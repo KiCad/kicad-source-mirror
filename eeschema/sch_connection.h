@@ -153,6 +153,8 @@ public:
         recacheName();
     }
 
+    wxString GetNetName() const;
+
     wxString Prefix() const { return m_prefix; }
     void SetPrefix( const wxString& aPrefix );
 

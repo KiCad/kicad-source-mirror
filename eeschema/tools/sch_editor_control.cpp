@@ -71,6 +71,7 @@
 #include <wx_filename.h>
 #include <sch_sheet_path.h>
 #include <wx/filedlg.h>
+#include <wx/treectrl.h>
 
 
 int SCH_EDITOR_CONTROL::New( const TOOL_EVENT& aEvent )
@@ -427,7 +428,8 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
 
             for( SCH_SYMBOL* symbol : symbolMap[it.first] )
             {
-                m_frame->SaveCopyInUndoList( m_frame->GetScreen(), symbol, UNDO_REDO::CHANGED, append, false);
+                m_frame->SaveCopyInUndoList( m_frame->GetScreen(), symbol, UNDO_REDO::CHANGED,
+                                             append, false );
                 symbol->SetLibId( id );
                 append = true;
             }
@@ -500,7 +502,8 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
 int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 {
     PICKER_TOOL*     picker = m_toolMgr->GetTool<PICKER_TOOL>();
-    SIMULATOR_FRAME* simFrame = (SIMULATOR_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR, false );
+    SIMULATOR_FRAME* simFrame = (SIMULATOR_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR,
+                                                                            false );
 
     if( !simFrame )     // Defensive coding; shouldn't happen.
         return 0;
@@ -1089,9 +1092,13 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
         }
 
         if( highlight )
+        {
             item->SetBrightened();
+        }
         else
+        {
             item->ClearBrightened();
+        }
 
         redraw |= item->IsBrightened();
 
@@ -2084,6 +2091,13 @@ int SCH_EDITOR_CONTROL::ShowHierarchy( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDITOR_CONTROL::ShowNetNavigator( const TOOL_EVENT& aEvent )
+{
+    getEditFrame<SCH_EDIT_FRAME>()->ToggleNetNavigator();
+    return 0;
+}
+
+
 int SCH_EDITOR_CONTROL::ToggleHiddenPins( const TOOL_EVENT& aEvent )
 {
     EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
@@ -2369,6 +2383,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
 
     Go( &SCH_EDITOR_CONTROL::ShowSearch,            EE_ACTIONS::showSearch.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ShowHierarchy,         EE_ACTIONS::showHierarchy.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::ShowNetNavigator,      EE_ACTIONS::showNetNavigator.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::ToggleHiddenPins,      EE_ACTIONS::toggleHiddenPins.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ToggleHiddenFields,    EE_ACTIONS::toggleHiddenFields.MakeEvent() );
@@ -2388,6 +2403,8 @@ void SCH_EDITOR_CONTROL::setTransitions()
 
     Go( &SCH_EDITOR_CONTROL::RepairSchematic,       EE_ACTIONS::repairSchematic.MakeEvent() );
 
-    Go( &SCH_EDITOR_CONTROL::ExportSymbolsToLibrary, EE_ACTIONS::exportSymbolsToLibrary.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::ExportSymbolsToLibrary, EE_ACTIONS::exportSymbolsToNewLibrary.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::ExportSymbolsToLibrary,
+        EE_ACTIONS::exportSymbolsToLibrary.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::ExportSymbolsToLibrary,
+        EE_ACTIONS::exportSymbolsToNewLibrary.MakeEvent() );
 }

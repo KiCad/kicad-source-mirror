@@ -32,6 +32,7 @@
 #include <wx/event.h>
 #include <wx/gdicmn.h>
 #include <wx/string.h>
+#include <wx/treectrl.h>
 #include <wx/utils.h>
 
 #include <config_params.h>
@@ -94,6 +95,7 @@ enum SCH_CLEANUP_FLAGS
 
 
 wxDECLARE_EVENT( EDA_EVT_SCHEMATIC_CHANGED, wxCommandEvent );
+
 
 /**
  * Schematic editor (Eeschema) main window.
@@ -193,7 +195,7 @@ public:
     void KiwayMailIn( KIWAY_EXPRESS& aEvent ) override;
 
     /**
-     * Refresh the display of any operating points.  Called after a .op simulation completes.
+     * Refresh the display of any operaintg points.  Called after a .op simulation completes.
      */
     void RefreshOperatingPointDisplay();
 
@@ -309,10 +311,7 @@ public:
         return m_highlightedConn;
     }
 
-    void SetHighlightedConnection( const wxString& aConnection )
-    {
-        m_highlightedConn = aConnection;
-    }
+    void SetHighlightedConnection( const wxString& aConnection );
 
     /**
      * Check if we are ready to write a netlist file for the current schematic.
@@ -828,6 +827,8 @@ public:
 
     DIALOG_ERC* GetErcDialog();
 
+    wxTreeCtrl* GetNetNavigator() { return m_netNavigator; }
+
     /**
      * @return the name of the wxAuiPaneInfo managing the Hierarchy Navigator panel
      */
@@ -857,6 +858,17 @@ public:
      */
     void RemoveSchematicChangeListener( wxEvtHandler* aListener );
 
+    static const wxString NetNavigatorPaneName()
+    {
+        return wxS( "NetNavigator" );
+    }
+
+    void RefreshNetNavigator();
+
+    void MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemId aParentId );
+
+    void ToggleNetNavigator();
+
     DECLARE_EVENT_TABLE()
 
 protected:
@@ -885,6 +897,8 @@ protected:
 private:
     // Called when resizing the Hierarchy Navigator panel
     void OnResizeHierarchyNavigator( wxSizeEvent& aEvent );
+
+    void onResizeNetNavigator( wxSizeEvent& aEvent );
 
     // Sets up the tool framework
     void setupTools();
@@ -953,6 +967,12 @@ private:
 
     const wxString& getAutoSaveFileName() const;
 
+    wxTreeCtrl* createHighlightedNetNavigator();
+
+    void onNetNavigatorSelection( wxTreeEvent& aEvent );
+
+    void onNetNavigatorSelChanging( wxTreeEvent& aEvent );
+
 private:
     // The schematic editor control class should be able to access some internal
     // functions of the editor frame.
@@ -975,9 +995,13 @@ private:
     DIALOG_BOOK_REPORTER*   m_diffSymbolDialog;
     HIERARCHY_PANE*         m_hierarchy;
 
+    wxTreeCtrl*             m_netNavigator;
+
 	bool m_syncingPcbToSchSelection; // Recursion guard when synchronizing selection from PCB
 
     bool m_show_search;
+
+    bool m_highlightedConnChanged;
 
     std::vector<wxEvtHandler*> m_schematicChangeListeners;
 };

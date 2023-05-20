@@ -1,7 +1,7 @@
 /*
 * This program source code file is part of KiCad, a free EDA CAD application.
 *
-* Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+* Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -33,6 +33,7 @@
 #include <settings/json_settings_internals.h>
 #include <settings/parameters.h>
 #include <settings/settings_manager.h>
+#include <settings/aui_settings.h>
 #include <wx/config.h>
 #include <widgets/ui_common.h>
 #include <default_values.h>    // For some default values
@@ -58,6 +59,28 @@ const nlohmann::json defaultBomPlugins =
                 { "path", "bom_csv_grouped_by_value_with_fp.py" }
             },
         };
+
+
+const wxAuiPaneInfo& defaultNetNavigatorPaneInfo()
+{
+    static wxAuiPaneInfo paneInfo;
+
+    paneInfo.Name( wxS( "NetNavigator" ) )
+            .Caption( _( "Net Navigator" ) )
+            .CaptionVisible( true )
+            .PaneBorder( true )
+            .Left().Layer( 3 )
+            .TopDockable( false )
+            .BottomDockable( false )
+            .CloseButton( true )
+            .MinSize( 120, 60 )
+            .BestSize( 200, 200 )
+            .FloatingSize( 200, 200 )
+            .FloatingPosition( 50, 200 )
+            .Show( false );
+
+    return paneInfo;
+}
 
 
 EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
@@ -161,6 +184,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "aui.hierarchy_panel_docked_width",
             &m_AuiPanels.hierarchy_panel_docked_width, -1 ) );
 
+    m_params.emplace_back( new PARAM<int>( "aui.hierarchy_panel_docked_height",
+            &m_AuiPanels.hierarchy_panel_docked_height, -1 ) );
+
     m_params.emplace_back( new PARAM<int>( "aui.hierarchy_panel_float_width",
             &m_AuiPanels.hierarchy_panel_float_width, -1 ) );
 
@@ -175,6 +201,24 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
 
     m_params.emplace_back( new PARAM<bool>( "aui.show_search",
             &m_AuiPanels.show_search, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "aui.show_net_nav_panel",
+            &m_AuiPanels.show_net_nav_panel, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "aui.float_net_nav_panel",
+            &m_AuiPanels.float_net_nav_panel, false ) );
+
+    m_params.emplace_back( new PARAM<wxSize>( "aui.net_nav_panel_docked_size",
+            &m_AuiPanels.net_nav_panel_docked_size, wxSize( 120, -1 ) ) );
+
+    m_params.emplace_back( new PARAM<bool>( "aui.float_net_nav_panel",
+            &m_AuiPanels.float_net_nav_panel, false ) );
+
+    m_params.emplace_back( new PARAM<wxPoint>( "aui.net_nav_panel_float_pos",
+            &m_AuiPanels.net_nav_panel_float_pos, wxPoint( 50, 200 ), false ) );
+
+    m_params.emplace_back( new PARAM<wxSize>( "aui.net_nav_panel_float_size",
+            &m_AuiPanels.net_nav_panel_float_size, wxSize( 200, 200 ) ) );
 
     m_params.emplace_back( new PARAM<bool>( "autoplace_fields.enable",
             &m_AutoplaceFields.enable, true ) );

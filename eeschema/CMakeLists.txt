@@ -286,6 +286,7 @@ set( EESCHEMA_SRCS
     lib_textbox.cpp
     libarch.cpp
     menubar.cpp
+    net_navigator.cpp
     pin_numbers.cpp
     pin_type.cpp
     project_rescue.cpp

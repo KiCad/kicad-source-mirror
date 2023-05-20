@@ -75,7 +75,6 @@ template class PARAM_LAMBDA<int>;
 template class PARAM_LAMBDA<nlohmann::json>;
 template class PARAM_LAMBDA<std::string>;
 
-
 template <typename ValueType>
 void PARAM_LIST<ValueType>::Load( JSON_SETTINGS* aSettings, bool aResetIfMissing ) const
 {

@@ -447,6 +447,7 @@ set( COMMON_SRCS
     tool/zoom_tool.cpp
 
     settings/app_settings.cpp
+    settings/aui_settings.cpp
     settings/bom_settings.cpp
     settings/color_settings.cpp
     settings/cvpcb_settings.cpp

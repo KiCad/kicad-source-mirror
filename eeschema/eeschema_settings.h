@@ -1,7 +1,7 @@
 /*
 * This program source code file is part of KiCad, a free EDA CAD application.
 *
-* Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+* Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -24,10 +24,15 @@
 #ifndef _EESCHEMA_SETTINGS_H
 #define _EESCHEMA_SETTINGS_H
 
+#include <wx/aui/framemanager.h>
+
 #include <settings/app_settings.h>
 
 
 using KIGFX::COLOR4D;
+
+
+extern const wxAuiPaneInfo& defaultNetNavigatorPaneInfo();
 
 
 enum LINE_MODE
@@ -75,12 +80,18 @@ public:
     struct AUI_PANELS
     {
         int  hierarchy_panel_docked_width;  // width of hierarchy tree panel and pane when docked
+        int  hierarchy_panel_docked_height; // height of hierarchy tree panel and pane when docked
         int  hierarchy_panel_float_width;   // width of hierarchy tree panel when floating
         int  hierarchy_panel_float_height;  // height of hierarchy tree panel when floating
         int  search_panel_height;           // height of the search panel
         bool schematic_hierarchy_float;     // show hierarchy tree panel as floating
         bool show_schematic_hierarchy;      // show hierarchy tree pane
         bool show_search;                   // show the search panel
+        wxSize net_nav_panel_docked_size;
+        wxPoint net_nav_panel_float_pos;
+        wxSize net_nav_panel_float_size;
+        bool float_net_nav_panel;
+        bool show_net_nav_panel;
     };
 
     struct AUTOPLACE_FIELDS

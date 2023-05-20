@@ -254,6 +254,9 @@ void SCH_EDIT_FRAME::ToggleSearch()
 void SCH_EDIT_FRAME::ToggleSchematicHierarchy()
 {
     EESCHEMA_SETTINGS* cfg = eeconfig();
+
+    wxCHECK( cfg, /* void */ );
+
     wxAuiPaneInfo&     hierarchy_pane = m_auimgr.GetPane( SchematicHierarchyPaneName() );
 
     hierarchy_pane.Show( !hierarchy_pane.IsShown() );

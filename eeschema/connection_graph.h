@@ -28,6 +28,7 @@
 #include <erc_settings.h>
 #include <sch_connection.h>
 #include <sch_item.h>
+#include <wx/treectrl.h>
 
 
 #ifdef DEBUG
@@ -138,7 +139,8 @@ public:
     }
 
     /// Finds all items in the subgraph as well as child subgraphs recursively
-    void getAllConnectedItems( std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>>& aItems, std::set<CONNECTION_SUBGRAPH*>& aSubgraphs );
+    void getAllConnectedItems( std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>>& aItems,
+                               std::set<CONNECTION_SUBGRAPH*>& aSubgraphs );
 
     /**
      * Return the priority (higher is more important) of a candidate driver
@@ -411,6 +413,8 @@ public:
     CONNECTION_SUBGRAPH* FindFirstSubgraphByName( const wxString& aNetName );
 
     CONNECTION_SUBGRAPH* GetSubgraphForItem( SCH_ITEM* aItem );
+
+    const std::vector<CONNECTION_SUBGRAPH*> GetAllSubgraphs( const wxString& aNetName ) const;
 
     /**
      * Returns the fully-resolved netname for a given subgraph

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2022 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2023 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -112,7 +112,12 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_SCREEN* aScreen, SCH_ITEM* aItem,
     wxCHECK( aItem, /* void */ );
 
     if( aDirtyConnectivity )
+    {
+        if( aItem->Connection() && ( aItem->Connection()->Name() == m_highlightedConn ) )
+            m_highlightedConnChanged = true;
+
         aItem->SetConnectivityDirty();
+    }
 
     PICKED_ITEMS_LIST* lastUndo = PopCommandFromUndoList();
 
@@ -209,7 +214,12 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
             continue;
 
         if( aDirtyConnectivity )
+        {
+            if( sch_item->Connection() && ( sch_item->Connection()->Name() == m_highlightedConn ) )
+                m_highlightedConnChanged = true;
+
             sch_item->SetConnectivityDirty();
+        }
 
         UNDO_REDO command = commandToUndo->GetPickedItemStatus( ii );
 
@@ -281,6 +291,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         {
             continue;
         }
+
         if( status == UNDO_REDO::NEWITEM )
         {
             // If we are removing the current sheet, get out first
@@ -290,11 +301,21 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                     GetToolManager()->RunAction( EE_ACTIONS::leaveSheet );
             }
 
+            SCH_ITEM* schItem = static_cast<SCH_ITEM*>( eda_item );
+
+            if( schItem && schItem->IsConnectable() )
+                m_highlightedConnChanged = true;
+
             RemoveFromScreen( eda_item, screen );
             aList->SetPickedItemStatus( UNDO_REDO::DELETED, ii );
         }
         else if( status == UNDO_REDO::DELETED )
         {
+            SCH_ITEM* schItem = static_cast<SCH_ITEM*>( eda_item );
+
+            if( schItem && schItem->IsConnectable() )
+                m_highlightedConnChanged = true;
+
             // deleted items are re-inserted on undo
             AddToScreen( eda_item, screen );
             aList->SetPickedItemStatus( UNDO_REDO::NEWITEM, ii );
@@ -312,6 +333,9 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         }
         else if( SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( eda_item ) )
         {
+            if( item->IsConnectable() )
+                m_highlightedConnChanged = true;
+
             // everything else is modified in place
             SCH_ITEM* alt_item = static_cast<SCH_ITEM*>( aList->GetPickedItemLink( ii ) );
 

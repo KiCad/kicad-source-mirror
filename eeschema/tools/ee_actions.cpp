@@ -597,6 +597,10 @@ TOOL_ACTION EE_ACTIONS::highlightNetTool( "eeschema.EditorControl.highlightNetTo
         _( "Highlight Nets" ), _( "Highlight wires and pins of a net" ),
         BITMAPS::net_highlight_schematic, AF_ACTIVATE );
 
+TOOL_ACTION EE_ACTIONS::showNetNavigator( "eeschema.EditorControl.showNetNavigator",
+        AS_GLOBAL, 0, "",
+        _( "Show Net Navigator" ), _( "Toggle the net navigator panel visibility" ) );
+
 TOOL_ACTION EE_ACTIONS::editWithLibEdit( "eeschema.EditorControl.editWithSymbolEditor",
         AS_GLOBAL,
         MD_CTRL + 'E', LEGACY_HK_NAME( "Edit with Symbol Editor" ),

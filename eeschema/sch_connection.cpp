@@ -349,6 +349,22 @@ wxString SCH_CONNECTION::Name( bool aIgnoreSheet ) const
 }
 
 
+wxString SCH_CONNECTION::GetNetName() const
+{
+    wxString retv;
+
+    if( m_graph )
+    {
+        CONNECTION_SUBGRAPH* subgraph = m_graph->GetSubgraphForItem( m_parent );
+
+        if( subgraph )
+            retv = subgraph->GetNetName();
+    }
+
+    return retv;
+}
+
+
 void SCH_CONNECTION::recacheName()
 {
     m_cached_name = m_name.IsEmpty() ? wxString( wxT( "<NO NET>" ) )

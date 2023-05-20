@@ -2693,6 +2693,20 @@ CONNECTION_SUBGRAPH* CONNECTION_GRAPH::GetSubgraphForItem( SCH_ITEM* aItem )
 }
 
 
+const std::vector<CONNECTION_SUBGRAPH*> CONNECTION_GRAPH::GetAllSubgraphs(
+        const wxString& aNetName ) const
+{
+    std::vector<CONNECTION_SUBGRAPH*> subgraphs;
+
+    auto it = m_net_name_to_subgraphs_map.find( aNetName );
+
+    if( it == m_net_name_to_subgraphs_map.end() )
+        return subgraphs;
+
+    return it->second;
+}
+
+
 int CONNECTION_GRAPH::RunERC()
 {
     int error_count = 0;

@@ -116,13 +116,17 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, SCH_BASE_FRAME )
     EVT_DROP_FILES( SCH_EDIT_FRAME::OnDropFiles )
 END_EVENT_TABLE()
 
+
 wxDEFINE_EVENT( EDA_EVT_SCHEMATIC_CHANGED, wxCommandEvent );
+
 
 SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         SCH_BASE_FRAME( aKiway, aParent, FRAME_SCH, wxT( "Eeschema" ), wxDefaultPosition,
                         wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, SCH_EDIT_FRAME_NAME ),
     m_ercDialog( nullptr ),
-    m_diffSymbolDialog( nullptr )
+    m_diffSymbolDialog( nullptr ),
+    m_netNavigator( nullptr ),
+    m_highlightedConnChanged( false )
 {
     m_maximizeByDefault = true;
     m_schematic = new SCHEMATIC( nullptr );
@@ -194,7 +198,11 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .MinSize( 120, 60 )
                       .BestSize( 200, 200 )
                       .FloatingSize( 200, 200 )
+                      .FloatingPosition( 50, 50 )
                       .Show( false ) );
+
+    m_auimgr.AddPane( createHighlightedNetNavigator(), defaultNetNavigatorPaneInfo() );
+
     m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( wxS( "OptToolbar" ) )
                       .Left().Layer( 2 ) );
 
@@ -229,9 +237,11 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     static_cast<KIGFX::SCH_PAINTER*>( view->GetPainter() )->SetSchematic( m_schematic );
 
     wxAuiPaneInfo&     hierarchy_pane = m_auimgr.GetPane( SchematicHierarchyPaneName() );
+    wxAuiPaneInfo&     netNavigatorPane = m_auimgr.GetPane( NetNavigatorPaneName() );
     EESCHEMA_SETTINGS* cfg = eeconfig();
 
     hierarchy_pane.Show( cfg->m_AuiPanels.show_schematic_hierarchy );
+    netNavigatorPane.Show( cfg->m_AuiPanels.show_net_nav_panel );
 
     if( cfg->m_AuiPanels.hierarchy_panel_float_width > 0
             && cfg->m_AuiPanels.hierarchy_panel_float_height > 0 )
@@ -239,6 +249,12 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         // Show at end, after positioning
         hierarchy_pane.FloatingSize( cfg->m_AuiPanels.hierarchy_panel_float_width,
                                      cfg->m_AuiPanels.hierarchy_panel_float_height );
+    }
+
+    if( cfg->m_AuiPanels.net_nav_panel_float_size.GetWidth() > 0
+      && cfg->m_AuiPanels.net_nav_panel_float_size.GetHeight() > 0 )
+    {
+        netNavigatorPane.FloatingSize( cfg->m_AuiPanels.net_nav_panel_float_size );
     }
 
     if( cfg->m_AuiPanels.schematic_hierarchy_float )
@@ -250,24 +266,46 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         SetAuiPaneSize( m_auimgr, searchPane, -1, cfg->m_AuiPanels.search_panel_height );
     }
 
+    if( cfg->m_AuiPanels.float_net_nav_panel )
+        netNavigatorPane.Float();
+
     if( cfg->m_AuiPanels.hierarchy_panel_docked_width > 0 )
     {
-        SetAuiPaneSize( m_auimgr, hierarchy_pane,
-                        cfg->m_AuiPanels.hierarchy_panel_docked_width, -1 );
+        // If the net navigator is not show, let the heirarchy navigator take all of the vertical
+        // space.
+        if( !cfg->m_AuiPanels.show_net_nav_panel )
+        {
+            SetAuiPaneSize( m_auimgr, hierarchy_pane,
+                            cfg->m_AuiPanels.hierarchy_panel_docked_width, -1 );
+        }
+        else
+        {
+            SetAuiPaneSize( m_auimgr, hierarchy_pane,
+                            cfg->m_AuiPanels.hierarchy_panel_docked_width,
+                            cfg->m_AuiPanels.hierarchy_panel_docked_height );
+
+            SetAuiPaneSize( m_auimgr, netNavigatorPane,
+                            cfg->m_AuiPanels.net_nav_panel_docked_size.GetWidth(),
+                            cfg->m_AuiPanels.net_nav_panel_docked_size.GetHeight() );
+        }
 
         // wxAUI hack: force width by setting MinSize() and then Fixed()
-        // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
-        hierarchy_pane.MinSize( cfg->m_AuiPanels.hierarchy_panel_docked_width, -1 );
+        // thanks to ZenJu https://github.com/wxWidgets/wxWidgets/issues/13180
+        hierarchy_pane.MinSize( cfg->m_AuiPanels.hierarchy_panel_docked_width, 60 );
         hierarchy_pane.Fixed();
+        netNavigatorPane.MinSize( cfg->m_AuiPanels.net_nav_panel_docked_size.GetWidth(), 60 );
+        netNavigatorPane.Fixed();
         m_auimgr.Update();
 
         // now make it resizable again
         hierarchy_pane.Resizable();
+        netNavigatorPane.Resizable();
         m_auimgr.Update();
 
         // Note: DO NOT call m_auimgr.Update() anywhere after this; it will nuke the size
         // back to minimum.
         hierarchy_pane.MinSize( 120, 60 );
+        netNavigatorPane.MinSize( 120, 60 );
     }
     else
     {
@@ -284,10 +322,11 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     initScreenZoom();
 
-    m_hierarchy->Connect( wxEVT_SIZE,
-                          wxSizeEventHandler( SCH_EDIT_FRAME::OnResizeHierarchyNavigator ),
-                          NULL, this );
-
+    m_hierarchy->Bind( wxEVT_SIZE, &SCH_EDIT_FRAME::OnResizeHierarchyNavigator, this );
+    m_netNavigator->Bind( wxEVT_TREE_SEL_CHANGING, &SCH_EDIT_FRAME::onNetNavigatorSelChanging,
+                          this );
+    m_netNavigator->Bind( wxEVT_TREE_SEL_CHANGED, &SCH_EDIT_FRAME::onNetNavigatorSelection, this );
+    m_netNavigator->Bind( wxEVT_SIZE, &SCH_EDIT_FRAME::onResizeNetNavigator, this );
 
     // This is used temporarily to fix a client size issue on GTK that causes zoom to fit
     // to calculate the wrong zoom size.  See SCH_EDIT_FRAME::onSize().
@@ -323,9 +362,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
 {
-    m_hierarchy->Disconnect( wxEVT_SIZE,
-                             wxSizeEventHandler( SCH_EDIT_FRAME::OnResizeHierarchyNavigator ),
-                             NULL, this );
+    m_hierarchy->Unbind( wxEVT_SIZE, &SCH_EDIT_FRAME::OnResizeHierarchyNavigator, this );
 
     // Ensure m_canvasType is up to date, to save it in config
     m_canvasType = GetCanvas()->GetBackend();
@@ -444,6 +481,11 @@ void SCH_EDIT_FRAME::setupUIConditions()
                 return m_auimgr.GetPane( SchematicHierarchyPaneName() ).IsShown();
             };
 
+    auto netNavigatorCond =
+            [ this ] (const SELECTION& aSel )
+            {
+                return m_auimgr.GetPane( NetNavigatorPaneName() ).IsShown();
+            };
 
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )
@@ -453,7 +495,7 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::redo,                ENABLE( cond.RedoAvailable() ) );
 
     mgr->SetConditions( EE_ACTIONS::showHierarchy,    CHECK( hierarchyNavigatorCond ) );
-
+    mgr->SetConditions( EE_ACTIONS::showNetNavigator, CHECK( netNavigatorCond ) );
     mgr->SetConditions( ACTIONS::toggleGrid,          CHECK( cond.GridVisible() ) );
     mgr->SetConditions( ACTIONS::toggleCursorStyle,   CHECK( cond.FullscreenCursor() ) );
     mgr->SetConditions( ACTIONS::millimetersUnits,
@@ -888,6 +930,10 @@ void SCH_EDIT_FRAME::doCloseWindow()
     // Close modeless dialogs.  They're trouble when they get destroyed after the frame.
     Unbind( EDA_EVT_CLOSE_DIALOG_BOOK_REPORTER, &SCH_EDIT_FRAME::onCloseSymbolDiffDialog, this );
     Unbind( EDA_EVT_CLOSE_ERC_DIALOG, &SCH_EDIT_FRAME::onCloseErcDialog, this );
+    m_netNavigator->Unbind( wxEVT_TREE_SEL_CHANGING, &SCH_EDIT_FRAME::onNetNavigatorSelChanging,
+                            this );
+    m_netNavigator->Unbind( wxEVT_TREE_SEL_CHANGED, &SCH_EDIT_FRAME::onNetNavigatorSelection,
+                            this );
 
     wxWindow* open_dlg = wxWindow::FindWindowByName( DIALOG_ERC_WINDOW_NAME );
 
@@ -1692,7 +1738,6 @@ void SCH_EDIT_FRAME::initScreenZoom()
 
 void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
 {
-    bool                highlightedConnChanged = false;
     wxString            highlightedConn = GetHighlightedConnection();
     SCHEMATIC_SETTINGS& settings = Schematic().Settings();
     SCH_SHEET_LIST      list = Schematic().GetSheets();
@@ -1728,7 +1773,7 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
                 SCH_CONNECTION* connection = aChangedItem->Connection();
 
                 if( connection && ( connection->Name() == highlightedConn ) )
-                    highlightedConnChanged = true;
+                    m_highlightedConnChanged = true;
             };
 
     if( !ADVANCED_CFG::GetCfg().m_IncrementalConnectivity || aCleanupFlags == GLOBAL_CLEANUP
@@ -1857,10 +1902,11 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
 
     if( !highlightedConn.IsEmpty() )
     {
-        if( highlightedConnChanged )
-            wxLogDebug( wxS( "Highlighted connection \"%s\" changed." ), highlightedConn );
-        else if( !Schematic().ConnectionGraph()->FindFirstSubgraphByName( highlightedConn ) )
-            wxLogDebug( wxS( "Highlighted connection \"%s\" no longer exists." ), highlightedConn );
+        if( m_highlightedConnChanged
+          || !Schematic().ConnectionGraph()->FindFirstSubgraphByName( highlightedConn ) )
+            RefreshNetNavigator();
+
+        m_highlightedConnChanged = false;
     }
 }
 
@@ -2306,4 +2352,25 @@ void SCH_EDIT_FRAME::RemoveSchematicChangeListener( wxEvtHandler* aListener )
     // Don't add duplicate listeners.
     if( it != m_schematicChangeListeners.end() )
         m_schematicChangeListeners.erase( it );
+}
+
+
+wxTreeCtrl* SCH_EDIT_FRAME::createHighlightedNetNavigator()
+{
+    m_netNavigator = new wxTreeCtrl( this, wxID_ANY, wxPoint( 0, 0 ),
+                                     FromDIP( wxSize( 160, 250 ) ),
+                                     wxTR_DEFAULT_STYLE | wxNO_BORDER );
+
+    return m_netNavigator;
+}
+
+
+void SCH_EDIT_FRAME::SetHighlightedConnection( const wxString& aConnection )
+{
+    bool refreshNetNavigator = aConnection != m_highlightedConn;
+
+    m_highlightedConn = aConnection;
+
+    if( refreshNetNavigator )
+        RefreshNetNavigator();
 }

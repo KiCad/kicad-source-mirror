@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -31,10 +31,13 @@
 #include <settings/nested_settings.h>
 #include <settings/parameters.h>
 #include <settings/bom_settings.h>
+#include <settings/aui_settings.h>
+#include <wx/aui/framemanager.h>
 #include <wx/config.h>
 #include <wx/debug.h>
 #include <wx/fileconf.h>
 #include <wx/filename.h>
+#include <wx/gdicmn.h>
 #include <wx/log.h>
 #include <wx/stdstream.h>
 #include <wx/wfstream.h>
@@ -569,7 +572,10 @@ template std::optional<KIGFX::COLOR4D> JSON_SETTINGS::Get<KIGFX::COLOR4D>( const
 template std::optional<BOM_FIELD>  JSON_SETTINGS::Get<BOM_FIELD>( const std::string& aPath ) const;
 template std::optional<BOM_PRESET> JSON_SETTINGS::Get<BOM_PRESET>( const std::string& aPath ) const;
 template std::optional<BOM_FMT_PRESET> JSON_SETTINGS::Get<BOM_FMT_PRESET>( const std::string& aPath ) const;
-
+template std::optional<wxPoint> JSON_SETTINGS::Get<wxPoint>( const std::string& aPath ) const;
+template std::optional<wxSize> JSON_SETTINGS::Get<wxSize>( const std::string& aPath ) const;
+template std::optional<wxRect> JSON_SETTINGS::Get<wxRect>( const std::string& aPath ) const;
+template std::optional<wxAuiPaneInfo> JSON_SETTINGS::Get<wxAuiPaneInfo>( const std::string& aPath ) const;
 
 template<typename ValueType>
 void JSON_SETTINGS::Set( const std::string& aPath, ValueType aVal )
@@ -592,6 +598,10 @@ template void JSON_SETTINGS::Set<KIGFX::COLOR4D>( const std::string& aPath, KIGF
 template void JSON_SETTINGS::Set<BOM_FIELD>( const std::string& aPath, BOM_FIELD aValue );
 template void JSON_SETTINGS::Set<BOM_PRESET>( const std::string& aPath, BOM_PRESET aValue );
 template void JSON_SETTINGS::Set<BOM_FMT_PRESET>( const std::string& aPath, BOM_FMT_PRESET aValue );
+template void JSON_SETTINGS::Set<wxPoint>( const std::string& aPath, wxPoint aValue );
+template void JSON_SETTINGS::Set<wxSize>( const std::string& aPath, wxSize aValue );
+template void JSON_SETTINGS::Set<wxRect>( const std::string& aPath, wxRect aValue );
+template void JSON_SETTINGS::Set<wxAuiPaneInfo>( const std::string& aPath, wxAuiPaneInfo aValue );
 
 
 void JSON_SETTINGS::registerMigration( int aOldSchemaVersion, int aNewSchemaVersion,
