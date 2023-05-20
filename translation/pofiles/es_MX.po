@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-18 11:55-0700\n"
-"PO-Revision-Date: 2023-05-12 19:54+0000\n"
+"PO-Revision-Date: 2023-05-22 09:47+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -568,14 +568,12 @@ msgid "Toggle 3D models not in pos file"
 msgstr "Conmutar los modelos 3D que no están en el archivo pos"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:234
-#, fuzzy
 msgid "Toggle 3D models marked DNP"
-msgstr "Mostrar modelos 3D SMD"
+msgstr "Alternar modelos 3D marcados como DNP"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:234
-#, fuzzy
 msgid "Toggle 3D models for components marked 'Do Not Place'"
-msgstr "Excluir los modelos 3D de los componentes con el atributo \"virtual"
+msgstr "Alternar modelos 3D para componentes marcados con \"No colocar\""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:239
 msgid "Show Model Bounding Boxes"
@@ -1426,9 +1424,8 @@ msgid "Negative"
 msgstr "Negativo"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:157
-#, fuzzy
 msgid "Pcb Layer for Graphics"
-msgstr "Añadir gráfico importado"
+msgstr "Capa de placa para gráficos"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:159
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:525
@@ -1441,19 +1438,16 @@ msgid "Front solder mask"
 msgstr "Máscara de soldadura frontal"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:159
-#, fuzzy
 msgid "Front Fab layer"
-msgstr "Front_layer"
+msgstr "Capa frontal Fab"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:159
-#, fuzzy
 msgid "User layer drawings"
-msgstr "Capas de usuario:"
+msgstr "Dibujos de la capa de usuario"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:159
-#, fuzzy
 msgid "User layer comments"
-msgstr "Capa de usuario Eco1"
+msgstr "Comentarios de la capa de usuario"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:159
 msgid "User layer Eco1"
@@ -5544,9 +5538,9 @@ msgid "Deactivate selected"
 msgstr "Desactivar seleccionado"
 
 #: common/lib_table_grid_tricks.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid "Library settings for %s..."
-msgstr "Editar las opciones para los nuevos pads"
+msgstr "Configuración de biblioteca para %s..."
 
 #: common/lib_tree_model.cpp:146
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
@@ -5886,9 +5880,8 @@ msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
 msgstr "Error al escribir OUTPUTSTREAM_OUTPUTFORMATTER"
 
 #: common/settings/bom_settings.cpp:132
-#, fuzzy
 msgid "Grouped By Value"
-msgstr "Agrupar por nombre"
+msgstr "Agrupados por valor"
 
 #: common/settings/bom_settings.cpp:132 common/settings/bom_settings.cpp:149
 #: eeschema/dialogs/dialog_rescue_each.cpp:129
@@ -5899,9 +5892,8 @@ msgid "Reference"
 msgstr "Referencia"
 
 #: common/settings/bom_settings.cpp:149
-#, fuzzy
 msgid "Grouped By Value and Footprint"
-msgstr "Obtener y mover huella"
+msgstr "Agrupados por valor y huella"
 
 #: common/settings/bom_settings.cpp:213
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:49
@@ -5909,14 +5901,12 @@ msgid "CSV"
 msgstr "CSV"
 
 #: common/settings/bom_settings.cpp:218
-#, fuzzy
 msgid "TSV"
-msgstr "TV"
+msgstr "TSV"
 
 #: common/settings/bom_settings.cpp:224
-#, fuzzy
 msgid "Semicolons"
-msgstr "Colores sólidos"
+msgstr "Puntos y comas"
 
 #: common/settings/color_settings.cpp:334
 msgid "(Footprints)"
@@ -6832,9 +6822,8 @@ msgid "Sort by Best Match"
 msgstr "Ordenar por mejor coincidencia"
 
 #: common/widgets/lib_tree.cpp:90
-#, fuzzy
 msgid "Sort Alphabetically"
-msgstr "Alfabético"
+msgstr "Ordenar alfabéticamente"
 
 #: common/widgets/lib_tree.cpp:337
 msgid "recent searches"
@@ -7118,9 +7107,8 @@ msgid "Eagle XML schematic files"
 msgstr "Archivos XML de esquema de Eagle"
 
 #: common/wildcards_and_files_ext.cpp:310
-#, fuzzy
 msgid "Ltspice schematic files"
-msgstr "Archivos de esquema de Altium"
+msgstr "Archivos esquemáticos LTSpice"
 
 #: common/wildcards_and_files_ext.cpp:316
 msgid "Eagle XML files"
@@ -7798,7 +7786,6 @@ msgid "Delete all associations?"
 msgstr "¿Borrar todas las asociaciones?"
 
 #: eeschema/annotate.cpp:155
-#, fuzzy
 msgid "Delete Annotation"
 msgstr "Eliminar anotación"
 
@@ -8487,47 +8474,42 @@ msgid "No symbol selected"
 msgstr "No se ha seleccionado ningún símbolo"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:98
-#, fuzzy
 msgid "Connected to database successfully"
-msgstr "¡Lista de redes actualizada correctamente!"
+msgstr "Conectado a la base de datos exitosamente"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Database connection failed: %s"
-msgstr "Conexión de zona %s: %s."
+msgstr "Error en la conexión a la base de datos: %s"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:117
-#, fuzzy
 msgid "No connection to database"
-msgstr "Conexión pad a zonas:"
+msgstr "Sin conexión a la base de datos"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Loaded %zu libraries"
-msgstr "Cargando librerías de símbolos"
+msgstr "%zu bibliotecas cargadas"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:32
-#, fuzzy
 msgid "Connection"
-msgstr "Conexiones"
+msgstr "Conexión"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:39
 msgid "DSN:"
-msgstr ""
+msgstr "DSN:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:45
-#, fuzzy
 msgid "Username:"
-msgstr "Nuevo nombre:"
+msgstr "Nombre de usuario:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
 msgid "Password:"
 msgstr "Contraseña:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:71
-#, fuzzy
 msgid "Connection String:"
-msgstr "Conector:"
+msgstr "Cadena de conexión:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:85
 msgid "Test"
@@ -8541,35 +8523,29 @@ msgid "Libraries"
 msgstr "Bibliotecas"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:104
-#, fuzzy
 msgid "Reload Configuration"
-msgstr "&Configuración ..."
+msgstr "Recargar configuración"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:105
-#, fuzzy
 msgid "Reload the database library configuration file"
-msgstr "Cargar archivo de configuración de atajos de teclado"
+msgstr "Recargar el archivo de configuración de la biblioteca de base de datos"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:120
-#, fuzzy
 msgid "Caching"
-msgstr "Buscando..."
+msgstr "Almacenando en caché"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:127
-#, fuzzy
 msgid "Cache size:"
-msgstr "Tamaño de página:"
+msgstr "Tamaño de caché:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:129
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:134
-#, fuzzy
 msgid "How many database queries to cache"
-msgstr "Cuántos dígitos de precisión mostrar"
+msgstr "Cuántas consultas de base de datos se deben almacenar en caché"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:138
-#, fuzzy
 msgid "Cache timeout:"
-msgstr "Símbolo en caché:"
+msgstr "Tiempo de espera de caché:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:140
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:145
@@ -14645,7 +14621,7 @@ msgstr "Red resaltada: %s"
 #: eeschema/sch_edit_frame.cpp:2255 eeschema/tools/ee_actions.cpp:55
 #, fuzzy
 msgid "Diff Symbol with Library"
-msgstr "Nueva librería de símbolos"
+msgstr "Nueva biblioteca de símbolos"
 
 #: eeschema/sch_field.cpp:781
 #, c-format
@@ -15663,9 +15639,8 @@ msgstr "DNP"
 #: eeschema/sch_symbol.cpp:1730 eeschema/sch_text.cpp:505
 #: eeschema/sch_textbox.cpp:448 eeschema/tools/sch_edit_tool.cpp:378
 #: eeschema/tools/sch_edit_tool.cpp:470 eeschema/tools/sch_edit_tool.cpp:555
-#, fuzzy
 msgid "Simulation"
-msgstr "&Simulación"
+msgstr "Simulación"
 
 #: eeschema/sch_symbol.cpp:1733
 #, fuzzy
@@ -16816,9 +16791,11 @@ msgid "Invalid IBIS file '%s'"
 msgstr "Archivo IBIS inválido '%s'"
 
 #: eeschema/sim/sim_model.cpp:394
-#, fuzzy, c-format
+#, c-format
 msgid "No simulation model definition found for symbol '%s'."
-msgstr "Biblioteca de modelos de simulación no encontrada en '%s' o '%s'"
+msgstr ""
+"No se encontró ninguna definición de modelo de simulación para el símbolo "
+"'%s'."
 
 #: eeschema/sim/sim_model.cpp:401
 #, fuzzy
@@ -19304,9 +19281,9 @@ msgstr ""
 "Seleccione una huella para cotejarla con su equivalente en la biblioteca."
 
 #: eeschema/tools/ee_inspection_tool.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s"
-msgstr "Símbolos"
+msgstr "Símbolo %s"
 
 #: eeschema/tools/ee_inspection_tool.cpp:275
 #: pcbnew/tools/board_inspection_tool.cpp:1426
@@ -19316,7 +19293,7 @@ msgstr ""
 #: eeschema/tools/ee_inspection_tool.cpp:277
 #, fuzzy
 msgid "Schematic vs library diff for:"
-msgstr "Editor de librerías."
+msgstr "Editor de bibliotecas."
 
 #: eeschema/tools/ee_inspection_tool.cpp:279
 #: pcbnew/tools/board_inspection_tool.cpp:1430
@@ -32948,7 +32925,6 @@ msgid "Check rule syntax"
 msgstr "Verificar reglas de sintaxis"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -33346,8 +33322,8 @@ msgstr ""
 "### Elementos\n"
 "\n"
 " * `A` &nbsp;&nbsp; _el primer (o único) elemento bajo prueba_\n"
-" * `B` &nbsp;&nbsp; _el segundo elemento bajo prueba (para pruebas "
-"binarias)_\n"
+" * `B` &nbsp;&nbsp; _el segundo elemento bajo prueba (para pruebas binarias)"
+"_\n"
 " * `L` &nbsp;&nbsp; _la capa bajo prueba_\n"
 "\n"
 "<br>\n"
@@ -33424,8 +33400,8 @@ msgstr ""
 "\n"
 "Las reglas deberían ser ordenadas por especificidad.\n"
 "Las reglas posteriores tienen precedencia sobre las reglas anteriores;\n"
-"una vez que se encuentra una regla coincidente, no se comprobarán más "
-"reglas.\n"
+"una vez que se encuentra una regla coincidente, no se comprobarán más reglas."
+"\n"
 "\n"
 "Use Ctrl+/ para comentar o descomentar la(s) línea(s).\n"
 "<br><br><br>\n"
@@ -33458,8 +33434,8 @@ msgstr ""
 "    A.enclosedByArea('<zone_name>')\n"
 "Verdadero si todo `A` se encuentra dentro del contorno de la zona dada.\n"
 "\n"
-"Nota: esto es una llamada potencialmente más costosa que "
-"`intersectsArea()`.  Use `intersectsArea()` \n"
+"Nota: esto es una llamada potencialmente más costosa que `intersectsArea()`"
+".  Use `intersectsArea()` \n"
 "donde sea posible.\n"
 "<br><br>\n"
 " \n"
@@ -33468,8 +33444,8 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.inDiffPair('<net_name>')\n"
-"Verdadero si `A` tiene una red que es parte del par diferencial "
-"especificado.\n"
+"Verdadero si `A` tiene una red que es parte del par diferencial especificado."
+"\n"
 "`<net_name>` es el nombre base del par diferencial. Por ejemplo, "
 "`inDiffPair('CLK')`\n"
 "coincide con los elementos en las redes `CLK_P` y `CLK_N`.\n"
@@ -33479,8 +33455,16 @@ msgstr ""
 "Verdadero si `A` y `B` son miembros del mismo par diferencial.\n"
 "<br><br>\n"
 "\n"
-"    A.memberOf('<group_name>')\n"
-"Verdadero si `A` es un miembro del grupo dado. Incluye membresía anidada.\n"
+"    A.memberOfGroup('<group_name>')\n"
+"Verdadero si `A` es un miembro del grupo dado. El nombre puede contener "
+"wildcards.\n"
+"Incluye membresía anidada.\n"
+"<br><br>\n"
+"\n"
+"    A.memberOfFootprint('<footprint_reference>')\n"
+"Verdadero si `A` es un miembro de una huella que coincide con el designador "
+"de referencia dado.  La \n"
+"referencia puede contener wildcards.\n"
 "<br><br>\n"
 "\n"
 "    A.existsOnLayer('<layer_name>')\n"
@@ -33494,6 +33478,10 @@ msgstr ""
 "si la regla está siendo evaluada en esa capa o no.\n"
 "Para lo último, use la cláusula `(layer \"layer_name\")` en la regla.\n"
 "<br><br><br>\n"
+"\n"
+"    !!! A.memberOf('<group_name>') !!!\n"
+"Obsoleto; use `memberOfGroup()` en su lugar.\n"
+"<br><br>\n"
 "\n"
 "    !!! A.insideCourtyard('<footprint_refdes>') !!!\n"
 "Obsoleto; use `intersectsCourtyard()` en su lugar.\n"
@@ -33624,8 +33612,8 @@ msgstr ""
 "\n"
 "### Documentación\n"
 "\n"
-"Para la documentación completa consulte [https://docs.kicad.org](https://"
-"docs.kicad.org/GetMajorMinorVersion/pcbnew/#custom_design_rules)."
+"Para la documentación completa consulte [https://docs.kicad.org](https://docs"
+".kicad.org/GetMajorMinorVersion/pcbnew/#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:75
 msgid "Default properties for new dimension objects:"
@@ -34642,7 +34630,7 @@ msgstr ""
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:372
 #, fuzzy, c-format
 msgid "%s keep out tracks setting differs."
-msgstr "Eliminar pis&tas que conectan redes diferentes"
+msgstr "Eliminar pistas que conectan redes diferentes"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:374
 #, c-format
