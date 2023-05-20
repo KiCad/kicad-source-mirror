@@ -55,7 +55,8 @@ public:
             m_BestLengthRatio( 0.5),
             m_BestWidthRatio( 1.0 ),
             m_CurveSegCount( 0 ),
-            m_WidthtoSizeFilterRatio( 0.9 )
+            m_WidthtoSizeFilterRatio( 0.9 ),
+            m_TdOnPadsInZones( false )
     {
     }
 
