@@ -357,21 +357,23 @@ VECTOR2<T> VECTOR2<T>::Resize( T aNewLength ) const
 
     if( std::is_integral<T>::value )
     {
-        return VECTOR2<T> (
-            ( x < 0 ? -1 : 1 ) *
-                KiROUND( std::sqrt( rescale( l_sq_new, (extended_type) x * x, l_sq_current ) ) ),
-            ( y < 0 ? -1 : 1 ) *
-                KiROUND( std::sqrt( rescale( l_sq_new, (extended_type) y * y, l_sq_current ) ) ) )
-                    * sign( aNewLength );
+        return VECTOR2<T>( static_cast<T>(
+                ( x < 0 ? -1 : 1 ) *
+                    KiROUND( std::sqrt( rescale( l_sq_new, (extended_type) x * x, l_sq_current ) ) ) ),
+            static_cast<T>(
+                ( y < 0 ? -1 : 1 ) *
+                    KiROUND( std::sqrt( rescale( l_sq_new, (extended_type) y * y, l_sq_current ) ) ) )
+                        * sign( aNewLength ) );
     }
     else
     {
-        return VECTOR2<T> (
-            ( x < 0 ? -1 : 1 ) *
-                std::sqrt( rescale( l_sq_new, (extended_type) x * x, l_sq_current ) ),
-            ( y < 0 ? -1 : 1 ) *
-                std::sqrt( rescale( l_sq_new, (extended_type) y * y, l_sq_current ) ) )
-                    * sign( aNewLength );
+        return VECTOR2<T> ( static_cast<T>(
+                ( x < 0 ? -1 : 1 ) *
+                    std::sqrt( rescale( l_sq_new, (extended_type) x * x, l_sq_current ) ) ),
+            static_cast<T>(
+                ( y < 0 ? -1 : 1 ) *
+                    std::sqrt( rescale( l_sq_new, (extended_type) y * y, l_sq_current ) ) )
+                        * sign( aNewLength ) );
     }
 }
 
