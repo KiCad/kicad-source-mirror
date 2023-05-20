@@ -334,7 +334,7 @@ public:
     /**
      * @return the internal list of outline data.
      */
-    const std::list< IDF3_COMP_OUTLINE_DATA* >*const GetOutlinesData( void );
+    const std::list< IDF3_COMP_OUTLINE_DATA* >* GetOutlinesData( void );
 
     /**
      * Retrieve the internal position parameters and returns true if the
@@ -470,10 +470,10 @@ public:
     bool DelBoardOutline( size_t aIndex );
     size_t GetBoardOutlinesSize( void );
     BOARD_OUTLINE* GetBoardOutline( void );
-    const std::list< IDF_OUTLINE* >*const GetBoardOutlines( void );
+    const std::list< IDF_OUTLINE* >* GetBoardOutlines( void );
 
     // Operations for OTHER OUTLINES
-    const std::map<std::string, OTHER_OUTLINE*>*const GetOtherOutlines( void );
+    const std::map<std::string, OTHER_OUTLINE*>* GetOtherOutlines( void );
 
     /// XXX - TO BE IMPLEMENTED
     //
@@ -554,7 +554,7 @@ public:
     bool DelComponent( IDF3_COMPONENT* aComponent );
     bool DelComponent( size_t aIndex );
     size_t GetComponentsSize( void );
-    std::map< std::string, IDF3_COMPONENT* >*const GetComponents( void );
+    std::map< std::string, IDF3_COMPONENT* >* GetComponents( void );
     IDF3_COMPONENT* FindComponent( const std::string& aRefDes );
 
     // Return a pointer to a component outline object or NULL if the object doesn't exist.

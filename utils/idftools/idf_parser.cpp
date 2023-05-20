@@ -1208,7 +1208,7 @@ size_t IDF3_COMPONENT::GetOutlinesSize( void )
 }
 
 
-const std::list< IDF3_COMP_OUTLINE_DATA* >*const IDF3_COMPONENT::GetOutlinesData( void )
+const std::list< IDF3_COMP_OUTLINE_DATA* >* IDF3_COMPONENT::GetOutlinesData( void )
 {
     return &components;
 }
@@ -3480,7 +3480,7 @@ BOARD_OUTLINE* IDF3_BOARD::GetBoardOutline( void )
 }
 
 
-const std::list< IDF_OUTLINE* >*const IDF3_BOARD::GetBoardOutlines( void )
+const std::list< IDF_OUTLINE* >* IDF3_BOARD::GetBoardOutlines( void )
 {
     return olnBoard.GetOutlines();
 }
@@ -3925,7 +3925,7 @@ size_t IDF3_BOARD::GetComponentsSize( void )
 }
 
 
-std::map< std::string, IDF3_COMPONENT* >*const IDF3_BOARD::GetComponents( void )
+std::map< std::string, IDF3_COMPONENT* >* IDF3_BOARD::GetComponents( void )
 {
     return &components;
 }
@@ -4411,7 +4411,7 @@ void IDF3_BOARD::Clear( void )
 }
 
 
-const std::map<std::string, OTHER_OUTLINE*>* const IDF3_BOARD::GetOtherOutlines( void )
+const std::map<std::string, OTHER_OUTLINE*>*  IDF3_BOARD::GetOtherOutlines( void )
 {
     return &olnOther;
 }
