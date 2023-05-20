@@ -2349,8 +2349,6 @@ CADSTAR_SCH_ARCHIVE_LOADER::getLocationOfNetElement( const NET_SCH&       aNet,
     {
         return logUnknownNetElementError();
     }
-
-    return POINT();
 }
 
 
@@ -2781,8 +2779,6 @@ PLOT_DASH_TYPE CADSTAR_SCH_ARCHIVE_LOADER::getLineStyle( const LINECODE_ID& aCad
     default:                    return PLOT_DASH_TYPE::DEFAULT;
     }
     // clang-format on
-
-    return PLOT_DASH_TYPE();
 }
 
 
