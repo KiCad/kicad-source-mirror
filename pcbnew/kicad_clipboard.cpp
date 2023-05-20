@@ -434,7 +434,7 @@ BOARD* CLIPBOARD_IO::Load( const wxString& aFileName, BOARD* aAppendToMe,
             };
 
     STRING_LINE_READER reader( result, wxT( "clipboard" ) );
-    PCB_PARSER         parser( &reader, aAppendToMe, &queryUser );
+    PCB_PARSER         parser( &reader, aAppendToMe, queryUser );
 
     init( aProperties );
 

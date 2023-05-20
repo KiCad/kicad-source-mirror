@@ -5678,7 +5678,7 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
             {
                 if( m_showLegacy5ZoneWarning && m_queryUserCallback )
                 {
-                    if( !(*m_queryUserCallback)(
+                    if( !m_queryUserCallback(
                                 _( "Legacy Zone Warning" ), wxICON_WARNING,
                                 _( "The legacy zone fill strategy is no longer supported.\n"
                                    "Convert zones to smoothed polygon fills?" ),
@@ -5718,7 +5718,7 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                     {
                         if( m_showLegacySegmentZoneWarning && m_queryUserCallback )
                         {
-                            if( !(*m_queryUserCallback)(
+                            if( !m_queryUserCallback(
                                         _( "Legacy Zone Warning" ), wxICON_WARNING,
                                         _( "The segment zone fill mode is no longer supported.\n"
                                            "Convert zones to smoothed polygon fills?" ),
