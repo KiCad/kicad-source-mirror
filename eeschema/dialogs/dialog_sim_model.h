@@ -71,7 +71,7 @@ private:
 
     void updateWidgets();
     void updateIbisWidgets( SIM_MODEL* aModel );
-    void updateInstanceWidgets( SIM_MODEL* aModel );
+    void updateBuiltinModelWidgets( SIM_MODEL* aModel );
     void updateModelParamsTab( SIM_MODEL* aModel );
     void updateModelCodeTab( SIM_MODEL* aModel );
     void updatePinAssignments( SIM_MODEL* aModel );

@@ -54,7 +54,7 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 	protected:
 		wxNotebook* m_notebook;
 		wxPanel* m_modelPanel;
-		wxRadioButton* m_useLibraryModelRadioButton;
+		wxRadioButton* m_rbLibraryModel;
 		wxStaticText* m_pathLabel;
 		wxTextCtrl* m_libraryPathText;
 		STD_BITMAP_BUTTON* m_browseButton;
@@ -65,7 +65,7 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		wxCheckBox* m_differentialCheckbox;
 		wxStaticText* m_ibisModelLabel;
 		wxComboBox* m_ibisModelCombobox;
-		wxRadioButton* m_useInstanceModelRadioButton;
+		wxRadioButton* m_rbBuiltinModel;
 		wxStaticText* m_staticTextDevType;
 		wxChoice* m_deviceTypeChoice;
 		wxStaticText* m_staticTextSpiceType;

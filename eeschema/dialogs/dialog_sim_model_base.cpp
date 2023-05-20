@@ -27,8 +27,8 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bSizerMargins;
 	bSizerMargins = new wxBoxSizer( wxVERTICAL );
 
-	m_useLibraryModelRadioButton = new wxRadioButton( m_modelPanel, wxID_ANY, _("SPICE model from file (*.lib, *.sub or *.ibs)"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
-	bSizerMargins->Add( m_useLibraryModelRadioButton, 0, wxLEFT, 5 );
+	m_rbLibraryModel = new wxRadioButton( m_modelPanel, wxID_ANY, _("SPICE model from file (*.lib, *.sub or *.ibs)"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	bSizerMargins->Add( m_rbLibraryModel, 0, wxLEFT, 5 );
 
 	wxGridBagSizer* gbSizer1;
 	gbSizer1 = new wxGridBagSizer( 3, 5 );
@@ -98,8 +98,8 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 
 	bSizerMargins->Add( 0, 25, 0, wxEXPAND, 5 );
 
-	m_useInstanceModelRadioButton = new wxRadioButton( m_modelPanel, wxID_ANY, _("Built-in SPICE model"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerMargins->Add( m_useInstanceModelRadioButton, 0, wxBOTTOM|wxLEFT, 5 );
+	m_rbBuiltinModel = new wxRadioButton( m_modelPanel, wxID_ANY, _("Built-in SPICE model"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerMargins->Add( m_rbBuiltinModel, 0, wxBOTTOM|wxLEFT, 5 );
 
 	wxFlexGridSizer* fgSizer16;
 	fgSizer16 = new wxFlexGridSizer( 0, 2, 8, 0 );
@@ -328,7 +328,7 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	this->Centre( wxBOTH );
 
 	// Connect Events
-	m_useLibraryModelRadioButton->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onRadioButton ), NULL, this );
+	m_rbLibraryModel->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onRadioButton ), NULL, this );
 	m_pathLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onLibraryPathLabelUpdate ), NULL, this );
 	m_libraryPathText->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_SIM_MODEL_BASE::onLibraryPathTextKillFocus ), NULL, this );
 	m_libraryPathText->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onLibraryPathTextEnter ), NULL, this );
@@ -348,7 +348,7 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	m_ibisModelCombobox->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_SIM_MODEL_BASE::onModelNameComboboxKillFocus ), NULL, this );
 	m_ibisModelCombobox->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onIbisModelComboboxTextEnter ), NULL, this );
 	m_ibisModelCombobox->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onModelNameComboboxUpdate ), NULL, this );
-	m_useInstanceModelRadioButton->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onRadioButton ), NULL, this );
+	m_rbBuiltinModel->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onRadioButton ), NULL, this );
 	m_staticTextDevType->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onDeviceTypeLabelUpdate ), NULL, this );
 	m_deviceTypeChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onDeviceTypeChoice ), NULL, this );
 	m_deviceTypeChoice->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onDeviceTypeChoiceUpdate ), NULL, this );
@@ -363,7 +363,7 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 DIALOG_SIM_MODEL_BASE::~DIALOG_SIM_MODEL_BASE()
 {
 	// Disconnect Events
-	m_useLibraryModelRadioButton->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onRadioButton ), NULL, this );
+	m_rbLibraryModel->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onRadioButton ), NULL, this );
 	m_pathLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onLibraryPathLabelUpdate ), NULL, this );
 	m_libraryPathText->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_SIM_MODEL_BASE::onLibraryPathTextKillFocus ), NULL, this );
 	m_libraryPathText->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onLibraryPathTextEnter ), NULL, this );
@@ -383,7 +383,7 @@ DIALOG_SIM_MODEL_BASE::~DIALOG_SIM_MODEL_BASE()
 	m_ibisModelCombobox->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_SIM_MODEL_BASE::onModelNameComboboxKillFocus ), NULL, this );
 	m_ibisModelCombobox->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onIbisModelComboboxTextEnter ), NULL, this );
 	m_ibisModelCombobox->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onModelNameComboboxUpdate ), NULL, this );
-	m_useInstanceModelRadioButton->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onRadioButton ), NULL, this );
+	m_rbBuiltinModel->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onRadioButton ), NULL, this );
 	m_staticTextDevType->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onDeviceTypeLabelUpdate ), NULL, this );
 	m_deviceTypeChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onDeviceTypeChoice ), NULL, this );
 	m_deviceTypeChoice->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onDeviceTypeChoiceUpdate ), NULL, this );

@@ -188,7 +188,7 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
     if( libraryFilename != "" )
     {
         // The model is sourced from a library, optionally with instance overrides.
-        m_useLibraryModelRadioButton->SetValue( true );
+        m_rbLibraryModel->SetValue( true );
 
         if( !loadLibrary( libraryFilename ) )
         {
@@ -269,7 +269,7 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
                 || !SIM_MODEL::GetFieldValue( &m_fields, SIM_TYPE_FIELD ).empty() )
     {
         // The model is sourced from the instance.
-        m_useInstanceModelRadioButton->SetValue( true );
+        m_rbBuiltinModel->SetValue( true );
 
         msg.clear();
         m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields, &reporter );
@@ -282,7 +282,7 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
 
     for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
     {
-        if( m_useInstanceModelRadioButton->GetValue() && type == m_curModelType )
+        if( m_rbBuiltinModel->GetValue() && type == m_curModelType )
         {
             msg.clear();
             m_builtinModelsMgr.CreateModel( m_fields, m_sortedPartPins, false );
@@ -325,7 +325,7 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataFromWindow()
     std::string path;
     std::string name;
 
-    if( m_useLibraryModelRadioButton->GetValue() )
+    if( m_rbLibraryModel->GetValue() )
     {
         path = m_libraryPathText->GetValue();
         wxFileName fn( path );
@@ -388,7 +388,7 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateWidgets()
     SIM_MODEL* model = &curModel();
 
     updateIbisWidgets( model );
-    updateInstanceWidgets( model );
+    updateBuiltinModelWidgets( model );
     updateModelParamsTab( model );
     updateModelCodeTab( model );
     updatePinAssignments( model );
@@ -423,14 +423,14 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateIbisWidgets( SIM_MODEL* aModel )
 
 
 template <typename T_symbol, typename T_field>
-void DIALOG_SIM_MODEL<T_symbol, T_field>::updateInstanceWidgets( SIM_MODEL* aModel )
+void DIALOG_SIM_MODEL<T_symbol, T_field>::updateBuiltinModelWidgets( SIM_MODEL* aModel )
 {
     // Change the Type choice to match the current device type.
     if( aModel != m_prevModel )
     {
         m_deviceTypeChoice->Clear();
 
-        if( m_useLibraryModelRadioButton->GetValue() )
+        if( m_rbLibraryModel->GetValue() )
         {
             m_deviceTypeChoice->Append( aModel->GetDeviceInfo().description );
             m_deviceTypeChoice->SetSelection( 0 );
@@ -466,7 +466,7 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateInstanceWidgets( SIM_MODEL* aMod
         }
     }
 
-    m_typeChoice->Enable( !m_useLibraryModelRadioButton->GetValue() || isIbisLoaded() );
+    m_typeChoice->Enable( !m_rbLibraryModel->GetValue() || isIbisLoaded() );
 
     if( dynamic_cast<SIM_MODEL_RAW_SPICE*>( aModel ) )
         m_modelNotebook->SetSelection( 1 );
@@ -597,7 +597,7 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateModelCodeTab( SIM_MODEL* aModel 
 
     item.modelName = m_modelNameChoice->GetStringSelection();
 
-    if( m_useInstanceModelRadioButton->GetValue() || item.modelName == "" )
+    if( m_rbBuiltinModel->GetValue() || item.modelName == "" )
         item.modelName = m_fields.at( REFERENCE_FIELD ).GetText();
 
     text << aModel->SpiceGenerator().Preview( item );
@@ -729,7 +729,7 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::loadLibrary( const wxString& aLibraryP
     if( reporter.HasMessage() )
         DisplayErrorMessage( this, msg );
 
-    m_useLibraryModelRadioButton->SetValue( true );
+    m_rbLibraryModel->SetValue( true );
     m_libraryPathText->ChangeValue( aLibraryPath );
 
     wxArrayString modelNames;
@@ -929,7 +929,7 @@ int DIALOG_SIM_MODEL<T_symbol, T_field>::findSymbolPinRow( const wxString& aSymb
 template <typename T_symbol, typename T_field>
 SIM_MODEL& DIALOG_SIM_MODEL<T_symbol, T_field>::curModel() const
 {
-    if( m_useLibraryModelRadioButton->GetValue() )
+    if( m_rbLibraryModel->GetValue() )
     {
         int sel = m_modelNameChoice->GetSelection();
 
@@ -1014,7 +1014,7 @@ int DIALOG_SIM_MODEL<T_symbol, T_field>::getModelPinIndex( const wxString& aMode
 template <typename T_symbol, typename T_field>
 void DIALOG_SIM_MODEL<T_symbol, T_field>::onRadioButton( wxCommandEvent& aEvent )
 {
-    bool fromLibrary = m_useLibraryModelRadioButton->GetValue();
+    bool fromLibrary = m_rbLibraryModel->GetValue();
 
     m_pathLabel->Enable( fromLibrary );
     m_libraryPathText->Enable( fromLibrary );
@@ -1038,7 +1038,7 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onRadioButton( wxCommandEvent& aEvent 
 template <typename T_symbol, typename T_field>
 void DIALOG_SIM_MODEL<T_symbol, T_field>::onLibraryPathTextEnter( wxCommandEvent& aEvent )
 {
-    if( m_useLibraryModelRadioButton->GetValue() )
+    if( m_rbLibraryModel->GetValue() )
     {
         wxString path = m_libraryPathText->GetValue();
 
