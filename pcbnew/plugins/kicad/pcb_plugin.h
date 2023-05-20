@@ -277,7 +277,7 @@ public:
     void SetQueryUserCallback( std::function<bool( wxString aTitle, int aIcon, wxString aMessage,
                                                    wxString aOKButtonTitle )> aCallback ) override
     {
-        m_queryUserCallback = &aCallback;
+        m_queryUserCallback = aCallback;
     }
 
     void Save( const wxString& aFileName, BOARD* aBoard,
@@ -426,7 +426,7 @@ protected:
     NETINFO_MAPPING*       m_mapping;    ///< mapping for net codes, so only not empty net codes
                                          ///< are stored with consecutive integers as net codes
 
-    std::function<bool( wxString aTitle, int aIcon, wxString aMsg, wxString aAction )>* m_queryUserCallback;
+    std::function<bool( wxString aTitle, int aIcon, wxString aMsg, wxString aAction )> m_queryUserCallback;
 };
 
 #endif  // PCB_PLUGIN_H

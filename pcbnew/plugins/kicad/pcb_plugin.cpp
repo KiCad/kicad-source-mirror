@@ -274,7 +274,7 @@ void PCB_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, const STRING_UT
 
     if( sanityResult != wxEmptyString && m_queryUserCallback )
     {
-        if( !(*m_queryUserCallback)(
+        if( !m_queryUserCallback(
                     _( "Internal Group Data Error" ), wxICON_ERROR,
                     wxString::Format( _( "Please report this bug.  Error validating group "
                                          "structure: %s\n\nSave anyway?" ), sanityResult ),
@@ -2224,8 +2224,7 @@ void PCB_PLUGIN::format( const ZONE* aZone, int aNestLevel ) const
 PCB_PLUGIN::PCB_PLUGIN( int aControlFlags ) :
     m_cache( nullptr ),
     m_ctl( aControlFlags ),
-    m_mapping( new NETINFO_MAPPING() ),
-    m_queryUserCallback( nullptr )
+    m_mapping( new NETINFO_MAPPING() )
 {
     init( nullptr );
     m_out = &m_sf;

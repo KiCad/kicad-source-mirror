@@ -74,7 +74,7 @@ class PCB_PARSER : public PCB_LEXER
 {
 public:
     PCB_PARSER( LINE_READER* aReader, BOARD* aAppendToMe,
-                std::function<bool( wxString, int, wxString, wxString )>* aQueryUserCallback,
+                std::function<bool( wxString, int, wxString, wxString )> aQueryUserCallback,
                 PROGRESS_REPORTER* aProgressReporter = nullptr, unsigned aLineCount = 0 ) :
         PCB_LEXER( aReader ),
         m_board( aAppendToMe ),
@@ -368,7 +368,7 @@ private:
 
     std::vector<GROUP_INFO> m_groupInfos;
 
-    std::function<bool( wxString aTitle, int aIcon, wxString aMsg, wxString aAction )>* m_queryUserCallback;
+    std::function<bool( wxString aTitle, int aIcon, wxString aMsg, wxString aAction )> m_queryUserCallback;
 };
 
 

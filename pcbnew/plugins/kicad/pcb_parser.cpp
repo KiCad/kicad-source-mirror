@@ -990,8 +990,8 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
                         undefinedLayerNames,
                         destLayerName );
 
-            if( !(*m_queryUserCallback)( _( "Undefined Layers Warning" ), wxICON_WARNING, msg,
-                                         _( "Rescue" ) ) )
+            if( !m_queryUserCallback( _( "Undefined Layers Warning" ), wxICON_WARNING, msg,
+                                      _( "Rescue" ) ) )
             {
                 THROW_IO_ERROR( wxT( "CANCEL" ) );
             }
@@ -2216,7 +2216,7 @@ void PCB_PARSER::parseSetup()
                     {
                         // Thick outline fill mode no longer supported.  Make sure user is OK with
                         // converting fills.
-                        if( !(*m_queryUserCallback)(
+                        if( !m_queryUserCallback(
                                     _( "Legacy Zone Warning" ), wxICON_WARNING,
                                     _( "The legacy zone fill strategy is no longer supported.\n"
                                        "Convert zones to smoothed polygon fills?" ),
@@ -5171,7 +5171,7 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                 {
                     if( Pgm().IsGUI() && m_queryUserCallback )
                     {
-                        if( !(*m_queryUserCallback)(
+                        if( !m_queryUserCallback(
                                     _( "Legacy Zone Warning" ), wxICON_WARNING,
                                     _( "The legacy zone fill strategy is no longer supported.\n"
                                        "Convert zones to smoothed polygon fills?" ),
@@ -5220,7 +5220,7 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                         {
                             if( Pgm().IsGUI() && m_queryUserCallback )
                             {
-                                if( !(*m_queryUserCallback)(
+                                if( !m_queryUserCallback(
                                             _( "Legacy Zone Warning" ), wxICON_WARNING,
                                             _( "The segment zone fill mode is no longer supported.\n"
                                                "Convert zones to smoothed polygon fills?" ),
