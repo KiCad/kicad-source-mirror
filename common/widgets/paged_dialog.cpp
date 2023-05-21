@@ -330,7 +330,7 @@ void PAGED_DIALOG::SetError( const wxString& aMessage, wxWindow* aPage, wxWindow
 
 void PAGED_DIALOG::UpdateResetButton( int aPage )
 {
-    wxWindow* panel = m_treebook->GetPage( aPage );
+    wxWindow* panel = m_treebook->ResolvePage( aPage );
 
     // Enable the reset button only if the page is re-settable
     if( m_resetButton )
@@ -454,7 +454,7 @@ void PAGED_DIALOG::onResetButton( wxCommandEvent& aEvent )
         return;
 
     // NB: dynamic_cast doesn't work over Kiway
-    wxWindow* panel = m_treebook->GetPage( sel );
+    wxWindow* panel = m_treebook->ResolvePage( sel );
 
     if( panel )
     {
