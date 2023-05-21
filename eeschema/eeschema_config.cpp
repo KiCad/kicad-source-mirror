@@ -250,10 +250,7 @@ void SCH_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     aCfg->m_Window.grid.sizes = { wxS( "100 mil" ),
                                   wxS( "50 mil" ),
                                   wxS( "25 mil" ),
-                                  wxS( "10 mil" ),
-                                  wxS( "5 mil" ),
-                                  wxS( "2 mil" ),
-                                  wxS( "1 mil" ) };
+                                  wxS( "10 mil" ) };
 
     if( aCfg->m_Window.grid.last_size_idx > (int) aCfg->m_Window.grid.sizes.size() )
         aCfg->m_Window.grid.last_size_idx = 1;
