@@ -58,6 +58,12 @@ public:
         if( show )
             Resolve();
 
+        // m_contents has been created as a child window of LAZY_PAGE, and has been added to
+        // LAZY_PAGE's m_mainSizer.  So wxPanel::Show() should call m_contents' Show() method,
+        // whether overridden or not.  Only it doesn't, so we call it directly here.
+        if( show && m_contents )
+            m_contents->Show( true );
+
         return wxPanel::Show( show );
     }
 
