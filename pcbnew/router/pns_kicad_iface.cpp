@@ -275,6 +275,34 @@ static bool isHole( const PNS::ITEM* aItem )
 }
 
 
+static bool isDrilledHole( const PNS::ITEM* aItem )
+{
+    if( !isHole( aItem ) )
+        return false;
+
+    if( PAD* pad = dynamic_cast<PAD*>( aItem->Parent() ) )
+        return pad->GetDrillSizeX() && pad->GetDrillSizeX() == pad->GetDrillSizeY();
+
+    // Via holes are (currently) always round
+
+    return true;
+}
+
+
+static bool isNonPlatedSlot( const PNS::ITEM* aItem )
+{
+    if( !isHole( aItem ) )
+        return false;
+
+    if( PAD* pad = dynamic_cast<PAD*>( aItem->Parent() ) )
+        return pad->GetAttribute() == PAD_ATTRIB::NPTH && pad->GetDrillSizeX() != pad->GetDrillSizeY();
+
+    // Via holes are (currently) always round
+
+    return false;
+}
+
+
 static bool isEdge( const PNS::ITEM* aItem )
 {
     if ( !aItem )
@@ -432,7 +460,7 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
 
     for( int layer = layers.Start(); layer <= layers.End(); ++layer )
     {
-        if( isHole( aA ) && isHole( aB) )
+        if( isDrilledHole( aA ) && isDrilledHole( aB) )
         {
             if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE, aA, aB, layer, &constraint ) )
             {
@@ -456,7 +484,9 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
                     rv = constraint.m_Value.Min();
             }
         }
-        else if( isEdge( aA ) || ( aB && isEdge( aB ) ) )
+
+        // No 'else'; non-plated milled holes get both HOLE_CLEARANCE and EDGE_CLEARANCE
+        if( isEdge( aA ) || isNonPlatedSlot( aA ) || isEdge( aB ) || isNonPlatedSlot( aB ) )
         {
             if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_EDGE_CLEARANCE, aA, aB, layer, &constraint ) )
             {
