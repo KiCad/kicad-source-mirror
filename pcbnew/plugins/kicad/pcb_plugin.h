@@ -277,7 +277,7 @@ public:
     void SetQueryUserCallback( std::function<bool( wxString aTitle, int aIcon, wxString aMessage,
                                                    wxString aOKButtonTitle )> aCallback ) override
     {
-        m_queryUserCallback = aCallback;
+        m_queryUserCallback = std::move( aCallback );
     }
 
     void Save( const wxString& aFileName, BOARD* aBoard,

@@ -399,8 +399,8 @@ const std::vector<SIM_MODEL::PARAM::INFO>& SIM_MODEL_SOURCE::makeParamInfos( TYP
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeDcParamInfos( std::string aPrefix,
-                                                                        std::string aUnit )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeDcParamInfos( const std::string& aPrefix,
+                                                                        const std::string& aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -418,8 +418,8 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeDcParamInfos( std::str
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeSinParamInfos( std::string aPrefix,
-                                                                         std::string aUnit )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeSinParamInfos( const std::string& aPrefix,
+                                                                         const std::string& aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -477,8 +477,8 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeSinParamInfos( std::st
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makePulseParamInfos( std::string aPrefix,
-                                                                           std::string aUnit )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makePulseParamInfos( const std::string& aPrefix,
+                                                                           const std::string& aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -552,8 +552,8 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makePulseParamInfos( std::
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeExpParamInfos( std::string aPrefix,
-                                                                         std::string aUnit )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeExpParamInfos( const std::string& aPrefix,
+                                                                         const std::string& aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -611,7 +611,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeExpParamInfos( std::st
 }
 
 
-/*std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeSfamParamInfos( std::string aPrefix, std::string aUnit )
+/*std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeSfamParamInfos( const std::string& aPrefix, const std::string& aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -660,7 +660,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeExpParamInfos( std::st
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeSffmParamInfos( std::string aPrefix, std::string aUnit )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeSffmParamInfos( const std::string& aPrefix, const std::string& aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -726,7 +726,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeSffmParamInfos( std::s
 }*/
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeCcParamInfos( std::string aGainUnit )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeCcParamInfos( const std::string& aGainUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -748,7 +748,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeCcParamInfos( std::str
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeVcParamInfos( std::string aGainUnit )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeVcParamInfos( const std::string& aGainUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -771,9 +771,9 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeVcParamInfos( std::str
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makePwlParamInfos( std::string aPrefix,
-                                                                         std::string aQuantity,
-                                                                         std::string aUnit )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makePwlParamInfos( const std::string& aPrefix,
+                                                                         const std::string& aQuantity,
+                                                                         const std::string& aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -845,8 +845,8 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makePwlParamInfos( std::st
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeWhiteNoiseParamInfos( std::string aPrefix,
-                                                                                std::string aUnit )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeWhiteNoiseParamInfos( const std::string& aPrefix,
+                                                                                const std::string& aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -872,8 +872,8 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeWhiteNoiseParamInfos( 
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makePinkNoiseParamInfos( std::string aPrefix, 
-                                                                               std::string aUnit )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makePinkNoiseParamInfos( const std::string& aPrefix, 
+                                                                               const std::string& aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -907,8 +907,8 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makePinkNoiseParamInfos( s
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeBurstNoiseParamInfos( std::string aPrefix,
-                                                                                std::string aUnit )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeBurstNoiseParamInfos( const std::string& aPrefix,
+                                                                                const std::string& aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -942,8 +942,8 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeBurstNoiseParamInfos( 
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeRandomUniformParamInfos( std::string aPrefix,
-                                                                                   std::string aUnit )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeRandomUniformParamInfos( const std::string& aPrefix,
+                                                                                   const std::string& aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -985,8 +985,8 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeRandomUniformParamInfo
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeRandomNormalParamInfos( std::string aPrefix,
-                                                                                  std::string aUnit )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeRandomNormalParamInfos( const std::string& aPrefix,
+                                                                                  const std::string& aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -1028,8 +1028,8 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeRandomNormalParamInfos
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeRandomExpParamInfos( std::string aPrefix,
-                                                                               std::string aUnit )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeRandomExpParamInfos( const std::string& aPrefix,
+                                                                               const std::string& aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -1071,8 +1071,8 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeRandomExpParamInfos( s
 }
 
 
-std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeRandomPoissonParamInfos( std::string aPrefix,
-                                                                                   std::string aUnit )
+std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeRandomPoissonParamInfos( const std::string& aPrefix,
+                                                                                   const std::string& aUnit )
 {
     std::vector<PARAM::INFO> paramInfos;
     PARAM::INFO paramInfo;
@@ -1113,7 +1113,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeRandomPoissonParamInfo
     return paramInfos;
 }
 
-void SIM_MODEL_SOURCE::appendAcParamInfos( std::vector<PARAM::INFO>& aParamInfos, std::string aUnit )
+void SIM_MODEL_SOURCE::appendAcParamInfos( std::vector<PARAM::INFO>& aParamInfos, const std::string& aUnit )
 {
     PARAM::INFO paramInfo;
 

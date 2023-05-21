@@ -82,25 +82,39 @@ protected:
 private:
     static const std::vector<PARAM::INFO>& makeParamInfos( TYPE aType );
 
-    static std::vector<PARAM::INFO> makeDcParamInfos( std::string aPrefix, std::string aUnit );
-    static std::vector<PARAM::INFO> makeSinParamInfos( std::string aPrefix, std::string aUnit );
-    static std::vector<PARAM::INFO> makePulseParamInfos( std::string aPrefix, std::string aUnit );
-    static std::vector<PARAM::INFO> makeExpParamInfos( std::string aPrefix, std::string aUnit );
-    //static std::vector<PARAM::INFO> makeSfamParamInfos( std::string aPrefix, std::string aUnit );
-    //static std::vector<PARAM::INFO> makeSffmParamInfos( std::string aPrefix, std::string aUnit );
-    static std::vector<SIM_MODEL::PARAM::INFO> makeVcParamInfos( std::string aGainUnit );
-    static std::vector<SIM_MODEL::PARAM::INFO> makeCcParamInfos( std::string aGainUnit );
-    static std::vector<PARAM::INFO> makePwlParamInfos( std::string aPrefix, std::string aQuantity,
-                                                       std::string aUnit );
-    static std::vector<PARAM::INFO> makeWhiteNoiseParamInfos( std::string aPrefix, std::string aUnit );
-    static std::vector<PARAM::INFO> makePinkNoiseParamInfos( std::string aPrefix, std::string aUnit );
-    static std::vector<PARAM::INFO> makeBurstNoiseParamInfos( std::string aPrefix, std::string aUnit );
-    static std::vector<PARAM::INFO> makeRandomUniformParamInfos( std::string aPrefix, std::string aUnit );
-    static std::vector<PARAM::INFO> makeRandomNormalParamInfos( std::string aPrefix, std::string aUnit );
-    static std::vector<PARAM::INFO> makeRandomExpParamInfos( std::string aPrefix, std::string aUnit );
-    static std::vector<PARAM::INFO> makeRandomPoissonParamInfos( std::string aPrefix, std::string aUnit );
+    static std::vector<PARAM::INFO> makeDcParamInfos( const std::string& aPrefix,
+                                                      const std::string& aUnit );
+    static std::vector<PARAM::INFO> makeSinParamInfos( const std::string& aPrefix,
+                                                       const std::string& aUnit );
+    static std::vector<PARAM::INFO> makePulseParamInfos( const std::string& aPrefix,
+                                                         const std::string& aUnit );
+    static std::vector<PARAM::INFO> makeExpParamInfos( const std::string& aPrefix,
+                                                       const std::string& aUnit );
+    //static std::vector<PARAM::INFO> makeSfamParamInfos( const std::string& aPrefix,
+    //                                                    const std::string& aUnit );
+    //static std::vector<PARAM::INFO> makeSffmParamInfos( const std::string& aPrefix,
+    //                                                    const std::string& aUnit );
+    static std::vector<SIM_MODEL::PARAM::INFO> makeVcParamInfos( const std::string& aGainUnit );
+    static std::vector<SIM_MODEL::PARAM::INFO> makeCcParamInfos( const std::string& aGainUnit );
+    static std::vector<PARAM::INFO> makePwlParamInfos( const std::string& aPrefix,
+                                                       const std::string& aQuantity,
+                                                       const std::string& aUnit );
+    static std::vector<PARAM::INFO> makeWhiteNoiseParamInfos( const std::string& aPrefix,
+                                                              const std::string& aUnit );
+    static std::vector<PARAM::INFO> makePinkNoiseParamInfos( const std::string& aPrefix,
+                                                             const std::string& aUnit );
+    static std::vector<PARAM::INFO> makeBurstNoiseParamInfos( const std::string& aPrefix,
+                                                              const std::string& aUnit );
+    static std::vector<PARAM::INFO> makeRandomUniformParamInfos( const std::string& aPrefix,
+                                                                 const std::string& aUnit );
+    static std::vector<PARAM::INFO> makeRandomNormalParamInfos( const std::string& aPrefix,
+                                                                const std::string& aUnit );
+    static std::vector<PARAM::INFO> makeRandomExpParamInfos( const std::string& aPrefix,
+                                                             const std::string& aUnit );
+    static std::vector<PARAM::INFO> makeRandomPoissonParamInfos( const std::string& aPrefix,
+                                                                 const std::string& aUnit );
 
-    static void appendAcParamInfos( std::vector<PARAM::INFO>& aParamInfos, std::string aUnit );
+    static void appendAcParamInfos( std::vector<PARAM::INFO>& aParamInfos, const std::string& aUnit );
 };
 
 #endif // SIM_MODEL_SOURCE_H

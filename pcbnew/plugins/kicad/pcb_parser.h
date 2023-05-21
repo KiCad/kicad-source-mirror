@@ -82,7 +82,7 @@ public:
         m_progressReporter( aProgressReporter ),
         m_lastProgressTime( std::chrono::steady_clock::now() ),
         m_lineCount( aLineCount ),
-        m_queryUserCallback( aQueryUserCallback )
+        m_queryUserCallback( std::move( aQueryUserCallback ) )
     {
         init();
     }
