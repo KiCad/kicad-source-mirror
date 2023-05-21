@@ -1169,6 +1169,10 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
     if( !aStartPage.IsEmpty() )
         dlg.SetInitialPage( aStartPage, aStartParentPage );
 
+    // This is unfortunate, but it's the cost of lazy-loading the panels
+    book->SetMinSize( wxSize( 980, 560 ) );
+    book->SetInitialSize( wxSize( 980, 560 ) );
+
     dlg.SetEvtHandlerEnabled( true );
     wxEndBusyCursor();
 
