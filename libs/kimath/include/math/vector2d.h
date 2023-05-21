@@ -362,8 +362,8 @@ VECTOR2<T> VECTOR2<T>::Resize( T aNewLength ) const
                     KiROUND( std::sqrt( rescale( l_sq_new, (extended_type) x * x, l_sq_current ) ) ) ),
             static_cast<T>(
                 ( y < 0 ? -1 : 1 ) *
-                    KiROUND( std::sqrt( rescale( l_sq_new, (extended_type) y * y, l_sq_current ) ) ) )
-                        * sign( aNewLength ) );
+                    KiROUND( std::sqrt( rescale( l_sq_new, (extended_type) y * y, l_sq_current ) ) )
+                        * sign( aNewLength ) ) );
     }
     else
     {
@@ -372,8 +372,8 @@ VECTOR2<T> VECTOR2<T>::Resize( T aNewLength ) const
                     std::sqrt( rescale( l_sq_new, (extended_type) x * x, l_sq_current ) ) ),
             static_cast<T>(
                 ( y < 0 ? -1 : 1 ) *
-                    std::sqrt( rescale( l_sq_new, (extended_type) y * y, l_sq_current ) ) )
-                        * sign( aNewLength ) );
+                    std::sqrt( rescale( l_sq_new, (extended_type) y * y, l_sq_current ) )
+                        * sign( aNewLength ) ));
     }
 }
 
