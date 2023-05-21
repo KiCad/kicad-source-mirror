@@ -18,10 +18,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-18 11:55-0700\n"
-"PO-Revision-Date: 2023-05-12 13:55+0000\n"
+"PO-Revision-Date: 2023-05-22 09:47+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4283,9 +4283,9 @@ msgid "Zoom %.2f"
 msgstr "Zvětšení %.2f"
 
 #: common/eda_draw_frame.cpp:609
-#, fuzzy, c-format
+#, c-format
 msgid "grid %s"
-msgstr "Mřížka %f"
+msgstr "mřížka %s"
 
 #: common/eda_draw_frame.cpp:622 pagelayout_editor/pl_editor_frame.cpp:752
 msgid "inches"
@@ -9346,7 +9346,7 @@ msgstr "Chyba zkopírování globální tabulky knihoven symbolů '%s' do '%s'."
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:31
 msgid "Ibis parser log"
-msgstr ""
+msgstr "Log analyzátoru Ibis"
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter_base.h:46
 msgid "Ibis parser"
@@ -13208,12 +13208,12 @@ msgid "Unable to open destination '%s'"
 msgstr "Nelze otevřít cíl '%s'"
 
 #: eeschema/eeschema_jobs_handler.cpp:495
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr "Vykreslování symbolu '%s' jednotky %d do '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:505
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
 msgstr "Vykreslování symbolu '%s' do '%s'\n"
 
@@ -19756,9 +19756,8 @@ msgid "Drawing Mode"
 msgstr "Režim kreslení"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:60
-#, fuzzy
 msgid "Sketch flashed items"
-msgstr "Bliká jako obrys"
+msgstr "Bliká obrys položek"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:63
 msgid "Sketch lines"
@@ -20488,9 +20487,8 @@ msgid "Show lines in outline mode"
 msgstr "Zobrazit prokov jako obrys"
 
 #: gerbview/tools/gerbview_actions.cpp:168
-#, fuzzy
 msgid "Sketch Flashed Items"
-msgstr "Bliká jako obrys"
+msgstr "Bliká obrys položek"
 
 #: gerbview/tools/gerbview_actions.cpp:168
 msgid "Show flashed items in outline mode"
@@ -24183,12 +24181,11 @@ msgid "Write Data Failed"
 msgstr "Zápis dat se nezdařil"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:248
-#, fuzzy
 msgid ""
 "No data filename to save modifications.\n"
 "Do you want to exit and abandon your changes?"
 msgstr ""
-"Data upravena, není žádný soubor k uložení úprav\n"
+"Žádný název souboru dat pro uložení změn.\n"
 "Chcete ukončit a vzdát se změn?"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:258
@@ -24588,7 +24585,7 @@ msgstr "km"
 
 #: pcb_calculator/widgets/unit_selector.cpp:214
 msgid "feet"
-msgstr ""
+msgstr "stop"
 
 #: pcb_calculator/widgets/unit_selector.cpp:279
 msgid "mW"
@@ -26064,9 +26061,8 @@ msgstr "Použít středové čáry"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:113
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:104
 #: pcbnew/tools/convert_tool.cpp:75
-#, fuzzy
 msgid "Create bounding hull"
-msgstr "Vytvořit konvexní obálku"
+msgstr "Vytvoření omezujícího obalu"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:234
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:118
@@ -29213,9 +29209,8 @@ msgid "Ring"
 msgstr "Kruh"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:197
-#, fuzzy
 msgid "Line width may not be 0 for unfilled shapes."
-msgstr "Šířka čáry nemůže být 0 s výjimkou tvarů vyplněných barvou obrysu."
+msgstr "Šířka čáry nesmí být 0 pro nevyplněné tvary."
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:319
 #, c-format
@@ -29415,12 +29410,12 @@ msgstr ""
 "nebude generována."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1331
-#, fuzzy
 msgid ""
 "Warning: Negative solder paste margins larger than pad. No solder paste mask "
 "will be generated."
 msgstr ""
-"Záporná mezera znamená oblast menší, než ploška (obvykle pro pájecí pastu)."
+"Varování: Záporná mezera znamená okraje větší než ploška. Nebude generována "
+"žádná maska pasty."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1338
 msgid "Error: pad has no layer."
@@ -29483,7 +29478,7 @@ msgstr "Chyba: Záporná velikost rohu."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1424
 msgid "Warning: Corner size will make pad circular."
-msgstr ""
+msgstr "VAROVÁNÍ: Velikost rohu způsobí kruhovou plošku."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1434
 msgid "Error: Custom pad shape must resolve to a single polygon."
@@ -30176,31 +30171,26 @@ msgid "Postscript Options"
 msgstr "Možnosti Postscriptu"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:275
-#, fuzzy
 msgid "X scale factor:"
-msgstr "Měřítka:"
+msgstr "Měřítko X:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:280
-#, fuzzy
 msgid "Set global X scale adjust for exact scale PostScript output."
-msgstr "Nastavit globální měřítko X pro přesné měřítko výstupu postscriptu."
+msgstr "Nastavit globální měřítko X pro přesné měřítko výstupu Postscriptu."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:287
-#, fuzzy
 msgid "Y scale factor:"
-msgstr "Měřítka:"
+msgstr "Měřítko Y:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:292
-#, fuzzy
 msgid "Set global Y scale adjust for exact scale PostScript output."
-msgstr "Nastavit globální měřítko Y pro přesné měřítko výstupu postscriptu."
+msgstr "Nastavit globální měřítko Y pro přesné měřítko výstupu Postscriptu."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:299
 msgid "Track width correction:"
 msgstr "Korekce šířky spoje:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:304
-#, fuzzy
 msgid ""
 "Set global width correction for exact width PostScript output.\n"
 "These width correction is intended to compensate tracks width and also pads "
@@ -30210,9 +30200,9 @@ msgid ""
 msgstr ""
 "Nastavit globální korekci šířky pro přesný postscriptový výstup.\n"
 "Tato korekce šířky je určena ke kompenzování šířky spojů a také k chybám "
-"velikosti plošek a průchodek.\n"
-"Vhodná hodnota korekce šířky musí být v rozmezí [- (Minimální šířka spoje - "
-"1), + (Minimální izolační mezera - 1)] v desítkách."
+"velikosti plošek a prokovů.\n"
+"Vhodná hodnota korekce šířky musí být v rozsahu [-(MinTrackWidth-1), "
+"+(MinClearanceValue-1)]."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:315
 msgid "Force A4 output"
@@ -33036,9 +33026,9 @@ msgid "Checking %s thermal spoke width: %s."
 msgstr "Kontrola %s šířky tepelného paprsku: %s."
 
 #: pcbnew/drc/drc_engine.cpp:926
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s min spoke count: %s."
-msgstr "Kontrola %s %s: %s."
+msgstr "Kontrola %s min počet paprsků: %s."
 
 #: pcbnew/drc/drc_engine.cpp:933
 #, c-format
@@ -41088,7 +41078,7 @@ msgstr "Jít zpět o jeden segment aktuálního spoje."
 
 #: pcbnew/tools/pcb_actions.cpp:1513
 msgid "Route From Other End"
-msgstr ""
+msgstr "Táhni spoj z opačného konce"
 
 #: pcbnew/tools/pcb_actions.cpp:1514
 msgid ""
