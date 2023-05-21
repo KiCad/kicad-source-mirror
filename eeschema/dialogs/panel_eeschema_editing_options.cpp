@@ -68,9 +68,11 @@ void PANEL_EESCHEMA_EDITING_OPTIONS::loadEEschemaSettings( EESCHEMA_SETTINGS* aC
     COLOR4D           schematicBackground = settings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
 
     m_borderColorSwatch->SetSwatchBackground( schematicBackground );
+    m_borderColorSwatch->SetDefaultColor( settings->GetDefaultColor( LAYER_SHEET ) );
     m_borderColorSwatch->SetSwatchColor( aCfg->m_Drawing.default_sheet_border_color, false );
 
     m_backgroundColorSwatch->SetSwatchBackground( schematicBackground );
+    m_backgroundColorSwatch->SetDefaultColor( settings->GetDefaultColor( LAYER_SHEET_BACKGROUND ) );
     m_backgroundColorSwatch->SetSwatchColor( aCfg->m_Drawing.default_sheet_background_color, false );
 
     m_choiceLineMode->SetSelection( aCfg->m_Drawing.line_mode );
