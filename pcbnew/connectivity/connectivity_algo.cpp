@@ -119,6 +119,18 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
     if( !aItem->IsOnCopperLayer() )
         return false;
 
+    auto alreadyAdded =
+            [this]( BOARD_ITEM* item )
+            {
+                auto it = m_itemMap.find( item );
+
+                if( it == m_itemMap.end() )
+                    return false;
+
+                // Don't be fooled by an empty ITEM_MAP_ENTRY auto-created by operator[].
+                return !it->second.GetItems().empty();
+            };
+
     switch( aItem->Type() )
     {
     case PCB_NETINFO_T:
@@ -132,7 +144,7 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
 
         for( PAD* pad : static_cast<FOOTPRINT*>( aItem )->Pads() )
         {
-            if( m_itemMap.find( pad ) != m_itemMap.end() )
+            if( alreadyAdded( pad ) )
                 return false;
 
             add( m_itemList, pad );
@@ -149,7 +161,7 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
                 return false;
         }
 
-        if( m_itemMap.find( aItem ) != m_itemMap.end() )
+        if( alreadyAdded( aItem ) )
             return false;
 
         add( m_itemList, static_cast<PAD*>( aItem ) );
@@ -157,21 +169,21 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
     }
 
     case PCB_TRACE_T:
-        if( m_itemMap.find( aItem ) != m_itemMap.end() )
+        if( alreadyAdded( aItem ) )
             return false;
 
         add( m_itemList, static_cast<PCB_TRACK*>( aItem ) );
         break;
 
     case PCB_ARC_T:
-        if( m_itemMap.find( aItem ) != m_itemMap.end() )
+        if( alreadyAdded( aItem ) )
             return false;
 
         add( m_itemList, static_cast<PCB_ARC*>( aItem ) );
         break;
 
     case PCB_VIA_T:
-        if( m_itemMap.find( aItem ) != m_itemMap.end() )
+        if( alreadyAdded( aItem ) )
             return false;
 
         add( m_itemList, static_cast<PCB_VIA*>( aItem ) );
@@ -181,7 +193,7 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
     {
         ZONE* zone = static_cast<ZONE*>( aItem );
 
-        if( m_itemMap.find( aItem ) != m_itemMap.end() )
+        if( alreadyAdded( aItem ) )
             return false;
 
         m_itemMap[zone] = ITEM_MAP_ENTRY();
