@@ -61,6 +61,7 @@ private:
     void createPreviewItems();
 
     void updatePreview();
+    void updateAllowedSwatches();
     void zoomFitPreview();
 
 private:

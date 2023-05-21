@@ -223,6 +223,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createSwatches()
 
     m_colorsMainSizer->Layout();
 
+    updateAllowedSwatches();
     createPreviewItems();
     updatePreview();
     zoomFitPreview();
@@ -519,10 +520,8 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::OnSize( wxSizeEvent& aEvent )
 }
 
 
-void PANEL_EESCHEMA_COLOR_SETTINGS::OnOverrideItemColorsClicked( wxCommandEvent& aEvent )
+void PANEL_EESCHEMA_COLOR_SETTINGS::updateAllowedSwatches()
 {
-    m_currentSettings->SetOverrideSchItemColors( m_optOverrideColors->GetValue() );
-
     // If the theme is not overriding individual item colors then don't show them so that
     // the user doesn't get seduced into thinking they'll have some effect.
     m_labels[ LAYER_SHEET ]->Show( m_currentSettings->GetOverrideSchItemColors() );
@@ -533,4 +532,11 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::OnOverrideItemColorsClicked( wxCommandEvent&
 
     m_colorsGridSizer->Layout();
     m_colorsListWindow->Layout();
+}
+
+
+void PANEL_EESCHEMA_COLOR_SETTINGS::OnOverrideItemColorsClicked( wxCommandEvent& aEvent )
+{
+    m_currentSettings->SetOverrideSchItemColors( m_optOverrideColors->GetValue() );
+    updateAllowedSwatches();
 }
