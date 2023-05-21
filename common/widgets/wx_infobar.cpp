@@ -31,6 +31,10 @@
 #include <wx/bmpbuttn.h>
 #include <eda_base_frame.h>
 
+#ifdef __WXMSW__
+#include <gal/dpi_scaling.h>
+#endif
+
 
 wxDEFINE_EVENT( KIEVT_SHOW_INFOBAR,    wxCommandEvent );
 wxDEFINE_EVENT( KIEVT_DISMISS_INFOBAR, wxCommandEvent );
@@ -74,12 +78,20 @@ WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxAuiManager* aMgr, wxWindowID aWinid
     int sx, sy;
     GetSize( &sx, &sy );
     sy = 1.5 * sy;
-    SetSize( sx, sy );
 
     // The bitmap gets cutoff sometimes with the default size, so force it to be the same
     // height as the infobar.
     wxSizer* sizer    = GetSizer();
     wxSize   iconSize = wxArtProvider::GetSizeHint( wxART_BUTTON );
+
+#ifdef __WXMSW__
+    DPI_SCALING dpi( nullptr, aParent );
+    iconSize.x *= dpi.GetContentScaleFactor();
+    sx *= dpi.GetContentScaleFactor();
+    sy *= dpi.GetContentScaleFactor();
+#endif
+
+    SetSize( sx, sy );
 
     sizer->SetItemMinSize( (size_t) 0, iconSize.x, sy );
 
