@@ -427,14 +427,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             if( autofillZones )
                 dirtyIntersectingZones( boardItem, changeType );
 
-            boardItem->SetFlags( STRUCT_DELETED );
-
-            if( boardItem->Type() == PCB_FOOTPRINT_T )
-            {
-                for( PAD* pad : static_cast<FOOTPRINT*>( boardItem )->Pads() )
-                    pad->SetFlags( STRUCT_DELETED );
-            }
-
             switch( boardItem->Type() )
             {
             case PCB_TEXT_T:
