@@ -400,7 +400,7 @@ void SIM_PLOT_PANEL::updateAxes()
 
 void SIM_PLOT_PANEL::prepareDCAxes()
 {
-    wxString sim_cmd = getSimCommand().Lower();
+    wxString sim_cmd = GetSimCommand().Lower();
     wxString rem;
 
     if( sim_cmd.StartsWith( ".dc", &rem ) )

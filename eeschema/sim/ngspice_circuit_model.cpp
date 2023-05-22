@@ -72,7 +72,7 @@ SIM_PLOT_TYPE NGSPICE_CIRCUIT_MODEL::VectorToSignal( const std::string& aVector,
 }
 
 
-wxString NGSPICE_CIRCUIT_MODEL::GetSheetSimCommand()
+wxString NGSPICE_CIRCUIT_MODEL::GetSchTextSimCommand()
 {
     wxString      simCmd;
 
