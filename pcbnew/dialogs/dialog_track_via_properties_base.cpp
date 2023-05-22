@@ -41,16 +41,16 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	m_viaNotFree = new wxCheckBox( m_sbCommonSizer->GetStaticBox(), wxID_ANY, _("Automatically update via nets"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
 	m_viaNotFree->SetToolTip( _("Automatically change the net of this via when the pads or zones it touches are changed") );
 
-	bNetWidgetsRightCol->Add( m_viaNotFree, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 10 );
+	bNetWidgetsRightCol->Add( m_viaNotFree, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizerNetWidgets->Add( bNetWidgetsRightCol, 1, wxLEFT|wxALIGN_CENTER_VERTICAL, 10 );
+	bSizerNetWidgets->Add( bNetWidgetsRightCol, 1, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
-	m_sbCommonSizer->Add( bSizerNetWidgets, 5, wxEXPAND, 10 );
+	m_sbCommonSizer->Add( bSizerNetWidgets, 5, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_staticline1 = new wxStaticLine( m_sbCommonSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_sbCommonSizer->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM, 10 );
+	m_sbCommonSizer->Add( m_staticline1, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 	m_lockedCbox = new wxCheckBox( m_sbCommonSizer->GetStaticBox(), wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
 	m_sbCommonSizer->Add( m_lockedCbox, 0, wxBOTTOM, 2 );
@@ -64,7 +64,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	bSizerTracksLeftCol = new wxBoxSizer( wxVERTICAL );
 
 	wxFlexGridSizer* fgTrackEnds;
-	fgTrackEnds = new wxFlexGridSizer( 7, 5, 3, 2 );
+	fgTrackEnds = new wxFlexGridSizer( 7, 5, 3, 3 );
 	fgTrackEnds->AddGrowableCol( 1 );
 	fgTrackEnds->AddGrowableCol( 3 );
 	fgTrackEnds->SetFlexibleDirection( wxBOTH );
@@ -143,16 +143,14 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	fgTrackSizes->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_trackNetclass = new wxCheckBox( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Use net class widths"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_trackNetclass->SetValue(true);
 	fgTrackSizes->Add( m_trackNetclass, 0, wxBOTTOM, 3 );
-
-
-	fgTrackSizes->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
 	bSizerTracksLeftCol->Add( fgTrackSizes, 1, wxEXPAND, 5 );
 
 
-	m_sbTrackSizer->Add( bSizerTracksLeftCol, 1, wxEXPAND, 5 );
+	m_sbTrackSizer->Add( bSizerTracksLeftCol, 1, wxALL|wxEXPAND, 5 );
 
 
 	m_sbTrackSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 15 );
@@ -278,7 +276,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	viaRightColumn = new wxBoxSizer( wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer4;
-	fgSizer4 = new wxFlexGridSizer( 0, 2, 0, 5 );
+	fgSizer4 = new wxFlexGridSizer( 0, 2, 3, 5 );
 	fgSizer4->AddGrowableCol( 1 );
 	fgSizer4->SetFlexibleDirection( wxBOTH );
 	fgSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -338,7 +336,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	bSizerViaCols->Add( viaRightColumn, 1, wxEXPAND, 5 );
 
 
-	m_sbViaSizer->Add( bSizerViaCols, 0, wxEXPAND, 5 );
+	m_sbViaSizer->Add( bSizerViaCols, 0, wxALL|wxEXPAND, 5 );
 
 	m_staticline2 = new wxStaticLine( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	m_sbViaSizer->Add( m_staticline2, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
@@ -363,7 +361,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	m_legacyTeardropsWarning->Add( bSizer42, 1, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	m_sbViaSizer->Add( m_legacyTeardropsWarning, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	m_sbViaSizer->Add( m_legacyTeardropsWarning, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 	wxBoxSizer* bSizerTeardrops;
 	bSizerTeardrops = new wxBoxSizer( wxVERTICAL );
@@ -450,7 +448,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	m_rbStraightLines = new wxRadioButton( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Straight lines"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	bSizer41->Add( m_rbStraightLines, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_rbCurved = new wxRadioButton( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Curved"), wxDefaultPosition, wxDefaultSize, wxRB_SINGLE );
+	m_rbCurved = new wxRadioButton( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Curved"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer41->Add( m_rbCurved, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
@@ -463,7 +461,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	bSizerShapeColumns->Add( 20, 0, 0, wxEXPAND, 5 );
 
 	wxFlexGridSizer* fgSizerRightCol;
-	fgSizerRightCol = new wxFlexGridSizer( 0, 3, 2, 5 );
+	fgSizerRightCol = new wxFlexGridSizer( 0, 3, 3, 5 );
 	fgSizerRightCol->AddGrowableCol( 1 );
 	fgSizerRightCol->SetFlexibleDirection( wxBOTH );
 	fgSizerRightCol->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
