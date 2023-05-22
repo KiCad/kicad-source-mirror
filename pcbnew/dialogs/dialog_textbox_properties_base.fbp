@@ -216,7 +216,7 @@
                         <property name="name">gbSizer1</property>
                         <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                         <property name="permission">none</property>
-                        <property name="vgap">2</property>
+                        <property name="vgap">3</property>
                         <object class="gbsizeritem" expanded="1">
                             <property name="border">5</property>
                             <property name="colspan">3</property>
@@ -389,7 +389,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size"></property>
+                                <property name="minimum_size">175,-1</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_LayerSelectionCtrl</property>
                                 <property name="pane_border">1</property>
