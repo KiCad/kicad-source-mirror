@@ -42,7 +42,7 @@ PANEL_PACKAGE::PANEL_PACKAGE( wxWindow* parent, const ActionCallback& aCallback,
 
     m_name->SetFont( m_name->GetFont().Bold() );
 
-    m_name->SetLabel( m_data.package.name );
+    m_name->SetLabelText( m_data.package.name );
     m_bitmap->SetBitmap( *m_data.bitmap );
 
     // Set min width to 0 otherwise wxStaticLabel really doesn't want to shrink on resize
@@ -51,7 +51,7 @@ PANEL_PACKAGE::PANEL_PACKAGE( wxWindow* parent, const ActionCallback& aCallback,
     m_minHeight = GetMinHeight();
 
     double descLineHeight = m_desc->GetTextExtent( wxT( "X" ) ).GetHeight() * 1.2 /* leading */;
-    m_desc->SetLabel( m_data.package.description );
+    m_desc->SetLabelText( m_data.package.description );
     descLineHeight = wxSplit( m_desc->GetLabel(), '\n' ).size() * descLineHeight;
 
     int    nameLineHeight = m_name->GetTextExtent( wxT( "X" ) ).GetHeight();
