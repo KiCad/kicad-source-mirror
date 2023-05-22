@@ -362,6 +362,8 @@ public:
                 enumValues( std::move( aEnumValues ) )
             {}
 
+            bool Matches( const std::string& aName ) const;
+
             std::string              name;
             unsigned                 id;
             DIR                      dir;
@@ -377,12 +379,17 @@ public:
             std::vector<std::string> enumValues;
         };
 
-        std::string  value;
-        const INFO&  info;
-
         PARAM( const INFO& aInfo ) :
                 info( aInfo )
         {}
+
+        bool Matches( const std::string& aName ) const
+        {
+            return info.Matches( aName );
+        }
+
+        std::string  value;
+        const INFO&  info;
     };
 
 
