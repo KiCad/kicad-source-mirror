@@ -205,10 +205,20 @@ DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::DIALOG_GLOBAL_EDIT_TEARDROPS_BASE( wxWindow* 
 	m_staticText15->Wrap( -1 );
 	bSizer41->Add( m_staticText15, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_rbStraightLines = new wxRadioButton( sbAction->GetStaticBox(), wxID_ANY, _("Straight lines"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	m_rbAntiStraight = new wxRadioButton( sbAction->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	m_rbAntiStraight->Hide();
+
+	bSizer41->Add( m_rbAntiStraight, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	m_rbStraightLines = new wxRadioButton( sbAction->GetStaticBox(), wxID_ANY, _("Straight lines"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer41->Add( m_rbStraightLines, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_rbCurved = new wxRadioButton( sbAction->GetStaticBox(), wxID_ANY, _("Curved"), wxDefaultPosition, wxDefaultSize, wxRB_SINGLE );
+	m_rbAntiCurved = new wxRadioButton( sbAction->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	m_rbAntiCurved->Hide();
+
+	bSizer41->Add( m_rbAntiCurved, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	m_rbCurved = new wxRadioButton( sbAction->GetStaticBox(), wxID_ANY, _("Curved"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	bSizer41->Add( m_rbCurved, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 

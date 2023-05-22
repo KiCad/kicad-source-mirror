@@ -80,10 +80,12 @@ protected:
         if( !m_rbStraightLines->GetValue() )
         {
             m_rbStraightLines->SetValue( true );
+            m_rbAntiCurved->SetValue( true );
             m_rbCurved->SetValue( false );
         }
         else
         {
+            m_rbAntiStraight->SetValue( true );
             m_rbStraightLines->SetValue( false );
         }
     }
@@ -92,14 +94,19 @@ protected:
         if( !m_rbCurved->GetValue() )
         {
             m_rbCurved->SetValue( true );
+            m_rbAntiStraight->SetValue( true );
             m_rbStraightLines->SetValue( false );
         }
         else
         {
+            m_rbAntiCurved->SetValue( true );
             m_rbCurved->SetValue( false );
         }
     }
 
+    // Track-to-track teardrops always follow the document-wide settings (there are no teardrop
+    // properties on individual track segments as they're too ephemeral).  Therefore we disable
+    // Set-to-specified-values when track-to-track is selected.
     void onTrackToTrack( wxCommandEvent& event ) override
     {
         if( event.IsChecked() && m_specifiedValues->GetValue() )
@@ -109,6 +116,7 @@ protected:
         }
     }
 
+    // These just improve usability so that you don't have to click twice to enable a filter.
     void OnNetclassFilterSelect( wxCommandEvent& event ) override
     {
         m_netclassFilterOpt->SetValue( true );
@@ -121,12 +129,20 @@ protected:
     {
         m_netFilterOpt->SetValue( true );
     }
+
+    // Remove "add" terminology when updating only existing teardrops.
     void OnExistingFilterSelect( wxCommandEvent& event ) override
     {
         if( event.IsChecked() )
-            m_specifiedValues->SetLabel( _( "Update teardrops to specified values:" ) );
+        {
+            m_addTeardrops->SetLabel( _( "Set teardrops to default values for shape" ) );
+            m_specifiedValues->SetLabel( _( "Set teardrops to specified values:" ) );
+        }
         else
+        {
+            m_addTeardrops->SetLabel( _( "Add teardrops with default values for shape" ) );
             m_specifiedValues->SetLabel( _( "Add teardrops with specified values:" ) );
+        }
     }
 
     void setSpecifiedParams( TEARDROP_PARAMETERS* targetParams );

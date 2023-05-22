@@ -73,7 +73,9 @@ class DIALOG_GLOBAL_EDIT_TEARDROPS_BASE : public DIALOG_SHIM
 		wxStaticText* m_minTrackWidthHint;
 		wxStaticBitmap* m_bitmapTeardrop;
 		wxStaticText* m_staticText15;
+		wxRadioButton* m_rbAntiStraight;
 		wxRadioButton* m_rbStraightLines;
+		wxRadioButton* m_rbAntiCurved;
 		wxRadioButton* m_rbCurved;
 		wxStaticText* m_stLenPercentLabel;
 		wxTextCtrl* m_tcLenPercent;
