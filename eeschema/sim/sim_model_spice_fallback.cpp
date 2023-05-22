@@ -23,7 +23,6 @@
 
 #include <sim/sim_model_spice_fallback.h>
 #include <fmt/format.h>
-#include <boost/algorithm/string/case_conv.hpp>
 
 
 SIM_MODEL_SPICE_FALLBACK::SIM_MODEL_SPICE_FALLBACK( TYPE aType, const std::string& aRawSpiceCode ) :
@@ -67,15 +66,13 @@ int SIM_MODEL_SPICE_FALLBACK::doFindParam( const std::string& aParamName ) const
 {
     // Special case to allow escaped model parameters (suffixed with "_")
 
-    std::string lowerParamName = boost::to_lower_copy( aParamName );
-
     std::vector<std::reference_wrapper<const PARAM>> params = GetParams();
 
     for( int ii = 0; ii < (int) params.size(); ++ii )
     {
         const PARAM& param = params[ii];
 
-        if( param.info.name == lowerParamName || param.info.name == lowerParamName + "_" )
+        if( param.Matches( aParamName ) || param.Matches( aParamName + "_" ) )
             return ii;
     }
 

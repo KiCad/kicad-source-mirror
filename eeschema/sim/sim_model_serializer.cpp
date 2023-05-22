@@ -211,7 +211,7 @@ bool SIM_MODEL_SERIALIZER::ParseParams( const std::string& aParams )
     }
 
     std::string paramName;
-    bool isPrimaryValueSet = false;
+    bool        isPrimaryValueSet = false;
 
     for( const auto& node : root->children )
     {
@@ -223,11 +223,10 @@ bool SIM_MODEL_SERIALIZER::ParseParams( const std::string& aParams )
             || node->is_type<SIM_MODEL_SERIALIZER_PARSER::unquotedString>() )
         {
             wxASSERT( paramName != "" );
-            // TODO: Shouldn't be named "...fromSpiceCode" here...
 
             m_model.SetParamValue( paramName, node->string(), SIM_VALUE_GRAMMAR::NOTATION::SI );
 
-            if( paramName == m_model.GetParam( 0 ).info.name )
+            if( m_model.GetParam( 0 ).Matches( paramName ) )
                 isPrimaryValueSet = true;
         }
         else if( node->is_type<SIM_MODEL_SERIALIZER_PARSER::quotedString>() )
@@ -303,13 +302,13 @@ std::string SIM_MODEL_SERIALIZER::generateParamValuePair( const SIM_MODEL::PARAM
     std::string name = aParam.info.name;
 
     // Because of collisions with instance parameters, we append some model parameters with "_".
-    if( boost::ends_with( aParam.info.name, "_" ) )
-        name = aParam.info.name.substr( 0, aParam.info.name.length() - 1 );
+    if( boost::ends_with( name, "_" ) )
+        name = name.substr( 0, aParam.info.name.length() - 1 );
 
     std::string value = aParam.value;
 
     if( aParam.info.category == SIM_MODEL::PARAM::CATEGORY::FLAGS )
-        return value == "1" ? aParam.info.name : "";
+        return value == "1" ? name : "";
 
     if( value == "" || value.find( ' ' ) != std::string::npos )
         value = fmt::format( "\"{}\"", value );
