@@ -48,14 +48,8 @@ public:
 
     SIM_TYPE GetType() const;
 
-protected:
-    // We use `protected` here because members should be accessible from outside only through a
-    // workbook object, to prevent anyone from modifying the state without its knowledge. Otherwise
-    // we risk some things not getting saved.
-
-    const wxString& getSimCommand() const { return m_simCommand; }
-
-    void setSimCommand( const wxString& aSimCommand )
+    const wxString& GetSimCommand() const { return m_simCommand; }
+    void SetSimCommand( const wxString& aSimCommand )
     {
         wxCHECK_RET( GetType() == NGSPICE_CIRCUIT_MODEL::CommandToSimType( aSimCommand ),
                      "Cannot change the type of simulation of the existing plot panel" );
@@ -63,8 +57,8 @@ protected:
         m_simCommand = aSimCommand;
     }
 
-    const int getSimOptions() const { return m_simOptions; }
-    void setSimOptions( int aOptions ) { m_simOptions = aOptions; }
+    int GetSimOptions() const { return m_simOptions; }
+    void SetSimOptions( int aOptions ) { m_simOptions = aOptions; }
 
 private:
     wxString m_simCommand;

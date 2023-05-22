@@ -79,7 +79,7 @@ public:
     {
         if( aCmd != m_simCommand )
         {
-            m_lastSheetSimCommand = GetSheetSimCommand();
+            m_lastSchTextSimCommand = GetSchTextSimCommand();
             m_simCommand = aCmd;
         }
     }
@@ -90,7 +90,7 @@ public:
      */
     wxString GetSimCommand()
     {
-        return m_simCommand.IsEmpty() ? GetSheetSimCommand() : m_simCommand;
+        return m_simCommand.IsEmpty() ? GetSchTextSimCommand() : m_simCommand;
     }
 
     /**
@@ -109,14 +109,14 @@ public:
     /**
      * Return simulation command directives placed in schematic sheets (if any).
      */
-    wxString GetSheetSimCommand();
+    wxString GetSchTextSimCommand();
 
     /**
      * Return the sim command present as a sheet directive when the sim command override was last
      * updated.
      * @return
      */
-    wxString GetLastSheetSimCommand() const { return m_lastSheetSimCommand; }
+    wxString GetLastSchTextSimCommand() const { return m_lastSchTextSimCommand; }
 
     /**
      * Parse a two-source .dc command directive into its symbols.
@@ -148,7 +148,7 @@ private:
     wxString m_simCommand;
 
     ///< Value of schematic sheet simulation command when override was last updated
-    wxString m_lastSheetSimCommand;
+    wxString m_lastSchTextSimCommand;
 
     int      m_options;
 };
