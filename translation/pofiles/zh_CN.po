@@ -3745,7 +3745,8 @@ msgstr "线型"
 #: eeschema/sch_textbox.cpp:440 include/stroke_params.h:80
 #: pcbnew/fp_text.cpp:309 pcbnew/fp_textbox.cpp:336
 #: pcbnew/pcb_dimension.cpp:332 pcbnew/pcb_text.cpp:130
-#: pcbnew/pcb_textbox.cpp:297
+#: pcbnew/pcb_textbox.cpp:297 eeschema/sch_label.cpp:892
+#: eeschema/sch_text.cpp:496
 msgid "Default"
 msgstr "默认"
 
@@ -3759,7 +3760,7 @@ msgstr "网络类分配："
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:136
 msgid "Pattern"
-msgstr "模式"
+msgstr "匹配模式"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:137
 #: eeschema/sch_field.cpp:873 eeschema/sch_label.cpp:188
@@ -4349,15 +4350,18 @@ msgid "Net Label"
 msgstr "网络标签"
 
 #: common/eda_item.cpp:365 eeschema/sch_label.cpp:906
-#: eeschema/sch_label.cpp:1309
+#: eeschema/sch_label.cpp:1309 eeschema/sch_label.cpp:878
+#: eeschema/sch_label.cpp:1250
 msgid "Directive Label"
 msgstr "标识符标签"
 
 #: common/eda_item.cpp:366 eeschema/sch_label.cpp:907
+#: eeschema/sch_label.cpp:879
 msgid "Global Label"
 msgstr "全局标签"
 
 #: common/eda_item.cpp:367 eeschema/sch_label.cpp:908
+#: eeschema/sch_label.cpp:880
 msgid "Hierarchical Label"
 msgstr "层次标签"
 
@@ -4561,7 +4565,8 @@ msgstr "填充"
 #: gerbview/gerber_file_image.cpp:345
 #: pcbnew/microwave/microwave_polygon.cpp:128
 #: pcbnew/widgets/appearance_controls.cpp:635
-#: pcbnew/widgets/appearance_controls.cpp:1762
+#: pcbnew/widgets/appearance_controls.cpp:1762 eeschema/sch_label.cpp:894
+#: eeschema/sch_text.cpp:498
 msgid "Normal"
 msgstr "正常"
 
@@ -4587,7 +4592,8 @@ msgstr "正常"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:205
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:133
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:50
-#: pcbnew/fp_text_grid_table.cpp:105
+#: pcbnew/fp_text_grid_table.cpp:105 eeschema/sch_label.cpp:894
+#: eeschema/sch_text.cpp:498
 msgid "Italic"
 msgstr "斜体"
 
@@ -4608,6 +4614,7 @@ msgstr "斜体"
 #: eeschema/sch_textbox.cpp:442
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:93
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:186
+#: eeschema/sch_label.cpp:894 eeschema/sch_text.cpp:498
 msgid "Bold"
 msgstr "粗体"
 
@@ -7612,6 +7619,7 @@ msgstr "找到 %s"
 
 #: eeschema/cross-probing.cpp:175 eeschema/sim/sim_plot_frame.cpp:606
 #: eeschema/sim/sim_plot_frame.cpp:922 eeschema/widgets/tuner_slider.cpp:52
+#: eeschema/sim/sim_plot_frame.cpp:599 eeschema/sim/sim_plot_frame.cpp:915
 #, c-format
 msgid "%s not found"
 msgstr "未找到 %s"
@@ -7869,12 +7877,12 @@ msgid ""
 "python <script file name> <input filename> <output filename>\n"
 "```\n"
 "\n"
-"On Windows, if the desired generator script for a CSV BOM is `C:"
-"\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
+"On Windows, if the desired generator script for a CSV BOM is `C:\\Users"
+"\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O.csv"
+"\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -7937,12 +7945,12 @@ msgstr ""
 "python <脚本文件名> <输入文件名> <输出文件名> \n"
 "```\n"
 "\n"
-"在 Windows 上，如果想要的 CSV BOM 的生成器脚本是 `C:"
-"\\Users\\username\\kicad\\my_python_script.py`，命令行将是。\n"
+"在 Windows 上，如果想要的 CSV BOM 的生成器脚本是 `C:\\Users\\username\\kicad"
+"\\my_python_script.py`，命令行将是。\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O.csv"
+"\"\n"
 "```\n"
 "\n"
 "在 Linux 上，如果想要 的CSV BOM 的生成器脚本是 `/home/username/kicad/"
@@ -8511,6 +8519,7 @@ msgstr "导出网表"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:320
 #: eeschema/sim/sim_plot_frame.cpp:464 eeschema/sim/sim_plot_frame.cpp:1738
+#: eeschema/sim/sim_plot_frame.cpp:463
 msgid "Simulator requires a fully annotated schematic."
 msgstr "仿真器需要一张批注完整的原理图。"
 
@@ -8706,6 +8715,7 @@ msgstr "KiCad 字体"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:99
 #: eeschema/dialogs/dialog_text_properties_base.cpp:120
 #: eeschema/sch_label.cpp:932 eeschema/sch_text.cpp:509
+#: eeschema/sch_label.cpp:904 eeschema/sch_text.cpp:508
 msgid "Align left"
 msgstr "左对齐"
 
@@ -8721,6 +8731,7 @@ msgstr "水平居中对齐"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:109
 #: eeschema/dialogs/dialog_text_properties_base.cpp:130
 #: eeschema/sch_label.cpp:930 eeschema/sch_text.cpp:507
+#: eeschema/sch_label.cpp:902 eeschema/sch_text.cpp:506
 msgid "Align right"
 msgstr "右对齐"
 
@@ -8731,6 +8742,7 @@ msgstr "右对齐"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:129
 #: eeschema/dialogs/dialog_text_properties_base.cpp:140
 #: eeschema/sch_label.cpp:933 eeschema/sch_text.cpp:510
+#: eeschema/sch_label.cpp:905 eeschema/sch_text.cpp:509
 msgid "Align top"
 msgstr "顶部对齐"
 
@@ -8746,6 +8758,7 @@ msgstr "垂直居中对齐"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:139
 #: eeschema/dialogs/dialog_text_properties_base.cpp:150
 #: eeschema/sch_label.cpp:931 eeschema/sch_text.cpp:508
+#: eeschema/sch_label.cpp:903 eeschema/sch_text.cpp:507
 msgid "Align bottom"
 msgstr "底部对齐"
 
@@ -9156,7 +9169,8 @@ msgstr "垂直排列"
 #: eeschema/lib_text.cpp:428 eeschema/lib_textbox.cpp:490
 #: eeschema/sch_field.cpp:755 eeschema/sch_label.cpp:926
 #: eeschema/sch_text.cpp:503 eeschema/sch_textbox.cpp:446
-#: pcbnew/tools/board_inspection_tool.cpp:1237
+#: pcbnew/tools/board_inspection_tool.cpp:1237 eeschema/sch_label.cpp:898
+#: eeschema/sch_text.cpp:502
 msgid "Text Size"
 msgstr "文本大小"
 
@@ -9190,7 +9204,8 @@ msgstr "Y 坐标"
 #: eeschema/sch_text.cpp:497 eeschema/sch_textbox.cpp:440
 #: pcbnew/fp_text.cpp:309 pcbnew/fp_textbox.cpp:336
 #: pcbnew/pcb_dimension.cpp:332 pcbnew/pcb_text.cpp:130
-#: pcbnew/pcb_textbox.cpp:297
+#: pcbnew/pcb_textbox.cpp:297 eeschema/sch_label.cpp:892
+#: eeschema/sch_text.cpp:496
 msgid "Font"
 msgstr "字体"
 
@@ -10665,7 +10680,8 @@ msgstr "原理图页面必须具有指定的文件。"
 #: eeschema/sch_text.cpp:501 eeschema/sch_textbox.cpp:444
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:122
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:226
-#: pcbnew/teardrop/dialog_teardrop_base.cpp:330
+#: pcbnew/teardrop/dialog_teardrop_base.cpp:330 eeschema/sch_label.cpp:896
+#: eeschema/sch_text.cpp:500
 msgid "Style"
 msgstr "样式"
 
@@ -10707,7 +10723,7 @@ msgid "Add signal by name:"
 msgstr "按名称添加信号："
 
 #: eeschema/dialogs/dialog_signal_list_base.h:50
-#: eeschema/sim/sim_plot_frame.cpp:165
+#: eeschema/sim/sim_plot_frame.cpp:165 eeschema/sim/sim_plot_frame.cpp:164
 msgid "Add Signals"
 msgstr "添加信号"
 
@@ -11048,6 +11064,7 @@ msgstr "参数"
 #: pcbnew/fp_text.cpp:294 pcbnew/pcb_marker.cpp:193 pcbnew/pcb_shape.cpp:304
 #: pcbnew/pcb_track.cpp:861 pcbnew/pcb_track.cpp:935
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:249 pcbnew/zone.cpp:536
+#: eeschema/sch_label.cpp:890
 msgid "Type"
 msgstr "类型"
 
@@ -13145,6 +13162,7 @@ msgid "Unit %s"
 msgstr "单元 %s"
 
 #: eeschema/lib_text.cpp:477 eeschema/sch_text.cpp:393
+#: eeschema/sch_text.cpp:392
 #, c-format
 msgid "Graphic Text '%s'"
 msgstr "图形文本 '%s'"
@@ -13155,6 +13173,7 @@ msgstr "图形文本框"
 
 #: eeschema/lib_textbox.cpp:486 eeschema/sch_label.cpp:922
 #: eeschema/sch_text.cpp:499 eeschema/sch_textbox.cpp:442
+#: eeschema/sch_label.cpp:894 eeschema/sch_text.cpp:498
 msgid "Bold Italic"
 msgstr "加粗斜体"
 
@@ -13282,11 +13301,13 @@ msgid "P&references"
 msgstr "偏好设置 (&R)"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:478
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:477
 #, c-format
 msgid "Could not open file '%s' to write IBIS model"
 msgstr "打不开 '%s' 文件来写入 IBIS 模型"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:532
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:531
 #, c-format
 msgid "Could not find library file '%s'"
 msgstr "找不到库文件 '%s'"
@@ -13510,6 +13531,7 @@ msgstr "总线输入类型"
 #: eeschema/sch_bus_entry.cpp:512 eeschema/sch_label.cpp:950
 #: eeschema/sch_line.cpp:924 pcbnew/pad.cpp:1005 pcbnew/pcb_track.cpp:963
 #: pcbnew/tools/pcb_control.cpp:1544 pcbnew/zone.cpp:566
+#: eeschema/sch_label.cpp:922
 msgid "Resolved Netclass"
 msgstr "已解析的网络类"
 
@@ -13540,7 +13562,7 @@ msgstr "新原理图文件未保存"
 #: eeschema/symbol_editor/symbol_editor.cpp:1163
 #: pagelayout_editor/pl_editor_frame.cpp:395
 #: pcbnew/footprint_edit_frame.cpp:715 pcbnew/footprint_edit_frame.cpp:755
-#: pcbnew/pcb_edit_frame.cpp:1050
+#: pcbnew/pcb_edit_frame.cpp:1050 eeschema/sim/sim_plot_frame.cpp:1761
 #, c-format
 msgid "Save changes to '%s' before closing?"
 msgstr "是否在关闭前将变更保存到 '%s'？"
@@ -13582,12 +13604,13 @@ msgstr "不能打开 CvPcb"
 
 #: eeschema/sch_edit_frame.cpp:1420 eeschema/sim/sim_plot_frame.cpp:350
 #: kicad/kicad_manager_frame.cpp:776 pcbnew/footprint_edit_frame.cpp:926
-#: pcbnew/pcb_edit_frame.cpp:1566
+#: pcbnew/pcb_edit_frame.cpp:1566 eeschema/sim/sim_plot_frame.cpp:349
 msgid "[Read Only]"
 msgstr "[只读]"
 
 #: eeschema/sch_edit_frame.cpp:1423 eeschema/sim/sim_plot_frame.cpp:353
 #: pcbnew/footprint_edit_frame.cpp:935 pcbnew/pcb_edit_frame.cpp:1569
+#: eeschema/sim/sim_plot_frame.cpp:352
 msgid "[Unsaved]"
 msgstr "[未保存]"
 
@@ -13632,15 +13655,16 @@ msgstr "未知 SCH_FILE_T 值：%d"
 msgid "Tri-State"
 msgstr "三态"
 
-#: eeschema/sch_label.cpp:905
+#: eeschema/sch_label.cpp:905 eeschema/sch_label.cpp:877
 msgid "Label"
 msgstr "标签"
 
-#: eeschema/sch_label.cpp:909
+#: eeschema/sch_label.cpp:909 eeschema/sch_label.cpp:881
 msgid "Hierarchical Sheet Pin"
 msgstr "层次原理图页面引脚"
 
 #: eeschema/sch_label.cpp:937 eeschema/sch_text.cpp:514
+#: eeschema/sch_label.cpp:909 eeschema/sch_text.cpp:513
 msgid "Justification"
 msgstr "齐行"
 
@@ -13651,39 +13675,41 @@ msgstr "齐行"
 #: pcbnew/pad.cpp:1796 pcbnew/pcb_track.cpp:961
 #: pcbnew/tools/pcb_control.cpp:1541
 #: pcbnew/widgets/pcb_properties_panel.cpp:260 pcbnew/zone.cpp:564
-#: pcbnew/zone.cpp:1455
+#: pcbnew/zone.cpp:1455 eeschema/sch_label.cpp:973
 msgid "Net"
 msgstr "网络"
 
 #: eeschema/sch_label.cpp:1004 eeschema/sch_line.cpp:867
+#: eeschema/sch_label.cpp:976
 msgid "Resolved netclass"
 msgstr "已解析的网络类"
 
-#: eeschema/sch_label.cpp:1020
+#: eeschema/sch_label.cpp:1020 eeschema/sch_label.cpp:992
 msgid "Hierarchical Labels"
 msgstr "分层标签"
 
-#: eeschema/sch_label.cpp:1105
+#: eeschema/sch_label.cpp:1105 eeschema/sch_label.cpp:1077
 #, c-format
 msgid "Label '%s'"
 msgstr "标签 '%s'"
 
-#: eeschema/sch_label.cpp:1313
+#: eeschema/sch_label.cpp:1313 eeschema/sch_label.cpp:1254
 #, c-format
 msgid "Directive Label [%s %s]"
 msgstr "标识符标签 [%s %s]"
 
-#: eeschema/sch_label.cpp:1590
+#: eeschema/sch_label.cpp:1590 eeschema/sch_label.cpp:1531
 #, c-format
 msgid "Global Label '%s'"
 msgstr "全局标签 '%s'"
 
-#: eeschema/sch_label.cpp:1723
+#: eeschema/sch_label.cpp:1723 eeschema/sch_label.cpp:1664
 #, c-format
 msgid "Hierarchical Label '%s'"
 msgstr "层次标签 '%s'"
 
 #: eeschema/sch_label.cpp:1740 pcbnew/dialogs/panel_setup_rules.cpp:687
+#: eeschema/sch_label.cpp:1681
 msgid "Syntax Help"
 msgstr "语法帮助"
 
@@ -14467,7 +14493,7 @@ msgstr "在 %s 中找不到符号!"
 msgid "Symbol %s [%s]"
 msgstr "符号 %s [%s]"
 
-#: eeschema/sch_text.cpp:495
+#: eeschema/sch_text.cpp:495 eeschema/sch_text.cpp:494
 msgid "Graphic Text"
 msgstr "图形文本"
 
@@ -15632,47 +15658,51 @@ msgid ""
 "Simulation provided no plots. Please refer to console window for results."
 msgstr "仿真没有提供任何绘图。请参考控制台窗口的结果。"
 
-#: eeschema/sim/sim_plot_frame.cpp:163
+#: eeschema/sim/sim_plot_frame.cpp:163 eeschema/sim/sim_plot_frame.cpp:162
 msgid "Run/Stop Simulation"
 msgstr "运行/停止仿真"
 
 #: eeschema/sim/sim_plot_frame.cpp:164 eeschema/sim/sim_plot_frame_base.cpp:55
+#: eeschema/sim/sim_plot_frame.cpp:163
 msgid "Run Simulation"
 msgstr "运行仿真"
 
-#: eeschema/sim/sim_plot_frame.cpp:166
+#: eeschema/sim/sim_plot_frame.cpp:166 eeschema/sim/sim_plot_frame.cpp:165
 msgid "Add signals to plot"
 msgstr "添加信号到绘制"
 
-#: eeschema/sim/sim_plot_frame.cpp:167
+#: eeschema/sim/sim_plot_frame.cpp:167 eeschema/sim/sim_plot_frame.cpp:166
 msgid "Probe"
 msgstr "探针"
 
-#: eeschema/sim/sim_plot_frame.cpp:168
+#: eeschema/sim/sim_plot_frame.cpp:168 eeschema/sim/sim_plot_frame.cpp:167
 msgid "Probe signals on the schematic"
 msgstr "在原理图上探测信号"
 
 #: eeschema/sim/sim_plot_frame.cpp:169 eeschema/sim/sim_plot_frame_base.cpp:242
+#: eeschema/sim/sim_plot_frame.cpp:168
 msgid "Tune"
 msgstr "调整"
 
-#: eeschema/sim/sim_plot_frame.cpp:170
+#: eeschema/sim/sim_plot_frame.cpp:170 eeschema/sim/sim_plot_frame.cpp:169
 msgid "Tune component values"
 msgstr "调整元件的值"
 
-#: eeschema/sim/sim_plot_frame.cpp:171
+#: eeschema/sim/sim_plot_frame.cpp:171 eeschema/sim/sim_plot_frame.cpp:170
 msgid "Sim Command"
 msgstr "仿真命令"
 
-#: eeschema/sim/sim_plot_frame.cpp:172
+#: eeschema/sim/sim_plot_frame.cpp:172 eeschema/sim/sim_plot_frame.cpp:171
 msgid "Simulation command and settings"
 msgstr "仿真命令和设置"
 
 #: eeschema/sim/sim_plot_frame.cpp:355 eeschema/sim/sim_plot_frame_base.h:130
+#: eeschema/sim/sim_plot_frame.cpp:354
 msgid "Spice Simulator"
 msgstr "Spice 仿真器"
 
 #: eeschema/sim/sim_plot_frame.cpp:473 eeschema/sim/sim_plot_frame.cpp:1571
+#: eeschema/sim/sim_plot_frame.cpp:466 eeschema/sim/sim_plot_frame.cpp:1564
 msgid ""
 "Errors during netlist generation; simulation aborted.\n"
 "\n"
@@ -15680,84 +15710,90 @@ msgstr ""
 "网表生成期间出错；仿真中断。\n"
 "\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:490
+#: eeschema/sim/sim_plot_frame.cpp:490 eeschema/sim/sim_plot_frame.cpp:483
 msgid ""
 "Schematic sheet simulation command directive has changed.  Do you wish to "
 "update the Simulation Command?"
 msgstr "原理图表仿真命令指令已更改。 你要更新仿真命令吗？"
 
 #: eeschema/sim/sim_plot_frame.cpp:513 eeschema/sim/sim_plot_frame.cpp:2007
+#: eeschema/sim/sim_plot_frame.cpp:506 eeschema/sim/sim_plot_frame.cpp:1993
 msgid "Another simulation is already running."
 msgstr "另一个仿真已经在运行。"
 
-#: eeschema/sim/sim_plot_frame.cpp:541
+#: eeschema/sim/sim_plot_frame.cpp:541 eeschema/sim/sim_plot_frame.cpp:534
 #, c-format
 msgid "Plot%u - "
 msgstr "绘制 %u - "
 
 #: eeschema/sim/sim_plot_frame.cpp:605 eeschema/sim/sim_plot_frame.cpp:617
-#: eeschema/sim/sim_plot_frame.cpp:941
+#: eeschema/sim/sim_plot_frame.cpp:941 eeschema/sim/sim_plot_frame.cpp:598
+#: eeschema/sim/sim_plot_frame.cpp:610 eeschema/sim/sim_plot_frame.cpp:934
 msgid "Could not apply tuned value(s):"
 msgstr "无法应用调整后的值："
 
 #: eeschema/sim/sim_plot_frame.cpp:618 eeschema/sim/sim_plot_frame.cpp:930
+#: eeschema/sim/sim_plot_frame.cpp:611 eeschema/sim/sim_plot_frame.cpp:923
 #, c-format
 msgid "%s is not tunable"
 msgstr "%s 是不可调谐"
 
-#: eeschema/sim/sim_plot_frame.cpp:661
+#: eeschema/sim/sim_plot_frame.cpp:661 eeschema/sim/sim_plot_frame.cpp:654
 msgid "Error: simulation type not defined!\n"
 msgstr "错误：未定义仿真类型！\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:667
+#: eeschema/sim/sim_plot_frame.cpp:667 eeschema/sim/sim_plot_frame.cpp:660
 msgid "Error: simulation type doesn't support plotting!\n"
 msgstr "错误：仿真类型不支持绘制！\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:739 eeschema/sim/sim_plot_panel.h:117
+#: eeschema/sim/sim_plot_frame.cpp:732
 msgid " (mag)"
 msgstr " (mag)"
 
 #: eeschema/sim/sim_plot_frame.cpp:741 eeschema/sim/sim_plot_panel.h:119
+#: eeschema/sim/sim_plot_frame.cpp:734
 msgid " (phase)"
 msgstr " (相位)"
 
 #: eeschema/sim/sim_plot_frame.cpp:851 eeschema/sim/sim_plot_frame.cpp:1822
+#: eeschema/sim/sim_plot_frame.cpp:844 eeschema/sim/sim_plot_frame.cpp:1808
 msgid "Signal"
 msgstr "信号"
 
-#: eeschema/sim/sim_plot_frame.cpp:1188
+#: eeschema/sim/sim_plot_frame.cpp:1188 eeschema/sim/sim_plot_frame.cpp:1181
 msgid "noname"
 msgstr "无名称"
 
-#: eeschema/sim/sim_plot_frame.cpp:1237
+#: eeschema/sim/sim_plot_frame.cpp:1237 eeschema/sim/sim_plot_frame.cpp:1230
 msgid "Open simulation workbook"
 msgstr "打开仿真工作簿"
 
-#: eeschema/sim/sim_plot_frame.cpp:1266
+#: eeschema/sim/sim_plot_frame.cpp:1266 eeschema/sim/sim_plot_frame.cpp:1259
 msgid "Save Simulation Workbook As"
 msgstr "将仿真工作簿保存为"
 
-#: eeschema/sim/sim_plot_frame.cpp:1281
+#: eeschema/sim/sim_plot_frame.cpp:1281 eeschema/sim/sim_plot_frame.cpp:1274
 msgid "Save Plot as Image"
 msgstr "另存绘制为图片"
 
-#: eeschema/sim/sim_plot_frame.cpp:1298
+#: eeschema/sim/sim_plot_frame.cpp:1298 eeschema/sim/sim_plot_frame.cpp:1291
 msgid "Save Plot Data"
 msgstr "保存绘制数据"
 
-#: eeschema/sim/sim_plot_frame.cpp:1636
+#: eeschema/sim/sim_plot_frame.cpp:1636 eeschema/sim/sim_plot_frame.cpp:1629
 msgid "You need to run plot-providing simulation first."
 msgstr "您需要先运行绘制提供仿真。"
 
-#: eeschema/sim/sim_plot_frame.cpp:1693
+#: eeschema/sim/sim_plot_frame.cpp:1693 eeschema/sim/sim_plot_frame.cpp:1686
 msgid "SPICE Netlist"
 msgstr "SPICE 网表"
 
-#: eeschema/sim/sim_plot_frame.cpp:1772
+#: eeschema/sim/sim_plot_frame.cpp:1772 eeschema/sim/sim_plot_frame.cpp:1758
 msgid "Save changes to workbook?"
 msgstr "保存对工作簿的更改？"
 
-#: eeschema/sim/sim_plot_frame.cpp:1937
+#: eeschema/sim/sim_plot_frame.cpp:1937 eeschema/sim/sim_plot_frame.cpp:1923
 msgid ""
 "\n"
 "\n"
@@ -15769,19 +15805,20 @@ msgstr ""
 "仿真结果：\n"
 "\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:2028
+#: eeschema/sim/sim_plot_frame.cpp:2028 eeschema/sim/sim_plot_frame.cpp:2014
 msgid "Remove Signal"
 msgstr "移除信号"
 
-#: eeschema/sim/sim_plot_frame.cpp:2028
+#: eeschema/sim/sim_plot_frame.cpp:2028 eeschema/sim/sim_plot_frame.cpp:2014
 msgid "Remove the signal from the plot"
 msgstr "从绘图中删除信号"
 
 #: eeschema/sim/sim_plot_frame.cpp:2036 eeschema/sim/sim_plot_frame.cpp:2063
+#: eeschema/sim/sim_plot_frame.cpp:2022 eeschema/sim/sim_plot_frame.cpp:2049
 msgid "Hide Cursor"
 msgstr "隐藏光标"
 
-#: eeschema/sim/sim_plot_frame.cpp:2038
+#: eeschema/sim/sim_plot_frame.cpp:2038 eeschema/sim/sim_plot_frame.cpp:2024
 msgid "Show Cursor"
 msgstr "显示光标"
 
@@ -16006,8 +16043,8 @@ msgstr ""
 #: eeschema/symbol_checker.cpp:146
 #, c-format
 msgid ""
-"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
-"%s%s at location <b>(%s, %s)</b>."
+"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
+"%s at location <b>(%s, %s)</b>."
 msgstr ""
 "<b>重复引脚 %s</b> %s，位置 <b>(%s, %s)</b>，和引脚 %s%s 冲突，后者位于 "
 "<b>(%s,%s)</b>。"
@@ -16015,8 +16052,8 @@ msgstr ""
 #: eeschema/symbol_checker.cpp:159
 #, c-format
 msgid ""
-"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
-"%s%s at location <b>(%s, %s)</b> in units %s and %s."
+"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
+"%s at location <b>(%s, %s)</b> in units %s and %s."
 msgstr ""
 "<b>重复引脚 %s</b> %s，位置 <b>(%s, %s)</b>，和引脚 %s%s 冲突，后者位于 "
 "<b>(%s, %s)</b>，冲突敷铜在单元 %s和 %s。"
@@ -31065,13 +31102,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net"
+"\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net"
+"\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -35080,8 +35117,8 @@ msgid ""
 "The CADSTAR layer '%s' has no KiCad equivalent. All elements on this layer "
 "have been mapped to KiCad layer '%s' instead."
 msgstr ""
-"CADSTAR 图层 \"%s\" 没有等效项。此图层上的所有元素都映射到 KiCad 图层 "
-"\"%s\"。"
+"CADSTAR 图层 \"%s\" 没有等效项。此图层上的所有元素都映射到 KiCad 图层 \"%s"
+"\"。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:207
 #, c-format
@@ -36174,6 +36211,7 @@ msgstr ""
 "请验证它不是自交叉的多边形。"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1927 pcbnew/router/router_tool.cpp:453
+#: pcbnew/router/pns_kicad_iface.cpp:1923
 msgid "Interactive Router"
 msgstr "交互布线"
 
@@ -40834,8 +40872,8 @@ msgstr "KiCad 印刷电路板"
 #~ "\n"
 #~ "On Linux:\n"
 #~ "```\n"
-#~ "python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py "
-#~ "\"%I\" \"%O.csv\"\n"
+#~ "python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I"
+#~ "\" \"%O.csv\"\n"
 #~ "```\n"
 #~ msgstr ""
 #~ "＃ 1 - 完整文档\n"
@@ -40996,8 +41034,8 @@ msgstr "KiCad 印刷电路板"
 #~ "\n"
 #~ "在 Linux 上：\n"
 #~ "```\n"
-#~ "python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py "
-#~ "\"%I\" \"%O.csv\"\n"
+#~ "python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I"
+#~ "\" \"%O.csv\"\n"
 #~ "```\n"
 
 #, c-format
@@ -47328,8 +47366,8 @@ msgstr "KiCad 印刷电路板"
 #~ msgstr "使用触摸板平移"
 
 #~ msgid ""
-#~ "Enable touchpad-friendly controls (pan with scroll action, zoom with "
-#~ "Ctrl+scroll)."
+#~ "Enable touchpad-friendly controls (pan with scroll action, zoom with Ctrl"
+#~ "+scroll)."
 #~ msgstr "启用触摸板友好控制(平移滚动动作，使用 Ctrl+滚动缩放)"
 
 #~ msgid "Graphic items sketch mode"
