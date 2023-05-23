@@ -40,6 +40,7 @@
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include <core/kicad_algo.h>
+#include <core/mirror.h>
 #include <trigo.h>
 #include <sch_label.h>
 
@@ -398,6 +399,52 @@ void SCH_LABEL_BASE::MirrorSpinStyle( bool aLeftRight )
             pos.y = GetPosition().y + delta.y;
 
         field.SetTextPos( pos );
+    }
+}
+
+
+void SCH_LABEL_BASE::MirrorHorizontally( int aCenter )
+{
+    VECTOR2I old_pos = GetPosition();
+    SCH_TEXT::MirrorHorizontally( aCenter );
+
+    for( SCH_FIELD& field : m_fields )
+    {
+        switch( field.GetHorizJustify() )
+        {
+        case GR_TEXT_H_ALIGN_LEFT:
+            field.SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+            break;
+
+        case GR_TEXT_H_ALIGN_CENTER:
+            break;
+
+        case GR_TEXT_H_ALIGN_RIGHT:
+            field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+            break;
+        }
+
+        VECTOR2I pos = field.GetTextPos();
+        VECTOR2I delta = old_pos - pos;
+        pos.x = GetPosition().x + delta.x;
+
+        field.SetPosition( pos );
+    }
+}
+
+
+void SCH_LABEL_BASE::MirrorVertically( int aCenter )
+{
+    VECTOR2I old_pos = GetPosition();
+    SCH_TEXT::MirrorVertically( aCenter );
+
+    for( SCH_FIELD& field : m_fields )
+    {
+        VECTOR2I pos = field.GetTextPos();
+        VECTOR2I delta = old_pos - pos;
+        pos.y = GetPosition().y + delta.y;
+
+        field.SetPosition( pos );
     }
 }
 
@@ -1183,6 +1230,64 @@ void SCH_DIRECTIVE_LABEL::MirrorSpinStyle( bool aLeftRight )
 }
 
 
+void SCH_DIRECTIVE_LABEL::MirrorHorizontally( int aCenter )
+{
+    VECTOR2I old_pos = GetPosition();
+    // The "text" is in fact a graphic shape. For a horizontal "text", it looks like a
+    // vertical shape (like a text reduced to only "I" letter).
+    // So the mirroring is not exactly similar to a SCH_TEXT item
+    // Text is NOT really mirrored; it is moved to a suitable horizontal position
+    SetTextSpinStyle( GetTextSpinStyle().MirrorX() );
+
+    SetTextX( MIRRORVAL( GetTextPos().x, aCenter ) );
+
+    for( SCH_FIELD& field : m_fields )
+    {
+        switch( field.GetHorizJustify() )
+        {
+        case GR_TEXT_H_ALIGN_LEFT:
+            field.SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+            break;
+
+        case GR_TEXT_H_ALIGN_CENTER:
+            break;
+
+        case GR_TEXT_H_ALIGN_RIGHT:
+            field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+            break;
+        }
+
+        VECTOR2I pos = field.GetTextPos();
+        VECTOR2I delta = old_pos - pos;
+        pos.x = GetPosition().x + delta.x;
+
+        field.SetPosition( pos );
+    }
+}
+
+
+void SCH_DIRECTIVE_LABEL::MirrorVertically( int aCenter )
+{
+    VECTOR2I old_pos = GetPosition();
+    // The "text" is in fact a graphic shape. For a horizontal "text", it looks like a
+    // vertical shape (like a text reduced to only "I" letter).
+    // So the mirroring is not exactly similar to a SCH_TEXT item
+    // Text is NOT really mirrored; it is moved to a suitable vertical position
+    SetTextSpinStyle( GetTextSpinStyle().MirrorY() );
+
+    SetTextY( MIRRORVAL( GetTextPos().y, aCenter ) );
+
+    for( SCH_FIELD& field : m_fields )
+    {
+        VECTOR2I pos = field.GetTextPos();
+        VECTOR2I delta = old_pos - pos;
+        pos.y = GetPosition().y + delta.y;
+
+        field.SetPosition( pos );
+    }
+}
+
+
 void SCH_DIRECTIVE_LABEL::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings,
                                               std::vector<VECTOR2I>& aPoints,
                                               const VECTOR2I&        aPos ) const
@@ -1376,80 +1481,6 @@ void SCH_GLOBALLABEL::SetTextSpinStyle( TEXT_SPIN_STYLE aSpinStyle )
 {
     SCH_TEXT::SetTextSpinStyle( aSpinStyle );
     SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
-}
-
-
-void SCH_GLOBALLABEL::MirrorSpinStyle( bool aLeftRight )
-{
-    SCH_TEXT::MirrorSpinStyle( aLeftRight );
-
-    for( SCH_FIELD& field : m_fields )
-    {
-        if( ( aLeftRight && field.GetTextAngle().IsHorizontal() )
-                || ( !aLeftRight && field.GetTextAngle().IsVertical() ) )
-        {
-            if( field.GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
-                field.SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-            else
-                field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-        }
-
-        VECTOR2I pos = field.GetTextPos();
-        VECTOR2I delta = (VECTOR2I)GetPosition() - pos;
-
-        if( aLeftRight )
-            pos.x = GetPosition().x + delta.x;
-        else
-            pos.y = GetPosition().y + delta.y;
-
-        field.SetTextPos( pos );
-    }
-}
-
-
-void SCH_GLOBALLABEL::MirrorHorizontally( int aCenter )
-{
-    VECTOR2I old_pos = GetPosition();
-    SCH_TEXT::MirrorHorizontally( aCenter );
-
-    for( SCH_FIELD& field : m_fields )
-    {
-        switch( field.GetHorizJustify() )
-        {
-        case GR_TEXT_H_ALIGN_LEFT:
-            field.SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-            break;
-
-        case GR_TEXT_H_ALIGN_CENTER:
-            break;
-
-        case GR_TEXT_H_ALIGN_RIGHT:
-            field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-            break;
-        }
-
-        VECTOR2I pos = field.GetTextPos();
-        VECTOR2I delta = old_pos - pos;
-        pos.x = GetPosition().x + delta.x;
-
-        field.SetPosition( pos );
-    }
-}
-
-
-void SCH_GLOBALLABEL::MirrorVertically( int aCenter )
-{
-    VECTOR2I old_pos = GetPosition();
-    SCH_TEXT::MirrorVertically( aCenter );
-
-    for( SCH_FIELD& field : m_fields )
-    {
-        VECTOR2I pos = field.GetTextPos();
-        VECTOR2I delta = old_pos - pos;
-        pos.y = GetPosition().y + delta.y;
-
-        field.SetPosition( pos );
-    }
 }
 
 
