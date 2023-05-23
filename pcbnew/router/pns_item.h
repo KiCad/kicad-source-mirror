@@ -250,6 +250,13 @@ public:
     void SetIsFreePad( bool aIsFreePad = true ) { m_isFreePad = aIsFreePad; }
     bool IsFreePad() const { return m_isFreePad; }
 
+    virtual ITEM* ParentPadVia() const { return nullptr; }
+    virtual bool HasSameParentPadVia( const ITEM* aOther ) const
+    {
+        return ParentPadVia() && aOther->ParentPadVia()
+                && ParentPadVia()->Parent() == aOther->ParentPadVia()->Parent();
+    }
+
     bool IsVirtual() const
     {
         return m_isVirtual;

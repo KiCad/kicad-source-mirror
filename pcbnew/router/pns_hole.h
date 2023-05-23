@@ -72,7 +72,7 @@ public:
     const SHAPE* Shape() const override { return m_holeShape; }
 
     void SetParentPadVia( ITEM* aParent ) { m_parentPadVia = aParent; }
-    ITEM* ParentPadVia() const { return m_parentPadVia; }
+    ITEM* ParentPadVia() const override { return m_parentPadVia; }
 
     BOARD_ITEM* BoardItem() const override
     {

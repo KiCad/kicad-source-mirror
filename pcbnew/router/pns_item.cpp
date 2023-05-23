@@ -65,7 +65,7 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
 
     //printf( "h %p n %p t %p ctx %p\n", aHead, aNode, this, aCtx );
 
-    if( this == aHead || this == holeH )  // we cannot be self-colliding
+    if( this == aHead )  // we cannot be self-colliding
         return false;
 
     // Special cases for "head" lines with vias attached at the end.  Note that this does not
@@ -86,7 +86,7 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
 
     // And a special case for the "head" via's hole.
 
-    if( holeH )
+    if( holeH && !HasSameParentPadVia( holeH ) )
         collisionsFound |= collideSimple( holeH, aNode, aCtx );
 
     // Sadly collision routines ignore SHAPE_POLY_LINE widths so we have to pass them in as part
