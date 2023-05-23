@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-18 11:55-0700\n"
-"PO-Revision-Date: 2023-05-19 21:10+0000\n"
+"PO-Revision-Date: 2023-05-24 20:51+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -18673,7 +18673,7 @@ msgstr "Abre a biblioteca do símbolo no editor de símbolos"
 
 #: eeschema/tools/ee_actions.cpp:674
 msgid "Edit Symbol Fields..."
-msgstr "Edita o campos dos símbolos…"
+msgstr "Edite o campos dos símbolos…"
 
 #: eeschema/tools/ee_actions.cpp:674
 msgid "Bulk-edit fields of all symbols in schematic"
@@ -18685,7 +18685,7 @@ msgstr "Edita os vínculos do símbolo da biblioteca..."
 
 #: eeschema/tools/ee_actions.cpp:679
 msgid "Edit links between schematic and library symbols"
-msgstr "Edita os vínculos entre os símbolos do esquema e da biblioteca"
+msgstr "Edite os vínculos entre os símbolos do esquema e da biblioteca"
 
 #: eeschema/tools/ee_actions.cpp:684
 msgid "Assign Footprints..."
@@ -21284,7 +21284,7 @@ msgstr "Edite o esquema do projeto"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:134
 msgid "Edit global and/or project schematic symbol libraries"
-msgstr "Edita os símbolos das bibliotecas do esquema global e/ou do projeto"
+msgstr "Edite os símbolos das bibliotecas do esquema global e/ou do projeto"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:138
 msgid "Edit the project PCB design"
