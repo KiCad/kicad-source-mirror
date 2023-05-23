@@ -1801,7 +1801,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
                 break;
 
             case PCB_TEXT::TEXT_is_DIVERS:
-                if( IsFootprintEditor() )
+                if( parentFP )
                 {
                     m_commit->Modify( parentFP );
                     getView()->Remove( board_item );
@@ -1823,7 +1823,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         case PCB_SHAPE_T:
         case PCB_TEXTBOX_T:
         case PCB_BITMAP_T:
-            if( IsFootprintEditor() )
+            if( parentFP )
             {
                 m_commit->Modify( parentFP );
                 getView()->Remove( board_item );
@@ -1847,7 +1847,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
             break;
 
         case PCB_ZONE_T:
-            if( IsFootprintEditor() )
+            if( parentFP )
             {
                 m_commit->Modify( parentFP );
                 getView()->Remove( board_item );
