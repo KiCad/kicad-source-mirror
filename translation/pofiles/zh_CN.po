@@ -27,8 +27,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-18 11:55-0700\n"
-"PO-Revision-Date: 2023-05-12 19:54+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"PO-Revision-Date: 2023-05-24 20:51+0000\n"
+"Last-Translator: Hubert Hu <qinghan.hu@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -3798,7 +3798,7 @@ msgstr "网络类分配："
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:136
 msgid "Pattern"
-msgstr "模式"
+msgstr "匹配模式"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:137
 #: eeschema/sch_field.cpp:862 eeschema/sch_label.cpp:188
