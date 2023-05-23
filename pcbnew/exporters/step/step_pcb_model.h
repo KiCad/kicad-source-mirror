@@ -83,8 +83,29 @@ public:
     // create the PCB model using the current outlines and drill holes
     bool CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin );
 
-    bool MakeShape( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& chain, double aThickness,
-                    const VECTOR2D& aOrigin );
+    /**
+     * Convert a SHAPE_LINE_CHAIN (closed) to a TopoDS_Shape (polygonal vertical prism)
+     * @param aShape is the TopoDS_Shape to initialize (must be empty)
+     * @param aChain is a closed SHAPE_LINE_CHAIN (a polygon)
+     * @param aThickness is the height of the created prism
+     * @param aOrigin is the origin of the coordinates
+     * @return true if success
+     */
+    bool MakeShape( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& aChain, double aThickness,
+                    double aZposition, const VECTOR2D& aOrigin );
+
+    /**
+     * Convert a SHAPE_LINE_CHAIN containing only one 360 deg arc to a TopoDS_Shape
+     * ( vertical cylinder)
+     * it is a specialized version of MakeShape()
+     * @param aShape is the TopoDS_Shape to initialize (must be empty)
+     * @param aChain is a closed SHAPE_LINE_CHAIN, image of a circle: containing one 360 deg arc
+     * @param aThickness is the height of the created cylinder
+     * @param aOrigin is the origin of the coordinates
+     * @return true if success
+     */
+    bool MakeShapeAsCylinder( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& aChain,
+                              double aThickness, double aZposition, const VECTOR2D& aOrigin );
 
 #ifdef SUPPORTS_IGES
     // write the assembly model in IGES format

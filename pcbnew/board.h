@@ -664,10 +664,14 @@ public:
      *
      * @param aOutlines is the #SHAPE_POLY_SET to fill in with outlines/holes.
      * @param aErrorHandler is an optional DRC_ITEM error handler.
+     * @param aAllowUseArcsInPolygons = an optional option to allow adding arcs in
+     *  SHAPE_LINE_CHAIN polylines/polygons when building outlines from aShapeList
+     *  This is mainly for export to STEP files
      * @return true if success, false if a contour is not valid
      */
     bool GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
-                                  OUTLINE_ERROR_HANDLER* aErrorHandler = nullptr );
+                                  OUTLINE_ERROR_HANDLER* aErrorHandler = nullptr,
+                                  bool aAllowUseArcsInPolygons = false );
 
     /**
      * @return a epsilon value that is the max distance between 2 points to see them
