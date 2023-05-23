@@ -32,6 +32,7 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/statbmp.h>
+#include <wx/spinctrl.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -72,11 +73,6 @@ class DIALOG_GLOBAL_EDIT_TEARDROPS_BASE : public DIALOG_SHIM
 		wxStaticText* m_stHDRatioUnits;
 		wxStaticText* m_minTrackWidthHint;
 		wxStaticBitmap* m_bitmapTeardrop;
-		wxStaticText* m_staticText15;
-		wxRadioButton* m_rbAntiStraight;
-		wxRadioButton* m_rbStraightLines;
-		wxRadioButton* m_rbAntiCurved;
-		wxRadioButton* m_rbCurved;
 		wxStaticText* m_stLenPercentLabel;
 		wxTextCtrl* m_tcLenPercent;
 		wxStaticText* m_stLenPercentUnits;
@@ -89,8 +85,9 @@ class DIALOG_GLOBAL_EDIT_TEARDROPS_BASE : public DIALOG_SHIM
 		wxStaticText* m_stMaxHeight;
 		wxTextCtrl* m_tcMaxHeight;
 		wxStaticText* m_stMaxHeightUnits;
+		wxCheckBox* m_curvedEdges;
 		wxStaticText* m_curvePointsLabel;
-		wxTextCtrl* m_curvePointsCtrl;
+		wxSpinCtrl* m_curvePointsCtrl;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -103,8 +100,6 @@ class DIALOG_GLOBAL_EDIT_TEARDROPS_BASE : public DIALOG_SHIM
 		virtual void OnExistingFilterSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onShowBoardSetup( wxHyperlinkEvent& event ) { event.Skip(); }
 		virtual void onSpecifiedValuesUpdateUi( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void onStraightLines( wxMouseEvent& event ) { event.Skip(); }
-		virtual void onCurvedLines( wxMouseEvent& event ) { event.Skip(); }
 		virtual void onCurvedEdgesUpdateUi( wxUpdateUIEvent& event ) { event.Skip(); }
 
 

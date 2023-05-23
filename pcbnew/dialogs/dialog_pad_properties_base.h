@@ -36,7 +36,6 @@ class wxListView;
 #include <wx/statbmp.h>
 #include <wx/statbox.h>
 #include <wx/spinctrl.h>
-#include <wx/radiobut.h>
 #include <wx/listctrl.h>
 #include <wx/button.h>
 #include <wx/notebook.h>
@@ -184,9 +183,6 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_teardropShapeLabel;
 		wxStaticLine* m_staticline51;
 		wxStaticBitmap* m_bitmapTeardrop;
-		wxStaticText* m_edgesLabel;
-		wxRadioButton* m_rbStraightLines;
-		wxRadioButton* m_rbCurved;
 		wxStaticText* m_stHsetting;
 		wxSpinCtrlDouble* m_spTeardropLenPercent;
 		wxStaticText* m_stTeardropLenUnits;
@@ -199,6 +195,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_stTdMaxSize;
 		wxTextCtrl* m_tcMaxHeight;
 		wxStaticText* m_stMaxHeightUnits;
+		wxCheckBox* m_curvedEdges;
 		wxStaticText* m_curvePointsLabel;
 		wxSpinCtrl* m_curvePointsCtrl;
 		wxStaticBoxSizer* m_sbSizerZonesSettings;

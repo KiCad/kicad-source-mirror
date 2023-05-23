@@ -60,7 +60,6 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     m_teardropMaxLen( aParent, m_stMaxLen, m_tcTdMaxLen, m_stMaxLenUnits ),
     m_teardropHeightPercent( aParent, m_stHeightPercentLabel, m_tcHeightPercent, m_stHeightPercentUnits ),
     m_teardropMaxHeight( aParent, m_stMaxHeight, m_tcMaxHeight, m_stMaxHeightUnits ),
-    m_curvePoints( aParent, m_curvePointsLabel, m_curvePointsCtrl, nullptr ),
     m_tracks( false ),
     m_vias( false )
 {
@@ -76,7 +75,6 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     m_teardropHDPercent.SetUnits( EDA_UNITS::PERCENT );
     m_teardropLenPercent.SetUnits( EDA_UNITS::PERCENT );
     m_teardropHeightPercent.SetUnits( EDA_UNITS::PERCENT );
-    m_curvePoints.SetUnits( EDA_UNITS::UNSCALED );
 
     m_minTrackWidthHint->SetFont( KIUI::GetInfoFont( this ).Italic() );
 
@@ -157,6 +155,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                     m_trackEndX.SetValue( t->GetEnd().x );
                     m_trackEndY.SetValue( t->GetEnd().y );
                     m_trackWidth.SetValue( t->GetWidth() );
+                    m_trackNetclass->SetValue( false );
                     track_selection_layer = t->GetLayer();
                     m_tracks = true;
                 }
@@ -213,7 +212,8 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                     m_teardropLenPercent.SetDoubleValue( v->GetTeardropParams().m_BestLengthRatio*100.0 );
                     m_teardropHeightPercent.SetDoubleValue( v->GetTeardropParams().m_BestWidthRatio*100.0 );
                     m_teardropHDPercent.SetDoubleValue( v->GetTeardropParams().m_WidthtoSizeFilterRatio*100.0 );
-                    m_curvePoints.SetValue( v->GetTeardropParams().m_CurveSegCount );
+                    m_curvedEdges->SetValue( v->GetTeardropParams().IsCurved() );
+                    m_curvePointsCtrl->SetValue( v->GetTeardropParams().m_CurveSegCount );
                 }
                 else        // check if values are the same for every selected via
                 {
@@ -270,8 +270,11 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                     if( m_teardropHDPercent.GetDoubleValue() != v->GetTeardropParams().m_WidthtoSizeFilterRatio*100.0 )
                         m_teardropHDPercent.SetValue( INDETERMINATE_STATE );
 
-                    if( m_curvePoints.GetValue() != v->GetTeardropParams().m_CurveSegCount )
-                        m_curvePoints.SetValue( INDETERMINATE_STATE );
+                    if( m_curvePointsCtrl->GetValue() != v->GetTeardropParams().m_CurveSegCount )
+                    {
+                        m_curvedEdges->Set3StateValue( wxCHK_UNDETERMINED );
+                        m_curvePointsCtrl->SetValue( 5 );
+                    }
                 }
 
                 if( v->IsLocked() )
@@ -386,23 +389,6 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
         m_annularRingsLabel->Show( getLayerDepth() > 1 );
         m_annularRingsCtrl->Show( getLayerDepth() > 1 );
-
-        if( m_curvePoints.IsIndeterminate() )
-        {
-            m_rbStraightLines->SetValue( false );
-            m_rbCurved->SetValue( false );
-        }
-        else if( m_curvePoints.GetValue() == 0 )
-        {
-            m_rbStraightLines->SetValue( true );
-            m_rbCurved->SetValue( false );
-            m_curvePoints.SetValue( wxEmptyString );
-        }
-        else
-        {
-            m_rbStraightLines->SetValue( false );
-            m_rbCurved->SetValue( true );
-        }
     }
     else
     {
@@ -751,19 +737,12 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 if( !m_teardropHDPercent.IsIndeterminate() )
                     targetParams->m_WidthtoSizeFilterRatio = m_teardropHDPercent.GetDoubleValue() / 100.0;
 
-                if( m_curvePoints.GetValue() != v->GetTeardropParams().m_CurveSegCount )
-                    m_curvePoints.SetValue( INDETERMINATE_STATE );
-
-                if( m_rbStraightLines->GetValue() )
+                if( m_curvedEdges->Get3StateValue() != wxCHK_UNDETERMINED )
                 {
-                    targetParams->m_CurveSegCount = 0;
-                }
-                else if( m_rbCurved->GetValue() )
-                {
-                    if( !m_curvePoints.IsIndeterminate() && m_curvePoints.GetValue() > 0 )
-                        targetParams->m_CurveSegCount = m_curvePoints.GetIntValue();
-                    else if( targetParams->m_CurveSegCount == 0 )
-                        targetParams->m_CurveSegCount = 5;
+                    if( m_curvedEdges->GetValue() )
+                        targetParams->m_CurveSegCount = m_curvePointsCtrl->GetValue();
+                    else
+                        targetParams->m_CurveSegCount = 0;
                 }
 
                 if( changeLock )
@@ -964,5 +943,6 @@ void DIALOG_TRACK_VIA_PROPERTIES::onTeardropsUpdateUi( wxUpdateUIEvent& event )
 
 void DIALOG_TRACK_VIA_PROPERTIES::onCurvedEdgesUpdateUi( wxUpdateUIEvent& event )
 {
-    event.Enable( !m_frame->GetBoard()->LegacyTeardrops() && m_rbCurved->GetValue() );
+    event.Enable( !m_frame->GetBoard()->LegacyTeardrops()
+                  && m_curvedEdges->Get3StateValue() == wxCHK_CHECKED );
 }

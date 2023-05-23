@@ -66,42 +66,12 @@ protected:
     }
     void onCurvedEdgesUpdateUi( wxUpdateUIEvent& event ) override
     {
-        event.Enable( m_specifiedValues->GetValue() && m_rbCurved->GetValue() );
+        event.Enable( m_specifiedValues->GetValue()
+                        && m_curvedEdges->GetValue() == wxCHK_CHECKED );
     }
     void onFilterUpdateUi( wxUpdateUIEvent& event ) override
     {
         event.Enable( !m_trackToTrack->GetValue() );
-    }
-
-    // We can't use standard wxWidgets radio button processing for these because you must
-    // be able to turn them both off to set a "don't modify" state
-    void onStraightLines( wxMouseEvent& event ) override
-    {
-        if( !m_rbStraightLines->GetValue() )
-        {
-            m_rbStraightLines->SetValue( true );
-            m_rbAntiCurved->SetValue( true );
-            m_rbCurved->SetValue( false );
-        }
-        else
-        {
-            m_rbAntiStraight->SetValue( true );
-            m_rbStraightLines->SetValue( false );
-        }
-    }
-    void onCurvedLines( wxMouseEvent& event ) override
-    {
-        if( !m_rbCurved->GetValue() )
-        {
-            m_rbCurved->SetValue( true );
-            m_rbAntiStraight->SetValue( true );
-            m_rbStraightLines->SetValue( false );
-        }
-        else
-        {
-            m_rbAntiCurved->SetValue( true );
-            m_rbCurved->SetValue( false );
-        }
     }
 
     // Track-to-track teardrops always follow the document-wide settings (there are no teardrop
@@ -170,7 +140,6 @@ private:
     UNIT_BINDER     m_teardropMaxLen;
     UNIT_BINDER     m_teardropHeightPercent;
     UNIT_BINDER     m_teardropMaxHeight;
-    UNIT_BINDER     m_curvePoints;
 };
 
 
@@ -180,8 +149,7 @@ DIALOG_GLOBAL_EDIT_TEARDROPS::DIALOG_GLOBAL_EDIT_TEARDROPS( PCB_EDIT_FRAME* aPar
         m_teardropLenPercent( aParent, m_stLenPercentLabel, m_tcLenPercent, m_stLenPercentUnits ),
         m_teardropMaxLen( aParent, m_stMaxLen, m_tcTdMaxLen, m_stMaxLenUnits ),
         m_teardropHeightPercent( aParent, m_stHeightPercentLabel, m_tcHeightPercent, m_stHeightPercentUnits ),
-        m_teardropMaxHeight( aParent, m_stMaxHeight, m_tcMaxHeight, m_stMaxHeightUnits ),
-        m_curvePoints( aParent, m_curvePointsLabel, m_curvePointsCtrl, nullptr )
+        m_teardropMaxHeight( aParent, m_stMaxHeight, m_tcMaxHeight, m_stMaxHeightUnits )
 {
     m_parent = aParent;
     m_brd = m_parent->GetBoard();
@@ -191,7 +159,6 @@ DIALOG_GLOBAL_EDIT_TEARDROPS::DIALOG_GLOBAL_EDIT_TEARDROPS( PCB_EDIT_FRAME* aPar
     m_teardropHDPercent.SetUnits( EDA_UNITS::PERCENT );
     m_teardropLenPercent.SetUnits( EDA_UNITS::PERCENT );
     m_teardropHeightPercent.SetUnits( EDA_UNITS::PERCENT );
-    m_curvePoints.SetUnits( EDA_UNITS::UNSCALED );
 
     m_minTrackWidthHint->SetFont( KIUI::GetInfoFont( this ).Italic() );
 
@@ -320,7 +287,7 @@ bool DIALOG_GLOBAL_EDIT_TEARDROPS::TransferDataToWindow()
     m_teardropMaxLen.SetValue( INDETERMINATE_ACTION );
     m_teardropHeightPercent.SetValue( INDETERMINATE_ACTION );
     m_teardropMaxHeight.SetValue( INDETERMINATE_ACTION );
-    m_curvePoints.SetValue( INDETERMINATE_ACTION );
+    m_curvedEdges->Set3StateValue( wxCHK_UNDETERMINED );
 
     return true;
 }
@@ -349,16 +316,12 @@ void DIALOG_GLOBAL_EDIT_TEARDROPS::setSpecifiedParams( TEARDROP_PARAMETERS* targ
     if( !m_teardropMaxHeight.IsIndeterminate() )
         targetParams->m_TdMaxWidth = m_teardropMaxHeight.GetIntValue();
 
-    if( m_rbStraightLines->GetValue() )
+    if( m_curvedEdges->Get3StateValue() != wxCHK_UNDETERMINED )
     {
-        targetParams->m_CurveSegCount = 0;
-    }
-    else if( m_rbCurved->GetValue() )
-    {
-        if( !m_curvePoints.IsIndeterminate() )
-            targetParams->m_CurveSegCount = m_curvePoints.GetIntValue();
-        else if( targetParams->m_CurveSegCount == 0 )
-            targetParams->m_CurveSegCount = 5;
+        if( m_curvedEdges->GetValue() )
+            targetParams->m_CurveSegCount = m_curvePointsCtrl->GetValue();
+        else
+            targetParams->m_CurveSegCount = 0;
     }
 }
 

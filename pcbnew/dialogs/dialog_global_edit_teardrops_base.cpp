@@ -201,26 +201,6 @@ DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::DIALOG_GLOBAL_EDIT_TEARDROPS_BASE( wxWindow* 
 	wxBoxSizer* bSizer41;
 	bSizer41 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_staticText15 = new wxStaticText( sbAction->GetStaticBox(), wxID_ANY, _("Edges:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText15->Wrap( -1 );
-	bSizer41->Add( m_staticText15, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
-
-	m_rbAntiStraight = new wxRadioButton( sbAction->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
-	m_rbAntiStraight->Hide();
-
-	bSizer41->Add( m_rbAntiStraight, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-
-	m_rbStraightLines = new wxRadioButton( sbAction->GetStaticBox(), wxID_ANY, _("Straight lines"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer41->Add( m_rbStraightLines, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
-
-	m_rbAntiCurved = new wxRadioButton( sbAction->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
-	m_rbAntiCurved->Hide();
-
-	bSizer41->Add( m_rbAntiCurved, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-
-	m_rbCurved = new wxRadioButton( sbAction->GetStaticBox(), wxID_ANY, _("Curved"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
-	bSizer41->Add( m_rbCurved, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
-
 
 	bSizerLeftCol->Add( bSizer41, 0, wxEXPAND|wxBOTTOM, 5 );
 
@@ -229,6 +209,9 @@ DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::DIALOG_GLOBAL_EDIT_TEARDROPS_BASE( wxWindow* 
 
 
 	bSizerShapeColumns->Add( 25, 0, 0, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer121;
+	bSizer121 = new wxBoxSizer( wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerRightCol;
 	fgSizerRightCol = new wxFlexGridSizer( 0, 3, 2, 0 );
@@ -290,23 +273,32 @@ DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::DIALOG_GLOBAL_EDIT_TEARDROPS_BASE( wxWindow* 
 	fgSizerRightCol->Add( m_stMaxHeightUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	fgSizerRightCol->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizer121->Add( fgSizerRightCol, 1, wxEXPAND|wxLEFT, 10 );
 
 
-	fgSizerRightCol->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizer121->Add( 0, 8, 0, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer44;
+	bSizer44 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_curvedEdges = new wxCheckBox( sbAction->GetStaticBox(), wxID_ANY, _("Curved edges"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
+	bSizer44->Add( m_curvedEdges, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
-	fgSizerRightCol->Add( 0, 5, 1, wxEXPAND, 5 );
+	bSizer44->Add( 30, 0, 0, 0, 5 );
 
-	m_curvePointsLabel = new wxStaticText( sbAction->GetStaticBox(), wxID_ANY, _("Curve points:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_curvePointsLabel = new wxStaticText( sbAction->GetStaticBox(), wxID_ANY, _("Points:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_curvePointsLabel->Wrap( -1 );
-	fgSizerRightCol->Add( m_curvePointsLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
+	bSizer44->Add( m_curvePointsLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_curvePointsCtrl = new wxTextCtrl( sbAction->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), 0 );
-	fgSizerRightCol->Add( m_curvePointsCtrl, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	m_curvePointsCtrl = new wxSpinCtrl( sbAction->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 3, 10, 5 );
+	bSizer44->Add( m_curvePointsCtrl, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizerShapeColumns->Add( fgSizerRightCol, 1, wxEXPAND|wxTOP|wxLEFT, 10 );
+	bSizer121->Add( bSizer44, 0, wxEXPAND|wxLEFT, 3 );
+
+
+	bSizerShapeColumns->Add( bSizer121, 1, wxEXPAND|wxTOP, 5 );
 
 
 	bSizerSpecifiedValues->Add( bSizerShapeColumns, 1, wxEXPAND|wxBOTTOM, 3 );
@@ -353,11 +345,6 @@ DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::DIALOG_GLOBAL_EDIT_TEARDROPS_BASE( wxWindow* 
 	m_stHDRatioUnits->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onSpecifiedValuesUpdateUi ), NULL, this );
 	m_minTrackWidthHint->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onSpecifiedValuesUpdateUi ), NULL, this );
 	m_bitmapTeardrop->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onSpecifiedValuesUpdateUi ), NULL, this );
-	m_staticText15->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onSpecifiedValuesUpdateUi ), NULL, this );
-	m_rbStraightLines->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onStraightLines ), NULL, this );
-	m_rbStraightLines->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onSpecifiedValuesUpdateUi ), NULL, this );
-	m_rbCurved->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onCurvedLines ), NULL, this );
-	m_rbCurved->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onSpecifiedValuesUpdateUi ), NULL, this );
 	m_stLenPercentLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onSpecifiedValuesUpdateUi ), NULL, this );
 	m_tcLenPercent->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onSpecifiedValuesUpdateUi ), NULL, this );
 	m_stLenPercentUnits->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onSpecifiedValuesUpdateUi ), NULL, this );
@@ -370,6 +357,7 @@ DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::DIALOG_GLOBAL_EDIT_TEARDROPS_BASE( wxWindow* 
 	m_stMaxHeight->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onSpecifiedValuesUpdateUi ), NULL, this );
 	m_tcMaxHeight->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onSpecifiedValuesUpdateUi ), NULL, this );
 	m_stMaxHeightUnits->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onSpecifiedValuesUpdateUi ), NULL, this );
+	m_curvedEdges->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onSpecifiedValuesUpdateUi ), NULL, this );
 	m_curvePointsLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onCurvedEdgesUpdateUi ), NULL, this );
 	m_curvePointsCtrl->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onCurvedEdgesUpdateUi ), NULL, this );
 }
@@ -398,11 +386,6 @@ DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::~DIALOG_GLOBAL_EDIT_TEARDROPS_BASE()
 	m_stHDRatioUnits->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onSpecifiedValuesUpdateUi ), NULL, this );
 	m_minTrackWidthHint->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onSpecifiedValuesUpdateUi ), NULL, this );
 	m_bitmapTeardrop->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onSpecifiedValuesUpdateUi ), NULL, this );
-	m_staticText15->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onSpecifiedValuesUpdateUi ), NULL, this );
-	m_rbStraightLines->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onStraightLines ), NULL, this );
-	m_rbStraightLines->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onSpecifiedValuesUpdateUi ), NULL, this );
-	m_rbCurved->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onCurvedLines ), NULL, this );
-	m_rbCurved->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onSpecifiedValuesUpdateUi ), NULL, this );
 	m_stLenPercentLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onSpecifiedValuesUpdateUi ), NULL, this );
 	m_tcLenPercent->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onSpecifiedValuesUpdateUi ), NULL, this );
 	m_stLenPercentUnits->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onSpecifiedValuesUpdateUi ), NULL, this );
@@ -415,6 +398,7 @@ DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::~DIALOG_GLOBAL_EDIT_TEARDROPS_BASE()
 	m_stMaxHeight->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onSpecifiedValuesUpdateUi ), NULL, this );
 	m_tcMaxHeight->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onSpecifiedValuesUpdateUi ), NULL, this );
 	m_stMaxHeightUnits->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onSpecifiedValuesUpdateUi ), NULL, this );
+	m_curvedEdges->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onSpecifiedValuesUpdateUi ), NULL, this );
 	m_curvePointsLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onCurvedEdgesUpdateUi ), NULL, this );
 	m_curvePointsCtrl->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::onCurvedEdgesUpdateUi ), NULL, this );
 

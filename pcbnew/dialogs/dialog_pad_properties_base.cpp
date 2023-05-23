@@ -680,27 +680,14 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_bitmapTeardrop = new wxStaticBitmap( bSizerTeardrops->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerLeftCol->Add( m_bitmapTeardrop, 1, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT, 5 );
 
-	wxBoxSizer* bSizer41;
-	bSizer41 = new wxBoxSizer( wxHORIZONTAL );
-
-	m_edgesLabel = new wxStaticText( bSizerTeardrops->GetStaticBox(), wxID_ANY, _("Edges:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_edgesLabel->Wrap( -1 );
-	bSizer41->Add( m_edgesLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_rbStraightLines = new wxRadioButton( bSizerTeardrops->GetStaticBox(), wxID_ANY, _("Straight lines"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
-	bSizer41->Add( m_rbStraightLines, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_rbCurved = new wxRadioButton( bSizerTeardrops->GetStaticBox(), wxID_ANY, _("Curved"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer41->Add( m_rbCurved, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	bSizerLeftCol->Add( bSizer41, 0, wxEXPAND, 5 );
-
 
 	bSizerShapeColumns->Add( bSizerLeftCol, 1, wxEXPAND|wxRIGHT, 10 );
 
 
 	bSizerShapeColumns->Add( 10, 0, 0, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer43;
+	bSizer43 = new wxBoxSizer( wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerRightCol;
 	fgSizerRightCol = new wxFlexGridSizer( 0, 3, 2, 0 );
@@ -712,7 +699,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_stHsetting->Wrap( -1 );
 	fgSizerRightCol->Add( m_stHsetting, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_spTeardropLenPercent = new wxSpinCtrlDouble( bSizerTeardrops->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 20, 100, 40.000000, 10 );
+	m_spTeardropLenPercent = new wxSpinCtrlDouble( bSizerTeardrops->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 20, 200, 40.000000, 10 );
 	m_spTeardropLenPercent->SetDigits( 0 );
 	fgSizerRightCol->Add( m_spTeardropLenPercent, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
@@ -764,23 +751,29 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	fgSizerRightCol->Add( m_stMaxHeightUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	fgSizerRightCol->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizer43->Add( fgSizerRightCol, 1, wxEXPAND|wxTOP|wxLEFT, 10 );
+
+	wxBoxSizer* bSizer44;
+	bSizer44 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_curvedEdges = new wxCheckBox( bSizerTeardrops->GetStaticBox(), wxID_ANY, _("Curved edges"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer44->Add( m_curvedEdges, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	fgSizerRightCol->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizer44->Add( 45, 0, 0, 0, 5 );
 
-
-	fgSizerRightCol->Add( 0, 5, 1, wxEXPAND, 5 );
-
-	m_curvePointsLabel = new wxStaticText( bSizerTeardrops->GetStaticBox(), wxID_ANY, _("Curve points:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_curvePointsLabel = new wxStaticText( bSizerTeardrops->GetStaticBox(), wxID_ANY, _("Points:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_curvePointsLabel->Wrap( -1 );
-	fgSizerRightCol->Add( m_curvePointsLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
+	bSizer44->Add( m_curvePointsLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_curvePointsCtrl = new wxSpinCtrl( bSizerTeardrops->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 3, 10, 5 );
-	fgSizerRightCol->Add( m_curvePointsCtrl, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bSizer44->Add( m_curvePointsCtrl, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizerShapeColumns->Add( fgSizerRightCol, 1, wxEXPAND|wxTOP|wxLEFT, 10 );
+	bSizer43->Add( bSizer44, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 8 );
+
+
+	bSizerShapeColumns->Add( bSizer43, 1, wxEXPAND, 5 );
 
 
 	bSizerTeardrops->Add( bSizerShapeColumns, 1, wxEXPAND|wxBOTTOM, 5 );
@@ -1290,9 +1283,6 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_minTrackWidthHint->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
 	m_teardropShapeLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
 	m_bitmapTeardrop->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
-	m_edgesLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
-	m_rbStraightLines->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
-	m_rbCurved->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
 	m_stHsetting->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
 	m_spTeardropLenPercent->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
 	m_stTeardropLenUnits->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
@@ -1376,9 +1366,6 @@ DIALOG_PAD_PROPERTIES_BASE::~DIALOG_PAD_PROPERTIES_BASE()
 	m_minTrackWidthHint->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
 	m_teardropShapeLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
 	m_bitmapTeardrop->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
-	m_edgesLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
-	m_rbStraightLines->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
-	m_rbCurved->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
 	m_stHsetting->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
 	m_spTeardropLenPercent->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );
 	m_stTeardropLenUnits->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropsUpdateUi ), NULL, this );

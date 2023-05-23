@@ -31,7 +31,7 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/statbmp.h>
-#include <wx/radiobut.h>
+#include <wx/spinctrl.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -109,9 +109,6 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_stHDRatioUnits;
 		wxStaticText* m_minTrackWidthHint;
 		wxStaticBitmap* m_bitmapTeardrop;
-		wxStaticText* m_staticText15;
-		wxRadioButton* m_rbStraightLines;
-		wxRadioButton* m_rbCurved;
 		wxStaticText* m_stLenPercentLabel;
 		wxTextCtrl* m_tcLenPercent;
 		wxStaticText* m_stLenPercentUnits;
@@ -124,8 +121,9 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_stMaxHeight;
 		wxTextCtrl* m_tcMaxHeight;
 		wxStaticText* m_stMaxHeightUnits;
+		wxCheckBox* m_curvedEdges;
 		wxStaticText* m_curvePointsLabel;
-		wxTextCtrl* m_curvePointsCtrl;
+		wxSpinCtrl* m_curvePointsCtrl;
 		wxStdDialogButtonSizer* m_StdButtons;
 		wxButton* m_StdButtonsOK;
 		wxButton* m_StdButtonsCancel;
@@ -139,8 +137,6 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void onViaEdit( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onViaNetclassCheck( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onTeardropsUpdateUi( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void onStraightLines( wxMouseEvent& event ) { event.Skip(); }
-		virtual void onCurvedLines( wxMouseEvent& event ) { event.Skip(); }
 		virtual void onCurvedEdgesUpdateUi( wxUpdateUIEvent& event ) { event.Skip(); }
 
 

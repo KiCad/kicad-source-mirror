@@ -576,16 +576,12 @@ void DIALOG_PAD_PROPERTIES::initValues()
     m_spTeardropSizePercent->SetValue( m_previewPad->GetTeardropParams().m_BestWidthRatio *100 );
     m_spTeardropHDPercent->SetValue( m_previewPad->GetTeardropParams().m_WidthtoSizeFilterRatio*100 );
 
-    if( m_previewPad->GetTeardropParams().IsCurved() )
-    {
-        m_rbCurved->SetValue( true );
+    m_curvedEdges->SetValue( m_previewPad->GetTeardropParams().IsCurved() );
+
+    if( m_curvedEdges->GetValue() )
         m_curvePointsCtrl->SetValue( m_previewPad->GetTeardropParams().m_CurveSegCount );
-    }
     else
-    {
-        m_rbStraightLines->SetValue( true );
         m_curvePointsCtrl->SetValue( 5 );
-    }
 
     switch( m_previewPad->GetZoneConnection() )
     {
@@ -1138,7 +1134,7 @@ void DIALOG_PAD_PROPERTIES::onTeardropsUpdateUi( wxUpdateUIEvent& event )
 
 void DIALOG_PAD_PROPERTIES::onTeardropCurvePointsUpdateUi( wxUpdateUIEvent& event )
 {
-    event.Enable( !m_board->LegacyTeardrops() && m_rbCurved->GetValue() );
+    event.Enable( !m_board->LegacyTeardrops() && m_curvedEdges->GetValue() );
 }
 
 
@@ -1793,10 +1789,10 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     aPad->GetTeardropParams().m_BestLengthRatio = m_spTeardropLenPercent->GetValue() / 100;
     aPad->GetTeardropParams().m_BestWidthRatio = m_spTeardropSizePercent->GetValue() / 100;
 
-    if( m_rbStraightLines->GetValue() )
-        aPad->GetTeardropParams().m_CurveSegCount = 0;
-    else
+    if( m_curvedEdges->GetValue() )
         aPad->GetTeardropParams().m_CurveSegCount = m_curvePointsCtrl->GetValue();
+    else
+        aPad->GetTeardropParams().m_CurveSegCount = 0;
 
     aPad->GetTeardropParams().m_WidthtoSizeFilterRatio = m_spTeardropHDPercent->GetValue() / 100;
 
