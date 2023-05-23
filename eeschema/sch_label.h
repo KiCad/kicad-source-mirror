@@ -118,6 +118,9 @@ public:
 
     void MirrorSpinStyle( bool aLeftRight ) override;
 
+    void MirrorHorizontally( int aCenter ) override;
+    void MirrorVertically( int aCenter ) override;
+
     void SetPosition( const VECTOR2I& aPosition ) override;
 
     void AutoplaceFields( SCH_SCREEN* aScreen, bool aManual ) override;
@@ -324,6 +327,9 @@ public:
 
     void MirrorSpinStyle( bool aLeftRight ) override;
 
+    void MirrorHorizontally( int aCenter ) override;
+    void MirrorVertically( int aCenter ) override;
+
 private:
     int       m_pinLength;
     int       m_symbolSize;
@@ -355,11 +361,6 @@ public:
     }
 
     int GetMandatoryFieldCount() override { return 1; }
-
-    void MirrorSpinStyle( bool aLeftRight ) override;
-
-    void MirrorHorizontally( int aCenter ) override;
-    void MirrorVertically( int aCenter ) override;
 
     void SetTextSpinStyle( TEXT_SPIN_STYLE aSpinStyle ) override;
 
