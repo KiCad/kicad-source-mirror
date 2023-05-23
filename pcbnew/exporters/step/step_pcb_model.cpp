@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -240,7 +240,7 @@ bool STEP_PCB_MODEL::AddPadHole( const PAD* aPad, const VECTOR2D& aOrigin )
 
     if( holeOutlines.OutlineCount() > 0 )
     {
-        if( MakeShape( hole, holeOutlines.COutline( 0 ), m_thickness, aOrigin ) )
+        if( MakeShape( hole, holeOutlines.COutline( 0 ), m_thickness, 0.0, aOrigin ) )
         {
             m_cutouts.push_back( hole );
         }
@@ -343,9 +343,28 @@ bool STEP_PCB_MODEL::isBoardOutlineValid()
     return m_pcb_labels.size() > 0;
 }
 
+// A helper function to know if a SHAPE_LINE_CHAIN is encoding a circle
+static bool IsChainCircle( const SHAPE_LINE_CHAIN& aChain )
+{
+    // If aChain is a circle it
+    // - contains only one arc
+    // - this arc has the same start and end point
+    const std::vector<SHAPE_ARC>& arcs = aChain.CArcs();
 
-bool STEP_PCB_MODEL::MakeShape( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& aChain,
-                                double aThickness, const VECTOR2D& aOrigin )
+    if( arcs.size() == 1 )
+    {
+        const SHAPE_ARC& arc = arcs[0];
+
+        if( arc. GetP0() == arc.GetP1() )
+            return true;
+    }
+
+    return false;
+}
+
+bool STEP_PCB_MODEL::MakeShapeAsCylinder( TopoDS_Shape& aShape,
+                                          const SHAPE_LINE_CHAIN& aChain, double aThickness,
+                                          double aZposition, const VECTOR2D& aOrigin )
 {
     if( !aShape.IsNull() )
         return false; // there is already data in the shape object
@@ -353,12 +372,47 @@ bool STEP_PCB_MODEL::MakeShape( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& aC
     if( !aChain.IsClosed() )
         return false; // the loop is not closed
 
+    const std::vector<SHAPE_ARC>& arcs = aChain.CArcs();
+    const SHAPE_ARC& arc = arcs[0];
+
+    TopoDS_Shape base_shape;
+    base_shape = BRepPrimAPI_MakeCylinder(
+                        pcbIUScale.IUTomm( arc.GetRadius() ), aThickness ).Shape();
+    gp_Trsf shift;
+    shift.SetTranslation( gp_Vec( pcbIUScale.IUTomm( arc.GetCenter().x - aOrigin.x ),
+                                  -pcbIUScale.IUTomm( arc.GetCenter().y - aOrigin.y ),
+                                  aZposition ) );
+    BRepBuilderAPI_Transform round_shape( base_shape, shift );
+    aShape = round_shape;
+
+    if( aShape.IsNull() )
+    {
+        ReportMessage( wxT( "failed to create a cylinder vertical shape\n" ) );
+        return false;
+    }
+
+    return true;
+}
+
+bool STEP_PCB_MODEL::MakeShape( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& aChain,
+                                double aThickness, double aZposition, const VECTOR2D& aOrigin )
+{
+    if( !aShape.IsNull() )
+        return false; // there is already data in the shape object
+
+    if( !aChain.IsClosed() )
+        return false; // the loop is not closed
+
+    // a SHAPE_LINE_CHAIN that is in fact a circle (one 360deg arc) is exported as cylinder
+    if( IsChainCircle( aChain ) )
+        return MakeShapeAsCylinder( aShape, aChain, aThickness, aZposition, aOrigin );
+
     BRepBuilderAPI_MakeWire wire;
     TopoDS_Edge             edge;
     bool                    success = true;
 
     gp_Pnt start = gp_Pnt( pcbIUScale.IUTomm( aChain.CPoint( 0 ).x - aOrigin.x ),
-                           -pcbIUScale.IUTomm( aChain.CPoint( 0 ).y - aOrigin.y ), 0.0 );
+                           -pcbIUScale.IUTomm( aChain.CPoint( 0 ).y - aOrigin.y ), aZposition );
 
     for( int j = 0; j < aChain.PointCount(); j++ )
     {
@@ -369,12 +423,12 @@ bool STEP_PCB_MODEL::MakeShape( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& aC
         if( next >= aChain.PointCount() )
         {
             end = gp_Pnt( pcbIUScale.IUTomm( aChain.CPoint( 0 ).x - aOrigin.x ),
-                          -pcbIUScale.IUTomm( aChain.CPoint( 0 ).y - aOrigin.y ), 0.0 );
+                          -pcbIUScale.IUTomm( aChain.CPoint( 0 ).y - aOrigin.y ), aZposition );
         }
         else
         {
             end = gp_Pnt( pcbIUScale.IUTomm( aChain.CPoint( next ).x - aOrigin.x ),
-                          -pcbIUScale.IUTomm( aChain.CPoint( next ).y - aOrigin.y ), 0.0 );
+                          -pcbIUScale.IUTomm( aChain.CPoint( next ).y - aOrigin.y ), aZposition );
         }
 
         // Do not export very small segments: they can create broken outlines
@@ -460,7 +514,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
 
         TopoDS_Shape curr_brd;
 
-        if( !MakeShape( curr_brd, outline, m_thickness, aOrigin ) )
+        if( !MakeShape( curr_brd, outline, m_thickness, 0.0, aOrigin ) )
         {
             // Error
             ReportMessage( wxString::Format(
@@ -482,7 +536,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
             const SHAPE_LINE_CHAIN& holeOutline = aOutline.Hole( cnt, ii );
             TopoDS_Shape hole;
 
-            if( MakeShape( hole, holeOutline, m_thickness, aOrigin ) )
+            if( MakeShape( hole, holeOutline, m_thickness, 0.0, aOrigin ) )
             {
                 m_cutouts.push_back( hole );
             }

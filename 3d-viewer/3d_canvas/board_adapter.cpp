@@ -657,11 +657,6 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
 }
 
 
-extern bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
-                                           int aErrorMax, int aChainingEpsilon,
-                                           OUTLINE_ERROR_HANDLER* aErrorHandler = nullptr );
-
-
 bool BOARD_ADAPTER::createBoardPolygon( wxString* aErrorMsg )
 {
     m_board_poly.RemoveAllContours();

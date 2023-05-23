@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,19 +43,47 @@ const std::function<void( const wxString& msg, BOARD_ITEM* itemA, BOARD_ITEM* it
  * @param aChainingEpsilon is the max distance from one endPt to the next startPt (internal units)
  * @param aAllowDisjoint indicates multiple top-level outlines are allowed
  * @param aErrorHandler = an optional error handler
+ * @param aAllowUseArcsInPolygons = an optional option to allow adding arcs in
+ *  SHAPE_LINE_CHAIN polylines/polygons when building outlines from aShapeList
+ *  This is mainly for export to STEP files
+ * @return true if success, false if a contour is not valid (self intersecting)
  */
 bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SET& aPolygons,
                               int aErrorMax, int aChainingEpsilon, bool aAllowDisjoint,
-                              OUTLINE_ERROR_HANDLER* aErrorHandler );
+                              OUTLINE_ERROR_HANDLER* aErrorHandler, bool aAllowUseArcsInPolygons = false );
 
 
 /**
  * Extracts the board outlines and build a closed polygon from lines, arcs and circle items on
  * edge cut layer.  Any closed outline inside the main outline is a hole.  All contours should be
  * closed, i.e. are valid vertices for a closed polygon.
+ * @param aBoard is the board to build outlines
+ * @param aOutlines will contain the outlines ( complex polygons ).
+ * @param aErrorMax is the max error distance when polygonizing a curve (internal units)
+ * @param aChainingEpsilon is the max distance from one endPt to the next startPt (internal units)
+ * @param aErrorHandler = an optional error handler
+ * @param aAllowUseArcsInPolygons = an optional option to allow adding arcs in
+ *  SHAPE_LINE_CHAIN polylines/polygons when building outlines from aShapeList
+ *  This is mainly for export to STEP files
  * @return true if success, false if a contour is not valid
  */
 extern bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
                                        int aErrorMax, int aChainingEpsilon,
-                                       OUTLINE_ERROR_HANDLER* aErrorHandler = nullptr );
+                                       OUTLINE_ERROR_HANDLER* aErrorHandler = nullptr,
+                                       bool aAllowUseArcsInPolygons = false );
 
+
+/**
+ * This function is used to extract a board outline for a footprint view.
+ *
+ * Notes:
+ * * Incomplete outlines will be closed by joining the end of the outline onto the bounding box
+ *   (by simply projecting the end points) and then take the area that contains the copper.
+ * * If all copper lies inside a closed outline, than that outline will be treated as an external
+ *   board outline.
+ * * If copper is located outside a closed outline, then that outline will be treated as a hole,
+ *   and the outer edge will be formed using the bounding box.
+ */
+bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
+                                    int aErrorMax, int aChainingEpsilon,
+                                    OUTLINE_ERROR_HANDLER* aErrorHandler = nullptr );
