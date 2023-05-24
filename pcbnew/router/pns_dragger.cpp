@@ -323,7 +323,7 @@ bool DRAGGER::dragMarkObstacles( const VECTOR2I& aP )
     if( Settings().AllowDRCViolations() )
         m_dragStatus = true;
     else
-        m_dragStatus = !m_world->CheckColliding( m_draggedItems );
+        m_dragStatus = !m_lastNode->CheckColliding( m_draggedItems );
 
     return true;
 }
@@ -398,13 +398,14 @@ bool DRAGGER::dragViaWalkaround( const VIA_HANDLE& aHandle, NODE* aNode, const V
 
             vias.insert( draggedVia.get() );
 
+            m_lastNode->Remove( via );
+
             bool ok = propagateViaForces( m_lastNode, vias );
 
             if( ok )
             {
                 viaTargetPos = draggedVia->Pos();
                 viaPropOk = true;
-                m_lastNode->Remove( via );
                 m_lastNode->Add( std::move(draggedVia) );
             }
         }
@@ -604,7 +605,7 @@ bool DRAGGER::dragWalkaround( const VECTOR2I& aP )
 
     m_dragStatus = ok;
 
-    return true;
+    return ok;
 }
 
 
@@ -745,7 +746,17 @@ bool DRAGGER::Drag( const VECTOR2I& aP )
     }
 
     if( ret )
+    {
         m_lastValidPoint = aP;
+    }
+    else
+    {
+        if( m_lastNode )
+        {
+            delete m_lastNode;
+            m_lastNode = nullptr;
+        }
+    }
 
     return ret;
 }
