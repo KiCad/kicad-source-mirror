@@ -1,7 +1,7 @@
 /*
 * This program source code file is part of KiCad, a free EDA CAD application.
 *
-* Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+* Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -69,6 +69,7 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
     m_params.emplace_back( new PARAM<wxString>( "electrical.spacing_voltage",
             &m_Electrical.spacing_voltage, "500" ) );
 
+    // Regulators params
     m_params.emplace_back( new PARAM<wxString>( "regulators.r1", &m_Regulators.r1, "10" ) );
 
     m_params.emplace_back( new PARAM<wxString>( "regulators.r2", &m_Regulators.r2, "10" ) );
@@ -83,7 +84,11 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
     m_params.emplace_back( new PARAM<wxString>( "regulators.selected_regulator",
             &m_Regulators.selected_regulator, "" ) );
 
+    m_params.emplace_back( new PARAM<int>( "regulators.type", &m_Regulators.type, 0 ) );
 
+    m_params.emplace_back( new PARAM<int>( "regulators.last_param", &m_Regulators.last_param, 0 ) );
+
+    // cable_size params
     m_params.emplace_back( new PARAM<wxString>( "cable_size.conductorMaterialResitivity",
                                                 &m_cableSize.conductorMaterialResitivity, "" ) );
 
@@ -93,9 +98,8 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
     m_params.emplace_back( new PARAM<wxString>( "cable_size.conductorThermalCoef",
                                                 &m_cableSize.conductorThermalCoef, "" ) );
 
-    m_params.emplace_back( new PARAM<int>( "regulators.type", &m_Regulators.type, 0 ) );
-
-    m_params.emplace_back( new PARAM<int>( "regulators.last_param", &m_Regulators.last_param, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "cable_size.currentDensityChoice",
+                                           &m_cableSize.currentDensityChoice, 0 ) );
 
     m_params.emplace_back(
             new PARAM<int>( "cable_size.diameterUnit", &m_cableSize.diameterUnit, 0 ) );
@@ -107,6 +111,7 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
 
     m_params.emplace_back( new PARAM<int>( "cable_size.lengthUnit", &m_cableSize.lengthUnit, 0 ) );
 
+    // wavelength params
     m_params.emplace_back(
             new PARAM<double>( "wavelength.frequency", &m_wavelength.frequency, 1e9 ) );
 
