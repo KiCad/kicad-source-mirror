@@ -54,24 +54,24 @@ public:
     
     void SetSimCommand( SIM_PANEL_BASE* aPlotPanel, const wxString& aSimCommand )
     {
-        aPlotPanel->SetSimCommand( aSimCommand );
+        aPlotPanel->setSimCommand( aSimCommand );
         setModified();
     }
 
     const wxString& GetSimCommand( const SIM_PANEL_BASE* aPlotPanel )
     {
-        return aPlotPanel->GetSimCommand();
+        return aPlotPanel->getSimCommand();
     }
 
     void SetSimOptions( SIM_PANEL_BASE* aPlotPanel, int aOptions )
     {
-        aPlotPanel->SetSimOptions( aOptions );
+        aPlotPanel->setSimOptions( aOptions );
         setModified();
     }
 
     int GetSimOptions( const SIM_PANEL_BASE* aPlotPanel )
     {
-        return aPlotPanel->GetSimOptions();
+        return aPlotPanel->getSimOptions();
     }
 
     void ClrModified();

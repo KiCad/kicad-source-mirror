@@ -446,41 +446,15 @@ void SIM_PLOT_FRAME::setSubWindowsSashSize()
 }
 
 
-void SIM_PLOT_FRAME::StartSimulation()
+void SIM_PLOT_FRAME::StartSimulation( const wxString& aSimCommand )
 {
-    if( m_circuitModel->CommandToSimType( GetCurrentSimCommand() ) == ST_UNKNOWN )
-    {
-        if( !EditSimCommand() )
-            return;
+    wxCHECK_RET( m_circuitModel->CommandToSimType( getCurrentSimCommand() ) != ST_UNKNOWN,
+                 wxT( "Unknown simulation type" ) );
 
-        if( m_circuitModel->CommandToSimType( GetCurrentSimCommand() ) == ST_UNKNOWN )
-            return;
-    }
+    m_simConsole->Clear();
 
-    wxString        schTextSimCommand = m_circuitModel->GetSchTextSimCommand();
-    SIM_TYPE        schTextSimType = NGSPICE_CIRCUIT_MODEL::CommandToSimType( schTextSimCommand );
-    SIM_PANEL_BASE* plotWindow = getCurrentPlotWindow();
-
-    if( !plotWindow )
-    {
-        plotWindow = NewPlotPanel( schTextSimCommand, m_circuitModel->GetSimOptions() );
-        m_workbook->SetSimCommand( plotWindow, schTextSimCommand );
-    }
-    else
-    {
-        m_circuitModel->SetSimCommandOverride( m_workbook->GetSimCommand( plotWindow ) );
-
-        if( plotWindow->GetType() == schTextSimType
-                && schTextSimCommand != m_circuitModel->GetLastSchTextSimCommand() )
-        {
-            if( IsOK( this, _( "Schematic sheet simulation command directive has changed.  "
-                               "Do you wish to update the Simulation Command?" ) ) )
-            {
-                m_circuitModel->SetSimCommandOverride( wxEmptyString );
-                m_workbook->SetSimCommand( plotWindow, schTextSimCommand );
-            }
-        }
-    }
+    if( aSimCommand != wxEmptyString )
+        m_circuitModel->SetSimCommandOverride( aSimCommand );
 
     m_circuitModel->SetSimOptions( getCurrentOptions() );
 
@@ -501,13 +475,32 @@ void SIM_PLOT_FRAME::StartSimulation()
         return;
     }
 
+    SIM_PANEL_BASE* plotWindow = getCurrentPlotWindow();
+    wxString        sheetSimCommand = m_circuitModel->GetSheetSimCommand();
+
+    if( plotWindow
+            && plotWindow->GetType() == NGSPICE_CIRCUIT_MODEL::CommandToSimType( sheetSimCommand ) )
+    {
+        if( m_circuitModel->GetSimCommandOverride().IsEmpty() )
+        {
+            m_workbook->SetSimCommand( plotWindow, sheetSimCommand );
+        }
+        else if( sheetSimCommand != m_circuitModel->GetLastSheetSimCommand() )
+        {
+            if( IsOK( this, _( "Schematic sheet simulation command directive has changed.  Do you "
+                               "wish to update the Simulation Command?" ) ) )
+            {
+                m_circuitModel->SetSimCommandOverride( wxEmptyString );
+                m_workbook->SetSimCommand( plotWindow, sheetSimCommand );
+            }
+        }
+    }
+
     std::unique_lock<std::mutex> simulatorLock( m_simulator->GetMutex(), std::try_to_lock );
 
     if( simulatorLock.owns_lock() )
     {
         wxBusyCursor toggle;
-
-        m_simConsole->Clear();
 
         applyTuners();
 
@@ -1031,7 +1024,7 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
         }
 
         NewPlotPanel( simCommand, simOptions );
-        StartSimulation();
+        StartSimulation( simCommand );
 
         // Perform simulation, so plots can be added with values
         do
@@ -1565,7 +1558,7 @@ void SIM_PLOT_FRAME::onSimulate( wxCommandEvent& event )
 }
 
 
-bool SIM_PLOT_FRAME::EditSimCommand()
+void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
 {
     SIM_PANEL_BASE*     plotPanelWindow = getCurrentPlotWindow();
     DIALOG_SIM_COMMAND  dlg( this, m_circuitModel, m_simulator->Settings() );
@@ -1577,7 +1570,7 @@ bool SIM_PLOT_FRAME::EditSimCommand()
     {
         DisplayErrorMessage( this, _( "Errors during netlist generation; simulation aborted.\n\n" )
                                    + errors );
-        return false;
+        return;
     }
 
     if( m_workbook->GetPageIndex( plotPanelWindow ) != wxNOT_FOUND )
@@ -1628,10 +1621,7 @@ bool SIM_PLOT_FRAME::EditSimCommand()
         }
 
         m_simulator->Init();
-        return true;
     }
-
-    return false;
 }
 
 

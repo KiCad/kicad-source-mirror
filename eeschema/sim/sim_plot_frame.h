@@ -64,7 +64,7 @@ public:
     SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~SIM_PLOT_FRAME();
 
-    void StartSimulation();
+    void StartSimulation( const wxString& aSimCommand = wxEmptyString );
 
     /**
      * Create a new plot panel for a given simulation type and adds it to the main notebook.
@@ -137,26 +137,8 @@ public:
 
     WINDOW_SETTINGS* GetWindowSettings( APP_SETTINGS_BASE* aCfg ) override;
 
-    wxString GetCurrentSimCommand() const
-    {
-        if( getCurrentPlotWindow() )
-            return getCurrentPlotWindow()->GetSimCommand();
-        else
-            return m_circuitModel->GetSchTextSimCommand();
-    }
-
-    int GetCurrentOptions() const
-    {
-        if( getCurrentPlotWindow() )
-            return getCurrentPlotWindow()->GetSimOptions();
-        else
-            return m_circuitModel->GetSimOptions();
-    }
-
     // Simulator doesn't host a tool framework
     wxWindow* GetToolCanvas() const override { return nullptr; }
-
-    bool EditSimCommand();
 
 private:
     /**
@@ -253,7 +235,7 @@ private:
     wxString getCurrentSimCommand() const
     {
         if( getCurrentPlotWindow() == nullptr )
-            return m_circuitModel->GetSchTextSimCommand();
+            return m_circuitModel->GetSheetSimCommand();
         else
             return m_workbook->GetSimCommand( getCurrentPlotWindow() );
     }
@@ -314,10 +296,7 @@ private:
     void onWorkbookClrModified( wxCommandEvent& event );
 
     void onSimulate( wxCommandEvent& event );
-    void onSettings( wxCommandEvent& event )
-    {
-        EditSimCommand();
-    }
+    void onSettings( wxCommandEvent& event );
     void onAddSignal( wxCommandEvent& event );
     void onProbe( wxCommandEvent& event );
     void onTune( wxCommandEvent& event );
