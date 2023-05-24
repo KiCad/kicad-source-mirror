@@ -476,16 +476,45 @@ void PCB_PLUGIN::formatPolyPts( const SHAPE_LINE_CHAIN& outline, int aNestLevel,
 
 void PCB_PLUGIN::formatRenderCache( const EDA_TEXT* aText, int aNestLevel ) const
 {
-    const wxString& shownText = aText->GetShownText( true );
+    wxString resolvedText( aText->GetShownText( true ) );
     std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = aText->GetRenderCache( aText->GetFont(),
-                                                                                shownText );
+                                                                                resolvedText );
 
     m_out->Print( aNestLevel, "(render_cache %s %s\n",
-                  m_out->Quotew( shownText ).c_str(),
+                  m_out->Quotew( resolvedText ).c_str(),
                   EDA_UNIT_UTILS::FormatAngle( aText->GetDrawRotation() ).c_str() );
 
     for( const std::unique_ptr<KIFONT::GLYPH>& baseGlyph : *cache )
     {
+        // A glyph is not aways a polygon. it can be a stroke (for instance a text with overbar)
+        // we save only polygons from cache
+        // So convert any stroke to a polygon
+        if( baseGlyph->IsStroke() )
+        {
+            const KIFONT::STROKE_GLYPH& strokeGlyph = static_cast<const KIFONT::STROKE_GLYPH&>( *baseGlyph );
+
+            for( const std::vector<VECTOR2D>& points : strokeGlyph )
+            {
+                SHAPE_LINE_CHAIN outline;
+
+                for( size_t idx = 0; idx < points.size(); idx++ )
+                    outline.Append( (int)points[idx].x, (int)points[idx].y );
+
+                for( int idx = 1; idx < outline.PointCount(); idx++ )
+                {
+                    SHAPE_POLY_SET buffer;
+                    TransformOvalToPolygon( buffer, outline.CPoint( idx-1 ), outline.CPoint( idx ),
+                                            aText->GetTextThickness(), ARC_LOW_DEF, ERROR_INSIDE );
+
+                    m_out->Print( aNestLevel + 1, "(polygon\n" );
+                    formatPolyPts( buffer.Outline(0), aNestLevel + 2, true );
+                    m_out->Print( aNestLevel + 1, ")\n" );
+                }
+            }
+
+            continue;
+        }
+
         KIFONT::OUTLINE_GLYPH* glyph = static_cast<KIFONT::OUTLINE_GLYPH*>( baseGlyph.get() );
 
         if( glyph->OutlineCount() > 0 )
