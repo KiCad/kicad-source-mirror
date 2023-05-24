@@ -31,6 +31,7 @@
 
 #include <base_units.h>
 #include <board.h>
+#include <board_design_settings.h>
 #include <netinfo.h>
 #include <footprint.h>
 #include <pad.h>
@@ -343,7 +344,11 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
     }
 
-    if( aPcbFootprint->GetFields() != aNetlistComponent->GetFields() )
+    std::map<wxString, wxString> fpFieldsAsMap;
+    for( PCB_FIELD* field : aPcbFootprint->GetFields() )
+        fpFieldsAsMap[field->GetName()] = field->GetText();
+
+    if( fpFieldsAsMap != aNetlistComponent->GetFields() )
     {
         if( m_isDryRun )
         {
@@ -354,7 +359,24 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
             msg.Printf( _( "Updated %s fields." ), aPcbFootprint->GetReference() );
 
             changed = true;
-            aPcbFootprint->SetFields( aNetlistComponent->GetFields() );
+
+            for( auto pair : aNetlistComponent->GetFields() )
+            {
+                if( aPcbFootprint->HasFieldByName( pair.first ) )
+                    aPcbFootprint->GetFieldByName( pair.first )->SetText( pair.second );
+                else
+                {
+                    PCB_FIELD* newField = new PCB_FIELD(
+                            aPcbFootprint, aPcbFootprint->GetFieldCount(), pair.first );
+
+                    newField->SetText( pair.second );
+                    newField->SetVisible( false );
+                    newField->SetLayer( aPcbFootprint->GetLayer() == F_Cu ? F_Fab : B_Fab );
+                    newField->StyleFromSettings( m_frame->GetDesignSettings() );
+
+                    aPcbFootprint->AddField( newField );
+                }
+            }
         }
 
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );

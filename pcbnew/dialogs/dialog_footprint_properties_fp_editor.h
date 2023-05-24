@@ -102,7 +102,7 @@ private:
 
     static NOTEBOOK_PAGES      m_page;       // remember the last open page during session
 
-    FP_TEXT_GRID_TABLE*        m_texts;
+    FP_TEXT_GRID_TABLE*        m_fields;
     PRIVATE_LAYERS_GRID_TABLE* m_privateLayers;
 
     UNIT_BINDER                m_netClearance;

@@ -28,6 +28,8 @@
 #include <pcb_text.h>
 #include <template_fieldnames.h>
 
+class BOARD_DESIGN_SETTINGS;
+
 class PCB_FIELD : public PCB_TEXT
 {
 public:
@@ -43,6 +45,8 @@ public:
      * Useful mainly for python scripts, because Clone returns an EDA_ITEM.
      */
     PCB_FIELD* CloneField() const { return (PCB_FIELD*) Clone(); }
+
+    void StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings );
 
     /**
      * Return the field name (not translated)..

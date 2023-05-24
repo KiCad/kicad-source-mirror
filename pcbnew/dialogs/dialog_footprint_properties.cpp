@@ -77,7 +77,7 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
     m_posX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
     m_posY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
 
-    m_texts = new FP_TEXT_GRID_TABLE( m_frame );
+    m_fields = new FP_TEXT_GRID_TABLE( m_frame );
 
     m_delayedErrorMessage = wxEmptyString;
     m_delayedFocusGrid = nullptr;
@@ -93,7 +93,7 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
     // Give a bit more room for combobox editors
     m_itemsGrid->SetDefaultRowSize( m_itemsGrid->GetDefaultRowSize() + 4 );
 
-    m_itemsGrid->SetTable( m_texts );
+    m_itemsGrid->SetTable( m_fields );
     m_itemsGrid->PushEventHandler( new GRID_TRICKS( m_itemsGrid ) );
 
     // Show/hide text item columns according to the user's preference
@@ -177,7 +177,7 @@ DIALOG_FOOTPRINT_PROPERTIES::~DIALOG_FOOTPRINT_PROPERTIES()
         cfg->m_FootprintTextShownColumns = m_itemsGrid->GetShownColumnsAsString();
 
     // Prevents crash bug in wxGrid's d'tor
-    m_itemsGrid->DestroyTable( m_texts );
+    m_itemsGrid->DestroyTable( m_fields );
 
     // Delete the GRID_TRICKS.
     m_itemsGrid->PopEventHandler( true );
@@ -244,18 +244,13 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
     if( !m_3dPanel->TransferDataToWindow() )
         return false;
 
-    // Footprint Texts
-    m_texts->push_back( m_footprint->Reference() );
-    m_texts->push_back( m_footprint->Value() );
-
-    for( BOARD_ITEM* item : m_footprint->GraphicalItems() )
-    {
-        if( PCB_TEXT* textItem = dynamic_cast<PCB_TEXT*>( item ) )
-            m_texts->push_back( *textItem );
-    }
+    // Footprint Fields
+    for( PCB_FIELD* field : m_footprint->GetFields() )
+        m_fields->push_back( field );
 
     // notify the grid
-    wxGridTableMessage tmsg( m_texts, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_texts->GetNumberRows() );
+    wxGridTableMessage tmsg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED,
+                             m_fields->GetNumberRows() );
     m_itemsGrid->ProcessTableMessage( tmsg );
 
     // Footprint Properties
@@ -328,7 +323,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
             m_itemsGrid->SetColSize( col, col_size );
     }
 
-    m_itemsGrid->SetRowLabelSize( m_itemsGrid->GetVisibleWidth( -1, false, true, true ) );
+    m_itemsGrid->SetRowLabelSize( 0 );
 
     Layout();
     adjustGridColumns();
@@ -346,24 +341,19 @@ bool DIALOG_FOOTPRINT_PROPERTIES::Validate()
         return false;
 
     // Validate texts.
-    for( size_t i = 0; i < m_texts->size(); ++i )
+    for( size_t i = 0; i < m_fields->size(); ++i )
     {
-        PCB_TEXT& text = m_texts->at( i );
+        PCB_FIELD* field = m_fields->at( i );
 
-        if( i >= 2 )
+        // Check for missing field names.
+        if( field->GetName( false ).IsEmpty() )
         {
-            if( text.GetText().IsEmpty() )
-            {
-                if( m_NoteBook->GetSelection() != 0 )
-                    m_NoteBook->SetSelection( 0 );
+            m_delayedFocusGrid = m_itemsGrid;
+            m_delayedErrorMessage = wxString::Format( _( "Fields must have a name." ) );
+            m_delayedFocusColumn = FPT_NAME;
+            m_delayedFocusRow = i;
 
-                m_delayedFocusGrid = m_itemsGrid;
-                m_delayedErrorMessage = _( "Text items must have some content." );
-                m_delayedFocusColumn = FPT_TEXT;
-                m_delayedFocusRow = i;
-
-                return false;
-            }
+            return false;
         }
 
         int minSize = pcbIUScale.MilsToIU( TEXT_MIN_SIZE_MILS );
@@ -426,9 +416,9 @@ bool DIALOG_FOOTPRINT_PROPERTIES::Validate()
         }
 
         // Test for acceptable values for thickness and size and clamp if fails
-        int maxPenWidth = Clamp_Text_PenSize( text.GetTextThickness(), text.GetTextSize() );
+        int maxPenWidth = Clamp_Text_PenSize( field->GetTextThickness(), field->GetTextSize() );
 
-        if( text.GetTextThickness() > maxPenWidth )
+        if( field->GetTextThickness() > maxPenWidth )
         {
             wxString clamped = m_frame->StringFromValue( maxPenWidth, true );
 
@@ -470,30 +460,24 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
     BOARD_COMMIT commit( m_frame );
     commit.Modify( m_footprint );
 
-    // copy reference and value
-    m_footprint->Reference() = m_texts->at( 0 );
-    m_footprint->Value() = m_texts->at( 1 );
+    // Update fields
+    size_t i = 0;
 
-    size_t i = 2;
-
-    for( BOARD_ITEM* item : m_footprint->GraphicalItems() )
+    for( PCB_FIELD* field : m_footprint->GetFields() )
     {
-        if( PCB_TEXT* textItem = dynamic_cast<PCB_TEXT*>( item ) )
-        {
-            // copy grid table entries till we run out, then delete any remaining texts
-            if( i < m_texts->size() )
-                *textItem = m_texts->at( i++ );
-            else
-                textItem->DeleteStructure();
-        }
+        // copy grid table entries till we run out, then delete any remaining texts
+        if( i < m_fields->size() )
+            field = m_fields->at( i++ );
+        else
+            field->DeleteStructure();
     }
 
     // if there are still grid table entries, create new texts for them
-    while( i < m_texts->size() )
+    while( i < m_fields->size() )
     {
-        PCB_TEXT* newText = new PCB_TEXT( m_texts->at( i++ ) );
-        m_footprint->Add( newText, ADD_MODE::APPEND );
-        view->Add( newText );
+        PCB_FIELD* newField = m_fields->at( i++ );
+        m_footprint->Add( newField, ADD_MODE::APPEND );
+        view->Add( newField );
     }
 
     // Initialize masks clearances
@@ -583,30 +567,21 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnAddField( wxCommandEvent&  )
     if( !m_itemsGrid->CommitPendingChanges() )
         return;
 
-    const BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
-    PCB_TEXT                     textItem( m_footprint, PCB_TEXT::TEXT_is_DIVERS );
+    PCB_FIELD* newField = new PCB_FIELD( m_footprint, m_fields->size() );
 
-    // Set active layer if legal; otherwise copy layer from previous text item
-    if( LSET::AllTechMask().test( m_frame->GetActiveLayer() ) )
-        textItem.SetLayer( m_frame->GetActiveLayer() );
-    else
-        textItem.SetLayer( m_texts->at( m_texts->size() - 1 ).GetLayer() );
+    newField->SetLayer( m_footprint->GetLayer() == F_Cu ? F_Fab : B_Fab );
+    newField->SetVisible( false );
+    newField->StyleFromSettings( m_frame->GetDesignSettings() );
 
-    textItem.SetTextSize( dsnSettings.GetTextSize( textItem.GetLayer() ) );
-    textItem.SetTextThickness( dsnSettings.GetTextThickness( textItem.GetLayer() ) );
-    textItem.SetItalic( dsnSettings.GetTextItalic( textItem.GetLayer() ) );
-    textItem.SetKeepUpright( dsnSettings.GetTextUpright( textItem.GetLayer() ) );
-    textItem.SetMirrored( IsBackLayer( textItem.GetLayer() ) );
-
-    m_texts->push_back( textItem );
+    m_fields->push_back( newField );
 
     // notify the grid
-    wxGridTableMessage msg( m_texts, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
+    wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
     m_itemsGrid->ProcessTableMessage( msg );
 
     m_itemsGrid->SetFocus();
-    m_itemsGrid->MakeCellVisible( m_texts->size() - 1, 0 );
-    m_itemsGrid->SetGridCursor( m_texts->size() - 1, 0 );
+    m_itemsGrid->MakeCellVisible( m_fields->size() - 1, 0 );
+    m_itemsGrid->SetGridCursor( m_fields->size() - 1, 0 );
 
     m_itemsGrid->EnableCellEditControl( true );
     m_itemsGrid->ShowCellEditControl();
@@ -628,22 +603,26 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnDeleteField( wxCommandEvent&  )
 
     for( int row : selectedRows )
     {
-        if( row < 2 )
+        if( row < MANDATORY_FIELDS )
         {
-            DisplayError( nullptr, _( "Reference and value are mandatory." ) );
+            DisplayError( this, wxString::Format( _( "The first %d fields are mandatory." ),
+                                                  MANDATORY_FIELDS ) );
             return;
         }
     }
+
+    m_itemsGrid->CommitPendingChanges( true /* quiet mode */ );
+    m_itemsGrid->ClearSelection();
 
     // Reverse sort so deleting a row doesn't change the indexes of the other rows.
     selectedRows.Sort( []( int* first, int* second ) { return *second - *first; } );
 
     for( int row : selectedRows )
     {
-        m_texts->erase( m_texts->begin() + row );
+        m_fields->erase( m_fields->begin() + row );
 
         // notify the grid
-        wxGridTableMessage msg( m_texts, wxGRIDTABLE_NOTIFY_ROWS_DELETED, row, 1 );
+        wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, row, 1 );
         m_itemsGrid->ProcessTableMessage( msg );
 
         if( m_itemsGrid->GetNumberRows() > 0 )
@@ -662,11 +641,16 @@ void DIALOG_FOOTPRINT_PROPERTIES::adjustGridColumns()
 
     itemsWidth -= m_itemsGrid->GetRowLabelSize();
 
-    for( int i = 1; i < m_itemsGrid->GetNumberCols(); i++ )
-        itemsWidth -= m_itemsGrid->GetColSize( i );
+    for( int i = 0; i < m_itemsGrid->GetNumberCols(); i++ )
+    {
+        if( i == 1 )
+            continue;
 
-    m_itemsGrid->SetColSize( 0, std::max( itemsWidth,
-                                          m_itemsGrid->GetVisibleWidth( 0, true, false ) ) );
+        itemsWidth -= m_itemsGrid->GetColSize( i );
+    }
+
+    m_itemsGrid->SetColSize(
+            1, std::max( itemsWidth, m_itemsGrid->GetVisibleWidth( 0, true, false ) ) );
 
     // Update the width of the 3D panel
     m_3dPanel->AdjustGridColumnWidths();
@@ -710,7 +694,10 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnUpdateUI( wxUpdateUIEvent&  )
         if( !m_initialFocus || grid == m_itemsGrid )
         {
             grid->SetGridCursor( row, col );
-            grid->EnableCellEditControl( true );
+
+            if( !( col == 0 && row < MANDATORY_FIELDS ) )
+                grid->EnableCellEditControl( true );
+
             grid->ShowCellEditControl();
 
             if( grid == m_itemsGrid && row == 0 && col == 0 )

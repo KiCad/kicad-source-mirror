@@ -349,10 +349,15 @@ FOOTPRINT* PCB_BASE_FRAME::loadFootprint( const LIB_ID& aFootprintId )
     {
     }
 
-    // If the footprint is found, clear all net info to be sure there are no broken links to
-    // any netinfo list (should be not needed, but it can be edited from the footprint editor )
     if( footprint )
+    {
+        // If the footprint is found, clear all net info to be sure there are no broken links to
+        // any netinfo list (should be not needed, but it can be edited from the footprint editor )
         footprint->ClearAllNets();
+
+        if( m_pcb )
+            footprint->ApplyDefaultFieldSettings( *m_pcb );
+    }
 
     return footprint;
 }

@@ -94,6 +94,7 @@ PRIVATE
     eeschema_kiface_objects
     common
     pcbcommon
+    3d-viewer
     scripting
     kimath
     qa_utils

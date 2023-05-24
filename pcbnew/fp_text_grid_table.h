@@ -26,14 +26,15 @@
 
 #include <wx/grid.h>
 #include <grid_tricks.h>
-#include <pcb_text.h>
+#include <pcb_field.h>
 
 
 class PCB_BASE_FRAME;
 
 enum FP_TEXT_COL_ORDER
 {
-    FPT_TEXT,
+    FPT_NAME,
+    FPT_VALUE,
     FPT_SHOWN,
     FPT_WIDTH,
     FPT_HEIGHT,
@@ -50,7 +51,7 @@ enum FP_TEXT_COL_ORDER
 };
 
 
-class FP_TEXT_GRID_TABLE : public wxGridTableBase, public std::vector<PCB_TEXT>
+class FP_TEXT_GRID_TABLE : public wxGridTableBase, public std::vector<PCB_FIELD*>
 {
 public:
     FP_TEXT_GRID_TABLE( PCB_BASE_FRAME* aFrame );
@@ -60,7 +61,6 @@ public:
     int GetNumberCols() override { return FPT_COUNT; }
 
     wxString GetColLabelValue( int aCol ) override;
-    wxString GetRowLabelValue( int aRow ) override;
 
     bool IsEmptyCell( int row, int col ) override
     {

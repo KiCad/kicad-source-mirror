@@ -1293,7 +1293,7 @@ FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( const wxString& aFootprintName, b
     footprint->SetAttributes( footprintTranslated );
 
     PCB_LAYER_ID txt_layer;
-    VECTOR2I default_pos;
+    VECTOR2I     default_pos;
     BOARD_DESIGN_SETTINGS& settings = GetDesignSettings();
 
     footprint->Reference().SetText( settings.m_DefaultFPTextItems[0].m_Text );

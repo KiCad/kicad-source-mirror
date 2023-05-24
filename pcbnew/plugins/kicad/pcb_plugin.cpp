@@ -1118,13 +1118,11 @@ void PCB_PLUGIN::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
                       m_out->Quotew( aFootprint->GetKeywords() ).c_str() );
     }
 
-    const std::map<wxString, wxString>& props = aFootprint->GetFields();
-
-    for( const std::pair<const wxString, wxString>& prop : props )
+    for( const PCB_FIELD* field : aFootprint->GetFields() )
     {
-        m_out->Print( aNestLevel+1, "(property %s %s)\n",
-                      m_out->Quotew( prop.first ).c_str(),
-                      m_out->Quotew( prop.second ).c_str() );
+        m_out->Print( aNestLevel + 1, "(property %s %s)\n",
+                      m_out->Quotew( field->GetCanonicalName() ).c_str(),
+                      m_out->Quotew( field->GetText() ).c_str() );
     }
 
     if( !( m_ctl & CTL_OMIT_PATH ) && !aFootprint->GetPath().empty() )

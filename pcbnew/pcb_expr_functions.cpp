@@ -993,8 +993,10 @@ static void getFieldFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                 {
                     FOOTPRINT* fp = static_cast<FOOTPRINT*>( item );
 
-                    if( fp->HasField( arg->AsString() ) )
-                        return fp->GetField( arg->AsString() );
+                    PCB_FIELD* field = fp->GetFieldByName( arg->AsString() );
+
+                    if( field )
+                        return field->GetText();
                 }
 
                 return "";

@@ -23,6 +23,8 @@
  */
 
 #include <pcb_field.h>
+#include <footprint.h>
+#include <board_design_settings.h>
 
 PCB_FIELD::PCB_FIELD( FOOTPRINT* aParent, int aFieldId, const wxString& aName ) :
         PCB_TEXT( aParent, TEXT_TYPE( aFieldId ) )
@@ -38,6 +40,17 @@ PCB_FIELD::PCB_FIELD( const PCB_TEXT& aText, int aFieldId, const wxString& aName
     m_name = aName;
     SetId( aFieldId );
 }
+
+
+void PCB_FIELD::StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings )
+{
+    SetTextSize( settings.GetTextSize( GetLayer() ) );
+    SetTextThickness( settings.GetTextThickness( GetLayer() ) );
+    SetItalic( settings.GetTextItalic( GetLayer() ) );
+    SetKeepUpright( settings.GetTextUpright( GetLayer() ) );
+    SetMirrored( IsBackLayer( GetLayer() ) );
+}
+
 
 wxString PCB_FIELD::GetName( bool aUseDefaultName ) const
 {

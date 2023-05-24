@@ -95,8 +95,10 @@ void PlotInteractiveLayer( BOARD* aBoard, PLOTTER* aPlotter, const PCB_PLOT_PARA
                                                    _( "Value" ),
                                                    fp->Value().GetShownText( false ) ) );
 
-        for( const auto& [name, value] : fp->GetFields() )
-            properties.emplace_back( wxString::Format( wxT( "!%s = %s" ), name, value ) );
+        for( int i = VALUE_FIELD; i < fp->GetFieldCount(); i++ )
+            properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                       fp->GetFields().at( i )->GetName(),
+                                                       fp->GetFields().at( i )->GetText() ) );
 
         properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
                                                    _( "Footprint" ),

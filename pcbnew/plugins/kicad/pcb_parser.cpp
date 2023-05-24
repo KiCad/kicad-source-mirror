@@ -3707,8 +3707,6 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
 
     std::unique_ptr<FOOTPRINT> footprint = std::make_unique<FOOTPRINT>( m_board );
 
-    std::map<wxString, wxString> properties;
-
     footprint->SetInitialComments( aInitialComments );
 
     token = NextTok();
@@ -3813,7 +3811,33 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
             break;
 
         case T_property:
-            properties.insert( parseProperty() );
+        {
+            std::pair<wxString, wxString> nameAndValue = parseProperty();
+
+            // Skip non-field properties that should be hidden
+            if( nameAndValue.first == "ki_description" ||
+                nameAndValue.first == "ki_keywords" ||
+                nameAndValue.first == "Sheetfile" ||
+                nameAndValue.first == "Sheetname" )
+            {
+                break;
+            }
+
+            if( footprint->HasFieldByName( nameAndValue.first ) )
+                footprint->GetFieldByName( nameAndValue.first )->SetText( nameAndValue.second );
+            else
+            {
+                PCB_FIELD* newField = new PCB_FIELD( footprint.get(), footprint->GetFieldCount(),
+                                                     nameAndValue.first );
+
+                newField->SetText( nameAndValue.second );
+                newField->SetVisible( false );
+                newField->SetLayer( footprint->GetLayer() == F_Cu ? F_Fab : B_Fab );
+                newField->StyleFromSettings( m_board->GetDesignSettings() );
+
+                footprint->AddField( newField );
+            }
+        }
             break;
 
         case T_path:
@@ -3950,13 +3974,13 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
             switch( text->GetType() )
             {
             case PCB_TEXT::TEXT_is_REFERENCE:
-                footprint->Reference() = *text;
+                footprint->Reference() = PCB_FIELD( *text, REFERENCE_FIELD );
                 const_cast<KIID&>( footprint->Reference().m_Uuid ) = text->m_Uuid;
                 delete text;
                 break;
 
             case PCB_TEXT::TEXT_is_VALUE:
-                footprint->Value() = *text;
+                footprint->Value() = PCB_FIELD( *text, VALUE_FIELD );
                 const_cast<KIID&>( footprint->Value().m_Uuid ) = text->m_Uuid;
                 delete text;
                 break;
@@ -4067,7 +4091,6 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
     footprint->SetAttributes( attributes );
 
     footprint->SetFPID( fpid );
-    footprint->SetFields( properties );
 
     return footprint.release();
 }

@@ -27,6 +27,8 @@
 
 #include <deque>
 
+#include <template_fieldnames.h>
+
 #include <board_item_container.h>
 #include <board_item.h>
 #include <collectors.h>
@@ -38,6 +40,7 @@
 #include <convert_shape_list_to_polygon.h>
 #include <pcb_item_containers.h>
 #include <pcb_text.h>
+#include <pcb_field.h>
 #include <functional>
 #include <math/vector3.h>
 
@@ -168,6 +171,9 @@ public:
     // Virtual function
     const BOX2I GetBoundingBox() const override;
     const BOX2I GetBoundingBox( bool aIncludeText, bool aIncludeInvisibleText ) const;
+
+    PCB_FIELDS& Fields()                   { return m_fields; }
+    const PCB_FIELDS& Fields() const       { return m_fields; }
 
     PADS& Pads()                           { return m_pads; }
     const PADS& Pads() const               { return m_pads; }
@@ -518,19 +524,13 @@ public:
     /**
      * @return reference designator text.
      */
-    const wxString& GetReference() const
-    {
-        return m_reference->GetText();
-    }
+    const wxString& GetReference() const { return Reference().GetText(); }
 
     /**
      * @param aReference A reference to a wxString object containing the reference designator
      *                   text.
      */
-    void SetReference( const wxString& aReference )
-    {
-        m_reference->SetText( aReference );
-    }
+    void SetReference( const wxString& aReference ) { Reference().SetText( aReference ); }
 
     // Property system doesn't like const references
     wxString GetReferenceAsString() const
@@ -546,18 +546,12 @@ public:
     /**
      * @return the value text.
      */
-    const wxString& GetValue() const
-    {
-        return m_value->GetText();
-    }
+    const wxString& GetValue() const { return Value().GetText(); }
 
     /**
      * @param aValue A reference to a wxString object containing the value text.
      */
-    void SetValue( const wxString& aValue )
-    {
-        m_value->SetText( aValue );
-    }
+    void SetValue( const wxString& aValue ) { Value().SetText( aValue ); }
 
     // Property system doesn't like const references
     wxString GetValueAsString() const
@@ -566,21 +560,105 @@ public:
     }
 
     /// read/write accessors:
-    PCB_TEXT& Value()           { return *m_value; }
-    PCB_TEXT& Reference()       { return *m_reference; }
+    PCB_FIELD& Value()           { return *GetField( VALUE_FIELD ); }
+    PCB_FIELD& Reference()       { return *GetField( REFERENCE_FIELD ); }
 
     /// The const versions to keep the compiler happy.
-    PCB_TEXT& Value() const     { return *m_value; }
-    PCB_TEXT& Reference() const { return *m_reference; }
+    const PCB_FIELD& Value() const     { return *GetField( VALUE_FIELD ); }
+    const PCB_FIELD& Reference() const { return *GetField( REFERENCE_FIELD ); }
 
-    const std::map<wxString, wxString>& GetFields() const        { return m_fields; }
-    void SetFields( const std::map<wxString, wxString>& aFields ) { m_fields = aFields; }
-    const wxString& GetField( const wxString& aKey)               { return m_fields[ aKey ]; }
-    bool HasField( const wxString& aKey)
-    {
-        return m_fields.find( aKey ) != m_fields.end();
-    }
-    void SetField( const wxString& aKey, const wxString& aVal )   { m_fields[ aKey ] = aVal; }
+    //-----<Fields>-----------------------------------------------------------
+
+    /**
+     * Return a mandatory field in this symbol.
+     *
+     * @note If you need to fetch a user field, use GetFieldById.
+     *
+     * @param aFieldType is one of the mandatory field types (REFERENCE_FIELD, VALUE_FIELD, etc.).
+     * @return is the field at \a aFieldType or NULL if the field does not exist.
+     */
+    PCB_FIELD*       GetField( MANDATORY_FIELD_T aFieldType );
+    const PCB_FIELD* GetField( MANDATORY_FIELD_T aFieldNdx ) const;
+
+    /**
+     * Return a field in this symbol.
+     *
+     * @param aFieldId is the id of the field requested.  Note that this id ONLY SOMETIMES equates
+     *                 to the field's position in the vector.
+     * @return is the field at \a aFieldType or NULL if the field does not exist.
+     */
+    PCB_FIELD* GetFieldById( int aFieldId );
+
+    /**
+     * Return a field in this symbol.
+     *
+     * @param aFieldName is the name of the field
+     *
+     * @return is the field with \a aFieldName or NULL if the field does not exist.
+     */
+    PCB_FIELD* GetFieldByName( const wxString& aFieldName );
+
+    bool HasFieldByName( const wxString& aFieldName ) const;
+
+    /**
+     * Search for a field named \a aFieldName and returns text associated with this field.
+     *
+     * @param aFieldName is the name of the field
+     */
+    wxString GetFieldText( const wxString& aFieldName ) const;
+
+    /**
+     * Populate a std::vector with PCB_TEXTs.
+     *
+     * @param aVector is the vector to populate.
+     * @param aVisibleOnly is used to add only the fields that are visible and contain text.
+     */
+    void GetFields( std::vector<PCB_FIELD*>& aVector, bool aVisibleOnly );
+
+    /**
+     * Return a vector of fields from the symbol
+     */
+    PCB_FIELDS        GetFields() { return m_fields; }
+    const PCB_FIELDS& GetFields() const { return m_fields; }
+
+    /**
+     * Add a field to the symbol.
+     *
+     * @param aField is the field to add to this symbol.
+     *
+     * @return the newly inserted field.
+     */
+    PCB_FIELD* AddField( PCB_FIELD* aField );
+
+    /**
+     * Remove a user field from the footprint.
+     * @param aFieldName is the user fieldName to remove.  Attempts to remove a mandatory
+     *                   field or a non-existant field are silently ignored.
+     */
+    void RemoveField( const wxString& aFieldName );
+
+    void RemoveField( PCB_FIELD* aField ) { RemoveField( aField->GetName() ); }
+
+    /**
+     * Set multiple schematic fields.
+     *
+     * @param aFields are the fields to set in this symbol.
+     */
+    void SetFields( PCB_FIELDS aFields ) { m_fields = aFields; }
+
+    /**
+     * Return the number of fields in this symbol.
+     */
+    int GetFieldCount() const { return (int) m_fields.size(); }
+
+    /**
+     * @brief Apply default board settings to the footprint field text properties.
+     *
+     * This is needed because the board settings are not available when the footprint is
+     * being created in the footprint library cache, and we want these fields to have
+     * the correct default text properties.
+     */
+    void ApplyDefaultFieldSettings( BOARD& board );
 
     bool IsBoardOnly() const { return m_attributes & FP_BOARD_ONLY; }
     void SetBoardOnly( bool aIsBoardOnly = true )
@@ -836,6 +914,7 @@ protected:
     virtual void swapData( BOARD_ITEM* aImage ) override;
 
 private:
+    PCB_FIELDS      m_fields;
     DRAWINGS        m_drawings;          // BOARD_ITEMs for drawings on the board, owned by pointer.
     PADS            m_pads;              // PAD items, owned by pointer
     ZONES           m_zones;             // PCB_ZONE items, owned by pointer
@@ -843,8 +922,6 @@ private:
 
     EDA_ANGLE       m_orient;            // Orientation
     VECTOR2I        m_pos;               // Position of footprint on the board in internal units.
-    PCB_TEXT*       m_reference;         // Component reference designator value (U34, R18..)
-    PCB_TEXT*       m_value;             // Component value (74LS00, 22K..)
     LIB_ID          m_fpid;              // The #LIB_ID of the FOOTPRINT.
     int             m_attributes;        // Flag bits (see FOOTPRINT_ATTR_T)
     int             m_fpStatus;          // For autoplace: flags (LOCKED, FIELDS_AUTOPLACED)
@@ -888,7 +965,6 @@ private:
     LSET            m_privateLayers;     // Layers visible only in the footprint editor
 
     std::vector<FP_3DMODEL>       m_3D_Drawings;       // 3D models.
-    std::map<wxString, wxString>  m_fields;
     wxArrayString*                m_initial_comments;  // s-expression comments in the footprint,
                                                        // lazily allocated only if needed for speed
 
