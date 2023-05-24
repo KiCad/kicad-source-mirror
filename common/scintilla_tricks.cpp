@@ -33,8 +33,8 @@
 #include <confirm.h>
 
 SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString& aBraces,
-                                    bool aSingleLine, std::function<void()> aReturnCallback,
-                                    std::function<void( wxStyledTextEvent& )> aCharCallback ) :
+                                    bool aSingleLine, std::function<void()> onAcceptHandler,
+                                    std::function<void( wxStyledTextEvent& )> onCharAddedHandler ) :
         m_te( aScintilla ),
         m_braces( aBraces ),
         m_lastCaretPos( -1 ),
@@ -42,8 +42,8 @@ SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString
         m_lastSelEnd( -1 ),
         m_suppressAutocomplete( false ),
         m_singleLine( aSingleLine ),
-        m_returnCallback( aReturnCallback ),
-        m_charCallback( aCharCallback )
+        m_onAcceptHandler( onAcceptHandler ),
+        m_onCharAddedHandler( onCharAddedHandler )
 {
     // Always use LF as eol char, regardless the platform
     m_te->SetEOLMode( wxSTC_EOL_LF );
@@ -165,7 +165,7 @@ bool isCtrlSlash( wxKeyEvent& aEvent )
 
 void SCINTILLA_TRICKS::onChar( wxStyledTextEvent& aEvent )
 {
-    m_charCallback( aEvent );
+    m_onCharAddedHandler( aEvent );
 }
 
 
@@ -179,7 +179,7 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
     if( ( aEvent.GetKeyCode() == WXK_RETURN || aEvent.GetKeyCode() == WXK_NUMPAD_ENTER )
         && ( m_singleLine || aEvent.ShiftDown() ) )
     {
-        m_returnCallback();
+        m_onAcceptHandler();
     }
     else if( ConvertSmartQuotesAndDashes( &c ) )
     {
@@ -407,6 +407,42 @@ void SCINTILLA_TRICKS::onScintillaUpdateUI( wxStyledTextEvent& aEvent )
             m_te->SetHighlightGuide( 0 );
         }
     }
+}
+
+
+void SCINTILLA_TRICKS::DoTextVarAutocomplete( std::function<void( const wxString& crossRef,
+                                                                  wxArrayString* tokens )> aTokenProvider )
+{
+    wxArrayString autocompleteTokens;
+    int           text_pos = m_te->GetCurrentPos();
+    int           start = m_te->WordStartPosition( text_pos, true );
+    wxString      partial;
+
+    auto textVarRef =
+            [&]( int pos )
+            {
+                return pos >= 2 && m_te->GetCharAt( pos-2 ) == '$' && m_te->GetCharAt( pos-1 ) == '{';
+            };
+
+    // Check for cross-reference
+    if( start > 1 && m_te->GetCharAt( start-1 ) == ':' )
+    {
+        int refStart = m_te->WordStartPosition( start-1, true );
+
+        if( textVarRef( refStart ) )
+        {
+            partial = m_te->GetRange( start, text_pos );
+            aTokenProvider( m_te->GetRange( refStart, start-1 ), &autocompleteTokens );
+        }
+    }
+    else if( textVarRef( start ) )
+    {
+        partial = m_te->GetTextRange( start, text_pos );
+        aTokenProvider( wxEmptyString, &autocompleteTokens );
+    }
+
+    DoAutocomplete( partial, autocompleteTokens );
+    m_te->SetFocus();
 }
 
 

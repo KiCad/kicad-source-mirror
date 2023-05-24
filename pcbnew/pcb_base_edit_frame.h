@@ -226,6 +226,9 @@ public:
 
     void ToggleProperties();
 
+    void GetContextualTextVars( BOARD_ITEM* aSourceItem, const wxString& aCrossRef,
+                                wxArrayString* aTokens );
+
 protected:
     /**
      * Prompts a user to select global or project library tables

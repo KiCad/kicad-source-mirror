@@ -92,10 +92,12 @@ void GRID_CELL_STC_EDITOR::Create( wxWindow* aParent, wxWindowID aId, wxEvtHandl
 
     m_scintillaTricks = new SCINTILLA_TRICKS(
             stc_ctrl(), wxEmptyString, true,
+            // onAccept handler
             [this]()
             {
                 stc_ctrl()->AutoCompComplete();
             },
+            // onCharAdded handler
             [this]( wxStyledTextEvent& aEvent )
             {
                 m_onChar( aEvent, m_scintillaTricks );

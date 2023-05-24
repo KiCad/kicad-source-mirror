@@ -103,9 +103,19 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_ITE
     m_textCtrl->SetEOLMode( wxSTC_EOL_LF );
 
     m_scintillaTricks = new SCINTILLA_TRICKS( m_textCtrl, wxT( "{}" ), false,
+            // onAccept handler
             [this]()
             {
                 wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
+            },
+            // onCharAdded handler
+            [this]( wxStyledTextEvent& aEvent )
+            {
+                m_scintillaTricks->DoTextVarAutocomplete(
+                        [this]( const wxString& crossRef, wxArrayString* tokens )
+                        {
+                            getContextualTextVars( crossRef, tokens );
+                        } );
             } );
 
     m_textEntrySizer->AddGrowableRow( 0 );
@@ -169,9 +179,6 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_ITE
     SetupStandardButtons();
     Layout();
 
-    m_textCtrl->Bind( wxEVT_STC_CHARADDED, &DIALOG_TEXT_PROPERTIES::onScintillaCharAdded, this );
-    m_textCtrl->Bind( wxEVT_STC_AUTOCOMP_CHAR_DELETED,
-                      &DIALOG_TEXT_PROPERTIES::onScintillaCharAdded, this );
     m_hAlignLeft->Bind( wxEVT_BUTTON, &DIALOG_TEXT_PROPERTIES::onHAlignButton, this );
     m_hAlignCenter->Bind( wxEVT_BUTTON, &DIALOG_TEXT_PROPERTIES::onHAlignButton, this );
     m_hAlignRight->Bind( wxEVT_BUTTON, &DIALOG_TEXT_PROPERTIES::onHAlignButton, this );
@@ -192,6 +199,44 @@ DIALOG_TEXT_PROPERTIES::~DIALOG_TEXT_PROPERTIES()
 
     if( m_helpWindow )
         m_helpWindow->Destroy();
+}
+
+
+void DIALOG_TEXT_PROPERTIES::getContextualTextVars( const wxString& aCrossRef,
+                                                    wxArrayString*  aTokens )
+{
+    if( !aCrossRef.IsEmpty() )
+    {
+        SCH_SHEET_LIST     sheets = m_frame->Schematic().GetSheets();
+        SCH_REFERENCE_LIST refs;
+        SCH_SYMBOL*        refSymbol = nullptr;
+
+        sheets.GetSymbols( refs );
+
+        for( int jj = 0; jj < (int) refs.GetCount(); jj++ )
+        {
+            SCH_REFERENCE& ref = refs[jj];
+
+            if( ref.GetSymbol()->GetRef( &ref.GetSheetPath(), true ) == aCrossRef )
+            {
+                refSymbol = ref.GetSymbol();
+                break;
+            }
+        }
+
+        if( refSymbol )
+            refSymbol->GetContextualTextVars( aTokens );
+    }
+    else
+    {
+        SCHEMATIC* schematic = m_currentItem->Schematic();
+
+        if( schematic && schematic->CurrentSheet().Last() )
+            schematic->CurrentSheet().Last()->GetContextualTextVars( aTokens );
+
+        for( std::pair<wxString, wxString> entry : Prj().GetTextVars() )
+            aTokens->push_back( entry.first );
+    }
 }
 
 
@@ -350,67 +395,6 @@ void DIALOG_TEXT_PROPERTIES::onHyperlinkCombo( wxCommandEvent& aEvent )
         m_hyperlinkCb->SetValue( true );
         m_hyperlinkCombo->SetInsertionPointEnd();
     }
-}
-
-
-void DIALOG_TEXT_PROPERTIES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
-{
-    wxStyledTextCtrl* te = m_textCtrl;
-    wxArrayString     autocompleteTokens;
-    int               text_pos = te->GetCurrentPos();
-    int               start = te->WordStartPosition( text_pos, true );
-    wxString          partial;
-
-    auto textVarRef =
-            [&]( int pos )
-            {
-                return pos >= 2 && te->GetCharAt( pos-2 ) == '$' && te->GetCharAt( pos-1 ) == '{';
-            };
-
-    // Check for cross-reference
-    if( start > 1 && te->GetCharAt( start-1 ) == ':' )
-    {
-        int refStart = te->WordStartPosition( start-1, true );
-
-        if( textVarRef( refStart ) )
-        {
-            partial = te->GetRange( start, text_pos );
-
-            wxString           ref = te->GetRange( refStart, start-1 );
-            SCH_SHEET_LIST     sheets = m_frame->Schematic().GetSheets();
-            SCH_REFERENCE_LIST refs;
-            SCH_SYMBOL*        refSymbol = nullptr;
-
-            sheets.GetSymbols( refs );
-
-            for( size_t jj = 0; jj < refs.GetCount(); jj++ )
-            {
-                if( refs[ jj ].GetSymbol()->GetRef( &refs[ jj ].GetSheetPath(), true ) == ref )
-                {
-                    refSymbol = refs[ jj ].GetSymbol();
-                    break;
-                }
-            }
-
-            if( refSymbol )
-                refSymbol->GetContextualTextVars( &autocompleteTokens );
-        }
-    }
-    else if( textVarRef( start ) )
-    {
-        partial = te->GetTextRange( start, text_pos );
-
-        SCHEMATIC* schematic = m_currentItem->Schematic();
-
-        if( schematic && schematic->CurrentSheet().Last() )
-            schematic->CurrentSheet().Last()->GetContextualTextVars( &autocompleteTokens );
-
-        for( std::pair<wxString, wxString> entry : Prj().GetTextVars() )
-            autocompleteTokens.push_back( entry.first );
-    }
-
-    m_scintillaTricks->DoAutocomplete( partial, autocompleteTokens );
-    m_textCtrl->SetFocus();
 }
 
 

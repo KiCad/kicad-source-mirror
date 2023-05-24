@@ -47,7 +47,6 @@ private:
     void onAlignButton( wxCommandEvent &aEvent ) override;
     void onThickness( wxCommandEvent &aEvent ) override;
     void onBorderChecked( wxCommandEvent& event ) override;
-    void onScintillaCharAdded( wxStyledTextEvent &aEvent );
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;

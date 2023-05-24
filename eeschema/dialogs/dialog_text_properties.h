@@ -42,7 +42,8 @@ public:
     ~DIALOG_TEXT_PROPERTIES();
 
 private:
-    void onScintillaCharAdded( wxStyledTextEvent &aEvent );
+    void getContextualTextVars( const wxString& aCrossRef, wxArrayString* aTokens );
+
     void onHAlignButton( wxCommandEvent &aEvent );
     void onVAlignButton( wxCommandEvent &aEvent );
     void onTextAngleButton( wxCommandEvent &aEvent );

@@ -33,6 +33,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <pcb_dimension.h>
+#include <footprint.h>
 #include <footprint_info_impl.h>
 #include <project.h>
 #include <settings/color_settings.h>
@@ -41,7 +42,6 @@
 #include <widgets/pcb_properties_panel.h>
 #include <dialogs/eda_view_switcher.h>
 #include <wildcards_and_files_ext.h>
-#include <collectors.h>
 #include <widgets/wx_aui_utils.h>
 
 
@@ -322,3 +322,34 @@ void PCB_BASE_EDIT_FRAME::ToggleProperties()
         m_auimgr.Update();
     }
 }
+
+
+void PCB_BASE_EDIT_FRAME::GetContextualTextVars( BOARD_ITEM* aSourceItem, const wxString& aCrossRef,
+                                                 wxArrayString*  aTokens )
+{
+    BOARD* board = aSourceItem->GetBoard();
+
+    if( !aCrossRef.IsEmpty() )
+    {
+        for( FOOTPRINT* candidate : board->Footprints() )
+        {
+            if( candidate->GetReference() == aCrossRef )
+            {
+                candidate->GetContextualTextVars( aTokens );
+                break;
+            }
+        }
+    }
+    else
+    {
+        board->GetContextualTextVars( aTokens );
+
+        if( FOOTPRINT* footprint = aSourceItem->GetParentFootprint() )
+            footprint->GetContextualTextVars( aTokens );
+
+        for( std::pair<wxString, wxString> entry : board->GetProject()->GetTextVars() )
+            aTokens->push_back( entry.first );
+    }
+}
+
+

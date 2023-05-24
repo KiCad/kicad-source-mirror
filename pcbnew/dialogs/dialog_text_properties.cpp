@@ -58,9 +58,19 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PC
     m_MultiLineText->SetEOLMode( wxSTC_EOL_LF );
 
     m_scintillaTricks = new SCINTILLA_TRICKS( m_MultiLineText, wxT( "{}" ), false,
+            // onAccept handler
             [this]()
             {
                 wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
+            },
+            // onCharAdded handler
+            [this]( wxStyledTextEvent& aEvent )
+            {
+                m_scintillaTricks->DoTextVarAutocomplete(
+                        [this]( const wxString& crossRef, wxArrayString* tokens )
+                        {
+                            m_frame->GetContextualTextVars( m_item, crossRef, tokens );
+                        } );
             } );
 
     // A hack which causes Scintilla to auto-size the text editor canvas
@@ -165,11 +175,6 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PC
     Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_TEXT_PROPERTIES::OnCharHook ),
              nullptr, this );
 
-    m_MultiLineText->Bind( wxEVT_STC_CHARADDED,
-                           &DIALOG_TEXT_PROPERTIES::onScintillaCharAdded, this );
-    m_MultiLineText->Bind( wxEVT_STC_AUTOCOMP_CHAR_DELETED,
-                           &DIALOG_TEXT_PROPERTIES::onScintillaCharAdded, this );
-
     finishDialogSettings();
 }
 
@@ -209,62 +214,6 @@ void DIALOG_TEXT_PROPERTIES::OnSetFocusText( wxFocusEvent& event )
         m_SingleLineText->SetSelection( -1, -1 );
 
     event.Skip();
-}
-
-
-void DIALOG_TEXT_PROPERTIES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
-{
-    wxStyledTextCtrl* te = m_MultiLineText;
-    wxArrayString     autocompleteTokens;
-    int               text_pos = te->GetCurrentPos();
-    int               start = te->WordStartPosition( text_pos, true );
-    wxString          partial;
-
-    auto textVarRef =
-            [&]( int pos )
-            {
-                return pos >= 2 && te->GetCharAt( pos-2 ) == '$' && te->GetCharAt( pos-1 ) == '{';
-            };
-
-    // Check for cross-reference
-    if( start > 1 && te->GetCharAt( start-1 ) == ':' )
-    {
-        int refStart = te->WordStartPosition( start-1, true );
-
-        if( textVarRef( refStart ) )
-        {
-            partial = te->GetRange( start, text_pos );
-
-            wxString ref = te->GetRange( refStart, start-1 );
-            BOARD*   board = m_item->GetBoard();
-
-            for( FOOTPRINT* candidate : board->Footprints() )
-            {
-                if( candidate->GetReference() == ref )
-                {
-                    candidate->GetContextualTextVars( &autocompleteTokens );
-                    break;
-                }
-            }
-        }
-    }
-    else if( textVarRef( start ) )
-    {
-        partial = te->GetTextRange( start, text_pos );
-
-        BOARD* board = m_item->GetBoard();
-
-        board->GetContextualTextVars( &autocompleteTokens );
-
-        if( FOOTPRINT* footprint = m_item->GetParentFootprint() )
-            footprint->GetContextualTextVars( &autocompleteTokens );
-
-        for( std::pair<wxString, wxString> entry : board->GetProject()->GetTextVars() )
-            autocompleteTokens.push_back( entry.first );
-    }
-
-    m_scintillaTricks->DoAutocomplete( partial, autocompleteTokens );
-    m_MultiLineText->SetFocus();
 }
 
 
