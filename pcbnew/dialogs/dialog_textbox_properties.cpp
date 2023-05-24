@@ -36,6 +36,7 @@
 #include <pcb_edit_frame.h>
 #include <pcb_layer_box_selector.h>
 #include <scintilla_tricks.h>
+#include "macros.h"
 
 DIALOG_TEXTBOX_PROPERTIES::DIALOG_TEXTBOX_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent,
                                                       BOARD_ITEM* aItem ) :
@@ -158,7 +159,7 @@ DIALOG_TEXTBOX_PROPERTIES::~DIALOG_TEXTBOX_PROPERTIES()
 
 int PCB_BASE_EDIT_FRAME::ShowTextBoxPropertiesDialog( BOARD_ITEM* aText )
 {
-    DIALOG_TEXTBOX_PROPERTIES dlg( this, aTextBox );
+    DIALOG_TEXTBOX_PROPERTIES dlg( this, aText );
 
     // QuasiModal required for Scintilla auto-complete
     return dlg.ShowQuasiModal();
@@ -189,7 +190,7 @@ void DIALOG_TEXTBOX_PROPERTIES::onScintillaCharAdded( wxStyledTextEvent &aEvent 
             partial = te->GetRange( start, text_pos );
 
             wxString ref = te->GetRange( refStart, start-1 );
-            BOARD*   board = m_textBox->GetBoard();
+            BOARD*   board = m_frame->GetBoard();
 
             for( FOOTPRINT* candidate : board->Footprints() )
             {
@@ -205,12 +206,15 @@ void DIALOG_TEXTBOX_PROPERTIES::onScintillaCharAdded( wxStyledTextEvent &aEvent 
     {
         partial = te->GetTextRange( start, text_pos );
 
-        BOARD* board = m_textBox->GetBoard();
+        BOARD* board = m_frame->GetBoard();
 
         board->GetContextualTextVars( &autocompleteTokens );
 
-        if( FOOTPRINT* footprint = m_textBox->GetParentFootprint() )
-            footprint->GetContextualTextVars( &autocompleteTokens );
+        if( m_fpTextBox )
+        {
+            if( FOOTPRINT* footprint = m_fpTextBox->GetParentFootprint() )
+                footprint->GetContextualTextVars( &autocompleteTokens );
+        }
 
         for( std::pair<wxString, wxString> entry : board->GetProject()->GetTextVars() )
             autocompleteTokens.push_back( entry.first );

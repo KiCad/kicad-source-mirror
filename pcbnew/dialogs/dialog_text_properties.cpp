@@ -266,8 +266,11 @@ void DIALOG_TEXT_PROPERTIES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 
         board->GetContextualTextVars( &autocompleteTokens );
 
-        if( FOOTPRINT* footprint = m_item->GetParentFootprint() )
-            footprint->GetContextualTextVars( &autocompleteTokens );
+        if( m_fpText )
+        {
+            if( FOOTPRINT* footprint = static_cast<FOOTPRINT*>( m_fpText->GetParentFootprint() ) )
+                footprint->GetContextualTextVars( &autocompleteTokens );
+        }
 
         for( std::pair<wxString, wxString> entry : board->GetProject()->GetTextVars() )
             autocompleteTokens.push_back( entry.first );

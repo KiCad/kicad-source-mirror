@@ -655,7 +655,11 @@ int SYMBOL_EDITOR_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
         wxWindow* blocking_dialog = schframe->Kiway().GetBlockingDialog();
 
         if( blocking_dialog )
-            blocking_dialog->Close( true );
+        {
+            blocking_dialog->Raise();
+            wxBell();
+            return 0;
+        }
 
         wxCHECK( libSymbol->GetLibId().IsValid(), 0 );
 

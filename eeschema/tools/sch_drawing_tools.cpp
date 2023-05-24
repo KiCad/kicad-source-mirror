@@ -1609,6 +1609,7 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 textbox->SetHorizJustify( m_lastTextJust );
                 textbox->SetStroke( m_lastTextboxStroke );
                 textbox->SetFillColor( m_lastTextboxFillColor );
+                textbox->SetParent( schematic );
 
                 item = textbox;
             }
@@ -1618,6 +1619,7 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
                 item->SetStroke( m_lastStroke );
                 item->SetFillColor( m_lastFillColor );
+                item->SetParent( schematic );
             }
 
             item->SetFlags( IS_NEW );
