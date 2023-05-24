@@ -814,19 +814,13 @@ const SIM_MODEL::PARAM& SIM_MODEL::GetParam( unsigned aParamIndex ) const
 }
 
 
-bool SIM_MODEL::PARAM::INFO::Matches( const std::string& aParamName ) const
-{
-    return boost::iequals( name, aParamName );
-}
-
-
 int SIM_MODEL::doFindParam( const std::string& aParamName ) const
 {
     std::vector<std::reference_wrapper<const PARAM>> params = GetParams();
 
     for( int ii = 0; ii < (int) params.size(); ++ii )
     {
-        if( params[ii].get().Matches( aParamName ) )
+        if( boost::iequals( params[ii].get().info.name, aParamName ) )
             return ii;
     }
 

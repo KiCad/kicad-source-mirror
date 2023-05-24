@@ -24,7 +24,7 @@
 
 #include <sim/sim_model_ngspice.h>
 
-#include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/case_conv.hpp>
 #include <fmt/core.h>
 
 
@@ -85,13 +85,15 @@ int SIM_MODEL_NGSPICE::doFindParam( const std::string& aParamName ) const
 {
     // Special case to allow escaped model parameters (suffixed with "_")
 
+    std::string lowerParamName = boost::to_lower_copy( aParamName );
+
     std::vector<std::reference_wrapper<const PARAM>> params = GetParams();
 
     for( int ii = 0; ii < (int) params.size(); ++ii )
     {
         const PARAM& param = params[ii];
 
-        if( param.Matches( aParamName ) || param.Matches( aParamName + "_" ) )
+        if( param.info.name == lowerParamName || param.info.name == lowerParamName + "_" )
             return ii;
     }
 
@@ -103,13 +105,17 @@ void SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName,
                                                const std::string& aValue,
                                                SIM_VALUE_GRAMMAR::NOTATION aNotation )
 {
+    std::string paramName = boost::to_lower_copy( aParamName );
+
     // "level" and "version" are not really parameters - they're part of the type - so silently
     // ignore them.
-    if( boost::iequals( aParamName, "level" ) || boost::iequals( aParamName, "version" ) )
+    if( paramName == "level" || paramName == "version" )
         return;
 
     // First we try to use the name as is. Note that you can't set instance parameters from this
     // function, it's for ".model" cards, not for instantiations.
+
+    std::string lowerParamName = boost::to_lower_copy( paramName );
 
     std::vector<std::reference_wrapper<const PARAM>> params = GetParams();
 
@@ -117,10 +123,9 @@ void SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName,
     {
         const PARAM& param = params[ii];
 
-        if( param.info.isSpiceInstanceParam || param.info.category == PARAM::CATEGORY::SUPERFLUOUS )
-            continue;
-
-        if( param.Matches( aParamName ) || param.Matches( aParamName + "_" ) )
+        if( !param.info.isSpiceInstanceParam
+            && param.info.category != PARAM::CATEGORY::SUPERFLUOUS
+            && ( param.info.name == lowerParamName || param.info.name == lowerParamName + "_" ) )
         {
             SetParamValue( ii, aValue, aNotation );
             return;
@@ -134,18 +139,16 @@ void SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName,
 
     for( const PARAM::INFO& ngspiceParamInfo : ModelInfo( getModelType() ).modelParams )
     {
-        if( ngspiceParamInfo.Matches( aParamName ) )
+        if( ngspiceParamInfo.name == lowerParamName )
         {
             // Find an actual parameter with the same id.  Even if the ngspiceParam was
             // superfluous, its alias target might not be.
             for( int ii = 0; ii < (int) params.size(); ++ii )
             {
-                const PARAM::INFO& paramInfo = params[ii].get().info;
+                const PARAM& param = params[ii];
 
-                if( paramInfo.category == PARAM::CATEGORY::SUPERFLUOUS )
-                    continue;
-
-                if( paramInfo.id == ngspiceParamInfo.id )
+                if( param.info.id == ngspiceParamInfo.id
+                        && param.info.category != PARAM::CATEGORY::SUPERFLUOUS )
                 {
                     SetParamValue( ii, aValue, aNotation );
                     return;
@@ -156,7 +159,7 @@ void SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName,
         }
     }
 
-    if( !canSilentlyIgnoreParam( aParamName ) )
+    if( !canSilentlyIgnoreParam( paramName ) )
     {
         THROW_IO_ERROR( wxString::Format( "Failed to set parameter '%s' to value '%s'",
                                           aParamName,
@@ -168,19 +171,19 @@ void SIM_MODEL_NGSPICE::SetParamFromSpiceCode( const std::string& aParamName,
 bool SIM_MODEL_NGSPICE::canSilentlyIgnoreParam( const std::string& aParamName )
 {
     // Ignore the purely informative LTspice-specific parameters "mfg" and "type".
-    if( boost::iequals( aParamName, "mfg" ) || boost::iequals( aParamName, "type" ) )
+    if( aParamName == "mfg" || aParamName == "type" )
         return true;
 
     if( GetDeviceType() == DEVICE_T::D )
     {
-        if( boost::iequals( aParamName, "perim" )
-            || boost::iequals( aParamName, "isw" )
-            || boost::iequals( aParamName, "ns" )
-            || boost::iequals( aParamName, "rsw" )
-            || boost::iequals( aParamName, "cjsw" )
-            || boost::iequals( aParamName, "vjsw" )
-            || boost::iequals( aParamName, "mjsw" )
-            || boost::iequals( aParamName, "fcs" ) )
+        if( aParamName == "perim"
+            || aParamName == "isw"
+            || aParamName == "ns"
+            || aParamName == "rsw"
+            || aParamName == "cjsw"
+            || aParamName == "vjsw"
+            || aParamName == "mjsw"
+            || aParamName == "fcs" )
         {
             return true;
         }
@@ -189,20 +192,20 @@ bool SIM_MODEL_NGSPICE::canSilentlyIgnoreParam( const std::string& aParamName )
     if( GetDeviceType() == DEVICE_T::NPN || GetDeviceType() == DEVICE_T::PNP )
     {
         // Ignore the purely informative LTspice-specific parameters "icrating" and "vceo".
-        if( boost::iequals( aParamName, "icrating" ) || boost::iequals( aParamName, "vceo" ) )
+        if( aParamName == "icrating" || aParamName == "vceo" )
             return true;
     }
 
     if( GetType() == TYPE::NPN_GUMMELPOON || GetType() == TYPE::PNP_GUMMELPOON )
     {
         // Ignore unused parameters.
-        if( boost::iequals( aParamName, "bvcbo" )
-            || boost::iequals( aParamName, "nbvcbo" )
-            || boost::iequals( aParamName, "tbvcbo1" )
-            || boost::iequals( aParamName, "tbvcbo2" )
-            || boost::iequals( aParamName, "bvbe" )
-            || boost::iequals( aParamName, "ibvbe" )
-            || boost::iequals( aParamName, "nbvbe" ) )
+        if( aParamName == "bvcbo"
+            || aParamName == "nbvcbo"
+            || aParamName == "tbvcbo1"
+            || aParamName == "tbvcbo2"
+            || aParamName == "bvbe"
+            || aParamName == "ibvbe"
+            || aParamName == "nbvbe" )
         {
             return true;
         }
@@ -211,9 +214,9 @@ bool SIM_MODEL_NGSPICE::canSilentlyIgnoreParam( const std::string& aParamName )
     if( GetType() == TYPE::NMOS_VDMOS || GetType() == TYPE::PMOS_VDMOS )
     {
         // Ignore the purely informative LTspice-specific parameters "Vds", "Ron" and "Qg".
-        if( boost::iequals( aParamName, "vds" )
-            || boost::iequals( aParamName, "ron" )
-            || boost::iequals( aParamName, "qg" ) )
+        if( aParamName == "vds"
+            || aParamName == "ron"
+            || aParamName == "qg" )
         {
             return true;
         }
