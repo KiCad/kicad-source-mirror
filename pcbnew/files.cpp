@@ -609,14 +609,17 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // We insist on caller sending us an absolute path, if it does not, we say it's a bug.
     wxASSERT_MSG( wx_filename.IsAbsolute(), wxT( "Path is not absolute!" ) );
 
-    std::unique_ptr<wxSingleInstanceChecker> lockFile = ::LockFile( fullFileName );
+    std::unique_ptr<LOCKFILE> lock = std::make_unique<LOCKFILE>( fullFileName );
 
-    if( !lockFile || lockFile->IsAnotherRunning() )
+    if( !lock->Locked() )
     {
-        msg.Printf( _( "PCB '%s' is already open." ), wx_filename.GetFullName() );
+        msg.Printf( _( "PCB '%s' is already open by '%s' at '%s'." ), wx_filename.GetFullName(),
+                lock->GetUsername(), lock->GetHostname() );
 
         if( !OverrideLock( this, msg ) )
             return false;
+
+        lock->OverrideLock();
     }
 
     if( IsContentModified() )
@@ -630,9 +633,6 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             return false;
         }
     }
-
-    // Release the lock file, until the new file is actually loaded
-    ReleaseFile();
 
     wxFileName pro = fullFileName;
     pro.SetExt( ProjectFileExtension );
@@ -954,7 +954,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     }
 
     // Lock the file newly opened:
-    m_file_checker.reset( lockFile.release() );
+    m_file_checker.reset( lock.release() );
 
     if( !converted )
         UpdateFileHistory( GetBoard()->GetFileName() );

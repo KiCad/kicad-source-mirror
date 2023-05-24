@@ -353,7 +353,6 @@ set( COMMON_SRCS
     lib_tree_model.cpp
     lib_tree_model_adapter.cpp
     locale_io.cpp
-    lockfile.cpp
     lset.cpp
     marker_base.cpp
     markup_parser.cpp

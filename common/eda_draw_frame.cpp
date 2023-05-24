@@ -217,15 +217,20 @@ EDA_DRAW_FRAME::~EDA_DRAW_FRAME()
 
 void EDA_DRAW_FRAME::ReleaseFile()
 {
-    m_file_checker = nullptr;
+    if( m_file_checker.get() != nullptr )
+        m_file_checker->UnlockFile();
 }
 
 
 bool EDA_DRAW_FRAME::LockFile( const wxString& aFileName )
 {
-    m_file_checker = ::LockFile( aFileName );
+    // We need to explicitly reset here to get the deletion before
+    // we create a new unique_ptr that may be for the same file
+    m_file_checker.reset();
 
-    return m_file_checker && !m_file_checker->IsAnotherRunning();
+    m_file_checker = std::make_unique<LOCKFILE>( aFileName );
+
+    return m_file_checker->Locked();
 }
 
 

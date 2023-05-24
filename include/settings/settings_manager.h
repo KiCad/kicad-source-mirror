@@ -34,6 +34,7 @@ class PROJECT;
 class PROJECT_FILE;
 class REPORTER;
 class wxSingleInstanceChecker;
+class LOCKFILE;
 
 
 /// Project settings path will be <projectname> + this
@@ -447,7 +448,7 @@ private:
     std::map<wxString, PROJECT_FILE*> m_project_files;
 
     /// Lock for loaded project (expand to multiple once we support MDI)
-    std::unique_ptr<wxSingleInstanceChecker> m_project_lock;
+    std::unique_ptr<LOCKFILE> m_project_lock;
 
     static wxString backupDateTimeFormat;
 };
