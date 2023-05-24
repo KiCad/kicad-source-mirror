@@ -44,6 +44,27 @@ static void dumpObstacles( const PNS::NODE::OBSTACLES &obstacles )
     }
 }
 
+// prune self-collisions, i.e. a via/pad annular ring with its own hole
+static bool shouldWeConsiderHoleCollisions( const ITEM* aItem, const ITEM *aHead )
+{
+    const HOLE *hi = aItem->OfKind( ITEM::HOLE_T ) ? static_cast<const HOLE*>( aItem ) : nullptr;
+    const HOLE *hh = aHead->OfKind( ITEM::HOLE_T ) ? static_cast<const HOLE*>( aHead ) : nullptr;
+
+    if( hi && hh ) // hole-to-hole case
+    {
+        if ( !hi->ParentPadVia() || !hh->ParentPadVia() )
+            return true;
+
+        return hi->ParentPadVia() != hh->ParentPadVia();
+    }
+
+    if( hi )
+        return hi->ParentPadVia() != aHead;
+    else if( hh )
+        return hh->ParentPadVia() != aItem;
+    else
+        return true;
+}
 
 bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
                           COLLISION_SEARCH_CONTEXT* aCtx ) const
@@ -61,11 +82,10 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
     int          clearanceEpsilon = aNode->GetRuleResolver()->ClearanceEpsilon();
     bool         collisionsFound = false;
 
-    //printf( "******************** CollideSimple %lu\n", aCtx->obstacles.size() );
-
-    //printf( "h %p n %p t %p ctx %p\n", aHead, aNode, this, aCtx );
-
     if( this == aHead )  // we cannot be self-colliding
+        return false;
+
+    if ( !shouldWeConsiderHoleCollisions( this, aHead ) )
         return false;
 
     // Special cases for "head" lines with vias attached at the end.  Note that this does not
@@ -86,9 +106,16 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
 
     // And a special case for the "head" via's hole.
 
-    if( holeH && !HasSameParentPadVia( holeH ) )
-        collisionsFound |= collideSimple( holeH, aNode, aCtx );
 
+    if( holeH && shouldWeConsiderHoleCollisions( this, holeH ) )
+    {
+        if (collideSimple( holeH, aNode, aCtx ) )
+        {
+            collisionsFound = true;
+        }
+    }
+
+    
     // Sadly collision routines ignore SHAPE_POLY_LINE widths so we have to pass them in as part
     // of the clearance value.
     if( m_kind == LINE_T )

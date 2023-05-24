@@ -335,6 +335,7 @@ BOOST_FIXTURE_TEST_CASE( PNSHoleCollisions, PNS_TEST_FIXTURE )
     {
         PNS::NODE::OBSTACLES obstacles;
         int count = world->QueryColliding( v1, obstacles );
+        dumpObstacles( obstacles );
         BOOST_CHECK_EQUAL( obstacles.size(), 0 );
         BOOST_CHECK_EQUAL( count, 0 );
     }
