@@ -1004,7 +1004,7 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
     {
         DIALOG_TEXT_PROPERTIES dlg( m_frame, textItem );
 
-        // Must be quasi modal for syntax help
+        // QuasiModal required for syntax help and Scintilla auto-complete
         if( dlg.ShowQuasiModal() != wxID_OK )
         {
             delete textItem;
@@ -1647,9 +1647,8 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                     getViewControls()->SetAutoPan( false );
                     getViewControls()->CaptureCursor( false );
 
-                    // This is modal not quasi to protect against place symbol calls starting
-                    // TwoClickPlace wait routines in the middle
-                    if( dlg.ShowModal() != wxID_OK )
+                    // QuasiModal required for syntax help and Scintilla auto-complete
+                    if( dlg.ShowQuasiModal() != wxID_OK )
                     {
                         cleanup();
                         continue;

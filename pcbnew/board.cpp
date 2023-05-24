@@ -354,6 +354,24 @@ std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions( bool aCreateMarkers )
 }
 
 
+void BOARD::GetContextualTextVars( wxArrayString* aVars ) const
+{
+    auto add =
+            [&]( const wxString& aVar )
+            {
+                if( !alg::contains( *aVars, aVar ) )
+                    aVars->push_back( aVar );
+            };
+
+    add( wxT( "LAYER" ) );
+
+    GetTitleBlock().GetContextualTextVars( aVars );
+
+    for( std::pair<wxString, wxString> entry : GetProject()->GetTextVars() )
+        add( entry.first );
+}
+
+
 bool BOARD::ResolveTextVar( wxString* token, int aDepth ) const
 {
     if( token->Contains( ':' ) )

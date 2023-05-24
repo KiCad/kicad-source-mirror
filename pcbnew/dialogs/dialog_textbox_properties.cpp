@@ -25,20 +25,17 @@
 #include <widgets/font_choice.h>
 #include <dialog_textbox_properties.h>
 #include <confirm.h>
-#include <widgets/unit_binder.h>
 #include <board_commit.h>
 #include <board_design_settings.h>
 #include <board.h>
 #include <footprint.h>
-#include <string_utils.h>
 #include <pcb_textbox.h>
 #include <fp_textbox.h>
 #include <pcbnew.h>
+#include <project.h>
 #include <pcb_edit_frame.h>
 #include <pcb_layer_box_selector.h>
-#include <math/util.h>      // for KiROUND
 #include <scintilla_tricks.h>
-#include "macros.h"
 
 DIALOG_TEXTBOX_PROPERTIES::DIALOG_TEXTBOX_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent,
                                                       BOARD_ITEM* aItem ) :
@@ -141,6 +138,11 @@ DIALOG_TEXTBOX_PROPERTIES::DIALOG_TEXTBOX_PROPERTIES( PCB_BASE_EDIT_FRAME* aPare
     Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_TEXTBOX_PROPERTIES::OnCharHook ),
              nullptr, this );
 
+    m_MultiLineText->Bind( wxEVT_STC_CHARADDED,
+                           &DIALOG_TEXTBOX_PROPERTIES::onScintillaCharAdded, this );
+    m_MultiLineText->Bind( wxEVT_STC_AUTOCOMP_CHAR_DELETED,
+                           &DIALOG_TEXTBOX_PROPERTIES::onScintillaCharAdded, this );
+
     finishDialogSettings();
 }
 
@@ -156,8 +158,66 @@ DIALOG_TEXTBOX_PROPERTIES::~DIALOG_TEXTBOX_PROPERTIES()
 
 int PCB_BASE_EDIT_FRAME::ShowTextBoxPropertiesDialog( BOARD_ITEM* aText )
 {
-    DIALOG_TEXTBOX_PROPERTIES dlg( this, aText );
+    DIALOG_TEXTBOX_PROPERTIES dlg( this, aTextBox );
+
+    // QuasiModal required for Scintilla auto-complete
     return dlg.ShowQuasiModal();
+}
+
+
+void DIALOG_TEXTBOX_PROPERTIES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
+{
+    wxStyledTextCtrl* te = m_MultiLineText;
+    wxArrayString     autocompleteTokens;
+    int               text_pos = te->GetCurrentPos();
+    int               start = te->WordStartPosition( text_pos, true );
+    wxString          partial;
+
+    auto textVarRef =
+            [&]( int pos )
+            {
+                return pos >= 2 && te->GetCharAt( pos-2 ) == '$' && te->GetCharAt( pos-1 ) == '{';
+            };
+
+    // Check for cross-reference
+    if( start > 1 && te->GetCharAt( start-1 ) == ':' )
+    {
+        int refStart = te->WordStartPosition( start-1, true );
+
+        if( textVarRef( refStart ) )
+        {
+            partial = te->GetRange( start, text_pos );
+
+            wxString ref = te->GetRange( refStart, start-1 );
+            BOARD*   board = m_textBox->GetBoard();
+
+            for( FOOTPRINT* candidate : board->Footprints() )
+            {
+                if( candidate->GetReference() == ref )
+                {
+                    candidate->GetContextualTextVars( &autocompleteTokens );
+                    break;
+                }
+            }
+        }
+    }
+    else if( textVarRef( start ) )
+    {
+        partial = te->GetTextRange( start, text_pos );
+
+        BOARD* board = m_textBox->GetBoard();
+
+        board->GetContextualTextVars( &autocompleteTokens );
+
+        if( FOOTPRINT* footprint = m_textBox->GetParentFootprint() )
+            footprint->GetContextualTextVars( &autocompleteTokens );
+
+        for( std::pair<wxString, wxString> entry : board->GetProject()->GetTextVars() )
+            autocompleteTokens.push_back( entry.first );
+    }
+
+    m_scintillaTricks->DoAutocomplete( partial, autocompleteTokens );
+    m_MultiLineText->SetFocus();
 }
 
 

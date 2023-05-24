@@ -57,6 +57,7 @@ private:
     void onAlignButton( wxCommandEvent &aEvent ) override;
     void onValignButton( wxCommandEvent &aEvent ) override;
     void onThickness( wxCommandEvent &aEvent ) override;
+    void onScintillaCharAdded( wxStyledTextEvent &aEvent );
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;

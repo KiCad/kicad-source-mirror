@@ -912,10 +912,11 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                     DIALOG_TEXT_PROPERTIES textDialog( m_frame, fpText );
                     bool cancelled;
 
-                    RunMainStack( [&]()
-                                  {
-                                      cancelled = !textDialog.ShowModal();
-                                  } );
+                RunMainStack( [&]()
+                              {
+                                  // QuasiModal required for Scintilla auto-complete
+                                  cancelled = !textDialog.ShowQuasiModal();
+                              } );
 
                     if( cancelled || NoPrintableChars( fpText->GetText() ) )
                     {

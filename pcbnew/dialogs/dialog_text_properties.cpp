@@ -26,18 +26,16 @@
 #include <widgets/font_choice.h>
 #include <dialog_text_properties.h>
 #include <confirm.h>
-#include <widgets/unit_binder.h>
 #include <board_commit.h>
 #include <board.h>
 #include <footprint.h>
-#include <string_utils.h>
 #include <pcb_text.h>
 #include <fp_text.h>
 #include <pcbnew.h>
+#include <project.h>
 #include <pcb_edit_frame.h>
 #include <pcb_layer_box_selector.h>
 #include <wx/valnum.h>
-#include <math/util.h>      // for KiROUND
 #include <scintilla_tricks.h>
 
 
@@ -177,6 +175,11 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
     Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_TEXT_PROPERTIES::OnCharHook ),
              nullptr, this );
 
+    m_MultiLineText->Bind( wxEVT_STC_CHARADDED,
+                           &DIALOG_TEXT_PROPERTIES::onScintillaCharAdded, this );
+    m_MultiLineText->Bind( wxEVT_STC_AUTOCOMP_CHAR_DELETED,
+                           &DIALOG_TEXT_PROPERTIES::onScintillaCharAdded, this );
+
     finishDialogSettings();
 }
 
@@ -216,6 +219,62 @@ void DIALOG_TEXT_PROPERTIES::OnSetFocusText( wxFocusEvent& event )
         m_SingleLineText->SetSelection( -1, -1 );
 
     event.Skip();
+}
+
+
+void DIALOG_TEXT_PROPERTIES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
+{
+    wxStyledTextCtrl* te = m_MultiLineText;
+    wxArrayString     autocompleteTokens;
+    int               text_pos = te->GetCurrentPos();
+    int               start = te->WordStartPosition( text_pos, true );
+    wxString          partial;
+
+    auto textVarRef =
+            [&]( int pos )
+            {
+                return pos >= 2 && te->GetCharAt( pos-2 ) == '$' && te->GetCharAt( pos-1 ) == '{';
+            };
+
+    // Check for cross-reference
+    if( start > 1 && te->GetCharAt( start-1 ) == ':' )
+    {
+        int refStart = te->WordStartPosition( start-1, true );
+
+        if( textVarRef( refStart ) )
+        {
+            partial = te->GetRange( start, text_pos );
+
+            wxString ref = te->GetRange( refStart, start-1 );
+            BOARD*   board = m_item->GetBoard();
+
+            for( FOOTPRINT* candidate : board->Footprints() )
+            {
+                if( candidate->GetReference() == ref )
+                {
+                    candidate->GetContextualTextVars( &autocompleteTokens );
+                    break;
+                }
+            }
+        }
+    }
+    else if( textVarRef( start ) )
+    {
+        partial = te->GetTextRange( start, text_pos );
+
+        BOARD* board = m_item->GetBoard();
+
+        board->GetContextualTextVars( &autocompleteTokens );
+
+        if( FOOTPRINT* footprint = m_item->GetParentFootprint() )
+            footprint->GetContextualTextVars( &autocompleteTokens );
+
+        for( std::pair<wxString, wxString> entry : board->GetProject()->GetTextVars() )
+            autocompleteTokens.push_back( entry.first );
+    }
+
+    m_scintillaTricks->DoAutocomplete( partial, autocompleteTokens );
+    m_MultiLineText->SetFocus();
 }
 
 

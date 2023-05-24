@@ -1727,7 +1727,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     {
         DIALOG_TEXT_PROPERTIES dlg( m_frame, static_cast<SCH_ITEM*>( curr_item ) );
 
-        // Must be quasi modal for syntax help
+        // QuasiModal required for syntax help and Scintilla auto-complete
         if( dlg.ShowQuasiModal() == wxID_OK )
         {
             m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
