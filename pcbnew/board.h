@@ -339,6 +339,7 @@ public:
     const std::map<wxString, wxString>& GetProperties() const { return m_properties; }
     void SetProperties( const std::map<wxString, wxString>& aProps ) { m_properties = aProps; }
 
+    void GetContextualTextVars( wxArrayString* aVars ) const;
     bool ResolveTextVar( wxString* token, int aDepth ) const;
 
     /// Visibility settings stored in board prior to 6.0, only used for loading legacy files

@@ -888,7 +888,8 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
                 RunMainStack( [&]()
                               {
-                                  cancelled = !textDialog.ShowModal();
+                                  // QuasiModal required for Scintilla auto-complete
+                                  cancelled = !textDialog.ShowQuasiModal();
                               } );
 
                 if( cancelled || NoPrintableChars( text->GetText() ) )
