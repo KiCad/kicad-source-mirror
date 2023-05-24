@@ -44,7 +44,7 @@
 #include <sim/sim_lib_mgr.h>
 #include <sim/sim_library_kibis.h>
 
-#include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/case_conv.hpp>
 #include <fmt/core.h>
 #include <pegtl/contrib/parse_tree.hpp>
 
@@ -816,11 +816,13 @@ const SIM_MODEL::PARAM& SIM_MODEL::GetParam( unsigned aParamIndex ) const
 
 int SIM_MODEL::doFindParam( const std::string& aParamName ) const
 {
+    std::string lowerParamName = boost::to_lower_copy( aParamName );
+
     std::vector<std::reference_wrapper<const PARAM>> params = GetParams();
 
     for( int ii = 0; ii < (int) params.size(); ++ii )
     {
-        if( boost::iequals( params[ii].get().info.name, aParamName ) )
+        if( params[ii].get().info.name == lowerParamName )
             return ii;
     }
 
