@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2022 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,11 +26,11 @@
 
 extern double DoubleFromString( const wxString& TextValue );
 
-#define M2_to_MM2 1000000.0
-
 #define VACCUM_PERMEABILITY 1.256637e-6
 #define RELATIVE_PERMEABILITY 1
 
+// The default current density in ampere by mm2 (3A/mm2 is common to make transformers)
+#define AMP_DENSITY_BY_MM2 3.0
 
 CABLE_SIZE_ENTRY::CABLE_SIZE_ENTRY( wxString aName, double aRadius_meter ) :
     m_Name( aName ),
@@ -42,6 +42,55 @@ CABLE_SIZE_ENTRY::CABLE_SIZE_ENTRY( wxString aName, double aRadius_meter ) :
 PANEL_CABLE_SIZE::PANEL_CABLE_SIZE( wxWindow* parent, wxWindowID id, const wxPoint& pos,
                                     const wxSize& size, long style, const wxString& name ) :
         PANEL_CABLE_SIZE_BASE( parent, id, pos, size, style, name )
+{
+    buildCableList();
+
+    m_stUnitOhmMeter->SetLabel( wxT( "Ω⋅m" ) );
+    m_stUnitDegC->SetLabel( wxT( "°C" ) );
+    m_stUnitOhm->SetLabel( wxT( "Ω" ) );
+    m_stUnitmmSq->SetLabel( wxT( "mm²" ) );
+
+    // Needed on wxWidgets 3.0 to ensure sizers are correctly set
+    GetSizer()->SetSizeHints( this );
+
+    // Set internal state flags:
+    m_updatingUI = false;
+    m_updatingDiameter = false;
+    m_updatingArea = false;
+    m_updatingLinResistance = false;
+    m_updatingFrequency = false;
+    m_updatingAmpacity = false;
+    m_updatingCurrent = false;
+    m_updatingLength = false;
+    m_updatingResistanceDc = false;
+    m_updatingRVdrop = false;
+    m_updatingPower = false;
+    m_updatingConductorMaterialResitivity = false;
+
+    m_imperial = false;
+
+    // Initialize variables to a reasonable value
+    // Stored in normalized units
+
+    m_diameter = 0.001;     // i.e. 1 mm2
+    m_conductorTemperature = 20;
+    m_current = 1.0;
+    m_length = 1.0;
+    m_conductorMaterialResitivity = 1.72e-8;    //Initialized for copper
+    m_conductorMaterialResitivityRef = 1.72e-8; //Initialized for copper at 20 deg C
+    m_conductorMaterialThermalCoef = 3.93e-3;
+    m_amp_by_mm2 = AMP_DENSITY_BY_MM2;
+
+    updateAll( m_diameter / 2 );
+}
+
+
+PANEL_CABLE_SIZE::~PANEL_CABLE_SIZE()
+{
+}
+
+
+void PANEL_CABLE_SIZE::buildCableList()
 {
     m_entries.clear();
     m_entries.emplace_back( CABLE_SIZE_ENTRY( _( "AWG0000" ), 0.005842 ) );
@@ -83,54 +132,12 @@ PANEL_CABLE_SIZE::PANEL_CABLE_SIZE( wxWindow* parent, wxWindowID id, const wxPoi
     {
         m_sizeChoice->Append( entry.m_Name );
     }
-
-    m_staticText16412->SetLabel( wxT( "Ω⋅m" ) );
-    m_staticText181->SetLabel( wxT( "°C" ) );
-    m_staticText161211->SetLabel( wxT( "Ω" ) );
-    m_staticText1641->SetLabel( wxT( "mm²" ) );
-
-    // Needed on wxWidgets 3.0 to ensure sizers are correctly set
-    GetSizer()->SetSizeHints( this );
-
-    // Set internal state flags:
-    m_updatingUI = false;
-    m_updatingDiameter = false;
-    m_updatingArea = false;
-    m_updatingLinResistance = false;
-    m_updatingFrequency = false;
-    m_updatingAmpacity = false;
-    m_updatingCurrent = false;
-    m_updatingLength = false;
-    m_updatingResistanceDc = false;
-    m_updatingRVdrop = false;
-    m_updatingPower = false;
-    m_updatingConductorMaterialResitivity = false;
-
-    m_imperial = false;
-
-    // Initialize variables to a reasonable value
-    // Stored in normalized units
-
-    m_diameter = 0.001;
-    m_conductorTemperature = 20;
-    m_current = 1.0;
-    m_length = 1.0;
-    m_conductorMaterialResitivity = 1.72e-8; //Initialized for copper
-    m_conductorMaterialResitivityRef = 1.72e-8; //Initialized for copper at 20 deg C
-    m_conductorMaterialThermalCoef = 3.93e-3;
-
-    updateAll( m_diameter / 2 );
 }
 
 
 void PANEL_CABLE_SIZE::OnUpdateUnit( wxCommandEvent& aEvent )
 {
     printAll();
-}
-
-
-PANEL_CABLE_SIZE::~PANEL_CABLE_SIZE()
-{
 }
 
 
@@ -320,9 +327,8 @@ void PANEL_CABLE_SIZE::OnAmpacityChange( wxCommandEvent& aEvent )
 
         if( m_AmpacityCtrl->GetValue().ToDouble( &value ) )
         {
-            // Based on the 700 circular mils per amp rule of the thumb
-            // The long number is the sq m to circular mils conversion
-            updateAll( sqrt( value * 700 / 1973525241.77 / M_PI ) );
+            double radius = sqrt( value * m2_by_ampere() / M_PI );
+            updateAll( radius );
             m_sizeChoice->SetSelection( -1 );
         }
         m_updatingAmpacity = false;
@@ -528,9 +534,7 @@ void PANEL_CABLE_SIZE::updateAll( double aRadius )
     m_maxFrequency = m_conductorMaterialResitivity
                      / ( M_PI * aRadius * aRadius * VACCUM_PERMEABILITY * RELATIVE_PERMEABILITY );
 
-    // Based on the 700 circular mils per amp rule of the thumb
-    // The long number is the sq m to circular mils conversion
-    m_ampacity = ( m_area * 1973525241.77 ) / 700;
+    m_ampacity = m_area / m2_by_ampere();
 
     // Update application-specific values
     m_resistanceDc = m_linearResistance * m_length;

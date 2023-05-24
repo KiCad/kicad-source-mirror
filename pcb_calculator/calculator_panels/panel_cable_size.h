@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2022 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,6 +22,9 @@
 
 #include "panel_cable_size_base.h"
 #include <vector>
+
+// Helper to convert values (in m2) to mm2, more useful to display these values
+#define M2_to_MM2 1e6
 
 class PCB_CALCULATOR_SETTINGS;
 
@@ -69,6 +72,13 @@ private:
     void updateAll( double aRadius );
     void updateApplication();
     void printAll();
+    void buildCableList();
+
+    /// @return the area of the conductor in m2 by ampere, depending on m_amp_by_mm2 setting
+    double m2_by_ampere()
+    {
+        return 1/m_amp_by_mm2/M2_to_MM2;
+    }
 
 private:
     std::vector<CABLE_SIZE_ENTRY> m_entries;
@@ -103,6 +113,7 @@ private:
     double m_voltageDrop;
     double m_dissipatedPower;
     double m_ampacity;
+    double m_amp_by_mm2;        // allowed current density in ampere by mm2
 };
 
 #endif
