@@ -892,7 +892,7 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
         return true;
 
     bool readOnly = false;
-    std::unique_ptr<wxSingleInstanceChecker> lockFile = ::LockFile( fullPath );
+    LOCKFILE lockFile( fullPath );
 
     if( !lockFile )
     {
@@ -929,7 +929,7 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
         project->SetReadOnly( readOnly || project->GetProjectFile().IsReadOnly() );
 
         if( lockFile )
-            m_project_lock.reset( lockFile.release() );
+            m_project_lock.reset( new LOCKFILE( std::move( lockFile ) ) );
     }
 
     m_projects_list.push_back( std::move( project ) );

@@ -34,6 +34,7 @@
 #include <id.h>
 #include <kiface_base.h>
 #include <kiplatform/app.h>
+#include <lockfile.h>
 #include <pgm_base.h>
 #include <profile.h>
 #include <project/project_file.h>
@@ -103,6 +104,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         if( !OverrideLock( this, msg ) )
             return false;
+
+        m_file_checker->OverrideLock( false );
     }
 
     if( !AskToSaveChanges() )
@@ -1221,10 +1224,13 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
         if( !LockFile( aFileName ) )
         {
             wxString msg;
-            msg.Printf( _( "Schematic '%s' is already open." ), filename.GetFullName() );
+            msg.Printf( _( "Schematic '%s' is already open by '%s' at '%s'." ), aFileName,
+                    m_file_checker->GetUsername(), m_file_checker->GetHostname() );
 
             if( !OverrideLock( this, msg ) )
                 return false;
+
+            m_file_checker->OverrideLock();
         }
 
         try

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,20 +29,255 @@
 #ifndef INCLUDE__LOCK_FILE_H_
 #define INCLUDE__LOCK_FILE_H_
 
-#include <wx/string.h>
-#include <memory>
+#include <wx/wx.h>
+#include <wx/file.h>
+#include <wx/filefn.h>
+#include <wx/log.h>
+#include <wx/filename.h>
+#include <nlohmann/json.hpp>
 
-class wxSingleInstanceChecker;
+#define LCK "KICAD_LOCKING"
 
-/**
- * Test to see if \a aFileName can be locked (is not already locked) and only then
- * returns a wxSingleInstanceChecker protecting aFileName.
- */
-std::unique_ptr<wxSingleInstanceChecker> LockFile( const wxString& aFileName );
+class LOCKFILE
+{
+public:
+    LOCKFILE( const wxString &filename, bool aRemoveOnRelease = true ) :
+            m_originalFile( filename ), m_fileCreated( false ), m_status( false ),
+            m_removeOnRelease( aRemoveOnRelease ), m_errorMsg( "" )
+    {
+        if( filename.IsEmpty() )
+            return;
 
-/**
- * @return A wxString containing the path for lockfiles in Kicad.
- */
-wxString GetKicadLockFilePath();
+        wxFileName fn( filename );
+        fn.SetName( "~" + fn.GetName() );
+        fn.SetExt( fn.GetExt() + ".lck" );
+
+        m_lockFilename = fn.GetFullPath();
+
+        wxFile file;
+        try
+        {
+            bool lock_success = false;
+            bool rw_success = false;
+
+            {
+                wxLogNull suppressExpectedErrorMessages;
+
+                lock_success = file.Open( m_lockFilename, wxFile::write_excl );
+
+                if( !lock_success )
+                    rw_success = file.Open( m_lockFilename, wxFile::read );
+            }
+
+            if( lock_success )
+            {
+                // Lock file doesn't exist, create one
+                m_fileCreated = true;
+                m_status = true;
+                m_username = wxGetUserId();
+                m_hostname = wxGetHostName();
+                nlohmann::json j;
+                j["username"] = std::string( m_username.mb_str() );
+                j["hostname"] = std::string( m_hostname.mb_str() );
+                std::string lock_info = j.dump();
+                file.Write( lock_info );
+                file.Close();
+                wxLogTrace( LCK, "Locked %s", filename );
+            }
+            else if( rw_success )
+            {
+                // Lock file already exists, read the details
+                wxString lock_info;
+                file.ReadAll( &lock_info );
+                nlohmann::json j = nlohmann::json::parse( std::string( lock_info.mb_str() ) );
+                m_username = wxString( j["username"].get<std::string>() );
+                m_hostname = wxString( j["hostname"].get<std::string>() );
+                file.Close();
+                m_errorMsg = _( "Lock file already exists" );
+                wxLogTrace( LCK, "Existing Lock for %s", filename );
+            }
+            else
+            {
+                throw;
+            }
+        }
+        catch( std::exception& e )
+        {
+            wxLogError( "Got an error trying to lock %s: %s", filename, e.what() );
+
+            // Delete lock file if it was created above but we threw an exception somehow
+            if( m_fileCreated )
+            {
+                wxRemoveFile( m_lockFilename );
+                m_fileCreated = false; // Reset the flag since file has been deleted manually
+            }
+
+            m_errorMsg = _( "Failed to access lock file" );
+            m_status = false;
+        }
+    }
+
+    ~LOCKFILE()
+    {
+        UnlockFile();
+    }
+
+    /**
+     * Unlocks and removes the file from the filesystem as long as we still own it.
+     */
+    void UnlockFile()
+    {
+        wxLogTrace( LCK, "Unlocking %s", m_lockFilename );
+
+        // Delete lock file only if the file was created in the constructor and if the file contains the correct user and host names
+        if( m_fileCreated && checkUserAndHost() )
+        {
+            if( m_removeOnRelease )
+                wxRemoveFile( m_lockFilename );
+
+            m_fileCreated = false; // Reset the flag since file has been deleted manually
+            m_status = false;
+            m_errorMsg = wxEmptyString;
+        }
+    }
+
+    /**
+     * Forces the lock, overwriting the data that existed already
+     * @return True if we successfully overrode the lock
+     */
+    bool OverrideLock( bool aRemoveOnRelease = true )
+    {
+        wxLogTrace( LCK, "Overriding lock on %s", m_lockFilename );
+
+        if( !m_fileCreated )
+        {
+            try
+            {
+                wxFile file;
+                bool success = false;
+
+                {
+                    wxLogNull suppressExpectedErrorMessages;
+                    success = file.Open( m_lockFilename, wxFile::write );
+                }
+
+                if( success )
+                {
+                    m_username = wxGetUserId();
+                    m_hostname = wxGetHostName();
+                    nlohmann::json j;
+                    j["username"] = std::string( m_username.mb_str() );
+                    j["hostname"] = std::string( m_hostname.mb_str() );
+                    std::string lock_info = j.dump();
+                    file.Write( lock_info );
+                    file.Close();
+                    m_fileCreated = true;
+                    m_status = true;
+                    m_removeOnRelease = aRemoveOnRelease;
+                    m_errorMsg = wxEmptyString;
+                    wxLogTrace( LCK, "Successfully overrode lock on %s", m_lockFilename );
+                    return true;
+                }
+
+                return false;
+            }
+            catch( std::exception& e )
+            {
+                wxLogError( "Got exception trying to override lock on %s: %s",
+                        m_lockFilename, e.what() );
+
+                return false;
+            }
+        }
+        else
+        {
+            wxLogTrace( LCK, "Upgraded lock on %s to delete on release", m_lockFilename );
+            m_removeOnRelease = aRemoveOnRelease;
+        }
+
+        return true;
+    }
+
+    /**
+     * @return Current username.  If we own the lock, this is us.  Otherwise, this is the user that does own it
+     */
+    wxString GetUsername(){ return m_username; }
+
+    /**
+     * @return Current hostname.  If we own the lock this is our computer.  Otherwise, this is the computer that does
+     */
+    wxString GetHostname(){ return m_hostname; }
+
+    /**
+     * @return Last error message generated
+     */
+    wxString GetErrorMsg(){ return m_errorMsg; }
+
+    bool Locked() const
+    {
+        return m_fileCreated;
+    }
+
+    bool Valid() const
+    {
+        return m_status;
+    }
+
+    explicit operator bool() const
+    {
+        return m_status;
+    }
+
+private:
+    wxString m_originalFile;
+    wxString m_lockFilename;
+    wxString m_username;
+    wxString m_hostname;
+    bool m_fileCreated;
+    bool m_status;
+    bool m_removeOnRelease;
+    wxString m_errorMsg;
+
+    bool checkUserAndHost()
+    {
+        wxFileName fileName( m_lockFilename );
+
+        if( !fileName.FileExists() )
+        {
+            wxLogTrace
+            ( LCK, "File does not exist: %s", m_lockFilename );
+            return false;
+        }
+
+        wxFile file;
+        try
+        {
+            if( file.Open( m_lockFilename, wxFile::read ) )
+            {
+                wxString lock_info;
+                file.ReadAll( &lock_info );
+                nlohmann::json j = nlohmann::json::parse( std::string( lock_info.mb_str() ) );
+                if( m_username == wxString( j["username"].get<std::string>() )
+                        && m_hostname == wxString( j["hostname"].get<std::string>() ) )
+                {
+                    wxLogTrace
+                        ( LCK, "User and host match for lock %s", m_lockFilename );
+                    return true;
+                }
+            }
+        }
+        catch( std::exception &e )
+        {
+            wxLogError
+                ( "Got exception trying to check user/host for lock on %s: %s", m_lockFilename,
+                    e.what() );
+        }
+
+        wxLogTrace
+            ( LCK, "User and host DID NOT match for lock %s", m_lockFilename );
+        return false;
+    }
+};
+
 
 #endif  // INCLUDE__LOCK_FILE_H_

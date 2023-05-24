@@ -38,6 +38,7 @@ class EDA_ITEM;
 class wxSingleInstanceChecker;
 class ACTION_TOOLBAR;
 class COLOR_SETTINGS;
+class LOCKFILE;
 class TOOL_MENU;
 class APP_SETTINGS_BASE;
 class wxFindReplaceData;
@@ -489,7 +490,7 @@ protected:
     wxSocketServer*             m_socketServer;
 
     ///< Prevents opening same file multiple times.
-    std::unique_ptr<wxSingleInstanceChecker> m_file_checker;
+    std::unique_ptr<LOCKFILE> m_file_checker;
 
     COLOR4D            m_gridColor;         // Grid color
     COLOR4D            m_drawBgColor;       // The background color of the draw canvas; BLACK for

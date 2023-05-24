@@ -54,7 +54,6 @@
 #include <id.h>
 #include <kicad_curl/kicad_curl.h>
 #include <kiplatform/policy.h>
-#include <lockfile.h>
 #include <macros.h>
 #include <menus_helpers.h>
 #include <paths.h>
