@@ -146,6 +146,17 @@ PANEL_CABLE_SIZE_BASE::PANEL_CABLE_SIZE_BASE( wxWindow* parent, wxWindowID id, c
 	m_staticText16421->Wrap( -1 );
 	fgSizerLeft->Add( m_staticText16421, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
 
+	m_staticTextDensity = new wxStaticText( sbSizerLeft->GetStaticBox(), wxID_ANY, _("Current density"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextDensity->Wrap( -1 );
+	fgSizerLeft->Add( m_staticTextDensity, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_slCurrentDensity = new wxSlider( sbSizerLeft->GetStaticBox(), wxID_ANY, 3, 3, 12, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS|wxSL_VALUE_LABEL );
+	fgSizerLeft->Add( m_slCurrentDensity, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+
+	m_stUnitAmp_mmSq = new wxStaticText( sbSizerLeft->GetStaticBox(), wxID_ANY, _("A/mm^2"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stUnitAmp_mmSq->Wrap( -1 );
+	fgSizerLeft->Add( m_stUnitAmp_mmSq, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
 
 	sbSizerLeft->Add( fgSizerLeft, 0, wxEXPAND, 5 );
 
@@ -269,6 +280,15 @@ PANEL_CABLE_SIZE_BASE::PANEL_CABLE_SIZE_BASE( wxWindow* parent, wxWindowID id, c
 	m_frequencyCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_CABLE_SIZE_BASE::OnFrequencyChange ), NULL, this );
 	m_frequencyUnit->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_CABLE_SIZE_BASE::OnUpdateUnit ), NULL, this );
 	m_AmpacityCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_CABLE_SIZE_BASE::OnAmpacityChange ), NULL, this );
+	m_slCurrentDensity->Connect( wxEVT_SCROLL_TOP, wxScrollEventHandler( PANEL_CABLE_SIZE_BASE::onUpdateCurrentDensity ), NULL, this );
+	m_slCurrentDensity->Connect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( PANEL_CABLE_SIZE_BASE::onUpdateCurrentDensity ), NULL, this );
+	m_slCurrentDensity->Connect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( PANEL_CABLE_SIZE_BASE::onUpdateCurrentDensity ), NULL, this );
+	m_slCurrentDensity->Connect( wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler( PANEL_CABLE_SIZE_BASE::onUpdateCurrentDensity ), NULL, this );
+	m_slCurrentDensity->Connect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( PANEL_CABLE_SIZE_BASE::onUpdateCurrentDensity ), NULL, this );
+	m_slCurrentDensity->Connect( wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler( PANEL_CABLE_SIZE_BASE::onUpdateCurrentDensity ), NULL, this );
+	m_slCurrentDensity->Connect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( PANEL_CABLE_SIZE_BASE::onUpdateCurrentDensity ), NULL, this );
+	m_slCurrentDensity->Connect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( PANEL_CABLE_SIZE_BASE::onUpdateCurrentDensity ), NULL, this );
+	m_slCurrentDensity->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( PANEL_CABLE_SIZE_BASE::onUpdateCurrentDensity ), NULL, this );
 	m_conductorTempCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_CABLE_SIZE_BASE::OnConductorTempChange ), NULL, this );
 	m_currentCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_CABLE_SIZE_BASE::OnCurrentChange ), NULL, this );
 	m_lengthCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_CABLE_SIZE_BASE::OnLengthChange ), NULL, this );
@@ -296,6 +316,15 @@ PANEL_CABLE_SIZE_BASE::~PANEL_CABLE_SIZE_BASE()
 	m_frequencyCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_CABLE_SIZE_BASE::OnFrequencyChange ), NULL, this );
 	m_frequencyUnit->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_CABLE_SIZE_BASE::OnUpdateUnit ), NULL, this );
 	m_AmpacityCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_CABLE_SIZE_BASE::OnAmpacityChange ), NULL, this );
+	m_slCurrentDensity->Disconnect( wxEVT_SCROLL_TOP, wxScrollEventHandler( PANEL_CABLE_SIZE_BASE::onUpdateCurrentDensity ), NULL, this );
+	m_slCurrentDensity->Disconnect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( PANEL_CABLE_SIZE_BASE::onUpdateCurrentDensity ), NULL, this );
+	m_slCurrentDensity->Disconnect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( PANEL_CABLE_SIZE_BASE::onUpdateCurrentDensity ), NULL, this );
+	m_slCurrentDensity->Disconnect( wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler( PANEL_CABLE_SIZE_BASE::onUpdateCurrentDensity ), NULL, this );
+	m_slCurrentDensity->Disconnect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( PANEL_CABLE_SIZE_BASE::onUpdateCurrentDensity ), NULL, this );
+	m_slCurrentDensity->Disconnect( wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler( PANEL_CABLE_SIZE_BASE::onUpdateCurrentDensity ), NULL, this );
+	m_slCurrentDensity->Disconnect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( PANEL_CABLE_SIZE_BASE::onUpdateCurrentDensity ), NULL, this );
+	m_slCurrentDensity->Disconnect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( PANEL_CABLE_SIZE_BASE::onUpdateCurrentDensity ), NULL, this );
+	m_slCurrentDensity->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( PANEL_CABLE_SIZE_BASE::onUpdateCurrentDensity ), NULL, this );
 	m_conductorTempCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_CABLE_SIZE_BASE::OnConductorTempChange ), NULL, this );
 	m_currentCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_CABLE_SIZE_BASE::OnCurrentChange ), NULL, this );
 	m_lengthCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_CABLE_SIZE_BASE::OnLengthChange ), NULL, this );

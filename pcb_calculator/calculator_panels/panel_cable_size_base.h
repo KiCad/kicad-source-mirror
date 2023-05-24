@@ -31,6 +31,7 @@ class UNIT_SELECTOR_VOLTAGE;
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/sizer.h>
+#include <wx/slider.h>
 #include <wx/statbox.h>
 #include <wx/panel.h>
 
@@ -69,6 +70,9 @@ class PANEL_CABLE_SIZE_BASE : public CALCULATOR_PANEL
 		wxStaticText* m_staticTextAmpacity;
 		wxTextCtrl* m_AmpacityCtrl;
 		wxStaticText* m_staticText16421;
+		wxStaticText* m_staticTextDensity;
+		wxSlider* m_slCurrentDensity;
+		wxStaticText* m_stUnitAmp_mmSq;
 		wxStaticText* m_staticTextCableTemp;
 		wxTextCtrl* m_conductorTempCtrl;
 		wxStaticText* m_stUnitDegC;
@@ -100,6 +104,7 @@ class PANEL_CABLE_SIZE_BASE : public CALCULATOR_PANEL
 		virtual void OnLinResistanceChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnFrequencyChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAmpacityChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onUpdateCurrentDensity( wxScrollEvent& event ) { event.Skip(); }
 		virtual void OnConductorTempChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCurrentChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnLengthChange( wxCommandEvent& event ) { event.Skip(); }

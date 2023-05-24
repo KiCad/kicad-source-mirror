@@ -67,6 +67,7 @@ public:
     void OnResistanceDcChange( wxCommandEvent& aEvent ) override;
     void OnVDropChange( wxCommandEvent& aEvent ) override;
     void OnPowerChange( wxCommandEvent& aEvent ) override;
+	void onUpdateCurrentDensity( wxScrollEvent& aEvent ) override;
 
 private:
     void updateAll( double aRadius );

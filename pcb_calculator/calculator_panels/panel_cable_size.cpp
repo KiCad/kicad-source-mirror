@@ -49,6 +49,7 @@ PANEL_CABLE_SIZE::PANEL_CABLE_SIZE( wxWindow* parent, wxWindowID id, const wxPoi
     m_stUnitDegC->SetLabel( wxT( "°C" ) );
     m_stUnitOhm->SetLabel( wxT( "Ω" ) );
     m_stUnitmmSq->SetLabel( wxT( "mm²" ) );
+    m_stUnitAmp_mmSq->SetLabel( wxT( "A/mm²" ) );
 
     // Needed on wxWidgets 3.0 to ensure sizers are correctly set
     GetSizer()->SetSizeHints( this );
@@ -69,9 +70,7 @@ PANEL_CABLE_SIZE::PANEL_CABLE_SIZE( wxWindow* parent, wxWindowID id, const wxPoi
 
     m_imperial = false;
 
-    // Initialize variables to a reasonable value
-    // Stored in normalized units
-
+    // Initialize variables to a reasonable value (stored in normalized units)
     m_diameter = 0.001;     // i.e. 1 mm2
     m_conductorTemperature = 20;
     m_current = 1.0;
@@ -151,9 +150,10 @@ void PANEL_CABLE_SIZE::SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg )
                                                     << m_conductorMaterialResitivityRef;
     aCfg->m_cableSize.conductorTemperature = m_conductorTempCtrl->GetValue();
     aCfg->m_cableSize.conductorThermalCoef = m_textCtrlConductorThermCoef->GetValue();
+    aCfg->m_cableSize.currentDensityChoice = m_slCurrentDensity->GetValue();
 }
 
-
+#include <wx/log.h>
 void PANEL_CABLE_SIZE::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 {
     m_diameterUnit->SetSelection( aCfg->m_cableSize.diameterUnit );
@@ -164,23 +164,47 @@ void PANEL_CABLE_SIZE::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
     m_conductorTempCtrl->SetValue( aCfg->m_cableSize.conductorTemperature );
     m_textCtrlConductorThermCoef->SetValue( aCfg->m_cableSize.conductorThermalCoef );
 
+    int amp_per_mm2_choice = aCfg->m_cableSize.currentDensityChoice;
+
+    // Ensure validity of amp_per_mm2_choice
+    if( amp_per_mm2_choice < m_slCurrentDensity->GetMin()
+            || amp_per_mm2_choice > m_slCurrentDensity->GetMax() )
+    {
+        amp_per_mm2_choice = AMP_DENSITY_BY_MM2;
+    }
+
+    m_slCurrentDensity->SetValue( amp_per_mm2_choice );
+    m_amp_by_mm2 = amp_per_mm2_choice;
+
     wxString value = wxString( "" ) << m_conductorMaterialResitivity;
 
     if( m_textCtrlConductorResistivity->IsEmpty() || value == "nan" )
     {
-        //Initialize m_textCtrl to fill UI space
-        //Working variable initialized earlier
+        // Initialize m_textCtrl to fill UI space
+        // Working variable initialized earlier
         m_textCtrlConductorResistivity->SetValue( "1.72e-8" );
         m_conductorTempCtrl->SetValue( "20" );
     }
 
     if( m_textCtrlConductorThermCoef->IsEmpty() )
     {
-        //Initialize m_textCtrl to fill UI space
-        //Working variable initialized earlier
+        // Initialize m_textCtrl to fill UI space
+        // Working variable initialized earlier
         m_textCtrlConductorThermCoef->SetValue( "3.93e-3" );
     }
+
+    updateAll( m_diameter / 2 );
 }
+
+
+void PANEL_CABLE_SIZE::onUpdateCurrentDensity( wxScrollEvent& aEvent )
+{
+    m_amp_by_mm2 = m_slCurrentDensity->GetValue();
+
+    // Update displayed values depending on the current density (mainly Ampacity)
+    updateAll( m_diameter / 2 );
+}
+
 
 void PANEL_CABLE_SIZE::OnCableSizeChange( wxCommandEvent& aEvent )
 {
@@ -197,6 +221,7 @@ void PANEL_CABLE_SIZE::OnCableSizeChange( wxCommandEvent& aEvent )
     }
 }
 
+
 void PANEL_CABLE_SIZE::OnConductorResistivityChange( wxCommandEvent& aEvent )
 {
     if( !m_updatingUI )
@@ -209,6 +234,7 @@ void PANEL_CABLE_SIZE::OnConductorResistivityChange( wxCommandEvent& aEvent )
         m_updatingConductorMaterialResitivity = false;
     }
 }
+
 
 void PANEL_CABLE_SIZE::OnConductorResistivity_Button( wxCommandEvent& event )
 {
@@ -245,6 +271,7 @@ void PANEL_CABLE_SIZE::OnConductorThermCoefChange_Button( wxCommandEvent& event 
 
     if( !value.IsEmpty() )
         m_textCtrlConductorThermCoef->ChangeValue( value );
+
     OnConductorThermCoefChange( event );
 }
 
