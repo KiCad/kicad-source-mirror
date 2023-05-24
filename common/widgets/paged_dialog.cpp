@@ -19,20 +19,19 @@
 
 #include <confirm.h>
 #include <widgets/resettable_panel.h>
-#include <widgets/wx_infobar.h>
-#include <widgets/wx_panel.h>
-#include <widgets/paged_dialog.h>
-#include <widgets/wx_treebook.h>
-
 #include <wx/button.h>
 #include <wx/grid.h>
 #include <wx/sizer.h>
 #include <wx/treebook.h>
 #include <wx/treectrl.h>
-#include <wx/listctrl.h>
+
+#include <widgets/wx_infobar.h>
+#include <widgets/paged_dialog.h>
 #include <wx/stc/stc.h>
 
 #include <algorithm>
+#include "wx/listctrl.h"
+#include "widgets/wx_panel.h"
 
 // Maps from dialogTitle <-> pageTitle for keeping track of last-selected pages.
 // This is not a simple page index because some dialogs have dynamic page sets.
@@ -61,7 +60,7 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSho
     wxBoxSizer* treebookSizer = new wxBoxSizer( wxVERTICAL );
     treebookPanel->SetSizer( treebookSizer );
 
-    m_treebook = new WX_TREEBOOK( treebookPanel, wxID_ANY );
+    m_treebook = new wxTreebook( treebookPanel, wxID_ANY );
     m_treebook->SetFont( KIUI::GetControlFont( this ) );
 
     long treeCtrlFlags = m_treebook->GetTreeCtrl()->GetWindowStyleFlag();
@@ -270,20 +269,6 @@ bool PAGED_DIALOG::TransferDataFromWindow()
 }
 
 
-PAGED_DIALOG* PAGED_DIALOG::GetDialog( wxWindow* aParent )
-{
-    while( aParent )
-    {
-        if( PAGED_DIALOG* parentDialog = dynamic_cast<PAGED_DIALOG*>( aParent ) )
-            return parentDialog;
-
-        aParent = aParent->GetParent();
-    }
-
-    return nullptr;
-}
-
-
 void PAGED_DIALOG::SetError( const wxString& aMessage, const wxString& aPageName, int aCtrlId,
                              int aRow, int aCol )
 {
@@ -294,36 +279,39 @@ void PAGED_DIALOG::SetError( const wxString& aMessage, const wxString& aPageName
 void PAGED_DIALOG::SetError( const wxString& aMessage, wxWindow* aPage, wxWindow* aCtrl,
                              int aRow, int aCol )
 {
-    m_infoBar->ShowMessageFor( aMessage, 10000, wxICON_WARNING );
-
-    if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( aCtrl ) )
+    if( aCtrl )
     {
-        textCtrl->SetSelection( -1, -1 );
-        textCtrl->SetFocus();
-        return;
-    }
+        m_infoBar->ShowMessageFor( aMessage, 10000, wxICON_WARNING );
 
-    if( wxStyledTextCtrl* scintilla = dynamic_cast<wxStyledTextCtrl*>( aCtrl ) )
-    {
-        if( aRow > 0 )
+        if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( aCtrl ) )
         {
-            int pos = scintilla->PositionFromLine( aRow - 1 ) + ( aCol - 1 );
-            scintilla->GotoPos( pos );
+            textCtrl->SetSelection( -1, -1 );
+            textCtrl->SetFocus();
+            return;
         }
 
-        scintilla->SetFocus();
-        return;
-    }
+        if( wxStyledTextCtrl* scintilla = dynamic_cast<wxStyledTextCtrl*>( aCtrl ) )
+        {
+            if( aRow > 0 )
+            {
+                int pos = scintilla->PositionFromLine( aRow - 1 ) + ( aCol - 1 );
+                scintilla->GotoPos( pos );
+            }
 
-    if( wxGrid* grid = dynamic_cast<wxGrid*>( aCtrl ) )
-    {
-        grid->SetFocus();
-        grid->MakeCellVisible( aRow, aCol );
-        grid->SetGridCursor( aRow, aCol );
+            scintilla->SetFocus();
+            return;
+        }
 
-        grid->EnableCellEditControl( true );
-        grid->ShowCellEditControl();
-        return;
+        if( wxGrid* grid = dynamic_cast<wxGrid*>( aCtrl ) )
+        {
+            grid->SetFocus();
+            grid->MakeCellVisible( aRow, aCol );
+            grid->SetGridCursor( aRow, aCol );
+
+            grid->EnableCellEditControl( true );
+            grid->ShowCellEditControl();
+            return;
+        }
     }
 }
 

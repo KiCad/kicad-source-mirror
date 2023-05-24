@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -22,11 +22,10 @@
 #define PAGED_DIALOG_H
 
 #include <dialog_shim.h>
-#include <widgets/wx_treebook.h>
 
 
 class WX_INFOBAR;
-class WX_TREEBOOK;
+class wxTreebook;
 
 class PAGED_DIALOG : public DIALOG_SHIM
 {
@@ -35,7 +34,7 @@ public:
                   const wxString& aAuxiliaryAction = wxEmptyString );
     ~PAGED_DIALOG() override;
 
-    WX_TREEBOOK* GetTreebook() { return m_treebook; }
+    wxTreebook* GetTreebook() { return m_treebook; }
 
     void SetInitialPage( const wxString& aPage, const wxString& aParentPage = wxEmptyString );
 
@@ -49,8 +48,6 @@ public:
 
     void UpdateResetButton( int aPage );
 
-    static PAGED_DIALOG* GetDialog( wxWindow* aWindow );
-
 protected:
     void finishInitialization();
 
@@ -63,11 +60,11 @@ protected:
     virtual void onPageChanging( wxBookCtrlEvent& aEvent );
     virtual void onCharHook( wxKeyEvent& aEvent );
 
-    WX_TREEBOOK* m_treebook;
-    wxButton*    m_auxiliaryButton;
-    wxButton*    m_resetButton;
-    wxButton*    m_cancelButton;
-    WX_INFOBAR*  m_infoBar;
+    wxTreebook* m_treebook;
+    wxButton*   m_auxiliaryButton;
+    wxButton*   m_resetButton;
+    wxButton*   m_cancelButton;
+    WX_INFOBAR* m_infoBar;
 
 private:
     wxString    m_title;

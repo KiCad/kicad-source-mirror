@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -62,14 +62,12 @@ bool PANEL_PL_EDITOR_COLOR_SETTINGS::TransferDataToWindow()
 
 bool PANEL_PL_EDITOR_COLOR_SETTINGS::TransferDataFromWindow()
 {
-    int sel = m_themes->GetSelection();
+    SETTINGS_MANAGER&   mgr = Pgm().GetSettingsManager();
+    PL_EDITOR_SETTINGS* cfg = mgr.GetAppSettings<PL_EDITOR_SETTINGS>();
+    int                 sel = m_themes->GetSelection();
+    COLOR_SETTINGS*     colors = static_cast<COLOR_SETTINGS*>( m_themes->GetClientData( sel ) );
 
-    if( sel >= 0 )
-    {
-        SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-        COLOR_SETTINGS*   colors = static_cast<COLOR_SETTINGS*>( m_themes->GetClientData( sel ) );
-        mgr.GetAppSettings<PL_EDITOR_SETTINGS>()->m_ColorTheme = colors->GetFilename();
-    }
+    cfg->m_ColorTheme = colors->GetFilename();
 
     return true;
 }

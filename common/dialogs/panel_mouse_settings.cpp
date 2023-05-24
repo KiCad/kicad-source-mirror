@@ -26,8 +26,9 @@
 #include <wx/defs.h>
 
 
-PANEL_MOUSE_SETTINGS::PANEL_MOUSE_SETTINGS( wxWindow* aParent ) :
+PANEL_MOUSE_SETTINGS::PANEL_MOUSE_SETTINGS( PAGED_DIALOG* aDialog, wxWindow* aParent ) :
         PANEL_MOUSE_SETTINGS_BASE( aParent ),
+        m_dialog( aDialog ),
         m_currentScrollMod( {} )
 {
 #ifdef __WXOSX_MAC__
@@ -81,9 +82,8 @@ bool PANEL_MOUSE_SETTINGS::TransferDataFromWindow()
 
     if( !isScrollModSetValid( m_currentScrollMod ) )
     {
-        PAGED_DIALOG::GetDialog( this )->SetError( _( "Only one action can be assigned to each "
-                                                      "vertical scroll setting" ),
-                                                   this, nullptr );
+        m_dialog->SetError( _( "Only one action can be assigned to each vertical scroll setting" ),
+                            this, nullptr );
         return false;
     }
 

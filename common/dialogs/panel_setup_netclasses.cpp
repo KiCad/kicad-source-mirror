@@ -39,6 +39,7 @@
 #include <widgets/wx_html_report_box.h>
 #include <widgets/wx_panel.h>
 #include <widgets/std_bitmap_button.h>
+#include <wx/treebook.h>
 #include <project/net_settings.h>
 
 
@@ -69,12 +70,13 @@ std::vector<BITMAPS> g_lineStyleIcons;
 wxArrayString        g_lineStyleNames;
 
 
-PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( wxWindow* aParentWindow, EDA_DRAW_FRAME* aFrame,
+PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, EDA_DRAW_FRAME* aFrame,
                                                 std::shared_ptr<NET_SETTINGS> aNetSettings,
                                                 const std::set<wxString>& aNetNames,
                                                 bool aIsEEschema ) :
-        PANEL_SETUP_NETCLASSES_BASE( aParentWindow ),
+        PANEL_SETUP_NETCLASSES_BASE( aParent->GetTreebook() ),
         m_frame( aFrame ),
+        m_parent( aParent ),
         m_isEEschema( aIsEEschema ),
         m_netSettings( aNetSettings ),
         m_netNames( aNetNames ),
@@ -156,8 +158,8 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( wxWindow* aParentWindow, EDA_DRA
     }
 
     wxGridCellAttr* attr = new wxGridCellAttr;
-    attr->SetRenderer( new GRID_CELL_COLOR_RENDERER( PAGED_DIALOG::GetDialog( this ) ) );
-    attr->SetEditor( new GRID_CELL_COLOR_SELECTOR( PAGED_DIALOG::GetDialog( this ), m_netclassGrid ) );
+    attr->SetRenderer( new GRID_CELL_COLOR_RENDERER( aParent ) );
+    attr->SetEditor( new GRID_CELL_COLOR_SELECTOR( aParent, m_netclassGrid ) );
     m_netclassGrid->SetColAttr( GRID_SCHEMATIC_COLOR, attr );
 
     attr = new wxGridCellAttr;
@@ -426,7 +428,7 @@ bool PANEL_SETUP_NETCLASSES::validateNetclassName( int aRow, const wxString& aNa
     if( tmp.IsEmpty() )
     {
         wxString msg =  _( "Netclass must have a name." );
-        PAGED_DIALOG::GetDialog( this )->SetError( msg, this, m_netclassGrid, aRow, GRID_NAME );
+        m_parent->SetError( msg, this, m_netclassGrid, aRow, GRID_NAME );
         return false;
     }
 
@@ -435,8 +437,7 @@ bool PANEL_SETUP_NETCLASSES::validateNetclassName( int aRow, const wxString& aNa
         if( ii != aRow && m_netclassGrid->GetCellValue( ii, GRID_NAME ).CmpNoCase( tmp ) == 0 )
         {
             wxString msg = _( "Netclass name already in use." );
-            PAGED_DIALOG::GetDialog( this )->SetError( msg, this, m_netclassGrid,
-                                                       focusFirst ? aRow : ii, GRID_NAME );
+            m_parent->SetError( msg, this, m_netclassGrid, focusFirst ? aRow : ii, GRID_NAME );
             return false;
         }
     }

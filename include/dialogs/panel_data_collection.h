@@ -34,7 +34,7 @@ class PAGED_DIALOG;
 class PANEL_DATA_COLLECTION : public PANEL_DATA_COLLECTION_BASE
 {
 public:
-    PANEL_DATA_COLLECTION( wxWindow* aParent );
+    PANEL_DATA_COLLECTION( PAGED_DIALOG* aDialog, wxWindow* aParent );
 
     void ResetPanel() override;
 
@@ -46,6 +46,9 @@ protected:
 
 private:
     void applySettingsToPanel();
+
+protected:
+    PAGED_DIALOG* m_dialog;
 };
 
 #endif //PANEL_DATA_COLLECTION_H

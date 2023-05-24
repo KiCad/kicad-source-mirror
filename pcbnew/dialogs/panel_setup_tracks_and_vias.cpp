@@ -27,6 +27,7 @@
 #include <bitmaps.h>
 #include <widgets/wx_grid.h>
 #include <widgets/std_bitmap_button.h>
+#include <wx/treebook.h>
 #include <grid_tricks.h>
 
 #include <panel_setup_tracks_and_vias.h>
@@ -51,10 +52,11 @@ enum DIFF_VAR_GRID_COLUMNS
 };
 
 
-PANEL_SETUP_TRACKS_AND_VIAS::PANEL_SETUP_TRACKS_AND_VIAS( wxWindow* aParentWindow,
+PANEL_SETUP_TRACKS_AND_VIAS::PANEL_SETUP_TRACKS_AND_VIAS( PAGED_DIALOG* aParent,
                                                           PCB_EDIT_FRAME* aFrame ) :
-    PANEL_SETUP_TRACKS_AND_VIAS_BASE( aParentWindow )
+    PANEL_SETUP_TRACKS_AND_VIAS_BASE( aParent->GetTreebook() )
 {
+    m_Parent = aParent;
     m_Frame = aFrame;
     m_Pcb = m_Frame->GetBoard();
     m_BrdSettings = &m_Pcb->GetDesignSettings();
@@ -367,7 +369,7 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::Validate()
         if( !viaDia.IsEmpty() && viaDrill.IsEmpty() )
         {
             msg = _( "No via hole size defined." );
-            PAGED_DIALOG::GetDialog( this )->SetError( msg, this, m_viaSizesGrid, row, VIA_DRILL_COL );
+            m_Parent->SetError( msg, this, m_viaSizesGrid, row, VIA_DRILL_COL );
             return false;
         }
     }
@@ -381,7 +383,7 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::Validate()
         if( !dpWidth.IsEmpty() && dpGap.IsEmpty() )
         {
             msg = _( "No differential pair gap defined." );
-            PAGED_DIALOG::GetDialog( this )->SetError( msg, this, m_diffPairsGrid, row, 1 );
+            m_Parent->SetError( msg, this, m_diffPairsGrid, row, 1 );
             return false;
         }
     }
