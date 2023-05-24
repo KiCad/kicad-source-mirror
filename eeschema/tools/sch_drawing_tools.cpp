@@ -1608,6 +1608,7 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 textbox->SetHorizJustify( m_lastTextJust );
                 textbox->SetStroke( m_lastTextboxStroke );
                 textbox->SetFillColor( m_lastTextboxFillColor );
+                textbox->SetParent( schematic );
 
                 item = textbox;
             }
@@ -1617,6 +1618,7 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
                 item->SetStroke( m_lastStroke );
                 item->SetFillColor( m_lastFillColor );
+                item->SetParent( schematic );
             }
 
             item->SetFlags( IS_NEW );
@@ -1646,9 +1648,8 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                     getViewControls()->SetAutoPan( false );
                     getViewControls()->CaptureCursor( false );
 
-                    // This is modal not quasi to protect against place symbol calls starting
-                    // TwoClickPlace wait routines in the middle
-                    if( dlg.ShowModal() != wxID_OK )
+                    // Must be quasi modal for syntax help
+                    if( dlg.ShowQuasiModal() != wxID_OK )
                     {
                         cleanup();
                         continue;
