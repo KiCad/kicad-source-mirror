@@ -245,9 +245,7 @@ bool EXPORTER_STEP::composePCB()
 
     SHAPE_POLY_SET pcbOutlines; // stores the board main outlines
 
-    if( !m_board->GetBoardPolygonOutlines( pcbOutlines,
-                                           /* error handler */ nullptr,
-                                           /* allows use arcs in outlines */ true ) )
+    if( !m_board->GetBoardPolygonOutlines( pcbOutlines ) )
     {
         wxLogWarning( _( "Board outline is malformed. Run DRC for a full analysis." ) );
     }

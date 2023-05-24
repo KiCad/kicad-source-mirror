@@ -160,7 +160,9 @@ bool isCopperOutside( const FOOTPRINT* aFootprint, SHAPE_POLY_SET& aShape )
 }
 
 
-/* Build a polygon (with holes) from a PCB_SHAPE list, which is expected to be a closed main
+/**
+ * Function ConvertOutlineToPolygon
+ * Build a polygon (with holes) from a PCB_SHAPE list, which is expected to be a closed main
  * outline with perhaps closed inner outlines.  These closed inner outlines are considered as
  * holes in the main outline.
  * @param aShapeList the initial list of SHAPEs (only lines, circles and arcs).
@@ -169,12 +171,10 @@ bool isCopperOutside( const FOOTPRINT* aFootprint, SHAPE_POLY_SET& aShape )
  * @param aChainingEpsilon is the max error distance when polygonizing a curve (internal units)
  * @param aAllowDisjoint indicates multiple top-level outlines are allowed
  * @param aErrorHandler = an optional error handler
- * @param aAllowUseArcsInPolygons = an optional option to allow adding arcs in
- *  SHAPE_LINE_CHAIN polylines/polygons when building outlines from aShapeList
  */
 bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SET& aPolygons,
                               int aErrorMax, int aChainingEpsilon, bool aAllowDisjoint,
-                              OUTLINE_ERROR_HANDLER* aErrorHandler, bool aAllowUseArcsInPolygons )
+                              OUTLINE_ERROR_HANDLER* aErrorHandler )
 {
     if( aShapeList.size() == 0 )
         return true;
@@ -249,25 +249,30 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
         }
         else if( graphic->GetShape() == SHAPE_T::CIRCLE )
         {
+            // make a circle by segments;
             VECTOR2I center = graphic->GetCenter();
-            int      radius  = graphic->GetRadius();
             VECTOR2I start = center;
+            int      radius  = graphic->GetRadius();
+            int      steps   = GetArcToSegmentCount( radius, aErrorMax, FULL_CIRCLE );
+            VECTOR2I nextPt;
+
             start.x += radius;
 
-            // Add 360 deg Arc in currContour
-            SHAPE_ARC arc360( center, start, ANGLE_360, 0 );
-            currContour.Append( arc360, aErrorMax );
-            currContour.SetClosed( true );
-
-            // set shapeOwners for currContour points created by appending the arc360:
-            for( int ii = 1; ii < currContour.PointCount(); ++ii )
+            for( int step = 0; step < steps; ++step )
             {
-                shapeOwners[ std::make_pair( currContour.CPoint( ii-1 ),
-                                             currContour.CPoint( ii ) ) ] = graphic;
+                nextPt = start;
+                RotatePoint( nextPt, center, ANGLE_360 * step / steps );
+                currContour.Append( nextPt );
+
+                if( firstPt )
+                    firstPt = false;
+                else
+                    shapeOwners[ std::make_pair( prevPt, nextPt ) ] = graphic;
+
+                prevPt = nextPt;
             }
 
-            if( !aAllowUseArcsInPolygons )
-                currContour.ClearArcs();
+            currContour.SetClosed( true );
         }
         else if( graphic->GetShape() == SHAPE_T::RECT )
         {
@@ -610,8 +615,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
  * All contours should be closed, i.e. valid closed polygon vertices
  */
 bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aErrorMax,
-                                int aChainingEpsilon, OUTLINE_ERROR_HANDLER* aErrorHandler,
-                                bool aAllowUseArcsInPolygons )
+                                int aChainingEpsilon, OUTLINE_ERROR_HANDLER* aErrorHandler )
 {
     PCB_TYPE_COLLECTOR  items;
     bool                success = false;
@@ -646,7 +650,7 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aE
                                                false,
                                                // don't report errors here; the second pass also
                                                // gets an opportunity to use these segments
-                                               nullptr, aAllowUseArcsInPolygons );
+                                               nullptr );
 
             // Here, we test to see if we should make holes or outlines.  Holes are made if the footprint
             // has copper outside of a single, closed outline.  If there are multiple outlines, we assume
@@ -684,7 +688,7 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aE
     if( segList.size() )
     {
         success = ConvertOutlineToPolygon( segList, aOutlines, aErrorMax, aChainingEpsilon,
-                                           true, aErrorHandler, aAllowUseArcsInPolygons );
+                                           true, aErrorHandler );
     }
 
     if( !success || !aOutlines.OutlineCount() )

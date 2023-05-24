@@ -2013,14 +2013,13 @@ ZONE* BOARD::AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode, PCB_LAYER_
 
 
 bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
-                                     OUTLINE_ERROR_HANDLER* aErrorHandler,
-                                     bool aAllowUseArcsInPolygons )
+                                     OUTLINE_ERROR_HANDLER* aErrorHandler )
 {
     // max dist from one endPt to next startPt: use the current value
     int chainingEpsilon = GetOutlinesChainingEpsilon();
 
     bool success = BuildBoardPolygonOutlines( this, aOutlines, GetDesignSettings().m_MaxError,
-                                              chainingEpsilon, aErrorHandler, aAllowUseArcsInPolygons );
+                                              chainingEpsilon, aErrorHandler );
 
     // Make polygon strictly simple to avoid issues (especially in 3D viewer)
     aOutlines.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
