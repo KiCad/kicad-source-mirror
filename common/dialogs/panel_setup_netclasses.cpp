@@ -119,8 +119,10 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( wxWindow* aParentWindow, EDA_DRA
         // as this initial width is sometimes strange depending on the language (wxGrid bug?)
         int const min_width =  m_netclassGrid->GetVisibleWidth( i, true, true );
 
-        int const weighted_min_best_width = ( i == GRID_LINESTYLE ) ? min_best_width * 3 / 2
-                                                                    : min_best_width;
+        int const weighted_min_best_width =
+                        ( i == GRID_LINESTYLE )
+                        ? min_best_width * 3 / 2
+                        : min_best_width;
 
         m_netclassGrid->SetColMinimalWidth( i, min_width );
 
@@ -170,6 +172,7 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( wxWindow* aParentWindow, EDA_DRA
 
     m_netclassGrid->SetAutoEvalCols( { GRID_WIREWIDTH,
                                        GRID_BUSWIDTH,
+
                                        GRID_CLEARANCE,
                                        GRID_TRACKSIZE,
                                        GRID_VIASIZE,
@@ -321,8 +324,6 @@ bool PANEL_SETUP_NETCLASSES::TransferDataToWindow()
         m_assignmentGrid->SetCellValue( row, 1, netclassName );
         row++;
     }
-
-    AdjustAssignmentGridColumns( GetSize().x * 3 / 5 );
 
     return true;
 }
@@ -650,15 +651,16 @@ void PANEL_SETUP_NETCLASSES::AdjustAssignmentGridColumns( int aWidth )
     // Account for scroll bars
     aWidth -= ( m_assignmentGrid->GetSize().x - m_assignmentGrid->GetClientSize().x );
 
-    int classNameWidth = 160;
-    m_assignmentGrid->SetColSize( 1, classNameWidth );
+    // Set className column width to original className width from netclasses grid
+    int classNameWidth = m_originalColWidths[ 0 ];
+    m_assignmentGrid->SetColSize( 1, m_originalColWidths[ 0 ] );
     m_assignmentGrid->SetColSize( 0, std::max( aWidth - classNameWidth, classNameWidth ) );
 }
 
 
 void PANEL_SETUP_NETCLASSES::OnSizeAssignmentGrid( wxSizeEvent& event )
 {
-    AdjustAssignmentGridColumns( event.GetSize().GetX() );
+    AdjustAssignmentGridColumns( event.GetSize().GetX());
 
     event.Skip();
 }
