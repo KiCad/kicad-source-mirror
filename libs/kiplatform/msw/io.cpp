@@ -73,7 +73,6 @@ FILE* KIPLATFORM::IO::SeqFOpen( const wxString& aPath, const wxString& aMode )
 bool KIPLATFORM::IO::DuplicatePermissions( const wxString &aSrc, const wxString &aDest )
 {
     bool retval = false;
-    PSECURITY_DESCRIPTOR pSD = nullptr;
     DWORD dwSize = 0;
 
     // Retrieve the security descriptor from the source file
@@ -81,7 +80,15 @@ bool KIPLATFORM::IO::DuplicatePermissions( const wxString &aSrc, const wxString 
             OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION,
             NULL, 0, &dwSize ) )
     {
-        pSD = static_cast<PSECURITY_DESCRIPTOR>( new BYTE[dwSize] );
+        #ifdef __MINGW32__
+        // pSD is used as PSECURITY_DESCRIPTOR, aka void* pointer
+        // it create an annoying warning on gcc with "delete[] pSD;" :
+        // "warning: deleting 'PSECURITY_DESCRIPTOR' {aka 'void*'} is undefined"
+        // so use a BYTE* pointer (do not cast it to a void pointer)
+        BYTE* pSD = new BYTE[dwSize];
+        #else
+        PSECURITY_DESCRIPTOR pSD = static_cast<PSECURITY_DESCRIPTOR>( new BYTE[dwSize] );
+        #endif
 
         if( !pSD )
             return false;
