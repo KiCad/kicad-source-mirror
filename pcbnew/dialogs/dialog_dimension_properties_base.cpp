@@ -26,7 +26,7 @@ DIALOG_DIMENSION_PROPERTIES_BASE::DIALOG_DIMENSION_PROPERTIES_BASE( wxWindow* pa
 	gbSizerLeader->SetFlexibleDirection( wxBOTH );
 	gbSizerLeader->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_lblLeaderValue = new wxStaticText( m_sizerLeader->GetStaticBox(), wxID_ANY, _("Value:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lblLeaderValue = new wxStaticText( m_sizerLeader->GetStaticBox(), wxID_ANY, _("Text:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lblLeaderValue->Wrap( -1 );
 	gbSizerLeader->Add( m_lblLeaderValue, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
