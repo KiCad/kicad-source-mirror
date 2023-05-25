@@ -32,6 +32,7 @@
 #include <confirm.h>
 #include <gestfich.h>
 #include <kiplatform/environment.h>
+#include <kiplatform/io.h>
 #include <kiway.h>
 #include <tool/tool_manager.h>
 #include <tools/kicad_manager_actions.h>

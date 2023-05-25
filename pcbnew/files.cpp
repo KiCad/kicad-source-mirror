@@ -23,6 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <string>
+
 #include <confirm.h>
 #include <core/arraydim.h>
 #include <gestfich.h>
@@ -57,12 +59,13 @@
 #include <plugins/cadstar/cadstar_pcb_archive_plugin.h>
 #include <plugins/kicad/pcb_plugin.h>
 #include <dialogs/dialog_imported_layers.h>
-#include <string>
 #include <tools/pcb_actions.h>
 #include "footprint_info_impl.h"
 #include "board_commit.h"
 #include "zone_filler.h"
 #include <wx_filename.h>  // For ::ResolvePossibleSymlinks()
+
+#include <kiplatform/io.h>
 
 #include <wx/wupdlock.h>
 #include <wx/filedlg.h>
@@ -1092,6 +1095,9 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
 
         return false;
     }
+
+    // Preserve the permissions of the current file
+    KIPLATFORM::IO::DuplicatePermissions( pcbFileName.GetFullPath(), tempFile );
 
     // If save succeeded, replace the original with what we just wrote
     if( !wxRenameFile( tempFile, pcbFileName.GetFullPath() ) )

@@ -69,3 +69,41 @@ FILE* KIPLATFORM::IO::SeqFOpen( const wxString& aPath, const wxString& aMode )
     return wxFopen( aPath, aMode );
 #endif
 }
+
+bool KIPLATFORM::IO::DuplicatePermissions( const wxString &aSrc, const wxString &aDest )
+{
+    bool retval = false;
+    PSECURITY_DESCRIPTOR pSD = nullptr;
+    DWORD dwSize = 0;
+
+    // Retrieve the security descriptor from the source file
+    if( GetFileSecurity( sourceFilePath.wc_str(),
+            OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION,
+            NULL, 0, &dwSize ) )
+    {
+        pSD = static_cast<PSECURITY_DESCRIPTOR>( new BYTE[dwSize] );
+
+        if( !pSD )
+            return false;
+
+        if( !GetFileSecurity( sourceFilePath.wc_str(),
+                OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION
+                        | DACL_SECURITY_INFORMATION, pSD, dwSize, &dwSize ) )
+        {
+            delete[] pSD;
+            return false;
+        }
+
+        // Assign the retrieved security descriptor to the destination file
+        if( !SetFileSecurity( destFilePath.wc_str(),
+                OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION
+                        | DACL_SECURITY_INFORMATION, pSD ) )
+        {
+            retval = false;
+        }
+
+        delete[] pSD;
+    }
+
+    return retval;
+}

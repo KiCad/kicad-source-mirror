@@ -37,6 +37,13 @@ namespace IO
      * to say linux and it's posix_fadvise
      */
     FILE* SeqFOpen( const wxString& aPath, const wxString& mode );
+
+    /**
+     * Duplicates the file security data from one file to another ensuring that they are
+     * the same between both.  This assumes that the user has permission to set #aDest
+     * @return true if the process was successful
+     */
+    bool DuplicatePermissions( const wxString& aSrc, const wxString& aDest );
 } // namespace IO
 } // namespace KIPLATFORM
 
