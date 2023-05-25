@@ -1179,10 +1179,6 @@ bool SCH_SYMBOL::ResolveTextVar( wxString* token, int aDepth, const SCH_SHEET_PA
         {
             if( i == REFERENCE_FIELD )
                 *token = GetRef( &schematic->CurrentSheet(), true );
-            else if( i == VALUE_FIELD )
-                *token = GetValueFieldText( true, aPath, false );
-            else if( i == FOOTPRINT_FIELD )
-                *token = GetFootprintFieldText( true, aPath, false );
             else
                 *token = m_fields[ i ].GetShownText( aPath, false, aDepth + 1 );
 
