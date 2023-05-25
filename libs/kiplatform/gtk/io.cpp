@@ -23,6 +23,8 @@
 #include <wx/string.h>
 
 #include <fcntl.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 FILE* KIPLATFORM::IO::SeqFOpen( const wxString& aPath, const wxString& aMode )
 {
@@ -31,4 +33,27 @@ FILE* KIPLATFORM::IO::SeqFOpen( const wxString& aPath, const wxString& aMode )
     posix_fadvise( fileno( fp ), 0, 0, POSIX_FADV_SEQUENTIAL );
 
     return fp;
+}
+
+bool KIPLATFORM::IO::DuplicatePermissions( const wxString &aSrc, const wxString &aDest )
+{
+    struct stat sourceStat;
+    if( stat( aSrc.fn_str(), &sourceStat ) == 0 )
+    {
+        mode_t permissions = sourceStat.st_mode & ( S_IRWXU | S_IRWXG | S_IRWXO );
+        if( chmod( aDest.fn_str(), permissions ) == 0 )
+        {
+            return true;
+        }
+        else
+        {
+            // Handle error
+            return false;
+        }
+    }
+    else
+    {
+        // Handle error
+        return false;
+    }
 }

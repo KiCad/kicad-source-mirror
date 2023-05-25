@@ -38,6 +38,7 @@
 
 #include <footprint.h>
 #include <pad.h>
+#include <kiplatform/io.h>
 
 #include "step_pcb_model.h"
 #include "streamwrapper.h"
@@ -733,6 +734,10 @@ bool STEP_PCB_MODEL::WriteSTEP( const wxString& aFileName )
 
     if( success )
     {
+
+        // Preserve the permissions of the current file
+        KIPLATFORM::IO::DuplicatePermissions( fn.GetFullPath(), tmpfname );
+
         if( !wxRenameFile( tmpfname, fn.GetFullName(), true ) )
         {
             ReportMessage( wxString::Format( wxT( "Cannot rename temporary file '%s' to '%s'.\n" ),

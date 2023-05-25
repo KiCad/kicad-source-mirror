@@ -69,6 +69,8 @@
 #include <widgets/wx_progress_reporters.h>
 #include <widgets/wx_html_report_box.h>
 
+#include <kiplatform/io.h>
+
 #if wxCHECK_VERSION( 3, 1, 7 )
 #include "widgets/filedlg_hook_save_project.h"
 #else
@@ -727,6 +729,8 @@ bool SCH_EDIT_FRAME::saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSave
 
     if( success )
     {
+        // Preserve the permissions of the current file
+        KIPLATFORM::IO::DuplicatePermissions( schematicFileName.GetFullPath(), tempFile );
         // Replace the original with the temporary file we just wrote
         success = wxRenameFile( tempFile, schematicFileName.GetFullPath() );
 

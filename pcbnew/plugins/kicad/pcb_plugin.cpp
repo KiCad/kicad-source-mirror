@@ -57,6 +57,8 @@
 #include <zone.h>
 #include <zones.h>
 
+#include <kiplatform/io.h>
+
 // For some reason wxWidgets is built with wxUSE_BASE64 unset so expose the wxWidgets
 // base64 code. Needed for PCB_BITMAP
 #define wxUSE_BASE64 1
@@ -130,6 +132,9 @@ void FP_CACHE::Save( FOOTPRINT* aFootprint )
         // Even on Linux you can see an _intermittent_ error when calling wxRename(),
         // and it is fully inexplicable.  See if this dodges the error.
         wxMilliSleep( 250L );
+
+        // Preserve the permissions of the current file
+        KIPLATFORM::IO::DuplicatePermissions( fn.GetFullPath(), tempFileName );
 
         if( !wxRenameFile( tempFileName, fn.GetFullPath() ) )
         {

@@ -63,6 +63,7 @@
 #include <wx/stdpaths.h>
 #include <wx/string.h>
 #include <kiplatform/app.h>
+#include <kiplatform/io.h>
 #include <kiplatform/ui.h>
 
 #include <functional>
@@ -1303,6 +1304,9 @@ void EDA_BASE_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName )
     // the file name.
     if( response == wxYES )
     {
+        // Preserve the permissions of the current file
+        KIPLATFORM::IO::DuplicatePermissions( aFileName.GetFullPath(), autoSaveFileName.GetFullPath() );
+
         if( !wxRenameFile( autoSaveFileName.GetFullPath(), aFileName.GetFullPath() ) )
         {
             wxMessageBox( _( "The auto save file could not be renamed to the board file name." ),

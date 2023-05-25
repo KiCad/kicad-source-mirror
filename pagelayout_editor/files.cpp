@@ -32,6 +32,8 @@
 #include <widgets/wx_infobar.h>
 #include <wildcards_and_files_ext.h>
 
+#include <kiplatform/io.h>
+
 #include "pl_editor_frame.h"
 #include "pl_editor_id.h"
 #include "properties_frame.h"
@@ -306,6 +308,9 @@ bool PL_EDITOR_FRAME::SaveDrawingSheetFile( const wxString& aFullFileName )
 
             return false;
         }
+
+        // Preserve the permissions of the current file
+        KIPLATFORM::IO::DuplicatePermissions( aFullFileName, tempFile );
 
         if( !wxRenameFile( tempFile, aFullFileName ) )
             return false;

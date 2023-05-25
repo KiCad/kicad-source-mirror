@@ -34,6 +34,8 @@
 #include <thread_pool.h>
 #include <wildcards_and_files_ext.h>
 
+#include <kiplatform/io.h>
+
 #include <wx/textfile.h>
 #include <wx/txtstrm.h>
 #include <wx/wfstream.h>
@@ -336,6 +338,9 @@ void FOOTPRINT_LIST_IMPL::WriteCacheToFile( const wxString& aFilePath )
 
     txtStream.Flush();
     outStream.Close();
+
+    // Preserve the permissions of the current file
+    KIPLATFORM::IO::DuplicatePermissions( aFilePath, tmpFileName.GetFullPath() );
 
     if( !wxRenameFile( tmpFileName.GetFullPath(), aFilePath, true ) )
     {
