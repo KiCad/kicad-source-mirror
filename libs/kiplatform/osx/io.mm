@@ -29,7 +29,8 @@ FILE* KIPLATFORM::IO::SeqFOpen( const wxString& aPath, const wxString& aMode )
     return wxFopen( aPath, aMode );
 }
 
-bool AssignPermissions(const wxString& sourceFilePath, const wxString& destFilePath) 
+
+bool KIPLATFORM::IO::DuplicatePermissions(const wxString& sourceFilePath, const wxString& destFilePath)
 {
     NSString *sourcePath = [NSString stringWithUTF8String:sourceFilePath.utf8_str()];
     NSString *destPath = [NSString stringWithUTF8String:destFilePath.utf8_str()];
