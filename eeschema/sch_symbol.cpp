@@ -1250,10 +1250,6 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
         {
             if( i == REFERENCE_FIELD )
                 *token = GetRef( aPath, true );
-            else if( i == VALUE_FIELD )
-                *token = GetValueFieldText( true, aPath, false );
-            else if( i == FOOTPRINT_FIELD )
-                *token = GetFootprintFieldText( true, aPath, false );
             else
                 *token = m_fields[ i ].GetShownText( aPath, false, aDepth + 1 );
 
