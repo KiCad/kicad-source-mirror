@@ -77,7 +77,7 @@ bool KIPLATFORM::IO::DuplicatePermissions( const wxString &aSrc, const wxString 
     DWORD dwSize = 0;
 
     // Retrieve the security descriptor from the source file
-    if( GetFileSecurity( sourceFilePath.wc_str(),
+    if( GetFileSecurity( aSrc.wc_str(),
             OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION,
             NULL, 0, &dwSize ) )
     {
@@ -86,7 +86,7 @@ bool KIPLATFORM::IO::DuplicatePermissions( const wxString &aSrc, const wxString 
         if( !pSD )
             return false;
 
-        if( !GetFileSecurity( sourceFilePath.wc_str(),
+        if( !GetFileSecurity( aSrc.wc_str(),
                 OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION
                         | DACL_SECURITY_INFORMATION, pSD, dwSize, &dwSize ) )
         {
@@ -95,7 +95,7 @@ bool KIPLATFORM::IO::DuplicatePermissions( const wxString &aSrc, const wxString 
         }
 
         // Assign the retrieved security descriptor to the destination file
-        if( !SetFileSecurity( destFilePath.wc_str(),
+        if( !SetFileSecurity( aDest.wc_str(),
                 OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION
                         | DACL_SECURITY_INFORMATION, pSD ) )
         {
