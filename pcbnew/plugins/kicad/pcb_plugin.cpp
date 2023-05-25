@@ -23,39 +23,35 @@
  */
 
 #include <advanced_config.h>
-#include <base_units.h>
 #include <board.h>
 #include <board_design_settings.h>
 #include <confirm.h>
 #include <convert_basic_shapes_to_polygon.h> // for enum RECT_CHAMFER_POSITIONS definition
-#include <core/arraydim.h>
-#include <pcb_dimension.h>
-#include <footprint.h>
 #include <string_utils.h>
 #include <kiface_base.h>
 #include <locale_io.h>
 #include <macros.h>
+#include <callback_gal.h>
 #include <pad.h>
+#include <footprint.h>
 #include <pcb_group.h>
 #include <pcb_shape.h>
+#include <pcb_dimension.h>
 #include <pcb_bitmap.h>
 #include <pcb_target.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
+#include <pcb_track.h>
+#include <zone.h>
 #include <pcbnew_settings.h>
 #include <pgm_base.h>
 #include <plugins/kicad/pcb_plugin.h>
 #include <plugins/kicad/pcb_parser.h>
 #include <trace_helpers.h>
-#include <pcb_track.h>
 #include <progress_reporter.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/dir.h>
 #include <wx/log.h>
-#include <zone.h>
-#include <zones.h>
-
-#include <kiplatform/io.h>
 
 // For some reason wxWidgets is built with wxUSE_BASE64 unset so expose the wxWidgets
 // base64 code. Needed for PCB_BITMAP
@@ -493,54 +489,18 @@ void PCB_PLUGIN::formatRenderCache( const EDA_TEXT* aText, int aNestLevel ) cons
                   m_out->Quotew( resolvedText ).c_str(),
                   EDA_UNIT_UTILS::FormatAngle( aText->GetDrawRotation() ).c_str() );
 
-    for( const std::unique_ptr<KIFONT::GLYPH>& baseGlyph : *cache )
-    {
-        // A glyph is not aways a polygon. it can be a stroke (for instance a text with overbar)
-        // we save only polygons from cache
-        // So convert any stroke to a polygon
-        if( baseGlyph->IsStroke() )
-        {
-            const KIFONT::STROKE_GLYPH& strokeGlyph = static_cast<const KIFONT::STROKE_GLYPH&>( *baseGlyph );
+    KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
 
-            for( const std::vector<VECTOR2D>& points : strokeGlyph )
-            {
-                SHAPE_LINE_CHAIN outline;
-
-                for( size_t idx = 0; idx < points.size(); idx++ )
-                    outline.Append( (int)points[idx].x, (int)points[idx].y );
-
-                for( int idx = 1; idx < outline.PointCount(); idx++ )
-                {
-                    SHAPE_POLY_SET buffer;
-                    TransformOvalToPolygon( buffer, outline.CPoint( idx-1 ), outline.CPoint( idx ),
-                                            aText->GetTextThickness(), ARC_LOW_DEF, ERROR_INSIDE );
-
-                    m_out->Print( aNestLevel + 1, "(polygon\n" );
-                    formatPolyPts( buffer.Outline(0), aNestLevel + 2, true );
-                    m_out->Print( aNestLevel + 1, ")\n" );
-                }
-            }
-
-            continue;
-        }
-
-        KIFONT::OUTLINE_GLYPH* glyph = static_cast<KIFONT::OUTLINE_GLYPH*>( baseGlyph.get() );
-
-        if( glyph->OutlineCount() > 0 )
-        {
-            for( int ii = 0; ii < glyph->OutlineCount(); ++ii )
+    CALLBACK_GAL callback_gal( empty_opts,
+            // Polygon callback
+            [&]( const SHAPE_LINE_CHAIN& aPoly )
             {
                 m_out->Print( aNestLevel + 1, "(polygon\n" );
-
-                formatPolyPts( glyph->Outline( ii ), aNestLevel + 1, true );
-
-                for( int jj = 0; jj < glyph->HoleCount( ii ); ++jj )
-                    formatPolyPts( glyph->Hole( ii, jj ), aNestLevel + 2, true );
-
+                formatPolyPts( aPoly, aNestLevel + 1, true );
                 m_out->Print( aNestLevel + 1, ")\n" );
-            }
-        }
-    }
+            } );
+
+    callback_gal.DrawGlyphs( *cache );
 
     m_out->Print( aNestLevel, ")\n" );
 }
