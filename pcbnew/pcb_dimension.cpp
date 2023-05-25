@@ -1337,28 +1337,52 @@ static struct DIMENSION_DESC
 
         const wxString groupDimension = _HKI( "Dimension Properties" );
 
+        auto isLeader =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    return dynamic_cast<PCB_DIM_LEADER*>( aItem ) != nullptr;
+                };
+
+        auto isNotLeader =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+            return dynamic_cast<PCB_DIM_LEADER*>( aItem ) == nullptr;
+                };
+
         propMgr.AddProperty( new PROPERTY<PCB_DIMENSION_BASE, wxString>( _HKI( "Prefix" ),
                 &PCB_DIMENSION_BASE::ChangePrefix, &PCB_DIMENSION_BASE::GetPrefix ),
-                groupDimension );
+                groupDimension )
+                .SetAvailableFunc( isNotLeader );
         propMgr.AddProperty( new PROPERTY<PCB_DIMENSION_BASE, wxString>( _HKI( "Suffix" ),
                 &PCB_DIMENSION_BASE::ChangeSuffix, &PCB_DIMENSION_BASE::GetSuffix ),
-                groupDimension );
+                groupDimension )
+                .SetAvailableFunc( isNotLeader );
         propMgr.AddProperty( new PROPERTY<PCB_DIMENSION_BASE, wxString>( _HKI( "Override Text" ),
                 &PCB_DIMENSION_BASE::ChangeOverrideText, &PCB_DIMENSION_BASE::GetOverrideText ),
-                groupDimension );
+                groupDimension )
+                .SetAvailableFunc( isNotLeader );
+
+        propMgr.AddProperty( new PROPERTY<PCB_DIMENSION_BASE, wxString>( _HKI( "Text" ),
+                &PCB_DIMENSION_BASE::ChangeOverrideText, &PCB_DIMENSION_BASE::GetOverrideText ),
+                groupDimension )
+                .SetAvailableFunc( isLeader );
 
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_DIMENSION_BASE, DIM_UNITS_MODE>( _HKI( "Units" ),
                 &PCB_DIMENSION_BASE::ChangeUnitsMode, &PCB_DIMENSION_BASE::GetUnitsMode ),
-                groupDimension );
+                groupDimension )
+                .SetAvailableFunc( isNotLeader );
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_DIMENSION_BASE, DIM_UNITS_FORMAT>( _HKI( "Units Format" ),
                 &PCB_DIMENSION_BASE::ChangeUnitsFormat, &PCB_DIMENSION_BASE::GetUnitsFormat ),
-                groupDimension );
+                groupDimension )
+                .SetAvailableFunc( isNotLeader );
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_DIMENSION_BASE, DIM_PRECISION>( _HKI( "Precision" ),
                 &PCB_DIMENSION_BASE::ChangePrecision, &PCB_DIMENSION_BASE::GetPrecision ),
-                groupDimension );
+                groupDimension )
+                .SetAvailableFunc( isNotLeader );
         propMgr.AddProperty( new PROPERTY<PCB_DIMENSION_BASE, bool>( _HKI( "Suppress Trailing Zeroes" ),
                 &PCB_DIMENSION_BASE::ChangeSuppressZeroes, &PCB_DIMENSION_BASE::GetSuppressZeroes ),
-                groupDimension );
+                groupDimension )
+                .SetAvailableFunc( isNotLeader );
     }
 } _DIMENSION_DESC;
 
@@ -1397,10 +1421,19 @@ static struct ALIGNED_DIMENSION_DESC
                                       _HKI( "Visible" ),
                                       []( INSPECTABLE* aItem ) { return false; } );
         propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ALIGNED ), TYPE_HASH( EDA_TEXT ),
-                                      _HKI( "Knockout" ),
+                                      _HKI( "Text" ),
+                                      []( INSPECTABLE* aItem ) { return false; } );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ALIGNED ), TYPE_HASH( EDA_TEXT ),
+                                      _HKI( "Vertical Justification" ),
                                       []( INSPECTABLE* aItem ) { return false; } );
         propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ALIGNED ), TYPE_HASH( EDA_TEXT ),
                                       _HKI( "Hyperlink" ),
+                                      []( INSPECTABLE* aItem ) { return false; } );
+
+        // This is actually defined on PCB_TEXT, but using PCB_TEXT as the base-class doesn't
+        // work, while using BOARD_ITEM does.  ???
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ALIGNED ), TYPE_HASH( BOARD_ITEM ),
+                                      _HKI( "Knockout" ),
                                       []( INSPECTABLE* aItem ) { return false; } );
     }
 } ALIGNED_DIMENSION_DESC;
@@ -1423,14 +1456,23 @@ static struct ORTHOGONAL_DIMENSION_DESC
         propMgr.InheritsAfter( TYPE_HASH( PCB_DIM_ORTHOGONAL ), TYPE_HASH( PCB_DIMENSION_BASE ) );
         propMgr.InheritsAfter( TYPE_HASH( PCB_DIM_ORTHOGONAL ), TYPE_HASH( PCB_DIM_ALIGNED ) );
 
-        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ALIGNED ), TYPE_HASH( EDA_TEXT ),
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ORTHOGONAL ), TYPE_HASH( EDA_TEXT ),
                                       _HKI( "Visible" ),
                                       []( INSPECTABLE* aItem ) { return false; } );
-        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ALIGNED ), TYPE_HASH( EDA_TEXT ),
-                                      _HKI( "Knockout" ),
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ORTHOGONAL ), TYPE_HASH( EDA_TEXT ),
+                                      _HKI( "Text" ),
                                       []( INSPECTABLE* aItem ) { return false; } );
-        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ALIGNED ), TYPE_HASH( EDA_TEXT ),
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ORTHOGONAL ), TYPE_HASH( EDA_TEXT ),
+                                      _HKI( "Vertical Justification" ),
+                                      []( INSPECTABLE* aItem ) { return false; } );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ORTHOGONAL ), TYPE_HASH( EDA_TEXT ),
                                       _HKI( "Hyperlink" ),
+                                      []( INSPECTABLE* aItem ) { return false; } );
+
+        // This is actually defined on PCB_TEXT, but using PCB_TEXT as the base-class doesn't
+        // work, while using BOARD_ITEM does.  ???
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ORTHOGONAL ), TYPE_HASH( BOARD_ITEM ),
+                                      _HKI( "Knockout" ),
                                       []( INSPECTABLE* aItem ) { return false; } );
     }
 } ORTHOGONAL_DIMENSION_DESC;
@@ -1458,14 +1500,23 @@ static struct RADIAL_DIMENSION_DESC
                 PROPERTY_DISPLAY::PT_SIZE ),
                 groupDimension );
 
-        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ALIGNED ), TYPE_HASH( EDA_TEXT ),
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_RADIAL ), TYPE_HASH( EDA_TEXT ),
                                       _HKI( "Visible" ),
                                       []( INSPECTABLE* aItem ) { return false; } );
-        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ALIGNED ), TYPE_HASH( EDA_TEXT ),
-                                      _HKI( "Knockout" ),
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_RADIAL ), TYPE_HASH( EDA_TEXT ),
+                                      _HKI( "Text" ),
                                       []( INSPECTABLE* aItem ) { return false; } );
-        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ALIGNED ), TYPE_HASH( EDA_TEXT ),
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_RADIAL ), TYPE_HASH( EDA_TEXT ),
+                                      _HKI( "Vertical Justification" ),
+                                      []( INSPECTABLE* aItem ) { return false; } );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_RADIAL ), TYPE_HASH( EDA_TEXT ),
                                       _HKI( "Hyperlink" ),
+                                      []( INSPECTABLE* aItem ) { return false; } );
+
+        // This is actually defined on PCB_TEXT, but using PCB_TEXT as the base-class doesn't
+        // work, while using BOARD_ITEM does.  ???
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_RADIAL ), TYPE_HASH( BOARD_ITEM ),
+                                      _HKI( "Knockout" ),
                                       []( INSPECTABLE* aItem ) { return false; } );
     }
 } RADIAL_DIMENSION_DESC;
@@ -1501,10 +1552,19 @@ static struct LEADER_DIMENSION_DESC
                                       _HKI( "Visible" ),
                                       []( INSPECTABLE* aItem ) { return false; } );
         propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_LEADER ), TYPE_HASH( EDA_TEXT ),
-                                      _HKI( "Knockout" ),
+                                      _HKI( "Text" ),
+                                      []( INSPECTABLE* aItem ) { return false; } );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_LEADER ), TYPE_HASH( EDA_TEXT ),
+                                      _HKI( "Vertical Justification" ),
                                       []( INSPECTABLE* aItem ) { return false; } );
         propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_LEADER ), TYPE_HASH( EDA_TEXT ),
                                       _HKI( "Hyperlink" ),
+                                      []( INSPECTABLE* aItem ) { return false; } );
+
+        // This is actually defined on PCB_TEXT, but using PCB_TEXT as the base-class doesn't
+        // work, while using BOARD_ITEM does.  ???
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_LEADER ), TYPE_HASH( BOARD_ITEM ),
+                                      _HKI( "Knockout" ),
                                       []( INSPECTABLE* aItem ) { return false; } );
     }
 } LEADER_DIMENSION_DESC;
@@ -1532,10 +1592,19 @@ static struct CENTER_DIMENSION_DESC
                                       _HKI( "Visible" ),
                                       []( INSPECTABLE* aItem ) { return false; } );
         propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_CENTER ), TYPE_HASH( EDA_TEXT ),
-                                      _HKI( "Knockout" ),
+                                      _HKI( "Text" ),
+                                      []( INSPECTABLE* aItem ) { return false; } );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_CENTER ), TYPE_HASH( EDA_TEXT ),
+                                      _HKI( "Vertical Justification" ),
                                       []( INSPECTABLE* aItem ) { return false; } );
         propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_CENTER ), TYPE_HASH( EDA_TEXT ),
                                       _HKI( "Hyperlink" ),
+                                      []( INSPECTABLE* aItem ) { return false; } );
+
+        // This is actually defined on PCB_TEXT, but using PCB_TEXT as the base-class doesn't
+        // work, while using BOARD_ITEM does.  ???
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_CENTER ), TYPE_HASH( BOARD_ITEM ),
+                                      _HKI( "Knockout" ),
                                       []( INSPECTABLE* aItem ) { return false; } );
     }
 } CENTER_DIMENSION_DESC;
