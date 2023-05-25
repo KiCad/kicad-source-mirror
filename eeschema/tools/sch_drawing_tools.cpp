@@ -868,11 +868,11 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                 }
                 else if( evt->IsAction( &EE_ACTIONS::mirrorV ) )
                 {
-                    busItem->MirrorVertically( busItem->GetPosition().x );
+                    busItem->MirrorVertically( busItem->GetPosition().y );
                 }
                 else if( evt->IsAction( &EE_ACTIONS::mirrorH ) )
                 {
-                    busItem->MirrorHorizontally( busItem->GetPosition().y );
+                    busItem->MirrorHorizontally( busItem->GetPosition().x );
                 }
 
                 m_view->ClearPreview();
