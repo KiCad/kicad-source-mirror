@@ -1289,11 +1289,11 @@ bool PNS_KICAD_IFACE_BASE::syncTextItem( PNS::NODE* aWorld, PCB_TEXT* aText, PCB
     solid->SetRoutable( false );
 
     TEXT_ATTRIBUTES attrs = aText->GetAttributes();
-    int             margin = KiROUND( attrs.m_StrokeWidth / 2 );
+    int             margin = 0;
     SHAPE_POLY_SET  cornerBuffer;
 
     if( aText->IsKnockout() )
-        margin += attrs.m_StrokeWidth + GetKnockoutTextMargin( attrs.m_Size, attrs.m_StrokeWidth );
+        margin = GetKnockoutTextMargin( attrs.m_Size, attrs.m_StrokeWidth );
 
     aText->TransformBoundingBoxToPolygon( &cornerBuffer, margin );
 

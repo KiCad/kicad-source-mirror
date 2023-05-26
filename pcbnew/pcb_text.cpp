@@ -261,10 +261,7 @@ void PCB_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 
 int PCB_TEXT::getKnockoutMargin() const
 {
-    VECTOR2I textSize( GetTextWidth(), GetTextHeight() );
-    int      thickness = GetTextThickness();
-
-    return thickness * 1.5 + GetKnockoutTextMargin( textSize, thickness );
+    return GetKnockoutTextMargin( VECTOR2I( GetTextWidth(), GetTextHeight() ), GetTextThickness() );
 }
 
 
@@ -449,7 +446,7 @@ std::shared_ptr<SHAPE> PCB_TEXT::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHIN
         SHAPE_POLY_SET finalPoly;
         int            strokeWidth = GetEffectiveTextPenWidth();
         VECTOR2I       fontSize = GetTextSize();
-        int            margin = strokeWidth * 1.5 + GetKnockoutTextMargin( fontSize, strokeWidth );
+        int            margin = GetKnockoutTextMargin( fontSize, strokeWidth );
 
         TransformBoundingBoxToPolygon( &finalPoly, margin );
         finalPoly.BooleanSubtract( knockouts, SHAPE_POLY_SET::PM_FAST );

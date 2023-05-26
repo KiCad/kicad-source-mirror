@@ -822,9 +822,6 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
     default:                                                       break;
     }
 
-    if( text )
-        aGap += GetKnockoutTextMargin( text->GetTextSize(), text->GetTextThickness() );
-
     switch( aItem->Type() )
     {
     case PCB_SHAPE_T:

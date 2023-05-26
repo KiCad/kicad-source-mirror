@@ -500,6 +500,7 @@ void PCB_PLUGIN::formatRenderCache( const EDA_TEXT* aText, int aNestLevel ) cons
                 m_out->Print( aNestLevel + 1, ")\n" );
             } );
 
+    callback_gal.SetLineWidth( aText->GetTextThickness() );
     callback_gal.DrawGlyphs( *cache );
 
     m_out->Print( aNestLevel, ")\n" );
