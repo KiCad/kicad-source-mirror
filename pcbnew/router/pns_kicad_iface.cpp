@@ -619,6 +619,7 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     }
 
     aSizes.SetTrackWidth( trackWidth );
+    aSizes.SetBoardMinTrackWidth( bds.m_TrackMinWidth );
     aSizes.SetTrackWidthIsExplicit( !bds.m_UseConnectedTrackWidth || bds.m_TempOverrideTrackWidth );
 
     int viaDiameter = bds.m_ViasMinSize;

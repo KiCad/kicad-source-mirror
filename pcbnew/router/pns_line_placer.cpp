@@ -1156,6 +1156,16 @@ void LINE_PLACER::routeStep( const VECTOR2I& aP )
         {
             m_tail = prevTail;
             m_head = prevHead;
+
+            // If we fail to walk out of the initial point (no tail), instead of returning an empty
+            // line, return a zero-length line so that the user gets some feedback that routing is
+            // happening.  This will get pruned later.
+            if( m_tail.PointCount() == 0 )
+            {
+                m_tail.Line().Append( m_p_start );
+                m_tail.Line().Append( m_p_start, true );
+            }
+
             fail = true;
         }
 
@@ -1224,10 +1234,10 @@ bool LINE_PLACER::route( const VECTOR2I& aP )
 {
     routeStep( aP );
 
-    if (!m_head.PointCount() )
+    if( !m_head.PointCount() )
         return false;
 
-    return m_head.CPoint(-1) == aP;
+    return m_head.CPoint( -1 ) == aP;
 }
 
 
@@ -1235,7 +1245,12 @@ const LINE LINE_PLACER::Trace() const
 {
     SHAPE_LINE_CHAIN l( m_tail.CLine() );
     l.Append( m_head.CLine() );
-    l.Simplify();
+
+    // Only simplify if we have more than two points, because if we have a zero-length seg as the
+    // only part of the trace, we don't want it to be removed at this stage (will be the case if
+    // the routing start point violates DRC due to track width in shove/walk mode, for example).
+    if( l.PointCount() > 2 )
+        l.Simplify();
 
     LINE tmp( m_head );
 
@@ -1515,11 +1530,13 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
                 aEndItem->SetNet( m_currentNet );
             }
         }
-
-        // Collisions still prevent fixing unless "Allow DRC violations" is checked
-        if( !Settings().AllowDRCViolations() && m_world->CheckColliding( &pl ) )
-            return false;
     }
+
+    // Collisions still prevent fixing unless "Allow DRC violations" is checked
+    // Note that collisions can occur even in walk/shove modes if the beginning of the trace
+    // collides (for example if the starting track width is too high)
+    if( !Settings().AllowDRCViolations() && m_world->CheckColliding( &pl ) )
+        return false;
 
     const SHAPE_LINE_CHAIN& l = pl.CLine();
 

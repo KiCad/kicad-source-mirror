@@ -318,16 +318,23 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
 
         if( m_world->CheckColliding( &dummyStartLine, ITEM::ANY_T ) )
         {
-            ITEM_SET          dummyStartSet( &dummyStartLine );
-            NODE::ITEM_VECTOR highlightedItems;
+            // If the only reason we collide is track width; it's better to allow the user to start
+            // anyway and just highlight the resulting collisions, so they can change width later.
+            dummyStartLine.SetWidth( m_sizes.BoardMinTrackWidth() );
 
-            markViolations( m_world.get(), dummyStartSet, highlightedItems );
+            if( m_world->CheckColliding( &dummyStartLine, ITEM::ANY_T ) )
+            {
+                ITEM_SET dummyStartSet( &dummyStartLine );
+                NODE::ITEM_VECTOR highlightedItems;
 
-            for( ITEM* item : highlightedItems )
-                m_iface->HideItem( item );
+                markViolations( m_world.get(), dummyStartSet, highlightedItems );
 
-            SetFailureReason( _( "The routing start point violates DRC." ) );
-            return false;
+                for( ITEM* item : highlightedItems )
+                    m_iface->HideItem( item );
+
+                SetFailureReason( _( "The routing start point violates DRC." ) );
+                return false;
+            }
         }
     }
     else if( m_mode == PNS_MODE_ROUTE_DIFF_PAIR )
@@ -372,18 +379,27 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
         if( m_world->CheckColliding( &dummyStartLineA, ITEM::ANY_T )
                 || m_world->CheckColliding( &dummyStartLineB, ITEM::ANY_T ) )
         {
-            ITEM_SET          dummyStartSet;
-            NODE::ITEM_VECTOR highlightedItems;
+            // If the only reason we collide is track width; it's better to allow the user to start
+            // anyway and just highlight the resulting collisions, so they can change width later.
+            dummyStartLineA.SetWidth( m_sizes.BoardMinTrackWidth() );
+            dummyStartLineB.SetWidth( m_sizes.BoardMinTrackWidth() );
 
-            dummyStartSet.Add( dummyStartLineA );
-            dummyStartSet.Add( dummyStartLineB );
-            markViolations( m_world.get(), dummyStartSet, highlightedItems );
+            if( m_world->CheckColliding( &dummyStartLineA, ITEM::ANY_T )
+                || m_world->CheckColliding( &dummyStartLineB, ITEM::ANY_T ) )
+            {
+                ITEM_SET          dummyStartSet;
+                NODE::ITEM_VECTOR highlightedItems;
 
-            for( ITEM* item : highlightedItems )
-                m_iface->HideItem( item );
+                dummyStartSet.Add( dummyStartLineA );
+                dummyStartSet.Add( dummyStartLineB );
+                markViolations( m_world.get(), dummyStartSet, highlightedItems );
 
-            SetFailureReason( _( "The routing start point violates DRC." ) );
-            return false;
+                for( ITEM* item : highlightedItems )
+                    m_iface->HideItem( item );
+
+                SetFailureReason( _( "The routing start point violates DRC." ) );
+                return false;
+            }
         }
     }
 
@@ -696,8 +712,7 @@ void ROUTER::updateView( NODE* aNode, ITEM_SET& aCurrent, bool aDragging )
     if( !aNode )
         return;
 
-    if( Settings().Mode() == RM_MarkObstacles || m_forceMarkObstaclesMode )
-        markViolations( aNode, aCurrent, removed );
+    markViolations( aNode, aCurrent, removed );
 
     aNode->GetUpdatedItems( removed, added );
 

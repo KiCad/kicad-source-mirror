@@ -73,6 +73,9 @@ public:
     bool TrackWidthIsExplicit() const { return m_trackWidthIsExplicit; }
     void SetTrackWidthIsExplicit( bool aIsExplicit ) { m_trackWidthIsExplicit = aIsExplicit; }
 
+    int BoardMinTrackWidth() const { return m_boardMinTrackWidth; }
+    void SetBoardMinTrackWidth( int aWidth ) { m_boardMinTrackWidth = aWidth; }
+
     int DiffPairWidth() const { return m_diffPairWidth; }
     int DiffPairGap() const { return m_diffPairGap; }
 
@@ -135,6 +138,7 @@ private:
     int     m_minClearance;
     int     m_trackWidth;
     bool    m_trackWidthIsExplicit;
+    int     m_boardMinTrackWidth;
 
     VIATYPE m_viaType;
     int     m_viaDiameter;

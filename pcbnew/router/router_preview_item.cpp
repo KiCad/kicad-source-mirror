@@ -214,7 +214,22 @@ void ROUTER_PREVIEW_ITEM::drawLineChain( const SHAPE_LINE_CHAIN_BASE* aL, KIGFX:
     gal->SetIsFill( false );
 
     for( int s = 0; s < aL->GetSegmentCount(); s++ )
-        gal->DrawLine( aL->GetSegment( s ).A, aL->GetSegment( s ).B );
+    {
+        SEG seg = aL->GetSegment( s );
+
+        if( seg.A == seg.B )
+        {
+            gal->SetIsFill( true );
+            gal->SetIsStroke( false );
+            gal->DrawCircle( seg.A, gal->GetLineWidth() / 2 );
+            gal->SetIsFill( false );
+            gal->SetIsStroke( true );
+        }
+        else
+        {
+            gal->DrawLine( seg.A, seg.B );
+        }
+    }
 
     const SHAPE_LINE_CHAIN* lineChain = dynamic_cast<const SHAPE_LINE_CHAIN*>( aL );
 
