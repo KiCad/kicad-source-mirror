@@ -188,6 +188,8 @@ set( EESCHEMA_SIM_SRCS
     sim/sim_model_kibis.cpp
     sim/sim_model_ngspice.cpp
     sim/sim_model_ngspice_data_bjt.cpp
+    sim/sim_model_ngspice_data_bsim1.cpp
+    sim/sim_model_ngspice_data_bsim2.cpp
     sim/sim_model_ngspice_data_bsim3.cpp
     sim/sim_model_ngspice_data_bsim4.cpp
     sim/sim_model_ngspice_data_b3soi.cpp
@@ -199,6 +201,7 @@ set( EESCHEMA_SIM_SRCS
     sim/sim_model_ngspice_data_jfet.cpp
     sim/sim_model_ngspice_data_mes.cpp
     sim/sim_model_ngspice_data_mos.cpp
+    sim/sim_model_ngspice_data_mos6.cpp
     sim/sim_model_ngspice_data_mos9.cpp
     sim/sim_model_ngspice_data_vbic.cpp
     sim/sim_model_r_pot.cpp

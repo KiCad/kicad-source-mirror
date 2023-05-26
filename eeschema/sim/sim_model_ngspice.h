@@ -126,6 +126,8 @@ struct NGSPICE_MODEL_INFO_MAP
 
 private:
     void addBJT();
+    void addBSIM1();
+    void addBSIM2();
     void addBSIM3();
     void addBSIM4();
     void addB3SOI();
@@ -137,6 +139,7 @@ private:
     void addJFET();
     void addMES();
     void addMOS();
+    void addMOS6();
     void addMOS9();
     void addVBIC();
 };

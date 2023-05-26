@@ -310,6 +310,8 @@ NGSPICE_MODEL_INFO_MAP::NGSPICE_MODEL_INFO_MAP()
 {
     modelInfos[SIM_MODEL_NGSPICE::MODEL_TYPE::NONE] = {};
     addBJT();
+    addBSIM1();
+    addBSIM2();
     addBSIM3();
     addBSIM4();
     addB3SOI();
@@ -321,6 +323,7 @@ NGSPICE_MODEL_INFO_MAP::NGSPICE_MODEL_INFO_MAP()
     addJFET();
     addMES();
     addMOS();
+    addMOS6();
     addMOS9();
     addVBIC();
 }
