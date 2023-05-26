@@ -28,7 +28,7 @@
 #include <mutex>
 #include <unordered_map>
 
-#include <wx/font.h>
+#include <macros.h>
 #include <string_utils.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <font/stroke_font.h>
@@ -36,11 +36,9 @@
 #include <trigo.h>
 #include <markup_parser.h>
 
-// The "official" name of the building Kicad stroke font (always existing)
+// The "official" name of the Kicad stroke font (always existing)
 #include <font/kicad_font_name.h>
-#include "macros.h"
-#include "wx/tokenzr.h"
-
+#include <wx/tokenzr.h>
 
 // markup_parser.h includes pegtl.hpp which includes windows.h... which leaks #define DrawText
 #undef DrawText
@@ -180,7 +178,7 @@ void FONT::getLinePositions( const wxString& aText, const VECTOR2I& aPosition,
     {
         VECTOR2I pos( aPosition.x, aPosition.y + i * interline );
         VECTOR2I end = boundingBoxSingleLine( nullptr, aTextLines[i], pos, aAttrs.m_Size,
-                                                aAttrs.m_Italic );
+                                              aAttrs.m_Italic );
         VECTOR2I bBox( end - pos );
 
         aExtents.push_back( bBox );
@@ -397,7 +395,6 @@ void FONT::drawSingleLineText( KIGFX::GAL* aGal, BOX2I* aBoundingBox, const wxSt
 
     TEXT_STYLE_FLAGS textStyle = 0;
 
-
     if( aItalic )
         textStyle |= TEXT_STYLE::ITALIC;
 
@@ -427,7 +424,7 @@ VECTOR2I FONT::StringBoundaryLimits( const wxString& aText, const VECTOR2I& aSiz
         textStyle |= TEXT_STYLE::ITALIC;
 
     (void) drawMarkup( &boundingBox, nullptr, aText, VECTOR2I(), aSize, ANGLE_0, false, VECTOR2I(),
-            textStyle );
+                       textStyle );
 
     if( IsStroke() )
     {
@@ -453,7 +450,7 @@ VECTOR2I FONT::boundingBoxSingleLine( BOX2I* aBBox, const wxString& aText,
         textStyle |= TEXT_STYLE::ITALIC;
 
     VECTOR2I extents = drawMarkup( aBBox, nullptr, aText, aPosition, aSize, ANGLE_0, false,
-            VECTOR2I(), textStyle );
+                                   VECTOR2I(), textStyle );
 
     return extents;
 }

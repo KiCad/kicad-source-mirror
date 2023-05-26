@@ -347,13 +347,11 @@ bool SCH_PAINTER::isUnitAndConversionShown( const LIB_ITEM* aItem ) const
 
 KIFONT::FONT* SCH_PAINTER::getFont( const EDA_TEXT* aItem ) const
 {
-    KIFONT::FONT* retval = aItem->GetFont();
+    if( KIFONT::FONT* font = aItem->GetFont() )
+        return font;
 
-    if( !retval )
-        retval = KIFONT::FONT::GetFont( m_schSettings.GetDefaultFont(), aItem->IsBold(),
-                aItem->IsItalic() );
-
-    return retval;
+    return KIFONT::FONT::GetFont( m_schSettings.GetDefaultFont(), aItem->IsBold(),
+                                  aItem->IsItalic() );
 }
 
 
