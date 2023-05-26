@@ -133,6 +133,9 @@ void LIB_TEXT::MoveTo( const VECTOR2I& newPosition )
 
 void LIB_TEXT::NormalizeJustification( bool inverse )
 {
+    if( GetHorizJustify() == GR_TEXT_H_ALIGN_CENTER && GetVertJustify() == GR_TEXT_V_ALIGN_CENTER )
+        return;
+
     VECTOR2I delta( 0, 0 );
     BOX2I    bbox = GetTextBox();
 

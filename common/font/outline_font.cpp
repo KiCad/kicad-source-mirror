@@ -362,6 +362,9 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox,
 
     VECTOR2I cursor( 0, 0 );
 
+    if( aGlyphs )
+        aGlyphs->reserve( glyphCount );
+
     for( unsigned int i = 0; i < glyphCount; i++ )
     {
         // Don't process glyphs that were already included in a previous cluster
@@ -402,6 +405,8 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox,
             {
                 GLYPH_POINTS     points = c.m_Points;
                 SHAPE_LINE_CHAIN shape;
+
+                shape.ReservePoints( points.size() );
 
                 for( const VECTOR2D& v : points )
                 {
@@ -446,13 +451,6 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox,
                     }
                 }
             }
-
-            // FONT TODO we might not want to do Fracture() here;
-            // knockout text (eg. silkscreen labels with a background) will
-            // need to do that after the contours have been turned into holes
-            // and vice versa
-            if( glyph->HasHoles() )
-                glyph->Fracture( SHAPE_POLY_SET::PM_FAST ); // FONT TODO verify aFastMode
 
             aGlyphs->push_back( std::move( glyph ) );
         }
