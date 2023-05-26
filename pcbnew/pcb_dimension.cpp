@@ -1429,9 +1429,6 @@ static struct ALIGNED_DIMENSION_DESC
         propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ALIGNED ), TYPE_HASH( EDA_TEXT ),
                                       _HKI( "Hyperlink" ),
                                       []( INSPECTABLE* aItem ) { return false; } );
-
-        // This is actually defined on PCB_TEXT, but using PCB_TEXT as the base-class doesn't
-        // work, while using BOARD_ITEM does.  ???
         propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ALIGNED ), TYPE_HASH( BOARD_ITEM ),
                                       _HKI( "Knockout" ),
                                       []( INSPECTABLE* aItem ) { return false; } );
@@ -1468,9 +1465,6 @@ static struct ORTHOGONAL_DIMENSION_DESC
         propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ORTHOGONAL ), TYPE_HASH( EDA_TEXT ),
                                       _HKI( "Hyperlink" ),
                                       []( INSPECTABLE* aItem ) { return false; } );
-
-        // This is actually defined on PCB_TEXT, but using PCB_TEXT as the base-class doesn't
-        // work, while using BOARD_ITEM does.  ???
         propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_ORTHOGONAL ), TYPE_HASH( BOARD_ITEM ),
                                       _HKI( "Knockout" ),
                                       []( INSPECTABLE* aItem ) { return false; } );
@@ -1512,9 +1506,6 @@ static struct RADIAL_DIMENSION_DESC
         propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_RADIAL ), TYPE_HASH( EDA_TEXT ),
                                       _HKI( "Hyperlink" ),
                                       []( INSPECTABLE* aItem ) { return false; } );
-
-        // This is actually defined on PCB_TEXT, but using PCB_TEXT as the base-class doesn't
-        // work, while using BOARD_ITEM does.  ???
         propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_RADIAL ), TYPE_HASH( BOARD_ITEM ),
                                       _HKI( "Knockout" ),
                                       []( INSPECTABLE* aItem ) { return false; } );
@@ -1560,9 +1551,6 @@ static struct LEADER_DIMENSION_DESC
         propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_LEADER ), TYPE_HASH( EDA_TEXT ),
                                       _HKI( "Hyperlink" ),
                                       []( INSPECTABLE* aItem ) { return false; } );
-
-        // This is actually defined on PCB_TEXT, but using PCB_TEXT as the base-class doesn't
-        // work, while using BOARD_ITEM does.  ???
         propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_LEADER ), TYPE_HASH( BOARD_ITEM ),
                                       _HKI( "Knockout" ),
                                       []( INSPECTABLE* aItem ) { return false; } );
@@ -1600,9 +1588,6 @@ static struct CENTER_DIMENSION_DESC
         propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_CENTER ), TYPE_HASH( EDA_TEXT ),
                                       _HKI( "Hyperlink" ),
                                       []( INSPECTABLE* aItem ) { return false; } );
-
-        // This is actually defined on PCB_TEXT, but using PCB_TEXT as the base-class doesn't
-        // work, while using BOARD_ITEM does.  ???
         propMgr.OverrideAvailability( TYPE_HASH( PCB_DIM_CENTER ), TYPE_HASH( BOARD_ITEM ),
                                       _HKI( "Knockout" ),
                                       []( INSPECTABLE* aItem ) { return false; } );

@@ -1220,7 +1220,7 @@ void UOP::Exec( CONTEXT* ctx )
             result = arg1Value != 0.0 ? 0 : 1;
             break;
         default:
-            result = 0.0;
+            result = arg1Value != 0.0 ? 1 : 0;
             break;
         }
 

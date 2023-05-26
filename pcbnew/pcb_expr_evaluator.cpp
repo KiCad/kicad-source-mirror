@@ -257,6 +257,10 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCB_EXPR_UCODE::CreateVarRef( const wxString& 
                 {
                     vref->SetType( LIBEVAL::VT_NUMERIC );
                 }
+                else if( prop->TypeHash() == TYPE_HASH( bool ) )
+                {
+                    vref->SetType( LIBEVAL::VT_NUMERIC );
+                }
                 else if( prop->TypeHash() == TYPE_HASH( wxString ) )
                 {
                     vref->SetType( LIBEVAL::VT_STRING );
