@@ -31,9 +31,11 @@
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <settings/color_settings.h>
+#include <settings/cvpcb_settings.h>
 #include <layer_ids.h>
 
 #include <gal/graphics_abstraction_layer.h>
+#include <gal/dpi_scaling.h>
 #include <class_draw_panel_gal.h>
 #include <pcb_draw_panel_gal.h>
 #include <view/wx_view_controls.h>
@@ -127,6 +129,9 @@ void PCB_TEST_FRAME_BASE::createView( wxWindow *aParent, PCB_DRAW_PANEL_GAL::GAL
     // SUPERSAMPLING_X4;
     m_displayOptions.gl_antialiasing_mode = KIGFX::OPENGL_ANTIALIASING_MODE::NONE;
 
+    DPI_SCALING dpi( Pgm().GetCommonSettings(), aParent );
+    m_displayOptions.m_scaleFactor = dpi.GetScaleFactor();
+
     m_galPanel = std::make_shared<PCB_DRAW_PANEL_GAL>( aParent, -1, wxPoint( 0, 0 ),
                                                        wxDefaultSize, m_displayOptions, aGalType );
     m_galPanel->UpdateColors();
@@ -183,7 +188,9 @@ PCB_TEST_FRAME_BASE::~PCB_TEST_FRAME_BASE()
 
 void PCB_TEST_FRAME_BASE::LoadSettings()
 {
-    auto cs = Pgm().GetSettingsManager().GetColorSettings();
-    //cs->SetColorContext( COLOR_CONTEXT::PCB );
-    cs->Load();
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+
+    mgr.RegisterSettings( new PCBNEW_SETTINGS );
+    mgr.RegisterSettings( new CVPCB_SETTINGS );
+    mgr.GetColorSettings()->Load();
 }
