@@ -3,7 +3,7 @@
 # Arend-Jan van Hilten <a.j.vanhilten@student.tudelft.nl>, 2021.
 # pimjansen98 <pimjansen1998@gmail.com>, 2021.
 # CJ van der Hoeven <KeesEnJoa@gmail.com>, 2021.
-# Bas Wijnen <wijnen@debian.org>, 2022.
+# Bas Wijnen <wijnen@debian.org>, 2022, 2023.
 # Henrik Kauhanen <henrik@kauhanen.se>, 2023.
 # Christiaan Nieuwlaat <krizzje@gmail.com>, 2023.
 # Tom Niesse <tomniesse@gmail.com>, 2023.
@@ -13,16 +13,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-18 11:55-0700\n"
-"PO-Revision-Date: 2023-03-11 14:19+0000\n"
-"Last-Translator: johanneswilkens <wilkensjohannes@gmail.com>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/master-"
-"source/nl/>\n"
+"PO-Revision-Date: 2023-05-26 12:49+0000\n"
+"Last-Translator: Bas Wijnen <wijnen@debian.org>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
+"master-source/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 4.18-dev\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -11264,14 +11264,12 @@ msgid "Distortion"
 msgstr "Vervorming"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:228
-#, fuzzy
 msgid "Measured node:"
-msgstr "Gemeten knooppunt"
+msgstr "Gemeten knooppunt:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:238
-#, fuzzy
 msgid "Reference node:"
-msgstr "Referentie knooppunt"
+msgstr "Referentieknooppunt:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:245
 msgid "(optional; default GND)"
