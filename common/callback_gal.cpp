@@ -49,8 +49,9 @@ void CALLBACK_GAL::DrawGlyph( const KIFONT::GLYPH& aGlyph, int aNth, int aTotal 
                     int            strokeWidth = GetLineWidth();
                     SHAPE_POLY_SET poly;
 
+                    // Use ERROR_INSIDE because it avoids Clipper and is therefore much faster.
                     TransformOvalToPolygon( poly, pointList[ ii - 1 ], pointList[ ii ],
-                                            strokeWidth, strokeWidth / 48, ERROR_OUTSIDE );
+                                            strokeWidth, strokeWidth / 180, ERROR_INSIDE );
 
                     m_outlineCallback( poly.Outline( 0 ) );
                 }
