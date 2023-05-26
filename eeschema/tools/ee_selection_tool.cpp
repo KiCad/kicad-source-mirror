@@ -1148,7 +1148,7 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
                     }
                 }
 
-                text->GetEffectiveTextShape()->Collide( poss, closestDist, &dist );
+                text->GetEffectiveTextShape( false )->Collide( poss, closestDist, &dist );
             }
             else if( symbol )
             {

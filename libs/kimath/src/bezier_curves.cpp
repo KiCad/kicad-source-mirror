@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,8 +46,10 @@ BEZIER_POLY::BEZIER_POLY( const VECTOR2I& aStart, const VECTOR2I& aCtrl1,
 
 BEZIER_POLY::BEZIER_POLY( const std::vector<VECTOR2I>& aControlPoints )
 {
-    for( unsigned ii = 0; ii < aControlPoints.size(); ++ii )
-        m_ctrlPts.emplace_back( VECTOR2I( aControlPoints[ii] ) );
+    m_ctrlPts.reserve( aControlPoints.size() );
+
+    for( const VECTOR2I& pt : aControlPoints )
+        m_ctrlPts.emplace_back( pt );
 
     m_minSegLen = 0.0;
 }
@@ -59,8 +61,10 @@ void BEZIER_POLY::GetPoly( std::vector<VECTOR2I>& aOutput, int aMinSegLen, int a
     std::vector<VECTOR2D> buffer;
     GetPoly( buffer, double( aMinSegLen ), aMaxSegCount );
 
-    for( unsigned ii = 0; ii < buffer.size(); ++ii )
-        aOutput.emplace_back( VECTOR2I( int( buffer[ii].x ), int( buffer[ii].y ) ) );
+    aOutput.reserve( buffer.size() );
+
+    for( const VECTOR2D& pt : buffer )
+        aOutput.emplace_back( VECTOR2I( (int) pt.x, (int) pt.y ) );
 }
 
 
@@ -70,7 +74,8 @@ void BEZIER_POLY::GetPoly( std::vector<VECTOR2D>& aOutput, double aMinSegLen, in
     // FIXME Brute force method, use a better (recursive?) algorithm
     // with a max error value.
     // to optimize the number of segments
-    double dt = 1.0 / aMaxSegCount;
+    double                  dt = 1.0 / aMaxSegCount;
+    VECTOR2D::extended_type minSegLen_sq = aMinSegLen * aMinSegLen;
 
     aOutput.clear();
     aOutput.push_back( m_ctrlPts[0] );
@@ -96,10 +101,10 @@ void BEZIER_POLY::GetPoly( std::vector<VECTOR2D>& aOutput, double aMinSegLen, in
 
             // a minimal filter on the length of the segment being created:
             // The offset from last point:
-            VECTOR2D delta = vertex - aOutput.back();
-            double dist = delta.EuclideanNorm();
+            VECTOR2D                delta = vertex - aOutput.back();
+            VECTOR2D::extended_type dist_sq = delta.SquaredEuclideanNorm();
 
-            if( dist > aMinSegLen )
+            if( dist_sq > minSegLen_sq )
                 aOutput.push_back( vertex );
         }
     }

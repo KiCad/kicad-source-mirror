@@ -2825,10 +2825,7 @@ void SHAPE_POLY_SET::CacheTriangulation( bool aPartition, bool aSimplify )
 
         tmpSet.ClearArcs();
 
-        if( tmpSet.HasHoles() || tmpSet.IsSelfIntersecting() )
-            tmpSet.Fracture( PM_FAST );
-        else if( aSimplify )
-            tmpSet.Simplify( PM_FAST );
+        tmpSet.Fracture( PM_FAST );
 
         m_triangulationValid = triangulate( tmpSet, -1, m_triangulatedPolys );
     }

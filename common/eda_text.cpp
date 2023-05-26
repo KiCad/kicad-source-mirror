@@ -393,6 +393,9 @@ void EDA_TEXT::SetTextY( int aY )
 
 void EDA_TEXT::Offset( const VECTOR2I& aOffset )
 {
+    if( aOffset.x == 0 && aOffset.y == 0 )
+        return;
+
     m_pos += aOffset;
 
     for( std::unique_ptr<KIFONT::GLYPH>& glyph : m_render_cache )
@@ -461,7 +464,7 @@ std::vector<std::unique_ptr<KIFONT::GLYPH>>*
 EDA_TEXT::GetRenderCache( const KIFONT::FONT* aFont, const wxString& forResolvedText,
                           const VECTOR2I& aOffset ) const
 {
-    if( getDrawFont()->IsOutline() )
+    if( aFont->IsOutline() )
     {
         EDA_ANGLE resolvedAngle = GetDrawRotation();
 
@@ -869,12 +872,23 @@ std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( bool aTriangula
     KIGFX::GAL_DISPLAY_OPTIONS      empty_opts;
     KIFONT::FONT*                   font = getDrawFont();
     int                             penWidth = GetEffectiveTextPenWidth();
+    wxString                        shownText( GetShownText( true ) );
+    VECTOR2I                        drawPos = GetDrawPos();
     TEXT_ATTRIBUTES                 attrs = GetAttributes();
 
+    std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
+
     if( aUseTextRotation )
+    {
         attrs.m_Angle = GetDrawRotation();
+
+        if( font->IsOutline() )
+            cache = GetRenderCache( font, shownText, drawPos );
+    }
     else
+    {
         attrs.m_Angle = ANGLE_0;
+    }
 
     if( aTriangulate )
     {
@@ -896,7 +910,10 @@ std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( bool aTriangula
                     shape->AddShape( triShape );
                 } );
 
-        font->Draw( &callback_gal, GetShownText( true ), GetDrawPos(), attrs );
+        if( cache )
+            callback_gal.DrawGlyphs( *cache );
+        else
+            font->Draw( &callback_gal, shownText, drawPos, attrs );
     }
     else
     {
@@ -913,7 +930,10 @@ std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( bool aTriangula
                     shape->AddShape( aPoly.Clone() );
                 } );
 
-        font->Draw( &callback_gal, GetShownText( true ), GetDrawPos(), attrs );
+        if( cache )
+            callback_gal.DrawGlyphs( *cache );
+        else
+            font->Draw( &callback_gal, shownText, drawPos, attrs );
     }
 
     return shape;

@@ -486,6 +486,14 @@ public:
     long long int Length() const;
 
     /**
+     * Allocate a number of points all at once (for performance).
+     */
+    void ReservePoints( size_t aSize )
+    {
+        m_points.reserve( aSize );
+    }
+
+    /**
      * Append a new point at the end of the line chain.
      *
      * @param aX is X coordinate of the new point.
