@@ -134,8 +134,8 @@ public:
     void SetPage1Option( PAGE_OPTION aChoice ) { m_pageOption = aChoice; }
 
     // Coordinate handling
-    const VECTOR2I GetStartPosUi( int ii = 0 ) const;
-    const VECTOR2I GetEndPosUi( int ii = 0 ) const;
+    const VECTOR2I GetStartPosIU( int ii = 0 ) const;
+    const VECTOR2I GetEndPosIU( int ii = 0 ) const;
     const VECTOR2D GetStartPos( int ii = 0 ) const;
     const VECTOR2D GetEndPos( int ii = 0 ) const;
 

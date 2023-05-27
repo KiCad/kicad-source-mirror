@@ -2805,7 +2805,7 @@ void OPENGL_GAL::DrawGlyphs( const std::vector<std::unique_ptr<KIFONT::GLYPH>>& 
         // Optimized path for stroke fonts that pre-reserves glyph triangles.
         int triangleCount = 0;
 
-        if( aGlyphs.size() > 2 )
+        if( aGlyphs.size() > 0 )
         {
             thread_pool& tp = GetKiCadThreadPool();
 

@@ -106,13 +106,13 @@ void DS_DATA_ITEM::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aV
 
     for( int j = 0; j < m_RepeatCount; j++ )
     {
-        if( j && ! IsInsidePage( j ) )
+        if( j > 0 && !IsInsidePage( j ) )
             continue;
 
         if( m_type == DS_SEGMENT )
-            item = new DS_DRAW_ITEM_LINE( this, j, GetStartPosUi( j ), GetEndPosUi( j ), pensize );
+            item = new DS_DRAW_ITEM_LINE( this, j, GetStartPosIU( j ), GetEndPosIU( j ), pensize );
         else if( m_type == DS_RECT )
-            item = new DS_DRAW_ITEM_RECT( this, j, GetStartPosUi( j ), GetEndPosUi( j ), pensize );
+            item = new DS_DRAW_ITEM_RECT( this, j, GetStartPosIU( j ), GetEndPosIU( j ), pensize );
         else
         {
             wxFAIL_MSG( wxS( "Unknown drawing sheet item type" ) );
@@ -162,8 +162,8 @@ void DS_DATA_ITEM::MoveTo( const VECTOR2D& aPosition )
 
     for( DS_DRAW_ITEM_BASE* drawItem : m_drawItems )
     {
-        drawItem->SetPosition( GetStartPosUi( drawItem->GetIndexInPeer() ) );
-        drawItem->SetEnd( GetEndPosUi( drawItem->GetIndexInPeer() ) );
+        drawItem->SetPosition( GetStartPosIU( drawItem->GetIndexInPeer() ) );
+        drawItem->SetEnd( GetEndPosIU( drawItem->GetIndexInPeer() ) );
     }
 }
 
@@ -294,7 +294,7 @@ const VECTOR2D DS_DATA_ITEM::GetStartPos( int ii ) const
 }
 
 
-const VECTOR2I DS_DATA_ITEM::GetStartPosUi( int ii ) const
+const VECTOR2I DS_DATA_ITEM::GetStartPosIU( int ii ) const
 {
     VECTOR2D pos = GetStartPos( ii ) * DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu;
     return VECTOR2I( KiROUND( pos.x ), KiROUND( pos.y ) );
@@ -331,7 +331,7 @@ const VECTOR2D DS_DATA_ITEM::GetEndPos( int ii ) const
 }
 
 
-const VECTOR2I DS_DATA_ITEM::GetEndPosUi( int ii ) const
+const VECTOR2I DS_DATA_ITEM::GetEndPosIU( int ii ) const
 {
     VECTOR2D pos = GetEndPos( ii );
     pos = pos * DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu;
@@ -343,17 +343,13 @@ bool DS_DATA_ITEM::IsInsidePage( int ii ) const
 {
     DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
 
-    VECTOR2D pos = GetStartPos( ii );
-
-    for( int kk = 0; kk < 1; kk++ )
+    for( const VECTOR2D& pos : { GetStartPos( ii ), GetEndPos( ii ) } )
     {
         if( model.m_RB_Corner.x < pos.x || model.m_LT_Corner.x > pos.x )
             return false;
 
         if( model.m_RB_Corner.y < pos.y || model.m_LT_Corner.y > pos.y )
             return false;
-
-        pos = GetEndPos( ii );
     }
 
     return true;
@@ -406,11 +402,11 @@ void DS_DATA_ITEM_POLYGONS::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX:
 
     for( int j = 0; j < m_RepeatCount; j++ )
     {
-        if( j && !IsInsidePage( j ) )
+        if( j > 0 && !IsInsidePage( j ) )
             continue;
 
         int pensize = GetPenSizeUi();
-        auto poly_shape = new DS_DRAW_ITEM_POLYPOLYGONS( this, j, GetStartPosUi( j ), pensize );
+        auto poly_shape = new DS_DRAW_ITEM_POLYPOLYGONS( this, j, GetStartPosIU( j ), pensize );
         poly_shape->SetFlags( itemFlags[ j ] );
         m_drawItems.push_back( poly_shape );
 
@@ -584,7 +580,7 @@ void DS_DATA_ITEM_TEXT::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::VIE
         if( j > 0 && !IsInsidePage( j ) )
             continue;
 
-        text = new DS_DRAW_ITEM_TEXT( this, j, m_FullText, GetStartPosUi( j ), textsize, pensize,
+        text = new DS_DRAW_ITEM_TEXT( this, j, m_FullText, GetStartPosIU( j ), textsize, pensize,
                                       m_Font, m_Italic, m_Bold, m_TextColor );
         text->SetFlags( itemFlags[ j ] );
         m_drawItems.push_back( text );
@@ -595,14 +591,14 @@ void DS_DATA_ITEM_TEXT::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::VIE
         if( aView )
             aView->Add( text );
 
-        text->SetHorizJustify( m_Hjustify ) ;
+        text->SetHorizJustify( m_Hjustify );
         text->SetVertJustify( m_Vjustify );
         text->SetTextAngle( EDA_ANGLE( m_Orient, DEGREES_T ) );
         text->SetMultilineAllowed( multilines );
 
         // Increment label for the next text (has no meaning for multiline texts)
         if( m_RepeatCount > 1 && !multilines )
-            IncrementLabel(( j + 1 ) * m_IncrementLabel );
+            IncrementLabel( ( j + 1 ) * m_IncrementLabel );
     }
 }
 
@@ -746,10 +742,10 @@ void DS_DATA_ITEM_BITMAP::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::V
 
     for( int j = 0; j < m_RepeatCount; j++ )
     {
-        if( j && !IsInsidePage( j ) )
+        if( j > 0 && !IsInsidePage( j ) )
             continue;
 
-        DS_DRAW_ITEM_BITMAP* bitmap = new DS_DRAW_ITEM_BITMAP( this, j, GetStartPosUi( j ) );
+        DS_DRAW_ITEM_BITMAP* bitmap = new DS_DRAW_ITEM_BITMAP( this, j, GetStartPosIU( j ) );
 
         bitmap->SetFlags( itemFlags[ j ] );
         m_drawItems.push_back( bitmap );

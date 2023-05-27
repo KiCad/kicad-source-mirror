@@ -657,22 +657,22 @@ VECTOR2I PL_EDITOR_FRAME::ReturnCoordOriginCorner() const
 
     case 1: // Origin = page Right Bottom corner
         dummy.SetStart( 0, 0, RB_CORNER );
-        originCoord = dummy.GetStartPosUi();
+        originCoord = dummy.GetStartPosIU();
         break;
 
     case 2: // Origin = page Left Bottom corner
         dummy.SetStart( 0, 0, LB_CORNER );
-        originCoord = dummy.GetStartPosUi();
+        originCoord = dummy.GetStartPosIU();
         break;
 
     case 3: // Origin = page Right Top corner
         dummy.SetStart( 0, 0, RT_CORNER );
-        originCoord = dummy.GetStartPosUi();
+        originCoord = dummy.GetStartPosIU();
         break;
 
     case 4: // Origin = page Left Top corner
         dummy.SetStart( 0, 0, LT_CORNER );
-        originCoord = dummy.GetStartPosUi();
+        originCoord = dummy.GetStartPosIU();
         break;
     }
 
