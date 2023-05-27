@@ -1250,7 +1250,6 @@ int SCH_EDITOR_CONTROL::Redo( const TOOL_EVENT& aEvent )
 
     m_frame->SetSheetNumberAndCount();
     m_frame->TestDanglingEnds();
-    m_frame->OnPageSettingsChange();
 
     m_toolMgr->GetTool<EE_SELECTION_TOOL>()->RebuildSelection();
 
