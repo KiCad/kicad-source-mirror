@@ -383,7 +383,7 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox,
                 matrix.yx = (FT_Fixed) ( 0 * 0x10000L );  // Don't rotate in the y direction
                 matrix.yy = (FT_Fixed) ( 1 * 0x10000L );
 
-                FT_Set_Transform(face, &matrix,0);
+                FT_Set_Transform( face, &matrix, 0 );
             }
 
             FT_Load_Glyph( face, glyphInfo[i].codepoint, FT_LOAD_NO_BITMAP );
