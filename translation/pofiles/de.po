@@ -51,7 +51,6 @@ msgid "All Files"
 msgstr "Alle Dateien"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:322
-#, fuzzy
 msgid "Build board outline"
 msgstr "Platinenumriss erstellen"
 
@@ -65,7 +64,6 @@ msgid "No footprint loaded."
 msgstr "Kein Footprint geladen."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:696
-#, fuzzy
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
@@ -81,7 +79,6 @@ msgstr ""
 "eine vollständige Analyse ausführen."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:226
-#, fuzzy
 msgid "Create tracks and vias"
 msgstr "Leiterbahnen und Durchkontaktierungen erstellen"
 
@@ -3859,7 +3856,8 @@ msgstr "Linienstil"
 #: eeschema/sch_textbox.cpp:440 include/stroke_params.h:80
 #: pcbnew/fp_text.cpp:309 pcbnew/fp_textbox.cpp:336
 #: pcbnew/pcb_dimension.cpp:332 pcbnew/pcb_text.cpp:130
-#: pcbnew/pcb_textbox.cpp:297
+#: pcbnew/pcb_textbox.cpp:297 eeschema/sch_label.cpp:892
+#: eeschema/sch_text.cpp:496
 msgid "Default"
 msgstr "Voreinstellung"
 
@@ -4469,15 +4467,18 @@ msgid "Net Label"
 msgstr "Netzbezeichner"
 
 #: common/eda_item.cpp:365 eeschema/sch_label.cpp:906
-#: eeschema/sch_label.cpp:1309
+#: eeschema/sch_label.cpp:1309 eeschema/sch_label.cpp:878
+#: eeschema/sch_label.cpp:1250
 msgid "Directive Label"
 msgstr "Anweisungsbezeichner"
 
 #: common/eda_item.cpp:366 eeschema/sch_label.cpp:907
+#: eeschema/sch_label.cpp:879
 msgid "Global Label"
 msgstr "Globaler Bezeichner"
 
 #: common/eda_item.cpp:367 eeschema/sch_label.cpp:908
+#: eeschema/sch_label.cpp:880
 msgid "Hierarchical Label"
 msgstr "Hierarchischer Bezeichner"
 
@@ -4681,7 +4682,8 @@ msgstr "Gefüllt"
 #: gerbview/gerber_file_image.cpp:345
 #: pcbnew/microwave/microwave_polygon.cpp:128
 #: pcbnew/widgets/appearance_controls.cpp:635
-#: pcbnew/widgets/appearance_controls.cpp:1762
+#: pcbnew/widgets/appearance_controls.cpp:1762 eeschema/sch_label.cpp:894
+#: eeschema/sch_text.cpp:498
 msgid "Normal"
 msgstr "Normal"
 
@@ -4707,7 +4709,8 @@ msgstr "Normal"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:205
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:133
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:50
-#: pcbnew/fp_text_grid_table.cpp:105
+#: pcbnew/fp_text_grid_table.cpp:105 eeschema/sch_label.cpp:894
+#: eeschema/sch_text.cpp:498
 msgid "Italic"
 msgstr "Kursiv"
 
@@ -4728,6 +4731,7 @@ msgstr "Kursiv"
 #: eeschema/sch_textbox.cpp:442
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:93
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:186
+#: eeschema/sch_label.cpp:894 eeschema/sch_text.cpp:498
 msgid "Bold"
 msgstr "Fett"
 
@@ -7287,8 +7291,8 @@ msgstr ""
 "Ihrem Heimatverzeichnis erstellt.\n"
 "Sie müssen zuerst die Bibliothekstabelle konfigurieren, um alle noch nicht "
 "eingebundenen Footprintbibliotheken in KiCad verwenden zu können.\n"
-"Weitere Informationen finden Sie im Abschnitt \"Footprint "
-"Bibliothekstabelle\" der CvPcb Dokumentation."
+"Weitere Informationen finden Sie im Abschnitt \"Footprint Bibliothekstabelle"
+"\" der CvPcb Dokumentation."
 
 #: cvpcb/cvpcb.cpp:187
 msgid ""
@@ -7814,6 +7818,7 @@ msgstr "%s gefunden"
 
 #: eeschema/cross-probing.cpp:175 eeschema/sim/sim_plot_frame.cpp:606
 #: eeschema/sim/sim_plot_frame.cpp:922 eeschema/widgets/tuner_slider.cpp:52
+#: eeschema/sim/sim_plot_frame.cpp:599 eeschema/sim/sim_plot_frame.cpp:915
 #, c-format
 msgid "%s not found"
 msgstr "%s nicht gefunden"
@@ -8080,12 +8085,12 @@ msgid ""
 "python <script file name> <input filename> <output filename>\n"
 "```\n"
 "\n"
-"On Windows, if the desired generator script for a CSV BOM is `C:"
-"\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
+"On Windows, if the desired generator script for a CSV BOM is `C:\\Users"
+"\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O.csv"
+"\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -8752,6 +8757,7 @@ msgstr "Netzliste exportieren"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:320
 #: eeschema/sim/sim_plot_frame.cpp:464 eeschema/sim/sim_plot_frame.cpp:1738
+#: eeschema/sim/sim_plot_frame.cpp:463
 msgid "Simulator requires a fully annotated schematic."
 msgstr "Simulator benötigt einen vollständig annotierten Schaltplan."
 
@@ -8952,6 +8958,7 @@ msgstr "KiCad-Schriftart"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:99
 #: eeschema/dialogs/dialog_text_properties_base.cpp:120
 #: eeschema/sch_label.cpp:932 eeschema/sch_text.cpp:509
+#: eeschema/sch_label.cpp:904 eeschema/sch_text.cpp:508
 msgid "Align left"
 msgstr "Links ausrichten"
 
@@ -8967,6 +8974,7 @@ msgstr "Horizontal mittig ausrichten"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:109
 #: eeschema/dialogs/dialog_text_properties_base.cpp:130
 #: eeschema/sch_label.cpp:930 eeschema/sch_text.cpp:507
+#: eeschema/sch_label.cpp:902 eeschema/sch_text.cpp:506
 msgid "Align right"
 msgstr "Rechts ausrichten"
 
@@ -8977,6 +8985,7 @@ msgstr "Rechts ausrichten"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:129
 #: eeschema/dialogs/dialog_text_properties_base.cpp:140
 #: eeschema/sch_label.cpp:933 eeschema/sch_text.cpp:510
+#: eeschema/sch_label.cpp:905 eeschema/sch_text.cpp:509
 msgid "Align top"
 msgstr "Oben ausrichten"
 
@@ -8992,6 +9001,7 @@ msgstr "Vertikal mittig ausrichten"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:139
 #: eeschema/dialogs/dialog_text_properties_base.cpp:150
 #: eeschema/sch_label.cpp:931 eeschema/sch_text.cpp:508
+#: eeschema/sch_label.cpp:903 eeschema/sch_text.cpp:507
 msgid "Align bottom"
 msgstr "Unten ausrichten"
 
@@ -9254,8 +9264,8 @@ msgstr "Globale Bibliothekstabelle '%s' kann nicht erstellt werden."
 #, c-format
 msgid "Error copying global symbol library table '%s' to '%s'."
 msgstr ""
-"Fehler beim Kopieren der globalen Symbolbibliothekstabelle \"%s\" nach "
-"\"%s\"."
+"Fehler beim Kopieren der globalen Symbolbibliothekstabelle \"%s\" nach \"%s"
+"\"."
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:31
 msgid "Ibis parser log"
@@ -9406,7 +9416,8 @@ msgstr "V-Ausrichtung"
 #: eeschema/lib_text.cpp:428 eeschema/lib_textbox.cpp:490
 #: eeschema/sch_field.cpp:755 eeschema/sch_label.cpp:926
 #: eeschema/sch_text.cpp:503 eeschema/sch_textbox.cpp:446
-#: pcbnew/tools/board_inspection_tool.cpp:1237
+#: pcbnew/tools/board_inspection_tool.cpp:1237 eeschema/sch_label.cpp:898
+#: eeschema/sch_text.cpp:502
 msgid "Text Size"
 msgstr "Textgröße"
 
@@ -9440,7 +9451,8 @@ msgstr "Y-Position"
 #: eeschema/sch_text.cpp:497 eeschema/sch_textbox.cpp:440
 #: pcbnew/fp_text.cpp:309 pcbnew/fp_textbox.cpp:336
 #: pcbnew/pcb_dimension.cpp:332 pcbnew/pcb_text.cpp:130
-#: pcbnew/pcb_textbox.cpp:297
+#: pcbnew/pcb_textbox.cpp:297 eeschema/sch_label.cpp:892
+#: eeschema/sch_text.cpp:496
 msgid "Font"
 msgstr "Schriftart"
 
@@ -10953,7 +10965,8 @@ msgstr "Für ein Schaltplanblatt muss eine Datei angegeben sein."
 #: eeschema/sch_text.cpp:501 eeschema/sch_textbox.cpp:444
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:122
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:226
-#: pcbnew/teardrop/dialog_teardrop_base.cpp:330
+#: pcbnew/teardrop/dialog_teardrop_base.cpp:330 eeschema/sch_label.cpp:896
+#: eeschema/sch_text.cpp:500
 msgid "Style"
 msgstr "Stil"
 
@@ -10996,7 +11009,7 @@ msgid "Add signal by name:"
 msgstr "Signal nach Name hinzufügen:"
 
 #: eeschema/dialogs/dialog_signal_list_base.h:50
-#: eeschema/sim/sim_plot_frame.cpp:165
+#: eeschema/sim/sim_plot_frame.cpp:165 eeschema/sim/sim_plot_frame.cpp:164
 msgid "Add Signals"
 msgstr "Signale hinzufügen"
 
@@ -11339,6 +11352,7 @@ msgstr "Parameter"
 #: pcbnew/fp_text.cpp:294 pcbnew/pcb_marker.cpp:193 pcbnew/pcb_shape.cpp:304
 #: pcbnew/pcb_track.cpp:861 pcbnew/pcb_track.cpp:935
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:249 pcbnew/zone.cpp:536
+#: eeschema/sch_label.cpp:890
 msgid "Type"
 msgstr "Typ"
 
@@ -13523,6 +13537,7 @@ msgid "Unit %s"
 msgstr "Einheit %s"
 
 #: eeschema/lib_text.cpp:477 eeschema/sch_text.cpp:393
+#: eeschema/sch_text.cpp:392
 #, c-format
 msgid "Graphic Text '%s'"
 msgstr "Grafischer Text \"%s\""
@@ -13533,6 +13548,7 @@ msgstr "Grafisches Textfeld"
 
 #: eeschema/lib_textbox.cpp:486 eeschema/sch_label.cpp:922
 #: eeschema/sch_text.cpp:499 eeschema/sch_textbox.cpp:442
+#: eeschema/sch_label.cpp:894 eeschema/sch_text.cpp:498
 msgid "Bold Italic"
 msgstr "Fett Kursiv"
 
@@ -13664,11 +13680,13 @@ msgid "P&references"
 msgstr "&Einstellungen"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:478
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:477
 #, c-format
 msgid "Could not open file '%s' to write IBIS model"
 msgstr "Konnte Datei \"%s\" nicht öffnen, um IBIS-Modell zu schreiben"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:532
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:531
 #, c-format
 msgid "Could not find library file '%s'"
 msgstr "Konnte die Bibliotheksdatei \"%s\" nicht finden"
@@ -13899,6 +13917,7 @@ msgstr "Buseintritt-Typ"
 #: eeschema/sch_bus_entry.cpp:512 eeschema/sch_label.cpp:950
 #: eeschema/sch_line.cpp:924 pcbnew/pad.cpp:1005 pcbnew/pcb_track.cpp:963
 #: pcbnew/tools/pcb_control.cpp:1544 pcbnew/zone.cpp:566
+#: eeschema/sch_label.cpp:922
 msgid "Resolved Netclass"
 msgstr "Aufgelöste Netzklasse"
 
@@ -13929,7 +13948,7 @@ msgstr "Neue Schaltplandatei ist nicht gespeichert"
 #: eeschema/symbol_editor/symbol_editor.cpp:1163
 #: pagelayout_editor/pl_editor_frame.cpp:395
 #: pcbnew/footprint_edit_frame.cpp:715 pcbnew/footprint_edit_frame.cpp:755
-#: pcbnew/pcb_edit_frame.cpp:1050
+#: pcbnew/pcb_edit_frame.cpp:1050 eeschema/sim/sim_plot_frame.cpp:1761
 #, c-format
 msgid "Save changes to '%s' before closing?"
 msgstr "Die Änderungen in \"%s\" vor dem Schließen speichern?"
@@ -13975,12 +13994,13 @@ msgstr "Konnte CvPcb nicht öffnen"
 
 #: eeschema/sch_edit_frame.cpp:1420 eeschema/sim/sim_plot_frame.cpp:350
 #: kicad/kicad_manager_frame.cpp:776 pcbnew/footprint_edit_frame.cpp:926
-#: pcbnew/pcb_edit_frame.cpp:1566
+#: pcbnew/pcb_edit_frame.cpp:1566 eeschema/sim/sim_plot_frame.cpp:349
 msgid "[Read Only]"
 msgstr "[Schreibgeschützt]"
 
 #: eeschema/sch_edit_frame.cpp:1423 eeschema/sim/sim_plot_frame.cpp:353
 #: pcbnew/footprint_edit_frame.cpp:935 pcbnew/pcb_edit_frame.cpp:1569
+#: eeschema/sim/sim_plot_frame.cpp:352
 msgid "[Unsaved]"
 msgstr "[Ungespeichert]"
 
@@ -14025,15 +14045,16 @@ msgstr "Unbekannter SCH_FILE_T-Wert: %d"
 msgid "Tri-State"
 msgstr "Tri-State"
 
-#: eeschema/sch_label.cpp:905
+#: eeschema/sch_label.cpp:905 eeschema/sch_label.cpp:877
 msgid "Label"
 msgstr "Bezeichner"
 
-#: eeschema/sch_label.cpp:909
+#: eeschema/sch_label.cpp:909 eeschema/sch_label.cpp:881
 msgid "Hierarchical Sheet Pin"
 msgstr "Hierarchischer Schaltplanpin"
 
 #: eeschema/sch_label.cpp:937 eeschema/sch_text.cpp:514
+#: eeschema/sch_label.cpp:909 eeschema/sch_text.cpp:513
 msgid "Justification"
 msgstr "Ausrichtung"
 
@@ -14044,39 +14065,41 @@ msgstr "Ausrichtung"
 #: pcbnew/pad.cpp:1796 pcbnew/pcb_track.cpp:961
 #: pcbnew/tools/pcb_control.cpp:1541
 #: pcbnew/widgets/pcb_properties_panel.cpp:260 pcbnew/zone.cpp:564
-#: pcbnew/zone.cpp:1455
+#: pcbnew/zone.cpp:1455 eeschema/sch_label.cpp:973
 msgid "Net"
 msgstr "Netz"
 
 #: eeschema/sch_label.cpp:1004 eeschema/sch_line.cpp:867
+#: eeschema/sch_label.cpp:976
 msgid "Resolved netclass"
 msgstr "Aufgelöste Netzklasse"
 
-#: eeschema/sch_label.cpp:1020
+#: eeschema/sch_label.cpp:1020 eeschema/sch_label.cpp:992
 msgid "Hierarchical Labels"
 msgstr "Hierarchische Bezeichner"
 
-#: eeschema/sch_label.cpp:1105
+#: eeschema/sch_label.cpp:1105 eeschema/sch_label.cpp:1077
 #, c-format
 msgid "Label '%s'"
 msgstr "Bezeichner '%s'"
 
-#: eeschema/sch_label.cpp:1313
+#: eeschema/sch_label.cpp:1313 eeschema/sch_label.cpp:1254
 #, c-format
 msgid "Directive Label [%s %s]"
 msgstr "Anweisungsbezeichner [%s %s]"
 
-#: eeschema/sch_label.cpp:1590
+#: eeschema/sch_label.cpp:1590 eeschema/sch_label.cpp:1531
 #, c-format
 msgid "Global Label '%s'"
 msgstr "Globaler Bezeichner '%s'"
 
-#: eeschema/sch_label.cpp:1723
+#: eeschema/sch_label.cpp:1723 eeschema/sch_label.cpp:1664
 #, c-format
 msgid "Hierarchical Label '%s'"
 msgstr "Hierarchischer Bezeichner '%s'"
 
 #: eeschema/sch_label.cpp:1740 pcbnew/dialogs/panel_setup_rules.cpp:687
+#: eeschema/sch_label.cpp:1681
 msgid "Syntax Help"
 msgstr "Syntax-Hilfe"
 
@@ -14496,9 +14519,9 @@ msgid ""
 "design but KiCad only supports rotation angles multiples of 90 degrees. The "
 "connecting wires will need manual fixing."
 msgstr ""
-"Das Symbol '%s' ist im ursprünglichen CADSTAR-Design in einem Winkel von "
-"%.1f° gedreht, KiCad unterstützt jedoch nur Drehwinkel-Vielfache von 90°. "
-"Die Verbindungen müssen manuell korrigiert werden."
+"Das Symbol '%s' ist im ursprünglichen CADSTAR-Design in einem Winkel von %.1f"
+"° gedreht, KiCad unterstützt jedoch nur Drehwinkel-Vielfache von 90°. Die "
+"Verbindungen müssen manuell korrigiert werden."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1792
 #, c-format
@@ -14926,7 +14949,7 @@ msgstr "Symbol nicht in %s gefunden!"
 msgid "Symbol %s [%s]"
 msgstr "Symbol %s [%s]"
 
-#: eeschema/sch_text.cpp:495
+#: eeschema/sch_text.cpp:495 eeschema/sch_text.cpp:494
 msgid "Graphic Text"
 msgstr "Grafischer Text"
 
@@ -16044,8 +16067,8 @@ msgstr ""
 #, c-format
 msgid "Could not find a parameter named '%s' in simulation model of type '%s'"
 msgstr ""
-"Ein Parameter mit dem Namen \"%s\" konnte in Simulationsmodell vom Typ "
-"\"%s\" nicht gefunden werden"
+"Ein Parameter mit dem Namen \"%s\" konnte in Simulationsmodell vom Typ \"%s"
+"\" nicht gefunden werden"
 
 #: eeschema/sim/sim_model_kibis.cpp:81
 #, c-format
@@ -16128,47 +16151,51 @@ msgstr ""
 "Simulation lieferte keine Diagramme. Ergebnisse sind im Konsolenfenster zu "
 "finden."
 
-#: eeschema/sim/sim_plot_frame.cpp:163
+#: eeschema/sim/sim_plot_frame.cpp:163 eeschema/sim/sim_plot_frame.cpp:162
 msgid "Run/Stop Simulation"
 msgstr "Simulation starten/stoppen"
 
 #: eeschema/sim/sim_plot_frame.cpp:164 eeschema/sim/sim_plot_frame_base.cpp:55
+#: eeschema/sim/sim_plot_frame.cpp:163
 msgid "Run Simulation"
 msgstr "Starte Simulation"
 
-#: eeschema/sim/sim_plot_frame.cpp:166
+#: eeschema/sim/sim_plot_frame.cpp:166 eeschema/sim/sim_plot_frame.cpp:165
 msgid "Add signals to plot"
 msgstr "Signale dem Plot hinzufügen"
 
-#: eeschema/sim/sim_plot_frame.cpp:167
+#: eeschema/sim/sim_plot_frame.cpp:167 eeschema/sim/sim_plot_frame.cpp:166
 msgid "Probe"
 msgstr "Tastkopf"
 
-#: eeschema/sim/sim_plot_frame.cpp:168
+#: eeschema/sim/sim_plot_frame.cpp:168 eeschema/sim/sim_plot_frame.cpp:167
 msgid "Probe signals on the schematic"
 msgstr "Signale im Schaltplan untersuchen"
 
 #: eeschema/sim/sim_plot_frame.cpp:169 eeschema/sim/sim_plot_frame_base.cpp:242
+#: eeschema/sim/sim_plot_frame.cpp:168
 msgid "Tune"
 msgstr "Abstimmung"
 
-#: eeschema/sim/sim_plot_frame.cpp:170
+#: eeschema/sim/sim_plot_frame.cpp:170 eeschema/sim/sim_plot_frame.cpp:169
 msgid "Tune component values"
 msgstr "Werte von Bauteilen abstimmen"
 
-#: eeschema/sim/sim_plot_frame.cpp:171
+#: eeschema/sim/sim_plot_frame.cpp:171 eeschema/sim/sim_plot_frame.cpp:170
 msgid "Sim Command"
 msgstr "Sim-Befehl"
 
-#: eeschema/sim/sim_plot_frame.cpp:172
+#: eeschema/sim/sim_plot_frame.cpp:172 eeschema/sim/sim_plot_frame.cpp:171
 msgid "Simulation command and settings"
 msgstr "Simulationsparameter und -einstellungen"
 
 #: eeschema/sim/sim_plot_frame.cpp:355 eeschema/sim/sim_plot_frame_base.h:130
+#: eeschema/sim/sim_plot_frame.cpp:354
 msgid "Spice Simulator"
 msgstr "Spice-Simulator"
 
 #: eeschema/sim/sim_plot_frame.cpp:473 eeschema/sim/sim_plot_frame.cpp:1571
+#: eeschema/sim/sim_plot_frame.cpp:466 eeschema/sim/sim_plot_frame.cpp:1564
 msgid ""
 "Errors during netlist generation; simulation aborted.\n"
 "\n"
@@ -16177,7 +16204,7 @@ msgstr ""
 "abgebrochen.\n"
 "\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:490
+#: eeschema/sim/sim_plot_frame.cpp:490 eeschema/sim/sim_plot_frame.cpp:483
 msgid ""
 "Schematic sheet simulation command directive has changed.  Do you wish to "
 "update the Simulation Command?"
@@ -16186,77 +16213,83 @@ msgstr ""
 "der Simulationsbefehl aktualisiert werden?"
 
 #: eeschema/sim/sim_plot_frame.cpp:513 eeschema/sim/sim_plot_frame.cpp:2007
+#: eeschema/sim/sim_plot_frame.cpp:506 eeschema/sim/sim_plot_frame.cpp:1993
 msgid "Another simulation is already running."
 msgstr "Eine andere Simulation wurde bereits gestartet."
 
-#: eeschema/sim/sim_plot_frame.cpp:541
+#: eeschema/sim/sim_plot_frame.cpp:541 eeschema/sim/sim_plot_frame.cpp:534
 #, c-format
 msgid "Plot%u - "
 msgstr "Plot%u - "
 
 #: eeschema/sim/sim_plot_frame.cpp:605 eeschema/sim/sim_plot_frame.cpp:617
-#: eeschema/sim/sim_plot_frame.cpp:941
+#: eeschema/sim/sim_plot_frame.cpp:941 eeschema/sim/sim_plot_frame.cpp:598
+#: eeschema/sim/sim_plot_frame.cpp:610 eeschema/sim/sim_plot_frame.cpp:934
 msgid "Could not apply tuned value(s):"
 msgstr "Kann abgeglichene(n) Wert(e) nicht anwenden:"
 
 #: eeschema/sim/sim_plot_frame.cpp:618 eeschema/sim/sim_plot_frame.cpp:930
+#: eeschema/sim/sim_plot_frame.cpp:611 eeschema/sim/sim_plot_frame.cpp:923
 #, c-format
 msgid "%s is not tunable"
 msgstr "%s ist nicht abstimmbar"
 
-#: eeschema/sim/sim_plot_frame.cpp:661
+#: eeschema/sim/sim_plot_frame.cpp:661 eeschema/sim/sim_plot_frame.cpp:654
 msgid "Error: simulation type not defined!\n"
 msgstr "Fehler: Simulationstyp nicht definiert!\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:667
+#: eeschema/sim/sim_plot_frame.cpp:667 eeschema/sim/sim_plot_frame.cpp:660
 msgid "Error: simulation type doesn't support plotting!\n"
 msgstr "Fehler: Simulationstyp unterstützt kein Plotten!\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:739 eeschema/sim/sim_plot_panel.h:117
+#: eeschema/sim/sim_plot_frame.cpp:732
 msgid " (mag)"
 msgstr " (Mag)"
 
 #: eeschema/sim/sim_plot_frame.cpp:741 eeschema/sim/sim_plot_panel.h:119
+#: eeschema/sim/sim_plot_frame.cpp:734
 msgid " (phase)"
 msgstr " (Phase)"
 
 #: eeschema/sim/sim_plot_frame.cpp:851 eeschema/sim/sim_plot_frame.cpp:1822
+#: eeschema/sim/sim_plot_frame.cpp:844 eeschema/sim/sim_plot_frame.cpp:1808
 msgid "Signal"
 msgstr "Signal"
 
-#: eeschema/sim/sim_plot_frame.cpp:1188
+#: eeschema/sim/sim_plot_frame.cpp:1188 eeschema/sim/sim_plot_frame.cpp:1181
 msgid "noname"
 msgstr "namenlos"
 
-#: eeschema/sim/sim_plot_frame.cpp:1237
+#: eeschema/sim/sim_plot_frame.cpp:1237 eeschema/sim/sim_plot_frame.cpp:1230
 msgid "Open simulation workbook"
 msgstr "Arbeitsmappe öffnen"
 
-#: eeschema/sim/sim_plot_frame.cpp:1266
+#: eeschema/sim/sim_plot_frame.cpp:1266 eeschema/sim/sim_plot_frame.cpp:1259
 msgid "Save Simulation Workbook As"
 msgstr "Simulationsarbeitsmappe speichern unter"
 
-#: eeschema/sim/sim_plot_frame.cpp:1281
+#: eeschema/sim/sim_plot_frame.cpp:1281 eeschema/sim/sim_plot_frame.cpp:1274
 msgid "Save Plot as Image"
 msgstr "Speichert den Plot als Bild"
 
-#: eeschema/sim/sim_plot_frame.cpp:1298
+#: eeschema/sim/sim_plot_frame.cpp:1298 eeschema/sim/sim_plot_frame.cpp:1291
 msgid "Save Plot Data"
 msgstr "Plotdaten speichern"
 
-#: eeschema/sim/sim_plot_frame.cpp:1636
+#: eeschema/sim/sim_plot_frame.cpp:1636 eeschema/sim/sim_plot_frame.cpp:1629
 msgid "You need to run plot-providing simulation first."
 msgstr "Sie müssen zuerst eine Plot-Simulation ausführen."
 
-#: eeschema/sim/sim_plot_frame.cpp:1693
+#: eeschema/sim/sim_plot_frame.cpp:1693 eeschema/sim/sim_plot_frame.cpp:1686
 msgid "SPICE Netlist"
 msgstr "SPICE-Netzliste"
 
-#: eeschema/sim/sim_plot_frame.cpp:1772
+#: eeschema/sim/sim_plot_frame.cpp:1772 eeschema/sim/sim_plot_frame.cpp:1758
 msgid "Save changes to workbook?"
 msgstr "Änderungen in Arbeitsmappe speichern?"
 
-#: eeschema/sim/sim_plot_frame.cpp:1937
+#: eeschema/sim/sim_plot_frame.cpp:1937 eeschema/sim/sim_plot_frame.cpp:1923
 msgid ""
 "\n"
 "\n"
@@ -16268,19 +16301,20 @@ msgstr ""
 "Simulationsergebnisse:\n"
 "\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:2028
+#: eeschema/sim/sim_plot_frame.cpp:2028 eeschema/sim/sim_plot_frame.cpp:2014
 msgid "Remove Signal"
 msgstr "Signal entfernen"
 
-#: eeschema/sim/sim_plot_frame.cpp:2028
+#: eeschema/sim/sim_plot_frame.cpp:2028 eeschema/sim/sim_plot_frame.cpp:2014
 msgid "Remove the signal from the plot"
 msgstr "Entfernt das Signal aus dem Diagramm"
 
 #: eeschema/sim/sim_plot_frame.cpp:2036 eeschema/sim/sim_plot_frame.cpp:2063
+#: eeschema/sim/sim_plot_frame.cpp:2022 eeschema/sim/sim_plot_frame.cpp:2049
 msgid "Hide Cursor"
 msgstr "Cursor verbergen"
 
-#: eeschema/sim/sim_plot_frame.cpp:2038
+#: eeschema/sim/sim_plot_frame.cpp:2038 eeschema/sim/sim_plot_frame.cpp:2024
 msgid "Show Cursor"
 msgstr "Cursor anzeigen"
 
@@ -16511,8 +16545,8 @@ msgstr ""
 #: eeschema/symbol_checker.cpp:146
 #, c-format
 msgid ""
-"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
-"%s%s at location <b>(%s, %s)</b>."
+"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
+"%s at location <b>(%s, %s)</b>."
 msgstr ""
 "<b>Pin-Duplikat %s</b> %s an Position <b>(%s, %s)</b> steht in Konflikt mit "
 "Pin %s%s an Position <b>(%s, %s)</b>."
@@ -16520,8 +16554,8 @@ msgstr ""
 #: eeschema/symbol_checker.cpp:159
 #, c-format
 msgid ""
-"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
-"%s%s at location <b>(%s, %s)</b> in units %s and %s."
+"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
+"%s at location <b>(%s, %s)</b> in units %s and %s."
 msgstr ""
 "<b>Pin-Duplikat %s</b> %s an Position <b>(%s, %s)</b> steht in Konflikt mit "
 "Pin %s%s an Position <b>(%s, %s)</b> in Einheiten %s und %s."
@@ -26872,8 +26906,8 @@ msgid ""
 "selection filter."
 msgstr ""
 "Gesperrte Footprints können nicht frei verschoben und gedreht werden und "
-"können nur ausgewählt werden, wenn das Kontrollkästchen \"Gesperrte "
-"Elemente\" im Auswahlfilter aktiviert ist."
+"können nur ausgewählt werden, wenn das Kontrollkästchen \"Gesperrte Elemente"
+"\" im Auswahlfilter aktiviert ist."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:362
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:416
@@ -28156,8 +28190,8 @@ msgstr "Netzlisten-Datei:"
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:42
 msgid "Link footprints using component tstamps (unique ids)"
 msgstr ""
-"Verknüpfen von Footprints unter Verwendung von Bauteil-"
-"\"tstamps\" (eindeutige IDs)"
+"Verknüpfen von Footprints unter Verwendung von Bauteil-\"tstamps"
+"\" (eindeutige IDs)"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:42
 msgid "Link footprints using reference designators"
@@ -32048,13 +32082,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net"
+"\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net"
+"\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -32383,13 +32417,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net"
+"\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net"
+"\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -33160,8 +33194,8 @@ msgstr "FEHLER: %s %s"
 #, c-format
 msgid "The '%s' keyword has been deprecated.  Please use '%s' instead."
 msgstr ""
-"Das Schlüsselwort \"%s\" ist veraltet.  Bitte verwenden Sie stattdessen "
-"\"%s\"."
+"Das Schlüsselwort \"%s\" ist veraltet.  Bitte verwenden Sie stattdessen \"%s"
+"\"."
 
 #: pcbnew/drc/drc_rule_parser.cpp:117 pcbnew/drc/drc_rule_parser.cpp:200
 #: pcbnew/drc/drc_rule_parser.cpp:477
@@ -34124,8 +34158,8 @@ msgid ""
 "The current configuration does not include a library named '%s'.\n"
 "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
-"Die aktuelle Konfiguration beinhaltet keine Bibliothek mit dem Namen "
-"\"%s\".\n"
+"Die aktuelle Konfiguration beinhaltet keine Bibliothek mit dem Namen \"%s"
+"\".\n"
 "Verwenden Sie die Verwaltung von Footprintbibliotheken, um die Konfiguration "
 "zu bearbeiten."
 
@@ -36265,8 +36299,8 @@ msgstr ""
 #, c-format
 msgid "Unable to find component '%s' in the library(Symdef ID: '%s')"
 msgstr ""
-"Bauteil \"%s\" kann in der Bibliothek nicht gefunden werden (Symdef ID: "
-"\"%s\")"
+"Bauteil \"%s\" kann in der Bibliothek nicht gefunden werden (Symdef ID: \"%s"
+"\")"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1798
 #, c-format
@@ -37292,6 +37326,7 @@ msgstr ""
 "Stellen Sie bitte sicher, dass es kein selbst-schneidendes Polygon ist."
 
 #: pcbnew/router/pns_kicad_iface.cpp:1927 pcbnew/router/router_tool.cpp:453
+#: pcbnew/router/pns_kicad_iface.cpp:1923
 msgid "Interactive Router"
 msgstr "Interaktiver Router"
 
@@ -41680,8 +41715,8 @@ msgstr "KiCad-Leiterplatte"
 #~ "Simulation model type must be the same as of its base class: '%s', but is "
 #~ "'%s'"
 #~ msgstr ""
-#~ "Simulationsmodelltyp muss derselbe sein wie der seiner Basisklasse: "
-#~ "\"%s\", ist aber \"%s\""
+#~ "Simulationsmodelltyp muss derselbe sein wie der seiner Basisklasse: \"%s"
+#~ "\", ist aber \"%s\""
 
 #~ msgid "PTH and NPTH in separate files file"
 #~ msgstr "PTH- und NPTH-Bohrdaten in getrennten Dateien"
@@ -42106,8 +42141,8 @@ msgstr "KiCad-Leiterplatte"
 #~ "\n"
 #~ "On Linux:\n"
 #~ "```\n"
-#~ "python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py "
-#~ "\"%I\" \"%O.csv\"\n"
+#~ "python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I"
+#~ "\" \"%O.csv\"\n"
 #~ "```\n"
 #~ msgstr ""
 #~ "# 1 - Komplette Dokumentation\n"
@@ -42308,8 +42343,8 @@ msgstr "KiCad-Leiterplatte"
 #~ "\n"
 #~ "Unter Linux:\n"
 #~ "```\n"
-#~ "python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py "
-#~ "\"%I\" \"%O.csv\"\n"
+#~ "python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I"
+#~ "\" \"%O.csv\"\n"
 #~ "```\n"
 
 #, c-format
@@ -47513,8 +47548,8 @@ msgstr "KiCad-Leiterplatte"
 #~ msgstr "Benutzen des Touchpads zum Verschieben"
 
 #~ msgid ""
-#~ "Enable touchpad-friendly controls (pan with scroll action, zoom with "
-#~ "Ctrl+scroll)."
+#~ "Enable touchpad-friendly controls (pan with scroll action, zoom with Ctrl"
+#~ "+scroll)."
 #~ msgstr ""
 #~ "Aktivieren der Touchpad freundlichen Kontrolle (Verschieben durch "
 #~ "Scrollen, Zoom durch Strg+Scrollen)"
@@ -49147,8 +49182,8 @@ msgstr "KiCad-Leiterplatte"
 
 #~ msgid "Session file has 'reference' to non-existent symbol \"%s\""
 #~ msgstr ""
-#~ "Sessiondatei beinhaltet eine Referenz zu dem nicht existenten Bauteil "
-#~ "\"%s\"."
+#~ "Sessiondatei beinhaltet eine Referenz zu dem nicht existenten Bauteil \"%s"
+#~ "\"."
 
 #~ msgid "Select Single Track"
 #~ msgstr "Einzelne Leiterbahn auswählen"
