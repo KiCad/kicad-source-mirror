@@ -16,13 +16,14 @@
 # magical-obama <maschwaerzler@a1.net>, 2022.
 # Luc <some_physics@live.com>, 2023.
 # Ken Ovo <Elektroniker@aon.at>, 2023.
+# Karl SCHUH <k.schuh@schuh-tv.at>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-18 11:55-0700\n"
-"PO-Revision-Date: 2023-05-19 21:10+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"PO-Revision-Date: 2023-05-30 16:50+0000\n"
+"Last-Translator: Karl SCHUH <k.schuh@schuh-tv.at>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -54,7 +55,6 @@ msgid "All Files"
 msgstr "Alle Dateien"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:328
-#, fuzzy
 msgid "Build board outline"
 msgstr "Platinenumriss erstellen"
 
@@ -68,7 +68,6 @@ msgid "No footprint loaded."
 msgstr "Kein Footprint geladen."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:697
-#, fuzzy
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
@@ -84,7 +83,6 @@ msgstr ""
 "eine vollständige Analyse ausführen."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:226
-#, fuzzy
 msgid "Create tracks and vias"
 msgstr "Leiterbahnen und Durchkontaktierungen erstellen"
 
@@ -5593,9 +5591,9 @@ msgid "Deactivate selected"
 msgstr "Ausgewählte deaktivieren"
 
 #: common/lib_table_grid_tricks.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid "Library settings for %s..."
-msgstr "Ort der Bibliothek: %s"
+msgstr "Bibliothekseinstellungen für %s(...)"
 
 #: common/lib_tree_model.cpp:146
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
@@ -5934,9 +5932,8 @@ msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
 msgstr "OUTPUTSTREAM_OUTPUTFORMATTER Schreibfehler"
 
 #: common/settings/bom_settings.cpp:132
-#, fuzzy
 msgid "Grouped By Value"
-msgstr "Nach Name gruppieren"
+msgstr "Nach Wert gruppieren"
 
 #: common/settings/bom_settings.cpp:132 common/settings/bom_settings.cpp:149
 #: eeschema/dialogs/dialog_rescue_each.cpp:129
@@ -5947,9 +5944,8 @@ msgid "Reference"
 msgstr "Referenz"
 
 #: common/settings/bom_settings.cpp:149
-#, fuzzy
 msgid "Grouped By Value and Footprint"
-msgstr "Footprint verschieben"
+msgstr "Nach Wert und Footprint gruppieren"
 
 #: common/settings/bom_settings.cpp:213
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:49
@@ -5962,9 +5958,8 @@ msgid "TSV"
 msgstr "TV"
 
 #: common/settings/bom_settings.cpp:224
-#, fuzzy
 msgid "Semicolons"
-msgstr "Volltonfarben"
+msgstr "Strichpunkte"
 
 #: common/settings/color_settings.cpp:334
 msgid "(Footprints)"
@@ -6884,9 +6879,8 @@ msgid "Sort by Best Match"
 msgstr "Nach bester Übereinstimmung sortieren"
 
 #: common/widgets/lib_tree.cpp:90
-#, fuzzy
 msgid "Sort Alphabetically"
-msgstr "Vertikal spiegeln"
+msgstr "Alphabetisch sortieren"
 
 #: common/widgets/lib_tree.cpp:337
 msgid "recent searches"
@@ -8595,9 +8589,8 @@ msgid "Libraries"
 msgstr "Bibliotheken"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:104
-#, fuzzy
 msgid "Reload Configuration"
-msgstr "Benutzer-Konfiguration"
+msgstr "Konfiguration neu laden"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:105
 #, fuzzy
@@ -15077,6 +15070,8 @@ msgstr "Die Datei \"%s\" scheint keine gültige Schaltplandatei zu sein."
 msgid ""
 "Unable to find symbol %s, referenced by part %s. The part was not loaded."
 msgstr ""
+"Kann Symbol %s, referenziert von Teil %s nicht finden. Das Teil wurde nicht "
+"geladen."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:132
 #, c-format
@@ -15084,6 +15079,8 @@ msgid ""
 "Inconsitent pin numbers in symbol %s compared to the one defined in part %s. "
 "The part was not loaded."
 msgstr ""
+"Inkonsistente Pin-Nummern bei Symbol %s im Vergleich zu dem in Teil %s "
+"definierten. Das Teil wurde nicht geladen."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:365
 #, c-format
