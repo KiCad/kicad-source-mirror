@@ -142,13 +142,7 @@ EDA_ANGLE PCB_TEXT::GetDrawRotation() const
 
 const BOX2I PCB_TEXT::ViewBBox() const
 {
-    EDA_ANGLE angle = GetDrawRotation();
-    BOX2I     text_area = GetTextBox();
-
-    if( !angle.IsZero() )
-        text_area = text_area.GetBoundingBoxRotated( GetTextPos(), angle );
-
-    return BOX2I( text_area.GetPosition(), text_area.GetSize() );
+    return GetBoundingBox();
 }
 
 

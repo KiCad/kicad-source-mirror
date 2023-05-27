@@ -535,37 +535,100 @@ BOX2I EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
         return m_bounding_box_cache;
     }
 
-    // We've tried a gazillion different ways of calculating bounding boxes for text; all of them
-    // fail in one case or another and we end up with compensation hacks strewn throughout the
-    // code.  So I'm pulling the plug on it; we're just going to draw the damn text and see how
-    // big it is.
-    BOX2I                      bbox;
-    BOX2I                      strokeBBox;
-    KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
-    KIFONT::FONT*              font = getDrawFont();
-    wxString                   shownText( GetShownText( true ) );
-    TEXT_ATTRIBUTES            attrs = GetAttributes();
+    BOX2I          bbox;
+    wxArrayString  strings;
+    wxString       text = GetShownText( true );
+    int            thickness = GetEffectiveTextPenWidth();
 
-    CALLBACK_GAL callback_gal(
-            empty_opts,
-            // Stroke callback
-            [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
-            {
-                strokeBBox.Merge( aPt1 );
-                strokeBBox.Merge( aPt2 );
-            },
-            // Outline callback
-            [&]( const SHAPE_LINE_CHAIN& aPoly )
-            {
-                bbox.Merge( aPoly.BBox() );
-            } );
-
-    font->Draw( &callback_gal, shownText, drawPos, attrs );
-
-    if( strokeBBox.GetSizeMax() > 0 )
+    if( IsMultilineAllowed() )
     {
-        strokeBBox.Inflate( GetTextThickness() / 2 );
-        bbox.Merge( strokeBBox );
+        wxStringSplit( text, strings, '\n' );
+
+        if( strings.GetCount() )     // GetCount() == 0 for void strings with multilines allowed
+        {
+            if( aLine >= 0 && ( aLine < static_cast<int>( strings.GetCount() ) ) )
+                text = strings.Item( aLine );
+            else
+                text = strings.Item( 0 );
+        }
+    }
+
+    // calculate the H and V size
+    KIFONT::FONT* font = getDrawFont();
+    VECTOR2D      fontSize( GetTextSize() );
+    bool          bold = IsBold();
+    bool          italic = IsItalic();
+    VECTOR2I      extents = font->StringBoundaryLimits( text, fontSize, thickness, bold, italic );
+    int           overbarOffset = 0;
+
+    // Creates bounding box (rectangle) for horizontal, left and top justified text. The
+    // bounding box will be moved later according to the actual text options
+    VECTOR2I textsize = VECTOR2I( extents.x, extents.y );
+    VECTOR2I pos = drawPos;
+
+    if( IsMultilineAllowed() && aLine > 0 && aLine < (int) strings.GetCount() )
+        pos.y -= KiROUND( aLine * font->GetInterline( fontSize.y ) );
+
+    if( text.Contains( wxT( "~{" ) ) )
+        overbarOffset = extents.y / 14;
+
+    if( aInvertY )
+        pos.y = -pos.y;
+
+    bbox.SetOrigin( pos );
+
+    // for multiline texts and aLine < 0, merge all rectangles (aLine == -1 signals all lines)
+    if( IsMultilineAllowed() && aLine < 0 && strings.GetCount() )
+    {
+        for( unsigned ii = 1; ii < strings.GetCount(); ii++ )
+        {
+            text = strings.Item( ii );
+            extents = font->StringBoundaryLimits( text, fontSize, thickness, bold, italic );
+            textsize.x = std::max( textsize.x, extents.x );
+        }
+
+        // interline spacing is only *between* lines, so total height is the height of the first
+        // line plus the interline distance (with interline spacing) for all subsequent lines
+        textsize.y += KiROUND( ( strings.GetCount() - 1 ) * font->GetInterline( fontSize.y ) );
+    }
+
+    bbox.SetSize( textsize );
+
+    /*
+     * At this point the rectangle origin is the text origin (m_Pos).  This is correct only for
+     * left and top justified, non-mirrored, non-overbarred texts. Recalculate for all others.
+     */
+    int italicOffset = IsItalic() ? KiROUND( fontSize.y * ITALIC_TILT ) : 0;
+
+    switch( GetHorizJustify() )
+    {
+    case GR_TEXT_H_ALIGN_LEFT:
+        if( IsMirrored() )
+            bbox.SetX( bbox.GetX() - ( bbox.GetWidth() - italicOffset ) );
+        break;
+
+    case GR_TEXT_H_ALIGN_CENTER:
+        bbox.SetX( bbox.GetX() - ( bbox.GetWidth() - italicOffset ) / 2 );
+        break;
+
+    case GR_TEXT_H_ALIGN_RIGHT:
+        if( !IsMirrored() )
+            bbox.SetX( bbox.GetX() - ( bbox.GetWidth() - italicOffset ) );
+        break;
+    }
+
+    switch( GetVertJustify() )
+    {
+    case GR_TEXT_V_ALIGN_TOP:
+        break;
+
+    case GR_TEXT_V_ALIGN_CENTER:
+        bbox.SetY( bbox.GetY() - ( bbox.GetHeight() + overbarOffset ) / 2 );
+        break;
+
+    case GR_TEXT_V_ALIGN_BOTTOM:
+        bbox.SetY( bbox.GetY() - ( bbox.GetHeight() + overbarOffset ) );
+        break;
     }
 
     bbox.Normalize();       // Make h and v sizes always >= 0
