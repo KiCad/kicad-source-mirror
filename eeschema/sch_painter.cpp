@@ -2032,7 +2032,7 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
+void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
     bool drawingDangling = aLayer == LAYER_DANGLING;
