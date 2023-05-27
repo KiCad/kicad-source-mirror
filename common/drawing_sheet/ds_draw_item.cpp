@@ -176,15 +176,15 @@ void DS_DRAW_ITEM_TEXT::PrintWsItem( const RENDER_SETTINGS* aSettings, const VEC
 
 const BOX2I DS_DRAW_ITEM_TEXT::GetApproxBBox()
 {
-    // A really dumb approximation because doing it for real (even with the stroke font) shows
-    // up large in profiles.
+    // A really dumb over-approximation because doing it for real (even with the stroke font)
+    // shows up large in profiles.
 
     const TEXT_ATTRIBUTES& attrs = GetAttributes();
     const wxString         text = GetShownText( true );
     BOX2I                  bbox( GetTextPos() );
 
-    bbox.SetWidth( (int) text.length() * attrs.m_Size.x * 3 );
-    bbox.SetHeight( attrs.m_Size.y * 3 );
+    bbox.SetWidth( (int) text.length() * attrs.m_Size.x * 1.3 );
+    bbox.SetHeight( attrs.m_Size.y );
 
     switch( attrs.m_Halign )
     {
@@ -200,6 +200,7 @@ const BOX2I DS_DRAW_ITEM_TEXT::GetApproxBBox()
     case GR_TEXT_V_ALIGN_BOTTOM: bbox.Offset( 0, -bbox.GetHeight()     ); break;
     }
 
+    bbox.Inflate( attrs.m_Size.x, attrs.m_Size.y / 2 );
     return bbox;
 }
 
