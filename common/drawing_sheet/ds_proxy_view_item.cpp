@@ -126,8 +126,13 @@ void DS_PROXY_VIEW_ITEM::ViewDraw( int aLayer, VIEW* aView ) const
     ws_settings->SetDefaultFont( settings->GetDefaultFont() );
 
     // Draw all the components that make the drawing sheet
+    BOX2I viewport( aView->GetViewport().GetOrigin(), aView->GetViewport().GetSize() );
+
     for( DS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item; item = drawList.GetNext() )
-        ws_painter.Draw( item, LAYER_DRAWINGSHEET );
+    {
+        if( viewport.Intersects( item->GetApproxBBox() ) )
+            ws_painter.Draw( item, LAYER_DRAWINGSHEET );
+    }
 
     // Draw gray line that outlines the sheet size
     if( settings->GetShowPageLimits() )

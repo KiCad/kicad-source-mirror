@@ -1526,15 +1526,14 @@ void SCH_PAINTER::draw( const LIB_PIN *aPin, int aLayer, bool aDimmed )
                 m_gal->SetFillColor( colour[i] );
 
                 TEXT_ATTRIBUTES attrs;
+                attrs.m_Font = KIFONT::FONT::GetFont( eeconfig()->m_Appearance.default_font );
                 attrs.m_Size = VECTOR2I( size[i], size[i] );
                 attrs.m_Halign = hAlign;
                 attrs.m_Valign = vAlign;
                 attrs.m_Angle = aAngle;
                 attrs.m_StrokeWidth = KiROUND( thickness[i] );
-                KIFONT::FONT* font = KIFONT::FONT::GetFont( eeconfig()->m_Appearance.default_font, attrs.m_Bold,
-                                                      attrs.m_Italic );
 
-                if( drawingShadows && !font->IsOutline() )
+                if( drawingShadows && !attrs.m_Font->IsOutline() )
                 {
                     strokeText( text[i], aPos, attrs );
                 }
@@ -2058,17 +2057,10 @@ void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
 
 void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
 {
-    bool    drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
-    COLOR4D color = getRenderColor( aTextBox, aLayer, drawingShadows );
-    float   borderWidth = getLineWidth( aTextBox, drawingShadows );
-
-    KIFONT::FONT* font = aTextBox->GetFont();
-
-    if( !font )
-    {
-        font = KIFONT::FONT::GetFont( m_schSettings.GetDefaultFont(), aTextBox->IsBold(),
-                                      aTextBox->IsItalic() );
-    }
+    bool          drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+    COLOR4D       color = getRenderColor( aTextBox, aLayer, drawingShadows );
+    float         borderWidth = getLineWidth( aTextBox, drawingShadows );
+    KIFONT::FONT* font = getFont( aTextBox );
 
     auto drawText =
             [&]()

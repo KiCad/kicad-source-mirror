@@ -174,6 +174,36 @@ void DS_DRAW_ITEM_TEXT::PrintWsItem( const RENDER_SETTINGS* aSettings, const VEC
 }
 
 
+const BOX2I DS_DRAW_ITEM_TEXT::GetApproxBBox()
+{
+    // A really dumb approximation because doing it for real (even with the stroke font) shows
+    // up large in profiles.
+
+    const TEXT_ATTRIBUTES& attrs = GetAttributes();
+    const wxString         text = GetShownText( true );
+    BOX2I                  bbox( GetTextPos() );
+
+    bbox.SetWidth( (int) text.length() * attrs.m_Size.x * 3 );
+    bbox.SetHeight( attrs.m_Size.y * 3 );
+
+    switch( attrs.m_Halign )
+    {
+    case GR_TEXT_H_ALIGN_LEFT:                                           break;
+    case GR_TEXT_H_ALIGN_CENTER: bbox.Offset( -bbox.GetWidth() / 2, 0 ); break;
+    case GR_TEXT_H_ALIGN_RIGHT:  bbox.Offset( -bbox.GetWidth(),     0 ); break;
+    }
+
+    switch( GetAttributes().m_Valign )
+    {
+    case GR_TEXT_V_ALIGN_TOP:                                             break;
+    case GR_TEXT_V_ALIGN_CENTER: bbox.Offset( 0, -bbox.GetHeight() / 2 ); break;
+    case GR_TEXT_V_ALIGN_BOTTOM: bbox.Offset( 0, -bbox.GetHeight()     ); break;
+    }
+
+    return bbox;
+}
+
+
 const BOX2I DS_DRAW_ITEM_TEXT::GetBoundingBox() const
 {
     return EDA_TEXT::GetTextBox();

@@ -321,7 +321,7 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
 void PL_EDIT_TOOL::moveItem( DS_DATA_ITEM* aItem, const VECTOR2I& aDelta )
 {
-    aItem->MoveToUi( aItem->GetStartPosUi() + aDelta );
+    aItem->MoveToUi( aItem->GetStartPosIU() + aDelta );
 
     for( DS_DRAW_ITEM_BASE* item : aItem->GetDrawItems() )
     {

@@ -395,6 +395,7 @@ private:
 
     std::reference_wrapper<const EDA_IU_SCALE> m_IuScale;
 
+    mutable const KIFONT::FONT*                         m_render_cache_font;
     mutable wxString                                    m_render_cache_text;
     mutable EDA_ANGLE                                   m_render_cache_angle;
     mutable VECTOR2I                                    m_render_cache_offset;

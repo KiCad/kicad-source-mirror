@@ -1203,28 +1203,49 @@ void LIB_PIN::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
+void LIB_PIN::validateExtentsCache( KIFONT::FONT* aFont, int aSize, const wxString& aText,
+                                    EXTENTS_CACHE* aCache ) const
+{
+    if( aCache->m_Font == aFont
+        && aCache->m_FontSize == aSize
+        && aCache->m_Extents != VECTOR2I() )
+    {
+        return;
+    }
+
+    aCache->m_Font = aFont;
+    aCache->m_FontSize = aSize;
+
+    // Get maximum height including ascenders and descenders
+    static wxString hText = wxT( "Xg" );
+
+    VECTOR2D fontSize( aSize, aSize );
+    int      penWidth = GetPenSizeForNormal( aSize );
+
+    aCache->m_Extents.x = aFont->StringBoundaryLimits( aText, fontSize, penWidth, false, false ).x;
+    aCache->m_Extents.y = aFont->StringBoundaryLimits( hText, fontSize, penWidth, false, false ).y;
+}
+
+
 const BOX2I LIB_PIN::GetBoundingBox( bool aIncludeInvisiblePins, bool aIncludeNameAndNumber,
                                      bool aIncludeElectricalType ) const
 {
     EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
     KIFONT::FONT*      font = KIFONT::FONT::GetFont( cfg->m_Appearance.default_font );
 
-    BOX2I          bbox;
-    VECTOR2I       begin;
-    VECTOR2I       end;
-    int            pinNameOffset = 0;
-    int            nameTextLength = 0;
-    int            nameTextHeight = 0;
-    int            numberTextLength = 0;
-    int            numberTextHeight = 0;
-    int            typeTextLength = 0;
-    wxString       name = GetShownName();
-    wxString       number = GetShownNumber();
-    bool           includeName = aIncludeNameAndNumber && !name.IsEmpty();
-    bool           includeNumber = aIncludeNameAndNumber && !number.IsEmpty();
-    bool           includeType = aIncludeElectricalType;
-    int            minsizeV = TARGET_PIN_RADIUS;
-    int            penWidth = GetPenWidth();
+    BOX2I    bbox;
+    VECTOR2I begin;
+    VECTOR2I end;
+    int      pinNameOffset = 0;
+    int      nameTextLength = 0;
+    int      nameTextHeight = 0;
+    int      numberTextLength = 0;
+    int      numberTextHeight = 0;
+    int      typeTextLength = 0;
+    bool     includeName = aIncludeNameAndNumber && !GetShownName().IsEmpty();
+    bool     includeNumber = aIncludeNameAndNumber && !GetShownNumber().IsEmpty();
+    bool     includeType = aIncludeElectricalType;
+    int      minsizeV = TARGET_PIN_RADIUS;
 
     if( !aIncludeInvisiblePins && !IsVisible() )
     {
@@ -1243,33 +1264,18 @@ const BOX2I LIB_PIN::GetBoundingBox( bool aIncludeInvisiblePins, bool aIncludeNa
             includeNumber = false;
     }
 
-    // Get maximum height including ascenders and descenders
-    wxString test = wxT( "Xg" );
-
     if( includeNumber )
     {
-        VECTOR2D fontSize( m_numTextSize, m_numTextSize );
-        numberTextLength = font->StringBoundaryLimits( number, fontSize, penWidth, false, false ).x;
-        numberTextHeight = font->StringBoundaryLimits( test, fontSize, penWidth, false, false ).y;
+        validateExtentsCache( font, m_numTextSize, GetShownNumber(), &m_numExtentsCache );
+        numberTextLength = m_numExtentsCache.m_Extents.x;
+        numberTextHeight = m_numExtentsCache.m_Extents.y;
     }
 
     if( includeName )
     {
-        VECTOR2D fontSize( m_nameTextSize, m_nameTextSize );
-
-        nameTextLength = font->StringBoundaryLimits( name, fontSize, penWidth, false, false ).x
-                         + pinNameOffset;
-        nameTextHeight = font->StringBoundaryLimits( test, fontSize, penWidth, false, false ).y
-                         + schIUScale.MilsToIU( PIN_TEXT_MARGIN );
-    }
-
-    // KIFONT has to be rather tight on boundary limits for knockout text in PCBNew, but in truth
-    // the stroke font returns a vertically under-sized bounding box (even though it *does* in fact
-    // attempt to account for the font size being stroke centre-point to stroke centre-point).
-    if( font->IsStroke() )
-    {
-        numberTextHeight += 2 * penWidth;
-        nameTextHeight += 2 * penWidth;
+        validateExtentsCache( font, m_nameTextSize, GetShownName(), &m_nameExtentsCache );
+        nameTextLength = m_nameExtentsCache.m_Extents.x + pinNameOffset;
+        nameTextHeight = m_nameExtentsCache.m_Extents.y + schIUScale.MilsToIU( PIN_TEXT_MARGIN );
     }
 
     if( includeType )
@@ -1290,7 +1296,7 @@ const BOX2I LIB_PIN::GetBoundingBox( bool aIncludeInvisiblePins, bool aIncludeNa
 
     // Attempt to mimic SCH_PAINTER's algorithm without actually knowing the schematic text
     // offset ratio.
-    int PIN_TEXT_OFFSET = schIUScale.MilsToIU( 24 ) + 2 * penWidth;
+    int PIN_TEXT_OFFSET = schIUScale.MilsToIU( 24 );
 
     // Calculate topLeft & bottomRight corner positions for the default pin orientation (PIN_RIGHT)
     if( pinNameOffset || !includeName )

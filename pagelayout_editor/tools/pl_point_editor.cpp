@@ -337,8 +337,8 @@ void PL_POINT_EDITOR::updateItem() const
         VECTOR2I move_startpoint = m_editPoints->Point( LINE_START ).GetPosition() - line->GetStart();
         VECTOR2I move_endpoint = m_editPoints->Point( LINE_END ).GetPosition() - line->GetEnd();
 
-        dataItem->MoveStartPointToUi( dataItem->GetStartPosUi() + move_startpoint );
-        dataItem->MoveEndPointToUi( dataItem->GetEndPosUi() + move_endpoint );
+        dataItem->MoveStartPointToUi( dataItem->GetStartPosIU() + move_startpoint );
+        dataItem->MoveEndPointToUi( dataItem->GetEndPosIU() + move_endpoint );
 
         for( DS_DRAW_ITEM_BASE* draw_item : dataItem->GetDrawItems() )
         {
@@ -388,8 +388,8 @@ void PL_POINT_EDITOR::updateItem() const
             end_delta.x = botRight.x - rect->GetEnd().x;
         }
 
-        dataItem->MoveStartPointToUi( dataItem->GetStartPosUi() + start_delta );
-        dataItem->MoveEndPointToUi( dataItem->GetEndPosUi() + end_delta );
+        dataItem->MoveStartPointToUi( dataItem->GetStartPosIU() + start_delta );
+        dataItem->MoveEndPointToUi( dataItem->GetEndPosIU() + end_delta );
 
         for( DS_DRAW_ITEM_BASE* draw_item : dataItem->GetDrawItems() )
         {

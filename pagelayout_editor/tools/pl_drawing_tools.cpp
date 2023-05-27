@@ -169,7 +169,7 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
             else
             {
                 item->GetPeer()->MoveStartPointToUi( cursorPos );
-                item->SetPosition( item->GetPeer()->GetStartPosUi( 0 ) );
+                item->SetPosition( item->GetPeer()->GetStartPosIU( 0 ) );
                 item->ClearEditFlags();
                 getView()->Update( item );
 
@@ -194,7 +194,7 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
         else if( item && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
             item->GetPeer()->MoveStartPointToUi( cursorPos );
-            item->SetPosition( item->GetPeer()->GetStartPosUi( 0 ) );
+            item->SetPosition( item->GetPeer()->GetStartPosIU( 0 ) );
             getView()->Update( item );
         }
         else
@@ -306,7 +306,7 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             if( item )
             {
                 item->GetPeer()->MoveEndPointToUi( cursorPos );
-                item->SetEnd( item->GetPeer()->GetEndPosUi( 0 ) );
+                item->SetEnd( item->GetPeer()->GetEndPosIU( 0 ) );
                 getView()->Update( item );
             }
         }

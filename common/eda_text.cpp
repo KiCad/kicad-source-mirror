@@ -91,6 +91,7 @@ GR_TEXT_V_ALIGN_T EDA_TEXT::MapVertJustify( int aVertJustify )
 EDA_TEXT::EDA_TEXT( const EDA_IU_SCALE& aIuScale, const wxString& aText ) :
         m_text( aText ),
         m_IuScale( aIuScale ),
+        m_render_cache_font( nullptr ),
         m_bounding_box_cache_valid( false ),
         m_bounding_box_cache_line( -1 ),
         m_bounding_box_cache_inverted( false )
@@ -111,8 +112,10 @@ EDA_TEXT::EDA_TEXT( const EDA_TEXT& aText ) :
     m_attributes = aText.m_attributes;
     m_pos = aText.m_pos;
 
+    m_render_cache_font = aText.m_render_cache_font;
     m_render_cache_text = aText.m_render_cache_text;
     m_render_cache_angle = aText.m_render_cache_angle;
+    m_render_cache_offset = aText.m_render_cache_offset;
 
     m_render_cache.clear();
 
@@ -145,8 +148,10 @@ EDA_TEXT& EDA_TEXT::operator=( const EDA_TEXT& aText )
     m_attributes = aText.m_attributes;
     m_pos = aText.m_pos;
 
+    m_render_cache_font = aText.m_render_cache_font;
     m_render_cache_text = aText.m_render_cache_text;
     m_render_cache_angle = aText.m_render_cache_angle;
+    m_render_cache_offset = aText.m_render_cache_offset;
 
     m_render_cache.clear();
 
@@ -469,19 +474,21 @@ EDA_TEXT::GetRenderCache( const KIFONT::FONT* aFont, const wxString& forResolved
         EDA_ANGLE resolvedAngle = GetDrawRotation();
 
         if( m_render_cache.empty()
+                || m_render_cache_font != aFont
                 || m_render_cache_text != forResolvedText
                 || m_render_cache_angle != resolvedAngle
                 || m_render_cache_offset != aOffset )
         {
             m_render_cache.clear();
 
-            KIFONT::OUTLINE_FONT* font = static_cast<KIFONT::OUTLINE_FONT*>( getDrawFont() );
-            TEXT_ATTRIBUTES       attrs = GetAttributes();
+            const KIFONT::OUTLINE_FONT* font = static_cast<const KIFONT::OUTLINE_FONT*>( aFont );
+            TEXT_ATTRIBUTES             attrs = GetAttributes();
 
             attrs.m_Angle = resolvedAngle;
 
             font->GetLinesAsGlyphs( &m_render_cache, forResolvedText, GetDrawPos() + aOffset,
                                     attrs );
+            m_render_cache_font = aFont;
             m_render_cache_angle = resolvedAngle;
             m_render_cache_text = forResolvedText;
             m_render_cache_offset = aOffset;

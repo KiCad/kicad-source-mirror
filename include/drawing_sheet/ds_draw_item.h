@@ -84,6 +84,14 @@ public:
     // More advanced version of DrawWsItem. This is what must be defined in the derived type.
     virtual void PrintWsItem( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) = 0;
 
+    // We can't cache bounding boxes because we're recreated for each draw event.  This method
+    // can be overridden by items whose real bounding boxes are expensive to calculate.  It is
+    // used to determine if we're in the current view, so it can be sloppy.
+    virtual const BOX2I GetApproxBBox()
+    {
+        return GetBoundingBox();
+    }
+
     // Derived types must define GetBoundingBox() as a minimum, and can then override the
     // two HitTest() functions if they need something more specific.
     const BOX2I GetBoundingBox() const override = 0;
@@ -324,6 +332,8 @@ public:
 
     VECTOR2I GetPosition() const override { return GetTextPos(); }
     void     SetPosition( const VECTOR2I& aPos ) override { SetTextPos( aPos ); }
+
+    virtual const BOX2I GetApproxBBox() override;
 
     const BOX2I GetBoundingBox() const override;
 

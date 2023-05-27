@@ -253,10 +253,7 @@ void KIGFX::DS_PAINTER::draw( const DS_DRAW_ITEM_POLYPOLYGONS* aItem, int aLayer
 
 void KIGFX::DS_PAINTER::draw( const DS_DRAW_ITEM_TEXT* aItem, int aLayer ) const
 {
-    KIFONT::FONT*   font = aItem->GetFont();
-    wxString        shownText( aItem->GetShownText( true ) );
-    VECTOR2I        text_offset = aItem->GetTextPos();
-    TEXT_ATTRIBUTES attrs = aItem->GetAttributes();
+    KIFONT::FONT* font = aItem->GetFont();
 
     if( !font )
     {
@@ -269,25 +266,11 @@ void KIGFX::DS_PAINTER::draw( const DS_DRAW_ITEM_TEXT* aItem, int aLayer ) const
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
 
+    TEXT_ATTRIBUTES attrs = aItem->GetAttributes();
     attrs.m_StrokeWidth = std::max( aItem->GetEffectiveTextPenWidth(),
                                     m_renderSettings.GetDefaultPenWidth() );
 
-    std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
-
-    if( font->IsOutline() )
-        cache = aItem->GetRenderCache( font, shownText, text_offset );
-
-    if( cache )
-    {
-        m_gal->SetLineWidth( attrs.m_StrokeWidth );
-        m_gal->DrawGlyphs( *cache );
-    }
-    else
-    {
-        m_gal->SetIsFill( font->IsOutline() );
-        m_gal->SetIsStroke( font->IsStroke() );
-        font->Draw( m_gal, shownText, text_offset, attrs );
-    }
+    font->Draw( m_gal, aItem->GetShownText( true ), aItem->GetTextPos(), attrs );
 }
 
 

@@ -117,6 +117,7 @@ public:
 
         // pin name string does not support spaces
         m_name.Replace( wxT( " " ), wxT( "_" ) );
+        m_nameExtentsCache.m_Extents = VECTOR2I();
     }
 
     const wxString& GetNumber() const { return m_number; }
@@ -127,13 +128,22 @@ public:
 
         // pin number string does not support spaces
         m_number.Replace( wxT( " " ), wxT( "_" ) );
+        m_numExtentsCache.m_Extents = VECTOR2I();
     }
 
     int GetNameTextSize() const { return m_nameTextSize; }
-    void SetNameTextSize( int aSize ) { m_nameTextSize = aSize; }
+    void SetNameTextSize( int aSize )
+    {
+        m_nameTextSize = aSize;
+        m_nameExtentsCache.m_Extents = VECTOR2I();
+    }
 
     int GetNumberTextSize() const { return m_numTextSize; }
-    void SetNumberTextSize( int aSize ) { m_numTextSize = aSize; }
+    void SetNumberTextSize( int aSize )
+    {
+        m_numTextSize = aSize;
+        m_numExtentsCache.m_Extents = VECTOR2I();
+    }
 
     std::map<wxString, ALT>& GetAlternates() { return m_alternates; }
 
@@ -250,12 +260,22 @@ public:
     static const wxString GetCanonicalElectricalTypeName( ELECTRICAL_PINTYPE aType );
 
 protected:
+    struct EXTENTS_CACHE
+    {
+        KIFONT::FONT* m_Font = nullptr;
+        int           m_FontSize = 0;
+        VECTOR2I      m_Extents;
+    };
+
+    void validateExtentsCache( KIFONT::FONT* aFont, int aSize, const wxString& aText,
+                               EXTENTS_CACHE* aCache ) const;
+
     /**
      * Print the pin symbol without text.
      * If \a aColor != 0, draw with \a aColor, else with the normal pin color.
      */
     void printPinSymbol( const RENDER_SETTINGS *aSettings, const VECTOR2I &aPos, int aOrientation,
-            bool aDimmed );
+                         bool aDimmed );
 
     /**
      * Put the pin number and pin text info, given the pin line coordinates.
@@ -287,18 +307,21 @@ private:
     int compare( const LIB_ITEM& aOther, int aCompareFlags = 0 ) const override;
 
 protected:
-    VECTOR2I                m_position;      // Position of the pin.
-    int                     m_length;        // Length of the pin.
-    int                     m_orientation;   // Pin orientation (Up, Down, Left, Right)
-    GRAPHIC_PINSHAPE        m_shape;         // Shape drawn around pin
-    ELECTRICAL_PINTYPE      m_type;          // Electrical type of the pin.
-    int                     m_attributes;    // Set bit 0 to indicate pin is invisible.
+    VECTOR2I                m_position;        // Position of the pin.
+    int                     m_length;          // Length of the pin.
+    int                     m_orientation;     // Pin orientation (Up, Down, Left, Right)
+    GRAPHIC_PINSHAPE        m_shape;           // Shape drawn around pin
+    ELECTRICAL_PINTYPE      m_type;            // Electrical type of the pin.
+    int                     m_attributes;      // Set bit 0 to indicate pin is invisible.
     wxString                m_name;
     wxString                m_number;
-    int                     m_numTextSize;   // Pin num and Pin name sizes
+    int                     m_numTextSize;     // Pin num and Pin name sizes
     int                     m_nameTextSize;
 
-    std::map<wxString, ALT> m_alternates;    // Map of alternate name to ALT structure
+    std::map<wxString, ALT> m_alternates;      // Map of alternate name to ALT structure
+
+    mutable EXTENTS_CACHE   m_numExtentsCache;
+    mutable EXTENTS_CACHE   m_nameExtentsCache;
 };
 
 
