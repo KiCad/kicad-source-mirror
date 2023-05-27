@@ -566,11 +566,18 @@ BOX2I EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     VECTOR2I textsize = VECTOR2I( extents.x, extents.y );
     VECTOR2I pos = drawPos;
 
+    if( font->IsStroke() )
+    {
+        int fudgeFactor = extents.y * 0.17;
+        textsize.y += fudgeFactor;
+        pos.y += fudgeFactor / 2;
+    }
+
     if( IsMultilineAllowed() && aLine > 0 && aLine < (int) strings.GetCount() )
         pos.y -= KiROUND( aLine * font->GetInterline( fontSize.y ) );
 
     if( text.Contains( wxT( "~{" ) ) )
-        overbarOffset = extents.y / 14;
+        overbarOffset = extents.y / 6;
 
     if( aInvertY )
         pos.y = -pos.y;
@@ -578,7 +585,7 @@ BOX2I EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     bbox.SetOrigin( pos );
 
     // for multiline texts and aLine < 0, merge all rectangles (aLine == -1 signals all lines)
-    if( IsMultilineAllowed() && aLine < 0 && strings.GetCount() )
+    if( IsMultilineAllowed() && aLine < 0 && strings.GetCount() > 1 )
     {
         for( unsigned ii = 1; ii < strings.GetCount(); ii++ )
         {
@@ -591,6 +598,8 @@ BOX2I EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
         // line plus the interline distance (with interline spacing) for all subsequent lines
         textsize.y += KiROUND( ( strings.GetCount() - 1 ) * font->GetInterline( fontSize.y ) );
     }
+
+    textsize.y += overbarOffset;
 
     bbox.SetSize( textsize );
 
@@ -623,11 +632,11 @@ BOX2I EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
         break;
 
     case GR_TEXT_V_ALIGN_CENTER:
-        bbox.SetY( bbox.GetY() - ( bbox.GetHeight() + overbarOffset ) / 2 );
+        bbox.SetY( bbox.GetY() - bbox.GetHeight() / 2 );
         break;
 
     case GR_TEXT_V_ALIGN_BOTTOM:
-        bbox.SetY( bbox.GetY() - ( bbox.GetHeight() + overbarOffset ) );
+        bbox.SetY( bbox.GetY() - bbox.GetHeight() );
         break;
     }
 
