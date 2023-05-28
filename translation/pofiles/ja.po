@@ -12,10 +12,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-18 11:55-0700\n"
-"PO-Revision-Date: 2023-05-08 04:53+0000\n"
-"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"PO-Revision-Date: 2023-05-30 16:50+0000\n"
+"Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4286,9 +4286,9 @@ msgid "Zoom %.2f"
 msgstr "ズーム %.2f"
 
 #: common/eda_draw_frame.cpp:609
-#, fuzzy, c-format
+#, c-format
 msgid "grid %s"
-msgstr "フィールド %s"
+msgstr "グリッド %s"
 
 #: common/eda_draw_frame.cpp:622 pagelayout_editor/pl_editor_frame.cpp:752
 msgid "inches"
@@ -5871,14 +5871,12 @@ msgid "CSV"
 msgstr "CSV"
 
 #: common/settings/bom_settings.cpp:218
-#, fuzzy
 msgid "TSV"
-msgstr "TV"
+msgstr "TSV"
 
 #: common/settings/bom_settings.cpp:224
-#, fuzzy
 msgid "Semicolons"
-msgstr "ソリッド カラー"
+msgstr "セミコロン"
 
 #: common/settings/color_settings.cpp:334
 msgid "(Footprints)"
@@ -6790,9 +6788,8 @@ msgid "Sort by Best Match"
 msgstr ""
 
 #: common/widgets/lib_tree.cpp:90
-#, fuzzy
 msgid "Sort Alphabetically"
-msgstr "全て表示 (アルファベット順)"
+msgstr "アルファベット順に並び替え"
 
 #: common/widgets/lib_tree.cpp:337
 msgid "recent searches"
@@ -7074,9 +7071,8 @@ msgid "Eagle XML schematic files"
 msgstr "Eagle XML 回路図ファイル"
 
 #: common/wildcards_and_files_ext.cpp:310
-#, fuzzy
 msgid "Ltspice schematic files"
-msgstr "Altium 回路図ファイル"
+msgstr "Ltspice 回路図ファイル"
 
 #: common/wildcards_and_files_ext.cpp:316
 msgid "Eagle XML files"
@@ -7755,9 +7751,8 @@ msgid "Delete all associations?"
 msgstr "すべての関連付けを削除しますか？"
 
 #: eeschema/annotate.cpp:155
-#, fuzzy
 msgid "Delete Annotation"
-msgstr "アノテーションをクリア"
+msgstr "アノテーションを削除"
 
 #: eeschema/annotate.cpp:266
 #, c-format
@@ -8426,14 +8421,13 @@ msgid "No symbol selected"
 msgstr "保存するシンボルが選択されていません"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:98
-#, fuzzy
 msgid "Connected to database successfully"
-msgstr "ネットリストの更新に成功！"
+msgstr "データベースに正常に接続されました"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Database connection failed: %s"
-msgstr "%sのゾーン接続:%s。"
+msgstr "データベースへの接続に失敗: %s"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:117
 #, fuzzy
@@ -8455,22 +8449,20 @@ msgid "DSN:"
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:45
-#, fuzzy
 msgid "Username:"
-msgstr "新しい名前:"
+msgstr "Username:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
 msgid "Password:"
-msgstr ""
+msgstr "Password:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:71
-#, fuzzy
 msgid "Connection String:"
-msgstr "接続元"
+msgstr "接続文字列:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:85
 msgid "Test"
-msgstr ""
+msgstr "テスト"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:99
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:190
@@ -10848,9 +10840,8 @@ msgid "Replace matches in reference designators"
 msgstr "一致したリファレンス指定子の置換"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:123
-#, fuzzy
 msgid "Replace"
-msgstr "置換 (&R)"
+msgstr "置換"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:40
 msgid "Schematic Setup"
@@ -11226,23 +11217,20 @@ msgid "Distortion"
 msgstr "歪み"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:228
-#, fuzzy
 msgid "Measured node:"
-msgstr "測定ノード"
+msgstr "測定ノード:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:238
-#, fuzzy
 msgid "Reference node:"
-msgstr "基準ノード"
+msgstr "基準ノード:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:245
 msgid "(optional; default GND)"
 msgstr "(オプション; デフォルト GND)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:249
-#, fuzzy
 msgid "Noise source:"
-msgstr "ノイズ ソース"
+msgstr "ノイズ ソース:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:282
 msgid "Number of points:"
@@ -11655,9 +11643,10 @@ msgid "Rename Field"
 msgstr "ファイル名を変更"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:688
-#, fuzzy, c-format
+#, c-format
 msgid "Field name %s already exists. Cannot rename over existing field."
-msgstr "ファイル '%s' はすでに存在します。このファイルを上書きしますか？"
+msgstr "フィールド名 '%s' "
+"はすでに存在します。既存のフィールドの名前に変更することはできません。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:775
 #, fuzzy
@@ -11697,9 +11686,9 @@ msgid "Could not write BOM output to '%s'."
 msgstr "フォルダー '%s' へプロット ファイルを書き込めませんでした。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1137
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote BOM output to '%s'"
-msgstr "出力ディレクトリ '%s' を作成できませんでした。"
+msgstr "'%s' にBOMを出力しました"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1265
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1666
@@ -11769,9 +11758,8 @@ msgid "Group symbols together based on common properties"
 msgstr "共通のプロパティに基づいたシンボルをまとめてグループ化する"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:161
-#, fuzzy
 msgid "Edit"
-msgstr "編集 (&E)"
+msgstr "編集"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:173
 #, fuzzy
@@ -11786,7 +11774,7 @@ msgstr "ミリメートル"
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:187
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:201
 msgid ","
-msgstr ""
+msgstr ","
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:190
 #, fuzzy
@@ -13235,12 +13223,12 @@ msgid "Unable to open destination '%s'"
 msgstr "出力先 '%s' を開けませんでした"
 
 #: eeschema/eeschema_jobs_handler.cpp:495
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr "シンボル '%s' の ユニット%d を '%s' にプロット\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:505
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
 msgstr "シンボル '%s' を '%s' にプロット\n"
 
@@ -13901,7 +13889,6 @@ msgid "Pos Y"
 msgstr "座標 Y"
 
 #: eeschema/lib_pin.cpp:1188
-#, fuzzy
 msgid "Flags"
 msgstr "フラグ"
 
@@ -15512,14 +15499,12 @@ msgstr "DNP"
 #: eeschema/sch_symbol.cpp:1730 eeschema/sch_text.cpp:505
 #: eeschema/sch_textbox.cpp:448 eeschema/tools/sch_edit_tool.cpp:378
 #: eeschema/tools/sch_edit_tool.cpp:470 eeschema/tools/sch_edit_tool.cpp:555
-#, fuzzy
 msgid "Simulation"
-msgstr "シミュレーション (&S)"
+msgstr "シミュレーション"
 
 #: eeschema/sch_symbol.cpp:1733
-#, fuzzy
 msgid "BOM"
-msgstr "部品表..."
+msgstr "部品表"
 
 #: eeschema/sch_symbol.cpp:1745 eeschema/sch_text.cpp:505
 #: eeschema/sch_textbox.cpp:448
@@ -16032,9 +16017,9 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"ロードされた回路図でロードされた回路図プロジェクト ライブラリ テーブルから失"
-"われたライブラリー名があります。  これは回路図でシンボル ライブラリのリンクを"
-"壊す原因となります。\n"
+"選択した回路図にプロジェクト ライブラリ "
+"テーブルにないライブラリ名があります。  これは回路図でシンボル "
+"ライブラリの参照を壊す原因となります。\n"
 "\n"
 "続行しますか？"
 
@@ -16774,7 +16759,6 @@ msgid "noise [(V or A)^2/Hz]"
 msgstr "ノイズ [(V or A)^2/Hz]"
 
 #: eeschema/sim/sim_plot_panel.cpp:543 eeschema/sim/sim_plot_panel.cpp:650
-#, fuzzy
 msgid "Power"
 msgstr "電源"
 
@@ -16809,24 +16793,20 @@ msgid " (phase)"
 msgstr " (位相)"
 
 #: eeschema/sim/simulator_frame.cpp:194
-#, fuzzy
 msgid "Measure Min"
-msgstr "測定ノード"
+msgstr "最小値を計測"
 
 #: eeschema/sim/simulator_frame.cpp:195
-#, fuzzy
 msgid "Measure Max"
-msgstr "計測 (&M)"
+msgstr "最大値を計測"
 
 #: eeschema/sim/simulator_frame.cpp:196
-#, fuzzy
 msgid "Measure Average"
-msgstr "距離を計測"
+msgstr "平均を計測"
 
 #: eeschema/sim/simulator_frame.cpp:197
-#, fuzzy
 msgid "Measure RMS"
-msgstr "計測 (&M)"
+msgstr "二乗平均平方根を計測"
 
 #: eeschema/sim/simulator_frame.cpp:198
 #, fuzzy
@@ -16956,9 +16936,8 @@ msgstr ""
 "\n"
 
 #: eeschema/sim/simulator_frame_base.cpp:228
-#, fuzzy
 msgid "Measurement"
-msgstr "計測 (&M)"
+msgstr "計測"
 
 #: eeschema/sim/simulator_frame_base.cpp:230 gerbview/gerber_file_image.cpp:321
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:51
@@ -17709,11 +17688,11 @@ msgstr "フットプリントの再リンクはユーザーによってキャン
 
 #: eeschema/tools/backannotate.cpp:356
 msgid "true"
-msgstr ""
+msgstr "true"
 
 #: eeschema/tools/backannotate.cpp:356
 msgid "false"
-msgstr ""
+msgstr "false"
 
 #: eeschema/tools/backannotate.cpp:362
 #, c-format
@@ -17984,9 +17963,8 @@ msgid "Add Text"
 msgstr "テキストを追加"
 
 #: eeschema/tools/ee_actions.cpp:254 eeschema/tools/ee_actions.cpp:369
-#, fuzzy
 msgid "Draw text items"
-msgstr "その他のテキスト アイテム"
+msgstr "テキスト アイテムを描く"
 
 #: eeschema/tools/ee_actions.cpp:259 eeschema/tools/ee_actions.cpp:374
 #: pcbnew/tools/pcb_actions.cpp:133
@@ -18003,17 +17981,14 @@ msgid "Add Lines"
 msgstr "線を追加"
 
 #: eeschema/tools/ee_actions.cpp:264
-#, fuzzy
 msgid "Draw lines"
 msgstr "線を描く"
 
 #: eeschema/tools/ee_actions.cpp:269
-#, fuzzy
 msgid "Add Polygon"
-msgstr "ポリゴン"
+msgstr "ポリゴンを追加"
 
 #: eeschema/tools/ee_actions.cpp:269
-#, fuzzy
 msgid "Draw polygons"
 msgstr "ポリゴンを描く"
 
@@ -18058,7 +18033,6 @@ msgid "Add Symbol"
 msgstr "シンボルを追加"
 
 #: eeschema/tools/ee_actions.cpp:305
-#, fuzzy
 msgid "Add symbols"
 msgstr "シンボルを追加"
 
@@ -18067,7 +18041,6 @@ msgid "Add Power"
 msgstr "電源を追加"
 
 #: eeschema/tools/ee_actions.cpp:311
-#, fuzzy
 msgid "Add power symbols"
 msgstr "電源シンボルを追加"
 
@@ -18076,9 +18049,8 @@ msgid "Add No Connect Flag"
 msgstr "空き端子フラグを追加"
 
 #: eeschema/tools/ee_actions.cpp:317
-#, fuzzy
 msgid "Draw no-connection flags"
-msgstr "未接続フラグを追加"
+msgstr "未接続フラグを描く"
 
 #: eeschema/tools/ee_actions.cpp:323
 msgid "Add Junction"
@@ -18102,9 +18074,8 @@ msgid "Add Label"
 msgstr "ラベルを追加"
 
 #: eeschema/tools/ee_actions.cpp:335
-#, fuzzy
 msgid "Draw net labels"
-msgstr "ネット ラベルを追加"
+msgstr "ネット ラベルを描く"
 
 #: eeschema/tools/ee_actions.cpp:340
 msgid "Add Net Class Directive"
@@ -18120,7 +18091,6 @@ msgid "Add Hierarchical Label"
 msgstr "階層ラベルを追加"
 
 #: eeschema/tools/ee_actions.cpp:346
-#, fuzzy
 msgid "Add hierarchical labels"
 msgstr "階層ラベルを追加"
 
@@ -18156,7 +18126,6 @@ msgid "Add Rectangle"
 msgstr "矩形を追加"
 
 #: eeschema/tools/ee_actions.cpp:379
-#, fuzzy
 msgid "Draw rectangles"
 msgstr "矩形を描く"
 
@@ -18165,7 +18134,6 @@ msgid "Add Circle"
 msgstr "円を追加"
 
 #: eeschema/tools/ee_actions.cpp:384
-#, fuzzy
 msgid "Draw circles"
 msgstr "円を描画"
 
@@ -18174,7 +18142,6 @@ msgid "Add Arc"
 msgstr "円弧を追加"
 
 #: eeschema/tools/ee_actions.cpp:389
-#, fuzzy
 msgid "Draw arcs"
 msgstr "円弧を描く"
 
@@ -18936,9 +18903,8 @@ msgid "Break a wire out of a bus"
 msgstr "バスからワイヤーを引き出し"
 
 #: eeschema/tools/ee_actions.cpp:916
-#, fuzzy
 msgid "Draw graphic lines"
-msgstr "図形ラインを追加"
+msgstr "図形ラインを描く"
 
 #: eeschema/tools/ee_actions.cpp:922 pcbnew/tools/pcb_actions.cpp:1508
 msgid "Undo Last Segment"
@@ -19125,9 +19091,9 @@ msgid "Select a symbol to diff against its library equivalent."
 msgstr "ライブラリに対するフットプリントをチェックしています..."
 
 #: eeschema/tools/ee_inspection_tool.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s"
-msgstr "シンボル"
+msgstr "シンボル %s"
 
 #: eeschema/tools/ee_inspection_tool.cpp:275
 #: pcbnew/tools/board_inspection_tool.cpp:1426
@@ -19147,7 +19113,7 @@ msgstr "ライブラリ: "
 #: eeschema/tools/ee_inspection_tool.cpp:280
 #: pcbnew/tools/board_inspection_tool.cpp:1431
 msgid "Library item: "
-msgstr "ライブラリー アイテム: "
+msgstr "ライブラリのアイテム: "
 
 #: eeschema/tools/ee_inspection_tool.cpp:290
 #: pcbnew/tools/board_inspection_tool.cpp:1449
@@ -19157,9 +19123,8 @@ msgstr "ライブラリ '%s' は現在の設定では有効化されていませ
 
 #: eeschema/tools/ee_inspection_tool.cpp:292
 #: eeschema/tools/ee_inspection_tool.cpp:298
-#, fuzzy
 msgid "Manage Symbol Libraries"
-msgstr "シンボル ライブラリを管理..."
+msgstr "シンボル ライブラリを管理"
 
 #: eeschema/tools/ee_inspection_tool.cpp:296
 #: pcbnew/tools/board_inspection_tool.cpp:1457
@@ -19287,14 +19252,12 @@ msgid "Edit Sheet Page Number"
 msgstr "シートのページ番号を編集"
 
 #: eeschema/tools/sch_edit_tool.cpp:2562
-#, fuzzy
 msgid "Set Attribute"
-msgstr "属性情報"
+msgstr "属性を設定"
 
 #: eeschema/tools/sch_edit_tool.cpp:2595
-#, fuzzy
 msgid "Clear Attribute"
-msgstr "属性情報"
+msgstr "属性をクリア"
 
 #: eeschema/tools/sch_edit_tool.cpp:2628
 #, fuzzy
@@ -21096,9 +21059,8 @@ msgid "Plot only the first page (no sub-sheets)"
 msgstr ""
 
 #: kicad/cli/command_export_sch_plot.cpp:76
-#, fuzzy
 msgid "Pen size [mm]"
-msgstr "ペン サイズ"
+msgstr "ペン サイズ [mm]"
 
 #: kicad/cli/command_export_sch_plot.cpp:81
 msgid "Origin and scale: 0 bottom left, 1 centered, 2 page fit, 3 content fit"
@@ -27003,9 +26965,8 @@ msgid "Run DRC"
 msgstr "DRC を実行"
 
 #: pcbnew/dialogs/dialog_drc.cpp:263
-#, fuzzy
 msgid "DRC incomplete: could not compile custom design rules."
-msgstr "DRC が不完全: カスタム デザインルールをコンパイルできませんでした。  "
+msgstr "DRC が不完全: カスタム デザインルールをコンパイルできませんでした。"
 
 #: pcbnew/dialogs/dialog_drc.cpp:265 pcbnew/tools/board_inspection_tool.cpp:180
 msgid "Show design rules."
@@ -28559,9 +28520,8 @@ msgid "Tracks && vias"
 msgstr "配線とビア"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:43
-#, fuzzy
 msgid "Teardrops"
-msgstr "ティアドロップを追加"
+msgstr "ティアドロップ"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:46
 msgid "Markers"
@@ -31160,9 +31120,8 @@ msgid "Track and Via Dimensions"
 msgstr "配線とビアの寸法"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:51
-#, fuzzy
 msgid "Remove Unused Layers"
-msgstr "未使用のレイヤーを削除(&R)"
+msgstr "未使用のレイヤーを削除"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:52
 #, fuzzy
@@ -31183,9 +31142,8 @@ msgid "Keep &outside layers"
 msgstr "外側のレイヤーを維持(&o)"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.h:58
-#, fuzzy
 msgid "Unused Pads"
-msgstr "含まれるレイヤー"
+msgstr "未使用のパッド"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:32
 msgid "Delete footprints with no symbols"
@@ -36390,19 +36348,16 @@ msgid "Dimension '%s' on %s"
 msgstr "寸法 \"%s\" (%s 上)"
 
 #: pcbnew/pcb_dimension.cpp:1319
-#, fuzzy
 msgid "1234.0"
-msgstr "1234"
+msgstr "1234.0"
 
 #: pcbnew/pcb_dimension.cpp:1320
-#, fuzzy
 msgid "1234.0 mm"
-msgstr "1234mm"
+msgstr "1234.0mm"
 
 #: pcbnew/pcb_dimension.cpp:1321
-#, fuzzy
 msgid "1234.0 (mm)"
-msgstr "1234 (mm)"
+msgstr "1234.0 (mm)"
 
 #: pcbnew/pcb_dimension.cpp:1353
 #, fuzzy
@@ -36780,9 +36735,9 @@ msgid "Error creating svg file"
 msgstr "svg ファイルの作成中にエラーが発生しました"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:339 pcbnew/pcbnew_jobs_handler.cpp:417
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to plot to '%s'.\n"
-msgstr "'%s' のロードに失敗しました。"
+msgstr "'%s' へのプロットに失敗しました。\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:627 pcbnew/pcbnew_jobs_handler.cpp:698
 msgid "Loading footprint library\n"
@@ -37789,13 +37744,13 @@ msgid "Cannot interpret date code %d"
 msgstr "日付コード %d を解釈できません"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:925
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Items found on undefined layers (%s).\n"
 "Do you wish to rescue them to the %s layer?"
 msgstr ""
-"アイテムが未定義レイヤー上に見つかりました。  Cmts.User レイヤー上に\n"
-"それらをレスキューしますか?"
+"アイテムが未定義レイヤー (%s) 上に見つかりました。\n"
+"%s レイヤーにレスキューしますか?"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:930
 #, fuzzy
@@ -39046,10 +39001,8 @@ msgid "[netclass %s]"
 msgstr "[ネットクラス %s]"
 
 #: pcbnew/tools/board_inspection_tool.cpp:178
-#, fuzzy
 msgid "Report incomplete: could not compile custom design rules."
-msgstr ""
-"不完全なレポート：カスタムデザインルールをコンパイルできませんでした。  "
+msgstr "不完全なレポート：カスタムデザインルールをコンパイルできませんでした。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:280
 msgid "Uncoupled Length"
@@ -39426,9 +39379,8 @@ msgstr "ローカル ライブラリー フォルダー:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1451
 #: pcbnew/tools/board_inspection_tool.cpp:1459
-#, fuzzy
 msgid "Manage Footprint Libraries"
-msgstr "フットプリント ライブラリーを管理 (&L)"
+msgstr "フットプリント ライブラリを管理"
 
 #: pcbnew/tools/convert_tool.cpp:67
 msgid "Copy line width of first object"
@@ -41007,9 +40959,8 @@ msgid "Shows board statistics"
 msgstr "基板の統計を表示"
 
 #: pcbnew/tools/pcb_actions.cpp:1166
-#, fuzzy
 msgid "Clearance Resolution"
-msgstr "クリアランスの解決..."
+msgstr "クリアランスの解決"
 
 #: pcbnew/tools/pcb_actions.cpp:1167
 msgid ""
@@ -41018,9 +40969,8 @@ msgstr ""
 "アクティブなレイヤーの選択した 2つのオブジェクト間のクリアランスの解決を表示"
 
 #: pcbnew/tools/pcb_actions.cpp:1172
-#, fuzzy
 msgid "Constraints Resolution"
-msgstr "制約の解決..."
+msgstr "制約の解決"
 
 #: pcbnew/tools/pcb_actions.cpp:1173
 msgid "Show constraints resolution for the selected object"
