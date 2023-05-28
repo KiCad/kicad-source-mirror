@@ -30,9 +30,9 @@
 #include <map>
 #include <sch_io_mgr.h>
 #include <reporter.h>
+#include <lib_symbol.h>
 
 
-class LIB_SYMBOL;
 class SCH_SHEET;
 class SCH_SCREEN;
 
@@ -88,9 +88,20 @@ public:
         return false;
     }
 
+    void SymbolLibOptions( STRING_UTF8_MAP* aListToAppendTo ) const override;
 
 private:
-    std::map<wxString, LIB_SYMBOL*> m_libCache;
+    // Symbol caching
+    void ensureLoadedLibrary( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties );
+
+    typedef std::map<const wxString, std::unique_ptr<LIB_SYMBOL>> NAME_TO_SYMBOL_MAP;
+
+    NAME_TO_SYMBOL_MAP m_libCache;
+    long long          m_cacheTimestamp;
+    wxString           m_cachePath;
+    wxFileName         m_cachecsafn;
+    wxString           m_cachefplibname;
+
     REPORTER* m_reporter; // current reporter for warnings/errors
     PROGRESS_REPORTER* m_progressReporter;  // optional; may be nullptr
 };

@@ -185,11 +185,10 @@ void CADSTAR_SCH_ARCHIVE_PLUGIN::EnumerateSymbolLib( wxArrayString&         aSym
                                                      const wxString&        aLibraryPath,
                                                      const STRING_UTF8_MAP* aProperties )
 {
-    std::vector<LIB_SYMBOL*> symbols;
-    EnumerateSymbolLib( symbols, aLibraryPath, aProperties );
+    ensureLoadedLibrary( aLibraryPath, aProperties );
 
-    for( LIB_SYMBOL*& sym : symbols )
-        aSymbolNameList.Add( sym->GetName() );
+    for( auto& [libnameStr, libSymbol] : m_libCache )
+        aSymbolNameList.Add( libSymbol->GetName() );
 }
 
 
@@ -197,23 +196,10 @@ void CADSTAR_SCH_ARCHIVE_PLUGIN::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& a
                                                      const wxString&           aLibraryPath,
                                                      const STRING_UTF8_MAP* aProperties )
 {
-    static std::vector<LIB_SYMBOL*> cached;
-    static wxString                 cachedPath;
+    ensureLoadedLibrary( aLibraryPath, aProperties );
 
-    if(cachedPath == aLibraryPath)
-    {
-        aSymbolList = cached;
-        return;
-    }
-
-    wxFileName fn( aLibraryPath );
-    fn.SetExt( "csa" );
-    fn.SetName( "symbol" );
-
-    CADSTAR_SCH_ARCHIVE_LOADER csaLoader( fn.GetFullPath(), m_reporter, m_progressReporter );
-    aSymbolList = csaLoader.LoadPartsLib( aLibraryPath );
-    cachedPath = aLibraryPath;
-    cached = aSymbolList;
+    for( auto& [libnameStr, libSymbol] : m_libCache )
+        aSymbolList.push_back( libSymbol.get() );
 }
 
 
@@ -221,14 +207,10 @@ LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_PLUGIN::LoadSymbol( const wxString&        aLibr
                                                     const wxString&        aAliasName,
                                                     const STRING_UTF8_MAP* aProperties )
 {
-    std::vector<LIB_SYMBOL*> symbols;
-    EnumerateSymbolLib( symbols, aLibraryPath, aProperties );
+    ensureLoadedLibrary( aLibraryPath, aProperties );
 
-    for( LIB_SYMBOL*& sym : symbols )
-    {
-        if( sym->GetName() == aAliasName )
-            return sym;
-    }
+    if( m_libCache.count( aAliasName ) )
+        return m_libCache.at( aAliasName ).get();
 
     return nullptr;
 }
@@ -254,3 +236,79 @@ void CADSTAR_SCH_ARCHIVE_PLUGIN::GetAvailableSymbolFields( std::vector<wxString>
 
     std::copy( fieldNames.begin(), fieldNames.end(), std::back_inserter( aNames ) );
 }
+
+
+void CADSTAR_SCH_ARCHIVE_PLUGIN::SymbolLibOptions( STRING_UTF8_MAP* aListToAppendTo ) const
+{
+    ( *aListToAppendTo )["csa"] =
+            UTF8( _( "Path to the CADSTAR schematic archive (*.csa) file related to this CADSTAR "
+                     "parts library. If none specified it is assumed to be 'symbol.csa' in the "
+                     "same folder." ) );
+
+    ( *aListToAppendTo )["fplib"] =
+            UTF8( _( "Name of the footprint library related to the symbols in this library. You "
+                     "should create a separate entry for the CADSTAR PCB Archive (*.cpa) file in "
+                     "the footprint library tables. If none specified, 'cadstarpcblib' is assumed." ) );
+}
+
+
+void CADSTAR_SCH_ARCHIVE_PLUGIN::ensureLoadedLibrary( const wxString& aLibraryPath,
+                                                      const STRING_UTF8_MAP* aProperties )
+{
+    wxFileName csafn;
+    wxString   fplibname = "cadstarpcblib";
+
+    if( aProperties->count( "csa" ) )
+    {
+        csafn = wxFileName( aProperties->at( "csa" ) );
+    }
+    else
+    {
+        // If none specified, use
+        // symbol.csa in same folder as the .lib
+        csafn = wxFileName( aLibraryPath );
+        csafn.SetName( "symbol" );
+        csafn.SetExt( "csa" );
+    }
+
+    if( aProperties->count( "fplib" ) )
+    {
+        fplibname = aProperties->at( "fplib" );
+    }
+
+    // Get timestamp
+    long long  timestamp = 0;
+    wxFileName fn( aLibraryPath );
+
+    if( fn.IsFileReadable() )
+        timestamp = fn.GetModificationTime().GetValue().GetValue();
+
+
+    if( fn.IsFileReadable()
+        && m_cachePath == aLibraryPath
+        && m_cachecsafn.GetFullPath() == csafn.GetFullPath()
+        && m_cachefplibname == fplibname
+        && m_cacheTimestamp == timestamp )
+    {
+        return;
+    }
+
+    // Update cache
+    m_libCache.clear();
+
+    CADSTAR_SCH_ARCHIVE_LOADER csaLoader( csafn.GetFullPath(), m_reporter, m_progressReporter );
+    csaLoader.SetFpLibName( fplibname );
+
+    std::vector<LIB_SYMBOL*> symbols = csaLoader.LoadPartsLib( aLibraryPath );
+
+    for( LIB_SYMBOL* sym : symbols )
+    {
+        m_libCache.insert( { sym->GetName(), std::unique_ptr<LIB_SYMBOL>( sym ) } );
+    }
+
+    m_cachePath = aLibraryPath;
+    m_cachecsafn = csafn;
+    m_cachefplibname = fplibname;
+    m_cacheTimestamp = timestamp;
+}
+
