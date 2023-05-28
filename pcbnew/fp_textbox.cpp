@@ -451,8 +451,8 @@ std::shared_ptr<SHAPE> FP_TEXTBOX::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASH
 }
 
 
-void FP_TEXTBOX::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
-                                         int aClearance, int aError, ERROR_LOC aErrorLoc ) const
+void FP_TEXTBOX::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer,  int aClearance, int aError,
+                                         ERROR_LOC aErrorLoc ) const
 {
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
     KIFONT::FONT*              font = getDrawFont();
@@ -469,8 +469,7 @@ void FP_TEXTBOX::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID a
             // Stroke callback
             [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
             {
-                TransformOvalToPolygon( buffer, aPt1, aPt2, penWidth + ( 2 * aClearance ), aError,
-                                        ERROR_INSIDE );
+                TransformOvalToPolygon( buffer, aPt1, aPt2, penWidth, aError, aErrorLoc );
             },
             // Triangulation callback
             [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2, const VECTOR2I& aPt3 )
@@ -481,10 +480,7 @@ void FP_TEXTBOX::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID a
                     buffer.Append( point.x, point.y );
             } );
 
-    TEXT_ATTRIBUTES attrs = GetAttributes();
-    attrs.m_Angle = GetDrawRotation();
-
-    font->Draw( &callback_gal, GetShownText( true ), GetDrawPos(), attrs );
+    font->Draw( &callback_gal, GetShownText( true ), GetDrawPos(), GetAttributes() );
 
     buffer.Simplify( SHAPE_POLY_SET::PM_FAST );
     aBuffer.Append( buffer );

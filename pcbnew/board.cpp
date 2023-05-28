@@ -2388,7 +2388,7 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer,
         case PCB_TEXT_T:
         {
             const PCB_TEXT* text = static_cast<const PCB_TEXT*>( item );
-            text->TransformTextToPolySet( aOutlines, aLayer, 0, maxError, ERROR_INSIDE );
+            text->TransformTextToPolySet( aOutlines, 0, maxError, ERROR_INSIDE );
             break;
         }
 
@@ -2400,7 +2400,7 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer,
             textbox->PCB_SHAPE::TransformShapeToPolygon( aOutlines, aLayer, 0, maxError,
                                                          ERROR_INSIDE );
             // plot text
-            textbox->TransformTextToPolySet( aOutlines, aLayer, 0, maxError, ERROR_INSIDE );
+            textbox->TransformTextToPolySet( aOutlines, 0, maxError, ERROR_INSIDE );
             break;
         }
 

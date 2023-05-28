@@ -119,8 +119,8 @@ public:
      * @aClearance = the clearance around the text
      * @aError = the maximum error to allow when approximating curves
      */
-    void TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
-                                 int aError, ERROR_LOC aErrorLoc ) const;
+    void TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearance, int aError,
+                                 ERROR_LOC aErrorLoc ) const;
 
     void TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
                                   int aError, ERROR_LOC aErrorLoc,
@@ -148,6 +148,13 @@ public:
 #endif
 
 protected:
+    /**
+     * Build a nominally rectangular bounding box for the rendered text.  (It's not a BOX2I
+     * because it will be a diamond shape for non-cardinally rotated text.)
+     */
+    void buildBoundingHull( SHAPE_POLY_SET* aBuffer, const SHAPE_POLY_SET& aRenderedText,
+                            int aClearance ) const;
+
     virtual void swapData( BOARD_ITEM* aImage ) override;
 
     int getKnockoutMargin() const;

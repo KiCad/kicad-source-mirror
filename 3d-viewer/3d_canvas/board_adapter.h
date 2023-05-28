@@ -348,7 +348,7 @@ private:
                              PCB_LAYER_ID aLayerId );
 
     void addText( const EDA_TEXT* aText, CONTAINER_2D_BASE* aDstContainer,
-                  const BOARD_ITEM* aOwner );
+                  const BOARD_ITEM* aItem );
 
     void addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aContainer,
                    const BOARD_ITEM* aOwner );

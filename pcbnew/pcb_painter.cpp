@@ -1992,29 +1992,8 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
 
     if( aText->IsKnockout() )
     {
-        KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
-        SHAPE_POLY_SET             knockouts;
-
-        CALLBACK_GAL callback_gal( empty_opts,
-                // Polygon callback
-                [&]( const SHAPE_LINE_CHAIN& aPoly )
-                {
-                    knockouts.AddOutline( aPoly );
-                } );
-
-        attrs.m_StrokeWidth = getLineThickness( aText->GetEffectiveTextPenWidth() );
-
-        callback_gal.SetIsFill( font->IsOutline() );
-        callback_gal.SetIsStroke( font->IsStroke() );
-        callback_gal.SetLineWidth( attrs.m_StrokeWidth );
-        font->Draw( &callback_gal, resolvedText, aText->GetDrawPos(), attrs );
-
         SHAPE_POLY_SET finalPoly;
-        int            margin = attrs.m_StrokeWidth * 1.5
-                                    + GetKnockoutTextMargin( attrs.m_Size, attrs.m_StrokeWidth );
-
-        aText->TransformBoundingBoxToPolygon( &finalPoly, margin );
-        finalPoly.BooleanSubtract( knockouts, SHAPE_POLY_SET::PM_FAST );
+        aText->TransformTextToPolySet( finalPoly, 0, m_maxError, ERROR_INSIDE );
         finalPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
 
         m_gal->SetIsStroke( false );
@@ -2179,29 +2158,8 @@ void PCB_PAINTER::draw( const FP_TEXT* aText, int aLayer )
 
     if( aText->IsKnockout() )
     {
-        KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
-        SHAPE_POLY_SET             knockouts;
-
-        CALLBACK_GAL callback_gal( empty_opts,
-                // Polygon callback
-                [&]( const SHAPE_LINE_CHAIN& aPoly )
-                {
-                    knockouts.AddOutline( aPoly );
-                } );
-
-        attrs.m_StrokeWidth = getLineThickness( aText->GetEffectiveTextPenWidth() );
-
-        callback_gal.SetIsFill( font->IsOutline() );
-        callback_gal.SetIsStroke( font->IsStroke() );
-        callback_gal.SetLineWidth( attrs.m_StrokeWidth );
-        font->Draw( &callback_gal, resolvedText, aText->GetDrawPos(), attrs );
-
         SHAPE_POLY_SET finalPoly;
-        int            margin = attrs.m_StrokeWidth * 1.5
-                                    + GetKnockoutTextMargin( attrs.m_Size, attrs.m_StrokeWidth );
-
-        aText->TransformBoundingBoxToPolygon( &finalPoly, margin );
-        finalPoly.BooleanSubtract( knockouts, SHAPE_POLY_SET::PM_FAST );
+        aText->TransformTextToPolySet( finalPoly, 0, m_maxError, ERROR_INSIDE );
         finalPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
 
         m_gal->SetIsStroke( false );

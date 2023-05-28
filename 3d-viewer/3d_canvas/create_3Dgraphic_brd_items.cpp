@@ -64,7 +64,7 @@
 
 
 void BOARD_ADAPTER::addText( const EDA_TEXT* aText, CONTAINER_2D_BASE* aContainer,
-                             const BOARD_ITEM* aOwner )
+                             const BOARD_ITEM* aItem )
 {
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
     TEXT_ATTRIBUTES            attrs = aText->GetAttributes();
@@ -74,34 +74,25 @@ void BOARD_ADAPTER::addText( const EDA_TEXT* aText, CONTAINER_2D_BASE* aContaine
     if( !font )
         font = KIFONT::FONT::GetFont( wxEmptyString, aText->IsBold(), aText->IsItalic() );
 
-    if( aOwner && aOwner->IsKnockout() )
+    if( aItem && aItem->IsKnockout() )
     {
-        SHAPE_POLY_SET knockouts;
-
-        CALLBACK_GAL callback_gal( empty_opts,
-                // Polygon callback
-                [&]( const SHAPE_LINE_CHAIN& aPoly )
-                {
-                    knockouts.AddOutline( aPoly );
-                } );
-
-        attrs.m_StrokeWidth = aText->GetEffectiveTextPenWidth();
-        attrs.m_Angle = aText->GetDrawRotation();
-
-        callback_gal.SetIsFill( font->IsOutline() );
-        callback_gal.SetIsStroke( font->IsStroke() );
-        callback_gal.SetLineWidth( attrs.m_StrokeWidth );
-        font->Draw( &callback_gal, aText->GetShownText( true ), aText->GetDrawPos(), attrs );
-
+        int            maxError = m_board->GetDesignSettings().m_MaxError;
         SHAPE_POLY_SET finalPoly;
-        int            margin = attrs.m_StrokeWidth * 1.5 +
-                                    GetKnockoutTextMargin( attrs.m_Size, attrs.m_StrokeWidth );
 
-        aText->TransformBoundingBoxToPolygon( &finalPoly, margin );
-        finalPoly.BooleanSubtract( knockouts, SHAPE_POLY_SET::PM_FAST );
-        finalPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
+        if( aItem->Type() == PCB_FP_TEXT_T )
+        {
+            static_cast<const FP_TEXT*>( aItem )->TransformTextToPolySet( finalPoly, 0, maxError,
+                                                                          ERROR_INSIDE );
+        }
+        else if( aItem->Type() == PCB_TEXT_T )
+        {
+            static_cast<const PCB_TEXT*>( aItem )->TransformTextToPolySet( finalPoly, 0, maxError,
+                                                                           ERROR_INSIDE );
+        }
 
-        ConvertPolygonToTriangles( finalPoly, *aContainer, m_biuTo3Dunits, *aOwner );
+        // Do not call finalPoly.Fracture() here: ConvertPolygonToTriangles() call it
+        // if needed, and Fracture() called twice can create bad results and is useless
+        ConvertPolygonToTriangles( finalPoly, *aContainer, m_biuTo3Dunits, *aItem );
     }
     else
     {
@@ -120,19 +111,19 @@ void BOARD_ADAPTER::addText( const EDA_TEXT* aText, CONTAINER_2D_BASE* aContaine
                     {
                         // Cannot add segments that have the same start and end point
                         aContainer->Add( new FILLED_CIRCLE_2D( pt1_3DU, penWidth_3DU / 2,
-                                                               *aOwner ) );
+                                                               *aItem ) );
                     }
                     else
                     {
                         aContainer->Add( new ROUND_SEGMENT_2D( pt1_3DU, pt2_3DU, penWidth_3DU,
-                                                               *aOwner ) );
+                                                               *aItem ) );
                     }
                 },
                 // Triangulation callback
                 [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2, const VECTOR2I& aPt3 )
                 {
                     aContainer->Add( new TRIANGLE_2D( TO_SFVEC2F( aPt1 ), TO_SFVEC2F( aPt2 ),
-                                                      TO_SFVEC2F( aPt3 ), *aOwner ) );
+                                                      TO_SFVEC2F( aPt3 ), *aItem ) );
                 } );
 
         attrs.m_Angle = aText->GetDrawRotation();

@@ -1281,65 +1281,40 @@ bool PNS_KICAD_IFACE_BASE::syncTextItem( PNS::NODE* aWorld, EDA_TEXT* aText, PCB
     if( !IsCopperLayer( aLayer ) )
         return false;
 
+    BOARD_ITEM*  boardItem = dynamic_cast<BOARD_ITEM*>( aText );
+    PCB_LAYER_ID layer = boardItem->GetLayer();
+    int          maxError = m_board->GetDesignSettings().m_MaxError;
+
     std::unique_ptr<PNS::SOLID> solid = std::make_unique<PNS::SOLID>();
+    SHAPE_SIMPLE*               shape = new SHAPE_SIMPLE;
 
     solid->SetLayer( aLayer );
     solid->SetNet( -1 );
-    solid->SetParent( dynamic_cast<BOARD_ITEM*>( aText ) );
+    solid->SetShape( shape );   // takes ownership
+    solid->SetParent( boardItem );
 
-    PCB_TEXT* pcb_text = dynamic_cast<PCB_TEXT*>( aText );
+    SHAPE_POLY_SET cornerBuffer;
 
-    if( pcb_text && pcb_text->IsKnockout() )
+    if( boardItem->Type() == PCB_FP_TEXT_T )
     {
-        TEXT_ATTRIBUTES attrs = pcb_text->GetAttributes();
-        SHAPE_POLY_SET buffer;
-        int margin = attrs.m_StrokeWidth * 1.5
-                     + GetKnockoutTextMargin( attrs.m_Size, attrs.m_StrokeWidth );
-        pcb_text->TransformBoundingBoxToPolygon( &buffer, margin );
-
-        // buffer should contain a single rectangular polygon
-        if( !buffer.OutlineCount() )
-            return false;
-
-        SHAPE_SIMPLE* rectShape = new SHAPE_SIMPLE;
-
-        for( int ii = 0; ii < buffer.Outline(0).PointCount(); ii++ )
-        {
-            VECTOR2I point = buffer.Outline(0).CPoint(ii);
-            rectShape->Append( point );
-        }
-
-        solid->SetShape( rectShape );   // takes ownership
+        static_cast<FP_TEXT*>( boardItem )->TransformShapeToPolygon( cornerBuffer, layer, 0,
+                                                                     maxError, ERROR_OUTSIDE, false );
     }
-    else
+    else if( boardItem->Type() == PCB_TEXT_T )
     {
-        solid->SetShape( aText->GetEffectiveTextShape()->Clone() );
+        static_cast<PCB_TEXT*>( boardItem )->TransformShapeToPolygon( cornerBuffer, layer, 0,
+                                                                      maxError, ERROR_OUTSIDE );
     }
 
-    solid->SetRoutable( false );
+    if( !cornerBuffer.OutlineCount() )
+        return false;
+
+    for( const VECTOR2I& pt : cornerBuffer.Outline( 0 ).CPoints() )
+        shape->Append( pt );
 
     aWorld->Add( std::move( solid ) );
 
     return true;
-
-    /* A coarser (but faster) method:
-    SHAPE_POLY_SET outline;
-    SHAPE_SIMPLE* shape = new SHAPE_SIMPLE();
-
-    aText->TransformBoundingBoxToPolygon( &outline, 0 );
-
-    for( auto iter = outline.CIterate( 0 ); iter; iter++ )
-        shape->Append( *iter );
-
-    solid->SetShape( shape );
-
-    solid->SetLayer( aLayer );
-    solid->SetNet( -1 );
-    solid->SetParent( nullptr );
-    solid->SetRoutable( false );
-    aWorld->Add( std::move( solid ) );
-    return true;
-     */
 }
 
 

@@ -28,6 +28,8 @@
 #include <pcb_plot_params.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
+#include <board.h>
+#include <board_design_settings.h>
 #include <board_item.h>
 
 class PLOTTER;
@@ -40,8 +42,6 @@ class FP_SHAPE;
 class PCB_TARGET;
 class FP_TEXT;
 class ZONE;
-class BOARD;
-class BOARD_ITEM;
 class REPORTER;
 class wxFileName;
 
@@ -61,6 +61,7 @@ public:
     {
         m_plotter = aPlotter;
         m_board = aBoard;
+        m_maxError = aBoard->GetDesignSettings().m_MaxError;
     }
 
     /**
@@ -80,7 +81,6 @@ public:
     void SetLayerSet( LSET aLayerMask ) { m_layerMask = aLayerMask; }
     void PlotFootprintGraphicItems( const FOOTPRINT* aFootprint );
     void PlotFootprintShape( const FP_SHAPE* aShape );
-    void PlotFootprintTextItem( const FP_TEXT* aText, const COLOR4D& aColor );
 
     /*
      * Reference, Value, and other fields are plotted only if the corresponding option is enabled.
@@ -92,7 +92,8 @@ public:
     void PlotPcbTarget( const PCB_TARGET* aMire );
     void PlotFilledAreas( const ZONE* aZone, PCB_LAYER_ID aLayer,
                           const SHAPE_POLY_SET& aPolysList );
-    void PlotPcbText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, bool aIsKnockout );
+    void PlotPcbText( const EDA_TEXT* aText, const BOARD_ITEM* aItem, PCB_LAYER_ID aLayer,
+                      bool aIsKnockout );
     void PlotPcbShape( const PCB_SHAPE* aShape );
 
     /**
@@ -139,6 +140,7 @@ private:
 
     PLOTTER*    m_plotter;
     BOARD*      m_board;
+    int         m_maxError;     // For use when approximating shapes as polygons
     LSET        m_layerMask;
 };
 

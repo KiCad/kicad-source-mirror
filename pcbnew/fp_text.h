@@ -159,8 +159,8 @@ public:
                                   int aError, ERROR_LOC aErrorLoc,
                                   bool aIgnoreLineWidth ) const override;
 
-    void TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
-                                 int aError, ERROR_LOC aErrorLoc ) const;
+    void TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearance, int aError,
+                                 ERROR_LOC aErrorLoc ) const;
 
     // @copydoc BOARD_ITEM::GetEffectiveShape
     std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
@@ -188,6 +188,15 @@ public:
 #if defined(DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
+
+protected:
+    /**
+     * Build a nominally rectangular bounding box for the rendered text.  (It's not a BOX2I
+     * because it will be a diamond shape for non-cardinally rotated text.)
+     */
+    void buildBoundingHull( SHAPE_POLY_SET* aBuffer, const SHAPE_POLY_SET& aRenderedText,
+                            int aClearance ) const;
+
 
 private:
     TEXT_TYPE m_Type;           ///< 0=ref, 1=val, etc.

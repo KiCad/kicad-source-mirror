@@ -232,19 +232,6 @@ public:
                 const COLOR4D& aColor, OUTLINE_MODE aDisplay_mode = FILLED );
 
     /**
-     * Convert the text bounding box to a rectangular polygon depending on the text
-     * orientation, the bounding box is not always horizontal or vertical
-     *
-     * Used in filling zones calculations
-     * Circles and arcs are approximated by segments
-     *
-     * @param aBuffer a buffer to store the polygon.
-     * @param aClearance the clearance around the text bounding box
-     * to the real clearance value (usually near from 1.0).
-     */
-    void TransformBoundingBoxToPolygon( SHAPE_POLY_SET* aBuffer, int aClearance ) const;
-
-    /**
      * build a list of segments (SHAPE_SEGMENT) to describe a text shape.
      * @param aTriangulate: true to build also the triangulation of each shape
      * @param aUseTextRotation: true to use the actual text draw rotation.

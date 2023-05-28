@@ -438,29 +438,48 @@ std::shared_ptr<SHAPE> FP_TEXT::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING
 {
     if( IsKnockout() )
     {
-        SHAPE_POLY_SET knockouts;
+        SHAPE_POLY_SET poly;
 
-        TransformTextToPolySet( knockouts, aLayer, 0, GetBoard()->GetDesignSettings().m_MaxError,
-                                ERROR_INSIDE );
+        TransformTextToPolySet( poly, 0, GetBoard()->GetDesignSettings().m_MaxError, ERROR_INSIDE );
 
-        SHAPE_POLY_SET finalPoly;
-        int            strokeWidth = GetEffectiveTextPenWidth();
-        VECTOR2I       fontSize = GetTextSize();
-        int            margin = strokeWidth * 1.5 + GetKnockoutTextMargin( fontSize, strokeWidth );
-
-        TransformBoundingBoxToPolygon( &finalPoly, margin );
-        finalPoly.BooleanSubtract( knockouts, SHAPE_POLY_SET::PM_FAST );
-        finalPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
-
-        return std::make_shared<SHAPE_POLY_SET>( finalPoly );
+        return std::make_shared<SHAPE_POLY_SET>( poly );
     }
 
     return GetEffectiveTextShape();
 }
 
 
-void FP_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
-                                      int aError, ERROR_LOC aErrorLoc ) const
+void FP_TEXT::buildBoundingHull( SHAPE_POLY_SET* aBuffer, const SHAPE_POLY_SET& aRenderedText,
+                                 int aClearance ) const
+{
+    SHAPE_POLY_SET poly( aRenderedText );
+
+    poly.Rotate( -GetDrawRotation(), GetDrawPos() );
+
+    BOX2I    rect = poly.BBox( aClearance );
+    VECTOR2I corners[4];
+
+    corners[0].x = rect.GetOrigin().x;
+    corners[0].y = rect.GetOrigin().y;
+    corners[1].y = corners[0].y;
+    corners[1].x = rect.GetRight();
+    corners[2].x = corners[1].x;
+    corners[2].y = rect.GetBottom();
+    corners[3].y = corners[2].y;
+    corners[3].x = corners[0].x;
+
+    aBuffer->NewOutline();
+
+    for( VECTOR2I& corner : corners )
+    {
+        RotatePoint( corner, GetDrawPos(), GetDrawRotation() );
+        aBuffer->Append( corner.x, corner.y );
+    }
+}
+
+
+void FP_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearance, int aError,
+                                      ERROR_LOC aErrorLoc ) const
 {
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
     KIFONT::FONT*              font = getDrawFont();
@@ -469,22 +488,21 @@ void FP_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLay
     // The polygonal shape of a text can have many basic shapes, so combining these shapes can
     // be very useful to create a final shape with a lot less vertices to speedup calculations.
     // Simplify shapes is not usually always efficient, but in this case it is.
-    SHAPE_POLY_SET buffer;
+    SHAPE_POLY_SET textShape;
 
     CALLBACK_GAL callback_gal( empty_opts,
             // Stroke callback
             [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
             {
-                TransformOvalToPolygon( buffer, aPt1, aPt2, penWidth + ( 2 * aClearance ), aError,
-                                        ERROR_INSIDE );
+                TransformOvalToPolygon( textShape, aPt1, aPt2, penWidth, aError, aErrorLoc );
             },
             // Triangulation callback
             [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2, const VECTOR2I& aPt3 )
             {
-                buffer.NewOutline();
+                textShape.NewOutline();
 
                 for( const VECTOR2I& point : { aPt1, aPt2, aPt3 } )
-                    buffer.Append( point.x, point.y );
+                    textShape.Append( point.x, point.y );
             } );
 
     TEXT_ATTRIBUTES attrs = GetAttributes();
@@ -492,22 +510,22 @@ void FP_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLay
 
     font->Draw( &callback_gal, GetShownText( true ), GetTextPos(), attrs );
 
-    buffer.Simplify( SHAPE_POLY_SET::PM_FAST );
+    textShape.Simplify( SHAPE_POLY_SET::PM_FAST );
 
     if( IsKnockout() )
     {
+        TEXT_ATTRIBUTES attrs = GetAttributes();
         SHAPE_POLY_SET finalPoly;
-        int            margin = attrs.m_StrokeWidth * 1.5
-                                    + GetKnockoutTextMargin( attrs.m_Size, attrs.m_StrokeWidth );
+        int            margin = GetKnockoutTextMargin( attrs.m_Size, penWidth );
 
-        TransformBoundingBoxToPolygon( &finalPoly, margin );
-        finalPoly.BooleanSubtract( buffer, SHAPE_POLY_SET::PM_FAST );
+        buildBoundingHull( &finalPoly, textShape, margin + aClearance );
+        finalPoly.BooleanSubtract( textShape, SHAPE_POLY_SET::PM_FAST );
 
         aBuffer.Append( finalPoly );
     }
     else
     {
-        aBuffer.Append( buffer );
+        aBuffer.Append( textShape );
     }
 }
 
@@ -515,10 +533,11 @@ void FP_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLay
 void FP_TEXT::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
                                        int aError, ERROR_LOC aErrorLoc, bool aIgnoreLineWidth ) const
 {
-    SHAPE_POLY_SET buffer;
+    SHAPE_POLY_SET poly;
 
-    EDA_TEXT::TransformBoundingBoxToPolygon( &buffer, aClearance );
-    aBuffer.Append( buffer );
+    TransformTextToPolySet( poly, 0, GetBoard()->GetDesignSettings().m_MaxError, ERROR_INSIDE );
+
+    buildBoundingHull( &aBuffer, poly, aClearance );
 }
 
 

@@ -112,8 +112,8 @@ public:
      * @aClearance = the clearance around the text
      * @aError = the maximum error to allow when approximating curves
      */
-    void TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
-                                 int aError, ERROR_LOC aErrorLoc ) const;
+    void TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearance, int aError,
+                                 ERROR_LOC aErrorLoc ) const;
 
     void TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
                                   int aError, ERROR_LOC aErrorLoc,
