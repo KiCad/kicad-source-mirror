@@ -1082,7 +1082,7 @@ msgstr "Ondoorzichtigheid"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:165
 msgid "Board Thickness"
-msgstr "Bord dikte:"
+msgstr "Borddikte"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:170
 #: bitmap2component/bitmap2cmp_gui.cpp:152
@@ -3807,7 +3807,8 @@ msgstr "Lijnstijl"
 #: eeschema/sch_textbox.cpp:440 include/stroke_params.h:80
 #: pcbnew/fp_text.cpp:309 pcbnew/fp_textbox.cpp:336
 #: pcbnew/pcb_dimension.cpp:332 pcbnew/pcb_text.cpp:130
-#: pcbnew/pcb_textbox.cpp:297
+#: pcbnew/pcb_textbox.cpp:297 eeschema/sch_label.cpp:892
+#: eeschema/sch_text.cpp:496
 msgid "Default"
 msgstr "Standaard"
 
@@ -4413,15 +4414,18 @@ msgid "Net Label"
 msgstr "Net-label"
 
 #: common/eda_item.cpp:365 eeschema/sch_label.cpp:906
-#: eeschema/sch_label.cpp:1309
+#: eeschema/sch_label.cpp:1309 eeschema/sch_label.cpp:878
+#: eeschema/sch_label.cpp:1250
 msgid "Directive Label"
 msgstr "Richtlijn-label"
 
 #: common/eda_item.cpp:366 eeschema/sch_label.cpp:907
+#: eeschema/sch_label.cpp:879
 msgid "Global Label"
 msgstr "Wereldwijd label"
 
 #: common/eda_item.cpp:367 eeschema/sch_label.cpp:908
+#: eeschema/sch_label.cpp:880
 msgid "Hierarchical Label"
 msgstr "Hierarchisch label"
 
@@ -4626,7 +4630,8 @@ msgstr "Gevuld"
 #: gerbview/gerber_file_image.cpp:345
 #: pcbnew/microwave/microwave_polygon.cpp:128
 #: pcbnew/widgets/appearance_controls.cpp:635
-#: pcbnew/widgets/appearance_controls.cpp:1762
+#: pcbnew/widgets/appearance_controls.cpp:1762 eeschema/sch_label.cpp:894
+#: eeschema/sch_text.cpp:498
 msgid "Normal"
 msgstr "Normaal"
 
@@ -4652,7 +4657,8 @@ msgstr "Normaal"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:205
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:133
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:50
-#: pcbnew/fp_text_grid_table.cpp:105
+#: pcbnew/fp_text_grid_table.cpp:105 eeschema/sch_label.cpp:894
+#: eeschema/sch_text.cpp:498
 msgid "Italic"
 msgstr "Italic"
 
@@ -4673,6 +4679,7 @@ msgstr "Italic"
 #: eeschema/sch_textbox.cpp:442
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:93
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:186
+#: eeschema/sch_label.cpp:894 eeschema/sch_text.cpp:498
 msgid "Bold"
 msgstr "Vet"
 
@@ -7740,6 +7747,7 @@ msgstr "%s gevonden"
 
 #: eeschema/cross-probing.cpp:175 eeschema/sim/sim_plot_frame.cpp:606
 #: eeschema/sim/sim_plot_frame.cpp:922 eeschema/widgets/tuner_slider.cpp:52
+#: eeschema/sim/sim_plot_frame.cpp:599 eeschema/sim/sim_plot_frame.cpp:915
 #, c-format
 msgid "%s not found"
 msgstr "%s niet gevonden"
@@ -8006,12 +8014,12 @@ msgid ""
 "python <script file name> <input filename> <output filename>\n"
 "```\n"
 "\n"
-"On Windows, if the desired generator script for a CSV BOM is `C:"
-"\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
+"On Windows, if the desired generator script for a CSV BOM is `C:\\Users"
+"\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O.csv"
+"\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -8592,6 +8600,7 @@ msgstr "Netlijst exporteren"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:320
 #: eeschema/sim/sim_plot_frame.cpp:464 eeschema/sim/sim_plot_frame.cpp:1738
+#: eeschema/sim/sim_plot_frame.cpp:463
 msgid "Simulator requires a fully annotated schematic."
 msgstr "De simulator vereist een volledig geannoteerd schema."
 
@@ -8800,6 +8809,7 @@ msgstr "Kicad afsluiten"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:99
 #: eeschema/dialogs/dialog_text_properties_base.cpp:120
 #: eeschema/sch_label.cpp:932 eeschema/sch_text.cpp:509
+#: eeschema/sch_label.cpp:904 eeschema/sch_text.cpp:508
 msgid "Align left"
 msgstr "Links uitlijnen"
 
@@ -8816,6 +8826,7 @@ msgstr "Uitlijnen op horizontaal midden"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:109
 #: eeschema/dialogs/dialog_text_properties_base.cpp:130
 #: eeschema/sch_label.cpp:930 eeschema/sch_text.cpp:507
+#: eeschema/sch_label.cpp:902 eeschema/sch_text.cpp:506
 msgid "Align right"
 msgstr "Rechts uitlijnen"
 
@@ -8826,6 +8837,7 @@ msgstr "Rechts uitlijnen"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:129
 #: eeschema/dialogs/dialog_text_properties_base.cpp:140
 #: eeschema/sch_label.cpp:933 eeschema/sch_text.cpp:510
+#: eeschema/sch_label.cpp:905 eeschema/sch_text.cpp:509
 msgid "Align top"
 msgstr "Boven uitlijnen"
 
@@ -8842,6 +8854,7 @@ msgstr "Uitlijnen op verticaal midden"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:139
 #: eeschema/dialogs/dialog_text_properties_base.cpp:150
 #: eeschema/sch_label.cpp:931 eeschema/sch_text.cpp:508
+#: eeschema/sch_label.cpp:903 eeschema/sch_text.cpp:507
 msgid "Align bottom"
 msgstr "Bodem uitlijnen"
 
@@ -9266,7 +9279,8 @@ msgstr "V Uitlijnen"
 #: eeschema/lib_text.cpp:428 eeschema/lib_textbox.cpp:490
 #: eeschema/sch_field.cpp:755 eeschema/sch_label.cpp:926
 #: eeschema/sch_text.cpp:503 eeschema/sch_textbox.cpp:446
-#: pcbnew/tools/board_inspection_tool.cpp:1237
+#: pcbnew/tools/board_inspection_tool.cpp:1237 eeschema/sch_label.cpp:898
+#: eeschema/sch_text.cpp:502
 msgid "Text Size"
 msgstr "Tekstgrootte"
 
@@ -9300,7 +9314,8 @@ msgstr "Y-positie"
 #: eeschema/sch_text.cpp:497 eeschema/sch_textbox.cpp:440
 #: pcbnew/fp_text.cpp:309 pcbnew/fp_textbox.cpp:336
 #: pcbnew/pcb_dimension.cpp:332 pcbnew/pcb_text.cpp:130
-#: pcbnew/pcb_textbox.cpp:297
+#: pcbnew/pcb_textbox.cpp:297 eeschema/sch_label.cpp:892
+#: eeschema/sch_text.cpp:496
 #, fuzzy
 msgid "Font"
 msgstr "Lettertype:"
@@ -10422,8 +10437,8 @@ msgid ""
 msgstr ""
 "Dit schema is gemaakt met behulp van oudere symboolbibliotheken die het "
 "schema kunnen breken. Sommige symbolen moeten mogelijk aan een andere "
-"symboolnaam worden gekoppeld. Sommige symbolen moeten mogelijk worden "
-"\"gered\" (gekopieerd en hernoemd) naar een nieuwe bibliotheek.\n"
+"symboolnaam worden gekoppeld. Sommige symbolen moeten mogelijk worden \"gered"
+"\" (gekopieerd en hernoemd) naar een nieuwe bibliotheek.\n"
 "\n"
 "De volgende wijzigingen worden aanbevolen om het project bij te werken."
 
@@ -10618,9 +10633,8 @@ msgid "Replace matches in reference designators"
 msgstr "Vervang overeenkomsten in referentie-aanduidingen"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:120
-#, fuzzy
 msgid "Replace"
-msgstr "&Vervangen"
+msgstr "Vervangen"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:41
 msgid "Schematic Setup"
@@ -10835,7 +10849,8 @@ msgstr "Een blad moet een gespecificeerd bestand hebben."
 #: eeschema/sch_text.cpp:501 eeschema/sch_textbox.cpp:444
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:122
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:226
-#: pcbnew/teardrop/dialog_teardrop_base.cpp:330
+#: pcbnew/teardrop/dialog_teardrop_base.cpp:330 eeschema/sch_label.cpp:896
+#: eeschema/sch_text.cpp:500
 msgid "Style"
 msgstr "Stijl"
 
@@ -10877,7 +10892,7 @@ msgid "Add signal by name:"
 msgstr "Signaal bij naam toevoegen:"
 
 #: eeschema/dialogs/dialog_signal_list_base.h:50
-#: eeschema/sim/sim_plot_frame.cpp:165
+#: eeschema/sim/sim_plot_frame.cpp:165 eeschema/sim/sim_plot_frame.cpp:164
 msgid "Add Signals"
 msgstr "Signaal Toevoegen"
 
@@ -11224,6 +11239,7 @@ msgstr "Parameter"
 #: pcbnew/fp_text.cpp:294 pcbnew/pcb_marker.cpp:193 pcbnew/pcb_shape.cpp:304
 #: pcbnew/pcb_track.cpp:861 pcbnew/pcb_track.cpp:935
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:249 pcbnew/zone.cpp:536
+#: eeschema/sch_label.cpp:890
 msgid "Type"
 msgstr "Type"
 
@@ -13444,6 +13460,7 @@ msgid "Unit %s"
 msgstr "Eenheid %s"
 
 #: eeschema/lib_text.cpp:477 eeschema/sch_text.cpp:393
+#: eeschema/sch_text.cpp:392
 #, c-format
 msgid "Graphic Text '%s'"
 msgstr "Grafische tekst '%s'"
@@ -13455,6 +13472,7 @@ msgstr "Grafische tekst"
 
 #: eeschema/lib_textbox.cpp:486 eeschema/sch_label.cpp:922
 #: eeschema/sch_text.cpp:499 eeschema/sch_textbox.cpp:442
+#: eeschema/sch_label.cpp:894 eeschema/sch_text.cpp:498
 msgid "Bold Italic"
 msgstr "Vet Italic"
 
@@ -13589,11 +13607,13 @@ msgid "P&references"
 msgstr "Voorkeuren"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:478
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:477
 #, fuzzy, c-format
 msgid "Could not open file '%s' to write IBIS model"
 msgstr "Kon custom pad %s niet vinden."
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:532
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:531
 #, fuzzy, c-format
 msgid "Could not find library file '%s'"
 msgstr "Kon bibliotheek-bestand %s niet vinden."
@@ -13822,6 +13842,7 @@ msgstr "Type businvoer"
 #: eeschema/sch_bus_entry.cpp:512 eeschema/sch_label.cpp:950
 #: eeschema/sch_line.cpp:924 pcbnew/pad.cpp:1005 pcbnew/pcb_track.cpp:963
 #: pcbnew/tools/pcb_control.cpp:1544 pcbnew/zone.cpp:566
+#: eeschema/sch_label.cpp:922
 #, fuzzy
 msgid "Resolved Netclass"
 msgstr "Toegewezen Netclass"
@@ -13854,7 +13875,7 @@ msgstr "Nieuw schemabestand is niet opgeslagen"
 #: eeschema/symbol_editor/symbol_editor.cpp:1163
 #: pagelayout_editor/pl_editor_frame.cpp:395
 #: pcbnew/footprint_edit_frame.cpp:715 pcbnew/footprint_edit_frame.cpp:755
-#: pcbnew/pcb_edit_frame.cpp:1050
+#: pcbnew/pcb_edit_frame.cpp:1050 eeschema/sim/sim_plot_frame.cpp:1761
 #, c-format
 msgid "Save changes to '%s' before closing?"
 msgstr "Wijzigingen aan '%s' opslaan voor het afsluiten?"
@@ -13897,12 +13918,13 @@ msgstr "Kan CvPcb niet openen"
 
 #: eeschema/sch_edit_frame.cpp:1420 eeschema/sim/sim_plot_frame.cpp:350
 #: kicad/kicad_manager_frame.cpp:776 pcbnew/footprint_edit_frame.cpp:926
-#: pcbnew/pcb_edit_frame.cpp:1566
+#: pcbnew/pcb_edit_frame.cpp:1566 eeschema/sim/sim_plot_frame.cpp:349
 msgid "[Read Only]"
 msgstr "[Alleen lezen]"
 
 #: eeschema/sch_edit_frame.cpp:1423 eeschema/sim/sim_plot_frame.cpp:353
 #: pcbnew/footprint_edit_frame.cpp:935 pcbnew/pcb_edit_frame.cpp:1569
+#: eeschema/sim/sim_plot_frame.cpp:352
 msgid "[Unsaved]"
 msgstr "[niet opgeslagen]"
 
@@ -13948,15 +13970,16 @@ msgstr "Onbekende SCH_FILE_T-waarde: %d"
 msgid "Tri-State"
 msgstr "Driestaten"
 
-#: eeschema/sch_label.cpp:905
+#: eeschema/sch_label.cpp:905 eeschema/sch_label.cpp:877
 msgid "Label"
 msgstr "Label"
 
-#: eeschema/sch_label.cpp:909
+#: eeschema/sch_label.cpp:909 eeschema/sch_label.cpp:881
 msgid "Hierarchical Sheet Pin"
 msgstr "Hiërarchische bladpin"
 
 #: eeschema/sch_label.cpp:937 eeschema/sch_text.cpp:514
+#: eeschema/sch_label.cpp:909 eeschema/sch_text.cpp:513
 msgid "Justification"
 msgstr "Rechtvaardiging"
 
@@ -13967,41 +13990,43 @@ msgstr "Rechtvaardiging"
 #: pcbnew/pad.cpp:1796 pcbnew/pcb_track.cpp:961
 #: pcbnew/tools/pcb_control.cpp:1541
 #: pcbnew/widgets/pcb_properties_panel.cpp:260 pcbnew/zone.cpp:564
-#: pcbnew/zone.cpp:1455
+#: pcbnew/zone.cpp:1455 eeschema/sch_label.cpp:973
 msgid "Net"
 msgstr "Net"
 
 #: eeschema/sch_label.cpp:1004 eeschema/sch_line.cpp:867
+#: eeschema/sch_label.cpp:976
 #, fuzzy
 msgid "Resolved netclass"
 msgstr "Toegewezen Netclass"
 
-#: eeschema/sch_label.cpp:1020
+#: eeschema/sch_label.cpp:1020 eeschema/sch_label.cpp:992
 #, fuzzy
 msgid "Hierarchical Labels"
 msgstr "Hierarchisch label"
 
-#: eeschema/sch_label.cpp:1105
+#: eeschema/sch_label.cpp:1105 eeschema/sch_label.cpp:1077
 #, c-format
 msgid "Label '%s'"
 msgstr "Label '%s'"
 
-#: eeschema/sch_label.cpp:1313
+#: eeschema/sch_label.cpp:1313 eeschema/sch_label.cpp:1254
 #, fuzzy, c-format
 msgid "Directive Label [%s %s]"
 msgstr "Net-label"
 
-#: eeschema/sch_label.cpp:1590
+#: eeschema/sch_label.cpp:1590 eeschema/sch_label.cpp:1531
 #, c-format
 msgid "Global Label '%s'"
 msgstr "Wereldwijd label '%s'"
 
-#: eeschema/sch_label.cpp:1723
+#: eeschema/sch_label.cpp:1723 eeschema/sch_label.cpp:1664
 #, c-format
 msgid "Hierarchical Label '%s'"
 msgstr "Hiërarchisch label '%s'"
 
 #: eeschema/sch_label.cpp:1740 pcbnew/dialogs/panel_setup_rules.cpp:687
+#: eeschema/sch_label.cpp:1681
 msgid "Syntax Help"
 msgstr "Syntaxis Help"
 
@@ -14826,7 +14851,7 @@ msgstr "Symbool niet gevonden in %s!"
 msgid "Symbol %s [%s]"
 msgstr "Symbool %s [%s]"
 
-#: eeschema/sch_text.cpp:495
+#: eeschema/sch_text.cpp:495 eeschema/sch_text.cpp:494
 msgid "Graphic Text"
 msgstr "Grafische tekst"
 
@@ -15509,9 +15534,8 @@ msgid "Invalid V_meas value."
 msgstr "Ongeldige eigenschap-waarde"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:539
-#, fuzzy
 msgid "C_comp is invalid."
-msgstr "Enkele bestanden zijn verkeerd!"
+msgstr "C_comp is ongeldig."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:547
 #, fuzzy
@@ -15703,9 +15727,8 @@ msgid "Unknown keyword in "
 msgstr "Onbekend Record-id: %d."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1364
-#, fuzzy
 msgid " context: "
-msgstr "Cmp ext: "
+msgstr " Context: "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1430
 #, fuzzy
@@ -16105,49 +16128,53 @@ msgstr ""
 "Deze simulatie levert geen plots op. Raadpleeg het consolevenster voor "
 "resultaten"
 
-#: eeschema/sim/sim_plot_frame.cpp:163
+#: eeschema/sim/sim_plot_frame.cpp:163 eeschema/sim/sim_plot_frame.cpp:162
 msgid "Run/Stop Simulation"
 msgstr "Simulatie uitvoeren / stoppen"
 
 #: eeschema/sim/sim_plot_frame.cpp:164 eeschema/sim/sim_plot_frame_base.cpp:55
+#: eeschema/sim/sim_plot_frame.cpp:163
 msgid "Run Simulation"
 msgstr "Voer simulatie uit"
 
-#: eeschema/sim/sim_plot_frame.cpp:166
+#: eeschema/sim/sim_plot_frame.cpp:166 eeschema/sim/sim_plot_frame.cpp:165
 msgid "Add signals to plot"
 msgstr "Voeg signalen toe om te plotten"
 
-#: eeschema/sim/sim_plot_frame.cpp:167
+#: eeschema/sim/sim_plot_frame.cpp:167 eeschema/sim/sim_plot_frame.cpp:166
 msgid "Probe"
 msgstr "Sonde"
 
-#: eeschema/sim/sim_plot_frame.cpp:168
+#: eeschema/sim/sim_plot_frame.cpp:168 eeschema/sim/sim_plot_frame.cpp:167
 msgid "Probe signals on the schematic"
 msgstr "Sonde signalen op het schema"
 
 #: eeschema/sim/sim_plot_frame.cpp:169 eeschema/sim/sim_plot_frame_base.cpp:242
+#: eeschema/sim/sim_plot_frame.cpp:168
 msgid "Tune"
 msgstr "Afstemmen"
 
-#: eeschema/sim/sim_plot_frame.cpp:170
+#: eeschema/sim/sim_plot_frame.cpp:170 eeschema/sim/sim_plot_frame.cpp:169
 msgid "Tune component values"
 msgstr "Stem componentwaarden af"
 
-#: eeschema/sim/sim_plot_frame.cpp:171
+#: eeschema/sim/sim_plot_frame.cpp:171 eeschema/sim/sim_plot_frame.cpp:170
 #, fuzzy
 msgid "Sim Command"
 msgstr "Opdracht"
 
-#: eeschema/sim/sim_plot_frame.cpp:172
+#: eeschema/sim/sim_plot_frame.cpp:172 eeschema/sim/sim_plot_frame.cpp:171
 #, fuzzy
 msgid "Simulation command and settings"
 msgstr "Simulatie-parameters en instellingen"
 
 #: eeschema/sim/sim_plot_frame.cpp:355 eeschema/sim/sim_plot_frame_base.h:130
+#: eeschema/sim/sim_plot_frame.cpp:354
 msgid "Spice Simulator"
 msgstr "Kruidensimulator"
 
 #: eeschema/sim/sim_plot_frame.cpp:473 eeschema/sim/sim_plot_frame.cpp:1571
+#: eeschema/sim/sim_plot_frame.cpp:466 eeschema/sim/sim_plot_frame.cpp:1564
 #, fuzzy
 msgid ""
 "Errors during netlist generation; simulation aborted.\n"
@@ -16155,87 +16182,91 @@ msgid ""
 msgstr ""
 "Er zijn fouten opgetreden tijdens het exporteren van de netlijst, afgebroken."
 
-#: eeschema/sim/sim_plot_frame.cpp:490
+#: eeschema/sim/sim_plot_frame.cpp:490 eeschema/sim/sim_plot_frame.cpp:483
 msgid ""
 "Schematic sheet simulation command directive has changed.  Do you wish to "
 "update the Simulation Command?"
 msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:513 eeschema/sim/sim_plot_frame.cpp:2007
+#: eeschema/sim/sim_plot_frame.cpp:506 eeschema/sim/sim_plot_frame.cpp:1993
 msgid "Another simulation is already running."
 msgstr "Er is al een andere simulatie bezig."
 
-#: eeschema/sim/sim_plot_frame.cpp:541
+#: eeschema/sim/sim_plot_frame.cpp:541 eeschema/sim/sim_plot_frame.cpp:534
 #, c-format
 msgid "Plot%u - "
 msgstr "Plot %u - "
 
 #: eeschema/sim/sim_plot_frame.cpp:605 eeschema/sim/sim_plot_frame.cpp:617
-#: eeschema/sim/sim_plot_frame.cpp:941
+#: eeschema/sim/sim_plot_frame.cpp:941 eeschema/sim/sim_plot_frame.cpp:598
+#: eeschema/sim/sim_plot_frame.cpp:610 eeschema/sim/sim_plot_frame.cpp:934
 msgid "Could not apply tuned value(s):"
 msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:618 eeschema/sim/sim_plot_frame.cpp:930
+#: eeschema/sim/sim_plot_frame.cpp:611 eeschema/sim/sim_plot_frame.cpp:923
 #, fuzzy, c-format
 msgid "%s is not tunable"
 msgstr "%s pin %s niet gevonden"
 
-#: eeschema/sim/sim_plot_frame.cpp:661
+#: eeschema/sim/sim_plot_frame.cpp:661 eeschema/sim/sim_plot_frame.cpp:654
 msgid "Error: simulation type not defined!\n"
 msgstr "Fout: simulatietype niet gedefinieerd!\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:667
+#: eeschema/sim/sim_plot_frame.cpp:667 eeschema/sim/sim_plot_frame.cpp:660
 msgid "Error: simulation type doesn't support plotting!\n"
 msgstr "Fout: simulatietype ondersteunt plotten niet!\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:739 eeschema/sim/sim_plot_panel.h:117
+#: eeschema/sim/sim_plot_frame.cpp:732
 msgid " (mag)"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:741 eeschema/sim/sim_plot_panel.h:119
-#, fuzzy
+#: eeschema/sim/sim_plot_frame.cpp:734 eeschema/sim/sim_plot_panel.h:119
 msgid " (phase)"
-msgstr "AC-fase:"
+msgstr " (fase)"
 
 #: eeschema/sim/sim_plot_frame.cpp:851 eeschema/sim/sim_plot_frame.cpp:1822
+#: eeschema/sim/sim_plot_frame.cpp:844 eeschema/sim/sim_plot_frame.cpp:1808
 msgid "Signal"
 msgstr "Signaal"
 
-#: eeschema/sim/sim_plot_frame.cpp:1188
+#: eeschema/sim/sim_plot_frame.cpp:1188 eeschema/sim/sim_plot_frame.cpp:1181
 msgid "noname"
 msgstr "naamloos"
 
-#: eeschema/sim/sim_plot_frame.cpp:1237
+#: eeschema/sim/sim_plot_frame.cpp:1237 eeschema/sim/sim_plot_frame.cpp:1230
 msgid "Open simulation workbook"
 msgstr "Open simulatiewerkboek"
 
-#: eeschema/sim/sim_plot_frame.cpp:1266
+#: eeschema/sim/sim_plot_frame.cpp:1266 eeschema/sim/sim_plot_frame.cpp:1259
 msgid "Save Simulation Workbook As"
 msgstr "Simulatie-werkmap opslaan als"
 
-#: eeschema/sim/sim_plot_frame.cpp:1281
+#: eeschema/sim/sim_plot_frame.cpp:1281 eeschema/sim/sim_plot_frame.cpp:1274
 msgid "Save Plot as Image"
 msgstr "Bewaar plot als afbeelding"
 
-#: eeschema/sim/sim_plot_frame.cpp:1298
+#: eeschema/sim/sim_plot_frame.cpp:1298 eeschema/sim/sim_plot_frame.cpp:1291
 msgid "Save Plot Data"
 msgstr "Bewaar plotgegevens"
 
-#: eeschema/sim/sim_plot_frame.cpp:1636
+#: eeschema/sim/sim_plot_frame.cpp:1636 eeschema/sim/sim_plot_frame.cpp:1629
 msgid "You need to run plot-providing simulation first."
 msgstr "U moet eerst een plot-leverende simulatie uitvoeren."
 
-#: eeschema/sim/sim_plot_frame.cpp:1693
+#: eeschema/sim/sim_plot_frame.cpp:1693 eeschema/sim/sim_plot_frame.cpp:1686
 #, fuzzy
 msgid "SPICE Netlist"
 msgstr "SPICE netlist-bestand"
 
-#: eeschema/sim/sim_plot_frame.cpp:1772
+#: eeschema/sim/sim_plot_frame.cpp:1772 eeschema/sim/sim_plot_frame.cpp:1758
 #, fuzzy
 msgid "Save changes to workbook?"
 msgstr "Opslaan huidige bord"
 
-#: eeschema/sim/sim_plot_frame.cpp:1937
+#: eeschema/sim/sim_plot_frame.cpp:1937 eeschema/sim/sim_plot_frame.cpp:1923
 msgid ""
 "\n"
 "\n"
@@ -16247,21 +16278,22 @@ msgstr ""
 "Simulatie resultaten:\n"
 "\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:2028
+#: eeschema/sim/sim_plot_frame.cpp:2028 eeschema/sim/sim_plot_frame.cpp:2014
 #, fuzzy
 msgid "Remove Signal"
 msgstr "Verwijder Zone Vulling"
 
-#: eeschema/sim/sim_plot_frame.cpp:2028
+#: eeschema/sim/sim_plot_frame.cpp:2028 eeschema/sim/sim_plot_frame.cpp:2014
 #, fuzzy
 msgid "Remove the signal from the plot"
 msgstr "Wis het signaal van het plotscherm"
 
 #: eeschema/sim/sim_plot_frame.cpp:2036 eeschema/sim/sim_plot_frame.cpp:2063
+#: eeschema/sim/sim_plot_frame.cpp:2022 eeschema/sim/sim_plot_frame.cpp:2049
 msgid "Hide Cursor"
 msgstr "Cursor verbergen"
 
-#: eeschema/sim/sim_plot_frame.cpp:2038
+#: eeschema/sim/sim_plot_frame.cpp:2038 eeschema/sim/sim_plot_frame.cpp:2024
 msgid "Show Cursor"
 msgstr "Cursor tonen"
 
@@ -16491,20 +16523,20 @@ msgstr ""
 #: eeschema/symbol_checker.cpp:146
 #, c-format
 msgid ""
-"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
-"%s%s at location <b>(%s, %s)</b>."
+"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
+"%s at location <b>(%s, %s)</b>."
 msgstr ""
-"<b>Dubbele pin %s</b> %s op locatie <b>(%s, %s)</b> conflicteert met pin "
-"%s%s op locatie <b>(%s, %s)</b>."
+"<b>Dubbele pin %s</b> %s op locatie <b>(%s, %s)</b> conflicteert met pin %s"
+"%s op locatie <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:159
 #, fuzzy, c-format
 msgid ""
-"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
-"%s%s at location <b>(%s, %s)</b> in units %s and %s."
+"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
+"%s at location <b>(%s, %s)</b> in units %s and %s."
 msgstr ""
-"<b>Dubbele pin %s</b> %s op locatie <b>(%s, %s)</b> conflicteert met pin "
-"%s%s op locatie <b>(%s, %s)</b> in eenheden %c en %c."
+"<b>Dubbele pin %s</b> %s op locatie <b>(%s, %s)</b> conflicteert met pin %s"
+"%s op locatie <b>(%s, %s)</b> in eenheden %c en %c."
 
 #: eeschema/symbol_checker.cpp:187
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
@@ -20983,9 +21015,9 @@ msgid "No package updates available"
 msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:74 kicad/pcm/pcm_task_manager.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Version %s of package %s not found!"
-msgstr "Netlist bestand %s niet gevonden"
+msgstr "Versie %s van pakket %s niet gevonden!"
 
 #: kicad/pcm/pcm_task_manager.cpp:83
 msgid "Unable to create download directory!"
@@ -25897,8 +25929,8 @@ msgid ""
 "produce a full circle divided evenly into \"Count\" portions."
 msgstr ""
 "Positieve hoeken vertegenwoordigen een rotatie tegen de klok in. Een hoek "
-"van 0 produceert een volledige cirkel die gelijkmatig is verdeeld in "
-"\"Count\" -delen."
+"van 0 produceert een volledige cirkel die gelijkmatig is verdeeld in \"Count"
+"\" -delen."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:268
 msgid "How many items in the array."
@@ -32180,13 +32212,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net"
+"\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net"
+"\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -33552,11 +33584,12 @@ msgid "Build STEP data\n"
 msgstr ""
 
 #: pcbnew/exporters/step/exporter_step.cpp:353
-#, fuzzy
 msgid ""
 "\n"
 "** Error building STEP board model. Export aborted. **\n"
-msgstr "Fout bij schrijven naar bestand '%s'."
+msgstr ""
+"\n"
+"** Fout bij het bouwen van het STOP modelbord. Export afgebroken. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:357
 #, fuzzy
@@ -33564,26 +33597,30 @@ msgid "Writing STEP file\n"
 msgstr "STEP-bestanden"
 
 #: pcbnew/exporters/step/exporter_step.cpp:361
-#, fuzzy
 msgid ""
 "\n"
 "** Error writing STEP file. **\n"
-msgstr "Fout bij schrijven naar bestand '%s'."
+msgstr ""
+"\n"
+"** Fout bij schrijven naar STEP-bestand. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:366
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "STEP file '%s' created.\n"
-msgstr "Rapportbestand '%s' aangemaakt."
+msgstr ""
+"\n"
+"STEP-bestand '%s' aangemaakt.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:372
 #: pcbnew/exporters/step/exporter_step.cpp:377
-#, fuzzy
 msgid ""
 "\n"
 "** Error exporting STEP file. Export aborted. **\n"
-msgstr "Fout bij schrijven naar bestand '%s'."
+msgstr ""
+"\n"
+"** Fout bij het exporteren naar STEP-bestand. Export afgebroken. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:385
 msgid ""
@@ -37095,6 +37132,7 @@ msgstr ""
 "Controleer dat de omtrek zichzelf niet snijdt."
 
 #: pcbnew/router/pns_kicad_iface.cpp:1927 pcbnew/router/router_tool.cpp:453
+#: pcbnew/router/pns_kicad_iface.cpp:1923
 msgid "Interactive Router"
 msgstr "Interactieve router"
 
@@ -41934,8 +41972,8 @@ msgstr "KiCad PCB (Printed Circuit Board)"
 #~ "\n"
 #~ "On Linux:\n"
 #~ "```\n"
-#~ "python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py "
-#~ "\"%I\" \"%O.csv\"\n"
+#~ "python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I"
+#~ "\" \"%O.csv\"\n"
 #~ "```\n"
 #~ msgstr ""
 #~ "# 1 - Volledige documentatie\n"
@@ -41994,9 +42032,9 @@ msgstr "KiCad PCB (Printed Circuit Board)"
 #~ "\n"
 #~ "*** Opmerking (alleen Windows): ***\n"
 #~ "* Standaard wordt de opdrachtregel uitgevoerd met een verborgen "
-#~ "consolevenster en wordt de uitvoer omgeleid naar het veld \"Plugin "
-#~ "info\". Om het venster van het lopende commando weer te geven, vinkt u "
-#~ "het selectievakje \"Show console window\" aan. *\n"
+#~ "consolevenster en wordt de uitvoer omgeleid naar het veld \"Plugin info"
+#~ "\". Om het venster van het lopende commando weer te geven, vinkt u het "
+#~ "selectievakje \"Show console window\" aan. *\n"
 #~ "\n"
 #~ "Zodra u op de knop genereren klikt, gebeurt het volgende:\n"
 #~ "\n"
@@ -42038,8 +42076,8 @@ msgstr "KiCad PCB (Printed Circuit Board)"
 #~ "zo uit (afhankelijk van het Python-script):\n"
 #~ "\n"
 #~ "``\n"
-#~ "python f: /kicad/bin/plugins/bom-in-python/myconverter.py \"% I\" \"% "
-#~ "O\"\n"
+#~ "python f: /kicad/bin/plugins/bom-in-python/myconverter.py \"% I\" \"% O"
+#~ "\"\n"
 #~ "``\n"
 #~ "\n"
 #~ "of\n"
@@ -42126,8 +42164,8 @@ msgstr "KiCad PCB (Printed Circuit Board)"
 #~ "\n"
 #~ "Op Windows:\n"
 #~ "``\n"
-#~ "python.exe f: /kicad/bin/plugins/bom-in-python/my_python_script.py \"% "
-#~ "I\" \"% O.html\"\n"
+#~ "python.exe f: /kicad/bin/plugins/bom-in-python/my_python_script.py \"% I"
+#~ "\" \"% O.html\"\n"
 #~ "``\n"
 #~ "\n"
 #~ "Op Linux:\n"
@@ -42716,8 +42754,8 @@ msgstr "KiCad PCB (Printed Circuit Board)"
 #~ msgstr ""
 #~ "De nummering van de symboolpinnen komt niet altijd overeen met de "
 #~ "vereiste SPICE-pincode\n"
-#~ "Controleer het symbool en gebruik \"Alternatieve volgorde van "
-#~ "knooppunten\" om de pinnen indien nodig opnieuw te ordenen"
+#~ "Controleer het symbool en gebruik \"Alternatieve volgorde van knooppunten"
+#~ "\" om de pinnen indien nodig opnieuw te ordenen"
 
 #~ msgid "For a Diode, pin order is anode, cathode"
 #~ msgstr "Voor een diode is de penvolgorde anode, kathode"
