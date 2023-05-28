@@ -28,13 +28,11 @@ LIB_TABLE_GRID_TRICKS::LIB_TABLE_GRID_TRICKS( WX_GRID* aGrid ) : GRID_TRICKS( aG
 
 void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 {
-    if( m_grid->GetGridCursorCol() == COL_OPTIONS )
-    {
-        menu.Append( LIB_TABLE_GRID_TRICKS_OPTIONS_EDITOR,
-                    _( "Options Editor..." ),
-                    _( "Edit options" ) );
-        menu.AppendSeparator();
-    }
+    menu.Append( LIB_TABLE_GRID_TRICKS_OPTIONS_EDITOR,
+                _( "Edit options..." ),
+                _( "Edit options for this library entry" ) );
+
+    menu.AppendSeparator();
 
     bool            showActivate = false;
     bool            showDeactivate = false;

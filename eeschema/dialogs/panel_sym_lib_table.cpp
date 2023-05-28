@@ -23,6 +23,7 @@
 #include <wx/regex.h>
 
 #include <common.h>     // For ExpandEnvVarSubstitutions
+#include <dialogs/dialog_plugin_options.h>
 #include <project.h>
 #include <panel_sym_lib_table.h>
 #include <lib_id.h>
@@ -140,7 +141,29 @@ protected:
 
     virtual void optionsEditor( int aRow )
     {
-        DisplayError( m_dialog, _( "optionsEditor not implemented in SYMBOL_GRID_TRICKS" ) );
+        SYMBOL_LIB_TABLE_GRID* tbl = (SYMBOL_LIB_TABLE_GRID*) m_grid->GetTable();
+
+        if( tbl->GetNumberRows() > aRow )
+        {
+            LIB_TABLE_ROW*  row = tbl->at( (size_t) aRow );
+            const wxString& options = row->GetOptions();
+            wxString        result = options;
+            STRING_UTF8_MAP choices;
+
+            SCH_IO_MGR::SCH_FILE_T pi_type = SCH_IO_MGR::EnumFromStr( row->GetType() );
+            SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( pi_type ) );
+            pi->SymbolLibOptions( &choices );
+
+            DIALOG_PLUGIN_OPTIONS dlg( m_dialog, row->GetNickName(), choices, options, &result );
+            dlg.ShowModal();
+
+            if( options != result )
+            {
+                row->SetOptions( result );
+                m_grid->Refresh();
+            }
+        }
+
     }
 
     /// handle specialized clipboard text, with leading "(sym_lib_table" or
