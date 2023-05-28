@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-18 11:55-0700\n"
-"PO-Revision-Date: 2023-05-22 09:47+0000\n"
+"PO-Revision-Date: 2023-05-30 16:51+0000\n"
 "Last-Translator: Ulices <dev.n47os@aleeas.com>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -8775,7 +8775,6 @@ msgid "Change severity to Error for all '%s' violations"
 msgstr "Cambie la gravedad a Error para todas las infracciones de '%s'"
 
 #: eeschema/dialogs/dialog_erc.cpp:703 eeschema/dialogs/dialog_erc.cpp:709
-#, fuzzy
 msgid ""
 "Violation severities can also be edited in the Schematic Setup... dialog"
 msgstr ""
@@ -11724,9 +11723,11 @@ msgid "Rename Field"
 msgstr "Renombrar archivo"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:688
-#, fuzzy, c-format
+#, c-format
 msgid "Field name %s already exists. Cannot rename over existing field."
-msgstr "El archivo %s ya existe. ¿Desea sobreescribirlo?"
+msgstr ""
+"El nombre de campo %s ya existe. No se puede cambiar el nombre de un campo "
+"existente."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:775
 #, fuzzy
@@ -11767,9 +11768,9 @@ msgid "Could not write BOM output to '%s'."
 msgstr "No pueden guardarse los archivos de trazado en la carpeta '%s'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1137
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote BOM output to '%s'"
-msgstr "No se puede crear la carpeta de salida '%s'."
+msgstr "Salida de lista de materiales escrita en '%s'"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1265
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1666
@@ -14081,9 +14082,9 @@ msgid "Pin count differs."
 msgstr "El recuento de pads difiere."
 
 #: eeschema/lib_symbol.cpp:358
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s not found."
-msgstr "%s no encontrado"
+msgstr "Pin %s no encontrado."
 
 #: eeschema/lib_symbol.cpp:367
 #, fuzzy, c-format
@@ -16798,9 +16799,8 @@ msgstr ""
 "'%s'."
 
 #: eeschema/sim/sim_model.cpp:401
-#, fuzzy
 msgid "No simulation model definition found."
-msgstr "Editor de modelos de simulación"
+msgstr "No se encontró ninguna definición de modelo de simulación."
 
 #: eeschema/sim/sim_model.cpp:535 eeschema/sim/sim_model.cpp:597
 #, c-format
