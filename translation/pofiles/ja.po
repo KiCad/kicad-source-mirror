@@ -3786,7 +3786,8 @@ msgstr "線のスタイル"
 #: eeschema/sch_textbox.cpp:440 include/stroke_params.h:80
 #: pcbnew/fp_text.cpp:309 pcbnew/fp_textbox.cpp:336
 #: pcbnew/pcb_dimension.cpp:332 pcbnew/pcb_text.cpp:130
-#: pcbnew/pcb_textbox.cpp:297
+#: pcbnew/pcb_textbox.cpp:297 eeschema/sch_label.cpp:892
+#: eeschema/sch_text.cpp:496
 msgid "Default"
 msgstr "標準"
 
@@ -4248,9 +4249,9 @@ msgid "Zoom %.2f"
 msgstr "ズーム %.2f"
 
 #: common/eda_draw_frame.cpp:617
-#, fuzzy, c-format
+#, c-format
 msgid "grid %s"
-msgstr "フィールド %s"
+msgstr "グリッド %s"
 
 #: common/eda_draw_frame.cpp:630 pagelayout_editor/pl_editor_frame.cpp:752
 msgid "inches"
@@ -4390,15 +4391,18 @@ msgid "Net Label"
 msgstr "ネット ラベル"
 
 #: common/eda_item.cpp:365 eeschema/sch_label.cpp:906
-#: eeschema/sch_label.cpp:1309
+#: eeschema/sch_label.cpp:1309 eeschema/sch_label.cpp:878
+#: eeschema/sch_label.cpp:1250
 msgid "Directive Label"
 msgstr "指示ラベル"
 
 #: common/eda_item.cpp:366 eeschema/sch_label.cpp:907
+#: eeschema/sch_label.cpp:879
 msgid "Global Label"
 msgstr "グローバル ラベル"
 
 #: common/eda_item.cpp:367 eeschema/sch_label.cpp:908
+#: eeschema/sch_label.cpp:880
 msgid "Hierarchical Label"
 msgstr "階層ラベル"
 
@@ -4602,7 +4606,8 @@ msgstr "塗りつぶし"
 #: gerbview/gerber_file_image.cpp:345
 #: pcbnew/microwave/microwave_polygon.cpp:128
 #: pcbnew/widgets/appearance_controls.cpp:635
-#: pcbnew/widgets/appearance_controls.cpp:1762
+#: pcbnew/widgets/appearance_controls.cpp:1762 eeschema/sch_label.cpp:894
+#: eeschema/sch_text.cpp:498
 msgid "Normal"
 msgstr "標準"
 
@@ -4628,7 +4633,8 @@ msgstr "標準"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:205
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:133
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:50
-#: pcbnew/fp_text_grid_table.cpp:105
+#: pcbnew/fp_text_grid_table.cpp:105 eeschema/sch_label.cpp:894
+#: eeschema/sch_text.cpp:498
 msgid "Italic"
 msgstr "斜体字"
 
@@ -4649,6 +4655,7 @@ msgstr "斜体字"
 #: eeschema/sch_textbox.cpp:442
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:93
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:186
+#: eeschema/sch_label.cpp:894 eeschema/sch_text.cpp:498
 msgid "Bold"
 msgstr "太字"
 
@@ -7712,6 +7719,7 @@ msgstr "%s が見つかりました"
 
 #: eeschema/cross-probing.cpp:175 eeschema/sim/sim_plot_frame.cpp:606
 #: eeschema/sim/sim_plot_frame.cpp:922 eeschema/widgets/tuner_slider.cpp:52
+#: eeschema/sim/sim_plot_frame.cpp:599 eeschema/sim/sim_plot_frame.cpp:915
 #, c-format
 msgid "%s not found"
 msgstr "%s が見つかりません"
@@ -7970,12 +7978,12 @@ msgid ""
 "python <script file name> <input filename> <output filename>\n"
 "```\n"
 "\n"
-"On Windows, if the desired generator script for a CSV BOM is `C:"
-"\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
+"On Windows, if the desired generator script for a CSV BOM is `C:\\Users"
+"\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O.csv"
+"\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -8049,13 +8057,13 @@ msgstr ""
 "python <スクリプトファイル名> <入力ファイル名> <出力ファイル名>\n"
 "```\n"
 "\n"
-"Windowsでは、CSV BOMに使うジェネレーター スクリプトが `C:"
-"\\Users\\username\\kicad\\my_python_script.py` の場合、コマンドラインは以下の"
-"ようになります。\n"
+"Windowsでは、CSV BOMに使うジェネレーター スクリプトが `C:\\Users\\username"
+"\\kicad\\my_python_script.py` の場合、コマンドラインは以下のようになりま"
+"す。\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O.csv"
+"\"\n"
 "```\n"
 "\n"
 "Linuxでは、CSV BOMに使うジェネレーター スクリプトが `/home/username/kicad/"
@@ -8628,6 +8636,7 @@ msgstr "ネットリストをエクスポート"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:320
 #: eeschema/sim/sim_plot_frame.cpp:464 eeschema/sim/sim_plot_frame.cpp:1738
+#: eeschema/sim/sim_plot_frame.cpp:463
 msgid "Simulator requires a fully annotated schematic."
 msgstr "シミュレーターには回路図の完全なアノテーションが必要です。"
 
@@ -8825,6 +8834,7 @@ msgstr "KiCadフォント"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:99
 #: eeschema/dialogs/dialog_text_properties_base.cpp:120
 #: eeschema/sch_label.cpp:932 eeschema/sch_text.cpp:509
+#: eeschema/sch_label.cpp:904 eeschema/sch_text.cpp:508
 msgid "Align left"
 msgstr "左揃え"
 
@@ -8840,6 +8850,7 @@ msgstr "中央揃え"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:109
 #: eeschema/dialogs/dialog_text_properties_base.cpp:130
 #: eeschema/sch_label.cpp:930 eeschema/sch_text.cpp:507
+#: eeschema/sch_label.cpp:902 eeschema/sch_text.cpp:506
 msgid "Align right"
 msgstr "右揃え"
 
@@ -8850,6 +8861,7 @@ msgstr "右揃え"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:129
 #: eeschema/dialogs/dialog_text_properties_base.cpp:140
 #: eeschema/sch_label.cpp:933 eeschema/sch_text.cpp:510
+#: eeschema/sch_label.cpp:905 eeschema/sch_text.cpp:509
 msgid "Align top"
 msgstr "上揃え"
 
@@ -8865,6 +8877,7 @@ msgstr "上下中央揃え"
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:139
 #: eeschema/dialogs/dialog_text_properties_base.cpp:150
 #: eeschema/sch_label.cpp:931 eeschema/sch_text.cpp:508
+#: eeschema/sch_label.cpp:903 eeschema/sch_text.cpp:507
 msgid "Align bottom"
 msgstr "下揃え"
 
@@ -9276,7 +9289,8 @@ msgstr "垂直揃え"
 #: eeschema/lib_text.cpp:428 eeschema/lib_textbox.cpp:490
 #: eeschema/sch_field.cpp:755 eeschema/sch_label.cpp:926
 #: eeschema/sch_text.cpp:503 eeschema/sch_textbox.cpp:446
-#: pcbnew/tools/board_inspection_tool.cpp:1237
+#: pcbnew/tools/board_inspection_tool.cpp:1237 eeschema/sch_label.cpp:898
+#: eeschema/sch_text.cpp:502
 msgid "Text Size"
 msgstr "テキスト サイズ"
 
@@ -9310,7 +9324,8 @@ msgstr "Y 位置"
 #: eeschema/sch_text.cpp:497 eeschema/sch_textbox.cpp:440
 #: pcbnew/fp_text.cpp:309 pcbnew/fp_textbox.cpp:336
 #: pcbnew/pcb_dimension.cpp:332 pcbnew/pcb_text.cpp:130
-#: pcbnew/pcb_textbox.cpp:297
+#: pcbnew/pcb_textbox.cpp:297 eeschema/sch_label.cpp:892
+#: eeschema/sch_text.cpp:496
 msgid "Font"
 msgstr "フォント"
 
@@ -10593,9 +10608,8 @@ msgid "Replace matches in reference designators"
 msgstr "一致したリファレンス指定子の置換"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:120
-#, fuzzy
 msgid "Replace"
-msgstr "置換 (&R)"
+msgstr "置換"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:41
 msgid "Schematic Setup"
@@ -10802,7 +10816,8 @@ msgstr "シートは指定されたファイルを持つ必要があります。
 #: eeschema/sch_text.cpp:501 eeschema/sch_textbox.cpp:444
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:122
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:226
-#: pcbnew/teardrop/dialog_teardrop_base.cpp:330
+#: pcbnew/teardrop/dialog_teardrop_base.cpp:330 eeschema/sch_label.cpp:896
+#: eeschema/sch_text.cpp:500
 msgid "Style"
 msgstr "スタイル"
 
@@ -10844,7 +10859,7 @@ msgid "Add signal by name:"
 msgstr "名前で信号を追加:"
 
 #: eeschema/dialogs/dialog_signal_list_base.h:50
-#: eeschema/sim/sim_plot_frame.cpp:165
+#: eeschema/sim/sim_plot_frame.cpp:165 eeschema/sim/sim_plot_frame.cpp:164
 msgid "Add Signals"
 msgstr "信号を追加"
 
@@ -11185,6 +11200,7 @@ msgstr "パラメーター"
 #: pcbnew/fp_text.cpp:294 pcbnew/pcb_marker.cpp:193 pcbnew/pcb_shape.cpp:304
 #: pcbnew/pcb_track.cpp:861 pcbnew/pcb_track.cpp:935
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:249 pcbnew/zone.cpp:536
+#: eeschema/sch_label.cpp:890
 msgid "Type"
 msgstr "タイプ"
 
@@ -12613,12 +12629,12 @@ msgid "Unknown netlist format.\n"
 msgstr "未知のフォーマットのネットリストです。\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:396
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr "シンボル '%s' の ユニット%d を '%s' にプロット\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
 msgstr "シンボル '%s' を '%s' にプロット\n"
 
@@ -13326,6 +13342,7 @@ msgid "Unit %s"
 msgstr "ユニット %s"
 
 #: eeschema/lib_text.cpp:477 eeschema/sch_text.cpp:393
+#: eeschema/sch_text.cpp:392
 #, c-format
 msgid "Graphic Text '%s'"
 msgstr "図形テキスト %s"
@@ -13336,6 +13353,7 @@ msgstr "図形テキスト ボックス"
 
 #: eeschema/lib_textbox.cpp:486 eeschema/sch_label.cpp:922
 #: eeschema/sch_text.cpp:499 eeschema/sch_textbox.cpp:442
+#: eeschema/sch_label.cpp:894 eeschema/sch_text.cpp:498
 msgid "Bold Italic"
 msgstr "斜太字"
 
@@ -13463,11 +13481,13 @@ msgid "P&references"
 msgstr "設定 (&r)"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:478
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:477
 #, c-format
 msgid "Could not open file '%s' to write IBIS model"
 msgstr "IBIS モデルを書き込むためのファイル '%s' を開くことができませんでした"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:532
+#: eeschema/netlist_exporters/netlist_exporter_spice.cpp:531
 #, c-format
 msgid "Could not find library file '%s'"
 msgstr "ライブラリ ファイル '%s' が見つかりませんでした"
@@ -13696,6 +13716,7 @@ msgstr "バス エントリー タイプ"
 #: eeschema/sch_bus_entry.cpp:512 eeschema/sch_label.cpp:950
 #: eeschema/sch_line.cpp:924 pcbnew/pad.cpp:1005 pcbnew/pcb_track.cpp:963
 #: pcbnew/tools/pcb_control.cpp:1544 pcbnew/zone.cpp:566
+#: eeschema/sch_label.cpp:922
 msgid "Resolved Netclass"
 msgstr "解決されたネットクラス"
 
@@ -13726,7 +13747,7 @@ msgstr "新しい回路図ファイルは保存されていません"
 #: eeschema/symbol_editor/symbol_editor.cpp:1163
 #: pagelayout_editor/pl_editor_frame.cpp:395
 #: pcbnew/footprint_edit_frame.cpp:715 pcbnew/footprint_edit_frame.cpp:755
-#: pcbnew/pcb_edit_frame.cpp:1050
+#: pcbnew/pcb_edit_frame.cpp:1050 eeschema/sim/sim_plot_frame.cpp:1761
 #, c-format
 msgid "Save changes to '%s' before closing?"
 msgstr "閉じる前に '%s' へ変更を保存しますか?"
@@ -13769,12 +13790,13 @@ msgstr "CvPcb を開くことができません"
 
 #: eeschema/sch_edit_frame.cpp:1420 eeschema/sim/sim_plot_frame.cpp:350
 #: kicad/kicad_manager_frame.cpp:776 pcbnew/footprint_edit_frame.cpp:926
-#: pcbnew/pcb_edit_frame.cpp:1566
+#: pcbnew/pcb_edit_frame.cpp:1566 eeschema/sim/sim_plot_frame.cpp:349
 msgid "[Read Only]"
 msgstr "[読み取り専用]"
 
 #: eeschema/sch_edit_frame.cpp:1423 eeschema/sim/sim_plot_frame.cpp:353
 #: pcbnew/footprint_edit_frame.cpp:935 pcbnew/pcb_edit_frame.cpp:1569
+#: eeschema/sim/sim_plot_frame.cpp:352
 msgid "[Unsaved]"
 msgstr "[未保存]"
 
@@ -13819,15 +13841,16 @@ msgstr "未知の SCH_FILE_T 値: %d"
 msgid "Tri-State"
 msgstr "トライステート"
 
-#: eeschema/sch_label.cpp:905
+#: eeschema/sch_label.cpp:905 eeschema/sch_label.cpp:877
 msgid "Label"
 msgstr "ラベル"
 
-#: eeschema/sch_label.cpp:909
+#: eeschema/sch_label.cpp:909 eeschema/sch_label.cpp:881
 msgid "Hierarchical Sheet Pin"
 msgstr "階層シートピン"
 
 #: eeschema/sch_label.cpp:937 eeschema/sch_text.cpp:514
+#: eeschema/sch_label.cpp:909 eeschema/sch_text.cpp:513
 msgid "Justification"
 msgstr "位置合わせ"
 
@@ -13838,39 +13861,41 @@ msgstr "位置合わせ"
 #: pcbnew/pad.cpp:1796 pcbnew/pcb_track.cpp:961
 #: pcbnew/tools/pcb_control.cpp:1541
 #: pcbnew/widgets/pcb_properties_panel.cpp:260 pcbnew/zone.cpp:564
-#: pcbnew/zone.cpp:1455
+#: pcbnew/zone.cpp:1455 eeschema/sch_label.cpp:973
 msgid "Net"
 msgstr "ネット"
 
 #: eeschema/sch_label.cpp:1004 eeschema/sch_line.cpp:867
+#: eeschema/sch_label.cpp:976
 msgid "Resolved netclass"
 msgstr "解決されたネットクラス"
 
-#: eeschema/sch_label.cpp:1020
+#: eeschema/sch_label.cpp:1020 eeschema/sch_label.cpp:992
 msgid "Hierarchical Labels"
 msgstr "階層ラベル"
 
-#: eeschema/sch_label.cpp:1105
+#: eeschema/sch_label.cpp:1105 eeschema/sch_label.cpp:1077
 #, c-format
 msgid "Label '%s'"
 msgstr "ラベル '%s'"
 
-#: eeschema/sch_label.cpp:1313
+#: eeschema/sch_label.cpp:1313 eeschema/sch_label.cpp:1254
 #, c-format
 msgid "Directive Label [%s %s]"
 msgstr "指示ラベル [%s %s]"
 
-#: eeschema/sch_label.cpp:1590
+#: eeschema/sch_label.cpp:1590 eeschema/sch_label.cpp:1531
 #, c-format
 msgid "Global Label '%s'"
 msgstr "グローバル ラベル '%s'"
 
-#: eeschema/sch_label.cpp:1723
+#: eeschema/sch_label.cpp:1723 eeschema/sch_label.cpp:1664
 #, c-format
 msgid "Hierarchical Label '%s'"
 msgstr "階層ラベル '%s'"
 
 #: eeschema/sch_label.cpp:1740 pcbnew/dialogs/panel_setup_rules.cpp:687
+#: eeschema/sch_label.cpp:1681
 msgid "Syntax Help"
 msgstr "構文ヘルプ"
 
@@ -14708,7 +14733,7 @@ msgstr "%s にシンボルが見つかりません!"
 msgid "Symbol %s [%s]"
 msgstr "シンボル %s [%s]"
 
-#: eeschema/sch_text.cpp:495
+#: eeschema/sch_text.cpp:495 eeschema/sch_text.cpp:494
 msgid "Graphic Text"
 msgstr "図形テキスト"
 
@@ -15179,9 +15204,8 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"ロードされた回路図でロードされた回路図プロジェクト ライブラリ テーブルから失"
-"われたライブラリー名があります。  これは回路図でシンボル ライブラリのリンクを"
-"壊す原因となります。\n"
+"選択した回路図にプロジェクト ライブラリ テーブルにないライブラリ名がありま"
+"す。  これは回路図でシンボル ライブラリの参照を壊す原因となります。\n"
 "\n"
 "続行しますか？"
 
@@ -15903,47 +15927,51 @@ msgstr ""
 "このシミュレーションはプロットを行いません。結果はコンソール ウィンドウを参照"
 "して下さい。"
 
-#: eeschema/sim/sim_plot_frame.cpp:163
+#: eeschema/sim/sim_plot_frame.cpp:163 eeschema/sim/sim_plot_frame.cpp:162
 msgid "Run/Stop Simulation"
 msgstr "実行/停止"
 
 #: eeschema/sim/sim_plot_frame.cpp:164 eeschema/sim/sim_plot_frame_base.cpp:55
+#: eeschema/sim/sim_plot_frame.cpp:163
 msgid "Run Simulation"
 msgstr "シミュレーションを実行"
 
-#: eeschema/sim/sim_plot_frame.cpp:166
+#: eeschema/sim/sim_plot_frame.cpp:166 eeschema/sim/sim_plot_frame.cpp:165
 msgid "Add signals to plot"
 msgstr "プロットする信号を追加"
 
-#: eeschema/sim/sim_plot_frame.cpp:167
+#: eeschema/sim/sim_plot_frame.cpp:167 eeschema/sim/sim_plot_frame.cpp:166
 msgid "Probe"
 msgstr "プローブ"
 
-#: eeschema/sim/sim_plot_frame.cpp:168
+#: eeschema/sim/sim_plot_frame.cpp:168 eeschema/sim/sim_plot_frame.cpp:167
 msgid "Probe signals on the schematic"
 msgstr "回路図上の信号をプローブ"
 
 #: eeschema/sim/sim_plot_frame.cpp:169 eeschema/sim/sim_plot_frame_base.cpp:242
+#: eeschema/sim/sim_plot_frame.cpp:168
 msgid "Tune"
 msgstr "調整"
 
-#: eeschema/sim/sim_plot_frame.cpp:170
+#: eeschema/sim/sim_plot_frame.cpp:170 eeschema/sim/sim_plot_frame.cpp:169
 msgid "Tune component values"
 msgstr "コンポーネント定数を調整"
 
-#: eeschema/sim/sim_plot_frame.cpp:171
+#: eeschema/sim/sim_plot_frame.cpp:171 eeschema/sim/sim_plot_frame.cpp:170
 msgid "Sim Command"
 msgstr "コマンド"
 
-#: eeschema/sim/sim_plot_frame.cpp:172
+#: eeschema/sim/sim_plot_frame.cpp:172 eeschema/sim/sim_plot_frame.cpp:171
 msgid "Simulation command and settings"
 msgstr "シミュレーションのコマンドと設定"
 
 #: eeschema/sim/sim_plot_frame.cpp:355 eeschema/sim/sim_plot_frame_base.h:130
+#: eeschema/sim/sim_plot_frame.cpp:354
 msgid "Spice Simulator"
 msgstr "Spice シミュレーター"
 
 #: eeschema/sim/sim_plot_frame.cpp:473 eeschema/sim/sim_plot_frame.cpp:1571
+#: eeschema/sim/sim_plot_frame.cpp:466 eeschema/sim/sim_plot_frame.cpp:1564
 msgid ""
 "Errors during netlist generation; simulation aborted.\n"
 "\n"
@@ -15951,7 +15979,7 @@ msgstr ""
 "ネットリストの生成中にエラーが発生しました。シミュレーションを中止します。\n"
 "\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:490
+#: eeschema/sim/sim_plot_frame.cpp:490 eeschema/sim/sim_plot_frame.cpp:483
 msgid ""
 "Schematic sheet simulation command directive has changed.  Do you wish to "
 "update the Simulation Command?"
@@ -15960,77 +15988,83 @@ msgstr ""
 "ン コマンドを更新しますか?"
 
 #: eeschema/sim/sim_plot_frame.cpp:513 eeschema/sim/sim_plot_frame.cpp:2007
+#: eeschema/sim/sim_plot_frame.cpp:506 eeschema/sim/sim_plot_frame.cpp:1993
 msgid "Another simulation is already running."
 msgstr "別のシミュレーションがすでに実行中です。"
 
-#: eeschema/sim/sim_plot_frame.cpp:541
+#: eeschema/sim/sim_plot_frame.cpp:541 eeschema/sim/sim_plot_frame.cpp:534
 #, c-format
 msgid "Plot%u - "
 msgstr "プロット %u - "
 
 #: eeschema/sim/sim_plot_frame.cpp:605 eeschema/sim/sim_plot_frame.cpp:617
-#: eeschema/sim/sim_plot_frame.cpp:941
+#: eeschema/sim/sim_plot_frame.cpp:941 eeschema/sim/sim_plot_frame.cpp:598
+#: eeschema/sim/sim_plot_frame.cpp:610 eeschema/sim/sim_plot_frame.cpp:934
 msgid "Could not apply tuned value(s):"
 msgstr "調整した値を適用できません:"
 
 #: eeschema/sim/sim_plot_frame.cpp:618 eeschema/sim/sim_plot_frame.cpp:930
+#: eeschema/sim/sim_plot_frame.cpp:611 eeschema/sim/sim_plot_frame.cpp:923
 #, c-format
 msgid "%s is not tunable"
 msgstr "%s の調整はできません"
 
-#: eeschema/sim/sim_plot_frame.cpp:661
+#: eeschema/sim/sim_plot_frame.cpp:661 eeschema/sim/sim_plot_frame.cpp:654
 msgid "Error: simulation type not defined!\n"
 msgstr "エラー: シミュレーション タイプが定義されていません!\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:667
+#: eeschema/sim/sim_plot_frame.cpp:667 eeschema/sim/sim_plot_frame.cpp:660
 msgid "Error: simulation type doesn't support plotting!\n"
 msgstr "エラー: シミュレーション タイプはプロットをサポートしていません!\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:739 eeschema/sim/sim_plot_panel.h:117
+#: eeschema/sim/sim_plot_frame.cpp:732
 msgid " (mag)"
 msgstr " (利得)"
 
 #: eeschema/sim/sim_plot_frame.cpp:741 eeschema/sim/sim_plot_panel.h:119
+#: eeschema/sim/sim_plot_frame.cpp:734
 msgid " (phase)"
 msgstr " (位相)"
 
 #: eeschema/sim/sim_plot_frame.cpp:851 eeschema/sim/sim_plot_frame.cpp:1822
+#: eeschema/sim/sim_plot_frame.cpp:844 eeschema/sim/sim_plot_frame.cpp:1808
 msgid "Signal"
 msgstr "信号"
 
-#: eeschema/sim/sim_plot_frame.cpp:1188
+#: eeschema/sim/sim_plot_frame.cpp:1188 eeschema/sim/sim_plot_frame.cpp:1181
 msgid "noname"
 msgstr "名前なし"
 
-#: eeschema/sim/sim_plot_frame.cpp:1237
+#: eeschema/sim/sim_plot_frame.cpp:1237 eeschema/sim/sim_plot_frame.cpp:1230
 msgid "Open simulation workbook"
 msgstr "シミュレーション ワークブックを開く"
 
-#: eeschema/sim/sim_plot_frame.cpp:1266
+#: eeschema/sim/sim_plot_frame.cpp:1266 eeschema/sim/sim_plot_frame.cpp:1259
 msgid "Save Simulation Workbook As"
 msgstr "名前を付けてシミュレーション ワークブックを保存"
 
-#: eeschema/sim/sim_plot_frame.cpp:1281
+#: eeschema/sim/sim_plot_frame.cpp:1281 eeschema/sim/sim_plot_frame.cpp:1274
 msgid "Save Plot as Image"
 msgstr "画像としてプロットを保存"
 
-#: eeschema/sim/sim_plot_frame.cpp:1298
+#: eeschema/sim/sim_plot_frame.cpp:1298 eeschema/sim/sim_plot_frame.cpp:1291
 msgid "Save Plot Data"
 msgstr "プロット データを保存"
 
-#: eeschema/sim/sim_plot_frame.cpp:1636
+#: eeschema/sim/sim_plot_frame.cpp:1636 eeschema/sim/sim_plot_frame.cpp:1629
 msgid "You need to run plot-providing simulation first."
 msgstr "最初にプロット付きのシミュレーションを実行する必要があります。"
 
-#: eeschema/sim/sim_plot_frame.cpp:1693
+#: eeschema/sim/sim_plot_frame.cpp:1693 eeschema/sim/sim_plot_frame.cpp:1686
 msgid "SPICE Netlist"
 msgstr "SPICE ネットリスト"
 
-#: eeschema/sim/sim_plot_frame.cpp:1772
+#: eeschema/sim/sim_plot_frame.cpp:1772 eeschema/sim/sim_plot_frame.cpp:1758
 msgid "Save changes to workbook?"
 msgstr "ワークブックに変更を保存しますか？"
 
-#: eeschema/sim/sim_plot_frame.cpp:1937
+#: eeschema/sim/sim_plot_frame.cpp:1937 eeschema/sim/sim_plot_frame.cpp:1923
 msgid ""
 "\n"
 "\n"
@@ -16042,19 +16076,20 @@ msgstr ""
 "シミュレーション結果:\n"
 "\n"
 
-#: eeschema/sim/sim_plot_frame.cpp:2028
+#: eeschema/sim/sim_plot_frame.cpp:2028 eeschema/sim/sim_plot_frame.cpp:2014
 msgid "Remove Signal"
 msgstr "信号を削除"
 
-#: eeschema/sim/sim_plot_frame.cpp:2028
+#: eeschema/sim/sim_plot_frame.cpp:2028 eeschema/sim/sim_plot_frame.cpp:2014
 msgid "Remove the signal from the plot"
 msgstr "プロットから信号を削除"
 
 #: eeschema/sim/sim_plot_frame.cpp:2036 eeschema/sim/sim_plot_frame.cpp:2063
+#: eeschema/sim/sim_plot_frame.cpp:2022 eeschema/sim/sim_plot_frame.cpp:2049
 msgid "Hide Cursor"
 msgstr "カーソルを非表示"
 
-#: eeschema/sim/sim_plot_frame.cpp:2038
+#: eeschema/sim/sim_plot_frame.cpp:2038 eeschema/sim/sim_plot_frame.cpp:2024
 msgid "Show Cursor"
 msgstr "カーソルを表示"
 
@@ -16284,8 +16319,8 @@ msgstr ""
 #: eeschema/symbol_checker.cpp:146
 #, c-format
 msgid ""
-"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
-"%s%s at location <b>(%s, %s)</b>."
+"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
+"%s at location <b>(%s, %s)</b>."
 msgstr ""
 "<b>重複ピン %s</b> \"%s\" 位置 <b>(%s, %s)</b> 衝突ピン %s%s 位置 <b>(%s, "
 "%s)</b>."
@@ -16293,8 +16328,8 @@ msgstr ""
 #: eeschema/symbol_checker.cpp:159
 #, c-format
 msgid ""
-"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
-"%s%s at location <b>(%s, %s)</b> in units %s and %s."
+"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin %s"
+"%s at location <b>(%s, %s)</b> in units %s and %s."
 msgstr ""
 "<b>重複ピン %s</b> \"%s\" 位置 <b>(%s, %s)</b> 衝突ピン %s%s 位置 <b>(%s, "
 "%s)</b> (ユニット %s と %s)."
@@ -31593,13 +31628,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net"
+"\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net"
+"\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -31920,13 +31955,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net"
+"\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net"
+"\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -34892,19 +34927,16 @@ msgid "Dimension '%s' on %s"
 msgstr "寸法 \"%s\" (%s 上)"
 
 #: pcbnew/pcb_dimension.cpp:1319
-#, fuzzy
 msgid "1234.0"
-msgstr "1234"
+msgstr "1234.0"
 
 #: pcbnew/pcb_dimension.cpp:1320
-#, fuzzy
 msgid "1234.0 mm"
-msgstr "1234mm"
+msgstr "1234.0mm"
 
 #: pcbnew/pcb_dimension.cpp:1321
-#, fuzzy
 msgid "1234.0 (mm)"
-msgstr "1234 (mm)"
+msgstr "1234.0 (mm)"
 
 #: pcbnew/pcb_dimension.cpp:1353
 #, fuzzy
@@ -35238,9 +35270,9 @@ msgid "Error creating svg file"
 msgstr "svg ファイルの作成中にエラーが発生しました"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:337 pcbnew/pcbnew_jobs_handler.cpp:414
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to plot to '%s'.\n"
-msgstr "'%s' のロードに失敗しました。"
+msgstr "'%s' へのプロットに失敗しました。\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:624 pcbnew/pcbnew_jobs_handler.cpp:695
 msgid "Loading footprint library\n"
@@ -36751,6 +36783,7 @@ msgstr ""
 "自己交差したポリゴンではないことを確認して下さい。"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1927 pcbnew/router/router_tool.cpp:453
+#: pcbnew/router/pns_kicad_iface.cpp:1923
 msgid "Interactive Router"
 msgstr "インタラクティブ ルーター"
 
@@ -38615,14 +38648,12 @@ msgid "Import footprint from file"
 msgstr "ファイルからフットプリントをインポート"
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export Footprint..."
-msgstr "フットプリントをエクスポート(&E)..."
+msgstr "フットプリントをエクスポート..."
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export footprint to file"
-msgstr "ファイルにへフットプリントをエクスポート"
+msgstr "フットプリントをファイルにエクスポート"
 
 #: pcbnew/tools/pcb_actions.cpp:453
 msgid "Footprint Properties..."
@@ -41466,8 +41497,8 @@ msgstr "KiCad プリント基板ファイル"
 #~ "\n"
 #~ "On Linux:\n"
 #~ "```\n"
-#~ "python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py "
-#~ "\"%I\" \"%O.csv\"\n"
+#~ "python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I"
+#~ "\" \"%O.csv\"\n"
 #~ "```\n"
 #~ msgstr ""
 #~ "# 1 - 完全なドキュメント\n"
@@ -41651,8 +41682,8 @@ msgstr "KiCad プリント基板ファイル"
 #~ "\n"
 #~ "Linux の例:\n"
 #~ "```\n"
-#~ "python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py "
-#~ "\"%I\" \"%O.csv\"\n"
+#~ "python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I"
+#~ "\" \"%O.csv\"\n"
 #~ "```\n"
 
 #, c-format
@@ -48263,8 +48294,8 @@ msgstr "KiCad プリント基板ファイル"
 #~ msgstr "画面のパンにタッチパッドを使用"
 
 #~ msgid ""
-#~ "Enable touchpad-friendly controls (pan with scroll action, zoom with "
-#~ "Ctrl+scroll)."
+#~ "Enable touchpad-friendly controls (pan with scroll action, zoom with Ctrl"
+#~ "+scroll)."
 #~ msgstr ""
 #~ "タッチパッド向きのコントロール (スクロール動作でパン、 Ctrl+スクロールで"
 #~ "ズーム) を有効にします。"
