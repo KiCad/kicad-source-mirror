@@ -563,13 +563,10 @@ BOX2I EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     // bounding box will be moved later according to the actual text options
     wxSize   textsize = wxSize( extents.x, extents.y );
     VECTOR2I pos = drawPos;
+    int      fudgeFactor = extents.y * 0.17;
 
     if( font->IsStroke() )
-    {
-        int fudgeFactor = extents.y * 0.17;
         textsize.y += fudgeFactor;
-        pos.y += fudgeFactor / 2;
-    }
 
     if( IsMultilineAllowed() && aLine > 0 && aLine < (int) strings.GetCount() )
         pos.y -= KiROUND( aLine * font->GetInterline( fontSize.y ) );
@@ -627,6 +624,7 @@ BOX2I EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     switch( GetVertJustify() )
     {
     case GR_TEXT_V_ALIGN_TOP:
+        bbox.Offset( 0, -fudgeFactor );
         break;
 
     case GR_TEXT_V_ALIGN_CENTER:
@@ -635,6 +633,7 @@ BOX2I EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
 
     case GR_TEXT_V_ALIGN_BOTTOM:
         bbox.SetY( bbox.GetY() - bbox.GetHeight() );
+        bbox.Offset( 0, fudgeFactor );
         break;
     }
 
