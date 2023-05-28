@@ -360,8 +360,7 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
                 if( !aReporter )
                     return retv;
             }
-
-            if( int tmp2 = aPinItem->compare( *bPin, aCompareFlags ) )
+            else if( int tmp2 = aPinItem->compare( *bPin, aCompareFlags ) )
             {
                 retv = tmp2;
                 REPORT( wxString::Format( _( "Pin %s differs." ), aPin->GetNumber() ) );
