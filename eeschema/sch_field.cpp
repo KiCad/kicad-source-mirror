@@ -243,6 +243,16 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
 }
 
 
+wxString SCH_FIELD::GetShownText( bool aAllowExtraText, int aDepth ) const
+{
+    if( SCHEMATIC* schematic = Schematic() )
+        return GetShownText( &schematic->CurrentSheet(), aAllowExtraText, aDepth );
+    else
+        return EDA_TEXT::GetShownText( aAllowExtraText, aDepth );
+}
+
+
+
 int SCH_FIELD::GetPenWidth() const
 {
     return GetEffectiveTextPenWidth();
