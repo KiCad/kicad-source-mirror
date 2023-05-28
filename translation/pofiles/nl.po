@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-18 11:55-0700\n"
-"PO-Revision-Date: 2023-05-26 12:49+0000\n"
+"PO-Revision-Date: 2023-05-30 16:50+0000\n"
 "Last-Translator: Bas Wijnen <wijnen@debian.org>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
 "master-source/nl/>\n"
@@ -1098,9 +1098,8 @@ msgid "Opacity"
 msgstr "Ondoorzichtigheid"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:165
-#, fuzzy
 msgid "Board Thickness"
-msgstr "Bord dikte:"
+msgstr "Borddikte"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:170
 #: bitmap2component/bitmap2cmp_gui.cpp:153
@@ -5527,9 +5526,9 @@ msgid "Deactivate selected"
 msgstr "Selectie deactiveren"
 
 #: common/lib_table_grid_tricks.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid "Library settings for %s..."
-msgstr "&Bibliotheek instellingen"
+msgstr "Bibliotheekinstellingen voor %s..."
 
 #: common/lib_tree_model.cpp:146
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
@@ -8425,9 +8424,8 @@ msgid "Connection String:"
 msgstr "Connector:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:85
-#, fuzzy
 msgid "Test"
-msgstr "&Test Erc"
+msgstr "Test"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:99
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:190
@@ -8473,9 +8471,8 @@ msgid "Time in seconds that database queries will be cached for"
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.h:79
-#, fuzzy
 msgid "Database Library Settings"
-msgstr "&Bibliotheek instellingen"
+msgstr "Database-bibliotheekinstellingen"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:545
 #, c-format
@@ -10876,9 +10873,8 @@ msgid "Replace matches in reference designators"
 msgstr "Vervang overeenkomsten in referentie-aanduidingen"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:123
-#, fuzzy
 msgid "Replace"
-msgstr "&Vervangen"
+msgstr "Vervangen"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:40
 msgid "Schematic Setup"
@@ -11276,9 +11272,8 @@ msgid "(optional; default GND)"
 msgstr "(optioneel; standaard GND)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:249
-#, fuzzy
 msgid "Noise source:"
-msgstr "Geluidsbron"
+msgstr "Ruisbron:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:282
 msgid "Number of points:"
@@ -11827,9 +11822,8 @@ msgid "Group symbols together based on common properties"
 msgstr "Groepeer symbolen op basis van gemeenschappelijke eigenschappen"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:161
-#, fuzzy
 msgid "Edit"
-msgstr "&Bewerken"
+msgstr "Bewerken"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:173
 #, fuzzy
@@ -16392,9 +16386,8 @@ msgid "Invalid V_meas value."
 msgstr "Ongeldige eigenschap-waarde"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:539
-#, fuzzy
 msgid "C_comp is invalid."
-msgstr "Enkele bestanden zijn verkeerd!"
+msgstr "C_comp is ongeldig."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:547
 #, fuzzy
@@ -16586,9 +16579,8 @@ msgid "Unknown keyword in "
 msgstr "Onbekend Record-id: %d."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1364
-#, fuzzy
 msgid " context: "
-msgstr "Cmp ext: "
+msgstr " Context: "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1430
 #, fuzzy
@@ -17038,9 +17030,8 @@ msgstr ""
 
 #: eeschema/sim/sim_plot_panel.h:151 eeschema/sim/simulator_frame.cpp:903
 #: eeschema/sim/simulator_frame.cpp:1134
-#, fuzzy
 msgid " (phase)"
-msgstr "AC-fase:"
+msgstr " (fase)"
 
 #: eeschema/sim/simulator_frame.cpp:194
 #, fuzzy
@@ -22212,9 +22203,9 @@ msgid "No package updates available"
 msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:74 kicad/pcm/pcm_task_manager.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Version %s of package %s not found!"
-msgstr "Netlist bestand %s niet gevonden"
+msgstr "Versie %s van pakket %s niet gevonden!"
 
 #: kicad/pcm/pcm_task_manager.cpp:83
 msgid "Unable to create download directory!"
@@ -27500,9 +27491,8 @@ msgid "Run DRC"
 msgstr "Voer DRC uit"
 
 #: pcbnew/dialogs/dialog_drc.cpp:263
-#, fuzzy
 msgid "DRC incomplete: could not compile custom design rules."
-msgstr "DRC onvolledig: kon geen custom ontwerpregels opstellen.  "
+msgstr "DRC onvolledig: kon geen custom ontwerpregels opstellen."
 
 #: pcbnew/dialogs/dialog_drc.cpp:265 pcbnew/tools/board_inspection_tool.cpp:180
 msgid "Show design rules."
@@ -35111,11 +35101,12 @@ msgid "Build STEP data\n"
 msgstr ""
 
 #: pcbnew/exporters/step/exporter_step.cpp:469
-#, fuzzy
 msgid ""
 "\n"
 "** Error building STEP board model. Export aborted. **\n"
-msgstr "Fout bij schrijven naar bestand '%s'."
+msgstr ""
+"\n"
+"** Fout bij het bouwen van het STOP modelbord. Export afgebroken. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:473
 #, fuzzy
@@ -35123,26 +35114,30 @@ msgid "Writing STEP file\n"
 msgstr "STEP-bestanden"
 
 #: pcbnew/exporters/step/exporter_step.cpp:477
-#, fuzzy
 msgid ""
 "\n"
 "** Error writing STEP file. **\n"
-msgstr "Fout bij schrijven naar bestand '%s'."
+msgstr ""
+"\n"
+"** Fout bij schrijven naar STEP-bestand. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:482
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "STEP file '%s' created.\n"
-msgstr "Rapportbestand '%s' aangemaakt."
+msgstr ""
+"\n"
+"STEP-bestand '%s' aangemaakt.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:488
 #: pcbnew/exporters/step/exporter_step.cpp:493
-#, fuzzy
 msgid ""
 "\n"
 "** Error exporting STEP file. Export aborted. **\n"
-msgstr "Fout bij schrijven naar bestand '%s'."
+msgstr ""
+"\n"
+"** Fout bij het exporteren naar STEP-bestand. Export afgebroken. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:501
 msgid ""
@@ -39462,9 +39457,8 @@ msgid "[netclass %s]"
 msgstr "[net-klasse %s]"
 
 #: pcbnew/tools/board_inspection_tool.cpp:178
-#, fuzzy
 msgid "Report incomplete: could not compile custom design rules."
-msgstr "Rapport onvolledig: kon geen ontwerpregels opstellen.  "
+msgstr "Rapport onvolledig: kon geen ontwerpregels opstellen."
 
 #: pcbnew/tools/board_inspection_tool.cpp:280
 #, fuzzy
