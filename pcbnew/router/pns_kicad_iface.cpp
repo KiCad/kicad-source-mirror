@@ -1288,14 +1288,10 @@ bool PNS_KICAD_IFACE_BASE::syncTextItem( PNS::NODE* aWorld, PCB_TEXT* aText, PCB
     solid->SetShape( shape );   // takes ownership
     solid->SetRoutable( false );
 
-    TEXT_ATTRIBUTES attrs = aText->GetAttributes();
-    int             margin = 0;
-    SHAPE_POLY_SET  cornerBuffer;
+    SHAPE_POLY_SET cornerBuffer;
 
-    if( aText->IsKnockout() )
-        margin = GetKnockoutTextMargin( attrs.m_Size, attrs.m_StrokeWidth );
-
-    aText->TransformBoundingBoxToPolygon( &cornerBuffer, margin );
+    aText->TransformShapeToPolygon( cornerBuffer, aText->GetLayer(), 0,
+                                    m_board->GetDesignSettings().m_MaxError, ERROR_OUTSIDE );
 
     if( !cornerBuffer.OutlineCount() )
         return false;

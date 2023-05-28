@@ -28,6 +28,8 @@
 #include <pcb_plot_params.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
+#include <board.h>
+#include <board_design_settings.h>
 #include <board_item.h>
 
 class EDA_TEXT;
@@ -39,8 +41,6 @@ class PCB_DIMENSION_BASE;
 class FOOTPRINT;
 class PCB_TARGET;
 class ZONE;
-class BOARD;
-class BOARD_ITEM;
 class REPORTER;
 class wxFileName;
 
@@ -60,6 +60,7 @@ public:
     {
         m_plotter = aPlotter;
         m_board = aBoard;
+        m_maxError = aBoard->GetDesignSettings().m_MaxError;
     }
 
     /**
@@ -137,6 +138,7 @@ private:
 
     PLOTTER*    m_plotter;
     BOARD*      m_board;
+    int         m_maxError;     // For use when approximating shapes as polygons
     LSET        m_layerMask;
 };
 

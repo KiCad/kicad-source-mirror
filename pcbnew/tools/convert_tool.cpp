@@ -786,7 +786,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromClosedGraphics( const std::deque<EDA_I
         case PCB_TEXT_T:
         {
             PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
-            text->TransformTextToPolySet( poly, UNDEFINED_LAYER, 0, bds.m_MaxError, ERROR_INSIDE );
+            text->TransformTextToPolySet( poly, 0, bds.m_MaxError, ERROR_INSIDE );
             text->SetFlags( SKIP_STRUCT );
             break;
         }

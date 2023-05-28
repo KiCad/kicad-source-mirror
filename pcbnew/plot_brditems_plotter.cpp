@@ -294,13 +294,13 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_
 void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
 {
     const PCB_TEXT* textItem = &aFootprint->Reference();
-    int             textLayer = textItem->GetLayer();
+    PCB_LAYER_ID    textLayer = textItem->GetLayer();
 
     // Reference and value are specific items, not in graphic items list
     if( GetPlotReference() && m_layerMask[textLayer]
         && ( textItem->IsVisible() || GetPlotInvisibleText() ) )
     {
-        PlotFootprintTextItem( textItem, getColor( textLayer ) );
+        PlotPcbText( textItem, textLayer, textItem->IsKnockout() );
     }
 
     textItem  = &aFootprint->Value();
@@ -309,7 +309,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
     if( GetPlotValue() && m_layerMask[textLayer]
         && ( textItem->IsVisible() || GetPlotInvisibleText() ) )
     {
-        PlotFootprintTextItem( textItem, getColor( textLayer ) );
+        PlotPcbText( textItem, textLayer, textItem->IsKnockout() );
     }
 
     for( const BOARD_ITEM* item : aFootprint->GraphicalItems() )
@@ -336,7 +336,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
         if( textItem->GetText() == wxT( "${VALUE}" ) && !GetPlotValue() )
             continue;
 
-        PlotFootprintTextItem( textItem, getColor( textLayer ) );
+        PlotPcbText( textItem, textLayer, textItem->IsKnockout() );
     }
 }
 
@@ -386,84 +386,6 @@ void BRDITEMS_PLOTTER::PlotBoardGraphicItems()
 {
     for( const BOARD_ITEM* item : m_board->Drawings() )
         PlotPcbGraphicItem( item );
-}
-
-
-void BRDITEMS_PLOTTER::PlotFootprintTextItem( const PCB_TEXT* aText, const COLOR4D& aColor )
-{
-    COLOR4D color = aColor;
-
-    if( aColor == COLOR4D::WHITE )
-        color = COLOR4D( LIGHTGRAY );
-
-    m_plotter->SetColor( color );
-
-    // calculate some text parameters :
-    //VECTOR2I      size = aText->GetTextSize();
-    VECTOR2I      pos = aText->GetTextPos();
-    int           thickness = aText->GetEffectiveTextPenWidth();
-    KIFONT::FONT* font = aText->GetFont();
-
-    if( !font )
-    {
-        font = KIFONT::FONT::GetFont( m_plotter->RenderSettings()
-                                            ? m_plotter->RenderSettings()->GetDefaultFont()
-                                            : wxString( wxEmptyString ),
-                                      aText->IsBold(), aText->IsItalic() );
-    }
-
-    // Non bold texts thickness is clamped at 1/6 char size by the low level draw function.
-    // but in Pcbnew we do not manage bold texts and thickness up to 1/4 char size
-    // (like bold text) and we manage the thickness.
-    // So we set bold flag to true
-    TEXT_ATTRIBUTES attrs = aText->GetAttributes();
-    attrs.m_StrokeWidth = thickness;
-    attrs.m_Angle = aText->GetDrawRotation();
-    attrs.m_Bold = true;
-    attrs.m_Multiline = false;
-
-    GBR_METADATA gbr_metadata;
-
-    if( IsCopperLayer( aText->GetLayer() ) )
-        gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_NONCONDUCTOR );
-
-    gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_CMP );
-    const FOOTPRINT* parent = aText->GetParentFootprint();
-    gbr_metadata.SetCmpReference( parent->GetReference() );
-
-    m_plotter->SetCurrentLineWidth( thickness );
-
-    if( aText->IsKnockout() )
-    {
-        KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
-        SHAPE_POLY_SET             knockouts;
-
-        CALLBACK_GAL callback_gal( empty_opts,
-                // Polygon callback
-                [&]( const SHAPE_LINE_CHAIN& aPoly )
-                {
-                    knockouts.AddOutline( aPoly );
-                } );
-
-        callback_gal.SetIsFill( font->IsOutline() );
-        callback_gal.SetIsStroke( font->IsStroke() );
-        font->Draw( &callback_gal, aText->GetShownText( true ), aText->GetDrawPos(), attrs );
-
-        SHAPE_POLY_SET finalPoly;
-        int            margin = attrs.m_StrokeWidth * 1.5
-                                    + GetKnockoutTextMargin( attrs.m_Size, attrs.m_StrokeWidth );
-
-        aText->TransformBoundingBoxToPolygon( &finalPoly, margin );
-        finalPoly.BooleanSubtract( knockouts, SHAPE_POLY_SET::PM_FAST );
-        finalPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
-
-        for( int ii = 0; ii < finalPoly.OutlineCount(); ++ii )
-            m_plotter->PlotPoly( finalPoly.Outline( ii ), FILL_T::FILLED_SHAPE, 0, &gbr_metadata );
-    }
-    else
-    {
-        m_plotter->PlotText( pos, aColor, aText->GetShownText( true ), attrs, font, &gbr_metadata );
-    }
 }
 
 
@@ -623,7 +545,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
         }
 
         case PCB_TEXT_T:
-            // Plotted in PlotFootprintTextItem()
+            // Plotted in PlotFootprintTextItems()
             break;
 
         default:
@@ -673,26 +595,10 @@ void BRDITEMS_PLOTTER::PlotPcbText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, 
 
     if( aIsKnockout )
     {
-        KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
-        SHAPE_POLY_SET             knockouts;
-
-        CALLBACK_GAL callback_gal( empty_opts,
-                // Polygon callback
-                [&]( const SHAPE_LINE_CHAIN& aPoly )
-                {
-                    knockouts.AddOutline( aPoly );
-                } );
-
-        callback_gal.SetIsFill( font->IsOutline() );
-        callback_gal.SetIsStroke( font->IsStroke() );
-        font->Draw( &callback_gal, shownText, aText->GetDrawPos(), attrs );
-
+        const PCB_TEXT* text = static_cast<const PCB_TEXT*>( aText );
         SHAPE_POLY_SET finalPoly;
-        int            margin = attrs.m_StrokeWidth * 1.5
-                                    + GetKnockoutTextMargin( attrs.m_Size, attrs.m_StrokeWidth );
 
-        aText->TransformBoundingBoxToPolygon( &finalPoly, margin );
-        finalPoly.BooleanSubtract( knockouts, SHAPE_POLY_SET::PM_FAST );
+        text->TransformTextToPolySet( finalPoly, 0, m_maxError, ERROR_INSIDE );
         finalPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
 
         for( int ii = 0; ii < finalPoly.OutlineCount(); ++ii )

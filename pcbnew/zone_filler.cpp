@@ -813,27 +813,42 @@ void ZONE_FILLER::addHoleKnockout( PAD* aPad, int aGap, SHAPE_POLY_SET& aHoles )
 void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
                                bool aIgnoreLineWidth, SHAPE_POLY_SET& aHoles )
 {
-    EDA_TEXT* text = nullptr;
-
     switch( aItem->Type() )
     {
-    case PCB_TEXT_T:    text = static_cast<PCB_TEXT*>( aItem );    break;
-    case PCB_TEXTBOX_T: text = static_cast<PCB_TEXTBOX*>( aItem ); break;
-    default:                                                       break;
-    }
-
-    switch( aItem->Type() )
-    {
-    case PCB_SHAPE_T:
     case PCB_TEXT_T:
-    case PCB_TEXTBOX_T:
-    case PCB_TARGET_T:
-        if( !text || text->IsVisible() )
+    {
+        PCB_TEXT* text = static_cast<PCB_TEXT*>( aItem );
+
+        if( text->IsVisible() )
         {
-            aItem->TransformShapeToPolygon( aHoles, aLayer, aGap, m_maxError, ERROR_OUTSIDE,
-                                            aIgnoreLineWidth );
+            if( text->IsKnockout() )
+            {
+                int antiGap = -m_maxError * 2;   // Don't leave gaps around knockout text
+                text->TransformShapeToPolygon( aHoles, aLayer, antiGap, m_maxError, ERROR_OUTSIDE );
+            }
+            else
+            {
+                text->TransformShapeToPolygon( aHoles, aLayer, aGap, m_maxError, ERROR_OUTSIDE );
+            }
         }
 
+        break;
+    }
+
+    case PCB_TEXTBOX_T:
+    {
+        PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( aItem );
+
+        if( textbox->IsVisible() )
+            textbox->TransformShapeToPolygon( aHoles, aLayer, aGap, m_maxError, ERROR_OUTSIDE );
+
+        break;
+    }
+
+    case PCB_SHAPE_T:
+    case PCB_TARGET_T:
+        aItem->TransformShapeToPolygon( aHoles, aLayer, aGap, m_maxError, ERROR_OUTSIDE,
+                                        aIgnoreLineWidth );
         break;
 
     default:

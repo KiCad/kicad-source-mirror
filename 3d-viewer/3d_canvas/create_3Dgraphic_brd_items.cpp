@@ -74,29 +74,11 @@ void BOARD_ADAPTER::addText( const EDA_TEXT* aText, CONTAINER_2D_BASE* aContaine
 
     if( aOwner && aOwner->IsKnockout() )
     {
-        SHAPE_POLY_SET knockouts;
+        SHAPE_POLY_SET  finalPoly;
+        const PCB_TEXT* pcbText = static_cast<const PCB_TEXT*>( aOwner );
 
-        CALLBACK_GAL callback_gal( empty_opts,
-                // Polygon callback
-                [&]( const SHAPE_LINE_CHAIN& aPoly )
-                {
-                    knockouts.AddOutline( aPoly );
-                } );
-
-        attrs.m_StrokeWidth = aText->GetEffectiveTextPenWidth();
-        attrs.m_Angle = aText->GetDrawRotation();
-
-        callback_gal.SetIsFill( font->IsOutline() );
-        callback_gal.SetIsStroke( font->IsStroke() );
-        callback_gal.SetLineWidth( attrs.m_StrokeWidth );
-        font->Draw( &callback_gal, aText->GetShownText( true ), aText->GetDrawPos(), attrs );
-
-        SHAPE_POLY_SET finalPoly;
-        int            margin = attrs.m_StrokeWidth * 1.5 +
-                                    GetKnockoutTextMargin( attrs.m_Size, attrs.m_StrokeWidth );
-
-        aText->TransformBoundingBoxToPolygon( &finalPoly, margin );
-        finalPoly.BooleanSubtract( knockouts, SHAPE_POLY_SET::PM_FAST );
+        pcbText->TransformTextToPolySet( finalPoly, 0, m_board->GetDesignSettings().m_MaxError,
+                                         ERROR_INSIDE );
 
         // Do not call finalPoly.Fracture() here: ConvertPolygonToTriangles() call it
         // if needed, and Fracture() called twice can create bad results and is useless

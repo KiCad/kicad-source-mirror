@@ -167,7 +167,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::addItemToRTrees( BOARD_ITEM* aItem )
             {
                 const PCB_TEXT* text = static_cast<const PCB_TEXT*>( aItem );
 
-                text->TransformTextToPolySet( *solderMask->GetFill( layer ), layer,
+                text->TransformTextToPolySet( *solderMask->GetFill( layer ),
                                               m_webWidth / 2, m_maxError, ERROR_OUTSIDE );
 
                 m_itemTree->Insert( aItem, layer, m_largestClearance );

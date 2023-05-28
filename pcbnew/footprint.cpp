@@ -1952,13 +1952,13 @@ double FOOTPRINT::GetCoverageArea( const BOARD_ITEM* aItem, const GENERAL_COLLEC
     {
         const PCB_TEXT* text = static_cast<const PCB_TEXT*>( aItem );
 
-        text->TransformTextToPolySet( poly, UNDEFINED_LAYER, textMargin, ARC_LOW_DEF, ERROR_OUTSIDE );
+        text->TransformTextToPolySet( poly, textMargin, ARC_LOW_DEF, ERROR_OUTSIDE );
     }
     else if( aItem->Type() == PCB_TEXTBOX_T )
     {
         const PCB_TEXTBOX* tb = static_cast<const PCB_TEXTBOX*>( aItem );
 
-        tb->TransformTextToPolySet( poly, UNDEFINED_LAYER, textMargin, ARC_LOW_DEF, ERROR_OUTSIDE );
+        tb->TransformTextToPolySet( poly, textMargin, ARC_LOW_DEF, ERROR_OUTSIDE );
     }
     else if( aItem->Type() == PCB_SHAPE_T )
     {
@@ -2747,7 +2747,7 @@ void FOOTPRINT::TransformFPShapesToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_I
     }
 
     for( const PCB_TEXT* text : texts )
-        text->TransformTextToPolySet( aBuffer, aLayer, aClearance, aError, aErrorLoc );
+        text->TransformTextToPolySet( aBuffer, aClearance, aError, aErrorLoc );
 }
 
 

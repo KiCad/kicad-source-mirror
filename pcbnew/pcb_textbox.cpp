@@ -447,8 +447,8 @@ std::shared_ptr<SHAPE> PCB_TEXTBOX::GetEffectiveShape( PCB_LAYER_ID aLayer, FLAS
 }
 
 
-void PCB_TEXTBOX::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
-                                          int aClearance, int aError, ERROR_LOC aErrorLoc ) const
+void PCB_TEXTBOX::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearance, int aError,
+                                          ERROR_LOC aErrorLoc ) const
 {
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
     KIFONT::FONT*              font = getDrawFont();
@@ -465,8 +465,7 @@ void PCB_TEXTBOX::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID 
             // Stroke callback
             [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
             {
-                TransformOvalToPolygon( buffer, aPt1, aPt2, penWidth + ( 2 * aClearance ), aError,
-                                        ERROR_INSIDE );
+                TransformOvalToPolygon( buffer, aPt1, aPt2, penWidth, aError, aErrorLoc );
             },
             // Triangulation callback
             [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2, const VECTOR2I& aPt3 )
@@ -479,7 +478,11 @@ void PCB_TEXTBOX::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID 
 
     font->Draw( &callback_gal, GetShownText( true ), GetDrawPos(), GetAttributes() );
 
-    buffer.Simplify( SHAPE_POLY_SET::PM_FAST );
+    if( aClearance > 0 )
+        buffer.Inflate( aClearance, aClearance );
+    else
+        buffer.Simplify( SHAPE_POLY_SET::PM_FAST );
+
     aBuffer.Append( buffer );
 }
 

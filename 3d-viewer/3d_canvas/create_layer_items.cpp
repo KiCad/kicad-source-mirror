@@ -649,7 +649,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 {
                     PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
 
-                    text->TransformTextToPolySet( *layerPoly, layer, 0, maxError, ERROR_INSIDE );
+                    text->TransformTextToPolySet( *layerPoly, 0, maxError, ERROR_INSIDE );
                     break;
                 }
 
@@ -657,7 +657,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 {
                     PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( item );
 
-                    textbox->TransformTextToPolySet( *layerPoly, layer, 0, maxError, ERROR_INSIDE );
+                    textbox->TransformTextToPolySet( *layerPoly, 0, maxError, ERROR_INSIDE );
                     break;
                 }
 
@@ -958,7 +958,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 {
                     PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
 
-                    text->TransformTextToPolySet( *layerPoly, layer, 0, maxError, ERROR_INSIDE );
+                    text->TransformTextToPolySet( *layerPoly, 0, maxError, ERROR_INSIDE );
                     break;
                 }
 
@@ -966,7 +966,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 {
                     PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( item );
 
-                    textbox->TransformTextToPolySet( *layerPoly, layer, 0, maxError, ERROR_INSIDE );
+                    textbox->TransformTextToPolySet( *layerPoly, 0, maxError, ERROR_INSIDE );
                     break;
                 }
 

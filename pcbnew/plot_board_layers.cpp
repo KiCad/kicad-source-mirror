@@ -848,10 +848,10 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                     return;
 
                 // add shapes with their exact mask layer size in initialPolys
-                aText.TransformTextToPolySet( initialPolys, layer, 0, maxError, ERROR_OUTSIDE );
+                aText.TransformTextToPolySet( initialPolys, 0, maxError, ERROR_OUTSIDE );
 
                 // add shapes inflated by aMinThickness/2 in areas
-                aText.TransformTextToPolySet( areas, layer, inflate, maxError, ERROR_OUTSIDE );
+                aText.TransformTextToPolySet( areas, inflate, maxError, ERROR_OUTSIDE );
             };
 
     // Generate polygons with arcs inside the shape or exact shape to minimize shape changes
@@ -934,10 +934,10 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                     const PCB_TEXT* text = static_cast<const PCB_TEXT*>( item );
 
                     // add shapes with their exact mask layer size in initialPolys
-                    text->TransformTextToPolySet( initialPolys, layer, 0, maxError, ERROR_OUTSIDE );
+                    text->TransformTextToPolySet( initialPolys, 0, maxError, ERROR_OUTSIDE );
 
                     // add shapes inflated by aMinThickness/2 in areas
-                    text->TransformTextToPolySet( areas, layer, inflate, maxError, ERROR_OUTSIDE );
+                    text->TransformTextToPolySet( areas, inflate, maxError, ERROR_OUTSIDE );
                 }
                 else
                 {
