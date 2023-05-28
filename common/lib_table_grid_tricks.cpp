@@ -20,6 +20,7 @@
 #include "lib_table_grid_tricks.h"
 #include "lib_table_grid.h"
 
+
 LIB_TABLE_GRID_TRICKS::LIB_TABLE_GRID_TRICKS( WX_GRID* aGrid ) : GRID_TRICKS( aGrid )
 {
 }
@@ -27,6 +28,14 @@ LIB_TABLE_GRID_TRICKS::LIB_TABLE_GRID_TRICKS( WX_GRID* aGrid ) : GRID_TRICKS( aG
 
 void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 {
+    if( m_grid->GetGridCursorCol() == COL_OPTIONS )
+    {
+        menu.Append( LIB_TABLE_GRID_TRICKS_OPTIONS_EDITOR,
+                    _( "Options Editor..." ),
+                    _( "Edit options" ) );
+        menu.AppendSeparator();
+    }
+
     bool            showActivate = false;
     bool            showDeactivate = false;
     LIB_TABLE_GRID* tbl = static_cast<LIB_TABLE_GRID*>( m_grid->GetTable() );
@@ -73,8 +82,12 @@ void LIB_TABLE_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
     int menu_id = event.GetId();
     LIB_TABLE_GRID* tbl = (LIB_TABLE_GRID*) m_grid->GetTable();
 
-    if( menu_id == LIB_TABLE_GRID_TRICKS_ACTIVATE_SELECTED
-        || menu_id == LIB_TABLE_GRID_TRICKS_DEACTIVATE_SELECTED )
+    if( menu_id == LIB_TABLE_GRID_TRICKS_OPTIONS_EDITOR )
+    {
+        optionsEditor( m_grid->GetGridCursorRow() );
+    }
+    else if( menu_id == LIB_TABLE_GRID_TRICKS_ACTIVATE_SELECTED
+            || menu_id == LIB_TABLE_GRID_TRICKS_DEACTIVATE_SELECTED )
     {
         bool selected_state = menu_id == LIB_TABLE_GRID_TRICKS_ACTIVATE_SELECTED;
 
@@ -95,3 +108,16 @@ void LIB_TABLE_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
         GRID_TRICKS::doPopupSelection( event );
     }
 }
+
+
+bool LIB_TABLE_GRID_TRICKS::handleDoubleClick( wxGridEvent& aEvent )
+{
+    if( aEvent.GetCol() == COL_OPTIONS )
+    {
+        optionsEditor( aEvent.GetRow() );
+        return true;
+    }
+
+    return false;
+}
+

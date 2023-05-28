@@ -72,20 +72,6 @@ class KIWAY;
  */
 void InvokePcbLibTableEditor( KIWAY* aKiway, wxWindow* aCaller );
 
-
-/**
- * Function InvokePluginOptionsEditor
- * calls DIALOG_FP_PLUGIN_OPTIONS dialog so that plugin options set can be edited.
- *
- * @param aCaller is the wxTopLevelWindow which is invoking the dialog.
- * @param aNickname is the footprint library whose options are being edited.
- * @param aPluginType is something that will pass through IO_MGR::EnumFromStr().
- * @param aOptions is the options string on calling into this function.
- * @param aResult is where to put the result of the editing.
- */
-void InvokePluginOptionsEditor( wxWindow* aCaller, const wxString& aNickname,
-    const wxString& aPluginType, const wxString& aOptions, wxString* aResult );
-
 /**
  * Function InvokeExportSVG
  * shows the Export SVG dialog

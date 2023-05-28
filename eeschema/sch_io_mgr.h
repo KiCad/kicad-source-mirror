@@ -432,7 +432,7 @@ public:
      *   <dd>This eventually is what shows up into the fp-lib-table "options"
      *       field, possibly combined with others.</dd>
      *   <dt>internationalized description</dt>
-     *   <dd>The internationalized description is displayed in DIALOG_FP_SCH_PLUGIN_OPTIONS.
+     *   <dd>The internationalized description is displayed in DIALOG_PLUGIN_OPTIONS.
      *      It may be multi-line and be quite explanatory of the option.</dd>
      *  </dl>
      * <br>

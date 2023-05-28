@@ -25,12 +25,19 @@ class LIB_TABLE_GRID_TRICKS : public GRID_TRICKS
     {
         LIB_TABLE_GRID_TRICKS_ACTIVATE_SELECTED = GRIDTRICKS_FIRST_CLIENT_ID,
         LIB_TABLE_GRID_TRICKS_DEACTIVATE_SELECTED,
-        LIB_TABLE_GRID_TRICKS_LIBRARY_SETTINGS
+        LIB_TABLE_GRID_TRICKS_LIBRARY_SETTINGS,
+        LIB_TABLE_GRID_TRICKS_OPTIONS_EDITOR
     };
 
 public:
     explicit LIB_TABLE_GRID_TRICKS( WX_GRID* aGrid );
 
+    virtual ~LIB_TABLE_GRID_TRICKS(){};
+
     void showPopupMenu( wxMenu& menu, wxGridEvent& aEvent ) override;
     void doPopupSelection( wxCommandEvent& event ) override;
+
+protected:
+    virtual void optionsEditor( int aRow ) = 0;
+    bool handleDoubleClick( wxGridEvent& aEvent ) override;
 };

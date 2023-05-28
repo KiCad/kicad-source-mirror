@@ -24,6 +24,8 @@
 #include <string_utils.h>
 #include <wx/grid.h>
 
+class LIB_TABLE_GRID_TRICKS;
+
 const wxColour COLOUR_ROW_ENABLED( 0, 0, 0 );
 const wxColour COLOUR_ROW_DISABLED( 100, 100, 100 );
 
@@ -47,6 +49,8 @@ enum COL_ORDER
  */
 class LIB_TABLE_GRID : public wxGridTableBase
 {
+    friend class LIB_TABLE_GRID_TRICKS;
+
 public:
 
     //-----<wxGridTableBase overloads>-------------------------------------------

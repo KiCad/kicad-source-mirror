@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -8,11 +8,11 @@
 #include "widgets/std_bitmap_button.h"
 #include "widgets/wx_grid.h"
 
-#include "dialog_fp_plugin_options_base.h"
+#include "dialog_plugin_options_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_FP_PLUGIN_OPTIONS_BASE::DIALOG_FP_PLUGIN_OPTIONS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+DIALOG_PLUGIN_OPTIONS_BASE::DIALOG_PLUGIN_OPTIONS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
@@ -116,26 +116,26 @@ DIALOG_FP_PLUGIN_OPTIONS_BASE::DIALOG_FP_PLUGIN_OPTIONS_BASE( wxWindow* parent, 
 	this->Centre( wxBOTH );
 
 	// Connect Events
-	m_grid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onGridCellChange ), NULL, this );
-	m_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onSize ), NULL, this );
-	m_grid->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onUpdateUI ), NULL, this );
-	m_append_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onAppendRow ), NULL, this );
-	m_delete_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onDeleteRow ), NULL, this );
-	m_listbox->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onListBoxItemSelected ), NULL, this );
-	m_listbox->Connect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onListBoxItemDoubleClicked ), NULL, this );
-	m_append_choice_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onAppendOption ), NULL, this );
+	m_grid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_PLUGIN_OPTIONS_BASE::onGridCellChange ), NULL, this );
+	m_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_PLUGIN_OPTIONS_BASE::onSize ), NULL, this );
+	m_grid->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PLUGIN_OPTIONS_BASE::onUpdateUI ), NULL, this );
+	m_append_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLUGIN_OPTIONS_BASE::onAppendRow ), NULL, this );
+	m_delete_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLUGIN_OPTIONS_BASE::onDeleteRow ), NULL, this );
+	m_listbox->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_PLUGIN_OPTIONS_BASE::onListBoxItemSelected ), NULL, this );
+	m_listbox->Connect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( DIALOG_PLUGIN_OPTIONS_BASE::onListBoxItemDoubleClicked ), NULL, this );
+	m_append_choice_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLUGIN_OPTIONS_BASE::onAppendOption ), NULL, this );
 }
 
-DIALOG_FP_PLUGIN_OPTIONS_BASE::~DIALOG_FP_PLUGIN_OPTIONS_BASE()
+DIALOG_PLUGIN_OPTIONS_BASE::~DIALOG_PLUGIN_OPTIONS_BASE()
 {
 	// Disconnect Events
-	m_grid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onGridCellChange ), NULL, this );
-	m_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onSize ), NULL, this );
-	m_grid->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onUpdateUI ), NULL, this );
-	m_append_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onAppendRow ), NULL, this );
-	m_delete_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onDeleteRow ), NULL, this );
-	m_listbox->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onListBoxItemSelected ), NULL, this );
-	m_listbox->Disconnect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onListBoxItemDoubleClicked ), NULL, this );
-	m_append_choice_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FP_PLUGIN_OPTIONS_BASE::onAppendOption ), NULL, this );
+	m_grid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_PLUGIN_OPTIONS_BASE::onGridCellChange ), NULL, this );
+	m_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_PLUGIN_OPTIONS_BASE::onSize ), NULL, this );
+	m_grid->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PLUGIN_OPTIONS_BASE::onUpdateUI ), NULL, this );
+	m_append_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLUGIN_OPTIONS_BASE::onAppendRow ), NULL, this );
+	m_delete_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLUGIN_OPTIONS_BASE::onDeleteRow ), NULL, this );
+	m_listbox->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_PLUGIN_OPTIONS_BASE::onListBoxItemSelected ), NULL, this );
+	m_listbox->Disconnect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( DIALOG_PLUGIN_OPTIONS_BASE::onListBoxItemDoubleClicked ), NULL, this );
+	m_append_choice_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PLUGIN_OPTIONS_BASE::onAppendOption ), NULL, this );
 
 }

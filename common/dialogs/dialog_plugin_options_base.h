@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -36,9 +36,9 @@ class WX_GRID;
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_FP_PLUGIN_OPTIONS_BASE
+/// Class DIALOG_PLUGIN_OPTIONS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_FP_PLUGIN_OPTIONS_BASE : public DIALOG_SHIM
+class DIALOG_PLUGIN_OPTIONS_BASE : public DIALOG_SHIM
 {
 	private:
 
@@ -66,9 +66,9 @@ class DIALOG_FP_PLUGIN_OPTIONS_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_FP_PLUGIN_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER );
+		DIALOG_PLUGIN_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER );
 
-		~DIALOG_FP_PLUGIN_OPTIONS_BASE();
+		~DIALOG_PLUGIN_OPTIONS_BASE();
 
 };
 

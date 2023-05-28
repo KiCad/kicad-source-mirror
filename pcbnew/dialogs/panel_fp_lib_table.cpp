@@ -56,6 +56,7 @@
 #include <pcb_edit_frame.h>
 #include <env_paths.h>
 #include <dialogs/dialog_edit_library_tables.h>
+#include <dialogs/dialog_plugin_options.h>
 #include <footprint_viewer_frame.h>
 #include <footprint_edit_frame.h>
 #include <kiway.h>
@@ -251,8 +252,6 @@ public:
 };
 
 
-#define MYID_OPTIONS_EDITOR  15151
-
 
 class FP_GRID_TRICKS : public LIB_TABLE_GRID_TRICKS
 {
@@ -264,7 +263,7 @@ public:
 protected:
     DIALOG_EDIT_LIBRARY_TABLES* m_dialog;
 
-    void optionsEditor( int aRow )
+    void optionsEditor( int aRow ) override
     {
         FP_LIB_TABLE_GRID* tbl = (FP_LIB_TABLE_GRID*) m_grid->GetTable();
 
@@ -273,9 +272,14 @@ protected:
             LIB_TABLE_ROW*  row = tbl->at( (size_t) aRow );
             const wxString& options = row->GetOptions();
             wxString        result = options;
+            STRING_UTF8_MAP choices;
 
-            InvokePluginOptionsEditor( m_dialog, row->GetNickName(), row->GetType(), options,
-                                       &result );
+            IO_MGR::PCB_FILE_T pi_type = IO_MGR::EnumFromStr( row->GetType() );
+            PLUGIN::RELEASER   pi( IO_MGR::PluginFind( pi_type ) );
+            pi->FootprintLibOptions( &choices );
+
+            DIALOG_PLUGIN_OPTIONS dlg( m_dialog, row->GetNickName(), choices, options, &result );
+            dlg.ShowModal();
 
             if( options != result )
             {
@@ -283,36 +287,6 @@ protected:
                 m_grid->Refresh();
             }
         }
-    }
-
-    bool handleDoubleClick( wxGridEvent& aEvent ) override
-    {
-        if( aEvent.GetCol() == COL_OPTIONS )
-        {
-            optionsEditor( aEvent.GetRow() );
-            return true;
-        }
-
-        return false;
-    }
-
-    void showPopupMenu( wxMenu& menu, wxGridEvent& aEvent ) override
-    {
-        if( m_grid->GetGridCursorCol() == COL_OPTIONS )
-        {
-            menu.Append( MYID_OPTIONS_EDITOR, _( "Options Editor..." ), _( "Edit options" ) );
-            menu.AppendSeparator();
-        }
-
-        LIB_TABLE_GRID_TRICKS::showPopupMenu( menu, aEvent );
-    }
-
-    void doPopupSelection( wxCommandEvent& event ) override
-    {
-        if( event.GetId() == MYID_OPTIONS_EDITOR )
-            optionsEditor( m_grid->GetGridCursorRow() );
-        else
-            LIB_TABLE_GRID_TRICKS::doPopupSelection( event );
     }
 
     /// handle specialized clipboard text, with leading "(fp_lib_table", OR

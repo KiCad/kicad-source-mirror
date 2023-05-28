@@ -138,6 +138,11 @@ public:
 protected:
     DIALOG_EDIT_LIBRARY_TABLES* m_dialog;
 
+    virtual void optionsEditor( int aRow )
+    {
+        DisplayError( m_dialog, _( "optionsEditor not implemented in SYMBOL_GRID_TRICKS" ) );
+    }
+
     /// handle specialized clipboard text, with leading "(sym_lib_table" or
     /// spreadsheet formatted text.
     virtual void paste_text( const wxString& cb_text ) override
