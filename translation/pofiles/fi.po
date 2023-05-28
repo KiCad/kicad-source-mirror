@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-18 11:55-0700\n"
-"PO-Revision-Date: 2023-05-22 09:47+0000\n"
+"PO-Revision-Date: 2023-05-30 16:50+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
@@ -9881,7 +9881,7 @@ msgstr "Näytä pin-nimen teksti"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:137
 msgid "Pin name inside"
-msgstr "Kiinnitä nimi sisälle"
+msgstr "Nastan nimi sisällä"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.h:78
 msgid "New Symbol"
@@ -31600,9 +31600,9 @@ msgid ""
 "net.  If set, this is an absolute minimum which cannot be reduced by "
 "netclasses, custom rules, or other settings."
 msgstr ""
-"Minimivälys kuparikohteiden välillä jotka eivät kuulu samaan net:iin. Jos "
-"asetettu, tämä on absoluuttiminimi jota ei voi alittaa netclass:eilla, "
-"kustomisäännöillä tai muilla asetuksilla."
+"Minimivälys kuparikohteiden välillä, jotka eivät kuulu samaan verkkoon. Jos "
+"asetettu, tämä on ehdoton minimi jota ei voi alittaa verkkoluokilla, "
+"mukautetuilla säännöillä tai muilla asetuksilla."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:62
 msgid "Minimum track width:"
@@ -31613,8 +31613,8 @@ msgid ""
 "The minimum track width.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
-"Pienin vedon leveys. Jos asetettu, tämä on absoluuttinen minimi jota ei voi "
-"alittaa netclass:eilla, kustomisäännöillä tai muilla asetuksilla."
+"Pienin johdinliuskan leveys. Jos asetettu, tämä on ehdoton minimi jota ei "
+"voi alittaa verkkoluokilla, mukautetuilla säännöillä tai muilla asetuksilla."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:79
 msgid "Minimum connection width:"
