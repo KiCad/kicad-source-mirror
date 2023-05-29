@@ -169,7 +169,8 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                             holeCount += outlineGlyph->HoleCount( ii );
 
                         SHAPE_POLY_SET poly = outlineGlyph->CloneDropTriangulation();
-                        poly.Deflate( constraint.Value().Min() / 2, 16 );
+                        poly.Deflate( constraint.Value().Min() / 2,
+                                      SHAPE_POLY_SET::CHAMFER_ALL_CORNERS, ARC_LOW_DEF );
                         poly.Simplify( SHAPE_POLY_SET::PM_FAST );
 
                         int resultingOutlineCount = poly.OutlineCount();

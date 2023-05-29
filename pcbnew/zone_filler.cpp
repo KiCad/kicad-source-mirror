@@ -1938,6 +1938,7 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
 
     int linethickness = thickness - aZone->GetMinThickness();
     int gridsize = thickness + aZone->GetHatchGap();
+    int maxError = m_board->GetDesignSettings().m_MaxError;
 
     SHAPE_POLY_SET filledPolys = aFillPolys.CloneDropTriangulation();
     // Use a area that contains the rotated bbox by orientation, and after rotate the result
@@ -1999,7 +2000,7 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
             smooth_value = std::min( smooth_value, aZone->GetHatchGap() / 2 );
 
             // the error to approximate a circle by segments when smoothing corners by a arc
-            int error_max = std::max( pcbIUScale.mmToIU( 0.01 ), smooth_value / 20 );
+            maxError = std::max( maxError * 2, smooth_value / 20 );
 
             switch( smooth_level )
             {
@@ -2011,9 +2012,9 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
 
             default:
                 if( aZone->GetHatchSmoothingLevel() > 2 )
-                    error_max /= 2;    // Force better smoothing
+                    maxError /= 2;    // Force better smoothing
 
-                hole_base = smooth_hole.Fillet( smooth_value, error_max ).Outline( 0 );
+                hole_base = smooth_hole.Fillet( smooth_value, maxError ).Outline( 0 );
                 break;
 
             case 0:
@@ -2062,12 +2063,13 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
     // The fill has already been deflated to ensure GetMinThickness() so we just have to
     // account for anything beyond that.
     SHAPE_POLY_SET deflatedFilledPolys = aFillPolys.CloneDropTriangulation();
-    deflatedFilledPolys.Deflate( outline_margin - aZone->GetMinThickness(), 16 );
+    deflatedFilledPolys.Deflate( outline_margin - aZone->GetMinThickness(),
+                                 SHAPE_POLY_SET::CHAMFER_ALL_CORNERS, maxError );
     holes.BooleanIntersection( deflatedFilledPolys, SHAPE_POLY_SET::PM_FAST );
     DUMP_POLYS_TO_COPPER_LAYER( holes, In11_Cu, wxT( "fill-clipped-hatch-holes" ) );
 
     SHAPE_POLY_SET deflatedOutline = aZone->Outline()->CloneDropTriangulation();
-    deflatedOutline.Deflate( outline_margin, 16 );
+    deflatedOutline.Deflate( outline_margin, SHAPE_POLY_SET::CHAMFER_ALL_CORNERS, maxError );
     holes.BooleanIntersection( deflatedOutline, SHAPE_POLY_SET::PM_FAST );
     DUMP_POLYS_TO_COPPER_LAYER( holes, In12_Cu, wxT( "outline-clipped-hatch-holes" ) );
 
@@ -2094,7 +2096,7 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
                     int r = std::max( min_apron_radius,
                                       via->GetDrillValue() / 2 + outline_margin );
 
-                    TransformCircleToPolygon( aprons, via->GetPosition(), r, ARC_HIGH_DEF,
+                    TransformCircleToPolygon( aprons, via->GetPosition(), r, maxError,
                                               ERROR_OUTSIDE );
                 }
             }
@@ -2120,7 +2122,7 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
                                               outline_margin - min_annular_ring_width );
 
                     clearance = std::max( 0, clearance - linethickness / 2 );
-                    pad->TransformShapeToPolygon( aprons, aLayer, clearance, ARC_HIGH_DEF,
+                    pad->TransformShapeToPolygon( aprons, aLayer, clearance, maxError,
                                                   ERROR_OUTSIDE );
                 }
             }

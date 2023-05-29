@@ -1507,14 +1507,14 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
                     if( margin.x < 0 )  // The poly shape must be deflated
                     {
-                        int numSegs = GetArcToSegmentCount( -margin.x, m_maxError, FULL_CIRCLE );
                         SHAPE_POLY_SET outline;
                         outline.NewOutline();
 
                         for( int ii = 0; ii < poly->PointCount(); ++ii )
                             outline.Append( poly->CPoint( ii ) );
 
-                        outline.Deflate( -margin.x, numSegs );
+                        outline.Deflate( -margin.x, SHAPE_POLY_SET::CHAMFER_ALL_CORNERS,
+                                         m_maxError );
 
                         m_gal->DrawPolygon( outline );
                     }

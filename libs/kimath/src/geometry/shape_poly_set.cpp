@@ -892,11 +892,12 @@ void SHAPE_POLY_SET::BooleanIntersection( const SHAPE_POLY_SET& a, const SHAPE_P
 }
 
 
-void SHAPE_POLY_SET::InflateWithLinkedHoles( int aFactor, int aCircleSegmentsCount,
-                                             POLYGON_MODE aFastMode )
+void SHAPE_POLY_SET::InflateWithLinkedHoles( int aFactor,
+                                             SHAPE_POLY_SET::CORNER_STRATEGY aCornerStrategy,
+                                             int aMaxError, POLYGON_MODE aFastMode )
 {
     Unfracture( aFastMode );
-    Inflate( aFactor, aCircleSegmentsCount );
+    Inflate( aFactor, aCornerStrategy, aMaxError );
     Fracture( aFastMode );
 }
 

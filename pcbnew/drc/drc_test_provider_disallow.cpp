@@ -127,7 +127,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                     // they will be exactly touching along the entire exclusion border.
                     SHAPE_POLY_SET areaPoly = ruleArea->Outline()->CloneDropTriangulation();
                     areaPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
-                    areaPoly.Deflate( epsilon, 0, SHAPE_POLY_SET::ALLOW_ACUTE_CORNERS );
+                    areaPoly.Deflate( epsilon, SHAPE_POLY_SET::ALLOW_ACUTE_CORNERS, ARC_LOW_DEF );
 
                     DRC_RTREE* zoneRTree = board->m_CopperZoneRTreeCache[ copperZone ].get();
 

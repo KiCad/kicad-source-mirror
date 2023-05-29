@@ -1024,7 +1024,8 @@ public:
      * polygons are also polygons with linked holes to main outlines.  For \a aFastMode
      * meaning, see function booleanOp  .
      */
-    void InflateWithLinkedHoles( int aFactor, int aCircleSegmentsCount, POLYGON_MODE aFastMode );
+    void InflateWithLinkedHoles( int aFactor, CORNER_STRATEGY aCornerStrategy, int aMaxError,
+                                 POLYGON_MODE aFastMode );
 
     /// Convert a set of polygons with holes to a single outline with "slits"/"fractures"
     /// connecting the outer ring to the inner holes

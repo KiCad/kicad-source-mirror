@@ -1329,12 +1329,14 @@ void ZONE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer
     SHAPE_POLY_SET temp_buf = m_FilledPolysList.at( aLayer )->CloneDropTriangulation();
 
     // Rebuild filled areas only if clearance is not 0
-    int numSegs = GetArcToSegmentCount( aClearance, aError, FULL_CIRCLE );
+    if( aClearance > 0 || aErrorLoc == ERROR_OUTSIDE )
+    {
+        if( aErrorLoc == ERROR_OUTSIDE )
+            aClearance += aError;
 
-    if( aErrorLoc == ERROR_OUTSIDE )
-        aClearance += aError;
-
-    temp_buf.InflateWithLinkedHoles( aClearance, numSegs, SHAPE_POLY_SET::PM_FAST );
+        temp_buf.InflateWithLinkedHoles( aClearance, SHAPE_POLY_SET::ROUND_ALL_CORNERS, aError,
+                                         SHAPE_POLY_SET::PM_FAST );
+    }
 
     aBuffer.Append( temp_buf );
 }
