@@ -190,8 +190,9 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                         if( glyphArea == 0 )
                             continue;
 
-                        poly.Inflate( constraint.Value().Min() / 2, 16 );
-                        poly.Simplify( SHAPE_POLY_SET::PM_FAST );
+                        poly.Inflate( constraint.Value().Min() / 2,
+                                      SHAPE_POLY_SET::CHAMFER_ALL_CORNERS, ARC_LOW_DEF, true );
+
                         double resultingGlyphArea = poly.Area();
 
                         if( ( std::abs( resultingGlyphArea - glyphArea ) / glyphArea ) > 0.1 )

@@ -114,11 +114,11 @@ public:
      * @param aClearance = the clearance around the text
      * @param aError = the maximum error to allow when approximating curves
      */
-    void TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearance, int aError,
+    void TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearance, int aMaxError,
                                  ERROR_LOC aErrorLoc ) const;
 
     void TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
-                                  int aError, ERROR_LOC aErrorLoc,
+                                  int aMaxError, ERROR_LOC aErrorLoc,
                                   bool aIgnoreLineWidth = false ) const override;
 
     // @copydoc BOARD_ITEM::GetEffectiveShape

@@ -1952,13 +1952,13 @@ double FOOTPRINT::GetCoverageArea( const BOARD_ITEM* aItem, const GENERAL_COLLEC
     {
         const PCB_TEXT* text = static_cast<const PCB_TEXT*>( aItem );
 
-        text->TransformTextToPolySet( poly, textMargin, ARC_LOW_DEF, ERROR_OUTSIDE );
+        text->TransformTextToPolySet( poly, textMargin, ARC_LOW_DEF, ERROR_INSIDE );
     }
     else if( aItem->Type() == PCB_TEXTBOX_T )
     {
         const PCB_TEXTBOX* tb = static_cast<const PCB_TEXTBOX*>( aItem );
 
-        tb->TransformTextToPolySet( poly, textMargin, ARC_LOW_DEF, ERROR_OUTSIDE );
+        tb->TransformTextToPolySet( poly, textMargin, ARC_LOW_DEF, ERROR_INSIDE );
     }
     else if( aItem->Type() == PCB_SHAPE_T )
     {
@@ -2138,14 +2138,14 @@ void FOOTPRINT::BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler )
     if( !list_front.size() && !list_back.size() )
         return;
 
-    int errorMax = pcbIUScale.mmToIU( 0.02 );         // max error for polygonization
+    int maxError = pcbIUScale.mmToIU( 0.02 );         // max error for polygonization
     int chainingEpsilon = pcbIUScale.mmToIU( 0.02 );  // max dist from one endPt to next startPt
 
-    if( ConvertOutlineToPolygon( list_front, m_courtyard_cache_front, errorMax, chainingEpsilon,
+    if( ConvertOutlineToPolygon( list_front, m_courtyard_cache_front, maxError, chainingEpsilon,
                                  true, aErrorHandler ) )
     {
         // Touching courtyards, or courtyards -at- the clearance distance are legal.
-        m_courtyard_cache_front.Inflate( -1, SHAPE_POLY_SET::CHAMFER_ACUTE_CORNERS );
+        m_courtyard_cache_front.Inflate( -1, SHAPE_POLY_SET::CHAMFER_ACUTE_CORNERS, maxError );
 
         m_courtyard_cache_front.CacheTriangulation( false );
     }
@@ -2154,11 +2154,11 @@ void FOOTPRINT::BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler )
         SetFlags( MALFORMED_F_COURTYARD );
     }
 
-    if( ConvertOutlineToPolygon( list_back, m_courtyard_cache_back, errorMax, chainingEpsilon,
+    if( ConvertOutlineToPolygon( list_back, m_courtyard_cache_back, maxError, chainingEpsilon,
                                  true, aErrorHandler ) )
     {
         // Touching courtyards, or courtyards -at- the clearance distance are legal.
-        m_courtyard_cache_back.Inflate( -1, SHAPE_POLY_SET::CHAMFER_ACUTE_CORNERS );
+        m_courtyard_cache_back.Inflate( -1, SHAPE_POLY_SET::CHAMFER_ACUTE_CORNERS, maxError );
 
         m_courtyard_cache_back.CacheTriangulation( false );
     }

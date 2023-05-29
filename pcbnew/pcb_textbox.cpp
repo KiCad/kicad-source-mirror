@@ -447,7 +447,7 @@ std::shared_ptr<SHAPE> PCB_TEXTBOX::GetEffectiveShape( PCB_LAYER_ID aLayer, FLAS
 }
 
 
-void PCB_TEXTBOX::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearance, int aError,
+void PCB_TEXTBOX::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearance, int aMaxError,
                                           ERROR_LOC aErrorLoc ) const
 {
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
@@ -465,7 +465,7 @@ void PCB_TEXTBOX::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearanc
             // Stroke callback
             [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
             {
-                TransformOvalToPolygon( buffer, aPt1, aPt2, penWidth, aError, aErrorLoc );
+                TransformOvalToPolygon( buffer, aPt1, aPt2, penWidth, aMaxError, aErrorLoc );
             },
             // Triangulation callback
             [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2, const VECTOR2I& aPt3 )
@@ -478,17 +478,24 @@ void PCB_TEXTBOX::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearanc
 
     font->Draw( &callback_gal, GetShownText( true ), GetDrawPos(), GetAttributes() );
 
-    if( aClearance > 0 )
-        buffer.Inflate( aClearance, aClearance );
+    if( aClearance > 0 || aErrorLoc == ERROR_OUTSIDE )
+    {
+        if( aErrorLoc == ERROR_OUTSIDE )
+            aClearance += aMaxError;
+
+        buffer.Inflate( aClearance, SHAPE_POLY_SET::ROUND_ALL_CORNERS, aMaxError, true );
+    }
     else
+    {
         buffer.Simplify( SHAPE_POLY_SET::PM_FAST );
+    }
 
     aBuffer.Append( buffer );
 }
 
 
 void PCB_TEXTBOX::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
-                                           int aClearance, int aError, ERROR_LOC aErrorLoc,
+                                           int aClearance, int aMaxError, ERROR_LOC aErrorLoc,
                                            bool aIgnoreLineWidth ) const
 {
     // Don't use PCB_SHAPE::TransformShapeToPolygon.  We want to treat the textbox as filled even
@@ -508,10 +515,10 @@ void PCB_TEXTBOX::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID
         if( width > 0 )
         {
             // Add in segments
-            TransformOvalToPolygon( aBuffer, pts[0], pts[1], width, aError, aErrorLoc );
-            TransformOvalToPolygon( aBuffer, pts[1], pts[2], width, aError, aErrorLoc );
-            TransformOvalToPolygon( aBuffer, pts[2], pts[3], width, aError, aErrorLoc );
-            TransformOvalToPolygon( aBuffer, pts[3], pts[0], width, aError, aErrorLoc );
+            TransformOvalToPolygon( aBuffer, pts[0], pts[1], width, aMaxError, aErrorLoc );
+            TransformOvalToPolygon( aBuffer, pts[1], pts[2], width, aMaxError, aErrorLoc );
+            TransformOvalToPolygon( aBuffer, pts[2], pts[3], width, aMaxError, aErrorLoc );
+            TransformOvalToPolygon( aBuffer, pts[3], pts[0], width, aMaxError, aErrorLoc );
         }
     }
     else if( GetShape() == SHAPE_T::POLY )  // Non-cardinally-rotated rect
@@ -528,7 +535,7 @@ void PCB_TEXTBOX::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID
             for( int ii = 0; ii < poly.SegmentCount(); ++ii )
             {
                 const SEG& seg = poly.GetSegment( ii );
-                TransformOvalToPolygon( aBuffer, seg.A, seg.B, width, aError, aErrorLoc );
+                TransformOvalToPolygon( aBuffer, seg.A, seg.B, width, aMaxError, aErrorLoc );
             }
         }
     }

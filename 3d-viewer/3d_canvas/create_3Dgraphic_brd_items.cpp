@@ -438,7 +438,7 @@ void BOARD_ADAPTER::createPadWithMargin( const PAD* aPad, CONTAINER_2D_BASE* aCo
     if( !poly.IsEmpty() )
     {
         if( clearance.x )
-            poly.Inflate( clearance.x, 32 );
+            poly.Inflate( clearance.x, SHAPE_POLY_SET::ROUND_ALL_CORNERS, maxError );
 
         // Add the PAD polygon
         ConvertPolygonToTriangles( poly, *aContainer, m_biuTo3Dunits, *aPad );

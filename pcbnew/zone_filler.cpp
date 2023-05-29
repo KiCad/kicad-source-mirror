@@ -1391,7 +1391,6 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
     // deflating/inflating.
     int half_min_width = aZone->GetMinThickness() / 2;
     int epsilon = pcbIUScale.mmToIU( 0.001 );
-    int numSegs = GetArcToSegmentCount( half_min_width, m_maxError, FULL_CIRCLE );
 
     // Solid polygons are deflated and inflated during calculations.  Deflating doesn't cause
     // issues, but inflate is tricky as it can create excessively long and narrow spikes for
@@ -1456,10 +1455,10 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
     // Prune features that don't meet minimum-width criteria
     if( half_min_width - epsilon > epsilon )
     {
-        testAreas.Deflate( half_min_width - epsilon, numSegs, fastCornerStrategy );
+        testAreas.Deflate( half_min_width - epsilon, fastCornerStrategy, m_maxError );
         DUMP_POLYS_TO_COPPER_LAYER( testAreas, In5_Cu, wxT( "spoke-test-deflated" ) );
 
-        testAreas.Inflate( half_min_width - epsilon, numSegs, fastCornerStrategy );
+        testAreas.Inflate( half_min_width - epsilon, fastCornerStrategy, m_maxError );
         DUMP_POLYS_TO_COPPER_LAYER( testAreas, In6_Cu, wxT( "spoke-test-reinflated" ) );
     }
 
@@ -1526,7 +1525,7 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
      */
 
     if( half_min_width - epsilon > epsilon )
-        aFillPolys.Deflate( half_min_width - epsilon, numSegs, fastCornerStrategy );
+        aFillPolys.Deflate( half_min_width - epsilon, fastCornerStrategy, m_maxError );
 
     // Min-thickness is the web thickness.  On the other hand, a blob min-thickness by
     // min-thickness is not useful.  Since there's no obvious definition of web vs. blob, we
@@ -1563,7 +1562,7 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
      */
 
     if( half_min_width - epsilon > epsilon )
-        aFillPolys.Inflate( half_min_width - epsilon, numSegs, cornerStrategy, true );
+        aFillPolys.Inflate( half_min_width - epsilon, cornerStrategy, m_maxError, true );
 
     DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In15_Cu, wxT( "after-reinflating" ) );
 
@@ -1663,7 +1662,7 @@ bool ZONE_FILLER::fillNonCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
     int epsilon = pcbIUScale.mmToIU( 0.001 );
     int numSegs = GetArcToSegmentCount( half_min_width, m_maxError, FULL_CIRCLE );
 
-    aFillPolys.Deflate( half_min_width - epsilon, numSegs );
+    aFillPolys.Deflate( half_min_width - epsilon, SHAPE_POLY_SET::CHAMFER_ALL_CORNERS, m_maxError );
 
     // Remove the non filled areas due to the hatch pattern
     if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
@@ -1674,7 +1673,7 @@ bool ZONE_FILLER::fillNonCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
 
     // Re-inflate after pruning of areas that don't meet minimum-width criteria
     if( half_min_width - epsilon > epsilon )
-        aFillPolys.Inflate( half_min_width - epsilon, numSegs );
+        aFillPolys.Inflate( half_min_width - epsilon, SHAPE_POLY_SET::ROUND_ALL_CORNERS, m_maxError );
 
     aFillPolys.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
     return true;

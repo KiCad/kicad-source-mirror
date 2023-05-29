@@ -1231,7 +1231,7 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
     if( aSmoothedPolyWithApron )
     {
         SHAPE_POLY_SET poly = maxExtents->CloneDropTriangulation();
-        poly.Inflate( m_ZoneMinThickness, 64 );
+        poly.Inflate( m_ZoneMinThickness, SHAPE_POLY_SET::ROUND_ALL_CORNERS, maxError );
         *aSmoothedPolyWithApron = aSmoothedPoly;
         aSmoothedPolyWithApron->BooleanIntersection( poly, SHAPE_POLY_SET::PM_FAST );
     }
@@ -1292,12 +1292,10 @@ void ZONE::TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aBuffer, int aClea
         if( board )
             maxError = board->GetDesignSettings().m_MaxError;
 
-        int segCount = GetArcToSegmentCount( aClearance, maxError, FULL_CIRCLE );
-
         if( aErrorLoc == ERROR_OUTSIDE )
-            aClearance += aMaxError;
+            aClearance += maxError;
 
-        polybuffer.Inflate( aClearance, segCount );
+        polybuffer.Inflate( aClearance, SHAPE_POLY_SET::ROUND_ALL_CORNERS, maxError );
     }
 
     polybuffer.Fracture( SHAPE_POLY_SET::PM_FAST );

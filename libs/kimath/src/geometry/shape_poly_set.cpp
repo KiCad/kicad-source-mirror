@@ -1096,13 +1096,15 @@ void SHAPE_POLY_SET::inflate2( int aAmount, int aCircleSegCount, CORNER_STRATEGY
 }
 
 
-void SHAPE_POLY_SET::Inflate( int aAmount, int aCircleSegCount, CORNER_STRATEGY aCornerStrategy,
-        bool aSimplify )
+void SHAPE_POLY_SET::Inflate( int aAmount, CORNER_STRATEGY aCornerStrategy, int aMaxError,
+                              bool aSimplify )
 {
+    int segCount = GetArcToSegmentCount( aAmount, aMaxError, FULL_CIRCLE );
+
     if( ADVANCED_CFG::GetCfg().m_UseClipper2 )
-        inflate2( aAmount, aCircleSegCount, aCornerStrategy, aSimplify );
+        inflate2( aAmount, segCount, aCornerStrategy, aSimplify );
     else
-        inflate1( aAmount, aCircleSegCount, aCornerStrategy );
+        inflate1( aAmount, segCount, aCornerStrategy );
 }
 
 

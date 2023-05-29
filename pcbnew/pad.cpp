@@ -1592,7 +1592,7 @@ bool PAD::TransformHoleToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance, int a
 
 
 void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
-                                   int aError, ERROR_LOC aErrorLoc, bool ignoreLineWidth ) const
+                                   int aMaxError, ERROR_LOC aErrorLoc, bool ignoreLineWidth ) const
 {
     wxASSERT_MSG( !ignoreLineWidth, wxT( "IgnoreLineWidth has no meaning for pads." ) );
 
@@ -1613,7 +1613,7 @@ void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
         // Note: dx == dy is not guaranteed for circle pads in legacy boards
         if( dx == dy || ( GetShape() == PAD_SHAPE::CIRCLE ) )
         {
-            TransformCircleToPolygon( aBuffer, padShapePos, dx + aClearance, aError, aErrorLoc,
+            TransformCircleToPolygon( aBuffer, padShapePos, dx + aClearance, aMaxError, aErrorLoc,
                                       pad_min_seg_per_circle_count );
         }
         else
@@ -1624,7 +1624,7 @@ void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
             RotatePoint( delta, m_orient );
 
             TransformOvalToPolygon( aBuffer, padShapePos - delta, padShapePos + delta,
-                                    ( half_width + aClearance ) * 2, aError, aErrorLoc,
+                                    ( half_width + aClearance ) * 2, aMaxError, aErrorLoc,
                                     pad_min_seg_per_circle_count );
         }
 
@@ -1638,7 +1638,7 @@ void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
 
         SHAPE_POLY_SET outline;
         TransformTrapezoidToPolygon( outline, padShapePos, m_size, m_orient, ddx, ddy, aClearance,
-                                     aError, aErrorLoc );
+                                     aMaxError, aErrorLoc );
         aBuffer.Append( outline );
         break;
     }
@@ -1653,7 +1653,7 @@ void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
                                               GetRoundRectCornerRadius(),
                                               doChamfer ? GetChamferRectRatio() : 0,
                                               doChamfer ? GetChamferPositions() : 0,
-                                              aClearance, aError, aErrorLoc );
+                                              aClearance, aMaxError, aErrorLoc );
         aBuffer.Append( outline );
         break;
     }
@@ -1665,19 +1665,12 @@ void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
         outline.Rotate( m_orient );
         outline.Move( VECTOR2I( m_pos ) );
 
-        if( aClearance )
+        if( aClearance > 0 || aErrorLoc == ERROR_OUTSIDE )
         {
-            int numSegs = std::max( GetArcToSegmentCount( aClearance, aError, FULL_CIRCLE ),
-                                                          pad_min_seg_per_circle_count );
-            int clearance = aClearance;
-
             if( aErrorLoc == ERROR_OUTSIDE )
-            {
-                int actual_error = CircleToEndSegmentDeltaRadius( clearance, numSegs );
-                clearance += GetCircleToPolyCorrection( actual_error );
-            }
+                aClearance += aMaxError;
 
-            outline.Inflate( clearance, numSegs );
+            outline.Inflate( aClearance, SHAPE_POLY_SET::ROUND_ALL_CORNERS, aMaxError );
             outline.Fracture( SHAPE_POLY_SET::PM_FAST );
         }
 

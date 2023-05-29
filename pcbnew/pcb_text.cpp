@@ -466,7 +466,7 @@ void PCB_TEXT::buildBoundingHull( SHAPE_POLY_SET* aBuffer, const SHAPE_POLY_SET&
 }
 
 
-void PCB_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearance, int aError,
+void PCB_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearance, int aMaxError,
                                        ERROR_LOC aErrorLoc ) const
 {
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
@@ -485,7 +485,7 @@ void PCB_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearance, 
             // Stroke callback
             [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
             {
-                TransformOvalToPolygon( textShape, aPt1, aPt2, penWidth, aError, aErrorLoc );
+                TransformOvalToPolygon( textShape, aPt1, aPt2, penWidth, aMaxError, aErrorLoc );
             },
             // Triangulation callback
             [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2, const VECTOR2I& aPt3 )
@@ -511,11 +511,12 @@ void PCB_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearance, 
     }
     else
     {
-        if( aClearance > 0 )
+        if( aClearance > 0 || aErrorLoc == ERROR_OUTSIDE )
         {
-            // Number of segments to approximate a circle when inflating a polygon
-            const int circleSegmentsCount = 16;
-            textShape.Inflate( aClearance, circleSegmentsCount );
+            if( aErrorLoc == ERROR_OUTSIDE )
+                aClearance += aMaxError;
+
+            textShape.Inflate( aClearance, SHAPE_POLY_SET::ROUND_ALL_CORNERS, aMaxError );
         }
 
         aBuffer.Append( textShape );
@@ -524,12 +525,12 @@ void PCB_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearance, 
 
 
 void PCB_TEXT::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
-                                        int aClearance, int aError, ERROR_LOC aErrorLoc,
+                                        int aClearance, int aMaxError, ERROR_LOC aErrorLoc,
                                         bool aIgnoreLineWidth ) const
 {
     SHAPE_POLY_SET poly;
 
-    TransformTextToPolySet( poly, 0, GetBoard()->GetDesignSettings().m_MaxError, ERROR_INSIDE );
+    TransformTextToPolySet( poly, 0, aMaxError, aErrorLoc );
 
     buildBoundingHull( &aBuffer, poly, aClearance );
 }
