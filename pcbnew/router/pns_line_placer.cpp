@@ -1534,9 +1534,21 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
 
     // Collisions still prevent fixing unless "Allow DRC violations" is checked
     // Note that collisions can occur even in walk/shove modes if the beginning of the trace
-    // collides (for example if the starting track width is too high)
-    if( !Settings().AllowDRCViolations() && m_world->CheckColliding( &pl ) )
-        return false;
+    // collides (for example if the starting track width is too high).
+
+    if( !Settings().AllowDRCViolations() )
+    {
+        NODE* checkNode = ( Settings().Mode() == RM_Shove ) ? m_shove->CurrentNode() : m_world;
+        std::optional<OBSTACLE> obs = checkNode->CheckColliding( &pl );
+
+        if( obs )
+        {
+            // TODO: Determine why the shove node sometimes reports collisions against shoved objects.
+            // For now, to work around this issue, we consider only solids in shove mode.
+            if( Settings().Mode() != RM_Shove || obs->m_item->OfKind( ITEM::SOLID_T ) )
+                return false;
+        }
+    }
 
     const SHAPE_LINE_CHAIN& l = pl.CLine();
 
