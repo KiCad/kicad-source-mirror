@@ -27,6 +27,7 @@
 #include <board.h>
 #include <footprint.h>
 #include "../../3d_math.h"
+#include "convert_basic_shapes_to_polygon.h"
 #include <trigo.h>
 #include <project.h>
 #include <profile.h>        // To use GetRunningMicroSecs or another profiling utility
@@ -775,6 +776,9 @@ void RENDER_3D_OPENGL::generateViasAndPads()
             {
                 const PCB_VIA* via = static_cast<const PCB_VIA*>( track );
 
+                if( via->GetViaType() == VIATYPE::THROUGH )
+                    continue;   // handle with pad holes so castellation is taken into account
+
                 const float holediameter = via->GetDrillValue() * m_boardAdapter.BiuTo3dUnits();
                 const int nrSegments = m_boardAdapter.GetCircleSegmentCount( via->GetDrillValue() );
                 const float hole_inner_radius = holediameter / 2.0f;
@@ -804,13 +808,32 @@ void RENDER_3D_OPENGL::generateViasAndPads()
     }
 
 
-    if( m_boardAdapter.GetHoleCount() > 0 )
+    if( m_boardAdapter.GetHoleCount() > 0 || m_boardAdapter.GetViaCount() > 0 )
     {
-        SHAPE_POLY_SET tht_outer_holes_poly; // Stores the outer poly of the copper holes (the pad)
-        SHAPE_POLY_SET tht_inner_holes_poly; // Stores the inner poly of the copper holes (the hole)
+        SHAPE_POLY_SET tht_outer_holes_poly; // Stores the outer poly of the copper holes
+        SHAPE_POLY_SET tht_inner_holes_poly; // Stores the inner poly of the copper holes
 
         tht_outer_holes_poly.RemoveAllContours();
         tht_inner_holes_poly.RemoveAllContours();
+
+        // Insert through-via holes (vertical cylinders)
+        for( const PCB_TRACK* track : m_boardAdapter.GetBoard()->Tracks() )
+        {
+            if( track->Type() == PCB_VIA_T )
+            {
+                const PCB_VIA* via = static_cast<const PCB_VIA*>( track );
+
+                if( via->GetViaType() == VIATYPE::THROUGH )
+                {
+                    TransformCircleToPolygon( tht_outer_holes_poly, via->GetPosition(),
+                                              via->GetDrill() / 2 + platingThickness,
+                                              ARC_HIGH_DEF, ERROR_INSIDE );
+
+                    TransformCircleToPolygon( tht_inner_holes_poly, via->GetPosition(),
+                                              via->GetDrill() / 2, ARC_HIGH_DEF, ERROR_INSIDE );
+                }
+            }
+        }
 
         // Insert pads holes (vertical cylinders)
         for( const FOOTPRINT* footprint : m_boardAdapter.GetBoard()->Footprints() )
@@ -903,7 +926,9 @@ void RENDER_3D_OPENGL::Load3dModelsIfNeeded()
         load3dModels( &activityReporter );
     }
     else
+    {
         load3dModels( nullptr );
+    }
 }
 
 
