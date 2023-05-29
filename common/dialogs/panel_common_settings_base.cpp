@@ -62,7 +62,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	bAntialiasingSizer->Add( gbSizer11, 0, wxTOP|wxBOTTOM, 5 );
 
 
-	bLeftSizer->Add( bAntialiasingSizer, 0, wxTOP|wxLEFT, 5 );
+	bLeftSizer->Add( bAntialiasingSizer, 0, wxTOP|wxLEFT|wxEXPAND, 5 );
 
 
 	bLeftSizer->Add( 0, 15, 0, 0, 5 );
@@ -86,7 +86,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	bSizer61->Add( textEditorLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_textEditorPath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer61->Add( m_textEditorPath, 1, wxEXPAND, 5 );
+	bSizer61->Add( m_textEditorPath, 1, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_textEditorBtn = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer61->Add( m_textEditorBtn, 0, wxALIGN_CENTER_VERTICAL, 5 );
@@ -104,7 +104,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	bSizer8->Add( m_defaultPDFViewer, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bHelperAppsSizer->Add( bSizer8, 0, wxBOTTOM, 3 );
+	bHelperAppsSizer->Add( bSizer8, 0, wxBOTTOM|wxEXPAND, 3 );
 
 	wxBoxSizer* bSizer7;
 	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
@@ -113,7 +113,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	bSizer7->Add( m_otherPDFViewer, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_PDFViewerPath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer7->Add( m_PDFViewerPath, 1, wxEXPAND|wxLEFT, 5 );
+	bSizer7->Add( m_PDFViewerPath, 1, wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_pdfViewerBtn = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer7->Add( m_pdfViewerBtn, 0, wxALIGN_CENTER_VERTICAL, 5 );
@@ -122,7 +122,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	bHelperAppsSizer->Add( bSizer7, 0, wxBOTTOM|wxRIGHT|wxEXPAND, 5 );
 
 
-	bLeftSizer->Add( bHelperAppsSizer, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
+	bLeftSizer->Add( bHelperAppsSizer, 0, wxTOP|wxLEFT|wxEXPAND, 5 );
 
 
 	bLeftSizer->Add( 0, 15, 0, 0, 5 );
@@ -181,7 +181,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	bSizerIconsTheme->Add( m_rbIconThemeAuto, 0, wxALL, 5 );
 
 
-	bUserInterfaceSizer->Add( bSizerIconsTheme, 0, 0, 5 );
+	bUserInterfaceSizer->Add( bSizerIconsTheme, 0, wxEXPAND, 5 );
 
 	m_gbUserInterface = new wxGridBagSizer( 5, 0 );
 	m_gbUserInterface->SetFlexibleDirection( wxVERTICAL );
@@ -232,7 +232,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	bLeftSizer->Add( bUserInterfaceSizer, 0, wxTOP|wxLEFT|wxEXPAND, 5 );
 
 
-	bPanelSizer->Add( bLeftSizer, 0, wxRIGHT|wxEXPAND, 20 );
+	bPanelSizer->Add( bLeftSizer, 0, wxRIGHT, 20 );
 
 	wxBoxSizer* rightSizer;
 	rightSizer = new wxBoxSizer( wxVERTICAL );
@@ -410,7 +410,7 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	rightSizer->Add( bProjectBackupSizer, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
 
 
-	bPanelSizer->Add( rightSizer, 0, wxEXPAND|wxLEFT, 5 );
+	bPanelSizer->Add( rightSizer, 0, wxLEFT, 5 );
 
 
 	this->SetSizer( bPanelSizer );
