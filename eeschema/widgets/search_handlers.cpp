@@ -93,7 +93,7 @@ void SCH_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
 
     m_frame->GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
 
-    if( allHitsOnSamePage )
+    if( allHitsOnSamePage && !selectedHits.empty() )
     {
         m_frame->SetCurrentSheet( *selectedHits.front().sheetPath );
         m_frame->DisplayCurrentSheet();
