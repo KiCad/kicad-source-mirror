@@ -395,6 +395,17 @@ static struct PCB_SHAPE_DESC
         propMgr.InheritsAfter( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( BOARD_ITEM ) );
         propMgr.InheritsAfter( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ) );
 
+        // Need to initialise enum_map before we can use a Property enum for it
+        ENUM_MAP<PCB_LAYER_ID>& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
+
+        if( layerEnum.Choices().GetCount() == 0 )
+        {
+            layerEnum.Undefined( UNDEFINED_LAYER );
+
+            for( LSEQ seq = LSET::AllLayersMask().Seq(); seq; ++seq )
+                layerEnum.Map( *seq, LSET::Name( *seq ) );
+        }
+
         auto layerProperty = new PROPERTY_ENUM<PCB_SHAPE, PCB_LAYER_ID, BOARD_ITEM>(
                 _HKI( "Layer" ), &PCB_SHAPE::SetLayer, &PCB_SHAPE::GetLayer );
 
