@@ -818,6 +818,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponentLibrary()
                                                     // ordering of pads in footprint->Pads()
 
         footprint->SetPosition( { 0, 0 } ); // KiCad expects library footprints at 0,0
+        footprint->SetReference( wxT( "REF**" ) );
+        footprint->SetValue( libID.GetLibItemName() );
         m_libraryMap.insert( std::make_pair( key, footprint ) );
     }
 }
@@ -878,6 +880,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryCoppers( const SYMDEF_PCB& aComponen
                 anchorPad = aComponent.ComponentPads.at( compCopper.AssociatedPadIDs.front() );
 
             std::unique_ptr<PAD> pad = std::make_unique<PAD>( aFootprint );
+            pad->SetKeepTopBottom( false ); // TODO: correct? This seems to be KiCad default on import
             pad->SetAttribute( PAD_ATTRIB::SMD );
             pad->SetLayerSet( LSET( 1, copperLayer ) );
             pad->SetNumber( anchorPad.Identifier.IsEmpty()
@@ -1308,6 +1311,8 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
 
         m_padcodesTested.insert( csPadcode.ID );
     }
+
+    pad->SetKeepTopBottom( false ); // TODO: correct? This seems to be KiCad default on import
 
     return pad.release();
 }

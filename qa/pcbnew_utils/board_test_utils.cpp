@@ -299,10 +299,22 @@ void CheckFpPad( const PAD* expected, const PAD* pad )
         BOOST_CHECK_EQUAL( expected->GetRemoveUnconnected(), pad->GetRemoveUnconnected() );
         BOOST_CHECK_EQUAL( expected->GetKeepTopBottom(), pad->GetKeepTopBottom() );
 
-        // TODO: check complex pad shapes
+        // TODO: did we check everything for complex pad shapes?
         CHECK_ENUM_CLASS_EQUAL( expected->GetAnchorPadShape(), pad->GetAnchorPadShape() );
         CHECK_ENUM_CLASS_EQUAL( expected->GetCustomShapeInZoneOpt(),
                                 pad->GetCustomShapeInZoneOpt() );
+
+        BOOST_CHECK_EQUAL( expected->GetPrimitives().size(), pad->GetPrimitives().size() );
+
+        if( expected->GetPrimitives().size() == pad->GetPrimitives().size() )
+        {
+            for( size_t i = 0; i < expected->GetPrimitives().size(); ++i )
+            {
+                CheckFpShape( expected->GetPrimitives().at( i ).get(),
+                              pad->GetPrimitives().at( i ).get() );
+            }
+        }
+
     }
 }
 
@@ -437,7 +449,33 @@ void CheckShapePolySet( const SHAPE_POLY_SET* expected, const SHAPE_POLY_SET* po
         BOOST_CHECK_EQUAL( expected->OutlineCount(), polyset->OutlineCount() );
         BOOST_CHECK_EQUAL( expected->TotalVertices(), polyset->TotalVertices() );
 
-        // TODO: check all outlines and holes
+        if( expected->OutlineCount() != polyset->OutlineCount() )
+            return; // don't check the rest
+
+        if( expected->TotalVertices() != polyset->TotalVertices() )
+            return; // don't check the rest
+
+        // TODO: check all outlines and holes (just checking outlines for now)
+        for( int i = 0; i < expected->OutlineCount(); ++i )
+        {
+            BOOST_TEST_CONTEXT( "Outline " << i )
+            {
+                BOOST_CHECK_EQUAL( expected->Outline( i ).ArcCount(),
+                                   polyset->Outline( i ).ArcCount() );
+                BOOST_CHECK_EQUAL( expected->Outline( i ).PointCount(),
+                                   polyset->Outline( i ).PointCount() );
+
+
+                if( expected->Outline( i ).PointCount() != polyset->Outline( i ).PointCount() )
+                    return; // don't check the rest
+
+                for( int j = 0; j < expected->Outline( i ).PointCount(); ++j )
+                {
+                    BOOST_CHECK_EQUAL( expected->Outline( i ).GetPoint( j ),
+                                       polyset->Outline( i ).GetPoint( j ) );
+                }
+            }
+        }
     }
 }
 
