@@ -139,7 +139,7 @@ public:
 protected:
     DIALOG_EDIT_LIBRARY_TABLES* m_dialog;
 
-    virtual void optionsEditor( int aRow )
+    virtual void optionsEditor( int aRow ) override
     {
         SYMBOL_LIB_TABLE_GRID* tbl = (SYMBOL_LIB_TABLE_GRID*) m_grid->GetTable();
 

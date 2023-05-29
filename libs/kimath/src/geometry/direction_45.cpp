@@ -254,7 +254,7 @@ const SHAPE_LINE_CHAIN DIRECTION_45::BuildInitialTrace( const VECTOR2I& aP0, con
 
         if( w == h ) // we only need one arc without a straigth line.
         {
-            arc.ConstructFromStartEndCenter( aP0, aP1, aP1 - mp0, sh == sw != startDiagonal );
+            arc.ConstructFromStartEndCenter( aP0, aP1, aP1 - mp0, ( sh == sw ) != startDiagonal );
             pl.Append( arc );
             return pl;
         }

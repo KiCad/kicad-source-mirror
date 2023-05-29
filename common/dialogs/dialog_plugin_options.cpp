@@ -44,8 +44,8 @@ DIALOG_PLUGIN_OPTIONS::DIALOG_PLUGIN_OPTIONS( wxWindow* aParent,
                         wxString* aResult ) :
     DIALOG_PLUGIN_OPTIONS_BASE( aParent ),
     m_callers_options( aFormattedOptions ),
-    m_choices( aPluginOptions ),
     m_result( aResult ),
+    m_choices( aPluginOptions ),
     m_initial_help( INITIAL_HELP ),
     m_grid_widths_dirty( true )
 {

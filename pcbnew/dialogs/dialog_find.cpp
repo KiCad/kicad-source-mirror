@@ -392,8 +392,8 @@ void DIALOG_FIND::search( bool aDirection )
         msg.Printf( _( "'%s' found" ), searchString );
         m_frame->SetStatusText( msg );
 
-        msg.Printf( _( "Hit(s): %ld / %lu" ),
-                    std::distance( m_hitList.begin(), m_it ) + 1,
+        msg.Printf( _( "Hit(s): %d / %zu" ),
+                    (int)std::distance( m_hitList.begin(), m_it ) + 1,
                     m_hitList.size() );
         m_status->SetLabel( msg );
     }
