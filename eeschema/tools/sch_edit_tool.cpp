@@ -1519,7 +1519,7 @@ void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
     wxString caption;
 
     // Use title caps for mandatory fields.  "Edit Sheet name Field" looks dorky.
-    if( parentType == SCH_SYMBOL_T && aField->GetId() < MANDATORY_FIELDS )
+    if( parentType == SCH_SYMBOL_T && aField->GetId() >= 0 && aField->GetId() < MANDATORY_FIELDS )
     {
         wxString translated_fieldname;
         translated_fieldname = TEMPLATE_FIELDNAME::GetDefaultFieldName( aField->GetId(),

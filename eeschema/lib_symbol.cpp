@@ -377,7 +377,7 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
         const LIB_FIELD* bField = nullptr;
         int              tmp = 0;
 
-        if( aField->GetId() < MANDATORY_FIELDS )
+        if( aField->GetId() >= 0 && aField->GetId() < MANDATORY_FIELDS )
             bField = aRhs.GetFieldById( aField->GetId() );
         else
             bField = aRhs.FindField( aField->GetName() );
@@ -385,16 +385,6 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
         if( !bField )
         {
             tmp = 1;
-        }
-        else if( aField->GetId() == REFERENCE_FIELD )
-        {
-            if( aCompareFlags & LIB_ITEM::COMPARE_FLAGS::EQUALITY )
-                tmp = aFieldItem->compare( *bField, aCompareFlags );
-        }
-        else if( aField->GetId() == VALUE_FIELD )
-        {
-            if( ( aCompareFlags & LIB_ITEM::COMPARE_FLAGS::ERC ) == 0 )
-                tmp = aFieldItem->compare( *bField, aCompareFlags );
         }
         else
         {

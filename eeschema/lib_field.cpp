@@ -247,16 +247,27 @@ int LIB_FIELD::compare( const LIB_ITEM& aOther, int aCompareFlags ) const
                 return retv;
         }
     }
-    else
+    else    // assume we're sorting
     {
         if( m_id != tmp->m_id )
             return m_id - tmp->m_id;
     }
 
-    retv = GetText().CmpNoCase( tmp->GetText() );
+    bool ignoreFieldText = false;
 
-    if( retv != 0 )
-        return retv;
+    if( m_id == REFERENCE_FIELD && ( aCompareFlags & COMPARE_FLAGS::EQUALITY ) )
+        ignoreFieldText = true;
+
+    if( m_id == VALUE_FIELD && ( aCompareFlags & COMPARE_FLAGS::ERC ) )
+        ignoreFieldText = true;
+
+    if( !ignoreFieldText )
+    {
+        retv = GetText().CmpNoCase( tmp->GetText() );
+
+        if( retv != 0 )
+            return retv;
+    }
 
     if( aCompareFlags & LIB_ITEM::COMPARE_FLAGS::EQUALITY )
     {
