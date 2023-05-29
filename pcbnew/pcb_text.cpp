@@ -512,7 +512,11 @@ void PCB_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearance, 
     else
     {
         if( aClearance > 0 )
-            textShape.Inflate( aClearance, aClearance );
+        {
+            // Number of segments to approximate a circle when inflating a polygon
+            const int circleSegmentsCount = 16;
+            textShape.Inflate( aClearance, circleSegmentsCount );
+        }
 
         aBuffer.Append( textShape );
     }
