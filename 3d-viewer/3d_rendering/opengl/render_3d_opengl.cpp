@@ -802,11 +802,14 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         {
             setLayerMaterial( layer_id );
 
-            OPENGL_RENDER_LIST* throughHolesOuter =
-                        m_boardAdapter.m_Cfg->m_Render.clip_silk_on_via_annulus
-                        && m_boardAdapter.m_Cfg->m_Render.realistic
-                        && ( layer_id == B_SilkS || layer_id == F_SilkS ) ? m_outerThroughHoleRings
-                                                                          : m_outerThroughHoles;
+            OPENGL_RENDER_LIST* throughHolesOuter = m_outerThroughHoles;
+
+            if( m_boardAdapter.m_Cfg->m_Render.clip_silk_on_via_annulus
+                    && m_boardAdapter.m_Cfg->m_Render.realistic
+                    && ( layer_id == B_SilkS || layer_id == F_SilkS ) )
+            {
+                throughHolesOuter = m_outerThroughHoleRings;
+            }
 
             if( throughHolesOuter )
             {
@@ -824,11 +827,20 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
                                                         - pLayerDispList->GetZBot() );
             }
 
-            if( !skipRenderHoles
-                    && m_boardAdapter.m_Cfg->m_Render.subtract_mask_from_silk
-                    && m_boardAdapter.m_Cfg->m_Render.realistic
-                    && (   ( layer_id == B_SilkS && m_layers.find( B_Mask ) != m_layers.end() )
-                        || ( layer_id == F_SilkS && m_layers.find( F_Mask ) != m_layers.end() ) ) )
+            if( skipRenderHoles )
+            {
+                // Do not render Paste layers when skipRenderHoles is enabled
+                // otherwise it will cause z-fight issues
+                if( layer_id != B_Paste && layer_id != F_Paste )
+                {
+                    pLayerDispList->DrawAllCameraCulledSubtractLayer( drawMiddleSegments,
+                                                                      anti_board );
+                }
+            }
+            else if( m_boardAdapter.m_Cfg->m_Render.subtract_mask_from_silk
+                  && m_boardAdapter.m_Cfg->m_Render.realistic
+                  && (   ( layer_id == B_SilkS && m_layers.find( B_Mask ) != m_layers.end() )
+                      || ( layer_id == F_SilkS && m_layers.find( F_Mask ) != m_layers.end() ) ) )
             {
                 const PCB_LAYER_ID layerMask_id = (layer_id == B_SilkS) ? B_Mask : F_Mask;
 
@@ -838,25 +850,16 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
                                                                   pLayerDispListMask,
                                                                   throughHolesOuter, anti_board );
             }
+            else if( throughHolesOuter )
+            {
+                pLayerDispList->DrawAllCameraCulledSubtractLayer( drawMiddleSegments, nullptr,
+                                                                  throughHolesOuter,
+                                                                  anti_board );
+            }
             else
             {
-                if( !skipRenderHoles && throughHolesOuter
-                  && ( layer_id == B_SilkS || layer_id == F_SilkS ) )
-                {
-                    pLayerDispList->DrawAllCameraCulledSubtractLayer( drawMiddleSegments, nullptr,
-                                                                      throughHolesOuter,
-                                                                      anti_board );
-                }
-                else
-                {
-                    // Do not render Paste layers when skipRenderHoles is enabled
-                    // otherwise it will cause z-fight issues
-                    if( !( skipRenderHoles && ( layer_id == B_Paste || layer_id == F_Paste ) ) )
-                    {
-                        pLayerDispList->DrawAllCameraCulledSubtractLayer( drawMiddleSegments,
-                                                                          anti_board );
-                    }
-                }
+                pLayerDispList->DrawAllCameraCulledSubtractLayer( drawMiddleSegments,
+                                                                  anti_board );
             }
         }
 
