@@ -902,7 +902,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryCoppers( const SYMDEF_PCB& aComponen
             SHAPE_POLY_SET shapePolys = getPolySetFromCadstarShape( compCopper.Shape,
                                                                     lineThickness,
                                                                     aFootprint );
-            shapePolys.Move( aFootprint->GetPosition() - anchorPos );
+            shapePolys.Move( -anchorPos );
             pad->AddPrimitivePoly( shapePolys, 0, true );
 
             // Now renumber all the associated pads
