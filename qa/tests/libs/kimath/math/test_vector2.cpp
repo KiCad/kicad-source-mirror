@@ -53,16 +53,18 @@ BOOST_AUTO_TEST_CASE( test_dot_product, *boost::unit_test::tolerance( 0.000001 )
 
 BOOST_AUTO_TEST_CASE( test_resize, *boost::unit_test::tolerance( 0.000001 ) )
 {
-    // a few vectors just to ensure the sign change happens as needed
+    // just some arbitrary vectors
     VECTOR2I v1( 4, 3 );
     VECTOR2I v2( 5, -1 );
     VECTOR2I v3( -2, 1 );
     VECTOR2I v4( 1, 1 );
+    VECTOR2I v5( -70, -70 );
 
-    BOOST_CHECK( v1.Resize( 8 ) == VECTOR2I( 6, 4 ) );
-    BOOST_CHECK( v2.Resize( 10 ) == VECTOR2I( 9, -2 ) );
-    BOOST_CHECK( v3.Resize( 4 ) == VECTOR2I( -3, 1 ) );
+    BOOST_CHECK( v1.Resize( 8 ) == VECTOR2I( 6, 5 ) );
+    BOOST_CHECK( v2.Resize( 10 ) == VECTOR2I( 10, -2 ) );
+    BOOST_CHECK( v3.Resize( 4 ) == VECTOR2I( -4, 2 ) );
     BOOST_CHECK( v4.Resize( 1 ) == VECTOR2I( 1, 1 ) );
+    BOOST_CHECK( v5.Resize( 100 ) == VECTOR2I( -71, -71 ) );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

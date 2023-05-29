@@ -356,8 +356,8 @@ VECTOR2<T> VECTOR2<T>::Resize( T aNewLength ) const
     extended_type y_sq = (extended_type) y * y;
     extended_type l_sq = x_sq + y_sq;
     extended_type newLength_sq = (extended_type) aNewLength * aNewLength;
-    extended_type newX = std::sqrt( rescale( newLength_sq, x_sq, l_sq ) );
-    extended_type newY = std::sqrt( rescale( newLength_sq, y_sq, l_sq ) );
+    double newX = std::sqrt( rescale( newLength_sq, x_sq, l_sq ) );
+    double newY = std::sqrt( rescale( newLength_sq, y_sq, l_sq ) );
 
     if( std::is_integral<T>::value )
     {
