@@ -52,6 +52,13 @@ public:
         fn.SetName( "~" + fn.GetName() );
         fn.SetExt( fn.GetExt() + ".lck" );
 
+        if( !fn.IsFileWritable() )
+        {
+            m_status = true;
+            m_removeOnRelease = false;
+            return;
+        }
+
         m_lockFilename = fn.GetFullPath();
 
         wxFile file;
