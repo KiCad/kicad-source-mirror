@@ -308,7 +308,7 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnAdd3DModel( wxCommandEvent&  )
             filter = (int) tmp;
     }
 
-    if( !S3D::Select3DModel( this, m_frame->Prj().Get3DCacheManager(), initialpath, filter, &model )
+    if( !S3D::Select3DModel( m_parentDialog, m_frame->Prj().Get3DCacheManager(), initialpath, filter, &model )
         || model.m_Filename.empty() )
     {
         select3DModel( selected );
