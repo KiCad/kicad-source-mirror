@@ -62,7 +62,7 @@ if( KICAD_TEST_XML_OUTPUT )
     # Due to Boost issue in 1.62, have to use the --logger parameter, rather than
     # separate --log_format, --log_sink, etc parameter
     # https://svn.boost.org/trac10/ticket/12507
-    set(BOOST_TEST_PARAMS --logger=JUNIT,all,${TEST_NAME}.boost-results.xml --report_level=no --result_code=yes)
+    set(BOOST_TEST_PARAMS --logger=JUNIT,all,${TEST_NAME}.boost-results.xml)
 endif()
 
 # Add the test to the CTest registry
