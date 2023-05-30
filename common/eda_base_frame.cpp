@@ -167,15 +167,28 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType, const wxS
 }
 
 
+wxWindow* findQuasiModalDialog( wxWindow* aParent )
+{
+    for( wxWindow* child : aParent->GetChildren() )
+    {
+        if( DIALOG_SHIM* dlg = dynamic_cast<DIALOG_SHIM*>( child ) )
+        {
+            if( dlg->IsQuasiModal() )
+                return dlg;
+
+            if( wxWindow* nestedDlg = findQuasiModalDialog( child ) )
+                return nestedDlg;
+        }
+    }
+
+    return nullptr;
+}
+
+
 wxWindow* EDA_BASE_FRAME::findQuasiModalDialog()
 {
-    for( wxWindow* iter : GetChildren() )
-    {
-        DIALOG_SHIM* dlg = dynamic_cast<DIALOG_SHIM*>( iter );
-
-        if( dlg && dlg->IsQuasiModal() )
-            return dlg;
-    }
+    if( wxWindow* dlg = ::findQuasiModalDialog( this ) )
+        return dlg;
 
     // FIXME: CvPcb is currently implemented on top of KIWAY_PLAYER rather than DIALOG_SHIM,
     // so we have to look for it separately.
