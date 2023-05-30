@@ -2059,6 +2059,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
+    frame()->PushTool( aEvent );
     Activate();
 
     m_startItem = nullptr;
@@ -2343,6 +2344,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     controls()->SetAutoPan( false );
     controls()->ForceCursorPosition( false );
     frame()->UndoRedoBlock( false );
+    frame()->PopTool( aEvent );
     highlightNets( false );
 
     return 0;
