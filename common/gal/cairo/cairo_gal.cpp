@@ -126,7 +126,7 @@ const VECTOR2D CAIRO_GAL_BASE::xform( const VECTOR2D& aP )
 }
 
 
-const double CAIRO_GAL_BASE::angle_xform( const double aAngle )
+double CAIRO_GAL_BASE::angle_xform( double aAngle )
 {
     // calculate rotation angle due to the rotation transform
     // and if flipped on X axis.
@@ -174,7 +174,7 @@ void CAIRO_GAL_BASE::arc_angles_xform_and_normalize( double& aStartAngle, double
 }
 
 
-const double CAIRO_GAL_BASE::xform( double x )
+double CAIRO_GAL_BASE::xform( double x )
 {
     double dx = m_currentWorld2Screen.xx * x;
     double dy = m_currentWorld2Screen.yx * x;

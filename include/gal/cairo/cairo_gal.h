@@ -248,7 +248,7 @@ public:
 
 protected:
     // Geometric transforms according to the m_currentWorld2Screen transform matrix:
-    const double xform( double x );             // scale
+    double xform( double x );             // scale
     const VECTOR2D xform( double x, double y ); // rotation, scale and offset
     const VECTOR2D xform( const VECTOR2D& aP ); // rotation, scale and offset
 
@@ -258,7 +258,7 @@ protected:
      * @param aAngle is the angle in radians to transform.
      * @return the modified angle.
      */
-    const double angle_xform( const double aAngle );
+    double angle_xform( double aAngle );
 
     /**
      * Transform according to the rotation from m_currentWorld2Screen transform matrix
