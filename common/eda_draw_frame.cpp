@@ -230,7 +230,10 @@ bool EDA_DRAW_FRAME::LockFile( const wxString& aFileName )
 
     m_file_checker = std::make_unique<LOCKFILE>( aFileName );
 
-    return m_file_checker->Locked();
+    // If the file is not valid, or is successfully locked, return true
+    // Invalid lockfiles are the result of bad permissions, so this is
+    // likely not a file that we can override regardless
+    return !m_file_checker->Valid() || m_file_checker->Locked();
 }
 
 
