@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Ian McInerney <Ian.S.McInerney@ieee.org>
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -161,8 +161,29 @@ int CVPCB_CONTROL::ShowFootprintViewer( const TOOL_EVENT& aEvent )
 
     if( !fpframe )
     {
+        // DISPLAY_FOOTPRINTS_FRAME needs a PCBNEW_SETTINGS because most of its settings
+        // come from it, and needs _pcbnew.dll/so code. So load it if the dll is not yet loaded
+        // (for instance if the board editor was never loaded)
+        if( !m_frame->Kiway().KiFACE( KIWAY::FACE_PCB, false ) )
+        {
+            try
+            {
+                m_frame->Kiway().KiFACE( KIWAY::FACE_PCB, true );
+            }
+            catch( ... )
+            {
+                // _pcbnew.dll/so is not available (install problem).
+            }
+        }
+
         fpframe = (DISPLAY_FOOTPRINTS_FRAME*) m_frame->Kiway().Player( FRAME_CVPCB_DISPLAY, true,
                                                                        m_frame );
+        if( !fpframe )
+        {
+            wxMessageBox( _( "Unable to create the footprint viewer frame" ) );
+            return 0;
+        }
+
         fpframe->Show( true );
     }
     else
