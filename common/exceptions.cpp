@@ -120,10 +120,18 @@ FUTURE_FORMAT_ERROR::FUTURE_FORMAT_ERROR( const PARSE_ERROR& aParseError,
                                           const wxString& aRequiredVersion ) :
         PARSE_ERROR()
 {
-    init( aRequiredVersion );
+    if( const FUTURE_FORMAT_ERROR* ffe = dynamic_cast<const FUTURE_FORMAT_ERROR*>( &aParseError ) )
+    {
+        requiredVersion = ffe->requiredVersion;
+        problem = ffe->Problem();
+    }
+    else
+    {
+        init( aRequiredVersion );
 
-    if( !aParseError.Problem().IsEmpty() )
-        problem += wxS( "\n\n" ) + _( "Full error text:" ) + wxS( "\n" ) + aParseError.Problem();
+        if( !aParseError.Problem().IsEmpty() )
+            problem += wxS( "\n\n" ) + _( "Full error text:" ) + wxS( "\n" ) + aParseError.Problem();
+    }
 
     lineNumber = aParseError.lineNumber;
     byteIndex = aParseError.byteIndex;
