@@ -1364,7 +1364,7 @@
                                                                             <property name="style"></property>
                                                                             <property name="subclass"></property>
                                                                             <property name="toolbar_pane">0</property>
-                                                                            <property name="tooltip">Check this option when all symbol units are identical except&#x0A;for pin numbers.</property>
+                                                                            <property name="tooltip">Check this option when all symbol units have the same function.&#x0A;For instance, this should be checked for a quad NAND gate, while it should not be checked for a dual triode (where unit C is the filament).</property>
                                                                             <property name="validator_data_type"></property>
                                                                             <property name="validator_style">wxFILTER_NONE</property>
                                                                             <property name="validator_type">wxDefaultValidator</property>
@@ -1439,7 +1439,7 @@
                                                                             <property name="style"></property>
                                                                             <property name="subclass"></property>
                                                                             <property name="toolbar_pane">0</property>
-                                                                            <property name="tooltip">Check this option if the symbol has an alternate body style (De Morgan)</property>
+                                                                            <property name="tooltip">Check this option if the symbol has an alternate body style for a De Morgan logic equivalence.&#x0A;For instance, this should be checked for a NAND gate to provide an alternate representation as an OR gate with inverted inputs.</property>
                                                                             <property name="validator_data_type"></property>
                                                                             <property name="validator_style">wxFILTER_NONE</property>
                                                                             <property name="validator_type">wxDefaultValidator</property>

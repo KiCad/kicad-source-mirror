@@ -188,7 +188,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	sbSizerSymbol->Add( bSizerUnitCount, 1, wxEXPAND|wxLEFT, 4 );
 
 	m_OptionPartsInterchangeable = new wxCheckBox( sbSizerSymbol->GetStaticBox(), wxID_ANY, _("All units are interchangeable"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_OptionPartsInterchangeable->SetToolTip( _("Check this option when all symbol units are identical except\nfor pin numbers.") );
+	m_OptionPartsInterchangeable->SetToolTip( _("Check this option when all symbol units have the same function.\nFor instance, this should be checked for a quad NAND gate, while it should not be checked for a dual triode (where unit C is the filament).") );
 
 	sbSizerSymbol->Add( m_OptionPartsInterchangeable, 0, wxALL, 4 );
 
@@ -196,7 +196,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	sbSizerSymbol->Add( 0, 8, 0, wxEXPAND, 5 );
 
 	m_AsConvertButt = new wxCheckBox( sbSizerSymbol->GetStaticBox(), wxID_ANY, _("Has alternate body style (De Morgan)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_AsConvertButt->SetToolTip( _("Check this option if the symbol has an alternate body style (De Morgan)") );
+	m_AsConvertButt->SetToolTip( _("Check this option if the symbol has an alternate body style for a De Morgan logic equivalence.\nFor instance, this should be checked for a NAND gate to provide an alternate representation as an OR gate with inverted inputs.") );
 
 	sbSizerSymbol->Add( m_AsConvertButt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
 
