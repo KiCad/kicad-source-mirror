@@ -1660,7 +1660,6 @@ bool ZONE_FILLER::fillNonCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
     // deflating/inflating.
     int half_min_width = aZone->GetMinThickness() / 2;
     int epsilon = pcbIUScale.mmToIU( 0.001 );
-    int numSegs = GetArcToSegmentCount( half_min_width, m_maxError, FULL_CIRCLE );
 
     aFillPolys.Deflate( half_min_width - epsilon, SHAPE_POLY_SET::CHAMFER_ALL_CORNERS, m_maxError );
 
