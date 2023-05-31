@@ -113,7 +113,8 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_SCREEN* aScreen, SCH_ITEM* aItem,
 
     if( aDirtyConnectivity )
     {
-        if( aItem->Connection() && ( aItem->Connection()->Name() == m_highlightedConn ) )
+        if( !aItem->IsConnectivityDirty() && aItem->Connection()
+          && ( aItem->Connection()->Name() == m_highlightedConn ) )
             m_highlightedConnChanged = true;
 
         aItem->SetConnectivityDirty();
@@ -215,7 +216,8 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
 
         if( aDirtyConnectivity )
         {
-            if( sch_item->Connection() && ( sch_item->Connection()->Name() == m_highlightedConn ) )
+            if( !sch_item->IsConnectivityDirty() && sch_item->Connection()
+              && ( sch_item->Connection()->Name() == m_highlightedConn ) )
                 m_highlightedConnChanged = true;
 
             sch_item->SetConnectivityDirty();
