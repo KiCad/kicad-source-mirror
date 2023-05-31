@@ -155,7 +155,7 @@ public:
 
     virtual wxString NetName( int aNet ) = 0;
 
-    virtual void ClearCacheForItem( const ITEM* aItem ) {}
+    virtual void ClearCacheForItems( std::vector<const PNS::ITEM*>& aItems ) {}
     virtual void ClearCaches() {}
 
     virtual int ClearanceEpsilon() const { return 0; }

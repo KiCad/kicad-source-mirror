@@ -87,7 +87,7 @@ NODE::~NODE()
 
     m_joints.clear();
 
-    std::vector<ITEM*> toDelete;
+    std::vector<const ITEM*> toDelete;
 
     toDelete.reserve( m_index->Size() );
 
@@ -97,10 +97,15 @@ NODE::~NODE()
             toDelete.push_back( item );
     }
 
-    for( ITEM* item : toDelete )
+    for( const ITEM* item : toDelete )
     {
         wxLogTrace( wxT( "PNS" ), wxT( "del item %p type %s" ), item, item->KindStr().c_str() );
         delete item;
+    }
+
+    if( m_ruleResolver )
+    {
+        m_ruleResolver->ClearCacheForItems( toDelete );
     }
 
     releaseGarbage();
@@ -1389,6 +1394,9 @@ void NODE::releaseGarbage()
     if( !isRoot() )
         return;
 
+    std::vector<const ITEM*> cacheCheckItems;
+    cacheCheckItems.reserve( m_garbageItems.size() );
+
     for( ITEM* item : m_garbageItems )
     {
         if( !item->BelongsTo( this ) )
@@ -1396,6 +1404,11 @@ void NODE::releaseGarbage()
     }
 
     m_garbageItems.clear();
+
+    if( m_ruleResolver )
+    {
+        m_ruleResolver->ClearCacheForItems( cacheCheckItems );
+    }
 }
 
 
