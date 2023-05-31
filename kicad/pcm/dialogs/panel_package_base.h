@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -38,6 +38,7 @@ class PANEL_PACKAGE_BASE : public wxPanel
 	protected:
 		wxStaticBitmap* m_bitmap;
 		wxStaticText* m_name;
+		wxBoxSizer* m_descSizer;
 		wxStaticText* m_desc;
 		wxButton* m_button;
 		SPLIT_BUTTON* m_splitButton;

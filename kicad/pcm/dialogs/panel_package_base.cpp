@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -54,9 +54,14 @@ PANEL_PACKAGE_BASE::PANEL_PACKAGE_BASE( wxWindow* parent, wxWindowID id, const w
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
 
+	m_descSizer = new wxBoxSizer( wxVERTICAL );
+
 	m_desc = new wxStaticText( this, wxID_ANY, _("Description"), wxDefaultPosition, wxDefaultSize, wxST_NO_AUTORESIZE );
 	m_desc->Wrap( -1 );
-	bSizer3->Add( m_desc, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	m_descSizer->Add( m_desc, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+
+
+	bSizer3->Add( m_descSizer, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );

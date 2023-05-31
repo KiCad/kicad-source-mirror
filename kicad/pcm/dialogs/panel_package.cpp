@@ -52,6 +52,7 @@ PANEL_PACKAGE::PANEL_PACKAGE( wxWindow* parent, const ActionCallback& aCallback,
 
     double descLineHeight = m_desc->GetTextExtent( wxT( "X" ) ).GetHeight() * 1.2 /* leading */;
     m_desc->SetLabelText( m_data.package.description );
+    m_desc->Wrap( m_descSizer->GetSize().GetWidth() );
     descLineHeight = wxSplit( m_desc->GetLabel(), '\n' ).size() * descLineHeight;
 
     int    nameLineHeight = m_name->GetTextExtent( wxT( "X" ) ).GetHeight();
@@ -80,6 +81,16 @@ PANEL_PACKAGE::PANEL_PACKAGE( wxWindow* parent, const ActionCallback& aCallback,
 void PANEL_PACKAGE::OnSize( wxSizeEvent& event )
 {
     Layout();
+
+    double descLineHeight = m_desc->GetTextExtent( wxT( "X" ) ).GetHeight() * 1.2 /* leading */;
+    m_desc->SetLabelText( m_data.package.description );
+    m_desc->Wrap( m_descSizer->GetSize().GetWidth() );
+    descLineHeight = wxSplit( m_desc->GetLabel(), '\n' ).size() * descLineHeight;
+
+    int    nameLineHeight = m_name->GetTextExtent( wxT( "X" ) ).GetHeight();
+    wxSize minSize = GetMinSize();
+    minSize.y = std::max( nameLineHeight + KiROUND( descLineHeight ) + 15, m_minHeight );
+    SetMinSize( minSize );
 }
 
 
