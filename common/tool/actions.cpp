@@ -159,11 +159,13 @@ TOOL_ACTION ACTIONS::copy( "common.Interactive.copy",
         _( "Copy" ), _( "Copy selected item(s) to clipboard" ),
         BITMAPS::copy, AF_NONE, (void*) wxID_COPY );
 
+// This action is also used for a tool in the main horizontal toolbar in schematic editor
+// do not specify a wxID like wxID_PASTE, it prevent the tool working (at least on Windows)
 TOOL_ACTION ACTIONS::paste( "common.Interactive.paste",
         AS_GLOBAL,
         MD_CTRL + 'V', LEGACY_HK_NAME( "Paste" ),
         _( "Paste" ), _( "Paste item(s) from clipboard" ),
-        BITMAPS::paste, AF_NONE, (void*) wxID_PASTE );
+        BITMAPS::paste, AF_NONE /*, (void*) wxID_PASTE*/ );
 
 TOOL_ACTION ACTIONS::selectAll( "common.Interactive.selectAll",
         AS_GLOBAL,
