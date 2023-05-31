@@ -726,18 +726,16 @@ void GRID_TRICKS::paste_text( const wxString& cb_text )
         wxStringTokenizer cols( rowTxt, COL_SEP, wxTOKEN_RET_EMPTY );
 
         if( !is_selection )
-        {
             end_col = cur_col + cols.CountTokens();
 
-            if( end_col > tbl->GetNumberCols() )
-                end_col = tbl->GetNumberCols();
-        }
-
-        for( int col = start_col;  col < end_col;  ++col )
+        for( int col = start_col;  col < end_col && col < tbl->GetNumberCols();  ++col )
         {
             // Skip hidden columns
             if( !m_grid->IsColShown( col ) )
+            {
+                end_col++;
                 continue;
+            }
 
             // If number of selected cols is larger than the count of cols on the clipboard,
             // paste again and again until the end of the selection is reached.
