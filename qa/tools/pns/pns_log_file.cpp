@@ -233,6 +233,30 @@ bool comparePnsItems( const PNS::ITEM*a , const PNS::ITEM* b )
 }
 
 
+const std::set<PNS::ITEM*> deduplicate( const std::set<PNS::ITEM*>& items )
+{
+    std::set<PNS::ITEM*> rv;
+
+    for( auto item : items )
+    {
+        bool isDuplicate = false;
+        for (auto ritem : rv )
+        {
+            if( comparePnsItems( ritem, item) )
+            {
+                isDuplicate = true;
+                break;
+            }
+
+            if( !isDuplicate )
+                rv.insert( item );
+        }
+    }
+    
+    return rv;
+}
+
+
 bool PNS_LOG_FILE::COMMIT_STATE::Compare( const PNS_LOG_FILE::COMMIT_STATE& aOther )
 {
     COMMIT_STATE check( aOther );
@@ -252,21 +276,24 @@ bool PNS_LOG_FILE::COMMIT_STATE::Compare( const PNS_LOG_FILE::COMMIT_STATE& aOth
         }
     }
 
-    for( auto item : m_addedItems )
+    auto addedItems = deduplicate( m_addedItems );
+    auto chkAddedItems = deduplicate( check.m_addedItems );
+
+    for( auto item : addedItems )
     {
-        for( auto chk : check.m_addedItems )
+        for( auto chk : chkAddedItems )
         {
             if( comparePnsItems( item, chk ) )
             {
-                check.m_addedItems.erase( chk );
+                chkAddedItems.erase( chk );
                 break;
             }
         }
     }
 
-    //printf("post-compare: %d/%d\n", check.m_addedItems.size(), check.m_removedIds.size() );
+    //printf("post-compare: %d/%d\n", chkAddedItems.size(), check.m_removedIds.size() );
 
-    return check.m_addedItems.empty() && check.m_removedIds.empty();
+    return chkAddedItems.empty() && check.m_removedIds.empty();
 }
 
 
