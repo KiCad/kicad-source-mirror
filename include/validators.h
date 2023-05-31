@@ -170,34 +170,6 @@ protected:
     wxRegEx m_regEx;
 };
 
-/**
- * Custom validator that verifies that a string defines a valid #LIB_ID.
- *
- * The default validation allows empty #LIB_ID strings to allow the #LIB_ID to be cleared.
- * Use SetStyle( wxFILTER_EMPTY ) to force a valid #LIB_ID string.
- */
-class LIB_ID_VALIDATOR : public wxTextValidator
-{
-public:
-    /**
-     * @param aLibIdType is the type of #LIB_ID object to validate.
-     * @param aValue is a pointer to a wxString containing the value to validate.
-     */
-    LIB_ID_VALIDATOR( wxString* aValue = nullptr ) :
-        wxTextValidator( wxFILTER_EXCLUDE_CHAR_LIST, aValue )
-    {
-        SetCharExcludes( wxT( "\r\n\t" ) );
-    }
-
-    virtual wxObject* Clone() const override
-    {
-        return new LIB_ID_VALIDATOR( *this );
-    }
-
-    bool Validate( wxWindow* aParent ) override;
-};
-
-
 class NETNAME_VALIDATOR : public wxTextValidator
 {
 public:

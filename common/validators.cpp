@@ -268,54 +268,6 @@ void REGEX_VALIDATOR::compileRegEx( const wxString& aRegEx, int aFlags )
 }
 
 
-bool LIB_ID_VALIDATOR::Validate( wxWindow *aParent )
-{
-    LIB_ID dummy;
-
-    // If window is disabled, simply return
-    if( !m_validatorWindow->IsEnabled() )
-        return true;
-
-    wxTextEntry* const text = GetTextEntry();
-
-    if( !text )
-        return false;
-
-    wxString msg;
-    wxString val( text->GetValue() );
-    wxString tmp = val.Clone();          // For trailing and leading white space tests.
-
-    // Allow empty string if empty filter not set to allow clearing the LIB_ID.
-    if( !(GetStyle() & wxFILTER_EMPTY) && val.IsEmpty() )
-        return true;
-
-    if( tmp.Trim() != val )              // Trailing white space.
-    {
-        msg = _( "Entry contains trailing white space." );
-    }
-    else if( tmp.Trim( false ) != val )  // Leading white space.
-    {
-        msg = _( "Entry contains leading white space." );
-    }
-    else if( dummy.Parse( val ) != -1 || !dummy.IsValid() )   // Is valid LIB_ID.
-    {
-        msg.Printf( _( "'%s' is not a valid library identifier format." ), val );
-    }
-
-    if( !msg.empty() )
-    {
-        m_validatorWindow->SetFocus();
-
-        wxMessageBox( msg, _( "Library Identifier Validation Error" ),
-                      wxOK | wxICON_EXCLAMATION, aParent );
-
-        return false;
-    }
-
-    return true;
-}
-
-
 NETNAME_VALIDATOR::NETNAME_VALIDATOR( wxString *aVal ) :
          wxTextValidator(),
          m_allowSpaces( false )

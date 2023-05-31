@@ -128,7 +128,6 @@ private:
     SCH_FIELD_VALIDATOR   m_fieldNameValidator;
     SCH_FIELD_VALIDATOR   m_referenceValidator;
     SCH_FIELD_VALIDATOR   m_valueValidator;
-    LIB_ID_VALIDATOR      m_libIdValidator;
     SCH_FIELD_VALIDATOR   m_urlValidator;
     SCH_FIELD_VALIDATOR   m_nonUrlValidator;
     SCH_FIELD_VALIDATOR   m_filepathValidator;
