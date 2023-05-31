@@ -1614,13 +1614,17 @@ void FOOTPRINT::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
     // Flip layer
     BOARD_ITEM::SetLayer( FlipLayer( GetLayer() ) );
 
-    // Reverse mirror orientation.
-    m_orient = -m_orient;
-    m_orient.Normalize180();
+    // Calculate the new orientation, and then clear it for pad flipping.
+    EDA_ANGLE newOrientation = -m_orient;
+    newOrientation.Normalize180();
+    m_orient = ANGLE_0;
 
     // Mirror pads to other side of board.
     for( PAD* pad : m_pads )
         pad->Flip( m_pos, false );
+
+    // Now set the new orientation.
+    m_orient = newOrientation;
 
     // Mirror zones to other side of board.
     for( ZONE* zone : m_zones )
