@@ -264,6 +264,8 @@ SYMBOL_EDIT_FRAME::~SYMBOL_EDIT_FRAME()
     if( m_toolManager )
         m_toolManager->ShutdownAllTools();
 
+    setSymWatcher( nullptr );
+
     if( IsSymbolFromSchematic() )
     {
         delete m_symbol;
@@ -1371,6 +1373,52 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         break;
     }
 
+    case MAIL_REFRESH_SYMBOL:
+    {
+        SYMBOL_LIB_TABLE* tbl = Prj().SchSymbolLibTable();
+        LIB_SYMBOL* symbol = GetCurSymbol();
+
+        wxLogTrace( "KICAD_LIB_WATCH", "Received refresh symbol request for %s",
+                    payload );
+
+        if( !tbl || !symbol )
+            break;
+
+        wxString libName = symbol->GetLibId().GetLibNickname();
+        const SYMBOL_LIB_TABLE_ROW* row = tbl->FindRow( libName );
+
+        if( !row )
+            return;
+
+        wxFileName libfullname( row->GetFullURI( true ) );
+
+        wxFileName changedLib( mail.GetPayload() );
+        wxLogTrace( "KICAD_LIB_WATCH",
+                    "Received refresh symbol request for %s, current symbols is %s",
+                    changedLib.GetFullPath(), libfullname.GetFullPath() );
+
+        if( changedLib == libfullname )
+        {
+            wxLogTrace( "KICAD_LIB_WATCH", "Refreshing symbol %s", symbol->GetName() );
+
+            m_libMgr->UpdateLibraryBuffer( libName );
+
+            LIB_SYMBOL* lib_symbol = m_libMgr->GetBufferedSymbol( symbol->GetName(), libName );
+            wxCHECK2_MSG( lib_symbol, break, wxString::Format( "Symbol %s not found in library %s",
+                          symbol->GetName(), libName ) );
+
+            // The buffered screen for the symbol
+            SCH_SCREEN* symbol_screen = m_libMgr->GetScreen( lib_symbol->GetName(), libName );
+
+            SetScreen( symbol_screen );
+            SetCurSymbol( new LIB_SYMBOL( *lib_symbol ), false );
+            RebuildSymbolUnitsList();
+            SetShowDeMorgan( GetCurSymbol()->HasConversion() );
+        }
+
+        break;
+    }
+
     default:
         ;
     }
@@ -1518,6 +1566,7 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
 
     SetScreen( tmpScreen );
     SetCurSymbol( symbol.release(), true );
+    setSymWatcher( nullptr );
 
     ReCreateMenuBar();
     ReCreateHToolbar();

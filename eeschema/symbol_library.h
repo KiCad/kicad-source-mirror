@@ -85,6 +85,14 @@ public:
     SYMBOL_LIB* AddLibrary( const wxString& aFileName, SYMBOL_LIBS::iterator& aIterator );
 
     /**
+     * Refreshes the library from the (possibly updated) contents on disk
+     *
+     * @param aFileName is the file name of the symbol library
+     * @return true if successfully updated
+     */
+    bool ReloadLibrary( const wxString& aFileName );
+
+    /**
      * Load all of the project's libraries into this container, which should
      * be cleared before calling it.
      *

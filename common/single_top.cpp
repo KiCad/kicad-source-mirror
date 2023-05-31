@@ -133,6 +133,26 @@ private:
 };
 wxIMPLEMENT_DYNAMIC_CLASS(HtmlModule, wxModule);
 
+// Define a custom assertion handler
+void CustomAssertHandler(const wxString& file,
+                         int line,
+                         const wxString& func,
+                         const wxString& cond,
+                         const wxString& msg)
+{
+    // Log the assertion details to standard log
+    if (!msg.empty())
+    {
+        wxLogError( "Assertion failed at %s:%d in %s: %s - %s",
+                    file, line, func, cond, msg);
+    }
+    else
+    {
+        wxLogError( "Assertion failed at %s:%d in %s: %s",
+                    file, line, func, cond);
+    }
+}
+
 /**
  * Struct APP_SINGLE_TOP
  * implements a bare naked wxApp (so that we don't become dependent on
@@ -149,6 +169,9 @@ struct APP_SINGLE_TOP : public wxApp
 
     bool OnInit() override
     {
+        wxDISABLE_DEBUG_SUPPORT();
+        wxSetAssertHandler( CustomAssertHandler );
+
         // Perform platform-specific init tasks
         if( !KIPLATFORM::APP::Init() )
             return false;

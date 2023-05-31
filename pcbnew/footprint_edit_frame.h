@@ -279,6 +279,12 @@ public:
     void AddFootprintToBoard( FOOTPRINT* aFootprint ) override;
 
     /**
+     * Override from PCB_BASE_FRAME which reloads the footprint from the library without
+     * setting the footprint watcher
+     */
+    void ReloadFootprint( FOOTPRINT* aFootprint ) override;
+
+    /**
      * Update visible items after a language change.
      */
     void ShowChangedLanguage() override;

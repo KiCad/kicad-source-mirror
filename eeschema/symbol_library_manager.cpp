@@ -831,6 +831,35 @@ SYMBOL_LIBRARY_MANAGER::LIB_BUFFER& SYMBOL_LIBRARY_MANAGER::getLibraryBuffer(
 }
 
 
+bool SYMBOL_LIBRARY_MANAGER::UpdateLibraryBuffer( const wxString& aLibrary )
+{
+    try
+    {
+        m_libs.erase( aLibrary );
+        getLibraryBuffer( aLibrary );
+    }
+    catch(const std::exception& e)
+    {
+        wxLogError( _( "Error updating library buffer: %s" ), e.what() );
+        return false;
+    }
+    catch( const IO_ERROR& e )
+    {
+        wxLogError( _( "Error updating library buffer: %s" ), e.What() );
+        return false;
+    }
+    catch(...)
+    {
+        wxLogError( _( "Error updating library buffer." ) );
+        return false;
+    }
+
+    getLibraryBuffer( aLibrary );
+
+    return true;
+}
+
+
 SYMBOL_LIBRARY_MANAGER::SYMBOL_BUFFER::SYMBOL_BUFFER( LIB_SYMBOL* aSymbol,
                                                       std::unique_ptr<SCH_SCREEN> aScreen ) :
         m_screen( std::move( aScreen ) ),

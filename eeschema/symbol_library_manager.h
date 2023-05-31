@@ -118,6 +118,11 @@ public:
                                   const wxString& aLibrary );
 
     /**
+     * Update the library buffer with a new version of the library.
+     */
+    bool UpdateLibraryBuffer( const wxString& aLibrary );
+
+    /**
      * Remove the symbol from the symbol buffer.
      * It is required to save the library to have the symbol removed in the schematic editor.
      */

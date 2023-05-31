@@ -72,6 +72,12 @@ public:
      */
     void OnUpdateFootprintButton(  wxUpdateUIEvent& aEvent );
 
+    /**
+     * Override from PCB_BASE_FRAME which reloads the footprint from the library without
+     * setting the footprint watcher
+     */
+    void ReloadFootprint( FOOTPRINT* aFootprint ) override;
+
     ///< @copydoc EDADRAW_FRAME::UpdateMsgPanel
     void UpdateMsgPanel() override;
 

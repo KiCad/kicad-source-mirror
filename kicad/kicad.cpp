@@ -407,6 +407,26 @@ void PGM_KICAD::Destroy()
 KIWAY  Kiway( &Pgm(), KFCTL_CPP_PROJECT_SUITE );
 
 
+// Define a custom assertion handler
+void CustomAssertHandler(const wxString& file,
+                         int line,
+                         const wxString& func,
+                         const wxString& cond,
+                         const wxString& msg)
+{
+    // Log the assertion details to standard log
+    if (!msg.empty())
+    {
+        wxLogError( "Assertion failed at %s:%d in %s: %s - %s",
+                    file, line, func, cond, msg);
+    }
+    else
+    {
+        wxLogError( "Assertion failed at %s:%d in %s: %s",
+                    file, line, func, cond);
+    }
+}
+
 /**
  * Not publicly visible because most of the action is in #PGM_KICAD these days.
  */
@@ -421,6 +441,9 @@ struct APP_KICAD : public wxApp
 
     bool OnInit()           override
     {
+        wxDISABLE_DEBUG_SUPPORT();
+        wxSetAssertHandler( CustomAssertHandler );
+
         // Perform platform-specific init tasks
         if( !KIPLATFORM::APP::Init() )
             return false;
@@ -438,10 +461,8 @@ struct APP_KICAD : public wxApp
     {
         program.OnPgmExit();
 
-#if defined(__FreeBSD__)
         // Avoid wxLog crashing when used in destructors.
         wxLog::EnableLogging( false );
-#endif
 
         return wxApp::OnExit();
     }

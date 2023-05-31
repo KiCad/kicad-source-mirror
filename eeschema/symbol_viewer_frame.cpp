@@ -1312,11 +1312,38 @@ SELECTION& SYMBOL_VIEWER_FRAME::GetCurrentSelection()
 
 void SYMBOL_VIEWER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 {
+
     switch( mail.Command() )
     {
     case MAIL_RELOAD_LIB:
     {
         ReCreateLibList();
+        break;
+    }
+    case MAIL_REFRESH_SYMBOL:
+    {
+        SYMBOL_LIB_TABLE* tbl = Prj().SchSymbolLibTable();
+        LIB_SYMBOL* symbol = GetSelectedSymbol();
+        const SYMBOL_LIB_TABLE_ROW* row = tbl->FindRow( symbol->GetLibId().GetLibNickname() );
+
+        if( !row )
+            return;
+
+        wxString libfullname = row->GetFullURI( true );
+
+        if( symbol )
+        {
+            wxString lib( mail.GetPayload() );
+            wxLogTrace( "KICAD_LIB_WATCH", "Received refresh symbol request for %s, current symbols is %s", lib, libfullname );
+
+            if( lib == libfullname )
+            {
+                wxLogTrace( "KICAD_LIB_WATCH", "Refreshing symbol %s", symbol->GetName() );
+                updatePreviewSymbol();
+                GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL);
+            }
+        }
+
         break;
     }
     default:;

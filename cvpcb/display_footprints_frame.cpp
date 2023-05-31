@@ -188,6 +188,7 @@ DISPLAY_FOOTPRINTS_FRAME::~DISPLAY_FOOTPRINTS_FRAME()
 
     delete GetScreen();
     SetScreen( nullptr );      // Be sure there is no double deletion
+    setFPWatcher( nullptr );
 }
 
 
@@ -454,6 +455,7 @@ FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintNam
 
     if( footprint )
     {
+        footprint->SetFPID( fpid );
         footprint->SetParent( (EDA_ITEM*) GetBoard() );
         footprint->SetPosition( VECTOR2I( 0, 0 ) );
         return footprint;
@@ -462,6 +464,35 @@ FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintNam
     aReporter.Report( wxString::Format( _( "Footprint '%s' not found." ), aFootprintName ),
                       RPT_SEVERITY_ERROR );
     return nullptr;
+}
+
+
+void DISPLAY_FOOTPRINTS_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
+{
+    if( !aFootprint || !m_currentComp )
+        return;
+
+    GetBoard()->DeleteAllFootprints();
+    GetBoard()->GetNetInfo().RemoveUnusedNets();
+    GetCanvas()->GetView()->Clear();
+
+
+    for( PAD* pad : aFootprint->Pads() )
+    {
+        const COMPONENT_NET& net = m_currentComp->GetNet( pad->GetNumber() );
+
+        if( !net.GetPinFunction().IsEmpty() )
+        {
+            NETINFO_ITEM* netinfo = new NETINFO_ITEM( GetBoard() );
+            netinfo->SetNetname( net.GetPinFunction() );
+            GetBoard()->Add( netinfo );
+            pad->SetNet( netinfo );
+        }
+    }
+
+    GetBoard()->Add( aFootprint );
+    updateView();
+    GetCanvas()->Refresh();
 }
 
 
@@ -517,6 +548,7 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
         GetBoard()->Add( footprint );
         m_currentFootprint = footprintName;
         m_currentComp = comp;
+        setFPWatcher( footprint );
     }
 
     if( fpInfo )

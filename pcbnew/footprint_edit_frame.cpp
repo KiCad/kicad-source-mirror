@@ -338,6 +338,9 @@ FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
     // save the footprint in the PROJECT
     retainLastFootprint();
 
+    // Clear the watched file
+    setFPWatcher( nullptr );
+
     delete m_selectionFilterPanel;
     delete m_appearancePanel;
     delete m_treePane;
@@ -535,7 +538,7 @@ void FOOTPRINT_EDIT_FRAME::restoreLastFootprint()
 }
 
 
-void FOOTPRINT_EDIT_FRAME::AddFootprintToBoard( FOOTPRINT* aFootprint )
+void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
 {
     m_originalFootprintCopy.reset( static_cast<FOOTPRINT*>( aFootprint->Clone() ) );
     m_originalFootprintCopy->SetParent( nullptr );
@@ -563,6 +566,17 @@ void FOOTPRINT_EDIT_FRAME::AddFootprintToBoard( FOOTPRINT* aFootprint )
     }
 
     UpdateMsgPanel();
+}
+
+
+void FOOTPRINT_EDIT_FRAME::AddFootprintToBoard( FOOTPRINT* aFootprint )
+{
+    ReloadFootprint( aFootprint );
+
+    if( IsCurrentFPFromBoard() )
+        setFPWatcher( nullptr );
+    else
+        setFPWatcher( aFootprint );
 }
 
 

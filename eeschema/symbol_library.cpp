@@ -310,6 +310,49 @@ SYMBOL_LIB* SYMBOL_LIBS::AddLibrary( const wxString& aFileName, SYMBOL_LIBS::ite
 }
 
 
+bool SYMBOL_LIBS::ReloadLibrary( const wxString &aFileName )
+{
+    SYMBOL_LIB *lib;
+    wxFileName fn = aFileName;
+
+    // Check if the library already exists.
+    if( !( lib = FindLibrary( fn.GetName() ) ) )
+        return false;
+
+    // Create a clone of the library pointer in case we need to re-add it
+    SYMBOL_LIB *cloneLib = lib;
+
+    // Try to find the iterator of the library
+    for( auto it = begin(); it != end(); ++it )
+    {
+        if( it->GetName() == fn.GetName() )
+        {
+            // Remove the old library and keep the pointer
+            lib = &*it;
+            release( it );
+            break;
+        }
+    }
+
+    // Try to reload the library
+    try
+    {
+        lib = SYMBOL_LIB::LoadSymbolLibrary( aFileName );
+
+        // If the library is successfully reloaded, add it back to the set.
+        push_back( lib );
+        return true;
+    }
+    catch( ... )
+    {
+        // If an exception occurs, ensure that the SYMBOL_LIBS remains unchanged
+        // by re-adding the old library back to the set.
+        push_back( cloneLib );
+        return false;
+    }
+}
+
+
 SYMBOL_LIB* SYMBOL_LIBS::FindLibrary( const wxString& aName )
 {
     for( SYMBOL_LIBS::iterator it = begin();  it!=end();  ++it )

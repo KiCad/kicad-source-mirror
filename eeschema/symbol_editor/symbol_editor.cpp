@@ -198,6 +198,7 @@ bool SYMBOL_EDIT_FRAME::LoadSymbol( const LIB_ID& aLibId, int aUnit, int aConver
 
         m_centerItemOnIdle = libId;
         Bind( wxEVT_IDLE, &SYMBOL_EDIT_FRAME::centerItemIdleHandler, this );
+        setSymWatcher( &libId );
 
         return true;
     }
@@ -305,9 +306,11 @@ bool SYMBOL_EDIT_FRAME::LoadOneLibrarySymbolAux( LIB_SYMBOL* aEntry, const wxStr
 
     ClearUndoRedoList();
 
-    // Let tools add things to the view if necessary
-    if( m_toolManager )
-        m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+    if( !IsSymbolFromSchematic() )
+    {
+        LIB_ID libId = GetCurSymbol()->GetLibId();
+        setSymWatcher( &libId );
+    }
 
     // Display the document information based on the entry selected just in
     // case the entry is an alias.

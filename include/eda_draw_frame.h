@@ -84,7 +84,7 @@ public:
      * Use #ReleaseFile() to undo this.
      *
      * @param aFileName full path to the file.
-     * @return false if the file was already locked, true otherwise.
+     * @return true if the file is locked or read-only, false otherwise.
      */
     bool LockFile( const wxString& aFileName );
 

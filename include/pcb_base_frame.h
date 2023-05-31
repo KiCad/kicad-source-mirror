@@ -39,6 +39,9 @@
 #include <richio.h>
 #include <vector>
 
+#include <wx/fswatcher.h>
+#include <wx/datetime.h>
+#include <wx/timer.h>
 
 /* Forward declarations of classes. */
 class APP_SETTINGS_BASE;
@@ -182,6 +185,15 @@ public:
      */
     virtual const PCB_PLOT_PARAMS& GetPlotSettings() const;
     virtual void SetPlotSettings( const PCB_PLOT_PARAMS& aSettings );
+
+    /**
+     * Reload the footprint from the library.
+     * @param aFootprint is the footprint to reload.
+     */
+    virtual void ReloadFootprint( FOOTPRINT* aFootprint )
+    {
+        wxFAIL_MSG( wxT( "Attempted to reload a footprint for PCB_BASE_FRAME that does not override!" ) );
+    }
 
     /**
      * Set the #m_Pcb member in such as way as to ensure deleting any previous #BOARD.
@@ -392,6 +404,16 @@ public:
      */
     void RemoveBoardChangeListener( wxEvtHandler* aListener );
 
+    /**
+     * Handler for FP change events.  Responds to the filesystem watcher set in #setFPWatcher.
+    */
+    void OnFPChange( wxFileSystemWatcherEvent& aEvent );
+
+    /**
+     * Handler for the filesystem watcher debounce timer.
+     */
+    void OnFpChangeDebounceTimer( wxTimerEvent& aEvent );
+
 protected:
     bool canCloseWindow( wxCloseEvent& aCloseEvent ) override;
 
@@ -416,6 +438,12 @@ protected:
 
     void rebuildConnectivity();
 
+    /**
+     * Creates (or removes) a watcher on the specified footprint
+     * @param aFootprint If nullptr, the watcher is removed.  Otherwise, set a change watcher
+     */
+    void setFPWatcher( FOOTPRINT* aFootprint );
+
 protected:
     BOARD*                  m_pcb;
     PCB_DISPLAY_OPTIONS     m_displayOptions;
@@ -423,6 +451,11 @@ protected:
 
 private:
     NL_PCBNEW_PLUGIN*       m_spaceMouse;
+
+    std::unique_ptr<wxFileSystemWatcher>    m_watcher;
+    wxFileName                              m_watcherFileName;
+    wxDateTime                              m_watcherLastModified;
+    wxTimer                                 m_watcherDebounceTimer;
 
     std::vector<wxEvtHandler*> m_boardChangeListeners;
 };

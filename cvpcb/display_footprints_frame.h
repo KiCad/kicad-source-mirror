@@ -95,6 +95,7 @@ public:
 
     SELECTION& GetCurrentSelection() override;
 
+    void ReloadFootprint( FOOTPRINT* aFootprint ) override;
     DECLARE_EVENT_TABLE()
 
 protected:

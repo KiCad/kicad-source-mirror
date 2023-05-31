@@ -107,6 +107,8 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindo
                       selTool->OnIdle( aEvent );
               }
           } );
+
+    m_watcherDebounceTimer.Bind( wxEVT_TIMER, &SCH_BASE_FRAME::OnSymChangeDebounceTimer, this );
 }
 
 
@@ -618,4 +620,109 @@ wxString SCH_BASE_FRAME::SelectLibraryFromList()
     }
 
     return libName;
+}
+
+
+void SCH_BASE_FRAME::setSymWatcher( const LIB_ID* aID )
+{
+    Unbind( wxEVT_FSWATCHER, &SCH_BASE_FRAME::OnSymChange, this );
+
+    if( !aID )
+    {
+        wxLogTrace( "KICAD_LIB_WATCH", "No symbol library specified, disabling watcher" );
+        m_watcher.reset();
+        return;
+    }
+
+    wxString libfullname;
+    SYMBOL_LIB_TABLE* tbl = Prj().SchSymbolLibTable();
+
+    if( !tbl )
+        return;
+
+    try
+    {
+        const SYMBOL_LIB_TABLE_ROW* row = tbl->FindRow( aID->GetLibNickname() );
+
+        if( !row )
+            return;
+
+        libfullname = row->GetFullURI( true );
+    }
+    catch( const std::exception& e )
+    {
+        DisplayInfoMessage( this, e.what() );
+        return;
+    }
+    catch( const IO_ERROR& error )
+    {
+        wxLogTrace( "KICAD_LIB_WATCH", "Error: %s", error.What() );
+        return;
+    }
+
+    wxLogTrace( "KICAD_LIB_WATCH", "Setting up watcher for %s", libfullname );
+    m_watcherFileName.Assign( libfullname );
+
+    if( !m_watcherFileName.FileExists() )
+        return;
+
+    wxLog::EnableLogging( false );
+    m_watcherLastModified = m_watcherFileName.GetModificationTime();
+    wxLog::EnableLogging( true );
+
+    Bind( wxEVT_FSWATCHER, &SCH_BASE_FRAME::OnSymChange, this );
+    m_watcher = std::make_unique<wxFileSystemWatcher>();
+    m_watcher->SetOwner( this );
+
+    wxFileName fn;
+    fn.AssignDir( m_watcherFileName.GetPath() );
+    fn.DontFollowLink();
+
+    m_watcher->AddTree( fn );
+}
+
+
+void SCH_BASE_FRAME::OnSymChange( wxFileSystemWatcherEvent& aEvent )
+{
+    SYMBOL_LIBS* libs = Prj().SchLibs();
+
+    wxLogTrace( "KICAD_LIB_WATCH", "OnSymChange: %s, watcher file: %s",
+                aEvent.GetPath().GetFullPath(), m_watcherFileName.GetFullPath() );
+
+    if( !libs || !m_watcher || !m_watcher.get() || m_watcherFileName.GetPath().IsEmpty() )
+        return;
+
+    if( aEvent.GetPath() != m_watcherFileName )
+        return;
+
+    // Start the debounce timer (set to 1 second)
+    if( !m_watcherDebounceTimer.StartOnce( 1000 ) )
+    {
+        wxLogTrace( "KICAD_LIB_WATCH", "Failed to start the debounce timer" );
+        return;
+    }
+}
+
+
+void SCH_BASE_FRAME::OnSymChangeDebounceTimer( wxTimerEvent& aEvent )
+{
+    wxLogTrace( "KICAD_LIB_WATCH", "OnSymChangeDebounceTimer" );
+    // Disable logging to avoid spurious messages and check if the file has changed
+    wxLog::EnableLogging( false );
+    wxDateTime lastModified = m_watcherFileName.GetModificationTime();
+    wxLog::EnableLogging( true );
+
+    if( lastModified == m_watcherLastModified || !lastModified.IsValid() )
+        return;
+
+    m_watcherLastModified = lastModified;
+
+    if( !GetScreen()->IsContentModified() || IsOK( this, _( "The library containing the current symbol has changed.\n"
+                                                            "Do you want to reload the library?" ) ) )
+    {
+        wxLogTrace( "KICAD_LIB_WATCH", "Sending refresh symbol mail" );
+        std::string libName = m_watcherFileName.GetFullPath().ToStdString();
+        Kiway().ExpressMail( FRAME_SCH_VIEWER, MAIL_REFRESH_SYMBOL, libName );
+        Kiway().ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_REFRESH_SYMBOL, libName );
+    }
 }

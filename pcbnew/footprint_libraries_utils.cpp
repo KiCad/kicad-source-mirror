@@ -53,6 +53,7 @@
 #include "footprint_viewer_frame.h"
 #include <wx/choicdlg.h>
 #include <wx/filedlg.h>
+#include <wx/fswatcher.h>
 
 
 // unique, "file local" translations:

@@ -51,6 +51,7 @@
 #include <pcb_base_frame.h>
 #include <pcb_draw_panel_gal.h>
 #include <pgm_base.h>
+#include <wildcards_and_files_ext.h>
 #include <zoom_defines.h>
 
 #include <math/vector2d.h>
@@ -81,6 +82,7 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
         m_originTransforms( *this ),
         m_spaceMouse( nullptr )
 {
+    m_watcherDebounceTimer.Bind( wxEVT_TIMER, &PCB_BASE_FRAME::OnFpChangeDebounceTimer, this );
 }
 
 
@@ -1137,4 +1139,116 @@ void PCB_BASE_FRAME::SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions, boo
 
     if( aRefresh )
         canvas->Refresh();
+}
+
+
+void PCB_BASE_FRAME::setFPWatcher( FOOTPRINT* aFootprint )
+{
+    Unbind( wxEVT_FSWATCHER, &PCB_BASE_FRAME::OnFPChange, this );
+
+    if( !aFootprint )
+    {
+        m_watcher.reset();
+        return;
+    }
+
+    wxString libfullname;
+    FP_LIB_TABLE* tbl = Prj().PcbFootprintLibs();
+
+    if( !aFootprint || !tbl )
+        return;
+
+    try
+    {
+        const FP_LIB_TABLE_ROW* row = tbl->FindRow( aFootprint->GetFPID().GetLibNickname() );
+
+        if( !row )
+            return;
+
+        libfullname = row->GetFullURI( true );
+    }
+    catch( const std::exception& e )
+    {
+        DisplayInfoMessage( this, e.what() );
+        return;
+    }
+    catch( const IO_ERROR& error )
+    {
+        wxLogTrace( "KICAD_LIB_WATCH", "Error: %s", error.What() );
+        return;
+    }
+
+    m_watcherFileName.Assign( libfullname, aFootprint->GetFPID().GetLibItemName(),
+                              KiCadFootprintFileExtension );
+
+    if( !m_watcherFileName.FileExists() )
+        return;
+
+    m_watcherLastModified = m_watcherFileName.GetModificationTime();
+
+    Bind( wxEVT_FSWATCHER, &PCB_BASE_FRAME::OnFPChange, this );
+    m_watcher = std::make_unique<wxFileSystemWatcher>();
+    m_watcher->SetOwner( this );
+
+    wxFileName fn;
+    fn.AssignDir( m_watcherFileName.GetPath() );
+    fn.DontFollowLink();
+
+    m_watcher->AddTree( fn );
+}
+
+
+void PCB_BASE_FRAME::OnFPChange( wxFileSystemWatcherEvent& aEvent )
+{
+    if( aEvent.GetPath() != m_watcherFileName.GetFullPath() )
+        return;
+
+    // Start the debounce timer (set to 1 second)
+    if( !m_watcherDebounceTimer.StartOnce( 1000 ) )
+    {
+        wxLogTrace( "KICAD_LIB_WATCH", "Failed to start the debounce timer" );
+        return;
+    }
+}
+
+
+void PCB_BASE_FRAME::OnFpChangeDebounceTimer( wxTimerEvent& aEvent )
+{
+    wxLogTrace( "KICAD_LIB_WATCH", "OnFpChangeDebounceTimer" );
+
+    // Disable logging to avoid spurious messages and check if the file has changed
+    wxLog::EnableLogging( false );
+    wxDateTime lastModified = m_watcherFileName.GetModificationTime();
+    wxLog::EnableLogging( true );
+
+    if( lastModified == m_watcherLastModified || !lastModified.IsValid() )
+        return;
+
+    m_watcherLastModified = lastModified;
+
+    FOOTPRINT* fp = GetBoard()->GetFirstFootprint();
+    FP_LIB_TABLE* tbl = Prj().PcbFootprintLibs();
+
+    if( !fp || !tbl )
+        return;
+
+    if( !GetScreen()->IsContentModified()
+        || IsOK( this, _( "The library containing the current footprint has changed.\n"
+                          "Do you want to reload the footprint?" ) ) )
+    {
+        wxString fpname = fp->GetFPID().GetLibItemName();
+        wxString nickname = fp->GetFPID().GetLibNickname();
+
+        try
+        {
+            FOOTPRINT* newfp = tbl->FootprintLoad( nickname, fpname );
+
+            if( newfp )
+                ReloadFootprint( newfp );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            DisplayError( this, ioe.What() );
+        }
+    }
 }

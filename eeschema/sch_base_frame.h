@@ -35,8 +35,11 @@
 #include <utility>
 #include <vector>
 #include <wx/event.h>
+#include <wx/fswatcher.h>
+#include <wx/datetime.h>
 #include <wx/gdicmn.h>
 #include <wx/string.h>
+#include <wx/timer.h>
 
 #include <template_fieldnames.h>
 
@@ -251,6 +254,16 @@ public:
 
     void ActivateGalCanvas() override;
 
+    /**
+     * Handler for Symbol change events.  Responds to the filesystem watcher set in #setSymWatcher.
+    */
+    void OnSymChange( wxFileSystemWatcherEvent& aEvent );
+
+    /**
+     * Handler for the filesystem watcher debounce timer.
+     */
+    void OnSymChangeDebounceTimer( wxTimerEvent& aEvent );
+
 protected:
     void handleActivateEvent( wxActivateEvent& aEvent ) override;
 
@@ -265,11 +278,24 @@ protected:
      */
     bool saveSymbolLibTables( bool aGlobal, bool aProject );
 
+    /**
+     * Creates (or removes) a watcher on the specified symbol library
+     * @param aSymbol If nullptr, the watcher is removed.  Otherwise, set a change watcher
+     */
+    void setSymWatcher( const LIB_ID* aSymbol );
+
     /// These are only used by symbol_editor.  Eeschema should be using the one inside
     /// the SCHEMATIC.
     SCHEMATIC_SETTINGS  m_base_frame_defaults;
 
 private:
+
+    /// These are file watchers for the symbol library tables.
+    std::unique_ptr<wxFileSystemWatcher>    m_watcher;
+    wxFileName                              m_watcherFileName;
+    wxDateTime                              m_watcherLastModified;
+    wxTimer                                 m_watcherDebounceTimer;
+
     NL_SCHEMATIC_PLUGIN* m_spaceMouse;
 };
 

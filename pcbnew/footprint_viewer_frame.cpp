@@ -68,9 +68,10 @@
 using namespace std::placeholders;
 
 
-#define NEXT_PART       1
 #define NEW_PART        0
-#define PREVIOUS_PART   -1
+#define NEXT_PART       1
+#define PREVIOUS_PART   2
+#define RELOAD_PART     3
 
 
 BEGIN_EVENT_TABLE( FOOTPRINT_VIEWER_FRAME, PCB_BASE_FRAME )
@@ -260,7 +261,10 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
         FOOTPRINT* footprint = loadFootprint( id );
 
         if( footprint )
+        {
             GetBoard()->Add( footprint );
+            setFPWatcher( footprint );
+        }
     }
 
     drawPanel->DisplayBoard( m_pcb );
@@ -361,6 +365,7 @@ FOOTPRINT_VIEWER_FRAME::~FOOTPRINT_VIEWER_FRAME()
     // Be sure any event cannot be fired after frame deletion:
     GetCanvas()->SetEvtHandlerEnabled( false );
     m_fpList->Disconnect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( FOOTPRINT_VIEWER_FRAME::DClickOnFootprintList ), nullptr, this );
+    setFPWatcher( nullptr );
 }
 
 
@@ -753,42 +758,7 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& aEvent )
     if( getCurFootprintName().CmpNoCase( name ) != 0 )
     {
         setCurFootprintName( name );
-
-        // Delete the current footprint (MUST reset tools first)
-        GetToolManager()->ResetTools( TOOL_BASE::MODEL_RELOAD );
-
-        GetBoard()->DeleteAllFootprints();
-        GetBoard()->GetNetInfo().RemoveUnusedNets();
-
-        LIB_ID id;
-        id.SetLibNickname( getCurNickname() );
-        id.SetLibItemName( getCurFootprintName() );
-
-        FOOTPRINT* footprint = nullptr;
-
-        try
-        {
-            footprint = loadFootprint( id );
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            wxString msg = wxString::Format( _( "Could not load footprint '%s' from library '%s'."
-                                             "\n\n%s" ),
-                                             getCurFootprintName(),
-                                             getCurNickname(),
-                                             ioe.Problem() );
-            DisplayError( this, msg );
-        }
-
-        if( footprint )
-            displayFootprint( footprint );
-
-        UpdateTitle();
-
-        updateView();
-
-        GetCanvas()->Refresh();
-        Update3DView( true, true );
+        SelectAndViewFootprint( NEW_PART );
     }
 }
 
@@ -1049,6 +1019,14 @@ void FOOTPRINT_VIEWER_FRAME::OnUpdateFootprintButton( wxUpdateUIEvent& aEvent )
 }
 
 
+void FOOTPRINT_VIEWER_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
+{
+    setCurNickname( aFootprint->GetFPID().GetLibNickname() );
+    setCurFootprintName( aFootprint->GetFPID().GetLibItemName() );
+    SelectAndViewFootprint( RELOAD_PART );
+}
+
+
 void FOOTPRINT_VIEWER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 {
     const std::string& payload = mail.GetPayload();
@@ -1246,6 +1224,9 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
 
         if( footprint )
             displayFootprint( footprint );
+
+        if( aMode != RELOAD_PART )
+            setFPWatcher( footprint );
 
         Update3DView( true, true );
         updateView();
