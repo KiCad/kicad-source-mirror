@@ -73,7 +73,10 @@ const PNS_LOG_FILE::COMMIT_STATE PNS_LOG_PLAYER::GetRouterUpdatedItems()
     //printf("a %d r %d\n", added.size(), removed.size() );
     for( auto item : removed )
     {
-        state.m_removedIds.insert( item->Parent()->m_Uuid );
+        if( item->Parent() )
+        {
+            state.m_removedIds.insert( item->Parent()->m_Uuid );
+        }
     }
 
     for( auto item : added )
