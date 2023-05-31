@@ -754,6 +754,7 @@ bool DRAGGER::Drag( const VECTOR2I& aP )
         if( m_lastNode )
         {
             delete m_lastNode;
+            m_draggedItems.Clear();
             m_lastNode = nullptr;
         }
     }
