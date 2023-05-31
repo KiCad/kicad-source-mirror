@@ -222,6 +222,9 @@ public:
 
     ///< Used to inform tool that it should display the disambiguation menu
     const static TOOL_EVENT DisambiguatePoint;
+
+    ///< Used for hotkey feedback
+    const static TOOL_EVENT GridChangedByKeyEvent;
 };
 
 #endif // __ACTIONS_H

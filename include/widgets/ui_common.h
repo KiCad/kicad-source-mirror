@@ -123,6 +123,8 @@ bool IsModalDialogFocused();
  */
 void Disable( wxWindow* aWindow );
 
+extern const wxString s_FocusStealableInputName;
+
 }
 
 SEVERITY SeverityFromString( const wxString& aSeverity );

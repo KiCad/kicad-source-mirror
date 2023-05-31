@@ -140,6 +140,7 @@ set( COMMON_DLG_SRCS
     dialogs/eda_reorderable_list_dialog_base.cpp
     dialogs/eda_view_switcher.cpp
     dialogs/eda_view_switcher_base.cpp
+    dialogs/hotkey_cycle_popup.cpp
     dialogs/html_message_box.cpp
     dialogs/panel_color_settings_base.cpp
     dialogs/panel_color_settings.cpp

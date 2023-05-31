@@ -29,6 +29,7 @@
 #include <core/arraydim.h>
 #include <core/kicad_algo.h>
 #include <dialog_shim.h>
+#include <dialogs/hotkey_cycle_popup.h>
 #include <eda_draw_frame.h>
 #include <file_history.h>
 #include <id.h>
@@ -113,6 +114,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_msgFrameHeight      = EDA_MSG_PANEL::GetRequiredHeight( this );
     m_polarCoords         = false;
     m_findReplaceData     = std::make_unique<EDA_SEARCH_DATA>();
+    m_hotkeyPopup         = nullptr;
 
     SetUserUnits( EDA_UNITS::MILLIMETRES );
 
@@ -1131,6 +1133,12 @@ void EDA_DRAW_FRAME::ShowChangedLanguage()
     {
         m_searchPane->OnLanguageChange();
     }
+}
+
+
+void EDA_DRAW_FRAME::CreateHotkeyPopup()
+{
+    m_hotkeyPopup = new HOTKEY_CYCLE_POPUP( this );
 }
 
 

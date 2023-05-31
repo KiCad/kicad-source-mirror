@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -32,12 +32,13 @@ class EDA_VIEW_SWITCHER_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		wxStaticText* m_staticText2;
+		wxStaticText* m_stTitle;
 		wxListBox* m_listBox;
 
 	public:
 
 		EDA_VIEW_SWITCHER_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("View Preset Switcher"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxSTAY_ON_TOP );
+
 		~EDA_VIEW_SWITCHER_BASE();
 
 };

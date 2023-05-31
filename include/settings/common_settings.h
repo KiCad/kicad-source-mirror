@@ -85,6 +85,7 @@ public:
         bool immediate_actions;
         bool warp_mouse_on_move;
         bool horizontal_pan;
+        bool hotkey_feedback;
 
         bool zoom_acceleration;
         int  zoom_speed;

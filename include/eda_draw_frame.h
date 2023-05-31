@@ -43,6 +43,7 @@ class TOOL_MENU;
 class APP_SETTINGS_BASE;
 class wxFindReplaceData;
 class SEARCH_PANE;
+class HOTKEY_CYCLE_POPUP;
 
 namespace KIGFX
 {
@@ -452,6 +453,10 @@ public:
      */
     void ShowChangedLanguage() override;
 
+    HOTKEY_CYCLE_POPUP* GetHotkeyPopup() { return m_hotkeyPopup; }
+
+    virtual void CreateHotkeyPopup();
+
     DECLARE_EVENT_TABLE()
 
 protected:
@@ -518,6 +523,8 @@ protected:
 
     COLOR_SETTINGS*    m_colorSettings;
     SEARCH_PANE*       m_searchPane;
+
+    HOTKEY_CYCLE_POPUP* m_hotkeyPopup;
 
     ///< The current canvas type.
     EDA_DRAW_PANEL_GAL::GAL_TYPE    m_canvasType;

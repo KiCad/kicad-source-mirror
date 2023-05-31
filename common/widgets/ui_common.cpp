@@ -38,6 +38,10 @@
 #include <bitmaps/bitmap_types.h>
 #include <string_utils.h>
 
+
+const wxString KIUI::s_FocusStealableInputName = wxS( "KI_NOFOCUS");
+
+
 int KIUI::GetStdMargin()
 {
     // This is the value used in (most) wxFB dialogs
@@ -268,6 +272,10 @@ bool KIUI::IsInputControlFocused( wxWindow* aFocus )
         aFocus = wxWindow::FindFocus();
 
     if( !aFocus )
+        return false;
+
+    // These widgets are never considered focused
+    if( aFocus->GetName() == s_FocusStealableInputName )
         return false;
 
     wxTextEntry*      textEntry = dynamic_cast<wxTextEntry*>( aFocus );

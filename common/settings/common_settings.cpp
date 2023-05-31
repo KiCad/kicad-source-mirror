@@ -248,6 +248,9 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "input.horizontal_pan",
             &m_Input.horizontal_pan, false ) );
 
+    m_params.emplace_back( new PARAM<bool>( "input.hotkey_feedback",
+            &m_Input.hotkey_feedback, true ) );
+
     m_params.emplace_back( new PARAM<bool>( "input.zoom_acceleration",
             &m_Input.zoom_acceleration, false ) );
 

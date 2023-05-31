@@ -85,7 +85,9 @@ public:
     int ToggleGrid( const TOOL_EVENT& aEvent );
     int GridProperties( const TOOL_EVENT& aEvent );
     int GridPreset( int idx );
-    int OnGridChanged();
+    int OnGridChanged( bool aFromHotkey = true );
+
+    const std::vector<VECTOR2I> Grids() const { return m_grids; }
 
 private:
     /**

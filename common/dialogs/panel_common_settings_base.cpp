@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -153,6 +153,11 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_focusFollowSchPcb->SetToolTip( _("If the mouse cursor is moved over the canvas of a schematic or PCB editor window, that window is raised.") );
 
 	bSizer14->Add( m_focusFollowSchPcb, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_hotkeyFeedback = new wxCheckBox( this, wxID_ANY, _("Show popup indicator when toggling settings with hotkeys"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_hotkeyFeedback->SetToolTip( _("When enabled, certain hotkeys that cycle between settings will show a popup indicator briefly to indicate the change in settings.") );
+
+	bSizer14->Add( m_hotkeyFeedback, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
 	bUserInterfaceSizer->Add( bSizer14, 0, wxEXPAND, 5 );

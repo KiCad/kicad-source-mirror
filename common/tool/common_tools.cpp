@@ -75,7 +75,7 @@ void COMMON_TOOLS::Reset( RESET_REASON aReason )
 
     m_grids.emplace_back( KiROUND<double, int>( userGridX ), KiROUND<double, int>( userGridY ) );
 
-    OnGridChanged();
+    OnGridChanged( false );
 }
 
 
@@ -464,7 +464,7 @@ int COMMON_TOOLS::GridPreset( int idx )
 }
 
 
-int COMMON_TOOLS::OnGridChanged()
+int COMMON_TOOLS::OnGridChanged( bool aFromHotkey )
 {
     int& currentGrid = m_toolMgr->GetSettings()->m_Window.grid.last_size_idx;
 
@@ -482,6 +482,10 @@ int COMMON_TOOLS::OnGridChanged()
     // Put cursor on new grid
     VECTOR2D gridCursor = getViewControls()->GetCursorPosition( true );
     getViewControls()->SetCrossHairCursorPosition( gridCursor, false );
+
+    // Show feedback
+    if( aFromHotkey )
+        m_toolMgr->PostEvent( EVENTS::GridChangedByKeyEvent );
 
     return 0;
 }

@@ -32,6 +32,7 @@
 #include <dialogs/dialog_symbol_remap.h>
 #include <dialogs/dialog_assign_netclass.h>
 #include <dialogs/dialog_update_from_pcb.h>
+#include <dialogs/hotkey_cycle_popup.h>
 #include <project_rescue.h>
 #include <erc.h>
 #include <invoke_sch_dialog.h>
@@ -39,6 +40,7 @@
 #include <kiway.h>
 #include <netlist_exporters/netlist_exporter_spice.h>
 #include <paths.h>
+#include <pgm_base.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include <sch_edit_frame.h>
@@ -53,11 +55,14 @@
 #include <sch_view.h>
 #include <schematic.h>
 #include <sch_commit.h>
+#include <advanced_config.h>
+#include <settings/common_settings.h>
 #include <sim/simulator_frame.h>
 #include <sim/spice_generator.h>
 #include <sim/sim_lib_mgr.h>
 #include <symbol_library_manager.h>
 #include <symbol_viewer_frame.h>
+#include <tool/common_tools.h>
 #include <tool/picker_tool.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
@@ -2347,6 +2352,31 @@ int SCH_EDITOR_CONTROL::RepairSchematic( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDITOR_CONTROL::GridFeedback( const TOOL_EVENT& aEvent )
+{
+    if( !Pgm().GetCommonSettings()->m_Input.hotkey_feedback )
+        return 0;
+
+    const std::vector<VECTOR2I>& grids = m_toolMgr->GetTool<COMMON_TOOLS>()->Grids();
+    int currentIdx = m_toolMgr->GetSettings()->m_Window.grid.last_size_idx;
+
+    wxArrayString gridsLabels;
+
+    for( const VECTOR2I& grid : grids )
+        gridsLabels.Add( m_frame->StringFromValue( grid.x, true ) );
+
+    if( !m_frame->GetHotkeyPopup() )
+        m_frame->CreateHotkeyPopup();
+
+    HOTKEY_CYCLE_POPUP* popup = m_frame->GetHotkeyPopup();
+
+    if( popup )
+        popup->Popup( _( "Grid" ), gridsLabels, currentIdx );
+
+    return 0;
+}
+
+
 void SCH_EDITOR_CONTROL::setTransitions()
 {
     Go( &SCH_EDITOR_CONTROL::New,                   ACTIONS::doNew.MakeEvent() );
@@ -2388,6 +2418,8 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::Paste,                 ACTIONS::paste.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Paste,                 ACTIONS::pasteSpecial.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Duplicate,             ACTIONS::duplicate.MakeEvent() );
+
+    Go( &SCH_EDITOR_CONTROL::GridFeedback,          EVENTS::GridChangedByKeyEvent );
 
     Go( &SCH_EDITOR_CONTROL::EditWithSymbolEditor,  EE_ACTIONS::editWithLibEdit.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::EditWithSymbolEditor,  EE_ACTIONS::editLibSymbolWithLibEdit.MakeEvent() );

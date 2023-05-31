@@ -298,6 +298,7 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
     commonSettings->m_Appearance.hicontrast_dimming_factor = dimmingPercent / 100.0f;
 
     commonSettings->m_Input.focus_follow_sch_pcb = m_focusFollowSchPcb->GetValue();
+    commonSettings->m_Input.hotkey_feedback      = m_hotkeyFeedback->GetValue();
     commonSettings->m_Input.immediate_actions    = !m_NonImmediateActions->GetValue();
     commonSettings->m_Input.warp_mouse_on_move   = m_warpMouseOnMove->GetValue();
 
@@ -391,6 +392,7 @@ void PANEL_COMMON_SETTINGS::applySettingsToPanel( COMMON_SETTINGS& aSettings )
     m_highContrastCtrl->SetValue( wxString::Format( "%.0f", dimmingPercent ) );
 
     m_focusFollowSchPcb->SetValue( aSettings.m_Input.focus_follow_sch_pcb );
+    m_hotkeyFeedback->SetValue( aSettings.m_Input.hotkey_feedback );
     m_warpMouseOnMove->SetValue( aSettings.m_Input.warp_mouse_on_move );
     m_NonImmediateActions->SetValue( !aSettings.m_Input.immediate_actions );
 
