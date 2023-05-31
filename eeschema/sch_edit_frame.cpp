@@ -611,18 +611,6 @@ void SCH_EDIT_FRAME::setupUIConditions()
                 return m_toolManager->GetTool<SCH_NAVIGATE_TOOL>()->CanGoUp();
             };
 
-    auto navHistoryHasForward =
-            [this]( const SELECTION& aSel )
-            {
-                return m_toolManager->GetTool<SCH_NAVIGATE_TOOL>()->CanGoForward();
-            };
-
-    auto navHistoryHasBackward =
-            [this]( const SELECTION& aSel )
-            {
-                return m_toolManager->GetTool<SCH_NAVIGATE_TOOL>()->CanGoBack();
-            };
-
     auto navSchematicHasPreviousSheet =
             [this]( const SELECTION& aSel )
             {
@@ -636,9 +624,15 @@ void SCH_EDIT_FRAME::setupUIConditions()
             };
 
     mgr->SetConditions( EE_ACTIONS::leaveSheet,            ENABLE( belowRootSheetCondition ) );
+
+    /* Some of these are bound by default to arrow keys which will get a different action if we
+     * disable the buttons.  So always leave them enabled so the action is consistent.
+     * https://gitlab.com/kicad/code/kicad/-/issues/14783
     mgr->SetConditions( EE_ACTIONS::navigateUp,            ENABLE( belowRootSheetCondition ) );
     mgr->SetConditions( EE_ACTIONS::navigateForward,       ENABLE( navHistoryHasForward ) );
-    mgr->SetConditions( EE_ACTIONS::navigateBack,          ENABLE( navHistoryHasBackward ) );
+    mgr->SetConditions( EE_ACTIONS::navigateBack,          ENABLE( navHistoryHsBackward ) );
+     */
+
     mgr->SetConditions( EE_ACTIONS::navigatePrevious,      ENABLE( navSchematicHasPreviousSheet ) );
     mgr->SetConditions( EE_ACTIONS::navigateNext,          ENABLE( navSchematicHasNextSheet ) );
     mgr->SetConditions( EE_ACTIONS::remapSymbols,          ENABLE( remapSymbolsCondition ) );

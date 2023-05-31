@@ -47,6 +47,7 @@ void SCH_NAVIGATE_TOOL::CleanHistory()
     // Search through our history, and removing any entries
     // that the no longer point to a sheet on the schematic
     auto entry = m_navHistory.begin();
+
     while( entry != m_navHistory.end() )
     {
         if( std::find( sheets.begin(), sheets.end(), *entry ) != sheets.end() )
@@ -111,6 +112,10 @@ int SCH_NAVIGATE_TOOL::Forward( const TOOL_EVENT& aEvent )
         m_frame->SetCurrentSheet( *m_navIndex );
         m_frame->DisplayCurrentSheet();
     }
+    else
+    {
+        wxBell();
+    }
 
     return 0;
 }
@@ -128,6 +133,10 @@ int SCH_NAVIGATE_TOOL::Back( const TOOL_EVENT& aEvent )
         m_frame->SetCurrentSheet( *m_navIndex );
         m_frame->DisplayCurrentSheet();
     }
+    else
+    {
+        wxBell();
+    }
 
     return 0;
 }
@@ -136,8 +145,14 @@ int SCH_NAVIGATE_TOOL::Back( const TOOL_EVENT& aEvent )
 int SCH_NAVIGATE_TOOL::Previous( const TOOL_EVENT& aEvent )
 {
     if( CanGoPrevious() )
-        changeSheet( m_frame->Schematic().GetSheets().at(
-                m_frame->GetCurrentSheet().GetVirtualPageNumber() - 2 ) );
+    {
+        int targetSheet = m_frame->GetCurrentSheet().GetVirtualPageNumber() - 1;
+        changeSheet( m_frame->Schematic().GetSheets().at( targetSheet - 1 ) );
+    }
+    else
+    {
+        wxBell();
+    }
 
     return 0;
 }
@@ -146,8 +161,14 @@ int SCH_NAVIGATE_TOOL::Previous( const TOOL_EVENT& aEvent )
 int SCH_NAVIGATE_TOOL::Next( const TOOL_EVENT& aEvent )
 {
     if( CanGoNext() )
-        changeSheet( m_frame->Schematic().GetSheets().at(
-                m_frame->GetCurrentSheet().GetVirtualPageNumber() ) );
+    {
+        int targetSheet = m_frame->GetCurrentSheet().GetVirtualPageNumber() + 1;
+        changeSheet( m_frame->Schematic().GetSheets().at( targetSheet - 1 ) );
+    }
+    else
+    {
+        wxBell();
+    }
 
     return 0;
 }
@@ -220,6 +241,10 @@ int SCH_NAVIGATE_TOOL::LeaveSheet( const TOOL_EVENT& aEvent )
         popped.pop_back();
 
         changeSheet( popped );
+    }
+    else
+    {
+        wxBell();
     }
 
     return 0;
