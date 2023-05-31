@@ -30,7 +30,7 @@
 #ifndef GERBER_JOBFILE_WRITER_H
 #define GERBER_JOBFILE_WRITER_H
 
-#include <nlohmann/json_fwd.hpp>
+#include <nlohmann/json.hpp>
 
 
 // A helper enum to handle sides of some layers (silk, mask)

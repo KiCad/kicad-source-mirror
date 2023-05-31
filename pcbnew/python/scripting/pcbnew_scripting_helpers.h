@@ -25,8 +25,14 @@
 #ifndef __PCBNEW_SCRIPTING_HELPERS_H
 #define __PCBNEW_SCRIPTING_HELPERS_H
 
-#include <pcb_edit_frame.h>
+#include <deque>
 #include <io_mgr.h>
+
+class PCB_EDIT_FRAME;
+class BOARD;
+class SETTINGS_MANAGER;
+class BOARD_ITEM;
+enum class EDA_UNITS;
 
 /* we could be including all these methods as static in a class, but
  * we want plain pcbnew.<method_name> access from python
