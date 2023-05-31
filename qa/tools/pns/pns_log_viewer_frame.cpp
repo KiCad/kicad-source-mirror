@@ -31,6 +31,7 @@
 #include <profile.h>
 #include <trace_helpers.h>
 #include <view/view_overlay.h>
+#include <view/view_controls.h>
 
 
 #include "label_manager.h"
@@ -170,6 +171,7 @@ PNS_LOG_VIEWER_FRAME::PNS_LOG_VIEWER_FRAME( wxFrame* frame ) : PNS_LOG_VIEWER_FR
 
     m_overlay.reset( new PNS_LOG_VIEWER_OVERLAY ( m_galPanel->GetGAL() ) );
     m_galPanel->GetView()->Add( m_overlay.get() );
+    m_galPanel->GetViewControls()->EnableCursorWarping(false);
 }
 
 
