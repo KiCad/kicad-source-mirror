@@ -103,6 +103,7 @@ void ROUTER::ClearWorld()
 {
     if( m_world )
     {
+        m_world->SetRuleResolver( nullptr );
         m_world->KillChildren();
         m_world.reset();
     }
@@ -727,9 +728,11 @@ void ROUTER::updateView( NODE* aNode, ITEM_SET& aCurrent, bool aDragging )
 
     aNode->GetUpdatedItems( removed, added );
 
+    std::vector<const PNS::ITEM*> cacheCheckItems( added.begin(), added.end() );
+    GetRuleResolver()->ClearCacheForItems( cacheCheckItems );
+
     for( ITEM* item : added )
     {
-        GetRuleResolver()->ClearCacheForItem( item );
         int clearance = GetRuleResolver()->Clearance( item, nullptr );
         m_iface->DisplayItem( item, clearance, aDragging );
     }

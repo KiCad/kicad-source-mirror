@@ -124,7 +124,7 @@ public:
 
     int ClearanceEpsilon() const override { return m_clearanceEpsilon; }
 
-    void ClearCacheForItem( const PNS::ITEM* aItem ) override;
+    void ClearCacheForItems( std::vector<const PNS::ITEM*>& aItems ) override;
     void ClearCaches() override;
 
 private:
@@ -417,13 +417,30 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
 }
 
 
-void PNS_PCBNEW_RULE_RESOLVER::ClearCacheForItem( const PNS::ITEM* aItem )
+void PNS_PCBNEW_RULE_RESOLVER::ClearCacheForItems( std::vector<const PNS::ITEM*>& aItems )
 {
-    CLEARANCE_CACHE_KEY key = { aItem, nullptr, false };
-    m_clearanceCache.erase( key );
+    int n_pruned = 0;
+    std::set<const PNS::ITEM*> remainingItems( aItems.begin(), aItems.end() );
 
-    key.Flag = true;
-    m_clearanceCache.erase( key );
+/* We need to carefully check both A and B item pointers in the cache against dirty/invalidated
+   items in the set, as the clearance relation is commutative ( CL[a,b] == CL[b,a] ). The code
+   below is a bit ugly, but works in O(n*log(m)) and is run once or twice during ROUTER::Move() call
+   - so I hope it still gets better performance than no cache at all */
+    for( auto it = m_clearanceCache.begin(); it != m_clearanceCache.end(); )
+    {
+        bool dirty = remainingItems.find( it->first.A ) != remainingItems.end();
+        dirty |= remainingItems.find( it->first.B) != remainingItems.end();
+
+        if( dirty )
+        {
+            it = m_clearanceCache.erase( it );
+            n_pruned++;
+        } else
+            it++;
+    }
+#if 0
+    printf("ClearCache : n_pruned %d\n", n_pruned );
+#endif
 }
 
 
@@ -499,7 +516,15 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
     if( aUseClearanceEpsilon && rv > 0 )
         rv = std::max( 0, rv - m_clearanceEpsilon );
 
-    m_clearanceCache[ key ] = rv;
+
+/* It makes no sense to put items that have no owning NODE in the cache - they can be allocated on stack
+   and we can't really invalidate them in the cache when they are destroyed. Probably a better idea would be
+   to use a static unique counter in PNS::ITEM constructor to generate the cache keys. */
+    if( aA && aB && aA->Owner() && aB->Owner() )
+    {
+        m_clearanceCache[ key ] = rv;
+    }
+
     return rv;
 }
 
