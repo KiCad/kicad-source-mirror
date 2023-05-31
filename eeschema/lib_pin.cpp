@@ -1319,9 +1319,13 @@ const BOX2I LIB_PIN::GetBoundingBox( bool aIncludeInvisiblePins, bool aIncludeNa
         // pin name is above pin line
         // pin number is below line
         begin.y = std::max( minsizeV, nameTextHeight + PIN_TEXT_OFFSET );
-        begin.x = std::min( -typeTextLength, m_length - ( numberTextLength / 2) );
+        begin.x = -typeTextLength;
+        begin.x = std::min( begin.x, ( m_length - numberTextLength ) / 2 );
+        begin.x = std::min( begin.x, ( m_length - nameTextLength ) / 2 );
 
-        end.x = std::max( m_length, nameTextLength );
+        end.x = m_length;
+        end.x = std::max( end.x, ( m_length + nameTextLength ) / 2 );
+        end.x = std::max( end.x, ( m_length + numberTextLength ) / 2 );
         end.y = std::min( -minsizeV, -numberTextHeight - PIN_TEXT_OFFSET );
     }
 
