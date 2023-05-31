@@ -163,7 +163,7 @@ TOOL_ACTION ACTIONS::paste( "common.Interactive.paste",
         AS_GLOBAL,
         MD_CTRL + 'V', LEGACY_HK_NAME( "Paste" ),
         _( "Paste" ), _( "Paste item(s) from clipboard" ),
-        BITMAPS::paste, AF_NONE/*, (void*) wxID_PASTE*/ );
+        BITMAPS::paste, AF_NONE, (void*) wxID_PASTE );
 
 TOOL_ACTION ACTIONS::selectAll( "common.Interactive.selectAll",
         AS_GLOBAL,
