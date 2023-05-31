@@ -253,9 +253,9 @@ public:
 
     void SetSize( const VECTOR2I& aSize )       { m_size = aSize; SetDirty(); }
     const VECTOR2I& GetSize() const             { return m_size; }
-    void SetSizeX( const int aX )               { m_size.x = aX; SetDirty(); }
+    void SetSizeX( const int aX )               { if( aX > 0 ) { m_size.x = aX; SetDirty(); } }
     int GetSizeX() const                        { return m_size.x; }
-    void SetSizeY( const int aY )               { m_size.y = aY; SetDirty(); }
+    void SetSizeY( const int aY )               { if( aY > 0 ) { m_size.y = aY; SetDirty(); } }
     int GetSizeY() const                        { return m_size.y; }
 
     void SetDelta( const VECTOR2I& aSize )      { m_deltaSize = aSize; SetDirty(); }
