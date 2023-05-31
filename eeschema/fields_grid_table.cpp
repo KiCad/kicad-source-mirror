@@ -331,22 +331,22 @@ wxString FIELDS_GRID_TABLE<T>::GetColLabelValue( int aCol )
 {
     switch( aCol )
     {
-    case FDC_NAME:         return _( "Name" );
-    case FDC_VALUE:        return _( "Value" );
-    case FDC_SHOWN:        return _( "Show" );
-    case FDC_SHOW_NAME:    return _( "Show Name" );
-    case FDC_H_ALIGN:      return _( "H Align" );
-    case FDC_V_ALIGN:      return _( "V Align" );
-    case FDC_ITALIC:       return _( "Italic" );
-    case FDC_BOLD:         return _( "Bold" );
-    case FDC_TEXT_SIZE:    return _( "Text Size" );
-    case FDC_ORIENTATION:  return _( "Orientation" );
-    case FDC_POSX:         return _( "X Position" );
-    case FDC_POSY:         return _( "Y Position" );
-    case FDC_FONT:         return _( "Font" );
-    case FDC_COLOR:        return _( "Color" );
+    case FDC_NAME:            return _( "Name" );
+    case FDC_VALUE:           return _( "Value" );
+    case FDC_SHOWN:           return _( "Show" );
+    case FDC_SHOW_NAME:       return _( "Show Name" );
+    case FDC_H_ALIGN:         return _( "H Align" );
+    case FDC_V_ALIGN:         return _( "V Align" );
+    case FDC_ITALIC:          return _( "Italic" );
+    case FDC_BOLD:            return _( "Bold" );
+    case FDC_TEXT_SIZE:       return _( "Text Size" );
+    case FDC_ORIENTATION:     return _( "Orientation" );
+    case FDC_POSX:            return _( "X Position" );
+    case FDC_POSY:            return _( "Y Position" );
+    case FDC_FONT:            return _( "Font" );
+    case FDC_COLOR:           return _( "Color" );
     case FDC_ALLOW_AUTOPLACE: return _( "Allow Autoplacement" );
-    default:               wxFAIL; return wxEmptyString;
+    default:      wxFAIL;     return wxEmptyString;
     }
 }
 
