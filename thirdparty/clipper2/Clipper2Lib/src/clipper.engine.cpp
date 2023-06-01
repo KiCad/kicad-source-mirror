@@ -1,6 +1,6 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Date      :  23 April 2023                                                   *
+* Date      :  20 May 2023                                                     *
 * Website   :  http://www.angusj.com                                           *
 * Copyright :  Angus Johnson 2010-2023                                         *
 * Purpose   :  This is the main polygon clipping module                        *
@@ -419,7 +419,6 @@ namespace Clipper2Lib {
     return outrec;
   }
 
-
   inline void UncoupleOutRec(Active ae)
   {
     OutRec* outrec = ae.outrec;
@@ -482,6 +481,156 @@ namespace Clipper2Lib {
     while (tmp && tmp != outrec) tmp = tmp->owner;
     if (tmp) new_owner->owner = outrec->owner;
     outrec->owner = new_owner;
+  }
+
+  //------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------
+
+  void AddLocMin(LocalMinimaList& list,
+    Vertex& vert, PathType polytype, bool is_open)
+  {
+    //make sure the vertex is added only once ...
+    if ((VertexFlags::LocalMin & vert.flags) != VertexFlags::None) return;
+
+    vert.flags = (vert.flags | VertexFlags::LocalMin);
+    list.push_back(std::make_unique <LocalMinima>(&vert, polytype, is_open));
+  }
+
+  void AddPaths_(const Paths64& paths, PathType polytype, bool is_open, 
+    std::vector<Vertex*>& vertexLists, LocalMinimaList& locMinList)
+  {
+    const auto total_vertex_count =
+      std::accumulate(paths.begin(), paths.end(), 0,
+        [](const auto& a, const Path64& path)
+        {return a + static_cast<unsigned>(path.size()); });
+    if (total_vertex_count == 0) return;
+
+    Vertex* vertices = new Vertex[total_vertex_count], * v = vertices;
+    for (const Path64& path : paths)
+    {
+      //for each path create a circular double linked list of vertices
+      Vertex* v0 = v, * curr_v = v, * prev_v = nullptr;
+
+      if (path.empty())
+        continue;
+
+      v->prev = nullptr;
+      int cnt = 0;
+      for (const Point64& pt : path)
+      {
+        if (prev_v)
+        {
+          if (prev_v->pt == pt) continue; // ie skips duplicates
+          prev_v->next = curr_v;
+        }
+        curr_v->prev = prev_v;
+        curr_v->pt = pt;
+        curr_v->flags = VertexFlags::None;
+        prev_v = curr_v++;
+        cnt++;
+      }
+      if (!prev_v || !prev_v->prev) continue;
+      if (!is_open && prev_v->pt == v0->pt)
+        prev_v = prev_v->prev;
+      prev_v->next = v0;
+      v0->prev = prev_v;
+      v = curr_v; // ie get ready for next path
+      if (cnt < 2 || (cnt == 2 && !is_open)) continue;
+
+      //now find and assign local minima
+      bool going_up, going_up0;
+      if (is_open)
+      {
+        curr_v = v0->next;
+        while (curr_v != v0 && curr_v->pt.y == v0->pt.y)
+          curr_v = curr_v->next;
+        going_up = curr_v->pt.y <= v0->pt.y;
+        if (going_up)
+        {
+          v0->flags = VertexFlags::OpenStart;
+          AddLocMin(locMinList , *v0, polytype, true);
+        }
+        else
+          v0->flags = VertexFlags::OpenStart | VertexFlags::LocalMax;
+      }
+      else // closed path
+      {
+        prev_v = v0->prev;
+        while (prev_v != v0 && prev_v->pt.y == v0->pt.y)
+          prev_v = prev_v->prev;
+        if (prev_v == v0)
+          continue; // only open paths can be completely flat
+        going_up = prev_v->pt.y > v0->pt.y;
+      }
+
+      going_up0 = going_up;
+      prev_v = v0;
+      curr_v = v0->next;
+      while (curr_v != v0)
+      {
+        if (curr_v->pt.y > prev_v->pt.y && going_up)
+        {
+          prev_v->flags = (prev_v->flags | VertexFlags::LocalMax);
+          going_up = false;
+        }
+        else if (curr_v->pt.y < prev_v->pt.y && !going_up)
+        {
+          going_up = true;
+          AddLocMin(locMinList, *prev_v, polytype, is_open);
+        }
+        prev_v = curr_v;
+        curr_v = curr_v->next;
+      }
+
+      if (is_open)
+      {
+        prev_v->flags = prev_v->flags | VertexFlags::OpenEnd;
+        if (going_up)
+          prev_v->flags = prev_v->flags | VertexFlags::LocalMax;
+        else
+          AddLocMin(locMinList, *prev_v, polytype, is_open);
+      }
+      else if (going_up != going_up0)
+      {
+        if (going_up0) AddLocMin(locMinList, *prev_v, polytype, false);
+        else prev_v->flags = prev_v->flags | VertexFlags::LocalMax;
+      }
+    } // end processing current path
+
+    vertexLists.emplace_back(vertices);
+  }
+
+
+
+  //------------------------------------------------------------------------------
+  // ReuseableDataContainer64 methods ...
+  //------------------------------------------------------------------------------
+
+  void ReuseableDataContainer64::AddLocMin(Vertex& vert, PathType polytype, bool is_open)
+  {
+    //make sure the vertex is added only once ...
+    if ((VertexFlags::LocalMin & vert.flags) != VertexFlags::None) return;
+
+    vert.flags = (vert.flags | VertexFlags::LocalMin);
+    minima_list_.push_back(std::make_unique <LocalMinima>(&vert, polytype, is_open));
+  }
+
+  void ReuseableDataContainer64::AddPaths(const Paths64& paths,
+    PathType polytype, bool is_open)
+  {
+    AddPaths_(paths, polytype, is_open, vertex_lists_, minima_list_);
+  }
+
+  ReuseableDataContainer64::~ReuseableDataContainer64()
+  {
+    Clear();
+  }
+
+  void ReuseableDataContainer64::Clear()
+  {
+    minima_list_.clear();
+    for (auto v : vertex_lists_) delete[] v;
+    vertex_lists_.clear();
   }
 
   //------------------------------------------------------------------------------
@@ -576,113 +725,26 @@ namespace Clipper2Lib {
     AddPaths(tmp, polytype, is_open);
   }
 
-
   void ClipperBase::AddPaths(const Paths64& paths, PathType polytype, bool is_open)
   {
     if (is_open) has_open_paths_ = true;
     minima_list_sorted_ = false;
+    AddPaths_(paths, polytype, is_open, vertex_lists_, minima_list_);
+  } 
 
-    const auto total_vertex_count =
-      std::accumulate(paths.begin(), paths.end(), 0, 
-        [](const auto& a, const Path64& path) 
-        {return a + static_cast<unsigned>(path.size());});
-    if (total_vertex_count == 0) return;
-
-    Vertex* vertices = new Vertex[total_vertex_count], * v = vertices;
-    for (const Path64& path : paths)
+  void ClipperBase::AddReuseableData(const ReuseableDataContainer64& reuseable_data) 
+  {
+    // nb: reuseable_data will continue to own the vertices 
+    // and remains responsible for their clean up.
+    succeeded_ = false;
+    minima_list_sorted_ = false;
+    LocalMinimaList::const_iterator i;
+    for (i = reuseable_data.minima_list_.cbegin(); i != reuseable_data.minima_list_.cend(); ++i)
     {
-      //for each path create a circular double linked list of vertices
-      Vertex* v0 = v, * curr_v = v, * prev_v = nullptr;
-
-      if (path.empty())
-        continue;
-
-      v->prev = nullptr;
-      int cnt = 0;
-      for (const Point64& pt : path)
-      {
-        if (prev_v)
-        {
-          if (prev_v->pt == pt) continue; // ie skips duplicates
-          prev_v->next = curr_v;
-        }
-        curr_v->prev = prev_v;
-        curr_v->pt = pt;
-        curr_v->flags = VertexFlags::None;
-        prev_v = curr_v++;
-        cnt++;
-      }
-      if (!prev_v || !prev_v->prev) continue;
-      if (!is_open && prev_v->pt == v0->pt)
-        prev_v = prev_v->prev;
-      prev_v->next = v0;
-      v0->prev = prev_v;
-      v = curr_v; // ie get ready for next path
-      if (cnt < 2 || (cnt == 2 && !is_open)) continue;
-
-      //now find and assign local minima
-      bool going_up, going_up0;
-      if (is_open)
-      {
-        curr_v = v0->next;
-        while (curr_v != v0 && curr_v->pt.y == v0->pt.y)
-          curr_v = curr_v->next;
-        going_up = curr_v->pt.y <= v0->pt.y;
-        if (going_up)
-        {
-          v0->flags = VertexFlags::OpenStart;
-          AddLocMin(*v0, polytype, true);
-        }
-        else
-          v0->flags = VertexFlags::OpenStart | VertexFlags::LocalMax;
-      }
-      else // closed path
-      {
-        prev_v = v0->prev;
-        while (prev_v != v0 && prev_v->pt.y == v0->pt.y)
-          prev_v = prev_v->prev;
-        if (prev_v == v0)
-          continue; // only open paths can be completely flat
-        going_up = prev_v->pt.y > v0->pt.y;
-      }
-
-      going_up0 = going_up;
-      prev_v = v0;
-      curr_v = v0->next;
-      while (curr_v != v0)
-      {
-        if (curr_v->pt.y > prev_v->pt.y && going_up)
-        {
-          prev_v->flags = (prev_v->flags | VertexFlags::LocalMax);
-          going_up = false;
-        }
-        else if (curr_v->pt.y < prev_v->pt.y && !going_up)
-        {
-          going_up = true;
-          AddLocMin(*prev_v, polytype, is_open);
-        }
-        prev_v = curr_v;
-        curr_v = curr_v->next;
-      }
-
-      if (is_open)
-      {
-        prev_v->flags = prev_v->flags | VertexFlags::OpenEnd;
-        if (going_up)
-          prev_v->flags = prev_v->flags | VertexFlags::LocalMax;
-        else
-          AddLocMin(*prev_v, polytype, is_open);
-      }
-      else if (going_up != going_up0)
-      {
-        if (going_up0) AddLocMin(*prev_v, polytype, false);
-        else prev_v->flags = prev_v->flags | VertexFlags::LocalMax;
-      }
-    } // end processing current path
-
-    vertex_lists_.emplace_back(vertices);
-  } // end AddPaths
-
+      minima_list_.push_back(std::make_unique <LocalMinima>((*i)->vertex, (*i)->polytype, (*i)->is_open));
+      if ((*i)->is_open) has_open_paths_ = true;
+    }
+  }
 
   void ClipperBase::InsertScanline(int64_t y)
   {
@@ -1315,6 +1377,7 @@ namespace Clipper2Lib {
     result->owner = nullptr;
     result->polypath = nullptr;
     result->is_open = false;
+    result->splits = nullptr;
     return result;
   }
 
@@ -1596,17 +1659,14 @@ namespace Clipper2Lib {
       default: if (std::abs(edge_c->wind_cnt) != 1) return nullptr; break;
       }
 
+      OutPt* resultOp;
       //toggle contribution ...
       if (IsHotEdge(*edge_o))
       {
-        OutPt* resultOp = AddOutPt(*edge_o, pt);
-#ifdef USINGZ
-        if (zCallback_) SetZ(e1, e2, resultOp->pt);
-#endif
+        resultOp = AddOutPt(*edge_o, pt);
         if (IsFront(*edge_o)) edge_o->outrec->front_edge = nullptr;
         else edge_o->outrec->back_edge = nullptr;
         edge_o->outrec = nullptr;
-        return resultOp;
       }
 
       //horizontal edges can pass under open paths at a LocMins
@@ -1626,11 +1686,16 @@ namespace Clipper2Lib {
           return e3->outrec->pts;
         }
         else
-          return StartOpenPath(*edge_o, pt);
+          resultOp = StartOpenPath(*edge_o, pt);
       }
       else
-        return StartOpenPath(*edge_o, pt);
-    }
+        resultOp = StartOpenPath(*edge_o, pt);
+
+#ifdef USINGZ
+      if (zCallback_) SetZ(*edge_o, *edge_c, resultOp->pt);
+#endif
+      return resultOp;
+    } // end of an open path intersection
 
     //MANAGING CLOSED PATHS FROM HERE ON
 
@@ -2111,7 +2176,7 @@ namespace Clipper2Lib {
 
       if (or1 == or2)
       {
-        or2 = new OutRec(); 
+        or2 = NewOutRec();
         or2->pts = op1b;
         FixOutRecPts(or2);
         if (or1->pts->outrec == or2)
@@ -2123,7 +2188,11 @@ namespace Clipper2Lib {
         if (using_polytree_)
         {
           if (Path1InsidePath2(or2->pts, or1->pts))
+          {
             SetOwner(or2, or1);
+            if (!or1->splits) or1->splits = new OutRecList();
+            or1->splits->push_back(or2); //(#520)
+          }
           else if (Path1InsidePath2(or1->pts, or2->pts))
             SetOwner(or1, or2);
           else
@@ -2135,8 +2204,6 @@ namespace Clipper2Lib {
         }
         else
           or2->owner = or1;
-
-        outrec_list_.push_back(or2);
       }
       else
       {
@@ -2763,14 +2830,13 @@ namespace Clipper2Lib {
     return true;
   }
 
-  bool ClipperBase::CheckSplitOwner(OutRec* outrec)
+  bool ClipperBase::CheckSplitOwner(OutRec* outrec, OutRecList* splits)
   {
-    for (auto s : *outrec->owner->splits)
+    for (auto split : *splits)
     {
-      OutRec* split = GetRealOutRec(s);
-      if (split && split != outrec &&
-        split != outrec->owner && CheckBounds(split) &&
-        split->bounds.Contains(outrec->bounds) &&
+      if(split == outrec || split == outrec->owner) continue;
+      else if (split->splits && CheckSplitOwner(outrec, split->splits)) return true;
+      else if (CheckBounds(split) && split->bounds.Contains(outrec->bounds) &&
         Path1InsidePath2(outrec->pts, split->pts))
       {
         outrec->owner = split; //found in split
@@ -2789,7 +2855,7 @@ namespace Clipper2Lib {
 
     while (outrec->owner)
     {
-      if (outrec->owner->splits && CheckSplitOwner(outrec)) break;
+      if (outrec->owner->splits && CheckSplitOwner(outrec, outrec->owner->splits)) break;
       if (outrec->owner->pts && CheckBounds(outrec->owner) &&
         outrec->owner->bounds.Contains(outrec->bounds) &&
         Path1InsidePath2(outrec->pts, outrec->owner->pts)) break;
