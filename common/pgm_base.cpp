@@ -897,7 +897,7 @@ void PGM_BASE::HandleException( std::exception_ptr aPtr )
     catch( const std::exception& e )
     {
 #ifdef KICAD_USE_SENTRY
-        if( Pgm().IsSentryOptedIn() )
+        if( IsSentryOptedIn() )
         {
             sentry_value_t exc = sentry_value_new_exception( "exception", e.what() );
             sentry_value_set_stacktrace( exc, NULL, 0 );
@@ -937,7 +937,7 @@ void PGM_BASE::HandleAssert( const wxString& aFile, int aLine, const wxString& a
     wxLogError( assertStr );
 
 #ifdef KICAD_USE_SENTRY
-    if( Pgm().IsSentryOptedIn() )
+    if( IsSentryOptedIn() )
     {
         sentry_value_t exc = sentry_value_new_exception( "assert", assertStr );
         sentry_value_set_stacktrace( exc, NULL, 0 );
