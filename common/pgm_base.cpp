@@ -916,3 +916,35 @@ void PGM_BASE::HandleException( std::exception_ptr aPtr )
         wxLogError( wxT( "Unhandled exception of unknown type" ) );
     }
 }
+
+
+void PGM_BASE::HandleAssert( const wxString& aFile, int aLine, const wxString& aFunc,
+                             const wxString& aCond, const wxString& aMsg )
+{
+    wxString assertStr;
+    // Log the assertion details to standard log
+    if( !aMsg.empty() )
+    {
+        assertStr = wxString::Format( "Assertion failed at %s:%d in %s: %s - %s", aFile, aLine,
+                                      aFunc, aCond, aMsg );
+    }
+    else
+    {
+        assertStr = wxString::Format( "Assertion failed at %s:%d in %s: %s", aFile, aLine, aFunc,
+                                      aCond );
+    }
+
+    wxLogError( assertStr );
+
+#ifdef KICAD_USE_SENTRY
+    if( Pgm().IsSentryOptedIn() )
+    {
+        sentry_value_t exc = sentry_value_new_exception( "assert", assertStr );
+        sentry_value_set_stacktrace( exc, NULL, 0 );
+
+        sentry_value_t sentryEvent = sentry_value_new_event();
+        sentry_event_add_exception( sentryEvent, exc );
+        sentry_capture_event( sentryEvent );
+    }
+#endif
+}

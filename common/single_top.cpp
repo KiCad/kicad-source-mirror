@@ -140,17 +140,7 @@ void CustomAssertHandler(const wxString& file,
                          const wxString& cond,
                          const wxString& msg)
 {
-    // Log the assertion details to standard log
-    if (!msg.empty())
-    {
-        wxLogError( "Assertion failed at %s:%d in %s: %s - %s",
-                    file, line, func, cond, msg);
-    }
-    else
-    {
-        wxLogError( "Assertion failed at %s:%d in %s: %s",
-                    file, line, func, cond);
-    }
+    Pgm().HandleAssert( file, line, func, cond, msg );
 }
 
 /**

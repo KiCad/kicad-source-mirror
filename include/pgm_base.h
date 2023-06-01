@@ -323,13 +323,27 @@ public:
 #endif
 
     /**
-     * A excepion handler to be used at the top level if exceptions bubble up that for
+     * A exception handler to be used at the top level if exceptions bubble up that for
      *
      * The purpose is to have a central place to log a wxWidgets error message and/or sentry report
      *
      * @param aPtr Pass the std::current_exception() from within the catch block
      */
     void HandleException( std::exception_ptr aPtr );
+
+    /**
+     * A common assert handler to be used between single_top and kicad
+     *
+     * This lets us have a common set of assert handling, including triggering sentry reports
+     *
+     * @param aFile the file path of the assert
+     * @param aLine the line number of the assert
+     * @param aFunc the function name the assert is within
+     * @param aCond the condition of the assert
+     * @param aMsg the attached assert message (can be empty)
+     */
+    void HandleAssert( const wxString& aFile, int aLine, const wxString& aFunc,
+                       const wxString& aCond, const wxString& aMsg );
 
     /**
      * Determine if the application is running with a GUI
