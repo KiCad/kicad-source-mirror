@@ -61,6 +61,7 @@ class DIALOG_SCH_FIND;
 class wxFindReplaceData;
 class RESCUER;
 class HIERARCHY_PANE;
+class NET_NAVIGATOR_ITEM_DATA;
 
 // @todo Move this to transform alone with all of the transform manipulation code.
 /// enum used in RotationMiroir()
@@ -865,7 +866,8 @@ public:
 
     void RefreshNetNavigator();
 
-    void MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemId aParentId );
+    void MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemId aParentId,
+                               const NET_NAVIGATOR_ITEM_DATA* aSelection = nullptr );
 
     void ToggleNetNavigator();
 

@@ -33,20 +33,20 @@
 class NET_NAVIGATOR_ITEM_DATA : public wxTreeItemData
 {
 public:
-    NET_NAVIGATOR_ITEM_DATA( const SCH_SHEET_PATH& aSheetPath, const VECTOR2I& aItemCenterPos ) :
+    NET_NAVIGATOR_ITEM_DATA( const SCH_SHEET_PATH& aSheetPath, const SCH_ITEM* aItem ) :
         m_sheetPath( aSheetPath ),
-        m_itemCenterPos( aItemCenterPos )
+        m_item( aItem )
     {
     }
 
     NET_NAVIGATOR_ITEM_DATA() {}
 
     SCH_SHEET_PATH& GetSheetPath() { return m_sheetPath; }
-    VECTOR2I& GetItemCenterPos() { return m_itemCenterPos; }
+    const SCH_ITEM* GetItem() const { return m_item; }
 
     bool operator==( const NET_NAVIGATOR_ITEM_DATA& aRhs ) const
     {
-        return ( m_sheetPath == aRhs.m_sheetPath ) && ( m_itemCenterPos == aRhs.m_itemCenterPos );
+        return ( m_sheetPath == aRhs.m_sheetPath ) && ( m_item == aRhs.m_item );
     }
 
     NET_NAVIGATOR_ITEM_DATA& operator=( const NET_NAVIGATOR_ITEM_DATA& aItemData )
@@ -55,23 +55,25 @@ public:
             return *this;
 
         m_sheetPath = aItemData.m_sheetPath;
-        m_itemCenterPos = aItemData.m_itemCenterPos;
+        m_item = aItemData.m_item;
 
         return *this;
     }
 
 private:
     SCH_SHEET_PATH m_sheetPath;
-    VECTOR2I m_itemCenterPos;
+    const SCH_ITEM* m_item;
 };
 
 
-void SCH_EDIT_FRAME::MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemId aParentId )
+void SCH_EDIT_FRAME::MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemId aParentId,
+                                           const NET_NAVIGATOR_ITEM_DATA* aSelection )
 {
     wxCHECK( !aNetName.IsEmpty(), /* void */ );
     wxCHECK( m_schematic, /* void */ );
     wxCHECK( m_netNavigator, /* void */ );
 
+    wxTreeItemId expandId = aParentId;
     CONNECTION_GRAPH* connectionGraph = m_schematic->ConnectionGraph();
 
     wxCHECK( connectionGraph, /* void */ );
@@ -82,20 +84,42 @@ void SCH_EDIT_FRAME::MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemI
 
     for( const CONNECTION_SUBGRAPH* subGraph : subgraphs )
     {
+        NET_NAVIGATOR_ITEM_DATA* itemData = nullptr;
         SCH_SHEET_PATH sheetPath = subGraph->GetSheet();
 
-        // if( subgraphs.size() > 1 )
-            sheetPathPrefix = _( "Sheet: " ) + sheetPath.PathHumanReadable() + wxS( ", " );
+        wxCHECK2( sheetPath.Last(), continue );
+
+        itemData = new NET_NAVIGATOR_ITEM_DATA( sheetPath, nullptr );
+
+        bool stripTrailingSeparator = !sheetPath.Last()->IsRootSheet();
+        wxString txt =  sheetPath.PathHumanReadable( true, stripTrailingSeparator );
+        wxTreeItemId sheetId = m_netNavigator->AppendItem( aParentId, txt, -1, -1, itemData );
+
+        if( aSelection && *aSelection == *itemData )
+            m_netNavigator->SelectItem( sheetId );
+
+        // If there is only one sheet in the schematic, always expand the sheet tree.
+        if( Schematic().GetSheets().size() == 1 )
+            expandId = sheetId;
 
         for( const SCH_ITEM* item : subGraph->GetItems() )
         {
-            VECTOR2I itemCenterPos = item->GetBoundingBox().Centre();
-            m_netNavigator->AppendItem( aParentId,
-                                        sheetPathPrefix + item->GetItemDescription( this ),
-                                        -1, -1,
-                                        new NET_NAVIGATOR_ITEM_DATA( sheetPath, itemCenterPos ) );
+            itemData = new NET_NAVIGATOR_ITEM_DATA( sheetPath, item );
+            wxTreeItemId id = m_netNavigator->AppendItem( sheetId, item->GetItemDescription( this ),
+                                                          -1, -1, itemData );
+
+            if( aSelection && *aSelection == *itemData )
+            {
+                expandId = sheetId;
+                m_netNavigator->SelectItem( id );
+            }
         }
     }
+
+    if( expandId != m_netNavigator->GetRootItem() )
+        m_netNavigator->Expand( aParentId );
+
+    m_netNavigator->Expand( expandId );
 }
 
 
@@ -123,59 +147,20 @@ void SCH_EDIT_FRAME::RefreshNetNavigator()
             wxTreeItemId rootId = m_netNavigator->AddRoot( m_highlightedConn, 0 );
 
             MakeNetNavigatorNode( m_highlightedConn, rootId );
-            m_netNavigator->Expand( rootId );
         }
         else
         {
-            // If it's the same net, we have to manually check to make sure the net has
-            // not changed.  This is an ugly hack because we have no way to track a
-            // single connection object change in the connection graph code.
-            wxTreeItemData* treeItemData = nullptr;
-            NET_NAVIGATOR_ITEM_DATA* tmp = nullptr;
-            wxTreeItemId selectedId = m_netNavigator->GetSelection();
+            NET_NAVIGATOR_ITEM_DATA* itemData = nullptr;
 
-            wxString selectedText;
-            NET_NAVIGATOR_ITEM_DATA selectedItemData;
+            wxTreeItemId selection = m_netNavigator->GetSelection();
 
-            if( ( selectedId != m_netNavigator->GetRootItem() ) && selectedId.IsOk() )
-            {
-                selectedText = m_netNavigator->GetItemText( selectedId );
-
-                treeItemData = m_netNavigator->GetItemData( selectedId );
-                tmp = static_cast<NET_NAVIGATOR_ITEM_DATA*>( treeItemData );
-
-                if( tmp )
-                    selectedItemData = *tmp;
-            }
+            if( selection.IsOk() )
+                itemData = dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>( m_netNavigator->GetItemData( selection ) );
 
             m_netNavigator->DeleteAllItems();
             wxTreeItemId rootId = m_netNavigator->AddRoot( m_highlightedConn, 0 );
 
-            MakeNetNavigatorNode( m_highlightedConn, rootId );
-            m_netNavigator->Expand( rootId );
-
-            if( ( selectedId != m_netNavigator->GetRootItem() ) && !selectedText.IsEmpty() )
-            {
-                wxTreeItemIdValue cookie;
-
-                wxTreeItemId id = m_netNavigator->GetFirstChild( rootId, cookie );
-
-                while( id.IsOk() )
-                {
-                    wxString treeItemText = m_netNavigator->GetItemText( id );
-                    treeItemData = m_netNavigator->GetItemData( id );
-                    tmp = static_cast<NET_NAVIGATOR_ITEM_DATA*>( treeItemData );
-
-                    if( ( treeItemText == selectedText )
-                      && ( tmp && ( *tmp == selectedItemData ) ) )
-                    {
-                        m_netNavigator->SetFocusedItem( id );
-                        break;
-                    }
-
-                    id = m_netNavigator->GetNextChild( rootId, cookie );
-                }
-            }
+            MakeNetNavigatorNode( m_highlightedConn, rootId, itemData );
         }
     }
     else
@@ -183,7 +168,6 @@ void SCH_EDIT_FRAME::RefreshNetNavigator()
         wxTreeItemId rootId = m_netNavigator->AddRoot( m_highlightedConn, 0 );
 
         MakeNetNavigatorNode( m_highlightedConn, rootId );
-        m_netNavigator->Expand( rootId );
     }
 }
 
@@ -205,13 +189,17 @@ void SCH_EDIT_FRAME::onNetNavigatorSelection( wxTreeEvent& aEvent )
 
     if( GetCurrentSheet() != itemData->GetSheetPath() )
     {
-        // GetToolManager()->RunAction( ACTIONS::cancelInteractive, true );
-        // GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
         Schematic().SetCurrentSheet( itemData->GetSheetPath() );
         DisplayCurrentSheet();
     }
 
-    FocusOnLocation( itemData->GetItemCenterPos() );
+    // Do not focus on item when a sheet tree node is selected.
+    if( m_netNavigator->GetItemParent( id ) != m_netNavigator->GetRootItem()
+      && itemData->GetItem() )
+    {
+        FocusOnLocation( itemData->GetItem()->GetBoundingBox().Centre() );
+    }
+
     GetCanvas()->Refresh();
 }
 
