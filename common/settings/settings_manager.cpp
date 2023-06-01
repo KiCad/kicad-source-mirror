@@ -894,7 +894,7 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
     bool readOnly = false;
     LOCKFILE lockFile( fullPath );
 
-    if( !lockFile )
+    if( !lockFile.Valid() )
     {
         wxLogTrace( traceSettings, wxT( "Project %s is locked; opening read-only" ), fullPath );
         readOnly = true;
