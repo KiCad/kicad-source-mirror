@@ -66,6 +66,20 @@ public:
         m_orientation = aSolid.m_orientation;
     }
 
+    SOLID& operator=( const SOLID& aB )
+    {
+        if( aB.m_shape )
+            SetShape( aB.m_shape->Clone() );
+
+        if( aB.m_hole )
+            SetHole( new PNS::HOLE( aB.m_hole->Shape()->Clone() ) );
+
+        m_pos = aB.m_pos;
+        m_padToDie = aB.m_padToDie;
+        m_orientation = aB.m_orientation;
+        return *this;
+    }
+
     static inline bool ClassOf( const ITEM* aItem )
     {
         return aItem && SOLID_T == aItem->Kind();
