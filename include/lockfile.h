@@ -105,7 +105,7 @@ public:
             }
             else
             {
-                throw;
+                throw std::runtime_error( "Failed to open lock file" );
             }
         }
         catch( std::exception& e )
