@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-18 11:55-0700\n"
-"PO-Revision-Date: 2023-05-30 16:50+0000\n"
+"PO-Revision-Date: 2023-06-03 06:51+0000\n"
 "Last-Translator: Bas Wijnen <wijnen@debian.org>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
 "master-source/nl/>\n"
@@ -7907,9 +7907,8 @@ msgid "Selection"
 msgstr "Selectie"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:51
-#, fuzzy
 msgid "Recurse into subsheets"
-msgstr "de huidige layout?"
+msgstr "Annoteer onderliggende bladen recursief mee"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:58
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:27
@@ -8862,15 +8861,14 @@ msgid "Run external simulator command:"
 msgstr "Externe simulatoropdracht:"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:315
-#, fuzzy
 msgid ""
 "Enter the command line to run SPICE\n"
 "Usually '<path to SPICE binary> \"%I\"'\n"
 "%I will be replaced by the netlist filepath"
 msgstr ""
 "Voer de opdrachtregel in om spice uit te voeren\n"
-"Meestal <path to spice binary>% I\n"
-"% I zal worden vervangen door de eigenlijke naam van de netlijst van kruiden"
+"Meestal <pad naar spice-programma>% I\n"
+"%I zal worden vervangen door de bestandsnaam van de netlijst"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:388
 msgid "Netlist command:"
@@ -8906,9 +8904,8 @@ msgid "external simulator has the wrong format or architecture"
 msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:587
-#, fuzzy
 msgid "permission denied"
-msgstr "Toestemmingsfout?"
+msgstr "niet toegestaan"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:723
 msgid "This plugin already exists."
@@ -11356,7 +11353,7 @@ msgstr "Voorbijgaand"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:444
 msgid "Spice directives:"
-msgstr "Specerijen richtlijnen:"
+msgstr "Spice-richtlijnen:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:453
 msgid "Load directives from schematic"
@@ -11708,9 +11705,9 @@ msgid "Rename Field"
 msgstr "Hernoem Bestand"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:688
-#, fuzzy, c-format
+#, c-format
 msgid "Field name %s already exists. Cannot rename over existing field."
-msgstr "Bestand '%s' bestaat al. Wilt u dit bestand overschrijven?"
+msgstr "Bestandsnaam %s bestaat al. Kan het bestaande veld niet hernoemen."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:775
 #, fuzzy
@@ -16254,9 +16251,8 @@ msgid "Invalid C_pkg value."
 msgstr "Ongeldige eigenschap-waarde"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:186
-#, fuzzy
 msgid "Checking pin "
-msgstr "Pinnen controleren ..."
+msgstr "Pin controleren "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:193
 #, fuzzy
@@ -16289,9 +16285,8 @@ msgid "Cpin is not valid."
 msgstr "Footprint-ID '%s' is niet geldig."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:247
-#, fuzzy
 msgid "Checking component "
-msgstr "Zones controleren"
+msgstr "Component controleren "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:254
 #, fuzzy
@@ -16346,9 +16341,8 @@ msgid "Model name cannot be empty"
 msgstr "Netnaam mag niet leeg zijn."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:475
-#, fuzzy
 msgid "Checking model "
-msgstr "Zones controleren"
+msgstr "Model controleren "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:482
 #, fuzzy
@@ -16454,9 +16448,8 @@ msgid "Package model name cannot be empty."
 msgstr "Netnaam mag niet leeg zijn."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:678
-#, fuzzy
 msgid "Checking package model "
-msgstr "De gaten in de remblokjes controleren ..."
+msgstr "Pakketmodel controleren "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:685
 #, fuzzy
@@ -16514,19 +16507,16 @@ msgid "Inductance matrix is nullptr."
 msgstr "Inductie per lengte-eenheid"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:808
-#, fuzzy
 msgid "Cannot open file "
-msgstr "Kan het bestand '%s' niet openen"
+msgstr "Kan het bestand niet openen "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:832
-#, fuzzy
 msgid "Unexpected end of file. Missing [END] ?"
-msgstr "Onverwacht bestands-einde."
+msgstr "Onverwacht bestands-einde. [END] ontbreekt?"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:844
-#, fuzzy
 msgid "Error on line "
-msgstr "Fout bij initialiseren van printer info"
+msgstr "Fout op regel "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:872
 #, fuzzy
@@ -16574,9 +16564,8 @@ msgid "No extra argument was expected"
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1364
-#, fuzzy
 msgid "Unknown keyword in "
-msgstr "Onbekend Record-id: %d."
+msgstr "Onbekend sleutelwoord in "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1364
 msgid " context: "
@@ -16642,9 +16631,8 @@ msgid "Typ-Min-Max Values requires at least Typ."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1970
-#, fuzzy
 msgid "Unknown Model_type "
-msgstr "Onbekende methode"
+msgstr "Onbekend Model_type "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1977
 #, fuzzy
@@ -16652,9 +16640,8 @@ msgid "Internal Error while reading model_type"
 msgstr "%d fouten tijdens lezen van Gerber bestand [%s]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1992
-#, fuzzy
 msgid "Unknown Enable: "
-msgstr "Onbekende PCad-laag %u"
+msgstr "Onbekende Enable: "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1999
 #: eeschema/sim/kibis/ibis_parser.cpp:2021
@@ -16663,9 +16650,8 @@ msgid "Internal Error while reading Enable"
 msgstr "%d fouten tijdens lezen van Gerber bestand [%s]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2014
-#, fuzzy
 msgid "Unknown polarity "
-msgstr "Transformeer primitief"
+msgstr "Onbekende polariteit "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2051
 msgid "Continued reading a model that did not begin. ( internal error )"
@@ -17113,7 +17099,7 @@ msgstr "Cursor"
 
 #: eeschema/sim/simulator_frame.cpp:772 eeschema/sim/simulator_frame_base.h:88
 msgid "Spice Simulator"
-msgstr "Kruidensimulator"
+msgstr "Spice simulator"
 
 #: eeschema/sim/simulator_frame.cpp:990
 msgid "Simulator requires a fully annotated schematic."
@@ -17168,9 +17154,8 @@ msgid "Error: simulation type doesn't support plotting.\n"
 msgstr "Fout: simulatietype ondersteunt plotten niet!\n"
 
 #: eeschema/sim/simulator_frame.cpp:2590
-#, fuzzy
 msgid "Save changes to workbook?"
-msgstr "Opslaan huidige bord"
+msgstr "Wijzigingen opslaan in werkboek?"
 
 #: eeschema/sim/simulator_frame.cpp:2948
 msgid ""
@@ -17218,7 +17203,7 @@ msgstr "ONBEKEND!"
 
 #: eeschema/sim/spice_value.cpp:70
 msgid "Spice value cannot be empty"
-msgstr "Kruidenwaarde mag niet leeg zijn"
+msgstr "Spice-waarde mag niet leeg zijn"
 
 #: eeschema/sim/spice_value.cpp:75
 msgid "Invalid Spice value string"
@@ -19012,9 +18997,8 @@ msgid "Toggle display of hidden text fields"
 msgstr "Schakel de weergave van verborgen tekstvelden in"
 
 #: eeschema/tools/ee_actions.cpp:772
-#, fuzzy
 msgid "Show Directive Labels"
-msgstr "Richtlijn-label"
+msgstr "Toon richtlijn-labels"
 
 #: eeschema/tools/ee_actions.cpp:772
 #, fuzzy
@@ -19453,15 +19437,13 @@ msgstr "Schema-bestand is 'alleen-lezen'."
 
 #: eeschema/tools/ee_inspection_tool.cpp:279
 #: pcbnew/tools/board_inspection_tool.cpp:1430
-#, fuzzy
 msgid "Library: "
-msgstr "Bibliotheek:"
+msgstr "Bibliotheek: "
 
 #: eeschema/tools/ee_inspection_tool.cpp:280
 #: pcbnew/tools/board_inspection_tool.cpp:1431
-#, fuzzy
 msgid "Library item: "
-msgstr "Bibliotheek Bestanden:"
+msgstr "Bibliotheekonderdeel: "
 
 #: eeschema/tools/ee_inspection_tool.cpp:290
 #: pcbnew/tools/board_inspection_tool.cpp:1449
@@ -21251,9 +21233,8 @@ msgstr ""
 #: kicad/cli/command_export_pcb_pdf.cpp:78
 #: kicad/cli/command_export_pcb_pos.cpp:101
 #: kicad/cli/command_export_pcb_svg.cpp:88
-#, fuzzy
 msgid "Board file does not exist or is not accessible\n"
-msgstr "Schema '%s' bestaat niet. Wilt u deze aanmaken?"
+msgstr "Bordbestand bestaat niet, of kan niet geopend worden\n"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:50
 #: kicad/cli/command_export_pcb_pdf.cpp:49
@@ -21438,9 +21419,8 @@ msgstr "Schets tekeningblad"
 #: kicad/cli/command_export_sch_netlist.cpp:50
 #: kicad/cli/command_export_sch_plot.cpp:94
 #: kicad/cli/command_export_sch_pythonbom.cpp:47
-#, fuzzy
 msgid "Schematic file does not exist or is not accessible\n"
-msgstr "Schema '%s' bestaat niet. Wilt u deze aanmaken?"
+msgstr "Schema bestaat niet, of kan niet geopend worden\n"
 
 #: kicad/cli/command_export_sch_netlist.cpp:36
 msgid ""
@@ -21504,9 +21484,8 @@ msgid "Include hidden fields"
 msgstr "Zoek verborgen velden"
 
 #: kicad/cli/command_sym_export_svg.cpp:76 kicad/cli/command_sym_upgrade.cpp:53
-#, fuzzy
 msgid "Symbol file does not exist or is not accessible\n"
-msgstr "Schema '%s' bestaat niet. Wilt u deze aanmaken?"
+msgstr "Symboolbestand bestaat niet, of kan niet geopend worden\n"
 
 #: kicad/cli/command_sym_upgrade.cpp:37
 msgid "Forces the symbol library to be resaved regardless of versioning"
@@ -22082,9 +22061,8 @@ msgid "Library package handling"
 msgstr "Bibliotheekwijzigingen worden niet opgeslagen"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:53
-#, fuzzy
 msgid "Automatically add installed libraries to global lib table"
-msgstr "De bibliotheek toevoegen aan de globale bibliotheektabel?"
+msgstr "Geïnstalleerde bibliotheken automatisch aan de globale bibliotheektabel"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:57
 #, fuzzy
@@ -22279,12 +22257,13 @@ msgid "Archive metadata must have a single version defined"
 msgstr "Archive metadata moet een enkele versie hebben"
 
 #: kicad/pcm/pcm_task_manager.cpp:395
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Package with identifier %s is already installed. Would you like to update it "
 "to the version from selected file?"
 msgstr ""
-"Pakket met id %s is al geïnstalleerd, je moet dat pakket eerst verwijderen."
+"Pakket met id %s is al geïnstalleerd. Wil je het bijwerken naar de versie "
+"van het geselecteerde bestand?"
 
 #: kicad/pcm/pcm_task_manager.cpp:398
 #, fuzzy
@@ -28448,7 +28427,7 @@ msgid "Solder paste relative clearance:"
 msgstr "Relatieve vrije afstand voor soldeerpasta:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:320
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -28459,13 +28438,13 @@ msgid ""
 "clearance value.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"Dit is de vrije afstand in procenten tussen de pads en de soldeerpasta voor "
-"deze footprint.\n"
-"Een waarde van 10 betekent dat de vrije afstand 10 procent van de padgrootte "
-"is.\n"
+"Dit is de vrije afstand in procenten van de pad breedte en hoogte voor deze "
+"footprint.\n"
+"Een waarde van 10 betekent dat de horizontale vrije afstand 10 procent van "
+"de padbreedte is en de verticale vrije afstand 10% van de padhoogte.\n"
 "Deze waarde kan worden vervangen door een lokale padwaarde.\n"
-"De uiteindelijke vrije afstand is de som van deze waarde en de vrije "
-"afstand.\n"
+"De uiteindelijke vrije afstand is de som van deze waarde en de absolute "
+"vrije afstand.\n"
 "Een negatieve waarde betekent een kleinere maskergrootte dan de padgrootte."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:343
@@ -28625,7 +28604,7 @@ msgstr ""
 "het tabblad lokale vrije afstand en instellingen van de Pad-eigenschappen."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:291
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -28637,12 +28616,12 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local Clearance "
 "and Settings tab of Pad Properties."
 msgstr ""
-"Dit is de vrije afstand in procenten van de padbreedte en -hoogte voor deze "
-"footprint.\n"
+"Dit is de lokale vrije afstand in procenten van de padbreedte en -hoogte "
+"voor deze footprint.\n"
 "Een waarde van 10 betekent dat de horizontale vrije afstand 10% van de pad-"
-"breedte is en de vertikale vrije afstand 10% van de pad-hoogte.\n"
-"De uiteindelijke vrije afstand is de som van deze waarde en de vrije "
-"afstand.\n"
+"breedte is en de verticale vrije afstand 10% van de pad-hoogte.\n"
+"De uiteindelijke vrije afstand is de som van deze waarde en de absolute "
+"vrije afstand.\n"
 "Een negatieve waarde betekent een kleinere maskergrootte dan de padgrootte.\n"
 "Deze waarde kan per pad worden overschreven in het tabblad lokale vrije "
 "afstand en instellingen van de pad-eigenschappen."
@@ -34584,9 +34563,9 @@ msgid "%s keep out pads setting differs."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "%s keep out tracks setting differs."
-msgstr "Verwijder &sporen die verschillende netten verbinden"
+msgstr "%s instelling voor sporen vermijden is ongelijk."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:374
 #, c-format
@@ -34679,32 +34658,28 @@ msgid "%s corners differ."
 msgstr "Pad Kop."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:440
-#, fuzzy
 msgid "3D model scale doesn't match: "
-msgstr "Zoekpad voor 3D-model"
+msgstr "Schaal van 3D-model is ongelijk: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:441
 msgid "3D model rotation doesn't match: "
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:442
-#, fuzzy
 msgid "3D model offset doesn't match: "
-msgstr "Padnet komt niet overeen met het schema"
+msgstr "Offset van 3D-model is ongelijk: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:443
 msgid "3D model opacity doesn't match: "
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:444
-#, fuzzy
 msgid "3D model doesn't match: "
-msgstr "Zoekpad voor 3D-model"
+msgstr "3D-model is ongelijk: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:445
-#, fuzzy
 msgid "3D model visibility doesn't match: "
-msgstr "Zichtbaarheid van 3D-modellen"
+msgstr "Zichtbaarheid van 3D-model is ongelijk: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:484
 #, fuzzy
@@ -41972,9 +41947,8 @@ msgid "Resolved clearance"
 msgstr "Opgeloste vrije afstand: %s."
 
 #: pcbnew/tools/pcb_control.cpp:1375
-#, fuzzy
 msgid "Actual clearance"
-msgstr "Net pad ruimte "
+msgstr "Daadwerkelijke vrije ruimte"
 
 #: pcbnew/tools/pcb_control.cpp:1418
 #, fuzzy
