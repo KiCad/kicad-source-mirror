@@ -103,6 +103,23 @@ public:
             delete m_hole;
     }
 
+    VIA& operator=( const VIA& aB )
+    {
+        SetNet( aB.Net() );
+        SetLayers( aB.Layers() );
+        m_pos = aB.m_pos;
+        m_diameter = aB.m_diameter;
+        m_shape = SHAPE_CIRCLE( m_pos, m_diameter / 2 );
+        m_drill = aB.m_drill;
+        SetHole( HOLE::MakeCircularHole( m_pos, m_drill / 2 ) );
+        m_marker = aB.m_marker;
+        m_rank = aB.m_rank;
+        m_viaType = aB.m_viaType;
+        m_isFree = aB.m_isFree;
+        m_isVirtual = aB.m_isVirtual;
+        return *this;
+    }
+
     static inline bool ClassOf( const ITEM* aItem )
     {
         return aItem && VIA_T == aItem->Kind();
