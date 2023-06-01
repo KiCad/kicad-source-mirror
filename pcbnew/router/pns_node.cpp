@@ -518,11 +518,8 @@ void NODE::addHole( HOLE* aHole )
     // do we need holes in the connection graph?
     //linkJoint( aHole->Pos(), aHole->Layers(), aHole->Net(), aHole );
 
-    HOLE* hole = new HOLE( aHole->Shape()->Clone() );
-    hole->SetLayers( aHole->Layers() );
-
-    hole->SetOwner( this );
-    m_index->Add( hole );
+    aHole->SetOwner( this );
+    m_index->Add( aHole );
 }
 
 
