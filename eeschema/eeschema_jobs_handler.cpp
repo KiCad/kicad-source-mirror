@@ -502,6 +502,7 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
                 if( convert == 2 )
                     filename += wxS( "_demorgan" );
 
+                fn.SetName( filename );
                 wxPrintf( _( "Plotting symbol '%s' to '%s'\n" ), symbol->GetName(), fn.GetFullPath() );
             }
 
