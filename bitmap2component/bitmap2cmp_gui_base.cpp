@@ -13,6 +13,12 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
+	m_menubar = new wxMenuBar( 0 );
+	m_menu1 = new wxMenu();
+	m_menubar->Append( m_menu1, _("dummy") );
+
+	this->SetMenuBar( m_menubar );
+
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxHORIZONTAL );
 

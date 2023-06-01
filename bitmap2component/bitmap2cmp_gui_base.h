@@ -11,12 +11,13 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 #include "kiway_player.h"
-#include <wx/scrolwin.h>
+#include <wx/string.h>
+#include <wx/menu.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/string.h>
+#include <wx/scrolwin.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
@@ -45,6 +46,8 @@ class BM2CMP_FRAME_BASE : public KIWAY_PLAYER
 	private:
 
 	protected:
+		wxMenuBar* m_menubar;
+		wxMenu* m_menu1;
 		wxNotebook* m_Notebook;
 		wxScrolledWindow* m_InitialPicturePanel;
 		wxScrolledWindow* m_GreyscalePicturePanel;
