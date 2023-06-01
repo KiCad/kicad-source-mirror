@@ -428,7 +428,7 @@ namespace Clipper2Lib
   }
 
   template <typename T1, typename T2>
-  inline Path<T1> ScalePath(const Path<T2>& path, 
+  inline Path<T1> ScalePath(const Path<T2>& path,
     double scale, int& error_code)
   {
     return ScalePath<T1, T2>(path, scale, scale, error_code);

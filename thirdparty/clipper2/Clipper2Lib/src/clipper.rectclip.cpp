@@ -1,6 +1,6 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Date      :  22 April 2023                                                   *
+* Date      :  30 May 2023                                                     *
 * Website   :  http://www.angusj.com                                           *
 * Copyright :  Angus Johnson 2010-2023                                         *
 * Purpose   :  FAST rectangular clipping                                       *
@@ -281,7 +281,7 @@ namespace Clipper2Lib {
   // RectClip64
   //----------------------------------------------------------------------------
 
-  OutPt2* RectClip::Add(Point64 pt, bool start_new)
+  OutPt2* RectClip64::Add(Point64 pt, bool start_new)
   {
     // this method is only called by InternalExecute.
     // Later splitting & rejoining won't create additional op's,
@@ -312,7 +312,7 @@ namespace Clipper2Lib {
     return result;
   }
 
-  void RectClip::AddCorner(Location prev, Location curr)
+  void RectClip64::AddCorner(Location prev, Location curr)
   {
     if (HeadingClockwise(prev, curr))
       Add(rect_as_path_[static_cast<int>(prev)]);
@@ -320,7 +320,7 @@ namespace Clipper2Lib {
       Add(rect_as_path_[static_cast<int>(curr)]);
   }
 
-  void RectClip::AddCorner(Location& loc, bool isClockwise)
+  void RectClip64::AddCorner(Location& loc, bool isClockwise)
   {
     if (isClockwise)
     {
@@ -334,7 +334,7 @@ namespace Clipper2Lib {
     }
   }
 
-  void RectClip::GetNextLocation(const Path64& path,
+  void RectClip64::GetNextLocation(const Path64& path,
     Location& loc, int& i, int highI)
   {
     switch (loc)
@@ -389,7 +389,7 @@ namespace Clipper2Lib {
     } //switch          
   }
 
-  void RectClip::ExecuteInternal(const Path64& path)
+  void RectClip64::ExecuteInternal(const Path64& path)
   {
     int i = 0, highI = static_cast<int>(path.size()) - 1;
     Location prev = Location::Inside, loc;
@@ -546,7 +546,7 @@ namespace Clipper2Lib {
     }
   }
 
-  void RectClip::CheckEdges()
+  void RectClip64::CheckEdges()
   {
     for (size_t i = 0; i < results_.size(); ++i)
     {
@@ -606,7 +606,7 @@ namespace Clipper2Lib {
     }
   }
 
-  void RectClip::TidyEdges(int idx, OutPt2List& cw, OutPt2List& ccw)
+  void RectClip64::TidyEdges(int idx, OutPt2List& cw, OutPt2List& ccw)
   {
     if (ccw.empty()) return;
     bool isHorz = ((idx == 1) || (idx == 3));
@@ -784,7 +784,7 @@ namespace Clipper2Lib {
     }
   }
 
-  Path64 RectClip::GetPath(OutPt2*& op)
+  Path64 RectClip64::GetPath(OutPt2*& op)
   {
     if (!op || op->next == op->prev) return Path64();
 
@@ -814,7 +814,7 @@ namespace Clipper2Lib {
     return result;
   }
 
-  Paths64 RectClip::Execute(const Paths64& paths, bool convex_only)
+  Paths64 RectClip64::Execute(const Paths64& paths)
   {
     Paths64 result;
     if (rect_.IsEmpty()) return result;
@@ -833,13 +833,10 @@ namespace Clipper2Lib {
       }
 
       ExecuteInternal(path);
-      if (!convex_only)
-      {
-        CheckEdges();
-        for (int i = 0; i < 4; ++i)
-          TidyEdges(i, edges_[i * 2], edges_[i * 2 + 1]);
-      }
-
+      CheckEdges();
+      for (int i = 0; i < 4; ++i)
+        TidyEdges(i, edges_[i * 2], edges_[i * 2 + 1]);
+  
       for (OutPt2*& op :  results_)
       {
         Path64 tmp = GetPath(op);
@@ -857,10 +854,10 @@ namespace Clipper2Lib {
   }
 
   //------------------------------------------------------------------------------
-  // RectClipLines
+  // RectClipLines64
   //------------------------------------------------------------------------------
 
-  Paths64 RectClipLines::Execute(const Paths64& paths)
+  Paths64 RectClipLines64::Execute(const Paths64& paths)
   {
     Paths64 result;
     if (rect_.IsEmpty()) return result;
@@ -886,7 +883,7 @@ namespace Clipper2Lib {
     return result;
   }
 
-  void RectClipLines::ExecuteInternal(const Path64& path)
+  void RectClipLines64::ExecuteInternal(const Path64& path)
   {
     if (rect_.IsEmpty() || path.size() < 2) return;
 
@@ -956,7 +953,7 @@ namespace Clipper2Lib {
     ///////////////////////////////////////////////////
   }
 
-  Path64 RectClipLines::GetPath(OutPt2*& op)
+  Path64 RectClipLines64::GetPath(OutPt2*& op)
   {
     Path64 result;
     if (!op || op == op->next) return result;

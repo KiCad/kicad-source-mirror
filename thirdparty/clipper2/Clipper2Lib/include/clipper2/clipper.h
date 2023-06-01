@@ -1,6 +1,6 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Date      :  21 April 2023                                                   *
+* Date      :  26 May 2023                                                     *
 * Website   :  http://www.angusj.com                                           *
 * Copyright :  Angus Johnson 2010-2023                                         *
 * Purpose   :  This module provides a simple interface to the Clipper Library  *
@@ -161,60 +161,61 @@ namespace Clipper2Lib {
     return ScalePaths<double, int64_t>(solution, 1 / scale, error_code);
   }
 
-  inline Path64 TranslatePath(const Path64& path, int64_t dx, int64_t dy)
+  template <typename T>
+  inline Path<T> TranslatePath(const Path<T>& path, T dx, T dy)
   {
-    Path64 result;
+    Path<T> result;
     result.reserve(path.size());
     std::transform(path.begin(), path.end(), back_inserter(result),
-      [dx, dy](const auto& pt) { return Point64(pt.x + dx, pt.y +dy); });
+      [dx, dy](const auto& pt) { return Point<T>(pt.x + dx, pt.y +dy); });
     return result;
+  }
+
+  inline Path64 TranslatePath(const Path64& path, int64_t dx, int64_t dy)
+  {
+    return TranslatePath<int64_t>(path, dx, dy);
   }
 
   inline PathD TranslatePath(const PathD& path, double dx, double dy)
   {
-    PathD result;
-    result.reserve(path.size());
-    std::transform(path.begin(), path.end(), back_inserter(result),
-      [dx, dy](const auto& pt) { return PointD(pt.x + dx, pt.y + dy); });
+    return TranslatePath<double>(path, dx, dy);
+  }
+
+  template <typename T>
+  inline Paths<T> TranslatePaths(const Paths<T>& paths, T dx, T dy)
+  {
+    Paths<T> result;
+    result.reserve(paths.size());
+    std::transform(paths.begin(), paths.end(), back_inserter(result),
+      [dx, dy](const auto& path) { return TranslatePath(path, dx, dy); });
     return result;
   }
 
   inline Paths64 TranslatePaths(const Paths64& paths, int64_t dx, int64_t dy)
   {
-    Paths64 result;
-    result.reserve(paths.size());
-    std::transform(paths.begin(), paths.end(), back_inserter(result),
-      [dx, dy](const auto& path) { return TranslatePath(path, dx, dy); });
-    return result;
+    return TranslatePaths<int64_t>(paths, dx, dy);
   }
 
   inline PathsD TranslatePaths(const PathsD& paths, double dx, double dy)
   {
-    PathsD result;
-    result.reserve(paths.size());
-    std::transform(paths.begin(), paths.end(), back_inserter(result),
-      [dx, dy](const auto& path) { return TranslatePath(path, dx, dy); });
-    return result;
+    return TranslatePaths<double>(paths, dx, dy);
   }
 
-  inline Paths64 ExecuteRectClip(const Rect64& rect, 
-    const Paths64& paths, bool convex_only)
+  inline Paths64 RectClip(const Rect64& rect, const Paths64& paths)
   {
     if (rect.IsEmpty() || paths.empty()) return Paths64();
-    RectClip rc(rect);
-    return rc.Execute(paths, convex_only);
+    RectClip64 rc(rect);
+    return rc.Execute(paths);
   }
 
-  inline Paths64 ExecuteRectClip(const Rect64& rect,
-    const Path64& path, bool convex_only)
+  inline Paths64 RectClip(const Rect64& rect, const Path64& path)
   {
     if (rect.IsEmpty() || path.empty()) return Paths64();
-    RectClip rc(rect);
-    return rc.Execute(Paths64{ path }, convex_only);
+    RectClip64 rc(rect);
+    return rc.Execute(Paths64{ path });
   }
 
-  inline PathsD ExecuteRectClip(const RectD& rect,
-    const PathsD& paths, bool convex_only, int precision = 2)
+  inline PathsD RectClip(const RectD& rect, const PathsD& paths, int precision = 2)
   {
     if (rect.IsEmpty() || paths.empty()) return PathsD();
     int error_code = 0;
@@ -222,32 +223,31 @@ namespace Clipper2Lib {
     if (error_code) return PathsD();
     const double scale = std::pow(10, precision);
     Rect64 r = ScaleRect<int64_t, double>(rect, scale);
-    RectClip rc(r);
+    RectClip64 rc(r);
     Paths64 pp = ScalePaths<int64_t, double>(paths, scale, error_code);
     if (error_code) return PathsD(); // ie: error_code result is lost 
     return ScalePaths<double, int64_t>(
-      rc.Execute(pp, convex_only), 1 / scale, error_code);
+      rc.Execute(pp), 1 / scale, error_code);
   }
 
-  inline PathsD ExecuteRectClip(const RectD& rect,
-    const PathD& path, bool convex_only, int precision = 2)
+  inline PathsD RectClip(const RectD& rect, const PathD& path, int precision = 2)
   {
-    return ExecuteRectClip(rect, PathsD{ path }, convex_only, precision);
+    return RectClip(rect, PathsD{ path }, precision);
   }
 
-  inline Paths64 ExecuteRectClipLines(const Rect64& rect, const Paths64& lines)
+  inline Paths64 RectClipLines(const Rect64& rect, const Paths64& lines)
   {
     if (rect.IsEmpty() || lines.empty()) return Paths64();
-    RectClipLines rcl(rect);
+    RectClipLines64 rcl(rect);
     return rcl.Execute(lines);
   }
 
-  inline Paths64 ExecuteRectClipLines(const Rect64& rect, const Path64& line)
+  inline Paths64 RectClipLines(const Rect64& rect, const Path64& line)
   {
-    return ExecuteRectClipLines(rect, Paths64{ line });
+    return RectClipLines(rect, Paths64{ line });
   }
 
-  inline PathsD ExecuteRectClipLines(const RectD& rect, const PathsD& lines, int precision = 2)
+  inline PathsD RectClipLines(const RectD& rect, const PathsD& lines, int precision = 2)
   {
     if (rect.IsEmpty() || lines.empty()) return PathsD();
     int error_code = 0;
@@ -255,16 +255,16 @@ namespace Clipper2Lib {
     if (error_code) return PathsD();
     const double scale = std::pow(10, precision);
     Rect64 r = ScaleRect<int64_t, double>(rect, scale);
-    RectClipLines rcl(r);
+    RectClipLines64 rcl(r);
     Paths64 p = ScalePaths<int64_t, double>(lines, scale, error_code);
     if (error_code) return PathsD();
     p = rcl.Execute(p);
     return ScalePaths<double, int64_t>(p, 1 / scale, error_code);
   }
 
-  inline PathsD ExecuteRectClipLines(const RectD& rect, const PathD& line, int precision = 2)
+  inline PathsD RectClipLines(const RectD& rect, const PathD& line, int precision = 2)
   {
-    return ExecuteRectClipLines(rect, PathsD{ line }, precision);
+    return RectClipLines(rect, PathsD{ line }, precision);
   }
 
   namespace details
@@ -290,14 +290,9 @@ namespace Clipper2Lib {
       {
         // return false if this child isn't fully contained by its parent
 
-        // the following algorithm is a bit too crude, and doesn't account
-        // for rounding errors. A better algorithm is to return false when
-        // consecutive vertices are found outside the parent's polygon.
-
-        //const Path64& path = pp.Polygon();
-        //if (std::any_of(child->Polygon().cbegin(), child->Polygon().cend(),
-        //  [path](const auto& pt) {return (PointInPolygon(pt, path) ==
-        //    PointInPolygonResult::IsOutside); })) return false;
+        // checking for a single vertex outside is a bit too crude since 
+        // it doesn't account for rounding errors. It's better to check 
+        // for consecutive vertices found outside the parent's polygon.
 
         int outsideCnt = 0;
         for (const Point64& pt : child->Polygon())
@@ -489,6 +484,39 @@ namespace Clipper2Lib {
     details::MakePathGeneric(list, N, result);
     return result;
   }
+
+#ifdef USINGZ
+  template<typename T2, std::size_t N>
+  inline Path64 MakePathZ(const T2(&list)[N])
+  {
+    static_assert(N % 3 == 0 && std::numeric_limits<T2>::is_integer,
+      "MakePathZ requires integer values in multiples of 3");
+    std::size_t size = N / 3;
+    Path64 result(size);
+    for (size_t i = 0; i < size; ++i)
+      result[i] = Point64(list[i * 3], 
+        list[i * 3 + 1], list[i * 3 + 2]);
+    return result;
+  }
+
+  template<typename T2, std::size_t N>
+  inline PathD MakePathZD(const T2(&list)[N])
+  {
+    static_assert(N % 3 == 0,
+      "MakePathZD requires values in multiples of 3");
+    std::size_t size = N / 3;
+    PathD result(size);
+    if constexpr (std::numeric_limits<T2>::is_integer)
+      for (size_t i = 0; i < size; ++i)
+        result[i] = PointD(list[i * 3],
+          list[i * 3 + 1], list[i * 3 + 2]);
+    else
+      for (size_t i = 0; i < size; ++i)
+        result[i] = PointD(list[i * 3], list[i * 3 + 1], 
+          static_cast<int64_t>(list[i * 3 + 2]));
+    return result;
+  }
+#endif
 
   inline Path64 TrimCollinear(const Path64& p, bool is_open_path = false)
   {
