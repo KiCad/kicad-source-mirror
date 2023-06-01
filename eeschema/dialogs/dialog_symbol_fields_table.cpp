@@ -1533,8 +1533,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
         m_grid->SetColLabelValue( col, label );
 
         if( cfg->m_FieldEditorPanel.field_widths.count( fieldNameStr ) )
-            m_grid->SetColMinimalWidth( col,
-                                        cfg->m_FieldEditorPanel.field_widths.at( fieldNameStr ) );
+            m_grid->SetColSize( col, cfg->m_FieldEditorPanel.field_widths.at( fieldNameStr ) );
 
         // Set shown colums
         bool show = m_dataModel->GetShowColumn( col );
