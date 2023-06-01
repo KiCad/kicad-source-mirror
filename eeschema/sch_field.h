@@ -141,6 +141,8 @@ public:
             m_lastResolvedColor = aField->m_lastResolvedColor;
     }
 
+    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+
     /**
      * Adjusters to allow EDA_TEXT to draw/print/etc. text in absolute coords.
      */

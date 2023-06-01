@@ -436,6 +436,21 @@ COLOR4D SCH_FIELD::GetFieldColor() const
 }
 
 
+void SCH_FIELD::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    aCount      = 2;
+
+    switch( m_id )
+    {
+    case REFERENCE_FIELD: aLayers[0] = LAYER_REFERENCEPART; break;
+    case VALUE_FIELD:     aLayers[0] = LAYER_VALUEPART;     break;
+    default:              aLayers[0] = LAYER_FIELDS;        break;
+    }
+
+    aLayers[1] = LAYER_SELECTION_SHADOWS;
+}
+
+
 EDA_ANGLE SCH_FIELD::GetDrawRotation() const
 {
     // Calculate the text orientation according to the symbol orientation.
