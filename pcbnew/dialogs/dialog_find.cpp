@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <pcb_edit_frame.h> // Keep this include at top to avoid compil issue on MSYS2
 #include <board.h>
 #include <pcb_marker.h>
 #include <footprint.h>
@@ -30,7 +31,6 @@
 #include <zone.h>
 #include <dialog_find.h>
 #include <string_utils.h>
-#include <pcb_edit_frame.h>
 #include <string>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
