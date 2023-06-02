@@ -365,7 +365,10 @@ void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
     if( m_view )
     {
         if( infobar && infobar->IsLocked() )
-            m_view->SetCenter( bottom - m_view->ToWorld( clientSize, false ) / 2.0 );
+        {
+            VECTOR2D halfScreen( std::ceil( 0.5 * clientSize.x ), std::ceil( 0.5 * clientSize.y ) );
+            m_view->SetCenter( bottom - m_view->ToWorld( halfScreen, false ) );
+        }
 
         m_view->MarkTargetDirty( KIGFX::TARGET_CACHED );
         m_view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
