@@ -23352,7 +23352,7 @@ msgstr "电介质材料特性"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:20
 msgid "Has castellated pads"
-msgstr "有城堡型焊盘"
+msgstr "有金属化半孔焊盘"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:23
 msgid "Plated board edge"
@@ -27946,7 +27946,7 @@ msgstr "警告：散热属性对于非金属化孔 (NPTH) 焊盘没有意义。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1410
 msgid "Warning: Castellated property is for PTH pads."
-msgstr "警告：雉堞状属性用于镀通孔 (PTH) 焊盘。"
+msgstr "警告：半孔属性用于镀通孔 (PTH) 焊盘。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1416
 msgid "Warning: BGA property is for SMD pads."
@@ -28238,7 +28238,7 @@ msgstr ""
 "基准全局是整个电路板的基准\n"
 "测试板可用于在 Gerber 文件中指定测试点\n"
 "散热器焊盘指定热焊盘\n"
-"蜂窝状指定板边缘上蜂窝状的过孔焊盘\n"
+"半孔指板边缘金属化半孔焊盘\n"
 "此属性在 Gerber X2 文件中指定。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:1745
@@ -28263,7 +28263,7 @@ msgstr "散热焊盘"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558
 msgid "Castellated pad (through hole only)"
-msgstr "城堡式焊盘（仅限通孔）"
+msgstr "金属化半孔焊盘（仅限通孔）"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:580
 msgid "Clearance Overrides"
@@ -34268,7 +34268,7 @@ msgstr "散热片"
 
 #: pcbnew/pad.cpp:1029
 msgid "Castellated"
-msgstr "城堡式焊盘"
+msgstr "金属化半孔"
 
 #: pcbnew/pad.cpp:1058
 msgid "Length in Package"
@@ -34358,7 +34358,7 @@ msgstr "梯形"
 
 #: pcbnew/pad.cpp:1750
 msgid "Castellated pad"
-msgstr "城堡式焊盘"
+msgstr "金属化半孔焊盘"
 
 #: pcbnew/pad.cpp:1802
 msgid "Pad Type"
@@ -37350,7 +37350,7 @@ msgstr "铜表面处理（镀铜）： "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:452
 msgid "Castellated pads: "
-msgstr "城堡式焊盘： "
+msgstr "金属化半孔焊盘： "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:460
 msgid "Board Thickness: "
