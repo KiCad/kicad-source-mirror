@@ -1284,10 +1284,10 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
          * intersect it with REFERENCE1POINT pointing the same direction as REFERENCE0POINT -> XY1.
          * This should give us a valid measurement point where we can place the drawsegment.
          */
-        VECTOR2I direction             = aElem.xy1 - referencePoint0;
-        VECTOR2I directionNormalVector = VECTOR2I( -direction.y, direction.x );
-        SEG     segm1( referencePoint0, referencePoint0 + directionNormalVector );
-        SEG     segm2( referencePoint1, referencePoint1 + direction );
+        VECTOR2I     direction             = aElem.xy1 - referencePoint0;
+        VECTOR2I     directionNormalVector = VECTOR2I( -direction.y, direction.x );
+        SEG          segm1( referencePoint0, referencePoint0 + directionNormalVector );
+        SEG          segm2( referencePoint1, referencePoint1 + direction );
         OPT_VECTOR2I intersection( segm1.Intersect( segm2, true, true ) );
 
         if( !intersection )
@@ -1297,7 +1297,7 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
 
         int height = static_cast<int>( EuclideanNorm( direction ) );
 
-        if( direction.x <= 0 && direction.y <= 0 ) // TODO: I suspect this is not always correct
+        if( ( direction.x > 0 || direction.y < 0 ) != ( aElem.angle >= 180.0 ) )
             height = -height;
 
         dimension->SetHeight( height );
@@ -1309,11 +1309,16 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
 
     dimension->SetLineThickness( aElem.linewidth );
 
+    dimension->SetUnitsFormat( DIM_UNITS_FORMAT::NO_SUFFIX );
     dimension->SetPrefix( aElem.textprefix );
 
-    // Suffix normally holds the units
-    dimension->SetUnitsFormat( aElem.textsuffix.IsEmpty() ? DIM_UNITS_FORMAT::NO_SUFFIX
-                                                          : DIM_UNITS_FORMAT::BARE_SUFFIX );
+    // Suffix normally (but not always) holds the units
+    wxRegEx units( wxS( "(mm)|(in)|(mils)|(thou)|(')|(\")" ), wxRE_ADVANCED );
+
+    if( units.Matches( aElem.textsuffix ) )
+        dimension->SetUnitsFormat( DIM_UNITS_FORMAT::BARE_SUFFIX );
+    else
+        dimension->SetSuffix( aElem.textsuffix );
 
     dimension->SetTextThickness( aElem.textlinewidth );
     dimension->SetTextSize( VECTOR2I( aElem.textheight, aElem.textheight ) );
