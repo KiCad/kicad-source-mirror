@@ -1,0 +1,46 @@
+(kicad_sch (version 20230121) (generator eeschema)
+
+  (uuid 0fa37f06-195f-46d0-abab-0a61e03e8f7d)
+
+  (paper "A4")
+
+  (lib_symbols
+  )
+
+  (bus_alias "ALIAS2" (members "SDA" "SCL"))
+
+  (bus (pts (xy 107.95 77.47) (xy 121.92 77.47))
+    (stroke (width 0) (type default))
+    (uuid 3a2be92f-6a0f-4c8e-a931-f9def41389df)
+  )
+  (bus (pts (xy 124.46 74.93) (xy 146.05 74.93))
+    (stroke (width 0) (type default))
+    (uuid a271a4d3-7ff5-491a-832b-331c567ca0c2)
+  )
+
+  (label "BOOT{ALIAS2}" (at 128.27 74.93 0) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid 5752ea1e-a688-41ac-9fbd-249709aaa6ba)
+  )
+
+  (hierarchical_label "{ALIAS1}" (shape input) (at 107.95 77.47 180) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid c7a2989c-ad88-42e7-8073-9aae4bdf938b)
+  )
+
+  (sheet (at 146.05 68.58) (size 25.4 15.24) (fields_autoplaced)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0000))
+    (uuid 5d358b80-b2c6-4077-a589-f28265c82400)
+    (property "Sheetname" "Sub2" (at 146.05 67.8684 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "sub2.kicad_sch" (at 146.05 84.4046 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (pin "{ALIAS2}" input (at 146.05 74.93 180)
+      (effects (font (size 1.27 1.27)) (justify left))
+      (uuid 326f835e-3272-4ddb-8393-0edf2828b89a)
+    )
+  )
+)
