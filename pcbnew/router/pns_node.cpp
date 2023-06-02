@@ -94,7 +94,18 @@ NODE::~NODE()
     for( ITEM* item : *m_index )
     {
         if( item->BelongsTo( this ) && item->OfKind( ITEM::HOLE_T ) )
+        {
+#ifdef DEBUG
+            HOLE* hole = static_cast<HOLE*>( item );
+
+            // If a hole is no longer owned by the same NODE as its parent then we're in a
+            // heap of trouble.
+            if( hole->ParentPadVia() && !hole->ParentPadVia()->BelongsTo( this ) )
+                assert( false );
+#endif
+
             toDelete.push_back( item );
+        }
     }
 
     for( const ITEM* item : toDelete )
