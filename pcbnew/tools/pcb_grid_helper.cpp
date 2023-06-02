@@ -473,7 +473,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                     break;
                 }
 
-                case PAD_SHAPE::RECT:
+                case PAD_SHAPE::RECTANGLE:
                 case PAD_SHAPE::TRAPEZOID:
                 case PAD_SHAPE::ROUNDRECT:
                 case PAD_SHAPE::CHAMFERED_RECT:

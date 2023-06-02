@@ -395,7 +395,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 itemplotter.PlotPad( pad, color, padPlotMode );
                 break;
 
-            case PAD_SHAPE::RECT:
+            case PAD_SHAPE::RECTANGLE:
                 pad->SetSize( padPlotsSize );
 
                 if( mask_clearance > 0 )

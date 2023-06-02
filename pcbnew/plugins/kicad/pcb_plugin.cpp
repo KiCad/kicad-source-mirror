@@ -1382,7 +1382,7 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
     switch( aPad->GetShape() )
     {
     case PAD_SHAPE::CIRCLE:          shape = "circle";       break;
-    case PAD_SHAPE::RECT:            shape = "rect";         break;
+    case PAD_SHAPE::RECTANGLE:            shape = "rect";         break;
     case PAD_SHAPE::OVAL:            shape = "oval";         break;
     case PAD_SHAPE::TRAPEZOID:       shape = "trapezoid";    break;
     case PAD_SHAPE::CHAMFERED_RECT:
@@ -1629,7 +1629,7 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
         #endif
 
         // Output the anchor pad shape (circle/rect)
-        if( aPad->GetAnchorPadShape() == PAD_SHAPE::RECT )
+        if( aPad->GetAnchorPadShape() == PAD_SHAPE::RECTANGLE )
             shape = "rect";
         else
             shape = "circle";

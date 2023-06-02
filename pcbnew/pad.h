@@ -227,12 +227,12 @@ public:
     /**
      * Set the shape of the anchor pad for custom shaped pads.
      *
-     * @param aShape is the shape of the anchor pad shape( currently, only #PAD_SHAPE::RECT or
+     * @param aShape is the shape of the anchor pad shape( currently, only #PAD_SHAPE::RECTANGLE or
      *               #PAD_SHAPE::CIRCLE.
      */
     void SetAnchorPadShape( PAD_SHAPE aShape )
     {
-        m_anchorPadShape = ( aShape ==  PAD_SHAPE::RECT ) ? PAD_SHAPE::RECT : PAD_SHAPE::CIRCLE;
+        m_anchorPadShape = ( aShape ==  PAD_SHAPE::RECTANGLE ) ? PAD_SHAPE::RECTANGLE : PAD_SHAPE::CIRCLE;
         SetDirty();
     }
 
@@ -758,9 +758,10 @@ private:
 
     VECTOR2I      m_pos; // Pad Position on board
 
-    PAD_SHAPE     m_padShape;           // Shape: PAD_SHAPE::CIRCLE, PAD_SHAPE::RECT,
+    PAD_SHAPE     m_padShape;           // Shape: PAD_SHAPE::CIRCLE, PAD_SHAPE::RECTANGLE,
                                         //   PAD_SHAPE::OVAL, PAD_SHAPE::TRAPEZOID,
-                                        //   PAD_SHAPE::ROUNDRECT, PAD_SHAPE_POLYGON
+                                        //   PAD_SHAPE::ROUNDRECT, PAD_SHAPE::CHAMFERED_RECT,
+                                        //   PAD_SHAPE::CUSTOM
     /*
      * Editing definitions of primitives for custom pad shapes.  In local coordinates relative
      * to m_Pos (NOT shapePos) at orient 0.
@@ -794,7 +795,7 @@ private:
     int               m_chamferPositions;   // The positions of the chamfers (at orient 0)
 
     PAD_SHAPE         m_anchorPadShape;     // For custom shaped pads: shape of pad anchor,
-                                            //   PAD_SHAPE::RECT, PAD_SHAPE::CIRCLE
+                                            //   PAD_SHAPE::RECTANGLE, PAD_SHAPE::CIRCLE
 
     /*
      * Most of the time the hole is the center of the shape (m_Offset = 0). But some designers

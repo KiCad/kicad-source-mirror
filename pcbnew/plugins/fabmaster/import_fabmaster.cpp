@@ -614,7 +614,7 @@ size_t FABMASTER::processPadStacks( size_t aRow )
             }
             else if( pad_shape == "RECTANGLE" )
             {
-                pad->shape = PAD_SHAPE::RECT;
+                pad->shape = PAD_SHAPE::RECTANGLE;
             }
             else if( pad_shape == "ROUNDED_RECT" )
             {
@@ -622,14 +622,14 @@ size_t FABMASTER::processPadStacks( size_t aRow )
             }
             else if( pad_shape == "SQUARE" )
             {
-                pad->shape = PAD_SHAPE::RECT;
+                pad->shape = PAD_SHAPE::RECTANGLE;
                 pad->height = pad->width;
             }
             else if( pad_shape == "OBLONG" || pad_shape == "OBLONG_X" || pad_shape == "OBLONG_Y" )
                 pad->shape = PAD_SHAPE::OVAL;
             else if( pad_shape == "OCTAGON" )
             {
-                pad->shape = PAD_SHAPE::RECT;
+                pad->shape = PAD_SHAPE::RECTANGLE;
                 pad->is_octogon = true;
             }
             else if( pad_shape == "SHAPE" )

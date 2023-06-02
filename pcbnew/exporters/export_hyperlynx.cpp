@@ -161,7 +161,7 @@ private:
             shapeId = 2;
             break;
 
-        case PAD_SHAPE::RECT:
+        case PAD_SHAPE::RECTANGLE:
             shapeId = 1;
             break;
 

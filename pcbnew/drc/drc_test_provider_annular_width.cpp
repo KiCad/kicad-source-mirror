@@ -117,7 +117,7 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
 
                         case PAD_SHAPE::CIRCLE:
                         case PAD_SHAPE::OVAL:
-                        case PAD_SHAPE::RECT:
+                        case PAD_SHAPE::RECTANGLE:
                         case PAD_SHAPE::ROUNDRECT:
                             return 1;
 
@@ -171,7 +171,7 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
 
                         case PAD_SHAPE::CIRCLE:
                         case PAD_SHAPE::OVAL:
-                        case PAD_SHAPE::RECT:
+                        case PAD_SHAPE::RECTANGLE:
                         case PAD_SHAPE::ROUNDRECT:
                             annularWidth = std::min( pad->GetSizeX() - pad->GetDrillSizeX(),
                                                      pad->GetSizeY() - pad->GetDrillSizeY() ) / 2;

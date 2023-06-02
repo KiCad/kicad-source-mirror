@@ -1340,7 +1340,7 @@ void LEGACY_PLUGIN::loadPAD( FOOTPRINT* aFootprint )
             switch( padchar )
             {
             case 'C':   padshape = static_cast<int>( PAD_SHAPE::CIRCLE );      break;
-            case 'R':   padshape = static_cast<int>( PAD_SHAPE::RECT );        break;
+            case 'R':   padshape = static_cast<int>( PAD_SHAPE::RECTANGLE );        break;
             case 'O':   padshape = static_cast<int>( PAD_SHAPE::OVAL );        break;
             case 'T':   padshape = static_cast<int>( PAD_SHAPE::TRAPEZOID );   break;
             default:

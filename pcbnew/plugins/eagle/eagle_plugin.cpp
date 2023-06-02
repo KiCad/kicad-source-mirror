@@ -1888,7 +1888,7 @@ void EAGLE_PLUGIN::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
             break;
 
         case EPAD::SQUARE:
-            pad->SetShape( PAD_SHAPE::RECT );
+            pad->SetShape( PAD_SHAPE::RECTANGLE );
             break;
 
         case EPAD::OFFSET:
@@ -2386,7 +2386,7 @@ void EAGLE_PLUGIN::packageSMD( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
 
     pad->SetKeepTopBottom( false ); // TODO: correct? This seems to be KiCad default on import
 
-    pad->SetShape( PAD_SHAPE::RECT );
+    pad->SetShape( PAD_SHAPE::RECTANGLE );
     pad->SetAttribute( PAD_ATTRIB::SMD );
 
     VECTOR2I padSize( e.dx.ToPcbUnits(), e.dy.ToPcbUnits() );

@@ -327,7 +327,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
         break;
     }
 
-    case PAD_SHAPE::RECT:
+    case PAD_SHAPE::RECTANGLE:
     {
         double dx = scale( aPad->GetSize().x ) / 2.0;
         double dy = scale( aPad->GetSize().y ) / 2.0;

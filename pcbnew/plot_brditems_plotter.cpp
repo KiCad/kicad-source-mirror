@@ -228,7 +228,7 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_
                                  &gbr_metadata );
         break;
 
-    case PAD_SHAPE::RECT:
+    case PAD_SHAPE::RECTANGLE:
         m_plotter->FlashPadRect( shape_pos, aPad->GetSize(), aPad->GetOrientation(), aPlotMode,
                                  &gbr_metadata );
         break;

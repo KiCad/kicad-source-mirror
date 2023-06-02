@@ -824,7 +824,7 @@ std::vector<PCB_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun, BOARD
         {
             aCommit.Modify( aPad );
 
-            if( aPad->GetShape() == PAD_SHAPE::RECT || aPad->GetShape() == PAD_SHAPE::CIRCLE )
+            if( aPad->GetShape() == PAD_SHAPE::RECTANGLE || aPad->GetShape() == PAD_SHAPE::CIRCLE )
             {
                 aPad->SetAnchorPadShape( aPad->GetShape() );
             }

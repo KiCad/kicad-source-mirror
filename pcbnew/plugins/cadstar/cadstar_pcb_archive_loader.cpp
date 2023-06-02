@@ -1136,7 +1136,7 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
         // Cadstar diamond shape is a square rotated 45 degrees
         // We convert it in KiCad to a square with chamfered edges
         int sizeOfSquare = (double) getKiCadLength( csPadcode.Shape.Size ) * sqrt(2.0);
-        pad->SetShape( PAD_SHAPE::RECT );
+        pad->SetShape( PAD_SHAPE::RECTANGLE );
         pad->SetChamferRectRatio( 0.5 );
         pad->SetSize( { sizeOfSquare, sizeOfSquare } );
 
@@ -1165,7 +1165,7 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
         break;
 
     case PAD_SHAPE_TYPE::RECTANGLE:
-        pad->SetShape( PAD_SHAPE::RECT );
+        pad->SetShape( PAD_SHAPE::RECTANGLE );
         pad->SetSize( { getKiCadLength( (long long) csPadcode.Shape.Size
                                         + (long long) csPadcode.Shape.LeftLength
                                         + (long long) csPadcode.Shape.RightLength ),
@@ -1189,7 +1189,7 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
 
 
     case PAD_SHAPE_TYPE::SQUARE:
-        pad->SetShape( PAD_SHAPE::RECT );
+        pad->SetShape( PAD_SHAPE::RECTANGLE );
         pad->SetSize( { getKiCadLength( csPadcode.Shape.Size ),
                 getKiCadLength( csPadcode.Shape.Size ) } );
         break;
@@ -1259,7 +1259,7 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
 
             if( editedPadOutline.Contains( { 0, 0 } ) )
             {
-                pad->SetAnchorPadShape( PAD_SHAPE::RECT );
+                pad->SetAnchorPadShape( PAD_SHAPE::RECTANGLE );
                 pad->SetSize( VECTOR2I( { 4, 4 } ) );
                 pad->SetShape( PAD_SHAPE::CUSTOM );
                 pad->AddPrimitive( padShape );

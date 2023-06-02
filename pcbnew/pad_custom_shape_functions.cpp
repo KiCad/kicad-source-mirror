@@ -234,7 +234,7 @@ void PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon, ERROR_LOC aE
     // The anchor pad is always at 0,0
     switch( GetAnchorPadShape() )
     {
-    case PAD_SHAPE::RECT:
+    case PAD_SHAPE::RECTANGLE:
     {
         SHAPE_RECT rect( -GetSize().x / 2, -GetSize().y / 2, GetSize().x, GetSize().y );
         aMergedPolygon->AddOutline( rect.Outline() );

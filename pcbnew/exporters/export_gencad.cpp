@@ -455,7 +455,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
                      pad->GetSize().x / (SCALE_FACTOR * 2) );
             break;
 
-        case PAD_SHAPE::RECT:
+        case PAD_SHAPE::RECTANGLE:
             fprintf( aFile, " RECTANGULAR %g\n",
                      pad->GetDrillSize().x / SCALE_FACTOR );
 

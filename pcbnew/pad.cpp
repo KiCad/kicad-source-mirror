@@ -469,7 +469,7 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
 
         break;
 
-    case PAD_SHAPE::RECT:
+    case PAD_SHAPE::RECTANGLE:
     case PAD_SHAPE::TRAPEZOID:
     case PAD_SHAPE::ROUNDRECT:
     {
@@ -1224,7 +1224,7 @@ wxString PAD::ShowPadShape() const
     {
     case PAD_SHAPE::CIRCLE:         return _( "Circle" );
     case PAD_SHAPE::OVAL:           return _( "Oval" );
-    case PAD_SHAPE::RECT:           return _( "Rect" );
+    case PAD_SHAPE::RECTANGLE:           return _( "Rect" );
     case PAD_SHAPE::TRAPEZOID:      return _( "Trap" );
     case PAD_SHAPE::ROUNDRECT:      return _( "Roundrect" );
     case PAD_SHAPE::CHAMFERED_RECT: return _( "Chamferedrect" );
@@ -1631,7 +1631,7 @@ void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
         break;
 
     case PAD_SHAPE::TRAPEZOID:
-    case PAD_SHAPE::RECT:
+    case PAD_SHAPE::RECTANGLE:
     {
         int  ddx = GetShape() == PAD_SHAPE::TRAPEZOID ? m_deltaSize.x / 2 : 0;
         int  ddy = GetShape() == PAD_SHAPE::TRAPEZOID ? m_deltaSize.y / 2 : 0;
@@ -1707,7 +1707,7 @@ static struct PAD_DESC
 
         ENUM_MAP<PAD_SHAPE>::Instance()
                 .Map( PAD_SHAPE::CIRCLE,           _HKI( "Circle" ) )
-                .Map( PAD_SHAPE::RECT,             _HKI( "Rectangle" ) )
+                .Map( PAD_SHAPE::RECTANGLE,             _HKI( "Rectangle" ) )
                 .Map( PAD_SHAPE::OVAL,             _HKI( "Oval" ) )
                 .Map( PAD_SHAPE::TRAPEZOID,        _HKI( "Trapezoid" ) )
                 .Map( PAD_SHAPE::ROUNDRECT,        _HKI( "Rounded rectangle" ) )

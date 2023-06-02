@@ -4130,7 +4130,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
         break;
 
     case T_rect:
-        pad->SetShape( PAD_SHAPE::RECT );
+        pad->SetShape( PAD_SHAPE::RECTANGLE );
         break;
 
     case T_oval:
@@ -4620,7 +4620,7 @@ bool PCB_PARSER::parsePAD_option( PAD* aPad )
                     break;
 
                 case T_rect:
-                    aPad->SetAnchorPadShape( PAD_SHAPE::RECT );
+                    aPad->SetAnchorPadShape( PAD_SHAPE::RECTANGLE );
                     break;
 
                 default:

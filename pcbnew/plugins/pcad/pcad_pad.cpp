@@ -276,7 +276,7 @@ void PCAD_PAD::AddToFootprint( FOOTPRINT* aFootprint, const EDA_ANGLE& aRotation
         }
         else if( padShapeName.IsSameAs( wxT( "Rect" ), false ) )
         {
-            pad->SetShape( PAD_SHAPE::RECT );
+            pad->SetShape( PAD_SHAPE::RECTANGLE );
         }
         else if(  padShapeName.IsSameAs( wxT( "RndRect" ), false ) )
         {
@@ -284,7 +284,7 @@ void PCAD_PAD::AddToFootprint( FOOTPRINT* aFootprint, const EDA_ANGLE& aRotation
         }
         else if( padShapeName.IsSameAs( wxT( "Polygon" ), false ) )
         {
-            pad->SetShape( PAD_SHAPE::RECT ); // approximation
+            pad->SetShape( PAD_SHAPE::RECTANGLE ); // approximation
         }
 
         pad->SetSize( VECTOR2I( width, height ) );

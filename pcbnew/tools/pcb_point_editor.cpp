@@ -282,7 +282,7 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
 
         case PAD_SHAPE::OVAL:
         case PAD_SHAPE::TRAPEZOID:
-        case PAD_SHAPE::RECT:
+        case PAD_SHAPE::RECTANGLE:
         case PAD_SHAPE::ROUNDRECT:
         case PAD_SHAPE::CHAMFERED_RECT:
         {
@@ -1298,7 +1298,7 @@ void PCB_POINT_EDITOR::updateItem() const
 
         case PAD_SHAPE::OVAL:
         case PAD_SHAPE::TRAPEZOID:
-        case PAD_SHAPE::RECT:
+        case PAD_SHAPE::RECTANGLE:
         case PAD_SHAPE::ROUNDRECT:
         case PAD_SHAPE::CHAMFERED_RECT:
         {
@@ -1812,7 +1812,7 @@ void PCB_POINT_EDITOR::updatePoints()
 
         case PAD_SHAPE::OVAL:
         case PAD_SHAPE::TRAPEZOID:
-        case PAD_SHAPE::RECT:
+        case PAD_SHAPE::RECTANGLE:
         case PAD_SHAPE::ROUNDRECT:
         case PAD_SHAPE::CHAMFERED_RECT:
         {

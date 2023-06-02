@@ -57,7 +57,7 @@ static PAD_SHAPE code_shape[] =
 {
     PAD_SHAPE::CIRCLE,
     PAD_SHAPE::OVAL,
-    PAD_SHAPE::RECT,
+    PAD_SHAPE::RECTANGLE,
     PAD_SHAPE::TRAPEZOID,
     PAD_SHAPE::ROUNDRECT,
     PAD_SHAPE::CHAMFERED_RECT,
@@ -602,7 +602,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     default:
     case PAD_SHAPE::CIRCLE:    m_PadShapeSelector->SetSelection( CHOICE_SHAPE_CIRCLE );    break;
     case PAD_SHAPE::OVAL:      m_PadShapeSelector->SetSelection( CHOICE_SHAPE_OVAL );      break;
-    case PAD_SHAPE::RECT:      m_PadShapeSelector->SetSelection( CHOICE_SHAPE_RECT );      break;
+    case PAD_SHAPE::RECTANGLE:      m_PadShapeSelector->SetSelection( CHOICE_SHAPE_RECT );      break;
     case PAD_SHAPE::TRAPEZOID: m_PadShapeSelector->SetSelection( CHOICE_SHAPE_TRAPEZOID ); break;
     case PAD_SHAPE::ROUNDRECT: m_PadShapeSelector->SetSelection( CHOICE_SHAPE_ROUNDRECT ); break;
 
@@ -614,7 +614,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
         break;
 
     case PAD_SHAPE::CUSTOM:
-        if( m_previewPad->GetAnchorPadShape() == PAD_SHAPE::RECT )
+        if( m_previewPad->GetAnchorPadShape() == PAD_SHAPE::RECTANGLE )
             m_PadShapeSelector->SetSelection( CHOICE_SHAPE_CUSTOM_RECT_ANCHOR );
         else
             m_PadShapeSelector->SetSelection( CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR );
@@ -1670,7 +1670,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     if( m_currentPad->GetShape() == PAD_SHAPE::ROUNDRECT &&
         m_currentPad->GetRoundRectRadiusRatio() == 0.0 )
     {
-        m_currentPad->SetShape( PAD_SHAPE::RECT );
+        m_currentPad->SetShape( PAD_SHAPE::RECTANGLE );
     }
 
     // Set the fabrication property:
@@ -1774,7 +1774,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     aPad->SetShape( code_shape[m_PadShapeSelector->GetSelection()] );
 
     if( m_PadShapeSelector->GetSelection() == CHOICE_SHAPE_CUSTOM_RECT_ANCHOR )
-        aPad->SetAnchorPadShape( PAD_SHAPE::RECT );
+        aPad->SetAnchorPadShape( PAD_SHAPE::RECTANGLE );
     else
         aPad->SetAnchorPadShape( PAD_SHAPE::CIRCLE );
 

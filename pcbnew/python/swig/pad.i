@@ -8,6 +8,13 @@
 #include <pad.h>
 %}
 
+/* Only for compatibility with old python scripts: */
+const int PAD_SHAPE_RECT = (const int)PAD_SHAPE::RECTANGLE;
+
+%{
+const int PAD_SHAPE_RECT = (const int)PAD_SHAPE::RECTANGLE;
+%}
+
 %extend PAD
 {
     %pythoncode

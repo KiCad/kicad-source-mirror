@@ -546,7 +546,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
             static const LSET pad_front( 3, F_Cu, F_Mask, F_Paste );
             static const LSET pad_back(  3, B_Cu, B_Mask, B_Paste );
 
-            pad->SetShape( PAD_SHAPE::RECT );
+            pad->SetShape( PAD_SHAPE::RECTANGLE );
             pad->SetAttribute( PAD_ATTRIB::SMD );
             pad->SetLayerSet( pad_front );
 
@@ -644,7 +644,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
             pad->SetLayerSet( pad_set );
 
             if( testFlags( parameters[paramCnt-2], 0x0100, wxT( "square" ) ) )
-                pad->SetShape( PAD_SHAPE::RECT );
+                pad->SetShape( PAD_SHAPE::RECTANGLE );
 
             // Set the pad name:
             // Pcbnew pad name is used for electrical connection calculations.

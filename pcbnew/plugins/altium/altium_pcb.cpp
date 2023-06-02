@@ -2468,7 +2468,7 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
     switch( aElem.topshape )
     {
     case ALTIUM_PAD_SHAPE::RECT:
-        pad->SetShape( PAD_SHAPE::RECT );
+        pad->SetShape( PAD_SHAPE::RECTANGLE );
         break;
 
     case ALTIUM_PAD_SHAPE::CIRCLE:
