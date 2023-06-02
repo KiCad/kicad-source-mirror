@@ -1349,7 +1349,6 @@
                                                                 <event name="OnGridCellLeftDClick">OnTableCellClick</event>
                                                                 <event name="OnGridCellRightClick">OnTableItemContextMenu</event>
                                                                 <event name="OnGridColSize">OnTableColSize</event>
-                                                                <event name="OnGridRangeSelect">OnTableRangeSelected</event>
                                                             </object>
                                                         </object>
                                                     </object>

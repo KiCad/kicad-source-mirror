@@ -114,7 +114,6 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		virtual void OnTableCellClick( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnTableItemContextMenu( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnTableColSize( wxGridSizeEvent& event ) { event.Skip(); }
-		virtual void OnTableRangeSelected( wxGridRangeSelectEvent& event ) { event.Skip(); }
 		virtual void OnPreviewRefresh( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOutputFileBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnExport( wxCommandEvent& event ) { event.Skip(); }

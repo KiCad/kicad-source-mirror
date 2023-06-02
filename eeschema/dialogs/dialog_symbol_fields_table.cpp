@@ -273,6 +273,9 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
                      wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColSort ), nullptr, this );
     m_grid->Connect( wxEVT_GRID_COL_MOVE,
                      wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColMove ), nullptr, this );
+    m_grid->Connect( wxEVT_GRID_RANGE_SELECT,
+                     wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected ),
+                     nullptr, this );
     m_cbBomPresets->Bind( wxEVT_CHOICE, &DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged, this );
     m_cbBomFmtPresets->Bind( wxEVT_CHOICE, &DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged, this );
     m_fieldsCtrl->Bind( wxEVT_DATAVIEW_ITEM_VALUE_CHANGED,
@@ -922,7 +925,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableCellClick( wxGridEvent& event )
     }
 }
 
-void DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent& event )
+void DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected( wxGridEvent& event )
 {
     wxGridCellCoordsArray selectedCells = m_grid->GetSelectedCells();
 
