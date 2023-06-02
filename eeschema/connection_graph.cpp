@@ -1300,33 +1300,34 @@ void CONNECTION_GRAPH::generateBusAliasMembers()
 {
     std::vector<CONNECTION_SUBGRAPH*> new_subgraphs;
 
-    SCH_CONNECTION dummy( this );
-
-    for( auto&& subgraph : m_driver_subgraphs )
+    for( CONNECTION_SUBGRAPH* subgraph : m_driver_subgraphs )
     {
-        auto vec = subgraph->GetAllBusLabels();
+        SCH_ITEM_SET vec = subgraph->GetAllBusLabels();
 
-        for( auto& item : vec )
+        for( SCH_ITEM* item : vec )
         {
             SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( item );
 
+            SCH_CONNECTION dummy( item, subgraph->m_sheet );
+            dummy.SetGraph( this );
             dummy.ConfigureFromLabel( label->GetText() );
 
             wxLogTrace( ConnTrace, wxS( "new bus label (%s)" ), label->GetText() );
 
-            for( auto& conn : dummy.Members() )
+            for( const auto& conn : dummy.Members() )
             {
                 wxString name = conn->FullLocalName();
 
                 CONNECTION_SUBGRAPH* new_sg = new CONNECTION_SUBGRAPH( this );
-                SCH_CONNECTION* new_conn = new SCH_CONNECTION( this );
+                SCH_CONNECTION* new_conn = new SCH_CONNECTION( item, subgraph->m_sheet );
+                new_conn->SetGraph( this );
 
                 new_conn->SetName( name );
                 new_conn->SetType( CONNECTION_TYPE::NET );
                 int code = assignNewNetCode( *new_conn );
 
-                wxLogTrace( ConnTrace, wxS( "SG(%ld), Adding full local name (%s) with sg (%d)" ), subgraph->m_code,
-                            name, code );
+                wxLogTrace( ConnTrace, wxS( "SG(%ld), Adding full local name (%s) with sg (%d) on subsheet %s" ), subgraph->m_code,
+                            name, code, subgraph->m_sheet.PathHumanReadable() );
 
                 new_sg->m_driver_connection = new_conn;
                 new_sg->m_code = m_last_subgraph_code++;
@@ -2320,8 +2321,8 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, boo
     }
     else if( aSubgraph->m_hier_ports.empty() && aSubgraph->m_hier_pins.empty() )
     {
-        wxLogTrace( ConnTrace, wxS( "%lu (%s) has no hier pins or ports; marking clean" ),
-                    aSubgraph->m_code, conn->Name() );
+        wxLogTrace( ConnTrace, wxS( "%lu (%s) has no hier pins or ports on sheet %s; marking clean" ),
+                    aSubgraph->m_code, conn->Name(), aSubgraph->m_sheet.PathHumanReadable() );
         aSubgraph->m_dirty = false;
         return;
     }
