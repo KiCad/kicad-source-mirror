@@ -1014,7 +1014,7 @@ void SCH_EDIT_FRAME::doCloseWindow()
 
     Schematic().Reset();
 
-    // Prevents any rouge events from continuing (i.e. search panel tries to redraw)
+    // Prevents any rogue events from continuing (i.e. search panel tries to redraw)
     Show( false );
 
     Destroy();
