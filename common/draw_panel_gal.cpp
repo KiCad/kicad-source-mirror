@@ -354,21 +354,24 @@ void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
     if( ToVECTOR2I( clientSize ) == m_gal->GetScreenPixelSize() )
         return;
 
-    clientSize.x = std::max( 10, clientSize.x );
-    clientSize.y = std::max( 10, clientSize.y );
+    // Note: ( +1, +1 ) prevents an ugly black line on right and bottom on Mac
+    clientSize.x = std::max( 10, clientSize.x + 1 );
+    clientSize.y = std::max( 10, clientSize.y + 1 );
 
     VECTOR2D bottom( 0, 0 );
 
     if( m_view )
         bottom = m_view->ToWorld( m_gal->GetScreenPixelSize(), true );
 
-    // Note: ( +1, +1 ) prevents an ugly black line on right and bottom (at least on Mac)
-    m_gal->ResizeScreen( clientSize.GetX() + 1, clientSize.GetY() + 1 );
+    m_gal->ResizeScreen( clientSize.GetX(), clientSize.GetY() );
 
     if( m_view )
     {
         if( infobar && infobar->IsLocked() )
-            m_view->SetCenter( bottom - m_view->ToWorld( ToVECTOR2I(clientSize), false ) / 2.0 );
+        {
+            VECTOR2D halfScreen( std::ceil( 0.5 * clientSize.x ), std::ceil( 0.5 * clientSize.y ) );
+            m_view->SetCenter( bottom - m_view->ToWorld( halfScreen, false ) );
+        }
 
         m_view->MarkTargetDirty( KIGFX::TARGET_CACHED );
         m_view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
