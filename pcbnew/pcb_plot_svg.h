@@ -29,6 +29,7 @@ struct PCB_PLOT_SVG_OPTIONS
     bool m_mirror;
     bool m_blackAndWhite;
     bool m_plotFrame;
+    bool m_negative;
 
     int m_pageSizeMode;
 

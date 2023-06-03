@@ -21,6 +21,7 @@
 
 #include "command_export_pcb_svg.h"
 #include <cli/exit_codes.h>
+#include "command_export_pcb_base.h"
 #include "jobs/job_export_pcb_svg.h"
 #include <kiface_base.h>
 #include <layer_ids.h>
@@ -46,6 +47,11 @@ CLI::EXPORT_PCB_SVG_COMMAND::EXPORT_PCB_SVG_COMMAND() : EXPORT_PCB_BASE_COMMAND(
     m_argParser.add_argument( "-t", ARG_THEME )
             .default_value( std::string() )
             .help( UTF8STDSTR( _( "Color theme to use (will default to pcbnew settings)" ) ) );
+
+    m_argParser.add_argument( ARG_NEGATIVE_SHORT, ARG_NEGATIVE )
+            .help( UTF8STDSTR( _( ARG_NEGATIVE_DESC ) ) )
+            .implicit_value( true )
+            .default_value( false );
 
     m_argParser.add_argument( ARG_BLACKANDWHITE )
             .help( UTF8STDSTR( _( ARG_BLACKANDWHITE_DESC ) ) )
@@ -76,6 +82,7 @@ int CLI::EXPORT_PCB_SVG_COMMAND::doPerform( KIWAY& aKiway )
     svgJob->m_mirror = m_argParser.get<bool>( ARG_MIRROR );
     svgJob->m_blackAndWhite = m_argParser.get<bool>( ARG_BLACKANDWHITE );
     svgJob->m_pageSizeMode = m_argParser.get<int>( ARG_PAGE_SIZE );
+    svgJob->m_negative = m_argParser.get<bool>( ARG_NEGATIVE );
 
     svgJob->m_filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
     svgJob->m_outputFile = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );

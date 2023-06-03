@@ -55,6 +55,11 @@ CLI::EXPORT_PCB_PDF_COMMAND::EXPORT_PCB_PDF_COMMAND() : EXPORT_PCB_BASE_COMMAND(
             .implicit_value( true )
             .default_value( false );
 
+    m_argParser.add_argument( ARG_NEGATIVE_SHORT, ARG_NEGATIVE )
+            .help( UTF8STDSTR( _( ARG_NEGATIVE_DESC ) ) )
+            .implicit_value( true )
+            .default_value( false );
+
     m_argParser.add_argument( ARG_BLACKANDWHITE )
             .help( UTF8STDSTR( _( ARG_BLACKANDWHITE_DESC ) ) )
             .implicit_value( true )
@@ -92,6 +97,7 @@ int CLI::EXPORT_PCB_PDF_COMMAND::doPerform( KIWAY& aKiway )
     pdfJob->m_mirror = m_argParser.get<bool>( ARG_MIRROR );
     pdfJob->m_blackAndWhite = m_argParser.get<bool>( ARG_BLACKANDWHITE );
     pdfJob->m_colorTheme = FROM_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
+    pdfJob->m_negative = m_argParser.get<bool>( ARG_NEGATIVE );
 
     pdfJob->m_printMaskLayer = m_selectedLayers;
 

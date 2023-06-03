@@ -35,6 +35,7 @@ public:
             m_colorTheme(),
             m_mirror( false ),
             m_blackAndWhite( false ),
+            m_negative( false ),
             m_plotFootprintValues( true ),
             m_plotRefDes( true ),
             m_plotBorderTitleBlocks( false ),
@@ -48,6 +49,7 @@ public:
 
     bool m_mirror;
     bool m_blackAndWhite;
+    bool m_negative;
     bool m_plotFootprintValues;
     bool m_plotRefDes;
     bool m_plotBorderTitleBlocks;

@@ -30,7 +30,8 @@ class JOB_EXPORT_PCB_SVG : public JOB
 public:
     JOB_EXPORT_PCB_SVG( bool aIsCli ) :
             JOB( "svg", aIsCli ), m_filename(), m_outputFile(), m_colorTheme(), m_mirror( false ),
-            m_blackAndWhite( false ), m_plotDrawingSheet( true ), m_pageSizeMode( 0 ), m_printMaskLayer()
+            m_blackAndWhite( false ), m_negative( false ), m_plotDrawingSheet( true ),
+            m_pageSizeMode( 0 ), m_printMaskLayer()
     {
     }
 
@@ -40,6 +41,7 @@ public:
 
     bool m_mirror;
     bool m_blackAndWhite;
+    bool m_negative;
 
     bool m_plotDrawingSheet;
     int m_pageSizeMode;
