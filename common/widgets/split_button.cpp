@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Anil8735(https://stackoverflow.com/users/3659387/anil8753)
  *                    from https://stackoverflow.com/a/37274011
- * Copyright (C) 2020-2022 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -97,7 +97,11 @@ void SPLIT_BUTTON::SetBitmap( const wxBitmapBundle& aBmp )
 {
     m_bitmap = aBmp;
 
+#ifdef __WXMAC__
+    SetMinSize( m_bitmap.GetDefaultSize() );
+#else
     SetMinSize( m_bitmap.GetPreferredBitmapSizeFor( this ) );
+#endif
 }
 
 
@@ -284,17 +288,22 @@ void SPLIT_BUTTON::OnPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 
     if( m_bitmap.IsOk() )
     {
+#ifdef __WXMAC__
+        wxSize     bmpSize = m_bitmap.GetDefaultSize();
+#else
+        wxSize     bmpSize = m_bitmap.GetPreferredBitmapSizeFor( this );
+#endif
         wxBitmap   bmp = m_bitmap.GetBitmapFor( this );
         wxMemoryDC mdc( bmp );
 
-        r1.x = ( width - bmp.GetWidth() ) / 2;
+        r1.x = ( width - bmpSize.GetWidth() ) / 2;
 
         if( r1.x < 0 )
             r1.x = 0;
 
-        r1.y += ( size.GetHeight() - bmp.GetHeight() ) / 2;
+        r1.y += ( size.GetHeight() - bmpSize.GetHeight() ) / 2;
 
-        dc.Blit( wxPoint( r1.x, r1.y ), bmp.GetSize(), &mdc, wxPoint( 0, 0 ), wxCOPY, true );
+        dc.Blit( wxPoint( r1.x, r1.y ), bmpSize, &mdc, wxPoint( 0, 0 ), wxCOPY, true );
     }
     else
     {

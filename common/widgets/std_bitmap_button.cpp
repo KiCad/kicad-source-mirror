@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Anil8735(https://stackoverflow.com/users/3659387/anil8753)
  *                    from https://stackoverflow.com/a/37274011
- * Copyright (C) 2020-2022 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,7 +76,12 @@ void STD_BITMAP_BUTTON::onThemeChanged( wxSysColourChangedEvent &aEvent )
 void STD_BITMAP_BUTTON::SetBitmap( const wxBitmapBundle& aBmp )
 {
     m_bitmap = aBmp;
-    wxSize size = aBmp.GetPreferredBitmapSizeFor( this );
+
+#ifdef __WXMAC__
+    wxSize size = m_bitmap.GetDefaultSize();
+#else
+    wxSize size = m_bitmap.GetPreferredBitmapSizeFor( this );
+#endif
 
     SetMinSize( wxSize( size.GetWidth() + 8, size.GetHeight() + 8 ) );
 }
@@ -206,7 +211,11 @@ void STD_BITMAP_BUTTON::OnPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 
     if( m_bitmap.IsOk() )
     {
+#ifdef __WXMAC__
+        wxSize bmpSize = m_bitmap.GetDefaultSize();
+#else
         wxSize bmpSize = m_bitmap.GetPreferredBitmapSizeFor( this );
+#endif
 
         r1.x = ( size.GetWidth() - bmpSize.GetWidth() ) / 2;
 

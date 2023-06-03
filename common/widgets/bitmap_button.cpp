@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2020 Ian McInerney <ian.s.mcinerney at ieee dot org>
- * Copyright (C) 2020-2022 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -95,7 +95,11 @@ void BITMAP_BUTTON::SetPadding( int aPadding )
 void BITMAP_BUTTON::SetBitmap( const wxBitmapBundle& aBmp )
 {
     m_normalBitmap = aBmp;
-    m_unadjustedMinSize = aBmp.GetPreferredBitmapSizeFor( this );
+#ifdef __WXMAC__
+    m_unadjustedMinSize = m_normalBitmap.GetDefaultSize();
+#else
+    m_unadjustedMinSize = m_normalBitmap.GetPreferredBitmapSizeFor( this );
+#endif
 
     SetMinSize( wxSize( m_unadjustedMinSize.GetWidth() + ( m_padding * 2 ),
                         m_unadjustedMinSize.GetHeight() + ( m_padding * 2 ) ) );
