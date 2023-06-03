@@ -25,7 +25,7 @@
 #ifndef STD_BITMAP_BUTTON_H
 #define STD_BITMAP_BUTTON_H
 
-#include <wx/bitmap.h>
+#include <wx/bmpbndl.h>
 #include <wx/panel.h>
 
 class wxButton;
@@ -51,7 +51,7 @@ public:
 
     ~STD_BITMAP_BUTTON();
 
-    void SetBitmap( const wxBitmap& aBmp );
+    void SetBitmap( const wxBitmapBundle& aBmp );
     bool Enable( bool aEnable = true ) override;
 
 protected:
@@ -66,7 +66,7 @@ protected:
 private:
     int       m_stateButton  = 0;
     bool      m_bIsEnable    = true;
-    wxBitmap  m_bitmap;
+    wxBitmapBundle m_bitmap;
 };
 
 #endif /*STD_BITMAP_BUTTON_H*/

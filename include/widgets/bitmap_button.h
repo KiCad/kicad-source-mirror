@@ -25,7 +25,7 @@
 #ifndef BITMAP_BUTTON_H_
 #define BITMAP_BUTTON_H_
 
-#include <wx/bitmap.h>
+#include <wx/bmpbndl.h>
 #include <wx/panel.h>
 #include <wx/colour.h>
 
@@ -63,14 +63,14 @@ public:
      *
      * @param aBmp is the enabled bitmap.
      */
-    void SetBitmap( const wxBitmap& aBmp );
+    void SetBitmap( const wxBitmapBundle& aBmp );
 
     /**
      * Set the bitmap shown when the button is disabled.
      *
      * @param aBmp is the disabled bitmap.
      */
-    void SetDisabledBitmap( const wxBitmap& aBmp );
+    void SetDisabledBitmap( const wxBitmapBundle& aBmp );
 
     /**
      * Enable the button.
@@ -142,8 +142,8 @@ protected:
     }
 
 private:
-    wxBitmap  m_normalBitmap;
-    wxBitmap  m_disabledBitmap;
+    wxBitmapBundle m_normalBitmap;
+    wxBitmapBundle m_disabledBitmap;
 
     bool      m_isRadioButton;
     bool      m_showBadge;

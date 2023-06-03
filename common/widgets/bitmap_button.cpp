@@ -92,16 +92,17 @@ void BITMAP_BUTTON::SetPadding( int aPadding )
 }
 
 
-void BITMAP_BUTTON::SetBitmap( const wxBitmap& aBmp )
+void BITMAP_BUTTON::SetBitmap( const wxBitmapBundle& aBmp )
 {
     m_normalBitmap = aBmp;
-    m_unadjustedMinSize = aBmp.GetSize();
+    m_unadjustedMinSize = aBmp.GetPreferredBitmapSizeFor( this );
 
-    SetMinSize( wxSize( aBmp.GetWidth() + ( m_padding * 2 ), aBmp.GetHeight() + ( m_padding * 2 ) ) );
+    SetMinSize( wxSize( m_unadjustedMinSize.GetWidth() + ( m_padding * 2 ),
+                        m_unadjustedMinSize.GetHeight() + ( m_padding * 2 ) ) );
 }
 
 
-void BITMAP_BUTTON::SetDisabledBitmap( const wxBitmap& aBmp )
+void BITMAP_BUTTON::SetDisabledBitmap( const wxBitmapBundle& aBmp )
 {
     m_disabledBitmap = aBmp;
 }
@@ -272,11 +273,11 @@ void BITMAP_BUTTON::OnPaint( wxPaintEvent& aEvent )
         }
     }
 
-    const wxBitmap& bmp = hasFlag( wxCONTROL_DISABLED ) ? m_disabledBitmap : m_normalBitmap;
+    const wxBitmapBundle& bmp = hasFlag( wxCONTROL_DISABLED ) ? m_disabledBitmap : m_normalBitmap;
 
     // Draw the bitmap with the upper-left corner offset by the padding
     if( bmp.IsOk() )
-        dc.DrawBitmap( bmp, m_padding, m_padding, true );
+        dc.DrawBitmap( bmp.GetBitmapFor( this ), m_padding, m_padding, true );
 
     // Draw the badge
     if( m_showBadge )

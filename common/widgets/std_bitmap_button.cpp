@@ -73,11 +73,12 @@ void STD_BITMAP_BUTTON::onThemeChanged( wxSysColourChangedEvent &aEvent )
 }
 
 
-void STD_BITMAP_BUTTON::SetBitmap( const wxBitmap& aBmp )
+void STD_BITMAP_BUTTON::SetBitmap( const wxBitmapBundle& aBmp )
 {
     m_bitmap = aBmp;
+    wxSize size = aBmp.GetPreferredBitmapSizeFor( this );
 
-    SetMinSize( wxSize( m_bitmap.GetWidth() + 8, m_bitmap.GetHeight() + 8 ) );
+    SetMinSize( wxSize( size.GetWidth() + 8, size.GetHeight() + 8 ) );
 }
 
 
@@ -205,14 +206,21 @@ void STD_BITMAP_BUTTON::OnPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 
     if( m_bitmap.IsOk() )
     {
-        r1.x = ( size.GetWidth() - m_bitmap.GetWidth() ) / 2;
+        wxSize bmpSize = m_bitmap.GetPreferredBitmapSizeFor( this );
+
+        r1.x = ( size.GetWidth() - bmpSize.GetWidth() ) / 2;
 
         if( r1.x < 0 )
             r1.x = 0;
 
-        r1.y += ( size.GetHeight() - m_bitmap.GetHeight() ) / 2;
+        r1.y += ( size.GetHeight() - bmpSize.GetHeight() ) / 2;
 
-        dc.DrawBitmap( m_bIsEnable ? m_bitmap : m_bitmap.ConvertToDisabled(), r1.x, r1.y, true );
+        wxBitmap bm = m_bitmap.GetBitmapFor( this );
+
+        if( !m_bIsEnable )
+            bm.ConvertToDisabled();
+
+        dc.DrawBitmap( bm, r1.x, r1.y, true );
     }
 }
 
