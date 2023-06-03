@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -211,6 +211,9 @@ int TEXT_SEARCH_HANDLER::Search( const wxString& aQuery )
         if( item->Type() == SCH_TEXT_T )
         {
             SCH_TEXT* text = dynamic_cast<SCH_TEXT*>( item );
+
+            wxCHECK( text, false );
+
             if( text->Matches( frp, sheet ) )
             {
                 return true;
@@ -219,6 +222,9 @@ int TEXT_SEARCH_HANDLER::Search( const wxString& aQuery )
         else if( item->Type() == SCH_TEXTBOX_T )
         {
             SCH_TEXTBOX* text = dynamic_cast<SCH_TEXTBOX*>( item );
+
+            wxCHECK( text, false );
+
             if( text->Matches( frp, sheet ) )
             {
                 return true;
@@ -306,6 +312,9 @@ int LABEL_SEARCH_HANDLER::Search( const wxString& aQuery )
             || item->Type() == SCH_HIER_LABEL_T )
         {
             SCH_LABEL_BASE* lbl = dynamic_cast<SCH_LABEL_BASE*>( item );
+
+            wxCHECK( lbl, false );
+
             if( lbl->Matches( frp, sheet ) )
             {
                 return true;

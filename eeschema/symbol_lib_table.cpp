@@ -656,6 +656,8 @@ bool SYMBOL_LIB_TABLE::LoadGlobalTable( SYMBOL_LIB_TABLE& aTable )
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
     KICAD_SETTINGS*   settings = mgr.GetAppSettings<KICAD_SETTINGS>();
 
+    wxCHECK( settings, false );
+
     wxString packagesPath = Pgm().GetLocalEnvVariables().at( wxT( "KICAD7_3RD_PARTY" ) ).GetValue();
 
     if( settings->m_PcmLibAutoAdd )
@@ -688,7 +690,13 @@ bool SYMBOL_LIB_TABLE::LoadGlobalTable( SYMBOL_LIB_TABLE& aTable )
         }
 
         for( const wxString& nickName : to_remove )
-            aTable.RemoveRow( aTable.FindRow( nickName ) );
+        {
+            SYMBOL_LIB_TABLE_ROW* row = aTable.FindRow( nickName );
+
+            wxCHECK2( row, continue );
+
+            aTable.RemoveRow( row );
+        }
     }
 
     return tableExists;

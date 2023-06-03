@@ -755,7 +755,7 @@ bool PCB_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
         {
             GuessSelectionCandidates( collector, aWhere );
         }
-        catch( const ClipperLib::clipperException& exc )
+        catch( const std::exception& exc )
         {
             wxLogWarning( wxS( "Exception \"%s\" occurred attemption to guess selection "
                                "candidates." ), exc.what() );
@@ -2795,7 +2795,7 @@ int PCB_SELECTION_TOOL::hitTestDistance( const VECTOR2I& aWhere, BOARD_ITEM* aIt
         {
             footprint->GetBoundingHull().Collide( loc, aMaxDistance, &distance );
         }
-        catch( const ClipperLib::clipperException& exc )
+        catch( const std::exception& exc )
         {
             // This may be overkill and could be an assertion but we are more likely to find
             // any clipper errors this way.
@@ -2964,7 +2964,7 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
             {
                 area = FOOTPRINT::GetCoverageArea( item, aCollector );
             }
-            catch( const ClipperLib::clipperException& e )
+            catch( const std::exception& e )
             {
                 wxLogError( wxT( "A clipper exception %s was detected." ), e.what() );
             }

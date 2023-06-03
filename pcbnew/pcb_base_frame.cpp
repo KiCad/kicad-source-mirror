@@ -371,7 +371,7 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
         {
             viewportPoly.BooleanSubtract( dialogPoly, SHAPE_POLY_SET::PM_FAST );
         }
-        catch( const ClipperLib::clipperException& exc )
+        catch( const std::exception& exc )
         {
             // This may be overkill and could be an assertion but we are more likely to
             // find any clipper errors this way.
@@ -422,7 +422,7 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
                 {
                     itemPoly = static_cast<FOOTPRINT*>( item )->GetBoundingHull();
                 }
-                catch( const ClipperLib::clipperException& exc )
+                catch( const std::exception& exc )
                 {
                     // This may be overkill and could be an assertion but we are more likely to
                     // find any clipper errors this way.
@@ -490,7 +490,7 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
             {
                 clippedPoly.BooleanIntersection( itemPoly, viewportPoly, SHAPE_POLY_SET::PM_FAST );
             }
-            catch( const ClipperLib::clipperException& exc )
+            catch( const std::exception& exc )
             {
                 // This may be overkill and could be an assertion but we are more likely to
                 // find any clipper errors this way.
@@ -517,7 +517,7 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
         {
             itemPoly.Deflate( step, SHAPE_POLY_SET::ALLOW_ACUTE_CORNERS, ARC_LOW_DEF );
         }
-        catch( const ClipperLib::clipperException& exc )
+        catch( const std::exception& exc )
         {
             // This may be overkill and could be an assertion but we are more likely to
             // find any clipper errors this way.

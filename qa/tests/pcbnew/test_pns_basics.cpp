@@ -243,7 +243,7 @@ public:
     bool IsKeepout( const PNS::ITEM* aA, const PNS::ITEM* aB ) override { return false; }
 
     void AddMockRule( PNS::CONSTRAINT_TYPE aType, const PNS::ITEM* aItemA, const PNS::ITEM* aItemB,
-                      PNS::CONSTRAINT aConstraint )
+                      PNS::CONSTRAINT& aConstraint )
     {
         ITEM_KEY key;
 

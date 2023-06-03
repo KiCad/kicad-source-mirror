@@ -228,6 +228,10 @@ void TEARDROP_MANAGER::computeCurvedForRoundShape( const TEARDROP_PARAMETERS& aP
          Vpercent *= (double) aParams.m_TdMaxWidth / td_height;
 
     int radius = GetWidth( aOther ) / 2;
+
+    // Don't divide by zero.  No good can come of that.
+    wxCHECK2( radius != 0, radius = 1 );
+
     double minVpercent = double( aTrackHalfWidth ) / radius;
     double weaken = (Vpercent - minVpercent) / ( 1 - minVpercent ) / radius;
 

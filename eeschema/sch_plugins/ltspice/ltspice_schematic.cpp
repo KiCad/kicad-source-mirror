@@ -482,6 +482,8 @@ LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::SymbolBuilder( const wxString& a
     int       lineNumber = 1;
 
     lt_symbol.Name = aAscFileName;
+    lt_symbol.SymbolType = LTSPICE_SCHEMATIC::SYMBOLTYPE::CELL;
+    lt_symbol.SymbolOrientation = LTSPICE_SCHEMATIC::ORIENTATION::R0;
 
     for( wxString line : wxSplit( aAsyFileContent, '\n' ) )
     {

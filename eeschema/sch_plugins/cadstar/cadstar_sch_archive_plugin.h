@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -39,7 +39,8 @@ class SCH_SCREEN;
 class CADSTAR_SCH_ARCHIVE_PLUGIN : public SCH_PLUGIN
 {
 public:
-    CADSTAR_SCH_ARCHIVE_PLUGIN()
+    CADSTAR_SCH_ARCHIVE_PLUGIN() :
+        m_cacheTimestamp( 0 )
     {
         m_reporter = &WXLOG_REPORTER::GetInstance();
         m_progressReporter = nullptr;

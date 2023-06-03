@@ -1203,6 +1203,9 @@ void TOOL_MANAGER::setActiveState( TOOL_STATE* aState )
 bool TOOL_MANAGER::IsToolActive( TOOL_ID aId ) const
 {
     auto it = m_toolIdIndex.find( aId );
+
+    wxCHECK( it != m_toolIdIndex.end(), false );
+
     return !it->second->idle;
 }
 

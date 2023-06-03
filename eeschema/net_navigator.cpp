@@ -39,7 +39,10 @@ public:
     {
     }
 
-    NET_NAVIGATOR_ITEM_DATA() {}
+    NET_NAVIGATOR_ITEM_DATA() :
+        m_item( nullptr )
+    {
+    }
 
     SCH_SHEET_PATH& GetSheetPath() { return m_sheetPath; }
     const SCH_ITEM* GetItem() const { return m_item; }
