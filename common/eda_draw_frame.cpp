@@ -389,7 +389,7 @@ void EDA_DRAW_FRAME::OnUpdateSelectGrid( wxUpdateUIEvent& aEvent )
     wxCHECK( config(), /* void */ );
 
     int idx = config()->m_Window.grid.last_size_idx;
-    idx = std::max( 0, std::min( idx, (int) m_gridSelectBox->GetCount() - 1 ) );
+    idx = alg::clamp( 0, idx, (int) m_gridSelectBox->GetCount() - 1 );
 
     if( idx != m_gridSelectBox->GetSelection() )
         m_gridSelectBox->SetSelection( idx );

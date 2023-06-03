@@ -3402,7 +3402,7 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent )
             if( dim->Type() == PCB_DIM_ORTHOGONAL_T )
             {
                 PCB_DIM_ORTHOGONAL* ortho = static_cast<PCB_DIM_ORTHOGONAL*>( dim.get() );
-                orientation = std::max( 0, std::min( 1, orientation ) );
+                orientation = alg::clamp( 0, orientation, 1 );
                 ortho->SetOrientation( static_cast<PCB_DIM_ORTHOGONAL::DIR>( orientation ) );
             }
 
@@ -3442,7 +3442,7 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent )
                 case T_units_format:
                 {
                     int format = parseInt( "dimension units format" );
-                    format = std::max( 0, std::min( 3, format ) );
+                    format = alg::clamp( 0, format, 3 );
                     dim->SetUnitsFormat( static_cast<DIM_UNITS_FORMAT>( format ) );
                     NeedRIGHT();
                     break;
@@ -3529,7 +3529,7 @@ PCB_DIMENSION_BASE* PCB_PARSER::parseDIMENSION( BOARD_ITEM* aParent )
                     PCB_DIM_LEADER* leader = static_cast<PCB_DIM_LEADER*>( dim.get() );
 
                     int textFrame = parseInt( "text frame mode" );
-                    textFrame = std::max( 0, std::min( 3, textFrame ) );
+                    textFrame = alg::clamp( 0, textFrame, 3 );
                     leader->SetTextBorder( static_cast<DIM_TEXT_BORDER>( textFrame ));
                     NeedRIGHT();
                     break;

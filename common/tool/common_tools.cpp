@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2016 CERN
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -33,6 +33,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <id.h>
 #include <math/vector2wx.h>
+#include <core/kicad_algo.h>
 #include <kiface_base.h>
 #include <settings/app_settings.h>
 #include <tool/actions.h>
@@ -457,7 +458,7 @@ int COMMON_TOOLS::GridPreset( int idx )
 {
     int& currentGrid = m_toolMgr->GetSettings()->m_Window.grid.last_size_idx;
 
-    currentGrid = std::max( 0, std::min( idx, (int) m_grids.size() - 1 ) );
+    currentGrid = alg::clamp( 0, idx, (int) m_grids.size() - 1 );
 
     return OnGridChanged();
 }

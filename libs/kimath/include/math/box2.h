@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2022 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2023 Kicad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2013 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -33,6 +33,7 @@
 
 #include <math/vector2d.h>
 #include <geometry/eda_angle.h>
+#include <core/kicad_algo.h>
 #include <trigo.h>
 
 /**
@@ -785,8 +786,8 @@ public:
         me.Normalize(); // ensure size is >= 0
 
         // Determine closest point to the circle centre within this rect
-        coord_type nx = std::max( me.GetLeft(), std::min( aPoint.x, me.GetRight() ) );
-        coord_type ny = std::max( me.GetTop(), std::min( aPoint.y, me.GetBottom() ) );
+        coord_type nx = alg::clamp( me.GetLeft(), aPoint.x, me.GetRight() );
+        coord_type ny = alg::clamp( me.GetTop(), aPoint.y, me.GetBottom() );
 
         return Vec( nx, ny );
     }

@@ -38,6 +38,11 @@ class SHAPE_COMPOUND;
 class SHAPE_POLY_SET;
 
 
+// These are only here for algorithmic safety, not to tell the user what to do
+#define TEXT_MIN_SIZE_MILS  1        ///< Minimum text size in mils
+#define TEXT_MAX_SIZE_MILS  10000    ///< Maximum text size in mils (10 inches)
+
+
 namespace KIGFX
 {
     class RENDER_SETTINGS;

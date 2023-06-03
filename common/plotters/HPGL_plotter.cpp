@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -424,7 +424,7 @@ void HPGL_PLOTTER::Circle( const VECTOR2I& aCenter, int aDiameter, FILL_T aFill,
     double const target_chord_length = m_arcTargetChordLength;
     EDA_ANGLE    chord_angle         = ANGLE_360 * target_chord_length / circumf;
 
-    chord_angle = std::max( m_arcMinChordDegrees, std::min( chord_angle, ANGLE_45 ) );
+    chord_angle = std::clamp( m_arcMinChordDegrees, chord_angle, ANGLE_45 );
 
     if( aFill == FILL_T::FILLED_SHAPE )
     {

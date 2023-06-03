@@ -23,6 +23,7 @@
 
 #include <dialog_sim_format_value.h>
 #include <sim/spice_value.h>
+#include <core/kicad_algo.h>
 
 
 DIALOG_SIM_FORMAT_VALUE::DIALOG_SIM_FORMAT_VALUE( wxWindow* aParent, SPICE_VALUE_FORMAT* aFormat ) :
@@ -88,7 +89,7 @@ DIALOG_SIM_FORMAT_VALUE::DIALOG_SIM_FORMAT_VALUE( wxWindow* aParent, SPICE_VALUE
 
 bool DIALOG_SIM_FORMAT_VALUE::TransferDataFromWindow()
 {
-    m_format->Precision = std::max( 1, std::min( m_precisionCtrl->GetValue(), 9 ) );
+    m_format->Precision = alg::clamp( 1, m_precisionCtrl->GetValue(), 9 );
 
     if( m_rangeCtrl->GetSelection() == 0 )
         m_format->Range = wxS( "~" ) + m_units;

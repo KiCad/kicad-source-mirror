@@ -34,7 +34,6 @@
 
 #include <board.h>
 
-#include <pcbnew.h>
 #include <pcbplot.h>
 #include <gendrill_file_writer_base.h>
 #include <pcb_painter.h>

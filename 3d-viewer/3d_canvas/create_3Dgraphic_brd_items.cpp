@@ -269,7 +269,7 @@ void BOARD_ADAPTER::createTrack( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDs
         else
         {
             circlesegcount = KiROUND( arcsegcount * 360.0 / std::abs( arc_angle.AsDegrees() ) );
-            circlesegcount = std::max( 1, std::min( circlesegcount, 128 ) );
+            circlesegcount = alg::clamp( 1, circlesegcount, 128 );
         }
 
         transformArcToSegments( VECTOR2I( center.x, center.y ), arc->GetStart(), arc_angle,

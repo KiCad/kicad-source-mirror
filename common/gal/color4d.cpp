@@ -29,6 +29,7 @@
 #include <i18n_utility.h>
 #include <wx/crt.h>
 #include <math/util.h>
+#include <core/kicad_algo.h>
 
 using namespace KIGFX;
 
@@ -575,10 +576,10 @@ EDA_COLOR_T COLOR4D::FindNearestLegacyColor( int aR, int aG, int aB )
 
 COLOR4D& COLOR4D::FromCSSRGBA( int aRed, int aGreen, int aBlue, double aAlpha )
 {
-    r = std::max( 0, std::min( 255, aRed ) ) / 255.0;
-    g = std::max( 0, std::min( 255, aGreen ) ) / 255.0;
-    b = std::max( 0, std::min( 255, aBlue ) ) / 255.0;
-    a = std::max( 0.0, std::min( 1.0, aAlpha ) );
+    r = alg::clamp( 0, aRed, 255 ) / 255.0;
+    g = alg::clamp( 0, aGreen, 255 ) / 255.0;
+    b = alg::clamp( 0, aBlue, 255 ) / 255.0;
+    a = alg::clamp( 0.0, aAlpha, 1.0 );
 
     return *this;
 }

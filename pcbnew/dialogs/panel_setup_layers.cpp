@@ -27,7 +27,6 @@
 #include <confirm.h>
 #include <core/arraydim.h>
 #include <core/kicad_algo.h>
-#include <pcbnew.h>
 #include <pcb_edit_frame.h>
 #include <board.h>
 #include <collectors.h>

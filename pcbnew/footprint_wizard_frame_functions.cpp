@@ -26,7 +26,6 @@
 #include <pcb_edit_frame.h>
 #include <board.h>
 #include <footprint.h>
-#include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <wildcards_and_files_ext.h>
 #include <dialogs/dialog_footprint_wizard_list.h>

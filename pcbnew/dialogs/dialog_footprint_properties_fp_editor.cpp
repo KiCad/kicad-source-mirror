@@ -4,7 +4,7 @@
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,7 +44,6 @@
 #include "3d_rendering/opengl/3d_model.h"
 #include "filename_resolver.h"
 #include <pgm_base.h>
-#include <pcbnew.h>
 #include "dialogs/panel_preview_3d_model.h"
 #include "dialogs/3d_cache_dialogs.h"
 #include <settings/settings_manager.h>
@@ -420,24 +419,27 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::Validate()
             return false;
         }
 
-        if( text.GetTextWidth() < TEXTS_MIN_SIZE || text.GetTextWidth() > TEXTS_MAX_SIZE )
+        int minSize = pcbIUScale.MilsToIU( TEXT_MIN_SIZE_MILS );
+        int maxSize = pcbIUScale.MilsToIU( TEXT_MAX_SIZE_MILS );
+
+        if( text.GetTextWidth() < minSize || text.GetTextWidth() > maxSize )
         {
             m_delayedFocusGrid = m_itemsGrid;
             m_delayedErrorMessage = wxString::Format( _( "The text width must be between %s and %s." ),
-                                                      m_frame->StringFromValue( TEXTS_MIN_SIZE, true ),
-                                                      m_frame->StringFromValue( TEXTS_MAX_SIZE, true ) );
+                                                      m_frame->StringFromValue( minSize, true ),
+                                                      m_frame->StringFromValue( maxSize, true ) );
             m_delayedFocusColumn = FPT_WIDTH;
             m_delayedFocusRow = i;
 
             return false;
         }
 
-        if( text.GetTextHeight() < TEXTS_MIN_SIZE || text.GetTextHeight() > TEXTS_MAX_SIZE )
+        if( text.GetTextHeight() < minSize || text.GetTextHeight() > maxSize )
         {
             m_delayedFocusGrid = m_itemsGrid;
             m_delayedErrorMessage = wxString::Format( _( "The text height must be between %s and %s." ),
-                                                      m_frame->StringFromValue( TEXTS_MIN_SIZE, true ),
-                                                      m_frame->StringFromValue( TEXTS_MAX_SIZE, true ) );
+                                                      m_frame->StringFromValue( minSize, true ),
+                                                      m_frame->StringFromValue( maxSize, true ) );
             m_delayedFocusColumn = FPT_HEIGHT;
             m_delayedFocusRow = i;
 

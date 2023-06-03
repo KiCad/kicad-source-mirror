@@ -193,8 +193,7 @@ void DIALOG_DRC::OnActivateDlg( wxActivateEvent& aEvent )
 
 bool DIALOG_DRC::updateUI()
 {
-    double cur = (double) m_progress.load() / m_maxProgress;
-    cur = std::max( 0.0, std::min( cur, 1.0 ) );
+    double cur = alg::clamp( 0.0, (double) m_progress.load() / m_maxProgress, 1.0 );
 
     m_gauge->SetValue( KiROUND( cur * 1000.0 ) );
     wxSafeYield( this );

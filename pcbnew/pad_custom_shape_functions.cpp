@@ -278,8 +278,8 @@ bool PAD::GetBestAnchorPosition( VECTOR2I& aPos )
         stepsX = minSteps * (double) bbox.GetWidth() / (double )(bbox.GetHeight() + 1);
     }
 
-    stepsX = std::max(minSteps, std::min( maxSteps, stepsX ) );
-    stepsY = std::max(minSteps, std::min( maxSteps, stepsY ) );
+    stepsX = alg::clamp( minSteps, maxSteps, stepsX );
+    stepsY = alg::clamp( minSteps, maxSteps, stepsY );
 
     VECTOR2I center = bbox.Centre();
 

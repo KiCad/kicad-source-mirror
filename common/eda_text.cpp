@@ -42,6 +42,7 @@
 #include <string_utils.h>     // for UnescapeString
 #include <math/util.h>        // for KiROUND
 #include <math/vector2d.h>
+#include <core/kicad_algo.h>
 #include <richio.h>
 #include <render_settings.h>
 #include <trigo.h>            // for RotatePoint
@@ -52,7 +53,6 @@
 #include <font/outline_font.h>
 #include <geometry/shape_poly_set.h>
 #include <properties/property_validators.h>
-#include <pcbnew.h>          // Text limits are in here for some reason
 
 #include <wx/debug.h>           // for wxASSERT
 #include <wx/string.h>
@@ -358,7 +358,11 @@ void EDA_TEXT::SetLineSpacing( double aLineSpacing )
 
 void EDA_TEXT::SetTextSize( const VECTOR2I& aNewSize )
 {
-    m_attributes.m_Size = aNewSize;
+    int min = m_IuScale.get().MilsToIU( TEXT_MIN_SIZE_MILS );
+    int max = m_IuScale.get().MilsToIU( TEXT_MAX_SIZE_MILS );
+
+    m_attributes.m_Size = VECTOR2I( alg::clamp( min, aNewSize.x, max ),
+                                    alg::clamp( min, aNewSize.y, max ) );
     ClearRenderCache();
     m_bounding_box_cache_valid = false;
 }
@@ -366,7 +370,10 @@ void EDA_TEXT::SetTextSize( const VECTOR2I& aNewSize )
 
 void EDA_TEXT::SetTextWidth( int aWidth )
 {
-    m_attributes.m_Size.x = aWidth;
+    int min = m_IuScale.get().MilsToIU( TEXT_MIN_SIZE_MILS );
+    int max = m_IuScale.get().MilsToIU( TEXT_MAX_SIZE_MILS );
+
+    m_attributes.m_Size.x = alg::clamp( min, aWidth, max );
     ClearRenderCache();
     m_bounding_box_cache_valid = false;
 }
@@ -374,7 +381,10 @@ void EDA_TEXT::SetTextWidth( int aWidth )
 
 void EDA_TEXT::SetTextHeight( int aHeight )
 {
-    m_attributes.m_Size.y = aHeight;
+    int min = m_IuScale.get().MilsToIU( TEXT_MIN_SIZE_MILS );
+    int max = m_IuScale.get().MilsToIU( TEXT_MAX_SIZE_MILS );
+
+    m_attributes.m_Size.y = alg::clamp( min, aHeight, max );
     ClearRenderCache();
     m_bounding_box_cache_valid = false;
 }
@@ -1073,17 +1083,13 @@ static struct EDA_TEXT_DESC
                                                           &EDA_TEXT::SetTextWidth,
                                                           &EDA_TEXT::GetTextWidth,
                                                           PROPERTY_DISPLAY::PT_SIZE ),
-                             textProps )
-                .SetValidator( PROPERTY_VALIDATORS::RangeIntValidator<TEXTS_MIN_SIZE,
-                                                                      TEXTS_MAX_SIZE> );
+                             textProps );
 
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, int>( _HKI( "Height" ),
                                                           &EDA_TEXT::SetTextHeight,
                                                           &EDA_TEXT::GetTextHeight,
                                                           PROPERTY_DISPLAY::PT_SIZE ),
-                             textProps )
-                .SetValidator( PROPERTY_VALIDATORS::RangeIntValidator<TEXTS_MIN_SIZE,
-                                                                      TEXTS_MAX_SIZE> );
+                             textProps );
 
         propMgr.AddProperty( new PROPERTY_ENUM<EDA_TEXT,
                              GR_TEXT_H_ALIGN_T>( _HKI( "Horizontal Justification" ),

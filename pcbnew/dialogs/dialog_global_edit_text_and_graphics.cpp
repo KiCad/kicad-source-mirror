@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,6 @@
 #include <pcb_edit_frame.h>
 #include <footprint_edit_frame.h>
 #include <pcb_layer_box_selector.h>
-#include <pcbnew.h>
 #include <board.h>
 #include <board_design_settings.h>
 #include <footprint.h>
@@ -497,8 +496,11 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( BOARD_COMMIT& aCommit, BOA
 
 bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
 {
-    if( !m_textWidth.Validate( TEXTS_MIN_SIZE, TEXTS_MAX_SIZE )
-        || !m_textHeight.Validate( TEXTS_MIN_SIZE, TEXTS_MAX_SIZE ) )
+    int minTextSize = pcbIUScale.MilsToIU( TEXT_MIN_SIZE_MILS );
+    int maxTextSize = pcbIUScale.MilsToIU( TEXT_MAX_SIZE_MILS );
+
+    if( !m_textWidth.Validate( minTextSize, maxTextSize )
+        || !m_textHeight.Validate( minTextSize, maxTextSize ) )
     {
         return false;
     }

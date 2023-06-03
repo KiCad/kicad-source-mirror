@@ -36,7 +36,6 @@
 #include <pcb_shape.h>
 #include <microwave/microwave_tool.h>
 #include <pad.h>
-#include <pcbnew.h>
 #include <math/util.h>      // for KiROUND
 
 #include <wx/button.h>

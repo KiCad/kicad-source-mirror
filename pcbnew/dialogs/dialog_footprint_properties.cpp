@@ -35,7 +35,6 @@
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <pgm_base.h>
-#include <pcbnew.h>
 #include <kiplatform/ui.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <widgets/text_ctrl_eval.h>
@@ -367,11 +366,14 @@ bool DIALOG_FOOTPRINT_PROPERTIES::Validate()
             }
         }
 
+        int minSize = pcbIUScale.MilsToIU( TEXT_MIN_SIZE_MILS );
+        int maxSize = pcbIUScale.MilsToIU( TEXT_MAX_SIZE_MILS );
         int width = m_frame->ValueFromString( m_itemsGrid->GetCellValue( i, FPT_WIDTH ) );
+        int height = m_frame->ValueFromString( m_itemsGrid->GetCellValue( i, FPT_HEIGHT ) );
 
-        if( width < TEXTS_MIN_SIZE )
+        if( width < minSize )
         {
-            wxString min = m_frame->StringFromValue( TEXTS_MIN_SIZE, true );
+            wxString min = m_frame->StringFromValue( minSize, true );
 
             m_itemsGrid->SetCellValue( i, FPT_WIDTH, min );
 
@@ -382,9 +384,9 @@ bool DIALOG_FOOTPRINT_PROPERTIES::Validate()
 
             return false;
         }
-        else if( width > TEXTS_MAX_SIZE )
+        else if( width > maxSize )
         {
-            wxString max = m_frame->StringFromValue( TEXTS_MAX_SIZE, true );
+            wxString max = m_frame->StringFromValue( maxSize, true );
 
             m_itemsGrid->SetCellValue( i, FPT_WIDTH, max );
 
@@ -396,11 +398,9 @@ bool DIALOG_FOOTPRINT_PROPERTIES::Validate()
             return false;
         }
 
-        int height = m_frame->ValueFromString( m_itemsGrid->GetCellValue( i, FPT_HEIGHT ) );
-
-        if( height < TEXTS_MIN_SIZE )
+        if( height < minSize )
         {
-            wxString min = m_frame->StringFromValue( TEXTS_MIN_SIZE, true );
+            wxString min = m_frame->StringFromValue( minSize, true );
 
             m_itemsGrid->SetCellValue( i, FPT_HEIGHT, min );
 
@@ -411,9 +411,9 @@ bool DIALOG_FOOTPRINT_PROPERTIES::Validate()
 
             return false;
         }
-        else if( height > TEXTS_MAX_SIZE )
+        else if( height > maxSize )
         {
-            wxString max = m_frame->StringFromValue( TEXTS_MAX_SIZE, true );
+            wxString max = m_frame->StringFromValue( maxSize, true );
 
             m_itemsGrid->SetCellValue( i, FPT_HEIGHT, max );
 

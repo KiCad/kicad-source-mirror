@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -22,15 +22,14 @@
 #include <footprint_editor_settings.h>
 #include <layer_ids.h>
 #include <pgm_base.h>
+#include <eda_text.h>
 #include <settings/common_settings.h>
 #include <settings/json_settings_internals.h>
 #include <settings/parameters.h>
 #include <settings/settings_manager.h>
 #include <wx/config.h>
 #include <base_units.h>
-#include <widgets/ui_common.h>
 #include <wx/log.h>
-#include <pcbnew.h>
 
 
 ///! Update the schema version whenever a migration is required
@@ -161,95 +160,91 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
                                        { "${REFERENCE}", true, F_Fab }
                                    } ) ) );
 
+    int minTextSize = pcbIUScale.MilsToIU( TEXT_MIN_SIZE_MILS );
+    int maxTextSize = pcbIUScale.MilsToIU( TEXT_MAX_SIZE_MILS );
+    int minStroke = 1;
+    int maxStroke = pcbIUScale.mmToIU( 100 );
+
     m_params.emplace_back( new PARAM_SCALED<int>( "design_settings.silk_line_width",
             &m_DesignSettings.m_LineThickness[ LAYER_CLASS_SILK ],
-            pcbIUScale.mmToIU( DEFAULT_SILK_LINE_WIDTH ), pcbIUScale.mmToIU( 0.01 ), pcbIUScale.mmToIU( 100.0 ),
-            pcbIUScale.MM_PER_IU ) );
+            pcbIUScale.mmToIU( DEFAULT_SILK_LINE_WIDTH ), minStroke, maxStroke, pcbIUScale.MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "design_settings.silk_text_size_h",
             &m_DesignSettings.m_TextSize[ LAYER_CLASS_SILK ].x,
-            pcbIUScale.mmToIU( DEFAULT_SILK_TEXT_SIZE ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE, pcbIUScale.MM_PER_IU ) );
+            pcbIUScale.mmToIU( DEFAULT_SILK_TEXT_SIZE ), minTextSize, maxTextSize, pcbIUScale.MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "design_settings.silk_text_size_v",
             &m_DesignSettings.m_TextSize[ LAYER_CLASS_SILK ].y,
-            pcbIUScale.mmToIU( DEFAULT_SILK_TEXT_SIZE ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE, pcbIUScale.MM_PER_IU ) );
+            pcbIUScale.mmToIU( DEFAULT_SILK_TEXT_SIZE ), minTextSize, maxTextSize, pcbIUScale.MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "design_settings.silk_text_thickness",
             &m_DesignSettings.m_TextThickness[ LAYER_CLASS_SILK ],
-            pcbIUScale.mmToIU( DEFAULT_SILK_TEXT_WIDTH ), 1, TEXTS_MAX_WIDTH, pcbIUScale.MM_PER_IU ) );
+            pcbIUScale.mmToIU( DEFAULT_SILK_TEXT_WIDTH ), 1, maxTextSize, pcbIUScale.MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM<bool>( "design_settings.silk_text_italic",
             &m_DesignSettings.m_TextItalic[ LAYER_CLASS_SILK ], false ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "design_settings.copper_line_width",
             &m_DesignSettings.m_LineThickness[ LAYER_CLASS_COPPER ],
-            pcbIUScale.mmToIU( DEFAULT_COPPER_LINE_WIDTH ), pcbIUScale.mmToIU( 0.01 ), pcbIUScale.mmToIU( 5.0 ),
-            pcbIUScale.MM_PER_IU ) );
+            pcbIUScale.mmToIU( DEFAULT_COPPER_LINE_WIDTH ), minStroke, maxStroke, pcbIUScale.MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "design_settings.copper_text_size_h",
             &m_DesignSettings.m_TextSize[ LAYER_CLASS_COPPER ].x,
-            pcbIUScale.mmToIU( DEFAULT_COPPER_TEXT_SIZE ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
-            pcbIUScale.MM_PER_IU ) );
+            pcbIUScale.mmToIU( DEFAULT_COPPER_TEXT_SIZE ), minTextSize, maxTextSize, pcbIUScale.MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "design_settings.copper_text_size_v",
             &m_DesignSettings.m_TextSize[ LAYER_CLASS_COPPER ].y,
-            pcbIUScale.mmToIU( DEFAULT_COPPER_TEXT_SIZE ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
-            pcbIUScale.MM_PER_IU ) );
+            pcbIUScale.mmToIU( DEFAULT_COPPER_TEXT_SIZE ), minTextSize, maxTextSize, pcbIUScale.MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "design_settings.copper_text_thickness",
             &m_DesignSettings.m_TextThickness[ LAYER_CLASS_COPPER ],
-            pcbIUScale.mmToIU( DEFAULT_COPPER_TEXT_WIDTH ), pcbIUScale.mmToIU( 0.01 ), pcbIUScale.mmToIU( 5.0 ),
-            pcbIUScale.MM_PER_IU ) );
+            pcbIUScale.mmToIU( DEFAULT_COPPER_TEXT_WIDTH ), minStroke, maxStroke, pcbIUScale.MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM<bool>( "design_settings.copper_text_italic",
             &m_DesignSettings.m_TextItalic[ LAYER_CLASS_COPPER ], false ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "design_settings.edge_line_width",
             &m_DesignSettings.m_LineThickness[ LAYER_CLASS_EDGES ],
-            pcbIUScale.mmToIU( DEFAULT_EDGE_WIDTH ), pcbIUScale.mmToIU( 0.01 ), pcbIUScale.mmToIU( 5.0 ),
-            pcbIUScale.MM_PER_IU ) );
+            pcbIUScale.mmToIU( DEFAULT_EDGE_WIDTH ), minStroke, maxStroke, pcbIUScale.MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "design_settings.courtyard_line_width",
             &m_DesignSettings.m_LineThickness[ LAYER_CLASS_COURTYARD ],
-            pcbIUScale.mmToIU( DEFAULT_COURTYARD_WIDTH ), pcbIUScale.mmToIU( 0.01 ), pcbIUScale.mmToIU( 5.0 ),
-            pcbIUScale.MM_PER_IU ) );
+            pcbIUScale.mmToIU( DEFAULT_COURTYARD_WIDTH ), minStroke, maxStroke, pcbIUScale.MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "design_settings.fab_line_width",
            &m_DesignSettings.m_LineThickness[ LAYER_CLASS_FAB ],
-           pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH ), pcbIUScale.mmToIU( 0.01 ), pcbIUScale.mmToIU( 5.0 ),
-           pcbIUScale.MM_PER_IU ) );
+           pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH ), minStroke, maxStroke, pcbIUScale.MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "design_settings.fab_text_size_h",
            &m_DesignSettings.m_TextSize[ LAYER_CLASS_FAB ].x,
-           pcbIUScale.mmToIU( DEFAULT_TEXT_SIZE ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE, pcbIUScale.MM_PER_IU ) );
+           pcbIUScale.mmToIU( DEFAULT_TEXT_SIZE ), minTextSize, maxTextSize, pcbIUScale.MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "design_settings.fab_text_size_v",
            &m_DesignSettings.m_TextSize[ LAYER_CLASS_FAB ].y,
-           pcbIUScale.mmToIU( DEFAULT_TEXT_SIZE ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE, pcbIUScale.MM_PER_IU ) );
+           pcbIUScale.mmToIU( DEFAULT_TEXT_SIZE ), minTextSize, maxTextSize, pcbIUScale.MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "design_settings.fab_text_thickness",
            &m_DesignSettings.m_TextThickness[ LAYER_CLASS_FAB ],
-           pcbIUScale.mmToIU( DEFAULT_TEXT_WIDTH ), 1, TEXTS_MAX_WIDTH, pcbIUScale.MM_PER_IU ) );
+           pcbIUScale.mmToIU( DEFAULT_TEXT_WIDTH ), 1, maxTextSize, pcbIUScale.MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM<bool>( "design_settings.fab_text_italic",
-            &m_DesignSettings.m_TextItalic[ LAYER_CLASS_FAB ], false ) );
+           &m_DesignSettings.m_TextItalic[ LAYER_CLASS_FAB ], false ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "design_settings.others_line_width",
            &m_DesignSettings.m_LineThickness[ LAYER_CLASS_OTHERS ],
-           pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH ), pcbIUScale.mmToIU( 0.01 ), pcbIUScale.mmToIU( 5.0 ),
-           pcbIUScale.MM_PER_IU ) );
+           pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH ), minStroke, maxStroke, pcbIUScale.MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "design_settings.others_text_size_h",
            &m_DesignSettings.m_TextSize[ LAYER_CLASS_OTHERS ].x,
-           pcbIUScale.mmToIU( DEFAULT_TEXT_SIZE ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE, pcbIUScale.MM_PER_IU ) );
+           pcbIUScale.mmToIU( DEFAULT_TEXT_SIZE ), minTextSize, maxTextSize, pcbIUScale.MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "design_settings.others_text_size_v",
            &m_DesignSettings.m_TextSize[ LAYER_CLASS_OTHERS ].y,
-           pcbIUScale.mmToIU( DEFAULT_TEXT_SIZE ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE, pcbIUScale.MM_PER_IU ) );
+           pcbIUScale.mmToIU( DEFAULT_TEXT_SIZE ), minTextSize, maxTextSize, pcbIUScale.MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "design_settings.others_text_thickness",
            &m_DesignSettings.m_TextThickness[ LAYER_CLASS_OTHERS ],
-           pcbIUScale.mmToIU( DEFAULT_TEXT_WIDTH ), 1, TEXTS_MAX_WIDTH, pcbIUScale.MM_PER_IU ) );
+           pcbIUScale.mmToIU( DEFAULT_TEXT_WIDTH ), 1, maxTextSize, pcbIUScale.MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM<bool>( "design_settings.others_text_italic",
             &m_DesignSettings.m_TextItalic[ LAYER_CLASS_OTHERS ], false ) );

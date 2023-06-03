@@ -343,7 +343,7 @@ void PAD::SetRoundRectCornerRadius( double aRadius )
 
 void PAD::SetRoundRectRadiusRatio( double aRadiusScale )
 {
-    m_roundedCornerScale = std::max( 0.0, std::min( aRadiusScale, 0.5 ) );
+    m_roundedCornerScale = alg::clamp( 0.0, aRadiusScale, 0.5 );
 
     SetDirty();
 }
@@ -351,7 +351,7 @@ void PAD::SetRoundRectRadiusRatio( double aRadiusScale )
 
 void PAD::SetChamferRectRatio( double aChamferScale )
 {
-    m_chamferScale = std::max( 0.0, std::min( aChamferScale, 0.5 ) );
+    m_chamferScale = alg::clamp( 0.0, aChamferScale, 0.5 );
 
     SetDirty();
 }

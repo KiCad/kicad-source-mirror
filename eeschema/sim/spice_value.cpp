@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -23,7 +24,8 @@
  */
 
 #include "spice_value.h"
-#include "math/util.h"
+#include <math/util.h>
+#include <core/kicad_algo.h>
 
 #include <stdexcept>
 #include <cmath>
@@ -47,7 +49,7 @@ void SPICE_VALUE_FORMAT::FromString( const wxString& aString )
 
 wxString SPICE_VALUE_FORMAT::ToString() const
 {
-    return wxString::Format( wxS( "%d%s" ), std::max( 0, std::min( Precision, 9 ) ), Range );
+    return wxString::Format( wxS( "%d%s" ), alg::clamp( 0, Precision, 9 ), Range );
 }
 
 

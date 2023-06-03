@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -197,6 +197,13 @@ template <typename T, std::enable_if_t<std::is_integral<T>::value, int> = 0>
 bool signbit( T v )
 {
     return v < 0;
+}
+
+
+template <typename T>
+T clamp( T min, T value, T max )
+{
+    return std::max( min, std::min( value, max ) );
 }
 
 

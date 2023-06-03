@@ -30,7 +30,6 @@
 #include <board.h>
 #include <footprint.h>
 #include <pcb_textbox.h>
-#include <pcbnew.h>
 #include <project.h>
 #include <pcb_edit_frame.h>
 #include <pcb_layer_box_selector.h>
@@ -284,11 +283,11 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataFromWindow()
     if( !DIALOG_TEXTBOX_PROPERTIES_BASE::TransferDataFromWindow() )
         return false;
 
-    if( !m_textWidth.Validate( TEXTS_MIN_SIZE, TEXTS_MAX_SIZE )
-        || !m_textHeight.Validate( TEXTS_MIN_SIZE, TEXTS_MAX_SIZE ) )
-    {
+    int minSize = pcbIUScale.MilsToIU( TEXT_MIN_SIZE_MILS );
+    int maxSize = pcbIUScale.MilsToIU( TEXT_MAX_SIZE_MILS );
+
+    if( !m_textWidth.Validate( minSize, maxSize ) || !m_textHeight.Validate( minSize, maxSize ) )
         return false;
-    }
 
     BOARD_COMMIT commit( m_frame );
     commit.Modify( m_textBox );
