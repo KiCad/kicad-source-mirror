@@ -25,7 +25,7 @@
 #ifndef __SPLIT_BUTTON_H__
 #define __SPLIT_BUTTON_H__
 
-#include <wx/bitmap.h>
+#include <wx/bmpbndl.h>
 #include <wx/panel.h>
 
 class wxButton;
@@ -40,7 +40,7 @@ public:
     ~SPLIT_BUTTON();
 
     wxMenu* GetSplitButtonMenu();
-    void    SetBitmap( const wxBitmap& aBmp );
+    void    SetBitmap( const wxBitmapBundle& aBmp );
     void    SetMinSize( const wxSize& aSize ) override;
     void    SetWidthPadding( int aPadding );
     void    SetLabel( const wxString& aLabel ) override;
@@ -65,7 +65,7 @@ private:
     bool      m_bLButtonDown     = false;
     wxString  m_label;
     wxMenu*   m_pMenu = nullptr;
-    wxBitmap  m_bitmap;
+    wxBitmapBundle  m_bitmap;
     wxSize    m_unadjustedMinSize;
 };
 

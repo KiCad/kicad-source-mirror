@@ -93,11 +93,11 @@ void SPLIT_BUTTON::SetWidthPadding( int aPadding )
 }
 
 
-void SPLIT_BUTTON::SetBitmap( const wxBitmap& aBmp )
+void SPLIT_BUTTON::SetBitmap( const wxBitmapBundle& aBmp )
 {
     m_bitmap = aBmp;
 
-    SetMinSize( wxSize( m_bitmap.GetWidth(), m_bitmap.GetHeight() ) );
+    SetMinSize( m_bitmap.GetPreferredBitmapSizeFor( this ) );
 }
 
 
@@ -284,16 +284,17 @@ void SPLIT_BUTTON::OnPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 
     if( m_bitmap.IsOk() )
     {
-        wxMemoryDC mdc( m_bitmap );
+        wxBitmap   bmp = m_bitmap.GetBitmapFor( this );
+        wxMemoryDC mdc( bmp );
 
-        r1.x = ( width - m_bitmap.GetWidth() ) / 2;
+        r1.x = ( width - bmp.GetWidth() ) / 2;
 
         if( r1.x < 0 )
             r1.x = 0;
 
-        r1.y += ( size.GetHeight() - m_bitmap.GetHeight() ) / 2;
+        r1.y += ( size.GetHeight() - bmp.GetHeight() ) / 2;
 
-        dc.Blit( wxPoint( r1.x, r1.y ), m_bitmap.GetSize(), &mdc, wxPoint( 0, 0 ), wxCOPY, true );
+        dc.Blit( wxPoint( r1.x, r1.y ), bmp.GetSize(), &mdc, wxPoint( 0, 0 ), wxCOPY, true );
     }
     else
     {
