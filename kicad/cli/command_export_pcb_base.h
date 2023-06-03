@@ -32,6 +32,10 @@ namespace CLI
 #define ARG_BLACKANDWHITE "--black-and-white"
 #define ARG_BLACKANDWHITE_DESC "Black and white only"
 
+#define ARG_NEGATIVE "--negative"
+#define ARG_NEGATIVE_SHORT "-n"
+#define ARG_NEGATIVE_DESC "Plot as negative (useful for directly etching from the export)"
+
 #define ARG_LAYERS "--layers"
 #define ARG_EXCLUDE_REFDES "--exclude-refdes"
 #define ARG_EXCLUDE_VALUE "--exclude-value"

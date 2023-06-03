@@ -131,6 +131,7 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     svgPlotOptions.m_colorTheme = aSvgJob->m_colorTheme;
     svgPlotOptions.m_outputFile = aSvgJob->m_outputFile;
     svgPlotOptions.m_mirror = aSvgJob->m_mirror;
+    svgPlotOptions.m_negative = aSvgJob->m_negative;
     svgPlotOptions.m_pageSizeMode = aSvgJob->m_pageSizeMode;
     svgPlotOptions.m_printMaskLayer = aSvgJob->m_printMaskLayer;
     svgPlotOptions.m_plotFrame = aSvgJob->m_plotDrawingSheet;
@@ -240,6 +241,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
     plotOpts.SetColorSettings( mgr.GetColorSettings( aPdfJob->m_colorTheme ) );
     plotOpts.SetBlackAndWhite( aPdfJob->m_blackAndWhite );
+    plotOpts.SetNegative( aPdfJob->m_negative );
 
     PDF_PLOTTER* plotter = (PDF_PLOTTER*) StartPlotBoard(
             brd, &plotOpts, UNDEFINED_LAYER, aPdfJob->m_outputFile, wxEmptyString, wxEmptyString );

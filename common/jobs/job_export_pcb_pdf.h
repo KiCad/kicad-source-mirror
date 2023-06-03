@@ -34,6 +34,7 @@ public:
             m_outputFile(),
             m_colorTheme(),
             m_blackAndWhite( false ),
+            m_negative( false ),
             m_plotFootprintValues( true ),
             m_plotRefDes( true ),
             m_plotBorderTitleBlocks( false ),
@@ -46,6 +47,7 @@ public:
     wxString m_colorTheme;
 
     bool m_blackAndWhite;
+    bool m_negative;
     bool m_plotFootprintValues;
     bool m_plotRefDes;
     bool m_plotBorderTitleBlocks;

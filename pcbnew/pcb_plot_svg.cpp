@@ -45,6 +45,7 @@ bool PCB_PLOT_SVG::Plot( BOARD* aBoard, const PCB_PLOT_SVG_OPTIONS& aSvgPlotOpti
     plot_opts.SetSkipPlotNPTH_Pads( false );
 
     plot_opts.SetMirror( aSvgPlotOptions.m_mirror );
+    plot_opts.SetNegative( aSvgPlotOptions.m_negative );
     plot_opts.SetFormat( PLOT_FORMAT::SVG );
     // coord format: 4 digits in mantissa (units always in mm). This is a good choice.
     plot_opts.SetSvgPrecision( 4 );
