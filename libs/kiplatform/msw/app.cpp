@@ -106,7 +106,7 @@ bool KIPLATFORM::APP::Init()
         wxLog::EnableLogging( true );
 #ifndef DEBUG
         wxLog::SetLogLevel( wxLOG_Trace );
-#endif;
+#endif
         wxLog::SetActiveTarget( new wxLogStderr );
     }
 

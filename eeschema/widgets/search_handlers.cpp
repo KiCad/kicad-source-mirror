@@ -121,7 +121,6 @@ SYMBOL_SEARCH_HANDLER::SYMBOL_SEARCH_HANDLER( SCH_EDIT_FRAME* aFrame ) :
 int SYMBOL_SEARCH_HANDLER::Search( const wxString& aQuery )
 {
     m_hitlist.clear();
-    SCHEMATIC& sch = m_frame->Schematic();
 
     SCH_SEARCH_DATA frp;
     frp.findString = aQuery;
