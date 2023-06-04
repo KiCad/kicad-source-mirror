@@ -44,6 +44,8 @@ public:
 
     TOOL_INTERACTIVE* GetContextMenuTool() override;
 
+    wxDataViewItem GetCurrentDataViewItem() override;
+
 protected:
     FP_TREE_SYNCHRONIZING_ADAPTER( FOOTPRINT_EDIT_FRAME* aFrame, FP_LIB_TABLE* aLibs );
 

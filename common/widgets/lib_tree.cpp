@@ -491,7 +491,11 @@ void LIB_TREE::onDebounceTimer( wxTimerEvent& aEvent )
 
 void LIB_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
 {
-    const wxDataViewItem sel = m_tree_ctrl->GetSelection();
+    wxDataViewItem sel = m_tree_ctrl->GetSelection();
+
+    if( !sel.IsOk() )
+        sel = m_adapter->GetCurrentDataViewItem();
+
     LIB_TREE_NODE::TYPE  type = sel.IsOk() ? m_adapter->GetTypeFor( sel ) : LIB_TREE_NODE::INVALID;
 
     switch( aKeyStroke.GetKeyCode() )

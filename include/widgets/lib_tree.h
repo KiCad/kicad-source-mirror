@@ -224,7 +224,6 @@ protected:
     wxTimer*         m_debounceTimer;
     bool             m_inTimerEvent;
 
-    LIB_ID           m_last_libid;
     wxString         m_recentSearchesKey;
 
     bool             m_skipNextRightClick;

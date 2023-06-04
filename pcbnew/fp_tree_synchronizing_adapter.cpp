@@ -169,6 +169,12 @@ FP_TREE_SYNCHRONIZING_ADAPTER::deleteLibrary( LIB_TREE_NODE::PTR_VECTOR::iterato
 }
 
 
+wxDataViewItem FP_TREE_SYNCHRONIZING_ADAPTER::GetCurrentDataViewItem()
+{
+    return FindItem( m_frame->GetLoadedFPID() );
+}
+
+
 void FP_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
                                               unsigned int aCol ) const
 {

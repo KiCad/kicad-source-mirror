@@ -48,6 +48,8 @@ public:
 
     TOOL_INTERACTIVE* GetContextMenuTool() override;
 
+    wxDataViewItem GetCurrentDataViewItem() override;
+
 protected:
     void updateLibrary( LIB_TREE_NODE_LIB& aLibNode );
 
