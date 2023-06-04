@@ -775,8 +775,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColumnItemToggled( wxDataViewEvent& event )
     case GROUP_BY_COLUMN:
     {
         bool value = m_fieldsCtrl->GetToggleValue( row, col );
+        int  dataCol = m_dataModel->GetFieldNameCol(
+                m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN ) );
 
-        if( m_dataModel->ColIsQuantity( row ) && value )
+        if( m_dataModel->ColIsQuantity( dataCol ) && value )
         {
             DisplayError( this, _( "The Quantity column cannot be grouped by." ) );
 
