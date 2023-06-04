@@ -208,6 +208,15 @@ SYMBOL_TREE_SYNCHRONIZING_ADAPTER::deleteLibrary( LIB_TREE_NODE::PTR_VECTOR::ite
 }
 
 
+wxDataViewItem SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetCurrentDataViewItem()
+{
+    if( m_frame->GetCurSymbol() )
+        return FindItem( m_frame->GetCurSymbol()->GetLibId() );
+
+    return wxDataViewItem();
+}
+
+
 void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
                                                   unsigned int aCol ) const
 {

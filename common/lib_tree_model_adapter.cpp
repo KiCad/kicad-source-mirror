@@ -417,6 +417,12 @@ wxDataViewItem LIB_TREE_MODEL_ADAPTER::FindItem( const LIB_ID& aLibId )
 }
 
 
+wxDataViewItem LIB_TREE_MODEL_ADAPTER::GetCurrentDataViewItem()
+{
+    return FindItem( m_preselect_lib_id );
+}
+
+
 unsigned int LIB_TREE_MODEL_ADAPTER::GetChildren( const wxDataViewItem&   aItem,
                                                   wxDataViewItemArray&    aChildren ) const
 {

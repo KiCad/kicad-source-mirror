@@ -283,6 +283,8 @@ public:
      */
     wxDataViewItem FindItem( const LIB_ID& aLibId );
 
+    virtual wxDataViewItem GetCurrentDataViewItem();
+
     /**
      * Populate a list of all the children of an item
      *
