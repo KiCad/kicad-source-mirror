@@ -4,7 +4,7 @@
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2022 CERN
- * Copyright (C) 2004-2022 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2023 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -186,7 +186,7 @@ public:
 
     void GetChooserFields( std::map<wxString , wxString>& aColumnMap ) override;
 
-            /**
+    /**
      * For symbols derived from other symbols, IsRoot() indicates no derivation.
      */
     bool IsRoot() const override { return m_parent.use_count() == 0; }
@@ -349,7 +349,7 @@ public:
      * @param aDimmed - Reduce brightness of symbol
      */
     void PrintBackground( const RENDER_SETTINGS *aSettings, const VECTOR2I &aOffset, int aMulti,
-            int aConvert, const LIB_SYMBOL_OPTIONS &aOpts, bool aDimmed );
+                          int aConvert, const LIB_SYMBOL_OPTIONS &aOpts, bool aDimmed );
 
     /**
      * Plot lib symbol to plotter.
@@ -380,7 +380,8 @@ public:
      * @param aDimmed - reduce brightness of fields
      */
     void PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert, bool aBackground,
-                        const VECTOR2I& aOffset, const TRANSFORM& aTransform, bool aDimmed, bool aPlotHidden = true );
+                        const VECTOR2I& aOffset, const TRANSFORM& aTransform, bool aDimmed,
+                        bool aPlotHidden = true );
 
     /**
      * Add a new draw \a aItem to the draw object list and sort according to \a aSort.
