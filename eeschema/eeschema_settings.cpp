@@ -418,6 +418,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
 
     m_params.emplace_back( new PARAM<int>( "field_editor.page", &m_FieldEditorPanel.page, 0 ) );
 
+    m_params.emplace_back( new PARAM<wxString>( "field_editor.export_filename",
+                                                &m_FieldEditorPanel.export_filename, wxT( "" ) ) );
+
     m_params.emplace_back( new PARAM<bool>( "plot.background_color",
             &m_PlotPanel.background_color, false ) );
 

@@ -212,6 +212,7 @@ public:
         int                        width;
         int                        height;
         int                        page;
+        wxString                   export_filename;
     };
 
     struct PANEL_LIB_VIEW

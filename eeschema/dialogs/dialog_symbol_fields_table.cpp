@@ -266,6 +266,8 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
 
     m_nbPages->SetSelection( cfg->m_FieldEditorPanel.page );
 
+    m_outputFileName->SetValue( cfg->m_FieldEditorPanel.export_filename );
+
     Center();
 
     // Connect Events
@@ -391,6 +393,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::~DIALOG_SYMBOL_FIELDS_TABLE()
     cfg->m_FieldEditorPanel.width = GetSize().x;
     cfg->m_FieldEditorPanel.height = GetSize().y;
     cfg->m_FieldEditorPanel.page = m_nbPages->GetSelection();
+    cfg->m_FieldEditorPanel.export_filename = m_outputFileName->GetValue();
 
     for( int i = 0; i < m_grid->GetNumberCols(); i++ )
     {
