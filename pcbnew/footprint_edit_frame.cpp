@@ -811,7 +811,7 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateLoadFootprintFromBoard( wxUpdateUIEvent& aEve
 {
     PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB_EDITOR, false );
 
-    aEvent.Enable( frame && frame->GetBoard()->GetFirstFootprint() != nullptr );
+    aEvent.Enable( frame != nullptr );
 }
 
 
