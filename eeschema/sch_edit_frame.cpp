@@ -475,6 +475,12 @@ void SCH_EDIT_FRAME::setupUIConditions()
                         ( !GetScreen()->Items().empty() || !SELECTION_CONDITIONS::Idle( aSel ) );
             };
 
+    auto searchPaneCond =
+        [this] ( const SELECTION& )
+        {
+            return m_auimgr.GetPane( SearchPaneName() ).IsShown();
+        };
+
     auto hierarchyNavigatorCond =
             [ this ] ( const SELECTION& aSel )
             {
@@ -494,6 +500,7 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::undo,                ENABLE( cond.UndoAvailable() ) );
     mgr->SetConditions( ACTIONS::redo,                ENABLE( cond.RedoAvailable() ) );
 
+    mgr->SetConditions( EE_ACTIONS::showSearch,       CHECK( searchPaneCond ) );
     mgr->SetConditions( EE_ACTIONS::showHierarchy,    CHECK( hierarchyNavigatorCond ) );
     mgr->SetConditions( EE_ACTIONS::showNetNavigator, CHECK( netNavigatorCond ) );
     mgr->SetConditions( ACTIONS::toggleGrid,          CHECK( cond.GridVisible() ) );
