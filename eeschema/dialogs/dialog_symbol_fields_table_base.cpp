@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -90,15 +90,15 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_separator1 = new BITMAP_BUTTON( m_rightPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
 	m_separator1->Enable( false );
 
-	bControls->Add( m_separator1, 0, wxALL, 5 );
+	bControls->Add( m_separator1, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_checkExcludeDNP = new wxCheckBox( m_rightPanel, wxID_ANY, _("Exclude DNP"), wxDefaultPosition, wxDefaultSize, 0 );
-	bControls->Add( m_checkExcludeDNP, 0, wxALL, 5 );
+	bControls->Add( m_checkExcludeDNP, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_separator2 = new BITMAP_BUTTON( m_rightPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
 	m_separator2->Enable( false );
 
-	bControls->Add( m_separator2, 0, wxALL, 5 );
+	bControls->Add( m_separator2, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_groupSymbolsBox = new wxCheckBox( m_rightPanel, OPT_GROUP_COMPONENTS, _("Group symbols"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_groupSymbolsBox->SetValue(true);
@@ -109,7 +109,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_separator3 = new BITMAP_BUTTON( m_rightPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
 	m_separator3->Enable( false );
 
-	bControls->Add( m_separator3, 0, wxALL, 5 );
+	bControls->Add( m_separator3, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_bRefresh = new wxBitmapButton( m_rightPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bRefresh->SetMinSize( wxSize( 30,30 ) );
