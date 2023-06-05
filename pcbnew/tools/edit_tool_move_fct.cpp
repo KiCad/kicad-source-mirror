@@ -351,7 +351,7 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommi
     auto updateStatusPopup =
             [&]( EDA_ITEM* item, size_t ii, size_t count )
             {
-                wxString popuptext = _( "Click to place %s (item %ld of %ld)\n"
+                wxString popuptext = _( "Click to place %s (item %zu of %zu)\n"
                                      "Press <esc> to cancel all; double-click to finish" );
                 wxString msg;
 
