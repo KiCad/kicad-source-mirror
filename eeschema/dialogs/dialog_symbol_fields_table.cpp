@@ -120,20 +120,6 @@ protected:
         {
             GRID_TRICKS::doPopupSelection( event );
         }
-
-        if( event.GetId() >= GRIDTRICKS_FIRST_SHOWHIDE && event.GetId() < GRIDTRICKS_LAST_ID )
-        {
-            if( !m_grid->IsColShown( REFERENCE_FIELD ) )
-            {
-                DisplayError( m_dlg, _( "The Reference column cannot be hidden." ) );
-
-                m_grid->ShowCol( REFERENCE_FIELD );
-            }
-
-            // Refresh Show checkboxes from grid columns
-            for( int i = 0; i < m_fieldsCtrl->GetItemCount(); ++i )
-                m_fieldsCtrl->SetToggleValue( m_grid->IsColShown( i ), i, 1 );
-        }
     }
 
     DIALOG_SHIM*        m_dlg;
