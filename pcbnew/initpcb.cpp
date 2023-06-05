@@ -22,13 +22,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcbnew/initpcb.cpp
- */
-
 #include <confirm.h>
 #include <pcb_edit_frame.h>
 #include <project.h>
+#include <tool/tool_manager.h>
 #include <project/net_settings.h>
 #include <project/project_file.h>
 
@@ -89,6 +86,15 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery, bool aFinal )
 
         Zoom_Automatique( false );
     }
+    else if( m_isClosing )
+    {
+        if( m_toolManager )
+            m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+
+        // Clear the view so we don't attempt redraws (particularly of the RATSNEST_VIEW_ITEM,
+        // which causes all manner of grief).
+        GetCanvas()->GetView()->Clear();
+    }
 
     return true;
 }
@@ -123,19 +129,30 @@ bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool aQuery )
     ClearUndoRedoList();
     GetScreen()->SetContentModified( false );
 
-    BOARD* board = new BOARD;
+    if( !m_isClosing )
+    {
+        SetBoard( new BOARD );
 
-    board->GetDesignSettings() = GetDesignSettings();
-    board->SynchronizeNetsAndNetClasses( true );
-    SetBoard( board );
+        GetBoard()->GetDesignSettings() = GetDesignSettings();
+        GetBoard()->SynchronizeNetsAndNetClasses( true );
 
-    // This board will only be used to hold a footprint for editing
-    GetBoard()->SetBoardUse( BOARD_USE::FPHOLDER );
+        // This board will only be used to hold a footprint for editing
+        GetBoard()->SetBoardUse( BOARD_USE::FPHOLDER );
 
-    // clear filename, to avoid overwriting an old file
-    GetBoard()->SetFileName( wxEmptyString );
+        // clear filename, to avoid overwriting an old file
+        GetBoard()->SetFileName( wxEmptyString );
 
-    GetScreen()->InitDataPoints( GetPageSizeIU() );
+        GetScreen()->InitDataPoints( GetPageSizeIU() );
+    }
+    else
+    {
+        if( m_toolManager )
+            m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+
+        // Clear the view so we don't attempt redraws
+        GetCanvas()->GetView()->Clear();
+    }
+
 
     return true;
 }
