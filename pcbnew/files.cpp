@@ -31,7 +31,6 @@
 #include <pcb_edit_frame.h>
 #include <board_design_settings.h>
 #include <3d_viewer/eda_3d_viewer_frame.h>
-#include <widgets/msgpanel.h>
 #include <fp_lib_table.h>
 #include <kiface_base.h>
 #include <macros.h>
@@ -44,9 +43,6 @@
 #include <wildcards_and_files_ext.h>
 #include <tool/tool_manager.h>
 #include <board.h>
-#include <wx/checkbox.h>
-#include <wx/stdpaths.h>
-#include <ratsnest/ratsnest_data.h>
 #include <kiplatform/app.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/wx_infobar.h>
@@ -61,13 +57,13 @@
 #include <dialogs/dialog_imported_layers.h>
 #include <tools/pcb_actions.h>
 #include "footprint_info_impl.h"
-#include "board_commit.h"
-#include "zone_filler.h"
+#include <board_commit.h>
+#include <zone_filler.h>
 #include <wx_filename.h>  // For ::ResolvePossibleSymlinks()
 
 #include <kiplatform/io.h>
 
-#include <wx/wupdlock.h>
+#include <wx/stdpaths.h>
 #include <wx/filedlg.h>
 #include <wx/wfstream.h>
 #include <wx/txtstrm.h>
