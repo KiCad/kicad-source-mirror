@@ -32,7 +32,7 @@ PANEL_BOARD_CLASS_BASE::PANEL_BOARD_CLASS_BASE( wxWindow* parent, wxWindowID id,
 
 	m_staticTextBrdClass = new wxStaticText( this, wxID_ANY, _("Note: Values are minimal values"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextBrdClass->Wrap( -1 );
-	m_staticTextBrdClass->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_staticTextBrdClass->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
 	brdclsSizerRight->Add( m_staticTextBrdClass, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
@@ -81,7 +81,7 @@ PANEL_BOARD_CLASS_BASE::PANEL_BOARD_CLASS_BASE( wxWindow* parent, wxWindowID id,
 	// Label Appearance
 
 	// Cell Defaults
-	m_gridClassesValuesDisplay->SetDefaultCellAlignment( wxALIGN_CENTER, wxALIGN_TOP );
+	m_gridClassesValuesDisplay->SetDefaultCellAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 	brdclsSizerRight->Add( m_gridClassesValuesDisplay, 0, wxALL, 5 );
 
 	m_panelShowClassPrms = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
