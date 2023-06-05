@@ -65,15 +65,16 @@ enum
     MYID_SHOW_DATASHEET
 };
 
-
 class FIELDS_EDITOR_GRID_TRICKS : public GRID_TRICKS
 {
 public:
     FIELDS_EDITOR_GRID_TRICKS( DIALOG_SHIM* aParent, WX_GRID* aGrid,
-                               wxDataViewListCtrl* aFieldsCtrl ) :
+                               wxDataViewListCtrl*            aFieldsCtrl,
+                               FIELDS_EDITOR_GRID_DATA_MODEL* aDataModel ) :
             GRID_TRICKS( aGrid ),
             m_dlg( aParent ),
-            m_fieldsCtrl( aFieldsCtrl )
+            m_fieldsCtrl( aFieldsCtrl ),
+            m_dataModel( aDataModel )
     {}
 
 protected:
@@ -118,12 +119,38 @@ protected:
         }
         else
         {
-            GRID_TRICKS::doPopupSelection( event );
+            // We have grid tricks events to show/hide the columns from the popup menu
+            // and we need to make sure the data model is updated to match the grid,
+            // so do it through our code instead
+            if( event.GetId() >= GRIDTRICKS_FIRST_SHOWHIDE )
+            {
+                // Pop-up column order is the order of the shown fields, not the
+                // fieldsCtrl order
+                int col = event.GetId() - GRIDTRICKS_FIRST_SHOWHIDE;
+
+                bool show = !m_dataModel->GetShowColumn( col );
+
+                // Convert data model column to by iterating over m_fieldsCtrl rows
+                // and finding the matching field name
+                wxString fieldName = m_dataModel->GetColFieldName( col );
+
+                for( int row = 0; row < m_fieldsCtrl->GetItemCount(); row++ )
+                {
+                    if( m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN ) == fieldName )
+                    {
+                        m_fieldsCtrl->SetToggleValue( show, row, SHOW_FIELD_COLUMN );
+                        break;
+                    }
+                }
+            }
+            else
+                GRID_TRICKS::doPopupSelection( event );
         }
     }
 
     DIALOG_SHIM*        m_dlg;
     wxDataViewListCtrl* m_fieldsCtrl;
+    FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel;
 };
 
 
@@ -220,7 +247,8 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     m_grid->SetSelectionMode( wxGrid::wxGridSelectCells );
 
     // add Cut, Copy, and Paste to wxGrid
-    m_grid->PushEventHandler( new FIELDS_EDITOR_GRID_TRICKS( this, m_grid, m_fieldsCtrl ) );
+    m_grid->PushEventHandler(
+            new FIELDS_EDITOR_GRID_TRICKS( this, m_grid, m_fieldsCtrl, m_dataModel ) );
 
     // give a bit more room for comboboxes
     m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
@@ -1534,10 +1562,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
         m_fieldsCtrl->SetToggleValue( show, i, SHOW_FIELD_COLUMN );
 
         if( show )
-        {
             m_grid->ShowCol( col );
-            //m_grid->SetColSize( col, schSettings. );
-        }
         else
             m_grid->HideCol( col );
 
