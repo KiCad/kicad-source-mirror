@@ -48,7 +48,7 @@ namespace KI_TEST
 {
 
 BOARD_DUMPER::BOARD_DUMPER() :
-        m_dump_boards( std::getenv( "KICAD_TEST_DUMP_BOARD_FILES" ) )
+        m_dump_boards( true )
 {
 }
 

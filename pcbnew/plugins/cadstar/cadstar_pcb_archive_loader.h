@@ -367,7 +367,7 @@ private:
      * @param aShapes
      * @return
      */
-    SHAPE_LINE_CHAIN getLineChainFromShapes( const std::vector<PCB_SHAPE*> aShapes );
+    SHAPE_LINE_CHAIN getLineChainFromShapes( const std::vector<PCB_SHAPE*>& aShapes );
 
     /**
      * @brief Returns a vector of pointers to TRACK/ARC objects. Caller owns the objects
@@ -381,7 +381,7 @@ private:
      *                       width in the shapes
      * @return
     */
-    std::vector<PCB_TRACK*> makeTracksFromShapes( const std::vector<PCB_SHAPE*> aShapes,
+    std::vector<PCB_TRACK*> makeTracksFromShapes( const std::vector<PCB_SHAPE*>& aShapes,
                                                   BOARD_ITEM_CONTAINER* aParentContainer,
                                                   NETINFO_ITEM* aNet = nullptr,
                                                   PCB_LAYER_ID aLayerOverride = UNDEFINED_LAYER,

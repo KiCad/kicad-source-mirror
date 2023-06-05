@@ -2861,11 +2861,11 @@ std::vector<PCB_SHAPE*> CADSTAR_PCB_ARCHIVE_LOADER::getShapesFromVertices(
                                                     const VECTOR2I& aTransformCentre,
                                                     const bool& aMirrorInvert )
 {
-    std::vector<PCB_SHAPE*> drawSegments;
+    std::vector<PCB_SHAPE*> shapes;
 
     if( aCadstarVertices.size() < 2 )
         //need at least two points to draw a segment! (unlikely but possible to have only one)
-        return drawSegments;
+        return shapes;
 
     const VERTEX* prev = &aCadstarVertices.at( 0 ); // first one should always be a point vertex
     const VERTEX* cur;
@@ -2873,13 +2873,13 @@ std::vector<PCB_SHAPE*> CADSTAR_PCB_ARCHIVE_LOADER::getShapesFromVertices(
     for( size_t i = 1; i < aCadstarVertices.size(); i++ )
     {
         cur = &aCadstarVertices.at( i );
-        drawSegments.push_back( getShapeFromVertex( prev->End, *cur, aContainer, aCadstarGroupID,
-                                                    aMoveVector, aRotationAngle, aScalingFactor,
-                                                    aTransformCentre, aMirrorInvert ) );
+        shapes.push_back( getShapeFromVertex( prev->End, *cur, aContainer, aCadstarGroupID,
+                                              aMoveVector, aRotationAngle, aScalingFactor,
+                                              aTransformCentre, aMirrorInvert ) );
         prev = cur;
     }
 
-    return drawSegments;
+    return shapes;
 }
 
 
@@ -3019,9 +3019,9 @@ SHAPE_POLY_SET CADSTAR_PCB_ARCHIVE_LOADER::getPolySetFromCadstarShape( const SHA
 
     //cleanup
     for( PCB_SHAPE* shape : outlineShapes )
-            delete shape;
+        delete shape;
 
-    for( CUTOUT cutout : aCadstarShape.Cutouts )
+    for( const CUTOUT& cutout : aCadstarShape.Cutouts )
     {
         std::vector<PCB_SHAPE*> cutoutShapes = getShapesFromVertices( cutout.Vertices, aContainer,
                                                                       noGroup, aMoveVector,
@@ -3056,7 +3056,7 @@ SHAPE_POLY_SET CADSTAR_PCB_ARCHIVE_LOADER::getPolySetFromCadstarShape( const SHA
 }
 
 
-SHAPE_LINE_CHAIN CADSTAR_PCB_ARCHIVE_LOADER::getLineChainFromShapes( const std::vector<PCB_SHAPE*> aShapes )
+SHAPE_LINE_CHAIN CADSTAR_PCB_ARCHIVE_LOADER::getLineChainFromShapes( const std::vector<PCB_SHAPE*>& aShapes )
 {
     SHAPE_LINE_CHAIN lineChain;
 
@@ -3101,7 +3101,7 @@ SHAPE_LINE_CHAIN CADSTAR_PCB_ARCHIVE_LOADER::getLineChainFromShapes( const std::
 
 
 std::vector<PCB_TRACK*> CADSTAR_PCB_ARCHIVE_LOADER::makeTracksFromShapes(
-                                                  const std::vector<PCB_SHAPE*> aShapes,
+                                                  const std::vector<PCB_SHAPE*>& aShapes,
                                                   BOARD_ITEM_CONTAINER* aParentContainer,
                                                   NETINFO_ITEM* aNet, PCB_LAYER_ID aLayerOverride,
                                                   int aWidthOverride )
@@ -3363,7 +3363,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::applyRouteOffset( VECTOR2I*      aPointToOffset
 
 
 void CADSTAR_PCB_ARCHIVE_LOADER:: applyTextCode( EDA_TEXT*          aKiCadText,
-                                                const TEXTCODE_ID& aCadstarTextCodeID )
+                                                 const TEXTCODE_ID& aCadstarTextCodeID )
 {
     TEXTCODE tc = getTextCode( aCadstarTextCodeID );
 
