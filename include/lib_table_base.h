@@ -455,7 +455,7 @@ public:
             if( *iter == *aRow )
             {
                 m_rows.erase( iter, iter + 1 );
-                reindex( true );
+                reindex();
                 return true;
             }
         }
@@ -521,6 +521,18 @@ public:
         return m_version;
     }
 
+    /**
+     * While this is an encapsulation leak, calling it before threaded loads *may* prevent
+     * some Sentry crashes we're seeing (KICAD-4S).
+     */
+    void EnsureIndex()
+    {
+        ensureIndex();
+
+        if( m_fallBack )
+            m_fallBack->EnsureIndex();
+    }
+
 protected:
     /**
      * Return a #LIB_TABLE_ROW if \a aNickname is found in this table or in any chained
@@ -546,15 +558,9 @@ protected:
      * @param aForce is to avoid rebuilding the index multiple times because multiple threads hit ensureIndex
      * at the same time
      */
-    void reindex( bool aForce )
+    void reindex()
     {
         std::lock_guard<std::shared_mutex> lock( m_nickIndexMutex );
-
-        if( !aForce )
-        {
-            if( m_nickIndex.size() )
-                return;
-        }
 
         m_nickIndex.clear();
 
@@ -567,8 +573,14 @@ protected:
         // The dialog lib table editor may not maintain the nickIndex.
         // Lazy indexing may be required.  To handle lazy indexing, we must enforce
         // that "nickIndex" is either empty or accurate, but never inaccurate.
-        if( !m_nickIndex.size() )
-            reindex( false );
+        {
+            std::shared_lock<std::shared_mutex> lock( m_nickIndexMutex );
+
+            if( m_nickIndex.size() )
+                return;
+        }
+
+        reindex();
     }
 
 private:

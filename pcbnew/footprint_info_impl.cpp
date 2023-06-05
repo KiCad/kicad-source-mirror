@@ -266,6 +266,12 @@ void FOOTPRINT_LIST_IMPL::loadFootprints()
                 return 1;
             };
 
+    // While the private ensureIndex() is supposedly thread-safe, and having a public call is
+    // a bit of an encapsulation leak, we have at least one non-reproducible Sentry issue
+    // (KICAD-4S) that *might* be prevented by doing the EnsureIndex() before spooling up the
+    // multi-threaded part.
+    m_lib_table->EnsureIndex();
+
     for( size_t ii = 0; ii < num_elements; ++ii )
         returns[ii] = tp.submit( fp_thread );
 

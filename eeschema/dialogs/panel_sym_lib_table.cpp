@@ -891,7 +891,7 @@ bool PANEL_SYM_LIB_TABLE::TransferDataFromWindow()
         m_globalTable->Clear();
         m_globalTable->m_rows.transfer( m_globalTable->m_rows.end(), global_model()->m_rows.begin(),
                                       global_model()->m_rows.end(), global_model()->m_rows );
-        m_globalTable->reindex( true );
+        m_globalTable->reindex();
     }
 
     if( project_model() && *project_model() != *m_projectTable )
@@ -901,7 +901,7 @@ bool PANEL_SYM_LIB_TABLE::TransferDataFromWindow()
         m_projectTable->Clear();
         m_projectTable->m_rows.transfer( m_projectTable->m_rows.end(), project_model()->m_rows.begin(),
                                        project_model()->m_rows.end(), project_model()->m_rows );
-        m_projectTable->reindex( true );
+        m_projectTable->reindex();
     }
 
     return true;
