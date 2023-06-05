@@ -604,7 +604,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     }
                     else
                     {
-                        saveCopyInUndoList( (SCH_ITEM*) item, UNDO_REDO::CHANGED, appendUndo );
+                        saveCopyInUndoList( (SCH_ITEM*) item, UNDO_REDO::CHANGED, appendUndo, false );
                         appendUndo = true;
                     }
 
@@ -923,7 +923,12 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     {
         // One last update after exiting loop (for slower stuff, such as updating SCREEN's RTree).
         for( EDA_ITEM* item : selection )
+        {
             updateItem( item, true );
+
+            if( SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( item ) )
+                sch_item->SetConnectivityDirty( true );
+        }
 
         m_selectionTool->RemoveItemsFromSel( &m_dragAdditions, QUIET_MODE );
 
