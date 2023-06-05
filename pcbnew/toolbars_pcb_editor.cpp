@@ -1,10 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -188,10 +188,10 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
 
         LayerPairBitmap = std::make_unique<wxBitmap>( image );
 
-        if( m_mainToolBar )
+        if( m_auxiliaryToolBar )
         {
-            m_mainToolBar->SetToolBitmap( PCB_ACTIONS::selectLayerPair, *LayerPairBitmap );
-            m_mainToolBar->Refresh();
+            m_auxiliaryToolBar->SetToolBitmap( PCB_ACTIONS::selectLayerPair, *LayerPairBitmap );
+            m_auxiliaryToolBar->Refresh();
         }
     }
 }
@@ -218,16 +218,6 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
                                             KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT |
                                             wxAUI_TB_HORIZONTAL );
         m_mainToolBar->SetAuiManager( &m_auimgr );
-
-        // The layer indicator is special, so we register a callback directly that will
-        // regenerate the bitmap instead of using the conditions system.
-        auto layerIndicatorUpdate =
-            [this] ( wxUpdateUIEvent& )
-            {
-                PrepareLayerIndicator();
-            };
-
-        Bind( wxEVT_UPDATE_UI, layerIndicatorUpdate, PCB_ACTIONS::selectLayerPair.GetUIId() );
     }
 
     // Set up toolbar
@@ -287,20 +277,6 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( PCB_ACTIONS::runDRC );
 
     m_mainToolBar->AddScaledSeparator( this );
-
-    if( m_SelLayerBox == nullptr )
-    {
-        m_SelLayerBox = new PCB_LAYER_BOX_SELECTOR( m_mainToolBar, ID_TOOLBARH_PCB_SELECT_LAYER );
-        m_SelLayerBox->SetBoardFrame( this );
-    }
-
-    ReCreateLayerBox( false );
-    m_mainToolBar->AddControl( m_SelLayerBox );
-
-    m_mainToolBar->Add( PCB_ACTIONS::selectLayerPair );
-    PrepareLayerIndicator( true );    // Force rebuild of the bitmap with the active layer colors
-
-    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( PCB_ACTIONS::showEeschema );
 
     // Access to the scripting console
@@ -310,10 +286,6 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
         m_mainToolBar->Add( PCB_ACTIONS::showPythonConsole, ACTION_TOOLBAR::TOGGLE );
         AddActionPluginTools();
     }
-
-    // Go through and ensure the comboboxes are the correct size, since the strings in the
-    // box could have changed widths.
-    m_mainToolBar->UpdateControlWidth( ID_TOOLBARH_PCB_SELECT_LAYER );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->KiRealize();
@@ -542,6 +514,17 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
         m_auxiliaryToolBar = new ACTION_TOOLBAR( this, ID_AUX_TOOLBAR, wxDefaultPosition,
                                                  wxDefaultSize,
                                                  KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+
+        // The layer indicator is special, so we register a callback directly that will
+        // regenerate the bitmap instead of using the conditions system.
+        auto layerIndicatorUpdate =
+            [this] ( wxUpdateUIEvent& )
+            {
+                PrepareLayerIndicator();
+            };
+
+        Bind( wxEVT_UPDATE_UI, layerIndicatorUpdate, PCB_ACTIONS::selectLayerPair.GetUIId() );
+
         m_auxiliaryToolBar->SetAuiManager( &m_auimgr );
     }
 
@@ -576,6 +559,20 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     UpdateViaSizeSelectBox( m_SelViaSizeBox );
     m_auxiliaryToolBar->AddControl( m_SelViaSizeBox );
 
+    m_auxiliaryToolBar->AddScaledSeparator( this );
+
+    if( m_SelLayerBox == nullptr )
+    {
+        m_SelLayerBox = new PCB_LAYER_BOX_SELECTOR( m_auxiliaryToolBar, ID_TOOLBARH_PCB_SELECT_LAYER );
+        m_SelLayerBox->SetBoardFrame( this );
+    }
+
+    ReCreateLayerBox( false );
+    m_auxiliaryToolBar->AddControl( m_SelLayerBox );
+
+    m_auxiliaryToolBar->Add( PCB_ACTIONS::selectLayerPair );
+    PrepareLayerIndicator( true );    // Force rebuild of the bitmap with the active layer colors
+
     // Add the box to display and select the current grid size:
     m_auxiliaryToolBar->AddScaledSeparator( this );
 
@@ -603,6 +600,7 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     m_auxiliaryToolBar->UpdateControlWidth( ID_AUX_TOOLBAR_PCB_VIA_SIZE );
     m_auxiliaryToolBar->UpdateControlWidth( ID_ON_ZOOM_SELECT );
     m_auxiliaryToolBar->UpdateControlWidth( ID_ON_GRID_SELECT );
+    m_auxiliaryToolBar->UpdateControlWidth( ID_TOOLBARH_PCB_SELECT_LAYER );
 
     // after adding the buttons to the toolbar, must call Realize()
     m_auxiliaryToolBar->KiRealize();
@@ -614,7 +612,6 @@ void PCB_EDIT_FRAME::UpdateToolbarControlSizes()
     if( m_mainToolBar )
     {
         // Update the item widths
-        m_mainToolBar->UpdateControlWidth( ID_TOOLBARH_PCB_SELECT_LAYER );
     }
 
     if( m_auxiliaryToolBar )
@@ -624,6 +621,7 @@ void PCB_EDIT_FRAME::UpdateToolbarControlSizes()
         m_auxiliaryToolBar->UpdateControlWidth( ID_AUX_TOOLBAR_PCB_VIA_SIZE );
         m_auxiliaryToolBar->UpdateControlWidth( ID_ON_ZOOM_SELECT );
         m_auxiliaryToolBar->UpdateControlWidth( ID_ON_GRID_SELECT );
+        m_auxiliaryToolBar->UpdateControlWidth( ID_TOOLBARH_PCB_SELECT_LAYER );
     }
 }
 
@@ -762,7 +760,7 @@ void PCB_EDIT_FRAME::UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, bool a
 
 void PCB_EDIT_FRAME::ReCreateLayerBox( bool aForceResizeToolbar )
 {
-    if( m_SelLayerBox == nullptr || m_mainToolBar == nullptr )
+    if( m_SelLayerBox == nullptr || m_auxiliaryToolBar == nullptr )
         return;
 
     m_SelLayerBox->SetToolTip( _( "+/- to switch" ) );
