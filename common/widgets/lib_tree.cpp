@@ -523,6 +523,7 @@ void LIB_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
         break;
 
     case WXK_RETURN:
+    case WXK_NUMPAD_ENTER:
         updateRecentSearchMenu();
 
         if( GetSelectedLibId().IsValid() )
