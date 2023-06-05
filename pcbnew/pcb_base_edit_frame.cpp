@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -189,9 +189,9 @@ void PCB_BASE_EDIT_FRAME::ActivateGalCanvas()
 
 void PCB_BASE_EDIT_FRAME::SetBoard( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
 {
-    bool new_board = ( aBoard != m_pcb );
+    bool is_new_board = ( aBoard != m_pcb );
 
-    if( new_board )
+    if( is_new_board )
     {
         if( m_toolManager )
             m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
@@ -204,7 +204,7 @@ void PCB_BASE_EDIT_FRAME::SetBoard( BOARD* aBoard, PROGRESS_REPORTER* aReporter 
 
     GetCanvas()->GetGAL()->SetGridOrigin( VECTOR2D( aBoard->GetDesignSettings().GetGridOrigin() ) );
 
-    if( new_board )
+    if( is_new_board )
     {
         BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
         bds.m_DRCEngine            = std::make_shared<DRC_ENGINE>( aBoard, &bds );
@@ -219,7 +219,7 @@ void PCB_BASE_EDIT_FRAME::SetBoard( BOARD* aBoard, PROGRESS_REPORTER* aReporter 
         m_toolManager->SetEnvironment( aBoard, GetCanvas()->GetView(),
                                        GetCanvas()->GetViewControls(), config(), this );
 
-        if( new_board )
+        if( is_new_board )
             m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
     }
 }

@@ -39,12 +39,12 @@
 #include <widgets/appearance_controls.h>
 
 
-bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery, bool aFinal )
+bool PCB_EDIT_FRAME::Clear_Pcb( bool doAskAboutUnsavedChanges, bool aFinal )
 {
     if( GetBoard() == nullptr )
         return false;
 
-    if( aQuery && !GetBoard()->IsEmpty() )
+    if( doAskAboutUnsavedChanges && !GetBoard()->IsEmpty() )
     {
         if( !IsOK( this, _( "Current Board will be lost and this operation cannot be undone. "
                             "Continue?" ) ) )
@@ -93,14 +93,14 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery, bool aFinal )
 }
 
 
-bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool aQuery )
+bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool doAskAboutUnsavedChanges )
 {
     if( GetBoard() == nullptr )
         return false;
 
     bool is_last_fp_from_brd = IsCurrentFPFromBoard();
 
-    if( aQuery && IsContentModified() )
+    if( doAskAboutUnsavedChanges && IsContentModified() )
     {
         wxSafeYield( this, true );      // Allow frame to come to front before showing warning.
 

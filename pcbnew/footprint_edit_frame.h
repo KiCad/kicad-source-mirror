@@ -196,9 +196,10 @@ public:
     /**
      * Delete all and reinitialize the current board.
      *
-     * @param aQuery = true to prompt user for confirmation, false to initialize silently
+     * @param doAskAboutUnsavedChanges = true to prompt user for confirmation if existing board
+     *                                   contains unsaved changes, false to re-initialize silently
      */
-    bool Clear_Pcb( bool aQuery );
+    bool Clear_Pcb( bool doAskAboutUnsavedChanges );
 
     /// Return the LIB_ID of the part or library selected in the footprint tree.
     LIB_ID GetTreeFPID() const;
