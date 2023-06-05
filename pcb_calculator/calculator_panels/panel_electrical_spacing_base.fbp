@@ -95,7 +95,7 @@
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
-                                <property name="font">,90,91,-1,70,0</property>
+                                <property name="font">,90,90,-1,70,0</property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
@@ -483,7 +483,7 @@
                                 <property name="cell_font"></property>
                                 <property name="cell_horiz_alignment">wxALIGN_CENTER</property>
                                 <property name="cell_text"></property>
-                                <property name="cell_vert_alignment">wxALIGN_TOP</property>
+                                <property name="cell_vert_alignment">wxALIGN_CENTER</property>
                                 <property name="center_pane">0</property>
                                 <property name="close_button">1</property>
                                 <property name="col_label_horiz_alignment">wxALIGN_CENTER</property>
