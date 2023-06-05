@@ -262,18 +262,6 @@ void EDA_SHAPE::scale( double aScale )
 
 void EDA_SHAPE::rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
-    auto horizontal =
-            []( const SEG& seg )
-            {
-                return seg.A.y == seg.B.y;
-            };
-
-    auto vertical =
-            []( const SEG& seg )
-            {
-                return seg.A.x == seg.B.x;
-            };
-
     switch( m_shape )
     {
     case SHAPE_T::SEGMENT:
@@ -309,36 +297,6 @@ void EDA_SHAPE::rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 
     case SHAPE_T::POLY:
         m_poly.Rotate( aAngle, aRotCentre );
-
-        // Convert back to rectangle if appropriate
-        if( m_poly.OutlineCount() == 1 && m_poly.Outline( 0 ).SegmentCount() == 4 )
-        {
-            SHAPE_LINE_CHAIN& outline = m_poly.Outline( 0 );
-
-            if( horizontal( outline.Segment( 0 ) )
-                && vertical( outline.Segment( 1 ) )
-                && horizontal( outline.Segment( 2 ) )
-                && vertical( outline.Segment( 3 ) ) )
-            {
-                m_shape = SHAPE_T::RECT;
-                m_start.x = std::min( outline.Segment( 0 ).A.x, outline.Segment( 0 ).B.x );
-                m_start.y = std::min( outline.Segment( 1 ).A.y, outline.Segment( 1 ).B.y );
-                m_end.x = std::max( outline.Segment( 0 ).A.x, outline.Segment( 0 ).B.x );
-                m_end.y = std::max( outline.Segment( 1 ).A.y, outline.Segment( 1 ).B.y );
-            }
-            else if( vertical( outline.Segment( 0 ) )
-                  && horizontal( outline.Segment( 1 ) )
-                  && vertical( outline.Segment( 2 ) )
-                  && horizontal( outline.Segment( 3 ) ) )
-            {
-                m_shape = SHAPE_T::RECT;
-                m_start.x = std::min( outline.Segment( 1 ).A.x, outline.Segment( 1 ).B.x );
-                m_start.y = std::min( outline.Segment( 0 ).A.y, outline.Segment( 0 ).B.y );
-                m_end.x = std::max( outline.Segment( 1 ).A.x, outline.Segment( 1 ).B.x );
-                m_end.y = std::max( outline.Segment( 0 ).A.y, outline.Segment( 0 ).B.y );
-            }
-        }
-
         break;
 
     case SHAPE_T::BEZIER:

@@ -181,6 +181,49 @@ void PCB_SHAPE::NormalizeRect()
         SetStart( rect.GetPosition() );
         SetEnd( rect.GetEnd() );
     }
+    else if( m_shape == SHAPE_T::POLY )
+    {
+        auto horizontal =
+                []( const SEG& seg )
+                {
+                    return seg.A.y == seg.B.y;
+                };
+
+        auto vertical =
+                []( const SEG& seg )
+                {
+                    return seg.A.x == seg.B.x;
+                };
+
+        // Convert a poly back to a rectangle if appropriate
+        if( m_poly.OutlineCount() == 1 && m_poly.Outline( 0 ).SegmentCount() == 4 )
+        {
+            SHAPE_LINE_CHAIN& outline = m_poly.Outline( 0 );
+
+            if( horizontal( outline.Segment( 0 ) )
+                && vertical( outline.Segment( 1 ) )
+                && horizontal( outline.Segment( 2 ) )
+                && vertical( outline.Segment( 3 ) ) )
+            {
+                m_shape = SHAPE_T::RECT;
+                m_start.x = std::min( outline.Segment( 0 ).A.x, outline.Segment( 0 ).B.x );
+                m_start.y = std::min( outline.Segment( 1 ).A.y, outline.Segment( 1 ).B.y );
+                m_end.x = std::max( outline.Segment( 0 ).A.x, outline.Segment( 0 ).B.x );
+                m_end.y = std::max( outline.Segment( 1 ).A.y, outline.Segment( 1 ).B.y );
+            }
+            else if( vertical( outline.Segment( 0 ) )
+                  && horizontal( outline.Segment( 1 ) )
+                  && vertical( outline.Segment( 2 ) )
+                  && horizontal( outline.Segment( 3 ) ) )
+            {
+                m_shape = SHAPE_T::RECT;
+                m_start.x = std::min( outline.Segment( 1 ).A.x, outline.Segment( 1 ).B.x );
+                m_start.y = std::min( outline.Segment( 0 ).A.y, outline.Segment( 0 ).B.y );
+                m_end.x = std::max( outline.Segment( 1 ).A.x, outline.Segment( 1 ).B.x );
+                m_end.y = std::max( outline.Segment( 0 ).A.y, outline.Segment( 0 ).B.y );
+            }
+        }
+    }
 }
 
 

@@ -472,6 +472,12 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint, REPORTER* 
         if( GetOrientation() != ANGLE_0 )
             temp->SetOrientation( ANGLE_0 );
 
+        for( BOARD_ITEM* item : temp->GraphicalItems() )
+        {
+            if( item->Type() == PCB_SHAPE_T )
+                static_cast<PCB_SHAPE*>( item )->NormalizeRect();
+        }
+
         diff = temp->FootprintNeedsUpdate( aLibFootprint, aReporter );
 
         // This temporary footprint must not have a parent when it goes out of scope because it must
