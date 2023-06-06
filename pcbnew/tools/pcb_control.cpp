@@ -713,9 +713,6 @@ static void pasteFootprintItemsToFootprintEditor( FOOTPRINT* aClipFootprint, BOA
         {
             PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
 
-            if( text->GetType() != PCB_TEXT::TEXT_is_DIVERS )
-                continue;
-
             text->SetTextAngle( text->GetTextAngle() - aClipFootprint->GetOrientation() );
             text->SetTextAngle( text->GetTextAngle() + editorFootprint->GetOrientation() );
         }

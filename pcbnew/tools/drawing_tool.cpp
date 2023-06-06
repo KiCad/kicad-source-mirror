@@ -894,8 +894,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 // Init the new item attributes
                 if( m_isFootprintEditor )
                 {
-                    text = new PCB_TEXT( static_cast<FOOTPRINT*>( m_frame->GetModel() ),
-                                         PCB_TEXT::TEXT_is_DIVERS );
+                    text = new PCB_TEXT( static_cast<FOOTPRINT*>( m_frame->GetModel() ) );
                 }
                 else
                 {

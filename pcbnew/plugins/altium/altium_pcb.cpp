@@ -3101,7 +3101,7 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
     }
     else
     {
-        fpText = new PCB_TEXT( aFootprint, PCB_TEXT::TEXT_is_DIVERS );
+        fpText = new PCB_TEXT( aFootprint );
         aFootprint->Add( fpText, ADD_MODE::APPEND );
     }
 

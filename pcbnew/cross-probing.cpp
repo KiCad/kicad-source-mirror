@@ -279,17 +279,16 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
     }
 
     case PCB_FIELD_T:
-    case PCB_TEXT_T:
     {
-        PCB_TEXT*   text = static_cast<PCB_TEXT*>( aItem );
-        FOOTPRINT*  footprint = text->GetParentFootprint();
+        PCB_FIELD*  field = static_cast<PCB_FIELD*>( aItem );
+        FOOTPRINT*  footprint = field->GetParentFootprint();
         const char* text_key;
 
         /* This can't be a switch since the break need to pull out
          * from the outer switch! */
-        if( text->GetType() == PCB_TEXT::TEXT_is_REFERENCE )
+        if( field->IsReference() )
             text_key = "$REF:";
-        else if( text->GetType() == PCB_TEXT::TEXT_is_VALUE )
+        else if( field->IsValue() )
             text_key = "$VAL:";
         else
             break;
@@ -297,7 +296,7 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
         return StrPrintf( "$PART: \"%s\" %s \"%s\"",
                           TO_UTF8( footprint->GetReference() ),
                           text_key,
-                          TO_UTF8( text->GetText() ) );
+                          TO_UTF8( field->GetText() ) );
     }
 
     default:

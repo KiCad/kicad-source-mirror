@@ -70,23 +70,13 @@ void FOOTPRINT_EDIT_FRAME::LoadFootprintFromLibrary( LIB_ID aFPID )
 
     footprint->ClearFlags();
 
-    // if either m_Reference or m_Value are gone, reinstall them -
+    // if either reference or value are missing, reinstall them -
     // otherwise you cannot see what you are doing on board
-    PCB_TEXT* ref = &footprint->Reference();
-    PCB_TEXT* val = &footprint->Value();
+    if( footprint->Reference().GetText().IsEmpty() )
+        footprint->SetReference( wxT( "Ref**" ) );
 
-    if( val && ref )
-    {
-        ref->SetType( PCB_TEXT::TEXT_is_REFERENCE );    // just in case ...
-
-        if( ref->GetText().IsEmpty() )
-            ref->SetText( wxT( "Ref**" ) );
-
-        val->SetType( PCB_TEXT::TEXT_is_VALUE );        // just in case ...
-
-        if( val->GetText().IsEmpty() )
-            val->SetText( wxT( "Val**" ) );
-    }
+    if( footprint->Value().GetText().IsEmpty() )
+        footprint->SetValue( wxT( "Val**" ) );
 
     Zoom_Automatique( false );
 

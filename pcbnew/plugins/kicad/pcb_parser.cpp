@@ -3008,17 +3008,11 @@ PCB_TEXT* PCB_PARSER::parsePCB_TEXT( BOARD_ITEM* aParent )
     {
         switch( token )
         {
-        case T_reference:
-            text = std::make_unique<PCB_TEXT>( parentFP, PCB_TEXT::TEXT_is_REFERENCE );
-            break;
+        case T_reference: text = std::make_unique<PCB_FIELD>( parentFP, REFERENCE_FIELD ); break;
 
-        case T_value:
-            text = std::make_unique<PCB_TEXT>( parentFP, PCB_TEXT::TEXT_is_VALUE );
-            break;
+        case T_value: text = std::make_unique<PCB_FIELD>( parentFP, VALUE_FIELD ); break;
 
-        case T_user:
-            text = std::make_unique<PCB_TEXT>( parentFP, PCB_TEXT::TEXT_is_DIVERS );
-            break;
+        case T_user: text = std::make_unique<PCB_TEXT>( parentFP ); break;
 
         default:
             THROW_IO_ERROR( wxString::Format( _( "Cannot handle footprint text type %s" ),
@@ -3971,23 +3965,27 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
             PCB_TEXT* text = parsePCB_TEXT( footprint.get() );
             text->SetTextAngle( text->GetTextAngle() - footprint->GetOrientation());
 
-            switch( text->GetType() )
+            if( PCB_FIELD* field = dynamic_cast<PCB_FIELD*>( text ) )
             {
-            case PCB_TEXT::TEXT_is_REFERENCE:
-                footprint->Reference() = PCB_FIELD( *text, REFERENCE_FIELD );
-                const_cast<KIID&>( footprint->Reference().m_Uuid ) = text->m_Uuid;
-                delete text;
-                break;
+                // Fields other than reference and value weren't historically
+                // stored in fp_texts so we don't need to handle them here
+                switch( field->GetId() )
+                {
+                case REFERENCE_FIELD:
+                    footprint->Reference() = PCB_FIELD( *text, REFERENCE_FIELD );
+                    const_cast<KIID&>( footprint->Reference().m_Uuid ) = text->m_Uuid;
+                    delete text;
+                    break;
 
-            case PCB_TEXT::TEXT_is_VALUE:
-                footprint->Value() = PCB_FIELD( *text, VALUE_FIELD );
-                const_cast<KIID&>( footprint->Value().m_Uuid ) = text->m_Uuid;
-                delete text;
-                break;
-
-            default:
-                footprint->Add( text, ADD_MODE::APPEND, true );
+                case VALUE_FIELD:
+                    footprint->Value() = PCB_FIELD( *text, VALUE_FIELD );
+                    const_cast<KIID&>( footprint->Value().m_Uuid ) = text->m_Uuid;
+                    delete text;
+                    break;
+                }
             }
+            else
+                footprint->Add( text, ADD_MODE::APPEND, true );
 
             break;
         }

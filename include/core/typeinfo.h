@@ -107,6 +107,14 @@ enum KICAD_T
     PCB_GROUP_T,             ///< class PCB_GROUP, a set of BOARD_ITEMs
 
     // Be prudent with these types:
+    // they should be used only to locate a specific field type among PCB_FIELD_Ts
+    // N.B. If you add a type here, be sure to add it below to the BaseType()
+    PCB_FIELD_LOCATE_REFERENCE_T,
+    PCB_FIELD_LOCATE_VALUE_T,
+    PCB_FIELD_LOCATE_FOOTPRINT_T,
+    PCB_FIELD_LOCATE_DATASHEET_T,
+
+    // Be prudent with these types:
     // they should be used only to locate specific item sub-types
     // N.B. If you add a type here, be sure to add it below to the BaseType()
     PCB_LOCATE_STDVIA_T,
@@ -263,6 +271,12 @@ constexpr KICAD_T BaseType( const KICAD_T aType )
 
     case SCH_SYMBOL_LOCATE_POWER_T:
         return SCH_SYMBOL_T;
+
+    case PCB_FIELD_LOCATE_REFERENCE_T:
+    case PCB_FIELD_LOCATE_VALUE_T:
+    case PCB_FIELD_LOCATE_FOOTPRINT_T:
+    case PCB_FIELD_LOCATE_DATASHEET_T:
+        return PCB_FIELD_T;
 
     case PCB_LOCATE_HOLE_T:
     case PCB_LOCATE_PTH_T:

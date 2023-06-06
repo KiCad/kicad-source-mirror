@@ -112,9 +112,9 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
             const PCB_GROUP* group = dynamic_cast<const PCB_GROUP*>( item );
             BOARD_ITEM*      clone;
 
-            if( const PCB_TEXT* text = dyn_cast<const PCB_TEXT*>( item ) )
+            if( const PCB_FIELD* field = dyn_cast<const PCB_FIELD*>( item ) )
             {
-                if( text->GetType() != PCB_TEXT::TEXT_is_DIVERS )
+                if( field->IsMandatoryField() )
                     continue;
             }
 
@@ -144,13 +144,13 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
                 static_cast<PCB_GROUP*>( clone )->RunOnDescendants(
                         [&]( BOARD_ITEM* descendant )
                         {
-                            // One cannot add a text reference or value to a given footprint:
-                            // only one is allowed. So add only PCB_TEXT::TEXT_is_DIVERS
+                            // One cannot add an additional mandatory field to a given footprint:
+                            // only one is allowed. So add only non-mandatory fields.
                             bool can_add = true;
 
-                            if( const PCB_TEXT* text = dyn_cast<const PCB_TEXT*>( descendant ) )
+                            if( const PCB_FIELD* field = dyn_cast<const PCB_FIELD*>( item ) )
                             {
-                                if( text->GetType() != PCB_TEXT::TEXT_is_DIVERS )
+                                if( field->IsMandatoryField() )
                                     can_add = false;
                             }
 

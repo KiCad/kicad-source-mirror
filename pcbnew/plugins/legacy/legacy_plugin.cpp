@@ -180,6 +180,9 @@ typedef unsigned LAYER_MSK;
 
 #define NO_LAYERS               0x00000000
 
+#define PCB_LEGACY_TEXT_is_REFERENCE 0
+#define PCB_LEGACY_TEXT_is_VALUE     1
+#define PCB_LEGACY_TEXT_is_DIVERS    2 // French for "other"
 
 // Old internal units definition (UI = decimil)
 #define PCB_LEGACY_INTERNAL_UNIT 10000
@@ -1152,17 +1155,17 @@ void LEGACY_PLUGIN::loadFOOTPRINT( FOOTPRINT* aFootprint )
 
             switch( tnum )
             {
-            case PCB_TEXT::TEXT_is_REFERENCE:
+            case PCB_LEGACY_TEXT_is_REFERENCE:
                 text = &aFootprint->Reference();
                 break;
 
-            case PCB_TEXT::TEXT_is_VALUE:
+            case PCB_LEGACY_TEXT_is_VALUE:
                 text = &aFootprint->Value();
                 break;
 
             // All other fields greater than 1.
             default:
-                text = new PCB_TEXT( aFootprint, PCB_TEXT::TEXT_is_DIVERS );
+                text = new PCB_TEXT( aFootprint );
                 aFootprint->Add( text );
             }
 
@@ -1690,10 +1693,8 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( PCB_TEXT* aText )
     char*   hjust   = strtok_r( (char*) txt_end, delims, (char**) &data );
     char*   vjust   = strtok_r( nullptr, delims, (char**) &data );
 
-    if( type != PCB_TEXT::TEXT_is_REFERENCE && type != PCB_TEXT::TEXT_is_VALUE )
-        type = PCB_TEXT::TEXT_is_DIVERS;
-
-    aText->SetType( static_cast<PCB_TEXT::TEXT_TYPE>( type ) );
+    if( type != PCB_LEGACY_TEXT_is_REFERENCE && type != PCB_LEGACY_TEXT_is_VALUE )
+        type = PCB_LEGACY_TEXT_is_DIVERS;
 
     aText->SetFPRelativePosition( VECTOR2I( pos0_x, pos0_y ) );
     aText->SetTextSize( VECTOR2I( size0_x, size0_y ) );

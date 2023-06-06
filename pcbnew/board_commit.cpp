@@ -432,12 +432,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             switch( boardItem->Type() )
             {
             case PCB_TEXT_T:
-                // don't allow deletion of Reference or Value
-                if( static_cast<PCB_TEXT*>( boardItem )->GetType() != PCB_TEXT::TEXT_is_DIVERS )
-                    break;
-
-                KI_FALLTHROUGH;
-
             case PCB_PAD_T:
             case PCB_SHAPE_T:            // a shape (normally not on copper layers)
             case PCB_BITMAP_T:           // a bitmap on a user layer

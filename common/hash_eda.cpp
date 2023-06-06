@@ -31,6 +31,7 @@
 #include <pcb_shape.h>
 #include <pad.h>
 
+#include <macros.h>
 #include <functional>
 
 using namespace std;
@@ -102,15 +103,16 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
         break;
 
     case PCB_FIELD_T:
+        if( !( aFlags & HASH_REF ) && static_cast<const PCB_FIELD*>( aItem )->IsReference() )
+            break;
+
+        if( !( aFlags & HASH_VALUE ) && static_cast<const PCB_FIELD*>( aItem )->IsValue() )
+            break;
+
+        KI_FALLTHROUGH;
     case PCB_TEXT_T:
     {
         const PCB_TEXT* text = static_cast<const PCB_TEXT*>( aItem );
-
-        if( !( aFlags & HASH_REF ) && text->GetType() == PCB_TEXT::TEXT_is_REFERENCE )
-            break;
-
-        if( !( aFlags & HASH_VALUE ) && text->GetType() == PCB_TEXT::TEXT_is_VALUE )
-            break;
 
         ret = hash_board_item( text, aFlags );
         hash_combine( ret, text->GetText().ToStdString() );

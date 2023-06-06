@@ -79,18 +79,30 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PC
 
     if( m_item->GetParentFootprint() )
     {
-        switch( m_item->GetType() )
+        if( m_item->Type() == PCB_FIELD_T )
         {
-        case PCB_TEXT::TEXT_is_REFERENCE: title = _( "Footprint Reference Properties" ); break;
-        case PCB_TEXT::TEXT_is_VALUE:     title = _( "Footprint Value Properties" );     break;
-        case PCB_TEXT::TEXT_is_DIVERS:    title = _( "Footprint Text Properties" );      break;
-        }
+            PCB_FIELD* field = static_cast<PCB_FIELD*>( m_item );
 
-        switch( m_item->GetType() )
+            if( field->IsReference() )
+            {
+                title = _( "Footprint Reference Properties" );
+                m_TextLabel->SetLabel( _( "Reference:" ) );
+            }
+            else if( field->IsValue() )
+            {
+                title = _( "Footprint Value Properties" );
+                m_TextLabel->SetLabel( _( "Value:" ) );
+            }
+            else
+            {
+                title = _( "Footprint Field Properties" );
+                m_TextLabel->SetLabel( _( "Text:" ) );
+            }
+        }
+        else
         {
-        case PCB_TEXT::TEXT_is_REFERENCE: m_TextLabel->SetLabel( _( "Reference:" ) ); break;
-        case PCB_TEXT::TEXT_is_VALUE:     m_TextLabel->SetLabel( _( "Value:" ) );     break;
-        case PCB_TEXT::TEXT_is_DIVERS:    m_TextLabel->SetLabel( _( "Text:" ) );      break;
+            title = _( "Footprint Text Properties" );
+            m_TextLabel->SetLabel( _( "Text:" ) );
         }
 
         SetInitialFocus( m_SingleLineText );
@@ -227,19 +239,19 @@ void PCB_BASE_EDIT_FRAME::ShowTextPropertiesDialog( PCB_TEXT* aText )
 
 void DIALOG_TEXT_PROPERTIES::OnSetFocusText( wxFocusEvent& event )
 {
+    if( m_item->Type() == PCB_FIELD_T && static_cast<PCB_FIELD*>( m_item )->IsReference() )
+    {
 #ifdef __WXGTK__
-    // Force an update of the text control before setting the text selection
-    // This is needed because GTK seems to ignore the selection on first update
-    //
-    // Note that we can't do this on OSX as it tends to provoke Apple's
-    // "[NSAlert runModal] may not be invoked inside of transaction begin/commit pair"
-    // bug.  See: https://bugs.launchpad.net/kicad/+bug/1837225
-    if( m_item->GetType() == PCB_TEXT::TEXT_is_REFERENCE )
+        // Force an update of the text control before setting the text selection
+        // This is needed because GTK seems to ignore the selection on first update
+        //
+        // Note that we can't do this on OSX as it tends to provoke Apple's
+        // "[NSAlert runModal] may not be invoked inside of transaction begin/commit pair"
+        // bug.  See: https://bugs.launchpad.net/kicad/+bug/1837225
         m_SingleLineText->Update();
 #endif
-
-    if( m_item->GetType() == PCB_TEXT::TEXT_is_REFERENCE )
         KIUI::SelectReferenceNumber( static_cast<wxTextEntry*>( m_SingleLineText ) );
+    }
     else
         m_SingleLineText->SetSelection( -1, -1 );
 
@@ -256,7 +268,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
     {
         m_SingleLineText->SetValue( m_item->GetText() );
 
-        if( m_item->GetType() == PCB_TEXT::TEXT_is_REFERENCE )
+        if( m_item->Type() == PCB_FIELD_T && static_cast<PCB_FIELD*>( m_item )->IsReference() )
             KIUI::SelectReferenceNumber( static_cast<wxTextEntry*>( m_SingleLineText ) );
         else
             m_SingleLineText->SetSelection( -1, -1 );

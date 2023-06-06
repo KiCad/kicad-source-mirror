@@ -2033,7 +2033,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                     if( layer == F_SilkS || layer == B_SilkS )
                         txt = &( fp->Reference() );
                     else
-                        txt = new PCB_TEXT( fp, PCB_TEXT::TEXT_is_DIVERS );
+                        txt = new PCB_TEXT( fp );
 
                     if( src->mirror )
                     {

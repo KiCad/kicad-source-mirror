@@ -1792,37 +1792,13 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         switch( item->Type() )
         {
         case PCB_FIELD_T:
-        case PCB_TEXT_T:
-            switch( static_cast<PCB_TEXT*>( board_item )->GetType() )
-            {
-            case PCB_TEXT::TEXT_is_VALUE:
-            case PCB_TEXT::TEXT_is_REFERENCE:
-                wxASSERT( parentFP );
-                m_commit->Modify( parentFP );
-                static_cast<PCB_TEXT*>( board_item )->SetVisible( false );
-                getView()->Update( board_item );
-                break;
-
-            case PCB_TEXT::TEXT_is_DIVERS:
-                if( parentFP )
-                {
-                    m_commit->Modify( parentFP );
-                    getView()->Remove( board_item );
-                    parentFP->Remove( board_item );
-                }
-                else
-                {
-                    m_commit->Remove( board_item );
-                }
-                break;
-
-            default:
-                wxFAIL; // Shouldn't get here
-                break;
-            }
-
+            wxASSERT( parentFP );
+            m_commit->Modify( parentFP );
+            static_cast<PCB_TEXT*>( board_item )->SetVisible( false );
+            getView()->Update( board_item );
             break;
 
+        case PCB_TEXT_T:
         case PCB_SHAPE_T:
         case PCB_TEXTBOX_T:
         case PCB_BITMAP_T:

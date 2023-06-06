@@ -37,6 +37,46 @@ public:
 
     PCB_FIELD( const PCB_TEXT& aText, int aFieldId, const wxString& aName = wxEmptyString );
 
+    static inline bool ClassOf( const EDA_ITEM* aItem )
+    {
+        return aItem && PCB_FIELD_T == aItem->Type();
+    }
+
+    wxString GetClass() const override { return wxT( "PCB_FIELD" ); }
+
+    bool IsType( const std::vector<KICAD_T>& aScanTypes ) const override
+    {
+        if( BOARD_ITEM::IsType( aScanTypes ) )
+            return true;
+
+        for( KICAD_T scanType : aScanTypes )
+        {
+            if( scanType == PCB_FIELD_LOCATE_REFERENCE_T && m_id == REFERENCE_FIELD )
+                return true;
+            else if( scanType == PCB_FIELD_LOCATE_VALUE_T && m_id == VALUE_FIELD )
+                return true;
+            else if( scanType == PCB_FIELD_LOCATE_FOOTPRINT_T && m_id == FOOTPRINT_FIELD )
+                return true;
+            else if( scanType == PCB_FIELD_LOCATE_DATASHEET_T && m_id == DATASHEET_FIELD )
+                return true;
+        }
+
+        return false;
+    }
+
+    bool IsReference() const { return m_id == REFERENCE_FIELD; }
+    bool IsValue() const { return m_id == VALUE_FIELD; }
+    bool IsFootprint() const { return m_id == FOOTPRINT_FIELD; }
+    bool IsDatasheet() const { return m_id == DATASHEET_FIELD; }
+
+    bool IsMandatoryField() const { return m_id < MANDATORY_FIELDS; }
+
+    wxString GetTextTypeDescription() const override;
+
+    wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
+
+    double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
+
     EDA_ITEM* Clone() const override;
 
     /**
@@ -72,8 +112,6 @@ public:
     const wxString& GetInternalName() { return m_name; }
 
     int GetId() const { return m_id; }
-
-    void SetId( int aId );
 
 private:
     int m_id; ///< Field index, @see enum MANDATORY_FIELD_T

@@ -28,6 +28,7 @@
 #include <cmath>
 #include <functional>
 using namespace std::placeholders;
+#include <macros.h>
 #include <core/kicad_algo.h>
 #include <board.h>
 #include <board_design_settings.h>
@@ -2430,6 +2431,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
     const PCB_VIA*  via = nullptr;
     const PAD*      pad = nullptr;
     const PCB_TEXT* text = nullptr;
+    const PCB_FIELD* field = nullptr;
 
     switch( aItem->Type() )
     {
@@ -2490,6 +2492,16 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
         break;
 
     case PCB_FIELD_T:
+        field = static_cast<const PCB_FIELD*>( aItem );
+
+        if( field->IsReference() && !view()->IsLayerVisible( LAYER_MOD_REFERENCES ) )
+            return false;
+
+        if( field->IsValue() && !view()->IsLayerVisible( LAYER_MOD_VALUES ) )
+            return false;
+
+        // Handle all other fields with normal text visibility controls
+        KI_FALLTHROUGH;
     case PCB_TEXT_T:
         text = static_cast<const PCB_TEXT*>( aItem );
 
@@ -2509,31 +2521,12 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
             if( !board()->IsLayerVisible( text->GetLayer() ) )
                 return false;
 
-            int controlLayer = UNDEFINED_LAYER;
+            int controlLayer = LAYER_MOD_TEXT;
 
-            switch( text->GetType() )
-            {
-            case PCB_TEXT::TEXT_is_REFERENCE:
+            if( text->GetText() == wxT( "${REFERENCE}" ) )
                 controlLayer = LAYER_MOD_REFERENCES;
-                break;
-
-            case PCB_TEXT::TEXT_is_VALUE:
+            else if( text->GetText() == wxT( "${VALUE}" ) )
                 controlLayer = LAYER_MOD_VALUES;
-                break;
-
-            case PCB_TEXT::TEXT_is_DIVERS:
-                if( text->GetText() == wxT( "${REFERENCE}" ) )
-                    controlLayer = LAYER_MOD_REFERENCES;
-                else if( text->GetText() == wxT( "${VALUE}" ) )
-                    controlLayer = LAYER_MOD_VALUES;
-                else
-                    controlLayer = LAYER_MOD_TEXT;
-
-                break;
-            }
-
-            if( controlLayer == UNDEFINED_LAYER )
-                return false;
 
             if( !view()->IsLayerVisible( controlLayer ) )
                 return false;

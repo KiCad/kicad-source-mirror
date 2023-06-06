@@ -503,10 +503,9 @@ void PCAD_FOOTPRINT::AddToBoard( FOOTPRINT* aFootprint )
     footprint->SetFPID( fpID );
 
     // reference text
-    PCB_TEXT* ref_text = &footprint->Reference();
+    PCB_FIELD* ref_text = &footprint->Reference();
 
     ref_text->SetText( ValidateReference( m_Name.text ) );
-    ref_text->SetType( PCB_TEXT::TEXT_is_REFERENCE );
 
     ref_text->SetFPRelativePosition( VECTOR2I( m_Name.correctedPositionX,
                                                m_Name.correctedPositionY ) );
@@ -529,10 +528,9 @@ void PCAD_FOOTPRINT::AddToBoard( FOOTPRINT* aFootprint )
     ref_text->SetLayer( m_Mirror ? FlipLayer( m_KiCadLayer ) : m_KiCadLayer );
 
     // value text
-    PCB_TEXT* val_text = &footprint->Value();
+    PCB_FIELD* val_text = &footprint->Value();
 
     val_text->SetText( m_Value.text );
-    val_text->SetType( PCB_TEXT::TEXT_is_VALUE );
 
     val_text->SetFPRelativePosition( VECTOR2I( m_Value.correctedPositionX,
                                                m_Value.correctedPositionY ) );

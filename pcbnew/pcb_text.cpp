@@ -41,17 +41,15 @@
 
 PCB_TEXT::PCB_TEXT( BOARD_ITEM* parent, KICAD_T idtype ) :
         BOARD_ITEM( parent, idtype ),
-        EDA_TEXT( pcbIUScale ),
-        m_type( TEXT_is_DIVERS )
+        EDA_TEXT( pcbIUScale )
 {
     SetMultilineAllowed( true );
 }
 
 
-PCB_TEXT::PCB_TEXT( FOOTPRINT* aParent, TEXT_TYPE text_type ) :
+PCB_TEXT::PCB_TEXT( FOOTPRINT* aParent ) :
         BOARD_ITEM( aParent, PCB_TEXT_T ),
-        EDA_TEXT( pcbIUScale ),
-        m_type( text_type )
+        EDA_TEXT( pcbIUScale )
 {
     SetKeepUpright( true );
 
@@ -185,13 +183,13 @@ double PCB_TEXT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     if( FOOTPRINT* parentFP = GetParentFootprint() )
     {
         // Handle Render tab switches
-        if( m_type == TEXT_is_VALUE || GetText() == wxT( "${VALUE}" ) )
+        if( GetText() == wxT( "${VALUE}" ) )
         {
             if( !aView->IsLayerVisible( LAYER_MOD_VALUES ) )
                 return HIDE;
         }
 
-        if( m_type == TEXT_is_REFERENCE || GetText() == wxT( "${REFERENCE}" ) )
+        if( GetText() == wxT( "${REFERENCE}" ) )
         {
             if( !aView->IsLayerVisible( LAYER_MOD_REFERENCES ) )
                 return HIDE;
@@ -225,14 +223,7 @@ void PCB_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
         aList.emplace_back( _( "PCB Text" ), KIUI::EllipsizeStatusText( aFrame, GetText() ) );
 
     if( parentFP )
-    {
-        switch( m_type )
-        {
-        case TEXT_is_REFERENCE: aList.emplace_back( _( "Type" ), _( "Reference" ) ); break;
-        case TEXT_is_VALUE:     aList.emplace_back( _( "Type" ), _( "Value" ) );     break;
-        case TEXT_is_DIVERS:    aList.emplace_back( _( "Type" ), _( "Text" ) );      break;
-        }
-    }
+        aList.emplace_back( _( "Type" ), GetTextTypeDescription() );
 
     if( aFrame->GetName() == PCB_EDIT_FRAME_NAME && IsLocked() )
         aList.emplace_back( _( "Status" ), _( "Locked" ) );
@@ -369,26 +360,18 @@ void PCB_TEXT::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 }
 
 
+wxString PCB_TEXT::GetTextTypeDescription() const
+{
+    return _( "Text" );
+}
+
+
 wxString PCB_TEXT::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
     if( FOOTPRINT* parentFP = GetParentFootprint() )
     {
-        switch( m_type )
-        {
-        case TEXT_is_REFERENCE:
-            return wxString::Format( _( "Reference '%s'" ),
-                                     parentFP->GetReference() );
-
-        case TEXT_is_VALUE:
-            return wxString::Format( _( "Value '%s' of %s" ),
-                                     KIUI::EllipsizeMenuText( GetText() ),
-                                     parentFP->GetReference() );
-
-        case TEXT_is_DIVERS:
-            return wxString::Format( _( "Footprint Text '%s' of %s" ),
-                                     KIUI::EllipsizeMenuText( GetText() ),
-                                     parentFP->GetReference() );
-        }
+        return wxString::Format( _( "Footprint Text '%s' of %s" ),
+                                 KIUI::EllipsizeMenuText( GetText() ), parentFP->GetReference() );
     }
     else
     {

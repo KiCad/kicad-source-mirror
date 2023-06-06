@@ -27,18 +27,14 @@
 #include <board_design_settings.h>
 
 PCB_FIELD::PCB_FIELD( FOOTPRINT* aParent, int aFieldId, const wxString& aName ) :
-        PCB_TEXT( aParent, TEXT_TYPE( aFieldId ) )
+        PCB_TEXT( aParent, PCB_FIELD_T ), m_id( aFieldId ), m_name( aName )
 {
-    m_name = aName;
-    SetId( aFieldId );
 }
 
 
 PCB_FIELD::PCB_FIELD( const PCB_TEXT& aText, int aFieldId, const wxString& aName ) :
-        PCB_TEXT( aText )
+        PCB_TEXT( aText ), m_id( aFieldId ), m_name( aName )
 {
-    m_name = aName;
-    SetId( aFieldId );
 }
 
 
@@ -97,22 +93,61 @@ wxString PCB_FIELD::GetCanonicalName() const
 }
 
 
-void PCB_FIELD::SetId( int aId )
+wxString PCB_FIELD::GetTextTypeDescription() const
 {
-    m_id = aId;
+        switch( m_id )
+        {
+        case  REFERENCE_FIELD: return _( "Reference" );
+        case  VALUE_FIELD:     return _( "Value" );
+        case  FOOTPRINT_FIELD: return _( "Footprint" );
+        case  DATASHEET_FIELD: return _( "Datasheet" );
+        default:               return _( "User Field" );
+        }
+}
 
-    switch(m_id)
+
+wxString PCB_FIELD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
+{
+    switch( m_id )
     {
-        case REFERENCE_FIELD:
-            SetType(TEXT_is_REFERENCE);
-            break;
-        case VALUE_FIELD:
-            SetType(TEXT_is_VALUE);
-            break;
-        default:
-            SetType(TEXT_is_DIVERS);
-            break;
+    case REFERENCE_FIELD:
+        return wxString::Format( _( "Reference '%s'" ),
+                                 GetParentFootprint()->GetReference() );
+
+    case VALUE_FIELD:
+        return wxString::Format( _( "Value '%s' of %s" ),
+                                 KIUI::EllipsizeMenuText( GetText() ),
+                                 GetParentFootprint()->GetReference() );
+
+    case FOOTPRINT_FIELD:
+        return wxString::Format( _( "Footprint '%s' of %s" ),
+                                 KIUI::EllipsizeMenuText( GetText() ),
+                                 GetParentFootprint()->GetReference() );
+    case DATASHEET_FIELD:
+        return wxString::Format( _( "Datasheet '%s' of %s" ),
+                                 KIUI::EllipsizeMenuText( GetText() ),
+                                 GetParentFootprint()->GetReference() );
     }
+
+    // Can't get here, but gcc doesn't seem to know that....
+    return wxEmptyString;
+}
+
+double PCB_FIELD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+{
+    constexpr double HIDE = std::numeric_limits<double>::max();
+
+    if( !aView )
+        return 0.0;
+
+    // Handle Render tab switches
+    if( IsValue() && !aView->IsLayerVisible( LAYER_MOD_VALUES ) )
+        return HIDE;
+
+    if( IsReference() && !aView->IsLayerVisible( LAYER_MOD_REFERENCES ) )
+        return HIDE;
+
+    return PCB_TEXT::ViewGetLOD( aLayer, aView );
 }
 
 

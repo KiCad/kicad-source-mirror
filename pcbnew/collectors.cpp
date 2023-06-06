@@ -268,6 +268,17 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         break;
 
     case PCB_FIELD_T:
+    {
+        PCB_FIELD* field = static_cast<PCB_FIELD*>( item );
+
+        if( field->IsReference() && m_Guide->IgnoreFPReferences() )
+            return INSPECT_RESULT::CONTINUE;
+
+        if( field->IsValue() && m_Guide->IgnoreFPValues() )
+            return INSPECT_RESULT::CONTINUE;
+    }
+
+        KI_FALLTHROUGH;
     case PCB_TEXT_T:
         if( item->GetParentFootprint() )
         {
@@ -290,27 +301,11 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
              * The three text types have different criteria: reference and value have their own
              * ignore flags; user text instead follows their layer visibility. Checking this here
              * is simpler than later (when layer visibility is checked for other entities)
+             *
+             * Note: we fallthrough from PCB_FIELD_T above, hence the type check.
              */
-            switch( text->GetType() )
-            {
-            case PCB_TEXT::TEXT_is_REFERENCE:
-                if( m_Guide->IgnoreFPReferences() )
-                    return INSPECT_RESULT::CONTINUE;
-
-                break;
-
-            case PCB_TEXT::TEXT_is_VALUE:
-                if( m_Guide->IgnoreFPValues() )
-                    return INSPECT_RESULT::CONTINUE;
-
-                break;
-
-            case PCB_TEXT::TEXT_is_DIVERS:
-                if( !m_Guide->IsLayerVisible( layer ) )
-                    return INSPECT_RESULT::CONTINUE;
-
-                break;
-            }
+            if( text->Type() == PCB_TEXT_T && !m_Guide->IsLayerVisible( layer ) )
+                return INSPECT_RESULT::CONTINUE;
         }
 
         break;

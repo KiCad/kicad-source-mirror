@@ -1752,13 +1752,7 @@ void PCB_PLUGIN::format( const PCB_TEXT* aText, int aNestLevel ) const
     if( parentFP )
     {
         prefix = "fp";
-
-        switch( aText->GetType() )
-        {
-        case PCB_TEXT::TEXT_is_REFERENCE: type = " reference"; break;
-        case PCB_TEXT::TEXT_is_VALUE:     type = " value";     break;
-        case PCB_TEXT::TEXT_is_DIVERS:    type = " user";      break;
-        }
+        type = " user";
 
         pos -= parentFP->GetPosition();
         RotatePoint( pos, -parentFP->GetOrientation() );

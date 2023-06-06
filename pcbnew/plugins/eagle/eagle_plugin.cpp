@@ -1972,7 +1972,7 @@ void EAGLE_PLUGIN::packageText( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
     }
     else
     {
-        textItem = new PCB_TEXT( aFootprint, PCB_TEXT::TEXT_is_DIVERS );
+        textItem = new PCB_TEXT( aFootprint );
         aFootprint->Add( textItem );
 
         textItem->SetText( interpretText( t.text ) );

@@ -274,10 +274,10 @@ const PCB_FIELD* FOOTPRINT::GetField( MANDATORY_FIELD_T aFieldType ) const
 
 PCB_FIELD* FOOTPRINT::GetFieldById( int aFieldId )
 {
-    for( size_t ii = 0; ii < m_fields.size(); ++ii )
+    for( PCB_FIELD* field : m_fields )
     {
-        if( m_fields[ii]->GetId() == aFieldId )
-            return m_fields[ii];
+        if( field->GetId() == aFieldId )
+            return field;
     }
 
     return nullptr;
@@ -285,9 +285,9 @@ PCB_FIELD* FOOTPRINT::GetFieldById( int aFieldId )
 
 bool FOOTPRINT::HasFieldByName( const wxString& aFieldName ) const
 {
-    for( size_t ii = 0; ii < m_fields.size(); ++ii )
+    for( PCB_FIELD* field : m_fields )
     {
-        if( m_fields[ii]->GetCanonicalName() == aFieldName )
+        if( field->GetCanonicalName() == aFieldName )
             return true;
     }
 
@@ -296,10 +296,10 @@ bool FOOTPRINT::HasFieldByName( const wxString& aFieldName ) const
 
 PCB_FIELD* FOOTPRINT::GetFieldByName( const wxString& aFieldName )
 {
-    for( size_t ii = 0; ii < m_fields.size(); ++ii )
+    for( PCB_FIELD* field : m_fields )
     {
-        if( m_fields[ii]->GetName() == aFieldName )
-            return m_fields[ii];
+        if( field->GetName() == aFieldName )
+            return field;
     }
 
     return nullptr;
@@ -696,25 +696,14 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectiv
     switch( aBoardItem->Type() )
     {
     case PCB_FIELD_T:
-    case PCB_TEXT_T:
-
-        if( dynamic_cast<PCB_FIELD*>( aBoardItem ) != nullptr )
-        {
-            if( aMode == ADD_MODE::APPEND )
-                m_fields.push_back( static_cast<PCB_FIELD*>( aBoardItem ) );
-            else
-                m_fields.push_front( static_cast<PCB_FIELD*>( aBoardItem ) );
-
-            break;
-        }
+        if( aMode == ADD_MODE::APPEND )
+            m_fields.push_back( static_cast<PCB_FIELD*>( aBoardItem ) );
         else
-        {
-            // Only user text can be added this way.
-            wxASSERT( static_cast<PCB_TEXT*>( aBoardItem )->GetType() == PCB_TEXT::TEXT_is_DIVERS );
-        }
+            m_fields.push_front( static_cast<PCB_FIELD*>( aBoardItem ) );
 
-        KI_FALLTHROUGH;
+        break;
 
+    case PCB_TEXT_T:
     case PCB_DIM_ALIGNED_T:
     case PCB_DIM_LEADER_T:
     case PCB_DIM_CENTER_T:
@@ -770,9 +759,12 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
 {
     switch( aBoardItem->Type() )
     {
-    case PCB_TEXT_T:
+    case PCB_FIELD_T:
+    {
+        PCB_FIELD* field = static_cast<PCB_FIELD*>( aBoardItem );
+
         // Only user text can be removed this way.
-        wxCHECK_RET( static_cast<PCB_TEXT*>( aBoardItem )->GetType() == PCB_TEXT::TEXT_is_DIVERS,
+        wxCHECK_RET( field->IsMandatoryField(),
                      wxT( "Please report this bug: Invalid remove operation on required text" ) );
         for( auto it = m_fields.begin(); it != m_fields.end(); ++it )
         {
@@ -782,8 +774,10 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
                 break;
             }
         }
-        KI_FALLTHROUGH;
+    }
+    break;
 
+    case PCB_TEXT_T:
     case PCB_DIM_ALIGNED_T:
     case PCB_DIM_CENTER_T:
     case PCB_DIM_ORTHOGONAL_T:
@@ -1963,15 +1957,18 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootpr
         PCB_TEXT* new_text = new PCB_TEXT( *static_cast<const PCB_TEXT*>( aItem ) );
         const_cast<KIID&>( new_text->m_Uuid ) = KIID();
 
-        if( new_text->GetType() == PCB_TEXT::TEXT_is_REFERENCE )
+        if( aItem->Type() == PCB_FIELD_T )
         {
-            new_text->SetText( wxT( "${REFERENCE}" ) );
-            new_text->SetType( PCB_TEXT::TEXT_is_DIVERS );
-        }
-        else if( new_text->GetType() == PCB_TEXT::TEXT_is_VALUE )
-        {
-            new_text->SetText( wxT( "${VALUE}" ) );
-            new_text->SetType( PCB_TEXT::TEXT_is_DIVERS );
+            switch( static_cast<const PCB_FIELD*>( aItem )->GetId() )
+            {
+            case REFERENCE_FIELD: new_text->SetText( wxT( "${REFERENCE}" ) ); break;
+
+            case VALUE_FIELD: new_text->SetText( wxT( "${VALUE}" ) ); break;
+
+            case DATASHEET_FIELD: new_text->SetText( wxT( "${DATASHEET}" ) ); break;
+
+            case FOOTPRINT_FIELD: new_text->SetText( wxT( "${FOOTPRINT}" ) ); break;
+            }
         }
 
         if( aAddToFootprint )

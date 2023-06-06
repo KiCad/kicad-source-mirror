@@ -1314,7 +1314,7 @@ FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( const wxString& aFootprintName, b
 
     for( size_t i = 2; i < settings.m_DefaultFPTextItems.size(); ++i )
     {
-        PCB_TEXT* textItem = new PCB_TEXT( footprint, PCB_TEXT::TEXT_is_DIVERS );
+        PCB_TEXT* textItem = new PCB_TEXT( footprint );
         textItem->SetText( settings.m_DefaultFPTextItems[i].m_Text );
         textItem->SetVisible( settings.m_DefaultFPTextItems[i].m_Visible );
         txt_layer = (PCB_LAYER_ID) settings.m_DefaultFPTextItems[i].m_Layer;

@@ -226,5 +226,5 @@ std::unique_ptr<PCB_SHAPE> GRAPHICS_IMPORTER_FOOTPRINT::createDrawing()
 
 std::unique_ptr<PCB_TEXT> GRAPHICS_IMPORTER_FOOTPRINT::createText()
 {
-    return std::make_unique<PCB_TEXT>( m_footprint, PCB_TEXT::TEXT_is_DIVERS );
+    return std::make_unique<PCB_TEXT>( m_footprint );
 }
