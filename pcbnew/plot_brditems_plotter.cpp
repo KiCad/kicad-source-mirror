@@ -519,6 +519,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
             break;
         }
 
+        case PCB_FIELD_T:
         case PCB_TEXT_T:
             // Plotted in PlotFootprintTextItems()
             break;

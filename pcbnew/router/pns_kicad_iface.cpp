@@ -1565,6 +1565,9 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
         for( ZONE* zone : footprint->Zones() )
             syncZone( aWorld, zone, boardOutline );
 
+        for( PCB_FIELD* field : footprint->Fields() )
+            syncTextItem( aWorld, static_cast<PCB_TEXT*>( field ), field->GetLayer() );
+
         for( BOARD_ITEM* item : footprint->GraphicalItems() )
         {
             if( item->Type() == PCB_SHAPE_T || item->Type() == PCB_TEXTBOX_T )

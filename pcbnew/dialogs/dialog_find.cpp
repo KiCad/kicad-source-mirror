@@ -274,6 +274,12 @@ void DIALOG_FIND::search( bool aDirection )
                                 m_hitList.push_back( fp );
                         }
                     }
+
+                    for( PCB_FIELD* field : fp->Fields() )
+                    {
+                        if( field->Matches( m_frame->GetFindReplaceData(), nullptr ) )
+                            m_hitList.push_back( fp );
+                    }
                 }
             }
 

@@ -193,7 +193,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
     auto checkTextOnEdgeCuts =
             [&]( BOARD_ITEM* item )
             {
-                if( item->Type() == PCB_TEXT_T || item->Type() == PCB_TEXTBOX_T
+                if( item->Type() == PCB_FIELD_T || item->Type() == PCB_TEXT_T || item->Type() == PCB_TEXTBOX_T
                         || BaseType( item->Type() ) == PCB_DIMENSION_T )
                 {
                     if( item->GetLayer() == Edge_Cuts )

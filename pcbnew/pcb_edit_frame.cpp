@@ -1728,6 +1728,7 @@ void PCB_EDIT_FRAME::ShowFindDialog()
             findString = UnescapeString( static_cast<FOOTPRINT*>( front )->GetValue() );
             break;
 
+        case PCB_FIELD_T:
         case PCB_TEXT_T:
             findString = UnescapeString( static_cast<PCB_TEXT*>( front )->GetText() );
 

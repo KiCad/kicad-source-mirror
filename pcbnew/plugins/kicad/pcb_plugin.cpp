@@ -365,6 +365,7 @@ void PCB_PLUGIN::Format( const BOARD_ITEM* aItem, int aNestLevel ) const
         format( static_cast<const PAD*>( aItem ), aNestLevel );
         break;
 
+    case PCB_FIELD_T:
     case PCB_TEXT_T:
         format( static_cast<const PCB_TEXT*>( aItem ), aNestLevel );
         break;

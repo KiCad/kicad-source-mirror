@@ -1332,9 +1332,9 @@ FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( const wxString& aFootprintName, b
         footprint->SetValue( footprintName );
 
     footprint->RunOnChildren(
-            [&] ( BOARD_ITEM* aChild )
+            [&]( BOARD_ITEM* aChild )
             {
-                if( aChild->Type() == PCB_TEXT_T )
+                if( aChild->Type() == PCB_FIELD_T || aChild->Type() == PCB_TEXT_T )
                 {
                     PCB_TEXT*    textItem = static_cast<PCB_TEXT*>( aChild );
                     PCB_LAYER_ID layer = textItem->GetLayer();

@@ -125,6 +125,7 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
         ShowBitmapPropertiesDialog( aItem);
         break;
 
+    case PCB_FIELD_T:
     case PCB_TEXT_T:
         ShowTextPropertiesDialog( static_cast<PCB_TEXT*>( aItem ) );
         break;

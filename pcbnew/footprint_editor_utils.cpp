@@ -203,6 +203,7 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
         GetCanvas()->Refresh();
         break;
 
+    case PCB_FIELD_T:
     case PCB_TEXT_T:
         ShowTextPropertiesDialog( static_cast<PCB_TEXT*>( aItem ) );
         break;

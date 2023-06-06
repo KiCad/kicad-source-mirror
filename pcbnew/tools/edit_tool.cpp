@@ -1574,6 +1574,7 @@ static void mirrorPadY( PAD& aPad, const VECTOR2I& aMirrorPoint )
 
 const std::vector<KICAD_T> EDIT_TOOL::MirrorableItems = {
         PCB_SHAPE_T,
+        PCB_FIELD_T,
         PCB_TEXT_T,
         PCB_TEXTBOX_T,
         PCB_ZONE_T,
@@ -1641,6 +1642,7 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             static_cast<ZONE*>( item )->Mirror( mirrorPoint, mirrorLeftRight );
             break;
 
+        case PCB_FIELD_T:
         case PCB_TEXT_T:
             static_cast<PCB_TEXT*>( item )->Mirror( mirrorPoint, mirrorAroundXaxis );
             break;
@@ -1789,6 +1791,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
 
         switch( item->Type() )
         {
+        case PCB_FIELD_T:
         case PCB_TEXT_T:
             switch( static_cast<PCB_TEXT*>( board_item )->GetType() )
             {
@@ -1900,14 +1903,14 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
                     {
                         if( bItem->GetParent() && bItem->GetParent()->Type() == PCB_FOOTPRINT_T )
                         {
-                            // Silently ignore delete of Reference or Value if they happen to be
-                            // in group.
-                            if( bItem->Type() == PCB_TEXT_T )
+                            // Just make fields invisible if they happen to be in group.
+                            if( bItem->Type() == PCB_FIELD_T )
                             {
-                                PCB_TEXT* textItem = static_cast<PCB_TEXT*>( bItem );
+                                m_commit->Modify( bItem->GetParent() );
+                                static_cast<PCB_FIELD*>( board_item )->SetVisible( false );
+                                getView()->Update( board_item );
 
-                                if( textItem->GetType() != PCB_TEXT::TEXT_is_DIVERS )
-                                    return;
+                                return;
                             }
                             else if( bItem->Type() == PCB_PAD_T )
                             {
@@ -2193,6 +2196,11 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         {
             switch( orig_item->Type() )
             {
+            case PCB_FIELD_T:
+                // Todo: these should probably be duplicated into new text items that
+                // have variables that reference the field values
+
+                break;
             case PCB_FOOTPRINT_T:
             case PCB_TEXT_T:
             case PCB_TEXTBOX_T:
@@ -2459,8 +2467,11 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
 
                     // We can't copy both a footprint and its text in the same operation, so if
                     // both are selected, remove the text
-                    if( item->Type() == PCB_TEXT_T && aCollector.HasItem( item->GetParentFootprint() ) )
+                    if( ( item->Type() == PCB_FIELD_T || item->Type() == PCB_TEXT_T )
+                        && aCollector.HasItem( item->GetParentFootprint() ) )
+                    {
                         aCollector.Remove( item );
+                    }
                 }
             },
 

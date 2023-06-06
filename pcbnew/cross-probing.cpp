@@ -278,6 +278,7 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
                           TO_UTF8( pad->GetNumber() ) );
     }
 
+    case PCB_FIELD_T:
     case PCB_TEXT_T:
     {
         PCB_TEXT*   text = static_cast<PCB_TEXT*>( aItem );

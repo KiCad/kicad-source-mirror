@@ -2095,6 +2095,7 @@ static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem, const BOARD& aBoard
         else
             return aFilterOptions.includeItemsOnTechLayers;
 
+    case PCB_FIELD_T:
     case PCB_TEXT_T:
     case PCB_TEXTBOX_T:
         return aFilterOptions.includePcbTexts;
@@ -2234,6 +2235,7 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect 
 
         break;
 
+    case PCB_FIELD_T:
     case PCB_TEXT_T:
     case PCB_TEXTBOX_T:
         if( !m_filter.text )
@@ -2487,6 +2489,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
         break;
 
+    case PCB_FIELD_T:
     case PCB_TEXT_T:
         text = static_cast<const PCB_TEXT*>( aItem );
 
@@ -2771,6 +2774,7 @@ int PCB_SELECTION_TOOL::hitTestDistance( const VECTOR2I& aWhere, BOARD_ITEM* aIt
 
     switch( aItem->Type() )
     {
+    case PCB_FIELD_T:
     case PCB_TEXT_T:
     {
         PCB_TEXT* text = static_cast<PCB_TEXT*>( aItem );
@@ -2885,8 +2889,9 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
             BOARD_ITEM* item = aCollector[i];
             KICAD_T     type = item->Type();
 
-            if( ( type == PCB_TEXT_T || type == PCB_TEXTBOX_T || type == PCB_SHAPE_T )
-                    && silkLayers[item->GetLayer()] )
+            if( ( type == PCB_FIELD_T || type == PCB_TEXT_T || type == PCB_TEXTBOX_T
+                  || type == PCB_SHAPE_T )
+                && silkLayers[item->GetLayer()] )
             {
                 preferred.insert( item );
             }

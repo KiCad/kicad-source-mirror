@@ -115,8 +115,11 @@ public:
     {
         wxCHECK( aTargetLayer != UNDEFINED_LAYER, /* void */ );
 
-        if( aItem->Type() == PCB_TEXT_T && !static_cast<PCB_TEXT*>( aItem )->IsVisible() )
+        if( ( aItem->Type() == PCB_FIELD_T || aItem->Type() == PCB_TEXT_T )
+            && !static_cast<PCB_TEXT*>( aItem )->IsVisible() )
+        {
             return;
+        }
 
         std::vector<const SHAPE*> subshapes;
         std::shared_ptr<SHAPE> shape = aItem->GetEffectiveShape( aRefLayer );

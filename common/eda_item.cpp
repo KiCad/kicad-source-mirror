@@ -333,6 +333,7 @@ static struct EDA_ITEM_DESC
             .Map( PCB_PAD_T,               _HKI( "Pad" ) )
             .Map( PCB_SHAPE_T,             _HKI( "Graphic" ) )
             .Map( PCB_BITMAP_T,            _HKI( "Bitmap" ) )
+            .Map( PCB_FIELD_T,             _HKI( "Field" ) )
             .Map( PCB_TEXT_T,              _HKI( "Text" ) )
             .Map( PCB_TEXTBOX_T,           _HKI( "Text Box" ) )
             .Map( PCB_TRACE_T,             _HKI( "Track" ) )

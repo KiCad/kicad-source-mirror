@@ -521,7 +521,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
         {
             KICAD_T itemType = boardItem->Type();
 
-            if( itemType == PCB_TEXT_T || itemType == PCB_TEXTBOX_T )
+            if( itemType == PCB_FIELD_T || itemType == PCB_TEXT_T || itemType == PCB_TEXTBOX_T )
             {
                 if( m_otherFields->GetValue() )
                     visitItem( commit, boardItem );

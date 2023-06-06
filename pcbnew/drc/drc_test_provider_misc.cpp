@@ -261,6 +261,7 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
     int       items = 0;
 
     static const std::vector<KICAD_T> itemTypes = {
+        PCB_FIELD_T,
         PCB_TEXT_T,
         PCB_TEXTBOX_T,
         PCB_DIMENSION_T

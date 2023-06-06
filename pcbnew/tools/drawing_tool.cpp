@@ -2929,7 +2929,8 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 {
                     continue;       // check against children, but not against footprint itself
                 }
-                else if( item->Type() == PCB_TEXT_T && !static_cast<PCB_TEXT*>( item )->IsVisible() )
+                else if( ( item->Type() == PCB_FIELD_T || item->Type() == PCB_TEXT_T )
+                         && !static_cast<PCB_TEXT*>( item )->IsVisible() )
                 {
                     continue;       // ignore hidden items
                 }

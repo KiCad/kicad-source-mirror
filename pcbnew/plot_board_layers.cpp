@@ -876,6 +876,12 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             if( itemplotter.GetPlotValue() && footprint->Value().IsOnLayer( layer ) )
                 plotFPTextItem( footprint->Value() );
 
+            for( const PCB_FIELD* field : footprint->Fields() )
+            {
+                if( field->IsOnLayer( layer ) )
+                    plotFPTextItem( static_cast<const PCB_TEXT&>( *field ) );
+            }
+
             for( const BOARD_ITEM* item : footprint->GraphicalItems() )
             {
                 if( item->IsOnLayer( layer ) )

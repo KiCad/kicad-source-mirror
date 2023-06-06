@@ -247,7 +247,7 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
 
     for( FOOTPRINT* footprint : brd->Footprints() )
     {
-        if( typeMask[ PCB_TEXT_T ] )
+        if( typeMask[PCB_FIELD_T] )
         {
             if( ( footprint->Reference().GetLayerSet() & aLayers ).any() )
             {

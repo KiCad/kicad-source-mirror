@@ -855,6 +855,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
     case PCB_DIM_LEADER_T:
     case PCB_SHAPE_T:
     case PCB_BITMAP_T:
+    case PCB_FIELD_T:
     case PCB_TEXT_T:
     case PCB_TEXTBOX_T:
     case PCB_TARGET_T:
@@ -968,6 +969,7 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
     case PCB_DIM_LEADER_T:
     case PCB_SHAPE_T:
     case PCB_BITMAP_T:
+    case PCB_FIELD_T:
     case PCB_TEXT_T:
     case PCB_TEXTBOX_T:
     case PCB_TARGET_T:
@@ -1435,6 +1437,7 @@ INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData,
         case PCB_PAD_T:
         case PCB_SHAPE_T:
         case PCB_BITMAP_T:
+        case PCB_FIELD_T:
         case PCB_TEXT_T:
         case PCB_TEXTBOX_T:
         case PCB_DIM_ALIGNED_T:
@@ -2307,7 +2310,7 @@ bool BOARD::cmp_drawings::operator()( const BOARD_ITEM* aFirst,
         const PCB_SHAPE* other = static_cast<const PCB_SHAPE*>( aSecond );
         return shape->Compare( other );
     }
-    else if( aFirst->Type() == PCB_TEXT_T )
+    else if( aFirst->Type() == PCB_TEXT_T || aFirst->Type() == PCB_FIELD_T )
     {
         const PCB_TEXT* text = static_cast<const PCB_TEXT*>( aFirst );
         const PCB_TEXT* other = static_cast<const PCB_TEXT*>( aSecond );
@@ -2379,6 +2382,7 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer,
             break;
         }
 
+        case PCB_FIELD_T:
         case PCB_TEXT_T:
         {
             const PCB_TEXT* text = static_cast<const PCB_TEXT*>( item );

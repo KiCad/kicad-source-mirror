@@ -695,6 +695,7 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectiv
 {
     switch( aBoardItem->Type() )
     {
+    case PCB_FIELD_T:
     case PCB_TEXT_T:
 
         if( dynamic_cast<PCB_FIELD*>( aBoardItem ) != nullptr )
@@ -1478,16 +1479,16 @@ INSPECT_RESULT FOOTPRINT::Visit( INSPECTOR inspector, void* testData,
 
             break;
 
-        case PCB_TEXT_T:
+        case PCB_FIELD_T:
             if( inspector( &Reference(), testData ) == INSPECT_RESULT::QUIT )
                 return INSPECT_RESULT::QUIT;
 
             if( inspector( &Value(), testData ) == INSPECT_RESULT::QUIT )
                 return INSPECT_RESULT::QUIT;
 
-            // Intentionally fall through since m_Drawings can hold PCB_TEXT_T also
-            KI_FALLTHROUGH;
+            break;
 
+        case PCB_TEXT_T:
         case PCB_DIM_ALIGNED_T:
         case PCB_DIM_LEADER_T:
         case PCB_DIM_CENTER_T:
@@ -1956,6 +1957,7 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootpr
         break;
     }
 
+    case PCB_FIELD_T:
     case PCB_TEXT_T:
     {
         PCB_TEXT* new_text = new PCB_TEXT( *static_cast<const PCB_TEXT*>( aItem ) );
@@ -2111,7 +2113,7 @@ double FOOTPRINT::GetCoverageArea( const BOARD_ITEM* aItem, const GENERAL_COLLEC
 
         poly = footprint->GetBoundingHull();
     }
-    else if( aItem->Type() == PCB_TEXT_T )
+    else if( aItem->Type() == PCB_FIELD_T || aItem->Type() == PCB_TEXT_T )
     {
         const PCB_TEXT* text = static_cast<const PCB_TEXT*>( aItem );
 
@@ -2187,6 +2189,7 @@ double FOOTPRINT::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
 
         switch( item->Type() )
         {
+        case PCB_FIELD_T:
         case PCB_TEXT_T:
         case PCB_TEXTBOX_T:
         case PCB_SHAPE_T:

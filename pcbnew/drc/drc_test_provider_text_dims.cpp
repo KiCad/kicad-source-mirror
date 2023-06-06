@@ -22,6 +22,7 @@
  */
 
 #include <macros.h>
+#include <pcb_field.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
 #include <drc/drc_engine.h>
@@ -255,7 +256,7 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
                 return true;
             };
 
-    static const std::vector<KICAD_T> itemTypes = { PCB_TEXT_T, PCB_TEXTBOX_T };
+    static const std::vector<KICAD_T> itemTypes = { PCB_FIELD_T, PCB_TEXT_T, PCB_TEXTBOX_T };
 
     forEachGeometryItem( itemTypes, LSET::AllLayersMask(),
             [&]( BOARD_ITEM* item ) -> bool
@@ -275,6 +276,7 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
 
                 switch( item->Type() )
                 {
+                case PCB_FIELD_T:   text = static_cast<PCB_FIELD*>( item );   break;
                 case PCB_TEXT_T:    text = static_cast<PCB_TEXT*>( item );    break;
                 case PCB_TEXTBOX_T: text = static_cast<PCB_TEXTBOX*>( item ); break;
                 default:            UNIMPLEMENTED_FOR( item->GetClass() );    break;

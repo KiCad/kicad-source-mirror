@@ -159,7 +159,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::addItemToRTrees( BOARD_ITEM* aItem )
             }
         }
     }
-    else if( aItem->Type() == PCB_TEXT_T )
+    else if( aItem->Type() == PCB_FIELD_T || aItem->Type() == PCB_TEXT_T )
     {
         for( PCB_LAYER_ID layer : { F_Mask, B_Mask } )
         {

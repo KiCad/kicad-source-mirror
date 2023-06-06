@@ -203,7 +203,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
             BOARD_ITEM* item = static_cast<BOARD_ITEM*>( i );
             BOARD_ITEM* copy = nullptr;
 
-            if( item->Type() == PCB_TEXT_T )
+            if( item->Type() == PCB_FIELD_T || item->Type() == PCB_TEXT_T )
             {
                 copy = static_cast<BOARD_ITEM*>( item->Clone() );
 

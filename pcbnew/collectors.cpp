@@ -53,6 +53,7 @@ const std::vector<KICAD_T> GENERAL_COLLECTOR::AllBoardItems = {
     PCB_TRACE_T,            // in m_tracks
     PCB_ARC_T,              // in m_tracks
     PCB_PAD_T,              // in footprints
+    PCB_FIELD_T,            // in footprints
     PCB_FOOTPRINT_T,        // in m_footprints
     PCB_GROUP_T,            // in m_groups
     PCB_ZONE_T              // in m_zones
@@ -95,6 +96,7 @@ const std::vector<KICAD_T> GENERAL_COLLECTOR::PadsOrTracks = {
 
 const std::vector<KICAD_T> GENERAL_COLLECTOR::FootprintItems = {
     PCB_MARKER_T,
+    PCB_FIELD_T,
     PCB_TEXT_T,
     PCB_TEXTBOX_T,
     PCB_SHAPE_T,
@@ -265,6 +267,7 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     case PCB_TARGET_T:
         break;
 
+    case PCB_FIELD_T:
     case PCB_TEXT_T:
         if( item->GetParentFootprint() )
         {

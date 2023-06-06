@@ -834,6 +834,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             break;
         }
 
+        case PCB_FIELD_T:
         case PCB_TEXT_T:
             if( aFrom && aSelectionFilter && !aSelectionFilter->text )
                 break;

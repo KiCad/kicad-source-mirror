@@ -569,6 +569,7 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         draw( static_cast<const PCB_BITMAP*>( item ), aLayer );
         break;
 
+    case PCB_FIELD_T:
     case PCB_TEXT_T:
         draw( static_cast<const PCB_TEXT*>( item ), aLayer );
         break;

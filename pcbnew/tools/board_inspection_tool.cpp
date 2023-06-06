@@ -1294,7 +1294,7 @@ int BOARD_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         r->Flush();
     }
 
-    if( item->Type() == PCB_TEXT_T || item->Type() == PCB_TEXTBOX_T )
+    if( item->Type() == PCB_FIELD_T || item->Type() == PCB_TEXT_T || item->Type() == PCB_TEXTBOX_T )
     {
         r = dialog->AddHTMLPage( _( "Text Size" ) );
         reportHeader( _( "Text height resolution for:" ), item, r );

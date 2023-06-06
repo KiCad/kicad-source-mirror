@@ -236,7 +236,7 @@ bool CONVERT_TOOL::Init()
     auto shapes = S_C::OnlyTypes( { PCB_SHAPE_LOCATE_SEGMENT_T, PCB_SHAPE_LOCATE_RECT_T,
                                     PCB_SHAPE_LOCATE_CIRCLE_T, PCB_SHAPE_LOCATE_ARC_T,
                                     PCB_SHAPE_LOCATE_BEZIER_T,
-                                    PCB_TEXT_T } )
+                                    PCB_FIELD_T, PCB_TEXT_T } )
                                 && P_S_C::SameLayer();
 
     auto graphicToTrack = S_C::OnlyTypes( { PCB_SHAPE_LOCATE_SEGMENT_T, PCB_SHAPE_LOCATE_ARC_T } );
@@ -783,6 +783,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromClosedGraphics( const std::deque<EDA_I
             item->SetFlags( SKIP_STRUCT );
             break;
 
+        case PCB_FIELD_T:
         case PCB_TEXT_T:
         {
             PCB_TEXT* text = static_cast<PCB_TEXT*>( item );

@@ -101,6 +101,7 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
     }
         break;
 
+    case PCB_FIELD_T:
     case PCB_TEXT_T:
     {
         const PCB_TEXT* text = static_cast<const PCB_TEXT*>( aItem );

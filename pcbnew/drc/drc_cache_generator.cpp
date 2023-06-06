@@ -137,7 +137,7 @@ bool DRC_CACHE_GENERATOR::Run()
         PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T,
         PCB_PAD_T,
         PCB_SHAPE_T,
-        PCB_TEXT_T, PCB_TEXTBOX_T,
+        PCB_FIELD_T, PCB_TEXT_T, PCB_TEXTBOX_T,
         PCB_DIMENSION_T
     };
 

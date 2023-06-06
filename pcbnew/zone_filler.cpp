@@ -815,6 +815,7 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
 {
     switch( aItem->Type() )
     {
+    case PCB_FIELD_T:
     case PCB_TEXT_T:
     {
         PCB_TEXT* text = static_cast<PCB_TEXT*>( aItem );

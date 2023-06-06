@@ -87,6 +87,7 @@ enum KICAD_T
     PCB_PAD_T,               ///< class PAD, a pad in a footprint
     PCB_SHAPE_T,             ///< class PCB_SHAPE, a segment not on copper layers
     PCB_BITMAP_T,            ///< class PCB_BITMAP, bitmap on a layer
+    PCB_FIELD_T,             ///< class PCB_FIELD, text associated with a footprint property
     PCB_TEXT_T,              ///< class PCB_TEXT, text on a layer
     PCB_TEXTBOX_T,           ///< class PCB_TEXTBOX, wrapped text on a layer
     PCB_TRACE_T,             ///< class PCB_TRACK, a track segment (segment on a copper layer)
