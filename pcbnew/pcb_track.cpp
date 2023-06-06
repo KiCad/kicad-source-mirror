@@ -1154,6 +1154,14 @@ EDA_ANGLE PCB_ARC::GetArcAngleStart() const
 }
 
 
+// Note: used in python tests.  Ignore CLion's claim that it's unused....
+EDA_ANGLE PCB_ARC::GetArcAngleEnd() const
+{
+    EDA_ANGLE angleEnd( m_End - GetPosition() );
+    return angleEnd.Normalize();
+}
+
+
 bool PCB_TRACK::cmp_tracks::operator() ( const PCB_TRACK* a, const PCB_TRACK* b ) const
 {
     if( a->GetNetCode() != b->GetNetCode() )

@@ -323,6 +323,7 @@ public:
     double GetRadius() const;
     EDA_ANGLE GetAngle() const;
     EDA_ANGLE GetArcAngleStart() const;
+    EDA_ANGLE GetArcAngleEnd() const;  // Called by Python; ignore CLion's claim that it's unused
     virtual bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
 
     virtual bool HitTest( const BOX2I& aRect, bool aContained = true,
