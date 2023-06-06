@@ -34,6 +34,7 @@
 #include <geometry/shape_rect.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_compound.h>
+#include <geometry/shape_poly_set.h>
 #include <math/vector2d.h>
 
 typedef VECTOR2I::extended_type ecoord;
@@ -1084,6 +1085,20 @@ static bool collideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, int
                     break;
             }
         }
+    }
+    else if( aA->Type() == SH_POLY_SET )
+    {
+        const SHAPE_POLY_SET* polySetA = static_cast<const SHAPE_POLY_SET*>( aA );
+
+        wxASSERT( !aMTV );
+        return polySetA->Collide( aB, aClearance, aActual, aLocation );
+    }
+    else if( aB->Type() == SH_POLY_SET )
+    {
+        const SHAPE_POLY_SET* polySetB = static_cast<const SHAPE_POLY_SET*>( aB );
+
+        wxASSERT( !aMTV );
+        return polySetB->Collide( aA, aClearance, aActual, aLocation );
     }
     else
     {
