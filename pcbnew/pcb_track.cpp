@@ -32,12 +32,12 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <pcb_track.h>
 #include <base_units.h>
-#include <bitmaps.h>
+//#include <bitmaps.h>
 #include <string_utils.h>
 #include <view/view.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
-#include <i18n_utility.h>
+//#include <i18n_utility.h>
 #include <geometry/seg.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_circle.h>
@@ -460,9 +460,7 @@ std::shared_ptr<SHAPE_SEGMENT> PCB_VIA::GetEffectiveHoleShape() const
 
 bool PCB_VIA::IsTented() const
 {
-    const BOARD* board = GetBoard();
-
-    if( board )
+    if( const BOARD* board = GetBoard() )
         return board->GetTentVias();
     else
         return true;
@@ -471,9 +469,7 @@ bool PCB_VIA::IsTented() const
 
 int PCB_VIA::GetSolderMaskExpansion() const
 {
-    const BOARD* board = GetBoard();
-
-    if( board )
+    if( const BOARD* board = GetBoard() )
         return board->GetDesignSettings().m_SolderMaskExpansion;
     else
         return 0;
@@ -615,7 +611,7 @@ void PCB_VIA::SanitizeLayers()
 
 bool PCB_VIA::FlashLayer( LSET aLayers ) const
 {
-    for( auto layer : aLayers.Seq() )
+    for( PCB_LAYER_ID layer : aLayers.Seq() )
     {
         if( FlashLayer( layer ) )
             return true;
@@ -737,10 +733,9 @@ double PCB_TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
 const BOX2I PCB_TRACK::ViewBBox() const
 {
-    BOX2I        bbox = GetBoundingBox();
-    const BOARD* board = GetBoard();
+    BOX2I bbox = GetBoundingBox();
 
-    if( board )
+    if( const BOARD* board = GetBoard() )
         bbox.Inflate( 2 * board->GetDesignSettings().GetBiggestClearanceValue() );
     else
         bbox.Inflate( GetWidth() );     // Add a bit extra for safety
@@ -777,7 +772,6 @@ double PCB_VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
     PCB_PAINTER*         painter = static_cast<PCB_PAINTER*>( aView->GetPainter() );
     PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
-    const BOARD*         board = GetBoard();
     LSET                 visible = LSET::AllLayersMask();
 
     // Meta control for hiding all vias
@@ -785,7 +779,7 @@ double PCB_VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         return HIDE;
 
     // Handle board visibility
-    if( board )
+    if( const BOARD* board = GetBoard() )
         visible = board->GetVisibleLayers() & board->GetEnabledLayers();
 
     // In high contrast mode don't show vias that don't cross the high-contrast layer
@@ -1157,13 +1151,6 @@ EDA_ANGLE PCB_ARC::GetArcAngleStart() const
 {
     EDA_ANGLE angleStart( m_Start - GetPosition() );
     return angleStart.Normalize();
-}
-
-
-EDA_ANGLE PCB_ARC::GetArcAngleEnd() const
-{
-    EDA_ANGLE angleEnd( m_End - GetPosition() );
-    return angleEnd.Normalize();
 }
 
 

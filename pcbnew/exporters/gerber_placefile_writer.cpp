@@ -31,11 +31,7 @@
 #include <string_utils.h>
 #include <locale_io.h>
 #include <macros.h>
-
-#include <board.h>
-#include <board_design_settings.h>
 #include <pcb_shape.h>
-
 #include <pcbplot.h>
 #include <wildcards_and_files_ext.h>
 #include <gbr_metadata.h>
@@ -115,7 +111,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
     // and component outline thickness (polyline)
     int flash_position_shape_diam = pcbIUScale.mmToIU( 0.3 ); // defined size for position shape (circle)
     int pad1_mark_size = pcbIUScale.mmToIU( 0.36 );           // defined size for pad 1 position (diamond)
-    int other_pads_mark_size = 0;                         // defined size for position shape (circle)
+    int other_pads_mark_size = 0;                             // defined size for position shape (circle)
     int line_thickness = pcbIUScale.mmToIU( 0.1 );            // defined size for component outlines
 
     brd_plotter.SetLayerSet( LSET( aLayer ) );
@@ -126,16 +122,16 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
     for( FOOTPRINT* footprint : fp_list )
     {
         // Manage the aperture attribute component position:
-        GBR_METADATA gbr_metadata;
-        gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_POSITION );
+        GBR_METADATA metadata;
+        metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_POSITION );
 
         // Add object attribute: component reference to flash (mainly useful for users)
         // using quoted UTF8 string
         wxString ref = ConvertNotAllowedCharsInGerber( footprint->Reference().GetShownText( false ),
                                                        allowUtf8, true );
 
-        gbr_metadata.SetCmpReference( ref );
-        gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_CMP );
+        metadata.SetCmpReference( ref );
+        metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_CMP );
 
         // Add P&P specific attributes
         GBR_CMP_PNP_METADATA pnpAttrib;
@@ -163,15 +159,15 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
         fp_info = FROM_UTF8( footprint->GetFPID().GetLibNickname().c_str() );
         pnpAttrib.m_LibraryName = ConvertNotAllowedCharsInGerber( fp_info, allowUtf8, true );
 
-        gbr_metadata.m_NetlistMetadata.SetExtraData( pnpAttrib.FormatCmpPnPMetadata() );
+        metadata.m_NetlistMetadata.SetExtraData( pnpAttrib.FormatCmpPnPMetadata() );
 
         VECTOR2I flash_pos = footprint->GetPosition();
 
-        plotter.FlashPadCircle( flash_pos, flash_position_shape_diam, FILLED, &gbr_metadata );
-        gbr_metadata.m_NetlistMetadata.ClearExtraData();
+        plotter.FlashPadCircle( flash_pos, flash_position_shape_diam, FILLED, &metadata );
+        metadata.m_NetlistMetadata.ClearExtraData();
 
         // Now some extra metadata is output, avoid blindly clearing the full metadata list
-        gbr_metadata.m_NetlistMetadata.m_TryKeepPreviousAttributes = true;
+        metadata.m_NetlistMetadata.m_TryKeepPreviousAttributes = true;
 
         // We plot the footprint courtyard when possible.
         // If not, the pads bounding box will be used.
@@ -184,8 +180,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
 
         if( ( footprint->GetFlags() & checkFlag ) == 0 )
         {
-            gbr_metadata.SetApertureAttrib(
-                    GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_COURTYARD );
+            metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_COURTYARD );
 
             const SHAPE_POLY_SET& courtyard = footprint->GetCourtyard( aLayer );
 
@@ -197,14 +192,13 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
                     continue;
 
                 useFpPadsBbox = false;
-                plotter.PLOTTER::PlotPoly( poly, FILL_T::NO_FILL, line_thickness, &gbr_metadata );
+                plotter.PLOTTER::PlotPoly( poly, FILL_T::NO_FILL, line_thickness, &metadata );
             }
         }
 
         if( useFpPadsBbox )
         {
-            gbr_metadata.SetApertureAttrib(
-                    GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_FOOTPRINT );
+            metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_FOOTPRINT );
 
             // bbox of fp pads, pos 0, rot 0, non flipped
             BOX2I bbox = footprint->GetFpPadsLocalBbox();
@@ -222,7 +216,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
 
             poly.Rotate( footprint->GetOrientation() );
             poly.Move( footprint->GetPosition() );
-            plotter.PLOTTER::PlotPoly( poly, FILL_T::NO_FILL, line_thickness, &gbr_metadata );
+            plotter.PLOTTER::PlotPoly( poly, FILL_T::NO_FILL, line_thickness, &metadata );
         }
 
         std::vector<PAD*>pad_key_list;
@@ -233,26 +227,21 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
 
             for( PAD* pad1 : pad_key_list )
             {
-                gbr_metadata.SetApertureAttrib(
-                        GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_PAD1_POSITION );
-
-                gbr_metadata.SetPadName( pad1->GetNumber(), allowUtf8, true );
-
-                gbr_metadata.SetPadPinFunction( pad1->GetPinFunction(), allowUtf8, true );
-
-                gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_PAD );
+                metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_PAD1_POS );
+                metadata.SetPadName( pad1->GetNumber(), allowUtf8, true );
+                metadata.SetPadPinFunction( pad1->GetPinFunction(), allowUtf8, true );
+                metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_PAD );
 
                 // Flashes a diamond at pad position:
                 plotter.FlashRegularPolygon( pad1->GetPosition(), pad1_mark_size, 4, ANGLE_0,
-                                             FILLED, &gbr_metadata );
+                                             FILLED, &metadata );
             }
         }
 
         if( m_plotOtherPadsMarker )
         {
-            gbr_metadata.SetApertureAttrib(
-                    GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_PADOTHER_POSITION );
-            gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_PAD );
+            metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_PADOTHER_POS );
+            metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_PAD );
 
             for( PAD* pad: footprint->Pads() )
             {
@@ -275,13 +264,11 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
                 if( !pad->IsOnLayer( aLayer ) )
                     continue;
 
-                gbr_metadata.SetPadName( pad->GetNumber(), allowUtf8, true );
-
-                gbr_metadata.SetPadPinFunction( pad->GetPinFunction(), allowUtf8, true );
+                metadata.SetPadName( pad->GetNumber(), allowUtf8, true );
+                metadata.SetPadPinFunction( pad->GetPinFunction(), allowUtf8, true );
 
                 // Flashes a round, 0 sized round shape at pad position
-                plotter.FlashPadCircle( pad->GetPosition(), other_pads_mark_size, FILLED,
-                                        &gbr_metadata );
+                plotter.FlashPadCircle( pad->GetPosition(), other_pads_mark_size, FILLED, &metadata );
             }
         }
 
@@ -296,7 +283,8 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
         brd_plotter.SetLayerSet( LSET( Edge_Cuts ) );
 
          // Plot edge layer and graphic items
-        brd_plotter.PlotBoardGraphicItems();
+        for( const BOARD_ITEM* item : m_pcb->Drawings() )
+            brd_plotter.PlotBoardGraphicItem( item );
 
         // Draw footprint other graphic items:
         for( FOOTPRINT* footprint : fp_list )
@@ -304,7 +292,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
             for( BOARD_ITEM* item : footprint->GraphicalItems() )
             {
                 if( item->Type() == PCB_SHAPE_T && item->GetLayer() == Edge_Cuts )
-                    brd_plotter.PlotPcbShape( static_cast<PCB_SHAPE*>( item ) );
+                    brd_plotter.PlotShape( static_cast<PCB_SHAPE*>( item ) );
             }
         }
     }

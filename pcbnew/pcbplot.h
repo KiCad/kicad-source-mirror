@@ -55,13 +55,11 @@ class wxFileName;
 class BRDITEMS_PLOTTER : public PCB_PLOT_PARAMS
 {
 public:
-    BRDITEMS_PLOTTER( PLOTTER* aPlotter, BOARD* aBoard, const PCB_PLOT_PARAMS& aPlotOpts )
-            : PCB_PLOT_PARAMS( aPlotOpts )
-    {
-        m_plotter = aPlotter;
-        m_board = aBoard;
-        m_maxError = aBoard->GetDesignSettings().m_MaxError;
-    }
+    BRDITEMS_PLOTTER( PLOTTER* aPlotter, BOARD* aBoard, const PCB_PLOT_PARAMS& aPlotOpts ) :
+            PCB_PLOT_PARAMS( aPlotOpts ),
+            m_plotter( aPlotter ),
+            m_board( aBoard )
+    { }
 
     /**
      * @return a 'width adjustment' for the postscript engine
@@ -79,20 +77,13 @@ public:
     // Basic functions to plot a board item
     void SetLayerSet( LSET aLayerMask ) { m_layerMask = aLayerMask; }
     void PlotFootprintGraphicItems( const FOOTPRINT* aFootprint );
-    void PlotFootprintTextItem( const PCB_TEXT* aText, const COLOR4D& aColor );
-
-    /*
-     * Reference, Value, and other fields are plotted only if the corresponding option is enabled.
-     * Invisible text fields are plotted only if PlotInvisibleText option is set.
-     */
     void PlotFootprintTextItems( const FOOTPRINT* aFootprint );
 
     void PlotDimension( const PCB_DIMENSION_BASE* aDim );
     void PlotPcbTarget( const PCB_TARGET* aMire );
-    void PlotFilledAreas( const ZONE* aZone, PCB_LAYER_ID aLayer,
-                          const SHAPE_POLY_SET& aPolysList );
-    void PlotPcbText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, bool aIsKnockout );
-    void PlotPcbShape( const PCB_SHAPE* aShape );
+    void PlotZones( const ZONE* aZone, PCB_LAYER_ID aLayer, const SHAPE_POLY_SET& aPolysList );
+    void PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, bool aIsKnockout );
+    void PlotShape( const PCB_SHAPE* aShape );
 
     /**
      * Plot a pad.
@@ -105,8 +96,7 @@ public:
     /**
      * Plot items like text and graphics but not tracks and footprints.
      */
-    void PlotBoardGraphicItems();
-    void PlotPcbGraphicItem( const BOARD_ITEM* item );
+    void PlotBoardGraphicItem( const BOARD_ITEM* item );
 
     /**
      * Draw a drill mark for pads and vias.
@@ -136,10 +126,9 @@ private:
                            const VECTOR2I& aDrillSize, const VECTOR2I& aPadSize,
                            const EDA_ANGLE& aOrientation, int aSmallDrill );
 
-    PLOTTER*    m_plotter;
-    BOARD*      m_board;
-    int         m_maxError;     // For use when approximating shapes as polygons
-    LSET        m_layerMask;
+    PLOTTER*  m_plotter;
+    BOARD*    m_board;
+    LSET      m_layerMask;
 };
 
 

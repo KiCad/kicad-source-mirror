@@ -27,9 +27,9 @@
  * for curved tracks (PCB_ARC) and vias (PCB_VIA).  All told there are three KICAD_Ts:
  * PCB_TRACK_T, PCB_ARC_T, and PCB_VIA_T.
  *
- * For vias there is a further VIATYPE which indicates THROUGH, BLIND_BURIED, or
- * MICROVIA, which are supported by the synthetic KICAD_Ts PCB_LOCATE_STDVIA_T,
- * PCB_LOCATE_BBVIA_T, and PCB_LOCATE_UVIA_T.
+ * For vias there is a further VIATYPE which indicates THROUGH, BLIND_BURIED, or MICROVIA,
+ * which are supported by the synthetic KICAD_Ts PCB_LOCATE_STDVIA_T, PCB_LOCATE_BBVIA_T, and
+ * PCB_LOCATE_UVIA_T.
  */
 
 #ifndef CLASS_TRACK_H
@@ -99,24 +99,24 @@ public:
 
     void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
 
-    void          SetPosition( const VECTOR2I& aPos ) override { m_Start = aPos; }
-    VECTOR2I      GetPosition() const override { return m_Start; }
-    const VECTOR2I GetFocusPosition() const override { return ( m_Start + m_End ) / 2; }
+    void SetPosition( const VECTOR2I& aPos ) override { m_Start = aPos; }
+    VECTOR2I GetPosition() const override             { return m_Start; }
+    const VECTOR2I GetFocusPosition() const override  { return ( m_Start + m_End ) / 2; }
 
-    void SetWidth( int aWidth )                 { m_Width = aWidth; }
-    int GetWidth() const                        { return m_Width; }
+    void SetWidth( int aWidth )             { m_Width = aWidth; }
+    int GetWidth() const                    { return m_Width; }
 
-    void            SetEnd( const VECTOR2I& aEnd ) { m_End = aEnd; }
-    const VECTOR2I& GetEnd() const { return m_End; }
+    void SetEnd( const VECTOR2I& aEnd )     { m_End = aEnd; }
+    const VECTOR2I& GetEnd() const          { return m_End; }
 
-    void            SetStart( const VECTOR2I& aStart ) { m_Start = aStart; }
-    const VECTOR2I& GetStart() const { return m_Start; }
+    void SetStart( const VECTOR2I& aStart ) { m_Start = aStart; }
+    const VECTOR2I& GetStart() const        { return m_Start; }
 
-    void SetEndX( int aX ) { m_End.x = aX; }
-    void SetEndY( int aY ) { m_End.y = aY; }
+    void SetEndX( int aX )                  { m_End.x = aX; }
+    void SetEndY( int aY )                  { m_End.y = aY; }
 
-    int GetEndX() const { return m_End.x; }
-    int GetEndY() const { return m_End.y; }
+    int GetEndX() const                     { return m_End.x; }
+    int GetEndY() const                     { return m_End.y; }
 
     /// Return the selected endpoint (start or end)
     const VECTOR2I& GetEndPoint( ENDPOINT_T aEndPoint ) const
@@ -275,12 +275,11 @@ protected:
                                      std::vector<MSG_PANEL_ITEM>& aList ) const;
 
 protected:
-    int      m_Width; ///< Thickness of track, or via diameter
-    VECTOR2I m_Start; ///< Line start point
-    VECTOR2I m_End;   ///< Line end point
+    int      m_Width;        ///< Thickness of track, or via diameter
+    VECTOR2I m_Start;        ///< Line start point
+    VECTOR2I m_End;          ///< Line end point
 
-    double   m_CachedLOD; ///< Last LOD used to draw this track's net
-
+    double   m_CachedLOD;    ///< Last LOD used to draw this track's net
     double   m_CachedScale;  ///< Last zoom scale used to draw this track's net.
 };
 
@@ -290,8 +289,7 @@ class PCB_ARC : public PCB_TRACK
 public:
     PCB_ARC( BOARD_ITEM* aParent ) :
         PCB_TRACK( aParent, PCB_ARC_T )
-    {
-    };
+    { }
 
     PCB_ARC( BOARD_ITEM* aParent, const SHAPE_ARC* aArc );
 
@@ -313,13 +311,10 @@ public:
 
     void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight ) override;
 
-    void            SetMid( const VECTOR2I& aMid ) { m_Mid = aMid; }
-    const VECTOR2I& GetMid() const { return m_Mid; }
+    void SetMid( const VECTOR2I& aMid ) { m_Mid = aMid; }
+    const VECTOR2I& GetMid() const      { return m_Mid; }
 
-    void SetPosition( const VECTOR2I& aPos ) override
-    {
-        m_Start = aPos;
-    }
+    void SetPosition( const VECTOR2I& aPos ) override { m_Start = aPos; }
 
     virtual VECTOR2I GetPosition() const override;
 
@@ -328,7 +323,6 @@ public:
     double GetRadius() const;
     EDA_ANGLE GetAngle() const;
     EDA_ANGLE GetArcAngleStart() const;
-    EDA_ANGLE GetArcAngleEnd() const;
     virtual bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
 
     virtual bool HitTest( const BOX2I& aRect, bool aContained = true,
@@ -443,8 +437,8 @@ public:
      */
     void SanitizeLayers();
 
-    VECTOR2I GetPosition() const override { return m_Start; }
-    void     SetPosition( const VECTOR2I& aPoint ) override { m_Start = aPoint;  m_End = aPoint; }
+    VECTOR2I GetPosition() const override               { return m_Start; }
+    void SetPosition( const VECTOR2I& aPoint ) override { m_Start = aPoint;  m_End = aPoint; }
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
@@ -548,13 +542,8 @@ public:
      *
      * @return true if the via is a free via
      */
-    bool GetIsFree() const { return m_isFree; }
+    bool GetIsFree() const              { return m_isFree; }
     void SetIsFree( bool aFree = true ) { m_isFree = aFree; }
-
-    /**
-     * @return true if the drill value is default value (-1)
-     */
-    bool IsDrillDefault() const { return m_drill <= 0; }
 
     // @copydoc BOARD_ITEM::GetEffectiveShape
     std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,

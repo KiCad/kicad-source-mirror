@@ -146,10 +146,10 @@ public:
         GBR_APERTURE_ATTRIB_CMP_POSITION,
 
         ///< aperture used for flashed pin 1 (or A1 or AA1) position in placement files.
-        GBR_APERTURE_ATTRIB_PAD1_POSITION,
+        GBR_APERTURE_ATTRIB_PAD1_POS,
 
         ///< aperture used for flashed pads position in placement files.
-        GBR_APERTURE_ATTRIB_PADOTHER_POSITION,
+        GBR_APERTURE_ATTRIB_PADOTHER_POS,
 
         ///< aperture used to draw component physical body outline without pins in placement files.
         GBR_APERTURE_ATTRIB_CMP_BODY,

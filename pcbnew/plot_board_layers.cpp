@@ -284,7 +284,8 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     bool sketchPads = ( onFrontFab || onBackFab ) && aPlotOpt.GetSketchPadsOnFabLayers();
 
      // Plot edge layer and graphic items
-    itemplotter.PlotBoardGraphicItems();
+    for( const BOARD_ITEM* item : aBoard->Drawings() )
+        itemplotter.PlotBoardGraphicItem( item );
 
     // Draw footprint texts:
     for( const FOOTPRINT* footprint : aBoard->Footprints() )
@@ -376,7 +377,9 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             // Note: a custom pad can have its pad anchor with size = 0
             if( pad->GetShape() != PAD_SHAPE::CUSTOM
                 && ( padPlotsSize.x <= 0 || padPlotsSize.y <= 0 ) )
+            {
                 continue;
+            }
 
             switch( pad->GetShape() )
             {
@@ -689,13 +692,13 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 }
             }
 
-            itemplotter.PlotFilledAreas( zone, layer, mainArea );
+            itemplotter.PlotZones( zone, layer, mainArea );
 
             if( !islands.IsEmpty() )
             {
                 ZONE dummy( *zone );
                 dummy.SetNet( &nonet );
-                itemplotter.PlotFilledAreas( &dummy, layer, islands );
+                itemplotter.PlotZones( &dummy, layer, islands );
             }
         }
     }
@@ -893,7 +896,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 else if( item->IsOnLayer( Edge_Cuts ) )
                 {
                     if( item->Type() == PCB_SHAPE_T )
-                        itemplotter.PlotPcbShape( static_cast<const PCB_SHAPE*>( item ) );
+                        itemplotter.PlotShape( static_cast<const PCB_SHAPE*>( item ) );
                 }
             }
         }
@@ -951,7 +954,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             }
             else if( item->IsOnLayer( Edge_Cuts ) )
             {
-                itemplotter.PlotPcbGraphicItem( item );
+                itemplotter.PlotBoardGraphicItem( item );
             }
         }
 
@@ -989,7 +992,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     areas.BooleanAdd( initialPolys, SHAPE_POLY_SET::PM_FAST );
     areas.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
-    itemplotter.PlotFilledAreas( &zone, layer, areas );
+    itemplotter.PlotZones( &zone, layer, areas );
 }
 
 

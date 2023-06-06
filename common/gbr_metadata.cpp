@@ -279,18 +279,18 @@ std::string GBR_APERTURE_METADATA::FormatAttribute( GBR_APERTURE_ATTRIB aAttribu
         attribute_string = "TA.AperFunction,ComponentMain";
         break;
 
-    case GBR_APERTURE_ATTRIB_PAD1_POSITION:     // print info associated to a component
+    case GBR_APERTURE_ATTRIB_PAD1_POS:     // print info associated to a component
                                                 // flashed shape at pad 1 position
                                                 // (pad 1 is also pad A1 or pad AA1)
                                                 // in placement files
         attribute_string = "TA.AperFunction,ComponentPin";
         break;
 
-    case GBR_APERTURE_ATTRIB_PADOTHER_POSITION: // print info associated to a component
+    case GBR_APERTURE_ATTRIB_PADOTHER_POS: // print info associated to a component
                                                 // flashed shape at pads position (all but pad 1)
                                                 // in placement files
                                                 // Currently: (could be changed later) same as
-                                                // GBR_APERTURE_ATTRIB_PADOTHER_POSITION
+                                                // GBR_APERTURE_ATTRIB_PADOTHER_POS
         attribute_string = "TA.AperFunction,ComponentPin";
         break;
 
