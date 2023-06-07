@@ -260,8 +260,8 @@ KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
 
         setlocale( lc_new_type, user_locale.c_str() );
 
-#ifdef KICAD_USE_SENTRY
         wxString       msg = wxString::Format( "Loading kiface %d", aFaceId );
+#ifdef KICAD_USE_SENTRY
         sentry_value_t crumb = sentry_value_new_breadcrumb( "navigation", msg.utf8_str() );
         sentry_value_set_by_key( crumb, "category", sentry_value_new_string( "kiway.kiface" ) );
         sentry_value_set_by_key( crumb, "level", sentry_value_new_string( "info" ) );
