@@ -575,6 +575,9 @@ public:
     virtual int GetUndoCommandCount() const { return m_undoList.m_CommandsList.size(); }
     virtual int GetRedoCommandCount() const { return m_redoList.m_CommandsList.size(); }
 
+    virtual wxString GetUndoActionDescription() const;
+    virtual wxString GetRedoActionDescription() const;
+
     int GetMaxUndoItems() const { return m_undoRedoCountMax; }
 
     /**

@@ -119,6 +119,8 @@ void SCHEMATIC_COMMIT::pushLibEdit( const wxString& aMessage, int aCommitFlags )
     if( Empty() )
         return;
 
+    undoList.SetDescription( aMessage );
+
     for( COMMIT_LINE& ent : m_changes )
     {
         int changeType = ent.m_type & CHT_TYPE;
@@ -248,6 +250,8 @@ void SCHEMATIC_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
     if( Empty() )
         return;
+
+    undoList.SetDescription( aMessage );
 
     SCHEMATIC& schematic = static_cast<SCH_EDIT_FRAME*>( m_toolMgr->GetToolHolder() )->Schematic();
     std::vector<SCH_ITEM*>   bulkAddedItems;

@@ -407,6 +407,25 @@ void EDA_BASE_FRAME::HandleUpdateUIEvent( wxUpdateUIEvent& aEvent, EDA_BASE_FRAM
         return;
     }
 
+    if( showRes && aEvent.GetId() == ACTIONS::undo.GetUIId() )
+    {
+        wxString msg = _( "Undo" );
+
+        if( enableRes )
+            msg += wxS( " " ) + aFrame->GetUndoActionDescription();
+
+        aEvent.SetText( msg );
+    }
+    else if( showRes && aEvent.GetId() == ACTIONS::redo.GetUIId() )
+    {
+        wxString msg = _( "Redo" );
+
+        if( enableRes )
+            msg += wxS( " " ) + aFrame->GetRedoActionDescription();
+
+        aEvent.SetText( msg );
+    }
+
     if( isCut || isCopy || isPaste )
     {
         wxWindow*    focus = wxWindow::FindFocus();
@@ -1391,6 +1410,24 @@ PICKED_ITEMS_LIST* EDA_BASE_FRAME::PopCommandFromUndoList( )
 PICKED_ITEMS_LIST* EDA_BASE_FRAME::PopCommandFromRedoList( )
 {
     return m_redoList.PopCommand();
+}
+
+
+wxString EDA_BASE_FRAME::GetUndoActionDescription() const
+{
+    if( GetUndoCommandCount() > 0 )
+        return m_undoList.m_CommandsList.back()->GetDescription();
+
+    return wxEmptyString;
+}
+
+
+wxString EDA_BASE_FRAME::GetRedoActionDescription() const
+{
+    if( GetRedoCommandCount() > 0 )
+        return m_redoList.m_CommandsList.back()->GetDescription();
+
+    return wxEmptyString;
 }
 
 

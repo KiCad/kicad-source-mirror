@@ -30,6 +30,7 @@
 #include <eda_item_flags.h>
 #include <functional>
 #include <vector>
+#include <wx/string.h>
 
 class EDA_ITEM;
 class PICKED_ITEMS_LIST;
@@ -132,9 +133,6 @@ private:
  */
 class PICKED_ITEMS_LIST
 {
-private:
-    std::vector <ITEM_PICKER> m_ItemsList;
-
 public:
     PICKED_ITEMS_LIST();
     ~PICKED_ITEMS_LIST();
@@ -288,6 +286,13 @@ public:
      * @param aSource The list of items to copy to the list.
      */
     void CopyList( const PICKED_ITEMS_LIST& aSource );
+
+    wxString GetDescription() const                     { return m_description; }
+    void SetDescription( const wxString& aDescription ) { m_description = aDescription; }
+
+private:
+    wxString                 m_description;
+    std::vector<ITEM_PICKER> m_ItemsList;
 };
 
 

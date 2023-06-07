@@ -245,6 +245,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
     if( Empty() )
         return;
 
+    undoList.SetDescription( aMessage );
+
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = board->GetConnectivity();
 
     // Note:

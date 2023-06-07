@@ -193,7 +193,10 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
     }
 
     if( !commandToUndo )
+    {
         commandToUndo = new PICKED_ITEMS_LIST();
+        commandToUndo->SetDescription( aItemsList.GetDescription() );
+    }
 
     // Copy picker list:
     if( !commandToUndo->GetCount() )

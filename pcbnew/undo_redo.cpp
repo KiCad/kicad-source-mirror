@@ -293,6 +293,7 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
                                               UNDO_REDO aCommandType )
 {
     PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
+    commandToUndo->SetDescription( aItemsList.GetDescription() );
 
     saveCopyInUndoList( commandToUndo, aItemsList, aCommandType );
 }
@@ -304,7 +305,10 @@ void PCB_BASE_EDIT_FRAME::AppendCopyToUndoList( const PICKED_ITEMS_LIST& aItemsL
     PICKED_ITEMS_LIST* commandToUndo = PopCommandFromUndoList();
 
     if( !commandToUndo )
+    {
         commandToUndo = new PICKED_ITEMS_LIST();
+        commandToUndo->SetDescription( aItemsList.GetDescription() );
+    }
 
     saveCopyInUndoList( commandToUndo, aItemsList, aCommandType );
 }
