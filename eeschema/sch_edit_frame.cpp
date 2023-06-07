@@ -2144,11 +2144,10 @@ void SCH_EDIT_FRAME::onSize( wxSizeEvent& aEvent )
 void SCH_EDIT_FRAME::SaveSymbolToSchematic( const LIB_SYMBOL& aSymbol,
                                             const KIID& aSchematicSymbolUUID )
 {
-    bool appendToUndo = false;
-
-    SCH_SHEET_PATH principalPath;
-    SCH_ITEM*      item = Schematic().GetSheets().GetItem( aSchematicSymbolUUID, &principalPath );
-    SCH_SYMBOL*    principalSymbol = dynamic_cast<SCH_SYMBOL*>( item );
+    SCH_SHEET_PATH   principalPath;
+    SCH_ITEM*        item = Schematic().GetSheets().GetItem( aSchematicSymbolUUID, &principalPath );
+    SCH_SYMBOL*      principalSymbol = dynamic_cast<SCH_SYMBOL*>( item );
+    SCHEMATIC_COMMIT commit( m_toolManager );
 
     if( !principalSymbol )
         return;
@@ -2158,7 +2157,7 @@ void SCH_EDIT_FRAME::SaveSymbolToSchematic( const LIB_SYMBOL& aSymbol,
     if( principalSymbol->IsAnnotated( &principalPath ) )
         principalRef = principalSymbol->GetRef( &principalPath, false );
 
-    std::vector< std::pair<SCH_SYMBOL*, SCH_SHEET_PATH> > otherUnits;
+    std::vector< std::pair<SCH_SYMBOL*, SCH_SHEET_PATH> > allUnits;
 
     for( const SCH_SHEET_PATH& path : Schematic().GetSheets() )
     {
@@ -2170,37 +2169,36 @@ void SCH_EDIT_FRAME::SaveSymbolToSchematic( const LIB_SYMBOL& aSymbol,
                 || ( candidateSymbol->IsAnnotated( &path )
                      && candidateSymbol->GetRef( &path, false ) == principalRef ) )
             {
-                otherUnits.emplace_back( candidateSymbol, path );
+                allUnits.emplace_back( candidateSymbol, path );
             }
         }
     }
 
-    for( auto& [ otherUnit, path ] : otherUnits )
+    for( auto& [ unit, path ] : allUnits )
     {
         // This needs to be done before the LIB_SYMBOL is changed to prevent stale
         // library symbols in the schematic file.
-        path.LastScreen()->Remove( otherUnit );
+        path.LastScreen()->Remove( unit );
 
-        if( !otherUnit->IsNew() )
-        {
-            SaveCopyInUndoList( path.LastScreen(), otherUnit, UNDO_REDO::CHANGED, appendToUndo );
-            appendToUndo = true;
-        }
+        if( !unit->IsNew() )
+            commit.Modify( unit, path.LastScreen() );
 
-        otherUnit->SetLibSymbol( aSymbol.Flatten().release() );
-        otherUnit->UpdateFields( &GetCurrentSheet(),
+        unit->SetLibSymbol( aSymbol.Flatten().release() );
+        unit->UpdateFields( &GetCurrentSheet(),
                                  true, /* update style */
                                  true, /* update ref */
                                  true, /* update other fields */
                                  false, /* reset ref */
                                  false /* reset other fields */ );
 
-        path.LastScreen()->Append( otherUnit );
-        GetCanvas()->GetView()->Update( otherUnit );
+        path.LastScreen()->Append( unit );
+        GetCanvas()->GetView()->Update( unit );
     }
 
+    if( !commit.Empty() )
+        commit.Push( _( "Save Symbol to Schematic" ) );
+
     GetCanvas()->Refresh();
-    OnModify();
 }
 
 

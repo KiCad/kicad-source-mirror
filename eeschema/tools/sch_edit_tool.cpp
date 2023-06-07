@@ -1343,9 +1343,9 @@ static std::vector<KICAD_T> deletableItems =
 
 int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 {
-    SCH_SCREEN*          screen = m_frame->GetScreen();
-    auto                 items = m_selectionTool->RequestSelection( deletableItems ).GetItems();
-    bool                 appendToUndo = false;
+    SCH_SCREEN*           screen = m_frame->GetScreen();
+    std::deque<EDA_ITEM*> items = m_selectionTool->RequestSelection( deletableItems ).GetItems();
+    bool                  appendToUndo = false;
     std::vector<VECTOR2I> pts;
 
     if( items.empty() )
@@ -1507,11 +1507,12 @@ int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 
 void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
 {
-    KICAD_T  parentType = aField->GetParent() ? aField->GetParent()->Type() : SCHEMATIC_T;
+    KICAD_T          parentType = aField->GetParent() ? aField->GetParent()->Type() : SCHEMATIC_T;
+    SCHEMATIC_COMMIT commit( m_toolMgr );
 
     // Save old symbol in undo list if not already in edit, or moving.
     if( aField->GetEditFlags() == 0 )    // i.e. not edited, or moved
-        saveCopyInUndoList( aField, UNDO_REDO::CHANGED );
+        commit.Modify( aField, m_frame->GetScreen() );
 
     if( parentType == SCH_SYMBOL_T && aField->GetId() == REFERENCE_FIELD )
         static_cast<SCH_ITEM*>( aField->GetParent() )->SetConnectivityDirty();
@@ -1541,6 +1542,9 @@ void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
 
     if( m_frame->eeconfig()->m_AutoplaceFields.enable || parentType == SCH_SHEET_T )
         static_cast<SCH_ITEM*>( aField->GetParent() )->AutoAutoplaceFields( m_frame->GetScreen() );
+
+    if( !commit.Empty() )
+        commit.Push( caption );
 
     m_frame->UpdateItem( aField, false, true );
     m_frame->OnModify();
@@ -1597,9 +1601,10 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( RotatableItems );
-    SCH_ITEM*     head = static_cast<SCH_ITEM*>( selection.Front() );
-    bool          moving = head && head->IsMoving();
+    EE_SELECTION&    selection = m_selectionTool->RequestSelection( RotatableItems );
+    SCHEMATIC_COMMIT commit( m_toolMgr );
+    SCH_ITEM*        head = static_cast<SCH_ITEM*>( selection.Front() );
+    bool             moving = head && head->IsMoving();
 
     if( selection.Empty() )
         return 0;
@@ -1616,15 +1621,10 @@ int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
             autoplaceItems.push_back( static_cast<SCH_ITEM*>( item->GetParent() ) );
     }
 
-    bool appendUndo = false;
-
     for( SCH_ITEM* sch_item : autoplaceItems )
     {
         if( !moving && !sch_item->IsNew() )
-        {
-            saveCopyInUndoList( sch_item, UNDO_REDO::CHANGED, appendUndo, false );
-            appendUndo = true;
-        }
+            commit.Modify( sch_item, m_frame->GetScreen() );
 
         sch_item->AutoplaceFields( m_frame->GetScreen(), /* aManual */ true );
 
@@ -1639,10 +1639,11 @@ int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
     }
     else
     {
+        if( !commit.Empty() )
+            commit.Push( _( "Autoplace Fields" ) );
+
         if( selection.IsHover() )
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-
-        m_frame->OnModify();
     }
 
     return 0;
