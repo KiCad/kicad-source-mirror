@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -46,7 +46,7 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	wxBoxSizer* bSizerMiddle;
 	bSizerMiddle = new wxBoxSizer( wxHORIZONTAL );
 
-	wxString m_rbFormatChoices[] = { _("ASCII"), _("CSV"), _("Gerber (experimental)") };
+	wxString m_rbFormatChoices[] = { _("ASCII"), _("CSV"), _("Gerber X3") };
 	int m_rbFormatNChoices = sizeof( m_rbFormatChoices ) / sizeof( wxString );
 	m_rbFormat = new wxRadioBox( this, wxID_ANY, _("Format"), wxDefaultPosition, wxDefaultSize, m_rbFormatNChoices, m_rbFormatChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbFormat->SetSelection( 2 );
@@ -55,7 +55,7 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	wxString m_radioBoxUnitsChoices[] = { _("Inches"), _("Millimeters") };
 	int m_radioBoxUnitsNChoices = sizeof( m_radioBoxUnitsChoices ) / sizeof( wxString );
 	m_radioBoxUnits = new wxRadioBox( this, wxID_ANY, _("Units"), wxDefaultPosition, wxDefaultSize, m_radioBoxUnitsNChoices, m_radioBoxUnitsChoices, 1, wxRA_SPECIFY_COLS );
-	m_radioBoxUnits->SetSelection( 0 );
+	m_radioBoxUnits->SetSelection( 1 );
 	bSizerMiddle->Add( m_radioBoxUnits, 1, wxALL|wxEXPAND, 5 );
 
 	wxString m_radioBoxFilesCountChoices[] = { _("Separate files for front, back"), _("Single file for board") };
