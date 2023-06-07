@@ -118,6 +118,7 @@ enum class BITMAPS : unsigned int
     change_label,
     change_text,
     checked_ok,
+    creepage_clearance,
     coax,
     color_code_multiplier,
     color_code_tolerance,

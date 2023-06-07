@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c5)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,25 +10,20 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class UNIT_SELECTOR_LEN;
-
+#include "panel_electrical_spacing_ipc2221.h"
+#include "panel_electrical_spacing_iec60664.h"
 #include "calculator_panels/calculator_panel.h"
-#include <wx/string.h>
-#include <wx/choice.h>
+#include <wx/panel.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/statline.h>
-#include <wx/stattext.h>
-#include <wx/textctrl.h>
-#include <wx/button.h>
+#include <wx/string.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/notebook.h>
 #include <wx/sizer.h>
-#include <wx/grid.h>
-#include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -41,20 +36,9 @@ class PANEL_ELECTRICAL_SPACING_BASE : public CALCULATOR_PANEL
 	private:
 
 	protected:
-		UNIT_SELECTOR_LEN* m_ElectricalSpacingUnitsSelector;
-		wxStaticLine* m_staticline2;
-		wxStaticText* m_staticText891;
-		wxTextCtrl* m_ElectricalSpacingVoltage;
-		wxButton* m_buttonElectSpacingRefresh;
-		wxBoxSizer* m_electricalSpacingSizer;
-		wxStaticText* m_staticTextElectricalSpacing;
-		wxGrid* m_gridElectricalSpacingValues;
-		wxStaticText* m_staticText88;
-
-		// Virtual event handlers, override them in your derived class
-		virtual void OnElectricalSpacingUnitsSelection( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnElectricalSpacingRefresh( wxCommandEvent& event ) { event.Skip(); }
-
+		wxNotebook* m_notebook1;
+		PANEL_ELECTRICAL_SPACING_IPC2221* m_IPC2221;
+		PANEL_ELECTRICAL_SPACING_IEC60664* m_IEC60664;
 
 	public:
 

@@ -28,6 +28,8 @@
 #include <pcb_calculator_settings.h>
 #include <string_utils.h>
 #include <wx/msgdlg.h>
+#include <html_window.h>
+
 
 #include <i18n_utility.h>   // For _HKI definition in eseries_help.h
 wxString eseries_help =

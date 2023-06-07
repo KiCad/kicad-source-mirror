@@ -633,6 +633,7 @@ set( BMAPS_OTHER
     color_code_tolerance
     color_code_value
     color_code_value_and_name
+    creepage_clearance
     cpw
     cpw_back
     microstrip

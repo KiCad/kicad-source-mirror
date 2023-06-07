@@ -48,6 +48,17 @@ public:
     {
         int spacing_units;
         wxString spacing_voltage;
+
+        double iec60664_ratedVoltage;
+        int    iec60664_OVC;
+        double iec60664_RMSvoltage;
+        double iec60664_transientOV;
+        double iec60664_peakOV;
+        int    iec60664_insulationType;
+        int    iec60664_pollutionDegree;
+        int    iec60664_materialGroup;
+        int    iec60664_pcbMaterial;
+        double iec60664_altitude;
     };
 
     struct REGULATORS

@@ -25,6 +25,11 @@ set( PCB_CALCULATOR_SRCS
         calculator_panels/panel_galvanic_corrosion_base.cpp
     calculator_panels/panel_electrical_spacing.cpp
     calculator_panels/panel_electrical_spacing_base.cpp
+    calculator_panels/iec60664.cpp
+    calculator_panels/panel_electrical_spacing_iec60664.cpp
+    calculator_panels/panel_electrical_spacing_iec60664_base.cpp
+    calculator_panels/panel_electrical_spacing_ipc2221.cpp
+    calculator_panels/panel_electrical_spacing_ipc2221_base.cpp
     calculator_panels/panel_eseries.cpp
     calculator_panels/panel_eseries_base.cpp
     calculator_panels/panel_fusing_current.cpp
@@ -220,6 +225,7 @@ endfunction()
     md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/eseries_help )
     md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/fusing_current_help )
     md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/galvanic_corrosion_help )
+    md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/iec60664_help )
 
 set( DOCS_LIST
         ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/pi_formula.h
@@ -230,6 +236,7 @@ set( DOCS_LIST
         ${CMAKE_CURRENT_SOURCE_DIR}/eseries_help.h
         ${CMAKE_CURRENT_SOURCE_DIR}/fusing_current_help.h
         ${CMAKE_CURRENT_SOURCE_DIR}/galvanic_corrosion_help.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/iec60664_help.h
     )
 
 set_source_files_properties( attenuators/attenuator_classes.cpp

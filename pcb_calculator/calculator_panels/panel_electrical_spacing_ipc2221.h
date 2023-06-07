@@ -17,27 +17,32 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PANEL_ELECTRICAL_SPACING_H
-#define PANEL_ELECTRICAL_SPACING_H
+#ifndef PANEL_ELECTRICAL_SPACING_IPC2221_H
+#define PANEL_ELECTRICAL_SPACING_IPC2221_H
 
-#include "panel_electrical_spacing_base.h"
+#include "panel_electrical_spacing_ipc2221_base.h"
 
 class PCB_CALCULATOR_SETTINGS;
 
 
-class PANEL_ELECTRICAL_SPACING : public PANEL_ELECTRICAL_SPACING_BASE
+class PANEL_ELECTRICAL_SPACING_IPC2221 : public PANEL_ELECTRICAL_SPACING_IPC2221_BASE
 {
 public:
-    PANEL_ELECTRICAL_SPACING( wxWindow* parent, wxWindowID id = wxID_ANY,
+    PANEL_ELECTRICAL_SPACING_IPC2221( wxWindow* parent, wxWindowID id = wxID_ANY,
                               const wxPoint& pos = wxDefaultPosition,
                               const wxSize& size = wxDefaultSize,
                               long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
-    ~PANEL_ELECTRICAL_SPACING();
+    ~PANEL_ELECTRICAL_SPACING_IPC2221();
 
     // Methods from CALCULATOR_PANEL that must be overridden
     void LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg ) override;
     void SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg ) override;
     void ThemeChanged() override;
+
+    void OnElectricalSpacingUnitsSelection( wxCommandEvent& event ) override;
+    void OnElectricalSpacingRefresh( wxCommandEvent& event ) override;
+    void ElectricalSpacingUpdateData( double aUnitScale );
+
 };
 
 #endif

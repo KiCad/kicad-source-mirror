@@ -63,11 +63,42 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
         m_params.emplace_back( new PARAM<double>( path + ".zout", &att->zout, 50.0 ) );
     }
 
+    // Electrical spacing params
     m_params.emplace_back( new PARAM<int>( "electrical.spacing_units",
             &m_Electrical.spacing_units, 0 ) );
 
     m_params.emplace_back( new PARAM<wxString>( "electrical.spacing_voltage",
             &m_Electrical.spacing_voltage, "500" ) );
+
+    m_params.emplace_back( new PARAM<double>( "electrical.iec60664_ratedVoltage",
+            &m_Electrical.iec60664_ratedVoltage, 230 ) );
+
+    m_params.emplace_back( new PARAM<int>( "electrical.iec60664_OVC",
+            &m_Electrical.iec60664_OVC, 0 ) );
+
+    m_params.emplace_back( new PARAM<double>( "electrical.iec60664_RMSvoltage",
+            &m_Electrical.iec60664_RMSvoltage, 230 ) );
+
+    m_params.emplace_back( new PARAM<double>( "electrical.iec60664_transientOV",
+            &m_Electrical.iec60664_transientOV, 1 ) );
+
+    m_params.emplace_back( new PARAM<double>( "electrical.iec60664_peakOV",
+            &m_Electrical.iec60664_peakOV, 0.5 ) );
+
+    m_params.emplace_back( new PARAM<int>( "electrical.iec60664_insulationType",
+            &m_Electrical.iec60664_insulationType, 0 ) );
+
+    m_params.emplace_back( new PARAM<int>( "electrical.iec60664_pollutionDegree",
+            &m_Electrical.iec60664_pollutionDegree, 0 ) );
+
+    m_params.emplace_back( new PARAM<int>( "electrical.iec60664_materialGroup",
+            &m_Electrical.iec60664_materialGroup, 0 ) );
+
+    m_params.emplace_back( new PARAM<int>( "electrical.iec60664_pcbMaterial",
+            &m_Electrical.iec60664_pcbMaterial, 1 ) );
+
+    m_params.emplace_back( new PARAM<double>( "electrical.iec60664_altitude",
+            &m_Electrical.iec60664_altitude, 2000 ) );
 
     // Regulators params
     m_params.emplace_back( new PARAM<wxString>( "regulators.r1", &m_Regulators.r1, "10" ) );
