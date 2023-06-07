@@ -151,6 +151,7 @@ bool BITMAP_BASE::ReadImageFile( const wxString& aFullFilename )
         return false;
     }
 
+    m_imageType = new_image->GetType();
     delete m_image;
     m_image  = new_image;
     delete m_originalImage;
@@ -167,7 +168,12 @@ bool BITMAP_BASE::SaveData( FILE* aFile ) const
     if( m_image )
     {
         wxMemoryOutputStream stream;
-        m_image->SaveFile( stream, wxBITMAP_TYPE_PNG );
+
+        if( m_imageType == wxBITMAP_TYPE_JPEG )
+            m_image->SaveFile( stream, wxBITMAP_TYPE_JPEG );
+        else
+            // Save as PNG (default
+            m_image->SaveFile( stream, wxBITMAP_TYPE_PNG );
 
         // Write binary data in hexadecimal form (ASCII)
         wxStreamBuffer* buffer = stream.GetOutputStreamBuffer();
@@ -197,7 +203,12 @@ void BITMAP_BASE::SaveData( wxArrayString& aPngStrings ) const
     if( m_image )
     {
         wxMemoryOutputStream stream;
-        m_image->SaveFile( stream, wxBITMAP_TYPE_PNG );
+
+        if( m_imageType == wxBITMAP_TYPE_JPEG )
+            m_image->SaveFile( stream, wxBITMAP_TYPE_JPEG );
+        else
+            // Save as PNG (default
+            m_image->SaveFile( stream, wxBITMAP_TYPE_PNG );
 
         // Write binary data in hexadecimal form (ASCII)
         wxStreamBuffer* buffer = stream.GetOutputStreamBuffer();
@@ -244,7 +255,7 @@ bool BITMAP_BASE::LoadData( LINE_READER& aLine, wxString& aErrorMsg )
             // We expect here m_image and m_bitmap are void
             m_image = new wxImage();
             wxMemoryInputStream istream( stream );
-            m_image->LoadFile( istream, wxBITMAP_TYPE_PNG );
+            m_image->LoadFile( istream, wxBITMAP_TYPE_ANY );
             m_bitmap = new wxBitmap( *m_image );
             m_originalImage = new wxImage( *m_image );
             break;

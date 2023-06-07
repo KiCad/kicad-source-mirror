@@ -138,7 +138,8 @@ class PCB_PLUGIN;   // forward decl
 //#define SEXPR_BOARD_FILE_VERSION    20230517  // Teardrop parameters for pads and vias
 //#define SEXPR_BOARD_FILE_VERSION    20230620  // PCB Fields
 //#define SEXPR_BOARD_FILE_VERSION    20230730  // Connectivity for graphic shapes
-#define SEXPR_BOARD_FILE_VERSION      20230825  // Textbox explicit border flag
+//#define SEXPR_BOARD_FILE_VERSION    20230825  // Textbox explicit border flag
+#define SEXPR_BOARD_FILE_VERSION      20230606  // Multiple image type support in files
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 #define LEGACY_ARC_FORMATTING         20210925  ///< These were the last to use old arc formatting

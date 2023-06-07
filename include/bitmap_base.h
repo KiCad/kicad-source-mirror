@@ -224,6 +224,16 @@ public:
     void PlotImage( PLOTTER* aPlotter, const VECTOR2I& aPos,
                     const KIGFX::COLOR4D& aDefaultColor, int aDefaultPensize ) const;
 
+    /**
+     * Return the bitmap type (png, jpeg, etc.)
+     */
+    wxBitmapType GetImageType() const { return m_imageType; }
+
+    /**
+     * Set the bitmap type (png, jpeg, etc.)
+     */
+    void SetImageType( wxBitmapType aType ) { m_imageType = aType; }
+
 private:
     /*
      * Rebuild the internal bitmap used to draw/plot image.
@@ -238,7 +248,8 @@ private:
 
     double    m_scale;              // The scaling factor of the bitmap
                                     // With m_pixelSizeIu, controls the actual draw size
-    wxImage*  m_image;              // the raw image data (png format)
+    wxImage*  m_image;              // the raw image data
+    wxBitmapType m_imageType;       // the image type (png, jpeg, etc.)
     wxImage*  m_originalImage;      // Raw image data, not transformed by rotate/mirror
     wxBitmap* m_bitmap;             // the bitmap used to draw/plot image
     double    m_pixelSizeIu;        // The scaling factor of the bitmap

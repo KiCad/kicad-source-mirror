@@ -2984,8 +2984,9 @@ PCB_BITMAP* PCB_PARSER::parsePCB_BITMAP( BOARD_ITEM* aParent )
             wxMemoryOutputStream stream( buffer.GetData(), buffer.GetBufSize() );
             wxImage*             image = new wxImage();
             wxMemoryInputStream  istream( stream );
-            image->LoadFile( istream, wxBITMAP_TYPE_PNG );
+            image->LoadFile( istream );
             bitmap->SetImage( image );
+            bitmap->MutableImage()->SetImageType( image->GetType() );
             break;
         }
 
