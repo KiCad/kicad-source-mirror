@@ -10674,7 +10674,6 @@ msgid "Replace matches in reference designators"
 msgstr "Zamień pasujące elementy w oznaczeniach komponentów"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:120
-#, fuzzy
 msgid "Replace"
 msgstr "Zamień"
 
@@ -12716,12 +12715,12 @@ msgid "Unknown netlist format.\n"
 msgstr "Nieprawidłowy format listy sieci.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:396
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr "Rysuję symbol '%s' element %d na '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
 msgstr "Rysuję symbol '%s' na '%s'\n"
 
@@ -12886,7 +12885,7 @@ msgstr "Konflikty"
 #: eeschema/erc_item.cpp:44 pcbnew/dialogs/panel_edit_options_base.cpp:384
 #: pcbnew/drc/drc_item.cpp:50
 msgid "Miscellaneous"
-msgstr "&Różne"
+msgstr "Różne"
 
 #: eeschema/erc_item.cpp:47
 msgid "Duplicate sheet names within a given sheet"
@@ -35199,49 +35198,40 @@ msgid "Dimension '%s' on %s"
 msgstr "Wymiar '%s' na %s"
 
 #: pcbnew/pcb_dimension.cpp:1319
-#, fuzzy
 msgid "1234.0"
-msgstr "1234"
+msgstr "1234,0"
 
 #: pcbnew/pcb_dimension.cpp:1320
-#, fuzzy
 msgid "1234.0 mm"
-msgstr "1234 mm"
+msgstr "1234,0 mm"
 
 #: pcbnew/pcb_dimension.cpp:1321
-#, fuzzy
 msgid "1234.0 (mm)"
-msgstr "1234 (mm)"
+msgstr "1234,0 (mm)"
 
 #: pcbnew/pcb_dimension.cpp:1353
-#, fuzzy
 msgid "Units Format"
-msgstr "Formatowanie jednostek:"
+msgstr "Formatowanie"
 
 #: pcbnew/pcb_dimension.cpp:1359
-#, fuzzy
 msgid "Suppress Trailing Zeroes"
 msgstr "Pomiń zera końcowe"
 
 #: pcbnew/pcb_dimension.cpp:1387
-#, fuzzy
 msgid "Crossbar Height"
-msgstr "Kursor w prawo"
+msgstr "Wysokość poprzeczki"
 
 #: pcbnew/pcb_dimension.cpp:1391
-#, fuzzy
 msgid "Extension Line Overshoot"
-msgstr "Przesunięcie rozszerzenia linii:"
+msgstr "Przekroczenia linii pomocniczej"
 
 #: pcbnew/pcb_dimension.cpp:1456
-#, fuzzy
 msgid "Leader Length"
-msgstr "Długość przelotki"
+msgstr "Długość linii odniesienia"
 
 #: pcbnew/pcb_dimension.cpp:1496
-#, fuzzy
 msgid "Text Frame"
-msgstr "Ramka tekstu:"
+msgstr "Obramowanie tekstu"
 
 #: pcbnew/pcb_edit_frame.cpp:203
 msgid "KiCad PCB Editor"
@@ -37632,11 +37622,11 @@ msgstr "Liczba segmentów by zbudować łezkę o zakrzywionym kształcie"
 
 #: pcbnew/teardrop/dialog_teardrop_base.h:121
 msgid "Add Teardrops"
-msgstr "Dodaj łezki"
+msgstr "Umieść łezki"
 
 #: pcbnew/teardrop/teardrop.cpp:228
 msgid "Add teardrops"
-msgstr "Dodaj łezki"
+msgstr "Dodaje łezki"
 
 #: pcbnew/teardrop/teardrop.cpp:430
 msgid "Remove teardrops"
@@ -38054,7 +38044,7 @@ msgstr "Prześwit pomiędzy strefami: %s."
 #: pcbnew/tools/board_inspection_tool.cpp:703
 #, c-format
 msgid "Overridden by larger physical clearance from %s;clearance: %s."
-msgstr "Zastąpiony przez większy fizyczny prześwit z %s; prześwit: %s."
+msgstr "Zastąpiony większym fizycznym prześwitem od %s; prześwit: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:719
 #, c-format
@@ -38964,12 +38954,10 @@ msgid "Import footprint from file"
 msgstr "Importuj footprint z pliku"
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export Footprint..."
-msgstr "Eksportuj footprint"
+msgstr "Eksportuj footprint..."
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export footprint to file"
 msgstr "Eksportuj footprint do pliku"
 
