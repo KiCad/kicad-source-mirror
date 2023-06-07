@@ -403,7 +403,7 @@
                                                             <property name="style"></property>
                                                             <property name="subclass">; ; forward_declare</property>
                                                             <property name="toolbar_pane">0</property>
-                                                            <property name="tooltip">OVC I: Equipments with no direct connection to mains supply&#x0A;&#x0A;OVC II: Energy-consming equipment to be supplied from the fixed installation. (eg: appliances, potable tools, household loads). OVCIII applys if there are reliability and avaibility requirements&#x0A;&#x0A;OVC III :  Equipements in fixed installation with reliability and avaibility requirements. (eg: electrical switches, equipment for industrial use)&#x0A;&#x0A;OVC IV: Equipments at the origin of the installation (eg: electricity meters, primary overcurrent protection devices)</property>
+                                                            <property name="tooltip"></property>
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
                                                             <property name="window_style"></property>
@@ -818,7 +818,7 @@
                                                             <property name="style"></property>
                                                             <property name="subclass">; ; forward_declare</property>
                                                             <property name="toolbar_pane">0</property>
-                                                            <property name="tooltip">A groove with a smaller width has no effect on the path for clearance distances.</property>
+                                                            <property name="tooltip"></property>
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
                                                             <property name="window_style"></property>
@@ -1051,7 +1051,7 @@
                                                             <property name="style"></property>
                                                             <property name="subclass">; ; forward_declare</property>
                                                             <property name="toolbar_pane">0</property>
-                                                            <property name="tooltip">Functional: inuslation is necessary only for the functioning of the equipment&#x0A;&#x0A;Basic: Insulation of hazardous-live parts.&#x0A;&#x0A;Reinforced: Single insulation that provides a degree of protection equivalent to a double insulation. ( which is two separate basic insulations, in case one of them fails  ).</property>
+                                                            <property name="tooltip"></property>
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
                                                             <property name="window_style"></property>
@@ -1241,7 +1241,7 @@
                                                             <property name="style"></property>
                                                             <property name="subclass">; ; forward_declare</property>
                                                             <property name="toolbar_pane">0</property>
-                                                            <property name="tooltip">Functional: inuslation is necessary only for the functioning of the equipment&#x0A;&#x0A;Basic: Insulation of hazardous-live parts.&#x0A;&#x0A;Reinforced: Single insulation that provides a degree of protection equivalent to a double insulation. ( which is two separate basic insulations, in case one of them fails  ).</property>
+                                                            <property name="tooltip"></property>
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
                                                             <property name="window_style"></property>
@@ -1431,7 +1431,7 @@
                                                             <property name="style"></property>
                                                             <property name="subclass">; ; forward_declare</property>
                                                             <property name="toolbar_pane">0</property>
-                                                            <property name="tooltip">Functional: inuslation is necessary only for the functioning of the equipment&#x0A;&#x0A;Basic: Insulation of hazardous-live parts.&#x0A;&#x0A;Reinforced: Single insulation that provides a degree of protection equivalent to a double insulation. ( which is two separate basic insulations, in case one of them fails  ).</property>
+                                                            <property name="tooltip"></property>
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
                                                             <property name="window_style"></property>
@@ -2173,7 +2173,7 @@
                                                             <property name="style"></property>
                                                             <property name="subclass">; ; forward_declare</property>
                                                             <property name="toolbar_pane">0</property>
-                                                            <property name="tooltip">Coating and potting allows for clearange and creepace distances reduction.Not supported by the calculator.&#x0A;&#x0A;A coating that could easily delaminate in the lifespan of the product (such as a soldermask) should not be considered for a reduction.</property>
+                                                            <property name="tooltip"></property>
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
                                                             <property name="window_style"></property>
@@ -2469,7 +2469,7 @@
                                                                     <property name="style"></property>
                                                                     <property name="subclass">; ; forward_declare</property>
                                                                     <property name="toolbar_pane">0</property>
-                                                                    <property name="tooltip">A groove with a smaller width has no effect on the path for clearance distances.</property>
+                                                                    <property name="tooltip"></property>
                                                                     <property name="window_extra_style"></property>
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
@@ -2658,7 +2658,7 @@
                                                                     <property name="style"></property>
                                                                     <property name="subclass">; ; forward_declare</property>
                                                                     <property name="toolbar_pane">0</property>
-                                                                    <property name="tooltip">A groove with a smaller width has no effect on the path for clearance distances.</property>
+                                                                    <property name="tooltip"></property>
                                                                     <property name="window_extra_style"></property>
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
@@ -2847,7 +2847,7 @@
                                                                     <property name="style"></property>
                                                                     <property name="subclass">; ; forward_declare</property>
                                                                     <property name="toolbar_pane">0</property>
-                                                                    <property name="tooltip">A groove with a smaller width has no effect on the path for clearance distances.</property>
+                                                                    <property name="tooltip"></property>
                                                                     <property name="window_extra_style"></property>
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>

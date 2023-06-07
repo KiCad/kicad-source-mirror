@@ -49,8 +49,6 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 
 	m_staticText52112 = new wxStaticText( sbSizerTop->GetStaticBox(), wxID_ANY, _("V"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText52112->Wrap( -1 );
-	m_staticText52112->SetToolTip( _("OVC I: Equipments with no direct connection to mains supply\n\nOVC II: Energy-consming equipment to be supplied from the fixed installation. (eg: appliances, potable tools, household loads). OVCIII applys if there are reliability and avaibility requirements\n\nOVC III :  Equipements in fixed installation with reliability and avaibility requirements. (eg: electrical switches, equipment for industrial use)\n\nOVC IV: Equipments at the origin of the installation (eg: electricity meters, primary overcurrent protection devices)") );
-
 	fgSizer111->Add( m_staticText52112, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_staticText52111 = new wxStaticText( sbSizerTop->GetStaticBox(), wxID_ANY, _("Overvoltage category:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -98,8 +96,6 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 
 	static_textkV = new wxStaticText( sbSizerTop->GetStaticBox(), wxID_ANY, _("kV"), wxDefaultPosition, wxDefaultSize, 0 );
 	static_textkV->Wrap( -1 );
-	static_textkV->SetToolTip( _("A groove with a smaller width has no effect on the path for clearance distances.") );
-
 	fgSizerTopRight->Add( static_textkV, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
@@ -133,8 +129,6 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 
 	m_staticText11212 = new wxStaticText( sbSizerMiddle->GetStaticBox(), wxID_ANY, _("V"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText11212->Wrap( -1 );
-	m_staticText11212->SetToolTip( _("Functional: inuslation is necessary only for the functioning of the equipment\n\nBasic: Insulation of hazardous-live parts.\n\nReinforced: Single insulation that provides a degree of protection equivalent to a double insulation. ( which is two separate basic insulations, in case one of them fails  ).") );
-
 	fgSizer11->Add( m_staticText11212, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_staticText114 = new wxStaticText( sbSizerMiddle->GetStaticBox(), wxID_ANY, _("Transient overvoltage:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -148,8 +142,6 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 
 	m_staticText1121 = new wxStaticText( sbSizerMiddle->GetStaticBox(), wxID_ANY, _("kV"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1121->Wrap( -1 );
-	m_staticText1121->SetToolTip( _("Functional: inuslation is necessary only for the functioning of the equipment\n\nBasic: Insulation of hazardous-live parts.\n\nReinforced: Single insulation that provides a degree of protection equivalent to a double insulation. ( which is two separate basic insulations, in case one of them fails  ).") );
-
 	fgSizer11->Add( m_staticText1121, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_staticText113 = new wxStaticText( sbSizerMiddle->GetStaticBox(), wxID_ANY, _("Recurring peak voltage:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -163,8 +155,6 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 
 	m_staticText11211 = new wxStaticText( sbSizerMiddle->GetStaticBox(), wxID_ANY, _("kV"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText11211->Wrap( -1 );
-	m_staticText11211->SetToolTip( _("Functional: inuslation is necessary only for the functioning of the equipment\n\nBasic: Insulation of hazardous-live parts.\n\nReinforced: Single insulation that provides a degree of protection equivalent to a double insulation. ( which is two separate basic insulations, in case one of them fails  ).") );
-
 	fgSizer11->Add( m_staticText11211, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_staticText112 = new wxStaticText( sbSizerMiddle->GetStaticBox(), wxID_ANY, _("Type of insulation:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -235,8 +225,6 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 
 	m_staticText11121211 = new wxStaticText( sbSizerMiddle->GetStaticBox(), wxID_ANY, _("m"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText11121211->Wrap( -1 );
-	m_staticText11121211->SetToolTip( _("Coating and potting allows for clearange and creepace distances reduction.Not supported by the calculator.\n\nA coating that could easily delaminate in the lifespan of the product (such as a soldermask) should not be considered for a reduction.") );
-
 	fgSizer11->Add( m_staticText11121211, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
@@ -274,8 +262,6 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 
 	m_staticText71111 = new wxStaticText( sbSizerMiddle->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText71111->Wrap( -1 );
-	m_staticText71111->SetToolTip( _("A groove with a smaller width has no effect on the path for clearance distances.") );
-
 	fgSizer6->Add( m_staticText71111, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_staticText1111 = new wxStaticText( sbSizerMiddle->GetStaticBox(), wxID_ANY, _("Creepage:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -289,8 +275,6 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 
 	m_staticText7111 = new wxStaticText( sbSizerMiddle->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText7111->Wrap( -1 );
-	m_staticText7111->SetToolTip( _("A groove with a smaller width has no effect on the path for clearance distances.") );
-
 	fgSizer6->Add( m_staticText7111, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_staticText111 = new wxStaticText( sbSizerMiddle->GetStaticBox(), wxID_ANY, _("Min groove width:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -306,8 +290,6 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 
 	m_staticText711 = new wxStaticText( sbSizerMiddle->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText711->Wrap( -1 );
-	m_staticText711->SetToolTip( _("A groove with a smaller width has no effect on the path for clearance distances.") );
-
 	fgSizer6->Add( m_staticText711, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
