@@ -374,6 +374,8 @@ public:
 
     void KiwayMailIn( KIWAY_EXPRESS& mail ) override;
 
+    void FocusOnItem( LIB_ITEM* aItem );
+
     /**
      * Load a symbol from the schematic to edit in place.
      *

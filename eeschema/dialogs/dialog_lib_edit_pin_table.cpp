@@ -649,6 +649,11 @@ public:
         return removedRow;
     }
 
+    LIB_PINS GetRowPins( int aRow )
+    {
+        return m_rows[ aRow ];
+    }
+
     bool IsEdited()
     {
         return m_edited;
@@ -856,6 +861,11 @@ DIALOG_LIB_EDIT_PIN_TABLE::~DIALOG_LIB_EDIT_PIN_TABLE()
     // m_pins will already be empty.
     for( LIB_PIN* pin : m_pins )
         delete pin;
+
+    WINDOW_THAWER thawer( m_editFrame );
+
+    m_editFrame->FocusOnItem( nullptr );
+    m_editFrame->GetCanvas()->Refresh();
 }
 
 
@@ -1015,6 +1025,34 @@ void DIALOG_LIB_EDIT_PIN_TABLE::RemovePin( LIB_PIN* pin )
 void DIALOG_LIB_EDIT_PIN_TABLE::OnCellEdited( wxGridEvent& event )
 {
     updateSummary();
+}
+
+
+void DIALOG_LIB_EDIT_PIN_TABLE::OnCellSelected( wxGridEvent& event )
+{
+    LIB_PIN* pin = nullptr;
+
+    if( event.GetRow() >= 0 && event.GetRow() < m_dataModel->GetNumberRows() )
+    {
+        const LIB_PINS& pins = m_dataModel->GetRowPins( event.GetRow() );
+
+        if( pins.size() == 1 && m_editFrame->GetCurSymbol() )
+        {
+            for( LIB_PIN* candidate : m_editFrame->GetCurSymbol()->GetAllLibPins() )
+            {
+                if( candidate->GetNumber() == pins.at( 0 )->GetNumber() )
+                {
+                    pin = candidate;
+                    break;
+                }
+            }
+        }
+    }
+
+    WINDOW_THAWER thawer( m_editFrame );
+
+    m_editFrame->FocusOnItem( pin );
+    m_editFrame->GetCanvas()->Refresh();
 }
 
 

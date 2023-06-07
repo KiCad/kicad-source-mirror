@@ -65,6 +65,7 @@ public:
     void OnDeleteRow( wxCommandEvent& event ) override;
     void OnSize( wxSizeEvent& event ) override;
     void OnCellEdited( wxGridEvent& event ) override;
+    void OnCellSelected( wxGridEvent& event ) override;
     void OnRebuildRows( wxCommandEvent& event ) override;
     void OnGroupSelected( wxCommandEvent& event ) override;
     void OnFilterCheckBox( wxCommandEvent& event ) override;
@@ -77,10 +78,10 @@ public:
     bool IsDisplayGrouped();
 
 protected:
-
     void updateSummary();
     void adjustGridColumns();
 
+protected:
     SYMBOL_EDIT_FRAME*    m_editFrame;
     bool                  m_initialized = false;
     int                   m_originalColWidths[ COL_COUNT ];

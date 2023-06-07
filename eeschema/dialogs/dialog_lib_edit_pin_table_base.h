@@ -67,6 +67,7 @@ class DIALOG_LIB_EDIT_PIN_TABLE_BASE : public DIALOG_SHIM
 		virtual void OnClose( wxCloseEvent& event ) = 0;
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) = 0;
 		virtual void OnCellEdited( wxGridEvent& event ) = 0;
+		virtual void OnCellSelected( wxGridEvent& event ) = 0;
 		virtual void OnSize( wxSizeEvent& event ) = 0;
 		virtual void OnAddRow( wxCommandEvent& event ) = 0;
 		virtual void OnDeleteRow( wxCommandEvent& event ) = 0;

@@ -1303,6 +1303,54 @@ const BOX2I SYMBOL_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) con
 }
 
 
+void SYMBOL_EDIT_FRAME::FocusOnItem( LIB_ITEM* aItem )
+{
+    static KIID lastBrightenedItemID( niluuid );
+
+    LIB_ITEM* lastItem = nullptr;
+
+    if( m_symbol )
+    {
+        for( LIB_PIN* pin : m_symbol->GetAllLibPins() )
+        {
+            if( pin->m_Uuid == lastBrightenedItemID )
+                lastItem = pin;
+        }
+
+        std::vector<LIB_FIELD*> fields;
+
+        m_symbol->GetFields( fields );
+
+        for( LIB_FIELD* field : fields )
+        {
+            if( field->m_Uuid == lastBrightenedItemID )
+                lastItem = field;
+        }
+    }
+
+    if( lastItem && lastItem != aItem )
+    {
+        lastItem->ClearBrightened();
+
+        UpdateItem( lastItem );
+        lastBrightenedItemID = niluuid;
+    }
+
+    if( aItem )
+    {
+        if( !aItem->IsBrightened() )
+        {
+            aItem->SetBrightened();
+
+            UpdateItem( aItem );
+            lastBrightenedItemID = aItem->m_Uuid;
+        }
+
+        FocusOnLocation( VECTOR2I( aItem->GetFocusPosition().x, -aItem->GetFocusPosition().y ) );
+    }
+}
+
+
 void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 {
     const std::string& payload = mail.GetPayload();
