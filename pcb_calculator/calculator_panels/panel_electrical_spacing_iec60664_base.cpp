@@ -13,20 +13,22 @@
 
 PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : CALCULATOR_PANEL( parent, id, pos, size, style, name )
 {
-	wxBoxSizer* bSizer4;
-	bSizer4 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizerWindow;
+	bSizerWindow = new wxBoxSizer( wxVERTICAL );
 
-	m_scrolledWindow1 = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
-	m_scrolledWindow1->SetScrollRate( 5, 5 );
-	wxBoxSizer* bSizeMain;
-	bSizeMain = new wxBoxSizer( wxVERTICAL );
+	m_scrolledWindow = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
+	m_scrolledWindow->SetScrollRate( 5, 5 );
+	wxBoxSizer* bSizerMain;
+	bSizerMain = new wxBoxSizer( wxVERTICAL );
 
-	m_stTitle = new wxStaticText( m_scrolledWindow1, wxID_ANY, _("Insulation coordination for equipment within low-voltage supply systems"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stTitle = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Insulation coordination for equipment within low-voltage supply systems"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stTitle->Wrap( -1 );
-	bSizeMain->Add( m_stTitle, 0, wxALIGN_CENTER|wxALL, 15 );
+	m_stTitle->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+
+	bSizerMain->Add( m_stTitle, 0, wxALIGN_CENTER|wxALL, 5 );
 
 	wxStaticBoxSizer* sbSizerTop;
-	sbSizerTop = new wxStaticBoxSizer( new wxStaticBox( m_scrolledWindow1, wxID_ANY, _("Determine the transient impulse voltage to withstand") ), wxHORIZONTAL );
+	sbSizerTop = new wxStaticBoxSizer( new wxStaticBox( m_scrolledWindow, wxID_ANY, _("Determine the transient impulse voltage to withstand") ), wxHORIZONTAL );
 
 	wxBoxSizer* bSizerTopLeft;
 	bSizerTopLeft = new wxBoxSizer( wxHORIZONTAL );
@@ -42,8 +44,8 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 
 	fgSizer111->Add( m_staticText5211, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_ratedVoltage1 = new wxTextCtrl( sbSizerTop->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer111->Add( m_ratedVoltage1, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	m_ratedVoltage = new wxTextCtrl( sbSizerTop->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer111->Add( m_ratedVoltage, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 	m_staticText52112 = new wxStaticText( sbSizerTop->GetStaticBox(), wxID_ANY, _("V"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText52112->Wrap( -1 );
@@ -53,12 +55,13 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 
 	m_staticText52111 = new wxStaticText( sbSizerTop->GetStaticBox(), wxID_ANY, _("Overvoltage category:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText52111->Wrap( -1 );
-	m_staticText52111->SetToolTip( _("OVC I: Equipments with no direct connection to mains supply\n\nOVC II: Energy-consming equipment to be supplied from the fixed installation. (eg: appliances, potable tools, household loads). OVCIII applys if there are reliability and avaibility requirements\n\nOVC III :  Equipements in fixed installation with reliability and avaibility requirements. (eg: electrical switches, equipment for industrial use)\n\nOVC IV: Equipments at the origin of the installation (eg: electricity meters, primary overcurrent protection devices)") );
+	m_staticText52111->SetToolTip( _("OVC I: Equipments with no direct connection to mains supply\n\nOVC II: Energy-consuming equipment to be supplied from the fixed installation. (eg: appliances, portable tools, household loads). OVCIII applys if there are reliability and avaibility requirements\n\nOVC III :  Equipements in fixed installation with reliability and avaibility requirements. (eg: electrical switches, equipment for industrial use)\n\nOVC IV: Equipments at the origin of the installation (eg: electricity meters, primary overcurrent protection devices)") );
 
 	fgSizer111->Add( m_staticText52111, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	wxArrayString m_OVCchoiceChoices;
-	m_OVCchoice = new wxChoice( sbSizerTop->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_OVCchoiceChoices, 0 );
+	wxString m_OVCchoiceChoices[] = { _("OVC I"), _("OVC II"), _("OVC III"), _("OVC IV") };
+	int m_OVCchoiceNChoices = sizeof( m_OVCchoiceChoices ) / sizeof( wxString );
+	m_OVCchoice = new wxChoice( sbSizerTop->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_OVCchoiceNChoices, m_OVCchoiceChoices, 0 );
 	m_OVCchoice->SetSelection( 0 );
 	fgSizer111->Add( m_OVCchoice, 0, wxALL|wxEXPAND, 5 );
 
@@ -106,10 +109,10 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 	sbSizerTop->Add( bSizerTopRight, 1, wxEXPAND, 5 );
 
 
-	bSizeMain->Add( sbSizerTop, 0, wxALL|wxEXPAND, 15 );
+	bSizerMain->Add( sbSizerTop, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 	wxStaticBoxSizer* sbSizerMiddle;
-	sbSizerMiddle = new wxStaticBoxSizer( new wxStaticBox( m_scrolledWindow1, wxID_ANY, _("Compute the clearance and creepage distances") ), wxHORIZONTAL );
+	sbSizerMiddle = new wxStaticBoxSizer( new wxStaticBox( m_scrolledWindow, wxID_ANY, _("Compute the clearance and creepage distances") ), wxHORIZONTAL );
 
 	wxBoxSizer* bSizerMiddleLeft;
 	bSizerMiddleLeft = new wxBoxSizer( wxHORIZONTAL );
@@ -166,12 +169,13 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 
 	m_staticText112 = new wxStaticText( sbSizerMiddle->GetStaticBox(), wxID_ANY, _("Type of insulation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText112->Wrap( -1 );
-	m_staticText112->SetToolTip( _("Functional: inuslation is necessary only for the functioning of the equipment\n\nBasic: Insulation of hazardous-live parts.\n\nReinforced: Single insulation that provides a degree of protection equivalent to a double insulation. ( which is two separate basic insulations, in case one of them fails  ).") );
+	m_staticText112->SetToolTip( _("Functional: insulation is necessary only for the functioning of the equipment\n\nBasic: Insulation of hazardous-live parts.\n\nReinforced: Single insulation that provides a degree of protection equivalent to a double insulation. ( which is two separate basic insulations, in case one of them fails  ).") );
 
 	fgSizer11->Add( m_staticText112, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	wxArrayString m_insulationTypeChoices;
-	m_insulationType = new wxChoice( sbSizerMiddle->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_insulationTypeChoices, 0 );
+	wxString m_insulationTypeChoices[] = { _("Functional"), _("Basic"), _("Reinforced"), wxEmptyString, wxEmptyString };
+	int m_insulationTypeNChoices = sizeof( m_insulationTypeChoices ) / sizeof( wxString );
+	m_insulationType = new wxChoice( sbSizerMiddle->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_insulationTypeNChoices, m_insulationTypeChoices, 0 );
 	m_insulationType->SetSelection( 0 );
 	fgSizer11->Add( m_insulationType, 0, wxALL|wxEXPAND, 5 );
 
@@ -184,9 +188,10 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 
 	fgSizer11->Add( m_staticText52, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	wxArrayString m_pollutionDegreeChoices;
-	m_pollutionDegree = new wxChoice( sbSizerMiddle->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_pollutionDegreeChoices, 0 );
-	m_pollutionDegree->SetSelection( 0 );
+	wxString m_pollutionDegreeChoices[] = { _("PD1"), _("PD2"), _("PD3"), _("PD4") };
+	int m_pollutionDegreeNChoices = sizeof( m_pollutionDegreeChoices ) / sizeof( wxString );
+	m_pollutionDegree = new wxChoice( sbSizerMiddle->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_pollutionDegreeNChoices, m_pollutionDegreeChoices, 0 );
+	m_pollutionDegree->SetSelection( 1 );
 	fgSizer11->Add( m_pollutionDegree, 0, wxALL|wxEXPAND, 5 );
 
 
@@ -198,8 +203,9 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 
 	fgSizer11->Add( m_materialGroupTxt, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	wxArrayString m_materialGroupChoices;
-	m_materialGroup = new wxChoice( sbSizerMiddle->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_materialGroupChoices, 0 );
+	wxString m_materialGroupChoices[] = { _("I"), _("II"), _("IIIa"), _("IIIb") };
+	int m_materialGroupNChoices = sizeof( m_materialGroupChoices ) / sizeof( wxString );
+	m_materialGroup = new wxChoice( sbSizerMiddle->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_materialGroupNChoices, m_materialGroupChoices, 0 );
 	m_materialGroup->SetSelection( 0 );
 	fgSizer11->Add( m_materialGroup, 0, wxALL|wxEXPAND, 5 );
 
@@ -208,7 +214,7 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 
 	m_staticText1112 = new wxStaticText( sbSizerMiddle->GetStaticBox(), wxID_ANY, _("PCB material:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1112->Wrap( -1 );
-	m_staticText1112->SetToolTip( _("Printed wiring mateiral can benefit of a creepage distance reduction for RMS voltages lower than 1000V") );
+	m_staticText1112->SetToolTip( _("Printed wiring material can benefit of a creepage distance reduction for RMS voltages lower than 1000V") );
 
 	fgSizer11->Add( m_staticText1112, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
@@ -220,7 +226,7 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 
 	m_staticText1112121 = new wxStaticText( sbSizerMiddle->GetStaticBox(), wxID_ANY, _("Max altitude:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1112121->Wrap( -1 );
-	m_staticText1112121->SetToolTip( _("Coating and potting allows for clearange and creepace distances reduction.Not supported by the calculator.\n\nA coating that could easily delaminate in the lifespan of the product (such as a soldermask) should not be considered for a reduction.") );
+	m_staticText1112121->SetToolTip( _("Coating and potting allows for clearance and creepage distances reduction. Not supported by the calculator.\n\nA coating that could easily delaminate in the lifespan of the product (such as a soldermask) should not be considered for a reduction.") );
 
 	fgSizer11->Add( m_staticText1112121, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
@@ -314,13 +320,13 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 	bSizerBitmapHelp = new wxBoxSizer( wxVERTICAL );
 
 	m_staticline3 = new wxStaticLine( sbSizerMiddle->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerBitmapHelp->Add( m_staticline3, 0, wxEXPAND | wxALL, 5 );
+	bSizerBitmapHelp->Add( m_staticline3, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerBitmap;
 	bSizerBitmap = new wxBoxSizer( wxHORIZONTAL );
 
 	m_creepageclearanceBitmap = new wxStaticBitmap( sbSizerMiddle->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerBitmap->Add( m_creepageclearanceBitmap, 0, wxALL, 5 );
+	bSizerBitmap->Add( m_creepageclearanceBitmap, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_stBitmapLegend = new wxStaticText( sbSizerMiddle->GetStaticBox(), wxID_ANY, _("solid: clearance\ndashed: creepage"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stBitmapLegend->Wrap( -1 );
@@ -336,38 +342,32 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 	sbSizerMiddle->Add( bSizerMiddleRight, 1, wxEXPAND, 5 );
 
 
-	bSizeMain->Add( sbSizerMiddle, 0, wxALL|wxEXPAND, 15 );
+	bSizerMain->Add( sbSizerMiddle, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
-	wxBoxSizer* bSizerBottom;
-	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
+	wxStaticBoxSizer* sbSizerBottom;
+	sbSizerBottom = new wxStaticBoxSizer( new wxStaticBox( m_scrolledWindow, wxID_ANY, _("Help") ), wxVERTICAL );
 
-	wxStaticBoxSizer* sbSizer3;
-	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( m_scrolledWindow1, wxID_ANY, _("Help") ), wxVERTICAL );
-
-	sbSizer3->SetMinSize( wxSize( -1,100 ) );
-	m_panelHelp = new HTML_WINDOW( sbSizer3->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
+	sbSizerBottom->SetMinSize( wxSize( -1,100 ) );
+	m_panelHelp = new HTML_WINDOW( sbSizerBottom->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
 	m_panelHelp->SetMinSize( wxSize( -1,-200 ) );
 
-	sbSizer3->Add( m_panelHelp, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	sbSizerBottom->Add( m_panelHelp, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
-	bSizerBottom->Add( sbSizer3, 1, wxEXPAND, 5 );
+	bSizerMain->Add( sbSizerBottom, 1, wxEXPAND, 5 );
 
 
-	bSizeMain->Add( bSizerBottom, 1, wxEXPAND, 5 );
+	m_scrolledWindow->SetSizer( bSizerMain );
+	m_scrolledWindow->Layout();
+	bSizerMain->Fit( m_scrolledWindow );
+	bSizerWindow->Add( m_scrolledWindow, 1, wxEXPAND | wxALL, 5 );
 
 
-	m_scrolledWindow1->SetSizer( bSizeMain );
-	m_scrolledWindow1->Layout();
-	bSizeMain->Fit( m_scrolledWindow1 );
-	bSizer4->Add( m_scrolledWindow1, 1, wxEXPAND | wxALL, 5 );
-
-
-	this->SetSizer( bSizer4 );
+	this->SetSizer( bSizerWindow );
 	this->Layout();
 
 	// Connect Events
-	m_ratedVoltage1->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_ELECTRICAL_SPACING_IEC60664_BASE::UpdateTransientImpulse ), NULL, this );
+	m_ratedVoltage->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_ELECTRICAL_SPACING_IEC60664_BASE::UpdateTransientImpulse ), NULL, this );
 	m_OVCchoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_ELECTRICAL_SPACING_IEC60664_BASE::UpdateTransientImpulse ), NULL, this );
 	m_RMSVoltage->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_ELECTRICAL_SPACING_IEC60664_BASE::UpdateClearanceCreepage ), NULL, this );
 	m_transientOvervoltage->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_ELECTRICAL_SPACING_IEC60664_BASE::UpdateClearanceCreepage ), NULL, this );
@@ -382,7 +382,7 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 PANEL_ELECTRICAL_SPACING_IEC60664_BASE::~PANEL_ELECTRICAL_SPACING_IEC60664_BASE()
 {
 	// Disconnect Events
-	m_ratedVoltage1->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_ELECTRICAL_SPACING_IEC60664_BASE::UpdateTransientImpulse ), NULL, this );
+	m_ratedVoltage->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_ELECTRICAL_SPACING_IEC60664_BASE::UpdateTransientImpulse ), NULL, this );
 	m_OVCchoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_ELECTRICAL_SPACING_IEC60664_BASE::UpdateTransientImpulse ), NULL, this );
 	m_RMSVoltage->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_ELECTRICAL_SPACING_IEC60664_BASE::UpdateClearanceCreepage ), NULL, this );
 	m_transientOvervoltage->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_ELECTRICAL_SPACING_IEC60664_BASE::UpdateClearanceCreepage ), NULL, this );

@@ -42,27 +42,9 @@ PANEL_ELECTRICAL_SPACING_IEC60664::PANEL_ELECTRICAL_SPACING_IEC60664(
         long style, const wxString& name ) :
         PANEL_ELECTRICAL_SPACING_IEC60664_BASE( parent, id, pos, size, style, name )
 {
-    m_OVCchoice->Append( _( "OVC I" ) );
-    m_OVCchoice->Append( _( "OVC II" ) );
-    m_OVCchoice->Append( _( "OVC III" ) );
-    m_OVCchoice->Append( _( "OVC IV" ) );
     m_OVCchoice->SetSelection( 0 );
-
-    m_insulationType->Append( _( "Functional" ) );
-    m_insulationType->Append( _( "Basic" ) );
-    m_insulationType->Append( _( "Reinforced" ) );
     m_insulationType->SetSelection( 0 );
-
-    m_pollutionDegree->Append( _( "PD1" ) );
-    m_pollutionDegree->Append( _( "PD2" ) );
-    m_pollutionDegree->Append( _( "PD3" ) );
-    m_pollutionDegree->Append( _( "PD4" ) );
     m_pollutionDegree->SetSelection( 0 );
-
-    m_materialGroup->Append( _( "I" ) );
-    m_materialGroup->Append( _( "II" ) );
-    m_materialGroup->Append( _( "IIIa" ) );
-    m_materialGroup->Append( _( "IIIb" ) );
     m_materialGroup->SetSelection( 0 );
 
     wxString msg;
@@ -80,7 +62,7 @@ PANEL_ELECTRICAL_SPACING_IEC60664::~PANEL_ELECTRICAL_SPACING_IEC60664()
 
 void PANEL_ELECTRICAL_SPACING_IEC60664::ThemeChanged()
 {
-    m_creepageclearanceBitmap->SetBitmap( KiBitmap( BITMAPS::viacalc ) );
+    m_creepageclearanceBitmap->SetBitmap( KiBitmap( BITMAPS::creepage_clearance ) );
 }
 
 
@@ -89,7 +71,7 @@ void PANEL_ELECTRICAL_SPACING_IEC60664::SaveSettings( PCB_CALCULATOR_SETTINGS* a
     if( !aCfg )
         return;
 
-    aCfg->m_Electrical.iec60664_ratedVoltage = DoubleFromString( m_ratedVoltage1->GetValue() );
+    aCfg->m_Electrical.iec60664_ratedVoltage = DoubleFromString( m_ratedVoltage->GetValue() );
     aCfg->m_Electrical.iec60664_RMSvoltage = DoubleFromString( m_RMSVoltage->GetValue() );
     aCfg->m_Electrical.iec60664_transientOV = DoubleFromString( m_transientOvervoltage->GetValue() );
     aCfg->m_Electrical.iec60664_peakOV = DoubleFromString( m_peakVoltage->GetValue() );
@@ -109,7 +91,7 @@ void PANEL_ELECTRICAL_SPACING_IEC60664::LoadSettings( PCB_CALCULATOR_SETTINGS* a
     if( !aCfg )
         return;
 
-    m_ratedVoltage1->SetValue( wxString( "" ) << aCfg->m_Electrical.iec60664_ratedVoltage );
+    m_ratedVoltage->SetValue( wxString( "" ) << aCfg->m_Electrical.iec60664_ratedVoltage );
     m_RMSVoltage->SetValue( wxString( "" ) << aCfg->m_Electrical.iec60664_RMSvoltage );
     m_transientOvervoltage->SetValue( wxString( "" ) << aCfg->m_Electrical.iec60664_transientOV );
     m_peakVoltage->SetValue( wxString( "" ) << aCfg->m_Electrical.iec60664_peakOV );
@@ -129,7 +111,7 @@ void PANEL_ELECTRICAL_SPACING_IEC60664::LoadSettings( PCB_CALCULATOR_SETTINGS* a
 
 void PANEL_ELECTRICAL_SPACING_IEC60664::CalculateTransientImpulse()
 {
-    wxString              string = m_ratedVoltage1->GetValue();
+    wxString              string = m_ratedVoltage->GetValue();
     double                value = 0;
     IEC60664::OV_CATEGORY ovc;
 

@@ -44,10 +44,10 @@ class PANEL_ELECTRICAL_SPACING_IEC60664_BASE : public CALCULATOR_PANEL
 	private:
 
 	protected:
-		wxScrolledWindow* m_scrolledWindow1;
+		wxScrolledWindow* m_scrolledWindow;
 		wxStaticText* m_stTitle;
 		wxStaticText* m_staticText5211;
-		wxTextCtrl* m_ratedVoltage1;
+		wxTextCtrl* m_ratedVoltage;
 		wxStaticText* m_staticText52112;
 		wxStaticText* m_staticText52111;
 		wxChoice* m_OVCchoice;
@@ -97,7 +97,7 @@ class PANEL_ELECTRICAL_SPACING_IEC60664_BASE : public CALCULATOR_PANEL
 
 	public:
 
-		PANEL_ELECTRICAL_SPACING_IEC60664_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 699,561 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_ELECTRICAL_SPACING_IEC60664_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 669,561 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~PANEL_ELECTRICAL_SPACING_IEC60664_BASE();
 
