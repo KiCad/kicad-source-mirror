@@ -34,6 +34,7 @@
 #include <schematic.h>
 #include <template_fieldnames.h>
 #include <widgets/wx_html_report_panel.h>
+#include <schematic_commit.h>
 
 bool g_selectRefDes = false;
 bool g_selectValue  = false;
@@ -369,8 +370,9 @@ void DIALOG_CHANGE_SYMBOLS::checkAll( bool aCheck )
 
 void DIALOG_CHANGE_SYMBOLS::onOkButtonClicked( wxCommandEvent& aEvent )
 {
-    wxBusyCursor dummy;
-    SCH_EDIT_FRAME* parent = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
+    wxBusyCursor     dummy;
+    SCH_EDIT_FRAME*  parent = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
+    SCHEMATIC_COMMIT commit( parent );
 
     wxCHECK( parent, /* void */ );
 
@@ -391,14 +393,16 @@ void DIALOG_CHANGE_SYMBOLS::onOkButtonClicked( wxCommandEvent& aEvent )
                 m_updateFields.insert( dummy_field.GetCanonicalName() );
             }
             else
+            {
                 m_updateFields.insert( m_fieldsBox->GetString( i ) );
+            }
         }
     }
 
-    if( processMatchingSymbols() )
+    if( processMatchingSymbols( &commit) )
     {
         parent->TestDanglingEnds();   // This will also redraw the changed symbols.
-        parent->OnModify();
+        commit.Push( m_mode == MODE::CHANGE ? _( "Change Symbols" ) : _( "Update Symbols" ) );
     }
 
     m_messagePanel->Flush( false );
@@ -447,7 +451,7 @@ bool DIALOG_CHANGE_SYMBOLS::isMatch( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aInsta
 
 
 
-int DIALOG_CHANGE_SYMBOLS::processMatchingSymbols()
+int DIALOG_CHANGE_SYMBOLS::processMatchingSymbols( SCHEMATIC_COMMIT* aCommit )
 {
     SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
 
@@ -505,7 +509,7 @@ int DIALOG_CHANGE_SYMBOLS::processMatchingSymbols()
         }
     }
 
-    matchesProcessed += processSymbols( symbols );
+    matchesProcessed += processSymbols( aCommit, symbols );
 
     frame->GetCurrentSheet().UpdateAllScreenReferences();
 
@@ -513,8 +517,8 @@ int DIALOG_CHANGE_SYMBOLS::processMatchingSymbols()
 }
 
 
-int DIALOG_CHANGE_SYMBOLS::processSymbols( const std::map<SCH_SYMBOL*,
-                                                          SYMBOL_CHANGE_INFO>& aSymbols )
+int DIALOG_CHANGE_SYMBOLS::processSymbols( SCHEMATIC_COMMIT* aCommit,
+                                           const std::map<SCH_SYMBOL*, SYMBOL_CHANGE_INFO>& aSymbols )
 {
     wxCHECK( !aSymbols.empty(), 0 );
 
@@ -561,8 +565,6 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( const std::map<SCH_SYMBOL*,
         }
     }
 
-    bool appendUndo = false;
-
     // Removing the symbol needs to be done before the LIB_SYMBOL is changed to prevent stale
     // library symbols in the schematic file.
     for( const auto& [ symbol, symbol_change_info ] : symbols )
@@ -574,8 +576,7 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( const std::map<SCH_SYMBOL*,
         wxCHECK( screen, 0 );
 
         screen->Remove( symbol );
-        frame->SaveCopyInUndoList( screen, symbol, UNDO_REDO::CHANGED, appendUndo );
-        appendUndo = true;
+        aCommit->Modify( symbol, screen );
     }
 
     for( const auto& [ symbol, symbol_change_info ] : symbols )

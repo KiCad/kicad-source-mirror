@@ -23,17 +23,13 @@
  */
 
 #include <core/kicad_algo.h>
-#include <eeschema_id.h>
 #include <general.h>
-#include <lib_item.h>
 #include <sch_bus_entry.h>
-#include <sch_symbol.h>
 #include <sch_edit_frame.h>
 #include <sch_junction.h>
 #include <sch_line.h>
 #include <sch_no_connect.h>
 #include <sch_screen.h>
-#include <sch_sheet.h>
 #include <sch_view.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>

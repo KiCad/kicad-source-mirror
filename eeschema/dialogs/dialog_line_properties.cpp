@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Seth Hillbrand <hillbrand@ucdavis.edu>
- * Copyright (C) 2014-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,7 @@
 #include <sch_edit_frame.h>
 #include <stroke_params.h>
 #include <widgets/color_swatch.h>
+#include <schematic_commit.h>
 
 
 DIALOG_LINE_PROPERTIES::DIALOG_LINE_PROPERTIES( SCH_EDIT_FRAME* aParent,
@@ -128,15 +129,12 @@ void DIALOG_LINE_PROPERTIES::resetDefaults( wxCommandEvent& event )
 
 bool DIALOG_LINE_PROPERTIES::TransferDataFromWindow()
 {
-    PICKED_ITEMS_LIST pickedItems;
-
-    for( SCH_LINE* line : m_lines )
-        pickedItems.PushItem( ITEM_PICKER( m_frame->GetScreen(), line, UNDO_REDO::CHANGED ) );
-
-    m_frame->SaveCopyInUndoList( pickedItems, UNDO_REDO::CHANGED, false, false );
+    SCHEMATIC_COMMIT commit( m_frame );
 
     for( SCH_LINE* line : m_lines )
     {
+        commit.Modify( line, m_frame->GetScreen() );
+
         if( !m_width.IsIndeterminate() )
             line->SetLineWidth( std::max( (long long int) 0, m_width.GetValue() ) );
 
@@ -153,8 +151,8 @@ bool DIALOG_LINE_PROPERTIES::TransferDataFromWindow()
         m_frame->UpdateItem( line, false, true );
     }
 
+    commit.Push( m_lines.size() == 1 ? _( "Edit Line" ) : _( "Edit Lines" ), SKIP_CONNECTIVITY );
     m_frame->GetCanvas()->Refresh();
-    m_frame->OnModify();
 
     return true;
 }

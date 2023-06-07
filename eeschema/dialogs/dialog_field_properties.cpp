@@ -32,7 +32,6 @@
 #include <confirm.h>
 #include <common.h>
 #include <string_utils.h>
-#include <sch_base_frame.h>
 #include <sch_edit_frame.h>
 #include <ee_collectors.h>
 #include <sch_symbol.h>
@@ -42,6 +41,7 @@
 #include <symbol_library.h>
 #include <sch_validators.h>
 #include <schematic.h>
+#include <schematic_commit.h>
 #include <dialog_field_properties.h>
 #include <sch_text.h>
 #include <scintilla_tricks.h>
@@ -629,7 +629,8 @@ void DIALOG_SCH_FIELD_PROPERTIES::onScintillaCharAdded( wxStyledTextEvent &aEven
 }
 
 
-void DIALOG_SCH_FIELD_PROPERTIES::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* aSheetPath )
+void DIALOG_SCH_FIELD_PROPERTIES::UpdateField( SCHEMATIC_COMMIT* aCommit, SCH_FIELD* aField,
+                                               SCH_SHEET_PATH* aSheetPath )
 {
     SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
     SCH_ITEM*       parent = dynamic_cast<SCH_ITEM*>( aField->GetParent() );
@@ -715,14 +716,12 @@ void DIALOG_SCH_FIELD_PROPERTIES::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH
             {
                 SCH_SCREEN*              screen = sheet.LastScreen();
                 std::vector<SCH_SYMBOL*> otherUnits;
-                constexpr bool           appendUndo = true;
 
                 CollectOtherUnits( ref, unit, libId, sheet, &otherUnits );
 
                 for( SCH_SYMBOL* otherUnit : otherUnits )
                 {
-                    editFrame->SaveCopyInUndoList( screen, otherUnit, UNDO_REDO::CHANGED,
-                                                   appendUndo );
+                    aCommit->Modify( otherUnit, screen );
 
                     if( fieldType == VALUE_FIELD )
                         otherUnit->SetValueFieldText( m_text );

@@ -29,7 +29,6 @@
 #include <widgets/color_swatch.h>
 #include <settings/color_settings.h>
 #include <sch_edit_frame.h>
-#include <sch_validators.h>
 #include <tool/tool_manager.h>
 #include <gr_text.h>
 #include <confirm.h>
@@ -37,10 +36,9 @@
 #include <dialogs/html_message_box.h>
 #include <dialog_label_properties.h>
 #include <string_utils.h>
-#include <project/net_settings.h>
-#include <project/project_file.h>
 #include <kiface_base.h>
 #include <sch_label.h>
+#include <schematic_commit.h>
 
 
 DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_LABEL_BASE* aLabel ) :
@@ -433,14 +431,12 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
     if( !m_textSize.Validate( 0.01, 1000.0, EDA_UNITS::MILLIMETRES ) )
         return false;
 
-    wxString text;
+    SCHEMATIC_COMMIT commit( m_Parent );
+    wxString         text;
 
     /* save old text in undo list if not already in edit */
     if( m_currentLabel->GetEditFlags() == 0 )
-    {
-        m_Parent->SaveCopyInUndoList( m_Parent->GetScreen(), m_currentLabel, UNDO_REDO::CHANGED,
-                                      false );
-    }
+        commit.Modify( m_currentLabel, m_Parent->GetScreen() );
 
     m_Parent->GetCanvas()->Refresh();
 
@@ -517,24 +513,15 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
 
     if( m_shapeSizer->AreAnyItemsShown() )
     {
-        if( m_input->GetValue() )
-            m_currentLabel->SetShape( LABEL_FLAG_SHAPE::L_INPUT );
-        else if( m_output->GetValue() )
-            m_currentLabel->SetShape( LABEL_FLAG_SHAPE::L_OUTPUT );
-        else if( m_bidirectional->GetValue() )
-            m_currentLabel->SetShape( LABEL_FLAG_SHAPE::L_BIDI );
-        else if( m_triState->GetValue() )
-            m_currentLabel->SetShape( LABEL_FLAG_SHAPE::L_TRISTATE );
-        else if( m_passive->GetValue() )
-            m_currentLabel->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );
-        else if( m_dot->GetValue() )
-            m_currentLabel->SetShape( LABEL_FLAG_SHAPE::F_DOT );
-        else if( m_circle->GetValue() )
-            m_currentLabel->SetShape( LABEL_FLAG_SHAPE::F_ROUND );
-        else if( m_diamond->GetValue() )
-            m_currentLabel->SetShape( LABEL_FLAG_SHAPE::F_DIAMOND );
-        else if( m_rectangle->GetValue() )
-            m_currentLabel->SetShape( LABEL_FLAG_SHAPE::F_RECTANGLE );
+        if( m_bidirectional->GetValue() )  m_currentLabel->SetShape( LABEL_FLAG_SHAPE::L_BIDI );
+        else if( m_input->GetValue() )     m_currentLabel->SetShape( LABEL_FLAG_SHAPE::L_INPUT );
+        else if( m_output->GetValue() )    m_currentLabel->SetShape( LABEL_FLAG_SHAPE::L_OUTPUT );
+        else if( m_triState->GetValue() )  m_currentLabel->SetShape( LABEL_FLAG_SHAPE::L_TRISTATE );
+        else if( m_passive->GetValue() )   m_currentLabel->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );
+        else if( m_dot->GetValue() )       m_currentLabel->SetShape( LABEL_FLAG_SHAPE::F_DOT );
+        else if( m_circle->GetValue() )    m_currentLabel->SetShape( LABEL_FLAG_SHAPE::F_ROUND );
+        else if( m_diamond->GetValue() )   m_currentLabel->SetShape( LABEL_FLAG_SHAPE::F_DIAMOND );
+        else if( m_rectangle->GetValue() ) m_currentLabel->SetShape( LABEL_FLAG_SHAPE::F_RECTANGLE );
     }
 
     if( m_fontCtrl->HaveFontSelection() )
@@ -568,14 +555,10 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
 
     TEXT_SPIN_STYLE selectedSpinStyle= TEXT_SPIN_STYLE::LEFT;
 
-    if( m_spin0->IsChecked() )
-        selectedSpinStyle = TEXT_SPIN_STYLE::RIGHT;
-    else if( m_spin1->IsChecked() )
-        selectedSpinStyle = TEXT_SPIN_STYLE::LEFT;
-    else if( m_spin2->IsChecked() )
-        selectedSpinStyle = TEXT_SPIN_STYLE::UP;
-    else if( m_spin3->IsChecked() )
-        selectedSpinStyle = TEXT_SPIN_STYLE::BOTTOM;
+    if( m_spin0->IsChecked() )      selectedSpinStyle = TEXT_SPIN_STYLE::RIGHT;
+    else if( m_spin1->IsChecked() ) selectedSpinStyle = TEXT_SPIN_STYLE::LEFT;
+    else if( m_spin2->IsChecked() ) selectedSpinStyle = TEXT_SPIN_STYLE::UP;
+    else if( m_spin3->IsChecked() ) selectedSpinStyle = TEXT_SPIN_STYLE::BOTTOM;
 
     if( m_currentLabel->AutoRotateOnPlacementSupported() )
     {
@@ -584,16 +567,24 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
         frame->AutoRotateItem( frame->GetScreen(), m_currentLabel );
     }
     else
+    {
         m_currentLabel->SetAutoRotateOnPlacement( false );
+    }
 
     if( !m_currentLabel->AutoRotateOnPlacement()
         && m_currentLabel->GetTextSpinStyle() != selectedSpinStyle )
+    {
         m_currentLabel->SetTextSpinStyle( selectedSpinStyle );
+    }
 
     if( doAutoplace )
         m_currentLabel->AutoAutoplaceFields( m_Parent->GetScreen() );
 
     m_Parent->UpdateItem( m_currentLabel );
+
+    if( !commit.Empty() )
+        commit.Push( _( "Edit Label" ), SKIP_CONNECTIVITY );
+
     m_Parent->GetCanvas()->Refresh();
 
     return true;

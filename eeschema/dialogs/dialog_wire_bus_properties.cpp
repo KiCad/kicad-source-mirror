@@ -31,6 +31,7 @@
 #include <sch_edit_frame.h>
 #include <stroke_params.h>
 #include <widgets/color_swatch.h>
+#include <schematic_commit.h>
 
 
 DIALOG_WIRE_BUS_PROPERTIES::DIALOG_WIRE_BUS_PROPERTIES( SCH_EDIT_FRAME* aParent,
@@ -174,15 +175,12 @@ void DIALOG_WIRE_BUS_PROPERTIES::resetDefaults( wxCommandEvent& event )
 
 bool DIALOG_WIRE_BUS_PROPERTIES::TransferDataFromWindow()
 {
-    PICKED_ITEMS_LIST pickedItems;
-
-    for( SCH_ITEM* strokeItem : m_items )
-        pickedItems.PushItem( ITEM_PICKER( m_frame->GetScreen(), strokeItem, UNDO_REDO::CHANGED ) );
-
-    m_frame->SaveCopyInUndoList( pickedItems, UNDO_REDO::CHANGED, false, false );
+    SCHEMATIC_COMMIT commit( m_frame );
 
     for( SCH_ITEM* item : m_items )
     {
+        commit.Modify( item, m_frame->GetScreen() );
+
         if( item->HasLineStroke() )
         {
             if( !m_wireWidth.IsIndeterminate() )
@@ -228,8 +226,9 @@ bool DIALOG_WIRE_BUS_PROPERTIES::TransferDataFromWindow()
         m_frame->UpdateItem( item, false, true );
     }
 
+    commit.Push( wxString::Format( _( "Edit %s" ), m_items.size() == 1 ? _( "Wire/Bus" )
+                                                                       : _( "Wires/Buses" ) ) );
     m_frame->GetCanvas()->Refresh();
-    m_frame->OnModify();
 
     return true;
 }

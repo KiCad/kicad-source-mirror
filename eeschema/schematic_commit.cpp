@@ -359,7 +359,10 @@ void SCHEMATIC_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
         schematic.OnItemsChanged( itemsChanged );
 
     if( !( aCommitFlags & SKIP_UNDO ) && frame )
-        frame->SaveCopyInUndoList(undoList, UNDO_REDO::UNSPECIFIED, aCommitFlags & APPEND_UNDO );
+    {
+        frame->SaveCopyInUndoList( undoList, UNDO_REDO::UNSPECIFIED, aCommitFlags & APPEND_UNDO,
+                                   ( aCommitFlags & SKIP_CONNECTIVITY ) == 0 );
+    }
 
     m_toolMgr->PostEvent( { TC_MESSAGE, TA_MODEL_CHANGE, AS_GLOBAL } );
 

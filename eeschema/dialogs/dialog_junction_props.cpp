@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -23,6 +23,7 @@
 #include <settings/settings_manager.h>
 #include <sch_edit_frame.h>
 #include <widgets/color_swatch.h>
+#include <schematic_commit.h>
 
 
 DIALOG_JUNCTION_PROPS::DIALOG_JUNCTION_PROPS( SCH_EDIT_FRAME* aParent,
@@ -95,15 +96,12 @@ void DIALOG_JUNCTION_PROPS::resetDefaults( wxCommandEvent& event )
 
 bool DIALOG_JUNCTION_PROPS::TransferDataFromWindow()
 {
-    PICKED_ITEMS_LIST pickedItems;
-
-    for( SCH_JUNCTION* junction : m_junctions )
-        pickedItems.PushItem( ITEM_PICKER( m_frame->GetScreen(), junction, UNDO_REDO::CHANGED ) );
-
-    m_frame->SaveCopyInUndoList( pickedItems, UNDO_REDO::CHANGED, false, false );
+    SCHEMATIC_COMMIT commit( m_frame );
 
     for( SCH_JUNCTION* junction : m_junctions )
     {
+        commit.Modify( junction, m_frame->GetScreen() );
+
         if( !m_diameter.IsIndeterminate() )
             junction->SetDiameter( m_diameter.GetValue() );
 
@@ -112,8 +110,9 @@ bool DIALOG_JUNCTION_PROPS::TransferDataFromWindow()
         m_frame->GetCanvas()->GetView()->Update( junction );
     }
 
+    commit.Push( m_junctions.size() == 1 ? _( "Edit Junction" ) : _( "Edit Junctions" ),
+                 SKIP_CONNECTIVITY );
     m_frame->GetCanvas()->Refresh();
-    m_frame->OnModify();
 
     return true;
 }

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
 #include <sch_validators.h>
+#include <schematic_commit.h>
 #include <dialog_sheet_pin_properties.h>
 #include <dialogs/html_message_box.h>
 #include <string_utils.h>
@@ -133,11 +134,10 @@ bool DIALOG_SHEET_PIN_PROPERTIES::TransferDataToWindow()
 
 bool DIALOG_SHEET_PIN_PROPERTIES::TransferDataFromWindow()
 {
+    SCHEMATIC_COMMIT commit( m_frame );
+
     if( !m_sheetPin->IsNew() )
-    {
-        SCH_SHEET* parentSheet = m_sheetPin->GetParent();
-        m_frame->SaveCopyInUndoList( m_frame->GetScreen(), parentSheet, UNDO_REDO::CHANGED, false );
-    }
+        commit.Modify( m_sheetPin->GetParent(), m_frame->GetScreen() );
 
     m_sheetPin->SetText( EscapeString( m_comboName->GetValue(), CTX_NETNAME ) );
 
@@ -165,24 +165,21 @@ bool DIALOG_SHEET_PIN_PROPERTIES::TransferDataFromWindow()
 
     // Currently, eeschema uses only the text width as text size,
     // and expects text width = text height
-    m_sheetPin->SetTextSize( VECTOR2I( m_textSize.GetValue(), m_textSize.GetValue() ) );
+    m_sheetPin->SetTextSize( VECTOR2I( m_textSize.GetIntValue(), m_textSize.GetIntValue() ) );
 
     m_sheetPin->SetTextColor( m_textColorSwatch->GetSwatchColor() );
 
-    if( m_input->GetValue() )
-        m_sheetPin->SetShape( LABEL_FLAG_SHAPE::L_INPUT );
-    else if( m_output->GetValue() )
-        m_sheetPin->SetShape( LABEL_FLAG_SHAPE::L_OUTPUT );
-    else if( m_bidirectional->GetValue() )
-        m_sheetPin->SetShape( LABEL_FLAG_SHAPE::L_BIDI );
-    else if( m_triState->GetValue() )
-        m_sheetPin->SetShape( LABEL_FLAG_SHAPE::L_TRISTATE );
-    else if( m_passive->GetValue() )
-        m_sheetPin->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );
+    if( m_input->GetValue() )              m_sheetPin->SetShape( LABEL_FLAG_SHAPE::L_INPUT );
+    else if( m_output->GetValue() )        m_sheetPin->SetShape( LABEL_FLAG_SHAPE::L_OUTPUT );
+    else if( m_bidirectional->GetValue() ) m_sheetPin->SetShape( LABEL_FLAG_SHAPE::L_BIDI );
+    else if( m_triState->GetValue() )      m_sheetPin->SetShape( LABEL_FLAG_SHAPE::L_TRISTATE );
+    else if( m_passive->GetValue() )       m_sheetPin->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );
+
+    if( !commit.Empty() )
+        commit.Push( _( "Edit Sheet Pin" ) );
 
     m_frame->UpdateItem( m_sheetPin, false, true );
     m_frame->GetCanvas()->Refresh();
-    m_frame->OnModify();
 
     return true;
 }

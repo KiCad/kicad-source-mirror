@@ -26,8 +26,7 @@
 
 #include <sch_edit_frame.h>
 #include <sch_bitmap.h>
-#include <tool/tool_manager.h>
-#include <tool/actions.h>
+#include <schematic_commit.h>
 
 
 DIALOG_IMAGE_PROPERTIES::DIALOG_IMAGE_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_BITMAP* aBitmap ) :
@@ -61,15 +60,19 @@ bool DIALOG_IMAGE_PROPERTIES::TransferDataFromWindow()
 {
     if( m_imageEditor->TransferDataFromWindow() )
     {
+        SCHEMATIC_COMMIT commit( m_frame );
+
         // Save old image in undo list if not already in edit
         if( m_bitmap->GetEditFlags() == 0 )
-            m_frame->SaveCopyInUndoList( m_frame->GetScreen(), m_bitmap, UNDO_REDO::CHANGED, false,
-                                         false );
+            commit.Modify( m_bitmap, m_frame->GetScreen() );
 
         // Update our bitmap from the editor
         m_imageEditor->TransferToImage( m_bitmap->GetImage() );
 
         m_bitmap->SetPosition( VECTOR2I( m_posX.GetValue(), m_posY.GetValue() ) );
+
+        if( !commit.Empty() )
+            commit.Push( _( "Image Properties" ), SKIP_CONNECTIVITY );
 
         return true;
     }

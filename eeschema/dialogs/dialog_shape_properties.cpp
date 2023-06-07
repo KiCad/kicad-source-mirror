@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,8 @@
 #include <sch_shape.h>
 #include <dialog_shape_properties.h>
 #include <settings/color_settings.h>
+#include <schematic_commit.h>
+
 
 DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_SHAPE* aShape ) :
     DIALOG_SHAPE_PROPERTIES_BASE( aParent ),
@@ -135,16 +137,15 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
     if( !wxDialog::TransferDataFromWindow() )
         return false;
 
+    SCHEMATIC_COMMIT commit( m_frame );
+
     if( !m_shape->IsNew() )
-    {
-        m_frame->SaveCopyInUndoList( m_frame->GetScreen(), m_shape, UNDO_REDO::CHANGED, false,
-                                     false );
-    }
+        commit.Modify( m_shape, m_frame->GetScreen() );
 
     STROKE_PARAMS stroke = m_shape->GetStroke();
 
     if( m_borderCheckbox->GetValue() )
-        stroke.SetWidth( std::max( (long long int) 0, m_borderWidth.GetValue() ) );
+        stroke.SetWidth( std::max( 0, m_borderWidth.GetIntValue() ) );
     else
         stroke.SetWidth( -1 );
 
@@ -162,6 +163,9 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
 
     m_shape->SetFillMode( m_filledCtrl->GetValue() ? FILL_T::FILLED_WITH_COLOR : FILL_T::NO_FILL );
     m_shape->SetFillColor( m_fillColorSwatch->GetSwatchColor() );
+
+    if( !commit.Empty() )
+        commit.Push( wxString::Format( _( "Edit %s" ), m_shape->ShowShape() ), SKIP_CONNECTIVITY );
 
     return true;
 }

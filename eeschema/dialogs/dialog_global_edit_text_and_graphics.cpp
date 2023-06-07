@@ -78,8 +78,6 @@ class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS : public DIALOG_GLOBAL_EDIT_TEXT_AND_
     UNIT_BINDER            m_lineWidth;
     UNIT_BINDER            m_junctionSize;
 
-    bool                   m_appendUndo;
-
 public:
     DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( SCH_EDIT_FRAME* parent );
     ~DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS() override;
@@ -105,8 +103,8 @@ protected:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    void visitItem( const SCH_SHEET_PATH& aSheetPath, SCH_ITEM* aItem );
-    void processItem( const SCH_SHEET_PATH& aSheetPath, SCH_ITEM* aItem );
+    void visitItem( SCHEMATIC_COMMIT* aCommit, const SCH_SHEET_PATH& aSheetPath, SCH_ITEM* aItem );
+    void processItem( SCHEMATIC_COMMIT* aCommit, const SCH_SHEET_PATH& aSheetPath, SCH_ITEM* aItem );
 };
 
 
@@ -117,7 +115,6 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( SCH_
         m_junctionSize( parent, m_dotSizeLabel, m_dotSizeCtrl, m_dotSizeUnits, true )
 {
     m_parent = parent;
-    m_appendUndo = false;
 
     m_lineStyle->Append( DEFAULT_STYLE );
     m_lineStyle->Append( INDETERMINATE_ACTION );
@@ -239,7 +236,8 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
 }
 
 
-void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aSheetPath,
+void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( SCHEMATIC_COMMIT* aCommit,
+                                                        const SCH_SHEET_PATH& aSheetPath,
                                                         SCH_ITEM* aItem )
 {
     if( m_selectedFilterOpt->GetValue() )
@@ -248,9 +246,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
             return;
     }
 
-    m_parent->SaveCopyInUndoList( aSheetPath.LastScreen(), aItem, UNDO_REDO::CHANGED, m_appendUndo,
-                                  false );
-    m_appendUndo = true;
+    aCommit->Modify( aItem, aSheetPath.LastScreen() );
 
     if( EDA_TEXT* eda_text = dynamic_cast<EDA_TEXT*>( aItem ) )
     {
@@ -375,7 +371,8 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
     }
 }
 
-void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aSheetPath,
+void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( SCHEMATIC_COMMIT* aCommit,
+                                                      const SCH_SHEET_PATH& aSheetPath,
                                                       SCH_ITEM* aItem )
 {
     if( m_netFilterOpt->GetValue() && !m_netFilter->GetValue().IsEmpty() )
@@ -427,10 +424,10 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
         SCH_SYMBOL* symbol = (SCH_SYMBOL*) aItem;
 
         if( m_references->GetValue() )
-            processItem( aSheetPath, symbol->GetField( REFERENCE_FIELD ) );
+            processItem( aCommit, aSheetPath, symbol->GetField( REFERENCE_FIELD ) );
 
         if( m_values->GetValue() )
-            processItem( aSheetPath, symbol->GetField( VALUE_FIELD ) );
+            processItem( aCommit, aSheetPath, symbol->GetField( VALUE_FIELD ) );
 
         if( m_otherFields->GetValue() )
         {
@@ -442,7 +439,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
                 if( !m_fieldnameFilterOpt->GetValue() || m_fieldnameFilter->GetValue().IsEmpty()
                         || WildCompareString( m_fieldnameFilter->GetValue(), fieldName, false ) )
                 {
-                    processItem( aSheetPath, &field );
+                    processItem( aCommit, aSheetPath, &field );
                 }
             }
         }
@@ -452,7 +449,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
         SCH_SHEET* sheet = static_cast<SCH_SHEET*>( aItem );
 
         if( m_sheetTitles->GetValue() )
-            processItem( aSheetPath, &sheet->GetFields()[SHEETNAME] );
+            processItem( aCommit, aSheetPath, &sheet->GetFields()[SHEETNAME] );
 
         if( m_sheetFields->GetValue() )
         {
@@ -466,7 +463,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
                 if( !m_fieldnameFilterOpt->GetValue() || m_fieldnameFilter->GetValue().IsEmpty()
                         || WildCompareString( m_fieldnameFilter->GetValue(), fieldName, false ) )
                 {
-                    processItem( aSheetPath, &field );
+                    processItem( aCommit, aSheetPath, &field );
                 }
             }
         }
@@ -486,26 +483,26 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
         if( m_sheetPins->GetValue() )
         {
             for( SCH_SHEET_PIN* pin : sheet->GetPins() )
-                processItem( aSheetPath, pin );
+                processItem( aCommit, aSheetPath, pin );
         }
     }
     else if( m_wires->GetValue() && aItem->IsType( { SCH_ITEM_LOCATE_WIRE_T,
                                                      SCH_LABEL_LOCATE_WIRE_T } ) )
     {
-        processItem( aSheetPath, aItem );
+        processItem( aCommit, aSheetPath, aItem );
     }
     else if( m_buses->GetValue() && aItem->IsType( { SCH_ITEM_LOCATE_BUS_T,
                                                      SCH_LABEL_LOCATE_BUS_T } ) )
     {
-        processItem( aSheetPath, aItem );
+        processItem( aCommit, aSheetPath, aItem );
     }
     else if( aItem->IsType( { SCH_LABEL_LOCATE_ANY_T } ) )
     {
         if( m_globalLabels->GetValue() && aItem->Type() == SCH_GLOBAL_LABEL_T )
-            processItem( aSheetPath, aItem );
+            processItem( aCommit, aSheetPath, aItem );
 
         if( m_hierLabels->GetValue() && aItem->Type() == SCH_HIER_LABEL_T )
-            processItem( aSheetPath, aItem );
+            processItem( aCommit, aSheetPath, aItem );
 
         if( m_labelFields->GetValue() )
         {
@@ -516,7 +513,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
                 if( !m_fieldnameFilterOpt->GetValue() || m_fieldnameFilter->GetValue().IsEmpty()
                         || WildCompareString( m_fieldnameFilter->GetValue(), fieldName, false ) )
                 {
-                    processItem( aSheetPath, &field );
+                    processItem( aCommit, aSheetPath, &field );
                 }
             }
         }
@@ -529,12 +526,12 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
         {
             if( item->GetLayer() == LAYER_BUS && m_buses->GetValue() )
             {
-                processItem( aSheetPath, aItem );
+                processItem( aCommit, aSheetPath, aItem );
                 break;
             }
             else if( item->GetLayer() == LAYER_WIRE && m_wires->GetValue() )
             {
-                processItem( aSheetPath, aItem );
+                processItem( aCommit, aSheetPath, aItem );
                 break;
             }
         }
@@ -543,7 +540,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
                                                                   SCH_ITEM_LOCATE_GRAPHIC_LINE_T,
                                                                   SCH_SHAPE_T } ) )
     {
-        processItem( aSheetPath, aItem );
+        processItem( aCommit, aSheetPath, aItem );
     }
 }
 
@@ -553,8 +550,8 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
     if( !m_textSize.Validate( 1.0, 10000.0, EDA_UNITS::MILS ) )  // 1 mil .. 10 inches
         return false;
 
-    SCH_SHEET_PATH currentSheet = m_parent->GetCurrentSheet();
-    m_appendUndo = false;
+    SCH_SHEET_PATH   currentSheet = m_parent->GetCurrentSheet();
+    SCHEMATIC_COMMIT commit( m_parent );
 
     // Go through sheets
     for( const SCH_SHEET_PATH& sheetPath : m_parent->Schematic().GetSheets() )
@@ -566,13 +563,13 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
             m_parent->SetCurrentSheet( sheetPath );
 
             for( SCH_ITEM* item : screen->Items() )
-                visitItem( sheetPath, item );
+                visitItem( &commit, sheetPath, item );
         }
     }
 
-    if( m_appendUndo )
+    if( !commit.Empty() )
     {
-        m_parent->OnModify();
+        commit.Push( _( "Edit Text and Graphics" ), SKIP_CONNECTIVITY );
         m_parent->HardRedraw();
     }
 

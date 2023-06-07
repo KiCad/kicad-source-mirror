@@ -30,9 +30,7 @@
 #include <tools/sch_move_tool.h>
 #include <tools/sch_drawing_tools.h>
 #include <ee_actions.h>
-#include <bitmaps.h>
 #include <confirm.h>
-#include <eda_item.h>
 #include <string_utils.h>
 #include <sch_item.h>
 #include <sch_symbol.h>
@@ -67,7 +65,7 @@
 #include <symbol_editor_settings.h>
 #include <core/kicad_algo.h>
 #include <wx/textdlg.h>
-#include "project/net_settings.h"
+#include <project/net_settings.h>
 
 class SYMBOL_UNIT_MENU : public ACTION_MENU
 {
@@ -1538,16 +1536,15 @@ void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
     if( dlg.ShowQuasiModal() != wxID_OK )
         return;
 
-    dlg.UpdateField( aField, &m_frame->GetCurrentSheet() );
+    dlg.UpdateField( &commit, aField, &m_frame->GetCurrentSheet() );
 
     if( m_frame->eeconfig()->m_AutoplaceFields.enable || parentType == SCH_SHEET_T )
         static_cast<SCH_ITEM*>( aField->GetParent() )->AutoAutoplaceFields( m_frame->GetScreen() );
 
     if( !commit.Empty() )
-        commit.Push( caption );
+        commit.Push( caption, SKIP_CONNECTIVITY );
 
     m_frame->UpdateItem( aField, false, true );
-    m_frame->OnModify();
 
     // This must go after OnModify() so that the connectivity graph will have been updated.
     m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );

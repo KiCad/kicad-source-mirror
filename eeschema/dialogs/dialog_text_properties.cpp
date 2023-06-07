@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,15 +28,12 @@
 #include <widgets/font_choice.h>
 #include <widgets/color_swatch.h>
 #include <widgets/wx_combobox.h>
-#include <base_units.h>
 #include <settings/color_settings.h>
-#include <tool/tool_manager.h>
-#include <general.h>
 #include <sch_textbox.h>
 #include <confirm.h>
 #include <schematic.h>
+#include <schematic_commit.h>
 #include <dialogs/html_message_box.h>
-#include <string_utils.h>
 #include <scintilla_tricks.h>
 #include <dialog_text_properties.h>
 #include <gr_text.h>
@@ -437,14 +434,12 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     if( !m_textSize.Validate( 0.01, 1000.0, EDA_UNITS::MILLIMETRES ) )
         return false;
 
-    wxString text;
+    SCHEMATIC_COMMIT commit( m_frame );
+    wxString         text;
 
     /* save old text in undo list if not already in edit */
     if( m_currentItem->GetEditFlags() == 0 )
-    {
-        m_frame->SaveCopyInUndoList( m_frame->GetScreen(), m_currentItem, UNDO_REDO::CHANGED,
-                                     false, false );
-    }
+        commit.Modify( m_currentItem, m_frame->GetScreen() );
 
     m_frame->GetCanvas()->Refresh();
 
@@ -561,7 +556,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
         STROKE_PARAMS stroke = textBox->GetStroke();
 
         if( m_borderCheckbox->GetValue() )
-            stroke.SetWidth( std::max( (long long int) 0, m_borderWidth.GetValue() ) );
+            stroke.SetWidth( std::max( 0, m_borderWidth.GetIntValue() ) );
         else
             stroke.SetWidth( -1 );
 
@@ -582,9 +577,11 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
         textBox->SetFillColor( m_fillColorSwatch->GetSwatchColor() );
     }
 
+    if( !commit.Empty() )
+        commit.Push( _( "Edit Text" ), SKIP_CONNECTIVITY );
+
     m_frame->UpdateItem( m_currentItem, false, true );
     m_frame->GetCanvas()->Refresh();
-    m_frame->OnModify();
 
     return true;
 }
