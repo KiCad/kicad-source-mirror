@@ -494,8 +494,11 @@ const ITEM_SET NODE::HitTest( const VECTOR2I& aPoint ) const
 
 void NODE::addSolid( SOLID* aSolid )
 {
-    if( aSolid->HasHole() && aSolid->Hole()->BelongsTo( aSolid ) )
+    if( aSolid->HasHole() )
+    {
+        assert( aSolid->Hole()->BelongsTo( aSolid ) );
         addHole( aSolid->Hole() );
+    }
 
     if( aSolid->IsRoutable() )
         linkJoint( aSolid->Pos(), aSolid->Layers(), aSolid->Net(), aSolid );
@@ -514,8 +517,14 @@ void NODE::Add( std::unique_ptr< SOLID >&& aSolid )
 
 void NODE::addVia( VIA* aVia )
 {
-    if( aVia->HasHole() && aVia->Hole()->BelongsTo( aVia ) )
+    if( aVia->HasHole() )
+    {
+        if( ! aVia->Hole()->BelongsTo( aVia ) )
+        {
+            assert( false );
+        }
         addHole( aVia->Hole() );
+    }
 
     linkJoint( aVia->Pos(), aVia->Layers(), aVia->Net(), aVia );
     aVia->SetOwner( this );
@@ -724,7 +733,7 @@ void NODE::doRemove( ITEM* aItem )
         if( hole )
         {
             m_index->Remove( hole ); // hole is not directly owned by NODE but by the parent SOLID/VIA.
-            hole->SetOwner( hole->ParentPadVia() );
+            hole->SetOwner( aItem );
         }
     }
 }
@@ -834,6 +843,11 @@ void NODE::Remove( VIA* aVia )
 {
     removeViaIndex( aVia );
     doRemove( aVia );
+
+    if( !aVia->Owner() )
+    {
+        assert( aVia->Hole()->BelongsTo( aVia ) );
+    }
 }
 
 
@@ -864,7 +878,10 @@ void NODE::Remove( ITEM* aItem )
         SOLID* solid = static_cast<SOLID*>( aItem );
 
         if( solid->HasHole() )
+        {
             Remove( solid->Hole() );
+            solid->Hole()->SetOwner( solid );
+        }
 
         Remove( static_cast<SOLID*>( aItem ) );
         break;
@@ -889,7 +906,10 @@ void NODE::Remove( ITEM* aItem )
         VIA* via = static_cast<VIA*>( aItem );
 
         if( via->HasHole() )
+        {
             Remove( via->Hole() );
+            via->Hole()->SetOwner( via );
+        }
 
         Remove( static_cast<VIA*>( aItem ) );
         break;
@@ -1433,6 +1453,11 @@ void NODE::Commit( NODE* aNode )
 
     for( ITEM* item : *aNode->m_index )
     {
+        if( item->HasHole() )
+        {
+            item->Hole()->SetOwner( item );
+        }
+
         item->SetRank( -1 );
         item->Unmark();
         add( item );
