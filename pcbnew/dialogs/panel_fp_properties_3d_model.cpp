@@ -311,8 +311,12 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnAdd3DModel( wxCommandEvent&  )
     if( !S3D::Select3DModel( m_parentDialog, m_frame->Prj().Get3DCacheManager(), initialpath, filter, &model )
         || model.m_Filename.empty() )
     {
-        select3DModel( selected );
-        updateValidateStatus( selected );
+        if( selected >= 0 )
+        {
+            select3DModel( selected );
+            updateValidateStatus( selected );
+        }
+
         return;
     }
 
