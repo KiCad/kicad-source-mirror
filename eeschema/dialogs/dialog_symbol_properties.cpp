@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,6 @@
 #include <kiface_base.h>
 #include <pin_numbers.h>
 #include <string_utils.h>
-#include <menus_helpers.h>
 #include <kiplatform/ui.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/grid_combobox.h>
@@ -44,9 +43,9 @@
 #include <sch_edit_frame.h>
 #include <sch_reference_list.h>
 #include <schematic.h>
+#include <schematic_commit.h>
 #include <tool/tool_manager.h>
 #include <tool/actions.h>
-#include <math/vector2d.h>
 
 #include <dialog_sim_model.h>
 
@@ -697,7 +696,8 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     if( !m_pinGrid->CommitPendingChanges() )
         return false;
 
-    SCH_SCREEN* currentScreen = GetParent()->GetScreen();
+    SCHEMATIC_COMMIT commit( GetParent() );
+    SCH_SCREEN*      currentScreen = GetParent()->GetScreen();
     wxCHECK( currentScreen, false );
 
     // This needs to be done before the LIB_ID is changed to prevent stale library symbols in
@@ -706,7 +706,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     // save old cmp in undo list if not already in edit, or moving ...
     if( m_symbol->GetEditFlags() == 0 )
-        GetParent()->SaveCopyInUndoList( currentScreen, m_symbol, UNDO_REDO::CHANGED, false );
+        commit.Modify( m_symbol, currentScreen );
 
     // Save current flags which could be modified by next change settings
     EDA_ITEM_FLAGS flags = m_symbol->GetFlags();
@@ -870,7 +870,9 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     currentScreen->Append( m_symbol );
     GetParent()->TestDanglingEnds();
     GetParent()->UpdateItem( m_symbol, false, true );
-    GetParent()->OnModify();
+
+    if( !commit.Empty() )
+        commit.Push( _( "Edit Symbol Properties" ) );
 
     // This must go after OnModify() so that the connectivity graph will have been updated.
     GetParent()->GetToolManager()->PostEvent( EVENTS::SelectedItemsModified );
