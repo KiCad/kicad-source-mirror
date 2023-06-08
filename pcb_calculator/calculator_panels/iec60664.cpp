@@ -58,8 +58,7 @@ double IEC60664::GetClearanceForRMSVoltage( const double aVRMS, const FIELD aFie
     switch( aField )
     {
     case FIELD::INHOMOGENEOUS:
-    {
-        if( aVRMS <= 0.028 )
+         if( aVRMS <= 0.028 )
             return 0.001;
         if( aVRMS <= 0.053 )
             return 0.002;
@@ -157,9 +156,10 @@ double IEC60664::GetClearanceForRMSVoltage( const double aVRMS, const FIELD aFie
             return 80.0;
         if( aVRMS <= 35.4 )
             return 80.0;
-    }
+
+        break;
+
     case FIELD::HOMOGENEOUS:
-    {
         if( aVRMS <= 0.028 )
             return 0.001;
         if( aVRMS <= 0.053 )
@@ -258,13 +258,14 @@ double IEC60664::GetClearanceForRMSVoltage( const double aVRMS, const FIELD aFie
             return 80.0;
         if( aVRMS <= 148.5 )
             return 80.0;
-    }
+
+        break;
+
     default:
-    {
         break;
     }
-    }
-    return -1;
+
+    return -1;      // Out of range
 }
 
 
@@ -277,7 +278,6 @@ double IEC60664::GetClearanceToWithstandTransientVoltage( const double          
     switch( aField )
     {
     case FIELD::INHOMOGENEOUS:
-    {
         if( aPD <= POLLUTION_DEGREE::PD1 )
         {
             if( aVoltage <= 0.33 )
@@ -345,9 +345,10 @@ double IEC60664::GetClearanceToWithstandTransientVoltage( const double          
             return 130;
         if( aVoltage <= 100 )
             return 170;
-    }
+
+        break;
+
     case FIELD::HOMOGENEOUS:
-    {
         if( aPD <= POLLUTION_DEGREE::PD1 )
         {
             if( aVoltage <= 0.33 )
@@ -415,13 +416,14 @@ double IEC60664::GetClearanceToWithstandTransientVoltage( const double          
             return 35;
         if( aVoltage <= 100 )
             return 45;
-    }
+
+        break;
+
     default:
-    {
         break;
     }
-    }
-    return -1;
+
+    return -1;  // Out of range
 }
 
 double IEC60664::GetClearanceToWithstandPeaks( const double aVoltage, const FIELD aField )
@@ -431,7 +433,6 @@ double IEC60664::GetClearanceToWithstandPeaks( const double aVoltage, const FIEL
     switch( aField )
     {
     case FIELD::INHOMOGENEOUS:
-    {
         if( aVoltage <= 0.04 )
             return 0.001;
         if( aVoltage <= 0.06 )
@@ -492,9 +493,10 @@ double IEC60664::GetClearanceToWithstandPeaks( const double aVoltage, const FIEL
             return 77;
         if( aVoltage <= 50 )
             return 100;
-    }
+
+        break;
+
     case FIELD::HOMOGENEOUS:
-    {
         if( aVoltage <= 0.04 )
             return 0.001;
         if( aVoltage <= 0.06 )
@@ -563,10 +565,11 @@ double IEC60664::GetClearanceToWithstandPeaks( const double aVoltage, const FIEL
             return 35;
         if( aVoltage <= 100 )
             return 45;
-    }
+
+        break;
+
     default:
-    {
-    }
+        break;
     }
     return -1;
 }
@@ -579,7 +582,6 @@ double IEC60664::GetRatedImpulseWithstandVoltage()
     switch( m_overvoltageCat )
     {
     case OV_CATEGORY::OV_I:
-    {
         if( voltage <= 50 )
             return 330;
         if( voltage <= 100 )
@@ -596,9 +598,10 @@ double IEC60664::GetRatedImpulseWithstandVoltage()
             return 4000;
         if( voltage <= 1500 )
             return 6000;
-    }
+
+        break;
+
     case OV_CATEGORY::OV_II:
-    {
         if( voltage <= 50 )
             return 500;
         if( voltage <= 100 )
@@ -615,10 +618,11 @@ double IEC60664::GetRatedImpulseWithstandVoltage()
             return 6000;
         if( voltage <= 1500 )
             return 8000;
-    }
+
+        break;
+
     case OV_CATEGORY::OV_III:
-    {
-        if( voltage <= 50 )
+         if( voltage <= 50 )
             return 800;
         if( voltage <= 100 )
             return 1500;
@@ -634,9 +638,10 @@ double IEC60664::GetRatedImpulseWithstandVoltage()
             return 8000;
         if( voltage <= 1500 )
             return 10000;
-    }
+
+        break;
+
     case OV_CATEGORY::OV_IV:
-    {
         if( voltage <= 50 )
             return 1500;
         if( voltage <= 100 )
@@ -653,13 +658,14 @@ double IEC60664::GetRatedImpulseWithstandVoltage()
             return 12000;
         if( voltage <= 1500 )
             return 15000;
-    }
+
+        break;
+
     default:
-    {
         break;
     }
-    }
-    return -1;
+
+    return -1;      // Out of range
 }
 
 
@@ -1237,14 +1243,16 @@ double IEC60664::ComputeClearanceDistance( const POLLUTION_DEGREE aPD, const FIE
                                            const double aAltitude )
 {
     //  Based on IEC60664-1 : 2020-05 chart G.1
-    double frequency = 50;
 
+#if 0   // Not handled in IEC60664-1
+    double frequency = 50;
     bool coatedOrPotted = false;
 
     if( frequency > 30e3 )
         return -1; // Requires 60664-3
     if( coatedOrPotted )
         return -1; // Requires 60664-4
+#endif
 
     double clearance1 = GetClearanceToWithstandTransientVoltage(
             ( m_insulationType == INSULATION_TYPE::REINFORCED ) ? m_transientVoltage * 1.6
@@ -1270,14 +1278,16 @@ double IEC60664::ComputeCreepageDistance( const POLLUTION_DEGREE aPD, const MATE
 {
     //  Based on IEC60664-1 : 2020-05 chart H.1
 
-
+#if 0   // Not handled in IEC60664-1
     double frequency = 50;
     bool   coatedOrPotted = false;
 
     if( frequency > 30e3 )
         return -1; // Requires 60664-3
+
     if( coatedOrPotted )
         return -1; // Requires 60664-4
+#endif
 
     double creepage = GetBasicCreepageDistance( m_RMSvoltage, aPD, aMG );
 

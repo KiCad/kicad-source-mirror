@@ -21,7 +21,7 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
 
-	m_stTitle = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Insulation coordination for equipment within low-voltage supply systems"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stTitle = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Insulation for equipment within low-voltage supply systems"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stTitle->Wrap( -1 );
 	m_stTitle->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
@@ -163,7 +163,7 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 
 	fgSizer11->Add( m_staticText112, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	wxString m_insulationTypeChoices[] = { _("Functional"), _("Basic"), _("Reinforced"), wxEmptyString, wxEmptyString };
+	wxString m_insulationTypeChoices[] = { _("Functional"), _("Basic"), _("Reinforced") };
 	int m_insulationTypeNChoices = sizeof( m_insulationTypeChoices ) / sizeof( wxString );
 	m_insulationType = new wxChoice( sbSizerMiddle->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_insulationTypeNChoices, m_insulationTypeChoices, 0 );
 	m_insulationType->SetSelection( 0 );

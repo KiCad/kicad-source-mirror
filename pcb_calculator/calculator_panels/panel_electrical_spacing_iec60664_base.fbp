@@ -154,7 +154,7 @@
                                     <property name="gripper">0</property>
                                     <property name="hidden">0</property>
                                     <property name="id">wxID_ANY</property>
-                                    <property name="label">Insulation coordination for equipment within low-voltage supply systems</property>
+                                    <property name="label">Insulation for equipment within low-voltage supply systems</property>
                                     <property name="markup">0</property>
                                     <property name="max_size"></property>
                                     <property name="maximize_button">0</property>
@@ -1518,7 +1518,7 @@
                                                             <property name="caption"></property>
                                                             <property name="caption_visible">1</property>
                                                             <property name="center_pane">0</property>
-                                                            <property name="choices">&quot;Functional&quot; &quot;Basic&quot; &quot;Reinforced&quot; &quot;&quot; &quot;&quot;</property>
+                                                            <property name="choices">&quot;Functional&quot; &quot;Basic&quot; &quot;Reinforced&quot;</property>
                                                             <property name="close_button">1</property>
                                                             <property name="context_help"></property>
                                                             <property name="context_menu">1</property>

@@ -31,7 +31,7 @@
 #include <bitmaps.h>
 
 
-#include <i18n_utility.h> // For _HKI definition in eseries_help.h
+#include <i18n_utility.h> // For _HKI definition in iec60664_help.h
 wxString iec60664help =
 #include "iec60664_help.h"
 
@@ -52,6 +52,8 @@ PANEL_ELECTRICAL_SPACING_IEC60664::PANEL_ELECTRICAL_SPACING_IEC60664(
     m_panelHelp->SetPage( msg );
 
     m_creepageclearanceBitmap->SetBitmap( KiBitmap( BITMAPS::creepage_clearance ) );
+
+	Layout();
 }
 
 
@@ -111,8 +113,6 @@ void PANEL_ELECTRICAL_SPACING_IEC60664::LoadSettings( PCB_CALCULATOR_SETTINGS* a
 
 void PANEL_ELECTRICAL_SPACING_IEC60664::CalculateTransientImpulse()
 {
-    wxString              string = m_ratedVoltage->GetValue();
-    double                value = 0;
     IEC60664::OV_CATEGORY ovc;
 
     switch( m_OVCchoice->GetSelection() )
@@ -122,6 +122,9 @@ void PANEL_ELECTRICAL_SPACING_IEC60664::CalculateTransientImpulse()
     case 2: ovc = IEC60664::OV_CATEGORY::OV_III; break;
     default: ovc = IEC60664::OV_CATEGORY::OV_IV; break;
     }
+
+    wxString string = m_ratedVoltage->GetValue();
+    double   value = 0;
 
     if( string.ToDouble( &value ) )
     {
@@ -186,8 +189,6 @@ void PANEL_ELECTRICAL_SPACING_IEC60664::CalculateClearanceCreepage()
         && m_peakVoltage->GetValue().ToDouble( &peakV )
         && m_RMSVoltage->GetValue().ToDouble( &RMSV ) )
     {
-        wxString string;
-
         IEC60664 cal;
         cal.SetPollutionDegree( pd );
         cal.SetMaterialGroup( mg );
@@ -204,7 +205,7 @@ void PANEL_ELECTRICAL_SPACING_IEC60664::CalculateClearanceCreepage()
         double creepage = cal.GetCreepageDistance();
         double clearange = cal.GetClearanceDistance();
 
-        string = "";
+        wxString string;
 
         if( groove >= 0 )
             string << groove;
@@ -213,7 +214,7 @@ void PANEL_ELECTRICAL_SPACING_IEC60664::CalculateClearanceCreepage()
 
         m_minGrooveWidth->SetValue( string );
 
-        string = "";
+        string.Clear();
 
         if( creepage >= 0 )
             string << creepage;
@@ -222,7 +223,7 @@ void PANEL_ELECTRICAL_SPACING_IEC60664::CalculateClearanceCreepage()
 
         m_creepage->SetValue( string );
 
-        string = "";
+        string.Clear();
 
         if( clearange >= 0 )
             string << clearange;
