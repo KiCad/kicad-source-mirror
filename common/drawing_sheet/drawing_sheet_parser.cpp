@@ -24,8 +24,10 @@
  */
 
 #include <charconv>
+#include <wx/base64.h>
 #include <wx/ffile.h>
 #include <wx/log.h>
+
 #include <eda_item.h>
 #include <locale_io.h>
 #include <string_utils.h>
@@ -512,6 +514,33 @@ void DRAWING_SHEET_PARSER::parseBitmap( DS_DATA_ITEM_BITMAP * aItem )
             NeedRIGHT();
             break;
 
+        case T_data:
+        {
+            token = NextTok();
+
+            wxString data;
+
+            // Reserve 512K because most image files are going to be larger than the default
+            // 1K that wxString reserves.
+            data.reserve( 1 << 19 );
+
+            while( token != T_RIGHT )
+            {
+                if( !IsSymbol( token ) )
+                    Expecting( "base64 image data" );
+
+                data += FromUTF8();
+                token = NextTok();
+            }
+
+            wxMemoryBuffer buffer = wxBase64Decode( data );
+
+            if( !aItem->m_ImageBitmap->ReadImageFile( buffer ) )
+                THROW_IO_ERROR( _( "Failed to read image data." ) );
+
+            break;
+        }
+
         case T_pngdata:
             readPngdata( aItem );
             break;
@@ -556,7 +585,7 @@ void DRAWING_SHEET_PARSER::readPngdata( DS_DATA_ITEM_BITMAP * aItem )
     wxString msg;
     STRING_LINE_READER str_reader( tmp, wxT("Png kicad_wks data") );
 
-    if( ! aItem->m_ImageBitmap->LoadData( str_reader, msg ) )
+    if( ! aItem->m_ImageBitmap->LoadLegacyData( str_reader, msg ) )
         wxLogMessage(msg);
 }
 

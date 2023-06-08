@@ -35,6 +35,7 @@
 #include <drawing_sheet/ds_file_versions.h>
 #include <font/font.h>
 
+#include <wx/base64.h>
 #include <wx/msgdlg.h>
 
 using namespace DRAWINGSHEET_T;
@@ -417,16 +418,26 @@ void DS_DATA_MODEL_IO::format( DS_DATA_ITEM_BITMAP* aItem, int aNestLevel ) cons
         m_out->Print( 0, " (comment %s)\n", m_out->Quotew( aItem->m_Info ).c_str() );
 
     // Write image in png readable format
-    m_out->Print( aNestLevel, "(pngdata\n" );
-    wxArrayString pngStrings;
-    aItem->m_ImageBitmap->SaveData( pngStrings );
+    m_out->Print( aNestLevel, "(data" );
 
-    for( unsigned ii = 0; ii < pngStrings.GetCount(); ii++ )
-        m_out->Print( aNestLevel+1, "(data \"%s\")\n", TO_UTF8(pngStrings[ii]) );
+    wxString out = wxBase64Encode( aItem->m_ImageBitmap->GetImageDataBuffer() );
 
-    m_out->Print( aNestLevel+1, ")\n" );
+    // Apparently the MIME standard character width for base64 encoding is 76 (unconfirmed)
+    // so use it in a vain attempt to be standard like.
+#define MIME_BASE64_LENGTH 76
 
-    m_out->Print( aNestLevel, ")\n" );
+    size_t first = 0;
+
+    while( first < out.Length() )
+    {
+        m_out->Print( 0, "\n" );
+        m_out->Print( aNestLevel + 1, "%s", TO_UTF8( out( first, MIME_BASE64_LENGTH ) ) );
+        first += MIME_BASE64_LENGTH;
+    }
+
+    m_out->Print( 0, "\n" );
+    m_out->Print( aNestLevel, ")\n" );  // Closes data token.
+    m_out->Print( aNestLevel, ")\n" );  // Closes bitmap token.
 }
 
 

@@ -676,7 +676,7 @@ SCH_BITMAP* SCH_LEGACY_PLUGIN::loadBitmap( LINE_READER& aReader )
         }
         else if( strCompare( "Data", line, &line ) )
         {
-            wxMemoryOutputStream stream;
+            wxMemoryBuffer buffer;
 
             while( line )
             {
@@ -688,12 +688,7 @@ SCH_BITMAP* SCH_LEGACY_PLUGIN::loadBitmap( LINE_READER& aReader )
                 if( strCompare( "EndData", line ) )
                 {
                     // all the PNG date is read.
-                    // We expect here m_image and m_bitmap are void
-                    wxImage* image = new wxImage();
-                    wxMemoryInputStream istream( stream );
-                    image->LoadFile( istream, wxBITMAP_TYPE_PNG );
-
-                    bitmap->SetImage( image );
+                    bitmap->GetImage()->ReadImageFile( buffer );
 
                     // Legacy file formats assumed 300 image PPI at load.
                     BITMAP_BASE* bitmapImage = bitmap->GetImage();
@@ -716,7 +711,7 @@ SCH_BITMAP* SCH_LEGACY_PLUGIN::loadBitmap( LINE_READER& aReader )
                     int value = 0;
 
                     if( sscanf( line, "%X", &value ) == 1 )
-                        stream.PutC( (char) value );
+                        buffer.AppendByte( (char) value );
                     else
                         THROW_IO_ERROR( "invalid PNG data" );
                 }

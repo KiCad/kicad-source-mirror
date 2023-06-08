@@ -69,8 +69,6 @@ public:
 
     const wxImage* GetOriginalImageData() const { return m_originalImage; }
 
-    void SetImage( wxImage* aImage );
-
     double GetScale() const { return m_scale; }
     void SetScale( double aScale ) { m_scale = aScale; }
 
@@ -159,25 +157,27 @@ public:
     bool ReadImageFile( wxInputStream& aInStream );
 
     /**
-     * Write the bitmap data to \a aFile.
+     * Reads and stores in memory an image file.
      *
-     * The file format is png, in hexadecimal form.  If the hexadecimal data is converted to
-     * binary it gives exactly a .png image data.
+     * Initialize the bitmap format used to draw this item.
      *
-     * @param aFile The FILE to write to.
-     * @return true if success writing else false.
+     * Supported images formats are format supported by wxImage if all handlers are loaded.
+     * By default, .png, .jpeg are always loaded.
+     *
+     * @param aBuf a memory buffer containing the file data.
+     * @return true if success reading else false.
      */
-    bool SaveData( FILE* aFile ) const;
+    bool ReadImageFile( wxMemoryBuffer& aBuf );
 
     /**
-     * Write the bitmap data to an array string.
-     *
-     * The format is png, in Hexadecimal form.  If the hexadecimal data is converted to binary
-     * it gives exactly a .png image data.
-     *
-     * @param aPngStrings The wxArrayString to write to.
-     */
-    void SaveData( wxArrayString& aPngStrings ) const;
+    * Write the bitmap data to \a aOutStream.
+    *
+    * This writes binary data, not hexadecimal strings
+    *
+    * @param aOutStream The output stream to write to.
+    * @return true if success writing else false.
+    */
+    bool SaveImageData( wxOutputStream& aOutStream ) const;
 
     /**
      * Load an image data saved by #SaveData.
@@ -189,7 +189,7 @@ public:
      *                  png bitmap data.
      * @return true if the bitmap loaded successfully.
      */
-    bool LoadData( LINE_READER& aLine, wxString& aErrorMsg );
+    bool LoadLegacyData( LINE_READER& aLine, wxString& aErrorMsg );
 
     /**
      * Mirror image vertically (i.e. relative to its horizontal X axis ) or horizontally (i.e
@@ -234,6 +234,16 @@ public:
      */
     void SetImageType( wxBitmapType aType ) { m_imageType = aType; }
 
+    /**
+     * @return the image data buffer.
+     */
+    const wxMemoryBuffer& GetImageDataBuffer() const { return m_imageData; }
+
+    /**
+     * Resets the image data buffer using the current image data.
+     */
+    void UpdateImageDataBuffer();
+
 private:
     /*
      * Rebuild the internal bitmap used to draw/plot image.
@@ -248,8 +258,10 @@ private:
 
     double    m_scale;              // The scaling factor of the bitmap
                                     // With m_pixelSizeIu, controls the actual draw size
-    wxImage*  m_image;              // the raw image data
-    wxBitmapType m_imageType;       // the image type (png, jpeg, etc.)
+    wxMemoryBuffer m_imageData;     // The original image data, in its original format
+    wxBitmapType   m_imageType;     // the image type (png, jpeg, etc.)
+
+    wxImage*  m_image;              // the raw, uncompressed image data
     wxImage*  m_originalImage;      // Raw image data, not transformed by rotate/mirror
     wxBitmap* m_bitmap;             // the bitmap used to draw/plot image
     double    m_pixelSizeIu;        // The scaling factor of the bitmap

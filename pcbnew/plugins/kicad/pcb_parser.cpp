@@ -2967,9 +2967,9 @@ PCB_BITMAP* PCB_PARSER::parsePCB_BITMAP( BOARD_ITEM* aParent )
 
             wxString data;
 
-            // Reserve 128K because most image files are going to be larger than the default
+            // Reserve 512K because most image files are going to be larger than the default
             // 1K that wxString reserves.
-            data.reserve( 1 << 17 );
+            data.reserve( 1 << 19 );
 
             while( token != T_RIGHT )
             {
@@ -2981,12 +2981,10 @@ PCB_BITMAP* PCB_PARSER::parsePCB_BITMAP( BOARD_ITEM* aParent )
             }
 
             wxMemoryBuffer       buffer = wxBase64Decode( data );
-            wxMemoryOutputStream stream( buffer.GetData(), buffer.GetBufSize() );
-            wxImage*             image = new wxImage();
-            wxMemoryInputStream  istream( stream );
-            image->LoadFile( istream );
-            bitmap->SetImage( image );
-            bitmap->MutableImage()->SetImageType( image->GetType() );
+
+            if( !bitmap->ReadImageFile( buffer ) )
+                THROW_IO_ERROR( _( "Failed to read image data." ) );
+
             break;
         }
 

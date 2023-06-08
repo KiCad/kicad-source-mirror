@@ -3056,11 +3056,10 @@ SCH_BITMAP* SCH_SEXPR_PARSER::parseImage()
             }
 
             wxMemoryBuffer       buffer = wxBase64Decode( data );
-            wxMemoryOutputStream stream( buffer.GetData(), buffer.GetBufSize() );
-            wxImage*             image = new wxImage();
-            wxMemoryInputStream  istream( stream );
-            image->LoadFile( istream, wxBITMAP_TYPE_PNG );
-            bitmap->SetImage( image );
+
+            if( !bitmap->GetImage()->ReadImageFile( buffer ) )
+                THROW_IO_ERROR( _( "Failed to read image data." ) );
+
             break;
         }
 

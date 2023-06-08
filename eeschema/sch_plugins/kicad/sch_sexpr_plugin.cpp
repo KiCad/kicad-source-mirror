@@ -952,13 +952,7 @@ void SCH_SEXPR_PLUGIN::saveBitmap( SCH_BITMAP* aBitmap, int aNestLevel )
 
     m_out->Print( aNestLevel + 1, "(data" );
 
-    wxMemoryOutputStream stream;
-
-    image->SaveFile( stream, wxBITMAP_TYPE_PNG );
-
-    // Write binary data in hexadecimal form (ASCII)
-    wxStreamBuffer* buffer = stream.GetOutputStreamBuffer();
-    wxString out = wxBase64Encode( buffer->GetBufferStart(), buffer->GetBufferSize() );
+    wxString out = wxBase64Encode( aBitmap->GetImage()->GetImageDataBuffer() );
 
     // Apparently the MIME standard character width for base64 encoding is 76 (unconfirmed)
     // so use it in a vein attempt to be standard like.

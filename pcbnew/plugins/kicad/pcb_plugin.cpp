@@ -1040,19 +1040,7 @@ void PCB_PLUGIN::format( const PCB_BITMAP* aBitmap, int aNestLevel ) const
 
     m_out->Print( aNestLevel + 1, "(data" );
 
-    wxMemoryOutputStream stream;
-    wxBitmapType type = wxBITMAP_TYPE_PNG;
-
-    // Save the image in the same format as the original file
-    // if it was a JPEG.  Otherwise, save it as a PNG.
-    if( aBitmap->GetImage()->GetImageType() == wxBITMAP_TYPE_JPEG )
-        type = wxBITMAP_TYPE_JPEG;
-
-    image->SaveFile( stream, type );
-
-    // Write binary data in hexadecimal form (ASCII)
-    wxStreamBuffer* buffer = stream.GetOutputStreamBuffer();
-    wxString out = wxBase64Encode( buffer->GetBufferStart(), buffer->GetBufferSize() );
+    wxString out = wxBase64Encode( aBitmap->GetImage()->GetImageDataBuffer() );
 
     // Apparently the MIME standard character width for base64 encoding is 76 (unconfirmed)
     // so use it in a vain attempt to be standard like.

@@ -30,6 +30,10 @@
 #include <richio.h>
 #include <wx/bitmap.h>    // for wxBitmap
 #include <wx/mstream.h>
+#include <wx/stream.h>    // for wxInputStream, wxOutputStream
+#include <wx/string.h>    // for wxString
+#include <wx/wfstream.h>  // for wxFileInputStream
+
 
 
 BITMAP_BASE::BITMAP_BASE( const VECTOR2I& pos )
@@ -65,19 +69,10 @@ BITMAP_BASE::BITMAP_BASE( const BITMAP_BASE& aSchBitmap )
         m_image   = new wxImage( *aSchBitmap.m_image );
         m_bitmap  = new wxBitmap( *m_image );
         m_originalImage = new wxImage( *aSchBitmap.m_originalImage );
+        m_imageType = aSchBitmap.m_imageType;
+        m_imageData = aSchBitmap.m_imageData;
         m_imageId = aSchBitmap.m_imageId;
     }
-}
-
-
-void BITMAP_BASE::SetImage( wxImage* aImage )
-{
-    delete m_image;
-    m_image = aImage;
-    delete m_originalImage;
-    m_originalImage = new wxImage( *aImage );
-    rebuildBitmap();
-    updatePPI();
 }
 
 
@@ -90,6 +85,7 @@ void BITMAP_BASE::rebuildBitmap( bool aResetID )
 
     if( aResetID )
         m_imageId = KIID();
+
 }
 
 
@@ -120,42 +116,34 @@ void BITMAP_BASE::ImportData( BITMAP_BASE* aItem )
     m_isMirroredX = aItem->m_isMirroredX;
     m_isMirroredY = aItem->m_isMirroredY;
     m_rotation = aItem->m_rotation;
+    m_imageType = aItem->m_imageType;
+    m_imageData = aItem->m_imageData;
 }
 
 
 bool BITMAP_BASE::ReadImageFile( wxInputStream& aInStream )
 {
+    // Store the original image data in m_imageData
+    size_t dataSize = aInStream.GetLength();
+    m_imageData.SetBufSize( dataSize );
+    aInStream.Read( m_imageData.GetData(), dataSize );
+    m_imageData.SetDataLen( dataSize );
+
     std::unique_ptr<wxImage> new_image = std::make_unique<wxImage>();
 
-    if( !new_image->LoadFile( aInStream ) )
+    // Load the image from the stream into new_image
+    wxMemoryInputStream mem_stream( m_imageData.GetData(), dataSize );
+    if( !new_image->LoadFile( mem_stream ) )
         return false;
 
     delete m_image;
-    m_image = new_image.release();
-    delete m_originalImage;
-    m_originalImage = new wxImage( *m_image );
-    rebuildBitmap();
-    updatePPI();
-
-    return true;
-}
-
-
-bool BITMAP_BASE::ReadImageFile( const wxString& aFullFilename )
-{
-    wxImage* new_image = new wxImage();
-
-    if( !new_image->LoadFile( aFullFilename ) )
-    {
-        delete new_image;
-        return false;
-    }
-
     m_imageType = new_image->GetType();
-    delete m_image;
-    m_image  = new_image;
+    m_image = new_image.release();
+
+    // Create a new wxImage object from m_image
     delete m_originalImage;
     m_originalImage = new wxImage( *m_image );
+
     rebuildBitmap();
     updatePPI();
 
@@ -163,78 +151,69 @@ bool BITMAP_BASE::ReadImageFile( const wxString& aFullFilename )
 }
 
 
-bool BITMAP_BASE::SaveData( FILE* aFile ) const
+bool BITMAP_BASE::ReadImageFile( wxMemoryBuffer& aBuf )
 {
-    if( m_image )
+    // Store the original image data in m_imageData
+    m_imageData = aBuf;
+
+    std::unique_ptr<wxImage> new_image = std::make_unique<wxImage>();
+
+    // Load the image from the buffer into new_image
+    wxMemoryInputStream mem_stream( m_imageData.GetData(), m_imageData.GetBufSize() );
+
+    if( !new_image->LoadFile( mem_stream ) )
+        return false;
+
+    delete m_image;
+    m_imageType = new_image->GetType();
+    m_image = new_image.release();
+
+    // Create a new wxImage object from m_image
+    delete m_originalImage;
+    m_originalImage = new wxImage( *m_image );
+
+    rebuildBitmap();
+    updatePPI();
+
+    return true;
+}
+
+
+bool BITMAP_BASE::ReadImageFile(const wxString& aFullFilename)
+{
+    wxFileInputStream file_stream(aFullFilename);
+
+    // Check if the file could be opened successfully
+    if (!file_stream.IsOk())
+        return false;
+
+    return ReadImageFile(file_stream);
+}
+
+
+bool BITMAP_BASE::SaveImageData( wxOutputStream& aOutStream ) const
+{
+    if( m_imageData.IsEmpty() )
     {
-        wxMemoryOutputStream stream;
+        // If m_imageData is empty, use wxImage::Save() method to write m_image contents to the stream.
+        wxBitmapType type = m_imageType == wxBITMAP_TYPE_JPEG ? wxBITMAP_TYPE_JPEG : wxBITMAP_TYPE_PNG;
 
-        if( m_imageType == wxBITMAP_TYPE_JPEG )
-            m_image->SaveFile( stream, wxBITMAP_TYPE_JPEG );
-        else
-            // Save as PNG (default
-            m_image->SaveFile( stream, wxBITMAP_TYPE_PNG );
-
-        // Write binary data in hexadecimal form (ASCII)
-        wxStreamBuffer* buffer = stream.GetOutputStreamBuffer();
-        char*           begin  = (char*) buffer->GetBufferStart();
-
-        for( int ii = 0; begin < buffer->GetBufferEnd(); begin++, ii++ )
+        if( !m_image->SaveFile( aOutStream, type ) )
         {
-            if( ii >= 32 )
-            {
-                ii = 0;
-
-                if( fprintf( aFile, "\n" ) == EOF )
-                    return false;
-            }
-
-            if( fprintf( aFile, "%2.2X ", *begin & 0xFF ) == EOF )
-                return false;
+            return false;
         }
+    }
+    else
+    {
+        // Write the contents of m_imageData to the stream.
+        aOutStream.Write( m_imageData.GetData(), m_imageData.GetBufSize() );
     }
 
     return true;
 }
 
 
-void BITMAP_BASE::SaveData( wxArrayString& aPngStrings ) const
-{
-    if( m_image )
-    {
-        wxMemoryOutputStream stream;
-
-        if( m_imageType == wxBITMAP_TYPE_JPEG )
-            m_image->SaveFile( stream, wxBITMAP_TYPE_JPEG );
-        else
-            // Save as PNG (default
-            m_image->SaveFile( stream, wxBITMAP_TYPE_PNG );
-
-        // Write binary data in hexadecimal form (ASCII)
-        wxStreamBuffer* buffer = stream.GetOutputStreamBuffer();
-        char*           begin  = (char*) buffer->GetBufferStart();
-        wxString        line;
-
-        for( int ii = 0; begin < buffer->GetBufferEnd(); begin++, ii++ )
-        {
-            if( ii >= 32 )
-            {
-                ii = 0;
-                aPngStrings.Add( line );
-                line.Empty();
-            }
-
-            line << wxString::Format( wxT( "%2.2X " ), *begin & 0xFF );
-        }
-
-        // Add last line:
-        if( !line.IsEmpty() )
-            aPngStrings.Add( line );
-    }
-}
-
-
-bool BITMAP_BASE::LoadData( LINE_READER& aLine, wxString& aErrorMsg )
+bool BITMAP_BASE::LoadLegacyData( LINE_READER& aLine, wxString& aErrorMsg )
 {
     wxMemoryOutputStream stream;
     char* line;
@@ -258,6 +237,7 @@ bool BITMAP_BASE::LoadData( LINE_READER& aLine, wxString& aErrorMsg )
             m_image->LoadFile( istream, wxBITMAP_TYPE_ANY );
             m_bitmap = new wxBitmap( *m_image );
             m_originalImage = new wxImage( *m_image );
+            UpdateImageDataBuffer();
             break;
         }
 
@@ -450,6 +430,7 @@ void BITMAP_BASE::Mirror( bool aVertically )
             m_isMirroredX = !m_isMirroredX;
 
         rebuildBitmap( false );
+        UpdateImageDataBuffer();
     }
 }
 
@@ -474,6 +455,7 @@ void BITMAP_BASE::Rotate( bool aRotateCCW )
 
         m_rotation += ( aRotateCCW ? -ANGLE_90 : ANGLE_90 );
         rebuildBitmap( false );
+        UpdateImageDataBuffer();
     }
 }
 
@@ -485,6 +467,7 @@ void BITMAP_BASE::ConvertToGreyscale()
         *m_image  = m_image->ConvertToGreyscale();
         *m_originalImage = m_originalImage->ConvertToGreyscale();
         rebuildBitmap();
+        UpdateImageDataBuffer();
     }
 }
 
@@ -501,4 +484,21 @@ void BITMAP_BASE::PlotImage( PLOTTER*       aPlotter, const VECTOR2I& aPos,
     aPlotter->SetColor( aDefaultColor );
     aPlotter->SetCurrentLineWidth( aDefaultPensize );
     aPlotter->PlotImage( *m_image, aPos, GetScalingFactor() );
+}
+
+
+void BITMAP_BASE::UpdateImageDataBuffer()
+{
+    if( m_image )
+    {
+        wxMemoryOutputStream stream;
+        wxBitmapType type = m_imageType == wxBITMAP_TYPE_JPEG ? wxBITMAP_TYPE_JPEG : wxBITMAP_TYPE_PNG;
+
+        if( !m_image->SaveFile( stream, type ) )
+            return;
+
+        m_imageData.GetWriteBuf( stream.GetLength() );
+        stream.CopyTo( m_imageData.GetData(), stream.GetLength() );
+        m_imageData.SetDataLen( stream.GetLength() );
+    }
 }

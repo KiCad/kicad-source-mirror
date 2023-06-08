@@ -92,13 +92,6 @@ bool SCH_BITMAP::ReadImageFile( const wxString& aFullFilename )
 }
 
 
-void SCH_BITMAP::SetImage( wxImage* aImage )
-{
-    m_bitmapBase->SetImage( aImage );
-    m_bitmapBase->SetPixelSizeIu( 254000.0 / m_bitmapBase->GetPPI() );
-}
-
-
 EDA_ITEM* SCH_BITMAP::Clone() const
 {
     return new SCH_BITMAP( *this );
