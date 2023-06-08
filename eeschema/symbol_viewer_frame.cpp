@@ -884,8 +884,8 @@ void SYMBOL_VIEWER_FRAME::ClickOnLibList( wxCommandEvent& event )
 void SYMBOL_VIEWER_FRAME::SetSelectedLibrary( const wxString& aLibraryName,
                                               const wxString& aSubLibName )
 {
-    if( m_currentSymbol.GetUniStringLibNickname() == aLibraryName &&
-        wxString( m_currentSymbol.GetSubLibraryName() ) == aSubLibName )
+    if( m_currentSymbol.GetUniStringLibNickname() == aLibraryName
+        && wxString( m_currentSymbol.GetSubLibraryName().wx_str() ) == aSubLibName )
         return;
 
     m_currentSymbol.SetLibNickname( aLibraryName );

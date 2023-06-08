@@ -243,7 +243,7 @@ void CADSTAR_PCB_ARCHIVE_PLUGIN::ensureLoadedLibrary( const wxString& aLibraryPa
 
     for( std::unique_ptr<FOOTPRINT>& fp : footprints )
     {
-        footprintMap.insert( { fp->GetFPID().GetLibItemName(), std::move( fp ) } );
+        footprintMap.insert( { fp->GetFPID().GetLibItemName().wx_str(), std::move( fp ) } );
     }
 
     m_cache.insert( { aLibraryPath, std::move( footprintMap ) } );
