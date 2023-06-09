@@ -2364,12 +2364,36 @@ wxTreeCtrl* SCH_EDIT_FRAME::createHighlightedNetNavigator()
 }
 
 
-void SCH_EDIT_FRAME::SetHighlightedConnection( const wxString& aConnection )
+void SCH_EDIT_FRAME::SetHighlightedConnection( const wxString& aConnection,
+                                               const NET_NAVIGATOR_ITEM_DATA* aSelection )
 {
     bool refreshNetNavigator = aConnection != m_highlightedConn;
 
     m_highlightedConn = aConnection;
 
     if( refreshNetNavigator )
-        RefreshNetNavigator();
+        RefreshNetNavigator( aSelection );
+}
+
+
+void SCH_EDIT_FRAME::unitsChangeRefresh()
+{
+    if( m_netNavigator && !m_highlightedConn.IsEmpty() )
+    {
+        NET_NAVIGATOR_ITEM_DATA itemData;
+        wxTreeItemId selection = m_netNavigator->GetSelection();
+        bool refreshSelection = selection.IsOk() && ( selection != m_netNavigator->GetRootItem() );
+
+        if( refreshSelection )
+        {
+            NET_NAVIGATOR_ITEM_DATA* tmp =
+                dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>( m_netNavigator->GetItemData( selection ) );
+
+            wxCHECK( tmp, /* void */ );
+            itemData = *tmp;
+        }
+
+        m_netNavigator->DeleteAllItems();
+        RefreshNetNavigator( refreshSelection ? &itemData : nullptr );
+    }
 }

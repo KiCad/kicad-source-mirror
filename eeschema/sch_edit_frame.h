@@ -61,7 +61,7 @@ class DIALOG_SCH_FIND;
 class wxFindReplaceData;
 class RESCUER;
 class HIERARCHY_PANE;
-class NET_NAVIGATOR_ITEM_DATA;
+
 
 // @todo Move this to transform alone with all of the transform manipulation code.
 /// enum used in RotationMiroir()
@@ -96,6 +96,48 @@ enum SCH_CLEANUP_FLAGS
 
 
 wxDECLARE_EVENT( EDA_EVT_SCHEMATIC_CHANGED, wxCommandEvent );
+
+
+/**
+ * Tree view item data for the net navigator.
+ */
+class NET_NAVIGATOR_ITEM_DATA : public wxTreeItemData
+{
+public:
+    NET_NAVIGATOR_ITEM_DATA( const SCH_SHEET_PATH& aSheetPath, const SCH_ITEM* aItem ) :
+        m_sheetPath( aSheetPath ),
+        m_item( aItem )
+    {
+    }
+
+    NET_NAVIGATOR_ITEM_DATA() :
+        m_item( nullptr )
+    {
+    }
+
+    SCH_SHEET_PATH& GetSheetPath() { return m_sheetPath; }
+    const SCH_ITEM* GetItem() const { return m_item; }
+
+    bool operator==( const NET_NAVIGATOR_ITEM_DATA& aRhs ) const
+    {
+        return ( m_sheetPath == aRhs.m_sheetPath ) && ( m_item == aRhs.m_item );
+    }
+
+    NET_NAVIGATOR_ITEM_DATA& operator=( const NET_NAVIGATOR_ITEM_DATA& aItemData )
+    {
+        if( this == &aItemData )
+            return *this;
+
+        m_sheetPath = aItemData.m_sheetPath;
+        m_item = aItemData.m_item;
+
+        return *this;
+    }
+
+private:
+    SCH_SHEET_PATH m_sheetPath;
+    const SCH_ITEM* m_item;
+};
 
 
 /**
@@ -312,7 +354,8 @@ public:
         return m_highlightedConn;
     }
 
-    void SetHighlightedConnection( const wxString& aConnection );
+    void SetHighlightedConnection( const wxString& aConnection,
+                                   const NET_NAVIGATOR_ITEM_DATA* aSelection = nullptr );
 
     /**
      * Check if we are ready to write a netlist file for the current schematic.
@@ -864,10 +907,12 @@ public:
         return wxS( "NetNavigator" );
     }
 
-    void RefreshNetNavigator();
+    void RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelection = nullptr );
 
     void MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemId aParentId,
                                const NET_NAVIGATOR_ITEM_DATA* aSelection = nullptr );
+
+    void SelectNetNavigatorItem( const NET_NAVIGATOR_ITEM_DATA* aSelection = nullptr );
 
     void ToggleNetNavigator();
 
@@ -895,6 +940,8 @@ protected:
     void onCloseSymbolDiffDialog( wxCommandEvent& aEvent );
 
     void onCloseErcDialog( wxCommandEvent& aEvent );
+
+    void unitsChangeRefresh() override;
 
 private:
     // Called when resizing the Hierarchy Navigator panel

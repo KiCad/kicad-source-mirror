@@ -24,49 +24,123 @@
 #include <tool/tool_manager.h>
 #include <kiface_base.h>
 #include <sch_edit_frame.h>
+#include <sch_line.h>
+#include <sch_junction.h>
+#include <sch_sheet_pin.h>
 #include <schematic.h>
 #include <connection_graph.h>
 #include <widgets/wx_aui_utils.h>
 #include <tools/ee_actions.h>
 
 
-class NET_NAVIGATOR_ITEM_DATA : public wxTreeItemData
+static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
+                                         const SCH_SHEET_PATH& aSheetPath,
+                                         UNITS_PROVIDER* aUnitsProvider )
 {
-public:
-    NET_NAVIGATOR_ITEM_DATA( const SCH_SHEET_PATH& aSheetPath, const SCH_ITEM* aItem ) :
-        m_sheetPath( aSheetPath ),
-        m_item( aItem )
+    wxString retv;
+
+    wxCHECK( aItem && aUnitsProvider, retv );
+
+    switch( aItem->Type() )
     {
+    case SCH_LINE_T:
+    {
+        const SCH_LINE* line = static_cast<const SCH_LINE*>( aItem );
+
+        wxCHECK( line, retv );
+
+        if( aItem->GetLayer() == LAYER_WIRE )
+        {
+            retv.Printf( _( "Wire from %s, %s to %s, %s" ),
+                         aUnitsProvider->MessageTextFromValue( line->GetStartPoint().x ),
+                         aUnitsProvider->MessageTextFromValue( line->GetStartPoint().y ),
+                         aUnitsProvider->MessageTextFromValue( line->GetEndPoint().x ),
+                         aUnitsProvider->MessageTextFromValue( line->GetEndPoint().y ) );
+        }
+        else if( aItem->GetLayer() == LAYER_BUS )
+        {
+            retv.Printf( _( "Bus from %s, %s to %s, %s" ),
+                         aUnitsProvider->MessageTextFromValue( line->GetStartPoint().x ),
+                         aUnitsProvider->MessageTextFromValue( line->GetStartPoint().y ),
+                         aUnitsProvider->MessageTextFromValue( line->GetEndPoint().x ),
+                         aUnitsProvider->MessageTextFromValue( line->GetEndPoint().y ) );
+        }
+        else
+        {
+            retv = _( "Graphic line not connectable" );
+        }
+
+        break;
+    }
+    case SCH_PIN_T:
+    {
+        const SCH_PIN* pin = static_cast<const SCH_PIN*>( aItem );
+        wxCHECK( pin, retv );
+
+        SCH_SYMBOL* symbol = pin->GetParentSymbol();
+        wxCHECK( symbol, retv );
+
+        retv.Printf( _( "Symbol %s pin %s" ), symbol->GetRef( &aSheetPath, true ),
+                     pin->GetNumber() );
+        break;
+    }
+    case SCH_SHEET_PIN_T:
+    {
+        const SCH_SHEET_PIN* pin = static_cast<const SCH_SHEET_PIN*>( aItem );
+        wxCHECK( pin, retv );
+
+        SCH_SHEET* sheet = pin->GetParent();
+        wxCHECK( sheet, retv );
+
+        retv.Printf( _( "Sheet %s pin %s" ), sheet->GetName(), pin->GetText() );
+        break;
+    }
+    case SCH_LABEL_T:
+    {
+        const SCH_LABEL* label = static_cast<const SCH_LABEL*>( aItem );
+        wxCHECK( label, retv );
+
+        retv.Printf( _( "Label %s at %s, %s" ), label->GetText(),
+                     aUnitsProvider->MessageTextFromValue( label->GetPosition().x ),
+                     aUnitsProvider->MessageTextFromValue( label->GetPosition().y ) );
+        break;
+    }
+    case SCH_GLOBAL_LABEL_T:
+    {
+        const SCH_GLOBALLABEL* label = static_cast<const SCH_GLOBALLABEL*>( aItem );
+        wxCHECK( label, retv );
+
+        retv.Printf( _( "Global label %s at %s, %s" ), label->GetText(),
+                     aUnitsProvider->MessageTextFromValue( label->GetPosition().x ),
+                     aUnitsProvider->MessageTextFromValue( label->GetPosition().y ) );
+        break;
+    }
+    case SCH_HIER_LABEL_T:
+    {
+        const SCH_HIERLABEL* label = static_cast<const SCH_HIERLABEL*>( aItem );
+        wxCHECK( label, retv );
+
+        retv.Printf( _( "Hierarchical label %s at %s, %s" ), label->GetText(),
+                     aUnitsProvider->MessageTextFromValue( label->GetPosition().x ),
+                     aUnitsProvider->MessageTextFromValue( label->GetPosition().y ) );
+        break;
+    }
+    case SCH_JUNCTION_T:
+    {
+        const SCH_JUNCTION* junction = static_cast<const SCH_JUNCTION*>( aItem );
+        wxCHECK( junction, retv );
+
+        retv.Printf( _( "Junction at %s, %s" ),
+                     aUnitsProvider->MessageTextFromValue( junction->GetPosition().x ),
+                     aUnitsProvider->MessageTextFromValue( junction->GetPosition().y ) );
+        break;
+    }
+    default:
+        retv.Printf( _( "Unhandled item type %d" ), aItem->Type() );
     }
 
-    NET_NAVIGATOR_ITEM_DATA() :
-        m_item( nullptr )
-    {
-    }
-
-    SCH_SHEET_PATH& GetSheetPath() { return m_sheetPath; }
-    const SCH_ITEM* GetItem() const { return m_item; }
-
-    bool operator==( const NET_NAVIGATOR_ITEM_DATA& aRhs ) const
-    {
-        return ( m_sheetPath == aRhs.m_sheetPath ) && ( m_item == aRhs.m_item );
-    }
-
-    NET_NAVIGATOR_ITEM_DATA& operator=( const NET_NAVIGATOR_ITEM_DATA& aItemData )
-    {
-        if( this == &aItemData )
-            return *this;
-
-        m_sheetPath = aItemData.m_sheetPath;
-        m_item = aItemData.m_item;
-
-        return *this;
-    }
-
-private:
-    SCH_SHEET_PATH m_sheetPath;
-    const SCH_ITEM* m_item;
-};
+    return retv;
+}
 
 
 void SCH_EDIT_FRAME::MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemId aParentId,
@@ -107,26 +181,31 @@ void SCH_EDIT_FRAME::MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemI
 
         for( const SCH_ITEM* item : subGraph->GetItems() )
         {
+            SCH_ITEM_SET& connectedItems = const_cast<SCH_ITEM*>( item )->ConnectedItems( sheetPath );
+            wxLogDebug( wxS( "Item \"%s\" has %zu connected items." ),
+                        item->GetItemDescription( this ), connectedItems.size() );
+
             itemData = new NET_NAVIGATOR_ITEM_DATA( sheetPath, item );
-            wxTreeItemId id = m_netNavigator->AppendItem( sheetId, item->GetItemDescription( this ),
+            wxTreeItemId id = m_netNavigator->AppendItem( sheetId,
+                                                          GetNetNavigatorItemText( item, sheetPath,
+                                                                                   this ),
                                                           -1, -1, itemData );
 
             if( aSelection && *aSelection == *itemData )
             {
                 expandId = sheetId;
+                m_netNavigator->EnsureVisible( id );
                 m_netNavigator->SelectItem( id );
             }
         }
     }
 
-    if( expandId != m_netNavigator->GetRootItem() )
+    if( !aSelection )
         m_netNavigator->Expand( aParentId );
-
-    m_netNavigator->Expand( expandId );
 }
 
 
-void SCH_EDIT_FRAME::RefreshNetNavigator()
+void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelection )
 {
     wxCHECK( m_netNavigator, /* void */ );
 
@@ -170,7 +249,55 @@ void SCH_EDIT_FRAME::RefreshNetNavigator()
     {
         wxTreeItemId rootId = m_netNavigator->AddRoot( m_highlightedConn, 0 );
 
-        MakeNetNavigatorNode( m_highlightedConn, rootId );
+        MakeNetNavigatorNode( m_highlightedConn, rootId, aSelection );
+    }
+}
+
+
+void SCH_EDIT_FRAME::SelectNetNavigatorItem( const NET_NAVIGATOR_ITEM_DATA* aSelection )
+{
+    wxCHECK( m_netNavigator, /* void */ );
+
+    // Maybe in the future we can do something like collapse the tree for an empty selection.
+    // For now, leave the tree selection in its current state.
+    if( !aSelection )
+        return;
+
+    wxTreeItemIdValue sheetCookie;
+    NET_NAVIGATOR_ITEM_DATA* itemData = nullptr;
+    wxTreeItemId rootId = m_netNavigator->GetRootItem();
+    wxTreeItemId sheetId = m_netNavigator->GetFirstChild( rootId, sheetCookie );
+
+    while( sheetId.IsOk() )
+    {
+        if( m_netNavigator->ItemHasChildren( sheetId ) )
+        {
+            wxTreeItemIdValue itemCookie;
+            wxTreeItemId itemId = m_netNavigator->GetFirstChild( sheetId, itemCookie );
+
+            while( itemId.IsOk() )
+            {
+                itemData = dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>( m_netNavigator->GetItemData( itemId ) );
+
+                wxCHECK2( itemData, continue );
+
+                if( *itemData == *aSelection )
+                {
+                    if( !m_netNavigator->IsVisible( itemId ) )
+                    {
+                        m_netNavigator->CollapseAll();
+                        m_netNavigator->EnsureVisible( itemId );
+                    }
+
+                    m_netNavigator->SelectItem( itemId );
+                    return;
+                }
+
+                itemId = m_netNavigator->GetNextSibling( itemId );
+            }
+
+            sheetId = m_netNavigator->GetNextSibling( sheetId );
+        }
     }
 }
 
@@ -200,6 +327,18 @@ void SCH_EDIT_FRAME::onNetNavigatorSelection( wxTreeEvent& aEvent )
     if( m_netNavigator->GetItemParent( id ) != m_netNavigator->GetRootItem()
       && itemData->GetItem() )
     {
+        // Make sure we didn't remove the item and/or the screen it resides on before we access it.
+        const SCH_ITEM* item = itemData->GetItem();
+
+        // Don't search for child items in screen r-tree.
+        item = ( ( item->Type() == SCH_SHEET_PIN_T ) || ( item->Type() == SCH_PIN_T ) ) ?
+               static_cast<const SCH_ITEM*>( item->GetParent() ) : item;
+
+        const SCH_SCREEN* screen = itemData->GetSheetPath().LastScreen();
+
+        wxCHECK( screen, /* void */ );
+        wxCHECK( screen->Items().contains( item, true ), /* void */ );
+
         FocusOnLocation( itemData->GetItem()->GetBoundingBox().Centre() );
     }
 

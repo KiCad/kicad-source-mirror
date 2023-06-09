@@ -417,6 +417,16 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                     collector[ 0 ]->DoHypertextAction( m_frame );
                     selCancelled = true;
                 }
+                else if( collector[0]->IsBrightened() )
+                {
+                    if( SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
+                    {
+                        NET_NAVIGATOR_ITEM_DATA itemData( schframe->GetCurrentSheet(),
+                                                          collector[0] );
+
+                        schframe->SelectNetNavigatorItem( &itemData );
+                    }
+                }
             }
 
             if( !selCancelled )

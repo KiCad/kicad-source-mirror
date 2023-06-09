@@ -760,6 +760,7 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
     EE_SELECTION_TOOL*  selTool       = aToolMgr->GetTool<EE_SELECTION_TOOL>();
     SCH_EDITOR_CONTROL* editorControl = aToolMgr->GetTool<SCH_EDITOR_CONTROL>();
     SCH_CONNECTION*     conn          = nullptr;
+    SCH_ITEM*           item          = nullptr;
     bool                retVal        = true;
 
     if( aPosition != CLEAR )
@@ -773,7 +774,7 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
         }
         else
         {
-            SCH_ITEM*   item   = static_cast<SCH_ITEM*>( selTool->GetNode( aPosition ) );
+            item   = static_cast<SCH_ITEM*>( selTool->GetNode( aPosition ) );
             SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item );
 
             if( item )
@@ -811,8 +812,9 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
     }
     else
     {
+        NET_NAVIGATOR_ITEM_DATA itemData( editFrame->GetCurrentSheet(), item );
         editFrame->SetCrossProbeConnection( conn );
-        editFrame->SetHighlightedConnection( connectionName );
+        editFrame->SetHighlightedConnection( connectionName, &itemData );
     }
 
     editFrame->UpdateNetHighlightStatus();
