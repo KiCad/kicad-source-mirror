@@ -95,7 +95,7 @@ void BITMAP_BUTTON::SetPadding( int aPadding )
 void BITMAP_BUTTON::SetBitmap( const wxBitmapBundle& aBmp )
 {
     m_normalBitmap = aBmp;
-#ifdef __WXMAC__
+#ifndef __WXMSW__
     m_unadjustedMinSize = m_normalBitmap.GetDefaultSize();
 #else
     m_unadjustedMinSize = m_normalBitmap.GetPreferredBitmapSizeFor( this );

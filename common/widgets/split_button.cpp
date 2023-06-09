@@ -97,7 +97,7 @@ void SPLIT_BUTTON::SetBitmap( const wxBitmapBundle& aBmp )
 {
     m_bitmap = aBmp;
 
-#ifdef __WXMAC__
+#ifndef __WXMSW__
     SetMinSize( m_bitmap.GetDefaultSize() );
 #else
     SetMinSize( m_bitmap.GetPreferredBitmapSizeFor( this ) );

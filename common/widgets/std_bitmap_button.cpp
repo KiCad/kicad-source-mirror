@@ -77,7 +77,7 @@ void STD_BITMAP_BUTTON::SetBitmap( const wxBitmapBundle& aBmp )
 {
     m_bitmap = aBmp;
 
-#ifdef __WXMAC__
+#ifndef __WXMSW__
     wxSize size = m_bitmap.GetDefaultSize();
 #else
     wxSize size = m_bitmap.GetPreferredBitmapSizeFor( this );
