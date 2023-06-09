@@ -681,6 +681,10 @@ void PANEL_SYM_LIB_TABLE::deleteRowHandler( wxCommandEvent& event )
     // Remove selected rows (note: a row can be stored more than once in list)
     int last_row = -1;
 
+    // Needed to avoid a wxWidgets alert if the row to delete is the last row
+    // at least on wxMSW 3.2
+    m_cur_grid->ClearSelection();
+
     for( int ii = selectedRows.GetCount()-1; ii >= 0; ii-- )
     {
         int row = selectedRows[ii];

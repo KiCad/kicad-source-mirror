@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013-2021 CERN
- * Copyright (C) 2012-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -680,6 +680,10 @@ void PANEL_FP_LIB_TABLE::deleteRowHandler( wxCommandEvent& event )
 
     // Remove selected rows (note: a row can be stored more than once in list)
     int last_row = -1;
+
+    // Needed to avoid a wxWidgets alert if the row to delete is the last row
+    // at least on wxMSW 3.2
+    m_cur_grid->ClearSelection();
 
     for( int ii = selectedRows.GetCount()-1; ii >= 0; ii-- )
     {
