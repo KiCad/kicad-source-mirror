@@ -344,7 +344,7 @@ void PCB_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
 wxString PCB_SHAPE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
-    return wxString::Format( _( "%s on %s" ), ShowShape(), GetLayerName() );
+    return wxString::Format( _( "%s on %s" ), GetFriendlyName(), GetLayerName() );
 }
 
 

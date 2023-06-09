@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,14 +69,11 @@ private:
     ///< Connected items with no wire are included (as there is no wire to adjust for the drag).
     ///< Connected wires are included with any un-connected ends flagged (STARTPOINT or ENDPOINT).
     void getConnectedItems( SCH_ITEM* aOriginalItem, const VECTOR2I& aPoint, EDA_ITEMS& aList );
-    void getConnectedDragItems( SCH_ITEM* fixed, const VECTOR2I& selected, EDA_ITEMS& aList,
-                                bool& aAppendUndo );
+    void getConnectedDragItems( SCHEMATIC_COMMIT* aCommit, SCH_ITEM* fixed,
+                                const VECTOR2I& selected, EDA_ITEMS& aList );
 
     void orthoLineDrag( SCH_LINE* line, const VECTOR2I& splitDelta, int& xBendCount,
                         int& yBendCount, const EE_GRID_HELPER& grid );
-
-    ///< Saves the new drag lines to the undo list
-    void commitDragLines();
 
     ///< Clears the new drag lines and removes them from the screen
     void clearNewDragLines();
@@ -85,7 +82,7 @@ private:
     void setTransitions() override;
 
     ///< Cleanup dangling lines left after a drag
-    void trimDanglingLines();
+    void trimDanglingLines( SCHEMATIC_COMMIT* aCommit );
 
 private:
     ///< Re-entrancy guard

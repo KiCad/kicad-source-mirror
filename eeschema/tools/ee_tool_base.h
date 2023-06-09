@@ -34,9 +34,7 @@
 #include <tools/ee_selection_tool.h>
 #include <sch_edit_frame.h>
 #include <sch_view.h>
-#include <schematic_commit.h>
 #include <symbol_edit_frame.h>
-#include <undo_redo_container.h>
 
 class EE_SELECTION;
 
@@ -91,9 +89,6 @@ public:
             m_frame = getEditFrame<T>();
             m_isSymbolEditor = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame ) != nullptr;
         }
-
-        if( aReason != RUN )
-            m_commit = std::make_unique<SCHEMATIC_COMMIT>( m_toolMgr );
 
         m_view = static_cast<KIGFX::SCH_VIEW*>( getView() );
     }
@@ -201,8 +196,6 @@ protected:
     KIGFX::SCH_VIEW*   m_view;
     EE_SELECTION_TOOL* m_selectionTool;
     bool               m_isSymbolEditor;
-
-    std::unique_ptr<SCHEMATIC_COMMIT> m_commit;
 };
 
 

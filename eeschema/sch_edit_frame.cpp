@@ -53,6 +53,7 @@
 #include <sch_sheet.h>
 #include <sch_marker.h>
 #include <schematic.h>
+#include <schematic_commit.h>
 #include <settings/settings_manager.h>
 #include <advanced_config.h>
 #include <sim/simulator_frame.h>
@@ -1083,7 +1084,7 @@ void SCH_EDIT_FRAME::OnModify()
     GetScreen()->SetContentModified();
     m_autoSaveRequired = true;
 
-    RecalculateConnections( NO_CLEANUP );
+    RecalculateConnections( nullptr, NO_CLEANUP );
 
     GetCanvas()->Refresh();
     UpdateHierarchyNavigator();
@@ -1588,8 +1589,8 @@ void SCH_EDIT_FRAME::AutoRotateItem( SCH_SCREEN* aScreen, SCH_ITEM* aItem )
 }
 
 
-void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* aItem,
-                                                 bool aUndoAppend )
+void SCH_EDIT_FRAME::AddItemToCommitAndScreen( SCHEMATIC_COMMIT* aCommit, SCH_SCREEN* aScreen,
+                                               SCH_ITEM* aItem )
 {
     wxCHECK_RET( aItem != nullptr, wxT( "Cannot add null item to list." ) );
 
@@ -1622,8 +1623,7 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* 
         if( aItem->Type() == SCH_SHEET_PIN_T )
         {
             // Sheet pins are owned by their parent sheet.
-            SaveCopyInUndoList( aScreen, undoItem, UNDO_REDO::CHANGED, aUndoAppend );
-
+            aCommit->Modify( undoItem, aScreen );
             parentSheet->AddPin( (SCH_SHEET_PIN*) aItem );
         }
         else if( aItem->Type() == SCH_FIELD_T )
@@ -1638,12 +1638,12 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* 
                 AddToScreen( aItem, aScreen );
 
             SaveCopyForRepeatItem( aItem );
-            SaveCopyInUndoList( aScreen, undoItem, UNDO_REDO::NEWITEM, aUndoAppend );
+            aCommit->Modify( undoItem, aScreen );
         }
 
         // Update connectivity info for new item
         if( !aItem->IsMoving() && aItem->IsConnectable() )
-            RecalculateConnections( LOCAL_CLEANUP );
+            RecalculateConnections( aCommit, LOCAL_CLEANUP );
     }
 
     aItem->ClearFlags( IS_NEW );
@@ -1656,22 +1656,21 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* 
         std::vector<VECTOR2I> pts = aItem->GetConnectionPoints();
 
         bool connected = true;
+
         for( auto i = pts.begin(); i != pts.end(); i++ )
         {
             for( auto j = i + 1; j != pts.end(); j++ )
-                TrimWire( *i, *j );
+                TrimWire( aCommit, *i, *j );
 
             if( aScreen->IsExplicitJunctionNeeded( *i ) )
             {
-                AddJunction( aScreen, *i, true, false );
+                AddJunction( aCommit, aScreen, *i );
                 connected = true;
             }
         }
 
         if( connected )
-        {
             AutoRotateItem( aScreen, aItem );
-        }
 
         TestDanglingEnds();
 
@@ -1737,11 +1736,16 @@ void SCH_EDIT_FRAME::initScreenZoom()
 }
 
 
-void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
+void SCH_EDIT_FRAME::RecalculateConnections( SCHEMATIC_COMMIT* aCommit,
+                                             SCH_CLEANUP_FLAGS aCleanupFlags )
 {
     wxString            highlightedConn = GetHighlightedConnection();
     SCHEMATIC_SETTINGS& settings = Schematic().Settings();
     SCH_SHEET_LIST      list = Schematic().GetSheets();
+    SCHEMATIC_COMMIT    localInstance( m_toolManager );
+
+    if( !aCommit )
+        aCommit = &localInstance;
 
 #ifdef PROFILE
     PROF_TIMER timer;
@@ -1750,12 +1754,12 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
     // Ensure schematic graph is accurate
     if( aCleanupFlags == LOCAL_CLEANUP )
     {
-        SchematicCleanUp( GetScreen() );
+        SchematicCleanUp( aCommit, GetScreen() );
     }
     else if( aCleanupFlags == GLOBAL_CLEANUP )
     {
         for( const SCH_SHEET_PATH& sheet : list )
-            SchematicCleanUp( sheet.LastScreen() );
+            SchematicCleanUp( aCommit, sheet.LastScreen() );
     }
 
 #ifdef PROFILE
@@ -1909,6 +1913,9 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
 
         m_highlightedConnChanged = false;
     }
+
+    if( !localInstance.Empty() )
+        localInstance.Push( _( "Schematic Cleanup" ) );
 }
 
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2017 jean-pierre Charras jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,14 +24,13 @@
 
 
 #include <sch_edit_frame.h>
-#include <base_units.h>
 #include <bitmaps.h>
-#include <confirm.h>
 #include <dialog_annotate_base.h>
 #include <eeschema_settings.h>
 #include <kiface_base.h>
 #include <widgets/wx_html_report_panel.h>
 #include <schematic.h>
+#include <schematic_commit.h>
 
 // A window name for the annotate dialog to retrieve is if not destroyed
 #define DLG_WINDOW_NAME "DialogAnnotateWindowName"
@@ -215,19 +214,21 @@ void DIALOG_ANNOTATE::OnClose( wxCloseEvent& event )
 
 void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
 {
+    SCHEMATIC_COMMIT commit( m_Parent );
+
     m_MessageWindow->Clear();
     REPORTER& reporter = m_MessageWindow->Reporter();
     m_MessageWindow->SetLazyUpdate( true );     // Don't update after each message
 
-    m_Parent->AnnotateSymbols( GetScope(), GetSortOrder(), GetAnnotateAlgo(), GetRecursive(),
-                               GetStartNumber(), GetResetItems(), true, reporter );
+    m_Parent->AnnotateSymbols( &commit, GetScope(), GetSortOrder(), GetAnnotateAlgo(),
+                               GetRecursive(), GetStartNumber(), GetResetItems(), true, reporter );
+
+    commit.Push( _( "Annotate" ) );
 
     m_MessageWindow->Flush( true );             // Now update to show all messages
-
     m_Parent->GetCanvas()->Refresh();
 
     m_btnClear->Enable();
-
     m_sdbSizer1Cancel->SetDefault();
 
     // Don't close dialog if there are things the user needs to address

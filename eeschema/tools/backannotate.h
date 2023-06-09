@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Alexander Shuklin <Jasuramme@gmail.com>
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@
 class REPORTER;
 class SCH_SHEET_LIST;
 class SCH_EDIT_FRAME;
-
+class SCHEMATIC_COMMIT;
 
 /**
  * Back annotation algorithm class used to receive, check, and apply a \ref NETLIST from
@@ -62,7 +62,7 @@ public:
     {
         PCB_FP_DATA( const wxString& aRef, const wxString& aFootprint, const wxString& aValue,
                      bool aDNP, bool aExcludeFromBOM,
-                     const std::map<wxString, wxString> aPinMap ) :
+                     const std::map<wxString, wxString>& aPinMap ) :
                 m_ref( aRef ),
                 m_footprint( aFootprint ),
                 m_value( aValue ),
@@ -71,11 +71,11 @@ public:
                 m_pinMap( aPinMap )
         {}
 
-        wxString m_ref;
-        wxString m_footprint;
-        wxString m_value;
-        bool     m_DNP;
-        bool     m_excludeFromBOM;
+        wxString                     m_ref;
+        wxString                     m_footprint;
+        wxString                     m_value;
+        bool                         m_DNP;
+        bool                         m_excludeFromBOM;
         std::map<wxString, wxString> m_pinMap;
     };
 
@@ -131,7 +131,7 @@ private:
      */
     void applyChangelist();
 
-    void processNetNameChange( const wxString& aRef, SCH_PIN* aPin,
+    void processNetNameChange( SCHEMATIC_COMMIT* aCommit, const wxString& aRef, SCH_PIN* aPin,
                                const SCH_CONNECTION* aConnection, const wxString& aOldName,
                                const wxString& aNewName );
 
@@ -152,7 +152,6 @@ private:
     SCH_EDIT_FRAME*              m_frame;
 
     int                          m_changesCount;    // Number of user-level changes
-    bool                         m_appendUndo;
 };
 
 #endif

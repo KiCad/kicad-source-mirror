@@ -671,10 +671,15 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     if( selection.GetSize() == 0 )
         return 0;
 
-    SCH_ITEM* head = nullptr;
-    int       principalItemCount = 0;  // User-selected items (as opposed to connected wires)
-    VECTOR2I  rotPoint;
-    bool      moving = false;
+    SCH_ITEM*         head = nullptr;
+    int               principalItemCount = 0;  // User-selected items (as opposed to connected wires)
+    VECTOR2I          rotPoint;
+    bool              moving = false;
+    SCHEMATIC_COMMIT  localInstance( m_toolMgr );
+    SCHEMATIC_COMMIT* commit = aEvent.Parameter<SCHEMATIC_COMMIT*>();
+
+    if( !commit )
+        commit = &localInstance;
 
     for( unsigned ii = 0; ii < selection.GetSize(); ii++ )
     {
@@ -702,7 +707,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             rotPoint = m_frame->GetNearestHalfGridPosition( head->GetBoundingBox().GetCenter() );
 
         if( !moving )
-            saveCopyInUndoList( head, UNDO_REDO::CHANGED );
+            commit->Modify( head, m_frame->GetScreen() );
 
         switch( head->Type() )
         {
@@ -830,9 +835,9 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             rotPoint = m_frame->GetNearestHalfGridPosition( selection.GetCenter() );
     }
 
-    for( unsigned ii = 0; ii < selection.GetSize(); ii++ )
+    for( EDA_ITEM* edaItem : selection )
     {
-        SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( ii ) );
+        SCH_ITEM* item = static_cast<SCH_ITEM*>( edaItem );
 
         // We've already rotated the user selected item if there was only one.  We're just
         // here to rotate the ends of wires that were attached to it.
@@ -840,7 +845,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             continue;
 
         if( !moving )
-            saveCopyInUndoList( item, UNDO_REDO::CHANGED, ii > 0 );
+            commit->Modify( item, m_frame->GetScreen() );
 
         for( int i = 0; clockwise ? i < 3 : i < 1; ++i )
         {
@@ -916,13 +921,14 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
         SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
-        lwbTool->TrimOverLappingWires( &selectionCopy );
-        lwbTool->AddJunctionsIfNeeded( &selectionCopy );
+        lwbTool->TrimOverLappingWires( commit, &selectionCopy );
+        lwbTool->AddJunctionsIfNeeded( commit, &selectionCopy );
 
-        m_frame->SchematicCleanUp();
+        m_frame->SchematicCleanUp( commit );
         m_frame->TestDanglingEnds();
 
-        m_frame->OnModify();
+        if( !localInstance.Empty() )
+            localInstance.Push( _( "Rotate" ) );
     }
 
     return 0;
@@ -936,15 +942,20 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     if( selection.GetSize() == 0 )
         return 0;
 
-    bool      vertical = ( aEvent.Matches( EE_ACTIONS::mirrorV.MakeEvent() ) );
-    SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.Front() );
-    bool      connections = false;
-    bool      moving = item->IsMoving();
+    bool              vertical = ( aEvent.Matches( EE_ACTIONS::mirrorV.MakeEvent() ) );
+    SCH_ITEM*         item = static_cast<SCH_ITEM*>( selection.Front() );
+    bool              connections = false;
+    bool              moving = item->IsMoving();
+    SCHEMATIC_COMMIT  localInstance( m_toolMgr );
+    SCHEMATIC_COMMIT* commit = aEvent.Parameter<SCHEMATIC_COMMIT*>();
+
+    if( !commit )
+        commit = &localInstance;
 
     if( selection.GetSize() == 1 )
     {
         if( !moving )
-            saveCopyInUndoList( item, UNDO_REDO::CHANGED );
+            commit->Modify( item, m_frame->GetScreen() );
 
         switch( item->Type() )
         {
@@ -1040,12 +1051,12 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     {
         VECTOR2I mirrorPoint = m_frame->GetNearestHalfGridPosition( selection.GetCenter() );
 
-        for( unsigned ii = 0; ii < selection.GetSize(); ii++ )
+        for( EDA_ITEM* edaItem : selection )
         {
-            item = static_cast<SCH_ITEM*>( selection.GetItem( ii ) );
+            item = static_cast<SCH_ITEM*>( edaItem );
 
             if( !moving )
-                saveCopyInUndoList( item, UNDO_REDO::CHANGED, ii > 0 );
+                commit->Modify( item, m_frame->GetScreen() );
 
             if( item->Type() == SCH_SHEET_PIN_T )
             {
@@ -1110,14 +1121,15 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         if( connections )
         {
             SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
-            lwbTool->TrimOverLappingWires( &selectionCopy );
-            lwbTool->AddJunctionsIfNeeded( &selectionCopy );
+            lwbTool->TrimOverLappingWires( commit, &selectionCopy );
+            lwbTool->AddJunctionsIfNeeded( commit, &selectionCopy );
 
-            m_frame->SchematicCleanUp();
+            m_frame->SchematicCleanUp( commit );
             m_frame->TestDanglingEnds();
         }
 
-        m_frame->OnModify();
+        if( !localInstance.Empty() )
+            localInstance.Push( _( "Mirror" ) );
     }
 
     return 0;
@@ -1235,8 +1247,8 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-    bool         appendUndo = false;
-    EE_SELECTION newItems;
+    SCHEMATIC_COMMIT commit( m_toolMgr );
+    EE_SELECTION     newItems;
 
     for( const std::unique_ptr<SCH_ITEM>& item : sourceItems )
     {
@@ -1266,8 +1278,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( EE_ACTIONS::addItemToSel, true, newItem );
         newItem->SetFlags( IS_NEW );
         m_frame->AddToScreen( newItem, m_frame->GetScreen() );
-        m_frame->SaveCopyInUndoList( m_frame->GetScreen(), newItem, UNDO_REDO::NEWITEM, appendUndo );
-        appendUndo = true;
+        commit.Added( newItem, m_frame->GetScreen() );
 
         if( newItem->Type() == SCH_SYMBOL_T )
         {
@@ -1279,13 +1290,19 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
             {
                 static_cast<SCH_SYMBOL*>( newItem )->ClearAnnotation( nullptr, false );
                 NULL_REPORTER reporter;
-                m_frame->AnnotateSymbols( ANNOTATE_SELECTION,
+                m_frame->AnnotateSymbols( &commit, ANNOTATE_SELECTION,
                                           (ANNOTATE_ORDER_T) annotate.sort_order,
                                           (ANNOTATE_ALGO_T) annotate.method, true /* recursive */,
-                                          annotateStartNum, false, false, reporter, appendUndo );
+                                          annotateStartNum, false, false, reporter );
             }
 
-            m_toolMgr->RunAction( EE_ACTIONS::move, true );
+            m_toolMgr->RunAction( EE_ACTIONS::move, true, &commit );
+
+            while( m_toolMgr->GetTool<SCH_MOVE_TOOL>()->IsToolActive() )
+            {
+                wxMilliSleep( 50 );
+                wxYield();
+            }
         }
 
         newItems.Add( newItem );
@@ -1296,15 +1313,17 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
     if( !newItems.Empty() )
     {
         SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
-        lwbTool->TrimOverLappingWires( &newItems );
-        lwbTool->AddJunctionsIfNeeded( &newItems );
+        lwbTool->TrimOverLappingWires( &commit, &newItems );
+        lwbTool->AddJunctionsIfNeeded( &commit, &newItems );
 
-        m_frame->SchematicCleanUp();
+        m_frame->SchematicCleanUp( &commit );
         m_frame->TestDanglingEnds();
     }
 
     m_frame->GetCanvas()->Refresh();
-    m_frame->OnModify();
+
+    if( !commit.Empty() )
+        commit.Push( _( "Repeat Item" ) );
 
     if( !newItems.Empty() )
         m_frame->SaveCopyForRepeatItem( static_cast<SCH_ITEM*>( newItems[0] ) );
@@ -1343,7 +1362,7 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 {
     SCH_SCREEN*           screen = m_frame->GetScreen();
     std::deque<EDA_ITEM*> items = m_selectionTool->RequestSelection( deletableItems ).GetItems();
-    bool                  appendToUndo = false;
+    SCHEMATIC_COMMIT      commit( m_toolMgr );
     std::vector<VECTOR2I> pts;
 
     if( items.empty() )
@@ -1381,31 +1400,23 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
             if( !alg::contains( items, sheet ) )
             {
                 pin->SetFlags( STRUCT_DELETED );
-                saveCopyInUndoList( item, UNDO_REDO::DELETED, appendToUndo );
-                appendToUndo = true;
-
                 updateItem( pin, false );
-
                 sheet->RemovePin( pin );
+                commit.Removed( pin, m_frame->GetScreen() );
             }
         }
         else if( sch_item->Type() == SCH_FIELD_T )
         {
-            saveCopyInUndoList( item, UNDO_REDO::CHANGED, appendToUndo );
+            commit.Modify( item, m_frame->GetScreen() );
             static_cast<SCH_FIELD*>( sch_item )->SetVisible( false );
-            appendToUndo = true;
-
             updateItem( sch_item, false );
         }
         else
         {
             sch_item->SetFlags( STRUCT_DELETED );
-            saveCopyInUndoList( item, UNDO_REDO::DELETED, appendToUndo );
-            appendToUndo = true;
-
             updateItem( sch_item, false );
-
             m_frame->RemoveFromScreen( sch_item, m_frame->GetScreen() );
+            commit.Removed( item, m_frame->GetScreen() );
 
             if( sch_item->Type() == SCH_SHEET_T )
                 m_frame->UpdateHierarchyNavigator();
@@ -1420,13 +1431,13 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
             continue;
 
         if( junction->HasFlag( STRUCT_DELETED ) || !screen->IsExplicitJunction( point ) )
-            m_frame->DeleteJunction( junction, appendToUndo );
+            m_frame->DeleteJunction( &commit, junction );
     }
 
-    m_frame->TestDanglingEnds();
+//    m_frame->TestDanglingEnds();
 
     m_frame->GetCanvas()->Refresh();
-    m_frame->OnModify();
+    commit.Push( _( "Delete" ) );
 
     return 0;
 }
@@ -2329,14 +2340,18 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             if( selected )
                 m_toolMgr->RunAction( EE_ACTIONS::removeItemFromSel, true, item );
 
+            SCHEMATIC_COMMIT commit( m_toolMgr );
+
             if( !item->IsNew() )
             {
-                saveCopyInUndoList( item, UNDO_REDO::DELETED, i != 0 );
-                saveCopyInUndoList( newtext, UNDO_REDO::NEWITEM, true );
-
                 m_frame->RemoveFromScreen( item, m_frame->GetScreen() );
+                commit.Removed( item, m_frame->GetScreen() );
+
                 m_frame->AddToScreen( newtext, m_frame->GetScreen() );
+                commit.Added( newtext, m_frame->GetScreen() );
             }
+
+            commit.Push( _( "Change Item Type" ) );
 
             if( selected )
                 m_toolMgr->RunAction( EE_ACTIONS::addItemToSel, true, newtext );
@@ -2372,6 +2387,8 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
     VECTOR2I      cursorPos = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
     EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_LINE_T } );
 
+    SCH_SCREEN*            screen = m_frame->GetScreen();
+    SCHEMATIC_COMMIT       commit( m_toolMgr );
     std::vector<SCH_LINE*> lines;
 
     for( EDA_ITEM* item : selection )
@@ -2384,7 +2401,6 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
     }
 
     m_selectionTool->ClearSelection();
-    m_frame->StartNewUndo();
 
     for( SCH_LINE* line : lines )
     {
@@ -2392,9 +2408,9 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
 
         // We let the user select the break point if they're on a single line
         if( lines.size() == 1 && line->HitTest( cursorPos ) )
-            m_frame->BreakSegment( line, cursorPos, &newLine );
+            m_frame->BreakSegment( &commit, line, cursorPos, &newLine, screen );
         else
-            m_frame->BreakSegment( line, line->GetMidPoint(), &newLine );
+            m_frame->BreakSegment( &commit, line, line->GetMidPoint(), &newLine, screen );
 
         // Make sure both endpoints are deselected
         newLine->ClearFlags();
@@ -2417,11 +2433,18 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
     if( !lines.empty() )
     {
         m_frame->TestDanglingEnds();
-
-        m_frame->OnModify();
         m_frame->GetCanvas()->Refresh();
 
-        m_toolMgr->RunAction( EE_ACTIONS::drag, false, true );
+        m_toolMgr->RunAction( EE_ACTIONS::drag, true, &commit );
+
+        while( m_toolMgr->GetTool<SCH_MOVE_TOOL>()->IsToolActive() )
+        {
+            wxMilliSleep( 50 );
+            wxYield();
+        }
+
+        if( !commit.Empty() )
+            commit.Push( isSlice ? _( "Slice Wire" ) : _( "Break Wire" ) );
     }
 
     return 0;

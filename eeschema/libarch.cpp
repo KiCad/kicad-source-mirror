@@ -32,34 +32,10 @@
 #include <wildcards_and_files_ext.h>
 
 #include <sch_edit_frame.h>
-#include <symbol_lib_table.h>
 #include <symbol_library.h>
 #include <sch_symbol.h>
 #include <sch_sheet.h>
 #include <schematic.h>
-
-
-bool SCH_EDIT_FRAME::CreateArchiveLibraryCacheFile( bool aUseCurrentSheetFilename )
-{
-    wxFileName fn;
-
-    if( aUseCurrentSheetFilename )
-        fn = GetScreen()->GetFileName();
-    else
-        fn = Schematic().RootScreen()->GetFileName();
-
-    fn.SetName( fn.GetName() + wxS( "-cache" ) );
-    fn.SetExt( LegacySymbolLibFileExtension );
-
-    bool success = CreateArchiveLibrary( fn.GetFullPath() );
-
-    // Update the schematic symbol library links.
-    // because the lib cache has changed
-    SCH_SCREENS schematic( Schematic().Root() );
-    schematic.UpdateSymbolLinks();
-
-    return success;
-}
 
 
 bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )

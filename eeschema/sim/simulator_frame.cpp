@@ -994,7 +994,7 @@ bool SIMULATOR_FRAME::LoadSimulator()
 
     // If we are using the new connectivity, make sure that we do a full-rebuild
     if( ADVANCED_CFG::GetCfg().m_IncrementalConnectivity )
-        m_schematicFrame->RecalculateConnections( GLOBAL_CLEANUP );
+        m_schematicFrame->RecalculateConnections( nullptr, GLOBAL_CLEANUP );
 
     if( !m_simulator->Attach( m_circuitModel, reporter ) )
     {

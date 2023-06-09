@@ -192,15 +192,15 @@ std::unordered_set<SCH_SYMBOL*> getInferredSymbols( const EE_SELECTION& aSelecti
 }
 
 
-void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
+void SCH_EDIT_FRAME::AnnotateSymbols( SCHEMATIC_COMMIT* aCommit,
+                                      ANNOTATE_SCOPE_T  aAnnotateScope,
                                       ANNOTATE_ORDER_T  aSortOption,
                                       ANNOTATE_ALGO_T   aAlgoOption,
                                       bool              aRecursive,
                                       int               aStartNumber,
                                       bool              aResetAnnotation,
                                       bool              aRepairTimestamps,
-                                      REPORTER&         aReporter,
-                                      bool              appendUndo )
+                                      REPORTER&         aReporter )
 {
     EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
     EE_SELECTION&      selection = selTool->GetSelection();
@@ -354,8 +354,7 @@ void SCH_EDIT_FRAME::AnnotateSymbols( ANNOTATE_SCOPE_T  aAnnotateScope,
         SCH_SYMBOL*     symbol = ref.GetSymbol();
         SCH_SHEET_PATH* sheet = &ref.GetSheetPath();
 
-        SaveCopyInUndoList( sheet->LastScreen(), symbol, UNDO_REDO::CHANGED, appendUndo );
-        appendUndo = true;
+        aCommit->Modify( symbol, sheet->LastScreen() );
         ref.Annotate();
 
         KIID_PATH full_uuid = sheet->Path();

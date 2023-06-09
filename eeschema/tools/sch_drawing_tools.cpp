@@ -47,6 +47,7 @@
 #include <sch_sheet_pin.h>
 #include <sch_bitmap.h>
 #include <schematic.h>
+#include <schematic_commit.h>
 #include <symbol_library_common.h>
 #include <eeschema_settings.h>
 #include <dialogs/dialog_label_properties.h>
@@ -110,6 +111,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     std::vector<PICKED_SYMBOL>* historyList = nullptr;
     bool                        ignorePrimePosition = false;
     COMMON_SETTINGS*            common_settings = Pgm().GetCommonSettings();
+    SCHEMATIC_COMMIT            commit( m_toolMgr );
     EE_GRID_HELPER              grid( m_toolMgr );
 
     if( m_inPlaceSymbol )
@@ -147,7 +149,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     m_frame->PushTool( aEvent );
 
     auto addSymbol =
-            [&]( SCH_SYMBOL* aSymbol )
+            [this]( SCHEMATIC_COMMIT* aCommit, SCH_SYMBOL* aSymbol )
             {
                 m_frame->SaveCopyForRepeatItem( aSymbol );
 
@@ -156,9 +158,9 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 
                 aSymbol->SetParent( m_frame->GetScreen() );
                 aSymbol->SetFlags( IS_NEW | IS_MOVING );
-                m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), aSymbol, false );
+                m_frame->AddItemToCommitAndScreen( aCommit, m_frame->GetScreen(), aSymbol );
 
-                // Set IS_MOVING again, as AddItemToScreenAndUndoList() will have cleared it.
+                // Set IS_MOVING again, as AddItemToCommitAndScreen() will have cleared it.
                 aSymbol->SetFlags( IS_MOVING );
                 m_toolMgr->RunAction( ACTIONS::refreshPreview );
             };
@@ -222,7 +224,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     // Prime the pump
     if( symbol )
     {
-        addSymbol( symbol );
+        addSymbol( &commit, symbol );
         annotate();
         getViewControls()->WarpMouseCursor( getViewControls()->GetMousePosition( false ) );
     }
@@ -323,7 +325,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 
                 symbol = new SCH_SYMBOL( *libSymbol, &m_frame->GetCurrentSheet(), sel, cursorPos,
                                          &m_frame->Schematic() );
-                addSymbol( symbol );
+                addSymbol( &commit, symbol );
                 annotate();
 
                 // Update the list of references for the next symbol placement.
@@ -348,10 +350,10 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                 m_frame->GetScreen()->Update( symbol );
 
                 SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
-                lwbTool->TrimOverLappingWires( &m_selectionTool->GetSelection() );
-                lwbTool->AddJunctionsIfNeeded( &m_selectionTool->GetSelection() );
+                lwbTool->TrimOverLappingWires( &commit, &m_selectionTool->GetSelection() );
+                lwbTool->AddJunctionsIfNeeded( &commit, &m_selectionTool->GetSelection() );
 
-                m_frame->OnModify();
+                commit.Push( _( "Add Symbol" ) );
 
                 SCH_SYMBOL* nextSymbol = nullptr;
 
@@ -381,8 +383,8 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                         if( new_unit == 1 )
                             nextSymbol->ClearAnnotation( nullptr, false );
 
-                        addSymbol( nextSymbol );
-                        symbol = nextSymbol; // annotate() looks at symbol, update it
+                        addSymbol( &commit, nextSymbol );
+                        symbol = nextSymbol;
                         annotate();
 
                         // Update the list of references for the next symbol placement.
@@ -641,7 +643,10 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), image, false );
+                SCHEMATIC_COMMIT commit( m_toolMgr );
+                m_frame->AddItemToCommitAndScreen( &commit, m_frame->GetScreen(), image );
+                commit.Push( _( "Add Image" ) );
+
                 image = nullptr;
                 m_toolMgr->RunAction( ACTIONS::activatePointEditor );
 
@@ -700,6 +705,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     SCH_ITEM*             previewItem;
     bool                  loggedInfoBarError = false;
+    wxString              description;
 
     if( m_inSingleClickPlace )
         return 0;
@@ -725,16 +731,19 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
     case SCH_NO_CONNECT_T:
         previewItem = new SCH_NO_CONNECT( cursorPos );
         previewItem->SetParent( m_frame->GetScreen() );
+        description = _( "Add No Connect Flag" );
         break;
 
     case SCH_JUNCTION_T:
         previewItem = new SCH_JUNCTION( cursorPos );
         previewItem->SetParent( m_frame->GetScreen() );
+        description = _( "Add Junction" );
         break;
 
     case SCH_BUS_WIRE_ENTRY_T:
         previewItem = new SCH_BUS_WIRE_ENTRY( cursorPos );
         previewItem->SetParent( m_frame->GetScreen() );
+        description = _( "Add Wire to Bus Entry" );
         break;
 
     default:
@@ -824,14 +833,15 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                 newItem->SetPosition( cursorPos );
                 newItem->SetFlags( IS_NEW );
 
-                m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), newItem, false );
+                SCHEMATIC_COMMIT commit( m_toolMgr );
+                m_frame->AddItemToCommitAndScreen( &commit, m_frame->GetScreen(), newItem );
 
                 if( type == SCH_JUNCTION_T )
                     m_frame->TestDanglingEnds();
                 else
-                    m_frame->SchematicCleanUp();
+                    m_frame->SchematicCleanUp( &commit );
 
-                m_frame->OnModify();
+                commit.Push( description );
             }
 
             if( evt->IsDblClick( BUT_LEFT ) || type == SCH_SHEET_PIN_T )  // Finish tool.
@@ -890,10 +900,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                     DIALOG_WIRE_BUS_PROPERTIES dlg( m_frame, strokeItems );
 
                     if( dlg.ShowModal() == wxID_OK )
-                    {
                         m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
-                        m_frame->OnModify();
-                    }
                 }
                     break;
 
@@ -905,10 +912,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                     DIALOG_JUNCTION_PROPS dlg( m_frame, junctions );
 
                     if( dlg.ShowModal() == wxID_OK )
-                    {
                         m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
-                        m_frame->OnModify();
-                    }
                 }
                     break;
                 default:
@@ -1115,6 +1119,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     bool                  ignorePrimePosition = false;
     COMMON_SETTINGS*      common_settings = Pgm().GetCommonSettings();
     SCH_SHEET*            sheet = nullptr;
+    wxString              description;
 
     if( m_inTwoClickPlace )
         return 0;
@@ -1293,10 +1298,12 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 if( isText )
                 {
                     item = createNewText( cursorPos, LAYER_NOTES );
+                    description = _( "Add Text" );
                 }
                 else if( isHierLabel )
                 {
                     item = createNewText( cursorPos, LAYER_HIERLABEL );
+                    description = _( "Add Hierarchical Label" );
                 }
                 else if( isNetLabel || isGlobalLabel )
                 {
@@ -1356,10 +1363,13 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                         labelItem->SetText( netName );
                         item = labelItem;
                     }
+
+                    description = _( "Add Label" );
                 }
                 else if( isClassLabel )
                 {
                     item = createNewText( cursorPos, LAYER_NETCLASS_REFS );
+                    description = _( "Add Label" );
                 }
                 else if( isSheetPin )
                 {
@@ -1387,6 +1397,8 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                             break;
                         }
                     }
+
+                    description = _( "Add Sheet Pin" );
                 }
 
                 // If we started with a hotkey which has a position then warp back to that.
@@ -1426,9 +1438,12 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             else            // ... and second click places:
             {
                 item->ClearFlags( IS_MOVING );
-                m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), item, false );
-                item = nullptr;
 
+                SCHEMATIC_COMMIT commit( m_toolMgr );
+                m_frame->AddItemToCommitAndScreen( &commit, m_frame->GetScreen(), item );
+                commit.Push( description );
+
+                item = nullptr;
                 m_view->ClearPreview();
 
                 // Exit the tool when this sheet runs out of pins for convenience
@@ -1502,6 +1517,7 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     SCH_SHAPE*          item = nullptr;
     bool                isTextBox = aEvent.IsAction( &EE_ACTIONS::drawTextBox );
     SHAPE_T             type = aEvent.Parameter<SHAPE_T>();
+    wxString            description;
 
     if( m_inDrawShape )
         return 0;
@@ -1611,6 +1627,7 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 textbox->SetParent( schematic );
 
                 item = textbox;
+                description = _( "Add Text Box" );
             }
             else
             {
@@ -1619,6 +1636,7 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 item->SetStroke( m_lastStroke );
                 item->SetFillColor( m_lastFillColor );
                 item->SetParent( schematic );
+                description = wxString::Format( _( "Add %s" ), item->EDA_SHAPE::GetFriendlyName() );
             }
 
             item->SetFlags( IS_NEW );
@@ -1670,7 +1688,10 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                     m_lastFillColor = item->GetFillColor();
                 }
 
-                m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), item, false );
+                SCHEMATIC_COMMIT commit( m_toolMgr );
+                commit.Added( item, m_frame->GetScreen() );
+                commit.Push( wxString::Format( _( "Draw %s" ), item->GetClass() ) );
+
                 m_selectionTool->AddItemToSel( item );
                 item = nullptr;
 
@@ -1859,7 +1880,10 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             {
                 sheet->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
 
-                m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), sheet, false );
+                SCHEMATIC_COMMIT commit( m_toolMgr );
+                m_frame->AddItemToCommitAndScreen( &commit, m_frame->GetScreen(), sheet );
+                commit.Push( "Draw Sheet" );
+
                 m_frame->UpdateHierarchyNavigator();
                 m_selectionTool->AddItemToSel( sheet );
             }

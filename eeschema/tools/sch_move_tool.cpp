@@ -30,6 +30,7 @@
 #include <tools/ee_selection_tool.h>
 #include <tools/sch_line_wire_bus_tool.h>
 #include <ee_actions.h>
+#include <schematic_commit.h>
 #include <eda_item.h>
 #include <sch_item.h>
 #include <sch_symbol.h>
@@ -359,6 +360,11 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     EE_GRID_HELPER        grid( m_toolMgr );
     bool                  wasDragging = m_moveInProgress && m_isDrag;
     bool                  isSlice = false;
+    SCHEMATIC_COMMIT      localInstance( m_toolMgr );
+    SCHEMATIC_COMMIT*     commit = aEvent.Parameter<SCHEMATIC_COMMIT*>();
+
+    if( !commit )
+        commit = &localInstance;
 
     m_anchorPos.reset();
 
@@ -369,7 +375,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     else if( aEvent.IsAction( &EE_ACTIONS::drag ) )
     {
         m_isDrag = true;
-        isSlice = aEvent.Parameter<bool>();
+        isSlice = commit != &localInstance;
     }
     else if( aEvent.IsAction( &EE_ACTIONS::moveActivate ) )
     {
@@ -392,7 +398,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 // state.
                 try
                 {
-                    m_frame->RollbackSchematicFromUndo();
+                    commit->Revert();
                 }
                 catch( const IO_ERROR& exc )
                 {
@@ -475,7 +481,6 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             if( !m_moveInProgress )    // Prepare to start moving/dragging
             {
                 SCH_ITEM* sch_item = (SCH_ITEM*) selection.Front();
-                bool      appendUndo = ( sch_item && sch_item->IsNew() ) || isSlice;
                 bool      placingNewItems = sch_item && sch_item->IsNew();
 
                 //------------------------------------------------------------------------
@@ -528,7 +533,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                         }
 
                         for( const VECTOR2I& point : connections )
-                            getConnectedDragItems( item, point, connectedDragItems, appendUndo );
+                            getConnectedDragItems( commit, item, point, connectedDragItems );
                     }
 
                     // Go back and get all label connections now that we can test for drag-selected
@@ -536,7 +541,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     for( SCH_ITEM* item : stageTwo )
                     {
                         for( const VECTOR2I& point : item->GetConnectionPoints() )
-                            getConnectedDragItems( item, point, connectedDragItems, appendUndo );
+                            getConnectedDragItems( commit, item, point, connectedDragItems );
                     }
 
                     for( EDA_ITEM* item : connectedDragItems )
@@ -595,17 +600,15 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
                     if( item->IsNew() )
                     {
-                        // Item was added in a previous command (and saved to undo by
-                        // that command)
+                        // Item was added to commit in a previous command
                     }
                     else if( item->GetParent() && item->GetParent()->IsSelected() )
                     {
-                        // Item will be (or has been) saved to undo by parent
+                        // Item will be (or has been) added to commit by parent
                     }
                     else
                     {
-                        saveCopyInUndoList( (SCH_ITEM*) item, UNDO_REDO::CHANGED, appendUndo, false );
-                        appendUndo = true;
+                        commit->Modify( (SCH_ITEM*) item, m_frame->GetScreen() );
                     }
 
                     SCH_ITEM* schItem = (SCH_ITEM*) item;
@@ -840,11 +843,11 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsAction( &EE_ACTIONS::rotateCW ) )
         {
-            m_toolMgr->RunAction( EE_ACTIONS::rotateCW, true );
+            m_toolMgr->RunAction( EE_ACTIONS::rotateCW, true, &commit );
         }
         else if( evt->IsAction( &EE_ACTIONS::rotateCCW ) )
         {
-            m_toolMgr->RunAction( EE_ACTIONS::rotateCCW, true );
+            m_toolMgr->RunAction( EE_ACTIONS::rotateCCW, true, &commit );
         }
         else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
         {
@@ -903,7 +906,19 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         selectionCopy.Add( line );
 
     // Save whatever new bend lines and changed lines survived the drag
-    commitDragLines();
+    for( SCH_LINE* newLine : m_newDragLines )
+    {
+        newLine->ClearEditFlags();
+        commit->Added( newLine, m_frame->GetScreen() );
+    }
+
+    // These lines have been changed, but aren't selected. We need
+    // to manually clear these edit flags or they'll stick around.
+    for( SCH_LINE* oldLine : m_changedDragLines )
+        oldLine->ClearEditFlags();
+
+    m_newDragLines.clear();
+    m_changedDragLines.clear();
 
     controls->ForceCursorPosition( false );
     controls->ShowCursor( false );
@@ -917,7 +932,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     if( restore_state )
     {
         m_selectionTool->RemoveItemsFromSel( &m_dragAdditions, QUIET_MODE );
-        m_frame->RollbackSchematicFromUndo();
+        commit->Revert();
     }
     else
     {
@@ -937,24 +952,26 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         for( const DANGLING_END_ITEM& it : internalPoints )
         {
             if( m_frame->GetScreen()->IsExplicitJunctionNeeded( it.GetPosition()) )
-                m_frame->AddJunction( m_frame->GetScreen(), it.GetPosition(), true, false );
+                m_frame->AddJunction( commit, m_frame->GetScreen(), it.GetPosition() );
         }
 
         SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
-        lwbTool->TrimOverLappingWires( &selectionCopy );
-        lwbTool->AddJunctionsIfNeeded( &selectionCopy );
+        lwbTool->TrimOverLappingWires( commit, &selectionCopy );
+        lwbTool->AddJunctionsIfNeeded( commit, &selectionCopy );
 
         // This needs to run prior to `RecalculateConnections` because we need to identify
         // the lines that are newly dangling
         if( m_isDrag && !isSlice )
-            trimDanglingLines();
+            trimDanglingLines( commit );
 
         // Auto-rotate any moved labels
         for( EDA_ITEM* item : selection )
             m_frame->AutoRotateItem( m_frame->GetScreen(), static_cast<SCH_ITEM*>( item ) );
 
-        m_frame->SchematicCleanUp();
-        m_frame->OnModify();
+        m_frame->SchematicCleanUp( commit );
+
+        if( commit == &localInstance )
+            commit->Push( m_isDrag ? _( "Drag" ) : _( "Move" ) );
     }
 
     for( EDA_ITEM* item : m_frame->GetScreen()->Items() )
@@ -979,10 +996,10 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 }
 
 
-void SCH_MOVE_TOOL::trimDanglingLines()
+void SCH_MOVE_TOOL::trimDanglingLines( SCHEMATIC_COMMIT* aCommit )
 {
     // Need a local cleanup first to ensure we remove unneeded junctions
-    m_frame->SchematicCleanUp( m_frame->GetScreen() );
+    m_frame->SchematicCleanUp( aCommit, m_frame->GetScreen() );
 
     std::set<SCH_ITEM*> danglers;
 
@@ -1006,10 +1023,9 @@ void SCH_MOVE_TOOL::trimDanglingLines()
     for( SCH_ITEM* line : danglers )
     {
         line->SetFlags( STRUCT_DELETED );
-        saveCopyInUndoList( line, UNDO_REDO::DELETED, true );
+        aCommit->Removed( line, m_frame->GetScreen() );
 
         updateItem( line, false );
-
         m_frame->RemoveFromScreen( line, m_frame->GetScreen() );
     }
 }
@@ -1144,8 +1160,8 @@ void SCH_MOVE_TOOL::getConnectedItems( SCH_ITEM* aOriginalItem, const VECTOR2I& 
 }
 
 
-void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR2I& aPoint,
-                                           EDA_ITEMS& aList, bool& aAppendUndo )
+void SCH_MOVE_TOOL::getConnectedDragItems( SCHEMATIC_COMMIT* aCommit, SCH_ITEM* aSelectedItem,
+                                           const VECTOR2I& aPoint, EDA_ITEMS& aList )
 {
     EE_RTREE&         items = m_frame->GetScreen()->Items();
     EE_RTREE::EE_TYPE itemsOverlappingRTree = items.Overlapping( aSelectedItem->GetBoundingBox() );
@@ -1153,7 +1169,8 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR
     bool              ptHasUnselectedJunction = false;
 
     auto makeNewWire =
-            [&]( SCH_ITEM* fixed, SCH_ITEM* selected, const VECTOR2I& start, const VECTOR2I& end )
+            [this]( SCHEMATIC_COMMIT* commit, SCH_ITEM* fixed, SCH_ITEM* selected,
+                    const VECTOR2I& start, const VECTOR2I& end )
             {
                 SCH_LINE* newWire;
 
@@ -1175,12 +1192,13 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR
 
                 newWire->SetEndPoint( end );
                 m_frame->AddToScreen( newWire, m_frame->GetScreen() );
+                commit->Added( newWire, m_frame->GetScreen() );
 
                 return newWire;
             };
 
     auto makeNewJunction =
-            [&]( SCH_LINE* line, const VECTOR2I& pt )
+            [this]( SCHEMATIC_COMMIT* commit, SCH_LINE* line, const VECTOR2I& pt )
             {
                 SCH_JUNCTION* junction = new SCH_JUNCTION( pt );
                 junction->SetFlags( IS_NEW );
@@ -1191,6 +1209,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR
                     junction->SetLayer( LAYER_BUS_JUNCTION );
 
                 m_frame->AddToScreen( junction, m_frame->GetScreen() );
+                commit->Added( junction, m_frame->GetScreen() );
 
                 return junction;
             };
@@ -1282,34 +1301,22 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR
                     if( line->HitTest( aPoint, 1 ) && !line->HasFlag( SELECTED )
                         && !line->HasFlag( SELECTED_BY_DRAG ) )
                     {
-                        newWire = makeNewWire( line, aSelectedItem, aPoint, aPoint );
+                        newWire = makeNewWire( aCommit, line, aSelectedItem, aPoint, aPoint );
                         newWire->SetFlags( SELECTED_BY_DRAG | STARTPOINT );
                         newWire->StoreAngle( ( line->Angle() + ANGLE_90 ).Normalize() );
                         aList.push_back( newWire );
-
-                        saveCopyInUndoList( newWire, UNDO_REDO::NEWITEM, aAppendUndo );
-                        aAppendUndo = true;
 
                         if( aPoint != line->GetStartPoint() && aPoint != line->GetEndPoint() )
                         {
                             // Split line in half
                             if( !line->IsNew() )
-                            {
-                                saveCopyInUndoList( line, UNDO_REDO::CHANGED, aAppendUndo );
-                                aAppendUndo = true;
-                            }
+                                aCommit->Modify( line, m_frame->GetScreen() );
 
                             VECTOR2I oldEnd = line->GetEndPoint();
                             line->SetEndPoint( aPoint );
 
-                            SCH_LINE*     secondHalf = makeNewWire( line, line, aPoint, oldEnd );
-                            SCH_JUNCTION* junction = makeNewJunction( line, aPoint );
-
-                            saveCopyInUndoList( secondHalf, UNDO_REDO::NEWITEM, aAppendUndo );
-                            aAppendUndo = true;
-
-                            saveCopyInUndoList( junction, UNDO_REDO::NEWITEM, aAppendUndo );
-                            aAppendUndo = true;
+                            makeNewWire( aCommit, line, line, aPoint, oldEnd );
+                            makeNewJunction( aCommit, line, aPoint );
                         }
                         else
                         {
@@ -1367,12 +1374,9 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR
                     {
                         // Add a new wire between the sheetpin and the selected item so the
                         // selected item can be dragged.
-                        newWire = makeNewWire( pin, aSelectedItem, aPoint, aPoint );
+                        newWire = makeNewWire( aCommit, pin, aSelectedItem, aPoint, aPoint );
                         newWire->SetFlags( SELECTED_BY_DRAG | STARTPOINT );
                         aList.push_back( newWire );
-
-                        saveCopyInUndoList( newWire, UNDO_REDO::NEWITEM, aAppendUndo );
-                        aAppendUndo = true;
                     }
                 }
             }
@@ -1385,12 +1389,9 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR
             {
                 // Add a new wire between the symbol or junction and the selected item so
                 // the selected item can be dragged.
-                newWire = makeNewWire( test, aSelectedItem, aPoint, aPoint );
+                newWire = makeNewWire( aCommit, test, aSelectedItem, aPoint, aPoint );
                 newWire->SetFlags( SELECTED_BY_DRAG | STARTPOINT );
                 aList.push_back( newWire );
-
-                saveCopyInUndoList( newWire, UNDO_REDO::NEWITEM, aAppendUndo );
-                aAppendUndo = true;
             }
 
             break;
@@ -1451,12 +1452,9 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR
             {
                 // Add a new wire between the label and the selected item so the selected item
                 // can be dragged.
-                newWire = makeNewWire( test, aSelectedItem, aPoint, aPoint );
+                newWire = makeNewWire( aCommit, test, aSelectedItem, aPoint, aPoint );
                 newWire->SetFlags( SELECTED_BY_DRAG | STARTPOINT );
                 aList.push_back( newWire );
-
-                saveCopyInUndoList( newWire, UNDO_REDO::NEWITEM, aAppendUndo );
-                aAppendUndo = true;
             }
 
             break;
@@ -1496,7 +1494,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR
                         else
                             otherEnd = ends[0];
 
-                        getConnectedDragItems( test, otherEnd, aList, aAppendUndo );
+                        getConnectedDragItems( aCommit, test, otherEnd, aList );
 
                         // No need to test the other end of the bus entry
                         break;
@@ -1594,15 +1592,15 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
 
 int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
 {
-    EE_GRID_HELPER grid( m_toolMgr);
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::MovableItems );
-    bool appendUndo = false;
+    EE_GRID_HELPER   grid( m_toolMgr);
+    EE_SELECTION&    selection = m_selectionTool->RequestSelection( EE_COLLECTOR::MovableItems );
+    SCHEMATIC_COMMIT commit( m_toolMgr );
 
     auto doMoveItem =
             [&]( EDA_ITEM* item, const VECTOR2I& delta )
             {
-                saveCopyInUndoList( item, UNDO_REDO::CHANGED, appendUndo );
-                appendUndo = true;
+                commit.Modify( item, m_frame->GetScreen() );
+
                 // Ensure only one end is moved when calling moveItem
                 // i.e. we are in drag mode
                 bool tmp_isDrag = m_isDrag;
@@ -1645,7 +1643,7 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
                 line->ClearFlags();
                 line->SetFlags( SELECTED );
                 line->SetFlags( flags[ii] );
-                getConnectedDragItems( line, pts[ii], drag_items, appendUndo );
+                getConnectedDragItems( &commit, line, pts[ii], drag_items );
                 std::set<EDA_ITEM*> unique_items( drag_items.begin(), drag_items.end() );
 
                 VECTOR2I gridpt = grid.AlignGrid( pts[ii] ) - pts[ii];
@@ -1697,8 +1695,8 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
                     if( gridpt != VECTOR2I( 0, 0 ) )
                     {
                         EDA_ITEMS drag_items;
-                        getConnectedDragItems( pin, pin->GetConnectionPoints()[0], drag_items,
-                                               appendUndo );
+                        getConnectedDragItems( &commit, pin, pin->GetConnectionPoints()[0],
+                                               drag_items );
 
                         doMoveItem( pin, gridpt );
 
@@ -1720,7 +1718,7 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
             EDA_ITEMS             drag_items{ item };
 
             for( const VECTOR2I& point : connections )
-                getConnectedDragItems( schItem, point, drag_items, appendUndo );
+                getConnectedDragItems( &commit, schItem, point, drag_items );
 
             std::map<VECTOR2I, int> shifts;
             VECTOR2I                most_common( 0, 0 );
@@ -1753,36 +1751,16 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
     }
 
     SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
-    lwbTool->TrimOverLappingWires( &selection );
-    lwbTool->AddJunctionsIfNeeded( &selection );
+    lwbTool->TrimOverLappingWires( &commit, &selection );
+    lwbTool->AddJunctionsIfNeeded( &commit, &selection );
 
     m_toolMgr->PostEvent( EVENTS::SelectedItemsMoved );
 
-    m_frame->SchematicCleanUp();
+    m_frame->SchematicCleanUp( &commit );
     m_frame->TestDanglingEnds();
+    commit.Push( _( "Align" ) );
 
-    m_frame->OnModify();
     return 0;
-}
-
-
-void SCH_MOVE_TOOL::commitDragLines()
-{
-    for( SCH_LINE* newLine : m_newDragLines )
-    {
-        newLine->ClearEditFlags();
-        saveCopyInUndoList( newLine, UNDO_REDO::NEWITEM, true );
-    }
-
-    // These lines have been changed, but aren't selected. We need
-    // to manually clear these edit flags or they'll stick around.
-    for( SCH_LINE* oldLine : m_changedDragLines )
-    {
-        oldLine->ClearEditFlags();
-    }
-
-    m_newDragLines.clear();
-    m_changedDragLines.clear();
 }
 
 

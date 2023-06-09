@@ -26,13 +26,9 @@
 #include <tools/ee_tool_base.h>
 
 #include <lib_item.h>
-#include <lib_pin.h>
-#include <lib_shape.h>
 #include <lib_symbol.h>
-#include <lib_text.h>
 
 #include <sch_screen.h>
-#include <sch_sheet_path.h>
 #include <schematic.h>
 
 #include <view/view.h>
@@ -75,19 +71,33 @@ COMMIT& SCHEMATIC_COMMIT::Stage( EDA_ITEM *aItem, CHANGE_TYPE aChangeType, BASE_
 
     // If aItem belongs a symbol, the full symbol will be saved because undo/redo does
     // not handle "sub items" modifications.
-    if( aItem->GetParent() && aItem->GetParent()->IsType( { SCH_SYMBOL_T, LIB_SYMBOL_T } ) )
+    if( aItem->GetParent() && aItem->GetParent()->IsType( { SCH_SYMBOL_T, LIB_SYMBOL_T,
+                                                            SCH_SHEET_T } ) )
     {
         aItem->SetFlags( IS_MODIFIED_CHILD );
         aItem = aItem->GetParent();
+        aChangeType = CHT_MODIFY;
     }
 
+    // IS_SELECTED flag should not be set on undo items which were added for
+    // a drag operation.
+    if( aItem->IsSelected() && aItem->HasFlag( SELECTED_BY_DRAG ) )
+    {
+        aItem->ClearSelected();
+        COMMIT::Stage( aItem, aChangeType, aScreen );
+        aItem->SetSelected();
+    }
+    else
+    {
+        COMMIT::Stage( aItem, aChangeType, aScreen );
+    }
 
-    return COMMIT::Stage( aItem, aChangeType, aScreen );
+    return *this;
 }
 
 
 COMMIT& SCHEMATIC_COMMIT::Stage( std::vector<EDA_ITEM*> &container, CHANGE_TYPE aChangeType,
-        BASE_SCREEN *aScreen )
+                                 BASE_SCREEN *aScreen )
 {
     for( EDA_ITEM* item : container )
         Stage( item, aChangeType, aScreen );
@@ -97,7 +107,7 @@ COMMIT& SCHEMATIC_COMMIT::Stage( std::vector<EDA_ITEM*> &container, CHANGE_TYPE 
 
 
 COMMIT& SCHEMATIC_COMMIT::Stage( const PICKED_ITEMS_LIST &aItems, UNDO_REDO aModFlag,
-        BASE_SCREEN *aScreen )
+                                 BASE_SCREEN *aScreen )
 {
     return COMMIT::Stage( aItems, aModFlag, aScreen );
 }
@@ -274,17 +284,17 @@ void SCHEMATIC_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
         {
         case CHT_ADD:
         {
-            if( !schItem->GetParent() )
+            if( !( aCommitFlags & SKIP_UNDO ) )
+                undoList.PushItem( ITEM_PICKER( screen, schItem, UNDO_REDO::NEWITEM ) );
+
+            if( !( changeFlags & CHT_DONE ) )
             {
-                if( !( aCommitFlags & SKIP_UNDO ) )
-                    undoList.PushItem( ITEM_PICKER( screen, schItem, UNDO_REDO::NEWITEM ) );
-
-                if( !( changeFlags & CHT_DONE ) )
+                if( !schItem->GetParent() )
                     frame->GetScreen()->Append( schItem );
-            }
 
-            if( view )
-                view->Add( schItem );
+                if( view )
+                    view->Add( schItem );
+            }
 
             bulkAddedItems.push_back( schItem );
 
@@ -310,13 +320,15 @@ void SCHEMATIC_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
                 break;
             }
 
-            if( view )
-                view->Remove( schItem );
+            if( !( changeFlags & CHT_DONE ) )
+            {
+                frame->GetScreen()->Remove( schItem );
+
+                if( view )
+                    view->Remove( schItem );
+            }
 
             bulkRemovedItems.push_back( schItem );
-
-            if( !( changeFlags & CHT_DONE ) )
-                frame->GetScreen()->Remove( schItem );
 
             break;
         }
@@ -406,8 +418,10 @@ EDA_ITEM* SCHEMATIC_COMMIT::parentObject( EDA_ITEM* aItem ) const
 EDA_ITEM* SCHEMATIC_COMMIT::makeImage( EDA_ITEM* aItem ) const
 {
     if( m_isLibEditor )
-        return new LIB_SYMBOL(
-                *static_cast<SYMBOL_EDIT_FRAME*>( m_toolMgr->GetToolHolder() )->GetCurSymbol() );
+    {
+        SYMBOL_EDIT_FRAME* frame = static_cast<SYMBOL_EDIT_FRAME*>( m_toolMgr->GetToolHolder() );
+        return new LIB_SYMBOL( *frame->GetCurSymbol() );
+    }
 
     return aItem->Clone();
 }
@@ -431,8 +445,8 @@ void SCHEMATIC_COMMIT::revertLibEdit()
 
 void SCHEMATIC_COMMIT::Revert()
 {
-    PICKED_ITEMS_LIST                  undoList;
-    KIGFX::VIEW*                       view = m_toolMgr->GetView();
+    PICKED_ITEMS_LIST undoList;
+    KIGFX::VIEW*      view = m_toolMgr->GetView();
 
     if( m_changes.empty() )
         return;
@@ -443,10 +457,11 @@ void SCHEMATIC_COMMIT::Revert()
         return;
     }
 
-    SCHEMATIC& schematic = static_cast<SCH_EDIT_FRAME*>( m_toolMgr->GetToolHolder() )->Schematic();
+    SCH_EDIT_FRAME* frame = static_cast<SCH_EDIT_FRAME*>( m_toolMgr->GetToolHolder() );
+    SCHEMATIC&      schematic = frame->Schematic();
 
     std::vector<SCH_ITEM*> bulkAddedItems;
-    std::vector<SCH_ITEM*>   bulkRemovedItems;
+    std::vector<SCH_ITEM*> bulkRemovedItems;
     std::vector<SCH_ITEM*> itemsChanged;
 
     for( auto it = m_changes.rbegin(); it != m_changes.rend(); ++it )
@@ -470,6 +485,8 @@ void SCHEMATIC_COMMIT::Revert()
             break;
 
         case CHT_REMOVE:
+            item->SetConnectivityDirty();
+
             if( !( changeFlags & CHT_DONE ) )
                 break;
 
@@ -482,6 +499,7 @@ void SCHEMATIC_COMMIT::Revert()
         {
             view->Remove( item );
             item->SwapData( copy );
+            item->SetConnectivityDirty();
 
             // Special cases for items which have instance data
             if( item->GetParent() && item->GetParent()->Type() == SCH_SYMBOL_T
@@ -520,6 +538,8 @@ void SCHEMATIC_COMMIT::Revert()
 
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
     selTool->RebuildSelection();
+
+    frame->RecalculateConnections( nullptr, NO_CLEANUP );
 
     clear();
 }

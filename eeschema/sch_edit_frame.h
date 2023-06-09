@@ -55,10 +55,10 @@ class SCH_SYMBOL;
 class SCH_FIELD;
 class SCH_JUNCTION;
 class SCHEMATIC;
+class SCHEMATIC_COMMIT;
 class DIALOG_BOOK_REPORTER;
 class DIALOG_ERC;
 class DIALOG_SCH_FIND;
-class wxFindReplaceData;
 class RESCUER;
 class HIERARCHY_PANE;
 
@@ -248,10 +248,9 @@ public:
     void AutoRotateItem( SCH_SCREEN* aScreen, SCH_ITEM* aItem );
 
     /**
-     * Add an item to the schematic and adds the changes to the undo/redo container.
-     * @param aUndoAppend True if the action should be appended to the current undo record.
+     * Add an item to the schematic and adds the changes to the commit.
      */
-    void AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* aItem, bool aUndoAppend );
+    void AddItemToCommitAndScreen( SCHEMATIC_COMMIT* aCommit, SCH_SCREEN* aScreen, SCH_ITEM* aItem );
 
     /**
      * Run the Find or Find & Replace dialog.
@@ -279,39 +278,33 @@ public:
 
     /**
      * Break a single segment into two at the specified point.
-     *
-     * @note This always appends to the existing undo state.
-     *
+     * @param aCommit Transaction container used to record changes for undo/redo
      * @param aSegment Line segment to break
      * @param aPoint Point at which to break the segment
-     * @param aNewSegment Pointer to the newly created segment (if given and created)
-     * @param aScreen is the screen to examine, or nullptr to examine the current screen.
+     * @param aNewSegment Pointer to the newly created segment (if created)
+     * @param aScreen is the screen to examine
      */
-    void BreakSegment( SCH_LINE* aSegment, const VECTOR2I& aPoint,
-                       SCH_LINE** aNewSegment = nullptr, SCH_SCREEN* aScreen = nullptr );
+    void BreakSegment( SCHEMATIC_COMMIT* aCommit, SCH_LINE* aSegment, const VECTOR2I& aPoint,
+                       SCH_LINE** aNewSegment, SCH_SCREEN* aScreen );
 
     /**
      * Check every wire and bus for a intersection at \a aPoint and break into two segments
      * at \a aPoint if an intersection is found.
-     *
-     * @note This always appends to the existing undo state.
-     *
+     * @param aCommit Transaction container used to record changes for undo/redo
      * @param aPoint Test this point for an intersection.
-     * @param aScreen is the screen to examine, or nullptr to examine the current screen.
+     * @param aScreen is the screen to examine.
      * @return True if any wires or buses were broken.
      */
-    bool BreakSegments( const VECTOR2I& aPoint, SCH_SCREEN* aScreen = nullptr );
+    bool BreakSegments( SCHEMATIC_COMMIT* aCommit, const VECTOR2I& aPoint, SCH_SCREEN* aScreen );
 
     /**
      * Test all junctions and bus entries in the schematic for intersections with wires and
      * buses and breaks any intersections into multiple segments.
-     *
-     * @note This always appends to the existing undo state.
-     *
-     * @param aScreen is the screen to examine, or nullptr to examine the current screen
+     * @param aCommit Transaction container used to record changes for undo/redo
+     * @param aScreen is the screen to examine.
      * @return True if any wires or buses were broken.
      */
-    bool BreakSegmentsOnJunctions( SCH_SCREEN* aScreen = nullptr );
+    bool BreakSegmentsOnJunctions( SCHEMATIC_COMMIT* aCommit, SCH_SCREEN* aScreen );
 
     /**
      * Test all of the connectable objects in the schematic for unused connection points.
@@ -396,7 +389,7 @@ public:
      * Annotate the symbols in the schematic that are not currently annotated. Multi-unit symbols
      * are annotated together. E.g. if two symbols were R8A and R8B, they may become R3A and
      * R3B, but not R3A and R3C or R3C and R4D.
-     *
+     * @param aCommit Transaction container used to record changes for undo/redo
      * @param aAnnotateScope See #ANNOTATE_SCOPE_T
      * @param aSortOption Define the annotation order.  See #ANNOTATE_ORDER_T.
      * @param aAlgoOption Define the annotation style.  See #ANNOTATE_ALGO_T.
@@ -410,17 +403,14 @@ public:
      *                          used to handle annotation in complex hierarchies.
      * @param aReporter A sink for error messages.  Use NULL_REPORTER if you don't need errors.
      *
-     * @param appendUndo True if the annotation operation should be added to an existing undo,
-     *                   false if it should be separately undo-able.
-     *
      * When the sheet number is used in annotation, each sheet annotation starts from sheet
      * number * 100.  In other words the first sheet uses 100 to 199, the second sheet uses
      * 200 to 299, and so on.
      */
-    void AnnotateSymbols( ANNOTATE_SCOPE_T aAnnotateScope, ANNOTATE_ORDER_T aSortOption,
-                          ANNOTATE_ALGO_T aAlgoOption, bool aRecursive, int aStartNumber,
-                          bool aResetAnnotation, bool aRepairTimestamps, REPORTER& aReporter,
-                          bool appendUndo = false );
+    void AnnotateSymbols( SCHEMATIC_COMMIT* aCommit, ANNOTATE_SCOPE_T aAnnotateScope,
+                          ANNOTATE_ORDER_T aSortOption, ANNOTATE_ALGO_T aAlgoOption,
+                          bool aRecursive, int aStartNumber, bool aResetAnnotation,
+                          bool aRepairTimestamps, REPORTER& aReporter );
 
     /**
      * Check for annotation errors.
@@ -532,31 +522,26 @@ public:
      */
     bool AskToSaveChanges();
 
-    SCH_JUNCTION* AddJunction( SCH_SCREEN* aScreen, const VECTOR2I& aPos, bool aAppendToUndo,
-                               bool aFinal = true );
+    SCH_JUNCTION* AddJunction( SCHEMATIC_COMMIT* aCommit, SCH_SCREEN* aScreen,
+                               const VECTOR2I& aPos );
 
     /**
      * Perform routine schematic cleaning including breaking wire and buses and deleting
      * identical objects superimposed on top of each other.
-     *
-     * @note This always appends to the existing undo state.
-     *
+     * @param aCommit Transaction container used to record changes for undo/redo
      * @param aScreen is the screen to examine, or nullptr to examine the current screen
-     * @return True if any schematic clean up was performed.
      */
-    bool SchematicCleanUp( SCH_SCREEN* aScreen = nullptr );
+    void SchematicCleanUp( SCHEMATIC_COMMIT* aCommit, SCH_SCREEN* aScreen = nullptr );
 
     /**
      * If any single wire passes through _both points_, remove the portion between the two points,
      * potentially splitting the wire into two.
-     *
-     * @note This always appends to the existing undo state.
-     *
+     * @param aCommit Transaction container used to record changes for undo/redo
      * @param aStart The starting point for trimmming
      * @param aEnd The ending point for trimming
      * @return True if any wires were changed by this operation
      */
-    bool TrimWire( const VECTOR2I& aStart, const VECTOR2I& aEnd );
+    bool TrimWire( SCHEMATIC_COMMIT* aCommit, const VECTOR2I& aStart, const VECTOR2I& aEnd );
 
     void OnOpenPcbnew( wxCommandEvent& event );
     void OnOpenCvpcb( wxCommandEvent& event );
@@ -568,7 +553,6 @@ public:
      *
      * @param aSheet is the #SCH_SHEET object to test.
      * @param aHierarchy is the #SCH_SHEET_PATH where \a aSheet is going to reside.
-     *
      * @return true if \a aSheet will cause a recursion error in \a aHierarchy.
      */
     bool CheckSheetForRecursion( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy );
@@ -670,20 +654,14 @@ public:
      * Removes a given junction and heals any wire segments under the junction
      *
      * @param aItem The junction to delete
-     * @param aAppend True if we are updating an ongoing commit
      */
-    void DeleteJunction( SCH_ITEM* aItem, bool aAppend = false );
+    void DeleteJunction( SCHEMATIC_COMMIT* aCommit, SCH_ITEM* aItem );
 
     void ConvertPart( SCH_SYMBOL* aSymbol );
 
     void SelectUnit( SCH_SYMBOL* aSymbol, int aUnit );
 
     /* Undo - redo */
-
-    /**
-     * Create a new, blank stack for future Undo commands to be pushed to
-     */
-    void StartNewUndo();
 
     /**
      * Create a copy of the current schematic item, and put it in the undo list.
@@ -759,17 +737,6 @@ public:
     void RollbackSchematicFromUndo();
 
     /**
-     * Create a symbol library file with the name of the root document plus the '-cache' suffix,
-     *
-     * This file will contain all symbols used in the current schematic.
-     *
-     * @param aUseCurrentSheetFilename set to false to use the root sheet filename
-     *                                 (default) or true to use the currently opened sheet.
-     * @return true if the file was written successfully.
-     */
-    bool CreateArchiveLibraryCacheFile( bool aUseCurrentSheetFilename = false );
-
-    /**
      * Create a library \a aFileName that contains all symbols used in the current schematic.
      *
      * @param aFileName The full path and file name of the archive library.
@@ -809,7 +776,7 @@ public:
     /**
      * Generate the connection data for the entire schematic hierarchy.
      */
-    void RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags );
+    void RecalculateConnections( SCHEMATIC_COMMIT* aCommit, SCH_CLEANUP_FLAGS aCleanupFlags );
 
     /**
      * Called after the preferences dialog is run.

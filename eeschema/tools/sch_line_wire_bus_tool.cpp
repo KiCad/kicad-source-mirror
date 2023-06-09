@@ -35,9 +35,6 @@
 #include <utility>
 #include <vector>
 
-#include <eda_item.h>
-#include <bitmaps.h>
-#include <core/typeinfo.h>
 #include <layer_ids.h>
 #include <math/vector2d.h>
 #include <advanced_config.h>
@@ -47,18 +44,16 @@
 #include <tool/selection_conditions.h>
 #include <tool/tool_event.h>
 #include <trigo.h>
-#include <undo_redo_container.h>
-#include <connection_graph.h>
 #include <eeschema_id.h>
 #include <sch_bus_entry.h>
 #include <sch_connection.h>
 #include <sch_edit_frame.h>
-#include <sch_item.h>
 #include <sch_line.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
 #include <schematic.h>
+#include <schematic_commit.h>
 #include <ee_actions.h>
 #include <ee_grid_helper.h>
 #include <ee_selection.h>
@@ -819,8 +814,10 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, int aType, 
             if( evt->IsDblClick( BUT_LEFT ) && segment )
             {
                 if( twoSegments && m_wires.size() >= 2 )
+                {
                     computeBreakPoint( { m_wires[m_wires.size() - 2], segment }, cursorPos,
                                        currentMode, posture );
+                }
 
                 finishSegments();
                 segment = nullptr;
@@ -1123,8 +1120,8 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
     // freed selected items.
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-    SCH_SCREEN*       screen = m_frame->GetScreen();
-    PICKED_ITEMS_LIST itemList;
+    SCH_SCREEN*      screen = m_frame->GetScreen();
+    SCHEMATIC_COMMIT commit( m_toolMgr );
 
     // Remove segments backtracking over others
     simplifyWireList();
@@ -1149,17 +1146,17 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
                 new_ends.push_back( pt );
         }
 
-        itemList.PushItem( ITEM_PICKER( screen, wire, UNDO_REDO::NEWITEM ) );
+        commit.Added( wire, screen );
     }
 
     if( m_busUnfold.in_progress && m_busUnfold.label_placed )
     {
         wxASSERT( m_busUnfold.entry && m_busUnfold.label );
 
-        itemList.PushItem( ITEM_PICKER( screen, m_busUnfold.entry, UNDO_REDO::NEWITEM ) );
+        commit.Added( m_busUnfold.entry, screen );
         m_frame->SaveCopyForRepeatItem( m_busUnfold.entry );
 
-        itemList.PushItem( ITEM_PICKER( screen, m_busUnfold.label, UNDO_REDO::NEWITEM ) );
+        commit.Added( m_busUnfold.label, screen );
         m_frame->AddCopyForRepeatItem( m_busUnfold.label );
         m_busUnfold.label->ClearEditFlags();
     }
@@ -1189,10 +1186,8 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
     getViewControls()->CaptureCursor( false );
     getViewControls()->SetAutoPan( false );
 
-    m_frame->SaveCopyInUndoList( itemList, UNDO_REDO::NEWITEM, false );
-
     // Correct and remove segments that need to be merged.
-    m_frame->SchematicCleanUp();
+    m_frame->SchematicCleanUp( &commit );
 
     std::vector<SCH_ITEM*> symbols;
 
@@ -1209,14 +1204,14 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
         for( auto pt = pts.begin(); pt != pts.end(); pt++ )
         {
             for( auto secondPt = pt + 1; secondPt != pts.end(); secondPt++ )
-                m_frame->TrimWire( *pt, *secondPt );
+                m_frame->TrimWire( &commit, *pt, *secondPt );
         }
     }
 
     for( const VECTOR2I& pt : new_ends )
     {
         if( m_frame->GetScreen()->IsExplicitJunctionNeeded( pt ) )
-            m_frame->AddJunction( m_frame->GetScreen(), pt, true, false );
+            m_frame->AddJunction( &commit, m_frame->GetScreen(), pt );
     }
 
     if( m_busUnfold.in_progress )
@@ -1226,13 +1221,14 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
         item->ClearEditFlags();
 
     m_frame->TestDanglingEnds();
-    m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
+    commit.Push( _( "Draw Wires" ) );
 
-    m_frame->OnModify();
+    m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
 }
 
 
-int SCH_LINE_WIRE_BUS_TOOL::TrimOverLappingWires(  EE_SELECTION* aSelection  )
+int SCH_LINE_WIRE_BUS_TOOL::TrimOverLappingWires( SCHEMATIC_COMMIT* aCommit,
+                                                  EE_SELECTION* aSelection  )
 {
     SCHEMATIC* sch = getModel<SCHEMATIC>();
     SCH_SCREEN* screen = sch->CurrentSheet().LastScreen();
@@ -1258,7 +1254,7 @@ int SCH_LINE_WIRE_BUS_TOOL::TrimOverLappingWires(  EE_SELECTION* aSelection  )
         {
             std::vector<VECTOR2I> conn_pts;
 
-            for( VECTOR2I pt : pts )
+            for( const VECTOR2I& pt : pts )
             {
                 if( IsPointOnSegment( line->GetStartPoint(), line->GetEndPoint(), pt ) )
                     conn_pts.push_back( pt );
@@ -1268,7 +1264,7 @@ int SCH_LINE_WIRE_BUS_TOOL::TrimOverLappingWires(  EE_SELECTION* aSelection  )
             }
 
             if( conn_pts.size() == 2 )
-                m_frame->TrimWire( conn_pts[0], conn_pts[1] );
+                m_frame->TrimWire( aCommit, conn_pts[0], conn_pts[1] );
         }
     }
 
@@ -1276,12 +1272,13 @@ int SCH_LINE_WIRE_BUS_TOOL::TrimOverLappingWires(  EE_SELECTION* aSelection  )
 }
 
 
-int SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded( EE_SELECTION* aSelection )
+int SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded( SCHEMATIC_COMMIT* aCommit,
+                                                  EE_SELECTION* aSelection )
 {
     SCH_SCREEN*   screen = m_frame->GetScreen();
 
     for( const VECTOR2I& point : screen->GetNeededJunctions( aSelection->Items() ) )
-        m_frame->AddJunction( m_frame->GetScreen(), point, true, false );
+        m_frame->AddJunction( aCommit, m_frame->GetScreen(), point );
 
     return 0;
 }

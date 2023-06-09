@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
- * Copyright (C) 2004-2022 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2023 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,7 @@
 #include <sch_no_connect.h>
 #include <sch_screen.h>
 #include <sch_view.h>
+#include <schematic_commit.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
 #include <tools/ee_selection_tool.h>
@@ -49,7 +50,8 @@ void SCH_EDIT_FRAME::TestDanglingEnds()
 }
 
 
-bool SCH_EDIT_FRAME::TrimWire( const VECTOR2I& aStart, const VECTOR2I& aEnd )
+bool SCH_EDIT_FRAME::TrimWire( SCHEMATIC_COMMIT* aCommit, const VECTOR2I& aStart,
+                               const VECTOR2I& aEnd )
 {
     if( aStart == aEnd )
         return false;
@@ -92,20 +94,20 @@ bool SCH_EDIT_FRAME::TrimWire( const VECTOR2I& aStart, const VECTOR2I& aEnd )
         // Step 1: break the segment on one end.
         // Ensure that *line points to the segment containing aEnd
         SCH_LINE* new_line;
-        BreakSegment( line, aStart, &new_line );
+        BreakSegment( aCommit, line, aStart, &new_line, screen );
 
         if( IsPointOnSegment( new_line->GetStartPoint(), new_line->GetEndPoint(), aEnd ) )
             line = new_line;
 
         // Step 2: break the remaining segment.
         // Ensure that *line _also_ contains aStart.  This is our overlapping segment
-        BreakSegment( line, aEnd, &new_line );
+        BreakSegment( aCommit, line, aEnd, &new_line, screen );
 
         if( IsPointOnSegment( new_line->GetStartPoint(), new_line->GetEndPoint(), aStart ) )
             line = new_line;
 
-        SaveCopyInUndoList( screen, line, UNDO_REDO::DELETED, true );
         RemoveFromScreen( line, screen );
+        aCommit->Removed( line, screen );
 
         return true;
     }
@@ -114,11 +116,9 @@ bool SCH_EDIT_FRAME::TrimWire( const VECTOR2I& aStart, const VECTOR2I& aEnd )
 }
 
 
-bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
+void SCH_EDIT_FRAME::SchematicCleanUp( SCHEMATIC_COMMIT* aCommit, SCH_SCREEN* aScreen )
 {
-    PICKED_ITEMS_LIST            itemList;
     EE_SELECTION_TOOL*           selectionTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
-    std::vector<SCH_ITEM*>       deletedItems;
     std::vector<SCH_LINE*>       lines;
     std::vector<SCH_JUNCTION*>   junctions;
     std::vector<SCH_NO_CONNECT*> ncs;
@@ -134,12 +134,16 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
                            if( !( aItem->GetFlags() & STRUCT_DELETED ) )
                            {
                                aItem->SetFlags( STRUCT_DELETED );
-                               itemList.PushItem( ITEM_PICKER( aScreen, aItem, UNDO_REDO::DELETED ) );
-                               deletedItems.push_back( aItem );
+
+                               if( aItem->IsSelected() )
+                                   selectionTool->RemoveItemFromSel( aItem, true /*quiet mode*/ );
+
+                               RemoveFromScreen( aItem, aScreen );
+                               aCommit->Removed( aItem, aScreen );
                            }
                        };
 
-    BreakSegmentsOnJunctions( aScreen );
+    BreakSegmentsOnJunctions( aCommit, aScreen );
 
     for( SCH_ITEM* item : aScreen->Items().OfType( SCH_JUNCTION_T ) )
     {
@@ -150,9 +154,7 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
     }
 
     for( SCH_ITEM* item : aScreen->Items().OfType( SCH_NO_CONNECT_T ) )
-    {
         ncs.push_back( static_cast<SCH_NO_CONNECT*>( item ) );
-    }
 
     alg::for_all_pairs( junctions.begin(), junctions.end(),
             [&]( SCH_JUNCTION* aFirst, SCH_JUNCTION* aSecond )
@@ -237,9 +239,9 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
                 {
                     remove_item( firstLine );
                     remove_item( secondLine );
-                    itemList.PushItem( ITEM_PICKER( aScreen, mergedLine, UNDO_REDO::NEWITEM ) );
 
                     AddToScreen( mergedLine, aScreen );
+                    aCommit->Added( mergedLine, aScreen );
 
                     if( firstLine->IsSelected() || secondLine->IsSelected() )
                         selectionTool->AddItemToSel( mergedLine, true /*quiet mode*/ );
@@ -249,55 +251,38 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
             }
         }
     }
-
-    for( SCH_ITEM* item : deletedItems )
-    {
-        if( item->IsSelected() )
-            selectionTool->RemoveItemFromSel( item, true /*quiet mode*/ );
-
-        RemoveFromScreen( item, aScreen );
-    }
-
-    if( itemList.GetCount() )
-        SaveCopyInUndoList( itemList, UNDO_REDO::DELETED, true );
-
-    return itemList.GetCount() > 0;
 }
 
 
-void SCH_EDIT_FRAME::BreakSegment( SCH_LINE* aSegment, const VECTOR2I& aPoint,
-                                   SCH_LINE** aNewSegment, SCH_SCREEN* aScreen )
+void SCH_EDIT_FRAME::BreakSegment( SCHEMATIC_COMMIT* aCommit, SCH_LINE* aSegment,
+                                   const VECTOR2I& aPoint, SCH_LINE** aNewSegment,
+                                   SCH_SCREEN* aScreen )
 {
-    if( aScreen == nullptr )
-        aScreen = GetScreen();
-
     // Save the copy of aSegment before breaking it
-    SaveCopyInUndoList( aScreen, aSegment, UNDO_REDO::CHANGED, true );
+    aCommit->Modify( aSegment, aScreen );
 
     SCH_LINE* newSegment = aSegment->BreakAt( aPoint );
+
     aSegment->SetFlags( IS_CHANGED | IS_BROKEN );
     newSegment->SetFlags( IS_NEW | IS_BROKEN );
+
     AddToScreen( newSegment, aScreen );
-
-    SaveCopyInUndoList( aScreen, newSegment, UNDO_REDO::NEWITEM, true );
-
+    aCommit->Added( newSegment, aScreen );
     UpdateItem( aSegment, false, true );
 
-    if( aNewSegment )
-        *aNewSegment = newSegment;
+    *aNewSegment = newSegment;
 }
 
 
-bool SCH_EDIT_FRAME::BreakSegments( const VECTOR2I& aPoint, SCH_SCREEN* aScreen )
+bool SCH_EDIT_FRAME::BreakSegments( SCHEMATIC_COMMIT* aCommit, const VECTOR2I& aPoint,
+                                    SCH_SCREEN* aScreen )
 {
-    if( aScreen == nullptr )
-        aScreen = GetScreen();
-
-    bool brokenSegments = false;
+    bool      brokenSegments = false;
+    SCH_LINE* new_line;
 
     for( SCH_LINE* wire : aScreen->GetBusesAndWires( aPoint, true ) )
     {
-        BreakSegment( wire, aPoint, nullptr, aScreen );
+        BreakSegment( aCommit, wire, aPoint, &new_line, aScreen );
         brokenSegments = true;
     }
 
@@ -305,11 +290,8 @@ bool SCH_EDIT_FRAME::BreakSegments( const VECTOR2I& aPoint, SCH_SCREEN* aScreen 
 }
 
 
-bool SCH_EDIT_FRAME::BreakSegmentsOnJunctions( SCH_SCREEN* aScreen )
+bool SCH_EDIT_FRAME::BreakSegmentsOnJunctions( SCHEMATIC_COMMIT* aCommit, SCH_SCREEN* aScreen )
 {
-    if( aScreen == nullptr )
-        aScreen = GetScreen();
-
     bool brokenSegments = false;
 
     std::set<VECTOR2I> point_set;
@@ -326,7 +308,7 @@ bool SCH_EDIT_FRAME::BreakSegmentsOnJunctions( SCH_SCREEN* aScreen )
 
     for( const VECTOR2I& pt : point_set )
     {
-        BreakSegments( pt, aScreen );
+        BreakSegments( aCommit, pt, aScreen );
         brokenSegments = true;
     }
 
@@ -334,21 +316,15 @@ bool SCH_EDIT_FRAME::BreakSegmentsOnJunctions( SCH_SCREEN* aScreen )
 }
 
 
-void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
+void SCH_EDIT_FRAME::DeleteJunction( SCHEMATIC_COMMIT* aCommit, SCH_ITEM* aJunction )
 {
     SCH_SCREEN*        screen = GetScreen();
     PICKED_ITEMS_LIST  undoList;
     EE_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
 
-    auto remove_item =
-            [&]( SCH_ITEM* aItem ) -> void
-            {
-                aItem->SetFlags( STRUCT_DELETED );
-                undoList.PushItem( ITEM_PICKER( screen, aItem, UNDO_REDO::DELETED ) );
-            };
-
-    remove_item( aJunction );
+    aJunction->SetFlags( STRUCT_DELETED );
     RemoveFromScreen( aJunction, screen );
+    aCommit->Removed( aJunction, screen );
 
     /// Note that std::list or similar is required here as we may insert values in the
     /// loop below.  This will invalidate iterators in a std::vector or std::deque
@@ -380,26 +356,24 @@ void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
                 if( firstLine->IsEndPoint( secondLine->GetStartPoint() )
                         && firstLine->IsEndPoint( secondLine->GetEndPoint() ) )
                 {
-                    remove_item( firstLine );
+                    firstLine->SetFlags( STRUCT_DELETED );
                     return;
                 }
 
                 // Try to merge the remaining lines
-                if( SCH_LINE* line = secondLine->MergeOverlap( screen, firstLine, false ) )
+                if( SCH_LINE* new_line = secondLine->MergeOverlap( screen, firstLine, false ) )
                 {
-                    remove_item( firstLine );
-                    remove_item( secondLine );
-                    undoList.PushItem( ITEM_PICKER( screen, line, UNDO_REDO::NEWITEM ) );
-                    AddToScreen( line, screen );
+                    firstLine->SetFlags( STRUCT_DELETED );
+                    secondLine->SetFlags( STRUCT_DELETED );
+                    AddToScreen( new_line, screen );
+                    aCommit->Added( new_line, screen );
 
-                    if( line->IsSelected() )
-                        selectionTool->AddItemToSel( line, true /*quiet mode*/ );
+                    if( new_line->IsSelected() )
+                        selectionTool->AddItemToSel( new_line, true /*quiet mode*/ );
 
-                    lines.push_back( line );
+                    lines.push_back( new_line );
                 }
             } );
-
-    SaveCopyInUndoList( undoList, UNDO_REDO::DELETED, aAppend );
 
     for( SCH_LINE* line : lines )
     {
@@ -409,32 +383,21 @@ void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
                 selectionTool->RemoveItemFromSel( line, true /*quiet mode*/ );
 
             RemoveFromScreen( line, screen );
+            aCommit->Removed( line, screen );
         }
     }
 }
 
 
-SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( SCH_SCREEN* aScreen, const VECTOR2I& aPos,
-                                           bool aUndoAppend, bool aFinal )
+SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( SCHEMATIC_COMMIT* aCommit, SCH_SCREEN* aScreen,
+                                           const VECTOR2I& aPos )
 {
     SCH_JUNCTION* junction = new SCH_JUNCTION( aPos );
 
     AddToScreen( junction, aScreen );
-    SaveCopyInUndoList( aScreen, junction, UNDO_REDO::NEWITEM, aUndoAppend );
-    BreakSegments( aPos );
+    aCommit->Added( junction, aScreen );
 
-    if( aFinal )
-    {
-        m_toolManager->PostEvent( EVENTS::SelectedItemsModified );
-
-        TestDanglingEnds();
-        OnModify();
-
-        KIGFX::SCH_VIEW* view = GetCanvas()->GetView();
-        view->ClearPreview();
-        view->ShowPreview( false );
-        view->ClearHiddenFlags();
-    }
+    BreakSegments( aCommit, aPos, aScreen );
 
     return junction;
 }

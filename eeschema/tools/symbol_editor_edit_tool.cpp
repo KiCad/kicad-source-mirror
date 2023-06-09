@@ -28,20 +28,20 @@
 #include <tools/symbol_editor_drawing_tools.h>
 #include <tools/symbol_editor_move_tool.h>
 #include <ee_actions.h>
-#include <bitmaps.h>
 #include <string_utils.h>
 #include <symbol_edit_frame.h>
+#include <schematic_commit.h>
 #include <dialogs/dialog_lib_shape_properties.h>
 #include <dialogs/dialog_lib_text_properties.h>
+#include <dialogs/dialog_lib_textbox_properties.h>
 #include <dialogs/dialog_field_properties.h>
 #include <dialogs/dialog_lib_symbol_properties.h>
 #include <dialogs/dialog_lib_edit_pin_table.h>
 #include <dialogs/dialog_update_symbol_fields.h>
 #include <sch_plugins/kicad/sch_sexpr_plugin.h>
 #include <lib_text.h>
+#include <lib_textbox.h>
 #include "symbol_editor_edit_tool.h"
-#include "dialog_lib_textbox_properties.h"
-#include "lib_textbox.h"
 #include <wx/textdlg.h>     // for wxTextEntryDialog
 #include <math/util.h>      // for KiROUND
 
@@ -755,7 +755,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
 
 int SYMBOL_EDITOR_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 {
-    LIB_SYMBOL*         symbol = m_frame->GetCurSymbol();
+    LIB_SYMBOL* symbol = m_frame->GetCurSymbol();
 
     if( !symbol || symbol->IsAlias() )
         return 0;
@@ -780,7 +780,9 @@ int SYMBOL_EDITOR_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
     if( !newPart )
         return -1;
 
-    m_frame->SaveCopyInUndoList( symbol );
+    SCHEMATIC_COMMIT commit( m_toolMgr );
+
+    commit.Modify( symbol );
     m_selectionTool->ClearSelection();
 
     for( LIB_ITEM& item : symbol->GetDrawItems() )
@@ -811,7 +813,8 @@ int SYMBOL_EDITOR_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
     if( !selection.Empty() )
     {
         selection.SetReferencePoint( getViewControls()->GetCursorPosition( true ) );
-        m_toolMgr->RunAction( EE_ACTIONS::move, false );
+        m_toolMgr->RunAction( EE_ACTIONS::move, true, &commit );
+        commit.Push( _( "Paste" ) );
     }
 
     return 0;
@@ -820,8 +823,9 @@ int SYMBOL_EDITOR_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 
 int SYMBOL_EDITOR_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 {
-    LIB_SYMBOL*   symbol = m_frame->GetCurSymbol();
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( nonFields );
+    LIB_SYMBOL*      symbol = m_frame->GetCurSymbol();
+    EE_SELECTION&    selection = m_selectionTool->RequestSelection( nonFields );
+    SCHEMATIC_COMMIT commit( m_toolMgr );
 
     if( selection.GetSize() == 0 )
         return 0;
@@ -832,7 +836,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         return 0;
 
     if( !selection.Front()->IsMoving() )
-        saveCopyInUndoList( m_frame->GetCurSymbol(), UNDO_REDO::LIBEDIT );
+        commit.Modify( symbol, m_frame->GetScreen() );
 
     EDA_ITEMS newItems;
     int       symbolLastPinNumber = -1;
@@ -866,7 +870,8 @@ int SYMBOL_EDITOR_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( EE_ACTIONS::addItemsToSel, true, &newItems );
 
     selection.SetReferencePoint( mapCoords( getViewControls()->GetCursorPosition( true ) ) );
-    m_toolMgr->RunAction( EE_ACTIONS::move, false );
+    m_toolMgr->RunAction( EE_ACTIONS::move, true, &commit );
+    commit.Push( _( "Duplicate" ) );
 
     return 0;
 }

@@ -487,7 +487,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             OnModify();
         }
 
-        RecalculateConnections( GLOBAL_CLEANUP );
+        RecalculateConnections( nullptr, GLOBAL_CLEANUP );
         ClearUndoRedoList();
     }
 
@@ -1258,7 +1258,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             GetScreen()->SetFileName( newfilename.GetFullPath() );
             GetScreen()->SetContentModified();
 
-            RecalculateConnections( GLOBAL_CLEANUP );
+            RecalculateConnections( nullptr, GLOBAL_CLEANUP );
 
             // Only perform the dangling end test on root sheet.
             GetScreen()->TestDanglingEnds();

@@ -55,7 +55,7 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
 
     // If we are using the new connectivity, make sure that we do a full-rebuild
     if( ADVANCED_CFG::GetCfg().m_IncrementalConnectivity )
-        RecalculateConnections( GLOBAL_CLEANUP );
+        RecalculateConnections( nullptr, GLOBAL_CLEANUP );
 
     bool res = true;
     bool executeCommandLine = false;

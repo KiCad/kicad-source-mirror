@@ -96,13 +96,6 @@
  * swapped data is data modified by editing, so not all values are swapped
  */
 
-void SCH_EDIT_FRAME::StartNewUndo()
-{
-    PICKED_ITEMS_LIST* blank = new PICKED_ITEMS_LIST();
-    PushCommandToUndoList( blank );
-}
-
-
 void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_SCREEN* aScreen, SCH_ITEM* aItem,
                                          UNDO_REDO aCommandType, bool aAppend,
                                          bool aDirtyConnectivity )
@@ -221,7 +214,9 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
         {
             if( !sch_item->IsConnectivityDirty() && sch_item->Connection()
               && ( sch_item->Connection()->Name() == m_highlightedConn ) )
+            {
                 m_highlightedConnChanged = true;
+            }
 
             sch_item->SetConnectivityDirty();
         }

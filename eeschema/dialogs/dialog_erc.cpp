@@ -495,9 +495,9 @@ void DIALOG_ERC::testErc()
 
     // If we are using the new connectivity, make sure that we do a full-rebuild
     if( ADVANCED_CFG::GetCfg().m_IncrementalConnectivity )
-        m_parent->RecalculateConnections( GLOBAL_CLEANUP );
+        m_parent->RecalculateConnections( nullptr, GLOBAL_CLEANUP );
     else
-        m_parent->RecalculateConnections( NO_CLEANUP );
+        m_parent->RecalculateConnections( nullptr, NO_CLEANUP );
 
     sch->ConnectionGraph()->RunERC();
 

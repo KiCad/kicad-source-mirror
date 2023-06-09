@@ -807,14 +807,12 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
         {
             SCH_SCREEN*              screen = sheet.LastScreen();
             std::vector<SCH_SYMBOL*> otherUnits;
-            constexpr bool           appendUndo = true;
 
             CollectOtherUnits( ref, unit, libId, sheet, &otherUnits );
 
             for( SCH_SYMBOL* otherUnit : otherUnits )
             {
-                GetParent()->SaveCopyInUndoList( screen, otherUnit, UNDO_REDO::CHANGED,
-                                                 appendUndo );
+                commit.Modify( otherUnit, screen );
                 otherUnit->SetValueFieldText( m_fields->at( VALUE_FIELD ).GetText() );
                 otherUnit->SetFootprintFieldText( m_fields->at( FOOTPRINT_FIELD ).GetText() );
 

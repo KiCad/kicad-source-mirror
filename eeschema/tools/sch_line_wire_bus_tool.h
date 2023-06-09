@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -92,17 +92,20 @@ public:
     /**
      * Handle the addition of junctions to a selection of objects
      */
-    int AddJunctionsIfNeeded( EE_SELECTION* aSelection );
+    int AddJunctionsIfNeeded( SCHEMATIC_COMMIT* aCommit, EE_SELECTION* aSelection );
 
     /**
      * Logic to remove wires when overlapping correct items
      */
-    int TrimOverLappingWires( EE_SELECTION* aSelection );
+    int TrimOverLappingWires( SCHEMATIC_COMMIT* aCommit, EE_SELECTION* aSelection );
 
 private:
-    int       doDrawSegments( const TOOL_EVENT& aTool, int aType, bool aQuitOnDraw );
+    int doDrawSegments( const TOOL_EVENT& aTool, int aType, bool aQuitOnDraw );
+
     SCH_LINE* startSegments( int aType, const VECTOR2D& aPos, SCH_LINE* aSegment = nullptr );
+
     SCH_LINE* doUnfoldBus( const wxString& aNet, const VECTOR2I& aPos = VECTOR2I( 0, 0 ) );
+
     void finishSegments();
 
     /**

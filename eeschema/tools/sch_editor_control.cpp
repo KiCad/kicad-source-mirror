@@ -31,12 +31,12 @@
 #include <dialogs/dialog_plot_schematic.h>
 #include <dialogs/dialog_symbol_remap.h>
 #include <dialogs/dialog_assign_netclass.h>
+#include <dialogs/dialog_update_from_pcb.h>
 #include <project_rescue.h>
 #include <erc.h>
 #include <invoke_sch_dialog.h>
 #include <string_utils.h>
 #include <kiway.h>
-#include <kiway_player.h>
 #include <netlist_exporters/netlist_exporter_spice.h>
 #include <paths.h>
 #include <project/project_file.h>
@@ -52,11 +52,11 @@
 #include <sch_sheet_pin.h>
 #include <sch_view.h>
 #include <schematic.h>
-#include <advanced_config.h>
+#include <schematic_commit.h>
 #include <sim/simulator_frame.h>
 #include <sim/spice_generator.h>
 #include <sim/sim_lib_mgr.h>
-#include "symbol_library_manager.h"
+#include <symbol_library_manager.h>
 #include <symbol_viewer_frame.h>
 #include <tool/picker_tool.h>
 #include <tool/tool_manager.h>
@@ -64,8 +64,8 @@
 #include <tools/ee_selection.h>
 #include <tools/ee_selection_tool.h>
 #include <tools/sch_editor_control.h>
+#include <tools/sch_move_tool.h>
 #include <drawing_sheet/ds_proxy_undo_item.h>
-#include <dialog_update_from_pcb.h>
 #include <eda_list_dialog.h>
 #include <wildcards_and_files_ext.h>
 #include <wx_filename.h>
@@ -247,7 +247,7 @@ bool SCH_EDITOR_CONTROL::rescueProject( RESCUER& aRescuer, bool aRunningOnDemand
             SCH_SCREENS schematic( m_frame->Schematic().Root() );
 
             schematic.UpdateSymbolLinks();
-            m_frame->RecalculateConnections( GLOBAL_CLEANUP );
+            m_frame->RecalculateConnections( nullptr, GLOBAL_CLEANUP );
         }
 
         m_frame->ClearUndoRedoList();
@@ -780,9 +780,7 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
             if( item )
             {
                 if( item->IsConnectivityDirty() )
-                {
-                    editFrame->RecalculateConnections( NO_CLEANUP );
-                }
+                    editFrame->RecalculateConnections( nullptr, NO_CLEANUP );
 
                 if( item->Type() == SCH_FIELD_T )
                     symbol = dynamic_cast<SCH_SYMBOL*>( item->GetParent() );
@@ -1529,18 +1527,19 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     // SCH_SEXP_PLUGIN added the items to the paste screen, but not to the view or anything
     // else.  Pull them back out to start with.
-    EDA_ITEMS       loadedItems;
-    bool            sheetsPasted = false;
-    SCH_SHEET_LIST  hierarchy = m_frame->Schematic().GetSheets();
-    SCH_SHEET_PATH& pasteRoot = m_frame->GetCurrentSheet();
-    wxFileName      destFn = pasteRoot.Last()->GetFileName();
+    SCHEMATIC_COMMIT commit( m_toolMgr );
+    EDA_ITEMS        loadedItems;
+    bool             sheetsPasted = false;
+    SCH_SHEET_LIST   hierarchy = m_frame->Schematic().GetSheets();
+    SCH_SHEET_PATH&  pasteRoot = m_frame->GetCurrentSheet();
+    wxFileName       destFn = pasteRoot.Last()->GetFileName();
 
     if( destFn.IsRelative() )
         destFn.MakeAbsolute( m_frame->Prj().GetProjectPath() );
 
     // List of paths in the hierarchy that refer to the destination sheet of the paste
-    SCH_SHEET_LIST pasteInstances = hierarchy.FindAllSheetsForScreen( pasteRoot.LastScreen() );
-    pasteInstances.SortByPageNumbers();
+    SCH_SHEET_LIST sheetPathsForScreen = hierarchy.FindAllSheetsForScreen( pasteRoot.LastScreen() );
+    sheetPathsForScreen.SortByPageNumbers();
 
     // Build a list of screens from the current design (to avoid loading sheets that already exist)
     std::map<wxString, SCH_SCREEN*> loadedScreens;
@@ -1594,9 +1593,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     // Remove the references from our temporary screen to prevent freeing on the DTOR
     tempScreen->Clear( false );
 
-    for( unsigned i = 0; i < loadedItems.size(); ++i )
+    for( EDA_ITEM* item : loadedItems )
     {
-        EDA_ITEM* item = loadedItems[i];
         KIID_PATH clipPath( wxT( "/" ) ); // clipboard is at root
 
         if( item->Type() == SCH_SYMBOL_T )
@@ -1629,8 +1627,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 symbol->SetLibSymbol( libSymbol );
             }
 
-            for( SCH_SHEET_PATH& instance : pasteInstances )
-                updatePastedSymbol( symbol, tempScreen, instance, clipPath, forceKeepAnnotations );
+            for( SCH_SHEET_PATH& sheetPath : sheetPathsForScreen )
+                updatePastedSymbol( symbol, tempScreen, sheetPath, clipPath, forceKeepAnnotations );
 
             // Assign a new KIID
             const_cast<KIID&>( item->m_Uuid ) = KIID();
@@ -1639,14 +1637,14 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             for( SCH_PIN* pin : symbol->GetPins() )
                 const_cast<KIID&>( pin->m_Uuid ) = KIID();
 
-            for( SCH_SHEET_PATH& instance : pasteInstances )
+            for( SCH_SHEET_PATH& sheetPath : sheetPathsForScreen )
             {
                 // Ignore symbols from a non-existant library.
                 if( libSymbol )
                 {
-                    SCH_REFERENCE schReference( symbol, libSymbol, instance );
-                    schReference.SetSheetNumber( instance.GetVirtualPageNumber() );
-                    pastedSymbols[instance].AddItem( schReference );
+                    SCH_REFERENCE schReference( symbol, libSymbol, sheetPath );
+                    schReference.SetSheetNumber( sheetPath.GetVirtualPageNumber() );
+                    pastedSymbols[sheetPath].AddItem( schReference );
                 }
             }
         }
@@ -1724,14 +1722,14 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
             // Once we have our new KIID we can update all pasted instances. This will either
             // reset the annotations or copy "kept" annotations from the supplementary clipboard.
-            for( SCH_SHEET_PATH& instance : pasteInstances )
+            for( SCH_SHEET_PATH& sheetPath : sheetPathsForScreen )
             {
-                SCH_SHEET_PATH sheetPath = updatePastedSheet( instance, clipPath, sheet,
-                                                              ( forceKeepAnnotations && annotate.automatic ),
-                                                              &pastedSheets[instance],
-                                                              &pastedSymbols[instance] );
+                SCH_SHEET_PATH subPath = updatePastedSheet( sheetPath, clipPath, sheet,
+                                                            ( forceKeepAnnotations && annotate.automatic ),
+                                                            &pastedSheets[sheetPath],
+                                                            &pastedSymbols[sheetPath] );
 
-                sheetPath.GetSymbols( pastedSymbols[instance] );
+                subPath.GetSymbols( pastedSymbols[sheetPath] );
             }
         }
         else
@@ -1754,7 +1752,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             item->SetFlags( STARTPOINT | ENDPOINT );
 
         item->SetFlags( IS_NEW | IS_PASTED | IS_MOVING );
-        m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), (SCH_ITEM*) item, i > 0 );
+        m_frame->AddItemToCommitAndScreen( &commit, m_frame->GetScreen(), (SCH_ITEM*) item );
 
         // Reset flags for subsequent move operation
         item->SetFlags( IS_NEW | IS_PASTED | IS_MOVING );
@@ -1764,16 +1762,16 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         getView()->Hide( item, true );
     }
 
-    pasteInstances.SortByPageNumbers();
+    sheetPathsForScreen.SortByPageNumbers();
 
     if( sheetsPasted )
     {
         // Update page numbers: Find next free numeric page number
-        for( SCH_SHEET_PATH& instance : pasteInstances )
+        for( SCH_SHEET_PATH& sheetPath : sheetPathsForScreen )
         {
-            pastedSheets[instance].SortByPageNumbers();
+            pastedSheets[sheetPath].SortByPageNumbers();
 
-            for( SCH_SHEET_PATH& pastedSheet : pastedSheets[instance] )
+            for( SCH_SHEET_PATH& pastedSheet : pastedSheets[sheetPath] )
             {
                 int      page = 1;
                 wxString pageNum = wxString::Format( "%d", page );
@@ -1797,7 +1795,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     std::map<SCH_SHEET_PATH, SCH_REFERENCE_LIST> annotatedSymbols;
 
     // Update the list of symbol instances that satisfy the annotation criteria.
-    for( const SCH_SHEET_PATH& sheetPath : pasteInstances )
+    for( const SCH_SHEET_PATH& sheetPath : sheetPathsForScreen )
     {
         for( size_t i = 0; i < pastedSymbols[sheetPath].GetCount(); i++ )
         {
@@ -1812,24 +1810,27 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     if( !annotatedSymbols.empty() )
     {
-        for( SCH_SHEET_PATH& instance : pasteInstances )
+        for( SCH_SHEET_PATH& path : sheetPathsForScreen )
         {
-            annotatedSymbols[instance].SortByReferenceOnly();
+            annotatedSymbols[path].SortByReferenceOnly();
 
             if( pasteMode == PASTE_MODE::UNIQUE_ANNOTATIONS )
-                annotatedSymbols[instance].ReannotateDuplicates( existingRefs );
+            {
+                annotatedSymbols[path].ReannotateDuplicates( existingRefs );
+            }
             else
-                annotatedSymbols[instance].ReannotateByOptions( (ANNOTATE_ORDER_T) annotate.sort_order,
-                                                                (ANNOTATE_ALGO_T) annotate.method,
-                                                                annotateStartNum, existingRefs,
-                                                                false,
-                                                                &hierarchy );
+            {
+                annotatedSymbols[path].ReannotateByOptions( (ANNOTATE_ORDER_T) annotate.sort_order,
+                                                            (ANNOTATE_ALGO_T) annotate.method,
+                                                            annotateStartNum, existingRefs, false,
+                                                            &hierarchy );
+            }
 
-            annotatedSymbols[instance].UpdateAnnotation();
+            annotatedSymbols[path].UpdateAnnotation();
 
             // Update existing refs for next iteration
-            for( size_t i = 0; i < annotatedSymbols[instance].GetCount(); i++ )
-                existingRefs.AddItem( annotatedSymbols[instance][i] );
+            for( size_t i = 0; i < annotatedSymbols[path].GetCount(); i++ )
+                existingRefs.AddItem( annotatedSymbols[path][i] );
         }
     }
 
@@ -1935,7 +1936,16 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             selection.SetReferencePoint( item->GetPosition() );
         }
 
-        m_toolMgr->RunAction( EE_ACTIONS::move, false );
+        m_toolMgr->RunAction( EE_ACTIONS::move, true, &commit );
+
+        while( m_toolMgr->GetTool<SCH_MOVE_TOOL>()->IsToolActive() )
+        {
+            wxMilliSleep( 50 );
+            wxYield();
+        }
+
+        if( !commit.Empty() )
+            commit.Push( _( "Paste" ) );
     }
 
     return 0;
@@ -2071,7 +2081,7 @@ int SCH_EDITOR_CONTROL::GenerateBOM( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::DrawSheetOnClipboard( const TOOL_EVENT& aEvent )
 {
-    m_frame->RecalculateConnections( LOCAL_CLEANUP );
+    m_frame->RecalculateConnections( nullptr, LOCAL_CLEANUP );
     m_frame->DrawCurrentSheetToClipboard();
     return 0;
 }

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Alexander Shuklin <Jasuramme@gmail.com>
- * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +33,7 @@
 #include <sch_sheet_path.h>
 #include <sch_label.h>
 #include <schematic.h>
+#include <schematic_commit.h>
 #include <string_utils.h>
 #include <kiface_base.h>
 #include <wildcards_and_files_ext.h>
@@ -53,8 +54,7 @@ BACK_ANNOTATE::BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter, bool 
         m_processAttributes( aProcessAttributes ),
         m_dryRun( aDryRun ),
         m_frame( aFrame ),
-        m_changesCount( 0 ),
-        m_appendUndo( false )
+        m_changesCount( 0 )
 {
 }
 
@@ -67,7 +67,6 @@ BACK_ANNOTATE::~BACK_ANNOTATE()
 bool BACK_ANNOTATE::BackAnnotateSymbols( const std::string& aNetlist )
 {
     m_changesCount = 0;
-    m_appendUndo = false;
 
     if( !m_matchByReference && !m_processValues && !m_processFootprints && !m_processReferences
         && !m_processNetNames && !m_processAttributes )
@@ -226,8 +225,8 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
         else
         {
             // Add footprint to the map
-            auto data =
-                    std::make_shared<PCB_FP_DATA>( ref, footprint, value, dnp, exBOM, pinNetMap );
+            auto data = std::make_shared<PCB_FP_DATA>( ref, footprint, value, dnp, exBOM,
+                                                       pinNetMap );
             m_pcbFootprints.insert( nearestItem, std::make_pair( path, data ) );
         }
     }
@@ -336,7 +335,8 @@ void BACK_ANNOTATE::checkForUnusedSymbols()
 
 void BACK_ANNOTATE::applyChangelist()
 {
-    wxString msg;
+    SCHEMATIC_COMMIT commit( m_frame );
+    wxString         msg;
 
     // Apply changes from change list
     for( CHANGELIST_ITEM& item : m_changelist )
@@ -365,8 +365,7 @@ void BACK_ANNOTATE::applyChangelist()
 
             if( !m_dryRun )
             {
-                m_frame->SaveCopyInUndoList( screen, symbol, UNDO_REDO::CHANGED, m_appendUndo );
-                m_appendUndo = true;
+                commit.Modify( symbol, screen );
                 symbol->SetRef( &ref.GetSheetPath(), fpData.m_ref );
             }
 
@@ -383,8 +382,7 @@ void BACK_ANNOTATE::applyChangelist()
 
             if( !m_dryRun )
             {
-                m_frame->SaveCopyInUndoList( screen, symbol, UNDO_REDO::CHANGED, m_appendUndo );
-                m_appendUndo = true;
+                commit.Modify( symbol, screen );
                 symbol->SetFootprintFieldText( fpData.m_footprint );
             }
 
@@ -401,8 +399,7 @@ void BACK_ANNOTATE::applyChangelist()
 
             if( !m_dryRun )
             {
-                m_frame->SaveCopyInUndoList( screen, symbol, UNDO_REDO::CHANGED, m_appendUndo );
-                m_appendUndo = true;
+                commit.Modify( symbol, screen );
                 symbol->SetValueFieldText( fpData.m_value );
             }
 
@@ -417,8 +414,7 @@ void BACK_ANNOTATE::applyChangelist()
 
             if( !m_dryRun )
             {
-                m_frame->SaveCopyInUndoList( screen, symbol, UNDO_REDO::CHANGED, m_appendUndo );
-                m_appendUndo = true;
+                commit.Modify( symbol, screen );
                 symbol->SetDNP( fpData.m_DNP );
             }
 
@@ -434,8 +430,7 @@ void BACK_ANNOTATE::applyChangelist()
 
             if( !m_dryRun )
             {
-                m_frame->SaveCopyInUndoList( screen, symbol, UNDO_REDO::CHANGED, m_appendUndo );
-                m_appendUndo = true;
+                commit.Modify( symbol, screen );
                 symbol->SetIncludeInBom( !fpData.m_excludeFromBOM );
             }
 
@@ -464,19 +459,21 @@ void BACK_ANNOTATE::applyChangelist()
 
                 if( connection && connection->Name( true ) != shortNetName )
                 {
-                    processNetNameChange( ref.GetRef(), pin, connection,
+                    processNetNameChange( &commit, ref.GetRef(), pin, connection,
                                           connection->Name( true ), shortNetName );
                 }
             }
         }
 
-        // JEY TODO: back-annotate netclass changes?
+        // TODO: back-annotate netclass changes?
     }
 
     if( !m_dryRun )
     {
-        m_frame->RecalculateConnections( NO_CLEANUP );
+        m_frame->RecalculateConnections( &commit, NO_CLEANUP );
         m_frame->UpdateNetHighlightStatus();
+
+        commit.Push( _( "Update Schematic from PCB" ) );
     }
 }
 
@@ -560,8 +557,8 @@ void addConnections( SCH_ITEM* aItem, const SCH_SHEET_PATH& aSheetPath,
 }
 
 
-void BACK_ANNOTATE::processNetNameChange( const wxString& aRef, SCH_PIN* aPin,
-                                          const SCH_CONNECTION* aConnection,
+void BACK_ANNOTATE::processNetNameChange( SCHEMATIC_COMMIT* aCommit, const wxString& aRef,
+                                          SCH_PIN* aPin, const SCH_CONNECTION* aConnection,
                                           const wxString& aOldName, const wxString& aNewName )
 {
     wxString msg;
@@ -603,10 +600,7 @@ void BACK_ANNOTATE::processNetNameChange( const wxString& aRef, SCH_PIN* aPin,
 
         if( !m_dryRun )
         {
-            SCH_SCREEN* screen = aConnection->Sheet().LastScreen();
-
-            m_frame->SaveCopyInUndoList( screen, driver, UNDO_REDO::CHANGED, m_appendUndo );
-            m_appendUndo = true;
+            aCommit->Modify( driver, aConnection->Sheet().LastScreen() );
             static_cast<SCH_LABEL_BASE*>( driver )->SetText( aNewName );
         }
 
@@ -644,8 +638,7 @@ void BACK_ANNOTATE::processNetNameChange( const wxString& aRef, SCH_PIN* aPin,
             label->SetFlags( IS_NEW );
 
             SCH_SCREEN* screen = aConnection->Sheet().LastScreen();
-            m_frame->AddItemToScreenAndUndoList( screen, label, m_appendUndo );
-            m_appendUndo = true;
+            m_frame->AddItemToCommitAndScreen( aCommit, screen, label );
         }
 
         m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );

@@ -36,7 +36,7 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
     m_shape( aShape ),
     m_borderWidth( aParent, m_borderWidthLabel, m_borderWidthCtrl, m_borderWidthUnits, true )
 {
-    SetTitle( wxString::Format( GetTitle(), aShape->ShowShape() ) );
+    SetTitle( wxString::Format( GetTitle(), aShape->EDA_SHAPE::GetFriendlyName() ) );
 
     m_helpLabel1->SetFont( KIUI::GetInfoFont( this ).Italic() );
     m_helpLabel2->SetFont( KIUI::GetInfoFont( this ).Italic() );
@@ -165,7 +165,10 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
     m_shape->SetFillColor( m_fillColorSwatch->GetSwatchColor() );
 
     if( !commit.Empty() )
-        commit.Push( wxString::Format( _( "Edit %s" ), m_shape->ShowShape() ), SKIP_CONNECTIVITY );
+    {
+        commit.Push( wxString::Format( _( "Edit %s" ), m_shape->EDA_SHAPE::GetFriendlyName() ),
+                     SKIP_CONNECTIVITY );
+    }
 
     return true;
 }

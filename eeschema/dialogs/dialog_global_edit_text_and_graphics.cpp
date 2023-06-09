@@ -21,7 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <connection_graph.h>
 #include <dialog_global_edit_text_and_graphics_base.h>
 #include <string_utils.h>
 #include <sch_symbol.h>
@@ -33,7 +32,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
 #include <schematic.h>
-#include <advanced_config.h>
+#include <schematic_commit.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_selection_tool.h>
 #include <tools/sch_edit_tool.h>
