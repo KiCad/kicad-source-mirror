@@ -130,9 +130,14 @@ int CLI::EXPORT_PCB_STEP_COMMAND::doPerform( KIWAY& aKiway )
         step->m_xOrigin = atof( sm.str( 1 ).c_str() );
         step->m_yOrigin = atof( sm.str( 2 ).c_str() );
 
+        // Default unit for m_xOrigin and m_yOrigin is mm.
+        // Convert in to board units. If the value is given in inches, it will be converted later
+        step->m_xOrigin = pcbIUScale.mmToIU( step->m_xOrigin );
+        step->m_yOrigin = pcbIUScale.mmToIU( step->m_yOrigin );
+
         std::string tunit( sm[3] );
 
-        if( tunit.size() > 0 ) // No unit accepted ( default = mm )
+        if( tunit.size() > 0 ) // unit specified ( default = mm, but can be in, inch or mm )
         {
             if( ( !sm.str( 1 ).compare( " " ) || !sm.str( 2 ).compare( " " ) )
                 || ( sm.size() != 4 ) )
