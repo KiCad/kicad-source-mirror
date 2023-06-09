@@ -29,7 +29,7 @@
 #include <sch_edit_frame.h>
 #include <stroke_params.h>
 #include <widgets/color_swatch.h>
-#include <schematic_commit.h>
+#include <sch_commit.h>
 
 
 DIALOG_LINE_PROPERTIES::DIALOG_LINE_PROPERTIES( SCH_EDIT_FRAME* aParent,
@@ -129,7 +129,7 @@ void DIALOG_LINE_PROPERTIES::resetDefaults( wxCommandEvent& event )
 
 bool DIALOG_LINE_PROPERTIES::TransferDataFromWindow()
 {
-    SCHEMATIC_COMMIT commit( m_frame );
+    SCH_COMMIT commit( m_frame );
 
     for( SCH_LINE* line : m_lines )
     {

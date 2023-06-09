@@ -55,7 +55,7 @@ class SCH_SYMBOL;
 class SCH_FIELD;
 class SCH_JUNCTION;
 class SCHEMATIC;
-class SCHEMATIC_COMMIT;
+class SCH_COMMIT;
 class DIALOG_BOOK_REPORTER;
 class DIALOG_ERC;
 class DIALOG_SCH_FIND;
@@ -250,7 +250,7 @@ public:
     /**
      * Add an item to the schematic and adds the changes to the commit.
      */
-    void AddItemToCommitAndScreen( SCHEMATIC_COMMIT* aCommit, SCH_SCREEN* aScreen, SCH_ITEM* aItem );
+    void AddItemToCommitAndScreen( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen, SCH_ITEM* aItem );
 
     /**
      * Run the Find or Find & Replace dialog.
@@ -284,7 +284,7 @@ public:
      * @param aNewSegment Pointer to the newly created segment (if created)
      * @param aScreen is the screen to examine
      */
-    void BreakSegment( SCHEMATIC_COMMIT* aCommit, SCH_LINE* aSegment, const VECTOR2I& aPoint,
+    void BreakSegment( SCH_COMMIT* aCommit, SCH_LINE* aSegment, const VECTOR2I& aPoint,
                        SCH_LINE** aNewSegment, SCH_SCREEN* aScreen );
 
     /**
@@ -295,7 +295,7 @@ public:
      * @param aScreen is the screen to examine.
      * @return True if any wires or buses were broken.
      */
-    bool BreakSegments( SCHEMATIC_COMMIT* aCommit, const VECTOR2I& aPoint, SCH_SCREEN* aScreen );
+    bool BreakSegments( SCH_COMMIT* aCommit, const VECTOR2I& aPoint, SCH_SCREEN* aScreen );
 
     /**
      * Test all junctions and bus entries in the schematic for intersections with wires and
@@ -304,7 +304,7 @@ public:
      * @param aScreen is the screen to examine.
      * @return True if any wires or buses were broken.
      */
-    bool BreakSegmentsOnJunctions( SCHEMATIC_COMMIT* aCommit, SCH_SCREEN* aScreen );
+    bool BreakSegmentsOnJunctions( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen );
 
     /**
      * Test all of the connectable objects in the schematic for unused connection points.
@@ -407,7 +407,7 @@ public:
      * number * 100.  In other words the first sheet uses 100 to 199, the second sheet uses
      * 200 to 299, and so on.
      */
-    void AnnotateSymbols( SCHEMATIC_COMMIT* aCommit, ANNOTATE_SCOPE_T aAnnotateScope,
+    void AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T aAnnotateScope,
                           ANNOTATE_ORDER_T aSortOption, ANNOTATE_ALGO_T aAlgoOption,
                           bool aRecursive, int aStartNumber, bool aResetAnnotation,
                           bool aRepairTimestamps, REPORTER& aReporter );
@@ -522,8 +522,7 @@ public:
      */
     bool AskToSaveChanges();
 
-    SCH_JUNCTION* AddJunction( SCHEMATIC_COMMIT* aCommit, SCH_SCREEN* aScreen,
-                               const VECTOR2I& aPos );
+    SCH_JUNCTION* AddJunction( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen, const VECTOR2I& aPos );
 
     /**
      * Perform routine schematic cleaning including breaking wire and buses and deleting
@@ -531,7 +530,7 @@ public:
      * @param aCommit Transaction container used to record changes for undo/redo
      * @param aScreen is the screen to examine, or nullptr to examine the current screen
      */
-    void SchematicCleanUp( SCHEMATIC_COMMIT* aCommit, SCH_SCREEN* aScreen = nullptr );
+    void SchematicCleanUp( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen = nullptr );
 
     /**
      * If any single wire passes through _both points_, remove the portion between the two points,
@@ -541,7 +540,7 @@ public:
      * @param aEnd The ending point for trimming
      * @return True if any wires were changed by this operation
      */
-    bool TrimWire( SCHEMATIC_COMMIT* aCommit, const VECTOR2I& aStart, const VECTOR2I& aEnd );
+    bool TrimWire( SCH_COMMIT* aCommit, const VECTOR2I& aStart, const VECTOR2I& aEnd );
 
     void OnOpenPcbnew( wxCommandEvent& event );
     void OnOpenCvpcb( wxCommandEvent& event );
@@ -655,7 +654,7 @@ public:
      *
      * @param aItem The junction to delete
      */
-    void DeleteJunction( SCHEMATIC_COMMIT* aCommit, SCH_ITEM* aItem );
+    void DeleteJunction( SCH_COMMIT* aCommit, SCH_ITEM* aItem );
 
     void ConvertPart( SCH_SYMBOL* aSymbol );
 
@@ -776,7 +775,7 @@ public:
     /**
      * Generate the connection data for the entire schematic hierarchy.
      */
-    void RecalculateConnections( SCHEMATIC_COMMIT* aCommit, SCH_CLEANUP_FLAGS aCleanupFlags );
+    void RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS aCleanupFlags );
 
     /**
      * Called after the preferences dialog is run.

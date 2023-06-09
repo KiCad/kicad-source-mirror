@@ -270,8 +270,8 @@ public:
      * Because a symbol in library editor does not have a lot of primitives, the full data is
      * duplicated. It is not worth to try to optimize this save function.
      */
-    void SaveCopyInUndoList( EDA_ITEM* aItem, UNDO_REDO aUndoType = UNDO_REDO::LIBEDIT,
-                             bool aAppend = false );
+    void SaveCopyInUndoList( const wxString& aDescription, EDA_ITEM* aItem,
+                             UNDO_REDO aUndoType = UNDO_REDO::LIBEDIT );
 
     void GetSymbolFromUndoList();
     void GetSymbolFromRedoList();

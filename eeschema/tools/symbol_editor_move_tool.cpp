@@ -26,6 +26,7 @@
 #include <tools/ee_selection_tool.h>
 #include <ee_actions.h>
 #include <eda_item.h>
+#include <sch_commit.h>
 #include <wx/log.h>
 #include "symbol_editor_move_tool.h"
 #include "symbol_editor_pin_tool.h"
@@ -90,6 +91,11 @@ void SYMBOL_EDITOR_MOVE_TOOL::Reset( RESET_REASON aReason )
 int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    SCH_COMMIT            localCommit( m_toolMgr );
+    SCH_COMMIT*           commit = aEvent.Parameter<SCH_COMMIT*>();
+
+    if( !commit )
+        commit = &localCommit;
 
     m_anchorPos = { 0, 0 };
 
@@ -124,7 +130,7 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     VECTOR2I    prevPos;
 
     if( !selection.Front()->IsNew() )
-        saveCopyInUndoList( m_frame->GetCurSymbol(), UNDO_REDO::LIBEDIT );
+        commit->Modify( m_frame->GetCurSymbol(), m_frame->GetScreen() );
 
     m_cursor = controls->GetCursorPosition( !aEvent.DisableGridSnapping() );
 
@@ -355,7 +361,7 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
     if( restore_state )
     {
-        m_frame->RollbackSymbolFromUndo();
+        commit->Revert();
 
         if( unselect )
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
@@ -367,7 +373,8 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         if( unselect )
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-        m_frame->OnModify();
+        if( !localCommit.Empty() )
+            localCommit.Push( _( "Move" ) );
     }
 
     m_moveInProgress = false;

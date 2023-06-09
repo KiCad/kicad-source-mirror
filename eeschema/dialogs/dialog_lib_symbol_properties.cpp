@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -368,11 +368,12 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
             return false;
         }
 
-        m_Parent->SaveCopyInUndoList( m_libEntry, UNDO_REDO::LIB_RENAME );
+        m_Parent->SaveCopyInUndoList( _( "Edit Symbol Properties" ), m_libEntry,
+                                      UNDO_REDO::LIB_RENAME );
     }
     else
     {
-        m_Parent->SaveCopyInUndoList( m_libEntry );
+        m_Parent->SaveCopyInUndoList( _( "Edit Symbol Properties" ), m_libEntry );
     }
 
     // The Y axis for components in lib is from bottom to top while the screen axis is top

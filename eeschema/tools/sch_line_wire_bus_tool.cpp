@@ -53,7 +53,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
 #include <schematic.h>
-#include <schematic_commit.h>
+#include <sch_commit.h>
 #include <ee_actions.h>
 #include <ee_grid_helper.h>
 #include <ee_selection.h>
@@ -1120,8 +1120,8 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
     // freed selected items.
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-    SCH_SCREEN*      screen = m_frame->GetScreen();
-    SCHEMATIC_COMMIT commit( m_toolMgr );
+    SCH_SCREEN* screen = m_frame->GetScreen();
+    SCH_COMMIT  commit( m_toolMgr );
 
     // Remove segments backtracking over others
     simplifyWireList();
@@ -1227,8 +1227,7 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
 }
 
 
-int SCH_LINE_WIRE_BUS_TOOL::TrimOverLappingWires( SCHEMATIC_COMMIT* aCommit,
-                                                  EE_SELECTION* aSelection  )
+int SCH_LINE_WIRE_BUS_TOOL::TrimOverLappingWires( SCH_COMMIT* aCommit, EE_SELECTION* aSelection  )
 {
     SCHEMATIC* sch = getModel<SCHEMATIC>();
     SCH_SCREEN* screen = sch->CurrentSheet().LastScreen();
@@ -1272,10 +1271,9 @@ int SCH_LINE_WIRE_BUS_TOOL::TrimOverLappingWires( SCHEMATIC_COMMIT* aCommit,
 }
 
 
-int SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded( SCHEMATIC_COMMIT* aCommit,
-                                                  EE_SELECTION* aSelection )
+int SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded( SCH_COMMIT* aCommit, EE_SELECTION* aSelection )
 {
-    SCH_SCREEN*   screen = m_frame->GetScreen();
+    SCH_SCREEN* screen = m_frame->GetScreen();
 
     for( const VECTOR2I& point : screen->GetNeededJunctions( aSelection->Items() ) )
         m_frame->AddJunction( aCommit, m_frame->GetScreen(), point );

@@ -31,7 +31,7 @@
 #include <sch_no_connect.h>
 #include <sch_screen.h>
 #include <sch_view.h>
-#include <schematic_commit.h>
+#include <sch_commit.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
 #include <tools/ee_selection_tool.h>
@@ -50,8 +50,7 @@ void SCH_EDIT_FRAME::TestDanglingEnds()
 }
 
 
-bool SCH_EDIT_FRAME::TrimWire( SCHEMATIC_COMMIT* aCommit, const VECTOR2I& aStart,
-                               const VECTOR2I& aEnd )
+bool SCH_EDIT_FRAME::TrimWire( SCH_COMMIT* aCommit, const VECTOR2I& aStart, const VECTOR2I& aEnd )
 {
     if( aStart == aEnd )
         return false;
@@ -116,7 +115,7 @@ bool SCH_EDIT_FRAME::TrimWire( SCHEMATIC_COMMIT* aCommit, const VECTOR2I& aStart
 }
 
 
-void SCH_EDIT_FRAME::SchematicCleanUp( SCHEMATIC_COMMIT* aCommit, SCH_SCREEN* aScreen )
+void SCH_EDIT_FRAME::SchematicCleanUp( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen )
 {
     EE_SELECTION_TOOL*           selectionTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
     std::vector<SCH_LINE*>       lines;
@@ -254,9 +253,8 @@ void SCH_EDIT_FRAME::SchematicCleanUp( SCHEMATIC_COMMIT* aCommit, SCH_SCREEN* aS
 }
 
 
-void SCH_EDIT_FRAME::BreakSegment( SCHEMATIC_COMMIT* aCommit, SCH_LINE* aSegment,
-                                   const VECTOR2I& aPoint, SCH_LINE** aNewSegment,
-                                   SCH_SCREEN* aScreen )
+void SCH_EDIT_FRAME::BreakSegment( SCH_COMMIT* aCommit, SCH_LINE* aSegment, const VECTOR2I& aPoint,
+                                   SCH_LINE** aNewSegment, SCH_SCREEN* aScreen )
 {
     // Save the copy of aSegment before breaking it
     aCommit->Modify( aSegment, aScreen );
@@ -274,15 +272,14 @@ void SCH_EDIT_FRAME::BreakSegment( SCHEMATIC_COMMIT* aCommit, SCH_LINE* aSegment
 }
 
 
-bool SCH_EDIT_FRAME::BreakSegments( SCHEMATIC_COMMIT* aCommit, const VECTOR2I& aPoint,
-                                    SCH_SCREEN* aScreen )
+bool SCH_EDIT_FRAME::BreakSegments( SCH_COMMIT* aCommit, const VECTOR2I& aPos, SCH_SCREEN* aScreen )
 {
     bool      brokenSegments = false;
     SCH_LINE* new_line;
 
-    for( SCH_LINE* wire : aScreen->GetBusesAndWires( aPoint, true ) )
+    for( SCH_LINE* wire : aScreen->GetBusesAndWires( aPos, true ) )
     {
-        BreakSegment( aCommit, wire, aPoint, &new_line, aScreen );
+        BreakSegment( aCommit, wire, aPos, &new_line, aScreen );
         brokenSegments = true;
     }
 
@@ -290,7 +287,7 @@ bool SCH_EDIT_FRAME::BreakSegments( SCHEMATIC_COMMIT* aCommit, const VECTOR2I& a
 }
 
 
-bool SCH_EDIT_FRAME::BreakSegmentsOnJunctions( SCHEMATIC_COMMIT* aCommit, SCH_SCREEN* aScreen )
+bool SCH_EDIT_FRAME::BreakSegmentsOnJunctions( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen )
 {
     bool brokenSegments = false;
 
@@ -316,7 +313,7 @@ bool SCH_EDIT_FRAME::BreakSegmentsOnJunctions( SCHEMATIC_COMMIT* aCommit, SCH_SC
 }
 
 
-void SCH_EDIT_FRAME::DeleteJunction( SCHEMATIC_COMMIT* aCommit, SCH_ITEM* aJunction )
+void SCH_EDIT_FRAME::DeleteJunction( SCH_COMMIT* aCommit, SCH_ITEM* aJunction )
 {
     SCH_SCREEN*        screen = GetScreen();
     PICKED_ITEMS_LIST  undoList;
@@ -389,7 +386,7 @@ void SCH_EDIT_FRAME::DeleteJunction( SCHEMATIC_COMMIT* aCommit, SCH_ITEM* aJunct
 }
 
 
-SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( SCHEMATIC_COMMIT* aCommit, SCH_SCREEN* aScreen,
+SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen,
                                            const VECTOR2I& aPos )
 {
     SCH_JUNCTION* junction = new SCH_JUNCTION( aPos );

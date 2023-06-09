@@ -33,7 +33,7 @@
 #include <sch_sheet_path.h>
 #include <sch_label.h>
 #include <schematic.h>
-#include <schematic_commit.h>
+#include <sch_commit.h>
 #include <string_utils.h>
 #include <kiface_base.h>
 #include <wildcards_and_files_ext.h>
@@ -335,8 +335,8 @@ void BACK_ANNOTATE::checkForUnusedSymbols()
 
 void BACK_ANNOTATE::applyChangelist()
 {
-    SCHEMATIC_COMMIT commit( m_frame );
-    wxString         msg;
+    SCH_COMMIT commit( m_frame );
+    wxString   msg;
 
     // Apply changes from change list
     for( CHANGELIST_ITEM& item : m_changelist )
@@ -557,8 +557,8 @@ void addConnections( SCH_ITEM* aItem, const SCH_SHEET_PATH& aSheetPath,
 }
 
 
-void BACK_ANNOTATE::processNetNameChange( SCHEMATIC_COMMIT* aCommit, const wxString& aRef,
-                                          SCH_PIN* aPin, const SCH_CONNECTION* aConnection,
+void BACK_ANNOTATE::processNetNameChange( SCH_COMMIT* aCommit, const wxString& aRef, SCH_PIN* aPin,
+                                          const SCH_CONNECTION* aConnection,
                                           const wxString& aOldName, const wxString& aNewName )
 {
     wxString msg;

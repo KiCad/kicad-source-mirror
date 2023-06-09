@@ -30,7 +30,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
 #include <sch_validators.h>
-#include <schematic_commit.h>
+#include <sch_commit.h>
 #include <dialog_sheet_pin_properties.h>
 #include <dialogs/html_message_box.h>
 #include <string_utils.h>
@@ -134,7 +134,7 @@ bool DIALOG_SHEET_PIN_PROPERTIES::TransferDataToWindow()
 
 bool DIALOG_SHEET_PIN_PROPERTIES::TransferDataFromWindow()
 {
-    SCHEMATIC_COMMIT commit( m_frame );
+    SCH_COMMIT commit( m_frame );
 
     if( !m_sheetPin->IsNew() )
         commit.Modify( m_sheetPin->GetParent(), m_frame->GetScreen() );

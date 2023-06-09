@@ -31,7 +31,7 @@
 #include <sch_edit_frame.h>
 #include <stroke_params.h>
 #include <widgets/color_swatch.h>
-#include <schematic_commit.h>
+#include <sch_commit.h>
 
 
 DIALOG_WIRE_BUS_PROPERTIES::DIALOG_WIRE_BUS_PROPERTIES( SCH_EDIT_FRAME* aParent,
@@ -175,7 +175,7 @@ void DIALOG_WIRE_BUS_PROPERTIES::resetDefaults( wxCommandEvent& event )
 
 bool DIALOG_WIRE_BUS_PROPERTIES::TransferDataFromWindow()
 {
-    SCHEMATIC_COMMIT commit( m_frame );
+    SCH_COMMIT commit( m_frame );
 
     for( SCH_ITEM* item : m_items )
     {

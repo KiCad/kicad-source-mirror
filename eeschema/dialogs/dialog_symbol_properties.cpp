@@ -43,7 +43,7 @@
 #include <sch_edit_frame.h>
 #include <sch_reference_list.h>
 #include <schematic.h>
-#include <schematic_commit.h>
+#include <sch_commit.h>
 #include <tool/tool_manager.h>
 #include <tool/actions.h>
 
@@ -696,8 +696,8 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     if( !m_pinGrid->CommitPendingChanges() )
         return false;
 
-    SCHEMATIC_COMMIT commit( GetParent() );
-    SCH_SCREEN*      currentScreen = GetParent()->GetScreen();
+    SCH_COMMIT  commit( GetParent() );
+    SCH_SCREEN* currentScreen = GetParent()->GetScreen();
     wxCHECK( currentScreen, false );
 
     // This needs to be done before the LIB_ID is changed to prevent stale library symbols in

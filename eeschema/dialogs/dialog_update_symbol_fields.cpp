@@ -22,6 +22,7 @@
 #include <dialog_update_symbol_fields.h>
 #include <lib_symbol.h>
 #include <symbol_edit_frame.h>
+#include <sch_commit.h>
 #include <template_fieldnames.h>
 #include <string_utils.h>
 
@@ -122,8 +123,9 @@ void DIALOG_UPDATE_SYMBOL_FIELDS::checkAll( bool aCheck )
 void DIALOG_UPDATE_SYMBOL_FIELDS::onOkButtonClicked( wxCommandEvent& aEvent )
 {
     wxBusyCursor dummy;
+    SCH_COMMIT   commit( m_editFrame );
 
-    m_editFrame->SaveCopyInUndoList( m_symbol, UNDO_REDO::LIBEDIT );
+    commit.Modify( m_symbol );
 
     // Create the set of fields to be updated
     m_updateFields.clear();
@@ -216,8 +218,9 @@ void DIALOG_UPDATE_SYMBOL_FIELDS::onOkButtonClicked( wxCommandEvent& aEvent )
 
     m_symbol->SetFields( result );
 
+    commit.Push( _( "Update Symbol Fields" ) );
+
     m_editFrame->RebuildView();
-    m_editFrame->OnModify();
     wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
 }
 

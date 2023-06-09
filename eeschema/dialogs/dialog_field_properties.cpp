@@ -41,7 +41,7 @@
 #include <symbol_library.h>
 #include <sch_validators.h>
 #include <schematic.h>
-#include <schematic_commit.h>
+#include <sch_commit.h>
 #include <dialog_field_properties.h>
 #include <sch_text.h>
 #include <scintilla_tricks.h>
@@ -629,7 +629,7 @@ void DIALOG_SCH_FIELD_PROPERTIES::onScintillaCharAdded( wxStyledTextEvent &aEven
 }
 
 
-void DIALOG_SCH_FIELD_PROPERTIES::UpdateField( SCHEMATIC_COMMIT* aCommit, SCH_FIELD* aField,
+void DIALOG_SCH_FIELD_PROPERTIES::UpdateField( SCH_COMMIT* aCommit, SCH_FIELD* aField,
                                                SCH_SHEET_PATH* aSheetPath )
 {
     SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );

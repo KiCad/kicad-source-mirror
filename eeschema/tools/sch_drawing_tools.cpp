@@ -47,7 +47,7 @@
 #include <sch_sheet_pin.h>
 #include <sch_bitmap.h>
 #include <schematic.h>
-#include <schematic_commit.h>
+#include <sch_commit.h>
 #include <symbol_library_common.h>
 #include <eeschema_settings.h>
 #include <dialogs/dialog_label_properties.h>
@@ -111,7 +111,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     std::vector<PICKED_SYMBOL>* historyList = nullptr;
     bool                        ignorePrimePosition = false;
     COMMON_SETTINGS*            common_settings = Pgm().GetCommonSettings();
-    SCHEMATIC_COMMIT            commit( m_toolMgr );
+    SCH_COMMIT                  commit( m_toolMgr );
     EE_GRID_HELPER              grid( m_toolMgr );
 
     if( m_inPlaceSymbol )
@@ -149,7 +149,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     m_frame->PushTool( aEvent );
 
     auto addSymbol =
-            [this]( SCHEMATIC_COMMIT* aCommit, SCH_SYMBOL* aSymbol )
+            [this]( SCH_COMMIT* aCommit, SCH_SYMBOL* aSymbol )
             {
                 m_frame->SaveCopyForRepeatItem( aSymbol );
 
@@ -643,7 +643,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
             }
             else
             {
-                SCHEMATIC_COMMIT commit( m_toolMgr );
+                SCH_COMMIT commit( m_toolMgr );
                 m_frame->AddItemToCommitAndScreen( &commit, m_frame->GetScreen(), image );
                 commit.Push( _( "Add Image" ) );
 
@@ -833,7 +833,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                 newItem->SetPosition( cursorPos );
                 newItem->SetFlags( IS_NEW );
 
-                SCHEMATIC_COMMIT commit( m_toolMgr );
+                SCH_COMMIT commit( m_toolMgr );
                 m_frame->AddItemToCommitAndScreen( &commit, m_frame->GetScreen(), newItem );
 
                 if( type == SCH_JUNCTION_T )
@@ -1439,7 +1439,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             {
                 item->ClearFlags( IS_MOVING );
 
-                SCHEMATIC_COMMIT commit( m_toolMgr );
+                SCH_COMMIT commit( m_toolMgr );
                 m_frame->AddItemToCommitAndScreen( &commit, m_frame->GetScreen(), item );
                 commit.Push( description );
 
@@ -1688,7 +1688,7 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                     m_lastFillColor = item->GetFillColor();
                 }
 
-                SCHEMATIC_COMMIT commit( m_toolMgr );
+                SCH_COMMIT commit( m_toolMgr );
                 commit.Added( item, m_frame->GetScreen() );
                 commit.Push( wxString::Format( _( "Draw %s" ), item->GetClass() ) );
 
@@ -1880,7 +1880,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             {
                 sheet->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
 
-                SCHEMATIC_COMMIT commit( m_toolMgr );
+                SCH_COMMIT commit( m_toolMgr );
                 m_frame->AddItemToCommitAndScreen( &commit, m_frame->GetScreen(), sheet );
                 commit.Push( "Draw Sheet" );
 

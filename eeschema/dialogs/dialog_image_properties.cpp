@@ -26,7 +26,7 @@
 
 #include <sch_edit_frame.h>
 #include <sch_bitmap.h>
-#include <schematic_commit.h>
+#include <sch_commit.h>
 
 
 DIALOG_IMAGE_PROPERTIES::DIALOG_IMAGE_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_BITMAP* aBitmap ) :
@@ -60,7 +60,7 @@ bool DIALOG_IMAGE_PROPERTIES::TransferDataFromWindow()
 {
     if( m_imageEditor->TransferDataFromWindow() )
     {
-        SCHEMATIC_COMMIT commit( m_frame );
+        SCH_COMMIT commit( m_frame );
 
         // Save old image in undo list if not already in edit
         if( m_bitmap->GetEditFlags() == 0 )

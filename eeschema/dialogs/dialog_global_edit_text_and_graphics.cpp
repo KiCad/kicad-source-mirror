@@ -32,7 +32,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
 #include <schematic.h>
-#include <schematic_commit.h>
+#include <sch_commit.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_selection_tool.h>
 #include <tools/sch_edit_tool.h>
@@ -102,8 +102,8 @@ protected:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    void visitItem( SCHEMATIC_COMMIT* aCommit, const SCH_SHEET_PATH& aSheetPath, SCH_ITEM* aItem );
-    void processItem( SCHEMATIC_COMMIT* aCommit, const SCH_SHEET_PATH& aSheetPath, SCH_ITEM* aItem );
+    void visitItem( SCH_COMMIT* aCommit, const SCH_SHEET_PATH& aSheetPath, SCH_ITEM* aItem );
+    void processItem( SCH_COMMIT* aCommit, const SCH_SHEET_PATH& aSheetPath, SCH_ITEM* aItem );
 };
 
 
@@ -235,7 +235,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
 }
 
 
-void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( SCHEMATIC_COMMIT* aCommit,
+void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( SCH_COMMIT* aCommit,
                                                         const SCH_SHEET_PATH& aSheetPath,
                                                         SCH_ITEM* aItem )
 {
@@ -370,7 +370,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( SCHEMATIC_COMMIT* aCommi
     }
 }
 
-void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( SCHEMATIC_COMMIT* aCommit,
+void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( SCH_COMMIT* aCommit,
                                                       const SCH_SHEET_PATH& aSheetPath,
                                                       SCH_ITEM* aItem )
 {
@@ -549,8 +549,8 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
     if( !m_textSize.Validate( 1.0, 10000.0, EDA_UNITS::MILS ) )  // 1 mil .. 10 inches
         return false;
 
-    SCH_SHEET_PATH   currentSheet = m_parent->GetCurrentSheet();
-    SCHEMATIC_COMMIT commit( m_parent );
+    SCH_SHEET_PATH currentSheet = m_parent->GetCurrentSheet();
+    SCH_COMMIT     commit( m_parent );
 
     // Go through sheets
     for( const SCH_SHEET_PATH& sheetPath : m_parent->Schematic().GetSheets() )

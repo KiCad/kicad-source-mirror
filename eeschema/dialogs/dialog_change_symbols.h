@@ -32,7 +32,7 @@
 class SCH_SYMBOL;
 class SCH_EDIT_FRAME;
 class SCH_SCREEN;
-class SCHEMATIC_COMMIT;
+class SCH_COMMIT;
 
 
 struct SYMBOL_CHANGE_INFO
@@ -84,8 +84,8 @@ private:
     void updateFieldsList();
 
     bool isMatch( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aInstance );
-    int processMatchingSymbols( SCHEMATIC_COMMIT* aCommit );
-    int processSymbols( SCHEMATIC_COMMIT* aCommit,
+    int processMatchingSymbols( SCH_COMMIT* aCommit );
+    int processSymbols( SCH_COMMIT* aCommit,
                         const std::map<SCH_SYMBOL*, SYMBOL_CHANGE_INFO>& aSymbols );
     wxString getSymbolReferences( SCH_SYMBOL& aSymbol, const LIB_ID& aNewId );
 

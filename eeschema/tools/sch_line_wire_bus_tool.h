@@ -92,12 +92,12 @@ public:
     /**
      * Handle the addition of junctions to a selection of objects
      */
-    int AddJunctionsIfNeeded( SCHEMATIC_COMMIT* aCommit, EE_SELECTION* aSelection );
+    int AddJunctionsIfNeeded( SCH_COMMIT* aCommit, EE_SELECTION* aSelection );
 
     /**
      * Logic to remove wires when overlapping correct items
      */
-    int TrimOverLappingWires( SCHEMATIC_COMMIT* aCommit, EE_SELECTION* aSelection );
+    int TrimOverLappingWires( SCH_COMMIT* aCommit, EE_SELECTION* aSelection );
 
 private:
     int doDrawSegments( const TOOL_EVENT& aTool, int aType, bool aQuitOnDraw );

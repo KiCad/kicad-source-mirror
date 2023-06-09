@@ -24,6 +24,7 @@
 
 #include <ee_actions.h>
 #include <symbol_edit_frame.h>
+#include <sch_commit.h>
 #include <tools/symbol_editor_drawing_tools.h>
 #include <tools/symbol_editor_pin_tool.h>
 #include <tools/ee_grid_helper.h>
@@ -92,6 +93,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     LIB_ITEM*             item   = nullptr;
     bool                  isText = aEvent.IsAction( &EE_ACTIONS::placeSymbolText );
     COMMON_SETTINGS*      common_settings = Pgm().GetCommonSettings();
+    wxString              description;
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
@@ -209,6 +211,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 {
                     item = pinTool->CreatePin( VECTOR2I( cursorPos.x, -cursorPos.y ), symbol );
                     g_lastPinWeakPtr = item;
+                    description = _( "Add Pin" );
                     break;
                 }
                 case LIB_TEXT_T:
@@ -233,6 +236,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     else
                         item = text;
 
+                    description = _( "Add Text" );
                     break;
                 }
                 default:
@@ -271,7 +275,8 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             // ... and second click places:
             else
             {
-                m_frame->SaveCopyInUndoList( symbol );
+                SCH_COMMIT commit( m_toolMgr );
+                commit.Modify( symbol, m_frame->GetScreen() );
 
                 switch( item->Type() )
                 {
@@ -289,8 +294,8 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 item = nullptr;
                 m_view->ClearPreview();
 
+                commit.Push( description );
                 m_frame->RebuildView();
-                m_frame->OnModify();
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -334,6 +339,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     LIB_SYMBOL*             symbol = m_frame->GetCurSymbol();
     LIB_SHAPE*              item = nullptr;
     bool                    isTextBox = aEvent.IsAction( &EE_ACTIONS::drawSymbolTextBox );
+    wxString                description;
 
     if( m_inDrawShape )
         return 0;
@@ -439,10 +445,12 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 textbox->SetHorizJustify( m_lastTextJust );
 
                 item = textbox;
+                description = _( "Add Text Box" );
             }
             else
             {
                 item = new LIB_SHAPE( symbol, shapeType, lineWidth, m_lastFillStyle );
+                description = wxString::Format( _( "Add %s" ), item->EDA_SHAPE::GetFriendlyName() );
             }
 
             item->SetStroke( m_lastStroke );
@@ -508,12 +516,14 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
                 m_view->ClearPreview();
 
-                m_frame->SaveCopyInUndoList( symbol );
+                SCH_COMMIT commit( m_toolMgr );
+                commit.Modify( symbol, m_frame->GetScreen() );
+
                 symbol->AddDrawItem( item );
                 item = nullptr;
 
+                commit.Push( description );
                 m_frame->RebuildView();
-                m_frame->OnModify();
                 m_toolMgr->RunAction( ACTIONS::activatePointEditor );
             }
         }

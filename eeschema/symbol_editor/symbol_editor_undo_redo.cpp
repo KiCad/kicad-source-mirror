@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014-2021 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2014-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,10 +31,9 @@
 #include <tools/ee_selection_tool.h>
 
 
-void SYMBOL_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* aItem, UNDO_REDO aUndoType, bool aAppend )
+void SYMBOL_EDIT_FRAME::SaveCopyInUndoList( const wxString& aDescription, EDA_ITEM* aItem,
+                                            UNDO_REDO aUndoType )
 {
-    wxASSERT_MSG( !aAppend, "Append not needed/supported for symbol editor" );
-
     if( !aItem )
         return;
 
@@ -50,6 +49,7 @@ void SYMBOL_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* aItem, UNDO_REDO aUndoType
 
     ITEM_PICKER wrapper( GetScreen(), copyItem, aUndoType );
     lastcmd->PushItem( wrapper );
+    lastcmd->SetDescription( aDescription );
     PushCommandToUndoList( lastcmd );
 
     // Clear redo list, because after new save there is no redo to do.
@@ -66,18 +66,23 @@ void SYMBOL_EDIT_FRAME::GetSymbolFromRedoList()
 
     // Load the last redo entry
     PICKED_ITEMS_LIST* redoCommand = PopCommandFromRedoList();
-    ITEM_PICKER redoWrapper = redoCommand->PopItem();
+    ITEM_PICKER        redoWrapper = redoCommand->PopItem();
+    wxString           description = redoCommand->GetDescription();
+
     delete redoCommand;
+
     LIB_SYMBOL* symbol = (LIB_SYMBOL*) redoWrapper.GetItem();
+    UNDO_REDO   undoRedoType = redoWrapper.GetStatus();
     wxCHECK( symbol, /* void */ );
     symbol->ClearFlags( UR_TRANSIENT );
-    UNDO_REDO undoRedoType = redoWrapper.GetStatus();
 
     // Store the current symbol in the undo buffer
     PICKED_ITEMS_LIST* undoCommand = new PICKED_ITEMS_LIST();
-    LIB_SYMBOL* oldSymbol = m_symbol;
+    LIB_SYMBOL*        oldSymbol = m_symbol;
+
     oldSymbol->SetFlags( UR_TRANSIENT );
     ITEM_PICKER undoWrapper( GetScreen(), oldSymbol, undoRedoType );
+    undoCommand->SetDescription( description );
     undoCommand->PushItem( undoWrapper );
     PushCommandToUndoList( undoCommand );
 
@@ -114,19 +119,24 @@ void SYMBOL_EDIT_FRAME::GetSymbolFromUndoList()
 
     // Load the last undo entry
     PICKED_ITEMS_LIST* undoCommand = PopCommandFromUndoList();
-    ITEM_PICKER undoWrapper = undoCommand->PopItem();
+    wxString           description = undoCommand->GetDescription();
+    ITEM_PICKER        undoWrapper = undoCommand->PopItem();
+
     delete undoCommand;
+
     LIB_SYMBOL* symbol = (LIB_SYMBOL*) undoWrapper.GetItem();
+    UNDO_REDO   undoRedoType = undoWrapper.GetStatus();
     wxCHECK( symbol, /* void */ );
     symbol->ClearFlags( UR_TRANSIENT );
-    UNDO_REDO undoRedoType = undoWrapper.GetStatus();
 
     // Store the current symbol in the redo buffer
     PICKED_ITEMS_LIST* redoCommand = new PICKED_ITEMS_LIST();
-    LIB_SYMBOL* oldSymbol = m_symbol;
+    LIB_SYMBOL*        oldSymbol = m_symbol;
+
     oldSymbol->SetFlags( UR_TRANSIENT );
     ITEM_PICKER redoWrapper( GetScreen(), oldSymbol, undoRedoType );
     redoCommand->PushItem( redoWrapper );
+    redoCommand->SetDescription( description );
     PushCommandToRedoList( redoCommand );
 
     // Do not delete the previous symbol by calling SetCurSymbol( symbol ),

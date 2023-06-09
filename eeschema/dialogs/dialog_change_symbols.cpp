@@ -34,7 +34,7 @@
 #include <schematic.h>
 #include <template_fieldnames.h>
 #include <widgets/wx_html_report_panel.h>
-#include <schematic_commit.h>
+#include <sch_commit.h>
 
 bool g_selectRefDes = false;
 bool g_selectValue  = false;
@@ -370,9 +370,9 @@ void DIALOG_CHANGE_SYMBOLS::checkAll( bool aCheck )
 
 void DIALOG_CHANGE_SYMBOLS::onOkButtonClicked( wxCommandEvent& aEvent )
 {
-    wxBusyCursor     dummy;
-    SCH_EDIT_FRAME*  parent = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
-    SCHEMATIC_COMMIT commit( parent );
+    wxBusyCursor    dummy;
+    SCH_EDIT_FRAME* parent = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
+    SCH_COMMIT      commit( parent );
 
     wxCHECK( parent, /* void */ );
 
@@ -451,7 +451,7 @@ bool DIALOG_CHANGE_SYMBOLS::isMatch( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aInsta
 
 
 
-int DIALOG_CHANGE_SYMBOLS::processMatchingSymbols( SCHEMATIC_COMMIT* aCommit )
+int DIALOG_CHANGE_SYMBOLS::processMatchingSymbols( SCH_COMMIT* aCommit )
 {
     SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
 
@@ -517,7 +517,7 @@ int DIALOG_CHANGE_SYMBOLS::processMatchingSymbols( SCHEMATIC_COMMIT* aCommit )
 }
 
 
-int DIALOG_CHANGE_SYMBOLS::processSymbols( SCHEMATIC_COMMIT* aCommit,
+int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
                                            const std::map<SCH_SYMBOL*, SYMBOL_CHANGE_INFO>& aSymbols )
 {
     wxCHECK( !aSymbols.empty(), 0 );

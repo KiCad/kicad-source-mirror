@@ -30,7 +30,7 @@
 #include <ee_actions.h>
 #include <string_utils.h>
 #include <symbol_edit_frame.h>
-#include <schematic_commit.h>
+#include <sch_commit.h>
 #include <dialogs/dialog_lib_shape_properties.h>
 #include <dialogs/dialog_lib_text_properties.h>
 #include <dialogs/dialog_lib_textbox_properties.h>
@@ -154,12 +154,17 @@ int SYMBOL_EDITOR_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     if( selection.GetSize() == 0 )
         return 0;
 
-    VECTOR2I  rotPoint;
-    bool      ccw = ( aEvent.Matches( EE_ACTIONS::rotateCCW.MakeEvent() ) );
-    LIB_ITEM* item = static_cast<LIB_ITEM*>( selection.Front() );
+    VECTOR2I    rotPoint;
+    bool        ccw = ( aEvent.Matches( EE_ACTIONS::rotateCCW.MakeEvent() ) );
+    LIB_ITEM*   item = static_cast<LIB_ITEM*>( selection.Front() );
+    SCH_COMMIT  localCommit( m_toolMgr );
+    SCH_COMMIT* commit = aEvent.Parameter<SCH_COMMIT*>();
+
+    if( !commit )
+        commit = &localCommit;
 
     if( !item->IsMoving() )
-        saveCopyInUndoList( m_frame->GetCurSymbol(), UNDO_REDO::LIBEDIT );
+        commit->Modify( m_frame->GetCurSymbol(), m_frame->GetScreen() );
 
     if( selection.GetSize() == 1 )
         rotPoint = item->GetPosition();
@@ -184,7 +189,8 @@ int SYMBOL_EDITOR_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         if( selection.IsHover() )
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-        m_frame->OnModify();
+        if( !localCommit.Empty() )
+            localCommit.Push( _( "Rotate" ) );
     }
 
     return 0;
@@ -252,8 +258,9 @@ static std::vector<KICAD_T> nonFields =
 
 int SYMBOL_EDITOR_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 {
-    LIB_SYMBOL *symbol = m_frame->GetCurSymbol();
+    LIB_SYMBOL*           symbol = m_frame->GetCurSymbol();
     std::deque<EDA_ITEM*> items = m_selectionTool->RequestSelection( nonFields ).GetItems();
+    SCH_COMMIT            commit( m_frame );
 
     if( items.empty() )
         return 0;
@@ -261,9 +268,9 @@ int SYMBOL_EDITOR_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
     // Don't leave a freed pointer in the selection
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-    saveCopyInUndoList( symbol, UNDO_REDO::LIBEDIT );
+    commit.Modify( symbol, m_frame->GetScreen() );
 
-    std::set<LIB_ITEM *> toDelete;
+    std::set<LIB_ITEM*> toDelete;
 
     for( EDA_ITEM* item : items )
     {
@@ -318,8 +325,9 @@ int SYMBOL_EDITOR_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
     for( LIB_ITEM* item : toDelete )
         symbol->RemoveDrawItem( item );
 
+    commit.Push( _( "Delete" ) );
+
     m_frame->RebuildView();
-    m_frame->OnModify();
 
     return 0;
 }
@@ -780,7 +788,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
     if( !newPart )
         return -1;
 
-    SCHEMATIC_COMMIT commit( m_toolMgr );
+    SCH_COMMIT commit( m_toolMgr );
 
     commit.Modify( symbol );
     m_selectionTool->ClearSelection();
@@ -823,9 +831,9 @@ int SYMBOL_EDITOR_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 
 int SYMBOL_EDITOR_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 {
-    LIB_SYMBOL*      symbol = m_frame->GetCurSymbol();
-    EE_SELECTION&    selection = m_selectionTool->RequestSelection( nonFields );
-    SCHEMATIC_COMMIT commit( m_toolMgr );
+    LIB_SYMBOL*   symbol = m_frame->GetCurSymbol();
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( nonFields );
+    SCH_COMMIT    commit( m_toolMgr );
 
     if( selection.GetSize() == 0 )
         return 0;

@@ -38,7 +38,7 @@
 #include <string_utils.h>
 #include <kiface_base.h>
 #include <sch_label.h>
-#include <schematic_commit.h>
+#include <sch_commit.h>
 
 
 DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_LABEL_BASE* aLabel ) :
@@ -431,8 +431,8 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
     if( !m_textSize.Validate( 0.01, 1000.0, EDA_UNITS::MILLIMETRES ) )
         return false;
 
-    SCHEMATIC_COMMIT commit( m_Parent );
-    wxString         text;
+    SCH_COMMIT commit( m_Parent );
+    wxString   text;
 
     /* save old text in undo list if not already in edit */
     if( m_currentLabel->GetEditFlags() == 0 )

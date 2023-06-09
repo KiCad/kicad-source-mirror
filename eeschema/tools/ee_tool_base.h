@@ -155,7 +155,7 @@ protected:
             SYMBOL_EDIT_FRAME* editFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame );
             wxCHECK_RET( editFrame, wxT( "editFrame is null" ) );
 
-            editFrame->SaveCopyInUndoList( static_cast<LIB_ITEM*>( aItem ), aType, aAppend );
+            editFrame->SaveCopyInUndoList( wxEmptyString, static_cast<LIB_ITEM*>( aItem ) );
         }
         else
         {

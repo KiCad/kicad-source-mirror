@@ -46,7 +46,7 @@
 #include <sch_junction.h>
 #include <sch_edit_frame.h>
 #include <schematic.h>
-#include <schematic_commit.h>
+#include <sch_commit.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <eeschema_id.h>
 #include <dialogs/dialog_change_symbols.h>
@@ -671,15 +671,15 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     if( selection.GetSize() == 0 )
         return 0;
 
-    SCH_ITEM*         head = nullptr;
-    int               principalItemCount = 0;  // User-selected items (as opposed to connected wires)
-    VECTOR2I          rotPoint;
-    bool              moving = false;
-    SCHEMATIC_COMMIT  localInstance( m_toolMgr );
-    SCHEMATIC_COMMIT* commit = aEvent.Parameter<SCHEMATIC_COMMIT*>();
+    SCH_ITEM*   head = nullptr;
+    int         principalItemCount = 0;  // User-selected items (as opposed to connected wires)
+    VECTOR2I    rotPoint;
+    bool        moving = false;
+    SCH_COMMIT  localCommit( m_toolMgr );
+    SCH_COMMIT* commit = aEvent.Parameter<SCH_COMMIT*>();
 
     if( !commit )
-        commit = &localInstance;
+        commit = &localCommit;
 
     for( unsigned ii = 0; ii < selection.GetSize(); ii++ )
     {
@@ -927,8 +927,8 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         m_frame->SchematicCleanUp( commit );
         m_frame->TestDanglingEnds();
 
-        if( !localInstance.Empty() )
-            localInstance.Push( _( "Rotate" ) );
+        if( !localCommit.Empty() )
+            localCommit.Push( _( "Rotate" ) );
     }
 
     return 0;
@@ -942,15 +942,15 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     if( selection.GetSize() == 0 )
         return 0;
 
-    bool              vertical = ( aEvent.Matches( EE_ACTIONS::mirrorV.MakeEvent() ) );
-    SCH_ITEM*         item = static_cast<SCH_ITEM*>( selection.Front() );
-    bool              connections = false;
-    bool              moving = item->IsMoving();
-    SCHEMATIC_COMMIT  localInstance( m_toolMgr );
-    SCHEMATIC_COMMIT* commit = aEvent.Parameter<SCHEMATIC_COMMIT*>();
+    bool        vertical = ( aEvent.Matches( EE_ACTIONS::mirrorV.MakeEvent() ) );
+    SCH_ITEM*   item = static_cast<SCH_ITEM*>( selection.Front() );
+    bool        connections = false;
+    bool        moving = item->IsMoving();
+    SCH_COMMIT  localCommit( m_toolMgr );
+    SCH_COMMIT* commit = aEvent.Parameter<SCH_COMMIT*>();
 
     if( !commit )
-        commit = &localInstance;
+        commit = &localCommit;
 
     if( selection.GetSize() == 1 )
     {
@@ -1128,8 +1128,8 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             m_frame->TestDanglingEnds();
         }
 
-        if( !localInstance.Empty() )
-            localInstance.Push( _( "Mirror" ) );
+        if( !localCommit.Empty() )
+            localCommit.Push( _( "Mirror" ) );
     }
 
     return 0;
@@ -1247,8 +1247,8 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-    SCHEMATIC_COMMIT commit( m_toolMgr );
-    EE_SELECTION     newItems;
+    SCH_COMMIT   commit( m_toolMgr );
+    EE_SELECTION newItems;
 
     for( const std::unique_ptr<SCH_ITEM>& item : sourceItems )
     {
@@ -1362,7 +1362,7 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 {
     SCH_SCREEN*           screen = m_frame->GetScreen();
     std::deque<EDA_ITEM*> items = m_selectionTool->RequestSelection( deletableItems ).GetItems();
-    SCHEMATIC_COMMIT      commit( m_toolMgr );
+    SCH_COMMIT            commit( m_toolMgr );
     std::vector<VECTOR2I> pts;
 
     if( items.empty() )
@@ -1516,8 +1516,8 @@ int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 
 void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
 {
-    KICAD_T          parentType = aField->GetParent() ? aField->GetParent()->Type() : SCHEMATIC_T;
-    SCHEMATIC_COMMIT commit( m_toolMgr );
+    KICAD_T    parentType = aField->GetParent() ? aField->GetParent()->Type() : SCHEMATIC_T;
+    SCH_COMMIT commit( m_toolMgr );
 
     // Save old symbol in undo list if not already in edit, or moving.
     if( aField->GetEditFlags() == 0 )    // i.e. not edited, or moved
@@ -1609,10 +1609,10 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION&    selection = m_selectionTool->RequestSelection( RotatableItems );
-    SCHEMATIC_COMMIT commit( m_toolMgr );
-    SCH_ITEM*        head = static_cast<SCH_ITEM*>( selection.Front() );
-    bool             moving = head && head->IsMoving();
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( RotatableItems );
+    SCH_COMMIT    commit( m_toolMgr );
+    SCH_ITEM*     head = static_cast<SCH_ITEM*>( selection.Front() );
+    bool          moving = head && head->IsMoving();
 
     if( selection.Empty() )
         return 0;
@@ -2340,7 +2340,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             if( selected )
                 m_toolMgr->RunAction( EE_ACTIONS::removeItemFromSel, true, item );
 
-            SCHEMATIC_COMMIT commit( m_toolMgr );
+            SCH_COMMIT commit( m_toolMgr );
 
             if( !item->IsNew() )
             {
@@ -2386,9 +2386,8 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
     bool          isSlice   = aEvent.Matches( EE_ACTIONS::slice.MakeEvent() );
     VECTOR2I      cursorPos = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
     EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_LINE_T } );
-
-    SCH_SCREEN*            screen = m_frame->GetScreen();
-    SCHEMATIC_COMMIT       commit( m_toolMgr );
+    SCH_SCREEN*   screen = m_frame->GetScreen();
+    SCH_COMMIT    commit( m_toolMgr );
     std::vector<SCH_LINE*> lines;
 
     for( EDA_ITEM* item : selection )
@@ -2555,7 +2554,7 @@ int SCH_EDIT_TOOL::DdAppendFile( const TOOL_EVENT& aEvent )
 int SCH_EDIT_TOOL::SetAttribute( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
-    SCHEMATIC_COMMIT commit( m_toolMgr );
+    SCH_COMMIT    commit( m_toolMgr );
 
     if( selection.Empty() )
         return 0;
@@ -2588,7 +2587,7 @@ int SCH_EDIT_TOOL::SetAttribute( const TOOL_EVENT& aEvent )
 int SCH_EDIT_TOOL::UnsetAttribute( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
-    SCHEMATIC_COMMIT commit( m_toolMgr );
+    SCH_COMMIT    commit( m_toolMgr );
 
     if( selection.Empty() )
         return 0;
@@ -2621,7 +2620,7 @@ int SCH_EDIT_TOOL::UnsetAttribute( const TOOL_EVENT& aEvent )
 int SCH_EDIT_TOOL::ToggleAttribute( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
-    SCHEMATIC_COMMIT commit( m_toolMgr );
+    SCH_COMMIT    commit( m_toolMgr );
 
     if( selection.Empty() )
         return 0;

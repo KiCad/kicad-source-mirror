@@ -37,7 +37,7 @@
 class REPORTER;
 class SCH_SHEET_LIST;
 class SCH_EDIT_FRAME;
-class SCHEMATIC_COMMIT;
+class SCH_COMMIT;
 
 /**
  * Back annotation algorithm class used to receive, check, and apply a \ref NETLIST from
@@ -131,7 +131,7 @@ private:
      */
     void applyChangelist();
 
-    void processNetNameChange( SCHEMATIC_COMMIT* aCommit, const wxString& aRef, SCH_PIN* aPin,
+    void processNetNameChange( SCH_COMMIT* aCommit, const wxString& aRef, SCH_PIN* aPin,
                                const SCH_CONNECTION* aConnection, const wxString& aOldName,
                                const wxString& aNewName );
 

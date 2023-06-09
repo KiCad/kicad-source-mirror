@@ -53,7 +53,7 @@
 #include <sch_sheet.h>
 #include <sch_marker.h>
 #include <schematic.h>
-#include <schematic_commit.h>
+#include <sch_commit.h>
 #include <settings/settings_manager.h>
 #include <advanced_config.h>
 #include <sim/simulator_frame.h>
@@ -1589,7 +1589,7 @@ void SCH_EDIT_FRAME::AutoRotateItem( SCH_SCREEN* aScreen, SCH_ITEM* aItem )
 }
 
 
-void SCH_EDIT_FRAME::AddItemToCommitAndScreen( SCHEMATIC_COMMIT* aCommit, SCH_SCREEN* aScreen,
+void SCH_EDIT_FRAME::AddItemToCommitAndScreen( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen,
                                                SCH_ITEM* aItem )
 {
     wxCHECK_RET( aItem != nullptr, wxT( "Cannot add null item to list." ) );
@@ -1736,16 +1736,15 @@ void SCH_EDIT_FRAME::initScreenZoom()
 }
 
 
-void SCH_EDIT_FRAME::RecalculateConnections( SCHEMATIC_COMMIT* aCommit,
-                                             SCH_CLEANUP_FLAGS aCleanupFlags )
+void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS aCleanupFlags )
 {
     wxString            highlightedConn = GetHighlightedConnection();
     SCHEMATIC_SETTINGS& settings = Schematic().Settings();
     SCH_SHEET_LIST      list = Schematic().GetSheets();
-    SCHEMATIC_COMMIT    localInstance( m_toolManager );
+    SCH_COMMIT          localCommit( m_toolManager );
 
     if( !aCommit )
-        aCommit = &localInstance;
+        aCommit = &localCommit;
 
 #ifdef PROFILE
     PROF_TIMER timer;
@@ -1914,8 +1913,8 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCHEMATIC_COMMIT* aCommit,
         m_highlightedConnChanged = false;
     }
 
-    if( !localInstance.Empty() )
-        localInstance.Push( _( "Schematic Cleanup" ) );
+    if( !localCommit.Empty() )
+        localCommit.Push( _( "Schematic Cleanup" ) );
 }
 
 
@@ -2151,10 +2150,10 @@ void SCH_EDIT_FRAME::onSize( wxSizeEvent& aEvent )
 void SCH_EDIT_FRAME::SaveSymbolToSchematic( const LIB_SYMBOL& aSymbol,
                                             const KIID& aSchematicSymbolUUID )
 {
-    SCH_SHEET_PATH   principalPath;
-    SCH_ITEM*        item = Schematic().GetSheets().GetItem( aSchematicSymbolUUID, &principalPath );
-    SCH_SYMBOL*      principalSymbol = dynamic_cast<SCH_SYMBOL*>( item );
-    SCHEMATIC_COMMIT commit( m_toolManager );
+    SCH_SHEET_PATH principalPath;
+    SCH_ITEM*      item = Schematic().GetSheets().GetItem( aSchematicSymbolUUID, &principalPath );
+    SCH_SYMBOL*    principalSymbol = dynamic_cast<SCH_SYMBOL*>( item );
+    SCH_COMMIT     commit( m_toolManager );
 
     if( !principalSymbol )
         return;

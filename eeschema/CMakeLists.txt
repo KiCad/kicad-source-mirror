@@ -310,6 +310,7 @@ set( EESCHEMA_SRCS
     sch_base_frame.cpp
     sch_bitmap.cpp
     sch_bus_entry.cpp
+    sch_commit.cpp
     sch_connection.cpp
     sch_draw_panel.cpp
     sch_edit_frame.cpp
@@ -338,7 +339,6 @@ set( EESCHEMA_SRCS
     sch_validators.cpp
     sch_view.cpp
     schematic.cpp
-    schematic_commit.cpp
     schematic_settings.cpp
     schematic_undo_redo.cpp
     sheet.cpp

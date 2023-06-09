@@ -52,7 +52,7 @@
 #include <sch_sheet_pin.h>
 #include <sch_view.h>
 #include <schematic.h>
-#include <schematic_commit.h>
+#include <sch_commit.h>
 #include <sim/simulator_frame.h>
 #include <sim/spice_generator.h>
 #include <sim/sim_lib_mgr.h>
@@ -1527,12 +1527,12 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     // SCH_SEXP_PLUGIN added the items to the paste screen, but not to the view or anything
     // else.  Pull them back out to start with.
-    SCHEMATIC_COMMIT commit( m_toolMgr );
-    EDA_ITEMS        loadedItems;
-    bool             sheetsPasted = false;
-    SCH_SHEET_LIST   hierarchy = m_frame->Schematic().GetSheets();
-    SCH_SHEET_PATH&  pasteRoot = m_frame->GetCurrentSheet();
-    wxFileName       destFn = pasteRoot.Last()->GetFileName();
+    SCH_COMMIT      commit( m_toolMgr );
+    EDA_ITEMS       loadedItems;
+    bool            sheetsPasted = false;
+    SCH_SHEET_LIST  hierarchy = m_frame->Schematic().GetSheets();
+    SCH_SHEET_PATH& pasteRoot = m_frame->GetCurrentSheet();
+    wxFileName      destFn = pasteRoot.Last()->GetFileName();
 
     if( destFn.IsRelative() )
         destFn.MakeAbsolute( m_frame->Prj().GetProjectPath() );

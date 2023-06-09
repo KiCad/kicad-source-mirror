@@ -30,7 +30,7 @@
 #include <kiface_base.h>
 #include <widgets/wx_html_report_panel.h>
 #include <schematic.h>
-#include <schematic_commit.h>
+#include <sch_commit.h>
 
 // A window name for the annotate dialog to retrieve is if not destroyed
 #define DLG_WINDOW_NAME "DialogAnnotateWindowName"
@@ -214,7 +214,7 @@ void DIALOG_ANNOTATE::OnClose( wxCloseEvent& event )
 
 void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
 {
-    SCHEMATIC_COMMIT commit( m_Parent );
+    SCH_COMMIT commit( m_Parent );
 
     m_MessageWindow->Clear();
     REPORTER& reporter = m_MessageWindow->Reporter();

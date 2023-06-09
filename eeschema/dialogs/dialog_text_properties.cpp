@@ -32,7 +32,7 @@
 #include <sch_textbox.h>
 #include <confirm.h>
 #include <schematic.h>
-#include <schematic_commit.h>
+#include <sch_commit.h>
 #include <dialogs/html_message_box.h>
 #include <scintilla_tricks.h>
 #include <dialog_text_properties.h>
@@ -434,8 +434,8 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     if( !m_textSize.Validate( 0.01, 1000.0, EDA_UNITS::MILLIMETRES ) )
         return false;
 
-    SCHEMATIC_COMMIT commit( m_frame );
-    wxString         text;
+    SCH_COMMIT commit( m_frame );
+    wxString   text;
 
     /* save old text in undo list if not already in edit */
     if( m_currentItem->GetEditFlags() == 0 )

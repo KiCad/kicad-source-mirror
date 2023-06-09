@@ -42,25 +42,25 @@ class EE_TOOL_BASE;
 #define SKIP_SET_DIRTY     0x0004
 #define SKIP_CONNECTIVITY  0x0008
 
-class SCHEMATIC_COMMIT : public COMMIT
+class SCH_COMMIT : public COMMIT
 {
 public:
-    SCHEMATIC_COMMIT( TOOL_MANAGER* aToolMgr );
-    SCHEMATIC_COMMIT( EDA_DRAW_FRAME* aFrame );
-    SCHEMATIC_COMMIT( EE_TOOL_BASE<SCH_BASE_FRAME>* aFrame );
+    SCH_COMMIT( TOOL_MANAGER* aToolMgr );
+    SCH_COMMIT( EDA_DRAW_FRAME* aFrame );
+    SCH_COMMIT( EE_TOOL_BASE<SCH_BASE_FRAME>* aFrame );
 
-    virtual ~SCHEMATIC_COMMIT();
+    virtual ~SCH_COMMIT();
 
     virtual void Push( const wxString& aMessage = wxT( "A commit" ),
                        int aCommitFlags = 0 ) override;
 
     virtual void Revert() override;
-    COMMIT&      Stage( EDA_ITEM *aItem, CHANGE_TYPE aChangeType, BASE_SCREEN *aScreen = nullptr )
-                     override;
-    COMMIT&      Stage( std::vector<EDA_ITEM*> &container, CHANGE_TYPE aChangeType,
-                    BASE_SCREEN *aScreen = nullptr ) override;
-    COMMIT&      Stage( const PICKED_ITEMS_LIST &aItems, UNDO_REDO aModFlag = UNDO_REDO::UNSPECIFIED,
-                    BASE_SCREEN *aScreen = nullptr ) override;
+    COMMIT& Stage( EDA_ITEM *aItem, CHANGE_TYPE aChangeType,
+                   BASE_SCREEN *aScreen = nullptr ) override;
+    COMMIT& Stage( std::vector<EDA_ITEM*> &container, CHANGE_TYPE aChangeType,
+                   BASE_SCREEN *aScreen = nullptr ) override;
+    COMMIT& Stage( const PICKED_ITEMS_LIST &aItems, UNDO_REDO aModFlag = UNDO_REDO::UNSPECIFIED,
+                   BASE_SCREEN *aScreen = nullptr ) override;
 
 private:
     EDA_ITEM* parentObject( EDA_ITEM* aItem ) const override;

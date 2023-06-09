@@ -22,9 +22,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <tool/tool_manager.h>
 #include <tools/ee_selection_tool.h>
 #include <symbol_edit_frame.h>
+#include <sch_commit.h>
 #include <confirm.h>
 #include <ee_actions.h>
 #include <dialogs/dialog_pin_properties.h>
@@ -118,19 +118,15 @@ bool SYMBOL_EDITOR_PIN_TOOL::Init()
 
 bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
 {
-    LIB_PIN original_pin( *aPin );
+    LIB_PIN               original_pin( *aPin );
     DIALOG_PIN_PROPERTIES dlg( m_frame, aPin );
+    SCH_COMMIT            commit( m_frame );
 
     if( aPin->GetEditFlags() == 0 )
-        m_frame->SaveCopyInUndoList( aPin->GetParent() );
+        commit.Modify( aPin->GetParent() );
 
     if( dlg.ShowModal() == wxID_CANCEL )
-    {
-        if( aPin->GetEditFlags() == 0 )
-            m_frame->PopCommandFromUndoList();
-
         return false;
-    }
 
     aPin->SetModified();
 
@@ -194,8 +190,8 @@ bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
         }
     }
 
+    commit.Push( _( "Edit Pin Properties" ) );
     m_frame->UpdateItem( aPin, false, true );
-    m_frame->OnModify( );
 
     std::vector<MSG_PANEL_ITEM> items;
     aPin->GetMsgPanelInfo( m_frame, items );

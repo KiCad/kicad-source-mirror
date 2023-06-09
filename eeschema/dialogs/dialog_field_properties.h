@@ -35,7 +35,7 @@ class SCH_BASE_FRAME;
 class SCH_FIELD;
 class EDA_TEXT;
 class SCINTILLA_TRICKS;
-class SCHEMATIC_COMMIT;
+class SCH_COMMIT;
 
 
 /**
@@ -142,7 +142,7 @@ public:
 
     void onScintillaCharAdded( wxStyledTextEvent &aEvent );
 
-    void UpdateField( SCHEMATIC_COMMIT* aCommit, SCH_FIELD* aField, SCH_SHEET_PATH* aSheetPath );
+    void UpdateField( SCH_COMMIT* aCommit, SCH_FIELD* aField, SCH_SHEET_PATH* aSheetPath );
 
 private:
     const SCH_FIELD* m_field;

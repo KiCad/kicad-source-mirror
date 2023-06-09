@@ -27,7 +27,7 @@
 #include <reporter.h>
 #include <sch_edit_frame.h>
 #include <schematic.h>
-#include <schematic_commit.h>
+#include <sch_commit.h>
 #include <erc_settings.h>
 #include <sch_reference_list.h>
 #include <symbol_library.h>
@@ -64,7 +64,7 @@ void SCH_EDIT_FRAME::DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool aRe
     SCH_SHEET_LIST sheets = Schematic().GetSheets();
     SCH_SCREEN*    screen = GetScreen();
     SCH_SHEET_PATH currentSheet = GetCurrentSheet();
-    SCHEMATIC_COMMIT commit( this );
+    SCH_COMMIT     commit( this );
 
     auto clearSymbolAnnotation =
         [&]( EDA_ITEM* aItem, SCH_SCREEN* aScreen, SCH_SHEET_PATH* aSheet, bool aResetPrefixes )
@@ -192,15 +192,10 @@ std::unordered_set<SCH_SYMBOL*> getInferredSymbols( const EE_SELECTION& aSelecti
 }
 
 
-void SCH_EDIT_FRAME::AnnotateSymbols( SCHEMATIC_COMMIT* aCommit,
-                                      ANNOTATE_SCOPE_T  aAnnotateScope,
-                                      ANNOTATE_ORDER_T  aSortOption,
-                                      ANNOTATE_ALGO_T   aAlgoOption,
-                                      bool              aRecursive,
-                                      int               aStartNumber,
-                                      bool              aResetAnnotation,
-                                      bool              aRepairTimestamps,
-                                      REPORTER&         aReporter )
+void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T  aAnnotateScope,
+                                      ANNOTATE_ORDER_T aSortOption, ANNOTATE_ALGO_T aAlgoOption,
+                                      bool aRecursive, int aStartNumber, bool aResetAnnotation,
+                                      bool aRepairTimestamps, REPORTER& aReporter )
 {
     EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
     EE_SELECTION&      selection = selTool->GetSelection();

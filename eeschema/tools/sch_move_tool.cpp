@@ -30,7 +30,7 @@
 #include <tools/ee_selection_tool.h>
 #include <tools/sch_line_wire_bus_tool.h>
 #include <ee_actions.h>
-#include <schematic_commit.h>
+#include <sch_commit.h>
 #include <eda_item.h>
 #include <sch_item.h>
 #include <sch_symbol.h>
@@ -87,8 +87,8 @@ bool SCH_MOVE_TOOL::Init()
 }
 
 
-void SCH_MOVE_TOOL::orthoLineDrag( SCH_LINE* line, const VECTOR2I& splitDelta, int& xBendCount,
-                                   int& yBendCount, const EE_GRID_HELPER& grid )
+void SCH_MOVE_TOOL::orthoLineDrag( SCH_COMMIT* aCommit, SCH_LINE* line, const VECTOR2I& splitDelta,
+                                   int& xBendCount, int& yBendCount, const EE_GRID_HELPER& grid )
 {
     // If the move is not the same angle as this move,  then we need to do something special with
     // the unselected end to maintain orthogonality. Either drag some connected line that is the
@@ -197,7 +197,7 @@ void SCH_MOVE_TOOL::orthoLineDrag( SCH_LINE* line, const VECTOR2I& splitDelta, i
 
             if( !foundLine->HasFlag( IS_CHANGED ) && !foundLine->HasFlag( IS_NEW ) )
             {
-                saveCopyInUndoList( (SCH_ITEM*) foundLine, UNDO_REDO::CHANGED, true );
+                aCommit->Modify( (SCH_ITEM*) foundLine, m_frame->GetScreen() );
 
                 if( !foundLine->IsSelected() )
                     m_changedDragLines.insert( foundLine );
@@ -360,11 +360,11 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     EE_GRID_HELPER        grid( m_toolMgr );
     bool                  wasDragging = m_moveInProgress && m_isDrag;
     bool                  isSlice = false;
-    SCHEMATIC_COMMIT      localInstance( m_toolMgr );
-    SCHEMATIC_COMMIT*     commit = aEvent.Parameter<SCHEMATIC_COMMIT*>();
+    SCH_COMMIT            localCommit( m_toolMgr );
+    SCH_COMMIT*           commit = aEvent.Parameter<SCH_COMMIT*>();
 
     if( !commit )
-        commit = &localInstance;
+        commit = &localCommit;
 
     m_anchorPos.reset();
 
@@ -375,7 +375,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     else if( aEvent.IsAction( &EE_ACTIONS::drag ) )
     {
         m_isDrag = true;
-        isSlice = commit != &localInstance;
+        isSlice = commit != &localCommit;
     }
     else if( aEvent.IsAction( &EE_ACTIONS::moveActivate ) )
     {
@@ -752,7 +752,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                             && line
                             && line->HasFlag( STARTPOINT ) != line->HasFlag( ENDPOINT ) )
                     {
-                        orthoLineDrag( line, splitDelta, xBendCount, yBendCount, grid );
+                        orthoLineDrag( commit, line, splitDelta, xBendCount, yBendCount, grid );
                     }
 
                     // Move all other items normally, including the selected end of partially
@@ -970,7 +970,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
         m_frame->SchematicCleanUp( commit );
 
-        if( commit == &localInstance )
+        if( commit == &localCommit )
             commit->Push( m_isDrag ? _( "Drag" ) : _( "Move" ) );
     }
 
@@ -996,7 +996,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 }
 
 
-void SCH_MOVE_TOOL::trimDanglingLines( SCHEMATIC_COMMIT* aCommit )
+void SCH_MOVE_TOOL::trimDanglingLines( SCH_COMMIT* aCommit )
 {
     // Need a local cleanup first to ensure we remove unneeded junctions
     m_frame->SchematicCleanUp( aCommit, m_frame->GetScreen() );
@@ -1160,7 +1160,7 @@ void SCH_MOVE_TOOL::getConnectedItems( SCH_ITEM* aOriginalItem, const VECTOR2I& 
 }
 
 
-void SCH_MOVE_TOOL::getConnectedDragItems( SCHEMATIC_COMMIT* aCommit, SCH_ITEM* aSelectedItem,
+void SCH_MOVE_TOOL::getConnectedDragItems( SCH_COMMIT* aCommit, SCH_ITEM* aSelectedItem,
                                            const VECTOR2I& aPoint, EDA_ITEMS& aList )
 {
     EE_RTREE&         items = m_frame->GetScreen()->Items();
@@ -1169,8 +1169,8 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCHEMATIC_COMMIT* aCommit, SCH_ITEM* 
     bool              ptHasUnselectedJunction = false;
 
     auto makeNewWire =
-            [this]( SCHEMATIC_COMMIT* commit, SCH_ITEM* fixed, SCH_ITEM* selected,
-                    const VECTOR2I& start, const VECTOR2I& end )
+            [this]( SCH_COMMIT* commit, SCH_ITEM* fixed, SCH_ITEM* selected, const VECTOR2I& start,
+                    const VECTOR2I& end )
             {
                 SCH_LINE* newWire;
 
@@ -1198,7 +1198,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCHEMATIC_COMMIT* aCommit, SCH_ITEM* 
             };
 
     auto makeNewJunction =
-            [this]( SCHEMATIC_COMMIT* commit, SCH_LINE* line, const VECTOR2I& pt )
+            [this]( SCH_COMMIT* commit, SCH_LINE* line, const VECTOR2I& pt )
             {
                 SCH_JUNCTION* junction = new SCH_JUNCTION( pt );
                 junction->SetFlags( IS_NEW );
@@ -1592,9 +1592,9 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
 
 int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
 {
-    EE_GRID_HELPER   grid( m_toolMgr);
-    EE_SELECTION&    selection = m_selectionTool->RequestSelection( EE_COLLECTOR::MovableItems );
-    SCHEMATIC_COMMIT commit( m_toolMgr );
+    EE_GRID_HELPER grid( m_toolMgr);
+    EE_SELECTION&  selection = m_selectionTool->RequestSelection( EE_COLLECTOR::MovableItems );
+    SCH_COMMIT     commit( m_toolMgr );
 
     auto doMoveItem =
             [&]( EDA_ITEM* item, const VECTOR2I& delta )

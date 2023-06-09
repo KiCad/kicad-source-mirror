@@ -23,7 +23,7 @@
 #include <settings/settings_manager.h>
 #include <sch_edit_frame.h>
 #include <widgets/color_swatch.h>
-#include <schematic_commit.h>
+#include <sch_commit.h>
 
 
 DIALOG_JUNCTION_PROPS::DIALOG_JUNCTION_PROPS( SCH_EDIT_FRAME* aParent,
@@ -96,7 +96,7 @@ void DIALOG_JUNCTION_PROPS::resetDefaults( wxCommandEvent& event )
 
 bool DIALOG_JUNCTION_PROPS::TransferDataFromWindow()
 {
-    SCHEMATIC_COMMIT commit( m_frame );
+    SCH_COMMIT commit( m_frame );
 
     for( SCH_JUNCTION* junction : m_junctions )
     {

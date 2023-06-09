@@ -32,38 +32,40 @@
 #include <schematic.h>
 
 #include <view/view.h>
-#include <schematic_commit.h>
+#include <sch_commit.h>
 
 #include <functional>
 
 
-SCHEMATIC_COMMIT::SCHEMATIC_COMMIT( TOOL_MANAGER* aToolMgr ) :
+SCH_COMMIT::SCH_COMMIT( TOOL_MANAGER* aToolMgr ) :
         m_toolMgr( aToolMgr ),
         m_isLibEditor( false )
 {
+    SCH_BASE_FRAME* frame = static_cast<SCH_BASE_FRAME*>( m_toolMgr->GetToolHolder() );
+    m_isLibEditor = frame && frame->IsType( FRAME_SCH_SYMBOL_EDITOR );
 }
 
 
-SCHEMATIC_COMMIT::SCHEMATIC_COMMIT( EE_TOOL_BASE<SCH_BASE_FRAME>* aTool )
+SCH_COMMIT::SCH_COMMIT( EE_TOOL_BASE<SCH_BASE_FRAME>* aTool )
 {
     m_toolMgr = aTool->GetManager();
     m_isLibEditor = aTool->IsSymbolEditor();
 }
 
 
-SCHEMATIC_COMMIT::SCHEMATIC_COMMIT( EDA_DRAW_FRAME* aFrame )
+SCH_COMMIT::SCH_COMMIT( EDA_DRAW_FRAME* aFrame )
 {
     m_toolMgr = aFrame->GetToolManager();
     m_isLibEditor = aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR );
 }
 
 
-SCHEMATIC_COMMIT::~SCHEMATIC_COMMIT()
+SCH_COMMIT::~SCH_COMMIT()
 {
 }
 
 
-COMMIT& SCHEMATIC_COMMIT::Stage( EDA_ITEM *aItem, CHANGE_TYPE aChangeType, BASE_SCREEN *aScreen )
+COMMIT& SCH_COMMIT::Stage( EDA_ITEM *aItem, CHANGE_TYPE aChangeType, BASE_SCREEN *aScreen )
 {
     wxCHECK( aItem, *this );
 
@@ -96,8 +98,8 @@ COMMIT& SCHEMATIC_COMMIT::Stage( EDA_ITEM *aItem, CHANGE_TYPE aChangeType, BASE_
 }
 
 
-COMMIT& SCHEMATIC_COMMIT::Stage( std::vector<EDA_ITEM*> &container, CHANGE_TYPE aChangeType,
-                                 BASE_SCREEN *aScreen )
+COMMIT& SCH_COMMIT::Stage( std::vector<EDA_ITEM*> &container, CHANGE_TYPE aChangeType,
+                           BASE_SCREEN *aScreen )
 {
     for( EDA_ITEM* item : container )
         Stage( item, aChangeType, aScreen );
@@ -106,54 +108,28 @@ COMMIT& SCHEMATIC_COMMIT::Stage( std::vector<EDA_ITEM*> &container, CHANGE_TYPE 
 }
 
 
-COMMIT& SCHEMATIC_COMMIT::Stage( const PICKED_ITEMS_LIST &aItems, UNDO_REDO aModFlag,
-                                 BASE_SCREEN *aScreen )
+COMMIT& SCH_COMMIT::Stage( const PICKED_ITEMS_LIST &aItems, UNDO_REDO aModFlag,
+                           BASE_SCREEN *aScreen )
 {
     return COMMIT::Stage( aItems, aModFlag, aScreen );
 }
 
 
-void SCHEMATIC_COMMIT::pushLibEdit( const wxString& aMessage, int aCommitFlags )
+void SCH_COMMIT::pushLibEdit( const wxString& aMessage, int aCommitFlags )
 {
-    // Objects potentially interested in changes:
-    PICKED_ITEMS_LIST   undoList;
-    KIGFX::VIEW*        view = m_toolMgr->GetView();
-
-    SYMBOL_EDIT_FRAME*  sym_frame = static_cast<SYMBOL_EDIT_FRAME*>( m_toolMgr->GetToolHolder() );
-    LIB_SYMBOL*         symbol = sym_frame->GetCurSymbol();
-    std::set<EDA_ITEM*> savedModules;
-    EE_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-    bool                itemsDeselected = false;
-    bool                selectedModified = false;
+    KIGFX::VIEW*       view = m_toolMgr->GetView();
+    SYMBOL_EDIT_FRAME* sym_frame = static_cast<SYMBOL_EDIT_FRAME*>( m_toolMgr->GetToolHolder() );
+    LIB_SYMBOL*        symbol = sym_frame->GetCurSymbol();
+    bool               selectedModified = false;
 
     if( Empty() )
         return;
 
-    undoList.SetDescription( aMessage );
-
     for( COMMIT_LINE& ent : m_changes )
     {
-        int changeType = ent.m_type & CHT_TYPE;
-        int changeFlags = ent.m_type & CHT_FLAGS;
-        LIB_ITEM* libItem = static_cast<LIB_ITEM*>( ent.m_item );
-
-        wxASSERT( ent.m_item );
-
-        // Module items need to be saved in the undo buffer before modification
-        if( ent.m_item->Type() != LIB_SYMBOL_T )
-        {
-            ent.m_item = ent.m_item->GetParent();
-            wxASSERT( ent.m_item );
-        }
-
-        // We have not saved the symbol yet, so let's create an entry
-        if( savedModules.count( ent.m_item ) == 0 )
-        {
-            if( !( aCommitFlags & SKIP_UNDO ) && sym_frame )
-                sym_frame->SaveCopyInUndoList( ent.m_item, UNDO_REDO::CHANGED, aCommitFlags & APPEND_UNDO );
-
-            savedModules.insert( ent.m_item );
-        }
+        // In the symbol editor everything should have been commited as a changed symbol.
+        wxASSERT( ent.m_item == symbol );
+        wxASSERT( ent.m_type == CHT_MODIFY );
 
         if( ent.m_item->IsSelected() )
             selectedModified = true;
@@ -165,77 +141,33 @@ void SCHEMATIC_COMMIT::pushLibEdit( const wxString& aMessage, int aCommitFlags )
                     selectedModified = true;
             } );
 
-        switch( changeType )
+        if( view )
         {
-        case CHT_ADD:
-        {
-            wxASSERT( libItem->Type() != LIB_SYMBOL_T );
+            view->Update( symbol );
 
-            libItem->SetParent( symbol );
-
-            if( !( changeFlags & CHT_DONE ) )
-                symbol->AddDrawItem( libItem );
-
-            if( view )
-                view->Add( libItem );
-
-            break;
+            symbol->RunOnChildren(
+                    [&]( LIB_ITEM* aChild )
+                    {
+                        view->Update( aChild );
+                    });
         }
 
-        case CHT_REMOVE:
+        if( !( aCommitFlags & SKIP_UNDO ) && sym_frame )
         {
-            if( libItem->IsSelected() )
+            if( ent.m_copy )
             {
-                if( selTool )
-                    selTool->RemoveItemFromSel( libItem, true /* quiet mode */ );
-
-                itemsDeselected = true;
+                sym_frame->SaveCopyInUndoList( aMessage, ent.m_copy );
+                ent.m_copy = nullptr;
             }
-
-            // Avoid removing mandatory fields
-            if( libItem->Type() == LIB_FIELD_T && static_cast<LIB_FIELD*>( libItem )->IsMandatory() )
-                break;
-
-            if( view )
-                view->Remove( libItem );
-
-            if( !( changeFlags & CHT_DONE ) )
-                symbol->RemoveDrawItem( libItem );
-
-            break;
-
         }
-
-        case CHT_MODIFY:
+        else
         {
-            if( view )
-            {
-                view->Update( libItem );
-
-                symbol->RunOnChildren(
-                        [&]( LIB_ITEM* aChild )
-                        {
-                            view->Update( aChild );
-                        });
-            }
-
             // if no undo entry is needed, the copy would create a memory leak
-            if( aCommitFlags & SKIP_UNDO )
-                delete ent.m_copy;
-
-            break;
-        }
-
-        default:
-            wxASSERT( false );
-            break;
+            delete ent.m_copy;
         }
     }
 
     m_toolMgr->PostEvent( { TC_MESSAGE, TA_MODEL_CHANGE, AS_GLOBAL } );
-
-    if( itemsDeselected )
-        m_toolMgr->PostEvent( EVENTS::UnselectedEvent );
 
     if( selectedModified )
         m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
@@ -247,7 +179,7 @@ void SCHEMATIC_COMMIT::pushLibEdit( const wxString& aMessage, int aCommitFlags )
 }
 
 
-void SCHEMATIC_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
+void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 {
     // Objects potentially interested in changes:
     PICKED_ITEMS_LIST   undoList;
@@ -391,7 +323,7 @@ void SCHEMATIC_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 }
 
 
-void SCHEMATIC_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
+void SCH_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 {
     if( m_isLibEditor )
         pushLibEdit( aMessage, aCommitFlags );
@@ -400,7 +332,7 @@ void SCHEMATIC_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 }
 
 
-EDA_ITEM* SCHEMATIC_COMMIT::parentObject( EDA_ITEM* aItem ) const
+EDA_ITEM* SCH_COMMIT::parentObject( EDA_ITEM* aItem ) const
 {
     if( SCH_SYMBOL* parentSymbol = dyn_cast<SCH_SYMBOL*>( aItem->GetParent() ) )
         return parentSymbol;
@@ -415,7 +347,7 @@ EDA_ITEM* SCHEMATIC_COMMIT::parentObject( EDA_ITEM* aItem ) const
 }
 
 
-EDA_ITEM* SCHEMATIC_COMMIT::makeImage( EDA_ITEM* aItem ) const
+EDA_ITEM* SCH_COMMIT::makeImage( EDA_ITEM* aItem ) const
 {
     if( m_isLibEditor )
     {
@@ -427,7 +359,7 @@ EDA_ITEM* SCHEMATIC_COMMIT::makeImage( EDA_ITEM* aItem ) const
 }
 
 
-void SCHEMATIC_COMMIT::revertLibEdit()
+void SCH_COMMIT::revertLibEdit()
 {
     // The first element in the commit is the original, and libedit
     // just saves copies of the whole symbol, so grab the original and discard the rest
@@ -443,7 +375,7 @@ void SCHEMATIC_COMMIT::revertLibEdit()
 }
 
 
-void SCHEMATIC_COMMIT::Revert()
+void SCH_COMMIT::Revert()
 {
     PICKED_ITEMS_LIST undoList;
     KIGFX::VIEW*      view = m_toolMgr->GetView();

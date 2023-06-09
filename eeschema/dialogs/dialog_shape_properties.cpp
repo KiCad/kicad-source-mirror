@@ -27,7 +27,7 @@
 #include <sch_shape.h>
 #include <dialog_shape_properties.h>
 #include <settings/color_settings.h>
-#include <schematic_commit.h>
+#include <sch_commit.h>
 
 
 DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_SHAPE* aShape ) :
@@ -137,7 +137,7 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
     if( !wxDialog::TransferDataFromWindow() )
         return false;
 
-    SCHEMATIC_COMMIT commit( m_frame );
+    SCH_COMMIT commit( m_frame );
 
     if( !m_shape->IsNew() )
         commit.Modify( m_shape, m_frame->GetScreen() );
