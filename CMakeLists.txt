@@ -483,6 +483,12 @@ if( MSVC )
     string( APPEND CMAKE_CXX_FLAGS " /EHs" )
     endif()
 
+    if( KICAD_SANITIZE_ADDRESS )
+        add_definitions( -DKICAD_SANITIZE_ADDRESS )
+        add_definitions( -D_DISABLE_VECTOR_ANNOTATION )
+        string( APPEND CMAKE_CXX_FLAGS " /fsanitize=address" )
+    endif()
+
     foreach( type EXE SHARED MODULE)
         # /DEBUG: create PDB
         string( APPEND CMAKE_${type}_LINKER_FLAGS " /DEBUG /MANIFEST:NO" )
