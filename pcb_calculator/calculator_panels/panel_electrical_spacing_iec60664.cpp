@@ -37,9 +37,12 @@ wxString iec60664help =
 
 extern double DoubleFromString( const wxString& TextValue );
 
-PANEL_ELECTRICAL_SPACING_IEC60664::PANEL_ELECTRICAL_SPACING_IEC60664(
-        wxWindow * parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
-        long style, const wxString& name ) :
+PANEL_ELECTRICAL_SPACING_IEC60664::PANEL_ELECTRICAL_SPACING_IEC60664( wxWindow* parent,
+                                                                      wxWindowID id,
+                                                                      const wxPoint& pos,
+                                                                      const wxSize& size,
+                                                                      long style,
+                                                                      const wxString& name ) :
         PANEL_ELECTRICAL_SPACING_IEC60664_BASE( parent, id, pos, size, style, name )
 {
     m_OVCchoice->SetSelection( 0 );
@@ -117,10 +120,10 @@ void PANEL_ELECTRICAL_SPACING_IEC60664::CalculateTransientImpulse()
 
     switch( m_OVCchoice->GetSelection() )
     {
-    case 0: ovc = IEC60664::OV_CATEGORY::OV_I; break;
-    case 1: ovc = IEC60664::OV_CATEGORY::OV_II; break;
-    case 2: ovc = IEC60664::OV_CATEGORY::OV_III; break;
-    default: ovc = IEC60664::OV_CATEGORY::OV_IV; break;
+    case 0:  ovc = IEC60664::OV_CATEGORY::OV_I;   break;
+    case 1:  ovc = IEC60664::OV_CATEGORY::OV_II;  break;
+    case 2:  ovc = IEC60664::OV_CATEGORY::OV_III; break;
+    default: ovc = IEC60664::OV_CATEGORY::OV_IV;  break;
     }
 
     wxString string = m_ratedVoltage->GetValue();
@@ -158,24 +161,24 @@ void PANEL_ELECTRICAL_SPACING_IEC60664::CalculateClearanceCreepage()
 
     switch( m_insulationType->GetSelection() )
     {
-    case 0: insul = IEC60664::INSULATION_TYPE::FUNCTIONAL; break;
-    case 1: insul = IEC60664::INSULATION_TYPE::BASIC; break;
+    case 0:  insul = IEC60664::INSULATION_TYPE::FUNCTIONAL; break;
+    case 1:  insul = IEC60664::INSULATION_TYPE::BASIC;      break;
     default: insul = IEC60664::INSULATION_TYPE::REINFORCED; break;
     }
 
     switch( m_pollutionDegree->GetSelection() )
     {
-    case 0: pd = IEC60664::POLLUTION_DEGREE::PD1; break;
-    case 1: pd = IEC60664::POLLUTION_DEGREE::PD2; break;
-    case 2: pd = IEC60664::POLLUTION_DEGREE::PD3; break;
+    case 0:  pd = IEC60664::POLLUTION_DEGREE::PD1; break;
+    case 1:  pd = IEC60664::POLLUTION_DEGREE::PD2; break;
+    case 2:  pd = IEC60664::POLLUTION_DEGREE::PD3; break;
     default: pd = IEC60664::POLLUTION_DEGREE::PD4; break;
     }
 
     switch( m_materialGroup->GetSelection() )
     {
-    case 0: mg = IEC60664::MATERIAL_GROUP::MG_I; break;
-    case 1: mg = IEC60664::MATERIAL_GROUP::MG_II; break;
-    case 2: mg = IEC60664::MATERIAL_GROUP::MG_IIIa; break;
+    case 0:  mg = IEC60664::MATERIAL_GROUP::MG_I;    break;
+    case 1:  mg = IEC60664::MATERIAL_GROUP::MG_II;   break;
+    case 2:  mg = IEC60664::MATERIAL_GROUP::MG_IIIa; break;
     default: mg = IEC60664::MATERIAL_GROUP::MG_IIIb; break;
     }
 

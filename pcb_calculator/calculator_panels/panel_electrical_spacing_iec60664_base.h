@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -22,7 +22,6 @@ class HTML_WINDOW;
 #include <wx/textctrl.h>
 #include <wx/choice.h>
 #include <wx/sizer.h>
-#include <wx/statline.h>
 #include <wx/statbox.h>
 #include <wx/checkbox.h>
 #include <wx/bitmap.h>
@@ -51,7 +50,6 @@ class PANEL_ELECTRICAL_SPACING_IEC60664_BASE : public CALCULATOR_PANEL
 		wxStaticText* m_staticText52112;
 		wxStaticText* m_staticText52111;
 		wxChoice* m_OVCchoice;
-		wxStaticLine* m_OVC;
 		wxStaticText* m_staticText111111;
 		wxTextCtrl* m_impulseVotlage1TxtCtrl;
 		wxStaticText* static_textkV;
@@ -75,7 +73,6 @@ class PANEL_ELECTRICAL_SPACING_IEC60664_BASE : public CALCULATOR_PANEL
 		wxStaticText* m_staticText1112121;
 		wxTextCtrl* m_altitude;
 		wxStaticText* m_staticText11121211;
-		wxStaticLine* m_staticline31;
 		wxStaticText* m_staticText11111;
 		wxTextCtrl* m_clearance;
 		wxStaticText* m_staticText71111;
@@ -85,7 +82,6 @@ class PANEL_ELECTRICAL_SPACING_IEC60664_BASE : public CALCULATOR_PANEL
 		wxStaticText* m_staticText111;
 		wxTextCtrl* m_minGrooveWidth;
 		wxStaticText* m_staticText711;
-		wxStaticLine* m_staticline3;
 		wxStaticBitmap* m_creepageclearanceBitmap;
 		wxStaticText* m_stBitmapLegend;
 		HTML_WINDOW* m_panelHelp;
@@ -97,7 +93,7 @@ class PANEL_ELECTRICAL_SPACING_IEC60664_BASE : public CALCULATOR_PANEL
 
 	public:
 
-		PANEL_ELECTRICAL_SPACING_IEC60664_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 669,561 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_ELECTRICAL_SPACING_IEC60664_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~PANEL_ELECTRICAL_SPACING_IEC60664_BASE();
 
