@@ -126,6 +126,7 @@ public:
     LIST_ITEM( NETINFO_ITEM* aNet ) :
             m_net( aNet )
     {
+        wxASSERT( aNet );
         m_net_name = UnescapeString( aNet->GetNetname() );
         m_column_changed.resize( COLUMN_NUM_STATIC_COL + MAX_CU_LAYERS, 0 );
     }
@@ -811,8 +812,11 @@ protected:
             else if( aCol == COLUMN_TOTAL_LENGTH )
                 aOutValue = m_parent.formatLength( i->GetTotalLength() );
 
-            else if( aCol > COLUMN_NUM_STATIC_COL )
+            else if( aCol > COLUMN_NUM_STATIC_COL && aCol <= m_parent.m_columns.size() )
                 aOutValue = m_parent.formatLength( i->GetLayerWireLength( m_parent.m_columns[aCol].layer ) );
+
+            else
+                aOutValue = "";
         }
     }
 
@@ -1680,6 +1684,14 @@ void DIALOG_NET_INSPECTOR::buildNetsList()
         prev_selected_netcodes.push_back( item->GetNetCode() );
     }
 
+    // At least on GTK, wxDVC will crash if you rebuild with a sorting column set.
+    if( wxDataViewColumn* sorting_column = m_netsList->GetSortingColumn() )
+    {
+        g_settings.sorting_column = static_cast<int>( sorting_column->GetModelColumn() ) ;
+        g_settings.sort_order_asc = sorting_column->IsSortOrderAscending();
+        sorting_column->UnsetAsSortKey();
+    }
+
     m_data_model->deleteAllItems();
 
     std::vector<std::unique_ptr<LIST_ITEM>> new_items;
@@ -1759,6 +1771,15 @@ void DIALOG_NET_INSPECTOR::buildNetsList()
 
 
     m_data_model->addItems( std::move( new_items ) );
+
+    if( g_settings.sorting_column != -1 )
+    {
+        if( wxDataViewColumn* c = m_netsList->GetColumn( g_settings.sorting_column ) )
+        {
+            c->SetSortOrder( g_settings.sort_order_asc );
+            m_data_model->Resort();
+        }
+    }
 
     // try to restore the selected rows.  set the ones that we can't find anymore to -1.
     sel.Clear();
