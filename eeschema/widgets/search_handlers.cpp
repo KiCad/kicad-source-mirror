@@ -124,7 +124,9 @@ int SYMBOL_SEARCH_HANDLER::Search( const wxString& aQuery )
 
     SCH_SEARCH_DATA frp;
     frp.findString = aQuery;
-    frp.matchMode = EDA_SEARCH_MATCH_MODE::WILDCARD;
+
+    // Try to handle whatever the user throws at us (substring, wildcards, regex, etc.)
+    frp.matchMode = EDA_SEARCH_MATCH_MODE::PERMISSIVE;
     frp.searchCurrentSheetOnly = false;
 
     auto search = [frp]( SCH_ITEM* item, SCH_SHEET_PATH* sheet )
@@ -202,7 +204,9 @@ int TEXT_SEARCH_HANDLER::Search( const wxString& aQuery )
 
     SCH_SEARCH_DATA frp;
     frp.findString = aQuery;
-    frp.matchMode = EDA_SEARCH_MATCH_MODE::WILDCARD;
+
+    // Try to handle whatever the user throws at us (substring, wildcards, regex, etc.)
+    frp.matchMode = EDA_SEARCH_MATCH_MODE::PERMISSIVE;
     frp.searchCurrentSheetOnly = false;
 
     auto search = [frp]( SCH_ITEM* item, SCH_SHEET_PATH* sheet )
@@ -302,7 +306,9 @@ int LABEL_SEARCH_HANDLER::Search( const wxString& aQuery )
 
     SCH_SEARCH_DATA frp;
     frp.findString = aQuery;
-    frp.matchMode = EDA_SEARCH_MATCH_MODE::WILDCARD;
+
+    // Try to handle whatever the user throws at us (substring, wildcards, regex, etc.)
+    frp.matchMode = EDA_SEARCH_MATCH_MODE::PERMISSIVE;
     frp.searchCurrentSheetOnly = false;
 
     auto search = [frp]( SCH_ITEM* item, SCH_SHEET_PATH* sheet )

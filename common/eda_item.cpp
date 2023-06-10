@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,6 +32,7 @@
 #include <wx/log.h>
 
 #include <wx/fdrepdlg.h>
+#include <eda_pattern_match.h>
 
 EDA_ITEM::EDA_ITEM( EDA_ITEM* parent, KICAD_T idType ) :
         m_parent( parent ),
@@ -128,7 +129,13 @@ bool EDA_ITEM::Matches( const wxString& aText, const EDA_SEARCH_DATA& aSearchDat
         searchText.MakeUpper();
     }
 
-    if( aSearchData.matchMode == EDA_SEARCH_MATCH_MODE::WHOLEWORD )
+    if( aSearchData.matchMode == EDA_SEARCH_MATCH_MODE::PERMISSIVE )
+    {
+        EDA_COMBINED_MATCHER matcher( searchText, CTX_SEARCH );
+
+        return matcher.Find( text );
+    }
+    else if( aSearchData.matchMode == EDA_SEARCH_MATCH_MODE::WHOLEWORD )
     {
         int ii = 0;
 

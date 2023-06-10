@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2022 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2023 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,8 @@ enum class EDA_SEARCH_MATCH_MODE
 {
     PLAIN,
     WHOLEWORD,
-    WILDCARD
+    WILDCARD,
+    PERMISSIVE
 };
 
 struct EDA_SEARCH_DATA

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -63,7 +63,9 @@ int FOOTPRINT_SEARCH_HANDLER::Search( const wxString& aQuery )
 
     EDA_SEARCH_DATA frp;
     frp.findString = aQuery;
-    frp.matchMode = EDA_SEARCH_MATCH_MODE::WILDCARD;
+
+    // Try to handle whatever the user throws at us (substring, wildcards, regex, etc.)
+    frp.matchMode = EDA_SEARCH_MATCH_MODE::PERMISSIVE;
 
     for( FOOTPRINT* fp : board->Footprints() )
     {
@@ -139,7 +141,9 @@ int ZONE_SEARCH_HANDLER::Search( const wxString& aQuery )
 
     EDA_SEARCH_DATA frp;
     frp.findString = aQuery;
-    frp.matchMode = EDA_SEARCH_MATCH_MODE::WILDCARD;
+
+    // Try to handle whatever the user throws at us (substring, wildcards, regex, etc.)
+    frp.matchMode = EDA_SEARCH_MATCH_MODE::PERMISSIVE;
 
     for( BOARD_ITEM* item : board->Zones() )
     {
@@ -222,7 +226,9 @@ int TEXT_SEARCH_HANDLER::Search( const wxString& aQuery )
 
     EDA_SEARCH_DATA frp;
     frp.findString = aQuery;
-    frp.matchMode = EDA_SEARCH_MATCH_MODE::WILDCARD;
+
+    // Try to handle whatever the user throws at us (substring, wildcards, regex, etc.)
+    frp.matchMode = EDA_SEARCH_MATCH_MODE::PERMISSIVE;
 
     for( BOARD_ITEM* item : board->Drawings() )
     {
@@ -304,7 +310,9 @@ int NETS_SEARCH_HANDLER::Search( const wxString& aQuery )
 
     EDA_SEARCH_DATA frp;
     frp.findString = aQuery;
-    frp.matchMode = EDA_SEARCH_MATCH_MODE::WILDCARD;
+
+    // Try to handle whatever the user throws at us (substring, wildcards, regex, etc.)
+    frp.matchMode = EDA_SEARCH_MATCH_MODE::PERMISSIVE;
 
     BOARD* board = m_frame->GetBoard();
 
