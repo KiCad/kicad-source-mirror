@@ -119,7 +119,6 @@ void SCH_COMMIT::pushLibEdit( const wxString& aMessage, int aCommitFlags )
 {
     KIGFX::VIEW*       view = m_toolMgr->GetView();
     SYMBOL_EDIT_FRAME* sym_frame = static_cast<SYMBOL_EDIT_FRAME*>( m_toolMgr->GetToolHolder() );
-    LIB_SYMBOL*        symbol = sym_frame->GetCurSymbol();
     bool               selectedModified = false;
 
     if( Empty() )
@@ -127,19 +126,21 @@ void SCH_COMMIT::pushLibEdit( const wxString& aMessage, int aCommitFlags )
 
     for( COMMIT_LINE& ent : m_changes )
     {
-        // In the symbol editor everything should have been commited as a changed symbol.
-        wxASSERT( ent.m_item == symbol );
-        wxASSERT( ent.m_type == CHT_MODIFY );
+        LIB_SYMBOL* symbol = dynamic_cast<LIB_SYMBOL*>( ent.m_item );
+
+        // In the symbol editor everything should have been commited as a change to the symbol
+        // itself.
+        wxCHECK2( symbol && ent.m_type == CHT_MODIFY, continue );
 
         if( ent.m_item->IsSelected() )
             selectedModified = true;
 
         symbol->RunOnChildren(
-            [&selectedModified]( LIB_ITEM* aItem )
-            {
-                if( aItem->HasFlag( IS_MODIFIED_CHILD ) )
-                    selectedModified = true;
-            } );
+                [&selectedModified]( LIB_ITEM* aItem )
+                {
+                    if( aItem->HasFlag( IS_MODIFIED_CHILD ) )
+                        selectedModified = true;
+                } );
 
         if( view )
         {
@@ -154,16 +155,18 @@ void SCH_COMMIT::pushLibEdit( const wxString& aMessage, int aCommitFlags )
 
         if( !( aCommitFlags & SKIP_UNDO ) )
         {
-            if( ent.m_copy )
+            if( sym_frame && ent.m_copy )
             {
                 sym_frame->SaveCopyInUndoList( aMessage, ent.m_copy );
-                ent.m_copy = nullptr;
+                ent.m_copy = nullptr;   // we've transferred ownership to the undo stack
             }
         }
-        else
+
+        if( ent.m_copy )
         {
-            // if no undo entry is needed, the copy would create a memory leak
+            // if no undo entry was needed, the copy would create a memory leak
             delete ent.m_copy;
+            ent.m_copy = nullptr;
         }
     }
 
@@ -173,7 +176,10 @@ void SCH_COMMIT::pushLibEdit( const wxString& aMessage, int aCommitFlags )
         m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
     if( !( aCommitFlags & SKIP_SET_DIRTY ) )
-        sym_frame->OnModify();
+    {
+        if( sym_frame )
+            sym_frame->OnModify();
+    }
 
     clear();
 }
@@ -189,28 +195,35 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
     EE_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
     bool                itemsDeselected = false;
     bool                selectedModified = false;
+    bool                dirtyConnectivity = false;
 
     if( Empty() )
         return;
 
     undoList.SetDescription( aMessage );
 
-    SCHEMATIC& schematic = static_cast<SCH_EDIT_FRAME*>( m_toolMgr->GetToolHolder() )->Schematic();
-    std::vector<SCH_ITEM*>   bulkAddedItems;
-    std::vector<SCH_ITEM*>   bulkRemovedItems;
-    std::vector<SCH_ITEM*>   itemsChanged;
+    SCHEMATIC*             schematic = nullptr;
+    std::vector<SCH_ITEM*> bulkAddedItems;
+    std::vector<SCH_ITEM*> bulkRemovedItems;
+    std::vector<SCH_ITEM*> itemsChanged;
 
     for( COMMIT_LINE& ent : m_changes )
     {
-        int changeType = ent.m_type & CHT_TYPE;
-        int changeFlags = ent.m_type & CHT_FLAGS;
-        SCH_ITEM* schItem = static_cast<SCH_ITEM*>( ent.m_item );
-        SCH_SCREEN* screen = static_cast<SCH_SCREEN*>( ent.m_screen );
+        int         changeType = ent.m_type & CHT_TYPE;
+        int         changeFlags = ent.m_type & CHT_FLAGS;
+        SCH_ITEM*   schItem = dynamic_cast<SCH_ITEM*>( ent.m_item );
+        SCH_SCREEN* screen = dynamic_cast<SCH_SCREEN*>( ent.m_screen );
 
-        wxASSERT( ent.m_item );
+        wxCHECK2( schItem && screen, continue );
 
-        if( ent.m_item->IsSelected() )
+        if( !schematic )
+            schematic = schItem->Schematic();
+
+        if( schItem->IsSelected() )
             selectedModified = true;
+
+        if( !( aCommitFlags & SKIP_CONNECTIVITY ) )
+            dirtyConnectivity = true;
 
         switch( changeType )
         {
@@ -222,7 +235,7 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
             if( !( changeFlags & CHT_DONE ) )
             {
                 if( !schItem->GetParent() )
-                    frame->GetScreen()->Append( schItem );
+                    screen->Append( schItem );
 
                 if( view )
                     view->Add( schItem );
@@ -254,7 +267,7 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
             if( !( changeFlags & CHT_DONE ) )
             {
-                frame->GetScreen()->Remove( schItem );
+                screen->Remove( schItem );
 
                 if( view )
                     view->Remove( schItem );
@@ -273,6 +286,7 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
                 wxASSERT( ent.m_copy );
                 itemWrapper.SetLink( ent.m_copy );
                 undoList.PushItem( itemWrapper );
+                ent.m_copy = nullptr;   // We've transferred ownership to the undo list
             }
 
             if( view )
@@ -280,9 +294,12 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
             itemsChanged.push_back( schItem );
 
-            // if no undo entry is needed, the copy would create a memory leak
-            if( aCommitFlags & SKIP_UNDO )
+            if( ent.m_copy )
+            {
+                // if no undo entry is needed, the copy would create a memory leak
                 delete ent.m_copy;
+                ent.m_copy = nullptr;
+            }
 
             break;
         }
@@ -293,19 +310,22 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
         }
     }
 
-    if( bulkAddedItems.size() > 0 )
-        schematic.OnItemsAdded( bulkAddedItems );
-
-    if( bulkRemovedItems.size() > 0 )
-        schematic.OnItemsRemoved( bulkRemovedItems );
-
-    if( itemsChanged.size() > 0 )
-        schematic.OnItemsChanged( itemsChanged );
-
-    if( !( aCommitFlags & SKIP_UNDO ) && frame )
+    if( schematic )
     {
-        frame->SaveCopyInUndoList( undoList, UNDO_REDO::UNSPECIFIED, aCommitFlags & APPEND_UNDO,
-                                   ( aCommitFlags & SKIP_CONNECTIVITY ) == 0 );
+        if( bulkAddedItems.size() > 0 )
+            schematic->OnItemsAdded( bulkAddedItems );
+
+        if( bulkRemovedItems.size() > 0 )
+            schematic->OnItemsRemoved( bulkRemovedItems );
+
+        if( itemsChanged.size() > 0 )
+            schematic->OnItemsChanged( itemsChanged );
+    }
+
+    if( !( aCommitFlags & SKIP_UNDO ) )
+    {
+        if( frame )
+            frame->SaveCopyInUndoList( undoList, UNDO_REDO::UNSPECIFIED, false, dirtyConnectivity );
     }
 
     m_toolMgr->PostEvent( { TC_MESSAGE, TA_MODEL_CHANGE, AS_GLOBAL } );
@@ -316,8 +336,11 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
     if( selectedModified )
         m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
-    if( frame && !( aCommitFlags & SKIP_SET_DIRTY ) )
-        frame->OnModify();
+    if( !( aCommitFlags & SKIP_SET_DIRTY ) )
+    {
+        if( frame )
+            frame->OnModify();
+    }
 
     clear();
 }
