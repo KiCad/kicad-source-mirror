@@ -23,7 +23,6 @@
 
 #include <jobs/job_dispatcher.h>
 #include <wx/string.h>
-#include <reporter.h>
 
 namespace KIGFX
 {
@@ -48,8 +47,6 @@ public:
     int JobSymUpgrade( JOB* aJob );
     int JobSymExportSvg( JOB* aJob );
 
-    int doSymExportSvg( JOB_SYM_EXPORT_SVG* aSvgJob, KIGFX::SCH_RENDER_SETTINGS* aRenderSettings, LIB_SYMBOL* symbol );
-
     /**
      * Configures the SCH_RENDER_SETTINGS object with the correct data to be used with plotting
      *
@@ -61,6 +58,10 @@ public:
      */
     void InitRenderSettings( KIGFX::SCH_RENDER_SETTINGS* aRenderSettings, const wxString& aTheme,
                              SCHEMATIC* aSch );
+
+private:
+    int doSymExportSvg( JOB_SYM_EXPORT_SVG* aSvgJob, KIGFX::SCH_RENDER_SETTINGS* aRenderSettings,
+                        LIB_SYMBOL* symbol );
 
 };
 

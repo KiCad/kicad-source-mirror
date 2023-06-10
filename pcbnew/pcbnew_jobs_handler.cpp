@@ -48,6 +48,7 @@
 #include <wildcards_and_files_ext.h>
 #include <plugins/kicad/pcb_plugin.h>
 #include <gerber_jobfile_writer.h>
+#include <reporter.h>
 
 #include "pcbnew_scripting_helpers.h"
 

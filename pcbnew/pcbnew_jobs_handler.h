@@ -23,7 +23,6 @@
 
 #include <jobs/job_dispatcher.h>
 #include <pcb_plot_params.h>
-#include <reporter.h>
 
 class JOB_EXPORT_PCB_GERBER;
 class JOB_FP_EXPORT_SVG;

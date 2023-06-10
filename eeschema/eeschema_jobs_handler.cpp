@@ -40,6 +40,7 @@
 #include <wildcards_and_files_ext.h>
 #include <plotters/plotters_pslike.h>
 #include <drawing_sheet/ds_data_model.h>
+#include <reporter.h>
 
 #include <settings/settings_manager.h>
 
@@ -661,8 +662,9 @@ int EESCHEMA_JOBS_HANDLER::JobSymUpgrade( JOB* aJob )
     {
         if( wxFile::Exists( upgradeJob->m_outputLibraryPath ) )
         {
-            m_reporter->Report(
-                    _( "Output path must not conflict with existing path\n", RPT_SEVERITY_ERROR ) );
+            m_reporter->Report( _( "Output path must not conflict with existing path\n" ),
+                                RPT_SEVERITY_ERROR );
+
             return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
         }
     }
@@ -672,7 +674,7 @@ int EESCHEMA_JOBS_HANDLER::JobSymUpgrade( JOB* aJob )
 
     if( shouldSave )
     {
-        m_reporter->Report( _( "Saving symbol library in updated format\n", RPT_SEVERITY_ACTION ) );
+        m_reporter->Report( _( "Saving symbol library in updated format\n" ), RPT_SEVERITY_ACTION );
 
         try
         {
