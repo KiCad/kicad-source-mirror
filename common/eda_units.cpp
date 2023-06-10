@@ -104,20 +104,20 @@ wxString EDA_UNIT_UTILS::GetText( EDA_UNITS aUnits, EDA_DATA_TYPE aType )
 
     switch( aUnits )
     {
-    case EDA_UNITS::MILLIMETRES: label = wxT( " mm" );   break;
-    case EDA_UNITS::DEGREES:     label = wxT( "°" );     break;
-    case EDA_UNITS::MILS:        label = wxT( " mils" ); break;
-    case EDA_UNITS::INCHES:      label = wxT( " in" );   break;
-    case EDA_UNITS::PERCENT:     label = wxT( "%" );     break;
-    case EDA_UNITS::UNSCALED:                            break;
-    default: UNIMPLEMENTED_FOR( wxS( "Unknown units" ) );       break;
+    case EDA_UNITS::MILLIMETRES:  label = wxT( " mm" );   break;
+    case EDA_UNITS::DEGREES:      label = wxT( "°" );     break;
+    case EDA_UNITS::MILS:         label = wxT( " mils" ); break;
+    case EDA_UNITS::INCHES:       label = wxT( " in" );   break;
+    case EDA_UNITS::PERCENT:      label = wxT( "%" );     break;
+    case EDA_UNITS::UNSCALED:                             break;
+    default: UNIMPLEMENTED_FOR( wxS( "Unknown units" ) ); break;
     }
 
     switch( aType )
     {
-    case EDA_DATA_TYPE::VOLUME:   label += wxT( "³" );   break;
-    case EDA_DATA_TYPE::AREA:     label += wxT( "²" );   break;
-    case EDA_DATA_TYPE::DISTANCE:                        break;
+    case EDA_DATA_TYPE::VOLUME:      label += wxT( "³" );       break;
+    case EDA_DATA_TYPE::AREA:        label += wxT( "²" );       break;
+    case EDA_DATA_TYPE::DISTANCE:                               break;
     default: UNIMPLEMENTED_FOR( wxS( "Unknown measurement" ) ); break;
     }
 
