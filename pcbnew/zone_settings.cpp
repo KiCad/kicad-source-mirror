@@ -196,7 +196,7 @@ const static wxSize LAYER_BITMAP_SIZE( 24, 16 );
 const static wxSize CHECKERBOARD_SIZE( 8, 8 );
 
 
-static const ZONE_SETTINGS& GetDefaultSettings()
+const ZONE_SETTINGS& ZONE_SETTINGS::GetDefaultSettings()
 {
     static ZONE_SETTINGS defaultSettings;
 
