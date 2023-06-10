@@ -118,21 +118,19 @@ COMMIT& SCH_COMMIT::Stage( const PICKED_ITEMS_LIST &aItems, UNDO_REDO aModFlag,
 void SCH_COMMIT::pushLibEdit( const wxString& aMessage, int aCommitFlags )
 {
     KIGFX::VIEW*       view = m_toolMgr->GetView();
-    SYMBOL_EDIT_FRAME* sym_frame = static_cast<SYMBOL_EDIT_FRAME*>( m_toolMgr->GetToolHolder() );
+    SYMBOL_EDIT_FRAME* frame = static_cast<SYMBOL_EDIT_FRAME*>( m_toolMgr->GetToolHolder() );
     bool               selectedModified = false;
 
     if( Empty() )
         return;
 
-    for( COMMIT_LINE& ent : m_changes )
+    // Symbol editor just saves copies of the whole symbol, so grab the first and discard the rest
+    LIB_SYMBOL* symbol = dynamic_cast<LIB_SYMBOL*>( m_changes.front().m_item );
+    LIB_SYMBOL* copy = dynamic_cast<LIB_SYMBOL*>( m_changes.front().m_copy );
+
+    if( symbol )
     {
-        LIB_SYMBOL* symbol = dynamic_cast<LIB_SYMBOL*>( ent.m_item );
-
-        // In the symbol editor everything should have been commited as a change to the symbol
-        // itself.
-        wxCHECK2( symbol && ent.m_type == CHT_MODIFY, continue );
-
-        if( ent.m_item->IsSelected() )
+        if( symbol->IsSelected() )
             selectedModified = true;
 
         symbol->RunOnChildren(
@@ -155,18 +153,18 @@ void SCH_COMMIT::pushLibEdit( const wxString& aMessage, int aCommitFlags )
 
         if( !( aCommitFlags & SKIP_UNDO ) )
         {
-            if( sym_frame && ent.m_copy )
+            if( frame && copy )
             {
-                sym_frame->SaveCopyInUndoList( aMessage, ent.m_copy );
-                ent.m_copy = nullptr;   // we've transferred ownership to the undo stack
+                frame->SaveCopyInUndoList( aMessage, copy );
+                copy = nullptr;   // we've transferred ownership to the undo stack
             }
         }
 
-        if( ent.m_copy )
+        if( copy )
         {
             // if no undo entry was needed, the copy would create a memory leak
-            delete ent.m_copy;
-            ent.m_copy = nullptr;
+            delete copy;
+            copy = nullptr;
         }
     }
 
@@ -177,9 +175,12 @@ void SCH_COMMIT::pushLibEdit( const wxString& aMessage, int aCommitFlags )
 
     if( !( aCommitFlags & SKIP_SET_DIRTY ) )
     {
-        if( sym_frame )
-            sym_frame->OnModify();
+        if( frame )
+            frame->OnModify();
     }
+
+    for( size_t ii = 1; ii < m_changes.size(); ++ii )
+        delete m_changes[ii].m_copy;
 
     clear();
 }
@@ -384,15 +385,21 @@ EDA_ITEM* SCH_COMMIT::makeImage( EDA_ITEM* aItem ) const
 
 void SCH_COMMIT::revertLibEdit()
 {
-    // The first element in the commit is the original, and libedit
-    // just saves copies of the whole symbol, so grab the original and discard the rest
-    SYMBOL_EDIT_FRAME*  sym_frame = static_cast<SYMBOL_EDIT_FRAME*>( m_toolMgr->GetToolHolder() );
-    LIB_SYMBOL*         sym = static_cast<LIB_SYMBOL*>( m_changes.front().m_item );
+    if( Empty() )
+        return;
 
-    sym_frame->SetCurSymbol( sym,  false );
+    // Symbol editor just saves copies of the whole symbol, so grab the first and discard the rest
+    SYMBOL_EDIT_FRAME* frame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_toolMgr->GetToolHolder() );
+    LIB_SYMBOL*        copy = dynamic_cast<LIB_SYMBOL*>( m_changes.front().m_copy );
+
+    if( frame && copy )
+    {
+        frame->SetCurSymbol( copy, false );
+        m_toolMgr->ResetTools( TOOL_BASE::MODEL_RELOAD );
+    }
 
     for( size_t ii = 1; ii < m_changes.size(); ++ii )
-        delete m_changes[ii].m_item;
+        delete m_changes[ii].m_copy;
 
     clear();
 }
@@ -400,8 +407,9 @@ void SCH_COMMIT::revertLibEdit()
 
 void SCH_COMMIT::Revert()
 {
-    PICKED_ITEMS_LIST undoList;
-    KIGFX::VIEW*      view = m_toolMgr->GetView();
+    KIGFX::VIEW*       view = m_toolMgr->GetView();
+    SCH_EDIT_FRAME*    frame = dynamic_cast<SCH_EDIT_FRAME*>( m_toolMgr->GetToolHolder() );
+    EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
 
     if( m_changes.empty() )
         return;
@@ -412,21 +420,23 @@ void SCH_COMMIT::Revert()
         return;
     }
 
-    SCH_EDIT_FRAME* frame = static_cast<SCH_EDIT_FRAME*>( m_toolMgr->GetToolHolder() );
-    SCHEMATIC&      schematic = frame->Schematic();
-
+    SCHEMATIC*             schematic = nullptr;
     std::vector<SCH_ITEM*> bulkAddedItems;
     std::vector<SCH_ITEM*> bulkRemovedItems;
     std::vector<SCH_ITEM*> itemsChanged;
 
-    for( auto it = m_changes.rbegin(); it != m_changes.rend(); ++it )
+    for( COMMIT_LINE& ent : m_changes )
     {
-        COMMIT_LINE& ent = *it;
-        SCH_ITEM* item = static_cast<SCH_ITEM*>( ent.m_item );
-        SCH_ITEM* copy = static_cast<SCH_ITEM*>( ent.m_copy );
-        SCH_SCREEN* screen = static_cast<SCH_SCREEN*>( ent.m_screen );
-        int changeType = ent.m_type & CHT_TYPE;
-        int changeFlags = ent.m_type & CHT_FLAGS;
+        int         changeType = ent.m_type & CHT_TYPE;
+        int         changeFlags = ent.m_type & CHT_FLAGS;
+        SCH_ITEM*   item = dynamic_cast<SCH_ITEM*>( ent.m_item );
+        SCH_ITEM*   copy = dynamic_cast<SCH_ITEM*>( ent.m_copy );
+        SCH_SCREEN* screen = dynamic_cast<SCH_SCREEN*>( ent.m_screen );
+
+        wxCHECK2( item && screen, continue );
+
+        if( !schematic )
+            schematic = item->Schematic();
 
         switch( changeType )
         {
@@ -434,7 +444,9 @@ void SCH_COMMIT::Revert()
             if( !( changeFlags & CHT_DONE ) )
                 break;
 
-            view->Remove( item );
+            if( view )
+                view->Remove( item );
+
             screen->Remove( item );
             bulkRemovedItems.push_back( item );
             break;
@@ -445,14 +457,18 @@ void SCH_COMMIT::Revert()
             if( !( changeFlags & CHT_DONE ) )
                 break;
 
-            view->Add( item );
+            if( view )
+                view->Add( item );
+
             screen->Append( item );
             bulkAddedItems.push_back( item );
             break;
 
         case CHT_MODIFY:
         {
-            view->Remove( item );
+            if( view )
+                view->Remove( item );
+
             item->SwapData( copy );
             item->SetConnectivityDirty();
 
@@ -465,12 +481,13 @@ void SCH_COMMIT::Revert()
 
                 if( field->GetId() == REFERENCE_FIELD )
                 {
-                    symbol->SetRef( schematic.GetSheets().FindSheetForScreen( screen ),
+                    symbol->SetRef( schematic->GetSheets().FindSheetForScreen( screen ),
                                     field->GetText() );
                 }
             }
 
-            view->Add( item );
+            if( view )
+                view->Add( item );
 
             delete copy;
             break;
@@ -482,19 +499,23 @@ void SCH_COMMIT::Revert()
         }
     }
 
-    if( bulkAddedItems.size() > 0 )
-        schematic.OnItemsAdded( bulkAddedItems );
+    if( schematic )
+    {
+        if( bulkAddedItems.size() > 0 )
+            schematic->OnItemsAdded( bulkAddedItems );
 
-    if( bulkRemovedItems.size() > 0 )
-        schematic.OnItemsRemoved( bulkRemovedItems );
+        if( bulkRemovedItems.size() > 0 )
+            schematic->OnItemsRemoved( bulkRemovedItems );
 
-    if( itemsChanged.size() > 0 )
-        schematic.OnItemsChanged( itemsChanged );
+        if( itemsChanged.size() > 0 )
+            schematic->OnItemsChanged( itemsChanged );
+    }
 
-    EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-    selTool->RebuildSelection();
+    if( selTool )
+        selTool->RebuildSelection();
 
-    frame->RecalculateConnections( nullptr, NO_CLEANUP );
+    if( frame )
+        frame->RecalculateConnections( nullptr, NO_CLEANUP );
 
     clear();
 }

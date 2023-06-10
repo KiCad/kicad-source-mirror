@@ -107,7 +107,6 @@ SCH_DRAW_PANEL::~SCH_DRAW_PANEL()
 
 void SCH_DRAW_PANEL::DisplaySymbol( LIB_SYMBOL* aSymbol )
 {
-    GetView()->Clear();
     GetView()->DisplaySymbol( aSymbol );
 }
 
