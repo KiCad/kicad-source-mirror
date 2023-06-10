@@ -2028,6 +2028,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     }
 
     DeleteItems( selectionCopy, isCut );
+    canvas()->Refresh();
 
     editFrame->PopTool( aEvent );
     return 0;
