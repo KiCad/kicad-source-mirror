@@ -34939,12 +34939,10 @@ msgid "1234.0 (mm)"
 msgstr "1234.0 (mm)"
 
 #: pcbnew/pcb_dimension.cpp:1353
-#, fuzzy
 msgid "Units Format"
-msgstr "単位のフォーマット:"
+msgstr "単位のフォーマット"
 
 #: pcbnew/pcb_dimension.cpp:1359
-#, fuzzy
 msgid "Suppress Trailing Zeroes"
 msgstr "後方ゼロ省略 (トレイリング ゼロ サプレス)"
 
@@ -34964,9 +34962,8 @@ msgid "Leader Length"
 msgstr "ビア長さ"
 
 #: pcbnew/pcb_dimension.cpp:1496
-#, fuzzy
 msgid "Text Frame"
-msgstr "テキストの枠:"
+msgstr "テキストの枠"
 
 #: pcbnew/pcb_edit_frame.cpp:203
 msgid "KiCad PCB Editor"
