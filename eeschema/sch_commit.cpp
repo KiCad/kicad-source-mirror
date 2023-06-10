@@ -152,7 +152,7 @@ void SCH_COMMIT::pushLibEdit( const wxString& aMessage, int aCommitFlags )
                     });
         }
 
-        if( !( aCommitFlags & SKIP_UNDO ) && sym_frame )
+        if( !( aCommitFlags & SKIP_UNDO ) )
         {
             if( ent.m_copy )
             {
@@ -172,7 +172,7 @@ void SCH_COMMIT::pushLibEdit( const wxString& aMessage, int aCommitFlags )
     if( selectedModified )
         m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
-    if( sym_frame && !( aCommitFlags & SKIP_SET_DIRTY ) )
+    if( !( aCommitFlags & SKIP_SET_DIRTY ) )
         sym_frame->OnModify();
 
     clear();
