@@ -237,6 +237,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
 
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
     plotOpts.SetColorSettings( mgr.GetColorSettings( aPdfJob->m_colorTheme ) );
+    plotOpts.SetMirror( aPdfJob->m_mirror );
     plotOpts.SetBlackAndWhite( aPdfJob->m_blackAndWhite );
 
     PDF_PLOTTER* plotter = (PDF_PLOTTER*) StartPlotBoard(

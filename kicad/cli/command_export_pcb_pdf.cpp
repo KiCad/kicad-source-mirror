@@ -35,6 +35,11 @@ CLI::EXPORT_PCB_PDF_COMMAND::EXPORT_PCB_PDF_COMMAND() : EXPORT_PCB_BASE_COMMAND(
 {
     addLayerArg( true );
 
+    m_argParser.add_argument( "-m", ARG_MIRROR )
+            .help( UTF8STDSTR( _( "Mirror the board (useful for trying to show bottom layers)" ) ) )
+            .implicit_value( true )
+            .default_value( false );
+
     m_argParser.add_argument( "--erd", ARG_EXCLUDE_REFDES )
             .help( UTF8STDSTR( _( "Exclude the reference designator text" ) ) )
             .implicit_value( true )
@@ -84,6 +89,7 @@ int CLI::EXPORT_PCB_PDF_COMMAND::doPerform( KIWAY& aKiway )
 
     pdfJob->m_plotBorderTitleBlocks = m_argParser.get<bool>( ARG_INCLUDE_BORDER_TITLE );
 
+    pdfJob->m_mirror = m_argParser.get<bool>( ARG_MIRROR );
     pdfJob->m_blackAndWhite = m_argParser.get<bool>( ARG_BLACKANDWHITE );
     pdfJob->m_colorTheme = FROM_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
 
