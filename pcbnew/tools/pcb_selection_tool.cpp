@@ -2510,9 +2510,23 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
             switch( text->GetType() )
             {
-            case PCB_TEXT::TEXT_is_REFERENCE: controlLayer = LAYER_MOD_REFERENCES; break;
-            case PCB_TEXT::TEXT_is_VALUE:     controlLayer = LAYER_MOD_VALUES;     break;
-            case PCB_TEXT::TEXT_is_DIVERS:    controlLayer = LAYER_MOD_TEXT;       break;
+            case PCB_TEXT::TEXT_is_REFERENCE:
+                controlLayer = LAYER_MOD_REFERENCES;
+                break;
+
+            case PCB_TEXT::TEXT_is_VALUE:
+                controlLayer = LAYER_MOD_VALUES;
+                break;
+
+            case PCB_TEXT::TEXT_is_DIVERS:
+                if( text->GetText() == wxT( "${REFERENCE}" ) )
+                    controlLayer = LAYER_MOD_REFERENCES;
+                else if( text->GetText() == wxT( "${VALUE}" ) )
+                    controlLayer = LAYER_MOD_VALUES;
+                else
+                    controlLayer = LAYER_MOD_TEXT;
+
+                break;
             }
 
             if( controlLayer == UNDEFINED_LAYER )
