@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-18 11:55-0700\n"
-"PO-Revision-Date: 2023-05-30 16:50+0000\n"
+"PO-Revision-Date: 2023-06-11 02:25+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -13943,9 +13943,8 @@ msgid "Power flag differs."
 msgstr "%s は異なります。"
 
 #: eeschema/lib_symbol.cpp:279
-#, fuzzy
 msgid "Unit count differs."
-msgstr "パッドの数が異なります。"
+msgstr "ユニットの数が異なります。"
 
 #: eeschema/lib_symbol.cpp:319
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:565
@@ -13959,49 +13958,43 @@ msgid "%s differs."
 msgstr "%s は異なります。"
 
 #: eeschema/lib_symbol.cpp:342
-#, fuzzy
 msgid "Pin count differs."
-msgstr "パッドの数が異なります。"
+msgstr "ピンの数が異なります。"
 
 #: eeschema/lib_symbol.cpp:358
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s not found."
-msgstr "%s が見つかりません"
+msgstr "ピン %s が見つかりません。"
 
 #: eeschema/lib_symbol.cpp:367
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s differs."
-msgstr "%s は異なります。"
+msgstr "ピン %s が異なります。"
 
 #: eeschema/lib_symbol.cpp:408
-#, fuzzy, c-format
+#, c-format
 msgid "%s field differs."
-msgstr "%s は異なります。"
+msgstr "%s のフィールドが異なります。"
 
 #: eeschema/lib_symbol.cpp:418
-#, fuzzy
 msgid "Field count differs."
-msgstr "パッドの数が異なります。"
+msgstr "フィールドの数が異なります。"
 
 #: eeschema/lib_symbol.cpp:427
-#, fuzzy
 msgid "Footprint filters differs."
-msgstr "フットプリントの部品のタイプが異なります。"
+msgstr "フットプリント フィルターが異なります。"
 
 #: eeschema/lib_symbol.cpp:439
-#, fuzzy
 msgid "Footprint filters differ."
-msgstr "フットプリントの部品のタイプが異なります。"
+msgstr "フットプリント フィルターが異なります。"
 
 #: eeschema/lib_symbol.cpp:450
-#, fuzzy
 msgid "Symbol descriptions differ."
-msgstr "フットプリントの説明が異なります。"
+msgstr "シンボルの説明が異なります。"
 
 #: eeschema/lib_symbol.cpp:459
-#, fuzzy
 msgid "Symbol keywords differ."
-msgstr "フットプリントのキーワードが異なります。"
+msgstr "シンボルのキーワードが異なります。"
 
 #: eeschema/lib_symbol.cpp:468
 msgid "Symbol pin name offsets differ."
@@ -36360,12 +36353,10 @@ msgid "1234.0 (mm)"
 msgstr "1234.0 (mm)"
 
 #: pcbnew/pcb_dimension.cpp:1353
-#, fuzzy
 msgid "Units Format"
-msgstr "単位のフォーマット:"
+msgstr "単位のフォーマット"
 
 #: pcbnew/pcb_dimension.cpp:1359
-#, fuzzy
 msgid "Suppress Trailing Zeroes"
 msgstr "後方ゼロ省略 (トレイリング ゼロ サプレス)"
 
@@ -36385,9 +36376,8 @@ msgid "Leader Length"
 msgstr "ビア長さ"
 
 #: pcbnew/pcb_dimension.cpp:1496
-#, fuzzy
 msgid "Text Frame"
-msgstr "テキストの枠:"
+msgstr "テキストの枠"
 
 #: pcbnew/pcb_edit_frame.cpp:216
 msgid "KiCad PCB Editor"
