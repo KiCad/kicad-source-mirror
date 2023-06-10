@@ -40,6 +40,7 @@
 #include <view/view.h>
 #include <wx/stattext.h>
 #include <zoom_defines.h>
+#include <dialog_shim.h>
 
 FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL( KIWAY* aKiway, wxWindow* aParent,
                                                   std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> aOpts,
@@ -53,8 +54,22 @@ FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL( KIWAY* aKiway, wxWindow* aPare
     ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_NEVER );
     EnableScrolling( false, false );    // otherwise Zoom Auto disables GAL canvas
 
+    wxWindow* topLevelParent = aParent;
+
+    while( topLevelParent && !topLevelParent->IsTopLevel() )
+        topLevelParent = topLevelParent->GetParent();
+
+    if( topLevelParent )
+    {
+        if( DIALOG_SHIM* parentDlg = dynamic_cast<DIALOG_SHIM*>( topLevelParent ) )
+            m_userUnits = parentDlg->GetUserUnits();
+        else if( UNITS_PROVIDER* parentFrame = dynamic_cast<UNITS_PROVIDER*>( topLevelParent ) )
+            m_userUnits = parentFrame->GetUserUnits();
+    }
+
     m_dummyBoard = std::make_unique<BOARD>();
     m_dummyBoard->SetUserUnits( m_userUnits );
+    m_dummyBoard->SetBoardUse( BOARD_USE::FPHOLDER );
     UpdateColors();
     SyncLayersVisibility( m_dummyBoard.get() );
 
