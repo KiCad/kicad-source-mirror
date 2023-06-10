@@ -129,31 +129,25 @@ int SYMBOL_SEARCH_HANDLER::Search( const wxString& aQuery )
     frp.matchMode = EDA_SEARCH_MATCH_MODE::PERMISSIVE;
     frp.searchCurrentSheetOnly = false;
 
-    auto search = [frp]( SCH_ITEM* item, SCH_SHEET_PATH* sheet )
-    {
-        if( item->Type() == SCH_SYMBOL_T )
-        {
-            SCH_SYMBOL* sym = dynamic_cast<SCH_SYMBOL*>( item );
-            if( sym->IsPower() )
-                return false;
-
-            bool hit = false;
-            for( SCH_FIELD& field : sym->GetFields() )
+    auto search =
+            [frp]( SCH_ITEM* item, SCH_SHEET_PATH* sheet )
             {
-                if( field.Matches( frp, sheet ) )
+                if( item->Type() == SCH_SYMBOL_T )
                 {
-                    hit = true;
+                    SCH_SYMBOL* sym = dynamic_cast<SCH_SYMBOL*>( item );
+
+                    if( sym->IsPower() )
+                        return false;
+
+                    for( SCH_FIELD& field : sym->GetFields() )
+                    {
+                        if( frp.findString.IsEmpty() || field.Matches( frp, sheet ) )
+                            return true;
+                    }
                 }
-            }
 
-            if( hit )
-            {
-                return true;
-            }
-        }
-
-        return false;
-    };
+                return false;
+            };
 
     FindAll( search );
 
@@ -209,33 +203,17 @@ int TEXT_SEARCH_HANDLER::Search( const wxString& aQuery )
     frp.matchMode = EDA_SEARCH_MATCH_MODE::PERMISSIVE;
     frp.searchCurrentSheetOnly = false;
 
-    auto search = [frp]( SCH_ITEM* item, SCH_SHEET_PATH* sheet )
-    {
-        if( item->Type() == SCH_TEXT_T )
-        {
-            SCH_TEXT* text = dynamic_cast<SCH_TEXT*>( item );
-
-            wxCHECK( text, false );
-
-            if( text->Matches( frp, sheet ) )
+    auto search =
+            [frp]( SCH_ITEM* item, SCH_SHEET_PATH* sheet )
             {
-                return true;
-            }
-        }
-        else if( item->Type() == SCH_TEXTBOX_T )
-        {
-            SCH_TEXTBOX* text = dynamic_cast<SCH_TEXTBOX*>( item );
+                if( item->Type() == SCH_TEXT_T || item->Type() == SCH_TEXTBOX_T )
+                {
+                    if( frp.findString.IsEmpty() || item->Matches( frp, sheet ) )
+                        return true;
+                }
 
-            wxCHECK( text, false );
-
-            if( text->Matches( frp, sheet ) )
-            {
-                return true;
-            }
-        }
-
-        return false;
-    };
+                return false;
+            };
 
     FindAll( search );
 
@@ -311,23 +289,21 @@ int LABEL_SEARCH_HANDLER::Search( const wxString& aQuery )
     frp.matchMode = EDA_SEARCH_MATCH_MODE::PERMISSIVE;
     frp.searchCurrentSheetOnly = false;
 
-    auto search = [frp]( SCH_ITEM* item, SCH_SHEET_PATH* sheet )
-    {
-        if( item->Type() == SCH_LABEL_T || item->Type() == SCH_GLOBAL_LABEL_T
-            || item->Type() == SCH_HIER_LABEL_T )
-        {
-            SCH_LABEL_BASE* lbl = dynamic_cast<SCH_LABEL_BASE*>( item );
-
-            wxCHECK( lbl, false );
-
-            if( lbl->Matches( frp, sheet ) )
+    auto search =
+            [frp]( SCH_ITEM* item, SCH_SHEET_PATH* sheet )
             {
-                return true;
-            }
-        }
+                if( item->IsType( { SCH_LABEL_LOCATE_ANY_T } ) )
+                {
+                    SCH_LABEL_BASE* lbl = dynamic_cast<SCH_LABEL_BASE*>( item );
 
-        return false;
-    };
+                    wxCHECK( lbl, false );
+
+                    if( frp.findString.IsEmpty() || lbl->Matches( frp, sheet ) )
+                        return true;
+                }
+
+                return false;
+            };
 
     FindAll( search );
 

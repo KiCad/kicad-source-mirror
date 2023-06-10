@@ -517,6 +517,24 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     TestDanglingEnds();
 
     UpdateHierarchyNavigator();
+
+    wxCommandEvent e( EDA_EVT_SCHEMATIC_CHANGED );
+    ProcessEventLocally( e );
+
+    for( wxEvtHandler* listener : m_schematicChangeListeners )
+    {
+        wxCHECK2( listener, continue );
+
+        // Use the windows variant when handling event messages in case there is any special
+        // event handler pre and/or post processing specific to windows.
+        wxWindow* win = dynamic_cast<wxWindow*>( listener );
+
+        if( win )
+            win->HandleWindowEvent( e );
+        else
+            listener->SafelyProcessEvent( e );
+    }
+
     updateTitle();
     m_toolManager->GetTool<SCH_NAVIGATE_TOOL>()->ResetHistory();
 
