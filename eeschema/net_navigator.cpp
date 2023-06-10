@@ -181,10 +181,6 @@ void SCH_EDIT_FRAME::MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemI
 
         for( const SCH_ITEM* item : subGraph->GetItems() )
         {
-            SCH_ITEM_SET& connectedItems = const_cast<SCH_ITEM*>( item )->ConnectedItems( sheetPath );
-            wxLogDebug( wxS( "Item \"%s\" has %zu connected items." ),
-                        item->GetItemDescription( this ), connectedItems.size() );
-
             itemData = new NET_NAVIGATOR_ITEM_DATA( sheetPath, item );
             wxTreeItemId id = m_netNavigator->AppendItem( sheetId,
                                                           GetNetNavigatorItemText( item, sheetPath,
