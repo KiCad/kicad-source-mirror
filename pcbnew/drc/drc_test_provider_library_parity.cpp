@@ -274,8 +274,20 @@ bool shapeNeedsUpdate( const PCB_SHAPE* a, const PCB_SHAPE* b )
 
     switch( a->GetShape() )
     {
-    case SHAPE_T::SEGMENT:
     case SHAPE_T::RECT:
+    {
+        BOX2I aRect( a->GetStart(), a->GetEnd() - a->GetStart() );
+        BOX2I bRect( b->GetStart(), b->GetEnd() - b->GetStart() );
+
+        aRect.Normalize();
+        bRect.Normalize();
+
+        TEST( aRect.GetOrigin(), bRect.GetOrigin(), "" );
+        TEST( aRect.GetEnd(), bRect.GetEnd(), "" );
+        break;
+    }
+
+    case SHAPE_T::SEGMENT:
     case SHAPE_T::CIRCLE:
         TEST( a->GetStart(), b->GetStart(), "" );
         TEST( a->GetEnd(), b->GetEnd(), "" );
