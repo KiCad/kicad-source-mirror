@@ -2533,9 +2533,23 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
             switch( static_cast<const FP_TEXT*>( aItem )->GetType() )
             {
-            case FP_TEXT::TEXT_is_REFERENCE: controlLayer = LAYER_MOD_REFERENCES; break;
-            case FP_TEXT::TEXT_is_VALUE:     controlLayer = LAYER_MOD_VALUES;     break;
-            case FP_TEXT::TEXT_is_DIVERS:    controlLayer = LAYER_MOD_TEXT;       break;
+            case FP_TEXT::TEXT_is_REFERENCE:
+                controlLayer = LAYER_MOD_REFERENCES;
+                break;
+
+            case FP_TEXT::TEXT_is_VALUE:
+                controlLayer = LAYER_MOD_VALUES;
+                break;
+
+            case FP_TEXT::TEXT_is_DIVERS:
+                if( text->GetText() == wxT( "${REFERENCE}" ) )
+                    controlLayer = LAYER_MOD_REFERENCES;
+                else if( text->GetText() == wxT( "${VALUE}" ) )
+                    controlLayer = LAYER_MOD_VALUES;
+                else
+                    controlLayer = LAYER_MOD_TEXT;
+
+                break;
             }
 
             if( controlLayer == UNDEFINED_LAYER )
