@@ -54,9 +54,6 @@ TEARDROP_MANAGER::TEARDROP_MANAGER( BOARD* aBoard, TOOL_MANAGER* aToolManager ) 
 }
 
 
-// Build a zone teardrop
-static ZONE_SETTINGS s_default_settings;      // Use zone default settings for teardrop
-
 ZONE* TEARDROP_MANAGER::createTeardrop( TEARDROP_VARIANT aTeardropVariant,
                                         std::vector<VECTOR2I>& aPoints, PCB_TRACK* aTrack ) const
 {
@@ -64,7 +61,7 @@ ZONE* TEARDROP_MANAGER::createTeardrop( TEARDROP_VARIANT aTeardropVariant,
 
     // teardrop settings are the last zone settings used by a zone dialog.
     // override them by default.
-    s_default_settings.ExportSetting( *teardrop, false );
+    ZONE_SETTINGS::GetDefaultSettings().ExportSetting( *teardrop, false );
 
     // Add zone properties (priority will be fixed later)
     teardrop->SetTeardropAreaType( aTeardropVariant == TD_TYPE_PADVIA ? TEARDROP_TYPE::TD_VIAPAD

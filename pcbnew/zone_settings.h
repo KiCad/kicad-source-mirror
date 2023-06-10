@@ -144,6 +144,11 @@ public:
     ZONE_SETTINGS& operator << ( const ZONE& aSource );
 
     /**
+     * @return Default ZONE_SETTINGS
+     */
+    static const ZONE_SETTINGS& GetDefaultSettings();
+
+    /**
      * A helper routine for the various zone dialogs (copper, non-copper, keepout).
      * @param aList the wxDataViewListCtrl to populate
      * @param aFrame the parent editor frame

@@ -196,6 +196,14 @@ const static wxSize LAYER_BITMAP_SIZE( 24, 16 );
 const static wxSize CHECKERBOARD_SIZE( 8, 8 );
 
 
+static const ZONE_SETTINGS& GetDefaultSettings()
+{
+    static ZONE_SETTINGS defaultSettings;
+
+    return defaultSettings;
+}
+
+
 // A helper for setting up a dialog list for specifying zone layers.  Used by all three
 // zone settings dialogs.
 void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* aFrame,
