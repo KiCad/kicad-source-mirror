@@ -41,6 +41,7 @@ namespace CLI
 #define ARG_EXCLUDE_VALUE "--exclude-value"
 #define ARG_THEME "--theme"
 #define ARG_INCLUDE_BORDER_TITLE "--include-border-title"
+#define ARG_MIRROR "--mirror"
 
 struct EXPORT_PCB_BASE_COMMAND : public COMMAND
 {

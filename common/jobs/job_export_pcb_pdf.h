@@ -33,6 +33,7 @@ public:
             m_filename(),
             m_outputFile(),
             m_colorTheme(),
+            m_mirror( false ),
             m_blackAndWhite( false ),
             m_negative( false ),
             m_plotFootprintValues( true ),
@@ -46,6 +47,7 @@ public:
     wxString m_outputFile;
     wxString m_colorTheme;
 
+    bool m_mirror;
     bool m_blackAndWhite;
     bool m_negative;
     bool m_plotFootprintValues;
