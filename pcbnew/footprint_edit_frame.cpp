@@ -128,14 +128,15 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     SetIcons( icon_bundle );
 
-    CreateInfoBar();
-
     // Create GAL canvas
     m_canvasType = loadCanvasTypeSetting();
 
     PCB_DRAW_PANEL_GAL* drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_frameSize,
                                                             GetGalDisplayOptions(), m_canvasType );
     SetCanvas( drawPanel );
+
+    CreateInfoBar();
+
     SetBoard( new BOARD() );
 
     // This board will only be used to hold a footprint for editing
@@ -543,13 +544,17 @@ void FOOTPRINT_EDIT_FRAME::AddFootprintToBoard( FOOTPRINT* aFootprint )
         msg.Printf( _( "Editing %s from board.  Saving will update the board only." ),
                     aFootprint->GetReference() );
 
-        GetInfoBar()->RemoveAllButtons();
-        GetInfoBar()->AddCloseButton();
-        GetInfoBar()->ShowMessage( msg, wxICON_INFORMATION );
+        if( WX_INFOBAR* infobar = GetInfoBar() )
+        {
+            infobar->RemoveAllButtons();
+            infobar->AddCloseButton();
+            infobar->ShowMessage( msg, wxICON_INFORMATION );
+        }
     }
     else
     {
-        GetInfoBar()->Dismiss();
+        if( WX_INFOBAR* infobar = GetInfoBar() )
+            infobar->Dismiss();
     }
 
     UpdateMsgPanel();
