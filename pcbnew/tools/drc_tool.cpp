@@ -87,7 +87,7 @@ void DRC_TOOL::ShowDRCDialog( wxWindow* aParent )
     if( !m_drcDialog )
     {
         m_drcDialog = new DIALOG_DRC( m_editFrame, aParent );
-        updatePointers();
+        updatePointers( false );
 
         if( show_dlg_modal )
             m_drcDialog->ShowModal();
@@ -96,7 +96,7 @@ void DRC_TOOL::ShowDRCDialog( wxWindow* aParent )
     }
     else // The dialog is just not visible (because the user has double clicked on an error item)
     {
-        updatePointers();
+        updatePointers( false );
         m_drcDialog->Show( true );
     }
 }
@@ -197,16 +197,16 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aRefillZones
     m_editFrame->ShowSolderMask();
 
     // update the m_drcDialog listboxes
-    updatePointers();
+    updatePointers( aProgressReporter->IsCancelled() );
 }
 
 
-void DRC_TOOL::updatePointers()
+void DRC_TOOL::updatePointers( bool aDRCWasCancelled )
 {
     // update my pointers, m_editFrame is the only unchangeable one
     m_pcb = m_editFrame->GetBoard();
 
-    m_editFrame->ResolveDRCExclusions( false );
+    m_editFrame->ResolveDRCExclusions( aDRCWasCancelled );
 
     if( m_drcDialog )
         m_drcDialog->UpdateData();
