@@ -49,6 +49,10 @@
 #include <bitset>
 #include <vector>
 
+
+static DIALOG_NET_INSPECTOR::SETTINGS g_settings;
+
+
 enum class CSV_COLUMN_DESC : int
 {
     CSV_NONE  = 0,
