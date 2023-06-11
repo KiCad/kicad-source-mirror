@@ -128,6 +128,8 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     SetIcons( icon_bundle );
 
+    CreateInfoBar();
+
     // Create GAL canvas
     m_canvasType = loadCanvasTypeSetting();
 
@@ -194,8 +196,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetActiveLayer( F_SilkS );
 
     m_auimgr.SetManagedWindow( this );
-
-    CreateInfoBar();
 
     unsigned int auiFlags = wxAUI_MGR_DEFAULT;
 #if !defined( _WIN32 )
