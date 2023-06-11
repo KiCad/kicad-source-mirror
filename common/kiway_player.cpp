@@ -170,6 +170,8 @@ bool KIWAY_PLAYER::ShowModal( wxString* aResult, wxWindow* aResultantFocusWindow
 
 bool KIWAY_PLAYER::Destroy()
 {
+    Kiway().PlayerDidClose( GetFrameType() );
+
     return EDA_BASE_FRAME::Destroy();
 }
 

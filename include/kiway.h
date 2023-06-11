@@ -359,6 +359,11 @@ public:
     virtual bool PlayersClose( bool doForce );
 
     /**
+     * Notifies a Kiway that a player has been closed.
+     */
+    void PlayerDidClose( FRAME_T aFrameType );
+
+    /**
      * Send @a aPayload to @a aDestination from @a aSource.
      *
      * The recipient receives this in its #KIWAY_PLAYER::KiwayMailIn() function and can
@@ -433,11 +438,6 @@ public:
 private:
     /// Get the [path &] name of the DSO holding the requested FACE_T.
     const wxString dso_search_path( FACE_T aFaceId );
-
-#if 0
-    /// hooked into m_top in SetTop(), marks child frame as closed.
-    void player_destroy_handler( wxWindowDestroyEvent& event );
-#endif
 
     bool set_kiface( FACE_T aFaceType, KIFACE* aKiface )
     {

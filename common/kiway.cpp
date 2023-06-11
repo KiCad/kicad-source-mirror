@@ -506,7 +506,7 @@ bool KIWAY::PlayerClose( FRAME_T aFrameType, bool doForce )
         return false;
     }
 
-    KIWAY_PLAYER* frame =  GetPlayerFrame( aFrameType );
+    KIWAY_PLAYER* frame = GetPlayerFrame( aFrameType );
 
     if( frame == nullptr ) // Already closed
         return true;
@@ -538,11 +538,15 @@ bool KIWAY::PlayersClose( bool doForce )
     bool ret = true;
 
     for( unsigned i=0; i < KIWAY_PLAYER_COUNT;  ++i )
-    {
         ret = ret && PlayerClose( FRAME_T( i ), doForce );
-    }
 
     return ret;
+}
+
+
+void KIWAY::PlayerDidClose( FRAME_T aFrameType )
+{
+    m_playerFrameId[aFrameType] = wxID_NONE;
 }
 
 
