@@ -94,9 +94,12 @@ SCH_SYMBOL* NETLIST_EXPORTER_BASE::findNextSymbol( EDA_ITEM* aItem, SCH_SHEET_PA
 
     wxCHECK( screen, nullptr );
 
-    LIB_SYMBOL* libSymbol = screen->GetLibSymbols()[ symbol->GetSchSymbolLibraryName() ];
+    auto it = screen->GetLibSymbols().find( symbol->GetSchSymbolLibraryName() );
 
-    wxCHECK( libSymbol, nullptr );
+    if( it == screen->GetLibSymbols().end() )
+        return nullptr;
+
+    LIB_SYMBOL* libSymbol = it->second;
 
     // If symbol is a "multi parts per package" type
     if( libSymbol->GetUnitCount() > 1 )

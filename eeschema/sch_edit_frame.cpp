@@ -816,7 +816,7 @@ void SCH_EDIT_FRAME::HardRedraw()
     for( SCH_ITEM* item : screen->Items() )
         item->ClearCaches();
 
-    for( std::pair<const wxString, LIB_SYMBOL*>& libSymbol : screen->GetLibSymbols() )
+    for( const std::pair<const wxString, LIB_SYMBOL*>& libSymbol : screen->GetLibSymbols() )
     {
         wxCHECK2( libSymbol.second, continue );
         libSymbol.second->ClearCaches();
@@ -1971,8 +1971,8 @@ void SCH_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
     for( SCH_ITEM* item : screen->Items() )
         item->ClearCaches();
 
-    for( std::pair<const wxString, LIB_SYMBOL*>& libSymbol : screen->GetLibSymbols() )
-        libSymbol.second->ClearCaches();
+    for( const auto& [ libItemName, libSymbol ] : screen->GetLibSymbols() )
+        libSymbol->ClearCaches();
 
     GetCanvas()->ForceRefresh();
 
