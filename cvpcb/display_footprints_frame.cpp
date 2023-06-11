@@ -226,12 +226,6 @@ void DISPLAY_FOOTPRINTS_FRAME::setupUIConditions()
 }
 
 
-void DISPLAY_FOOTPRINTS_FRAME::doCloseWindow()
-{
-    Destroy();
-}
-
-
 void DISPLAY_FOOTPRINTS_FRAME::ReCreateVToolbar()
 {
     // Currently, no vertical right toolbar.
