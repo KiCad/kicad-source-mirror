@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-18 11:55-0700\n"
-"PO-Revision-Date: 2023-05-22 09:47+0000\n"
+"PO-Revision-Date: 2023-06-12 08:52+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -29334,9 +29334,8 @@ msgid "angle"
 msgstr "úhel"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:725
-#, fuzzy
 msgid "at"
-msgstr "t"
+msgstr "na"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:726
 msgid "radius"
@@ -29859,9 +29858,8 @@ msgid "Pad shape"
 msgstr "Tvar plošky"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:726
-#, fuzzy
 msgid "Pad convex hull"
-msgstr "Použít konvexní ohraničení"
+msgstr "Použít zvýraznění obrysu plošky"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:739
 msgid "Thermal Relief Overrides"
@@ -29899,7 +29897,7 @@ msgstr "Duplikovat položku"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:832
 #, fuzzy
 msgid "Transform Primitive"
-msgstr "Transformovat pouzdro"
+msgstr "Transformovat základní tvar"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:838
 msgid "Delete Primitive"
@@ -30009,10 +30007,11 @@ msgid "Remove soldermask on vias"
 msgstr "Odstranit nepájivou masku na prokovech"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:104
-#, fuzzy
 msgid ""
 "Use the drill/place file origin as the coordinate origin for plotted files"
-msgstr "Použít počátek pomocné osy souřadnic v souborech kreslení"
+msgstr ""
+"Použít počátek souboru vrtání/umístění jako počátek souřadnic pro "
+"vykreslované soubory"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:108
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:234
@@ -30142,13 +30141,12 @@ msgid "Include netlist attributes"
 msgstr "Zahrnout atributy netlist"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:229
-#, fuzzy
 msgid ""
 "Include netlist metadata and aperture attributes in Gerber files.\n"
 "They are comments in the X1 format.\n"
 "Used to check connectivity in CAM tools and Gerber viewers."
 msgstr ""
-"Zahrnout metadata netlistu a atributy clony do souborů Gerber.\n"
+"Zahrnout metadata netlistu a atributy otvoru do souborů Gerber.\n"
 "Ve formátu X1 jsou to komentáře.\n"
 "Používá se ke kontrole propojení v nástrojích CAM a v prohlížečích Gerber."
 
@@ -30213,9 +30211,9 @@ msgid "DXF Options"
 msgstr "Možnosti DXF"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:330
-#, fuzzy
 msgid "Uncheck to plot graphic items using their center lines"
-msgstr "Vykreslit grafické prvky pomocí jejich obrysů"
+msgstr ""
+"Zrušte zaškrtnutí k vykreslení grafických prvků pomocí jejich středové čáry"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:334
 msgid "Export units:"
@@ -30523,9 +30521,8 @@ msgid "Suggest track finish"
 msgstr "Návrh ukončení spoje"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:66
-#, fuzzy
 msgid "Optimize entire track being dragged"
-msgstr "Optimalizace taženého spoje"
+msgstr "Optimalizovat celý přetahovaný spoj"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:67
 msgid ""
@@ -30586,14 +30583,12 @@ msgid "Reset to the current Y offset from the reference position."
 msgstr "Obnovit na aktuální Y offset od polohy reference."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:229
-#, fuzzy
 msgid "Reference location: grid origin"
-msgstr "Nastavit počátek mřížky"
+msgstr "Umístění reference: počátek mřížky"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:233
-#, fuzzy
 msgid "Reference location: local coordinates origin"
-msgstr "Zapnout polární souřadnice"
+msgstr "Umístění reference: počátek místních souřadnic"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:239
 msgid "<none selected>"
@@ -30741,18 +30736,16 @@ msgid "Keep out tracks"
 msgstr "Bez spojů"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:74
-#, fuzzy
 msgid "Prevent tracks from routing into this area"
-msgstr "Smazat spoje zkratující dvě sítě"
+msgstr "Zabránit tažení spojů v této oblasti"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:78
 msgid "Keep out vias"
 msgstr "Bez prokovů"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:79
-#, fuzzy
 msgid "Prevent vias from being placed in this area"
-msgstr "Zabránit Cvpcb ukončení po uložení netlistu"
+msgstr "Zabránit umístění prokovů do této oblasti"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:83
 msgid "Keep out pads"
@@ -30776,9 +30769,8 @@ msgid "Keep out footprints"
 msgstr "Žádná pouzdra"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:94
-#, fuzzy
 msgid "Raise a DRC error if a footprint courtyard overlaps this area"
-msgstr "Nahlásit chybu DRC, pokud ploška překrývá tuto oblast"
+msgstr "Nahlásit chybu DRC pokud pole obsazenosti pouzdra překrývá tuto oblast"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.h:68
 msgid "Rule Area Properties"
@@ -30870,9 +30862,8 @@ msgid "Change text box properties"
 msgstr "Změnit vlastnosti textu"
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:204
-#, fuzzy
 msgid "Border style:"
-msgstr "Styl mřížky:"
+msgstr "Styl okraje:"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:456
 #, c-format
@@ -31048,9 +31039,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:37
-#, fuzzy
 msgid "Replace footprints with those specified in the schematic"
-msgstr "Smazat všechna přiřazení pouzder"
+msgstr "Nahraďte pouzdra za ty uvedené ve schématu"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:39
 msgid ""
@@ -31098,19 +31088,16 @@ msgid "Clearance Outlines"
 msgstr "Izolační mezera obrysů"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:75
-#, fuzzy
 msgid "Show when routing"
-msgstr "Zobrazit při vytváření spojů"
+msgstr "Zobrazit při tažení spojů"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:75
-#, fuzzy
 msgid "Show when routing w/ via clearance at end"
-msgstr "Zobrazit s izolační mezerou prokovu na konci"
+msgstr "Zobrazit při tažení w/ izolační mezeru prokovu na konci"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:75
-#, fuzzy
 msgid "Show when routing and editing"
-msgstr "Při vytváření spojů"
+msgstr "Zobrazit při tažení spojů a úpravách"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:75
 msgid "Show always"
