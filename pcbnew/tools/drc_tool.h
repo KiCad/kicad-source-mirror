@@ -102,7 +102,7 @@ private:
     /**
      * Update needed pointers from the one pointer which is known not to change.
      */
-    void updatePointers();
+    void updatePointers( bool aDRCWasCancelled );
 
     EDA_UNITS userUnits() const { return m_editFrame->GetUserUnits(); }
 
