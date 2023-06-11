@@ -260,11 +260,17 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
     {
         m_glMainContext = GL_CONTEXT_MANAGER::Get().CreateCtx( this );
 
+        if( !m_glMainContext )
+            throw std::runtime_error( "Could not create the main OpenGL context" );
+
         m_glPrivContext = m_glMainContext;
     }
     else
     {
         m_glPrivContext = GL_CONTEXT_MANAGER::Get().CreateCtx( this, m_glMainContext );
+
+        if( !m_glPrivContext )
+            throw std::runtime_error( "Could not create a private OpenGL context" );
     }
 
     m_shader = new SHADER();
@@ -2533,16 +2539,8 @@ void OPENGL_GAL::init()
 #endif /* wxCHECK_VERSION( 3, 0, 3 ) */
 
     // Check correct initialization from the constructor
-    if( !m_glMainContext )
-        throw std::runtime_error( "Could not create the main OpenGL context" );
-
-    if( !m_glPrivContext )
-        throw std::runtime_error( "Could not create a private OpenGL context" );
-
     if( m_tesselator == nullptr )
-        throw std::runtime_error( "Could not create the m_tesselator" );
-    // End initialization checks
-
+        throw std::runtime_error( "Could not create the tesselator" );
     GLenum err = glewInit();
 
     if( GLEW_OK != err )
