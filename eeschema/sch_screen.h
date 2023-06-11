@@ -478,7 +478,6 @@ public:
      *
      * @return The list of unique #LIB_SYMBOL object pointers.
      */
-    std::map<wxString, LIB_SYMBOL*>& GetLibSymbols() { return m_libSymbols; }
     const std::map<wxString, LIB_SYMBOL*>& GetLibSymbols() const { return m_libSymbols; }
 
     /**
