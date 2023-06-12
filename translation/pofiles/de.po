@@ -4325,9 +4325,9 @@ msgid "Zoom %.2f"
 msgstr "Zoom %.2f"
 
 #: common/eda_draw_frame.cpp:617
-#, fuzzy, c-format
+#, c-format
 msgid "grid %s"
-msgstr "Feld %s"
+msgstr "Raster %s"
 
 #: common/eda_draw_frame.cpp:630 pagelayout_editor/pl_editor_frame.cpp:752
 msgid "inches"
@@ -7491,9 +7491,8 @@ msgid "Path Type"
 msgstr "Pfadangabe"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:37
-#, fuzzy
 msgid "Ref"
-msgstr "Revision"
+msgstr "Ref"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:38
 msgid "Schematic assignment"
