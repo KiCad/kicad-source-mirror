@@ -1031,6 +1031,7 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onRadioButton( wxCommandEvent& aEvent 
     m_deviceTypeChoice->Enable( !fromLibrary );
     m_staticTextSpiceType->Enable( !fromLibrary );
 
+    m_prevModel = nullptr;  // Ensure the Model panel will be rebuild after updating other params.
     updateWidgets();
 }
 
