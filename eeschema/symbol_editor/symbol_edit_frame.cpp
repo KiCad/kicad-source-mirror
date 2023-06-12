@@ -389,8 +389,8 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     auto symbolModifiedCondition =
             [this]( const SELECTION& sel )
             {
-                return m_libMgr->IsSymbolModified( GetTargetLibId().GetLibItemName(),
-                                                   GetTargetLibId().GetLibNickname() );
+                return m_libMgr && m_libMgr->IsSymbolModified( GetTargetLibId().GetLibItemName(),
+                                                               GetTargetLibId().GetLibNickname() );
             };
 
     auto libSelectedCondition =
@@ -446,7 +446,7 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     auto pinTypeCond =
             [this]( const SELECTION& )
             {
-                return GetRenderSettings()->m_ShowPinsElectricalType;
+                return GetRenderSettings() && GetRenderSettings()->m_ShowPinsElectricalType;
             };
 
     auto showCompTreeCond =

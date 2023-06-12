@@ -467,10 +467,10 @@ void EDA_BASE_FRAME::setupUIConditions()
 {
     // Setup the conditions to check a language menu item
     auto isCurrentLang =
-        [] ( const SELECTION& aSel, int aLangIdentifier )
-        {
-            return Pgm().GetSelectedLanguageIdentifier() == aLangIdentifier;
-        };
+            [] ( const SELECTION& aSel, int aLangIdentifier )
+            {
+                return Pgm().GetSelectedLanguageIdentifier() == aLangIdentifier;
+            };
 
     for( unsigned ii = 0;  LanguagesList[ii].m_KI_Lang_Identifier != 0; ii++ )
     {

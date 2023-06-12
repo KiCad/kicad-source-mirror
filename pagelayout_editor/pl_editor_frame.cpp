@@ -315,16 +315,16 @@ void PL_EDITOR_FRAME::setupUIConditions()
                         CHECK( SELECTION_CONDITIONS::ShowNever ) );
 
     auto titleBlockNormalMode =
-        [] ( const SELECTION& )
-        {
-            return DS_DATA_MODEL::GetTheInstance().m_EditMode == false;
-        };
+            [] ( const SELECTION& )
+            {
+                return DS_DATA_MODEL::GetTheInstance().m_EditMode == false;
+            };
 
     auto titleBlockEditMode =
-        [] ( const SELECTION& )
-        {
-            return DS_DATA_MODEL::GetTheInstance().m_EditMode == true;
-        };
+            [] ( const SELECTION& )
+            {
+                return DS_DATA_MODEL::GetTheInstance().m_EditMode == true;
+            };
 
     mgr->SetConditions( PL_ACTIONS::layoutNormalMode, CHECK( titleBlockNormalMode ) );
     mgr->SetConditions( PL_ACTIONS::layoutEditMode,   CHECK( titleBlockEditMode ) );

@@ -489,10 +489,10 @@ void SCH_EDIT_FRAME::setupUIConditions()
             };
 
     auto searchPaneCond =
-        [this] ( const SELECTION& )
-        {
-            return m_auimgr.GetPane( SearchPaneName() ).IsShown();
-        };
+            [this] ( const SELECTION& )
+            {
+                return m_auimgr.GetPane( SearchPaneName() ).IsShown();
+            };
 
     auto hierarchyNavigatorCond =
             [ this ] ( const SELECTION& aSel )
@@ -628,19 +628,22 @@ void SCH_EDIT_FRAME::setupUIConditions()
     auto belowRootSheetCondition =
             [this]( const SELECTION& aSel )
             {
-                return m_toolManager->GetTool<SCH_NAVIGATE_TOOL>()->CanGoUp();
+                SCH_NAVIGATE_TOOL* navigateTool = m_toolManager->GetTool<SCH_NAVIGATE_TOOL>();
+                return navigateTool && navigateTool->CanGoUp();
             };
 
     auto navSchematicHasPreviousSheet =
             [this]( const SELECTION& aSel )
             {
-                return m_toolManager->GetTool<SCH_NAVIGATE_TOOL>()->CanGoPrevious();
+                SCH_NAVIGATE_TOOL* navigateTool = m_toolManager->GetTool<SCH_NAVIGATE_TOOL>();
+                return navigateTool && navigateTool->CanGoPrevious();
             };
 
     auto navSchematicHasNextSheet =
             [this]( const SELECTION& aSel )
             {
-                return m_toolManager->GetTool<SCH_NAVIGATE_TOOL>()->CanGoNext();
+                SCH_NAVIGATE_TOOL* navigateTool = m_toolManager->GetTool<SCH_NAVIGATE_TOOL>();
+                return navigateTool && navigateTool->CanGoNext();
             };
 
     mgr->SetConditions( EE_ACTIONS::leaveSheet,            ENABLE( belowRootSheetCondition ) );

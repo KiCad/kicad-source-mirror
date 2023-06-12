@@ -420,20 +420,19 @@ void SYMBOL_VIEWER_FRAME::setupUIConditions()
     auto electricalTypesShownCondition =
             [this]( const SELECTION& aSel )
             {
-                return GetRenderSettings()->m_ShowPinsElectricalType;
+                return GetRenderSettings() && GetRenderSettings()->m_ShowPinsElectricalType;
             };
 
     auto pinNumbersShownCondition =
             [this]( const SELECTION& )
             {
-                return GetRenderSettings()->m_ShowPinNumbers;
+                return GetRenderSettings() && GetRenderSettings()->m_ShowPinNumbers;
             };
 
     auto demorganCond =
             [this]( const SELECTION& )
             {
                 LIB_SYMBOL* symbol = GetSelectedSymbol();
-
                 return symbol && symbol->HasConversion();
             };
 
@@ -453,7 +452,6 @@ void SYMBOL_VIEWER_FRAME::setupUIConditions()
             [this]( const SELECTION& )
             {
                 LIB_SYMBOL* symbol = GetSelectedSymbol();
-
                 return symbol && !symbol->GetDatasheetField().GetText().IsEmpty();
             };
 

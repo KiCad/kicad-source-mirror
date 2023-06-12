@@ -724,7 +724,7 @@ void PCB_EDIT_FRAME::setupUIConditions()
     auto enableZoneControlCondition =
             [this] ( const SELECTION& )
             {
-                return GetBoard()->GetVisibleElements().Contains( LAYER_ZONES )
+                return GetBoard() && GetBoard()->GetVisibleElements().Contains( LAYER_ZONES )
                         && GetDisplayOptions().m_ZoneOpacity > 0.0;
             };
 
@@ -752,16 +752,14 @@ void PCB_EDIT_FRAME::setupUIConditions()
     auto enableBoardSetupCondition =
             [this] ( const SELECTION& )
             {
-                if( DRC_TOOL* tool = m_toolManager->GetTool<DRC_TOOL>() )
-                    return !tool->IsDRCDialogShown();
-
-                return true;
+                DRC_TOOL* tool = m_toolManager->GetTool<DRC_TOOL>();
+                return !( tool && tool->IsDRCDialogShown() );
             };
 
     auto boardFlippedCond =
             [this]( const SELECTION& )
             {
-                return GetCanvas()->GetView()->IsMirroredX();
+                return GetCanvas() && GetCanvas()->GetView()->IsMirroredX();
             };
 
     auto layerManagerCond =
@@ -771,16 +769,16 @@ void PCB_EDIT_FRAME::setupUIConditions()
             };
 
     auto propertiesCond =
-        [this] ( const SELECTION& )
-        {
-            return PropertiesShown();
-        };
+            [this] ( const SELECTION& )
+            {
+                return PropertiesShown();
+            };
 
     auto searchPaneCond =
-        [this] ( const SELECTION& )
-        {
-            return m_auimgr.GetPane( SearchPaneName() ).IsShown();
-        };
+            [this] ( const SELECTION& )
+            {
+                return m_auimgr.GetPane( SearchPaneName() ).IsShown();
+            };
 
     auto highContrastCond =
             [this] ( const SELECTION& )
@@ -811,7 +809,7 @@ void PCB_EDIT_FRAME::setupUIConditions()
             [this]( const SELECTION& )
             {
                 BOARD_INSPECTION_TOOL* tool = m_toolManager->GetTool<BOARD_INSPECTION_TOOL>();
-                return tool->IsNetHighlightSet();
+                return tool && tool->IsNetHighlightSet();
             };
 
     mgr->SetConditions( PCB_ACTIONS::toggleHV45Mode,       CHECK( constrainedDrawingModeCond ) );
@@ -826,16 +824,17 @@ void PCB_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( PCB_ACTIONS::showProperties,       CHECK( propertiesCond ) );
     mgr->SetConditions( PCB_ACTIONS::showSearch,           CHECK( searchPaneCond ) );
 
-    auto isArcKeepCenterMode = [this]( const SELECTION& )
-    {
-        return GetPcbNewSettings()->m_ArcEditMode == ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS;
-    };
+    auto isArcKeepCenterMode =
+            [this]( const SELECTION& )
+            {
+                return GetPcbNewSettings()->m_ArcEditMode == ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS;
+            };
 
-    auto isArcKeepEndpointMode = [this]( const SELECTION& )
-    {
-        return GetPcbNewSettings()->m_ArcEditMode
-               == ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION;
-    };
+    auto isArcKeepEndpointMode =
+            [this]( const SELECTION& )
+            {
+                return GetPcbNewSettings()->m_ArcEditMode == ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION;
+            };
 
     mgr->SetConditions( PCB_ACTIONS::pointEditorArcKeepCenter,   CHECK( isArcKeepCenterMode ) );
     mgr->SetConditions( PCB_ACTIONS::pointEditorArcKeepEndpoint, CHECK( isArcKeepEndpointMode ) );
@@ -844,21 +843,21 @@ void PCB_EDIT_FRAME::setupUIConditions()
             [this]( const SELECTION& )
             {
                 ROUTER_TOOL* tool = m_toolManager->GetTool<ROUTER_TOOL>();
-                return tool->GetRouterMode() == PNS::RM_MarkObstacles;
+                return tool && tool->GetRouterMode() == PNS::RM_MarkObstacles;
             };
 
     auto isShoveMode =
             [this]( const SELECTION& )
             {
                 ROUTER_TOOL* tool = m_toolManager->GetTool<ROUTER_TOOL>();
-                return tool->GetRouterMode() == PNS::RM_Shove;
+                return tool && tool->GetRouterMode() == PNS::RM_Shove;
             };
 
     auto isWalkaroundMode =
             [this]( const SELECTION& )
             {
                 ROUTER_TOOL* tool = m_toolManager->GetTool<ROUTER_TOOL>();
-                return tool->GetRouterMode() == PNS::RM_Walkaround;
+                return tool && tool->GetRouterMode() == PNS::RM_Walkaround;
             };
 
     mgr->SetConditions( PCB_ACTIONS::routerHighlightMode,  CHECK( isHighlightMode ) );
@@ -925,7 +924,7 @@ void PCB_EDIT_FRAME::setupUIConditions()
             [this] ( const SELECTION& )
             {
                 DRC_TOOL* tool = m_toolManager->GetTool<DRC_TOOL>();
-                return !tool->IsDRCRunning();
+                return !( tool && tool->IsDRCRunning() );
             };
 
 #define CURRENT_EDIT_TOOL( action )                                                             \

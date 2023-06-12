@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 CERN (www.cern.ch)
- * Copyright (C) 2004-2022 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2023 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -308,10 +308,10 @@ void KICAD_MANAGER_FRAME::setupUIConditions()
     wxASSERT( manager );
 
     auto activeProject =
-        [this] ( const SELECTION& )
-        {
-            return m_active_project;
-        };
+            [this] ( const SELECTION& )
+            {
+                return m_active_project;
+            };
 
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
 
