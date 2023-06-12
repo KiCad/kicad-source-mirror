@@ -1121,13 +1121,15 @@ const BOX2I LIB_SYMBOL::GetUnitBoundingBox( int aUnit, int aConvert,
 
 void LIB_SYMBOL::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aCount      = 6;
-    aLayers[0]  = LAYER_DEVICE;
-    aLayers[1]  = LAYER_DEVICE_BACKGROUND;
-    aLayers[2]  = LAYER_REFERENCEPART;
-    aLayers[3]  = LAYER_VALUEPART;
-    aLayers[4]  = LAYER_FIELDS;
-    aLayers[5]  = LAYER_SELECTION_SHADOWS;
+    aCount = 0;
+    aLayers[ aCount++ ] = LAYER_DEVICE;
+    aLayers[ aCount++ ] = LAYER_DEVICE_BACKGROUND;
+    aLayers[ aCount++ ] = LAYER_REFERENCEPART;
+    aLayers[ aCount++ ] = LAYER_VALUEPART;
+    aLayers[ aCount++ ] = LAYER_FIELDS;
+    aLayers[ aCount++ ] = LAYER_PRIVATE_NOTES;
+    aLayers[ aCount++ ] = LAYER_NOTES_BACKGROUND;
+    aLayers[ aCount++ ] = LAYER_SELECTION_SHADOWS;
 }
 
 

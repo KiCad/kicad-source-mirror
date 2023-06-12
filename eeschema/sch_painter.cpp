@@ -749,9 +749,29 @@ void SCH_PAINTER::draw( const LIB_SYMBOL* aSymbol, int aLayer, bool aDrawFields,
         drawnSymbol = tmpSymbol.get();
     }
 
+    // The parent must exist on the union of all its children's draw layers.  But that doesn't
+    // mean we want to draw each child on the union.
+    auto childOnLayer =
+            []( const LIB_ITEM& item, int layer )
+            {
+                int layers[512], layers_count;
+                item.ViewGetLayers( layers, layers_count );
+
+                for( int ii = 0; ii < layers_count; ++ii )
+                {
+                    if( layers[ii] == layer )
+                        return true;
+                }
+
+                return false;
+            };
+
     for( const LIB_ITEM& item : drawnSymbol->GetDrawItems() )
     {
         if( !aDrawFields && item.Type() == LIB_FIELD_T )
+            continue;
+
+        if( !childOnLayer( item, aLayer ) )
             continue;
 
         if( aUnit && item.GetUnit() && aUnit != item.GetUnit() )
