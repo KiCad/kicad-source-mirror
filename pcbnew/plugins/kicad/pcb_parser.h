@@ -179,6 +179,7 @@ private:
 
     PCB_SHAPE*          parsePCB_SHAPE( BOARD_ITEM* aParent );
     PCB_TEXT*           parsePCB_TEXT( BOARD_ITEM* aParent );
+    void                parsePCB_TEXT_effects( PCB_TEXT* aText );
     PCB_BITMAP*         parsePCB_BITMAP( BOARD_ITEM* aParent );
     PCB_TEXTBOX*        parsePCB_TEXTBOX( BOARD_ITEM* aParent );
     PCB_DIMENSION_BASE* parseDIMENSION( BOARD_ITEM* aParent );
@@ -245,7 +246,7 @@ private:
 
     void parseXY( int* aX, int* aY );
 
-    std::pair<wxString, wxString> parseProperty();
+    std::pair<wxString, wxString> parseBoardProperty();
 
     /**
      * Parses possible outline points and stores them into \p aPoly.  This accepts points

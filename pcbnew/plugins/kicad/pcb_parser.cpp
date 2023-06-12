@@ -365,7 +365,7 @@ void PCB_PARSER::parseXY( int* aX, int* aY )
 }
 
 
-std::pair<wxString, wxString> PCB_PARSER::parseProperty()
+std::pair<wxString, wxString> PCB_PARSER::parseBoardProperty()
 {
     wxString pName;
     wxString pValue;
@@ -868,7 +868,7 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
             break;
 
         case T_property:
-            properties.insert( parseProperty() );
+            properties.insert( parseBoardProperty() );
             break;
 
         case T_net:
@@ -3041,52 +3041,60 @@ PCB_TEXT* PCB_PARSER::parsePCB_TEXT( BOARD_ITEM* aParent )
     text->SetText( value );
 
     NeedLEFT();
-    token = NextTok();
 
-    if( token != T_at )
-        Expecting( T_at );
+    parsePCB_TEXT_effects( text.get() );
 
-    VECTOR2I pt;
+    return text.release();
+}
 
-    pt.x = parseBoardUnits( "X coordinate" );
-    pt.y = parseBoardUnits( "Y coordinate" );
-    text->SetTextPos( pt );
 
-    // If there is no orientation defined, then it is the default value of 0 degrees.
-    token = NextTok();
+void PCB_PARSER::parsePCB_TEXT_effects( PCB_TEXT* aText )
+{
+    FOOTPRINT* parentFP = dynamic_cast<FOOTPRINT*>( aText->GetParent() );
 
-    if( CurTok() == T_NUMBER )
-    {
-        text->SetTextAngle( EDA_ANGLE( parseDouble(), DEGREES_T ) );
-        NextTok();
-    }
-
-    if( parentFP && CurTok() == T_unlocked )
-    {
-        text->SetKeepUpright( false );
-        NextTok();
-    }
-
-    if( CurTok() != T_RIGHT )
-    {
-        Unexpected( CurText() );
-    }
-
-    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+    for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
         if( token == T_LEFT )
             token = NextTok();
 
         switch( token )
         {
+        case T_at:
+        {
+            VECTOR2I pt;
+
+            pt.x = parseBoardUnits( "X coordinate" );
+            pt.y = parseBoardUnits( "Y coordinate" );
+            aText->SetTextPos( pt );
+            token = NextTok();
+
+            // If there is no orientation defined, then it is the default value of 0 degrees.
+            if( CurTok() == T_NUMBER )
+            {
+                aText->SetTextAngle( EDA_ANGLE( parseDouble(), DEGREES_T ) );
+                token = NextTok();
+            }
+
+            if( parentFP && CurTok() == T_unlocked )
+            {
+                aText->SetKeepUpright( false );
+                token = NextTok();
+            }
+
+            if( (int) token != DSN_RIGHT )
+                Expecting( DSN_RIGHT );
+        }
+
+            break;
+
         case T_layer:
-            text->SetLayer( parseBoardItemLayer() );
+            aText->SetLayer( parseBoardItemLayer() );
 
             token = NextTok();
 
             if( token == T_knockout )
             {
-                text->SetIsKnockout( true );
+                aText->SetIsKnockout( true );
                 token = NextTok();
             }
 
@@ -3097,25 +3105,21 @@ PCB_TEXT* PCB_PARSER::parsePCB_TEXT( BOARD_ITEM* aParent )
 
         case T_tstamp:
             NextTok();
-            const_cast<KIID&>( text->m_Uuid ) = CurStrToKIID();
+            const_cast<KIID&>( aText->m_Uuid ) = CurStrToKIID();
             NeedRIGHT();
             break;
 
         case T_hide:
             if( parentFP )
-                text->SetVisible( false );
+                aText->SetVisible( false );
             else
                 Expecting( "layer, effects, locked, render_cache or tstamp" );
 
             break;
 
-        case T_effects:
-            parseEDA_TEXT( static_cast<EDA_TEXT*>( text.get() ) );
-            break;
+        case T_effects: parseEDA_TEXT( static_cast<EDA_TEXT*>( aText ) ); break;
 
-        case T_render_cache:
-            parseRenderCache( static_cast<EDA_TEXT*>( text.get() ) );
-            break;
+        case T_render_cache: parseRenderCache( static_cast<EDA_TEXT*>( aText ) ); break;
 
         default:
             if( parentFP )
@@ -3127,11 +3131,9 @@ PCB_TEXT* PCB_PARSER::parsePCB_TEXT( BOARD_ITEM* aParent )
 
     if( parentFP )
     {
-        text->Rotate( { 0, 0 }, parentFP->GetOrientation() );
-        text->Move( parentFP->GetPosition() );
+        aText->Rotate( { 0, 0 }, parentFP->GetOrientation() );
+        aText->Move( parentFP->GetPosition() );
     }
-
-    return text.release();
 }
 
 
@@ -3806,31 +3808,43 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
 
         case T_property:
         {
-            std::pair<wxString, wxString> nameAndValue = parseProperty();
+            wxString value;
+
+            NeedSYMBOL();
+            wxString pName = FromUTF8();
+            NeedSYMBOL();
+            wxString pValue = FromUTF8();
 
             // Skip non-field properties that should be hidden
-            if( nameAndValue.first == "ki_description" ||
-                nameAndValue.first == "ki_keywords" ||
-                nameAndValue.first == "Sheetfile" ||
-                nameAndValue.first == "Sheetname" )
+            if( pName == "ki_description" ||
+                pName == "ki_keywords" ||
+                pName == "Sheetfile" ||
+                pName == "Sheetname" )
             {
+                NeedRIGHT();
                 break;
             }
 
-            if( footprint->HasFieldByName( nameAndValue.first ) )
-                footprint->GetFieldByName( nameAndValue.first )->SetText( nameAndValue.second );
+            PCB_FIELD* field = nullptr;
+
+            if( footprint->HasFieldByName( pName ) )
+            {
+                field = footprint->GetFieldByName( pName );
+                field->SetText( pValue );
+            }
             else
             {
-                PCB_FIELD* newField = new PCB_FIELD( footprint.get(), footprint->GetFieldCount(),
-                                                     nameAndValue.first );
+                field = new PCB_FIELD( footprint.get(), footprint->GetFieldCount(), pName );
 
-                newField->SetText( nameAndValue.second );
-                newField->SetVisible( false );
-                newField->SetLayer( footprint->GetLayer() == F_Cu ? F_Fab : B_Fab );
-                newField->StyleFromSettings( m_board->GetDesignSettings() );
+                field->SetText( pValue );
+                field->SetVisible( false );
+                field->SetLayer( footprint->GetLayer() == F_Cu ? F_Fab : B_Fab );
+                field->StyleFromSettings( m_board->GetDesignSettings() );
 
-                footprint->AddField( newField );
+                footprint->AddField( field );
             }
+
+            parsePCB_TEXT_effects( field );
         }
             break;
 

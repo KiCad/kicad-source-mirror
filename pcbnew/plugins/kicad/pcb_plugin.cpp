@@ -366,6 +366,9 @@ void PCB_PLUGIN::Format( const BOARD_ITEM* aItem, int aNestLevel ) const
         break;
 
     case PCB_FIELD_T:
+        // Handled in the footprint formatter when properties are formatted
+        break;
+
     case PCB_TEXT_T:
         format( static_cast<const PCB_TEXT*>( aItem ), aNestLevel );
         break;
@@ -1121,9 +1124,13 @@ void PCB_PLUGIN::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
 
     for( const PCB_FIELD* field : aFootprint->GetFields() )
     {
-        m_out->Print( aNestLevel + 1, "(property %s %s)\n",
+        m_out->Print( aNestLevel + 1, "(property %s %s",
                       m_out->Quotew( field->GetCanonicalName() ).c_str(),
                       m_out->Quotew( field->GetText() ).c_str() );
+
+        format( field, aNestLevel + 1 );
+
+        m_out->Print( aNestLevel + 1, ")\n" );
     }
 
     if( !( m_ctl & CTL_OMIT_PATH ) && !aFootprint->GetPath().empty() )
@@ -1744,6 +1751,7 @@ void PCB_PLUGIN::format( const PCB_TEXT* aText, int aNestLevel ) const
     std::string prefix;
     std::string type;
     VECTOR2I    pos = aText->GetTextPos();
+    bool        isField = dynamic_cast<const PCB_FIELD*>( aText ) != nullptr;
 
     // Always format dimension text as gr_text
     if( dynamic_cast<const PCB_DIMENSION_BASE*>( aText ) )
@@ -1762,12 +1770,14 @@ void PCB_PLUGIN::format( const PCB_TEXT* aText, int aNestLevel ) const
         prefix = "gr";
     }
 
-    m_out->Print( aNestLevel, "(%s_text%s%s %s (at %s",
-                  prefix.c_str(),
-                  type.c_str(),
-                  aText->IsLocked() ? " locked" : "",
-                  m_out->Quotew( aText->GetText() ).c_str(),
-                  formatInternalUnits( pos ).c_str() );
+    if( !isField )
+    {
+        m_out->Print( aNestLevel, "(%s_text%s%s %s", prefix.c_str(), type.c_str(),
+                      aText->IsLocked() ? " locked" : "",
+                      m_out->Quotew( aText->GetText() ).c_str() );
+    }
+
+    m_out->Print( 0, " (at %s", formatInternalUnits( pos ).c_str() );
 
     // Due to Pcbnew history, fp_text angle is saved as an absolute on screen angle.
     if( !aText->GetTextAngle().IsZero() )
@@ -1792,7 +1802,8 @@ void PCB_PLUGIN::format( const PCB_TEXT* aText, int aNestLevel ) const
     if( aText->GetFont() && aText->GetFont()->IsOutline() )
         formatRenderCache( aText, aNestLevel + 1 );
 
-    m_out->Print( aNestLevel, ")\n" );
+    if( !isField )
+        m_out->Print( aNestLevel, ")\n" );
 }
 
 
