@@ -83,6 +83,9 @@ public:
 
     void ParseLib( LIB_SYMBOL_MAP& aSymbolLibMap );
 
+    /**
+     * Parse internal #LINE_READER object into symbols and return all found.
+     */
     LIB_SYMBOL* ParseSymbol( LIB_SYMBOL_MAP& aSymbolLibMap,
                              int aFileVersion = SEXPR_SYMBOL_LIB_FILE_VERSION );
 
@@ -154,6 +157,8 @@ private:
     }
 
     bool parseBool();
+
+    LIB_SYMBOL* parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLibMap );
 
     /**
      * Parse stroke definition \a aStroke.

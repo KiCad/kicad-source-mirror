@@ -137,8 +137,9 @@ public:
 
     const wxString& GetError() const override { return m_error; }
 
-    static LIB_SYMBOL* ParseLibSymbol( LINE_READER& aReader,
-                                       int aVersion = SEXPR_SCHEMATIC_FILE_VERSION );
+    static std::vector<LIB_SYMBOL*> ParseLibSymbols( std::string& aSymbolText,
+                                                     std::string  aSource,
+                                                     int aFileVersion = SEXPR_SCHEMATIC_FILE_VERSION );
     static void FormatLibSymbol( LIB_SYMBOL* aPart, OUTPUTFORMATTER& aFormatter );
 
 private:

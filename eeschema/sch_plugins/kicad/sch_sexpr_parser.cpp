@@ -152,7 +152,7 @@ void SCH_SEXPR_PARSER::ParseLib( LIB_SYMBOL_MAP& aSymbolLibMap )
         {
             m_unit = 1;
             m_convert = 1;
-            LIB_SYMBOL* symbol = ParseSymbol( aSymbolLibMap, m_requiredVersion );
+            LIB_SYMBOL* symbol = parseLibSymbol( aSymbolLibMap );
             aSymbolLibMap[symbol->GetName()] = symbol;
         }
         else
@@ -165,6 +165,34 @@ void SCH_SEXPR_PARSER::ParseLib( LIB_SYMBOL_MAP& aSymbolLibMap )
 
 LIB_SYMBOL* SCH_SEXPR_PARSER::ParseSymbol( LIB_SYMBOL_MAP& aSymbolLibMap, int aFileVersion )
 {
+    LIB_SYMBOL* newSymbol = nullptr;
+
+    NextTok();
+
+    // If there actually isn't anything here, don't throw just return a nullptr
+    if( CurTok() == T_LEFT )
+    {
+        NextTok();
+
+        if( CurTok() == T_symbol )
+        {
+            m_requiredVersion = aFileVersion;
+            newSymbol         = parseLibSymbol( aSymbolLibMap );
+        }
+        else
+        {
+            wxString msg = wxString::Format( _( "Cannot parse %s as a symbol" ),
+                                             GetTokenString( CurTok() ) );
+            THROW_PARSE_ERROR( msg, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
+        }
+    }
+
+    return newSymbol;
+}
+
+
+LIB_SYMBOL* SCH_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLibMap )
+{
     wxCHECK_MSG( CurTok() == T_symbol, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a symbol." ) );
 
@@ -176,7 +204,6 @@ LIB_SYMBOL* SCH_SEXPR_PARSER::ParseSymbol( LIB_SYMBOL_MAP& aSymbolLibMap, int aF
     LIB_ITEM* item;
     std::unique_ptr<LIB_SYMBOL> symbol = std::make_unique<LIB_SYMBOL>( wxEmptyString );
 
-    m_requiredVersion = aFileVersion;
     symbol->SetUnitCount( 1 );
 
     m_fieldId = MANDATORY_FIELDS;
@@ -2398,7 +2425,7 @@ void SCH_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly, 
                 switch( token )
                 {
                 case T_symbol:
-                    symbol = ParseSymbol( symbolLibMap, m_requiredVersion );
+                    symbol = parseLibSymbol( symbolLibMap );
                     symbol->UpdateFieldOrdinals();
                     screen->AddLibSymbol( symbol );
                     break;

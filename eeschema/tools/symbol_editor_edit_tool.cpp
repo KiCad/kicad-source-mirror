@@ -758,30 +758,31 @@ int SYMBOL_EDITOR_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
 
 int SYMBOL_EDITOR_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 {
-    LIB_SYMBOL* symbol = m_frame->GetCurSymbol();
+    LIB_SYMBOL* symbol  = m_frame->GetCurSymbol();
+    LIB_SYMBOL* newPart = nullptr;
 
     if( !symbol || symbol->IsAlias() )
         return 0;
 
-    std::string         text_utf8 = m_toolMgr->GetClipboardUTF8();
-    STRING_LINE_READER  reader( text_utf8, "Clipboard" );
-    LIB_SYMBOL*         newPart;
+    std::string clipboardData = m_toolMgr->GetClipboardUTF8();
 
     try
     {
-        newPart = SCH_SEXPR_PLUGIN::ParseLibSymbol( reader );
+        std::vector<LIB_SYMBOL*> newParts = SCH_SEXPR_PLUGIN::ParseLibSymbols( clipboardData, "Clipboard" );
+
+        if( newParts.empty() || !newParts[0] )
+            return -1;
+
+        newPart = newParts[0];
     }
     catch( IO_ERROR& )
     {
         // If it's not a symbol then paste as text
         newPart = new LIB_SYMBOL( "dummy_part" );
         LIB_TEXT* newText = new LIB_TEXT( newPart );
-        newText->SetText( wxString::FromUTF8( text_utf8.c_str() ) );
+        newText->SetText( clipboardData );
         newPart->AddDrawItem( newText );
     }
-
-    if( !newPart )
-        return -1;
 
     SCH_COMMIT commit( m_toolMgr );
 

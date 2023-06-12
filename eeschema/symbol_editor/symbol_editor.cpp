@@ -852,43 +852,16 @@ void SYMBOL_EDIT_FRAME::DuplicateSymbol( bool aFromClipboard )
 
     if( aFromClipboard )
     {
-        wxLogNull doNotLog; // disable logging of failed clipboard actions
+        std::string clipboardData = m_toolManager->GetClipboardUTF8();
 
-        auto clipboard = wxTheClipboard;
-        wxClipboardLocker clipboardLock( clipboard );
-
-        if( !clipboardLock
-            || !( clipboard->IsSupported( wxDF_TEXT )
-                  || clipboard->IsSupported( wxDF_UNICODETEXT ) ) )
+        try
         {
-            return;
+            newSymbols = SCH_SEXPR_PLUGIN::ParseLibSymbols( clipboardData, "Clipboard" );
         }
-
-        wxTextDataObject data;
-        clipboard->GetData( data );
-        wxString symbolSource = data.GetText();
-
-        std::unique_ptr<STRING_LINE_READER> reader = std::make_unique<STRING_LINE_READER>( TO_UTF8( symbolSource ), wxS( "Clipboard" ) );
-        LIB_SYMBOL* newSymbol = nullptr;
-
-        do
+        catch( IO_ERROR& e )
         {
-            try
-            {
-                newSymbol = SCH_SEXPR_PLUGIN::ParseLibSymbol( *reader );
-            }
-            catch( IO_ERROR& e )
-            {
-                wxLogMessage( wxS( "Can not paste: %s" ), e.Problem() );
-                break;
-            }
-
-            if( newSymbol )
-                newSymbols.emplace_back( newSymbol );
-
-            reader.reset( new STRING_LINE_READER( *reader ) );
+            wxLogMessage( wxS( "Can not paste: %s" ), e.Problem() );
         }
-        while( newSymbol );
     }
     else
     {

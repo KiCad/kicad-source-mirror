@@ -1658,16 +1658,31 @@ void SCH_SEXPR_PLUGIN::GetDefaultSymbolFields( std::vector<wxString>& aNames )
 }
 
 
-LIB_SYMBOL* SCH_SEXPR_PLUGIN::ParseLibSymbol( LINE_READER& aReader, int aFileVersion )
+std::vector<LIB_SYMBOL*> SCH_SEXPR_PLUGIN::ParseLibSymbols( std::string& aSymbolText,
+                                                            std::string  aSource,
+                                                            int aFileVersion )
 {
-    LOCALE_IO toggle;     // toggles on, then off, the C locale.
+    LOCALE_IO      toggle;     // toggles on, then off, the C locale.
+    LIB_SYMBOL*    newSymbol = nullptr;
     LIB_SYMBOL_MAP map;
-    SCH_SEXPR_PARSER parser( &aReader );
 
-    parser.NeedLEFT();
-    parser.NextTok();
+    std::vector<LIB_SYMBOL*>            newSymbols;
+    std::unique_ptr<STRING_LINE_READER> reader = std::make_unique<STRING_LINE_READER>( aSymbolText, aSource );
 
-    return parser.ParseSymbol( map, aFileVersion );
+    do
+    {
+        SCH_SEXPR_PARSER parser( reader.get() );
+
+        newSymbol = parser.ParseSymbol( map, aFileVersion );
+
+        if( newSymbol )
+            newSymbols.emplace_back( newSymbol );
+
+        reader.reset( new STRING_LINE_READER( *reader ) );
+    }
+    while( newSymbol );
+
+    return newSymbols;
 }
 
 
