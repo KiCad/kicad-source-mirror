@@ -31,6 +31,7 @@
 
 #include <board.h>
 #include <board_design_settings.h>
+#include <footprint_editor_settings.h>
 
 #include <pcbnew.h>
 #include <footprint_edit_frame.h>
@@ -133,7 +134,9 @@ bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool aQuery )
     {
         SetBoard( new BOARD );
 
-        GetBoard()->GetDesignSettings() = GetDesignSettings();
+        if( FOOTPRINT_EDITOR_SETTINGS* cfg = GetSettings() )
+            GetBoard()->GetDesignSettings() = cfg->m_DesignSettings;
+
         GetBoard()->SynchronizeNetsAndNetClasses( true );
 
         // This board will only be used to hold a footprint for editing
