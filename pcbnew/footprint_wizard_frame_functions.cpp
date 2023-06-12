@@ -92,7 +92,7 @@ void FOOTPRINT_WIZARD_FRAME::DisplayWizardInfos()
 }
 
 
-void FOOTPRINT_WIZARD_FRAME::ReloadFootprint()
+void FOOTPRINT_WIZARD_FRAME::RegenerateFootprint()
 {
     FOOTPRINT_WIZARD* footprintWizard = GetMyWizard();
 
@@ -183,7 +183,7 @@ void FOOTPRINT_WIZARD_FRAME::SelectFootprintWizard()
         m_wizardDescription.Empty();
     }
 
-    ReloadFootprint();
+    RegenerateFootprint();
     Zoom_Automatique( false );
     DisplayWizardInfos();
     ReCreatePageList();
@@ -208,7 +208,7 @@ void FOOTPRINT_WIZARD_FRAME::DefaultParameters( wxCommandEvent& event )
 
     // Reload
     ReCreateParameterList();
-    ReloadFootprint();
+    RegenerateFootprint();
     DisplayWizardInfos();
 }
 
@@ -255,7 +255,7 @@ void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
         if( !res.IsEmpty() )
             wxMessageBox( res );
 
-        ReloadFootprint();
+        RegenerateFootprint();
         DisplayWizardInfos();
 
         // The python script can have modified some other parameters.
