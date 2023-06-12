@@ -110,7 +110,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-18 11:58-0700\n"
-"PO-Revision-Date: 2023-05-15 10:18+0200\n"
+"PO-Revision-Date: 2023-06-12 14:32+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -11317,7 +11317,7 @@ msgstr "Nessun modello \"%s\" in libreria."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:278 eeschema/sim/sim_model.cpp:403
 msgid "Failed to read simulation model from fields."
-msgstr "Fallita la lettura delo modello di simulazione dai campi."
+msgstr "Fallita la lettura del modello di simulazione dai campi."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:404
 msgid "Component:"
