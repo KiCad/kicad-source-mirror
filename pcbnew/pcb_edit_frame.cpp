@@ -583,7 +583,7 @@ void PCB_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
     PCB_BASE_FRAME::SetPageSettings( aPageSettings );
 
     // Prepare drawing-sheet template
-    DS_PROXY_VIEW_ITEM* drawingSheet = new DS_PROXY_VIEW_ITEM( pcbIUScale.IU_PER_MILS,
+    DS_PROXY_VIEW_ITEM* drawingSheet = new DS_PROXY_VIEW_ITEM( pcbIUScale,
                                                                &m_pcb->GetPageSettings(),
                                                                m_pcb->GetProject(),
                                                                &m_pcb->GetTitleBlock(),

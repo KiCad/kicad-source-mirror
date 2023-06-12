@@ -47,8 +47,8 @@ class GAL;
 class DS_PROXY_VIEW_ITEM : public EDA_ITEM
 {
 public:
-    DS_PROXY_VIEW_ITEM( int aScaleFactor, const PAGE_INFO* aPageInfo, const PROJECT* aProject,
-                        const TITLE_BLOCK* aTitleBlock,
+    DS_PROXY_VIEW_ITEM( const EDA_IU_SCALE& aIuScale, const PAGE_INFO* aPageInfo,
+                        const PROJECT* aProject, const TITLE_BLOCK* aTitleBlock,
                         const std::map<wxString, wxString>* aProperties );
 
     /**
@@ -128,27 +128,25 @@ protected:
                         DS_DRAW_ITEM_LIST* aDrawList ) const;
 
 protected:
-    /// the factor between mils (units used in drawing sheet and internal units)
-    /// it is the value IU_PER_MILS used in the caller
-    int                m_mils2IUscalefactor;
+    const EDA_IU_SCALE& m_iuScale;
 
-    std::string        m_fileName;
-    std::string        m_sheetName;
-    std::string        m_sheetPath;
-    const TITLE_BLOCK* m_titleBlock;
-    const PAGE_INFO*   m_pageInfo;
-    std::string        m_pageNumber;
-    int                m_sheetCount;
-    bool               m_isFirstPage;
-    const PROJECT*     m_project;
+    std::string         m_fileName;
+    std::string         m_sheetName;
+    std::string         m_sheetPath;
+    const TITLE_BLOCK*  m_titleBlock;
+    const PAGE_INFO*    m_pageInfo;
+    std::string         m_pageNumber;
+    int                 m_sheetCount;
+    bool                m_isFirstPage;
+    const PROJECT*      m_project;
 
     const std::map<wxString, wxString>* m_properties;
 
     /// Layer that is used for drawing sheet color (LAYER_DRAWINGSHEET is always used for visibility)
-    int                m_colorLayer;
+    int                 m_colorLayer;
 
     /// Layer that is used for page border color
-    int                m_pageBorderColorLayer;
+    int                 m_pageBorderColorLayer;
 };
 
 #endif /* DS_PROXY_VIEW_ITEM_H */

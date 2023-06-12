@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -97,11 +97,10 @@ void PL_DRAW_PANEL_GAL::DisplayDrawingSheet()
 
     // To show the formatted texts instead of raw texts in drawing sheet editor, we need
     // a dummy DS_DRAW_ITEM_LIST.
-    DS_DRAW_ITEM_LIST dummy;
+    DS_DRAW_ITEM_LIST dummy( drawSheetIUScale );
     dummy.SetPaperFormat( m_edaFrame->GetPageSettings().GetType() );
     dummy.SetTitleBlock( &m_edaFrame->GetTitleBlock() );
     dummy.SetProject( &m_edaFrame->Prj() );
-    dummy.SetMilsToIUfactor( drawSheetIUScale.IU_PER_MILS );
 
     for( DS_DATA_ITEM* dataItem : model.GetItems() )
         dataItem->SyncDrawItems( &dummy, m_view );

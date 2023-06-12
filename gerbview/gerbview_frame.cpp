@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -826,9 +826,8 @@ void GERBVIEW_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
     GERBVIEW_DRAW_PANEL_GAL* drawPanel = static_cast<GERBVIEW_DRAW_PANEL_GAL*>( GetCanvas() );
 
     // Prepare drawing-sheet template
-    DS_PROXY_VIEW_ITEM* drawingSheet = new DS_PROXY_VIEW_ITEM( gerbIUScale.IU_PER_MILS,
-                                                               &GetPageSettings(), &Prj(),
-                                                               &GetTitleBlock(), nullptr );
+    DS_PROXY_VIEW_ITEM* drawingSheet = new DS_PROXY_VIEW_ITEM( gerbIUScale, &GetPageSettings(),
+                                                               &Prj(), &GetTitleBlock(), nullptr );
 
     if( GetScreen() )
     {

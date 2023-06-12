@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2013-2020 CERN
- * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -34,11 +34,11 @@
 
 using namespace KIGFX;
 
-DS_PROXY_VIEW_ITEM::DS_PROXY_VIEW_ITEM( int aMils2IUscalefactor, const PAGE_INFO* aPageInfo,
+DS_PROXY_VIEW_ITEM::DS_PROXY_VIEW_ITEM( const EDA_IU_SCALE& aIuScale, const PAGE_INFO* aPageInfo,
                                         const PROJECT* aProject, const TITLE_BLOCK* aTitleBlock,
                                         const std::map<wxString, wxString>* aProperties ) :
         EDA_ITEM( NOT_USED ), // this item is never added to a BOARD so it needs no type
-        m_mils2IUscalefactor( aMils2IUscalefactor ),
+        m_iuScale( aIuScale ),
         m_titleBlock( aTitleBlock ),
         m_pageInfo( aPageInfo ),
         m_pageNumber( "1" ),
@@ -56,11 +56,11 @@ const BOX2I DS_PROXY_VIEW_ITEM::ViewBBox() const
 {
     BOX2I bbox;
 
-    if( m_pageInfo != NULL )
+    if( m_pageInfo )
     {
         bbox.SetOrigin( VECTOR2I( 0, 0 ) );
-        bbox.SetEnd( VECTOR2I( m_pageInfo->GetWidthMils() * m_mils2IUscalefactor,
-                               m_pageInfo->GetHeightMils() * m_mils2IUscalefactor ) );
+        bbox.SetEnd( VECTOR2I( m_iuScale.MilsToIU( m_pageInfo->GetWidthMils() ),
+                               m_iuScale.MilsToIU( m_pageInfo->GetHeightMils() ) ) );
     }
     else
     {
@@ -81,9 +81,6 @@ void DS_PROXY_VIEW_ITEM::buildDrawList( VIEW* aView,
     wxString         sheetPath( m_sheetPath.c_str(), wxConvUTF8 );
 
     aDrawList->SetDefaultPenSize( (int) settings->GetDrawingSheetLineWidth() );
-    // Adjust the scaling factor: drawing sheet item coordinates and sizes are stored in mils,
-    // and must be scaled to the same units as the caller
-    aDrawList->SetMilsToIUfactor( m_mils2IUscalefactor );
     aDrawList->SetIsFirstPage( m_isFirstPage );
     aDrawList->SetPageNumber( m_pageNumber );
     aDrawList->SetSheetCount( m_sheetCount );
@@ -102,7 +99,7 @@ void DS_PROXY_VIEW_ITEM::ViewDraw( int aLayer, VIEW* aView ) const
 {
     GAL*              gal = aView->GetGAL();
     RENDER_SETTINGS*  settings = aView->GetPainter()->GetSettings();
-    DS_DRAW_ITEM_LIST drawList;
+    DS_DRAW_ITEM_LIST drawList( m_iuScale );
 
     buildDrawList( aView, m_properties, &drawList );
 
@@ -112,7 +109,7 @@ void DS_PROXY_VIEW_ITEM::ViewDraw( int aLayer, VIEW* aView ) const
     if( flipped )
     {
         gal->Save();
-        gal->Translate( VECTOR2D( m_pageInfo->GetWidthMils() * m_mils2IUscalefactor, 0 ) );
+        gal->Translate( VECTOR2D( m_iuScale.MilsToIU( m_pageInfo->GetWidthMils() ), 0 ) );
         gal->Scale( VECTOR2D( -1.0, 1.0 ) );
     }
 
@@ -136,7 +133,7 @@ void DS_PROXY_VIEW_ITEM::ViewDraw( int aLayer, VIEW* aView ) const
 
     // Draw gray line that outlines the sheet size
     if( settings->GetShowPageLimits() )
-        ws_painter.DrawBorder( m_pageInfo, m_mils2IUscalefactor );
+        ws_painter.DrawBorder( m_pageInfo, m_iuScale.IU_PER_MILS );
 
     if( flipped )
         gal->Restore();
@@ -153,7 +150,7 @@ void DS_PROXY_VIEW_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 bool DS_PROXY_VIEW_ITEM::HitTestDrawingSheetItems( VIEW* aView, const VECTOR2I& aPosition )
 {
     int               accuracy = (int) aView->ToWorld( 5.0 );   // five pixels at current zoom
-    DS_DRAW_ITEM_LIST drawList;
+    DS_DRAW_ITEM_LIST drawList( m_iuScale );
 
     buildDrawList( aView, m_properties, &drawList );
 

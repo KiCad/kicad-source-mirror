@@ -356,13 +356,22 @@ void EDA_TEXT::SetLineSpacing( double aLineSpacing )
 }
 
 
-void EDA_TEXT::SetTextSize( const VECTOR2I& aNewSize )
+void EDA_TEXT::SetTextSize( VECTOR2I aNewSize )
 {
-    int min = m_IuScale.get().MilsToIU( TEXT_MIN_SIZE_MILS );
-    int max = m_IuScale.get().MilsToIU( TEXT_MAX_SIZE_MILS );
+    if( m_IuScale.get().IU_PER_MM != unityScale.IU_PER_MM )
+    {
+        // Plotting uses unityScale and independently scales the text.  If we clamp here we'll
+        // clamp to *really* small values.
 
-    m_attributes.m_Size = VECTOR2I( alg::clamp( min, aNewSize.x, max ),
-                                    alg::clamp( min, aNewSize.y, max ) );
+        int min = m_IuScale.get().MilsToIU( TEXT_MIN_SIZE_MILS );
+        int max = m_IuScale.get().MilsToIU( TEXT_MAX_SIZE_MILS );
+
+        aNewSize = VECTOR2I( alg::clamp( min, aNewSize.x, max ),
+                             alg::clamp( min, aNewSize.y, max ) );
+    }
+
+    m_attributes.m_Size = aNewSize;
+
     ClearRenderCache();
     m_bounding_box_cache_valid = false;
 }

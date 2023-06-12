@@ -65,14 +65,14 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
     if( plotColor == COLOR4D::UNSPECIFIED )
         plotColor = COLOR4D( RED );
 
-    DS_DRAW_ITEM_LIST drawList;
+    DS_DRAW_ITEM_LIST drawList( unityScale );
 
     // Print only a short filename, if aFilename is the full filename
     wxFileName fn( aFilename );
 
     // Prepare plot parameters
     drawList.SetDefaultPenSize( PLOTTER::USE_DEFAULT_LINE_WIDTH );
-    drawList.SetMilsToIUfactor( iusPerMil );
+    drawList.SetPlotterMilsToIUfactor( iusPerMil );
     drawList.SetPageNumber( aSheetNumber );
     drawList.SetSheetCount( aSheetCount );
     drawList.SetFileName( fn.GetFullName() );   // Print only the short filename

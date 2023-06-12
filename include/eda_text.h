@@ -200,7 +200,7 @@ public:
     void SetLineSpacing( double aLineSpacing );
     double GetLineSpacing() const               { return m_attributes.m_LineSpacing; }
 
-    void SetTextSize( const VECTOR2I& aNewSize );
+    void SetTextSize( VECTOR2I aNewSize );
     VECTOR2I GetTextSize() const                { return m_attributes.m_Size; }
 
     void SetTextWidth( int aWidth );
@@ -389,7 +389,7 @@ private:
     wxString         m_shown_text;           // Cache of unescaped text for efficient access
     bool             m_shown_text_has_text_var_refs;
 
-    std::reference_wrapper<const EDA_IU_SCALE> m_IuScale;
+    std::reference_wrapper<const EDA_IU_SCALE>          m_IuScale;
 
     mutable wxString                                    m_render_cache_text;
     mutable const KIFONT::FONT*                         m_render_cache_font;

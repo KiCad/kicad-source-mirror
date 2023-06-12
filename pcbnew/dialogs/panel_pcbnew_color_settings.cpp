@@ -504,8 +504,8 @@ void PANEL_PCBNEW_COLOR_SETTINGS::createPreviewItems()
     m_preview->UpdateColors();
     m_preview->DisplayBoard( m_preview->GetBoard() );
 
-    DS_PROXY_VIEW_ITEM* drawingSheet = new DS_PROXY_VIEW_ITEM( (int) pcbIUScale.IU_PER_MILS, m_page,
-                                                               nullptr, m_titleBlock, nullptr );
+    DS_PROXY_VIEW_ITEM* drawingSheet = new DS_PROXY_VIEW_ITEM( pcbIUScale, m_page, nullptr,
+                                                               m_titleBlock, nullptr );
     drawingSheet->SetIsFirstPage( true );
     drawingSheet->SetColorLayer( LAYER_DRAWINGSHEET );
     drawingSheet->SetPageBorderColorLayer( LAYER_PAGE_LIMITS );

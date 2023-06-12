@@ -536,7 +536,7 @@ void DS_DRAW_ITEM_LIST::BuildDrawItemsList( const PAGE_INFO& aPageInfo,
     if( model.GetCount() == 0 && !model.VoidListAllowed() )
         model.LoadDrawingSheet();
 
-    model.SetupDrawEnvironment( aPageInfo, m_milsToIu );
+    model.SetupDrawEnvironment( aPageInfo, GetMilsToIUfactor() );
 
     for( DS_DATA_ITEM* wsItem : model.GetItems() )
     {

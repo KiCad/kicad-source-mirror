@@ -299,12 +299,11 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
             } );
 
     DS_PROXY_VIEW_ITEM* drawingSheet = m_drcEngine->GetDrawingSheet();
-    DS_DRAW_ITEM_LIST   drawItems;
+    DS_DRAW_ITEM_LIST   drawItems( pcbIUScale );
 
     if( !drawingSheet || m_drcEngine->IsErrorLimitExceeded( DRCE_UNRESOLVED_VARIABLE ) )
         return;
 
-    drawItems.SetMilsToIUfactor( pcbIUScale.IU_PER_MILS );
     drawItems.SetPageNumber( wxT( "1" ) );
     drawItems.SetSheetCount( 1 );
     drawItems.SetFileName( wxT( "dummyFilename" ) );

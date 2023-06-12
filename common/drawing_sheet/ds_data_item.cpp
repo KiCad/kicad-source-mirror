@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2013 Jean-Pierre Charras <jp.charras at wanadoo.fr>.
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -580,8 +580,10 @@ void DS_DATA_ITEM_TEXT::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::VIE
         if( j > 0 && !IsInsidePage( j ) )
             continue;
 
-        text = new DS_DRAW_ITEM_TEXT( this, j, m_FullText, GetStartPosIU( j ), textsize, pensize,
-                                      m_Font, m_Italic, m_Bold, m_TextColor );
+        text = new DS_DRAW_ITEM_TEXT( aCollector->GetIuScale(), this, j, m_FullText,
+                                      GetStartPosIU( j ), textsize, pensize, m_Font, m_Italic,
+                                      m_Bold, m_TextColor );
+
         text->SetFlags( itemFlags[ j ] );
         m_drawItems.push_back( text );
 
@@ -677,36 +679,6 @@ void DS_DATA_ITEM_TEXT::SetConstrainedTextSize()
 
     if( m_ConstrainedTextSize.y == 0 )
         m_ConstrainedTextSize.y = DS_DATA_MODEL::GetTheInstance().m_DefaultTextSize.y;
-
-    if( m_BoundingBoxSize.x || m_BoundingBoxSize.y )
-    {
-        // to know the X and Y size of the line, we should use
-        // EDA_TEXT::GetTextBox()
-        // but this function uses integers
-        // So, to avoid truncations with our unit in mm, use microns.
-        VECTOR2I size_micron;
-        #define FSCALE 1000.0
-        int linewidth = 0;
-        size_micron.x = KiROUND( m_ConstrainedTextSize.x * FSCALE );
-        size_micron.y = KiROUND( m_ConstrainedTextSize.y * FSCALE );
-        DS_DRAW_ITEM_TEXT dummy( this, 0, m_FullText, VECTOR2I( 0, 0 ), size_micron, linewidth,
-                                 m_Font, m_Italic, m_Bold, m_TextColor );
-        dummy.SetMultilineAllowed( true );
-        dummy.SetHorizJustify( m_Hjustify ) ;
-        dummy.SetVertJustify( m_Vjustify );
-        dummy.SetTextAngle( EDA_ANGLE( m_Orient, DEGREES_T ) );
-
-        BOX2I    rect = dummy.GetTextBox();
-        VECTOR2D size;
-        size.x = rect.GetWidth() / FSCALE;
-        size.y = rect.GetHeight() / FSCALE;
-
-        if( m_BoundingBoxSize.x && size.x > m_BoundingBoxSize.x )
-            m_ConstrainedTextSize.x *= m_BoundingBoxSize.x / size.x;
-
-        if( m_BoundingBoxSize.y &&  size.y > m_BoundingBoxSize.y )
-            m_ConstrainedTextSize.y *= m_BoundingBoxSize.y / size.y;
-    }
 }
 
 

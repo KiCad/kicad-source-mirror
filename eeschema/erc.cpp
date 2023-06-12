@@ -170,7 +170,7 @@ int ERC_TESTER::TestDuplicateSheetNames( bool aCreateMarker )
 
 void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
 {
-    DS_DRAW_ITEM_LIST wsItems;
+    DS_DRAW_ITEM_LIST wsItems( schIUScale );
 
     auto unresolved = [this]( wxString str )
     {
@@ -180,7 +180,6 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
 
     if( aDrawingSheet )
     {
-        wsItems.SetMilsToIUfactor( schIUScale.IU_PER_MILS );
         wsItems.SetPageNumber( wxS( "1" ) );
         wsItems.SetSheetCount( 1 );
         wsItems.SetFileName( wxS( "dummyFilename" ) );

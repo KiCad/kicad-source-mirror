@@ -982,10 +982,10 @@ void PrintDrawingSheet( const RENDER_SETTINGS* aSettings, const PAGE_INFO& aPage
                         const wxString& aPageNumber, double aMils2Iu, const PROJECT* aProject,
                         const wxString& aSheetLayer, bool aIsFirstPage )
 {
-    DS_DRAW_ITEM_LIST drawList;
+    DS_DRAW_ITEM_LIST drawList( unityScale );
 
     drawList.SetDefaultPenSize( aSettings->GetDefaultPenWidth() );
-    drawList.SetMilsToIUfactor( aMils2Iu );
+    drawList.SetPlotterMilsToIUfactor( aMils2Iu );
     drawList.SetPageNumber( aPageNumber );
     drawList.SetSheetCount( aSheetCount );
     drawList.SetFileName( aFileName );

@@ -310,12 +310,13 @@ private:
 class DS_DRAW_ITEM_TEXT : public DS_DRAW_ITEM_BASE, public EDA_TEXT
 {
 public:
-    DS_DRAW_ITEM_TEXT( DS_DATA_ITEM* aPeer, int aIndex, const wxString& aText, const VECTOR2I& aPos,
-                       const VECTOR2I& aSize, int aPenWidth, KIFONT::FONT* aFont,
+    DS_DRAW_ITEM_TEXT( const EDA_IU_SCALE& aIuScale, DS_DATA_ITEM* aPeer, int aIndex,
+                       const wxString& aText, const VECTOR2I& aPos, const VECTOR2I& aSize,
+                       int aPenWidth, KIFONT::FONT* aFont,
                        bool aItalic = false, bool aBold = false,
                        const KIGFX::COLOR4D& aColor = KIGFX::COLOR4D::UNSPECIFIED ) :
             DS_DRAW_ITEM_BASE( aPeer, aIndex, WSG_TEXT_T),
-            EDA_TEXT( drawSheetIUScale, aText )
+            EDA_TEXT( aIuScale, aText )
     {
         SetTextPos( aPos );
         SetTextSize( aSize );
@@ -394,10 +395,11 @@ private:
 class DS_DRAW_ITEM_LIST
 {
 public:
-    DS_DRAW_ITEM_LIST()
+    DS_DRAW_ITEM_LIST( const EDA_IU_SCALE& aIuScale ) :
+        m_iuScale( aIuScale )
     {
         m_idx = 0;
-        m_milsToIu = 1.0;
+        m_plotterMilsToIu = 0.0;
         m_penSize = 1;
         m_pageNumber = "1";
         m_sheetCount = 1;
@@ -455,14 +457,25 @@ public:
     int GetDefaultPenSize() const { return m_penSize; }
 
     /**
-     * Set the scalar to convert pages units (mils) to draw/plot units
+     * Set the scalar to convert pages units (mils) to plot units.
      */
-    void SetMilsToIUfactor( double aMils2Iu ) { m_milsToIu = aMils2Iu; }
+    void SetPlotterMilsToIUfactor( double aMils2Iu ) { m_plotterMilsToIu = aMils2Iu; }
 
     /**
-     * Get the scalar to convert pages units (mils) to draw/plot units
+     * Get the scalar to convert pages units (mils) to draw/plot units.
+     *
+     * This will be controlled by EITHER the parent frame's EDA_IU_SCALE or the plotter's
+     * mils-to-iu factor.
      */
-    double GetMilsToIUfactor() { return m_milsToIu; }
+    double GetMilsToIUfactor()
+    {
+        if( m_plotterMilsToIu > 0.0 )
+            return m_plotterMilsToIu;
+        else
+            return m_iuScale.IU_PER_MILS;
+    }
+
+    const EDA_IU_SCALE& GetIuScale() const { return m_iuScale; }
 
     /**
      * Set the value of the sheet number.
@@ -520,7 +533,6 @@ public:
      *
      * Before calling this function, some parameters should be initialized by calling:
      *   SetPenSize( aPenWidth );
-     *   SetMilsToIUfactor( aMils2Iu );
      *   SetSheetNumber( aSheetNumber );
      *   SetSheetCount( aSheetCount );
      *   SetFileName( aFileName );
@@ -544,9 +556,10 @@ public:
 
 protected:
     std::vector <DS_DRAW_ITEM_BASE*> m_graphicList;     // Items to draw/plot
+    const EDA_IU_SCALE&              m_iuScale;         // IU scale for drawing
+    double                           m_plotterMilsToIu; // IU scale for plotting
+
     unsigned           m_idx;             // for GetFirst, GetNext functions
-    double             m_milsToIu;        // the scalar to convert pages units ( mils)
-                                          // to draw/plot units.
     int                m_penSize;         // The default line width for drawings.
                                           // used when an item has a pen size = 0
     bool               m_isFirstPage;     ///< Is this the first page or not.

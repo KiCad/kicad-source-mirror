@@ -250,8 +250,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
     m_page->SetHeightMils( 5000 );
     m_page->SetWidthMils( 6000 );
 
-    m_drawingSheet = new DS_PROXY_VIEW_ITEM( (int) schIUScale.IU_PER_MILS, m_page, nullptr,
-                                             m_titleBlock, nullptr );
+    m_drawingSheet = new DS_PROXY_VIEW_ITEM( schIUScale, m_page, nullptr, m_titleBlock, nullptr );
     m_drawingSheet->SetColorLayer( LAYER_SCHEMATIC_DRAWINGSHEET );
     m_drawingSheet->SetPageBorderColorLayer( LAYER_SCHEMATIC_PAGE_LIMITS );
     view->Add( m_drawingSheet );

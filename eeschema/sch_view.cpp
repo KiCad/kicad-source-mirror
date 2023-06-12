@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2018 CERN
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -95,8 +95,7 @@ void SCH_VIEW::DisplaySheet( const SCH_SCREEN *aScreen )
     for( SCH_ITEM* item : aScreen->Items() )
         Add( item );
 
-    m_drawingSheet.reset( new DS_PROXY_VIEW_ITEM( static_cast<int>( schIUScale.IU_PER_MILS ),
-                                                  &aScreen->GetPageSettings(),
+    m_drawingSheet.reset( new DS_PROXY_VIEW_ITEM( schIUScale, &aScreen->GetPageSettings(),
                                                   &aScreen->Schematic()->Prj(),
                                                   &aScreen->GetTitleBlock(),
                                                   aScreen->Schematic()->GetProperties() ) );
