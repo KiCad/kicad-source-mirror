@@ -872,9 +872,6 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     if( !commit.Empty() )
         commit.Push( _( "Edit Symbol Properties" ) );
 
-    // This must go after OnModify() so that the connectivity graph will have been updated.
-    GetParent()->GetToolManager()->PostEvent( EVENTS::SelectedItemsModified );
-
     return true;
 }
 

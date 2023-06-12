@@ -907,8 +907,6 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         updateItem( item, true );
     }
 
-    m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
-
     if( moving )
     {
         m_toolMgr->RunAction( ACTIONS::refreshPreview );
@@ -1101,8 +1099,6 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         }
     }
 
-    m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
-
     // Update R-Tree for modified items
     for( EDA_ITEM* selected : selection )
         updateItem( selected, true );
@@ -1212,8 +1208,6 @@ int SCH_EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
         m_frame->UpdateItem( a, false, true );
         m_frame->UpdateItem( b, false, true );
     }
-
-    m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
 
     // Update R-Tree for modified items
     for( EDA_ITEM* selected : selection )
@@ -1556,9 +1550,6 @@ void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
         commit.Push( caption, SKIP_CONNECTIVITY );
 
     m_frame->UpdateItem( aField, false, true );
-
-    // This must go after OnModify() so that the connectivity graph will have been updated.
-    m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
 }
 
 
@@ -1638,8 +1629,6 @@ int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
 
         updateItem( sch_item, true );
     }
-
-    m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
 
     if( moving )
     {
@@ -1777,7 +1766,6 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
             if( m_frame->eeconfig()->m_AutoplaceFields.enable )
                 symbol->AutoAutoplaceFields( m_frame->GetScreen() );
 
-            m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
             m_frame->OnModify();
         }
         else if( retval == SYMBOL_PROPS_EDIT_SCHEMATIC_SYMBOL )
@@ -1855,7 +1843,6 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
         if( doRefresh )
         {
-            m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
             m_frame->GetCanvas()->Refresh();
             m_frame->UpdateHierarchyNavigator();
         }
@@ -1871,7 +1858,6 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         // QuasiModal required for help dialog
         if( dlg.ShowQuasiModal() == wxID_OK )
         {
-            m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
             m_frame->OnModify();
         }
     }
@@ -1885,7 +1871,6 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         // QuasiModal required for syntax help and Scintilla auto-complete
         if( dlg.ShowQuasiModal() == wxID_OK )
         {
-            m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
             m_frame->OnModify();
         }
     }
@@ -1901,7 +1886,6 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         // Must be quasi modal for syntax help
         if( dlg.ShowQuasiModal() == wxID_OK )
         {
-            m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
             m_frame->OnModify();
         }
     }
@@ -1924,7 +1908,6 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
         if( dlg.ShowModal() == wxID_OK )
         {
-            m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
             m_frame->OnModify();
         }
     }
@@ -1939,7 +1922,6 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         {
             // The bitmap is cached in Opengl: clear the cache in case it has become invalid
             getView()->RecacheAllItems();
-            m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
             m_frame->OnModify();
         }
     }
@@ -1964,7 +1946,6 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
             if( dlg.ShowModal() == wxID_OK )
             {
-                m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
                 m_frame->OnModify();
             }
         }
@@ -1983,7 +1964,6 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
             if( dlg.ShowModal() == wxID_OK )
             {
-                m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
                 m_frame->OnModify();
             }
         }
@@ -2007,7 +1987,6 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
             if( dlg.ShowModal() == wxID_OK )
             {
-                m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
                 m_frame->OnModify();
             }
         }

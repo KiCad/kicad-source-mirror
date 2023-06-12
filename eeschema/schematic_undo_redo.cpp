@@ -210,17 +210,6 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
         if( !sch_item )
             continue;
 
-        if( aDirtyConnectivity )
-        {
-            if( !sch_item->IsConnectivityDirty() && sch_item->Connection()
-              && ( sch_item->Connection()->Name() == m_highlightedConn ) )
-            {
-                m_highlightedConnChanged = true;
-            }
-
-            sch_item->SetConnectivityDirty();
-        }
-
         UNDO_REDO command = commandToUndo->GetPickedItemStatus( ii );
 
         if( command == UNDO_REDO::UNSPECIFIED )

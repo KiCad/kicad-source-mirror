@@ -1097,8 +1097,6 @@ void SCH_EDIT_FRAME::OnModify()
     GetScreen()->SetContentModified();
     m_autoSaveRequired = true;
 
-    RecalculateConnections( nullptr, NO_CLEANUP );
-
     GetCanvas()->Refresh();
     UpdateHierarchyNavigator();
 

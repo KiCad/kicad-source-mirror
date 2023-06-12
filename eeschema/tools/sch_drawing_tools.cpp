@@ -905,9 +905,6 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                     strokeItems.push_back( previewItem );
 
                     DIALOG_WIRE_BUS_PROPERTIES dlg( m_frame, strokeItems );
-
-                    if( dlg.ShowModal() == wxID_OK )
-                        m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
                 }
                     break;
 
@@ -917,9 +914,6 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                     junctions.push_back( static_cast<SCH_JUNCTION*>( previewItem ) );
 
                     DIALOG_JUNCTION_PROPS dlg( m_frame, junctions );
-
-                    if( dlg.ShowModal() == wxID_OK )
-                        m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
                 }
                     break;
                 default:

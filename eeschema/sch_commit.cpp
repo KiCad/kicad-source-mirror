@@ -208,6 +208,8 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
     std::vector<SCH_ITEM*> bulkRemovedItems;
     std::vector<SCH_ITEM*> itemsChanged;
 
+    frame->RecalculateConnections( this, NO_CLEANUP );
+
     for( COMMIT_LINE& ent : m_changes )
     {
         int         changeType = ent.m_type & CHT_TYPE;

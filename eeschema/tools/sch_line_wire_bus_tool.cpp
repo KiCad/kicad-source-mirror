@@ -1222,8 +1222,6 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
 
     m_frame->TestDanglingEnds();
     commit.Push( _( "Draw Wires" ) );
-
-    m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
 }
 
 

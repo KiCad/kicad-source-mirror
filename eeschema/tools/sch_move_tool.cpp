@@ -678,7 +678,6 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
 
                 controls->SetCursorPosition( m_cursor, false );
-                m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
 
                 prevPos = m_cursor;
                 controls->SetAutoPan( true );
