@@ -598,6 +598,9 @@ void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
 
     PrintPage( cfg );
 
+    // Deselect Bitmap from DC before using the bitmap
+    dc.SelectObject( wxNullBitmap );
+
     {
         wxLogNull doNotLog; // disable logging of failed clipboard actions
 
@@ -610,9 +613,6 @@ void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
             wxTheClipboard->Close();
         }
     }
-
-    // Deselect Bitmap from DC in order to delete the MemoryDC
-    dc.SelectObject( wxNullBitmap );
 
     GRForceBlackPen( false );
 
