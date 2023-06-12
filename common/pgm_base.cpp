@@ -934,7 +934,9 @@ void PGM_BASE::HandleAssert( const wxString& aFile, int aLine, const wxString& a
                                       aCond );
     }
 
+#ifndef NDEBUG
     wxLogError( assertStr );
+#endif
 
 #ifdef KICAD_USE_SENTRY
     if( IsSentryOptedIn() )
