@@ -187,7 +187,7 @@ SCH_PAINTER::SCH_PAINTER( GAL* aGal ) :
     m_schematic( nullptr )
 { }
 
-bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
+bool SCH_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 {
     const EDA_ITEM* item = dynamic_cast<const EDA_ITEM*>( aItem );
 
@@ -199,7 +199,7 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
     return false;
 }
 
-void SCH_PAINTER::draw( const EDA_ITEM *aItem, int aLayer, bool aDimmed )
+void SCH_PAINTER::draw( const EDA_ITEM* aItem, int aLayer, bool aDimmed )
 {
 
 #ifdef CONNECTIVITY_DEBUG
@@ -368,7 +368,7 @@ float SCH_PAINTER::getShadowWidth( bool aForHighlight ) const
 }
 
 
-COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM *aItem, int aLayer, bool aDrawingShadows,
+COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDrawingShadows,
                                      bool aDimmed ) const
 {
     COLOR4D color = m_schSettings.GetLayerColor( aLayer );
@@ -731,7 +731,7 @@ void SCH_PAINTER::triLine( const VECTOR2D &a, const VECTOR2D &b, const VECTOR2D 
 }
 
 
-void SCH_PAINTER::draw( const LIB_SYMBOL *aSymbol, int aLayer, bool aDrawFields, int aUnit,
+void SCH_PAINTER::draw( const LIB_SYMBOL* aSymbol, int aLayer, bool aDrawFields, int aUnit,
                         int aConvert, bool aDimmed )
 {
     if( !aUnit )
@@ -845,7 +845,7 @@ bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer, bool aDimm
 }
 
 
-void SCH_PAINTER::draw( const LIB_SHAPE *aShape, int aLayer, bool aDimmed )
+void SCH_PAINTER::draw( const LIB_SHAPE* aShape, int aLayer, bool aDimmed )
 {
     if( !isUnitAndConversionShown( aShape ) )
         return;
@@ -993,7 +993,7 @@ void SCH_PAINTER::draw( const LIB_SHAPE *aShape, int aLayer, bool aDimmed )
 }
 
 
-void SCH_PAINTER::draw( const LIB_FIELD *aField, int aLayer, bool aDimmed )
+void SCH_PAINTER::draw( const LIB_FIELD* aField, int aLayer, bool aDimmed )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
@@ -1290,7 +1290,7 @@ void SCH_PAINTER::drawPinDanglingSymbol( const VECTOR2I& aPos, const COLOR4D& aC
 }
 
 
-void SCH_PAINTER::draw( const LIB_PIN *aPin, int aLayer, bool aDimmed )
+void SCH_PAINTER::draw( const LIB_PIN* aPin, int aLayer, bool aDimmed )
 {
     if( !isUnitAndConversionShown( aPin ) )
         return;
@@ -1773,7 +1773,7 @@ void SCH_PAINTER::drawDanglingSymbol( const VECTOR2I& aPos, const COLOR4D& aColo
 }
 
 
-void SCH_PAINTER::draw( const SCH_JUNCTION *aJct, int aLayer )
+void SCH_PAINTER::draw( const SCH_JUNCTION* aJct, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
@@ -1796,7 +1796,7 @@ void SCH_PAINTER::draw( const SCH_JUNCTION *aJct, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( const SCH_LINE *aLine, int aLayer )
+void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
     bool drawingDangling = aLayer == LAYER_DANGLING;
@@ -2612,7 +2612,7 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
 }
 
 
-void SCH_PAINTER::draw( const SCH_GLOBALLABEL *aLabel, int aLayer )
+void SCH_PAINTER::draw( const SCH_GLOBALLABEL* aLabel, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
@@ -2655,7 +2655,7 @@ void SCH_PAINTER::draw( const SCH_GLOBALLABEL *aLabel, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( const SCH_LABEL *aLabel, int aLayer )
+void SCH_PAINTER::draw( const SCH_LABEL* aLabel, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
@@ -2675,7 +2675,7 @@ void SCH_PAINTER::draw( const SCH_LABEL *aLabel, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( const SCH_HIERLABEL *aLabel, int aLayer )
+void SCH_PAINTER::draw( const SCH_HIERLABEL* aLabel, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
@@ -2723,7 +2723,7 @@ void SCH_PAINTER::draw( const SCH_HIERLABEL *aLabel, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( const SCH_DIRECTIVE_LABEL *aLabel, int aLayer )
+void SCH_PAINTER::draw( const SCH_DIRECTIVE_LABEL* aLabel, int aLayer )
 {
     if( !eeconfig()->m_Appearance.show_directive_labels && !aLabel->IsSelected() )
         return;
@@ -2788,7 +2788,7 @@ void SCH_PAINTER::draw( const SCH_DIRECTIVE_LABEL *aLabel, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( const SCH_SHEET *aSheet, int aLayer )
+void SCH_PAINTER::draw( const SCH_SHEET* aSheet, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
@@ -2867,7 +2867,7 @@ void SCH_PAINTER::draw( const SCH_SHEET *aSheet, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( const SCH_NO_CONNECT *aNC, int aLayer )
+void SCH_PAINTER::draw( const SCH_NO_CONNECT* aNC, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
@@ -2946,7 +2946,7 @@ void SCH_PAINTER::draw( const SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( const SCH_BITMAP *aBitmap, int aLayer )
+void SCH_PAINTER::draw( const SCH_BITMAP* aBitmap, int aLayer )
 {
     m_gal->Save();
     m_gal->Translate( aBitmap->GetPosition() );
@@ -2991,7 +2991,7 @@ void SCH_PAINTER::draw( const SCH_BITMAP *aBitmap, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( const SCH_MARKER *aMarker, int aLayer )
+void SCH_PAINTER::draw( const SCH_MARKER* aMarker, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
