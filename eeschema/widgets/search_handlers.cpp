@@ -76,6 +76,8 @@ void SCH_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
     EDA_ITEMS                   selectedItems;
     std::vector<SCH_SEARCH_HIT> selectedHits;
 
+    m_frame->GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
+
     for( long row : aItemRows )
     {
         if( row >= 0 && row < (long) m_hitlist.size() )
@@ -85,13 +87,14 @@ void SCH_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
         }
     }
 
+    if( selectedHits.empty() )
+        return;
+
     bool allHitsOnSamePage = std::all_of( selectedHits.begin() + 1, selectedHits.end(),
                                           [&]( const SCH_SEARCH_HIT& r )
                                           {
                                               return r.sheetPath == selectedHits.front().sheetPath;
                                           } );
-
-    m_frame->GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
 
     if( allHitsOnSamePage && !selectedHits.empty() )
     {
