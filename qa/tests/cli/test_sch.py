@@ -28,7 +28,7 @@ from pathlib import Path
 import pytest
 from typing import List
 import platform
-from PIL import Image
+from PIL import Image, ImageChops
 import numpy as np
 
 def images_are_equal( image1: str, image2: str ):
@@ -42,12 +42,18 @@ def images_are_equal( image1: str, image2: str ):
         return False
 
     sum = np.sum( ( np.asarray ( image1 ).astype( np.float32 ) - np.asarray( image2 ).astype( np.float32 ) ) ** 2.0 )
+    retval = True
 
-    if sum == 0:
-        return True
-    else:
+    if sum != 0.0:
         norm_sum = sum / np.sqrt( sum )
-        return norm_sum < 0.001
+        retval = norm_sum < 0.001
+
+    if not retval:
+        diff = ImageChops.difference( image1, image2 )
+        diff_name = image1.filename + ".diff.png"
+        diff.save( diff_name )
+
+    return retval
 
 @pytest.mark.parametrize("test_file,output_dir,compare_fn,cli_args",
                             [("cli/basic_test/basic_test.kicad_sch", "basic_test", "cli/basic_test/basic_test.png", []),
