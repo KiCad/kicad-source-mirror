@@ -155,3 +155,19 @@ EDA_ITEM* PCB_FIELD::Clone() const
 {
     return new PCB_FIELD( *this );
 }
+
+
+static struct PCB_FIELD_DESC
+{
+    PCB_FIELD_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( PCB_FIELD );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_FIELD, PCB_TEXT> );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_FIELD, BOARD_ITEM> );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_FIELD, EDA_TEXT> );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_FIELD ), TYPE_HASH( BOARD_ITEM ) );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_FIELD ), TYPE_HASH( PCB_TEXT ) );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_FIELD ), TYPE_HASH( EDA_TEXT ) );
+    }
+} _PCB_FIELD_DESC;
