@@ -17,13 +17,14 @@
 # Luc <some_physics@live.com>, 2023.
 # Ken Ovo <Elektroniker@aon.at>, 2023.
 # Karl SCHUH <k.schuh@schuh-tv.at>, 2023.
+# Julian Daube <julian@daube.xyz>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-18 11:55-0700\n"
-"PO-Revision-Date: 2023-05-30 16:50+0000\n"
-"Last-Translator: Karl SCHUH <k.schuh@schuh-tv.at>\n"
+"PO-Revision-Date: 2023-06-13 15:45+0000\n"
+"Last-Translator: Julian Daube <julian@daube.xyz>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -3520,7 +3521,7 @@ msgstr "Bildskalierung:"
 
 #: common/dialogs/panel_image_editor_base.cpp:47
 msgid "PPI:"
-msgstr ""
+msgstr "PPI:"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: pcbnew/dialogs/panel_edit_options_base.cpp:224
@@ -4363,9 +4364,9 @@ msgid "Zoom %.2f"
 msgstr "Zoom %.2f"
 
 #: common/eda_draw_frame.cpp:609
-#, fuzzy, c-format
+#, c-format
 msgid "grid %s"
-msgstr "Feld %s"
+msgstr "Raster %s"
 
 #: common/eda_draw_frame.cpp:622 pagelayout_editor/pl_editor_frame.cpp:752
 msgid "inches"
@@ -7164,9 +7165,8 @@ msgid "Eagle XML schematic files"
 msgstr "Eagle XML-Schaltplandateien"
 
 #: common/wildcards_and_files_ext.cpp:310
-#, fuzzy
 msgid "Ltspice schematic files"
-msgstr "Altium Schaltplandateien"
+msgstr "Ltspice Schaltplandateien"
 
 #: common/wildcards_and_files_ext.cpp:316
 msgid "Eagle XML files"
@@ -7605,9 +7605,8 @@ msgid "Path Type"
 msgstr "Pfadangabe"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:37
-#, fuzzy
 msgid "Ref"
-msgstr "Revision"
+msgstr "Ref"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:38
 msgid "Schematic assignment"
