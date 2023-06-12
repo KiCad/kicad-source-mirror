@@ -721,24 +721,24 @@ void PCB_EDIT_FRAME::setupUIConditions()
     if( SCRIPTING::IsWxAvailable() )
         mgr->SetConditions( PCB_ACTIONS::showPythonConsole, CHECK( cond.ScriptingConsoleVisible() ) );
 
-    auto enableZoneControlConition =
-        [this] ( const SELECTION& )
-        {
-            return GetBoard()->GetVisibleElements().Contains( LAYER_ZONES )
-                    && GetDisplayOptions().m_ZoneOpacity > 0.0;
-        };
+    auto enableZoneControlCondition =
+            [this] ( const SELECTION& )
+            {
+                return GetBoard()->GetVisibleElements().Contains( LAYER_ZONES )
+                        && GetDisplayOptions().m_ZoneOpacity > 0.0;
+            };
 
     mgr->SetConditions( PCB_ACTIONS::zoneDisplayFilled,
-                        ENABLE( enableZoneControlConition )
+                        ENABLE( enableZoneControlCondition )
                         .Check( cond.ZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_FILLED ) ) );
     mgr->SetConditions( PCB_ACTIONS::zoneDisplayOutline,
-                        ENABLE( enableZoneControlConition )
+                        ENABLE( enableZoneControlCondition )
                         .Check( cond.ZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_ZONE_OUTLINE ) ) );
     mgr->SetConditions( PCB_ACTIONS::zoneDisplayFractured,
-                        ENABLE( enableZoneControlConition )
+                        ENABLE( enableZoneControlCondition )
                         .Check( cond.ZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_FRACTURE_BORDERS ) ) );
     mgr->SetConditions( PCB_ACTIONS::zoneDisplayTriangulated,
-                        ENABLE( enableZoneControlConition )
+                        ENABLE( enableZoneControlCondition )
                         .Check( cond.ZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_TRIANGULATION ) ) );
 
     mgr->SetConditions( ACTIONS::toggleBoundingBoxes, CHECK( cond.BoundingBoxes() ) );
@@ -921,14 +921,16 @@ void PCB_EDIT_FRAME::setupUIConditions()
     CURRENT_TOOL( PCB_ACTIONS::localRatsnestTool );
 
 
-    auto isDrcRunning =
+    auto isDRCIdle =
             [this] ( const SELECTION& )
             {
                 DRC_TOOL* tool = m_toolManager->GetTool<DRC_TOOL>();
                 return !tool->IsDRCRunning();
             };
 
-#define CURRENT_EDIT_TOOL( action ) mgr->SetConditions( action, ACTION_CONDITIONS().Check( cond.CurrentTool( action ) ).Enable( isDrcRunning ) )
+#define CURRENT_EDIT_TOOL( action )                                                             \
+            mgr->SetConditions( action, ACTION_CONDITIONS().Check( cond.CurrentTool( action ) ) \
+                                                           .Enable( isDRCIdle ) )
 
     // These tools edit the board, so they must be disabled during some operations
     CURRENT_EDIT_TOOL( ACTIONS::deleteTool );
