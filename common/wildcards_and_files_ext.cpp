@@ -181,6 +181,7 @@ const std::string KiCadFootprintFileExtension( "kicad_mod" );
 const std::string SpecctraDsnFileExtension( "dsn" );
 const std::string SpecctraSessionFileExtension( "ses" );
 const std::string IpcD356FileExtension( "d356" );
+const std::string Ipc2581FileExtension( "xml" );
 const std::string WorkbookFileExtension( "wbk" );
 
 const std::string PngFileExtension( "png" );

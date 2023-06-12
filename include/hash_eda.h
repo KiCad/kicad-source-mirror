@@ -44,11 +44,13 @@ enum HASH_FLAGS
 
     ///< use coordinates relative to the parent object
     REL_COORD   = 0x02,
-    HASH_ROT    = 0x04,
-    HASH_LAYER  = 0x08,
-    HASH_NET    = 0x10,
-    HASH_REF    = 0x20,
-    HASH_VALUE  = 0x40,
+    ///< use coordinates relative to the shape position
+    REL_POS     = 0x04,
+    HASH_ROT    = 0x08,
+    HASH_LAYER  = 0x10,
+    HASH_NET    = 0x20,
+    HASH_REF    = 0x40,
+    HASH_VALUE  = 0x80,
     HASH_ALL    = 0xff
 };
 

@@ -205,6 +205,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
         contours.emplace_back();
 
         SHAPE_LINE_CHAIN& currContour = contours.back();
+        currContour.SetWidth( graphic->GetWidth() );
         bool firstPt = true;
 
         // Circles, rects and polygons are closed shapes unto themselves (and do not combine

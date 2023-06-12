@@ -101,7 +101,7 @@ void PROGRESS_REPORTER_BASE::AddPhases( int aNumPhases )
 }
 
 
-int PROGRESS_REPORTER_BASE::currentProgress() const
+int PROGRESS_REPORTER_BASE::CurrentProgress() const
 {
     double current = ( 1.0 / (double) m_numPhases ) *
                      ( (double) m_phase + ( (double) m_progress.load() / (double) m_maxProgress ) );

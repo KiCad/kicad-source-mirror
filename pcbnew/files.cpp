@@ -28,6 +28,7 @@
 
 #include <confirm.h>
 #include <core/arraydim.h>
+#include <core/thread_pool.h>
 #include <gestfich.h>
 #include <pcb_edit_frame.h>
 #include <board_design_settings.h>
@@ -58,6 +59,7 @@
 #include <project/net_settings.h>
 #include <plugins/cadstar/cadstar_pcb_archive_plugin.h>
 #include <plugins/kicad/pcb_plugin.h>
+#include <dialogs/dialog_export_2581.h>
 #include <dialogs/dialog_imported_layers.h>
 #include <dialogs/dialog_import_choose_project.h>
 #include <plugins/common/plugin_common_choose_project.h>
@@ -70,8 +72,11 @@
 #include <kiplatform/io.h>
 
 #include <wx/stdpaths.h>
+#include <wx/ffile.h>
 #include <wx/filedlg.h>
 #include <wx/txtstrm.h>
+#include <wx/wfstream.h>
+#include <wx/zipstrm.h>
 
 #include "widgets/filedlg_hook_save_project.h"
 
@@ -1220,3 +1225,131 @@ bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
     return false;
 }
 
+
+void PCB_EDIT_FRAME::GenIPC2581File( wxCommandEvent& event )
+{
+    DIALOG_EXPORT_2581 dlg( this );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return;
+
+    wxFileName pcbFileName = dlg.GetOutputPath();
+
+    // Write through symlinks, don't replace them
+    WX_FILENAME::ResolvePossibleSymlinks( pcbFileName );
+
+    if( pcbFileName.GetName().empty() )
+    {
+        DisplayError( this, _( "The board must be saved before generating IPC2581 file." ) );
+        return;
+    }
+
+    if( !IsWritable( pcbFileName ) )
+    {
+        wxString msg = wxString::Format( _( "Insufficient permissions to write file '%s'." ),
+                                         pcbFileName.GetFullPath() );
+
+        DisplayError( this, msg );
+        return;
+    }
+
+    wxString   tempFile = wxFileName::CreateTempFileName( wxS( "pcbnew_ipc" ) );
+    wxString   upperTxt;
+    wxString   lowerTxt;
+    WX_PROGRESS_REPORTER reporter( this, _( "Generating IPC2581 file" ), 5 );
+    STRING_UTF8_MAP props;
+
+    props["units"] = dlg.GetUnitsString();
+    props["sigfig"] = dlg.GetPrecision();
+    props["version"] = dlg.GetVersion();
+    props["OEMRef"] = dlg.GetOEM();
+    props["mpn"] = dlg.GetMPN();
+    props["mfg"] = dlg.GetMfg();
+    props["dist"] = dlg.GetDist();
+    props["distpn"] = dlg.GetDistPN();
+
+    auto saveFile = [&]() -> bool
+    {
+        try
+        {
+            PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::IPC2581 ) );
+
+            pi->SaveBoard( tempFile, GetBoard(), &props, &reporter );
+            return true;
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            DisplayError( this, wxString::Format( _( "Error generating IPC2581 file '%s'.\n%s" ),
+                                                  pcbFileName.GetFullPath(), ioe.What() ) );
+
+            lowerTxt.Printf( _( "Failed to create temporary file '%s'." ), tempFile );
+
+            SetMsgPanel( upperTxt, lowerTxt );
+
+            // In case we started a file but didn't fully write it, clean up
+            wxRemoveFile( tempFile );
+
+            return false;
+        }
+    };
+
+    thread_pool& tp = GetKiCadThreadPool();
+    auto ret = tp.submit( saveFile );
+
+
+    std::future_status status = ret.wait_for( std::chrono::milliseconds( 250 ) );
+
+    while( status != std::future_status::ready )
+    {
+        reporter.KeepRefreshing();
+        status = ret.wait_for( std::chrono::milliseconds( 250 ) );
+    }
+
+    try
+    {
+        if( !ret.get() )
+            return;
+    }
+    catch(const std::exception& e)
+    {
+        wxLogError( "Exception in IPC2581 generation: %s", e.what() );
+        return;
+    }
+
+    // Preserve the permissions of the current file
+    KIPLATFORM::IO::DuplicatePermissions( pcbFileName.GetFullPath(), tempFile );
+
+    if( dlg.GetCompress() )
+    {
+        wxFileName tempfn = pcbFileName;
+        tempfn.SetExt( Ipc2581FileExtension );
+        wxFileName zipfn = tempFile;
+        zipfn.SetExt( "zip" );
+
+        wxFFileOutputStream fnout( zipfn.GetFullPath() );
+        wxZipOutputStream zip( fnout );
+        wxFFileInputStream fnin( tempFile );
+
+        zip.PutNextEntry( tempfn.GetFullName() );
+        fnin.Read( zip );
+        zip.Close();
+        fnout.Close();
+
+        wxRemoveFile( tempFile );
+        tempFile = zipfn.GetFullPath();
+    }
+
+    // If save succeeded, replace the original with what we just wrote
+    if( !wxRenameFile( tempFile, pcbFileName.GetFullPath() ) )
+    {
+        DisplayError( this, wxString::Format( _( "Error generating IPC2581 file '%s'.\n"
+                                                 "Failed to rename temporary file '%s." ),
+                                              pcbFileName.GetFullPath(),
+                                              tempFile ) );
+
+        lowerTxt.Printf( _( "Failed to rename temporary file '%s'." ),
+                         tempFile );
+
+        SetMsgPanel( upperTxt, lowerTxt );
+    }
+}

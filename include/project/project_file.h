@@ -55,6 +55,7 @@ enum LAST_PATH_TYPE : unsigned int
     LAST_PATH_POS_FILES,
     LAST_PATH_SVG,
     LAST_PATH_PLOT,
+    LAST_PATH_2581,
 
     LAST_PATH_SIZE
 };
@@ -175,6 +176,8 @@ public:
     std::vector<LAYER_PRESET>     m_LayerPresets;   /// List of stored layer presets
     std::vector<VIEWPORT>         m_Viewports;      /// List of stored viewports (pos + zoom)
     std::vector<VIEWPORT3D>       m_Viewports3D;    /// List of stored 3D viewports (view matrixes)
+
+    struct IP2581_BOM             m_IP2581Bom;      /// IPC-2581 BOM settings
 
 private:
     /// An list of schematic sheets in this project

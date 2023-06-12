@@ -934,6 +934,11 @@ public:
         bool operator()( const PAD* aFirst, const PAD* aSecond ) const;
     };
 
+    struct cmp_padstack
+    {
+        bool operator()( const PAD* aFirst, const PAD* aSecond ) const;
+    };
+
     struct cmp_zones
     {
         bool operator()( const ZONE* aFirst, const ZONE* aSecond ) const;

@@ -424,6 +424,7 @@ public:
     static TOOL_ACTION generateDrillFiles;
     static TOOL_ACTION generatePosFile;
     static TOOL_ACTION generateReportFile;
+    static TOOL_ACTION generateIPC2581File;
     static TOOL_ACTION generateD356File;
     static TOOL_ACTION generateBOM;
 

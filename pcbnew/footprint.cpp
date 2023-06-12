@@ -293,6 +293,9 @@ bool FOOTPRINT::HasFieldByName( const wxString& aFieldName ) const
 
 PCB_FIELD* FOOTPRINT::GetFieldByName( const wxString& aFieldName )
 {
+    if( aFieldName.empty() )
+        return nullptr;
+
     for( PCB_FIELD* field : m_fields )
     {
         if( field->GetName() == aFieldName )
@@ -2499,14 +2502,24 @@ void FOOTPRINT::BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler )
     // Collect items:
     std::vector<PCB_SHAPE*> list_front;
     std::vector<PCB_SHAPE*> list_back;
+    std::map<int, int>      front_width_histogram;
+    std::map<int, int>      back_width_histogram;
 
     for( BOARD_ITEM* item : GraphicalItems() )
     {
         if( item->GetLayer() == B_CrtYd && item->Type() == PCB_SHAPE_T )
-            list_back.push_back( static_cast<PCB_SHAPE*>( item ) );
+        {
+            PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
+            list_back.push_back( shape );
+            back_width_histogram[ shape->GetStroke().GetWidth() ]++;
+        }
 
         if( item->GetLayer() == F_CrtYd && item->Type() == PCB_SHAPE_T )
-            list_front.push_back( static_cast<PCB_SHAPE*>( item ) );
+        {
+            PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
+            list_front.push_back( shape );
+            front_width_histogram[ shape->GetStroke().GetWidth() ]++;
+        }
     }
 
     if( !list_front.size() && !list_back.size() )
@@ -2522,6 +2535,18 @@ void FOOTPRINT::BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler )
         m_courtyard_cache_front.Inflate( -1, CORNER_STRATEGY::CHAMFER_ACUTE_CORNERS, maxError );
 
         m_courtyard_cache_front.CacheTriangulation( false );
+        auto max = std::max_element( front_width_histogram.begin(), front_width_histogram.end(),
+                                     []( const std::pair<int, int>& a, const std::pair<int, int>& b )
+                                     {
+                                         return a.second < b.second;
+                                     } );
+        int width = max->first;
+
+        if( width == 0 )
+            width = DEFAULT_COURTYARD_WIDTH;
+
+        if( m_courtyard_cache_front.OutlineCount() > 0 )
+            m_courtyard_cache_front.Outline( 0 ).SetWidth( width );
     }
     else
     {
@@ -2535,6 +2560,18 @@ void FOOTPRINT::BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler )
         m_courtyard_cache_back.Inflate( -1, CORNER_STRATEGY::CHAMFER_ACUTE_CORNERS, maxError );
 
         m_courtyard_cache_back.CacheTriangulation( false );
+        auto max = std::max_element( back_width_histogram.begin(), back_width_histogram.end(),
+                                     []( const std::pair<int, int>& a, const std::pair<int, int>& b )
+                                     {
+                                         return a.second < b.second;
+                                     } );
+        int width = max->first;
+
+        if( width == 0 )
+            width = DEFAULT_COURTYARD_WIDTH;
+
+        if( m_courtyard_cache_back.OutlineCount() > 0 )
+            m_courtyard_cache_back.Outline( 0 ).SetWidth( width );
     }
     else
     {
@@ -2999,51 +3036,78 @@ double FOOTPRINT::Similarity( const BOARD_ITEM& aOther ) const
 }
 
 
-#define TEST( a, b ) { if( a != b ) return a < b; }
-#define TEST_PT( a, b ) { if( a.x != b.x ) return a.x < b.x; if( a.y != b.y ) return a.y < b.y; }
-
-
 bool FOOTPRINT::cmp_drawings::operator()( const BOARD_ITEM* itemA, const BOARD_ITEM* itemB ) const
 {
-    TEST( itemA->Type(), itemB->Type() );
-    TEST( itemA->GetLayer(), itemB->GetLayer() );
+    if( itemA->Type() != itemB->Type() )
+        return itemA->Type() < itemB->Type();
+
+    if( itemA->GetLayer() != itemB->GetLayer() )
+        return itemA->GetLayer() < itemB->GetLayer();
 
     if( itemA->Type() == PCB_SHAPE_T )
     {
         const PCB_SHAPE* dwgA = static_cast<const PCB_SHAPE*>( itemA );
         const PCB_SHAPE* dwgB = static_cast<const PCB_SHAPE*>( itemB );
 
-        TEST( dwgA->GetShape(), dwgB->GetShape() );
+        if( dwgA->GetShape() != dwgB->GetShape() )
+            return dwgA->GetShape() < dwgB->GetShape();
 
         // GetStart() and GetEnd() have no meaning with polygons.
         // We cannot use them for sorting polygons
         if( dwgA->GetShape() != SHAPE_T::POLY )
         {
-            TEST_PT( dwgA->GetStart(), dwgB->GetStart() );
-            TEST_PT( dwgA->GetEnd(), dwgB->GetEnd() );
+            if( dwgA->GetStart().x != dwgB->GetStart().x )
+                return dwgA->GetStart().x < dwgB->GetStart().x;
+            if( dwgA->GetStart().y != dwgB->GetStart().y )
+                return dwgA->GetStart().y < dwgB->GetStart().y;
+
+            if( dwgA->GetEnd().x != dwgB->GetEnd().x )
+                return dwgA->GetEnd().x < dwgB->GetEnd().x;
+            if( dwgA->GetEnd().y != dwgB->GetEnd().y )
+                return dwgA->GetEnd().y < dwgB->GetEnd().y;
         }
 
         if( dwgA->GetShape() == SHAPE_T::ARC )
         {
-            TEST_PT( dwgA->GetCenter(), dwgB->GetCenter() );
+            if( dwgA->GetCenter().x != dwgB->GetCenter().x )
+                return dwgA->GetCenter().x < dwgB->GetCenter().x;
+            if( dwgA->GetCenter().y != dwgB->GetCenter().y )
+                return dwgA->GetCenter().y < dwgB->GetCenter().y;
         }
         else if( dwgA->GetShape() == SHAPE_T::BEZIER )
         {
-            TEST_PT( dwgA->GetBezierC1(), dwgB->GetBezierC1() );
-            TEST_PT( dwgA->GetBezierC2(), dwgB->GetBezierC2() );
+            if( dwgA->GetBezierC1().x != dwgB->GetBezierC1().x )
+                return dwgA->GetBezierC1().x < dwgB->GetBezierC1().x;
+            if( dwgA->GetBezierC1().y != dwgB->GetBezierC1().y )
+                return dwgA->GetBezierC1().y < dwgB->GetBezierC1().y;
+
+            if( dwgA->GetBezierC2().x != dwgB->GetBezierC2().x )
+                return dwgA->GetBezierC2().x < dwgB->GetBezierC2().x;
+            if( dwgA->GetBezierC2().y != dwgB->GetBezierC2().y )
+                return dwgA->GetBezierC2().y < dwgB->GetBezierC2().y;
         }
         else if( dwgA->GetShape() == SHAPE_T::POLY )
         {
-            TEST( dwgA->GetPolyShape().TotalVertices(), dwgB->GetPolyShape().TotalVertices() );
+            if( dwgA->GetPolyShape().TotalVertices() != dwgB->GetPolyShape().TotalVertices() )
+                return dwgA->GetPolyShape().TotalVertices() < dwgB->GetPolyShape().TotalVertices();
 
             for( int ii = 0; ii < dwgA->GetPolyShape().TotalVertices(); ++ii )
-                TEST_PT( dwgA->GetPolyShape().CVertex( ii ), dwgB->GetPolyShape().CVertex( ii ) );
+            {
+                if( dwgA->GetPolyShape().CVertex( ii ).x != dwgB->GetPolyShape().CVertex( ii ).x )
+                    return dwgA->GetPolyShape().CVertex( ii ).x
+                           < dwgB->GetPolyShape().CVertex( ii ).x;
+                if( dwgA->GetPolyShape().CVertex( ii ).y != dwgB->GetPolyShape().CVertex( ii ).y )
+                    return dwgA->GetPolyShape().CVertex( ii ).y
+                           < dwgB->GetPolyShape().CVertex( ii ).y;
+            }
         }
 
-        TEST( dwgA->GetWidth(), dwgB->GetWidth() );
+        if( dwgA->GetWidth() != dwgB->GetWidth() )
+            return dwgA->GetWidth() < dwgB->GetWidth();
     }
 
-    TEST( itemA->m_Uuid, itemB->m_Uuid );   // should be always the case for valid boards
+    if( itemA->m_Uuid != itemB->m_Uuid )
+        return itemA->m_Uuid < itemB->m_Uuid;
 
     return itemA < itemB;
 }
@@ -3054,34 +3118,108 @@ bool FOOTPRINT::cmp_pads::operator()( const PAD* aFirst, const PAD* aSecond ) co
     if( aFirst->GetNumber() != aSecond->GetNumber() )
         return StrNumCmp( aFirst->GetNumber(), aSecond->GetNumber() ) < 0;
 
-    TEST_PT( aFirst->GetFPRelativePosition(), aSecond->GetFPRelativePosition() );
-    TEST_PT( aFirst->GetSize(), aSecond->GetSize() );
-    TEST( aFirst->GetShape(), aSecond->GetShape() );
-    TEST( aFirst->GetLayerSet().Seq(), aSecond->GetLayerSet().Seq() );
+    if( aFirst->GetFPRelativePosition().x != aSecond->GetFPRelativePosition().x )
+        return aFirst->GetFPRelativePosition().x < aSecond->GetFPRelativePosition().x;
+    if( aFirst->GetFPRelativePosition().y != aSecond->GetFPRelativePosition().y )
+        return aFirst->GetFPRelativePosition().y < aSecond->GetFPRelativePosition().y;
 
-    TEST( aFirst->m_Uuid, aSecond->m_Uuid );   // should be always the case for valid boards
+    if( aFirst->GetSize().x != aSecond->GetSize().x )
+        return aFirst->GetSize().x < aSecond->GetSize().x;
+    if( aFirst->GetSize().y != aSecond->GetSize().y )
+        return aFirst->GetSize().y < aSecond->GetSize().y;
+
+    if( aFirst->GetShape() != aSecond->GetShape() )
+        return aFirst->GetShape() < aSecond->GetShape();
+
+    if( aFirst->GetLayerSet().Seq() != aSecond->GetLayerSet().Seq() )
+        return aFirst->GetLayerSet().Seq() < aSecond->GetLayerSet().Seq();
+
+    if( aFirst->m_Uuid != aSecond->m_Uuid )
+        return aFirst->m_Uuid < aSecond->m_Uuid;
 
     return aFirst < aSecond;
+}
+
+
+bool FOOTPRINT::cmp_padstack::operator()( const PAD* aFirst, const PAD* aSecond ) const
+{
+    if( aFirst->GetSize().x != aSecond->GetSize().x )
+        return aFirst->GetSize().x < aSecond->GetSize().x;
+    if( aFirst->GetSize().y != aSecond->GetSize().y )
+        return aFirst->GetSize().y < aSecond->GetSize().y;
+
+    if( aFirst->GetShape() != aSecond->GetShape() )
+        return aFirst->GetShape() < aSecond->GetShape();
+
+    if( aFirst->GetLayerSet().Seq() != aSecond->GetLayerSet().Seq() )
+        return aFirst->GetLayerSet().Seq() < aSecond->GetLayerSet().Seq();
+
+    if( aFirst->GetDrillSizeX() != aSecond->GetDrillSizeX() )
+        return aFirst->GetDrillSizeX() < aSecond->GetDrillSizeX();
+
+    if( aFirst->GetDrillSizeY() != aSecond->GetDrillSizeY() )
+        return aFirst->GetDrillSizeY() < aSecond->GetDrillSizeY();
+
+    if( aFirst->GetDrillShape() != aSecond->GetDrillShape() )
+        return aFirst->GetDrillShape() < aSecond->GetDrillShape();
+
+    if( aFirst->GetAttribute() != aSecond->GetAttribute() )
+        return aFirst->GetAttribute() < aSecond->GetAttribute();
+
+    if( aFirst->GetOrientation() != aSecond->GetOrientation() )
+        return aFirst->GetOrientation() < aSecond->GetOrientation();
+
+    if( aFirst->GetSolderMaskExpansion() != aSecond->GetSolderMaskExpansion() )
+        return aFirst->GetSolderMaskExpansion() < aSecond->GetSolderMaskExpansion();
+
+    if( aFirst->GetSolderPasteMargin() != aSecond->GetSolderPasteMargin() )
+        return aFirst->GetSolderPasteMargin() < aSecond->GetSolderPasteMargin();
+
+    if( aFirst->GetLocalSolderMaskMargin() != aSecond->GetLocalSolderMaskMargin() )
+        return aFirst->GetLocalSolderMaskMargin() < aSecond->GetLocalSolderMaskMargin();
+
+    std::shared_ptr<SHAPE_POLY_SET> firstShape = aFirst->GetEffectivePolygon( ERROR_INSIDE );
+    std::shared_ptr<SHAPE_POLY_SET> secondShape = aSecond->GetEffectivePolygon( ERROR_INSIDE );
+
+    if( firstShape->VertexCount() != secondShape->VertexCount() )
+        return firstShape->VertexCount() < secondShape->VertexCount();
+
+    for( int ii = 0; ii < firstShape->VertexCount(); ++ii )
+    {
+        if( firstShape->CVertex( ii ).x != secondShape->CVertex( ii ).x )
+            return firstShape->CVertex( ii ).x < secondShape->CVertex( ii ).x;
+        if( firstShape->CVertex( ii ).y != secondShape->CVertex( ii ).y )
+            return firstShape->CVertex( ii ).y < secondShape->CVertex( ii ).y;
+    }
+
+    return false;
 }
 
 
 bool FOOTPRINT::cmp_zones::operator()( const ZONE* aFirst, const ZONE* aSecond ) const
 {
-    TEST( aFirst->GetAssignedPriority(), aSecond->GetAssignedPriority() );
-    TEST( aFirst->GetLayerSet().Seq(), aSecond->GetLayerSet().Seq() );
+    if( aFirst->GetAssignedPriority() != aSecond->GetAssignedPriority() )
+        return aFirst->GetAssignedPriority() < aSecond->GetAssignedPriority();
 
-    TEST( aFirst->Outline()->TotalVertices(), aSecond->Outline()->TotalVertices() );
+    if( aFirst->GetLayerSet().Seq() != aSecond->GetLayerSet().Seq() )
+        return aFirst->GetLayerSet().Seq() < aSecond->GetLayerSet().Seq();
+
+    if( aFirst->Outline()->TotalVertices() != aSecond->Outline()->TotalVertices() )
+        return aFirst->Outline()->TotalVertices() < aSecond->Outline()->TotalVertices();
 
     for( int ii = 0; ii < aFirst->Outline()->TotalVertices(); ++ii )
-        TEST_PT( aFirst->Outline()->CVertex( ii ), aSecond->Outline()->CVertex( ii ) );
+    {
+        if( aFirst->Outline()->CVertex( ii ).x != aSecond->Outline()->CVertex( ii ).x )
+            return aFirst->Outline()->CVertex( ii ).x < aSecond->Outline()->CVertex( ii ).x;
+        if( aFirst->Outline()->CVertex( ii ).y != aSecond->Outline()->CVertex( ii ).y )
+            return aFirst->Outline()->CVertex( ii ).y < aSecond->Outline()->CVertex( ii ).y;
+    }
 
-    TEST( aFirst->m_Uuid, aSecond->m_Uuid );   // should be always the case for valid boards
+    if( aFirst->m_Uuid != aSecond->m_Uuid )
+        return aFirst->m_Uuid < aSecond->m_Uuid;
 
     return aFirst < aSecond;
 }
-
-
-#undef TEST
 
 
 void FOOTPRINT::TransformPadsToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,

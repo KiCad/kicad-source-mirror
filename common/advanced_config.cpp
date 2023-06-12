@@ -219,6 +219,8 @@ static const wxChar EnableGit[] = wxT( "EnableGit" );
 
 static const wxChar EnableEeschemaPrintCairo[] = wxT( "EnableEeschemaPrintCairo" );
 
+static const wxChar Enable2581[] = wxT( "Enable2581" );
+
 /**
  * The time in milliseconds to wait before displaying a disambiguation menu.
  */
@@ -529,6 +531,11 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableEeschemaPrintCairo,
                                                 &m_EnableEeschemaPrintCairo, m_EnableEeschemaPrintCairo ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::Enable2581,
+                                                &m_Enable2581, m_Enable2581 ) );
+
+
 
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config

@@ -48,7 +48,8 @@ public:
      * Saves the entire board to the clipboard formatted using the PCB_PLUGIN formatting
      */
     void SaveBoard( const wxString& aFileName, BOARD* aBoard,
-                    const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                    const STRING_UTF8_MAP* aProperties = nullptr,
+                    PROGRESS_REPORTER*     aProgressReporter = nullptr ) override;
 
     /*
      * Write all the settings of the BOARD* set by setBoard() and then adds all the

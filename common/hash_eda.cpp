@@ -30,6 +30,7 @@
 #include <pcb_textbox.h>
 #include <pcb_shape.h>
 #include <pad.h>
+#include <pcb_track.h>
 
 #include <macros.h>
 #include <functional>
@@ -74,15 +75,66 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
     }
         break;
 
+    case PCB_VIA_T:
+    {
+        const PCB_VIA* via = static_cast<const PCB_VIA*>( aItem );
+        ret = hash_val( via->GetWidth() );
+        hash_combine( ret, via->GetDrillValue() );
+        hash_combine( ret, via->TopLayer() );
+        hash_combine( ret, via->BottomLayer() );
+
+        for( PCB_LAYER_ID layer : via->GetLayerSet().Seq() )
+            hash_combine( ret, via->FlashLayer( layer ) );
+
+        break;
+    }
+
     case PCB_PAD_T:
     {
         const PAD* pad = static_cast<const PAD*>( aItem );
 
         ret = hash<int>{}( static_cast<int>( pad->GetShape() ) );
-        hash_combine( ret, pad->GetDrillShape() );
+
+        hash_combine( ret, pad->GetAttribute() );
+
+        if( pad->GetAttribute() == PAD_ATTRIB::PTH || pad->GetAttribute() == PAD_ATTRIB::NPTH )
+        {
+            hash_combine( ret, pad->GetDrillSizeX(), pad->GetDrillSizeY() );
+            hash_combine( ret, pad->GetDrillShape() );
+
+            for( PCB_LAYER_ID layer : pad->GetLayerSet().Seq() )
+                hash_combine( ret, pad->FlashLayer( layer ) );
+        }
+
         hash_combine( ret, pad->GetSize().x, pad->GetSize().y );
         hash_combine( ret, pad->GetOffset().x, pad->GetOffset().y );
-        hash_combine( ret, pad->GetDelta().x, pad->GetDelta().y );
+
+        switch( pad->GetShape() )
+        {
+        case PAD_SHAPE::CHAMFERED_RECT:
+            hash_combine( ret, pad->GetChamferPositions() );
+            hash_combine( ret, pad->GetChamferRectRatio() );
+            break;
+        case PAD_SHAPE::ROUNDRECT:
+            hash_combine( ret, pad->GetRoundRectCornerRadius() );
+            break;
+        case PAD_SHAPE::TRAPEZOID:
+            hash_combine( ret, pad->GetDelta().x, pad->GetDelta().y );
+            break;
+        case PAD_SHAPE::CUSTOM:
+        {
+            auto poly = pad->GetEffectivePolygon( ERROR_INSIDE );
+
+            for( int ii = 0; ii < poly->VertexCount(); ++ii )
+            {
+                VECTOR2I point = poly->CVertex( ii ) - pad->GetPosition();
+                hash_combine( ret, point.x, point.y );
+            }
+            break;
+        }
+        default:
+            break;
+        }
 
         hash_combine( ret, hash_board_item( pad, aFlags ) );
 
@@ -100,7 +152,7 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
         if( aFlags & HASH_NET )
             hash_combine( ret, pad->GetNetCode() );
     }
-        break;
+    break;
 
     case PCB_FIELD_T:
         if( !( aFlags & HASH_REF ) && static_cast<const PCB_FIELD*>( aItem )->IsReference() )
@@ -144,39 +196,57 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
         hash_combine( ret, shape->GetShape() );
         hash_combine( ret, shape->GetWidth() );
         hash_combine( ret, shape->IsFilled() );
+        hash_combine( ret, shape->GetLineStyle() );
 
         if( shape->GetShape() == SHAPE_T::ARC || shape->GetShape() == SHAPE_T::CIRCLE )
             hash_combine( ret, shape->GetRadius() );
 
         if( aFlags & HASH_POS )
         {
-            VECTOR2I start = shape->GetStart();
-            VECTOR2I end = shape->GetEnd();
-            VECTOR2I center = shape->GetCenter();
+            std::vector<VECTOR2I> points;
+
+            points.push_back( shape->GetStart() );
+            points.push_back( shape->GetEnd() );
+
+            if( shape->GetShape() == SHAPE_T::CIRCLE )
+                points.push_back( shape->GetCenter() );
+
+            if( shape->GetShape() == SHAPE_T::ARC )
+                points.push_back( shape->GetArcMid() );
 
             FOOTPRINT* parentFP = shape->GetParentFootprint();
 
+            if( shape->GetShape() == SHAPE_T::POLY )
+            {
+                const SHAPE_POLY_SET& poly = shape->GetPolyShape();
+
+                for( auto it = poly.CIterateWithHoles(); it; it++ )
+                    points.push_back( *it );
+            }
+
+            if( shape->GetShape() == SHAPE_T::BEZIER )
+            {
+                points.push_back( shape->GetBezierC1() );
+                points.push_back( shape->GetBezierC2() );
+            }
+
             if( parentFP && ( aFlags & REL_COORD ) )
             {
-                start -= parentFP->GetPosition();
-                end -= parentFP->GetPosition();
-                center -= parentFP->GetPosition();
-
-                RotatePoint( start, -parentFP->GetOrientation() );
-                RotatePoint( end, -parentFP->GetOrientation() );
-                RotatePoint( center, -parentFP->GetOrientation() );
+                for( VECTOR2I& point : points )
+                {
+                    point -= parentFP->GetPosition();
+                    RotatePoint( point, -parentFP->GetOrientation() );
+                }
             }
 
-            hash_combine( ret, start.x );
-            hash_combine( ret, start.y );
-            hash_combine( ret, end.x );
-            hash_combine( ret, end.y );
-
-            if( shape->GetShape() == SHAPE_T::ARC )
+            if( aFlags & REL_POS )
             {
-                hash_combine( ret, center.x );
-                hash_combine( ret, center.y );
+                for( VECTOR2I& point : points )
+                    point -= shape->GetPosition();
             }
+
+            for( VECTOR2I& point : points )
+                hash_combine( ret, point.x, point.y );
         }
     }
         break;
@@ -200,6 +270,7 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
 
         hash_combine( ret, textbox->GetShape() );
         hash_combine( ret, textbox->GetWidth() );
+        hash_combine( ret, textbox->GetLineStyle() );
 
         if( aFlags & HASH_POS )
         {

@@ -4,7 +4,7 @@
    data-name="Слой 1"
    viewBox="0 0 24 24"
    version="1.1"
-   sodipodi:docname="post_rpt.svg"
+   sodipodi:docname="post_xml.svg"
    inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -26,9 +26,9 @@
      inkscape:window-height="2109"
      id="namedview159354"
      showgrid="true"
-     inkscape:zoom="85.677773"
-     inkscape:cx="12.021788"
-     inkscape:cy="8.7829081"
+     inkscape:zoom="30.291667"
+     inkscape:cx="21.392022"
+     inkscape:cy="16.225584"
      inkscape:window-x="0"
      inkscape:window-y="27"
      inkscape:window-maximized="1"
@@ -86,28 +86,31 @@
      width="17.937201"
      height="17.983299"
      rx="2.9934001"
-     id="rect159335" />
+     id="rect159335"
+     style="fill:#8f8f8f;fill-opacity:1" />
   <rect
      class="cls-2"
      x="0.00010001659"
      y="2.9995"
      width="18.7099"
      height="9.2299004"
-     id="rect159337" />
+     id="rect159337"
+     style="fill:#42b8eb;fill-opacity:1" />
   <g
      aria-label="xml"
      id="text5854"
      style="font-size:8.52777px;line-height:1.25;font-family:'Tiresias LPfont';-inkscape-font-specification:'Tiresias LPfont';stroke-width:0.700254">
     <path
-       d="M 4.0180055,7.587901 2.6706178,5.3280419 h 1.151249 L 4.6746438,6.880096 5.5359486,5.3280419 H 6.6786698 L 5.3227543,7.5964287 6.7383641,9.958621 H 5.595643 L 4.666116,8.3042336 3.7451169,9.958621 H 2.6023957 Z"
-       style="font-weight:600;font-stretch:semi-condensed;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold Semi-Condensed';fill:#ffffff"
+       d="M 3.8969283,7.587901 2.6647828,5.3280419 H 3.7175654 L 4.4974043,6.880096 5.2850417,5.3280419 H 6.3300259 L 5.0900819,7.5964287 6.3846146,9.958621 H 5.3396304 L 4.4896059,8.3042336 3.6473799,9.958621 H 2.6023957 Z"
+       style="font-weight:600;font-stretch:semi-condensed;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold Semi-Condensed';fill:#ffffff;stroke-width:0.669638"
        id="path6460" />
     <path
-       d="m 12.27288,5.2427642 q 0.707805,0 1.065971,0.409333 0.358166,0.4008051 0.358166,1.2706377 V 9.958621 h -1.03186 V 7.1529847 q 0,-1.0489157 -0.682221,-1.0489157 -0.486083,0 -0.69075,0.3752218 Q 11.08752,6.845985 11.08752,7.5452621 V 9.958621 H 10.055659 V 7.1444569 q 0,-1.0403879 -0.6822211,-1.0403879 -0.520194,0 -0.7078049,0.4178607 -0.187611,0.409333 -0.187611,1.1683045 V 9.958621 H 7.4461618 V 5.3280419 h 0.8016104 l 0.1364443,0.6139994 h 0.059694 Q 8.6229941,5.583875 8.9555771,5.4133196 9.2881602,5.2427642 9.6804376,5.2427642 q 0.9380544,0 1.2450544,0.7078049 h 0.07675 q 0.196139,-0.3581663 0.528722,-0.5287217 0.34111,-0.1790832 0.741916,-0.1790832 z"
-       style="font-weight:600;font-stretch:semi-condensed;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold Semi-Condensed';fill:#ffffff"
-       id="path6462" />
+       d="m 10.980765,5.2427642 c 0.391193,0 0.545706,0.1364443 0.743658,0.409333 0.197954,0.2672034 0.29693,0.6907493 0.29693,1.2706377 V 9.958621 H 11.037525 V 7.1529847 c 0,-0.6992771 -0.07181,-0.9380351 -0.448863,-0.9380351 -0.230177,0 -0.352273,0.081193 -0.455934,0.2643412 C 10.019612,6.7237536 9.998069,7.0790774 9.998069,7.5452621 V 9.958621 H 9.0609388 V 7.1444569 C 9.0609388,6.450865 8.8838823,6.1689327 8.5070321,6.1565914 8.277701,6.1490811 8.1739136,6.3182798 8.1128246,6.481079 8.0091349,6.7539677 7.9864691,7.1842532 7.9864691,7.6902342 V 9.958621 H 6.9792978 V 5.3280419 h 0.6645567 l 0.03725,0.6139994 h 0.049488 C 7.8295695,5.7032638 8.0468304,5.5270232 8.2306439,5.4133196 8.4144575,5.299616 8.6147672,5.2427642 8.8315729,5.2427642 c 0.5184395,0 0.8624963,0.235935 1.0321705,0.7078049 h 0.063628 C 10.035774,5.7117916 10.181883,5.535551 10.365696,5.4218474 10.554223,5.3024586 10.759246,5.2427642 10.980765,5.2427642 Z"
+       style="font-weight:600;font-stretch:semi-condensed;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold Semi-Condensed';fill:#ffffff;stroke-width:0.637588"
+       id="path6462"
+       sodipodi:nodetypes="scsccsscsccsscsccccccsscccs" />
     <path
-       d="M 15.948344,9.958621 H 14.916483 V 3.4775158 h 1.031861 z"
+       d="M 14.018376,9.958621 H 12.986515 V 3.4775158 h 1.031861 z"
        style="font-weight:600;font-stretch:semi-condensed;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold Semi-Condensed';fill:#ffffff"
        id="path6464" />
   </g>
@@ -121,7 +124,8 @@
      cy="16.996099"
      rx="6.9924002"
      ry="7.0039001"
-     id="ellipse159347" />
+     id="ellipse159347"
+     style="fill:#f2647e;fill-opacity:1" />
   <line
      class="cls-5"
      x1="17.1112"

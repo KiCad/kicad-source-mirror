@@ -94,8 +94,6 @@ wxString EDA_SHAPE::SHAPE_T_asString() const
     case SHAPE_T::CIRCLE:    return wxS( "S_CIRCLE" );
     case SHAPE_T::POLY:      return wxS( "S_POLYGON" );
     case SHAPE_T::BEZIER:    return wxS( "S_CURVE" );
-    // Synthetic value, but if we come across it then we're going to want to know.
-    case SHAPE_T::LAST:      return wxS( "!S_LAST!" );
     }
 
     return wxEmptyString;  // Just to quiet GCC.
@@ -663,6 +661,23 @@ EDA_ANGLE EDA_SHAPE::GetArcAngle() const
     CalcArcAngles( startAngle, endAngle );
 
     return endAngle - startAngle;
+}
+
+
+bool EDA_SHAPE::IsClockwiseArc() const
+{
+    if( m_shape == SHAPE_T::ARC )
+    {
+        VECTOR2D mid = GetArcMid();
+
+        double orient = ( mid.x - m_start.x ) * ( m_end.y - m_start.y )
+                        - ( mid.y - m_start.y ) * ( m_end.x - m_start.x );
+
+        return orient < 0;
+    }
+
+    UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+    return false;
 }
 
 

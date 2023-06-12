@@ -292,7 +292,8 @@ bool PCB_PLUGIN::CanReadBoard( const wxString& aFileName ) const
 
 
 void PCB_PLUGIN::SaveBoard( const wxString& aFileName, BOARD* aBoard,
-                            const STRING_UTF8_MAP* aProperties )
+                            const STRING_UTF8_MAP* aProperties,
+                            PROGRESS_REPORTER*     aProgressReporter )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 

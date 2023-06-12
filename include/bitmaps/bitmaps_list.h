@@ -454,6 +454,7 @@ enum class BITMAPS : unsigned int
     post_gerber,
     post_module,
     post_rpt,
+    post_xml,
     preference,
     primitives_to_custom_pad,
     print_button,

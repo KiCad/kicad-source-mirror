@@ -334,6 +334,11 @@ public:
     void GenFootprintsReport( wxCommandEvent& event );
 
     /**
+     * Create and IPC2581 output file
+    */
+    void GenIPC2581File( wxCommandEvent& event );
+
+    /**
      * Create an ASCII footprint report file giving some infos on footprints and board outlines.
      *
      * @param aFullFilename the full file name of the file to create

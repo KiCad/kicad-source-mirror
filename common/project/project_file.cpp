@@ -122,6 +122,21 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
     m_params.emplace_back( new PARAM_VIEWPORT( "board.viewports", &m_Viewports ) );
 
     m_params.emplace_back( new PARAM_VIEWPORT3D( "board.3dviewports", &m_Viewports3D ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "board.ipc2581.internal_id",
+            &m_IP2581Bom.id, wxEmptyString ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "board.ipc2581.mpn",
+            &m_IP2581Bom.MPN, wxEmptyString ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "board.ipc2581.mfg",
+            &m_IP2581Bom.mfg, wxEmptyString ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "board.ipc2581.distpn",
+            &m_IP2581Bom.distPN, wxEmptyString ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "board.ipc2581.dist",
+            &m_IP2581Bom.dist, wxEmptyString ) );
 }
 
 

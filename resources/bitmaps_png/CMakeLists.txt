@@ -429,6 +429,7 @@ set( BMAPS_MID
     post_gencad
     post_gerber
     post_rpt
+    post_xml
     preference
     print_button
     project

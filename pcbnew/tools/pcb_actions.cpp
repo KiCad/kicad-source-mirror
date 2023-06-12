@@ -1056,6 +1056,13 @@ TOOL_ACTION PCB_ACTIONS::generateReportFile( TOOL_ACTION_ARGS()
         .Tooltip( _( "Create report of all footprints from current board" ) )
         .Icon( BITMAPS::post_rpt ) );
 
+TOOL_ACTION PCB_ACTIONS::generateIPC2581File( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.generateIPC2581File" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "IPC-2581 File (.xml)..." ) )
+        .Tooltip( _( "Generate an IPC-2581 file" ) )
+        .Icon( BITMAPS::post_xml ) );
+
 TOOL_ACTION PCB_ACTIONS::generateD356File( TOOL_ACTION_ARGS()
         .Name( "pcbnew.EditorControl.generateD356File" )
         .Scope( AS_GLOBAL )

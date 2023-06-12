@@ -188,6 +188,14 @@ public:
         bool   overwrite_file;
     };
 
+    struct DIALOG_EXPORT_2581
+    {
+        int    precision;
+        int    units;
+        int    version;
+        bool   compress;
+    };
+
     struct DIALOG_EXPORT_SVG
     {
         bool             black_and_white;
@@ -368,6 +376,8 @@ public:
     DIALOG_EXPORT_IDF m_ExportIdf;
 
     DIALOG_EXPORT_STEP m_ExportStep;
+
+    DIALOG_EXPORT_2581 m_Export2581;
 
     DIALOG_EXPORT_SVG m_ExportSvg;
 

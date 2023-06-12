@@ -107,8 +107,9 @@ public:
 
     bool IsCancelled() const override { return m_cancelled; }
 
+    int CurrentProgress() const;
+
 protected:
-    int currentProgress() const;
 
     virtual bool updateUI() = 0;
 

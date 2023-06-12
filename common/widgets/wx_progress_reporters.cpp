@@ -57,7 +57,7 @@ WX_PROGRESS_REPORTER::~WX_PROGRESS_REPORTER()
 
 bool WX_PROGRESS_REPORTER::updateUI()
 {
-    int cur = currentProgress();
+    int cur = CurrentProgress();
 
     if( cur < 0 || cur > 1000 )
         cur = 0;
@@ -104,7 +104,7 @@ GAUGE_PROGRESS_REPORTER::GAUGE_PROGRESS_REPORTER( wxWindow* aParent, int aNumPha
 
 bool GAUGE_PROGRESS_REPORTER::updateUI()
 {
-    int cur = currentProgress();
+    int cur = CurrentProgress();
 
     if( cur < 0 || cur > 1000 )
         cur = 0;

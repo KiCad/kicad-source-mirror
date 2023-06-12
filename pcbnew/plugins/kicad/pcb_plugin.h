@@ -305,7 +305,8 @@ public:
     bool CanReadBoard( const wxString& aFileName ) const override;
 
     void SaveBoard( const wxString& aFileName, BOARD* aBoard,
-                    const STRING_UTF8_MAP* aProperties = nullptr ) override;
+                    const STRING_UTF8_MAP* aProperties = nullptr,
+                    PROGRESS_REPORTER*     aProgressReporter = nullptr ) override;
 
     BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
                       const STRING_UTF8_MAP* aProperties = nullptr, PROJECT* aProject = nullptr,

@@ -66,6 +66,7 @@ public:
         GEDA_PCB, ///< Geda PCB file formats.
         PCAD,
         SOLIDWORKS_PCB,
+        IPC2581,
         // add your type here.
 
         // etc.
@@ -373,11 +374,13 @@ public:
      *                    tuning arguments that the plugin is known to support.  The caller
      *                    continues to own this object (plugin may not delete it) and plugins
      *                    should expect it to be optionally NULL.
+     * @param aProgressReporter an optional progress reporter
      *
      * @throw IO_ERROR if there is a problem saving or exporting.
      */
     virtual void SaveBoard( const wxString& aFileName, BOARD* aBoard,
-                       const STRING_UTF8_MAP* aProperties = nullptr );
+                            const STRING_UTF8_MAP* aProperties = nullptr,
+                            PROGRESS_REPORTER*     aProgressReporter = nullptr );
 
     /**
      * Return a list of footprint names contained within the library at @a aLibraryPath.

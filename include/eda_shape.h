@@ -45,8 +45,7 @@ enum class SHAPE_T : int
     ARC,
     CIRCLE,
     POLY,
-    BEZIER,
-    LAST            ///< marker for list end
+    BEZIER
 };
 
 
@@ -310,6 +309,8 @@ public:
     void SetRectangle( const long long int& aHeight, const long long int& aWidth );
 
     void SetSegmentAngle( const EDA_ANGLE& aAngle );
+
+    bool IsClockwiseArc() const;
 
     /**
      * @return the length of the segment using the hypotenuse calculation.

@@ -288,6 +288,12 @@ public:
      * When true, enable Eeschema printing using Cairo
      */
     bool m_EnableEeschemaPrintCairo;
+
+    /**
+     * When true, enable output to 2581
+    */
+    bool m_Enable2581;
+
 ///@}
 
 

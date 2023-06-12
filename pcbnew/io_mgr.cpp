@@ -43,6 +43,7 @@
 #include <plugins/fabmaster/fabmaster_plugin.h>
 #include <plugins/easyeda/pcb_easyeda_plugin.h>
 #include <plugins/easyedapro/pcb_easyedapro_plugin.h>
+#include <plugins/ipc2581/ipc2581_plugin.h>
 
 #define FMT_UNIMPLEMENTED   _( "Plugin \"%s\" does not implement the \"%s\" function." )
 #define FMT_NOTFOUND        _( "Plugin type \"%s\" is not found." )
@@ -262,4 +263,9 @@ static IO_MGR::REGISTER_PLUGIN registerSolidworksPCBPlugin(
         IO_MGR::SOLIDWORKS_PCB,
         wxT( "Solidworks PCB" ),
         []() -> PLUGIN* { return new SOLIDWORKS_PCB_PLUGIN; } );
+
+static IO_MGR::REGISTER_PLUGIN registerIPC2581Plugin(
+        IO_MGR::IPC2581,
+        wxT( "IPC-2581" ),
+        []() -> PLUGIN* { return new IPC2581_PLUGIN; } );
 // clang-format on

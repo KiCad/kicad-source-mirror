@@ -332,6 +332,18 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<int>( "gen_drill.zeros_format",
             &m_GenDrill.zeros_format, 0, 0, 3 ) );
 
+    m_params.emplace_back( new PARAM<int>( "export_2581.units",
+            &m_Export2581.units, 0 ) );
+
+    m_params.emplace_back( new PARAM<int>( "export_2581.precision",
+            &m_Export2581.precision, 3 ) );
+
+    m_params.emplace_back( new PARAM<int>( "export_2581.version",
+            &m_Export2581.version, 1 ) );
+
+    m_params.emplace_back( new PARAM<bool>( "export_2581.compress",
+            &m_Export2581.compress, false ) );
+
     m_params.emplace_back( new PARAM<bool>( "export_idf.auto_adjust",
             &m_ExportIdf.auto_adjust, false ) );
 

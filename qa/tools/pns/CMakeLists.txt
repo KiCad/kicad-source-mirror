@@ -51,6 +51,7 @@ set( COMMON_SRCS
     ../../../pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp
     ../../../pcbnew/drc/drc_engine.cpp
     ../../../pcbnew/drc/drc_item.cpp
+    ../../../pcbnew/board_stackup_manager/stackup_predefined_prms.cpp
     pns_log_file.cpp
     pns_log_player.cpp
     pns_test_debug_decorator.cpp
@@ -65,7 +66,7 @@ add_executable( pns_debug_tool
     ../../qa_utils/test_app_main.cpp
     ../../qa_utils/utility_program.cpp
     ../../qa_utils/mocks.cpp
-    
+
     playground.cpp
     pns_debug_tool_main.cpp
   )

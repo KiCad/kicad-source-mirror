@@ -124,6 +124,16 @@ enum class RATSNEST_MODE
     VISIBLE     ///< Ratsnest lines are drawn to items on visible layers only
 };
 
+///< BOM Data choices for IPC2581 export
+struct IP2581_BOM
+{
+    wxString mfg;       ///< Manufacturer name column
+    wxString MPN;     ///< Manufacturer part number column
+    wxString dist;      ///< Distributor name column
+    wxString distPN;    ///< Distributor part number column
+    wxString id;        ///< Internal ID column
+};
+
 /**
  * A saved set of layers that are visible.
  */
