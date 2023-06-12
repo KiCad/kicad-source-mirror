@@ -1344,7 +1344,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
     }
 
     // See if parent can resolve it (this will recurse to ancestors)
-    if( aPath->Last()->ResolveTextVar( aPath, token, aDepth + 1 ) )
+    if( aPath->Last() && aPath->Last()->ResolveTextVar( aPath, token, aDepth + 1 ) )
         return true;
 
     return false;
