@@ -149,8 +149,11 @@ SCH_CONNECTION* SCH_ITEM::Connection( const SCH_SHEET_PATH* aSheet ) const
     if( !IsConnectable() )
         return nullptr;
 
-    wxCHECK_MSG( !IsConnectivityDirty(), nullptr,
-                  wxT( "Shouldn't be asking for connection if connectivity is dirty!" ) );
+    if( IsConnectivityDirty() )
+    {
+        wxFAIL_MSG( wxT( "Shouldn't be asking for connection if connectivity is dirty!" ) );
+        return nullptr;
+    }
 
     if( !aSheet )
         aSheet = &Schematic()->CurrentSheet();

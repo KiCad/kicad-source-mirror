@@ -111,8 +111,8 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     std::vector<PICKED_SYMBOL>* historyList = nullptr;
     bool                        ignorePrimePosition = false;
     COMMON_SETTINGS*            common_settings = Pgm().GetCommonSettings();
-    SCH_COMMIT                  commit( m_toolMgr );
     EE_GRID_HELPER              grid( m_toolMgr );
+    SCH_SCREEN*                 screen = m_frame->GetScreen();
 
     if( m_inPlaceSymbol )
         return 0;
@@ -149,16 +149,17 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     m_frame->PushTool( aEvent );
 
     auto addSymbol =
-            [this]( SCH_COMMIT* aCommit, SCH_SYMBOL* aSymbol )
+            [this]( SCH_SYMBOL* aSymbol )
             {
                 m_frame->SaveCopyForRepeatItem( aSymbol );
 
                 m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
                 m_selectionTool->AddItemToSel( aSymbol );
 
-                aSymbol->SetParent( m_frame->GetScreen() );
                 aSymbol->SetFlags( IS_NEW | IS_MOVING );
-                m_frame->AddItemToCommitAndScreen( aCommit, m_frame->GetScreen(), aSymbol );
+
+                m_view->ClearPreview();
+                m_view->AddToPreview( aSymbol, false );   // Add, but not give ownership
 
                 // Set IS_MOVING again, as AddItemToCommitAndScreen() will have cleared it.
                 aSymbol->SetFlags( IS_MOVING );
@@ -176,11 +177,13 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
             [&]()
             {
                 m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-                m_frame->RollbackSchematicFromUndo();
+                m_view->ClearPreview();
+                delete symbol;
+                symbol = nullptr;
+
                 existingRefs.Clear();
                 hierarchy.GetSymbols( existingRefs );
                 existingRefs.SortByReferenceOnly();
-                symbol = nullptr;
             };
 
     auto annotate =
@@ -224,7 +227,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     // Prime the pump
     if( symbol )
     {
-        addSymbol( &commit, symbol );
+        addSymbol( symbol );
         annotate();
         getViewControls()->WarpMouseCursor( getViewControls()->GetMousePosition( false ) );
     }
@@ -325,7 +328,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 
                 symbol = new SCH_SYMBOL( *libSymbol, &m_frame->GetCurrentSheet(), sel, cursorPos,
                                          &m_frame->Schematic() );
-                addSymbol( &commit, symbol );
+                addSymbol( symbol );
                 annotate();
 
                 // Update the list of references for the next symbol placement.
@@ -342,12 +345,14 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
             }
             else
             {
-                if( m_frame->eeconfig()->m_AutoplaceFields.enable )
-                    symbol->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
+                m_view->ClearPreview();
+                m_frame->AddToScreen( symbol, screen );
 
-                symbol->ClearEditFlags();
-                m_view->Update( symbol );
-                m_frame->GetScreen()->Update( symbol );
+                if( m_frame->eeconfig()->m_AutoplaceFields.enable )
+                    symbol->AutoplaceFields( screen, false /* aManual */ );
+
+                SCH_COMMIT commit( m_toolMgr );
+                commit.Added( symbol, screen );
 
                 SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
                 lwbTool->TrimOverLappingWires( &commit, &m_selectionTool->GetSelection() );
@@ -383,7 +388,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                         if( new_unit == 1 )
                             nextSymbol->ClearAnnotation( nullptr, false );
 
-                        addSymbol( &commit, nextSymbol );
+                        addSymbol( nextSymbol );
                         symbol = nextSymbol;
                         annotate();
 
@@ -438,7 +443,8 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
         else if( symbol && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
             symbol->SetPosition( cursorPos );
-            m_view->Update( symbol );
+            m_view->ClearPreview();
+            m_view->AddToPreview( symbol, false );   // Add, but not give ownership
             m_frame->SetMsgPanel( symbol );
         }
         else if( symbol && evt->IsAction( &ACTIONS::doDelete ) )
@@ -634,7 +640,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
 
                 m_view->ClearPreview();
                 m_view->AddToPreview( image, false );   // Add, but not give ownership
-                m_view->RecacheAllItems();  // Bitmaps are cached in Opengl
+                m_view->RecacheAllItems();              // Bitmaps are cached in Opengl
 
                 m_selectionTool->AddItemToSel( image );
 
@@ -644,7 +650,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
             else
             {
                 SCH_COMMIT commit( m_toolMgr );
-                m_frame->AddItemToCommitAndScreen( &commit, m_frame->GetScreen(), image );
+                commit.Add( image, m_frame->GetScreen() );
                 commit.Push( _( "Add Image" ) );
 
                 image = nullptr;
@@ -672,7 +678,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
             image->SetPosition( cursorPos );
             m_view->ClearPreview();
             m_view->AddToPreview( image, false );   // Add, but not give ownership
-            m_view->RecacheAllItems();  // Bitmaps are cached in Opengl
+            m_view->RecacheAllItems();              // Bitmaps are cached in Opengl
             m_frame->SetMsgPanel( image );
         }
         else if( image && evt->IsAction( &ACTIONS::doDelete ) )
@@ -706,6 +712,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
     SCH_ITEM*             previewItem;
     bool                  loggedInfoBarError = false;
     wxString              description;
+    SCH_SCREEN*           screen = m_frame->GetScreen();
 
     if( m_inSingleClickPlace )
         return 0;
@@ -730,19 +737,19 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
     {
     case SCH_NO_CONNECT_T:
         previewItem = new SCH_NO_CONNECT( cursorPos );
-        previewItem->SetParent( m_frame->GetScreen() );
+        previewItem->SetParent( screen );
         description = _( "Add No Connect Flag" );
         break;
 
     case SCH_JUNCTION_T:
         previewItem = new SCH_JUNCTION( cursorPos );
-        previewItem->SetParent( m_frame->GetScreen() );
+        previewItem->SetParent( screen );
         description = _( "Add Junction" );
         break;
 
     case SCH_BUS_WIRE_ENTRY_T:
         previewItem = new SCH_BUS_WIRE_ENTRY( cursorPos );
-        previewItem->SetParent( m_frame->GetScreen() );
+        previewItem->SetParent( screen );
         description = _( "Add Wire to Bus Entry" );
         break;
 
@@ -811,11 +818,11 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
         {
-            if( !m_frame->GetScreen()->GetItem( cursorPos, 0, type ) )
+            if( !screen->GetItem( cursorPos, 0, type ) )
             {
                 if( type == SCH_JUNCTION_T )
                 {
-                    if( !m_frame->GetScreen()->IsExplicitJunctionAllowed( cursorPos ) )
+                    if( !screen->IsExplicitJunctionAllowed( cursorPos ) )
                     {
                         m_frame->ShowInfoBarError( _( "Junction location contains no joinable "
                                                       "wires and/or pins." ) );
@@ -834,7 +841,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                 newItem->SetFlags( IS_NEW );
 
                 SCH_COMMIT commit( m_toolMgr );
-                m_frame->AddItemToCommitAndScreen( &commit, m_frame->GetScreen(), newItem );
+                commit.Add( newItem, screen );
 
                 if( type == SCH_JUNCTION_T )
                     m_frame->TestDanglingEnds();
@@ -1439,8 +1446,11 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             {
                 item->ClearFlags( IS_MOVING );
 
+                if( item->IsConnectable() )
+                    m_frame->AutoRotateItem( m_frame->GetScreen(), item );
+
                 SCH_COMMIT commit( m_toolMgr );
-                m_frame->AddItemToCommitAndScreen( &commit, m_frame->GetScreen(), item );
+                commit.Add( item, m_frame->GetScreen() );
                 commit.Push( description );
 
                 item = nullptr;
@@ -1881,7 +1891,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                 sheet->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
 
                 SCH_COMMIT commit( m_toolMgr );
-                m_frame->AddItemToCommitAndScreen( &commit, m_frame->GetScreen(), sheet );
+                commit.Add( sheet, m_frame->GetScreen() );
                 commit.Push( "Draw Sheet" );
 
                 m_frame->UpdateHierarchyNavigator();

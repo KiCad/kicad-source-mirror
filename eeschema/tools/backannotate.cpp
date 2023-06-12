@@ -638,7 +638,7 @@ void BACK_ANNOTATE::processNetNameChange( SCH_COMMIT* aCommit, const wxString& a
             label->SetFlags( IS_NEW );
 
             SCH_SCREEN* screen = aConnection->Sheet().LastScreen();
-            m_frame->AddItemToCommitAndScreen( aCommit, screen, label );
+            aCommit->Add( label, screen );
         }
 
         m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );

@@ -248,11 +248,6 @@ public:
     void AutoRotateItem( SCH_SCREEN* aScreen, SCH_ITEM* aItem );
 
     /**
-     * Add an item to the schematic and adds the changes to the commit.
-     */
-    void AddItemToCommitAndScreen( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen, SCH_ITEM* aItem );
-
-    /**
      * Run the Find or Find & Replace dialog.
      */
     void ShowFindReplaceDialog( bool aReplace );

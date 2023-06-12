@@ -1752,7 +1752,11 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             item->SetFlags( STARTPOINT | ENDPOINT );
 
         item->SetFlags( IS_NEW | IS_PASTED | IS_MOVING );
-        m_frame->AddItemToCommitAndScreen( &commit, m_frame->GetScreen(), (SCH_ITEM*) item );
+
+        if( !m_frame->GetScreen()->CheckIfOnDrawList( (SCH_ITEM*) item ) )  // don't want a loop!
+            m_frame->AddToScreen( item, m_frame->GetScreen() );
+
+        commit.Added( (SCH_ITEM*) item, m_frame->GetScreen() );
 
         // Reset flags for subsequent move operation
         item->SetFlags( IS_NEW | IS_PASTED | IS_MOVING );

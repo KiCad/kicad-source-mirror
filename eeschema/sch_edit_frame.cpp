@@ -1602,100 +1602,6 @@ void SCH_EDIT_FRAME::AutoRotateItem( SCH_SCREEN* aScreen, SCH_ITEM* aItem )
 }
 
 
-void SCH_EDIT_FRAME::AddItemToCommitAndScreen( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen,
-                                               SCH_ITEM* aItem )
-{
-    wxCHECK_RET( aItem != nullptr, wxT( "Cannot add null item to list." ) );
-
-    SCH_SHEET*  parentSheet = nullptr;
-    SCH_SYMBOL* parentSymbol = nullptr;
-    SCH_ITEM*   undoItem = aItem;
-
-    if( aItem->Type() == SCH_SHEET_PIN_T )
-    {
-        parentSheet = (SCH_SHEET*) aItem->GetParent();
-
-        wxCHECK_RET( parentSheet && parentSheet->Type() == SCH_SHEET_T,
-                     wxT( "Cannot place sheet pin in invalid schematic sheet." ) );
-
-        undoItem = parentSheet;
-    }
-
-    else if( aItem->Type() == SCH_FIELD_T )
-    {
-        parentSymbol = (SCH_SYMBOL*) aItem->GetParent();
-
-        wxCHECK_RET( parentSymbol && parentSymbol->Type() == SCH_SYMBOL_T,
-                     wxT( "Cannot place field in invalid schematic symbol." ) );
-
-        undoItem = parentSymbol;
-    }
-
-    if( aItem->IsNew() )
-    {
-        if( aItem->Type() == SCH_SHEET_PIN_T )
-        {
-            // Sheet pins are owned by their parent sheet.
-            aCommit->Modify( undoItem, aScreen );
-            parentSheet->AddPin( (SCH_SHEET_PIN*) aItem );
-        }
-        else if( aItem->Type() == SCH_FIELD_T )
-        {
-            // Symbol fields are also owned by their parent, but new symbol fields are
-            // handled elsewhere.
-            wxLogMessage( wxT( "addCurrentItemToScreen: unexpected new SCH_FIELD" ) );
-        }
-        else
-        {
-            if( !aScreen->CheckIfOnDrawList( aItem ) )  // don't want a loop!
-                AddToScreen( aItem, aScreen );
-
-            SaveCopyForRepeatItem( aItem );
-            aCommit->Modify( undoItem, aScreen );
-        }
-
-        // Update connectivity info for new item
-        if( !aItem->IsMoving() && aItem->IsConnectable() )
-            RecalculateConnections( aCommit, LOCAL_CLEANUP );
-    }
-
-    aItem->ClearFlags( IS_NEW );
-
-    aScreen->SetContentModified();
-    UpdateItem( aItem );
-
-    if( !aItem->IsMoving() && aItem->IsConnectable() )
-    {
-        std::vector<VECTOR2I> pts = aItem->GetConnectionPoints();
-
-        bool connected = true;
-
-        for( auto i = pts.begin(); i != pts.end(); i++ )
-        {
-            for( auto j = i + 1; j != pts.end(); j++ )
-                TrimWire( aCommit, *i, *j );
-
-            if( aScreen->IsExplicitJunctionNeeded( *i ) )
-            {
-                AddJunction( aCommit, aScreen, *i );
-                connected = true;
-            }
-        }
-
-        if( connected )
-            AutoRotateItem( aScreen, aItem );
-
-        TestDanglingEnds();
-
-        for( SCH_ITEM* item : aItem->ConnectedItems( GetCurrentSheet() ) )
-            UpdateItem( item );
-    }
-
-    aItem->ClearEditFlags();
-    GetCanvas()->Refresh();
-}
-
-
 void SCH_EDIT_FRAME::updateTitle()
 {
     SCH_SCREEN* screen = GetScreen();
@@ -1847,8 +1753,7 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
         }
 
         std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>> all_items =
-                Schematic().ConnectionGraph()->ExtractAffectedItems(
-                        changed_items );
+                Schematic().ConnectionGraph()->ExtractAffectedItems( changed_items );
 
         CONNECTION_GRAPH new_graph( &Schematic() );
 
