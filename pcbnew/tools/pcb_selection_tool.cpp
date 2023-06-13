@@ -2511,10 +2511,10 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
         break;
 
     case PCB_FP_TEXT_T:
+        text = static_cast<const FP_TEXT*>( aItem );
+
         if( m_isFootprintEditor )
         {
-            text = static_cast<const FP_TEXT*>( aItem );
-
             if( !text->IsVisible() && !view()->IsLayerVisible( LAYER_MOD_TEXT_INVISIBLE ) )
                 return false;
 
