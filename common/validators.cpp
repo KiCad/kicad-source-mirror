@@ -31,6 +31,7 @@
 #include <string_utils.h>
 #include <confirm.h>
 #include <validators.h>
+#include <template_fieldnames.h>
 
 #include <wx/grid.h>
 #include <wx/textctrl.h>
@@ -333,4 +334,172 @@ void KIUI::ValidatorTransferToWindowWithoutEvents( wxValidator& aValidator )
 
     wxEventBlocker orient_update_blocker( ctrl, wxEVT_ANY );
     aValidator.TransferToWindow();
+}
+
+
+FIELD_VALIDATOR::FIELD_VALIDATOR( bool aIsLibEditor, int aFieldId, wxString* aValue ) :
+        wxTextValidator( wxFILTER_EXCLUDE_CHAR_LIST, aValue )
+{
+    m_fieldId = aFieldId;
+    m_isLibEditor = aIsLibEditor;
+
+    // Fields cannot contain carriage returns, line feeds, or tabs.
+    wxString excludes( wxT( "\r\n\t" ) );
+
+    // The reference and sheet name fields cannot contain spaces.
+    if( aFieldId == REFERENCE_FIELD )
+    {
+        excludes += wxT( " " );
+    }
+    else if( m_fieldId == SHEETNAME_V )
+    {
+        excludes += wxT( "/" );
+    }
+
+    long style = GetStyle();
+
+    // The reference, sheetname and sheetfilename fields cannot be empty.
+    if( aFieldId == REFERENCE_FIELD || aFieldId == SHEETNAME_V || aFieldId == SHEETFILENAME_V )
+    {
+        style |= wxFILTER_EMPTY;
+    }
+
+    SetStyle( style );
+    SetCharExcludes( excludes );
+}
+
+
+FIELD_VALIDATOR::FIELD_VALIDATOR( const FIELD_VALIDATOR& aValidator ) :
+        wxTextValidator( aValidator )
+{
+    m_fieldId = aValidator.m_fieldId;
+    m_isLibEditor = aValidator.m_isLibEditor;
+}
+
+
+bool FIELD_VALIDATOR::Validate( wxWindow* aParent )
+{
+    // If window is disabled, simply return
+    if( !m_validatorWindow->IsEnabled() )
+        return true;
+
+    wxTextEntry* const text = GetTextEntry();
+
+    if( !text )
+        return false;
+
+    wxString val( text->GetValue() );
+    wxString msg;
+
+    if( HasFlag( wxFILTER_EMPTY ) && val.empty() )
+        msg.Printf( _( "The value of the field cannot be empty." ) );
+
+    if( HasFlag( wxFILTER_EXCLUDE_CHAR_LIST ) && ContainsExcludedCharacters( val ) )
+    {
+        wxArrayString badCharsFound;
+
+#if wxCHECK_VERSION( 3, 1, 3 )
+        for( const wxUniCharRef& excludeChar : GetCharExcludes() )
+        {
+            if( val.Find( excludeChar ) != wxNOT_FOUND )
+            {
+                if( excludeChar == '\r' )
+                    badCharsFound.Add( _( "carriage return" ) );
+                else if( excludeChar == '\n' )
+                    badCharsFound.Add( _( "line feed" ) );
+                else if( excludeChar == '\t' )
+                    badCharsFound.Add( _( "tab" ) );
+                else if( excludeChar == ' ' )
+                    badCharsFound.Add( _( "space" ) );
+                else
+                    badCharsFound.Add( wxString::Format( wxT( "'%s'" ), excludeChar ) );
+            }
+        }
+#else
+        for( const wxString& excludeChar : GetExcludes() )
+        {
+            if( val.Find( excludeChar ) != wxNOT_FOUND )
+            {
+                if( excludeChar == wxT( "\r" ) )
+                    badCharsFound.Add( _( "carriage return" ) );
+                else if( excludeChar == wxT( "\n" ) )
+                    badCharsFound.Add( _( "line feed" ) );
+                else if( excludeChar == wxT( "\t" ) )
+                    badCharsFound.Add( _( "tab" ) );
+                else if( excludeChar == wxT( " " ) )
+                    badCharsFound.Add( _( "space" ) );
+                else
+                    badCharsFound.Add( wxString::Format( wxT( "'%s'" ), excludeChar ) );
+            }
+        }
+#endif
+
+        wxString badChars;
+
+        for( size_t i = 0; i < badCharsFound.GetCount(); i++ )
+        {
+            if( !badChars.IsEmpty() )
+            {
+                if( badCharsFound.GetCount() == 2 )
+                {
+                    badChars += _( " or " );
+                }
+                else
+                {
+                    if( i < badCharsFound.GetCount() - 2 )
+                        badChars += _( ", or " );
+                    else
+                        badChars += wxT( ", " );
+                }
+            }
+
+            badChars += badCharsFound.Item( i );
+        }
+
+        switch( m_fieldId )
+        {
+        case REFERENCE_FIELD:
+            msg.Printf( _( "The reference designator cannot contain %s character(s)." ), badChars );
+            break;
+
+        case VALUE_FIELD:
+            msg.Printf( _( "The value field cannot contain %s character(s)." ), badChars );
+            break;
+
+        case FOOTPRINT_FIELD:
+            msg.Printf( _( "The footprint field cannot contain %s character(s)." ), badChars );
+            break;
+
+        case DATASHEET_FIELD:
+            msg.Printf( _( "The datasheet field cannot contain %s character(s)." ), badChars );
+            break;
+
+        case SHEETNAME_V:
+            msg.Printf( _( "The sheet name cannot contain %s character(s)." ), badChars );
+            break;
+
+        case SHEETFILENAME_V:
+            msg.Printf( _( "The sheet filename cannot contain %s character(s)." ), badChars );
+            break;
+
+        default:
+            msg.Printf( _( "The field cannot contain %s character(s)." ), badChars );
+            break;
+        };
+    }
+    else if( m_fieldId == REFERENCE_FIELD && val.Contains( wxT( "${" ) ) )
+    {
+        msg.Printf( _( "The reference designator cannot contain text variable references" ) );
+    }
+
+    if( !msg.empty() )
+    {
+        m_validatorWindow->SetFocus();
+
+        wxMessageBox( msg, _( "Field Validation Error" ), wxOK | wxICON_EXCLAMATION, aParent );
+
+        return false;
+    }
+
+    return true;
 }

@@ -58,8 +58,8 @@ DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME* aParent,
         m_infoBar->ShowMessage( message );
     }
 
-    m_textName->SetValidator( SCH_FIELD_VALIDATOR( true, VALUE_FIELD ) );
-    m_textReference->SetValidator( SCH_FIELD_VALIDATOR( true, REFERENCE_FIELD ) );
+    m_textName->SetValidator( FIELD_VALIDATOR( true, VALUE_FIELD ) );
+    m_textReference->SetValidator( FIELD_VALIDATOR( true, REFERENCE_FIELD ) );
 
     m_pinTextPosition.SetValue( schIUScale.MilsToIU( DEFAULT_PIN_NAME_OFFSET ) );
 

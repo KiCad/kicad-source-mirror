@@ -33,47 +33,6 @@
 #include <wx/valtext.h>
 #include <validators.h>
 
-#define FIELD_NAME  -1
-#define FIELD_VALUE -2
-
-#define SHEETNAME_V      100    // We can't use SHEETNAME and SHEETFILENAME because they
-#define SHEETFILENAME_V  101    //   overlap with REFERENCE_FIELD and VALUE_FIELD
-#define SHEETUSERFIELD_V 102
-
-#define LABELUSERFIELD_V 200
-
-/**
- * A text control validator used for validating the text allowed in library and
- * schematic symbol fields.
- *
- * - The reference field does not accept spaces.
- * - The value field does not accept spaces in the symbol library editor because in symbol
- *   libraries, the value field is the symbol name in the library.
- */
-class SCH_FIELD_VALIDATOR : public wxTextValidator
-{
-public:
-    SCH_FIELD_VALIDATOR( bool aIsLibEditor, int aFieldId, wxString* aValue = nullptr );
-
-    SCH_FIELD_VALIDATOR( const SCH_FIELD_VALIDATOR& aValidator );
-
-    virtual wxObject* Clone() const override { return new SCH_FIELD_VALIDATOR( *this ); }
-
-    /**
-     * Override the default Validate() function provided by wxTextValidator to provide
-     * better error messages.
-     *
-     * @param aParent is the parent window of the error message dialog.
-     * @return true if the text in the control is valid otherwise false.
-     */
-    virtual bool Validate( wxWindow *aParent ) override;
-
-private:
-    int  m_fieldId;
-    bool m_isLibEditor;
-};
-
-
 /*
  * A refinement of the NETNAME_VALIDATOR which also allows (and checks) bus definitions.
  */

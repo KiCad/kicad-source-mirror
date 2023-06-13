@@ -168,7 +168,7 @@ void DIALOG_FIELD_PROPERTIES::init()
 
     if( use_validator )
     {
-        m_TextCtrl->SetValidator( SCH_FIELD_VALIDATOR( isSymbolEditor, m_fieldId, &m_text ) );
+        m_TextCtrl->SetValidator( FIELD_VALIDATOR( isSymbolEditor, m_fieldId, &m_text ) );
         SetInitialFocus( m_TextCtrl );
 
         m_StyledTextCtrl->Show( false );

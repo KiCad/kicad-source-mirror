@@ -125,12 +125,12 @@ private:
     wxString        m_symbolNetlist;
     wxString        m_curdir;
 
-    SCH_FIELD_VALIDATOR   m_fieldNameValidator;
-    SCH_FIELD_VALIDATOR   m_referenceValidator;
-    SCH_FIELD_VALIDATOR   m_valueValidator;
-    SCH_FIELD_VALIDATOR   m_urlValidator;
-    SCH_FIELD_VALIDATOR   m_nonUrlValidator;
-    SCH_FIELD_VALIDATOR   m_filepathValidator;
+    FIELD_VALIDATOR   m_fieldNameValidator;
+    FIELD_VALIDATOR   m_referenceValidator;
+    FIELD_VALIDATOR   m_valueValidator;
+    FIELD_VALIDATOR   m_urlValidator;
+    FIELD_VALIDATOR   m_nonUrlValidator;
+    FIELD_VALIDATOR   m_filepathValidator;
 
     wxGridCellAttr*       m_readOnlyAttr;
     wxGridCellAttr*       m_fieldNameAttr;
