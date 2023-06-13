@@ -15,16 +15,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-18 11:55-0700\n"
-"PO-Revision-Date: 2023-03-19 09:38+0000\n"
+"PO-Revision-Date: 2023-06-13 15:45+0000\n"
 "Last-Translator: turkce <turkceceviri@protonmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 4.18-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -3754,9 +3754,8 @@ msgid "<b>Nets matching '%s':</b>"
 msgstr "<b>Eşleşen ağlar%s':</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
-#, fuzzy
 msgid "Netclasses:"
-msgstr "Ağ Sınıfları"
+msgstr "Ağ Sınıfları:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:503
@@ -3839,9 +3838,8 @@ msgid "Set color to transparent to use KiCad default color."
 msgstr "KiCad varsayılan rengini kullanmak için rengi saydam olarak ayarlayın."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:112
-#, fuzzy
 msgid "Netclass assignments:"
-msgstr "Şematik atama"
+msgstr "Şematik atama:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:136
 msgid "Pattern"
@@ -4238,12 +4236,11 @@ msgid ""
 "\n"
 "Do you wish to open the auto-saved file instead?"
 msgstr ""
-"Bu potansiyel olarak utanç verici!\n"
-"Görünüşe göre en son düzenlediğinizde\n"
+"Peki bu potansiyel olarak utanç verici!\n"
+"Dosyayı en son düzenlediğinizde görünüyor\n"
 "%s\n"
-"KiCad kaydetmeden önce çıktı.\n"
-"\n"
-"Bunun yerine otomatik kaydedilmiş dosyayı açmak ister misiniz?"
+"düzgün kaydedilmedi. Yaptığınız son kaydedilen düzenlemeleri geri yüklemek "
+"istiyor musunuz?"
 
 #: common/eda_base_frame.cpp:1296
 msgid "The auto save file could not be renamed to the board file name."
@@ -4295,9 +4292,9 @@ msgid "Zoom %.2f"
 msgstr "%.2f Yakınlaştır"
 
 #: common/eda_draw_frame.cpp:609
-#, fuzzy, c-format
+#, c-format
 msgid "grid %s"
-msgstr "Kılavuz eksenleri"
+msgstr "kılavuz %s"
 
 #: common/eda_draw_frame.cpp:622 pagelayout_editor/pl_editor_frame.cpp:752
 msgid "inches"
@@ -4783,9 +4780,8 @@ msgstr "Metin Özellikleri"
 #: pcbnew/pcb_dimension.cpp:1433 pcbnew/pcb_dimension.cpp:1468
 #: pcbnew/pcb_dimension.cpp:1507 pcbnew/pcb_dimension.cpp:1538
 #: pcbnew/pcb_text.cpp:560
-#, fuzzy
 msgid "Hyperlink"
-msgstr "Hyperlynx..."
+msgstr "Köprü"
 
 #: common/eda_text.cpp:1052
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:91
@@ -5652,9 +5648,9 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "Bu dil için KiCad dil dosyası kurulu değil."
 
 #: common/plotters/PDF_plotter.cpp:829
-#, fuzzy, c-format
+#, c-format
 msgid "Page %s"
-msgstr "Lehim maskesi katmanlarını göster"
+msgstr "%S Sayfası"
 
 #: common/plotters/PDF_plotter.cpp:833
 #, fuzzy, c-format
@@ -5662,9 +5658,9 @@ msgid "%s (Page %s)"
 msgstr "Izgara: %s (%s)"
 
 #: common/plotters/PDF_plotter.cpp:1199
-#, fuzzy, c-format
+#, c-format
 msgid "Show Page %s"
-msgstr "Lehim maskesi katmanlarını göster"
+msgstr "%s Sayfasını Göster"
 
 #: common/plotters/PDF_plotter.cpp:1210
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:814
@@ -6887,9 +6883,9 @@ msgid "No objects selected"
 msgstr "Sembol seçilmedi"
 
 #: common/widgets/properties_panel.cpp:283
-#, fuzzy, c-format
+#, c-format
 msgid "%d objects selected"
-msgstr "Sembol seçilmedi"
+msgstr "%d seçilen nesneler"
 
 #: common/widgets/properties_panel.cpp:290
 #, fuzzy
@@ -8848,15 +8844,15 @@ msgstr "Panoda vurgulamak için öğelere tıklayın."
 
 #: eeschema/dialogs/dialog_erc_base.cpp:87
 #: pcbnew/dialogs/dialog_drc_base.cpp:107
-#, fuzzy, c-format
+#, c-format
 msgid "Violations (%s)"
-msgstr "İhlaller"
+msgstr "İhlaller (%s)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:99
 #: pcbnew/dialogs/dialog_drc_base.cpp:149
-#, fuzzy, c-format
+#, c-format
 msgid "Ignored Tests (%s)"
-msgstr "Yoksayılan Testler (%d)"
+msgstr "Yoksayılan Testler (%s)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:139
 #: pcbnew/dialogs/dialog_drc_base.cpp:189
@@ -9316,9 +9312,8 @@ msgid "-- leave unchanged --"
 msgstr "-- değiştirilmemiş bırak --"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:260
-#, fuzzy
 msgid "H Align:"
-msgstr "Y Hizala"
+msgstr "H Hizala:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:270
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:280
@@ -9329,9 +9324,8 @@ msgid "(fields only)"
 msgstr "Görünür (yalnızca alanlar)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:284
-#, fuzzy
 msgid "V Align:"
-msgstr "D Hizala"
+msgstr "V Hizala:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:326
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:354
@@ -9382,7 +9376,7 @@ msgid ""
 "Error creating symbol library table '%s'.\n"
 "%s"
 msgstr ""
-"Sembol kütüphane tablosu '%s' oluşturulurken hata oluştu.\n"
+"'%s' sembol kitaplığı oluşturulurken hata oluştu.\n"
 "%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:75
@@ -9402,7 +9396,7 @@ msgid ""
 "Error reading symbol library table '%s'.\n"
 "%s"
 msgstr ""
-"Sembol kütüphanesi tablosu '%s' okunurken hata oluştu.\n"
+"'%s' sembol kitaplığı tablosu yüklenirken hata oluştu.\n"
 "%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:109
@@ -9604,9 +9598,8 @@ msgstr "Y Konumu"
 #: eeschema/sch_text.cpp:507 eeschema/sch_textbox.cpp:450
 #: pcbnew/pcb_dimension.cpp:332 pcbnew/pcb_text.cpp:255
 #: pcbnew/pcb_textbox.cpp:306
-#, fuzzy
 msgid "Font"
-msgstr "Yazı tipi:"
+msgstr "Yazı tipi"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:121
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:92
@@ -9798,9 +9791,8 @@ msgid "0"
 msgstr "0"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:37
-#, fuzzy
 msgid "Pin count:"
-msgstr "Bacak sayısı"
+msgstr "Bacak sayısı:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:48
 #, fuzzy
@@ -9817,9 +9809,8 @@ msgid "Group Selected"
 msgstr "Seç"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:151
-#, fuzzy
 msgid "Filter by unit:"
-msgstr "Bacak sayısına göre filtrele"
+msgstr "Bacak sayısına göre filtrele:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.h:82
 msgid "Pin Table"
@@ -10241,9 +10232,8 @@ msgstr "Metin boş olamaz."
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:259
 #: eeschema/dialogs/dialog_text_properties_base.cpp:266
-#, fuzzy
 msgid "Background fill"
-msgstr "Arka plan dolgusu:"
+msgstr "Arka plan dolgusu"
 
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:285
 #, fuzzy
@@ -10363,7 +10353,6 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 "Bu pim, şemada bağlanmayı zorlaştıracak %d mils ızgarasında değildir.\n"
-"\n"
 "Devam etmek istiyor musun?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:439
@@ -10404,9 +10393,8 @@ msgid "&Pin length:"
 msgstr "B&acak uzunluğu:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:83
-#, fuzzy
 msgid "N&ame text size:"
-msgstr "&Ad Metin Boyutu"
+msgstr "&Ad Metin Boyutu:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:90
 msgid "Number text si&ze:"
@@ -10549,9 +10537,9 @@ msgstr "Kullanıcı yoluna geri dönmek'%s'."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:442
 #: eeschema/dialogs/dialog_plot_schematic.cpp:480
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot normalize path '%s%s'."
-msgstr "'%s' kitaplık yolunun üzerine yazılamıyor."
+msgstr "'%s%s' yolu normalleştirilemiyor."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:467
 #, fuzzy
@@ -26700,23 +26688,23 @@ msgstr "Yatay olarak: soldan sağa doğru"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:83
 msgid "Horizontally:: bottom right to top left"
-msgstr ""
+msgstr "Yatay :: sağ alttan sola"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:91
 msgid "Vertically: top left to bottom right"
-msgstr ""
+msgstr "Dikey olarak: sol üstten sağa"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:102
 msgid "Vertically: bottom left to top right"
-msgstr ""
+msgstr "Dikey olarak: soldan sağa doğru"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:113
 msgid "Vertically: top right to bottom left"
-msgstr ""
+msgstr "Dikey olarak: sağ üstten sola"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:124
 msgid "Vertically: bottom right to top left"
-msgstr ""
+msgstr "Dikey olarak: sağ alttan sola"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:137
 #, fuzzy
@@ -26740,6 +26728,9 @@ msgid ""
 "to this grid before sorting.\n"
 "This helps with misaligned parts."
 msgstr ""
+"Bileşen konumu yuvarlatılacaktır\n"
+"sıralamadan önce bu ızgaraya.\n"
+"Bu, yanlış hizalanmış parçalara yardımcı olur."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:168
 #, fuzzy
@@ -26798,12 +26789,16 @@ msgid ""
 "Blank continues from front or enter a number greater than the highest "
 "reference designation on the front."
 msgstr ""
+"Boşluk önden devam eder veya öndeki en yüksek referans tanımından daha büyük "
+"bir sayı girin."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:230
 msgid ""
 "Leave blank or zero, or enter a number greater than the highest reference "
 "designation on the front."
 msgstr ""
+"Boş veya sıfır bırakın veya öndeki en yüksek referans tanımından daha büyük "
+"bir sayı girin."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:235
 #, fuzzy
@@ -26815,16 +26810,20 @@ msgid ""
 "If checked will remove the front side prefix\n"
 "in the front prefix box if present"
 msgstr ""
+"Kontrol edilirse ön taraf öneki kaldırılır\n"
+"varsa ön önek kutusunda"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:240
 msgid "Remove back prefix"
-msgstr ""
+msgstr "Geri önekini kaldır"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:241
 msgid ""
 "If checked will remove the Back side prefix\n"
 "in the back prefix box if present"
 msgstr ""
+"Kontrol edilirse Arka taraf öneki kaldırılır\n"
+"varsa arka önek kutusunda"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:245
 #, fuzzy
@@ -26834,7 +26833,7 @@ msgstr "Önek:"
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:247
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:252
 msgid "Optional prefix for component side reference designations (e.g. F_)"
-msgstr ""
+msgstr "Bileşen tarafı referans tanımlamaları için isteğe bağlı önek (ör. F_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:256
 #, fuzzy
@@ -26844,7 +26843,7 @@ msgstr "Önek:"
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:258
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:263
 msgid "Optional prefix for solder side reference designations (e.g. B_)"
-msgstr ""
+msgstr "Lehim tarafı referans tanımlamaları için isteğe bağlı önek (ör. B_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:267
 #, fuzzy
@@ -26866,6 +26865,8 @@ msgid ""
 "Do not re-annotate this type \n"
 "of reference (R means R*)"
 msgstr ""
+"Bu türe yeniden açıklama eklemeyin\n"
+"referans (R, R * anlamına gelir)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:293
 msgid "Reference Designators"
@@ -26873,7 +26874,7 @@ msgstr "Başvuru Belirleyicileri"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.h:107
 msgid "Geographical Reannotation"
-msgstr ""
+msgstr "Coğrafi Yeniden Düzenleme"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:53
 #, fuzzy
@@ -26922,7 +26923,7 @@ msgstr "Varsayılanlar"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:136
 msgid "Design Rules"
-msgstr ""
+msgstr "Tasarım Kuralları"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:143
 msgid "Constraints"
@@ -26936,7 +26937,7 @@ msgstr "Önceden tanımlanan boyutlar:"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:191
 msgid "Project is missing or read-only. Some settings will not be editable."
-msgstr ""
+msgstr "Proje eksik veya salt okunur. Bazı ayarlar düzenlenemez."
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:248
 #, c-format
@@ -26944,6 +26945,8 @@ msgid ""
 "Error importing settings from board:\n"
 "Associated project file %s could not be loaded"
 msgstr ""
+"Ayarları panodan içe aktarırken hata oluştu:\n"
+"İlişkili proje dosyası %s yüklenemedi"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:270 pcbnew/files.cpp:649
 #: pcbnew/tools/pcb_control.cpp:1231
@@ -27060,6 +27063,8 @@ msgid ""
 "PCB statistics report\n"
 "====================="
 msgstr ""
+"PCB istatistik raporu\n"
+"====================="
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:662
 msgid "Date"
@@ -27145,7 +27150,7 @@ msgstr "Oluşturucu Dosyası"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.h:68
 msgid "Board Statistics"
-msgstr ""
+msgstr "Yönetim Kurulu İstatistikleri"
 
 #: pcbnew/dialogs/dialog_choose_footprint.cpp:237
 #, fuzzy
@@ -27190,11 +27195,13 @@ msgid ""
 "(Pads which appear in a Net Tie pad group will not be considered for "
 "merging.)"
 msgstr ""
+"(Net Bağlama pedi grubunda görünen pedler birleştirme için dikkate "
+"alınmayacaktır.)"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:48
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:72
 msgid "Changes To Be Applied:"
-msgstr ""
+msgstr "Uygulanacak Değişiklikler:"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.h:55
 #, fuzzy
@@ -27214,7 +27221,7 @@ msgstr "Bacaklar kontrol ediliyor..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:138
 msgid "Rebuilding connectivity..."
-msgstr ""
+msgstr "Bağlantıyı yeniden kurmak..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:158
 #, fuzzy
@@ -27223,25 +27230,28 @@ msgstr "Kart adı"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:25
 msgid "Delete &tracks connecting different nets"
-msgstr ""
+msgstr "Farklı ağları birbirine bağlayan parçaları sil ve izle"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:26
 msgid ""
 "remove track segments connecting nodes belonging to different nets (short "
 "circuit)"
 msgstr ""
+"farklı ağlara ait düğümleri birbirine bağlayan parça parçalarını çıkarın ("
+"kısa devre)"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:30
 msgid "&Delete redundant vias"
-msgstr ""
+msgstr "Gereksiz yolları &sil"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:31
 msgid "remove vias on through hole pads and superimposed vias"
 msgstr ""
+"delik pedleri ve üst üste bindirilmiş delikler üzerindeki delikleri çıkarın"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:35
 msgid "Delete vias connected on only one layer"
-msgstr ""
+msgstr "Yalnızca bir katmana bağlı yolları silin"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:38
 #, fuzzy
@@ -27250,15 +27260,15 @@ msgstr "Çakışmalar kontrol ediliyor..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:39
 msgid "merge aligned track segments, and remove null segments"
-msgstr ""
+msgstr "hizalanmış parça segmentlerini birleştirin ve boş segmentleri kaldırın"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:43
 msgid "Delete tracks unconnected at one end"
-msgstr ""
+msgstr "Bir uca bağlı parçaları silin"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:44
 msgid "delete tracks having at least one dangling end"
-msgstr ""
+msgstr "en az bir sarkan ucu olan parçaları silin"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:48
 #, fuzzy
@@ -27268,6 +27278,7 @@ msgstr "Yollar ve geçişler oluştur"
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:49
 msgid "Delete tracks that have both start and end positions inside of a pad"
 msgstr ""
+"Bir pedin içinde hem başlangıç hem de bitiş konumlarına sahip parçaları silin"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.h:60
 #, fuzzy
@@ -27318,7 +27329,7 @@ msgstr "Logo Dosyası Oluştur"
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:109
 #: pcbnew/tools/convert_tool.cpp:101
 msgid "Delete source objects after conversion"
-msgstr ""
+msgstr "Dönüştürmeden sonra kaynak nesneleri sil"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:243
 #, fuzzy
@@ -27341,7 +27352,7 @@ msgstr "Yuvarlama"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:564
 msgid "Thermal spoke width cannot be smaller than the minimum width."
-msgstr ""
+msgstr "Termal kol genişliği minimum genişlikten daha küçük olamaz."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:588
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:325
@@ -27351,13 +27362,15 @@ msgstr "Sembol seçilmedi"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:872
 msgid "<no net> will result in an isolated copper island."
-msgstr ""
+msgstr "<ağ yok> yalıtılmış bir bakır adaya neden olur."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:48
 msgid ""
 "Pattern to filter net names in filtered list.\n"
 "Only net names matching this pattern are displayed."
 msgstr ""
+"Filtrelenmiş listedeki ağ adlarını filtrelemek için desen.\n"
+"Yalnızca bu desenle eşleşen ağ adları görüntülenir."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:55
 #, fuzzy
@@ -27376,11 +27389,11 @@ msgstr "Ağ adları"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:97
 msgid "A unique name for this zone to identify it for DRC"
-msgstr ""
+msgstr "Bu bölgenin DRC için tanımlaması için benzersiz bir ad."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:104
 msgid "Zone priority level:"
-msgstr ""
+msgstr "Bölge öncelik düzeyi:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:106
 msgid ""
@@ -27390,6 +27403,11 @@ msgid ""
 "* If its priority is higher, its outlines are removed from the other zone.\n"
 "* If its priority is equal, a DRC error is set."
 msgstr ""
+"Bölgeler öncelik seviyesine göre doldurulur, seviye 3, seviye 2'den daha "
+"yüksek önceliğe sahiptir.\n"
+"Bir bölge başka bir bölgenin içinde olduğunda:\n"
+"* Önceliği daha yüksekse, ana hatları diğer bölgeden kaldırılır.\n"
+"* Önceliği eşitse, bir DRC hatası ayarlanır."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:130
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:116
@@ -27414,7 +27432,7 @@ msgstr "Taranmış"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:65
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:126
 msgid "Outline hatch pitch:"
-msgstr ""
+msgstr "Anahat hatch pitch:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:154
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:87
@@ -27444,6 +27462,8 @@ msgstr "Açıklık:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:199
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
 msgstr ""
+"Bu bölge için bakır boşluğu (net sınıf boşluğunu kullanmak için 0'a "
+"ayarlayın)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:210
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:76
@@ -27453,7 +27473,7 @@ msgstr "En ince yol genişliği"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:212
 msgid "Minimum thickness of filled areas."
-msgstr ""
+msgstr "Doldurulmuş alanların minimum kalınlığı."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:226
 #, fuzzy
@@ -27465,6 +27485,8 @@ msgid ""
 "Default pad connection type to zone.\n"
 "This setting can be overridden by local  pad settings"
 msgstr ""
+"Bölgeye varsayılan ped bağlantı türü.\n"
+"Bu ayar yerel ped ayarları tarafından geçersiz kılınabilir"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:2765
 #: pcbnew/pad.cpp:1740 pcbnew/zone.cpp:1362
@@ -27474,7 +27496,7 @@ msgstr "termal kabartmalar"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 msgid "Reliefs for PTH"
-msgstr ""
+msgstr "PTH için kabartmalar"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:238
 #, fuzzy
@@ -27486,10 +27508,12 @@ msgid ""
 "The distance that will be kept clear between the filled area of the zone and "
 "a pad connected by thermal relief spokes."
 msgstr ""
+"Bölgenin doldurulmuş alanı ile termal kabartma parmaklarıyla bağlanan bir "
+"ped arasında net tutulacak mesafe."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:245
 msgid "Clearance between pads in the same net and filled areas."
-msgstr ""
+msgstr "Aynı ağdaki ve doldurulmuş alanlardaki pedler arasındaki boşluk."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:253
 msgid "Thermal spoke width:"
@@ -27534,7 +27558,7 @@ msgstr "Yol genişliği:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:318
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:160
 msgid "Hatch gap:"
-msgstr ""
+msgstr "Kapak boşluğu:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:329
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:171
@@ -27551,6 +27575,11 @@ msgid ""
 "2 = round corners\n"
 "3 = round corners (finer shape)"
 msgstr ""
+"Yumuşatma çabasının değeri\n"
+"0 = yumuşatma yok\n"
+"1 = pah kırma\n"
+"2 = yuvarlak köşeler\n"
+"3 = yuvarlak köşeler (daha ince şekil)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:338
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:183
@@ -27565,6 +27594,10 @@ msgid ""
 "0 = no smoothing\n"
 "1.0 = max radius/chamfer size (half gap value)"
 msgstr ""
+"Düzleştirilmiş köşeler boyutu ile çizgiler arasındaki boşluk arasındaki "
+"oran\n"
+"0 = yumuşatma yok\n"
+"1.0 = maksimum yarıçap / pah boyutu (yarım boşluk değeri)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:351
 #, fuzzy
@@ -27573,11 +27606,11 @@ msgstr "Alan Ekle..."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:353
 msgid "Choose what to do with unconnected copper islands"
-msgstr ""
+msgstr "Bağlantısız bakır adalarla ne yapacağınızı seçin"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
 msgid "Below area limit"
-msgstr ""
+msgstr "Alan sınırının altında"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:363
 #, fuzzy
@@ -27586,17 +27619,19 @@ msgstr "En büyük toplam yedekleme boyutu:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:366
 msgid "Isolated islands smaller than this will be removed"
-msgstr ""
+msgstr "Bundan daha küçük izole adalar kaldırılacak"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:395
 msgid "Export Settings to Other Similar Zones"
-msgstr ""
+msgstr "Ayarları Diğer Benzer Bölgelere Aktar"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:396
 msgid ""
 "Export this zone setup (excluding layer and net selection) to other similar "
 "copper zones (teardrops or usual copper zones)."
 msgstr ""
+"Bu bölge kurulumunu (katman ve ağ seçimi hariç) diğer benzer bakır bölgelere "
+"(gözyaşı damlaları veya normal bakır bölgeler) dışa aktarın."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.h:141
 #, fuzzy
@@ -27605,24 +27640,24 @@ msgstr "Ayak İzi Değeri Özellikleri"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:133
 msgid "Numerals (0,1,2,...,9,10)"
-msgstr ""
+msgstr "Rakamlar (0,1,2,...,9,10)"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:137
 msgid "Hexadecimal (0,1,...,F,10,...)"
-msgstr ""
+msgstr "Onaltılık (0,1,..., F,10,...)"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:141
 msgid "Alphabet, minus IOSQXZ"
-msgstr ""
+msgstr "Alfabe, eksi IOSQXZ"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:145
 msgid "Alphabet, full 26 characters"
-msgstr ""
+msgstr "Alfabe, tam 26 karakter"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:269
-#, c-format
+#, c-format, fuzzy
 msgid "Bad numeric value for %s: %s"
-msgstr ""
+msgstr "%S için hatalı sayısal değer: %s"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:305
 #, c-format
@@ -27630,6 +27665,8 @@ msgid ""
 "Could not determine numbering start from '%s': expected value consistent "
 "with alphabet '%s'."
 msgstr ""
+"'%s' ile başlayan numaralandırma belirlenemedi: '%s' alfabesiyle tutarlı "
+"beklenen değer."
 
 #: pcbnew/dialogs/dialog_create_array.cpp:313
 #, fuzzy
@@ -27725,7 +27762,7 @@ msgstr "Numaralandırma Seçenekleri"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:122
 msgid "Reverse numbering on alternate rows/columns"
-msgstr ""
+msgstr "Alternatif satırlarda / sütunlarda ters numaralandırma"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:125
 #: pcbnew/dialogs/dialog_create_array_base.cpp:293
@@ -27746,11 +27783,11 @@ msgstr "Bacak Numarası"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:131
 msgid "Continuous (1, 2, 3...)"
-msgstr ""
+msgstr "Sürekli (1, 2, 3...)"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:131
 msgid "Coordinate (A1, A2, ... B1, ...)"
-msgstr ""
+msgstr "Koordinat (A1, A2, ... B1, ...)"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:133
 #, fuzzy
@@ -27759,11 +27796,11 @@ msgstr "Bacak Numarası"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:137
 msgid "Primary axis numbering:"
-msgstr ""
+msgstr "Birincil eksen numaralandırması:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:146
 msgid "Secondary axis numbering:"
-msgstr ""
+msgstr "İkincil eksen numaralandırması:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:165
 #: pcbnew/dialogs/dialog_create_array_base.cpp:314
@@ -27802,10 +27839,12 @@ msgid ""
 "Positive angles represent an anti-clockwise rotation. An angle of 0 will "
 "produce a full circle divided evenly into \"Count\" portions."
 msgstr ""
+"Pozitif açılar saat yönünün tersine dönüşü temsil eder. 0'lık bir açı, eşit "
+"olarak \"Sayım\" bölümlerine bölünmüş tam bir daire oluşturacaktır."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:268
 msgid "How many items in the array."
-msgstr ""
+msgstr "Dizide kaç öğe var."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:272
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:52
@@ -27816,7 +27855,7 @@ msgstr "Döndür:"
 msgid ""
 "Rotate the item as well as move it - multi-selections will be rotated "
 "together"
-msgstr ""
+msgstr "Öğeyi döndürün ve taşıyın - çoklu seçimler birlikte döndürülür"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:291
 msgid "Numbering Options"
@@ -27856,6 +27895,8 @@ msgid ""
 "This can conflict with reference designators in the schematic that have not "
 "yet been synchronized with the board."
 msgstr ""
+"Bu, şemadaki henüz kartla senkronize edilmemiş referans belirleyicilerle "
+"çakışabilir."
 
 #: pcbnew/dialogs/dialog_create_array_base.h:127
 #, fuzzy
@@ -27867,6 +27908,8 @@ msgid ""
 "This item was on a non-existing layer.\n"
 "It has been moved to the first defined layer."
 msgstr ""
+"Bu öğe mevcut olmayan bir katmandaydı.\n"
+"Tanımlanan ilk katmana taşındı."
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:311
 #, fuzzy
@@ -27886,7 +27929,7 @@ msgstr "Metin dosyaları"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:41
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:49
 msgid "Draw a shape around the leader text"
-msgstr ""
+msgstr "Lider metninin etrafına bir şekil çizin"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:53
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:76
@@ -27909,7 +27952,7 @@ msgstr "Boyut"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:98
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:104
 msgid "Measured value of this dimension"
-msgstr ""
+msgstr "Bu boyutun ölçülen değeri"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:108
 #, fuzzy
@@ -27920,6 +27963,8 @@ msgstr "Üzerine yaz"
 msgid ""
 "When checked, the actual measurement is ignored and any value can be entered"
 msgstr ""
+"Kontrol edildiğinde, gerçek ölçüm göz ardı edilir ve herhangi bir değer "
+"girilebilir"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:116
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:44
@@ -27935,11 +27980,13 @@ msgid ""
 "Units of this dimension (\"automatic\" to follow the units selected in the "
 "editor)"
 msgstr ""
+"Bu boyuttaki birimler (düzenleyicide seçilen birimleri takip etmek için "
+"\"otomatik\")"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:132
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:137
 msgid "Text to print before the dimension value"
-msgstr ""
+msgstr "Boyut değerinden önce yazdırılacak metin"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:141
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:114
@@ -27950,7 +27997,7 @@ msgstr "Tekdüze"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:143
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:151
 msgid "Choose how to display the units"
-msgstr ""
+msgstr "Birimlerin nasıl görüntüleneceğini seçin"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:147
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:118
@@ -27972,7 +28019,7 @@ msgstr "1234"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:157
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:162
 msgid "Text to print after the dimension value"
-msgstr ""
+msgstr "Boyut değerinden sonra yazdırılacak metin"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:166
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:126
@@ -27984,7 +28031,7 @@ msgstr "Kesinlik:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:168
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:176
 msgid "Choose how many digits of precision to display"
-msgstr ""
+msgstr "Kaç basamak hassas görüntüleneceğini seçin"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:345
@@ -28046,13 +28093,15 @@ msgstr "0.00000"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:180
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:152
 msgid "Suppress trailing zeroes"
-msgstr ""
+msgstr "Sondaki sıfırları bastır"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:181
 msgid ""
 "When checked, \"0.100\" will be shown as \"0.1\" even if the precision "
 "setting is higher"
 msgstr ""
+"Kontrol edildiğinde, hassasiyet ayarı daha yüksek olsa bile \"0.100\" \"0.1\""
+" olarak gösterilecektir"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:209
 #, fuzzy
@@ -28146,7 +28195,7 @@ msgstr "El ile"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:359
 msgid "Choose how to position the text relative to the dimension line"
-msgstr ""
+msgstr "Metnin boyut satırına göre nasıl konumlandırılacağını seçin"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:363
 #, fuzzy
@@ -28156,6 +28205,7 @@ msgstr "Kılavuz boyutlarını ayarla"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:364
 msgid "Automatically set the text orientation to match the dimension lines"
 msgstr ""
+"Metin yönünü boyut çizgileriyle eşleşecek şekilde otomatik olarak ayarlayın"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:378
 #, fuzzy
@@ -28164,7 +28214,7 @@ msgstr "Boyut"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:387
 msgid "Thickness of the dimension lines"
-msgstr ""
+msgstr "Boyut çizgilerinin kalınlığı"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:401
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:141
@@ -28181,7 +28231,7 @@ msgstr "Pozisyon kayması:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:414
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:419
 msgid "Gap between the measured points and the start of the extension lines"
-msgstr ""
+msgstr "Ölçülen noktalar ile uzatma hatlarının başlangıcı arasındaki boşluk"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:427
 #, fuzzy
@@ -28256,7 +28306,7 @@ msgstr "'%s' rapor dosyası oluşturuldu."
 
 #: pcbnew/dialogs/dialog_drc.cpp:1136
 msgid "Do you wish to delete excluded markers as well?"
-msgstr ""
+msgstr "Hariç tutulan işaretleyicileri de silmek ister misiniz?"
 
 #: pcbnew/dialogs/dialog_drc.cpp:1139
 #, fuzzy
@@ -28270,11 +28320,11 @@ msgstr "< bulunamadı>"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:27
 msgid "Refill all zones before performing DRC"
-msgstr ""
+msgstr "Drc'yi gerçekleştirmeden önce tüm bölgeleri yeniden doldurun"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:30
 msgid "Report all errors for each track"
-msgstr ""
+msgstr "Her parça için tüm hataları bildirin"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:31
 msgid ""
@@ -28284,10 +28334,14 @@ msgid ""
 "If unselected, only the first DRC violation will be reported for each track "
 "connection."
 msgstr ""
+"Seçilirse, parçalar için tüm DRC ihlalleri bildirilecektir. Karmaşık "
+"tasarımlar için bu yavaş olabilir.\n"
+"\n"
+"Seçilmemişse, her parça bağlantısı için yalnızca ilk DRC ihlali bildirilir."
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:41
 msgid "Test for parity between PCB and schematic"
-msgstr ""
+msgstr "PCB ve şematik arasındaki parite testi"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:119
 #, fuzzy, c-format
@@ -28311,7 +28365,7 @@ msgstr "Elektrik Kuralları Denetleyicisi"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:19
 msgid "Pad names are restricted to 4 characters (including number)."
-msgstr ""
+msgstr "Ped adları 4 karakterle sınırlıdır (sayı dahil)."
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:32
 #, fuzzy
@@ -28384,6 +28438,10 @@ msgid ""
 "or the user made changes to the library footprint and wants to propagate "
 "them back to the PCB."
 msgstr ""
+"Dizeleri güncelle / sıfırla: Bu açıklamaların kapsaması gereken iki durum "
+"vardır: kullanıcı PCB üzerindeki bir ayak izini geçersiz kılar ve bunları "
+"kaldırmak ister veya kullanıcı kitaplık ayak izinde değişiklikler yapar ve "
+"bunları PCB'ye geri yaymak ister."
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:357
 #, c-format
@@ -28406,7 +28464,7 @@ msgstr "Değişiklikleri Geri Al"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:398
 msgid ": OK"
-msgstr ""
+msgstr ": Tamam"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:24
 #, fuzzy
@@ -28532,12 +28590,14 @@ msgstr "SVG dosyaları"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:223
 msgid "Non-unity scaled models:"
-msgstr ""
+msgstr "Birlik dışı ölçekli modeller:"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:225
 msgid ""
 "Scaled models detected.  Model scaling is not reliable for mechanical export."
 msgstr ""
+"Ölçeklendirilmiş modeller algılandı. Model ölçeklendirme, mekanik dışa "
+"aktarma için güvenilir değildir."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:227
 msgid "Model Scale Warning"
@@ -28546,6 +28606,7 @@ msgstr "Model Ölçek Uyarısı"
 #: pcbnew/dialogs/dialog_export_step.cpp:297
 msgid "STEP export failed!  Please save the PCB and try again"
 msgstr ""
+"Adım dışa aktarma başarısız oldu! Lütfen PCB'yi kaydedin ve tekrar deneyin"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:359
 #, c-format
@@ -28574,7 +28635,7 @@ msgstr "Koordinatlar"
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:98
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
 msgid "Drill/place file origin"
-msgstr ""
+msgstr "Dosya kaynağını delin / yerleştirin"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:41
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
@@ -28622,11 +28683,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:120
 msgid "Substitute similarly named models"
-msgstr ""
+msgstr "Benzer şekilde adlandırılmış modelleri değiştirin"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:121
 msgid "Replace VRML models with STEP models of the same name"
-msgstr ""
+msgstr "VRML modellerini aynı addaki adım modelleriyle değiştirin"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:125
 #, fuzzy
@@ -28649,7 +28710,7 @@ msgstr "Kartın dış çizgileri kapalı değil:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:137
 msgid "Tight (0.001 mm)"
-msgstr ""
+msgstr "Sıkı (0.001 mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:137
 #, fuzzy
@@ -28658,7 +28719,7 @@ msgstr "Standart (1,2,3)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:137
 msgid "Loose (0.1 mm)"
-msgstr ""
+msgstr "Gevşek (0.1mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:141
 msgid ""
@@ -28683,6 +28744,7 @@ msgstr "Farklı bir yol seçin"
 msgid ""
 "Cannot make path relative (target volume different from board file volume)!"
 msgstr ""
+"Yol göreli hale getirilemiyor (hedef birim, pano dosyası biriminden farklı)!"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:272
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:280
@@ -28702,6 +28764,8 @@ msgid ""
 "Enter a filename if you do not want to use default file names\n"
 "Can be used only when printing the current sheet"
 msgstr ""
+"Varsayılan dosya adlarını kullanmak istemiyorsanız bir dosya adı girin\n"
+"Yalnızca geçerli sayfayı yazdırırken kullanılabilir"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:64
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:509
@@ -28716,7 +28780,7 @@ msgstr "Yazdır"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:85
 msgid "Export as black elements on a white background"
-msgstr ""
+msgstr "Beyaz bir arka plan üzerinde siyah öğeler olarak dışa aktar"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:89
 #, fuzzy
@@ -28740,7 +28804,7 @@ msgstr "Sayfa boyutu:"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:96
 msgid "Print the layer(s) horizontally mirrored"
-msgstr ""
+msgstr "Katman (lar) ı yatay olarak yansıtılmış olarak yazdırın"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:100
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:254
@@ -28750,7 +28814,7 @@ msgstr "Her bir katmanı farklı sayfada yazdır"
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:106
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:260
 msgid "Print board edges on all pages"
-msgstr ""
+msgstr "Tüm sayfalara pano kenarlarını yazdırın"
 
 #: pcbnew/dialogs/dialog_export_svg_base.h:72
 #, fuzzy
@@ -28759,7 +28823,7 @@ msgstr "Dosyaya Aktar"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:181
 msgid "Are you sure you want to overwrite the existing file?"
-msgstr ""
+msgstr "Mevcut dosyanın üzerine yazmak istediğinizden emin misiniz?"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:256
 #: pcbnew/plugins/altium/altium_pcb.cpp:1575
@@ -28783,7 +28847,7 @@ msgstr "Ayak çizimi metni"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:46
 msgid "Coordinate origin options:"
-msgstr ""
+msgstr "Orijin seçeneklerini koordine et:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:53
 #, fuzzy
@@ -28801,25 +28865,29 @@ msgstr "İnç"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:111
 msgid "VRML Units for Output Files"
-msgstr ""
+msgstr "Çıktı Dosyaları için VRML Birimleri"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:124
 msgid "Copy 3D model files to 3D model path"
-msgstr ""
+msgstr "3B model dosyalarını 3B model yoluna kopyalama"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:125
 msgid ""
 "If checked: copy 3D models to the destination folder\n"
 "If not checked: Embed 3D models in the VRML board file"
 msgstr ""
+"İşaretliyse: 3B modelleri hedef klasöre kopyalayın\n"
+"İşaretli değilse: 3B modelleri VRML kart dosyasına göm"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:129
 msgid "Use relative paths to model files in board VRML file"
-msgstr ""
+msgstr "VRML dosyasındaki dosyaları modellemek için göreli yolları kullanın"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:130
 msgid "Use paths for model files in board VRML file relative to the VRML file"
 msgstr ""
+"VRML dosyasına göre tahta VRML dosyasındaki model dosyaları için yolları "
+"kullanma"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.h:65
 #, fuzzy
@@ -28893,7 +28961,7 @@ msgstr "Kilitli Öğeler"
 
 #: pcbnew/dialogs/dialog_find.cpp:386
 msgid "No hits"
-msgstr ""
+msgstr "İsabet yok"
 
 #: pcbnew/dialogs/dialog_find.cpp:392
 #, fuzzy, c-format
@@ -28903,7 +28971,7 @@ msgstr "%s bulundu"
 #: pcbnew/dialogs/dialog_find.cpp:395
 #, c-format
 msgid "Hit(s): %ld / %lu"
-msgstr ""
+msgstr "İsabet (ler): %ld / %lu"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:28
 #, fuzzy
@@ -28951,7 +29019,7 @@ msgstr "Metin Ara"
 
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:61
 msgid "Run Checks"
-msgstr ""
+msgstr "Kontrolleri Çalıştır"
 
 #: pcbnew/dialogs/dialog_footprint_checker_base.h:69
 #: pcbnew/tools/pcb_actions.cpp:458
@@ -28971,6 +29039,9 @@ msgid ""
 "only be selected when the 'Locked items' checkbox is enabled in the "
 "selection filter."
 msgstr ""
+"Kilitli ayak izleri tuval üzerinde serbestçe hareket ettirilemez ve "
+"yönlendirilemez ve yalnızca seçim filtresinde 'Kilitli öğeler' onay kutusu "
+"etkinleştirildiğinde seçilebilir."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:362
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:415
@@ -28999,11 +29070,13 @@ msgid "Text height must be at most %s."
 msgstr "%s en az %s olmalıdır."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:438
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Text thickness is too large for the text size.\n"
 "It will be clamped at %s."
 msgstr ""
+"Metin kalınlığı metin boyutu için çok büyük.\n"
+"%S olarak sıkıştırılacaktır."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:574
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:610
@@ -29112,12 +29185,12 @@ msgstr "Bu ihlali hariç tut"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:211
 #: pcbnew/footprint.cpp:2836
 msgid "Exempt from courtyard requirement"
-msgstr ""
+msgstr "Avlu şartından muaf"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:208
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:212
 msgid "Will not generate \"missing courtyard\" DRC violations"
-msgstr ""
+msgstr "\"Eksik avlu\" DRC ihlalleri oluşturmayacak"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:227
 #, fuzzy
@@ -29143,7 +29216,7 @@ msgstr "Açıklık"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:266
 msgid "Set values to 0 to use Board Setup values."
-msgstr ""
+msgstr "Pano Kurulum değerlerini kullanmak için değerleri 0 olarak ayarlayın."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:276
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:247
@@ -29158,6 +29231,9 @@ msgid ""
 "If 0, the Netclass values are used\n"
 "This value can be superseded by a pad local value."
 msgstr ""
+"Bu, bu ayak izinin tüm pedi için yerel net boşluktur\n"
+"0 İse, Net sınıf değerleri kullanılır\n"
+"Bu değerin yerini bir pad yerel değeri alabilir."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:289
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:260
@@ -29173,11 +29249,14 @@ msgid ""
 "This value can be superseded by a pad local value.\n"
 "If 0, the global value is used."
 msgstr ""
+"Bu, bu ayak izi için pedler ve lehim maskesi arasındaki yerel boşluktur.\n"
+"Bu değerin yerini bir pad yerel değeri alabilir.\n"
+"0 İse, genel değer kullanılır."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:302
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:273
 msgid "Allow bridged solder mask apertures between pads"
-msgstr ""
+msgstr "Pedler arasında köprülü lehim maskesi açıklıklarına izin verin"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:305
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:276
@@ -29196,6 +29275,11 @@ msgid ""
 "ratio.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
+"Bu, bu ayak izi için pedler ve lehim pastası arasındaki yerel boşluktur.\n"
+"Bu değerin yerini bir ped yerel değerleri alabilir.\n"
+"Son boşluk değeri, bu değerin toplamı ve boşluk değeri oranıdır.\n"
+"Negatif bir değer, ped boyutundan daha küçük bir şablon açıklığı boyutu "
+"anlamına gelir."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:318
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:289
@@ -29206,7 +29290,7 @@ msgid "Solder paste relative clearance:"
 msgstr "Lehim maskeden bakıra açıklık:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:320
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -29217,6 +29301,14 @@ msgid ""
 "clearance value.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
+"Bu, bu ayak izi için ped genişliğinin ve yüksekliğinin yüzdesi olarak "
+"uygulanan yerel boşluk oranıdır.\n"
+"10 Değeri, yatay boşluk değerinin pedin genişliğinin10%  'u ve dikey boşluk "
+"değerinin pedin yüksekliğinin10%  'u olduğu anlamına gelir.\n"
+"Bu değerin yerini bir pad yerel değeri alabilir.\n"
+"Son boşluk değeri, bu değerin ve mutlak boşluk değerinin toplamıdır.\n"
+"Negatif bir değer, ped boyutundan daha küçük bir şablon açıklığı boyutu "
+"anlamına gelir."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:343
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:314
@@ -29225,6 +29317,8 @@ msgstr ""
 msgid ""
 "Note: solder mask and paste values are used only for pads on copper layers."
 msgstr ""
+"Not: lehim maskesi ve macun değerleri sadece bakır tabakalardaki pedler için "
+"kullanılır."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:347
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:318
@@ -29233,6 +29327,8 @@ msgid ""
 "Note: solder paste clearances (absolute and relative) are added to determine "
 "the final clearance."
 msgstr ""
+"Not: son boşluğu belirlemek için lehim pastası boşlukları (mutlak ve "
+"göreceli) eklenir."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:355
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:326
@@ -29272,6 +29368,8 @@ msgid ""
 "The library ID and footprint ID currently assigned.  Use \"Change "
 "Footprint...\" to assign a different footprint."
 msgstr ""
+"Şu anda atanmış olan kitaplık kimliği ve ayak izi kimliği. \"Ayak İzini "
+"Değiştir\" i kullanın...\" farklı bir ayak izi atamak için."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:122
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:114
@@ -29307,6 +29405,8 @@ msgid ""
 "The text thickness is too large for the text size.\n"
 "It will be clamped."
 msgstr ""
+"Metin kalınlığı metin boyutu için çok büyük.\n"
+"Kenetlenecek."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:61
 msgid "Unconstrained"
@@ -29339,6 +29439,10 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
+"Bu, bu ayak izinin tüm pedleri için yerel net boşluktur.\n"
+"0 İse, Net sınıf değerleri kullanılır.\n"
+"Bu değer, Yerel Olarak altlık bazında geçersiz kılınabilir\n"
+"Ped Özelliklerinin Boşluk ve Ayarlar sekmesi."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:262
 msgid ""
@@ -29348,6 +29452,11 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
+"Bu, pedler ve lehim maskesi arasındaki yerel boşluktur.\n"
+"bu ayak izi.\n"
+"0 İse, genel değer kullanılır.\n"
+"Bu değer, Yerel Olarak altlık bazında geçersiz kılınabilir\n"
+"Ped Özelliklerinin Boşluk ve Ayarlar sekmesi."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:278
 msgid ""
@@ -29359,6 +29468,13 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
+"Bu, pedler ve lehim pastası arasındaki yerel boşluktur.\n"
+"bu ayak izi.\n"
+"Son boşluk değeri, bu değerin toplamı ve boşluk değeri oranıdır.\n"
+"Negatif bir değer, ped boyutundan daha küçük bir şablon açıklığı boyutu "
+"anlamına gelir.\n"
+"Bu değer, Yerel Olarak altlık bazında geçersiz kılınabilir\n"
+"Ped Özelliklerinin Boşluk ve Ayarlar sekmesi."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:291
 #, c-format
@@ -29373,6 +29489,15 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local Clearance "
 "and Settings tab of Pad Properties."
 msgstr ""
+"Bu, bu ayak izi için ped genişliğinin ve yüksekliğinin yüzdesi olarak "
+"uygulanan yerel boşluk oranıdır.\n"
+"10 Değeri, yatay boşluk değerinin pedin genişliğinin% 10'u ve dikey boşluk "
+"değerinin pedin yüksekliğinin% 10'u olduğu anlamına gelir.\n"
+"Son boşluk değeri, bu değerin ve mutlak boşluk değerinin toplamıdır.\n"
+"Negatif bir değer, ped boyutundan daha küçük bir şablon açıklığı boyutu "
+"anlamına gelir.\n"
+"Bu değer, Sayfa Özellikleri'nin Yerel Boşluk ve Ayarlar sekmesinde altlık "
+"bazında geçersiz kılınabilir."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:342
 #, fuzzy
@@ -29381,11 +29506,11 @@ msgstr "Ağ adları"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:344
 msgid "Pad groups allowed to short different nets:"
-msgstr ""
+msgstr "Ped gruplarının farklı ağları kısaltmasına izin verildi:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:143
 msgid "All footprint generator scripts were loaded"
-msgstr ""
+msgstr "Tüm ayak izi oluşturucu komut dosyaları yüklendi"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:65
 #, fuzzy
@@ -29399,7 +29524,7 @@ msgstr "3B Arama Yolları"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:77
 msgid "Not loadable python scripts:"
-msgstr ""
+msgstr "Yüklenemeyen python komut dosyaları:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:84
 #, fuzzy
@@ -29418,13 +29543,15 @@ msgstr "Ayak İzi(Footprint) Editörü"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.h:85
 msgid "Traceback of Python Script Errors"
-msgstr ""
+msgstr "Python Komut Dosyası Hatalarının Geri İzlenmesi"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options.cpp:38
 msgid ""
 "Select an <b>Option Choice</b> in the listbox above, and then click the "
 "<b>Append Selected Option</b> button."
 msgstr ""
+"Yukarıdaki liste kutusunda bir <b>Seçenek Seçimi</b> seçin ve ardından "
+"<b>Seçili Seçeneği Ekle</b> düğmesini tıklatın."
 
 #: pcbnew/dialogs/dialog_fp_plugin_options.cpp:63
 #, c-format
@@ -29443,11 +29570,11 @@ msgstr "Seçenekler"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:81
 msgid "Options supported by current plugin"
-msgstr ""
+msgstr "Mevcut eklenti tarafından desteklenen seçenekler"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:85
 msgid "<<    Append Selected Option"
-msgstr ""
+msgstr "<< Seçili Seçeneği Ekle"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:303
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:435
@@ -29473,13 +29600,13 @@ msgstr "Ön (üst yüz) yerleştirme dosyası: '%s'."
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:491
 #, c-format
 msgid "Full component count: %d."
-msgstr ""
+msgstr "Tam bileşen sayısı: %d."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:335
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:444
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:495
 msgid "File generation successful."
-msgstr ""
+msgstr "Dosya oluşturma başarılı."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:362
 #, fuzzy
@@ -29509,15 +29636,15 @@ msgstr "ASCII"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:49
 msgid "Gerber (experimental)"
-msgstr ""
+msgstr "Gerber (deneysel)"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:61
 msgid "Separate files for front, back"
-msgstr ""
+msgstr "Ön, arka için ayrı dosyalar"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:61
 msgid "Single file for board"
-msgstr ""
+msgstr "Tahta için tek dosya"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:63
 msgid "Files"
@@ -29528,6 +29655,8 @@ msgid ""
 "Creates 2 files: one for each board side or\n"
 "Creates only one file containing all footprints to place\n"
 msgstr ""
+"2 Dosya oluşturur: her pano tarafı için bir tane veya\n"
+"Yerleştirilecek tüm ayak izlerini içeren tek bir dosya oluşturur\n"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:75
 msgid "Include only SMD footprints"
@@ -29545,7 +29674,7 @@ msgstr "Katmanları Dahil Et"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:87
 msgid "Use negative X coordinates for footprints on bottom layer"
-msgstr ""
+msgstr "Alt katmandaki ayak izleri için negatif X koordinatlarını kullanın"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:76
 #, fuzzy
@@ -29559,11 +29688,11 @@ msgstr "Diğer sayfalara aktar"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:49
 msgid "Select a GenCAD export filename"
-msgstr ""
+msgstr "Bir GenCAD dışa aktarma dosya adı seçin"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:136
 msgid "Flip bottom footprint padstacks"
-msgstr ""
+msgstr "Alt ayak izi pedlerini çevirin"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:137
 #, fuzzy
@@ -29573,14 +29702,16 @@ msgstr "Oluşturanın takma adı:"
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:138
 msgid "Generate a new shape for each footprint instance (do not reuse shapes)"
 msgstr ""
+"Her ayak izi örneği için yeni bir şekil oluşturun (şekilleri yeniden "
+"kullanmayın)"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:139
 msgid "Use drill/place file origin as origin"
-msgstr ""
+msgstr "Matkap kullanın / dosya kaynağını kaynak olarak yerleştirin"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:140
 msgid "Save the origin coordinates in the file"
-msgstr ""
+msgstr "Başlangıç koordinatlarını dosyaya kaydedin"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:76
 #, fuzzy
@@ -29621,16 +29752,20 @@ msgid ""
 "Not recommended.\n"
 "Used mostly by users who make the boards themselves."
 msgstr ""
+"Tavsiye edilmez.\n"
+"Çoğunlukla panoları kendileri yapan kullanıcılar tarafından kullanılır."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:58
 msgid ""
 "Not recommended.\n"
 "Only use it for board houses which do not accept fully featured headers."
 msgstr ""
+"Tavsiye edilmez.\n"
+"Sadece tam özellikli başlıkları kabul etmeyen tahta evler için kullanın.."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:62
 msgid "PTH and NPTH in single file"
-msgstr ""
+msgstr "PTH ve PTH tek dosyada"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:63
 msgid ""
@@ -29638,10 +29773,13 @@ msgid ""
 "Only use for board houses which ask for merged PTH and NPTH into a single "
 "file."
 msgstr ""
+"Tavsiye edilmez.\n"
+"Yalnızca birleştirilmiş PTH ve npth'yi tek bir dosyada isteyen tahta evler "
+"için kullanın."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:67
 msgid "Use route command (recommended)"
-msgstr ""
+msgstr "Rota komutunu kullanın (önerilir)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:67
 #, fuzzy
@@ -29650,7 +29788,7 @@ msgstr "Alternatif Pin Adı"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:69
 msgid "Oval Holes Drill Mode"
-msgstr ""
+msgstr "Oval Delik Delme Modu"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:71
 msgid ""
@@ -29659,6 +29797,10 @@ msgid ""
 " \"Use alternate mode\" uses another drill/ route command (G85)\n"
 "(Use it only if the recommended command does not work)"
 msgstr ""
+"Oval delikler genellikle tahta evler için sorun yaratır.\n"
+"\"Rota komutunu kullan\" normal G00 rota komutunu kullanır (önerilir)\n"
+"\"Alternatif modu kullan\" başka bir tatbikat / rota komutu kullanır (G85)\n"
+"(Yalnızca önerilen komut çalışmıyorsa kullanın)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:78
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:84
@@ -29677,7 +29819,7 @@ msgstr "Dosya Biçimi"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:88
 msgid "Creates a drill map in PDF or other formats"
-msgstr ""
+msgstr "PDF veya diğer formatlarda bir detay haritası oluşturur"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:100
 #, fuzzy
@@ -29689,6 +29831,8 @@ msgid ""
 "Choose the coordinate origin: absolute or relative to the drill/place file "
 "origin"
 msgstr ""
+"Koordinat kaynağını seçin: matkap / yer dosyası kaynağına göre mutlak veya "
+"göreceli"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:108
 #, fuzzy
@@ -29697,15 +29841,15 @@ msgstr "Matkap dosyaları"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:112
 msgid "Decimal format (recommended)"
-msgstr ""
+msgstr "Ondalık biçim (önerilir)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:112
 msgid "Suppress leading zeros"
-msgstr ""
+msgstr "Baştaki sıfırları bastır"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:112
 msgid "Suppress trailing zeros"
-msgstr ""
+msgstr "Sondaki sıfırları bastırma"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:112
 #, fuzzy
@@ -29719,7 +29863,7 @@ msgstr "Dosya Biçimi"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:116
 msgid "Choose EXCELLON numbers notation"
-msgstr ""
+msgstr "MÜKEMMEL sayı gösterimini seçin"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:130 pcbnew/pcb_dimension.cpp:320
 #: pcbnew/pcb_dimension.cpp:1356
@@ -29759,7 +29903,7 @@ msgstr "Referans belirteçleri"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:35
 msgid "(specify multiple items separated by spaces for successive placement)"
-msgstr ""
+msgstr "(ardışık yerleştirme için boşluklarla ayrılmış birden çok öğe belirtin)"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:39
 msgid "Available footprints:"
@@ -30026,7 +30170,7 @@ msgstr "Öğeleri üst simge kitaplığı kimliğine göre filtreleyin:"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:112
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:133
 msgid "Set to specified values:"
-msgstr ""
+msgstr "Belirtilen değerlere ayarla:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:228
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:104
@@ -30189,10 +30333,11 @@ msgstr "Metin boş olamaz."
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:453
 msgid "Line width must be greater than zero for an unfilled rectangle."
 msgstr ""
+"Doldurulmamış bir dikdörtgen için çizgi genişliği sıfırdan büyük olmalıdır."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:459
 msgid "Line width must be greater than zero for an unfilled polygon."
-msgstr ""
+msgstr "Doldurulmamış bir çokgen için çizgi genişliği sıfırdan büyük olmalıdır."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:471
 #, fuzzy
@@ -30232,7 +30377,7 @@ msgstr "Metin Öğesi Özellikleri"
 
 #: pcbnew/dialogs/dialog_group_properties.cpp:120
 msgid "Modified group"
-msgstr ""
+msgstr "Değiştirilmiş grup"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:30
 #, fuzzy
@@ -30241,7 +30386,7 @@ msgstr "Ada göre grupla"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:41
 msgid "Prevents group from being moved on canvas"
-msgstr ""
+msgstr "Grubun tuval üzerinde taşınmasını engeller"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:45
 #, fuzzy
@@ -30255,7 +30400,7 @@ msgstr "Metin Özellikleri"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:81
 msgid "Load and Test Netlist"
-msgstr ""
+msgstr "Ağ Listesini Yükle ve Test Et"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:123
 #, fuzzy
@@ -30264,7 +30409,7 @@ msgstr "Seçimi kaldır"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:147
 msgid "Please choose a valid netlist file."
-msgstr ""
+msgstr "Lütfen geçerli bir netlist dosyası seçin."
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:153
 #: pcbnew/dialogs/dialog_import_netlist.cpp:190
@@ -30275,7 +30420,7 @@ msgstr "Verilen yol mevcut değil"
 #: pcbnew/dialogs/dialog_import_netlist.cpp:157
 #: pcbnew/dialogs/dialog_update_pcb.cpp:134
 msgid "Changes Applied to PCB"
-msgstr ""
+msgstr "PCB'ye Uygulanan Değişiklikler"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:225
 #, c-format
@@ -30290,6 +30435,8 @@ msgstr "Yapıştırılan sembollere benzersiz referans göstergeleri atayın"
 #: pcbnew/dialogs/dialog_import_netlist.cpp:231
 msgid "Using tstamps (unique IDs) to match symbols and footprints.\n"
 msgstr ""
+"Sembolleri ve ayak izlerini eşleştirmek için damgaları (benzersiz kimlikler) "
+"kullanma.\n"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:26
 #, fuzzy
@@ -30299,6 +30446,7 @@ msgstr "Ağlistesi Dosyasını Kaydet"
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:42
 msgid "Link footprints using component tstamps (unique ids)"
 msgstr ""
+"Bileşen damgalarını kullanarak ayak izlerini bağlama (benzersiz kimlikler)"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:42
 #, fuzzy
@@ -30307,7 +30455,7 @@ msgstr "'%s' için birden fazla ayak izi bulundu."
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:44
 msgid "Link Method"
-msgstr ""
+msgstr "Bağlantı Yöntemi"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:46
 msgid ""
@@ -30315,6 +30463,9 @@ msgid ""
 "assigned symbols, or to re-assign footprints to symbols which match their "
 "current references."
 msgstr ""
+"Geçerli olarak atanmış sembolleriyle eşleşecek şekilde ayak izi "
+"referanslarının güncellenip güncellenmeyeceğini veya geçerli referanslarıyla "
+"eşleşen sembollere ayak izlerini yeniden atayıp atamayacağınızı seçin."
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:53
 #, fuzzy
@@ -30328,7 +30479,7 @@ msgstr "Sembolü olmayan iz düşümleri sil"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:59
 msgid "Delete tracks shorting multiple nets"
-msgstr ""
+msgstr "Birden çok ağı kısa devre yapan parçaları silme"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.h:70
 #, fuzzy
@@ -30343,7 +30494,7 @@ msgstr "Tümünü Seç"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:51
 msgid "Board layers and physical stackup"
-msgstr ""
+msgstr "Tahta katmanları ve fiziksel yığınlama"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:54
 #, fuzzy
@@ -30357,7 +30508,7 @@ msgstr "Metin ve Grafik Özelliklerini Düzenle"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:60
 msgid "Text && graphics formatting"
-msgstr ""
+msgstr "Metin ve grafik biçimlendirme"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:63
 #, fuzzy
@@ -30385,6 +30536,9 @@ msgid ""
 "All required layers (marked with '*') must be matched. Please click on 'Auto-"
 "Match Layers' to automatically match the remaining layers"
 msgstr ""
+"Gerekli tüm katmanlar ('*' ile işaretlenmiş) eşleştirilmelidir. Kalan "
+"katmanları otomatik olarak eşleştirmek için lütfen 'Katmanları Otomatik "
+"Eşleştir' seçeneğine tıklayın"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:342
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:22
@@ -30417,7 +30571,7 @@ msgstr "<"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:65
 msgid "Remove selected layers from matched layers list."
-msgstr ""
+msgstr "Seçilen katmanları eşleşen katmanlar listesinden kaldırın."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:70
 #, fuzzy
@@ -30436,11 +30590,11 @@ msgstr "Arka Katmanlar"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:95
 msgid "Automatically match any unmatched layers to their KiCad equivalent."
-msgstr ""
+msgstr "Eşleşmeyen katmanları otomatik olarak KiCad eşdeğerleriyle eşleştirin."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.h:65
 msgid "Edit Mapping of Imported Layers"
-msgstr ""
+msgstr "İçe Aktarılan Katmanların Eşlemesini Düzenleme"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.cpp:122
 #, fuzzy
@@ -30464,21 +30618,21 @@ msgstr "Tüm Bakır Katmanlar"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:104
 msgid "Rotate around item anchor"
-msgstr ""
+msgstr "Öğe çapasının etrafında döndür"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:107
 msgid "Rotate around selection center"
-msgstr ""
+msgstr "Seçim merkezi etrafında döndür"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:110
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
 msgid "Rotate around local coordinates origin"
-msgstr ""
+msgstr "Yerel koordinatların kökeni etrafında döndürün"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:113
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
 msgid "Rotate around drill/place origin"
-msgstr ""
+msgstr "Matkabın etrafında döndürün / orijini yerleştirin"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:206
 #: pcbnew/dialogs/dialog_position_relative.cpp:159
@@ -30502,10 +30656,12 @@ msgid ""
 "Invalid movement values.  Movement would place selection outside of the "
 "maximum board area."
 msgstr ""
+"Geçersiz hareket değerleri. Hareket, seçimi maksimum tahta alanının dışına "
+"yerleştirecektir."
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
 msgid "Rotate around center of selection"
-msgstr ""
+msgstr "Seçimin merkezi etrafında döndür"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:81
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:106
@@ -30592,12 +30748,12 @@ msgstr "Değişken adı boş olamaz."
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2136
 #, c-format
 msgid "Net '%s' is in use.  Delete anyway?"
-msgstr ""
+msgstr "Net '%s' kullanılıyor. Yine de silmek mi?"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2177
 #, c-format
 msgid "Delete all nets in group '%s'?"
-msgstr ""
+msgstr "'%s' grubundaki tüm ağları silmek mi?"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2200
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2201
@@ -30635,7 +30791,7 @@ msgstr "Joker karakterler"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:51
 msgid "RegEx Substr"
-msgstr ""
+msgstr "RegEx Substr"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:90
 #, fuzzy
@@ -30680,7 +30836,7 @@ msgstr "Halka"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:197
 msgid "Line width may not be 0 for unfilled shapes."
-msgstr ""
+msgstr "Doldurulmamış şekiller için çizgi genişliği 0 olmayabilir."
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:319
 #, fuzzy, c-format
@@ -30694,7 +30850,7 @@ msgstr "%s en az %s olmalıdır."
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:374
 msgid "Polygon must have at least 3 corners after simplification"
-msgstr ""
+msgstr "Basitleştirmeden sonra çokgenin en az 3 köşesi olmalıdır"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:380
 #, fuzzy
@@ -30703,15 +30859,15 @@ msgstr "(kendiliğinden kesişen)"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:398
 msgid "Note: redundant corners removed"
-msgstr ""
+msgstr "Not: gereksiz köşeler kaldırıldı"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:424
 msgid "Select a corner to add the new corner after."
-msgstr ""
+msgstr "Ardından yeni köşeyi eklemek için bir köşe seçin."
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:459
 msgid "Select a corner to delete."
-msgstr ""
+msgstr "Silinecek bir köşe seçin."
 
 #: pcbnew/dialogs/dialog_pad_primitives_properties_base.cpp:30
 #, fuzzy
@@ -30749,15 +30905,15 @@ msgstr "Çiftleme:"
 
 #: pcbnew/dialogs/dialog_pad_primitives_properties_base.cpp:448
 msgid "Coordinates are relative to anchor pad, rotated 0.0 deg."
-msgstr ""
+msgstr "Koordinatlar, 0,0 derece döndürülmüş ankraj pedine göredir."
 
 #: pcbnew/dialogs/dialog_pad_primitives_properties_base.h:124
 msgid "Pad Custom Shape Geometry Transform"
-msgstr ""
+msgstr "Pad Özel Şekil Geometrisi Dönüşümü"
 
 #: pcbnew/dialogs/dialog_pad_primitives_properties_base.h:164
 msgid "Basic Shape Polygon"
-msgstr ""
+msgstr "Temel Şekil Çokgeni"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:169
 #: pcbnew/dialogs/dialog_pad_properties_base.h:266 pcbnew/pad.cpp:1781
@@ -30767,22 +30923,22 @@ msgstr "Bacak Özellikleri"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:176
 msgid "Default Pad Properties for Add Pad Tool"
-msgstr ""
+msgstr "Altlık Ekle Aracı için Varsayılan Sayfa Özellikleri"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:501
 #, c-format
 msgid "Footprint %s (%s), %s, rotated %g deg"
-msgstr ""
+msgstr "Ayak izi %s (%s), %s, döndürülmüş %g derece"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:504
 #: pcbnew/dialogs/dialog_text_properties.cpp:240
 msgid "back side (mirrored)"
-msgstr ""
+msgstr "arka taraf (aynalı)"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:504
 #: pcbnew/dialogs/dialog_text_properties.cpp:241
 msgid "front side"
-msgstr ""
+msgstr "ön taraf"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:695
 msgid "width"
@@ -30862,11 +31018,11 @@ msgstr "Ayak şekli"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1249
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1254
 msgid "Error: Pad must have a positive size."
-msgstr ""
+msgstr "Hata: Pedin pozitif bir boyutu olmalıdır."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1268
 msgid "Warning: Pad hole not inside pad shape."
-msgstr ""
+msgstr "Uyarı: Ped deliği ped şeklinin içinde değildir."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1281
 #, fuzzy
@@ -30875,25 +31031,31 @@ msgstr "Yalnızca Bakır katmanlardaki izler."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1286
 msgid "Warning: Negative local clearance values will have no effect."
-msgstr ""
+msgstr "Uyarı: Negatif yerel boşluk değerlerinin hiçbir etkisi olmayacaktır."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1303
 msgid ""
 "Warning: Negative solder mask clearances larger than some shape primitives. "
 "Results may be surprising."
 msgstr ""
+"Uyarı: Bazı şekil ilkellerinden daha büyük negatif lehim maskesi boşlukları. "
+"Sonuçlar şaşırtıcı olabilir."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1312
 msgid ""
 "Warning: Negative solder mask clearance larger than pad. No solder mask will "
 "be generated."
 msgstr ""
+"Uyarı: Negatif lehim maskesi boşluğu pedden daha büyüktür. Lehim maskesi "
+"üretilmeyecektir."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1331
 msgid ""
 "Warning: Negative solder paste margins larger than pad. No solder paste mask "
 "will be generated."
 msgstr ""
+"Uyarı: Negatif lehim pastası kenar boşlukları pedden daha büyüktür. Lehim "
+"pastası maskesi üretilmeyecektir."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1338
 #, fuzzy
@@ -30905,10 +31067,12 @@ msgid ""
 "Warning: Plated through holes should normally have a copper pad on at least "
 "one layer."
 msgstr ""
+"Uyarı: Deliklerden kaplanmış normalde en az bir katmanda bakır bir ped "
+"bulunmalıdır."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1350
 msgid "Error: Trapazoid delta is too large."
-msgstr ""
+msgstr "Hata: Trapezoid delta çok büyük."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1359
 #, fuzzy
@@ -30919,6 +31083,8 @@ msgstr "Delikli ayak izleri"
 msgid ""
 "Warning: Connector pads normally have no solder paste. Use a SMD pad instead."
 msgstr ""
+"Uyarı: Konektör pedlerinde normalde lehim pastası yoktur. Bunun yerine bir "
+"SMD pedi kullanın."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1375
 #, fuzzy
@@ -30933,34 +31099,35 @@ msgstr "Yalnızca Bakır katmanlardaki izler."
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1389
 msgid "Warning: Fiducial property makes no sense on NPTH pads."
 msgstr ""
+"Uyarı: Güvene dayalı mülkiyet, NPTH pedlerinde hiçbir anlam ifade etmez."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1395
 msgid "Warning: Testpoint property makes no sense on NPTH pads."
-msgstr ""
+msgstr "Uyarı: Test noktası özelliği, NPTH pedlerinde hiçbir anlam ifade etmez."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1401
 msgid "Warning: Heatsink property makes no sense of NPTH pads."
-msgstr ""
+msgstr "Uyarı: Soğutucu özelliği, NPTH pedlerini anlamıyor."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1407
 msgid "Warning: Castellated property is for PTH pads."
-msgstr ""
+msgstr "Uyarı: Castellated özelliği PTH pedleri içindir."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1413
 msgid "Warning: BGA property is for SMD pads."
-msgstr ""
+msgstr "Uyarı: BGA özelliği SMD pedleri içindir."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1422
 msgid "Error: Negative corner size."
-msgstr ""
+msgstr "Hata: Negatif köşe boyutu."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1424
 msgid "Warning: Corner size will make pad circular."
-msgstr ""
+msgstr "Uyarı: Köşe boyutu pedi dairesel hale getirecektir."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1434
 msgid "Error: Custom pad shape must resolve to a single polygon."
-msgstr ""
+msgstr "Hata: Özel ped şekli tek bir çokgene çözülmelidir."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1440
 msgid "Pad Properties Errors"
@@ -30973,7 +31140,7 @@ msgstr "Ped Özellikleri Hataları"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1658
 msgid "Modify pad"
-msgstr ""
+msgstr "Pedi değiştir"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1686
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:371
@@ -31006,7 +31173,7 @@ msgstr "Süpürme türü:"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2158
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:823
 msgid "Add Primitive"
-msgstr ""
+msgstr "İlkel Ekle"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:35
 #, fuzzy
@@ -31029,7 +31196,7 @@ msgstr "Mekanik"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:39
 msgid "SMD Aperture"
-msgstr ""
+msgstr "SMD Açıklığı"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:45
 #, fuzzy
@@ -31072,7 +31239,7 @@ msgstr "Pah kırılmış dörtgen"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:99
 msgid "Chamfered with other corners rounded"
-msgstr ""
+msgstr "Diğer köşeleri yuvarlatılmış yivli"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:99
 #, fuzzy
@@ -31081,7 +31248,7 @@ msgstr "Özel kağıt boyutu:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:99
 msgid "Custom (rectangular base)"
-msgstr ""
+msgstr "Özel (dikdörtgen taban)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:114
 #, fuzzy
@@ -31106,6 +31273,9 @@ msgid ""
 "The width is the smaller value between size X and size Y.\n"
 "The max value is 50 percent."
 msgstr ""
+"Ped genişliğinin yüzde olarak köşe yarıçapı.\n"
+"Genişlik, X boyutu ile Sizin boyutunuz arasındaki daha küçük değerdir.\n"
+"Maksimum değer yüzde 50'dir."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:159
 #, fuzzy
@@ -31119,6 +31289,10 @@ msgid ""
 "The width is the smaller value between size X and size Y.\n"
 "Note: IPC norm gives a max value = 0.25mm."
 msgstr ""
+"Köşe yarıçapı.\n"
+"Ped genişliğinin yarısından fazla olamaz.\n"
+"Genişlik, X boyutu ile Sizin boyutunuz arasındaki daha küçük değerdir.\n"
+"Not: IPC normu maksimum değer = 0,25 mm verir."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:184
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:240
@@ -31133,6 +31307,9 @@ msgid ""
 "The width is the smaller value between size X and size Y.\n"
 "The max value is 50 percent."
 msgstr ""
+"Ped genişliğinin yüzde olarak pah boyutu.\n"
+"Genişlik, X boyutu ile Sizin boyutunuz arasındaki daha küçük değerdir.\n"
+"Maksimum değer yüzde 50'dir."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:203
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:259
@@ -31144,7 +31321,7 @@ msgstr "Pah kırılmış dörtgen"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:261
 msgid ""
 "Chamfered corners. The position is relative to a pad orientation 0 degree."
-msgstr ""
+msgstr "Yivli köşeler. Konum, 0 derecelik bir ped yönüne göredir."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:212
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:268
@@ -31172,17 +31349,19 @@ msgstr "Delik şekli:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:402
 msgid "Offset shape from hole"
-msgstr ""
+msgstr "Delikten ofset şekli"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:458
 msgid "Specify pad to die length"
-msgstr ""
+msgstr "Kalıp uzunluğu için ped belirtin"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:493
 msgid ""
 "Parent footprint on board is flipped.\n"
 "Layers will be reversed."
 msgstr ""
+"Gemideki ebeveyn ayak izi ters çevrilir.\n"
+"Katmanlar tersine çevrilecektir."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:513
 #, fuzzy
@@ -31244,18 +31423,28 @@ msgid ""
 "Castellated specify castellated through hole pads on a board edge\n"
 "These properties are specified in Gerber X2  files."
 msgstr ""
+"İmalat dosyalarında özel bir amaç veya kısıtlama belirtmek için isteğe bağlı "
+"özellik:\n"
+"BGA özniteliği BGA ayak izlerindeki pedler içindir\n"
+"Güvene dayalı yerel, ebeveyn ayak izi için bir güvendir\n"
+"Mutemet global, tüm yönetim kurulu için bir mutemettir\n"
+"Test Noktası pedi, Gerber dosyalarındaki test noktalarını belirtmek için "
+"kullanışlıdır\n"
+"Soğutucu pedi bir termal ped belirtin\n"
+"Castellated tahta kenarındaki delikli pedleri castellated olarak belirtin\n"
+"Bu özellikler Gerber X2 dosyalarında belirtilmiştir."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:1726
 msgid "BGA pad"
-msgstr ""
+msgstr "BGA pedi"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:1728
 msgid "Fiducial, local to footprint"
-msgstr ""
+msgstr "Güvene dayalı, yerelden ayak izine"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:1727
 msgid "Fiducial, global to board"
-msgstr ""
+msgstr "Güvene dayalı, küresel yönetim kuruluna"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:1729
 msgid "Test point pad"
@@ -31267,7 +31456,7 @@ msgstr "Soğutucu ped"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558
 msgid "Castellated pad (through hole only)"
-msgstr ""
+msgstr "Castellated ped (sadece delikten)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:580
 #, fuzzy
@@ -31277,29 +31466,39 @@ msgstr "Açıklık"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:583
 msgid "Set values to 0 to use parent footprint or netclass values."
 msgstr ""
+"Üst ayak izi veya net sınıf değerlerini kullanmak için değerleri 0 olarak "
+"ayarlayın."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:587
 msgid ""
 "Positive clearance means area bigger than the pad (usual for mask clearance)."
 msgstr ""
+"Pozitif boşluk, pedden daha büyük alan anlamına gelir (maske boşluğu için "
+"olağandır)."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:591
 msgid ""
 "Negative clearance means area smaller than the pad (usual for paste "
 "clearance)."
 msgstr ""
+"Negatif boşluk, pedden daha küçük alan anlamına gelir (macun boşluğu için "
+"olağandır)."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:603
 msgid ""
 "This is the local net clearance for this pad.\n"
 "If 0, the footprint local value or the Netclass value is used."
 msgstr ""
+"Bu, bu ped için yerel net boşluktur.\n"
+"0 İse, ayak izi yerel değeri veya Net sınıf değeri kullanılır."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:616
 msgid ""
 "This is the local clearance between this pad and the solder mask.\n"
 "If 0, the footprint local value or the global value is used."
 msgstr ""
+"Bu, bu ped ile lehim maskesi arasındaki yerel boşluktur.\n"
+"0 İse, ayak izi yerel değeri veya genel değer kullanılır."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:629
 msgid ""
@@ -31309,6 +31508,10 @@ msgid ""
 "ratio.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
+"Bu, bu ped ile lehim pastası arasındaki yerel boşluktur.\n"
+"0 İse, ayak izi değeri veya genel değer kullanılır.\n"
+"Son boşluk değeri, bu değerin toplamı ve boşluk değeri oranıdır.\n"
+"Negatif bir değer, ped boyutundan daha küçük bir maske boyutu anlamına gelir."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:642
 msgid ""
@@ -31339,7 +31542,7 @@ msgstr "Varsayılan ayak izi yok"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:722
 msgid "Zone knockout:"
-msgstr ""
+msgstr "Bölge nakavt:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:726
 msgid "Pad shape"
@@ -31347,7 +31550,7 @@ msgstr "Ayak şekli"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:726
 msgid "Pad convex hull"
-msgstr ""
+msgstr "Ped dışbükey gövde"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:739
 #, fuzzy
@@ -31356,7 +31559,7 @@ msgstr "Termal Tahliye iletim Genişliği"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:747
 msgid "Relief gap:"
-msgstr ""
+msgstr "Rölyef boşluğu:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:758
 msgid "Spoke width:"
@@ -31364,15 +31567,15 @@ msgstr "Tutacak genişliği:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:769
 msgid "Spoke angle:"
-msgstr ""
+msgstr "Konuşma açısı:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:803
 msgid "Primitives list:"
-msgstr ""
+msgstr "İlkeller listesi:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:807
 msgid "Note: coordinates are relative to anchor pad, orientation 0."
-msgstr ""
+msgstr "Not: koordinatlar ankraj pedine göredir, oryantasyon 0'dır."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:826
 #, fuzzy
@@ -31386,7 +31589,7 @@ msgstr "Çiftleme:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:832
 msgid "Transform Primitive"
-msgstr ""
+msgstr "İlkel Dönüşümü"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:838
 #, fuzzy
@@ -31400,7 +31603,7 @@ msgstr "Özel Şekil"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:988
 msgid "Preview pad in sketch mode"
-msgstr ""
+msgstr "Çizim modunda önizleme pedi"
 
 #: pcbnew/dialogs/dialog_plot.cpp:133
 #, fuzzy
@@ -31443,10 +31646,12 @@ msgid ""
 "Width correction constrained.  The width correction value must be in the "
 "range of [%s; %s] for the current design rules."
 msgstr ""
+"Genişlik düzeltmesi kısıtlandı. Geçerli tasarım kuralları için genişlik "
+"düzeltme değeri [%s; %s] aralığında olmalıdır."
 
 #: pcbnew/dialogs/dialog_plot.cpp:976
 msgid "No layer selected, Nothing to plot"
-msgstr ""
+msgstr "Katman seçilmedi, Çizilecek hiçbir şey yok"
 
 #: pcbnew/dialogs/dialog_plot.cpp:1041
 #, fuzzy
@@ -31489,7 +31694,7 @@ msgstr "Referans belirteçleri"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:88
 msgid "Force plotting of invisible values / refs"
-msgstr ""
+msgstr "Görünmez değerlerin / hakemlerin zorla çizilmesi"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:89
 #, fuzzy
@@ -31502,11 +31707,11 @@ msgstr "İmalat katmanlarında çizim ayakları"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:94
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
-msgstr ""
+msgstr "Çizim yaparken F.Fab ve B.Fab katmanlarına ped anahatlarını ekleyin"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
 msgid "Do not tent vias"
-msgstr ""
+msgstr "Çadır yolları yapmayın"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:99
 #, fuzzy
@@ -31517,6 +31722,8 @@ msgstr "Lehim maskesi ekranını aç/kapat"
 msgid ""
 "Use the drill/place file origin as the coordinate origin for plotted files"
 msgstr ""
+"Çizilen dosyalar için koordinat kaynağı olarak matkap / yer dosyası "
+"kaynağını kullanın"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:108
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:234
@@ -31566,17 +31773,21 @@ msgstr "Negatif"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:144
 msgid "Check zone fills before plotting"
-msgstr ""
+msgstr "Çizmeden önce bölge dolgularını kontrol edin"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:161
 msgid "Global solder mask minimum width and/or margin are not set to 0. "
 msgstr ""
+"Genel lehim maskesi minimum genişliği ve / veya kenar boşluğu 0 olarak "
+"ayarlanmamıştır. "
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:165
 msgid ""
 "Most board manufacturers expect 0 and use their own constraints for solder "
 "mask minimum width."
 msgstr ""
+"Çoğu pano üreticisi 0 bekler ve lehim maskesi minimum genişliği için kendi "
+"kısıtlamalarını kullanır."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:175
 #, fuzzy
@@ -31603,6 +31814,8 @@ msgid ""
 "Use Protel Gerber extensions (.GBL, .GTL, etc...)\n"
 "No longer recommended. The official extension is .gbr"
 msgstr ""
+"Protel Gerber uzantılarını kullanın (.GBL, .GTL, vb...)\n"
+"Artık tavsiye edilmiyor. Resmi uzantısıdır.gbr"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:202
 #, fuzzy
@@ -31614,6 +31827,8 @@ msgid ""
 "Generate a Gerber job file that contains info about the board,\n"
 "and the list of generated Gerber plot files"
 msgstr ""
+"Pano hakkında bilgi içeren bir Gerber iş dosyası oluşturun,\n"
+"ve oluşturulan Gerber arsa dosyalarının listesi"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:209
 #, fuzzy
@@ -31627,15 +31842,15 @@ msgstr "Koordinatlar"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
 msgid "4.5, unit mm"
-msgstr ""
+msgstr "4.5, birim mm"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
 msgid "4.6, unit mm"
-msgstr ""
+msgstr "4.6, birim mm"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:223
 msgid "Use extended X2 format (recommended)"
-msgstr ""
+msgstr "Genişletilmiş X2 biçimi kullanın (önerilir)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:224
 msgid ""
@@ -31644,6 +31859,10 @@ msgid ""
 "If not checked, use X1 format.\n"
 "In X1 format, these attributes are included as comments in files."
 msgstr ""
+"X2 Gerber dosya biçimini kullanın.\n"
+"Gerber başlıklarına esas olarak X2 özniteliklerini ekleyin.\n"
+"İşaretli değilse, X1 biçimini kullanın.\n"
+"X1 biçiminde, bu öznitelikler dosyalara yorum olarak eklenir."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:228
 #, fuzzy
@@ -31656,6 +31875,11 @@ msgid ""
 "They are comments in the X1 format.\n"
 "Used to check connectivity in CAM tools and Gerber viewers."
 msgstr ""
+"Gerber dosyalarına netlist meta verilerini ve aperture özniteliklerini "
+"ekleyin.\n"
+"Bunlar X1 biçimindeki yorumlardır.\n"
+"CAM araçlarındaki ve Gerber görüntüleyicilerindeki bağlantıyı kontrol etmek "
+"için kullanılır."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:233
 #, fuzzy
@@ -31667,6 +31891,8 @@ msgid ""
 "Disable aperture macros in Gerber files\n"
 "Use *only* for broken Gerber viewers."
 msgstr ""
+"Gerber dosyalarında diyafram makrolarını devre dışı bırak\n"
+"Bozuk Gerber görüntüleyenler için * yalnızca * kullanın."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:248
 #, fuzzy
@@ -31711,6 +31937,11 @@ msgid ""
 "The reasonable width correction value must be in a range of [-"
 "(MinTrackWidth-1), +(MinClearanceValue-1)]."
 msgstr ""
+"Tam genişlik PostScript çıktısı için genel genişlik düzeltmesini ayarlayın.\n"
+"Bu genişlik düzeltmeleri, rayların genişliğini ve ayrıca pedlerin ve "
+"yolların boyut hatalarını telafi etmek için tasarlanmıştır.\n"
+"Makul genişlik düzeltme değeri [-(MinTrackWidth-1), +(MinClearanceValue-1)] "
+"aralığında olmalıdır."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:315
 #, fuzzy
@@ -31725,6 +31956,7 @@ msgstr "HPGL Seçenekleri"
 #: pcbnew/dialogs/dialog_plot_base.cpp:330
 msgid "Uncheck to plot graphic items using their center lines"
 msgstr ""
+"Orta çizgilerini kullanarak grafik öğeleri çizmek için işaretini kaldırın"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:334
 #, fuzzy
@@ -31733,17 +31965,20 @@ msgstr "Ağ Listesini Dışa Aktar"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:342
 msgid "The units to use for the exported DXF file"
-msgstr ""
+msgstr "Dışa aktarılan DXF dosyası için kullanılacak birimler"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:346
 msgid "Use KiCad font to plot text"
-msgstr ""
+msgstr "Metni çizmek için KiCad yazı tipini kullanın"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:347
 msgid ""
 "Check to use KiCad stroke font\n"
 "Uncheck to plot single-line ASCII texts as editable text (using DXF font)"
 msgstr ""
+"KiCad kontur yazı tipini kullanmayı kontrol edin\n"
+"Tek satırlık ASCII metinlerini düzenlenebilir metin olarak çizmek için "
+"işaretini kaldırın (DXF yazı tipini kullanarak)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:357
 #, fuzzy
@@ -31756,6 +31991,9 @@ msgid ""
 "User unit is 10^-<N> mm\n"
 "Choose 4 if you are not sure."
 msgstr ""
+"Bu sayı, 1 mm'nin altındaki kaç basamağın dışa aktarılacağını tanımlar.\n"
+"Kullanıcı birimi 10 ^ - <N> mm'dir\n"
+"Emin değilseniz 4'ü seçin."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:389
 #, fuzzy
@@ -31779,7 +32017,7 @@ msgstr "ERC'yi çalıştırın"
 #: pcbnew/dialogs/dialog_plot_base.cpp:440
 #, c-format
 msgid "(%d known DRC violations; %d exclusions)"
-msgstr ""
+msgstr "(%d bilinen DRC ihlalleri; %d hariç tutmaları)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:464
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:283
@@ -31821,11 +32059,11 @@ msgstr "%s, %s'den küçük olmalıdır."
 #: pcbnew/router/pns_kicad_iface.cpp:588 pcbnew/router/pns_kicad_iface.cpp:661
 #: pcbnew/router/pns_kicad_iface.cpp:662
 msgid "user choice"
-msgstr ""
+msgstr "kullanıcı seçimi"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:36
 msgid "Trace gap:"
-msgstr ""
+msgstr "İz boşluğu:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:47
 #, fuzzy
@@ -31834,7 +32072,7 @@ msgstr "Geçiş türü:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:67
 msgid "Via gap same as trace gap"
-msgstr ""
+msgstr "İz boşluğu ile aynı boşluk üzerinden"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.h:57
 #, fuzzy
@@ -31868,7 +32106,7 @@ msgstr "Uzunluk"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:30
 msgid "Tune from:"
-msgstr ""
+msgstr "Şuradan ayarla:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:46
 #, fuzzy
@@ -31881,7 +32119,7 @@ msgstr "Kısıtlama:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:68
 msgid "From Design Rules"
-msgstr ""
+msgstr "Tasarım Kurallarından"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:80
 #, fuzzy
@@ -31894,11 +32132,11 @@ msgstr "Menderesleme"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:109
 msgid "Min amplitude (Amin):"
-msgstr ""
+msgstr "Minimum genlik (Amin):"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:120
 msgid "Max amplitude (Amax):"
-msgstr ""
+msgstr "Maksimum genlik (Amax):"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:131
 #, fuzzy
@@ -31910,6 +32148,8 @@ msgid ""
 "Minimum spacing between adjacent meander segments. The resulting spacing may "
 "be greater based on design rules."
 msgstr ""
+"Bitişik menderes segmentleri arasındaki minimum boşluk. Ortaya çıkan boşluk, "
+"tasarım kurallarına göre daha büyük olabilir."
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:144
 #, fuzzy
@@ -31927,11 +32167,11 @@ msgstr "yay"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:160
 msgid "Single-sided"
-msgstr ""
+msgstr "Tek taraflı"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:166
 msgid "Miter radius (r):"
-msgstr ""
+msgstr "Metre yarıçapı (r):"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.h:76
 #, fuzzy
@@ -31940,7 +32180,7 @@ msgstr "Yol Uzunluğu"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:34
 msgid "DRC violation: highlight obstacles"
-msgstr ""
+msgstr "DRC ihlali: engelleri vurgulayın"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:35
 #, fuzzy
@@ -31949,7 +32189,7 @@ msgstr "Yollar ve geçişler oluştur"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:36
 msgid "DRC violation: walk around obstacles"
-msgstr ""
+msgstr "DRC ihlali: engellerin etrafında yürüyün"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:19
 #, fuzzy
@@ -31971,7 +32211,7 @@ msgstr "Mod"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:28
 msgid "Free angle mode (no shove/walkaround)"
-msgstr ""
+msgstr "Serbest açı modu (itme / geri dönüş yok)"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:31
 #, fuzzy
@@ -31983,16 +32223,20 @@ msgid ""
 "When disabled, vias are treated as un-movable objects and hugged instead of "
 "shoved."
 msgstr ""
+"Devre dışı bırakıldığında, yollar taşınamaz nesneler olarak kabul edilir ve "
+"itilmek yerine sarılır."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:36
 msgid "Jump over obstacles"
-msgstr ""
+msgstr "Engellerin üzerinden atla"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:37
 msgid ""
 "When enabled, the router tries to move colliding traces behind solid "
 "obstacles (e.g. pads) instead of \"reflecting\" back the collision"
 msgstr ""
+"Etkinleştirildiğinde, yönlendirici çarpışmayı \"yansıtmak\" yerine çarpışan "
+"izleri katı engellerin (örneğin pedler) arkasına taşımaya çalışır"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:41
 #, fuzzy
@@ -32006,6 +32250,10 @@ msgid ""
 "Loop removal works locally (only between the start and end of the currently "
 "routed trace)."
 msgstr ""
+"Yönlendirme sırasında döngüleri kaldırır (örneğin, yeni parça zaten var "
+"olanla aynı bağlantıyı sağlıyorsa, eski parça kaldırılır).\n"
+"Döngü kaldırma yerel olarak çalışır (yalnızca o anda yönlendirilen izlemenin "
+"başlangıcı ile bitişi arasında)."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:46
 #, fuzzy
@@ -32017,16 +32265,20 @@ msgid ""
 "When enabled, the router tries to break out pads/vias in a clean way, "
 "avoiding acute angles and jagged breakout traces."
 msgstr ""
+"Etkinleştirildiğinde yönlendirici, dar açılardan ve pürüzlü kopma izlerinden "
+"kaçınarak pedleri / boşlukları temiz bir şekilde kırmaya çalışır."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:51
 msgid "Smooth dragged segments"
-msgstr ""
+msgstr "Düzgün sürüklenen segmentler"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:52
 msgid ""
 "When enabled, the router attempts to merge several jagged segments into a "
 "single straight one (dragging mode)."
 msgstr ""
+"Etkinleştirildiğinde, yönlendirici birkaç pürüzlü segmenti tek bir düz "
+"segmentte birleştirmeye çalışır (sürükleme modu)."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:56
 #, fuzzy
@@ -32038,14 +32290,16 @@ msgid ""
 "(Highlight collisions mode only) - allows one to establish a track even if "
 "is violating the DRC rules."
 msgstr ""
+"(Yalnızca çarpışma modunu vurgula) - DRC kurallarını ihlal etse bile bir "
+"parçanın oluşturulmasına izin verir."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:61
 msgid "Suggest track finish"
-msgstr ""
+msgstr "Parça bitişini öner"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:66
 msgid "Optimize entire track being dragged"
-msgstr ""
+msgstr "Sürüklenen tüm parçayı optimize edin"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:67
 msgid ""
@@ -32053,20 +32307,26 @@ msgid ""
 "will be optimized and re-routed when a segment is dragged.  When disabled, "
 "only the area near the segment being dragged will be optimized."
 msgstr ""
+"Etkinleştirildiğinde, parçanın ekranda görünen tüm kısmı optimize edilecek "
+"ve bir parça sürüklendiğinde yeniden yönlendirilecektir. Devre dışı "
+"bırakıldığında, yalnızca sürüklenen segmentin yakınındaki alan optimize "
+"edilir."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:71
 msgid "Use mouse path to set track posture"
-msgstr ""
+msgstr "Parça duruşunu ayarlamak için fare yolunu kullanın"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:72
 msgid ""
 "When enabled, the posture of tracks will be guided by how the mouse is moved "
 "from the starting location"
 msgstr ""
+"Etkinleştirildiğinde, izlerin duruşu, farenin başlangıç konumundan nasıl "
+"hareket ettirildiğine göre yönlendirilir"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:76
 msgid "Fix all segments on click"
-msgstr ""
+msgstr "Tıklamadaki tüm segmentleri düzeltin"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:77
 msgid ""
@@ -32074,6 +32334,9 @@ msgid ""
 "location.  When disabled, the last segment (closest to the cursor) will "
 "remain free and follow the cursor."
 msgstr ""
+"Etkinleştirildiğinde, tüm parça parçaları imleç konumuna kadar yerine "
+"sabitlenecektir. Devre dışı bırakıldığında, son bölüm (imlecin en yakınında) "
+"serbest kalır ve imleci takip eder."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:61
 #, fuzzy
@@ -32082,11 +32345,11 @@ msgstr "Elek Ayarları"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:162
 msgid "Reset to the current distance from the reference position."
-msgstr ""
+msgstr "Referans konumundan geçerli mesafeye sıfırlayın."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:163
 msgid "Reset to the current angle from the reference position."
-msgstr ""
+msgstr "Referans konumundan geçerli açıya sıfırlayın."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:167
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:66
@@ -32102,19 +32365,19 @@ msgstr "Kayma:"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:170
 msgid "Reset to the current X offset from the reference position."
-msgstr ""
+msgstr "Referans konumundan geçerli X ofsetine sıfırlayın.."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:171
 msgid "Reset to the current Y offset from the reference position."
-msgstr ""
+msgstr "Referans konumundan geçerli Y ofsetine sıfırlayın."
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:229
 msgid "Reference location: grid origin"
-msgstr ""
+msgstr "Referans yeri: ızgara kökeni"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:233
 msgid "Reference location: local coordinates origin"
-msgstr ""
+msgstr "Referans yeri: yerel koordinatlar menşei"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:239
 #, fuzzy
@@ -32151,22 +32414,24 @@ msgid ""
 "Click and select a board item.\n"
 "The anchor position will be the position of the selected item."
 msgstr ""
+"Tıklayın ve bir pano öğesi seçin.\n"
+"Bağlantı konumu, seçilen öğenin konumu olacaktır."
 
 #: pcbnew/dialogs/dialog_position_relative_base.h:72
 msgid "Position Relative To Reference Item"
-msgstr ""
+msgstr "Referans Öğeye Göre Konum"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:116
 msgid "Right-click for layer selection commands."
-msgstr ""
+msgstr "Katman seçim komutları için sağ tıklayın."
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:207
 msgid "Print according to objects tab of appearance manager"
-msgstr ""
+msgstr "Görünüm yöneticisinin nesneler sekmesine göre yazdır"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:235
 msgid "No drill mark"
-msgstr ""
+msgstr "Matkap izi yok"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:236
 #, fuzzy
@@ -32198,15 +32463,15 @@ msgstr "Projeyi doğrudan gönder"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:37
 msgid "Sends production files to manufacturer from KiCad"
-msgstr ""
+msgstr "Üretim dosyalarını kicad'den üreticiye gönderir"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:41
 msgid "Produce PCB"
-msgstr ""
+msgstr "PCB üretmek"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.h:44
 msgid "Send PCB for production"
-msgstr ""
+msgstr "Üretim için PCB gönder"
 
 #: pcbnew/dialogs/dialog_push_pad_properties.cpp:49
 #, fuzzy
@@ -32220,19 +32485,19 @@ msgstr "İz Düşümünü Farklı Kaydet"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:25
 msgid "Do not modify pads having a different shape"
-msgstr ""
+msgstr "Farklı bir şekle sahip pedleri değiştirmeyin"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:28
 msgid "Do not modify pads having different layers"
-msgstr ""
+msgstr "Farklı katmanlara sahip pedleri değiştirmeyin"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:31
 msgid "Do not modify pads having a different orientation"
-msgstr ""
+msgstr "Farklı bir yöne sahip pedleri değiştirmeyin"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:34
 msgid "Do not modify pads having a different type"
-msgstr ""
+msgstr "Farklı tipte pedleri değiştirmeyin"
 
 #: pcbnew/dialogs/dialog_push_pad_properties_base.h:51
 #, fuzzy
@@ -32262,7 +32527,7 @@ msgstr "Ağ adları"
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:54
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:131
 msgid "A unique name for this rule area for use in DRC rules"
-msgstr ""
+msgstr "DRC kurallarında kullanılmak üzere bu kural alanı için benzersiz bir ad"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:69
 #, fuzzy
@@ -32276,7 +32541,7 @@ msgstr "Rota izleri"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:74
 msgid "Prevent tracks from routing into this area"
-msgstr ""
+msgstr "İzlerin bu alana yönlendirilmesini önleyin"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:78
 #, fuzzy
@@ -32285,7 +32550,7 @@ msgstr "Sınır çizgileri"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:79
 msgid "Prevent vias from being placed in this area"
-msgstr ""
+msgstr "Virüsün bu alana yerleştirilmesini önleyin"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:83
 #, fuzzy
@@ -32294,7 +32559,7 @@ msgstr "Sınır çizgileri"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:84
 msgid "Raise a DRC error if a pad overlaps this area"
-msgstr ""
+msgstr "Bir ped bu alanla çakışırsa DRC hatasını yükseltin"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:88
 #, fuzzy
@@ -32303,7 +32568,7 @@ msgstr "Sınır çizgileri"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:89
 msgid "Zones will not fill copper into this area"
-msgstr ""
+msgstr "Bölgeler bu alana bakır doldurmayacak"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:93
 #, fuzzy
@@ -32312,7 +32577,7 @@ msgstr "Varsayılan ayak izi yok"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:94
 msgid "Raise a DRC error if a footprint courtyard overlaps this area"
-msgstr ""
+msgstr "Bir ayak izi avlusu bu alanla çakışıyorsa DRC hatasını yükseltin"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.h:68
 #, fuzzy
@@ -32336,7 +32601,7 @@ msgstr "Arka Katmanlar"
 
 #: pcbnew/dialogs/dialog_target_properties.cpp:109
 msgid "Modified alignment target"
-msgstr ""
+msgstr "Değiştirilmiş hizalama hedefi"
 
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:50
 msgid "Shape:"
@@ -32385,7 +32650,7 @@ msgstr "Sayfa Özellikleri"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:60
 msgid "Enter the text placed on selected layer."
-msgstr ""
+msgstr "Seçilen katmana yerleştirilen metni girin."
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:101
 #: pcbnew/fp_text_grid_table.cpp:112 pcbnew/pcb_dimension.cpp:1400
@@ -32393,11 +32658,11 @@ msgstr ""
 #: pcbnew/pcb_dimension.cpp:1504 pcbnew/pcb_dimension.cpp:1535
 #: pcbnew/pcb_text.cpp:536
 msgid "Knockout"
-msgstr ""
+msgstr "Nakavt"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:105
 msgid "Keep text upright"
-msgstr ""
+msgstr "Metni dik tutun"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:257
 #, fuzzy
@@ -32418,16 +32683,20 @@ msgstr "Köşe Stili"
 #, c-format
 msgid "Changing the net will also update %s pad %s to %s."
 msgstr ""
+"Ağın değiştirilmesi ayrıca %s pad %s değerini %s olarak güncelleyecektir."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:465
 #, c-format
 msgid "Changing the net will also update %s pad %s and %s pad %s to %s."
 msgstr ""
+"Ağın değiştirilmesi ayrıca %s sayfasını %s ve %s altlığını %s olarak %s "
+"olarak güncelleyecektir."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:474
 #, c-format
 msgid "Changing the net will also update %lu connected pads to %s."
 msgstr ""
+"Ağın değiştirilmesi ayrıca %lu bağlantılı pedleri %s uit'e güncelleyecektir."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:480
 #, fuzzy
@@ -32447,7 +32716,7 @@ msgstr "Geçiş matkap boyutu geçiş çapından küçük olmalıdır"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:510
 msgid "Via start layer and end layer cannot be the same"
-msgstr ""
+msgstr "Başlangıç katmanı ve bitiş katmanı aynı olamaz"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:679
 #, fuzzy
@@ -32469,6 +32738,8 @@ msgid ""
 "Automatically change the net of this via when the pads or zones it touches "
 "are changed"
 msgstr ""
+"Dokunduğu pedler veya bölgeler değiştirildiğinde bunun ağını otomatik olarak "
+"değiştirin"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:60
 #, fuzzy
@@ -32545,11 +32816,11 @@ msgstr "Bitiş katmanı:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:280
 msgid "Annular rings:"
-msgstr ""
+msgstr "Halka şeklindeki halkalar:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:284
 msgid "Start, end, and connected layers"
-msgstr ""
+msgstr "Başlangıç, bitiş ve bağlı katmanlar"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:114
 msgid "Track & Via Properties"
@@ -32597,10 +32868,11 @@ msgid ""
 "Remove from the board unlocked footprints which are not linked to a "
 "schematic symbol."
 msgstr ""
+"Şematik bir sembole bağlı olmayan kilitli ayak izlerini tahtadan çıkarın."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:37
 msgid "Replace footprints with those specified in the schematic"
-msgstr ""
+msgstr "Ayak izlerini şemada belirtilenlerle değiştirin"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:39
 msgid ""
@@ -32608,6 +32880,9 @@ msgid ""
 "assignment changes made in the schematic. Uncheck this only if you don't "
 "want to change existing footprints on the board."
 msgstr ""
+"Normalde tahtadaki ayak izleri, şemada yapılan ayak izi atama "
+"değişikliklerine uyacak şekilde değiştirilmelidir. Yalnızca tahtadaki mevcut "
+"ayak izlerini değiştirmek istemiyorsanız bunun işaretini kaldırın."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.h:53
 #, fuzzy
@@ -32651,15 +32926,15 @@ msgstr "Açıklık"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:75
 msgid "Show when routing"
-msgstr ""
+msgstr "Yönlendirirken göster"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:75
 msgid "Show when routing w/ via clearance at end"
-msgstr ""
+msgstr "Sonunda boşluk ile yönlendirme yaparken göster"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:75
 msgid "Show when routing and editing"
-msgstr ""
+msgstr "Yönlendirme ve düzenleme sırasında göster"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:75
 msgid "Show always"
@@ -32674,6 +32949,8 @@ msgid ""
 "Show clearance outlines around tracks, and optionally the via clearance "
 "around the end of the track while routing."
 msgstr ""
+"İzlerin etrafındaki açıklık anahatlarını ve isteğe bağlı olarak yönlendirme "
+"sırasında yolun sonundaki geçiş boşluğunu gösterin."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:83
 #, fuzzy
@@ -32692,34 +32969,38 @@ msgstr "Seçili sembollere ayak izi atama"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:110
 msgid "Ensures that cross-probed footprints are visible in the current view"
-msgstr ""
+msgstr "Çapraz problu ayak izlerinin geçerli görünümde görünür olmasını sağlar"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:120
 msgid "Highlight nets when they are highlighted in the schematic editor"
-msgstr ""
+msgstr "Şematik düzenleyicide vurgulandıklarında ağları vurgulayın"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:124
 msgid "Refresh 3D view automatically"
-msgstr ""
+msgstr "3B görünümü otomatik olarak yenile"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:125
 msgid ""
 "When enabled, edits to the board will cause the 3D view to refresh (may be "
 "slow with larger boards)"
 msgstr ""
+"Etkinleştirildiğinde, panodaki düzenlemeler 3B görünümün yenilenmesine neden "
+"olur (daha büyük panolarda yavaş olabilir)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:28
 msgid "Flip board items L/R (default is T/B)"
-msgstr ""
+msgstr "Flip board öğeleri L / R (varsayılan T / B'dir)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:31
 msgid "Allow free pads"
-msgstr ""
+msgstr "Serbest pedlere izin ver"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:32
 msgid ""
 "If checked, pads can be moved with respect to the rest of the footprint."
 msgstr ""
+"Kontrol edilirse, pedler ayak izinin geri kalanına göre hareket "
+"ettirilebilir."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:45
 #, fuzzy
@@ -32728,11 +33009,12 @@ msgstr "Y, D, 45 ile sınırla"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:51
 msgid "Step for &rotate commands:"
-msgstr ""
+msgstr "Komutları & döndürme adımı:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:56
 msgid "Set increment (in degrees) for context menu and hotkey rotation."
 msgstr ""
+"Bağlam menüsü ve kısayol tuşu dönüşü için artışı (derece olarak) ayarlayın."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:74
 #, fuzzy
@@ -32741,16 +33023,16 @@ msgstr "Gerçekçi modu aç/kapat"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:81
 msgid "Keep center, adjust radius"
-msgstr ""
+msgstr "Merkezi tutun, yarıçapı ayarlayın"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:81
 msgid "Keep endpoints or direction of starting point"
-msgstr ""
+msgstr "Bitiş noktalarını veya başlangıç noktasının yönünü koruyun"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:112
 #: pcbnew/dialogs/panel_edit_options_base.cpp:184
 msgid "No modifier"
-msgstr ""
+msgstr "Değiştirici yok"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:117
 #: pcbnew/dialogs/panel_edit_options_base.cpp:189
@@ -32777,7 +33059,7 @@ msgstr "Çalışma Noktası"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:262
 msgid "Magnetic pads"
-msgstr ""
+msgstr "Manyetik pedler"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:266
 #, fuzzy
@@ -32792,7 +33074,7 @@ msgstr "Izgaraya Yasla:"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:292
 #: pcbnew/dialogs/panel_edit_options_base.cpp:300
 msgid "Capture cursor when the mouse enters a pad area"
-msgstr ""
+msgstr "Fare bir ped alanına girdiğinde imleci yakalayın"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:296
 #: pcbnew/dialogs/panel_edit_options_base.cpp:310
@@ -32808,7 +33090,7 @@ msgstr "Izgaraya Yasla:"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:306
 #: pcbnew/dialogs/panel_edit_options_base.cpp:314
 msgid "Capture cursor when the mouse approaches a track"
-msgstr ""
+msgstr "Fare bir parçaya yaklaştığında imleci yakalayın"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:318
 #, fuzzy
@@ -32818,7 +33100,7 @@ msgstr "Izgaraya Yasla:"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:320
 #: pcbnew/dialogs/panel_edit_options_base.cpp:328
 msgid "Capture cursor when the mouse approaches graphical control points"
-msgstr ""
+msgstr "Fare grafik kontrol noktalarına yaklaştığında imleci yakalayın"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:341
 #, fuzzy
@@ -32828,7 +33110,7 @@ msgstr "Artı işaretlerini her zaman göster"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:344
 #: pcbnew/tools/pcb_actions.cpp:881
 msgid "Show ratsnest with curved lines"
-msgstr ""
+msgstr "Farelerin yuvalarını eğri çizgilerle göster"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:351
 #, fuzzy
@@ -32837,53 +33119,54 @@ msgstr "Düzenleme"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:353
 msgid "Mouse drag track behavior:"
-msgstr ""
+msgstr "Fare sürükleme izleme davranışı:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:355
 msgid ""
 "Choose the action to perform when dragging a track segment with the mouse"
-msgstr ""
+msgstr "Bir parça parçasını fareyle sürüklerken gerçekleştirilecek eylemi seçin"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:363
 msgid "Moves the track segment without moving connected tracks"
-msgstr ""
+msgstr "Bağlı parçaları hareket ettirmeden parça segmentini hareket ettirir"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:367
 #: pcbnew/tools/pcb_actions.cpp:1552
 msgid "Drag (45 degree mode)"
-msgstr ""
+msgstr "Sürükle (45 derece modu)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:368
 #: pcbnew/tools/pcb_actions.cpp:1553
 msgid "Drags the track segment while keeping connected tracks at 45 degrees."
-msgstr ""
+msgstr "Bağlı parçaları 45 derecede tutarken parça segmentini sürükler."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:372
 #: pcbnew/tools/pcb_actions.cpp:1559
 msgid "Drag (free angle)"
-msgstr ""
+msgstr "İlaç (serbest açı)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:373
 #: pcbnew/tools/pcb_actions.cpp:1560
 msgid ""
 "Drags the nearest joint in the track without restricting the track angle."
-msgstr ""
+msgstr "Ray açısını kısıtlamadan raydaki en yakın eklemi sürükler."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:392
 msgid "Draw an outline to show the sheet size."
-msgstr ""
+msgstr "Sayfa boyutunu göstermek için bir anahat çizin."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:396
 msgid "Show courtyard collisions when moving/dragging"
-msgstr ""
+msgstr "Taşırken / sürüklerken avlu çarpışmalarını göster"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:400
 msgid "Auto-refill zones"
-msgstr ""
+msgstr "Otomatik doldurma bölgeleri"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:402
 msgid "If checked, zones will be re-filled after each edit operation"
 msgstr ""
+"İşaretlenirse, her düzenleme işleminden sonra bölgeler yeniden doldurulur"
 
 #: pcbnew/dialogs/panel_fp_editor_color_settings.cpp:113
 #, fuzzy
@@ -32892,17 +33175,17 @@ msgstr "Katmanları Dahil Et"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:23
 msgid "Default text items for new footprints:"
-msgstr ""
+msgstr "Yeni ayak izleri için varsayılan metin öğeleri:"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:88
 msgid ""
 "Note: a blank reference designator or value will use the footprint name."
-msgstr ""
+msgstr "Not: boş bir referans belirteci veya değer, ayak izi adını kullanır."
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:105
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:21
 msgid "Default properties for new graphic items:"
-msgstr ""
+msgstr "Yeni grafik öğeleri için varsayılan özellikler:"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:303
 #, fuzzy
@@ -32946,7 +33229,7 @@ msgstr "Kitaplık Formatı"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:392
 msgid "No filename entered"
-msgstr ""
+msgstr "Dosya adı girilmedi"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:397
 #, fuzzy
@@ -33015,10 +33298,11 @@ msgstr "Görüntüleme Seçenekleri"
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:27
 msgid "Select which origin is used for X,Y coordinate display."
 msgstr ""
+"X, Y koordinatlarını görüntülemek için hangi orijinin kullanılacağını seçin."
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:31
 msgid "Increases right"
-msgstr ""
+msgstr "Doğru artırır"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:31
 #, fuzzy
@@ -33027,27 +33311,27 @@ msgstr "<ağ oluştur>"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:33
 msgid "X Axis"
-msgstr ""
+msgstr "X Ekseni"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:35
 msgid "Select which the direction on the screen in which the X axis increases."
-msgstr ""
+msgstr "Ekranda X ekseninin hangi yönde artacağını seçin."
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:39
 msgid "Increases up"
-msgstr ""
+msgstr "Artar"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:39
 msgid "Increases down"
-msgstr ""
+msgstr "Aşağı doğru artar"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:41
 msgid "Y Axis"
-msgstr ""
+msgstr "Y Ekseni"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:43
 msgid "Select which the direction on the screen in which the Y axis increases."
-msgstr ""
+msgstr "Ekranda Y ekseninin hangi yönde artacağını seçin."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:46
 #, fuzzy
@@ -33060,6 +33344,9 @@ msgid ""
 "net.  If set, this is an absolute minimum which cannot be reduced by "
 "netclasses, custom rules, or other settings."
 msgstr ""
+"Aynı ağa ait olmayan bakır eşyalar arasındaki minimum boşluk. Ayarlanırsa, "
+"bu, net sınıflar, özel kurallar veya diğer ayarlarla azaltılamayan mutlak "
+"bir minimumdur."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:62
 #, fuzzy
@@ -33071,6 +33358,8 @@ msgid ""
 "The minimum track width.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Minimum iz genişliği. Ayarlanırsa, bu mutlak bir minimumdur ve ağ sınıfları, "
+"özel kurallar veya diğer ayarlarla azaltılamaz."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:79
 #, fuzzy
@@ -33079,7 +33368,7 @@ msgstr "En ince yol genişliği"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:84
 msgid "The minimum copper width of connected copper items."
-msgstr ""
+msgstr "Bağlı bakır öğelerin minimum bakır genişliği."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:96
 #, fuzzy
@@ -33091,6 +33380,8 @@ msgid ""
 "The minimum annular ring width.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Minimum halka şeklindeki halka genişliği. Ayarlanırsa, bu mutlak bir "
+"minimumdur ve ağ sınıfları, özel kurallar veya diğer ayarlarla azaltılamaz."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:112
 #, fuzzy
@@ -33102,6 +33393,8 @@ msgid ""
 "The minimum via diameter.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Minimum çap üzerinden. Ayarlanırsa, bu mutlak bir minimumdur ve ağ "
+"sınıfları, özel kurallar veya diğer ayarlarla azaltılamaz."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:128
 msgid "Copper to hole clearance:"
@@ -33113,6 +33406,9 @@ msgid ""
 "set, this is an absolute minimum and cannot be reduced by custom rules or "
 "other settings."
 msgstr ""
+"Bir delik ile ilişkisiz bir bakır öğe arasındaki minimum boşluk. "
+"Ayarlanırsa, bu mutlak bir minimumdur ve özel kurallar veya diğer ayarlarla "
+"azaltılamaz."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:144
 msgid "Copper to edge clearance:"
@@ -33124,6 +33420,9 @@ msgid ""
 "this is an absolute minimum and cannot be reduced by custom rules or other "
 "settings."
 msgstr ""
+"Tahta kenarı ile herhangi bir bakır öğe arasındaki minimum boşluk. "
+"Ayarlanırsa, bu mutlak bir minimumdur ve özel kurallar veya diğer ayarlarla "
+"azaltılamaz."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:169
 msgid "Holes"
@@ -33139,6 +33438,8 @@ msgid ""
 "The minimum through-hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules or other settings."
 msgstr ""
+"Minimum delik boyutu. Ayarlanırsa, bu mutlak bir minimumdur ve net sınıflar, "
+"özel kurallar veya diğer ayarlarla azaltılamaz."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:201
 #, fuzzy
@@ -33151,6 +33452,9 @@ msgid ""
 "absolute minimum and cannot be reduced by custom rules or other settings. "
 "(Note: does not apply to milled holes.)"
 msgstr ""
+"Delinmiş iki delik arasındaki minimum boşluk. Ayarlanırsa, bu mutlak bir "
+"minimumdur ve özel kurallar veya diğer ayarlarla azaltılamaz. (Not: "
+"öğütülmüş delikler için geçerli değildir.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:226
 msgid "uVias"
@@ -33166,6 +33470,8 @@ msgid ""
 "The minimum diameter for micro-vias.  If set, this is an absolute minimum "
 "and cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Mikro yollar için minimum çap. Ayarlanırsa, bu mutlak bir minimumdur ve ağ "
+"sınıfları, özel kurallar veya diğer ayarlarla azaltılamaz."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:258
 #, fuzzy
@@ -33177,6 +33483,8 @@ msgid ""
 "The minimum micro-via hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
+"Minimum mikro delik boyutu. Ayarlanırsa, bu mutlak bir minimumdur ve ağ "
+"sınıfları, özel kurallar veya diğer ayarlarla azaltılamaz."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:283
 msgid "Silkscreen"
@@ -33193,6 +33501,9 @@ msgid ""
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
 msgstr ""
+"Aynı serigrafi katmanındaki iki öğe arasındaki minimum boşluk. Bu "
+"ayarlanırsa okunabilirliği artırabilir. (Not: tek bir ayak izi içindeki "
+"birden çok şekil için geçerli değildir.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:315
 msgid "Minimum text height:"
@@ -33204,7 +33515,7 @@ msgstr "Minimum metin kalınlığı:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:355
 msgid "Arc/circle approximated by segments"
-msgstr ""
+msgstr "Segmentlerle yaklaştırılan yay / daire"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:368
 #, fuzzy
@@ -33217,6 +33528,8 @@ msgid ""
 "approximate it.\n"
 "The error max defines the number of segments of this polygon."
 msgstr ""
+"Bu, bir daire ile ona yaklaşan çokgen şekil arasındaki maksimum mesafedir.\n"
+"Hata maks bu çokgenin segment sayısını tanımlar."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:375
 msgid ""
@@ -33224,19 +33537,22 @@ msgid ""
 "to approximate it.  Smaller values produce smoother graphics at the expense "
 "of performance."
 msgstr ""
+"Gerçek bir yay veya daire ile ona yaklaşmak için kullanılan bölümler "
+"arasında izin verilen maksimum sapma. Daha küçük değerler, performans "
+"pahasına daha düzgün grafikler üretir."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:386
 #, c-format
 msgid "Note: zone filling can be slow when < %s."
-msgstr ""
+msgstr "Not: bölge dolumu <%s he olduğunda yavaş olabilir."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:398
 msgid "Zone fill strategy"
-msgstr ""
+msgstr "Bölge doldurma stratejisi"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:408
 msgid "Allow fillets outside zone outline"
-msgstr ""
+msgstr "Filetoların bölge taslağının dışına çıkmasına izin ver"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:420
 #, fuzzy
@@ -33250,7 +33566,7 @@ msgstr "Uzunluk"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:443
 msgid "Include stackup height in track length calculations"
-msgstr ""
+msgstr "İz uzunluğu hesaplamalarına yığın yüksekliğini dahil edin"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:444
 msgid ""
@@ -33258,10 +33574,15 @@ msgid ""
 "length calculations for tracks with vias.  When disabled, via stackup height "
 "is ignored."
 msgstr ""
+"Etkinleştirildiğinde, bakır tabakalar arasındaki mesafe, geçişli raylar için "
+"ray uzunluğu hesaplamalarına dahil edilecektir. Devre dışı bırakıldığında, "
+"vıa yığın yüksekliği göz ardı edilir."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:433
 msgid "Use the Physical Stackup page to change the number of copper layers."
 msgstr ""
+"Bakır katman sayısını değiştirmek için Fiziksel Yığın yukarı sayfasını "
+"kullanın."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:466
 #, c-format
@@ -33271,6 +33592,10 @@ msgid ""
 "These items will be no longer accessible\n"
 "Do you wish to continue?"
 msgstr ""
+"Ayak izlerinin kaldırılan katmanlarda bazı öğeleri vardır:\n"
+"%s\n"
+"Bu öğelere artık erişilemeyecek\n"
+"Devam etmek istiyor musun?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:476
 msgid ""
@@ -33278,6 +33603,9 @@ msgid ""
 "items from removed layers and cannot be undone.\n"
 "Do you wish to continue?"
 msgstr ""
+"Kaldırılan katmanlarda öğeler bulundu. Bu işlem, kaldırılan katmanlardaki "
+"tüm öğeleri siler ve geri alınamaz.\n"
+"Devam etmek istiyor musun?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:671
 #, fuzzy
@@ -33287,11 +33615,11 @@ msgstr "Alanların bir adı olmalıdır."
 #: pcbnew/dialogs/panel_setup_layers.cpp:677
 #, c-format
 msgid "%s are forbidden in layer names."
-msgstr ""
+msgstr "katman adlarında %s yasaktır."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:684
 msgid "Layer name \"signal\" is reserved."
-msgstr ""
+msgstr "Katman adı \"sinyal\" ayrılmıştır."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:693
 #, fuzzy, c-format
@@ -33306,14 +33634,18 @@ msgid ""
 "\n"
 "Continue and delete the extra inner copper layers from the current board?"
 msgstr ""
+"İçe aktarılan ayarlar geçerli karttan daha az bakır katmana sahiptir (%i "
+"yerine %i).\n"
+"\n"
+"Devam edin ve mevcut karttaki ekstra iç bakır katmanları silin mi?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:800
 msgid "Inner Layers To Be Deleted"
-msgstr ""
+msgstr "Silinecek iç Katmanlar"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:835
 msgid "All user-defined layers have already been added."
-msgstr ""
+msgstr "Tüm kullanıcı tanımlı katmanlar zaten eklenmiştir."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:839
 msgid "Add User-defined Layer"
@@ -33330,11 +33662,11 @@ msgstr "CrtYd_Ön"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:60
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:648
 msgid "Off-board, testing"
-msgstr ""
+msgstr "Off-board, test"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:67
 msgid "If you want a fabrication layer for the front side of the board"
-msgstr ""
+msgstr "Tahtanın ön tarafı için bir imalat katmanı istiyorsanız"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:71
 msgid "Fab_Front"
@@ -33343,11 +33675,11 @@ msgstr "Fab_Ön"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:74
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:638
 msgid "Off-board, manufacturing"
-msgstr ""
+msgstr "Off-board, üretim"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:79
 msgid "If you want an adhesive template for the front side of the board"
-msgstr ""
+msgstr "Tahtanın ön tarafı için yapışkan bir şablon istiyorsanız"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:83
 msgid "Adhes_Front"
@@ -33362,11 +33694,11 @@ msgstr "Adhes_Ön"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:614
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:626
 msgid "On-board, non-copper"
-msgstr ""
+msgstr "Yerleşik, bakır olmayan"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:91
 msgid "If you want a solder paste layer for front side of the board"
-msgstr ""
+msgstr "Tahtanın ön tarafı için bir lehim pastası tabakası istiyorsanız"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:95
 msgid "SoldP_Front"
@@ -33374,7 +33706,7 @@ msgstr "SoldP_Ön"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:103
 msgid "If you want a silk screen layer for the front side of the board"
-msgstr ""
+msgstr "Tahtanın ön tarafı için bir serigrafi katmanı istiyorsanız"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:107
 msgid "SilkS_Front"
@@ -33382,7 +33714,7 @@ msgstr "İpkBsk_Ön"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:115
 msgid "If you want a solder mask layer for the front of the board"
-msgstr ""
+msgstr "Tahtanın önü için bir lehim maskesi katmanı istiyorsanız"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:119
 msgid "Mask_Front"
@@ -33579,6 +33911,9 @@ msgid ""
 "Copper layer type for Freerouter and other external routers.\n"
 "Power plane layers are removed from Freerouter's layer menus."
 msgstr ""
+"Serbest yönlendirici ve diğer harici yönlendiriciler için bakır katman tipi."
+"\n"
+"Güç düzlemi katmanları, Freerouter'ın katman menülerinden kaldırılır."
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:147
 msgid "In1"
@@ -33707,11 +34042,11 @@ msgstr "İç bakır katman"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:570
 msgid "Layer name of back (bottom) copper layer"
-msgstr ""
+msgstr "Arka (alt) bakır tabakanın katman adı"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:583
 msgid "If you want a solder mask layer for the back side of the board"
-msgstr ""
+msgstr "Tahtanın arka tarafı için bir lehim maskesi katmanı istiyorsanız"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:587
 msgid "SoldM_Back"
@@ -33719,7 +34054,7 @@ msgstr "LhmMsk_Arka"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:595
 msgid "If you want a silk screen layer for the back side of the board"
-msgstr ""
+msgstr "Tahtanın arka tarafı için bir serigrafi katmanı istiyorsanız"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:599
 msgid "SilkS_Back"
@@ -33727,7 +34062,7 @@ msgstr "İpkBsk_Arka"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:607
 msgid "If you want a solder paste layer for the back side of the board"
-msgstr ""
+msgstr "Tahtanın arka tarafı için bir lehim pastası tabakası istiyorsanız"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:611
 msgid "SoldP_Back"
@@ -33735,7 +34070,7 @@ msgstr "LehimP_Arka"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:619
 msgid "If you want an adhesive layer for the back side of the board"
-msgstr ""
+msgstr "Tahtanın arka tarafı için yapışkan bir tabaka istiyorsanız"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:623
 msgid "Adhes_Back"
@@ -33743,7 +34078,7 @@ msgstr "Ypştr_Arka"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:631
 msgid "If you want a fabrication layer for the back side of the board"
-msgstr ""
+msgstr "Tahtanın arka tarafı için bir imalat katmanı istiyorsanız"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:635
 msgid "Fab_Back"
@@ -33788,7 +34123,7 @@ msgstr "Eko2"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:693
 msgid "If you want a separate layer for comments or notes"
-msgstr ""
+msgstr "Yorumlar veya notlar için ayrı bir katman istiyorsanız"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:697
 msgid "Comments"
@@ -33857,22 +34192,28 @@ msgid ""
 "Use your board manufacturer's recommendations for solder mask expansion and "
 "minimum web width."
 msgstr ""
+"Lehim maskesi genişletme ve minimum ağ genişliği için kart üreticinizin "
+"önerilerini kullanın."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:36
 msgid "If none are provided, setting the values to zero is suggested."
-msgstr ""
+msgstr "Hiçbiri sağlanmazsa, değerleri sıfıra ayarlamanız önerilir."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:56
 msgid ""
 "Global clearance between pads and the solder mask.\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
+"Pedler ve lehim maskesi arasındaki küresel boşluk.\n"
+"Bu değer, bir ayak izi veya altlık için yerel değerlerle değiştirilebilir."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:61
 msgid ""
 "Positive clearance means area bigger than the pad (usual for solder mask "
 "clearance)."
 msgstr ""
+"Pozitif boşluk, pedden daha büyük alan anlamına gelir (lehim maskesi boşluğu "
+"için olağandır)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:69
 msgid "Solder mask minimum web width:"
@@ -33885,12 +34226,18 @@ msgid ""
 "This parameter is only used to plot solder mask layers.\n"
 "Leave at 0 unless you know what you are doing."
 msgstr ""
+"Dk. 2 ped alanı arasında dağıtın.\n"
+"Çizim sırasında bu değerden daha yakın iki ped alanı birleştirilecektir.\n"
+"Bu parametre yalnızca lehim maskesi katmanlarını çizmek için kullanılır.\n"
+"Ne yaptığınızı bilmiyorsanız saat 0'da ayrılın."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:76
 msgid ""
 "Minimum distance between openings in the solder mask.  Pad openings closer "
 "than this distance will be plotted as a single opening."
 msgstr ""
+"Lehim maskesindeki açıklıklar arasındaki minimum mesafe. Bu mesafeden daha "
+"yakın olan ped açıklıkları tek bir açıklık olarak çizilecektir."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:84
 msgid "Solder mask to copper clearance:"
@@ -33899,10 +34246,12 @@ msgstr "Lehim maskeden bakıra açıklık:"
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:95
 msgid "Allow bridged solder mask apertures between pads within footprints"
 msgstr ""
+"Ayak izleri içindeki pedler arasında köprülü lehim maskesi açıklıklarına "
+"izin verin"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:98
 msgid "Tent vias"
-msgstr ""
+msgstr "Çadır yolları"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:103
 msgid ""
@@ -33910,12 +34259,17 @@ msgid ""
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Final clearance value is the sum of this value and the clearance value ratio."
 msgstr ""
+"Pedler ve lehim pastası arasındaki küresel boşluk.\n"
+"Bu değer, bir ayak izi veya altlık için yerel değerlerle değiştirilebilir.\n"
+"Son boşluk değeri, bu değerin ve boşluk değeri oranının toplamıdır."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:108
 msgid ""
 "Negative clearance means area smaller than the pad (usual for solder paste "
 "clearance)."
 msgstr ""
+"Negatif boşluk, pedden daha küçük alan anlamına gelir (lehim pastası boşluğu "
+"için normal)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:118
 msgid ""
@@ -33924,16 +34278,22 @@ msgid ""
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Final clearance value is the sum of this value and the clearance value."
 msgstr ""
+"Pedler ve lehim pastası arasındaki yüzde cinsinden küresel boşluk oranı.\n"
+"10 Değeri, boşluk değerinin ped boyutunun yüzde 10'u olduğu anlamına gelir.\n"
+"Bu değer, bir ayak izi veya altlık için yerel değerlerle değiştirilebilir.\n"
+"Son boşluk değeri, bu değerin ve boşluk değerinin toplamıdır."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:123
 msgid "Additional clearance as a percentage of the pad size."
-msgstr ""
+msgstr "Ped boyutunun yüzdesi olarak ek boşluk."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:134
 msgid ""
 "Note: Solder paste clearances (absolute and relative) are added to determine "
 "the final clearance."
 msgstr ""
+"Not: Son boşluğu belirlemek için lehim pastası boşlukları (mutlak ve "
+"göreceli) eklenir."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:94
 msgid "Cancel Changes?"
@@ -33951,7 +34311,7 @@ msgstr "HATA:"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:633
 msgid "Design rules cannot be added without a project"
-msgstr ""
+msgstr "Proje olmadan tasarım kuralları eklenemez"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:22
 #, fuzzy
@@ -33960,7 +34320,7 @@ msgstr "Kurallar"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:76
 msgid "Check rule syntax"
-msgstr ""
+msgstr "Kural sözdizimini denetle"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
 #, fuzzy
@@ -34518,12 +34878,14 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:75
 msgid "Default properties for new dimension objects:"
-msgstr ""
+msgstr "Yeni boyut nesneleri için varsayılan özellikler:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:95
 msgid ""
 "Default units for dimensions (\"automatic\" to follow the chosen UI units)"
 msgstr ""
+"Boyutlar için varsayılan birimler (seçilen UI birimlerini takip etmek için "
+"\"otomatik\")"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:102
 #, fuzzy
@@ -34532,29 +34894,32 @@ msgstr "&X konumu:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:110
 msgid "Where to position the dimension text relative to the dimension line"
-msgstr ""
+msgstr "Boyut metnini boyut satırına göre nereye konumlandırabilirim"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:124
 msgid "Keep text aligned"
-msgstr ""
+msgstr "Metni hizalı tutun"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:125
 msgid "When checked, dimension text will be kept aligned with dimension lines"
 msgstr ""
+"İşaretlendiğinde, boyut metni boyut çizgileriyle aynı hizada tutulacaktır"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:137
 msgid "How many digits of precision to show"
-msgstr ""
+msgstr "Kaç basamak kesinlik gösterilecek"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:153
 msgid ""
 "When checked, \"1.2300\" will be rendered as \"1.23\" even if precision is "
 "set to show more digits"
 msgstr ""
+"İşaretlendiğinde, hassasiyet daha fazla basamak gösterecek şekilde "
+"ayarlanmış olsa bile \"1.2300\" \"1.23\" olarak işlenecektir"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:369
 msgid "No via hole size defined."
-msgstr ""
+msgstr "Delik boyutu tanımlanmadı."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:383
 #, fuzzy
@@ -34663,7 +35028,7 @@ msgstr "ağ sınıfları"
 #: pcbnew/drc/drc_engine.cpp:299
 #, c-format
 msgid "netclass '%s' (diff pair)"
-msgstr ""
+msgstr "net sınıf '%s' (fark çifti)"
 
 #: pcbnew/drc/drc_engine.cpp:345
 #, fuzzy, c-format
@@ -34678,7 +35043,7 @@ msgstr "Sınır çizgisi katmanı"
 #: pcbnew/drc/drc_engine.cpp:421
 #, c-format
 msgid "keepout area '%s'"
-msgstr ""
+msgstr "saklama alanı '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:615
 #, c-format
@@ -34688,7 +35053,7 @@ msgstr "Çözümlenmiş bölge bağlantı türü: %s."
 #: pcbnew/drc/drc_engine.cpp:633
 #, c-format
 msgid "Pad is not a through hole pad; connection will be: %s."
-msgstr ""
+msgstr "Sayfa delikli bir ped değildir; bağlantı şu şekilde olacaktır: %s."
 
 #: pcbnew/drc/drc_engine.cpp:750 pcbnew/drc/drc_engine.cpp:760
 #, c-format
@@ -34979,7 +35344,7 @@ msgstr "Elektriksel"
 
 #: pcbnew/drc/drc_item.cpp:46
 msgid "Design for Manufacturing"
-msgstr ""
+msgstr "Üretim için Tasarım"
 
 #: pcbnew/drc/drc_item.cpp:47
 #, fuzzy
@@ -34988,7 +35353,7 @@ msgstr "Şematik Dosyalar"
 
 #: pcbnew/drc/drc_item.cpp:48
 msgid "Signal Integrity"
-msgstr ""
+msgstr "Sinyal Bütünlüğü"
 
 #: pcbnew/drc/drc_item.cpp:49
 msgid "Readability"
@@ -35001,7 +35366,7 @@ msgstr "En ince yol genişliği"
 
 #: pcbnew/drc/drc_item.cpp:57
 msgid "Items shorting two nets"
-msgstr ""
+msgstr "İki ağı kısaltan öğeler"
 
 #: pcbnew/drc/drc_item.cpp:61
 #, fuzzy
@@ -35010,7 +35375,7 @@ msgstr "Öğe numaralandırılamadı: %s%s\n"
 
 #: pcbnew/drc/drc_item.cpp:65
 msgid "Text (or dimension) on Edge.Cuts layer"
-msgstr ""
+msgstr "Kenardaki metin (veya boyut).Katmanı keser"
 
 #: pcbnew/drc/drc_item.cpp:69
 #, fuzzy
@@ -35019,7 +35384,7 @@ msgstr "Numaralandırmayı Temizle"
 
 #: pcbnew/drc/drc_item.cpp:73
 msgid "Tracks crossing"
-msgstr ""
+msgstr "Geçiş izleri"
 
 #: pcbnew/drc/drc_item.cpp:77
 #, fuzzy
@@ -35033,19 +35398,19 @@ msgstr "Bakır dilim"
 
 #: pcbnew/drc/drc_item.cpp:85
 msgid "Isolated copper fill"
-msgstr ""
+msgstr "İzole bakır dolgu"
 
 #: pcbnew/drc/drc_item.cpp:89
 msgid "Thermal relief connection to zone incomplete"
-msgstr ""
+msgstr "Bölgeye termal tahliye bağlantısı tamamlanmadı"
 
 #: pcbnew/drc/drc_item.cpp:93
 msgid "Via is not connected or connected on only one layer"
-msgstr ""
+msgstr "Vıa bağlı değil veya yalnızca bir katmana bağlı değil"
 
 #: pcbnew/drc/drc_item.cpp:97
 msgid "Track has unconnected end"
-msgstr ""
+msgstr "Parçanın bağlantısız sonu var"
 
 #: pcbnew/drc/drc_item.cpp:101
 #, fuzzy
@@ -35054,15 +35419,15 @@ msgstr "Mekanik boşluk çözünürlüğü:"
 
 #: pcbnew/drc/drc_item.cpp:105
 msgid "Drilled holes too close together"
-msgstr ""
+msgstr "Birbirine çok yakın delinmiş delikler"
 
 #: pcbnew/drc/drc_item.cpp:109
 msgid "Drilled holes co-located"
-msgstr ""
+msgstr "Delinmiş delikler birlikte bulunur"
 
 #: pcbnew/drc/drc_item.cpp:113
 msgid "Copper connection too narrow"
-msgstr ""
+msgstr "Bakır bağlantı çok dar"
 
 #: pcbnew/drc/drc_item.cpp:117
 #, fuzzy
@@ -35091,7 +35456,7 @@ msgstr "'%s' ayak izi kimliği geçerli değil."
 
 #: pcbnew/drc/drc_item.cpp:137
 msgid "Micro via drill out of range"
-msgstr ""
+msgstr "Matkap ile mikro menzil dışında"
 
 #: pcbnew/drc/drc_item.cpp:141
 #, fuzzy
@@ -35110,11 +35475,11 @@ msgstr "Ayak izleri ön"
 
 #: pcbnew/drc/drc_item.cpp:153
 msgid "PTH inside courtyard"
-msgstr ""
+msgstr "PTH iç avlu"
 
 #: pcbnew/drc/drc_item.cpp:157
 msgid "NPTH inside courtyard"
-msgstr ""
+msgstr "NPTH iç avlu"
 
 #: pcbnew/drc/drc_item.cpp:161
 #, fuzzy
@@ -35143,7 +35508,7 @@ msgstr "ayak izi"
 
 #: pcbnew/drc/drc_item.cpp:181
 msgid "Pad net doesn't match schematic"
-msgstr ""
+msgstr "Ped ağı şemaya uymuyor"
 
 #: pcbnew/drc/drc_item.cpp:185
 msgid "Footprint not found in libraries"
@@ -35164,7 +35529,7 @@ msgstr "Bakır şerit"
 
 #: pcbnew/drc/drc_item.cpp:205
 msgid "Solder mask aperture bridges items with different nets"
-msgstr ""
+msgstr "Lehim maskesi açıklığı, farklı ağlara sahip öğeleri köprüler"
 
 #: pcbnew/drc/drc_item.cpp:209
 #, fuzzy
@@ -35173,7 +35538,7 @@ msgstr "Lehim maskesinin kenarlarındaki serigrafiyi kesin"
 
 #: pcbnew/drc/drc_item.cpp:213
 msgid "Silkscreen clipped by board edge"
-msgstr ""
+msgstr "Tahta kenarı ile kırpılmış serigrafi"
 
 #: pcbnew/drc/drc_item.cpp:217
 #, fuzzy
@@ -35246,13 +35611,13 @@ msgstr "%s'i kapat"
 
 #: pcbnew/drc/drc_rule_condition.cpp:52
 msgid "ERROR in expression."
-msgstr ""
+msgstr "İfade hatası."
 
 #: pcbnew/drc/drc_rule_condition.cpp:100 pcbnew/drc/drc_rule_parser.cpp:61
 #: pcbnew/drc/drc_rule_parser.cpp:573
 #, c-format
 msgid "ERROR: <a href='%d:%d'>%s</a>%s"
-msgstr ""
+msgstr "hata: <a href='%d:%d'>%s</a>%s"
 
 #: pcbnew/drc/drc_rule_parser.cpp:68 pcbnew/drc/drc_rule_parser.cpp:580
 #, fuzzy, c-format
@@ -35263,6 +35628,8 @@ msgstr "HATA:"
 #, c-format
 msgid "The '%s' keyword has been deprecated.  Please use '%s' instead."
 msgstr ""
+"'%s' anahtar sözcüğü kullanımdan kaldırıldı. Lütfen bunun yerine '%s' "
+"kullanın."
 
 #: pcbnew/drc/drc_rule_parser.cpp:117 pcbnew/drc/drc_rule_parser.cpp:200
 #: pcbnew/drc/drc_rule_parser.cpp:477
@@ -35296,7 +35663,7 @@ msgstr "Tanınmayan öğe '%s'"
 #: pcbnew/drc/drc_rule_parser.cpp:167 pcbnew/drc/drc_rule_parser.cpp:249
 #: pcbnew/drc/drc_rule_parser.cpp:545
 msgid "Incomplete statement."
-msgstr ""
+msgstr "Eksik ifade."
 
 #: pcbnew/drc/drc_rule_parser.cpp:171 pcbnew/drc/drc_rule_parser.cpp:253
 #: pcbnew/drc/drc_rule_parser.cpp:332 pcbnew/drc/drc_rule_parser.cpp:376
@@ -35313,12 +35680,12 @@ msgstr "Dosya Adı"
 
 #: pcbnew/drc/drc_rule_parser.cpp:215
 msgid "Missing condition expression."
-msgstr ""
+msgstr "Eksik koşul ifadesi."
 
 #: pcbnew/drc/drc_rule_parser.cpp:226 pcbnew/drc/drc_rule_parser.cpp:460
 #, c-format
 msgid "Unrecognized item '%s'.| Expected quoted expression."
-msgstr ""
+msgstr "Tanınmayan öğe '%s'./ Beklenen alıntı ifadesi."
 
 #: pcbnew/drc/drc_rule_parser.cpp:261 pcbnew/drc/drc_rule_parser.cpp:372
 #: pcbnew/drc/drc_rule_parser.cpp:385 pcbnew/drc/drc_rule_parser.cpp:404
@@ -35331,7 +35698,7 @@ msgstr "Kayıp ebeveyn"
 #: pcbnew/drc/drc_rule_parser.cpp:292
 #, c-format
 msgid "Missing constraint type.|  Expected %s."
-msgstr ""
+msgstr "Eksik kısıtlama türü./ Beklenen %s."
 
 #: pcbnew/drc/drc_rule_parser.cpp:344
 #, fuzzy, c-format
@@ -35797,7 +36164,7 @@ msgstr "Bacak Özellikleri"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:655
 msgid "No project loaded, skipping library parity tests."
-msgstr ""
+msgstr "ütüphane eşlik testlerini atlayarak proje yüklenmedi."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:659
 msgid "Loading footprint library table..."
@@ -35863,7 +36230,7 @@ msgstr "Ayak izleri kontrol ediliyor..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:113
 msgid "(no edges found on Edge.Cuts layer)"
-msgstr ""
+msgstr "(kenarda kenar bulunamadı.Katmanı keser)"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:199
 #, fuzzy, c-format
@@ -35911,22 +36278,22 @@ msgstr "Güncelleştirilmiş ayak izi(footprint) %s (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:141
 msgid "No corresponding pin found in schematic."
-msgstr ""
+msgstr "Şemada karşılık gelen bir pim bulunamadı."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:151
 #, c-format
 msgid "Pad missing net given by schematic (%s)."
-msgstr ""
+msgstr "Şematik (%s) ile verilen ped eksik ağ."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:162
 #, c-format
 msgid "Pad net (%s) doesn't match net given by schematic (%s)."
-msgstr ""
+msgstr "Ped ağı (%s) şematik (%s) ile verilen ağla eşleşmiyor."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:183
 #, c-format
 msgid "No pad found for pin %s in schematic."
-msgstr ""
+msgstr "Şemada%s pimi için bölme bulunamadı."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:219
 #, fuzzy
@@ -35940,7 +36307,7 @@ msgstr "Ayak izleri kontrol ediliyor..."
 
 #: pcbnew/drc/drc_test_provider_sliver_checker.cpp:84
 msgid "Running sliver detection on copper layers..."
-msgstr ""
+msgstr "Bakır tabakalarda şerit tespiti yapılıyor..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:56
 msgid "board setup solder mask min width"
@@ -35949,12 +36316,12 @@ msgstr "kart kurulumu lehim maskesi min genişliği"
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:542
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:636
 msgid "Front solder mask aperture bridges items with different nets"
-msgstr ""
+msgstr "Ön lehim maskesi açıklığı, farklı ağlara sahip öğeleri köprüler"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:544
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:638
 msgid "Rear solder mask aperture bridges items with different nets"
-msgstr ""
+msgstr "Arka lehim maskesi açıklığı, farklı ağlara sahip öğeleri köprüler"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:761
 msgid "Building solder mask..."
@@ -35986,7 +36353,7 @@ msgstr "%s boşluğunun kontrol edilmesi: %s."
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:209
 msgid "(TrueType font characters with insufficient stroke weight)"
-msgstr ""
+msgstr "(Kontur ağırlığı yetersiz olan TrueType yazı tipi karakterleri)"
 
 #: pcbnew/drc/drc_test_provider_text_dims.cpp:225
 #, fuzzy, c-format
@@ -36048,10 +36415,13 @@ msgid ""
 "File contains pad shapes that are not supported by the Hyperlynx exporter "
 "(supported shapes are oval, rectangle, rounded rectangle, and circle)."
 msgstr ""
+"Dosya, Hyperlynx dışa aktarıcısı tarafından desteklenmeyen altlık şekilleri "
+"içerir (desteklenen şekiller oval, dikdörtgen, yuvarlatılmış dikdörtgen ve "
+"dairedir)."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:175
 msgid "They have been exported as oval pads."
-msgstr ""
+msgstr "Oval pedler olarak ihraç edilmişlerdir."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:290
 #: pcbnew/exporters/exporter_vrml.cpp:780
@@ -36069,11 +36439,11 @@ msgstr "Dosyaya Aktar"
 
 #: pcbnew/exporters/exporter_vrml.cpp:809
 msgid "VRML Export Failed: Could not add holes to contours."
-msgstr ""
+msgstr "VRML Dışa Aktarma Başarısız Oldu: Konturlara delik eklenemedi."
 
 #: pcbnew/exporters/exporter_vrml.cpp:1241
 msgid "No project when exporting the VRML file"
-msgstr ""
+msgstr "VRML dosyasını dışa aktarırken proje yok"
 
 #: pcbnew/exporters/exporter_vrml.cpp:1301
 #, fuzzy
@@ -36098,11 +36468,11 @@ msgstr "'%s' Gerber iş dosyası oluşturuldu."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:592
 msgid "Board stackup settings not up to date."
-msgstr ""
+msgstr "Pano yığın ayarları güncel değil."
 
 #: pcbnew/exporters/step/exporter_step.cpp:457
 msgid "Determining PCB data\n"
-msgstr ""
+msgstr "PCB verilerinin belirlenmesi\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:460
 #, fuzzy, c-format
@@ -36111,7 +36481,7 @@ msgstr "Kart Kalınlığı: "
 
 #: pcbnew/exporters/step/exporter_step.cpp:465
 msgid "Build STEP data\n"
-msgstr ""
+msgstr "Adım verileri oluşturma\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:469
 #, fuzzy
@@ -36152,10 +36522,12 @@ msgid ""
 "Unable to create STEP file.\n"
 "Check that the board has a valid outline and models."
 msgstr ""
+"ADIM dosyası oluşturulamıyor.\n"
+"Kartın geçerli bir anahattı ve modelleri olup olmadığını kontrol edin."
 
 #: pcbnew/exporters/step/exporter_step.cpp:506
 msgid "STEP file has been created, but there are warnings."
-msgstr ""
+msgstr "Adım dosyası oluşturuldu, ancak uyarılar var."
 
 #: pcbnew/files.cpp:154
 #, fuzzy
@@ -36169,7 +36541,7 @@ msgstr "Oluşturucu Dosyası"
 
 #: pcbnew/files.cpp:197
 msgid "Import Non KiCad Board File"
-msgstr ""
+msgstr "KiCad Olmayan Pano Dosyasını İçe Aktar"
 
 #: pcbnew/files.cpp:233
 #, fuzzy
@@ -36195,10 +36567,12 @@ msgstr "'%s' dosyası arşivlenemedi."
 #, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
 msgstr ""
+"Mevcut kart kapatılacak, devam etmeden önce değişiklikleri '%s' olarak "
+"kaydedecek mi?"
 
 #: pcbnew/files.cpp:394
 msgid "Current Board will be closed. Continue?"
-msgstr ""
+msgstr "Mevcut Yönetim Kurulu kapatılacak. Devam mı?"
 
 #: pcbnew/files.cpp:574
 msgid ""
@@ -36207,6 +36581,10 @@ msgid ""
 "This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
+"Bu karttaki bölgeler yeniden doldurulursa Bakır Kenar Boşluğu ayarı "
+"kullanılacaktır (bkz. Kart Kurulumu> Tasarım Kuralları> Kısıtlamalar).\n"
+"Bu, Kenar Kesim katmanında tahta sınırının çizgi kalınlıklarını kullanan "
+"önceki KiCad sürümlerinden farklı dolgulara neden olabilir."
 
 #: pcbnew/files.cpp:609
 #, fuzzy, c-format
@@ -36222,7 +36600,7 @@ msgstr ""
 #: pcbnew/files.cpp:639
 #, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
-msgstr ""
+msgstr "PCB '%s' mevcut değil. Onu yaratmak ister misin?"
 
 #: pcbnew/files.cpp:648
 #, fuzzy
@@ -36322,7 +36700,7 @@ msgstr "Kart adı"
 
 #: pcbnew/footprint.cpp:1050
 msgid "Back (Flipped)"
-msgstr ""
+msgstr "Geri (Ters çevrilmiş)"
 
 #: pcbnew/footprint.cpp:1067
 msgid "autoplaced"
@@ -36373,12 +36751,12 @@ msgstr "Ayak İzi: %s"
 #: pcbnew/footprint.cpp:2261
 #, c-format
 msgid "(expected 'Through hole'; actual '%s')"
-msgstr ""
+msgstr "(beklenen 'Delikten'; gerçek '%s')"
 
 #: pcbnew/footprint.cpp:2264
 #, c-format
 msgid "(expected 'SMD'; actual '%s')"
-msgstr ""
+msgstr "(beklenen 'SMD'; gerçek '%s')"
 
 #: pcbnew/footprint.cpp:2292
 #, fuzzy
@@ -36392,25 +36770,25 @@ msgstr "Yalnızca Bakır katmanlardaki izler."
 
 #: pcbnew/footprint.cpp:2320
 msgid "(SMD pad appears on both front and back copper)"
-msgstr ""
+msgstr "(SMD pedi hem ön hem de arka bakırda görünür)"
 
 #: pcbnew/footprint.cpp:2327 pcbnew/footprint.cpp:2340
 msgid "(SMD pad copper and mask layers don't match)"
-msgstr ""
+msgstr "(SMD ped bakır ve maske katmanları eşleşmiyor)"
 
 #: pcbnew/footprint.cpp:2332 pcbnew/footprint.cpp:2345
 msgid "(SMD pad copper and paste layers don't match)"
-msgstr ""
+msgstr "(SMD ped bakır ve macun katmanları eşleşmiyor)"
 
 #: pcbnew/footprint.cpp:2518
 #, c-format
 msgid "(net-tie pad group contains unknown pad number %s)"
-msgstr ""
+msgstr "((nettie pad grubu %s bilinmeyen sayfa numarası içerir)"
 
 #: pcbnew/footprint.cpp:2523
 #, c-format
 msgid "(pad %s appears in more than one net-tie pad group)"
-msgstr ""
+msgstr "((%s altlığı birden fazla ağ bağlantılı altlık grubunda görünür)"
 
 #: pcbnew/footprint.cpp:2763 pcbnew/pad.cpp:1738 pcbnew/zone.cpp:1360
 msgid "Inherited"
@@ -36438,11 +36816,11 @@ msgstr "Boşluk"
 
 #: pcbnew/footprint.cpp:2843 pcbnew/pad.cpp:1854
 msgid "Solderpaste Margin Override"
-msgstr ""
+msgstr "Lehim pastası Kenar Boşluğu Geçersiz Kılma"
 
 #: pcbnew/footprint.cpp:2848 pcbnew/pad.cpp:1858
 msgid "Solderpaste Margin Ratio Override"
-msgstr ""
+msgstr "Lehim pastası Kenar Boşluğu Oranı Geçersiz Kılma"
 
 #: pcbnew/footprint.cpp:2853 pcbnew/pad.cpp:1863
 #, fuzzy
@@ -36477,7 +36855,7 @@ msgstr "Ayak izi değişikliklerinin sembolü kaydedilmedi"
 #: pcbnew/footprint_edit_frame.cpp:553
 #, c-format
 msgid "Editing %s from board.  Saving will update the board only."
-msgstr ""
+msgstr "Tahtadan%s düzenleniyor. Kaydetme yalnızca kartı güncelleyecektir."
 
 #: pcbnew/footprint_edit_frame.cpp:925
 #, fuzzy, c-format
@@ -36547,6 +36925,11 @@ msgid ""
 "and update your footprint lib table\n"
 "to save your footprint (a .kicad_mod file) in the .pretty library folder"
 msgstr ""
+"Eski kitaplıkları yazma / değiştirme (.mod dosyaları) izin verilmez\n"
+"Lütfen mevcut kütüphaneyi yenisine kaydedin.güzel biçim\n"
+"ve ayak izi lib tablonuzu güncelleyin\n"
+"ayak izinizi korumak için (a.kicad_mod dosyası) içinde.güzel kütüphane "
+"klasörü"
 
 #: pcbnew/footprint_libraries_utils.cpp:68
 msgid ""
@@ -36555,6 +36938,10 @@ msgid ""
 "and update your footprint lib table\n"
 "before deleting a footprint"
 msgstr ""
+"Eski kitaplıkları değiştirme (.mod dosyaları) izin verilmez\n"
+"Lütfen mevcut kütüphaneyi yeninin altına kaydedin.güzel biçim\n"
+"ve ayak izi lib tablonuzu güncelleyin\n"
+"bir ayak izini silmeden önce"
 
 #: pcbnew/footprint_libraries_utils.cpp:89
 #, fuzzy
@@ -36625,18 +37012,20 @@ msgstr "Kartın ayak çizimleri yeni kütüphaneden güncellesin mi?"
 #: pcbnew/footprint_libraries_utils.cpp:932
 #: pcbnew/footprint_viewer_frame.cpp:843
 msgid "No board currently open."
-msgstr ""
+msgstr "Şu anda açık bir tahta yok."
 
 #: pcbnew/footprint_libraries_utils.cpp:958
 msgid ""
 "Unable to find the footprint on the main board.\n"
 "Cannot save."
 msgstr ""
+"Ana karttaki ayak izini bulamıyorum.\n"
+"Kurtarılamıyor."
 
 #: pcbnew/footprint_libraries_utils.cpp:966
 #: pcbnew/footprint_viewer_frame.cpp:851
 msgid "Previous footprint placement still in progress."
-msgstr ""
+msgstr "Önceki ayak izi yerleşimi hala devam ediyor."
 
 #: pcbnew/footprint_libraries_utils.cpp:1069
 msgid "Save Footprint As"
@@ -36644,11 +37033,11 @@ msgstr "İz Düşümünü Farklı Kaydet"
 
 #: pcbnew/footprint_libraries_utils.cpp:1153
 msgid "No library specified.  Footprint could not be saved."
-msgstr ""
+msgstr "Kütüphane belirtilmedi. Ayak izi kaydedilemedi."
 
 #: pcbnew/footprint_libraries_utils.cpp:1163
 msgid "No footprint name specified.  Footprint could not be saved."
-msgstr ""
+msgstr "Ayak izi adı belirtilmemiş. Ayak izi kaydedilemedi."
 
 #: pcbnew/footprint_libraries_utils.cpp:1187
 #, fuzzy, c-format
@@ -36690,6 +37079,10 @@ msgid ""
 "Search terms are separated by spaces.  All search terms must match.\n"
 "A term which is a number will also match against the pad count."
 msgstr ""
+"Ayak izi adına, anahtar kelimelere, açıklamaya ve ped sayısına göre "
+"filtreleyin.\n"
+"Arama terimleri boşluklarla ayrılır. Tüm arama terimleri eşleşmelidir.\n"
+"Sayı olan bir terim de ped sayısına karşılık gelecektir."
 
 #: pcbnew/footprint_viewer_frame.cpp:775
 #, fuzzy, c-format
@@ -36775,7 +37168,7 @@ msgstr "'%s' kitaplığından %s ayak izi(footprint) yüklenirken hata oluştu."
 
 #: pcbnew/generate_footprint_info.cpp:122
 msgid "doc url"
-msgstr ""
+msgstr "doküman url'si"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:52
 msgid "Centimeter"
@@ -36802,16 +37195,18 @@ msgstr "Lütfen bir sembol kitaplığı tablo dosyası seçin."
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:271
 msgid "Items in the imported file could not be handled properly."
-msgstr ""
+msgstr "İçe aktarılan dosyadaki öğeler düzgün işlenemedi."
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:281
 msgid "There is no plugin to handle this file type."
-msgstr ""
+msgstr "Bu dosya türünü işlemek için eklenti yok."
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:27
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:32
 msgid "Only vectors will be imported.  Bitmaps and fonts will be ignored."
 msgstr ""
+"Sadece vektörler içe aktarılacaktır. Bit Eşlemler ve yazı tipleri yok "
+"sayılır."
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:44
 msgid "Placement"
@@ -36828,11 +37223,11 @@ msgstr "Da"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:75
 msgid "DXF origin on PCB Grid, X Coordinate"
-msgstr ""
+msgstr "PCB Izgarasında DXF kökeni, X Koordinatı"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:96
 msgid "DXF origin on PCB Grid, Y Coordinate"
-msgstr ""
+msgstr "PCB Izgarasında DXF kökeni, Y Koordinatı"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:117
 msgid "Import Parameters"
@@ -36855,7 +37250,7 @@ msgstr "Grup sembolleri"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:161
 msgid "Add all imported items into a new group"
-msgstr ""
+msgstr "İçe aktarılan tüm öğeleri yeni bir gruba ekleme"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:172
 msgid "DXF Parameters"
@@ -36868,20 +37263,20 @@ msgstr "Varsayılan yazı tipi"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.h:86
 msgid "Import Vector Graphics File"
-msgstr ""
+msgstr "Vektör Grafik Dosyasını İçe Aktar"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:134
 msgid "Memory was exhausted trying to load the DXF, it may be too large."
-msgstr ""
+msgstr "Dxf'yi yüklemeye çalışırken bellek tükendi, çok büyük olabilir."
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1454
 msgid "Invalid spline definition encountered"
-msgstr ""
+msgstr "Geçersiz spline tanımıyla karşılaşıldı"
 
 #: pcbnew/initpcb.cpp:50
 msgid ""
 "Current Board will be lost and this operation cannot be undone. Continue?"
-msgstr ""
+msgstr "Mevcut Kart kaybolacak ve bu işlem geri alınamaz. Devam mı?"
 
 #: pcbnew/initpcb.cpp:109 pcbnew/tools/footprint_editor_control.cpp:198
 #, fuzzy
@@ -36896,7 +37291,7 @@ msgstr "BİLİNMEYEN!"
 
 #: pcbnew/kicad_clipboard.cpp:429
 msgid "Clipboard content is not KiCad compatible"
-msgstr ""
+msgstr "Pano içeriği KiCad uyumlu değil"
 
 #: pcbnew/load_select_footprint.cpp:267
 #, fuzzy, c-format
@@ -36933,7 +37328,7 @@ msgstr "&PNG Olarak Görüntüle..."
 
 #: pcbnew/menubar_footprint_editor.cpp:79
 msgid "Create a PNG file from the current view"
-msgstr ""
+msgstr "Geçerli görünümden bir PNG dosyası oluşturun"
 
 #: pcbnew/menubar_footprint_editor.cpp:150 pcbnew/menubar_pcb_editor.cpp:264
 #, fuzzy
@@ -36942,7 +37337,7 @@ msgstr "Çizim Sayfasını Yazdır"
 
 #: pcbnew/menubar_footprint_editor.cpp:160 pcbnew/menubar_pcb_editor.cpp:289
 msgid "&Contrast Mode"
-msgstr ""
+msgstr "& Kontrast Modu"
 
 #: pcbnew/menubar_footprint_editor.cpp:220
 #, fuzzy
@@ -36951,7 +37346,7 @@ msgstr "Ayak izleri yükleniyor..."
 
 #: pcbnew/menubar_footprint_editor.cpp:221
 msgid "Load a footprint from the current board into the editor"
-msgstr ""
+msgstr "Geçerli karttan editöre bir ayak izi yükleyin"
 
 #: pcbnew/menubar_footprint_editor.cpp:225
 #, fuzzy
@@ -36960,7 +37355,7 @@ msgstr "Ayak İzi Onar"
 
 #: pcbnew/menubar_footprint_editor.cpp:226
 msgid "Insert footprint onto current board"
-msgstr ""
+msgstr "Ayak izini mevcut panoya yerleştirin"
 
 #: pcbnew/menubar_pcb_editor.cpp:105
 msgid "Resc&ue"
@@ -36969,6 +37364,8 @@ msgstr "K&urtar"
 #: pcbnew/menubar_pcb_editor.cpp:106
 msgid "Clear board and get last rescue file automatically saved by PCB editor"
 msgstr ""
+"Kartı temizleyin ve PCB editörü tarafından otomatik olarak kaydedilen son "
+"kurtarma dosyasını alın"
 
 #: pcbnew/menubar_pcb_editor.cpp:116
 #, fuzzy
@@ -36982,7 +37379,7 @@ msgstr "KiCad Olmayan Şematik..."
 
 #: pcbnew/menubar_pcb_editor.cpp:119
 msgid "Import board file from other applications"
-msgstr ""
+msgstr "Pano dosyasını diğer uygulamalardan içe aktar"
 
 #: pcbnew/menubar_pcb_editor.cpp:130
 #, fuzzy
@@ -36995,7 +37392,7 @@ msgstr "GenCAD..."
 
 #: pcbnew/menubar_pcb_editor.cpp:131
 msgid "Export GenCAD board representation"
-msgstr ""
+msgstr "İhracat GenCAD yönetim kurulu temsilciliği"
 
 #: pcbnew/menubar_pcb_editor.cpp:133
 msgid "VRML..."
@@ -37003,7 +37400,7 @@ msgstr "VRML..."
 
 #: pcbnew/menubar_pcb_editor.cpp:133
 msgid "Export VRML 3D board representation"
-msgstr ""
+msgstr "VRML 3D pano temsilini dışa aktar"
 
 #: pcbnew/menubar_pcb_editor.cpp:135
 msgid "IDFv3..."
@@ -37011,7 +37408,7 @@ msgstr "IDFv3..."
 
 #: pcbnew/menubar_pcb_editor.cpp:135
 msgid "Export IDF 3D board representation"
-msgstr ""
+msgstr "IDF 3D yönetim kurulu temsilini dışa aktar"
 
 #: pcbnew/menubar_pcb_editor.cpp:137
 msgid "STEP..."
@@ -37019,7 +37416,7 @@ msgstr "STEP..."
 
 #: pcbnew/menubar_pcb_editor.cpp:137
 msgid "Export STEP 3D board representation"
-msgstr ""
+msgstr "ADIM 3B pano temsilini dışa aktar"
 
 #: pcbnew/menubar_pcb_editor.cpp:139
 msgid "SVG..."
@@ -37027,7 +37424,7 @@ msgstr "SVG..."
 
 #: pcbnew/menubar_pcb_editor.cpp:139
 msgid "Export SVG board representation"
-msgstr ""
+msgstr "SVG yönetim kurulu temsilini dışa aktar"
 
 #: pcbnew/menubar_pcb_editor.cpp:141
 #, fuzzy
@@ -37053,6 +37450,8 @@ msgid ""
 "Add footprints used on board to an existing footprint library\n"
 "(does not remove other footprints from this library)"
 msgstr ""
+"Gemide kullanılan ayak izlerini mevcut bir ayak izi kitaplığına ekleme\n"
+"(bu kitaplıktaki diğer ayak izlerini kaldırmaz)"
 
 #: pcbnew/menubar_pcb_editor.cpp:156
 msgid "Footprints to New Library..."
@@ -37063,6 +37462,9 @@ msgid ""
 "Create a new footprint library containing the footprints used on board\n"
 "(if the library already exists it will be replaced)"
 msgstr ""
+"Gemide kullanılan ayak izlerini içeren yeni bir ayak izi kitaplığı "
+"oluşturun\n"
+"(kütüphane zaten mevcutsa, değiştirilecektir)"
 
 #: pcbnew/menubar_pcb_editor.cpp:165
 #, fuzzy
@@ -37071,7 +37473,7 @@ msgstr "Malzeme özellikleri:"
 
 #: pcbnew/menubar_pcb_editor.cpp:316
 msgid "Add Microwave Shape"
-msgstr ""
+msgstr "Mikrodalga Şekli Ekleyin"
 
 #: pcbnew/menubar_pcb_editor.cpp:355
 #, fuzzy
@@ -37109,7 +37511,7 @@ msgstr "Standart (1,2,3)"
 
 #: pcbnew/microwave/microwave_footprint.cpp:70
 msgid "Arc Stub Radius Value:"
-msgstr ""
+msgstr "Ark Saplama Yarıçapı Değeri:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:81
 #: pcbnew/microwave/microwave_footprint.cpp:95
@@ -37118,7 +37520,7 @@ msgstr "Mikrodalga Ayak İzi Oluştur"
 
 #: pcbnew/microwave/microwave_footprint.cpp:94
 msgid "Angle in degrees:"
-msgstr ""
+msgstr "Derece cinsinden açı:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:106
 #, fuzzy
@@ -37127,7 +37529,7 @@ msgstr "Yanlış ölçek numarası"
 
 #: pcbnew/microwave/microwave_inductor.cpp:316
 msgid "Add microwave inductor"
-msgstr ""
+msgstr "Mikrodalga indüktör ekleyin"
 
 #: pcbnew/microwave/microwave_inductor.cpp:366
 #, fuzzy
@@ -37136,19 +37538,19 @@ msgstr "Uzunluk"
 
 #: pcbnew/microwave/microwave_inductor.cpp:376
 msgid "Requested length < minimum length"
-msgstr ""
+msgstr "İstenen uzunluk <minimum uzunluk"
 
 #: pcbnew/microwave/microwave_inductor.cpp:390
 msgid "Requested length too large"
-msgstr ""
+msgstr "İstenen uzunluk çok büyük"
 
 #: pcbnew/microwave/microwave_inductor.cpp:393
 msgid "Requested length too small"
-msgstr ""
+msgstr "İstenen uzunluk çok küçük"
 
 #: pcbnew/microwave/microwave_inductor.cpp:396
 msgid "Requested length can't be represented"
-msgstr ""
+msgstr "İstenen uzunluk gösterilemez"
 
 #: pcbnew/microwave/microwave_inductor.cpp:404
 #, fuzzy
@@ -37175,7 +37577,7 @@ msgstr "Şekil Açıklama Dosyası"
 
 #: pcbnew/microwave/microwave_polygon.cpp:314
 msgid "Shape has a null size."
-msgstr ""
+msgstr "Şekil boş bir boyuta sahiptir."
 
 #: pcbnew/microwave/microwave_polygon.cpp:320
 #, fuzzy
@@ -37184,7 +37586,7 @@ msgstr "Bölge %s ayak bağlantısı: %s."
 
 #: pcbnew/microwave/microwave_tool.cpp:92
 msgid "Place microwave feature"
-msgstr ""
+msgstr "Mikrodalga özelliğini yerleştirin"
 
 #: pcbnew/netinfo_item.cpp:136
 #, fuzzy
@@ -37279,22 +37681,22 @@ msgstr "%s özellikleri güncellendi."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:372
 #, c-format
 msgid "Add %s 'exclude from BOM' fabrication attribute."
-msgstr ""
+msgstr "%s 'ürün reçetesinden hariç tut' üretim özniteliğini ekleyin."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:377
 #, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
-msgstr ""
+msgstr "%s 'ürün reçetesinden hariç tut' üretim özniteliğini kaldırın."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:388
 #, c-format
 msgid "Added %s 'exclude from BOM' fabrication attribute."
-msgstr ""
+msgstr "%s 'ürün reçetesinden hariç tut' üretim niteliği eklendi."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:394
 #, c-format
 msgid "Removed %s 'exclude from BOM' fabrication attribute."
-msgstr ""
+msgstr "%s 'ürün reçetesinden hariç tut' üretim özniteliği kaldırıldı."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:412
 #, fuzzy, c-format
@@ -37399,7 +37801,7 @@ msgstr "Bölge %s ayak bağlantısı: %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:830
 #, c-format
 msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
-msgstr ""
+msgstr "%s katmanındaki (%s, %s) bakır bölgenin bağlı pedleri yoktur."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:871
 #, c-format
@@ -37407,6 +37809,8 @@ msgid ""
 "Symbol %s has pins with no number.  These pins can not be matched to pads in "
 "%s."
 msgstr ""
+"%s sembolünün numarası olmayan pimleri vardır. Bu pimler %s cinsinden "
+"pedlerle eşleştirilemez."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:881
 #, fuzzy, c-format
@@ -37456,12 +37860,12 @@ msgstr "Alanları Güncelleştir"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1114
 #, c-format
 msgid "Total warnings: %d, errors: %d."
-msgstr ""
+msgstr "Toplam uyarılar: %d, hatalar: %d."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:270
 #, c-format
 msgid "Cannot find component with ref '%s' in netlist."
-msgstr ""
+msgstr "Netlist'te ref '%s' olan bileşen bulunamıyor."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:438
 #, c-format
@@ -37471,14 +37875,18 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
+"Geçersiz ayak izi kimliği\n"
+"dosya: '%s'\n"
+"satır: %d\n"
+"uzaklık: %d"
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:114
 msgid "Cannot parse time stamp in symbol section of netlist."
-msgstr ""
+msgstr "Netlist'in sembol bölümünde zaman damgası ayrıştırılamıyor."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:124
 msgid "Cannot parse footprint name in symbol section of netlist."
-msgstr ""
+msgstr "Netlist'in sembol bölümünde ayak izi adı ayrıştırılamıyor."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:138
 #, fuzzy
@@ -37487,20 +37895,20 @@ msgstr "Yapıştırılan tüm sembollerdeki referans göstergelerini temizle"
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:148
 msgid "Cannot parse value in symbol section of netlist."
-msgstr ""
+msgstr "Netlist'in sembol bölümündeki değer ayrıştırılamıyor."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:185
 msgid "Cannot parse pin name in symbol net section of netlist."
-msgstr ""
+msgstr "Netlist'in sembol ağı bölümünde pın adı ayrıştırılamıyor."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:194
 msgid "Cannot parse net name in symbol net section of netlist."
-msgstr ""
+msgstr "Netlist'in sembol ağı bölümünde ağ adı ayrıştırılamıyor."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:242
 #, c-format
 msgid "Cannot find symbol %s in footprint filter section of netlist."
-msgstr ""
+msgstr "Netlist'in ayak izi filtresi bölümünde %s sembolü bulunamıyor."
 
 #: pcbnew/netlist_reader/netlist.cpp:62
 #, c-format
@@ -37524,7 +37932,7 @@ msgstr "%s sembolü için ayak izi tanımlanmadı."
 #: pcbnew/netlist_reader/netlist.cpp:189
 #, c-format
 msgid "Footprint of %s changed: board footprint '%s', netlist footprint '%s'."
-msgstr ""
+msgstr "Değiştirilen %s ayak izi: pano ayak izi '%s', ağ listesi ayak izi '%s'."
 
 #: pcbnew/netlist_reader/netlist.cpp:212
 #, c-format
@@ -37567,11 +37975,11 @@ msgstr "BGA"
 
 #: pcbnew/pad.cpp:1009
 msgid "Fiducial global"
-msgstr ""
+msgstr "Güvene dayalı küresel"
 
 #: pcbnew/pad.cpp:1010
 msgid "Fiducial local"
-msgstr ""
+msgstr "Güvene dayalı yerel"
 
 #: pcbnew/pad.cpp:1011
 #, fuzzy
@@ -37594,7 +38002,7 @@ msgstr "Paket"
 
 #: pcbnew/pad.cpp:1056
 msgid "Hole X / Y"
-msgstr ""
+msgstr "Delik X / Y"
 
 #: pcbnew/pad.cpp:1068 pcbnew/pcb_track.cpp:901 pcbnew/pcb_track.cpp:946
 #: pcbnew/router/router_tool.cpp:2537 pcbnew/router/router_tool.cpp:2554
@@ -37723,7 +38131,7 @@ msgstr "Malzeme özellikleri:"
 
 #: pcbnew/pad.cpp:1838 pcbnew/pcb_track.cpp:891
 msgid "Pad To Die Length"
-msgstr ""
+msgstr "Kalıp Uzunluğu için Ped"
 
 #: pcbnew/pad.cpp:1850
 #, fuzzy
@@ -37798,7 +38206,7 @@ msgstr "Tekdüze"
 
 #: pcbnew/pcb_dimension.cpp:1359
 msgid "Suppress Trailing Zeroes"
-msgstr ""
+msgstr "Sondaki Sıfırları Bastır"
 
 #: pcbnew/pcb_dimension.cpp:1387
 #, fuzzy
@@ -37832,7 +38240,7 @@ msgstr "Ağlistesi vermek için tam numaralandırılmış bir şema gerekir."
 
 #: pcbnew/pcb_edit_frame.cpp:406
 msgid "New PCB file is unsaved"
-msgstr ""
+msgstr "Yeni PCB dosyası kaydedilmemiş"
 
 #: pcbnew/pcb_edit_frame.cpp:1463
 #, fuzzy
@@ -37855,6 +38263,9 @@ msgid ""
 "order to create or update PCBs from schematics, you must launch the KiCad "
 "project manager and create a project."
 msgstr ""
+"PCB düzenleyicisi tek başına modda açıldığından PCB güncelleştirilemiyor. "
+"Şemalardan PCB oluşturmak veya güncellemek için KiCad proje yöneticisini "
+"başlatmanız ve bir proje oluşturmanız gerekir."
 
 #: pcbnew/pcb_edit_frame.cpp:1842
 #, fuzzy
@@ -37866,6 +38277,8 @@ msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
 msgstr ""
+"Netlist okunurken bir hata alındı. Lütfen Yardım-> Hata Bildir menüsünü "
+"kullanarak bu sorunu KiCad ekibine bildirin."
 
 #: pcbnew/pcb_edit_frame.cpp:1880
 #, c-format
@@ -37888,7 +38301,7 @@ msgstr "'%s' özel ayak bulunamadı."
 
 #: pcbnew/pcb_edit_frame.cpp:2373
 msgid "Export Hyperlynx Layout"
-msgstr ""
+msgstr "Hyperlynx Düzenini Dışa Aktar"
 
 #: pcbnew/pcb_edit_frame.cpp:2425
 #, fuzzy
@@ -37912,7 +38325,7 @@ msgstr "Ayak izlerinden Kütüphaneye..."
 
 #: pcbnew/pcb_expr_evaluator.cpp:307
 msgid "must be mm, in, or mil"
-msgstr ""
+msgstr "mm, inç veya mil olmalıdır"
 
 #: pcbnew/pcb_expr_functions.cpp:75
 #, fuzzy, c-format
@@ -37931,7 +38344,7 @@ msgstr "'%s' için birden fazla ayak izi bulundu."
 
 #: pcbnew/pcb_expr_functions.cpp:447
 msgid "Footprint's courtyard is not a single, closed shape."
-msgstr ""
+msgstr "Footprint'in avlusu tek, kapalı bir şekil değildir."
 
 #: pcbnew/pcb_expr_functions.cpp:459
 #, fuzzy
@@ -37961,7 +38374,7 @@ msgstr "'%s' için birden fazla ayak izi bulundu."
 #: pcbnew/pcb_expr_functions.cpp:911
 #, c-format
 msgid "Missing diff-pair name argument to %s."
-msgstr ""
+msgstr "Eksik fark çifti adı bağımsız değişkeni %s."
 
 #: pcbnew/pcb_expr_functions.cpp:978
 #, fuzzy, c-format
@@ -37971,12 +38384,12 @@ msgstr "Kayıp ebeveyn"
 #: pcbnew/pcb_group.cpp:376
 #, c-format
 msgid "Unnamed Group, %zu members"
-msgstr ""
+msgstr "İsimsiz Grup, %zu üyeleri"
 
 #: pcbnew/pcb_group.cpp:378
 #, c-format
 msgid "Group '%s', %zu members"
-msgstr ""
+msgstr "'%s' grubu, %zu üyeleri"
 
 #: pcbnew/pcb_group.cpp:390
 msgid "<unnamed>"
@@ -37988,7 +38401,7 @@ msgstr "Üyeler"
 
 #: pcbnew/pcb_layer_box_selector.cpp:103
 msgid "(not activated)"
-msgstr ""
+msgstr "(aktif değil)"
 
 #: pcbnew/pcb_marker.cpp:194
 msgid "Violation"
@@ -38069,7 +38482,7 @@ msgstr "Geçiş Deliği"
 
 #: pcbnew/pcb_track.cpp:194
 msgid "removed annular ring"
-msgstr ""
+msgstr "halka şeklindeki halka kaldırıldı"
 
 #: pcbnew/pcb_track.cpp:848
 #, fuzzy
@@ -38126,7 +38539,7 @@ msgstr "NetKodu"
 #: pcbnew/pcb_track.cpp:1097
 #, c-format
 msgid "Track (arc) %s on %s, length %s"
-msgstr ""
+msgstr "İz (yay) %s açık %s, uzunluk %s"
 
 #: pcbnew/pcb_track.cpp:1098
 #, fuzzy, c-format
@@ -38172,7 +38585,7 @@ msgstr "Yaylar yükleniyor..."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:146
 msgid "Successfully created svg file"
-msgstr ""
+msgstr "Svg dosyası başarıyla oluşturuldu"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:148 pcbnew/pcbnew_jobs_handler.cpp:799
 #, fuzzy
@@ -38217,15 +38630,17 @@ msgstr "Çarpan"
 #: pcbnew/plugin.cpp:136
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
 msgstr ""
+"Bu eklentideki Footprint* () işlevleri için <b>debug</b> günlüğünü "
+"etkinleştirin."
 
 #: pcbnew/plugin.cpp:139
 msgid "Regular expression <b>footprint name</b> filter."
-msgstr ""
+msgstr "Düzenli ifade <b> ayak izi adı</b> filtresi."
 
 #: pcbnew/plugin.cpp:157
 msgid ""
 "Enter the python module which implements the PLUGIN::Footprint*() functions."
-msgstr ""
+msgstr "PLUGİN ::Footprint* () işlevlerini uygulayan python modülüne girin."
 
 #: pcbnew/plugins/altium/altium_designer_plugin.cpp:152
 #: pcbnew/plugins/altium/altium_pcb.cpp:505
@@ -38238,7 +38653,7 @@ msgstr "Dosya bulunamadı: '%s'."
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:134
 #, c-format
 msgid "Unknown mapping of the Altium layer '%s'."
-msgstr ""
+msgstr "Altium katmanının bilinmeyen eşlemesi '%s'."
 
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:182
 #, fuzzy, c-format
@@ -38258,7 +38673,7 @@ msgstr "'%s' belge dosyası için bilinmeyen MIME türü"
 #: pcbnew/plugins/altium/altium_parser_pcb.cpp:784
 #, c-format
 msgid "Pads6 stream has unexpected length for subrecord 6: %d."
-msgstr ""
+msgstr "Pedler 6 akışı, alt kayıt 6:%d için beklenmeyen uzunluğa sahiptir."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:277
 #, c-format
@@ -38266,6 +38681,8 @@ msgid ""
 "Altium layer (%d) has no KiCad equivalent. It has been moved to KiCad layer "
 "Eco1_User."
 msgstr ""
+"Altium tabakasının (%d) KiCad eşdeğeri yoktur. KiCad katmanı eco1_user'a "
+"taşındı."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:313
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:270
@@ -38334,6 +38751,8 @@ msgid ""
 "Dimension found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
+"KiCad eşdeğeri olmayan bir Altium katmanında (%d) bulunan boyut. KiCad "
+"katmanı eco1_user'a taşındı."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1507
 #, fuzzy
@@ -38344,11 +38763,11 @@ msgstr "Unicode dizeler yükleniyor..."
 #: pcbnew/plugins/altium/altium_pcb.cpp:1535
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
-msgstr ""
+msgstr "%d türünde yoksayılan boyut (henüz desteklenmiyor)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1576
 msgid "No 3D-models will be imported."
-msgstr ""
+msgstr "Hiçbir 3D model içe aktarılmayacak."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1605
 #, fuzzy, c-format
@@ -38380,7 +38799,7 @@ msgstr "Bölgeler yükleniyor..."
 #: pcbnew/plugins/altium/altium_pcb.cpp:1960
 #, c-format
 msgid "Ignored polygon shape of kind %d (not yet supported)."
-msgstr ""
+msgstr "%d türünde yoksayılan çokgen şekli (henüz desteklenmiyor)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2020
 msgid "Loading zone fills..."
@@ -38398,11 +38817,13 @@ msgstr "Pedler yükleniyor..."
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
+"Ayak izi %s ped %s çok katmanlı olarak işaretlenmez, ancak bir inci peddir."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2408
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
+"Footprint %s pad %s kare bir deliğe sahiptir (henüz desteklenmemektedir)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2435
 #, c-format
@@ -38410,21 +38831,24 @@ msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
+"Ayak izi %s pad %s  %fderece delik dönüşüne sahiptir. KiCad sadece 90 "
+"derecelik dönüşleri destekler."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2447
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
-msgstr ""
+msgstr "Ayak izi %s ped %s bilinmeyen türde bir delik kullanır %d."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2464
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
 msgstr ""
+"Footprint %s pad %s karmaşık bir padstack kullanır (henüz desteklenmez.)"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2501
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
-msgstr ""
+msgstr "Ayak izi %s ped %s bilinmeyen bir ped şekli kullanır."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2559
 #: pcbnew/plugins/altium/altium_pcb.cpp:2580
@@ -38433,26 +38857,30 @@ msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
 msgstr ""
+"KiCad eşdeğeri olmayan bir Altium katmanında (%d) bulunan bakır olmayan ped "
+"%s. KiCad katmanı eco1_user'a taşındı."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2599
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
-msgstr ""
+msgstr "Bakır olmayan ped %s, desteklenmeyen bir ağa bağlanır."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2605
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
-msgstr ""
+msgstr "Bakır olmayan ped %s desteklenmeyen bir deliğe sahiptir."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2610
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr ""
+"Bakır olmayan ped %s karmaşık bir ped yığınına sahiptir (henüz "
+"desteklenmemektedir)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2752
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
-msgstr ""
+msgstr "Bakır olmayan ped %s bilinmeyen bir ped şekli kullanır."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2762
 msgid "Loading vias..."
@@ -38463,6 +38891,8 @@ msgstr "Vias yükleniyor..."
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
 msgstr ""
+"%d katmanından %d katmanına kadar desteklenmeyen bakır olmayan bir katman "
+"kullanır."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2822
 msgid "Loading tracks..."
@@ -38480,7 +38910,7 @@ msgstr "Metin yükleniyor..."
 #: pcbnew/plugins/altium/altium_pcb.cpp:3046
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
-msgstr ""
+msgstr "%d Altium katmanında göz ardı edilen barkod (henüz desteklenmiyor)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3194
 msgid "Loading rectangles..."
@@ -38493,6 +38923,10 @@ msgid ""
 "procedure in CADSTAR and re-import, to avoid inconsistencies between the PCB "
 "and the schematic. "
 msgstr ""
+"Seçilen dosya, ağların şematik ile senkronizasyonun dışında olabileceğini "
+"gösterir. PCB ile şematik arasındaki tutarsızlıkları önlemek için cadstar'da "
+"bir 'Ağları Hizala' prosedürü uygulamanız ve yeniden içe aktarmanız "
+"önerilir. "
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:131
 #, c-format
@@ -38501,12 +38935,17 @@ msgid ""
 "been made but it is possible that DRC errors exist and that manual editing "
 "of the zone priorities is required."
 msgstr ""
+"'%s' katmanı için bölge doldurma öncelikleri belirlenemiyor. En iyi "
+"girişimde bulunuldu, ancak DRC hatalarının mevcut olması ve bölge "
+"önceliklerinin manuel olarak düzenlenmesi gerekebilir."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:145
 msgid ""
 "The CADSTAR design contains Trunk routing elements, which have no KiCad "
 "equivalent. These elements were not loaded."
 msgstr ""
+"CADSTAR tasarımı, KıCad eşdeğeri olmayan Gövde yönlendirme öğeleri içerir. "
+"Bu öğeler yüklenmedi."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:152
 #, c-format
@@ -38514,6 +38953,8 @@ msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "variant '%s' was loaded."
 msgstr ""
+"CADSTAR tasarımı, KiCad eşdeğeri olmayan varyantlar içerir. Yalnızca '%s' "
+"varyantı yüklendi."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:164
 msgid ""
@@ -38521,6 +38962,10 @@ msgid ""
 "alignment issues that may cause DRC errors. Please review the imported text "
 "elements carefully and correct manually if required."
 msgstr ""
+"CADSTAR yazı tipleri kicad'dakilerden farklıdır. Bu, büyük olasılıkla DRC "
+"hatalarına neden olabilecek hizalama sorunlarına neden olacaktır. Lütfen içe "
+"aktarılan metin öğelerini dikkatlice inceleyin ve gerekirse manuel olarak "
+"düzeltin."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:240
 #, c-format
@@ -38528,6 +38973,8 @@ msgid ""
 "The CADSTAR layer '%s' has no KiCad equivalent. All elements on this layer "
 "have been mapped to KiCad layer '%s' instead."
 msgstr ""
+"CADSTAR katmanı '%s'nin KıCad eşdeğeri yoktur. Bu katmandaki tüm öğeler "
+"bunun yerine KiCad katmanı '%s' ile eşleştirildi."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:253
 #, c-format
@@ -38535,6 +38982,8 @@ msgid ""
 "The CADSTAR layer '%s' has been assumed to be a technical layer. All "
 "elements on this layer have been mapped to KiCad layer '%s'."
 msgstr ""
+"CADSTAR katmanı '%s' nin teknik bir katman olduğu varsayılmıştır. Bu "
+"katmandaki tüm öğeler KiCad katmanı '%s' ile eşleştirildi."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:325
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:349
@@ -38547,12 +38996,12 @@ msgstr ""
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:588
 #, c-format
 msgid "Unexpected layer '%s' in layer stack."
-msgstr ""
+msgstr "Katman yığınında beklenmeyen katman '%s'."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:745
 #, c-format
 msgid "Design rule %s was not found. This was ignored."
-msgstr ""
+msgstr "%s tasarım kuralı bulunamadı. Bu göz ardı edildi."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:775
 msgid ""
@@ -38560,6 +39009,9 @@ msgid ""
 "design rules were imported. It is recommended that you review the design "
 "rules that have been applied."
 msgstr ""
+"KiCad tasarım kuralları CADSTAR tasarım kurallarından farklıdır. Yalnızca "
+"uyumlu tasarım kuralları içe aktarıldı. Uygulanan tasarım kurallarını gözden "
+"geçirmeniz önerilir."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:971
 #, c-format
@@ -38568,6 +39020,8 @@ msgid ""
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
 msgstr ""
+"'%s' kitaplık bileşenindeki '%s' CADSTAR alanının KıCad eşdeğeri yoktur. "
+"Bölge ne kuş ne de rota koruma alanıdır. Bölge ithal edilmedi."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1057
 #, c-format
@@ -38576,6 +39030,9 @@ msgid ""
 "supported in KiCad. Please review the imported pads as they may require "
 "manual correction."
 msgstr ""
+"CADSTAR not defteri tanımı '%s', kicad'de desteklenmeyen karmaşık bir not "
+"defteri yığınıdır. Manuel düzeltme gerektirebileceğinden lütfen içe "
+"aktarılan pedleri gözden geçirin."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1275
 #, c-format
@@ -38583,11 +39040,13 @@ msgid ""
 "The CADSTAR pad definition '%s' has the hole shape outside the pad shape. "
 "The hole has been moved to the center of the pad."
 msgstr ""
+"CADSTAR altlık tanımı '%s', altlık şeklinin dışındaki delik şekline "
+"sahiptir. Delik pedin ortasına taşındı."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1305
 #, c-format
 msgid "The CADSTAR pad definition '%s' has import errors: %s"
-msgstr ""
+msgstr "CADSTAR pad tanımında '%s' içe aktarma hataları var: %s"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1323
 #, fuzzy, c-format
@@ -38604,6 +39063,7 @@ msgstr "'%s' için bir PDF görüntüleyici bulunamadı."
 msgid ""
 "Unable to find sub group %s in the group map (parent group ID=%s, Name=%s)."
 msgstr ""
+"Grup eşlemesinde %s alt grubu bulunamıyor (üst grup kimliği =%s, Ad=%s)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1439
 #, c-format
@@ -38611,6 +39071,8 @@ msgid ""
 "Dimension ID %s is an angled dimension, which has no KiCad equivalent. An "
 "aligned dimension was loaded instead."
 msgstr ""
+"Boyut Kimliği %s, KiCad eşdeğeri olmayan açılı bir boyuttur. Bunun yerine "
+"hizalanmış bir boyut yüklendi."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1450
 #, c-format
@@ -38619,11 +39081,14 @@ msgid ""
 "are not yet supported in KiCad. The dimension object was imported with an "
 "internal dimension style instead."
 msgstr ""
+"Boyut Kimliği %s, CADSTAR'DA 'Harici' bir stile sahiptir. Kicad'de dış boyut "
+"stilleri henüz desteklenmiyor. Boyut nesnesi, bunun yerine bir iç boyut "
+"stiliyle içe aktarıldı."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1507
 #, c-format
 msgid "Unexpected Dimension type (ID %s). This was not imported."
-msgstr ""
+msgstr "Beklenmeyen Boyut türü (ID %s). Bu ithal edilmedi."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1642
 #, c-format
@@ -38631,6 +39096,7 @@ msgid ""
 "Dimension %s is an angular dimension which has no KiCad equivalent. The "
 "object was not imported."
 msgstr ""
+"%s boyutu, KiCad eşdeğeri olmayan açısal bir boyuttur. Nesne içe aktarılmadı."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1682
 #, c-format
@@ -38639,6 +39105,9 @@ msgid ""
 "areas are not supported in KiCad. Only the supported elements for the area "
 "were imported."
 msgstr ""
+"CADSTAR alanı '%s', CADSTAR'DA bir yerleşim alanı olarak işaretlenmiştir. "
+"Kicad'de yerleşim alanları desteklenmemektedir. Yalnızca alan için "
+"desteklenen öğeler içe aktarıldı."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1691
 #, c-format
@@ -38646,6 +39115,8 @@ msgid ""
 "The CADSTAR area '%s' does not have a KiCad equivalent. Pure Placement areas "
 "are not supported."
 msgstr ""
+"CADSTAR alanı '%s' bir KıCad eşdeğerine sahip değildir. Saf Yerleşim "
+"alanları desteklenmez."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1718
 #, fuzzy, c-format
@@ -38663,6 +39134,9 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Allow in No Routing Areas' "
 "enabled. This setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
+"CADSTAR şablonu '%s', 'Yönlendirme Alanlarına İzin Verme' ayarını "
+"etkinleştirmiştir. Bu ayarın KiCad eşdeğeri yoktur, bu nedenle göz ardı "
+"edilmiştir."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1919
 #, c-format
@@ -38670,6 +39144,8 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Box Isolated Pins' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
+"CADSTAR şablonu '%s', 'Kutudan Yalıtılmış Pimler' ayarını etkinleştirmiştir. "
+"Bu ayarın KiCad eşdeğeri yoktur, bu nedenle göz ardı edilmiştir."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1927
 #, c-format
@@ -38677,6 +39153,8 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
+"CADSTAR şablonu '%s', 'Otomatik Repour' ayarını etkinleştirmiştir. Bu ayarın "
+"KiCad eşdeğeri yoktur, bu nedenle göz ardı edilmiştir."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1938
 #, c-format
@@ -38685,6 +39163,9 @@ msgid ""
 "Width' setting. There is no KiCad equivalent for this, so this setting was "
 "ignored."
 msgstr ""
+"CADSTAR şablonu '%s', 'Şerit Genişliği' ayarı için tanımlanmış sıfır olmayan "
+"bir değere sahiptir. Bunun için KiCad eşdeğeri yoktur, bu nedenle bu ayar "
+"göz ardı edildi."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1948
 #, c-format
@@ -38694,6 +39175,9 @@ msgid ""
 "between these two settings. The setting for disjoint copper has been applied "
 "as the minimum island area of the KiCad Zone."
 msgstr ""
+"CADSTAR şablonu '%s', 'Dökülen Bakırı Ayrık Tut' ve 'Dökülen Bakırı İzole "
+"Tut' için farklı ayarlara sahiptir. KiCad bu iki ayar arasında ayrım yapmaz. "
+"Ayrık bakır ayarı, KiCad Bölgesinin minimum ada alanı olarak uygulanmıştır."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1999
 #, c-format
@@ -38702,6 +39186,9 @@ msgid ""
 "and vias. KiCad only supports one single setting for both. The setting for "
 "pads has been applied."
 msgstr ""
+"CADSTAR şablonu '%s', pedlerde ve geçitlerde termal rahatlama için farklı "
+"ayarlara sahiptir. KiCad, her ikisi için de yalnızca tek bir ayarı "
+"destekler. Pedler için ayar uygulanmıştır."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2016
 #, fuzzy, c-format
@@ -38725,6 +39212,9 @@ msgid ""
 "with such name exists. The layer has been loaded but no copper zone was "
 "created."
 msgstr ""
+"CADSTAR katmanı '%s' bir güç düzlemi katmanı olarak tanımlanır. Ancak böyle "
+"bir isme sahip bir ağ mevcut değildir. Katman yüklendi ancak bakır bölge "
+"oluşturulmadı."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2165
 msgid ""
@@ -38733,6 +39223,9 @@ msgid ""
 "filled, or as a KiCad Track if the shape was an unfilled outline (open or "
 "closed)."
 msgstr ""
+"CADSTAR tasarımı, doğrudan KiCad eşdeğeri olmayan bakır elemanlar içerir. "
+"Bunlar, katı veya kapak doluysa bir KıCad Bölgesi veya şekil doldurulmamış "
+"bir anahattıysa (açık veya kapalı) bir KıCad Yolu olarak içe aktarılmıştır."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2268
 #, c-format
@@ -38740,6 +39233,7 @@ msgid ""
 "The net '%s' references component ID '%s' which does not exist. This has "
 "been ignored."
 msgstr ""
+"Net '%s', var olmayan '%s' bileşen kimliğine başvurur. Bu göz ardı edildi."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2274
 #, c-format
@@ -38747,16 +39241,20 @@ msgid ""
 "The net '%s' references non-existent pad index '%d' in component '%s'. This "
 "has been ignored."
 msgstr ""
+"Net '%s' '%s' bileşeninde var olmayan '%d' alt dizinine başvurur. Bu göz "
+"ardı edildi."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2440
 msgid "Text Variables could not be set as there is no project loaded."
-msgstr ""
+msgstr "Yüklenen proje olmadığı için Metin Değişkenleri ayarlanamadı."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2525
 msgid ""
 "The CADSTAR design contains teardrops. This importer does not yet support "
 "them, so the teardrops in the design have been ignored."
 msgstr ""
+"CADSTAR tasarımı gözyaşı damlaları içerir. Bu ithalatçı henüz onları "
+"desteklemiyor, bu nedenle tasarımdaki gözyaşı damlaları göz ardı edildi."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2556
 #, c-format
@@ -38765,6 +39263,9 @@ msgid ""
 "only supports circular vias so this via type has been changed to be a via "
 "with circular shape of %.2f mm diameter."
 msgstr ""
+"'%s' koduyla CADSTAR, tanımlanmış bir daireden farklı bir şekle sahiptir. "
+"KiCad sadece dairesel vizeleri desteklediğinden bu vize türü% şeklinde "
+"dairesel bir vize olarak değiştirilmiştir.%.2f mm çap."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2766
 #, c-format
@@ -38772,6 +39273,8 @@ msgid ""
 "The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
 "equivalent. Using solid fill instead."
 msgstr ""
+"'%s' şekli, KiCad eşdeğeri olmayan CADSTAR ile doldurulmuş kapaktır. Bunun "
+"yerine katı dolgu kullanın."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3583
 #, c-format
