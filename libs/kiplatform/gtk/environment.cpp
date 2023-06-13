@@ -20,6 +20,7 @@
 
 #include <glib.h>
 #include <gio/gio.h>
+#include <gdk/gdk.h>
 #include <kiplatform/environment.h>
 #include <wx/filename.h>
 #include <wx/utils.h>
@@ -35,9 +36,20 @@ void KIPLATFORM::ENV::Init()
     if( wxGetEnv( wxT( "XDG_CURRENT_DESKTOP" ), &wm ) && wm.CmpNoCase( wxT( "Unity" ) ) == 0 )
         wxSetEnv ( wxT("UBUNTU_MENUPROXY" ), wxT( "0" ) );
 
-    // Force the use of X11 backend (or wayland-x11 compatibility layer).  This is
-    // required until wxWidgets supports the Wayland compositors
-    wxSetEnv( wxT( "GDK_BACKEND" ), wxT( "x11" ) );
+    wxString gdkBackend;
+    wxGetEnv( wxT( "GDK_BACKEND" ), &gdkBackend );
+
+    if( gdkBackend == wxT( "broadway" ) )
+    {
+        // Work around static setter in wx
+        gdk_set_allowed_backends( "broadway" );
+    }
+    else if( gdkBackend != wxT( "wayland" ) )
+    {
+        // Force the use of X11 backend (or wayland-x11 compatibility layer).  This is
+        // required until wxWidgets supports the Wayland compositors
+        wxSetEnv( wxT( "GDK_BACKEND" ), wxT( "x11" ) );
+    }
 
     // Set GTK2-style input instead of xinput2.  This disables touchscreen and smooth
     // scrolling.  It's needed to ensure that we are not getting multiple mouse scroll
