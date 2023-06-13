@@ -269,6 +269,23 @@ void DRAWING_TOOL::Reset( RESET_REASON aReason )
     m_board = getModel<BOARD>();
     m_frame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
+    // Re-initialize session attributes
+    const BOARD_DESIGN_SETTINGS& bds = m_frame->GetDesignSettings();
+
+    m_layer = m_frame->GetActiveLayer();
+    m_stroke.SetWidth( bds.GetLineThickness( m_layer ) );
+    m_stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
+    m_stroke.SetColor( COLOR4D::UNSPECIFIED );
+
+    m_textAttrs.m_Size = bds.GetTextSize( m_layer );
+    m_textAttrs.m_StrokeWidth = bds.GetTextThickness( m_layer );
+    InferBold( &m_textAttrs );
+    m_textAttrs.m_Italic = bds.GetTextItalic( m_layer );
+    m_textAttrs.m_KeepUpright = bds.GetTextUpright( m_layer );
+    m_textAttrs.m_Mirrored = IsBackLayer( m_layer );
+    m_textAttrs.m_Halign = GR_TEXT_H_ALIGN_LEFT;
+    m_textAttrs.m_Valign = GR_TEXT_V_ALIGN_TOP;
+
     UpdateStatusBar();
 }
 
@@ -1759,7 +1776,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
     if( m_layer != m_frame->GetActiveLayer() )
     {
         m_layer = m_frame->GetActiveLayer();
-        m_stroke.SetWidth( getSegmentWidth( m_layer ) );
+        m_stroke.SetWidth( bds.GetLineThickness( m_layer ) );
         m_stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
         m_stroke.SetColor( COLOR4D::UNSPECIFIED );
 
@@ -1874,7 +1891,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
             if( m_layer != m_frame->GetActiveLayer() )
             {
                 m_layer = m_frame->GetActiveLayer();
-                m_stroke.SetWidth( getSegmentWidth( m_layer ) );
+                m_stroke.SetWidth( bds.GetLineThickness( m_layer ) );
                 m_stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
                 m_stroke.SetColor( COLOR4D::UNSPECIFIED );
 
@@ -2148,7 +2165,7 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
     if( m_layer != m_frame->GetActiveLayer() )
     {
         m_layer = m_frame->GetActiveLayer();
-        m_stroke.SetWidth( getSegmentWidth( m_layer ) );
+        m_stroke.SetWidth( m_frame->GetDesignSettings().GetLineThickness( m_layer ) );
         m_stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
         m_stroke.SetColor( COLOR4D::UNSPECIFIED );
     }
@@ -2287,7 +2304,7 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
             if( m_layer != m_frame->GetActiveLayer() )
             {
                 m_layer = m_frame->GetActiveLayer();
-                m_stroke.SetWidth( getSegmentWidth( m_layer ) );
+                m_stroke.SetWidth( m_frame->GetDesignSettings().GetLineThickness( m_layer ) );
                 m_stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
                 m_stroke.SetColor( COLOR4D::UNSPECIFIED );
             }
@@ -3203,13 +3220,6 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
     doInteractiveItemPlacement( aEvent, &placer, _( "Place via" ), IPO_REPEAT | IPO_SINGLE_CLICK );
 
     return 0;
-}
-
-
-int DRAWING_TOOL::getSegmentWidth( PCB_LAYER_ID aLayer ) const
-{
-    assert( m_board );
-    return m_board->GetDesignSettings().GetLineThickness( aLayer );
 }
 
 
