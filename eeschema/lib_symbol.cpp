@@ -597,7 +597,10 @@ std::unique_ptr< LIB_SYMBOL > LIB_SYMBOL::Flatten() const
                      wxString::Format( "Parent of derived symbol '%s' undefined", m_name ) );
 
         // Copy the parent.
-        retv = std::make_unique<LIB_SYMBOL>( *parent.get() );
+        if( parent->IsAlias() )
+            retv = parent->Flatten();
+        else
+            retv = std::make_unique<LIB_SYMBOL>( *parent.get() );
 
         retv->m_name = m_name;
         retv->SetLibId( m_libId );

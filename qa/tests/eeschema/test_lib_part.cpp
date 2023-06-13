@@ -590,17 +590,54 @@ BOOST_AUTO_TEST_CASE( Inheritance )
 {
     std::unique_ptr<LIB_SYMBOL> parent = std::make_unique<LIB_SYMBOL>( "parent" );
     BOOST_CHECK( parent->IsRoot() );
-    std::unique_ptr<LIB_SYMBOL> child1 = std::make_unique<LIB_SYMBOL>( "child1", parent.get() );
-    BOOST_CHECK( child1->IsAlias() );
-    LIB_SYMBOL_SPTR parentRef = child1->GetParent().lock();
+
+    std::unique_ptr<LIB_SYMBOL> ref = std::make_unique<LIB_SYMBOL>( *parent );
+
+    std::unique_ptr<LIB_SYMBOL> child = std::make_unique<LIB_SYMBOL>( "child", parent.get() );
+    BOOST_CHECK( child->IsAlias() );
+
+    std::unique_ptr<LIB_SYMBOL> grandChild = std::make_unique<LIB_SYMBOL>( "grandchild",
+                                                                           child.get() );
+    BOOST_CHECK( grandChild->IsAlias() );
+
+    LIB_SYMBOL_SPTR parentRef = child->GetParent().lock();
     BOOST_CHECK( parentRef );
     BOOST_CHECK( parentRef == parent->SharedPtr() );
     BOOST_CHECK_EQUAL( parent->SharedPtr().use_count(), 3 );
-    BOOST_CHECK_EQUAL( child1->GetUnitCount(), 1 );
+
+    LIB_SYMBOL_SPTR childRef = grandChild->GetParent().lock();
+    BOOST_CHECK( childRef );
+    BOOST_CHECK( childRef == child->SharedPtr() );
+    BOOST_CHECK_EQUAL( child->SharedPtr().use_count(), 3 );
+
+    BOOST_CHECK_EQUAL( child->GetUnitCount(), 1 );
     parent->SetUnitCount( 4 );
-    BOOST_CHECK_EQUAL( child1->GetUnitCount(), 4 );
-    child1->SetParent();
-    BOOST_CHECK_EQUAL( child1->GetUnitCount(), 1 );
+    BOOST_CHECK_EQUAL( child->GetUnitCount(), 4 );
+    parent->SetUnitCount( 1 );
+
+    LIB_FIELD* field = new LIB_FIELD( MANDATORY_FIELDS, "Manufacturer" );
+    field->SetText( "Manufacturer" );
+    child->AddField( field );
+
+    ref->SetName( "child" );
+    field = new LIB_FIELD( MANDATORY_FIELDS, "Manufacturer" );
+    field->SetText( "Manufacturer" );
+    ref->AddField( field );
+    BOOST_CHECK( *ref == *child->Flatten() );
+
+    ref->SetName( "grandchild" );
+    field = new LIB_FIELD( MANDATORY_FIELDS + 1, "MPN" );
+    field->SetText( "123456" );
+    ref->AddField( field );
+
+    field = new LIB_FIELD( MANDATORY_FIELDS + 1, "MPN" );
+    field->SetText( "123456" );
+    grandChild->AddField( field );
+    BOOST_CHECK( *ref == *grandChild->Flatten() );
+
+    child->SetParent();
+    BOOST_CHECK_EQUAL( child->GetUnitCount(), 1 );
+
     parentRef.reset();
     BOOST_CHECK_EQUAL( parent->SharedPtr().use_count(), 2 );
 }
