@@ -1422,7 +1422,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     item->SetPosition( cursorPos );
 
                     item->SetFlags( IS_NEW | IS_MOVING );
-                    item->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
+                    item->AutoplaceFields( nullptr, false /* aManual */ );
                     updatePreview();
 
                     if( item->Type() != SCH_SHEET_PIN_T )
@@ -1443,8 +1443,11 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 if( item->IsConnectable() )
                     m_frame->AutoRotateItem( m_frame->GetScreen(), item );
 
+                m_frame->AddToScreen( item, m_frame->GetScreen() );
+                item->AutoplaceFields( m_frame->GetScreen(), false /* aManual */ );
+
                 SCH_COMMIT commit( m_toolMgr );
-                commit.Add( item, m_frame->GetScreen() );
+                commit.Added( item, m_frame->GetScreen() );
                 commit.Push( description );
 
                 item = nullptr;
