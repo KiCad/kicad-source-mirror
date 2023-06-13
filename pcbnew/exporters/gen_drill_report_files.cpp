@@ -225,6 +225,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
             {
             PCB_SHAPE dummy_shape( *static_cast<PCB_SHAPE*>( item ) );
             dummy_shape.SetLayer( Dwgs_User );
+            dummy_shape.SetParentGroup( nullptr );      // Remove group association, not needed for plotting
             itemplotter.PlotShape( &dummy_shape );
             }
             break;
