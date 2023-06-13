@@ -159,6 +159,10 @@ struct APP_SINGLE_TOP : public wxApp
 
     bool OnInit() override
     {
+#ifdef NDEBUG
+        // These checks generate extra assert noise
+        wxSizerFlags::DisableConsistencyChecks();
+#endif
         wxDISABLE_DEBUG_SUPPORT();
         wxSetAssertHandler( CustomAssertHandler );
 
