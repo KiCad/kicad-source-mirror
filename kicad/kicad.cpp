@@ -406,7 +406,7 @@ void PGM_KICAD::Destroy()
 
 KIWAY  Kiway( &Pgm(), KFCTL_CPP_PROJECT_SUITE );
 
-
+#ifdef NDEBUG
 // Define a custom assertion handler
 void CustomAssertHandler(const wxString& file,
                          int line,
@@ -416,6 +416,7 @@ void CustomAssertHandler(const wxString& file,
 {
     Pgm().HandleAssert( file, line, func, cond, msg );
 }
+#endif
 
 /**
  * Not publicly visible because most of the action is in #PGM_KICAD these days.
@@ -434,9 +435,9 @@ struct APP_KICAD : public wxApp
 #ifdef NDEBUG
         // These checks generate extra assert noise
         wxSizerFlags::DisableConsistencyChecks();
-#endif
         wxDISABLE_DEBUG_SUPPORT();
         wxSetAssertHandler( CustomAssertHandler );
+#endif
 
         // Perform platform-specific init tasks
         if( !KIPLATFORM::APP::Init() )

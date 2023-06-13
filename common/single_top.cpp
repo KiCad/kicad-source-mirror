@@ -133,6 +133,7 @@ private:
 };
 wxIMPLEMENT_DYNAMIC_CLASS(HtmlModule, wxModule);
 
+#ifdef NDEBUG
 // Define a custom assertion handler
 void CustomAssertHandler(const wxString& file,
                          int line,
@@ -142,6 +143,7 @@ void CustomAssertHandler(const wxString& file,
 {
     Pgm().HandleAssert( file, line, func, cond, msg );
 }
+#endif
 
 /**
  * Struct APP_SINGLE_TOP
@@ -162,9 +164,9 @@ struct APP_SINGLE_TOP : public wxApp
 #ifdef NDEBUG
         // These checks generate extra assert noise
         wxSizerFlags::DisableConsistencyChecks();
-#endif
         wxDISABLE_DEBUG_SUPPORT();
         wxSetAssertHandler( CustomAssertHandler );
+#endif
 
         // Perform platform-specific init tasks
         if( !KIPLATFORM::APP::Init() )
