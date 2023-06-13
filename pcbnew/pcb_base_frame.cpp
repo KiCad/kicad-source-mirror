@@ -120,7 +120,7 @@ void PCB_BASE_FRAME::handleActivateEvent( wxActivateEvent& aEvent )
 {
     EDA_DRAW_FRAME::handleActivateEvent( aEvent );
 
-    if( m_spaceMouse != nullptr && ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
+    if( m_spaceMouse )
         m_spaceMouse->SetFocus( aEvent.GetActive() );
 }
 
@@ -129,8 +129,7 @@ void PCB_BASE_FRAME::handleIconizeEvent( wxIconizeEvent& aEvent )
 {
     EDA_DRAW_FRAME::handleIconizeEvent( aEvent );
 
-    if( m_spaceMouse != nullptr && aEvent.IsIconized()
-            && ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
+    if( m_spaceMouse != nullptr && aEvent.IsIconized() )
         m_spaceMouse->SetFocus( false );
 }
 
@@ -1082,20 +1081,17 @@ void PCB_BASE_FRAME::ActivateGalCanvas()
     canvas->SetEventDispatcher( m_toolDispatcher );
     canvas->StartDrawing();
 
-    if( ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
-    {
-        try
+    try
 
+    {
+        if( m_spaceMouse == nullptr )
         {
-            if( m_spaceMouse == nullptr )
-            {
-                m_spaceMouse = new NL_PCBNEW_PLUGIN( GetCanvas() );
-            }
+            m_spaceMouse = new NL_PCBNEW_PLUGIN( GetCanvas() );
         }
-        catch( const std::system_error& e )
-        {
-            wxLogTrace( wxT( "KI_TRACE_NAVLIB" ), e.what() );
-        }
+    }
+    catch( const std::system_error& e )
+    {
+        wxLogTrace( wxT( "KI_TRACE_NAVLIB" ), e.what() );
     }
 }
 

@@ -165,17 +165,13 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
     m_canvas->SetInfoBar( m_infoBar );
     m_canvas->SetStatusBar( status_bar );
 
-
-    if( ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
+    try
     {
-        try
-        {
-            m_spaceMouse = new NL_3D_VIEWER_PLUGIN( m_canvas );
-        }
-        catch( const std::system_error& e )
-        {
-            wxLogTrace( wxT( "KI_TRACE_NAVLIB" ), e.what() );
-        }
+        m_spaceMouse = new NL_3D_VIEWER_PLUGIN( m_canvas );
+    }
+    catch( const std::system_error& e )
+    {
+        wxLogTrace( wxT( "KI_TRACE_NAVLIB" ), e.what() );
     }
 
     // Fixes bug in Windows (XP and possibly others) where the canvas requires the focus
@@ -336,11 +332,8 @@ void EDA_3D_VIEWER_FRAME::handleIconizeEvent( wxIconizeEvent& aEvent )
 {
     KIWAY_PLAYER::handleIconizeEvent( aEvent );
 
-    if( m_spaceMouse != nullptr && aEvent.IsIconized()
-            && ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
-    {
+    if( m_spaceMouse && aEvent.IsIconized() )
         m_spaceMouse->SetFocus( false );
-    }
 }
 
 
@@ -656,7 +649,7 @@ void EDA_3D_VIEWER_FRAME::OnActivate( wxActivateEvent &aEvent )
         m_canvas->SetFocus();
     }
 
-    if( m_spaceMouse != nullptr && ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
+    if( m_spaceMouse )
         m_spaceMouse->SetFocus( aEvent.GetActive() );
 
     aEvent.Skip(); // required under wxMAC

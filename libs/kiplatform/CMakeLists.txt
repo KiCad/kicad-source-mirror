@@ -10,6 +10,7 @@ set( PLATFORM_COMPILE_DEFS "" )
 if( APPLE )
     set( PLATFORM_SRCS
         osx/app.mm
+        osx/drivers.mm
         osx/environment.mm
         osx/io.mm
         osx/policy.mm
@@ -25,6 +26,7 @@ if( APPLE )
 elseif( WIN32 )
     set( PLATFORM_SRCS
         msw/app.cpp
+        msw/drivers.cpp
         msw/environment.cpp
         msw/io.cpp
         msw/policy.cpp
@@ -40,6 +42,7 @@ elseif( WIN32 )
 elseif( UNIX )
     set( PLATFORM_SRCS
         gtk/app.cpp
+        gtk/drivers.cpp
         gtk/environment.cpp
         gtk/io.cpp
         gtk/policy.cpp

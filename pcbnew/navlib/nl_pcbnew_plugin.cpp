@@ -21,14 +21,15 @@
 #include "nl_pcbnew_plugin.h"
 #include "nl_pcbnew_plugin_impl.h"
 #include <advanced_config.h>
+#include <kiplatform/drivers.h>
 
-
-NL_PCBNEW_PLUGIN::NL_PCBNEW_PLUGIN( PCB_DRAW_PANEL_GAL* aViewport )
+NL_PCBNEW_PLUGIN::NL_PCBNEW_PLUGIN( PCB_DRAW_PANEL_GAL* aViewport ) : m_impl( nullptr )
 {
-    if( ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
+    if( ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver
+        && KIPLATFORM::DRIVERS::Valid3DConnexionDriverVersion() )
+    {
         m_impl = new NL_PCBNEW_PLUGIN_IMPL( aViewport );
-    else
-        m_impl = nullptr;
+    }
 }
 
 
@@ -40,6 +41,6 @@ NL_PCBNEW_PLUGIN::~NL_PCBNEW_PLUGIN()
 
 void NL_PCBNEW_PLUGIN::SetFocus( bool focus )
 {
-    if( ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
+    if( m_impl )
         m_impl->SetFocus( focus );
 }

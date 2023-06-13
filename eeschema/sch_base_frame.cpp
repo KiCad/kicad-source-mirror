@@ -345,19 +345,16 @@ void SCH_BASE_FRAME::ActivateGalCanvas()
 {
     EDA_DRAW_FRAME::ActivateGalCanvas();
 
-    if( ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
+    try
     {
-        try
-        {
-            if( !m_spaceMouse )
-                m_spaceMouse = new NL_SCHEMATIC_PLUGIN();
+        if( !m_spaceMouse )
+            m_spaceMouse = new NL_SCHEMATIC_PLUGIN();
 
-            m_spaceMouse->SetCanvas( GetCanvas() );
-        }
-        catch( const std::system_error& e )
-        {
-            wxLogTrace( wxT( "KI_TRACE_NAVLIB" ), e.what() );
-        }
+        m_spaceMouse->SetCanvas( GetCanvas() );
+    }
+    catch( const std::system_error& e )
+    {
+        wxLogTrace( wxT( "KI_TRACE_NAVLIB" ), e.what() );
     }
 }
 
@@ -537,7 +534,7 @@ void SCH_BASE_FRAME::handleActivateEvent( wxActivateEvent& aEvent )
 {
     EDA_DRAW_FRAME::handleActivateEvent( aEvent );
 
-    if( m_spaceMouse && ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
+    if( m_spaceMouse )
         m_spaceMouse->SetFocus( aEvent.GetActive() );
 }
 
@@ -546,7 +543,7 @@ void SCH_BASE_FRAME::handleIconizeEvent( wxIconizeEvent& aEvent )
 {
     EDA_DRAW_FRAME::handleIconizeEvent( aEvent );
 
-    if( m_spaceMouse && aEvent.IsIconized() && ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
+    if( m_spaceMouse )
         m_spaceMouse->SetFocus( false );
 }
 

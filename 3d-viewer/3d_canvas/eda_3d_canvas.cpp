@@ -532,7 +532,9 @@ void EDA_3D_CANVAS::DoRePaint()
         render_pivot( curtime_delta_s, scale );
     }
 
-    if( m_render3dmousePivot && ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
+    // This will only be enabled by the 3d mouse plugin, so we can leave
+    // it as a simple if statement
+    if( m_render3dmousePivot )
     {
         const float scale = glm::min( m_camera.GetZoom(), 1.0f );
         render3dmousePivot( scale );

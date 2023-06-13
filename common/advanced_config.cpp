@@ -337,12 +337,7 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     m_UseClipper2               = true;
 
-#ifdef _WIN32
-    // spacemouse is largely stable on Windows
-    m_Use3DConnexionDriver = true;
-#else
-    m_Use3DConnexionDriver = false;
-#endif
+    m_Use3DConnexionDriver      = true;
 
     m_IncrementalConnectivity   = false;
 

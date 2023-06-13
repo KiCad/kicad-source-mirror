@@ -20,16 +20,18 @@
 
 #include "nl_schematic_plugin.h"
 #include <advanced_config.h>
+#include <kiplatform/drivers.h>
 
 #include "nl_schematic_plugin_impl.h"
 
 
-NL_SCHEMATIC_PLUGIN::NL_SCHEMATIC_PLUGIN()
+NL_SCHEMATIC_PLUGIN::NL_SCHEMATIC_PLUGIN() : m_impl( nullptr )
 {
-    if( ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
+    if( ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver
+        && KIPLATFORM::DRIVERS::Valid3DConnexionDriverVersion() )
+    {
         m_impl = new NL_SCHEMATIC_PLUGIN_IMPL();
-    else
-        m_impl = nullptr;
+    }
 }
 
 
@@ -41,13 +43,13 @@ NL_SCHEMATIC_PLUGIN::~NL_SCHEMATIC_PLUGIN()
 
 void NL_SCHEMATIC_PLUGIN::SetFocus( bool focus )
 {
-    if( ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
+    if( m_impl )
         m_impl->SetFocus( focus );
 }
 
 
 void NL_SCHEMATIC_PLUGIN::SetCanvas( EDA_DRAW_PANEL_GAL* aViewport )
 {
-    if( ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver )
+    if( m_impl )
         m_impl->SetCanvas( aViewport );
 }

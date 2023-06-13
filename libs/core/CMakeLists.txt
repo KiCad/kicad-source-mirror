@@ -6,6 +6,7 @@ endif()
 
 
 add_library( core STATIC
+    version_compare.cpp
     wx_stl_compat.cpp
 )
 
