@@ -79,6 +79,9 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PC
 
     if( m_item->GetParentFootprint() )
     {
+        m_PositionXLabel->SetLabel( _( "Offset X:" ) );
+        m_PositionYLabel->SetLabel( _( "Offset Y:" ) );
+
         if( m_item->Type() == PCB_FIELD_T )
         {
             PCB_FIELD* field = static_cast<PCB_FIELD*>( m_item );
