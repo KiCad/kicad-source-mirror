@@ -98,8 +98,11 @@ void SCH_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
 
     if( allHitsOnSamePage && !selectedHits.empty() )
     {
-        m_frame->SetCurrentSheet( *selectedHits.front().sheetPath );
-        m_frame->DisplayCurrentSheet();
+        if( m_frame->GetCurrentSheet() != *selectedHits.front().sheetPath )
+        {
+            m_frame->SetCurrentSheet( *selectedHits.front().sheetPath );
+            m_frame->DisplayCurrentSheet();
+        }
 
         if( selectedItems.size() )
             m_frame->GetToolManager()->RunAction( EE_ACTIONS::addItemsToSel, true, &selectedItems );

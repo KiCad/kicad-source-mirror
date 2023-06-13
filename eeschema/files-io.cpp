@@ -1227,7 +1227,7 @@ bool SCH_EDIT_FRAME::doAutoSave()
 }
 
 
-bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
+void SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 {
     wxFileName             filename( aFileName );
     wxFileName             newfilename;
@@ -1240,8 +1240,9 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
     case SCH_IO_MGR::SCH_CADSTAR_ARCHIVE:
     case SCH_IO_MGR::SCH_EAGLE:
     case SCH_IO_MGR::SCH_LTSPICE:
+    {
         // We insist on caller sending us an absolute path, if it does not, we say it's a bug.
-        wxCHECK_MSG( filename.IsAbsolute(), false,
+        wxCHECK_MSG( filename.IsAbsolute(), /*void*/,
                      wxT( "Import schematic: path is not absolute!" ) );
 
         try
@@ -1280,15 +1281,6 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 
             // Only perform the dangling end test on root sheet.
             GetScreen()->TestDanglingEnds();
-
-            ClearUndoRedoList();
-
-            initScreenZoom();
-            SetSheetNumberAndCount();
-            SyncView();
-
-            UpdateHierarchyNavigator();
-            updateTitle();
         }
         catch( const IO_ERROR& ioe )
         {
@@ -1302,8 +1294,6 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 
             msg.Printf( _( "Failed to load '%s'." ), aFileName );
             SetMsgPanel( wxEmptyString, msg );
-
-            return false;
         }
         catch( const std::exception& exc )
         {
@@ -1316,15 +1306,41 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 
             msg.Printf( _( "Failed to load '%s'." ), aFileName );
             SetMsgPanel( wxEmptyString, msg );
-
-            return false;
         }
 
-        return true;
+        ClearUndoRedoList();
+
+        initScreenZoom();
+        SetSheetNumberAndCount();
+        SyncView();
+
+        UpdateHierarchyNavigator();
+
+        wxCommandEvent e( EDA_EVT_SCHEMATIC_CHANGED );
+        ProcessEventLocally( e );
+
+        for( wxEvtHandler* listener : m_schematicChangeListeners )
+        {
+            wxCHECK2( listener, continue );
+
+            // Use the windows variant when handling event messages in case there is any
+            // special event handler pre and/or post processing specific to windows.
+            wxWindow* win = dynamic_cast<wxWindow*>( listener );
+
+            if( win )
+                win->HandleWindowEvent( e );
+            else
+                listener->SafelyProcessEvent( e );
+        }
+
+        updateTitle();
+        break;
+    }
 
     default:
-        return false;
+        break;
     }
+
 }
 
 
