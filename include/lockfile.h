@@ -48,12 +48,14 @@ public:
         if( filename.IsEmpty() )
             return;
 
+        wxLogTrace( LCK, "Trying to lock %s", filename );
         wxFileName fn( filename );
         fn.SetName( "~" + fn.GetName() );
         fn.SetExt( fn.GetExt() + ".lck" );
 
-        if( !fn.IsFileWritable() )
+        if( !fn.IsDirWritable() )
         {
+            wxLogTrace( LCK, "File is not writable: %s", filename );
             m_status = true;
             m_removeOnRelease = false;
             return;
