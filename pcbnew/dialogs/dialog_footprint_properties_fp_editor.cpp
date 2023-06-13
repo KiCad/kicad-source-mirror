@@ -621,8 +621,11 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnAddField( wxCommandEvent& event )
     if( !m_itemsGrid->CommitPendingChanges() )
         return;
 
+    int                          fieldId = (int) m_fields->size();
     const BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
-    PCB_FIELD*                   newField = new PCB_FIELD( m_footprint, m_fields->size() );
+    PCB_FIELD*                   newField =
+            new PCB_FIELD( m_footprint, m_fields->size(),
+                           TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldId, DO_TRANSLATE ) );
 
     // Set active layer if legal; otherwise copy layer from previous text item
     if( LSET::AllTechMask().test( m_frame->GetActiveLayer() ) )

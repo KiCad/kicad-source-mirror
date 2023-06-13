@@ -764,7 +764,7 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
         PCB_FIELD* field = static_cast<PCB_FIELD*>( aBoardItem );
 
         // Only user text can be removed this way.
-        wxCHECK_RET( field->IsMandatoryField(),
+        wxCHECK_RET( !field->IsMandatoryField(),
                      wxT( "Please report this bug: Invalid remove operation on required text" ) );
         for( auto it = m_fields.begin(); it != m_fields.end(); ++it )
         {

@@ -567,10 +567,14 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnAddField( wxCommandEvent&  )
     if( !m_itemsGrid->CommitPendingChanges() )
         return;
 
-    PCB_FIELD* newField = new PCB_FIELD( m_footprint, m_fields->size() );
+    int        fieldId = (int) m_fields->size();
+    PCB_FIELD* newField =
+            new PCB_FIELD( m_footprint, m_fields->size(),
+                           TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldId, DO_TRANSLATE ) );
 
-    newField->SetLayer( m_footprint->GetLayer() == F_Cu ? F_Fab : B_Fab );
     newField->SetVisible( false );
+    newField->SetLayer( m_footprint->GetLayer() == F_Cu ? F_Fab : B_Fab );
+    newField->SetFPRelativePosition( { 0, 0 } );
     newField->StyleFromSettings( m_frame->GetDesignSettings() );
 
     m_fields->push_back( newField );

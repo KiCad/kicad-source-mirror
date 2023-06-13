@@ -157,7 +157,7 @@ wxGridCellAttr* FP_TEXT_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr:
     switch( aCol )
     {
     case FPT_NAME:
-        if( aRow < 2 )
+        if( aRow < MANDATORY_FIELDS )
         {
             m_readOnlyAttr->IncRef();
             return m_readOnlyAttr;
