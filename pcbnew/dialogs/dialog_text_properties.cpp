@@ -98,6 +98,10 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PC
             }
             else
             {
+                // Don't let users modify the library link
+                if( field->IsFootprint() )
+                    m_SingleLineText->SetEditable( false );
+
                 title = _( "Footprint Field Properties" );
                 m_TextLabel->SetLabel( _( "Text:" ) );
             }

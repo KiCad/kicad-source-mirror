@@ -27,6 +27,8 @@
 #include <wx/grid.h>
 #include <grid_tricks.h>
 #include <pcb_field.h>
+#include <validators.h>
+#include <dialog_shim.h>
 
 
 class PCB_BASE_FRAME;
@@ -54,7 +56,7 @@ enum FP_TEXT_COL_ORDER
 class FP_TEXT_GRID_TABLE : public wxGridTableBase, public std::vector<PCB_FIELD*>
 {
 public:
-    FP_TEXT_GRID_TABLE( PCB_BASE_FRAME* aFrame );
+    FP_TEXT_GRID_TABLE( PCB_BASE_FRAME* aFrame, DIALOG_SHIM* aDialog );
     ~FP_TEXT_GRID_TABLE();
 
     int GetNumberRows() override { return (int) size(); }
@@ -84,11 +86,22 @@ protected:
 
 private:
     PCB_BASE_FRAME* m_frame;
+    DIALOG_SHIM*    m_dialog;
+
+    FIELD_VALIDATOR m_fieldNameValidator;
+    FIELD_VALIDATOR m_referenceValidator;
+    FIELD_VALIDATOR m_valueValidator;
+    FIELD_VALIDATOR m_urlValidator;
+    FIELD_VALIDATOR m_nonUrlValidator;
 
     wxGridCellAttr* m_readOnlyAttr;
     wxGridCellAttr* m_boolColAttr;
     wxGridCellAttr* m_orientationColAttr;
     wxGridCellAttr* m_layerColAttr;
+    wxGridCellAttr* m_referenceAttr;
+    wxGridCellAttr* m_valueAttr;
+    wxGridCellAttr* m_footprintAttr;
+    wxGridCellAttr* m_urlAttr;
 
     std::unique_ptr<NUMERIC_EVALUATOR>        m_eval;
     std::map< std::pair<int, int>, wxString > m_evalOriginal;

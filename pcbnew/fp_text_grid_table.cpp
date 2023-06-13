@@ -22,6 +22,7 @@
  */
 
 #include <kiway_player.h>
+#include <project.h>
 #include <fp_text_grid_table.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/grid_combobox.h>
@@ -29,6 +30,7 @@
 #include <pcb_base_frame.h>
 #include <footprint.h>
 #include "grid_layer_box_helpers.h"
+#include "widgets/grid_text_button_helpers.h"
 
 enum
 {
@@ -40,8 +42,14 @@ enum
 wxArrayString g_menuOrientations;
 
 
-FP_TEXT_GRID_TABLE::FP_TEXT_GRID_TABLE( PCB_BASE_FRAME* aFrame ) :
-        m_frame( aFrame )
+FP_TEXT_GRID_TABLE::FP_TEXT_GRID_TABLE( PCB_BASE_FRAME* aFrame, DIALOG_SHIM* aDialog ) :
+        m_frame( aFrame ),
+        m_dialog( aDialog ),
+        m_fieldNameValidator( FIELD_NAME ),
+        m_referenceValidator( REFERENCE_FIELD ),
+        m_valueValidator( VALUE_FIELD ),
+        m_urlValidator( FIELD_VALUE ),
+        m_nonUrlValidator( FIELD_VALUE )
 {
     // Build the column attributes.
 
@@ -68,6 +76,27 @@ FP_TEXT_GRID_TABLE::FP_TEXT_GRID_TABLE( PCB_BASE_FRAME* aFrame ) :
     m_layerColAttr->SetRenderer( new GRID_CELL_LAYER_RENDERER( m_frame ) );
     m_layerColAttr->SetEditor( new GRID_CELL_LAYER_SELECTOR( m_frame, {} ) );
 
+    m_referenceAttr = new wxGridCellAttr;
+    GRID_CELL_TEXT_EDITOR* referenceEditor = new GRID_CELL_TEXT_EDITOR();
+    referenceEditor->SetValidator( m_referenceValidator );
+    m_referenceAttr->SetEditor( referenceEditor );
+
+    m_valueAttr = new wxGridCellAttr;
+    GRID_CELL_TEXT_EDITOR* valueEditor = new GRID_CELL_TEXT_EDITOR();
+    valueEditor->SetValidator( m_valueValidator );
+    m_valueAttr->SetEditor( valueEditor );
+
+    m_footprintAttr = new wxGridCellAttr;
+    m_footprintAttr->SetReadOnly( true );
+    GRID_CELL_FPID_EDITOR* fpIdEditor = new GRID_CELL_FPID_EDITOR( m_dialog, "" );
+    fpIdEditor->SetValidator( m_nonUrlValidator );
+    m_footprintAttr->SetEditor( fpIdEditor );
+
+    m_urlAttr = new wxGridCellAttr;
+    GRID_CELL_URL_EDITOR* urlEditor = new GRID_CELL_URL_EDITOR( m_dialog );
+    urlEditor->SetValidator( m_urlValidator );
+    m_urlAttr->SetEditor( urlEditor );
+
     m_eval = std::make_unique<NUMERIC_EVALUATOR>( m_frame->GetUserUnits() );
 
     m_frame->Bind( EDA_EVT_UNITS_CHANGED, &FP_TEXT_GRID_TABLE::onUnitsChanged, this );
@@ -80,6 +109,10 @@ FP_TEXT_GRID_TABLE::~FP_TEXT_GRID_TABLE()
     m_boolColAttr->DecRef();
     m_orientationColAttr->DecRef();
     m_layerColAttr->DecRef();
+    m_referenceAttr->DecRef();
+    m_valueAttr->DecRef();
+    m_footprintAttr->DecRef();
+    m_urlAttr->DecRef();
 
     m_frame->Unbind( EDA_EVT_UNITS_CHANGED, &FP_TEXT_GRID_TABLE::onUnitsChanged, this );
 }
@@ -166,6 +199,27 @@ wxGridCellAttr* FP_TEXT_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr:
         return nullptr;
 
     case FPT_VALUE:
+        if( aRow == REFERENCE_FIELD )
+        {
+            m_referenceAttr->IncRef();
+            return m_referenceAttr;
+        }
+        else if( aRow == VALUE_FIELD )
+        {
+            m_valueAttr->IncRef();
+            return m_valueAttr;
+        }
+        else if( aRow == FOOTPRINT_FIELD )
+        {
+            m_footprintAttr->IncRef();
+            return m_footprintAttr;
+        }
+        else if( aRow == DATASHEET_FIELD )
+        {
+            m_urlAttr->IncRef();
+            return m_urlAttr;
+        }
+
     case FPT_WIDTH:
     case FPT_HEIGHT:
     case FPT_THICKNESS:

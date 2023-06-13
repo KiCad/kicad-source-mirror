@@ -142,7 +142,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR(
     m_3dPanel = new PANEL_FP_PROPERTIES_3D_MODEL( m_frame, m_footprint, this, m_NoteBook );
     m_NoteBook->AddPage( m_3dPanel, _("3D Models"), false );
 
-    m_fields = new FP_TEXT_GRID_TABLE( m_frame );
+    m_fields = new FP_TEXT_GRID_TABLE( m_frame, this );
     m_privateLayers = new PRIVATE_LAYERS_GRID_TABLE( m_frame );
 
     m_delayedErrorMessage = wxEmptyString;

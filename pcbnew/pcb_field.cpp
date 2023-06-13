@@ -25,6 +25,7 @@
 #include <pcb_field.h>
 #include <footprint.h>
 #include <board_design_settings.h>
+#include <i18n_utility.h>
 
 PCB_FIELD::PCB_FIELD( FOOTPRINT* aParent, int aFieldId, const wxString& aName ) :
         PCB_TEXT( aParent, PCB_FIELD_T ), m_id( aFieldId ), m_name( aName )
@@ -169,5 +170,17 @@ static struct PCB_FIELD_DESC
         propMgr.InheritsAfter( TYPE_HASH( PCB_FIELD ), TYPE_HASH( BOARD_ITEM ) );
         propMgr.InheritsAfter( TYPE_HASH( PCB_FIELD ), TYPE_HASH( PCB_TEXT ) );
         propMgr.InheritsAfter( TYPE_HASH( PCB_FIELD ), TYPE_HASH( EDA_TEXT ) );
+
+        auto isNotFootprintFootprint =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( PCB_FIELD* field = dynamic_cast<PCB_FIELD*>( aItem ) )
+                        return !field->IsFootprint();
+
+                    return true;
+                };
+
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Text" ),
+                                      isNotFootprintFootprint );
     }
 } _PCB_FIELD_DESC;

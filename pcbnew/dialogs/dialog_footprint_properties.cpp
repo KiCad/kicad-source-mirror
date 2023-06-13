@@ -77,7 +77,7 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
     m_posX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
     m_posY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
 
-    m_fields = new FP_TEXT_GRID_TABLE( m_frame );
+    m_fields = new FP_TEXT_GRID_TABLE( m_frame, this );
 
     m_delayedErrorMessage = wxEmptyString;
     m_delayedFocusGrid = nullptr;
