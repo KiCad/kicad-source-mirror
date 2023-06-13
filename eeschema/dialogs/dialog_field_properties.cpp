@@ -151,9 +151,6 @@ DIALOG_FIELD_PROPERTIES::~DIALOG_FIELD_PROPERTIES()
 
 void DIALOG_FIELD_PROPERTIES::init()
 {
-    SCH_BASE_FRAME* parent = GetParent();
-    bool isSymbolEditor = parent && parent->IsType( FRAME_SCH_SYMBOL_EDITOR );
-
     // Disable options for graphic text editing which are not needed for fields.
     m_CommonConvert->Show( false );
     m_CommonUnit->Show( false );
@@ -168,7 +165,7 @@ void DIALOG_FIELD_PROPERTIES::init()
 
     if( use_validator )
     {
-        m_TextCtrl->SetValidator( FIELD_VALIDATOR( isSymbolEditor, m_fieldId, &m_text ) );
+        m_TextCtrl->SetValidator( FIELD_VALIDATOR( m_fieldId, &m_text ) );
         SetInitialFocus( m_TextCtrl );
 
         m_StyledTextCtrl->Show( false );

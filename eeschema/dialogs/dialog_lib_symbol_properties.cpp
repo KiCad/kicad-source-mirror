@@ -78,7 +78,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
     attr->SetEditor( new GRID_CELL_URL_EDITOR( this, Prj().SchSearchS() ) );
     m_grid->SetAttr( DATASHEET_FIELD, FDC_VALUE, attr );
 
-    m_SymbolNameCtrl->SetValidator( FIELD_VALIDATOR( true, VALUE_FIELD ) );
+    m_SymbolNameCtrl->SetValidator( FIELD_VALIDATOR( VALUE_FIELD ) );
 
     // Configure button logos
     m_bpAdd->SetBitmap( KiBitmap( BITMAPS::small_plus ) );

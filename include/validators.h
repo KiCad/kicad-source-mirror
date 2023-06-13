@@ -237,7 +237,7 @@ void ValidatorTransferToWindowWithoutEvents( wxValidator& aValidator );
 class FIELD_VALIDATOR : public wxTextValidator
 {
 public:
-    FIELD_VALIDATOR( bool aIsLibEditor, int aFieldId, wxString* aValue = nullptr );
+    FIELD_VALIDATOR( int aFieldId, wxString* aValue = nullptr );
 
     FIELD_VALIDATOR( const FIELD_VALIDATOR& aValidator );
 
@@ -253,8 +253,7 @@ public:
     virtual bool Validate( wxWindow* aParent ) override;
 
 private:
-    int  m_fieldId;
-    bool m_isLibEditor;
+    int m_fieldId;
 };
 
 

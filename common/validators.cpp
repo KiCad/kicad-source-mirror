@@ -337,12 +337,9 @@ void KIUI::ValidatorTransferToWindowWithoutEvents( wxValidator& aValidator )
 }
 
 
-FIELD_VALIDATOR::FIELD_VALIDATOR( bool aIsLibEditor, int aFieldId, wxString* aValue ) :
-        wxTextValidator( wxFILTER_EXCLUDE_CHAR_LIST, aValue )
+FIELD_VALIDATOR::FIELD_VALIDATOR( int aFieldId, wxString* aValue ) :
+        wxTextValidator( wxFILTER_EXCLUDE_CHAR_LIST, aValue ), m_fieldId( aFieldId )
 {
-    m_fieldId = aFieldId;
-    m_isLibEditor = aIsLibEditor;
-
     // Fields cannot contain carriage returns, line feeds, or tabs.
     wxString excludes( wxT( "\r\n\t" ) );
 
@@ -370,10 +367,8 @@ FIELD_VALIDATOR::FIELD_VALIDATOR( bool aIsLibEditor, int aFieldId, wxString* aVa
 
 
 FIELD_VALIDATOR::FIELD_VALIDATOR( const FIELD_VALIDATOR& aValidator ) :
-        wxTextValidator( aValidator )
+        wxTextValidator( aValidator ), m_fieldId( aValidator.m_fieldId )
 {
-    m_fieldId = aValidator.m_fieldId;
-    m_isLibEditor = aValidator.m_isLibEditor;
 }
 
 

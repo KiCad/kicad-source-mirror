@@ -97,12 +97,12 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* a
         m_parentType( SCH_SYMBOL_T ),
         m_mandatoryFieldCount( MANDATORY_FIELDS ),
         m_part( aSymbol ),
-        m_fieldNameValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_NAME ),
-        m_referenceValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), REFERENCE_FIELD ),
-        m_valueValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), VALUE_FIELD ),
-        m_urlValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_VALUE ),
-        m_nonUrlValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_VALUE ),
-        m_filepathValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), SHEETFILENAME )
+        m_fieldNameValidator( FIELD_NAME ),
+        m_referenceValidator( REFERENCE_FIELD ),
+        m_valueValidator( VALUE_FIELD ),
+        m_urlValidator( FIELD_VALUE ),
+        m_nonUrlValidator( FIELD_VALUE ),
+        m_filepathValidator( SHEETFILENAME )
 {
     initGrid( aGrid );
 }
@@ -118,12 +118,12 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* a
         m_mandatoryFieldCount( MANDATORY_FIELDS ),
         m_part( aSymbol->GetLibSymbolRef().get() ),
         m_symbolNetlist( netList( aSymbol, aFrame->GetCurrentSheet() ) ),
-        m_fieldNameValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_NAME ),
-        m_referenceValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), REFERENCE_FIELD ),
-        m_valueValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), VALUE_FIELD ),
-        m_urlValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_VALUE ),
-        m_nonUrlValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_VALUE ),
-        m_filepathValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), SHEETFILENAME )
+        m_fieldNameValidator( FIELD_NAME ),
+        m_referenceValidator( REFERENCE_FIELD ),
+        m_valueValidator( VALUE_FIELD ),
+        m_urlValidator( FIELD_VALUE ),
+        m_nonUrlValidator( FIELD_VALUE ),
+        m_filepathValidator( SHEETFILENAME )
 {
     initGrid( aGrid );
 }
@@ -138,12 +138,12 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* a
         m_parentType( SCH_SHEET_T ),
         m_mandatoryFieldCount( SHEET_MANDATORY_FIELDS ),
         m_part( nullptr ),
-        m_fieldNameValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_NAME ),
-        m_referenceValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), SHEETNAME_V ),
-        m_valueValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), VALUE_FIELD ),
-        m_urlValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_VALUE ),
-        m_nonUrlValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_VALUE ),
-        m_filepathValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), SHEETFILENAME_V )
+        m_fieldNameValidator( FIELD_NAME ),
+        m_referenceValidator( SHEETNAME_V ),
+        m_valueValidator( VALUE_FIELD ),
+        m_urlValidator( FIELD_VALUE ),
+        m_nonUrlValidator( FIELD_VALUE ),
+        m_filepathValidator( SHEETFILENAME_V )
 {
     initGrid( aGrid );
 }
@@ -158,12 +158,12 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* a
         m_parentType( SCH_LABEL_LOCATE_ANY_T ),
         m_mandatoryFieldCount( aLabel->GetMandatoryFieldCount() ),
         m_part( nullptr ),
-        m_fieldNameValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_NAME ),
-        m_referenceValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), 0 ),
-        m_valueValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), 0 ),
-        m_urlValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_VALUE ),
-        m_nonUrlValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_VALUE ),
-        m_filepathValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), 0 )
+        m_fieldNameValidator( FIELD_NAME ),
+        m_referenceValidator( 0 ),
+        m_valueValidator( 0 ),
+        m_urlValidator( FIELD_VALUE ),
+        m_nonUrlValidator( FIELD_VALUE ),
+        m_filepathValidator( 0 )
 {
     initGrid( aGrid );
 }
