@@ -74,6 +74,10 @@ void PANEL_TRANSLINE::ThemeChanged()
 
 void PANEL_TRANSLINE::SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 {
+    // Ensure parameters from current selection are up to date before saving
+    if( m_currTransLine )
+        TransfDlgDataToTranslineParams();
+
     aCfg->m_TransLine.type = m_currTransLineType;
 
     for( TRANSLINE_IDENT* transline : m_transline_list )

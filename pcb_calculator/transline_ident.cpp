@@ -52,6 +52,7 @@ TRANSLINE_PRM::TRANSLINE_PRM( PRM_TYPE aType, PRMS_ID aId, const char* aKeywordC
     m_KeyWord       = aKeywordCfg;
     m_ToolTip       = aToolTip;
     m_Value         = aValue;
+    m_DefaultValue  = aValue;
     m_ConvUnit      = aConvUnit;
     m_ValueCtrl     = nullptr;
     m_UnitCtrl      = nullptr;
@@ -90,7 +91,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
     AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, EPSILONR_PRM,
                                "Er", wxT( "εr" ),
                                _( "Substrate relative permittivity (dielectric constant)" ),
-                               4.6, false ) );
+                               4.5, false ) );
     AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, TAND_PRM,
                                "TanD", wxT( "tan δ" ),
                                _( "Dielectric loss (dissipation factor)" ),

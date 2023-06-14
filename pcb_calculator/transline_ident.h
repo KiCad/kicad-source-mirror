@@ -82,6 +82,7 @@ public:
     wxString    m_DlgLabel;        // name for this parameter in dialog (usually translated
     wxString    m_ToolTip;         // Tool tip for this parameter in dialog
     double      m_Value;           // Value for this parameter in dialog
+    double      m_DefaultValue;    // Default value for this parameter from CTOR build
     double      m_NormalizedValue; // actual value for this parameter
     bool        m_ConvUnit;        // true if an unit selector must be used
     void*       m_ValueCtrl;       // The text ctrl containing the value in dialog

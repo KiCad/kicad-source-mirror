@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2019 jean-pierre.charras
- * Copyright (C) 1992-2019 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,23 +30,23 @@ wxArrayString StandardRelativeDielectricConstantList()
     wxArrayString list;
 
     // EpsilonR ( relative dielectric constant) list
-    list.Add( wxT( "4.5  FR4" ) );
-    list.Add( wxT( "3.67  Isola FR408" ) );
-    list.Add( wxT( "4.04  Isola 370HR" ) );
-    list.Add( wxT( "3.55  Rogers RO4003C" ) );
-    list.Add( wxT( "3.66  Rogers R4350B" ) );
-    list.Add( wxT( "9.8  alumina (Al2O3)" ) );
-    list.Add( wxT( "3.78  fused quartz" ) );
-    list.Add( wxT( "3.38  RO4003" ) );
-    list.Add( wxT( "2.2  RT/duroid 5880" ) );
-    list.Add( wxT( "10.2  RT/duroid 6010LM" ) );
-    list.Add( wxT( "2.1  teflon (PTFE)" ) );
-    list.Add( wxT( "4.0  PVC" ) );
-    list.Add( wxT( "2.3  PE" ) );
-    list.Add( wxT( "6.6  beryllia (BeO)" ) );
-    list.Add( wxT( "8.7  aluminum nitride" ) );
-    list.Add( wxT( "11.9  silicon" ) );
-    list.Add( wxT( "12.9  GaAs" ) );
+    list.Add( wxT( "4.5 \tFR4" ) );
+    list.Add( wxT( "3.67 \tIsola FR408" ) );
+    list.Add( wxT( "4.04 \tIsola 370HR" ) );
+    list.Add( wxT( "3.55 \tRogers RO4003C" ) );
+    list.Add( wxT( "3.66 \tRogers R4350B" ) );
+    list.Add( wxT( "9.8 \talumina (Al2O3)" ) );
+    list.Add( wxT( "3.78 \tfused quartz" ) );
+    list.Add( wxT( "3.38 \tRO4003" ) );
+    list.Add( wxT( "2.2 \tRT/duroid 5880" ) );
+    list.Add( wxT( "10.2 \tRT/duroid 6010LM" ) );
+    list.Add( wxT( "2.1 \tteflon (PTFE)" ) );
+    list.Add( wxT( "4.0 \tPVC" ) );
+    list.Add( wxT( "2.3 \tPE" ) );
+    list.Add( wxT( "6.6 \tberyllia (BeO)" ) );
+    list.Add( wxT( "8.7 \taluminum nitride" ) );
+    list.Add( wxT( "11.9 \tsilicon" ) );
+    list.Add( wxT( "12.9 \tGaAs" ) );
 
     return list;
 }
@@ -58,24 +58,24 @@ wxArrayString StandardLossTangentList()
 
     // List of current dielectric loss factor (tangent delta)
     list.Clear();
-    list.Add( wxT( "2e-2  FR4 @ 1GHz" ) );
-    list.Add( wxT( "12e-3  Isola FR408 @ 2 GHz" ) );
-    list.Add( wxT( "21e-3  Isola 370HR @ 2 GHz" ) );
-    list.Add( wxT( "27e-4  Rogers RO4003C @ 10 GHz" ) );
-    list.Add( wxT( "21e-4  Rogers RO4003C @ 2.5 GHz" ) );
-    list.Add( wxT( "37e-4  Rogers RO4350B @ 10 GHz" ) );
-    list.Add( wxT( "31e-4  Rogers RO4350B @ 2.5 GHz" ) );
-    list.Add( wxT( "3e-4  beryllia @ 10GHz" ) );
-    list.Add( wxT( "2e-4  aluminia (Al2O3) @ 10GHz" ) );
-    list.Add( wxT( "1e-4  fused quartz @ 10GHz" ) );
-    list.Add( wxT( "2e-3  RO4003 @ 10GHz" ) );
-    list.Add( wxT( "9e-4  RT/duroid 5880 @ 10GHz" ) );
-    list.Add( wxT( "2e-4  teflon (PTFE) @ 1MHz" ) );
-    list.Add( wxT( "5e-2  PVC @ 1MHz" ) );
-    list.Add( wxT( "2e-4  PE @ 1MHz" ) );
-    list.Add( wxT( "1e-3  aluminum nitride @ 10GHz" ) );
-    list.Add( wxT( "0.015  silicon @ 10GHz" ) );
-    list.Add( wxT( "0.002  GaAs @ 10GHz" ) );
+    list.Add( wxT( "2e-2 \tFR4 @ 1GHz" ) );
+    list.Add( wxT( "12e-3 \tIsola FR408 @ 2 GHz" ) );
+    list.Add( wxT( "21e-3 \tIsola 370HR @ 2 GHz" ) );
+    list.Add( wxT( "27e-4 \tRogers RO4003C @ 10 GHz" ) );
+    list.Add( wxT( "21e-4 \tRogers RO4003C @ 2.5 GHz" ) );
+    list.Add( wxT( "37e-4 \tRogers RO4350B @ 10 GHz" ) );
+    list.Add( wxT( "31e-4 \tRogers RO4350B @ 2.5 GHz" ) );
+    list.Add( wxT( "3e-4 \tberyllia @ 10GHz" ) );
+    list.Add( wxT( "2e-4 \taluminia (Al2O3) @ 10GHz" ) );
+    list.Add( wxT( "1e-4 \tfused quartz @ 10GHz" ) );
+    list.Add( wxT( "2e-3 \tRO4003 @ 10GHz" ) );
+    list.Add( wxT( "9e-4 \tRT/duroid 5880 @ 10GHz" ) );
+    list.Add( wxT( "2e-4 \tteflon (PTFE) @ 1MHz" ) );
+    list.Add( wxT( "5e-2 \tPVC @ 1MHz" ) );
+    list.Add( wxT( "2e-4 \tPE @ 1MHz" ) );
+    list.Add( wxT( "1e-3 \taluminum nitride @ 10GHz" ) );
+    list.Add( wxT( "0.015 \tsilicon @ 10GHz" ) );
+    list.Add( wxT( "0.002 \tGaAs @ 10GHz" ) );
 
     return list;
 }
@@ -87,16 +87,16 @@ wxArrayString StandardResistivityList()
 
     // Specific resistance list in ohms*meters (rho):
     list.Clear();
-    list.Add( wxT( "2.4e-8  gold" ) );
-    list.Add( wxT( "1.72e-8  copper" ) );
-    list.Add( wxT( "1.62e-8  silver" ) );
-    list.Add( wxT( "12.4e-8  tin" ) );
-    list.Add( wxT( "10.5e-8  platinum" ) );
-    list.Add( wxT( "2.62e-8  aluminum" ) );
-    list.Add( wxT( "6.9e-8  nickel" ) );
-    list.Add( wxT( "3.9e-8  brass (66Cu 34Zn)" ) );
-    list.Add( wxT( "9.71e-8  iron" ) );
-    list.Add( wxT( "6.0e-8  zinc" ) );
+    list.Add( wxT( "2.4e-8 \tgold" ) );
+    list.Add( wxT( "1.72e-8 \tcopper" ) );
+    list.Add( wxT( "1.62e-8 \tsilver" ) );
+    list.Add( wxT( "12.4e-8 \ttin" ) );
+    list.Add( wxT( "10.5e-8 \tplatinum" ) );
+    list.Add( wxT( "2.62e-8 \taluminum" ) );
+    list.Add( wxT( "6.9e-8 \tnickel" ) );
+    list.Add( wxT( "3.9e-8 \tbrass (66Cu 34Zn)" ) );
+    list.Add( wxT( "9.71e-8 \tiron" ) );
+    list.Add( wxT( "6.0e-8 \tzinc" ) );
 
     return list;
 }
@@ -108,11 +108,11 @@ wxArrayString StandardCableConductorList()
     // Lined the same as StandardCableTempCoefList
     // Specific resistance list in ohms*meters (rho):
     list.Clear();
-    list.Add( wxT( "1.72e-8  Cu, Copper" ) );
-    list.Add( wxT( "2.62e-8  Al, Aluminum" ) );
-    list.Add( wxT( "100e-8  NiCr, Nichrome" ) );
-    list.Add( wxT( "9.71e-8  Fe, Iron" ) );
-    list.Add( wxT( "5.6e-8  W, Tungsten" ) );
+    list.Add( wxT( "1.72e-8 \tCu, Copper" ) );
+    list.Add( wxT( "2.62e-8 \tAl, Aluminum" ) );
+    list.Add( wxT( "100e-8 \tNiCr, Nichrome" ) );
+    list.Add( wxT( "9.71e-8 \tFe, Iron" ) );
+    list.Add( wxT( "5.6e-8 \tW, Tungsten" ) );
 
     return list;
 }
@@ -123,11 +123,11 @@ wxArrayString StandardCableTempCoefList()
     // Lined the same as StandardCableConductorList
     // Specific temperature coefficient (20C):
     list.Clear();
-    list.Add( wxT( "3.93e-3  Cu, Copper" ) );
-    list.Add( wxT( "4.29e-3  Al, Aluminum" ) );
-    list.Add( wxT( "0.4e-3 NiCr, Nichrome" ) );
-    list.Add( wxT( "5e-3  Fe, Iron" ) );
-    list.Add( wxT( "4.5e-3  W, Tungsten" ) );
+    list.Add( wxT( "3.93e-3 \tCu, Copper" ) );
+    list.Add( wxT( "4.29e-3 \tAl, Aluminum" ) );
+    list.Add( wxT( "0.4e-3 \tNiCr, Nichrome" ) );
+    list.Add( wxT( "5e-3 \tFe, Iron" ) );
+    list.Add( wxT( "4.5e-3 \tW, Tungsten" ) );
 
     return list;
 }

@@ -340,6 +340,10 @@ void PANEL_TRANSLINE::TransfDlgDataToTranslineParams()
 
 void PANEL_TRANSLINE::OnTranslineSelection( wxCommandEvent& event )
 {
+    // Ensure parameters from current selection are taken in account before switching to a new selection
+    if( m_currTransLine )
+        TransfDlgDataToTranslineParams();
+
     enum TRANSLINE_TYPE_ID id = (enum TRANSLINE_TYPE_ID) event.GetSelection();
 
     TranslineTypeSelection( id );
@@ -353,9 +357,17 @@ void PANEL_TRANSLINE::OnTranslineSelection( wxCommandEvent& event )
 
 void PANEL_TRANSLINE::OnTransLineResetButtonClick( wxCommandEvent& event )
 {
-    TranslineTypeSelection( DEFAULT_TYPE );
-    m_TranslineSelection->SetSelection( DEFAULT_TYPE );
+    // Initialize param values to default value
+    TRANSLINE_IDENT* tr_ident = m_transline_list[m_currTransLineType];
 
-    GetSizer()->Layout();
+    for( unsigned ii = 0; ii < tr_ident->GetPrmsCount(); ii++ )
+    {
+        TRANSLINE_PRM* prm = tr_ident->GetPrm( ii );
+        prm->m_Value = prm->m_DefaultValue;
+    }
+
+    // Reinit displayed values
+    TranslineTypeSelection( m_currTransLineType );
+
     Refresh();
 }

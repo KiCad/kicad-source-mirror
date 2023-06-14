@@ -150,7 +150,7 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
             new PARAM<double>( "wavelength.permeability", &m_wavelength.permeability, 1 ) );
 
     m_params.emplace_back(
-            new PARAM<double>( "wavelength.permittivity", &m_wavelength.permittivity, 4.6 ) );
+            new PARAM<double>( "wavelength.permittivity", &m_wavelength.permittivity, 4.5 ) );
 
     m_params.emplace_back(
             new PARAM<int>( "wavelength.frequencyUnit", &m_wavelength.frequencyUnit, 0 ) );
