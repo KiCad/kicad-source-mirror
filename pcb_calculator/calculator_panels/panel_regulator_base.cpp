@@ -56,7 +56,7 @@ PANEL_REGULATOR_BASE::PANEL_REGULATOR_BASE( wxWindow* parent, wxWindowID id, con
 
 	m_RegulFormula = new wxStaticText( sbSizerRegFormula->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_RegulFormula->Wrap( -1 );
-	m_RegulFormula->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_RegulFormula->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
 	sbSizerRegFormula->Add( m_RegulFormula, 0, wxALIGN_CENTER_HORIZONTAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
@@ -143,7 +143,7 @@ PANEL_REGULATOR_BASE::PANEL_REGULATOR_BASE( wxWindow* parent, wxWindowID id, con
 	fgSizerRegParams->Add( m_labelRegultR1, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_RegulR1Value = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerRegParams->Add( m_RegulR1Value, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizerRegParams->Add( m_RegulR1Value, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_r1Units = new wxStaticText( this, wxID_ANY, _("kOhm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_r1Units->Wrap( -1 );
@@ -157,7 +157,7 @@ PANEL_REGULATOR_BASE::PANEL_REGULATOR_BASE( wxWindow* parent, wxWindowID id, con
 	fgSizerRegParams->Add( m_labelRegultR2, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_RegulR2Value = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerRegParams->Add( m_RegulR2Value, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizerRegParams->Add( m_RegulR2Value, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_r2Units = new wxStaticText( this, wxID_ANY, _("kOhm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_r2Units->Wrap( -1 );
@@ -171,7 +171,7 @@ PANEL_REGULATOR_BASE::PANEL_REGULATOR_BASE( wxWindow* parent, wxWindowID id, con
 	fgSizerRegParams->Add( m_labelVout, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_RegulVoutValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerRegParams->Add( m_RegulVoutValue, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizerRegParams->Add( m_RegulVoutValue, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_unitsVout = new wxStaticText( this, wxID_ANY, _("V"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_unitsVout->Wrap( -1 );
@@ -187,7 +187,7 @@ PANEL_REGULATOR_BASE::PANEL_REGULATOR_BASE( wxWindow* parent, wxWindowID id, con
 	fgSizerRegParams->Add( m_labelVRef, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_RegulVrefValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerRegParams->Add( m_RegulVrefValue, 0, wxEXPAND|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerRegParams->Add( m_RegulVrefValue, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_unitsVref = new wxStaticText( this, wxID_ANY, _("V"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_unitsVref->Wrap( -1 );
@@ -203,7 +203,7 @@ PANEL_REGULATOR_BASE::PANEL_REGULATOR_BASE( wxWindow* parent, wxWindowID id, con
 	fgSizerRegParams->Add( m_RegulIadjTitle, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_RegulIadjValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerRegParams->Add( m_RegulIadjValue, 0, wxEXPAND|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerRegParams->Add( m_RegulIadjValue, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_IadjUnitLabel = new wxStaticText( this, wxID_ANY, _("uA"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_IadjUnitLabel->Wrap( -1 );

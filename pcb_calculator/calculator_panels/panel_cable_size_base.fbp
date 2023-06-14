@@ -35,7 +35,6 @@
             <property name="bg"></property>
             <property name="context_help"></property>
             <property name="context_menu">1</property>
-            <property name="drag_accept_files">0</property>
             <property name="enabled">1</property>
             <property name="event_handler">impl_virtual</property>
             <property name="fg"></property>
@@ -80,7 +79,7 @@
                                     <property name="border">5</property>
                                     <property name="flag">wxALL|wxEXPAND</property>
                                     <property name="proportion">0</property>
-                                    <object class="wxStaticBoxSizer" expanded="1">
+                                    <object class="wxStaticBoxSizer" expanded="0">
                                         <property name="id">wxID_ANY</property>
                                         <property name="label">Wire properties</property>
                                         <property name="minimum_size"></property>
@@ -88,11 +87,11 @@
                                         <property name="orient">wxVERTICAL</property>
                                         <property name="parent">1</property>
                                         <property name="permission">none</property>
-                                        <object class="sizeritem" expanded="1">
+                                        <object class="sizeritem" expanded="0">
                                             <property name="border">5</property>
-                                            <property name="flag">wxEXPAND</property>
+                                            <property name="flag">wxALL|wxEXPAND</property>
                                             <property name="proportion">0</property>
-                                            <object class="wxFlexGridSizer" expanded="1">
+                                            <object class="wxFlexGridSizer" expanded="0">
                                                 <property name="cols">3</property>
                                                 <property name="flexible_direction">wxBOTH</property>
                                                 <property name="growablecols">1</property>
@@ -106,7 +105,7 @@
                                                 <property name="vgap">0</property>
                                                 <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxStaticText" expanded="0">
                                                         <property name="BottomDockable">1</property>
@@ -129,7 +128,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -168,7 +166,7 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                                                    <property name="flag">wxEXPAND|wxLEFT|wxRIGHT</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxChoice" expanded="0">
                                                         <property name="BottomDockable">1</property>
@@ -192,7 +190,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -244,7 +241,7 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxStaticText" expanded="0">
                                                         <property name="BottomDockable">1</property>
@@ -267,7 +264,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -306,7 +302,7 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT</property>
+                                                    <property name="flag">wxEXPAND|wxLEFT|wxRIGHT|wxTOP</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxTextCtrl" expanded="0">
                                                         <property name="BottomDockable">1</property>
@@ -329,7 +325,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -372,7 +367,7 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxEXPAND</property>
+                                                    <property name="flag">wxEXPAND|wxTOP</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxChoice" expanded="0">
                                                         <property name="BottomDockable">1</property>
@@ -396,7 +391,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -438,7 +432,7 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxStaticText" expanded="0">
                                                         <property name="BottomDockable">1</property>
@@ -461,7 +455,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -500,7 +493,7 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT</property>
+                                                    <property name="flag">wxEXPAND|wxLEFT|wxRIGHT|wxTOP</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxTextCtrl" expanded="0">
                                                         <property name="BottomDockable">1</property>
@@ -523,7 +516,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -589,7 +581,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -626,11 +617,11 @@
                                                         <property name="wrap">-1</property>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxStaticText" expanded="1">
+                                                    <object class="wxStaticText" expanded="0">
                                                         <property name="BottomDockable">1</property>
                                                         <property name="LeftDockable">1</property>
                                                         <property name="RightDockable">1</property>
@@ -651,7 +642,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -688,18 +678,18 @@
                                                         <property name="wrap">-1</property>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
                                                     <property name="flag">wxEXPAND</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxBoxSizer" expanded="1">
+                                                    <object class="wxBoxSizer" expanded="0">
                                                         <property name="minimum_size"></property>
                                                         <property name="name">bSizerResistivity</property>
                                                         <property name="orient">wxHORIZONTAL</property>
                                                         <property name="permission">none</property>
                                                         <object class="sizeritem" expanded="0">
                                                             <property name="border">5</property>
-                                                            <property name="flag">wxTOP|wxLEFT|wxALIGN_CENTER_VERTICAL</property>
+                                                            <property name="flag">wxEXPAND|wxLEFT|wxTOP</property>
                                                             <property name="proportion">1</property>
                                                             <object class="wxTextCtrl" expanded="0">
                                                                 <property name="BottomDockable">1</property>
@@ -722,7 +712,6 @@
                                                                 <property name="dock">Dock</property>
                                                                 <property name="dock_fixed">0</property>
                                                                 <property name="docking">Left</property>
-                                                                <property name="drag_accept_files">0</property>
                                                                 <property name="enabled">1</property>
                                                                 <property name="fg"></property>
                                                                 <property name="floatable">1</property>
@@ -765,7 +754,7 @@
                                                         </object>
                                                         <object class="sizeritem" expanded="0">
                                                             <property name="border">5</property>
-                                                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT</property>
+                                                            <property name="flag">wxEXPAND|wxLEFT|wxRIGHT|wxTOP</property>
                                                             <property name="proportion">0</property>
                                                             <object class="wxButton" expanded="0">
                                                                 <property name="BottomDockable">1</property>
@@ -793,7 +782,6 @@
                                                                 <property name="dock">Dock</property>
                                                                 <property name="dock_fixed">0</property>
                                                                 <property name="docking">Left</property>
-                                                                <property name="drag_accept_files">0</property>
                                                                 <property name="enabled">1</property>
                                                                 <property name="fg"></property>
                                                                 <property name="floatable">1</property>
@@ -840,11 +828,11 @@
                                                         </object>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
                                                     <property name="flag">wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxTOP</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxStaticText" expanded="1">
+                                                    <object class="wxStaticText" expanded="0">
                                                         <property name="BottomDockable">1</property>
                                                         <property name="LeftDockable">1</property>
                                                         <property name="RightDockable">1</property>
@@ -865,7 +853,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -902,11 +889,11 @@
                                                         <property name="wrap">-1</property>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxStaticText" expanded="1">
+                                                    <object class="wxStaticText" expanded="0">
                                                         <property name="BottomDockable">1</property>
                                                         <property name="LeftDockable">1</property>
                                                         <property name="RightDockable">1</property>
@@ -927,7 +914,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -964,20 +950,20 @@
                                                         <property name="wrap">-1</property>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
                                                     <property name="flag">wxEXPAND</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxBoxSizer" expanded="1">
+                                                    <object class="wxBoxSizer" expanded="0">
                                                         <property name="minimum_size"></property>
                                                         <property name="name">bSizerTempCoeff</property>
                                                         <property name="orient">wxHORIZONTAL</property>
                                                         <property name="permission">none</property>
-                                                        <object class="sizeritem" expanded="1">
+                                                        <object class="sizeritem" expanded="0">
                                                             <property name="border">5</property>
-                                                            <property name="flag">wxTOP|wxLEFT|wxALIGN_CENTER_VERTICAL</property>
+                                                            <property name="flag">wxEXPAND|wxLEFT|wxTOP</property>
                                                             <property name="proportion">1</property>
-                                                            <object class="wxTextCtrl" expanded="1">
+                                                            <object class="wxTextCtrl" expanded="0">
                                                                 <property name="BottomDockable">1</property>
                                                                 <property name="LeftDockable">1</property>
                                                                 <property name="RightDockable">1</property>
@@ -998,7 +984,6 @@
                                                                 <property name="dock">Dock</property>
                                                                 <property name="dock_fixed">0</property>
                                                                 <property name="docking">Left</property>
-                                                                <property name="drag_accept_files">0</property>
                                                                 <property name="enabled">1</property>
                                                                 <property name="fg"></property>
                                                                 <property name="floatable">1</property>
@@ -1039,11 +1024,11 @@
                                                                 <event name="OnText">OnConductorThermCoefChange</event>
                                                             </object>
                                                         </object>
-                                                        <object class="sizeritem" expanded="1">
+                                                        <object class="sizeritem" expanded="0">
                                                             <property name="border">5</property>
-                                                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT</property>
+                                                            <property name="flag">wxEXPAND|wxLEFT|wxRIGHT|wxTOP</property>
                                                             <property name="proportion">0</property>
-                                                            <object class="wxButton" expanded="1">
+                                                            <object class="wxButton" expanded="0">
                                                                 <property name="BottomDockable">1</property>
                                                                 <property name="LeftDockable">1</property>
                                                                 <property name="RightDockable">1</property>
@@ -1069,7 +1054,6 @@
                                                                 <property name="dock">Dock</property>
                                                                 <property name="dock_fixed">0</property>
                                                                 <property name="docking">Left</property>
-                                                                <property name="drag_accept_files">0</property>
                                                                 <property name="enabled">1</property>
                                                                 <property name="fg"></property>
                                                                 <property name="floatable">1</property>
@@ -1116,11 +1100,11 @@
                                                         </object>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
                                                     <property name="flag">wxEXPAND</property>
                                                     <property name="proportion">1</property>
-                                                    <object class="spacer" expanded="1">
+                                                    <object class="spacer" expanded="0">
                                                         <property name="height">0</property>
                                                         <property name="permission">protected</property>
                                                         <property name="width">0</property>
@@ -1128,7 +1112,7 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxStaticText" expanded="0">
                                                         <property name="BottomDockable">1</property>
@@ -1151,7 +1135,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -1190,7 +1173,7 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT</property>
+                                                    <property name="flag">wxEXPAND|wxLEFT|wxRIGHT|wxTOP</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxTextCtrl" expanded="0">
                                                         <property name="BottomDockable">1</property>
@@ -1213,7 +1196,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -1256,7 +1238,7 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxEXPAND</property>
+                                                    <property name="flag">wxEXPAND|wxTOP</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxChoice" expanded="0">
                                                         <property name="BottomDockable">1</property>
@@ -1280,7 +1262,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -1322,7 +1303,7 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxStaticText" expanded="0">
                                                         <property name="BottomDockable">1</property>
@@ -1345,7 +1326,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -1384,7 +1364,7 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT</property>
+                                                    <property name="flag">wxEXPAND|wxLEFT|wxRIGHT|wxTOP</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxTextCtrl" expanded="0">
                                                         <property name="BottomDockable">1</property>
@@ -1407,7 +1387,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -1450,7 +1429,7 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxEXPAND</property>
+                                                    <property name="flag">wxEXPAND|wxTOP</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxChoice" expanded="0">
                                                         <property name="BottomDockable">1</property>
@@ -1474,7 +1453,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -1516,7 +1494,7 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxStaticText" expanded="0">
                                                         <property name="BottomDockable">1</property>
@@ -1539,7 +1517,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -1578,7 +1555,7 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT</property>
+                                                    <property name="flag">wxEXPAND|wxLEFT|wxRIGHT|wxTOP</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxTextCtrl" expanded="0">
                                                         <property name="BottomDockable">1</property>
@@ -1601,7 +1578,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -1667,7 +1643,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -1704,11 +1679,11 @@
                                                         <property name="wrap">-1</property>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxStaticText" expanded="1">
+                                                    <object class="wxStaticText" expanded="0">
                                                         <property name="BottomDockable">1</property>
                                                         <property name="LeftDockable">1</property>
                                                         <property name="RightDockable">1</property>
@@ -1729,7 +1704,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -1766,11 +1740,11 @@
                                                         <property name="wrap">-1</property>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT</property>
+                                                    <property name="flag">wxEXPAND|wxRIGHT|wxTOP</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxSlider" expanded="1">
+                                                    <object class="wxSlider" expanded="0">
                                                         <property name="BottomDockable">1</property>
                                                         <property name="LeftDockable">1</property>
                                                         <property name="RightDockable">1</property>
@@ -1791,7 +1765,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -1833,11 +1806,11 @@
                                                         <event name="OnScroll">onUpdateCurrentDensity</event>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxStaticText" expanded="1">
+                                                    <object class="wxStaticText" expanded="0">
                                                         <property name="BottomDockable">1</property>
                                                         <property name="LeftDockable">1</property>
                                                         <property name="RightDockable">1</property>
@@ -1858,7 +1831,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -1903,7 +1875,7 @@
                                     <property name="border">5</property>
                                     <property name="flag">wxALL|wxEXPAND</property>
                                     <property name="proportion">1</property>
-                                    <object class="wxStaticBoxSizer" expanded="1">
+                                    <object class="wxStaticBoxSizer" expanded="0">
                                         <property name="id">wxID_ANY</property>
                                         <property name="label">Application</property>
                                         <property name="minimum_size"></property>
@@ -1911,11 +1883,11 @@
                                         <property name="orient">wxVERTICAL</property>
                                         <property name="parent">1</property>
                                         <property name="permission">none</property>
-                                        <object class="sizeritem" expanded="1">
+                                        <object class="sizeritem" expanded="0">
                                             <property name="border">5</property>
-                                            <property name="flag"></property>
+                                            <property name="flag">wxALL</property>
                                             <property name="proportion">1</property>
-                                            <object class="wxFlexGridSizer" expanded="1">
+                                            <object class="wxFlexGridSizer" expanded="0">
                                                 <property name="cols">3</property>
                                                 <property name="flexible_direction">wxBOTH</property>
                                                 <property name="growablecols">1</property>
@@ -1927,11 +1899,11 @@
                                                 <property name="permission">none</property>
                                                 <property name="rows">0</property>
                                                 <property name="vgap">0</property>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxStaticText" expanded="1">
+                                                    <object class="wxStaticText" expanded="0">
                                                         <property name="BottomDockable">1</property>
                                                         <property name="LeftDockable">1</property>
                                                         <property name="RightDockable">1</property>
@@ -1952,7 +1924,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -1989,11 +1960,11 @@
                                                         <property name="wrap">-1</property>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                                                    <property name="flag">wxEXPAND|wxLEFT|wxRIGHT</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxTextCtrl" expanded="1">
+                                                    <object class="wxTextCtrl" expanded="0">
                                                         <property name="BottomDockable">1</property>
                                                         <property name="LeftDockable">1</property>
                                                         <property name="RightDockable">1</property>
@@ -2014,7 +1985,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -2055,11 +2025,11 @@
                                                         <event name="OnText">OnConductorTempChange</event>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
                                                     <property name="flag">wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxStaticText" expanded="1">
+                                                    <object class="wxStaticText" expanded="0">
                                                         <property name="BottomDockable">1</property>
                                                         <property name="LeftDockable">1</property>
                                                         <property name="RightDockable">1</property>
@@ -2080,7 +2050,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -2117,11 +2086,11 @@
                                                         <property name="wrap">-1</property>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxStaticText" expanded="1">
+                                                    <object class="wxStaticText" expanded="0">
                                                         <property name="BottomDockable">1</property>
                                                         <property name="LeftDockable">1</property>
                                                         <property name="RightDockable">1</property>
@@ -2142,7 +2111,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -2179,11 +2147,11 @@
                                                         <property name="wrap">-1</property>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT</property>
+                                                    <property name="flag">wxEXPAND|wxLEFT|wxRIGHT|wxTOP</property>
                                                     <property name="proportion">1</property>
-                                                    <object class="wxTextCtrl" expanded="1">
+                                                    <object class="wxTextCtrl" expanded="0">
                                                         <property name="BottomDockable">1</property>
                                                         <property name="LeftDockable">1</property>
                                                         <property name="RightDockable">1</property>
@@ -2204,7 +2172,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -2245,11 +2212,11 @@
                                                         <event name="OnText">OnCurrentChange</event>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
                                                     <property name="flag">wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxTOP</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxStaticText" expanded="1">
+                                                    <object class="wxStaticText" expanded="0">
                                                         <property name="BottomDockable">1</property>
                                                         <property name="LeftDockable">1</property>
                                                         <property name="RightDockable">1</property>
@@ -2270,7 +2237,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -2307,11 +2273,11 @@
                                                         <property name="wrap">-1</property>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxStaticText" expanded="1">
+                                                    <object class="wxStaticText" expanded="0">
                                                         <property name="BottomDockable">1</property>
                                                         <property name="LeftDockable">1</property>
                                                         <property name="RightDockable">1</property>
@@ -2332,7 +2298,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -2369,11 +2334,11 @@
                                                         <property name="wrap">-1</property>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT</property>
+                                                    <property name="flag">wxEXPAND|wxLEFT|wxRIGHT|wxTOP</property>
                                                     <property name="proportion">1</property>
-                                                    <object class="wxTextCtrl" expanded="1">
+                                                    <object class="wxTextCtrl" expanded="0">
                                                         <property name="BottomDockable">1</property>
                                                         <property name="LeftDockable">1</property>
                                                         <property name="RightDockable">1</property>
@@ -2394,7 +2359,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -2435,11 +2399,11 @@
                                                         <event name="OnText">OnLengthChange</event>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
                                                     <property name="flag">wxTOP|wxEXPAND</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxChoice" expanded="1">
+                                                    <object class="wxChoice" expanded="0">
                                                         <property name="BottomDockable">1</property>
                                                         <property name="LeftDockable">1</property>
                                                         <property name="RightDockable">1</property>
@@ -2461,7 +2425,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -2501,11 +2464,11 @@
                                                         <event name="OnChoice">OnUpdateUnit</event>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxStaticText" expanded="1">
+                                                    <object class="wxStaticText" expanded="0">
                                                         <property name="BottomDockable">1</property>
                                                         <property name="LeftDockable">1</property>
                                                         <property name="RightDockable">1</property>
@@ -2526,7 +2489,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -2563,11 +2525,11 @@
                                                         <property name="wrap">-1</property>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT</property>
+                                                    <property name="flag">wxEXPAND|wxLEFT|wxRIGHT|wxTOP</property>
                                                     <property name="proportion">1</property>
-                                                    <object class="wxTextCtrl" expanded="1">
+                                                    <object class="wxTextCtrl" expanded="0">
                                                         <property name="BottomDockable">1</property>
                                                         <property name="LeftDockable">1</property>
                                                         <property name="RightDockable">1</property>
@@ -2588,7 +2550,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -2629,11 +2590,11 @@
                                                         <event name="OnText">OnResistanceDcChange</event>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
                                                     <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxStaticText" expanded="1">
+                                                    <object class="wxStaticText" expanded="0">
                                                         <property name="BottomDockable">1</property>
                                                         <property name="LeftDockable">1</property>
                                                         <property name="RightDockable">1</property>
@@ -2654,7 +2615,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -2691,11 +2651,11 @@
                                                         <property name="wrap">-1</property>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxStaticText" expanded="1">
+                                                    <object class="wxStaticText" expanded="0">
                                                         <property name="BottomDockable">1</property>
                                                         <property name="LeftDockable">1</property>
                                                         <property name="RightDockable">1</property>
@@ -2716,7 +2676,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -2753,11 +2712,11 @@
                                                         <property name="wrap">-1</property>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT</property>
+                                                    <property name="flag">wxEXPAND|wxLEFT|wxRIGHT|wxTOP</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxTextCtrl" expanded="1">
+                                                    <object class="wxTextCtrl" expanded="0">
                                                         <property name="BottomDockable">1</property>
                                                         <property name="LeftDockable">1</property>
                                                         <property name="RightDockable">1</property>
@@ -2778,7 +2737,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -2819,11 +2777,11 @@
                                                         <event name="OnText">OnVDropChange</event>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxTOP|wxALIGN_CENTER_VERTICAL|wxEXPAND</property>
+                                                    <property name="flag">wxEXPAND|wxTOP</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxChoice" expanded="1">
+                                                    <object class="wxChoice" expanded="0">
                                                         <property name="BottomDockable">1</property>
                                                         <property name="LeftDockable">1</property>
                                                         <property name="RightDockable">1</property>
@@ -2845,7 +2803,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -2885,11 +2842,11 @@
                                                         <event name="OnChoice">OnUpdateUnit</event>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT</property>
+                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxStaticText" expanded="1">
+                                                    <object class="wxStaticText" expanded="0">
                                                         <property name="BottomDockable">1</property>
                                                         <property name="LeftDockable">1</property>
                                                         <property name="RightDockable">1</property>
@@ -2910,7 +2867,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -2947,11 +2903,11 @@
                                                         <property name="wrap">-1</property>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT</property>
+                                                    <property name="flag">wxEXPAND|wxLEFT|wxRIGHT|wxTOP</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxTextCtrl" expanded="1">
+                                                    <object class="wxTextCtrl" expanded="0">
                                                         <property name="BottomDockable">1</property>
                                                         <property name="LeftDockable">1</property>
                                                         <property name="RightDockable">1</property>
@@ -2972,7 +2928,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>
@@ -3013,11 +2968,11 @@
                                                         <event name="OnText">OnPowerChange</event>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="1">
+                                                <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxEXPAND</property>
+                                                    <property name="flag">wxEXPAND|wxTOP</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxChoice" expanded="1">
+                                                    <object class="wxChoice" expanded="0">
                                                         <property name="BottomDockable">1</property>
                                                         <property name="LeftDockable">1</property>
                                                         <property name="RightDockable">1</property>
@@ -3039,7 +2994,6 @@
                                                         <property name="dock">Dock</property>
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
-                                                        <property name="drag_accept_files">0</property>
                                                         <property name="enabled">1</property>
                                                         <property name="fg"></property>
                                                         <property name="floatable">1</property>

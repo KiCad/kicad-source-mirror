@@ -23,7 +23,7 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 
 	m_stTitle = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Insulation for equipment within low-voltage supply systems"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stTitle->Wrap( -1 );
-	m_stTitle->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_stTitle->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
 	bSizerMain->Add( m_stTitle, 0, wxALIGN_CENTER|wxALL, 5 );
 
@@ -45,7 +45,7 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 	fgSizer111->Add( m_staticText5211, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_ratedVoltage = new wxTextCtrl( sbSizerTop->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer111->Add( m_ratedVoltage, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	fgSizer111->Add( m_ratedVoltage, 0, wxALL|wxEXPAND, 5 );
 
 	m_staticText52112 = new wxStaticText( sbSizerTop->GetStaticBox(), wxID_ANY, _("V"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText52112->Wrap( -1 );
@@ -140,7 +140,7 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 	m_transientOvervoltage = new wxTextCtrl( sbSizerMiddle->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_transientOvervoltage->SetMinSize( wxSize( 100,-1 ) );
 
-	fgSizer11->Add( m_transientOvervoltage, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer11->Add( m_transientOvervoltage, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_staticText1121 = new wxStaticText( sbSizerMiddle->GetStaticBox(), wxID_ANY, _("kV"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1121->Wrap( -1 );
@@ -155,7 +155,7 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 	m_peakVoltage = new wxTextCtrl( sbSizerMiddle->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_peakVoltage->SetMinSize( wxSize( 100,-1 ) );
 
-	fgSizer11->Add( m_peakVoltage, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer11->Add( m_peakVoltage, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_staticText11211 = new wxStaticText( sbSizerMiddle->GetStaticBox(), wxID_ANY, _("kV"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText11211->Wrap( -1 );
@@ -171,7 +171,7 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 	int m_insulationTypeNChoices = sizeof( m_insulationTypeChoices ) / sizeof( wxString );
 	m_insulationType = new wxChoice( sbSizerMiddle->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_insulationTypeNChoices, m_insulationTypeChoices, 0 );
 	m_insulationType->SetSelection( 0 );
-	fgSizer11->Add( m_insulationType, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer11->Add( m_insulationType, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	fgSizer11->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -186,7 +186,7 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 	int m_pollutionDegreeNChoices = sizeof( m_pollutionDegreeChoices ) / sizeof( wxString );
 	m_pollutionDegree = new wxChoice( sbSizerMiddle->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_pollutionDegreeNChoices, m_pollutionDegreeChoices, 0 );
 	m_pollutionDegree->SetSelection( 1 );
-	fgSizer11->Add( m_pollutionDegree, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer11->Add( m_pollutionDegree, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	fgSizer11->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -201,7 +201,7 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 	int m_materialGroupNChoices = sizeof( m_materialGroupChoices ) / sizeof( wxString );
 	m_materialGroup = new wxChoice( sbSizerMiddle->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_materialGroupNChoices, m_materialGroupChoices, 0 );
 	m_materialGroup->SetSelection( 0 );
-	fgSizer11->Add( m_materialGroup, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer11->Add( m_materialGroup, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	fgSizer11->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -227,7 +227,7 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 	m_altitude = new wxTextCtrl( sbSizerMiddle->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_altitude->SetMinSize( wxSize( 100,-1 ) );
 
-	fgSizer11->Add( m_altitude, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer11->Add( m_altitude, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_staticText11121211 = new wxStaticText( sbSizerMiddle->GetStaticBox(), wxID_ANY, _("m"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText11121211->Wrap( -1 );
@@ -273,7 +273,7 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 	m_creepage->Enable( false );
 	m_creepage->SetMinSize( wxSize( 100,-1 ) );
 
-	fgSizer6->Add( m_creepage, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer6->Add( m_creepage, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_staticText7111 = new wxStaticText( sbSizerMiddle->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText7111->Wrap( -1 );
@@ -289,7 +289,7 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 	m_minGrooveWidth->Enable( false );
 	m_minGrooveWidth->SetMinSize( wxSize( 100,-1 ) );
 
-	fgSizer6->Add( m_minGrooveWidth, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer6->Add( m_minGrooveWidth, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_staticText711 = new wxStaticText( sbSizerMiddle->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText711->Wrap( -1 );
@@ -330,7 +330,7 @@ PANEL_ELECTRICAL_SPACING_IEC60664_BASE::PANEL_ELECTRICAL_SPACING_IEC60664_BASE( 
 	sbSizerBottom = new wxStaticBoxSizer( new wxStaticBox( m_scrolledWindow, wxID_ANY, _("Help") ), wxVERTICAL );
 
 	m_panelHelp = new HTML_WINDOW( sbSizerBottom->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
-	sbSizerBottom->Add( m_panelHelp, 1, wxEXPAND, 5 );
+	sbSizerBottom->Add( m_panelHelp, 1, wxALL|wxEXPAND, 5 );
 
 
 	bSizerMain->Add( sbSizerBottom, 1, wxEXPAND|wxBOTTOM, 5 );

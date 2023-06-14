@@ -23,7 +23,7 @@ PANEL_RF_ATTENUATORS_BASE::PANEL_RF_ATTENUATORS_BASE( wxWindow* parent, wxWindow
 	wxString m_AttenuatorsSelectionChoices[] = { _("Pi"), _("Tee"), _("Bridged tee"), _("Resistive splitter") };
 	int m_AttenuatorsSelectionNChoices = sizeof( m_AttenuatorsSelectionChoices ) / sizeof( wxString );
 	m_AttenuatorsSelection = new wxRadioBox( this, wxID_ANY, _("Attenuators"), wxDefaultPosition, wxDefaultSize, m_AttenuatorsSelectionNChoices, m_AttenuatorsSelectionChoices, 1, wxRA_SPECIFY_COLS );
-	m_AttenuatorsSelection->SetSelection( 2 );
+	m_AttenuatorsSelection->SetSelection( 1 );
 	bLeftSizerAtt->Add( m_AttenuatorsSelection, 0, wxEXPAND|wxALL, 5 );
 
 
@@ -33,7 +33,7 @@ PANEL_RF_ATTENUATORS_BASE::PANEL_RF_ATTENUATORS_BASE( wxWindow* parent, wxWindow
 	bLeftSizerAtt->Add( m_attenuatorBitmap, 0, wxALIGN_CENTER_HORIZONTAL|wxTOP|wxBOTTOM, 10 );
 
 
-	bSizerAtt->Add( bLeftSizerAtt, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
+	bSizerAtt->Add( bLeftSizerAtt, 0, wxBOTTOM|wxEXPAND|wxRIGHT, 5 );
 
 	wxBoxSizer* bMiddleSizerAtt;
 	bMiddleSizerAtt = new wxBoxSizer( wxVERTICAL );
@@ -49,7 +49,7 @@ PANEL_RF_ATTENUATORS_BASE::PANEL_RF_ATTENUATORS_BASE( wxWindow* parent, wxWindow
 
 	m_attenuationLabel = new wxStaticText( sbSizerAttPrms->GetStaticBox(), wxID_ANY, _("Attenuation (a):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_attenuationLabel->Wrap( -1 );
-	fgSizerAttPrms->Add( m_attenuationLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	fgSizerAttPrms->Add( m_attenuationLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_AttValueCtrl = new wxTextCtrl( sbSizerAttPrms->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_AttValueCtrl->SetMinSize( wxSize( 100,-1 ) );
@@ -62,7 +62,7 @@ PANEL_RF_ATTENUATORS_BASE::PANEL_RF_ATTENUATORS_BASE( wxWindow* parent, wxWindow
 
 	m_attenuationZinLabel = new wxStaticText( sbSizerAttPrms->GetStaticBox(), wxID_ANY, _("Zin:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_attenuationZinLabel->Wrap( -1 );
-	fgSizerAttPrms->Add( m_attenuationZinLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	fgSizerAttPrms->Add( m_attenuationZinLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_ZinValueCtrl = new wxTextCtrl( sbSizerAttPrms->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_ZinValueCtrl->SetMinSize( wxSize( 100,-1 ) );
@@ -75,7 +75,7 @@ PANEL_RF_ATTENUATORS_BASE::PANEL_RF_ATTENUATORS_BASE( wxWindow* parent, wxWindow
 
 	m_ZoutLabel = new wxStaticText( sbSizerAttPrms->GetStaticBox(), wxID_ANY, _("Zout:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ZoutLabel->Wrap( -1 );
-	fgSizerAttPrms->Add( m_ZoutLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	fgSizerAttPrms->Add( m_ZoutLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_ZoutValueCtrl = new wxTextCtrl( sbSizerAttPrms->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_ZoutValueCtrl->SetMinSize( wxSize( 100,-1 ) );
@@ -87,7 +87,7 @@ PANEL_RF_ATTENUATORS_BASE::PANEL_RF_ATTENUATORS_BASE( wxWindow* parent, wxWindow
 	fgSizerAttPrms->Add( m_attZoutUnit, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	sbSizerAttPrms->Add( fgSizerAttPrms, 0, wxEXPAND|wxBOTTOM, 5 );
+	sbSizerAttPrms->Add( fgSizerAttPrms, 0, wxALL|wxEXPAND, 5 );
 
 
 	bMiddleSizerAtt->Add( sbSizerAttPrms, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
@@ -117,7 +117,7 @@ PANEL_RF_ATTENUATORS_BASE::PANEL_RF_ATTENUATORS_BASE( wxWindow* parent, wxWindow
 
 	m_attenuatorR1Label = new wxStaticText( sbSizerAttValues->GetStaticBox(), wxID_ANY, _("R1:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_attenuatorR1Label->Wrap( -1 );
-	fgSizerAttResults->Add( m_attenuatorR1Label, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	fgSizerAttResults->Add( m_attenuatorR1Label, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_Att_R1_Value = new wxTextCtrl( sbSizerAttValues->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerAttResults->Add( m_Att_R1_Value, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
@@ -128,7 +128,7 @@ PANEL_RF_ATTENUATORS_BASE::PANEL_RF_ATTENUATORS_BASE( wxWindow* parent, wxWindow
 
 	m_attenuatorR2Label = new wxStaticText( sbSizerAttValues->GetStaticBox(), wxID_ANY, _("R2:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_attenuatorR2Label->Wrap( -1 );
-	fgSizerAttResults->Add( m_attenuatorR2Label, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	fgSizerAttResults->Add( m_attenuatorR2Label, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_Att_R2_Value = new wxTextCtrl( sbSizerAttValues->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerAttResults->Add( m_Att_R2_Value, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
@@ -139,7 +139,7 @@ PANEL_RF_ATTENUATORS_BASE::PANEL_RF_ATTENUATORS_BASE( wxWindow* parent, wxWindow
 
 	m_attenuatorR3Label = new wxStaticText( sbSizerAttValues->GetStaticBox(), wxID_ANY, _("R3:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_attenuatorR3Label->Wrap( -1 );
-	fgSizerAttResults->Add( m_attenuatorR3Label, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	fgSizerAttResults->Add( m_attenuatorR3Label, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_Att_R3_Value = new wxTextCtrl( sbSizerAttValues->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerAttResults->Add( m_Att_R3_Value, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
@@ -149,7 +149,7 @@ PANEL_RF_ATTENUATORS_BASE::PANEL_RF_ATTENUATORS_BASE( wxWindow* parent, wxWindow
 	fgSizerAttResults->Add( m_attR3Unit, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	sbSizerAttValues->Add( fgSizerAttResults, 0, wxEXPAND|wxBOTTOM, 5 );
+	sbSizerAttValues->Add( fgSizerAttResults, 0, wxALL|wxEXPAND, 5 );
 
 
 	bMiddleSizerAtt->Add( sbSizerAttValues, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
@@ -185,10 +185,10 @@ PANEL_RF_ATTENUATORS_BASE::PANEL_RF_ATTENUATORS_BASE( wxWindow* parent, wxWindow
 	m_panelAttFormula = new HTML_WINDOW( sbRightSizerFormula->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
 	m_panelAttFormula->SetMinSize( wxSize( 200,-1 ) );
 
-	sbRightSizerFormula->Add( m_panelAttFormula, 1, wxEXPAND|wxBOTTOM, 5 );
+	sbRightSizerFormula->Add( m_panelAttFormula, 1, wxALL|wxEXPAND, 5 );
 
 
-	bSizer7->Add( sbRightSizerFormula, 1, wxEXPAND|wxALL, 5 );
+	bSizer7->Add( sbRightSizerFormula, 1, wxALL|wxEXPAND, 5 );
 
 
 	bSizerAtt->Add( bSizer7, 1, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );

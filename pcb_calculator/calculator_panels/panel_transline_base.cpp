@@ -58,7 +58,7 @@ PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, con
 	bSizer441->Add( m_Value_EpsilonR, 1, wxEXPAND|wxLEFT, 5 );
 
 	m_button_EpsilonR = new wxButton( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, _("..."), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer441->Add( m_button_EpsilonR, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	bSizer441->Add( m_button_EpsilonR, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	fgSizerSubstPrms->Add( bSizer441, 1, wxEXPAND, 5 );
@@ -77,7 +77,7 @@ PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, con
 	bSizer442->Add( m_Value_TanD, 1, wxEXPAND|wxLEFT, 5 );
 
 	m_button_TanD = new wxButton( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, _("..."), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer442->Add( m_button_TanD, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	bSizer442->Add( m_button_TanD, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	fgSizerSubstPrms->Add( bSizer442, 1, wxEXPAND, 5 );
@@ -98,7 +98,7 @@ PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, con
 	bSizer443->Add( m_Value_Rho, 1, wxEXPAND|wxLEFT, 5 );
 
 	m_button_Rho = new wxButton( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, _("..."), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
-	bSizer443->Add( m_button_Rho, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	bSizer443->Add( m_button_Rho, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	fgSizerSubstPrms->Add( bSizer443, 1, wxEXPAND, 5 );
@@ -111,75 +111,75 @@ PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, con
 	fgSizerSubstPrms->Add( m_substrate_prm4_label, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_Substrate_prm4_Value = new wxTextCtrl( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerSubstPrms->Add( m_Substrate_prm4_Value, 0, wxRIGHT|wxLEFT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerSubstPrms->Add( m_Substrate_prm4_Value, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxArrayString m_SubsPrm4_choiceUnitChoices;
 	m_SubsPrm4_choiceUnit = new UNIT_SELECTOR_LEN( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_SubsPrm4_choiceUnitChoices, 0 );
 	m_SubsPrm4_choiceUnit->SetSelection( 0 );
-	fgSizerSubstPrms->Add( m_SubsPrm4_choiceUnit, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerSubstPrms->Add( m_SubsPrm4_choiceUnit, 0, wxEXPAND, 5 );
 
 	m_substrate_prm5_label = new wxStaticText( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, _("H_t:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_substrate_prm5_label->Wrap( -1 );
 	fgSizerSubstPrms->Add( m_substrate_prm5_label, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_Substrate_prm5_Value = new wxTextCtrl( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerSubstPrms->Add( m_Substrate_prm5_Value, 0, wxRIGHT|wxLEFT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerSubstPrms->Add( m_Substrate_prm5_Value, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxArrayString m_SubsPrm5_choiceUnitChoices;
 	m_SubsPrm5_choiceUnit = new UNIT_SELECTOR_LEN( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_SubsPrm5_choiceUnitChoices, 0 );
 	m_SubsPrm5_choiceUnit->SetSelection( 0 );
-	fgSizerSubstPrms->Add( m_SubsPrm5_choiceUnit, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerSubstPrms->Add( m_SubsPrm5_choiceUnit, 0, wxEXPAND, 5 );
 
 	m_substrate_prm6_label = new wxStaticText( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, _("T:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_substrate_prm6_label->Wrap( -1 );
 	fgSizerSubstPrms->Add( m_substrate_prm6_label, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_Substrate_prm6_Value = new wxTextCtrl( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerSubstPrms->Add( m_Substrate_prm6_Value, 0, wxRIGHT|wxLEFT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerSubstPrms->Add( m_Substrate_prm6_Value, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxArrayString m_SubsPrm6_choiceUnitChoices;
 	m_SubsPrm6_choiceUnit = new UNIT_SELECTOR_LEN( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_SubsPrm6_choiceUnitChoices, 0 );
 	m_SubsPrm6_choiceUnit->SetSelection( 0 );
-	fgSizerSubstPrms->Add( m_SubsPrm6_choiceUnit, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerSubstPrms->Add( m_SubsPrm6_choiceUnit, 0, wxEXPAND, 5 );
 
 	m_substrate_prm7_label = new wxStaticText( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, _("Rough:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_substrate_prm7_label->Wrap( -1 );
 	fgSizerSubstPrms->Add( m_substrate_prm7_label, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_Substrate_prm7_Value = new wxTextCtrl( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerSubstPrms->Add( m_Substrate_prm7_Value, 0, wxRIGHT|wxLEFT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerSubstPrms->Add( m_Substrate_prm7_Value, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxArrayString m_SubsPrm7_choiceUnitChoices;
 	m_SubsPrm7_choiceUnit = new UNIT_SELECTOR_LEN( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_SubsPrm7_choiceUnitChoices, 0 );
 	m_SubsPrm7_choiceUnit->SetSelection( 0 );
-	fgSizerSubstPrms->Add( m_SubsPrm7_choiceUnit, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerSubstPrms->Add( m_SubsPrm7_choiceUnit, 0, wxEXPAND, 5 );
 
 	m_substrate_prm8_label = new wxStaticText( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, _("Insulator mu:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_substrate_prm8_label->Wrap( -1 );
 	fgSizerSubstPrms->Add( m_substrate_prm8_label, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_Substrate_prm8_Value = new wxTextCtrl( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerSubstPrms->Add( m_Substrate_prm8_Value, 0, wxEXPAND|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerSubstPrms->Add( m_Substrate_prm8_Value, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxArrayString m_SubsPrm8_choiceUnitChoices;
 	m_SubsPrm8_choiceUnit = new UNIT_SELECTOR_LEN( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_SubsPrm8_choiceUnitChoices, 0 );
 	m_SubsPrm8_choiceUnit->SetSelection( 0 );
-	fgSizerSubstPrms->Add( m_SubsPrm8_choiceUnit, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerSubstPrms->Add( m_SubsPrm8_choiceUnit, 0, wxEXPAND, 5 );
 
 	m_substrate_prm9_label = new wxStaticText( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, _("Conductor mu:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_substrate_prm9_label->Wrap( -1 );
 	fgSizerSubstPrms->Add( m_substrate_prm9_label, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_Substrate_prm9_Value = new wxTextCtrl( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerSubstPrms->Add( m_Substrate_prm9_Value, 0, wxRIGHT|wxLEFT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerSubstPrms->Add( m_Substrate_prm9_Value, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxArrayString m_SubsPrm9_choiceUnitChoices;
 	m_SubsPrm9_choiceUnit = new UNIT_SELECTOR_LEN( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_SubsPrm9_choiceUnitChoices, 0 );
 	m_SubsPrm9_choiceUnit->SetSelection( 0 );
-	fgSizerSubstPrms->Add( m_SubsPrm9_choiceUnit, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerSubstPrms->Add( m_SubsPrm9_choiceUnit, 0, wxEXPAND, 5 );
 
 
-	sbSubstrateBoxSizer->Add( fgSizerSubstPrms, 1, wxEXPAND|wxBOTTOM, 5 );
+	sbSubstrateBoxSizer->Add( fgSizerSubstPrms, 1, wxALL|wxEXPAND, 5 );
 
 
 	bMiddleSizer->Add( sbSubstrateBoxSizer, 0, wxEXPAND|wxBOTTOM, 5 );
@@ -206,7 +206,7 @@ PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, con
 	fgSizeCmpPrms->Add( m_choiceUnit_Frequency, 0, wxEXPAND, 5 );
 
 
-	sbCmpPrmsSizer->Add( fgSizeCmpPrms, 0, wxEXPAND|wxBOTTOM, 5 );
+	sbCmpPrmsSizer->Add( fgSizeCmpPrms, 0, wxALL|wxEXPAND, 5 );
 
 
 	bMiddleSizer->Add( sbCmpPrmsSizer, 0, wxEXPAND|wxTOP, 5 );
@@ -243,12 +243,12 @@ PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, con
 	fgSizerPhysPrms->Add( m_phys_prm1_label, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_Phys_prm1_Value = new wxTextCtrl( btranslineRightSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerPhysPrms->Add( m_Phys_prm1_Value, 0, wxRIGHT|wxLEFT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerPhysPrms->Add( m_Phys_prm1_Value, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxArrayString m_choiceUnit_Param1Choices;
 	m_choiceUnit_Param1 = new UNIT_SELECTOR_LEN( btranslineRightSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceUnit_Param1Choices, 0 );
 	m_choiceUnit_Param1->SetSelection( 0 );
-	fgSizerPhysPrms->Add( m_choiceUnit_Param1, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerPhysPrms->Add( m_choiceUnit_Param1, 0, wxEXPAND, 5 );
 
 	m_radioBtnPrm1 = new wxRadioButton( btranslineRightSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	fgSizerPhysPrms->Add( m_radioBtnPrm1, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -258,12 +258,12 @@ PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, con
 	fgSizerPhysPrms->Add( m_phys_prm2_label, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_Phys_prm2_Value = new wxTextCtrl( btranslineRightSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerPhysPrms->Add( m_Phys_prm2_Value, 0, wxRIGHT|wxLEFT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerPhysPrms->Add( m_Phys_prm2_Value, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxArrayString m_choiceUnit_Param2Choices;
 	m_choiceUnit_Param2 = new UNIT_SELECTOR_LEN( btranslineRightSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceUnit_Param2Choices, 0 );
 	m_choiceUnit_Param2->SetSelection( 0 );
-	fgSizerPhysPrms->Add( m_choiceUnit_Param2, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerPhysPrms->Add( m_choiceUnit_Param2, 0, wxEXPAND, 5 );
 
 	m_radioBtnPrm2 = new wxRadioButton( btranslineRightSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerPhysPrms->Add( m_radioBtnPrm2, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -273,18 +273,18 @@ PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, con
 	fgSizerPhysPrms->Add( m_phys_prm3_label, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_Phys_prm3_Value = new wxTextCtrl( btranslineRightSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerPhysPrms->Add( m_Phys_prm3_Value, 0, wxRIGHT|wxLEFT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerPhysPrms->Add( m_Phys_prm3_Value, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxArrayString m_choiceUnit_Param3Choices;
 	m_choiceUnit_Param3 = new UNIT_SELECTOR_LEN( btranslineRightSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceUnit_Param3Choices, 0 );
 	m_choiceUnit_Param3->SetSelection( 0 );
-	fgSizerPhysPrms->Add( m_choiceUnit_Param3, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerPhysPrms->Add( m_choiceUnit_Param3, 0, wxEXPAND, 5 );
 
 
 	fgSizerPhysPrms->Add( 0, 0, 0, 0, 5 );
 
 
-	btranslineRightSizer->Add( fgSizerPhysPrms, 0, wxEXPAND|wxBOTTOM, 5 );
+	btranslineRightSizer->Add( fgSizerPhysPrms, 0, wxALL|wxEXPAND, 5 );
 
 
 	bSizer11->Add( btranslineRightSizer, 0, wxALL|wxEXPAND, 5 );
@@ -330,39 +330,39 @@ PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, con
 	fgSizerResults->Add( m_elec_prm1_label, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_Elec_prm1_Value = new wxTextCtrl( sbElectricalResultsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerResults->Add( m_Elec_prm1_Value, 0, wxRIGHT|wxLEFT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerResults->Add( m_Elec_prm1_Value, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxArrayString m_choiceUnit_ElecPrm1Choices;
 	m_choiceUnit_ElecPrm1 = new UNIT_SELECTOR_RESISTOR( sbElectricalResultsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceUnit_ElecPrm1Choices, 0 );
 	m_choiceUnit_ElecPrm1->SetSelection( 0 );
-	fgSizerResults->Add( m_choiceUnit_ElecPrm1, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerResults->Add( m_choiceUnit_ElecPrm1, 0, wxEXPAND, 5 );
 
 	m_elec_prm2_label = new wxStaticText( sbElectricalResultsSizer->GetStaticBox(), wxID_ANY, _("Z:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_elec_prm2_label->Wrap( -1 );
 	fgSizerResults->Add( m_elec_prm2_label, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_Elec_prm2_Value = new wxTextCtrl( sbElectricalResultsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerResults->Add( m_Elec_prm2_Value, 0, wxEXPAND|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerResults->Add( m_Elec_prm2_Value, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxArrayString m_choiceUnit_ElecPrm2Choices;
 	m_choiceUnit_ElecPrm2 = new UNIT_SELECTOR_RESISTOR( sbElectricalResultsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceUnit_ElecPrm2Choices, 0 );
 	m_choiceUnit_ElecPrm2->SetSelection( 0 );
-	fgSizerResults->Add( m_choiceUnit_ElecPrm2, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerResults->Add( m_choiceUnit_ElecPrm2, 0, wxEXPAND, 5 );
 
 	m_elec_prm3_label = new wxStaticText( sbElectricalResultsSizer->GetStaticBox(), wxID_ANY, _("Angle:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_elec_prm3_label->Wrap( -1 );
 	fgSizerResults->Add( m_elec_prm3_label, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_Elec_prm3_Value = new wxTextCtrl( sbElectricalResultsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerResults->Add( m_Elec_prm3_Value, 0, wxEXPAND|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerResults->Add( m_Elec_prm3_Value, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxArrayString m_choiceUnit_ElecPrm3Choices;
 	m_choiceUnit_ElecPrm3 = new UNIT_SELECTOR_ANGLE( sbElectricalResultsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceUnit_ElecPrm3Choices, 0 );
 	m_choiceUnit_ElecPrm3->SetSelection( 0 );
-	fgSizerResults->Add( m_choiceUnit_ElecPrm3, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerResults->Add( m_choiceUnit_ElecPrm3, 0, 0, 5 );
 
 
-	sbElectricalResultsSizer->Add( fgSizerResults, 0, wxEXPAND|wxBOTTOM, 5 );
+	sbElectricalResultsSizer->Add( fgSizerResults, 0, wxALL|wxEXPAND, 5 );
 
 
 	bSizer11->Add( sbElectricalResultsSizer, 0, wxEXPAND|wxALL, 5 );
@@ -378,7 +378,7 @@ PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, con
 
 	m_left_message1 = new wxStaticText( sbMessagesSizer->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_left_message1->Wrap( -1 );
-	fgSizerTranslResults->Add( m_left_message1, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerTranslResults->Add( m_left_message1, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_Message1 = new wxStaticText( sbMessagesSizer->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Message1->Wrap( -1 );
@@ -386,7 +386,7 @@ PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, con
 
 	m_left_message2 = new wxStaticText( sbMessagesSizer->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_left_message2->Wrap( -1 );
-	fgSizerTranslResults->Add( m_left_message2, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerTranslResults->Add( m_left_message2, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_Message2 = new wxStaticText( sbMessagesSizer->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Message2->Wrap( -1 );
@@ -394,7 +394,7 @@ PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, con
 
 	m_left_message3 = new wxStaticText( sbMessagesSizer->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_left_message3->Wrap( -1 );
-	fgSizerTranslResults->Add( m_left_message3, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerTranslResults->Add( m_left_message3, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_Message3 = new wxStaticText( sbMessagesSizer->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Message3->Wrap( -1 );
@@ -402,7 +402,7 @@ PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, con
 
 	m_left_message4 = new wxStaticText( sbMessagesSizer->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_left_message4->Wrap( -1 );
-	fgSizerTranslResults->Add( m_left_message4, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerTranslResults->Add( m_left_message4, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_Message4 = new wxStaticText( sbMessagesSizer->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Message4->Wrap( -1 );
@@ -410,7 +410,7 @@ PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, con
 
 	m_left_message5 = new wxStaticText( sbMessagesSizer->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_left_message5->Wrap( -1 );
-	fgSizerTranslResults->Add( m_left_message5, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizerTranslResults->Add( m_left_message5, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_Message5 = new wxStaticText( sbMessagesSizer->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Message5->Wrap( -1 );
@@ -418,7 +418,7 @@ PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, con
 
 	m_left_message6 = new wxStaticText( sbMessagesSizer->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_left_message6->Wrap( -1 );
-	fgSizerTranslResults->Add( m_left_message6, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerTranslResults->Add( m_left_message6, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_Message6 = new wxStaticText( sbMessagesSizer->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Message6->Wrap( -1 );
@@ -426,7 +426,7 @@ PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, con
 
 	m_left_message7 = new wxStaticText( sbMessagesSizer->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_left_message7->Wrap( -1 );
-	fgSizerTranslResults->Add( m_left_message7, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerTranslResults->Add( m_left_message7, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_Message7 = new wxStaticText( sbMessagesSizer->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Message7->Wrap( -1 );
@@ -434,14 +434,14 @@ PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, con
 
 	m_left_message8 = new wxStaticText( sbMessagesSizer->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_left_message8->Wrap( -1 );
-	fgSizerTranslResults->Add( m_left_message8, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	fgSizerTranslResults->Add( m_left_message8, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_Message8 = new wxStaticText( sbMessagesSizer->GetStaticBox(), wxID_ANY, _("dummy"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Message8->Wrap( -1 );
 	fgSizerTranslResults->Add( m_Message8, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
-	sbMessagesSizer->Add( fgSizerTranslResults, 1, wxEXPAND|wxBOTTOM, 5 );
+	sbMessagesSizer->Add( fgSizerTranslResults, 1, wxALL|wxEXPAND, 5 );
 
 
 	bSizer11->Add( sbMessagesSizer, 0, wxEXPAND|wxALL, 5 );
