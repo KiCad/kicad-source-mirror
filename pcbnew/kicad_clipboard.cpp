@@ -94,6 +94,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
         Format( static_cast<BOARD_ITEM*>( &newFootprint ) );
 
         newFootprint.SetParent( nullptr );
+        newFootprint.SetParentGroup( nullptr );
     }
     else if( isFootprintEditor )
     {
@@ -125,6 +126,10 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
             // If it is only a footprint, clear the nets from the pads
             if( PAD* pad = dyn_cast<PAD*>( clone ) )
                pad->SetNetCode( 0 );
+
+           // Don't copy group membership information for the 1st level objects being copied
+           // since the group they belong to isn't being copied.
+           clone->SetParentGroup( nullptr );
 
             // Add the pad to the new footprint before moving to ensure the local coords are
             // correct
@@ -161,7 +166,10 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
 
             // Now delete items, duplicated but not added:
             for( BOARD_ITEM* skp_item : skipped_items )
+            {
+                skp_item->SetParentGroup( nullptr );
                 delete skp_item;
+            }
         }
 
         // Set the new relative internal local coordinates of copied items
@@ -248,6 +256,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
                                                                        } );
                 }
 
+                copy->SetParentGroup( nullptr );
                 delete copy;
             }
         }
