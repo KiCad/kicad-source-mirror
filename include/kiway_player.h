@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2017-2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,12 +68,6 @@ public:
     KIWAY_PLAYER( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
                   const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
                   long aStyle, const wxString& aFrameName, const EDA_IU_SCALE& aIuScale );
-
-    /// Don't use this one, only wxformbuilder uses it, and it must be augmented with
-    /// a SetKiway() early in derived constructor.
-    KIWAY_PLAYER( wxWindow* aParent, wxWindowID aId, const wxString& aTitle,
-                  const wxPoint& aPos, const wxSize& aSize, long aStyle,
-                  const wxString& aWdoName = wxFrameNameStr );
 
     ~KIWAY_PLAYER() throw();
 
@@ -181,6 +175,16 @@ public:
      */
     virtual void ExecuteRemoteCommand( const char* cmdline ){}
 
+
+private:
+    friend class BM2CMP_FRAME_BASE;
+    friend class SIMULATOR_FRAME_BASE;
+
+    /// Don't use this one, only wxformbuilder uses it, and it must be augmented with correcting
+    /// m_ident and calling a SetKiway() early in derived constructor.
+    KIWAY_PLAYER( wxWindow* aParent, wxWindowID aId, const wxString& aTitle,
+                  const wxPoint& aPos, const wxSize& aSize, long aStyle,
+                  const wxString& aWdoName = wxFrameNameStr );
 
 protected:
 

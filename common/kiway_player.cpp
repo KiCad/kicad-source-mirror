@@ -55,6 +55,12 @@ KIWAY_PLAYER::KIWAY_PLAYER( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType
 }
 
 
+// Don't use this one; it's only for wxFormBuilder, and it must be augmented with code to
+// correct the m_ident and set the m_kiway early in derived constructor.
+//
+// Because of its inherent danger, it's also declared private and requires friend-class
+// declarations for each usage.
+//
 KIWAY_PLAYER::KIWAY_PLAYER( wxWindow* aParent, wxWindowID aId, const wxString& aTitle,
                             const wxPoint& aPos, const wxSize& aSize, long aStyle,
                             const wxString& aWdoName ) :

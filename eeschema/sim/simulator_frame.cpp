@@ -473,6 +473,7 @@ SIMULATOR_FRAME::SIMULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_simFinished( false ),
         m_workbookModified( false )
 {
+    m_ident = FRAME_SIMULATOR;      // Initialized to wxID_ANY by wxFormBuilder
     SetKiway( this, aKiway );
 
     m_schematicFrame = (SCH_EDIT_FRAME*) Kiway().Player( FRAME_SCH, false );

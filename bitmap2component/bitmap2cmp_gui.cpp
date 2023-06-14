@@ -148,6 +148,7 @@ END_EVENT_TABLE()
 BM2CMP_FRAME::BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     BM2CMP_FRAME_BASE( aParent )
 {
+    m_ident = FRAME_BM2CMP;      // Initialized to wxID_ANY by wxFormBuilder
     SetKiway( this, aKiway );
 
     for( wxString unit : { _( "mm" ), _( "Inch" ), _( "DPI" ) } )
