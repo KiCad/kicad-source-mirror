@@ -834,6 +834,8 @@ public:
 
     wxTreeCtrl* GetNetNavigator() { return m_netNavigator; }
 
+    const SCH_ITEM* GetSelectedNetNavigatorItem() const;
+
     /**
      * @return the name of the wxAuiPaneInfo managing the Hierarchy Navigator panel
      */

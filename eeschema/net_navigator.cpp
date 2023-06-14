@@ -24,6 +24,7 @@
 #include <tool/tool_manager.h>
 #include <kiface_base.h>
 #include <sch_edit_frame.h>
+#include <sch_bus_entry.h>
 #include <sch_line.h>
 #include <sch_junction.h>
 #include <sch_sheet_pin.h>
@@ -80,7 +81,7 @@ static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
         SCH_SYMBOL* symbol = pin->GetParentSymbol();
         wxCHECK( symbol, retv );
 
-        retv.Printf( _( "Symbol %s pin %s" ), symbol->GetRef( &aSheetPath, true ),
+        retv.Printf( _( "Symbol '%s' pin '%s'" ), symbol->GetRef( &aSheetPath, true ),
                      pin->GetNumber() );
         break;
     }
@@ -92,7 +93,7 @@ static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
         SCH_SHEET* sheet = pin->GetParent();
         wxCHECK( sheet, retv );
 
-        retv.Printf( _( "Sheet %s pin %s" ), sheet->GetName(), pin->GetText() );
+        retv.Printf( _( "Sheet '%s' pin '%s'" ), sheet->GetName(), pin->GetText() );
         break;
     }
     case SCH_LABEL_T:
@@ -100,7 +101,7 @@ static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
         const SCH_LABEL* label = static_cast<const SCH_LABEL*>( aItem );
         wxCHECK( label, retv );
 
-        retv.Printf( _( "Label %s at %s, %s" ), label->GetText(),
+        retv.Printf( _( "Label '%s' at %s, %s" ), label->GetText(),
                      aUnitsProvider->MessageTextFromValue( label->GetPosition().x ),
                      aUnitsProvider->MessageTextFromValue( label->GetPosition().y ) );
         break;
@@ -110,7 +111,7 @@ static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
         const SCH_GLOBALLABEL* label = static_cast<const SCH_GLOBALLABEL*>( aItem );
         wxCHECK( label, retv );
 
-        retv.Printf( _( "Global label %s at %s, %s" ), label->GetText(),
+        retv.Printf( _( "Global label '%s' at %s, %s" ), label->GetText(),
                      aUnitsProvider->MessageTextFromValue( label->GetPosition().x ),
                      aUnitsProvider->MessageTextFromValue( label->GetPosition().y ) );
         break;
@@ -120,7 +121,7 @@ static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
         const SCH_HIERLABEL* label = static_cast<const SCH_HIERLABEL*>( aItem );
         wxCHECK( label, retv );
 
-        retv.Printf( _( "Hierarchical label %s at %s, %s" ), label->GetText(),
+        retv.Printf( _( "Hierarchical label '%s' at %s, %s" ), label->GetText(),
                      aUnitsProvider->MessageTextFromValue( label->GetPosition().x ),
                      aUnitsProvider->MessageTextFromValue( label->GetPosition().y ) );
         break;
@@ -133,6 +134,30 @@ static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
         retv.Printf( _( "Junction at %s, %s" ),
                      aUnitsProvider->MessageTextFromValue( junction->GetPosition().x ),
                      aUnitsProvider->MessageTextFromValue( junction->GetPosition().y ) );
+        break;
+    }
+    case SCH_BUS_WIRE_ENTRY_T:
+    {
+        const SCH_BUS_WIRE_ENTRY* entry = static_cast<const SCH_BUS_WIRE_ENTRY*>( aItem );
+        wxCHECK( entry, retv );
+
+        retv.Printf( _( "Bus to wire entry from %s, %s to %s, %s" ),
+                     aUnitsProvider->MessageTextFromValue( entry->GetPosition().x ),
+                     aUnitsProvider->MessageTextFromValue( entry->GetPosition().y ),
+                     aUnitsProvider->MessageTextFromValue( entry->GetEnd().x ),
+                     aUnitsProvider->MessageTextFromValue( entry->GetEnd().y ) );
+        break;
+    }
+    case SCH_BUS_BUS_ENTRY_T:
+    {
+        const SCH_BUS_BUS_ENTRY* entry = static_cast<const SCH_BUS_BUS_ENTRY*>( aItem );
+        wxCHECK( entry, retv );
+
+        retv.Printf( _( "Bus to bus entry from %s, %s to %s, %s" ),
+                     aUnitsProvider->MessageTextFromValue( entry->GetPosition().x ),
+                     aUnitsProvider->MessageTextFromValue( entry->GetPosition().y ),
+                     aUnitsProvider->MessageTextFromValue( entry->GetEnd().x ),
+                     aUnitsProvider->MessageTextFromValue( entry->GetEnd().y ) );
         break;
     }
     default:
@@ -164,7 +189,10 @@ void SCH_EDIT_FRAME::MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemI
         NET_NAVIGATOR_ITEM_DATA* itemData = nullptr;
         SCH_SHEET_PATH sheetPath = subGraph->GetSheet();
 
-        wxCHECK2( sheetPath.Last(), continue );
+        wxCHECK2( subGraph && sheetPath.Last(), continue );
+
+        if( subGraph->GetItems().empty() )
+            continue;
 
         itemData = new NET_NAVIGATOR_ITEM_DATA( sheetPath, nullptr );
 
@@ -224,7 +252,7 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
 
             wxTreeItemId rootId = m_netNavigator->AddRoot( m_highlightedConn, 0 );
 
-            MakeNetNavigatorNode( m_highlightedConn, rootId );
+            MakeNetNavigatorNode( m_highlightedConn, rootId, aSelection );
         }
         else
         {
@@ -295,6 +323,25 @@ void SCH_EDIT_FRAME::SelectNetNavigatorItem( const NET_NAVIGATOR_ITEM_DATA* aSel
             sheetId = m_netNavigator->GetNextSibling( sheetId );
         }
     }
+}
+
+
+const SCH_ITEM* SCH_EDIT_FRAME::GetSelectedNetNavigatorItem() const
+{
+    if( m_netNavigator )
+        return nullptr;
+
+    wxTreeItemId id = m_netNavigator->GetSelection();
+
+    if( !id.IsOk() )
+        return nullptr;
+
+    NET_NAVIGATOR_ITEM_DATA* itemData =
+            dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>( m_netNavigator->GetItemData( id ) );
+
+    wxCHECK( itemData, nullptr );
+
+    return itemData->GetItem();
 }
 
 
