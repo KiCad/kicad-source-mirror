@@ -87,8 +87,7 @@ void GL_CONTEXT_MANAGER::DeleteAll()
 
 void GL_CONTEXT_MANAGER::LockCtx( wxGLContext* aContext, wxGLCanvas* aCanvas )
 {
-    assert( aContext );
-    wxCHECK( aContext && ( aCanvas || m_glContexts.count( aContext ) > 0 ), /* void */ );
+    wxCHECK( aContext && m_glContexts.count( aContext ) > 0, /* void */ );
 
     m_glCtxMutex.lock();
     wxGLCanvas* canvas = aCanvas ? aCanvas : m_glContexts.at( aContext );
@@ -107,7 +106,6 @@ void GL_CONTEXT_MANAGER::LockCtx( wxGLContext* aContext, wxGLCanvas* aCanvas )
 
 void GL_CONTEXT_MANAGER::UnlockCtx( wxGLContext* aContext )
 {
-    assert( aContext );
     wxCHECK( aContext && m_glContexts.count( aContext ) > 0, /* void */ );
 
     if( m_glCtx == aContext )
