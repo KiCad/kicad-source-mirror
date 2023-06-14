@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -184,6 +184,18 @@ public:
     int GetRedoCommandCount() const override
     {
         return m_redoList.size();
+    }
+
+    // Cvpcb does not handle a undo/redo description (it does not use a UNDO_REDO_CONTAINER,
+    // but a CVPCB_UNDO_REDO_LIST to store the undo/redo commands)
+    wxString GetUndoActionDescription() const override
+    {
+        return wxEmptyString;
+    }
+
+    wxString GetRedoActionDescription() const override
+    {
+        return wxEmptyString;
     }
 
     /**
