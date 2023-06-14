@@ -113,6 +113,7 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_plotNumber( 0 ),
         m_simFinished( false )
 {
+    m_ident = FRAME_BM2CMP;      // Initialized to wxID_ANY by wxFormBuilder
     SetKiway( this, aKiway );
     m_signalsIconColorList = nullptr;
 

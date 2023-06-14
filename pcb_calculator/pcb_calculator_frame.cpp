@@ -47,15 +47,14 @@
 
 
 PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
-    KIWAY_PLAYER( aParent, wxID_ANY, _( "Calculator Tools" ), wxDefaultPosition, wxSize( 646, 361 ),
+    KIWAY_PLAYER( aKiway, aParent, FRAME_CALC, _( "Calculator Tools" ), wxDefaultPosition,
+                  wxDefaultSize,
                   wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxFULL_REPAINT_ON_RESIZE|wxTAB_TRAVERSAL,
-                  wxT( "calculator_tools" ) ),
+                  wxT( "calculator_tools" ), unityScale ),
     m_lastNotebookPage( -1 )
 {
     SHAPE_POLY_SET dummy;   // A ugly trick to force the linker to include
                             // some methods in code and avoid link errors
-
-    SetKiway( this, aKiway );
 
     SetSizeHints( wxDefaultSize, wxDefaultSize );
 
