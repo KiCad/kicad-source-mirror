@@ -24,22 +24,22 @@
  */
 
 #include "confirm.h"
-#include "sim_panel_base.h"
+#include "sim_plot_panel_base.h"
 
 #include "simulator_frame.h"
 #include "ngspice_circuit_model.h"
 
 
-SIM_PANEL_BASE::SIM_PANEL_BASE() :
+SIM_PLOT_PANEL_BASE::SIM_PLOT_PANEL_BASE() :
         m_simCommand( wxEmptyString ),
         m_simOptions( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS )
 {
 }
 
 
-SIM_PANEL_BASE::SIM_PANEL_BASE( const wxString& aCommand, int aOptions, wxWindow* parent,
-                                wxWindowID id, const wxPoint& pos, const wxSize& size, long style,
-                                const wxString& name ) :
+SIM_PLOT_PANEL_BASE::SIM_PLOT_PANEL_BASE( const wxString& aCommand, int aOptions, wxWindow* parent,
+                                          wxWindowID id, const wxPoint& pos, const wxSize& size,
+                                          long style, const wxString& name ) :
         wxWindow( parent, id, pos, size, style, name ),
         m_simCommand( aCommand ),
         m_simOptions( aOptions )
@@ -47,12 +47,12 @@ SIM_PANEL_BASE::SIM_PANEL_BASE( const wxString& aCommand, int aOptions, wxWindow
 }
 
 
-SIM_PANEL_BASE::~SIM_PANEL_BASE()
+SIM_PLOT_PANEL_BASE::~SIM_PLOT_PANEL_BASE()
 {
 }
 
 
-bool SIM_PANEL_BASE::IsPlottable( SIM_TYPE aSimType )
+bool SIM_PLOT_PANEL_BASE::IsPlottable( SIM_TYPE aSimType )
 {
     switch( aSimType )
     {
@@ -67,7 +67,7 @@ bool SIM_PANEL_BASE::IsPlottable( SIM_TYPE aSimType )
 }
 
 
-SIM_TYPE SIM_PANEL_BASE::GetType() const
+SIM_TYPE SIM_PLOT_PANEL_BASE::GetType() const
 {
     return NGSPICE_CIRCUIT_MODEL::CommandToSimType( m_simCommand );
 }
@@ -76,7 +76,7 @@ SIM_TYPE SIM_PANEL_BASE::GetType() const
 SIM_NOPLOT_PANEL::SIM_NOPLOT_PANEL( const wxString& aCommand, int aOptions, wxWindow* parent,
                                     wxWindowID id, const wxPoint& pos, const wxSize& size,
                                     long style, const wxString& name ) :
-        SIM_PANEL_BASE( aCommand, aOptions, parent, id, pos, size, style, name )
+        SIM_PLOT_PANEL_BASE( aCommand, aOptions, parent, id, pos, size, style, name )
 {
     m_sizer = new wxBoxSizer( wxVERTICAL );
     m_sizer->Add( 0, 1, 1, wxEXPAND, 5 );

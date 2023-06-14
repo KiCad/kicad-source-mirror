@@ -64,7 +64,7 @@ int SIMULATOR_CONTROL::NewPlot( const TOOL_EVENT& aEvent )
 {
     SIM_TYPE type = m_circuitModel->GetSimType();
 
-    if( SIM_PANEL_BASE::IsPlottable( type ) )
+    if( SIM_PLOT_PANEL_BASE::IsPlottable( type ) )
     {
         m_simulatorFrame->NewPlotPanel( m_circuitModel->GetSimCommand(),
                                         m_circuitModel->GetSimOptions() );

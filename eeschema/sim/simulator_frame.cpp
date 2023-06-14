@@ -627,7 +627,7 @@ void SIMULATOR_FRAME::ShowChangedLanguage()
 
     for( int ii = 0; ii < (int) m_plotNotebook->GetPageCount(); ++ii )
     {
-        SIM_PANEL_BASE* plot = dynamic_cast<SIM_PLOT_PANEL*>( m_plotNotebook->GetPage( ii ) );
+        auto plot = dynamic_cast<SIM_PLOT_PANEL_BASE*>( m_plotNotebook->GetPage( ii ) );
 
         wxCHECK( plot, /* void */ );
 
@@ -1018,9 +1018,9 @@ void SIMULATOR_FRAME::StartSimulation()
             return;
     }
 
-    wxString        schTextSimCommand = m_circuitModel->GetSchTextSimCommand();
-    SIM_TYPE        schTextSimType = NGSPICE_CIRCUIT_MODEL::CommandToSimType( schTextSimCommand );
-    SIM_PANEL_BASE* plotWindow = getCurrentPlotWindow();
+    wxString             schTextSimCommand = m_circuitModel->GetSchTextSimCommand();
+    SIM_TYPE             schTextSimType = NGSPICE_CIRCUIT_MODEL::CommandToSimType( schTextSimCommand );
+    SIM_PLOT_PANEL_BASE* plotWindow = getCurrentPlotWindow();
 
     if( !plotWindow )
     {
@@ -1070,23 +1070,22 @@ void SIMULATOR_FRAME::StartSimulation()
 }
 
 
-SIM_PANEL_BASE* SIMULATOR_FRAME::NewPlotPanel( const wxString& aSimCommand, int aOptions )
+SIM_PLOT_PANEL_BASE* SIMULATOR_FRAME::NewPlotPanel( const wxString& aSimCommand, int aOptions )
 {
-    SIM_PANEL_BASE* plotPanel = nullptr;
-    SIM_TYPE        simType   = NGSPICE_CIRCUIT_MODEL::CommandToSimType( aSimCommand );
+    SIM_PLOT_PANEL_BASE* plotPanel = nullptr;
+    SIM_TYPE             simType   = NGSPICE_CIRCUIT_MODEL::CommandToSimType( aSimCommand );
 
-    if( SIM_PANEL_BASE::IsPlottable( simType ) )
+    if( SIM_PLOT_PANEL_BASE::IsPlottable( simType ) )
     {
         SIM_PLOT_PANEL* panel = new SIM_PLOT_PANEL( aSimCommand, aOptions, m_plotNotebook, wxID_ANY );
-        plotPanel = dynamic_cast<SIM_PANEL_BASE*>( panel );
+        plotPanel = panel;
 
         COMMON_SETTINGS::INPUT cfg = Pgm().GetCommonSettings()->m_Input;
         panel->GetPlotWin()->EnableMouseWheelPan( cfg.scroll_modifier_zoom != 0 );
     }
     else
     {
-        SIM_NOPLOT_PANEL* panel = new SIM_NOPLOT_PANEL( aSimCommand, aOptions, m_plotNotebook, wxID_ANY );
-        plotPanel = dynamic_cast<SIM_PANEL_BASE*>( panel );
+        plotPanel = new SIM_NOPLOT_PANEL( aSimCommand, aOptions, m_plotNotebook, wxID_ANY );
     }
 
     wxString pageTitle( m_simulator->TypeToName( simType, true ) );
@@ -1472,7 +1471,7 @@ void SIMULATOR_FRAME::AddCurrentTrace( const wxString& aDeviceName )
 
 void SIMULATOR_FRAME::AddTuner( const SCH_SHEET_PATH& aSheetPath, SCH_SYMBOL* aSymbol )
 {
-    SIM_PANEL_BASE* plotPanel = getCurrentPlotWindow();
+    SIM_PLOT_PANEL_BASE* plotPanel = getCurrentPlotWindow();
 
     if( !plotPanel )
         return;
@@ -1594,7 +1593,7 @@ void SIMULATOR_FRAME::AddMeasurement( const wxString& aCmd )
 
 SIM_PLOT_PANEL* SIMULATOR_FRAME::GetCurrentPlot() const
 {
-    SIM_PANEL_BASE* curPage = getCurrentPlotWindow();
+    SIM_PLOT_PANEL_BASE* curPage = getCurrentPlotWindow();
 
     return !curPage || curPage->GetType() == ST_UNKNOWN ? nullptr
                                                         : dynamic_cast<SIM_PLOT_PANEL*>( curPage );
@@ -1626,7 +1625,7 @@ void SIMULATOR_FRAME::doAddTrace( const wxString& aName, SIM_TRACE_TYPE aType )
         m_simConsole->SetInsertionPointEnd();
         return;
     }
-    else if( !SIM_PANEL_BASE::IsPlottable( simType ) )
+    else if( !SIM_PLOT_PANEL_BASE::IsPlottable( simType ) )
     {
         m_simConsole->AppendText( _( "Error: simulation type doesn't support plotting.\n" ) );
         m_simConsole->SetInsertionPointEnd();
@@ -1719,7 +1718,7 @@ void SIMULATOR_FRAME::updateTrace( const wxString& aVectorName, int aTraceType,
     if( aTraceType & SPT_POWER )
         simVectorName = simVectorName.AfterFirst( '(' ).BeforeLast( ')' ) + wxS( ":power" );
 
-    if( !SIM_PANEL_BASE::IsPlottable( simType ) )
+    if( !SIM_PLOT_PANEL_BASE::IsPlottable( simType ) )
     {
         // There is no plot to be shown
         m_simulator->Command( wxString::Format( wxT( "print %s" ), aVectorName ).ToStdString() );
@@ -2208,7 +2207,7 @@ bool SIMULATOR_FRAME::LoadWorkbook( const wxString& aPath )
 
         for( int ii = 0; ii < (int) m_plotNotebook->GetPageCount(); ++ii )
         {
-            auto* plot = dynamic_cast<const SIM_PANEL_BASE*>( m_plotNotebook->GetPage( ii ) );
+            auto* plot = dynamic_cast<const SIM_PLOT_PANEL_BASE*>( m_plotNotebook->GetPage( ii ) );
 
             if( plot && plot->GetType() == schTextSimType )
             {
@@ -2280,7 +2279,7 @@ bool SIMULATOR_FRAME::SaveWorkbook( const wxString& aPath )
 
     for( size_t i = 0; i < m_plotNotebook->GetPageCount(); i++ )
     {
-        const SIM_PANEL_BASE* basePanel = dynamic_cast<const SIM_PANEL_BASE*>( m_plotNotebook->GetPage( i ) );
+        auto* basePanel = dynamic_cast<const SIM_PLOT_PANEL_BASE*>( m_plotNotebook->GetPage( i ) );
 
         if( !basePanel )
         {
@@ -2473,7 +2472,7 @@ void SIMULATOR_FRAME::onPlotClosed( wxAuiNotebookEvent& event )
                    rebuildSignalsGrid( m_filter->GetValue() );
                    updateCursors();
 
-                   SIM_PANEL_BASE* panel = getCurrentPlotWindow();
+                   SIM_PLOT_PANEL_BASE* panel = getCurrentPlotWindow();
 
                    if( !panel || panel->GetType() != ST_OP )
                    {
@@ -2508,10 +2507,10 @@ void SIMULATOR_FRAME::onNotebookModified( wxCommandEvent& event )
 
 bool SIMULATOR_FRAME::EditSimCommand()
 {
-    SIM_PANEL_BASE*     plotPanelWindow = getCurrentPlotWindow();
-    DIALOG_SIM_COMMAND  dlg( this, m_circuitModel, m_simulator->Settings() );
-    wxString            errors;
-    WX_STRING_REPORTER  reporter( &errors );
+    SIM_PLOT_PANEL_BASE* plotPanelWindow = getCurrentPlotWindow();
+    DIALOG_SIM_COMMAND   dlg( this, m_circuitModel, m_simulator->Settings() );
+    wxString             errors;
+    WX_STRING_REPORTER   reporter( &errors );
 
     if( !m_circuitModel->ReadSchematicAndLibraries( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS,
                                                     reporter ) )
@@ -2856,7 +2855,7 @@ void SIMULATOR_FRAME::onSimFinished( wxCommandEvent& aEvent )
     if( simType == ST_UNKNOWN )
         return;
 
-    SIM_PANEL_BASE* plotPanelWindow = getCurrentPlotWindow();
+    SIM_PLOT_PANEL_BASE* plotPanelWindow = getCurrentPlotWindow();
 
     if( !plotPanelWindow || plotPanelWindow->GetType() != simType )
     {
@@ -2894,7 +2893,7 @@ void SIMULATOR_FRAME::onSimFinished( wxCommandEvent& aEvent )
     schematic.ClearOperatingPoints();
 
     // If there are any signals plotted, update them
-    if( SIM_PANEL_BASE::IsPlottable( simType ) )
+    if( SIM_PLOT_PANEL_BASE::IsPlottable( simType ) )
     {
         SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( plotPanelWindow );
         wxCHECK_RET( plotPanel, wxT( "not a SIM_PLOT_PANEL" ) );

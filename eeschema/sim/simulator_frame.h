@@ -49,7 +49,7 @@ class SPICE_SIMULATOR_SETTINGS;
 class NGSPICE_CIRCUIT_MODEL;
 
 #include <sim/sim_plot_panel.h>
-#include <sim/sim_panel_base.h>
+#include <sim/sim_plot_panel_base.h>
 #include "widgets/sim_notebook.h"
 
 class SIM_THREAD_REPORTER;
@@ -96,7 +96,7 @@ public:
      * @param aSimOptions netlisting options
      * @return The new plot panel.
      */
-    SIM_PANEL_BASE* NewPlotPanel( const wxString& aSimCommand, int aSimOptions );
+    SIM_PLOT_PANEL_BASE* NewPlotPanel( const wxString& aSimCommand, int aSimOptions );
 
     /**
      * Shows a dialog for editing the current tab's simulation command, or creating a new tab
@@ -322,9 +322,9 @@ private:
     /**
      * Return the currently opened plot panel (or NULL if there is none).
      */
-    SIM_PANEL_BASE* getCurrentPlotWindow() const
+    SIM_PLOT_PANEL_BASE* getCurrentPlotWindow() const
     {
-        return dynamic_cast<SIM_PANEL_BASE*>( m_plotNotebook->GetCurrentPage() );
+        return dynamic_cast<SIM_PLOT_PANEL_BASE*>( m_plotNotebook->GetCurrentPage() );
     }
 
     /**
@@ -386,7 +386,7 @@ private:
 
 
     ///< Panel that was used as the most recent one for simulations
-    SIM_PANEL_BASE*                        m_lastSimPlot;
+    SIM_PLOT_PANEL_BASE*                        m_lastSimPlot;
 
     SPICE_VALUE_FORMAT                     m_cursorFormats[3][2];
 

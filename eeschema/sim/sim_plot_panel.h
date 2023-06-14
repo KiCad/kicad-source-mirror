@@ -33,7 +33,7 @@
 #include <widgets/mathplot.h>
 #include <wx/colour.h>
 #include <wx/sizer.h>
-#include "sim_panel_base.h"
+#include "sim_plot_panel_base.h"
 #include "sim_plot_colors.h"
 
 class SIMULATOR_FRAME;
@@ -191,7 +191,7 @@ protected:
 };
 
 
-class SIM_PLOT_PANEL : public SIM_PANEL_BASE
+class SIM_PLOT_PANEL : public SIM_PLOT_PANEL_BASE
 {
 public:
     SIM_PLOT_PANEL( const wxString& aCommand, int aOptions, wxWindow* parent, wxWindowID id,
