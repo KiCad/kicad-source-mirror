@@ -242,7 +242,7 @@ void DIALOG_CHANGE_SYMBOLS::launchMatchIdSymbolBrowser( wxCommandEvent& aEvent )
 {
     wxString newName = getLibIdValue( m_specifiedId );
 
-    KIWAY_PLAYER* frame = Kiway().Player( FRAME_SCH_VIEWER_MODAL, true );
+    KIWAY_PLAYER* frame = Kiway().Player( FRAME_SCH_VIEWER_MODAL, true, this );
 
     if( frame->ShowModal( &newName, this ) )
     {
@@ -258,7 +258,7 @@ void DIALOG_CHANGE_SYMBOLS::launchNewIdSymbolBrowser( wxCommandEvent& aEvent )
 {
     wxString newName = getLibIdValue( m_newId );
 
-    KIWAY_PLAYER* frame = Kiway().Player( FRAME_SCH_VIEWER_MODAL, true );
+    KIWAY_PLAYER* frame = Kiway().Player( FRAME_SCH_VIEWER_MODAL, true, this );
 
     if( frame->ShowModal( &newName, this ) )
     {
