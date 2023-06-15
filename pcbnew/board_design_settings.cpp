@@ -835,6 +835,7 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     m_DiffPairDimensionsList = aOther.m_DiffPairDimensionsList;
     m_CurrentViaType         = aOther.m_CurrentViaType;
     m_UseConnectedTrackWidth = aOther.m_UseConnectedTrackWidth;
+    m_TempOverrideTrackWidth = aOther.m_TempOverrideTrackWidth;
     m_MinClearance           = aOther.m_MinClearance;
     m_MinConn                = aOther.m_MinConn;
     m_TrackMinWidth          = aOther.m_TrackMinWidth;
@@ -847,6 +848,7 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     m_HoleClearance          = aOther.m_HoleClearance;
     m_HoleToHoleMin          = aOther.m_HoleToHoleMin;
     m_SilkClearance          = aOther.m_SilkClearance;
+    m_MinResolvedSpokes      = aOther.m_MinResolvedSpokes;
     m_MinSilkTextHeight      = aOther.m_MinSilkTextHeight;
     m_MinSilkTextThickness   = aOther.m_MinSilkTextThickness;
     m_DRCSeverities          = aOther.m_DRCSeverities;
@@ -858,6 +860,7 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     m_SolderMaskToCopperClearance = aOther.m_SolderMaskToCopperClearance;
     m_SolderPasteMargin           = aOther.m_SolderPasteMargin;
     m_SolderPasteMarginRatio      = aOther.m_SolderPasteMarginRatio;
+    m_AllowSoldermaskBridgesInFPs = aOther.m_AllowSoldermaskBridgesInFPs;
     m_DefaultFPTextItems          = aOther.m_DefaultFPTextItems;
 
     std::copy( std::begin( aOther.m_LineThickness ), std::end( aOther.m_LineThickness ),

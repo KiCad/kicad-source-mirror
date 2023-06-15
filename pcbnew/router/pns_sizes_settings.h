@@ -42,6 +42,7 @@ public:
             m_minClearance( 0 ),
             m_trackWidth( 155000 ),
             m_trackWidthIsExplicit( true ),
+            m_boardMinTrackWidth( 0 ),
             m_viaType( VIATYPE::THROUGH ),
             m_viaDiameter( 600000 ),
             m_viaDrill( 250000 ),
