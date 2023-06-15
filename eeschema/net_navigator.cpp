@@ -328,7 +328,7 @@ void SCH_EDIT_FRAME::SelectNetNavigatorItem( const NET_NAVIGATOR_ITEM_DATA* aSel
 
 const SCH_ITEM* SCH_EDIT_FRAME::GetSelectedNetNavigatorItem() const
 {
-    if( m_netNavigator )
+    if( !m_netNavigator )
         return nullptr;
 
     wxTreeItemId id = m_netNavigator->GetSelection();
