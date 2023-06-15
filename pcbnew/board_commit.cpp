@@ -431,6 +431,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
             switch( boardItem->Type() )
             {
+            case PCB_FIELD_T:
             case PCB_TEXT_T:
             case PCB_PAD_T:
             case PCB_SHAPE_T:            // a shape (normally not on copper layers)

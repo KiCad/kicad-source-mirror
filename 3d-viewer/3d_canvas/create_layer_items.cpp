@@ -599,7 +599,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 addShape( static_cast<PCB_SHAPE*>( item ), layerContainer, item );
                 break;
 
-            case PCB_FIELD_T:
             case PCB_TEXT_T:
                 addText( static_cast<PCB_TEXT*>( item ), layerContainer, item );
                 break;
@@ -646,7 +645,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     item->TransformShapeToPolygon( *layerPoly, layer, 0, maxError, ERROR_INSIDE );
                     break;
 
-                case PCB_FIELD_T:
                 case PCB_TEXT_T:
                 {
                     PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
@@ -920,7 +918,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 addShape( static_cast<PCB_SHAPE*>( item ), layerContainer, item );
                 break;
 
-            case PCB_FIELD_T:
             case PCB_TEXT_T:
                 addText( static_cast<PCB_TEXT*>( item ), layerContainer, item );
                 break;
@@ -957,7 +954,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     item->TransformShapeToPolygon( *layerPoly, layer, 0, maxError, ERROR_INSIDE );
                     break;
 
-                case PCB_FIELD_T:
                 case PCB_TEXT_T:
                 {
                     PCB_TEXT* text = static_cast<PCB_TEXT*>( item );

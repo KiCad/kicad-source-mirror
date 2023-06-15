@@ -278,7 +278,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
     const PCB_TEXT* textItem = &aFootprint->Reference();
     PCB_LAYER_ID    textLayer = textItem->GetLayer();
 
-    // Reference and value are specific items, not in graphic items list
+    // Reference and value have special controls for forcing their plotting
     if( GetPlotReference() && m_layerMask[textLayer]
         && ( textItem->IsVisible() || GetPlotInvisibleText() ) )
     {
@@ -294,17 +294,32 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
         PlotText( textItem, textLayer, textItem->IsKnockout() );
     }
 
-    for( const BOARD_ITEM* item : aFootprint->GraphicalItems() )
+
+    std::vector<PCB_TEXT*> texts;
+
+    // Skip the reference and value texts that are handled specially
+    for( PCB_FIELD* field : aFootprint->Fields() )
+    {
+        if( field->IsReference() || field->IsValue() )
+            continue;
+
+        texts.push_back( field );
+    }
+
+    for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
     {
         textItem = dyn_cast<const PCB_TEXT*>( item );
 
-        if( !textItem )
+        if( textItem )
+            texts.push_back( static_cast<PCB_TEXT*>( item ) );
+    }
+
+    for( const PCB_TEXT* text : texts )
+    {
+        if( !text->IsVisible() )
             continue;
 
-        if( !textItem->IsVisible() )
-            continue;
-
-        textLayer = textItem->GetLayer();
+        textLayer = text->GetLayer();
 
         if( textLayer == Edge_Cuts || textLayer >= PCB_LAYER_ID_COUNT )
             continue;
@@ -312,13 +327,13 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
         if( !m_layerMask[textLayer] || aFootprint->GetPrivateLayers().test( textLayer ) )
             continue;
 
-        if( textItem->GetText() == wxT( "${REFERENCE}" ) && !GetPlotReference() )
+        if( text->GetText() == wxT( "${REFERENCE}" ) && !GetPlotReference() )
             continue;
 
-        if( textItem->GetText() == wxT( "${VALUE}" ) && !GetPlotValue() )
+        if( text->GetText() == wxT( "${VALUE}" ) && !GetPlotValue() )
             continue;
 
-        PlotText( textItem, textLayer, textItem->IsKnockout() );
+        PlotText( text, textLayer, textItem->IsKnockout() );
     }
 }
 
@@ -519,7 +534,6 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
             break;
         }
 
-        case PCB_FIELD_T:
         case PCB_TEXT_T:
             // Plotted in PlotFootprintTextItems()
             break;

@@ -128,6 +128,10 @@ wxString PCB_FIELD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
         return wxString::Format( _( "Datasheet '%s' of %s" ),
                                  KIUI::EllipsizeMenuText( GetText() ),
                                  GetParentFootprint()->GetReference() );
+    default:
+        return wxString::Format( _( "Field '%s' of %s" ),
+                                 KIUI::EllipsizeMenuText( GetText() ),
+                                 GetParentFootprint()->GetReference() );
     }
 
     // Can't get here, but gcc doesn't seem to know that....

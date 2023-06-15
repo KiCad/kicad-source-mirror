@@ -3837,12 +3837,13 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
                 field = new PCB_FIELD( footprint.get(), footprint->GetFieldCount(), pName );
 
                 field->SetText( pValue );
-                field->SetVisible( false );
                 field->SetLayer( footprint->GetLayer() == F_Cu ? F_Fab : B_Fab );
                 field->StyleFromSettings( m_board->GetDesignSettings() );
 
                 footprint->AddField( field );
             }
+
+            field->SetVisible( true );
 
             parsePCB_TEXT_effects( field );
         }

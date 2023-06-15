@@ -954,6 +954,7 @@ const BOX2I FOOTPRINT::GetBoundingBox() const
 
 const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisibleText ) const
 {
+    std::vector<PCB_TEXT*> texts;
     const BOARD* board = GetBoard();
     bool         isFPEdit = board && board->IsFootprintHolder();
 
@@ -991,7 +992,10 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisible
 
         // Handle text separately
         if( item->Type() == PCB_TEXT_T )
+        {
+            texts.push_back( static_cast<PCB_TEXT*>( item ) );
             continue;
+        }
 
         // Treat dimension objects as text
         if( !aIncludeText && BaseType( item->Type() ) == PCB_DIMENSION_T )
@@ -999,6 +1003,9 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisible
 
         bbox.Merge( item->GetBoundingBox() );
     }
+
+    for( PCB_FIELD* field : m_fields )
+        texts.push_back( field );
 
     for( PAD* pad : m_pads )
         bbox.Merge( pad->GetBoundingBox() );
@@ -1011,15 +1018,14 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisible
     // Groups do not contribute to the rect, only their members
     if( aIncludeText || noDrawItems )
     {
-        for( BOARD_ITEM* item : m_drawings )
+        // Only PCB_TEXT and PCB_FIELD items are independently selectable;
+        // PCB_TEXTBOX items go in with other graphic items above.
+        for( PCB_TEXT* text : texts )
         {
-            if( !isFPEdit && m_privateLayers.test( item->GetLayer() ) )
+            if( !isFPEdit && m_privateLayers.test( text->GetLayer() ) )
                 continue;
 
-            // Only PCB_TEXT items are independently selectable; PCB_TEXTBOX items go in with
-            // other graphic items above.
-            if( item->Type() == PCB_TEXT_T )
-                bbox.Merge( item->GetBoundingBox() );
+            bbox.Merge( text->GetBoundingBox() );
         }
 
         // This can be further optimized when aIncludeInvisibleText is true, but currently
@@ -1310,17 +1316,13 @@ bool FOOTPRINT::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
                 return true;
         }
 
-        for( PCB_FIELD* field : m_fields )
-        {
-            if( field->HitTest( arect, false, 0 ) )
-                return true;
-        }
-
         for( ZONE* zone : m_zones )
         {
             if( zone->HitTest( arect, false, 0 ) )
                 return true;
         }
+
+        // PCB fields are selectable on their own, so they don't get tested
 
         for( BOARD_ITEM* item : m_drawings )
         {
@@ -1474,11 +1476,11 @@ INSPECT_RESULT FOOTPRINT::Visit( INSPECTOR inspector, void* testData,
             break;
 
         case PCB_FIELD_T:
-            if( inspector( &Reference(), testData ) == INSPECT_RESULT::QUIT )
+            if( IterateForward<PCB_FIELD*>( m_fields, inspector, testData, { scanType } )
+                == INSPECT_RESULT::QUIT )
+            {
                 return INSPECT_RESULT::QUIT;
-
-            if( inspector( &Value(), testData ) == INSPECT_RESULT::QUIT )
-                return INSPECT_RESULT::QUIT;
+            }
 
             break;
 

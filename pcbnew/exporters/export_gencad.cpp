@@ -720,6 +720,9 @@ static size_t hashFootprint( const FOOTPRINT* aFootprint )
     constexpr int flags = HASH_FLAGS::HASH_POS | HASH_FLAGS::REL_COORD
                             | HASH_FLAGS::HASH_ROT | HASH_FLAGS::HASH_LAYER;
 
+    for( PCB_FIELD* i : aFootprint->Fields() )
+        ret += hash_fp_item( i, flags );
+
     for( BOARD_ITEM* i : aFootprint->GraphicalItems() )
         ret += hash_fp_item( i, flags );
 

@@ -249,20 +249,15 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
     {
         if( typeMask[PCB_FIELD_T] )
         {
-            if( ( footprint->Reference().GetLayerSet() & aLayers ).any() )
+            for( PCB_FIELD* field : footprint->GetFields() )
             {
-                if( !aFunc( &footprint->Reference() ) )
-                    return n;
+                if( ( field->GetLayerSet() & aLayers ).any() )
+                {
+                    if( !aFunc( field ) )
+                        return n;
 
-                n++;
-            }
-
-            if( ( footprint->Value().GetLayerSet() & aLayers ).any() )
-            {
-                if( !aFunc( &footprint->Value() ) )
-                    return n;
-
-                n++;
+                    n++;
+                }
             }
         }
 

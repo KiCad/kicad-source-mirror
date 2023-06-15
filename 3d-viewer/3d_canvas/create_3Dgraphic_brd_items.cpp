@@ -165,11 +165,11 @@ void BOARD_ADAPTER::addFootprintShapes( const FOOTPRINT* aFootprint, CONTAINER_2
 {
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
 
-    if( aFootprint->Reference().GetLayer() == aLayerId && aFootprint->Reference().IsVisible() )
-        addText( &aFootprint->Reference(), aContainer, &aFootprint->Reference() );
-
-    if( aFootprint->Value().GetLayer() == aLayerId && aFootprint->Value().IsVisible() )
-        addText( &aFootprint->Value(), aContainer, &aFootprint->Value() );
+    for( PCB_FIELD* field : aFootprint->GetFields() )
+    {
+        if( field->GetLayer() == aLayerId && field->IsVisible() )
+            addText( field, aContainer, field );
+    }
 
     for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
     {

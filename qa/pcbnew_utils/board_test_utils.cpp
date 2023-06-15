@@ -153,7 +153,6 @@ struct kitest_cmp_drawings
             const PCB_TEXT* textA = static_cast<const PCB_TEXT*>( itemA );
             const PCB_TEXT* textB = static_cast<const PCB_TEXT*>( itemB );
 
-            TEST( textA->GetType(), textB->GetType() );
             TEST_PT( textA->GetPosition(), textB->GetPosition() );
             TEST( textA->GetTextAngle(), textB->GetTextAngle() );
         }
@@ -324,8 +323,6 @@ void CheckFpText( const PCB_TEXT* expected, const PCB_TEXT* text )
     BOOST_TEST_CONTEXT( "Assert PCB_TEXT with KIID=" << expected->m_Uuid.AsString() )
     {
         CHECK_ENUM_CLASS_EQUAL( expected->Type(), text->Type() );
-
-        CHECK_ENUM_CLASS_EQUAL( expected->GetType(), text->GetType() );
 
         BOOST_CHECK_EQUAL( expected->IsLocked(), text->IsLocked() );
 

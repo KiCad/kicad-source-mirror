@@ -180,6 +180,7 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         breakhere++;
         break;
 
+    case PCB_FIELD_T:
     case PCB_TEXT_T:
         breakhere++;
         break;
@@ -295,16 +296,6 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                 return INSPECT_RESULT::CONTINUE;
 
             if( m_Guide->IgnoreFPTextOnFront() && IsFrontLayer( layer ) )
-                return INSPECT_RESULT::CONTINUE;
-
-            /*
-             * The three text types have different criteria: reference and value have their own
-             * ignore flags; user text instead follows their layer visibility. Checking this here
-             * is simpler than later (when layer visibility is checked for other entities)
-             *
-             * Note: we fallthrough from PCB_FIELD_T above, hence the type check.
-             */
-            if( text->Type() == PCB_TEXT_T && !m_Guide->IsLayerVisible( layer ) )
                 return INSPECT_RESULT::CONTINUE;
         }
 
