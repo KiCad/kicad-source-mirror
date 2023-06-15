@@ -704,14 +704,14 @@ void CONNECTION_GRAPH::removeSubgraphs( std::set<CONNECTION_SUBGRAPH*>& aSubgrap
     std::sort( m_subgraphs.begin(), m_subgraphs.end() );
     std::set<int> codes_to_remove;
 
-    for( auto el : m_sheet_to_subgraphs_map )
+    for( auto& el : m_sheet_to_subgraphs_map )
     {
         std::sort( el.second.begin(), el.second.end() );
     }
 
     for( CONNECTION_SUBGRAPH* sg : aSubgraphs )
     {
-        for( auto it : sg->m_bus_neighbors )
+        for( auto& it : sg->m_bus_neighbors )
         {
             for( CONNECTION_SUBGRAPH* neighbor : it.second )
             {
@@ -730,7 +730,7 @@ void CONNECTION_GRAPH::removeSubgraphs( std::set<CONNECTION_SUBGRAPH*>& aSubgrap
             }
         }
 
-        for( auto it : sg->m_bus_parents )
+        for( auto& it : sg->m_bus_parents )
         {
             for( CONNECTION_SUBGRAPH* parent : it.second )
             {

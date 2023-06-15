@@ -2177,7 +2177,7 @@ void ALTIUM_PCB::ConvertArcs6ToBoardItem( const AARC6& aElem, const int aPrimiti
             ConvertArcs6ToBoardItemOnLayer( aElem, klayer );
     }
 
-    for( const auto layerExpansionMask :
+    for( const auto& layerExpansionMask :
          HelperGetSolderAndPasteMaskExpansions( ALTIUM_RECORD::ARC, aPrimitiveIndex, aElem.layer ) )
     {
         int width = aElem.width + ( layerExpansionMask.second * 2 );
@@ -2230,7 +2230,7 @@ void ALTIUM_PCB::ConvertArcs6ToFootprintItem( FOOTPRINT* aFootprint, const AARC6
         }
     }
 
-    for( const auto layerExpansionMask :
+    for( const auto& layerExpansionMask :
          HelperGetSolderAndPasteMaskExpansions( ALTIUM_RECORD::ARC, aPrimitiveIndex, aElem.layer ) )
     {
         int width = aElem.width + ( layerExpansionMask.second * 2 );
@@ -2873,7 +2873,7 @@ void ALTIUM_PCB::ConvertTracks6ToBoardItem( const ATRACK6& aElem, const int aPri
         }
     }
 
-    for( const auto layerExpansionMask : HelperGetSolderAndPasteMaskExpansions(
+    for( const auto& layerExpansionMask : HelperGetSolderAndPasteMaskExpansions(
                  ALTIUM_RECORD::TRACK, aPrimitiveIndex, aElem.layer ) )
     {
         int width = aElem.width + ( layerExpansionMask.second * 2 );
@@ -2927,7 +2927,7 @@ void ALTIUM_PCB::ConvertTracks6ToFootprintItem( FOOTPRINT* aFootprint, const ATR
         }
     }
 
-    for( const auto layerExpansionMask : HelperGetSolderAndPasteMaskExpansions(
+    for( const auto& layerExpansionMask : HelperGetSolderAndPasteMaskExpansions(
                  ALTIUM_RECORD::TRACK, aPrimitiveIndex, aElem.layer ) )
     {
         int width = aElem.width + ( layerExpansionMask.second * 2 );

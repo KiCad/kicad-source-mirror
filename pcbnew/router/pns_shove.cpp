@@ -178,7 +178,7 @@ SHOVE::~SHOVE()
 {
     std::unordered_set<LINE*> alreadyDeleted;
 
-    for( auto it : m_rootLineHistory )
+    for( auto& it : m_rootLineHistory )
     {
         auto it2 = alreadyDeleted.find( it.second );
 
