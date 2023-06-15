@@ -178,7 +178,6 @@ public:
 
 private:
     friend class BM2CMP_FRAME_BASE;
-    friend class SIMULATOR_FRAME_BASE;
 
     /// Don't use this one, only wxformbuilder uses it, and it must be augmented with correcting
     /// m_ident and calling a SetKiway() early in derived constructor.

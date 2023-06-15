@@ -226,7 +226,8 @@ set( EESCHEMA_SIM_SRCS
     sim/ngspice_circuit_model.cpp
     sim/ngspice.cpp
     sim/simulator_frame.cpp
-    sim/simulator_frame_base.cpp
+    sim/simulator_panel.cpp
+    sim/simulator_panel_base.cpp
     sim/sim_plot_colors.cpp
     sim/sim_plot_panel_base.cpp
     sim/sim_plot_panel.cpp

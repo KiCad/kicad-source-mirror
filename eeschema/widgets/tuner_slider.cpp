@@ -25,6 +25,7 @@
  */
 
 
+#include <sim/simulator_panel.h>
 #include <sim/simulator_frame.h>
 #include <sch_symbol.h>
 #include <template_fieldnames.h>
@@ -38,7 +39,7 @@
 #include "tuner_slider.h"
 #include "core/kicad_algo.h"
 
-TUNER_SLIDER::TUNER_SLIDER( SIMULATOR_FRAME* aFrame, wxWindow* aParent,
+TUNER_SLIDER::TUNER_SLIDER( SIMULATOR_PANEL* aPanel, wxWindow* aParent,
                             const SCH_SHEET_PATH& aSheetPath, SCH_SYMBOL* aSymbol ) :
         TUNER_SLIDER_BASE( aParent ),
         m_symbol( aSymbol->m_Uuid ),
@@ -47,9 +48,9 @@ TUNER_SLIDER::TUNER_SLIDER( SIMULATOR_FRAME* aFrame, wxWindow* aParent,
         m_min( 0.0 ),
         m_max( 0.0 ),
         m_value( 0.0 ),
-        m_frame ( aFrame )
+        m_panel( aPanel )
 {
-    const SPICE_ITEM* item = aFrame->GetExporter()->FindItem( std::string( m_ref.ToUTF8() ) );
+    const SPICE_ITEM* item = m_panel->GetExporter()->FindItem( std::string( m_ref.ToUTF8() ) );
 
     if( !item )
         throw KI_PARAM_ERROR( wxString::Format( _( "%s not found" ), m_ref ) );
@@ -190,7 +191,7 @@ bool TUNER_SLIDER::SetMax( const SPICE_VALUE& aVal )
 
 void TUNER_SLIDER::updateComponentValue()
 {
-    wxQueueEvent( m_frame, new wxCommandEvent( EVT_SIM_UPDATE ) );
+    wxQueueEvent( m_panel, new wxCommandEvent( EVT_SIM_UPDATE ) );
 }
 
 
@@ -333,13 +334,13 @@ void TUNER_SLIDER::updateMin()
 
 void TUNER_SLIDER::onClose( wxCommandEvent& event )
 {
-    m_frame->RemoveTuner( this );
+    m_panel->RemoveTuner( this );
 }
 
 
 void TUNER_SLIDER::onSave( wxCommandEvent& event )
 {
-    m_frame->UpdateTunerValue( m_sheetPath, m_symbol, GetSymbolRef(), m_value.ToOrigString() );
+    m_panel->UpdateTunerValue( m_sheetPath, m_symbol, GetSymbolRef(), m_value.ToOrigString() );
 }
 
 
