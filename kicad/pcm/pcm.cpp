@@ -428,8 +428,9 @@ const bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryI
 
     wxString url = std::get<2>( *repository_tuple );
 
-    nlohmann::json js;
-    PCM_REPOSITORY current_repo;
+    nlohmann::json  js;
+    PCM_REPOSITORY  current_repo;
+    PCM_REPOSITORY& current_repo_ref = current_repo;
 
     std::shared_ptr<PROGRESS_REPORTER> reporter;
 
@@ -522,12 +523,13 @@ const bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryI
         packages_cache_stream << std::setw( 4 ) << js << std::endl;
 
         m_repository_cache[aRepositoryId] = std::move( current_repo );
+        current_repo_ref = m_repository_cache[aRepositoryId];
     }
 
-    if( current_repo.resources )
+    if( current_repo_ref.resources )
     {
         // Check resources file date, redownload if needed
-        PCM_RESOURCE_REFERENCE& resources = *current_repo.resources;
+        PCM_RESOURCE_REFERENCE& resources = *current_repo_ref.resources;
 
         wxFileName resource_file( repo_cache.GetPath(), wxT( "resources.zip" ) );
 
