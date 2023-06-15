@@ -21431,7 +21431,7 @@ msgstr "Aseta Oletusarvoksi"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:543
 msgid "Page Margins"
-msgstr "Sivun Marginaalit"
+msgstr "Sivun Reunukset"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:551
 msgid "Left:"
