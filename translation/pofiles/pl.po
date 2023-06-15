@@ -3700,7 +3700,7 @@ msgstr "Średnica otworu przelotki"
 
 #: common/dialogs/panel_setup_netclasses.cpp:504
 msgid "Microvia pad diameter"
-msgstr "Średnica mikroprzelotki"
+msgstr "Średnica pola mikroprzelotki"
 
 #: common/dialogs/panel_setup_netclasses.cpp:505
 msgid "Microvia plated hole diameter"
