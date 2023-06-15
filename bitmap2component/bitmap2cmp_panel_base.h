@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,14 +10,12 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-#include "kiway_player.h"
-#include <wx/string.h>
-#include <wx/menu.h>
+#include <wx/scrolwin.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/scrolwin.h>
+#include <wx/string.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
@@ -32,22 +30,19 @@
 #include <wx/choice.h>
 #include <wx/slider.h>
 #include <wx/radiobox.h>
-#include <wx/statusbr.h>
-#include <wx/frame.h>
+#include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class BM2CMP_FRAME_BASE
+/// Class BITMAP2CMP_PANEL_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class BM2CMP_FRAME_BASE : public KIWAY_PLAYER
+class BITMAP2CMP_PANEL_BASE : public wxPanel
 {
 	private:
 
 	protected:
-		wxMenuBar* m_menubar;
-		wxMenu* m_menu1;
 		wxNotebook* m_Notebook;
 		wxScrolledWindow* m_InitialPicturePanel;
 		wxScrolledWindow* m_GreyscalePicturePanel;
@@ -77,7 +72,6 @@ class BM2CMP_FRAME_BASE : public KIWAY_PLAYER
 		wxRadioBox* m_rbOutputFormat;
 		wxButton* m_buttonExportFile;
 		wxButton* m_buttonExportClipboard;
-		wxStatusBar* m_statusBar;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnPaintInit( wxPaintEvent& event ) { event.Skip(); }
@@ -97,9 +91,9 @@ class BM2CMP_FRAME_BASE : public KIWAY_PLAYER
 
 	public:
 
-		BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Image Converter"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCLOSE_BOX|wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxTAB_TRAVERSAL );
+		BITMAP2CMP_PANEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
-		~BM2CMP_FRAME_BASE();
+		~BITMAP2CMP_PANEL_BASE();
 
 };
 

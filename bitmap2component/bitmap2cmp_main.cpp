@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <bitmap2cmp_gui.h>
+#include <bitmap2cmp_frame.h>
 #include <bitmap2cmp_settings.h>
 #include <kiface_base.h>
 #include <kiway.h>
@@ -41,7 +41,7 @@ static struct IFACE : public KIFACE_BASE
     {
         InitSettings( new BITMAP2CMP_SETTINGS );
         Pgm().GetSettingsManager().RegisterSettings( KifaceSettings() );
-        return new BM2CMP_FRAME( aKiway, aParent );
+        return new BITMAP2CMP_FRAME( aKiway, aParent );
     }
 
     /**

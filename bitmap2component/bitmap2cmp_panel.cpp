@@ -22,139 +22,32 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "bitmap2cmp_gui.h"
-#include "bitmap2component.h"
+#include <bitmap2cmp_frame.h>
+#include <bitmap2component.h>
+#include <bitmap2cmp_panel.h>
 #include <bitmap2cmp_settings.h>
 #include <bitmap_io.h>
 #include <bitmaps.h>
 #include <common.h>
 #include <kiface_base.h>
 #include <math/util.h>      // for KiROUND
-#include <kiway.h>
+#include <pgm_base.h>
 #include <potracelib.h>
-#include <wildcards_and_files_ext.h>
-#include <tool/tool_manager.h>
-#include <tool/common_control.h>
 #include <wx/clipbrd.h>
 #include <wx/rawbmp.h>
-#include <wx/filedlg.h>
 #include <wx/msgdlg.h>
 #include <wx/dcclient.h>
 #include <wx/log.h>
 
-
-#include "bitmap2cmp_gui_base.h"
-#include "pgm_base.h"
-
 #define DEFAULT_DPI 300     // the image DPI used in formats that do not define a DPI
 
-IMAGE_SIZE::IMAGE_SIZE()
+
+BITMAP2CMP_PANEL::BITMAP2CMP_PANEL( BITMAP2CMP_FRAME* aParent ) :
+        BITMAP2CMP_PANEL_BASE( aParent ),
+        m_parentFrame( aParent )
 {
-    m_outputSize = 0.0;
-    m_originalDPI = DEFAULT_DPI;
-    m_originalSizePixels = 0;
-    m_unit = EDA_UNITS::MILLIMETRES;
-}
-
-
-void IMAGE_SIZE::SetOutputSizeFromInitialImageSize()
-{
-    // Safety-check to guarantee no divide-by-zero
-    m_originalDPI = std::max( 1, m_originalDPI );
-
-    // Set the m_outputSize value from the m_originalSizePixels and the selected unit
-    if( m_unit == EDA_UNITS::MILLIMETRES )
-        m_outputSize = (double)GetOriginalSizePixels() / m_originalDPI * 25.4;
-    else if( m_unit == EDA_UNITS::INCHES )
-        m_outputSize = (double)GetOriginalSizePixels() / m_originalDPI;
-    else
-        m_outputSize = m_originalDPI;
-}
-
-
-int IMAGE_SIZE::GetOutputDPI()
-{
-    int outputDPI;
-
-    if( m_unit == EDA_UNITS::MILLIMETRES )
-        outputDPI = GetOriginalSizePixels() / ( m_outputSize / 25.4 );
-    else if( m_unit == EDA_UNITS::INCHES )
-        outputDPI = GetOriginalSizePixels() / m_outputSize;
-    else
-        outputDPI = KiROUND( m_outputSize );
-
-    // Zero is not a DPI, and may cause divide-by-zero errors...
-    outputDPI = std::max( 1, outputDPI );
-
-    return outputDPI;
-}
-
-
-void IMAGE_SIZE::SetUnit( EDA_UNITS aUnit )
-{
-    // Set the unit used for m_outputSize, and convert the old m_outputSize value
-    // to the value in new unit
-    if( aUnit == m_unit )
-        return;
-
-    // Convert m_outputSize to mm:
-    double size_mm;
-
-    if( m_unit == EDA_UNITS::MILLIMETRES )
-    {
-        size_mm = m_outputSize;
-    }
-    else if( m_unit == EDA_UNITS::INCHES )
-    {
-        size_mm = m_outputSize * 25.4;
-    }
-    else
-    {
-        // m_outputSize is the DPI, not an image size
-        // the image size is m_originalSizePixels / m_outputSize (in inches)
-        if( m_outputSize )
-            size_mm =  m_originalSizePixels / m_outputSize * 25.4;
-        else
-            size_mm = 0;
-    }
-
-    // Convert m_outputSize to new value:
-    if( aUnit == EDA_UNITS::MILLIMETRES )
-    {
-        m_outputSize = size_mm;
-    }
-    else if( aUnit == EDA_UNITS::INCHES )
-    {
-        m_outputSize = size_mm / 25.4;
-    }
-    else
-    {
-        if( size_mm )
-            m_outputSize = m_originalSizePixels / size_mm * 25.4;
-        else
-            m_outputSize = 0;
-    }
-
-    m_unit = aUnit;
-}
-
-
-BEGIN_EVENT_TABLE( BM2CMP_FRAME, BM2CMP_FRAME_BASE )
-    EVT_MENU( wxID_EXIT, BM2CMP_FRAME::OnExit )
-    EVT_MENU( wxID_OPEN, BM2CMP_FRAME::OnLoadFile )
-END_EVENT_TABLE()
-
-
-BM2CMP_FRAME::BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
-    BM2CMP_FRAME_BASE( aParent )
-{
-    m_ident = FRAME_BM2CMP;      // Initialized to wxID_ANY by wxFormBuilder
-    SetKiway( this, aKiway );
-
     for( wxString unit : { _( "mm" ), _( "Inch" ), _( "DPI" ) } )
         m_PixelUnit->Append( unit );
-
-    LoadSettings( config() );
 
     m_outputSizeX.SetUnit( getUnitFromSelection() );
     m_outputSizeY.SetUnit( getUnitFromSelection() );
@@ -164,99 +57,24 @@ BM2CMP_FRAME::BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_UnitSizeX->ChangeValue( FormatOutputSize( m_outputSizeX.GetOutputSize() ) );
     m_UnitSizeY->ChangeValue( FormatOutputSize( m_outputSizeY.GetOutputSize() ) );
 
-    // Give an icon
-    wxIcon icon;
-    wxIconBundle icon_bundle;
-
-    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_bitmap2component ) );
-    icon_bundle.AddIcon( icon );
-    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_bitmap2component_32 ) );
-    icon_bundle.AddIcon( icon );
-    icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_bitmap2component_16 ) );
-    icon_bundle.AddIcon( icon );
-
-    SetIcons( icon_bundle );
-
-    ReCreateMenuBar();
-
-    GetSizer()->SetSizeHints( this );
-
     m_buttonExportFile->Enable( false );
     m_buttonExportClipboard->Enable( false );
-
-    SetSize( m_framePos.x, m_framePos.y, m_frameSize.x, m_frameSize.y );
-
-    if ( m_framePos == wxDefaultPosition )
-        Centre();
 }
 
 
-BM2CMP_FRAME::~BM2CMP_FRAME()
+BITMAP2CMP_PANEL::~BITMAP2CMP_PANEL()
 {
-    SaveSettings( config() );
-    /*
-     * This needed for OSX: avoids further OnDraw processing after this
-     * destructor and before the native window is destroyed
-     */
-    Freeze();
 }
 
 
-wxWindow* BM2CMP_FRAME::GetToolCanvas() const
+wxWindow* BITMAP2CMP_PANEL::GetCurrentPage()
 {
     return m_Notebook->GetCurrentPage();
 }
 
 
-void BM2CMP_FRAME::doReCreateMenuBar()
+void BITMAP2CMP_PANEL::LoadSettings( BITMAP2CMP_SETTINGS* cfg )
 {
-    // wxWidgets handles the Mac Application menu behind the scenes, but that means
-    // we always have to start from scratch with a new wxMenuBar.
-    wxMenuBar* oldMenuBar = GetMenuBar();
-    wxMenuBar* menuBar    = new wxMenuBar();
-
-    wxMenu* fileMenu = new wxMenu;
-
-    wxMenuItem* item = new wxMenuItem( fileMenu, wxID_OPEN, _( "Open..." ) + wxT( "\tCtrl+O" ),
-                                       _( "Load source image" ) );
-
-    fileMenu->Append( item );
-
-#ifndef __WXMAC__
-    // Mac moves Quit to the App menu so we don't need a separator on Mac
-    fileMenu->AppendSeparator();
-#endif
-
-    item = new wxMenuItem( fileMenu, wxID_EXIT, _( "Quit" ) + wxT( "\tCtrl+Q" ),
-                           _( "Quit Image Converter" ) );
-
-    if( Pgm().GetCommonSettings()->m_Appearance.use_icons_in_menus )
-        item->SetBitmap( KiBitmap( BITMAPS::exit ) );
-
-    fileMenu->Append( item );
-
-    menuBar->Append( fileMenu, _( "&File" ) );
-
-    SetMenuBar( menuBar );
-    delete oldMenuBar;
-}
-
-
-void BM2CMP_FRAME::OnExit( wxCommandEvent& event )
-{
-    Destroy();
-}
-
-
-void BM2CMP_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
-{
-    EDA_BASE_FRAME::LoadSettings( aCfg );
-
-    BITMAP2CMP_SETTINGS* cfg = static_cast<BITMAP2CMP_SETTINGS*>( aCfg );
-
-    m_BitmapFileName    = cfg->m_BitmapFileName;
-    m_ConvertedFileName = cfg->m_ConvertedFileName;
-
     int u_select = cfg->m_Units;
 
     if( u_select < 0 || u_select > 2 )  // Validity control
@@ -291,23 +109,17 @@ void BM2CMP_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 }
 
 
-void BM2CMP_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
+void BITMAP2CMP_PANEL::SaveSettings( BITMAP2CMP_SETTINGS* cfg )
 {
-    EDA_BASE_FRAME::SaveSettings( aCfg );
-
-    BITMAP2CMP_SETTINGS* cfg = static_cast<BITMAP2CMP_SETTINGS*>( aCfg );
-
-    cfg->m_BitmapFileName    = m_BitmapFileName;
-    cfg->m_ConvertedFileName = m_ConvertedFileName;
-    cfg->m_Threshold         = m_sliderThreshold->GetValue();
-    cfg->m_Negative          = m_checkNegative->IsChecked();
-    cfg->m_LastFormat        = m_rbOutputFormat->GetSelection();
-    cfg->m_LastModLayer      = m_chPCBLayer->GetSelection();
-    cfg->m_Units             = m_PixelUnit->GetSelection();
+    cfg->m_Threshold    = m_sliderThreshold->GetValue();
+    cfg->m_Negative     = m_checkNegative->IsChecked();
+    cfg->m_LastFormat   = m_rbOutputFormat->GetSelection();
+    cfg->m_LastModLayer = m_chPCBLayer->GetSelection();
+    cfg->m_Units        = m_PixelUnit->GetSelection();
 }
 
 
-void BM2CMP_FRAME::OnPaintInit( wxPaintEvent& event )
+void BITMAP2CMP_PANEL::OnPaintInit( wxPaintEvent& event )
 {
 #ifdef __WXMAC__
     // Otherwise fails due: using wxPaintDC without being in a native paint event
@@ -326,7 +138,7 @@ void BM2CMP_FRAME::OnPaintInit( wxPaintEvent& event )
 }
 
 
-void BM2CMP_FRAME::OnPaintGreyscale( wxPaintEvent& event )
+void BITMAP2CMP_PANEL::OnPaintGreyscale( wxPaintEvent& event )
 {
 #ifdef __WXMAC__
     // Otherwise fails due: using wxPaintDC without being in a native paint event
@@ -345,7 +157,7 @@ void BM2CMP_FRAME::OnPaintGreyscale( wxPaintEvent& event )
 }
 
 
-void BM2CMP_FRAME::OnPaintBW( wxPaintEvent& event )
+void BITMAP2CMP_PANEL::OnPaintBW( wxPaintEvent& event )
 {
 #ifdef __WXMAC__
     // Otherwise fails due: using wxPaintDC without being in a native paint event
@@ -363,41 +175,17 @@ void BM2CMP_FRAME::OnPaintBW( wxPaintEvent& event )
 }
 
 
-void BM2CMP_FRAME::OnLoadFile( wxCommandEvent& event )
+void BITMAP2CMP_PANEL::OnLoadFile( wxCommandEvent& event )
 {
-    wxFileName  fn( m_BitmapFileName );
-    wxString    path = fn.GetPath();
-
-    if( path.IsEmpty() || !wxDirExists( path ) )
-        path = m_mruPath;
-
-    wxFileDialog fileDlg( this, _( "Choose Image" ), path, wxEmptyString,
-                          _( "Image Files" ) + wxS( " " )+ wxImage::GetImageExtWildcard(),
-                          wxFD_OPEN | wxFD_FILE_MUST_EXIST );
-
-    int diag = fileDlg.ShowModal();
-
-    if( diag != wxID_OK )
-        return;
-
-    wxString fullFilename = fileDlg.GetPath();
-
-    if( !OpenProjectFiles( std::vector<wxString>( 1, fullFilename ) ) )
-        return;
-
-    fn = fullFilename;
-    m_mruPath = fn.GetPath();
-    SetStatusText( fullFilename );
-    Refresh();
+    m_parentFrame->OnLoadFile( event );
 }
 
 
-bool BM2CMP_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
+bool BITMAP2CMP_PANEL::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
 {
     m_Pict_Image.Destroy();
-    m_BitmapFileName = aFileSet[0];
 
-    if( !m_Pict_Image.LoadFile( m_BitmapFileName ) )
+    if( !m_Pict_Image.LoadFile( aFileSet[0] ) )
     {
         // LoadFile has its own UI, no need for further failure notification here
         return false;
@@ -485,7 +273,7 @@ bool BM2CMP_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int 
 
 
 // return a string giving the output size, according to the selected unit
-wxString BM2CMP_FRAME::FormatOutputSize( double aSize )
+wxString BITMAP2CMP_PANEL::FormatOutputSize( double aSize )
 {
     wxString text;
 
@@ -499,7 +287,7 @@ wxString BM2CMP_FRAME::FormatOutputSize( double aSize )
     return text;
 }
 
-void BM2CMP_FRAME::updateImageInfo()
+void BITMAP2CMP_PANEL::updateImageInfo()
 {
     // Note: the image resolution text controls are not modified here, to avoid a race between
     // text change when entered by user and a text change if it is modified here.
@@ -517,7 +305,7 @@ void BM2CMP_FRAME::updateImageInfo()
 }
 
 
-EDA_UNITS BM2CMP_FRAME::getUnitFromSelection()
+EDA_UNITS BITMAP2CMP_PANEL::getUnitFromSelection()
 {
     // return the EDA_UNITS from the m_PixelUnit choice
     switch( m_PixelUnit->GetSelection() )
@@ -530,7 +318,7 @@ EDA_UNITS BM2CMP_FRAME::getUnitFromSelection()
 }
 
 
-void BM2CMP_FRAME::OnSizeChangeX( wxCommandEvent& event )
+void BITMAP2CMP_PANEL::OnSizeChangeX( wxCommandEvent& event )
 {
     double new_size;
 
@@ -559,7 +347,7 @@ void BM2CMP_FRAME::OnSizeChangeX( wxCommandEvent& event )
 }
 
 
-void BM2CMP_FRAME::OnSizeChangeY( wxCommandEvent& event )
+void BITMAP2CMP_PANEL::OnSizeChangeY( wxCommandEvent& event )
 {
     double new_size;
 
@@ -588,7 +376,7 @@ void BM2CMP_FRAME::OnSizeChangeY( wxCommandEvent& event )
 }
 
 
-void BM2CMP_FRAME::OnSizeUnitChange( wxCommandEvent& event )
+void BITMAP2CMP_PANEL::OnSizeUnitChange( wxCommandEvent& event )
 {
     m_outputSizeX.SetUnit( getUnitFromSelection() );
     m_outputSizeY.SetUnit( getUnitFromSelection() );
@@ -599,7 +387,7 @@ void BM2CMP_FRAME::OnSizeUnitChange( wxCommandEvent& event )
 }
 
 
-void BM2CMP_FRAME::ToggleAspectRatioLock( wxCommandEvent& event )
+void BITMAP2CMP_PANEL::ToggleAspectRatioLock( wxCommandEvent& event )
 {
     if( m_aspectRatioCheckbox->GetValue() )
     {
@@ -610,7 +398,7 @@ void BM2CMP_FRAME::ToggleAspectRatioLock( wxCommandEvent& event )
 }
 
 
-void BM2CMP_FRAME::Binarize( double aThreshold )
+void BITMAP2CMP_PANEL::Binarize( double aThreshold )
 {
     int           h = m_Greyscale_Image.GetHeight();
     int           w = m_Greyscale_Image.GetWidth();
@@ -639,7 +427,7 @@ void BM2CMP_FRAME::Binarize( double aThreshold )
 }
 
 
-void BM2CMP_FRAME::NegateGreyscaleImage( )
+void BITMAP2CMP_PANEL::NegateGreyscaleImage( )
 {
     unsigned char pix;
     int           h = m_Greyscale_Image.GetHeight();
@@ -657,7 +445,7 @@ void BM2CMP_FRAME::NegateGreyscaleImage( )
 }
 
 
-void BM2CMP_FRAME::OnNegativeClicked( wxCommandEvent&  )
+void BITMAP2CMP_PANEL::OnNegativeClicked( wxCommandEvent&  )
 {
     if( m_checkNegative->GetValue() != m_Negative )
     {
@@ -672,14 +460,14 @@ void BM2CMP_FRAME::OnNegativeClicked( wxCommandEvent&  )
 }
 
 
-void BM2CMP_FRAME::OnThresholdChange( wxScrollEvent& event )
+void BITMAP2CMP_PANEL::OnThresholdChange( wxScrollEvent& event )
 {
     Binarize( (double)m_sliderThreshold->GetValue()/m_sliderThreshold->GetMax() );
     Refresh();
 }
 
 
-void BM2CMP_FRAME::OnExportToFile( wxCommandEvent& event )
+void BITMAP2CMP_PANEL::OnExportToFile( wxCommandEvent& event )
 {
     // choices of m_rbOutputFormat are expected to be in same order as
     // OUTPUT_FMT_ID. See bitmap2component.h
@@ -688,7 +476,7 @@ void BM2CMP_FRAME::OnExportToFile( wxCommandEvent& event )
 }
 
 
-void BM2CMP_FRAME::OnExportToClipboard( wxCommandEvent& event )
+void BITMAP2CMP_PANEL::OnExportToClipboard( wxCommandEvent& event )
 {
     // choices of m_rbOutputFormat are expected to be in same order as
     // OUTPUT_FMT_ID. See bitmap2component.h
@@ -715,161 +503,19 @@ void BM2CMP_FRAME::OnExportToClipboard( wxCommandEvent& event )
 }
 
 
-void BM2CMP_FRAME::exportBitmap( OUTPUT_FMT_ID aFormat )
+void BITMAP2CMP_PANEL::exportBitmap( OUTPUT_FMT_ID aFormat )
 {
     switch( aFormat )
     {
-    case EESCHEMA_FMT:     exportEeschemaFormat();   break;
-    case PCBNEW_KICAD_MOD: exportPcbnewFormat();     break;
-    case POSTSCRIPT_FMT:   exportPostScriptFormat(); break;
-    case KICAD_WKS_LOGO:   exportLogo();             break;
+    case EESCHEMA_FMT:     m_parentFrame->ExportEeschemaFormat();   break;
+    case PCBNEW_KICAD_MOD: m_parentFrame->ExportPcbnewFormat();     break;
+    case POSTSCRIPT_FMT:   m_parentFrame->ExportPostScriptFormat(); break;
+    case KICAD_WKS_LOGO:   m_parentFrame->ExportLogo();             break;
     }
 }
 
 
-void BM2CMP_FRAME::exportLogo()
-{
-    wxFileName  fn( m_ConvertedFileName );
-    wxString    path = fn.GetPath();
-
-    if( path.IsEmpty() || !wxDirExists(path) )
-        path = ::wxGetCwd();
-
-    wxFileDialog fileDlg( this, _( "Create Logo File" ), path, wxEmptyString,
-                          DrawingSheetFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
-    int          diag = fileDlg.ShowModal();
-
-    if( diag != wxID_OK )
-        return;
-
-    fn = fileDlg.GetPath();
-    fn.SetExt( DrawingSheetFileExtension );
-    m_ConvertedFileName = fn.GetFullPath();
-
-    FILE*    outfile;
-    outfile = wxFopen( m_ConvertedFileName, wxT( "w" ) );
-
-    if( outfile == nullptr )
-    {
-        wxString msg;
-        msg.Printf( _( "File '%s' could not be created." ), m_ConvertedFileName );
-        wxMessageBox( msg );
-        return;
-    }
-
-    std::string buffer;
-    ExportToBuffer( buffer, KICAD_WKS_LOGO );
-    fputs( buffer.c_str(), outfile );
-    fclose( outfile );
-}
-
-
-void BM2CMP_FRAME::exportPostScriptFormat()
-{
-    wxFileName  fn( m_ConvertedFileName );
-    wxString    path = fn.GetPath();
-
-    if( path.IsEmpty() || !wxDirExists( path ) )
-        path = ::wxGetCwd();
-
-    wxFileDialog fileDlg( this, _( "Create PostScript File" ), path, wxEmptyString,
-                          PSFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
-
-    if( fileDlg.ShowModal() != wxID_OK )
-        return;
-
-    fn = fileDlg.GetPath();
-    fn.SetExt( wxT( "ps" ) );
-    m_ConvertedFileName = fn.GetFullPath();
-
-    FILE*    outfile;
-    outfile = wxFopen( m_ConvertedFileName, wxT( "w" ) );
-
-    if( outfile == nullptr )
-    {
-        wxString msg;
-        msg.Printf( _( "File '%s' could not be created." ), m_ConvertedFileName );
-        wxMessageBox( msg );
-        return;
-    }
-
-    std::string buffer;
-    ExportToBuffer( buffer, POSTSCRIPT_FMT );
-    fputs( buffer.c_str(), outfile );
-    fclose( outfile );
-}
-
-
-void BM2CMP_FRAME::exportEeschemaFormat()
-{
-    wxFileName  fn( m_ConvertedFileName );
-    wxString    path = fn.GetPath();
-
-    if( path.IsEmpty() || !wxDirExists(path) )
-        path = ::wxGetCwd();
-
-    wxFileDialog fileDlg( this, _( "Create Symbol Library" ), path, wxEmptyString,
-                          KiCadSymbolLibFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
-
-    if( fileDlg.ShowModal() != wxID_OK )
-        return;
-
-    fn = EnsureFileExtension( fileDlg.GetPath(), KiCadSymbolLibFileExtension );
-    m_ConvertedFileName = fn.GetFullPath();
-
-    FILE*    outfile = wxFopen( m_ConvertedFileName, wxT( "w" ) );
-
-    if( outfile == nullptr )
-    {
-        wxString msg;
-        msg.Printf( _( "File '%s' could not be created." ), m_ConvertedFileName );
-        wxMessageBox( msg );
-        return;
-    }
-
-    std::string buffer;
-    ExportToBuffer( buffer, EESCHEMA_FMT );
-    fputs( buffer.c_str(), outfile );
-    fclose( outfile );
-}
-
-
-void BM2CMP_FRAME::exportPcbnewFormat()
-{
-    wxFileName  fn( m_ConvertedFileName );
-    wxString    path = fn.GetPath();
-
-    if( path.IsEmpty() || !wxDirExists( path ) )
-        path = m_mruPath;
-
-    wxFileDialog fileDlg( this, _( "Create Footprint Library" ), path, wxEmptyString,
-                          KiCadFootprintLibFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
-
-    if( fileDlg.ShowModal() != wxID_OK )
-        return;
-
-    fn = EnsureFileExtension( fileDlg.GetPath(), KiCadFootprintFileExtension );
-    m_ConvertedFileName = fn.GetFullPath();
-
-    FILE* outfile = wxFopen( m_ConvertedFileName, wxT( "w" ) );
-
-    if( outfile == nullptr )
-    {
-        wxString msg;
-        msg.Printf( _( "File '%s' could not be created." ), m_ConvertedFileName );
-        wxMessageBox( msg );
-        return;
-    }
-
-    std::string buffer;
-    ExportToBuffer( buffer, PCBNEW_KICAD_MOD );
-    fputs( buffer.c_str(), outfile );
-    fclose( outfile );
-    m_mruPath = fn.GetPath();
-}
-
-
-void BM2CMP_FRAME::ExportToBuffer( std::string& aOutput, OUTPUT_FMT_ID aFormat )
+void BITMAP2CMP_PANEL::ExportToBuffer( std::string& aOutput, OUTPUT_FMT_ID aFormat )
 {
     // Create a potrace bitmap
     int h = m_NB_Image.GetHeight();
@@ -910,7 +556,7 @@ void BM2CMP_FRAME::ExportToBuffer( std::string& aOutput, OUTPUT_FMT_ID aFormat )
 }
 
 
-void BM2CMP_FRAME::OnFormatChange( wxCommandEvent& event )
+void BITMAP2CMP_PANEL::OnFormatChange( wxCommandEvent& event )
 {
     bool enable = m_rbOutputFormat->GetSelection() == PCBNEW_KICAD_MOD;
     m_chPCBLayer->Enable( enable );

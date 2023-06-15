@@ -14,15 +14,17 @@ set( BITMAP2COMPONENT_SRCS
     bitmap2cmp_main.cpp
     bitmap2cmp_settings.cpp
     bitmap2component.cpp
-    bitmap2cmp_gui_base.cpp
-    bitmap2cmp_gui.cpp
+        bitmap2cmp_panel_base.cpp
+        bitmap2cmp_frame.cpp
+    bitmap2cmp_panel.cpp
+    bitmap2cmp_panel_base.cpp
     ../common/env_vars.cpp      # needed on MSW to avoid a link issue (a symbol not found)
     )
 
 set_source_files_properties( ${CMAKE_SOURCE_DIR}/common/single_top.cpp PROPERTIES
     COMPILE_DEFINITIONS     "TOP_FRAME=FRAME_BM2CMP"
     )
-set_source_files_properties( bitmap2cmp_gui.cpp PROPERTIES
+set_source_files_properties(bitmap2cmp_frame.cpp PROPERTIES
     COMPILE_DEFINITIONS     "COMPILING_DLL"
     )
 

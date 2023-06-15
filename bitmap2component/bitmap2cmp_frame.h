@@ -23,12 +23,13 @@
 #ifndef BITMOP2CMP_GUI_H_
 #define BITMOP2CMP_GUI_H_
 
-#include "bitmap2component.h"
+#include <kiway_player.h>
+#include <bitmap2cmp_frame.h>
 
-#include "bitmap2cmp_gui_base.h"
 #include <eda_units.h>
 #include <potracelib.h>
 
+class BITMAP2CMP_PANEL;
 
 class IMAGE_SIZE
 {
@@ -82,97 +83,55 @@ private:
     int       m_originalSizePixels;   // The original image size read from file, in pixels
 };
 
-class BM2CMP_FRAME : public BM2CMP_FRAME_BASE
+
+class BITMAP2CMP_FRAME : public KIWAY_PLAYER
 {
 public:
-    BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent );
-    ~BM2CMP_FRAME();
+    BITMAP2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent );
+    ~BITMAP2CMP_FRAME();
 
     // overload KIWAY_PLAYER virtual
     bool OpenProjectFiles( const std::vector<wxString>& aFilenames, int aCtl = 0 ) override;
 
     void OnExit( wxCommandEvent& event );
-    void OnLoadFile( wxCommandEvent& event ) override;
-
-DECLARE_EVENT_TABLE()
-
-private:
-    // Event handlers
-    void OnPaintInit( wxPaintEvent& event ) override;
-    void OnPaintGreyscale( wxPaintEvent& event ) override;
-    void OnPaintBW( wxPaintEvent& event ) override;
-    void OnExportToFile( wxCommandEvent& event ) override;
-    void OnExportToClipboard( wxCommandEvent& event ) override;
-
-    ///< @return the EDA_UNITS from the m_PixelUnit choice
-    EDA_UNITS getUnitFromSelection();
-
-    // return a string giving the output size, according to the selected unit
-    wxString FormatOutputSize( double aSize );
+    void OnLoadFile( wxCommandEvent& event );
 
     /**
      * Generate a schematic library which contains one component:
      * the logo
      */
-    void exportEeschemaFormat();
+    void ExportEeschemaFormat();
 
     /**
      * Generate a footprint in S expr format
      */
-    void exportPcbnewFormat();
+    void ExportPcbnewFormat();
 
     /**
      * Generate a postscript file
      */
-    void exportPostScriptFormat();
+    void ExportPostScriptFormat();
 
     /**
      * Generate a file suitable to be copied into a drawing sheet (.kicad_wks) file
      */
-    void exportLogo();
-
-    void Binarize( double aThreshold ); // aThreshold = 0.0 (black level) to 1.0 (white level)
-    void OnNegativeClicked( wxCommandEvent& event ) override;
-    void OnThresholdChange( wxScrollEvent& event ) override;
-
-    void OnSizeChangeX( wxCommandEvent& event ) override;
-    void OnSizeChangeY( wxCommandEvent& event ) override;
-    void OnSizeUnitChange( wxCommandEvent& event ) override;
-
-    void ToggleAspectRatioLock( wxCommandEvent& event ) override;
-
-    void NegateGreyscaleImage();
-    /**
-     * generate a export data of the current bitmap.
-     * @param aOutput is a string buffer to fill with data
-     * @param aFormat is the format to generate
-     */
-    void ExportToBuffer( std::string& aOutput, OUTPUT_FMT_ID aFormat );
-
-    void updateImageInfo();
-    void OnFormatChange( wxCommandEvent& event ) override;
-    void exportBitmap( OUTPUT_FMT_ID aFormat );
+    void ExportLogo();
 
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
     wxWindow* GetToolCanvas() const override;
 
+DECLARE_EVENT_TABLE()
+
 protected:
     void doReCreateMenuBar() override;
 
 private:
-    wxImage    m_Pict_Image;
-    wxBitmap   m_Pict_Bitmap;
-    wxImage    m_Greyscale_Image;
-    wxBitmap   m_Greyscale_Bitmap;
-    wxImage    m_NB_Image;
-    wxBitmap   m_BN_Bitmap;
-    IMAGE_SIZE m_outputSizeX;
-    IMAGE_SIZE m_outputSizeY;
-    bool       m_Negative;
-    wxString   m_BitmapFileName;
-    wxString   m_ConvertedFileName;
-    double     m_AspectRatio;
+    BITMAP2CMP_PANEL* m_panel;
+    wxStatusBar*      m_statusBar;
+
+    wxString          m_bitmapFileName;
+    wxString          m_convertedFileName;
 };
 #endif// BITMOP2CMP_GUI_H_

@@ -175,16 +175,6 @@ public:
      */
     virtual void ExecuteRemoteCommand( const char* cmdline ){}
 
-
-private:
-    friend class BM2CMP_FRAME_BASE;
-
-    /// Don't use this one, only wxformbuilder uses it, and it must be augmented with correcting
-    /// m_ident and calling a SetKiway() early in derived constructor.
-    KIWAY_PLAYER( wxWindow* aParent, wxWindowID aId, const wxString& aTitle,
-                  const wxPoint& aPos, const wxSize& aSize, long aStyle,
-                  const wxString& aWdoName = wxFrameNameStr );
-
 protected:
 
     /// event handler, routes to derivative specific virtual KiwayMailIn()

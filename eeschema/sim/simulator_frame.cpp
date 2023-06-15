@@ -110,6 +110,9 @@ END_EVENT_TABLE()
 SIMULATOR_FRAME::SIMULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         KIWAY_PLAYER( aKiway, aParent, FRAME_SIMULATOR, _( "Simulator" ), wxDefaultPosition,
                       wxDefaultSize, wxDEFAULT_FRAME_STYLE, wxT( "simulator" ), unityScale ),
+        m_schematicFrame( nullptr ),
+        m_toolBar( nullptr ),
+        m_panel( nullptr ),
         m_lastSimPlot( nullptr ),
         m_simFinished( false ),
         m_workbookModified( false )

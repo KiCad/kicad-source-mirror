@@ -1,24 +1,16 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "bitmap2cmp_gui_base.h"
+#include "bitmap2cmp_panel_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : KIWAY_PLAYER( parent, id, title, pos, size, style )
+BITMAP2CMP_PANEL_BASE::BITMAP2CMP_PANEL_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
-	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
-
-	m_menubar = new wxMenuBar( 0 );
-	m_menu1 = new wxMenu();
-	m_menubar->Append( m_menu1, _("dummy") );
-
-	this->SetMenuBar( m_menubar );
-
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxHORIZONTAL );
 
@@ -106,6 +98,9 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 	m_buttonLoad = new wxButton( this, wxID_ANY, _("Load Source Image"), wxDefaultPosition, wxDefaultSize, 0 );
 	brightSizer->Add( m_buttonLoad, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
+
+	brightSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+
 	wxStaticBoxSizer* sbSizerImgPrms;
 	sbSizerImgPrms = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Output Size") ), wxVERTICAL );
 
@@ -184,47 +179,46 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 	brightSizer->Add( m_buttonExportClipboard, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bMainSizer->Add( brightSizer, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bMainSizer->Add( brightSizer, 0, wxEXPAND|wxALL, 5 );
 
 
 	this->SetSizer( bMainSizer );
 	this->Layout();
 	bMainSizer->Fit( this );
-	m_statusBar = this->CreateStatusBar( 1, wxSTB_SIZEGRIP, wxID_ANY );
 
 	// Connect Events
-	m_InitialPicturePanel->Connect( wxEVT_PAINT, wxPaintEventHandler( BM2CMP_FRAME_BASE::OnPaintInit ), NULL, this );
-	m_GreyscalePicturePanel->Connect( wxEVT_PAINT, wxPaintEventHandler( BM2CMP_FRAME_BASE::OnPaintGreyscale ), NULL, this );
-	m_BNPicturePanel->Connect( wxEVT_PAINT, wxPaintEventHandler( BM2CMP_FRAME_BASE::OnPaintBW ), NULL, this );
-	m_buttonLoad->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnLoadFile ), NULL, this );
-	m_aspectRatioCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( BM2CMP_FRAME_BASE::ToggleAspectRatioLock ), NULL, this );
-	m_UnitSizeX->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnSizeChangeX ), NULL, this );
-	m_UnitSizeY->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnSizeChangeY ), NULL, this );
-	m_PixelUnit->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnSizeUnitChange ), NULL, this );
-	m_sliderThreshold->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( BM2CMP_FRAME_BASE::OnThresholdChange ), NULL, this );
-	m_sliderThreshold->Connect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( BM2CMP_FRAME_BASE::OnThresholdChange ), NULL, this );
-	m_checkNegative->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnNegativeClicked ), NULL, this );
-	m_rbOutputFormat->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnFormatChange ), NULL, this );
-	m_buttonExportFile->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnExportToFile ), NULL, this );
-	m_buttonExportClipboard->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnExportToClipboard ), NULL, this );
+	m_InitialPicturePanel->Connect( wxEVT_PAINT, wxPaintEventHandler( BITMAP2CMP_PANEL_BASE::OnPaintInit ), NULL, this );
+	m_GreyscalePicturePanel->Connect( wxEVT_PAINT, wxPaintEventHandler( BITMAP2CMP_PANEL_BASE::OnPaintGreyscale ), NULL, this );
+	m_BNPicturePanel->Connect( wxEVT_PAINT, wxPaintEventHandler( BITMAP2CMP_PANEL_BASE::OnPaintBW ), NULL, this );
+	m_buttonLoad->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( BITMAP2CMP_PANEL_BASE::OnLoadFile ), NULL, this );
+	m_aspectRatioCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( BITMAP2CMP_PANEL_BASE::ToggleAspectRatioLock ), NULL, this );
+	m_UnitSizeX->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( BITMAP2CMP_PANEL_BASE::OnSizeChangeX ), NULL, this );
+	m_UnitSizeY->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( BITMAP2CMP_PANEL_BASE::OnSizeChangeY ), NULL, this );
+	m_PixelUnit->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( BITMAP2CMP_PANEL_BASE::OnSizeUnitChange ), NULL, this );
+	m_sliderThreshold->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( BITMAP2CMP_PANEL_BASE::OnThresholdChange ), NULL, this );
+	m_sliderThreshold->Connect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( BITMAP2CMP_PANEL_BASE::OnThresholdChange ), NULL, this );
+	m_checkNegative->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( BITMAP2CMP_PANEL_BASE::OnNegativeClicked ), NULL, this );
+	m_rbOutputFormat->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( BITMAP2CMP_PANEL_BASE::OnFormatChange ), NULL, this );
+	m_buttonExportFile->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( BITMAP2CMP_PANEL_BASE::OnExportToFile ), NULL, this );
+	m_buttonExportClipboard->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( BITMAP2CMP_PANEL_BASE::OnExportToClipboard ), NULL, this );
 }
 
-BM2CMP_FRAME_BASE::~BM2CMP_FRAME_BASE()
+BITMAP2CMP_PANEL_BASE::~BITMAP2CMP_PANEL_BASE()
 {
 	// Disconnect Events
-	m_InitialPicturePanel->Disconnect( wxEVT_PAINT, wxPaintEventHandler( BM2CMP_FRAME_BASE::OnPaintInit ), NULL, this );
-	m_GreyscalePicturePanel->Disconnect( wxEVT_PAINT, wxPaintEventHandler( BM2CMP_FRAME_BASE::OnPaintGreyscale ), NULL, this );
-	m_BNPicturePanel->Disconnect( wxEVT_PAINT, wxPaintEventHandler( BM2CMP_FRAME_BASE::OnPaintBW ), NULL, this );
-	m_buttonLoad->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnLoadFile ), NULL, this );
-	m_aspectRatioCheckbox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( BM2CMP_FRAME_BASE::ToggleAspectRatioLock ), NULL, this );
-	m_UnitSizeX->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnSizeChangeX ), NULL, this );
-	m_UnitSizeY->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnSizeChangeY ), NULL, this );
-	m_PixelUnit->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnSizeUnitChange ), NULL, this );
-	m_sliderThreshold->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( BM2CMP_FRAME_BASE::OnThresholdChange ), NULL, this );
-	m_sliderThreshold->Disconnect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( BM2CMP_FRAME_BASE::OnThresholdChange ), NULL, this );
-	m_checkNegative->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnNegativeClicked ), NULL, this );
-	m_rbOutputFormat->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnFormatChange ), NULL, this );
-	m_buttonExportFile->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnExportToFile ), NULL, this );
-	m_buttonExportClipboard->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnExportToClipboard ), NULL, this );
+	m_InitialPicturePanel->Disconnect( wxEVT_PAINT, wxPaintEventHandler( BITMAP2CMP_PANEL_BASE::OnPaintInit ), NULL, this );
+	m_GreyscalePicturePanel->Disconnect( wxEVT_PAINT, wxPaintEventHandler( BITMAP2CMP_PANEL_BASE::OnPaintGreyscale ), NULL, this );
+	m_BNPicturePanel->Disconnect( wxEVT_PAINT, wxPaintEventHandler( BITMAP2CMP_PANEL_BASE::OnPaintBW ), NULL, this );
+	m_buttonLoad->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( BITMAP2CMP_PANEL_BASE::OnLoadFile ), NULL, this );
+	m_aspectRatioCheckbox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( BITMAP2CMP_PANEL_BASE::ToggleAspectRatioLock ), NULL, this );
+	m_UnitSizeX->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( BITMAP2CMP_PANEL_BASE::OnSizeChangeX ), NULL, this );
+	m_UnitSizeY->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( BITMAP2CMP_PANEL_BASE::OnSizeChangeY ), NULL, this );
+	m_PixelUnit->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( BITMAP2CMP_PANEL_BASE::OnSizeUnitChange ), NULL, this );
+	m_sliderThreshold->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( BITMAP2CMP_PANEL_BASE::OnThresholdChange ), NULL, this );
+	m_sliderThreshold->Disconnect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( BITMAP2CMP_PANEL_BASE::OnThresholdChange ), NULL, this );
+	m_checkNegative->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( BITMAP2CMP_PANEL_BASE::OnNegativeClicked ), NULL, this );
+	m_rbOutputFormat->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( BITMAP2CMP_PANEL_BASE::OnFormatChange ), NULL, this );
+	m_buttonExportFile->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( BITMAP2CMP_PANEL_BASE::OnExportToFile ), NULL, this );
+	m_buttonExportClipboard->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( BITMAP2CMP_PANEL_BASE::OnExportToClipboard ), NULL, this );
 
 }
