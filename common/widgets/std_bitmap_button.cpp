@@ -211,7 +211,7 @@ void STD_BITMAP_BUTTON::OnPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 
     if( m_bitmap.IsOk() )
     {
-#ifdef __WXMAC__
+#ifndef __WXMSW__
         wxSize bmpSize = m_bitmap.GetDefaultSize();
 #else
         wxSize bmpSize = m_bitmap.GetPreferredBitmapSizeFor( this );
