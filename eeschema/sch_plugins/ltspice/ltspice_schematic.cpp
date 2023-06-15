@@ -133,7 +133,7 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
             std::map  tempAsyMap = ReadAsyFiles( tempVector, mapOfAsyFiles );
             wxString  ascFileName = ascFiles[i].Name.GetName();
             LT_ASC    dummyAsc;
-            LT_SYMBOL tempSymbol = SymbolBuilder( tempAsyMap[ascFileName], ascFileName, dummyAsc );
+            LT_SYMBOL tempSymbol = SymbolBuilder( ascFileName, tempAsyMap[ascFileName], dummyAsc );
 
             LIB_SYMBOL* tempLibSymbol = new LIB_SYMBOL( std::string( ascFiles[i].Name.GetName() ) );
             parser.CreateSymbol( tempSymbol, tempLibSymbol );
