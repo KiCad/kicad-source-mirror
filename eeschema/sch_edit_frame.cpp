@@ -842,6 +842,10 @@ void SCH_EDIT_FRAME::HardRedraw()
     FocusOnItem( nullptr );
 
     GetCanvas()->DisplaySheet( GetCurrentSheet().LastScreen() );
+
+    if( EE_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<EE_SELECTION_TOOL>() )
+        selectionTool->Reset( TOOL_BASE::REDRAW );
+
     GetCanvas()->ForceRefresh();
 }
 
