@@ -599,7 +599,7 @@ int DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
                 COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
 
-        if( evt->IsCancelInteractive() )
+        if( evt->IsCancelInteractive() || evt->IsAction( &ACTIONS::undo ) )
         {
             if( image )
             {
@@ -740,6 +740,10 @@ int DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
         {
             wxBell();
         }
+        else if( evt->IsAction( &ACTIONS::redo ) )
+        {
+            wxBell();
+        }
         else
         {
             evt->SetPassEvent();
@@ -831,7 +835,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
 
-        if( evt->IsCancelInteractive() )
+        if( evt->IsCancelInteractive() || evt->IsAction( &ACTIONS::undo ) )
         {
             if( text )
             {
@@ -995,6 +999,10 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 evt->SetPassEvent();
             }
         }
+        else if( evt->IsAction( &ACTIONS::redo ) )
+        {
+            wxBell();
+        }
         else
         {
             evt->SetPassEvent();
@@ -1115,7 +1123,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
         m_controls->ForceCursorPosition( true, cursorPos );
 
-        if( evt->IsCancelInteractive() )
+        if( evt->IsCancelInteractive() || evt->IsAction( &ACTIONS::undo ) )
         {
             m_controls->SetAutoPan( false );
 
@@ -1437,6 +1445,10 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             }
         }
         else if( dimension && ZONE_FILLER_TOOL::IsZoneFillAction( evt ) )
+        {
+            wxBell();
+        }
+        else if( evt->IsAction( &ACTIONS::redo ) )
         {
             wxBell();
         }
@@ -1851,7 +1863,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
                 COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
 
-        if( evt->IsCancelInteractive() )
+        if( evt->IsCancelInteractive() || evt->IsAction( &ACTIONS::undo ) )
         {
             cleanup();
 
@@ -2066,6 +2078,10 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
             m_view->Update( &preview );
             frame()->SetMsgPanel( graphic );
         }
+        else if( evt->IsAction( &ACTIONS::redo ) )
+        {
+            wxBell();
+        }
         else if( graphic && evt->IsAction( &PCB_ACTIONS::decWidth ) )
         {
             if( (unsigned) m_stroke.GetWidth() > WIDTH_STEP )
@@ -2225,7 +2241,7 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
                 grid.BestSnapAnchor( m_controls->GetMousePosition(), graphic ), COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
 
-        if( evt->IsCancelInteractive() )
+        if( evt->IsCancelInteractive() || evt->IsAction( &ACTIONS::undo ) )
         {
             cleanup();
 
@@ -2383,6 +2399,10 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
             evt->SetPassEvent();
         }
         else if( started && ZONE_FILLER_TOOL::IsZoneFillAction( evt ) )
+        {
+            wxBell();
+        }
+        else if( evt->IsAction( &ACTIONS::redo ) )
         {
             wxBell();
         }
@@ -2548,9 +2568,13 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
         polyGeomMgr.SetLeaderMode( Is45Limited() ? POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45
                                                  : POLYGON_GEOM_MANAGER::LEADER_MODE::DIRECT );
 
-        if( evt->IsCancelInteractive() )
+        if( evt->IsCancelInteractive() || evt->IsAction( &ACTIONS::undo ) )
         {
-            if( polyGeomMgr.IsPolygonInProgress() )
+            if( polyGeomMgr.PolygonPointCount() >= 2 && evt->IsAction( &ACTIONS::undo ) )
+            {
+                polyGeomMgr.DeleteLastCorner();
+            }
+            else if( polyGeomMgr.IsPolygonInProgress() )
             {
                 cleanup();
             }
@@ -2672,6 +2696,10 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
             // m_view->Update( &zoneAsst );
             evt->SetPassEvent();
         }*/
+        else if( evt->IsAction( &ACTIONS::redo ) )
+        {
+            wxBell();
+        }
         else
         {
             evt->SetPassEvent();

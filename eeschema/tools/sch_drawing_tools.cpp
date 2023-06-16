@@ -254,7 +254,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
         bool isSyntheticClick = symbol && evt->IsActivate() && evt->HasPosition()
                                 && evt->Matches( aEvent );
 
-        if( evt->IsCancelInteractive() )
+        if( evt->IsCancelInteractive() || evt->IsAction( &ACTIONS::undo ) )
         {
             m_frame->GetInfoBar()->Dismiss();
 
@@ -451,6 +451,10 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
         {
             cleanup();
         }
+        else if( evt->IsAction( &ACTIONS::redo ) )
+        {
+            wxBell();
+        }
         else
         {
             evt->SetPassEvent();
@@ -546,7 +550,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
         bool isSyntheticClick = image && evt->IsActivate() && evt->HasPosition()
                                 && evt->Matches( aEvent );
 
-        if( evt->IsCancelInteractive() )
+        if( evt->IsCancelInteractive() || evt->IsAction( &ACTIONS::undo ) )
         {
             m_frame->GetInfoBar()->Dismiss();
 
@@ -685,6 +689,10 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
         {
             cleanup();
         }
+        else if( evt->IsAction( &ACTIONS::redo ) )
+        {
+            wxBell();
+        }
         else
         {
             evt->SetPassEvent();
@@ -798,7 +806,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
         cursorPos = grid.BestSnapAnchor( cursorPos, LAYER_CONNECTABLE, nullptr );
         controls->ForceCursorPosition( true, cursorPos );
 
-        if( evt->IsCancelInteractive() )
+        if( evt->IsCancelInteractive() || evt->IsAction( &ACTIONS::undo ) )
         {
             m_frame->PopTool( aEvent );
             break;
@@ -928,6 +936,10 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
             {
                 evt->SetPassEvent();
             }
+        }
+        else if( evt->IsAction( &ACTIONS::redo ) )
+        {
+            wxBell();
         }
         else
         {
@@ -1244,7 +1256,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     }
                 };
 
-        if( evt->IsCancelInteractive() )
+        if( evt->IsCancelInteractive() || evt->IsAction( &ACTIONS::undo ) )
         {
             m_frame->GetInfoBar()->Dismiss();
 
@@ -1499,6 +1511,10 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         {
             cleanup();
         }
+        else if( evt->IsAction( &ACTIONS::redo ) )
+        {
+            wxBell();
+        }
         else
         {
             evt->SetPassEvent();
@@ -1576,7 +1592,7 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         bool isSyntheticClick = item && evt->IsActivate() && evt->HasPosition()
                                 && evt->Matches( aEvent );
 
-        if( evt->IsCancelInteractive() )
+        if( evt->IsCancelInteractive() || evt->IsAction( &ACTIONS::undo ) )
         {
             if( item )
             {
@@ -1725,6 +1741,10 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
             m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
+        else if( evt->IsAction( &ACTIONS::redo ) )
+        {
+            wxBell();
+        }
         else
         {
             evt->SetPassEvent();
@@ -1792,7 +1812,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
         bool isSyntheticClick = sheet && evt->IsActivate() && evt->HasPosition()
                                 && evt->Matches( aEvent );
 
-        if( evt->IsCancelInteractive() )
+        if( evt->IsCancelInteractive() || evt->IsAction( &ACTIONS::undo ) )
         {
             m_frame->GetInfoBar()->Dismiss();
 
@@ -1915,6 +1935,10 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                 m_toolMgr->VetoContextMenuMouseWarp();
 
             m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
+        }
+        else if( evt->IsAction( &ACTIONS::redo ) )
+        {
+            wxBell();
         }
         else
         {

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,13 +60,10 @@ public:
     void SetEnd( const VECTOR2I& aEnd )
     {
         if( m_angleSnap )
-        {
             m_end = GetVectorSnapped45( aEnd - m_origin ) + m_origin;
-        }
         else
-        {
             m_end = aEnd;
-        }
+
         setGeometryChanged();
     }
 
