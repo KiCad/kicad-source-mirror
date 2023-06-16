@@ -32,7 +32,8 @@ class PAGED_DIALOG : public DIALOG_SHIM
 {
 public:
     PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aShowReset,
-                  const wxString& aAuxiliaryAction = wxEmptyString );
+                  const wxString& aAuxiliaryAction = wxEmptyString,
+                  const wxSize&   aInitialSize = wxDefaultSize );
     ~PAGED_DIALOG() override;
 
     WX_TREEBOOK* GetTreebook() { return m_treebook; }
