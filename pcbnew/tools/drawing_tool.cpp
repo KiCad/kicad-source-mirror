@@ -1553,7 +1553,9 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
     // Clear the current selection then select the drawings so that edit tools work on them
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-    m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &selectedItems );
+
+    EDA_ITEMS selItems( selectedItems.begin(), selectedItems.end() );
+    m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, true, &selItems );
 
     m_frame->PushTool( aEvent );
 

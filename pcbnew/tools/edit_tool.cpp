@@ -2229,7 +2229,8 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
     // Select the new items
-    m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &new_items );
+    EDA_ITEMS nItems( new_items.begin(), new_items.end() );
+    m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, true, &nItems );
 
     // record the new items as added
     if( !selection.Empty() )

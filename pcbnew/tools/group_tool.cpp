@@ -357,7 +357,8 @@ int GROUP_TOOL::Ungroup( const TOOL_EVENT& aEvent )
         }
     }
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &members );
+    EDA_ITEMS mem( members.begin(), members.end() );
+    m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, true, &mem );
 
     m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
     m_frame->OnModify();

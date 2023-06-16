@@ -116,7 +116,10 @@ void FOOTPRINT_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
     m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 
     if( selectedItems.size() )
-        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItems, true, &selectedItems );
+    {
+        EDA_ITEMS selItems( selectedItems.begin(), selectedItems.end() );
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItems, true, &selItems );
+    }
 
     m_frame->GetCanvas()->Refresh( false );
 }
@@ -202,7 +205,10 @@ void ZONE_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
     m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 
     if( selectedItems.size() )
-        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItems, true, &selectedItems );
+    {
+        EDA_ITEMS selItems( selectedItems.begin(), selectedItems.end() );
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItems, true, &selItems );
+    }
 
     m_frame->GetCanvas()->Refresh( false );
 }
@@ -290,7 +296,10 @@ void TEXT_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
     m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 
     if( selectedItems.size() )
-        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItems, true, &selectedItems );
+    {
+        EDA_ITEMS selItems( selectedItems.begin(), selectedItems.end() );
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItems, true, &selItems );
+    }
 
     m_frame->GetCanvas()->Refresh( false );
 }

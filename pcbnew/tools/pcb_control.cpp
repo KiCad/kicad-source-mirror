@@ -1152,7 +1152,8 @@ int PCB_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsNew,
     }
 
     // Select the items that should be selected
-    m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &itemsToSel );
+    EDA_ITEMS toSel( itemsToSel.begin(), itemsToSel.end() );
+    m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, true, &toSel );
 
     // Reannotate duplicate footprints (make sense only in board editor )
     if( aReannotateDuplicates && m_isBoardEditor )

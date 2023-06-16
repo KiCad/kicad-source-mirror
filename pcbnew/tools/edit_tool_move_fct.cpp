@@ -816,7 +816,9 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommi
     else
     {
         m_commit->Push( aCommitMessage );
-        m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &orig_items );
+
+        EDA_ITEMS oItems( orig_items.begin(), orig_items.end() );
+        m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, true, &oItems );
     }
 
     m_toolMgr->GetTool<DRAWING_TOOL>()->UpdateStatusBar();
