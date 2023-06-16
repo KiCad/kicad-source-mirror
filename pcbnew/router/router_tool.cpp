@@ -2020,7 +2020,8 @@ void ROUTER_TOOL::performDragging( int aMode )
 }
 
 
-void ROUTER_TOOL::NeighboringSegmentFilter( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+void ROUTER_TOOL::NeighboringSegmentFilter( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector,
+                                            PCB_SELECTION_TOOL* aSelTool )
 {
     /*
      * If the collection contains a trivial line corner (two connected segments)
@@ -2077,7 +2078,8 @@ void ROUTER_TOOL::NeighboringSegmentFilter( const VECTOR2I& aPt, GENERAL_COLLECT
 
 bool ROUTER_TOOL::CanInlineDrag( int aDragMode )
 {
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, NeighboringSegmentFilter );
+    m_toolMgr->RunAction<CLIENT_SELECTION_FILTER>( PCB_ACTIONS::selectionCursor, true,
+                                                   NeighboringSegmentFilter );
     const PCB_SELECTION& selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 
     if( selection.Size() == 1 )
@@ -2105,7 +2107,10 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     const PCB_SELECTION& selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 
     if( selection.Empty() )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, NeighboringSegmentFilter );
+    {
+        m_toolMgr->RunAction<CLIENT_SELECTION_FILTER>( PCB_ACTIONS::selectionCursor, true,
+                                                       NeighboringSegmentFilter );
+    }
 
     if( selection.Size() != 1 )
         return 0;

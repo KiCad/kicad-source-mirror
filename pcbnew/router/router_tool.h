@@ -25,6 +25,8 @@
 
 #include "pns_tool_base.h"
 
+class PCB_SELECTION_TOOL;
+
 class APIEXPORT ROUTER_TOOL : public PNS::TOOL_BASE
 {
 public:
@@ -62,7 +64,8 @@ public:
 
     // A filter for narrowing a collection representing a simple corner
     // or a non-fanout-via to a single PCB_TRACK item.
-    static void NeighboringSegmentFilter( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector );
+    static void NeighboringSegmentFilter( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector,
+                                          PCB_SELECTION_TOOL* aSelTool );
 
     void UpdateMessagePanel();
 

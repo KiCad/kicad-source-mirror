@@ -1757,13 +1757,15 @@ int BOARD_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
                 PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
 
                 m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-                m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, EDIT_TOOL::PadFilter );
+                m_toolMgr->RunAction<CLIENT_SELECTION_FILTER>( PCB_ACTIONS::selectionCursor, true,
+                                                               EDIT_TOOL::PadFilter );
+
                 PCB_SELECTION& selection = selectionTool->GetSelection();
 
                 if( selection.Empty() )
                 {
-                    m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true,
-                                          EDIT_TOOL::FootprintFilter );
+                    m_toolMgr->RunAction<CLIENT_SELECTION_FILTER>( PCB_ACTIONS::selectionCursor, true,
+                                                                   EDIT_TOOL::FootprintFilter );
                     selection = selectionTool->GetSelection();
                 }
 
