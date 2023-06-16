@@ -117,6 +117,9 @@ bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, int* aCtl, wxString* aFileNa
         // Import Altium Designer board files.
         { AltiumDesignerPcbFileWildcard(),      IO_MGR::ALTIUM_DESIGNER },
 
+        // Import Solidworks PCB (based on Altium) board files.
+        { SolidworksPcbFileWildcard(),          IO_MGR::SOLIDWORKS_PCB },
+
         // Import Cadstar PCB Archive board files.
         { CadstarPcbArchiveFileWildcard(),      IO_MGR::CADSTAR_PCB_ARCHIVE },
 

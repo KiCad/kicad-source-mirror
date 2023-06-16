@@ -588,7 +588,7 @@ void OPENGL_RENDER_LIST::DrawAllCameraCulledSubtractLayer( bool aDrawMiddle,
 
 void OPENGL_RENDER_LIST::ApplyScalePosition( float aZposition, float aZscale )
 {
-    wxASSERT( aZscale > FLT_EPSILON );
+    wxCHECK2( aZscale > FLT_EPSILON, aZscale = FLT_EPSILON + 1 );
 
     m_zPositionTransformation = aZposition;
     m_zScaleTransformation = aZscale;

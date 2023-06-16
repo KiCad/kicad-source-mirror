@@ -60,6 +60,7 @@ public:
         ALTIUM_DESIGNER,
         ALTIUM_CIRCUIT_STUDIO,
         ALTIUM_CIRCUIT_MAKER,
+        SOLIDWORKS_PCB,
         CADSTAR_PCB_ARCHIVE,
         GEDA_PCB, ///< Geda PCB file formats.
         // add your type here.

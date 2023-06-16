@@ -50,6 +50,7 @@
 #include <wx/wfstream.h>
 #include <wx/zstream.h>
 #include <progress_reporter.h>
+#include <magic_enum.hpp>
 
 
 constexpr double BOLD_FACTOR = 1.75;    // CSS font-weight-normal is 400; bold is 700
@@ -500,9 +501,14 @@ void ALTIUM_PCB::Parse( const ALTIUM_COMPOUND_FILE&                  altiumPcbFi
         const CFB::COMPOUND_FILE_ENTRY* file = altiumPcbFile.FindStream( mappedFile );
 
         if( file != nullptr )
+        {
             fp( altiumPcbFile, file );
+        }
         else if( isRequired )
-            wxLogError( _( "File not found: '%s'." ), FormatPath( mappedFile ) );
+        {
+            wxLogError( _( "File not found: '%s' for directory '%s'." ), FormatPath( mappedFile ),
+                        magic_enum::enum_name( directory ) );
+        }
     }
 
     // fixup zone priorities since Altium stores them in the opposite order

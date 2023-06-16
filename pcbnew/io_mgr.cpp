@@ -35,6 +35,7 @@
 #include <plugins/altium/altium_circuit_maker_plugin.h>
 #include <plugins/altium/altium_circuit_studio_plugin.h>
 #include <plugins/altium/altium_designer_plugin.h>
+#include <plugins/altium/solidworks_pcb_plugin.h>
 #include <plugins/cadstar/cadstar_pcb_archive_plugin.h>
 #include <plugins/fabmaster/fabmaster_plugin.h>
 #include <wildcards_and_files_ext.h>
@@ -206,6 +207,9 @@ static IO_MGR::REGISTER_PLUGIN registerAltiumCircuitStudioPlugin( IO_MGR::ALTIUM
         wxT( "Altium Circuit Studio" ),
         []() -> PLUGIN* { return new ALTIUM_CIRCUIT_STUDIO_PLUGIN; } );
 static IO_MGR::REGISTER_PLUGIN registerAltiumCircuitMakerPlugin( IO_MGR::ALTIUM_CIRCUIT_MAKER,
+        wxT( "Solidworks PCB" ),
+        []() -> PLUGIN* { return new SOLIDWORKS_PCB_PLUGIN; } );
+static IO_MGR::REGISTER_PLUGIN registerSolidworksPCBPlugin( IO_MGR::SOLIDWORKS_PCB,
         wxT( "Altium Circuit Maker" ),
         []() -> PLUGIN* { return new ALTIUM_CIRCUIT_MAKER_PLUGIN; } );
 static IO_MGR::REGISTER_PLUGIN registerCadstarArchivePlugin( IO_MGR::CADSTAR_PCB_ARCHIVE,

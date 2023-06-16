@@ -366,6 +366,11 @@ wxString AltiumCircuitMakerPcbFileWildcard()
     return _( "Altium Circuit Maker PCB files" ) + AddFileExtListToFilter( { "CMPcbDoc" } );
 }
 
+wxString SolidworksPcbFileWildcard()
+{
+    return _( "Solidworks PCB files" ) + AddFileExtListToFilter( { "SWPcbDoc" } );
+}
+
 wxString FabmasterPcbFileWildcard()
 {
     return _( "Fabmaster PCB files" ) + AddFileExtListToFilter( { "txt", "fab" } );

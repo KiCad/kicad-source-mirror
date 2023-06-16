@@ -227,6 +227,7 @@ extern wxString CadstarPcbArchiveFileWildcard();
 extern wxString AltiumDesignerPcbFileWildcard();
 extern wxString AltiumCircuitStudioPcbFileWildcard();
 extern wxString AltiumCircuitMakerPcbFileWildcard();
+extern wxString SolidworksPcbFileWildcard();
 extern wxString FabmasterPcbFileWildcard();
 extern wxString PdfFileWildcard();
 extern wxString PSFileWildcard();
