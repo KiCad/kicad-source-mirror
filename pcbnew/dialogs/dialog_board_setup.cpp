@@ -52,7 +52,7 @@ std::mutex DIALOG_BOARD_SETUP::g_Mutex;
 
 DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
         PAGED_DIALOG( aFrame, _( "Board Setup" ), false,
-                      _( "Import Settings from Another Board..." ) ),
+                      _( "Import Settings from Another Board..." ), wxSize( 980, 600 ) ),
         m_frame( aFrame ),
         m_layers( nullptr ),
         m_physicalStackup( nullptr ),
@@ -186,10 +186,6 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
 
     for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
         m_treebook->ExpandNode( i );
-
-    // This is unfortunate, but it's the cost of lazy-loading the panels
-    m_treebook->SetMinSize( wxSize( 980, 600 ) );
-    m_treebook->SetInitialSize( wxSize( 980, 600 ) );
 
     SetEvtHandlerEnabled( true );
 

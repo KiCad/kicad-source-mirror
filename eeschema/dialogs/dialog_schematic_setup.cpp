@@ -38,7 +38,7 @@
 
 DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
         PAGED_DIALOG( aFrame, _( "Schematic Setup" ), true,
-                      _( "Import Settings from Another Project..." ) ),
+                      _( "Import Settings from Another Project..." ), wxSize( 920, 460 ) ),
         m_frame( aFrame )
 {
     SetEvtHandlerEnabled( false );
@@ -113,10 +113,6 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
 
     for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
         m_treebook->ExpandNode( i );
-
-    // This is unfortunate, but it's the cost of lazy-loading the panels
-    m_treebook->SetMinSize( wxSize( 920, 460 ) );
-    m_treebook->SetInitialSize( wxSize( 920, 460 ) );
 
     SetEvtHandlerEnabled( true );
 
