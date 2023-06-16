@@ -104,7 +104,7 @@
                         <property name="pin_button">1</property>
                         <property name="pos"></property>
                         <property name="resize">Resizable</property>
-                        <property name="scroll_rate_x">5</property>
+                        <property name="scroll_rate_x">0</property>
                         <property name="scroll_rate_y">5</property>
                         <property name="show">1</property>
                         <property name="size"></property>
@@ -4481,7 +4481,7 @@
                                 </object>
                             </object>
                             <object class="sizeritem" expanded="1">
-                                <property name="border">20</property>
+                                <property name="border">15</property>
                                 <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
                                 <property name="proportion">0</property>
                                 <object class="spacer" expanded="1">

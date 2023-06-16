@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -26,7 +26,7 @@ PANEL_3D_RAYTRACING_OPTIONS_BASE::PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* pa
 
 	m_cbRaytracing_proceduralTextures = new wxCheckBox( this, wxID_ANY, _("Procedural textures (slow)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbRaytracing_proceduralTextures->SetValue(true);
-	gSizer1->Add( m_cbRaytracing_proceduralTextures, 0, wxALL, 5 );
+	gSizer1->Add( m_cbRaytracing_proceduralTextures, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_cbRaytracing_addFloor = new wxCheckBox( this, wxID_ANY, _("Add floor (slow)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbRaytracing_addFloor->SetValue(true);
@@ -347,6 +347,7 @@ PANEL_3D_RAYTRACING_OPTIONS_BASE::PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* pa
 
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 }
 
 PANEL_3D_RAYTRACING_OPTIONS_BASE::~PANEL_3D_RAYTRACING_OPTIONS_BASE()
