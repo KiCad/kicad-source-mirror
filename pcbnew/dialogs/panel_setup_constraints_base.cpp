@@ -15,7 +15,7 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	bMainSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_scrolledWindow = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
-	m_scrolledWindow->SetScrollRate( 5, 5 );
+	m_scrolledWindow->SetScrollRate( 0, 5 );
 	wxBoxSizer* bScrolledSizer;
 	bScrolledSizer = new wxBoxSizer( wxHORIZONTAL );
 
@@ -344,7 +344,7 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	bScrolledSizer->Add( sbFeatureConstraints, 0, wxEXPAND|wxTOP|wxRIGHT, 5 );
 
 
-	bScrolledSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 20 );
+	bScrolledSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 15 );
 
 	wxBoxSizer* sbFeatureRules;
 	sbFeatureRules = new wxBoxSizer( wxVERTICAL );

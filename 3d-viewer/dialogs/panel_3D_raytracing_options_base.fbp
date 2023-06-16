@@ -45,7 +45,7 @@
             <property name="minimum_size"></property>
             <property name="name">PANEL_3D_RAYTRACING_OPTIONS_BASE</property>
             <property name="pos"></property>
-            <property name="size">834,514</property>
+            <property name="size">-1,-1</property>
             <property name="subclass">RESETTABLE_PANEL; widgets/resettable_panel.h; forward_declare</property>
             <property name="tooltip"></property>
             <property name="two_step_creation">0</property>
@@ -190,7 +190,7 @@
                         <property name="vgap">0</property>
                         <object class="sizeritem" expanded="0">
                             <property name="border">5</property>
-                            <property name="flag">wxALL</property>
+                            <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
                             <property name="proportion">0</property>
                             <object class="wxCheckBox" expanded="0">
                                 <property name="BottomDockable">1</property>

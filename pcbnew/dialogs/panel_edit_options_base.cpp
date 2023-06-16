@@ -349,11 +349,11 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 
 	m_ratsnestThicknessLabel = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Ratsnest line thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ratsnestThicknessLabel->Wrap( -1 );
-	bSizer11->Add( m_ratsnestThicknessLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bSizer11->Add( m_ratsnestThicknessLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_ratsnestThickness = new wxSpinCtrlDouble( sbSizer3->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0.5, 10, 0.5, 0.5 );
 	m_ratsnestThickness->SetDigits( 1 );
-	bSizer11->Add( m_ratsnestThickness, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bSizer11->Add( m_ratsnestThickness, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	sbSizer3->Add( bSizer11, 1, wxEXPAND, 5 );

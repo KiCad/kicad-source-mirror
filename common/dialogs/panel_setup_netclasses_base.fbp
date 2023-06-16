@@ -45,7 +45,7 @@
             <property name="minimum_size">-1,-1</property>
             <property name="name">PANEL_SETUP_NETCLASSES_BASE</property>
             <property name="pos"></property>
-            <property name="size">-1,-1</property>
+            <property name="size">700,500</property>
             <property name="subclass">; forward_declare</property>
             <property name="tooltip"></property>
             <property name="two_step_creation">0</property>
@@ -258,7 +258,7 @@
                                             </object>
                                             <object class="sizeritem" expanded="0">
                                                 <property name="border">1</property>
-                                                <property name="flag">wxEXPAND|wxLEFT|wxRIGHT|wxTOP</property>
+                                                <property name="flag">wxEXPAND|wxFIXED_MINSIZE|wxLEFT|wxRIGHT|wxTOP</property>
                                                 <property name="proportion">1</property>
                                                 <object class="wxGrid" expanded="0">
                                                     <property name="BottomDockable">1</property>
@@ -737,7 +737,7 @@
                                                             <property name="permission">none</property>
                                                             <object class="sizeritem" expanded="0">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxEXPAND|wxLEFT</property>
+                                                                <property name="flag">wxEXPAND|wxFIXED_MINSIZE|wxLEFT</property>
                                                                 <property name="proportion">2</property>
                                                                 <object class="wxGrid" expanded="0">
                                                                     <property name="BottomDockable">1</property>
@@ -766,7 +766,7 @@
                                                                     <property name="col_label_values">&quot;Pattern&quot; &quot;Net Class&quot;</property>
                                                                     <property name="col_label_vert_alignment">wxALIGN_CENTER</property>
                                                                     <property name="cols">2</property>
-                                                                    <property name="column_sizes">360,160</property>
+                                                                    <property name="column_sizes">270,160</property>
                                                                     <property name="context_help"></property>
                                                                     <property name="context_menu">1</property>
                                                                     <property name="default_pane">0</property>

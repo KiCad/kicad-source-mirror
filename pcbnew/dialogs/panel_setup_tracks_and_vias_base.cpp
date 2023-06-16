@@ -144,7 +144,7 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	bSizerVias->Add( bSizer4, 0, wxEXPAND|wxTOP, 2 );
 
 
-	bMainSizer->Add( bSizerVias, 1, wxEXPAND|wxRIGHT, 5 );
+	bMainSizer->Add( bSizerVias, 2, wxEXPAND|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizerDiffPairs;
 	bSizerDiffPairs = new wxBoxSizer( wxVERTICAL );
@@ -211,7 +211,7 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	bSizerDiffPairs->Add( bSizer5, 0, wxEXPAND|wxTOP, 2 );
 
 
-	bMainSizer->Add( bSizerDiffPairs, 1, wxEXPAND, 5 );
+	bMainSizer->Add( bSizerDiffPairs, 3, wxEXPAND, 5 );
 
 
 	this->SetSizer( bMainSizer );

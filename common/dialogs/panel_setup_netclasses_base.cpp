@@ -74,7 +74,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 
 	// Cell Defaults
 	m_netclassGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bUpperSizer->Add( m_netclassGrid, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 1 );
+	bUpperSizer->Add( m_netclassGrid, 1, wxEXPAND|wxFIXED_MINSIZE|wxLEFT|wxRIGHT|wxTOP, 1 );
 
 	wxBoxSizer* buttonBoxSizer;
 	buttonBoxSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -129,7 +129,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_assignmentGrid->SetMargins( 0, 0 );
 
 	// Columns
-	m_assignmentGrid->SetColSize( 0, 360 );
+	m_assignmentGrid->SetColSize( 0, 270 );
 	m_assignmentGrid->SetColSize( 1, 160 );
 	m_assignmentGrid->EnableDragColMove( false );
 	m_assignmentGrid->EnableDragColSize( true );
@@ -147,7 +147,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 
 	// Cell Defaults
 	m_assignmentGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bSizer14->Add( m_assignmentGrid, 2, wxEXPAND|wxLEFT, 5 );
+	bSizer14->Add( m_assignmentGrid, 2, wxEXPAND|wxFIXED_MINSIZE|wxLEFT, 5 );
 
 
 	bColumns->Add( bSizer14, 3, wxEXPAND, 5 );
@@ -186,7 +186,6 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 
 	this->SetSizer( bpanelNetClassesSizer );
 	this->Layout();
-	bpanelNetClassesSizer->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnUpdateUI ) );

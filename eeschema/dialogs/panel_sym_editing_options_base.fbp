@@ -45,7 +45,7 @@
             <property name="minimum_size"></property>
             <property name="name">PANEL_SYM_EDITING_OPTIONS_BASE</property>
             <property name="pos"></property>
-            <property name="size">381,396</property>
+            <property name="size">-1,-1</property>
             <property name="subclass">RESETTABLE_PANEL; widgets/resettable_panel.h; Not forward_declare</property>
             <property name="tooltip"></property>
             <property name="two_step_creation">0</property>

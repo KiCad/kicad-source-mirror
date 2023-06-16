@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -103,7 +103,7 @@ class PANEL_3D_RAYTRACING_OPTIONS_BASE : public RESETTABLE_PANEL
 
 	public:
 
-		PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 834,514 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_3D_RAYTRACING_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~PANEL_3D_RAYTRACING_OPTIONS_BASE();
 
