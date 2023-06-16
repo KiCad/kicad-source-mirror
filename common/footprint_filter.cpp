@@ -202,7 +202,7 @@ void FOOTPRINT_FILTER::FilterByFootprintFilters( const wxArrayString& aFilters )
 
     for( const wxString& each_pattern : aFilters )
     {
-        m_footprint_filters.push_back( std::make_unique<EDA_PATTERN_MATCH_WILDCARD_EXPLICIT>() );
+        m_footprint_filters.push_back( std::make_unique<EDA_PATTERN_MATCH_WILDCARD_ANCHORED>() );
         m_footprint_filters.back()->SetPattern( each_pattern.Lower() );
     }
 

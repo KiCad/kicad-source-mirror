@@ -78,17 +78,33 @@ public:
 
 bool EDA_PATTERN_MATCH_REGEX::SetPattern( const wxString& aPattern )
 {
-    m_pattern = aPattern;
+    if( aPattern.StartsWith( "^" ) && aPattern.EndsWith( "$" ) )
+    {
+        m_pattern = aPattern;
+    }
+    else if( aPattern.StartsWith( "/" ) )
+    {
+        // Requiring a '/' on the end means they get no feedback while they type
+        m_pattern = aPattern.Mid( 1 );
+
+        if( m_pattern.EndsWith( "/" ) )
+            m_pattern = m_pattern.Left( m_pattern.length() - 1 );
+    }
+    else
+    {
+        // For now regular expressions must be explicit
+        return false;
+    }
 
     // Evil and undocumented: wxRegEx::Compile calls wxLogError on error, even
     // though it promises to just return false. Silence the error.
     WX_LOGLEVEL_CONTEXT ctx( wxLOG_FatalError );
 
-    return m_regex.Compile( aPattern, wxRE_ADVANCED );
+    return m_regex.Compile( m_pattern, wxRE_ADVANCED );
 }
 
 
-bool EDA_PATTERN_MATCH_REGEX_EXPLICIT::SetPattern( const wxString& aPattern )
+bool EDA_PATTERN_MATCH_REGEX_ANCHORED::SetPattern( const wxString& aPattern )
 {
     wxString pattern( aPattern );
 
@@ -186,7 +202,7 @@ EDA_PATTERN_MATCH::FIND_RESULT EDA_PATTERN_MATCH_WILDCARD::Find( const wxString&
 }
 
 
-bool EDA_PATTERN_MATCH_WILDCARD_EXPLICIT::SetPattern( const wxString& aPattern )
+bool EDA_PATTERN_MATCH_WILDCARD_ANCHORED::SetPattern( const wxString& aPattern )
 {
     m_wildcard_pattern = aPattern;
 
@@ -386,8 +402,8 @@ EDA_COMBINED_MATCHER::EDA_COMBINED_MATCHER( const wxString& aPattern,
         break;
 
     case CTX_NETCLASS:
-        AddMatcher( aPattern, std::make_unique<EDA_PATTERN_MATCH_REGEX_EXPLICIT>() );
-        AddMatcher( aPattern, std::make_unique<EDA_PATTERN_MATCH_WILDCARD_EXPLICIT>() );
+        AddMatcher( aPattern, std::make_unique<EDA_PATTERN_MATCH_REGEX_ANCHORED>() );
+        AddMatcher( aPattern, std::make_unique<EDA_PATTERN_MATCH_WILDCARD_ANCHORED>() );
         break;
 
     case CTX_SIGNAL:

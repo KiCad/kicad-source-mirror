@@ -132,7 +132,7 @@ protected:
 };
 
 
-class EDA_PATTERN_MATCH_REGEX_EXPLICIT : public EDA_PATTERN_MATCH_REGEX
+class EDA_PATTERN_MATCH_REGEX_ANCHORED : public EDA_PATTERN_MATCH_REGEX
 {
 public:
     virtual bool SetPattern( const wxString& aPattern ) override;
@@ -151,7 +151,7 @@ protected:
 };
 
 
-class EDA_PATTERN_MATCH_WILDCARD_EXPLICIT : public EDA_PATTERN_MATCH_WILDCARD
+class EDA_PATTERN_MATCH_WILDCARD_ANCHORED : public EDA_PATTERN_MATCH_WILDCARD
 {
 public:
     virtual bool SetPattern( const wxString& aPattern ) override;
