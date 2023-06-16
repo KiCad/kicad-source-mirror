@@ -303,6 +303,28 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
     {
         m_te->LineEndWrap();
     }
+    else if( ( aEvent.GetModifiers() & wxMOD_RAW_CONTROL ) && aEvent.GetKeyCode() == 'B' )
+    {
+        if( aEvent.GetModifiers() & wxMOD_ALT )
+            m_te->WordLeft();
+        else
+            m_te->CharLeft();
+    }
+    else if( ( aEvent.GetModifiers() & wxMOD_RAW_CONTROL ) && aEvent.GetKeyCode() == 'F' )
+    {
+        if( aEvent.GetModifiers() & wxMOD_ALT )
+            m_te->WordRight();
+        else
+            m_te->CharRight();
+    }
+    else if( aEvent.GetModifiers() == wxMOD_RAW_CONTROL && aEvent.GetKeyCode() == 'D' )
+    {
+        if( m_te->GetSelectionEnd() == m_te->GetSelectionStart() )
+            m_te->CharRightExtend();
+
+        if( m_te->GetSelectionEnd() > m_te->GetSelectionStart() )
+            m_te->DeleteBack();
+    }
 #endif
     else if( aEvent.GetKeyCode() == WXK_SPECIAL20 )
     {
