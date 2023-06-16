@@ -1216,6 +1216,9 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
         setCurFootprintName( m_fpList->GetBaseString( selection ) );
 
         // Delete the current footprint
+        if( PCB_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<PCB_SELECTION_TOOL>() )
+            selectionTool->ClearSelection( true /* quiet mode */ );
+
         GetBoard()->DeleteAllFootprints();
         GetBoard()->GetNetInfo().RemoveUnusedNets();
 
