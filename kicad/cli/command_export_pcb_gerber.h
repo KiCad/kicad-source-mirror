@@ -33,6 +33,7 @@ namespace CLI
 #define ARG_DISABLE_APERTURE_MACROS "--disable-aperture-macros"
 #define ARG_USE_DRILL_FILE_ORIGIN "--use-drill-file-origin"
 #define ARG_PRECISION "--precision"
+#define ARG_NO_PROTEL_EXTENSION "--no-protel-ext"
 
 class EXPORT_PCB_GERBER_COMMAND : public EXPORT_PCB_BASE_COMMAND
 {

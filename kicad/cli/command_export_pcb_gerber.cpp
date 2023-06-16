@@ -80,6 +80,11 @@ CLI::EXPORT_PCB_GERBER_COMMAND::EXPORT_PCB_GERBER_COMMAND( const std::string& aN
             .help( UTF8STDSTR( _( "Precision of gerber coordinates, valid options: 5 or 6" ) ) )
             .scan<'i', int>()
             .default_value( 6 );
+
+    m_argParser.add_argument( ARG_NO_PROTEL_EXTENSION )
+            .help( UTF8STDSTR( _( "Use KiCad gerber file extension" ) ) )
+            .implicit_value( true )
+            .default_value( false );
 }
 
 
@@ -101,6 +106,7 @@ int CLI::EXPORT_PCB_GERBER_COMMAND::populateJob( JOB_EXPORT_PCB_GERBER* aJob )
     aJob->m_includeNetlistAttributes = !m_argParser.get<bool>( ARG_NO_NETLIST );
     aJob->m_useX2Format = !m_argParser.get<bool>( ARG_NO_X2 );
     aJob->m_useAuxOrigin = m_argParser.get<bool>( ARG_USE_DRILL_FILE_ORIGIN );
+    aJob->m_useProtelFileExtension = !m_argParser.get<bool>( ARG_NO_PROTEL_EXTENSION );
     aJob->m_precision = m_argParser.get<int>( ARG_PRECISION );
     aJob->m_printMaskLayer = m_selectedLayers;
 
@@ -123,12 +129,14 @@ int CLI::EXPORT_PCB_GERBER_COMMAND::populateJob( JOB_EXPORT_PCB_GERBER* aJob )
 int CLI::EXPORT_PCB_GERBER_COMMAND::doPerform( KIWAY& aKiway )
 {
     int exitCode = EXPORT_PCB_BASE_COMMAND::doPerform( aKiway );
+
     if( exitCode != EXIT_CODES::OK )
         return exitCode;
 
     std::unique_ptr<JOB_EXPORT_PCB_GERBER> gerberJob( new JOB_EXPORT_PCB_GERBER( true ) );
 
     exitCode = populateJob( gerberJob.get() );
+
     if( exitCode != EXIT_CODES::OK )
         return exitCode;
 
