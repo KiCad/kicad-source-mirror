@@ -40,6 +40,7 @@ public:
             m_useX2Format( true ),
             m_disableApertureMacros( false ),
             m_useAuxOrigin( false ),
+            m_useProtelFileExtension( true ),
             m_precision( 5 ),
             m_printMaskLayer()
     {
@@ -61,6 +62,7 @@ public:
     bool m_useX2Format;
     bool m_disableApertureMacros;
     bool m_useAuxOrigin;
+    bool m_useProtelFileExtension;
 
     int m_precision;
 

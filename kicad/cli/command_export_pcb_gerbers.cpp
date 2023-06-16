@@ -33,6 +33,7 @@
 #define ARG_COMMON_LAYERS "--common-layers"
 #define ARG_USE_BOARD_PLOT_PARAMS "--board-plot-params"
 
+
 CLI::EXPORT_PCB_GERBERS_COMMAND::EXPORT_PCB_GERBERS_COMMAND() :
         EXPORT_PCB_GERBER_COMMAND( "gerbers" )
 {
@@ -54,18 +55,21 @@ CLI::EXPORT_PCB_GERBERS_COMMAND::EXPORT_PCB_GERBERS_COMMAND() :
 int CLI::EXPORT_PCB_GERBERS_COMMAND::doPerform( KIWAY& aKiway )
 {
     int exitCode = EXPORT_PCB_BASE_COMMAND::doPerform( aKiway );
+
     if( exitCode != EXIT_CODES::OK )
         return exitCode;
 
     std::unique_ptr<JOB_EXPORT_PCB_GERBERS> gerberJob( new JOB_EXPORT_PCB_GERBERS( true ) );
 
     exitCode = populateJob( gerberJob.get() );
+
     if( exitCode != EXIT_CODES::OK )
         return exitCode;
 
     wxString layers = FROM_UTF8( m_argParser.get<std::string>( ARG_COMMON_LAYERS ).c_str() );
     gerberJob->m_layersIncludeOnAll =
             convertLayerStringList( layers, gerberJob->m_layersIncludeOnAllSet );
+    gerberJob->m_useBoardPlotParams = m_argParser.get<bool>( ARG_USE_BOARD_PLOT_PARAMS );
 
     LOCALE_IO dummy;
     exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, gerberJob.get() );

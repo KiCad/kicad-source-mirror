@@ -313,14 +313,17 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
         // Pick the basename from the board file
         wxFileName fn( brd->GetFileName() );
         PCB_LAYER_ID layer = *seq;
-        fileExt = GetGerberProtelExtension( layer );
-
         PCB_PLOT_PARAMS plotOpts;
 
         if( aGerberJob->m_useBoardPlotParams )
             plotOpts = boardPlotOptions;
         else
             populateGerberPlotOptionsFromJob( plotOpts, aGerberJob );
+
+        if( plotOpts.GetUseGerberProtelExtensions() )
+            fileExt = GetGerberProtelExtension( layer );
+        else
+            fileExt = GerberFileExtension;
 
         BuildPlotFileName( &fn, aGerberJob->m_outputFile, brd->GetLayerName( layer ), fileExt );
         wxString fullname = fn.GetFullName();
@@ -350,6 +353,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
     }
 
     wxFileName fn( aGerberJob->m_filename );
+
     // Build gerber job file from basename
     BuildPlotFileName( &fn, aGerberJob->m_outputFile, wxT( "job" ), GerberJobFileExtension );
     jobfile_writer.CreateJobFile( fn.GetFullPath() );
@@ -376,7 +380,7 @@ void PCBNEW_JOBS_HANDLER::populateGerberPlotOptionsFromJob( PCB_PLOT_PARAMS&    
     aPlotOpts.SetUseGerberX2format( aJob->m_useX2Format );
     aPlotOpts.SetIncludeGerberNetlistInfo( aJob->m_includeNetlistAttributes );
     aPlotOpts.SetUseAuxOrigin( aJob->m_useAuxOrigin );
-
+    aPlotOpts.SetUseGerberProtelExtensions( aJob->m_useProtelFileExtension );
     aPlotOpts.SetGerberPrecision( aJob->m_precision );
 }
 
