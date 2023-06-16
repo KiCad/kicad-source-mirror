@@ -264,7 +264,7 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	fgSizer->Add( vPrecisionLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_vPrecisionCtrl = new wxSpinCtrl( sbSizer7->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 10, 3 );
-	fgSizer->Add( m_vPrecisionCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	fgSizer->Add( m_vPrecisionCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	wxStaticText* vRangeLabel;
 	vRangeLabel = new wxStaticText( sbSizer7->GetStaticBox(), wxID_ANY, _("Range (voltages):"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -275,7 +275,7 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	int m_vRangeCtrlNChoices = sizeof( m_vRangeCtrlChoices ) / sizeof( wxString );
 	m_vRangeCtrl = new wxChoice( sbSizer7->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_vRangeCtrlNChoices, m_vRangeCtrlChoices, 0 );
 	m_vRangeCtrl->SetSelection( 0 );
-	fgSizer->Add( m_vRangeCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer->Add( m_vRangeCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	wxStaticText* iPrecisionLabel;
 	iPrecisionLabel = new wxStaticText( sbSizer7->GetStaticBox(), wxID_ANY, _("Significant digits (currents):"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -283,18 +283,18 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	fgSizer->Add( iPrecisionLabel, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_iPrecisionCtrl = new wxSpinCtrl( sbSizer7->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 10, 3 );
-	fgSizer->Add( m_iPrecisionCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	fgSizer->Add( m_iPrecisionCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	wxStaticText* iRangeLabel;
 	iRangeLabel = new wxStaticText( sbSizer7->GetStaticBox(), wxID_ANY, _("Range (currents):"), wxDefaultPosition, wxDefaultSize, 0 );
 	iRangeLabel->Wrap( -1 );
-	fgSizer->Add( iRangeLabel, 0, wxRIGHT|wxLEFT, 5 );
+	fgSizer->Add( iRangeLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxString m_iRangeCtrlChoices[] = { _("Auto"), _("fA"), _("pA"), _("nA"), _("uA"), _("mA"), _("A"), _("KA"), _("MA"), _("GA"), _("TA"), _("PA") };
 	int m_iRangeCtrlNChoices = sizeof( m_iRangeCtrlChoices ) / sizeof( wxString );
 	m_iRangeCtrl = new wxChoice( sbSizer7->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_iRangeCtrlNChoices, m_iRangeCtrlChoices, 0 );
 	m_iRangeCtrl->SetSelection( 0 );
-	fgSizer->Add( m_iRangeCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer->Add( m_iRangeCtrl, 0, wxBOTTOM|wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
 	sbSizer7->Add( fgSizer, 1, wxEXPAND, 5 );
