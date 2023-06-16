@@ -896,7 +896,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, int aType, 
                     m_view->AddToPreview( wire->Clone() );
             }
         }
-        else if( evt->IsAction( &EE_ACTIONS::undoLastSegment ) )
+        else if( evt->IsAction( &EE_ACTIONS::undoLastSegment ) || evt->IsAction( &ACTIONS::undo ) )
         {
             if( ( currentMode == LINE_MODE::LINE_MODE_FREE && m_wires.size() > 1 )
                 || ( LINE_MODE::LINE_MODE_90 && m_wires.size() > 2 ) )
@@ -1008,6 +1008,10 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, int aType, 
         else if( evt->IsAction( &ACTIONS::doDelete ) && ( segment || m_busUnfold.in_progress ) )
         {
             cleanup();
+        }
+        else if( evt->IsAction( &ACTIONS::redo ) )
+        {
+            wxBell();
         }
         else
         {

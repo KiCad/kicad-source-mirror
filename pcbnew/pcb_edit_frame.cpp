@@ -671,13 +671,24 @@ void PCB_EDIT_FRAME::setupUIConditions()
     ACTION_MANAGER*       mgr = m_toolManager->GetActionManager();
     PCB_EDITOR_CONDITIONS cond( this );
 
+    auto undoCond =
+            [ this ] (const SELECTION& aSel )
+            {
+                DRAWING_TOOL* drawingTool = m_toolManager->GetTool<DRAWING_TOOL>();
+
+                if( drawingTool && drawingTool->GetDrawingMode() != DRAWING_TOOL::MODE::NONE )
+                    return true;
+
+                return GetUndoCommandCount() > 0;
+            };
+
     wxASSERT( mgr );
 
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )
 
     mgr->SetConditions( ACTIONS::save, ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
-    mgr->SetConditions( ACTIONS::undo, ENABLE( cond.UndoAvailable() ) );
+    mgr->SetConditions( ACTIONS::undo, ENABLE( undoCond ) );
     mgr->SetConditions( ACTIONS::redo, ENABLE( cond.RedoAvailable() ) );
 
     mgr->SetConditions( ACTIONS::toggleGrid, CHECK( cond.GridVisible() ) );

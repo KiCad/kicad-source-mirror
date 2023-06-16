@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2017-2022 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -114,6 +114,12 @@ void POLYGON_GEOM_MANAGER::SetCursorPosition( const VECTOR2I& aPos )
 bool POLYGON_GEOM_MANAGER::IsPolygonInProgress() const
 {
     return m_lockedPoints.PointCount() > 0;
+}
+
+
+int POLYGON_GEOM_MANAGER::PolygonPointCount() const
+{
+    return m_lockedPoints.PointCount();
 }
 
 

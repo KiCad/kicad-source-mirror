@@ -398,7 +398,7 @@ void SCH_EDIT_FRAME::setupUIConditions()
 {
     SCH_BASE_FRAME::setupUIConditions();
 
-    ACTION_MANAGER*   mgr = m_toolManager->GetActionManager();
+    ACTION_MANAGER*       mgr = m_toolManager->GetActionManager();
     SCH_EDITOR_CONDITIONS cond( this );
 
     wxASSERT( mgr );
@@ -417,11 +417,20 @@ void SCH_EDIT_FRAME::setupUIConditions()
             };
 
 
+    auto undoCond =
+            [ this ] (const SELECTION& aSel )
+            {
+                if( SCH_LINE_WIRE_BUS_TOOL::IsDrawingLineWireOrBus( aSel ) )
+                    return true;
+
+                return GetUndoCommandCount() > 0;
+            };
+
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
 #define CHECK( x )  ACTION_CONDITIONS().Check( x )
 
     mgr->SetConditions( ACTIONS::save,                ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
-    mgr->SetConditions( ACTIONS::undo,                ENABLE( cond.UndoAvailable() ) );
+    mgr->SetConditions( ACTIONS::undo,                ENABLE( undoCond ) );
     mgr->SetConditions( ACTIONS::redo,                ENABLE( cond.RedoAvailable() ) );
 
     mgr->SetConditions( EE_ACTIONS::showHierarchy,    CHECK( hierarchyNavigatorCond ) );
