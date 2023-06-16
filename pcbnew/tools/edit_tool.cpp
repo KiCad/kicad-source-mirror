@@ -2398,8 +2398,7 @@ bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aS
     m_statusPopup->Popup();
     canvas()->SetStatusPopup( m_statusPopup->GetPanel() );
 
-    TOOL_EVENT subtoolEvent = PCB_ACTIONS::pickerSubTool.MakeEvent();
-    m_toolMgr->RunAction( ACTIONS::pickerSubTool, true, (void*) &subtoolEvent );
+    m_toolMgr->RunAction( ACTIONS::pickerSubTool, true );
 
     while( !done )
     {
