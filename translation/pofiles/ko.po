@@ -29,7 +29,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-18 11:55-0700\n"
-"PO-Revision-Date: 2023-06-09 05:47+0000\n"
+"PO-Revision-Date: 2023-06-17 23:21+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -38,7 +38,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 4.18.1\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -545,7 +545,7 @@ msgstr "단색 렌더링"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:195
 msgid "Use only the diffuse color property from 3D model file"
-msgstr "모델 3D 모델 파일의 확산 색상 속성만 사용"
+msgstr "3D 모델 파일의 확산 색상 속성만 사용"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:201
 msgid "Render CAD Colors"
@@ -584,7 +584,6 @@ msgid "Toggle 3D models not in pos file"
 msgstr "pos 파일에 없는 3D 모델 전환"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:234
-#, fuzzy
 msgid "Toggle 3D models marked DNP"
 msgstr "DNP로 표시된 3D 모델 전환"
 
@@ -5490,9 +5489,9 @@ msgid "Deactivate selected"
 msgstr "선택대상 비활성화"
 
 #: common/lib_table_grid_tricks.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid "Library settings for %s..."
-msgstr "%s...에 대한 라이브러리 설정"
+msgstr "%s에 대한 라이브러리 설정…"
 
 #: common/lib_tree_model.cpp:146
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
@@ -13841,9 +13840,8 @@ msgid "Power flag differs."
 msgstr "전원 플래그가 다릅니다."
 
 #: eeschema/lib_symbol.cpp:279
-#, fuzzy
 msgid "Unit count differs."
-msgstr "패드 커퍼"
+msgstr "단위 수가 다릅니다."
 
 #: eeschema/lib_symbol.cpp:319
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:565
@@ -13858,14 +13856,13 @@ msgid "%s differs."
 msgstr "%s는 다릅니다."
 
 #: eeschema/lib_symbol.cpp:342
-#, fuzzy
 msgid "Pin count differs."
-msgstr "패드 커퍼"
+msgstr "핀 수가 다릅니다."
 
 #: eeschema/lib_symbol.cpp:358
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s not found."
-msgstr "%s을(를) 찾을 수 없음"
+msgstr "핀 %s을(를) 찾을 수 없습니다."
 
 #: eeschema/lib_symbol.cpp:367
 #, fuzzy, c-format
@@ -13878,53 +13875,44 @@ msgid "%s field differs."
 msgstr "%s 필드가 다릅니다."
 
 #: eeschema/lib_symbol.cpp:418
-#, fuzzy
 msgid "Field count differs."
-msgstr "패드 커퍼"
+msgstr "필드 수가 다릅니다."
 
 #: eeschema/lib_symbol.cpp:427
-#, fuzzy
 msgid "Footprint filters differs."
-msgstr "풋프린트 유형:"
+msgstr "풋프린트 필터가 다릅니다."
 
 #: eeschema/lib_symbol.cpp:439
-#, fuzzy
 msgid "Footprint filters differ."
-msgstr "풋프린트 유형:"
+msgstr "풋프린트 필터가 다릅니다."
 
 #: eeschema/lib_symbol.cpp:450
-#, fuzzy
 msgid "Symbol descriptions differ."
-msgstr "풋프린트 관련성 파일"
+msgstr "심볼 설명이 다릅니다."
 
 #: eeschema/lib_symbol.cpp:459
-#, fuzzy
 msgid "Symbol keywords differ."
-msgstr "풋프린트 순서"
+msgstr "심볼 키워드가 다릅니다."
 
 #: eeschema/lib_symbol.cpp:468
 msgid "Symbol pin name offsets differ."
 msgstr "심볼 핀 이름 오프셋이 다릅니다."
 
 #: eeschema/lib_symbol.cpp:479
-#, fuzzy
 msgid "Show pin names settings differ."
-msgstr "핀 이름 텍스트 표시"
+msgstr "표시 핀 이름 설정 다릅니다."
 
 #: eeschema/lib_symbol.cpp:488
-#, fuzzy
 msgid "Show pin numbers settings differ."
-msgstr "핀 번호 텍스트 표시"
+msgstr "표시된 핀 번호 설정이 다릅니다."
 
 #: eeschema/lib_symbol.cpp:497
-#, fuzzy
 msgid "Exclude from bill of materials settings differ."
-msgstr "BOM에서 제외"
+msgstr "BOM에서 제외 설정이 다릅니다."
 
 #: eeschema/lib_symbol.cpp:506
-#, fuzzy
 msgid "Exclude from board settings differ."
-msgstr "부품자리 요구 사항 면제"
+msgstr "제외된 보드 제외 설정이 다릅니다."
 
 #: eeschema/lib_symbol.cpp:553 eeschema/sch_symbol.cpp:438
 #: eeschema/tools/sch_edit_tool.cpp:116
@@ -14391,9 +14379,8 @@ msgid "Highlighted net: %s"
 msgstr "강조 표시된 네트: %s"
 
 #: eeschema/sch_edit_frame.cpp:2255 eeschema/tools/ee_actions.cpp:55
-#, fuzzy
 msgid "Diff Symbol with Library"
-msgstr "심볼을 라이브러리로..."
+msgstr "심볼이 라이브러리와 다름"
 
 #: eeschema/sch_field.cpp:781
 #, c-format
@@ -14745,9 +14732,8 @@ msgid "File not found %s."
 msgstr "%s 파일을 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:72
-#, fuzzy
 msgid "The selected file does not appear to be a CADSTAR parts Library file"
-msgstr "파일 '%s'은(는) 유효한 회로도 파일이 아닌 것 같습니다."
+msgstr "선택한 파일이 CADSTAR 부품 라이브러리 파일이 아닌 것 같음"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:117
 #, c-format
@@ -14760,7 +14746,8 @@ msgstr "참조하는 부품의 심볼 %s을(를) 찾을 수 없어 부품 %s이 
 msgid ""
 "Inconsitent pin numbers in symbol %s compared to the one defined in part %s. "
 "The part was not loaded."
-msgstr ""
+msgstr "심볼의 핀 번호가 %s 에 정의된 것과 부품 %s이 일치하지 않아 부품이 로드되지 "
+"않았습니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:365
 #, c-format
@@ -14827,7 +14814,8 @@ msgstr ""
 msgid ""
 "The selected file is a CADSTAR symbol library. It does not contain a "
 "schematic design so cannot be imported/opened in this way."
-msgstr ""
+msgstr "선택한 파일은 CADSTAR 심볼 라이브러리입니다. 회로도가 포함되어 있지 않으므로 "
+"이 방법으로 가져오거나 열 수 없습니다."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:585
 msgid "The CADSTAR schematic might be corrupt: there is no root sheet."
@@ -14984,7 +14972,8 @@ msgstr ""
 msgid ""
 "'%s' is an Eagle binary-format schematic file; only Eagle XML-format "
 "schematics can be imported."
-msgstr ""
+msgstr "'%s' 은 Eagle 바이너리 형식의 회로도 파일이며, Eagle XML 형식의 회로도만 "
+"가져올 수 있습니다."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:449
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:3099
@@ -15212,47 +15201,47 @@ msgstr "예기치 않은 따옴표 없는 문자열"
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:294
 #, c-format
 msgid "Expecting integer at line %d in file %s"
-msgstr ""
+msgstr "%d 줄 %s 파일에 정수가 필요함"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:317
 #, c-format
 msgid "Expected data missing on line %d in file %s"
-msgstr ""
+msgstr "%d 줄 %s 파일에 필요한 데이터가 없음"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:323
 #, c-format
 msgid "Extra data found on line %d in file %s"
-msgstr ""
+msgstr "%d 라인 %s 파일에서 추가 데이터가 발견됨"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:351
 msgid "Expecting 0, 1, 2 or 3"
-msgstr ""
+msgstr "0, 1, 2 또는 3 필요"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:365
 msgid "Expecting NORMAL or WIDE"
-msgstr ""
+msgstr "NORMAL 또는 WIDE 필요"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:381
 msgid "Expecting I, O, B or OUT"
-msgstr ""
+msgstr "I, O, B 또는 OUT 필요"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:402
 msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
-msgstr ""
+msgstr "R0, R90, R18, R270, M0, M90, M180 또는 M270 필요"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:423
 msgid ""
 "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VTOP or VBOTTOM"
-msgstr ""
+msgstr "LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VTOP 또는 VBOTTOM 필요"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:444
 msgid ""
 "Expecting NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VLEFT or VRIGHT"
-msgstr ""
+msgstr "NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VLEFT 또는 VRIGHT 필요"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:458
 msgid "Expecting CELL or BLOCK"
-msgstr ""
+msgstr "CELL 또는 BLOCK 필요"
 
 #: eeschema/sch_reference_list.cpp:692
 #, c-format
@@ -17210,7 +17199,7 @@ msgstr "현재 심볼은 변경되었습니다.  변경점을 저장할까요?"
 #: eeschema/symbol_editor/symbol_editor.cpp:361
 #, c-format
 msgid "Deriving from '%s', the root symbol of '%s'."
-msgstr ""
+msgstr "'%s'에서 파생된, '%s'의 루트 심볼."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:379
 msgid "This new symbol has no name and cannot be created."
@@ -17578,12 +17567,13 @@ msgid "Footprint re-linking cancelled by user."
 msgstr "풋프린트의 재 연결이 사용자에 의해 취소되었습니다."
 
 #: eeschema/tools/backannotate.cpp:356
+#, fuzzy
 msgid "true"
-msgstr ""
+msgstr "참"
 
 #: eeschema/tools/backannotate.cpp:356
 msgid "false"
-msgstr ""
+msgstr "거짓"
 
 #: eeschema/tools/backannotate.cpp:362
 #, c-format
@@ -17651,7 +17641,7 @@ msgstr "라이브러리에 대한 보드 풋프린트 확인 중..."
 
 #: eeschema/tools/ee_actions.cpp:61
 msgid "Show simulation window for running SPICE or IBIS simulations."
-msgstr ""
+msgstr "SPICE 또는 IBIS 시뮬레이션을 실행하기 위한 시뮬레이션 창을 표시합니다."
 
 #: eeschema/tools/ee_actions.cpp:67
 msgid "Opens the datasheet in a browser"
@@ -18424,7 +18414,7 @@ msgstr "채우지 마십시오"
 
 #: eeschema/tools/ee_actions.cpp:654
 msgid "Set the do not populate attribute"
-msgstr ""
+msgstr "채우기 안 함 속성 설정"
 
 #: eeschema/tools/ee_actions.cpp:659
 #, fuzzy
@@ -18433,7 +18423,7 @@ msgstr "채우지 마십시오"
 
 #: eeschema/tools/ee_actions.cpp:659
 msgid "Clear the do not populate attribute"
-msgstr ""
+msgstr "채우지 않음 속성 지우기"
 
 #: eeschema/tools/ee_actions.cpp:664
 #, fuzzy
@@ -19004,7 +18994,7 @@ msgstr "심볼 %s"
 #: eeschema/tools/ee_inspection_tool.cpp:275
 #: pcbnew/tools/board_inspection_tool.cpp:1426
 msgid "Summary"
-msgstr ""
+msgstr "요약"
 
 #: eeschema/tools/ee_inspection_tool.cpp:277
 #, fuzzy
@@ -19054,8 +19044,9 @@ msgstr "레이어가 선택되지 않았습니다."
 
 #: eeschema/tools/ee_inspection_tool.cpp:337
 #: pcbnew/tools/board_inspection_tool.cpp:1485
+#, fuzzy
 msgid "Visual"
-msgstr ""
+msgstr "시각적"
 
 #: eeschema/tools/ee_inspection_tool.cpp:428
 msgid "No datasheet defined."
@@ -20900,7 +20891,7 @@ msgstr "부품 없이 보드만 생성"
 
 #: kicad/cli/command_export_pcb_step.cpp:85
 msgid "Export tracks (extremely time consuming)"
-msgstr ""
+msgstr "트랙 내보내기(시간이 많이 소요됨)"
 
 #: kicad/cli/command_export_pcb_step.cpp:91
 msgid "Minimum distance between points to treat them as separate ones"
@@ -20960,7 +20951,7 @@ msgstr "배경색 설정 금지(테마 상관없음)"
 
 #: kicad/cli/command_export_sch_plot.cpp:69
 msgid "Plot only the first page (no sub-sheets)"
-msgstr ""
+msgstr "첫 페이지만 플롯(하위 시트 없음)"
 
 #: kicad/cli/command_export_sch_plot.cpp:76
 #, fuzzy
@@ -20968,12 +20959,13 @@ msgid "Pen size [mm]"
 msgstr "페이지 크기:"
 
 #: kicad/cli/command_export_sch_plot.cpp:81
+#, fuzzy
 msgid "Origin and scale: 0 bottom left, 1 centered, 2 page fit, 3 content fit"
-msgstr ""
+msgstr "원점 및 배율: 0 왼쪽 하단, 1 중앙, 2 페이지 맞춤, 3 콘텐츠 맞춤"
 
 #: kicad/cli/command_export_sch_plot.cpp:121
 msgid "HPGL origin option must be 0, 1, 2 or 3\n"
-msgstr ""
+msgstr "HPGL 오리진 옵션은 0, 1, 2 또는 3이어야 함\n"
 
 #: kicad/cli/command_fp_export_svg.cpp:44
 #: kicad/cli/command_sym_export_svg.cpp:44
@@ -27249,13 +27241,16 @@ msgstr "오래된 파일 덮어쓰기"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:128
 msgid "Export tracks (time consuming)"
-msgstr ""
+msgstr "트랙 내보내기(시간 소요)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:129
+#, fuzzy
 msgid ""
 "Export tracks and vias on external copper layers.\n"
 "Warning: this is *extremely* time consuming."
 msgstr ""
+"외부 구리 레이어에 트랙과 비아를 내보냅니다.\n"
+"경고: 이 작업은 시간이 *매우* 많이 소요됩니다."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:133
 msgid "Board outline chaining tolerance:"
@@ -34030,12 +34025,12 @@ msgstr "(%s 최소 값 %s; 실제 값 %s)"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:355
 #, c-format
 msgid "%s corner smoothing setting differs."
-msgstr ""
+msgstr "%s 모서리 평활 설정이 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:357
 #, c-format
 msgid "%s corner smoothing radius differs."
-msgstr ""
+msgstr "%s 모서리 평활 반경이 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:359
 #, c-format
@@ -34050,7 +34045,7 @@ msgstr "%s 우선 순위가 다릅니다."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:364
 #, c-format
 msgid "%s keep-out property differs."
-msgstr ""
+msgstr "%s 금지 속성이 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:366
 #, c-format
@@ -34058,14 +34053,14 @@ msgid "%s keep out copper fill setting differs."
 msgstr "%s 구리 채움 금지 설정이 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "%s keep out footprints setting differs."
-msgstr "부품자리 요구 사항 면제"
+msgstr "%s 부품자리 금지 설정이 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:370
 #, c-format
 msgid "%s keep out pads setting differs."
-msgstr ""
+msgstr "%s 패드 차단 설정이 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:372
 #, fuzzy, c-format
@@ -34075,7 +34070,7 @@ msgstr "%s 트랙 유지 설정이 다릅니다."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:374
 #, c-format
 msgid "%s keep out vias setting differs."
-msgstr ""
+msgstr "%s 비아 금지 설정이 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:377
 #, fuzzy, c-format
@@ -34083,9 +34078,9 @@ msgid "%s layers differ."
 msgstr "%s 레이어는 필수입니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:380
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad connection property differs."
-msgstr "%s 패드 연결: %s."
+msgstr "%s 패드 연결 속성이 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:382
 #, fuzzy, c-format
@@ -34093,9 +34088,9 @@ msgid "%s local clearance differs."
 msgstr "해결된 클리어런스: %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:384
-#, fuzzy, c-format
+#, c-format
 msgid "%s thermal relief gap differs."
-msgstr "%s 단열판 갭: %s."
+msgstr "%s 방열 간격이 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:386
 #, fuzzy, c-format
@@ -34103,34 +34098,34 @@ msgid "%s thermal relief spoke width differs."
 msgstr "해결된 단열판 스포크 너비: %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "%s min thickness differs."
-msgstr "%s 최소 두께 : %s."
+msgstr "%s 최소 두께가 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:392
 #, c-format
 msgid "%s remove islands setting differs."
-msgstr ""
+msgstr "%s 아일랜드 제거 설정이 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:394
-#, fuzzy, c-format
+#, c-format
 msgid "%s minimum island size setting differs."
-msgstr "고립된 영역 최소 크기:"
+msgstr "%s 최소 아일랜드 크기 설정이 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:397
-#, fuzzy, c-format
+#, c-format
 msgid "%s fill type differs."
-msgstr "풋프린트 유형:"
+msgstr "%s 채움 유형이 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:399
 #, c-format
 msgid "%s hatch width differs."
-msgstr ""
+msgstr "%s 해치 너비가 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:401
 #, c-format
 msgid "%s hatch gap differs."
-msgstr ""
+msgstr "%s 해치 간격이 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:403
 #, fuzzy, c-format
@@ -34138,19 +34133,19 @@ msgid "%s hatch orientation differs."
 msgstr "%s의 규칙 영역"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:405
-#, c-format
+#, c-format, fuzzy
 msgid "%s hatch smoothing level differs."
-msgstr ""
+msgstr "%s 해치 평활화 수준이 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:407
-#, c-format
+#, c-format, fuzzy
 msgid "%s hatch smoothing amount differs."
-msgstr ""
+msgstr "%s 해치 평활화 양이 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:409
 #, c-format
 msgid "%s minimum hatch hole setting differs."
-msgstr ""
+msgstr "%s 최소 해치 홀 설정이 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:415
 #, fuzzy, c-format
@@ -34158,9 +34153,9 @@ msgid "%s outline corner count differs."
 msgstr "%s의 규칙 영역"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:430
-#, fuzzy, c-format
+#, c-format
 msgid "%s corners differ."
-msgstr "패드 커퍼"
+msgstr "%s 모서리가 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:440
 msgid "3D model scale doesn't match: "
@@ -34168,7 +34163,7 @@ msgstr "3D 모델 배율이 일치하지 않음: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:441
 msgid "3D model rotation doesn't match: "
-msgstr ""
+msgstr "3D 모델 회전이 일치하지 않음: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:442
 msgid "3D model offset doesn't match: "
@@ -34176,7 +34171,7 @@ msgstr "3D 모델 오프셋이 일치하지 않음: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:443
 msgid "3D model opacity doesn't match: "
-msgstr ""
+msgstr "3D 모델 불투명도가 일치하지 않음: "
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:444
 msgid "3D model doesn't match: "
@@ -34239,7 +34234,7 @@ msgstr "영역 연결 스타일"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:521
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:526
 msgid "Net tie pad groups differ."
-msgstr ""
+msgstr "네트 타이 패드 그룹이 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:590
 #, fuzzy
@@ -34247,18 +34242,18 @@ msgid "Pad count differs."
 msgstr "패드 커퍼"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:599
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s differs."
-msgstr "패드 커퍼"
+msgstr "패드 %s가 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:604
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s has overrides."
-msgstr "지역 재정의"
+msgstr "패드 %s에 재정의가 있습니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:614
 msgid "3D model count differs."
-msgstr ""
+msgstr "3D 모델 수가 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:636
 #, fuzzy
@@ -35748,9 +35743,9 @@ msgid "Disconnected %s pin %s."
 msgstr "%s 핀 %s이(가) 분리되었습니다."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:526
-#, fuzzy, c-format
+#, c-format
 msgid "No net found for component %s pad %s (no pin %s in symbol)."
-msgstr "심볼 %s 핀 %s에 대한 네트를 찾을 수 없습니다."
+msgstr "컴포넌트 %s 패드 %s에 대한 네트를 찾을 수 없습니다(심볼에 핀 %s 없음)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:580
 #, c-format
@@ -36942,13 +36937,11 @@ msgstr ""
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:325
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:349
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR construction layer '%s' is on the outer surface of the board. It "
 "has been ignored."
-msgstr ""
-"CADSTAR 디자인에는 티어드롭이 포함되어 있습니다. 이 importer는 아직 그들을 지"
-"원하지 않으므로 디자인의 티어드롭은 무시되었습니다."
+msgstr "CADSTAR 구성 레이어 '%s'는 보드의 외부 표면에 있어 무시되었습니다."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:588
 #, c-format
@@ -37567,13 +37560,13 @@ msgid "Cannot interpret date code %d"
 msgstr "날짜 코드 %d을(를) 해석할 수 없습니다"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:925
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Items found on undefined layers (%s).\n"
 "Do you wish to rescue them to the %s layer?"
 msgstr ""
-"정의되지 않은 레이어에서 개체를 발견하였습니다.\n"
-"User.Comments 레이어로 복구할까요?"
+"정의되지 않은 레이어에서 발견된 항목 (%s).\n"
+"%s 레이어로 복구하시겠습니까?"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:930
 #, fuzzy
@@ -38635,7 +38628,7 @@ msgstr "생성 오류"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:413
 msgid "(Shapes will be adjusted for clearances on next zone fill.)"
-msgstr ""
+msgstr "(다음 영역 채우기에서 간격에 맞게 모양이 조정됩니다.)"
 
 #: pcbnew/teardrop/dialog_teardrop_base.h:123
 msgid "Add Teardrops"
@@ -39085,9 +39078,9 @@ msgid "Clearance is 0."
 msgstr "클리어런스: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:839
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved clearance: %s; clearance will not be tested."
-msgstr "%s의 지역 클리어런스 값; 클리어런스: %s."
+msgstr "해결된 클리어런스: %s; 클리어런스는 테스트되지 않습니다."
 
 #: pcbnew/tools/board_inspection_tool.cpp:862
 msgid "Diff Pair"
