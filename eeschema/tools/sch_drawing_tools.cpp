@@ -1696,7 +1696,7 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 }
 
                 SCH_COMMIT commit( m_toolMgr );
-                commit.Added( item, m_frame->GetScreen() );
+                commit.Add( item, m_frame->GetScreen() );
                 commit.Push( wxString::Format( _( "Draw %s" ), item->GetClass() ) );
 
                 m_selectionTool->AddItemToSel( item );
