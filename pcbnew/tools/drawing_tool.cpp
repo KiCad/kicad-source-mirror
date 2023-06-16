@@ -1285,11 +1285,9 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 commit.Add( dimension );
                 commit.Push( _( "Draw a dimension" ) );
 
+                // Run the edit immediately to set the leader text
                 if( t == PCB_DIM_LEADER_T )
-                {
-                    // Run the edit immediately to set the leader text
-                    m_toolMgr->RunAction( PCB_ACTIONS::properties, true, dimension );
-                }
+                    frame()->OnEditItemRequest( dimension );
 
                 m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, true, dimension );
 
