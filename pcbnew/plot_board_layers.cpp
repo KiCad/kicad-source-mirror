@@ -897,10 +897,6 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                                                        ERROR_OUTSIDE );
                     }
                 }
-                else if( item->IsOnLayer( Edge_Cuts ) )
-                {
-                   itemplotter.PlotFootprintShape( static_cast<const FP_SHAPE*>( item ) );
-                }
             }
         }
 
@@ -954,10 +950,6 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                     item->TransformShapeToPolygon( areas, layer, inflate, maxError,
                                                    ERROR_OUTSIDE );
                 }
-            }
-            else if( item->IsOnLayer( Edge_Cuts ) )
-            {
-                itemplotter.PlotPcbGraphicItem( item );
             }
         }
 
