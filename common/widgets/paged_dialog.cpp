@@ -63,6 +63,7 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSho
 
     m_treebook = new WX_TREEBOOK( treebookPanel, wxID_ANY );
     m_treebook->SetFont( KIUI::GetControlFont( this ) );
+    m_treebook->SetFitToCurrentPage( true );
 
     long treeCtrlFlags = m_treebook->GetTreeCtrl()->GetWindowStyleFlag();
     treeCtrlFlags = ( treeCtrlFlags & ~wxBORDER_MASK ) | wxBORDER_NONE;
@@ -234,7 +235,7 @@ bool PAGED_DIALOG::TransferDataToWindow()
     }
 
     lastPageIndex = std::max( 0, lastPageIndex );
-    m_treebook->ChangeSelection( lastPageIndex );
+    m_treebook->SetSelection( lastPageIndex );
     UpdateResetButton( lastPageIndex );
 
     return true;
@@ -406,6 +407,22 @@ void PAGED_DIALOG::onPageChanged( wxBookCtrlEvent& event )
     }
 
     UpdateResetButton( page );
+
+    // Make sure the dialog size is enough to fit the page content.
+    m_treebook->InvalidateBestSize();
+
+    SetMinSize( wxDefaultSize );
+    wxSize minSize = GetBestSize();
+    minSize.IncTo( wxSize( 600, 500 ) );
+    minSize.DecTo( wxSize( 1500, 900 ) ); // Failsafe
+    SetMinSize( minSize );
+
+    wxSize currentSize = GetSize();
+    wxSize newSize = currentSize;
+    newSize.IncTo( minSize );
+
+    if( newSize != currentSize )
+        SetSize( newSize );
 
 #ifdef __WXMAC__
     // Work around an OSX wxWidgets issue where the wxGrid children don't get placed correctly
