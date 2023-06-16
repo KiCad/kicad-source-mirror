@@ -580,7 +580,10 @@ void DS_DATA_ITEM_TEXT::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::VIE
         if( j > 0 && !IsInsidePage( j ) )
             continue;
 
-        text = new DS_DRAW_ITEM_TEXT( aCollector->GetIuScale(), this, j, m_FullText,
+        EDA_IU_SCALE iuscale = aCollector ? aCollector->GetIuScale()
+                                          : DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu;
+
+        text = new DS_DRAW_ITEM_TEXT( iuscale, this, j, m_FullText,
                                       GetStartPosIU( j ), textsize, pensize, m_Font, m_Italic,
                                       m_Bold, m_TextColor );
 
