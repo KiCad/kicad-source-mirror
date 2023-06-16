@@ -31,7 +31,14 @@
 #include <common.h>
 #include <kiface_base.h>
 #include <pgm_base.h>
+#include <widgets/wx_menubar.h>
+#include <menus_helpers.h>
 #include <wildcards_and_files_ext.h>
+#include <tool/tool_manager.h>
+#include <tool/tool_dispatcher.h>
+#include <tool/common_control.h>
+#include <bitmap2cmp_control.h>
+#include <tool/actions.h>
 
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
@@ -130,18 +137,14 @@ void IMAGE_SIZE::SetUnit( EDA_UNITS aUnit )
 }
 
 
-BEGIN_EVENT_TABLE( BITMAP2CMP_FRAME, KIWAY_PLAYER )
-    EVT_MENU( wxID_EXIT, BITMAP2CMP_FRAME::OnExit )
-    EVT_MENU( wxID_OPEN, BITMAP2CMP_FRAME::OnLoadFile )
-END_EVENT_TABLE()
-
-
 BITMAP2CMP_FRAME::BITMAP2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         KIWAY_PLAYER( aKiway, aParent, FRAME_BM2CMP, _( "Image Converter" ), wxDefaultPosition,
                       wxDefaultSize, wxDEFAULT_FRAME_STYLE, wxT( "bitmap2cmp" ), unityScale ),
         m_panel( nullptr ),
         m_statusBar( nullptr )
 {
+    m_aboutTitle = _HKI( "KiCad Image Converter" );
+
     // Give an icon
     wxIcon icon;
     wxIconBundle icon_bundle;
@@ -163,9 +166,19 @@ BITMAP2CMP_FRAME::BITMAP2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_statusBar = this->CreateStatusBar( 1, wxSTB_SIZEGRIP, wxID_ANY );
 
-    ReCreateMenuBar();
-
     LoadSettings( config() );
+
+    m_toolManager = new TOOL_MANAGER;
+    m_toolManager->SetEnvironment( nullptr, nullptr, nullptr, config(), this );
+
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
+
+    // Register tools
+    m_toolManager->RegisterTool( new COMMON_CONTROL );
+    m_toolManager->RegisterTool( new BITMAP2CMP_CONTROL );
+    m_toolManager->InitTools();
+
+    ReCreateMenuBar();
 
     GetSizer()->SetSizeHints( this );
 
@@ -195,41 +208,95 @@ wxWindow* BITMAP2CMP_FRAME::GetToolCanvas() const
 
 void BITMAP2CMP_FRAME::doReCreateMenuBar()
 {
-    // wxWidgets handles the Mac Application menu behind the scenes, but that means
+    COMMON_CONTROL* tool = m_toolManager->GetTool<COMMON_CONTROL>();
+    EDA_BASE_FRAME* base_frame = dynamic_cast<EDA_BASE_FRAME*>( this );
+
+    // base_frame == nullptr should not happen, but it makes Coverity happy
+    wxCHECK( base_frame, /* void */ );
+
+    // wxWidgets handles the OSX Application menu behind the scenes, but that means
     // we always have to start from scratch with a new wxMenuBar.
-    wxMenuBar* oldMenuBar = GetMenuBar();
-    wxMenuBar* menuBar    = new wxMenuBar();
+    wxMenuBar*  oldMenuBar = base_frame->GetMenuBar();
+    WX_MENUBAR* menuBar    = new WX_MENUBAR();
 
-    wxMenu* fileMenu = new wxMenu;
+    //-- File menu -----------------------------------------------------------
+    //
+    ACTION_MENU* fileMenu = new ACTION_MENU( false, tool );
 
-    wxMenuItem* item = new wxMenuItem( fileMenu, wxID_OPEN, _( "Open..." ) + wxT( "\tCtrl+O" ),
-                                       _( "Load source image" ) );
+    fileMenu->Add( ACTIONS::open );
 
-    fileMenu->Append( item );
-
-#ifndef __WXMAC__
-    // Mac moves Quit to the App menu so we don't need a separator on Mac
     fileMenu->AppendSeparator();
-#endif
+    fileMenu->AddQuit( _( "Image Converter" ) );
 
-    item = new wxMenuItem( fileMenu, wxID_EXIT, _( "Quit" ) + wxT( "\tCtrl+Q" ),
-                           _( "Quit Image Converter" ) );
+    //-- Preferences menu -----------------------------------------------
+    //
+    ACTION_MENU* prefsMenu = new ACTION_MENU( false, tool );
 
-    if( Pgm().GetCommonSettings()->m_Appearance.use_icons_in_menus )
-        item->SetBitmap( KiBitmap( BITMAPS::exit ) );
+    // We can't use ACTIONS::showPreferences yet because wxWidgets moves this on
+    // Mac, and it needs the wxID_PREFERENCES id to find it.
+    prefsMenu->Add( _( "Preferences..." ) + "\tCtrl+,",
+                    _( "Show preferences for all open tools" ),
+                    wxID_PREFERENCES,
+                    BITMAPS::preference );
 
-    fileMenu->Append( item );
+    prefsMenu->AppendSeparator();
+    AddMenuLanguageList( prefsMenu, tool );
 
+
+    //-- Menubar -------------------------------------------------------------
+    //
     menuBar->Append( fileMenu, _( "&File" ) );
+    menuBar->Append( prefsMenu, _( "&Preferences" ) );
+    base_frame->AddStandardHelpMenu( menuBar );
 
-    SetMenuBar( menuBar );
+    base_frame->SetMenuBar( menuBar );
     delete oldMenuBar;
 }
 
 
-void BITMAP2CMP_FRAME::OnExit( wxCommandEvent& event )
+void BITMAP2CMP_FRAME::ShowChangedLanguage()
 {
-    Destroy();
+    EDA_BASE_FRAME::ShowChangedLanguage();
+
+    UpdateTitle();
+
+    SaveSettings( config() );
+    IMAGE_SIZE imageSizeX = m_panel->GetOutputSizeX();
+    IMAGE_SIZE imageSizeY = m_panel->GetOutputSizeY();
+    Freeze();
+
+    wxSizer* mainSizer = m_panel->GetContainingSizer();
+    mainSizer->Detach( m_panel );
+    m_panel->Destroy();
+
+    m_panel = new BITMAP2CMP_PANEL( this );
+    mainSizer->Add( m_panel, 1, wxEXPAND, 5 );
+    Layout();
+
+    if( !m_bitmapFileName.IsEmpty() )
+        OpenProjectFiles( std::vector<wxString>( 1, m_bitmapFileName ) );
+
+    LoadSettings( config() );
+    m_panel->SetOutputSize( imageSizeX, imageSizeY );
+
+    Thaw();
+    Refresh();
+}
+
+
+void BITMAP2CMP_FRAME::UpdateTitle()
+{
+    wxString title;
+
+    if( !m_bitmapFileName.IsEmpty() )
+    {
+        wxFileName filename( m_bitmapFileName );
+        title = filename.GetFullName() + wxT( " \u2014 " );
+    }
+
+    title += _( "Image Converter" );
+
+    SetTitle( title );
 }
 
 
@@ -263,7 +330,7 @@ void BITMAP2CMP_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 }
 
 
-void BITMAP2CMP_FRAME::OnLoadFile( wxCommandEvent& event )
+void BITMAP2CMP_FRAME::OnLoadFile()
 {
     wxFileName  fn( m_bitmapFileName );
     wxString    path = fn.GetPath();
@@ -288,6 +355,7 @@ void BITMAP2CMP_FRAME::OnLoadFile( wxCommandEvent& event )
     fn = fullFilename;
     m_mruPath = fn.GetPath();
     SetStatusText( fullFilename );
+    UpdateTitle();
     Refresh();
 }
 

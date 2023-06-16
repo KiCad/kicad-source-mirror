@@ -44,7 +44,8 @@
 
 BITMAP2CMP_PANEL::BITMAP2CMP_PANEL( BITMAP2CMP_FRAME* aParent ) :
         BITMAP2CMP_PANEL_BASE( aParent ),
-        m_parentFrame( aParent )
+        m_parentFrame( aParent ), m_negative( false ),
+        m_aspectRatio( 1.0 )
 {
     for( wxString unit : { _( "mm" ), _( "Inch" ), _( "DPI" ) } )
         m_PixelUnit->Append( unit );
@@ -84,10 +85,10 @@ void BITMAP2CMP_PANEL::LoadSettings( BITMAP2CMP_SETTINGS* cfg )
 
     m_sliderThreshold->SetValue( cfg->m_Threshold );
 
-    m_Negative = cfg->m_Negative;
+    m_negative = cfg->m_Negative;
     m_checkNegative->SetValue( cfg->m_Negative );
 
-    m_AspectRatio = 1.0;
+    m_aspectRatio = 1.0;
     m_aspectRatioCheckbox->SetValue( true );
 
     int format = cfg->m_LastFormat;
@@ -177,7 +178,7 @@ void BITMAP2CMP_PANEL::OnPaintBW( wxPaintEvent& event )
 
 void BITMAP2CMP_PANEL::OnLoadFile( wxCommandEvent& event )
 {
-    m_parentFrame->OnLoadFile( event );
+    m_parentFrame->OnLoadFile();
 }
 
 
@@ -217,7 +218,7 @@ bool BITMAP2CMP_PANEL::OpenProjectFiles( const std::vector<wxString>& aFileSet, 
 
     int h  = m_Pict_Bitmap.GetHeight();
     int w  = m_Pict_Bitmap.GetWidth();
-    m_AspectRatio = (double) w / h;
+    m_aspectRatio = (double) w / h;
 
     m_outputSizeX.SetOriginalDPI( imageDPIx );
     m_outputSizeX.SetOriginalSizePixels( w );
@@ -253,7 +254,7 @@ bool BITMAP2CMP_PANEL::OpenProjectFiles( const std::vector<wxString>& aFileSet, 
         }
     }
 
-    if( m_Negative )
+    if( m_negative )
         NegateGreyscaleImage( );
 
     m_Greyscale_Bitmap = wxBitmap( m_Greyscale_Image );
@@ -326,7 +327,7 @@ void BITMAP2CMP_PANEL::OnSizeChangeX( wxCommandEvent& event )
     {
         if( m_aspectRatioCheckbox->GetValue() )
         {
-            double calculatedY = new_size / m_AspectRatio;
+            double calculatedY = new_size / m_aspectRatio;
 
             if( getUnitFromSelection() == EDA_UNITS::UNSCALED )
             {
@@ -355,7 +356,7 @@ void BITMAP2CMP_PANEL::OnSizeChangeY( wxCommandEvent& event )
     {
         if( m_aspectRatioCheckbox->GetValue() )
         {
-            double calculatedX = new_size * m_AspectRatio;
+            double calculatedX = new_size * m_aspectRatio;
 
             if( getUnitFromSelection() == EDA_UNITS::UNSCALED )
             {
@@ -380,6 +381,17 @@ void BITMAP2CMP_PANEL::OnSizeUnitChange( wxCommandEvent& event )
 {
     m_outputSizeX.SetUnit( getUnitFromSelection() );
     m_outputSizeY.SetUnit( getUnitFromSelection() );
+    updateImageInfo();
+
+    m_UnitSizeX->ChangeValue( FormatOutputSize( m_outputSizeX.GetOutputSize() ) );
+    m_UnitSizeY->ChangeValue( FormatOutputSize( m_outputSizeY.GetOutputSize() ) );
+}
+
+
+void BITMAP2CMP_PANEL::SetOutputSize( const IMAGE_SIZE& aSizeX, const IMAGE_SIZE& aSizeY )
+{
+    m_outputSizeX = aSizeX;
+    m_outputSizeY = aSizeY;
     updateImageInfo();
 
     m_UnitSizeX->ChangeValue( FormatOutputSize( m_outputSizeX.GetOutputSize() ) );
@@ -447,13 +459,13 @@ void BITMAP2CMP_PANEL::NegateGreyscaleImage( )
 
 void BITMAP2CMP_PANEL::OnNegativeClicked( wxCommandEvent&  )
 {
-    if( m_checkNegative->GetValue() != m_Negative )
+    if( m_checkNegative->GetValue() != m_negative )
     {
         NegateGreyscaleImage();
 
         m_Greyscale_Bitmap = wxBitmap( m_Greyscale_Image );
         Binarize( (double)m_sliderThreshold->GetValue()/m_sliderThreshold->GetMax() );
-        m_Negative = m_checkNegative->GetValue();
+        m_negative = m_checkNegative->GetValue();
 
         Refresh();
     }

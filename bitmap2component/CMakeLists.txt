@@ -11,11 +11,12 @@ include_directories( ${INC_AFTER} )
 
 set( BITMAP2COMPONENT_SRCS
     ${CMAKE_SOURCE_DIR}/common/single_top.cpp
+    bitmap2cmp_control.cpp
     bitmap2cmp_main.cpp
     bitmap2cmp_settings.cpp
     bitmap2component.cpp
-        bitmap2cmp_panel_base.cpp
-        bitmap2cmp_frame.cpp
+    bitmap2cmp_panel_base.cpp
+    bitmap2cmp_frame.cpp
     bitmap2cmp_panel.cpp
     bitmap2cmp_panel_base.cpp
     ../common/env_vars.cpp      # needed on MSW to avoid a link issue (a symbol not found)

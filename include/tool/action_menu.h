@@ -121,12 +121,21 @@ public:
     /**
      * Add either a standard Quit or Close item to the menu.
      *
-     * If \a aKiface is NULL or in single-instance then quit (wxID_QUIT) is used, otherwise
+     * If \a aKiface is NULL or in single-instance then quit (wxID_EXIT) is used, otherwise
      * close (wxID_CLOSE) is used.
      *
      * @param aAppname is the application name to append to the tooltip.
      */
     void AddQuitOrClose( KIFACE_BASE* aKiface, wxString aAppname = "" );
+
+    /**
+     * Add a standard Quit item to the menu.
+     *
+     * Emits the wxID_EXIT event.
+     *
+     * @param aAppname is the application name to append to the tooltip.
+     */
+    void AddQuit( const wxString& aAppname = "" );
 
     /**
      * Remove all the entries from the menu (as well as its title).

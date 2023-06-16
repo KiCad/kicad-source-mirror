@@ -63,6 +63,15 @@ public:
 
     void AddCalculator( CALCULATOR_PANEL *aPanel, const wxString& panelUIName );
 
+    void ShowChangedLanguage() override;
+
+    // Config read-write, virtual from EDA_BASE_FRAME
+    void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
+    void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
+
+protected:
+    void doReCreateMenuBar() override;
+
 private:
     // Event handlers
     void OnClosePcbCalc( wxCloseEvent& event );
@@ -71,9 +80,7 @@ private:
 
     void onThemeChanged( wxSysColourChangedEvent& aEvent );
 
-    // Config read-write, virtual from EDA_BASE_FRAME
-    void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
-    void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
+    void loadPages();
 
 private:
     wxBoxSizer* m_mainSizer;

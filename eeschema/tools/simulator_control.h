@@ -39,7 +39,8 @@ class SIMULATOR_CONTROL : public wxEvtHandler, public TOOL_INTERACTIVE
 {
 public:
     SIMULATOR_CONTROL() :
-            TOOL_INTERACTIVE( "eeschema.SimulatorControl" ), m_simulatorFrame( nullptr ),
+            TOOL_INTERACTIVE( "eeschema.SimulatorControl" ),
+            m_simulatorFrame( nullptr ),
             m_schematicFrame( nullptr )
     { }
 

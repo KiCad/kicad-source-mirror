@@ -31,59 +31,6 @@
 
 class BITMAP2CMP_PANEL;
 
-class IMAGE_SIZE
-{
-public:
-    IMAGE_SIZE();
-
-    // Set the unit used for m_outputSize, and convert the old m_outputSize value
-    // to the value in new unit
-    void SetUnit( EDA_UNITS aUnit );
-
-    // Accessors:
-    void SetOriginalDPI( int aDPI )
-    {
-        m_originalDPI = aDPI;
-    }
-
-    void SetOriginalSizePixels( int aPixels )
-    {
-        m_originalSizePixels = aPixels;
-    }
-
-    double GetOutputSize()
-    {
-        return m_outputSize;
-    }
-
-    void SetOutputSize( double aSize, EDA_UNITS aUnit )
-    {
-        m_unit = aUnit;
-        m_outputSize = aSize;
-    }
-
-    int  GetOriginalSizePixels()
-    {
-        return m_originalSizePixels;
-    }
-
-    // Set the m_outputSize value from the m_originalSizePixels and the selected unit
-    void SetOutputSizeFromInitialImageSize();
-
-    /** @return the pixels per inch value to build the output image.
-     * It is used by potrace to build the polygonal image
-     */
-    int GetOutputDPI();
-
-private:
-    EDA_UNITS m_unit;                 // The units for m_outputSize (mm, inch, dpi)
-    double    m_outputSize;           // The size in m_unit of the output image, depending on
-                                      // the user settings. Set to the initial image size
-    int       m_originalDPI;          // The image DPI if specified in file, or 0 if unknown
-    int       m_originalSizePixels;   // The original image size read from file, in pixels
-};
-
-
 class BITMAP2CMP_FRAME : public KIWAY_PLAYER
 {
 public:
@@ -94,7 +41,7 @@ public:
     bool OpenProjectFiles( const std::vector<wxString>& aFilenames, int aCtl = 0 ) override;
 
     void OnExit( wxCommandEvent& event );
-    void OnLoadFile( wxCommandEvent& event );
+    void OnLoadFile();
 
     /**
      * Generate a schematic library which contains one component:
@@ -117,12 +64,13 @@ public:
      */
     void ExportLogo();
 
+    void UpdateTitle();
+    void ShowChangedLanguage() override;
+
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
     wxWindow* GetToolCanvas() const override;
-
-DECLARE_EVENT_TABLE()
 
 protected:
     void doReCreateMenuBar() override;
@@ -134,4 +82,5 @@ private:
     wxString          m_bitmapFileName;
     wxString          m_convertedFileName;
 };
+
 #endif// BITMOP2CMP_GUI_H_

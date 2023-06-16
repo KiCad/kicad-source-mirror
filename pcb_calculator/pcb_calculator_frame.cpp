@@ -27,9 +27,14 @@
 #include <bitmap_store.h>
 #include <geometry/shape_poly_set.h>
 #include <kiface_base.h>
+#include <menus_helpers.h>
+#include <tool/tool_manager.h>
+#include <tool/tool_dispatcher.h>
+#include <tool/common_control.h>
 #include <attenuators/attenuator_classes.h>
 #include <pcb_calculator_frame.h>
 #include <pcb_calculator_settings.h>
+#include <pcb_calculator_control.h>
 
 #include <calculator_panels/panel_rf_attenuators.h>
 #include <calculator_panels/panel_board_class.h>
@@ -44,6 +49,7 @@
 #include <calculator_panels/panel_transline.h>
 #include <calculator_panels/panel_via_size.h>
 #include <calculator_panels/panel_wavelength.h>
+#include "widgets/wx_menubar.h"
 
 
 PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
@@ -53,6 +59,8 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                   wxT( "calculator_tools" ), unityScale ),
     m_lastNotebookPage( -1 )
 {
+    m_aboutTitle = _HKI( "KiCad Calculator Tools" );
+
     SHAPE_POLY_SET dummy;   // A ugly trick to force the linker to include
                             // some methods in code and avoid link errors
 
@@ -68,35 +76,7 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     Layout();
     Centre( wxBOTH );
 
-    m_treebook->AddPage( nullptr, _( "General system design" ) );
-
-    AddCalculator( new PANEL_REGULATOR( m_treebook ), _( "Regulators" ) );
-
-    m_treebook->AddPage( nullptr, _( "Power, current and isolation" ) );
-
-    AddCalculator( new PANEL_ELECTRICAL_SPACING( m_treebook ), _( "Electrical Spacing" ) );
-    AddCalculator( new PANEL_VIA_SIZE( m_treebook ), _( "Via Size" ) );
-    AddCalculator( new PANEL_TRACK_WIDTH( m_treebook ), _( "Track Width" ) );
-    AddCalculator( new PANEL_FUSING_CURRENT( m_treebook ), _( "Fusing Current" ) );
-    AddCalculator( new PANEL_CABLE_SIZE( m_treebook ), _( "Cable Size" ) );
-
-    m_treebook->AddPage( nullptr, _( "High speed" ) );
-
-    AddCalculator( new PANEL_WAVELENGTH( m_treebook ), _( "Wavelength" ) );
-    AddCalculator( new PANEL_RF_ATTENUATORS( m_treebook ), _( "RF Attenuators" ) );
-    AddCalculator( new PANEL_TRANSLINE( m_treebook ), _( "Transmission Lines") );
-
-    m_treebook->AddPage( nullptr, _( "Memo" ) );
-
-    AddCalculator( new PANEL_E_SERIES( m_treebook ), _( "E-Series" ) );
-    AddCalculator( new PANEL_COLOR_CODE( m_treebook ), _( "Color Code" ) );
-    AddCalculator( new PANEL_BOARD_CLASS( m_treebook ), _("Board Classes") );
-    AddCalculator( new PANEL_GALVANIC_CORROSION( m_treebook ), _( "Galvanic Corrosion" ) );
-
-    LoadSettings( config() );
-
-    if( PANEL_REGULATOR* regPanel = GetCalculator<PANEL_REGULATOR>() )
-        regPanel->ReadDataFile();
+    loadPages();
 
     // Give an icon
     wxIcon icon;
@@ -110,6 +90,18 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     icon_bundle.AddIcon( icon );
 
     SetIcons( icon_bundle );
+
+    m_toolManager = new TOOL_MANAGER;
+    m_toolManager->SetEnvironment( nullptr, nullptr, nullptr, config(), this );
+
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
+
+    // Register tools
+    m_toolManager->RegisterTool( new COMMON_CONTROL );
+    m_toolManager->RegisterTool( new PCB_CALCULATOR_CONTROL );
+    m_toolManager->InitTools();
+
+    ReCreateMenuBar();
 
     GetSizer()->SetSizeHints( this );
 
@@ -144,6 +136,110 @@ PCB_CALCULATOR_FRAME::~PCB_CALCULATOR_FRAME()
     this->Freeze();
 }
 
+
+void PCB_CALCULATOR_FRAME::loadPages()
+{
+    m_treebook->AddPage( nullptr, _( "General system design" ) );
+
+    AddCalculator( new PANEL_REGULATOR( m_treebook ), _( "Regulators" ) );
+
+    m_treebook->AddPage( nullptr, _( "Power, current and isolation" ) );
+
+    AddCalculator( new PANEL_ELECTRICAL_SPACING( m_treebook ), _( "Electrical Spacing" ) );
+    AddCalculator( new PANEL_VIA_SIZE( m_treebook ), _( "Via Size" ) );
+    AddCalculator( new PANEL_TRACK_WIDTH( m_treebook ), _( "Track Width" ) );
+    AddCalculator( new PANEL_FUSING_CURRENT( m_treebook ), _( "Fusing Current" ) );
+    AddCalculator( new PANEL_CABLE_SIZE( m_treebook ), _( "Cable Size" ) );
+
+    m_treebook->AddPage( nullptr, _( "High Speed" ) );
+
+    AddCalculator( new PANEL_WAVELENGTH( m_treebook ), _( "Wavelength" ) );
+    AddCalculator( new PANEL_RF_ATTENUATORS( m_treebook ), _( "RF Attenuators" ) );
+    AddCalculator( new PANEL_TRANSLINE( m_treebook ), _( "Transmission Lines") );
+
+    m_treebook->AddPage( nullptr, _( "Memo" ) );
+
+    AddCalculator( new PANEL_E_SERIES( m_treebook ), _( "E-Series" ) );
+    AddCalculator( new PANEL_COLOR_CODE( m_treebook ), _( "Color Code" ) );
+    AddCalculator( new PANEL_BOARD_CLASS( m_treebook ), _( "Board Classes" ) );
+    AddCalculator( new PANEL_GALVANIC_CORROSION( m_treebook ), _( "Galvanic Corrosion" ) );
+
+    LoadSettings( config() );
+
+    if( PANEL_REGULATOR* regPanel = GetCalculator<PANEL_REGULATOR>() )
+        regPanel->ReadDataFile();
+}
+
+
+void PCB_CALCULATOR_FRAME::doReCreateMenuBar()
+{
+    COMMON_CONTROL* tool = m_toolManager->GetTool<COMMON_CONTROL>();
+    EDA_BASE_FRAME* base_frame = dynamic_cast<EDA_BASE_FRAME*>( this );
+
+    // base_frame == nullptr should not happen, but it makes Coverity happy
+    wxCHECK( base_frame, /* void */ );
+
+    // wxWidgets handles the OSX Application menu behind the scenes, but that means
+    // we always have to start from scratch with a new wxMenuBar.
+    wxMenuBar*  oldMenuBar = base_frame->GetMenuBar();
+    WX_MENUBAR* menuBar    = new WX_MENUBAR();
+
+    //-- File menu -----------------------------------------------------------
+    //
+    ACTION_MENU* fileMenu = new ACTION_MENU( false, tool );
+
+    fileMenu->AddQuit( _( "Calculator Tools" ) );
+
+    //-- Preferences menu -----------------------------------------------
+    //
+    ACTION_MENU* prefsMenu = new ACTION_MENU( false, tool );
+
+    // We can't use ACTIONS::showPreferences yet because wxWidgets moves this on
+    // Mac, and it needs the wxID_PREFERENCES id to find it.
+    prefsMenu->Add( _( "Preferences..." ) + "\tCtrl+,",
+                    _( "Show preferences for all open tools" ),
+                    wxID_PREFERENCES,
+                    BITMAPS::preference );
+
+    prefsMenu->AppendSeparator();
+    AddMenuLanguageList( prefsMenu, tool );
+
+
+    //-- Menubar -------------------------------------------------------------
+    //
+    menuBar->Append( fileMenu, _( "&File" ) );
+    menuBar->Append( prefsMenu, _( "&Preferences" ) );
+    base_frame->AddStandardHelpMenu( menuBar );
+
+    base_frame->SetMenuBar( menuBar );
+    delete oldMenuBar;
+}
+
+
+void PCB_CALCULATOR_FRAME::ShowChangedLanguage()
+{
+    EDA_BASE_FRAME::ShowChangedLanguage();
+
+    SetTitle( _( "Calculator Tools" ) );
+
+    SaveSettings( config() );
+    Freeze();
+
+    int page = m_treebook->GetSelection();
+    m_treebook->DeleteAllPages();
+    m_panels.clear();
+
+    loadPages();
+    Layout();
+
+    m_treebook->SetSelection( page );
+    LoadSettings( config() );
+
+    Thaw();
+    Refresh();
+}
+
+
 void PCB_CALCULATOR_FRAME::OnPageChanged ( wxTreebookEvent& aEvent )
 {
     int page = aEvent.GetSelection();
@@ -152,10 +248,13 @@ void PCB_CALCULATOR_FRAME::OnPageChanged ( wxTreebookEvent& aEvent )
     if ( m_treebook->GetPageParent( page ) == wxNOT_FOUND )
     {
         m_treebook->ExpandNode( page );
+
         // Select the first child
-        m_treebook->ChangeSelection( page + 1 );
+        if( page + 1 < m_treebook->GetPageCount() )
+            m_treebook->ChangeSelection( page + 1 );
     }
 }
+
 
 void PCB_CALCULATOR_FRAME::AddCalculator( CALCULATOR_PANEL *aPanel, const wxString& panelUIName )
 {

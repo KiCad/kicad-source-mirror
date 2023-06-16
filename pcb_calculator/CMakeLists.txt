@@ -10,19 +10,20 @@ include_directories(
 set( PCB_CALCULATOR_SRCS
     common_data.cpp
     params_read_write.cpp
+    pcb_calculator_control.cpp
     pcb_calculator_frame.cpp
     pcb_calculator_settings.cpp
     datafile_read_write.cpp
-        calculator_panels/panel_rf_attenuators.cpp
-        calculator_panels/panel_rf_attenuators_base.cpp
+    calculator_panels/panel_rf_attenuators.cpp
+    calculator_panels/panel_rf_attenuators_base.cpp
     calculator_panels/panel_board_class.cpp
     calculator_panels/panel_board_class_base.cpp
     calculator_panels/panel_cable_size.cpp
     calculator_panels/panel_cable_size_base.cpp
     calculator_panels/panel_color_code.cpp
     calculator_panels/panel_color_code_base.cpp
-        calculator_panels/panel_galvanic_corrosion.cpp
-        calculator_panels/panel_galvanic_corrosion_base.cpp
+    calculator_panels/panel_galvanic_corrosion.cpp
+    calculator_panels/panel_galvanic_corrosion_base.cpp
     calculator_panels/panel_electrical_spacing.cpp
     calculator_panels/panel_electrical_spacing_base.cpp
     calculator_panels/iec60664.cpp

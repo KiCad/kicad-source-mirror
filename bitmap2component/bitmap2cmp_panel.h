@@ -31,6 +31,59 @@ class BITMAP2CMP_FRAME;
 class BITMAP2CMP_SETTINGS;
 
 
+class IMAGE_SIZE
+{
+public:
+    IMAGE_SIZE();
+
+    // Set the unit used for m_outputSize, and convert the old m_outputSize value
+    // to the value in new unit
+    void SetUnit( EDA_UNITS aUnit );
+
+    // Accessors:
+    void SetOriginalDPI( int aDPI )
+    {
+        m_originalDPI = aDPI;
+    }
+
+    void SetOriginalSizePixels( int aPixels )
+    {
+        m_originalSizePixels = aPixels;
+    }
+
+    double GetOutputSize()
+    {
+        return m_outputSize;
+    }
+
+    void SetOutputSize( double aSize, EDA_UNITS aUnit )
+    {
+        m_unit = aUnit;
+        m_outputSize = aSize;
+    }
+
+    int  GetOriginalSizePixels()
+    {
+        return m_originalSizePixels;
+    }
+
+    // Set the m_outputSize value from the m_originalSizePixels and the selected unit
+    void SetOutputSizeFromInitialImageSize();
+
+    /** @return the pixels per inch value to build the output image.
+     * It is used by potrace to build the polygonal image
+     */
+    int GetOutputDPI();
+
+private:
+    EDA_UNITS m_unit;                 // The units for m_outputSize (mm, inch, dpi)
+    double    m_outputSize;           // The size in m_unit of the output image, depending on
+                                      // the user settings. Set to the initial image size
+    int       m_originalDPI;          // The image DPI if specified in file, or 0 if unknown
+    int       m_originalSizePixels;   // The original image size read from file, in pixels
+};
+
+
 class BITMAP2CMP_PANEL : public BITMAP2CMP_PANEL_BASE
 {
 public:
@@ -45,6 +98,10 @@ public:
     void SaveSettings( BITMAP2CMP_SETTINGS* aCfg );
 
     wxWindow* GetCurrentPage();
+
+    IMAGE_SIZE GetOutputSizeX() const { return m_outputSizeX; }
+    IMAGE_SIZE GetOutputSizeY() const { return m_outputSizeY; }
+    void SetOutputSize( const IMAGE_SIZE& aSizeX, const IMAGE_SIZE& aSizeY );
 
     /**
      * generate a export data of the current bitmap.
@@ -86,15 +143,15 @@ private:
 private:
     BITMAP2CMP_FRAME* m_parentFrame;
 
-    wxImage    m_Pict_Image;
-    wxBitmap   m_Pict_Bitmap;
-    wxImage    m_Greyscale_Image;
-    wxBitmap   m_Greyscale_Bitmap;
-    wxImage    m_NB_Image;
-    wxBitmap   m_BN_Bitmap;
-    IMAGE_SIZE m_outputSizeX;
-    IMAGE_SIZE m_outputSizeY;
-    bool       m_Negative;
-    double     m_AspectRatio;
+    wxImage           m_Pict_Image;
+    wxBitmap          m_Pict_Bitmap;
+    wxImage           m_Greyscale_Image;
+    wxBitmap          m_Greyscale_Bitmap;
+    wxImage           m_NB_Image;
+    wxBitmap          m_BN_Bitmap;
+    IMAGE_SIZE        m_outputSizeX;
+    IMAGE_SIZE        m_outputSizeY;
+    bool              m_negative;
+    double            m_aspectRatio;
 };
 #endif// BITMAP2CMP_PANEL
