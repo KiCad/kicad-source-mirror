@@ -62,8 +62,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
         m_MouseCapturedLost( false ),
         m_parent( aParentWindow ),
         m_edaFrame( nullptr ),
-        m_lastRefresh( 0 ),
-        m_pendingRefresh( false ),
+        m_lastRepaint( 0 ),
         m_drawing( false ),
         m_drawingEnabled( false ),
         m_gal( nullptr ),
@@ -78,8 +77,6 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
         m_statusPopup( nullptr )
 {
     m_PaintEventCounter = std::make_unique<PROF_COUNTER>( "Draw panel paint events" );
-
-    m_minRefreshPeriod = 13; // 77 FPS (minus render time) by default
 
     SetLayoutDirection( wxLayout_LeftToRight );
 
@@ -191,12 +188,23 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 }
 
 
-void EDA_DRAW_PANEL_GAL::DoRePaint()
+bool EDA_DRAW_PANEL_GAL::DoRePaint()
 {
     if( !m_refreshMutex.try_lock() )
-        return;
+        return false;
 
     std::lock_guard<std::mutex> lock( m_refreshMutex, std::adopt_lock );
+
+    if( !m_drawingEnabled )
+        return false;
+
+    if( !m_gal->IsInitialized() || !m_gal->IsVisible() )
+        return false;
+
+    if( m_drawing )
+        return false;
+
+    m_lastRepaint = wxGetLocalTimeMillis();
 
     // Repaint the canvas, and fix scrollbar cursors
     // Usually called by a OnPaint event, but because it does not use a wxPaintDC,
@@ -209,17 +217,6 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
 
     if( Pgm().GetCommonSettings()->m_Appearance.show_scrollbars )
         m_viewControls->UpdateScrollbars();
-
-    if( !m_drawingEnabled )
-        return;
-
-    if( !m_gal->IsInitialized() || !m_gal->IsVisible() )
-        return;
-
-    m_pendingRefresh = false;
-
-    if( m_drawing )
-        return;
 
     SCOPED_SET_RESET<bool> drawing( m_drawing, true );
 
@@ -337,7 +334,7 @@ void EDA_DRAW_PANEL_GAL::DoRePaint()
         );
     }
 
-    m_lastRefresh = wxGetLocalTimeMillis();
+    return true;
 }
 
 
@@ -382,28 +379,30 @@ void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
 void EDA_DRAW_PANEL_GAL::Refresh( bool aEraseBackground, const wxRect* aRect )
 {
     wxLongLong t = wxGetLocalTimeMillis();
-    wxLongLong delta = t - m_lastRefresh;
+    wxLongLong delta = t - m_lastRepaint;
+
+    int minRefreshPeriod = 13; // 77 FPS limit when v-sync not available.
+
+    if( m_gal && m_gal->IsInitialized() && m_gal->GetSwapInterval() != 0 )
+        minRefreshPeriod = 3;
 
     // If it has been too long since the last frame (possible depending on platform timer latency),
     // just do a refresh.  Otherwise, start the refresh timer if it hasn't already been started.
     // This ensures that we will render often enough but not too often.
-    if( delta >= m_minRefreshPeriod )
+    if( delta >= minRefreshPeriod )
     {
-        if( !m_pendingRefresh )
-            ForceRefresh();
-
-        m_refreshTimer.Start( m_minRefreshPeriod, true );
+        if( !DoRePaint() )
+            m_refreshTimer.Start( minRefreshPeriod, true );
     }
     else if( !m_refreshTimer.IsRunning() )
     {
-        m_refreshTimer.Start( ( m_minRefreshPeriod - delta ).ToLong(), true );
+        m_refreshTimer.Start( ( minRefreshPeriod - delta ).ToLong(), true );
     }
 }
 
 
 void EDA_DRAW_PANEL_GAL::ForceRefresh()
 {
-    m_pendingRefresh = true;
     DoRePaint();
 }
 
@@ -426,7 +425,6 @@ void EDA_DRAW_PANEL_GAL::StopDrawing()
     m_refreshTimer.Stop();
     m_drawingEnabled = false;
     Disconnect( wxEVT_PAINT, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), nullptr, this );
-    m_pendingRefresh = false;
 }
 
 
@@ -538,12 +536,6 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 
     m_gal->SetGridVisibility( grid_visibility );
 
-    if( m_gal->GetSwapInterval() != 0 )
-    {
-        // In theory this could be 0 but then more CPU cycles will be wasted in SwapBuffers
-        m_minRefreshPeriod = 5;
-    }
-
     // Make sure the cursor is set on the new canvas
     SetCurrentCursor( KICURSOR::ARROW );
 
@@ -613,7 +605,6 @@ void EDA_DRAW_PANEL_GAL::onRefreshTimer( wxTimerEvent& aEvent )
     {
         if( m_gal && m_gal->IsInitialized() )
         {
-            m_pendingRefresh = true;
             Connect( wxEVT_PAINT, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), nullptr,
                      this );
             m_drawingEnabled = true;

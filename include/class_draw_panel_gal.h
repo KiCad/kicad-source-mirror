@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2018 CERN
- * Copyright (C) 2013-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -224,8 +224,10 @@ public:
      * Usually called by a OnPaint event.
      *
      * Because it does not use a wxPaintDC, it can be called outside a wxPaintEvent.
+     * 
+     * @return true if the repaint attempt was successful.
      */
-    void DoRePaint();
+    bool DoRePaint();
 
     /**
      * Create an overlay for rendering debug graphics.
@@ -258,9 +260,7 @@ protected:
     wxWindow*                m_parent;           ///< Pointer to the parent window
     EDA_DRAW_FRAME*          m_edaFrame;         ///< Parent EDA_DRAW_FRAME (if available)
 
-    int                      m_minRefreshPeriod; ///< A minimum delay before another draw can start
-    wxLongLong               m_lastRefresh;      ///< Last timestamp when the panel was refreshed
-    bool                     m_pendingRefresh;   ///< Is there a redraw event requested?
+    wxLongLong               m_lastRepaint;      ///< Timestamp of the last repaint start
     wxTimer                  m_refreshTimer;     ///< Timer to prevent too-frequent refreshing
 
     std::mutex               m_refreshMutex;     ///< Blocks multiple calls to the draw
