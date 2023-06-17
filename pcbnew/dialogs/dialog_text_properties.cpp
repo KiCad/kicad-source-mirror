@@ -98,6 +98,22 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PC
 
         // Do not allow locking items in the footprint editor
         m_cbLocked->Show( false );
+
+        m_tabOrder = {
+            m_SingleLineText,
+            m_LayerSelectionCtrl,
+            m_SizeXCtrl,
+            m_SizeYCtrl,
+            m_ThicknessCtrl,
+            m_Visible,
+            m_cbKnockout,
+            m_KeepUpright,
+            m_PositionXCtrl,
+            m_PositionYCtrl,
+            m_OrientCtrl,
+            m_sdbSizerOK,
+            m_sdbSizerCancel
+        };
     }
     else
     {
@@ -112,6 +128,21 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PC
 
         m_KeepUpright->Show( false );
         m_statusLine->Show( false );
+
+        m_tabOrder = {
+            m_MultiLineText,
+            m_cbLocked,
+            m_LayerSelectionCtrl,
+            m_SizeXCtrl,
+            m_SizeYCtrl,
+            m_ThicknessCtrl,
+            m_cbKnockout,
+            m_PositionXCtrl,
+            m_PositionYCtrl,
+            m_OrientCtrl,
+            m_sdbSizerOK,
+            m_sdbSizerCancel
+        };
     }
 
     m_bold->SetIsCheckButton();
