@@ -53,7 +53,7 @@ public:
     FIELDS_EDITOR_GRID_DATA_MODEL( SCH_REFERENCE_LIST& aSymbolsList ) :
             m_symbolsList( aSymbolsList ), m_edited( false ), m_sortColumn( 0 ),
             m_sortAscending( false ), m_groupingEnabled( false ), m_excludeDNP( false ),
-            m_includeExcluded( false )
+            m_includeExcluded( false ), m_rebuildsEnabled( true )
     {
         m_symbolsList.SplitReferences();
     }
@@ -131,7 +131,12 @@ public:
     int  GetSortCol() { return m_sortColumn; }
     bool GetSortAsc() { return m_sortAscending; }
 
+    // These are used to disable the RebuildRows functionality while we're generating
+    // lots of events in the UI, e.g. applying a BOM preset, that would thrash the grid.
+    void EnableRebuilds();
+    void DisableRebuilds();
     void RebuildRows();
+
     void ExpandRow( int aRow );
     void CollapseRow( int aRow );
     void ExpandCollapseRow( int aRow );
@@ -204,6 +209,7 @@ protected:
     bool               m_groupingEnabled;
     bool               m_excludeDNP;
     bool               m_includeExcluded;
+    bool               m_rebuildsEnabled;
 
     std::vector<DATA_MODEL_COL> m_cols;
     std::vector<DATA_MODEL_ROW> m_rows;

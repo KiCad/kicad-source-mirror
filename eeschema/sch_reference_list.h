@@ -100,6 +100,7 @@ public:
 
     int GetUnit() const                        { return m_unit; }
     void SetUnit( int aUnit )                  { m_unit = aUnit; }
+    bool IsMultiUnit() const                   { return GetLibPart()->GetUnitCount() > 1; }
 
     const wxString GetValue() const            { return m_value; }
     void SetValue( const wxString& aValue )    { m_value = aValue; }

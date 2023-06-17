@@ -350,8 +350,23 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef,
 }
 
 
+void FIELDS_EDITOR_GRID_DATA_MODEL::EnableRebuilds()
+{
+    m_rebuildsEnabled = true;
+}
+
+
+void FIELDS_EDITOR_GRID_DATA_MODEL::DisableRebuilds()
+{
+    m_rebuildsEnabled = false;
+}
+
+
 void FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
 {
+    if( !m_rebuildsEnabled )
+        return;
+
     if( GetView() )
     {
         // Commit any pending in-place edits before the row gets moved out from under
@@ -378,6 +393,13 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
             continue;
 
         bool matchFound = false;
+
+        // Performance optimization for ungrouped case to skip the N^2 for loop
+        if( !m_groupingEnabled && !ref.IsMultiUnit() )
+        {
+            m_rows.emplace_back( DATA_MODEL_ROW( ref, GROUP_SINGLETON ) );
+            continue;
+        }
 
         // See if we already have a row which this symbol fits into
         for( DATA_MODEL_ROW& row : m_rows )

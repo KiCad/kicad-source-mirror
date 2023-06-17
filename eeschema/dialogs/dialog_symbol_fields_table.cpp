@@ -1509,6 +1509,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged( wxCommandEvent& aEvent )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
 {
+    // Disable rebuilds while we're applying the preset otherwise we'll be
+    // rebuilding the model constantly while firing off wx events
+    m_dataModel->DisableRebuilds();
+
     // Basically, we apply the BOM preset to the data model and then
     // update our UI to reflect resulting the data model state, not the preset.
     m_dataModel->ApplyBomPreset( aPreset );
@@ -1580,6 +1584,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
 
     // This will rebuild all rows and columns in the model such that the order
     // and labels are right, then we refresh the shown grid data to match
+    m_dataModel->EnableRebuilds();
     m_dataModel->RebuildRows();
     m_grid->ForceRefresh();
 }
@@ -1900,7 +1905,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomFmtPreset( const BOM_FMT_PRESET& aPre
     m_checkKeepTabs->SetValue( aPreset.keepTabs );
     m_checkKeepLineBreaks->SetValue( aPreset.keepLineBreaks );
 
-    PreviewRefresh();
+
+    // Refresh the preview if that's the current page
+    if( m_nbPages->GetSelection() == 1 )
+        PreviewRefresh();
 }
 
 
