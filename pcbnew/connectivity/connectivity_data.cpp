@@ -770,9 +770,10 @@ bool CONNECTIVITY_DATA::TestTrackEndpointDangling( PCB_TRACK* aTrack, VECTOR2I* 
 
             if( hitStart && hitEnd )
             {
-                if( zone )
+                if( zone || item->Type() == PCB_PAD_T || item->Type() == PCB_VIA_T )
                 {
-                    // Both start and end in a zone: track may be redundant, but it's not dangling
+                    // Both start and end in a zone or under a pad: track may be redundant, but
+                    // it's not dangling
                     return false;
                 }
 
