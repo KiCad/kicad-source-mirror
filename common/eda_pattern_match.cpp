@@ -186,7 +186,7 @@ bool EDA_PATTERN_MATCH_WILDCARD::SetPattern( const wxString& aPattern )
         }
     }
 
-    return EDA_PATTERN_MATCH_REGEX::SetPattern( regex );
+    return EDA_PATTERN_MATCH_REGEX::SetPattern( wxS( "/" ) + regex + wxS( "/" ) );
 }
 
 
