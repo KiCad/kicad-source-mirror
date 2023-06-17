@@ -514,7 +514,6 @@ void FP_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearance, i
 
     if( IsKnockout() )
     {
-        TEXT_ATTRIBUTES attrs = GetAttributes();
         SHAPE_POLY_SET finalPoly;
         int            margin = GetKnockoutTextMargin( attrs.m_Size, penWidth );
 

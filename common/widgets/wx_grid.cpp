@@ -462,7 +462,7 @@ bool WX_GRID::CancelPendingChanges()
     wxGridCellAttr* attr = GetCellAttr( row, col );
     wxGridCellEditor* editor = attr->GetEditor( this, row, col );
 
-    bool changed = editor->EndEdit( row, col, this, oldval, &newval );
+    editor->EndEdit( row, col, this, oldval, &newval );
 
     editor->DecRef();
     attr->DecRef();
