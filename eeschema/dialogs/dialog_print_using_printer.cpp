@@ -372,6 +372,7 @@ bool SCH_PRINTOUT::OnPrintPage( int page )
     m_parent->SetCurrentSheet( sheetList[ page - 1 ] );
     m_parent->GetCurrentSheet().UpdateAllScreenReferences();
     m_parent->SetSheetNumberAndCount();
+    m_parent->RecomputeIntersheetRefs();
     screen = m_parent->GetCurrentSheet().LastScreen();
     PrintPage( screen );
     m_parent->SetCurrentSheet( oldsheetpath );
@@ -431,7 +432,7 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
     COLOR_SETTINGS*    theme = mgr.GetColorSettings( cfg->m_Printing.color_theme );
 
     // Change scale factor and offset to print the whole page.
-    bool printReference = cfg->m_Printing.title_block;
+    bool printDrawingSheet = cfg->m_Printing.title_block;
 
     pageSizeIU = ToWxSize( aScreen->GetPageSettings().GetSizeIU( schIUScale.IU_PER_MILS ) );
     FitThisSizeToPaper( pageSizeIU );
@@ -520,7 +521,7 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
 
     renderSettings.SetDefaultFont( cfg->m_Appearance.default_font );
 
-    if( printReference )
+    if( printDrawingSheet )
     {
         m_parent->PrintDrawingSheet( &renderSettings, aScreen, aScreen->Schematic()->GetProperties(),
                                      schIUScale.IU_PER_MILS, aScreen->GetFileName(), wxEmptyString );
