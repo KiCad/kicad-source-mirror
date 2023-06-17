@@ -376,6 +376,12 @@ void SCH_FIELD::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
      */
     textpos = GetBoundingBox().Centre() + aOffset;
 
+    if( GetParent() && GetParent()->Type() == SCH_GLOBAL_LABEL_T )
+    {
+        SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( GetParent() );
+        textpos += label->GetSchematicTextOffset( aSettings );
+    }
+
     GRPrintText( DC, textpos, color, GetShownText( true ), orient, GetTextSize(),
                  GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(), IsBold(),
                  font );
