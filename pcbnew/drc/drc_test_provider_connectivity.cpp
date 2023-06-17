@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2022 KiCad Developers.
+ * Copyright (C) 2004-2023 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,7 +100,7 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
         int code = track->Type() == PCB_VIA_T ? DRCE_DANGLING_VIA : DRCE_DANGLING_TRACK;
         VECTOR2I pos;
 
-        if( connectivity->TestTrackEndpointDangling( track, &pos ) )
+        if( connectivity->TestTrackEndpointDangling( track, true, &pos ) )
         {
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( code );
             drcItem->SetItems( track );
