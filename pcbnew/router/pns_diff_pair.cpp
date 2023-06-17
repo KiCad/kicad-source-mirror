@@ -609,8 +609,11 @@ void DP_GATEWAYS::buildDpContinuation( const DP_PRIMITIVE_PAIR& aPair, bool aIsD
     if( !aPair.Directional() )
         return;
 
-    // Add gateways that angle the anchor points by 22.5 degrees for connection to tracks which
-    // are at +/- 45 degrees from the existing direction.
+    // If we're at a "normal" angle (cardinal or 45-degree-diagonal), then add gateways that angle
+    // the anchor points by 22.5-degrees for connection to tracks which are at +/- 45 degrees from
+    // the existing direction.
+
+    int epsilon = 5; // 0.005um
 
     auto addAngledGateways =
             [&]( int length, int priority )
@@ -632,11 +635,16 @@ void DP_GATEWAYS::buildDpContinuation( const DP_PRIMITIVE_PAIR& aPair, bool aIsD
                 m_gateways.push_back( gwExtendN );
             };
 
-    addAngledGateways( KiROUND( (double) m_gap * 0.38268 ), 20 );
+    VECTOR2I delta = aPair.AnchorP() - aPair.AnchorN();
 
-    // fixme; sin(22.5) doesn't always work, so we also add some lower priority ones with a bit
-    // of wiggle room.  See https://gitlab.com/kicad/code/kicad/-/issues/12459.
-    addAngledGateways( KiROUND( (double) m_gap * 0.4 ), 5 );
+    if( abs( delta.x ) < epsilon || abs( delta.y ) < epsilon || abs( delta.x - delta.y ) < epsilon )
+    {
+        addAngledGateways( KiROUND( (double) m_gap * 0.38268 ), 20 );
+
+        // fixme; sin(22.5) doesn't always work, so we also add some lower priority ones with a
+        // bit of wiggle room.  See https://gitlab.com/kicad/code/kicad/-/issues/12459.
+        addAngledGateways( KiROUND( (double) m_gap * 0.4 ), 5 );
+    }
 }
 
 
