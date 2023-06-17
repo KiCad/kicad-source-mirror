@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -273,7 +273,7 @@ bool TRACKS_CLEANER::deleteDanglingTracks( bool aTrack, bool aVia )
                 continue;
 
             // Test if a track (or a via) endpoint is not connected to another track or zone.
-            if( m_brd->GetConnectivity()->TestTrackEndpointDangling( track ) )
+            if( m_brd->GetConnectivity()->TestTrackEndpointDangling( track, false ) )
             {
                 std::shared_ptr<CLEANUP_ITEM> item;
 

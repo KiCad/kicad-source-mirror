@@ -731,7 +731,8 @@ static int getMinDist( BOARD_CONNECTED_ITEM* aItem, const VECTOR2I& aPoint )
 }
 
 
-bool CONNECTIVITY_DATA::TestTrackEndpointDangling( PCB_TRACK* aTrack, VECTOR2I* aPos ) const
+bool CONNECTIVITY_DATA::TestTrackEndpointDangling( PCB_TRACK* aTrack, bool aIgnoreTracksInPads,
+                                                   VECTOR2I* aPos ) const
 {
     const std::list<CN_ITEM*>& items = GetConnectivityAlgo()->ItemEntry( aTrack ).GetItems();
 
@@ -791,11 +792,16 @@ bool CONNECTIVITY_DATA::TestTrackEndpointDangling( PCB_TRACK* aTrack, VECTOR2I* 
 
             if( hitStart && hitEnd )
             {
-                if( zone || item->Type() == PCB_PAD_T || item->Type() == PCB_VIA_T )
+                if( zone )
                 {
-                    // Both start and end in a zone or under a pad: track may be redundant, but
-                    // it's not dangling
+                    // Both start and end in a zone: track may be redundant, but it's not dangling
                     return false;
+                }
+                else if( item->Type() == PCB_PAD_T || item->Type() == PCB_VIA_T )
+                {
+                    // Both start and end are under a pad: see what the caller wants us to do
+                    if( aIgnoreTracksInPads )
+                        return false;
                 }
 
                 if( getMinDist( item, aTrack->GetStart() ) < getMinDist( item, aTrack->GetEnd() ) )
