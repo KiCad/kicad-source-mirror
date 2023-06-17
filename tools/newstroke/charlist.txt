@@ -97,7 +97,7 @@ font newstroke_font
 + BRACE
 + LINE_V
 + !BRACE
-+ TILDE
++ TILDE_U+007E
 + DEL
 
 // LATIN-1 SUPPLEMENT (0080-00FF)
@@ -2918,6 +2918,7 @@ skipcodes 256 0
 // Miscellaneous Symbols and Arrows (2B00-2BFF)
 skipcodes 256 0
 
+// Skip to CJK
 skipcodes 1024 0
 
 // CJK Symbols and Punctuation (3000-303F)

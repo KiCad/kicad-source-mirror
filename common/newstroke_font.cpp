@@ -65737,7 +65737,11 @@ const char* const newstroke_font[] =
 const int newstroke_font_bufsize = sizeof(newstroke_font)/sizeof(newstroke_font[0]);
 
 /* --- unused glyphs --- */
-/*  RECTANGLE_V_BLACK_SMALL  */
-/*  TRIANGLE_TALL_BLACK  */
 /*  COMBINING  */
+/*  C_CAP_REV  */
+/*  C_SMALL_REV  */
 /*  DIAMOND_SMALL  */
+/*  DOT_MACRON  */
+/*  RECTANGLE_V_BLACK_SMALL  */
+/*  TILDE_MACRON  */
+/*  TRIANGLE_TALL_BLACK  */

@@ -3,7 +3,11 @@
 # awk script to convert KiCAD font.
 
 BEGIN {
-	print "/* Automatically converted font */"
+	fn_header = "font_header.cpp"
+	while (getline line < fn_header)
+		print line
+	close(fn_header)
+
 	missed = 0
 	printstats = 1
 
@@ -269,9 +273,10 @@ $1 == "ENDDEF" {
 # parsing font index
 $1 == "font" {
 	print fontend
-	print "const static char* "$2"[] ="
+	print "\n"
+	print "const char* const "$2"[] ="
 	print "{"
-	fontend = "};"
+	fontend = "};\nconst int "$2"_bufsize = sizeof("$2")/sizeof("$2"[0]);\n"
 }
 $1 == "startchar" {
 	codeno = $2
@@ -310,8 +315,9 @@ $1 == "+)" {
 
 $1 == "skipcodes" {
 	#print "    // skip "$2
+	skipper = codeno > 0x9000 ? "0" : symdef
 	for(i = 0; i<$2; i++) {
-		print "    \""cesc(metric(symdef) graph(symdef))"\"," ((codeno%16)?"":sprintf(" /* U+%X */", codeno))
+		print "    \""cesc(metric(skipper) graph(skipper))"\"," ((codeno%16)?"":sprintf(" /* U+%X */", codeno))
 		codeno += 1
 	}
 }
@@ -327,6 +333,7 @@ END {
 	if(printstats) {
 		if(missed>0) print "/* Missed glyphs: " missed " */"
 		print "/* --- unused glyphs --- */"
+		PROCINFO["sorted_in"] = "@val_str_asc"
 		for(f in fi) {
 			if(0==fontuse[f]) print "/*  "f"  */"
 		}
