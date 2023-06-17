@@ -213,11 +213,10 @@ public:
                              bool aAddUndoItem = true );
 
     /*
-     * Functions to build the listboxes and their contents
+     * Functions to build the listbox contents
      */
-    void BuildSymbolsListBox();
-    void BuildFootprintsListBox();
-    void BuildLibrariesListBox();
+    void BuildFootprintsList();
+    void BuildLibrariesList();
 
     /**
      * Save the edits that the user has done by sending them back to Eeschema via the kiway.

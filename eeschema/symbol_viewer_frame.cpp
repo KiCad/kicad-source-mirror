@@ -37,6 +37,8 @@
 #include <symbol_viewer_frame.h>
 #include <widgets/msgpanel.h>
 #include <widgets/wx_listbox.h>
+#include <widgets/wx_aui_utils.h>
+#include <widgets/wx_progress_reporters.h>
 #include <sch_view.h>
 #include <sch_painter.h>
 #include <symbol_lib_table.h>
@@ -57,7 +59,6 @@
 #include <tools/symbol_editor_control.h>
 #include <tools/ee_inspection_tool.h>
 #include <view/view_controls.h>
-#include <widgets/wx_progress_reporters.h>
 #include <wx/srchctrl.h>
 
 #include <default_values.h>
@@ -239,42 +240,10 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAM
     m_auimgr.Update();
 
     if( m_libListWidth > 0 )
-    {
-        wxAuiPaneInfo& treePane = m_auimgr.GetPane( "Libraries" );
-
-        // wxAUI hack: force width by setting MinSize() and then Fixed()
-        // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
-        treePane.MinSize( m_libListWidth, -1 );
-        treePane.Fixed();
-        m_auimgr.Update();
-
-        // now make it resizable again
-        treePane.Resizable();
-        m_auimgr.Update();
-
-        // Note: DO NOT call m_auimgr.Update() anywhere after this; it will nuke the size
-        // back to minimum.
-        treePane.MinSize( 100, -1 );
-    }
+        SetAuiPaneSize( m_auimgr, m_auimgr.GetPane( "Libraries" ), m_libListWidth, -1 );
 
     if( m_symbolListWidth > 0 )
-    {
-        wxAuiPaneInfo& treePane = m_auimgr.GetPane( "Symbols" );
-
-        // wxAUI hack: force width by setting MinSize() and then Fixed()
-        // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
-        treePane.MinSize( m_symbolListWidth, -1 );
-        treePane.Fixed();
-        m_auimgr.Update();
-
-        // now make it resizable again
-        treePane.Resizable();
-        m_auimgr.Update();
-
-        // Note: DO NOT call m_auimgr.Update() anywhere after this; it will nuke the size
-        // back to minimum.
-        treePane.MinSize( 100, -1 );
-    }
+        SetAuiPaneSize( m_auimgr, m_auimgr.GetPane( "Symbols" ), m_symbolListWidth, -1 );
 
     FinishAUIInitialization();
 

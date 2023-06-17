@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jean-pierre.charras
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -94,8 +94,8 @@ bool CVPCB_MAINFRAME::readNetListAndFpFiles( const std::string& aNetlist )
 
     LoadFootprintFiles();
 
-    BuildFootprintsListBox();
-    BuildLibrariesListBox();
+    BuildFootprintsList();
+    BuildLibrariesList();
 
     m_symbolsListBox->Clear();
 
@@ -258,6 +258,8 @@ bool CVPCB_MAINFRAME::readNetListAndFpFiles( const std::string& aNetlist )
         }
     }
 
+    int firstUnassigned = wxNOT_FOUND;
+
     // Populates the component list box:
     for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
     {
@@ -270,17 +272,15 @@ bool CVPCB_MAINFRAME::readNetListAndFpFiles( const std::string& aNetlist )
 
         m_symbolsListBox->AppendLine( msg );
 
-        FOOTPRINT_INFO* fp =
-                m_FootprintsList->GetFootprintInfo( component->GetFPID().Format().wx_str() );
+        if( firstUnassigned == wxNOT_FOUND && component->GetFPID().empty() )
+            firstUnassigned = i;
 
-        if( !fp )
-        {
+        if( !m_FootprintsList->GetFootprintInfo( component->GetFPID().Format().wx_str() ) )
             m_symbolsListBox->AppendWarning( i );
-        }
     }
 
-    if( !m_netlist.IsEmpty() )
-        m_symbolsListBox->SetSelection( 0, true );
+    if( firstUnassigned >= 0 )
+        m_symbolsListBox->SetSelection( firstUnassigned, true );
 
     DisplayStatus();
 

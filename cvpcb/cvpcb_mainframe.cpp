@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,6 @@
 #include <kiway_express.h>
 #include <string_utils.h>
 #include <project/project_file.h>
-#include <macros.h>
 #include <netlist_reader/netlist_reader.h>
 #include <lib_tree_model_adapter.h>
 #include <numeric>
@@ -44,8 +43,6 @@
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
 #include <widgets/wx_progress_reporters.h>
-#include <wx/statline.h>
-#include <wx/stattext.h>
 
 #include <cvpcb_association.h>
 #include <cvpcb_id.h>
@@ -57,30 +54,30 @@
 #include <tools/cvpcb_actions.h>
 #include <tools/cvpcb_association_tool.h>
 #include <tools/cvpcb_control.h>
+
+#include <wx/statline.h>
+#include <wx/stattext.h>
 #include <wx/button.h>
-#include <wx/settings.h>
 
-
-#define CVPCB_MAINFRAME_NAME wxT( "CvpcbFrame" )
 
 CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
         KIWAY_PLAYER( aKiway, aParent, FRAME_CVPCB, _( "Assign Footprints" ), wxDefaultPosition,
-                      wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, CVPCB_MAINFRAME_NAME,
+                      wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, wxT( "CvpcbFrame" ),
                       unityScale ),
+        m_mainToolBar( nullptr ),
+        m_footprintListBox( nullptr ),
+        m_librariesListBox( nullptr ),
+        m_symbolsListBox( nullptr ),
+        m_tcFilterString( nullptr ),
         m_viewerPendingUpdate( false )
 {
-    m_symbolsListBox      = nullptr;
-    m_footprintListBox    = nullptr;
-    m_librariesListBox    = nullptr;
-    m_mainToolBar         = nullptr;
     m_modified            = false;
     m_cannotClose         = false;
     m_skipComponentSelect = false;
     m_filteringOptions    = FOOTPRINTS_LISTBOX::UNFILTERED_FP_LIST;
-    m_tcFilterString      = nullptr;
     m_FootprintsList      = FOOTPRINT_LIST::GetInstance( Kiway() );
     m_initialized         = false;
-    m_aboutTitle          = wxS( "CvPcb" );
+    m_aboutTitle          = _( "Assign Footprints" );
 
     // Give an icon
     wxIcon icon;
@@ -96,12 +93,16 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReCreateMenuBar();
     ReCreateHToolbar();
 
-    // Create list of available footprints and symbols of the schematic
-    BuildSymbolsListBox();
-    BuildFootprintsListBox();
+    m_footprintListBox = new FOOTPRINTS_LISTBOX( this, ID_CVPCB_FOOTPRINT_LIST );
+    m_footprintListBox->SetFont( KIUI::GetMonospacedUIFont() );
+
+    m_symbolsListBox = new SYMBOLS_LISTBOX( this, ID_CVPCB_COMPONENT_LIST );
+    m_symbolsListBox->SetFont( KIUI::GetMonospacedUIFont() );
 
     m_librariesListBox = new LIBRARY_LISTBOX( this, ID_CVPCB_LIBRARY_LIST );
     m_librariesListBox->SetFont( KIUI::GetMonospacedUIFont() );
+
+    BuildFootprintsList();
 
     m_auimgr.SetManagedWindow( this );
 
@@ -169,45 +170,32 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.Update();
     m_initialized = true;
 
+    auto setPaneWidth =
+            [this]( wxAuiPaneInfo& pane, int width )
+            {
+                // wxAUI hack: force width by setting MinSize() and then Fixed()
+                // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
+                pane.MinSize( width, -1 );
+                pane.BestSize( width, -1 );
+                pane.MaxSize( width, -1 );
+                pane.Fixed();
+                m_auimgr.Update();
+
+                // now make it resizable again
+                pane.MinSize( 20, -1 );
+                pane.Resizable();
+                m_auimgr.Update();
+            };
+
     if( CVPCB_SETTINGS* cfg = dynamic_cast<CVPCB_SETTINGS*>( config() ) )
     {
         m_tcFilterString->ChangeValue( cfg->m_FilterString );
 
         if( cfg->m_LibrariesWidth > 0 )
-        {
-            wxAuiPaneInfo& librariesPane = m_auimgr.GetPane( "Libraries" );
-
-            // wxAUI hack: force width by setting MinSize() and then Fixed()
-            // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
-            librariesPane.MinSize( cfg->m_LibrariesWidth, -1 );
-            librariesPane.BestSize( cfg->m_LibrariesWidth, -1 );
-            librariesPane.MaxSize( cfg->m_LibrariesWidth, -1 );
-            librariesPane.Fixed();
-            m_auimgr.Update();
-
-            // now make it resizable again
-            librariesPane.MinSize( 20, -1 );
-            librariesPane.Resizable();
-            m_auimgr.Update();
-        }
+            setPaneWidth( m_auimgr.GetPane( "Libraries" ), cfg->m_LibrariesWidth );
 
         if( cfg->m_FootprintsWidth > 0 )
-        {
-            wxAuiPaneInfo& footprintsPane = m_auimgr.GetPane( "Footprints" );
-
-            // wxAUI hack: force width by setting MinSize() and then Fixed()
-            // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
-            footprintsPane.MinSize( cfg->m_FootprintsWidth, -1 );
-            footprintsPane.BestSize( cfg->m_FootprintsWidth, -1 );
-            footprintsPane.MaxSize( cfg->m_FootprintsWidth, -1 );
-            footprintsPane.Fixed();
-            m_auimgr.Update();
-
-            // now make it resizable again
-            footprintsPane.MinSize( 20, -1 );
-            footprintsPane.Resizable();
-            m_auimgr.Update();
-        }
+            setPaneWidth( m_auimgr.GetPane( "Footprints" ), cfg->m_FootprintsWidth );
     }
 
     // Connect Events
@@ -653,17 +641,10 @@ void CVPCB_MAINFRAME::AssociateFootprint( const CVPCB_ASSOCIATION& aAssociation,
                                                      candidate->GetFPID().Format().wx_str() );
             m_symbolsListBox->SetString( idx, description );
 
-            FOOTPRINT_INFO* fp =
-                    m_FootprintsList->GetFootprintInfo( symbol->GetFPID().Format().wx_str() );
-
-            if( !fp )
-            {
+            if( !m_FootprintsList->GetFootprintInfo( symbol->GetFPID().Format().wx_str() ) )
                 m_symbolsListBox->AppendWarning( idx );
-            }
             else
-            {
                 m_symbolsListBox->RemoveWarning( idx );
-            }
         }
     }
 
@@ -840,7 +821,7 @@ void CVPCB_MAINFRAME::DisplayStatus()
     else
         msg.Printf( _( "Filtered by %s" ), filters );
 
-    msg << wxT( ": " ) << m_footprintListBox->GetCount();
+    msg += wxString::Format( _( ": %i matching footprints" ), m_footprintListBox->GetCount() );
 
     SetStatusText( msg );
 
@@ -909,9 +890,7 @@ bool CVPCB_MAINFRAME::LoadFootprintFiles()
     m_FootprintsList->ReadFootprintFiles( fptbl, nullptr, &progressReporter );
 
     if( m_FootprintsList->GetErrorCount() )
-    {
         m_FootprintsList->DisplayErrors( this );
-    }
 
     return true;
 }
@@ -991,66 +970,15 @@ int CVPCB_MAINFRAME::readSchematicNetlist( const std::string& aNetlist )
 }
 
 
-void CVPCB_MAINFRAME::BuildFootprintsListBox()
+void CVPCB_MAINFRAME::BuildFootprintsList()
 {
-    wxFont   guiFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-
-    if( m_footprintListBox == nullptr )
-    {
-        m_footprintListBox = new FOOTPRINTS_LISTBOX( this, ID_CVPCB_FOOTPRINT_LIST );
-        m_footprintListBox->SetFont( KIUI::GetMonospacedUIFont() );
-    }
-
     m_footprintListBox->SetFootprints( *m_FootprintsList, wxEmptyString, nullptr, wxEmptyString,
                                        FOOTPRINTS_LISTBOX::UNFILTERED_FP_LIST );
     DisplayStatus();
 }
 
 
-void CVPCB_MAINFRAME::BuildSymbolsListBox()
-{
-    wxString    msg;
-    COMPONENT*  symbol;
-    wxFont      guiFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-
-    if( m_symbolsListBox == nullptr )
-    {
-        m_symbolsListBox = new SYMBOLS_LISTBOX( this, ID_CVPCB_COMPONENT_LIST );
-        m_symbolsListBox->SetFont( KIUI::GetMonospacedUIFont() );
-    }
-
-    m_symbolsListBox->m_SymbolList.Clear();
-
-    for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
-    {
-        symbol = m_netlist.GetComponent( i );
-
-        msg = formatSymbolDesc( m_symbolsListBox->GetCount() + 1,
-                                symbol->GetReference(),
-                                symbol->GetValue(),
-                                symbol->GetFPID().Format().wx_str() );
-        m_symbolsListBox->m_SymbolList.Add( msg );
-
-        FOOTPRINT_INFO* fp =
-                m_FootprintsList->GetFootprintInfo( symbol->GetFPID().Format().wx_str() );
-
-        if( !fp )
-        {
-            m_symbolsListBox->AppendWarning( i );
-        }
-    }
-
-    if( m_symbolsListBox->m_SymbolList.Count() )
-    {
-        m_symbolsListBox->SetItemCount( m_symbolsListBox->m_SymbolList.Count() );
-        m_symbolsListBox->SetSelection( 0, true );
-        m_symbolsListBox->RefreshItems( 0L, m_symbolsListBox->m_SymbolList.Count() - 1 );
-        m_symbolsListBox->UpdateWidth();
-    }
-}
-
-
-void CVPCB_MAINFRAME::BuildLibrariesListBox()
+void CVPCB_MAINFRAME::BuildLibrariesList()
 {
     COMMON_SETTINGS*   cfg = Pgm().GetCommonSettings();
     PROJECT_FILE&      project = Kiway().Prj().GetProjectFile();
@@ -1124,8 +1052,8 @@ void CVPCB_MAINFRAME::SetSelectedComponent( int aIndex, bool aSkipUpdate )
 }
 
 
-std::vector<unsigned int> CVPCB_MAINFRAME::GetComponentIndices(
-        CVPCB_MAINFRAME::CRITERIA aCriteria )
+std::vector<unsigned int>
+CVPCB_MAINFRAME::GetComponentIndices( CVPCB_MAINFRAME::CRITERIA aCriteria )
 {
     std::vector<unsigned int> idx;
     int                       lastIdx;
@@ -1198,14 +1126,10 @@ wxWindow* CVPCB_MAINFRAME::GetToolCanvas() const
 
 CVPCB_MAINFRAME::CONTROL_TYPE CVPCB_MAINFRAME::GetFocusedControl() const
 {
-    if( m_librariesListBox->HasFocus() )
-        return CVPCB_MAINFRAME::CONTROL_LIBRARY;
-    else if( m_symbolsListBox->HasFocus() )
-        return CVPCB_MAINFRAME::CONTROL_COMPONENT;
-    else if( m_footprintListBox->HasFocus() )
-        return CVPCB_MAINFRAME::CONTROL_FOOTPRINT;
-
-    return CVPCB_MAINFRAME::CONTROL_NONE;
+    if( m_librariesListBox->HasFocus() )      return CVPCB_MAINFRAME::CONTROL_LIBRARY;
+    else if( m_symbolsListBox->HasFocus() )   return CVPCB_MAINFRAME::CONTROL_COMPONENT;
+    else if( m_footprintListBox->HasFocus() ) return CVPCB_MAINFRAME::CONTROL_FOOTPRINT;
+    else                                      return CVPCB_MAINFRAME::CONTROL_NONE;
 }
 
 
@@ -1268,8 +1192,8 @@ void CVPCB_MAINFRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
     case MAIL_RELOAD_LIB:
         m_cannotClose = true;
         LoadFootprintFiles();
-        BuildFootprintsListBox();
-        BuildLibrariesListBox();
+        BuildFootprintsList();
+        BuildLibrariesList();
         m_cannotClose = false;
         break;
     default:

@@ -38,6 +38,7 @@
 #include <netlist_reader/pcb_netlist.h>
 #include <widgets/msgpanel.h>
 #include <widgets/wx_listbox.h>
+#include <widgets/wx_aui_utils.h>
 #include <pcb_draw_panel_gal.h>
 #include <pcb_painter.h>
 #include <pcbnew_id.h>
@@ -288,42 +289,10 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_auimgr.Update();
 
     if( m_libListWidth > 0 )
-    {
-        wxAuiPaneInfo& treePane = m_auimgr.GetPane( "Libraries" );
-
-        // wxAUI hack: force width by setting MinSize() and then Fixed()
-        // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
-        treePane.MinSize( m_libListWidth, -1 );
-        treePane.Fixed();
-        m_auimgr.Update();
-
-        // now make it resizable again
-        treePane.Resizable();
-        m_auimgr.Update();
-
-        // Note: DO NOT call m_auimgr.Update() anywhere after this; it will nuke the size
-        // back to minimum.
-        treePane.MinSize( 100, -1 );
-    }
+        SetAuiPaneSize( m_auimgr, m_auimgr.GetPane( "Libraries" ), m_libListWidth, -1 );
 
     if( m_fpListWidth > 0 )
-    {
-        wxAuiPaneInfo& treePane = m_auimgr.GetPane( "Footprints" );
-
-        // wxAUI hack: force width by setting MinSize() and then Fixed()
-        // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
-        treePane.MinSize( m_fpListWidth, -1 );
-        treePane.Fixed();
-        m_auimgr.Update();
-
-        // now make it resizable again
-        treePane.Resizable();
-        m_auimgr.Update();
-
-        // Note: DO NOT call m_auimgr.Update() anywhere after this; it will nuke the size
-        // back to minimum.
-        treePane.MinSize( 100, -1 );
-    }
+        SetAuiPaneSize( m_auimgr, m_auimgr.GetPane( "Footprints" ), m_fpListWidth, -1 );
 
     // The canvas should not steal the focus from the list boxes
     GetCanvas()->SetCanFocus( false );

@@ -69,6 +69,7 @@
 #include <widgets/lib_tree.h>
 #include <widgets/wx_progress_reporters.h>
 #include <widgets/symbol_tree_pane.h>
+#include <widgets/wx_aui_utils.h>
 #include <wildcards_and_files_ext.h>
 #include <panel_sym_lib_table.h>
 #include <string_utils.h>
@@ -202,23 +203,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     FinishAUIInitialization();
 
     if( m_settings->m_LibWidth > 0 )
-    {
-        wxAuiPaneInfo& treePane = m_auimgr.GetPane( "SymbolTree" );
-
-        // wxAUI hack: force width by setting MinSize() and then Fixed()
-        // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
-        treePane.MinSize( m_settings->m_LibWidth, -1 );
-        treePane.Fixed();
-        m_auimgr.Update();
-
-        // now make it resizable again
-        treePane.Resizable();
-        m_auimgr.Update();
-
-        // Note: DO NOT call m_auimgr.Update() anywhere after this; it will nuke the size
-        // back to minimum.
-        treePane.MinSize( 250, -1 );
-    }
+        SetAuiPaneSize( m_auimgr, m_auimgr.GetPane( "SymbolTree" ), m_settings->m_LibWidth, -1 );
 
     Raise();
     Show( true );
