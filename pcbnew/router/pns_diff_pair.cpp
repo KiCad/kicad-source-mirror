@@ -613,7 +613,9 @@ void DP_GATEWAYS::buildDpContinuation( const DP_PRIMITIVE_PAIR& aPair, bool aIsD
     // the anchor points by 22.5-degrees for connection to tracks which are at +/- 45 degrees from
     // the existing direction.
 
-    int epsilon = 5; // 0.005um
+    int    EPSILON  = 5;         // 0.005um
+    double SIN_22_5 = 0.38268;   // sin(22.5)
+    double SIN_23_5 = 0.39875;   // sin(23.5)
 
     auto addAngledGateways =
             [&]( int length, int priority )
@@ -637,13 +639,13 @@ void DP_GATEWAYS::buildDpContinuation( const DP_PRIMITIVE_PAIR& aPair, bool aIsD
 
     VECTOR2I delta = aPair.AnchorP() - aPair.AnchorN();
 
-    if( abs( delta.x ) < epsilon || abs( delta.y ) < epsilon || abs( delta.x - delta.y ) < epsilon )
+    if( abs( delta.x ) < EPSILON || abs( delta.y ) < EPSILON || abs( delta.x - delta.y ) < EPSILON )
     {
-        addAngledGateways( KiROUND( (double) m_gap * 0.38268 ), 20 );
+        addAngledGateways( KiROUND( (double) m_gap * SIN_22_5 ), 20 );
 
         // fixme; sin(22.5) doesn't always work, so we also add some lower priority ones with a
         // bit of wiggle room.  See https://gitlab.com/kicad/code/kicad/-/issues/12459.
-        addAngledGateways( KiROUND( (double) m_gap * 0.4 ), 5 );
+        addAngledGateways( KiROUND( (double) m_gap * SIN_23_5 ), 5 );
     }
 }
 
