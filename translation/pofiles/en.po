@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-18 11:58-0700\n"
+"POT-Creation-Date: 2023-06-18 15:39+0200\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -4876,6 +4876,9 @@ msgstr "Filter footprint list by library"
 msgid "Delete all associations?"
 msgstr "Delete all associations?"
 
+msgid "Unable to create the footprint viewer frame"
+msgstr "Unable to create the footprint viewer frame"
+
 #, c-format
 msgid "%d duplicate time stamps were found and replaced."
 msgstr "%d duplicate time stamps were found and replaced."
@@ -8647,6 +8650,10 @@ msgstr "Overwrite Files"
 msgid "Abort Project Save"
 msgstr "Abort Project Save"
 
+#, c-format
+msgid "Schematic '%s' is already open by '%s' at '%s'."
+msgstr "Schematic '%s' is already open by '%s' at '%s'."
+
 msgid "Importing Schematic"
 msgstr "Importing Schematic"
 
@@ -10813,18 +10820,18 @@ msgid "Spice Simulator"
 msgstr "Spice Simulator"
 
 msgid ""
-"Errors during netlist generation; simulation aborted.\n"
-"\n"
+"Schematic sheet simulation command directive has changed.  Do you wish to "
+"update the Simulation Command?"
 msgstr ""
-"Errors during netlist generation; simulation aborted.\n"
-"\n"
+"Schematic sheet simulation command directive has changed.  Do you wish to "
+"update the Simulation Command?"
 
 msgid ""
-"Schematic sheet simulation command directive has changed.  Do you wish to "
-"update the Simulation Command?"
+"Errors during netlist generation; simulation aborted.\n"
+"\n"
 msgstr ""
-"Schematic sheet simulation command directive has changed.  Do you wish to "
-"update the Simulation Command?"
+"Errors during netlist generation; simulation aborted.\n"
+"\n"
 
 msgid "Another simulation is already running."
 msgstr "Another simulation is already running."
@@ -13458,6 +13465,12 @@ msgstr "This file is already open."
 msgid "Malformed expression"
 msgstr "Malformed expression"
 
+msgid "Lock file already exists"
+msgstr "Lock file already exists"
+
+msgid "Failed to access lock file"
+msgstr "Failed to access lock file"
+
 msgid "Reset all hotkeys to the built-in KiCad defaults"
 msgstr "Reset all hotkeys to the built-in KiCad defaults"
 
@@ -13578,8 +13591,14 @@ msgstr "Subtract soldermask from silkscreen"
 msgid "Disable aperature macros"
 msgstr "Disable aperature macros"
 
+msgid "Use drill/place file origin"
+msgstr "Use drill/place file origin"
+
 msgid "Precision of gerber coordinates, valid options: 5 or 6"
 msgstr "Precision of gerber coordinates, valid options: 5 or 6"
+
+msgid "Use KiCad gerber file extension"
+msgstr "Use KiCad gerber file extension"
 
 msgid ""
 "Layers to include on each plot, comma separated list of untranslated layer "
@@ -13590,6 +13609,9 @@ msgstr ""
 
 msgid "Use the gerber plot settings already configured in the board file"
 msgstr "Use the gerber plot settings already configured in the board file"
+
+msgid "Mirror the board (useful for trying to show bottom layers)"
+msgstr "Mirror the board (useful for trying to show bottom layers)"
 
 msgid "Color theme to use (will default to pcbnew settings)"
 msgstr "Color theme to use (will default to pcbnew settings)"
@@ -13663,9 +13685,6 @@ msgid ""
 msgstr ""
 "User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default unit "
 "mm)"
-
-msgid "Mirror the board (useful for trying to show bottom layers)"
-msgstr "Mirror the board (useful for trying to show bottom layers)"
 
 msgid ""
 "Set page sizing mode (0 = page with frame and title block, 1 = current page "
@@ -18904,9 +18923,6 @@ msgstr "Exclude all footprints with through hole pads"
 msgid "Include board edge layer"
 msgstr "Include board edge layer"
 
-msgid "Use drill/place file origin"
-msgstr "Use drill/place file origin"
-
 msgid "Use negative X coordinates for footprints on bottom layer"
 msgstr "Use negative X coordinates for footprints on bottom layer"
 
@@ -23594,8 +23610,8 @@ msgstr ""
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 
 #, c-format
-msgid "PCB '%s' is already open."
-msgstr "PCB '%s' is already open."
+msgid "PCB '%s' is already open by '%s' at '%s'."
+msgstr "PCB '%s' is already open by '%s' at '%s'."
 
 msgid "The current PCB has been modified.  Save changes?"
 msgstr "The current PCB has been modified.  Save changes?"
@@ -27214,10 +27230,10 @@ msgstr "Pack footprints"
 
 #, c-format
 msgid ""
-"Click to place %s (item %ld of %ld)\n"
+"Click to place %s (item %zu of %zu)\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"Click to place %s (item %ld of %ld)\n"
+"Click to place %s (item %zu of %zu)\n"
 "Press <esc> to cancel all; double-click to finish"
 
 #, c-format
@@ -29371,12 +29387,6 @@ msgstr "pcbnew"
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "An EDA suite for schematic and circuit board design"
 
-msgid "EDA"
-msgstr "EDA"
-
-msgid "Circuit board"
-msgstr "Circuit board"
-
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
 "It features schematic capture, integrated circuit simulation, printed "
@@ -29415,6 +29425,24 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#, c-format
+#~ msgid "PCB '%s' is already open."
+#~ msgstr "PCB '%s' is already open."
+
+#, c-format
+#~ msgid ""
+#~ "Click to place %s (item %ld of %ld)\n"
+#~ "Press <esc> to cancel all; double-click to finish"
+#~ msgstr ""
+#~ "Click to place %s (item %ld of %ld)\n"
+#~ "Press <esc> to cancel all; double-click to finish"
+
+#~ msgid "EDA"
+#~ msgstr "EDA"
+
+#~ msgid "Circuit board"
+#~ msgstr "Circuit board"
 
 #~ msgid "Export Current Footprint..."
 #~ msgstr "Export Current Footprint..."
