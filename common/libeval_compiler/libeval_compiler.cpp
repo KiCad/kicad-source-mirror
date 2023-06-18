@@ -646,7 +646,7 @@ void dumpNode( wxString& buf, TREE_NODE* tok, int depth = 0 )
 
      case TR_OP_FUNC_CALL:
         buf += "CALL '";
-        buf += *tok->leaf[0]->value.str;
+        buf += formatNode( tok->leaf[0] );
         buf += "': ";
         dumpNode( buf, tok->leaf[1], depth + 1 );
         break;
@@ -786,7 +786,7 @@ static std::vector<TREE_NODE*> squashParamList( TREE_NODE* root )
     std::reverse( args.begin(), args.end() );
 
     for( size_t i = 0; i < args.size(); i++ )
-        libeval_dbg( 10, "squash arg%d: %s\n", int( i ), *args[i]->value.str );
+        libeval_dbg( 10, "squash arg%d: %s\n", int( i ), formatNode( args[i] ) );
 
     return args;
 }
@@ -845,7 +845,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                 int pos = node->leaf[0]->srcPos;
 
                 if( node->leaf[0]->value.str )
-                    pos -= static_cast<int>( node->leaf[0]->value.str->length() );
+                    pos -= static_cast<int>( formatNode( node->leaf[0] ).length() );
 
                 reportError( CST_CODEGEN,  _( "Unknown parent of property" ), pos );
 
@@ -864,8 +864,8 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     // leaf[0]: object
                     // leaf[1]: field
 
-                    wxString itemName = *node->leaf[0]->value.str;
-                    wxString propName = *node->leaf[1]->value.str;
+                    wxString itemName = formatNode( node->leaf[0] );
+                    wxString propName = formatNode( node->leaf[1] );
                     std::unique_ptr<VAR_REF> vref = aCode->CreateVarRef( itemName, propName );
 
                     if( !vref )
@@ -895,7 +895,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     //    leaf[0]: function name
                     //    leaf[1]: parameter
 
-                    wxString                 itemName = *node->leaf[0]->value.str;
+                    wxString                 itemName = formatNode( node->leaf[0] );
                     std::unique_ptr<VAR_REF> vref = aCode->CreateVarRef( itemName, "" );
 
                     if( !vref )
@@ -905,7 +905,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                                      node->leaf[0]->srcPos - (int) itemName.length() );
                     }
 
-                    wxString functionName = *node->leaf[1]->leaf[0]->value.str;
+                    wxString functionName = formatNode( node->leaf[1]->leaf[0] );
                     auto  func = aCode->CreateFuncCall( functionName );
                     std::vector<TREE_NODE*> params = squashParamList( node->leaf[1]->leaf[1] );
 
@@ -924,7 +924,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                         for( TREE_NODE* pnode : params )
                         {
                             VALUE*   param = aPreflightContext->AllocValue();
-                            param->Set( *pnode->value.str );
+                            param->Set( formatNode( pnode ) );
                             aPreflightContext->Push( param );
                         }
 
@@ -968,8 +968,8 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     // leaf[0]: object
                     // leaf[1]: malformed syntax
 
-                    wxString itemName = *node->leaf[0]->value.str;
-                    wxString propName = *node->leaf[1]->value.str;
+                    wxString itemName = formatNode( node->leaf[0] );
+                    wxString propName = formatNode( node->leaf[1] );
                     std::unique_ptr<VAR_REF> vref = aCode->CreateVarRef( itemName, propName );
 
                     if( !vref )
@@ -1006,12 +1006,12 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
             {
                 if( m_unitResolver->GetSupportedUnits().empty() )
                 {
-                    msg.Printf( _( "Unexpected units for '%s'" ), *node->value.str );
+                    msg.Printf( _( "Unexpected units for '%s'" ), formatNode( node ) );
                     reportError( CST_CODEGEN, msg, node->srcPos );
                 }
 
                 int units = son->value.idx;
-                value =  m_unitResolver->Convert( *node->value.str, units );
+                value =  m_unitResolver->Convert( formatNode( node ), units );
                 son->isVisited = true;
             }
             else
@@ -1019,12 +1019,12 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                 if( !m_unitResolver->GetSupportedUnitsMessage().empty() )
                 {
                     msg.Printf( _( "Missing units for '%s'| (%s)" ),
-                                *node->value.str,
+                                formatNode( node ),
                                 m_unitResolver->GetSupportedUnitsMessage() );
                     reportError( CST_CODEGEN, msg, node->srcPos );
                 }
 
-                value = EDA_UNIT_UTILS::UI::DoubleValueFromString( *node->value.str );
+                value = EDA_UNIT_UTILS::UI::DoubleValueFromString( formatNode( node ) );
             }
 
             node->SetUop( TR_UOP_PUSH_VALUE, value );
@@ -1034,7 +1034,7 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 
         case TR_STRING:
         {
-            wxString str = *node->value.str;
+            wxString str = formatNode( node );
             bool isWildcard = str.Contains("?") || str.Contains("*");
             node->SetUop( TR_UOP_PUSH_VALUE, str, isWildcard );
             node->isTerminal = true;
@@ -1043,12 +1043,12 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 
         case TR_IDENTIFIER:
         {
-            std::unique_ptr<VAR_REF> vref = aCode->CreateVarRef( *node->value.str, "" );
+            std::unique_ptr<VAR_REF> vref = aCode->CreateVarRef( formatNode( node ), "" );
 
             if( !vref )
             {
-                msg.Printf( _( "Unrecognized item '%s'" ), *node->value.str );
-                reportError( CST_CODEGEN, msg, node->srcPos - (int) node->value.str->length() );
+                msg.Printf( _( "Unrecognized item '%s'" ), formatNode( node ) );
+                reportError( CST_CODEGEN, msg, node->srcPos - (int) formatNode( node ).length() );
             }
 
             node->SetUop( TR_UOP_PUSH_VAR, std::move( vref ) );
