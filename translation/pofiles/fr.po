@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-18 15:40+0200\n"
-"PO-Revision-Date: 2023-06-08 09:47+0200\n"
+"POT-Creation-Date: 2023-06-18 16:13+0200\n"
+"PO-Revision-Date: 2023-06-18 16:29+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -3247,12 +3247,17 @@ msgstr ""
 #: common/dialogs/panel_common_settings_base.cpp:157
 msgid "Show popup indicator when toggling settings with hotkeys"
 msgstr ""
+"Afficher un indicateur contextuel lorsque l'on change les paramètres à "
+"l'aide de touches de raccourci"
 
 #: common/dialogs/panel_common_settings_base.cpp:158
 msgid ""
 "When enabled, certain hotkeys that cycle between settings will show a popup "
 "indicator briefly to indicate the change in settings."
 msgstr ""
+"Lorsque cette option est activée, certaines touches de raccourci qui passent "
+"d'un réglage à l'autre affichent brièvement un indicateur contextuel pour "
+"signaler le changement de réglage."
 
 #: common/dialogs/panel_common_settings_base.cpp:168
 msgid "Icon theme:"
@@ -7544,9 +7549,9 @@ msgid "Filtered by %s"
 msgstr "Filtré par %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:824
-#, fuzzy, c-format
+#, c-format
 msgid ": %i matching footprints"
-msgstr "Empreinte manquante"
+msgstr ": %i empreintes correspondantes"
 
 #: cvpcb/cvpcb_mainframe.cpp:836
 #, c-format
@@ -8431,9 +8436,8 @@ msgid "Update"
 msgstr "Mise à jour"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:405
-#, fuzzy
 msgid "Update Symbols"
-msgstr "Mise a Jour Symbole..."
+msgstr "Mise a Jour Symboles..."
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:547
 msgid "*** symbol not found ***"
@@ -9346,9 +9350,8 @@ msgid "Text Item Properties"
 msgstr "Propriétés de l'Élément Texte"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:571
-#, fuzzy
 msgid "Edit Text and Graphics"
-msgstr "Editer Propriétés des Textes et Elément Graphiques"
+msgstr "Editer Textes et Elément Graphiques"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:33
 msgid "Other symbol fields"
@@ -9554,19 +9557,16 @@ msgid "Ibis parser"
 msgstr "Analyseur Ibis"
 
 #: eeschema/dialogs/dialog_image_properties.cpp:75
-#, fuzzy
 msgid "Image Properties"
-msgstr "Propriétés de la Mire"
+msgstr "Propriétés de l'Image"
 
 #: eeschema/dialogs/dialog_junction_props.cpp:113
-#, fuzzy
 msgid "Edit Junction"
-msgstr "Ajout Jonctions"
+msgstr "Editer Jonction"
 
 #: eeschema/dialogs/dialog_junction_props.cpp:113
-#, fuzzy
 msgid "Edit Junctions"
-msgstr "Jonctions"
+msgstr "Editer Jonctions"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
@@ -9627,9 +9627,8 @@ msgid "untitled"
 msgstr "untitled"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:586
-#, fuzzy
 msgid "Edit Label"
-msgstr "Éditer Label..."
+msgstr "Éditer Label"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:671
 msgid "The first field is mandatory."
@@ -10169,9 +10168,8 @@ msgstr "Le nom de symbole '%s' existe déjà  en librairie '%s'."
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:371
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:376
 #: eeschema/dialogs/dialog_symbol_properties.cpp:873
-#, fuzzy
 msgid "Edit Symbol Properties"
-msgstr "Propriétés du Symbole"
+msgstr "Editer Propriétés du Symbole"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:498
 #, c-format
@@ -10419,14 +10417,12 @@ msgid "Text Box Properties"
 msgstr "Propriétés de Boite de Texte"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:154
-#, fuzzy
 msgid "Edit Line"
-msgstr "Éditer Fichier"
+msgstr "Éditer Ligne"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:154
-#, fuzzy
 msgid "Edit Lines"
-msgstr "Ajouter Lignes"
+msgstr "Editer Lignes"
 
 #: eeschema/dialogs/dialog_line_properties_base.cpp:79
 msgid "Set width to 0 to use schematic's default line width."
@@ -11158,9 +11154,9 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_shape_properties.cpp:169
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:229
-#, fuzzy, c-format
+#, c-format
 msgid "Edit %s"
-msgstr "Editer"
+msgstr "Editer %s"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:88
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:158
@@ -11186,9 +11182,8 @@ msgid "%s Properties"
 msgstr "Propriétés %s"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:179
-#, fuzzy
 msgid "Edit Sheet Pin"
-msgstr "Ajouter Pins de Feuille de Hierarchie"
+msgstr "Editer Pin de Feuille"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.h:84
 msgid "Sheet Pin Properties"
@@ -12388,9 +12383,8 @@ msgstr ""
 "une page de cette schématique."
 
 #: eeschema/dialogs/dialog_text_properties.cpp:581
-#, fuzzy
 msgid "Edit Text"
-msgstr "Éditer Texte..."
+msgstr "Éditer Texte"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:292
 msgid "Link:"
@@ -12486,14 +12480,12 @@ msgid "User-defined Signals"
 msgstr "Signaux Définis par l'Utilisateur"
 
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:229
-#, fuzzy
 msgid "Wire/Bus"
-msgstr "Fils"
+msgstr "Fil/Bus"
 
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:230
-#, fuzzy
 msgid "Wires/Buses"
-msgstr "Migration des Bus"
+msgstr "Fils/Bus"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:30
 msgid "Wire/bus width:"
@@ -14476,64 +14468,63 @@ msgid "P&references"
 msgstr "P&références"
 
 #: eeschema/net_navigator.cpp:55
-#, fuzzy, c-format
+#, c-format
 msgid "Wire from %s, %s to %s, %s"
-msgstr "Fil %s de (%s,%s) à (%s,%s)"
+msgstr "Fil de %s, %s à %s, %s"
 
 #: eeschema/net_navigator.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid "Bus from %s, %s to %s, %s"
-msgstr "Bus %s de  (%s,%s) à (%s,%s)"
+msgstr "Bus de %s, %s à %s, %s"
 
 #: eeschema/net_navigator.cpp:71
-#, fuzzy
 msgid "Graphic line not connectable"
-msgstr "Pin non connectée"
+msgstr "Ligne graphique non connectable"
 
 #: eeschema/net_navigator.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' pin '%s'"
-msgstr "Symbole %s [%s]"
+msgstr "Symbole '%s' pin '%s'"
 
 #: eeschema/net_navigator.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid "Sheet '%s' pin '%s'"
-msgstr "Pins de feuille"
+msgstr "Feuille '%s' pin '%s'"
 
 #: eeschema/net_navigator.cpp:104
-#, fuzzy, c-format
+#, c-format
 msgid "Label '%s' at %s, %s"
-msgstr "Texte \"%s\" à  (%s %s)"
+msgstr "Label  '%s' à %s, %s"
 
 #: eeschema/net_navigator.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid "Global label '%s' at %s, %s"
-msgstr "Label Global '%s'"
+msgstr "Label global '%s' à %s, %s"
 
 #: eeschema/net_navigator.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label '%s' at %s, %s"
-msgstr "Label Hiérarchique '%s'"
+msgstr "Label hiérarchique '%s' à %s, %s"
 
 #: eeschema/net_navigator.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Junction at %s, %s"
-msgstr "Taille jonction:"
+msgstr "Jonction à %s, %s"
 
 #: eeschema/net_navigator.cpp:144
-#, fuzzy, c-format
+#, c-format
 msgid "Bus to wire entry from %s, %s to %s, %s"
-msgstr "Fil %s de (%s,%s) à (%s,%s)"
+msgstr "Entrée de fil vers bus de %s, %s à %s, %s"
 
 #: eeschema/net_navigator.cpp:156
-#, fuzzy, c-format
+#, c-format
 msgid "Bus to bus entry from %s, %s to %s, %s"
-msgstr "Bus %s de  (%s,%s) à (%s,%s)"
+msgstr "Entrée de bus vers bus de %s, %s à %s, %s"
 
 #: eeschema/net_navigator.cpp:164
-#, fuzzy, c-format
+#, c-format
 msgid "Unhandled item type %d"
-msgstr "Ne peut gérer le texte d'empreinte type %s"
+msgstr "Type d'élément non managé %d"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:480
 #, c-format
@@ -14871,9 +14862,8 @@ msgid "[no schematic loaded]"
 msgstr "[pas de schématique chargée]"
 
 #: eeschema/sch_edit_frame.cpp:1829
-#, fuzzy
 msgid "Schematic Cleanup"
-msgstr "Configuration Schématique"
+msgstr "Nettoyage Schématique"
 
 #: eeschema/sch_edit_frame.cpp:1939
 #, c-format
@@ -15524,9 +15514,9 @@ msgid "library %s does not contain a symbol named %s"
 msgstr "la librairie %s ne contient pas un alias %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:184
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse %s as a symbol"
-msgstr "Un alias ne peut pas avoir le même nom que le symbole."
+msgstr "Impossible d'analyser %s comme un symbole"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:216
 msgid "Invalid symbol name"
@@ -19634,14 +19624,14 @@ msgstr "Ajouter Pins de Feuille de Hierarchie"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1662
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:453
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s"
-msgstr "Ajouter Bus"
+msgstr "Ajouter %s"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1716
-#, fuzzy, c-format
+#, c-format
 msgid "Draw %s"
-msgstr "Tracer des pins"
+msgstr "Tracer %s"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1840
 msgid "Press <ESC> to cancel sheet creation."
@@ -19690,9 +19680,8 @@ msgid "Label value cannot go below zero"
 msgstr "La valeur du label ne peut pas descendre en dessous de zéro"
 
 #: eeschema/tools/sch_edit_tool.cpp:1320
-#, fuzzy
 msgid "Repeat Item"
-msgstr "Éléments répétés"
+msgstr "Répéter Élément"
 
 #: eeschema/tools/sch_edit_tool.cpp:1531 eeschema/tools/sch_edit_tool.cpp:1534
 #: eeschema/tools/symbol_editor_edit_tool.cpp:531
@@ -19711,14 +19700,12 @@ msgid "<empty>"
 msgstr "<Vide>"
 
 #: eeschema/tools/sch_edit_tool.cpp:2333
-#, fuzzy
 msgid "Change Item Type"
-msgstr "Changer en Texte"
+msgstr "Modifier le Type de l'Elément"
 
 #: eeschema/tools/sch_edit_tool.cpp:2425
-#, fuzzy
 msgid "Slice Wire"
-msgstr "Supprimer Fil"
+msgstr "Découper Fil"
 
 #: eeschema/tools/sch_edit_tool.cpp:2425
 msgid "Break Wire"
@@ -19843,9 +19830,8 @@ msgid "Press <ESC> to cancel drawing."
 msgstr "Appuyez <ESC> sur pour annuler le dessin."
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:1228
-#, fuzzy
 msgid "Draw Wires"
-msgstr "Drag Fil"
+msgstr "Tracer Fils"
 
 #: eeschema/tools/sch_move_tool.cpp:797
 msgid "Press <ESC> to cancel drag."
@@ -19857,9 +19843,8 @@ msgid "Press <ESC> to cancel move."
 msgstr "Appuyez <ESC> sur pour annuler le déplacement."
 
 #: eeschema/tools/sch_move_tool.cpp:1760
-#, fuzzy
 msgid "Align"
-msgstr "Alignement H"
+msgstr "Aligner"
 
 #: eeschema/tools/sch_navigate_tool.cpp:81
 #, c-format
@@ -19939,9 +19924,8 @@ msgid "Set Unit Display Name"
 msgstr "Définir Nom Affichage Unité"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:193
-#, fuzzy
 msgid "Edit Pin Properties"
-msgstr "Propriétés des Pins"
+msgstr "Editer Propriétés des Pins"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:234
 #, c-format
@@ -21410,9 +21394,8 @@ msgid "Precision of gerber coordinates, valid options: 5 or 6"
 msgstr "Précision des coordonnées Gerber, options valables : 5 ou 6"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:85
-#, fuzzy
 msgid "Use KiCad gerber file extension"
-msgstr "Utiliser extensions Gerber Protel"
+msgstr "Utiliser extension Gerber KiCad"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:45
 msgid ""
@@ -25091,9 +25074,8 @@ msgstr ""
 "que l'air n'entrent pas dans le champ d'application de la IEC60664"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:62
-#, fuzzy
 msgid "KiCad Calculator Tools"
-msgstr "Outil de Calcul"
+msgstr "Outil de Calcul KiCad"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:142
 msgid "General system design"
@@ -25120,9 +25102,8 @@ msgid "Cable Size"
 msgstr "Taille du Câble"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:154
-#, fuzzy
 msgid "High Speed"
-msgstr "Haute vitesse"
+msgstr "Haute Vitesse"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:156
 msgid "Wavelength"
@@ -42677,17 +42658,15 @@ msgstr ""
 
 #: pcbnew/tools/pcb_control.cpp:337
 msgid "Dimmed"
-msgstr ""
+msgstr "Atténué"
 
 #: pcbnew/tools/pcb_control.cpp:338
-#, fuzzy
 msgid "Hidden"
-msgstr "Texte invisible"
+msgstr "Caché"
 
 #: pcbnew/tools/pcb_control.cpp:346
-#, fuzzy
 msgid "Inactive Layer Display"
-msgstr "Couchenon actives:"
+msgstr "Affichage Couche Inactive"
 
 #: pcbnew/tools/pcb_control.cpp:614
 msgid "Item locked."
@@ -43132,7 +43111,7 @@ msgstr "Couches non actives (%s):"
 #: pcbnew/widgets/appearance_controls.cpp:619
 #: pcbnew/widgets/appearance_controls.cpp:1752
 msgid "Inactive layers:"
-msgstr "Couchenon actives:"
+msgstr "Couches non actives:"
 
 #: pcbnew/widgets/appearance_controls.cpp:633
 #: pcbnew/widgets/appearance_controls.cpp:1757
