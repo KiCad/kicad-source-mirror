@@ -300,7 +300,7 @@ public:
                        const wxString& aSignalName );
 
     ///< Reset scale ranges to fit the current traces.
-    void ResetScales();
+    void ResetScales( bool aIncludeX );
 
     ///< Update trace line style
     void UpdateTraceStyle( TRACE* trace );

@@ -402,6 +402,10 @@ private:
 };
 
 
+#define ID_SIM_REFRESH 10207
+#define REFRESH_INTERVAL 50   // 20 frames/second.
+
+
 SIMULATOR_PANEL::SIMULATOR_PANEL( SIMULATOR_FRAME* aSimulatorFrame,
                                   SCH_EDIT_FRAME* aSchematicFrame ) :
         SIMULATOR_PANEL_BASE( aSimulatorFrame ),
@@ -409,7 +413,8 @@ SIMULATOR_PANEL::SIMULATOR_PANEL( SIMULATOR_FRAME* aSimulatorFrame,
         m_simulatorFrame( aSimulatorFrame ),
         m_schematicFrame( aSchematicFrame ),
         m_darkMode( true ),
-        m_plotNumber( 0 )
+        m_plotNumber( 0 ),
+        m_refreshTimer( this, ID_SIM_REFRESH )
 {
     // Get the previous size and position of windows:
     LoadSettings( m_schematicFrame->eeconfig() );
@@ -455,6 +460,16 @@ SIMULATOR_PANEL::SIMULATOR_PANEL( SIMULATOR_FRAME* aSimulatorFrame,
 
     Bind( EVT_SIM_CURSOR_UPDATE, &SIMULATOR_PANEL::onPlotCursorUpdate, this );
     Bind( EVT_WORKBOOK_MODIFIED, &SIMULATOR_PANEL::onNotebookModified, this );
+
+    Bind( wxEVT_TIMER,
+            [&]( wxTimerEvent& aEvent )
+            {
+                OnSimRefresh( false );
+
+                if( m_simulatorFrame->GetSimulator()->IsRunning() )
+                    m_refreshTimer.Start( REFRESH_INTERVAL, wxTIMER_ONE_SHOT );
+            },
+            m_refreshTimer.GetId() );
 
 #ifndef wxHAS_NATIVE_TABART
     // Default non-native tab art has ugly gradients we don't want
@@ -1373,7 +1388,7 @@ void SIMULATOR_PANEL::SetUserDefinedSignals( const std::map<int, wxString>& aNew
 
 
 void SIMULATOR_PANEL::updateTrace( const wxString& aVectorName, int aTraceType,
-                                  SIM_PLOT_PANEL* aPlotPanel )
+                                   SIM_PLOT_PANEL* aPlotPanel )
 {
     SIM_TYPE simType = NGSPICE_CIRCUIT_MODEL::CommandToSimType( aPlotPanel->GetSimCommand() );
 
@@ -1402,31 +1417,28 @@ void SIMULATOR_PANEL::updateTrace( const wxString& aVectorName, int aTraceType,
     std::vector<double> data_x;
     std::vector<double> data_y;
 
-    if( m_simulatorFrame->SimFinished() )
+    data_x = simulator()->GetMagPlot( (const char*) xAxisName.c_str() );
+
+    switch( simType )
     {
-        data_x = simulator()->GetMagPlot( (const char*) xAxisName.c_str() );
-
-        switch( simType )
-        {
-        case ST_AC:
-            if( aTraceType & SPT_AC_MAG )
-                data_y = simulator()->GetMagPlot( (const char*) simVectorName.c_str() );
-            else if( aTraceType & SPT_AC_PHASE )
-                data_y = simulator()->GetPhasePlot( (const char*) simVectorName.c_str() );
-            else
-                wxFAIL_MSG( wxT( "Plot type missing AC_PHASE or AC_MAG bit" ) );
-
-            break;
-
-        case ST_NOISE:
-        case ST_DC:
-        case ST_TRANSIENT:
+    case ST_AC:
+        if( aTraceType & SPT_AC_MAG )
             data_y = simulator()->GetMagPlot( (const char*) simVectorName.c_str() );
-            break;
+        else if( aTraceType & SPT_AC_PHASE )
+            data_y = simulator()->GetPhasePlot( (const char*) simVectorName.c_str() );
+        else
+            wxFAIL_MSG( wxT( "Plot type missing AC_PHASE or AC_MAG bit" ) );
 
-        default:
-            wxFAIL_MSG( wxT( "Unhandled plot type" ) );
-        }
+        break;
+
+    case ST_NOISE:
+    case ST_DC:
+    case ST_TRANSIENT:
+        data_y = simulator()->GetMagPlot( (const char*) simVectorName.c_str() );
+        break;
+
+    default:
+        wxFAIL_MSG( wxT( "Unhandled plot type" ) );
     }
 
     unsigned int size = data_x.size();
@@ -2316,11 +2328,15 @@ void SIMULATOR_PANEL::onPlotCursorUpdate( wxCommandEvent& aEvent )
 
 void SIMULATOR_PANEL::OnSimUpdate()
 {
-    // Incremental update
+    if( SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( GetCurrentPlotWindow() ) )
+        plotPanel->ResetScales( true );
+
     m_simConsole->Clear();
 
     // Do not export netlist, it is already stored in the simulator
     applyTuners();
+
+    m_refreshTimer.Start( REFRESH_INTERVAL, wxTIMER_ONE_SHOT );
 }
 
 
@@ -2331,7 +2347,7 @@ void SIMULATOR_PANEL::OnSimReport( const wxString& aMsg )
 }
 
 
-void SIMULATOR_PANEL::OnSimFinished()
+void SIMULATOR_PANEL::OnSimRefresh( bool aFinal )
 {
     SIM_TYPE             simType = circuitModel()->GetSimType();
     SIM_PLOT_PANEL_BASE* plotPanelWindow = GetCurrentPlotWindow();
@@ -2397,7 +2413,10 @@ void SIMULATOR_PANEL::OnSimFinished()
         updateSignalsGrid();
 
         plotPanel->GetPlotWin()->UpdateAll();
-        plotPanel->ResetScales();
+
+        if( aFinal )
+            plotPanel->ResetScales( true );
+
         plotPanel->GetPlotWin()->Fit();
     }
     else if( simType == ST_OP )

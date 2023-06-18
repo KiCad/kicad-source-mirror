@@ -228,7 +228,7 @@ public:
 
     void OnSimUpdate();
     void OnSimReport( const wxString& aMsg );
-    void OnSimFinished();
+    void OnSimRefresh( bool aFinal );
 
 private:
     /**
@@ -331,6 +331,7 @@ private:
     int                          m_splitterTuneValuesSashPosition;
     bool                         m_darkMode;
     unsigned int                 m_plotNumber;
+    wxTimer                      m_refreshTimer;
 };
 
 #endif // SIMULATOR_PANEL_H

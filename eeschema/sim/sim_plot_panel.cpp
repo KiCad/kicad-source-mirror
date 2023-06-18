@@ -170,6 +170,33 @@ private:
 };
 
 
+class TIME_SCALE : public LIN_SCALE<mpScaleX>
+{
+public:
+    TIME_SCALE( const wxString& name, const wxString& unit, int flags ) :
+            LIN_SCALE( name, unit, flags )
+    {};
+
+    void ExtendDataRange( double minV, double maxV ) override
+    {
+        if( !m_rangeSet )
+        {
+            m_minV = 0;
+            m_maxV = 0;
+            m_rangeSet = true;
+        }
+        else
+        {
+            if( minV < m_minV )
+                m_minV -= abs( maxV - minV );
+
+            if( maxV > m_maxV )
+                m_maxV += abs( maxV - minV );
+        }
+    }
+};
+
+
 template <typename parent>
 class LOG_SCALE : public parent
 {
@@ -511,7 +538,7 @@ void SIM_PLOT_PANEL::updateAxes( int aNewTraceType )
         case ST_TRANSIENT:
             if( !m_axis_x )
             {
-                m_axis_x = new LIN_SCALE<mpScaleX>( wxEmptyString, wxT( "s" ), mpALIGN_BOTTOM );
+                m_axis_x = new TIME_SCALE( wxEmptyString, wxT( "s" ), mpALIGN_BOTTOM );
                 m_axis_x->SetNameAlign( mpALIGN_BOTTOM );
                 m_plotWin->AddLayer( m_axis_x );
 
@@ -793,7 +820,7 @@ void SIM_PLOT_PANEL::DeleteTrace( TRACE* aTrace )
     }
 
     m_plotWin->DelLayer( aTrace, true, true );
-    ResetScales();
+    ResetScales( false );
 }
 
 
@@ -843,9 +870,9 @@ void SIM_PLOT_PANEL::EnableCursor( const wxString& aVectorName, int aType, int a
 }
 
 
-void SIM_PLOT_PANEL::ResetScales()
+void SIM_PLOT_PANEL::ResetScales( bool aIncludeX )
 {
-    if( m_axis_x )
+    if( m_axis_x && aIncludeX )
         m_axis_x->ResetDataRange();
 
     if( m_axis_y1 )

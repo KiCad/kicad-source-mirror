@@ -2980,10 +2980,10 @@ void mpFXYVector::SetData( const std::vector<double>& xs, const std::vector<doub
     }
     else
     {
-        m_minX  = -1;
-        m_maxX  = 1;
-        m_minY  = -1;
-        m_maxY  = 1;
+        m_minX  = 0;
+        m_maxX  = 0;
+        m_minY  = 0;
+        m_maxY  = 0;
     }
 }
 

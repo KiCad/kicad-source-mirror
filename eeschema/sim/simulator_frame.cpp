@@ -741,7 +741,7 @@ void SIMULATOR_FRAME::onSimFinished( wxCommandEvent& aEvent )
 
     m_simFinished = true;
 
-    m_panel->OnSimFinished();
+    m_panel->OnSimRefresh( true );
 
     m_schematicFrame->RefreshOperatingPointDisplay();
     m_schematicFrame->GetCanvas()->Refresh();
@@ -765,8 +765,8 @@ void SIMULATOR_FRAME::onSimUpdate( wxCommandEvent& aEvent )
 
     if( m_panel->GetCurrentPlotWindow() != m_lastSimPlot )
     {
-        // We need to rerun simulation, as the simulator currently stores
-        // results for another plot
+        // We need to rerun simulation, as the simulator currently stores results for another
+        // plot
         StartSimulation();
     }
     else

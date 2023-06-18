@@ -748,7 +748,7 @@ public:
         maxV = m_maxV;
     }
 
-    void ExtendDataRange( double minV, double maxV )
+    virtual void ExtendDataRange( double minV, double maxV )
     {
         if( !m_rangeSet )
         {
@@ -771,7 +771,7 @@ public:
 
     void ResetDataRange()
     {
-        m_rangeSet = 0;
+        m_rangeSet = false;
     }
 
     double AbsMaxValue() const
