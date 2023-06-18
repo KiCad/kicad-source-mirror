@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-18 11:55-0700\n"
+"POT-Creation-Date: 2023-06-18 15:40+0200\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -728,32 +728,17 @@ msgstr "Preview"
 msgid "Reload board and 3D models"
 msgstr "Reload board and 3D models"
 
-msgid "Inch"
-msgstr "Inch"
+msgid "Image Converter"
+msgstr "Image Converter"
 
-msgid "DPI"
-msgstr "DPI"
-
-msgid "Open..."
-msgstr "Open..."
-
-msgid "Load source image"
-msgstr "Load source image"
-
-msgid "Quit"
-msgstr "Quit"
-
-msgid "Quit Image Converter"
-msgstr "Quit Image Converter"
+msgid "KiCad Image Converter"
+msgstr "KiCad Image Converter"
 
 msgid "Choose Image"
 msgstr "Choose Image"
 
 msgid "Image Files"
 msgstr "Image Files"
-
-msgid "Unable to export to the Clipboard"
-msgstr "Unable to export to the Clipboard"
 
 msgid "Create Logo File"
 msgstr "Create Logo File"
@@ -770,6 +755,15 @@ msgstr "Create Symbol Library"
 
 msgid "Create Footprint Library"
 msgstr "Create Footprint Library"
+
+msgid "Inch"
+msgstr "Inch"
+
+msgid "DPI"
+msgstr "DPI"
+
+msgid "Unable to export to the Clipboard"
+msgstr "Unable to export to the Clipboard"
 
 msgid "Error allocating memory for potrace bitmap"
 msgstr "Error allocating memory for potrace bitmap"
@@ -885,9 +879,6 @@ msgstr "Export to File"
 
 msgid "Export to Clipboard"
 msgstr "Export to Clipboard"
-
-msgid "Image Converter"
-msgstr "Image Converter"
 
 #, c-format
 msgid ""
@@ -1627,6 +1618,35 @@ msgstr "Paste Options"
 msgid "Paste Special"
 msgstr "Paste Special"
 
+msgid ""
+"Select an <b>Option Choice</b> in the listbox above, and then click the "
+"<b>Append Selected Option</b> button."
+msgstr ""
+"Select an <b>Option Choice</b> in the listbox above, and then click the "
+"<b>Append Selected Option</b> button."
+
+#, c-format
+msgid "Options for Library '%s'"
+msgstr "Options for Library '%s'"
+
+msgid "Plugin Options"
+msgstr "Plugin Options"
+
+msgid "Option"
+msgstr "Option"
+
+msgid "Value"
+msgstr "Value"
+
+msgid "Option Choices"
+msgstr "Option Choices"
+
+msgid "Options supported by current plugin"
+msgstr "Options supported by current plugin"
+
+msgid "<<    Append Selected Option"
+msgstr "<<    Append Selected Option"
+
 msgid "Print"
 msgstr "Print"
 
@@ -1870,6 +1890,16 @@ msgstr ""
 "If the mouse cursor is moved over the canvas of a schematic or PCB editor "
 "window, that window is raised."
 
+msgid "Show popup indicator when toggling settings with hotkeys"
+msgstr "Show popup indicator when toggling settings with hotkeys"
+
+msgid ""
+"When enabled, certain hotkeys that cycle between settings will show a popup "
+"indicator briefly to indicate the change in settings."
+msgstr ""
+"When enabled, certain hotkeys that cycle between settings will show a popup "
+"indicator briefly to indicate the change in settings."
+
 msgid "Icon theme:"
 msgstr "Icon theme:"
 
@@ -2105,9 +2135,6 @@ msgstr "PPI:"
 
 msgid "Cmd"
 msgstr "Cmd"
-
-msgid "Option"
-msgstr "Option"
 
 msgid "Only one action can be assigned to each vertical scroll setting"
 msgstr "Only one action can be assigned to each vertical scroll setting"
@@ -2490,6 +2517,12 @@ msgstr ""
 
 msgid "Invalid floating point number"
 msgstr "Invalid floating point number"
+
+msgid "Undo"
+msgstr "Undo"
+
+msgid "Redo"
+msgstr "Redo"
 
 msgid "&About KiCad"
 msgstr "&About KiCad"
@@ -3073,6 +3106,9 @@ msgstr "Ignore Grid Snaps"
 msgid "Ignore Other Snaps"
 msgstr "Ignore Other Snaps"
 
+msgid "Quit"
+msgstr "Quit"
+
 msgid "Project Manager"
 msgstr "Project Manager"
 
@@ -3339,6 +3375,12 @@ msgstr "Courtyard collision shadow"
 
 msgid "Illegal character found in logical library name"
 msgstr "Illegal character found in logical library name"
+
+msgid "Edit options..."
+msgstr "Edit options..."
+
+msgid "Edit options for this library entry"
+msgstr "Edit options for this library entry"
 
 msgid "Activate selected"
 msgstr "Activate selected"
@@ -3630,6 +3672,9 @@ msgstr "Add Library…"
 msgid "Add an existing library folder"
 msgstr "Add an existing library folder"
 
+msgid "Open..."
+msgstr "Open..."
+
 msgid "Open existing document"
 msgstr "Open existing document"
 
@@ -3684,14 +3729,8 @@ msgstr "Show Context Menu"
 msgid "Perform the right-mouse-button action"
 msgstr "Perform the right-mouse-button action"
 
-msgid "Undo"
-msgstr "Undo"
-
 msgid "Undo last edit"
 msgstr "Undo last edit"
-
-msgid "Redo"
-msgstr "Redo"
 
 msgid "Redo last edit"
 msgstr "Redo last edit"
@@ -4123,19 +4162,6 @@ msgstr "Zoom: %.2f"
 #, c-format
 msgid "Incorrect value: %s"
 msgstr "Incorrect value: %s"
-
-msgid "Entry contains trailing white space."
-msgstr "Entry contains trailing white space."
-
-msgid "Entry contains leading white space."
-msgstr "Entry contains leading white space."
-
-#, c-format
-msgid "'%s' is not a valid library identifier format."
-msgstr "'%s' is not a valid library identifier format."
-
-msgid "Library Identifier Validation Error"
-msgstr "Library Identifier Validation Error"
 
 msgid "Invalid signal name"
 msgstr "Invalid signal name"
@@ -4676,6 +4702,10 @@ msgid "Filtered by %s"
 msgstr "Filtered by %s"
 
 #, c-format
+msgid ": %i matching footprints"
+msgstr ": %i matching footprints"
+
+#, c-format
 msgid "Description: %s;  Keywords: %s"
 msgstr "Description: %s;  Keywords: %s"
 
@@ -4736,9 +4766,6 @@ msgstr "Edit File"
 
 msgid "Available environment variables for relative paths:"
 msgstr "Available environment variables for relative paths:"
-
-msgid "Value"
-msgstr "Value"
 
 msgid "Absolute"
 msgstr "Absolute"
@@ -4933,6 +4960,9 @@ msgstr "Filter footprint list by library"
 
 msgid "Delete all associations?"
 msgstr "Delete all associations?"
+
+msgid "Unable to create the footprint viewer frame"
+msgstr "Unable to create the footprint viewer frame"
 
 msgid "Delete Annotation"
 msgstr "Delete Annotation"
@@ -5350,6 +5380,9 @@ msgstr "Change"
 
 msgid "Update"
 msgstr "Update"
+
+msgid "Update Symbols"
+msgstr "Update Symbols"
 
 msgid "*** symbol not found ***"
 msgstr "*** symbol not found ***"
@@ -5934,6 +5967,9 @@ msgstr "Common to all body styles"
 msgid "Text Item Properties"
 msgstr "Text Item Properties"
 
+msgid "Edit Text and Graphics"
+msgstr "Edit Text and Graphics"
+
 msgid "Other symbol fields"
 msgstr "Other symbol fields"
 
@@ -5979,8 +6015,8 @@ msgstr "Power symbols"
 msgid "Filter items by net:"
 msgstr "Filter items by net:"
 
-msgid "Only include selected items"
-msgstr "Only include selected items"
+msgid "Selected items only"
+msgstr "Selected items only"
 
 msgid "Set To"
 msgstr "Set To"
@@ -6067,6 +6103,15 @@ msgstr "Ibis parser log"
 msgid "Ibis parser"
 msgstr "Ibis parser"
 
+msgid "Image Properties"
+msgstr "Image Properties"
+
+msgid "Edit Junction"
+msgstr "Edit Junction"
+
+msgid "Edit Junctions"
+msgstr "Edit Junctions"
+
 msgid "Diameter:"
 msgstr "Diameter:"
 
@@ -6102,6 +6147,9 @@ msgstr "Label can not be empty."
 
 msgid "untitled"
 msgstr "untitled"
+
+msgid "Edit Label"
+msgstr "Edit Label"
 
 msgid "The first field is mandatory."
 msgstr "The first field is mandatory."
@@ -6366,6 +6414,9 @@ msgstr "Delete alternate body style (De Morgan) from symbol?"
 msgid "Symbol name '%s' already in use in library '%s'."
 msgstr "Symbol name '%s' already in use in library '%s'."
 
+msgid "Edit Symbol Properties"
+msgstr "Edit Symbol Properties"
+
 #, c-format
 msgid "The name '%s' is already in use."
 msgstr "The name '%s' is already in use."
@@ -6416,12 +6467,28 @@ msgid "Enter the number of units for a symbol that contains more than one unit"
 msgstr ""
 "Enter the number of units for a symbol that contains more than one unit"
 
+msgid ""
+"Check this option when all symbol units have the same function.\n"
+"For instance, this should be checked for a quad NAND gate, while it should "
+"not be checked for a dual triode (where unit C is the filament)."
+msgstr ""
+"Check this option when all symbol units have the same function.\n"
+"For instance, this should be checked for a quad NAND gate, while it should "
+"not be checked for a dual triode (where unit C is the filament)."
+
 msgid "Has alternate body style (De Morgan)"
 msgstr "Has alternate body style (De Morgan)"
 
-msgid "Check this option if the symbol has an alternate body style (De Morgan)"
+msgid ""
+"Check this option if the symbol has an alternate body style for a De Morgan "
+"logic equivalence.\n"
+"For instance, this should be checked for a NAND gate to provide an alternate "
+"representation as an OR gate with inverted inputs."
 msgstr ""
-"Check this option if the symbol has an alternate body style (De Morgan)"
+"Check this option if the symbol has an alternate body style for a De Morgan "
+"logic equivalence.\n"
+"For instance, this should be checked for a NAND gate to provide an alternate "
+"representation as an OR gate with inverted inputs."
 
 msgid "Define as power symbol"
 msgstr "Define as power symbol"
@@ -6518,6 +6585,12 @@ msgstr "Private to symbol editor"
 
 msgid "Text Box Properties"
 msgstr "Text Box Properties"
+
+msgid "Edit Line"
+msgstr "Edit Line"
+
+msgid "Edit Lines"
+msgstr "Edit Lines"
 
 msgid "Set width to 0 to use schematic's default line width."
 msgstr "Set width to 0 to use schematic's default line width."
@@ -7009,6 +7082,10 @@ msgstr ""
 msgid "Note: individual item colors overridden in Preferences."
 msgstr "Note: individual item colors overridden in Preferences."
 
+#, c-format
+msgid "Edit %s"
+msgstr "Edit %s"
+
 msgid "Filled shape"
 msgstr "Filled shape"
 
@@ -7021,6 +7098,9 @@ msgstr "Clear colors to use Schematic Editor colors."
 #, c-format
 msgid "%s Properties"
 msgstr "%s Properties"
+
+msgid "Edit Sheet Pin"
+msgstr "Edit Sheet Pin"
 
 msgid "Sheet Pin Properties"
 msgstr "Sheet Pin Properties"
@@ -7472,9 +7552,6 @@ msgstr "Show Datasheet"
 msgid "Show datasheet in browser"
 msgstr "Show datasheet in browser"
 
-msgid "The Reference column cannot be hidden."
-msgstr "The Reference column cannot be hidden."
-
 msgid "Label"
 msgstr "Label"
 
@@ -7823,6 +7900,9 @@ msgstr ""
 "or http(s)://) or \"#<page number>\" to create a hyperlink to a page in this "
 "schematic."
 
+msgid "Edit Text"
+msgstr "Edit Text"
+
 msgid "Link:"
 msgstr "Link:"
 
@@ -7871,6 +7951,9 @@ msgstr "Net names"
 msgid "Update Schematic from PCB"
 msgstr "Update Schematic from PCB"
 
+msgid "Update Symbol Fields"
+msgstr "Update Symbol Fields"
+
 msgid "Parent symbol:"
 msgstr "Parent symbol:"
 
@@ -7880,11 +7963,14 @@ msgstr "Remove fields if not in parent symbol"
 msgid "Reset fields if empty in parent symbol"
 msgstr "Reset fields if empty in parent symbol"
 
-msgid "Update Symbol Fields"
-msgstr "Update Symbol Fields"
-
 msgid "User-defined Signals"
 msgstr "User-defined Signals"
+
+msgid "Wire/Bus"
+msgstr "Wire/Bus"
+
+msgid "Wires/Buses"
+msgstr "Wires/Buses"
 
 msgid "Wire/bus width:"
 msgstr "Wire/bus width:"
@@ -8600,11 +8686,11 @@ msgstr "Output path must not conflict with existing path\n"
 msgid "Saving symbol library in updated format\n"
 msgstr "Saving symbol library in updated format\n"
 
-msgid "Unable to save library\n"
-msgstr "Unable to save library\n"
-
 msgid "Symbol library was not updated\n"
 msgstr "Symbol library was not updated\n"
+
+msgid "Net Navigator"
+msgstr "Net Navigator"
 
 msgid "Input Pin"
 msgstr "Input Pin"
@@ -8820,8 +8906,8 @@ msgid "Allow Autoplacement"
 msgstr "Allow Autoplacement"
 
 #, c-format
-msgid "Schematic '%s' is already open."
-msgstr "Schematic '%s' is already open."
+msgid "Schematic '%s' is already open by '%s' at '%s'."
+msgstr "Schematic '%s' is already open by '%s' at '%s'."
 
 #, c-format
 msgid "Schematic '%s' does not exist.  Do you wish to create it?"
@@ -9277,6 +9363,53 @@ msgid "P&references"
 msgstr "P&references"
 
 #, c-format
+msgid "Wire from %s, %s to %s, %s"
+msgstr "Wire from %s, %s to %s, %s"
+
+#, c-format
+msgid "Bus from %s, %s to %s, %s"
+msgstr "Bus from %s, %s to %s, %s"
+
+msgid "Graphic line not connectable"
+msgstr "Graphic line not connectable"
+
+#, c-format
+msgid "Symbol '%s' pin '%s'"
+msgstr "Symbol '%s' pin '%s'"
+
+#, c-format
+msgid "Sheet '%s' pin '%s'"
+msgstr "Sheet '%s' pin '%s'"
+
+#, c-format
+msgid "Label '%s' at %s, %s"
+msgstr "Label '%s' at %s, %s"
+
+#, c-format
+msgid "Global label '%s' at %s, %s"
+msgstr "Global label '%s' at %s, %s"
+
+#, c-format
+msgid "Hierarchical label '%s' at %s, %s"
+msgstr "Hierarchical label '%s' at %s, %s"
+
+#, c-format
+msgid "Junction at %s, %s"
+msgstr "Junction at %s, %s"
+
+#, c-format
+msgid "Bus to wire entry from %s, %s to %s, %s"
+msgstr "Bus to wire entry from %s, %s to %s, %s"
+
+#, c-format
+msgid "Bus to bus entry from %s, %s to %s, %s"
+msgstr "Bus to bus entry from %s, %s to %s, %s"
+
+#, c-format
+msgid "Unhandled item type %d"
+msgstr "Unhandled item type %d"
+
+#, c-format
 msgid "Could not open file '%s' to write IBIS model"
 msgstr "Could not open file '%s' to write IBIS model"
 
@@ -9435,6 +9568,13 @@ msgstr "No symbol libraries are loaded."
 msgid "Select Symbol Library"
 msgstr "Select Symbol Library"
 
+msgid ""
+"The library containing the current symbol has changed.\n"
+"Do you want to reload the library?"
+msgstr ""
+"The library containing the current symbol has changed.\n"
+"Do you want to reload the library?"
+
 msgid "Bus to Wire Entry"
 msgstr "Bus to Wire Entry"
 
@@ -9513,9 +9653,15 @@ msgstr "[Unsaved]"
 msgid "[no schematic loaded]"
 msgstr "[no schematic loaded]"
 
+msgid "Schematic Cleanup"
+msgstr "Schematic Cleanup"
+
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Highlighted net: %s"
+
+msgid "Save Symbol to Schematic"
+msgstr "Save Symbol to Schematic"
 
 msgid "Diff Symbol with Library"
 msgstr "Diff Symbol with Library"
@@ -9656,31 +9802,6 @@ msgstr "Done"
 #, c-format
 msgid "Failed to write plot files to folder '%s'."
 msgstr "Failed to write plot files to folder '%s'."
-
-msgid "Enable <b>debug</b> logging for Symbol*() functions in this SCH_PLUGIN."
-msgstr ""
-"Enable <b>debug</b> logging for Symbol*() functions in this SCH_PLUGIN."
-
-msgid "Regular expression <b>symbol name</b> filter."
-msgstr "Regular expression <b>symbol name</b> filter."
-
-msgid ""
-"Enable transaction logging. The mere presence of this option turns on the "
-"logging, no need to set a Value."
-msgstr ""
-"Enable transaction logging. The mere presence of this option turns on the "
-"logging, no need to set a Value."
-
-msgid "User name for <b>login</b> to some special library server."
-msgstr "User name for <b>login</b> to some special library server."
-
-msgid "Password for <b>login</b> to some special library server."
-msgstr "Password for <b>login</b> to some special library server."
-
-msgid ""
-"Enter the python symbol which implements the SCH_PLUGIN::Symbol*() functions."
-msgstr ""
-"Enter the python symbol which implements the SCH_PLUGIN::Symbol*() functions."
 
 #, c-format
 msgid ""
@@ -9976,6 +10097,24 @@ msgstr ""
 "The CADSTAR schematic might be corrupt: Block %s references a child sheet "
 "but has no Figure defined."
 
+msgid ""
+"Path to the CADSTAR schematic archive (*.csa) file related to this CADSTAR "
+"parts library. If none specified it is assumed to be 'symbol.csa' in the "
+"same folder."
+msgstr ""
+"Path to the CADSTAR schematic archive (*.csa) file related to this CADSTAR "
+"parts library. If none specified it is assumed to be 'symbol.csa' in the "
+"same folder."
+
+msgid ""
+"Name of the footprint library related to the symbols in this library. You "
+"should create a separate entry for the CADSTAR PCB Archive (*.cpa) file in "
+"the footprint library tables. If none specified, 'cadstarpcblib' is assumed."
+msgstr ""
+"Name of the footprint library related to the symbols in this library. You "
+"should create a separate entry for the CADSTAR PCB Archive (*.cpa) file in "
+"the footprint library tables. If none specified, 'cadstarpcblib' is assumed."
+
 #, c-format
 msgid "Error reading database table %s: %s"
 msgstr "Error reading database table %s: %s"
@@ -10019,6 +10158,10 @@ msgstr "Library file '%s' not found."
 #, c-format
 msgid "library %s does not contain a symbol named %s"
 msgstr "library %s does not contain a symbol named %s"
+
+#, c-format
+msgid "Cannot parse %s as a symbol"
+msgstr "Cannot parse %s as a symbol"
 
 msgid "Invalid symbol name"
 msgstr "Invalid symbol name"
@@ -11307,11 +11450,6 @@ msgstr "Bitrate"
 msgid "Number of bits"
 msgstr "Number of bits"
 
-msgid ""
-"Simulation provided no plots. Please refer to console window for results."
-msgstr ""
-"Simulation provided no plots. Please refer to console window for results."
-
 #, c-format
 msgid "%d"
 msgstr "%d"
@@ -11342,6 +11480,40 @@ msgstr " (gain)"
 
 msgid " (phase)"
 msgstr " (phase)"
+
+msgid ""
+"Simulation provided no plots. Please refer to console window for results."
+msgstr ""
+"Simulation provided no plots. Please refer to console window for results."
+
+msgid "Simulator"
+msgstr "Simulator"
+
+msgid "Spice Simulator"
+msgstr "Spice Simulator"
+
+msgid "Simulator requires a fully annotated schematic."
+msgstr "Simulator requires a fully annotated schematic."
+
+msgid ""
+"Errors during netlist generation.\n"
+"\n"
+msgstr ""
+"Errors during netlist generation.\n"
+"\n"
+
+msgid ""
+"Schematic sheet simulation command directive has changed.  Do you wish to "
+"update the Simulation Command?"
+msgstr ""
+"Schematic sheet simulation command directive has changed.  Do you wish to "
+"update the Simulation Command?"
+
+msgid "Another simulation is already running."
+msgstr "Another simulation is already running."
+
+msgid "Save changes to workbook?"
+msgstr "Save changes to workbook?"
 
 msgid "Measure Min"
 msgstr "Measure Min"
@@ -11390,29 +11562,6 @@ msgstr "Cursor 1"
 msgid "Cursor 2"
 msgstr "Cursor 2"
 
-msgid "Spice Simulator"
-msgstr "Spice Simulator"
-
-msgid "Simulator requires a fully annotated schematic."
-msgstr "Simulator requires a fully annotated schematic."
-
-msgid ""
-"Errors during netlist generation.\n"
-"\n"
-msgstr ""
-"Errors during netlist generation.\n"
-"\n"
-
-msgid ""
-"Schematic sheet simulation command directive has changed.  Do you wish to "
-"update the Simulation Command?"
-msgstr ""
-"Schematic sheet simulation command directive has changed.  Do you wish to "
-"update the Simulation Command?"
-
-msgid "Another simulation is already running."
-msgstr "Another simulation is already running."
-
 msgid "Diff"
 msgstr "Diff"
 
@@ -11431,9 +11580,6 @@ msgstr "Error: simulation type not defined.\n"
 
 msgid "Error: simulation type doesn't support plotting.\n"
 msgstr "Error: simulation type doesn't support plotting.\n"
-
-msgid "Save changes to workbook?"
-msgstr "Save changes to workbook?"
 
 msgid ""
 "\n"
@@ -11483,9 +11629,6 @@ msgstr "Please, fill required fields"
 #, c-format
 msgid "'%s' is not a valid Spice value."
 msgstr "'%s' is not a valid Spice value."
-
-msgid "Simulator"
-msgstr "Simulator"
 
 msgid "&Simulation"
 msgstr "&Simulation"
@@ -11911,6 +12054,13 @@ msgstr "Cannot load symbol '%s' from library '%s'."
 #, c-format
 msgid "Cannot enumerate library '%s'."
 msgstr "Cannot enumerate library '%s'."
+
+#, c-format
+msgid "Error updating library buffer: %s"
+msgstr "Error updating library buffer: %s"
+
+msgid "Error updating library buffer."
+msgstr "Error updating library buffer."
 
 #, c-format
 msgid "Error saving symbol %s to library '%s'."
@@ -12555,6 +12705,12 @@ msgstr "Highlight Nets"
 msgid "Highlight wires and pins of a net"
 msgstr "Highlight wires and pins of a net"
 
+msgid "Show Net Navigator"
+msgstr "Show Net Navigator"
+
+msgid "Toggle the net navigator panel visibility"
+msgstr "Toggle the net navigator panel visibility"
+
 msgid "Edit with Symbol Editor"
 msgstr "Edit with Symbol Editor"
 
@@ -13092,6 +13248,17 @@ msgstr "Press <ESC> to cancel item creation."
 msgid "Click over a sheet."
 msgstr "Click over a sheet."
 
+msgid "Add Sheet Pin"
+msgstr "Add Sheet Pin"
+
+#, c-format
+msgid "Add %s"
+msgstr "Add %s"
+
+#, c-format
+msgid "Draw %s"
+msgstr "Draw %s"
+
 msgid "Press <ESC> to cancel sheet creation."
 msgstr "Press <ESC> to cancel sheet creation."
 
@@ -13113,8 +13280,17 @@ msgstr "Edit Main Fields"
 msgid "Change To"
 msgstr "Change To"
 
+msgid "Rotate"
+msgstr "Rotate"
+
+msgid "Mirror"
+msgstr "Mirror"
+
 msgid "Label value cannot go below zero"
 msgstr "Label value cannot go below zero"
+
+msgid "Repeat Item"
+msgstr "Repeat Item"
 
 #, c-format
 msgid "Edit %s Field"
@@ -13126,6 +13302,15 @@ msgstr "Edit '%s' Field"
 
 msgid "<empty>"
 msgstr "<empty>"
+
+msgid "Change Item Type"
+msgstr "Change Item Type"
+
+msgid "Slice Wire"
+msgstr "Slice Wire"
+
+msgid "Break Wire"
+msgstr "Break Wire"
 
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr "Do you wish to delete the unreferenced pins from this sheet?"
@@ -13208,11 +13393,17 @@ msgstr "Bus has no members"
 msgid "Press <ESC> to cancel drawing."
 msgstr "Press <ESC> to cancel drawing."
 
+msgid "Draw Wires"
+msgstr "Draw Wires"
+
 msgid "Press <ESC> to cancel drag."
 msgstr "Press <ESC> to cancel drag."
 
 msgid "Press <ESC> to cancel move."
 msgstr "Press <ESC> to cancel move."
+
+msgid "Align"
+msgstr "Align"
 
 #, c-format
 msgid "Page '%s' not found."
@@ -13270,6 +13461,9 @@ msgstr "Enter display name for unit %s"
 
 msgid "Set Unit Display Name"
 msgstr "Set Unit Display Name"
+
+msgid "Edit Pin Properties"
+msgstr "Edit Pin Properties"
 
 #, c-format
 msgid "This position is already occupied by another pin, in unit %d."
@@ -13748,9 +13942,6 @@ msgstr "Clear"
 msgid "Polarity"
 msgstr "Polarity"
 
-msgid "Mirror"
-msgstr "Mirror"
-
 msgid "AB axis"
 msgstr "AB axis"
 
@@ -14150,6 +14341,12 @@ msgstr "This file is already open."
 msgid "Malformed expression"
 msgstr "Malformed expression"
 
+msgid "Lock file already exists"
+msgstr "Lock file already exists"
+
+msgid "Failed to access lock file"
+msgstr "Failed to access lock file"
+
 msgid "Reset all hotkeys to the built-in KiCad defaults"
 msgstr "Reset all hotkeys to the built-in KiCad defaults"
 
@@ -14276,6 +14473,9 @@ msgstr "Use drill/place file origin"
 msgid "Precision of gerber coordinates, valid options: 5 or 6"
 msgstr "Precision of gerber coordinates, valid options: 5 or 6"
 
+msgid "Use KiCad gerber file extension"
+msgstr "Use KiCad gerber file extension"
+
 msgid ""
 "Layers to include on each plot, comma separated list of untranslated layer "
 "names to include such as F.Cu,B.Cu"
@@ -14285,6 +14485,9 @@ msgstr ""
 
 msgid "Use the gerber plot settings already configured in the board file"
 msgstr "Use the gerber plot settings already configured in the board file"
+
+msgid "Mirror the board (useful for trying to show bottom layers)"
+msgstr "Mirror the board (useful for trying to show bottom layers)"
 
 msgid "Color theme to use (will default to PCB Editor settings)"
 msgstr "Color theme to use (will default to PCB Editor settings)"
@@ -14364,9 +14567,6 @@ msgid ""
 msgstr ""
 "User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default unit "
 "mm)"
-
-msgid "Mirror the board (useful for trying to show bottom layers)"
-msgstr "Mirror the board (useful for trying to show bottom layers)"
 
 msgid "Color theme to use (will default to pcbnew settings)"
 msgstr "Color theme to use (will default to pcbnew settings)"
@@ -15901,6 +16101,12 @@ msgstr "Frequency for 100% skin depth:"
 msgid "Ampacity:"
 msgstr "Ampacity:"
 
+msgid "Current density"
+msgstr "Current density"
+
+msgid "A/mm^2"
+msgstr "A/mm^2"
+
 msgid "Application"
 msgstr "Application"
 
@@ -15960,6 +16166,271 @@ msgstr "4th Band"
 
 msgid "Multiplier"
 msgstr "Multiplier"
+
+msgid "IPC 2221"
+msgstr "IPC 2221"
+
+msgid "IEC 60664"
+msgstr "IEC 60664"
+
+msgid "Insulation for equipment within low-voltage supply systems"
+msgstr "Insulation for equipment within low-voltage supply systems"
+
+msgid "Determine the transient impulse voltage to withstand"
+msgstr "Determine the transient impulse voltage to withstand"
+
+msgid "Rated Voltage (RMS or DC):"
+msgstr "Rated Voltage (RMS or DC):"
+
+msgid "Voltage of the mains supply"
+msgstr "Voltage of the mains supply"
+
+msgid "Overvoltage category:"
+msgstr "Overvoltage category:"
+
+msgid ""
+"OVC I: Equipments with no direct connection to mains supply\n"
+"\n"
+"OVC II: Energy-consuming equipment to be supplied from the fixed "
+"installation. (eg: appliances, portable tools, household loads). OVCIII "
+"applys if there are reliability and avaibility requirements\n"
+"\n"
+"OVC III :  Equipements in fixed installation with reliability and avaibility "
+"requirements. (eg: electrical switches, equipment for industrial use)\n"
+"\n"
+"OVC IV: Equipments at the origin of the installation (eg: electricity "
+"meters, primary overcurrent protection devices)"
+msgstr ""
+"OVC I: Equipments with no direct connection to mains supply\n"
+"\n"
+"OVC II: Energy-consuming equipment to be supplied from the fixed "
+"installation. (eg: appliances, portable tools, household loads). OVCIII "
+"applys if there are reliability and avaibility requirements\n"
+"\n"
+"OVC III :  Equipements in fixed installation with reliability and avaibility "
+"requirements. (eg: electrical switches, equipment for industrial use)\n"
+"\n"
+"OVC IV: Equipments at the origin of the installation (eg: electricity "
+"meters, primary overcurrent protection devices)"
+
+msgid "OVC I"
+msgstr "OVC I"
+
+msgid "OVC II"
+msgstr "OVC II"
+
+msgid "OVC III"
+msgstr "OVC III"
+
+msgid "OVC IV"
+msgstr "OVC IV"
+
+msgid "Impulse voltage:"
+msgstr "Impulse voltage:"
+
+msgid ""
+"Given the rated voltage and the overvoltage category, a device should "
+"withstand this value whithout a breakdown of insulation. This impulse "
+"voltage is a standard 1.2/50µs wave"
+msgstr ""
+"Given the rated voltage and the overvoltage category, a device should "
+"withstand this value whithout a breakdown of insulation. This impulse "
+"voltage is a standard 1.2/50µs wave"
+
+msgid "kV"
+msgstr "kV"
+
+msgid "Compute the clearance and creepage distances"
+msgstr "Compute the clearance and creepage distances"
+
+msgid "RMS Voltage:"
+msgstr "RMS Voltage:"
+
+msgid "Expected RMS voltage."
+msgstr "Expected RMS voltage."
+
+msgid "Transient overvoltage:"
+msgstr "Transient overvoltage:"
+
+msgid ""
+"Transient overvoltages due to:\n"
+"\n"
+"- Atmospheric disturbances transmitted by the mains supply (eg: a lightning "
+"strike)\n"
+"- Switching loads in the main supplys\n"
+"- External circuits\n"
+"- Internal generation\n"
+"\n"
+"Events that last for a few milliseconds or less."
+msgstr ""
+"Transient overvoltages due to:\n"
+"\n"
+"- Atmospheric disturbances transmitted by the mains supply (eg: a lightning "
+"strike)\n"
+"- Switching loads in the main supplys\n"
+"- External circuits\n"
+"- Internal generation\n"
+"\n"
+"Events that last for a few milliseconds or less."
+
+msgid "Recurring peak voltage:"
+msgstr "Recurring peak voltage:"
+
+msgid ""
+"- Steady-state voltage value\n"
+"- Temporary overvoltage\n"
+"- Recurring peak voltage\n"
+"\n"
+"Events of relatively long duration."
+msgstr ""
+"- Steady-state voltage value\n"
+"- Temporary overvoltage\n"
+"- Recurring peak voltage\n"
+"\n"
+"Events of relatively long duration."
+
+msgid "Type of insulation:"
+msgstr "Type of insulation:"
+
+msgid ""
+"Functional: insulation is necessary only for the functioning of the "
+"equipment\n"
+"\n"
+"Basic: Insulation of hazardous-live parts.\n"
+"\n"
+"Reinforced: Single insulation that provides a degree of protection "
+"equivalent to a double insulation. ( which is two separate basic "
+"insulations, in case one of them fails  )."
+msgstr ""
+"Functional: insulation is necessary only for the functioning of the "
+"equipment\n"
+"\n"
+"Basic: Insulation of hazardous-live parts.\n"
+"\n"
+"Reinforced: Single insulation that provides a degree of protection "
+"equivalent to a double insulation. ( which is two separate basic "
+"insulations, in case one of them fails  )."
+
+msgid "Functional"
+msgstr "Functional"
+
+msgid "Basic"
+msgstr "Basic"
+
+msgid "Reinforced"
+msgstr "Reinforced"
+
+msgid "Pollution Degree:"
+msgstr "Pollution Degree:"
+
+msgid ""
+"PD1: No pollution or only dry, non-conductive pollution occurs\n"
+"\n"
+"PD2: Only non-conductive pollution occurs . Condensation may occur.\n"
+"\n"
+"PD3: Conductive pollution occurs, or non-conductive pollution occurs which "
+"becomes conductive due to expected condensation.\n"
+"\n"
+"PD4: Continous conductivity occurs due to conductive dust, rain, ..."
+msgstr ""
+"PD1: No pollution or only dry, non-conductive pollution occurs\n"
+"\n"
+"PD2: Only non-conductive pollution occurs . Condensation may occur.\n"
+"\n"
+"PD3: Conductive pollution occurs, or non-conductive pollution occurs which "
+"becomes conductive due to expected condensation.\n"
+"\n"
+"PD4: Continous conductivity occurs due to conductive dust, rain, ..."
+
+msgid "PD1"
+msgstr "PD1"
+
+msgid "PD2"
+msgstr "PD2"
+
+msgid "PD3"
+msgstr "PD3"
+
+msgid "PD4"
+msgstr "PD4"
+
+msgid "Material group:"
+msgstr "Material group:"
+
+msgid ""
+"Materials with a high comparative tracking index (CTI) are better at "
+"providing isolation.\n"
+"\n"
+"Material group I: 600 <= CTI\n"
+"Material group II: 400 <= CTI < 600\n"
+"Material group IIIa: 175 <= CTI < 400\n"
+"Material group IIIb: 100 <= CTI < 175"
+msgstr ""
+"Materials with a high comparative tracking index (CTI) are better at "
+"providing isolation.\n"
+"\n"
+"Material group I: 600 <= CTI\n"
+"Material group II: 400 <= CTI < 600\n"
+"Material group IIIa: 175 <= CTI < 400\n"
+"Material group IIIb: 100 <= CTI < 175"
+
+msgid "II"
+msgstr "II"
+
+msgid "IIIa"
+msgstr "IIIa"
+
+msgid "IIIb"
+msgstr "IIIb"
+
+msgid "PCB material:"
+msgstr "PCB material:"
+
+msgid ""
+"Printed wiring material can benefit of a creepage distance reduction for RMS "
+"voltages lower than 1000V"
+msgstr ""
+"Printed wiring material can benefit of a creepage distance reduction for RMS "
+"voltages lower than 1000V"
+
+msgid "Max altitude:"
+msgstr "Max altitude:"
+
+msgid ""
+"Coating and potting allows for clearance and creepage distances reduction. "
+"Not supported by the calculator.\n"
+"\n"
+"A coating that could easily delaminate in the lifespan of the product (such "
+"as a soldermask) should not be considered for a reduction."
+msgstr ""
+"Coating and potting allows for clearance and creepage distances reduction. "
+"Not supported by the calculator.\n"
+"\n"
+"A coating that could easily delaminate in the lifespan of the product (such "
+"as a soldermask) should not be considered for a reduction."
+
+msgid "Clearance:"
+msgstr "Clearance:"
+
+msgid "Creepage:"
+msgstr "Creepage:"
+
+msgid "Min groove width:"
+msgstr "Min groove width:"
+
+msgid ""
+"A groove which width is smaller has no effect on the path considered for "
+"creepage"
+msgstr ""
+"A groove which width is smaller has no effect on the path considered for "
+"creepage"
+
+msgid ""
+"solid: clearance\n"
+"dashed: creepage"
+msgstr ""
+"solid: clearance\n"
+"dashed: creepage"
 
 msgid "Voltage > 500 V:"
 msgstr "Voltage > 500 V:"
@@ -16714,6 +17185,38 @@ msgstr ""
 "Selected cells shown with the default system's coloring choice after a table "
 "refill.\n"
 
+msgid ""
+"The goal of the IEC60664-1 is to provide guidance on designing insulation "
+"for products that have a connection to mains supply.\n"
+"\n"
+"However some cases are not covered by this calculator:\n"
+"\n"
+"- For frequencies higher than 30kHz, the dielectric perfomances are "
+"degraded. IEC60664-4 covers those cases\n"
+"- When using a conformal coating or a potting in order to protect for "
+"pollution, if all conditions specified by IEC60664-3 are met, the clearance "
+"and creepage distances can be reduced. Soldermask is usually not considered "
+"as a conformal coating.\n"
+"- Insulations trough liquids, compressed air or gases other than air are not "
+"in the scope of IEC60664"
+msgstr ""
+"The goal of the IEC60664-1 is to provide guidance on designing insulation "
+"for products that have a connection to mains supply.\n"
+"\n"
+"However some cases are not covered by this calculator:\n"
+"\n"
+"- For frequencies higher than 30kHz, the dielectric perfomances are "
+"degraded. IEC60664-4 covers those cases\n"
+"- When using a conformal coating or a potting in order to protect for "
+"pollution, if all conditions specified by IEC60664-3 are met, the clearance "
+"and creepage distances can be reduced. Soldermask is usually not considered "
+"as a conformal coating.\n"
+"- Insulations trough liquids, compressed air or gases other than air are not "
+"in the scope of IEC60664"
+
+msgid "KiCad Calculator Tools"
+msgstr "KiCad Calculator Tools"
+
 msgid "General system design"
 msgstr "General system design"
 
@@ -16732,8 +17235,8 @@ msgstr "Fusing Current"
 msgid "Cable Size"
 msgstr "Cable Size"
 
-msgid "High speed"
-msgstr "High speed"
+msgid "High Speed"
+msgstr "High Speed"
 
 msgid "Wavelength"
 msgstr "Wavelength"
@@ -17081,6 +17584,36 @@ msgstr "NetClass"
 
 msgid "NetName"
 msgstr "NetName"
+
+msgid "Teardrops"
+msgstr "Teardrops"
+
+msgid "Enable Teardrops"
+msgstr "Enable Teardrops"
+
+msgid "Best Length Ratio"
+msgstr "Best Length Ratio"
+
+msgid "Max Length"
+msgstr "Max Length"
+
+msgid "Best Width Ratio"
+msgstr "Best Width Ratio"
+
+msgid "Max Width"
+msgstr "Max Width"
+
+msgid "Curve Points"
+msgstr "Curve Points"
+
+msgid "Prefer zone connections"
+msgstr "Prefer zone connections"
+
+msgid "Allow teardrops to span two tracks"
+msgstr "Allow teardrops to span two tracks"
+
+msgid "Max Width Ratio"
+msgstr "Max Width Ratio"
 
 msgid "all copper layers"
 msgstr "all copper layers"
@@ -18196,9 +18729,6 @@ msgstr "Fillet"
 msgid "Electrical Properties"
 msgstr "Electrical Properties"
 
-msgid "Clearance:"
-msgstr "Clearance:"
-
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
 msgstr ""
 "Copper clearance for this zone (set to 0 to use the netclass clearance)"
@@ -19163,8 +19693,8 @@ msgid "'%s' found"
 msgstr "'%s' found"
 
 #, c-format
-msgid "Hit(s): %ld / %lu"
-msgstr "Hit(s): %ld / %lu"
+msgid "Hit(s): %d / %zu"
+msgstr "Hit(s): %d / %zu"
 
 msgid "Search for:"
 msgstr "Search for:"
@@ -19541,29 +20071,6 @@ msgstr "Footprint Generators"
 msgid "Traceback of Python Script Errors"
 msgstr "Traceback of Python Script Errors"
 
-msgid ""
-"Select an <b>Option Choice</b> in the listbox above, and then click the "
-"<b>Append Selected Option</b> button."
-msgstr ""
-"Select an <b>Option Choice</b> in the listbox above, and then click the "
-"<b>Append Selected Option</b> button."
-
-#, c-format
-msgid "Options for Library '%s'"
-msgstr "Options for Library '%s'"
-
-msgid "Plugin Options"
-msgstr "Plugin Options"
-
-msgid "Option Choices"
-msgstr "Option Choices"
-
-msgid "Options supported by current plugin"
-msgstr "Options supported by current plugin"
-
-msgid "<<    Append Selected Option"
-msgstr "<<    Append Selected Option"
-
 #, c-format
 msgid "Front (top side) placement file: '%s'."
 msgstr "Front (top side) placement file: '%s'."
@@ -19604,8 +20111,8 @@ msgstr "Footprint Report"
 msgid "ASCII"
 msgstr "ASCII"
 
-msgid "Gerber (experimental)"
-msgstr "Gerber (experimental)"
+msgid "Gerber X3"
+msgstr "Gerber X3"
 
 msgid "Separate files for front, back"
 msgstr "Separate files for front, back"
@@ -19818,9 +20325,6 @@ msgstr "Footprints"
 msgid "Tracks && vias"
 msgstr "Tracks && vias"
 
-msgid "Teardrops"
-msgstr "Teardrops"
-
 msgid "Markers"
 msgstr "Markers"
 
@@ -19862,6 +20366,100 @@ msgstr "Current layer:"
 
 msgid "Delete Items"
 msgstr "Delete Items"
+
+msgid "Set teardrops to default values for shape"
+msgstr "Set teardrops to default values for shape"
+
+msgid "Set teardrops to specified values:"
+msgstr "Set teardrops to specified values:"
+
+msgid "Add teardrops with default values for shape"
+msgstr "Add teardrops with default values for shape"
+
+msgid "Add teardrops with specified values:"
+msgstr "Add teardrops with specified values:"
+
+msgid "Edit Teardrops"
+msgstr "Edit Teardrops"
+
+msgid "PTH pads"
+msgstr "PTH pads"
+
+msgid "SMD pads"
+msgstr "SMD pads"
+
+msgid "Track to track"
+msgstr "Track to track"
+
+msgid "Filter Items"
+msgstr "Filter Items"
+
+msgid "Filter items by net class:"
+msgstr "Filter items by net class:"
+
+msgid "Filter items by layer:"
+msgstr "Filter items by layer:"
+
+msgid "Round pads only"
+msgstr "Round pads only"
+
+msgid "Existing teardrops only"
+msgstr "Existing teardrops only"
+
+msgid "Remove teardrops"
+msgstr "Remove teardrops"
+
+msgid "Edit default values in Board Setup"
+msgstr "Edit default values in Board Setup"
+
+msgid "Prefer zone connection"
+msgstr "Prefer zone connection"
+
+msgid "Allow teardrops to span 2 track segments"
+msgstr "Allow teardrops to span 2 track segments"
+
+msgid ""
+"Allows a teardrop to spread over 2 tracks if the first track segment is too "
+"short"
+msgstr ""
+"Allows a teardrop to spread over 2 tracks if the first track segment is too "
+"short"
+
+msgid "Maximum track width:"
+msgstr "Maximum track width:"
+
+msgid ""
+"Max pad/via size to track width ratio to create a teardrop.\n"
+"100 always creates a teardrop."
+msgstr ""
+"Max pad/via size to track width ratio to create a teardrop.\n"
+"100 always creates a teardrop."
+
+msgid ""
+"Tracks which are similar in size to the pad or via do not need teardrops."
+msgstr ""
+"Tracks which are similar in size to the pad or via do not need teardrops."
+
+msgid "(as a percentage of pad/via size)"
+msgstr "(as a percentage of pad/via size)"
+
+msgid "Best length:"
+msgstr "Best length:"
+
+msgid "Max length:"
+msgstr "Max length:"
+
+msgid "Best height:"
+msgstr "Best height:"
+
+msgid "Curved edges"
+msgstr "Curved edges"
+
+msgid "Points:"
+msgstr "Points:"
+
+msgid "Set Teardrops"
+msgstr "Set Teardrops"
 
 msgid "Other text items"
 msgstr "Other text items"
@@ -19929,9 +20527,6 @@ msgstr "PCB text items"
 msgid "PCB dimension items"
 msgstr "PCB dimension items"
 
-msgid "Filter items by layer:"
-msgstr "Filter items by layer:"
-
 msgid "Filter items by parent footprint library id:"
 msgstr "Filter items by parent footprint library id:"
 
@@ -19946,12 +20541,6 @@ msgstr "Via Diameter"
 
 msgid "uVia Diameter"
 msgstr "uVia Diameter"
-
-msgid "Filter Items"
-msgstr "Filter Items"
-
-msgid "Filter items by net class:"
-msgstr "Filter items by net class:"
 
 msgid "Filter tracks by width:"
 msgstr "Filter tracks by width:"
@@ -20161,6 +20750,9 @@ msgstr "Design rule constraints"
 
 msgid "Predefined track && via dimensions"
 msgstr "Predefined track && via dimensions"
+
+msgid "Teardrop defaults"
+msgstr "Teardrop defaults"
 
 msgid "Imported Layer"
 msgstr "Imported Layer"
@@ -20786,6 +21378,51 @@ msgstr "Heatsink pad"
 msgid "Castellated pad (through hole only)"
 msgstr "Castellated pad (through hole only)"
 
+msgid "Board contains legacy teardrops. "
+msgstr "Board contains legacy teardrops. "
+
+msgid "Use Edit > Edit Teardrops to apply automatic teardrops."
+msgstr "Use Edit > Edit Teardrops to apply automatic teardrops."
+
+msgid "Add teardrops on pad's track connections"
+msgstr "Add teardrops on pad's track connections"
+
+msgid "Tracks which are similar in size to the pad do not need teardrops."
+msgstr "Tracks which are similar in size to the pad do not need teardrops."
+
+msgid "(as a percentage of pad size)"
+msgstr "(as a percentage of pad size)"
+
+msgid "Teardrop Shape"
+msgstr "Teardrop Shape"
+
+msgid "Pad connection:"
+msgstr "Pad connection:"
+
+msgid "From parent footprint"
+msgstr "From parent footprint"
+
+msgid "Zone knockout:"
+msgstr "Zone knockout:"
+
+msgid "Pad shape"
+msgstr "Pad shape"
+
+msgid "Pad convex hull"
+msgstr "Pad convex hull"
+
+msgid "Thermal Relief Overrides"
+msgstr "Thermal Relief Overrides"
+
+msgid "Relief gap:"
+msgstr "Relief gap:"
+
+msgid "Spoke width:"
+msgstr "Spoke width:"
+
+msgid "Spoke angle:"
+msgstr "Spoke angle:"
+
 msgid "Clearance Overrides"
 msgstr "Clearance Overrides"
 
@@ -20845,33 +21482,6 @@ msgstr ""
 "If 0, the footprint value or the global value is used.\n"
 "The final clearance value is the sum of this value and the clearance value.\n"
 "A negative value means a smaller mask size than pad size."
-
-msgid "Pad connection:"
-msgstr "Pad connection:"
-
-msgid "From parent footprint"
-msgstr "From parent footprint"
-
-msgid "Zone knockout:"
-msgstr "Zone knockout:"
-
-msgid "Pad shape"
-msgstr "Pad shape"
-
-msgid "Pad convex hull"
-msgstr "Pad convex hull"
-
-msgid "Thermal Relief Overrides"
-msgstr "Thermal Relief Overrides"
-
-msgid "Relief gap:"
-msgstr "Relief gap:"
-
-msgid "Spoke width:"
-msgstr "Spoke width:"
-
-msgid "Spoke angle:"
-msgstr "Spoke angle:"
 
 msgid "Primitives list:"
 msgstr "Primitives list:"
@@ -21672,26 +22282,20 @@ msgstr ""
 "Automatically change the net of this via when the pads or zones it touches "
 "are changed"
 
-msgid "Start point X:"
-msgstr "Start point X:"
+msgid "Start X:"
+msgstr "Start X:"
 
-msgid "Start point Y:"
-msgstr "Start point Y:"
+msgid "End X:"
+msgstr "End X:"
 
-msgid "End point X:"
-msgstr "End point X:"
-
-msgid "End point Y:"
-msgstr "End point Y:"
-
-msgid "Pre-defined widths:"
-msgstr "Pre-defined widths:"
+msgid "Pre-defined sizes:"
+msgstr "Pre-defined sizes:"
 
 msgid "Use net class widths"
 msgstr "Use net class widths"
 
-msgid "Pre-defined sizes:"
-msgstr "Pre-defined sizes:"
+msgid "Pos X:"
+msgstr "Pos X:"
 
 msgid "Via diameter:"
 msgstr "Via diameter:"
@@ -21725,6 +22329,15 @@ msgstr "Annular rings:"
 
 msgid "Start, end, and connected layers"
 msgstr "Start, end, and connected layers"
+
+msgid "Add teardrops on via's track connections"
+msgstr "Add teardrops on via's track connections"
+
+msgid "Tracks which are similar in size to the via do not need teardrops."
+msgstr "Tracks which are similar in size to the via do not need teardrops."
+
+msgid "(as a percentage of pad/via/track size)"
+msgstr "(as a percentage of pad/via/track size)"
 
 msgid "Track & Via Properties"
 msgstr "Track & Via Properties"
@@ -21923,6 +22536,9 @@ msgstr "Always show selected ratsnest"
 msgid "Show ratsnest with curved lines"
 msgstr "Show ratsnest with curved lines"
 
+msgid "Ratsnest line thickness:"
+msgstr "Ratsnest line thickness:"
+
 msgid "Track Editing"
 msgstr "Track Editing"
 
@@ -21976,12 +22592,6 @@ msgstr ""
 
 msgid "Default properties for new graphic items:"
 msgstr "Default properties for new graphic items:"
-
-msgid "Options Editor..."
-msgstr "Options Editor…"
-
-msgid "Edit options"
-msgstr "Edit options"
 
 #, c-format
 msgid "Illegal character '%c' in nickname '%s'."
@@ -23377,6 +23987,39 @@ msgstr ""
 "For the full documentation see [https://docs.kicad.org](https://docs.kicad."
 "org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 
+msgid "Default properties for round shapes:"
+msgstr "Default properties for round shapes:"
+
+msgid "Edges:"
+msgstr "Edges:"
+
+msgid "Straight lines"
+msgstr "Straight lines"
+
+msgid "Curved"
+msgstr "Curved"
+
+msgid "Curve points:"
+msgstr "Curve points:"
+
+msgid "Allow teardrop to span two track segments"
+msgstr "Allow teardrop to span two track segments"
+
+msgid "Default properties for rectangular shapes:"
+msgstr "Default properties for rectangular shapes:"
+
+msgid "Properties for track-to-track teardrops:"
+msgstr "Properties for track-to-track teardrops:"
+
+msgid "Maximum track width"
+msgstr "Maximum track width"
+
+msgid "Tracks which are similar in size do not need teardrops."
+msgstr "Tracks which are similar in size do not need teardrops."
+
+msgid "(as a percentage of larger track width)"
+msgstr "(as a percentage of larger track width)"
+
 msgid "Default properties for new dimension objects:"
 msgstr "Default properties for new dimension objects:"
 
@@ -24562,8 +25205,8 @@ msgstr ""
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 
 #, c-format
-msgid "PCB '%s' is already open."
-msgstr "PCB '%s' is already open."
+msgid "PCB '%s' is already open by '%s' at '%s'."
+msgstr "PCB '%s' is already open by '%s' at '%s'."
 
 msgid "The current PCB has been modified.  Save changes?"
 msgstr "The current PCB has been modified.  Save changes?"
@@ -24928,16 +25571,6 @@ msgstr ""
 
 #, c-format
 msgid ""
-"Could not load footprint '%s' from library '%s'.\n"
-"\n"
-"%s"
-msgstr ""
-"Could not load footprint '%s' from library '%s'.\n"
-"\n"
-"%s"
-
-#, c-format
-msgid ""
 "The current configuration does not include library '%s'.  Use Manage "
 "Footprint Libraries to edit the configuration."
 msgstr ""
@@ -25209,12 +25842,6 @@ msgstr "Add Microwave Shape"
 
 msgid "Auto-Place Footprints"
 msgstr "Auto-Place Footprints"
-
-msgid "Add Teardrops..."
-msgstr "Add Teardrops..."
-
-msgid "Remove Teardrops"
-msgstr "Remove Teardrops"
 
 msgid "External Plugins"
 msgstr "External Plugins"
@@ -25681,8 +26308,8 @@ msgstr "Size X"
 msgid "Size Y"
 msgstr "Size Y"
 
-msgid "Round Radius Ratio"
-msgstr "Round Radius Ratio"
+msgid "Corner Radius Ratio"
+msgstr "Corner Radius Ratio"
 
 msgid "Hole Size X"
 msgstr "Hole Size X"
@@ -25710,6 +26337,13 @@ msgstr "Thermal Relief Gap"
 
 msgid "Error loading project footprint libraries."
 msgstr "Error loading project footprint libraries."
+
+msgid ""
+"The library containing the current footprint has changed.\n"
+"Do you want to reload the footprint?"
+msgstr ""
+"The library containing the current footprint has changed.\n"
+"Do you want to reload the footprint?"
 
 msgid "Bitmap Properties"
 msgstr "Bitmap Properties"
@@ -26026,6 +26660,9 @@ msgstr "Loading footprint library\n"
 msgid "Saving footprint library\n"
 msgstr "Saving footprint library\n"
 
+msgid "Unable to save library\n"
+msgstr "Unable to save library\n"
+
 msgid "Footprint library was not updated\n"
 msgstr "Footprint library was not updated\n"
 
@@ -26044,6 +26681,19 @@ msgstr "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
 
 msgid "Regular expression <b>footprint name</b> filter."
 msgstr "Regular expression <b>footprint name</b> filter."
+
+msgid ""
+"Enable transaction logging. The mere presence of this option turns on the "
+"logging, no need to set a Value."
+msgstr ""
+"Enable transaction logging. The mere presence of this option turns on the "
+"logging, no need to set a Value."
+
+msgid "User name for <b>login</b> to some special library server."
+msgstr "User name for <b>login</b> to some special library server."
+
+msgid "Password for <b>login</b> to some special library server."
+msgstr "Password for <b>login</b> to some special library server."
 
 msgid ""
 "Enter the python module which implements the PLUGIN::Footprint*() functions."
@@ -27543,113 +28193,6 @@ msgstr "Reference '%s' not found."
 msgid "A wire_via refers to missing padstack '%s'."
 msgstr "A wire_via refers to missing padstack '%s'."
 
-msgid "Filling Zones"
-msgstr "Filling Zones"
-
-#, c-format
-msgid "%d teardrops created"
-msgstr "%d teardrops created"
-
-#, c-format
-msgid "%d teardrops removed."
-msgstr "%d teardrops removed."
-
-msgid "Round shapes:"
-msgstr "Round shapes:"
-
-msgid "Best length:"
-msgstr "Best length:"
-
-msgid "Best height:"
-msgstr "Best height:"
-
-msgid "Max length:"
-msgstr "Max length:"
-
-msgid ""
-"Max pad/via size to track width ratio to create a teardrop.\n"
-"100 always creates a teardrop."
-msgstr ""
-"Max pad/via size to track width ratio to create a teardrop.\n"
-"100 always creates a teardrop."
-
-msgid "Straight lines"
-msgstr "Straight lines"
-
-msgid "Curved"
-msgstr "Curved"
-
-msgid "Rect shapes:"
-msgstr "Rect shapes:"
-
-msgid "Vias and PTH pads"
-msgstr "Vias and PTH pads"
-
-msgid "Add teardrops to vias and pads with holes"
-msgstr "Add teardrops to vias and pads with holes"
-
-msgid "Round pads only"
-msgstr "Round pads only"
-
-msgid "Add teardrops to round shapes only "
-msgstr "Add teardrops to round shapes only "
-
-msgid "SMD pads"
-msgstr "SMD pads"
-
-msgid "Add teardrops to not driiled pads, like SMD"
-msgstr "Add teardrops to not driiled pads, like SMD"
-
-msgid "Track to track"
-msgstr "Track to track"
-
-msgid "Add teardrops to two connected tracks of different widths"
-msgstr "Add teardrops to two connected tracks of different widths"
-
-msgid "Allow teardrops to span two track segments"
-msgstr "Allow teardrops to span two track segments"
-
-msgid ""
-"Allows a teardrop to spread over 2 tracks if the first track segment is too "
-"short"
-msgstr ""
-"Allows a teardrop to spread over 2 tracks if the first track segment is too "
-"short"
-
-msgid "Place teardrops on pads in zones"
-msgstr "Place teardrops on pads in zones"
-
-msgid ""
-"Pads inside a  copper zone outline of same net have no teardrop.\n"
-"Check this option to allow teardrop for these pads."
-msgstr ""
-"Pads inside a  copper zone outline of same net have no teardrop.\n"
-"Check this option to allow teardrop for these pads."
-
-msgid "Curve points:"
-msgstr "Curve points:"
-
-msgid "Number of segments to build a teardrop with curved shape"
-msgstr "Number of segments to build a teardrop with curved shape"
-
-msgid "Generate raw teardrops"
-msgstr "Generate raw teardrops"
-
-msgid "(Shapes will be adjusted for clearances on next zone fill.)"
-msgstr "(Shapes will be adjusted for clearances on next zone fill.)"
-
-msgid "Add Teardrops"
-msgstr "Add Teardrops"
-
-msgid "Add teardrops"
-msgstr "Add teardrops"
-
-msgid "Add teardrops and refill zones"
-msgstr "Add teardrops and refill zones"
-
-msgid "Remove teardrops"
-msgstr "Remove teardrops"
-
 msgid "Load footprint from current board"
 msgstr "Load footprint from current board"
 
@@ -28215,9 +28758,6 @@ msgstr "Unable to fillet the selected lines."
 msgid "Some of the lines could not be filleted."
 msgstr "Some of the lines could not be filleted."
 
-msgid "Rotate"
-msgstr "Rotate"
-
 msgid "Change Side / Flip"
 msgstr "Change Side / Flip"
 
@@ -28242,10 +28782,10 @@ msgstr "Pack footprints"
 
 #, c-format
 msgid ""
-"Click to place %s (item %ld of %ld)\n"
+"Click to place %s (item %zu of %zu)\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"Click to place %s (item %ld of %ld)\n"
+"Click to place %s (item %zu of %zu)\n"
 "Press <esc> to cancel all; double-click to finish"
 
 #, c-format
@@ -28698,6 +29238,12 @@ msgstr "Edit track and via properties globally across board"
 
 msgid "Edit Text and graphics properties globally across board"
 msgstr "Edit Text and graphics properties globally across board"
+
+msgid "Edit Teardrops..."
+msgstr "Edit Teardrops..."
+
+msgid "Add, remove or edit teardrops globally across board"
+msgstr "Add, remove or edit teardrops globally across board"
 
 msgid "Global Deletions..."
 msgstr "Global Deletions..."
@@ -29562,6 +30108,15 @@ msgstr ""
 "Not all zones are filled. Use Edit > Fill All Zones (%s) if you wish to see "
 "all fills."
 
+msgid "Dimmed"
+msgstr "Dimmed"
+
+msgid "Hidden"
+msgstr "Hidden"
+
+msgid "Inactive Layer Display"
+msgstr "Inactive Layer Display"
+
 msgid "Item locked."
 msgstr "Item locked."
 
@@ -30321,9 +30876,6 @@ msgstr "thermal reliefs for PTH"
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] load failed: input line too long\n"
 
-msgid "KiCad Image Converter"
-msgstr "KiCad Image Converter"
-
 msgid "Bitmap to Component Converter"
 msgstr "Bitmap to Component Converter"
 
@@ -30387,12 +30939,6 @@ msgstr "pcbnew"
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "An EDA suite for schematic and circuit board design"
 
-msgid "EDA"
-msgstr "EDA"
-
-msgid "Circuit board"
-msgstr "Circuit board"
-
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
 "It features schematic capture, integrated circuit simulation, printed "
@@ -30431,6 +30977,186 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Load source image"
+#~ msgstr "Load source image"
+
+#~ msgid "Quit Image Converter"
+#~ msgstr "Quit Image Converter"
+
+#~ msgid "Entry contains trailing white space."
+#~ msgstr "Entry contains trailing white space."
+
+#~ msgid "Entry contains leading white space."
+#~ msgstr "Entry contains leading white space."
+
+#, c-format
+#~ msgid "'%s' is not a valid library identifier format."
+#~ msgstr "'%s' is not a valid library identifier format."
+
+#~ msgid "Library Identifier Validation Error"
+#~ msgstr "Library Identifier Validation Error"
+
+#~ msgid "Only include selected items"
+#~ msgstr "Only include selected items"
+
+#~ msgid ""
+#~ "Check this option if the symbol has an alternate body style (De Morgan)"
+#~ msgstr ""
+#~ "Check this option if the symbol has an alternate body style (De Morgan)"
+
+#~ msgid "The Reference column cannot be hidden."
+#~ msgstr "The Reference column cannot be hidden."
+
+#, c-format
+#~ msgid "Schematic '%s' is already open."
+#~ msgstr "Schematic '%s' is already open."
+
+#~ msgid ""
+#~ "Enable <b>debug</b> logging for Symbol*() functions in this SCH_PLUGIN."
+#~ msgstr ""
+#~ "Enable <b>debug</b> logging for Symbol*() functions in this SCH_PLUGIN."
+
+#~ msgid "Regular expression <b>symbol name</b> filter."
+#~ msgstr "Regular expression <b>symbol name</b> filter."
+
+#~ msgid ""
+#~ "Enter the python symbol which implements the SCH_PLUGIN::Symbol*() "
+#~ "functions."
+#~ msgstr ""
+#~ "Enter the python symbol which implements the SCH_PLUGIN::Symbol*() "
+#~ "functions."
+
+#~ msgid "High speed"
+#~ msgstr "High speed"
+
+#, c-format
+#~ msgid "Hit(s): %ld / %lu"
+#~ msgstr "Hit(s): %ld / %lu"
+
+#~ msgid "Gerber (experimental)"
+#~ msgstr "Gerber (experimental)"
+
+#~ msgid "Start point X:"
+#~ msgstr "Start point X:"
+
+#~ msgid "Start point Y:"
+#~ msgstr "Start point Y:"
+
+#~ msgid "End point X:"
+#~ msgstr "End point X:"
+
+#~ msgid "End point Y:"
+#~ msgstr "End point Y:"
+
+#~ msgid "Pre-defined widths:"
+#~ msgstr "Pre-defined widths:"
+
+#~ msgid "Options Editor..."
+#~ msgstr "Options Editor…"
+
+#~ msgid "Edit options"
+#~ msgstr "Edit options"
+
+#, c-format
+#~ msgid "PCB '%s' is already open."
+#~ msgstr "PCB '%s' is already open."
+
+#, c-format
+#~ msgid ""
+#~ "Could not load footprint '%s' from library '%s'.\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Could not load footprint '%s' from library '%s'.\n"
+#~ "\n"
+#~ "%s"
+
+#~ msgid "Add Teardrops..."
+#~ msgstr "Add Teardrops..."
+
+#~ msgid "Remove Teardrops"
+#~ msgstr "Remove Teardrops"
+
+#~ msgid "Round Radius Ratio"
+#~ msgstr "Round Radius Ratio"
+
+#~ msgid "Filling Zones"
+#~ msgstr "Filling Zones"
+
+#, c-format
+#~ msgid "%d teardrops created"
+#~ msgstr "%d teardrops created"
+
+#, c-format
+#~ msgid "%d teardrops removed."
+#~ msgstr "%d teardrops removed."
+
+#~ msgid "Round shapes:"
+#~ msgstr "Round shapes:"
+
+#~ msgid "Rect shapes:"
+#~ msgstr "Rect shapes:"
+
+#~ msgid "Vias and PTH pads"
+#~ msgstr "Vias and PTH pads"
+
+#~ msgid "Add teardrops to vias and pads with holes"
+#~ msgstr "Add teardrops to vias and pads with holes"
+
+#~ msgid "Add teardrops to round shapes only "
+#~ msgstr "Add teardrops to round shapes only "
+
+#~ msgid "Add teardrops to not driiled pads, like SMD"
+#~ msgstr "Add teardrops to not driiled pads, like SMD"
+
+#~ msgid "Add teardrops to two connected tracks of different widths"
+#~ msgstr "Add teardrops to two connected tracks of different widths"
+
+#~ msgid "Allow teardrops to span two track segments"
+#~ msgstr "Allow teardrops to span two track segments"
+
+#~ msgid "Place teardrops on pads in zones"
+#~ msgstr "Place teardrops on pads in zones"
+
+#~ msgid ""
+#~ "Pads inside a  copper zone outline of same net have no teardrop.\n"
+#~ "Check this option to allow teardrop for these pads."
+#~ msgstr ""
+#~ "Pads inside a  copper zone outline of same net have no teardrop.\n"
+#~ "Check this option to allow teardrop for these pads."
+
+#~ msgid "Number of segments to build a teardrop with curved shape"
+#~ msgstr "Number of segments to build a teardrop with curved shape"
+
+#~ msgid "Generate raw teardrops"
+#~ msgstr "Generate raw teardrops"
+
+#~ msgid "(Shapes will be adjusted for clearances on next zone fill.)"
+#~ msgstr "(Shapes will be adjusted for clearances on next zone fill.)"
+
+#~ msgid "Add Teardrops"
+#~ msgstr "Add Teardrops"
+
+#~ msgid "Add teardrops"
+#~ msgstr "Add teardrops"
+
+#~ msgid "Add teardrops and refill zones"
+#~ msgstr "Add teardrops and refill zones"
+
+#, c-format
+#~ msgid ""
+#~ "Click to place %s (item %ld of %ld)\n"
+#~ "Press <esc> to cancel all; double-click to finish"
+#~ msgstr ""
+#~ "Click to place %s (item %ld of %ld)\n"
+#~ "Press <esc> to cancel all; double-click to finish"
+
+#~ msgid "EDA"
+#~ msgstr "EDA"
+
+#~ msgid "Circuit board"
+#~ msgstr "Circuit board"
 
 #~ msgid "Board Layer for Outline"
 #~ msgstr "Board Layer for Outline"
@@ -32536,9 +33262,6 @@ msgstr "KiCad Printed Circuit Board"
 #, c-format
 #~ msgid "Could not find Spice item with reference '%s'"
 #~ msgstr "Could not find Spice item with reference '%s'"
-
-#~ msgid "Break Wire"
-#~ msgstr "Break Wire"
 
 #~ msgid "Divide a wire into segments which can be dragged independently"
 #~ msgstr "Divide a wire into segments which can be dragged independently"
@@ -48645,9 +49368,6 @@ msgstr "KiCad Printed Circuit Board"
 #~ msgid "%s from schematic"
 #~ msgstr "%s from schematic"
 
-#~ msgid "Add Sheet Pin"
-#~ msgstr "Add Sheet Pin"
-
 #~ msgid "Add a sheet pin"
 #~ msgstr "Add a sheet pin"
 
@@ -55815,17 +56535,11 @@ msgstr "KiCad Printed Circuit Board"
 #~ msgid "Constraints:"
 #~ msgstr "Constraints:"
 
-#~ msgid "Start X:"
-#~ msgstr "Start X:"
-
 #~ msgid "Start Y:"
 #~ msgstr "Start Y:"
 
 #~ msgid "Origin:"
 #~ msgstr "Origin:"
-
-#~ msgid "End X:"
-#~ msgstr "End X:"
 
 #~ msgid "End Y:"
 #~ msgstr "End Y:"
