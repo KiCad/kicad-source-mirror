@@ -225,6 +225,7 @@ public:
 
     ///< Used for hotkey feedback
     const static TOOL_EVENT GridChangedByKeyEvent;
+    const static TOOL_EVENT ContrastModeChangedByKeyEvent;
 };
 
 #endif // __ACTIONS_H

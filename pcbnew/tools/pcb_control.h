@@ -65,6 +65,8 @@ public:
     // Update the view with the new high-contrast mode from the display settings
     int HighContrastMode( const TOOL_EVENT& aEvent );
 
+    int ContrastModeFeedback( const TOOL_EVENT& aEvent );
+
     // Rotate through the available high-contrast, net color and ratsnest color modes
     int HighContrastModeCycle( const TOOL_EVENT& aEvent );
     int NetColorModeCycle( const TOOL_EVENT& aEvent );

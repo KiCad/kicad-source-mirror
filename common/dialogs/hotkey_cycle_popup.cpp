@@ -77,7 +77,7 @@ void HOTKEY_CYCLE_POPUP::Popup( const wxString& aTitle, const wxArrayString& aIt
     m_listBox->SetSelection( std::min( aSelection,
                                        static_cast<int>( m_listBox->GetCount() ) - 1 ) );
 
-    int width = 0;
+    int width = m_stTitle->GetTextExtent( aTitle ).x;
     int height = 0;
 
     for( const wxString& item : aItems )

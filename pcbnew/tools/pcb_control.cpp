@@ -48,6 +48,7 @@
 #include <confirm.h>
 #include <connectivity/connectivity_data.h>
 #include <core/kicad_algo.h>
+#include <dialogs/hotkey_cycle_popup.h>
 #include <kicad_clipboard.h>
 #include <origin_viewitem.h>
 #include <pcb_edit_frame.h>
@@ -317,6 +318,33 @@ int PCB_CONTROL::HighContrastModeCycle( const TOOL_EVENT& aEvent )
     }
 
     m_frame->SetDisplayOptions( opts );
+
+    m_toolMgr->PostEvent( EVENTS::ContrastModeChangedByKeyEvent );
+
+    return 0;
+}
+
+
+int PCB_CONTROL::ContrastModeFeedback( const TOOL_EVENT& aEvent )
+{
+    if( !Pgm().GetCommonSettings()->m_Input.hotkey_feedback )
+        return 0;
+
+    PCB_DISPLAY_OPTIONS opts = frame()->GetDisplayOptions();
+
+    wxArrayString labels;
+    labels.Add( _( "Normal" ) );
+    labels.Add( _( "Dimmed" ) );
+    labels.Add( _( "Hidden" ) );
+
+    if( !m_frame->GetHotkeyPopup() )
+        m_frame->CreateHotkeyPopup();
+
+    HOTKEY_CYCLE_POPUP* popup = m_frame->GetHotkeyPopup();
+
+    if( popup )
+        popup->Popup( _( "Inactive Layer Display" ), labels,
+                      static_cast<int>( opts.m_ContrastModeDisplay ) );
 
     return 0;
 }
@@ -1553,6 +1581,7 @@ void PCB_CONTROL::setTransitions()
     Go( &PCB_CONTROL::ZoneDisplayMode,       PCB_ACTIONS::zoneDisplayToggle.MakeEvent() );
     Go( &PCB_CONTROL::HighContrastMode,      ACTIONS::highContrastMode.MakeEvent() );
     Go( &PCB_CONTROL::HighContrastModeCycle, ACTIONS::highContrastModeCycle.MakeEvent() );
+    Go( &PCB_CONTROL::ContrastModeFeedback,  EVENTS::ContrastModeChangedByKeyEvent );
     Go( &PCB_CONTROL::NetColorModeCycle,     PCB_ACTIONS::netColorModeCycle.MakeEvent() );
     Go( &PCB_CONTROL::RatsnestModeCycle,     PCB_ACTIONS::ratsnestModeCycle.MakeEvent() );
     Go( &PCB_CONTROL::FlipPcbView,           PCB_ACTIONS::flipBoard.MakeEvent() );

@@ -708,3 +708,6 @@ const TOOL_EVENT EVENTS::DisambiguatePoint( TC_MESSAGE, TA_ACTION, "common.Inter
 
 const TOOL_EVENT EVENTS::GridChangedByKeyEvent( TC_MESSAGE, TA_ACTION,
                                                 "common.Interactive.gridChangedByKey" );
+
+const TOOL_EVENT EVENTS::ContrastModeChangedByKeyEvent( TC_MESSAGE, TA_ACTION,
+                                                        "common.Interactive.contrastModeChangedByKeyEvent" );
