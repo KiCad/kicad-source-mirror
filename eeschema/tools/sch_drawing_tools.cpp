@@ -1898,13 +1898,14 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                          || isSyntheticClick
                          || evt->IsAction( &EE_ACTIONS::finishSheet ) ) )
         {
-            m_view->ClearPreview();
             getViewControls()->SetAutoPan( false );
             getViewControls()->CaptureCursor( false );
 
             if( m_frame->EditSheetProperties( static_cast<SCH_SHEET*>( sheet ),
                                               &m_frame->GetCurrentSheet(), nullptr ) )
             {
+                m_view->ClearPreview();
+
                 sheet->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
 
                 SCH_COMMIT commit( m_toolMgr );
@@ -1916,6 +1917,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             }
             else
             {
+                m_view->ClearPreview();
                 delete sheet;
             }
 

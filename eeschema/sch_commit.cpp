@@ -73,8 +73,14 @@ COMMIT& SCH_COMMIT::Stage( EDA_ITEM *aItem, CHANGE_TYPE aChangeType, BASE_SCREEN
 
     // If aItem belongs a symbol, the full symbol will be saved because undo/redo does
     // not handle "sub items" modifications.
-    if( aItem->GetParent() && aItem->GetParent()->IsType( { SCH_SYMBOL_T, LIB_SYMBOL_T,
-                                                            SCH_SHEET_T } ) )
+    if( aItem->GetParent() && aItem->GetParent()->IsType( { SCH_SYMBOL_T, LIB_SYMBOL_T } ) )
+    {
+        aItem->SetFlags( IS_MODIFIED_CHILD );
+        aItem = aItem->GetParent();
+        aChangeType = CHT_MODIFY;
+    }
+    // Same for fields of a sheet or label
+    else if( aItem->Type() == SCH_FIELD_T && aItem->GetParent() )
     {
         aItem->SetFlags( IS_MODIFIED_CHILD );
         aItem = aItem->GetParent();
@@ -237,7 +243,7 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
             if( !( changeFlags & CHT_DONE ) )
             {
-                if( !schItem->GetParent() )
+                if( !screen->CheckIfOnDrawList( schItem ) )  // don't want a loop!
                     screen->Append( schItem );
 
                 if( view )
