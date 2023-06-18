@@ -29,7 +29,7 @@ FILE* KIPLATFORM::IO::SeqFOpen( const wxString& aPath, const wxString& aMode )
     return wxFopen( aPath, aMode );
 }
 
-bool AssignPermissions(const wxString& sourceFilePath, const wxString& destFilePath) 
+bool KIPLATFORM::IO::DuplicatePermissions(const wxString& sourceFilePath, const wxString& destFilePath)
 {
     NSString *sourcePath = [NSString stringWithUTF8String:sourceFilePath.utf8_str()];
     NSString *destPath = [NSString stringWithUTF8String:destFilePath.utf8_str()];
@@ -47,16 +47,16 @@ bool AssignPermissions(const wxString& sourceFilePath, const wxString& destFileP
 
     NSNumber *permissions = sourceAttributes[NSFilePosixPermissions];
 
-    if (permissions == nil) 
+    if (permissions == nil)
     {
         return false;
     }
 
-    if ([fileManager setAttributes:@{NSFilePosixPermissions: permissions} ofItemAtPath:destPath error:&error]) 
+    if ([fileManager setAttributes:@{NSFilePosixPermissions: permissions} ofItemAtPath:destPath error:&error])
     {
         return true;
-    } 
-    else 
+    }
+    else
     {
         NSLog(@"Error assigning permissions: %@", error);
         return false;
