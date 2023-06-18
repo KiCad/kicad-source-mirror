@@ -88,7 +88,7 @@ static void existsOnLayerFunc( LIBEVAL::CONTEXT* aCtx, void *self )
     if( !item )
         return;
 
-    if( !arg )
+    if( !arg || arg->AsString().IsEmpty() )
     {
         if( aCtx->HasErrorCallback() )
             aCtx->ReportError( MISSING_LAYER_ARG( wxT( "existsOnLayer()" ) ) );
@@ -249,7 +249,7 @@ static void intersectsCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
     result->Set( 0.0 );
     context->Push( result );
 
-    if( !arg )
+    if( !arg || arg->AsString().IsEmpty() )
     {
         if( context->HasErrorCallback() )
             context->ReportError( MISSING_FP_ARG( wxT( "intersectsCourtyard()" ) ) );
@@ -304,7 +304,7 @@ static void intersectsFrontCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
     result->Set( 0.0 );
     context->Push( result );
 
-    if( !arg )
+    if( !arg || arg->AsString().IsEmpty() )
     {
         if( context->HasErrorCallback() )
             context->ReportError( MISSING_FP_ARG( wxT( "intersectsFrontCourtyard()" ) ) );
@@ -358,7 +358,7 @@ static void intersectsBackCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
     result->Set( 0.0 );
     context->Push( result );
 
-    if( !arg )
+    if( !arg || arg->AsString().IsEmpty() )
     {
         if( context->HasErrorCallback() )
             context->ReportError( MISSING_FP_ARG( wxT( "intersectsBackCourtyard()" ) ) );
@@ -598,7 +598,7 @@ static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
     result->Set( 0.0 );
     aCtx->Push( result );
 
-    if( !arg )
+    if( !arg || arg->AsString().IsEmpty() )
     {
         if( aCtx->HasErrorCallback() )
             aCtx->ReportError( MISSING_AREA_ARG( wxT( "intersectsArea()" ) ) );
@@ -678,7 +678,7 @@ static void enclosedByAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
     result->Set( 0.0 );
     aCtx->Push( result );
 
-    if( !arg )
+    if( !arg || arg->AsString().IsEmpty() )
     {
         if( aCtx->HasErrorCallback() )
             aCtx->ReportError( MISSING_AREA_ARG( wxT( "enclosedByArea()" ) ) );
@@ -763,7 +763,7 @@ static void memberOfGroupFunc( LIBEVAL::CONTEXT* aCtx, void* self )
     result->Set( 0.0 );
     aCtx->Push( result );
 
-    if( !arg )
+    if( !arg || arg->AsString().IsEmpty() )
     {
         if( aCtx->HasErrorCallback() )
             aCtx->ReportError( MISSING_GROUP_ARG( wxT( "memberOfGroup()" ) ) );
@@ -809,7 +809,7 @@ static void memberOfFootprintFunc( LIBEVAL::CONTEXT* aCtx, void* self )
     result->Set( 0.0 );
     aCtx->Push( result );
 
-    if( !arg )
+    if( !arg || arg->AsString().IsEmpty() )
     {
         if( aCtx->HasErrorCallback() )
             aCtx->ReportError( MISSING_REF_ARG( wxT( "memberOfFootprint()" ) ) );
@@ -920,7 +920,7 @@ static void inDiffPairFunc( LIBEVAL::CONTEXT* aCtx, void* self )
     result->Set( 0.0 );
     aCtx->Push( result );
 
-    if( !argv )
+    if( !argv || argv->AsString().IsEmpty() )
     {
         if( aCtx->HasErrorCallback() )
             aCtx->ReportError( MISSING_DP_ARG( wxT( "inDiffPair()" ) ) );
