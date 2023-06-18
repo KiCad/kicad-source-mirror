@@ -123,7 +123,19 @@ public:
         ngspice->Command( "set ngbehavior=ps" );
         ngspice->Command( "setseed 1" );
         BOOST_REQUIRE( ngspice->LoadNetlist( std::string( netlist.ToUTF8() ) ) );
-        BOOST_REQUIRE( ngspice->Run() );
+
+        if( ngspice->Run() )
+        {
+            // wait for end of simulation.
+            // calling wxYield() allows printing activity, and stopping ngspice from GUI
+            // Also note: do not user wxSafeYield, because when using it we cannot stop
+            // ngspice from the GUI
+            do
+            {
+                wxMilliSleep( 50 );
+                wxYield();
+            } while( ngspice->IsRunning() );
+        }
 
         // Test if ngspice cannot run a simulation (missing code models).
         // in this case the log contains "MIF-ERROR" and/or "Error: circuit not parsed"
