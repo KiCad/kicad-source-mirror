@@ -331,12 +331,14 @@ void CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
     const wxPoint cursorPos( aWindow.x2p( m_trace->x2s( m_coords.x ) ),
                              aWindow.y2p( m_trace->y2s( m_coords.y ) ) );
 
-    wxCoord leftPx   = m_drawOutsideMargins ? 0 : aWindow.GetMarginLeft();
-    wxCoord rightPx  = m_drawOutsideMargins ? aWindow.GetScrX() :
-                                              aWindow.GetScrX() - aWindow.GetMarginRight();
-    wxCoord topPx    = m_drawOutsideMargins ? 0 : aWindow.GetMarginTop();
-    wxCoord bottomPx = m_drawOutsideMargins ? aWindow.GetScrY() :
-                                              aWindow.GetScrY() - aWindow.GetMarginBottom();
+    wxCoord leftPx   = m_drawOutsideMargins ? 0
+                                            : aWindow.GetMarginLeft();
+    wxCoord rightPx  = m_drawOutsideMargins ? aWindow.GetScrX()
+                                            : aWindow.GetScrX() - aWindow.GetMarginRight();
+    wxCoord topPx    = m_drawOutsideMargins ? 0
+                                            : aWindow.GetMarginTop();
+    wxCoord bottomPx = m_drawOutsideMargins ? aWindow.GetScrY()
+                                            : aWindow.GetScrY() - aWindow.GetMarginBottom();
 
     wxPen    pen = GetPen();
     wxColour fg = GetPen().GetColour();
