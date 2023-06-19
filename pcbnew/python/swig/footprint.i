@@ -30,9 +30,8 @@
 
 
 %template(MAP_STRING_STRING) std::map<wxString, wxString>;
-%rename(GetPropertiesNative) FOOTPRINT::GetProperties;
-%rename(GetPropertyNative) FOOTPRINT::GetProperty;
-%rename(SetPropertiesNative) FOOTPRINT::SetProperties;
+%rename(GetFieldsNative) FOOTPRINT::GetFields;
+%rename(SetFieldsNative) FOOTPRINT::SetFields;
 %feature("flatnested");
 %include footprint.h
 %feature("flatnested", "");
@@ -61,24 +60,24 @@
     # the object in the garbage collector
     #
 
-    def GetProperties(self):
-      """ Returns footprint properties map. """
-      properties = self.GetPropertiesNative()
-      return {str(k): str(v) for k, v in properties.items()}
+    def GetFields(self):
+      """ Returns footprint fields map. """
+      fields = self.GetFieldsNative()
+      return {str(k): str(v) for k, v in fields.items()}
 
-    def GetProperty(self, key):
-      """ Returns property with a given key if it exists, throws KeyError otherwise. """
-      if self.HasProperty(key):
-        return self.GetPropertyNative(key)
+    def GetField(self, key):
+      """ Returns Field with a given key if it exists, throws KeyError otherwise. """
+      if self.HasField(key):
+        return self.GetFieldByName(key)
       else:
-        raise KeyError("Property not found: " + key)
+        raise KeyError("Field not found: " + key)
 
-    def SetProperties(self, properties):
-      """ Sets footprint properties map. """
-      wxproperties = MAP_STRING_STRING()
-      for k, v in properties.items():
-        wxproperties[k] = v
-      self.SetPropertiesNative(wxproperties)
+    def SetFields(self, fields):
+      """ Sets footprint fields map. """
+      wxfields = MAP_STRING_STRING()
+      for k, v in fields.items():
+        wxfields[k] = v
+      self.SetFieldsNative(wxfields)
 
     %}
 }

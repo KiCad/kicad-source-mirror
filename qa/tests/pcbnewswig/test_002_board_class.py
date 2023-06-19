@@ -123,15 +123,15 @@ class TestBoardClass:
     def test_footprint_properties(self):
         pcb = LoadBoard("../data/pcbnew/custom_fields.kicad_pcb")
         footprint = pcb.FindFootprintByReference('J1')
-        expected_properties = {
+        expected_fields = {
             'Sheet file': 'custom_fields.kicad_sch',
             'Sheet name': '',
             'myfield': 'myvalue'
         }
-        assert footprint.GetProperties() == expected_properties
-        assert footprint.GetProperty('myfield') == 'myvalue'
-        assert footprint.HasProperty('myfield') == True
-        assert footprint.HasProperty('abcd') == False
-        footprint.SetProperty('abcd', 'efgh')
-        assert footprint.HasProperty('abcd') == True
-        assert footprint.GetProperty('abcd') == 'efgh'
+        assert footprint.GetFields() == expected_fields
+        assert footprint.GetField('myfield') == 'myvalue'
+        assert footprint.HasField('myfield') == True
+        assert footprint.HasField('abcd') == False
+        footprint.SetField('abcd', 'efgh')
+        assert footprint.HasField('abcd') == True
+        assert footprint.GetField('abcd') == 'efgh'

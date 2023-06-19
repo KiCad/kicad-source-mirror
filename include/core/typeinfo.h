@@ -332,6 +332,11 @@ constexpr bool IsInstantiableType( const KICAD_T aType )
 
     case SCH_SYMBOL_LOCATE_POWER_T:
 
+    case PCB_FIELD_LOCATE_REFERENCE_T:
+    case PCB_FIELD_LOCATE_VALUE_T:
+    case PCB_FIELD_LOCATE_FOOTPRINT_T:
+    case PCB_FIELD_LOCATE_DATASHEET_T:
+
     case PCB_LOCATE_STDVIA_T:
     case PCB_LOCATE_UVIA_T:
     case PCB_LOCATE_BBVIA_T:
@@ -448,6 +453,10 @@ constexpr bool IsPcbnewType( const KICAD_T aType )
     case PCB_NETINFO_T:
     case PCB_GROUP_T:
 
+    case PCB_FIELD_LOCATE_REFERENCE_T:
+    case PCB_FIELD_LOCATE_VALUE_T:
+    case PCB_FIELD_LOCATE_FOOTPRINT_T:
+    case PCB_FIELD_LOCATE_DATASHEET_T:
     case PCB_LOCATE_STDVIA_T:
     case PCB_LOCATE_UVIA_T:
     case PCB_LOCATE_BBVIA_T:
