@@ -109,6 +109,21 @@ void GRAPHICS_IMPORTER_PCBNEW::AddArc( const VECTOR2D& aCenter, const VECTOR2D& 
 
     arc->SetArcGeometry( MapCoordinate( aStart ), MapCoordinate( mid ), MapCoordinate( end ) );
 
+    // Ensure the arc can be handled by Pcbnew. Arcs with a too big radius cannot.
+    // The criteria used here is radius < MAX_INT / 2.
+    // this is not perfect, but we do not know the exact final position of the arc, so
+    // we cannot test the coordinate values, because the arc can be moved before being placed.
+    VECTOR2D center = CalcArcCenter( arc->GetStart(), arc->GetEnd(), aAngle );
+    double radius = ( center - arc->GetStart() ).EuclideanNorm();
+    double rd_max_value = std::numeric_limits<VECTOR2I::coord_type>::max() / 2.0;
+
+    if( radius >= rd_max_value )
+    {
+        // Arc cannot be handled: convert it to a segment
+        AddLine( aStart, end, aWidth );
+        return;
+    }
+
     arc->SetStroke( STROKE_PARAMS( MapLineWidth( aWidth ), PLOT_DASH_TYPE::SOLID ) );
 
     addItem( std::move( arc ) );
