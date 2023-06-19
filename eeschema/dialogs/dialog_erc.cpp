@@ -394,6 +394,8 @@ void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
         }
     }
 
+    m_ignoredList->SetColumnWidth( 0, m_ignoredList->GetParent()->GetClientSize().x - 20 );
+
     Raise();
 
     m_runningResultsBook->ChangeSelection( 0 );   // Display the "Tests Running..." tab
@@ -911,18 +913,9 @@ void DIALOG_ERC::ExcludeMarker( SCH_MARKER* aMarker )
 }
 
 
-void DIALOG_ERC::OnIgnoreItemRClick( wxListEvent& event )
+void DIALOG_ERC::OnEditViolationSeverities( wxHyperlinkEvent& aEvent )
 {
-    wxMenu menu;
-
-    menu.Append( 1, _( "Edit ignored violations..." ), _( "Open the Schematic Setup... dialog" ) );
-
-    switch( GetPopupMenuSelectionFromUser( menu ) )
-    {
-    case 1:
-        m_parent->ShowSchematicSetupDialog( _( "Violation Severity" ) );
-        break;
-    }
+    m_parent->ShowSchematicSetupDialog( _( "Violation Severity" ) );
 }
 
 

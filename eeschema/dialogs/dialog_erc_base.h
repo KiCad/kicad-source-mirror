@@ -30,6 +30,7 @@ class WX_INFOBAR;
 #include <wx/notebook.h>
 #include <wx/dataview.h>
 #include <wx/listctrl.h>
+#include <wx/hyperlink.h>
 #include <wx/simplebook.h>
 #include <wx/stattext.h>
 #include <wx/checkbox.h>
@@ -62,6 +63,7 @@ class DIALOG_ERC_BASE : public DIALOG_SHIM
 		wxDataViewCtrl* m_markerDataView;
 		wxPanel* m_panelIgnored;
 		wxListCtrl* m_ignoredList;
+		wxHyperlinkCtrl* m_violationSeveritiesLink;
 		wxStaticText* m_showLabel;
 		wxCheckBox* m_showAll;
 		wxCheckBox* m_showErrors;
@@ -84,7 +86,7 @@ class DIALOG_ERC_BASE : public DIALOG_SHIM
 		virtual void OnERCItemDClick( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnERCItemRClick( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnERCItemSelected( wxDataViewEvent& event ) { event.Skip(); }
-		virtual void OnIgnoreItemRClick( wxListEvent& event ) { event.Skip(); }
+		virtual void OnEditViolationSeverities( wxHyperlinkEvent& event ) { event.Skip(); }
 		virtual void OnSeverity( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSaveReport( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteOneClick( wxCommandEvent& event ) { event.Skip(); }

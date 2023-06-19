@@ -76,7 +76,7 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bSizer10->Fit( m_panelMessages );
 	m_runningNotebook->AddPage( m_panelMessages, _("Tests Running..."), true );
 
-	bSizer14->Add( m_runningNotebook, 1, wxEXPAND | wxALL, 5 );
+	bSizer14->Add( m_runningNotebook, 1, wxEXPAND, 5 );
 
 
 	running->SetSizer( bSizer14 );
@@ -101,6 +101,9 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bSizerViolationsBox->Add( m_markerDataView, 1, wxALL|wxEXPAND, 5 );
 
 
+	bSizerViolationsBox->Add( 0, 8, 0, wxEXPAND, 5 );
+
+
 	m_panelViolations->SetSizer( bSizerViolationsBox );
 	m_panelViolations->Layout();
 	bSizerViolationsBox->Fit( m_panelViolations );
@@ -113,6 +116,9 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bSizerUnconnectedBox->Add( m_unconnectedDataView, 1, wxALL|wxEXPAND, 5 );
 
 
+	bSizerUnconnectedBox->Add( 0, 8, 0, wxEXPAND, 5 );
+
+
 	m_panelUnconnectedItems->SetSizer( bSizerUnconnectedBox );
 	m_panelUnconnectedItems->Layout();
 	bSizerUnconnectedBox->Fit( m_panelUnconnectedItems );
@@ -123,6 +129,9 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 
 	m_footprintsDataView = new wxDataViewCtrl( m_panelFootprintWarnings, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_NO_HEADER );
 	bSizerFootprintsBox->Add( m_footprintsDataView, 1, wxALL|wxEXPAND, 5 );
+
+
+	bSizerFootprintsBox->Add( 0, 8, 0, wxEXPAND, 5 );
 
 
 	m_panelFootprintWarnings->SetSizer( bSizerFootprintsBox );
@@ -140,7 +149,7 @@ DIALOG_DRC_BASE::DIALOG_DRC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bSizer15->Add( m_violationSeveritiesLink, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizer15->Add( 0, 5, 0, wxEXPAND, 5 );
+	bSizer15->Add( 0, 7, 0, wxEXPAND, 5 );
 
 
 	m_panelIgnored->SetSizer( bSizer15 );

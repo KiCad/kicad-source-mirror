@@ -404,7 +404,7 @@
                                     <property name="permission">none</property>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
-                                        <property name="flag">wxEXPAND | wxALL</property>
+                                        <property name="flag">wxEXPAND</property>
                                         <property name="proportion">1</property>
                                         <object class="wxNotebook" expanded="1">
                                             <property name="BottomDockable">1</property>
@@ -868,6 +868,16 @@
                                                                 <event name="OnDataViewCtrlSelectionChanged">OnDRCItemSelected</event>
                                                             </object>
                                                         </object>
+                                                        <object class="sizeritem" expanded="1">
+                                                            <property name="border">5</property>
+                                                            <property name="flag">wxEXPAND</property>
+                                                            <property name="proportion">0</property>
+                                                            <object class="spacer" expanded="1">
+                                                                <property name="height">8</property>
+                                                                <property name="permission">protected</property>
+                                                                <property name="width">0</property>
+                                                            </object>
+                                                        </object>
                                                     </object>
                                                 </object>
                                             </object>
@@ -961,6 +971,16 @@
                                                                 <event name="OnDataViewCtrlSelectionChanged">OnDRCItemSelected</event>
                                                             </object>
                                                         </object>
+                                                        <object class="sizeritem" expanded="1">
+                                                            <property name="border">5</property>
+                                                            <property name="flag">wxEXPAND</property>
+                                                            <property name="proportion">0</property>
+                                                            <object class="spacer" expanded="1">
+                                                                <property name="height">8</property>
+                                                                <property name="permission">protected</property>
+                                                                <property name="width">0</property>
+                                                            </object>
+                                                        </object>
                                                     </object>
                                                 </object>
                                             </object>
@@ -1052,6 +1072,16 @@
                                                                 <event name="OnDataViewCtrlItemActivated">OnDRCItemDClick</event>
                                                                 <event name="OnDataViewCtrlItemContextMenu">OnDRCItemRClick</event>
                                                                 <event name="OnDataViewCtrlSelectionChanged">OnDRCItemSelected</event>
+                                                            </object>
+                                                        </object>
+                                                        <object class="sizeritem" expanded="1">
+                                                            <property name="border">5</property>
+                                                            <property name="flag">wxEXPAND</property>
+                                                            <property name="proportion">0</property>
+                                                            <object class="spacer" expanded="1">
+                                                                <property name="height">8</property>
+                                                                <property name="permission">protected</property>
+                                                                <property name="width">0</property>
                                                             </object>
                                                         </object>
                                                     </object>
@@ -1248,7 +1278,7 @@
                                                             <property name="flag">wxEXPAND</property>
                                                             <property name="proportion">0</property>
                                                             <object class="spacer" expanded="1">
-                                                                <property name="height">5</property>
+                                                                <property name="height">7</property>
                                                                 <property name="permission">protected</property>
                                                                 <property name="width">0</property>
                                                             </object>

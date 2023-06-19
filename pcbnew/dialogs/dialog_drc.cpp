@@ -286,6 +286,8 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
         }
     }
 
+    m_ignoredList->SetColumnWidth( 0, m_ignoredList->GetParent()->GetClientSize().x - 20 );
+
     Raise();
 
     m_runningResultsBook->ChangeSelection( 0 );   // Display the "Tests Running..." tab

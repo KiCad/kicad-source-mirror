@@ -58,7 +58,7 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bSizer10->Fit( m_panelMessages );
 	m_runningNotebook->AddPage( m_panelMessages, _("Tests Running..."), true );
 
-	bSizer14->Add( m_runningNotebook, 1, wxEXPAND | wxALL, 5 );
+	bSizer14->Add( m_runningNotebook, 1, wxEXPAND, 5 );
 
 
 	running->SetSizer( bSizer14 );
@@ -78,7 +78,10 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_markerDataView->SetToolTip( _("Click on items to highlight them on the board.") );
 	m_markerDataView->SetMinSize( wxSize( 640,260 ) );
 
-	bViolationsSizer->Add( m_markerDataView, 2, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bViolationsSizer->Add( m_markerDataView, 2, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	bViolationsSizer->Add( 0, 8, 0, wxEXPAND, 5 );
 
 
 	violationsPanel->SetSizer( bViolationsSizer );
@@ -90,7 +93,13 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bSizer15 = new wxBoxSizer( wxVERTICAL );
 
 	m_ignoredList = new wxListCtrl( m_panelIgnored, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_NO_HEADER|wxLC_REPORT );
-	bSizer15->Add( m_ignoredList, 1, wxALL|wxEXPAND, 5 );
+	bSizer15->Add( m_ignoredList, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_violationSeveritiesLink = new wxHyperlinkCtrl( m_panelIgnored, wxID_ANY, _("Edit ignored tests"), wxEmptyString, wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE );
+	bSizer15->Add( m_violationSeveritiesLink, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	bSizer15->Add( 0, 8, 0, wxEXPAND, 5 );
 
 
 	m_panelIgnored->SetSizer( bSizer15 );
@@ -191,7 +200,7 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_markerDataView->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( DIALOG_ERC_BASE::OnERCItemDClick ), NULL, this );
 	m_markerDataView->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, wxDataViewEventHandler( DIALOG_ERC_BASE::OnERCItemRClick ), NULL, this );
 	m_markerDataView->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_ERC_BASE::OnERCItemSelected ), NULL, this );
-	m_ignoredList->Connect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( DIALOG_ERC_BASE::OnIgnoreItemRClick ), NULL, this );
+	m_violationSeveritiesLink->Connect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_ERC_BASE::OnEditViolationSeverities ), NULL, this );
 	m_showAll->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnSeverity ), NULL, this );
 	m_showErrors->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnSeverity ), NULL, this );
 	m_showWarnings->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnSeverity ), NULL, this );
@@ -211,7 +220,7 @@ DIALOG_ERC_BASE::~DIALOG_ERC_BASE()
 	m_markerDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( DIALOG_ERC_BASE::OnERCItemDClick ), NULL, this );
 	m_markerDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, wxDataViewEventHandler( DIALOG_ERC_BASE::OnERCItemRClick ), NULL, this );
 	m_markerDataView->Disconnect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_ERC_BASE::OnERCItemSelected ), NULL, this );
-	m_ignoredList->Disconnect( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, wxListEventHandler( DIALOG_ERC_BASE::OnIgnoreItemRClick ), NULL, this );
+	m_violationSeveritiesLink->Disconnect( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEventHandler( DIALOG_ERC_BASE::OnEditViolationSeverities ), NULL, this );
 	m_showAll->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnSeverity ), NULL, this );
 	m_showErrors->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnSeverity ), NULL, this );
 	m_showWarnings->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_ERC_BASE::OnSeverity ), NULL, this );
