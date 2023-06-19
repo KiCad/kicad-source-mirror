@@ -1741,7 +1741,7 @@ FOOTPRINT* EAGLE_PLUGIN::makeFootprint( wxXmlNode* aPackage, const wxString& aPk
         const wxString& itemName = packageItem->GetName();
 
         if( itemName == wxT( "description" ) )
-            m->SetDescription( packageItem->GetNodeContent() );
+            m->SetLibDescription( packageItem->GetNodeContent() );
         else if( itemName == wxT( "wire" ) )
             packageWire( m.get(), packageItem );
         else if( itemName == wxT( "pad" ) )

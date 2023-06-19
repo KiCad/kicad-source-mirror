@@ -35,11 +35,13 @@ using namespace TFIELD_T;
 #define VALUE_CANONICAL "Value"
 #define FOOTPRINT_CANONICAL "Footprint"
 #define DATASHEET_CANONICAL "Datasheet"
+#define DESCRIPTION_CANONICAL "Description"
 
 static wxString s_CanonicalReference( REFERENCE_CANONICAL );
 static wxString s_CanonicalValue( VALUE_CANONICAL );
 static wxString s_CanonicalFootprint( FOOTPRINT_CANONICAL );
 static wxString s_CanonicalDatasheet( DATASHEET_CANONICAL );
+static wxString s_CanonicalDescription( DESCRIPTION_CANONICAL );
 
 const wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx, bool aTranslateForHI )
 {
@@ -47,21 +49,23 @@ const wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx, bool aTra
     {
         switch( aFieldNdx )
         {
-        case  REFERENCE_FIELD: return s_CanonicalReference;   // The symbol reference, R1, C1, etc.
-        case  VALUE_FIELD:     return s_CanonicalValue;       // The symbol value
-        case  FOOTPRINT_FIELD: return s_CanonicalFootprint;   // The footprint for use with Pcbnew
-        case  DATASHEET_FIELD: return s_CanonicalDatasheet;   // Link to a datasheet for symbol
-        default:               return wxString::Format( wxT( "Field%d" ), aFieldNdx );
+        case REFERENCE_FIELD:   return s_CanonicalReference;   // The symbol reference, R1, C1, etc.
+        case VALUE_FIELD:       return s_CanonicalValue;       // The symbol value
+        case FOOTPRINT_FIELD:   return s_CanonicalFootprint;   // The footprint for use with Pcbnew
+        case DATASHEET_FIELD:   return s_CanonicalDatasheet;   // Link to a datasheet for symbol
+        case DESCRIPTION_FIELD: return s_CanonicalDescription; // The symbol description
+        default:                return wxString::Format( wxT( "Field%d" ), aFieldNdx );
         }
     }
 
     switch( aFieldNdx )
     {
-    case  REFERENCE_FIELD: return _( REFERENCE_CANONICAL );   // The symbol reference, R1, C1, etc.
-    case  VALUE_FIELD:     return _( VALUE_CANONICAL );       // The symbol value
-    case  FOOTPRINT_FIELD: return _( FOOTPRINT_CANONICAL );   // The footprint for use with Pcbnew
-    case  DATASHEET_FIELD: return _( DATASHEET_CANONICAL );   // Link to a datasheet for symbol
-    default:               return wxString::Format( _( "Field%d" ), aFieldNdx );
+    case REFERENCE_FIELD:   return _( REFERENCE_CANONICAL );   // The symbol reference, R1, C1, etc.
+    case VALUE_FIELD:       return _( VALUE_CANONICAL );       // The symbol value
+    case FOOTPRINT_FIELD:   return _( FOOTPRINT_CANONICAL );   // The footprint for use with Pcbnew
+    case DATASHEET_FIELD:   return _( DATASHEET_CANONICAL );   // Link to a datasheet for symbol
+    case DESCRIPTION_FIELD: return _( DESCRIPTION_CANONICAL );     // The symbol description
+    default:                return wxString::Format( _( "Field%d" ), aFieldNdx );
     }
 }
 

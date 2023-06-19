@@ -3796,7 +3796,7 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
 
         case T_descr:
             NeedSYMBOLorNUMBER(); // some symbols can be 0508, so a number is also a symbol here
-            footprint->SetDescription( FromUTF8() );
+            footprint->SetLibDescription( FromUTF8() );
             NeedRIGHT();
             break;
 
@@ -3815,9 +3815,19 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
             NeedSYMBOL();
             wxString pValue = FromUTF8();
 
-            // Skip non-field properties that should be hidden
-            if( pName == "ki_description" || pName == "ki_keywords" )
+            // Skip legacy non-field properties sent from symbols that should not be kept
+            // in footprints.
+            if( pName == "ki_keywords" || pName == "ki_fp_filters" || pName == "ki_locked" )
             {
+                NeedRIGHT();
+                break;
+            }
+
+            // Description from symbol (not the fooprint library description stored in (descr) )
+            // used to be stored as a reserved key value
+            if( pName == "ki_description" )
+            {
+                footprint->GetFieldById( DESCRIPTION_FIELD )->SetText( pValue );
                 NeedRIGHT();
                 break;
             }

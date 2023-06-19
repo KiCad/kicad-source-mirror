@@ -1823,7 +1823,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponents()
         loadComponentAttributes( comp, footprint );
 
         if( !comp.PartID.IsEmpty() && comp.PartID != wxT( "NO_PART" ) )
-            footprint->SetDescription( getPart( comp.PartID ).Definition.Name );
+            footprint->SetLibDescription( getPart( comp.PartID ).Definition.Name );
 
         m_componentMap.insert( { comp.ID, footprint } );
     }

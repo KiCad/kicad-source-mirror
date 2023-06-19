@@ -93,7 +93,7 @@ void LIB_FIELD::Init( int aId )
 
     // By contrast, VALUE and REFERENCE are are always constructed as initially visible, and
     // template fieldsnames' initial visibility is controlled by the template fieldname config.
-    if( aId == DATASHEET_FIELD || aId == FOOTPRINT_FIELD )
+    if( aId != VALUE_FIELD && aId != REFERENCE_FIELD && aId < MANDATORY_FIELDS )
         SetVisible( false );
 
     m_autoAdded      = false;
@@ -496,14 +496,8 @@ wxString LIB_FIELD::GetName( bool aUseDefaultName ) const
 
 wxString LIB_FIELD::GetCanonicalName() const
 {
-    switch( m_id )
-    {
-    case  REFERENCE_FIELD:
-    case  VALUE_FIELD:
-    case  FOOTPRINT_FIELD:
-    case  DATASHEET_FIELD:
+    if( m_id < MANDATORY_FIELDS )
         return TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id );
-    }
 
     return m_name;
 }

@@ -660,12 +660,12 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
         wxString                     description = ALTIUM_PARSER::ReadString( parameterProperties,
                                                                               wxT( "DESCRIPTION" ),
                                                                               wxT( "" ) );
-        footprint->SetDescription( description );
+        footprint->SetLibDescription( description );
     }
     else
     {
         wxLogError( _( "File not found: '%s'." ), FormatPath( parametersStreamName ) );
-        footprint->SetDescription( wxT( "" ) );
+        footprint->SetLibDescription( wxT( "" ) );
     }
 
     const std::vector<std::string> extendedPrimitiveInformationStreamName{

@@ -88,7 +88,7 @@ public:
         if( m_footprint )
         {
             wxString name = m_lib_id.GetLibItemName();
-            wxString desc = m_footprint->GetDescription();
+            wxString desc = m_footprint->GetLibDescription();
             wxString keywords = m_footprint->GetKeywords();
             wxString doc;
 

@@ -84,7 +84,7 @@ BOOST_AUTO_TEST_CASE( DefaultProperties )
 BOOST_AUTO_TEST_CASE( DefaultDrawings )
 {
     // default drawings exist
-    BOOST_CHECK_EQUAL( m_part_no_data.GetDrawItems().size(), 4 );
+    BOOST_CHECK_EQUAL( m_part_no_data.GetDrawItems().size(), MANDATORY_FIELDS );
     BOOST_CHECK_EQUAL( m_part_no_data.GetAllLibPins().size(), 0 );
 }
 
@@ -110,6 +110,10 @@ BOOST_AUTO_TEST_CASE( DefaultFields )
             ( m_part_no_data.GetValueField() )( "Value" )( MANDATORY_FIELD_T::VALUE_FIELD ) );
     BOOST_CHECK_PREDICATE( KI_TEST::FieldNameIdMatches,
             ( m_part_no_data.GetFootprintField() )( "Footprint" )( MANDATORY_FIELD_T::FOOTPRINT_FIELD ) );
+    BOOST_CHECK_PREDICATE( KI_TEST::FieldNameIdMatches,
+            ( m_part_no_data.GetDatasheetField() )( "Datasheet" )( MANDATORY_FIELD_T::DATASHEET_FIELD) );
+    BOOST_CHECK_PREDICATE( KI_TEST::FieldNameIdMatches,
+            ( m_part_no_data.GetDescriptionField() )( "Description" )( MANDATORY_FIELD_T::DESCRIPTION_FIELD) );
 }
 
 

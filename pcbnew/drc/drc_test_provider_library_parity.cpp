@@ -498,7 +498,7 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint, REPORTER* 
         return diff;
     }
 
-    TEST( GetDescription(), aLibFootprint->GetDescription(),
+    TEST( GetLibDescription(), aLibFootprint->GetLibDescription(),
           _( "Footprint descriptions differ." ) );
     TEST( GetKeywords(), aLibFootprint->GetKeywords(),
           _( "Footprint keywords differ." ) );

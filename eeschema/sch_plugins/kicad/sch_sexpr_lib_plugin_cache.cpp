@@ -292,15 +292,6 @@ void SCH_SEXPR_PLUGIN_CACHE::saveDcmInfoAsFields( LIB_SYMBOL* aSymbol, OUTPUTFOR
         aNextFreeFieldId += 1;
     }
 
-    if( !aSymbol->GetDescription().IsEmpty() )
-    {
-        LIB_FIELD description( aNextFreeFieldId, wxString( "ki_description" ) );
-        description.SetVisible( false );
-        description.SetText( aSymbol->GetDescription() );
-        saveField( &description, aFormatter, aNestLevel + 1 );
-        aNextFreeFieldId += 1;
-    }
-
     wxArrayString fpFilters = aSymbol->GetFPFilters();
 
     if( !fpFilters.IsEmpty() )

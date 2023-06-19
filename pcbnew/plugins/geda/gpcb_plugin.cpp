@@ -361,12 +361,12 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
 
     if( paramCnt > 10 )
     {
-        footprint->SetDescription( parameters[3] );
+        footprint->SetLibDescription( parameters[3] );
         footprint->SetReference( parameters[4] );
     }
     else
     {
-        footprint->SetDescription( parameters[2] );
+        footprint->SetLibDescription( parameters[2] );
         footprint->SetReference( parameters[3] );
     }
 

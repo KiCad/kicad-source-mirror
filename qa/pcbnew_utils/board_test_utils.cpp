@@ -172,7 +172,7 @@ void CheckFootprint( const FOOTPRINT* expected, const FOOTPRINT* fp )
 
     BOOST_CHECK_EQUAL( expected->GetReference(), fp->GetReference() );
     BOOST_CHECK_EQUAL( expected->GetValue(), fp->GetValue() );
-    BOOST_CHECK_EQUAL( expected->GetDescription(), fp->GetDescription() );
+    BOOST_CHECK_EQUAL( expected->GetLibDescription(), fp->GetLibDescription() );
     BOOST_CHECK_EQUAL( expected->GetKeywords(), fp->GetKeywords() );
     BOOST_CHECK_EQUAL( expected->GetAttributes(), fp->GetAttributes() );
     BOOST_CHECK_EQUAL( expected->GetFlag(), fp->GetFlag() );
@@ -180,6 +180,7 @@ void CheckFootprint( const FOOTPRINT* expected, const FOOTPRINT* fp )
     BOOST_CHECK_EQUAL( expected->GetTypeName(), fp->GetTypeName() );
 
     // simple test if count matches
+    BOOST_CHECK_EQUAL( expected->Fields().size(), fp->Fields().size() );
     BOOST_CHECK_EQUAL( expected->Pads().size(), fp->Pads().size() );
     BOOST_CHECK_EQUAL( expected->GraphicalItems().size(), fp->GraphicalItems().size() );
     BOOST_CHECK_EQUAL( expected->Zones().size(), fp->Zones().size() );

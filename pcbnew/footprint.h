@@ -223,8 +223,8 @@ public:
     wxString GetFPIDAsString() const { return m_fpid.Format(); }
     void SetFPIDAsString( const wxString& aFPID ) { m_fpid.Parse( aFPID ); }
 
-    wxString GetDescription() const { return m_doc; }
-    void SetDescription( const wxString& aDoc ) { m_doc = aDoc; }
+    wxString GetLibDescription() const { return m_libDescription; }
+    void     SetLibDescription( const wxString& aDesc ) { m_libDescription = aDesc; }
 
     wxString GetKeywords() const { return m_keywords; }
     void SetKeywords( const wxString& aKeywords ) { m_keywords = aKeywords; }
@@ -962,7 +962,7 @@ private:
     int             m_localSolderPasteMargin;      // Solder paste margin absolute value
     double          m_localSolderPasteMarginRatio; // Solder mask margin ratio value of pad size
 
-    wxString        m_doc;               // File name and path for documentation file.
+    wxString        m_libDescription;    // File name and path for documentation file.
     wxString        m_keywords;          // Search keywords to find footprint in library.
     KIID_PATH       m_path;              // Path to associated symbol ([sheetUUID, .., symbolUUID]).
     wxString        m_sheetname;         // Name of the sheet containing the symbol for this footprint

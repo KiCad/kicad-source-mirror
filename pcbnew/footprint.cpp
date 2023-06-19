@@ -200,7 +200,7 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
 
     // Copy auxiliary data
     m_3D_Drawings   = aFootprint.m_3D_Drawings;
-    m_doc           = aFootprint.m_doc;
+    m_libDescription = aFootprint.m_libDescription;
     m_keywords      = aFootprint.m_keywords;
     m_privateLayers = aFootprint.m_privateLayers;
 
@@ -477,7 +477,7 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
 
     // Copy auxiliary data
     m_3D_Drawings      = aOther.m_3D_Drawings;
-    m_doc              = aOther.m_doc;
+    m_libDescription   = aOther.m_libDescription;
     m_keywords         = aOther.m_keywords;
     m_privateLayers    = aOther.m_privateLayers;
 
@@ -587,7 +587,7 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
 
     // Copy auxiliary data
     m_3D_Drawings   = aOther.m_3D_Drawings;
-    m_doc           = aOther.m_doc;
+    m_libDescription = aOther.m_libDescription;
     m_keywords      = aOther.m_keywords;
     m_privateLayers = aOther.m_privateLayers;
 
@@ -1189,7 +1189,7 @@ void FOOTPRINT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
         aList.emplace_back( _( "Pads" ), wxString::Format( wxT( "%zu" ), padCount ) );
 
-        aList.emplace_back( wxString::Format( _( "Doc: %s" ), GetDescription() ),
+        aList.emplace_back( wxString::Format( _( "Doc: %s" ), GetLibDescription() ),
                             wxString::Format( _( "Keywords: %s" ), GetKeywords() ) );
 
         return;
@@ -1237,7 +1237,7 @@ void FOOTPRINT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
                                                             : m_3D_Drawings.front().m_Filename );
     aList.emplace_back( msg, msg2 );
 
-    msg.Printf( _( "Doc: %s" ), m_doc );
+    msg.Printf( _( "Doc: %s" ), m_libDescription );
     msg2.Printf( _( "Keywords: %s" ), m_keywords );
     aList.emplace_back( msg, msg2 );
 }
@@ -2984,8 +2984,8 @@ static struct FOOTPRINT_DESC
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Library link" ),
                     NO_SETTER( FOOTPRINT, wxString ), &FOOTPRINT::GetFPIDAsString ),
                     groupFootprint );
-        propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Description" ),
-                    NO_SETTER( FOOTPRINT, wxString ), &FOOTPRINT::GetDescription ),
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Library description" ),
+                    NO_SETTER( FOOTPRINT, wxString ), &FOOTPRINT::GetLibDescription ),
                     groupFootprint );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Keywords" ),
                     NO_SETTER( FOOTPRINT, wxString ), &FOOTPRINT::GetKeywords ),

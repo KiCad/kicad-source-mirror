@@ -214,7 +214,7 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewIte
     case DESC_COL:
         if( node->m_LibId == m_frame->GetLoadedFPID() && !m_frame->IsCurrentFPFromBoard() )
         {
-            node->m_Desc = m_frame->GetBoard()->GetFirstFootprint()->GetDescription();
+            node->m_Desc = m_frame->GetBoard()->GetFirstFootprint()->GetLibDescription();
         }
         else if( node->m_Type == LIB_TREE_NODE::LIB )
         {

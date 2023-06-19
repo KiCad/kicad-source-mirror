@@ -44,8 +44,9 @@ enum  MANDATORY_FIELD_T {
     VALUE_FIELD,                  ///< Field Value of part, i.e. "3.3K"
     FOOTPRINT_FIELD,              ///< Field Name Module PCB, i.e. "16DIP300"
     DATASHEET_FIELD,              ///< name of datasheet
+    DESCRIPTION_FIELD,            ///< Field Description of part, i.e. "1/4W 1% Metal Film Resistor"
 
-    /// The first 4 are mandatory, and must be instantiated in SCH_COMPONENT
+    /// The first 5 are mandatory, and must be instantiated in SCH_COMPONENT
     /// and LIB_PART constructors
     MANDATORY_FIELDS
 };

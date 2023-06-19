@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -58,7 +58,6 @@ class DIALOG_LIB_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 		STD_BITMAP_BUTTON* m_bpMoveDown;
 		STD_BITMAP_BUTTON* m_bpDelete;
 		wxTextCtrl* m_SymbolNameCtrl;
-		wxTextCtrl* m_DescCtrl;
 		wxStaticText* staticKeywordsLabel;
 		wxTextCtrl* m_KeywordCtrl;
 		wxStaticText* m_inheritsStaticText;

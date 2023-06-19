@@ -121,11 +121,9 @@ LIB_SYMBOL::LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent, SYMBOL_LIB* 
 
     // Add the MANDATORY_FIELDS in RAM only.  These are assumed to be present
     // when the field editors are invoked.
-    m_drawings[LIB_FIELD_T].reserve( 4 );
-    m_drawings[LIB_FIELD_T].push_back( new LIB_FIELD( this, VALUE_FIELD ) );
-    m_drawings[LIB_FIELD_T].push_back( new LIB_FIELD( this, REFERENCE_FIELD ) );
-    m_drawings[LIB_FIELD_T].push_back( new LIB_FIELD( this, FOOTPRINT_FIELD ) );
-    m_drawings[LIB_FIELD_T].push_back( new LIB_FIELD( this, DATASHEET_FIELD ) );
+    m_drawings[LIB_FIELD_T].reserve( MANDATORY_FIELDS );
+    for( int i = 0; i < MANDATORY_FIELDS; i++ )
+        m_drawings[LIB_FIELD_T].push_back( new LIB_FIELD( this, i ) );
 
     SetName( aName );
 
@@ -155,7 +153,6 @@ LIB_SYMBOL::LIB_SYMBOL( const LIB_SYMBOL& aSymbol, SYMBOL_LIB* aLibrary ) :
     m_lastModDate    = aSymbol.m_lastModDate;
     m_options        = aSymbol.m_options;
     m_libId          = aSymbol.m_libId;
-    m_description    = aSymbol.m_description;
     m_keyWords       = aSymbol.m_keyWords;
 
     aSymbol.CopyUnitDisplayNames( m_unitDisplayNames );
@@ -208,7 +205,6 @@ const LIB_SYMBOL& LIB_SYMBOL::operator=( const LIB_SYMBOL& aSymbol )
     m_lastModDate    = aSymbol.m_lastModDate;
     m_options        = aSymbol.m_options;
     m_libId          = aSymbol.m_libId;
-    m_description    = aSymbol.m_description;
     m_keyWords       = aSymbol.m_keyWords;
 
     m_unitDisplayNames.clear();
@@ -433,15 +429,6 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
         }
     }
 
-    if( int tmp = m_description.Cmp( aRhs.m_description ) )
-    {
-        retv = tmp;
-        REPORT( _( "Symbol descriptions differ." ) );
-
-        if( !aReporter )
-            return retv;
-    }
-
     if( int tmp = m_keyWords.Cmp( aRhs.m_keyWords ) )
     {
         retv = tmp;
@@ -645,7 +632,6 @@ std::unique_ptr< LIB_SYMBOL > LIB_SYMBOL::Flatten() const
         }
 
         retv->SetKeyWords( m_keyWords.IsEmpty() ? parent->GetKeyWords() : m_keyWords );
-        retv->SetDescription( m_description.IsEmpty() ? parent->GetDescription() : m_description );
         retv->SetFPFilters( m_fpFilters.IsEmpty() ? parent->GetFPFilters() : m_fpFilters );
 
         retv->SetIncludeInBom( parent->GetIncludeInBom() );
@@ -1308,6 +1294,14 @@ LIB_FIELD& LIB_SYMBOL::GetFootprintField()
 LIB_FIELD& LIB_SYMBOL::GetDatasheetField()
 {
     LIB_FIELD* field = GetFieldById( DATASHEET_FIELD );
+    wxASSERT( field != nullptr );
+    return *field;
+}
+
+
+LIB_FIELD& LIB_SYMBOL::GetDescriptionField()
+{
+    LIB_FIELD* field = GetFieldById( DESCRIPTION_FIELD );
     wxASSERT( field != nullptr );
     return *field;
 }

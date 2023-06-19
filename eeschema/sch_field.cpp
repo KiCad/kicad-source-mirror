@@ -869,14 +869,10 @@ wxString SCH_FIELD::GetCanonicalName() const
 {
     if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
     {
-        switch( m_id )
-        {
-        case  REFERENCE_FIELD: return wxT( "Reference" );
-        case  VALUE_FIELD:     return wxT( "Value" );
-        case  FOOTPRINT_FIELD: return wxT( "Footprint" );
-        case  DATASHEET_FIELD: return wxT( "Datasheet" );
-        default:               return m_name;
-        }
+        if( m_id < MANDATORY_FIELDS )
+            return TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id, true );
+        else
+            return m_name;
     }
     else if( m_parent && m_parent->Type() == SCH_SHEET_T )
     {

@@ -104,9 +104,8 @@ void PlotInteractiveLayer( BOARD* aBoard, PLOTTER* aPlotter, const PCB_PLOT_PARA
                                                    _( "Footprint" ),
                                                    fp->GetFPIDAsString() ) );
 
-        properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
-                                                   _( "Description" ),
-                                                   fp->GetDescription() ) );
+        properties.emplace_back( wxString::Format( wxT( "!%s = %s" ), _( "Library Description" ),
+                                                   fp->GetLibDescription() ) );
 
         properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
                                                    _( "Keywords" ),

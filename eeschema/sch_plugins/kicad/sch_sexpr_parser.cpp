@@ -895,9 +895,9 @@ LIB_FIELD* SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>& aSymbol
         aSymbol->SetKeyWords( value );
         return nullptr;
     }
+    // In v7 and earlier the description field didn't exist and was a key/value
     else if( name == "ki_description" )
     {
-        // Not a LIB_FIELD object yet.
         aSymbol->SetDescription( value );
         return nullptr;
     }

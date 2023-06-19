@@ -374,13 +374,6 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
 
             if( const std::unique_ptr<LIB_SYMBOL>& part = symbol->GetLibSymbolRef() )
             {
-                if( part->GetDescription().size() )
-                {
-                    xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
-                    xproperty->AddAttribute( wxT( "name" ), wxT( "ki_description" ) );
-                    xproperty->AddAttribute( wxT( "value" ), part->GetDescription() );
-                }
-
                 if( part->GetKeyWords().size() )
                 {
                     xcomp->AddChild( xproperty = node( wxT( "property" ) ) );

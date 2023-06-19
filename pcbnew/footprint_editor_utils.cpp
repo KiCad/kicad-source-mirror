@@ -138,7 +138,7 @@ public:
         m_pad_count = aFootprint->GetPadCount( DO_NOT_INCLUDE_NPTH );
         m_unique_pad_count = aFootprint->GetUniquePadCount( DO_NOT_INCLUDE_NPTH );
         m_keywords = aFootprint->GetKeywords();
-        m_doc = aFootprint->GetDescription();
+        m_doc = aFootprint->GetLibDescription();
         m_loaded = true;
     }
 };

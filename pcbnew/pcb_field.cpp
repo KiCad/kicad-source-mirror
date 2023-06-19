@@ -72,14 +72,10 @@ wxString PCB_FIELD::GetCanonicalName() const
 {
     if( m_parent && m_parent->Type() == PCB_FOOTPRINT_T )
     {
-        switch( m_id )
-        {
-        case  REFERENCE_FIELD: return wxT( "Reference" );
-        case  VALUE_FIELD:     return wxT( "Value" );
-        case  FOOTPRINT_FIELD: return wxT( "Footprint" );
-        case  DATASHEET_FIELD: return wxT( "Datasheet" );
-        default:               return m_name;
-        }
+        if( m_id < MANDATORY_FIELDS )
+            return TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id, true );
+        else
+            return m_name;
     }
     else
     {
@@ -96,14 +92,10 @@ wxString PCB_FIELD::GetCanonicalName() const
 
 wxString PCB_FIELD::GetTextTypeDescription() const
 {
-        switch( m_id )
-        {
-        case  REFERENCE_FIELD: return _( "Reference" );
-        case  VALUE_FIELD:     return _( "Value" );
-        case  FOOTPRINT_FIELD: return _( "Footprint" );
-        case  DATASHEET_FIELD: return _( "Datasheet" );
-        default:               return _( "User Field" );
-        }
+    if( m_id < MANDATORY_FIELDS )
+        return TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id, false );
+    else
+        return _( "User Field" );
 }
 
 

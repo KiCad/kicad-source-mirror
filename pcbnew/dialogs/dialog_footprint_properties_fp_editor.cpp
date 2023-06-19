@@ -254,7 +254,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
 
     m_FootprintNameCtrl->ChangeValue( footprintName );
 
-    m_DocCtrl->SetValue( m_footprint->GetDescription() );
+    m_DocCtrl->SetValue( m_footprint->GetLibDescription() );
     m_KeywordCtrl->SetValue( m_footprint->GetKeywords() );
 
     if( !wxDialog::TransferDataToWindow() )
@@ -492,7 +492,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
     fpID.SetLibItemName( m_FootprintNameCtrl->GetValue() );
     m_footprint->SetFPID( fpID );
 
-    m_footprint->SetDescription( m_DocCtrl->GetValue() );
+    m_footprint->SetLibDescription( m_DocCtrl->GetValue() );
     m_footprint->SetKeywords( m_KeywordCtrl->GetValue() );
 
     // Update fields

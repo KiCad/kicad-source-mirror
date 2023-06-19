@@ -1239,7 +1239,7 @@ void LEGACY_PLUGIN::loadFOOTPRINT( FOOTPRINT* aFootprint )
         else if( TESTLINE( "Cd" ) )
         {
             // e.g. "Cd Double rangee de contacts 2 x 4 pins\r\n"
-            aFootprint->SetDescription( FROM_UTF8( StrPurge( line + SZ( "Cd" ) ) ) );
+            aFootprint->SetLibDescription( FROM_UTF8( StrPurge( line + SZ( "Cd" ) ) ) );
         }
         else if( TESTLINE( "Kw" ) )         // Key words
         {

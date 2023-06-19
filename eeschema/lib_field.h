@@ -45,12 +45,13 @@ class SCH_LEGACY_PLUGIN_CACHE;
  * A field is a string linked to a symbol.  Unlike purely graphical text, fields can be used in
  * netlist generation and other tools (BOM).
  *
- *  The first 4 fields have a special meaning:
+ *  The first 5 fields have a special meaning:
  *
  *  0 = REFERENCE_FIELD
  *  1 = VALUE_FIELD
  *  2 = FOOTPRINT_FIELD (default Footprint)
  *  3 = DATASHEET_FIELD (user doc link)
+ *  4 = DESCRIPTION_FIELD
  *
  *  others = free fields
  * </p>

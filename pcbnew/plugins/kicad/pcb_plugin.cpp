@@ -1110,10 +1110,10 @@ void PCB_PLUGIN::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
         m_out->Print( 0, ")\n" );
     }
 
-    if( !aFootprint->GetDescription().IsEmpty() )
+    if( !aFootprint->GetLibDescription().IsEmpty() )
     {
-        m_out->Print( aNestLevel+1, "(descr %s)\n",
-                      m_out->Quotew( aFootprint->GetDescription() ).c_str() );
+        m_out->Print( aNestLevel + 1, "(descr %s)\n",
+                      m_out->Quotew( aFootprint->GetLibDescription() ).c_str() );
     }
 
     if( !aFootprint->GetKeywords().IsEmpty() )

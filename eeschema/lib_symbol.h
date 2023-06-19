@@ -151,17 +151,22 @@ public:
 
     wxString GetLibNickname() const override { return GetLibraryName(); }
 
-    void SetDescription( const wxString& aDescription ) { m_description = aDescription; }
+    ///< Sets the Description field text value
+    void SetDescription( const wxString& aDescription )
+    {
+        GetDescriptionField().SetText( aDescription );
+    }
 
+    ///< Gets the Description field text value */
     wxString GetDescription() override
     {
-        if( m_description.IsEmpty() && IsAlias() )
+        if( GetDescriptionField().GetText().IsEmpty() && IsAlias() )
         {
             if( LIB_SYMBOL_SPTR parent = m_parent.lock() )
                 return parent->GetDescription();
         }
 
-        return m_description;
+        return GetDescriptionField().GetText();
     }
 
     void SetKeyWords( const wxString& aKeyWords ) { m_keyWords = aKeyWords; }
@@ -311,6 +316,9 @@ public:
 
     /** Return reference to the datasheet field. */
     LIB_FIELD& GetDatasheetField();
+
+    /** Return reference to the description field. */
+    LIB_FIELD& GetDescriptionField();
 
     wxString GetPrefix();
 
@@ -754,7 +762,6 @@ private:
 
     SYMBOL_LIB*         m_library;
     wxString            m_name;
-    wxString            m_description;
     wxString            m_keyWords;         ///< Search keywords
     wxArrayString       m_fpFilters;        ///< List of suitable footprint names for the
                                             ///<  symbol (wild card names accepted).
