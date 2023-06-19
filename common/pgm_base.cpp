@@ -43,6 +43,7 @@
 #include <wx/tooltip.h>
 
 #include <advanced_config.h>
+#include <bitmaps.h>
 #include <cli/cli_names.h> // Needed for the pre wx 3.2 cli workaround
 #include <common.h>
 #include <config_params.h>
@@ -65,6 +66,8 @@
 #include <systemdirsappend.h>
 #include <thread_pool.h>
 #include <trace_helpers.h>
+
+#include <wx/splash.h>
 
 #ifdef KICAD_USE_SENTRY
 #include <boost/uuid/uuid_io.hpp>
@@ -130,6 +133,7 @@ PGM_BASE::PGM_BASE()
     m_Quitting = false;
     m_argcUtf8 = 0;
     m_argvUtf8 = nullptr;
+    m_splash = nullptr;
 
     setLanguageId( wxLANGUAGE_DEFAULT );
 
@@ -139,6 +143,7 @@ PGM_BASE::PGM_BASE()
 
 PGM_BASE::~PGM_BASE()
 {
+    HideSplash();
     Destroy();
 
     for( int n = 0; n < m_argcUtf8; n++ )
@@ -399,6 +404,28 @@ void PGM_BASE::BuildArgvUtf8()
 }
 
 
+void PGM_BASE::ShowSplash()
+{
+    if( m_splash )
+        return;
+
+    m_splash = new wxSplashScreen( KiBitmap( BITMAPS::splash ), wxSPLASH_CENTRE_ON_SCREEN, 0,
+                                    NULL, -1, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE | wxSTAY_ON_TOP );
+    wxYield();
+}
+
+
+void PGM_BASE::HideSplash()
+{
+    if( !m_splash )
+        return;
+
+    m_splash->Close();
+    m_splash->Destroy();
+    m_splash = nullptr;
+}
+
+
 bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
 {
 #if defined( __WXMAC__ )
@@ -478,6 +505,9 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
     setExecutablePath();
     SetLanguagePath();
     SetDefaultLanguage( tmp );
+
+    if( !aHeadless )
+        ShowSplash();
 
     m_settings_manager = std::make_unique<SETTINGS_MANAGER>( aHeadless );
 

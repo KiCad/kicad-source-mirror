@@ -408,5 +408,7 @@ bool PGM_SINGLE_TOP::OnPgmInit()
         frame->OpenProjectFiles( fileArgs );
     }
 
+    HideSplash();
+
     return true;
 }

@@ -1093,6 +1093,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::rectwaveguide].emplace_back( BITMAPS::rectwaveguide, wxT( "rectwaveguide.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::regul].emplace_back( BITMAPS::regul, wxT( "regul.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::regul_3pins].emplace_back( BITMAPS::regul_3pins, wxT( "regul_3pins.png" ), -1, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::splash].emplace_back( BITMAPS::splash, wxT( "splash.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::stripline].emplace_back( BITMAPS::stripline, wxT( "stripline.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::stroke_dash].emplace_back( BITMAPS::stroke_dash, wxT( "stroke_dash.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::stroke_dashdot].emplace_back( BITMAPS::stroke_dashdot, wxT( "stroke_dashdot.png" ), -1, wxT( "light" ) );
@@ -1132,6 +1133,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::rectwaveguide].emplace_back( BITMAPS::rectwaveguide, wxT( "rectwaveguide_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::regul].emplace_back( BITMAPS::regul, wxT( "regul_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::regul_3pins].emplace_back( BITMAPS::regul_3pins, wxT( "regul_3pins_dark.png" ), -1, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::splash].emplace_back( BITMAPS::splash, wxT( "splash_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::stripline].emplace_back( BITMAPS::stripline, wxT( "stripline_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::stroke_dash].emplace_back( BITMAPS::stroke_dash, wxT( "stroke_dash_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::stroke_dashdot].emplace_back( BITMAPS::stroke_dashdot, wxT( "stroke_dashdot_dark.png" ), -1, wxT( "dark" ) );

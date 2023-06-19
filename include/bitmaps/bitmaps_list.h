@@ -544,6 +544,7 @@ enum class BITMAPS : unsigned int
     small_up,
     small_warning,
     special_tools,
+    splash,
     spreadsheet,
     stripline,
     stroke_dash,

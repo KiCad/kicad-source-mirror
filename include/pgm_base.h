@@ -46,6 +46,7 @@ class wxSingleInstanceChecker;
 class wxApp;
 class wxMenu;
 class wxWindow;
+class wxSplashScreen;
 
 class COMMON_SETTINGS;
 class SETTINGS_MANAGER;
@@ -352,6 +353,10 @@ public:
      */
     bool IsGUI();
 
+
+    void ShowSplash();
+    void HideSplash();
+
     /**
      * wxWidgets on MSW tends to crash if you spool up more than one print job at a time.
      */
@@ -407,6 +412,8 @@ protected:
                                             /// and will return argv as either force converted to ascii in char* or wchar_t only
 
     int m_argcUtf8;
+
+    wxSplashScreen* m_splash;
 };
 
 

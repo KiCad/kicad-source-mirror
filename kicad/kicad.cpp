@@ -353,6 +353,8 @@ bool PGM_KICAD::OnPgmInit()
     frame->Show( true );
     frame->Raise();
 
+    HideSplash();
+
     return true;
 }
 

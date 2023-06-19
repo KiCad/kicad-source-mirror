@@ -636,6 +636,7 @@ set( BMAPS_OTHER
     creepage_clearance
     cpw
     cpw_back
+    light
     microstrip
     microstrip_zodd_zeven
     pads_npth
@@ -648,6 +649,7 @@ set( BMAPS_OTHER
     rectwaveguide
     regul
     regul_3pins
+    splash
     stripline
     stroke_dash
     stroke_dashdot
