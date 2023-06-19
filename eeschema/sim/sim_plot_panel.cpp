@@ -181,8 +181,8 @@ public:
     {
         if( !m_rangeSet )
         {
-            m_minV = 0;
-            m_maxV = 0;
+            m_minV = minV;
+            m_maxV = maxV;
             m_rangeSet = true;
         }
         else
@@ -575,7 +575,20 @@ void SIM_PLOT_PANEL::updateAxes( int aNewTraceType )
             // suppress warnings
             break;
     }
+
+    if( m_axis_x )
+        m_axis_x->SetFont( KIUI::GetStatusFont( m_plotWin ) );
+
+    if( m_axis_y1 )
+        m_axis_y1->SetFont( KIUI::GetStatusFont( m_plotWin ) );
+
+    if( m_axis_y2 )
+        m_axis_y2->SetFont( KIUI::GetStatusFont( m_plotWin ) );
+
+    if( m_axis_y3 )
+        m_axis_y3->SetFont( KIUI::GetStatusFont( m_plotWin ) );
 }
+
 
 void SIM_PLOT_PANEL::prepareDCAxes( int aNewTraceType )
 {

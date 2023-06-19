@@ -278,12 +278,12 @@ public:
     /** Set layer font
      *  @param font Font, will be copied to internal class member
      */
-    void SetFont( wxFont& font )  { m_font = font; }
+    void SetFont( const wxFont& font )  { m_font = font; }
 
     /** Set layer pen
      *  @param pen Pen, will be copied to internal class member
      */
-    void SetPen( wxPen pen )     { m_pen = pen;  }
+    void SetPen( const wxPen& pen )     { m_pen = pen;  }
 
     /** Set Draw mode: inside or outside margins. Default is outside, which allows the layer to draw up to the mpWindow border.
      *  @param drawModeOutside The draw mode to be set */
