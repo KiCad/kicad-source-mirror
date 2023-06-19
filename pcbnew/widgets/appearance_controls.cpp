@@ -903,6 +903,11 @@ void APPEARANCE_CONTROLS::OnNetGridRightClick( wxGridEvent& event )
 
     menu.Append( new wxMenuItem( &menu, ID_SET_NET_COLOR, _( "Set Net Color" ), wxEmptyString,
                                  wxITEM_NORMAL ) );
+    menu.Append( new wxMenuItem( &menu, ID_CLEAR_NET_COLOR, _( "Clear Net Color" ), wxEmptyString,
+                                 wxITEM_NORMAL ) );
+
+    menu.AppendSeparator();
+
     menu.Append( new wxMenuItem( &menu, ID_HIGHLIGHT_NET,
                                  wxString::Format( _( "Highlight %s" ), netName ), wxEmptyString,
                                  wxITEM_NORMAL ) );
@@ -2955,6 +2960,10 @@ void APPEARANCE_CONTROLS::onNetContextMenu( wxCommandEvent& aEvent )
         editor->BeginEdit( row, NET_GRID_TABLE::COL_COLOR, m_netsGrid );
         break;
     }
+
+    case ID_CLEAR_NET_COLOR:
+        m_netsGrid->SetCellValue( row, NET_GRID_TABLE::COL_COLOR, wxS( "rgba(0,0,0,0)" ) );
+        break;
 
     case ID_HIGHLIGHT_NET:
         m_frame->GetToolManager()->RunAction( PCB_ACTIONS::highlightNet, true,
