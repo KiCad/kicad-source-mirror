@@ -785,6 +785,21 @@ inline bool CollCaseReversed ( const SHAPE* aA, const SHAPE* aB, int aClearance,
 static bool collideSingleShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, int* aActual,
                                  VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
+    if( aA->Type() == SH_POLY_SET )
+    {
+        const SHAPE_POLY_SET* polySetA = static_cast<const SHAPE_POLY_SET*>( aA );
+
+        wxASSERT( !aMTV );
+        return polySetA->Collide( aB, aClearance, aActual, aLocation );
+    }
+    else if( aB->Type() == SH_POLY_SET )
+    {
+        const SHAPE_POLY_SET* polySetB = static_cast<const SHAPE_POLY_SET*>( aB );
+
+        wxASSERT( !aMTV );
+        return polySetB->Collide( aA, aClearance, aActual, aLocation );
+    }
+
     switch( aA->Type() )
     {
     case SH_NULL:
@@ -1085,20 +1100,6 @@ static bool collideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, int
                     break;
             }
         }
-    }
-    else if( aA->Type() == SH_POLY_SET )
-    {
-        const SHAPE_POLY_SET* polySetA = static_cast<const SHAPE_POLY_SET*>( aA );
-
-        wxASSERT( !aMTV );
-        return polySetA->Collide( aB, aClearance, aActual, aLocation );
-    }
-    else if( aB->Type() == SH_POLY_SET )
-    {
-        const SHAPE_POLY_SET* polySetB = static_cast<const SHAPE_POLY_SET*>( aB );
-
-        wxASSERT( !aMTV );
-        return polySetB->Collide( aA, aClearance, aActual, aLocation );
     }
     else
     {
