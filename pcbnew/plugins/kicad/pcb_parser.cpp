@@ -3816,11 +3816,23 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
             wxString pValue = FromUTF8();
 
             // Skip non-field properties that should be hidden
-            if( pName == "ki_description" ||
-                pName == "ki_keywords" ||
-                pName == "Sheetfile" ||
-                pName == "Sheetname" )
+            if( pName == "ki_description" || pName == "ki_keywords" )
             {
+                NeedRIGHT();
+                break;
+            }
+
+            // Sheet file and name used to be stored as properties invisible to the user
+            if( pName == "Sheetfile" || pName == "Sheet file" )
+            {
+                footprint->SetSheetfile( pValue );
+                NeedRIGHT();
+                break;
+            }
+
+            if( pName == "Sheetname" || pName == "Sheet name" )
+            {
+                footprint->SetSheetname( pValue );
                 NeedRIGHT();
                 break;
             }
@@ -3852,6 +3864,18 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
         case T_path:
             NeedSYMBOLorNUMBER(); // Paths can be numerical so a number is also a symbol here
             footprint->SetPath( KIID_PATH( FromUTF8() ) );
+            NeedRIGHT();
+            break;
+
+        case T_sheetname:
+            NeedSYMBOL();
+            footprint->SetSheetname( FromUTF8() );
+            NeedRIGHT();
+            break;
+
+        case T_sheetfile:
+            NeedSYMBOL();
+            footprint->SetSheetfile( FromUTF8() );
             NeedRIGHT();
             break;
 

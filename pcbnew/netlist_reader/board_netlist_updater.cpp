@@ -382,6 +382,45 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
     }
 
+    wxString sheetname;
+    wxString sheetfile;
+
+    if( aNetlistComponent->GetProperties().count( wxT( "Sheetname" ) ) > 0 )
+        sheetname = aNetlistComponent->GetProperties().at( wxT( "Sheetname" ) );
+
+    if( aNetlistComponent->GetProperties().count( wxT( "Sheetfile" ) ) > 0 )
+        sheetfile = aNetlistComponent->GetProperties().at( wxT( "Sheetfile" ) );
+
+    if( sheetname != aPcbFootprint->GetSheetname() )
+    {
+        if( m_isDryRun )
+            msg.Printf( _( "Update %s sheetname to '%s'." ), aPcbFootprint->GetReference(),
+                        sheetname );
+        else
+        {
+            aPcbFootprint->SetSheetname( sheetname );
+            msg.Printf( _( "Updated %s sheetname to '%s'." ), aPcbFootprint->GetReference(),
+                        sheetname );
+        }
+
+        m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+    }
+
+    if( sheetfile != aPcbFootprint->GetSheetfile() )
+    {
+        if( m_isDryRun )
+            msg.Printf( _( "Update %s sheetfile to '%s'." ), aPcbFootprint->GetReference(),
+                        sheetfile );
+        else
+        {
+            aPcbFootprint->SetSheetfile( sheetfile );
+            msg.Printf( _( "Updated %s sheetfile to '%s'." ), aPcbFootprint->GetReference(),
+                        sheetfile );
+        }
+
+        m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+    }
+
     if( ( aNetlistComponent->GetProperties().count( wxT( "exclude_from_bom" ) ) > 0 )
             != ( ( aPcbFootprint->GetAttributes() & FP_EXCLUDE_FROM_BOM ) > 0 ) )
     {

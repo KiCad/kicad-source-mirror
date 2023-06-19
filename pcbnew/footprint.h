@@ -232,6 +232,12 @@ public:
     const KIID_PATH& GetPath() const { return m_path; }
     void SetPath( const KIID_PATH& aPath ) { m_path = aPath; }
 
+    wxString GetSheetname() const { return m_sheetname; }
+    void SetSheetname( const wxString& aSheetname ) { m_sheetname = aSheetname; }
+
+    wxString GetSheetfile() const { return m_sheetfile; }
+    void SetSheetfile( const wxString& aSheetfile ) { m_sheetfile = aSheetfile; }
+
     int GetLocalSolderMaskMargin() const { return m_localSolderMaskMargin; }
     void SetLocalSolderMaskMargin( int aMargin ) { m_localSolderMaskMargin = aMargin; }
 
@@ -959,6 +965,8 @@ private:
     wxString        m_doc;               // File name and path for documentation file.
     wxString        m_keywords;          // Search keywords to find footprint in library.
     KIID_PATH       m_path;              // Path to associated symbol ([sheetUUID, .., symbolUUID]).
+    wxString        m_sheetname;         // Name of the sheet containing the symbol for this footprint
+    wxString        m_sheetfile;         // File of the sheet containing the symbol for this footprint
     timestamp_t     m_lastEditTime;
     int             m_arflag;            // Use to trace ratsnest and auto routing.
     KIID            m_link;              // Temporary logical link used during editing

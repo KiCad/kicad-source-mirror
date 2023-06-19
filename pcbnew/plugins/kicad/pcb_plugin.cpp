@@ -1139,6 +1139,18 @@ void PCB_PLUGIN::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
                       m_out->Quotew( aFootprint->GetPath().AsString() ).c_str() );
     }
 
+    if( !aFootprint->GetSheetname().empty() )
+    {
+        m_out->Print( aNestLevel + 1, "(sheetname %s)\n",
+                      m_out->Quotew( aFootprint->GetSheetname() ).c_str() );
+    }
+
+    if( !aFootprint->GetSheetfile().empty() )
+    {
+        m_out->Print( aNestLevel + 1, "(sheetfile %s)\n",
+                      m_out->Quotew( aFootprint->GetSheetfile() ).c_str() );
+    }
+
     if( aFootprint->GetLocalSolderMaskMargin() != 0 )
     {
         m_out->Print( aNestLevel+1, "(solder_mask_margin %s)\n",
