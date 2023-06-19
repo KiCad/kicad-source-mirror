@@ -149,7 +149,7 @@ public:
     bool FixRoute( const VECTOR2I& aP, ITEM* aItem, bool aForceFinish = false );
     void BreakSegment( ITEM *aItem, const VECTOR2I& aP );
 
-    void UndoLastSegment();
+    std::optional<VECTOR2I> UndoLastSegment();
     void CommitRouting();
 
     void GetUpdatedItems( std::vector<PNS::ITEM*>& aRemoved, std::vector<PNS::ITEM*>& aAdded,

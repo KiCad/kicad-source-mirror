@@ -1960,12 +1960,6 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 {
     PCB_BASE_EDIT_FRAME*  editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
-    if( isRouterActive() )
-    {
-        m_toolMgr->RunAction( PCB_ACTIONS::routerUndoLastSegment, true );
-        return 0;
-    }
-
     editFrame->PushTool( aEvent );
 
     std::vector<BOARD_ITEM*> lockedItems;

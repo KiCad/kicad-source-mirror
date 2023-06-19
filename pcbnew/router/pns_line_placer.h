@@ -108,7 +108,7 @@ public:
      */
     bool FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinish ) override;
 
-    bool UnfixRoute() override;
+    std::optional<VECTOR2I> UnfixRoute() override;
 
     bool CommitPlacement() override;
 

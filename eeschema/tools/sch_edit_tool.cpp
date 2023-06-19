@@ -1428,8 +1428,6 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
             m_frame->DeleteJunction( &commit, junction );
     }
 
-//    m_frame->TestDanglingEnds();
-
     m_frame->GetCanvas()->Refresh();
     commit.Push( _( "Delete" ) );
 

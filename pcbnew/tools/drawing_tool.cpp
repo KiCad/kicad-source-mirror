@@ -328,6 +328,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
     BOARD_COMMIT            commit( m_frame );
     SCOPED_DRAW_MODE        scopedDrawMode( m_mode, MODE::LINE );
     std::optional<VECTOR2D> startingPoint;
+    std::stack<PCB_SHAPE*>  committedLines;
 
     line->SetShape( SHAPE_T::SEGMENT );
     line->SetFlags( IS_NEW );
@@ -338,13 +339,14 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
     m_frame->PushTool( aEvent );
     Activate();
 
-    while( drawShape( aEvent, &line, startingPoint ) )
+    while( drawShape( aEvent, &line, startingPoint, &committedLines ) )
     {
         if( line )
         {
             commit.Add( line );
             commit.Push( _( "Draw a line segment" ) );
             startingPoint = VECTOR2D( line->GetEnd() );
+            committedLines.push( line );
         }
         else
         {
@@ -388,7 +390,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
     m_frame->PushTool( aEvent );
     Activate();
 
-    while( drawShape( aEvent, &rect, startingPoint ) )
+    while( drawShape( aEvent, &rect, startingPoint, nullptr ) )
     {
         if( rect )
         {
@@ -449,7 +451,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
     m_frame->PushTool( aEvent );
     Activate();
 
-    while( drawShape( aEvent, &circle, startingPoint ) )
+    while( drawShape( aEvent, &circle, startingPoint, nullptr ) )
     {
         if( circle )
         {
@@ -1773,7 +1775,8 @@ static void updateSegmentFromGeometryMgr( const KIGFX::PREVIEW::TWO_POINT_GEOMET
 
 
 bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
-                              std::optional<VECTOR2D> aStartingPoint )
+                              std::optional<VECTOR2D> aStartingPoint,
+                              std::stack<PCB_SHAPE*>* aCommittedGraphics )
 {
     SHAPE_T shape = ( *aGraphic )->GetShape();
 
@@ -1863,7 +1866,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
                 COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
 
-        if( evt->IsCancelInteractive() || evt->IsAction( &ACTIONS::undo ) )
+        if( evt->IsCancelInteractive() )
         {
             cleanup();
 
@@ -2070,6 +2073,34 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
             updateSegmentFromGeometryMgr( twoPointManager, graphic );
             m_view->Update( &preview );
             m_view->Update( &twoPointAsst );
+        }
+        else if( evt->IsAction( &ACTIONS::undo )
+                 || evt->IsAction( &PCB_ACTIONS::doDelete )
+                 || evt->IsAction( &PCB_ACTIONS::deleteLastPoint ) )
+        {
+            if( graphic && !aCommittedGraphics->empty() )
+            {
+                twoPointManager.SetOrigin( aCommittedGraphics->top()->GetStart() );
+                twoPointManager.SetEnd( aCommittedGraphics->top()->GetEnd() );
+                aCommittedGraphics->pop();
+
+                getViewControls()->WarpMouseCursor( twoPointManager.GetEnd(), true );
+
+                if( PICKED_ITEMS_LIST* undo = m_frame->PopCommandFromUndoList() )
+                {
+                    m_frame->PutDataInPreviousState( undo );
+                    m_frame->ClearListAndDeleteItems( undo );
+                    delete undo;
+                }
+
+                updateSegmentFromGeometryMgr( twoPointManager, graphic );
+                m_view->Update( &preview );
+                m_view->Update( &twoPointAsst );
+            }
+            else if( graphic )
+            {
+                cleanup();
+            }
         }
         else if( graphic && evt->IsAction( &PCB_ACTIONS::incWidth ) )
         {
@@ -2568,13 +2599,9 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
         polyGeomMgr.SetLeaderMode( Is45Limited() ? POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45
                                                  : POLYGON_GEOM_MANAGER::LEADER_MODE::DIRECT );
 
-        if( evt->IsCancelInteractive() || evt->IsAction( &ACTIONS::undo ) )
+        if( evt->IsCancelInteractive() )
         {
-            if( polyGeomMgr.PolygonPointCount() >= 2 && evt->IsAction( &ACTIONS::undo ) )
-            {
-                polyGeomMgr.DeleteLastCorner();
-            }
-            else if( polyGeomMgr.IsPolygonInProgress() )
+            if( polyGeomMgr.IsPolygonInProgress() )
             {
                 cleanup();
             }
@@ -2658,19 +2685,20 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
                 }
             }
         }
-        else if( evt->IsAction( &PCB_ACTIONS::deleteLastPoint ) )
+        else if( evt->IsAction( &PCB_ACTIONS::deleteLastPoint )
+                 || evt->IsAction( &ACTIONS::doDelete )
+                 || evt->IsAction( &ACTIONS::undo ) )
         {
-            polyGeomMgr.DeleteLastCorner();
-
-            if( !polyGeomMgr.IsPolygonInProgress() )
+            if( std::optional<VECTOR2I> last = polyGeomMgr.DeleteLastCorner() )
             {
-                // report finished as an empty shape
-                polyGeomMgr.SetFinished();
-
-                // start again
-                started = false;
-                m_controls->SetAutoPan( false );
-                m_controls->CaptureCursor( false );
+                cursorPos = last.value();
+                getViewControls()->WarpMouseCursor( cursorPos, true );
+                m_controls->ForceCursorPosition( true, cursorPos );
+                polyGeomMgr.SetCursorPosition( cursorPos );
+            }
+            else if( polyGeomMgr.IsPolygonInProgress() )
+            {
+                cleanup();
             }
         }
         else if( polyGeomMgr.IsPolygonInProgress()

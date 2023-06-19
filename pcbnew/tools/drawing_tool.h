@@ -230,7 +230,8 @@ private:
      *         the same point.
      */
     bool drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
-                    std::optional<VECTOR2D> aStartingPoint );
+                    std::optional<VECTOR2D> aStartingPoint,
+                    std::stack<PCB_SHAPE*>* aCommittedGraphics );
 
     /**
      * Start drawing an arc.

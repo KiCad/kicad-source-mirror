@@ -689,6 +689,11 @@ void PCB_EDIT_FRAME::setupUIConditions()
                 if( drawingTool && drawingTool->GetDrawingMode() != DRAWING_TOOL::MODE::NONE )
                     return true;
 
+                ROUTER_TOOL* routerTool = m_toolManager->GetTool<ROUTER_TOOL>();
+
+                if( routerTool && routerTool->RoutingInProgress() )
+                    return true;
+
                 return GetUndoCommandCount() > 0;
             };
 

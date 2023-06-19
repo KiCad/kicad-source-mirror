@@ -893,13 +893,13 @@ bool ROUTER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinish )
 }
 
 
-void ROUTER::UndoLastSegment()
+std::optional<VECTOR2I> ROUTER::UndoLastSegment()
 {
     if( !RoutingInProgress() )
-        return;
+        return std::nullopt;
 
     m_logger->Log( LOGGER::EVT_UNFIX );
-    m_placer->UnfixRoute();
+    return m_placer->UnfixRoute();
 }
 
 

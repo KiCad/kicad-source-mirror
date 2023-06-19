@@ -151,7 +151,7 @@ public:
     /**
      * Remove the last-added point from the polygon
      */
-    void DeleteLastCorner();
+    std::optional<VECTOR2I> DeleteLastCorner();
 
     /* =================================================================
      * Interfaces for users of the geometry

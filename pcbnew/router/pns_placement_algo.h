@@ -78,7 +78,7 @@ public:
      */
     virtual bool FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinish = false ) = 0;
 
-    virtual bool UnfixRoute() { return false; };
+    virtual std::optional<VECTOR2I> UnfixRoute() { return std::nullopt; };
 
     virtual bool CommitPlacement() { return false; };
 

@@ -1362,9 +1362,16 @@ void ROUTER_TOOL::performRouting()
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );
         }
-        else if( evt->IsAction( &PCB_ACTIONS::routerUndoLastSegment ) )
+        else if( evt->IsAction( &PCB_ACTIONS::routerUndoLastSegment )
+                    || evt->IsAction( &ACTIONS::doDelete )
+                    || evt->IsAction( &ACTIONS::undo ) )
         {
-            m_router->UndoLastSegment();
+            if( std::optional<VECTOR2I> last = m_router->UndoLastSegment() )
+            {
+                getViewControls()->WarpMouseCursor( last.value(), true );
+                evt->SetMousePosition( last.value() );
+            }
+
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );
         }

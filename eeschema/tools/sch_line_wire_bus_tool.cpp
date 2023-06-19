@@ -892,7 +892,9 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, int aType, 
                     m_view->AddToPreview( wire->Clone() );
             }
         }
-        else if( evt->IsAction( &EE_ACTIONS::undoLastSegment ) || evt->IsAction( &ACTIONS::undo ) )
+        else if( evt->IsAction( &EE_ACTIONS::undoLastSegment )
+                 || evt->IsAction( &ACTIONS::doDelete )
+                 || evt->IsAction( &ACTIONS::undo ) )
         {
             if( ( currentMode == LINE_MODE::LINE_MODE_FREE && m_wires.size() > 1 )
                 || ( LINE_MODE::LINE_MODE_90 && m_wires.size() > 2 ) )
@@ -904,7 +906,8 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, int aType, 
                 delete segment;
 
                 segment = m_wires.back();
-                segment->SetEndPoint( cursorPos );
+                cursorPos = segment->GetEndPoint();
+                getViewControls()->WarpMouseCursor( cursorPos, true );
 
                 // Find new bend point for current mode
                 if( twoSegments && m_wires.size() >= 2 )
@@ -1000,10 +1003,6 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, int aType, 
             {
                 wxBell();
             }
-        }
-        else if( evt->IsAction( &ACTIONS::doDelete ) && ( segment || m_busUnfold.in_progress ) )
-        {
-            cleanup();
         }
         else if( evt->IsAction( &ACTIONS::redo ) )
         {

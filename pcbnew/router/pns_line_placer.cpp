@@ -1701,14 +1701,16 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
 }
 
 
-bool LINE_PLACER::UnfixRoute()
+std::optional<VECTOR2I> LINE_PLACER::UnfixRoute()
 {
-    FIXED_TAIL::STAGE st;
+    FIXED_TAIL::STAGE       st;
+    std::optional<VECTOR2I> ret;
 
     if ( !m_fixedTail.PopStage( st ) )
-    {
-        return false;
-    }
+        return ret;
+
+    if( m_head.Line().PointCount() )
+        ret = m_head.Line().CPoint( 0 );
 
     m_head.Line().Clear();
     m_tail.Line().Clear();
@@ -1740,7 +1742,7 @@ bool LINE_PLACER::UnfixRoute()
 
     m_lastNode = m_currentNode->Branch();
 
-    return true;
+    return ret;
 }
 
 

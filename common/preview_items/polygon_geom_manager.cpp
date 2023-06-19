@@ -129,10 +129,15 @@ bool POLYGON_GEOM_MANAGER::NewPointClosesOutline( const VECTOR2I& aPt ) const
 }
 
 
-void POLYGON_GEOM_MANAGER::DeleteLastCorner()
+std::optional<VECTOR2I> POLYGON_GEOM_MANAGER::DeleteLastCorner()
 {
+    std::optional<VECTOR2I> last;
+
     if( m_lockedPoints.PointCount() > 0 )
+    {
+        last = m_lockedPoints.GetPoint( m_lockedPoints.PointCount() - 1 );
         m_lockedPoints.Remove( m_lockedPoints.PointCount() - 1 );
+    }
 
     // update the new last segment (was previously
     // locked in), reusing last constraints
@@ -140,6 +145,7 @@ void POLYGON_GEOM_MANAGER::DeleteLastCorner()
         updateTemporaryLines( m_leaderPts.CLastPoint() );
 
     m_client.OnGeometryChange( *this );
+    return last;
 }
 
 
