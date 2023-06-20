@@ -159,7 +159,13 @@ void SPICE_LIBRARY_PARSER::parseFile( const wxString &aFilePath, REPORTER& aRepo
                 }
                 catch( const IO_ERROR& e )
                 {
-                    aReporter.Report( e.What(), RPT_SEVERITY_ERROR );
+                   aReporter.Report( e.What(), RPT_SEVERITY_ERROR );
+                }
+                catch( ... )
+                {
+                   aReporter.Report( wxString::Format( _( "Cannot create sim model from %s" ),
+                                                       model ),
+                                     RPT_SEVERITY_ERROR );
                 }
             }
             else if( node->is_type<SIM_LIBRARY_SPICE_PARSER::dotInclude>() )
