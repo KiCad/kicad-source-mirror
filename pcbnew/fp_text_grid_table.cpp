@@ -220,6 +220,8 @@ wxGridCellAttr* FP_TEXT_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr:
             return m_urlAttr;
         }
 
+        return nullptr;
+
     case FPT_WIDTH:
     case FPT_HEIGHT:
     case FPT_THICKNESS:
