@@ -412,6 +412,7 @@ bool collidesWithArea( BOARD_ITEM* aItem, PCB_EXPR_CONTEXT* aCtx, ZONE* aArea )
     // This is particularly important for detecting copper fills as they will be exactly
     // touching along the entire exclusion border.
     SHAPE_POLY_SET areaOutline = aArea->Outline()->CloneDropTriangulation();
+    areaOutline.ClearArcs();
     areaOutline.Deflate( board->GetDesignSettings().GetDRCEpsilon(), 0,
                          SHAPE_POLY_SET::ALLOW_ACUTE_CORNERS );
 
