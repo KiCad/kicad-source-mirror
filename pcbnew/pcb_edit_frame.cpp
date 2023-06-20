@@ -2280,6 +2280,21 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
         }
     }
 
+    for( PCB_FIELD* field : aExisting->GetFields() )
+    {
+        PCB_FIELD* newField = aNew->GetFieldByName( field->GetName() );
+
+        if( !newField )
+        {
+            newField = new PCB_FIELD( *field );
+            aNew->Add( newField );
+            processTextItem( *field, *newField, true, true, true, aUpdated );
+        }
+        else
+            processTextItem( *field, *newField, false, resetTextLayers, resetTextEffects, aUpdated );
+
+    }
+
     if( resetFabricationAttrs )
     {
         // We've replaced the existing footprint with the library one, so the fabrication attrs
@@ -2310,7 +2325,6 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
 
     // Updating other parameters
     const_cast<KIID&>( aNew->m_Uuid ) = aExisting->m_Uuid;
-    aNew->SetFields( aExisting->GetFields() );
     aNew->SetPath( aExisting->GetPath() );
 
     aCommit.Remove( aExisting );

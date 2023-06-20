@@ -366,15 +366,13 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
                     aPcbFootprint->GetFieldByName( pair.first )->SetText( pair.second );
                 else
                 {
-                    PCB_FIELD* newField = new PCB_FIELD(
-                            aPcbFootprint, aPcbFootprint->GetFieldCount(), pair.first );
+                    PCB_FIELD* newField = aPcbFootprint->AddField( PCB_FIELD(
+                            aPcbFootprint, aPcbFootprint->GetFieldCount(), pair.first ) );
 
                     newField->SetText( pair.second );
                     newField->SetVisible( false );
                     newField->SetLayer( aPcbFootprint->GetLayer() == F_Cu ? F_Fab : B_Fab );
                     newField->StyleFromSettings( m_frame->GetDesignSettings() );
-
-                    aPcbFootprint->AddField( newField );
                 }
             }
         }

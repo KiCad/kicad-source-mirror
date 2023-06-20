@@ -80,7 +80,8 @@ FOOTPRINT::FOOTPRINT( BOARD* parent ) :
     // These are the mandatory fields for the editor to work
     for( int i = 0; i < MANDATORY_FIELDS; i++ )
     {
-        PCB_FIELD* field = AddField( new PCB_FIELD( this, i ) );
+        PCB_FIELD* field = new PCB_FIELD( this, i );
+        m_fields.push_back( field );
 
         // Style according to the board settings if we have them
         if( parent )
@@ -333,11 +334,11 @@ void FOOTPRINT::GetFields( std::vector<PCB_FIELD*>& aVector, bool aVisibleOnly )
 }
 
 
-PCB_FIELD* FOOTPRINT::AddField( PCB_FIELD* aField )
+PCB_FIELD* FOOTPRINT::AddField( const PCB_FIELD& aField )
 {
     int newNdx = m_fields.size();
 
-    m_fields.push_back( aField );
+    m_fields.push_back( new PCB_FIELD( aField ) );
     return m_fields[newNdx];
 }
 
@@ -696,10 +697,8 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectiv
     switch( aBoardItem->Type() )
     {
     case PCB_FIELD_T:
-        if( aMode == ADD_MODE::APPEND )
-            m_fields.push_back( static_cast<PCB_FIELD*>( aBoardItem ) );
-        else
-            m_fields.push_front( static_cast<PCB_FIELD*>( aBoardItem ) );
+        // Always append fields
+        m_fields.push_back( static_cast<PCB_FIELD*>( aBoardItem ) );
 
         break;
 

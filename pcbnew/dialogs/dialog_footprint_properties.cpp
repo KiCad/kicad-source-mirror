@@ -472,12 +472,10 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
             field->DeleteStructure();
     }
 
-    // if there are still grid table entries, create new texts for them
+    // if there are still grid table entries, create new fields for them
     while( i < m_fields->size() )
     {
-        PCB_FIELD* newField = m_fields->at( i++ );
-        m_footprint->Add( newField, ADD_MODE::APPEND );
-        view->Add( newField );
+        view->Add( m_footprint->AddField( *m_fields->at( i++ ) ) );
     }
 
     // Initialize masks clearances

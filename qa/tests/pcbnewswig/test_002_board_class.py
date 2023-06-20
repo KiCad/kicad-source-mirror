@@ -124,11 +124,10 @@ class TestBoardClass:
         pcb = LoadBoard("../data/pcbnew/custom_fields.kicad_pcb")
         footprint = pcb.FindFootprintByReference('J1')
         expected_fields = {
-            'Sheet file': 'custom_fields.kicad_sch',
-            'Sheet name': '',
             'myfield': 'myvalue'
         }
-        assert footprint.GetFields() == expected_fields
+        assert footprint.GetSheetfile() == 'custom_fields.kicad_sch'
+        assert footprint.GetSheetname() == ''
         assert footprint.GetField('myfield') == 'myvalue'
         assert footprint.HasField('myfield') == True
         assert footprint.HasField('abcd') == False

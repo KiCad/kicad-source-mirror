@@ -634,7 +634,7 @@ public:
      *
      * @return the newly inserted field.
      */
-    PCB_FIELD* AddField( PCB_FIELD* aField );
+    PCB_FIELD* AddField( const PCB_FIELD& aField );
 
     /**
      * Remove a user field from the footprint.
@@ -642,15 +642,6 @@ public:
      *                   field or a non-existant field are silently ignored.
      */
     void RemoveField( const wxString& aFieldName );
-
-    void RemoveField( PCB_FIELD* aField ) { RemoveField( aField->GetName() ); }
-
-    /**
-     * Set multiple schematic fields.
-     *
-     * @param aFields are the fields to set in this symbol.
-     */
-    void SetFields( PCB_FIELDS aFields ) { m_fields = aFields; }
 
     /**
      * Return the number of fields in this symbol.

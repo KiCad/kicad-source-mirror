@@ -55,6 +55,7 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
 %include zone_settings.i
 %include pcb_shape.i
 %include pcb_text.i
+%include pcb_field.i
 %include pcb_dimension.i
 %include pcb_marker.i
 %include pcb_target.i

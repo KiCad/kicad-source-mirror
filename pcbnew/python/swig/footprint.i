@@ -31,7 +31,6 @@
 
 %template(MAP_STRING_STRING) std::map<wxString, wxString>;
 %rename(GetFieldsNative) FOOTPRINT::GetFields;
-%rename(SetFieldsNative) FOOTPRINT::SetFields;
 %feature("flatnested");
 %include footprint.h
 %feature("flatnested", "");
@@ -63,21 +62,30 @@
     def GetFields(self):
       """ Returns footprint fields map. """
       fields = self.GetFieldsNative()
-      return {str(k): str(v) for k, v in fields.items()}
+      return {str(field.GetName()): str(field.GetText()) for field in fields}
 
     def GetField(self, key):
       """ Returns Field with a given key if it exists, throws KeyError otherwise. """
-      if self.HasField(key):
-        return self.GetFieldByName(key)
+      if self.HasFieldByName(key):
+        return self.GetFieldByName(key).GetText()
       else:
         raise KeyError("Field not found: " + key)
 
+    def SetField(self, key, value):
+      if self.HasFieldByName(key):
+        self.GetFieldByName(key).SetText(value)
+      else:
+        field = PCB_FIELD(self, self.GetFieldCount(), key)
+        field.SetText(value)
+        self.AddField(field)
+
+    def HasField(self, key):
+      return self.HasFieldByName(key)
+
     def SetFields(self, fields):
       """ Sets footprint fields map. """
-      wxfields = MAP_STRING_STRING()
       for k, v in fields.items():
-        wxfields[k] = v
-      self.SetFieldsNative(wxfields)
+        self.SetField(k, v)
 
     %}
 }

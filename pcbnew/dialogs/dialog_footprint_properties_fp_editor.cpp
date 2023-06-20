@@ -520,12 +520,10 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
     }
 
 
-    // if there are still grid table entries, create new texts for them
+    // if there are still grid table entries, create new fields for them
     while( i < m_fields->size() )
     {
-        PCB_FIELD* field = m_fields->at( i++ );
-        m_footprint->AddField( field );
-        view->Add( field );
+        view->Add( m_footprint->AddField( *m_fields->at( i++ ) ) );
     }
 
     LSET privateLayers;

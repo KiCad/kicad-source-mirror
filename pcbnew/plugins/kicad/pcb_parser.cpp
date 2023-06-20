@@ -3856,13 +3856,12 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
             }
             else
             {
-                field = new PCB_FIELD( footprint.get(), footprint->GetFieldCount(), pName );
+                field = footprint->AddField(
+                        PCB_FIELD( footprint.get(), footprint->GetFieldCount(), pName ) );
 
                 field->SetText( pValue );
                 field->SetLayer( footprint->GetLayer() == F_Cu ? F_Fab : B_Fab );
                 field->StyleFromSettings( m_board->GetDesignSettings() );
-
-                footprint->AddField( field );
             }
 
             field->SetVisible( true );

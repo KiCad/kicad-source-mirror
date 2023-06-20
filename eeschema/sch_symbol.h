@@ -463,16 +463,6 @@ public:
      */
     SCH_FIELD* FindField( const wxString& aFieldName, bool aIncludeDefaultFields = true );
 
-    /**
-     * Set multiple schematic fields.
-     *
-     * @param aFields are the fields to set in this symbol.
-     */
-    void SetFields( std::vector<SCH_FIELD>& aFields )
-    {
-        m_fields = aFields;     // vector copying, length is changed possibly
-    }
-
     const wxString GetValueFieldText( bool aResolve, const SCH_SHEET_PATH* aPath,
                                       bool aAllowExtraText ) const;
     void SetValueFieldText( const wxString& aValue );
