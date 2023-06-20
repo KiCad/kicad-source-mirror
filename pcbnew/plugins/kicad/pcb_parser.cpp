@@ -3864,7 +3864,12 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
                 field->StyleFromSettings( m_board->GetDesignSettings() );
             }
 
-            field->SetVisible( true );
+            // Hide the field by default if it is a legacy field that did not have
+            // text effects applied, since hide is a negative effect
+            if( m_requiredVersion < 20230620 )
+                field->SetVisible( false );
+            else
+                field->SetVisible( true );
 
             parsePCB_TEXT_effects( field );
         }

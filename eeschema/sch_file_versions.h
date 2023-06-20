@@ -47,7 +47,8 @@
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220328   // Text box start/end -> at/size.
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220331   // Text colors.
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220914   // Symbol unit display names.
-#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220914     // Don't save property ID
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION  20220914   // Don't save property ID
+#define   SEXPR_SYMBOL_LIB_FILE_VERSION  20230620   // ki_description -> Description Field
 
 /**
  * Schematic file version.
@@ -96,4 +97,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20221206  // Simulation model fields V6 -> V7
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20230121  // SCH_MARKER specific sheet path serialisation
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20230221  // Modern power symbols (editable value = net)
-#define SEXPR_SCHEMATIC_FILE_VERSION 20230409    // Add exclude_from_sim markup
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20230409  // Add exclude_from_sim markup
+#define   SEXPR_SCHEMATIC_FILE_VERSION 20230620  // ki_description -> Description Field
