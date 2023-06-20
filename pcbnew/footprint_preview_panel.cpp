@@ -23,6 +23,7 @@
 #include <utility>
 
 #include "pcbnew_settings.h"
+#include <advanced_config.h>
 #include <base_units.h>
 #include <board.h>
 #include <footprint.h>
@@ -255,7 +256,10 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* 
     // change this config
     //if( cfg->m_Window.zoom_factors.empty() )
     {
-        cfg->m_Window.zoom_factors = { ZOOM_LIST_PCBNEW };
+        if( ADVANCED_CFG::GetCfg().m_HyperZoom )
+            cfg->m_Window.zoom_factors = { ZOOM_LIST_PCBNEW_HYPER };
+        else
+            cfg->m_Window.zoom_factors = { ZOOM_LIST_PCBNEW };
     }
 
     std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> gal_opts;

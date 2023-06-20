@@ -897,7 +897,10 @@ void PCB_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     // change this config
     // if( aCfg->m_Window.zoom_factors.empty() )
     {
-        aCfg->m_Window.zoom_factors = { ZOOM_LIST_PCBNEW };
+        if( ADVANCED_CFG::GetCfg().m_HyperZoom )
+            aCfg->m_Window.zoom_factors = { ZOOM_LIST_PCBNEW_HYPER };
+        else
+            aCfg->m_Window.zoom_factors = { ZOOM_LIST_PCBNEW };
     }
 
     // Some, but not all, derived classes have a PCBNEW_SETTINGS.

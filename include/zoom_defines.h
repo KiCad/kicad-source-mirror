@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012-2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,9 @@
 
 #define ZOOM_LIST_PCBNEW 0.13, 0.22, 0.35, 0.6, 1.0, 1.5, 2.2, 3.5, 5.0, 8.0, 13.0,\
                          20.0, 35.0, 50.0, 80.0, 130.0, 220.0, 300.0
+
+#define ZOOM_LIST_PCBNEW_HYPER 0.6, 1.0, 1.5, 2.2, 3.5, 5.0, 8.0, 13.0, 20.0, 35.0, 50.0,\
+                               80.0, 130.0, 220.0, 350.0, 600.0, 900.0, 1500.0
 
 #define ZOOM_LIST_PL_EDITOR 0.022, 0.035, 0.05, 0.08, 0.13, 0.22, 0.35, 0.6, 1.0, 2.2,\
                             3.5, 5.0, 8.0, 13.0, 22.0, 35.0, 50.0, 80.0, 130.0, 220.0

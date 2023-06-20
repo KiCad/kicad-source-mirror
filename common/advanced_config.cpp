@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -109,6 +109,11 @@ static const wxChar CoroutineStackSize[] = wxT( "CoroutineStackSize" );
  * Show PNS router debug graphics while routing
  */
 static const wxChar ShowRouterDebugGraphics[] = wxT( "ShowRouterDebugGraphics" );
+
+/**
+ * Slide the zoom steps over for debugging things "up close".
+ */
+static const wxChar HyperZoom[] = wxT( "HyperZoom" );
 
 /**
  * When set to true, this will wrap polygon point sets at 4 points per line rather
@@ -290,6 +295,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     // then the values will remain as set here.
     m_CoroutineStackSize        = AC_STACK::default_stack;
     m_ShowRouterDebugGraphics   = false;
+    m_HyperZoom                 = false;
     m_DrawArcAccuracy           = 10.0;
     m_DrawArcCenterMaxAngle     = 50.0;
     m_MaxTangentAngleDeviation  = 1.0;
@@ -408,6 +414,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ShowRouterDebugGraphics,
                                                 &m_ShowRouterDebugGraphics, m_ShowRouterDebugGraphics ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::HyperZoom,
+                                                &m_HyperZoom, m_HyperZoom ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::CompactFileSave,
                                                 &m_CompactSave, m_CompactSave ) );

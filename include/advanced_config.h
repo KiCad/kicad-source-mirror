@@ -141,6 +141,11 @@ public:
     bool m_ShowRouterDebugGraphics;
 
     /**
+     * Slide the zoom steps over for debugging things "up close".
+     */
+    bool m_HyperZoom;
+
+    /**
      * Save files in compact display mode
      * When is is not specified, points are written one per line
      */
