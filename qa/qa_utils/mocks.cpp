@@ -170,7 +170,7 @@ bool DIALOG_FILTER_SELECTION::TransferDataFromWindow()
 }
 
 
-void ROUTER_TOOL::NeighboringSegmentFilter( const VECTOR2I&, GENERAL_COLLECTOR& )
+void ROUTER_TOOL::NeighboringSegmentFilter( const VECTOR2I&, GENERAL_COLLECTOR&, PCB_SELECTION_TOOL* )
 {
 }
 
