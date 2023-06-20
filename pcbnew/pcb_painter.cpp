@@ -387,6 +387,12 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
             break;
         }
 
+        case LAYER_DRC_ERROR:
+        case LAYER_DRC_WARNING:
+        case LAYER_DRC_EXCLUSION:
+            isActive = true;
+            break;
+
         default:
             break;
         }
