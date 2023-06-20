@@ -81,7 +81,7 @@ public:
     void AddShape( SHAPE* aShape )
     {
         // Don't make clients deal with nested SHAPE_COMPOUNDs
-        if( aShape->HasIndexableSubshapes() )
+        if( dynamic_cast<SHAPE_COMPOUND*>( aShape ) )
         {
             std::vector<const SHAPE*> subshapes;
             aShape->GetIndexableSubshapes( subshapes );
@@ -102,7 +102,7 @@ public:
     void AddShape( std::shared_ptr<SHAPE> aShape )
     {
         // Don't make clients deal with nested SHAPE_COMPOUNDs
-        if( aShape->HasIndexableSubshapes() )
+        if( dynamic_cast<SHAPE_COMPOUND*>( aShape.get() ) )
         {
             std::vector<const SHAPE*> subshapes;
             aShape->GetIndexableSubshapes( subshapes );
@@ -125,7 +125,7 @@ public:
 
     int Size() const
     {
-        return m_shapes.size();
+        return (int) m_shapes.size();
     }
 
     void Rotate( const EDA_ANGLE& aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override;
