@@ -124,6 +124,12 @@ public:
         wxFAIL_MSG( wxT( "groups don't support layer SetLayer" ) );
     }
 
+    bool IsOnCopperLayer() const override
+    {
+        // A group might have members on a copper layer, but isn't itself on any layer.
+        return false;
+    }
+
     /** Set layer for all items within the group.
      *
      * To avoid freezes with circular references, the maximum depth is 20 by default.

@@ -2417,7 +2417,17 @@ void FOOTPRINT::CheckNetTies( const std::function<void( const BOARD_ITEM* aItem,
     for( BOARD_ITEM* item : m_drawings )
     {
         if( item->IsOnCopperLayer() )
+        {
             copperItems.push_back( item );
+        }
+        else if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( item ) )
+        {
+            group->RunOnDescendants( [&]( BOARD_ITEM* descendent )
+                                     {
+                                         if( descendent->IsOnCopperLayer() )
+                                             copperItems.push_back( descendent );
+                                     } );
+        }
     }
 
     for( ZONE* zone : m_zones )
