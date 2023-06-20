@@ -193,18 +193,21 @@ bool DIALOG_WIRE_BUS_PROPERTIES::TransferDataFromWindow()
                     static_cast<SCH_BUS_ENTRY_BASE*>( item )->SetPenWidth( width );
             }
 
-            PLOT_DASH_TYPE lineStyle = PLOT_DASH_TYPE::DEFAULT;
+            size_t lineTypeSelection = m_typeCombo->GetSelection();
+            if( lineTypeSelection < lineTypeNames.size() )
+            {
+                PLOT_DASH_TYPE lineStyle = PLOT_DASH_TYPE::DEFAULT;
 
-            auto it = lineTypeNames.begin();
-            std::advance( it, m_typeCombo->GetSelection() );
+                auto it = lineTypeNames.begin();
+                std::advance( it, lineTypeSelection );
+                if( it != lineTypeNames.end() )
+                    lineStyle = it->first;
 
-            if( it != lineTypeNames.end() )
-                lineStyle = it->first;
-
-            if( item->Type() == SCH_LINE_T )
-                static_cast<SCH_LINE*>( item )->SetLineStyle( lineStyle );
-            else if( dynamic_cast<SCH_BUS_ENTRY_BASE*>( item ) )
-                static_cast<SCH_BUS_ENTRY_BASE*>( item )->SetLineStyle( lineStyle );
+                if( item->Type() == SCH_LINE_T )
+                    static_cast<SCH_LINE*>( item )->SetLineStyle( lineStyle );
+                else if( dynamic_cast<SCH_BUS_ENTRY_BASE*>( item ) )
+                    static_cast<SCH_BUS_ENTRY_BASE*>( item )->SetLineStyle( lineStyle );
+            }
 
             COLOR4D color = m_colorSwatch->GetSwatchColor();
 
