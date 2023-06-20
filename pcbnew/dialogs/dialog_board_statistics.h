@@ -110,7 +110,7 @@ public:
         {
         }
 
-        bool operator==( const DRILL_LINE_ITEM& other )
+        bool operator==( const DRILL_LINE_ITEM& other ) const
         {
             return xSize == other.xSize && ySize == other.ySize && shape == other.shape
                    && isPlated == other.isPlated && isPad == other.isPad

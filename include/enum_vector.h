@@ -92,8 +92,8 @@ public:
     T operator*() { return static_cast<T>( val ); }
     ENUM_ITERATOR begin() { return *this; }
     ENUM_ITERATOR end() { return ENUM_ITERATOR( endVal ); }
-    bool operator==( const ENUM_ITERATOR& aIt ) { return val == aIt.val; }
-    bool operator!=( const ENUM_ITERATOR& aIt ) { return val != aIt.val; }
+    bool operator==( const ENUM_ITERATOR& aIt ) const { return val == aIt.val; }
+    bool operator!=( const ENUM_ITERATOR& aIt ) const { return val != aIt.val; }
 };
 
 #endif /* ENUM_VECTOR_H */

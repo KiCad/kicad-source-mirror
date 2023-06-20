@@ -65,7 +65,7 @@ public:
         return *this;
     }
 
-    bool operator==( const SELECTION& aOther );
+    bool operator==( const SELECTION& aOther ) const;
 
     using ITER = std::deque<EDA_ITEM*>::iterator;
     using CITER = std::deque<EDA_ITEM*>::const_iterator;

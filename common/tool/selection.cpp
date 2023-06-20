@@ -29,7 +29,7 @@
 #include <tool/selection.h>
 
 
-bool SELECTION::operator==( const SELECTION& aOther )
+bool SELECTION::operator==( const SELECTION& aOther ) const
 {
     return ( m_items == aOther.m_items
              && m_itemsOrders == aOther.m_itemsOrders
