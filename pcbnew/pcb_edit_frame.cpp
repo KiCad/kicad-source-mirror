@@ -2078,17 +2078,17 @@ void processTextItem( const PCB_TEXT& aSrc, PCB_TEXT& aDest,
                       bool* aUpdated )
 {
     if( resetText )
+    {
         *aUpdated |= aSrc.GetText() != aDest.GetText();
-    else
+
         aDest.SetText( aSrc.GetText() );
+    }
 
     if( resetTextLayers )
     {
         *aUpdated |= aSrc.GetLayer() != aDest.GetLayer();
         *aUpdated |= aSrc.IsVisible() != aDest.IsVisible();
-    }
-    else
-    {
+
         aDest.SetLayer( aSrc.GetLayer() );
         aDest.SetVisible( aSrc.IsVisible() );
     }
@@ -2101,9 +2101,7 @@ void processTextItem( const PCB_TEXT& aSrc, PCB_TEXT& aDest,
         *aUpdated |= aSrc.GetTextThickness() != aDest.GetTextThickness();
         *aUpdated |= aSrc.GetTextAngle() != aDest.GetTextAngle();
         *aUpdated |= aSrc.GetFPRelativePosition() != aDest.GetFPRelativePosition();
-    }
-    else
-    {
+
         // Careful: the visible bit and position are also set by SetAttributes()
         bool visible = aDest.IsVisible();
         aDest.SetAttributes( aSrc );
