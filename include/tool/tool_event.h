@@ -36,6 +36,7 @@
 #include <optional>
 
 #include <tool/tool_action.h>
+#include <wx/debug.h>
 
 class TOOL_ACTION;
 class TOOL_MANAGER;
@@ -432,15 +433,14 @@ public:
     bool IsSimulator() const;
 
     /**
-     * Return a non-standard parameter assigned to the event. Its meaning depends on the
-     * target tool.
+     * Return a parameter assigned to the event. Its meaning depends on the target tool.
      */
     template<typename T>
-    T Parameter() const
+    T Parameter( typename std::enable_if<!std::is_pointer<T>::value>::type* = 0 ) const
     {
-        wxASSERT_MSG( m_param.has_value(), "Attempted to get a parameter from an event with no parameter." );
-
         T param;
+
+        wxCHECK_MSG( m_param.has_value(), T(), "Attempted to get a parameter from an event with no parameter." );
 
         try
         {
@@ -448,7 +448,31 @@ public:
         }
         catch( const std::bad_any_cast& e )
         {
-            wxASSERT_MSG( false,
+            wxCHECK_MSG( false, T(),
+                          wxString::Format( "Requested parameter type %s from event with parameter type %s.",
+                                            typeid(T).name(), m_param.type().name() ) );
+        }
+
+        return param;
+    }
+
+    /**
+     * Return pointer parameter assigned to the event. Its meaning depends on the target tool.
+     */
+    template<typename T>
+    T Parameter( typename std::enable_if<std::is_pointer<T>::value>::type* = 0 ) const
+    {
+        T param = nullptr;
+
+        wxCHECK_MSG( m_param.has_value(), param, "Attempted to get a parameter from an event with no parameter." );
+
+        try
+        {
+            param = std::any_cast<T>( m_param );
+        }
+        catch( const std::bad_any_cast& e )
+        {
+            wxCHECK_MSG( false, param,
                           wxString::Format( "Requested parameter type %s from event with parameter type %s.",
                                             typeid(T).name(), m_param.type().name() ) );
         }
