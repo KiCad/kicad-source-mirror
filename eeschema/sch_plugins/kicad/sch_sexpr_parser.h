@@ -207,7 +207,6 @@ private:
     void parseBusAlias( SCH_SCREEN* aScreen );
 
     int m_requiredVersion;  ///< Set to the symbol library file version required.
-    int m_fieldId;          ///< The current field ID.
     int m_unit;             ///< The current unit being parsed.
     int m_convert;          ///< The current body style being parsed.
     wxString m_symbolName;  ///< The current symbol name.

@@ -70,7 +70,6 @@ SCH_SEXPR_PARSER::SCH_SEXPR_PARSER( LINE_READER* aLineReader, PROGRESS_REPORTER*
                                     bool aIsAppending ) :
     SCHEMATIC_LEXER( aLineReader ),
     m_requiredVersion( 0 ),
-    m_fieldId( 0 ),
     m_unit( 1 ),
     m_convert( 1 ),
     m_appending( aIsAppending ),
@@ -206,8 +205,13 @@ LIB_SYMBOL* SCH_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLibMap )
 
     symbol->SetUnitCount( 1 );
 
-    m_fieldId = MANDATORY_FIELDS;
     m_fieldIDsRead.clear();
+
+    // Make sure the mandatory field IDs are reserved as already read,
+    // the field parser will set the field IDs to the correct value if
+    // the field name matches a mandatory field name
+    for( int i = 0; i < MANDATORY_FIELDS; i++ )
+        m_fieldIDsRead.insert( i );
 
     token = NextTok();
 
@@ -869,7 +873,7 @@ LIB_FIELD* SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>& aSymbol
     // Due to an bug when in #LIB_SYMBOL::Flatten, duplicate ids slipped through
     // when writing files.  This section replaces duplicate #LIB_FIELD indices on
     // load.
-    if( m_fieldIDsRead.count( field->GetId() ) )
+    if( ( field->GetId() >= MANDATORY_FIELDS ) && m_fieldIDsRead.count( field->GetId() ) )
     {
         int nextAvailableId = field->GetId() + 1;
 
@@ -1974,8 +1978,8 @@ SCH_FIELD* SCH_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
     // Empty property values are valid.
     wxString value = FromUTF8();
 
-    std::unique_ptr<SCH_FIELD> field = std::make_unique<SCH_FIELD>( VECTOR2I(-1,-1), -1,
-                                                                    aParent, name );
+    std::unique_ptr<SCH_FIELD> field =
+            std::make_unique<SCH_FIELD>( VECTOR2I( -1, -1 ), MANDATORY_FIELDS, aParent, name );
     field->SetText( value );
     field->SetVisible( true );
 
@@ -2595,8 +2599,13 @@ SCH_SYMBOL* SCH_SEXPR_PARSER::parseSchematicSymbol()
     // We'll reset this if we find a fields_autoplaced token
     symbol->ClearFieldsAutoplaced();
 
-    m_fieldId = MANDATORY_FIELDS;
     m_fieldIDsRead.clear();
+
+    // Make sure the mandatory field IDs are reserved as already read,
+    // the field parser will set the field IDs to the correct value if
+    // the field name matches a mandatory field name
+    for( int i = 0; i < MANDATORY_FIELDS; i++ )
+        m_fieldIDsRead.insert( i );
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
@@ -2846,7 +2855,7 @@ SCH_SYMBOL* SCH_SEXPR_PARSER::parseSchematicSymbol()
             // the field positions are set.
             field = parseSchField( symbol.get() );
 
-            if( m_fieldIDsRead.count( field->GetId() ) )
+            if( ( field->GetId() >= MANDATORY_FIELDS ) && m_fieldIDsRead.count( field->GetId() ) )
             {
                 int nextAvailableId = field->GetId() + 1;
 
