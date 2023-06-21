@@ -208,32 +208,32 @@ bool collidesWithCourtyard( BOARD_ITEM* aItem, std::shared_ptr<SHAPE>& aItemShap
 
 
 static bool searchFootprints( BOARD* aBoard, const wxString& aArg, PCB_EXPR_CONTEXT* aCtx,
-                              std::function<bool( FOOTPRINT* )> aFunc )
+                              const std::function<bool( FOOTPRINT* )>& aFunc )
 {
     if( aArg == wxT( "A" ) )
     {
         FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aCtx->GetItem( 0 ) );
 
         if( fp && aFunc( fp ) )
-            return 1.0;
+            return true;
     }
     else if( aArg == wxT( "B" ) )
     {
         FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aCtx->GetItem( 1 ) );
 
         if( fp && aFunc( fp ) )
-            return 1.0;
+            return true;
     }
     else for( FOOTPRINT* fp : aBoard->Footprints() )
     {
         if( fp->GetReference().Matches( aArg ) )
         {
             if( aFunc( fp ) )
-                return 1.0;
+                return true;
         }
     }
 
-    return 0.0;
+    return false;
 }
 
 
@@ -522,7 +522,7 @@ bool collidesWithArea( BOARD_ITEM* aItem, PCB_EXPR_CONTEXT* aCtx, ZONE* aArea )
 
 
 bool searchAreas( BOARD* aBoard, const wxString& aArg, PCB_EXPR_CONTEXT* aCtx,
-                  std::function<bool( ZONE* )> aFunc )
+                  const std::function<bool( ZONE* )>& aFunc )
 {
     if( aArg == wxT( "A" ) )
     {
@@ -555,7 +555,7 @@ bool searchAreas( BOARD* aBoard, const wxString& aArg, PCB_EXPR_CONTEXT* aCtx,
             }
         }
 
-        return 0.0;
+        return false;
     }
     else  // Match on zone name
     {
