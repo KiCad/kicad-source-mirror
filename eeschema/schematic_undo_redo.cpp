@@ -311,8 +311,13 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         }
         else if( status == UNDO_REDO::PAGESETTINGS )
         {
-            SetCurrentSheet( *m_schematic->GetSheets().FindSheetForScreen( screen ) );
-            DisplayCurrentSheet();
+            SCH_SHEET_PATH& undoSheet = *m_schematic->GetSheets().FindSheetForScreen( screen );
+
+            if( GetCurrentSheet() != undoSheet )
+            {
+                SetCurrentSheet( undoSheet );
+                DisplayCurrentSheet();
+            }
 
             // swap current settings with stored settings
             DS_PROXY_UNDO_ITEM  alt_item( this );
