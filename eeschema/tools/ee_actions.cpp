@@ -320,17 +320,27 @@ TOOL_ACTION EE_ACTIONS::pushPinNumSize( "eeschema.PinEditing.pushPinNumSize",
 
 // SCH_DRAWING_TOOLS
 //
-TOOL_ACTION EE_ACTIONS::placeSymbol( "eeschema.InteractiveDrawing.placeSymbol",
-        AS_GLOBAL,
-        'A', LEGACY_HK_NAME( "Add Symbol" ),
-        _( "Add Symbol" ), _( "Add symbols" ),
-        BITMAPS::add_component, AF_ACTIVATE );
+TOOL_ACTION EE_ACTIONS::placeSymbol( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.placeSymbol" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'A' )
+        .LegacyHotkeyName( "Add Symbol" )
+        .MenuText( _( "Add Symbol" ) )
+        .Tooltip( _( "Add symbols" ) )
+        .Icon( BITMAPS::add_component )
+        .Flags( AF_ACTIVATE )
+        .Parameter<SCH_SYMBOL*>( nullptr ) );
 
-TOOL_ACTION EE_ACTIONS::placePower( "eeschema.InteractiveDrawing.placePowerSymbol",
-        AS_GLOBAL,
-        'P', LEGACY_HK_NAME( "Add Power" ),
-        _( "Add Power" ), _( "Add power symbols" ),
-        BITMAPS::add_power, AF_ACTIVATE );
+TOOL_ACTION EE_ACTIONS::placePower( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.placePowerSymbol" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'P' )
+        .LegacyHotkeyName( "Add Power" )
+        .MenuText( _( "Add Power" ) )
+        .Tooltip( _( "Add power symbols" ) )
+        .Icon( BITMAPS::add_power )
+        .Flags( AF_ACTIVATE )
+        .Parameter<SCH_SYMBOL*>( nullptr ) );
 
 TOOL_ACTION EE_ACTIONS::placeNoConnect( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveDrawing.placeNoConnect" )
