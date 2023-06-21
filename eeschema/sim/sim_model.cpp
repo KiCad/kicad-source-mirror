@@ -1713,8 +1713,6 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
         {
             // Try to generate a default pin map from the SIM_MODEL's pins; if that fails,
             // generate one from the symbol's pins
-
-            model.model.SIM_MODEL::createPins( sourcePins );
             pinMapInfo.m_Text = wxString( model.model.Serializer().GeneratePins() );
 
             if( pinMapInfo.IsEmpty() )
