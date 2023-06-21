@@ -840,9 +840,15 @@ LIB_FIELD* SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>& aSymbol
 
         switch( token )
         {
+        // I am not sure we should even support parsing these IDs any more
         case T_id:
-            field->SetId( parseInt( "field ID" ) );
+        {
+            int id = parseInt( "field ID" );
+            // Only set an ID that isn't a MANDATORY_FIELDS ID
+            if( id >= MANDATORY_FIELDS )
+                field->SetId( id );
             NeedRIGHT();
+        }
             break;
 
         case T_at:
@@ -1978,8 +1984,15 @@ SCH_FIELD* SCH_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
     // Empty property values are valid.
     wxString value = FromUTF8();
 
+    int mandatoryFieldCount = 0;
+
+    if( aParent->Type() == SCH_SYMBOL_T )
+        mandatoryFieldCount = MANDATORY_FIELDS;
+    else if( aParent->Type() == SCH_SHEET_T )
+        mandatoryFieldCount = SHEET_MANDATORY_FIELDS;
+
     std::unique_ptr<SCH_FIELD> field =
-            std::make_unique<SCH_FIELD>( VECTOR2I( -1, -1 ), MANDATORY_FIELDS, aParent, name );
+            std::make_unique<SCH_FIELD>( VECTOR2I( -1, -1 ), mandatoryFieldCount, aParent, name );
     field->SetText( value );
     field->SetVisible( true );
 
@@ -2005,6 +2018,17 @@ SCH_FIELD* SCH_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
                 field->SetId( ii );
                 break;
             }
+            // Legacy support for old field names
+            else if( !name.CmpNoCase( wxT( "Sheet name" ) ) )
+            {
+                field->SetId( SHEETNAME );
+                break;
+            }
+            else if( !name.CmpNoCase( wxT( "Sheet file" ) ) )
+            {
+                field->SetId( SHEETFILENAME );
+                break;
+            }
         }
     }
 
@@ -2017,9 +2041,15 @@ SCH_FIELD* SCH_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
 
         switch( token )
         {
+        // I am not sure we should even support parsing these IDs any more
         case T_id:
-            field->SetId( parseInt( "field ID" ) );
+        {
+            int id = parseInt( "field ID" );
+            // Only set an ID that isn't a MANDATORY_FIELDS ID
+            if( id >= mandatoryFieldCount )
+                field->SetId( id );
             NeedRIGHT();
+        }
             break;
 
         case T_at:
