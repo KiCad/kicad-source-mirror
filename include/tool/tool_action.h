@@ -285,11 +285,7 @@ public:
     template<typename T>
     T GetParam() const
     {
-#ifdef WX_COMPATIBILITY
         wxASSERT_MSG( m_param.has_value(), "Attempted to get a parameter from an action with no parameter." );
-#else
-        assert( m_param.has_value() );
-#endif
 
         T param;
 
@@ -299,13 +295,9 @@ public:
         }
         catch( const std::bad_any_cast& e )
         {
-#ifdef WX_COMPATIBILITY
             wxASSERT_MSG( false,
                           wxString::Format( "Requested parameter type %s from action with parameter type %s.",
                                             typeid(T).name(), m_param.type().name() ) );
-#else
-            assert( false );
-#endif
         }
 
         return param;
