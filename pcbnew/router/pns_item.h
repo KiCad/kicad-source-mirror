@@ -50,7 +50,10 @@ class ITEM;
 class HOLE;
 struct COLLISION_SEARCH_CONTEXT;
 
-class ITEM_OWNER {};
+class ITEM_OWNER {
+public:
+    virtual ~ITEM_OWNER() {};
+};
 
 class OWNABLE_ITEM
 {
@@ -265,6 +268,8 @@ public:
     virtual void SetHole( HOLE* aHole ) {};
 
     virtual const std::string Format() const;
+
+    virtual const NODE* OwningNode() const;
 
 private:
     bool collideSimple( const ITEM* aHead, const NODE* aNode,
