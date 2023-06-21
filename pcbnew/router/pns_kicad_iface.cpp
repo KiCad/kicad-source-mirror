@@ -159,6 +159,15 @@ PNS_PCBNEW_RULE_RESOLVER::PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard,
     m_dummyArcs{ { aBoard }, { aBoard } },
     m_dummyVias{ { aBoard }, { aBoard } }
 {
+    for( PCB_TRACK& track : m_dummyTracks )
+        track.SetFlags( ROUTER_TRANSIENT );
+
+    for( PCB_ARC& arc : m_dummyArcs )
+        arc.SetFlags( ROUTER_TRANSIENT );
+
+    for ( PCB_VIA& via : m_dummyVias )
+        via.SetFlags( ROUTER_TRANSIENT );
+
     if( aBoard )
         m_clearanceEpsilon = aBoard->GetDesignSettings().GetDRCEpsilon();
     else

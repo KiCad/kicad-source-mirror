@@ -57,7 +57,11 @@
 #define MALFORMED_F_COURTYARD (1 << 20)
 #define MALFORMED_B_COURTYARD (1 << 21)
 #define MALFORMED_COURTYARDS ( MALFORMED_F_COURTYARD | MALFORMED_B_COURTYARD )
-// 22 and 23 are unused
+
+#define ROUTER_TRANSIENT      (1 << 22)     ///< transient items that should NOT be cached
+
+// 23 is unused
+
 #define HOLE_PROXY     (1 << 24)   ///< Indicates the BOARD_ITEM is a proxy for its hole
 #define IS_ROLLOVER    (1 << 25)   ///< Rollover active.  Used for hyperlink highlighting.
 #define SHOW_ELEC_TYPE (1 << 25)   ///< Show pin electrical type.  Shared with IS_ROLLOVER.

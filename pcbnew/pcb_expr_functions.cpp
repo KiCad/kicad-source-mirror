@@ -275,15 +275,20 @@ static void intersectsCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                             PTR_PTR_CACHE_KEY            key = { fp, item };
                             std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );
 
-                            auto i = board->m_IntersectsCourtyardCache.find( key );
+                            if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
+                            {
+                                auto i = board->m_IntersectsCourtyardCache.find( key );
 
-                            if( i != board->m_IntersectsCourtyardCache.end() )
-                                return i->second;
+                                if( i != board->m_IntersectsCourtyardCache.end() )
+                                    return i->second;
+                            }
 
                             bool res = collidesWithCourtyard( item, itemShape, context, fp, F_Cu )
                                     || collidesWithCourtyard( item, itemShape, context, fp, B_Cu );
 
-                            board->m_IntersectsCourtyardCache[ key ] = res;
+                            if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
+                                board->m_IntersectsCourtyardCache[ key ] = res;
+
                             return res;
                         } ) )
                 {
@@ -330,14 +335,19 @@ static void intersectsFrontCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                             PTR_PTR_CACHE_KEY            key = { fp, item };
                             std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );
 
-                            auto i = board->m_IntersectsFCourtyardCache.find( key );
+                            if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
+                            {
+                                auto i = board->m_IntersectsFCourtyardCache.find( key );
 
-                            if( i != board->m_IntersectsFCourtyardCache.end() )
-                                return i->second;
+                                if( i != board->m_IntersectsFCourtyardCache.end() )
+                                    return i->second;
+                            }
 
                             bool res = collidesWithCourtyard( item, itemShape, context, fp, F_Cu );
 
-                            board->m_IntersectsFCourtyardCache[ key ] = res;
+                            if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
+                                board->m_IntersectsFCourtyardCache[ key ] = res;
+
                             return res;
                         } ) )
                 {
@@ -384,14 +394,19 @@ static void intersectsBackCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                             PTR_PTR_CACHE_KEY            key = { fp, item };
                             std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );
 
-                            auto i = board->m_IntersectsBCourtyardCache.find( key );
+                            if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
+                            {
+                                auto i = board->m_IntersectsBCourtyardCache.find( key );
 
-                            if( i != board->m_IntersectsBCourtyardCache.end() )
-                                return i->second;
+                                if( i != board->m_IntersectsBCourtyardCache.end() )
+                                    return i->second;
+                            }
 
                             bool res = collidesWithCourtyard( item, itemShape, context, fp, B_Cu );
 
-                            board->m_IntersectsBCourtyardCache[ key ] = res;
+                            if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
+                                board->m_IntersectsBCourtyardCache[ key ] = res;
+
                             return res;
                         } ) )
                 {
@@ -636,6 +651,7 @@ static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 
                             std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );
                             LSET                         testLayers;
+                            PTR_PTR_LAYER_CACHE_KEY      key;
 
                             if( aLayer != UNDEFINED_LAYER )
                                 testLayers.set( aLayer );
@@ -644,16 +660,20 @@ static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 
                             for( PCB_LAYER_ID layer : testLayers.UIOrder() )
                             {
-                                PTR_PTR_LAYER_CACHE_KEY key = { aArea, item, layer };
+                                if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
+                                {
+                                    key = { aArea, item, layer };
 
-                                auto i = board->m_IntersectsAreaCache.find( key );
+                                    auto i = board->m_IntersectsAreaCache.find( key );
 
-                                if( i != board->m_IntersectsAreaCache.end() && i->second )
-                                    return true;
+                                    if( i != board->m_IntersectsAreaCache.end() && i->second )
+                                        return true;
+                                }
 
                                 bool collides = collidesWithArea( item, context, aArea );
 
-                                board->m_IntersectsAreaCache[ key ] = collides;
+                                if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
+                                    board->m_IntersectsAreaCache[ key ] = collides;
 
                                 if( collides )
                                     return true;
@@ -716,10 +736,13 @@ static void enclosedByAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                             std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );
                             PTR_PTR_LAYER_CACHE_KEY      key = { aArea, item, layer };
 
-                            auto i = board->m_EnclosedByAreaCache.find( key );
+                            if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
+                            {
+                                auto i = board->m_EnclosedByAreaCache.find( key );
 
-                            if( i != board->m_EnclosedByAreaCache.end() )
-                                return i->second;
+                                if( i != board->m_EnclosedByAreaCache.end() )
+                                    return i->second;
+                            }
 
                             SHAPE_POLY_SET itemShape;
                             bool           enclosedByArea;
@@ -740,7 +763,8 @@ static void enclosedByAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                                 enclosedByArea = itemShape.IsEmpty();
                             }
 
-                            board->m_EnclosedByAreaCache[ key ] = enclosedByArea;
+                            if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
+                                board->m_EnclosedByAreaCache[ key ] = enclosedByArea;
 
                             return enclosedByArea;
                         } ) )
