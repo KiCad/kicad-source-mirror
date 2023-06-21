@@ -403,11 +403,11 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 {
                     DRAW_SEGMENT_EVENT_PARAMS* params = new DRAW_SEGMENT_EVENT_PARAMS();
 
-                    params->layer = autostart->Parameter<DRAW_SEGMENT_EVENT_PARAMS*>()->layer;
+                    params->layer = autostart->Parameter<const DRAW_SEGMENT_EVENT_PARAMS*>()->layer;
                     params->quitOnDraw = true;
                     params->sourceSegment = dynamic_cast<SCH_LINE*>( collector[0] );
 
-                    autostart->SetParameter( params );
+                    autostart->SetParameter<const DRAW_SEGMENT_EVENT_PARAMS*>( params );
                     m_toolMgr->ProcessEvent( *autostart );
 
                     selCancelled = true;
