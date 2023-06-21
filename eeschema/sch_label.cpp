@@ -1820,3 +1820,38 @@ HTML_MESSAGE_BOX* SCH_TEXT::ShowSyntaxHelp( wxWindow* aParentWindow )
 
     return dlg;
 }
+
+
+static struct SCH_LABEL_DESC
+{
+    SCH_LABEL_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( SCH_LABEL_BASE );
+        REGISTER_TYPE( SCH_LABEL );
+        REGISTER_TYPE( SCH_HIERLABEL );
+        REGISTER_TYPE( SCH_GLOBALLABEL );
+        REGISTER_TYPE( SCH_DIRECTIVE_LABEL );
+
+        propMgr.AddTypeCast( new TYPE_CAST<SCH_LABEL, SCH_LABEL_BASE> );
+        propMgr.AddTypeCast( new TYPE_CAST<SCH_HIERLABEL, SCH_LABEL_BASE> );
+        propMgr.AddTypeCast( new TYPE_CAST<SCH_GLOBALLABEL, SCH_LABEL_BASE> );
+        propMgr.AddTypeCast( new TYPE_CAST<SCH_DIRECTIVE_LABEL, SCH_LABEL_BASE> );
+
+        propMgr.AddTypeCast( new TYPE_CAST<SCH_LABEL, SCH_TEXT> );
+        propMgr.AddTypeCast( new TYPE_CAST<SCH_HIERLABEL, SCH_TEXT> );
+        propMgr.AddTypeCast( new TYPE_CAST<SCH_GLOBALLABEL, SCH_TEXT> );
+        propMgr.AddTypeCast( new TYPE_CAST<SCH_DIRECTIVE_LABEL, SCH_TEXT> );
+
+        propMgr.AddTypeCast( new TYPE_CAST<SCH_LABEL, EDA_TEXT> );
+        propMgr.AddTypeCast( new TYPE_CAST<SCH_HIERLABEL, EDA_TEXT> );
+        propMgr.AddTypeCast( new TYPE_CAST<SCH_GLOBALLABEL, EDA_TEXT> );
+        propMgr.AddTypeCast( new TYPE_CAST<SCH_DIRECTIVE_LABEL, EDA_TEXT> );
+
+        propMgr.InheritsAfter( TYPE_HASH( SCH_LABEL_BASE ), TYPE_HASH( SCH_TEXT ) );
+        propMgr.InheritsAfter( TYPE_HASH( SCH_LABEL ), TYPE_HASH( SCH_LABEL_BASE ) );
+        propMgr.InheritsAfter( TYPE_HASH( SCH_HIERLABEL ), TYPE_HASH( SCH_LABEL_BASE ) );
+        propMgr.InheritsAfter( TYPE_HASH( SCH_GLOBALLABEL ), TYPE_HASH( SCH_LABEL_BASE ) );
+        propMgr.InheritsAfter( TYPE_HASH( SCH_DIRECTIVE_LABEL ), TYPE_HASH( SCH_LABEL_BASE ) );
+    }
+} _SCH_LABEL_DESC;

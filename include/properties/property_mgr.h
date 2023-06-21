@@ -224,6 +224,9 @@ public:
     ORIGIN_TRANSFORMS* GetTransforms() const { return m_originTransforms; }
     void SetTransforms( ORIGIN_TRANSFORMS* aTransforms ) { m_originTransforms = aTransforms; }
 
+    const EDA_IU_SCALE* GetIuScale() const { return m_iuScale; }
+    void SetIuScale( const EDA_IU_SCALE* aScale ) { m_iuScale = aScale; }
+
     /**
      * Rebuild the list of all registered properties. Needs to be called
      * once before GetProperty()/GetProperties() are used.
@@ -247,7 +250,8 @@ private:
     PROPERTY_MANAGER() :
             m_dirty( false ),
             m_units( EDA_UNITS::MILLIMETRES ),
-            m_originTransforms( nullptr )
+            m_originTransforms( nullptr ),
+            m_iuScale( &pcbIUScale )
     {
     }
 
@@ -304,7 +308,7 @@ private:
         ///< all properties available to a type
         void collectPropsRecur( PROPERTY_LIST& aResult, PROPERTY_SET& aReplaced,
                                 PROPERTY_DISPLAY_ORDER& aDisplayOrder,
-                                const PROPERTY_SET& aMasked ) const;
+                                PROPERTY_SET& aMasked ) const;
     };
 
     ///< Returns metadata for a specific type
@@ -321,6 +325,8 @@ private:
     EDA_UNITS m_units;
 
     ORIGIN_TRANSFORMS* m_originTransforms;
+
+    const EDA_IU_SCALE* m_iuScale;
 };
 
 

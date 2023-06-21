@@ -704,6 +704,11 @@ TOOL_ACTION ACTIONS::showFootprintEditor( TOOL_ACTION_ARGS()
         .Flags( AF_NONE )
         .Parameter( FRAME_FOOTPRINT_EDITOR ) );
 
+TOOL_ACTION ACTIONS::showProperties( "common.Control.showProperties",
+        AS_GLOBAL, 0, "",
+        _( "Show Properties Manager" ), _( "Show/hide the properties manager" ),
+        BITMAPS::tools );
+
 TOOL_ACTION ACTIONS::updatePcbFromSchematic( "common.Control.updatePcbFromSchematic",
         AS_GLOBAL,
         WXK_F8, LEGACY_HK_NAME( "Update PCB from Schematic" ),

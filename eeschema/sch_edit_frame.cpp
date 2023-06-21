@@ -62,6 +62,7 @@
 #include <tool/common_control.h>
 #include <tool/common_tools.h>
 #include <tool/picker_tool.h>
+#include <tool/properties_tool.h>
 #include <tool/selection.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
@@ -81,6 +82,7 @@
 #include <view/view_controls.h>
 #include <widgets/wx_infobar.h>
 #include <widgets/hierarchy_pane.h>
+#include <widgets/sch_properties_panel.h>
 #include <widgets/sch_search_pane.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/cmdline.h>
@@ -177,6 +179,9 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_pageSetupData.GetPrintData().SetNoCopies( 1 );
 
     m_searchPane = new SCH_SEARCH_PANE( this );
+    m_propertiesPanel = new SCH_PROPERTIES_PANEL( this, this );
+
+    m_propertiesPanel->SetSplitterProportion( eeconfig()->m_AuiPanels.properties_splitter_proportion );
 
     m_auimgr.SetManagedWindow( this );
 
@@ -201,6 +206,10 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .FloatingSize( 200, 200 )
                       .FloatingPosition( 50, 50 )
                       .Show( false ) );
+
+    m_auimgr.AddPane( m_propertiesPanel, EDA_PANE().Name( PropertiesPaneName() )
+                      .Left().Layer( 3 ).Caption( _( "Properties" ) )
+                      .PaneBorder( false ).MinSize( 240, -1 ).BestSize( 300, -1 ) );
 
     m_auimgr.AddPane( createHighlightedNetNavigator(), defaultNetNavigatorPaneInfo() );
 
@@ -239,10 +248,12 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     wxAuiPaneInfo&     hierarchy_pane = m_auimgr.GetPane( SchematicHierarchyPaneName() );
     wxAuiPaneInfo&     netNavigatorPane = m_auimgr.GetPane( NetNavigatorPaneName() );
+    wxAuiPaneInfo&     propertiesPane = m_auimgr.GetPane( PropertiesPaneName() );
     EESCHEMA_SETTINGS* cfg = eeconfig();
 
     hierarchy_pane.Show( cfg->m_AuiPanels.show_schematic_hierarchy );
     netNavigatorPane.Show( cfg->m_AuiPanels.show_net_nav_panel );
+    propertiesPane.Show( cfg->m_AuiPanels.show_properties );
 
     if( cfg->m_AuiPanels.hierarchy_panel_float_width > 0
             && cfg->m_AuiPanels.hierarchy_panel_float_height > 0 )
@@ -257,6 +268,9 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     {
         netNavigatorPane.FloatingSize( cfg->m_AuiPanels.net_nav_panel_float_size );
     }
+
+    if( cfg->m_AuiPanels.properties_panel_width > 0 )
+        SetAuiPaneSize( m_auimgr, propertiesPane, cfg->m_AuiPanels.properties_panel_width, -1 );
 
     if( cfg->m_AuiPanels.schematic_hierarchy_float )
         hierarchy_pane.Float();
@@ -463,6 +477,7 @@ void SCH_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new SCH_FIND_REPLACE_TOOL );
     m_toolManager->RegisterTool( new EE_POINT_EDITOR );
     m_toolManager->RegisterTool( new SCH_NAVIGATE_TOOL );
+    m_toolManager->RegisterTool( new PROPERTIES_TOOL );
     m_toolManager->InitTools();
 
     // Run the selection tool, it is supposed to be always active
@@ -492,6 +507,12 @@ void SCH_EDIT_FRAME::setupUIConditions()
             [this] ( const SELECTION& )
             {
                 return m_auimgr.GetPane( SearchPaneName() ).IsShown();
+            };
+
+    auto propertiesCond =
+            [this] ( const SELECTION& )
+            {
+                return m_auimgr.GetPane( PropertiesPaneName() ).IsShown();
             };
 
     auto hierarchyNavigatorCond =
@@ -525,6 +546,7 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( EE_ACTIONS::showSearch,       CHECK( searchPaneCond ) );
     mgr->SetConditions( EE_ACTIONS::showHierarchy,    CHECK( hierarchyNavigatorCond ) );
     mgr->SetConditions( EE_ACTIONS::showNetNavigator, CHECK( netNavigatorCond ) );
+    mgr->SetConditions( ACTIONS::showProperties,      CHECK( propertiesCond ) );
     mgr->SetConditions( ACTIONS::toggleGrid,          CHECK( cond.GridVisible() ) );
     mgr->SetConditions( ACTIONS::toggleCursorStyle,   CHECK( cond.FullscreenCursor() ) );
     mgr->SetConditions( ACTIONS::millimetersUnits,
@@ -2314,4 +2336,6 @@ void SCH_EDIT_FRAME::unitsChangeRefresh()
         m_netNavigator->DeleteAllItems();
         RefreshNetNavigator( refreshSelection ? &itemData : nullptr );
     }
+
+    UpdateProperties();
 }

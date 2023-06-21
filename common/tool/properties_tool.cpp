@@ -18,14 +18,15 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "properties_tool.h"
-#include <widgets/pcb_properties_panel.h>
+#include <eda_draw_frame.h>
 #include <tool/actions.h>
+#include <tool/properties_tool.h>
+#include <widgets/properties_panel.h>
 
 
 int PROPERTIES_TOOL::UpdateProperties( const TOOL_EVENT& aEvent )
 {
-    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
+    EDA_DRAW_FRAME* editFrame = getEditFrame<EDA_DRAW_FRAME>();
 
     if( editFrame )
         editFrame->UpdateProperties();

@@ -434,6 +434,7 @@ set( COMMON_SRCS
     tool/grid_helper.cpp
     tool/grid_menu.cpp
     tool/picker_tool.cpp
+    tool/properties_tool.cpp
     tool/selection.cpp
     tool/selection_tool.cpp
     tool/selection_conditions.cpp
@@ -466,6 +467,7 @@ set( COMMON_SRCS
     project/project_file.cpp
     project/project_local_settings.cpp
 
+    properties/color4d_variant.cpp
     properties/eda_angle_variant.cpp
     properties/pg_cell_renderer.cpp
     properties/pg_editors.cpp

@@ -26,6 +26,7 @@
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/property.h>
 #include <wx/propgrid/props.h>
+#include <wx/propgrid/advprops.h>
 #include <common.h>
 #include <origin_transforms.h>
 
@@ -185,6 +186,21 @@ public:
     virtual ~PGPROPERTY_BOOL() = default;
 
     const wxPGEditor* DoGetEditorClass() const override;
+};
+
+
+class PGPROPERTY_COLOR4D : public wxColourProperty
+{
+public:
+    PGPROPERTY_COLOR4D( const wxString& aLabel = wxPG_LABEL, const wxString& aName = wxPG_LABEL,
+                        COLOR4D aValue = COLOR4D::UNSPECIFIED );
+
+    virtual ~PGPROPERTY_COLOR4D() = default;
+
+    wxString ValueToString( wxVariant& aValue, int aFlags = 0 ) const override;
+
+     bool StringToValue( wxVariant &aVariant, const wxString &aText,
+                        int aFlags = 0 ) const override;
 };
 
 #endif /* PG_PROPERTIES_H */

@@ -226,7 +226,7 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
 
     viewMenu->Add( ACTIONS::showFootprintBrowser );
 
-    viewMenu->Add( PCB_ACTIONS::showProperties, ACTION_MENU::CHECK );
+    viewMenu->Add( ACTIONS::showProperties, ACTION_MENU::CHECK );
 
     viewMenu->Add( PCB_ACTIONS::showSearch, ACTION_MENU::CHECK );
     viewMenu->Add( ACTIONS::show3DViewer );

@@ -415,3 +415,14 @@ bool SCH_PIN::ConnectionPropagatesTo( const EDA_ITEM* aItem ) const
     // Reciprocal checking is done in CONNECTION_GRAPH anyway
     return !( m_libPin->GetType() == ELECTRICAL_PINTYPE::PT_NC );
 }
+
+
+static struct SCH_PIN_DESC
+{
+    SCH_PIN_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( SCH_PIN );
+        propMgr.InheritsAfter( TYPE_HASH( SCH_PIN ), TYPE_HASH( SCH_ITEM ) );
+    }
+} _SCH_PIN_DESC;

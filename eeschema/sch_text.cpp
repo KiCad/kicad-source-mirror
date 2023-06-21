@@ -542,3 +542,20 @@ void SCH_TEXT::Show( int nestLevel, std::ostream& os ) const
 #endif
 
 
+static struct SCH_TEXT_DESC
+{
+    SCH_TEXT_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( SCH_TEXT );
+        propMgr.AddTypeCast( new TYPE_CAST<SCH_TEXT, SCH_ITEM> );
+        propMgr.AddTypeCast( new TYPE_CAST<SCH_TEXT, EDA_TEXT> );
+        propMgr.InheritsAfter( TYPE_HASH( SCH_TEXT ), TYPE_HASH( SCH_ITEM ) );
+        propMgr.InheritsAfter( TYPE_HASH( SCH_TEXT ), TYPE_HASH( EDA_TEXT ) );
+
+        propMgr.Mask( TYPE_HASH( SCH_TEXT ), TYPE_HASH( EDA_TEXT ), _HKI( "Mirrored" ) );
+        propMgr.Mask( TYPE_HASH( SCH_TEXT ), TYPE_HASH( EDA_TEXT ), _HKI( "Visible" ) );
+        propMgr.Mask( TYPE_HASH( SCH_TEXT ), TYPE_HASH( EDA_TEXT ), _HKI( "Width" ) );
+        propMgr.Mask( TYPE_HASH( SCH_TEXT ), TYPE_HASH( EDA_TEXT ), _HKI( "Height" ) );
+    }
+} _SCH_TEXT_DESC;

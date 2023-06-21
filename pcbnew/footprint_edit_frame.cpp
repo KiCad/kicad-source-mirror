@@ -31,7 +31,6 @@
 #include "tools/placement_tool.h"
 #include "tools/pcb_point_editor.h"
 #include "tools/pcb_selection_tool.h"
-#include "tools/properties_tool.h"
 #include <python/scripting/pcb_scripting_tool.h>
 #include <3d_viewer/eda_3d_viewer_frame.h>
 #include <bitmaps.h>
@@ -56,6 +55,7 @@
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
 #include <tool/common_tools.h>
+#include <tool/properties_tool.h>
 #include <tool/selection.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
@@ -222,7 +222,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .Left().Layer( 4 )
                       .Caption( _( "Libraries" ) )
                       .MinSize( 250, -1 ).BestSize( 250, -1 ) );
-    m_auimgr.AddPane( m_propertiesPanel, EDA_PANE().Name( wxS( "PropertiesManager" ) )
+    m_auimgr.AddPane( m_propertiesPanel, EDA_PANE().Name( PropertiesPaneName() )
                       .Left().Layer( 3 ).Caption( _( "Properties" ) )
                       .PaneBorder( false ).MinSize( 240, -1 ).BestSize( 300, -1 ) );
     m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" )
@@ -245,7 +245,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
     m_auimgr.GetPane( "SelectionFilter" ).Show( m_show_layer_manager_tools );
-    m_auimgr.GetPane( "PropertiesManager" ).Show( m_show_properties );
+    m_auimgr.GetPane( PropertiesPaneName() ).Show( GetSettings()->m_AuiPanels.show_properties );
 
     // The selection filter doesn't need to grow in the vertical direction when docked
     m_auimgr.GetPane( "SelectionFilter" ).dock_proportion = 0;
@@ -639,7 +639,6 @@ void FOOTPRINT_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
         m_displayOptions = cfg->m_Display;
         m_show_layer_manager_tools = cfg->m_AuiPanels.show_layer_manager;
-        m_show_properties          = cfg->m_AuiPanels.show_properties;
 
         GetToolManager()->GetTool<PCB_SELECTION_TOOL>()->GetFilter() = cfg->m_SelectionFilter;
         m_selectionFilterPanel->SetCheckboxesFromFilter( cfg->m_SelectionFilter );
@@ -672,7 +671,7 @@ void FOOTPRINT_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         cfg->m_AuiPanels.right_panel_width    = m_appearancePanel->GetSize().x;
         cfg->m_AuiPanels.appearance_panel_tab = m_appearancePanel->GetTabIndex();
 
-        cfg->m_AuiPanels.show_properties        = m_show_properties;
+        cfg->m_AuiPanels.show_properties        = m_propertiesPanel->IsShownOnScreen();
         cfg->m_AuiPanels.properties_panel_width = m_propertiesPanel->GetSize().x;
 
         cfg->m_AuiPanels.properties_splitter_proportion =
@@ -1239,7 +1238,7 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
     auto propertiesCond =
             [this] ( const SELECTION& )
             {
-                return m_auimgr.GetPane( "PropertiesManager" ).IsShown();
+                return m_auimgr.GetPane( PropertiesPaneName() ).IsShown();
             };
 
     mgr->SetConditions( PCB_ACTIONS::toggleHV45Mode,        CHECK( constrainedDrawingModeCond ) );

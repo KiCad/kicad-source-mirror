@@ -32,7 +32,6 @@
 class APPEARANCE_CONTROLS;
 class BOARD_ITEM_CONTAINER;
 class PANEL_SELECTION_FILTER;
-class PROPERTIES_PANEL;
 class PCB_TEXTBOX;
 class PCB_TEXT;
 class PCB_SHAPE;
@@ -220,11 +219,7 @@ public:
 
     APPEARANCE_CONTROLS* GetAppearancePanel() { return m_appearancePanel; }
 
-    PROPERTIES_PANEL* GetPropertiesPanel() { return m_propertiesPanel; }
-
-    void UpdateProperties();
-
-    void ToggleProperties();
+    void ToggleProperties() override;
 
     void GetContextualTextVars( BOARD_ITEM* aSourceItem, const wxString& aCrossRef,
                                 wxArrayString* aTokens );
@@ -258,12 +253,10 @@ protected:
 
     PANEL_SELECTION_FILTER* m_selectionFilterPanel;
     APPEARANCE_CONTROLS*    m_appearancePanel;
-    PROPERTIES_PANEL*       m_propertiesPanel;
 
     wxAuiNotebook*          m_tabbedPanel;        /// Panel with Layers and Object Inspector tabs
 
     bool                    m_darkMode;
-    bool                    m_show_properties;
 };
 
 #endif

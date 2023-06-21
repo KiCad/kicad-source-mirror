@@ -976,3 +976,13 @@ bool SCH_LINE::IsBus() const
     return ( GetLayer() == LAYER_BUS );
 }
 
+
+static struct SCH_LINE_DESC
+{
+    SCH_LINE_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( SCH_LINE );
+        propMgr.InheritsAfter( TYPE_HASH( SCH_LINE ), TYPE_HASH( SCH_ITEM ) );
+    }
+} _SCH_LINE_DESC;

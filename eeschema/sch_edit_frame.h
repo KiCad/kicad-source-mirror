@@ -828,6 +828,8 @@ public:
      */
     void ToggleSearch();
 
+    void ToggleProperties() override;
+
     DIALOG_BOOK_REPORTER* GetSymbolDiffDialog();
 
     DIALOG_ERC* GetErcDialog();

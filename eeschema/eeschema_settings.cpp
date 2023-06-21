@@ -226,6 +226,15 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<wxSize>( "aui.net_nav_panel_float_size",
             &m_AuiPanels.net_nav_panel_float_size, wxSize( 200, 200 ) ) );
 
+    m_params.emplace_back( new PARAM<bool>( "aui.show_properties",
+            &m_AuiPanels.show_properties, true ) );
+
+    m_params.emplace_back( new PARAM<int>( "aui.properties_panel_width",
+            &m_AuiPanels.properties_panel_width, -1 ) );
+
+    m_params.emplace_back( new PARAM<float>( "aui.properties_splitter_proportion",
+            &m_AuiPanels.properties_splitter_proportion, 0.5f ) );
+
     m_params.emplace_back( new PARAM<bool>( "autoplace_fields.enable",
             &m_AutoplaceFields.enable, true ) );
 

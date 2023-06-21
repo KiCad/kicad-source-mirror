@@ -61,6 +61,7 @@
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
 #include <tool/common_tools.h>
+#include <tool/properties_tool.h>
 #include <tool/selection.h>
 #include <tool/zoom_tool.h>
 #include <tools/pcb_selection_tool.h>
@@ -82,7 +83,6 @@
 #include <tools/pad_tool.h>
 #include <microwave/microwave_tool.h>
 #include <tools/position_relative_tool.h>
-#include <tools/properties_tool.h>
 #include <tools/zone_filler_tool.h>
 #include <tools/pcb_actions.h>
 #include <router/router_tool.h>
@@ -203,7 +203,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_show_layer_manager_tools = true;
     m_supportsAutoSave = true;
     m_probingSchToPcb = false;
-    m_show_properties = true;
     m_show_search = false;
 
     // We don't know what state board was in when it was last saved, so we have to
@@ -304,7 +303,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .Caption( _( "Selection Filter" ) ).PaneBorder( false )
                       .MinSize( 180, -1 ).BestSize( 180, -1 ) );
 
-    m_auimgr.AddPane( m_propertiesPanel, EDA_PANE().Name( wxS( "PropertiesManager" ) )
+    m_auimgr.AddPane( m_propertiesPanel, EDA_PANE().Name( PropertiesPaneName() )
                       .Left().Layer( 5 ).Caption( _( "Properties" ) )
                       .PaneBorder( false ).MinSize( 240, -1 ).BestSize( 300, -1 ) );
 
@@ -327,7 +326,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
     m_auimgr.GetPane( "SelectionFilter" ).Show( m_show_layer_manager_tools );
-    m_auimgr.GetPane( "PropertiesManager" ).Show( m_show_properties );
+    m_auimgr.GetPane( PropertiesPaneName() ).Show( GetPcbNewSettings()->m_AuiPanels.show_properties );
 
     m_auimgr.GetPane( SearchPaneName() ).Show( m_show_search );
 
@@ -346,7 +345,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
         if( settings->m_AuiPanels.properties_panel_width > 0 && m_propertiesPanel )
         {
-            wxAuiPaneInfo& propertiesPanel = m_auimgr.GetPane( wxS( "PropertiesManager" ) );
+            wxAuiPaneInfo& propertiesPanel = m_auimgr.GetPane( PropertiesPaneName() );
             SetAuiPaneSize( m_auimgr, propertiesPanel,
                             settings->m_AuiPanels.properties_panel_width, -1 );
         }
@@ -1301,7 +1300,6 @@ void PCB_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     if( cfg )
     {
         m_show_layer_manager_tools = cfg->m_AuiPanels.show_layer_manager;
-        m_show_properties          = cfg->m_AuiPanels.show_properties;
         m_show_search              = cfg->m_AuiPanels.show_search;
     }
 }
@@ -1322,7 +1320,7 @@ void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
         if( m_propertiesPanel )
         {
-            cfg->m_AuiPanels.show_properties        = m_show_properties;
+            cfg->m_AuiPanels.show_properties        = m_propertiesPanel->IsShownOnScreen();
             cfg->m_AuiPanels.properties_panel_width = m_propertiesPanel->GetSize().x;
 
             cfg->m_AuiPanels.properties_splitter_proportion =
@@ -2441,7 +2439,7 @@ bool PCB_EDIT_FRAME::LayerManagerShown()
 
 bool PCB_EDIT_FRAME::PropertiesShown()
 {
-    return m_auimgr.GetPane( wxS( "PropertiesManager" ) ).IsShown();
+    return m_auimgr.GetPane( PropertiesPaneName() ).IsShown();
 }
 
 

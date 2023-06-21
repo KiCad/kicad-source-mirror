@@ -58,6 +58,7 @@
 #include <view/view.h>
 #include <drawing_sheet/ds_draw_item.h>
 #include <widgets/msgpanel.h>
+#include <widgets/properties_panel.h>
 #include <wx/event.h>
 #include <wx/snglinst.h>
 #include <dialogs/dialog_grid_settings.h>
@@ -115,6 +116,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_polarCoords         = false;
     m_findReplaceData     = std::make_unique<EDA_SEARCH_DATA>();
     m_hotkeyPopup         = nullptr;
+    m_propertiesPanel     = nullptr;
 
     SetUserUnits( EDA_UNITS::MILLIMETRES );
 
@@ -278,6 +280,7 @@ void EDA_DRAW_FRAME::unitsChangeRefresh()
 
     UpdateStatusBar();
     UpdateMsgPanel();
+    UpdateProperties();
 }
 
 
@@ -1133,6 +1136,18 @@ void EDA_DRAW_FRAME::ShowChangedLanguage()
     {
         m_searchPane->OnLanguageChange();
     }
+
+    if( m_propertiesPanel )
+        m_propertiesPanel->OnLanguageChanged();
+}
+
+
+void EDA_DRAW_FRAME::UpdateProperties()
+{
+    if( !m_propertiesPanel || !m_propertiesPanel->IsShownOnScreen() )
+        return;
+
+    m_propertiesPanel->UpdateData();
 }
 
 

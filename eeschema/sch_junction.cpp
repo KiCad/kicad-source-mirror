@@ -304,3 +304,13 @@ void SCH_JUNCTION::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANE
     }
 }
 
+
+static struct SCH_JUNCTION_DESC
+{
+    SCH_JUNCTION_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( SCH_JUNCTION );
+        propMgr.InheritsAfter( TYPE_HASH( SCH_JUNCTION ), TYPE_HASH( SCH_ITEM ) );
+    }
+} _SCH_JUNCTION_DESC;

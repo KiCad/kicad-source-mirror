@@ -26,6 +26,7 @@
 
 #include <core/wx_stl_compat.h>
 #include <origin_transforms.h>
+#include <properties/color4d_variant.h>
 #include <properties/eda_angle_variant.h>
 #include <properties/property_validator.h>
 
@@ -342,6 +343,11 @@ protected:
             {
                 EDA_ANGLE_VARIANT_DATA* ad = static_cast<EDA_ANGLE_VARIANT_DATA*>( var.GetData() );
                 a = ad->Angle();
+            }
+            else if( pv.CheckType<KIGFX::COLOR4D>() )
+            {
+                COLOR4D_VARIANT_DATA* cd = static_cast<COLOR4D_VARIANT_DATA*>( var.GetData() );
+                a = cd->Color();
             }
         }
 

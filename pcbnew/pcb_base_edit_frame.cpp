@@ -53,9 +53,7 @@ PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
         m_undoRedoBlocked( false ),
         m_selectionFilterPanel( nullptr ),
         m_appearancePanel( nullptr ),
-        m_propertiesPanel( nullptr ),
-        m_tabbedPanel( nullptr ),
-        m_show_properties( false )
+        m_tabbedPanel( nullptr )
 {
     m_darkMode = KIPLATFORM::UI::IsDarkTheme();
 
@@ -290,28 +288,19 @@ void PCB_BASE_EDIT_FRAME::onDarkModeToggle()
 }
 
 
-void PCB_BASE_EDIT_FRAME::UpdateProperties()
-{
-    if( !m_propertiesPanel || !m_propertiesPanel->IsShownOnScreen() )
-        return;
-
-    m_propertiesPanel->UpdateData();
-}
-
-
 void PCB_BASE_EDIT_FRAME::ToggleProperties()
 {
     if( !m_propertiesPanel )
         return;
 
+    bool show = !m_propertiesPanel->IsShownOnScreen();
+
+    wxAuiPaneInfo& propertiesPaneInfo = m_auimgr.GetPane( PropertiesPaneName() );
+    propertiesPaneInfo.Show( show );
+
     PCBNEW_SETTINGS* settings = GetPcbNewSettings();
 
-    m_show_properties = !m_show_properties;
-
-    wxAuiPaneInfo& propertiesPaneInfo = m_auimgr.GetPane( "PropertiesManager" );
-    propertiesPaneInfo.Show( m_show_properties );
-
-    if( m_show_properties )
+    if( show )
     {
         SetAuiPaneSize( m_auimgr, propertiesPaneInfo,
                         settings->m_AuiPanels.properties_panel_width, -1 );

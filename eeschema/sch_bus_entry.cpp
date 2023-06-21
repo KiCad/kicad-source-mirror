@@ -568,3 +568,18 @@ bool SCH_BUS_WIRE_ENTRY::ConnectionPropagatesTo( const EDA_ITEM* aItem ) const
 
     return true;
 }
+
+
+static struct SCH_BUS_ENTRY_DESC
+{
+    SCH_BUS_ENTRY_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( SCH_BUS_WIRE_ENTRY );
+        REGISTER_TYPE( SCH_BUS_BUS_ENTRY );
+        REGISTER_TYPE( SCH_BUS_ENTRY_BASE );
+        propMgr.InheritsAfter( TYPE_HASH( SCH_BUS_ENTRY_BASE ), TYPE_HASH( SCH_ITEM ) );
+        propMgr.InheritsAfter( TYPE_HASH( SCH_BUS_WIRE_ENTRY ), TYPE_HASH( SCH_BUS_ENTRY_BASE ) );
+        propMgr.InheritsAfter( TYPE_HASH( SCH_BUS_BUS_ENTRY ), TYPE_HASH( SCH_BUS_ENTRY_BASE ) );
+    }
+} _SCH_BUS_ENTRY_DESC;

@@ -509,4 +509,8 @@ protected:
     bool              m_connectivity_dirty;
 };
 
+#ifndef SWIG
+DECLARE_ENUM_TO_WXANY( SCH_LAYER_ID );
+#endif
+
 #endif /* SCH_ITEM_H */

@@ -246,6 +246,7 @@ set( EESCHEMA_WIDGETS
     widgets/pin_shape_combobox.cpp
     widgets/pin_type_combobox.cpp
     widgets/symbol_diff_widget.cpp
+    widgets/sch_properties_panel.cpp
     widgets/sch_search_pane.cpp
     widgets/search_handlers.cpp
     widgets/symbol_preview_widget.cpp

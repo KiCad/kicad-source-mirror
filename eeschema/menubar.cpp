@@ -176,6 +176,7 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     viewMenu->Add( ACTIONS::showSymbolBrowser );
     viewMenu->Add( ACTIONS::showSearch, ACTION_MENU::CHECK );
     viewMenu->Add( EE_ACTIONS::showHierarchy, ACTION_MENU::CHECK );
+    viewMenu->Add( ACTIONS::showProperties, ACTION_MENU::CHECK );
     viewMenu->Add( EE_ACTIONS::navigateBack );
     viewMenu->Add( EE_ACTIONS::navigateUp );
     viewMenu->Add( EE_ACTIONS::navigateForward );

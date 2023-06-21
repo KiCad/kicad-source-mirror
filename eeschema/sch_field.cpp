@@ -1136,3 +1136,30 @@ bool SCH_FIELD::operator <( const SCH_ITEM& aItem ) const
 
     return GetName() < field->GetName();
 }
+
+
+static struct SCH_FIELD_DESC
+{
+    SCH_FIELD_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( SCH_FIELD );
+        propMgr.AddTypeCast( new TYPE_CAST<SCH_FIELD, SCH_ITEM> );
+        propMgr.AddTypeCast( new TYPE_CAST<SCH_FIELD, EDA_TEXT> );
+        propMgr.InheritsAfter( TYPE_HASH( SCH_FIELD ), TYPE_HASH( SCH_ITEM ) );
+        propMgr.InheritsAfter( TYPE_HASH( SCH_FIELD ), TYPE_HASH( EDA_TEXT ) );
+
+        propMgr.AddProperty( new PROPERTY<SCH_FIELD, bool>( _HKI( "Show Field Name" ),
+                &SCH_FIELD::SetNameShown, &SCH_FIELD::IsNameShown ) );
+
+        propMgr.AddProperty( new PROPERTY<SCH_FIELD, bool>( _HKI( "Allow Autoplacement" ),
+                &SCH_FIELD::SetCanAutoplace, &SCH_FIELD::CanAutoplace ) );
+
+        propMgr.Mask( TYPE_HASH( SCH_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Hyperlink" ) );
+        propMgr.Mask( TYPE_HASH( SCH_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Thickness" ) );
+        propMgr.Mask( TYPE_HASH( SCH_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Mirrored" ) );
+        propMgr.Mask( TYPE_HASH( SCH_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Visible" ) );
+        propMgr.Mask( TYPE_HASH( SCH_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Width" ) );
+        propMgr.Mask( TYPE_HASH( SCH_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Height" ) );
+    }
+} _SCH_FIELD_DESC;

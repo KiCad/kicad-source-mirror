@@ -44,6 +44,7 @@ class APP_SETTINGS_BASE;
 class wxFindReplaceData;
 class SEARCH_PANE;
 class HOTKEY_CYCLE_POPUP;
+class PROPERTIES_PANEL;
 
 namespace KIGFX
 {
@@ -387,6 +388,14 @@ public:
      */
     virtual void UpdateMsgPanel();
 
+    PROPERTIES_PANEL* GetPropertiesPanel() { return m_propertiesPanel; }
+
+    void UpdateProperties();
+
+    virtual void ToggleProperties() {}
+
+    static const wxString PropertiesPaneName() { return wxS( "PropertiesManager" ); }
+
     /**
      * Fetch an item by KIID.  Frame-type-specific implementation.
      */
@@ -523,6 +532,7 @@ protected:
 
     COLOR_SETTINGS*    m_colorSettings;
     SEARCH_PANE*       m_searchPane;
+    PROPERTIES_PANEL*  m_propertiesPanel;
 
     HOTKEY_CYCLE_POPUP* m_hotkeyPopup;
 

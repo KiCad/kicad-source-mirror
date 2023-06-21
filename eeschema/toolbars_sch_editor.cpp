@@ -37,6 +37,7 @@
 #include <tools/ee_selection_tool.h>
 #include <widgets/hierarchy_pane.h>
 #include <widgets/wx_aui_utils.h>
+#include <widgets/sch_properties_panel.h>
 #include <widgets/sch_search_pane.h>
 
 /* Create  the main Horizontal Toolbar for the schematic editor
@@ -213,6 +214,7 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
 
     m_optionsToolBar->AddScaledSeparator( this );
     m_optionsToolBar->Add( EE_ACTIONS::showHierarchy,           ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::showProperties,             ACTION_TOOLBAR::TOGGLE );
 
     if( ADVANCED_CFG::GetCfg().m_DrawBoundingBoxes )
         m_optionsToolBar->Add( ACTIONS::toggleBoundingBoxes,    ACTION_TOOLBAR::TOGGLE );
@@ -260,6 +262,31 @@ void SCH_EDIT_FRAME::ToggleSearch()
         cfg->m_AuiPanels.search_panel_height = m_searchPane->GetSize().y;
         cfg->m_AuiPanels.search_panel_width = m_searchPane->GetSize().x;
         cfg->m_AuiPanels.search_panel_dock_direction = searchPaneInfo.dock_direction;
+        m_auimgr.Update();
+    }
+}
+
+
+void SCH_EDIT_FRAME::ToggleProperties()
+{
+    if( !m_propertiesPanel )
+        return;
+
+    bool show = !m_propertiesPanel->IsShownOnScreen();
+
+    wxAuiPaneInfo& propertiesPaneInfo = m_auimgr.GetPane( PropertiesPaneName() );
+    propertiesPaneInfo.Show( show );
+
+    EESCHEMA_SETTINGS* settings = eeconfig();
+
+    if( show )
+    {
+        SetAuiPaneSize( m_auimgr, propertiesPaneInfo,
+                        settings->m_AuiPanels.properties_panel_width, -1 );
+    }
+    else
+    {
+        settings->m_AuiPanels.properties_panel_width = m_propertiesPanel->GetSize().x;
         m_auimgr.Update();
     }
 }

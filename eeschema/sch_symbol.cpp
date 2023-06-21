@@ -2414,3 +2414,14 @@ bool SCH_SYMBOL::IsPower() const
 
     return m_part->IsPower();
 }
+
+
+static struct SCH_SYMBOL_DESC
+{
+    SCH_SYMBOL_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( SCH_SYMBOL );
+        propMgr.InheritsAfter( TYPE_HASH( SCH_SYMBOL ), TYPE_HASH( SCH_ITEM ) );
+    }
+} _SCH_SYMBOL_DESC;

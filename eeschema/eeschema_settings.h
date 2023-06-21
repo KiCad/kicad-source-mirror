@@ -94,6 +94,9 @@ public:
         wxSize net_nav_panel_float_size;
         bool float_net_nav_panel;
         bool show_net_nav_panel;
+        int  properties_panel_width;
+        float properties_splitter_proportion;
+        bool show_properties;
     };
 
     struct AUTOPLACE_FIELDS

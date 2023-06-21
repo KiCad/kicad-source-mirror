@@ -21,18 +21,20 @@
 #ifndef PROPERTIES_TOOL_H
 #define PROPERTIES_TOOL_H
 
-#include <tools/pcb_tool_base.h>
+#include <tool/tool_interactive.h>
 
 /**
  * Action handler for the Properties panel
  */
-class PROPERTIES_TOOL : public PCB_TOOL_BASE
+class PROPERTIES_TOOL : public TOOL_INTERACTIVE
 {
 public:
     PROPERTIES_TOOL()
-        : PCB_TOOL_BASE( "pcbnew.Properties" )
+        : TOOL_INTERACTIVE( "common.Properties" )
     {
     }
+
+    virtual void Reset( RESET_REASON aReason ) override {}
 
     int UpdateProperties( const TOOL_EVENT& aEvent );
 

@@ -318,3 +318,37 @@ void SCH_ITEM::Plot( PLOTTER* aPlotter, bool aBackground ) const
 {
     wxFAIL_MSG( wxT( "Plot() method not implemented for class " ) + GetClass() );
 }
+
+
+static struct SCH_ITEM_DESC
+{
+    SCH_ITEM_DESC()
+    {
+#ifdef NOTYET
+        ENUM_MAP<SCH_LAYER_ID>& layerEnum = ENUM_MAP<SCH_LAYER_ID>::Instance();
+
+        if( layerEnum.Choices().GetCount() == 0 )
+        {
+            layerEnum.Undefined( SCH_LAYER_ID_END );
+
+            for( SCH_LAYER_ID value : magic_enum::enum_values<SCH_LAYER_ID>() )
+                layerEnum.Map( value, LayerName( value ) );
+        }
+#endif
+
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( SCH_ITEM );
+        propMgr.InheritsAfter( TYPE_HASH( SCH_ITEM ), TYPE_HASH( EDA_ITEM ) );
+
+        // Not sure if this will ever be needed
+//        propMgr.AddProperty( new PROPERTY_ENUM<SCH_ITEM, SCH_LAYER_ID>( _HKI( "Layer" ),
+//                &SCH_ITEM::SetLayer, &SCH_ITEM::GetLayer ) )
+//                .SetIsHiddenFromPropertiesManager();
+
+        // Not yet functional in UI
+//        propMgr.AddProperty( new PROPERTY<SCH_ITEM, bool>( _HKI( "Locked" ),
+//                &SCH_ITEM::SetLocked, &SCH_ITEM::IsLocked ) );
+    }
+} _SCH_ITEM_DESC;
+
+IMPLEMENT_ENUM_TO_WXANY( SCH_LAYER_ID )

@@ -231,3 +231,14 @@ void SCH_BITMAP::ViewGetLayers( int aLayers[], int& aCount ) const
     aLayers[0] = LAYER_DRAW_BITMAPS;
     aLayers[1] = LAYER_SELECTION_SHADOWS;
 }
+
+
+static struct SCH_BITMAP_DESC
+{
+    SCH_BITMAP_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( SCH_BITMAP );
+        propMgr.InheritsAfter( TYPE_HASH( SCH_BITMAP ), TYPE_HASH( SCH_ITEM ) );
+    }
+} _SCH_BITMAP_DESC;

@@ -169,6 +169,7 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
 
     PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
     propMgr.SetUnits( m_frame->GetUserUnits() );
+    propMgr.SetIuScale( &m_frame->GetIuScale() );
     propMgr.SetTransforms( &m_frame->GetOriginTransforms() );
 
     std::set<PROPERTY_BASE*> commonProps;
@@ -249,7 +250,7 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
         existingProps.insert( property );
     }
 
-    if( existingProps == availableProps )
+    if( !existingProps.empty() && existingProps == availableProps )
         return;
 
     // Some difference exists:  start from scratch

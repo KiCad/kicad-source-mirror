@@ -265,9 +265,10 @@ PROPERTY_MANAGER::CLASS_DESC& PROPERTY_MANAGER::getClass( TYPE_ID aTypeId )
 
 void PROPERTY_MANAGER::CLASS_DESC::rebuild()
 {
-    PROPERTY_SET replaced( m_replaced );
+    PROPERTY_SET replaced;
+    PROPERTY_SET masked;
     m_allProperties.clear();
-    collectPropsRecur( m_allProperties, replaced, m_displayOrder, m_maskedBaseProperties );
+    collectPropsRecur( m_allProperties, replaced, m_displayOrder, masked );
     // We need to keep properties sorted to be able to use std::set_* functions
     sort( m_allProperties.begin(), m_allProperties.end() );
 
@@ -307,10 +308,13 @@ void PROPERTY_MANAGER::CLASS_DESC::rebuild()
 void PROPERTY_MANAGER::CLASS_DESC::collectPropsRecur( PROPERTY_LIST& aResult,
                                                       PROPERTY_SET& aReplaced,
                                                       PROPERTY_DISPLAY_ORDER& aDisplayOrder,
-                                                      const PROPERTY_SET& aMasked ) const
+                                                      PROPERTY_SET& aMasked ) const
 {
     for( const std::pair<size_t, wxString>& replacedEntry : m_replaced )
         aReplaced.emplace( replacedEntry );
+
+    for( const std::pair<size_t, wxString>& maskedEntry : m_maskedBaseProperties )
+        aMasked.emplace( maskedEntry );
 
     /*
      * We want to insert our own properties in forward order, but earlier than anything already in

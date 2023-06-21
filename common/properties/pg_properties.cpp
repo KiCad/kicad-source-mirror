@@ -26,6 +26,7 @@
 #include <validators.h>
 #include <eda_draw_frame.h>
 #include <eda_units.h>
+#include <properties/color4d_variant.h>
 #include <properties/eda_angle_variant.h>
 #include <properties/pg_properties.h>
 #include <properties/pg_editors.h>
@@ -75,6 +76,43 @@ private:
 wxAnyValueTypeScopedPtr wxAnyToEDA_ANGLE_VARIANTRegistrationImpl::s_instance( new wxAnyValueTypeImpl<EDA_ANGLE>() );
 
 static wxAnyToEDA_ANGLE_VARIANTRegistrationImpl s_wxAnyToEDA_ANGLE_VARIANTRegistration( &EDA_ANGLE_VARIANT_DATA::VariantDataFactory );
+
+
+class wxAnyToCOLOR4D_VARIANTRegistrationImpl : public wxAnyToVariantRegistration
+{
+public:
+    wxAnyToCOLOR4D_VARIANTRegistrationImpl( wxVariantDataFactory factory )
+            : wxAnyToVariantRegistration( factory )
+    {
+    }
+
+public:
+    static bool IsSameClass(const wxAnyValueType* otherType)
+    {
+        return AreSameClasses( *s_instance.get(), *otherType );
+    }
+
+    static wxAnyValueType* GetInstance()
+    {
+        return s_instance.get();
+    }
+
+    virtual wxAnyValueType* GetAssociatedType() override
+    {
+        return wxAnyToCOLOR4D_VARIANTRegistrationImpl::GetInstance();
+    }
+private:
+    static bool AreSameClasses(const wxAnyValueType& a, const wxAnyValueType& b)
+    {
+        return wxTypeId(a) == wxTypeId(b);
+    }
+
+    static wxAnyValueTypeScopedPtr s_instance;
+};
+
+wxAnyValueTypeScopedPtr wxAnyToCOLOR4D_VARIANTRegistrationImpl::s_instance( new wxAnyValueTypeImpl<KIGFX::COLOR4D>() );
+
+static wxAnyToCOLOR4D_VARIANTRegistrationImpl s_wxAnyToCOLOR4D_VARIANTRegistration( &COLOR4D_VARIANT_DATA::VariantDataFactory );
 
 
 wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty, EDA_DRAW_FRAME* aFrame )
@@ -144,6 +182,10 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty, EDA_DRAW_FRAME*
         {
             ret = new PGPROPERTY_STRING();
         }
+        else if( typeId == TYPE_HASH( COLOR4D ) )
+        {
+            ret = new PGPROPERTY_COLOR4D();
+        }
         else
         {
             wxFAIL_MSG( wxString::Format( wxS( "Property %s not supported by PGPropertyFactory" ),
@@ -195,6 +237,7 @@ wxString PGPROPERTY_DISTANCE::DistanceToString( wxVariant& aVariant, int aArgFla
     long distanceIU = aVariant.GetLong();
 
     ORIGIN_TRANSFORMS* transforms = PROPERTY_MANAGER::Instance().GetTransforms();
+    const EDA_IU_SCALE* iuScale   = PROPERTY_MANAGER::Instance().GetIuScale();
 
     if( transforms )
         distanceIU = transforms->ToDisplay( static_cast<long long int>( distanceIU ), m_coordType );
@@ -202,13 +245,13 @@ wxString PGPROPERTY_DISTANCE::DistanceToString( wxVariant& aVariant, int aArgFla
     switch( PROPERTY_MANAGER::Instance().GetUnits() )
     {
         case EDA_UNITS::INCHES:
-            return wxString::Format( wxS( "%g in" ), pcbIUScale.IUToMils( distanceIU ) / 1000.0 );
+            return wxString::Format( wxS( "%g in" ), iuScale->IUToMils( distanceIU ) / 1000.0 );
 
         case EDA_UNITS::MILS:
-            return wxString::Format( wxS( "%d mils" ), pcbIUScale.IUToMils( distanceIU ) );
+            return wxString::Format( wxS( "%d mils" ), iuScale->IUToMils( distanceIU ) );
 
         case EDA_UNITS::MILLIMETRES:
-            return wxString::Format( wxS( "%g mm" ), pcbIUScale.IUTomm( distanceIU ) );
+            return wxString::Format( wxS( "%g mm" ), iuScale->IUTomm( distanceIU ) );
 
         case EDA_UNITS::UNSCALED:
             return wxString::Format( wxS( "%li" ), distanceIU );
@@ -359,4 +402,32 @@ const wxPGEditor* PGPROPERTY_BOOL::DoGetEditorClass() const
     wxCHECK_MSG( m_customEditor, wxPGEditor_CheckBox,
                  wxT( "Make sure to set custom editor for PGPROPERTY_BOOL!" ) );
     return m_customEditor;
+}
+
+
+PGPROPERTY_COLOR4D::PGPROPERTY_COLOR4D( const wxString& aLabel, const wxString& aName,
+                                        COLOR4D aValue ) :
+        wxColourProperty( aLabel, aName, aValue.ToColour() )
+{
+}
+
+
+bool PGPROPERTY_COLOR4D::StringToValue( wxVariant& aVariant, const wxString& aString,
+                                        int aFlags ) const
+{
+    aVariant.SetData( new COLOR4D_VARIANT_DATA( aString ) );
+    return true;
+}
+
+
+wxString PGPROPERTY_COLOR4D::ValueToString( wxVariant& aValue, int aFlags ) const
+{
+    wxString ret;
+
+    if( aValue.IsType( wxS( "COLOR4D" ) ) )
+        static_cast<COLOR4D_VARIANT_DATA*>( aValue.GetData() )->Write( ret );
+    else
+        return wxColourProperty::ValueToString( aValue, aFlags );
+
+    return ret;
 }

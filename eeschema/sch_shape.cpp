@@ -517,3 +517,31 @@ void SCH_SHAPE::AddPoint( const VECTOR2I& aPosition )
 }
 
 
+static struct SCH_SHAPE_DESC
+{
+    SCH_SHAPE_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( SCH_SHAPE );
+        propMgr.AddTypeCast( new TYPE_CAST<SCH_SHAPE, SCH_ITEM> );
+        propMgr.AddTypeCast( new TYPE_CAST<SCH_SHAPE, EDA_SHAPE> );
+        propMgr.InheritsAfter( TYPE_HASH( SCH_SHAPE ), TYPE_HASH( SCH_ITEM ) );
+        propMgr.InheritsAfter( TYPE_HASH( SCH_SHAPE ), TYPE_HASH( EDA_SHAPE ) );
+
+        // Only polygons have meaningful Position properties.
+        // On other shapes, these are duplicates of the Start properties.
+        auto isPolygon =
+                []( INSPECTABLE* aItem ) -> bool
+        {
+            if( SCH_SHAPE* shape = dynamic_cast<SCH_SHAPE*>( aItem ) )
+                return shape->GetShape() == SHAPE_T::POLY;
+
+            return false;
+        };
+
+        propMgr.OverrideAvailability( TYPE_HASH( SCH_SHAPE ), TYPE_HASH( SCH_ITEM ),
+                                      _HKI( "Position X" ), isPolygon );
+        propMgr.OverrideAvailability( TYPE_HASH( SCH_SHAPE ), TYPE_HASH( SCH_ITEM ),
+                                      _HKI( "Position Y" ), isPolygon );
+    }
+} _SCH_SHAPE_DESC;

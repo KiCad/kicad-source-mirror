@@ -1392,3 +1392,26 @@ void SCH_SHEET::Show( int nestLevel, std::ostream& os ) const
 }
 
 #endif
+
+static struct SCH_SHEET_DESC
+{
+    SCH_SHEET_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( SCH_SHEET );
+        propMgr.InheritsAfter( TYPE_HASH( SCH_SHEET ), TYPE_HASH( SCH_ITEM ) );
+
+        propMgr.AddProperty( new PROPERTY<SCH_SHEET, wxString>( _HKI( "Sheet Name" ),
+                             &SCH_SHEET::SetName, &SCH_SHEET::GetName ) );
+
+        propMgr.AddProperty( new PROPERTY<SCH_SHEET, int>( _HKI( "Border Width" ),
+                             &SCH_SHEET::SetBorderWidth, &SCH_SHEET::GetBorderWidth,
+                             PROPERTY_DISPLAY::PT_SIZE ) );
+
+        propMgr.AddProperty( new PROPERTY<SCH_SHEET, COLOR4D>( _HKI( "Border Color" ),
+                             &SCH_SHEET::SetBorderColor, &SCH_SHEET::GetBorderColor ) );
+
+        propMgr.AddProperty( new PROPERTY<SCH_SHEET, COLOR4D>( _HKI( "Background Color" ),
+                             &SCH_SHEET::SetBackgroundColor, &SCH_SHEET::GetBackgroundColor ) );
+    }
+} _SCH_SHEET_DESC;
