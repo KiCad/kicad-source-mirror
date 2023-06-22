@@ -167,25 +167,38 @@ void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECT
     EDA_ANGLE     labelAngle = - EDA_ANGLE( tickLine );
     VECTOR2I      labelOffset = tickLine.Resize( majorTickLen );
 
+    // text is left (or right) aligned, so shadow text need a small offset to be draw
+    // around the basic text
+    int shadowXoffset = 0;
+
     if( aDrawingDropShadows )
+    {
         labelDims.StrokeWidth += 2 * labelDims.ShadowWidth;
+        shadowXoffset = labelDims.ShadowWidth;
+    }
 
     if( aView->IsMirroredX() )
+    {
         labelOffset = -labelOffset;
+        shadowXoffset = -shadowXoffset;
+    }
 
     TEXT_ATTRIBUTES labelAttrs;
     labelAttrs.m_Size = labelDims.GlyphSize;
     labelAttrs.m_StrokeWidth = labelDims.StrokeWidth;
+    labelAttrs.m_Mirrored = aView->IsMirroredX();   // Prevent text mirrored when view is mirrored
 
     if( EDA_ANGLE( aLine ) > ANGLE_0 )
     {
         labelAttrs.m_Halign = GR_TEXT_H_ALIGN_LEFT;
         labelAttrs.m_Angle = labelAngle;
+        labelOffset.x -= shadowXoffset;
     }
     else
     {
         labelAttrs.m_Halign = GR_TEXT_H_ALIGN_RIGHT;
         labelAttrs.m_Angle = labelAngle + ANGLE_180;
+        labelOffset.x += shadowXoffset;
     }
 
     BOX2D viewportD = aView->GetViewport();
@@ -193,6 +206,8 @@ void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECT
 
     viewport.Inflate( majorTickLen * 2 );   // Doesn't have to be accurate, just big enough not
                                             // to exclude anything that should be partially drawn
+
+    int isign = aView->IsMirroredX() ? -1 : 1;
 
     for( int i = 0; i < numTicks; ++i )
     {
@@ -216,7 +231,7 @@ void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECT
         }
 
         gal->SetLineWidth( labelAttrs.m_StrokeWidth / 2 );
-        gal->DrawLine( tickPos, tickPos + tickLine.Resize( length ) );
+        gal->DrawLine( tickPos, tickPos + tickLine.Resize( length*isign ) );
 
         if( drawLabel )
         {
@@ -244,9 +259,10 @@ void drawBacksideTicks( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECTO
     TEXT_DIMS    textDims = GetConstantGlyphHeight( gal, -1 );
     const double backTickSpace = aLine.EuclideanNorm() / aNumDivisions;
     VECTOR2D     backTickVec = aLine;
+    int isign                = aView->IsMirroredX() ? -1 : 1;
 
     RotatePoint( backTickVec, -ANGLE_90 );
-    backTickVec = backTickVec.Resize( aTickLen );
+    backTickVec = backTickVec.Resize( aTickLen * isign );
 
     BOX2D viewportD = aView->GetViewport();
     BOX2I viewport( VECTOR2I( viewportD.GetPosition() ), VECTOR2I( viewportD.GetSize() ) );

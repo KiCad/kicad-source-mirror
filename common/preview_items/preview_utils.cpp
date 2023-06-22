@@ -154,6 +154,15 @@ void KIGFX::PREVIEW::DrawTextNextToCursor( KIGFX::VIEW* aView, const VECTOR2D& a
         textPos.x -= 15.0 / gal->GetWorldScale();
     }
 
+    // text is left (or right) aligned, so a shadow text need a small offset to be draw
+    // around the basic text
+    int shadowXoffset = aDrawingDropShadows ? textDims.ShadowWidth : 0;
+
+    if( ( textAttrs.m_Halign == GR_TEXT_H_ALIGN_LEFT ) != viewFlipped )
+        textPos.x -= shadowXoffset;
+    else
+        textPos.x += shadowXoffset;
+
     gal->SetStrokeColor( aView->GetPainter()->GetSettings()->GetLayerColor( LAYER_AUX_ITEMS ) );
     textAttrs.m_Mirrored = viewFlipped; // Prevent text flipping when view is flipped
     textAttrs.m_Size = textDims.GlyphSize;

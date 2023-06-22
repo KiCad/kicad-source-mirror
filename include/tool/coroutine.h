@@ -423,7 +423,12 @@ private:
         const BOOL res = ::VirtualProtect( m_stack, system_page_size.value(),
                                            PAGE_READWRITE | PAGE_GUARD, &old_prot );
 
+#ifdef NDEBUG
+        // Avoid compil warning (unused variable 'res')
+        (void) res;
+#else
         assert( res != false );
+#endif
 
         stackSize = alloc_size;
         sp = static_cast<char*>( m_stack ) + stackSize;

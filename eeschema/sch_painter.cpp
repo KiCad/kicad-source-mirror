@@ -1627,6 +1627,12 @@ void SCH_PAINTER::draw( const LIB_PIN* aPin, int aLayer, bool aDimmed )
 
         for( float& t : thickness )
             t += shadowWidth;
+
+        // Due to the fact a shadow text in position ISIDE or OUTSIDE is drawn left or right aligned,
+        // it needs  an offset = shadowWidth/2 to be drawn at the same place as normal text
+        // texts drawn as GR_TEXT_H_ALIGN_CENTER do not need a specific offset.
+        insideOffset -= shadowWidth/2.0f;
+        outsideOffset -= shadowWidth/2.0f;
     }
 
     auto drawText =
