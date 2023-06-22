@@ -273,7 +273,7 @@ int SHAPE_POLY_SET::Append( int x, int y, int aOutline, int aHole, bool aAllowDu
 }
 
 
-int SHAPE_POLY_SET::Append( SHAPE_ARC& aArc, int aOutline, int aHole, double aAccuracy )
+int SHAPE_POLY_SET::Append( const SHAPE_ARC& aArc, int aOutline, int aHole, double aAccuracy )
 {
     assert( m_polys.size() );
 
@@ -414,7 +414,7 @@ const VECTOR2I& SHAPE_POLY_SET::CVertex( SHAPE_POLY_SET::VERTEX_INDEX index ) co
 }
 
 
-bool SHAPE_POLY_SET::GetNeighbourIndexes( int aGlobalIndex, int* aPrevious, int* aNext )
+bool SHAPE_POLY_SET::GetNeighbourIndexes( int aGlobalIndex, int* aPrevious, int* aNext ) const
 {
     SHAPE_POLY_SET::VERTEX_INDEX index;
 

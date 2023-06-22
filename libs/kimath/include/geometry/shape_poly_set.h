@@ -603,7 +603,7 @@ public:
      * @param aAccuracy Accuracy of the arc representation in IU
      * @return the number of points in the arc (including the interpolated points from the arc)
      */
-    int Append( SHAPE_ARC& aArc, int aOutline = -1, int aHole = -1,
+    int Append( const SHAPE_ARC& aArc, int aOutline = -1, int aHole = -1,
                 double aAccuracy = SHAPE_ARC::DefaultAccuracyForPCB() );
 
     /**
@@ -637,7 +637,7 @@ public:
      * @param aNext is the globalIndex of the next corner of the same contour.
      * @return true if OK, false if aGlobalIndex is out of range
      */
-    bool GetNeighbourIndexes( int aGlobalIndex, int* aPrevious, int* aNext );
+    bool GetNeighbourIndexes( int aGlobalIndex, int* aPrevious, int* aNext ) const;
 
     /**
      * Check whether the aPolygonIndex-th polygon in the set is self intersecting.

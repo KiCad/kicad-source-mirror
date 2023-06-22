@@ -365,7 +365,7 @@ inline EDA_ANGLE operator/( const EDA_ANGLE& aAngleA, double aOperator )
 }
 
 
-inline double operator/( const EDA_ANGLE& aAngleA, EDA_ANGLE& aOperator )
+inline double operator/( const EDA_ANGLE& aAngleA, const EDA_ANGLE& aOperator )
 {
     return aAngleA.AsDegrees() / aOperator.AsDegrees();
 }

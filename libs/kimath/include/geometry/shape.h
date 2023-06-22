@@ -188,7 +188,7 @@ public:
      *
      * @param aShape shape to check collision against
      * @param aClearance minimum clearance
-     * @param aMTV minimum translation vector
+     * @param aMTV [out] minimum translation vector
      * @param aActual [out] an optional pointer to an int to store the actual distance in the
      *                event of a collision.
      * @param aLocation [out] an option pointer to a point to store a nearby location in the
