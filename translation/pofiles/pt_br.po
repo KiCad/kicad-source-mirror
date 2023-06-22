@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-27 08:29-0700\n"
-"PO-Revision-Date: 2023-05-24 20:51+0000\n"
+"POT-Creation-Date: 2023-05-18 11:55-0700\n"
+"PO-Revision-Date: 2023-06-23 20:35+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 4.18.1\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -35338,7 +35338,7 @@ msgstr "Item não reconhecido '%s'.| Era esperada uma expressão entre aspas."
 #: pcbnew/drc/drc_rule_parser.cpp:415 pcbnew/drc/drc_rule_parser.cpp:441
 #: pcbnew/drc/drc_rule_parser.cpp:558 pcbnew/drc/drc_rule_parser.cpp:673
 msgid "Missing ')'."
-msgstr "Faltando '('."
+msgstr "Faltando ')'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:292
 #, c-format
