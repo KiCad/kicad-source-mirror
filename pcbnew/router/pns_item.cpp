@@ -152,8 +152,13 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
     // fixme: this f***ing singleton must go...
     ROUTER*       router = ROUTER::GetInstance();
     ROUTER_IFACE* iface = router ? router->GetInterface() : nullptr;
-    bool          differentNetsOnly = aCtx && aCtx->options.m_differentNetsOnly;
+    bool          differentNetsOnly = true;
     int           clearance;
+
+    if( aCtx )
+    {
+        differentNetsOnly = aCtx->options.m_differentNetsOnly;
+    }
 
     // Hole-to-hole collisions don't have anything to do with nets
     if( Kind() == HOLE_T && aHead->Kind() == HOLE_T )
