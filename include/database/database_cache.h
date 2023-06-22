@@ -29,17 +29,24 @@
 #include <database/database_connection.h>
 
 
+template<typename CacheValueType>
 class DATABASE_CACHE
 {
 public:
-    typedef std::pair<std::string, std::pair<time_t, DATABASE_CONNECTION::ROW>> CACHE_ENTRY;
+    typedef std::pair<std::string, std::pair<time_t, CacheValueType>> CACHE_ENTRY;
+
+    typedef std::unordered_map<std::string, typename std::list<CACHE_ENTRY>::iterator> CACHE_TYPE;
+
+    typedef typename CACHE_TYPE::const_iterator CACHE_CITER;
+
+    typedef CacheValueType CACHE_VALUE;
 
     DATABASE_CACHE( size_t aMaxSize, time_t aMaxAge ) :
             m_maxSize( aMaxSize ),
             m_maxAge( aMaxAge )
     {}
 
-    void Put( const std::string& aQuery, const DATABASE_CONNECTION::ROW& aResult )
+    void Put( const std::string& aQuery, const CacheValueType& aResult )
     {
         auto it = m_cache.find( aQuery );
 
@@ -65,7 +72,7 @@ public:
         }
     }
 
-    bool Get( const std::string& aQuery, DATABASE_CONNECTION::ROW& aResult )
+    bool Get( const std::string& aQuery, CacheValueType& aResult )
     {
         auto it = m_cache.find( aQuery );
 
@@ -94,7 +101,7 @@ private:
     size_t m_maxSize;
     time_t m_maxAge;
     std::list<CACHE_ENTRY> m_cacheMru;
-    std::unordered_map<std::string, std::list<CACHE_ENTRY>::iterator> m_cache;
+    CACHE_TYPE m_cache;
 };
 
 #endif //KICAD_DATABASE_CACHE_H
