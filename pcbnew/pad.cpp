@@ -1802,7 +1802,16 @@ static struct PAD_DESC
                     PROPERTY_DISPLAY::PT_SIZE ), groupPad );
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Size Y" ),
                     &PAD::SetSizeY, &PAD::GetSizeY,
-                    PROPERTY_DISPLAY::PT_SIZE ), groupPad );
+                    PROPERTY_DISPLAY::PT_SIZE ), groupPad )
+                .SetAvailableFunc(
+                        [=]( INSPECTABLE* aItem ) -> bool
+                        {
+                            // Circle pads have no usable y-size
+                            if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                                return pad->GetShape() != PAD_SHAPE::CIRCLE;
+
+                            return true;
+                        } );
 
         auto roundRadiusRatio = new PROPERTY<PAD, double>( _HKI( "Corner Radius Ratio" ),
                     &PAD::SetRoundRectRadiusRatio, &PAD::GetRoundRectRadiusRatio );
