@@ -44,6 +44,7 @@
 
 #include <database/database_connection.h>
 #include <database/database_cache.h>
+#include <profile.h>
 
 
 const char* const traceDatabase = "KICAD_DATABASE";
@@ -89,7 +90,7 @@ DATABASE_CONNECTION::DATABASE_CONNECTION( const std::string& aDataSourceName,
     m_pass    = aPassword;
     m_timeout = aTimeoutSeconds;
 
-    m_cache = std::make_unique<DATABASE_CACHE>( 10, 1 );
+    init();
 
     if( aConnectNow )
         Connect();
@@ -103,7 +104,7 @@ DATABASE_CONNECTION::DATABASE_CONNECTION( const std::string& aConnectionString,
     m_connectionString = aConnectionString;
     m_timeout          = aTimeoutSeconds;
 
-    m_cache = std::make_unique<DATABASE_CACHE>( 10, 1 );
+    init();
 
     if( aConnectNow )
         Connect();
@@ -114,6 +115,12 @@ DATABASE_CONNECTION::~DATABASE_CONNECTION()
 {
     Disconnect();
     m_conn.reset();
+}
+
+
+void DATABASE_CONNECTION::init()
+{
+    m_cache = std::make_unique<DB_CACHE_TYPE>( 10, 1 );
 }
 
 
@@ -159,12 +166,10 @@ bool DATABASE_CONNECTION::Connect()
         return false;
     }
 
+    m_tables.clear();
+
     if( IsConnected() )
-    {
-        syncTables();
-        cacheColumns();
         getQuoteChar();
-    }
 
     return IsConnected();
 }
@@ -201,54 +206,32 @@ bool DATABASE_CONNECTION::IsConnected() const
 }
 
 
-bool DATABASE_CONNECTION::syncTables()
+bool DATABASE_CONNECTION::CacheTableInfo( const std::string& aTable,
+                                          const std::set<std::string>& aColumns )
 {
     if( !m_conn )
         return false;
-
-    m_tables.clear();
 
     try
     {
         nanodbc::catalog catalog( *m_conn );
-        nanodbc::catalog::tables tables = catalog.find_tables();
+        nanodbc::catalog::tables tables = catalog.find_tables( fromUTF8( aTable ) );
 
-        while( tables.next() )
-        {
-            std::string key = toUTF8( tables.table_name() );
-            m_tables[key] = toUTF8( tables.table_type() );
-        }
-    }
-    catch( nanodbc::database_error& e )
-    {
-        m_lastError = e.what();
-        wxLogTrace( traceDatabase, wxT( "Exception while syncing tables: %s" ), m_lastError );
-        return false;
-    }
+        tables.next();
+        std::string key = toUTF8( tables.table_name() );
+        m_tables[key] = toUTF8( tables.table_type() );
 
-    return true;
-}
-
-
-bool DATABASE_CONNECTION::cacheColumns()
-{
-    if( !m_conn )
-        return false;
-
-    m_columnCache.clear();
-
-    for( const auto& tableIter : m_tables )
-    {
         try
         {
-            nanodbc::catalog catalog( *m_conn );
             nanodbc::catalog::columns columns =
-                    catalog.find_columns( NANODBC_TEXT( "" ), fromUTF8( tableIter.first ) );
+                    catalog.find_columns( NANODBC_TEXT( "" ), tables.table_name() );
 
             while( columns.next() )
             {
                 std::string columnKey = toUTF8( columns.column_name() );
-                m_columnCache[tableIter.first][columnKey] = columns.data_type();
+
+                if( aColumns.count( columnKey ) )
+                    m_columnCache[key][columnKey] = columns.data_type();
             }
 
         }
@@ -256,9 +239,15 @@ bool DATABASE_CONNECTION::cacheColumns()
         {
             m_lastError = e.what();
             wxLogTrace( traceDatabase, wxT( "Exception while syncing columns for table %s: %s" ),
-                        tableIter.first, m_lastError );
+                        key, m_lastError );
             return false;
         }
+    }
+    catch( nanodbc::database_error& e )
+    {
+        m_lastError = e.what();
+        wxLogTrace( traceDatabase, wxT( "Exception while caching table info: %s" ), m_lastError );
+        return false;
     }
 
     return true;
@@ -291,6 +280,35 @@ bool DATABASE_CONNECTION::getQuoteChar()
 }
 
 
+std::string DATABASE_CONNECTION::columnsFor( const std::string& aTable )
+{
+    if( !m_columnCache.count( aTable ) )
+    {
+        wxLogTrace( traceDatabase, wxT( "columnsFor: requested table %s missing from cache!" ),
+                    aTable );
+        return "*";
+    }
+
+    if( m_columnCache[aTable].empty() )
+    {
+        wxLogTrace( traceDatabase, wxT( "columnsFor: requested table %s has no columns mapped!" ),
+                    aTable );
+        return "*";
+    }
+
+    std::string ret;
+
+    for( const auto& [ columnName, columnType ] : m_columnCache[aTable] )
+        ret += fmt::format( "{}{}{}, ", m_quoteChar, columnName, m_quoteChar );
+
+    // strip tailing ', '
+    ret.resize( ret.length() - 2 );
+
+    return ret;
+}
+
+//next step, make SelectOne take from the SelectAll cache if the SelectOne cache is missing.
+//To do this, need to build a map of PK->ROW for the cache result.
 bool DATABASE_CONNECTION::SelectOne( const std::string& aTable,
                                      const std::pair<std::string, std::string>& aWhere,
                                      DATABASE_CONNECTION::ROW& aResult )
@@ -311,6 +329,18 @@ bool DATABASE_CONNECTION::SelectOne( const std::string& aTable,
     }
 
     const std::string& tableName = tableMapIter->first;
+    DB_CACHE_TYPE::CACHE_VALUE cacheEntry;
+
+    if( m_cache->Get( tableName, cacheEntry ) )
+    {
+        if( cacheEntry.count( aWhere.second ) )
+        {
+            wxLogTrace( traceDatabase, wxT( "SelectOne: `%s` with parameter `%s` - cache hit" ),
+                        tableName, aWhere.second );
+            aResult = cacheEntry.at( aWhere.second );
+            return true;
+        }
+    }
 
     if( !m_columnCache.count( tableName ) )
     {
@@ -332,19 +362,15 @@ bool DATABASE_CONNECTION::SelectOne( const std::string& aTable,
 
     std::string cacheKey = fmt::format( "{}{}{}", tableName, columnName, aWhere.second );
 
-    std::string queryStr = fmt::format( "SELECT * FROM {}{}{} WHERE {}{}{} = ?",
+    std::string queryStr = fmt::format( "SELECT {} FROM {}{}{} WHERE {}{}{} = ?",
+                                        columnsFor( tableName ),
                                         m_quoteChar, tableName, m_quoteChar,
                                         m_quoteChar, columnName, m_quoteChar );
 
     nanodbc::statement statement( *m_conn );
     nanodbc::string query = fromUTF8( queryStr );
 
-    if( m_cache->Get( cacheKey, aResult ) )
-    {
-        wxLogTrace( traceDatabase, wxT( "SelectOne: `%s` with parameter `%s` - cache hit" ),
-                    toUTF8( query ), aWhere.second );
-        return true;
-    }
+    PROF_TIMER timer;
 
     try
     {
@@ -384,14 +410,17 @@ bool DATABASE_CONNECTION::SelectOne( const std::string& aTable,
         return false;
     }
 
+    timer.Stop();
+
+
     if( !results.first() )
     {
         wxLogTrace( traceDatabase, wxT( "SelectOne: no results returned from query" ) );
         return false;
     }
 
-    wxLogTrace( traceDatabase, wxT( "SelectOne: %ld results returned from query" ),
-                results.rows() );
+    wxLogTrace( traceDatabase, wxT( "SelectOne: %ld results returned from query in %0.1f ms" ),
+                results.rows(), timer.msecs() );
 
     aResult.clear();
 
@@ -411,13 +440,12 @@ bool DATABASE_CONNECTION::SelectOne( const std::string& aTable,
         return false;
     }
 
-    m_cache->Put( cacheKey, aResult );
-
     return true;
 }
 
 
-bool DATABASE_CONNECTION::SelectAll( const std::string& aTable, std::vector<ROW>& aResults )
+bool DATABASE_CONNECTION::SelectAll( const std::string& aTable, const std::string& aKey,
+                                     std::vector<ROW>& aResults )
 {
     if( !m_conn )
     {
@@ -434,12 +462,26 @@ bool DATABASE_CONNECTION::SelectAll( const std::string& aTable, std::vector<ROW>
         return false;
     }
 
+    DB_CACHE_TYPE::CACHE_VALUE cacheEntry;
+
+    if( m_cache->Get( aTable, cacheEntry ) )
+    {
+        wxLogTrace( traceDatabase, wxT( "SelectAll: `%s` - cache hit" ), aTable );
+
+        for( auto &[ key, row ] : cacheEntry )
+            aResults.emplace_back( row );
+
+        return true;
+    }
+
     nanodbc::statement statement( *m_conn );
 
-    nanodbc::string query = fromUTF8( fmt::format( "SELECT * FROM {}{}{}", m_quoteChar,
-                                                   tableMapIter->first, m_quoteChar ) );
+    nanodbc::string query = fromUTF8( fmt::format( "SELECT {} FROM {}{}{}", columnsFor( aTable ),
+                                                   m_quoteChar, aTable, m_quoteChar ) );
 
     wxLogTrace( traceDatabase, wxT( "SelectAll: `%s`" ), toUTF8( query ) );
+
+    PROF_TIMER timer;
 
     try
     {
@@ -475,6 +517,8 @@ bool DATABASE_CONNECTION::SelectAll( const std::string& aTable, std::vector<ROW>
         return false;
     }
 
+    timer.Stop();
+
     try
     {
         while( results.next() )
@@ -497,6 +541,18 @@ bool DATABASE_CONNECTION::SelectAll( const std::string& aTable, std::vector<ROW>
                     m_lastError );
         return false;
     }
+
+    wxLogTrace( traceDatabase, wxT( "SelectAll from %s completed in %0.1f ms" ), aTable,
+                timer.msecs() );
+
+    for( const ROW& row : aResults )
+    {
+        wxASSERT( row.count( aKey ) );
+        std::string keyStr = std::any_cast<std::string>( row.at( aKey ) );
+        cacheEntry[keyStr] = row;
+    }
+
+    m_cache->Put( aTable, cacheEntry );
 
     return true;
 }

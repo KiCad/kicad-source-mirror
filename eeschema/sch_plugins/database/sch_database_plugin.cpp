@@ -73,7 +73,7 @@ void SCH_DATABASE_PLUGIN::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolL
     {
         std::vector<DATABASE_CONNECTION::ROW> results;
 
-        if( !m_conn->SelectAll( table.table, results ) )
+        if( !m_conn->SelectAll( table.table, table.key_col, results ) )
         {
             if( !m_conn->GetLastError().empty() )
             {
@@ -285,6 +285,26 @@ void SCH_DATABASE_PLUGIN::ensureConnection()
             m_conn.reset();
 
             THROW_IO_ERROR( msg );
+        }
+
+        for( const DATABASE_LIB_TABLE& tableIter : m_settings->m_Tables )
+        {
+            std::set<std::string> columns;
+
+            columns.insert( tableIter.key_col );
+            columns.insert( tableIter.footprints_col );
+            columns.insert( tableIter.symbols_col );
+
+            columns.insert( tableIter.properties.description );
+            columns.insert( tableIter.properties.footprint_filters );
+            columns.insert( tableIter.properties.keywords );
+            columns.insert( tableIter.properties.exclude_from_bom );
+            columns.insert( tableIter.properties.exclude_from_board );
+
+            for( const DATABASE_FIELD_MAPPING& field : tableIter.fields )
+                columns.insert( field.column );
+
+            m_conn->CacheTableInfo( tableIter.table, columns );
         }
 
         m_conn->SetCacheParams( m_settings->m_Cache.max_size, m_settings->m_Cache.max_age );

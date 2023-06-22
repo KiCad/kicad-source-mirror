@@ -24,7 +24,10 @@
 #include <any>
 #include <map>
 #include <memory>
+#include <set>
 #include <vector>
+
+#include <database/database_cache.h>
 
 extern const char* const traceDatabase;
 
@@ -33,8 +36,6 @@ namespace nanodbc
 {
     class connection;
 }
-
-class DATABASE_CACHE;
 
 
 class DATABASE_CONNECTION
@@ -62,6 +63,8 @@ public:
 
     bool IsConnected() const;
 
+    bool CacheTableInfo( const std::string& aTable, const std::set<std::string>& aColumns );
+
     /**
      * Retrieves a single row from a database table.  Table and column names are cached when the
      * connection is created, so schema changes to the database won't be recognized unless the
@@ -77,19 +80,21 @@ public:
     /**
      * Retrieves all rows from a database table.
      * @param aTable the name of a table in the database
+     * @param aKey holds the column name of the primary key used for caching results
      * @param aResults will be filled with all rows in the table
      * @return true if the query succeeded and at least one ROW was found, false otherwise
      */
-    bool SelectAll( const std::string& aTable, std::vector<ROW>& aResults );
+    bool SelectAll( const std::string& aTable, const std::string& aKey,
+                    std::vector<ROW>& aResults );
 
     std::string GetLastError() const { return m_lastError; }
 
 private:
-    bool syncTables();
-
-    bool cacheColumns();
+    void init();
 
     bool getQuoteChar();
+
+    std::string columnsFor( const std::string& aTable );
 
     std::unique_ptr<nanodbc::connection> m_conn;
 
@@ -109,7 +114,9 @@ private:
 
     char m_quoteChar;
 
-    std::unique_ptr<DATABASE_CACHE> m_cache;
+    typedef DATABASE_CACHE<std::map<std::string, ROW>> DB_CACHE_TYPE;
+
+    std::unique_ptr<DB_CACHE_TYPE> m_cache;
 };
 
 #endif //KICAD_DATABASE_CONNECTION_H
