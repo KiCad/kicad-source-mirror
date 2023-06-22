@@ -320,9 +320,18 @@ wxString PATHS::GetStockDemosPath()
 
 wxString PATHS::GetUserCachePath()
 {
+    wxString   envPath;
     wxFileName tmp;
 
     tmp.AssignDir( KIPLATFORM::ENV::GetUserCachePath() );
+
+    // Use KICAD_CACHE_HOME to allow the user to force a specific cache path.
+    if( wxGetEnv( wxT( "KICAD_CACHE_HOME" ), &envPath ) && !envPath.IsEmpty() )
+    {
+        // Override the assignment above with KICAD_CACHE_HOME
+        tmp.AssignDir( envPath );
+    }
+
     tmp.AppendDir( KICAD_PATH_STR );
     tmp.AppendDir( SETTINGS_MANAGER::GetSettingsVersion() );
 
