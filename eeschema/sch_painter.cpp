@@ -1512,6 +1512,19 @@ void SCH_PAINTER::draw( const LIB_PIN *aPin, int aLayer, bool aDimmed )
 
         for( float& t : thickness )
             t += shadowWidth;
+
+        // Due to the fact a shadow text in position INSIDE or OUTSIDE is drawn left or right aligned,
+        // it needs an offset = shadowWidth/2 to be drawn at the same place as normal text
+        // texts drawn as GR_TEXT_H_ALIGN_CENTER do not need a specific offset.
+        // this offset is shadowWidth/2 but for some reason we need to slightly modify this offset
+        // for a better look (better alignment of shadow shape), for KiCad font only
+        if( !KIFONT::FONT::GetFont( eeconfig()->m_Appearance.default_font )->IsOutline() )
+        {
+            const float adjust = 1.2f;      // Value chosen after tests
+            float shadowOffset = shadowWidth/2.0f * adjust;
+            insideOffset -= shadowOffset;
+            outsideOffset -= shadowOffset;
+        }
     }
 
     auto drawText =
