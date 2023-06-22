@@ -2,10 +2,10 @@
 <!-- Copyright (C) 2016-2017 Lubomir Rintel <lkundrak@v3.sk> -->
 <!-- Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors. -->
 <component type="desktop">
-    <id>org.kicad.kicad</id>
+    <id>@KICAD_APP_NAME@</id>
     <name>KiCad</name>
 
-    <launchable type="desktop-id">org.kicad.kicad.desktop</launchable>
+    <launchable type="desktop-id">@KICAD_APP_NAME@.desktop</launchable>
 
     <project_license>GPL-3.0-or-later</project_license>
     <metadata_license>CC-BY-SA-4.0</metadata_license>

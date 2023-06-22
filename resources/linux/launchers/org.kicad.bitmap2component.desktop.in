@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Terminal=false
-Icon=bitmap2component
+Icon=@KICAD_DESKTOP_FILE_ICON_PREFIX@bitmap2component
 Keywords=bitmap2component;Bitmap;Converter;
 Type=Application
 Categories=Science;Electronics;

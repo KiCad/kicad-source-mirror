@@ -111,6 +111,17 @@ cmake_dependent_option( KICAD_USE_BUNDLED_GLEW
     ON "KICAD_USE_EGL"
     OFF )
 
+# Options to build with flatpak platform defaults (only on Linux)
+cmake_dependent_option( KICAD_BUILD_FLATPAK
+    "Build KiCad with metadata, launchers, icons, and MIME info following flatpak conventions"
+    OFF "UNIX_NOT_APPLE"
+    OFF )
+
+cmake_dependent_option( KICAD_BUILD_NIGHTLY_FLATPAK
+    "Build a Nightly flatpak (requires KICAD_BUILD_FLATPAK=ON)"
+    OFF "UNIX_NOT_APPLE"
+    OFF )
+
 cmake_dependent_option( KICAD_WIN32_DPI_AWARE
     "Turn on DPI awareness for Windows builds only"
     OFF "WIN32"
