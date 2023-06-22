@@ -109,21 +109,6 @@ function( generate_lemon_grammar TGT GRAMMAR_DIR CONSUMING_FILE GRAMMAR_FILE )
 endfunction()
 
 
-# Is a macro instead of function so there's a higher probability that the
-# scope of CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA is global
-macro( add_conffiles )
-    if( ${ARGC} STREQUAL "0" )
-        # remove the file when user passes no arguments, which he should do exactly once at top
-        file( REMOVE ${CMAKE_CURRENT_BINARY_DIR}/conffiles )
-    else()
-        foreach( filename ${ARGV} )
-            file( APPEND ${CMAKE_CURRENT_BINARY_DIR}/conffiles "${filename}\n" )
-        endforeach()
-        set( CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA ${CMAKE_CURRENT_BINARY_DIR}/conffiles )
-    endif()
-endmacro( add_conffiles )
-
-
 # Function translate_language
 #
 # This is a function to add the targets and install step for translating a language
