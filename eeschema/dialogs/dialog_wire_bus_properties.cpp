@@ -193,13 +193,14 @@ bool DIALOG_WIRE_BUS_PROPERTIES::TransferDataFromWindow()
                     static_cast<SCH_BUS_ENTRY_BASE*>( item )->SetPenWidth( width );
             }
 
-            size_t lineTypeSelection = m_typeCombo->GetSelection();
-            if( lineTypeSelection < lineTypeNames.size() )
+            if( m_typeCombo->GetStringSelection() != INDETERMINATE_STYLE )
             {
                 PLOT_DASH_TYPE lineStyle = PLOT_DASH_TYPE::DEFAULT;
 
+                size_t lineTypeSelection = m_typeCombo->GetSelection();
                 auto it = lineTypeNames.begin();
                 std::advance( it, lineTypeSelection );
+
                 if( it != lineTypeNames.end() )
                     lineStyle = it->first;
 
