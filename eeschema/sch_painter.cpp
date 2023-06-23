@@ -86,6 +86,7 @@ std::vector<KICAD_T> SCH_PAINTER::g_ScaledSelectionTypes = {
     SCH_LINE_T,
     LIB_SHAPE_T, SCH_SHAPE_T,
     SCH_BITMAP_T,
+    SCH_GLOBAL_LABEL_T,
     SCH_DIRECTIVE_LABEL_T,
     LIB_SYMBOL_T, SCH_SYMBOL_T,
     SCH_SHEET_T,
@@ -2510,6 +2511,7 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
 void SCH_PAINTER::draw( const SCH_GLOBALLABEL *aLabel, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+    bool drawingDangling = aLayer == LAYER_DANGLING;
 
     if( !drawingShadows || eeconfig()->m_Selection.draw_selected_children )
     {
@@ -2533,18 +2535,21 @@ void SCH_PAINTER::draw( const SCH_GLOBALLABEL *aLabel, int aLayer )
     for( const VECTOR2I& p : pts )
         pts2.emplace_back( VECTOR2D( p.x, p.y ) );
 
-    // The text is drawn inside the graphic shape.
-    // On Cairo the graphic shape is filled by the background before drawing the text.
-    // However if the text is selected, it is draw twice: first on LAYER_SELECTION_SHADOWS
-    // and second on the text layer.  The second must not erase the first drawing.
-    bool fillBg = ( ( aLayer == LAYER_SELECTION_SHADOWS ) || !aLabel->IsSelected() )
-                   && aLayer != LAYER_DANGLING;
-    m_gal->SetIsFill( fillBg );
-    m_gal->SetFillColor( m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
     m_gal->SetIsStroke( true );
-    m_gal->SetLineWidth( getTextThickness( aLabel ) );
+    m_gal->SetLineWidth( getLineWidth( aLabel, drawingShadows ) );
     m_gal->SetStrokeColor( color );
-    m_gal->DrawPolyline( pts2 );
+
+    if( drawingShadows )
+    {
+        m_gal->SetIsFill( eeconfig()->m_Selection.fill_shapes );
+        m_gal->SetFillColor( color );
+        m_gal->DrawPolygon( pts2 );
+    }
+    else if( !drawingDangling )
+    {
+        m_gal->SetIsFill( false );
+        m_gal->DrawPolyline( pts2 );
+    }
 
     draw( static_cast<const SCH_TEXT*>( aLabel ), aLayer );
 }
