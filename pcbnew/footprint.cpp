@@ -801,7 +801,9 @@ BOX2I FOOTPRINT::GetFpPadsLocalBbox() const
     for( PAD* pad : dummy.Pads() )
         bbox.Merge( pad->GetBoundingBox() );
 
+    // Remove the parent and the group from the dummy footprint before deletion
     dummy.SetParent( nullptr );
+    dummy.SetParentGroup( nullptr );
 
     return bbox;
 }
