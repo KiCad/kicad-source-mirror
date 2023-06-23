@@ -1125,7 +1125,7 @@ void PCB_PLUGIN::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
     for( const PCB_FIELD* field : aFootprint->GetFields() )
     {
         m_out->Print( aNestLevel + 1, "(property %s %s",
-                      m_out->Quotew( field->GetName() ).c_str(),
+                      m_out->Quotew( field->GetCanonicalName() ).c_str(),
                       m_out->Quotew( field->GetText() ).c_str() );
 
         format( field, aNestLevel + 1 );
