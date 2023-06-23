@@ -870,7 +870,7 @@ wxString SCH_FIELD::GetCanonicalName() const
     if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
     {
         if( m_id < MANDATORY_FIELDS )
-            return TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id, true );
+            return TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id, false );
         else
             return m_name;
     }
