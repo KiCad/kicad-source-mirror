@@ -1052,9 +1052,10 @@ void ALTIUM_PCB::ParseClasses6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFi
 
             if( m_board->GetDesignSettings().m_NetSettings->m_NetClasses.count( nc->GetName() ) )
             {
-                // Name conflict, this is likely a bad board file.
+                // Name conflict, happens in some unknown circumstances
                 // unique_ptr will delete nc on this code path
-                THROW_IO_ERROR( wxString::Format( _( "Duplicate netclass name '%s'." ), elem.name ) );
+                wxLogWarning( _( "More than one Altium netclass with name '%s' found. "
+                                 "Only the first one will be imported." ), elem.name );
             }
             else
             {
