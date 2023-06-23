@@ -214,8 +214,6 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
     std::vector<SCH_ITEM*> bulkRemovedItems;
     std::vector<SCH_ITEM*> itemsChanged;
 
-    frame->RecalculateConnections( this, NO_CLEANUP );
-
     for( COMMIT_LINE& ent : m_changes )
     {
         int         changeType = ent.m_type & CHT_TYPE;
@@ -321,6 +319,12 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
         }
     }
 
+    if( frame )
+    {
+        frame->RecalculateConnections( this, NO_CLEANUP );
+        frame->TestDanglingEnds();
+    }
+
     if( schematic )
     {
         if( bulkAddedItems.size() > 0 )
@@ -346,9 +350,6 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
     if( selectedModified )
         m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
-
-    if( frame )
-        frame->TestDanglingEnds();
 
     if( !( aCommitFlags & SKIP_SET_DIRTY ) )
     {

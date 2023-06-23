@@ -1215,6 +1215,7 @@ int SCH_EDITOR_CONTROL::Undo( const TOOL_EVENT& aEvent )
 
     m_frame->PutDataInPreviousState( undo_list );
     m_frame->SetSheetNumberAndCount();
+    m_frame->RecalculateConnections( nullptr, NO_CLEANUP );
     m_frame->TestDanglingEnds();
 
     // Now push the old command to the RedoList
@@ -1249,6 +1250,7 @@ int SCH_EDITOR_CONTROL::Redo( const TOOL_EVENT& aEvent )
     m_frame->PushCommandToUndoList( list );
 
     m_frame->SetSheetNumberAndCount();
+    m_frame->RecalculateConnections( nullptr, NO_CLEANUP );
     m_frame->TestDanglingEnds();
 
     m_toolMgr->GetTool<EE_SELECTION_TOOL>()->RebuildSelection();
