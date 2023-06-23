@@ -252,6 +252,8 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
             bulkAddedItems.push_back( schItem );
 
+            schItem->ClearFlags( IS_NEW );
+
             break;
         }
 
