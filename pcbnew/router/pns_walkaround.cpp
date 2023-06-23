@@ -68,11 +68,18 @@ NODE::OPT_OBSTACLE WALKAROUND::nearestObstacle( const LINE& aPath )
 void WALKAROUND::RestrictToSet( bool aEnabled, const std::set<ITEM*>& aSet )
 {
     m_restrictedVertices.clear();
+    m_restrictedSet.clear();
 
     if( aEnabled )
-        m_restrictedSet = aSet;
-    else
-        m_restrictedSet.clear();
+    {
+        for( auto item : aSet )
+        {
+            m_restrictedSet.insert( item );
+
+            if ( item->HasHole() )
+                m_restrictedSet.insert( item->Hole() );
+        }
+    }
 
     for( auto item : aSet )
     {

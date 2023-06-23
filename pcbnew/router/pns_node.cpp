@@ -332,7 +332,7 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine,
 
     for( const OBSTACLE& obstacle : obstacleList )
     {
-        if( aOpts.m_restrictedSet && aOpts.m_restrictedSet->count( obstacle.m_item ) == 0 )
+        if( aOpts.m_restrictedSet && !aOpts.m_restrictedSet->empty() && aOpts.m_restrictedSet->count( obstacle.m_item ) == 0 )
             continue;
 
         int clearance =
