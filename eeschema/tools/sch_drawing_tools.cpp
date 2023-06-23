@@ -851,10 +851,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                 SCH_COMMIT commit( m_toolMgr );
                 commit.Add( newItem, screen );
 
-                if( type == SCH_JUNCTION_T )
-                    m_frame->TestDanglingEnds();
-                else
-                    m_frame->SchematicCleanUp( &commit );
+                m_frame->SchematicCleanUp( &commit );
 
                 commit.Push( description );
             }

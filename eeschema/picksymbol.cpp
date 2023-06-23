@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@
 #include <symbol_tree_model_adapter.h>
 #include <symbol_editor/symbol_editor_settings.h>
 #include <sch_symbol.h>
-#include <symbol_library_common.h>
+#include <sch_commit.h>
 #include <sch_edit_frame.h>
 #include <symbol_lib_table.h>
 #include <tool/tool_manager.h>
@@ -240,6 +240,7 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SYMBOL_LIBRARY_FILTER
 
 void SCH_EDIT_FRAME::SelectUnit( SCH_SYMBOL* aSymbol, int aUnit )
 {
+    SCH_COMMIT  commit( m_toolManager );
     LIB_SYMBOL* symbol = GetLibSymbol( aSymbol->GetLibId() );
 
     if( !symbol )
@@ -253,26 +254,20 @@ void SCH_EDIT_FRAME::SelectUnit( SCH_SYMBOL* aSymbol, int aUnit )
     if( aUnit > unitCount )
         aUnit = unitCount;
 
-    EDA_ITEM_FLAGS savedFlags = aSymbol->GetFlags();
-
     if( !aSymbol->GetEditFlags() )    // No command in progress: save in undo list
-        SaveCopyInUndoList( GetScreen(), aSymbol, UNDO_REDO::CHANGED, false );
+        commit.Modify( aSymbol, GetScreen() );
 
     /* Update the unit number. */
     aSymbol->SetUnitSelection( &GetCurrentSheet(), aUnit );
     aSymbol->SetUnit( aUnit );
-    aSymbol->ClearFlags();
-    aSymbol->SetFlags( savedFlags ); // Restore m_Flag modified by SetUnit()
 
-    if( !aSymbol->GetEditFlags() )   // No command in progress: update schematic
+    if( !commit.Empty() )
     {
         if( eeconfig()->m_AutoplaceFields.enable )
             aSymbol->AutoAutoplaceFields( GetScreen() );
 
-        TestDanglingEnds();
-
         UpdateItem( aSymbol, false, true );
-        OnModify();
+        commit.Push( _( "Change Unit" ) );
     }
 }
 
@@ -282,7 +277,8 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_SYMBOL* aSymbol )
     if( !aSymbol || !aSymbol->GetLibSymbolRef() )
         return;
 
-    wxString msg;
+    SCH_COMMIT commit( m_toolManager );
+    wxString   msg;
 
     if( !aSymbol->GetLibSymbolRef()->HasConversion() )
     {
@@ -295,7 +291,7 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_SYMBOL* aSymbol )
         return;
     }
 
-    EDA_ITEM_FLAGS savedFlags = aSymbol->GetFlags();
+    commit.Modify( aSymbol, GetScreen() );
 
     aSymbol->SetConvert( aSymbol->GetConvert() + 1 );
 
@@ -307,14 +303,10 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_SYMBOL* aSymbol )
     if( aSymbol->GetConvert() > LIB_ITEM::LIB_CONVERT::DEMORGAN )
         aSymbol->SetConvert( LIB_ITEM::LIB_CONVERT::BASE );
 
-    TestDanglingEnds();
-    aSymbol->ClearFlags();
-    aSymbol->SetFlags( savedFlags );   // Restore m_flags (modified by SetConvert())
-
     // If selected make sure all the now-included pins are selected
     if( aSymbol->IsSelected() )
         m_toolManager->RunAction<EDA_ITEM*>( EE_ACTIONS::addItemToSel, true, aSymbol );
 
     UpdateItem( aSymbol, false, true );
-    OnModify();
+    commit.Push( _( "Convert Symbol" ) );
 }

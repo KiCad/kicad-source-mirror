@@ -866,7 +866,6 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     }
 
     currentScreen->Append( m_symbol );
-    GetParent()->TestDanglingEnds();
     GetParent()->UpdateItem( m_symbol, false, true );
 
     if( !commit.Empty() )

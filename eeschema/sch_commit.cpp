@@ -347,6 +347,9 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
     if( selectedModified )
         m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
+    if( frame )
+        frame->TestDanglingEnds();
+
     if( !( aCommitFlags & SKIP_SET_DIRTY ) )
     {
         if( frame )
@@ -499,6 +502,8 @@ void SCH_COMMIT::Revert()
             if( view )
                 view->Add( item );
 
+            screen->Update( item );
+
             delete copy;
             break;
         }
@@ -525,7 +530,10 @@ void SCH_COMMIT::Revert()
         selTool->RebuildSelection();
 
     if( frame )
+    {
         frame->RecalculateConnections( nullptr, NO_CLEANUP );
+        frame->TestDanglingEnds();
+    }
 
     clear();
 }

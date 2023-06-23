@@ -70,14 +70,6 @@ std::string toUTFTildaText( const wxString& txt )
  * Used to draw a dummy shape when a LIB_SYMBOL is not found in library
  *
  * This symbol is a 400 mils square with the text "??"
- * DEF DUMMY U 0 40 Y Y 1 0 N
- * F0 "U" 0 -350 60 H V
- * F1 "DUMMY" 0 350 60 H V
- * DRAW
- * T 0 0 0 150 0 0 0 ??
- * S -200 200 200 -200 0 1 0
- * ENDDRAW
- * ENDDEF
  */
 static LIB_SYMBOL* dummy()
 {
@@ -387,11 +379,7 @@ void SCH_SYMBOL::UpdatePins()
 
 void SCH_SYMBOL::SetUnit( int aUnit )
 {
-    if( m_unit != aUnit )
-    {
-        UpdateUnit( aUnit );
-        SetModified();
-    }
+    UpdateUnit( aUnit );
 }
 
 
@@ -409,7 +397,6 @@ void SCH_SYMBOL::SetConvert( int aConvert )
 
         // The convert may have a different pin layout so the update the pin map.
         UpdatePins();
-        SetModified();
     }
 }
 
@@ -417,10 +404,7 @@ void SCH_SYMBOL::SetConvert( int aConvert )
 void SCH_SYMBOL::SetTransform( const TRANSFORM& aTransform )
 {
     if( m_transform != aTransform )
-    {
         m_transform = aTransform;
-        SetModified();
-    }
 }
 
 

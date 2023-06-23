@@ -400,10 +400,7 @@ void DIALOG_CHANGE_SYMBOLS::onOkButtonClicked( wxCommandEvent& aEvent )
     }
 
     if( processMatchingSymbols( &commit) )
-    {
-        parent->TestDanglingEnds();   // This will also redraw the changed symbols.
         commit.Push( m_mode == MODE::CHANGE ? _( "Change Symbols" ) : _( "Update Symbols" ) );
-    }
 
     m_messagePanel->Flush( false );
 }

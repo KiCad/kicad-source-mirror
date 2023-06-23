@@ -1223,7 +1223,6 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
     for( SCH_ITEM* item : m_frame->GetScreen()->Items() )
         item->ClearEditFlags();
 
-    m_frame->TestDanglingEnds();
     commit.Push( _( "Draw Wires" ) );
 }
 
