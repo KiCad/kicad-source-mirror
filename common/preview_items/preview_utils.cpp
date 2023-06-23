@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2019-2021 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -157,6 +157,13 @@ void KIGFX::PREVIEW::DrawTextNextToCursor( KIGFX::VIEW* aView, const VECTOR2D& a
     // text is left (or right) aligned, so a shadow text need a small offset to be draw
     // around the basic text
     int shadowXoffset = aDrawingDropShadows ? textDims.ShadowWidth : 0;
+
+    // Due to the fact a shadow text is drawn left or right aligned,
+    // it needs an offset = shadowWidth/2 to be drawn at the same place as normal text
+    // But for some reason we need to slightly modify this offset
+    // for a better look for KiCad font (better alignment of shadow shape)
+    const float adjust = 1.2f;      // Value chosen after tests
+    shadowXoffset *= adjust;
 
     if( ( textAttrs.m_Halign == GR_TEXT_H_ALIGN_LEFT ) != viewFlipped )
         textPos.x -= shadowXoffset;

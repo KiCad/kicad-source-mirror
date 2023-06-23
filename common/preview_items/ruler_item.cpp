@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2022 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2017-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -175,6 +175,12 @@ void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECT
     {
         labelDims.StrokeWidth += 2 * labelDims.ShadowWidth;
         shadowXoffset = labelDims.ShadowWidth;
+        // Due to the fact a shadow text is drawn left or right aligned,
+        // it needs an offset = shadowXoffset to be drawn at the same place as normal text
+        // But for some reason we need to slightly modify this offset
+        // for a better look for KiCad font (better alignment of shadow shape)
+        const float adjust = 1.2f;      // Value chosen after tests
+        shadowXoffset *= adjust;
     }
 
     if( aView->IsMirroredX() )
