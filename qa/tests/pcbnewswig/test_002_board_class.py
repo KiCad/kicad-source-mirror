@@ -128,9 +128,9 @@ class TestBoardClass:
         }
         assert footprint.GetSheetfile() == 'custom_fields.kicad_sch'
         assert footprint.GetSheetname() == ''
-        assert footprint.GetField('myfield') == 'myvalue'
-        assert footprint.HasField('myfield') == True
-        assert footprint.HasField('abcd') == False
+        assert footprint.GetFieldText('myfield') == 'myvalue'
+        assert footprint.HasField('myfield')
+        assert not footprint.HasField('abcd')
         footprint.SetField('abcd', 'efgh')
-        assert footprint.HasField('abcd') == True
-        assert footprint.GetField('abcd') == 'efgh'
+        assert footprint.HasField('abcd')
+        assert footprint.GetFieldText('abcd') == 'efgh'

@@ -30,7 +30,6 @@
 
 
 %template(MAP_STRING_STRING) std::map<wxString, wxString>;
-%rename(GetFieldsNative) FOOTPRINT::GetFields;
 %feature("flatnested");
 %include footprint.h
 %feature("flatnested", "");
@@ -59,15 +58,27 @@
     # the object in the garbage collector
     #
 
-    def GetFields(self):
-      """ Returns footprint fields map. """
-      fields = self.GetFieldsNative()
+    def GetFieldsText(self):
+      """ Returns footprint fields name to text map. """
+      fields = self.GetFields()
       return {str(field.GetName()): str(field.GetText()) for field in fields}
 
-    def GetField(self, key):
-      """ Returns Field with a given key if it exists, throws KeyError otherwise. """
+    def GetFieldsShownText(self):
+      """ Returns footprint fields name to shown text map. """
+      fields = self.GetFields()
+      return {str(field.GetName()): str(field.GetShownText(False)) for field in fields}
+
+    def GetFieldText(self, key):
+      """ Returns Field text with a given key if it exists, throws KeyError otherwise. """
       if self.HasFieldByName(key):
         return self.GetFieldByName(key).GetText()
+      else:
+        raise KeyError("Field not found: " + key)
+
+    def GetFieldShownText(self, key):
+      """ Returns Field shown text with a given key if it exists, throws KeyError otherwise. """
+      if self.HasFieldByName(key):
+        return self.GetFieldByName(key).GetShownText(False)
       else:
         raise KeyError("Field not found: " + key)
 

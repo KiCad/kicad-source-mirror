@@ -52,7 +52,7 @@ if( NOT (MSVC AND CMAKE_BUILD_TYPE STREQUAL "Debug") )
 # but the kicad binaries are linked to the debug mode python
 # Test that runs the QA tests through scripting
 add_test(NAME qa_python
-    COMMAND ${PYTHON_EXECUTABLE} -m pytest ${CMAKE_CURRENT_SOURCE_DIR}/pcbnewswig ${PYTEST_ARGS_QACLI}
+    COMMAND ${PYTHON_EXECUTABLE} -m pytest ${CMAKE_CURRENT_SOURCE_DIR}/pcbnewswig ${PYTEST_ARGS_QAPYTHON}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
