@@ -451,7 +451,9 @@ void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
     {
         wxMilliSleep( 500 );
         m_runningResultsBook->ChangeSelection( 1 );
+#ifndef __WXGTK__
         KIPLATFORM::UI::ForceFocus( m_markerDataView );
+#endif
     }
 
     m_ercRun = true;
