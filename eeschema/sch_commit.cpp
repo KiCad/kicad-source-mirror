@@ -372,11 +372,13 @@ void SCH_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
 EDA_ITEM* SCH_COMMIT::parentObject( EDA_ITEM* aItem ) const
 {
-    if( SCH_SYMBOL* parentSymbol = dyn_cast<SCH_SYMBOL*>( aItem->GetParent() ) )
-        return parentSymbol;
+    EDA_ITEM* parent = aItem->GetParent();
 
-    if( LIB_SYMBOL* parentSymbol = dyn_cast<LIB_SYMBOL*>( aItem->GetParent() ) )
-        return parentSymbol;
+    if( parent && parent->Type() == SCH_SYMBOL_T )
+        return parent;
+
+    if( parent && parent->Type() == LIB_SYMBOL_T )
+        return parent;
 
     if( m_isLibEditor )
         return static_cast<SYMBOL_EDIT_FRAME*>( m_toolMgr->GetToolHolder() )->GetCurSymbol();

@@ -238,11 +238,12 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             if( !track->IsOnLayer( layer ) )
                 continue;
 
-            // Skip vias annulus when not connected on this layer (if removing is enabled)
-            const PCB_VIA *via = dyn_cast< const PCB_VIA*>( track );
-
-            if( via && IsCopperLayer( layer ) && !via->FlashLayer( layer )  )
+            // Skip vias annulus when not flashed on this layer
+            if( track->Type() == PCB_VIA_T
+                    && !static_cast<const PCB_VIA*>( track )->FlashLayer( layer ) )
+            {
                 continue;
+            }
 
             // Add object item to layer container
             createTrack( track, layerContainer );
@@ -431,11 +432,12 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 if( !track->IsOnLayer( layer ) )
                     continue;
 
-                // Skip vias annulus when not connected on this layer (if removing is enabled)
-                const PCB_VIA *via = dyn_cast<const PCB_VIA*>( track );
-
-                if( via && !via->FlashLayer( layer ) && IsCopperLayer( layer ) )
+                // Skip vias annulus when not flashed on this layer
+                if( track->Type() == PCB_VIA_T
+                        && !static_cast<const PCB_VIA*>( track )->FlashLayer( layer )  )
+                {
                     continue;
+                }
 
                 // Add the track/via contour
                 track->TransformShapeToPolygon( *layerPoly, layer, 0, maxError, ERROR_INSIDE );

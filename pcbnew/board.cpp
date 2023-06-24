@@ -1908,7 +1908,7 @@ std::tuple<int, double, double> BOARD::GetTrackLength( const PCB_TRACK& aTrack )
             if( !inPad )
                 length += segLen + segInPadLen;
         }
-        else if( PAD* pad = dyn_cast<PAD*>( item ) )
+        else if( PAD* pad = dynamic_cast<PAD*>( item ) )
         {
             package_length += pad->GetPadToDieLength();
         }

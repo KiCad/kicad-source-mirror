@@ -1388,7 +1388,7 @@ int BOARD_EDITOR_CONTROL::ZoneDuplicate( const TOOL_EVENT& aEvent )
     if( selection.Size() != 1 )
         return 0;
 
-    ZONE* oldZone = dyn_cast<ZONE*>( selection[0] );
+    ZONE* oldZone = dynamic_cast<ZONE*>( selection[0] );
 
     if( !oldZone )
         return 0;

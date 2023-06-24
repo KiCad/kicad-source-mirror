@@ -2366,8 +2366,10 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
 
     for( EDA_ITEM* item : selection )
     {
-        if( SCH_LINE* line = dyn_cast<SCH_LINE*>( item ) )
+        if( item->Type() == SCH_LINE_T )
         {
+            SCH_LINE* line = static_cast<SCH_LINE*>( item );
+
             if( !line->IsEndPoint( cursorPos ) )
                 lines.push_back( line );
         }
@@ -2535,21 +2537,23 @@ int SCH_EDIT_TOOL::SetAttribute( const TOOL_EVENT& aEvent )
 
     for( EDA_ITEM* item : selection )
     {
-        if( SCH_SYMBOL* sym = dyn_cast<SCH_SYMBOL*>( item ) )
+        if( item->Type() == SCH_SYMBOL_T )
         {
-            commit.Modify( sym, m_frame->GetScreen() );
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+            commit.Modify( symbol, m_frame->GetScreen() );
 
             if( aEvent.IsAction( &EE_ACTIONS::setDNP ) )
-                sym->SetDNP( true );
+                symbol->SetDNP( true );
 
             if( aEvent.IsAction( &EE_ACTIONS::setExcludeFromSimulation ) )
-                sym->SetExcludeFromSim( true );
+                symbol->SetExcludeFromSim( true );
 
             if( aEvent.IsAction( &EE_ACTIONS::setExcludeFromBOM ) )
-                sym->SetExcludedFromBOM( true );
+                symbol->SetExcludedFromBOM( true );
 
             if( aEvent.IsAction( &EE_ACTIONS::setExcludeFromBoard ) )
-                sym->SetExcludedFromBoard( true );
+                symbol->SetExcludedFromBoard( true );
         }
     }
 
@@ -2568,21 +2572,23 @@ int SCH_EDIT_TOOL::UnsetAttribute( const TOOL_EVENT& aEvent )
 
     for( EDA_ITEM* item : selection )
     {
-        if( SCH_SYMBOL* sym = dyn_cast<SCH_SYMBOL*>( item ) )
+        if( item->Type() == SCH_SYMBOL_T )
         {
-            commit.Modify( sym, m_frame->GetScreen() );
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+            commit.Modify( symbol, m_frame->GetScreen() );
 
             if( aEvent.IsAction( &EE_ACTIONS::unsetDNP ) )
-                sym->SetDNP( false );
+                symbol->SetDNP( false );
 
             if( aEvent.IsAction( &EE_ACTIONS::unsetExcludeFromSimulation ) )
-                sym->SetExcludeFromSim( false );
+                symbol->SetExcludeFromSim( false );
 
             if( aEvent.IsAction( &EE_ACTIONS::unsetExcludeFromBOM ) )
-                sym->SetExcludedFromBOM( false );
+                symbol->SetExcludedFromBOM( false );
 
             if( aEvent.IsAction( &EE_ACTIONS::unsetExcludeFromBoard ) )
-                sym->SetExcludedFromBoard( false );
+                symbol->SetExcludedFromBoard( false );
         }
     }
 
@@ -2601,21 +2607,23 @@ int SCH_EDIT_TOOL::ToggleAttribute( const TOOL_EVENT& aEvent )
 
     for( EDA_ITEM* item : selection )
     {
-        if( SCH_SYMBOL* sym = dyn_cast<SCH_SYMBOL*>( item ) )
+        if( item->Type() == SCH_SYMBOL_T )
         {
-            commit.Modify( sym, m_frame->GetScreen() );
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+            commit.Modify( symbol, m_frame->GetScreen() );
 
             if( aEvent.IsAction( &EE_ACTIONS::toggleDNP ) )
-                sym->SetDNP( !sym->GetDNP() );
+                symbol->SetDNP( !symbol->GetDNP() );
 
             if( aEvent.IsAction( &EE_ACTIONS::toggleExcludeFromSimulation ) )
-                sym->SetExcludeFromSim( !sym->GetExcludeFromSim() );
+                symbol->SetExcludeFromSim( !symbol->GetExcludeFromSim() );
 
             if( aEvent.IsAction( &EE_ACTIONS::toggleExcludeFromBOM ) )
-                sym->SetExcludedFromBOM( !sym->GetExcludedFromBOM() );
+                symbol->SetExcludedFromBOM( !symbol->GetExcludedFromBOM() );
 
             if( aEvent.IsAction( &EE_ACTIONS::toggleExcludeFromBoard ) )
-                sym->SetExcludedFromBoard( !sym->GetExcludedFromBoard() );
+                symbol->SetExcludedFromBoard( !symbol->GetExcludedFromBoard() );
         }
     }
 

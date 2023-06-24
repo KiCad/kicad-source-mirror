@@ -124,7 +124,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
                 clone = static_cast<BOARD_ITEM*>( item->Clone() );
 
             // If it is only a footprint, clear the nets from the pads
-            if( PAD* pad = dyn_cast<PAD*>( clone ) )
+            if( PAD* pad = dynamic_cast<PAD*>( clone ) )
                pad->SetNetCode( 0 );
 
            // Don't copy group membership information for the 1st level objects being copied

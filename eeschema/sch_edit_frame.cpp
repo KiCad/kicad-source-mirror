@@ -1740,29 +1740,25 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
 
         for( VECTOR2I& pt: pts )
         {
-            for( SCH_ITEM* item : GetScreen()->Items().Overlapping(pt ) )
+            for( SCH_ITEM* item : GetScreen()->Items().Overlapping( pt ) )
             {
-                if( !item->IsConnectable() )
-                    continue;
-
-                if( SCH_LINE* line = dyn_cast<SCH_LINE*>( item ) )
+                if( item->Type() == SCH_LINE_T )
                 {
-                    if( line->HitTest( pt ) )
-                    {
+                    if( item->HitTest( pt ) )
                         changed_items.insert( item );
-                        continue;
-                    }
                 }
-
-                if( SCH_SYMBOL* sym = dyn_cast<SCH_SYMBOL*>( item ) )
+                else if( item->Type() == SCH_SYMBOL_T )
                 {
-                    std::vector<SCH_PIN*> pins = sym->GetPins();
-                    changed_items.insert( pins.begin(), pins.end() );
-                    continue;
-                }
+                    SCH_SYMBOL*           symbol = static_cast<SCH_SYMBOL*>( item );
+                    std::vector<SCH_PIN*> pins = symbol->GetPins();
 
-                if( item->IsConnected( pt ) )
-                    changed_items.insert( item );
+                    changed_items.insert( pins.begin(), pins.end() );
+                }
+                else if( item->IsConnectable() )
+                {
+                    if( item->IsConnected( pt ) )
+                        changed_items.insert( item );
+                }
             }
         }
 

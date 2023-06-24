@@ -1371,7 +1371,7 @@ bool EE_SELECTION_TOOL::selectMultiple()
                                     [&]( SCH_ITEM* aChild )
                                     {
                                         // Filter pins by unit
-                                        if( SCH_PIN* pin = dyn_cast<SCH_PIN*>( aChild ) )
+                                        if( SCH_PIN* pin = dynamic_cast<SCH_PIN*>( aChild ) )
                                         {
                                             int unit = pin->GetLibPin()->GetUnit();
 
