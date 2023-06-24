@@ -112,7 +112,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
             const PCB_GROUP* group = dynamic_cast<const PCB_GROUP*>( item );
             BOARD_ITEM*      clone;
 
-            if( const PCB_FIELD* field = dyn_cast<const PCB_FIELD*>( item ) )
+            if( const PCB_FIELD* field = dynamic_cast<const PCB_FIELD*>( item ) )
             {
                 if( field->IsMandatoryField() )
                     continue;
@@ -148,7 +148,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
                             // only one is allowed. So add only non-mandatory fields.
                             bool can_add = true;
 
-                            if( const PCB_FIELD* field = dyn_cast<const PCB_FIELD*>( item ) )
+                            if( const PCB_FIELD* field = dynamic_cast<const PCB_FIELD*>( item ) )
                             {
                                 if( field->IsMandatoryField() )
                                     can_add = false;

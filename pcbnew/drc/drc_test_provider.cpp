@@ -247,7 +247,7 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
 
     for( FOOTPRINT* footprint : brd->Footprints() )
     {
-        if( typeMask[PCB_FIELD_T] )
+        if( typeMask[ PCB_FIELD_T ] )
         {
             for( PCB_FIELD* field : footprint->GetFields() )
             {
@@ -340,7 +340,7 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
 
 bool DRC_TEST_PROVIDER::isInvisibleText( const BOARD_ITEM* aItem ) const
 {
-    if( const PCB_TEXT* text = dyn_cast<const PCB_TEXT*>( aItem ) )
+    if( const PCB_TEXT* text = dynamic_cast<const PCB_TEXT*>( aItem ) )
     {
         if( !text->IsVisible() )
             return true;

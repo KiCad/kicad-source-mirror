@@ -2117,7 +2117,7 @@ PCB_TEXT* getMatchingTextItem( PCB_TEXT* aRefItem, FOOTPRINT* aFootprint )
 
     for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
     {
-        PCB_TEXT* candidate = dyn_cast<PCB_TEXT*>( item );
+        PCB_TEXT* candidate = dynamic_cast<PCB_TEXT*>( item );
 
         if( candidate && candidate->GetText() == aRefItem->GetText() )
             candidates.push_back( candidate );
@@ -2258,7 +2258,7 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
 
     for( BOARD_ITEM* item : aExisting->GraphicalItems() )
     {
-        PCB_TEXT* srcItem = dyn_cast<PCB_TEXT*>( item );
+        PCB_TEXT* srcItem = dynamic_cast<PCB_TEXT*>( item );
 
         if( srcItem )
         {
