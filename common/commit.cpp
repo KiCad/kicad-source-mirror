@@ -151,14 +151,6 @@ void COMMIT::makeEntry( EDA_ITEM* aItem, CHANGE_TYPE aType, EDA_ITEM* aCopy, BAS
     // Expect an item copy if it is going to be modified
     wxASSERT( !!aCopy == ( ( aType & CHT_TYPE ) == CHT_MODIFY ) );
 
-    if( m_changedItems.find( aItem ) != m_changedItems.end() )
-    {
-        alg::delete_if( m_changes, [aItem, aScreen]( const COMMIT_LINE& aEnt )
-                                   {
-                                       return aEnt.m_item == aItem && aEnt.m_screen == aScreen;
-                                   } );
-    }
-
     COMMIT_LINE ent;
 
     ent.m_item = aItem;
