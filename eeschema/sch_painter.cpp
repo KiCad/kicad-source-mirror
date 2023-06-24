@@ -1404,9 +1404,10 @@ void SCH_PAINTER::draw( const LIB_PIN* aPin, int aLayer, bool aDimmed )
 
             knockoutText( aPin->GetOperatingPoint(), mid, attrs );
         }
-
-        return;
     }
+
+    if( drawingOP )
+        return;
 
     VECTOR2D pc;
 
@@ -1902,8 +1903,10 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
         attrs.m_Color = m_schSettings.GetLayerColor( LAYER_OP_VOLTAGES );
 
         knockoutText( aLine->GetOperatingPoint(), pos, attrs );
-        return;
     }
+
+    if( drawingOP )
+        return;
 
     m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor( color );
