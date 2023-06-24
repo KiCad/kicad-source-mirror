@@ -370,6 +370,9 @@ bool IFACE::loadGlobalLibTable()
     {
         if( !( m_start_flags & KFCTL_CLI ) )
         {
+            // Ensure the splash screen does not hide the dialog:
+            Pgm().HideSplash();
+
             DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG symDialog( nullptr );
 
             if( symDialog.ShowModal() != wxID_OK )

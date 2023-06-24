@@ -506,9 +506,6 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
     SetLanguagePath();
     SetDefaultLanguage( tmp );
 
-    if( !aHeadless )
-        ShowSplash();
-
     m_settings_manager = std::make_unique<SETTINGS_MANAGER>( aHeadless );
 
     // Our unit test mocks break if we continue
@@ -565,6 +562,10 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
 
     if( ADVANCED_CFG::GetCfg().m_UpdateUIEventInterval != 0 )
         wxUpdateUIEvent::SetUpdateInterval( ADVANCED_CFG::GetCfg().m_UpdateUIEventInterval );
+
+    // Now the application can safely start, show the splash screen
+    if( !aHeadless )
+        ShowSplash();
 
     return true;
 }
