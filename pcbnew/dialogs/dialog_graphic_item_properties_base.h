@@ -54,6 +54,12 @@ class DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_endYLabel;
 		wxTextCtrl* m_endYCtrl;
 		wxStaticText* m_endYUnits;
+		wxStaticText* m_segmentLengthLabel;
+		wxTextCtrl* m_segmentLengthCtrl;
+		wxStaticText* m_segmentLengthUnits;
+		wxStaticText* m_segmentAngleLabel;
+		wxTextCtrl* m_segmentAngleCtrl;
+		wxStaticText* m_segmentAngleUnits;
 		wxStaticText* m_bezierCtrlPt1Label;
 		wxStaticText* m_BezierPointC1XLabel;
 		wxTextCtrl* m_BezierC1X_Ctrl;

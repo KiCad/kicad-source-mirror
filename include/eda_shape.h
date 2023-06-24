@@ -192,6 +192,8 @@ public:
 
     EDA_ANGLE GetArcAngle() const;
 
+    EDA_ANGLE GetSegmentAngle() const;
+
     /**
      * Have the start and end points been swapped since they were set?
      * @return true if they have
@@ -297,6 +299,10 @@ public:
 
     void ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList );
 
+    void SetLength( const double& aLength );
+
+    void SetAngle( const EDA_ANGLE& aLength );
+
     /**
      * Return the length of the track using the hypotenuse calculation.
      *
@@ -365,6 +371,9 @@ protected:
     STROKE_PARAMS         m_stroke;       // Line style, width, etc.
     FILL_T                m_fill;
     COLOR4D               m_fillColor;
+
+    double                m_segmentLength;
+    EDA_ANGLE             m_segmentAngle;
 
     VECTOR2I              m_start;             // Line start point or Circle center
     VECTOR2I              m_end;               // Line end point or Circle 3 o'clock point

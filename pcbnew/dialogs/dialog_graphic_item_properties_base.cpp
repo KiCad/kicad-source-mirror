@@ -78,6 +78,28 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	m_endYUnits->Wrap( -1 );
 	m_sizerLeft->Add( m_endYUnits, wxGBPosition( 2, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
+	m_segmentLengthLabel = new wxStaticText( this, wxID_ANY, _("Length:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_segmentLengthLabel->Wrap( -1 );
+	m_sizerLeft->Add( m_segmentLengthLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_segmentLengthCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_sizerLeft->Add( m_segmentLengthCtrl, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_segmentLengthUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_segmentLengthUnits->Wrap( -1 );
+	m_sizerLeft->Add( m_segmentLengthUnits, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	m_segmentAngleLabel = new wxStaticText( this, wxID_ANY, _("Angle:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_segmentAngleLabel->Wrap( -1 );
+	m_sizerLeft->Add( m_segmentAngleLabel, wxGBPosition( 3, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_segmentAngleCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_sizerLeft->Add( m_segmentAngleCtrl, wxGBPosition( 3, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_segmentAngleUnits = new wxStaticText( this, wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_segmentAngleUnits->Wrap( -1 );
+	m_sizerLeft->Add( m_segmentAngleUnits, wxGBPosition( 3, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
 	m_bezierCtrlPt1Label = new wxStaticText( this, wxID_ANY, _("Bezier Control Pt"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_bezierCtrlPt1Label->Wrap( -1 );
 	m_sizerLeft->Add( m_bezierCtrlPt1Label, wxGBPosition( 4, 0 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT, 5 );

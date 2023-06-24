@@ -83,6 +83,8 @@ private:
     UNIT_BINDER           m_endX, m_endY;
     UNIT_BINDER           m_angle;
     UNIT_BINDER           m_thickness;
+    UNIT_BINDER           m_segmentLength;
+    UNIT_BINDER           m_segmentAngle;
     UNIT_BINDER           m_bezierCtrl1X, m_bezierCtrl1Y;
     UNIT_BINDER           m_bezierCtrl2X, m_bezierCtrl2Y;
 
@@ -98,6 +100,8 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
     m_startY( aParent, m_startYLabel, m_startYCtrl, m_startYUnits ),
     m_endX( aParent, m_endXLabel, m_endXCtrl, m_endXUnits ),
     m_endY( aParent, m_endYLabel, m_endYCtrl, m_endYUnits ),
+    m_segmentLength( aParent, m_segmentLengthLabel, m_segmentLengthCtrl, m_segmentLengthUnits ),
+    m_segmentAngle( aParent, m_segmentAngleLabel, m_segmentAngleCtrl, m_segmentAngleUnits ),
     m_angle( aParent, m_angleLabel, m_angleCtrl, m_angleUnits ),
     m_thickness( aParent, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits ),
     m_bezierCtrl1X( aParent, m_BezierPointC1XLabel, m_BezierC1X_Ctrl, m_BezierPointC1XUnit ),
@@ -116,6 +120,8 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
     m_bezierCtrl2X.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
     m_bezierCtrl2Y.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
 
+    m_segmentLength.SetUnits( EDA_UNITS::MILLIMETRES );
+    m_segmentAngle.SetUnits( EDA_UNITS::DEGREES );
     m_angle.SetUnits( EDA_UNITS::DEGREES );
 
     // Do not allow locking items in the footprint editor
@@ -221,6 +227,13 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
     if( !m_item )
         return false;
 
+    // Only a segment has this format
+    if( m_item->GetShape() != SHAPE_T::SEGMENT )
+    {
+        m_segmentLength.Show( false );
+        m_segmentAngle.Show( false );
+    }
+
     // Only an arc has a angle parameter. So do not show this parameter for other shapes
     if( m_item->GetShape() != SHAPE_T::ARC )
         m_angle.Show( false );
@@ -280,6 +293,9 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
             m_flipStartEnd = m_item->GetStart().y > m_item->GetEnd().y;
         else
             m_flipStartEnd = m_item->GetStart().x > m_item->GetEnd().x;
+
+        m_segmentLength.SetValue( m_item->GetLength() );
+        m_segmentAngle.SetAngleValue( m_item->GetSegmentAngle() );
 
         m_filledCtrl->Show( false );
         break;
@@ -354,6 +370,12 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
         return true;
 
     int          layer = m_LayerSelectionCtrl->GetLayerSelection();
+
+    VECTOR2I  begin_point = m_item->GetStart();
+    VECTOR2I  end_point = m_item->GetEnd();
+    long long int segment_length = m_item->GetLength();
+    EDA_ANGLE segment_angle = m_item->GetSegmentAngle();
+
     BOARD_COMMIT commit( m_parent );
 
     commit.Modify( m_item );
@@ -383,6 +405,55 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
         m_item->SetEndX( m_endX.GetValue() );
         m_item->SetEndY( m_endY.GetValue() );
     }
+
+     if( m_item->GetShape() == SHAPE_T::SEGMENT )
+     {
+        bool change_begin = ( begin_point != m_item->GetStart() );
+        bool change_end = ( end_point != m_item->GetEnd() );
+        bool change_length = ( segment_length != m_segmentLength.GetValue() );
+        EDA_ANGLE difference = segment_angle - m_segmentAngle.GetAngleValue();
+        
+        if( difference.AsRadians() < 0 )
+            difference = -difference;
+        
+        bool change_angle =
+                ( difference > EDA_ANGLE( 0.00001, TENTHS_OF_A_DEGREE_T ) );
+
+        if( !( change_begin && change_end ) )
+        {
+            segment_length = m_segmentLength.GetValue();
+            segment_angle = m_segmentAngle.GetAngleValue();
+
+            if( change_length || change_angle )
+            {
+                if( change_end )
+                {
+                    m_item->SetStartX( m_item->GetEndX()
+                                       - segment_length * segment_angle.Cos() );
+                    m_item->SetStartY( m_item->GetEndY()
+                                       + segment_length * segment_angle.Sin() );
+                }
+                else
+                {
+                    m_item->SetEndX( m_item->GetStartX()
+                                     + segment_length * segment_angle.Cos() );
+                    m_item->SetEndY( m_item->GetStartY()
+                                     - segment_length * segment_angle.Sin() );
+                }   
+            }
+        }
+
+        if( change_length )
+            m_item->SetLength( m_segmentLength.GetValue() );
+        else
+            m_item->SetLength( m_item->GetLength() );
+        
+        if( change_angle )
+            m_item->SetAngle( m_segmentAngle.GetAngleValue() );
+        else
+            m_item->SetAngle( m_item->GetSegmentAngle() );
+     
+     }
 
     // For Bezier curve: Set the two control points
     if( m_item->GetShape() == SHAPE_T::BEZIER )

@@ -137,6 +137,25 @@ double EDA_SHAPE::GetLength() const
     }
 }
 
+void EDA_SHAPE::SetLength( const double& aLength )
+{
+    switch( m_shape )
+    {
+    case SHAPE_T::SEGMENT: m_segmentLength = aLength; break;
+
+    default: UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+    }
+}
+
+void EDA_SHAPE::SetAngle( const EDA_ANGLE& aAngle )
+{
+    switch( m_shape )
+    {
+    case SHAPE_T::SEGMENT: m_segmentAngle = aAngle; break;
+
+    default: UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+    }
+}
 
 bool EDA_SHAPE::IsClosed() const
 {
@@ -574,6 +593,14 @@ void EDA_SHAPE::SetArcGeometry( const VECTOR2I& aStart, const VECTOR2I& aMid, co
         std::swap( m_start, m_end );
         m_endsSwapped = true;
     }
+}
+
+EDA_ANGLE EDA_SHAPE::GetSegmentAngle() const
+{
+    EDA_ANGLE angle( atan2( (double)( GetStart().y - GetEnd().y ),
+                            (double)( GetEnd().x - GetStart().x ) ), RADIANS_T );
+
+    return angle;
 }
 
 
