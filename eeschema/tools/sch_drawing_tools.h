@@ -57,17 +57,14 @@ public:
     int PlaceImage( const TOOL_EVENT& aEvent );
 
 private:
-    /**
-     * Get the next queued text item.
-     *
-     * @return next SCH_TEXT* or nullptr if empty
-     */
+    SCH_LINE* findWire( const VECTOR2I& aPosition );
+
     SCH_TEXT* createNewText( const VECTOR2I& aPosition, int aType );
 
     SCH_HIERLABEL* importHierLabel( SCH_SHEET* aSheet );
 
-    SCH_SHEET_PIN* createSheetPin( SCH_SHEET* aSheet, SCH_HIERLABEL* aLabel,
-                                   const VECTOR2I& aPosition );
+    SCH_SHEET_PIN* createNewSheetPin( SCH_SHEET* aSheet, SCH_HIERLABEL* aLabel,
+                                      const VECTOR2I& aPosition );
 
     void sizeSheet( SCH_SHEET* aSheet, const VECTOR2I& aPos );
 

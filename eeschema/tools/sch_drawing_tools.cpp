@@ -954,12 +954,30 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
 }
 
 
+SCH_LINE* SCH_DRAWING_TOOLS::findWire( const VECTOR2I& aPosition )
+{
+    for( SCH_ITEM* item : m_frame->GetScreen()->Items().Overlapping( SCH_LINE_T, aPosition ) )
+    {
+        SCH_LINE* line = static_cast<SCH_LINE*>( item );
+
+        if( line->GetEditFlags() & STRUCT_DELETED )
+            continue;
+
+        if( line->IsWire() )
+            return line;
+    }
+
+    return nullptr;
+}
+
+
 SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType )
 {
     SCHEMATIC*          schematic = getModel<SCHEMATIC>();
     SCHEMATIC_SETTINGS& settings = schematic->Settings();
     SCH_TEXT*           textItem = nullptr;
     SCH_LABEL_BASE*     labelItem = nullptr;
+    wxString            netName;
 
     switch( aType )
     {
@@ -970,6 +988,10 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
     case LAYER_LOCLABEL:
         labelItem = new SCH_LABEL( aPosition );
         textItem = labelItem;
+
+        if( SCH_LINE* wire = findWire( aPosition ) )
+            netName = wire->GetNetname( m_frame->GetCurrentSheet() );
+
         break;
 
     case LAYER_NETCLASS_REFS:
@@ -994,6 +1016,10 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
         labelItem->GetFields()[0].SetVisible( settings.m_IntersheetRefsShow );
         labelItem->SetAutoRotateOnPlacement( m_lastAutoLabelRotateOnPlacement );
         textItem = labelItem;
+
+        if( SCH_LINE* wire = findWire( aPosition ) )
+            netName = wire->GetNetname( m_frame->GetCurrentSheet() );
+
         break;
 
     default:
@@ -1023,6 +1049,11 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
             delete textItem;
             return nullptr;
         }
+    }
+    else if( !netName.IsEmpty() )
+    {
+        // Auto-create from attached wire
+        textItem->SetText( netName );
     }
     else
     {
@@ -1084,40 +1115,22 @@ SCH_HIERLABEL* SCH_DRAWING_TOOLS::importHierLabel( SCH_SHEET* aSheet )
 }
 
 
-SCH_SHEET_PIN* SCH_DRAWING_TOOLS::createSheetPin( SCH_SHEET* aSheet, SCH_HIERLABEL* aLabel,
-                                                  const VECTOR2I& aPosition )
+SCH_SHEET_PIN* SCH_DRAWING_TOOLS::createNewSheetPin( SCH_SHEET* aSheet, SCH_HIERLABEL* aLabel,
+                                                     const VECTOR2I& aPosition )
 {
     SCHEMATIC_SETTINGS& settings = aSheet->Schematic()->Settings();
-    wxString            text;
-    SCH_SHEET_PIN*      sheetPin;
+    SCH_SHEET_PIN*      pin = new SCH_SHEET_PIN( aSheet );
 
-    if( aLabel )
-    {
-        text = aLabel->GetText();
-        m_lastSheetPinType = aLabel->GetShape();
-    }
+    pin->SetFlags( IS_NEW | IS_MOVING );
+    pin->SetText( aLabel->GetText() );
+    pin->SetTextSize( VECTOR2I( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
+    pin->SetShape( aLabel->GetShape() );
+    pin->SetPosition( aPosition );
+    pin->ClearSelected();
 
-    sheetPin = new SCH_SHEET_PIN( aSheet, VECTOR2I( 0, 0 ), text );
-    sheetPin->SetFlags( IS_NEW );
-    sheetPin->SetTextSize( VECTOR2I( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
-    sheetPin->SetShape( m_lastSheetPinType );
+    m_lastSheetPinType = pin->GetShape();
 
-    if( !aLabel )
-    {
-        DIALOG_SHEET_PIN_PROPERTIES dlg( m_frame, sheetPin );
-
-        if( dlg.ShowModal() != wxID_OK || NoPrintableChars( sheetPin->GetText() )  )
-        {
-            delete sheetPin;
-            return nullptr;
-        }
-    }
-
-    m_lastSheetPinType = sheetPin->GetShape();
-
-    sheetPin->SetPosition( aPosition );
-
-    return sheetPin;
+    return pin;
 }
 
 
@@ -1226,33 +1239,6 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         bool isSyntheticClick = item && evt->IsActivate() && evt->HasPosition()
                                 && evt->Matches( aEvent );
 
-        auto createNextSheetPin =
-                [&]()
-                {
-                    if( !sheet )
-                        return;
-
-                    SCH_HIERLABEL* label = importHierLabel( sheet );
-
-                    if( !label )
-                    {
-                        m_statusPopup = std::make_unique<STATUS_TEXT_POPUP>( m_frame );
-                        m_statusPopup->SetText( _( "No new hierarchical labels found." ) );
-                        m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
-                        m_statusPopup->PopupFor( 2000 );
-                        item = nullptr;
-                    }
-                    else
-                    {
-                        item = createSheetPin( sheet, label, cursorPos );
-
-                        if( item->Type() == SCH_SHEET_PIN_T )
-                        {
-                            item->ClearSelected();
-                        }
-                    }
-                };
-
         if( evt->IsCancelInteractive() || evt->IsAction( &ACTIONS::undo ) )
         {
             m_frame->GetInfoBar()->Dismiss();
@@ -1315,65 +1301,14 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     item = createNewText( cursorPos, LAYER_HIERLABEL );
                     description = _( "Add Hierarchical Label" );
                 }
-                else if( isNetLabel || isGlobalLabel )
+                else if( isNetLabel )
                 {
-                    wxString netName;
-
-                    for( SCH_ITEM* overlapItem :
-                         m_frame->GetScreen()->Items().Overlapping( cursorPos ) )
-                    {
-                        if( overlapItem->GetEditFlags() & STRUCT_DELETED )
-                            continue;
-
-                        if( overlapItem->Type() == SCH_LINE_T )
-                        {
-                            SCH_LINE* line = static_cast<SCH_LINE*>( overlapItem );
-                            if( line->IsWire() )
-                            {
-                                netName = line->GetNetname(m_frame->GetCurrentSheet());
-                                break;
-                            }
-                        }
-                    }
-
-                    if( netName.IsEmpty() )
-                    {
-                        // no connected net label found -> open up the new label dialog
-                        if( isGlobalLabel )
-                            item = createNewText( cursorPos, LAYER_GLOBLABEL );
-                        else
-                            item = createNewText( cursorPos, LAYER_LOCLABEL );
-                    }
-                    else
-                    {
-                        // connected net label found -> create the label immediately
-                        SCHEMATIC*          schematic = getModel<SCHEMATIC>();
-                        SCHEMATIC_SETTINGS& sch_settings = schematic->Settings();
-                        SCH_LABEL_BASE*     labelItem = nullptr;
-
-                        if( isGlobalLabel )
-                        {
-                            labelItem = new SCH_GLOBALLABEL( cursorPos );
-                            labelItem->SetShape( m_lastGlobalLabelShape );
-                            // make intersheets reference visible based on settings
-                            labelItem->GetFields()[0].SetVisible( sch_settings.m_IntersheetRefsShow );
-                        }
-                        else
-                        {
-                            labelItem = new SCH_LABEL( cursorPos );
-                        }
-
-                        labelItem->SetParent( getModel<SCHEMATIC>() );
-                        labelItem->SetBold( m_lastTextBold );
-                        labelItem->SetItalic( m_lastTextItalic );
-                        labelItem->SetTextSpinStyle( m_lastTextOrientation );
-                        labelItem->SetTextSize( VECTOR2I( sch_settings.m_DefaultTextSize,
-                                                          sch_settings.m_DefaultTextSize ) );
-                        labelItem->SetFlags( IS_NEW | IS_MOVING );
-                        labelItem->SetText( netName );
-                        item = labelItem;
-                    }
-
+                    item = createNewText( cursorPos, LAYER_LOCLABEL );
+                    description = _( "Add Label" );
+                }
+                else if( isGlobalLabel )
+                {
+                    item = createNewText( cursorPos, LAYER_GLOBLABEL );
                     description = _( "Add Label" );
                 }
                 else if( isClassLabel )
@@ -1399,13 +1334,21 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     }
                     else
                     {
-                        createNextSheetPin();
+                        SCH_HIERLABEL* label = importHierLabel( sheet );
 
-                        if( !item )
+                        if( !label )
                         {
+                            m_statusPopup = std::make_unique<STATUS_TEXT_POPUP>( m_frame );
+                            m_statusPopup->SetText( _( "No new hierarchical labels found." ) );
+                            m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+                            m_statusPopup->PopupFor( 2000 );
+                            item = nullptr;
+
                             m_frame->PopTool( aEvent );
                             break;
                         }
+
+                        item = createNewSheetPin( sheet, label, cursorPos );
                     }
 
                     description = _( "Add Sheet Pin" );
@@ -1447,31 +1390,49 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             }
             else            // ... and second click places:
             {
+                SCH_COMMIT commit( m_toolMgr );
+
                 item->ClearFlags( IS_MOVING );
 
                 if( item->IsConnectable() )
                     m_frame->AutoRotateItem( m_frame->GetScreen(), item );
 
-                m_frame->AddToScreen( item, m_frame->GetScreen() );
+                if( isSheetPin )
+                {
+                    // Sheet pins are owned by their parent sheet.
+                    commit.Modify( sheet, m_frame->GetScreen() );
+                    sheet->AddPin( (SCH_SHEET_PIN*) item );
+                }
+                else
+                {
+                    m_frame->AddToScreen( item, m_frame->GetScreen() );
+                    commit.Added( item, m_frame->GetScreen() );
+                }
+
                 item->AutoplaceFields( m_frame->GetScreen(), false /* aManual */ );
 
-                SCH_COMMIT commit( m_toolMgr );
-                commit.Added( item, m_frame->GetScreen() );
                 commit.Push( description );
 
                 item = nullptr;
                 m_view->ClearPreview();
 
-                // Exit the tool when this sheet runs out of pins for convenience
                 if( isSheetPin )
                 {
-                    createNextSheetPin();
+                    SCH_HIERLABEL* label = importHierLabel( sheet );
 
-                    if( !item )
+                    if( !label )
                     {
+                        m_statusPopup = std::make_unique<STATUS_TEXT_POPUP>( m_frame );
+                        m_statusPopup->SetText( _( "No new hierarchical labels found." ) );
+                        m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+                        m_statusPopup->PopupFor( 2000 );
+                        item = nullptr;
+
                         m_frame->PopTool( aEvent );
                         break;
                     }
+
+                    item = createNewSheetPin( sheet, label, cursorPos );
                 }
             }
         }
