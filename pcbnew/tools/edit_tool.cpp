@@ -903,59 +903,59 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
     bool                   didOneAttemptFail              = false;
     std::set<PCB_TRACK*>   processedTracks;
 
-    for( EDA_ITEM* item : selection )
-    {
-        PCB_TRACK* track = dyn_cast<PCB_TRACK*>( item );
+    auto processFilletOp =
+            [&]( PCB_TRACK* aTrack, bool aStartPoint )
+            {
+                std::shared_ptr<CONNECTIVITY_DATA> c = board()->GetConnectivity();
+                VECTOR2I anchor = aStartPoint ? aTrack->GetStart() : aTrack->GetEnd();
+                std::vector<BOARD_CONNECTED_ITEM*> itemsOnAnchor;
 
-        if( !track || track->Type() != PCB_TRACE_T || track->GetLength() == 0 )
-        {
-            continue;
-        }
+                itemsOnAnchor = c->GetConnectedItemsAtAnchor( aTrack, anchor,
+                                                              { PCB_PAD_T, PCB_VIA_T,
+                                                                PCB_TRACE_T, PCB_ARC_T } );
 
-        auto processFilletOp =
-                [&]( bool aStartPoint )
+                if( itemsOnAnchor.size() > 0
+                        && selection.Contains( itemsOnAnchor.at( 0 ) )
+                        && itemsOnAnchor.at( 0 )->Type() == PCB_TRACE_T )
                 {
-                    std::shared_ptr<CONNECTIVITY_DATA> c = board()->GetConnectivity();
-                    VECTOR2I                           anchor = aStartPoint ? track->GetStart()
-                                                                            : track->GetEnd();
-                    std::vector<BOARD_CONNECTED_ITEM*> itemsOnAnchor;
+                    PCB_TRACK* trackOther = static_cast<PCB_TRACK*>( itemsOnAnchor.at( 0 ) );
 
-                    itemsOnAnchor = c->GetConnectedItemsAtAnchor( track, anchor,
-                                                                  { PCB_PAD_T, PCB_VIA_T,
-                                                                    PCB_TRACE_T, PCB_ARC_T } );
-
-                    if( itemsOnAnchor.size() > 0
-                            && selection.Contains( itemsOnAnchor.at( 0 ) )
-                            && itemsOnAnchor.at( 0 )->Type() == PCB_TRACE_T )
+                    // Make sure we don't fillet the same pair of tracks twice
+                    if( processedTracks.find( trackOther ) == processedTracks.end() )
                     {
-                        PCB_TRACK* trackOther = dyn_cast<PCB_TRACK*>( itemsOnAnchor.at( 0 ) );
-
-                        // Make sure we don't fillet the same pair of tracks twice
-                        if( processedTracks.find( trackOther ) == processedTracks.end() )
+                        if( itemsOnAnchor.size() == 1 )
                         {
-                            if( itemsOnAnchor.size() == 1 )
-                            {
-                                FILLET_OP filletOp;
-                                filletOp.t1      = track;
-                                filletOp.t2      = trackOther;
-                                filletOp.t1Start = aStartPoint;
-                                filletOp.t2Start = track->IsPointOnEnds( filletOp.t2->GetStart() );
-                                filletOperations.push_back( filletOp );
-                            }
-                            else
-                            {
-                                // User requested to fillet these two tracks but not possible as
-                                // there are other elements connected at that point
-                                didOneAttemptFail = true;
-                            }
+                            FILLET_OP filletOp;
+                            filletOp.t1      = aTrack;
+                            filletOp.t2      = trackOther;
+                            filletOp.t1Start = aStartPoint;
+                            filletOp.t2Start = aTrack->IsPointOnEnds( filletOp.t2->GetStart() );
+                            filletOperations.push_back( filletOp );
+                        }
+                        else
+                        {
+                            // User requested to fillet these two tracks but not possible as
+                            // there are other elements connected at that point
+                            didOneAttemptFail = true;
                         }
                     }
-                };
+                }
+            };
 
-        processFilletOp( true ); // on the start point of track
-        processFilletOp( false ); // on the end point of track
+    for( EDA_ITEM* item : selection )
+    {
+        if( item->Type() == PCB_TRACE_T )
+        {
+            PCB_TRACK* track = static_cast<PCB_TRACK*>( item );
 
-        processedTracks.insert( track );
+            if( track->GetLength() > 0 )
+            {
+                processFilletOp( track, true ); // on the start point of track
+                processFilletOp( track, false ); // on the end point of track
+
+                processedTracks.insert( track );
+            }
+        }
     }
 
     std::vector<BOARD_ITEM*> itemsToAddToSelection;
@@ -1061,7 +1061,6 @@ int EDIT_TOOL::FilletLines( const TOOL_EVENT& aEvent )
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
         []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
         {
-
             std::vector<VECTOR2I> pts;
 
             // Iterate from the back so we don't have to worry about removals.

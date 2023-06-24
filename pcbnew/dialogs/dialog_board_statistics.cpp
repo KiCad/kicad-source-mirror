@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Alexander Shuklin, jasuramme@gmail.com
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -282,8 +282,10 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
     // Get via counts
     for( PCB_TRACK* track : board->Tracks() )
     {
-        if( PCB_VIA* via = dyn_cast<PCB_VIA*>( track ) )
+        if( track->Type() == PCB_VIA_T )
         {
+            PCB_VIA* via = static_cast<PCB_VIA*>( track );
+
             for( LINE_ITEM<VIATYPE>& line : m_viaTypes )
             {
                 if( via->GetViaType() == line.attribute )

@@ -310,9 +310,10 @@ void EE_GRID_HELPER::computeAnchors( SCH_ITEM *aItem, const VECTOR2I &aRefPos, b
         break;
     }
 
-    if( SCH_LINE* line = dyn_cast<SCH_LINE*>( aItem ) )
+    if( aItem->Type() == SCH_LINE_T )
     {
-        VECTOR2I pt = Align( aRefPos );
+        SCH_LINE* line = static_cast<SCH_LINE*>( aItem );
+        VECTOR2I  pt = Align( aRefPos );
 
         if( line->GetStartPoint().x == line->GetEndPoint().x )
         {
@@ -328,7 +329,6 @@ void EE_GRID_HELPER::computeAnchors( SCH_ITEM *aItem, const VECTOR2I &aRefPos, b
             if( TestSegmentHit( possible, line->GetStartPoint(), line->GetEndPoint(), 0 ) )
                 addAnchor( possible, SNAPPABLE | HORIZONTAL, aItem );
         }
-
     }
 }
 

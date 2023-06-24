@@ -57,9 +57,7 @@
 #include <macros.h>
 
 #include "pns_kicad_iface.h"
-
 #include "pns_arc.h"
-#include "pns_routing_settings.h"
 #include "pns_sizes_settings.h"
 #include "pns_item.h"
 #include "pns_line.h"
@@ -1950,7 +1948,7 @@ void PNS_KICAD_IFACE::Commit()
     for( const auto& [ pad, fpOffset ] : m_fpOffsets )
     {
         VECTOR2I   offset = fpOffset.p_new - fpOffset.p_old;
-        FOOTPRINT* footprint = pad->GetParent();
+        FOOTPRINT* footprint = pad->GetParentFootprint();
         VECTOR2I   p_orig = footprint->GetPosition();
         VECTOR2I   p_new = p_orig + offset;
 

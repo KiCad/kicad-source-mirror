@@ -2465,7 +2465,7 @@ void EAGLE_PLUGIN::transferPad( const EPAD_COMMON& aEaglePad, PAD* aPad ) const
     if( aEaglePad.thermals && !*aEaglePad.thermals )
         aPad->SetZoneConnection( ZONE_CONNECTION::FULL );
 
-    FOOTPRINT* footprint = aPad->GetParent();
+    FOOTPRINT* footprint = aPad->GetParentFootprint();
     wxCHECK( footprint, /* void */ );
     RotatePoint( padPos, footprint->GetOrientation() );
     aPad->SetPosition( padPos + footprint->GetPosition() );

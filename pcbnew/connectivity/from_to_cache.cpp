@@ -141,11 +141,12 @@ int FROM_TO_CACHE::cacheFromToPaths( const wxString& aFrom, const wxString& aTo 
     {
         int count = 0;
 
-        wxString fromName = path.from->GetParent()->GetReference() + wxT( "-" )
-                                                                    + path.from->GetNumber();
+        wxString fromName = path.from->GetParentFootprint()->GetReference()
+                                + wxT( "-" ) + path.from->GetNumber();
 
         auto padCandidates = connectivity->GetConnectedItems( path.from,
-                { PCB_PAD_T, PCB_ARC_T, PCB_VIA_T, PCB_TRACE_T } );
+                                                              { PCB_PAD_T, PCB_ARC_T, PCB_VIA_T,
+                                                                PCB_TRACE_T } );
         PAD* toPad = nullptr;
 
         for( BOARD_CONNECTED_ITEM* pitem : padCandidates )
@@ -158,8 +159,8 @@ int FROM_TO_CACHE::cacheFromToPaths( const wxString& aFrom, const wxString& aTo 
 
             const PAD *pad = static_cast<const PAD*>( pitem );
 
-            wxString toName = pad->GetParent()->GetReference() + wxT( "-" ) + pad->GetNumber();
-
+            wxString toName = pad->GetParentFootprint()->GetReference()
+                                    + wxT( "-" ) + pad->GetNumber();
 
             for( const FT_ENDPOINT& endpoint : m_ftEndpoints )
             {

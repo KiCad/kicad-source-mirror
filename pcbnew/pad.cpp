@@ -229,7 +229,7 @@ LSET PAD::ApertureMask()
 
 bool PAD::IsFlipped() const
 {
-    FOOTPRINT* parent = GetParent();
+    FOOTPRINT* parent = GetParentFootprint();
 
     return ( parent && parent->GetLayer() == B_Cu );
 }
@@ -805,8 +805,8 @@ int PAD::GetLocalClearanceOverrides( wxString* aSource ) const
         return GetLocalClearance( aSource );
 
     // A footprint can have a specific clearance value
-    if( GetParent() && GetParent()->GetLocalClearance() )
-        return GetParent()->GetLocalClearance( aSource );
+    if( GetParent() && GetParentFootprint()->GetLocalClearance() )
+        return GetParentFootprint()->GetLocalClearance( aSource );
 
     return 0;
 }
@@ -857,9 +857,7 @@ int PAD::GetSolderMaskExpansion() const
 
     int margin = m_localSolderMaskMargin;
 
-    FOOTPRINT* parentFootprint = GetParent();
-
-    if( parentFootprint )
+    if( FOOTPRINT* parentFootprint = GetParentFootprint() )
     {
         if( margin == 0 )
         {
@@ -900,9 +898,7 @@ VECTOR2I PAD::GetSolderPasteMargin() const
     int     margin = m_localSolderPasteMargin;
     double  mratio = m_localSolderPasteMarginRatio;
 
-    FOOTPRINT* parentFootprint = GetParent();
-
-    if( parentFootprint )
+    if( FOOTPRINT* parentFootprint = GetParentFootprint() )
     {
         if( margin == 0 )
             margin = parentFootprint->GetLocalSolderPasteMargin();
@@ -1255,18 +1251,18 @@ wxString PAD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
         {
             return wxString::Format( _( "Pad %s of %s on %s" ),
                                      GetNetnameMsg(),
-                                     GetParent()->GetReference(),
+                                     GetParentFootprint()->GetReference(),
                                      layerMaskDescribe() );
         }
         else if( GetAttribute() == PAD_ATTRIB::NPTH )
         {
-            return wxString::Format( _( "NPTH pad of %s" ), GetParent()->GetReference() );
+            return wxString::Format( _( "NPTH pad of %s" ), GetParentFootprint()->GetReference() );
         }
         else
         {
             return wxString::Format( _( "PTH pad %s of %s" ),
                                      GetNetnameMsg(),
-                                     GetParent()->GetReference() );
+                                     GetParentFootprint()->GetReference() );
         }
     }
     else
@@ -1276,19 +1272,19 @@ wxString PAD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
             return wxString::Format( _( "Pad %s %s of %s on %s" ),
                                      GetNumber(),
                                      GetNetnameMsg(),
-                                     GetParent()->GetReference(),
+                                     GetParentFootprint()->GetReference(),
                                      layerMaskDescribe() );
         }
         else if( GetAttribute() == PAD_ATTRIB::NPTH )
         {
-            return wxString::Format( _( "NPTH of %s" ), GetParent()->GetReference() );
+            return wxString::Format( _( "NPTH of %s" ), GetParentFootprint()->GetReference() );
         }
         else
         {
             return wxString::Format( _( "PTH pad %s %s of %s" ),
                                      GetNumber(),
                                      GetNetnameMsg(),
-                                     GetParent()->GetReference() );
+                                     GetParentFootprint()->GetReference() );
         }
     }
 }
@@ -1369,17 +1365,6 @@ void PAD::ViewGetLayers( int aLayers[], int& aCount ) const
         if( IsOnLayer( each_layer ) )
             aLayers[aCount++] = each_layer;
     }
-
-#ifdef DEBUG
-    if( aCount == 0 )    // Should not occur
-    {
-        wxString msg;
-        msg.Printf( wxT( "footprint %s, pad %s: could not find valid layer for pad" ),
-                    GetParent() ? GetParent()->GetReference() : wxString( wxT( "<null>" ) ),
-                    GetNumber().IsEmpty() ? wxString(wxT( "(unnumbered)" ) ) : GetNumber() );
-        wxLogDebug( msg );
-    }
-#endif
 }
 
 
@@ -1476,12 +1461,6 @@ const BOX2I PAD::ViewBBox() const
 }
 
 
-FOOTPRINT* PAD::GetParent() const
-{
-    return dyn_cast<FOOTPRINT*>( m_parent );
-}
-
-
 void PAD::ImportSettingsFrom( const PAD& aMasterPad )
 {
     SetShape( aMasterPad.GetShape() );
@@ -1499,10 +1478,10 @@ void PAD::ImportSettingsFrom( const PAD& aMasterPad )
     EDA_ANGLE pad_rot = aMasterPad.GetOrientation();
 
     if( aMasterPad.GetParent() )
-        pad_rot -= aMasterPad.GetParent()->GetOrientation();
+        pad_rot -= aMasterPad.GetParentFootprint()->GetOrientation();
 
     if( GetParent() )
-        pad_rot += GetParent()->GetOrientation();
+        pad_rot += GetParentFootprint()->GetOrientation();
 
     SetOrientation( pad_rot );
 

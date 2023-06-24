@@ -83,7 +83,7 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_
     // Not yet in use.
     // bool isPadOnBoardTechLayers = ( aPad->GetLayerSet() & LSET::AllBoardTechMask() ).any();
 
-    metadata.SetCmpReference( aPad->GetParent()->GetReference() );
+    metadata.SetCmpReference( aPad->GetParentFootprint()->GetReference() );
 
     if( plotOnCopperLayer )
     {
@@ -308,7 +308,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
 
     for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
     {
-        textItem = dyn_cast<const PCB_TEXT*>( item );
+        textItem = dynamic_cast<const PCB_TEXT*>( item );
 
         if( textItem )
             texts.push_back( static_cast<PCB_TEXT*>( item ) );
@@ -925,12 +925,12 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
     if( GetPlotMode() == FILLED )
          m_plotter->SetColor( WHITE );
 
-    for( PCB_TRACK* tracks : m_board->Tracks() )
+    for( PCB_TRACK* track : m_board->Tracks() )
     {
-        const PCB_VIA* via = dyn_cast<const PCB_VIA*>( tracks );
-
-        if( via )
+        if( track->Type() == PCB_VIA_T )
         {
+            const PCB_VIA* via = static_cast<const PCB_VIA*>( track );
+
             plotOneDrillMark( PAD_DRILL_SHAPE_CIRCLE, via->GetStart(),
                               VECTOR2I( via->GetDrillValue(), 0 ), VECTOR2I( via->GetWidth(), 0 ),
                               ANGLE_0, smallDrill );

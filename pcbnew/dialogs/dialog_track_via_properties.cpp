@@ -37,8 +37,6 @@
 #include <board_commit.h>
 #include <macros.h>
 
-#include <wx/log.h>
-
 DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParent,
                                                           const PCB_SELECTION& aItems,
                                                           BOARD_COMMIT& aCommit ) :
@@ -502,7 +500,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::confirmPadChange( const std::vector<PAD*>& cha
     {
         PAD* pad = *changingPads.begin();
         msg.Printf( _( "Changing the net will also update %s pad %s to %s." ),
-                    pad->GetParent()->GetReference(),
+                    pad->GetParentFootprint()->GetReference(),
                     pad->GetNumber(),
                     m_netSelector->GetValue() );
     }
@@ -511,9 +509,9 @@ bool DIALOG_TRACK_VIA_PROPERTIES::confirmPadChange( const std::vector<PAD*>& cha
         PAD* pad1 = *changingPads.begin();
         PAD* pad2 = *( ++changingPads.begin() );
         msg.Printf( _( "Changing the net will also update %s pad %s and %s pad %s to %s." ),
-                    pad1->GetParent()->GetReference(),
+                    pad1->GetParentFootprint()->GetReference(),
                     pad1->GetNumber(),
-                    pad2->GetParent()->GetReference(),
+                    pad2->GetParentFootprint()->GetReference(),
                     pad2->GetNumber(),
                     m_netSelector->GetValue() );
     }

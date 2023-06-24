@@ -271,7 +271,7 @@ public:
     const std::map<int, wxString>& GetNetclassMap() const { return m_netclassMap; }
 
 #ifndef SWIG
-    const std::vector<CN_EDGE> GetRatsnestForItems( const std::vector<BOARD_ITEM*> aItems );
+    const std::vector<CN_EDGE> GetRatsnestForItems( const std::vector<BOARD_ITEM*>& aItems );
 
     const std::vector<CN_EDGE> GetRatsnestForPad( const PAD* aPad );
 

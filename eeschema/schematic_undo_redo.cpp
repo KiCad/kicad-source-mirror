@@ -286,9 +286,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             // If we are removing the current sheet, get out first
             if( eda_item->Type() == SCH_SHEET_T )
             {
-                SCH_SHEET* sheet = static_cast<SCH_SHEET*>( eda_item ) )
-
-                if( sheet->GetScreen() == GetScreen() )
+                if( static_cast<SCH_SHEET*>( eda_item )->GetScreen() == GetScreen() )
                     GetToolManager()->RunAction( EE_ACTIONS::leaveSheet );
             }
 

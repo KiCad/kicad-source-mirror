@@ -80,7 +80,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT&        aTool,
 
                     if( newItem->Type() == PCB_FOOTPRINT_T )
                     {
-                        FOOTPRINT* fp = dyn_cast<FOOTPRINT*>( newItem.get() );
+                        FOOTPRINT* fp = static_cast<FOOTPRINT*>( newItem.get() );
 
                         // footprints have more drawable parts
                         fp->RunOnChildren( std::bind( &KIGFX::VIEW_GROUP::Add, &preview, _1 ) );

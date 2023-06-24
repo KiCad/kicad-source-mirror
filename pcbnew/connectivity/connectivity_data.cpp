@@ -909,9 +909,7 @@ CONNECTIVITY_DATA::GetConnectedItemsAtAnchor( const BOARD_CONNECTED_ITEM* aItem,
 RN_NET* CONNECTIVITY_DATA::GetRatsnestForNet( int aNet )
 {
     if ( aNet < 0 || aNet >= (int) m_nets.size() )
-    {
         return nullptr;
-    }
 
     return m_nets[ aNet ];
 }
@@ -924,10 +922,9 @@ void CONNECTIVITY_DATA::MarkItemNetAsDirty( BOARD_ITEM *aItem )
         for( PAD* pad : static_cast<FOOTPRINT*>( aItem )->Pads() )
             m_connAlgo->MarkNetAsDirty( pad->GetNetCode() );
     }
+
     if (aItem->IsConnected() )
-    {
         m_connAlgo->MarkNetAsDirty( static_cast<BOARD_CONNECTED_ITEM*>( aItem )->GetNetCode() );
-    }
 }
 
 
@@ -938,7 +935,8 @@ void CONNECTIVITY_DATA::SetProgressReporter( PROGRESS_REPORTER* aReporter )
 }
 
 
-const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForItems( std::vector<BOARD_ITEM*> aItems )
+const std::vector<CN_EDGE>
+CONNECTIVITY_DATA::GetRatsnestForItems( const std::vector<BOARD_ITEM*>& aItems )
 {
     std::set<int> nets;
     std::vector<CN_EDGE> edges;
@@ -956,8 +954,10 @@ const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForItems( std::vector<B
                 item_set.insert( pad );
             }
         }
-        else if( auto conn_item = dyn_cast<BOARD_CONNECTED_ITEM*>( item ) )
+        else if( item->IsConnected() )
         {
+            BOARD_CONNECTED_ITEM* conn_item = static_cast<BOARD_CONNECTED_ITEM*>( item );
+
             item_set.insert( conn_item );
             nets.insert( conn_item->GetNetCode() );
         }
@@ -1002,7 +1002,8 @@ const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForPad( const PAD* aPad
 }
 
 
-const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForComponent( FOOTPRINT* aComponent, bool aSkipInternalConnections )
+const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForComponent( FOOTPRINT* aComponent,
+                                                                       bool aSkipInternalConnections )
 {
     std::set<int> nets;
     std::set<const PAD*> pads;
@@ -1014,14 +1015,12 @@ const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForComponent( FOOTPRINT
         pads.insert( pad );
     }
 
-    for( const auto& netcode : nets )
+    for( int netcode : nets )
     {
-        RN_NET* net = GetRatsnestForNet( netcode );
-
-        for( const CN_EDGE& edge : net->GetEdges() )
+        for( const CN_EDGE& edge : GetRatsnestForNet( netcode )->GetEdges() )
         {
-            auto srcNode = edge.GetSourceNode();
-            auto dstNode = edge.GetTargetNode();
+            const std::shared_ptr<const CN_ANCHOR>& srcNode = edge.GetSourceNode();
+            const std::shared_ptr<const CN_ANCHOR>& dstNode = edge.GetTargetNode();
 
             const PAD* srcParent = static_cast<const PAD*>( srcNode->Parent() );
             const PAD* dstParent = static_cast<const PAD*>( dstNode->Parent() );
@@ -1030,13 +1029,9 @@ const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForComponent( FOOTPRINT
             bool dstFound = ( pads.find(dstParent) != pads.end() );
 
             if ( srcFound && dstFound && !aSkipInternalConnections )
-            {
                 edges.push_back( edge );
-            }
             else if ( srcFound || dstFound )
-            {
                 edges.push_back( edge );
-            }
         }
     }
 

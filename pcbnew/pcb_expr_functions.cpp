@@ -33,7 +33,6 @@
 #include <pcb_group.h>
 #include <geometry/shape_segment.h>
 #include <pcb_expr_evaluator.h>
-
 #include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>
 #include <connectivity/from_to_cache.h>
@@ -873,10 +872,11 @@ static void isMicroVia( LIBEVAL::CONTEXT* aCtx, void* self )
     result->Set( 0.0 );
     aCtx->Push( result );
 
-    PCB_VIA* via = dyn_cast<PCB_VIA*>( item );
-
-    if( via && via->GetViaType() == VIATYPE::MICROVIA )
+    if( item && item->Type() == PCB_VIA_T
+            && static_cast<PCB_VIA*>( item )->GetViaType() == VIATYPE::MICROVIA )
+    {
         result->Set ( 1.0 );
+    }
 }
 
 
@@ -889,10 +889,11 @@ static void isBlindBuriedViaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
     result->Set( 0.0 );
     aCtx->Push( result );
 
-    PCB_VIA* via = dyn_cast<PCB_VIA*>( item );
-
-    if( via && via->GetViaType() == VIATYPE::BLIND_BURIED )
+    if( item && item->Type() == PCB_VIA_T
+            && static_cast<PCB_VIA*>( item )->GetViaType() == VIATYPE::MICROVIA )
+    {
         result->Set ( 1.0 );
+    }
 }
 
 

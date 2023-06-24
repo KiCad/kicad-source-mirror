@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2022 KiCad Developers.
+ * Copyright (C) 2004-2023 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,12 +38,10 @@ class DRC_TEST_PROVIDER_TRACK_WIDTH : public DRC_TEST_PROVIDER
 {
 public:
     DRC_TEST_PROVIDER_TRACK_WIDTH()
-    {
-    }
+    {}
 
     virtual ~DRC_TEST_PROVIDER_TRACK_WIDTH()
-    {
-    }
+    {}
 
     virtual bool Run() override;
 
@@ -82,18 +80,22 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_TRACK_WIDTH ) )
                     return false;
 
-                int     actual;
+                int      actual;
                 VECTOR2I p0;
 
-                if( PCB_ARC* arc = dyn_cast<PCB_ARC*>( item ) )
+                if( item->Type() == PCB_ARC_T )
                 {
+                    PCB_ARC* arc = static_cast<PCB_ARC*>( item );
+
                     actual = arc->GetWidth();
                     p0 = arc->GetStart();
                 }
-                else if( PCB_TRACK* trk = dyn_cast<PCB_TRACK*>( item ) )
+                else if( item->Type() == PCB_TRACE_T )
                 {
-                    actual = trk->GetWidth();
-                    p0 = ( trk->GetStart() + trk->GetEnd() ) / 2;
+                    PCB_TRACK* track = static_cast<PCB_TRACK*>( item );
+
+                    actual = track->GetWidth();
+                    p0 = ( track->GetStart() + track->GetEnd() ) / 2;
                 }
                 else
                 {

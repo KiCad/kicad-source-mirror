@@ -490,7 +490,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
     if( m_currentPad )
     {
-        if( FOOTPRINT* footprint = m_currentPad->GetParent() )
+        if( FOOTPRINT* footprint = m_currentPad->GetParentFootprint() )
         {
             VECTOR2I relPos = m_currentPad->GetFPRelativePosition();
 

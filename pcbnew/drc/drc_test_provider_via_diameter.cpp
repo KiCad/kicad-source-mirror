@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2022 KiCad Developers.
+ * Copyright (C) 2004-2023 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,12 +38,10 @@ class DRC_TEST_PROVIDER_VIA_DIAMETER : public DRC_TEST_PROVIDER
 {
 public:
     DRC_TEST_PROVIDER_VIA_DIAMETER()
-    {
-    }
+    {}
 
     virtual ~DRC_TEST_PROVIDER_VIA_DIAMETER()
-    {
-    }
+    {}
 
     virtual bool Run() override;
 
@@ -82,11 +80,10 @@ bool DRC_TEST_PROVIDER_VIA_DIAMETER::Run()
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_VIA_DIAMETER ) )
                     return false;
 
-                PCB_VIA* via = dyn_cast<PCB_VIA*>( item );
-
-                // fixme: move to pad stack check?
-                if( !via )
+                if( item->Type() != PCB_VIA_T )
                     return true;
+
+                PCB_VIA* via = static_cast<PCB_VIA*>( item );
 
                 // TODO: once we have padstacks this will need to run per-layer...
                 auto constraint = m_drcEngine->EvalRules( VIA_DIAMETER_CONSTRAINT, item, nullptr,

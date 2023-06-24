@@ -36,18 +36,14 @@
 #include <geometry/shape_segment.h>
 #include <pcb_base_frame.h>
 #include <math/util.h>      // for KiROUND
-
 #include <board.h>
-#include <board_design_settings.h>
 #include <footprint.h>
 #include <pcb_track.h>
-#include <pcb_text.h>
 #include <pad.h>
 #include <zone.h>
 #include <pcb_shape.h>
 #include <pcb_target.h>
 #include <pcb_dimension.h>
-
 #include <pcbplot.h>
 #include <plotters/plotter_dxf.h>
 #include <plotters/plotter_hpgl.h>
@@ -566,10 +562,10 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
     for( const PCB_TRACK* track : aBoard->Tracks() )
     {
-        const PCB_VIA* via = dyn_cast<const PCB_VIA*>( track );
-
-        if( !via )
+        if( track->Type() != PCB_VIA_T )
             continue;
+
+        const PCB_VIA* via = static_cast<const PCB_VIA*>( track );
 
         // vias are not plotted if not on selected layer, but if layer is SOLDERMASK_LAYER_BACK
         // or SOLDERMASK_LAYER_FRONT, vias are drawn only if they are on the corresponding
@@ -782,9 +778,12 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         // Plot vias holes
         for( PCB_TRACK* track : aBoard->Tracks() )
         {
-            const PCB_VIA* via = dyn_cast<const PCB_VIA*>( track );
+            if( track->Type() != PCB_VIA_T )
+                continue;
 
-            if( via && via->IsOnLayer( layer ) )    // via holes can be not through holes
+            const PCB_VIA* via = static_cast<const PCB_VIA*>( track );
+
+            if( via->IsOnLayer( layer ) )    // via holes can be not through holes
                 aPlotter->Circle( via->GetPosition(), via->GetDrillValue(), FILL_T::NO_FILL );
         }
     }
@@ -906,10 +905,13 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         // Plot (untented) vias
         for( const PCB_TRACK* track : aBoard->Tracks() )
         {
-            const PCB_VIA* via = dyn_cast<const PCB_VIA*>( track );
+            if( track->Type() != PCB_VIA_T )
+                continue;
+
+            const PCB_VIA* via = static_cast<const PCB_VIA*>( track );
 
             // Note: IsOnLayer() checks relevant mask layers of untented vias
-            if( !via || !via->IsOnLayer( layer ) )
+            if( !via->IsOnLayer( layer ) )
                 continue;
 
             int clearance = via->GetSolderMaskExpansion();

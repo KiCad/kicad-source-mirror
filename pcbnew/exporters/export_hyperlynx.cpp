@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,8 +37,6 @@
 #include <ki_exception.h>
 #include <locale_io.h>
 #include <reporter.h>
-#include <wx/log.h>
-
 #include <exporters/board_exporter_base.h>
 
 static double iu2hyp( double iu )
@@ -431,7 +429,7 @@ bool HYPERLYNX_EXPORTER::writeNetObjects( const std::vector<BOARD_ITEM*>& aObjec
 
             if( pstackIter != m_padMap.end() )
             {
-                wxString ref = pad->GetParent()->GetReference();
+                wxString ref = pad->GetParentFootprint()->GetReference();
 
                 if( ref.IsEmpty() )
                     ref = wxT( "EMPTY" );

@@ -2004,7 +2004,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
             }
             else
             {
-                PCB_SHAPE* snapItem = dyn_cast<PCB_SHAPE*>( grid.GetSnapped() );
+                PCB_SHAPE* snapItem = dynamic_cast<PCB_SHAPE*>( grid.GetSnapped() );
 
                 if( twoPointManager.GetOrigin() == twoPointManager.GetEnd()
                     || ( evt->IsDblClick( BUT_LEFT ) && shape == SHAPE_T::SEGMENT )
@@ -2493,8 +2493,8 @@ bool DRAWING_TOOL::getSourceZoneForAction( ZONE_MODE aMode, ZONE** aZone )
     }
 
     // we want a single zone
-    if( selection.Size() == 1 )
-        *aZone = dyn_cast<ZONE*>( selection[0] );
+    if( selection.Size() == 1 && selection[0]->Type() == PCB_ZONE_T )
+        *aZone = static_cast<ZONE*>( selection[0] );
 
     // expected a zone, but didn't get one
     if( !*aZone )
@@ -2813,8 +2813,10 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 if( !( item->GetLayerSet() & lset ).any() )
                     continue;
 
-                if( PCB_TRACK* track = dyn_cast<PCB_TRACK*>( item ) )
+                if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
                 {
+                    PCB_TRACK* track = static_cast<PCB_TRACK*>( item );
+
                     if( TestSegmentHit( position, track->GetStart(), track->GetEnd(),
                                         ( track->GetWidth() + aVia->GetWidth() ) / 2 ) )
                     {

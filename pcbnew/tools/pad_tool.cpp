@@ -187,13 +187,10 @@ int PAD_TOOL::copyPadSettings( const TOOL_EVENT& aEvent )
 
 
 static void doPushPadProperties( BOARD& board, const PAD& aSrcPad, BOARD_COMMIT& commit,
-                                 bool aSameFootprints,
-                                 bool aPadShapeFilter,
-                                 bool aPadOrientFilter,
-                                 bool aPadLayerFilter,
-                                 bool aPadTypeFilter )
+                                 bool aSameFootprints, bool aPadShapeFilter, bool aPadOrientFilter,
+                                 bool aPadLayerFilter, bool aPadTypeFilter )
 {
-    const FOOTPRINT* refFootprint = aSrcPad.GetParent();
+    const FOOTPRINT* refFootprint = aSrcPad.GetParentFootprint();
 
     EDA_ANGLE srcPadAngle = aSrcPad.GetOrientation() - refFootprint->GetOrientation();
 
@@ -241,40 +238,37 @@ int PAD_TOOL::pushPadSettings( const TOOL_EVENT& aEvent )
 {
     PCB_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
     const PCB_SELECTION& selection = selTool->GetSelection();
-    PAD*                 srcPad;
 
     if( selection.Size() == 1 && selection[0]->Type() == PCB_PAD_T )
-        srcPad = static_cast<PAD*>( selection[0] );
-    else
-        return 0;
+    {
+        PAD* srcPad = static_cast<PAD*>( selection[0] );
 
-    FOOTPRINT* footprint = srcPad->GetParent();
+        if( FOOTPRINT* footprint = srcPad->GetParentFootprint() )
+        {
+            frame()->SetMsgPanel( footprint );
 
-    if( !footprint )
-        return 0;
+            DIALOG_PUSH_PAD_PROPERTIES dlg( frame() );
+            int dialogRet = dlg.ShowModal();
 
-    frame()->SetMsgPanel( footprint );
+            if( dialogRet == wxID_CANCEL )
+                return 0;
 
-    DIALOG_PUSH_PAD_PROPERTIES dlg( frame() );
-    int dialogRet = dlg.ShowModal();
+            const bool edit_Same_Modules = (dialogRet == 1);
 
-    if( dialogRet == wxID_CANCEL )
-        return 0;
+            BOARD_COMMIT commit( frame() );
 
-    const bool edit_Same_Modules = (dialogRet == 1);
+            doPushPadProperties( *getModel<BOARD>(), *srcPad, commit, edit_Same_Modules,
+                                 DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Shape_Filter,
+                                 DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Orient_Filter,
+                                 DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Layer_Filter,
+                                 DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Type_Filter );
 
-    BOARD_COMMIT commit( frame() );
+            commit.Push( _( "Push Pad Settings" ) );
 
-    doPushPadProperties( *getModel<BOARD>(), *srcPad, commit, edit_Same_Modules,
-                         DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Shape_Filter,
-                         DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Orient_Filter,
-                         DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Layer_Filter,
-                         DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Type_Filter );
-
-    commit.Push( _( "Push Pad Settings" ) );
-
-    m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
-    frame()->Refresh();
+            m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
+            frame()->Refresh();
+        }
+    }
 
     return 0;
 }

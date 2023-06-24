@@ -1536,7 +1536,7 @@ int PCB_SELECTION_TOOL::grabUnconnected( const TOOL_EVENT& aEvent )
             if( edge.GetLength() < currentDistance )
             {
                 currentDistance = edge.GetLength();
-                nearest = static_cast<PAD*>( other->Parent() )->GetParent();
+                nearest = other->Parent()->GetParentFootprint();
             }
         }
 
@@ -2730,26 +2730,24 @@ bool PCB_SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 
             bool found = false;
 
-            std::function<void( PCB_GROUP* )> checkGroup;
-            checkGroup = [&]( PCB_GROUP* aGroup )
-                {
-                    aGroup->RunOnChildren(
-                            [&]( BOARD_ITEM* aItem )
+            std::function<void( PCB_GROUP* )> checkGroup =
+                    [&]( PCB_GROUP* aGroup )
+                    {
+                        aGroup->RunOnChildren(
+                                [&]( BOARD_ITEM* aItem )
                                 {
-                                    if( PCB_GROUP* group = dyn_cast<PCB_GROUP*>( aItem ) )
-                                        checkGroup( group );
+                                    if( aItem->Type() == PCB_GROUP_T )
+                                        checkGroup( static_cast<PCB_GROUP*>( aItem ) );
                                     else if( aItem->HitTest( aPoint, margin ) )
                                         found = true;
                                 } );
-                };
+                    };
 
-            if( PCB_GROUP* group = dyn_cast<PCB_GROUP*>( item ) )
-            {
-                checkGroup( group );
+            if( item->Type() == PCB_GROUP_T )
+                checkGroup( static_cast<PCB_GROUP*>( item ) );
 
-                if( found )
-                    return true;
-            }
+            if( found )
+                return true;
         }
     }
 

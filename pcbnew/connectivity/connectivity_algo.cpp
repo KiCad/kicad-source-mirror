@@ -869,25 +869,25 @@ bool CN_VISITOR::operator()( CN_ITEM* aCandidate )
         FLASHING flashingA = FLASHING::NEVER_FLASHED;
         FLASHING flashingB = FLASHING::NEVER_FLASHED;
 
-        if( const PAD* pad = dyn_cast<const PAD*>( parentA ) )
+        if( parentA->Type() == PCB_PAD_T )
         {
-            if( !pad->ConditionallyFlashed( layer ) )
+            if( !static_cast<const PAD*>( parentA )->ConditionallyFlashed( layer ) )
                 flashingA = FLASHING::ALWAYS_FLASHED;
         }
-        else if( const PCB_VIA* via = dyn_cast<const PCB_VIA*>( parentA ) )
+        else if( parentA->Type() == PCB_VIA_T )
         {
-            if( !via->ConditionallyFlashed( layer ) )
+            if( !static_cast<const PCB_VIA*>( parentA )->ConditionallyFlashed( layer ) )
                 flashingA = FLASHING::ALWAYS_FLASHED;
         }
 
-        if( const PAD* pad = dyn_cast<const PAD*>( parentB ) )
+        if( parentB->Type() == PCB_PAD_T )
         {
-            if( !pad->ConditionallyFlashed( layer ) )
+            if( !static_cast<const PAD*>( parentB )->ConditionallyFlashed( layer ) )
                 flashingB = FLASHING::ALWAYS_FLASHED;
         }
-        else if( const PCB_VIA* via = dyn_cast<const PCB_VIA*>( parentB ) )
+        else if( parentB->Type() == PCB_VIA_T )
         {
-            if( !via->ConditionallyFlashed( layer ) )
+            if( !static_cast<const PCB_VIA*>( parentB )->ConditionallyFlashed( layer ) )
                 flashingB = FLASHING::ALWAYS_FLASHED;
         }
 
