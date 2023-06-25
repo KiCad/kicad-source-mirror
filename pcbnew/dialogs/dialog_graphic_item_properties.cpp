@@ -85,6 +85,8 @@ private:
     UNIT_BINDER           m_thickness;
     UNIT_BINDER           m_segmentLength;
     UNIT_BINDER           m_segmentAngle;
+    UNIT_BINDER           m_rectangleLength;
+    UNIT_BINDER           m_rectangleWidth;
     UNIT_BINDER           m_bezierCtrl1X, m_bezierCtrl1Y;
     UNIT_BINDER           m_bezierCtrl2X, m_bezierCtrl2Y;
 
@@ -102,6 +104,8 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
     m_endY( aParent, m_endYLabel, m_endYCtrl, m_endYUnits ),
     m_segmentLength( aParent, m_segmentLengthLabel, m_segmentLengthCtrl, m_segmentLengthUnits ),
     m_segmentAngle( aParent, m_segmentAngleLabel, m_segmentAngleCtrl, m_segmentAngleUnits ),
+    m_rectangleLength( aParent, m_rectangleLengthLabel, m_rectangleLengthCtrl, m_rectangleLengthUnits ),
+    m_rectangleWidth( aParent, m_rectangleWidthLabel, m_rectangleWidthCtrl, m_rectangleWidthUnits ),
     m_angle( aParent, m_angleLabel, m_angleCtrl, m_angleUnits ),
     m_thickness( aParent, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits ),
     m_bezierCtrl1X( aParent, m_BezierPointC1XLabel, m_BezierC1X_Ctrl, m_BezierPointC1XUnit ),
@@ -122,6 +126,10 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
 
     m_segmentLength.SetUnits( EDA_UNITS::MILLIMETRES );
     m_segmentAngle.SetUnits( EDA_UNITS::DEGREES );
+
+    m_rectangleLength.SetUnits( EDA_UNITS::MILLIMETRES );
+    m_rectangleWidth.SetUnits( EDA_UNITS::MILLIMETRES );
+
     m_angle.SetUnits( EDA_UNITS::DEGREES );
 
     // Do not allow locking items in the footprint editor
@@ -234,6 +242,12 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
         m_segmentAngle.Show( false );
     }
 
+    if( m_item->GetShape() != SHAPE_T::RECT )
+    {
+        m_rectangleLength.Show( false );
+        m_rectangleWidth.Show( false );
+    }
+
     // Only an arc has a angle parameter. So do not show this parameter for other shapes
     if( m_item->GetShape() != SHAPE_T::ARC )
         m_angle.Show( false );
@@ -282,6 +296,9 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
 
     case SHAPE_T::RECTANGLE:
         SetTitle( _( "Rectangle Properties" ) );
+
+        m_rectangleLength.SetValue( m_item->GetRectangleLength() );
+        m_rectangleWidth.SetValue( m_item->GetRectangleWidth() );
 
         m_filledCtrl->Show( true );
         break;
@@ -373,12 +390,26 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
 
     VECTOR2I  begin_point = m_item->GetStart();
     VECTOR2I  end_point = m_item->GetEnd();
-    long long int segment_length = m_item->GetLength();
-    EDA_ANGLE segment_angle = m_item->GetSegmentAngle();
+    long long int segment_length = 0;
+    EDA_ANGLE     segment_angle = EDA_ANGLE( 0, RADIANS_T );
+    long long int rectangle_length = 0;
+    long long int rectangle_width = 0;
 
     BOARD_COMMIT commit( m_parent );
 
     commit.Modify( m_item );
+
+    if( m_item->GetShape() == SHAPE_T::SEGMENT )
+    {
+        segment_length = m_item->GetLength();
+        segment_angle = m_item->GetSegmentAngle();
+    }
+
+    if( m_item->GetShape() == SHAPE_T::RECT )
+    {
+        rectangle_length = m_item->GetRectangleLength();
+        rectangle_width = m_item->GetRectangleWidth();
+    }
 
     if( m_flipStartEnd && m_item->GetShape() != SHAPE_T::ARC )
     {
@@ -455,7 +486,39 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
      
      }
 
-    // For Bezier curve: Set the two control points
+    if( m_item->GetShape() == SHAPE_T::RECT )
+    {
+        bool change_begin = ( begin_point != m_item->GetStart() );
+        bool change_end = ( end_point != m_item->GetEnd() );
+        bool change_length = ( rectangle_length != m_rectangleLength.GetValue() );
+        bool change_width = ( rectangle_width != m_rectangleWidth.GetValue() );
+
+
+        if( !( change_begin && change_end ) )
+        {
+            rectangle_length = m_rectangleLength.GetValue();
+            rectangle_width = m_rectangleWidth.GetValue();
+
+            if( change_length || change_width )
+            {
+                if( change_end )
+                {
+                    m_item->SetStartX( m_item->GetEndX() - rectangle_length );
+                    m_item->SetStartY( m_item->GetEndY() - rectangle_width );
+                }
+                else
+                {
+                    m_item->SetEndX( m_item->GetStartX() + rectangle_length );
+                    m_item->SetEndY( m_item->GetStartY() + rectangle_width );
+                }
+            }
+        }
+
+        m_item->SetRectangle( m_rectangleLength.GetValue(), m_rectangleWidth.GetValue() );
+    }
+
+     
+     // For Bezier curve: Set the two control points
     if( m_item->GetShape() == SHAPE_T::BEZIER )
     {
         m_item->SetBezierC1( VECTOR2I( m_bezierCtrl1X.GetValue(), m_bezierCtrl1Y.GetValue() ) );

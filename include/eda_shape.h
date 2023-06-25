@@ -301,6 +301,8 @@ public:
 
     void SetLength( const double& aLength );
 
+    void SetRectangle( const long long int& aLength, const long long int& aWidth );
+
     void SetAngle( const EDA_ANGLE& aLength );
 
     /**
@@ -309,6 +311,9 @@ public:
      * @return the length of the track
      */
     double GetLength() const;
+
+    long long int GetRectangleLength() const;
+    long long int GetRectangleWidth() const;
 
     /**
      * Convert the shape to a closed polygon.  Circles and arcs are approximated by segments.
@@ -371,6 +376,9 @@ protected:
     STROKE_PARAMS         m_stroke;       // Line style, width, etc.
     FILL_T                m_fill;
     COLOR4D               m_fillColor;
+
+    long long int         m_rectangleLength;
+    long long int         m_rectangleWidth;
 
     double                m_segmentLength;
     EDA_ANGLE             m_segmentAngle;
