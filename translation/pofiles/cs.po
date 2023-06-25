@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-18 11:58-0700\n"
-"PO-Revision-Date: 2023-06-25 05:56+0000\n"
+"PO-Revision-Date: 2023-06-26 17:51+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v7/cs/>\n"
 "Language: cs\n"
@@ -11224,7 +11224,7 @@ msgstr "Kód"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:207
 msgid "Save {} in Value field as \"{}\""
-msgstr ""
+msgstr "Uložit {} v poli Hodnota jako \"{}\""
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:220
 msgid "Model"
@@ -12204,7 +12204,7 @@ msgstr "Délka mezery:"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:245
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:45
 msgid "Dash and dot lengths are ratios of the line width."
-msgstr ""
+msgstr "Délky pomlčky a bodu jsou poměry šířky linky."
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:220
 msgid "No error or warning"
@@ -12580,6 +12580,8 @@ msgid ""
 "Warning: schematic has annotation errors, please use the schematic editor to "
 "fix them\n"
 msgstr ""
+"VAROVÁNÍ: Schéma má chyby očíslování, použijte editor schémat k jejich "
+"opravě\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:172
 #: eeschema/eeschema_jobs_handler.cpp:273
@@ -15682,7 +15684,7 @@ msgstr "Čas OFF by měl být větší než 0."
 
 #: eeschema/sim/kibis/kibis.cpp:1545
 msgid "Rising edge is longer than on time."
-msgstr ""
+msgstr "Vzestupná hrana je delší než čas zapnutí."
 
 #: eeschema/sim/kibis/kibis.cpp:1554
 msgid "Falling edge is longer than off time."
@@ -15690,7 +15692,7 @@ msgstr ""
 
 #: eeschema/sim/kibis/kibis.cpp:1591
 msgid "Rising edge is longer than ON time."
-msgstr ""
+msgstr "Vzestupná hrana je delší než čas zapnutí."
 
 #: eeschema/sim/kibis/kibis.cpp:1599
 msgid "Falling edge is longer than OFF time."
@@ -28149,6 +28151,7 @@ msgstr "Varování: Díra plošky nezanechává žádnou měď."
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1288
 msgid "Warning: Negative local clearance values will have no effect."
 msgstr ""
+"Varování: Záporné hodnoty místní izolační mezery nebudou mít žádný účinek."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1305
 msgid ""
@@ -29919,14 +29922,12 @@ msgstr ""
 "klávesových zkratek."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:74
-#, fuzzy
 msgid "Arc editing mode:"
-msgstr "Režim pozice:"
+msgstr "Režim úpravy oblouku:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:81
-#, fuzzy
 msgid "Keep center, adjust radius"
-msgstr "Střed kružnice (%s, %s), poloměr %s"
+msgstr "Držet střed, upravit poloměr"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:81
 msgid "Keep endpoints or direction of starting point"
@@ -31043,21 +31044,20 @@ msgid "If none are provided, setting the values to zero is suggested."
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:56
-#, fuzzy
 msgid ""
 "Global clearance between pads and the solder mask.\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
-"Toto je globální izolační mezera mezi ploškou a pájecí maskou\n"
-"tato hodnota může být nahrazena místními hodnotami pro pouzdro nebo plošku."
+"Globální izolační mezera mezi ploškou a pájecí maskou.\n"
+"Tato hodnota může být nahrazena místními hodnotami pro pouzdro nebo plošku."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:61
-#, fuzzy
 msgid ""
 "Positive clearance means area bigger than the pad (usual for solder mask "
 "clearance)."
 msgstr ""
-"Kladná mezera znamená oblast větší, než ploška (obvykle pro pájecí masku)."
+"Kladná mezera znamená oblast větší, než ploška (obvykle pro izolační mezeru "
+"pájecí masky)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:69
 #, fuzzy
@@ -31109,12 +31109,12 @@ msgstr ""
 "mezery."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:108
-#, fuzzy
 msgid ""
 "Negative clearance means area smaller than the pad (usual for solder paste "
 "clearance)."
 msgstr ""
-"Záporná mezera znamená oblast menší, než ploška (obvykle pro pájecí pastu)."
+"Záporná mezera znamená oblast menší, než ploška (obvykle pro izolační mezeru "
+"pájecí pasty)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:118
 msgid ""
