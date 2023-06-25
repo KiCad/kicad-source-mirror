@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-18 15:39+0200\n"
-"PO-Revision-Date: 2023-05-12 13:56+0000\n"
+"POT-Creation-Date: 2023-05-18 11:58-0700\n"
+"PO-Revision-Date: 2023-06-25 05:56+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v7/cs/>\n"
 "Language: cs\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 4.18.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -34752,10 +34752,10 @@ msgstr "DPS úspěšně přečíslována"
 msgid "Error creating svg file"
 msgstr "Chyba čtení souboru."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:343 pcbnew/pcbnew_jobs_handler.cpp:422
-#, fuzzy, c-format
+#: pcbnew/pcbnew_jobs_handler.cpp:337 pcbnew/pcbnew_jobs_handler.cpp:414
+#, c-format
 msgid "Failed to plot to '%s'.\n"
-msgstr "Nepodařilo se načíst '%s'."
+msgstr "Nepodařilo se načíst '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:632 pcbnew/pcbnew_jobs_handler.cpp:703
 #, fuzzy
