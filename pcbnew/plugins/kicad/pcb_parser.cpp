@@ -3052,6 +3052,10 @@ void PCB_PARSER::parsePCB_TEXT_effects( PCB_TEXT* aText )
 {
     FOOTPRINT* parentFP = dynamic_cast<FOOTPRINT*>( aText->GetParent() );
 
+    // By default, texts in footprints have a locked rotation (i.e. rot = -90 ... 90 deg)
+    if( parentFP )
+        aText->SetKeepUpright( true );
+
     for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
         if( token == T_LEFT )
