@@ -128,8 +128,6 @@ bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
     if( dlg.ShowModal() == wxID_CANCEL )
         return false;
 
-    aPin->SetModified();
-
     if( !aPin->IsNew() && m_frame->SynchronizePins() && aPin->GetParent() )
     {
         LIB_PINS pinList;
@@ -184,7 +182,6 @@ bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
                 other->SetNameTextSize( aPin->GetNameTextSize() );
                 other->SetNumberTextSize( aPin->GetNumberTextSize() );
 
-                other->SetModified();
                 got_unit[static_cast<size_t>( other->GetUnit() )] = true;
             }
         }

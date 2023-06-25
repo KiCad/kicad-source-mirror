@@ -939,7 +939,6 @@ void LIB_SYMBOL::RemoveDrawItem( LIB_ITEM* aItem )
         if( &*i == aItem )
         {
             items.erase( i );
-            SetModified();
             break;
         }
     }

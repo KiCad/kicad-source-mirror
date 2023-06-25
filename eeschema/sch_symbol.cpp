@@ -275,11 +275,7 @@ bool SCH_SYMBOL::IsMovableFromAnchorPoint() const
 
 void SCH_SYMBOL::SetLibId( const LIB_ID& aLibId )
 {
-    if( m_lib_id != aLibId )
-    {
-        m_lib_id = aLibId;
-        SetModified();
-    }
+    m_lib_id = aLibId;
 }
 
 

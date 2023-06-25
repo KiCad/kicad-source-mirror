@@ -149,32 +149,20 @@ EDA_ITEM* SCH_LINE::Clone() const
 
 void SCH_LINE::Move( const VECTOR2I& aOffset )
 {
-    if( aOffset != VECTOR2I( 0, 0 ) )
-    {
-        m_start += aOffset;
-        m_end += aOffset;
-        SetModified();
-    }
+    m_start += aOffset;
+    m_end += aOffset;
 }
 
 
 void SCH_LINE::MoveStart( const VECTOR2I& aOffset )
 {
-    if( aOffset != VECTOR2I( 0, 0 ) )
-    {
-        m_start += aOffset;
-        SetModified();
-    }
+    m_start += aOffset;
 }
 
 
 void SCH_LINE::MoveEnd( const VECTOR2I& aOffset )
 {
-    if( aOffset != VECTOR2I( 0, 0 ) )
-    {
-        m_end += aOffset;
-        SetModified();
-    }
+    m_end += aOffset;
 }
 
 

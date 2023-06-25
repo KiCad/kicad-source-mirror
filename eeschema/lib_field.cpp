@@ -512,11 +512,7 @@ void LIB_FIELD::SetName( const wxString& aName )
         return;
     }
 
-    if( m_name != aName )
-    {
-        m_name = aName;
-        SetModified();
-    }
+    m_name = aName;
 }
 
 

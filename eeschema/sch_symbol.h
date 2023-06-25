@@ -640,8 +640,6 @@ public:
 
         for( SCH_FIELD& field : m_fields )
             field.Move( aMoveVector );
-
-        SetModified();
     }
 
     void MirrorHorizontally( int aCenter ) override;
