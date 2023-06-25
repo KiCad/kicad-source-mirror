@@ -889,22 +889,32 @@ TOOL_ACTION EE_ACTIONS::toggleOPCurrents( "eeschema.EditorControl.showOperatingP
         _( "Show OP Currents" ),
         _( "Show operating point current data from simulation" ) );
 
-TOOL_ACTION EE_ACTIONS::lineModeFree( "eeschema.EditorControl.lineModeFree",
-        AS_GLOBAL, 0, "",
-        _( "Line Mode for Wires and Buses" ), _( "Draw and drag at any angle" ),
-        BITMAPS::lines_any );
+TOOL_ACTION EE_ACTIONS::lineModeFree( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.lineModeFree" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Line Mode for Wires and Buses" ) )
+        .Tooltip( _( "Draw and drag at any angle" ) )
+        .Icon( BITMAPS::lines_any )
+        .Flags( AF_NONE )
+        .Parameter( LINE_MODE::LINE_MODE_FREE ) );
 
-TOOL_ACTION EE_ACTIONS::lineMode90( "eeschema.EditorControl.lineModeOrthonal",
-        AS_GLOBAL, 0, "",
-        _( "Line Mode for Wires and Buses" ),
-        _( "Constrain drawing and dragging to horizontal or vertical motions" ),
-        BITMAPS::lines90 );
+TOOL_ACTION EE_ACTIONS::lineMode90( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.lineModeOrthonal" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Line Mode for Wires and Buses" ) )
+        .Tooltip( _( "Constrain drawing and dragging to horizontal or vertical motions" ) )
+        .Icon( BITMAPS::lines90 )
+        .Flags( AF_NONE )
+        .Parameter( LINE_MODE::LINE_MODE_90) );
 
-TOOL_ACTION EE_ACTIONS::lineMode45( "eeschema.EditorControl.lineMode45",
-        AS_GLOBAL, 0, "",
-        _( "Line Mode for Wires and Buses" ),
-        _( "Constrain drawing and dragging to horizontal, vertical, or 45-degree angle motions" ),
-        BITMAPS::hv45mode );
+TOOL_ACTION EE_ACTIONS::lineMode45( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.lineMode45" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Line Mode for Wires and Buses" ) )
+        .Tooltip( _( "Constrain drawing and dragging to horizontal, vertical, or 45-degree angle motions" ) )
+        .Icon( BITMAPS::hv45mode )
+        .Flags( AF_NONE )
+        .Parameter( LINE_MODE::LINE_MODE_45 ) );
 
 TOOL_ACTION EE_ACTIONS::lineModeNext( "eeschema.EditorControl.lineModeNext",
         AS_GLOBAL, MD_SHIFT + WXK_SPACE, "",
@@ -1012,7 +1022,7 @@ TOOL_ACTION EE_ACTIONS::unfoldBus( "eeschema.InteractiveDrawingLineWireBus.unfol
         AS_GLOBAL,
         'C', LEGACY_HK_NAME( "Unfold from Bus" ),
         _( "Unfold from Bus" ), _( "Break a wire out of a bus" ),
-        BITMAPS::INVALID_BITMAP, AF_ACTIVATE );
+                                   BITMAPS::INVALID_BITMAP, AF_ACTIVATE );
 
 const DRAW_SEGMENT_EVENT_PARAMS drawLinesActionParam = { LAYER_NOTES, false, nullptr };
 TOOL_ACTION EE_ACTIONS::drawLines( TOOL_ACTION_ARGS()
