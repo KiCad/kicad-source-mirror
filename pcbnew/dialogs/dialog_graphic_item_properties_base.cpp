@@ -78,28 +78,6 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	m_endYUnits->Wrap( -1 );
 	m_sizerLeft->Add( m_endYUnits, wxGBPosition( 2, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_segmentLengthLabel = new wxStaticText( this, wxID_ANY, _("Length:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_segmentLengthLabel->Wrap( -1 );
-	m_sizerLeft->Add( m_segmentLengthLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-
-	m_segmentLengthCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_sizerLeft->Add( m_segmentLengthCtrl, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_segmentLengthUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_segmentLengthUnits->Wrap( -1 );
-	m_sizerLeft->Add( m_segmentLengthUnits, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
-
-	m_segmentAngleLabel = new wxStaticText( this, wxID_ANY, _("Angle:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_segmentAngleLabel->Wrap( -1 );
-	m_sizerLeft->Add( m_segmentAngleLabel, wxGBPosition( 3, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-
-	m_segmentAngleCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_sizerLeft->Add( m_segmentAngleCtrl, wxGBPosition( 3, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_segmentAngleUnits = new wxStaticText( this, wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_segmentAngleUnits->Wrap( -1 );
-	m_sizerLeft->Add( m_segmentAngleUnits, wxGBPosition( 3, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
-
 	m_bezierCtrlPt1Label = new wxStaticText( this, wxID_ANY, _("Bezier Control Pt"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_bezierCtrlPt1Label->Wrap( -1 );
 	m_sizerLeft->Add( m_bezierCtrlPt1Label, wxGBPosition( 4, 0 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT, 5 );
@@ -163,46 +141,90 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	gbSizer2->SetFlexibleDirection( wxBOTH );
 	gbSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
+	m_segmentLengthLabel = new wxStaticText( this, wxID_ANY, _("Length:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_segmentLengthLabel->Wrap( -1 );
+	gbSizer2->Add( m_segmentLengthLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_segmentLengthCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer2->Add( m_segmentLengthCtrl, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxTOP, 5 );
+
+	m_segmentLengthUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_segmentLengthUnits->Wrap( -1 );
+	gbSizer2->Add( m_segmentLengthUnits, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_segmentAngleLabel = new wxStaticText( this, wxID_ANY, _("Angle:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_segmentAngleLabel->Wrap( -1 );
+	gbSizer2->Add( m_segmentAngleLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_segmentAngleCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer2->Add( m_segmentAngleCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxTOP, 5 );
+
+	m_segmentAngleUnits = new wxStaticText( this, wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_segmentAngleUnits->Wrap( -1 );
+	gbSizer2->Add( m_segmentAngleUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_rectangleLengthLabel = new wxStaticText( this, wxID_ANY, _("Length:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rectangleLengthLabel->Wrap( -1 );
+	gbSizer2->Add( m_rectangleLengthLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_rectangleLengthCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer2->Add( m_rectangleLengthCtrl, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxTOP, 5 );
+
+	m_rectangleLengthUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rectangleLengthUnits->Wrap( -1 );
+	gbSizer2->Add( m_rectangleLengthUnits, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_rectangleWidthLabel = new wxStaticText( this, wxID_ANY, _("Width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rectangleWidthLabel->Wrap( -1 );
+	gbSizer2->Add( m_rectangleWidthLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_rectangleWidthCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer2->Add( m_rectangleWidthCtrl, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxTOP, 5 );
+
+	m_rectangleWidthUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rectangleWidthUnits->Wrap( -1 );
+	gbSizer2->Add( m_rectangleWidthUnits, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
 	m_angleLabel = new wxStaticText( this, wxID_ANY, _("Arc angle:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_angleLabel->Wrap( -1 );
-	gbSizer2->Add( m_angleLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer2->Add( m_angleLabel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_angleCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( m_angleCtrl, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	gbSizer2->Add( m_angleCtrl, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 	m_angleUnits = new wxStaticText( this, wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_angleUnits->Wrap( -1 );
-	gbSizer2->Add( m_angleUnits, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer2->Add( m_angleUnits, wxGBPosition( 4, 2 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_locked = new wxCheckBox( this, wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( m_locked, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxRIGHT|wxLEFT, 5 );
+	gbSizer2->Add( m_locked, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxRIGHT|wxLEFT, 5 );
 
 	m_filledCtrl = new wxCheckBox( this, wxID_ANY, _("Filled shape"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( m_filledCtrl, wxGBPosition( 2, 0 ), wxGBSpan( 1, 2 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	gbSizer2->Add( m_filledCtrl, wxGBPosition( 6, 0 ), wxGBSpan( 1, 2 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_thicknessLabel = new wxStaticText( this, wxID_ANY, _("Line width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_thicknessLabel->Wrap( -1 );
-	gbSizer2->Add( m_thicknessLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+	gbSizer2->Add( m_thicknessLabel, wxGBPosition( 7, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_thicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( m_thicknessCtrl, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
+	gbSizer2->Add( m_thicknessCtrl, wxGBPosition( 7, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
 
 	m_thicknessUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_thicknessUnits->Wrap( -1 );
-	gbSizer2->Add( m_thicknessUnits, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+	gbSizer2->Add( m_thicknessUnits, wxGBPosition( 7, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_lineStyleLabel = new wxStaticText( this, wxID_ANY, _("Line style:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lineStyleLabel->Wrap( -1 );
-	gbSizer2->Add( m_lineStyleLabel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	gbSizer2->Add( m_lineStyleLabel, wxGBPosition( 8, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_lineStyleCombo = new wxBitmapComboBox( this, wxID_ANY, _("Combo!"), wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
 	m_lineStyleCombo->SetMinSize( wxSize( 210,-1 ) );
 
-	gbSizer2->Add( m_lineStyleCombo, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND, 5 );
+	gbSizer2->Add( m_lineStyleCombo, wxGBPosition( 8, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND, 5 );
 
 	m_LayerLabel = new wxStaticText( this, wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerLabel->Wrap( -1 );
-	gbSizer2->Add( m_LayerLabel, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	gbSizer2->Add( m_LayerLabel, wxGBPosition( 9, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_LayerSelectionCtrl = new PCB_LAYER_BOX_SELECTOR( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
 	gbSizer2->Add( m_LayerSelectionCtrl, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
