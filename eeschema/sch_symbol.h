@@ -748,11 +748,11 @@ public:
 
     bool HasBrightenedPins();
 
-    bool GetIncludeInBom() const { return m_inBom; }
-    void SetIncludeInBom( bool aIncludeInBom ) { m_inBom = aIncludeInBom; }
+    bool GetExcludedFromBOM() const { return m_excludedFromBOM; }
+    void SetExcludedFromBOM( bool aIncludeInBOM ) { m_excludedFromBOM = aIncludeInBOM; }
 
-    bool GetIncludeOnBoard() const { return m_onBoard; }
-    void SetIncludeOnBoard( bool aIncludeOnBoard ) { m_onBoard = aIncludeOnBoard; }
+    bool GetExcludedFromBoard() const { return m_excludedFromBoard; }
+    void SetExcludedFromBoard( bool aIncludeOnBoard ) { m_excludedFromBoard = aIncludeOnBoard; }
 
     bool GetDNP() const { return m_DNP; }
     void SetDNP( bool aDNP ) { m_DNP = aDNP; }
@@ -804,8 +804,8 @@ private:
     std::unordered_map<LIB_PIN*, unsigned> m_pinMap;    ///< library pin pointer : SCH_PIN's index
 
     bool        m_isInNetlist;  ///< True if the symbol should appear in the netlist
-    bool        m_inBom;        ///< True to include in bill of materials export.
-    bool        m_onBoard;      ///< True to include in netlist when updating board.
+    bool        m_excludedFromBOM;        ///< True to include in bill of materials export.
+    bool        m_excludedFromBoard;      ///< True to include in netlist when updating board.
     bool        m_DNP;          ///< True if symbol is set to 'Do Not Populate'.
 
     // Defines the hierarchical path and reference of the symbol.  This allows support

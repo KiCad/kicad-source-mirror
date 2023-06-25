@@ -486,20 +486,20 @@ BOOST_AUTO_TEST_CASE( Compare )
     m_part_no_data.LockUnits( false );
 
     // Include in BOM support tests.
-    testPart.SetIncludeInBom( false );
+    testPart.SetExcludedFromBOM( true );
     BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
-    testPart.SetIncludeInBom( true );
-    m_part_no_data.SetIncludeInBom( false );
+    testPart.SetExcludedFromBOM( false );
+    m_part_no_data.SetExcludedFromBOM( true );
     BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
-    m_part_no_data.SetIncludeInBom( true );
+    m_part_no_data.SetExcludedFromBOM( false );
 
     // Include on board support tests.
-    testPart.SetIncludeOnBoard( false );
+    testPart.SetExcludedFromBoard( true );
     BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
-    testPart.SetIncludeOnBoard( true );
-    m_part_no_data.SetIncludeOnBoard( false );
+    testPart.SetExcludedFromBoard( false );
+    m_part_no_data.SetExcludedFromBoard( true );
     BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
-    m_part_no_data.SetIncludeOnBoard( true );
+    m_part_no_data.SetExcludedFromBoard( false );
 
     // Show pin names flag comparison tests.
     m_part_no_data.SetShowPinNames( false );

@@ -591,8 +591,8 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
         {
             // Fetch the attributes from the *flattened* library symbol.  They are not supported
             // in derived symbols.
-            symbol->SetIncludeInBom( symbol->GetLibSymbolRef()->GetIncludeInBom() );
-            symbol->SetIncludeOnBoard( symbol->GetLibSymbolRef()->GetIncludeOnBoard() );
+            symbol->SetExcludedFromBOM( symbol->GetLibSymbolRef()->GetExcludedFromBOM() );
+            symbol->SetExcludedFromBoard( symbol->GetLibSymbolRef()->GetExcludedFromBoard() );
         }
 
         bool removeExtras = m_removeExtraBox->GetValue();

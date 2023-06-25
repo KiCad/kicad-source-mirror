@@ -76,7 +76,7 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName,
             if( !symbol )
                 continue;
 
-            if( !symbol->GetIncludeOnBoard() )
+            if( symbol->GetExcludedFromBoard() )
                 continue;
 
             footprint = symbol->GetFootprintFieldText( true, &sheetList[ i ], false );

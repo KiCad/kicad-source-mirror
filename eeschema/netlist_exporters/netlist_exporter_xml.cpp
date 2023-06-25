@@ -269,8 +269,8 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
             SCH_SYMBOL* symbol = findNextSymbol( item, &sheet );
 
             if( !symbol
-               || ( ( aCtl & GNL_OPT_BOM ) && !symbol->GetIncludeInBom() )
-               || ( ( aCtl & GNL_OPT_KICAD ) && !symbol->GetIncludeOnBoard() ) )
+               || ( ( aCtl & GNL_OPT_BOM ) && symbol->GetExcludedFromBOM() )
+               || ( ( aCtl & GNL_OPT_KICAD ) && symbol->GetExcludedFromBoard() ) )
             {
                 continue;
             }
@@ -354,13 +354,13 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
                     xproperty->AddAttribute( wxT( "value" ), sheetField.GetText() );
             }
 
-            if( !symbol->GetIncludeInBom() )
+            if( symbol->GetExcludedFromBOM() )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
                 xproperty->AddAttribute( wxT( "name" ), wxT( "exclude_from_bom" ) );
             }
 
-            if( !symbol->GetIncludeOnBoard() )
+            if( symbol->GetExcludedFromBoard() )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
                 xproperty->AddAttribute( wxT( "name" ), wxT( "exclude_from_board" ) );
@@ -708,8 +708,8 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
                     SCH_SYMBOL* symbol = pin->GetParentSymbol();
 
                     if( !symbol
-                       || ( ( aCtl & GNL_OPT_BOM ) && !symbol->GetIncludeInBom() )
-                       || ( ( aCtl & GNL_OPT_KICAD ) && !symbol->GetIncludeOnBoard() ) )
+                       || ( ( aCtl & GNL_OPT_BOM ) && symbol->GetExcludedFromBOM() )
+                       || ( ( aCtl & GNL_OPT_KICAD ) && symbol->GetExcludedFromBoard() ) )
                     {
                         continue;
                     }

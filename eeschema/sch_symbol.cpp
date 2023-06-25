@@ -137,8 +137,8 @@ SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const LIB_ID& aLibId,
 
     // Inherit the include in bill of materials and board netlist settings from flattened
     // library symbol.
-    m_inBom = m_part->GetIncludeInBom();
-    m_onBoard = m_part->GetIncludeOnBoard();
+    m_excludedFromBOM = m_part->GetExcludedFromBOM();
+    m_excludedFromBoard = m_part->GetExcludedFromBoard();
     m_DNP = false;
 
 }
@@ -169,8 +169,8 @@ SCH_SYMBOL::SCH_SYMBOL( const SCH_SYMBOL& aSymbol ) :
     m_convert     = aSymbol.m_convert;
     m_lib_id      = aSymbol.m_lib_id;
     m_isInNetlist = aSymbol.m_isInNetlist;
-    m_inBom       = aSymbol.m_inBom;
-    m_onBoard     = aSymbol.m_onBoard;
+    m_excludedFromBOM = aSymbol.m_excludedFromBOM;
+    m_excludedFromBoard = aSymbol.m_excludedFromBoard;
     m_DNP         = aSymbol.m_DNP;
 
     if( aSymbol.m_part )
@@ -217,8 +217,8 @@ void SCH_SYMBOL::Init( const VECTOR2I& pos )
 
     m_prefix = wxString( wxT( "U" ) );
     m_isInNetlist = true;
-    m_inBom = true;
-    m_onBoard = true;
+    m_excludedFromBOM = false;
+    m_excludedFromBoard = false;
 }
 
 
@@ -1152,9 +1152,9 @@ void SCH_SYMBOL::SwapData( SCH_ITEM* aItem )
     m_transform = symbol->m_transform;
     symbol->m_transform = tmp;
 
-    std::swap( m_inBom, symbol->m_inBom );
+    std::swap( m_excludedFromBOM, symbol->m_excludedFromBOM );
     std::swap( m_DNP, symbol->m_DNP );
-    std::swap( m_onBoard, symbol->m_onBoard );
+    std::swap( m_excludedFromBoard, symbol->m_excludedFromBoard );
 
     std::swap( m_instanceReferences, symbol->m_instanceReferences );
     std::swap( m_schLibSymbolName, symbol->m_schLibSymbolName );
@@ -1311,14 +1311,14 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
     }
     else if( token->IsSameAs( wxT( "EXCLUDE_FROM_BOM" ) ) )
     {
-        *token = this->GetIncludeInBom() ? wxString( wxT( "" ) )
-                                                     : _( "Excluded from BOM" );
+        *token = this->GetExcludedFromBOM() ? _( "Excluded from BOM" )
+                                            : wxString( wxT( "" ) );
         return true;
     }
     else if( token->IsSameAs( wxT( "EXCLUDE_FROM_BOARD" ) ) )
     {
-        *token = this->GetIncludeOnBoard() ? wxString( wxT( "" ) )
-                                                       : _( "Excluded from board" );
+        *token = this->GetExcludedFromBoard() ? _( "Excluded from board" )
+                                              : wxString( wxT( "" ) );
         return true;
     }
     else if( token->IsSameAs( wxT( "DNP" ) ) )
@@ -1709,10 +1709,10 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
         if( GetExcludeFromSim() )
             msgs.Add( _( "Simulation" ) );
 
-        if( !GetIncludeInBom() )
+        if( GetExcludedFromBOM() )
             msgs.Add( _( "BOM" ) );
 
-        if( !GetIncludeOnBoard() )
+        if( GetExcludedFromBoard() )
             msgs.Add( _( "Board" ) );
 
         if( GetDNP() )
@@ -2407,5 +2407,20 @@ static struct SCH_SYMBOL_DESC
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( SCH_SYMBOL );
         propMgr.InheritsAfter( TYPE_HASH( SCH_SYMBOL ), TYPE_HASH( SCH_ITEM ) );
+
+        const wxString groupAttributes = _HKI( "Attributes" );
+
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Exclude from board" ),
+                &SCH_SYMBOL::SetExcludedFromBoard, &SCH_SYMBOL::GetExcludedFromBoard ),
+                groupAttributes );
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Exclude from simulation" ),
+                &SCH_SYMBOL::SetExcludeFromSim, &SCH_SYMBOL::GetExcludeFromSim ),
+                groupAttributes );
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Exclude from bill of materials" ),
+                &SCH_SYMBOL::SetExcludedFromBOM, &SCH_SYMBOL::GetExcludedFromBOM ),
+                groupAttributes );
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Do not populate" ),
+                &SCH_SYMBOL::SetDNP, &SCH_SYMBOL::GetDNP ),
+                groupAttributes );
     }
 } _SCH_SYMBOL_DESC;

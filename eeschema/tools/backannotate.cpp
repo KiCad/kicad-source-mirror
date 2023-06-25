@@ -310,7 +310,7 @@ void BACK_ANNOTATE::checkForUnusedSymbols()
         {
             const SCH_REFERENCE& ref = m_refs[i];
 
-            if( ref.GetSymbol()->GetIncludeOnBoard() )
+            if( ref.GetSymbol()->GetExcludedFromBoard() )
             {
                 wxString msg = wxString::Format( _( "Footprint '%s' is not present on PCB. "
                                                     "Corresponding symbols in schematic must be "
@@ -348,7 +348,7 @@ void BACK_ANNOTATE::applyChangelist()
         wxString       oldFootprint = ref.GetFootprint();
         wxString       oldValue = ref.GetValue();
         bool           oldDNP = ref.GetSymbol()->GetDNP();
-        bool           oldExBOM = !ref.GetSymbol()->GetIncludeInBom();
+        bool           oldExBOM = ref.GetSymbol()->GetExcludedFromBOM();
         bool           skip = ( ref.GetSymbol()->GetFlags() & SKIP_STRUCT ) > 0;
 
         auto boolString = []( bool b ) -> wxString
@@ -431,7 +431,7 @@ void BACK_ANNOTATE::applyChangelist()
             if( !m_dryRun )
             {
                 commit.Modify( symbol, screen );
-                symbol->SetIncludeInBom( !fpData.m_excludeFromBOM );
+                symbol->SetExcludedFromBOM( fpData.m_excludeFromBOM );
             }
 
             m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );

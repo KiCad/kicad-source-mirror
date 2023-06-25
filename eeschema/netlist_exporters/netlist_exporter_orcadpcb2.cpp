@@ -76,7 +76,7 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
             if( !symbol )
                 continue;
 
-            if( !symbol->GetIncludeOnBoard() )
+            if( symbol->GetExcludedFromBoard() )
                 continue;
 
             std::vector<PIN_INFO> pins = CreatePinList( symbol, &sheet, true );

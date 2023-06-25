@@ -510,8 +510,8 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     }
 
     m_cbExcludeFromSim->SetValue( m_symbol->GetFieldText( SIM_ENABLE_FIELD ) == wxS( "0" ) );
-    m_cbExcludeFromBom->SetValue( !m_symbol->GetIncludeInBom() );
-    m_cbExcludeFromBoard->SetValue( !m_symbol->GetIncludeOnBoard() );
+    m_cbExcludeFromBom->SetValue( m_symbol->GetExcludedFromBOM() );
+    m_cbExcludeFromBoard->SetValue( m_symbol->GetExcludedFromBoard() );
     m_cbDNP->SetValue( m_symbol->GetDNP() );
 
     if( m_part )
@@ -778,8 +778,8 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     m_symbol->SetValueFieldText( m_fields->at( VALUE_FIELD ).GetText() );
     m_symbol->SetFootprintFieldText(  m_fields->at( FOOTPRINT_FIELD ).GetText() );
 
-    m_symbol->SetIncludeInBom( !m_cbExcludeFromBom->IsChecked() );
-    m_symbol->SetIncludeOnBoard( !m_cbExcludeFromBoard->IsChecked() );
+    m_symbol->SetExcludedFromBOM( m_cbExcludeFromBom->IsChecked() );
+    m_symbol->SetExcludedFromBoard( m_cbExcludeFromBoard->IsChecked() );
     m_symbol->SetDNP( m_cbDNP->IsChecked() );
 
     // Update any assignments
@@ -845,8 +845,8 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
                         otherUnit->GetFields().erase( otherUnit->GetFields().begin() + ii );
                 }
 
-                otherUnit->SetIncludeInBom( !m_cbExcludeFromBom->IsChecked() );
-                otherUnit->SetIncludeOnBoard( !m_cbExcludeFromBoard->IsChecked() );
+                otherUnit->SetExcludedFromBOM( m_cbExcludeFromBom->IsChecked() );
+                otherUnit->SetExcludedFromBoard( m_cbExcludeFromBoard->IsChecked() );
                 otherUnit->SetDNP( m_cbDNP->IsChecked() );
 
                 if( m_dataModel )

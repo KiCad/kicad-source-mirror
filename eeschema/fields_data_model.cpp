@@ -389,7 +389,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
         if( m_excludeDNP && ref.GetSymbol()->GetDNP() )
             continue;
 
-        if( !m_includeExcluded && !ref.GetSymbol()->GetIncludeInBom() )
+        if( !m_includeExcluded && ref.GetSymbol()->GetExcludedFromBOM() )
             continue;
 
         bool matchFound = false;

@@ -185,8 +185,8 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     LIB_FIELD* simEnableField = m_libEntry->FindField( SIM_ENABLE_FIELD );
     m_excludeFromSim->SetValue( simEnableField && simEnableField->GetText() == wxT( "0" ) );
 
-    m_excludeFromBomCheckBox->SetValue( !m_libEntry->GetIncludeInBom() );
-    m_excludeFromBoardCheckBox->SetValue( !m_libEntry->GetIncludeOnBoard() );
+    m_excludeFromBomCheckBox->SetValue( !m_libEntry->GetExcludedFromBOM() );
+    m_excludeFromBoardCheckBox->SetValue( !m_libEntry->GetExcludedFromBoard() );
 
     m_ShowPinNumButt->SetValue( m_libEntry->ShowPinNumbers() );
     m_ShowPinNameButt->SetValue( m_libEntry->ShowPinNames() );
@@ -437,8 +437,8 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
         m_libEntry->SetNormal();
     }
 
-    m_libEntry->SetIncludeInBom( !m_excludeFromBomCheckBox->GetValue() );
-    m_libEntry->SetIncludeOnBoard( !m_excludeFromBoardCheckBox->GetValue() );
+    m_libEntry->SetExcludedFromBOM( m_excludeFromBomCheckBox->GetValue() );
+    m_libEntry->SetExcludedFromBoard( m_excludeFromBoardCheckBox->GetValue() );
 
     m_libEntry->SetShowPinNumbers( m_ShowPinNumButt->GetValue() );
     m_libEntry->SetShowPinNames( m_ShowPinNameButt->GetValue() );

@@ -649,20 +649,20 @@ public:
     bool ShowPinNumbers() const { return m_showPinNumbers; }
 
     /**
-     * Set or clear the include in schematic bill of materials flag.
+     * Set or clear the exclude from schematic bill of materials flag.
      *
-     * @param aIncludeInBom true to include symbol in schematic bill of material
+     * @param aExcludeFromBOM true to exclude symbol from schematic bill of materials
      */
-    void SetIncludeInBom( bool aIncludeInBom ) { m_includeInBom = aIncludeInBom; }
-    bool GetIncludeInBom() const { return m_includeInBom; }
+    void SetExcludedFromBOM( bool aExcludeFromBOM ) { m_excludedFromBOM = aExcludeFromBOM; }
+    bool GetExcludedFromBOM() const { return m_excludedFromBOM; }
 
     /**
-     * Set or clear include in board netlist flag.
+     * Set or clear exclude from board netlist flag.
      *
-     * @param aIncludeOnBoard true to include symbol in the board netlist
+     * @param aExcludeFromBoard true to exclude symbol from the board netlist
      */
-    void SetIncludeOnBoard( bool aIncludeOnBoard ) { m_includeOnBoard = aIncludeOnBoard; }
-    bool GetIncludeOnBoard() const { return m_includeOnBoard; }
+    void SetExcludedFromBoard( bool aExcludeFromBoard ) { m_excludedFromBoard = aExcludeFromBoard; }
+    bool GetExcludedFromBoard() const { return m_excludedFromBoard; }
 
     /**
      * Comparison test that can be used for operators.
@@ -754,8 +754,8 @@ private:
     bool                m_showPinNames;
     bool                m_showPinNumbers;
 
-    bool                m_includeInBom;
-    bool                m_includeOnBoard;
+    bool                m_excludedFromBOM;
+    bool                m_excludedFromBoard;
     LIBRENTRYOPTIONS    m_options;          ///< Special symbol features such as POWER or NORMAL.)
 
     LIB_ITEMS_CONTAINER m_drawings;

@@ -2546,10 +2546,10 @@ int SCH_EDIT_TOOL::SetAttribute( const TOOL_EVENT& aEvent )
                 sym->SetExcludeFromSim( true );
 
             if( aEvent.IsAction( &EE_ACTIONS::setExcludeFromBOM ) )
-                sym->SetIncludeInBom( false );
+                sym->SetExcludedFromBOM( true );
 
             if( aEvent.IsAction( &EE_ACTIONS::setExcludeFromBoard ) )
-                sym->SetIncludeOnBoard( false );
+                sym->SetExcludedFromBoard( true );
         }
     }
 
@@ -2579,10 +2579,10 @@ int SCH_EDIT_TOOL::UnsetAttribute( const TOOL_EVENT& aEvent )
                 sym->SetExcludeFromSim( false );
 
             if( aEvent.IsAction( &EE_ACTIONS::unsetExcludeFromBOM ) )
-                sym->SetIncludeInBom( true );
+                sym->SetExcludedFromBOM( false );
 
             if( aEvent.IsAction( &EE_ACTIONS::unsetExcludeFromBoard ) )
-                sym->SetIncludeOnBoard( true );
+                sym->SetExcludedFromBoard( false );
         }
     }
 
@@ -2612,10 +2612,10 @@ int SCH_EDIT_TOOL::ToggleAttribute( const TOOL_EVENT& aEvent )
                 sym->SetExcludeFromSim( !sym->GetExcludeFromSim() );
 
             if( aEvent.IsAction( &EE_ACTIONS::toggleExcludeFromBOM ) )
-                sym->SetIncludeInBom( !sym->GetIncludeInBom() );
+                sym->SetExcludedFromBOM( !sym->GetExcludedFromBOM() );
 
             if( aEvent.IsAction( &EE_ACTIONS::toggleExcludeFromBoard ) )
-                sym->SetIncludeOnBoard( !sym->GetIncludeOnBoard() );
+                sym->SetExcludedFromBoard( !sym->GetExcludedFromBoard() );
         }
     }
 

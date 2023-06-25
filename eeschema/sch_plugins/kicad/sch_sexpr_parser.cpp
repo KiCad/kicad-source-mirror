@@ -275,12 +275,12 @@ LIB_SYMBOL* SCH_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLibMap )
             break;
 
         case T_in_bom:
-            symbol->SetIncludeInBom( parseBool() );
+            symbol->SetExcludedFromBOM( !parseBool() );
             NeedRIGHT();
             break;
 
         case T_on_board:
-            symbol->SetIncludeOnBoard( parseBool() );
+            symbol->SetExcludedFromBoard( !parseBool() );
             NeedRIGHT();
             break;
 
@@ -2734,12 +2734,12 @@ SCH_SYMBOL* SCH_SEXPR_PARSER::parseSchematicSymbol()
             break;
 
         case T_in_bom:
-            symbol->SetIncludeInBom( parseBool() );
+            symbol->SetExcludedFromBOM( !parseBool() );
             NeedRIGHT();
             break;
 
         case T_on_board:
-            symbol->SetIncludeOnBoard( parseBool() );
+            symbol->SetExcludedFromBoard( !parseBool() );
             NeedRIGHT();
             break;
 

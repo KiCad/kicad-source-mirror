@@ -724,8 +724,8 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSchema
 
     m_out->Print( 0, "\n" );
 
-    m_out->Print( aNestLevel + 1, "(in_bom %s)", ( aSymbol->GetIncludeInBom() ) ? "yes" : "no" );
-    m_out->Print( 0, " (on_board %s)", ( aSymbol->GetIncludeOnBoard() ) ? "yes" : "no" );
+    m_out->Print( aNestLevel + 1, "(in_bom %s)", ( aSymbol->GetExcludedFromBOM() ) ? "no" : "yes" );
+    m_out->Print( 0, " (on_board %s)", ( aSymbol->GetExcludedFromBoard() ) ? "no" : "yes" );
     m_out->Print( 0, " (dnp %s)", ( aSymbol->GetDNP() ) ? "yes" : "no" );
 
     if( aSymbol->GetFieldsAutoplaced() != FIELDS_AUTOPLACED_NO )

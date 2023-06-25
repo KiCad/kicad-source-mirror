@@ -490,7 +490,7 @@ LIB_SYMBOL* SCH_DATABASE_PLUGIN::loadSymbolFromRow( const wxString& aSymbolName,
 
         if( val )
         {
-            symbol->SetIncludeOnBoard( !( *val ) );
+            symbol->SetExcludedFromBoard( *val );
         }
         else
         {
@@ -506,7 +506,7 @@ LIB_SYMBOL* SCH_DATABASE_PLUGIN::loadSymbolFromRow( const wxString& aSymbolName,
 
         if( val )
         {
-            symbol->SetIncludeInBom( !( *val ) );
+            symbol->SetExcludedFromBOM( *val );
         }
         else
         {

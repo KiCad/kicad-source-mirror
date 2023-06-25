@@ -108,8 +108,8 @@ struct null_deleter
 LIB_SYMBOL::LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent, SYMBOL_LIB* aLibrary ) :
     EDA_ITEM( LIB_SYMBOL_T ),
     m_me( this, null_deleter() ),
-    m_includeInBom( true ),
-    m_includeOnBoard( true )
+    m_excludedFromBOM( false ),
+    m_excludedFromBoard( false )
 {
     m_lastModDate    = 0;
     m_unitCount      = 1;
@@ -147,9 +147,9 @@ LIB_SYMBOL::LIB_SYMBOL( const LIB_SYMBOL& aSymbol, SYMBOL_LIB* aLibrary ) :
     m_unitsLocked    = aSymbol.m_unitsLocked;
     m_pinNameOffset  = aSymbol.m_pinNameOffset;
     m_showPinNumbers = aSymbol.m_showPinNumbers;
-    m_includeInBom   = aSymbol.m_includeInBom;
-    m_includeOnBoard = aSymbol.m_includeOnBoard;
-    m_showPinNames   = aSymbol.m_showPinNames;
+    m_excludedFromBOM = aSymbol.m_excludedFromBOM;
+    m_excludedFromBoard = aSymbol.m_excludedFromBoard;
+    m_showPinNames      = aSymbol.m_showPinNames;
     m_lastModDate    = aSymbol.m_lastModDate;
     m_options        = aSymbol.m_options;
     m_libId          = aSymbol.m_libId;
@@ -200,8 +200,8 @@ const LIB_SYMBOL& LIB_SYMBOL::operator=( const LIB_SYMBOL& aSymbol )
     m_pinNameOffset  = aSymbol.m_pinNameOffset;
     m_showPinNumbers = aSymbol.m_showPinNumbers;
     m_showPinNames   = aSymbol.m_showPinNames;
-    m_includeInBom   = aSymbol.m_includeInBom;
-    m_includeOnBoard = aSymbol.m_includeOnBoard;
+    m_excludedFromBOM = aSymbol.m_excludedFromBOM;
+    m_excludedFromBoard = aSymbol.m_excludedFromBoard;
     m_lastModDate    = aSymbol.m_lastModDate;
     m_options        = aSymbol.m_options;
     m_libId          = aSymbol.m_libId;
@@ -467,18 +467,18 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
                 return retv;
         }
 
-        if( m_includeInBom != aRhs.m_includeInBom )
+        if( m_excludedFromBOM != aRhs.m_excludedFromBOM )
         {
-            retv = ( m_includeInBom ) ? 1 : -1;
+            retv = ( m_excludedFromBOM ) ? -1 : 1;
             REPORT( _( "Exclude from bill of materials settings differ." ) );
 
             if( !aReporter )
                 return retv;
         }
 
-        if( m_includeOnBoard != aRhs.m_includeOnBoard )
+        if( m_excludedFromBoard != aRhs.m_excludedFromBoard )
         {
-            retv = ( m_includeOnBoard ) ? 1 : -1;
+            retv = ( m_excludedFromBoard ) ? -1 : 1;
             REPORT( _( "Exclude from board settings differ." ) );
 
             if( !aReporter )
@@ -634,8 +634,8 @@ std::unique_ptr< LIB_SYMBOL > LIB_SYMBOL::Flatten() const
         retv->SetKeyWords( m_keyWords.IsEmpty() ? parent->GetKeyWords() : m_keyWords );
         retv->SetFPFilters( m_fpFilters.IsEmpty() ? parent->GetFPFilters() : m_fpFilters );
 
-        retv->SetIncludeInBom( parent->GetIncludeInBom() );
-        retv->SetIncludeOnBoard( parent->GetIncludeOnBoard() );
+        retv->SetExcludedFromBOM( parent->GetExcludedFromBOM() );
+        retv->SetExcludedFromBoard( parent->GetExcludedFromBoard() );
 
         retv->UpdateFieldOrdinals();
     }

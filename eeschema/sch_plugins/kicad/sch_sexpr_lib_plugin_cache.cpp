@@ -181,8 +181,8 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& a
             aFormatter.Print( 0, ")" );
         }
 
-        aFormatter.Print( 0, " (in_bom %s)", ( aSymbol->GetIncludeInBom() ) ? "yes" : "no" );
-        aFormatter.Print( 0, " (on_board %s)", ( aSymbol->GetIncludeOnBoard() ) ? "yes" : "no" );
+        aFormatter.Print( 0, " (in_bom %s)", ( aSymbol->GetExcludedFromBOM() ) ? "no" : "yes" );
+        aFormatter.Print( 0, " (on_board %s)", ( aSymbol->GetExcludedFromBoard() ) ? "no" : "yes" );
 
         // TODO: add atomic token here.
 
