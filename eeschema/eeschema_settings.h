@@ -33,6 +33,8 @@ using KIGFX::COLOR4D;
 
 
 extern const wxAuiPaneInfo& defaultNetNavigatorPaneInfo();
+extern const wxAuiPaneInfo& defaultPropertiesPaneInfo();
+
 
 
 enum LINE_MODE

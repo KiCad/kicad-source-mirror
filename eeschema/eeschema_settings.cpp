@@ -24,6 +24,7 @@
 #include <functional>
 
 #include <dialogs/dialog_bom_cfg_lexer.h>
+#include <eda_draw_frame.h>
 #include <eeschema_settings.h>
 #include <layer_ids.h>
 #include <symbol_editor_settings.h>
@@ -78,6 +79,28 @@ const wxAuiPaneInfo& defaultNetNavigatorPaneInfo()
             .FloatingSize( 200, 200 )
             .FloatingPosition( 50, 200 )
             .Show( false );
+
+    return paneInfo;
+}
+
+
+const wxAuiPaneInfo& defaultPropertiesPaneInfo()
+{
+    static wxAuiPaneInfo paneInfo;
+
+    paneInfo.Name( EDA_DRAW_FRAME::PropertiesPaneName() )
+            .Caption( _( "Properties" ) )
+            .CaptionVisible( true )
+            .PaneBorder( true )
+            .Left().Layer( 3 )
+            .TopDockable( false )
+            .BottomDockable( false )
+            .CloseButton( true )
+            .MinSize( 240, 60 )
+            .BestSize( 200, 200 )
+            .FloatingSize( 200, 400 )
+            .FloatingPosition( 50, 200 )
+            .Show( true );
 
     return paneInfo;
 }

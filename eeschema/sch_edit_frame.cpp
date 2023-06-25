@@ -207,9 +207,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .FloatingPosition( 50, 50 )
                       .Show( false ) );
 
-    m_auimgr.AddPane( m_propertiesPanel, EDA_PANE().Name( PropertiesPaneName() )
-                      .Left().Layer( 3 ).Caption( _( "Properties" ) )
-                      .PaneBorder( false ).MinSize( 240, -1 ).BestSize( 300, -1 ) );
+    m_auimgr.AddPane( m_propertiesPanel, defaultPropertiesPaneInfo() );
 
     m_auimgr.AddPane( createHighlightedNetNavigator(), defaultNetNavigatorPaneInfo() );
 
