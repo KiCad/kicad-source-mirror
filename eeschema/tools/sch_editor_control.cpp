@@ -2231,7 +2231,7 @@ int SCH_EDITOR_CONTROL::ToggleOPCurrents( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::ChangeLineMode( const TOOL_EVENT& aEvent )
 {
-    m_frame->eeconfig()->m_Drawing.line_mode = aEvent.Parameter<int>();
+    m_frame->eeconfig()->m_Drawing.line_mode = aEvent.Parameter<LINE_MODE>();
     m_toolMgr->RunAction( ACTIONS::refreshPreview );
     return 0;
 }
