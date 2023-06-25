@@ -1576,8 +1576,8 @@ void SCH_PAINTER::draw( const LIB_PIN* aPin, int aLayer, bool aDimmed )
         colour   [ABOVE] = getRenderColor( aPin, LAYER_PINNUM, drawingShadows, aDimmed );
         text     [ABOVE] = aPin->GetShownNumber();
     }
-    // Otherwise pin NAMES go above and pin NUMBERS go below
-    else
+    // Otherwise if both are shown pin NAMES go above and pin NUMBERS go below
+    else if( showPinNames && showPinNumbers )
     {
         size     [ABOVE] = showPinNames ? aPin->GetNameTextSize() : 0;
         thickness[ABOVE] = nameStrokeWidth;
@@ -1588,6 +1588,20 @@ void SCH_PAINTER::draw( const LIB_PIN* aPin, int aLayer, bool aDimmed )
         thickness[BELOW] = numStrokeWidth;
         colour   [BELOW] = getRenderColor( aPin, LAYER_PINNUM, drawingShadows, aDimmed );
         text     [BELOW] = aPin->GetShownNumber();
+    }
+    else if( showPinNames )
+    {
+        size     [ABOVE] = aPin->GetNameTextSize();
+        thickness[ABOVE] = nameStrokeWidth;
+        colour   [ABOVE] = getRenderColor( aPin, LAYER_PINNAM, drawingShadows, aDimmed );
+        text     [ABOVE] = aPin->GetShownName();
+    }
+    else if( showPinNumbers )
+    {
+        size     [ABOVE] = aPin->GetNumberTextSize();
+        thickness[ABOVE] = numStrokeWidth;
+        colour   [ABOVE] = getRenderColor( aPin, LAYER_PINNUM, drawingShadows, aDimmed );
+        text     [ABOVE] = aPin->GetShownNumber();
     }
 
     if( m_schSettings.m_ShowPinsElectricalType )
