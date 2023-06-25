@@ -1082,11 +1082,7 @@ void LIB_PIN::Offset( const VECTOR2I& aOffset )
 
 void LIB_PIN::MoveTo( const VECTOR2I& aNewPosition )
 {
-    if( m_position != aNewPosition )
-    {
-        m_position = aNewPosition;
-        SetModified();
-    }
+    m_position = aNewPosition;
 }
 
 
