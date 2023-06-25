@@ -141,7 +141,7 @@ public:
      * Adjust label position to edge based on proximity to vertical or horizontal edge
      * of the parent sheet.
      */
-    void ConstrainOnEdge( VECTOR2I Pos );
+    void ConstrainOnEdge( VECTOR2I aPos, bool aAllowEdgeSwitch );
 
     /**
      * Get the parent sheet object of this sheet pin.
@@ -186,7 +186,10 @@ public:
 
     BITMAPS GetMenuImage() const override;
 
-    void SetPosition( const VECTOR2I& aPosition ) override { ConstrainOnEdge( aPosition ); }
+    void SetPosition( const VECTOR2I& aPosition ) override
+    {
+        ConstrainOnEdge( aPosition, true );
+    }
 
     bool IsPointClickableAnchor( const VECTOR2I& aPos ) const override
     {

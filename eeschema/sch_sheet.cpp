@@ -813,6 +813,17 @@ void SCH_SHEET::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 }
 
 
+void SCH_SHEET::SetPositionIgnoringPins( const VECTOR2I& aPosition )
+{
+    VECTOR2I delta = aPosition - m_pos;
+
+    m_pos = aPosition;
+
+    for( SCH_FIELD& field : m_fields )
+        field.Move( delta );
+}
+
+
 void SCH_SHEET::Move( const VECTOR2I& aMoveVector )
 {
     m_pos += aMoveVector;
@@ -928,7 +939,7 @@ void SCH_SHEET::Resize( const VECTOR2I& aSize )
 
     // Move the sheet labels according to the new sheet size.
     for( SCH_SHEET_PIN* sheetPin : m_pins )
-        sheetPin->ConstrainOnEdge( sheetPin->GetPosition() );
+        sheetPin->ConstrainOnEdge( sheetPin->GetPosition(), false );
 }
 
 

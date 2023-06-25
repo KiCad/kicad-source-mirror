@@ -1035,32 +1035,10 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
         }
 
         if( sheet->GetPosition() != sheetNewPos )
-        {
-            //Keep pins in the place they were before resizing
-            for( SCH_SHEET_PIN* pin : sheet->GetPins() )
-            {
-                switch( pin->GetSide() )
-                {
-                case SHEET_SIDE::LEFT:
-                case SHEET_SIDE::RIGHT:
-                    pin->Move( VECTOR2I( 0, sheet->GetPosition().y - sheetNewPos.y ) );
-                    break;
-                case SHEET_SIDE::TOP:
-                case SHEET_SIDE::BOTTOM:
-                    pin->Move( VECTOR2I( sheet->GetPosition().x - sheetNewPos.x, 0 ) );
-                    break;
-                case SHEET_SIDE::UNDEFINED:
-                    break;
-                }
-            }
-
-            sheet->SetPosition( sheetNewPos );
-        }
+            sheet->SetPositionIgnoringPins( sheetNewPos );
 
         if( sheet->GetSize() != sheetNewSize )
-        {
             sheet->Resize( sheetNewSize );
-        }
 
         break;
     }

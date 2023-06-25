@@ -153,7 +153,7 @@ enum SHEET_SIDE SCH_SHEET_PIN::GetSide() const
 }
 
 
-void SCH_SHEET_PIN::ConstrainOnEdge( VECTOR2I Pos )
+void SCH_SHEET_PIN::ConstrainOnEdge( VECTOR2I aPos, bool aAllowEdgeSwitch )
 {
     SCH_SHEET* sheet = GetParent();
 
@@ -173,20 +173,27 @@ void SCH_SHEET_PIN::ConstrainOnEdge( VECTOR2I Pos )
     sheetEdge.Append( leftSide,  botSide );
     sheetEdge.Append( leftSide,  topSide );
 
-    switch( sheetEdge.NearestSegment( Pos ) )
+    if( aAllowEdgeSwitch )
     {
-    case 0: SetSide( SHEET_SIDE::TOP ); break;
-    case 1: SetSide( SHEET_SIDE::RIGHT ); break;
-    case 2: SetSide( SHEET_SIDE::BOTTOM ); break;
-    case 3: SetSide( SHEET_SIDE::LEFT ); break;
-    default: wxASSERT( "Invalid segment number" );
+        switch( sheetEdge.NearestSegment( aPos ) )
+        {
+        case 0:  SetSide( SHEET_SIDE::TOP );    break;
+        case 1:  SetSide( SHEET_SIDE::RIGHT );  break;
+        case 2:  SetSide( SHEET_SIDE::BOTTOM ); break;
+        case 3:  SetSide( SHEET_SIDE::LEFT );   break;
+        default: wxASSERT( "Invalid segment number" );
+        }
+    }
+    else
+    {
+        SetSide( GetSide() );
     }
 
     switch( GetSide() )
     {
     case SHEET_SIDE::RIGHT:
     case SHEET_SIDE::LEFT:
-        SetTextY( Pos.y );
+        SetTextY( aPos.y );
 
         if( GetTextPos().y < topSide )
             SetTextY( topSide );
@@ -198,7 +205,7 @@ void SCH_SHEET_PIN::ConstrainOnEdge( VECTOR2I Pos )
 
     case SHEET_SIDE::BOTTOM:
     case SHEET_SIDE::TOP:
-        SetTextX( Pos.x );
+        SetTextX( aPos.x );
 
         if( GetTextPos().x < leftSide )
             SetTextX( leftSide );
@@ -252,7 +259,7 @@ void SCH_SHEET_PIN::Rotate( const VECTOR2I& aCenter )
     RotatePoint( pt, aCenter, ANGLE_90 );
 
     SHEET_SIDE oldSide = GetSide();
-    ConstrainOnEdge( pt );
+    ConstrainOnEdge( pt, true );
 
     // If the new side is the same as the old side, instead mirror across the center of that side.
     if( GetSide() == oldSide )

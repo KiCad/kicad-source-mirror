@@ -1555,7 +1555,7 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
         SCH_SHEET_PIN* pin = (SCH_SHEET_PIN*) aItem;
 
         pin->SetStoredPos( pin->GetStoredPos() + aDelta );
-        pin->ConstrainOnEdge( pin->GetStoredPos() );
+        pin->ConstrainOnEdge( pin->GetStoredPos(), true );
         break;
     }
 

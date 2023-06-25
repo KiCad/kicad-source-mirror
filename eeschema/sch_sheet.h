@@ -169,6 +169,8 @@ public:
      */
     bool IsVerticalOrientation() const;
 
+    void SetPositionIgnoringPins( const VECTOR2I& aPosition );
+
     /**
      * Add aSheetPin to the sheet.
      *
