@@ -17,8 +17,10 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <wx/control.h>
+#include <wx/dc.h>
 #include <wx/propgrid/propgrid.h>
 #include <properties/pg_cell_renderer.h>
+#include <properties/pg_properties.h>
 
 
 PG_CELL_RENDERER::PG_CELL_RENDERER() :
@@ -29,21 +31,39 @@ PG_CELL_RENDERER::PG_CELL_RENDERER() :
 bool PG_CELL_RENDERER::Render( wxDC &aDC, const wxRect &aRect, const wxPropertyGrid *aGrid,
                                wxPGProperty *aProperty, int aColumn, int aItem, int aFlags ) const
 {
-    // Default behavior for value column
+    wxPGCell cell = aGrid->GetUnspecifiedValueAppearance();
+
     if( aColumn > 0 )
+    {
+        if( PGPROPERTY_COLOR4D* colorProp = dynamic_cast<PGPROPERTY_COLOR4D*>( aProperty ) )
+        {
+            wxAny av = colorProp->GetValue().GetAny();
+            KIGFX::COLOR4D color = av.IsNull() ? KIGFX::COLOR4D::UNSPECIFIED
+                                               : av.As<KIGFX::COLOR4D>();
+
+            PreDrawCell( aDC, aRect, aGrid, cell, aFlags );
+
+            wxSize swatchSize = aGrid->ConvertDialogToPixels( wxSize( 24, 16 ) );
+            int offset = ( aRect.GetHeight() - swatchSize.GetHeight() ) / 2;
+            wxRect swatch( aRect.GetPosition() + wxPoint( offset, offset ), swatchSize );
+
+            aDC.SetPen( *wxTRANSPARENT_PEN );
+            aDC.SetBrush( wxBrush( color.ToColour() ) );
+            aDC.DrawRectangle( swatch );
+
+            PostDrawCell( aDC, aGrid, cell, aFlags );
+
+            return true;
+        }
+
+        // Default behavior for value column
         return wxPGDefaultRenderer::Render( aDC, aRect, aGrid, aProperty, aColumn, aItem, aFlags );
+    }
 
     wxString text;
     int      preDrawFlags = aFlags;
 
-#if wxCHECK_VERSION( 3, 1, 0 )
-    wxPGCell cell = aGrid->GetUnspecifiedValueAppearance();
     aProperty->GetDisplayInfo( aColumn, aItem, aFlags, &text, &cell );
-#else
-    const wxPGCell* cellPtr = nullptr;
-    aProperty->GetDisplayInfo( aColumn, aItem, aFlags, &text, &cellPtr );
-    const wxPGCell cell = *cellPtr;
-#endif
 
     text = wxControl::Ellipsize( text, aDC, wxELLIPSIZE_MIDDLE, aRect.GetWidth() );
 

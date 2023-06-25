@@ -407,7 +407,7 @@ const wxPGEditor* PGPROPERTY_BOOL::DoGetEditorClass() const
 
 PGPROPERTY_COLOR4D::PGPROPERTY_COLOR4D( const wxString& aLabel, const wxString& aName,
                                         COLOR4D aValue ) :
-        wxColourProperty( aLabel, aName, aValue.ToColour() )
+        wxStringProperty( aLabel, aName, aValue.ToCSSString() )
 {
 }
 
@@ -427,7 +427,7 @@ wxString PGPROPERTY_COLOR4D::ValueToString( wxVariant& aValue, int aFlags ) cons
     if( aValue.IsType( wxS( "COLOR4D" ) ) )
         static_cast<COLOR4D_VARIANT_DATA*>( aValue.GetData() )->Write( ret );
     else
-        return wxColourProperty::ValueToString( aValue, aFlags );
+        return wxStringProperty::ValueToString( aValue, aFlags );
 
     return ret;
 }

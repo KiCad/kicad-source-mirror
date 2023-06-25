@@ -28,6 +28,7 @@
 #include <wx/propgrid/props.h>
 #include <wx/propgrid/advprops.h>
 #include <common.h>
+#include <gal/color4d.h>
 #include <origin_transforms.h>
 
 class PROPERTY_BASE;
@@ -189,11 +190,11 @@ public:
 };
 
 
-class PGPROPERTY_COLOR4D : public wxColourProperty
+class PGPROPERTY_COLOR4D : public wxStringProperty
 {
 public:
     PGPROPERTY_COLOR4D( const wxString& aLabel = wxPG_LABEL, const wxString& aName = wxPG_LABEL,
-                        COLOR4D aValue = COLOR4D::UNSPECIFIED );
+                        KIGFX::COLOR4D aValue = KIGFX::COLOR4D::UNSPECIFIED );
 
     virtual ~PGPROPERTY_COLOR4D() = default;
 
