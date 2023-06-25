@@ -24,7 +24,6 @@
 
 #include <build_version.h>
 #include <common.h>     // For ExpandEnvVarSubstitutions
-#include <dialogs/dialog_global_sym_lib_table_config.h>
 #include <dialogs/dialog_plugin_options.h>
 #include <project.h>
 #include <panel_sym_lib_table.h>
@@ -915,6 +914,8 @@ void PANEL_SYM_LIB_TABLE::onReset( wxCommandEvent& event )
         return;
     }
 
+    // TODO(JE) library tables
+#if 0
     DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG dlg( m_parent );
 
     if( dlg.ShowModal() == wxID_OK )
@@ -936,6 +937,7 @@ void PANEL_SYM_LIB_TABLE::onReset( wxCommandEvent& event )
 
         m_global_grid->Thaw();
     }
+#endif
 }
 
 

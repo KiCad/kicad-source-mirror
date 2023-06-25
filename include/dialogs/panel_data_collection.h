@@ -24,16 +24,22 @@
 #ifndef PANEL_DATA_COLLECTION_H
 #define PANEL_DATA_COLLECTION_H
 
-#include "panel_data_collection_base.h"
+#include <dialogs/panel_data_collection_base.h>
 
 
 class COMMON_SETTINGS;
 class PAGED_DIALOG;
 
+struct PANEL_DATA_COLLECTION_MODEL
+{
+    bool m_enableSentry;
+};
+
 
 class PANEL_DATA_COLLECTION : public PANEL_DATA_COLLECTION_BASE
 {
 public:
+    PANEL_DATA_COLLECTION( std::shared_ptr<PANEL_DATA_COLLECTION_MODEL> model, wxWindow* aParent, bool aWizard = true );
     PANEL_DATA_COLLECTION( wxWindow* aParent );
 
     void ResetPanel() override;
@@ -45,6 +51,10 @@ protected:
     virtual void OnResetIdClick( wxCommandEvent& aEvent ) override;
 
 private:
+    std::shared_ptr<PANEL_DATA_COLLECTION_MODEL> m_model;
+
+    bool m_wizard;
+
     void applySettingsToPanel();
 };
 

@@ -259,44 +259,6 @@ const wxString PGM_BASE::AskUserForPreferredEditor( const wxString& aDefaultEdit
 }
 
 
-#ifdef KICAD_USE_SENTRY
-void PGM_BASE::sentryPrompt()
-{
-    if( !IsGUI() )
-        return;
-
-    KIPLATFORM::POLICY::PBOOL policyState = KIPLATFORM::POLICY::GetPolicyBool( POLICY_KEY_DATACOLLECTION );
-
-    if( policyState == KIPLATFORM::POLICY::PBOOL::NOT_CONFIGURED
-            && !m_settings_manager->GetCommonSettings()->m_DoNotShowAgain.data_collection_prompt )
-    {
-        wxMessageDialog optIn = wxMessageDialog(
-                nullptr,
-                _( "KiCad can anonymously report crashes and special event data to developers in order to "
-                   "aid identifying critical bugs and help profile functionality to guide improvements. \n"
-                   "If you choose to voluntarily participate, KiCad will automatically send said reports "
-                   "when crashes or events occur. \n"
-                   "Your design files such as schematic and PCB are not shared in this process." ),
-                _( "Data Collection Opt In" ), wxYES_NO | wxCENTRE );
-
-        optIn.SetYesNoLabels( _( "Opt In" ), _( "Decline" ) );
-        int result = optIn.ShowModal();
-
-        if( result == wxID_YES )
-        {
-            APP_MONITOR::SENTRY::Instance()->SetSentryOptIn( true );
-        }
-        else
-        {
-            APP_MONITOR::SENTRY::Instance()->SetSentryOptIn( false );
-        }
-
-        m_settings_manager->GetCommonSettings()->m_DoNotShowAgain.data_collection_prompt = true;
-    }
-}
-#endif
-
-
 void PGM_BASE::BuildArgvUtf8()
 {
     const wxArrayString& argArray = App().argv.GetArguments();
@@ -497,10 +459,6 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
     WarnUserIfOperatingSystemUnsupported();
 
     loadCommonSettings();
-
-#ifdef KICAD_USE_SENTRY
-    sentryPrompt();
-#endif
 
     ReadPdfBrowserInfos();      // needs GetCommonSettings()
 

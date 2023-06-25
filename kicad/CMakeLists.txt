@@ -34,6 +34,7 @@ set( KICAD_SRCS
     dialogs/panel_kicad_launcher.cpp
     dialogs/panel_jobset_base.cpp
     dialogs/panel_jobset.cpp
+    dialogs/panel_pcm_startwizard_base.cpp
     files-io.cpp
     jobs_runner.cpp
     import_proj.cpp
@@ -47,6 +48,8 @@ set( KICAD_SRCS
     project_tree_traverser.cpp
     update_manager.cpp
     toolbars_kicad_manager.cpp
+    startwizard.cpp
+    startwizard_provider_pcm.cpp
     tools/kicad_manager_actions.cpp
     tools/kicad_manager_control.cpp
     )

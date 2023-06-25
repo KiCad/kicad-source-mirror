@@ -100,7 +100,6 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_global_edit_teardrops_base.cpp
     dialogs/dialog_global_edit_text_and_graphics.cpp
     dialogs/dialog_global_edit_text_and_graphics_base.cpp
-    dialogs/dialog_global_fp_lib_table_config.cpp
     dialogs/dialog_push_pad_properties.cpp
     dialogs/dialog_push_pad_properties_base.cpp
     dialogs/dialog_shape_properties.cpp
@@ -392,6 +391,8 @@ set( PCBNEW_CLASS_SRCS
     undo_redo.cpp
     zone_filler.cpp
     edit_zone_helpers.cpp
+
+    startwizard_provider_fplib.cpp
 
     ratsnest/ratsnest.cpp
 

@@ -1,7 +1,6 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -18,40 +17,39 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "dialog_global_sym_lib_table_config.h"
-
-#include <confirm.h>
-#include <kiface_base.h>
-#include <kiway.h>
-#include <macros.h>
-
-#include <kiplatform/io.h>
+#include "startwizard_provider_schlib.h"
 #include "symbol_lib_table.h"
+#include <confirm.h>
+#include <kiplatform/io.h>
+
+#include <dialogs/panel_global_lib_table_config.h>
 
 
-DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG( wxWindow* aParent ) :
-        DIALOG_GLOBAL_LIB_TABLE_CONFIG( aParent, _( "symbol" ), KIWAY::FACE_SCH )
+class PANEL_GLOBAL_SYM_LIB_TABLE_CONFIG : public PANEL_GLOBAL_LIB_TABLE_CONFIG
 {
-}
+public:
+    PANEL_GLOBAL_SYM_LIB_TABLE_CONFIG(
+            wxWindow* aParent, std::shared_ptr<PANEL_GLOBAL_LIB_TABLE_CONFIG_MODEL> aModel ) :
+            PANEL_GLOBAL_LIB_TABLE_CONFIG( aParent, _( "symbol" ), aModel, KIWAY::FACE_SCH )
+    {
+    }
 
+    virtual ~PANEL_GLOBAL_SYM_LIB_TABLE_CONFIG(){};
 
-DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::~DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG()
-{
-}
+    bool TransferDataFromWindow() override;
 
+    virtual wxFileName GetGlobalTableFileName() override
+    {
+        return SYMBOL_LIB_TABLE::GetGlobalTableFileName();
+    }
+};
 
-wxFileName DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::GetGlobalTableFileName()
-{
-    return SYMBOL_LIB_TABLE::GetGlobalTableFileName();
-}
-
-
-bool DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::TransferDataFromWindow()
+bool PANEL_GLOBAL_SYM_LIB_TABLE_CONFIG::TransferDataFromWindow()
 {
     // Create an empty table if requested by the user.
     if( m_emptyRb->GetValue() )
     {
-        SYMBOL_LIB_TABLE    emptyTable;
+        SYMBOL_LIB_TABLE emptyTable;
 
         try
         {
@@ -138,4 +136,31 @@ bool DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::TransferDataFromWindow()
     }
 
     return true;
+}
+
+
+STARTWIZARD_PROVIDER_SCHLIB::STARTWIZARD_PROVIDER_SCHLIB() :
+        STARTWIZARD_PROVIDER( wxT( "Schematic Libraries" ) )
+{
+}
+
+
+wxPanel* STARTWIZARD_PROVIDER_SCHLIB::GetWizardPanel( wxWindow* aParent )
+{
+    m_model = std::make_shared<PANEL_GLOBAL_LIB_TABLE_CONFIG_MODEL>();
+    return new PANEL_GLOBAL_SYM_LIB_TABLE_CONFIG( aParent, m_model );
+}
+
+
+bool STARTWIZARD_PROVIDER_SCHLIB::NeedsUserInput() const
+{
+    wxFileName fn = SYMBOL_LIB_TABLE::GetGlobalTableFileName();
+
+    return !fn.FileExists();
+}
+
+
+void STARTWIZARD_PROVIDER_SCHLIB::Finish()
+{
+
 }

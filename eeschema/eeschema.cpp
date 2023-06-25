@@ -40,8 +40,6 @@
 #include <symbol_viewer_frame.h>
 #include <symbol_chooser_frame.h>
 #include <symbol_lib_table.h>
-#include <dialogs/dialog_global_design_block_lib_table_config.h>
-#include <dialogs/dialog_global_sym_lib_table_config.h>
 #include <dialogs/panel_grid_settings.h>
 #include <dialogs/panel_simulator_preferences.h>
 #include <dialogs/panel_design_block_lib_table.h>
@@ -71,6 +69,7 @@
 #include <panel_eeschema_display_options.h>
 #include <panel_sym_display_options.h>
 #include <sim/simulator_frame.h>
+#include "startwizard_provider_schlib.h"
 
 #include <dialogs/panel_toolbar_customization.h>
 #include <toolbars_sch_editor.h>
@@ -413,6 +412,8 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
     void PreloadLibraries( PROJECT* aProject ) override;
     void ProjectChanged() override;
 
+    void GetStartupProviders( std::vector<std::unique_ptr<STARTWIZARD_PROVIDER>>& aProviders ) override;
+
 private:
     bool loadGlobalLibTable();
     bool loadGlobalDesignBlockLibTable();
@@ -561,16 +562,6 @@ bool IFACE::loadGlobalLibTable()
 
     if( !fn.FileExists() )
     {
-        if( !( m_start_flags & KFCTL_CLI ) )
-        {
-            // Ensure the splash screen does not hide the dialog:
-            Pgm().HideSplash();
-
-            DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG symDialog( nullptr );
-
-            if( symDialog.ShowModal() != wxID_OK )
-                return false;
-        }
     }
     else
     {
@@ -832,4 +823,10 @@ int IFACE::HandleJob( JOB* aJob, REPORTER* aReporter, PROGRESS_REPORTER* aProgre
 bool IFACE::HandleJobConfig( JOB* aJob, wxWindow* aParent )
 {
     return m_jobHandler->HandleJobConfig( aJob, aParent );
+}
+
+
+void IFACE::GetStartupProviders( std::vector<std::unique_ptr<STARTWIZARD_PROVIDER>>& aProviders )
+{
+    aProviders.push_back( std::make_unique<STARTWIZARD_PROVIDER_SCHLIB>() );
 }

@@ -1,18 +1,16 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "dialog_global_lib_table_config_base.h"
+#include "panel_global_lib_table_config_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE::DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+PANEL_GLOBAL_LIB_TABLE_CONFIG_BASE::PANEL_GLOBAL_LIB_TABLE_CONFIG_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
-	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
-
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxHORIZONTAL );
 
@@ -53,15 +51,6 @@ DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE::DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE( wxWind
 
 	bSizer2->Add( m_filePicker1, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
-	m_sdbSizer1 = new wxStdDialogButtonSizer();
-	m_sdbSizer1OK = new wxButton( this, wxID_OK );
-	m_sdbSizer1->AddButton( m_sdbSizer1OK );
-	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
-	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
-	m_sdbSizer1->Realize();
-
-	bSizer2->Add( m_sdbSizer1, 1, wxEXPAND|wxTOP, 5 );
-
 
 	bSizer1->Add( bSizer2, 1, wxALL|wxEXPAND, 5 );
 
@@ -70,17 +59,15 @@ DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE::DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE( wxWind
 	this->Layout();
 	bSizer1->Fit( this );
 
-	this->Centre( wxBOTH );
-
 	// Connect Events
-	m_defaultRb->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE::onUpdateDefaultSelection ), NULL, this );
-	m_filePicker1->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE::onUpdateFilePicker ), NULL, this );
+	m_defaultRb->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_GLOBAL_LIB_TABLE_CONFIG_BASE::onUpdateDefaultSelection ), NULL, this );
+	m_filePicker1->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_GLOBAL_LIB_TABLE_CONFIG_BASE::onUpdateFilePicker ), NULL, this );
 }
 
-DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE::~DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE()
+PANEL_GLOBAL_LIB_TABLE_CONFIG_BASE::~PANEL_GLOBAL_LIB_TABLE_CONFIG_BASE()
 {
 	// Disconnect Events
-	m_defaultRb->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE::onUpdateDefaultSelection ), NULL, this );
-	m_filePicker1->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE::onUpdateFilePicker ), NULL, this );
+	m_defaultRb->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_GLOBAL_LIB_TABLE_CONFIG_BASE::onUpdateDefaultSelection ), NULL, this );
+	m_filePicker1->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_GLOBAL_LIB_TABLE_CONFIG_BASE::onUpdateFilePicker ), NULL, this );
 
 }

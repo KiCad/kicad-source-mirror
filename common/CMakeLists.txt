@@ -427,9 +427,6 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_design_block_properties_base.cpp
     dialogs/dialog_display_html_text_base.cpp
     dialogs/dialog_edit_library_tables.cpp
-    dialogs/dialog_global_lib_table_config.cpp
-    dialogs/dialog_global_lib_table_config_base.cpp
-    dialogs/dialog_global_design_block_lib_table_config.cpp
     dialogs/dialog_grid_settings.cpp
     dialogs/dialog_grid_settings_base.cpp
     dialogs/dialog_group_properties.cpp
@@ -467,7 +464,9 @@ set( COMMON_DLG_SRCS
     dialogs/panel_design_block_lib_table.cpp
     dialogs/panel_embedded_files.cpp
     dialogs/panel_embedded_files_base.cpp
-        dialogs/panel_base_display_options.cpp
+    dialogs/panel_base_display_options.cpp
+    dialogs/panel_global_lib_table_config.cpp
+    dialogs/panel_global_lib_table_config_base.cpp
     dialogs/panel_hotkeys_editor.cpp
     dialogs/panel_image_editor.cpp
     dialogs/panel_image_editor_base.cpp
@@ -500,7 +499,12 @@ set( COMMON_DLG_SRCS
 if( KICAD_USE_SENTRY )
     list( APPEND COMMON_DLG_SRCS
     dialogs/panel_data_collection.cpp
-    dialogs/panel_data_collection_base.cpp )
+    dialogs/panel_data_collection_base.cpp
+    )
+
+    list( APPEND COMMON_SRCS
+    startwizard_provider_datacollection.cpp
+    )
 endif()
 
 set( COMMON_WIDGET_SRCS

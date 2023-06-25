@@ -48,7 +48,6 @@
 #include <footprint_info_impl.h>
 #include <dialogs/dialog_configure_paths.h>
 #include <dialogs/panel_grid_settings.h>
-#include <dialog_global_fp_lib_table_config.h>
 #include <panel_display_options.h>
 #include <panel_edit_options.h>
 #include <panel_fp_editor_field_defaults.h>
@@ -70,6 +69,7 @@
 #include <3d_viewer/toolbars_3d.h>
 #include <toolbars_footprint_editor.h>
 #include <toolbars_pcb_editor.h>
+#include "startwizard_provider_fplib.h"
 
 #include <wx/crt.h>
 
@@ -392,6 +392,8 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
     bool HandleJobConfig( JOB* aJob, wxWindow* aParent ) override;
 
+    void GetStartupProviders( std::vector<std::unique_ptr<STARTWIZARD_PROVIDER>>& aProviders ) override;
+
 private:
     bool loadGlobalLibTable();
 
@@ -485,16 +487,6 @@ bool IFACE::loadGlobalLibTable()
 
     if( !fn.FileExists() )
     {
-        if( !( m_start_flags & KFCTL_CLI ) )
-        {
-            // Ensure the splash screen does not hide the dialog:
-            Pgm().HideSplash();
-
-            DIALOG_GLOBAL_FP_LIB_TABLE_CONFIG fpDialog( nullptr );
-
-            if( fpDialog.ShowModal() != wxID_OK )
-                return false;
-        }
     }
     else
     {
@@ -629,4 +621,10 @@ int IFACE::HandleJob( JOB* aJob, REPORTER* aReporter, PROGRESS_REPORTER* aProgre
 bool IFACE::HandleJobConfig( JOB* aJob, wxWindow* aParent )
 {
     return m_jobHandler->HandleJobConfig( aJob, aParent );
+}
+
+
+void IFACE::GetStartupProviders( std::vector<std::unique_ptr<STARTWIZARD_PROVIDER>>& aProviders )
+{
+    aProviders.push_back( std::make_unique<STARTWIZARD_PROVIDER_FPLIB>() );
 }

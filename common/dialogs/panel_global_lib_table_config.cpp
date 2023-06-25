@@ -18,28 +18,30 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <dialogs/dialog_global_lib_table_config.h>
+#include <dialogs/panel_global_lib_table_config.h>
 
 #include <env_vars.h>
 #include <pgm_base.h>
 #include <search_stack.h>
 #include <systemdirsappend.h>
+#include <confirm.h>
 
 #include <kiplatform/environment.h>
 
 
-DIALOG_GLOBAL_LIB_TABLE_CONFIG::DIALOG_GLOBAL_LIB_TABLE_CONFIG( wxWindow* aParent,
-                                                                const wxString&     aTableName,
-                                                                const KIWAY::FACE_T aFaceType ) :
-    DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE( aParent ),
+PANEL_GLOBAL_LIB_TABLE_CONFIG::PANEL_GLOBAL_LIB_TABLE_CONFIG( wxWindow*           aParent,
+                                                              const wxString&     aTableName,
+                                                              std::shared_ptr<PANEL_GLOBAL_LIB_TABLE_CONFIG_MODEL> aModel,
+                                                              const KIWAY::FACE_T aFaceType ) :
+    PANEL_GLOBAL_LIB_TABLE_CONFIG_BASE( aParent ),
     m_tableName( aTableName ),
     m_defaultFileFound( false ),
-    m_faceType( aFaceType )
+    m_faceType( aFaceType ),
+    m_model( aModel )
 {
     wxString tmp;
 
     tmp.Printf( _( "Configure Global %s Library Table" ), aTableName.Capitalize() );
-    SetTitle( tmp );
 
     tmp.Printf( _( "KiCad has been run for the first time using the new %s library table for\n"
                    "accessing libraries.  In order for KiCad to access %s libraries,\n"
@@ -70,38 +72,56 @@ DIALOG_GLOBAL_LIB_TABLE_CONFIG::DIALOG_GLOBAL_LIB_TABLE_CONFIG( wxWindow* aParen
     m_staticText2->SetLabel( tmp );
 
     m_filePicker1->Connect( wxEVT_UPDATE_UI,
-                            wxUpdateUIEventHandler( DIALOG_GLOBAL_LIB_TABLE_CONFIG::onUpdateFilePicker ),
+            wxUpdateUIEventHandler( PANEL_GLOBAL_LIB_TABLE_CONFIG::onUpdateFilePicker ),
                             nullptr, this );
 
-    SetupStandardButtons();
 
-    finishDialogSettings();
 }
 
 
-DIALOG_GLOBAL_LIB_TABLE_CONFIG::~DIALOG_GLOBAL_LIB_TABLE_CONFIG()
+PANEL_GLOBAL_LIB_TABLE_CONFIG::~PANEL_GLOBAL_LIB_TABLE_CONFIG()
 {
     m_filePicker1->Disconnect( wxEVT_UPDATE_UI,
-                               wxUpdateUIEventHandler( DIALOG_GLOBAL_LIB_TABLE_CONFIG::onUpdateFilePicker ),
+                               wxUpdateUIEventHandler( PANEL_GLOBAL_LIB_TABLE_CONFIG::onUpdateFilePicker ),
                                nullptr, this );
 }
 
 
-void DIALOG_GLOBAL_LIB_TABLE_CONFIG::onUpdateFilePicker( wxUpdateUIEvent& aEvent )
+void PANEL_GLOBAL_LIB_TABLE_CONFIG::onUpdateFilePicker( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( m_customRb->GetValue() );
 }
 
 
-void DIALOG_GLOBAL_LIB_TABLE_CONFIG::onUpdateDefaultSelection( wxUpdateUIEvent& aEvent )
+void PANEL_GLOBAL_LIB_TABLE_CONFIG::onUpdateDefaultSelection( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( m_defaultFileFound );
 }
 
 
-bool DIALOG_GLOBAL_LIB_TABLE_CONFIG::TransferDataToWindow()
+bool PANEL_GLOBAL_LIB_TABLE_CONFIG::TransferDataFromWindow()
 {
-    if( !wxDialog::TransferDataToWindow() )
+    if( m_emptyRb->GetValue() )
+    {
+        m_model->m_tableMode = PANEL_GLOBAL_LIB_TABLE_CONFIG_MODEL::TABLE_MODE::EMPTY;
+    }
+    else if (m_defaultRb->GetValue())
+    {
+        m_model->m_tableMode = PANEL_GLOBAL_LIB_TABLE_CONFIG_MODEL::TABLE_MODE::DEFAULT;
+    }
+    else if( m_customRb->GetValue() )
+    {
+        m_model->m_tableMode = PANEL_GLOBAL_LIB_TABLE_CONFIG_MODEL::TABLE_MODE::CUSTOM;
+        m_model->m_customTablePath = m_filePicker1->GetPath();
+    }
+
+    return true;
+}
+
+
+bool PANEL_GLOBAL_LIB_TABLE_CONFIG::TransferDataToWindow()
+{
+    if( !wxPanel::TransferDataToWindow() )
         return false;
 
     wxFileName fn = GetGlobalTableFileName();
@@ -133,7 +153,8 @@ bool DIALOG_GLOBAL_LIB_TABLE_CONFIG::TransferDataToWindow()
 
     if( m_defaultFileFound )
     {
-        m_filePicker1->SetPath(fileName );
+        m_model->m_defaultTablePath = fileName;
+        m_filePicker1->SetPath( fileName );
         m_filePicker1->Enable( false );
     }
     else

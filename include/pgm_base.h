@@ -370,7 +370,6 @@ protected:
 
 #ifdef KICAD_USE_SENTRY
     void     sentryInit();
-    void     sentryPrompt();
     wxString sentryCreateUid();
 #endif
 

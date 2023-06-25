@@ -59,7 +59,6 @@
 #include <pcb_edit_frame.h>
 #include <env_paths.h>
 #include <dialogs/dialog_edit_library_tables.h>
-#include <dialogs/dialog_global_fp_lib_table_config.h>
 #include <dialogs/dialog_plugin_options.h>
 #include <footprint_viewer_frame.h>
 #include <footprint_edit_frame.h>
@@ -1015,6 +1014,8 @@ void PANEL_FP_LIB_TABLE::onReset( wxCommandEvent& event )
         return;
     }
 
+    // TODO(JE) library tables
+#if 0
     DIALOG_GLOBAL_FP_LIB_TABLE_CONFIG dlg( m_parent );
 
     if( dlg.ShowModal() == wxID_OK )
@@ -1036,6 +1037,7 @@ void PANEL_FP_LIB_TABLE::onReset( wxCommandEvent& event )
 
         m_global_grid->Thaw();
     }
+#endif
 }
 
 

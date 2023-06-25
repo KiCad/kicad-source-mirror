@@ -44,6 +44,7 @@
 #include <richio.h>
 #include <settings/settings_manager.h>
 #include <settings/kicad_settings.h>
+#include <startwizard.h>
 #include <systemdirsappend.h>
 #include <trace_helpers.h>
 #include <wildcards_and_files_ext.h>
@@ -183,10 +184,12 @@ bool PGM_KICAD::OnPgmInit()
     if( !InitPgm( false, skipPythonInit ) )
         return false;
 
+
     m_bm.InitSettings( new KICAD_SETTINGS );
     GetSettingsManager().RegisterSettings( PgmSettings() );
     GetSettingsManager().SetKiway( &Kiway );
     m_bm.Init();
+
 
     // Add search paths to feed the PGM_KICAD::SysSearch() function,
     // currently limited in support to only look for project templates
@@ -235,6 +238,9 @@ bool PGM_KICAD::OnPgmInit()
         managerFrame = new KICAD_MANAGER_FRAME( nullptr, wxT( "KiCad" ), wxDefaultPosition,
                                                 wxWindow::FromDIP( wxSize( 775, -1 ), NULL ) );
         frame = managerFrame;
+
+        STARTWIZARD startWizard( &Kiway );
+        startWizard.CheckAndRun( frame );
     }
     else
     {

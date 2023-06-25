@@ -110,7 +110,6 @@ set( EESCHEMA_DLGS
     dialogs/dialog_field_properties_base.cpp
     dialogs/dialog_global_edit_text_and_graphics.cpp
     dialogs/dialog_global_edit_text_and_graphics_base.cpp
-    dialogs/dialog_global_sym_lib_table_config.cpp
     dialogs/dialog_ibis_parser_reporter.cpp
     dialogs/dialog_ibis_parser_reporter_base.cpp
     dialogs/dialog_image_properties.cpp
@@ -416,6 +415,7 @@ set( EESCHEMA_SRCS
     schematic.cpp
     schematic_settings.cpp
     schematic_undo_redo.cpp
+    startwizard_provider_schlib.cpp
     sheet.cpp
     symbol.cpp
     symbol_async_loader.cpp

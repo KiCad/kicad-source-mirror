@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023 Mark Roszko <mark.roszko@gmail.com>
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -18,21 +18,26 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _DIALOG_GLOBAL_FP_LIB_TABLE_CONFIG_H_
-#define _DIALOG_GLOBAL_FP_LIB_TABLE_CONFIG_H_
+#ifndef STARTWIZARD_PROVIDER_DATACOLLECTION_H
+#define STARTWIZARD_PROVIDER_DATACOLLECTION_H
 
-#include <dialogs/dialog_global_lib_table_config.h>
+#include <dialogs/panel_data_collection.h>
+#include <startwizard_provider.h>
+#include <memory>
 
-
-class DIALOG_GLOBAL_FP_LIB_TABLE_CONFIG : public DIALOG_GLOBAL_LIB_TABLE_CONFIG
+class STARTWIZARD_PROVIDER_DATACOLLECTION : public STARTWIZARD_PROVIDER
 {
 public:
-    DIALOG_GLOBAL_FP_LIB_TABLE_CONFIG( wxWindow* aParent );
-    virtual ~DIALOG_GLOBAL_FP_LIB_TABLE_CONFIG();
+    STARTWIZARD_PROVIDER_DATACOLLECTION() : STARTWIZARD_PROVIDER( wxT( "Data Collection" ) ){};
 
-    bool TransferDataFromWindow() override;
+    virtual bool NeedsUserInput() const override;
 
-    virtual wxFileName GetGlobalTableFileName() override;
+    virtual wxPanel* GetWizardPanel( wxWindow* aParent ) override;
+
+    virtual void Finish() override;
+
+private:
+    std::shared_ptr<PANEL_DATA_COLLECTION_MODEL> m_model;
 };
 
-#endif  // _DIALOG_GLOBAL_FP_LIB_TABLE_CONFIG_H_
+#endif

@@ -11,13 +11,13 @@
         <property name="embedded_files_path">res</property>
         <property name="encoding">UTF-8</property>
         <property name="event_generation">connect</property>
-        <property name="file">dialog_global_lib_table_config_base</property>
+        <property name="file">panel_global_lib_table_config_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
         <property name="image_path_wrapper_function_name"></property>
         <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
-        <property name="name">DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE</property>
+        <property name="name">PANEL_GLOBAL_LIB_TABLE_CONFIG_BASE</property>
         <property name="namespace"></property>
         <property name="path">.</property>
         <property name="precompiled_header"></property>
@@ -29,33 +29,29 @@
         <property name="use_array_enum">0</property>
         <property name="use_enum">0</property>
         <property name="use_microsoft_bom">0</property>
-        <object class="Dialog" expanded="1">
+        <object class="Panel" expanded="1">
             <property name="aui_managed">0</property>
             <property name="aui_manager_style">wxAUI_MGR_DEFAULT</property>
             <property name="bg"></property>
-            <property name="center">wxBOTH</property>
             <property name="context_help"></property>
             <property name="context_menu">1</property>
             <property name="enabled">1</property>
             <property name="event_handler">impl_virtual</property>
-            <property name="extra_style"></property>
             <property name="fg"></property>
             <property name="font"></property>
             <property name="hidden">0</property>
             <property name="id">wxID_ANY</property>
             <property name="maximum_size"></property>
             <property name="minimum_size"></property>
-            <property name="name">DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE</property>
+            <property name="name">PANEL_GLOBAL_LIB_TABLE_CONFIG_BASE</property>
             <property name="pos"></property>
-            <property name="size"></property>
-            <property name="style">wxCAPTION|wxCLOSE_BOX|wxRESIZE_BORDER</property>
-            <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
-            <property name="title">Configure Global Library Table</property>
+            <property name="size">-1,-1</property>
+            <property name="subclass">; ; forward_declare</property>
             <property name="tooltip"></property>
             <property name="two_step_creation">0</property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
-            <property name="window_style"></property>
+            <property name="window_style">wxTAB_TRAVERSAL</property>
             <object class="wxBoxSizer" expanded="1">
                 <property name="minimum_size"></property>
                 <property name="name">bSizer1</property>
@@ -469,24 +465,6 @@
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
                                 <event name="OnUpdateUI">onUpdateFilePicker</event>
-                            </object>
-                        </object>
-                        <object class="sizeritem" expanded="0">
-                            <property name="border">5</property>
-                            <property name="flag">wxEXPAND|wxTOP</property>
-                            <property name="proportion">1</property>
-                            <object class="wxStdDialogButtonSizer" expanded="0">
-                                <property name="Apply">0</property>
-                                <property name="Cancel">1</property>
-                                <property name="ContextHelp">0</property>
-                                <property name="Help">0</property>
-                                <property name="No">0</property>
-                                <property name="OK">1</property>
-                                <property name="Save">0</property>
-                                <property name="Yes">0</property>
-                                <property name="minimum_size"></property>
-                                <property name="name">m_sdbSizer1</property>
-                                <property name="permission">protected</property>
                             </object>
                         </object>
                     </object>
