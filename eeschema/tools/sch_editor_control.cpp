@@ -2231,7 +2231,13 @@ int SCH_EDITOR_CONTROL::ToggleOPCurrents( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::ChangeLineMode( const TOOL_EVENT& aEvent )
 {
-    m_frame->eeconfig()->m_Drawing.line_mode = aEvent.Parameter<int>();
+    if( aEvent.IsAction( &EE_ACTIONS::lineModeFree ) )
+        m_frame->eeconfig()->m_Drawing.line_mode = LINE_MODE::LINE_MODE_FREE;
+    else if( aEvent.IsAction( &EE_ACTIONS::lineMode45 ) )
+        m_frame->eeconfig()->m_Drawing.line_mode = LINE_MODE::LINE_MODE_45;
+    else
+        m_frame->eeconfig()->m_Drawing.line_mode = LINE_MODE::LINE_MODE_90;
+
     m_toolMgr->RunAction( ACTIONS::refreshPreview );
     return 0;
 }
@@ -2264,7 +2270,6 @@ int SCH_EDITOR_CONTROL::ToggleAnnotateRecursive( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::TogglePythonConsole( const TOOL_EVENT& aEvent )
 {
-
     m_frame->ScriptingConsoleEnableDisable();
     return 0;
 }
