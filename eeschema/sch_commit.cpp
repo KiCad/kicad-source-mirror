@@ -316,7 +316,7 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
             break;
         }
 
-        schItem->ClearFlags( IS_NEW | IS_MOVING );
+        schItem->ClearEditFlags();
     }
 
     if( frame )
