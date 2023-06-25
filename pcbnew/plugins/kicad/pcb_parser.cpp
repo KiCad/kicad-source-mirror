@@ -3861,7 +3861,9 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
 
                 field->SetText( pValue );
                 field->SetLayer( footprint->GetLayer() == F_Cu ? F_Fab : B_Fab );
-                field->StyleFromSettings( m_board->GetDesignSettings() );
+
+                if( m_board )   // can be null when reading a lib
+                    field->StyleFromSettings( m_board->GetDesignSettings() );
             }
 
             // Hide the field by default if it is a legacy field that did not have
