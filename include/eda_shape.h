@@ -28,6 +28,7 @@
 #include <trigo.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/geometry_utils.h>
+#include <properties/property.h>
 #include <stroke_params.h>
 
 class LINE_READER;
@@ -377,5 +378,10 @@ protected:
     int                   m_editState;
     bool                  m_annotationProxy;   // A shape storing the position of an annotation
 };
+
+#ifndef SWIG
+DECLARE_ENUM_TO_WXANY( SHAPE_T );
+DECLARE_ENUM_TO_WXANY( PLOT_DASH_TYPE );
+#endif
 
 #endif  // EDA_SHAPE_H

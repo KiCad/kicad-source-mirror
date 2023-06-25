@@ -1928,8 +1928,8 @@ void SCH_LEGACY_PLUGIN::saveLine( SCH_LINE* aLine )
     // Write line style (width, type, color) only for non default values
     if( aLine->IsGraphicLine() )
     {
-        if( aLine->GetLineSize() != 0 )
-            m_out->Print( 0, " %s %d", T_WIDTH, schIUScale.IUToMils( aLine->GetLineSize() ) );
+        if( aLine->GetLineWidth() != 0 )
+            m_out->Print( 0, " %s %d", T_WIDTH, schIUScale.IUToMils( aLine->GetLineWidth() ) );
 
         m_out->Print( 0, " %s %s", T_STYLE,
                       TO_UTF8( STROKE_PARAMS::GetLineStyleToken( aLine->GetLineStyle() ) ) );

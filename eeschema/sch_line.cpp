@@ -90,6 +90,17 @@ SCH_LINE::SCH_LINE( const SCH_LINE& aLine ) :
 }
 
 
+wxString SCH_LINE::GetFriendlyName() const
+{
+    switch( GetLayer() )
+    {
+    case LAYER_WIRE: return _( "Wire" );
+    case LAYER_BUS:  return _( "Bus" );
+    default:         return _( "Graphic Line" );
+    }
+}
+
+
 wxString SCH_LINE::GetNetname( const SCH_SHEET_PATH& aSheet )
 {
     std::list<const SCH_LINE *> checkedLines;
@@ -981,8 +992,24 @@ static struct SCH_LINE_DESC
 {
     SCH_LINE_DESC()
     {
+        ENUM_MAP<PLOT_DASH_TYPE>::Instance()
+                    .Map( PLOT_DASH_TYPE::DEFAULT,    _HKI( "Default" ) )
+                    .Map( PLOT_DASH_TYPE::SOLID,      _HKI( "Solid" ) )
+                    .Map( PLOT_DASH_TYPE::DASH,       _HKI( "Dashed" ) )
+                    .Map( PLOT_DASH_TYPE::DOT,        _HKI( "Dotted" ) )
+                    .Map( PLOT_DASH_TYPE::DASHDOT,    _HKI( "Dash-Dot" ) )
+                    .Map( PLOT_DASH_TYPE::DASHDOTDOT, _HKI( "Dash-Dot-Dot" ) );
+
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( SCH_LINE );
         propMgr.InheritsAfter( TYPE_HASH( SCH_LINE ), TYPE_HASH( SCH_ITEM ) );
+
+        void ( SCH_LINE::*lineStyleSetter )( PLOT_DASH_TYPE ) = &SCH_LINE::SetLineStyle;
+
+        propMgr.AddProperty( new PROPERTY_ENUM<SCH_LINE, PLOT_DASH_TYPE>( _HKI( "Line Style" ),
+                lineStyleSetter, &SCH_LINE::GetLineStyle ) );
+
+        propMgr.AddProperty( new PROPERTY<SCH_LINE, int>( _HKI( "Line Width" ),
+                &SCH_LINE::SetLineWidth, &SCH_LINE::GetLineWidth ) );
     }
 } _SCH_LINE_DESC;

@@ -61,6 +61,8 @@ public:
         return wxT( "SCH_LINE" );
     }
 
+    wxString GetFriendlyName() const override;
+
     /**
      * @brief This function travel though all the connected wire segments
      * to look for connected labels.
@@ -172,6 +174,7 @@ public:
     COLOR4D GetLineColor() const;
 
     void SetLineWidth( const int aSize );
+    int GetLineWidth() const { return m_stroke.GetWidth(); }
 
     virtual bool HasLineStroke() const override { return true; }
     virtual STROKE_PARAMS GetStroke() const override { return m_stroke; }
@@ -192,8 +195,6 @@ public:
                || ( style_a == PLOT_DASH_TYPE::DEFAULT && style_b == PLOT_DASH_TYPE::SOLID )
                || ( style_a == PLOT_DASH_TYPE::SOLID   && style_b == PLOT_DASH_TYPE::DEFAULT );
     }
-
-    int GetLineSize() const { return m_stroke.GetWidth(); }
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
