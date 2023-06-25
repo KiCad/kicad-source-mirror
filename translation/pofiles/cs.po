@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-27 08:29-0700\n"
-"PO-Revision-Date: 2023-06-12 08:52+0000\n"
+"POT-Creation-Date: 2023-05-18 11:55-0700\n"
+"PO-Revision-Date: 2023-06-27 08:53+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
 "source/cs/>\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 4.18.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -11830,7 +11830,7 @@ msgstr "Kód"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:207
 msgid "Save {} in Value field as \"{}\""
-msgstr ""
+msgstr "Uložit {} v poli Hodnota jako \"{}\""
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:220
 msgid "Model"
@@ -13009,7 +13009,7 @@ msgstr "Délka mezery:"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:245
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:45
 msgid "Dash and dot lengths are ratios of the line width."
-msgstr ""
+msgstr "Délky pomlčky a bodu jsou poměry šířky linky."
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:253
 #, fuzzy
@@ -13494,6 +13494,8 @@ msgid ""
 "Warning: schematic has annotation errors, please use the schematic editor to "
 "fix them\n"
 msgstr ""
+"VAROVÁNÍ: Schéma má chyby očíslování, použijte editor schémat k jejich "
+"opravě\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:168
 #: eeschema/eeschema_jobs_handler.cpp:278
@@ -16895,7 +16897,7 @@ msgstr "Čas OFF by měl být větší než 0."
 
 #: eeschema/sim/kibis/kibis.cpp:1541
 msgid "Rising edge is longer than on time."
-msgstr ""
+msgstr "Vzestupná hrana je delší než čas zapnutí."
 
 #: eeschema/sim/kibis/kibis.cpp:1550
 msgid "Falling edge is longer than off time."
@@ -16903,7 +16905,7 @@ msgstr ""
 
 #: eeschema/sim/kibis/kibis.cpp:1587
 msgid "Rising edge is longer than ON time."
-msgstr ""
+msgstr "Vzestupná hrana je delší než čas zapnutí."
 
 #: eeschema/sim/kibis/kibis.cpp:1595
 msgid "Falling edge is longer than OFF time."
@@ -30359,6 +30361,7 @@ msgstr "Varování: Díra plošky nezanechává žádnou měď."
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1325
 msgid "Warning: Negative local clearance values will have no effect."
 msgstr ""
+"Varování: Záporné hodnoty místní izolační mezery nebudou mít žádný účinek."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1342
 msgid ""
@@ -32187,14 +32190,12 @@ msgstr ""
 "klávesových zkratek."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:74
-#, fuzzy
 msgid "Arc editing mode:"
-msgstr "Režim pozice:"
+msgstr "Režim úpravy oblouku:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:81
-#, fuzzy
 msgid "Keep center, adjust radius"
-msgstr "Střed kružnice (%s, %s), poloměr %s"
+msgstr "Držet střed, upravit poloměr"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:81
 msgid "Keep endpoints or direction of starting point"
@@ -33312,21 +33313,20 @@ msgid "If none are provided, setting the values to zero is suggested."
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:56
-#, fuzzy
 msgid ""
 "Global clearance between pads and the solder mask.\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
-"Toto je globální izolační mezera mezi ploškou a pájecí maskou\n"
-"tato hodnota může být nahrazena místními hodnotami pro pouzdro nebo plošku."
+"Globální izolační mezera mezi ploškou a pájecí maskou.\n"
+"Tato hodnota může být nahrazena místními hodnotami pro pouzdro nebo plošku."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:61
-#, fuzzy
 msgid ""
 "Positive clearance means area bigger than the pad (usual for solder mask "
 "clearance)."
 msgstr ""
-"Kladná mezera znamená oblast větší, než ploška (obvykle pro pájecí masku)."
+"Kladná mezera znamená oblast větší, než ploška (obvykle pro izolační mezeru "
+"pájecí masky)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:69
 #, fuzzy
@@ -33378,12 +33378,12 @@ msgstr ""
 "mezery."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:108
-#, fuzzy
 msgid ""
 "Negative clearance means area smaller than the pad (usual for solder paste "
 "clearance)."
 msgstr ""
-"Záporná mezera znamená oblast menší, než ploška (obvykle pro pájecí pastu)."
+"Záporná mezera znamená oblast menší, než ploška (obvykle pro izolační mezeru "
+"pájecí pasty)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:118
 msgid ""
@@ -37426,10 +37426,10 @@ msgstr "DPS úspěšně přečíslována"
 msgid "Error creating svg file"
 msgstr "Chyba čtení souboru."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:346 pcbnew/pcbnew_jobs_handler.cpp:427
-#, fuzzy, c-format
+#: pcbnew/pcbnew_jobs_handler.cpp:339 pcbnew/pcbnew_jobs_handler.cpp:417
+#, c-format
 msgid "Failed to plot to '%s'.\n"
-msgstr "Nepodařilo se načíst '%s'."
+msgstr "Nepodařilo se načíst '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:639 pcbnew/pcbnew_jobs_handler.cpp:711
 #, fuzzy
