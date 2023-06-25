@@ -38,7 +38,7 @@
 #include <wx/propgrid/property.h>
 
 #include <functional>
-#include <map>
+#include <unordered_map>
 #include <memory>
 #include <typeindex>
 #include <type_traits>
