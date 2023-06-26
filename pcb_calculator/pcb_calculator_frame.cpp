@@ -42,13 +42,14 @@
 #include <calculator_panels/panel_galvanic_corrosion.h>
 #include <calculator_panels/panel_color_code.h>
 #include <calculator_panels/panel_electrical_spacing.h>
-#include <calculator_panels/panel_eseries.h>
+#include <calculator_panels/panel_r_calculator.h>
 #include <calculator_panels/panel_fusing_current.h>
 #include <calculator_panels/panel_regulator.h>
 #include <calculator_panels/panel_track_width.h>
 #include <calculator_panels/panel_transline.h>
 #include <calculator_panels/panel_via_size.h>
 #include <calculator_panels/panel_wavelength.h>
+#include <calculator_panels/panel_eseries_display.h>
 #include "widgets/wx_menubar.h"
 
 
@@ -142,6 +143,7 @@ void PCB_CALCULATOR_FRAME::loadPages()
     m_treebook->AddPage( nullptr, _( "General system design" ) );
 
     AddCalculator( new PANEL_REGULATOR( m_treebook ), _( "Regulators" ) );
+    AddCalculator( new PANEL_R_CALCULATOR( m_treebook ), _( "Resistor Calculator" ) );
 
     m_treebook->AddPage( nullptr, _( "Power, current and isolation" ) );
 
@@ -159,7 +161,7 @@ void PCB_CALCULATOR_FRAME::loadPages()
 
     m_treebook->AddPage( nullptr, _( "Memo" ) );
 
-    AddCalculator( new PANEL_E_SERIES( m_treebook ), _( "E-Series" ) );
+    AddCalculator( new PANEL_ESERIES_DISPLAY( m_treebook ), _( "E-Series" ) );
     AddCalculator( new PANEL_COLOR_CODE( m_treebook ), _( "Color Code" ) );
     AddCalculator( new PANEL_BOARD_CLASS( m_treebook ), _( "Board Classes" ) );
     AddCalculator( new PANEL_GALVANIC_CORROSION( m_treebook ), _( "Galvanic Corrosion" ) );

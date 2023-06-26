@@ -22,6 +22,8 @@ set( PCB_CALCULATOR_SRCS
     calculator_panels/panel_cable_size_base.cpp
     calculator_panels/panel_color_code.cpp
     calculator_panels/panel_color_code_base.cpp
+    calculator_panels/panel_eseries_display.cpp
+    calculator_panels/panel_eseries_display_base.cpp
     calculator_panels/panel_galvanic_corrosion.cpp
     calculator_panels/panel_galvanic_corrosion_base.cpp
     calculator_panels/panel_electrical_spacing.cpp
@@ -31,8 +33,8 @@ set( PCB_CALCULATOR_SRCS
     calculator_panels/panel_electrical_spacing_iec60664_base.cpp
     calculator_panels/panel_electrical_spacing_ipc2221.cpp
     calculator_panels/panel_electrical_spacing_ipc2221_base.cpp
-    calculator_panels/panel_eseries.cpp
-    calculator_panels/panel_eseries_base.cpp
+    calculator_panels/panel_r_calculator.cpp
+    calculator_panels/panel_r_calculator_base.cpp
     calculator_panels/panel_fusing_current.cpp
     calculator_panels/panel_fusing_current_base.cpp
     calculator_panels/panel_regulator.cpp
@@ -60,6 +62,7 @@ set( PCB_CALCULATOR_SRCS
     dialogs/dialog_regulator_form_base.cpp
     dialogs/dialog_regulator_form.cpp
     pcb_calculator_utils.cpp
+    resistor_substitution_utils.cpp
     ../common/env_vars.cpp      # needed on MSW to avoid a link issue (a symbol not found)
     )
 
@@ -223,7 +226,8 @@ endfunction()
     md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/pi_formula )
     md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/tee_formula )
     md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/tracks_width_versus_current_formula )
-    md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/eseries_help )
+    md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/eseries_display_help )
+    md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/r_calculator_help )
     md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/fusing_current_help )
     md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/galvanic_corrosion_help )
     md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/iec60664_help )
@@ -234,7 +238,8 @@ set( DOCS_LIST
         ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/bridget_tee_formula.h
         ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/splitter_formula.h
         ${CMAKE_CURRENT_SOURCE_DIR}/tracks_width_versus_current_formula.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/eseries_help.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/eseries_display_help.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/r_calculator_help.h
         ${CMAKE_CURRENT_SOURCE_DIR}/fusing_current_help.h
         ${CMAKE_CURRENT_SOURCE_DIR}/galvanic_corrosion_help.h
         ${CMAKE_CURRENT_SOURCE_DIR}/iec60664_help.h

@@ -18,6 +18,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma once
+
 #include <array>
 #include <vector>
 #include <string>
@@ -27,174 +29,149 @@
  * E-Values derived from a geometric sequence formula by Charles Renard were already
  * accepted and widely used before the ISO recommendation no. 3 has been published.
  * For this historical reason, rounding rules of some values are sometimes irregular.
+ * The current list of values is recorded in IEC 60063:2015.
+ * Previously it was in IEC publication 63.
  * Although all E-Values could be calculated at runtime, we initialize them in a lookup table
  * what seems the most easy way to consider any inconvenient irregular rules. Same table is
- * also used to lookup non calculable but readable BOM value strings. Supported E-series are:
+ * also used to lookup non calculable but readable BOM value strings.
  */
 
-// List of normalized values between 1 and 10
-// The terminal 0.0 value is a end of list value
-// Note also due to calculation time the E24 serie is the biggest usable.
-#define E24_VALUES  1.0, 1.1, 1.2, 1.3, 1.5, 1.6, 1.8, 2.0, 2.2, 2.4, 2.7, 3.0,\
-                    3.3, 3.6, 3.9, 4.3, 4.7, 5.1, 5.6, 6.2, 6.8, 7.5, 8.2, 9.1, 0.0
+// The resistor calculator cannot operate on series larger than E24 due to calculation time
 
-#define E12_VALUES  1.0, 1.2, 1.5, 1.8, 2.2, 2.7, 3.3, 3.9, 4.7, 5.6, 6.8, 8.2, 0.0
+// Values are stored in the 100-999 decade. This is so that all values are integers
+// and can be stored precisely. If the values are real values with a fraction part then
+// the fractional part is typically imprecisely stores. In the 100 decade the values
+// can be stored as precise values in integers. If used in floating point types
+// they are as precise as before
 
-#define E6_VALUES   1.0, 1.5, 2.2, 3.3, 4.7, 6.8, 0.0
+// If you want the values in the first decade then simply divide every value in
+// the list by the first value in the list.
 
-#define E3_VALUES   1.0, 2.2, 4.7, 0.0
+// E96 is a proper subset of E192. It is every 2nd value. E48 is every 4th value of E192.
+// That is, all the series with 3 significant figures are subsets of the same series, E192.
 
-#define E1_VALUES   1.0, 0.0
+// E24 is not a subset of E48 or E192. All series below E48 have only 2 significant figures
+// and are differently from the series with 3 significant figures.
 
+// E12, E6 and E3 are proper subsets of E24. Specifically they are evenly spaced
+// values selected from E24. E12 is every 2nd value, E6 every 4th, E3 every 8th.
 
-// First value of resistor in ohm
-#define FIRST_VALUE 10
+// E1 is not in the IEC standard.
 
-// last value of resistor in ohm
-#define LAST_VALUE 1e6
+// The value 0 is not present in any series. It does not fit in any decade.
+// It must be special cased in any calcuation or method of selection of
+// values.
 
-/**
- * List of handled E series values:
- * Note: series bigger than E24 have no interest because
- *  - probably the user will fing the needed value inside these series
- *  - the calculation time can be *very high* for series > E24
- */
-enum { E1, E3, E6, E12, E24 };
-
-/**
- * This calculator suggests solutions for 2R, 3R and 4R replacement combinations
- */
-enum { S2R, S3R, S4R };
-
-// R_DATA handles a resistor: string value, value and allowed to use
-struct R_DATA
+namespace ESERIES
 {
-    R_DATA() :
-        e_use( true ),
-        e_value( 0.0 )
-    {}
 
-    R_DATA( const std::string& aName, double aValue )
-    {
-        e_use = true;
-        e_name = aName;
-        e_value = aValue;
-    }
-
-    bool        e_use;
-    std::string e_name;
-    double      e_value;
+enum
+{
+    E1,
+    E3,
+    E6,
+    E12,
+    E24,
+    E48,
+    E96,
+    E192
 };
 
-class E_SERIES
+/* \brief Creates a vector of integers of E series values
+ *
+ */
+class ESERIES_VALUES : public std::vector<uint16_t>
 {
 public:
-    E_SERIES();
-
-    /**
-     * If any value of the selected E-series not available, it can be entered as an exclude value.
-     *
-     * @param aValue is the value to exclude from calculation
-     * Values to exclude are set to false in the selected E-series source lookup table
-     */
-    void Exclude( double aValue );
-
-    /**
-     *  initialize next calculation and erase results from previous calculation
-     */
-    void NewCalc();
-
-    /**
-     * called on calculate button to execute all the 2R, 3R and 4R calculations
-     */
-    void Calculate();
-
-    /**
-     * Interface for CheckBox, RadioButton, RequriedResistor and calculated Results
-     */
-    void SetSeries( uint32_t aSeries ) { m_series = aSeries; }
-    void SetRequiredValue( double aValue ) { m_required_value = aValue; }
-
-    // Accessor:
-    const std::array<R_DATA,S4R+1>& GetResults() { return m_results; }
+    ESERIES_VALUES( int aESeries );
 
 private:
-    /**
-     * Add values from aList to m_tables.  Covers all decades between FIRST_VALUE and LAST_VALUE.
-     * @return the count of items added to m_tables.
-     */
-    int buildSeriesData( const double aList[] );
-
-    /**
-     * Build all 2R combinations from the selected E-series values
-     *
-     * Pre-calculated value combinations are saved in intermediate look up table m_combined_table
-     * @return is the number of found combinations what also depends from exclude values
-    */
-    uint32_t combine2();
-
-    /**
-     * Search for closest two component solution
-     *
-     * @param aSize is the number of valid 2R combinations in m_combined_table on where to search
-     * The 2R result with smallest deviation will be saved in results
-    */
-    void simple_solution( uint32_t aSize );
-
-    /**
-     * Check if there is a better 3 R solution than previous one using only two components.
-     *
-     * @param aSize gives the number of available combinations to be checked inside
-     *              m_combined_table.  Therefore m_combined_table is combined with the primary
-     *              E-series look up table.  The 3R result with smallest deviation will be saved
-     *              in results if better than 2R
-     */
-    void combine3( uint32_t aSize );
-
-    /**
-     * Check if there is a better four component solution.
-     *
-     * @param aSsize gives the number of 2R combinations to be checked inside m_combined_table
-     * Occupied calculation time depends from number of available E-series values with the power
-     * of 4 why execution for E12 is conditional with 4R check box for the case the previously
-     * found 3R solution is already exact
-     */
-    void combine4( uint32_t aSize );
-
-    /*
-     * Strip redundant braces from three component result
-     *
-     * Example: R1+(R2+R3) become R1+R2+R3
-     * and      R1|(R2|R3) become R1|R2|R3
-     * while    R1+(R2|R3) or (R1+R2)|R3) remains untouched
-     */
-    void strip3();
-
-    /*
-     * Strip redundant braces from four component result
-     *
-     * Example: (R1+R2)+(R3+R4) become R1+R2+R3+R4
-     * and      (R1|R2)|(R2|R3) become R1|R2|R3|R4
-     * while    (R1+R2)|(R3+R4) remains untouched
-     */
-    void strip4();
-
-private:
-    std::vector<std::vector<R_DATA>> m_tables;
-
-    /* Note: intermediate calculations use m_combined_table
-     * if the biggest list is En, reserved array size should be 2*En*En of std::vector primary list.
-     * 2 component combinations including redundant swappable terms are for the moment
-     * ( using values between 10 ohms and 1Mohm )
-     * 72 combinations for E1
-     * 512 combinations for E3
-     * 1922 combinations for E6
-     * 7442 combinations for E12
-     * 29282 combinations for E24
-     */
-    std::vector<R_DATA>       m_combined_table;         // intermediate 2R combinations
-
-    std::array<R_DATA, S4R+1> m_results;                // 2R, 3R and 4R results
-    uint32_t                  m_series = E6;            // Radio Button State
-    double                    m_required_value = 0.0;	// required Resistor
+    static const std::vector<uint16_t> s_e24table;
+    static const std::vector<uint16_t> s_e192table;
 };
+
+/*! \brief Creates a vector of integers of the E1 series values.
+    *
+    */
+class E1_VALUES : public ESERIES_VALUES
+{
+public:
+    E1_VALUES() : ESERIES_VALUES( E1 ) {}
+};
+
+/*! \brief Creates a vector of integers of the E3 series values.
+    *
+    */
+class E3_VALUES : public ESERIES_VALUES
+{
+public:
+    E3_VALUES() : ESERIES_VALUES( E3 ) {}
+};
+
+/*! \brief Creates a vector of integers of the E6 series values.
+    *
+    */
+class E6_VALUES : public ESERIES_VALUES
+{
+public:
+    E6_VALUES() : ESERIES_VALUES( E6 ) {}
+};
+
+/*! \brief Creates a vector of integers of the E12 series values.
+    *
+    */
+class E12_VALUES : public ESERIES_VALUES
+{
+public:
+    E12_VALUES() : ESERIES_VALUES( E12 ) {}
+};
+
+/*! \brief Creates a vector of integers of the E24 series values.
+    *
+    */
+class E24_VALUES : public ESERIES_VALUES
+{
+public:
+    E24_VALUES() : ESERIES_VALUES( E24 ) {}
+};
+
+/*! \brief Creates a vector of integers of the E48 series values.
+    *
+    */
+class E48_VALUES : public ESERIES_VALUES
+{
+public:
+    E48_VALUES() : ESERIES_VALUES( E48 ) {}
+};
+
+/*! \brief Creates a vector of integers of the E96 series values.
+    *
+    */
+class E96_VALUES : public ESERIES_VALUES
+{
+public:
+    E96_VALUES() : ESERIES_VALUES( E96 ) {}
+};
+
+/*! \brief Creates a vector of integers of the E192 series values.
+    *
+    */
+class E192_VALUES : public ESERIES_VALUES
+{
+public:
+    E192_VALUES() : ESERIES_VALUES( E192 ) {}
+};
+
+/*! \brief Creates a vector of doubles of the values in the requested eseries and decade.
+     *
+     * The eSeries to select is a specified using the enumeration values above.
+     * The decade is specified as an integer exponent to the base 10.
+     * To receive vales between 100 and 1000 specify 2 as the exponent as each value will
+     * be normalized to betwen 1.0 and 10.0 and then multiplied by 10^2.
+     */
+class ESERIES_IN_DECADE : public std::vector<double>
+{
+public:
+    ESERIES_IN_DECADE( int eSeries, int decadeExponent );
+};
+} // namespace ESERIES

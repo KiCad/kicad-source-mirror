@@ -17,22 +17,23 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PANEL_E_SERIES_H
-#define PANEL_E_SERIES_H
+#ifndef PANEL_R_CALCULATOR_H
+#define PANEL_R_CALCULATOR_H
 
-#include "panel_eseries_base.h"
 #include <eseries.h>
+#include "panel_r_calculator_base.h"
+#include "resistor_substitution_utils.h"
 
 class PCB_CALCULATOR_SETTINGS;
 
 
-class PANEL_E_SERIES : public PANEL_E_SERIES_BASE
+class PANEL_R_CALCULATOR : public PANEL_R_CALCULATOR_BASE
 {
 public:
-    PANEL_E_SERIES( wxWindow* parent, wxWindowID id = wxID_ANY,
-                    const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-                    long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
-    ~PANEL_E_SERIES();
+    PANEL_R_CALCULATOR( wxWindow* parent, wxWindowID id = wxID_ANY,
+                        const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+                        long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+    ~PANEL_R_CALCULATOR();
 
     // Methods from CALCULATOR_PANEL that must be overridden
     void LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg ) override;
@@ -52,7 +53,7 @@ public:
     void OnESeriesSelection( wxCommandEvent& event ) override;
 
 private:
-    E_SERIES m_eSeries;
+    RES_EQUIV_CALC m_eSeries;
 };
 
 #endif

@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2011 jean-pierre.charras
- * Copyright (C) 1992-2022 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,23 +24,23 @@
  * for more info
  */
 
-#include <calculator_panels/panel_eseries.h>
+#include <calculator_panels/panel_r_calculator.h>
 #include <pcb_calculator_settings.h>
 #include <string_utils.h>
 #include <wx/msgdlg.h>
-#include <html_window.h>
+#include <eseries.h>
+#include "resistor_substitution_utils.h"
 
-
-#include <i18n_utility.h>   // For _HKI definition in eseries_help.h
-wxString eseries_help =
-#include "eseries_help.h"
+#include <i18n_utility.h> // For _HKI definition in r_calculator_help.h
+wxString r_calculator_help =
+#include "r_calculator_help.h"
 
 
 extern double DoubleFromString( const wxString& TextValue );
 
-PANEL_E_SERIES::PANEL_E_SERIES( wxWindow* parent, wxWindowID id, const wxPoint& pos,
-                                const wxSize& size, long style, const wxString& name ) :
-        PANEL_E_SERIES_BASE( parent, id, pos, size, style, name )
+PANEL_R_CALCULATOR::PANEL_R_CALCULATOR( wxWindow* parent, wxWindowID id, const wxPoint& pos,
+                                        const wxSize& size, long style, const wxString& name ) :
+        PANEL_R_CALCULATOR_BASE( parent, id, pos, size, style, name )
 {
     m_reqResUnits->SetLabel( wxT( "kΩ" ) );
     m_exclude1Units->SetLabel( wxT( "kΩ" ) );
@@ -62,7 +62,7 @@ PANEL_E_SERIES::PANEL_E_SERIES( wxWindow* parent, wxWindowID id, const wxPoint& 
 
     // show markdown formula explanation in lower help panel
     wxString msg;
-    ConvertMarkdown2Html( wxGetTranslation( eseries_help ), msg );
+    ConvertMarkdown2Html( wxGetTranslation( r_calculator_help ), msg );
     m_panelESeriesHelp->SetPage( msg );
 
     // Needed on wxWidgets 3.0 to ensure sizers are correctly set
@@ -70,54 +70,54 @@ PANEL_E_SERIES::PANEL_E_SERIES( wxWindow* parent, wxWindowID id, const wxPoint& 
 }
 
 
-PANEL_E_SERIES::~PANEL_E_SERIES()
+PANEL_R_CALCULATOR::~PANEL_R_CALCULATOR()
 {
 }
 
 
-void PANEL_E_SERIES::ThemeChanged()
+void PANEL_R_CALCULATOR::ThemeChanged()
 {
     // Update the HTML window with the help text
     m_panelESeriesHelp->ThemeChanged();
 }
 
 
-void PANEL_E_SERIES::SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg )
+void PANEL_R_CALCULATOR::SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 {
 }
 
 
-void PANEL_E_SERIES::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
+void PANEL_R_CALCULATOR::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 {
 }
 
 
-void PANEL_E_SERIES::OnCalculateESeries( wxCommandEvent& event )
+void PANEL_R_CALCULATOR::OnCalculateESeries( wxCommandEvent& event )
 {
-    double   reqr;            // required resistor stored in local copy
+    double   reqr;   // required resistor stored in local copy
     double   error, err3 = 0;
-    wxString es, fs;          // error and formula strings
+    wxString es, fs; // error and formula strings
 
     wxBusyCursor dummy;
 
     reqr = ( 1000 * DoubleFromString( m_ResRequired->GetValue() ) );
     m_eSeries.SetRequiredValue( reqr ); // keep a local copy of required resistor value
-    m_eSeries.NewCalc();     // assume all values available
+    m_eSeries.NewCalc();                // assume all values available
     /*
      * Exclude itself. For the case, a value from the available series is found as required value,
      * the calculator assumes this value needs a replacement for the reason of being not available.
      * Two further exclude values can be entered to exclude and are skipped as not being available.
      * All values entered in KiloOhms are converted to Ohm for internal calculation
      */
-    m_eSeries.Exclude( 1000 * DoubleFromString( m_ResRequired->GetValue()));
-    m_eSeries.Exclude( 1000 * DoubleFromString( m_ResExclude1->GetValue()));
-    m_eSeries.Exclude( 1000 * DoubleFromString( m_ResExclude2->GetValue()));
+    m_eSeries.Exclude( 1000 * DoubleFromString( m_ResRequired->GetValue() ) );
+    m_eSeries.Exclude( 1000 * DoubleFromString( m_ResExclude1->GetValue() ) );
+    m_eSeries.Exclude( 1000 * DoubleFromString( m_ResExclude2->GetValue() ) );
 
     try
     {
         m_eSeries.Calculate();
     }
-    catch (std::out_of_range const& exc)
+    catch( std::out_of_range const& exc )
     {
         wxString msg;
         msg << "Internal error: " << exc.what();
@@ -126,17 +126,18 @@ void PANEL_E_SERIES::OnCalculateESeries( wxCommandEvent& event )
         return;
     }
 
-    fs = m_eSeries.GetResults()[S2R].e_name;               // show 2R solution formula string
+    fs = m_eSeries.GetResults()[RES_EQUIV_CALC::S2R].e_name; // show 2R solution formula string
     m_ESeries_Sol2R->SetValue( fs );
-    error = reqr + m_eSeries.GetResults()[S2R].e_value;    // absolute value of solution
-    error = ( reqr / error - 1 ) * 100;                    // error in percent
+    error = reqr
+            + m_eSeries.GetResults()[RES_EQUIV_CALC::S2R].e_value; // absolute value of solution
+    error = ( reqr / error - 1 ) * 100;                 // error in percent
 
     if( error )
     {
         if( std::abs( error ) < 0.01 )
             es.Printf( "<%.2f", 0.01 );
         else
-            es.Printf( "%+.2f",error);
+            es.Printf( "%+.2f", error );
     }
     else
     {
@@ -145,9 +146,9 @@ void PANEL_E_SERIES::OnCalculateESeries( wxCommandEvent& event )
 
     m_ESeriesError2R->SetValue( es );                      // anyway show 2R error string
 
-    if( m_eSeries.GetResults()[S3R].e_use )                // if 3R solution available
+    if( m_eSeries.GetResults()[RES_EQUIV_CALC::S3R].e_use ) // if 3R solution available
     {
-        err3 = reqr + m_eSeries.GetResults()[S3R].e_value; // calculate the 3R
+        err3 = reqr + m_eSeries.GetResults()[RES_EQUIV_CALC::S3R].e_value; // calculate the 3R
         err3 = ( reqr / err3 - 1 ) * 100;                  // error in percent
 
         if( err3 )
@@ -155,18 +156,18 @@ void PANEL_E_SERIES::OnCalculateESeries( wxCommandEvent& event )
             if( std::abs( err3 ) < 0.01 )
                 es.Printf( "<%.2f", 0.01 );
             else
-                es.Printf( "%+.2f",err3);
+                es.Printf( "%+.2f", err3 );
         }
         else
         {
             es = _( "Exact" );
         }
 
-        m_ESeriesError3R->SetValue( es );                 // show 3R error string
-        fs = m_eSeries.GetResults()[S3R].e_name;
-        m_ESeries_Sol3R->SetValue( fs );                  // show 3R formula string
+        m_ESeriesError3R->SetValue( es ); // show 3R error string
+        fs = m_eSeries.GetResults()[RES_EQUIV_CALC::S3R].e_name;
+        m_ESeries_Sol3R->SetValue( fs );  // show 3R formula string
     }
-    else                                                  // nothing better than 2R found
+    else                                  // nothing better than 2R found
     {
         fs = _( "Not worth using" );
         m_ESeries_Sol3R->SetValue( fs );
@@ -175,21 +176,22 @@ void PANEL_E_SERIES::OnCalculateESeries( wxCommandEvent& event )
 
     fs = wxEmptyString;
 
-    if( m_eSeries.GetResults()[S4R].e_use )                 // show 4R solution if available
+    if( m_eSeries.GetResults()[RES_EQUIV_CALC::S4R].e_use ) // show 4R solution if available
     {
-        fs = m_eSeries.GetResults()[S4R].e_name;
+        fs = m_eSeries.GetResults()[RES_EQUIV_CALC::S4R].e_name;
 
-        error = reqr + m_eSeries.GetResults()[S4R].e_value; // absolute value of solution
+        error = reqr
+                + m_eSeries.GetResults()[RES_EQUIV_CALC::S4R].e_value; // absolute value of solution
         error = ( reqr / error - 1 ) * 100;                 // error in percent
 
         if( error )
-            es.Printf( "%+.2f",error );
+            es.Printf( "%+.2f", error );
         else
             es = _( "Exact" );
 
         m_ESeriesError4R->SetValue( es );
     }
-    else                                                   // no 4R solution
+    else // no 4R solution
     {
         fs = _( "Not worth using" );
         es = wxEmptyString;
@@ -200,16 +202,16 @@ void PANEL_E_SERIES::OnCalculateESeries( wxCommandEvent& event )
 }
 
 
-void PANEL_E_SERIES::OnESeriesSelection( wxCommandEvent& event )
+void PANEL_R_CALCULATOR::OnESeriesSelection( wxCommandEvent& event )
 {
     if( event.GetEventObject() == m_e1 )
-        m_eSeries.SetSeries( E1 );
+        m_eSeries.SetSeries( ESERIES::E1 );
     else if( event.GetEventObject() == m_e3 )
-        m_eSeries.SetSeries( E3 );
+        m_eSeries.SetSeries( ESERIES::E3 );
     else if( event.GetEventObject() == m_e12 )
-        m_eSeries.SetSeries( E12 );
+        m_eSeries.SetSeries( ESERIES::E12 );
     else if( event.GetEventObject() == m_e24 )
-        m_eSeries.SetSeries( E24 );
+        m_eSeries.SetSeries( ESERIES::E24 );
     else
-        m_eSeries.SetSeries( E6 );
+        m_eSeries.SetSeries( ESERIES::E6 );
 }

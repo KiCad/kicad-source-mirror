@@ -1,15 +1,15 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "panel_eseries_base.h"
+#include "panel_r_calculator_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-PANEL_E_SERIES_BASE::PANEL_E_SERIES_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : CALCULATOR_PANEL( parent, id, pos, size, style, name )
+PANEL_R_CALCULATOR_BASE::PANEL_R_CALCULATOR_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : CALCULATOR_PANEL( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* bSizerESeries;
 	bSizerESeries = new wxBoxSizer( wxVERTICAL );
@@ -203,22 +203,22 @@ PANEL_E_SERIES_BASE::PANEL_E_SERIES_BASE( wxWindow* parent, wxWindowID id, const
 	bSizerESeries->Fit( this );
 
 	// Connect Events
-	m_e1->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_E_SERIES_BASE::OnESeriesSelection ), NULL, this );
-	m_e3->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_E_SERIES_BASE::OnESeriesSelection ), NULL, this );
-	m_e6->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_E_SERIES_BASE::OnESeriesSelection ), NULL, this );
-	m_e12->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_E_SERIES_BASE::OnESeriesSelection ), NULL, this );
-	m_e24->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_E_SERIES_BASE::OnESeriesSelection ), NULL, this );
-	m_buttonEScalculate->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_E_SERIES_BASE::OnCalculateESeries ), NULL, this );
+	m_e1->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_R_CALCULATOR_BASE::OnESeriesSelection ), NULL, this );
+	m_e3->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_R_CALCULATOR_BASE::OnESeriesSelection ), NULL, this );
+	m_e6->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_R_CALCULATOR_BASE::OnESeriesSelection ), NULL, this );
+	m_e12->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_R_CALCULATOR_BASE::OnESeriesSelection ), NULL, this );
+	m_e24->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_R_CALCULATOR_BASE::OnESeriesSelection ), NULL, this );
+	m_buttonEScalculate->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_R_CALCULATOR_BASE::OnCalculateESeries ), NULL, this );
 }
 
-PANEL_E_SERIES_BASE::~PANEL_E_SERIES_BASE()
+PANEL_R_CALCULATOR_BASE::~PANEL_R_CALCULATOR_BASE()
 {
 	// Disconnect Events
-	m_e1->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_E_SERIES_BASE::OnESeriesSelection ), NULL, this );
-	m_e3->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_E_SERIES_BASE::OnESeriesSelection ), NULL, this );
-	m_e6->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_E_SERIES_BASE::OnESeriesSelection ), NULL, this );
-	m_e12->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_E_SERIES_BASE::OnESeriesSelection ), NULL, this );
-	m_e24->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_E_SERIES_BASE::OnESeriesSelection ), NULL, this );
-	m_buttonEScalculate->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_E_SERIES_BASE::OnCalculateESeries ), NULL, this );
+	m_e1->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_R_CALCULATOR_BASE::OnESeriesSelection ), NULL, this );
+	m_e3->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_R_CALCULATOR_BASE::OnESeriesSelection ), NULL, this );
+	m_e6->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_R_CALCULATOR_BASE::OnESeriesSelection ), NULL, this );
+	m_e12->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_R_CALCULATOR_BASE::OnESeriesSelection ), NULL, this );
+	m_e24->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( PANEL_R_CALCULATOR_BASE::OnESeriesSelection ), NULL, this );
+	m_buttonEScalculate->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_R_CALCULATOR_BASE::OnCalculateESeries ), NULL, this );
 
 }

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -34,9 +34,9 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class PANEL_E_SERIES_BASE
+/// Class PANEL_R_CALCULATOR_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_E_SERIES_BASE : public CALCULATOR_PANEL
+class PANEL_R_CALCULATOR_BASE : public CALCULATOR_PANEL
 {
 	private:
 
@@ -82,9 +82,9 @@ class PANEL_E_SERIES_BASE : public CALCULATOR_PANEL
 
 	public:
 
-		PANEL_E_SERIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_R_CALCULATOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
-		~PANEL_E_SERIES_BASE();
+		~PANEL_R_CALCULATOR_BASE();
 
 };
 
