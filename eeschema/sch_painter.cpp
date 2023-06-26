@@ -1579,12 +1579,12 @@ void SCH_PAINTER::draw( const LIB_PIN* aPin, int aLayer, bool aDimmed )
     // Otherwise if both are shown pin NAMES go above and pin NUMBERS go below
     else if( showPinNames && showPinNumbers )
     {
-        size     [ABOVE] = showPinNames ? aPin->GetNameTextSize() : 0;
+        size     [ABOVE] = aPin->GetNameTextSize();
         thickness[ABOVE] = nameStrokeWidth;
         colour   [ABOVE] = getRenderColor( aPin, LAYER_PINNAM, drawingShadows, aDimmed );
         text     [ABOVE] = aPin->GetShownName();
 
-        size     [BELOW] = showPinNumbers ? aPin->GetNumberTextSize() : 0;
+        size     [BELOW] = aPin->GetNumberTextSize();
         thickness[BELOW] = numStrokeWidth;
         colour   [BELOW] = getRenderColor( aPin, LAYER_PINNUM, drawingShadows, aDimmed );
         text     [BELOW] = aPin->GetShownNumber();
