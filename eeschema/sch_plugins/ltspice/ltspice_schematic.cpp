@@ -25,11 +25,9 @@
 
 #include <sch_plugins/ltspice/ltspice_schematic.h>
 #include <sch_plugins/ltspice/ltspice_sch_parser.h>
-#include <sch_io_mgr.h>
 #include <sch_screen.h>
 #include <wx/log.h>
 #include <wx/dir.h>
-#include <kiplatform/environment.h>
 #include <wildcards_and_files_ext.h>
 #include <sch_sheet.h>
 #include <schematic.h>
@@ -164,9 +162,6 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
 
             curSheet->GetScreen()->SetFileName( m_schematic->Prj().GetProjectPath() + sheetName
                                                  + ".kicad_sch" );
-
-            // JEY TODO: do we need this?
-            //curSheet->addInstance( sheetPath );
         }
         else
         {
@@ -205,10 +200,10 @@ void LTSPICE_SCHEMATIC::GetAscAndAsyFilePaths( std::map<wxString, wxString>& aMa
                                                std::map<wxString, wxString>& aMapOfAsyFiles,
                                                const wxFileName& parentFileName )
 {
-    wxString      ltSpiceFolder = KIPLATFORM::ENV::GetDocumentsPath() + wxS( "/LTspiceXVII" );
-    wxString      cmpFolder = ltSpiceFolder + wxS( "/lib/cmp/" );
-    wxString      subFolder = ltSpiceFolder + wxS( "/lib/sub/" );
-    wxString      symFolder = ltSpiceFolder + wxS( "/lib/sym/" );
+    wxString      ltSpiceFolder = m_ltspiceDataDir.GetFullPath();
+    wxString      cmpFolder = ltSpiceFolder + wxS( "lib/cmp/" );
+    wxString      subFolder = ltSpiceFolder + wxS( "lib/sub/" );
+    wxString      symFolder = ltSpiceFolder + wxS( "lib/sym/" );
     wxArrayString fileList;
 
     wxDir::GetAllFiles( ltSpiceFolder, &fileList );
@@ -329,10 +324,7 @@ void LTSPICE_SCHEMATIC::tokensSizeRangeCheck( size_t aActualSize, int aExpectedM
 
 void LTSPICE_SCHEMATIC::aggregateAttributeValue( wxArrayString& aTokens, int aIndex )
 {
-    /**
-     *  Merges a value which is across multiple tokens into one token appended with spaces in
-     *  between.
-     */
+    // Merges a value which is across multiple tokens into one token with spaces in between.
     for( int i = aIndex + 1; i < (int) aTokens.GetCount(); i++ )
         aTokens[ aIndex ] += " " + aTokens[i];
 }
@@ -1038,7 +1030,6 @@ std::vector<LTSPICE_SCHEMATIC::LT_ASC> LTSPICE_SCHEMATIC::StructureBuilder()
             else if( element == "VERSION" )
             {
                 wxString versionNumber = tokens[1];
-
                 ascFile.Version = integerCheck( versionNumber, lineNumber, fileName );
             }
 

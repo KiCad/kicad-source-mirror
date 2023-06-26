@@ -27,8 +27,6 @@
 #include <sch_plugins/ltspice/ltspice_sch_parser.h>
 #include <sch_plugins/ltspice/ltspice_schematic.h>
 #include <sch_io_mgr.h>
-#include <base_units.h>
-#include <core/kicad_algo.h>
 #include <schematic.h>
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
@@ -38,7 +36,6 @@
 #include <sch_edit_frame.h>
 #include <sch_shape.h>
 #include <sch_bus_entry.h>
-#include <kiplatform/environment.h>
 
 
 void LTSPICE_SCH_PARSER::Parse( SCH_SHEET_PATH* aSheet,
@@ -77,8 +74,7 @@ void LTSPICE_SCH_PARSER::Parse( SCH_SHEET_PATH* aSheet,
 
 void LTSPICE_SCH_PARSER::readIncludes( std::vector<LTSPICE_SCHEMATIC::LT_ASC>& outLT_ASCs )
 {
-    static wxString ltSubDir = KIPLATFORM::ENV::GetDocumentsPath() + wxS( "/LTspiceXVII/lib/sub/" );
-
+    wxString ltSubDir = m_lt_schematic->GetLTspiceDataDir().GetFullPath() + wxS( "lib/sub/" );
     wxString path;
 
     for( const LTSPICE_SCHEMATIC::LT_ASC& asc : outLT_ASCs )
@@ -349,22 +345,14 @@ VECTOR2I LTSPICE_SCH_PARSER::ToKicadFontSize( int aLTFontSize )
                 return VECTOR2I( schIUScale.MilsToIU( mils ), schIUScale.MilsToIU( mils ) );
             };
 
-    if( aLTFontSize == 1 )
-        return MILS_SIZE( 36 );
-    else if( aLTFontSize == 2 )
-        return MILS_SIZE( 42 );
-    else if( aLTFontSize == 3 )
-        return MILS_SIZE( 50 );
-    else if( aLTFontSize == 4 )
-        return MILS_SIZE( 60 );
-    else if( aLTFontSize == 5 )
-        return MILS_SIZE( 72 );
-    else if( aLTFontSize == 6 )
-        return MILS_SIZE( 88 );
-    else if( aLTFontSize == 7 )
-        return MILS_SIZE( 108 );
-    else
-        return ToKicadFontSize( 2 );
+    if( aLTFontSize == 1 )      return MILS_SIZE( 36 );
+    else if( aLTFontSize == 2 ) return MILS_SIZE( 42 );
+    else if( aLTFontSize == 3 ) return MILS_SIZE( 50 );
+    else if( aLTFontSize == 4 ) return MILS_SIZE( 60 );
+    else if( aLTFontSize == 5 ) return MILS_SIZE( 72 );
+    else if( aLTFontSize == 6 ) return MILS_SIZE( 88 );
+    else if( aLTFontSize == 7 ) return MILS_SIZE( 108 );
+    else                        return ToKicadFontSize( 2 );
 }
 
 
@@ -903,7 +891,7 @@ SCH_LABEL_BASE* LTSPICE_SCH_PARSER::CreateSCH_LABEL( KICAD_T aType, const VECTOR
 void LTSPICE_SCH_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol,
                                        SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheet )
 {
-    wxString libPath = KIPLATFORM::ENV::GetDocumentsPath() + wxS( "/LTspiceXVII/lib/" );
+    wxString libPath = m_lt_schematic->GetLTspiceDataDir().GetFullPath() + wxS( "lib/" );
     wxString symbolName = aLTSymbol.Name.Upper();
     wxString type = aLTSymbol.SymAttributes[ wxS( "TYPE" ) ].Upper();
     wxString prefix = aLTSymbol.SymAttributes[ wxS( "PREFIX" ) ].Upper();

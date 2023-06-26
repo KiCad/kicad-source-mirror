@@ -102,6 +102,20 @@ wxString KIPLATFORM::ENV::GetUserConfigPath()
 }
 
 
+wxString KIPLATFORM::ENV::GetUserDataPath()
+{
+    // If called by a python script in stand-alone (outside KiCad), wxStandardPaths::Get()
+    // complains about not existing app. so use a dummy app
+    if( wxTheApp ==  nullptr )
+    {
+        wxApp dummy;
+        return wxStandardPaths::Get().GetUserDataDir();
+    }
+
+    return wxStandardPaths::Get().GetUserDataDir();
+}
+
+
 wxString KIPLATFORM::ENV::GetUserCachePath()
 {
     // Unfortunately AppData/Local is the closest analog to "Cache" directories of other platforms

@@ -66,9 +66,6 @@ class SCH_SHAPE;
 class LTSPICE_SCH_PARSER
 {
 public:
-    // Size of tiny net labels which none present in original design
-    const int SMALL_LABEL_SIZE = KiROUND( (double) SCH_IU_PER_MM * 0.4 );
-
     explicit LTSPICE_SCH_PARSER( const wxString& aFilename,  LTSPICE_SCHEMATIC* aLTSchematic ) :
             m_lt_schematic( aLTSchematic ),
             m_powerSymbolIndex( 0 )
@@ -279,18 +276,8 @@ public:
     void CreateCircle( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex, SCH_SHEET_PATH* aSheet );
 
 private:
-    /**
-     * Method for setting Text Justification.
-     *
-     * @param aLineWidth object representing line width from ltspice.
-     */
     int getLineWidth( const LTSPICE_SCHEMATIC::LINEWIDTH& aLineWidth );
 
-    /**
-     * Method to get line Style For kicad.
-     *
-     * @param aLineStyle lineStyle from ltspice.
-     */
     PLOT_DASH_TYPE getLineStyle( const LTSPICE_SCHEMATIC::LINESTYLE& aLineStyle );
 
     STROKE_PARAMS getStroke( const LTSPICE_SCHEMATIC::LINEWIDTH& aLineWidth,
@@ -300,7 +287,6 @@ private:
 
 private:
     LTSPICE_SCHEMATIC*           m_lt_schematic;
-    wxFileName                   m_libraryFileName;
     VECTOR2I                     m_originOffset;
     std::map<wxString, wxString> m_includes;
     int                          m_powerSymbolIndex;

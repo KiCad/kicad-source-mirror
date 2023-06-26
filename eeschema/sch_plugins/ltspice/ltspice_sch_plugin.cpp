@@ -26,8 +26,7 @@
 #include <schematic.h>
 #include <sch_sheet.h>
 #include <sch_screen.h>
-#include <sch_line.h>
-#include <wildcards_and_files_ext.h>
+#include <kiplatform/environment.h>
 
 /**
  * @brief schematic PLUGIN for Ltspice (*.asc) and (.asy) format.
@@ -88,7 +87,17 @@ SCH_SHEET* SCH_LTSPICE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSche
 
     wxCHECK_MSG( libTable, nullptr, "Could not load symbol lib table." );
 
-    LTSPICE_SCHEMATIC               ascFile( aFileName );
+    wxFileName ltspiceDataDir( KIPLATFORM::ENV::GetUserDataPath(), wxEmptyString );
+    ltspiceDataDir.RemoveLastDir();        // "kicad"
+    ltspiceDataDir.AppendDir( wxS( "LTspice" ) );
+
+    if( !ltspiceDataDir.DirExists() )
+    {
+        ltspiceDataDir = wxFileName( KIPLATFORM::ENV::GetDocumentsPath(), wxEmptyString );
+        ltspiceDataDir.AppendDir( wxS( "LTspiceXVII" ) );
+    }
+
+    LTSPICE_SCHEMATIC               ascFile( aFileName, ltspiceDataDir, nullptr, nullptr );
     SCH_PLUGIN::SCH_PLUGIN_RELEASER sch_plugin;
 
     sch_plugin.set( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );

@@ -45,7 +45,6 @@ struct LTSPICE_FILE
             ParentIndex( 0 ),
             Sheet( nullptr ),
             Screen( nullptr )
-
     { }
 
     bool operator<( const LTSPICE_FILE& t ) const
@@ -276,17 +275,13 @@ public:
         BOX2I                  BoundingBox;
     };
 
-    explicit LTSPICE_SCHEMATIC( const wxString& aFilename, REPORTER* aReporter = nullptr,
-                                PROGRESS_REPORTER* aProgressReporter = nullptr )
-    {
-        m_schematic = nullptr;
-        m_rootSheet = nullptr;
-        m_plugin = nullptr;
-        m_designCenter.x = 0;
-        m_designCenter.y = 0;
-        m_reporter = aReporter;
-        m_progressReporter = aProgressReporter;
-    }
+    explicit LTSPICE_SCHEMATIC( const wxString& aFilename, const wxFileName& aLTspiceDataDir,
+                                REPORTER* aReporter, PROGRESS_REPORTER* aProgressReporter ) :
+            m_reporter( aReporter ),
+            m_schematic( nullptr ),
+            m_ltspiceDataDir( aLTspiceDataDir ),
+            m_progressReporter( aProgressReporter )
+    {}
 
     ~LTSPICE_SCHEMATIC() {}
 
@@ -352,6 +347,9 @@ public:
 
     LT_SYMBOL SymbolBuilder( const wxString& aAscFileName, const wxString& aAsyFileContent,
                              LT_ASC& aAscFile );
+
+    const wxFileName& GetLTspiceDataDir() { return m_ltspiceDataDir; }
+
 private:
     /**
      * Join value present across multiple tokens into one
@@ -432,15 +430,10 @@ private:
     static SYMBOLTYPE getSymbolType( const wxString& aValue );
 
 private:
-    REPORTER*                        m_reporter;
-    SCHEMATIC*                       m_schematic;
-    SCH_SHEET*                       m_rootSheet;
-    SCH_PLUGIN::SCH_PLUGIN_RELEASER* m_plugin;
-    wxFileName                       m_libraryFileName;
-    wxPoint                          m_designCenter;      //< Used for calculating the required
-                                                          //< offset to apply to the LTspice design
-                                                          //< so that it fits in KiCad canvas
-    PROGRESS_REPORTER*               m_progressReporter;  // optional; may be nullptr
+    REPORTER*            m_reporter;
+    SCHEMATIC*           m_schematic;
+    wxFileName           m_ltspiceDataDir;
+    PROGRESS_REPORTER*   m_progressReporter;  // optional; may be nullptr
 
     std::map<wxString, std::map<wxString, wxString>> m_fileCache;
 };
