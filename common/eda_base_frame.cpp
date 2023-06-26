@@ -499,6 +499,22 @@ void EDA_BASE_FRAME::ReCreateMenuBar()
 }
 
 
+void EDA_BASE_FRAME::SetMenuBar( wxMenuBar* menu_bar )
+{
+    wxFrame::SetMenuBar( menu_bar );
+
+    // Move Help menu back to end of menubar
+
+    int pos = GetMenuBar()->FindMenu( _( "&Help" ) + wxS( " " ) );
+
+    if( pos != wxNOT_FOUND )
+    {
+        wxMenu* helpMenu = GetMenuBar()->Remove( pos );
+        GetMenuBar()->Append( helpMenu, _( "&Help" ) + wxS( " " ) );
+    }
+}
+
+
 void EDA_BASE_FRAME::AddStandardHelpMenu( wxMenuBar* aMenuBar )
 {
     COMMON_CONTROL* commonControl = m_toolManager->GetTool<COMMON_CONTROL>();
@@ -516,6 +532,7 @@ void EDA_BASE_FRAME::AddStandardHelpMenu( wxMenuBar* aMenuBar )
 
     // Trailing space keeps OSX from hijacking our menu (and disabling everything in it).
     aMenuBar->Append( helpMenu, _( "&Help" ) + wxS( " " ) );
+    helpMenu->wxMenu::SetTitle( _( "&Help" ) + wxS( " " ) );
 }
 
 

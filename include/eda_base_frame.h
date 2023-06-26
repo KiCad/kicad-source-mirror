@@ -439,6 +439,8 @@ public:
      */
     void ReCreateMenuBar();
 
+    void SetMenuBar( wxMenuBar *menu_bar ) override;
+
     /**
      * Adds the standard KiCad help menu to the menubar.
      */
