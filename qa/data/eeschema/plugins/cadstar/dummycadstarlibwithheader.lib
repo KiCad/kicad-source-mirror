@@ -1,0 +1,2334 @@
+# FORMAT 32
++N0 'root'
++N1 N0 'PartName0'&
+'PartName1'&
+'PartName2'&
+'PartName3'&
+'PartName4'&
+'PartName5'&
+'PartName6'&
+'PartName7'&
+'PartName8'&
+'PartName9'&
+'PartName10'&
+'PartName11'&
+'PartName12'&
+'PartName13'&
+'PartName14'&
+'PartName15'&
+'PartName16'&
+'PartName17'&
+'PartName18'&
+'PartName19'&
+'PartName20'&
+'PartName21'&
+'PartName22'&
+'PartName23'&
+'PartName24'&
+'PartName25'&
+'PartName26'&
+'PartName27'&
+'PartName28'&
+'PartName29'&
+'PartName30'&
+'PartName31'&
+'PartName32'&
+'PartName33'&
+'PartName34'&
+'PartName35'&
+'PartName36'&
+'PartName37'&
+'PartName38'&
+'PartName39'&
+'PartName40'&
+'PartName41'&
+'PartName42'&
+'PartName43'&
+'PartName44'&
+'PartName45'&
+'PartName46'&
+'PartName47'&
+'PartName48'&
+'PartName49'&
+'PartName50'&
+'PartName51'&
+'PartName52'&
+'PartName53'&
+'PartName54'&
+'PartName55'&
+'PartName56'&
+'PartName57'&
+'PartName58'&
+'PartName59'&
+'PartName60'&
+'PartName61'&
+'PartName62'&
+'PartName63'&
+'PartName64'&
+'PartName65'&
+'PartName66'&
+'PartName67'&
+'PartName68'&
+'PartName69'&
+'PartName70'&
+'PartName71'&
+'PartName72'&
+'PartName73'&
+'PartName74'&
+'PartName75'&
+'PartName76'&
+'PartName77'&
+'PartName78'&
+'PartName79'&
+'PartName80'&
+'PartName81'&
+'PartName82'&
+'PartName83'&
+'PartName84'&
+'PartName85'&
+'PartName86'&
+'PartName87'&
+'PartName88'&
+'PartName89'&
+'PartName90'&
+'PartName91'&
+'PartName92'&
+'PartName93'&
+'PartName94'&
+'PartName95'&
+'PartName96'&
+'PartName97'&
+'PartName98'&
+'PartName99'&
+
+.PartName0 (0) :2 ;Part 0 Description
+FOOTPRINT0 (variant0)
+*VALUE 0 uH
+*DFN PartName0
+*STM L
+*MXP 10
+*SPI (PartName0) 0uH
+*PAC (PartName0) Acceptance0
+*UserFieldpartNo 0
+*"UserFieldpartNoCreated by" Person0
+$"SCH val1" (val0)
+$!SCH val2 (readOnly0)
+%"PCB val1" (val0)
+%!PCB val2 (readOnly0)
+~"Part val1" (val0)
+~!Part val2 (readOnly0)
+@SCH and PCB val1 (val0)
+@!SCH and PCB val2 (readOnly0)
+Symbol0
+1.0 2.0
+/GND 3.0
+
+.PartName1 (5) :2 ;Part 1 Description
+FOOTPRINT1 (variant5)
+*VALUE 1 uH
+*DFN PartName1
+*NGS
+*NPV
+*STM L
+*MXP 11
+*SPI (PartName1) 1uH
+*PAC (PartName1) Acceptance1
+*UserFieldpartNo 5
+*"UserFieldpartNoCreated by" Person1
+$"SCH val1" (val1)
+$!SCH val2 (readOnly1)
+%"PCB val1" (val1)
+@!SCH and PCB val2 (readOnly1)
+%!PCB val2 (readOnly1)
+@SCH and PCB val1 (val1)
+~!Part val2 (readOnly1)
+~"Part val1" (val1)
+Symbol1
+1.0 2.0
+/GND 3.0
+
+.PartName2 (10) :2 ;Part 2 Description
+FOOTPRINT2 (variant10)
+*VALUE 2 uH
+*DFN PartName2
+*STM L
+*MXP 12
+*SPI (PartName2) 2uH
+*PAC (PartName2) Acceptance2
+*UserFieldpartNo 10
+*"UserFieldpartNoCreated by" Person2
+$"SCH val1" (val2)
+$!SCH val2 (readOnly2)
+%!PCB val2 (readOnly2)
+@SCH and PCB val1 (val2)
+~"Part val1" (val2)
+@!SCH and PCB val2 (readOnly2)
+%"PCB val1" (val2)
+~!Part val2 (readOnly2)
+Symbol2
+1.0 2.0
+/GND 3.0
+
+.PartName3 (15) :2 ;Part 3 Description
+FOOTPRINT3 (variant15)
+*VALUE 3 uH
+*DFN PartName3
+*STM L
+*MXP 13
+*SPI (PartName3) 3uH
+*PAC (PartName3) Acceptance3
+*UserFieldpartNo 15
+*"UserFieldpartNoCreated by" Person3
+$"SCH val1" (val3)
+$!SCH val2 (readOnly3)
+~"Part val1" (val3)
+~!Part val2 (readOnly3)
+@SCH and PCB val1 (val3)
+%!PCB val2 (readOnly3)
+@!SCH and PCB val2 (readOnly3)
+%"PCB val1" (val3)
+Symbol3
+1.0 2.0
+/GND 3.0
+
+.PartName4 (20) :2 ;Part 4 Description
+FOOTPRINT4 (variant20)
+*VALUE 4 uH
+*DFN PartName4
+*STM L
+*MXP 14
+*SPI (PartName4) 4uH
+*PAC (PartName4) Acceptance4
+*UserFieldpartNo 20
+*"UserFieldpartNoCreated by" Person4
+$"SCH val1" (val4)
+$!SCH val2 (readOnly4)
+~!Part val2 (readOnly4)
+%!PCB val2 (readOnly4)
+@!SCH and PCB val2 (readOnly4)
+~"Part val1" (val4)
+%"PCB val1" (val4)
+@SCH and PCB val1 (val4)
+Symbol4
+1.0 2.0
+/GND 3.0
+
+.PartName5 (25) :2 ;Part 5 Description
+FOOTPRINT5 (variant25)
+*VALUE 5 uH
+*DFN PartName5
+*STM L
+*MXP 15
+*SPI (PartName5) 5uH
+*PAC (PartName5) Acceptance5
+*UserFieldpartNo 25
+*"UserFieldpartNoCreated by" Person5
+$"SCH val1" (val5)
+$!SCH val2 (readOnly5)
+@SCH and PCB val1 (val5)
+%!PCB val2 (readOnly5)
+%"PCB val1" (val5)
+~"Part val1" (val5)
+@!SCH and PCB val2 (readOnly5)
+~!Part val2 (readOnly5)
+Symbol5
+1.0 2.0
+/GND 3.0
+
+.PartName6 (30) :2 ;Part 6 Description
+FOOTPRINT6 (variant30)
+*VALUE 6 uH
+*DFN PartName6
+*NPV
+*STM L
+*MXP 16
+*SPI (PartName6) 6uH
+*PAC (PartName6) Acceptance6
+*UserFieldpartNo 30
+*"UserFieldpartNoCreated by" Person6
+$"SCH val1" (val6)
+$!SCH val2 (readOnly6)
+@!SCH and PCB val2 (readOnly6)
+%"PCB val1" (val6)
+~"Part val1" (val6)
+%!PCB val2 (readOnly6)
+~!Part val2 (readOnly6)
+@SCH and PCB val1 (val6)
+Symbol6
+1.0 2.0
+/GND 3.0
+
+.PartName7 (35) :2 ;Part 7 Description
+FOOTPRINT7 (variant35)
+*VALUE 7 uH
+*DFN PartName7
+*STM L
+*MXP 17
+*SPI (PartName7) 7uH
+*PAC (PartName7) Acceptance7
+*UserFieldpartNo 35
+*"UserFieldpartNoCreated by" Person7
+$"SCH val1" (val7)
+$!SCH val2 (readOnly7)
+@!SCH and PCB val2 (readOnly7)
+@SCH and PCB val1 (val7)
+%!PCB val2 (readOnly7)
+~!Part val2 (readOnly7)
+~"Part val1" (val7)
+%"PCB val1" (val7)
+Symbol7
+1.0 2.0
+/GND 3.0
+
+.PartName8 (40) :2 ;Part 8 Description
+FOOTPRINT8 (variant40)
+*VALUE 8 uH
+*DFN PartName8
+*STM L
+*MXP 18
+*SPI (PartName8) 8uH
+*PAC (PartName8) Acceptance8
+*UserFieldpartNo 40
+*"UserFieldpartNoCreated by" Person8
+$"SCH val1" (val8)
+%"PCB val1" (val8)
+$!SCH val2 (readOnly8)
+@SCH and PCB val1 (val8)
+~!Part val2 (readOnly8)
+@!SCH and PCB val2 (readOnly8)
+%!PCB val2 (readOnly8)
+~"Part val1" (val8)
+Symbol8
+1.0 2.0
+/GND 3.0
+
+.PartName9 (45) :2 ;Part 9 Description
+FOOTPRINT9 (variant45)
+*VALUE 9 uH
+*DFN PartName9
+*STM L
+*MXP 19
+*SPI (PartName9) 9uH
+*PAC (PartName9) Acceptance9
+*UserFieldpartNo 45
+*"UserFieldpartNoCreated by" Person9
+$"SCH val1" (val9)
+%"PCB val1" (val9)
+%!PCB val2 (readOnly9)
+~!Part val2 (readOnly9)
+@!SCH and PCB val2 (readOnly9)
+~"Part val1" (val9)
+@SCH and PCB val1 (val9)
+$!SCH val2 (readOnly9)
+Symbol9
+1.0 2.0
+/GND 3.0
+
+.PartName10 (50) :2 ;Part 10 Description
+FOOTPRINT10 (variant50)
+*VALUE 10 uH
+*DFN PartName10
+*STM L
+*MXP 20
+*SPI (PartName10) 10uH
+*PAC (PartName10) Acceptance10
+*UserFieldpartNo 50
+*"UserFieldpartNoCreated by" Person10
+$"SCH val1" (val10)
+%"PCB val1" (val10)
+~"Part val1" (val10)
+~!Part val2 (readOnly10)
+$!SCH val2 (readOnly10)
+@SCH and PCB val1 (val10)
+%!PCB val2 (readOnly10)
+@!SCH and PCB val2 (readOnly10)
+Symbol10
+1.0 2.0
+/GND 3.0
+
+.PartName11 (55) :2 ;Part 11 Description
+FOOTPRINT11 (variant55)
+*VALUE 11 uH
+*DFN PartName11
+*NGS
+*NPV
+*STM L
+*MXP 21
+*SPI (PartName11) 11uH
+*PAC (PartName11) Acceptance11
+*UserFieldpartNo 55
+*"UserFieldpartNoCreated by" Person11
+$"SCH val1" (val11)
+%"PCB val1" (val11)
+~!Part val2 (readOnly11)
+%!PCB val2 (readOnly11)
+~"Part val1" (val11)
+$!SCH val2 (readOnly11)
+@!SCH and PCB val2 (readOnly11)
+@SCH and PCB val1 (val11)
+Symbol11
+1.0 2.0
+/GND 3.0
+
+.PartName12 (60) :2 ;Part 12 Description
+FOOTPRINT12 (variant60)
+*VALUE 12 uH
+*DFN PartName12
+*STM L
+*MXP 22
+*SPI (PartName12) 12uH
+*PAC (PartName12) Acceptance12
+*UserFieldpartNo 60
+*"UserFieldpartNoCreated by" Person12
+$"SCH val1" (val12)
+%"PCB val1" (val12)
+@SCH and PCB val1 (val12)
+$!SCH val2 (readOnly12)
+~!Part val2 (readOnly12)
+%!PCB val2 (readOnly12)
+~"Part val1" (val12)
+@!SCH and PCB val2 (readOnly12)
+Symbol12
+1.0 2.0
+/GND 3.0
+
+.PartName13 (65) :2 ;Part 13 Description
+FOOTPRINT13 (variant65)
+*VALUE 13 uH
+*DFN PartName13
+*STM L
+*MXP 23
+*SPI (PartName13) 13uH
+*PAC (PartName13) Acceptance13
+*UserFieldpartNo 65
+*"UserFieldpartNoCreated by" Person13
+$"SCH val1" (val13)
+%"PCB val1" (val13)
+@SCH and PCB val1 (val13)
+@!SCH and PCB val2 (readOnly13)
+~"Part val1" (val13)
+~!Part val2 (readOnly13)
+%!PCB val2 (readOnly13)
+$!SCH val2 (readOnly13)
+Symbol13
+1.0 2.0
+/GND 3.0
+
+.PartName14 (70) :2 ;Part 14 Description
+FOOTPRINT14 (variant70)
+*VALUE 14 uH
+*DFN PartName14
+*STM L
+*MXP 24
+*SPI (PartName14) 14uH
+*PAC (PartName14) Acceptance14
+*UserFieldpartNo 70
+*"UserFieldpartNoCreated by" Person14
+$"SCH val1" (val14)
+%"PCB val1" (val14)
+@!SCH and PCB val2 (readOnly14)
+~!Part val2 (readOnly14)
+@SCH and PCB val1 (val14)
+~"Part val1" (val14)
+$!SCH val2 (readOnly14)
+%!PCB val2 (readOnly14)
+Symbol14
+1.0 2.0
+/GND 3.0
+
+.PartName15 (75) :2 ;Part 15 Description
+FOOTPRINT15 (variant75)
+*VALUE 15 uH
+*DFN PartName15
+*STM L
+*MXP 25
+*SPI (PartName15) 15uH
+*PAC (PartName15) Acceptance15
+*UserFieldpartNo 75
+*"UserFieldpartNoCreated by" Person15
+$"SCH val1" (val15)
+%!PCB val2 (readOnly15)
+$!SCH val2 (readOnly15)
+@SCH and PCB val1 (val15)
+%"PCB val1" (val15)
+~!Part val2 (readOnly15)
+@!SCH and PCB val2 (readOnly15)
+~"Part val1" (val15)
+Symbol15
+1.0 2.0
+/GND 3.0
+
+.PartName16 (80) :2 ;Part 16 Description
+FOOTPRINT16 (variant80)
+*VALUE 16 uH
+*DFN PartName16
+*NPV
+*STM L
+*MXP 26
+*SPI (PartName16) 16uH
+*PAC (PartName16) Acceptance16
+*UserFieldpartNo 80
+*"UserFieldpartNoCreated by" Person16
+$"SCH val1" (val16)
+%!PCB val2 (readOnly16)
+%"PCB val1" (val16)
+~!Part val2 (readOnly16)
+~"Part val1" (val16)
+@SCH and PCB val1 (val16)
+$!SCH val2 (readOnly16)
+@!SCH and PCB val2 (readOnly16)
+Symbol16
+1.0 2.0
+/GND 3.0
+
+.PartName17 (85) :2 ;Part 17 Description
+FOOTPRINT17 (variant85)
+*VALUE 17 uH
+*DFN PartName17
+*STM L
+*MXP 27
+*SPI (PartName17) 17uH
+*PAC (PartName17) Acceptance17
+*UserFieldpartNo 85
+*"UserFieldpartNoCreated by" Person17
+$"SCH val1" (val17)
+%!PCB val2 (readOnly17)
+~"Part val1" (val17)
+%"PCB val1" (val17)
+@SCH and PCB val1 (val17)
+$!SCH val2 (readOnly17)
+@!SCH and PCB val2 (readOnly17)
+~!Part val2 (readOnly17)
+Symbol17
+1.0 2.0
+/GND 3.0
+
+.PartName18 (90) :2 ;Part 18 Description
+FOOTPRINT18 (variant90)
+*VALUE 18 uH
+*DFN PartName18
+*STM L
+*MXP 28
+*SPI (PartName18) 18uH
+*PAC (PartName18) Acceptance18
+*UserFieldpartNo 90
+*"UserFieldpartNoCreated by" Person18
+$"SCH val1" (val18)
+%!PCB val2 (readOnly18)
+~!Part val2 (readOnly18)
+$!SCH val2 (readOnly18)
+@!SCH and PCB val2 (readOnly18)
+%"PCB val1" (val18)
+~"Part val1" (val18)
+@SCH and PCB val1 (val18)
+Symbol18
+1.0 2.0
+/GND 3.0
+
+.PartName19 (95) :2 ;Part 19 Description
+FOOTPRINT19 (variant95)
+*VALUE 19 uH
+*DFN PartName19
+*STM L
+*MXP 29
+*SPI (PartName19) 19uH
+*PAC (PartName19) Acceptance19
+*UserFieldpartNo 95
+*"UserFieldpartNoCreated by" Person19
+$"SCH val1" (val19)
+%!PCB val2 (readOnly19)
+~!Part val2 (readOnly19)
+@!SCH and PCB val2 (readOnly19)
+@SCH and PCB val1 (val19)
+~"Part val1" (val19)
+%"PCB val1" (val19)
+$!SCH val2 (readOnly19)
+Symbol19
+1.0 2.0
+/GND 3.0
+
+.PartName20 (100) :2 ;Part 20 Description
+FOOTPRINT20 (variant100)
+*VALUE 20 uH
+*DFN PartName20
+*STM L
+*MXP 30
+*SPI (PartName20) 20uH
+*PAC (PartName20) Acceptance20
+*UserFieldpartNo 100
+*"UserFieldpartNoCreated by" Person20
+$"SCH val1" (val20)
+%!PCB val2 (readOnly20)
+@SCH and PCB val1 (val20)
+@!SCH and PCB val2 (readOnly20)
+$!SCH val2 (readOnly20)
+~!Part val2 (readOnly20)
+%"PCB val1" (val20)
+~"Part val1" (val20)
+Symbol20
+1.0 2.0
+/GND 3.0
+
+.PartName21 (105) :2 ;Part 21 Description
+FOOTPRINT21 (variant105)
+*VALUE 21 uH
+*DFN PartName21
+*NGS
+*NPV
+*STM L
+*MXP 31
+*SPI (PartName21) 21uH
+*PAC (PartName21) Acceptance21
+*UserFieldpartNo 105
+*"UserFieldpartNoCreated by" Person21
+$"SCH val1" (val21)
+%!PCB val2 (readOnly21)
+@!SCH and PCB val2 (readOnly21)
+~!Part val2 (readOnly21)
+%"PCB val1" (val21)
+~"Part val1" (val21)
+@SCH and PCB val1 (val21)
+$!SCH val2 (readOnly21)
+Symbol21
+1.0 2.0
+/GND 3.0
+
+.PartName22 (110) :2 ;Part 22 Description
+FOOTPRINT22 (variant110)
+*VALUE 22 uH
+*DFN PartName22
+*STM L
+*MXP 32
+*SPI (PartName22) 22uH
+*PAC (PartName22) Acceptance22
+*UserFieldpartNo 110
+*"UserFieldpartNoCreated by" Person22
+$"SCH val1" (val22)
+~"Part val1" (val22)
+$!SCH val2 (readOnly22)
+~!Part val2 (readOnly22)
+@SCH and PCB val1 (val22)
+%!PCB val2 (readOnly22)
+%"PCB val1" (val22)
+@!SCH and PCB val2 (readOnly22)
+Symbol22
+1.0 2.0
+/GND 3.0
+
+.PartName23 (115) :2 ;Part 23 Description
+FOOTPRINT23 (variant115)
+*VALUE 23 uH
+*DFN PartName23
+*STM L
+*MXP 33
+*SPI (PartName23) 23uH
+*PAC (PartName23) Acceptance23
+*UserFieldpartNo 115
+*"UserFieldpartNoCreated by" Person23
+$"SCH val1" (val23)
+~"Part val1" (val23)
+%"PCB val1" (val23)
+%!PCB val2 (readOnly23)
+@!SCH and PCB val2 (readOnly23)
+$!SCH val2 (readOnly23)
+@SCH and PCB val1 (val23)
+~!Part val2 (readOnly23)
+Symbol23
+1.0 2.0
+/GND 3.0
+
+.PartName24 (120) :2 ;Part 24 Description
+FOOTPRINT24 (variant120)
+*VALUE 24 uH
+*DFN PartName24
+*STM L
+*MXP 34
+*SPI (PartName24) 24uH
+*PAC (PartName24) Acceptance24
+*UserFieldpartNo 120
+*"UserFieldpartNoCreated by" Person24
+$"SCH val1" (val24)
+~"Part val1" (val24)
+%!PCB val2 (readOnly24)
+%"PCB val1" (val24)
+$!SCH val2 (readOnly24)
+~!Part val2 (readOnly24)
+@SCH and PCB val1 (val24)
+@!SCH and PCB val2 (readOnly24)
+Symbol24
+1.0 2.0
+/GND 3.0
+
+.PartName25 (125) :2 ;Part 25 Description
+FOOTPRINT25 (variant125)
+*VALUE 25 uH
+*DFN PartName25
+*STM L
+*MXP 35
+*SPI (PartName25) 25uH
+*PAC (PartName25) Acceptance25
+*UserFieldpartNo 125
+*"UserFieldpartNoCreated by" Person25
+$"SCH val1" (val25)
+~"Part val1" (val25)
+~!Part val2 (readOnly25)
+$!SCH val2 (readOnly25)
+%"PCB val1" (val25)
+@!SCH and PCB val2 (readOnly25)
+@SCH and PCB val1 (val25)
+%!PCB val2 (readOnly25)
+Symbol25
+1.0 2.0
+/GND 3.0
+
+.PartName26 (130) :2 ;Part 26 Description
+FOOTPRINT26 (variant130)
+*VALUE 26 uH
+*DFN PartName26
+*NPV
+*STM L
+*MXP 36
+*SPI (PartName26) 26uH
+*PAC (PartName26) Acceptance26
+*UserFieldpartNo 130
+*"UserFieldpartNoCreated by" Person26
+$"SCH val1" (val26)
+~"Part val1" (val26)
+~!Part val2 (readOnly26)
+@!SCH and PCB val2 (readOnly26)
+%"PCB val1" (val26)
+@SCH and PCB val1 (val26)
+$!SCH val2 (readOnly26)
+%!PCB val2 (readOnly26)
+Symbol26
+1.0 2.0
+/GND 3.0
+
+.PartName27 (135) :2 ;Part 27 Description
+FOOTPRINT27 (variant135)
+*VALUE 27 uH
+*DFN PartName27
+*STM L
+*MXP 37
+*SPI (PartName27) 27uH
+*PAC (PartName27) Acceptance27
+*UserFieldpartNo 135
+*"UserFieldpartNoCreated by" Person27
+$"SCH val1" (val27)
+~"Part val1" (val27)
+@SCH and PCB val1 (val27)
+~!Part val2 (readOnly27)
+%!PCB val2 (readOnly27)
+%"PCB val1" (val27)
+@!SCH and PCB val2 (readOnly27)
+$!SCH val2 (readOnly27)
+Symbol27
+1.0 2.0
+/GND 3.0
+
+.PartName28 (140) :2 ;Part 28 Description
+FOOTPRINT28 (variant140)
+*VALUE 28 uH
+*DFN PartName28
+*STM L
+*MXP 38
+*SPI (PartName28) 28uH
+*PAC (PartName28) Acceptance28
+*UserFieldpartNo 140
+*"UserFieldpartNoCreated by" Person28
+$"SCH val1" (val28)
+~"Part val1" (val28)
+@!SCH and PCB val2 (readOnly28)
+%!PCB val2 (readOnly28)
+@SCH and PCB val1 (val28)
+%"PCB val1" (val28)
+$!SCH val2 (readOnly28)
+~!Part val2 (readOnly28)
+Symbol28
+1.0 2.0
+/GND 3.0
+
+.PartName29 (145) :2 ;Part 29 Description
+FOOTPRINT29 (variant145)
+*VALUE 29 uH
+*DFN PartName29
+*STM L
+*MXP 39
+*SPI (PartName29) 29uH
+*PAC (PartName29) Acceptance29
+*UserFieldpartNo 145
+*"UserFieldpartNoCreated by" Person29
+$"SCH val1" (val29)
+~!Part val2 (readOnly29)
+$!SCH val2 (readOnly29)
+~"Part val1" (val29)
+%"PCB val1" (val29)
+%!PCB val2 (readOnly29)
+@!SCH and PCB val2 (readOnly29)
+@SCH and PCB val1 (val29)
+Symbol29
+1.0 2.0
+/GND 3.0
+
+.PartName30 (150) :2 ;Part 30 Description
+FOOTPRINT30 (variant150)
+*VALUE 30 uH
+*DFN PartName30
+*STM L
+*MXP 40
+*SPI (PartName30) 30uH
+*PAC (PartName30) Acceptance30
+*UserFieldpartNo 150
+*"UserFieldpartNoCreated by" Person30
+$"SCH val1" (val30)
+~!Part val2 (readOnly30)
+%"PCB val1" (val30)
+%!PCB val2 (readOnly30)
+~"Part val1" (val30)
+$!SCH val2 (readOnly30)
+@SCH and PCB val1 (val30)
+@!SCH and PCB val2 (readOnly30)
+Symbol30
+1.0 2.0
+/GND 3.0
+
+.PartName31 (155) :2 ;Part 31 Description
+FOOTPRINT31 (variant155)
+*VALUE 31 uH
+*DFN PartName31
+*NGS
+*NPV
+*STM L
+*MXP 41
+*SPI (PartName31) 31uH
+*PAC (PartName31) Acceptance31
+*UserFieldpartNo 155
+*"UserFieldpartNoCreated by" Person31
+$"SCH val1" (val31)
+~!Part val2 (readOnly31)
+%!PCB val2 (readOnly31)
+$!SCH val2 (readOnly31)
+~"Part val1" (val31)
+@!SCH and PCB val2 (readOnly31)
+@SCH and PCB val1 (val31)
+%"PCB val1" (val31)
+Symbol31
+1.0 2.0
+/GND 3.0
+
+.PartName32 (160) :2 ;Part 32 Description
+FOOTPRINT32 (variant160)
+*VALUE 32 uH
+*DFN PartName32
+*STM L
+*MXP 42
+*SPI (PartName32) 32uH
+*PAC (PartName32) Acceptance32
+*UserFieldpartNo 160
+*"UserFieldpartNoCreated by" Person32
+$"SCH val1" (val32)
+~!Part val2 (readOnly32)
+%!PCB val2 (readOnly32)
+@!SCH and PCB val2 (readOnly32)
+~"Part val1" (val32)
+@SCH and PCB val1 (val32)
+$!SCH val2 (readOnly32)
+%"PCB val1" (val32)
+Symbol32
+1.0 2.0
+/GND 3.0
+
+.PartName33 (165) :2 ;Part 33 Description
+FOOTPRINT33 (variant165)
+*VALUE 33 uH
+*DFN PartName33
+*STM L
+*MXP 43
+*SPI (PartName33) 33uH
+*PAC (PartName33) Acceptance33
+*UserFieldpartNo 165
+*"UserFieldpartNoCreated by" Person33
+$"SCH val1" (val33)
+~!Part val2 (readOnly33)
+~"Part val1" (val33)
+@SCH and PCB val1 (val33)
+@!SCH and PCB val2 (readOnly33)
+%"PCB val1" (val33)
+%!PCB val2 (readOnly33)
+$!SCH val2 (readOnly33)
+Symbol33
+1.0 2.0
+/GND 3.0
+
+.PartName34 (170) :2 ;Part 34 Description
+FOOTPRINT34 (variant170)
+*VALUE 34 uH
+*DFN PartName34
+*STM L
+*MXP 44
+*SPI (PartName34) 34uH
+*PAC (PartName34) Acceptance34
+*UserFieldpartNo 170
+*"UserFieldpartNoCreated by" Person34
+$"SCH val1" (val34)
+~!Part val2 (readOnly34)
+@SCH and PCB val1 (val34)
+~"Part val1" (val34)
+$!SCH val2 (readOnly34)
+%!PCB val2 (readOnly34)
+%"PCB val1" (val34)
+@!SCH and PCB val2 (readOnly34)
+Symbol34
+1.0 2.0
+/GND 3.0
+
+.PartName35 (175) :2 ;Part 35 Description
+FOOTPRINT35 (variant175)
+*VALUE 35 uH
+*DFN PartName35
+*STM L
+*MXP 45
+*SPI (PartName35) 35uH
+*PAC (PartName35) Acceptance35
+*UserFieldpartNo 175
+*"UserFieldpartNoCreated by" Person35
+$"SCH val1" (val35)
+~!Part val2 (readOnly35)
+@!SCH and PCB val2 (readOnly35)
+%!PCB val2 (readOnly35)
+%"PCB val1" (val35)
+$!SCH val2 (readOnly35)
+@SCH and PCB val1 (val35)
+~"Part val1" (val35)
+Symbol35
+1.0 2.0
+/GND 3.0
+
+.PartName36 (180) :2 ;Part 36 Description
+FOOTPRINT36 (variant180)
+*VALUE 36 uH
+*DFN PartName36
+*NPV
+*STM L
+*MXP 46
+*SPI (PartName36) 36uH
+*PAC (PartName36) Acceptance36
+*UserFieldpartNo 180
+*"UserFieldpartNoCreated by" Person36
+$"SCH val1" (val36)
+@SCH and PCB val1 (val36)
+$!SCH val2 (readOnly36)
+%!PCB val2 (readOnly36)
+~!Part val2 (readOnly36)
+%"PCB val1" (val36)
+~"Part val1" (val36)
+@!SCH and PCB val2 (readOnly36)
+Symbol36
+1.0 2.0
+/GND 3.0
+
+.PartName37 (185) :2 ;Part 37 Description
+FOOTPRINT37 (variant185)
+*VALUE 37 uH
+*DFN PartName37
+*STM L
+*MXP 47
+*SPI (PartName37) 37uH
+*PAC (PartName37) Acceptance37
+*UserFieldpartNo 185
+*"UserFieldpartNoCreated by" Person37
+$"SCH val1" (val37)
+@SCH and PCB val1 (val37)
+%"PCB val1" (val37)
+$!SCH val2 (readOnly37)
+~!Part val2 (readOnly37)
+@!SCH and PCB val2 (readOnly37)
+~"Part val1" (val37)
+%!PCB val2 (readOnly37)
+Symbol37
+1.0 2.0
+/GND 3.0
+
+.PartName38 (190) :2 ;Part 38 Description
+FOOTPRINT38 (variant190)
+*VALUE 38 uH
+*DFN PartName38
+*STM L
+*MXP 48
+*SPI (PartName38) 38uH
+*PAC (PartName38) Acceptance38
+*UserFieldpartNo 190
+*"UserFieldpartNoCreated by" Person38
+$"SCH val1" (val38)
+@SCH and PCB val1 (val38)
+%"PCB val1" (val38)
+@!SCH and PCB val2 (readOnly38)
+~!Part val2 (readOnly38)
+~"Part val1" (val38)
+$!SCH val2 (readOnly38)
+%!PCB val2 (readOnly38)
+Symbol38
+1.0 2.0
+/GND 3.0
+
+.PartName39 (195) :2 ;Part 39 Description
+FOOTPRINT39 (variant195)
+*VALUE 39 uH
+*DFN PartName39
+*STM L
+*MXP 49
+*SPI (PartName39) 39uH
+*PAC (PartName39) Acceptance39
+*UserFieldpartNo 195
+*"UserFieldpartNoCreated by" Person39
+$"SCH val1" (val39)
+@SCH and PCB val1 (val39)
+%!PCB val2 (readOnly39)
+@!SCH and PCB val2 (readOnly39)
+$!SCH val2 (readOnly39)
+~"Part val1" (val39)
+~!Part val2 (readOnly39)
+%"PCB val1" (val39)
+Symbol39
+1.0 2.0
+/GND 3.0
+
+.PartName40 (200) :2 ;Part 40 Description
+FOOTPRINT40 (variant200)
+*VALUE 40 uH
+*DFN PartName40
+*STM L
+*MXP 50
+*SPI (PartName40) 40uH
+*PAC (PartName40) Acceptance40
+*UserFieldpartNo 200
+*"UserFieldpartNoCreated by" Person40
+$"SCH val1" (val40)
+@SCH and PCB val1 (val40)
+~"Part val1" (val40)
+~!Part val2 (readOnly40)
+%"PCB val1" (val40)
+%!PCB val2 (readOnly40)
+$!SCH val2 (readOnly40)
+@!SCH and PCB val2 (readOnly40)
+Symbol40
+1.0 2.0
+/GND 3.0
+
+.PartName41 (205) :2 ;Part 41 Description
+FOOTPRINT41 (variant205)
+*VALUE 41 uH
+*DFN PartName41
+*NGS
+*NPV
+*STM L
+*MXP 51
+*SPI (PartName41) 41uH
+*PAC (PartName41) Acceptance41
+*UserFieldpartNo 205
+*"UserFieldpartNoCreated by" Person41
+$"SCH val1" (val41)
+@SCH and PCB val1 (val41)
+~!Part val2 (readOnly41)
+%!PCB val2 (readOnly41)
+~"Part val1" (val41)
+$!SCH val2 (readOnly41)
+@!SCH and PCB val2 (readOnly41)
+%"PCB val1" (val41)
+Symbol41
+1.0 2.0
+/GND 3.0
+
+.PartName42 (210) :2 ;Part 42 Description
+FOOTPRINT42 (variant210)
+*VALUE 42 uH
+*DFN PartName42
+*STM L
+*MXP 52
+*SPI (PartName42) 42uH
+*PAC (PartName42) Acceptance42
+*UserFieldpartNo 210
+*"UserFieldpartNoCreated by" Person42
+$"SCH val1" (val42)
+@SCH and PCB val1 (val42)
+@!SCH and PCB val2 (readOnly42)
+%"PCB val1" (val42)
+~!Part val2 (readOnly42)
+$!SCH val2 (readOnly42)
+%!PCB val2 (readOnly42)
+~"Part val1" (val42)
+Symbol42
+1.0 2.0
+/GND 3.0
+
+.PartName43 (215) :2 ;Part 43 Description
+FOOTPRINT43 (variant215)
+*VALUE 43 uH
+*DFN PartName43
+*STM L
+*MXP 53
+*SPI (PartName43) 43uH
+*PAC (PartName43) Acceptance43
+*UserFieldpartNo 215
+*"UserFieldpartNoCreated by" Person43
+$"SCH val1" (val43)
+@!SCH and PCB val2 (readOnly43)
+$!SCH val2 (readOnly43)
+%"PCB val1" (val43)
+@SCH and PCB val1 (val43)
+~!Part val2 (readOnly43)
+~"Part val1" (val43)
+%!PCB val2 (readOnly43)
+Symbol43
+1.0 2.0
+/GND 3.0
+
+.PartName44 (220) :2 ;Part 44 Description
+FOOTPRINT44 (variant220)
+*VALUE 44 uH
+*DFN PartName44
+*STM L
+*MXP 54
+*SPI (PartName44) 44uH
+*PAC (PartName44) Acceptance44
+*UserFieldpartNo 220
+*"UserFieldpartNoCreated by" Person44
+$"SCH val1" (val44)
+@!SCH and PCB val2 (readOnly44)
+%"PCB val1" (val44)
+$!SCH val2 (readOnly44)
+%!PCB val2 (readOnly44)
+@SCH and PCB val1 (val44)
+~"Part val1" (val44)
+~!Part val2 (readOnly44)
+Symbol44
+1.0 2.0
+/GND 3.0
+
+.PartName45 (225) :2 ;Part 45 Description
+FOOTPRINT45 (variant225)
+*VALUE 45 uH
+*DFN PartName45
+*STM L
+*MXP 55
+*SPI (PartName45) 45uH
+*PAC (PartName45) Acceptance45
+*UserFieldpartNo 225
+*"UserFieldpartNoCreated by" Person45
+$"SCH val1" (val45)
+@!SCH and PCB val2 (readOnly45)
+%"PCB val1" (val45)
+@SCH and PCB val1 (val45)
+%!PCB val2 (readOnly45)
+~"Part val1" (val45)
+~!Part val2 (readOnly45)
+$!SCH val2 (readOnly45)
+Symbol45
+1.0 2.0
+/GND 3.0
+
+.PartName46 (230) :2 ;Part 46 Description
+FOOTPRINT46 (variant230)
+*VALUE 46 uH
+*DFN PartName46
+*NPV
+*STM L
+*MXP 56
+*SPI (PartName46) 46uH
+*PAC (PartName46) Acceptance46
+*UserFieldpartNo 230
+*"UserFieldpartNoCreated by" Person46
+$"SCH val1" (val46)
+@!SCH and PCB val2 (readOnly46)
+%!PCB val2 (readOnly46)
+~!Part val2 (readOnly46)
+~"Part val1" (val46)
+%"PCB val1" (val46)
+$!SCH val2 (readOnly46)
+@SCH and PCB val1 (val46)
+Symbol46
+1.0 2.0
+/GND 3.0
+
+.PartName47 (235) :2 ;Part 47 Description
+FOOTPRINT47 (variant235)
+*VALUE 47 uH
+*DFN PartName47
+*STM L
+*MXP 57
+*SPI (PartName47) 47uH
+*PAC (PartName47) Acceptance47
+*UserFieldpartNo 235
+*"UserFieldpartNoCreated by" Person47
+$"SCH val1" (val47)
+@!SCH and PCB val2 (readOnly47)
+~"Part val1" (val47)
+%!PCB val2 (readOnly47)
+@SCH and PCB val1 (val47)
+$!SCH val2 (readOnly47)
+~!Part val2 (readOnly47)
+%"PCB val1" (val47)
+Symbol47
+1.0 2.0
+/GND 3.0
+
+.PartName48 (240) :2 ;Part 48 Description
+FOOTPRINT48 (variant240)
+*VALUE 48 uH
+*DFN PartName48
+*STM L
+*MXP 58
+*SPI (PartName48) 48uH
+*PAC (PartName48) Acceptance48
+*UserFieldpartNo 240
+*"UserFieldpartNoCreated by" Person48
+$"SCH val1" (val48)
+@!SCH and PCB val2 (readOnly48)
+~!Part val2 (readOnly48)
+%!PCB val2 (readOnly48)
+$!SCH val2 (readOnly48)
+%"PCB val1" (val48)
+~"Part val1" (val48)
+@SCH and PCB val1 (val48)
+Symbol48
+1.0 2.0
+/GND 3.0
+
+.PartName49 (245) :2 ;Part 49 Description
+FOOTPRINT49 (variant245)
+*VALUE 49 uH
+*DFN PartName49
+*STM L
+*MXP 59
+*SPI (PartName49) 49uH
+*PAC (PartName49) Acceptance49
+*UserFieldpartNo 245
+*"UserFieldpartNoCreated by" Person49
+$"SCH val1" (val49)
+@!SCH and PCB val2 (readOnly49)
+@SCH and PCB val1 (val49)
+%"PCB val1" (val49)
+$!SCH val2 (readOnly49)
+~!Part val2 (readOnly49)
+~"Part val1" (val49)
+%!PCB val2 (readOnly49)
+Symbol49
+1.0 2.0
+/GND 3.0
+
+.PartName50 (250) :2 ;Part 50 Description
+FOOTPRINT50 (variant250)
+*VALUE 50 uH
+*DFN PartName50
+*STM L
+*MXP 60
+*SPI (PartName50) 50uH
+*PAC (PartName50) Acceptance50
+*UserFieldpartNo 250
+*"UserFieldpartNoCreated by" Person50
+$!SCH val2 (readOnly50)
+$"SCH val1" (val50)
+%"PCB val1" (val50)
+%!PCB val2 (readOnly50)
+~!Part val2 (readOnly50)
+@!SCH and PCB val2 (readOnly50)
+~"Part val1" (val50)
+@SCH and PCB val1 (val50)
+Symbol50
+1.0 2.0
+/GND 3.0
+
+.PartName51 (255) :2 ;Part 51 Description
+FOOTPRINT51 (variant255)
+*VALUE 51 uH
+*DFN PartName51
+*NGS
+*NPV
+*STM L
+*MXP 61
+*SPI (PartName51) 51uH
+*PAC (PartName51) Acceptance51
+*UserFieldpartNo 255
+*"UserFieldpartNoCreated by" Person51
+$!SCH val2 (readOnly51)
+$"SCH val1" (val51)
+%"PCB val1" (val51)
+@!SCH and PCB val2 (readOnly51)
+~!Part val2 (readOnly51)
+~"Part val1" (val51)
+@SCH and PCB val1 (val51)
+%!PCB val2 (readOnly51)
+Symbol51
+1.0 2.0
+/GND 3.0
+
+.PartName52 (260) :2 ;Part 52 Description
+FOOTPRINT52 (variant260)
+*VALUE 52 uH
+*DFN PartName52
+*STM L
+*MXP 62
+*SPI (PartName52) 52uH
+*PAC (PartName52) Acceptance52
+*UserFieldpartNo 260
+*"UserFieldpartNoCreated by" Person52
+$!SCH val2 (readOnly52)
+$"SCH val1" (val52)
+%!PCB val2 (readOnly52)
+@SCH and PCB val1 (val52)
+@!SCH and PCB val2 (readOnly52)
+~"Part val1" (val52)
+%"PCB val1" (val52)
+~!Part val2 (readOnly52)
+Symbol52
+1.0 2.0
+/GND 3.0
+
+.PartName53 (265) :2 ;Part 53 Description
+FOOTPRINT53 (variant265)
+*VALUE 53 uH
+*DFN PartName53
+*STM L
+*MXP 63
+*SPI (PartName53) 53uH
+*PAC (PartName53) Acceptance53
+*UserFieldpartNo 265
+*"UserFieldpartNoCreated by" Person53
+$!SCH val2 (readOnly53)
+$"SCH val1" (val53)
+~"Part val1" (val53)
+@SCH and PCB val1 (val53)
+%"PCB val1" (val53)
+%!PCB val2 (readOnly53)
+@!SCH and PCB val2 (readOnly53)
+~!Part val2 (readOnly53)
+Symbol53
+1.0 2.0
+/GND 3.0
+
+.PartName54 (270) :2 ;Part 54 Description
+FOOTPRINT54 (variant270)
+*VALUE 54 uH
+*DFN PartName54
+*STM L
+*MXP 64
+*SPI (PartName54) 54uH
+*PAC (PartName54) Acceptance54
+*UserFieldpartNo 270
+*"UserFieldpartNoCreated by" Person54
+$!SCH val2 (readOnly54)
+$"SCH val1" (val54)
+~!Part val2 (readOnly54)
+~"Part val1" (val54)
+%!PCB val2 (readOnly54)
+%"PCB val1" (val54)
+@SCH and PCB val1 (val54)
+@!SCH and PCB val2 (readOnly54)
+Symbol54
+1.0 2.0
+/GND 3.0
+
+.PartName55 (275) :2 ;Part 55 Description
+FOOTPRINT55 (variant275)
+*VALUE 55 uH
+*DFN PartName55
+*STM L
+*MXP 65
+*SPI (PartName55) 55uH
+*PAC (PartName55) Acceptance55
+*UserFieldpartNo 275
+*"UserFieldpartNoCreated by" Person55
+$!SCH val2 (readOnly55)
+$"SCH val1" (val55)
+@SCH and PCB val1 (val55)
+%!PCB val2 (readOnly55)
+~"Part val1" (val55)
+@!SCH and PCB val2 (readOnly55)
+~!Part val2 (readOnly55)
+%"PCB val1" (val55)
+Symbol55
+1.0 2.0
+/GND 3.0
+
+.PartName56 (280) :2 ;Part 56 Description
+FOOTPRINT56 (variant280)
+*VALUE 56 uH
+*DFN PartName56
+*NPV
+*STM L
+*MXP 66
+*SPI (PartName56) 56uH
+*PAC (PartName56) Acceptance56
+*UserFieldpartNo 280
+*"UserFieldpartNoCreated by" Person56
+$!SCH val2 (readOnly56)
+$"SCH val1" (val56)
+@!SCH and PCB val2 (readOnly56)
+%"PCB val1" (val56)
+~!Part val2 (readOnly56)
+@SCH and PCB val1 (val56)
+%!PCB val2 (readOnly56)
+~"Part val1" (val56)
+Symbol56
+1.0 2.0
+/GND 3.0
+
+.PartName57 (285) :2 ;Part 57 Description
+FOOTPRINT57 (variant285)
+*VALUE 57 uH
+*DFN PartName57
+*STM L
+*MXP 67
+*SPI (PartName57) 57uH
+*PAC (PartName57) Acceptance57
+*UserFieldpartNo 285
+*"UserFieldpartNoCreated by" Person57
+$!SCH val2 (readOnly57)
+$"SCH val1" (val57)
+@!SCH and PCB val2 (readOnly57)
+@SCH and PCB val1 (val57)
+~!Part val2 (readOnly57)
+%!PCB val2 (readOnly57)
+~"Part val1" (val57)
+%"PCB val1" (val57)
+Symbol57
+1.0 2.0
+/GND 3.0
+
+.PartName58 (290) :2 ;Part 58 Description
+FOOTPRINT58 (variant290)
+*VALUE 58 uH
+*DFN PartName58
+*STM L
+*MXP 68
+*SPI (PartName58) 58uH
+*PAC (PartName58) Acceptance58
+*UserFieldpartNo 290
+*"UserFieldpartNoCreated by" Person58
+$!SCH val2 (readOnly58)
+%"PCB val1" (val58)
+$"SCH val1" (val58)
+@!SCH and PCB val2 (readOnly58)
+%!PCB val2 (readOnly58)
+~!Part val2 (readOnly58)
+~"Part val1" (val58)
+@SCH and PCB val1 (val58)
+Symbol58
+1.0 2.0
+/GND 3.0
+
+.PartName59 (295) :2 ;Part 59 Description
+FOOTPRINT59 (variant295)
+*VALUE 59 uH
+*DFN PartName59
+*STM L
+*MXP 69
+*SPI (PartName59) 59uH
+*PAC (PartName59) Acceptance59
+*UserFieldpartNo 295
+*"UserFieldpartNoCreated by" Person59
+$!SCH val2 (readOnly59)
+%"PCB val1" (val59)
+%!PCB val2 (readOnly59)
+@SCH and PCB val1 (val59)
+~"Part val1" (val59)
+$"SCH val1" (val59)
+@!SCH and PCB val2 (readOnly59)
+~!Part val2 (readOnly59)
+Symbol59
+1.0 2.0
+/GND 3.0
+
+.PartName60 (300) :2 ;Part 60 Description
+FOOTPRINT60 (variant300)
+*VALUE 60 uH
+*DFN PartName60
+*STM L
+*MXP 70
+*SPI (PartName60) 60uH
+*PAC (PartName60) Acceptance60
+*UserFieldpartNo 300
+*"UserFieldpartNoCreated by" Person60
+$!SCH val2 (readOnly60)
+%"PCB val1" (val60)
+~"Part val1" (val60)
+~!Part val2 (readOnly60)
+@SCH and PCB val1 (val60)
+$"SCH val1" (val60)
+%!PCB val2 (readOnly60)
+@!SCH and PCB val2 (readOnly60)
+Symbol60
+1.0 2.0
+/GND 3.0
+
+.PartName61 (305) :2 ;Part 61 Description
+FOOTPRINT61 (variant305)
+*VALUE 61 uH
+*DFN PartName61
+*NGS
+*NPV
+*STM L
+*MXP 71
+*SPI (PartName61) 61uH
+*PAC (PartName61) Acceptance61
+*UserFieldpartNo 305
+*"UserFieldpartNoCreated by" Person61
+$!SCH val2 (readOnly61)
+%"PCB val1" (val61)
+~!Part val2 (readOnly61)
+%!PCB val2 (readOnly61)
+@SCH and PCB val1 (val61)
+@!SCH and PCB val2 (readOnly61)
+~"Part val1" (val61)
+$"SCH val1" (val61)
+Symbol61
+1.0 2.0
+/GND 3.0
+
+.PartName62 (310) :2 ;Part 62 Description
+FOOTPRINT62 (variant310)
+*VALUE 62 uH
+*DFN PartName62
+*STM L
+*MXP 72
+*SPI (PartName62) 62uH
+*PAC (PartName62) Acceptance62
+*UserFieldpartNo 310
+*"UserFieldpartNoCreated by" Person62
+$!SCH val2 (readOnly62)
+%"PCB val1" (val62)
+@SCH and PCB val1 (val62)
+$"SCH val1" (val62)
+@!SCH and PCB val2 (readOnly62)
+~!Part val2 (readOnly62)
+%!PCB val2 (readOnly62)
+~"Part val1" (val62)
+Symbol62
+1.0 2.0
+/GND 3.0
+
+.PartName63 (315) :2 ;Part 63 Description
+FOOTPRINT63 (variant315)
+*VALUE 63 uH
+*DFN PartName63
+*STM L
+*MXP 73
+*SPI (PartName63) 63uH
+*PAC (PartName63) Acceptance63
+*UserFieldpartNo 315
+*"UserFieldpartNoCreated by" Person63
+$!SCH val2 (readOnly63)
+%"PCB val1" (val63)
+@!SCH and PCB val2 (readOnly63)
+$"SCH val1" (val63)
+%!PCB val2 (readOnly63)
+~!Part val2 (readOnly63)
+@SCH and PCB val1 (val63)
+~"Part val1" (val63)
+Symbol63
+1.0 2.0
+/GND 3.0
+
+.PartName64 (320) :2 ;Part 64 Description
+FOOTPRINT64 (variant320)
+*VALUE 64 uH
+*DFN PartName64
+*STM L
+*MXP 74
+*SPI (PartName64) 64uH
+*PAC (PartName64) Acceptance64
+*UserFieldpartNo 320
+*"UserFieldpartNoCreated by" Person64
+$!SCH val2 (readOnly64)
+%"PCB val1" (val64)
+@!SCH and PCB val2 (readOnly64)
+@SCH and PCB val1 (val64)
+%!PCB val2 (readOnly64)
+~"Part val1" (val64)
+$"SCH val1" (val64)
+~!Part val2 (readOnly64)
+Symbol64
+1.0 2.0
+/GND 3.0
+
+.PartName65 (325) :2 ;Part 65 Description
+FOOTPRINT65 (variant325)
+*VALUE 65 uH
+*DFN PartName65
+*STM L
+*MXP 75
+*SPI (PartName65) 65uH
+*PAC (PartName65) Acceptance65
+*UserFieldpartNo 325
+*"UserFieldpartNoCreated by" Person65
+$!SCH val2 (readOnly65)
+%!PCB val2 (readOnly65)
+$"SCH val1" (val65)
+@SCH and PCB val1 (val65)
+~!Part val2 (readOnly65)
+%"PCB val1" (val65)
+@!SCH and PCB val2 (readOnly65)
+~"Part val1" (val65)
+Symbol65
+1.0 2.0
+/GND 3.0
+
+.PartName66 (330) :2 ;Part 66 Description
+FOOTPRINT66 (variant330)
+*VALUE 66 uH
+*DFN PartName66
+*NPV
+*STM L
+*MXP 76
+*SPI (PartName66) 66uH
+*PAC (PartName66) Acceptance66
+*UserFieldpartNo 330
+*"UserFieldpartNoCreated by" Person66
+$!SCH val2 (readOnly66)
+%!PCB val2 (readOnly66)
+%"PCB val1" (val66)
+~!Part val2 (readOnly66)
+@!SCH and PCB val2 (readOnly66)
+$"SCH val1" (val66)
+~"Part val1" (val66)
+@SCH and PCB val1 (val66)
+Symbol66
+1.0 2.0
+/GND 3.0
+
+.PartName67 (335) :2 ;Part 67 Description
+FOOTPRINT67 (variant335)
+*VALUE 67 uH
+*DFN PartName67
+*STM L
+*MXP 77
+*SPI (PartName67) 67uH
+*PAC (PartName67) Acceptance67
+*UserFieldpartNo 335
+*"UserFieldpartNoCreated by" Person67
+$!SCH val2 (readOnly67)
+%!PCB val2 (readOnly67)
+~"Part val1" (val67)
+%"PCB val1" (val67)
+@!SCH and PCB val2 (readOnly67)
+@SCH and PCB val1 (val67)
+~!Part val2 (readOnly67)
+$"SCH val1" (val67)
+Symbol67
+1.0 2.0
+/GND 3.0
+
+.PartName68 (340) :2 ;Part 68 Description
+FOOTPRINT68 (variant340)
+*VALUE 68 uH
+*DFN PartName68
+*STM L
+*MXP 78
+*SPI (PartName68) 68uH
+*PAC (PartName68) Acceptance68
+*UserFieldpartNo 340
+*"UserFieldpartNoCreated by" Person68
+$!SCH val2 (readOnly68)
+%!PCB val2 (readOnly68)
+~!Part val2 (readOnly68)
+%"PCB val1" (val68)
+$"SCH val1" (val68)
+@!SCH and PCB val2 (readOnly68)
+~"Part val1" (val68)
+@SCH and PCB val1 (val68)
+Symbol68
+1.0 2.0
+/GND 3.0
+
+.PartName69 (345) :2 ;Part 69 Description
+FOOTPRINT69 (variant345)
+*VALUE 69 uH
+*DFN PartName69
+*STM L
+*MXP 79
+*SPI (PartName69) 69uH
+*PAC (PartName69) Acceptance69
+*UserFieldpartNo 345
+*"UserFieldpartNoCreated by" Person69
+$!SCH val2 (readOnly69)
+%!PCB val2 (readOnly69)
+@SCH and PCB val1 (val69)
+$"SCH val1" (val69)
+~"Part val1" (val69)
+~!Part val2 (readOnly69)
+@!SCH and PCB val2 (readOnly69)
+%"PCB val1" (val69)
+Symbol69
+1.0 2.0
+/GND 3.0
+
+.PartName70 (350) :2 ;Part 70 Description
+FOOTPRINT70 (variant350)
+*VALUE 70 uH
+*DFN PartName70
+*STM L
+*MXP 80
+*SPI (PartName70) 70uH
+*PAC (PartName70) Acceptance70
+*UserFieldpartNo 350
+*"UserFieldpartNoCreated by" Person70
+$!SCH val2 (readOnly70)
+%!PCB val2 (readOnly70)
+@SCH and PCB val1 (val70)
+@!SCH and PCB val2 (readOnly70)
+~"Part val1" (val70)
+%"PCB val1" (val70)
+$"SCH val1" (val70)
+~!Part val2 (readOnly70)
+Symbol70
+1.0 2.0
+/GND 3.0
+
+.PartName71 (355) :2 ;Part 71 Description
+FOOTPRINT71 (variant355)
+*VALUE 71 uH
+*DFN PartName71
+*NGS
+*NPV
+*STM L
+*MXP 81
+*SPI (PartName71) 71uH
+*PAC (PartName71) Acceptance71
+*UserFieldpartNo 355
+*"UserFieldpartNoCreated by" Person71
+$!SCH val2 (readOnly71)
+%!PCB val2 (readOnly71)
+@!SCH and PCB val2 (readOnly71)
+~!Part val2 (readOnly71)
+@SCH and PCB val1 (val71)
+$"SCH val1" (val71)
+~"Part val1" (val71)
+%"PCB val1" (val71)
+Symbol71
+1.0 2.0
+/GND 3.0
+
+.PartName72 (360) :2 ;Part 72 Description
+FOOTPRINT72 (variant360)
+*VALUE 72 uH
+*DFN PartName72
+*STM L
+*MXP 82
+*SPI (PartName72) 72uH
+*PAC (PartName72) Acceptance72
+*UserFieldpartNo 360
+*"UserFieldpartNoCreated by" Person72
+$!SCH val2 (readOnly72)
+~"Part val1" (val72)
+$"SCH val1" (val72)
+@SCH and PCB val1 (val72)
+%"PCB val1" (val72)
+%!PCB val2 (readOnly72)
+~!Part val2 (readOnly72)
+@!SCH and PCB val2 (readOnly72)
+Symbol72
+1.0 2.0
+/GND 3.0
+
+.PartName73 (365) :2 ;Part 73 Description
+FOOTPRINT73 (variant365)
+*VALUE 73 uH
+*DFN PartName73
+*STM L
+*MXP 83
+*SPI (PartName73) 73uH
+*PAC (PartName73) Acceptance73
+*UserFieldpartNo 365
+*"UserFieldpartNoCreated by" Person73
+$!SCH val2 (readOnly73)
+~"Part val1" (val73)
+%"PCB val1" (val73)
+~!Part val2 (readOnly73)
+$"SCH val1" (val73)
+@!SCH and PCB val2 (readOnly73)
+@SCH and PCB val1 (val73)
+%!PCB val2 (readOnly73)
+Symbol73
+1.0 2.0
+/GND 3.0
+
+.PartName74 (370) :2 ;Part 74 Description
+FOOTPRINT74 (variant370)
+*VALUE 74 uH
+*DFN PartName74
+*STM L
+*MXP 84
+*SPI (PartName74) 74uH
+*PAC (PartName74) Acceptance74
+*UserFieldpartNo 370
+*"UserFieldpartNoCreated by" Person74
+$!SCH val2 (readOnly74)
+~"Part val1" (val74)
+%!PCB val2 (readOnly74)
+%"PCB val1" (val74)
+~!Part val2 (readOnly74)
+@!SCH and PCB val2 (readOnly74)
+$"SCH val1" (val74)
+@SCH and PCB val1 (val74)
+Symbol74
+1.0 2.0
+/GND 3.0
+
+.PartName75 (375) :2 ;Part 75 Description
+FOOTPRINT75 (variant375)
+*VALUE 75 uH
+*DFN PartName75
+*STM L
+*MXP 85
+*SPI (PartName75) 75uH
+*PAC (PartName75) Acceptance75
+*UserFieldpartNo 375
+*"UserFieldpartNoCreated by" Person75
+$!SCH val2 (readOnly75)
+~"Part val1" (val75)
+~!Part val2 (readOnly75)
+$"SCH val1" (val75)
+@SCH and PCB val1 (val75)
+%!PCB val2 (readOnly75)
+@!SCH and PCB val2 (readOnly75)
+%"PCB val1" (val75)
+Symbol75
+1.0 2.0
+/GND 3.0
+
+.PartName76 (380) :2 ;Part 76 Description
+FOOTPRINT76 (variant380)
+*VALUE 76 uH
+*DFN PartName76
+*NPV
+*STM L
+*MXP 86
+*SPI (PartName76) 76uH
+*PAC (PartName76) Acceptance76
+*UserFieldpartNo 380
+*"UserFieldpartNoCreated by" Person76
+$!SCH val2 (readOnly76)
+~"Part val1" (val76)
+~!Part val2 (readOnly76)
+@!SCH and PCB val2 (readOnly76)
+@SCH and PCB val1 (val76)
+%"PCB val1" (val76)
+$"SCH val1" (val76)
+%!PCB val2 (readOnly76)
+Symbol76
+1.0 2.0
+/GND 3.0
+
+.PartName77 (385) :2 ;Part 77 Description
+FOOTPRINT77 (variant385)
+*VALUE 77 uH
+*DFN PartName77
+*STM L
+*MXP 87
+*SPI (PartName77) 77uH
+*PAC (PartName77) Acceptance77
+*UserFieldpartNo 385
+*"UserFieldpartNoCreated by" Person77
+$!SCH val2 (readOnly77)
+~"Part val1" (val77)
+@SCH and PCB val1 (val77)
+@!SCH and PCB val2 (readOnly77)
+$"SCH val1" (val77)
+%"PCB val1" (val77)
+~!Part val2 (readOnly77)
+%!PCB val2 (readOnly77)
+Symbol77
+1.0 2.0
+/GND 3.0
+
+.PartName78 (390) :2 ;Part 78 Description
+FOOTPRINT78 (variant390)
+*VALUE 78 uH
+*DFN PartName78
+*STM L
+*MXP 88
+*SPI (PartName78) 78uH
+*PAC (PartName78) Acceptance78
+*UserFieldpartNo 390
+*"UserFieldpartNoCreated by" Person78
+$!SCH val2 (readOnly78)
+~"Part val1" (val78)
+@!SCH and PCB val2 (readOnly78)
+~!Part val2 (readOnly78)
+%"PCB val1" (val78)
+$"SCH val1" (val78)
+%!PCB val2 (readOnly78)
+@SCH and PCB val1 (val78)
+Symbol78
+1.0 2.0
+/GND 3.0
+
+.PartName79 (395) :2 ;Part 79 Description
+FOOTPRINT79 (variant395)
+*VALUE 79 uH
+*DFN PartName79
+*STM L
+*MXP 89
+*SPI (PartName79) 79uH
+*PAC (PartName79) Acceptance79
+*UserFieldpartNo 395
+*"UserFieldpartNoCreated by" Person79
+$!SCH val2 (readOnly79)
+~!Part val2 (readOnly79)
+$"SCH val1" (val79)
+~"Part val1" (val79)
+%!PCB val2 (readOnly79)
+@!SCH and PCB val2 (readOnly79)
+@SCH and PCB val1 (val79)
+%"PCB val1" (val79)
+Symbol79
+1.0 2.0
+/GND 3.0
+
+.PartName80 (400) :2 ;Part 80 Description
+FOOTPRINT80 (variant400)
+*VALUE 80 uH
+*DFN PartName80
+*STM L
+*MXP 90
+*SPI (PartName80) 80uH
+*PAC (PartName80) Acceptance80
+*UserFieldpartNo 400
+*"UserFieldpartNoCreated by" Person80
+$!SCH val2 (readOnly80)
+~!Part val2 (readOnly80)
+%"PCB val1" (val80)
+%!PCB val2 (readOnly80)
+@SCH and PCB val1 (val80)
+@!SCH and PCB val2 (readOnly80)
+$"SCH val1" (val80)
+~"Part val1" (val80)
+Symbol80
+1.0 2.0
+/GND 3.0
+
+.PartName81 (405) :2 ;Part 81 Description
+FOOTPRINT81 (variant405)
+*VALUE 81 uH
+*DFN PartName81
+*NGS
+*NPV
+*STM L
+*MXP 91
+*SPI (PartName81) 81uH
+*PAC (PartName81) Acceptance81
+*UserFieldpartNo 405
+*"UserFieldpartNoCreated by" Person81
+$!SCH val2 (readOnly81)
+~!Part val2 (readOnly81)
+%!PCB val2 (readOnly81)
+$"SCH val1" (val81)
+@!SCH and PCB val2 (readOnly81)
+~"Part val1" (val81)
+@SCH and PCB val1 (val81)
+%"PCB val1" (val81)
+Symbol81
+1.0 2.0
+/GND 3.0
+
+.PartName82 (410) :2 ;Part 82 Description
+FOOTPRINT82 (variant410)
+*VALUE 82 uH
+*DFN PartName82
+*STM L
+*MXP 92
+*SPI (PartName82) 82uH
+*PAC (PartName82) Acceptance82
+*UserFieldpartNo 410
+*"UserFieldpartNoCreated by" Person82
+$!SCH val2 (readOnly82)
+~!Part val2 (readOnly82)
+~"Part val1" (val82)
+$"SCH val1" (val82)
+%"PCB val1" (val82)
+@SCH and PCB val1 (val82)
+%!PCB val2 (readOnly82)
+@!SCH and PCB val2 (readOnly82)
+Symbol82
+1.0 2.0
+/GND 3.0
+
+.PartName83 (415) :2 ;Part 83 Description
+FOOTPRINT83 (variant415)
+*VALUE 83 uH
+*DFN PartName83
+*STM L
+*MXP 93
+*SPI (PartName83) 83uH
+*PAC (PartName83) Acceptance83
+*UserFieldpartNo 415
+*"UserFieldpartNoCreated by" Person83
+$!SCH val2 (readOnly83)
+~!Part val2 (readOnly83)
+~"Part val1" (val83)
+@!SCH and PCB val2 (readOnly83)
+%"PCB val1" (val83)
+$"SCH val1" (val83)
+@SCH and PCB val1 (val83)
+%!PCB val2 (readOnly83)
+Symbol83
+1.0 2.0
+/GND 3.0
+
+.PartName84 (420) :2 ;Part 84 Description
+FOOTPRINT84 (variant420)
+*VALUE 84 uH
+*DFN PartName84
+*STM L
+*MXP 94
+*SPI (PartName84) 84uH
+*PAC (PartName84) Acceptance84
+*UserFieldpartNo 420
+*"UserFieldpartNoCreated by" Person84
+$!SCH val2 (readOnly84)
+~!Part val2 (readOnly84)
+@SCH and PCB val1 (val84)
+~"Part val1" (val84)
+%!PCB val2 (readOnly84)
+$"SCH val1" (val84)
+%"PCB val1" (val84)
+@!SCH and PCB val2 (readOnly84)
+Symbol84
+1.0 2.0
+/GND 3.0
+
+.PartName85 (425) :2 ;Part 85 Description
+FOOTPRINT85 (variant425)
+*VALUE 85 uH
+*DFN PartName85
+*STM L
+*MXP 95
+*SPI (PartName85) 85uH
+*PAC (PartName85) Acceptance85
+*UserFieldpartNo 425
+*"UserFieldpartNoCreated by" Person85
+$!SCH val2 (readOnly85)
+~!Part val2 (readOnly85)
+@!SCH and PCB val2 (readOnly85)
+%!PCB val2 (readOnly85)
+~"Part val1" (val85)
+@SCH and PCB val1 (val85)
+%"PCB val1" (val85)
+$"SCH val1" (val85)
+Symbol85
+1.0 2.0
+/GND 3.0
+
+.PartName86 (430) :2 ;Part 86 Description
+FOOTPRINT86 (variant430)
+*VALUE 86 uH
+*DFN PartName86
+*NPV
+*STM L
+*MXP 96
+*SPI (PartName86) 86uH
+*PAC (PartName86) Acceptance86
+*UserFieldpartNo 430
+*"UserFieldpartNoCreated by" Person86
+$!SCH val2 (readOnly86)
+@SCH and PCB val1 (val86)
+$"SCH val1" (val86)
+%!PCB val2 (readOnly86)
+@!SCH and PCB val2 (readOnly86)
+~!Part val2 (readOnly86)
+%"PCB val1" (val86)
+~"Part val1" (val86)
+Symbol86
+1.0 2.0
+/GND 3.0
+
+.PartName87 (435) :2 ;Part 87 Description
+FOOTPRINT87 (variant435)
+*VALUE 87 uH
+*DFN PartName87
+*STM L
+*MXP 97
+*SPI (PartName87) 87uH
+*PAC (PartName87) Acceptance87
+*UserFieldpartNo 435
+*"UserFieldpartNoCreated by" Person87
+$!SCH val2 (readOnly87)
+@SCH and PCB val1 (val87)
+%"PCB val1" (val87)
+%!PCB val2 (readOnly87)
+$"SCH val1" (val87)
+~!Part val2 (readOnly87)
+@!SCH and PCB val2 (readOnly87)
+~"Part val1" (val87)
+Symbol87
+1.0 2.0
+/GND 3.0
+
+.PartName88 (440) :2 ;Part 88 Description
+FOOTPRINT88 (variant440)
+*VALUE 88 uH
+*DFN PartName88
+*STM L
+*MXP 98
+*SPI (PartName88) 88uH
+*PAC (PartName88) Acceptance88
+*UserFieldpartNo 440
+*"UserFieldpartNoCreated by" Person88
+$!SCH val2 (readOnly88)
+@SCH and PCB val1 (val88)
+%!PCB val2 (readOnly88)
+$"SCH val1" (val88)
+~"Part val1" (val88)
+~!Part val2 (readOnly88)
+%"PCB val1" (val88)
+@!SCH and PCB val2 (readOnly88)
+Symbol88
+1.0 2.0
+/GND 3.0
+
+.PartName89 (445) :2 ;Part 89 Description
+FOOTPRINT89 (variant445)
+*VALUE 89 uH
+*DFN PartName89
+*STM L
+*MXP 99
+*SPI (PartName89) 89uH
+*PAC (PartName89) Acceptance89
+*UserFieldpartNo 445
+*"UserFieldpartNoCreated by" Person89
+$!SCH val2 (readOnly89)
+@SCH and PCB val1 (val89)
+%!PCB val2 (readOnly89)
+@!SCH and PCB val2 (readOnly89)
+~"Part val1" (val89)
+$"SCH val1" (val89)
+~!Part val2 (readOnly89)
+%"PCB val1" (val89)
+Symbol89
+1.0 2.0
+/GND 3.0
+
+.PartName90 (450) :2 ;Part 90 Description
+FOOTPRINT90 (variant450)
+*VALUE 90 uH
+*DFN PartName90
+*STM L
+*MXP 100
+*SPI (PartName90) 90uH
+*PAC (PartName90) Acceptance90
+*UserFieldpartNo 450
+*"UserFieldpartNoCreated by" Person90
+$!SCH val2 (readOnly90)
+@SCH and PCB val1 (val90)
+~"Part val1" (val90)
+~!Part val2 (readOnly90)
+@!SCH and PCB val2 (readOnly90)
+$"SCH val1" (val90)
+%"PCB val1" (val90)
+%!PCB val2 (readOnly90)
+Symbol90
+1.0 2.0
+/GND 3.0
+
+.PartName91 (455) :2 ;Part 91 Description
+FOOTPRINT91 (variant455)
+*VALUE 91 uH
+*DFN PartName91
+*NGS
+*NPV
+*STM L
+*MXP 101
+*SPI (PartName91) 91uH
+*PAC (PartName91) Acceptance91
+*UserFieldpartNo 455
+*"UserFieldpartNoCreated by" Person91
+$!SCH val2 (readOnly91)
+@SCH and PCB val1 (val91)
+~!Part val2 (readOnly91)
+%!PCB val2 (readOnly91)
+@!SCH and PCB val2 (readOnly91)
+~"Part val1" (val91)
+%"PCB val1" (val91)
+$"SCH val1" (val91)
+Symbol91
+1.0 2.0
+/GND 3.0
+
+.PartName92 (460) :2 ;Part 92 Description
+FOOTPRINT92 (variant460)
+*VALUE 92 uH
+*DFN PartName92
+*STM L
+*MXP 102
+*SPI (PartName92) 92uH
+*PAC (PartName92) Acceptance92
+*UserFieldpartNo 460
+*"UserFieldpartNoCreated by" Person92
+$!SCH val2 (readOnly92)
+@SCH and PCB val1 (val92)
+@!SCH and PCB val2 (readOnly92)
+%!PCB val2 (readOnly92)
+$"SCH val1" (val92)
+~!Part val2 (readOnly92)
+%"PCB val1" (val92)
+~"Part val1" (val92)
+Symbol92
+1.0 2.0
+/GND 3.0
+
+.PartName93 (465) :2 ;Part 93 Description
+FOOTPRINT93 (variant465)
+*VALUE 93 uH
+*DFN PartName93
+*STM L
+*MXP 103
+*SPI (PartName93) 93uH
+*PAC (PartName93) Acceptance93
+*UserFieldpartNo 465
+*"UserFieldpartNoCreated by" Person93
+$!SCH val2 (readOnly93)
+@!SCH and PCB val2 (readOnly93)
+$"SCH val1" (val93)
+%!PCB val2 (readOnly93)
+~"Part val1" (val93)
+~!Part val2 (readOnly93)
+@SCH and PCB val1 (val93)
+%"PCB val1" (val93)
+Symbol93
+1.0 2.0
+/GND 3.0
+
+.PartName94 (470) :2 ;Part 94 Description
+FOOTPRINT94 (variant470)
+*VALUE 94 uH
+*DFN PartName94
+*STM L
+*MXP 104
+*SPI (PartName94) 94uH
+*PAC (PartName94) Acceptance94
+*UserFieldpartNo 470
+*"UserFieldpartNoCreated by" Person94
+$!SCH val2 (readOnly94)
+@!SCH and PCB val2 (readOnly94)
+%"PCB val1" (val94)
+$"SCH val1" (val94)
+~!Part val2 (readOnly94)
+~"Part val1" (val94)
+%!PCB val2 (readOnly94)
+@SCH and PCB val1 (val94)
+Symbol94
+1.0 2.0
+/GND 3.0
+
+.PartName95 (475) :2 ;Part 95 Description
+FOOTPRINT95 (variant475)
+*VALUE 95 uH
+*DFN PartName95
+*STM L
+*MXP 105
+*SPI (PartName95) 95uH
+*PAC (PartName95) Acceptance95
+*UserFieldpartNo 475
+*"UserFieldpartNoCreated by" Person95
+$!SCH val2 (readOnly95)
+@!SCH and PCB val2 (readOnly95)
+%"PCB val1" (val95)
+@SCH and PCB val1 (val95)
+~!Part val2 (readOnly95)
+$"SCH val1" (val95)
+~"Part val1" (val95)
+%!PCB val2 (readOnly95)
+Symbol95
+1.0 2.0
+/GND 3.0
+
+.PartName96 (480) :2 ;Part 96 Description
+FOOTPRINT96 (variant480)
+*VALUE 96 uH
+*DFN PartName96
+*NPV
+*STM L
+*MXP 106
+*SPI (PartName96) 96uH
+*PAC (PartName96) Acceptance96
+*UserFieldpartNo 480
+*"UserFieldpartNoCreated by" Person96
+$!SCH val2 (readOnly96)
+@!SCH and PCB val2 (readOnly96)
+%!PCB val2 (readOnly96)
+@SCH and PCB val1 (val96)
+$"SCH val1" (val96)
+%"PCB val1" (val96)
+~"Part val1" (val96)
+~!Part val2 (readOnly96)
+Symbol96
+1.0 2.0
+/GND 3.0
+
+.PartName97 (485) :2 ;Part 97 Description
+FOOTPRINT97 (variant485)
+*VALUE 97 uH
+*DFN PartName97
+*STM L
+*MXP 107
+*SPI (PartName97) 97uH
+*PAC (PartName97) Acceptance97
+*UserFieldpartNo 485
+*"UserFieldpartNoCreated by" Person97
+$!SCH val2 (readOnly97)
+@!SCH and PCB val2 (readOnly97)
+~"Part val1" (val97)
+~!Part val2 (readOnly97)
+$"SCH val1" (val97)
+@SCH and PCB val1 (val97)
+%!PCB val2 (readOnly97)
+%"PCB val1" (val97)
+Symbol97
+1.0 2.0
+/GND 3.0
+
+.PartName98 (490) :2 ;Part 98 Description
+FOOTPRINT98 (variant490)
+*VALUE 98 uH
+*DFN PartName98
+*STM L
+*MXP 108
+*SPI (PartName98) 98uH
+*PAC (PartName98) Acceptance98
+*UserFieldpartNo 490
+*"UserFieldpartNoCreated by" Person98
+$!SCH val2 (readOnly98)
+@!SCH and PCB val2 (readOnly98)
+~!Part val2 (readOnly98)
+%!PCB val2 (readOnly98)
+%"PCB val1" (val98)
+@SCH and PCB val1 (val98)
+$"SCH val1" (val98)
+~"Part val1" (val98)
+Symbol98
+1.0 2.0
+/GND 3.0
+
+.PartName99 (495) :2 ;Part 99 Description
+FOOTPRINT99 (variant495)
+*VALUE 99 uH
+*DFN PartName99
+*STM L
+*MXP 109
+*SPI (PartName99) 99uH
+*PAC (PartName99) Acceptance99
+*UserFieldpartNo 495
+*"UserFieldpartNoCreated by" Person99
+$!SCH val2 (readOnly99)
+@!SCH and PCB val2 (readOnly99)
+@SCH and PCB val1 (val99)
+%"PCB val1" (val99)
+~"Part val1" (val99)
+%!PCB val2 (readOnly99)
+~!Part val2 (readOnly99)
+$"SCH val1" (val99)
+Symbol99
+1.0 2.0
+/GND 3.0
+
+.END

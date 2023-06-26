@@ -101,89 +101,96 @@ BOOST_AUTO_TEST_CASE( CheckHeader )
 BOOST_AUTO_TEST_CASE( ReadFile )
 {
     CADSTAR_PARTS_LIB_PARSER p;
+    // Test a programatically generated files (see writeCadstarFile.py)
+    std::vector<std::string> testFiles = { "dummycadstarlib.lib", "dummycadstarlibwithheader.lib" };
 
-    // Test a programatically generated file (see writeCadstarFile.py)
-    auto ret = p.ReadFile( getCadstarTestFile( "cadstarDummy.lib" ) );
-
-    KI_CHECK_OPT_EQUAL( ret.m_FormatNumber, 32 );
-    BOOST_CHECK_EQUAL( ret.m_PartEntries.size(), 100 );
-
-    int i = 0;
-
-    for( CADSTAR_PART_ENTRY& partEntry : ret.m_PartEntries )
+    for( auto testFile : testFiles )
     {
-        // Part header KI_CHECK_OPT_EQUAL
-        BOOST_CHECK_EQUAL( partEntry.m_Name, "PartName" + std::to_string( i ) );
-        KI_CHECK_OPT_EQUAL( partEntry.m_Number, std::to_string( i * 5 ) );
-        KI_CHECK_OPT_EQUAL( partEntry.m_Version, std::to_string( 2 ) );
-        KI_CHECK_OPT_EQUAL( partEntry.m_Description,
-                           "Part " + std::to_string( i ) + " Description" );
+        auto ret = p.ReadFile( getCadstarTestFile( testFile ) );
 
-        BOOST_CHECK_EQUAL( partEntry.m_Pcb_component, "FOOTPRINT" + std::to_string( i ) );
-        KI_CHECK_OPT_EQUAL( partEntry.m_Pcb_alternate, "variant" + std::to_string( i * 5 ) );
-        KI_CHECK_OPT_EQUAL( partEntry.m_Value, std::to_string( i ) + " uH" );
-        BOOST_CHECK_EQUAL( partEntry.m_ComponentStem, "L" );
-        KI_CHECK_OPT_EQUAL( partEntry.m_MaxPinCount, i + 10 );
-        BOOST_CHECK_EQUAL( partEntry.m_GateSwappingAllowed, i % 10 != 1 );
-        BOOST_CHECK_EQUAL( partEntry.m_PinsVisible, i % 5 != 1 );
+        KI_CHECK_OPT_EQUAL( ret.m_FormatNumber, 32 );
+        BOOST_CHECK_EQUAL( ret.m_PartEntries.size(), 100 );
 
-        KI_CHECK_OPT_EQUAL( partEntry.m_SpicePartName, "PartName" + std::to_string( i ) );
-        KI_CHECK_OPT_EQUAL( partEntry.m_SpiceModel, std::to_string( i ) + "uH" );
+        int i = 0;
 
-        KI_CHECK_OPT_EQUAL( partEntry.m_AcceptancePartName, "PartName" + std::to_string( i ) );
-        KI_CHECK_OPT_EQUAL( partEntry.m_AcceptanceText, "Acceptance" + std::to_string( i ) );
+        for( CADSTAR_PART_ENTRY& partEntry : ret.m_PartEntries )
+        {
+            // Part header KI_CHECK_OPT_EQUAL
+            BOOST_CHECK_EQUAL( partEntry.m_Name, "PartName" + std::to_string( i ) );
+            KI_CHECK_OPT_EQUAL( partEntry.m_Number, std::to_string( i * 5 ) );
+            KI_CHECK_OPT_EQUAL( partEntry.m_Version, std::to_string( 2 ) );
+            KI_CHECK_OPT_EQUAL( partEntry.m_Description,
+                            "Part " + std::to_string( i ) + " Description" );
 
-        // User part attributes (* lines)
-        BOOST_CHECK_EQUAL( partEntry.m_UserAttributes["UserFieldpartNo"],
-                           std::to_string( i * 5 ) );
-        BOOST_CHECK_EQUAL( partEntry.m_UserAttributes["UserFieldpartNoCreated by"],
-                           "Person" + std::to_string( i ) );
+            BOOST_CHECK_EQUAL( partEntry.m_Pcb_component, "FOOTPRINT" + std::to_string( i ) );
+            KI_CHECK_OPT_EQUAL( partEntry.m_Pcb_alternate, "variant" + std::to_string( i * 5 ) );
+            KI_CHECK_OPT_EQUAL( partEntry.m_Value, std::to_string( i ) + " uH" );
+            BOOST_CHECK_EQUAL( partEntry.m_ComponentStem, "L" );
+            KI_CHECK_OPT_EQUAL( partEntry.m_MaxPinCount, i + 10 );
+            BOOST_CHECK_EQUAL( partEntry.m_GateSwappingAllowed, i % 10 != 1 );
+            BOOST_CHECK_EQUAL( partEntry.m_PinsVisible, i % 5 != 1 );
 
-        // SCH attributes ($ lines)
-        BOOST_CHECK_EQUAL( partEntry.m_SchAttributes["SCH val1"].m_ReadOnly, false );
-        BOOST_CHECK_EQUAL( partEntry.m_SchAttributes["SCH val1"].m_Value,
-                           "val" + std::to_string( i ) );
-        BOOST_CHECK_EQUAL( partEntry.m_SchAttributes["SCH val2"].m_ReadOnly, true );
-        BOOST_CHECK_EQUAL( partEntry.m_SchAttributes["SCH val2"].m_Value,
-                           "readOnly" + std::to_string( i ) );
+            KI_CHECK_OPT_EQUAL( partEntry.m_SpicePartName, "PartName" + std::to_string( i ) );
+            KI_CHECK_OPT_EQUAL( partEntry.m_SpiceModel, std::to_string( i ) + "uH" );
 
-        // PCB attributes (% lines)
-        BOOST_CHECK_EQUAL( partEntry.m_PcbAttributes["PCB val1"].m_ReadOnly, false );
-        BOOST_CHECK_EQUAL( partEntry.m_PcbAttributes["PCB val1"].m_Value,
-                           "val" + std::to_string( i ) );
-        BOOST_CHECK_EQUAL( partEntry.m_PcbAttributes["PCB val2"].m_ReadOnly, true );
-        BOOST_CHECK_EQUAL( partEntry.m_PcbAttributes["PCB val2"].m_Value,
-                           "readOnly" + std::to_string( i ) );
+            KI_CHECK_OPT_EQUAL( partEntry.m_AcceptancePartName, "PartName" + std::to_string( i ) );
+            KI_CHECK_OPT_EQUAL( partEntry.m_AcceptanceText, "Acceptance" + std::to_string( i ) );
 
-        // Parts attributes (~ lines)
-        BOOST_CHECK_EQUAL( partEntry.m_PartAttributes["Part val1"].m_ReadOnly, false );
-        BOOST_CHECK_EQUAL( partEntry.m_PartAttributes["Part val1"].m_Value,
-                           "val" + std::to_string( i ) );
-        BOOST_CHECK_EQUAL( partEntry.m_PartAttributes["Part val2"].m_ReadOnly, true );
-        BOOST_CHECK_EQUAL( partEntry.m_PartAttributes["Part val2"].m_Value,
-                           "readOnly" + std::to_string( i ) );
+            // User part attributes (* lines)
+            BOOST_CHECK_EQUAL( partEntry.m_UserAttributes["UserFieldpartNo"],
+                            std::to_string( i * 5 ) );
+            BOOST_CHECK_EQUAL( partEntry.m_UserAttributes["UserFieldpartNoCreated by"],
+                            "Person" + std::to_string( i ) );
 
-        // PCB and SCH attributes (@ lines)
-        BOOST_CHECK_EQUAL( partEntry.m_SchAndPcbAttributes["SCH and PCB val1"].m_ReadOnly, false );
-        BOOST_CHECK_EQUAL( partEntry.m_SchAndPcbAttributes["SCH and PCB val1"].m_Value,
-                           "val" + std::to_string( i ) );
-        BOOST_CHECK_EQUAL( partEntry.m_SchAndPcbAttributes["SCH and PCB val2"].m_ReadOnly, true );
-        BOOST_CHECK_EQUAL( partEntry.m_SchAndPcbAttributes["SCH and PCB val2"].m_Value,
-                           "readOnly" + std::to_string( i ) );
+            // SCH attributes ($ lines)
+            BOOST_CHECK_EQUAL( partEntry.m_SchAttributes["SCH val1"].m_ReadOnly, false );
+            BOOST_CHECK_EQUAL( partEntry.m_SchAttributes["SCH val1"].m_Value,
+                            "val" + std::to_string( i ) );
+            BOOST_CHECK_EQUAL( partEntry.m_SchAttributes["SCH val2"].m_ReadOnly, true );
+            BOOST_CHECK_EQUAL( partEntry.m_SchAttributes["SCH val2"].m_Value,
+                            "readOnly" + std::to_string( i ) );
 
-        // Check symbol name and pins
-        BOOST_REQUIRE_EQUAL( partEntry.m_Symbols.size(), 1 );
-        BOOST_CHECK_EQUAL( partEntry.m_Symbols[0].m_SymbolName, "Symbol" + std::to_string( i ) );
-        KI_CHECK_OPT_EQUAL( partEntry.m_Symbols[0].m_SymbolAlternateName,
-                           std::optional<std::string>() );
-        BOOST_REQUIRE_EQUAL( partEntry.m_Symbols[0].m_Pins.size(), 2 );
-        BOOST_CHECK_EQUAL( partEntry.m_Symbols[0].m_Pins[0].m_Identifier, 1 );
-        BOOST_CHECK_EQUAL( partEntry.m_Symbols[0].m_Pins[1].m_Identifier, 2 );
+            // PCB attributes (% lines)
+            BOOST_CHECK_EQUAL( partEntry.m_PcbAttributes["PCB val1"].m_ReadOnly, false );
+            BOOST_CHECK_EQUAL( partEntry.m_PcbAttributes["PCB val1"].m_Value,
+                            "val" + std::to_string( i ) );
+            BOOST_CHECK_EQUAL( partEntry.m_PcbAttributes["PCB val2"].m_ReadOnly, true );
+            BOOST_CHECK_EQUAL( partEntry.m_PcbAttributes["PCB val2"].m_Value,
+                            "readOnly" + std::to_string( i ) );
 
-        // Check hidden pins
-        BOOST_REQUIRE_EQUAL( partEntry.m_HiddenPins.size(), 1 );
-        BOOST_CHECK_EQUAL( partEntry.m_HiddenPins.count( "GND" ), 1 );
-        i++;
+            // Parts attributes (~ lines)
+            BOOST_CHECK_EQUAL( partEntry.m_PartAttributes["Part val1"].m_ReadOnly, false );
+            BOOST_CHECK_EQUAL( partEntry.m_PartAttributes["Part val1"].m_Value,
+                            "val" + std::to_string( i ) );
+            BOOST_CHECK_EQUAL( partEntry.m_PartAttributes["Part val2"].m_ReadOnly, true );
+            BOOST_CHECK_EQUAL( partEntry.m_PartAttributes["Part val2"].m_Value,
+                            "readOnly" + std::to_string( i ) );
+
+            // PCB and SCH attributes (@ lines)
+            BOOST_CHECK_EQUAL( partEntry.m_SchAndPcbAttributes["SCH and PCB val1"].m_ReadOnly, 
+                            false );
+            BOOST_CHECK_EQUAL( partEntry.m_SchAndPcbAttributes["SCH and PCB val1"].m_Value,
+                            "val" + std::to_string( i ) );
+            BOOST_CHECK_EQUAL( partEntry.m_SchAndPcbAttributes["SCH and PCB val2"].m_ReadOnly,
+                            true );
+            BOOST_CHECK_EQUAL( partEntry.m_SchAndPcbAttributes["SCH and PCB val2"].m_Value,
+                            "readOnly" + std::to_string( i ) );
+
+            // Check symbol name and pins
+            BOOST_REQUIRE_EQUAL( partEntry.m_Symbols.size(), 1 );
+            BOOST_CHECK_EQUAL( partEntry.m_Symbols[0].m_SymbolName,
+                            "Symbol" + std::to_string( i ) );
+            KI_CHECK_OPT_EQUAL( partEntry.m_Symbols[0].m_SymbolAlternateName,
+                            std::optional<std::string>() );
+            BOOST_REQUIRE_EQUAL( partEntry.m_Symbols[0].m_Pins.size(), 2 );
+            BOOST_CHECK_EQUAL( partEntry.m_Symbols[0].m_Pins[0].m_Identifier, 1 );
+            BOOST_CHECK_EQUAL( partEntry.m_Symbols[0].m_Pins[1].m_Identifier, 2 );
+
+            // Check hidden pins
+            BOOST_REQUIRE_EQUAL( partEntry.m_HiddenPins.size(), 1 );
+            BOOST_CHECK_EQUAL( partEntry.m_HiddenPins.count( "GND" ), 1 );
+            i++;
+        }
     }
 }
 
