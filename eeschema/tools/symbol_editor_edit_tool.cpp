@@ -158,7 +158,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     bool        ccw = ( aEvent.Matches( EE_ACTIONS::rotateCCW.MakeEvent() ) );
     LIB_ITEM*   item = static_cast<LIB_ITEM*>( selection.Front() );
     SCH_COMMIT  localCommit( m_toolMgr );
-    SCH_COMMIT* commit = aEvent.Parameter<SCH_COMMIT*>();
+    SCH_COMMIT* commit = dynamic_cast<SCH_COMMIT*>( aEvent.Commit() );
 
     if( !commit )
         commit = &localCommit;

@@ -285,7 +285,8 @@ bool TOOL_MANAGER::InvokeTool( const std::string& aToolName )
 }
 
 
-bool TOOL_MANAGER::doRunAction( const std::string& aActionName, bool aNow, std::any aParam )
+bool TOOL_MANAGER::doRunAction( const std::string& aActionName, bool aNow, std::any aParam,
+                                COMMIT* aCommit )
 {
     TOOL_ACTION* action = m_actionMgr->FindAction( aActionName );
 
@@ -295,7 +296,7 @@ bool TOOL_MANAGER::doRunAction( const std::string& aActionName, bool aNow, std::
         return false;
     }
 
-    doRunAction( *action, aNow, aParam );
+    doRunAction( *action, aNow, aParam, aCommit );
 
     return false;
 }
@@ -319,7 +320,8 @@ VECTOR2D TOOL_MANAGER::GetCursorPosition() const
 }
 
 
-bool TOOL_MANAGER::doRunAction( const TOOL_ACTION& aAction, bool aNow, std::any aParam )
+bool TOOL_MANAGER::doRunAction( const TOOL_ACTION& aAction, bool aNow, std::any aParam,
+                                COMMIT* aCommit )
 {
     if( m_shuttingDown )
         return true;
@@ -333,6 +335,10 @@ bool TOOL_MANAGER::doRunAction( const TOOL_ACTION& aAction, bool aNow, std::any 
     // Allow to override the action parameter
     if( aParam.has_value() )
         event.SetParameter( aParam );
+
+    // Pass the commit (if any)
+    if( aCommit )
+        event.SetCommit( aCommit );
 
     if( aNow )
     {

@@ -92,7 +92,7 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     SCH_COMMIT            localCommit( m_toolMgr );
-    SCH_COMMIT*           commit = aEvent.Parameter<SCH_COMMIT*>();
+    SCH_COMMIT*           commit = dynamic_cast<SCH_COMMIT*>( aEvent.Commit() );
 
     if( !commit )
         commit = &localCommit;

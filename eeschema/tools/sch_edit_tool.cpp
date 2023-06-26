@@ -676,7 +676,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     VECTOR2I    rotPoint;
     bool        moving = false;
     SCH_COMMIT  localCommit( m_toolMgr );
-    SCH_COMMIT* commit = aEvent.Parameter<SCH_COMMIT*>();
+    SCH_COMMIT* commit = dynamic_cast<SCH_COMMIT*>( aEvent.Commit() );
 
     if( !commit )
         commit = &localCommit;
@@ -944,7 +944,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     bool        connections = false;
     bool        moving = item->IsMoving();
     SCH_COMMIT  localCommit( m_toolMgr );
-    SCH_COMMIT* commit = aEvent.Parameter<SCH_COMMIT*>();
+    SCH_COMMIT* commit = dynamic_cast<SCH_COMMIT*>( aEvent.Commit() );
 
     if( !commit )
         commit = &localCommit;

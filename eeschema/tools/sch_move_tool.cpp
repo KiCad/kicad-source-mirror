@@ -361,7 +361,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     bool                  wasDragging = m_moveInProgress && m_isDrag;
     bool                  isSlice = false;
     SCH_COMMIT            localCommit( m_toolMgr );
-    SCH_COMMIT*           commit = aEvent.Parameter<SCH_COMMIT*>();
+    SCH_COMMIT*           commit = dynamic_cast<SCH_COMMIT*>( aEvent.Commit() );
 
     if( !commit )
         commit = &localCommit;

@@ -28,15 +28,17 @@
 #ifndef __TOOL_MANAGER_H
 #define __TOOL_MANAGER_H
 
-#include <typeinfo>
-#include <map>
 #include <list>
+#include <map>
 #include <stack>
+#include <typeinfo>
+#include <type_traits>
 
 #include <tool/tool_base.h>
 #include <tool/tool_event.h>
 #include <view/view_controls.h>
 
+class COMMIT;
 class TOOLS_HOLDER;
 class TOOL_ACTION;
 class TOOL_BASE;
@@ -139,13 +141,14 @@ public:
      *               depends on the action.
      * @return False if the action was not found.
      */
-    template<typename T>
+    template<typename T,
+             std::enable_if_t<!std::is_convertible_v<T*, COMMIT*>>* = nullptr>
     bool RunAction( const std::string& aActionName, T aParam )
     {
         // Use a cast to ensure the proper type is stored inside the parameter
         std::any a( static_cast<T>( aParam ) );
 
-        return doRunAction( aActionName, true, a );
+        return doRunAction( aActionName, true, a, nullptr );
     }
 
     bool RunAction( const std::string& aActionName )
@@ -153,7 +156,7 @@ public:
         // Default initialize the parameter argument to an empty std::any
         std::any a;
 
-        return doRunAction( aActionName, true, a );
+        return doRunAction( aActionName, true, a, nullptr );
     }
 
     /**
@@ -167,13 +170,32 @@ public:
      *               depends on the action.
      * @return True if the action was handled immediately
      */
-    template<typename T>
+    template<typename T,
+             std::enable_if_t<!std::is_convertible_v<T*, COMMIT*>>* = nullptr>
     bool RunAction( const TOOL_ACTION& aAction, T aParam )
     {
         // Use a cast to ensure the proper type is stored inside the parameter
         std::any a( static_cast<T>( aParam ) );
 
-        return doRunAction( aAction, true, a );
+        return doRunAction( aAction, true, a, nullptr );
+    }
+
+    /**
+     * Run the specified action immediately, pausing the current action to run the new one.
+     *
+     * Note: The type of the optional parameter must match exactly with the type the consuming
+     *       action is expecting, otherwise an assert will occur when reading the paramter.
+     *
+     * @param aAction is the action to be invoked.
+     * @param aCommit is the commit object the tool handling the action should add the new edits to
+     * @return True if the action was handled immediately
+     */
+    bool RunAction( const TOOL_ACTION& aAction, COMMIT* aCommit )
+    {
+        // Default initialize the parameter argument to an empty std::any
+        std::any a;
+
+        return doRunAction( aAction, true, a, aCommit );
     }
 
     bool RunAction( const TOOL_ACTION& aAction )
@@ -181,7 +203,7 @@ public:
         // Default initialize the parameter argument to an empty std::any
         std::any a;
 
-        return doRunAction( aAction, true, a );
+        return doRunAction( aAction, true, a, nullptr );
     }
 
     /**
@@ -203,7 +225,7 @@ public:
         // Use a cast to ensure the proper type is stored inside the parameter
         std::any a( static_cast<T>( aParam ) );
 
-        return doRunAction( aActionName, false, a );
+        return doRunAction( aActionName, false, a, nullptr );
     }
 
     bool PostAction( const std::string& aActionName )
@@ -211,7 +233,7 @@ public:
         // Default initialize the parameter argument to an empty std::any
         std::any a;
 
-        return doRunAction( aActionName, false, a );
+        return doRunAction( aActionName, false, a, nullptr );
     }
 
     /**
@@ -230,7 +252,7 @@ public:
         // Use a cast to ensure the proper type is stored inside the parameter
         std::any a( static_cast<T>( aParam ) );
 
-        return doRunAction( aAction, false, a );
+        return doRunAction( aAction, false, a, nullptr );
     }
 
     void PostAction( const TOOL_ACTION& aAction )
@@ -238,7 +260,7 @@ public:
         // Default initialize the parameter argument to an empty std::any
         std::any a;
 
-        doRunAction( aAction, false, a );
+        doRunAction( aAction, false, a, nullptr );
     }
 
     /**
@@ -514,8 +536,8 @@ private:
     /**
      * Helper function to actually run an action.
      */
-    bool doRunAction( const TOOL_ACTION& aAction, bool aNow, std::any aParam );
-    bool doRunAction( const std::string& aActionName, bool aNow, std::any aParam );
+    bool doRunAction( const TOOL_ACTION& aAction, bool aNow, std::any aParam, COMMIT* aCommit );
+    bool doRunAction( const std::string& aActionName, bool aNow, std::any aParam, COMMIT* aCommit );
 
     /**
      * Pass an event at first to the active tools, then to all others.

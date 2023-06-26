@@ -38,6 +38,7 @@
 #include <tool/tool_action.h>
 #include <wx/debug.h>
 
+class COMMIT;
 class TOOL_ACTION;
 class TOOL_MANAGER;
 class TOOL_BASE;
@@ -172,6 +173,7 @@ public:
         m_mouseButtons( 0 ),
         m_keyCode( 0 ),
         m_modifiers( 0 ),
+        m_commit( nullptr ),
         m_firstResponder( nullptr )
     {
         init();
@@ -185,6 +187,7 @@ public:
         m_mouseButtons( 0 ),
         m_keyCode( 0 ),
         m_modifiers( 0 ),
+        m_commit( nullptr ),
         m_firstResponder( nullptr )
     {
         if( aCategory == TC_MOUSE )
@@ -216,6 +219,7 @@ public:
         m_mouseButtons( 0 ),
         m_keyCode( 0 ),
         m_modifiers( 0 ),
+        m_commit( nullptr ),
         m_firstResponder( nullptr )
     {
         if( aCategory == TC_COMMAND || aCategory == TC_MESSAGE )
@@ -252,6 +256,9 @@ public:
     ///< Controls whether the tool is first being pushed to the stack or being reactivated after a pause
     bool IsReactivate() const { return m_reactivate; }
     void SetReactivate( bool aReactivate = true ) { m_reactivate = aReactivate; }
+
+    void SetCommit( COMMIT* aCommit ) { m_commit = aCommit; }
+    COMMIT* Commit() const { return m_commit; }
 
     ///< Returns information about difference between current mouse cursor position and the place
     ///< where dragging has started.
@@ -435,8 +442,9 @@ public:
     /**
      * Return a parameter assigned to the event. Its meaning depends on the target tool.
      */
-    template<typename T>
-    T Parameter( typename std::enable_if<!std::is_pointer<T>::value>::type* = 0 ) const
+    template<typename T,
+             std::enable_if_t<!std::is_pointer<T>::value>* = nullptr >
+    T Parameter() const
     {
         T param;
 
@@ -459,8 +467,9 @@ public:
     /**
      * Return pointer parameter assigned to the event. Its meaning depends on the target tool.
      */
-    template<typename T>
-    T Parameter( typename std::enable_if<std::is_pointer<T>::value>::type* = 0 ) const
+    template<typename T,
+             std::enable_if_t<std::is_pointer<T>::value>* = nullptr>
+    T Parameter() const
     {
         T param = nullptr;
 
@@ -573,6 +582,9 @@ private:
 
     ///< State of key modifiers (Ctrl/Alt/etc.)
     int m_modifiers;
+
+    /// Commit the tool handling the event should add to
+    COMMIT* m_commit;
 
     ///< Generic parameter used for passing non-standard data.
     std::any m_param;
