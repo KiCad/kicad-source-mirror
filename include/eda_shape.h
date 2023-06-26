@@ -301,7 +301,7 @@ public:
 
     void SetLength( const double& aLength );
 
-    void SetRectangle( const long long int& aLength, const long long int& aWidth );
+    void SetRectangle( const long long int& aHeight, const long long int& aWidth );
 
     void SetAngle( const EDA_ANGLE& aLength );
 
@@ -312,7 +312,7 @@ public:
      */
     double GetLength() const;
 
-    long long int GetRectangleLength() const;
+    long long int GetRectangleHeight() const;
     long long int GetRectangleWidth() const;
 
     /**
@@ -377,7 +377,7 @@ protected:
     FILL_T                m_fill;
     COLOR4D               m_fillColor;
 
-    long long int         m_rectangleLength;
+    long long int         m_rectangleHeight;
     long long int         m_rectangleWidth;
 
     double                m_segmentLength;

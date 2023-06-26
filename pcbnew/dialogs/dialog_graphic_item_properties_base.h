@@ -74,9 +74,9 @@ class DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_segmentAngleLabel;
 		wxTextCtrl* m_segmentAngleCtrl;
 		wxStaticText* m_segmentAngleUnits;
-		wxStaticText* m_rectangleLengthLabel;
-		wxTextCtrl* m_rectangleLengthCtrl;
-		wxStaticText* m_rectangleLengthUnits;
+		wxStaticText* m_rectangleHeightLabel;
+		wxTextCtrl* m_rectangleHeightCtrl;
+		wxStaticText* m_rectangleHeightUnits;
 		wxStaticText* m_rectangleWidthLabel;
 		wxTextCtrl* m_rectangleWidthCtrl;
 		wxStaticText* m_rectangleWidthUnits;

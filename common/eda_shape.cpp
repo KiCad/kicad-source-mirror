@@ -137,11 +137,11 @@ double EDA_SHAPE::GetLength() const
     }
 }
 
-long long int EDA_SHAPE::GetRectangleLength() const
+long long int EDA_SHAPE::GetRectangleHeight() const
 {
     switch( m_shape )
     {
-    case SHAPE_T::RECT: return GetEndX() - GetStartX();
+    case SHAPE_T::RECT: return GetEndY() - GetStartY();
 
     default: UNIMPLEMENTED_FOR( SHAPE_T_asString() );
     }
@@ -151,7 +151,7 @@ long long int EDA_SHAPE::GetRectangleWidth() const
 {
     switch( m_shape )
     {
-    case SHAPE_T::RECT: return GetEndY() - GetStartY();
+    case SHAPE_T::RECT: return GetEndX() - GetStartX();
 
     default: UNIMPLEMENTED_FOR( SHAPE_T_asString() );
     }
@@ -167,12 +167,12 @@ void EDA_SHAPE::SetLength( const double& aLength )
     }
 }
 
-void EDA_SHAPE::SetRectangle(const long long int& aLength, const long long int& aWidth)
+void EDA_SHAPE::SetRectangle(const long long int& aHeight, const long long int& aWidth)
 {
     switch ( m_shape )
     {
     case SHAPE_T::RECT:
-        m_rectangleLength = aLength;
+        m_rectangleHeight = aHeight;
         m_rectangleWidth = aWidth;
         break;
 
