@@ -524,7 +524,7 @@ int FOOTPRINT_EDITOR_CONTROL::ImportFootprint( const TOOL_EVENT& aEvent )
         m_frame->ReCreateHToolbar();
     }
 
-    m_toolMgr->RunAction( ACTIONS::zoomFitScreen, true );
+    m_toolMgr->RunAction( ACTIONS::zoomFitScreen );
     m_frame->OnModify();
     return 0;
 }

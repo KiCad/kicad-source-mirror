@@ -215,7 +215,7 @@ void DIALOG_POSITION_RELATIVE::OnSelectItemClick( wxCommandEvent& event )
 
     POSITION_RELATIVE_TOOL* posrelTool = m_toolMgr->GetTool<POSITION_RELATIVE_TOOL>();
     wxASSERT( posrelTool );
-    m_toolMgr->RunAction( PCB_ACTIONS::selectpositionRelativeItem, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectpositionRelativeItem );
 
     Hide();
 }

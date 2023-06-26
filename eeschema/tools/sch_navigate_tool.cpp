@@ -106,8 +106,8 @@ int SCH_NAVIGATE_TOOL::Forward( const TOOL_EVENT& aEvent )
     {
         m_navIndex++;
 
-        m_frame->GetToolManager()->RunAction( ACTIONS::cancelInteractive, true );
-        m_frame->GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
+        m_frame->GetToolManager()->RunAction( ACTIONS::cancelInteractive );
+        m_frame->GetToolManager()->RunAction( EE_ACTIONS::clearSelection );
 
         m_frame->SetCurrentSheet( *m_navIndex );
         m_frame->DisplayCurrentSheet();
@@ -127,8 +127,8 @@ int SCH_NAVIGATE_TOOL::Back( const TOOL_EVENT& aEvent )
     {
         m_navIndex--;
 
-        m_frame->GetToolManager()->RunAction( ACTIONS::cancelInteractive, true );
-        m_frame->GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
+        m_frame->GetToolManager()->RunAction( ACTIONS::cancelInteractive );
+        m_frame->GetToolManager()->RunAction( EE_ACTIONS::clearSelection );
 
         m_frame->SetCurrentSheet( *m_navIndex );
         m_frame->DisplayCurrentSheet();
@@ -278,8 +278,8 @@ void SCH_NAVIGATE_TOOL::pushToHistory( SCH_SHEET_PATH aPath )
 
 void SCH_NAVIGATE_TOOL::changeSheet( SCH_SHEET_PATH aPath )
 {
-    m_frame->GetToolManager()->RunAction( ACTIONS::cancelInteractive, true );
-    m_frame->GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
+    m_frame->GetToolManager()->RunAction( ACTIONS::cancelInteractive );
+    m_frame->GetToolManager()->RunAction( EE_ACTIONS::clearSelection );
 
     // Store the current zoom level into the current screen before switching
     m_frame->GetScreen()->m_LastZoomLevel = m_frame->GetCanvas()->GetView()->GetScale();

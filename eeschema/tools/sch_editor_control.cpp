@@ -132,8 +132,8 @@ int SCH_EDITOR_CONTROL::Revert( const TOOL_EVENT& aEvent )
 
     if( m_frame->GetCurrentSheet().Last() != &root )
     {
-        m_toolMgr->RunAction( ACTIONS::cancelInteractive, true );
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+        m_toolMgr->RunAction( ACTIONS::cancelInteractive );
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
         // Store the current zoom level into the current screen before switching
         m_frame->GetScreen()->m_LastZoomLevel = m_frame->GetCanvas()->GetView()->GetScale();
@@ -656,10 +656,10 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                 }
 
                 // Wake the selection tool after exiting to ensure the cursor gets updated
-                m_toolMgr->RunAction( EE_ACTIONS::selectionActivate, false );
+                m_toolMgr->PostAction( EE_ACTIONS::selectionActivate );
             } );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &aEvent );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, &aEvent );
 
     return 0;
 }
@@ -746,10 +746,10 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
                 // ( avoid crash in some cases when the SimTune tool is deselected )
                 EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
                 selectionTool->ClearSelection();
-                m_toolMgr->RunAction( EE_ACTIONS::selectionActivate, false );
+                m_toolMgr->PostAction( EE_ACTIONS::selectionActivate );
             } );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &aEvent );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, &aEvent );
 
     return 0;
 }
@@ -1196,7 +1196,7 @@ int SCH_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
             return highlightNet( m_toolMgr, aPos );
         } );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &aEvent );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, &aEvent );
 
     return 0;
 }
@@ -1301,7 +1301,7 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
     plugin.Format( &selection, &selPath, schematic, &formatter, true );
 
     if( selection.IsHover() )
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
     if( aUseDuplicateClipboard )
     {
@@ -1346,7 +1346,7 @@ int SCH_EDITOR_CONTROL::Cut( const TOOL_EVENT& aEvent )
     }
 
     if( doCopy() )
-        m_toolMgr->RunAction( ACTIONS::doDelete, true );
+        m_toolMgr->RunAction( ACTIONS::doDelete );
 
     return 0;
 }
@@ -1853,8 +1853,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     m_frame->GetCurrentSheet().UpdateAllScreenReferences();
 
     // Now clear the previous selection, select the pasted items, and fire up the "move" tool.
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-    m_toolMgr->RunAction<EDA_ITEMS*>( EE_ACTIONS::addItemsToSel, true, &loadedItems );
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+    m_toolMgr->RunAction<EDA_ITEMS*>( EE_ACTIONS::addItemsToSel, &loadedItems );
 
     EE_SELECTION& selection = selTool->GetSelection();
 
@@ -1952,7 +1952,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             selection.SetReferencePoint( item->GetPosition() );
         }
 
-        m_toolMgr->RunAction( EE_ACTIONS::move, true, &commit );
+        m_toolMgr->RunAction( EE_ACTIONS::move, &commit );
 
         while( m_toolMgr->GetTool<SCH_MOVE_TOOL>()->IsToolActive() )
         {
@@ -1979,7 +1979,7 @@ int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
         symbol = (SCH_SYMBOL*) selection.Front();
 
     if( selection.IsHover() )
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
     if( !symbol || symbol->GetEditFlags() != 0 )
         return 0;
@@ -1991,7 +1991,7 @@ int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    m_toolMgr->RunAction( ACTIONS::showSymbolEditor, true );
+    m_toolMgr->RunAction( ACTIONS::showSymbolEditor );
     symbolEditor = (SYMBOL_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH_SYMBOL_EDITOR, false );
 
     if( symbolEditor )
@@ -2232,7 +2232,7 @@ int SCH_EDITOR_CONTROL::ToggleOPCurrents( const TOOL_EVENT& aEvent )
 int SCH_EDITOR_CONTROL::ChangeLineMode( const TOOL_EVENT& aEvent )
 {
     m_frame->eeconfig()->m_Drawing.line_mode = aEvent.Parameter<LINE_MODE>();
-    m_toolMgr->RunAction( ACTIONS::refreshPreview );
+    m_toolMgr->PostAction( ACTIONS::refreshPreview );
     return 0;
 }
 
@@ -2241,7 +2241,7 @@ int SCH_EDITOR_CONTROL::NextLineMode( const TOOL_EVENT& aEvent )
 {
     m_frame->eeconfig()->m_Drawing.line_mode++;
     m_frame->eeconfig()->m_Drawing.line_mode %= LINE_MODE::LINE_MODE_COUNT;
-    m_toolMgr->RunAction( ACTIONS::refreshPreview );
+    m_toolMgr->PostAction( ACTIONS::refreshPreview );
     return 0;
 }
 

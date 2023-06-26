@@ -141,7 +141,7 @@ void PL_EDITOR_FRAME::RollbackFromUndo()
 
     if( pageSettingsAndTitleBlock )
     {
-        GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
+        GetToolManager()->RunAction( ACTIONS::zoomFitScreen );
         HardRedraw();   // items based off of corners will need re-calculating
     }
     else

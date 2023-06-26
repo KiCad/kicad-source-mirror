@@ -70,13 +70,13 @@ int CVPCB_CONTROL::Main( const TOOL_EVENT& aEvent )
             {
             // The right arrow moves focus to the focusable object to the right
             case WXK_RIGHT:
-                m_toolMgr->RunAction( CVPCB_ACTIONS::changeFocusRight );
+                m_toolMgr->PostAction( CVPCB_ACTIONS::changeFocusRight );
                 handled = true;
                 break;
 
             // The left arrow moves focus to the focusable object to the left
             case WXK_LEFT:
-                m_toolMgr->RunAction( CVPCB_ACTIONS::changeFocusLeft );
+                m_toolMgr->PostAction( CVPCB_ACTIONS::changeFocusLeft );
                 handled = true;
                 break;
 

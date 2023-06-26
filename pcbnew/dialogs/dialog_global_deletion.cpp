@@ -118,7 +118,7 @@ void DIALOG_GLOBAL_DELETION::DoGlobalDeletions()
     bool delete_all = m_delAll->GetValue();
 
     // Clear selection before removing any items
-    m_Parent->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_Parent->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
 
     BOARD*       board = m_Parent->GetBoard();
     BOARD_COMMIT commit( m_Parent );

@@ -570,7 +570,7 @@ int PCB_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
                     return false;   // drill origin is a one-shot; don't continue with tool
                 } );
 
-        m_toolMgr->RunAction( ACTIONS::pickerTool, true, &aEvent );
+        m_toolMgr->RunAction( ACTIONS::pickerTool, &aEvent );
     }
 
     return 0;
@@ -596,7 +596,7 @@ int PCB_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
     PCB_PICKER_TOOL* picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
 
     m_pickerItem = nullptr;
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
     // Deactivate other tools; particularly important if another PICKER is currently running
     Activate();
@@ -683,7 +683,7 @@ int PCB_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
                 m_frame->GetCanvas()->Refresh();
             } );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &aEvent );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, &aEvent );
 
     return 0;
 }
@@ -1103,7 +1103,7 @@ int PCB_CONTROL::placeBoardItems( BOARD* aBoard, bool aAnchorAtOrigin, bool aRea
 int PCB_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsNew,
                                   bool aAnchorAtOrigin, bool aReannotateDuplicates )
 {
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
     PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
     EDIT_TOOL*          editTool = m_toolMgr->GetTool<EDIT_TOOL>();
@@ -1153,7 +1153,7 @@ int PCB_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsNew,
 
     // Select the items that should be selected
     EDA_ITEMS toSel( itemsToSel.begin(), itemsToSel.end() );
-    m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, true, &toSel );
+    m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, &toSel );
 
     // Reannotate duplicate footprints (make sense only in board editor )
     if( aReannotateDuplicates && m_isBoardEditor )
@@ -1185,7 +1185,7 @@ int PCB_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsNew,
         getViewControls()->SetCursorPosition( getViewControls()->GetMousePosition(), false );
 
         m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
-        m_toolMgr->RunAction( PCB_ACTIONS::move, true );
+        m_toolMgr->RunAction( PCB_ACTIONS::move );
     }
 
     return 0;

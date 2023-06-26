@@ -206,7 +206,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     updateView();
 
     SetActiveLayer( F_Cu );
-    GetToolManager()->RunAction( ACTIONS::zoomFitScreen, false );
+    GetToolManager()->PostAction( ACTIONS::zoomFitScreen );
 
     // Do not Run a dialog here: on some Window Managers, it creates issues.
     // Reason: the FOOTPRINT_WIZARD_FRAME is run as modal;
@@ -291,7 +291,7 @@ void FOOTPRINT_WIZARD_FRAME::updateView()
     GetCanvas()->UpdateColors();
     GetCanvas()->DisplayBoard( GetBoard() );
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
-    m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+    m_toolManager->RunAction( ACTIONS::zoomFitScreen );
     UpdateMsgPanel();
 }
 
@@ -643,7 +643,7 @@ void FOOTPRINT_WIZARD_FRAME::PythonPluginsReload()
     PCB_EDIT_FRAME* pcbframe = static_cast<PCB_EDIT_FRAME*>( Kiway().Player( FRAME_PCB_EDITOR, false ) );
 
     if( pcbframe )
-        pcbframe->GetToolManager()->RunAction( PCB_ACTIONS::pluginsReload, true );
+        pcbframe->GetToolManager()->RunAction( PCB_ACTIONS::pluginsReload );
     else
-        GetToolManager()->RunAction( PCB_ACTIONS::pluginsReload, true );
+        GetToolManager()->RunAction( PCB_ACTIONS::pluginsReload );
 }

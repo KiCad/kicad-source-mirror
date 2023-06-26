@@ -312,7 +312,7 @@ protected:
         {
             bds.UseCustomTrackViaSize( true );
             bds.m_TempOverrideTrackWidth = true;
-            m_frame.GetToolManager()->RunAction( ACT_CustomTrackWidth, true );
+            m_frame.GetToolManager()->RunAction( ACT_CustomTrackWidth );
         }
         else if( id == ID_POPUP_PCB_SELECT_AUTO_WIDTH )
         {
@@ -438,7 +438,7 @@ protected:
         {
             bds.UseCustomDiffPairDimensions( true );
             TOOL_MANAGER* toolManager = m_frame.GetToolManager();
-            toolManager->RunAction( PCB_ACTIONS::routerDiffPairDialog, true );
+            toolManager->RunAction( PCB_ACTIONS::routerDiffPairDialog );
         }
         else if( id == ID_POPUP_PCB_SELECT_USE_NETCLASS_DIFFPAIR )
         {
@@ -1485,7 +1485,7 @@ void ROUTER_TOOL::performRouting()
             frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
             controls()->SetAutoPan( false );
             {
-                m_toolMgr->RunAction( ACT_CustomTrackWidth, true );
+                m_toolMgr->RunAction( ACT_CustomTrackWidth );
             }
             controls()->SetAutoPan( true );
             setCursor();
@@ -1636,7 +1636,7 @@ int ROUTER_TOOL::RouteSelected( const TOOL_EVENT& aEvent )
     if( selection.Size() == 0 )
         return 0;
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
     frame->PushTool( aEvent );
 
@@ -1714,9 +1714,9 @@ int ROUTER_TOOL::RouteSelected( const TOOL_EVENT& aEvent )
             bool autoRouted = false;
 
             if( autoRoute )
-                m_toolMgr->RunAction( PCB_ACTIONS::routerAttemptFinish, false, &autoRouted );
+                m_toolMgr->PostAction( PCB_ACTIONS::routerAttemptFinish, &autoRouted );
             else if( otherEnd )
-                m_toolMgr->RunAction( PCB_ACTIONS::routerContinueFromEnd, false );
+                m_toolMgr->PostAction( PCB_ACTIONS::routerContinueFromEnd );
 
             // We want autorouted tracks to all be in one undo group except for
             // any tracks that need to be manually finished.
@@ -1762,7 +1762,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     }
 
     // Deselect all items
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
     frame->PushTool( aEvent );
 
@@ -1853,7 +1853,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsAction( &ACT_PlaceThroughVia ) )
         {
-            m_toolMgr->RunAction( PCB_ACTIONS::layerToggle, true );
+            m_toolMgr->RunAction( PCB_ACTIONS::layerToggle );
         }
         else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
         {
@@ -1923,7 +1923,7 @@ void ROUTER_TOOL::performDragging( int aMode )
 
         m_cancelled = true;
 
-        m_toolMgr->RunAction( PCB_ACTIONS::drag45Degree, false );
+        m_toolMgr->PostAction( PCB_ACTIONS::drag45Degree );
 
         return;
     }
@@ -2078,7 +2078,7 @@ void ROUTER_TOOL::NeighboringSegmentFilter( const VECTOR2I& aPt, GENERAL_COLLECT
 
 bool ROUTER_TOOL::CanInlineDrag( int aDragMode )
 {
-    m_toolMgr->RunAction<CLIENT_SELECTION_FILTER>( PCB_ACTIONS::selectionCursor, true,
+    m_toolMgr->RunAction<CLIENT_SELECTION_FILTER>( PCB_ACTIONS::selectionCursor,
                                                    NeighboringSegmentFilter );
     const PCB_SELECTION& selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 
@@ -2108,7 +2108,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     if( selection.Empty() )
     {
-        m_toolMgr->RunAction<CLIENT_SELECTION_FILTER>( PCB_ACTIONS::selectionCursor, true,
+        m_toolMgr->RunAction<CLIENT_SELECTION_FILTER>( PCB_ACTIONS::selectionCursor,
                                                        NeighboringSegmentFilter );
     }
 
@@ -2137,7 +2137,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         item->SetLocked( false );
     }
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
     frame()->PushTool( aEvent );
     Activate();
@@ -2444,7 +2444,7 @@ int ROUTER_TOOL::InlineBreakTrack( const TOOL_EVENT& aEvent )
     if( item->Type() != PCB_TRACE_T )
         return 0;
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
     Activate();
 

@@ -241,7 +241,7 @@ bool SYMBOL_EDIT_FRAME::LoadSymbolFromCurrentLib( const wxString& aAliasName, in
     m_SyncPinEdit = GetCurSymbol()->IsMulti() && !GetCurSymbol()->UnitsLocked();
 
     ClearUndoRedoList();
-    m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+    m_toolManager->RunAction( ACTIONS::zoomFitScreen );
     SetShowDeMorgan( GetCurSymbol()->Flatten()->HasConversion() );
 
     if( aUnit > 0 )
@@ -265,7 +265,7 @@ bool SYMBOL_EDIT_FRAME::LoadOneLibrarySymbolAux( LIB_SYMBOL* aEntry, const wxStr
         return false;
     }
 
-    m_toolManager->RunAction( ACTIONS::cancelInteractive, true );
+    m_toolManager->RunAction( ACTIONS::cancelInteractive );
 
     // Symbols from the schematic are edited in place and not managed by the library manager.
     if( IsSymbolFromSchematic() )
@@ -336,7 +336,7 @@ void SYMBOL_EDIT_FRAME::SaveAll()
 
 void SYMBOL_EDIT_FRAME::CreateNewSymbol( const wxString& inheritFromSymbolName )
 {
-    m_toolManager->RunAction( ACTIONS::cancelInteractive, true );
+    m_toolManager->RunAction( ACTIONS::cancelInteractive );
 
     wxArrayString rootSymbols;
     wxString lib = getTargetLib();
@@ -1032,7 +1032,7 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
     SCH_IO_MGR::SCH_FILE_T fileType = SCH_IO_MGR::SCH_FILE_T::SCH_KICAD;
     PROJECT&   prj = Prj();
 
-    m_toolManager->RunAction( ACTIONS::cancelInteractive, true );
+    m_toolManager->RunAction( ACTIONS::cancelInteractive );
 
     if( !aNewFile && ( aLibrary.empty() || !prj.SchSymbolLibTable()->HasLibrary( aLibrary ) ) )
     {

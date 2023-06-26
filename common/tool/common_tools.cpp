@@ -163,7 +163,7 @@ int COMMON_TOOLS::CursorControl( const TOOL_EVENT& aEvent )
     }
 
     getViewControls()->SetCursorPosition( cursor, true, true, type );
-    m_toolMgr->RunAction( ACTIONS::refreshPreview );
+    m_toolMgr->PostAction( ACTIONS::refreshPreview );
 
     return 0;
 }

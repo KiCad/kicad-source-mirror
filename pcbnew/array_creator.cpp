@@ -205,8 +205,8 @@ void ARRAY_CREATOR::Invoke()
             all_added_items.push_back( item );
     }
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-    m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, true, &all_added_items );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+    m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, &all_added_items );
 
     commit.Push( _( "Create an array" ) );
 }

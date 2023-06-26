@@ -298,7 +298,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_appearancePanel->ApplyLayerPreset( cfg->m_ActiveLayerPreset );
     m_appearancePanel->SetTabIndex( cfg->m_AuiPanels.appearance_panel_tab );
 
-    GetToolManager()->RunAction( ACTIONS::zoomFitScreen, false );
+    GetToolManager()->PostAction( ACTIONS::zoomFitScreen );
     UpdateTitle();
     setupUnits( GetSettings() );
 
@@ -1140,9 +1140,9 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
     PCB_EDIT_FRAME* pcbframe = static_cast<PCB_EDIT_FRAME*>( Kiway().Player( FRAME_PCB_EDITOR, false ) );
 
     if( pcbframe )
-        pcbframe->GetToolManager()->RunAction( PCB_ACTIONS::pluginsReload, true );
+        pcbframe->GetToolManager()->RunAction( PCB_ACTIONS::pluginsReload );
     else
-        m_toolManager->RunAction( PCB_ACTIONS::pluginsReload, true );
+        m_toolManager->RunAction( PCB_ACTIONS::pluginsReload );
 }
 
 

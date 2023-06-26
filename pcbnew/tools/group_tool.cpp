@@ -145,7 +145,7 @@ int GROUP_TOOL::PickNewMember( const TOOL_EVENT& aEvent  )
     picker->SetClickHandler(
             [&]( const VECTOR2D& aPoint ) -> bool
             {
-                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
                 const PCB_SELECTION& sel = m_selectionTool->RequestSelection(
                         []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector,
@@ -200,7 +200,7 @@ int GROUP_TOOL::PickNewMember( const TOOL_EVENT& aEvent  )
     statusPopup.Popup();
     canvas()->SetStatusPopup( statusPopup.GetPanel() );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &aEvent );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, &aEvent );
 
     while( !done )
     {
@@ -315,10 +315,10 @@ int GROUP_TOOL::Ungroup( const TOOL_EVENT& aEvent )
     std::vector<BOARD_ITEM*> members;
 
     if( selection.Empty() )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
+        m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor );
 
     PCB_SELECTION selCopy = selection;
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
     for( EDA_ITEM* item : selCopy )
     {
@@ -358,7 +358,7 @@ int GROUP_TOOL::Ungroup( const TOOL_EVENT& aEvent )
     }
 
     EDA_ITEMS mem( members.begin(), members.end() );
-    m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, true, &mem );
+    m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, &mem );
 
     m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
     m_frame->OnModify();
@@ -374,7 +374,7 @@ int GROUP_TOOL::RemoveFromGroup( const TOOL_EVENT& aEvent )
     BOARD_COMMIT         commit( m_frame );
 
     if( selection.Empty() )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
+        m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor );
 
     std::map<PCB_GROUP*, std::vector<BOARD_ITEM*>> groupMap;
 

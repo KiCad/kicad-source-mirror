@@ -102,7 +102,7 @@ DIALOG_IMPORT_NETLIST::~DIALOG_IMPORT_NETLIST()
     {
         KIGFX::VIEW_CONTROLS* controls = m_parent->GetCanvas()->GetViewControls();
         controls->SetCursorPosition( controls->GetMousePosition() );
-        m_parent->GetToolManager()->RunAction( PCB_ACTIONS::move, true );
+        m_parent->GetToolManager()->RunAction( PCB_ACTIONS::move );
     }
 }
 

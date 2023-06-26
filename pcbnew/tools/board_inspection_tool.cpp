@@ -1516,10 +1516,10 @@ int BOARD_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
 
     m_frame->m_probingSchToPcb = true; // recursion guard
     {
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
         if( item )
-            m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, true, item );
+            m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, item );
     }
     m_frame->m_probingSchToPcb = false;
 
@@ -1756,15 +1756,15 @@ int BOARD_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
             {
                 PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
 
-                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-                m_toolMgr->RunAction<CLIENT_SELECTION_FILTER>( PCB_ACTIONS::selectionCursor, true,
+                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+                m_toolMgr->RunAction<CLIENT_SELECTION_FILTER>( PCB_ACTIONS::selectionCursor,
                                                                EDIT_TOOL::PadFilter );
 
                 PCB_SELECTION& selection = selectionTool->GetSelection();
 
                 if( selection.Empty() )
                 {
-                    m_toolMgr->RunAction<CLIENT_SELECTION_FILTER>( PCB_ACTIONS::selectionCursor, true,
+                    m_toolMgr->RunAction<CLIENT_SELECTION_FILTER>( PCB_ACTIONS::selectionCursor,
                                                                    EDIT_TOOL::FootprintFilter );
                     selection = selectionTool->GetSelection();
                 }
@@ -1817,7 +1817,7 @@ int BOARD_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
                 }
             } );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &aEvent );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, &aEvent );
 
     return 0;
 }

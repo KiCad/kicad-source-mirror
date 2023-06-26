@@ -363,14 +363,14 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         commit->Revert();
 
         if( unselect )
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
         else
             m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
     }
     else
     {
         if( unselect )
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
         if( !localCommit.Empty() )
             localCommit.Push( _( "Move" ) );

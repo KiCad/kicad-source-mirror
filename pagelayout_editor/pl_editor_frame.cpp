@@ -912,7 +912,7 @@ void PL_EDITOR_FRAME::OnNewDrawingSheet()
 
     UpdateTitleAndInfo();
 
-    m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+    m_toolManager->RunAction( ACTIONS::zoomFitScreen );
 
     if( GetCurrentFileName().IsEmpty() )
     {

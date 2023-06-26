@@ -371,7 +371,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_appearancePanel->SetTabIndex( settings->m_AuiPanels.appearance_panel_tab );
     }
 
-    GetToolManager()->RunAction( ACTIONS::zoomFitScreen, false );
+    GetToolManager()->PostAction( ACTIONS::zoomFitScreen );
 
     // This is used temporarily to fix a client size issue on GTK that causes zoom to fit
     // to calculate the wrong zoom size.  See PCB_EDIT_FRAME::onSize().
@@ -405,7 +405,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     PythonSyncProjectName();
 
     // Sync action plugins in case they changed since the last time the frame opened
-    GetToolManager()->RunAction( PCB_ACTIONS::pluginsReload, true );
+    GetToolManager()->RunAction( PCB_ACTIONS::pluginsReload );
 
     GetCanvas()->SwitchBackend( m_canvasType );
     ActivateGalCanvas();
@@ -1371,7 +1371,7 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
 
     m_appearancePanel->OnLayerChanged();
 
-    m_toolManager->RunAction( PCB_ACTIONS::layerChanged );  // notify other tools
+    m_toolManager->PostAction( PCB_ACTIONS::layerChanged );  // notify other tools
     GetCanvas()->SetFocus();                                // allow capture of hotkeys
     GetCanvas()->SetHighContrastLayer( aLayer );
 
@@ -2450,7 +2450,7 @@ void PCB_EDIT_FRAME::onSize( wxSizeEvent& aEvent )
         // We only need this until the frame is done resizing and the final client size is
         // established.
         Unbind( wxEVT_SIZE, &PCB_EDIT_FRAME::onSize, this );
-        GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
+        GetToolManager()->RunAction( ACTIONS::zoomFitScreen );
     }
 
     // Skip() is called in the base class.

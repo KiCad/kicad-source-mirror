@@ -328,7 +328,7 @@ void CVPCB_MAINFRAME::setupEventHandlers()
             [this]( wxCommandEvent& )
             {
                 // saveAssociations must be run immediately
-                GetToolManager()->RunAction( CVPCB_ACTIONS::saveAssociationsToFile, true );
+                GetToolManager()->RunAction( CVPCB_ACTIONS::saveAssociationsToFile );
             } );
 
     // Connect the handlers for the ok/cancel buttons
@@ -336,7 +336,7 @@ void CVPCB_MAINFRAME::setupEventHandlers()
             [this]( wxCommandEvent& )
             {
                 // saveAssociations must be run immediately, before running Close( true )
-                GetToolManager()->RunAction( CVPCB_ACTIONS::saveAssociationsToSchematic, true );
+                GetToolManager()->RunAction( CVPCB_ACTIONS::saveAssociationsToSchematic );
                 Close( true );
             }, wxID_OK );
     Bind( wxEVT_BUTTON,
@@ -503,7 +503,7 @@ void CVPCB_MAINFRAME::updateFootprintViewerOnIdle( wxIdleEvent& aEvent )
 
     // If the footprint view window is displayed, update the footprint.
     if( GetFootprintViewerFrame() )
-        GetToolManager()->RunAction( CVPCB_ACTIONS::showFootprintViewer, true );
+        GetToolManager()->RunAction( CVPCB_ACTIONS::showFootprintViewer );
 
     DisplayStatus();
 

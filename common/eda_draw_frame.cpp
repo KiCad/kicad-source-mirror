@@ -276,7 +276,7 @@ void EDA_DRAW_FRAME::unitsChangeRefresh()
 {
     // Notify all tools the units have changed
     if( m_toolManager )
-        m_toolManager->RunAction( ACTIONS::updateUnits, true );
+        m_toolManager->RunAction( ACTIONS::updateUnits );
 
     UpdateStatusBar();
     UpdateMsgPanel();
@@ -347,7 +347,7 @@ void EDA_DRAW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 
     // Notify all tools the preferences have changed
     if( m_toolManager )
-        m_toolManager->RunAction( ACTIONS::updatePreferences, true );
+        m_toolManager->RunAction( ACTIONS::updatePreferences );
 }
 
 
@@ -465,11 +465,11 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
         // (Only matters on some versions of GTK.)
         wxSafeYield();
 
-        m_toolManager->RunAction( ACTIONS::gridProperties, true );
+        m_toolManager->RunAction( ACTIONS::gridProperties );
     }
     else
     {
-        m_toolManager->RunAction( ACTIONS::gridPreset, true, idx );
+        m_toolManager->RunAction( ACTIONS::gridPreset, idx );
     }
 
     UpdateStatusBar();
@@ -556,7 +556,7 @@ void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
     if( id < 0 || !( id < (int)m_zoomSelectBox->GetCount() ) )
         return;
 
-    m_toolManager->RunAction( ACTIONS::zoomPreset, true, id );
+    m_toolManager->RunAction( ACTIONS::zoomPreset, id );
     UpdateStatusBar();
     m_canvas->Refresh();
     // Needed on Windows because clicking on m_zoomSelectBox remove the focus from m_canvas
@@ -913,7 +913,7 @@ void EDA_DRAW_FRAME::HardRedraw()
 
 void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
 {
-    m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+    m_toolManager->RunAction( ACTIONS::zoomFitScreen );
 }
 
 

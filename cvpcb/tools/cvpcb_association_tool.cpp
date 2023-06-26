@@ -221,7 +221,7 @@ int CVPCB_ASSOCIATION_TOOL::Associate( const TOOL_EVENT& aEvent )
     }
 
     // Move to the next not associated component
-    m_toolMgr->RunAction( CVPCB_ACTIONS::gotoNextNA );
+    m_toolMgr->PostAction( CVPCB_ACTIONS::gotoNextNA );
 
     return 0;
 }

@@ -96,7 +96,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
     if( strcmp( idcmd, "$CONFIG" ) == 0 )
         {
-            GetToolManager()->RunAction( ACTIONS::showSymbolLibTable, true );
+            GetToolManager()->RunAction( ACTIONS::showSymbolLibTable );
             return;
         }
     else if( strcmp( idcmd, "$CUSTOM_RULES" ) == 0 )
@@ -106,7 +106,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     }
     else if( strcmp( idcmd, "$DRC" ) == 0 )
     {
-        GetToolManager()->RunAction( PCB_ACTIONS::runDRC, true );
+        GetToolManager()->RunAction( PCB_ACTIONS::runDRC );
         return;
     }
     else if( strcmp( idcmd, "$CLEAR" ) == 0 )
@@ -192,9 +192,9 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         bbox = footprint->GetBoundingBox( true, false ); // No invisible text in bbox calc
 
         if( pad )
-            m_toolManager->RunAction<BOARD_ITEM*>( PCB_ACTIONS::highlightItem, true, pad );
+            m_toolManager->RunAction<BOARD_ITEM*>( PCB_ACTIONS::highlightItem, pad );
         else
-            m_toolManager->RunAction<BOARD_ITEM*>( PCB_ACTIONS::highlightItem, true, footprint );
+            m_toolManager->RunAction<BOARD_ITEM*>( PCB_ACTIONS::highlightItem, footprint );
     }
     else if( netcode > 0 || multiHighlight )
     {
@@ -645,11 +645,11 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
             if( selectConnections )
             {
-                GetToolManager()->RunAction( PCB_ACTIONS::syncSelectionWithNets, true, &items );
+                GetToolManager()->RunAction( PCB_ACTIONS::syncSelectionWithNets, &items );
             }
             else
             {
-                GetToolManager()->RunAction( PCB_ACTIONS::syncSelection, true, &items );
+                GetToolManager()->RunAction( PCB_ACTIONS::syncSelection, &items );
             }
 
             // Update 3D viewer highlighting
@@ -662,7 +662,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
     }
 
     case MAIL_PCB_UPDATE:
-        m_toolManager->RunAction( ACTIONS::updatePcbFromSchematic, true );
+        m_toolManager->RunAction( ACTIONS::updatePcbFromSchematic );
         break;
 
     case MAIL_IMPORT_FILE:
@@ -692,7 +692,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
     }
 
     case MAIL_RELOAD_PLUGINS:
-        GetToolManager()->RunAction( PCB_ACTIONS::pluginsReload, true );
+        GetToolManager()->RunAction( PCB_ACTIONS::pluginsReload );
         break;
 
     // many many others.

@@ -127,7 +127,7 @@ public:
     void ShutdownTool( const std::string& aToolName );
 
     /**
-     * Run the specified action.
+     * Run the specified action immediately, pausing the current action to run the new one.
      *
      * The common format for action names is "application.ToolName.Action".
      *
@@ -135,60 +135,110 @@ public:
      *       action is expecting, otherwise an assert will occur when reading the paramter.
      *
      * @param aActionName is the name of action to be invoked.
-     * @param aNow decides if the action has to be run immediately or after the current coroutine
-     *             is preemptied.
      * @param aParam is an optional parameter that might be used by the invoked action. Its meaning
      *               depends on the action.
      * @return False if the action was not found.
      */
     template<typename T>
-    bool RunAction( const std::string& aActionName, bool aNow, T aParam )
+    bool RunAction( const std::string& aActionName, T aParam )
     {
         // Use a cast to ensure the proper type is stored inside the parameter
         std::any a( static_cast<T>( aParam ) );
 
-        return doRunAction( aActionName, aNow, a );
+        return doRunAction( aActionName, true, a );
     }
 
-    bool RunAction( const std::string& aActionName, bool aNow = false )
+    bool RunAction( const std::string& aActionName )
     {
         // Default initialize the parameter argument to an empty std::any
         std::any a;
 
-        return doRunAction( aActionName, aNow, a );
+        return doRunAction( aActionName, true, a );
     }
 
     /**
-     * Run the specified action.
-     *
-     * This function will only return if the action has been handled when the action is run
-     * immediately (aNow = true), otherwise it will always return false.
+     * Run the specified action immediately, pausing the current action to run the new one.
      *
      * Note: The type of the optional parameter must match exactly with the type the consuming
      *       action is expecting, otherwise an assert will occur when reading the paramter.
      *
      * @param aAction is the action to be invoked.
-     * @param aNow decides if the action has to be run immediately or after the current coroutine
-     *             is preemptied.
      * @param aParam is an optional parameter that might be used by the invoked action. Its meaning
      *               depends on the action.
      * @return True if the action was handled immediately
      */
     template<typename T>
-    bool RunAction( const TOOL_ACTION& aAction, bool aNow, T aParam )
+    bool RunAction( const TOOL_ACTION& aAction, T aParam )
     {
         // Use a cast to ensure the proper type is stored inside the parameter
         std::any a( static_cast<T>( aParam ) );
 
-        return doRunAction( aAction, aNow, a );
+        return doRunAction( aAction, true, a );
     }
 
-    bool RunAction( const TOOL_ACTION& aAction, bool aNow = false )
+    bool RunAction( const TOOL_ACTION& aAction )
     {
         // Default initialize the parameter argument to an empty std::any
         std::any a;
 
-        return doRunAction( aAction, aNow, a );
+        return doRunAction( aAction, true, a );
+    }
+
+    /**
+     * Run the specified action after the current action (coroutine) ends.
+     *
+     * The common format for action names is "application.ToolName.Action".
+     *
+     * Note: The type of the optional parameter must match exactly with the type the consuming
+     *       action is expecting, otherwise an assert will occur when reading the paramter.
+     *
+     * @param aActionName is the name of action to be invoked.
+     * @param aParam is an optional parameter that might be used by the invoked action. Its meaning
+     *               depends on the action.
+     * @return False if the action was not found.
+     */
+    template<typename T>
+    bool PostAction( const std::string& aActionName, T aParam )
+    {
+        // Use a cast to ensure the proper type is stored inside the parameter
+        std::any a( static_cast<T>( aParam ) );
+
+        return doRunAction( aActionName, false, a );
+    }
+
+    bool PostAction( const std::string& aActionName )
+    {
+        // Default initialize the parameter argument to an empty std::any
+        std::any a;
+
+        return doRunAction( aActionName, false, a );
+    }
+
+    /**
+     * Run the specified action after the current action (coroutine) ends.
+     *
+     * Note: The type of the optional parameter must match exactly with the type the consuming
+     *       action is expecting, otherwise an assert will occur when reading the paramter.
+     *
+     * @param aAction is the action to be invoked.
+     * @param aParam is an optional parameter that might be used by the invoked action. Its meaning
+     *               depends on the action.
+     */
+    template<typename T>
+    bool PostAction( const TOOL_ACTION& aAction, T aParam )
+    {
+        // Use a cast to ensure the proper type is stored inside the parameter
+        std::any a( static_cast<T>( aParam ) );
+
+        return doRunAction( aAction, false, a );
+    }
+
+    void PostAction( const TOOL_ACTION& aAction )
+    {
+        // Default initialize the parameter argument to an empty std::any
+        std::any a;
+
+        doRunAction( aAction, false, a );
     }
 
     /**

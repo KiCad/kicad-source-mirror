@@ -479,7 +479,7 @@ void SCH_EDIT_FRAME::setupTools()
     m_toolManager->InitTools();
 
     // Run the selection tool, it is supposed to be always active
-    m_toolManager->RunAction( EE_ACTIONS::selectionActivate );
+    m_toolManager->PostAction( EE_ACTIONS::selectionActivate );
 
     GetCanvas()->SetEventDispatcher( m_toolDispatcher );
 }
@@ -885,7 +885,7 @@ bool SCH_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
     // Note this this will commit *some* pending changes.  For instance, the EE_POINT_EDITOR
     // will cancel any drag currently in progress, but commit all changes from previous drags.
     if( m_toolManager )
-        m_toolManager->RunAction( ACTIONS::cancelInteractive, true );
+        m_toolManager->RunAction( ACTIONS::cancelInteractive );
 
     // Shutdown blocks must be determined and vetoed as early as possible
     if( KIPLATFORM::APP::SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION
@@ -1256,7 +1256,7 @@ void SCH_EDIT_FRAME::OnFindDialogClose()
     m_findReplaceDialog->Destroy();
     m_findReplaceDialog = nullptr;
 
-    m_toolManager->RunAction( ACTIONS::updateFind, true );
+    m_toolManager->RunAction( ACTIONS::updateFind );
 }
 
 
@@ -1664,7 +1664,7 @@ void SCH_EDIT_FRAME::updateTitle()
 
 void SCH_EDIT_FRAME::initScreenZoom()
 {
-    m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+    m_toolManager->RunAction( ACTIONS::zoomFitScreen );
     GetScreen()->m_zoomInitialized = true;
 }
 
@@ -1965,7 +1965,7 @@ void SCH_EDIT_FRAME::UpdateNetHighlightStatus()
 void SCH_EDIT_FRAME::SetScreen( BASE_SCREEN* aScreen )
 {
     if( m_toolManager )
-        m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
+        m_toolManager->RunAction( EE_ACTIONS::clearSelection );
 
     SCH_BASE_FRAME::SetScreen( aScreen );
     GetCanvas()->DisplaySheet( static_cast<SCH_SCREEN*>( aScreen ) );
@@ -2067,7 +2067,7 @@ void SCH_EDIT_FRAME::onSize( wxSizeEvent& aEvent )
         // We only need this until the frame is done resizing and the final client size is
         // established.
         Unbind( wxEVT_SIZE, &SCH_EDIT_FRAME::onSize, this );
-        GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
+        GetToolManager()->RunAction( ACTIONS::zoomFitScreen );
     }
 
     // Skip() is called in the base class.
@@ -2149,13 +2149,13 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
 {
     wxCHECK( m_toolManager, /* void */ );
 
-    m_toolManager->RunAction( ACTIONS::cancelInteractive, true );
-    m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
+    m_toolManager->RunAction( ACTIONS::cancelInteractive );
+    m_toolManager->RunAction( EE_ACTIONS::clearSelection );
     SCH_SCREEN* screen = GetCurrentSheet().LastScreen();
 
     wxCHECK( screen, /* void */ );
 
-    m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
+    m_toolManager->RunAction( EE_ACTIONS::clearSelection );
 
     SCH_BASE_FRAME::SetScreen( screen );
 

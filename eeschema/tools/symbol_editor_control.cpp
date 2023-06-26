@@ -416,8 +416,8 @@ int SYMBOL_EDITOR_CONTROL::OnDeMorgan( const TOOL_EVENT& aEvent )
 
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
-        m_toolMgr->RunAction( ACTIONS::cancelInteractive, true );
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+        m_toolMgr->RunAction( ACTIONS::cancelInteractive );
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
         SYMBOL_EDIT_FRAME* symbolEditor = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
         symbolEditor->SetConvert( convert );
@@ -681,7 +681,7 @@ int SYMBOL_EDITOR_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
             symbol->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
 
         schframe->Raise();
-        schframe->GetToolManager()->RunAction( EE_ACTIONS::placeSymbol, false, symbol );
+        schframe->GetToolManager()->PostAction( EE_ACTIONS::placeSymbol, symbol );
     }
 
     return 0;

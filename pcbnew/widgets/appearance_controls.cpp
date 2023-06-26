@@ -295,7 +295,7 @@ void NET_GRID_TABLE::updateNetVisibility( const NET_GRID_ENTRY& aNet )
     const TOOL_ACTION& action = aNet.visible ? PCB_ACTIONS::showNetInRatsnest
                                              : PCB_ACTIONS::hideNetInRatsnest;
 
-    m_frame->GetToolManager()->RunAction( action, true, aNet.code );
+    m_frame->GetToolManager()->RunAction( action, aNet.code );
 }
 
 
@@ -496,7 +496,7 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
     m_btnNetInspector->Bind( wxEVT_BUTTON,
             [&]( wxCommandEvent& aEvent )
             {
-                m_frame->GetToolManager()->RunAction( PCB_ACTIONS::listNets, true );
+                m_frame->GetToolManager()->RunAction( PCB_ACTIONS::listNets );
                 passOnFocus();
             } );
 
@@ -514,7 +514,7 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
     m_cbFlipBoard->Bind( wxEVT_CHECKBOX,
             [&]( wxCommandEvent& aEvent )
             {
-                m_frame->GetToolManager()->RunAction( PCB_ACTIONS::flipBoard, true );
+                m_frame->GetToolManager()->RunAction( PCB_ACTIONS::flipBoard );
             } );
 
     m_toggleGridRenderer = new GRID_BITMAP_TOGGLE_RENDERER( KiBitmap( BITMAPS::visibility ),
@@ -2966,17 +2966,17 @@ void APPEARANCE_CONTROLS::onNetContextMenu( wxCommandEvent& aEvent )
         break;
 
     case ID_HIGHLIGHT_NET:
-        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::highlightNet, true, net.code );
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::highlightNet, net.code );
         m_frame->GetCanvas()->Refresh();
         break;
 
     case ID_SELECT_NET:
-        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectNet, true, net.code );
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectNet, net.code );
         m_frame->GetCanvas()->Refresh();
         break;
 
     case ID_DESELECT_NET:
-        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::deselectNet, true, net.code );
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::deselectNet, net.code );
         m_frame->GetCanvas()->Refresh();
         break;
 
@@ -3013,7 +3013,6 @@ void APPEARANCE_CONTROLS::showNetclass( const wxString& aClassName, bool aShow )
         {
             m_frame->GetToolManager()->RunAction( aShow ? PCB_ACTIONS::showNetInRatsnest
                                                         : PCB_ACTIONS::hideNetInRatsnest,
-                                                  true,
                                                   net->GetNetCode() );
 
             int row = m_netsTable->GetRowByNetcode( net->GetNetCode() );
@@ -3194,7 +3193,7 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
                 runOnNetsOfClass( m_contextMenuNetclass,
                         [&]( NETINFO_ITEM* aItem )
                         {
-                            toolMgr->RunAction( action, true, aItem->GetNetCode() );
+                            toolMgr->RunAction( action, aItem->GetNetCode() );
                         } );
             }
             break;

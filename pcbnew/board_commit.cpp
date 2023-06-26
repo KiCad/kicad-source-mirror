@@ -656,7 +656,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         m_toolMgr->PostEvent( EVENTS::UnselectedEvent );
 
     if( autofillZones )
-        m_toolMgr->RunAction( PCB_ACTIONS::zoneFillDirty );
+        m_toolMgr->PostAction( PCB_ACTIONS::zoneFillDirty );
 
     if( selectedModified )
         m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );

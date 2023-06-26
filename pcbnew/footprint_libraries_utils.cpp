@@ -794,7 +794,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( FOOTPRINT* aFootprint )
     PAD_TOOL* padTool = m_toolManager->GetTool<PAD_TOOL>();
 
     if( padTool->InPadEditMode() )
-        m_toolManager->RunAction( PCB_ACTIONS::recombinePad, true );
+        m_toolManager->RunAction( PCB_ACTIONS::recombinePad );
 
     wxString libraryName = aFootprint->GetFPID().GetLibNickname();
     wxString footprintName = aFootprint->GetFPID().GetLibItemName();
@@ -968,7 +968,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
         return false;
     }
 
-    m_toolManager->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_toolManager->RunAction( PCB_ACTIONS::selectionClear );
     BOARD_COMMIT commit( pcbframe );
 
     // Create a copy for the board, first using Clone() to keep existing Uuids, and then either
@@ -1015,7 +1015,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
         commit.Push( wxT( "Insert footprint" ) );
 
         pcbframe->Raise();
-        pcb_ToolManager->RunAction( PCB_ACTIONS::placeFootprint, true, newFootprint );
+        pcb_ToolManager->RunAction( PCB_ACTIONS::placeFootprint, newFootprint );
     }
 
     newFootprint->ClearFlags();

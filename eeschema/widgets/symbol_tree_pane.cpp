@@ -64,7 +64,7 @@ SYMBOL_TREE_PANE::~SYMBOL_TREE_PANE()
 
 void SYMBOL_TREE_PANE::onSymbolSelected( wxCommandEvent& aEvent )
 {
-    m_symbolEditFrame->GetToolManager()->RunAction( EE_ACTIONS::editSymbol, true );
+    m_symbolEditFrame->GetToolManager()->RunAction( EE_ACTIONS::editSymbol );
 
     // Make sure current-part highlighting doesn't get lost in selection highlighting
     m_tree->Unselect();

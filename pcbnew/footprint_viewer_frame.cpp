@@ -796,7 +796,7 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& aEvent )
         if( blocking_dialog )
             blocking_dialog->Close( true );
 
-        toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+        toolMgr->RunAction( PCB_ACTIONS::selectionClear );
         BOARD_COMMIT commit( pcbframe );
 
         // Create the "new" footprint
@@ -831,7 +831,7 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& aEvent )
         commit.Push( wxT( "Insert footprint" ) );
 
         pcbframe->Raise();
-        toolMgr->RunAction( PCB_ACTIONS::placeFootprint, false, newFootprint );
+        toolMgr->PostAction( PCB_ACTIONS::placeFootprint, newFootprint );
 
         newFootprint->ClearFlags();
     }
@@ -1220,9 +1220,9 @@ void FOOTPRINT_VIEWER_FRAME::updateView()
     wxAuiToolBarItem* toolOpt = m_mainToolBar->FindTool( ID_FPVIEWER_AUTOZOOM_TOOL );
 
     if( toolOpt->GetState() & wxAUI_BUTTON_STATE_CHECKED )
-        m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+        m_toolManager->RunAction( ACTIONS::zoomFitScreen );
     else
-        m_toolManager->RunAction( ACTIONS::centerContents, true );
+        m_toolManager->RunAction( ACTIONS::centerContents );
 
     UpdateMsgPanel();
 }

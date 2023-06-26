@@ -68,7 +68,7 @@ DIALOG_MIGRATE_BUSES::DIALOG_MIGRATE_BUSES( SCH_EDIT_FRAME* aParent )
     loadGraphData();
     updateUi();
 
-    aParent->GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
+    aParent->GetToolManager()->RunAction( ACTIONS::zoomFitScreen );
 }
 
 

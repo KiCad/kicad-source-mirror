@@ -909,14 +909,14 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
     if( moving )
     {
-        m_toolMgr->RunAction( ACTIONS::refreshPreview );
+        m_toolMgr->PostAction( ACTIONS::refreshPreview );
     }
     else
     {
         EE_SELECTION selectionCopy = selection;
 
         if( selection.IsHover() )
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
         SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
         lwbTool->TrimOverLappingWires( commit, &selectionCopy );
@@ -1111,7 +1111,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         EE_SELECTION selectionCopy = selection;
 
         if( selection.IsHover() )
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
         if( connections )
         {
@@ -1213,12 +1213,12 @@ int SCH_EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
 
     if( isMoving )
     {
-        m_toolMgr->RunAction( ACTIONS::refreshPreview );
+        m_toolMgr->PostAction( ACTIONS::refreshPreview );
     }
     else
     {
         if( selection.IsHover() )
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
         if( connections )
             m_frame->TestDanglingEnds();
@@ -1237,7 +1237,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
     if( sourceItems.empty() )
         return 0;
 
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
     SCH_COMMIT   commit( m_toolMgr );
     EE_SELECTION newItems;
@@ -1267,7 +1267,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
                                      schIUScale.MilsToIU( cfg->m_Drawing.default_repeat_offset_y ) ) );
         }
 
-        m_toolMgr->RunAction<EDA_ITEM*>( EE_ACTIONS::addItemToSel, true, newItem );
+        m_toolMgr->RunAction<EDA_ITEM*>( EE_ACTIONS::addItemToSel, newItem );
         newItem->SetFlags( IS_NEW );
         m_frame->AddToScreen( newItem, m_frame->GetScreen() );
         commit.Added( newItem, m_frame->GetScreen() );
@@ -1288,7 +1288,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
                                           annotateStartNum, false, false, reporter );
             }
 
-            m_toolMgr->RunAction( EE_ACTIONS::move, true, &commit );
+            m_toolMgr->RunAction( EE_ACTIONS::move, &commit );
 
             while( m_toolMgr->GetTool<SCH_MOVE_TOOL>()->IsToolActive() )
             {
@@ -1360,7 +1360,7 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
         return 0;
 
     // Don't leave a freed pointer in the selection
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
     for( EDA_ITEM* item : items )
         item->ClearFlags( STRUCT_DELETED );
@@ -1439,7 +1439,7 @@ int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
     PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
 
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
     m_pickerItem = nullptr;
 
     // Deactivate other tools; particularly important if another PICKER is currently running
@@ -1456,7 +1456,7 @@ int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
                     EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
                     selectionTool->UnbrightenItem( m_pickerItem );
                     selectionTool->AddItemToSel( m_pickerItem, true /*quiet mode*/ );
-                    m_toolMgr->RunAction( ACTIONS::doDelete, true );
+                    m_toolMgr->RunAction( ACTIONS::doDelete );
                     m_pickerItem = nullptr;
                 }
 
@@ -1494,10 +1494,10 @@ int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
                     m_toolMgr->GetTool<EE_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
 
                 // Wake the selection tool after exiting to ensure the cursor gets updated
-                m_toolMgr->RunAction( EE_ACTIONS::selectionActivate, false );
+                m_toolMgr->PostAction( EE_ACTIONS::selectionActivate );
             } );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &aEvent );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, &aEvent );
 
     return 0;
 }
@@ -1587,7 +1587,7 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
     }
 
     if( clearSelection )
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
     return 0;
 }
@@ -1627,7 +1627,7 @@ int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
 
     if( moving )
     {
-        m_toolMgr->RunAction( ACTIONS::refreshPreview );
+        m_toolMgr->PostAction( ACTIONS::refreshPreview );
     }
     else
     {
@@ -1635,7 +1635,7 @@ int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
             commit.Push( _( "Autoplace Fields" ) );
 
         if( selection.IsHover() )
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
     }
 
     return 0;
@@ -1693,10 +1693,10 @@ int SCH_EDIT_TOOL::ConvertDeMorgan( const TOOL_EVENT& aEvent )
     m_frame->ConvertPart( symbol );
 
     if( symbol->IsNew() )
-        m_toolMgr->RunAction( ACTIONS::refreshPreview );
+        m_toolMgr->PostAction( ACTIONS::refreshPreview );
 
     if( selection.IsHover() )
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
     return 0;
 }
@@ -1715,7 +1715,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
             VECTOR2D            cursorPos = getViewControls()->GetCursorPosition( false );
 
             if( ds && ds->HitTestDrawingSheetItems( getView(), cursorPos ) )
-                m_toolMgr->RunAction( ACTIONS::pageSettings );
+                m_toolMgr->PostAction( ACTIONS::pageSettings );
         }
 
         return 0;
@@ -2003,7 +2003,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     updateItem( curr_item, true );
 
     if( clearSelection )
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
     return 0;
 }
@@ -2312,7 +2312,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             }
 
             if( selected )
-                m_toolMgr->RunAction<EDA_ITEM*>( EE_ACTIONS::removeItemFromSel, true, item );
+                m_toolMgr->RunAction<EDA_ITEM*>( EE_ACTIONS::removeItemFromSel, item );
 
             SCH_COMMIT commit( m_toolMgr );
 
@@ -2328,7 +2328,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             commit.Push( _( "Change Item Type" ) );
 
             if( selected )
-                m_toolMgr->RunAction<EDA_ITEM*>( EE_ACTIONS::addItemToSel, true, newtext );
+                m_toolMgr->RunAction<EDA_ITEM*>( EE_ACTIONS::addItemToSel, newtext );
 
             // Otherwise, pointer is owned by the undo stack
             if( item->IsNew() )
@@ -2349,7 +2349,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
     }
 
     if( selection.IsHover() )
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
     return 0;
 }
@@ -2410,7 +2410,7 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
         m_frame->TestDanglingEnds();
         m_frame->GetCanvas()->Refresh();
 
-        m_toolMgr->RunAction( EE_ACTIONS::drag, true, &commit );
+        m_toolMgr->RunAction( EE_ACTIONS::drag, &commit );
 
         while( m_toolMgr->GetTool<SCH_MOVE_TOOL>()->IsToolActive() )
         {
@@ -2445,7 +2445,7 @@ int SCH_EDIT_TOOL::CleanupSheetPins( const TOOL_EVENT& aEvent )
     m_frame->OnModify();
 
     if( selection.IsHover() )
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
     return 0;
 }

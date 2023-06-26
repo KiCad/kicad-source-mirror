@@ -70,7 +70,7 @@ void PAD_TOOL::Reset( RESET_REASON aReason )
         bool highContrast = ( opts.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL );
 
         if( m_wasHighContrast != highContrast )
-            m_toolMgr->RunAction( ACTIONS::highContrastMode, true );
+            m_toolMgr->RunAction( ACTIONS::highContrastMode );
 
         frame()->GetInfoBar()->Dismiss();
 
@@ -300,7 +300,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     std::deque<int> storedPadNumbers;
     std::map<wxString, std::pair<int, wxString>> oldNumbers;
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
     frame()->PushTool( aEvent );
 
@@ -348,7 +348,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
 
         if( evt->IsCancelInteractive() )
         {
-            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
             commit.Revert();
 
             frame()->PopTool( aEvent );
@@ -611,7 +611,7 @@ int PAD_TOOL::EditPad( const TOOL_EVENT& aEvent )
                 } );
 
         if( !m_wasHighContrast )
-            m_toolMgr->RunAction( ACTIONS::highContrastMode, true );
+            m_toolMgr->RunAction( ACTIONS::highContrastMode );
 
         if( PCB_ACTIONS::explodePad.GetHotKey() == PCB_ACTIONS::recombinePad.GetHotKey() )
         {
@@ -635,7 +635,7 @@ int PAD_TOOL::EditPad( const TOOL_EVENT& aEvent )
         bool highContrast = ( opts.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL );
 
         if( m_wasHighContrast != highContrast )
-            m_toolMgr->RunAction( ACTIONS::highContrastMode, true );
+            m_toolMgr->RunAction( ACTIONS::highContrastMode );
 
         settings->m_PadEditModePad = nullptr;
 
@@ -727,7 +727,7 @@ PCB_LAYER_ID PAD_TOOL::explodePad( PAD* aPad )
     }
 
     commit.Push( _("Edit pad shapes") );
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
     return layer;
 }
 
@@ -739,7 +739,7 @@ std::vector<PCB_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun, BOARD
 
     // Don't leave an object in the point editor that might no longer exist after
     // recombining the pad.
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
     for( BOARD_ITEM* item : footprint->GraphicalItems() )
         item->ClearFlags( SKIP_STRUCT );

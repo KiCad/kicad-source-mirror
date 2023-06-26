@@ -572,9 +572,9 @@ void DISPLAY_FOOTPRINTS_FRAME::updateView()
     wxAuiToolBarItem* toolOpt = m_mainToolBar->FindTool( ID_CVPCB_FPVIEWER_AUTOZOOM_TOOL );
 
     if( toolOpt->GetState() & wxAUI_BUTTON_STATE_CHECKED )
-        m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+        m_toolManager->RunAction( ACTIONS::zoomFitScreen );
     else
-        m_toolManager->RunAction( ACTIONS::centerContents, true );
+        m_toolManager->RunAction( ACTIONS::centerContents );
 
     UpdateMsgPanel();
 }

@@ -251,7 +251,7 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
     }
 
     case PCB_GROUP_T:
-        m_toolManager->RunAction<PCB_GROUP*>( PCB_ACTIONS::groupProperties, true,
+        m_toolManager->RunAction<PCB_GROUP*>( PCB_ACTIONS::groupProperties,
                                               static_cast<PCB_GROUP*>( aItem ) );
         break;
 
@@ -279,7 +279,7 @@ void FOOTPRINT_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
 
     m_appearancePanel->OnLayerChanged();
 
-    m_toolManager->RunAction( PCB_ACTIONS::layerChanged );  // notify other tools
+    m_toolManager->PostAction( PCB_ACTIONS::layerChanged );  // notify other tools
     GetCanvas()->SetFocus();                             // allow capture of hotkeys
     GetCanvas()->SetHighContrastLayer( aLayer );
     GetCanvas()->Refresh();

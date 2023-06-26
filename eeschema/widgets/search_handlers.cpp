@@ -76,7 +76,7 @@ void SCH_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
     EDA_ITEMS                   selectedItems;
     std::vector<SCH_SEARCH_HIT> selectedHits;
 
-    m_frame->GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
+    m_frame->GetToolManager()->RunAction( EE_ACTIONS::clearSelection );
 
     for( long row : aItemRows )
     {
@@ -105,7 +105,7 @@ void SCH_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
         }
 
         if( selectedItems.size() )
-            m_frame->GetToolManager()->RunAction<EDA_ITEMS*>( EE_ACTIONS::addItemsToSel, true, &selectedItems );
+            m_frame->GetToolManager()->RunAction<EDA_ITEMS*>( EE_ACTIONS::addItemsToSel, &selectedItems );
 
         m_frame->GetCanvas()->Refresh( false );
     }

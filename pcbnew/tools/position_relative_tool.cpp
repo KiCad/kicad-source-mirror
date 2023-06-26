@@ -153,7 +153,7 @@ int POSITION_RELATIVE_TOOL::RelativeItemSelectionMove( const VECTOR2I& aPosAncho
     m_commit->Push( _( "Position Relative" ) );
 
     if( m_selection.IsHover() )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
     m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
@@ -175,7 +175,7 @@ int POSITION_RELATIVE_TOOL::SelectPositionRelativeItem( const TOOL_EVENT& aEvent
     picker->SetClickHandler(
         [&]( const VECTOR2D& aPoint ) -> bool
         {
-            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
             const PCB_SELECTION& sel = m_selectionTool->RequestSelection(
                     []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector,
                         PCB_SELECTION_TOOL* sTool )
@@ -219,7 +219,7 @@ int POSITION_RELATIVE_TOOL::SelectPositionRelativeItem( const TOOL_EVENT& aEvent
     statusPopup.Popup();
     canvas()->SetStatusPopup( statusPopup.GetPanel() );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &aEvent );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, &aEvent );
 
     while( !done )
     {

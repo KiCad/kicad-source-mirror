@@ -309,7 +309,7 @@ void MICROWAVE_TOOL::createInductorBetween( const VECTOR2I& aStart, const VECTOR
     else
     {
         // at this point, we can save the footprint
-        m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, true, inductorFP.get() );
+        m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, inductorFP.get() );
 
         BOARD_COMMIT commit( this );
         commit.Add( inductorFP.release() );

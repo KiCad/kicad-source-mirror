@@ -2323,7 +2323,7 @@ int PCB_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
                 commit.Remove( item );
             }
         }

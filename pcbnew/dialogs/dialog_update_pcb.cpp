@@ -79,7 +79,7 @@ DIALOG_UPDATE_PCB::~DIALOG_UPDATE_PCB()
     {
         KIGFX::VIEW_CONTROLS* controls = m_frame->GetCanvas()->GetViewControls();
         controls->SetCursorPosition( controls->GetMousePosition() );
-        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::move, true );
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::move );
     }
 }
 
@@ -98,7 +98,7 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
     if( !aDryRun )
     {
         m_frame->GetToolManager()->DeactivateTool();
-        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
     }
 
     BOARD_NETLIST_UPDATER updater( m_frame, m_frame->GetBoard() );

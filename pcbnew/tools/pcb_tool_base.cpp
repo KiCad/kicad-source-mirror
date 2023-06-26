@@ -49,7 +49,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT&        aTool,
 
     BOARD_COMMIT commit( frame() );
 
-    GetManager()->RunAction( PCB_ACTIONS::selectionClear, true );
+    GetManager()->RunAction( PCB_ACTIONS::selectionClear );
 
     Activate();
     // Must be done after Activate() so that it gets set into the correct context
@@ -214,7 +214,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT&        aTool,
         }
         else if( evt->IsAction( &PCB_ACTIONS::trackViaSizeChanged ) )
         {
-            m_toolMgr->RunAction( ACTIONS::refreshPreview );
+            m_toolMgr->PostAction( ACTIONS::refreshPreview );
         }
         else if( newItem && evt->Category() == TC_COMMAND )
         {

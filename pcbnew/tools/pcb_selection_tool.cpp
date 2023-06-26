@@ -298,7 +298,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 // Single click? Select single object
                 if( m_highlight_modifier && brd_editor )
                 {
-                    m_toolMgr->RunAction( PCB_ACTIONS::highlightNet, true );
+                    m_toolMgr->RunAction( PCB_ACTIONS::highlightNet );
                 }
                 else
                 {
@@ -338,15 +338,15 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             if( m_selection.GetSize() == 1 && m_selection[0]->Type() == PCB_GROUP_T )
                 EnterGroup();
             else
-                m_toolMgr->RunAction( PCB_ACTIONS::properties, true );
+                m_toolMgr->RunAction( PCB_ACTIONS::properties );
         }
         else if( evt->IsDblClick( BUT_MIDDLE ) )
         {
             // Middle double click?  Do zoom to fit or zoom to objects
             if( evt->Modifier( MD_CTRL ) ) // Is CTRL key down?
-                m_toolMgr->RunAction( ACTIONS::zoomFitObjects, true );
+                m_toolMgr->RunAction( ACTIONS::zoomFitObjects );
             else
-                m_toolMgr->RunAction( ACTIONS::zoomFitScreen, true );
+                m_toolMgr->RunAction( ACTIONS::zoomFitScreen );
         }
         else if( evt->IsDrag( BUT_LEFT ) )
         {
@@ -424,11 +424,11 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                                          && dynamic_cast<PCB_TRACK*>( m_selection.GetItem( 0 ) );
 
                     if( haveTrack && trackDragAction == TRACK_DRAG_ACTION::DRAG )
-                        m_toolMgr->RunAction( PCB_ACTIONS::drag45Degree, true );
+                        m_toolMgr->RunAction( PCB_ACTIONS::drag45Degree );
                     else if( haveTrack && trackDragAction == TRACK_DRAG_ACTION::DRAG_FREE_ANGLE )
-                        m_toolMgr->RunAction( PCB_ACTIONS::dragFreeAngle, true );
+                        m_toolMgr->RunAction( PCB_ACTIONS::dragFreeAngle );
                     else
-                        m_toolMgr->RunAction( PCB_ACTIONS::move, true );
+                        m_toolMgr->RunAction( PCB_ACTIONS::move );
                 }
                 else
                 {
@@ -554,7 +554,7 @@ PCB_SELECTION& PCB_SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCl
 
     if( selectionEmpty )
     {
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, aClientFilter );
+        m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, aClientFilter );
         m_selection.ClearReferencePoint();
     }
 
@@ -1155,7 +1155,7 @@ int PCB_SELECTION_TOOL::unrouteSelected( const TOOL_EVENT& aEvent )
 
     // Get the tracks on our list of pads, then delete them
     selectAllConnectedTracks( toUnroute, STOP_CONDITION::STOP_AT_PAD );
-    m_toolMgr->RunAction( ACTIONS::doDelete, true );
+    m_toolMgr->RunAction( ACTIONS::doDelete );
 
     // Reselect our footprint/pads as they were in our original selection
     for( EDA_ITEM* item : selectedItems )
@@ -1544,7 +1544,7 @@ int PCB_SELECTION_TOOL::grabUnconnected( const TOOL_EVENT& aEvent )
             select( nearest );
     }
 
-    m_toolMgr->RunAction( PCB_ACTIONS::moveIndividually, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::moveIndividually );
 
     return 0;
 }
@@ -2280,7 +2280,7 @@ void PCB_SELECTION_TOOL::ClearSelection( bool aQuietMode )
     if( !aQuietMode )
     {
         m_toolMgr->ProcessEvent( EVENTS::ClearedEvent );
-        m_toolMgr->RunAction( PCB_ACTIONS::hideLocalRatsnest, true );
+        m_toolMgr->RunAction( PCB_ACTIONS::hideLocalRatsnest );
     }
 }
 

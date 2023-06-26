@@ -167,7 +167,7 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
         break;
 
     case PCB_GROUP_T:
-        m_toolManager->RunAction<PCB_GROUP*>( PCB_ACTIONS::groupProperties, true,
+        m_toolManager->RunAction<PCB_GROUP*>( PCB_ACTIONS::groupProperties,
                                               static_cast<PCB_GROUP*>( aItem ) );
         break;
 

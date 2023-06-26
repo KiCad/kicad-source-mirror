@@ -414,13 +414,13 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
                 // And give it a kick so it doesn't have to wait for the first mouse movement
                 // to refresh.
-                m_toolMgr->RunAction( EE_ACTIONS::restartMove );
+                m_toolMgr->PostAction( EE_ACTIONS::restartMove );
             }
         }
         else
         {
             // The tool hotkey is interpreted as a click when already dragging/moving
-            m_toolMgr->RunAction( ACTIONS::cursorClick );
+            m_toolMgr->PostAction( ACTIONS::cursorClick );
         }
 
         return 0;
@@ -842,11 +842,11 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsAction( &EE_ACTIONS::rotateCW ) )
         {
-            m_toolMgr->RunAction( EE_ACTIONS::rotateCW, true, &commit );
+            m_toolMgr->RunAction( EE_ACTIONS::rotateCW, &commit );
         }
         else if( evt->IsAction( &EE_ACTIONS::rotateCCW ) )
         {
-            m_toolMgr->RunAction( EE_ACTIONS::rotateCCW, true, &commit );
+            m_toolMgr->RunAction( EE_ACTIONS::rotateCCW, &commit );
         }
         else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
         {
@@ -859,7 +859,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 if( symbol )
                 {
                     m_frame->SelectUnit( symbol, unit );
-                    m_toolMgr->RunAction( ACTIONS::refreshPreview );
+                    m_toolMgr->PostAction( ACTIONS::refreshPreview );
                 }
             }
         }
@@ -982,7 +982,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         item->ClearEditFlags();
 
     if( unselect )
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
     else
         m_selectionTool->RebuildSelection();  // Schematic cleanup might have merged lines, etc.
 

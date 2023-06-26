@@ -440,7 +440,7 @@ void KICAD_MANAGER_FRAME::DoWithAcceptedFiles()
         if( ext == ProjectFileExtension || ext == LegacyProjectFileExtension )
         {
             wxString fn = fileName.GetFullPath();
-            m_toolManager->RunAction<wxString*>( *m_acceptedExts.at( fileName.GetExt() ), true, &fn );
+            m_toolManager->RunAction<wxString*>( *m_acceptedExts.at( fileName.GetExt() ), &fn );
 
             return;
         }
@@ -464,7 +464,7 @@ void KICAD_MANAGER_FRAME::DoWithAcceptedFiles()
         else
         {
             wxString fn = fileName.GetFullPath();
-            m_toolManager->RunAction<wxString*>( *m_acceptedExts.at( fileName.GetExt() ), true, &fn );
+            m_toolManager->RunAction<wxString*>( *m_acceptedExts.at( fileName.GetExt() ), &fn );
         }
     }
 
@@ -477,7 +477,7 @@ void KICAD_MANAGER_FRAME::DoWithAcceptedFiles()
         {
             wxString command = fullEditorName + " " + gerberFiles;
             m_toolManager->RunAction<wxString*>( *m_acceptedExts.at( GerberFileExtension ),
-                                      true, &command );
+                                                 &command );
         }
     }
 }
@@ -713,7 +713,7 @@ void KICAD_MANAGER_FRAME::OnOpenFileInTextEditor( wxCommandEvent& event )
     wxString filename = dlg.GetPath();
 
     if( !dlg.GetPath().IsEmpty() && !Pgm().GetTextEditor().IsEmpty() )
-        m_toolManager->RunAction<wxString*>( KICAD_MANAGER_ACTIONS::openTextEditor, true, &filename );
+        m_toolManager->RunAction<wxString*>( KICAD_MANAGER_ACTIONS::openTextEditor, &filename );
 }
 
 
@@ -882,12 +882,12 @@ void KICAD_MANAGER_FRAME::OnIdle( wxIdleEvent& aEvent )
                     if( fn.GetExt() == LegacySchematicFileExtension
                             || fn.GetExt() == KiCadSchematicFileExtension )
                     {
-                        GetToolManager()->RunAction( KICAD_MANAGER_ACTIONS::editSchematic, true );
+                        GetToolManager()->RunAction( KICAD_MANAGER_ACTIONS::editSchematic );
                     }
                     else if( fn.GetExt() == LegacyPcbFileExtension
                              || fn.GetExt() == KiCadPcbFileExtension )
                     {
-                        GetToolManager()->RunAction( KICAD_MANAGER_ACTIONS::editPCB, true );
+                        GetToolManager()->RunAction( KICAD_MANAGER_ACTIONS::editPCB );
                     }
                 }
 

@@ -314,7 +314,7 @@ int SIMULATOR_CONTROL::Probe( const TOOL_EVENT& aEvent )
     if( blocking_dialog )
         blocking_dialog->Close( true );
 
-    m_schematicFrame->GetToolManager()->RunAction( EE_ACTIONS::simProbe );
+    m_schematicFrame->GetToolManager()->PostAction( EE_ACTIONS::simProbe );
     m_schematicFrame->Raise();
 
     return 0;
@@ -331,7 +331,7 @@ int SIMULATOR_CONTROL::Tune( const TOOL_EVENT& aEvent )
     if( blocking_dialog )
         blocking_dialog->Close( true );
 
-    m_schematicFrame->GetToolManager()->RunAction( EE_ACTIONS::simTune );
+    m_schematicFrame->GetToolManager()->PostAction( EE_ACTIONS::simTune );
     m_schematicFrame->Raise();
 
     return 0;

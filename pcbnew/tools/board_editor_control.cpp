@@ -746,7 +746,7 @@ int BOARD_EDITOR_CONTROL::TrackWidthInc( const TOOL_EVENT& aEvent )
         designSettings.SetDiffPairIndex( widthIndex );
         designSettings.UseCustomDiffPairDimensions( false );
 
-        m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged, true );
+        m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged );
     }
     else
     {
@@ -770,7 +770,7 @@ int BOARD_EDITOR_CONTROL::TrackWidthInc( const TOOL_EVENT& aEvent )
         designSettings.SetTrackWidthIndex( widthIndex );
         designSettings.UseCustomTrackViaSize( false );
 
-        m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged, true );
+        m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged );
     }
 
     return 0;
@@ -826,7 +826,7 @@ int BOARD_EDITOR_CONTROL::TrackWidthDec( const TOOL_EVENT& aEvent )
         designSettings.SetDiffPairIndex( widthIndex );
         designSettings.UseCustomDiffPairDimensions( false );
 
-        m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged, true );
+        m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged );
     }
     else
     {
@@ -850,7 +850,7 @@ int BOARD_EDITOR_CONTROL::TrackWidthDec( const TOOL_EVENT& aEvent )
         designSettings.SetTrackWidthIndex( widthIndex );
         designSettings.UseCustomTrackViaSize( false );
 
-        m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged, true );
+        m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged );
     }
 
     return 0;
@@ -899,7 +899,7 @@ int BOARD_EDITOR_CONTROL::ViaSizeInc( const TOOL_EVENT& aEvent )
         designSettings.SetViaSizeIndex( sizeIndex );
         designSettings.UseCustomTrackViaSize( false );
 
-        m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged, true );
+        m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged );
     }
 
     return 0;
@@ -956,7 +956,7 @@ int BOARD_EDITOR_CONTROL::ViaSizeDec( const TOOL_EVENT& aEvent )
         designSettings.SetViaSizeIndex( sizeIndex );
         designSettings.UseCustomTrackViaSize( false );
 
-        m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged, true );
+        m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged );
     }
 
     return 0;
@@ -977,7 +977,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
     BOARD*                board = getModel<BOARD>();
     COMMON_SETTINGS*      common_settings = Pgm().GetCommonSettings();
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
     m_frame->PushTool( aEvent );
 
@@ -990,7 +990,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
     auto cleanup =
             [&] ()
             {
-                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
                 commit.Revert();
 
                 if( fromOtherCommand )
@@ -1024,8 +1024,8 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
     {
         m_placingFootprint = true;
         fp->SetPosition( cursorPos );
-        m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, true, fp );
-        m_toolMgr->RunAction( ACTIONS::refreshPreview );
+        m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, fp );
+        m_toolMgr->PostAction( ACTIONS::refreshPreview );
     }
     else if( aEvent.HasPosition() )
     {
@@ -1044,7 +1044,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
         cursorPos = controls->GetCursorPosition( !evt->DisableGridSnapping() );
 
         if( reselect && fp )
-            m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, true, fp );
+            m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, fp );
 
         if( evt->IsCancelInteractive() )
         {
@@ -1128,13 +1128,13 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
                 fp->GetField( FOOTPRINT_FIELD )->SetText( UnescapeString( fp->GetFPIDAsString() ) );
 
                 commit.Add( fp );
-                m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, true, fp );
+                m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, fp );
 
-                m_toolMgr->RunAction( ACTIONS::refreshPreview );
+                m_toolMgr->PostAction( ACTIONS::refreshPreview );
             }
             else
             {
-                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
                 commit.Push( _( "Place a footprint" ) );
                 fp = nullptr;  // to indicate that there is no footprint that we currently modify
                 m_placingFootprint = false;
@@ -1203,7 +1203,7 @@ int BOARD_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
     BOARD_COMMIT         commit( m_frame );
 
     if( selection.Empty() )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
+        m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor );
 
     // Resolve TOGGLE mode
     if( aMode == TOGGLE )
@@ -1361,7 +1361,7 @@ int BOARD_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
         toMerge.push_back( curr_area );
     }
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
     if( !toMerge.empty() )
     {
@@ -1370,7 +1370,7 @@ int BOARD_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
             commit.Push( wxT( "Merge zones" ) );
 
             for( EDA_ITEM* item : merged )
-                m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, item );
+                m_toolMgr->RunAction( PCB_ACTIONS::selectItem, item );
         }
     }
 
@@ -1503,7 +1503,7 @@ int BOARD_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
     }
 
     selectionTool->ClearSelection();
-    m_toolMgr->RunAction( PCB_ACTIONS::selectNet, true, netCode );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectNet, netCode );
     canvas()->ForceRefresh();
 
     DIALOG_ASSIGN_NETCLASS dlg( m_frame, netName, board()->GetNetClassAssignmentCandidates(),
@@ -1561,7 +1561,7 @@ int BOARD_EDITOR_CONTROL::EditFpInFpEditor( const TOOL_EVENT& aEvent )
     editor->Raise();        // Iconize( false );
 
     if( selection.IsHover() )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
     return 0;
 }
@@ -1592,7 +1592,7 @@ int BOARD_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
             return false;   // drill origin is a one-shot; don't continue with tool
         } );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &aEvent );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, &aEvent );
 
     return 0;
 }

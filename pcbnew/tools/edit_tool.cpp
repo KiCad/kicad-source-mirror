@@ -282,11 +282,11 @@ int EDIT_TOOL::GetAndPlace( const TOOL_EVENT& aEvent )
 
     if( fp )
     {
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-        m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, true, fp );
+        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+        m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, fp );
 
         selectionTool->GetSelection().SetReferencePoint( fp->GetPosition() );
-        m_toolMgr->RunAction( PCB_ACTIONS::move, false );
+        m_toolMgr->PostAction( PCB_ACTIONS::move );
     }
 
     return 0;
@@ -314,7 +314,7 @@ bool EDIT_TOOL::invokeInlineRouter( int aDragMode )
 
     if( theRouter->CanInlineDrag( aDragMode ) )
     {
-        m_toolMgr->RunAction( PCB_ACTIONS::routerInlineDrag, true, aDragMode );
+        m_toolMgr->RunAction( PCB_ACTIONS::routerInlineDrag, aDragMode );
         return true;
     }
 
@@ -839,7 +839,7 @@ int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
 
     if( selection.IsHover() )
     {
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
         // Notify other tools of the changes -- This updates the visual ratsnest
         m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
@@ -1341,14 +1341,14 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         VECTOR2D            cursorPos = getViewControls()->GetCursorPosition( false );
 
         if( ds && ds->HitTestDrawingSheetItems( getView(), cursorPos ) )
-            m_toolMgr->RunAction( ACTIONS::pageSettings );
+            m_toolMgr->PostAction( ACTIONS::pageSettings );
         else
-            m_toolMgr->RunAction( PCB_ACTIONS::footprintProperties, true );
+            m_toolMgr->RunAction( PCB_ACTIONS::footprintProperties );
     }
 
     if( selection.IsHover() )
     {
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
     }
     else
     {
@@ -1475,12 +1475,12 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             m_commit->Push( _( "Rotate" ) );
 
         if( is_hover && !m_dragging )
-            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
         m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
         if( m_dragging )
-            m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false );
+            m_toolMgr->PostAction( PCB_ACTIONS::updateLocalRatsnest );
     }
 
     // Restore the old reference so any mouse dragging that occurs doesn't make the selection jump
@@ -1675,12 +1675,12 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         m_commit->Push( _( "Mirror" ) );
 
     if( selection.IsHover() && !m_dragging )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
     m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
     if( m_dragging )
-        m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false );
+        m_toolMgr->PostAction( PCB_ACTIONS::updateLocalRatsnest );
 
     return 0;
 }
@@ -1752,12 +1752,12 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
         m_commit->Push( _( "Change Side / Flip" ) );
 
     if( selection.IsHover() && !m_dragging )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
     m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
     if( m_dragging )
-        m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false );
+        m_toolMgr->PostAction( PCB_ACTIONS::updateLocalRatsnest );
 
     // Restore the old reference so any mouse dragging that occurs doesn't make the selection jump
     // to this now invalid reference
@@ -1773,7 +1773,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
 {
     // As we are about to remove items, they have to be removed from the selection first
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
     for( EDA_ITEM* item : aItems )
     {
@@ -1856,7 +1856,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
                         canvas()->Refresh();
 
                         // Restore the selection on the original zone
-                        m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, true, zone );
+                        m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, zone );
 
                         break;
                     }
@@ -1985,7 +1985,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         // In "alternative" mode, we expand selected track items to their full connection.
         if( isAlt && ( selectionCopy.HasType( PCB_TRACE_T ) || selectionCopy.HasType( PCB_VIA_T ) ) )
         {
-            m_toolMgr->RunAction( PCB_ACTIONS::selectConnection, true );
+            m_toolMgr->RunAction( PCB_ACTIONS::selectConnection );
         }
 
         // Finally run RequestSelection() one more time to find out what user wants to do about
@@ -2097,12 +2097,12 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
         m_commit->Push( _( "Move exact" ) );
 
         if( selection.IsHover() )
-            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
         m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
         if( m_dragging )
-            m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false );
+            m_toolMgr->PostAction( PCB_ACTIONS::updateLocalRatsnest );
     }
 
     return 0;
@@ -2225,11 +2225,11 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     }
 
     // Clear the old selection first
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
     // Select the new items
     EDA_ITEMS nItems( new_items.begin(), new_items.end() );
-    m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, true, &nItems );
+    m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, &nItems );
 
     // record the new items as added
     if( !selection.Empty() )
@@ -2239,7 +2239,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
         // TODO(ISM): This line can't be used to activate the tool until we allow multiple
         //            activations.
-        // m_toolMgr->RunAction( PCB_ACTIONS::move, true );
+        // m_toolMgr->RunAction( PCB_ACTIONS::move );
         // Instead we have to create the event and call the tool's function
         // directly
 
@@ -2250,7 +2250,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
         // Deslect the duplicated item if we originally started as a hover selection
         if( is_hover )
-            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
     }
 
     return 0;
@@ -2398,7 +2398,7 @@ bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aS
     m_statusPopup->Popup();
     canvas()->SetStatusPopup( m_statusPopup->GetPanel() );
 
-    m_toolMgr->RunAction( ACTIONS::pickerSubTool, true );
+    m_toolMgr->RunAction( ACTIONS::pickerSubTool );
 
     while( !done )
     {

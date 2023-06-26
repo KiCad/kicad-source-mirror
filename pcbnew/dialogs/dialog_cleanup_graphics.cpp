@@ -98,7 +98,7 @@ void DIALOG_CLEANUP_GRAPHICS::doCleanup( bool aDryRun )
     if( !aDryRun )
     {
         // Clear current selection list to avoid selection of deleted items
-        m_parentFrame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
+        m_parentFrame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
 
         // ... and to keep the treeModel from trying to refresh a deleted item
         m_changesTreeModel->Update( nullptr, RPT_SEVERITY_ACTION );

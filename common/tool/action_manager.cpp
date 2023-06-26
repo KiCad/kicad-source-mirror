@@ -205,7 +205,7 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
                     KeyNameFromKeyCode( aHotKey ) );
 
         if( runAction )
-            return m_toolMgr->RunAction( *context, true );
+            return m_toolMgr->RunAction( *context );
     }
     else if( !global.empty() )
     {
@@ -222,7 +222,7 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
                         act->GetName(),
                         KeyNameFromKeyCode( aHotKey ) );
 
-            if( runAction && m_toolMgr->RunAction( *act, true ) )
+            if( runAction && m_toolMgr->RunAction( *act ) )
                 return true;
         }
     }

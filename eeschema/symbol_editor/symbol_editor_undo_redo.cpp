@@ -62,7 +62,7 @@ void SYMBOL_EDIT_FRAME::GetSymbolFromRedoList()
     if( GetRedoCommandCount() <= 0 )
         return;
 
-    m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
+    m_toolManager->RunAction( EE_ACTIONS::clearSelection );
 
     // Load the last redo entry
     PICKED_ITEMS_LIST* redoCommand = PopCommandFromRedoList();
@@ -115,7 +115,7 @@ void SYMBOL_EDIT_FRAME::GetSymbolFromUndoList()
     if( GetUndoCommandCount() <= 0 )
         return;
 
-    m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
+    m_toolManager->RunAction( EE_ACTIONS::clearSelection );
 
     // Load the last undo entry
     PICKED_ITEMS_LIST* undoCommand = PopCommandFromUndoList();
@@ -165,7 +165,7 @@ void SYMBOL_EDIT_FRAME::GetSymbolFromUndoList()
 
 void SYMBOL_EDIT_FRAME::RollbackSymbolFromUndo()
 {
-    m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
+    m_toolManager->RunAction( EE_ACTIONS::clearSelection );
 
     // Load the last undo entry
     PICKED_ITEMS_LIST* undoCommand = PopCommandFromUndoList();

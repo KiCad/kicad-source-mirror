@@ -591,7 +591,7 @@ long NL_3D_VIEWER_PLUGIN_IMPL::SetActiveCommand( std::string commandId )
 
             if( runAction )
             {
-                tool_manager->RunAction( *context, true );
+                tool_manager->RunAction( *context );
                 m_canvas->Request_refresh();
             }
         }

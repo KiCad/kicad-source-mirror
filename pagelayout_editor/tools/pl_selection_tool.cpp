@@ -152,7 +152,7 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 if( selectionContains( evt->Position() ) )
                 {
                     // Yes -> run the move tool and wait till it finishes
-                    m_toolMgr->RunAction( "plEditor.InteractiveMove.move", true );
+                    m_toolMgr->RunAction( "plEditor.InteractiveMove.move" );
                 }
                 else
                 {
@@ -165,7 +165,7 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // Middle double click?  Do zoom to fit or zoom to objects
         else if( evt->IsDblClick( BUT_MIDDLE ) )
         {
-            m_toolMgr->RunAction( ACTIONS::zoomFitScreen, true );
+            m_toolMgr->RunAction( ACTIONS::zoomFitScreen );
         }
 
         else if( evt->IsCancelInteractive() )

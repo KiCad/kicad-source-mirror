@@ -223,7 +223,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     bbox.SetSize( max_size_x, max_size_y );
     GetCanvas()->GetView()->SetBoundary( bbox );
 
-    m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+    m_toolManager->RunAction( ACTIONS::zoomFitScreen );
 
     m_acceptedExts.emplace( KiCadSymbolLibFileExtension, &ACTIONS::ddAddLibrary );
     DragAcceptFiles( true );
@@ -660,8 +660,8 @@ void SYMBOL_EDIT_FRAME::OnSelectUnit( wxCommandEvent& event )
     if( ( i == wxNOT_FOUND ) || ( ( i + 1 ) == m_unit ) )
         return;
 
-    m_toolManager->RunAction( ACTIONS::cancelInteractive, true );
-    m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
+    m_toolManager->RunAction( ACTIONS::cancelInteractive );
+    m_toolManager->RunAction( EE_ACTIONS::clearSelection );
 
     m_unit = i + 1;
 
@@ -717,7 +717,7 @@ wxString SYMBOL_EDIT_FRAME::SetCurLib( const wxString& aLibNickname )
 
 void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
 {
-    m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
+    m_toolManager->RunAction( EE_ACTIONS::clearSelection );
     GetCanvas()->GetView()->Clear();
     delete m_symbol;
 
@@ -748,7 +748,7 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
     GetCanvas()->GetView()->ClearHiddenFlags();
 
     if( aUpdateZoom )
-        m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+        m_toolManager->RunAction( ACTIONS::zoomFitScreen );
 
     GetCanvas()->Refresh();
 
@@ -1152,7 +1152,7 @@ void SYMBOL_EDIT_FRAME::emptyScreen()
     SetCurSymbol( nullptr, false );
     SetScreen( m_dummyScreen );
     ClearUndoRedoList();
-    m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+    m_toolManager->RunAction( ACTIONS::zoomFitScreen );
     Refresh();
 }
 

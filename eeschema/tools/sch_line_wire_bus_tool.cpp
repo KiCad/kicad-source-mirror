@@ -290,7 +290,7 @@ int SCH_LINE_WIRE_BUS_TOOL::DrawSegments( const TOOL_EVENT& aEvent )
     const DRAW_SEGMENT_EVENT_PARAMS* params = aEvent.Parameter<const DRAW_SEGMENT_EVENT_PARAMS*>();
 
     m_frame->PushTool( aEvent );
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
     if( aEvent.HasPosition() )
     {
@@ -381,7 +381,7 @@ SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet, const VECTO
     if( aPos == VECTOR2I( 0, 0 ) )
         pos = static_cast<VECTOR2I>( getViewControls()->GetCursorPosition() );
 
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
     m_busUnfold.entry = new SCH_BUS_WIRE_ENTRY( pos );
     m_busUnfold.entry->SetParent( m_frame->GetScreen() );
@@ -584,7 +584,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, int aType, 
     auto cleanup =
             [&] ()
             {
-                m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+                m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
                 for( SCH_LINE* wire : m_wires )
                     delete wire;
@@ -962,7 +962,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, int aType, 
                 computeBreakPoint( { m_wires[m_wires.size() - 2], segment }, cursorPos, currentMode,
                                    posture );
 
-                m_toolMgr->RunAction( ACTIONS::refreshPreview );
+                m_toolMgr->PostAction( ACTIONS::refreshPreview );
             }
         }
         //------------------------------------------------------------------------
@@ -997,7 +997,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, int aType, 
             if( m_busUnfold.in_progress )
             {
                 m_busUnfold.label->Rotate90( evt->IsAction( &EE_ACTIONS::rotateCW ) );
-                m_toolMgr->RunAction( ACTIONS::refreshPreview );
+                m_toolMgr->PostAction( ACTIONS::refreshPreview );
             }
             else
             {
@@ -1121,7 +1121,7 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
     // Clear selection when done so that a new wire can be started.
     // NOTE: this must be done before simplifyWireList is called or we might end up with
     // freed selected items.
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
     SCH_SCREEN* screen = m_frame->GetScreen();
     SCH_COMMIT  commit( m_toolMgr );

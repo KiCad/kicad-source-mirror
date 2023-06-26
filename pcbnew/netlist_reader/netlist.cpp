@@ -120,7 +120,7 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aR
     // Spread new footprints.
     std::vector<FOOTPRINT*> newFootprints = aUpdater.GetAddedFootprints();
 
-    GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
+    GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
 
     SpreadFootprints( &newFootprints, { 0, 0 }, true );
 
@@ -128,7 +128,7 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aR
     if( !newFootprints.empty() )
     {
         for( FOOTPRINT* footprint : newFootprints )
-            GetToolManager()->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, true, footprint );
+            GetToolManager()->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, footprint );
 
         *aRunDragCommand = true;
     }

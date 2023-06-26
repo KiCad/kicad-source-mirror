@@ -478,14 +478,14 @@ void DIALOG_ABOUT::onCopyVersionInfo( wxCommandEvent& event )
 void DIALOG_ABOUT::onDonateClick( wxCommandEvent& event )
 {
     if( TOOL_MANAGER* mgr = static_cast<EDA_BASE_FRAME*>( GetParent() )->GetToolManager() )
-        mgr->RunAction( "common.SuiteControl.donate", true );
+        mgr->RunAction( "common.SuiteControl.donate" );
 }
 
 
 void DIALOG_ABOUT::onReportBug( wxCommandEvent& event )
 {
     if( TOOL_MANAGER* mgr = static_cast<EDA_BASE_FRAME*>( GetParent() )->GetToolManager() )
-        mgr->RunAction( "common.SuiteControl.reportBug", true );
+        mgr->RunAction( "common.SuiteControl.reportBug" );
 }
 
 

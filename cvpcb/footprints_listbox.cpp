@@ -205,7 +205,7 @@ void FOOTPRINTS_LISTBOX::OnLeftClick( wxListEvent& event )
 
 void FOOTPRINTS_LISTBOX::OnLeftDClick( wxListEvent& event )
 {
-    GetParent()->GetToolManager()->RunAction( CVPCB_ACTIONS::associate, true );
+    GetParent()->GetToolManager()->RunAction( CVPCB_ACTIONS::associate );
 }
 
 

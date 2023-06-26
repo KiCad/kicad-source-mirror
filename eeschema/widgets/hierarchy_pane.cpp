@@ -253,7 +253,7 @@ void HIERARCHY_PANE::onSelectSheetPath( wxTreeEvent& aEvent )
     TREE_ITEM_DATA* itemData = static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( itemSel ) );
 
     SetCursor( wxCURSOR_ARROWWAIT );
-    m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( EE_ACTIONS::changeSheet, true,
+    m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( EE_ACTIONS::changeSheet,
                                                            &itemData->m_SheetPath );
     SetCursor( wxCURSOR_ARROW );
 }

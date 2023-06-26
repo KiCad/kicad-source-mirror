@@ -200,9 +200,9 @@ void PROJECT_TREE_ITEM::Activate( PROJECT_TREE_PANE* aTreePrjFrame )
     case TREE_FILE_TYPE::SEXPR_SCHEMATIC:
         // Schematics not part of the project are opened in a separate process.
         if( fullFileName == frame->SchFileName() || fullFileName == frame->SchLegacyFileName() )
-            toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editSchematic, true );
+            toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editSchematic );
         else
-            toolMgr->RunAction<wxString*>( KICAD_MANAGER_ACTIONS::editOtherSch, true, &fullFileName );
+            toolMgr->RunAction<wxString*>( KICAD_MANAGER_ACTIONS::editOtherSch, &fullFileName );
 
         break;
 
@@ -210,9 +210,9 @@ void PROJECT_TREE_ITEM::Activate( PROJECT_TREE_PANE* aTreePrjFrame )
     case TREE_FILE_TYPE::SEXPR_PCB:
         // Boards not part of the project are opened in a separate process.
         if( fullFileName == frame->PcbFileName() || fullFileName == frame->PcbLegacyFileName() )
-            toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editPCB, true );
+            toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editPCB );
         else
-            toolMgr->RunAction<wxString*>( KICAD_MANAGER_ACTIONS::editOtherPCB, true, &fullFileName );
+            toolMgr->RunAction<wxString*>( KICAD_MANAGER_ACTIONS::editOtherPCB, &fullFileName );
 
         break;
 
@@ -221,7 +221,7 @@ void PROJECT_TREE_ITEM::Activate( PROJECT_TREE_PANE* aTreePrjFrame )
     case TREE_FILE_TYPE::DRILL:
     case TREE_FILE_TYPE::DRILL_NC:
     case TREE_FILE_TYPE::DRILL_XNC:
-        toolMgr->RunAction<wxString*>( KICAD_MANAGER_ACTIONS::viewGerbers, true, &fullFileName );
+        toolMgr->RunAction<wxString*>( KICAD_MANAGER_ACTIONS::viewGerbers, &fullFileName );
         break;
 
     case TREE_FILE_TYPE::HTML:
@@ -236,22 +236,22 @@ void PROJECT_TREE_ITEM::Activate( PROJECT_TREE_PANE* aTreePrjFrame )
     case TREE_FILE_TYPE::TXT:
     case TREE_FILE_TYPE::MD:
     case TREE_FILE_TYPE::REPORT:
-        toolMgr->RunAction<wxString*>( KICAD_MANAGER_ACTIONS::openTextEditor, true, &fullFileName );
+        toolMgr->RunAction<wxString*>( KICAD_MANAGER_ACTIONS::openTextEditor, &fullFileName );
         break;
 
     case TREE_FILE_TYPE::DRAWING_SHEET:
-        toolMgr->RunAction<wxString*>( KICAD_MANAGER_ACTIONS::editDrawingSheet, true, &fullFileName );
+        toolMgr->RunAction<wxString*>( KICAD_MANAGER_ACTIONS::editDrawingSheet, &fullFileName );
         break;
 
     case TREE_FILE_TYPE::FOOTPRINT_FILE:
-        toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editFootprints, true );
+        toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editFootprints );
         packet = fullFileName.ToStdString();
         kiway.ExpressMail( FRAME_FOOTPRINT_EDITOR, MAIL_FP_EDIT, packet );
         break;
 
     case TREE_FILE_TYPE::SCHEMATIC_LIBFILE:
     case TREE_FILE_TYPE::SEXPR_SYMBOL_LIB_FILE:
-        toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editSymbols, true );
+        toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editSymbols );
         packet = fullFileName.ToStdString();
         kiway.ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_LIB_EDIT, packet );
         break;

@@ -459,9 +459,7 @@ long NL_PCBNEW_PLUGIN_IMPL::SetActiveCommand( std::string commandId )
             }
 
             if( runAction )
-            {
-                tool_manager->RunAction( *context, true );
-            }
+                tool_manager->RunAction( *context );
         }
         else
         {

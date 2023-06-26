@@ -286,7 +286,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             // Do not leave g_RootSheet == NULL because it is expected to be
             // a valid sheet. Therefore create a dummy empty root sheet and screen.
             CreateScreens();
-            m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+            m_toolManager->RunAction( ACTIONS::zoomFitScreen );
 
             msg.Printf( _( "Failed to load '%s'." ), fullFileName );
             SetMsgPanel( wxEmptyString, msg );
@@ -1287,7 +1287,7 @@ void SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             // Do not leave g_RootSheet == NULL because it is expected to be
             // a valid sheet. Therefore create a dummy empty root sheet and screen.
             CreateScreens();
-            m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+            m_toolManager->RunAction( ACTIONS::zoomFitScreen );
 
             wxString msg = wxString::Format( _( "Error loading schematic '%s'." ), aFileName );
             DisplayErrorMessage( this, msg, ioe.What() );
@@ -1298,7 +1298,7 @@ void SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
         catch( const std::exception& exc )
         {
             CreateScreens();
-            m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+            m_toolManager->RunAction( ACTIONS::zoomFitScreen );
 
             wxString msg = wxString::Format( _( "Unhandled exception occurred loading schematic "
                                                 "'%s'." ), aFileName );

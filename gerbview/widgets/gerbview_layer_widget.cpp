@@ -252,11 +252,11 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
         break;
 
     case ID_LAYER_MOVE_UP:
-        m_frame->GetToolManager()->RunAction( GERBVIEW_ACTIONS::moveLayerUp, true );
+        m_frame->GetToolManager()->RunAction( GERBVIEW_ACTIONS::moveLayerUp );
         break;
 
     case ID_LAYER_MOVE_DOWN:
-        m_frame->GetToolManager()->RunAction( GERBVIEW_ACTIONS::moveLayerDown, true );
+        m_frame->GetToolManager()->RunAction( GERBVIEW_ACTIONS::moveLayerDown );
         break;
 
     case ID_LAYER_DELETE:

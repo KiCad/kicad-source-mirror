@@ -266,7 +266,7 @@ SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAM
     bbox.SetOrigin( -max_size_x / 2, -max_size_y / 2 );
     bbox.SetSize( max_size_x, max_size_y );
     GetCanvas()->GetView()->SetBoundary( bbox );
-    GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
+    GetToolManager()->RunAction( ACTIONS::zoomFitScreen );
 
     // If a symbol was previously selected in m_symbolList from a previous run, show it
     wxString symbName = m_symbolList->GetStringSelection();
@@ -492,7 +492,7 @@ void SYMBOL_VIEWER_FRAME::updatePreviewSymbol()
         AppendMsgPanel( _( "Keywords" ), m_previewItem->GetKeyWords() );
     }
 
-    m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+    m_toolManager->RunAction( ACTIONS::zoomFitScreen );
     GetCanvas()->Refresh();
 }
 
@@ -921,7 +921,7 @@ void SYMBOL_VIEWER_FRAME::SetSelectedSymbol( const wxString& aSymbolName )
 
 void SYMBOL_VIEWER_FRAME::DClickOnSymbolList( wxCommandEvent& event )
 {
-    m_toolManager->RunAction( EE_ACTIONS::addSymbolToSchematic, true );
+    m_toolManager->RunAction( EE_ACTIONS::addSymbolToSchematic );
 }
 
 

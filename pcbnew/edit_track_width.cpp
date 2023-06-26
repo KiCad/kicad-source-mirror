@@ -227,5 +227,5 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
         break;
     }
 
-    m_toolManager->RunAction( PCB_ACTIONS::trackViaSizeChanged, true );
+    m_toolManager->RunAction( PCB_ACTIONS::trackViaSizeChanged );
 }

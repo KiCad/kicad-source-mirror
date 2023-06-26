@@ -394,7 +394,7 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommi
                                                   pickedReferencePoint ) )
     {
         if( is_hover )
-            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
         editFrame->PopTool( aEvent );
         return 0;
@@ -449,7 +449,7 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommi
     displayConstraintsMessage( hv45Mode );
 
     // Prime the pump
-    m_toolMgr->RunAction( ACTIONS::refreshPreview );
+    m_toolMgr->PostAction( ACTIONS::refreshPreview );
 
     // Main loop: keep receiving events
     do
@@ -666,7 +666,7 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommi
 
             statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
 
-            m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false, new VECTOR2I( movement ) );
+            m_toolMgr->PostAction( PCB_ACTIONS::updateLocalRatsnest, new VECTOR2I( movement ) );
         }
         else if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
@@ -794,7 +794,7 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommi
 
     // Unselect all items to clear selection flags and then re-select the originally selected
     // items (after the potential Revert()).
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
     // TODO: there's an encapsulation leak here: this commit often has more than just the move
     // in it; for instance it might have a paste, append board, etc. as well.
@@ -818,12 +818,12 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommi
         m_commit->Push( aCommitMessage );
 
         EDA_ITEMS oItems( orig_items.begin(), orig_items.end() );
-        m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, true, &oItems );
+        m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, &oItems );
     }
 
     m_toolMgr->GetTool<DRAWING_TOOL>()->UpdateStatusBar();
     // Remove the dynamic ratsnest from the screen
-    m_toolMgr->RunAction( PCB_ACTIONS::hideLocalRatsnest, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::hideLocalRatsnest );
 
     editFrame->PopTool( aEvent );
     editFrame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );

@@ -162,7 +162,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
     m_auimgr.Update();
 
     SetActiveLayer( 0, true );
-    GetToolManager()->RunAction( ACTIONS::zoomFitScreen, false );
+    GetToolManager()->PostAction( ACTIONS::zoomFitScreen );
 
     resolveCanvasType();
 
@@ -185,7 +185,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
     m_acceptedExts.emplace( DrillFileExtension, &GERBVIEW_ACTIONS::loadGerbFiles );
     DragAcceptFiles( true );
 
-    GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
+    GetToolManager()->RunAction( ACTIONS::zoomFitScreen );
 
     // Ensure the window is on top
     Raise();
@@ -808,7 +808,7 @@ void GERBVIEW_FRAME::SetActiveLayer( int aLayer, bool doLayerWidgetUpdate )
 
     UpdateTitleAndInfo();
 
-    m_toolManager->RunAction( GERBVIEW_ACTIONS::layerChanged );       // notify other tools
+    m_toolManager->PostAction( GERBVIEW_ACTIONS::layerChanged );       // notify other tools
     GetCanvas()->SetFocus();                 // otherwise hotkeys are stuck somewhere
 
     GetCanvas()->SetHighContrastLayer( GERBER_DRAW_LAYER( aLayer ) );

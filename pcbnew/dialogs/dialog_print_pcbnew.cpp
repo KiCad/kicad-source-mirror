@@ -465,7 +465,7 @@ void DIALOG_PRINT_PCBNEW::saveSettings()
 int PCB_CONTROL::Print( const TOOL_EVENT& aEvent )
 {
     // Selection affects the origin item visibility
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
     PCBNEW_PRINTOUT_SETTINGS settings( m_frame->GetPageSettings() );
     DIALOG_PRINT_PCBNEW dlg( (PCB_BASE_EDIT_FRAME*) m_frame, &settings );

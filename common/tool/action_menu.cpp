@@ -405,7 +405,7 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
     if( type == wxEVT_MENU_OPEN )
     {
         if( m_dirty && m_tool )
-            getToolManager()->RunAction<ACTION_MENU*>( ACTIONS::updateMenu, true, this );
+            getToolManager()->RunAction<ACTION_MENU*>( ACTIONS::updateMenu, this );
 
         wxMenu* parent = dynamic_cast<wxMenu*>( GetParent() );
 

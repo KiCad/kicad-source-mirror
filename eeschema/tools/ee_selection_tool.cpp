@@ -483,9 +483,9 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             EDA_ITEM* item = m_selection.Front();
 
             if( item && item->Type() == SCH_SHEET_T )
-                m_toolMgr->RunAction( EE_ACTIONS::enterSheet );
+                m_toolMgr->PostAction( EE_ACTIONS::enterSheet );
             else
-                m_toolMgr->RunAction( EE_ACTIONS::properties );
+                m_toolMgr->PostAction( EE_ACTIONS::properties );
         }
         else if( evt->IsDblClick( BUT_MIDDLE ) )
         {
@@ -493,9 +493,9 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
             // Middle double click?  Do zoom to fit or zoom to objects
             if( evt->Modifier( MD_CTRL ) ) // Is CTRL key down?
-                m_toolMgr->RunAction( ACTIONS::zoomFitObjects, true );
+                m_toolMgr->RunAction( ACTIONS::zoomFitObjects );
             else
-                m_toolMgr->RunAction( ACTIONS::zoomFitScreen, true );
+                m_toolMgr->RunAction( ACTIONS::zoomFitScreen );
         }
         else if( evt->IsDrag( BUT_LEFT ) )
         {
@@ -561,11 +561,11 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsMouseDown( BUT_AUX1 ) )
         {
-            m_toolMgr->RunAction( EE_ACTIONS::navigateBack, true );
+            m_toolMgr->RunAction( EE_ACTIONS::navigateBack );
         }
         else if( evt->IsMouseDown( BUT_AUX2 ) )
         {
-            m_toolMgr->RunAction( EE_ACTIONS::navigateForward, true );
+            m_toolMgr->RunAction( EE_ACTIONS::navigateForward );
         }
         else if( evt->Category() == TC_COMMAND && evt->Action() == TA_CHOICE_MENU_CHOICE )
         {
@@ -585,7 +585,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                      && *evt->GetCommandId() <= ID_POPUP_SCH_UNFOLD_BUS_END )
             {
                 wxString* net = new wxString( *evt->Parameter<wxString*>() );
-                m_toolMgr->RunAction<wxString*>( EE_ACTIONS::unfoldBus, true, net );
+                m_toolMgr->RunAction<wxString*>( EE_ACTIONS::unfoldBus, net );
             }
         }
         else if( evt->IsCancelInteractive() )
@@ -907,7 +907,7 @@ bool EE_SELECTION_TOOL::selectPoint( EE_COLLECTOR& aCollector, const VECTOR2I& a
         // Try to call selectionMenu via RunAction() to avoid event-loop contention
         // But it we cannot handle the event, then we don't have an active tool loop, so
         // handle it directly.
-        if( !m_toolMgr->RunAction<COLLECTOR*>( EE_ACTIONS::selectionMenu, true, &aCollector ) )
+        if( !m_toolMgr->RunAction<COLLECTOR*>( EE_ACTIONS::selectionMenu, &aCollector ) )
         {
             if( !doSelectionMenu( &aCollector ) )
                 aCollector.m_MenuCancelled = true;

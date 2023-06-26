@@ -64,7 +64,7 @@ int CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsDblClick( BUT_MIDDLE ) )
         {
-            m_toolMgr->RunAction( ACTIONS::zoomFitScreen, true );
+            m_toolMgr->RunAction( ACTIONS::zoomFitScreen );
         }
         else if( evt->IsCancel() || evt->Action() == TA_UNDO_REDO_PRE )
         {

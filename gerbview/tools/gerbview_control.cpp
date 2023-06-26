@@ -398,7 +398,7 @@ int GERBVIEW_CONTROL::ClearLayer( const TOOL_EVENT& aEvent )
 int GERBVIEW_CONTROL::ClearAllLayers( const TOOL_EVENT& aEvent )
 {
     m_frame->Clear_DrawLayers( false );
-    m_toolMgr->RunAction( ACTIONS::zoomFitScreen, true );
+    m_toolMgr->RunAction( ACTIONS::zoomFitScreen );
     canvas()->Refresh();
     m_frame->ClearMsgPanel();
 

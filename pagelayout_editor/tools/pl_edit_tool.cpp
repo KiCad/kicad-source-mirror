@@ -310,7 +310,7 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         m_frame->OnModify();
 
     if( unselect )
-        m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
+        m_toolMgr->RunAction( PL_ACTIONS::clearSelection );
     else
         m_toolMgr->PostEvent( EVENTS::SelectedEvent );
 
@@ -355,7 +355,7 @@ bool PL_EDIT_TOOL::updateModificationPoint( PL_SELECTION& aSelection )
 
 int PL_EDIT_TOOL::ImportDrawingSheetContent( const TOOL_EVENT& aEvent )
 {
-    m_toolMgr->RunAction( ACTIONS::cancelInteractive, true );
+    m_toolMgr->RunAction( ACTIONS::cancelInteractive );
 
     wxCommandEvent evt( wxEVT_NULL, ID_APPEND_DESCR_FILE );
     m_frame->Files_io( evt );
@@ -427,7 +427,7 @@ int PL_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
                 PL_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PL_SELECTION_TOOL>();
                 selectionTool->UnbrightenItem( m_pickerItem );
                 selectionTool->AddItemToSel( m_pickerItem, true /*quiet mode*/ );
-                m_toolMgr->RunAction( ACTIONS::doDelete, true );
+                m_toolMgr->RunAction( ACTIONS::doDelete );
                 m_pickerItem = nullptr;
             }
 
@@ -473,10 +473,10 @@ int PL_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
                 m_toolMgr->GetTool<PL_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
 
             // Wake the selection tool after exiting to ensure the cursor gets updated
-            m_toolMgr->RunAction( PL_ACTIONS::selectionActivate, false );
+            m_toolMgr->PostAction( PL_ACTIONS::selectionActivate );
         } );
 
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &aEvent );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, &aEvent );
 
     return 0;
 }
@@ -561,7 +561,7 @@ int PL_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
     if( !selection.Empty() )
     {
         selection.SetReferencePoint( selection.GetTopLeftItem()->GetPosition() );
-        m_toolMgr->RunAction( PL_ACTIONS::move, false );
+        m_toolMgr->PostAction( PL_ACTIONS::move );
     }
 
     return 0;

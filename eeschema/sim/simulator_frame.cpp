@@ -613,7 +613,7 @@ void SIMULATOR_FRAME::doCloseWindow()
     m_simulator->Clean();
 
     // Cancel a running simProbe or simTune tool
-    m_schematicFrame->GetToolManager()->RunAction( ACTIONS::cancelInteractive );
+    m_schematicFrame->GetToolManager()->PostAction( ACTIONS::cancelInteractive );
 
     SaveSettings( config() );
 

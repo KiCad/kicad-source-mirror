@@ -215,12 +215,12 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
     if( strcmp( idcmd, "$CONFIG" ) == 0 )
     {
-        GetToolManager()->RunAction( ACTIONS::showSymbolLibTable, true );
+        GetToolManager()->RunAction( ACTIONS::showSymbolLibTable );
         return;
     }
     else if( strcmp( idcmd, "$ERC" ) == 0 )
     {
-        GetToolManager()->RunAction( EE_ACTIONS::runERC, true );
+        GetToolManager()->RunAction( EE_ACTIONS::runERC );
         return;
     }
     else if( strcmp( idcmd, "$NET:" ) == 0 )
@@ -235,7 +235,7 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         else
             m_highlightedConn = wxEmptyString;
 
-        GetToolManager()->RunAction( EE_ACTIONS::updateNetHighlighting, true );
+        GetToolManager()->RunAction( EE_ACTIONS::updateNetHighlighting );
 
         SetStatusText( _( "Selected net:" ) + wxS( " " ) + UnescapeString( netName ) );
         return;
@@ -970,7 +970,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         break;
 
     case MAIL_SCH_UPDATE:
-        m_toolManager->RunAction( ACTIONS::updateSchematicFromPcb, true );
+        m_toolManager->RunAction( ACTIONS::updateSchematicFromPcb );
         break;
 
     case MAIL_RELOAD_LIB:

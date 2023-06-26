@@ -287,7 +287,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             if( eda_item->Type() == SCH_SHEET_T )
             {
                 if( static_cast<SCH_SHEET*>( eda_item )->GetScreen() == GetScreen() )
-                    GetToolManager()->RunAction( EE_ACTIONS::leaveSheet );
+                    GetToolManager()->PostAction( EE_ACTIONS::leaveSheet );
             }
 
             SCH_ITEM* schItem = static_cast<SCH_ITEM*>( eda_item );

@@ -95,7 +95,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     COMMON_SETTINGS*      common_settings = Pgm().GetCommonSettings();
     wxString              description;
 
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
     m_frame->PushTool( aEvent );
 
@@ -113,7 +113,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     auto cleanup =
             [&] ()
             {
-                m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+                m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
                 m_view->ClearPreview();
                 delete item;
                 item = nullptr;
@@ -203,7 +203,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             // First click creates...
             if( !item )
             {
-                m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+                m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
                 switch( type )
                 {
@@ -350,7 +350,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     // gets whacked.
     m_toolMgr->DeactivateTool();
 
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
     m_frame->PushTool( aEvent );
 
@@ -363,7 +363,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     auto cleanup =
             [&] ()
             {
-                m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+                m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
                 m_view->ClearPreview();
                 delete item;
                 item = nullptr;
@@ -429,7 +429,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             if( !symbol )
                 continue;
 
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
             int lineWidth = schIUScale.MilsToIU( settings->m_Defaults.line_width );
 
@@ -524,7 +524,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
                 commit.Push( description );
                 m_frame->RebuildView();
-                m_toolMgr->RunAction( ACTIONS::activatePointEditor );
+                m_toolMgr->PostAction( ACTIONS::activatePointEditor );
             }
         }
         else if( item && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
@@ -535,7 +535,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsDblClick( BUT_LEFT ) && !item )
         {
-            m_toolMgr->RunAction( EE_ACTIONS::properties, true );
+            m_toolMgr->RunAction( EE_ACTIONS::properties );
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
@@ -654,10 +654,10 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem( const TOOL_EVENT& aEvent )
         LIB_PIN* pin = pinTool->RepeatPin( sourcePin );
         g_lastPinWeakPtr = pin;
 
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
         if( pin )
-            m_toolMgr->RunAction<EDA_ITEM*>( EE_ACTIONS::addItemToSel, true, pin );
+            m_toolMgr->RunAction<EDA_ITEM*>( EE_ACTIONS::addItemToSel, pin );
     }
 
     return 0;

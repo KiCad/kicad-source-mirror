@@ -41,7 +41,7 @@ void PCB_SEARCH_HANDLER::ActivateItem( long aItemRow )
     std::vector<long> item = { aItemRow };
     SelectItems( item );
 
-    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::properties, true );
+    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::properties );
 }
 
 
@@ -113,12 +113,12 @@ void FOOTPRINT_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
         }
     }
 
-    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
 
     if( selectedItems.size() )
     {
         EDA_ITEMS selItems( selectedItems.begin(), selectedItems.end() );
-        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItems, true, &selItems );
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItems, &selItems );
     }
 
     m_frame->GetCanvas()->Refresh( false );
@@ -202,12 +202,12 @@ void ZONE_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
         }
     }
 
-    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
 
     if( selectedItems.size() )
     {
         EDA_ITEMS selItems( selectedItems.begin(), selectedItems.end() );
-        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItems, true, &selItems );
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItems, &selItems );
     }
 
     m_frame->GetCanvas()->Refresh( false );
@@ -293,12 +293,12 @@ void TEXT_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
         }
     }
 
-    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
 
     if( selectedItems.size() )
     {
         EDA_ITEMS selItems( selectedItems.begin(), selectedItems.end() );
-        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItems, true, &selItems );
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItems, &selItems );
     }
 
     m_frame->GetCanvas()->Refresh( false );

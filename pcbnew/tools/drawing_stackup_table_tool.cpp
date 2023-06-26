@@ -549,7 +549,7 @@ int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent,
 
     BOARD_COMMIT commit( m_frame );
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
     // do not capture or auto-pan until we start placing the table
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::TEXT );

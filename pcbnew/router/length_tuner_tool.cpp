@@ -279,7 +279,7 @@ void LENGTH_TUNER_TOOL::setTransitions()
 int LENGTH_TUNER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
 {
     // Deselect all items
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
     frame()->PushTool( aEvent );
 

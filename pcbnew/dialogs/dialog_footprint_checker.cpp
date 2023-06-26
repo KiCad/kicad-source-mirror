@@ -376,7 +376,7 @@ void DIALOG_FOOTPRINT_CHECKER::refreshEditor()
 void DIALOG_FOOTPRINT_CHECKER::OnDeleteOneClick( wxCommandEvent& aEvent )
 {
     // Clear the selection.  It may be the selected DRC marker.
-    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
 
     m_markersTreeModel->DeleteCurrentItem( true );
 
@@ -400,7 +400,7 @@ void DIALOG_FOOTPRINT_CHECKER::OnDeleteAllClick( wxCommandEvent& event )
 void DIALOG_FOOTPRINT_CHECKER::deleteAllMarkers()
 {
     // Clear current selection list to avoid selection of deleted items
-    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
 
     m_markersTreeModel->DeleteItems( false, true, false );
     m_frame->GetBoard()->DeleteMARKERs( true, true );

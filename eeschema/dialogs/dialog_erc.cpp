@@ -276,7 +276,7 @@ void DIALOG_ERC::OnDeleteOneClick( wxCommandEvent& aEvent )
     if( m_notebook->GetSelection() == 0 )
     {
         // Clear the selection.  It may be the selected ERC marker.
-        m_parent->GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
+        m_parent->GetToolManager()->RunAction( EE_ACTIONS::clearSelection );
 
         m_markerTreeModel->DeleteCurrentItem( true );
 
@@ -632,8 +632,8 @@ void DIALOG_ERC::OnERCItemSelected( wxDataViewEvent& aEvent )
 
         if( !sheet.empty() && sheet != m_parent->GetCurrentSheet() )
         {
-            m_parent->GetToolManager()->RunAction( ACTIONS::cancelInteractive, true );
-            m_parent->GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
+            m_parent->GetToolManager()->RunAction( ACTIONS::cancelInteractive );
+            m_parent->GetToolManager()->RunAction( EE_ACTIONS::clearSelection );
 
             m_parent->SetCurrentSheet( sheet );
             m_parent->DisplayCurrentSheet();
@@ -951,7 +951,7 @@ void DIALOG_ERC::OnSeverity( wxCommandEvent& aEvent )
 void DIALOG_ERC::deleteAllMarkers( bool aIncludeExclusions )
 {
     // Clear current selection list to avoid selection of deleted items
-    m_parent->GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
+    m_parent->GetToolManager()->RunAction( EE_ACTIONS::clearSelection );
 
     m_markerTreeModel->DeleteItems( false, aIncludeExclusions, false );
 

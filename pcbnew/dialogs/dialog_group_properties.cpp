@@ -106,7 +106,7 @@ bool DIALOG_GROUP_PROPERTIES::TransferDataFromWindow()
     m_group->SetName( m_nameCtrl->GetValue() );
     m_group->SetLocked( m_locked->GetValue() );
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
     m_group->RemoveAll();
 
     for( size_t ii = 0; ii < m_membersList->GetCount(); ++ii )
@@ -115,7 +115,7 @@ bool DIALOG_GROUP_PROPERTIES::TransferDataFromWindow()
         m_group->AddItem( item );
     }
 
-    m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, true, m_group );
+    m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, m_group );
 
     commit.Push( _( "Modified group" ) );
     return true;
@@ -141,7 +141,7 @@ void DIALOG_GROUP_PROPERTIES::OnMemberSelected( wxCommandEvent& aEvent )
 
 void DIALOG_GROUP_PROPERTIES::OnAddMember( wxCommandEvent& event )
 {
-    m_toolMgr->RunAction( PCB_ACTIONS::pickNewGroupMember, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::pickNewGroupMember );
 }
 
 
