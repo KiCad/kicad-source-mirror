@@ -463,7 +463,12 @@ void LTSPICE_SCHEMATIC::removeCarriageReturn( wxString& elementFromLine )
 LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::SymbolBuilder( const wxString& aAscFileName,
                                                                LT_ASC& aAscFile )
 {
-    return SymbolBuilder( aAscFileName, m_fileCache[ wxS( "asyFiles" ) ][ aAscFileName ], aAscFile );
+    const std::map<wxString, wxString>& asyFiles = m_fileCache[ wxS( "asyFiles" ) ];
+
+    if( !asyFiles.count( aAscFileName ) )
+        THROW_IO_ERROR( wxString::Format( _( "Symbol '%s.asy' not found" ), aAscFileName ) );
+
+    return SymbolBuilder( aAscFileName, asyFiles.at( aAscFileName ), aAscFile );
 }
 
 LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::SymbolBuilder( const wxString& aAscFileName,
