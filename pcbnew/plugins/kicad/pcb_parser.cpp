@@ -3135,6 +3135,11 @@ void PCB_PARSER::parsePCB_TEXT_effects( PCB_TEXT* aText )
 
     if( parentFP )
     {
+        // make PCB_TEXT rotation relative to the parent footprint.
+        // It was read as absolute rotation from file
+        aText->SetTextAngle( aText->GetTextAngle() - parentFP->GetOrientation() );
+
+        // Move and rotate the text to its board coordinates
         aText->Rotate( { 0, 0 }, parentFP->GetOrientation() );
         aText->Move( parentFP->GetPosition() );
     }
@@ -4022,7 +4027,6 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
         case T_fp_text:
         {
             PCB_TEXT* text = parsePCB_TEXT( footprint.get() );
-            text->SetTextAngle( text->GetTextAngle() - footprint->GetOrientation());
 
             if( PCB_FIELD* field = dynamic_cast<PCB_FIELD*>( text ) )
             {
