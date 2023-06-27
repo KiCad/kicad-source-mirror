@@ -454,7 +454,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     if( m_item->GetShape() == SHAPE_T::SEGMENT )
     {
         segment_length = m_item->GetLength();
-        segment_angle = m_item->GetSegmentAngle().Truncate( 3 );
+        segment_angle = m_item->GetSegmentAngle().Round( 3 );
     }
 
     if( m_item->GetShape() == SHAPE_T::RECT )
@@ -494,18 +494,15 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
         bool change_begin = ( begin_point != m_item->GetStart() );
         bool change_end = ( end_point != m_item->GetEnd() );
         bool change_length = ( segment_length != m_segmentLength.GetValue() );
-        EDA_ANGLE difference = segment_angle - m_segmentAngle.GetAngleValue();
-
-        if( difference.AsRadians() < 0 )
-            difference = -difference;
+        EDA_ANGLE difference = std::abs( segment_angle - m_segmentAngle.GetAngleValue() );
         
         bool change_angle =
-                ( difference > EDA_ANGLE( 0.0005, DEGREES_T ) );
+                ( difference >= EDA_ANGLE( 0.00049, DEGREES_T ) );
 
         if( !( change_begin && change_end ) )
         {
             segment_length = m_segmentLength.GetValue();
-            segment_angle = m_segmentAngle.GetAngleValue().Truncate( 3 );
+            segment_angle = m_segmentAngle.GetAngleValue().Round( 3 );
 
             if( change_length || change_angle )
             {
@@ -532,9 +529,9 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
             m_item->SetLength( m_item->GetLength() );
         
         if( change_angle )
-            m_item->SetAngle( m_segmentAngle.GetAngleValue().Truncate( 3 ) );
+            m_item->SetAngle( m_segmentAngle.GetAngleValue().Round( 3 ) );
         else
-            m_item->SetAngle( m_item->GetSegmentAngle().Truncate( 3 ) );
+            m_item->SetAngle( m_item->GetSegmentAngle().Round( 3 ) );
      
      }
 

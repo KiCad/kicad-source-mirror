@@ -309,11 +309,11 @@ public:
 
     EDA_ANGLE KeepUpright() const;
 
-    EDA_ANGLE& Truncate( int digits ) const
+    EDA_ANGLE& Round( int digits ) const
     {
         EDA_ANGLE angle( *this );
-        double truncated = KiROUND( angle.AsDegrees() * pow( 10.0, digits ) ) / pow( 10.0, digits );
-        angle = EDA_ANGLE( truncated , DEGREES_T );
+        double rounded = KiROUND( angle.AsDegrees() * pow( 10.0, digits ) ) / pow( 10.0, digits );
+        angle = EDA_ANGLE( rounded, DEGREES_T );
         return angle;
     }
 

@@ -160,10 +160,10 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	#ifdef __WXGTK__
 	if ( !m_segmentAngleCtrl->HasFlag( wxTE_MULTILINE ) )
 	{
-	m_segmentAngleCtrl->SetMaxLength( 7 );
+	m_segmentAngleCtrl->SetMaxLength( 8 );
 	}
 	#else
-	m_segmentAngleCtrl->SetMaxLength( 7 );
+	m_segmentAngleCtrl->SetMaxLength( 8 );
 	#endif
 	gbSizer2->Add( m_segmentAngleCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
