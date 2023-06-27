@@ -879,13 +879,9 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
         break;
     }
 
-    case PCB_SHAPE_T:
-    case PCB_TARGET_T:
+    default:
         aItem->TransformShapeToPolygon( aHoles, aLayer, aGap, m_maxError, ERROR_OUTSIDE,
                                         aIgnoreLineWidth );
-        break;
-
-    default:
         break;
     }
 }
