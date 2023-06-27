@@ -3051,6 +3051,8 @@ PCB_TEXT* PCB_PARSER::parsePCB_TEXT( BOARD_ITEM* aParent )
 void PCB_PARSER::parsePCB_TEXT_effects( PCB_TEXT* aText )
 {
     FOOTPRINT* parentFP = dynamic_cast<FOOTPRINT*>( aText->GetParent() );
+    bool hasAngle       = false;    // Old files do not have a angle specified.
+                                    // in this case it is 0 expected to be 0
 
     // By default, texts in footprints have a locked rotation (i.e. rot = -90 ... 90 deg)
     if( parentFP )
@@ -3072,10 +3074,10 @@ void PCB_PARSER::parsePCB_TEXT_effects( PCB_TEXT* aText )
             aText->SetTextPos( pt );
             token = NextTok();
 
-            // If there is no orientation defined, then it is the default value of 0 degrees.
             if( CurTok() == T_NUMBER )
             {
                 aText->SetTextAngle( EDA_ANGLE( parseDouble(), DEGREES_T ) );
+                hasAngle = true;
                 token = NextTok();
             }
 
@@ -3132,6 +3134,10 @@ void PCB_PARSER::parsePCB_TEXT_effects( PCB_TEXT* aText )
                 Expecting( "layer, effects, locked, render_cache or tstamp" );
         }
     }
+
+    // If there is no orientation defined, then it is the default value of 0 degrees.
+    if( !hasAngle )
+        aText->SetTextAngle( ANGLE_0 );
 
     if( parentFP )
     {

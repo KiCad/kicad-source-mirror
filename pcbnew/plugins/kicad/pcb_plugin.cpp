@@ -1795,8 +1795,8 @@ void PCB_PLUGIN::format( const PCB_TEXT* aText, int aNestLevel ) const
     m_out->Print( 0, " (at %s", formatInternalUnits( pos ).c_str() );
 
     // Due to Pcbnew history, fp_text angle is saved as an absolute on screen angle.
-    if( !aText->GetTextAngle().IsZero() )
-        m_out->Print( 0, " %s", EDA_UNIT_UTILS::FormatAngle( aText->GetTextAngle() ).c_str() );
+    // To avoid issues in the future, always save the angle, even if it is 0
+    m_out->Print( 0, " %s", EDA_UNIT_UTILS::FormatAngle( aText->GetTextAngle() ).c_str() );
 
     if( parentFP && !aText->IsKeepUpright() )
         m_out->Print( 0, " unlocked" );
