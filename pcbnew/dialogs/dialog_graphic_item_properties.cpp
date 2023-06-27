@@ -126,6 +126,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
 
     m_segmentLength.SetUnits( EDA_UNITS::MILLIMETRES );
     m_segmentAngle.SetUnits( EDA_UNITS::DEGREES );
+    m_segmentAngle.SetPrecision( 4 );
 
     m_rectangleHeight.SetUnits( EDA_UNITS::MILLIMETRES );
     m_rectangleWidth.SetUnits( EDA_UNITS::MILLIMETRES );
@@ -402,7 +403,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     if( m_item->GetShape() == SHAPE_T::SEGMENT )
     {
         segment_length = m_item->GetLength();
-        segment_angle = m_item->GetSegmentAngle();
+        segment_angle = m_item->GetSegmentAngle().Truncate( 3 );
     }
 
     if( m_item->GetShape() == SHAPE_T::RECT )
@@ -443,17 +444,17 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
         bool change_end = ( end_point != m_item->GetEnd() );
         bool change_length = ( segment_length != m_segmentLength.GetValue() );
         EDA_ANGLE difference = segment_angle - m_segmentAngle.GetAngleValue();
-        
+
         if( difference.AsRadians() < 0 )
             difference = -difference;
         
         bool change_angle =
-                ( difference > EDA_ANGLE( 0.00001, TENTHS_OF_A_DEGREE_T ) );
+                ( difference > EDA_ANGLE( 0.0005, DEGREES_T ) );
 
         if( !( change_begin && change_end ) )
         {
             segment_length = m_segmentLength.GetValue();
-            segment_angle = m_segmentAngle.GetAngleValue();
+            segment_angle = m_segmentAngle.GetAngleValue().Truncate( 3 );
 
             if( change_length || change_angle )
             {
@@ -480,9 +481,9 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
             m_item->SetLength( m_item->GetLength() );
         
         if( change_angle )
-            m_item->SetAngle( m_segmentAngle.GetAngleValue() );
+            m_item->SetAngle( m_segmentAngle.GetAngleValue().Truncate( 3 ) );
         else
-            m_item->SetAngle( m_item->GetSegmentAngle() );
+            m_item->SetAngle( m_item->GetSegmentAngle().Truncate( 3 ) );
      
      }
 
