@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2020 CERN
- * Copyright (C) 2013-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
@@ -39,12 +39,9 @@ class BOARD_ITEM;
 class CONNECTIVITY_DATA;
 class STATUS_TEXT_POPUP;
 
-namespace KIGFX
+namespace KIGFX::PREVIEW
 {
-    namespace PREVIEW
-    {
-        class RULER_ITEM;
-    }
+    class RULER_ITEM;
 }
 
 
@@ -157,6 +154,8 @@ public:
      */
     int CreateArray( const TOOL_EVENT& aEvent );
 
+    bool DoMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit );
+
     /**
      * A selection filter which prunes the selection to contain only items of type #PCB_MODULE_T.
      */
@@ -168,8 +167,6 @@ public:
      */
     static void PadFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector,
                            PCB_SELECTION_TOOL* sTool );
-
-    BOARD_COMMIT* GetCurrentCommit() const { return m_commit.get(); }
 
 private:
     ///< Set up handlers for various events.
@@ -194,8 +191,6 @@ private:
     bool invokeInlineRouter( int aDragMode );
     bool isRouterActive() const;
 
-    int doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommitMessage );
-
     VECTOR2I getSafeMovement( const VECTOR2I& aMovement, const BOX2I& aSourceBBox,
                               const VECTOR2D& aBBoxOffset );
 
@@ -206,11 +201,10 @@ private:
     void rebuildConnectivity();
 
 private:
-    PCB_SELECTION_TOOL*           m_selectionTool;
-    std::unique_ptr<BOARD_COMMIT> m_commit;
-    bool                          m_dragging;   // Indicates objects are currently being dragged
-    VECTOR2I                      m_cursor;     // Last cursor position (so getModificationPoint()
-                                                // can avoid changes of edit reference point).
+    PCB_SELECTION_TOOL*   m_selectionTool;
+    bool                  m_dragging;         // Indicates objects are currently being dragged
+    VECTOR2I              m_cursor;           // Last cursor position (so getModificationPoint()
+                                              // can avoid changes of edit reference point).
     std::unique_ptr<STATUS_TEXT_POPUP> m_statusPopup;
 
     static const unsigned int COORDS_PADDING; // Padding from coordinates limits for this tool

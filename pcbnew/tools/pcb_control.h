@@ -133,10 +133,11 @@ private:
      * @param aReannotateDuplicates = true to reannotate any footprints with a designator
                                       that already exist in the board.
      */
-    int placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsNew, bool aAnchorAtOrigin,
-                         bool aReannotateDuplicates );
+    bool placeBoardItems( BOARD_COMMIT* aCommit, std::vector<BOARD_ITEM*>& aItems, bool aIsNew,
+                          bool aAnchorAtOrigin, bool aReannotateDuplicates );
 
-    int placeBoardItems( BOARD* aBoard, bool aAnchorAtOrigin, bool aReannotateDuplicates );
+    bool placeBoardItems( BOARD_COMMIT* aCommit, BOARD* aBoard, bool aAnchorAtOrigin,
+                          bool aReannotateDuplicates );
 
     ///< Pointer to the currently used edit frame.
     PCB_BASE_FRAME* m_frame;

@@ -24,43 +24,26 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <advanced_config.h>
+#include <functional>
 #include <limits>
 #include <board.h>
-#include <board_design_settings.h>
-#include <footprint.h>
-#include <pcb_shape.h>
-#include <collectors.h>
+#include <board_commit.h>
+#include <pad.h>
+#include <pcb_group.h>
 #include <pcb_edit_frame.h>
-#include <drawing_sheet/ds_proxy_view_item.h>
-#include <kiway.h>
-#include <pcbnew_settings.h>
 #include <spread_footprints.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
 #include <tools/edit_tool.h>
 #include <tools/pcb_grid_helper.h>
 #include <tools/drc_tool.h>
-#include <tools/drawing_tool.h>
 #include <tools/zone_filler_tool.h>
-#include <view/view_controls.h>
-#include <connectivity/connectivity_algo.h>
-#include <connectivity/connectivity_items.h>
-#include <cassert>
-#include <functional>
-#include <wx/hyperlink.h>
 #include <router/router_tool.h>
 #include <dialogs/dialog_move_exact.h>
-#include <dialogs/dialog_unit_entry.h>
-#include <board_commit.h>
-#include <pcb_group.h>
-#include <pcb_target.h>
 #include <zone_filler.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
-#include <pad.h>
-#include <geometry/shape_segment.h>
 #include <drc/drc_interactive_courtyard_clearance.h>
 
 
@@ -84,12 +67,8 @@ int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
                 {
                     BOARD_ITEM* item = aCollector[i];
 
-                    switch( item->Type() )
-                    {
-                    case PCB_TRACE_T: aCollector.Remove( item ); break;
-
-                    default: break;
-                    }
+                    if( item->Type() == PCB_TRACE_T )
+                        aCollector.Remove( item );
                 }
             },
             true /* prompt user regarding locked items */ );
@@ -97,33 +76,28 @@ int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
     if( selection.Size() < 2 )
         return 0;
 
+    BOARD_COMMIT  localCommit( this );
+    BOARD_COMMIT* commit = dynamic_cast<BOARD_COMMIT*>( aEvent.Commit() );
+
+    if( !commit )
+        commit = &localCommit;
+
     std::vector<EDA_ITEM*> sorted = selection.GetItemsSortedBySelectionOrder();
 
-    // When editing footprints, all items have the same parent
-    if( IsFootprintEditor() )
+    // Save items, so changes can be undone
+    for( EDA_ITEM* item : selection )
     {
-        m_commit->Modify( selection.Front() );
-    }
-    else
-    {
-        // Save items, so changes can be undone
-        for( EDA_ITEM* item : selection )
+        if( !item->IsNew() && !item->IsMoving() && ( !IsFootprintEditor() || commit->Empty() ) )
         {
-            // Don't double move footprint pads, fields, etc.
-            //
-            // For PCB_GROUP_T, the parent is the board.
-            if( item->GetParent() && item->GetParent()->IsSelected() )
-                continue;
+            commit->Modify( item );
 
-            m_commit->Modify( item );
-
-            // If moving a group, record position of all the descendants for undo
+            // If swapping a group, record position of all the descendants for undo
             if( item->Type() == PCB_GROUP_T )
             {
                 PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
                 group->RunOnDescendants( [&]( BOARD_ITEM* bItem )
                                          {
-                                             m_commit->Modify( bItem );
+                                             commit->Modify( bItem );
                                          });
             }
         }
@@ -172,8 +146,8 @@ int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
         }
     }
 
-    if( !m_dragging )
-        m_commit->Push( _( "Swap" ) );
+    if( !localCommit.Empty() )
+        localCommit.Push( _( "Swap" ) );
 
     m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
@@ -183,6 +157,7 @@ int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::PackAndMoveFootprints( const TOOL_EVENT& aEvent )
 {
+    BOARD_COMMIT   commit( this );
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
@@ -213,13 +188,19 @@ int EDIT_TOOL::PackAndMoveFootprints( const TOOL_EVENT& aEvent )
 
     for( FOOTPRINT* item : footprintsToPack )
     {
-        m_commit->Modify( item );
+        commit.Modify( item );
+        item->SetFlags( IS_MOVING );
         footprintsBbox.Merge( item->GetBoundingBox( false, false ) );
     }
 
     SpreadFootprints( &footprintsToPack, footprintsBbox.Normalize().GetOrigin(), false );
 
-    return doMoveSelection( aEvent, _( "Pack footprints" ) );
+    if( DoMoveSelection( aEvent, &commit ) )
+        commit.Push( _( "Pack footprints" ) );
+    else
+        commit.Revert();
+
+    return 0;
 }
 
 
@@ -231,7 +212,14 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    return doMoveSelection( aEvent, _( "Move" ) );
+    BOARD_COMMIT commit( this );
+
+    if( DoMoveSelection( aEvent, &commit ) )
+        commit.Push( _( "Move" ) );
+    else
+        commit.Revert();
+
+    return 0;
 }
 
 
@@ -269,7 +257,7 @@ VECTOR2I EDIT_TOOL::getSafeMovement( const VECTOR2I& aMovement, const BOX2I& aSo
 }
 
 
-int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommitMessage )
+bool EDIT_TOOL::DoMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit )
 {
     bool moveWithReference = aEvent.IsAction( &PCB_ACTIONS::moveWithReference );
     bool moveIndividually = aEvent.IsAction( &PCB_ACTIONS::moveIndividually );
@@ -296,7 +284,7 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommi
             !m_isFootprintEditor && cfg->m_AllowFreePads );
 
     if( m_dragging || selection.Empty() )
-        return 0;
+        return false;
 
     LSET     item_layers = selection.GetSelectionLayers();
     bool     is_hover    = selection.IsHover(); // N.B. This must be saved before the second call
@@ -318,9 +306,7 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommi
     }
 
     if( selection.Empty() )
-    {
-        return 0;
-    }
+        return false;
 
     editFrame->PushTool( aEvent );
     Activate();
@@ -397,7 +383,7 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommi
             m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
         editFrame->PopTool( aEvent );
-        return 0;
+        return false;
     }
 
     if( moveIndividually )
@@ -432,7 +418,6 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommi
 
     bool hv45Mode        = false;
     bool eatFirstMouseUp = true;
-    bool hasRedrawn3D    = false;
     bool allowRedraw3D   = cfg->m_Display.m_Live3DRefresh;
     bool showCourtyardConflicts = !m_isFootprintEditor && cfg->m_ShowCourtyardCollisions;
 
@@ -544,10 +529,7 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommi
                 }
 
                 if( redraw3D && allowRedraw3D )
-                {
                     editFrame->Update3DView( false, true );
-                    hasRedrawn3D = true;
-                }
 
                 if( showCourtyardConflicts && drc_on_move->m_FpInMove.size() )
                 {
@@ -564,23 +546,16 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommi
 
                 m_dragging = true;
 
-                // When editing footprints, all items have the same parent
-                if( IsFootprintEditor() )
+                for( EDA_ITEM* item : selection )
                 {
-                    m_commit->Modify( selection.Front() );
-                }
-                else
-                {
-                    // Save items, so changes can be undone
-                    for( EDA_ITEM* item : selection )
-                    {
-                        // Don't double move footprint pads, fields, etc.
-                        //
-                        // For PCB_GROUP_T, the parent is the board.
-                        if( item->GetParent() && item->GetParent()->IsSelected() )
-                            continue;
+                    if( item->GetParent() && item->GetParent()->IsSelected() )
+                        continue;
 
-                        m_commit->Modify( item );
+                    if( !item->IsNew() && item->IsMoving()
+                            && ( !IsFootprintEditor() || aCommit->Empty() ) )
+                    {
+                        aCommit->Modify( item );
+                        item->SetFlags( IS_MOVING );
 
                         // If moving a group, record position of all the descendants for undo
                         if( item->Type() == PCB_GROUP_T )
@@ -588,13 +563,13 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommi
                             PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
                             group->RunOnDescendants( [&]( BOARD_ITEM* bItem )
                                                      {
-                                                         m_commit->Modify( bItem );
+                                                         aCommit->Modify( bItem );
+                                                         item->SetFlags( IS_MOVING );
                                                      });
                         }
                     }
                 }
 
-                editFrame->UndoRedoBlock( true );
                 m_cursor = controls->GetCursorPosition();
 
                 if( selection.HasReferencePoint() )
@@ -666,7 +641,7 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommi
 
             statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
 
-            m_toolMgr->PostAction( PCB_ACTIONS::updateLocalRatsnest, new VECTOR2I( movement ) );
+            m_toolMgr->PostAction( PCB_ACTIONS::updateLocalRatsnest, movement );
         }
         else if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
@@ -676,21 +651,13 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommi
             restore_state = true; // Canceling the tool means that items have to be restored
             break;                // Finish
         }
-        else if( evt->IsAction( &ACTIONS::undo ) )
+        else if( evt->IsAction( &ACTIONS::undo ) || evt->IsAction( &ACTIONS::doDelete ) )
         {
             restore_state = true; // Perform undo locally
             break;                // Finish
         }
-        else if( evt->IsAction( &ACTIONS::doDelete ) || evt->IsAction( &ACTIONS::cut ) )
+        else if( evt->IsAction( &ACTIONS::duplicate ) || evt->IsAction( &ACTIONS::cut ) )
         {
-            // Dispatch TOOL_ACTIONs
-            evt->SetPassEvent();
-            break; // finish -- there is no further processing for removed items
-        }
-        else if( evt->IsAction( &ACTIONS::duplicate ) )
-        {
-            evt->SetPassEvent();
-            break; // finish -- Duplicate tool will start a new Move with the dup'ed items
         }
         else if( evt->IsAction( &PCB_ACTIONS::rotateCw )
                 || evt->IsAction( &PCB_ACTIONS::rotateCcw )
@@ -744,7 +711,7 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommi
                     updateStatusPopup( nextItem, itemIdx + 1, orig_items.size() );
 
                     // Pick up new item
-                    m_commit->Modify( nextItem );
+                    aCommit->Modify( nextItem );
                     nextItem->SetPosition( controls->GetMousePosition( true ) );
 
                     continue;
@@ -767,7 +734,7 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommi
             displayConstraintsMessage( hv45Mode );
             evt->SetPassEvent( false );
         }
-        else if( ZONE_FILLER_TOOL::IsZoneFillAction( evt ) )
+        else if( ZONE_FILLER_TOOL::IsZoneFillAction( evt ) || evt->IsAction( &ACTIONS::redo ))
         {
             wxBell();
         }
@@ -787,47 +754,26 @@ int EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, const wxString& aCommi
     controls->SetAutoPan( false );
 
     m_dragging = false;
-    editFrame->UndoRedoBlock( false );
 
     // Discard reference point when selection is "dropped" onto the board
     selection.ClearReferencePoint();
 
     // Unselect all items to clear selection flags and then re-select the originally selected
-    // items (after the potential Revert()).
+    // items.
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
-    // TODO: there's an encapsulation leak here: this commit often has more than just the move
-    // in it; for instance it might have a paste, append board, etc. as well.
-    if( restore_state )
+    if( !restore_state )
     {
-        m_commit->Revert();
-        m_selectionTool->RebuildSelection();
-
-        // Mainly for point editor, but there might be other clients that need to adjust to
-        // reverted state.
-        m_toolMgr->PostEvent( EVENTS::SelectedItemsMoved );
-
-        // Property panel needs to know about the reselect
-        m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
-
-        if( hasRedrawn3D )
-            editFrame->Update3DView( false, true );
-    }
-    else
-    {
-        m_commit->Push( aCommitMessage );
-
         EDA_ITEMS oItems( orig_items.begin(), orig_items.end() );
         m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, &oItems );
     }
 
-    m_toolMgr->GetTool<DRAWING_TOOL>()->UpdateStatusBar();
     // Remove the dynamic ratsnest from the screen
     m_toolMgr->RunAction( PCB_ACTIONS::hideLocalRatsnest );
 
     editFrame->PopTool( aEvent );
     editFrame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
 
-    return restore_state ? -1 : 0;
+    return !restore_state;
 }
 

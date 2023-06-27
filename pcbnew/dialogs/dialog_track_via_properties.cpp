@@ -38,12 +38,10 @@
 #include <macros.h>
 
 DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParent,
-                                                          const PCB_SELECTION& aItems,
-                                                          BOARD_COMMIT& aCommit ) :
+                                                          const PCB_SELECTION& aItems ) :
     DIALOG_TRACK_VIA_PROPERTIES_BASE( aParent ),
     m_frame( aParent ),
     m_items( aItems ),
-    m_commit( aCommit ),
     m_trackStartX( aParent, m_TrackStartXLabel, m_TrackStartXCtrl, nullptr ),
     m_trackStartY( aParent, m_TrackStartYLabel, m_TrackStartYCtrl, m_TrackStartYUnit ),
     m_trackEndX( aParent, m_TrackEndXLabel, m_TrackEndXCtrl, nullptr ),
@@ -571,12 +569,13 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
     // We don't bother with updating the nets at this point as it will be useless (any connected
     // pads will simply drive their existing nets back onto the track segments and vias).
 
-    bool changeLock = m_lockedCbox->Get3StateValue() != wxCHK_UNDETERMINED;
-    bool setLock = m_lockedCbox->Get3StateValue() == wxCHK_CHECKED;
+    BOARD_COMMIT commit( m_frame );
+    bool         changeLock = m_lockedCbox->Get3StateValue() != wxCHK_UNDETERMINED;
+    bool         setLock = m_lockedCbox->Get3StateValue() == wxCHK_CHECKED;
 
     for( EDA_ITEM* item : m_items )
     {
-        m_commit.Modify( item );
+        commit.Modify( item );
 
         switch( item->Type() )
         {
@@ -755,7 +754,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
         }
     }
 
-    m_commit.Push( _( "Edit track/via properties" ) );
+    commit.Push( _( "Edit track/via properties" ) );
 
     // Pushing the commit will have updated the connectivity so we can now test to see if we
     // need to update any pad nets.
@@ -795,7 +794,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
     {
         for( EDA_ITEM* item : m_items )
         {
-            m_commit.Modify( item );
+            commit.Modify( item );
 
             switch( item->Type() )
             {
@@ -816,11 +815,11 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 
         for( PAD* pad : changingPads )
         {
-            m_commit.Modify( pad );
+            commit.Modify( pad );
             pad->SetNetCode( newNetCode );
         }
 
-        m_commit.Push( _( "Updating nets" ) );
+        commit.Push( _( "Updating nets" ) );
     }
 
     return true;

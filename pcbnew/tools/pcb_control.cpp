@@ -834,7 +834,7 @@ void PCB_CONTROL::pruneItemLayers( std::vector<BOARD_ITEM*>& aItems )
 int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
 {
     CLIPBOARD_IO pi;
-    BOARD_ITEM* clipItem = pi.Parse();
+    BOARD_ITEM*  clipItem = pi.Parse();
 
     if( !clipItem )
         return 0;
@@ -871,9 +871,10 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     // The clipboard can contain two different things, an entire kicad_pcb or a single footprint
     if( isFootprintEditor && ( !board() || !footprint() ) )
-    {
         return 0;
-    }
+
+    BOARD_COMMIT commit( m_toolMgr );
+    bool         cancelled = false;
 
     switch( clipItem->Type() )
     {
@@ -942,7 +943,8 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
                 pruneItemLayers( pastedItems );
 
-                placeBoardItems( pastedItems, true, true, mode == PASTE_MODE::UNIQUE_ANNOTATIONS );
+                cancelled = !placeBoardItems( &commit, pastedItems, true, true,
+                                              mode == PASTE_MODE::UNIQUE_ANNOTATIONS );
             }
             else
             {
@@ -952,7 +954,8 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
                         clipFootprint->SetReference( defaultRef );
                 }
 
-                placeBoardItems( clipBoard, true, mode == PASTE_MODE::UNIQUE_ANNOTATIONS );
+                cancelled = !placeBoardItems( &commit, clipBoard, true,
+                                              mode == PASTE_MODE::UNIQUE_ANNOTATIONS );
             }
 
             break;
@@ -979,7 +982,8 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
             pruneItemLayers( pastedItems );
 
-            placeBoardItems( pastedItems, true, true, mode == PASTE_MODE::UNIQUE_ANNOTATIONS );
+            cancelled = !placeBoardItems( &commit, pastedItems, true, true,
+                                          mode == PASTE_MODE::UNIQUE_ANNOTATIONS );
             break;
         }
 
@@ -987,6 +991,11 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
             m_frame->DisplayToolMsg( _( "Invalid clipboard contents" ) );
             break;
     }
+
+    if( cancelled )
+        commit.Revert();
+    else
+        commit.Push( _( "Paste" ) );
 
     return 1;
 }
@@ -1013,7 +1022,6 @@ int PCB_CONTROL::AppendBoardFromFile( const TOOL_EVENT& aEvent )
 }
 
 
-// Helper function for PCB_CONTROL::placeBoardItems()
 template<typename T>
 static void moveUnflaggedItems( std::deque<T>& aList, std::vector<BOARD_ITEM*>& aTarget,
                                 bool aIsNew )
@@ -1076,7 +1084,8 @@ static void moveUnflaggedItems( ZONES& aList, std::vector<BOARD_ITEM*>& aTarget,
 
 
 
-int PCB_CONTROL::placeBoardItems( BOARD* aBoard, bool aAnchorAtOrigin, bool aReannotateDuplicates )
+bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, BOARD* aBoard, bool aAnchorAtOrigin,
+                                   bool aReannotateDuplicates )
 {
     // items are new if the current board is not the board source
     bool isNew = board() != aBoard;
@@ -1096,12 +1105,12 @@ int PCB_CONTROL::placeBoardItems( BOARD* aBoard, bool aAnchorAtOrigin, bool aRea
 
     pruneItemLayers( items );
 
-    return placeBoardItems( items, isNew, aAnchorAtOrigin, aReannotateDuplicates );
+    return placeBoardItems( aCommit, items, isNew, aAnchorAtOrigin, aReannotateDuplicates );
 }
 
 
-int PCB_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsNew,
-                                  bool aAnchorAtOrigin, bool aReannotateDuplicates )
+bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, std::vector<BOARD_ITEM*>& aItems,
+                                   bool aIsNew, bool aAnchorAtOrigin, bool aReannotateDuplicates )
 {
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
@@ -1161,11 +1170,10 @@ int PCB_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsNew,
 
     for( BOARD_ITEM* item : aItems )
     {
-        // Commit after reannotation
         if( aIsNew )
-            editTool->GetCurrentCommit()->Add( item );
+            aCommit->Add( item );
         else
-            editTool->GetCurrentCommit()->Added( item );
+            aCommit->Added( item );
     }
 
     PCB_SELECTION& selection = selectionTool->GetSelection();
@@ -1185,16 +1193,18 @@ int PCB_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsNew,
         getViewControls()->SetCursorPosition( getViewControls()->GetMousePosition(), false );
 
         m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
-        m_toolMgr->RunAction( PCB_ACTIONS::move );
+
+        return editTool->DoMoveSelection( PCB_ACTIONS::move.MakeEvent(), aCommit );
     }
 
-    return 0;
+    return true;
 }
 
 
 int PCB_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
 {
     PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
+    BOARD_COMMIT    commit( m_toolMgr );
 
     if( !editFrame )
         return 1;
@@ -1295,7 +1305,12 @@ int PCB_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
     brd->SetEnabledLayers( enabledLayers );
     brd->SetVisibleLayers( enabledLayers );
 
-    return placeBoardItems( brd, false, false ); // Do not reannotate duplicates on Append Board
+    if( placeBoardItems( &commit, brd, false, false /* Don't reannotate dupes on Append Board */ ) )
+        commit.Push( _( "Append Board" ) );
+    else
+        commit.Revert();
+
+    return 0;
 }
 
 

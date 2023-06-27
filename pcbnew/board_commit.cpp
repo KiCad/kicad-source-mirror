@@ -571,6 +571,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             wxASSERT( false );
             break;
         }
+
+        boardItem->ClearEditFlags();
     }
 
     if( bulkAddedItems.size() > 0 )
@@ -767,6 +769,8 @@ void BOARD_COMMIT::Revert()
             wxASSERT( false );
             break;
         }
+
+        item->ClearEditFlags();
     }
 
     if( bulkAddedItems.size() > 0 )
@@ -786,6 +790,9 @@ void BOARD_COMMIT::Revert()
 
     PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
     selTool->RebuildSelection();
+
+    // Property panel needs to know about the reselect
+    m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
 
     clear();
 }

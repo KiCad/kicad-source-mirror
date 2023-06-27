@@ -82,9 +82,6 @@ void EDIT_TOOL::Reset( RESET_REASON aReason )
     m_dragging = false;
 
     m_statusPopup = std::make_unique<STATUS_TEXT_POPUP>( getEditFrame<PCB_BASE_EDIT_FRAME>() );
-
-    if( aReason != RUN )
-        m_commit.reset( new BOARD_COMMIT( this ) );
 }
 
 
@@ -440,7 +437,11 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
     controls->ShowCursor( true );
     controls->SetAutoPan( true );
 
-    bool     restore_state = false;
+    BOARD_COMMIT  commit( this );
+    bool          restore_state = false;
+
+    commit.Modify( theArc );
+
     VECTOR2I arcCenter = theArc->GetCenter();
     SEG      tanStart = SEG( arcCenter, theArc->GetStart() ).PerpendicularSeg( theArc->GetStart() );
     SEG      tanEnd = SEG( arcCenter, theArc->GetEnd() ).PerpendicularSeg( theArc->GetEnd() );
@@ -478,41 +479,39 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
                         break;
                 }
 
-                PCB_TRACK* retval = nullptr;
+                PCB_TRACK* track = nullptr;
 
                 if( itemsOnAnchor.size() == 1 && itemsOnAnchor.front()->Type() == PCB_TRACE_T )
                 {
-                    retval = static_cast<PCB_TRACK*>( itemsOnAnchor.front() );
-                    SEG trackSeg( retval->GetStart(), retval->GetEnd() );
+                    track = static_cast<PCB_TRACK*>( itemsOnAnchor.front() );
+                    commit.Modify( track );
+
+                    SEG trackSeg( track->GetStart(), track->GetEnd() );
 
                     // Allow deviations in colinearity as defined in ADVANCED_CFG
                     if( trackSeg.Angle( aCollinearSeg ) > maxTangentDeviation )
-                        retval = nullptr;
+                        track = nullptr;
                 }
 
-                if( !retval )
+                if( !track )
                 {
-                    retval = new PCB_TRACK( theArc->GetParent() );
-                    retval->SetStart( aAnchor );
-                    retval->SetEnd( aAnchor );
-                    retval->SetNet( theArc->GetNet() );
-                    retval->SetLayer( theArc->GetLayer() );
-                    retval->SetWidth( theArc->GetWidth() );
-                    retval->SetLocked( theArc->IsLocked() );
-                    retval->SetFlags( IS_NEW );
-                    getView()->Add( retval );
+                    track = new PCB_TRACK( theArc->GetParent() );
+                    track->SetStart( aAnchor );
+                    track->SetEnd( aAnchor );
+                    track->SetNet( theArc->GetNet() );
+                    track->SetLayer( theArc->GetLayer() );
+                    track->SetWidth( theArc->GetWidth() );
+                    track->SetLocked( theArc->IsLocked() );
+                    track->SetFlags( IS_NEW );
+                    getView()->Add( track );
+                    commit.Added( track );
                 }
 
-                return retval;
+                return track;
             };
 
     PCB_TRACK* trackOnStart = getUniqueTrackAtAnchorCollinear( theArc->GetStart(), tanStart);
     PCB_TRACK* trackOnEnd = getUniqueTrackAtAnchorCollinear( theArc->GetEnd(), tanEnd );
-
-    // Make copies of items to be edited
-    PCB_ARC*   theArcCopy = new PCB_ARC( *theArc );
-    PCB_TRACK* trackOnStartCopy = new PCB_TRACK( *trackOnStart );
-    PCB_TRACK* trackOnEndCopy = new PCB_TRACK( *trackOnEnd );
 
     if( trackOnStart->GetLength() != 0 )
     {
@@ -622,7 +621,7 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
 
             VECTOR2I closest = cSegTanStart.NearestPoint( m_cursor );
 
-            for( VECTOR2I candidate : possiblePoints )
+            for( const VECTOR2I& candidate : possiblePoints )
             {
                 if( ( candidate - m_cursor ).SquaredEuclideanNorm()
                     < ( closest - m_cursor ).SquaredEuclideanNorm() )
@@ -698,56 +697,6 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
         }
     }
 
-    // Ensure we only do one commit operation on each object
-    auto processTrack =
-            [&]( PCB_TRACK* aTrack, PCB_TRACK* aTrackCopy, int aMaxLengthIU ) -> bool
-            {
-                if( aTrack->IsNew() )
-                {
-                    getView()->Remove( aTrack );
-
-                    if( aTrack->GetLength() <= aMaxLengthIU )
-                    {
-                        aTrack->SetParentGroup( nullptr );
-                        delete aTrack;
-                        aTrack = nullptr;
-
-                        aTrackCopy->SetParentGroup( nullptr );
-                        delete aTrackCopy;
-                        aTrackCopy = nullptr;
-
-                        return false;
-                    }
-                    else
-                    {
-                        m_commit->Add( aTrack );
-
-                        aTrackCopy->SetParentGroup( nullptr );
-                        delete aTrackCopy;
-                        aTrackCopy = nullptr;
-
-                        return true;
-                    }
-                }
-                else if( aTrack->GetLength() <= aMaxLengthIU )
-                {
-                    aTrack->SwapItemData( aTrackCopy ); //restore the original before notifying COMMIT
-                    m_commit->Remove( aTrack );
-
-                    aTrackCopy->SetParentGroup( nullptr );
-                    delete aTrackCopy;
-                    aTrackCopy = nullptr;
-
-                    return false;
-                }
-                else
-                {
-                    m_commit->Modified( aTrack, aTrackCopy );
-                }
-
-                return true;
-            };
-
     // Amend the end points of the arc if we delete the joining tracks
     VECTOR2I newStart = trackOnStart->GetStart();
     VECTOR2I newEnd = trackOnEnd->GetStart();
@@ -761,19 +710,26 @@ int EDIT_TOOL::DragArcTrack( const TOOL_EVENT& aEvent )
     int maxLengthIU =
             KiROUND( ADVANCED_CFG::GetCfg().m_MaxTrackLengthToKeep * pcbIUScale.IU_PER_MM );
 
-    if( !processTrack( trackOnStart, trackOnStartCopy, maxLengthIU ) )
+    if( trackOnStart->GetLength() <= maxLengthIU )
+    {
+        commit.Remove( trackOnStart );
         theArc->SetStart( newStart );
+    }
 
-    if( !processTrack( trackOnEnd, trackOnEndCopy, maxLengthIU ) )
+    if( trackOnEnd->GetLength() <= maxLengthIU )
+    {
+        commit.Remove( trackOnEnd );
         theArc->SetEnd( newEnd );
+    }
 
-    processTrack( theArc, theArcCopy, 0 ); // only delete the arc if start and end points coincide
+    if( theArc->GetLength() <= 0 )
+        commit.Remove( theArc );
 
     // Should we commit?
     if( restore_state )
-        m_commit->Revert();
+        commit.Revert();
     else
-        m_commit->Push( _( "Drag Arc Track" ) );
+        commit.Push( _( "Drag Arc Track" ) );
 
     return 0;
 }
@@ -795,13 +751,15 @@ int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
             },
             true /* prompt user regarding locked items */ );
 
+    BOARD_COMMIT commit( this );
+
     for( EDA_ITEM* item : selection )
     {
         if( item->Type() == PCB_VIA_T )
         {
             PCB_VIA* via = static_cast<PCB_VIA*>( item );
 
-            m_commit->Modify( via );
+            commit.Modify( via );
 
             int new_width;
             int new_drill;
@@ -828,14 +786,14 @@ int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
 
             wxCHECK( track, 0 );
 
-            m_commit->Modify( track );
+            commit.Modify( track );
 
             int new_width = board()->GetDesignSettings().GetCurrentTrackWidth();
             track->SetWidth( new_width );
         }
     }
 
-    m_commit->Push( _( "Edit track width/via size" ) );
+    commit.Push( _( "Edit track width/via size" ) );
 
     if( selection.IsHover() )
     {
@@ -958,6 +916,7 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
         }
     }
 
+    BOARD_COMMIT             commit( this );
     std::vector<BOARD_ITEM*> itemsToAddToSelection;
 
     for( FILLET_OP filletOp : filletOperations )
@@ -1018,11 +977,11 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
             tArc->SetWidth( track1->GetWidth() );
             tArc->SetNet( track1->GetNet() );
             tArc->SetLocked( track1->IsLocked() );
-            m_commit->Add( tArc );
+            commit.Add( tArc );
             itemsToAddToSelection.push_back( tArc );
 
-            m_commit->Modify( track1 );
-            m_commit->Modify( track2 );
+            commit.Modify( track1 );
+            commit.Modify( track2 );
 
             if( filletOp.t1Start )
                 track1->SetStart( t1newPoint );
@@ -1038,7 +997,7 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
         }
     }
 
-    m_commit->Push( _( "Fillet Tracks" ) );
+    commit.Push( _( "Fillet Tracks" ) );
 
     //select the newly created arcs
     for( BOARD_ITEM* item : itemsToAddToSelection )
@@ -1080,7 +1039,7 @@ int EDIT_TOOL::FilletLines( const TOOL_EVENT& aEvent )
         },
         true /* prompt user regarding locked items */ );
 
-    std::set<PCB_SHAPE*> lines_to_add;
+    std::set<PCB_SHAPE*>    lines_to_add;
     std::vector<PCB_SHAPE*> items_to_remove;
 
     for( EDA_ITEM* item : selection )
@@ -1159,13 +1118,14 @@ int EDIT_TOOL::FilletLines( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    bool                   operationPerformedOnAtLeastOne = false;
-    bool                   didOneAttemptFail              = false;
+    BOARD_COMMIT             commit( this );
+    bool                     operationPerformedOnAtLeastOne = false;
+    bool                     didOneAttemptFail              = false;
     std::vector<BOARD_ITEM*> itemsToAddToSelection;
 
     // Only modify one parent in FP editor
     if( m_isFootprintEditor )
-        m_commit->Modify( selection.Front() );
+        commit.Modify( selection.Front() );
 
     alg::for_all_pairs( selection.begin(), selection.end(), [&]( EDA_ITEM* a, EDA_ITEM* b )
         {
@@ -1252,7 +1212,7 @@ int EDIT_TOOL::FilletLines( const TOOL_EVENT& aEvent )
             }
             else if( !m_isFootprintEditor )
             {
-                m_commit->Modify( line_a );
+                commit.Modify( line_a );
             }
 
             if( lines_to_add.count( line_b ) )
@@ -1262,7 +1222,7 @@ int EDIT_TOOL::FilletLines( const TOOL_EVENT& aEvent )
             }
             else if( !m_isFootprintEditor )
             {
-                m_commit->Modify( line_b );
+                commit.Modify( line_b );
             }
 
             itemsToAddToSelection.push_back( tArc );
@@ -1277,16 +1237,16 @@ int EDIT_TOOL::FilletLines( const TOOL_EVENT& aEvent )
 
         } );
 
-    for( auto item : items_to_remove )
+    for( PCB_SHAPE* item : items_to_remove )
     {
-        m_commit->Remove( item );
+        commit.Remove( item );
         m_selectionTool->RemoveItemFromSel( item, true );
     }
 
     //select the newly created arcs
     for( BOARD_ITEM* item : itemsToAddToSelection )
     {
-        m_commit->Add( item );
+        commit.Add( item );
         m_selectionTool->AddItemToSel( item, true );
     }
 
@@ -1299,7 +1259,7 @@ int EDIT_TOOL::FilletLines( const TOOL_EVENT& aEvent )
     // Notify other tools of the changes
     m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
-    m_commit->Push( _( "Fillet Lines" ) );
+    commit.Push( _( "Fillet Lines" ) );
 
     if( !operationPerformedOnAtLeastOne )
         frame()->ShowInfoBarMsg( _( "Unable to fillet the selected lines." ) );
@@ -1321,7 +1281,7 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     // Tracks & vias are treated in a special way:
     if( ( SELECTION_CONDITIONS::OnlyTypes( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } ) )( selection ) )
     {
-        DIALOG_TRACK_VIA_PROPERTIES dlg( editFrame, selection, *m_commit );
+        DIALOG_TRACK_VIA_PROPERTIES dlg( editFrame, selection );
         dlg.ShowQuasiModal();       // QuasiModal required for NET_SELECTOR
     }
     else if( selection.Size() == 1 )
@@ -1379,6 +1339,11 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     }
 
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
+    BOARD_COMMIT         localCommit( this );
+    BOARD_COMMIT*        commit = dynamic_cast<BOARD_COMMIT*>( aEvent.Commit() );
+
+    if( !commit )
+        commit = &localCommit;
 
     // Be sure that there is at least one item that we can modify. If nothing was selected before,
     // try looking for the stuff under mouse cursor (i.e. KiCad old-style hover selection)
@@ -1448,31 +1413,27 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
     if( !outOfBounds )
     {
-        // When editing footprints, all items have the same parent
-        if( IsFootprintEditor() )
-            m_commit->Modify( selection.Front() );
-
         for( EDA_ITEM* item : selection )
         {
-            if( !item->IsNew() && !IsFootprintEditor() )
+            if( !item->IsNew() && !item->IsMoving() && ( !IsFootprintEditor() || commit->Empty() ) )
             {
-                m_commit->Modify( item );
+                commit->Modify( item );
 
                 // If rotating a group, record position of all the descendants for undo
                 if( item->Type() == PCB_GROUP_T )
                 {
                     static_cast<PCB_GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem )
-                                                                    {
-                                                                        m_commit->Modify( bItem );
-                                                                    });
+                                                                       {
+                                                                           commit->Modify( bItem );
+                                                                       });
                 }
             }
 
             static_cast<BOARD_ITEM*>( item )->Rotate( refPt, rotateAngle );
         }
 
-        if( !m_dragging )
-            m_commit->Push( _( "Rotate" ) );
+        if( !localCommit.Empty() )
+            localCommit.Push( _( "Rotate" ) );
 
         if( is_hover && !m_dragging )
             m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
@@ -1480,7 +1441,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
         if( m_dragging )
-            m_toolMgr->PostAction( PCB_ACTIONS::updateLocalRatsnest );
+            m_toolMgr->PostAction( PCB_ACTIONS::updateLocalRatsnest, VECTOR2I() );
     }
 
     // Restore the old reference so any mouse dragging that occurs doesn't make the selection jump
@@ -1590,6 +1551,12 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         return 0;
     }
 
+    BOARD_COMMIT  localCommit( this );
+    BOARD_COMMIT* commit = dynamic_cast<BOARD_COMMIT*>( aEvent.Commit() );
+
+    if( !commit )
+        commit = &localCommit;
+
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
@@ -1604,10 +1571,6 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
     updateModificationPoint( selection );
     VECTOR2I mirrorPoint = selection.GetReferencePoint();
-
-    // When editing footprints, all items have the same parent
-    if( IsFootprintEditor() )
-        m_commit->Modify( selection.Front() );
 
     // Set the mirroring options.
     // Unfortunately, the mirror function do not have the same parameter for all items
@@ -1626,8 +1589,8 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         if( !item->IsType( MirrorableItems ) )
             continue;
 
-        if( !item->IsNew() && !IsFootprintEditor() )
-            m_commit->Modify( item );
+        if( !item->IsNew() && !item->IsMoving() && ( !IsFootprintEditor() || commit->Empty() ) )
+            commit->Modify( item );
 
         // modify each object as necessary
         switch( item->Type() )
@@ -1671,8 +1634,8 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         }
     }
 
-    if( !m_dragging )
-        m_commit->Push( _( "Mirror" ) );
+    if( !localCommit.Empty() )
+        localCommit.Push( _( "Mirror" ) );
 
     if( selection.IsHover() && !m_dragging )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
@@ -1680,7 +1643,7 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
     if( m_dragging )
-        m_toolMgr->PostAction( PCB_ACTIONS::updateLocalRatsnest );
+        m_toolMgr->PostAction( PCB_ACTIONS::updateLocalRatsnest, VECTOR2I() );
 
     return 0;
 }
@@ -1693,6 +1656,12 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
         wxBell();
         return 0;
     }
+
+    BOARD_COMMIT  localCommit( this );
+    BOARD_COMMIT* commit = dynamic_cast<BOARD_COMMIT*>( aEvent.Commit() );
+
+    if( !commit )
+        commit = &localCommit;
 
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
@@ -1728,28 +1697,26 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 
     bool leftRight = frame()->GetPcbNewSettings()->m_FlipLeftRight;
 
-    // When editing footprints, all items have the same parent
-    if( IsFootprintEditor() )
-        m_commit->Modify( selection.Front() );
-
     for( EDA_ITEM* item : selection )
     {
-        if( !item->IsNew() && !IsFootprintEditor() )
-            m_commit->Modify( item );
-
-        if( item->Type() == PCB_GROUP_T )
+        if( !item->IsNew() && !item->IsMoving() && ( !IsFootprintEditor() || commit->Empty() ) )
         {
-            static_cast<PCB_GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem )
-                                                               {
-                                                                   m_commit->Modify( bItem );
-                                                               });
+            commit->Modify( item );
+
+            if( item->Type() == PCB_GROUP_T )
+            {
+                static_cast<PCB_GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem )
+                                                                   {
+                                                                       commit->Modify( bItem );
+                                                                   });
+            }
         }
 
         static_cast<BOARD_ITEM*>( item )->Flip( refPt, leftRight );
     }
 
-    if( !m_dragging )
-        m_commit->Push( _( "Change Side / Flip" ) );
+    if( !localCommit.Empty() )
+        localCommit.Push( _( "Change Side / Flip" ) );
 
     if( selection.IsHover() && !m_dragging )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
@@ -1757,7 +1724,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
     if( m_dragging )
-        m_toolMgr->PostAction( PCB_ACTIONS::updateLocalRatsnest );
+        m_toolMgr->PostAction( PCB_ACTIONS::updateLocalRatsnest, VECTOR2I() );
 
     // Restore the old reference so any mouse dragging that occurs doesn't make the selection jump
     // to this now invalid reference
@@ -1772,6 +1739,8 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 
 void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
 {
+    BOARD_COMMIT commit( this );
+
     // As we are about to remove items, they have to be removed from the selection first
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
@@ -1783,7 +1752,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
 
         if( parentGroup )
         {
-            m_commit->Modify( parentGroup );
+            commit.Modify( parentGroup );
             parentGroup->RemoveItem( board_item );
         }
 
@@ -1791,7 +1760,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         {
         case PCB_FIELD_T:
             wxASSERT( parentFP );
-            m_commit->Modify( parentFP );
+            commit.Modify( parentFP );
             static_cast<PCB_TEXT*>( board_item )->SetVisible( false );
             getView()->Update( board_item );
             break;
@@ -1802,13 +1771,13 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         case PCB_BITMAP_T:
             if( parentFP )
             {
-                m_commit->Modify( parentFP );
+                commit.Modify( parentFP );
                 getView()->Remove( board_item );
                 parentFP->Remove( board_item );
             }
             else
             {
-                m_commit->Remove( board_item );
+                commit.Remove( board_item );
             }
 
             break;
@@ -1816,7 +1785,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         case PCB_PAD_T:
             if( IsFootprintEditor() || frame()->GetPcbNewSettings()->m_AllowFreePads )
             {
-                m_commit->Modify( parentFP );
+                commit.Modify( parentFP );
                 getView()->Remove( board_item );
                 parentFP->Remove( board_item );
             }
@@ -1826,7 +1795,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         case PCB_ZONE_T:
             if( parentFP )
             {
-                m_commit->Modify( parentFP );
+                commit.Modify( parentFP );
                 getView()->Remove( board_item );
                 parentFP->Remove( board_item );
             }
@@ -1845,7 +1814,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
                     if( zone->HitTestCutout( curPos, &outlineIdx, &holeIdx ) )
                     {
                         // Remove the cutout
-                        m_commit->Modify( zone );
+                        commit.Modify( zone );
                         zone->RemoveCutout( outlineIdx, holeIdx );
                         zone->UnFill();
 
@@ -1863,7 +1832,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
                 }
 
                 // Remove the entire zone otherwise
-                m_commit->Remove( board_item );
+                commit.Remove( board_item );
             }
 
             break;
@@ -1880,7 +1849,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
                             // Just make fields invisible if they happen to be in group.
                             if( bItem->Type() == PCB_FIELD_T )
                             {
-                                m_commit->Modify( bItem->GetParent() );
+                                commit.Modify( bItem->GetParent() );
                                 static_cast<PCB_FIELD*>( board_item )->SetVisible( false );
                                 getView()->Update( board_item );
 
@@ -1895,13 +1864,13 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
                                 }
                             }
 
-                            m_commit->Modify( bItem->GetParent() );
+                            commit.Modify( bItem->GetParent() );
                             getView()->Remove( bItem );
                             bItem->GetParent()->Remove( bItem );
                         }
                         else
                         {
-                            m_commit->Remove( bItem );
+                            commit.Remove( bItem );
                         }
                     };
 
@@ -1915,7 +1884,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         }
 
         default:
-            m_commit->Remove( board_item );
+            commit.Remove( board_item );
             break;
         }
     }
@@ -1927,9 +1896,9 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         m_selectionTool->ExitGroup();
 
     if( aIsCut )
-        m_commit->Push( _( "Cut" ) );
+        commit.Push( _( "Cut" ) );
     else
-        m_commit->Push( _( "Delete" ) );
+        commit.Push( _( "Delete" ) );
 }
 
 
@@ -2038,9 +2007,10 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
 
     if( ret == wxID_OK )
     {
-        EDA_ANGLE angle = rotation;
-        VECTOR2I  rp = selection.GetCenter();
-        VECTOR2I  selCenter( rp.x, rp.y );
+        BOARD_COMMIT commit( this );
+        EDA_ANGLE    angle = rotation;
+        VECTOR2I     rp = selection.GetCenter();
+        VECTOR2I     selCenter( rp.x, rp.y );
 
         // Make sure the rotation is from the right reference point
         selCenter += translation;
@@ -2050,7 +2020,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
 
         // When editing footprints, all items have the same parent
         if( IsFootprintEditor() )
-            m_commit->Modify( selection.Front() );
+            commit.Modify( selection.Front() );
 
         for( EDA_ITEM* selItem : selection )
         {
@@ -2058,7 +2028,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
 
             if( !item->IsNew() && !IsFootprintEditor() )
             {
-                m_commit->Modify( item );
+                commit.Modify( item );
 
                 if( item->Type() == PCB_GROUP_T )
                 {
@@ -2066,7 +2036,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
 
                     group->RunOnDescendants( [&]( BOARD_ITEM* bItem )
                                              {
-                                                 m_commit->Modify( bItem );
+                                                 commit.Modify( bItem );
                                              });
                 }
             }
@@ -2094,7 +2064,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
                 getView()->Update( item );
         }
 
-        m_commit->Push( _( "Move exact" ) );
+        commit.Push( _( "Move exact" ) );
 
         if( selection.IsHover() )
             m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
@@ -2102,7 +2072,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
         m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
         if( m_dragging )
-            m_toolMgr->PostAction( PCB_ACTIONS::updateLocalRatsnest );
+            m_toolMgr->PostAction( PCB_ACTIONS::updateLocalRatsnest, VECTOR2I() );
     }
 
     return 0;
@@ -2132,6 +2102,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
     // we have a selection to work on now, so start the tool process
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
+    BOARD_COMMIT         commit( this );
 
     // If the selection was given a hover, we do not keep the selection after completion
     bool is_hover = selection.IsHover();
@@ -2163,7 +2134,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         }
         else if( FOOTPRINT* parentFootprint = orig_item->GetParentFootprint() )
         {
-            m_commit->Modify( parentFootprint );
+            commit.Modify( parentFootprint );
             dupe_item = parentFootprint->DuplicateItem( orig_item, true /* add to parent */ );
         }
         else
@@ -2211,7 +2182,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
                 static_cast<PCB_GROUP*>( dupe_item )->RunOnDescendants(
                         [&]( BOARD_ITEM* bItem )
                         {
-                            m_commit->Add( bItem );
+                            commit.Add( bItem );
                         });
             }
 
@@ -2220,7 +2191,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
             dupe_item->ClearSelected();
 
             new_items.push_back( dupe_item );
-            m_commit->Add( dupe_item );
+            commit.Add( dupe_item );
         }
     }
 
@@ -2237,18 +2208,13 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         editFrame->DisplayToolMsg( wxString::Format( _( "Duplicated %d item(s)" ),
                                                      (int) new_items.size() ) );
 
-        // TODO(ISM): This line can't be used to activate the tool until we allow multiple
-        //            activations.
-        // m_toolMgr->RunAction( PCB_ACTIONS::move );
-        // Instead we have to create the event and call the tool's function
-        // directly
-
         // If items were duplicated, pick them up
-        // this works well for "dropping" copies around and pushes the commit
-        TOOL_EVENT evt = PCB_ACTIONS::move.MakeEvent();
-        Move( evt );
+        if( DoMoveSelection( aEvent, &commit ) )
+            commit.Push( _( "Duplicate" ) );
+        else
+            commit.Revert();
 
-        // Deslect the duplicated item if we originally started as a hover selection
+        // Deselect the duplicated item if we originally started as a hover selection
         if( is_hover )
             m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
     }

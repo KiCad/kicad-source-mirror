@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 CERN
+ * Copyright (C) 2015-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -28,15 +29,13 @@
 #include <layer_ids.h>
 
 class PCB_SELECTION;
-class BOARD_COMMIT;
 class PCB_BASE_FRAME;
 class PAD;
 
 class DIALOG_TRACK_VIA_PROPERTIES : public DIALOG_TRACK_VIA_PROPERTIES_BASE
 {
 public:
-    DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParent, const PCB_SELECTION& aItems,
-                                 BOARD_COMMIT& aCommit );
+    DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParent, const PCB_SELECTION& aItems );
 
     ~DIALOG_TRACK_VIA_PROPERTIES();
 
@@ -63,7 +62,6 @@ private:
 private:
     PCB_BASE_FRAME*      m_frame;
     const PCB_SELECTION& m_items;      // List of items to be modified.
-    BOARD_COMMIT&        m_commit;     // An undo record to add any changes to.
 
     UNIT_BINDER          m_trackStartX, m_trackStartY;
     UNIT_BINDER          m_trackEndX, m_trackEndY;

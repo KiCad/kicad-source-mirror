@@ -1825,15 +1825,9 @@ int BOARD_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
 
 int BOARD_INSPECTION_TOOL::UpdateLocalRatsnest( const TOOL_EVENT& aEvent )
 {
-    VECTOR2I  delta;
+    VECTOR2I  delta = aEvent.Parameter<VECTOR2I>();
 
-    // If we have passed the simple move vector, we can update without recalculation
-    if( aEvent.Parameter<VECTOR2I*>() )
-    {
-        delta = *aEvent.Parameter<VECTOR2I*>();
-        delete aEvent.Parameter<VECTOR2I*>();
-    }
-    else
+    if( delta == VECTOR2I() )
     {
         // We can delete the existing map to force a recalculation
         delete m_dynamicData;
