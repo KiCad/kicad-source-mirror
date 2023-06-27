@@ -468,7 +468,7 @@ public:
         {
             param = std::any_cast<T>( m_param );
         }
-        catch( const std::bad_any_cast& e )
+        catch( const std::bad_any_cast& )
         {
             wxCHECK_MSG( false, T(),
                           wxString::Format( "Requested parameter type %s from event with parameter type %s.",
@@ -493,7 +493,7 @@ public:
         {
             param = std::any_cast<T>( m_param );
         }
-        catch( const std::bad_any_cast& e )
+        catch( const std::bad_any_cast& )
         {
             wxCHECK_MSG( false, param,
                           wxString::Format( "Requested parameter type %s from event with parameter type %s.",
