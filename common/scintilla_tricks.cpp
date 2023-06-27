@@ -173,6 +173,21 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
 {
     wxString c = aEvent.GetUnicodeKey();
 
+    if( m_te->AutoCompActive() )
+    {
+        if( aEvent.GetKeyCode() == WXK_ESCAPE )
+        {
+            m_te->AutoCompCancel();
+            m_suppressAutocomplete = true; // Don't run autocomplete again on the next char...
+        }
+        else
+        {
+            aEvent.Skip();
+        }
+
+        return;
+    }
+
     if( !isalpha( aEvent.GetKeyCode() ) )
         m_suppressAutocomplete = false;
 
@@ -273,18 +288,6 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
 
         if( m_te->GetSelectionEnd() > m_te->GetSelectionStart() )
             m_te->DeleteBack();
-    }
-    else if( aEvent.GetKeyCode() == WXK_ESCAPE )
-    {
-        if( m_te->AutoCompActive() )
-        {
-            m_te->AutoCompCancel();
-            m_suppressAutocomplete = true; // Don't run autocomplete again on the next char...
-        }
-        else
-        {
-            aEvent.Skip();
-        }
     }
     else if( isCtrlSlash( aEvent ) )
     {
