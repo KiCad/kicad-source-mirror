@@ -1248,7 +1248,14 @@ void PCB_BASE_FRAME::OnFpChangeDebounceTimer( wxTimerEvent& aEvent )
             FOOTPRINT* newfp = tbl->FootprintLoad( nickname, fpname );
 
             if( newfp )
+            {
                 ReloadFootprint( newfp );
+
+                newfp->ClearAllNets();
+                GetCanvas()->UpdateColors();
+                GetCanvas()->DisplayBoard( GetBoard() );
+                m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+            }
         }
         catch( const IO_ERROR& ioe )
         {

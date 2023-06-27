@@ -539,6 +539,8 @@ void FOOTPRINT_EDIT_FRAME::restoreLastFootprint()
 
 void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
 {
+    GetBoard()->DeleteAllFootprints();
+
     m_originalFootprintCopy.reset( static_cast<FOOTPRINT*>( aFootprint->Clone() ) );
     m_originalFootprintCopy->SetParent( nullptr );
 
