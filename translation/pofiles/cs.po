@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-18 11:55-0700\n"
+"POT-Creation-Date: 2023-06-27 15:35-0700\n"
 "PO-Revision-Date: 2023-06-27 08:53+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
@@ -37426,7 +37426,7 @@ msgstr "DPS úspěšně přečíslována"
 msgid "Error creating svg file"
 msgstr "Chyba čtení souboru."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:339 pcbnew/pcbnew_jobs_handler.cpp:417
+#: pcbnew/pcbnew_jobs_handler.cpp:346 pcbnew/pcbnew_jobs_handler.cpp:427
 #, c-format
 msgid "Failed to plot to '%s'.\n"
 msgstr "Nepodařilo se načíst '%s'.\n"
