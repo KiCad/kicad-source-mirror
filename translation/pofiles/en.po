@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-18 15:40+0200\n"
+"POT-Creation-Date: 2023-06-27 08:29-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -336,8 +336,8 @@ msgstr "Use all material properties from each 3D model file"
 msgid "Render Solid Colors"
 msgstr "Render Solid Colors"
 
-msgid "Use only the diffuse color property from 3D model file"
-msgstr "Use only the diffuse color property from 3D model file"
+msgid "Use only the diffuse color property from model 3D model file"
+msgstr "Use only the diffuse color property from model 3D model file"
 
 msgid "Render CAD Colors"
 msgstr "Render CAD Colors"
@@ -2687,6 +2687,9 @@ msgstr "Graphic"
 msgid "Bitmap"
 msgstr "Bitmap"
 
+msgid "Field"
+msgstr "Field"
+
 msgid "Text Box"
 msgstr "Text Box"
 
@@ -2743,9 +2746,6 @@ msgstr "Global Label"
 
 msgid "Hierarchical Label"
 msgstr "Hierarchical Label"
-
-msgid "Field"
-msgstr "Field"
 
 msgid "Symbol"
 msgstr "Symbol"
@@ -4041,6 +4041,12 @@ msgstr "Browse footprint libraries"
 msgid "Create, delete and edit footprints"
 msgstr "Create, delete and edit footprints"
 
+msgid "Show Properties Manager"
+msgstr "Show Properties Manager"
+
+msgid "Show/hide the properties manager"
+msgstr "Show/hide the properties manager"
+
 msgid "Update PCB from Schematic..."
 msgstr "Update PCB from Schematic…"
 
@@ -4171,6 +4177,61 @@ msgstr "Signal names cannot contain CR or LF characters"
 
 msgid "Signal names cannot contain spaces"
 msgstr "Signal names cannot contain spaces"
+
+msgid "The value of the field cannot be empty."
+msgstr "The value of the field cannot be empty."
+
+msgid "carriage return"
+msgstr "carriage return"
+
+msgid "line feed"
+msgstr "line feed"
+
+msgid "tab"
+msgstr "tab"
+
+msgid "space"
+msgstr "space"
+
+msgid " or "
+msgstr " or "
+
+msgid ", or "
+msgstr ", or "
+
+#, c-format
+msgid "The reference designator cannot contain %s character(s)."
+msgstr "The reference designator cannot contain %s character(s)."
+
+#, c-format
+msgid "The value field cannot contain %s character(s)."
+msgstr "The value field cannot contain %s character(s)."
+
+#, c-format
+msgid "The footprint field cannot contain %s character(s)."
+msgstr "The footprint field cannot contain %s character(s)."
+
+#, c-format
+msgid "The datasheet field cannot contain %s character(s)."
+msgstr "The datasheet field cannot contain %s character(s)."
+
+#, c-format
+msgid "The sheet name cannot contain %s character(s)."
+msgstr "The sheet name cannot contain %s character(s)."
+
+#, c-format
+msgid "The sheet filename cannot contain %s character(s)."
+msgstr "The sheet filename cannot contain %s character(s)."
+
+#, c-format
+msgid "The field cannot contain %s character(s)."
+msgstr "The field cannot contain %s character(s)."
+
+msgid "The reference designator cannot contain text variable references"
+msgstr "The reference designator cannot contain text variable references"
+
+msgid "Field Validation Error"
+msgstr "Field Validation Error"
 
 msgid "Mirroring for Y axis is not supported yet"
 msgstr "Mirroring for Y axis is not supported yet"
@@ -4498,6 +4559,9 @@ msgstr "Altium Circuit Studio PCB files"
 
 msgid "Altium Circuit Maker PCB files"
 msgstr "Altium Circuit Maker PCB files"
+
+msgid "Solidworks PCB files"
+msgstr "Solidworks PCB files"
 
 msgid "Fabmaster PCB files"
 msgstr "Fabmaster PCB files"
@@ -5739,9 +5803,6 @@ msgstr "Pin Conflicts Map"
 msgid "Violation Severity"
 msgstr "Violation Severity"
 
-msgid "Edit ignored violations..."
-msgstr "Edit ignored violations..."
-
 #, c-format
 msgid "Report file '%s' created."
 msgstr "Report file '%s' created."
@@ -5775,6 +5836,9 @@ msgstr "Click on items to highlight them on the board."
 #, c-format
 msgid "Violations (%s)"
 msgstr "Violations (%s)"
+
+msgid "Edit ignored tests"
+msgstr "Edit ignored tests"
 
 #, c-format
 msgid "Ignored Tests (%s)"
@@ -6430,9 +6494,6 @@ msgstr "Add Footprint Filter"
 
 msgid "Edit Footprint Filter"
 msgstr "Edit Footprint Filter"
-
-msgid "Description:"
-msgstr "Description:"
 
 msgid "Keywords:"
 msgstr "Keywords:"
@@ -8692,6 +8753,9 @@ msgstr "Symbol library was not updated\n"
 msgid "Net Navigator"
 msgstr "Net Navigator"
 
+msgid "Properties"
+msgstr "Properties"
+
 msgid "Input Pin"
 msgstr "Input Pin"
 
@@ -9251,9 +9315,6 @@ msgstr "Footprint filters differs."
 msgid "Footprint filters differ."
 msgstr "Footprint filters differ."
 
-msgid "Symbol descriptions differ."
-msgstr "Symbol descriptions differ."
-
 msgid "Symbol keywords differ."
 msgstr "Symbol keywords differ."
 
@@ -9438,9 +9499,15 @@ msgstr "Choose Power Symbol (%d items loaded)"
 msgid "Choose Symbol (%d items loaded)"
 msgstr "Choose Symbol (%d items loaded)"
 
+msgid "Change Unit"
+msgstr "Change Unit"
+
 #, c-format
 msgid "No alternate body style found for symbol '%s' in library '%s'."
 msgstr "No alternate body style found for symbol '%s' in library '%s'."
+
+msgid "Convert Symbol"
+msgstr "Convert Symbol"
 
 msgid "none"
 msgstr "none"
@@ -9676,6 +9743,9 @@ msgstr "Back to Previous Selected Sheet"
 msgid "Sheet References"
 msgstr "Sheet References"
 
+msgid "Show Field Name"
+msgstr "Show Field Name"
+
 #, c-format
 msgid "Plugin \"%s\" does not implement the \"%s\" function."
 msgstr "Plugin “%s” does not implement the “%s” function."
@@ -9727,6 +9797,9 @@ msgstr "Hierarchical Label '%s'"
 
 msgid "Syntax Help"
 msgstr "Syntax Help"
+
+msgid "Graphic Line"
+msgstr "Graphic Line"
 
 #, c-format
 msgid "Vertical Wire, length %s"
@@ -10334,6 +10407,10 @@ msgid "Expecting CELL or BLOCK"
 msgstr "Expecting CELL or BLOCK"
 
 #, c-format
+msgid "Symbol '%s.asy' not found"
+msgstr "Symbol '%s.asy' not found"
+
+#, c-format
 msgid "Item not annotated: %s%s (unit %d)"
 msgstr "Item not annotated: %s%s (unit %d)"
 
@@ -10405,6 +10482,12 @@ msgstr "Polyline, %d points"
 msgid "Bezier Curve, %d points"
 msgstr "Bezier Curve, %d points"
 
+msgid "Position X"
+msgstr "Position X"
+
+msgid "Position Y"
+msgstr "Position Y"
+
 msgid "Sheet Name"
 msgstr "Sheet Name"
 
@@ -10417,6 +10500,15 @@ msgstr "File Name"
 #, c-format
 msgid "Hierarchical Sheet %s"
 msgstr "Hierarchical Sheet %s"
+
+msgid "Border Width"
+msgstr "Border Width"
+
+msgid "Border Color"
+msgstr "Border Color"
+
+msgid "Background Color"
+msgstr "Background Color"
 
 msgid "(Deleted Item)"
 msgstr "(Deleted Item)"
@@ -10752,61 +10844,6 @@ msgstr ""
 "<p></p>\n"
 "<i>Note that markup has precedence over bus definitions.</i>\n"
 "\n"
-
-msgid "The value of the field cannot be empty."
-msgstr "The value of the field cannot be empty."
-
-msgid "carriage return"
-msgstr "carriage return"
-
-msgid "line feed"
-msgstr "line feed"
-
-msgid "tab"
-msgstr "tab"
-
-msgid "space"
-msgstr "space"
-
-msgid " or "
-msgstr " or "
-
-msgid ", or "
-msgstr ", or "
-
-#, c-format
-msgid "The reference designator cannot contain %s character(s)."
-msgstr "The reference designator cannot contain %s character(s)."
-
-#, c-format
-msgid "The value field cannot contain %s character(s)."
-msgstr "The value field cannot contain %s character(s)."
-
-#, c-format
-msgid "The footprint field cannot contain %s character(s)."
-msgstr "The footprint field cannot contain %s character(s)."
-
-#, c-format
-msgid "The datasheet field cannot contain %s character(s)."
-msgstr "The datasheet field cannot contain %s character(s)."
-
-#, c-format
-msgid "The sheet name cannot contain %s character(s)."
-msgstr "The sheet name cannot contain %s character(s)."
-
-#, c-format
-msgid "The sheet filename cannot contain %s character(s)."
-msgstr "The sheet filename cannot contain %s character(s)."
-
-#, c-format
-msgid "The field cannot contain %s character(s)."
-msgstr "The field cannot contain %s character(s)."
-
-msgid "The reference designator cannot contain text variable references"
-msgstr "The reference designator cannot contain text variable references"
-
-msgid "Field Validation Error"
-msgstr "Field Validation Error"
 
 msgid "Signal name contains '{' and '}' but is not a valid bus name"
 msgstr "Signal name contains '{' and '}' but is not a valid bus name"
@@ -11599,6 +11636,10 @@ msgid "Format"
 msgstr "Format"
 
 #, c-format
+msgid "Cannot create sim model from %s"
+msgstr "Cannot create sim model from %s"
+
+#, c-format
 msgid "Could not find model '%s' to copy for \"A Kind Of\" model '%s'"
 msgstr "Could not find model '%s' to copy for \"A Kind Of\" model '%s'"
 
@@ -12357,26 +12398,26 @@ msgstr ""
 msgid "Add Pin"
 msgstr "Add Pin"
 
-msgid "Draw pins"
-msgstr "Draw pins"
+msgid "Add a pin"
+msgstr "Add a pin"
 
 msgid "Add Text"
 msgstr "Add Text"
 
-msgid "Draw text items"
-msgstr "Draw text items"
+msgid "Add a text item"
+msgstr "Add a text item"
 
 msgid "Add Text Box"
 msgstr "Add Text Box"
 
-msgid "Draw text box items"
-msgstr "Draw text box items"
+msgid "Add a text box item"
+msgstr "Add a text box item"
 
 msgid "Add Lines"
 msgstr "Add Lines"
 
-msgid "Draw lines"
-msgstr "Draw lines"
+msgid "Add connected graphic lines"
+msgstr "Add connected graphic lines"
 
 msgid "Add Polygon"
 msgstr "Add Polygon"
@@ -12476,6 +12517,12 @@ msgstr "Add Global Label"
 
 msgid "Add global labels"
 msgstr "Add global labels"
+
+msgid "Draw text items"
+msgstr "Draw text items"
+
+msgid "Draw text box items"
+msgstr "Draw text box items"
 
 msgid "Add Rectangle"
 msgstr "Add Rectangle"
@@ -13239,14 +13286,14 @@ msgstr "Could not load image from '%s'."
 msgid "Junction location contains no joinable wires and/or pins."
 msgstr "Junction location contains no joinable wires and/or pins."
 
-msgid "No new hierarchical labels found."
-msgstr "No new hierarchical labels found."
-
 msgid "Press <ESC> to cancel item creation."
 msgstr "Press <ESC> to cancel item creation."
 
 msgid "Click over a sheet."
 msgstr "Click over a sheet."
+
+msgid "No new hierarchical labels found."
+msgstr "No new hierarchical labels found."
 
 msgid "Add Sheet Pin"
 msgstr "Add Sheet Pin"
@@ -13492,6 +13539,9 @@ msgid ""
 msgstr ""
 "Creating a project will enable features such as text variables, net classes, "
 "and ERC exclusions"
+
+msgid "Change property"
+msgstr "Change property"
 
 msgid "Do not update library tables"
 msgstr "Do not update library tables"
@@ -15706,9 +15756,6 @@ msgstr "KiCad Drawing Sheet Editor"
 msgid "coord origin: Right Bottom page corner"
 msgstr "coord origin: Right Bottom page corner"
 
-msgid "Properties"
-msgstr "Properties"
-
 #, c-format
 msgid "Error loading drawing sheet '%s'."
 msgstr "Error loading drawing sheet '%s'."
@@ -15774,9 +15821,6 @@ msgstr "Add a line"
 
 msgid "Add a rectangle"
 msgstr "Add a rectangle"
-
-msgid "Add a text item"
-msgstr "Add a text item"
 
 msgid "Add Bitmap"
 msgstr "Add Bitmap"
@@ -16510,59 +16554,11 @@ msgstr ""
 "*  A7 - External Component lead termination, with conformal coating (any "
 "elevation)"
 
-msgid "Exact"
-msgstr "Exact"
+msgid "E24,E48,E96"
+msgstr "E24,E48,E96"
 
-msgid "Not worth using"
-msgstr "Not worth using"
-
-msgid "Inputs"
-msgstr "Inputs"
-
-msgid "Required resistance:"
-msgstr "Required resistance:"
-
-msgid "kOhm"
-msgstr "kOhm"
-
-msgid "Exclude value 1:"
-msgstr "Exclude value 1:"
-
-msgid "Exclude value 2:"
-msgstr "Exclude value 2:"
-
-msgid "E1"
-msgstr "E1"
-
-msgid "E3"
-msgstr "E3"
-
-msgid "E6"
-msgstr "E6"
-
-msgid "E12"
-msgstr "E12"
-
-msgid "E24"
-msgstr "E24"
-
-msgid "Solutions"
-msgstr "Solutions"
-
-msgid "Simple solution:"
-msgstr "Simple solution:"
-
-msgid "Approximation:"
-msgstr "Approximation:"
-
-msgid "3R solution:"
-msgstr "3R solution:"
-
-msgid "4R solution:"
-msgstr "4R solution:"
-
-msgid "Calculate"
-msgstr "Calculate"
+msgid "E1,E3,E6,E12"
+msgstr "E1,E3,E6,E12"
 
 msgid "Current calculation is underestimated due to long fusing time."
 msgstr "Current calculation is underestimated due to long fusing time."
@@ -16584,6 +16580,9 @@ msgstr "Time to fuse:"
 
 msgid "s"
 msgstr "s"
+
+msgid "Calculate"
+msgstr "Calculate"
 
 msgid "Platinum"
 msgstr "Platinum"
@@ -16662,6 +16661,57 @@ msgstr "Threshold voltage:"
 
 msgid "Names"
 msgstr "Names"
+
+msgid "Exact"
+msgstr "Exact"
+
+msgid "Not worth using"
+msgstr "Not worth using"
+
+msgid "Inputs"
+msgstr "Inputs"
+
+msgid "Required resistance:"
+msgstr "Required resistance:"
+
+msgid "kOhm"
+msgstr "kOhm"
+
+msgid "Exclude value 1:"
+msgstr "Exclude value 1:"
+
+msgid "Exclude value 2:"
+msgstr "Exclude value 2:"
+
+msgid "E1"
+msgstr "E1"
+
+msgid "E3"
+msgstr "E3"
+
+msgid "E6"
+msgstr "E6"
+
+msgid "E12"
+msgstr "E12"
+
+msgid "E24"
+msgstr "E24"
+
+msgid "Solutions"
+msgstr "Solutions"
+
+msgid "Simple solution:"
+msgstr "Simple solution:"
+
+msgid "Approximation:"
+msgstr "Approximation:"
+
+msgid "3R solution:"
+msgstr "3R solution:"
+
+msgid "4R solution:"
+msgstr "4R solution:"
 
 msgid "PCB Calculator data file"
 msgstr "PCB Calculator data file"
@@ -17083,57 +17133,45 @@ msgid "Regulator Parameters"
 msgstr "Regulator Parameters"
 
 msgid ""
-"E-series are defined in IEC 60063.\n"
+"Passive components are commonly made with E-series values appropriate to "
+"their precision.\n"
+"Capacitors commonly use E12 values. 10% and 5% resistors commonly use E24 "
+"values. 1%\n"
+"resistors use E96 values. Other series are not commonly used.\n"
 "\n"
-"Available values are approximately equally spaced in a logarithmic scale.\n"
+"To select a value begin with the calculated target value and then round it "
+"to 2\n"
+"significant figures for E24 or below or 3 significant figures for E48 and "
+"up.\n"
+"Then find the value in the table which is nearest to the significant "
+"figures\n"
+"remaining and substitute it for those figures.\n"
 "\n"
-"\tE24(5%):  1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 4.3 "
-"4.7 5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
-"\tE12(10%): 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
-"\tE6(20%):  1.0  -  1.5  -  2.2  -  3.3  -  4.7  -  6.8  -\n"
-"\tE3(50%):  1.0  -   -   -  2.2  -   -   -  4.7  -   -   -\n"
-"\tE1     :  1.0  -   -   -   -   -   -   -   -   -   -   -\n"
+"For example if the calculated target value is 16,834.2Ω then this rounds to "
+"16,800Ω.\n"
+"The nearest value to 168 is 169 and the selected E96 value is 16.9kΩ.\n"
 "\n"
-"- This calculator finds combinations of standard E-series (between 10Ω and "
-"1MΩ) to create arbitrary values.\n"
-"- You can enter the required resistance from 0.0025 to 4000 kΩ.\n"
-"- Solutions using up to 4 components are given.\n"
-"\n"
-"The requested value is always excluded from the solution set.<br>\n"
-"Optionally up to two additional values can be excluded in case of component "
-"availability problems.\n"
-"\n"
-"Solutions are given in the following formats:\n"
-"\n"
-"\tR1 + R2 +...+ Rn\tresistors in series\n"
-"\tR1 | R2 |...| Rn\tresistors in parallel\n"
-"\tR1 + (R2|R3)...\t\tany combination of the above\n"
+"The value 0 is a special case and is not present in any series."
 msgstr ""
-"E-series are defined in IEC 60063.\n"
+"Passive components are commonly made with E-series values appropriate to "
+"their precision.\n"
+"Capacitors commonly use E12 values. 10% and 5% resistors commonly use E24 "
+"values. 1%\n"
+"resistors use E96 values. Other series are not commonly used.\n"
 "\n"
-"Available values are approximately equally spaced in a logarithmic scale.\n"
+"To select a value begin with the calculated target value and then round it "
+"to 2\n"
+"significant figures for E24 or below or 3 significant figures for E48 and "
+"up.\n"
+"Then find the value in the table which is nearest to the significant "
+"figures\n"
+"remaining and substitute it for those figures.\n"
 "\n"
-"\tE24(5%):  1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 4.3 "
-"4.7 5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
-"\tE12(10%): 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
-"\tE6(20%):  1.0  -  1.5  -  2.2  -  3.3  -  4.7  -  6.8  -\n"
-"\tE3(50%):  1.0  -   -   -  2.2  -   -   -  4.7  -   -   -\n"
-"\tE1     :  1.0  -   -   -   -   -   -   -   -   -   -   -\n"
+"For example if the calculated target value is 16,834.2Ω then this rounds to "
+"16,800Ω.\n"
+"The nearest value to 168 is 169 and the selected E96 value is 16.9kΩ.\n"
 "\n"
-"- This calculator finds combinations of standard E-series (between 10Ω and "
-"1MΩ) to create arbitrary values.\n"
-"- You can enter the required resistance from 0.0025 to 4000 kΩ.\n"
-"- Solutions using up to 4 components are given.\n"
-"\n"
-"The requested value is always excluded from the solution set.<br>\n"
-"Optionally up to two additional values can be excluded in case of component "
-"availability problems.\n"
-"\n"
-"Solutions are given in the following formats:\n"
-"\n"
-"\tR1 + R2 +...+ Rn\tresistors in series\n"
-"\tR1 | R2 |...| Rn\tresistors in parallel\n"
-"\tR1 + (R2|R3)...\t\tany combination of the above\n"
+"The value 0 is a special case and is not present in any series."
 
 msgid ""
 "You can use this calculator to check if a small track can handle a large "
@@ -17223,6 +17261,9 @@ msgstr "General system design"
 msgid "Regulators"
 msgstr "Regulators"
 
+msgid "Resistor Calculator"
+msgstr "Resistor Calculator"
+
 msgid "Power, current and isolation"
 msgstr "Power, current and isolation"
 
@@ -17279,6 +17320,37 @@ msgid ""
 msgstr ""
 "Unable to write file '%s'\n"
 "Do you want to exit and abandon your changes?"
+
+msgid ""
+"- This calculator finds combinations of standard E-series (between 10Ω and "
+"1MΩ) to create arbitrary values.\n"
+"- You can enter the required resistance from 0.0025 to 4000 kΩ.\n"
+"- Solutions using up to 4 components are given.\n"
+"\n"
+"The requested value is always excluded from the solution set.<br>\n"
+"Optionally up to two additional values can be excluded in case of component "
+"availability problems.\n"
+"\n"
+"Solutions are given in the following formats:\n"
+"\n"
+"\tR1 + R2 +...+ Rn\tresistors in series\n"
+"\tR1 | R2 |...| Rn\tresistors in parallel\n"
+"\tR1 + (R2|R3)...\t\tany combination of the above\n"
+msgstr ""
+"- This calculator finds combinations of standard E-series (between 10Ω and "
+"1MΩ) to create arbitrary values.\n"
+"- You can enter the required resistance from 0.0025 to 4000 kΩ.\n"
+"- Solutions using up to 4 components are given.\n"
+"\n"
+"The requested value is always excluded from the solution set.<br>\n"
+"Optionally up to two additional values can be excluded in case of component "
+"availability problems.\n"
+"\n"
+"Solutions are given in the following formats:\n"
+"\n"
+"\tR1 + R2 +...+ Rn\tresistors in series\n"
+"\tR1 | R2 |...| Rn\tresistors in parallel\n"
+"\tR1 + (R2|R3)...\t\tany combination of the above\n"
 
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
@@ -17623,12 +17695,6 @@ msgstr "and others"
 
 msgid "no layers"
 msgstr "no layers"
-
-msgid "Position X"
-msgstr "Position X"
-
-msgid "Position Y"
-msgstr "Position Y"
 
 msgid "Locked"
 msgstr "Locked"
@@ -19288,9 +19354,6 @@ msgstr "Unconnected Items (%s)"
 msgid "Schematic Parity (%s)"
 msgstr "Schematic Parity (%s)"
 
-msgid "Edit ignored tests"
-msgstr "Edit ignored tests"
-
 msgid "Design Rules Checker"
 msgstr "Design Rules Checker"
 
@@ -19741,9 +19804,6 @@ msgstr ""
 "only be selected when the 'Locked items' checkbox is enabled in the "
 "selection filter."
 
-msgid "Text items must have some content."
-msgstr "Text items must have some content."
-
 #, c-format
 msgid "Text width must be at least %s."
 msgstr "Text width must be at least %s."
@@ -19771,9 +19831,6 @@ msgstr ""
 msgid "Modify footprint properties"
 msgstr "Modify footprint properties"
 
-msgid "Reference and value are mandatory."
-msgstr "Reference and value are mandatory."
-
 msgid "Text Items"
 msgstr "Text Items"
 
@@ -19794,9 +19851,6 @@ msgstr "90"
 
 msgid "Side:"
 msgstr "Side:"
-
-msgid "Fabrication Attributes"
-msgstr "Fabrication Attributes"
 
 msgid "Footprint type:"
 msgstr "Footprint type:"
@@ -19968,6 +20022,9 @@ msgstr "Unconstrained"
 
 msgid "Footprint name:"
 msgstr "Footprint name:"
+
+msgid "Description:"
+msgstr "Description:"
 
 msgid "Private Layers"
 msgstr "Private Layers"
@@ -22208,14 +22265,17 @@ msgstr "Target Properties"
 msgid "Footprint Reference Properties"
 msgstr "Footprint Reference Properties"
 
+msgid "Reference:"
+msgstr "Reference:"
+
 msgid "Footprint Value Properties"
 msgstr "Footprint Value Properties"
 
+msgid "Footprint Field Properties"
+msgstr "Footprint Field Properties"
+
 msgid "Footprint Text Properties"
 msgstr "Footprint Text Properties"
-
-msgid "Reference:"
-msgstr "Reference:"
 
 #, c-format
 msgid "Footprint %s (%s), %s, rotated %.1f deg"
@@ -22581,6 +22641,9 @@ msgstr "If checked, zones will be re-filled after each edit operation"
 
 msgid "Internal Layers"
 msgstr "Internal Layers"
+
+msgid "Reference and value are mandatory."
+msgstr "Reference and value are mandatory."
 
 msgid "Default text items for new footprints:"
 msgstr "Default text items for new footprints:"
@@ -25363,6 +25426,9 @@ msgstr "Thermal reliefs for PTH"
 msgid "Library link"
 msgstr "Library link"
 
+msgid "Library description"
+msgstr "Library description"
+
 msgid "Overrides"
 msgstr "Overrides"
 
@@ -25972,12 +26038,28 @@ msgid "Updated %s symbol association from %s to %s."
 msgstr "Updated %s symbol association from %s to %s."
 
 #, c-format
-msgid "Update %s properties."
-msgstr "Update %s properties."
+msgid "Update %s fields."
+msgstr "Update %s fields."
 
 #, c-format
-msgid "Updated %s properties."
-msgstr "Updated %s properties."
+msgid "Updated %s fields."
+msgstr "Updated %s fields."
+
+#, c-format
+msgid "Update %s sheetname to '%s'."
+msgstr "Update %s sheetname to '%s'."
+
+#, c-format
+msgid "Updated %s sheetname to '%s'."
+msgstr "Updated %s sheetname to '%s'."
+
+#, c-format
+msgid "Update %s sheetfile to '%s'."
+msgstr "Update %s sheetfile to '%s'."
+
+#, c-format
+msgid "Updated %s sheetfile to '%s'."
+msgstr "Updated %s sheetfile to '%s'."
 
 #, c-format
 msgid "Add %s 'exclude from BOM' fabrication attribute."
@@ -26500,6 +26582,29 @@ msgstr "Missing diff-pair name argument to %s."
 msgid "Missing field name argument to %s."
 msgstr "Missing field name argument to %s."
 
+msgid "User Field"
+msgstr "User Field"
+
+#, c-format
+msgid "Reference '%s'"
+msgstr "Reference '%s'"
+
+#, c-format
+msgid "Value '%s' of %s"
+msgstr "Value '%s' of %s"
+
+#, c-format
+msgid "Footprint '%s' of %s"
+msgstr "Footprint '%s' of %s"
+
+#, c-format
+msgid "Datasheet '%s' of %s"
+msgstr "Datasheet '%s' of %s"
+
+#, c-format
+msgid "Field '%s' of %s"
+msgstr "Field '%s' of %s"
+
 #, c-format
 msgid "Unnamed Group, %zu members"
 msgstr "Unnamed Group, %zu members"
@@ -26542,14 +26647,6 @@ msgstr "PCB Text"
 
 msgid "Display"
 msgstr "Display"
-
-#, c-format
-msgid "Reference '%s'"
-msgstr "Reference '%s'"
-
-#, c-format
-msgid "Value '%s' of %s"
-msgstr "Value '%s' of %s"
 
 #, c-format
 msgid "Footprint Text '%s' of %s"
@@ -26676,6 +26773,9 @@ msgstr "Plotting footprint '%s' to '%s'\n"
 msgid "Multiple Layers"
 msgstr "Multiple Layers"
 
+msgid "Library Description"
+msgstr "Library Description"
+
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
 msgstr "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
 
@@ -26744,6 +26844,10 @@ msgid "'%s' was not fully parsed."
 msgstr "'%s' was not fully parsed."
 
 #, c-format
+msgid "File not found: '%s' for directory '%s'."
+msgstr "File not found: '%s' for directory '%s'."
+
+#, c-format
 msgid "Record of unknown type: '%d'."
 msgstr "Record of unknown type: '%d'."
 
@@ -26757,8 +26861,12 @@ msgid "Loading netclasses..."
 msgstr "Loading netclasses..."
 
 #, c-format
-msgid "Duplicate netclass name '%s'."
-msgstr "Duplicate netclass name '%s'."
+msgid ""
+"More than one Altium netclass with name '%s' found. Only the first one will "
+"be imported."
+msgstr ""
+"More than one Altium netclass with name '%s' found. Only the first one will "
+"be imported."
 
 msgid "Loading components..."
 msgstr "Loading components..."
@@ -29559,12 +29667,6 @@ msgstr "Show Appearance Manager"
 msgid "Show/hide the appearance manager"
 msgstr "Show/hide the appearance manager"
 
-msgid "Show Properties Manager"
-msgstr "Show Properties Manager"
-
-msgid "Show/hide the properties manager"
-msgstr "Show/hide the properties manager"
-
 msgid "Flip Board View"
 msgstr "Flip Board View"
 
@@ -30517,6 +30619,9 @@ msgstr "Hide all ratsnest lines"
 msgid "Set Net Color"
 msgstr "Set Net Color"
 
+msgid "Clear Net Color"
+msgstr "Clear Net Color"
+
 #, c-format
 msgid "Highlight %s"
 msgstr "Highlight %s"
@@ -30763,9 +30868,6 @@ msgstr "Dimensions"
 msgid "Other items"
 msgstr "Other items"
 
-msgid "Change property"
-msgstr "Change property"
-
 msgid "Textbox"
 msgstr "Textbox"
 
@@ -30876,14 +30978,14 @@ msgstr "thermal reliefs for PTH"
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] load failed: input line too long\n"
 
+msgid "bitmap2component;Bitmap;Converter;"
+msgstr "bitmap2component;Bitmap;Converter;"
+
 msgid "Bitmap to Component Converter"
 msgstr "Bitmap to Component Converter"
 
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr "Create a component from a bitmap for use with KiCad"
-
-msgid "bitmap2component"
-msgstr "bitmap2component"
 
 msgid "KiCad Schematic Editor (Standalone)"
 msgstr "KiCad Schematic Editor (Standalone)"
@@ -30903,8 +31005,11 @@ msgstr "Gerber File Viewer"
 msgid "View Gerber files"
 msgstr "View Gerber files"
 
-msgid "gerbview"
-msgstr "gerbview"
+msgid "gerbview;PCB;Gerber;"
+msgstr "gerbview;PCB;Gerber;"
+
+msgid "Projectmanager;"
+msgstr "Projectmanager;"
 
 msgid "KiCad"
 msgstr "KiCad"
@@ -30918,11 +31023,17 @@ msgstr "Suite of tools for schematic design and circuit board layout"
 msgid "KiCad PCB Calculator"
 msgstr "KiCad PCB Calculator"
 
+msgid "PCB;Calculator;"
+msgstr "PCB;Calculator;"
+
 msgid "PCB Calculator"
 msgstr "PCB Calculator"
 
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculator for various electronics-related computations"
+
+msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
+msgstr "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "KiCad PCB Editor (Standalone)"
@@ -30933,11 +31044,14 @@ msgstr "PCB layout editor"
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Standalone circuit board editor for KiCad boards"
 
-msgid "pcbnew"
-msgstr "pcbnew"
-
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "An EDA suite for schematic and circuit board design"
+
+msgid "EDA"
+msgstr "EDA"
+
+msgid "Circuit board"
+msgstr "Circuit board"
 
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
@@ -30977,6 +31091,103 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Use only the diffuse color property from 3D model file"
+#~ msgstr "Use only the diffuse color property from 3D model file"
+
+#~ msgid "Edit ignored violations..."
+#~ msgstr "Edit ignored violations..."
+
+#~ msgid "Symbol descriptions differ."
+#~ msgstr "Symbol descriptions differ."
+
+#~ msgid "Draw pins"
+#~ msgstr "Draw pins"
+
+#~ msgid "Draw lines"
+#~ msgstr "Draw lines"
+
+#~ msgid ""
+#~ "E-series are defined in IEC 60063.\n"
+#~ "\n"
+#~ "Available values are approximately equally spaced in a logarithmic "
+#~ "scale.\n"
+#~ "\n"
+#~ "\tE24(5%):  1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 "
+#~ "4.3 4.7 5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
+#~ "\tE12(10%): 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
+#~ "\tE6(20%):  1.0  -  1.5  -  2.2  -  3.3  -  4.7  -  6.8  -\n"
+#~ "\tE3(50%):  1.0  -   -   -  2.2  -   -   -  4.7  -   -   -\n"
+#~ "\tE1     :  1.0  -   -   -   -   -   -   -   -   -   -   -\n"
+#~ "\n"
+#~ "- This calculator finds combinations of standard E-series (between 10Ω "
+#~ "and 1MΩ) to create arbitrary values.\n"
+#~ "- You can enter the required resistance from 0.0025 to 4000 kΩ.\n"
+#~ "- Solutions using up to 4 components are given.\n"
+#~ "\n"
+#~ "The requested value is always excluded from the solution set.<br>\n"
+#~ "Optionally up to two additional values can be excluded in case of "
+#~ "component availability problems.\n"
+#~ "\n"
+#~ "Solutions are given in the following formats:\n"
+#~ "\n"
+#~ "\tR1 + R2 +...+ Rn\tresistors in series\n"
+#~ "\tR1 | R2 |...| Rn\tresistors in parallel\n"
+#~ "\tR1 + (R2|R3)...\t\tany combination of the above\n"
+#~ msgstr ""
+#~ "E-series are defined in IEC 60063.\n"
+#~ "\n"
+#~ "Available values are approximately equally spaced in a logarithmic "
+#~ "scale.\n"
+#~ "\n"
+#~ "\tE24(5%):  1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 "
+#~ "4.3 4.7 5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
+#~ "\tE12(10%): 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
+#~ "\tE6(20%):  1.0  -  1.5  -  2.2  -  3.3  -  4.7  -  6.8  -\n"
+#~ "\tE3(50%):  1.0  -   -   -  2.2  -   -   -  4.7  -   -   -\n"
+#~ "\tE1     :  1.0  -   -   -   -   -   -   -   -   -   -   -\n"
+#~ "\n"
+#~ "- This calculator finds combinations of standard E-series (between 10Ω "
+#~ "and 1MΩ) to create arbitrary values.\n"
+#~ "- You can enter the required resistance from 0.0025 to 4000 kΩ.\n"
+#~ "- Solutions using up to 4 components are given.\n"
+#~ "\n"
+#~ "The requested value is always excluded from the solution set.<br>\n"
+#~ "Optionally up to two additional values can be excluded in case of "
+#~ "component availability problems.\n"
+#~ "\n"
+#~ "Solutions are given in the following formats:\n"
+#~ "\n"
+#~ "\tR1 + R2 +...+ Rn\tresistors in series\n"
+#~ "\tR1 | R2 |...| Rn\tresistors in parallel\n"
+#~ "\tR1 + (R2|R3)...\t\tany combination of the above\n"
+
+#~ msgid "Text items must have some content."
+#~ msgstr "Text items must have some content."
+
+#~ msgid "Fabrication Attributes"
+#~ msgstr "Fabrication Attributes"
+
+#, c-format
+#~ msgid "Update %s properties."
+#~ msgstr "Update %s properties."
+
+#, c-format
+#~ msgid "Updated %s properties."
+#~ msgstr "Updated %s properties."
+
+#, c-format
+#~ msgid "Duplicate netclass name '%s'."
+#~ msgstr "Duplicate netclass name '%s'."
+
+#~ msgid "bitmap2component"
+#~ msgstr "bitmap2component"
+
+#~ msgid "gerbview"
+#~ msgstr "gerbview"
+
+#~ msgid "pcbnew"
+#~ msgstr "pcbnew"
 
 #~ msgid "Load source image"
 #~ msgstr "Load source image"
@@ -31152,12 +31363,6 @@ msgstr "KiCad Printed Circuit Board"
 #~ "Click to place %s (item %ld of %ld)\n"
 #~ "Press <esc> to cancel all; double-click to finish"
 
-#~ msgid "EDA"
-#~ msgstr "EDA"
-
-#~ msgid "Circuit board"
-#~ msgstr "Circuit board"
-
 #~ msgid "Board Layer for Outline"
 #~ msgstr "Board Layer for Outline"
 
@@ -31275,15 +31480,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "Simulate circuit in SPICE"
 #~ msgstr "Simulate circuit in SPICE"
-
-#~ msgid "Add a pin"
-#~ msgstr "Add a pin"
-
-#~ msgid "Add a text box item"
-#~ msgstr "Add a text box item"
-
-#~ msgid "Add connected graphic lines"
-#~ msgstr "Add connected graphic lines"
 
 #~ msgid "Add a symbol"
 #~ msgstr "Add a symbol"
@@ -32202,9 +32398,6 @@ msgstr "KiCad Printed Circuit Board"
 #, c-format
 #~ msgid "Checking board setup constraints hole to hole: min %s."
 #~ msgstr "Checking board setup constraints hole to hole: min %s."
-
-#~ msgid "Use only the diffuse color property from model 3D model file"
-#~ msgstr "Use only the diffuse color property from model 3D model file"
 
 #~ msgid "External simulator command:"
 #~ msgstr "External simulator command:"
@@ -42292,9 +42485,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "Schematic Marker"
 #~ msgstr "Schematic Marker"
-
-#~ msgid "Graphic Line"
-#~ msgstr "Graphic Line"
 
 #~ msgid "Schematic Text"
 #~ msgstr "Schematic Text"
@@ -53465,9 +53655,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "Render materials with reflections properties on final render (slow)"
 #~ msgstr "Render materials with reflections properties on final render (slow)"
-
-#~ msgid "Background Color"
-#~ msgstr "Background Color"
 
 #~ msgid "Show 3D &Axis"
 #~ msgstr "Show 3D &Axis"
