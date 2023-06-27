@@ -64,6 +64,12 @@ private:
     void onFilledCheckbox( wxCommandEvent& event ) override;
 
     void onLayerSelection( wxCommandEvent& event ) override;
+    void startCtrlOnTextEnter( wxCommandEvent& event ) override;
+    void endCtrlOnTextEnter( wxCommandEvent& event ) override;
+
+    void segmentOnTextEnter( wxCommandEvent& event ) override;
+
+    void rectangleOnTextEnter( wxCommandEvent& event ) override;
 
     bool Validate() override;
 
@@ -230,6 +236,51 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::onFilledCheckbox( wxCommandEvent& event )
     }
 }
 
+void DIALOG_GRAPHIC_ITEM_PROPERTIES::startCtrlOnTextEnter( wxCommandEvent& event )
+{
+    switch( m_item->GetShape() )
+    {
+    case SHAPE_T::SEGMENT:
+        TransferDataFromWindow();
+        TransferDataToWindow();
+        break;
+    case SHAPE_T::RECT:
+        TransferDataFromWindow();
+        TransferDataToWindow();
+        break;
+    default:
+        break;
+    }
+}
+
+void DIALOG_GRAPHIC_ITEM_PROPERTIES::endCtrlOnTextEnter( wxCommandEvent& event )
+{
+    switch( m_item->GetShape() )
+    {
+    case SHAPE_T::SEGMENT:
+        TransferDataFromWindow();
+        TransferDataToWindow();
+        break;
+    case SHAPE_T::RECT:
+        TransferDataFromWindow();
+        TransferDataToWindow();
+        break;
+    default: 
+        break;
+    }
+}
+
+void DIALOG_GRAPHIC_ITEM_PROPERTIES::segmentOnTextEnter( wxCommandEvent& event )
+{
+    TransferDataFromWindow();
+    TransferDataToWindow();
+}
+
+void DIALOG_GRAPHIC_ITEM_PROPERTIES::rectangleOnTextEnter( wxCommandEvent& event )
+{
+    TransferDataFromWindow();
+    TransferDataToWindow();
+}
 
 bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
 {
@@ -491,7 +542,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     {
         bool change_begin = ( begin_point != m_item->GetStart() );
         bool change_end = ( end_point != m_item->GetEnd() );
-        bool change_length = ( rectangle_height != m_rectangleHeight.GetValue() );
+        bool change_height = ( rectangle_height != m_rectangleHeight.GetValue() );
         bool change_width = ( rectangle_width != m_rectangleWidth.GetValue() );
 
 
@@ -500,7 +551,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
             rectangle_height = m_rectangleHeight.GetValue();
             rectangle_width = m_rectangleWidth.GetValue();
 
-            if( change_length || change_width )
+            if( change_height || change_width )
             {
                 if( change_end )
                 {
