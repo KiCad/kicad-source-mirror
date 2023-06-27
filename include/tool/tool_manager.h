@@ -171,7 +171,7 @@ public:
      * @return True if the action was handled immediately
      */
     template<typename T,
-             std::enable_if_t<!std::is_convertible_v<T*, COMMIT*>>* = nullptr>
+             std::enable_if_t<!std::is_convertible_v<T, COMMIT*>>* = nullptr>
     bool RunAction( const TOOL_ACTION& aAction, T aParam )
     {
         // Use a cast to ensure the proper type is stored inside the parameter
