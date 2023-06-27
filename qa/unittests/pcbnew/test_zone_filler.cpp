@@ -32,6 +32,9 @@
 #include <drc/drc_item.h>
 #include <settings/settings_manager.h>
 
+#include <tuple>
+#include <vector>
+
 
 struct ZONE_FILL_TEST_FIXTURE
 {
@@ -233,3 +236,25 @@ BOOST_FIXTURE_TEST_CASE( RegressionZoneFillTests, ZONE_FILL_TEST_FIXTURE )
     }
 }
 
+BOOST_FIXTURE_TEST_CASE( NetTies, ZONE_FILL_TEST_FIXTURE )
+{
+    std::vector<std::tuple<wxString, PCB_LAYER_ID, int>> tests = { { "issue15069", B_Cu, 1 } };
+
+    for( auto& t : tests )
+    {
+        KI_TEST::LoadBoard( m_settingsManager, std::get<0>( t ), m_board );
+
+        BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+        KI_TEST::FillZones( m_board.get() );
+
+        ZONE* zone = m_board->Zones().front();
+        SHAPE_POLY_SET copper = *zone->GetFilledPolysList( std::get<1>( t ) );
+
+        copper.Unfracture( SHAPE_POLY_SET::PM_FAST );
+        int holeCount = copper.HoleCount( 0 );
+        int expectedHoleCount = std::get<2>( t );
+
+        BOOST_CHECK_EQUAL( holeCount, expectedHoleCount );
+    }
+}
