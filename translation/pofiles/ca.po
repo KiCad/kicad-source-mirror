@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-18 15:39+0200\n"
+"POT-Creation-Date: 2023-06-27 15:33-0700\n"
 "PO-Revision-Date: 2023-04-08 21:59+0000\n"
 "Last-Translator: Arnau Llovet Vidal <arnaullv@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/v7/ca/>\n"
@@ -1095,7 +1095,7 @@ msgstr "Gruix de la placa"
 #: common/dialogs/dialog_grid_settings_base.cpp:52
 #: common/dialogs/dialog_grid_settings_base.cpp:98
 #: common/dialogs/dialog_grid_settings_base.cpp:109
-#: common/eda_draw_frame.cpp:637
+#: common/eda_draw_frame.cpp:639
 #: eeschema/dialogs/dialog_field_properties_base.cpp:219
 #: eeschema/dialogs/dialog_field_properties_base.cpp:253
 #: eeschema/dialogs/dialog_field_properties_base.cpp:264
@@ -4296,29 +4296,29 @@ msgstr "Polzades"
 msgid "Constrain to H, V, 45"
 msgstr "Restringeix a H, V, 45"
 
-#: common/eda_draw_frame.cpp:382
+#: common/eda_draw_frame.cpp:384
 msgid "Edit User Grid..."
 msgstr "Edita la quadrícula d'usuari..."
 
-#: common/eda_draw_frame.cpp:534
+#: common/eda_draw_frame.cpp:536
 msgid "Zoom Auto"
 msgstr "Zoom automàtic"
 
-#: common/eda_draw_frame.cpp:543
+#: common/eda_draw_frame.cpp:545
 #, c-format
 msgid "Zoom %.2f"
 msgstr "Zoom %.2f"
 
-#: common/eda_draw_frame.cpp:622
+#: common/eda_draw_frame.cpp:624
 #, fuzzy, c-format
 msgid "grid %s"
 msgstr "camp %s"
 
-#: common/eda_draw_frame.cpp:635 pagelayout_editor/pl_editor_frame.cpp:752
+#: common/eda_draw_frame.cpp:637 pagelayout_editor/pl_editor_frame.cpp:752
 msgid "inches"
 msgstr "polzades"
 
-#: common/eda_draw_frame.cpp:636
+#: common/eda_draw_frame.cpp:638
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:110
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:303
@@ -4336,19 +4336,19 @@ msgstr "polzades"
 msgid "mils"
 msgstr "mils"
 
-#: common/eda_draw_frame.cpp:638
+#: common/eda_draw_frame.cpp:640
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:57
 #: pcbnew/footprint_wizard_frame.cpp:327 pcbnew/pcb_dimension.cpp:330
 #: pcbnew/pcb_dimension.cpp:1350
 msgid "Units"
 msgstr "Unitats"
 
-#: common/eda_draw_frame.cpp:1061 eeschema/dialogs/panel_sym_lib_table.cpp:504
+#: common/eda_draw_frame.cpp:1063 eeschema/dialogs/panel_sym_lib_table.cpp:504
 #: pcbnew/footprint_libraries_utils.cpp:1394
 msgid "Select Library"
 msgstr "Selecciona la biblioteca"
 
-#: common/eda_draw_frame.cpp:1061
+#: common/eda_draw_frame.cpp:1063
 msgid "New Library"
 msgstr "Nova biblioteca"
 
@@ -13930,6 +13930,7 @@ msgstr ""
 "shell de KiCad i crea un projecte."
 
 #: eeschema/sch_edit_frame.cpp:1092 eeschema/sch_plotter.cpp:1028
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr "Esquemàtic"
 
@@ -16421,6 +16422,11 @@ msgstr "Augment de temperatura"
 #, fuzzy
 msgid "Voltage (measured)"
 msgstr "Caiguda de voltatge"
+
+#: eeschema/sim/spice_library_parser.cpp:89
+#, fuzzy, c-format
+msgid "Cannot create sim model from %s"
+msgstr "No es pot crear la carpeta «%s»."
 
 #: eeschema/sim/spice_model_parser.cpp:84
 #: eeschema/sim/spice_model_parser.cpp:186
@@ -20012,12 +20018,12 @@ msgstr "Aquest fitxer ja està obert."
 msgid "Malformed expression"
 msgstr ""
 
-#: include/lockfile.h:96
+#: include/lockfile.h:105
 #, fuzzy
 msgid "Lock file already exists"
 msgstr "El fitxer %s ja existeix."
 
-#: include/lockfile.h:115
+#: include/lockfile.h:124
 #, fuzzy
 msgid "Failed to access lock file"
 msgstr "No s'ha pogut carregar el fitxer de l'esquemàtic\n"
@@ -24105,6 +24111,7 @@ msgid "Tessellating copper zones..."
 msgstr "Tesselant les zones de coure..."
 
 #: pcbnew/board.cpp:999
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
 msgid "PCB"
 msgstr ""
 
@@ -29703,6 +29710,7 @@ msgid "Plot format:"
 msgstr "Format de ploteig:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Gerber"
 msgstr "Gerber"
 
@@ -42099,6 +42107,15 @@ msgstr "novapcb"
 msgid "An EDA suite for schematic and circuit board design"
 msgstr ""
 
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:34
+msgid "EDA"
+msgstr ""
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
+#, fuzzy
+msgid "Circuit board"
+msgstr "Imprimeix la placa"
+
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
@@ -42148,10 +42165,6 @@ msgstr "Edita l'esquemàtic"
 #, fuzzy
 msgid "KiCad Printed Circuit Board"
 msgstr "Fitxers de plaques de circuits impresos de KiCad (*.brd)|*.brd"
-
-#, fuzzy
-#~ msgid "Circuit board"
-#~ msgstr "Imprimeix la placa"
 
 #, fuzzy
 #~ msgid "Export Current Footprint..."

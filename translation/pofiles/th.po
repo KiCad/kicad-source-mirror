@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-18 15:39+0200\n"
+"POT-Creation-Date: 2023-06-27 15:33-0700\n"
 "PO-Revision-Date: 2023-04-21 07:52+0000\n"
 "Last-Translator: \"boonchai k.\" <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/v7/th/>\n"
@@ -1061,7 +1061,7 @@ msgstr "ความหนาบอร์ด"
 #: common/dialogs/dialog_grid_settings_base.cpp:52
 #: common/dialogs/dialog_grid_settings_base.cpp:98
 #: common/dialogs/dialog_grid_settings_base.cpp:109
-#: common/eda_draw_frame.cpp:637
+#: common/eda_draw_frame.cpp:639
 #: eeschema/dialogs/dialog_field_properties_base.cpp:219
 #: eeschema/dialogs/dialog_field_properties_base.cpp:253
 #: eeschema/dialogs/dialog_field_properties_base.cpp:264
@@ -4166,29 +4166,29 @@ msgstr "นิ้ว"
 msgid "Constrain to H, V, 45"
 msgstr "จำกัดเป็น H, V, 45"
 
-#: common/eda_draw_frame.cpp:382
+#: common/eda_draw_frame.cpp:384
 msgid "Edit User Grid..."
 msgstr "แก้ไขกริดผู้ใช้กำหนด…"
 
-#: common/eda_draw_frame.cpp:534
+#: common/eda_draw_frame.cpp:536
 msgid "Zoom Auto"
 msgstr "ซูมอัตโนมัติ"
 
-#: common/eda_draw_frame.cpp:543
+#: common/eda_draw_frame.cpp:545
 #, c-format
 msgid "Zoom %.2f"
 msgstr "ซูม %.2f"
 
-#: common/eda_draw_frame.cpp:622
+#: common/eda_draw_frame.cpp:624
 #, fuzzy, c-format
 msgid "grid %s"
 msgstr "แกนกริด"
 
-#: common/eda_draw_frame.cpp:635 pagelayout_editor/pl_editor_frame.cpp:752
+#: common/eda_draw_frame.cpp:637 pagelayout_editor/pl_editor_frame.cpp:752
 msgid "inches"
 msgstr "นิ้ว"
 
-#: common/eda_draw_frame.cpp:636
+#: common/eda_draw_frame.cpp:638
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:110
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:303
@@ -4206,19 +4206,19 @@ msgstr "นิ้ว"
 msgid "mils"
 msgstr "มิล"
 
-#: common/eda_draw_frame.cpp:638
+#: common/eda_draw_frame.cpp:640
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:57
 #: pcbnew/footprint_wizard_frame.cpp:327 pcbnew/pcb_dimension.cpp:330
 #: pcbnew/pcb_dimension.cpp:1350
 msgid "Units"
 msgstr "หน่วย"
 
-#: common/eda_draw_frame.cpp:1061 eeschema/dialogs/panel_sym_lib_table.cpp:504
+#: common/eda_draw_frame.cpp:1063 eeschema/dialogs/panel_sym_lib_table.cpp:504
 #: pcbnew/footprint_libraries_utils.cpp:1394
 msgid "Select Library"
 msgstr "เลือกไลบรารี"
 
-#: common/eda_draw_frame.cpp:1061
+#: common/eda_draw_frame.cpp:1063
 msgid "New Library"
 msgstr "ไลบรารีใหม่"
 
@@ -13584,6 +13584,7 @@ msgstr ""
 "ให้เปิดใช้จากกรอบ KiCad และต้องสร้างโครงการ"
 
 #: eeschema/sch_edit_frame.cpp:1092 eeschema/sch_plotter.cpp:1028
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr "วงจร"
 
@@ -16045,6 +16046,11 @@ msgstr "อุณหภูมิ (กวาด)"
 #: eeschema/sim/sim_plot_panel.cpp:441
 msgid "Voltage (measured)"
 msgstr "แรงดันไฟฟ้า (วัดได้)"
+
+#: eeschema/sim/spice_library_parser.cpp:89
+#, fuzzy, c-format
+msgid "Cannot create sim model from %s"
+msgstr "ไม่สามารถสร้างโฟลเดอร์ '%s'"
 
 #: eeschema/sim/spice_model_parser.cpp:84
 #: eeschema/sim/spice_model_parser.cpp:186
@@ -19446,12 +19452,12 @@ msgstr "ไฟล์นี้เปิดอยู่"
 msgid "Malformed expression"
 msgstr "นิพจน์ที่มีรูปแบบที่ไม่ถูกต้อง"
 
-#: include/lockfile.h:96
+#: include/lockfile.h:105
 #, fuzzy
 msgid "Lock file already exists"
 msgstr "ไฟล์ %s มีอยู่แล้ว"
 
-#: include/lockfile.h:115
+#: include/lockfile.h:124
 #, fuzzy
 msgid "Failed to access lock file"
 msgstr "โหลดไฟล์แผนผังวงจรไม่สำเร็จ\n"
@@ -23416,6 +23422,7 @@ msgid "Tessellating copper zones..."
 msgstr "สร้างตารางหมากรุกโซนทองแดง..."
 
 #: pcbnew/board.cpp:999
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
 msgid "PCB"
 msgstr "พีซีบี"
 
@@ -28737,6 +28744,7 @@ msgid "Plot format:"
 msgstr "รูปแบบพล็อต:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Gerber"
 msgstr "เกอร์เบอร์"
 
@@ -40790,6 +40798,15 @@ msgstr "พีซีบีนิว"
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "ชุดเครื่องมือ EDA สำหรับการออกแบบวงจรและแผ่นวงจรพิมพ์"
 
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:34
+msgid "EDA"
+msgstr ""
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
+#, fuzzy
+msgid "Circuit board"
+msgstr "แผ่นวงจรพิมพ์"
+
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
@@ -40836,10 +40853,6 @@ msgstr "แผนผังวงจร KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "แผ่นวงจรพิมพ์ KiCad"
-
-#, fuzzy
-#~ msgid "Circuit board"
-#~ msgstr "แผ่นวงจรพิมพ์"
 
 #, fuzzy
 #~ msgid "Export Current Footprint..."

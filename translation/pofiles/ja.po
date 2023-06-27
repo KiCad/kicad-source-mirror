@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-18 15:39+0200\n"
+"POT-Creation-Date: 2023-06-27 15:33-0700\n"
 "PO-Revision-Date: 2023-05-06 17:51+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v7/ja/>\n"
@@ -1080,7 +1080,7 @@ msgstr "基板厚"
 #: common/dialogs/dialog_grid_settings_base.cpp:52
 #: common/dialogs/dialog_grid_settings_base.cpp:98
 #: common/dialogs/dialog_grid_settings_base.cpp:109
-#: common/eda_draw_frame.cpp:637
+#: common/eda_draw_frame.cpp:639
 #: eeschema/dialogs/dialog_field_properties_base.cpp:219
 #: eeschema/dialogs/dialog_field_properties_base.cpp:253
 #: eeschema/dialogs/dialog_field_properties_base.cpp:264
@@ -4234,29 +4234,29 @@ msgstr "inch"
 msgid "Constrain to H, V, 45"
 msgstr "水平、垂直、45度に制限"
 
-#: common/eda_draw_frame.cpp:382
+#: common/eda_draw_frame.cpp:384
 msgid "Edit User Grid..."
 msgstr "ユーザー グリッドを編集..."
 
-#: common/eda_draw_frame.cpp:534
+#: common/eda_draw_frame.cpp:536
 msgid "Zoom Auto"
 msgstr "自動ズーム"
 
-#: common/eda_draw_frame.cpp:543
+#: common/eda_draw_frame.cpp:545
 #, c-format
 msgid "Zoom %.2f"
 msgstr "ズーム %.2f"
 
-#: common/eda_draw_frame.cpp:622
+#: common/eda_draw_frame.cpp:624
 #, c-format
 msgid "grid %s"
 msgstr "グリッド %s"
 
-#: common/eda_draw_frame.cpp:635 pagelayout_editor/pl_editor_frame.cpp:752
+#: common/eda_draw_frame.cpp:637 pagelayout_editor/pl_editor_frame.cpp:752
 msgid "inches"
 msgstr "inch"
 
-#: common/eda_draw_frame.cpp:636
+#: common/eda_draw_frame.cpp:638
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:110
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:303
@@ -4274,19 +4274,19 @@ msgstr "inch"
 msgid "mils"
 msgstr "mil"
 
-#: common/eda_draw_frame.cpp:638
+#: common/eda_draw_frame.cpp:640
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:57
 #: pcbnew/footprint_wizard_frame.cpp:327 pcbnew/pcb_dimension.cpp:330
 #: pcbnew/pcb_dimension.cpp:1350
 msgid "Units"
 msgstr "単位"
 
-#: common/eda_draw_frame.cpp:1061 eeschema/dialogs/panel_sym_lib_table.cpp:504
+#: common/eda_draw_frame.cpp:1063 eeschema/dialogs/panel_sym_lib_table.cpp:504
 #: pcbnew/footprint_libraries_utils.cpp:1394
 msgid "Select Library"
 msgstr "ライブラリを選択"
 
-#: common/eda_draw_frame.cpp:1061
+#: common/eda_draw_frame.cpp:1063
 msgid "New Library"
 msgstr "新規ライブラリ"
 
@@ -13750,6 +13750,7 @@ msgstr ""
 "て、プロジェクトを作成して下さい。"
 
 #: eeschema/sch_edit_frame.cpp:1092 eeschema/sch_plotter.cpp:1028
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr "回路図"
 
@@ -16198,6 +16199,11 @@ msgstr "温度 (swept)"
 #: eeschema/sim/sim_plot_panel.cpp:441
 msgid "Voltage (measured)"
 msgstr "電圧 (measured)"
+
+#: eeschema/sim/spice_library_parser.cpp:89
+#, fuzzy, c-format
+msgid "Cannot create sim model from %s"
+msgstr "フォルダ '%s' を作成できません。"
 
 #: eeschema/sim/spice_model_parser.cpp:84
 #: eeschema/sim/spice_model_parser.cpp:186
@@ -19595,12 +19601,12 @@ msgstr "このファイルはすでに開かれています。"
 msgid "Malformed expression"
 msgstr "不正な式"
 
-#: include/lockfile.h:96
+#: include/lockfile.h:105
 #, fuzzy
 msgid "Lock file already exists"
 msgstr "ファイル %s はすでに存在します。"
 
-#: include/lockfile.h:115
+#: include/lockfile.h:124
 #, fuzzy
 msgid "Failed to access lock file"
 msgstr "回路図 \"%s\" のロードに失敗しました\n"
@@ -23552,6 +23558,7 @@ msgid "Tessellating copper zones..."
 msgstr "導体ゾーンをテッセレーションしています..."
 
 #: pcbnew/board.cpp:999
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
 msgid "PCB"
 msgstr "プリント基板"
 
@@ -28893,6 +28900,7 @@ msgid "Plot format:"
 msgstr "出力フォーマット:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Gerber"
 msgstr "ガーバー"
 
@@ -40978,6 +40986,14 @@ msgstr "pcbnew"
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "回路図と基板設計のためのEDAスイート"
 
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:34
+msgid "EDA"
+msgstr "EDA"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
+msgid "Circuit board"
+msgstr "基板"
+
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
@@ -41025,12 +41041,6 @@ msgstr "KiCad 回路図ファイル"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad プリント基板ファイル"
-
-#~ msgid "EDA"
-#~ msgstr "EDA"
-
-#~ msgid "Circuit board"
-#~ msgstr "基板"
 
 #, fuzzy
 #~ msgid "Export Current Footprint..."

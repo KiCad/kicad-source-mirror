@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-18 15:39+0200\n"
+"POT-Creation-Date: 2023-06-27 15:33-0700\n"
 "PO-Revision-Date: 2023-01-20 06:51+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Latvian <https://hosted.weblate.org/projects/kicad/master-"
@@ -1131,7 +1131,7 @@ msgstr "Atslēgt biezumu"
 #: common/dialogs/dialog_grid_settings_base.cpp:52
 #: common/dialogs/dialog_grid_settings_base.cpp:98
 #: common/dialogs/dialog_grid_settings_base.cpp:109
-#: common/eda_draw_frame.cpp:637
+#: common/eda_draw_frame.cpp:639
 #: eeschema/dialogs/dialog_field_properties_base.cpp:219
 #: eeschema/dialogs/dialog_field_properties_base.cpp:253
 #: eeschema/dialogs/dialog_field_properties_base.cpp:264
@@ -4282,29 +4282,29 @@ msgstr ""
 msgid "Constrain to H, V, 45"
 msgstr ""
 
-#: common/eda_draw_frame.cpp:382
+#: common/eda_draw_frame.cpp:384
 msgid "Edit User Grid..."
 msgstr ""
 
-#: common/eda_draw_frame.cpp:534
+#: common/eda_draw_frame.cpp:536
 msgid "Zoom Auto"
 msgstr ""
 
-#: common/eda_draw_frame.cpp:543
+#: common/eda_draw_frame.cpp:545
 #, c-format
 msgid "Zoom %.2f"
 msgstr ""
 
-#: common/eda_draw_frame.cpp:622
+#: common/eda_draw_frame.cpp:624
 #, c-format
 msgid "grid %s"
 msgstr ""
 
-#: common/eda_draw_frame.cpp:635 pagelayout_editor/pl_editor_frame.cpp:752
+#: common/eda_draw_frame.cpp:637 pagelayout_editor/pl_editor_frame.cpp:752
 msgid "inches"
 msgstr ""
 
-#: common/eda_draw_frame.cpp:636
+#: common/eda_draw_frame.cpp:638
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:110
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:303
@@ -4322,20 +4322,20 @@ msgstr ""
 msgid "mils"
 msgstr ""
 
-#: common/eda_draw_frame.cpp:638
+#: common/eda_draw_frame.cpp:640
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:57
 #: pcbnew/footprint_wizard_frame.cpp:327 pcbnew/pcb_dimension.cpp:330
 #: pcbnew/pcb_dimension.cpp:1350
 msgid "Units"
 msgstr ""
 
-#: common/eda_draw_frame.cpp:1061 eeschema/dialogs/panel_sym_lib_table.cpp:504
+#: common/eda_draw_frame.cpp:1063 eeschema/dialogs/panel_sym_lib_table.cpp:504
 #: pcbnew/footprint_libraries_utils.cpp:1394
 #, fuzzy
 msgid "Select Library"
 msgstr "Ielādē %s"
 
-#: common/eda_draw_frame.cpp:1061
+#: common/eda_draw_frame.cpp:1063
 #, fuzzy
 msgid "New Library"
 msgstr "Ielādē %s"
@@ -13821,6 +13821,7 @@ msgid ""
 msgstr ""
 
 #: eeschema/sch_edit_frame.cpp:1092 eeschema/sch_plotter.cpp:1028
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 #, fuzzy
 msgid "Schematic"
 msgstr "Rādīt vara biezumu"
@@ -16040,6 +16041,11 @@ msgstr ""
 #: eeschema/sim/sim_plot_panel.cpp:441
 msgid "Voltage (measured)"
 msgstr ""
+
+#: eeschema/sim/spice_library_parser.cpp:89
+#, fuzzy, c-format
+msgid "Cannot create sim model from %s"
+msgstr "Ielādē %s"
 
 #: eeschema/sim/spice_model_parser.cpp:84
 #: eeschema/sim/spice_model_parser.cpp:186
@@ -19507,12 +19513,12 @@ msgstr "Rādīt vara biezumu"
 msgid "Malformed expression"
 msgstr ""
 
-#: include/lockfile.h:96
+#: include/lockfile.h:105
 #, fuzzy
 msgid "Lock file already exists"
 msgstr "Rādīt vara biezumu"
 
-#: include/lockfile.h:115
+#: include/lockfile.h:124
 #, fuzzy
 msgid "Failed to access lock file"
 msgstr "Rādīt vara biezumu"
@@ -23400,6 +23406,7 @@ msgid "Tessellating copper zones..."
 msgstr "Ielādē..."
 
 #: pcbnew/board.cpp:999
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
 msgid "PCB"
 msgstr ""
 
@@ -28738,6 +28745,7 @@ msgid "Plot format:"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 #, fuzzy
 msgid "Gerber"
 msgstr "3D skatītājs"
@@ -40532,6 +40540,15 @@ msgstr ""
 msgid "An EDA suite for schematic and circuit board design"
 msgstr ""
 
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:34
+msgid "EDA"
+msgstr ""
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
+#, fuzzy
+msgid "Circuit board"
+msgstr "Pārlādēt plati"
+
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
@@ -40576,10 +40593,6 @@ msgstr "Rādīt vara biezumu"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr ""
-
-#, fuzzy
-#~ msgid "Circuit board"
-#~ msgstr "Pārlādēt plati"
 
 #, fuzzy
 #~ msgid "Export Current Footprint..."

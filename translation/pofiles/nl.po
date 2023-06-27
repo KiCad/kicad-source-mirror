@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-18 15:39+0200\n"
+"POT-Creation-Date: 2023-06-27 15:33-0700\n"
 "PO-Revision-Date: 2023-03-12 20:08+0000\n"
 "Last-Translator: johanneswilkens <wilkensjohannes@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/v7/nl/>\n"
@@ -1090,7 +1090,7 @@ msgstr "Borddikte"
 #: common/dialogs/dialog_grid_settings_base.cpp:52
 #: common/dialogs/dialog_grid_settings_base.cpp:98
 #: common/dialogs/dialog_grid_settings_base.cpp:109
-#: common/eda_draw_frame.cpp:637
+#: common/eda_draw_frame.cpp:639
 #: eeschema/dialogs/dialog_field_properties_base.cpp:219
 #: eeschema/dialogs/dialog_field_properties_base.cpp:253
 #: eeschema/dialogs/dialog_field_properties_base.cpp:264
@@ -4257,29 +4257,29 @@ msgstr "Inches"
 msgid "Constrain to H, V, 45"
 msgstr "Beperk tot H, V, 45"
 
-#: common/eda_draw_frame.cpp:382
+#: common/eda_draw_frame.cpp:384
 msgid "Edit User Grid..."
 msgstr "Gebruikersraster bewerken ..."
 
-#: common/eda_draw_frame.cpp:534
+#: common/eda_draw_frame.cpp:536
 msgid "Zoom Auto"
 msgstr "Zoom Auto"
 
-#: common/eda_draw_frame.cpp:543
+#: common/eda_draw_frame.cpp:545
 #, c-format
 msgid "Zoom %.2f"
 msgstr "Zoom %.2f"
 
-#: common/eda_draw_frame.cpp:622
+#: common/eda_draw_frame.cpp:624
 #, fuzzy, c-format
 msgid "grid %s"
 msgstr "gebruikers raster"
 
-#: common/eda_draw_frame.cpp:635 pagelayout_editor/pl_editor_frame.cpp:752
+#: common/eda_draw_frame.cpp:637 pagelayout_editor/pl_editor_frame.cpp:752
 msgid "inches"
 msgstr "inch"
 
-#: common/eda_draw_frame.cpp:636
+#: common/eda_draw_frame.cpp:638
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:110
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:303
@@ -4297,19 +4297,19 @@ msgstr "inch"
 msgid "mils"
 msgstr "mils"
 
-#: common/eda_draw_frame.cpp:638
+#: common/eda_draw_frame.cpp:640
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:57
 #: pcbnew/footprint_wizard_frame.cpp:327 pcbnew/pcb_dimension.cpp:330
 #: pcbnew/pcb_dimension.cpp:1350
 msgid "Units"
 msgstr "Maat"
 
-#: common/eda_draw_frame.cpp:1061 eeschema/dialogs/panel_sym_lib_table.cpp:504
+#: common/eda_draw_frame.cpp:1063 eeschema/dialogs/panel_sym_lib_table.cpp:504
 #: pcbnew/footprint_libraries_utils.cpp:1394
 msgid "Select Library"
 msgstr "Selecteer Bibliotheek"
 
-#: common/eda_draw_frame.cpp:1061
+#: common/eda_draw_frame.cpp:1063
 msgid "New Library"
 msgstr "Nieuwe Bibliotheek"
 
@@ -13877,6 +13877,7 @@ msgstr ""
 "Kicad-shell en maak een project."
 
 #: eeschema/sch_edit_frame.cpp:1092 eeschema/sch_plotter.cpp:1028
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr "Schema"
 
@@ -16394,6 +16395,11 @@ msgstr "Temperatuur (geveegd)"
 #: eeschema/sim/sim_plot_panel.cpp:441
 msgid "Voltage (measured)"
 msgstr "Spanning (gemeten)"
+
+#: eeschema/sim/spice_library_parser.cpp:89
+#, fuzzy, c-format
+msgid "Cannot create sim model from %s"
+msgstr "Kan directory '%s' niet aanmaken."
 
 #: eeschema/sim/spice_model_parser.cpp:84
 #: eeschema/sim/spice_model_parser.cpp:186
@@ -19890,12 +19896,12 @@ msgstr "Dit bestand is al geopend."
 msgid "Malformed expression"
 msgstr "Verkeerde uitdrukking"
 
-#: include/lockfile.h:96
+#: include/lockfile.h:105
 #, fuzzy
 msgid "Lock file already exists"
 msgstr "Bestand %s bestaat al."
 
-#: include/lockfile.h:115
+#: include/lockfile.h:124
 #, fuzzy
 msgid "Failed to access lock file"
 msgstr "Kan schema \"%s\" niet laden"
@@ -23939,6 +23945,7 @@ msgid "Tessellating copper zones..."
 msgstr "Tessellating koperzones ..."
 
 #: pcbnew/board.cpp:999
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
 msgid "PCB"
 msgstr "Printplaat"
 
@@ -29407,6 +29414,7 @@ msgid "Plot format:"
 msgstr "Plot formaat:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Gerber"
 msgstr "Gerber"
 
@@ -41460,6 +41468,15 @@ msgstr "PcbNew"
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "Een EDA programma om schema's te tekenen en printplaten te ontwerpen"
 
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:34
+msgid "EDA"
+msgstr ""
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
+#, fuzzy
+msgid "Circuit board"
+msgstr "Print bord"
+
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
@@ -41508,10 +41525,6 @@ msgstr "KiCad schema"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad PCB (Printed Circuit Board)"
-
-#, fuzzy
-#~ msgid "Circuit board"
-#~ msgstr "Print bord"
 
 #, fuzzy
 #~ msgid "Export Current Footprint..."

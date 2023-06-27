@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-18 15:39+0200\n"
+"POT-Creation-Date: 2023-06-27 15:33-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -11007,6 +11007,10 @@ msgstr "Temperature (swept)"
 
 msgid "Voltage (measured)"
 msgstr "Voltage (measured)"
+
+#, c-format
+msgid "Cannot create sim model from %s"
+msgstr "Cannot create sim model from %s"
 
 #, c-format
 msgid "Could not find model '%s' to copy for \"A Kind Of\" model '%s'"
@@ -29387,6 +29391,12 @@ msgstr "pcbnew"
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "An EDA suite for schematic and circuit board design"
 
+msgid "EDA"
+msgstr "EDA"
+
+msgid "Circuit board"
+msgstr "Circuit board"
+
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
 "It features schematic capture, integrated circuit simulation, printed "
@@ -29437,12 +29447,6 @@ msgstr "KiCad Printed Circuit Board"
 #~ msgstr ""
 #~ "Click to place %s (item %ld of %ld)\n"
 #~ "Press <esc> to cancel all; double-click to finish"
-
-#~ msgid "EDA"
-#~ msgstr "EDA"
-
-#~ msgid "Circuit board"
-#~ msgstr "Circuit board"
 
 #~ msgid "Export Current Footprint..."
 #~ msgstr "Export Current Footprint..."
