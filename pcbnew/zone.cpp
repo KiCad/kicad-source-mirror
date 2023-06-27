@@ -1389,15 +1389,14 @@ static struct ZONE_DESC
         propMgr.InheritsAfter( TYPE_HASH( ZONE ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
 
         // Mask layer and position properties; they aren't useful in current form
-        auto posX = new PROPERTY<ZONE, int>( _HKI( "Position X" ),
-                                             NO_SETTER( ZONE, int ),
-                                             reinterpret_cast<int (ZONE::*)() const>( &ZONE::GetX ),
+        auto posX = new PROPERTY<ZONE, int>( _HKI( "Position X" ), NO_SETTER( ZONE, int ),
+                                             static_cast<int ( ZONE::* )() const>( &ZONE::GetX ),
                                              PROPERTY_DISPLAY::PT_COORD,
                                              ORIGIN_TRANSFORMS::ABS_X_COORD );
         posX->SetIsHiddenFromPropertiesManager();
 
         auto posY = new PROPERTY<ZONE, int>( _HKI( "Position Y" ), NO_SETTER( ZONE, int ),
-                                             reinterpret_cast<int (ZONE::*)() const>( &ZONE::GetY ),
+                                             static_cast<int ( ZONE::* )() const>( &ZONE::GetY ),
                                              PROPERTY_DISPLAY::PT_COORD,
                                              ORIGIN_TRANSFORMS::ABS_Y_COORD );
         posY->SetIsHiddenFromPropertiesManager();
