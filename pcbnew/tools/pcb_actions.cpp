@@ -777,11 +777,16 @@ TOOL_ACTION PCB_ACTIONS::zoneDuplicate( "pcbnew.EditorControl.zoneDuplicate",
         _( "Duplicate Zone onto Layer..." ), _( "Duplicate zone outline onto a different layer" ),
         BITMAPS::zone_duplicate );
 
-TOOL_ACTION PCB_ACTIONS::placeFootprint( "pcbnew.EditorControl.placeFootprint",
-        AS_GLOBAL,
-        'A', LEGACY_HK_NAME( "Add Footprint" ),
-        _( "Add Footprint" ), _( "Add a footprint" ),
-        BITMAPS::module, AF_ACTIVATE );
+TOOL_ACTION PCB_ACTIONS::placeFootprint( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.placeFootprint" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'A' )
+        .LegacyHotkeyName( "Add Footprint" )
+        .MenuText( _( "Add Footprint" ) )
+        .Tooltip( _( "Add a footprint" ) )
+        .Icon( BITMAPS::module )
+        .Flags( AF_ACTIVATE )
+        .Parameter<FOOTPRINT*>( nullptr ) );
 
 TOOL_ACTION PCB_ACTIONS::drillOrigin( "pcbnew.EditorControl.drillOrigin",
         AS_GLOBAL, 0, "",
