@@ -763,6 +763,9 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
                     resetReference( fpCopy );
                     pi->FootprintSave( libPath, fpCopy );
 
+                    // Remove reference to the group before deleting
+                    fpCopy->SetParentGroup( nullptr );
+
                     delete fpCopy;
                 }
             }
