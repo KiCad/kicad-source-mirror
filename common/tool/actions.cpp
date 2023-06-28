@@ -532,11 +532,14 @@ TOOL_ACTION ACTIONS::gridPrev( "common.Control.gridPrev",
         AS_GLOBAL, MD_SHIFT + 'N', LEGACY_HK_NAME( "Switch Grid To Previous" ),
         _( "Switch to Previous Grid" ), "" );
 
-TOOL_ACTION ACTIONS::gridSetOrigin( "common.Control.gridSetOrigin",
-        AS_GLOBAL,
-        0, LEGACY_HK_NAME( "Set Grid Origin" ),
-        _( "Grid Origin" ), _( "Set the grid origin point" ),
-        BITMAPS::grid_select_axis );
+TOOL_ACTION ACTIONS::gridSetOrigin( TOOL_ACTION_ARGS()
+        .Name( "common.Control.gridSetOrigin" )
+        .Scope( AS_GLOBAL )
+        .LegacyHotkeyName( "Set Grid Origin" )
+        .MenuText( _( "Grid Origin" ) )
+        .Tooltip( _( "Set the grid origin point" ) )
+        .Icon( BITMAPS::grid_select_axis )
+        .Parameter<VECTOR2D*>( nullptr ) );
 
 TOOL_ACTION ACTIONS::gridResetOrigin( "common.Control.gridResetOrigin",
         AS_GLOBAL,
