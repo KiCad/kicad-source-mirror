@@ -10,16 +10,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:35-0700\n"
-"PO-Revision-Date: 2023-06-17 23:21+0000\n"
+"PO-Revision-Date: 2023-07-03 07:52+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18.1\n"
+"X-Generator: Weblate 5.0-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -3256,13 +3256,15 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:157
 msgid "Show popup indicator when toggling settings with hotkeys"
-msgstr ""
+msgstr "Visa pop-up-bekräftelse när inställningar ändras med snabbtangenter"
 
 #: common/dialogs/panel_common_settings_base.cpp:158
 msgid ""
 "When enabled, certain hotkeys that cycle between settings will show a popup "
 "indicator briefly to indicate the change in settings."
 msgstr ""
+"Om aktivt, kommer vissa snabbtangenter som växlar mellan olika inställningar "
+"att kort visa en pop-up-ruta som bekräftelse på att inställningen ändrats."
 
 #: common/dialogs/panel_common_settings_base.cpp:168
 msgid "Icon theme:"
@@ -5671,14 +5673,12 @@ msgid "Illegal character found in logical library name"
 msgstr "Otillåtet tecken hittades i logikbibliotekets namn"
 
 #: common/lib_table_grid_tricks.cpp:32
-#, fuzzy
 msgid "Edit options..."
-msgstr "Redigera alternativ"
+msgstr "Redigera alternativ..."
 
 #: common/lib_table_grid_tricks.cpp:33
-#, fuzzy
 msgid "Edit options for this library entry"
-msgstr "Alternativ för bibliotek '%s'"
+msgstr "Redigera alternativ för denna bibliotekspost"
 
 #: common/lib_table_grid_tricks.cpp:56
 msgid "Activate selected"
@@ -7343,9 +7343,8 @@ msgid "Altium Circuit Maker PCB files"
 msgstr "Altium Circuit Maker PCB-filer"
 
 #: common/wildcards_and_files_ext.cpp:371
-#, fuzzy
 msgid "Solidworks PCB files"
-msgstr "Solid fyllning"
+msgstr "Solidworks mönsterkortsfiler"
 
 #: common/wildcards_and_files_ext.cpp:376
 msgid "Fabmaster PCB files"
@@ -7616,9 +7615,9 @@ msgid "Filtered by %s"
 msgstr "Filtrerad enligt %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:824
-#, fuzzy, c-format
+#, c-format
 msgid ": %i matching footprints"
-msgstr "Fotavtryck saknas"
+msgstr ": %i matchande fotavtryck"
 
 #: cvpcb/cvpcb_mainframe.cpp:836
 #, c-format
@@ -7957,9 +7956,8 @@ msgid "Delete all associations?"
 msgstr "Radera alla associationer?"
 
 #: cvpcb/tools/cvpcb_control.cpp:181
-#, fuzzy
 msgid "Unable to create the footprint viewer frame"
-msgstr "Det gick inte att skapa rapportfilen '%s'"
+msgstr "Det gick inte att skapa rutan för fotavtrycksvisaren"
 
 #: eeschema/annotate.cpp:155
 msgid "Delete Annotation"
@@ -8490,9 +8488,8 @@ msgid "Update"
 msgstr "Uppdatera"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:403
-#, fuzzy
 msgid "Update Symbols"
-msgstr "Uppdateringssymbol ..."
+msgstr "Uppdatera symboler"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:544
 msgid "*** symbol not found ***"
@@ -9397,9 +9394,8 @@ msgid "Text Item Properties"
 msgstr "Egenskaper för textobjekt"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:571
-#, fuzzy
 msgid "Edit Text and Graphics"
-msgstr "Redigera egenskaper för text och grafik"
+msgstr "Redigera text och grafik"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:33
 msgid "Other symbol fields"
@@ -9469,9 +9465,8 @@ msgstr "Filtrera objekt efter nät:"
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:102
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:91
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:121
-#, fuzzy
 msgid "Selected items only"
-msgstr "&Endast valda"
+msgstr "Endast valda objekt"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:159
 msgid "Set To"
@@ -9604,19 +9599,16 @@ msgid "Ibis parser"
 msgstr "Ibis-tolk"
 
 #: eeschema/dialogs/dialog_image_properties.cpp:75
-#, fuzzy
 msgid "Image Properties"
-msgstr "Målegenskaper"
+msgstr "Bildegenskaper"
 
 #: eeschema/dialogs/dialog_junction_props.cpp:113
-#, fuzzy
 msgid "Edit Junction"
-msgstr "Lägg till korsning"
+msgstr "Redigera knutpunkt"
 
 #: eeschema/dialogs/dialog_junction_props.cpp:113
-#, fuzzy
 msgid "Edit Junctions"
-msgstr "Knutpunkter"
+msgstr "Redigera knutpunkter"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
@@ -9676,7 +9668,6 @@ msgid "untitled"
 msgstr "namnlös"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:586
-#, fuzzy
 msgid "Edit Label"
 msgstr "Redigera etikett"
 
@@ -10220,9 +10211,8 @@ msgstr "Symbolnamn '%s' används redan i bibliotek '%s'."
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:370
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:375
 #: eeschema/dialogs/dialog_symbol_properties.cpp:872
-#, fuzzy
 msgid "Edit Symbol Properties"
-msgstr "Symbolegenskaper"
+msgstr "Redigera symbolegenskaper"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:496
 #, c-format
@@ -10291,6 +10281,9 @@ msgid ""
 "For instance, this should be checked for a quad NAND gate, while it should "
 "not be checked for a dual triode (where unit C is the filament)."
 msgstr ""
+"Markera denna option när alla symbolens enheter har samma funktion.\n"
+"Till exempel skall detta markeras för en fyrdubbel NAND-grind, men skall "
+"inte markeras för en dubbel triod (var enhet C är glödtråden)."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:190
 msgid "Has alternate body style (De Morgan)"
@@ -10303,6 +10296,11 @@ msgid ""
 "For instance, this should be checked for a NAND gate to provide an alternate "
 "representation as an OR gate with inverted inputs."
 msgstr ""
+"Markera denna option om symbolen har en alternativ representation enligt De "
+"Morgans regler för logisk ekvivalens.\n"
+"Till exempel skall denna option markeras för en NAND-grind för att "
+"tillhandahålla en alternativ representation som OR-grind med inverterade "
+"ingångar."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:198
 msgid "Define as power symbol"
@@ -10458,14 +10456,12 @@ msgid "Text Box Properties"
 msgstr "Egenskaper för textruta"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:154
-#, fuzzy
 msgid "Edit Line"
-msgstr "Redigera fil"
+msgstr "Redigera linje"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:154
-#, fuzzy
 msgid "Edit Lines"
-msgstr "Lägg till linjer"
+msgstr "Redigera linjer"
 
 #: eeschema/dialogs/dialog_line_properties_base.cpp:79
 msgid "Set width to 0 to use schematic's default line width."
@@ -11188,9 +11184,9 @@ msgstr "Obs! Objekts Individuella färger åsidosätts i inställningarna."
 
 #: eeschema/dialogs/dialog_shape_properties.cpp:169
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:233
-#, fuzzy, c-format
+#, c-format
 msgid "Edit %s"
-msgstr "Redigera"
+msgstr "Redigera %s"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:88
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:158
@@ -11215,9 +11211,8 @@ msgid "%s Properties"
 msgstr "%s-egenskaper"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:179
-#, fuzzy
 msgid "Edit Sheet Pin"
-msgstr "Lägg till arknål"
+msgstr "Redigera arkstift"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.h:84
 msgid "Sheet Pin Properties"
@@ -12411,7 +12406,6 @@ msgstr ""
 "hyperlänk till en sida i detta kretsschema."
 
 #: eeschema/dialogs/dialog_text_properties.cpp:581
-#, fuzzy
 msgid "Edit Text"
 msgstr "Redigera text"
 
@@ -12506,14 +12500,12 @@ msgid "User-defined Signals"
 msgstr "Användardefinierade signaler"
 
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:233
-#, fuzzy
 msgid "Wire/Bus"
-msgstr "Trådar"
+msgstr "Ledning/Buss"
 
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:234
-#, fuzzy
 msgid "Wires/Buses"
-msgstr "Migrera bussar"
+msgstr "Ledningar/bussar"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:30
 msgid "Wire/bus width:"
@@ -13556,9 +13548,8 @@ msgid "Symbol library was not updated\n"
 msgstr "Symbolbiblioteket uppdaterades inte\n"
 
 #: eeschema/eeschema_settings.cpp:70
-#, fuzzy
 msgid "Net Navigator"
-msgstr "Hierarkinavigator"
+msgstr "Nätnavigator"
 
 #: eeschema/eeschema_settings.cpp:92 pagelayout_editor/pl_editor_frame.cpp:190
 #: pcbnew/footprint_edit_frame.cpp:226 pcbnew/pcb_edit_frame.cpp:307
@@ -13858,9 +13849,9 @@ msgid "Allow Autoplacement"
 msgstr "Tillåt automatisk placering"
 
 #: eeschema/files-io.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' is already open by '%s' at '%s'."
-msgstr "Kretsschema '%s' är redan öppet."
+msgstr "Kretsschema '%s' är redan öppnat av '%s' på '%s'."
 
 #: eeschema/files-io.cpp:130
 #, c-format
@@ -14462,64 +14453,63 @@ msgid "P&references"
 msgstr "I&nställningar"
 
 #: eeschema/net_navigator.cpp:55
-#, fuzzy, c-format
+#, c-format
 msgid "Wire from %s, %s to %s, %s"
-msgstr "Stift %s [%s, %s, %s]"
+msgstr "Ledning från %s, %s till %s, %s"
 
 #: eeschema/net_navigator.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid "Bus from %s, %s to %s, %s"
-msgstr "%s, %s, %s eller %s"
+msgstr "Buss från %s, %s till %s, %s"
 
 #: eeschema/net_navigator.cpp:71
-#, fuzzy
 msgid "Graphic line not connectable"
-msgstr "Stiftet är inte anslutet"
+msgstr "Grafisk linje kan inte anslutas"
 
 #: eeschema/net_navigator.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' pin '%s'"
-msgstr "Symbol %s [%s]"
+msgstr "Symbol '%s' stift '%s'"
 
 #: eeschema/net_navigator.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid "Sheet '%s' pin '%s'"
-msgstr "Arkstift"
+msgstr "Ark '%s' stift '%s'"
 
 #: eeschema/net_navigator.cpp:104
-#, fuzzy, c-format
+#, c-format
 msgid "Label '%s' at %s, %s"
-msgstr "Etikett '%s'"
+msgstr "Etikett '%s' vid %s, %s"
 
 #: eeschema/net_navigator.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid "Global label '%s' at %s, %s"
-msgstr "Global etikett '%s'"
+msgstr "Global etikett '%s' vid %s, %s"
 
 #: eeschema/net_navigator.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label '%s' at %s, %s"
-msgstr "Hierarkisk etikett '%s'"
+msgstr "Hierarkisk etikett '%s' vid %s, %s"
 
 #: eeschema/net_navigator.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Junction at %s, %s"
-msgstr "Knutpunktens storlek:"
+msgstr "Knutpunkt vid %s, %s"
 
 #: eeschema/net_navigator.cpp:144
 #, c-format
 msgid "Bus to wire entry from %s, %s to %s, %s"
-msgstr ""
+msgstr "Buss-till-lednings-post från %s, %s till %s, %s"
 
 #: eeschema/net_navigator.cpp:156
 #, c-format
 msgid "Bus to bus entry from %s, %s to %s, %s"
-msgstr ""
+msgstr "Buss-till-buss-post från %s, %s till %s, %s"
 
 #: eeschema/net_navigator.cpp:164
-#, fuzzy, c-format
+#, c-format
 msgid "Unhandled item type %d"
-msgstr "Kan inte hantera fotavtrycks texttyp %s"
+msgstr "Ohanterad objekttyp %d"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:480
 #, c-format
@@ -14559,9 +14549,8 @@ msgid "Choose Symbol (%d items loaded)"
 msgstr "Välj symbol (%d objekt inlästa)"
 
 #: eeschema/picksymbol.cpp:270
-#, fuzzy
 msgid "Change Unit"
-msgstr "Byt nät"
+msgstr "Byt enhet"
 
 #: eeschema/picksymbol.cpp:287
 #, c-format
@@ -14569,9 +14558,8 @@ msgid "No alternate body style found for symbol '%s' in library '%s'."
 msgstr "Ingen alternativ symbolform hittades för symbol '%s' i bibliotek %s'."
 
 #: eeschema/picksymbol.cpp:311
-#, fuzzy
 msgid "Convert Symbol"
-msgstr "Power-symbol"
+msgstr "Konvertera symbol"
 
 #: eeschema/pin_numbers.cpp:124 pcbnew/zones.h:64
 msgid "none"
@@ -14741,13 +14729,12 @@ msgid "Select Symbol Library"
 msgstr "Välj symbolbibliotek"
 
 #: eeschema/sch_base_frame.cpp:720
-#, fuzzy
 msgid ""
 "The library containing the current symbol has changed.\n"
 "Do you want to reload the library?"
 msgstr ""
-"Symbolen '%s' har ändrats.\n"
-"Vill du ta bort den från biblioteket?"
+"Biblioteket som innehåller den nuvarande symbolen har ändrats.\n"
+"Vill du läsa in biblioteket på nytt?"
 
 #: eeschema/sch_bus_entry.cpp:418
 msgid "Bus to Wire Entry"
@@ -14868,9 +14855,8 @@ msgid "[no schematic loaded]"
 msgstr "[inget kretsschema inläst]"
 
 #: eeschema/sch_edit_frame.cpp:1845
-#, fuzzy
 msgid "Schematic Cleanup"
-msgstr "Kretsschema-inställningar"
+msgstr "Kretsschema-städning"
 
 #: eeschema/sch_edit_frame.cpp:1955
 #, c-format
@@ -14878,9 +14864,8 @@ msgid "Highlighted net: %s"
 msgstr "Markerat nät: %s"
 
 #: eeschema/sch_edit_frame.cpp:2133
-#, fuzzy
 msgid "Save Symbol to Schematic"
-msgstr "Lägg till symbol i kretsschemat"
+msgstr "Spara symbol i kretsschemat"
 
 #: eeschema/sch_edit_frame.cpp:2234 eeschema/tools/ee_actions.cpp:55
 msgid "Diff Symbol with Library"
@@ -14900,7 +14885,6 @@ msgid "Sheet References"
 msgstr "Arkreferenser"
 
 #: eeschema/sch_field.cpp:1152
-#, fuzzy
 msgid "Show Field Name"
 msgstr "Visa fältnamn"
 
@@ -15443,6 +15427,9 @@ msgid ""
 "parts library. If none specified it is assumed to be 'symbol.csa' in the "
 "same folder."
 msgstr ""
+"Sökväg till CADSTAR kretsschema-arkivfilen (*.csa) relativt detta CADSTAR "
+"komponentbibliotek. Om ingen specificerad antas det vara 'symbol.csa' i "
+"samma mapp."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_plugin.cpp:249
 msgid ""
@@ -15450,6 +15437,10 @@ msgid ""
 "should create a separate entry for the CADSTAR PCB Archive (*.cpa) file in "
 "the footprint library tables. If none specified, 'cadstarpcblib' is assumed."
 msgstr ""
+"Namnet på fotavtrycksbiblioteket relaterat till symbolerna i detta "
+"bibliotek. Du bör skapa en separat post för CADSTAR PCB Archive (*.cpa)-"
+"filen i fotavtrycksbibliotekstabellerna. Om inget specificerat antas "
+"'cadstarpcblib'."
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:84
 #, c-format
@@ -15511,9 +15502,9 @@ msgid "library %s does not contain a symbol named %s"
 msgstr "bibliotek %s innehåller inte en symbol som heter %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:183
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse %s as a symbol"
-msgstr "Numrerade %s som %s."
+msgstr "Kan inte tolka %s som en symbol"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:220
 msgid "Invalid symbol name"
@@ -15754,9 +15745,9 @@ msgid "Expecting CELL or BLOCK"
 msgstr "Förväntar CELL eller BLOCK"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:469
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s.asy' not found"
-msgstr "Symbolen hittades inte."
+msgstr "Symbolen '%s.asy' hittades inte."
 
 #: eeschema/sch_reference_list.cpp:692
 #, c-format
@@ -15876,19 +15867,16 @@ msgid "Hierarchical Sheet %s"
 msgstr "Hierarkiskt ark %s"
 
 #: eeschema/sch_sheet.cpp:1418
-#, fuzzy
 msgid "Border Width"
-msgstr "Kantbredd:"
+msgstr "Kantbredd"
 
 #: eeschema/sch_sheet.cpp:1422
-#, fuzzy
 msgid "Border Color"
-msgstr "Kantfärg:"
+msgstr "Kantfärg"
 
 #: eeschema/sch_sheet.cpp:1425
-#, fuzzy
 msgid "Background Color"
-msgstr "Bakgrunds Färg, Topp"
+msgstr "Bakgrundsfärg"
 
 #: eeschema/sch_sheet_path.cpp:57 include/board_item.h:372
 msgid "(Deleted Item)"
@@ -17281,9 +17269,9 @@ msgid "Format"
 msgstr "Format"
 
 #: eeschema/sim/spice_library_parser.cpp:166
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create sim model from %s"
-msgstr "Kan inte skapa mappen '%s'."
+msgstr "Kan inte skapa simulationsmodell från %s"
 
 #: eeschema/sim/spice_model_parser.cpp:85
 #: eeschema/sim/spice_model_parser.cpp:187
@@ -17904,17 +17892,13 @@ msgstr "Det går inte att räkna upp biblioteket '%s'."
 
 #: eeschema/symbol_library_manager.cpp:843
 #: eeschema/symbol_library_manager.cpp:848
-#, fuzzy, c-format
+#, c-format
 msgid "Error updating library buffer: %s"
-msgstr ""
-"Fel vid försök att spara global bibliotekstabell:\n"
-"\n"
-"%s"
+msgstr "Fel vid försök att ladda upp biblioteksbuffert: %s"
 
 #: eeschema/symbol_library_manager.cpp:853
-#, fuzzy
 msgid "Error updating library buffer."
-msgstr "Fel vid sparande av global bibliotekstabell."
+msgstr "Fel vid uppdatering av biblioteksbuffert."
 
 #: eeschema/symbol_library_manager.cpp:1000
 #: eeschema/symbol_library_manager.cpp:1101
@@ -18332,9 +18316,8 @@ msgid "Add Text Box"
 msgstr "Lägg till textruta"
 
 #: eeschema/tools/ee_actions.cpp:270
-#, fuzzy
 msgid "Add a text box item"
-msgstr "Lägg till ett textobjekt"
+msgstr "Lägg till en textruta"
 
 #: eeschema/tools/ee_actions.cpp:278 eeschema/tools/ee_actions.cpp:1033
 msgid "Add Lines"
@@ -18795,13 +18778,12 @@ msgid "Highlight wires and pins of a net"
 msgstr "Markera trådar och stift i ett nät"
 
 #: eeschema/tools/ee_actions.cpp:693
-#, fuzzy
 msgid "Show Net Navigator"
-msgstr "Visa nät bland nätlinjer"
+msgstr "Visa nätnavigatorn"
 
 #: eeschema/tools/ee_actions.cpp:693
 msgid "Toggle the net navigator panel visibility"
-msgstr ""
+msgstr "Växla nätnavigatorpanelens synlighet"
 
 #: eeschema/tools/ee_actions.cpp:698
 msgid "Edit with Symbol Editor"
@@ -19548,14 +19530,14 @@ msgstr "Lägg till arknål"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1620
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:453
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s"
-msgstr "Lägg till Buss"
+msgstr "Lägg till %s"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1674
-#, fuzzy, c-format
+#, c-format
 msgid "Draw %s"
-msgstr "Rita stift"
+msgstr "Rita %s"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1798
 msgid "Press <ESC> to cancel sheet creation."
@@ -19605,9 +19587,8 @@ msgid "Label value cannot go below zero"
 msgstr "Etikettvärdet kan inte gå under noll"
 
 #: eeschema/tools/sch_edit_tool.cpp:1317
-#, fuzzy
 msgid "Repeat Item"
-msgstr "Upprepade objekt"
+msgstr "Upprepa objekt"
 
 #: eeschema/tools/sch_edit_tool.cpp:1526 eeschema/tools/sch_edit_tool.cpp:1529
 #: eeschema/tools/symbol_editor_edit_tool.cpp:531
@@ -19626,9 +19607,8 @@ msgid "<empty>"
 msgstr "<tom>"
 
 #: eeschema/tools/sch_edit_tool.cpp:2328
-#, fuzzy
 msgid "Change Item Type"
-msgstr "Ändra till text"
+msgstr "Ändra objekttyp"
 
 #: eeschema/tools/sch_edit_tool.cpp:2422
 #, fuzzy
@@ -19754,9 +19734,8 @@ msgid "Press <ESC> to cancel drawing."
 msgstr "Tryck på <ESC> för att avbryta ritning."
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:1226
-#, fuzzy
 msgid "Draw Wires"
-msgstr "Rita cirklar"
+msgstr "Rita ledare"
 
 #: eeschema/tools/sch_move_tool.cpp:797
 msgid "Press <ESC> to cancel drag."
@@ -19850,9 +19829,8 @@ msgid "Set Unit Display Name"
 msgstr "Sätt enhetens visningsnamn"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:190
-#, fuzzy
 msgid "Edit Pin Properties"
-msgstr "Egenskaper för stift"
+msgstr "Redigera egenskaper för stift"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:231
 #, c-format
@@ -21119,14 +21097,12 @@ msgid "Malformed expression"
 msgstr "Felaktigt uttryckt"
 
 #: include/lockfile.h:105
-#, fuzzy
 msgid "Lock file already exists"
-msgstr "Filen %s finns redan."
+msgstr "Låsfilen finns redan"
 
 #: include/lockfile.h:124
-#, fuzzy
 msgid "Failed to access lock file"
-msgstr "Det gick inte att läsa in kretsschemafilen\n"
+msgstr "Kunde inte få åtkomst till låsfilen"
 
 #: include/panel_hotkeys_editor.h:55
 msgid "Reset all hotkeys to the built-in KiCad defaults"
@@ -21317,9 +21293,8 @@ msgid "Precision of gerber coordinates, valid options: 5 or 6"
 msgstr "Gerberkoordinaternas precision; giltiga alternativ: 5 eller 6"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:85
-#, fuzzy
 msgid "Use KiCad gerber file extension"
-msgstr "Använd Protel-filändelser"
+msgstr "Använd KiCad gerber-filändelser"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:45
 msgid ""
@@ -23502,14 +23477,12 @@ msgid "Ampacity:"
 msgstr "Märkström:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:149
-#, fuzzy
 msgid "Current density"
-msgstr "Aktuell tangent:"
+msgstr "Strömtäthet"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:156
-#, fuzzy
 msgid "A/mm^2"
-msgstr "mm^2"
+msgstr "A/mm^2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:167
 msgid "Application"
@@ -23606,31 +23579,31 @@ msgstr "Multiplikator"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:19
 msgid "IPC 2221"
-msgstr ""
+msgstr "IPC 2221"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:21
 msgid "IEC 60664"
-msgstr ""
+msgstr "IEC 60664"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:24
 msgid "Insulation for equipment within low-voltage supply systems"
-msgstr ""
+msgstr "Isolation för utrustning i lågspänningsnät"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:31
 msgid "Determine the transient impulse voltage to withstand"
-msgstr ""
+msgstr "Ange transientspänning som utrustningen skall motstå"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:41
 msgid "Rated Voltage (RMS or DC):"
-msgstr ""
+msgstr "Nominell arbetsspänning (RMS eller DC):"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:43
 msgid "Voltage of the mains supply"
-msgstr ""
+msgstr "Nätspänning"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:54
 msgid "Overvoltage category:"
-msgstr ""
+msgstr "Överspänningskategori:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:56
 msgid ""
@@ -23646,27 +23619,38 @@ msgid ""
 "OVC IV: Equipments at the origin of the installation (eg: electricity "
 "meters, primary overcurrent protection devices)"
 msgstr ""
+"OVC I: Utrustning utan direkt anslutning till nätspänning\n"
+"\n"
+"OVC II: Energiförbrukande utrustning som skall strömförsörjas från den fasta "
+"installationen. (t.ex. apparater, portabla elverktyg, hushållsförbrukare). "
+"OVCIII tillämpas om det finns krav på tillförlitlighet och tillgänglighet.\n"
+"\n"
+"OVC III :  Utrustning i den fasta installationen med krav på "
+"tillförlitlighet och tillgänglighet. (t.ex. elektriska brytare, utrustning "
+"för industriell användning)\n"
+"\n"
+"OVC IV: Utrustning vid installationens källpunkt (t.ex. elmätare, primära "
+"överströmsskydd)"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:60
 msgid "OVC I"
-msgstr ""
+msgstr "OVC I"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:60
 msgid "OVC II"
-msgstr ""
+msgstr "OVC II"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:60
 msgid "OVC III"
-msgstr ""
+msgstr "OVC III"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:60
 msgid "OVC IV"
-msgstr ""
+msgstr "OVC IV"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:83
-#, fuzzy
 msgid "Impulse voltage:"
-msgstr "Pulsat värde:"
+msgstr "Impulsspänning:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:85
 msgid ""
@@ -23674,31 +23658,31 @@ msgid ""
 "withstand this value whithout a breakdown of insulation. This impulse "
 "voltage is a standard 1.2/50µs wave"
 msgstr ""
+"Givet den nominella arbetsspänningen och överspänningskategorin skall "
+"utrustningen motstå detta spänningsvärde utan genombrott i isoleringen. "
+"Denna impulsspänning är en standard 1,2/50µs vågform."
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:95
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:145
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:160
-#, fuzzy
 msgid "kV"
-msgstr "V"
+msgstr "kV"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:109
 msgid "Compute the clearance and creepage distances"
-msgstr ""
+msgstr "Beräkna isolationsavstånd och krypavstånd"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:119
-#, fuzzy
 msgid "RMS Voltage:"
-msgstr "Spänning"
+msgstr "RMS-spänning:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:121
 msgid "Expected RMS voltage."
-msgstr ""
+msgstr "Förväntad RMS-spänning."
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:134
-#, fuzzy
 msgid "Transient overvoltage:"
-msgstr "Övergående ljud"
+msgstr "Transient överspänning:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:136
 msgid ""
@@ -23712,11 +23696,18 @@ msgid ""
 "\n"
 "Events that last for a few milliseconds or less."
 msgstr ""
+"Överspänningstransienter på grund av:\n"
+"\n"
+"- Atmosfäriska störningar överförda av elnätet (t.ex. åsknedslag)\n"
+"- Brytning av laster i elnätet\n"
+"- Yttre kretsar\n"
+"- Inre generering\n"
+"\n"
+"Händelser som varar några få millisekuner eller kortare."
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:149
-#, fuzzy
 msgid "Recurring peak voltage:"
-msgstr "Spänningsområde:"
+msgstr "Återkommande spänningstoppar:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:151
 msgid ""
@@ -23726,11 +23717,15 @@ msgid ""
 "\n"
 "Events of relatively long duration."
 msgstr ""
+"- Spänningsvärde i normalt drifttillstånd\n"
+"- Tillfällig överspänning\n"
+"- Återkommande spänningstoppar\n"
+"\n"
+"Händelser med relativt lång varaktighet."
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:164
-#, fuzzy
 msgid "Type of insulation:"
-msgstr "Textriktning"
+msgstr "Isolationstyp:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:166
 msgid ""
@@ -23743,23 +23738,29 @@ msgid ""
 "equivalent to a double insulation. ( which is two separate basic "
 "insulations, in case one of them fails  )."
 msgstr ""
+"Funktionell: Isolation nödvändig endast för utrustningens funktion\n"
+"\n"
+"Grundläggande: Isolation för farliga spänningssatta delar.\n"
+"\n"
+"Förstärkt: Enkel isolation som tillhandahåller en grad av skydd motsvarande "
+"dubbel isolation (som är två separata grudläggande isolationsskikt, ifall "
+"ett av dem upphör att fungera)."
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:170
-#, fuzzy
 msgid "Functional"
-msgstr "Knutpunkt"
+msgstr "Funktionell"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:170
 msgid "Basic"
-msgstr ""
+msgstr "Grundläggande"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:170
 msgid "Reinforced"
-msgstr ""
+msgstr "Förstärkt"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:179
 msgid "Pollution Degree:"
-msgstr ""
+msgstr "Nedsmutsningsgrad:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:181
 msgid ""
@@ -23772,31 +23773,36 @@ msgid ""
 "\n"
 "PD4: Continous conductivity occurs due to conductive dust, rain, ..."
 msgstr ""
+"PD1: Ingen nedsmutsning eller endast torr, icke-konduktiv nedsmutsning "
+"förekommer\n"
+"\n"
+"PD2: Endast icke-konduktiv nedsmutsning förekommer. Kondens kan förekomma.\n"
+"\n"
+"PD3: Konduktiv nedsmutsning förekommer, eller icke-konduktiv nedsmutsning "
+"förekommer, som blir konduktiv på grund av förväntad kondens.\n"
+"\n"
+"PD4: Kontinuerlig konduktivitet förekommer på grund av konduktivt damm, "
+"regn, ..."
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:185
-#, fuzzy
 msgid "PD1"
-msgstr "PDF"
+msgstr "PD1"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:185
-#, fuzzy
 msgid "PD2"
-msgstr "PDF"
+msgstr "PD2"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:185
-#, fuzzy
 msgid "PD3"
-msgstr "PDF"
+msgstr "PD3"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:185
-#, fuzzy
 msgid "PD4"
-msgstr "PDF"
+msgstr "PD4"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:194
-#, fuzzy
 msgid "Material group:"
-msgstr "Materialegenskaper:"
+msgstr "Materialgrupp:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:196
 msgid ""
@@ -23808,35 +23814,42 @@ msgid ""
 "Material group IIIa: 175 <= CTI < 400\n"
 "Material group IIIb: 100 <= CTI < 175"
 msgstr ""
+"Material med högt CTI-värde (comparative tracking index, ett mått på "
+"materialets förmåga att motstå överslag på ytan) är bättre på att "
+"upprätthålla isolation.\n"
+"\n"
+"Materialgrupp I: 600 <= CTI\n"
+"Materialgrupp II: 400 <= CTI < 600\n"
+"Materialgrupp IIIa: 175 <= CTI < 400\n"
+"Materialgrupp IIIb: 100 <= CTI < 175"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:200
-#, fuzzy
 msgid "II"
-msgstr "I"
+msgstr "II"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:200
 msgid "IIIa"
-msgstr ""
+msgstr "IIIa"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:200
 msgid "IIIb"
-msgstr ""
+msgstr "IIIb"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:209
-#, fuzzy
 msgid "PCB material:"
-msgstr "Gemensamma material:"
+msgstr "Mönsterkortsmaterial:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:211
 msgid ""
 "Printed wiring material can benefit of a creepage distance reduction for RMS "
 "voltages lower than 1000V"
 msgstr ""
+"Mönsterkortsmaterial kan dra nytta av minskade krypavstånd för RMS-"
+"spänningar under 1000V"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:221
-#, fuzzy
 msgid "Max altitude:"
-msgstr "Max amplitud (Amax):"
+msgstr "Max höjd över havet:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:223
 msgid ""
@@ -23846,6 +23859,11 @@ msgid ""
 "A coating that could easily delaminate in the lifespan of the product (such "
 "as a soldermask) should not be considered for a reduction."
 msgstr ""
+"Täckande skikt och ingjutning tillåter minskade isolations- och krypavstånd. "
+"Detta stöds inte av kalkylatorn.\n"
+"\n"
+"Ett täckande skikt som lätt kan delaminera under produktens livstid (som "
+"t.ex. lödmask) skall inte beaktas för reduktion."
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:254
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:197
@@ -23853,26 +23871,27 @@ msgid "Clearance:"
 msgstr "Avstånd:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:268
-#, fuzzy
 msgid "Creepage:"
-msgstr "Centrera"
+msgstr "Krypavstånd:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:282
-#, fuzzy
 msgid "Min groove width:"
-msgstr "Linjebredd:"
+msgstr "Minsta spaltbredd:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:284
 msgid ""
 "A groove which width is smaller has no effect on the path considered for "
 "creepage"
 msgstr ""
+"En mindre spalt har ingen effekt på sträckan som beaktas för krypavstånd"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:313
 msgid ""
 "solid: clearance\n"
 "dashed: creepage"
 msgstr ""
+"heldragen: isolationsavstånd\n"
+"streckad: krypavstånd"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:36
 msgid "Voltage > 500 V:"
@@ -23972,11 +23991,11 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_eseries_display_base.cpp:21
 msgid "E24,E48,E96"
-msgstr ""
+msgstr "E24,E48,E96"
 
 #: pcb_calculator/calculator_panels/panel_eseries_display_base.cpp:52
 msgid "E1,E3,E6,E12"
-msgstr ""
+msgstr "E1,E3,E6,E12"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:231
 msgid "Current calculation is underestimated due to long fusing time."
@@ -24816,6 +24835,25 @@ msgid ""
 "\n"
 "The value 0 is a special case and is not present in any series."
 msgstr ""
+"Passiva komponenter görs vanligen med lämpliga E-serievärden beroende på "
+"komponentens noggrannhet.\n"
+"Kondensatorer använder ofta E12-värden. 10% och 5% resistorer använder "
+"vanligen E24-värden.\n"
+"1% resistorer använder E96-värden. Andra serier används inte ofta.\n"
+"\n"
+"För att välja ett värde börja med det beräknade målvärdet och avrunda det "
+"till 2\n"
+"signifikanta siffror för E24 och lägre eller 3 signifikanta siffror för E48 "
+"och högre.\n"
+"Finn sedan värdet i tabellen som är närmast de kvarvarande signifikanta "
+"siffrorna\n"
+"och sätt in det istället för de siffrorna.\n"
+"\n"
+"Till exempel om det beräknade målvärdet är 16834,2Ω, avrundas det till "
+"16800Ω.\n"
+"Värdet närmast 168 är 169 och det valda E96-värdet är 16,9kΩ.\n"
+"\n"
+"Värdet 0 är ett specialfall och är inte med i någon serie."
 
 #: pcb_calculator/fusing_current_help.h:2
 msgid ""
@@ -24885,11 +24923,23 @@ msgid ""
 "- Insulations trough liquids, compressed air or gases other than air are not "
 "in the scope of IEC60664"
 msgstr ""
+"Målet med IEC60664-1 är att ge vägledning för design av isolation i "
+"produkter som har nätspänningsanslutning.\n"
+"\n"
+"Emellertid täcks vissa fall inte av denna kalkylator:\n"
+"\n"
+"- För frekvenser över 30kHz är den dielektriska förmågan försämrad. IEC60664-"
+"4 behandlar dessa fall\n"
+"- Om täckande skikt eller ingjutning används för att skydda mot "
+"nedsmutsning, och alla villkor specificerade i IEC60664-3 uppfylls, kan "
+"isolations- och krypavstånd reduceras. Lödmask anses vanligen inte som "
+"täckande skikt.\n"
+"- Isolation medelst vätskor, komprimerad luft eller andra gaser än luft "
+"innefattas inte av IEC60664."
 
 #: pcb_calculator/pcb_calculator_frame.cpp:63
-#, fuzzy
 msgid "KiCad Calculator Tools"
-msgstr "Beräkningsverktyg"
+msgstr "KiCad beräkningsverktyg"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:143
 msgid "General system design"
@@ -24900,9 +24950,8 @@ msgid "Regulators"
 msgstr "Spänningsregulatorer"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:146
-#, fuzzy
 msgid "Resistor Calculator"
-msgstr "E-serie motståndsräknare"
+msgstr "Motståndskalkylator"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:148
 msgid "Power, current and isolation"
@@ -24921,7 +24970,6 @@ msgid "Cable Size"
 msgstr "Kabelstorlek"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:156
-#, fuzzy
 msgid "High Speed"
 msgstr "Högfrekvens"
 
@@ -24979,7 +25027,6 @@ msgstr ""
 "Vill du avsluta och förkasta dina ändringar?"
 
 #: pcb_calculator/r_calculator_help.h:2
-#, fuzzy
 msgid ""
 "- This calculator finds combinations of standard E-series (between 10Ω and "
 "1MΩ) to create arbitrary values.\n"
@@ -24996,25 +25043,14 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"E-serierna är definierade i IEC 60063.\n"
-"\n"
-"Tillgängliga värden är ungefärligt jämnt fördelade i en logaritmisk skala.\n"
-"\n"
-"\tE24(5%):  1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 4.3 "
-"4.7 5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
-"\tE12(10%): 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
-"\tE6(20%):  1.0  -  1.5  -  2.2  -  3.3  -  4.7  -  6.8  -\n"
-"\tE3(50%):  1.0  -   -   -  2.2  -   -   -  4.7  -   -   -\n"
-"\tE1     :  1.0  -   -   -   -   -   -   -   -   -   -   -\n"
-"\n"
-"- Denna kalkylator hittar kombinationer av E-serie-värden (mellan 10Ω och "
-"1MΩ) för att skapa godtyckliga värden.'\n"
-"- Du kan ange nödvändig resistans från 0.0025 till 4000kΩ.\n"
+"- Denna kalkylator hittar kombinationer av standard E-serievärden (mellan "
+"10Ω och 1MΩ) för att skapa godtyckliga värden.'\n"
+"- Du kan ange önskad resistans från 0.0025 till 4000kΩ.\n"
 "- Lösningar som använder upp till 4 komponenter tillhandahålls.\n"
 "\n"
 "Det önskade värdet utesluts alltid ur lösningen.<br>\n"
-"Upp till två ytterligare värden kan exkluderas om så önskas (ex. om dessa "
-"värden inte är tillgängliga).\n"
+"Upp till två ytterligare värden kan exkluderas om så önskas t.ex. om dessa "
+"värden inte är tillgängliga.\n"
 "\n"
 "Lösningar ges i följande format:\n"
 "\n"
@@ -25529,49 +25565,41 @@ msgid "Teardrops"
 msgstr "Kragförstärkningar"
 
 #: pcbnew/board_connected_item.cpp:237
-#, fuzzy
 msgid "Enable Teardrops"
-msgstr "Kragförstärkningar"
+msgstr "Aktivera kragförstärkningar"
 
 #: pcbnew/board_connected_item.cpp:243
 #, fuzzy
 msgid "Best Length Ratio"
-msgstr "Bästa längd:"
+msgstr "Bästa längdförhållande:"
 
 #: pcbnew/board_connected_item.cpp:249
-#, fuzzy
 msgid "Max Length"
-msgstr "Maximal längd:"
+msgstr "Maximal längd"
 
 #: pcbnew/board_connected_item.cpp:255
-#, fuzzy
 msgid "Best Width Ratio"
-msgstr "Textbredd"
+msgstr "Bästa breddförhållande"
 
 #: pcbnew/board_connected_item.cpp:261
-#, fuzzy
 msgid "Max Width"
-msgstr "Maximal bredd:"
+msgstr "Maximal bredd"
 
 #: pcbnew/board_connected_item.cpp:267
-#, fuzzy
 msgid "Curve Points"
-msgstr "Bågpunkter:"
+msgstr "Bågpunkter"
 
 #: pcbnew/board_connected_item.cpp:273
-#, fuzzy
 msgid "Prefer zone connections"
-msgstr "%s anslutning till zon: %s."
+msgstr "Föredra anslutning till zon"
 
 #: pcbnew/board_connected_item.cpp:279
-#, fuzzy
 msgid "Allow teardrops to span two tracks"
-msgstr "Tillåt kragförstärkningen att sträcka sig över två ledarsegment"
+msgstr "Tillåt kragförstärkningar att sträcka sig över två ledarsegment"
 
 #: pcbnew/board_connected_item.cpp:285
-#, fuzzy
 msgid "Max Width Ratio"
-msgstr "Maximal bredd:"
+msgstr "Maximalt breddförhållande"
 
 #: pcbnew/board_item.cpp:117
 msgid "all copper layers"
@@ -28453,9 +28481,9 @@ msgid "'%s' found"
 msgstr "'%s' hittades"
 
 #: pcbnew/dialogs/dialog_find.cpp:401
-#, fuzzy, c-format
+#, c-format
 msgid "Hit(s): %d / %zu"
-msgstr "Träff (ar): %ld / %lu"
+msgstr "Träff(ar): %d / %zu"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:28
 msgid "Search for:"
@@ -29032,9 +29060,8 @@ msgid "ASCII"
 msgstr "ASCII"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:49
-#, fuzzy
 msgid "Gerber X3"
-msgstr "Gerber X2"
+msgstr "Gerber X3"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:61
 msgid "Separate files for front, back"
@@ -29378,39 +29405,33 @@ msgid "Delete Items"
 msgstr "Ta bort objekt"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:108
-#, fuzzy
 msgid "Set teardrops to default values for shape"
-msgstr "Ställ in på 0 för att använda standardvärden"
+msgstr "Sätt kragförstärkningarnas form till standardvärden"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:109
-#, fuzzy
 msgid "Set teardrops to specified values:"
-msgstr "Ställ in till angivna värden:"
+msgstr "Ställ in specificerade värden för kragförstärkningarnas form:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:113
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:120
-#, fuzzy
 msgid "Add teardrops with default values for shape"
-msgstr "Skapa bara kragförstärkningar på objekt med runda former "
+msgstr "Skapa kragförstärkningar med standardvärden för form"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:114
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:129
-#, fuzzy
 msgid "Add teardrops with specified values:"
-msgstr "Ställ in till angivna värden:"
+msgstr "Skapa kragförstärkningar med specificerade värden:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:483
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:487
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:491
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:510
-#, fuzzy
 msgid "Edit Teardrops"
-msgstr "Lägg till kragförstärkningar"
+msgstr "Redigera kragförstärkningar"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:27
-#, fuzzy
 msgid "PTH pads"
-msgstr "NPTH-yta (ej genompläterat hål) tillhörande %s"
+msgstr "PTH-lödytor (genompläterade)"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:31
 msgid "SMD pads"
@@ -29441,9 +29462,8 @@ msgid "Round pads only"
 msgstr "Endast runda lödytor"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:99
-#, fuzzy
 msgid "Existing teardrops only"
-msgstr "Uppdaterar kragförstärkningar..."
+msgstr "Endast befintliga kragförstärkningar"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:114
 msgid "Remove teardrops"
@@ -29451,22 +29471,20 @@ msgstr "Ta bort kragförstärkningar"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:123
 msgid "Edit default values in Board Setup"
-msgstr ""
+msgstr "Redigera förinställda värden i Mönsterkortsinställningar"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:141
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:613
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:116
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:249
-#, fuzzy
 msgid "Prefer zone connection"
-msgstr "%s anslutning till zon: %s."
+msgstr "Föredra anslutning till zon"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:144
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:617
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:378
-#, fuzzy
 msgid "Allow teardrops to span 2 track segments"
-msgstr "Tillåt kragförstärkningen att sträcka sig över två ledarsegment"
+msgstr "Tillåt kragförstärkningar att sträcka sig över två ledarsegment"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:145
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:619
@@ -29475,7 +29493,7 @@ msgid ""
 "Allows a teardrop to spread over 2 tracks if the first track segment is too "
 "short"
 msgstr ""
-"Låt kragförstärkningen spridas ut över två ledare om det första "
+"Låt kragförstärkningen spridas ut över två ledarsegment om det första "
 "ledarsegmentet är för kort"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:161
@@ -29483,9 +29501,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:395
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:119
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:252
-#, fuzzy
 msgid "Maximum track width:"
-msgstr "Minsta ledarbredd:"
+msgstr "Största ledarbredd:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:163
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:637
@@ -29506,12 +29523,13 @@ msgstr ""
 msgid ""
 "Tracks which are similar in size to the pad or via do not need teardrops."
 msgstr ""
+"Ledare med ungefär samma bredd som lödytan eller vian behöver inte "
+"kragförstärkningar."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:179
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:135
-#, fuzzy
 msgid "(as a percentage of pad/via size)"
-msgstr "Ytterligare marginal som en procentsats av lödytans storlek."
+msgstr "(som en procentsats av lödytans/vians storlek)"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:222
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:698
@@ -29543,21 +29561,18 @@ msgstr "Bästa höjd:"
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:284
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:759
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:515
-#, fuzzy
 msgid "Curved edges"
-msgstr "Bågformad"
+msgstr "Bågformade kanter"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:290
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:765
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:521
-#, fuzzy
 msgid "Points:"
-msgstr "Punkter"
+msgstr "Punkter:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.h:108
-#, fuzzy
 msgid "Set Teardrops"
-msgstr "Kragförstärkningar"
+msgstr "Ställ in kragförstärkningar"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:138
 msgid "Other text items"
@@ -29978,9 +29993,8 @@ msgid "Predefined track && via dimensions"
 msgstr "Fördefinierade ledar- och viadimensioner"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:69
-#, fuzzy
 msgid "Teardrop defaults"
-msgstr "Kragförstärkningsyta"
+msgstr "Kragförstärkningarnas standardinställningar"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:243
 #: pcbnew/dialogs/dialog_imported_layers.cpp:251
@@ -30839,33 +30853,33 @@ msgstr "Krenelerad lödyta (endast för hålmonteringshål)"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:590
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:352
 msgid "Board contains legacy teardrops. "
-msgstr ""
+msgstr "Mönsterkortet innehåller äldre typ av kragförstärkningar. "
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:594
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:356
 msgid "Use Edit > Edit Teardrops to apply automatic teardrops."
 msgstr ""
+"Använd Redigera > Redigera kragförstärkningar för att tillämpa automatiska "
+"kragförstärkningar."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:610
-#, fuzzy
 msgid "Add teardrops on pad's track connections"
-msgstr "Placera kragförstärkningar på lödytor i kopparzoner"
+msgstr "Placera kragförstärkningar på lödytornas ledaranslutningar"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:643
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:260
 msgid "Tracks which are similar in size to the pad do not need teardrops."
 msgstr ""
+"Ledare med ungefär samma bredd som lödytan behöver inte kragförstärkningar."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:654
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:268
-#, fuzzy
 msgid "(as a percentage of pad size)"
-msgstr "Ytterligare marginal som en procentsats av lödytans storlek."
+msgstr "(som en procentsats av lödytans storlek)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:667
-#, fuzzy
 msgid "Teardrop Shape"
-msgstr "Kragförstärkningsyta"
+msgstr "Kragförstärkningens form"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:795
 msgid "Pad connection:"
@@ -31938,9 +31952,8 @@ msgid "Footprint Value Properties"
 msgstr "Egenskaper för fotavtrycks värde"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:105
-#, fuzzy
 msgid "Footprint Field Properties"
-msgstr "Egenskaper för fotavtryck"
+msgstr "Fotavtrycksfältets egenskaper"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:111
 msgid "Footprint Text Properties"
@@ -32037,14 +32050,12 @@ msgstr ""
 "vid byts ut"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:73
-#, fuzzy
 msgid "Start X:"
-msgstr "Start X"
+msgstr "Start X:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:91
-#, fuzzy
 msgid "End X:"
-msgstr "Slut X"
+msgstr "Slut X:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:118
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:222
@@ -32056,9 +32067,8 @@ msgid "Use net class widths"
 msgstr "Använd nätklassbredder"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:195
-#, fuzzy
 msgid "Pos X:"
-msgstr "Position X"
+msgstr "Position X:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:235
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:36
@@ -32110,17 +32120,17 @@ msgid "Start, end, and connected layers"
 msgstr "Början, slut och anslutna lager"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:375
-#, fuzzy
 msgid "Add teardrops on via's track connections"
-msgstr "Lägg till kragförstärkningar på vior och hålmonteringslödytor"
+msgstr "Lägg till kragförstärkningar på viornas ledaranslutningar"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:402
 msgid "Tracks which are similar in size to the via do not need teardrops."
 msgstr ""
+"Ledare med ungefär samma bredd som vian behöver inte kragförstärkningar."
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:416
 msgid "(as a percentage of pad/via/track size)"
-msgstr ""
+msgstr "(som en procentsats av lödytans/vians/ledarens storlek)"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:145
 msgid "Track & Via Properties"
@@ -32391,9 +32401,8 @@ msgid "Show ratsnest with curved lines"
 msgstr "Visa nätlinjer med bågformade linjer"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:350
-#, fuzzy
 msgid "Ratsnest line thickness:"
-msgstr "Linjetjocklek:"
+msgstr "Nätlinjens linjebredd:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:365
 msgid "Track Editing"
@@ -34244,16 +34253,14 @@ msgstr ""
 "        (condition \"A.NetClass == 'Power'\"))"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:19
-#, fuzzy
 msgid "Default properties for round shapes:"
-msgstr "Standardegenskaper för nya grafiska objekt:"
+msgstr "Standardegenskaper för runda objekt:"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:38
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:171
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:304
-#, fuzzy
 msgid "Edges:"
-msgstr "Pcb_Edges"
+msgstr "Kanter:"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:42
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:175
@@ -34276,32 +34283,28 @@ msgstr "Bågpunkter:"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:139
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:272
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:402
-#, fuzzy
 msgid "Allow teardrop to span two track segments"
 msgstr "Tillåt kragförstärkningen att sträcka sig över två ledarsegment"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:152
-#, fuzzy
 msgid "Default properties for rectangular shapes:"
-msgstr "Standardegenskaper för nya grafiska objekt:"
+msgstr "Standardegenskaper för rektangulära objekt:"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:285
 msgid "Properties for track-to-track teardrops:"
-msgstr ""
+msgstr "Egenskaper för kragförstärkningar ledare-till-ledare:"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:382
-#, fuzzy
 msgid "Maximum track width"
-msgstr "Minsta ledarbredd"
+msgstr "Maximal ledarbredd"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:390
 msgid "Tracks which are similar in size do not need teardrops."
-msgstr ""
+msgstr "Ledare med ungefär samma bedd behöver inte kragförstärkningar."
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:398
-#, fuzzy
 msgid "(as a percentage of larger track width)"
-msgstr "Ledarbredd för differentialpar"
+msgstr "(som en procentsats av den bredare linjebredden)"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:75
 msgid "Default properties for new dimension objects:"
@@ -35900,9 +35903,9 @@ msgstr ""
 "versioner som använde linjetjockleken för kortkanten på Edge Cuts-lagret."
 
 #: pcbnew/files.cpp:611
-#, fuzzy, c-format
+#, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
-msgstr "Mönsterkortet '%s' är redan öppet."
+msgstr "Mönsterkortet '%s' är redan öppnat av '%s' på '%s'."
 
 #: pcbnew/files.cpp:622
 msgid "The current PCB has been modified.  Save changes?"
@@ -36107,9 +36110,8 @@ msgid "Library link"
 msgstr "Bibliotekslänk"
 
 #: pcbnew/footprint.cpp:2988
-#, fuzzy
 msgid "Library description"
-msgstr "Beskrivning"
+msgstr "Biblioteksbeskrivning"
 
 #: pcbnew/footprint.cpp:3009 pcbnew/pad.cpp:1828 pcbnew/zone.cpp:1499
 msgid "Overrides"
@@ -36908,34 +36910,34 @@ msgid "Updated %s symbol association from %s to %s."
 msgstr "Uppdaterade %s symbolassociation från %s till %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:355
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s fields."
-msgstr "Uppdatera fält"
+msgstr "Uppdatera %s fält."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s fields."
-msgstr "Uppdatera fält"
+msgstr "Uppdaterade %s fält."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:395
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s sheetname to '%s'."
-msgstr "Uppdaterade %s från %s till %s."
+msgstr "Uppdatera arknamn %s till %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:400
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s sheetname to '%s'."
-msgstr "Uppdaterade %s från %s till %s."
+msgstr "Uppdaterade arknamn %s till '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:410
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s sheetfile to '%s'."
-msgstr "Uppdaterade %s från %s till %s."
+msgstr "Uppdatera arkfil %s till '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:415
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s sheetfile to '%s'."
-msgstr "Uppdaterade %s från %s till %s."
+msgstr "Uppdaterade arkfil %s till '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:429
 #, c-format
@@ -37361,9 +37363,8 @@ msgid "Size Y"
 msgstr "Storlek Y"
 
 #: pcbnew/pad.cpp:1795
-#, fuzzy
 msgid "Corner Radius Ratio"
-msgstr "Avrundningsradieförhållande"
+msgstr "Hörnavrundningsradieförhållande"
 
 #: pcbnew/pad.cpp:1807
 msgid "Hole Size X"
@@ -37402,16 +37403,12 @@ msgid "Error loading project footprint libraries."
 msgstr "Fel vid inläsning av projektets fotavtrycksbibliotek."
 
 #: pcbnew/pcb_base_frame.cpp:1240
-#, fuzzy
 msgid ""
 "The library containing the current footprint has changed.\n"
 "Do you want to reload the footprint?"
 msgstr ""
-"Filnamnet på ritningsbladsfilen har ändrats.\n"
-"Vill du använda den relativa sökvägen:\n"
-"\"%s\"\n"
-"istället för\n"
-"\"%s\"?"
+"Biblioteket som innehåller det nuvarande fotavtrycket har förändrats.\n"
+"Vill du läsa in fotavtrycket på nytt?"
 
 #: pcbnew/pcb_bitmap.cpp:261
 msgid "Bitmap Properties"
@@ -37614,9 +37611,8 @@ msgid "Missing field name argument to %s."
 msgstr "Argumentet fältnamn saknas för %s."
 
 #: pcbnew/pcb_field.cpp:98
-#, fuzzy
 msgid "User Field"
-msgstr "Användardefinierade fält"
+msgstr "Användardefinierat fält"
 
 #: pcbnew/pcb_field.cpp:107
 #, c-format
@@ -37629,19 +37625,19 @@ msgid "Value '%s' of %s"
 msgstr "Värde '%s' av %s"
 
 #: pcbnew/pcb_field.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' of %s"
-msgstr "Footprint Text '%s' av %s"
+msgstr "Fotavtryck '%s' för %s"
 
 #: pcbnew/pcb_field.cpp:120
-#, fuzzy, c-format
+#, c-format
 msgid "Datasheet '%s' of %s"
-msgstr "Värde '%s' av %s"
+msgstr "Datablad '%s' för %s"
 
 #: pcbnew/pcb_field.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' of %s"
-msgstr "Kunde inte skapa '%s'"
+msgstr "Fält '%s' för %s"
 
 #: pcbnew/pcb_group.cpp:377
 #, c-format
@@ -37866,9 +37862,8 @@ msgid "Multiple Layers"
 msgstr "Flera lager"
 
 #: pcbnew/plot_board_layers.cpp:103
-#, fuzzy
 msgid "Library Description"
-msgstr "Beskrivning"
+msgstr "Biblioteksbeskrivning"
 
 #: pcbnew/plugin.cpp:136
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
@@ -37966,9 +37961,9 @@ msgid "'%s' was not fully parsed."
 msgstr "'%s' tolkades inte fullständigt."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:509
-#, fuzzy, c-format
+#, c-format
 msgid "File not found: '%s' for directory '%s'."
-msgstr "Filen hittades inte: '%s'."
+msgstr "Filen hittades inte: '%s' för bibliotek '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:740
 #, c-format
@@ -37993,6 +37988,8 @@ msgid ""
 "More than one Altium netclass with name '%s' found. Only the first one will "
 "be imported."
 msgstr ""
+"Fler än en Altium-nätklass med namn '%s' hittades. Endast den första kommer "
+"att importeras."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1077
 msgid "Loading components..."
@@ -40618,13 +40615,13 @@ msgid "Pack footprints"
 msgstr "Samla fotavtryck"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:343
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Click to place %s (item %zu of %zu)\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"Klicka för att placera %s (objekt %ld av %ld)\n"
-"Tryck på <esc> för att avbryta alla; dubbelklicka för att göra klart"
+"Klicka för att placera %s (objekt %zu av %zu)\n"
+"Tryck på <esc> för att avbryta allt; dubbelklicka för att göra klart"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:356
 #, c-format
@@ -41223,14 +41220,14 @@ msgid "Edit Text and graphics properties globally across board"
 msgstr "Redigera text- och grafikegenskaper över hela världen"
 
 #: pcbnew/tools/pcb_actions.cpp:550
-#, fuzzy
 msgid "Edit Teardrops..."
-msgstr "Lägg till kragförstärkningar..."
+msgstr "Redigera kragförstärkningar..."
 
 #: pcbnew/tools/pcb_actions.cpp:551
-#, fuzzy
 msgid "Add, remove or edit teardrops globally across board"
-msgstr "Ändra ledar- och viaegenskaper globalt över hela kortet"
+msgstr ""
+"Lägg till, ta bort eller ändra kragförstärkningar globalt för hela "
+"mönsterkortet"
 
 #: pcbnew/tools/pcb_actions.cpp:556
 msgid "Global Deletions..."
@@ -42378,17 +42375,15 @@ msgstr ""
 
 #: pcbnew/tools/pcb_control.cpp:337
 msgid "Dimmed"
-msgstr ""
+msgstr "Nedtonad"
 
 #: pcbnew/tools/pcb_control.cpp:338
-#, fuzzy
 msgid "Hidden"
-msgstr "Dold text"
+msgstr "Dold"
 
 #: pcbnew/tools/pcb_control.cpp:346
-#, fuzzy
 msgid "Inactive Layer Display"
-msgstr "Inaktiva lager:"
+msgstr "Visning av inaktiva lager"
 
 #: pcbnew/tools/pcb_control.cpp:614
 msgid "Item locked."
@@ -42938,9 +42933,8 @@ msgid "Set Net Color"
 msgstr "Ställ in nätfärg"
 
 #: pcbnew/widgets/appearance_controls.cpp:906
-#, fuzzy
 msgid "Clear Net Color"
-msgstr "Rensa färg"
+msgstr "Rensa nätfärg"
 
 #: pcbnew/widgets/appearance_controls.cpp:912
 #, c-format
