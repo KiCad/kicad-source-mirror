@@ -272,11 +272,18 @@ void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T  aAn
 
     case ANNOTATE_CURRENT_SHEET:
         currentSheet.GetMultiUnitSymbols( lockedSymbols );
+
+        if( aRecursive )
+            subSheets.GetMultiUnitSymbols( lockedSymbols );
+
         break;
 
     case ANNOTATE_SELECTION:
         for( SCH_SYMBOL* symbol : selectedSymbols )
             currentSheet.AppendMultiUnitSymbol( lockedSymbols, symbol );
+
+        if( aRecursive )
+            selectedSheets.GetMultiUnitSymbols( lockedSymbols );
 
         break;
     }
