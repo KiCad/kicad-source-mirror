@@ -206,6 +206,7 @@ void PCB_CALCULATOR_FRAME::doReCreateMenuBar()
     //
     ACTION_MENU* fileMenu = new ACTION_MENU( false, tool );
 
+    fileMenu->AddClose( _( "Calculator Tools" ) );
     fileMenu->AddQuit( _( "Calculator Tools" ) );
 
     //-- Preferences menu -----------------------------------------------
