@@ -226,8 +226,6 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
 
     m_Parent->GetCanvas()->Refresh();
 
-    m_btnClear->Enable();
-
     m_sdbSizer1Cancel->SetDefault();
 
     // Don't close dialog if there are things the user needs to address
@@ -248,7 +246,6 @@ void DIALOG_ANNOTATE::OnClearAnnotationClick( wxCommandEvent& event )
     bool appendUndo = false;
 
     m_Parent->DeleteAnnotation( GetScope(), GetRecursive(), &appendUndo );
-    m_btnClear->Enable( false );
 }
 
 
