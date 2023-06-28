@@ -2530,8 +2530,9 @@ void PCB_PLUGIN::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* a
             footprint->Flip( footprint->GetPosition(), false );
     }
 
-    // Detach it from the board
+    // Detach it from the board and its group
     footprint->SetParent( nullptr );
+    footprint->SetParentGroup( nullptr );
 
     wxLogTrace( traceKicadPcbPlugin, wxT( "Creating s-expr footprint file '%s'." ), fullPath );
     footprints.insert( footprintName,
