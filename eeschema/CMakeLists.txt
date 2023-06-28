@@ -355,6 +355,7 @@ set( EESCHEMA_SRCS
     toolbars_sch_editor.cpp
     toolbars_symbol_viewer.cpp
 
+    netlist_exporters/netlist_exporter_allegro.cpp
     netlist_exporters/netlist_exporter_base.cpp
     netlist_exporters/netlist_exporter_cadstar.cpp
     netlist_exporters/netlist_exporter_kicad.cpp

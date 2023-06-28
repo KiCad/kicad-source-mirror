@@ -145,6 +145,7 @@ const std::string LtspiceSchematicExtension( "asc" );
 const std::string CadstarNetlistFileExtension( "frp" );
 const std::string OrCadPcb2NetlistFileExtension( "net" );
 const std::string NetlistFileExtension( "net" );
+const std::string AllegroNetlistFileExtension( "txt" );
 const std::string FootprintAssignmentFileExtension( "cmp" );
 const std::string GerberFileExtension( "gbr" );
 const std::string GerberJobFileExtension( "gbrjob" );
@@ -327,6 +328,13 @@ wxString OrCadPcb2NetlistFileWildcard()
 wxString NetlistFileWildcard()
 {
     return _( "KiCad netlist files" ) + AddFileExtListToFilter( { "net" } );
+}
+
+
+wxString AllegroNetlistFileWildcard()
+{
+    return _( "Allegro netlist files" )
+            + AddFileExtListToFilter( { AllegroNetlistFileExtension } );
 }
 
 

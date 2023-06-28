@@ -41,6 +41,7 @@
 #include <netlist_exporter_spice.h>
 #include <netlist_exporter_spice_model.h>
 #include <netlist_exporter_kicad.h>
+#include <netlist_exporter_allegro.h>
 #include <netlist_exporter_xml.h>
 
 
@@ -87,6 +88,10 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
     case NET_TYPE_SPICE_MODEL:
         helper = new NETLIST_EXPORTER_SPICE_MODEL( sch );
         break;
+
+    case NET_TYPE_ALLEGRO:
+        helper = new NETLIST_EXPORTER_ALLEGRO( sch );
+        break;        
 
     case NET_TYPE_BOM:
         // When generating the BOM, we have a bare filename so don't strip

@@ -292,10 +292,15 @@ public:
     /**
      * Find a field within this symbol matching \a aFieldName and returns it
      * or NULL if not found.
+     * @param aFieldName is the name of the field to find.
+     * @param aCaseInsensitive ignore the filed name case if true.
+     * 
+     * @return the field if found or NULL if the field was not found.
      */
-    LIB_FIELD* FindField( const wxString& aFieldName );
+    LIB_FIELD* FindField( const wxString& aFieldName, bool aCaseInsensitive = false );
 
-    const LIB_FIELD* FindField( const wxString& aFieldName ) const;
+    const LIB_FIELD* FindField( const wxString& aFieldName,
+                                const bool      aCaseInsensitive = false ) const;
 
     /**
      * Return pointer to the requested field.

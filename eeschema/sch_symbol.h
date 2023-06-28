@@ -458,10 +458,12 @@ public:
      *
      * @param aFieldName is the name of the field to find.
      * @param aIncludeDefaultFields searches the library symbol default fields if true.
+     * @param aCaseInsensitive ignore the filed name case if true.     
      *
      * @return the field if found or NULL if the field was not found.
      */
-    SCH_FIELD* FindField( const wxString& aFieldName, bool aIncludeDefaultFields = true );
+    SCH_FIELD* FindField( const wxString& aFieldName, bool aIncludeDefaultFields = true,
+                          bool aCaseInsensitive = false );
 
     const wxString GetValueFieldText( bool aResolve, const SCH_SHEET_PATH* aPath,
                                       bool aAllowExtraText ) const;

@@ -1242,24 +1242,42 @@ LIB_FIELD* LIB_SYMBOL::GetFieldById( int aId ) const
 }
 
 
-LIB_FIELD* LIB_SYMBOL::FindField( const wxString& aFieldName )
+LIB_FIELD* LIB_SYMBOL::FindField( const wxString& aFieldName, bool aCaseInsensitive )
 {
     for( LIB_ITEM& item : m_drawings[ LIB_FIELD_T ] )
     {
-        if( static_cast<LIB_FIELD*>( &item )->GetCanonicalName() == aFieldName )
-            return static_cast<LIB_FIELD*>( &item );
+        if( aCaseInsensitive )
+        {
+            if( static_cast<LIB_FIELD*>( &item )->GetCanonicalName().Upper() == aFieldName.Upper() )
+                return static_cast<LIB_FIELD*>( &item );
+        }
+        else
+        {
+            if( static_cast<LIB_FIELD*>( &item )->GetCanonicalName() == aFieldName )
+                return static_cast<LIB_FIELD*>( &item );
+        }
     }
 
     return nullptr;
 }
 
 
-const LIB_FIELD* LIB_SYMBOL::FindField( const wxString& aFieldName ) const
+const LIB_FIELD* LIB_SYMBOL::FindField( const wxString& aFieldName,
+                                        const bool      aCaseInsensitive ) const
 {
     for( const LIB_ITEM& item : m_drawings[ LIB_FIELD_T ] )
     {
-        if( static_cast<const LIB_FIELD*>( &item )->GetCanonicalName() == aFieldName )
-            return static_cast<const LIB_FIELD*>( &item );
+        if( aCaseInsensitive )
+        {
+            if( static_cast<const LIB_FIELD*>( &item )->GetCanonicalName().Upper()
+                == aFieldName.Upper() )
+                return static_cast<const LIB_FIELD*>( &item );
+        }
+        else
+        {
+            if( static_cast<const LIB_FIELD*>( &item )->GetCanonicalName() == aFieldName )
+                return static_cast<const LIB_FIELD*>( &item );
+        }
     }
 
     return nullptr;

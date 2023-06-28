@@ -59,14 +59,16 @@
 
 
 /* panel (notebook page) identifiers */
-enum panel_netlist_index {
-    PANELPCBNEW = 0,    /* Handle Netlist format Pcbnew */
-    PANELORCADPCB2,     /* Handle Netlist format OracdPcb2 */
-    PANELCADSTAR,       /* Handle Netlist format CadStar */
-    PANELSPICE,         /* Handle Netlist format Spice */
-    PANELSPICEMODEL,    /* Handle Netlist format Spice Model (subcircuit) */
-    PANELCUSTOMBASE     /* First auxiliary panel (custom netlists).
-                         * others use PANELCUSTOMBASE+1, PANELCUSTOMBASE+2.. */
+enum panel_netlist_index
+{
+    PANELPCBNEW = 0, /* Handle Netlist format Pcbnew */
+    PANELORCADPCB2,  /* Handle Netlist format OracdPcb2 */
+    PANELALLEGRO,    /* Handle Netlist format Allegro */
+    PANELCADSTAR,    /* Handle Netlist format CadStar */
+    PANELSPICE,      /* Handle Netlist format Spice */
+    PANELSPICEMODEL, /* Handle Netlist format Spice Model (subcircuit) */
+    PANELCUSTOMBASE  /* First auxiliary panel (custom netlists).
+                            * others use PANELCUSTOMBASE+1, PANELCUSTOMBASE+2.. */
 };
 
 
@@ -245,14 +247,17 @@ DIALOG_EXPORT_NETLIST::DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* parent ) :
         page = nullptr;
 
     // Add notebook pages:
-    m_PanelNetType[PANELPCBNEW] = new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "KiCad" ),
-                                                           NET_TYPE_PCBNEW, false );
+    m_PanelNetType[PANELPCBNEW] =
+            new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "KiCad" ), NET_TYPE_PCBNEW, false );
 
-    m_PanelNetType[PANELORCADPCB2] = new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "OrcadPCB2" ),
-                                                              NET_TYPE_ORCADPCB2, false );
+    m_PanelNetType[PANELORCADPCB2] =
+            new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "OrcadPCB2" ), NET_TYPE_ORCADPCB2, false );
 
-    m_PanelNetType[PANELCADSTAR] = new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "CadStar" ),
-                                                            NET_TYPE_CADSTAR, false );
+    m_PanelNetType[PANELALLEGRO] =
+            new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "Allegro" ), NET_TYPE_ALLEGRO, false );
+
+    m_PanelNetType[PANELCADSTAR] =
+            new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "CadStar" ), NET_TYPE_CADSTAR, false );
 
     InstallPageSpice();
     InstallPageSpiceModel();
@@ -496,6 +501,9 @@ bool DIALOG_EXPORT_NETLIST::TransferDataFromWindow()
     case NET_TYPE_ORCADPCB2:
         break;
 
+    case NET_TYPE_ALLEGRO:
+        break;              
+
     default:    // custom, NET_TYPE_CUSTOM1 and greater
     {
         title.Printf( _( "%s Export" ), currPage->m_TitleStringCtrl->GetValue() );
@@ -627,6 +635,11 @@ bool DIALOG_EXPORT_NETLIST::FilenamePrms( NETLIST_TYPE_ID aType, wxString * aExt
     case NET_TYPE_PCBNEW:
         fileExt = NetlistFileExtension;
         fileWildcard = NetlistFileWildcard();
+        break;
+
+    case NET_TYPE_ALLEGRO:
+        fileExt = AllegroNetlistFileExtension;
+        fileWildcard = AllegroNetlistFileWildcard();
         break;
 
     default:    // custom, NET_TYPE_CUSTOM1 and greater

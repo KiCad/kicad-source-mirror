@@ -953,14 +953,23 @@ void SCH_SYMBOL::RemoveField( const wxString& aFieldName )
 }
 
 
-SCH_FIELD* SCH_SYMBOL::FindField( const wxString& aFieldName, bool aIncludeDefaultFields )
+SCH_FIELD* SCH_SYMBOL::FindField( const wxString& aFieldName, bool aIncludeDefaultFields,
+                                  bool aCaseInsensitive )
 {
     unsigned start = aIncludeDefaultFields ? 0 : MANDATORY_FIELDS;
 
     for( unsigned i = start; i < m_fields.size(); ++i )
     {
-        if( aFieldName == m_fields[i].GetName( false ) )
-            return &m_fields[i];
+        if( aCaseInsensitive )
+        {
+            if( aFieldName.Upper() == m_fields[i].GetName( false ).Upper() )
+                return &m_fields[i];
+        }
+        else
+        {
+            if( aFieldName == m_fields[i].GetName( false ) )
+                return &m_fields[i];
+        }
     }
 
     return nullptr;
