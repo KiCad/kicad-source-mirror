@@ -910,8 +910,10 @@ TOOL_ACTION PCB_ACTIONS::localRatsnestTool( "pcbnew.Control.localRatsnestTool",
 TOOL_ACTION PCB_ACTIONS::hideLocalRatsnest( "pcbnew.Control.hideDynamicRatsnest",
         AS_GLOBAL );
 
-TOOL_ACTION PCB_ACTIONS::updateLocalRatsnest( "pcbnew.Control.updateLocalRatsnest",
-        AS_GLOBAL );
+TOOL_ACTION PCB_ACTIONS::updateLocalRatsnest( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.updateLocalRatsnest" )
+        .Scope( AS_GLOBAL )
+        .Parameter( VECTOR2I() ) );
 
 TOOL_ACTION PCB_ACTIONS::listNets( "pcbnew.Control.listNets",
         AS_GLOBAL, 0, "",
