@@ -42,7 +42,7 @@ namespace KIGFX {
         virtual bool Init() = 0;
         virtual unsigned int CreateBuffer() = 0;
 
-        virtual VECTOR2U GetInternalBufferSize() = 0;
+        virtual VECTOR2I GetInternalBufferSize() = 0;
         virtual void OnLostBuffers() = 0;
 
         virtual void Begin() = 0;
@@ -59,7 +59,7 @@ namespace KIGFX {
         bool Init() override;
         unsigned int CreateBuffer() override;
 
-        VECTOR2U GetInternalBufferSize() override;
+        VECTOR2I GetInternalBufferSize() override;
         void OnLostBuffers() override;
 
         void Begin() override;
@@ -79,7 +79,7 @@ namespace KIGFX {
         bool Init() override;
         unsigned int CreateBuffer() override;
 
-        VECTOR2U GetInternalBufferSize() override;
+        VECTOR2I GetInternalBufferSize() override;
         void OnLostBuffers() override;
 
         void Begin() override;
@@ -103,7 +103,7 @@ namespace KIGFX {
         bool Init() override;
         unsigned int CreateBuffer () override;
 
-        VECTOR2U GetInternalBufferSize() override;
+        VECTOR2I GetInternalBufferSize() override;
         void OnLostBuffers() override;
 
         void Begin() override;

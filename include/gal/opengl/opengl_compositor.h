@@ -85,10 +85,10 @@ public:
     // Constant used by glBindFramebuffer to turn off rendering to framebuffers
     static const unsigned int DIRECT_RENDERING = 0;
 
-    VECTOR2U GetScreenSize() const;
+    VECTOR2I GetScreenSize() const;
     GLenum   GetBufferTexture( unsigned int aBufferHandle );
     void     DrawBuffer( unsigned int aSourceHandle, unsigned int aDestHandle );
-    unsigned int CreateBuffer( VECTOR2U aDimensions );
+    unsigned int CreateBuffer( VECTOR2I aDimensions );
 
     void SetAntialiasingMode( OPENGL_ANTIALIASING_MODE aMode ); // clears all buffers
     OPENGL_ANTIALIASING_MODE GetAntialiasingMode() const;
@@ -114,7 +114,7 @@ protected:
     // Buffers are simply textures storing a result of certain target rendering.
     struct OPENGL_BUFFER
     {
-        VECTOR2U dimensions;
+        VECTOR2I dimensions;
         GLuint textureTarget;                ///< Main texture handle
         GLuint attachmentPoint;              ///< Point to which an image from texture is attached
     };

@@ -105,14 +105,13 @@ void OPENGL_COMPOSITOR::Initialize()
         break;
     }
 
-    VECTOR2U dims = m_antialiasing->GetInternalBufferSize();
+    VECTOR2I dims = m_antialiasing->GetInternalBufferSize();
     assert( dims.x != 0 && dims.y != 0 );
 
     GLint maxBufSize;
     glGetIntegerv( GL_MAX_RENDERBUFFER_SIZE_EXT, &maxBufSize );
 
-    // VECTOR2U is unsigned, so no need to check if < 0
-    if( dims.x > (unsigned) maxBufSize || dims.y >= (unsigned) maxBufSize )
+    if( dims.x < 0 || dims.y < 0 || dims.x > maxBufSize || dims.y >= maxBufSize )
         throw std::runtime_error( "Requested render buffer size is not supported" );
 
     // We need framebuffer objects for drawing the screen contents
@@ -161,7 +160,7 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer()
 }
 
 
-unsigned int OPENGL_COMPOSITOR::CreateBuffer( VECTOR2U aDimensions )
+unsigned int OPENGL_COMPOSITOR::CreateBuffer( VECTOR2I aDimensions )
 {
     assert( m_initialized );
 
@@ -303,9 +302,13 @@ void OPENGL_COMPOSITOR::ClearBuffer( const COLOR4D& aColor )
 }
 
 
-VECTOR2U OPENGL_COMPOSITOR::GetScreenSize() const
+VECTOR2I OPENGL_COMPOSITOR::GetScreenSize() const
 {
-    return { m_width, m_height };
+    typedef VECTOR2I::coord_type coord_t;
+    wxASSERT( m_width <= static_cast<unsigned int>( std::numeric_limits<coord_t>::max() ) );
+    wxASSERT( m_height <= static_cast<unsigned int>( std::numeric_limits<coord_t>::max() ) );
+
+    return { static_cast<coord_t>( m_width ), static_cast<coord_t>( m_height ) };
 }
 
 

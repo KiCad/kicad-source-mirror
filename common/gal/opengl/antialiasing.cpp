@@ -59,7 +59,7 @@ bool ANTIALIASING_NONE::Init()
 }
 
 
-VECTOR2U ANTIALIASING_NONE::GetInternalBufferSize()
+VECTOR2I ANTIALIASING_NONE::GetInternalBufferSize()
 {
     return compositor->GetScreenSize();
 }
@@ -158,7 +158,7 @@ bool ANTIALIASING_SUPERSAMPLING::Init()
 }
 
 
-VECTOR2U ANTIALIASING_SUPERSAMPLING::GetInternalBufferSize()
+VECTOR2I ANTIALIASING_SUPERSAMPLING::GetInternalBufferSize()
 {
     return compositor->GetScreenSize() * 2;
 }
@@ -221,7 +221,7 @@ ANTIALIASING_SMAA::ANTIALIASING_SMAA( OPENGL_COMPOSITOR* aCompositor ) :
 }
 
 
-VECTOR2U ANTIALIASING_SMAA::GetInternalBufferSize()
+VECTOR2I ANTIALIASING_SMAA::GetInternalBufferSize()
 {
     return compositor->GetScreenSize();
 }
