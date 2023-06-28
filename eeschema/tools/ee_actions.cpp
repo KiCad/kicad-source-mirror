@@ -269,8 +269,7 @@ TOOL_ACTION EE_ACTIONS::drawSymbolTextBox( TOOL_ACTION_ARGS()
         .MenuText( _( "Add Text Box" ) )
         .Tooltip( _( "Add a text box item" ) )
         .Icon( BITMAPS::add_textbox )
-        .Flags( AF_ACTIVATE )
-        .Parameter( LIB_TEXTBOX_T ) );
+        .Flags( AF_ACTIVATE ) );
 
 TOOL_ACTION EE_ACTIONS::drawSymbolLines( TOOL_ACTION_ARGS()
         .Name( "eeschema.SymbolDrawing.drawSymbolLines" )

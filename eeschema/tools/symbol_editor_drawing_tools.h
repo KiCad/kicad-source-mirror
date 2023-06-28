@@ -25,6 +25,8 @@
 #ifndef SYMBOL_EDITOR_DRAWING_TOOLS_H
 #define SYMBOL_EDITOR_DRAWING_TOOLS_H
 
+#include <optional>
+
 #include <tools/ee_tool_base.h>
 
 
@@ -48,6 +50,7 @@ public:
 
     int TwoClickPlace( const TOOL_EVENT& aEvent );
     int DrawShape( const TOOL_EVENT& aEvent );
+    int DrawSymbolTextBox( const TOOL_EVENT& aEvent );
     int PlaceAnchor( const TOOL_EVENT& aEvent );
 
     int RepeatDrawItem( const TOOL_EVENT& aEvent );
@@ -62,6 +65,8 @@ public:
     bool GetDrawSpecificUnit() const { return m_drawSpecificUnit; }
 
 private:
+    int doDrawShape( const TOOL_EVENT& aEvent, std::optional<SHAPE_T> aDrawingShape );
+
     void setTransitions() override;
 
 private:

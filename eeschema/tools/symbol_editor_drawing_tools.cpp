@@ -23,6 +23,7 @@
  */
 
 #include <ee_actions.h>
+#include <optional>
 #include <symbol_edit_frame.h>
 #include <sch_commit.h>
 #include <tools/symbol_editor_drawing_tools.h>
@@ -332,13 +333,28 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
 int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 {
+    SHAPE_T requestedShape = aEvent.Parameter<SHAPE_T>();
+
+    return doDrawShape( aEvent, requestedShape );
+}
+
+
+int SYMBOL_EDITOR_DRAWING_TOOLS::DrawSymbolTextBox( const TOOL_EVENT& aEvent )
+{
+    return doDrawShape( aEvent, std::nullopt /* Draw text box */ );
+}
+
+
+int SYMBOL_EDITOR_DRAWING_TOOLS::doDrawShape( const TOOL_EVENT& aEvent, std::optional<SHAPE_T> aDrawingShape )
+{
+    bool    isTextBox = !aDrawingShape.has_value();
+    SHAPE_T toolType  = aDrawingShape.value_or( SHAPE_T::SEGMENT );
+
     SETTINGS_MANAGER&       settingsMgr = Pgm().GetSettingsManager();
     SYMBOL_EDITOR_SETTINGS* settings = settingsMgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
-    SHAPE_T                 toolType = aEvent.Parameter<SHAPE_T>();
     SHAPE_T                 shapeType = toolType == SHAPE_T::SEGMENT ? SHAPE_T::POLY : toolType;
     LIB_SYMBOL*             symbol = m_frame->GetCurSymbol();
     LIB_SHAPE*              item = nullptr;
-    bool                    isTextBox = aEvent.IsAction( &EE_ACTIONS::drawSymbolTextBox );
     wxString                description;
 
     if( m_inDrawShape )
@@ -666,14 +682,14 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem( const TOOL_EVENT& aEvent )
 
 void SYMBOL_EDITOR_DRAWING_TOOLS::setTransitions()
 {
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace,  EE_ACTIONS::placeSymbolPin.MakeEvent() );
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace,  EE_ACTIONS::placeSymbolText.MakeEvent() );
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,      EE_ACTIONS::drawRectangle.MakeEvent() );
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,      EE_ACTIONS::drawCircle.MakeEvent() );
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,      EE_ACTIONS::drawArc.MakeEvent() );
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,      EE_ACTIONS::drawSymbolLines.MakeEvent() );
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,      EE_ACTIONS::drawSymbolPolygon.MakeEvent() );
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,      EE_ACTIONS::drawSymbolTextBox.MakeEvent() );
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::PlaceAnchor,    EE_ACTIONS::placeSymbolAnchor.MakeEvent() );
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem, EE_ACTIONS::repeatDrawItem.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace,     EE_ACTIONS::placeSymbolPin.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace,     EE_ACTIONS::placeSymbolText.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         EE_ACTIONS::drawRectangle.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         EE_ACTIONS::drawCircle.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         EE_ACTIONS::drawArc.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         EE_ACTIONS::drawSymbolLines.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         EE_ACTIONS::drawSymbolPolygon.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawSymbolTextBox, EE_ACTIONS::drawSymbolTextBox.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::PlaceAnchor,       EE_ACTIONS::placeSymbolAnchor.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem,    EE_ACTIONS::repeatDrawItem.MakeEvent() );
 }
