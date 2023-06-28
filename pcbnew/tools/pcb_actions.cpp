@@ -847,32 +847,45 @@ TOOL_ACTION PCB_ACTIONS::appendBoard( "pcbnew.EditorControl.appendBoard",
         _( "Append Board..." ), _( "Open another board and append its contents to this board" ),
         BITMAPS::add_board );
 
-TOOL_ACTION PCB_ACTIONS::highlightNet( "pcbnew.EditorControl.highlightNet",
-        AS_GLOBAL,
+TOOL_ACTION PCB_ACTIONS::highlightNet( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.highlightNet" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( '`' )
         // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
-        '`', LEGACY_HK_NAME( "Toggle Highlight of Selected Net (Modern Toolset only)" ),
-        _( "Highlight Net" ), _( "Highlight net under cursor" ),
-        BITMAPS::net_highlight );
+        .LegacyHotkeyName( "Toggle Highlight of Selected Net (Modern Toolset only)" )
+        .MenuText( _( "Highlight Net" ) )
+        .Tooltip( _( "Highlight net under cursor" ) )
+        .Icon( BITMAPS::net_highlight )
+        .Parameter<int>( 0 ) );
 
-TOOL_ACTION PCB_ACTIONS::toggleLastNetHighlight( "pcbnew.EditorControl.toggleLastNetHighlight",
-        AS_GLOBAL, 0, "",
-        _( "Toggle Last Net Highlight" ), _( "Toggle between last two highlighted nets" ) );
+TOOL_ACTION PCB_ACTIONS::toggleLastNetHighlight( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.toggleLastNetHighlight" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Toggle Last Net Highlight" ) )
+        .Tooltip( _( "Toggle between last two highlighted nets" ) )
+        .Parameter<int>( 0 ) );
 
 TOOL_ACTION PCB_ACTIONS::clearHighlight( "pcbnew.EditorControl.clearHighlight",
         AS_GLOBAL,
         '~', "",
         _( "Clear Net Highlighting" ), _( "Clear any existing net highlighting" ) );
 
-TOOL_ACTION PCB_ACTIONS::toggleNetHighlight( "pcbnew.EditorControl.toggleNetHighlight",
-        AS_GLOBAL,
-        MD_ALT + '`', "",
-        _( "Toggle Net Highlight" ), _( "Toggle net highlighting" ),
-        BITMAPS::net_highlight );
+TOOL_ACTION PCB_ACTIONS::toggleNetHighlight( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.toggleNetHighlight" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_ALT + '`' )
+        .MenuText( _( "Toggle Net Highlight" ) )
+        .Tooltip( _( "Toggle net highlighting" ) )
+        .Icon( BITMAPS::net_highlight )
+        .Parameter<int>( 0 ) );
 
-TOOL_ACTION PCB_ACTIONS::highlightNetSelection( "pcbnew.EditorControl.highlightNetSelection",
-        AS_GLOBAL, 0, "",
-        _( "Highlight Net" ), _( "Highlight all copper items on the selected net(s)" ),
-        BITMAPS::net_highlight );
+TOOL_ACTION PCB_ACTIONS::highlightNetSelection( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.highlightNetSelection" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Highlight Net" ) )
+        .Tooltip( _( "Highlight all copper items on the selected net(s)" ) )
+        .Icon( BITMAPS::net_highlight )
+        .Parameter<int>( 0 ) );
 
 TOOL_ACTION PCB_ACTIONS::highlightItem( "pcbnew.EditorControl.highlightItem",
         AS_GLOBAL );
@@ -1506,15 +1519,19 @@ TOOL_ACTION PCB_ACTIONS::syncSelection( "pcbnew.InteractiveSelection.SyncSelecti
 TOOL_ACTION PCB_ACTIONS::syncSelectionWithNets( "pcbnew.InteractiveSelection.SyncSelectionWithNets",
         AS_GLOBAL );
 
-TOOL_ACTION PCB_ACTIONS::selectNet( "pcbnew.InteractiveSelection.SelectNet",
-        AS_GLOBAL, 0, "",
-        _( "Select All Tracks in Net" ),
-        _( "Selects all tracks & vias belonging to the same net." ) );
+TOOL_ACTION PCB_ACTIONS::selectNet( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveSelection.SelectNet" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Select All Tracks in Net" ) )
+        .Tooltip( _( "Selects all tracks & vias belonging to the same net." ) )
+        .Parameter<int>( 0 ) );
 
-TOOL_ACTION PCB_ACTIONS::deselectNet( "pcbnew.InteractiveSelection.DeselectNet",
-        AS_GLOBAL, 0, "",
-        _( "Deselect All Tracks in Net" ),
-        _( "Deselects all tracks & vias belonging to the same net." ) );
+TOOL_ACTION PCB_ACTIONS::deselectNet( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveSelection.DeselectNet" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Deselect All Tracks in Net" ) )
+        .Tooltip( _( "Deselects all tracks & vias belonging to the same net." ) )
+        .Parameter<int>( 0 ) );
 
 TOOL_ACTION PCB_ACTIONS::selectUnconnected( "pcbnew.InteractiveSelection.SelectUnconnected",
         AS_GLOBAL,
