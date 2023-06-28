@@ -69,8 +69,15 @@ public:
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
+    /**
+     * Event handler for the wxID_EXIT and wxID_CLOSE events.
+     */
+    void OnExit( wxCommandEvent& aEvent );
+
 protected:
     void doReCreateMenuBar() override;
+
+    DECLARE_EVENT_TABLE();
 
 private:
     // Event handlers

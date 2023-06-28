@@ -53,6 +53,12 @@
 #include "widgets/wx_menubar.h"
 
 
+BEGIN_EVENT_TABLE( PCB_CALCULATOR_FRAME, EDA_BASE_FRAME )
+    EVT_MENU( wxID_CLOSE, PCB_CALCULATOR_FRAME::OnExit )
+    EVT_MENU( wxID_EXIT, PCB_CALCULATOR_FRAME::OnExit )
+END_EVENT_TABLE()
+
+
 PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     KIWAY_PLAYER( aKiway, aParent, FRAME_CALC, _( "Calculator Tools" ), wxDefaultPosition,
                   wxDefaultSize,
@@ -135,6 +141,16 @@ PCB_CALCULATOR_FRAME::~PCB_CALCULATOR_FRAME()
     // This needed for OSX: avoids further OnDraw processing after this destructor and before
     // the native window is destroyed
     this->Freeze();
+}
+
+
+void PCB_CALCULATOR_FRAME::OnExit( wxCommandEvent& aEvent )
+{
+    if( aEvent.GetId() == wxID_EXIT )
+        Kiway().OnKiCadExit();
+
+    if( aEvent.GetId() == wxID_CLOSE || Kiface().IsSingle() )
+        Close( false );
 }
 
 

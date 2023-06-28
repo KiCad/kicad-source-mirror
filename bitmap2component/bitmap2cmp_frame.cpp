@@ -137,6 +137,12 @@ void IMAGE_SIZE::SetUnit( EDA_UNITS aUnit )
 }
 
 
+BEGIN_EVENT_TABLE( BITMAP2CMP_FRAME, EDA_BASE_FRAME )
+    EVT_MENU( wxID_CLOSE, BITMAP2CMP_FRAME::OnExit )
+    EVT_MENU( wxID_EXIT, BITMAP2CMP_FRAME::OnExit )
+END_EVENT_TABLE()
+
+
 BITMAP2CMP_FRAME::BITMAP2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         KIWAY_PLAYER( aKiway, aParent, FRAME_BM2CMP, _( "Image Converter" ), wxDefaultPosition,
                       wxDefaultSize, wxDEFAULT_FRAME_STYLE, wxT( "bitmap2cmp" ), unityScale ),
@@ -197,6 +203,13 @@ BITMAP2CMP_FRAME::~BITMAP2CMP_FRAME()
      * destructor and before the native window is destroyed
      */
     Freeze();
+}
+
+
+void BITMAP2CMP_FRAME::OnExit( wxCommandEvent& aEvent )
+{
+    // Just generate a wxCloseEvent
+    Close( false );
 }
 
 

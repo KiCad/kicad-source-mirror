@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2019-2022 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,6 @@ public:
     // overload KIWAY_PLAYER virtual
     bool OpenProjectFiles( const std::vector<wxString>& aFilenames, int aCtl = 0 ) override;
 
-    void OnExit( wxCommandEvent& event );
     void OnLoadFile();
 
     /**
@@ -72,8 +71,15 @@ public:
 
     wxWindow* GetToolCanvas() const override;
 
+    /**
+     * Event handler for the wxID_EXIT and wxID_CLOSE events.
+     */
+    void OnExit( wxCommandEvent& aEvent );
+
 protected:
     void doReCreateMenuBar() override;
+
+    DECLARE_EVENT_TABLE();
 
 private:
     BITMAP2CMP_PANEL* m_panel;
