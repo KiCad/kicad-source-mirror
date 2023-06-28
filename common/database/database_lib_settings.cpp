@@ -74,6 +74,11 @@ DATABASE_LIB_SETTINGS::DATABASE_LIB_SETTINGS( const std::string& aFilename ) :
                 table.symbols_col    = entry["symbols"].get<std::string>();
                 table.footprints_col = entry["footprints"].get<std::string>();
 
+                // Sanitize library display names; currently only `/` is removed because we use it
+                // as a separator and allow it in symbol names.
+                table.name.erase( std::remove( table.name.begin(), table.name.end(), '/' ),
+                                  table.name.end() );
+
                 if( entry.contains( "properties" ) && entry["properties"].is_object() )
                 {
                     const nlohmann::json& pj = entry["properties"];
