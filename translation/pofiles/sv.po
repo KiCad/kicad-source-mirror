@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:33-0700\n"
-"PO-Revision-Date: 2023-05-18 16:52+0000\n"
+"PO-Revision-Date: 2023-06-30 01:49+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v7/sv/>\n"
 "Language: sv\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 4.18.1\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -7645,9 +7645,8 @@ msgid "Delete all associations?"
 msgstr "Radera alla associationer?"
 
 #: cvpcb/tools/cvpcb_control.cpp:183
-#, fuzzy
 msgid "Unable to create the footprint viewer frame"
-msgstr "Det gick inte att skapa rapportfilen '%s'"
+msgstr "Det gick inte att skapa rutan för fotavtrycksvisaren"
 
 #: eeschema/annotate.cpp:265
 #, c-format
@@ -13214,9 +13213,9 @@ msgid "Abort Project Save"
 msgstr "Avbryt spara projekt"
 
 #: eeschema/files-io.cpp:1220
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' is already open by '%s' at '%s'."
-msgstr "Kretsschema '%s' är redan öppet."
+msgstr "Kretsschema '%s' är redan öppnat av '%s' på '%s'."
 
 #: eeschema/files-io.cpp:1233
 msgid "Importing Schematic"
@@ -16234,9 +16233,9 @@ msgid "Voltage (measured)"
 msgstr "Spänning (uppmätt)"
 
 #: eeschema/sim/spice_library_parser.cpp:89
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create sim model from %s"
-msgstr "Kan inte skapa mappen '%s'."
+msgstr "Kan inte skapa simulationsmodell från %s"
 
 #: eeschema/sim/spice_model_parser.cpp:84
 #: eeschema/sim/spice_model_parser.cpp:186
@@ -17231,7 +17230,7 @@ msgstr "Lägg till textruta"
 
 #: eeschema/tools/ee_actions.cpp:248
 msgid "Add a text box item"
-msgstr "Lägg till ett textruteobjekt"
+msgstr "Lägg till en textruta"
 
 #: eeschema/tools/ee_actions.cpp:253 eeschema/tools/ee_actions.cpp:834
 msgid "Add Lines"
@@ -19645,14 +19644,12 @@ msgid "Malformed expression"
 msgstr "Felaktigt uttryckt"
 
 #: include/lockfile.h:105
-#, fuzzy
 msgid "Lock file already exists"
-msgstr "Filen %s finns redan."
+msgstr "Låsfilen finns redan"
 
 #: include/lockfile.h:124
-#, fuzzy
 msgid "Failed to access lock file"
-msgstr "Det gick inte att läsa in kretsschemafilen\n"
+msgstr "Kunde inte få åtkomst till låsfilen"
 
 #: include/panel_hotkeys_editor.h:55
 msgid "Reset all hotkeys to the built-in KiCad defaults"
@@ -19843,9 +19840,8 @@ msgid "Precision of gerber coordinates, valid options: 5 or 6"
 msgstr "Gerberkoordinaternas precision; giltiga alternativ: 5 eller 6"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:85
-#, fuzzy
 msgid "Use KiCad gerber file extension"
-msgstr "Använd Protel-filändelser"
+msgstr "Använd KiCad gerber-filändelser"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:45
 msgid ""
@@ -33509,9 +33505,9 @@ msgstr ""
 "versioner som använde linjetjockleken för kortkanten på Edge Cuts-lagret."
 
 #: pcbnew/files.cpp:616
-#, fuzzy, c-format
+#, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
-msgstr "Mönsterkortet '%s' är redan öppet."
+msgstr "Mönsterkortet '%s' är redan öppnat av '%s' på '%s'."
 
 #: pcbnew/files.cpp:627
 msgid "The current PCB has been modified.  Save changes?"
@@ -37406,7 +37402,7 @@ msgid ""
 "Allows a teardrop to spread over 2 tracks if the first track segment is too "
 "short"
 msgstr ""
-"Låt kragförstärkningen spridas ut över två ledare om det första "
+"Låt kragförstärkningen spridas ut över två ledarsegment om det första "
 "ledarsegmentet är för kort"
 
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:384
@@ -38231,13 +38227,13 @@ msgid "Pack footprints"
 msgstr "Samla fotavtryck"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Click to place %s (item %zu of %zu)\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"Klicka för att placera %s (objekt %ld av %ld)\n"
-"Tryck på <esc> för att avbryta alla; dubbelklicka för att göra klart"
+"Klicka för att placera %s (objekt %zu av %zu)\n"
+"Tryck på <esc> för att avbryta allt; dubbelklicka för att göra klart"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:367
 #, c-format
