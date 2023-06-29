@@ -311,20 +311,6 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
 
             xlibsource->AddAttribute( wxT( "description" ), symbol->GetDescription() );
 
-            /* Add the symbol fields. Yes, this is redudant with the "properties"
-             * exported below, but properties has accreted everything we want to send to
-             * the footprint over time so we can't tell what's really a field.
-             */
-            XNODE* xfields = node( "fields" );
-            xcomp->AddChild( xfields );
-
-            for( const SCH_FIELD& field : symbol->GetFields() )
-            {
-                XNODE* xfield = node( wxT( "field" ), field.GetText() );
-                xfields->AddChild( xfield );
-                xfield->AddAttribute( wxT( "name" ), field.GetCanonicalName() );
-            }
-
             /* Add the symbol properties. */
             XNODE* xproperty;
 
