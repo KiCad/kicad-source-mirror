@@ -618,6 +618,13 @@ void WX_VIEW_CONTROLS::onScroll( wxScrollWinEvent& aEvent )
 
         m_view->SetCenter( center );
     }
+    else if( type == wxEVT_SCROLLWIN_THUMBRELEASE ||
+             type == wxEVT_SCROLLWIN_TOP ||
+             type == wxEVT_SCROLLWIN_BOTTOM )
+    {
+        // Do nothing on thumb release, we don't care about it.
+        // We don't have a concept of top or bottom in our viewport, so ignore those events.
+    }
     else
     {
         double dist = 0;
