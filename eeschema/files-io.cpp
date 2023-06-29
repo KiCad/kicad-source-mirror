@@ -81,6 +81,9 @@
 
 bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
 {
+    // ensure the splash screen does not obscure any dialog at startup
+    Pgm().HideSplash();
+
     // implement the pseudo code from KIWAY_PLAYER.h:
     wxString msg;
 
