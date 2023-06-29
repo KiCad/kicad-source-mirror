@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:33-0700\n"
-"PO-Revision-Date: 2023-06-23 20:34+0000\n"
+"PO-Revision-Date: 2023-06-30 01:49+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/v7/pt_BR/>\n"
@@ -532,7 +532,7 @@ msgstr "Renderize cores sólidas"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:195
 msgid "Use only the diffuse color property from model 3D model file"
-msgstr "Utilize apenas a propriedade difusa da cor do arquivo no modelo 3D"
+msgstr "Utilize apenas a propriedade difusa da cor do arquivo do modelo 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:201
 msgid "Render CAD Colors"
@@ -7699,9 +7699,8 @@ msgid "Delete all associations?"
 msgstr "Excluir todas as associações?"
 
 #: cvpcb/tools/cvpcb_control.cpp:183
-#, fuzzy
 msgid "Unable to create the footprint viewer frame"
-msgstr "Não é possível criar o ficheiro de relatório \"%s\""
+msgstr "Não é possível criar o quadro de visualização do footprint"
 
 #: eeschema/annotate.cpp:265
 #, c-format
@@ -13317,9 +13316,9 @@ msgid "Abort Project Save"
 msgstr "Aborte o salvamento do projeto"
 
 #: eeschema/files-io.cpp:1220
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' is already open by '%s' at '%s'."
-msgstr "O esquema '%s' já está aberto."
+msgstr "O esquema '%s' já está aberto por '%s' em '%s'."
 
 #: eeschema/files-io.cpp:1233
 msgid "Importing Schematic"
@@ -16391,9 +16390,9 @@ msgid "Voltage (measured)"
 msgstr "Tensão (medida)"
 
 #: eeschema/sim/spice_library_parser.cpp:89
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create sim model from %s"
-msgstr "Não é possível criar a pasta '%s'."
+msgstr "Não é possível criar o modelo sim de %s"
 
 #: eeschema/sim/spice_model_parser.cpp:84
 #: eeschema/sim/spice_model_parser.cpp:186
@@ -19821,14 +19820,12 @@ msgid "Malformed expression"
 msgstr "Expressão malformada"
 
 #: include/lockfile.h:105
-#, fuzzy
 msgid "Lock file already exists"
-msgstr "O arquivo %s já existe."
+msgstr "O arquivo de bloqueio já existe"
 
 #: include/lockfile.h:124
-#, fuzzy
 msgid "Failed to access lock file"
-msgstr "Houve uma falha ao carregar o arquivo do esquema\n"
+msgstr "Houve uma falha ao acessar o arquivo de bloqueio"
 
 #: include/panel_hotkeys_editor.h:55
 msgid "Reset all hotkeys to the built-in KiCad defaults"
@@ -20019,9 +20016,8 @@ msgid "Precision of gerber coordinates, valid options: 5 or 6"
 msgstr "A precisão das coordenadas do Gerber, opções válidas: 5 ou 6"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:85
-#, fuzzy
 msgid "Use KiCad gerber file extension"
-msgstr "Utilize um nome das extensões do arquivo Protel"
+msgstr "Use a extensão do arquivo KiCad gerber"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:45
 msgid ""
@@ -33775,9 +33771,9 @@ msgstr ""
 "corte."
 
 #: pcbnew/files.cpp:616
-#, fuzzy, c-format
+#, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
-msgstr "A PCI'%s' já está aberta."
+msgstr "A PCI '%s' já está aberta pelo '%s' em '%s'."
 
 #: pcbnew/files.cpp:627
 msgid "The current PCB has been modified.  Save changes?"
@@ -38558,12 +38554,12 @@ msgid "Pack footprints"
 msgstr "Pacote de footprints"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Click to place %s (item %zu of %zu)\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"Clique para colocar %s (item %ld de %ld)\n"
+"Clique para colocar %s (item %zu de %zu)\n"
 "Pressione <esc> para cancelar tudo; clique duas vezes para concluir"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:367
