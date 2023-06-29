@@ -190,7 +190,7 @@ public:
 };
 
 
-class PGPROPERTY_COLOR4D : public wxLongStringProperty
+class PGPROPERTY_COLOR4D : public wxStringProperty
 {
 public:
     PGPROPERTY_COLOR4D( const wxString& aLabel = wxPG_LABEL, const wxString& aName = wxPG_LABEL,
@@ -202,8 +202,6 @@ public:
 
      bool StringToValue( wxVariant &aVariant, const wxString &aText,
                         int aFlags = 0 ) const override;
-
-     bool DisplayEditorDialog( wxPropertyGrid* aGrid, wxVariant& aValue ) override;
 };
 
 #endif /* PG_PROPERTIES_H */

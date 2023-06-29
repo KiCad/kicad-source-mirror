@@ -72,6 +72,18 @@ SCH_PROPERTIES_PANEL::SCH_PROPERTIES_PANEL( wxWindow* aParent, SCH_BASE_FRAME* a
     {
         m_checkboxEditorInstance = static_cast<PG_CHECKBOX_EDITOR*>( it->second );
     }
+
+    it = wxPGGlobalVars->m_mapEditorClasses.find( PG_COLOR_EDITOR::EDITOR_NAME );
+
+    if( it == wxPGGlobalVars->m_mapEditorClasses.end() )
+    {
+        PG_COLOR_EDITOR* colorEditor = new PG_COLOR_EDITOR();
+        m_colorEditorInstance = static_cast<PG_COLOR_EDITOR*>( wxPropertyGrid::RegisterEditorClass( colorEditor ) );
+    }
+    else
+    {
+        m_colorEditorInstance = static_cast<PG_COLOR_EDITOR*>( it->second );
+    }
 }
 
 

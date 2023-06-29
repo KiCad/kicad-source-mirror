@@ -24,7 +24,6 @@
 
 #include <macros.h>
 #include <validators.h>
-#include <dialogs/dialog_color_picker.h>
 #include <eda_draw_frame.h>
 #include <eda_units.h>
 #include <properties/color4d_variant.h>
@@ -408,8 +407,10 @@ const wxPGEditor* PGPROPERTY_BOOL::DoGetEditorClass() const
 
 PGPROPERTY_COLOR4D::PGPROPERTY_COLOR4D( const wxString& aLabel, const wxString& aName,
                                         COLOR4D aValue ) :
-        wxLongStringProperty( aLabel, aName, aValue.ToCSSString() )
+        wxStringProperty( aLabel, aName, aValue.ToCSSString() )
 {
+    SetEditor( PG_COLOR_EDITOR::EDITOR_NAME );
+    SetFlag( wxPG_PROP_NOEDITOR );
 }
 
 
@@ -428,39 +429,7 @@ wxString PGPROPERTY_COLOR4D::ValueToString( wxVariant& aValue, int aFlags ) cons
     if( aValue.IsType( wxS( "COLOR4D" ) ) )
         static_cast<COLOR4D_VARIANT_DATA*>( aValue.GetData() )->Write( ret );
     else
-        return wxLongStringProperty::ValueToString( aValue, aFlags );
+        return wxStringProperty::ValueToString( aValue, aFlags );
 
     return ret;
-}
-
-
-bool PGPROPERTY_COLOR4D::DisplayEditorDialog( wxPropertyGrid* aGrid, wxVariant& aValue )
-{
-    KIGFX::COLOR4D color = KIGFX::COLOR4D::UNSPECIFIED;
-
-    COLOR4D_VARIANT_DATA* data = nullptr;
-
-    if( aValue.IsType( wxS( "COLOR4D" ) ) )
-    {
-        data = static_cast<COLOR4D_VARIANT_DATA*>( aValue.GetData() );
-        color = data->Color();
-    }
-
-    // TODO: Disable opacity where required
-    DIALOG_COLOR_PICKER dialog( ::wxGetTopLevelParent( aGrid ), color, true,
-                                nullptr, KIGFX::COLOR4D::UNSPECIFIED );
-
-    int res = dialog.ShowModal();
-
-    if( res == wxID_OK )
-    {
-        if( !data )
-            data = new COLOR4D_VARIANT_DATA();
-
-        data->SetColor( dialog.GetColor() );
-        aValue.SetData( data );
-        return true;
-    }
-
-    return false;
 }

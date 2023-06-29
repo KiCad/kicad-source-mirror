@@ -30,6 +30,7 @@ class SCH_BASE_FRAME;
 class PROPERTY_MANAGER;
 class PG_UNIT_EDITOR;
 class PG_CHECKBOX_EDITOR;
+class PG_COLOR_EDITOR;
 
 class SCH_PROPERTIES_PANEL : public PROPERTIES_PANEL
 {
@@ -57,6 +58,7 @@ protected:
     PROPERTY_MANAGER& m_propMgr;
     PG_UNIT_EDITOR* m_unitEditorInstance;
     PG_CHECKBOX_EDITOR* m_checkboxEditorInstance;
+    PG_COLOR_EDITOR* m_colorEditorInstance;
 
     wxPGChoices m_nets;
 };

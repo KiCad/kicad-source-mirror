@@ -21,6 +21,7 @@
 #include <wx/propgrid/propgrid.h>
 #include <properties/pg_cell_renderer.h>
 #include <properties/pg_properties.h>
+#include <widgets/color_swatch.h>
 
 
 PG_CELL_RENDERER::PG_CELL_RENDERER() :
@@ -40,6 +41,7 @@ bool PG_CELL_RENDERER::Render( wxDC &aDC, const wxRect &aRect, const wxPropertyG
             wxAny av = colorProp->GetValue().GetAny();
             KIGFX::COLOR4D color = av.IsNull() ? KIGFX::COLOR4D::UNSPECIFIED
                                                : av.As<KIGFX::COLOR4D>();
+            KIGFX::COLOR4D background;
 
             PreDrawCell( aDC, aRect, aGrid, cell, aFlags );
 
@@ -47,9 +49,9 @@ bool PG_CELL_RENDERER::Render( wxDC &aDC, const wxRect &aRect, const wxPropertyG
             int offset = ( aRect.GetHeight() - swatchSize.GetHeight() ) / 2;
             wxRect swatch( aRect.GetPosition() + wxPoint( offset, offset ), swatchSize );
 
-            aDC.SetPen( *wxTRANSPARENT_PEN );
-            aDC.SetBrush( wxBrush( color.ToColour() ) );
-            aDC.DrawRectangle( swatch );
+            COLOR_SWATCH::RenderToDC( &aDC, color, background, swatch,
+                                      aGrid->ConvertDialogToPixels( CHECKERBOARD_SIZE_DU ),
+                                      aGrid->GetParent()->GetBackgroundColour() );
 
             PostDrawCell( aDC, aGrid, cell, aFlags );
 

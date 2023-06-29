@@ -18,6 +18,7 @@
  */
 
 #include <eda_draw_frame.h>
+#include <dialogs/dialog_color_picker.h>
 #include <properties/eda_angle_variant.h>
 #include <properties/pg_editors.h>
 #include <properties/pg_properties.h>
@@ -27,6 +28,7 @@
 
 const wxString PG_UNIT_EDITOR::EDITOR_NAME = wxS( "KiCadUnitEditor" );
 const wxString PG_CHECKBOX_EDITOR::EDITOR_NAME = wxS( "KiCadCheckboxEditor" );
+const wxString PG_COLOR_EDITOR::EDITOR_NAME = wxS( "KiCadColorEditor" );
 
 
 PG_UNIT_EDITOR::PG_UNIT_EDITOR( EDA_DRAW_FRAME* aFrame ) :
@@ -73,7 +75,8 @@ wxPGWindowList PG_UNIT_EDITOR::CreateControls( wxPropertyGrid* aPropGrid, wxPGPr
     wxASSERT( m_unitBinder );
 
     wxString text = aProperty->GetValueAsString( wxPG_EDITABLE_VALUE );
-    wxWindow* win = aPropGrid->GenerateEditorTextCtrl(aPos, aSize, text, nullptr, 0, aProperty->GetMaxLength() );
+    wxWindow* win = aPropGrid->GenerateEditorTextCtrl( aPos, aSize, text, nullptr, 0,
+                                                       aProperty->GetMaxLength() );
     wxPGWindowList ret( win, nullptr );
 
     m_unitBinder->SetControl( win );
@@ -219,4 +222,35 @@ wxPGWindowList PG_CHECKBOX_EDITOR::CreateControls( wxPropertyGrid* aGrid, wxPGPr
         aProperty->SetValueFromInt( 0 );
 
     return wxPGCheckBoxEditor::CreateControls( aGrid, aProperty, aPos, aSize );
+}
+
+
+wxPGWindowList PG_COLOR_EDITOR::CreateControls( wxPropertyGrid* aGrid, wxPGProperty* aProperty,
+                                                const wxPoint& aPos, const wxSize& aSize ) const
+{
+    wxVariant val = aProperty->GetValue();
+
+    KIGFX::COLOR4D color = KIGFX::COLOR4D::UNSPECIFIED;
+    COLOR4D_VARIANT_DATA* data = nullptr;
+
+    if( val.IsType( wxS( "COLOR4D" ) ) )
+    {
+        data = static_cast<COLOR4D_VARIANT_DATA*>( val.GetData() );
+        color = data->Color();
+    }
+
+    DIALOG_COLOR_PICKER dialog( ::wxGetTopLevelParent( aGrid ), color, true,
+                                nullptr, KIGFX::COLOR4D::UNSPECIFIED );
+
+    int res = dialog.ShowModal();
+
+    if( res == wxID_OK )
+    {
+        data = new COLOR4D_VARIANT_DATA();
+        data->SetColor( dialog.GetColor() );
+        val.SetData( data );
+        aGrid->ChangePropertyValue( aProperty, val );
+    }
+
+    return nullptr;
 }

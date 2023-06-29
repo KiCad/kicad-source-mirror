@@ -84,4 +84,28 @@ public:
                                    const wxPoint& aPos, const wxSize& aSize ) const override;
 };
 
+
+class PG_COLOR_EDITOR : public wxPGEditor
+{
+public:
+    static const wxString EDITOR_NAME;
+
+    PG_COLOR_EDITOR() {}
+
+    virtual ~PG_COLOR_EDITOR() {}
+
+    wxString GetName() const override { return EDITOR_NAME; }
+
+    wxPGWindowList CreateControls( wxPropertyGrid* aGrid, wxPGProperty* aProperty,
+                                   const wxPoint& aPos, const wxSize& aSize ) const override;
+
+    void UpdateControl( wxPGProperty* aProperty, wxWindow* aCtrl ) const override {}
+
+    bool OnEvent( wxPropertyGrid* aGrid, wxPGProperty* aProperty, wxWindow* aWindow,
+                  wxEvent& aEvent ) const override
+    {
+        return false;
+    }
+};
+
 #endif //KICAD_PG_EDITORS_H

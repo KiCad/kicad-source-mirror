@@ -131,6 +131,11 @@ public:
                                 const wxSize& aSize, const wxSize& aCheckerboardSize,
                                 const KIGFX::COLOR4D& aCheckerboardBackground );
 
+    static void RenderToDC( wxDC* aDC, const KIGFX::COLOR4D& aColor,
+                            const KIGFX::COLOR4D& aBackground, const wxRect& aRect,
+                            const wxSize&         aCheckerboardSize,
+                            const KIGFX::COLOR4D& aCheckerboardBackground );
+
 private:
     void setupEvents();
 

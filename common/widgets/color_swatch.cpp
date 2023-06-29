@@ -41,12 +41,25 @@ wxBitmap COLOR_SWATCH::MakeBitmap( const COLOR4D& aColor, const COLOR4D& aBackgr
                                    const wxSize& aSize, const wxSize& aCheckerboardSize,
                                    const COLOR4D& aCheckerboardBackground )
 {
-    wxBitmap    bitmap( aSize );
-    wxBrush     brush;
-    wxPen       pen;
-    wxMemoryDC  iconDC;
+    wxBitmap   bitmap( aSize );
+    wxMemoryDC iconDC;
 
     iconDC.SelectObject( bitmap );
+
+    RenderToDC( &iconDC, aColor, aBackground, aSize, aCheckerboardSize, aCheckerboardBackground );
+
+    return bitmap;
+}
+
+
+void COLOR_SWATCH::RenderToDC( wxDC* aDC, const KIGFX::COLOR4D& aColor,
+                               const KIGFX::COLOR4D& aBackground, const wxRect& aRect,
+                               const wxSize&         aCheckerboardSize,
+                               const KIGFX::COLOR4D& aCheckerboardBackground )
+{
+    wxBrush     brush;
+    wxPen       pen;
+
     brush.SetStyle( wxBRUSHSTYLE_SOLID );
 
     if( aColor == COLOR4D::UNSPECIFIED )
@@ -69,19 +82,19 @@ wxBitmap COLOR_SWATCH::MakeBitmap( const COLOR4D& aColor, const COLOR4D& aBackgr
             rowCycle = false;
         }
 
-        for( int x = 0; x < aSize.x; x += aCheckerboardSize.x )
+        for( int x = aRect.GetTop(); x < aRect.GetBottom(); x += aCheckerboardSize.x )
         {
             bool colCycle = rowCycle;
 
-            for( int y = 0; y < aSize.y; y += aCheckerboardSize.y )
+            for( int y = aRect.GetLeft(); y < aRect.GetRight(); y += aCheckerboardSize.y )
             {
                 COLOR4D color = colCycle ? black : white;
                 brush.SetColour( color.ToColour() );
                 pen.SetColour( color.ToColour() );
 
-                iconDC.SetBrush( brush );
-                iconDC.SetPen( pen );
-                iconDC.DrawRectangle( x, y, x + aCheckerboardSize.x, y + aCheckerboardSize.y );
+                aDC->SetBrush( brush );
+                aDC->SetPen( pen );
+                aDC->DrawRectangle( x, y, x + aCheckerboardSize.x, y + aCheckerboardSize.y );
 
                 colCycle = !colCycle;
             }
@@ -94,19 +107,17 @@ wxBitmap COLOR_SWATCH::MakeBitmap( const COLOR4D& aColor, const COLOR4D& aBackgr
         brush.SetColour( aBackground.WithAlpha(1.0).ToColour() );
         pen.SetColour( aBackground.WithAlpha(1.0).ToColour() );
 
-        iconDC.SetBrush( brush );
-        iconDC.SetPen( pen );
-        iconDC.DrawRectangle( 0, 0, aSize.x, aSize.y );
+        aDC->SetBrush( brush );
+        aDC->SetPen( pen );
+        aDC->DrawRectangle( aRect );
 
         brush.SetColour( aColor.ToColour() );
         pen.SetColour( aColor.ToColour() );
 
-        iconDC.SetBrush( brush );
-        iconDC.SetPen( pen );
-        iconDC.DrawRectangle( 0, 0, aSize.x, aSize.y );
+        aDC->SetBrush( brush );
+        aDC->SetPen( pen );
+        aDC->DrawRectangle( aRect );
     }
-
-    return bitmap;
 }
 
 
