@@ -284,7 +284,8 @@
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
-                                        <event name="OnTextEnter">startCtrlOnTextEnter</event>
+                                        <event name="OnKillFocus">startOnKillFocus</event>
+                                        <event name="OnTextEnter">startOnTextEnter</event>
                                     </object>
                                 </object>
                                 <object class="gbsizeritem" expanded="1">
@@ -483,7 +484,8 @@
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
-                                        <event name="OnTextEnter">startCtrlOnTextEnter</event>
+                                        <event name="OnKillFocus">startOnKillFocus</event>
+                                        <event name="OnTextEnter">startOnTextEnter</event>
                                     </object>
                                 </object>
                                 <object class="gbsizeritem" expanded="1">
@@ -747,7 +749,8 @@
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
-                                        <event name="OnTextEnter">endCtrlOnTextEnter</event>
+                                        <event name="OnKillFocus">endOnKillFocus</event>
+                                        <event name="OnTextEnter">endOnTextEnter</event>
                                     </object>
                                 </object>
                                 <object class="gbsizeritem" expanded="1">
@@ -946,7 +949,8 @@
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
-                                        <event name="OnTextEnter">endCtrlOnTextEnter</event>
+                                        <event name="OnKillFocus">endOnKillFocus</event>
+                                        <event name="OnTextEnter">endOnTextEnter</event>
                                     </object>
                                 </object>
                                 <object class="gbsizeritem" expanded="1">
@@ -2556,6 +2560,7 @@
                                                 <property name="window_extra_style"></property>
                                                 <property name="window_name"></property>
                                                 <property name="window_style"></property>
+                                                <event name="OnKillFocus">segmentOnKillFocus</event>
                                                 <event name="OnTextEnter">segmentOnTextEnter</event>
                                             </object>
                                         </object>
@@ -2752,6 +2757,7 @@
                                                 <property name="window_extra_style"></property>
                                                 <property name="window_name"></property>
                                                 <property name="window_style"></property>
+                                                <event name="OnKillFocus">segmentOnKillFocus</event>
                                                 <event name="OnTextEnter">segmentOnTextEnter</event>
                                             </object>
                                         </object>
@@ -2948,6 +2954,7 @@
                                                 <property name="window_extra_style"></property>
                                                 <property name="window_name"></property>
                                                 <property name="window_style"></property>
+                                                <event name="OnKillFocus">rectangleOnKillFocus</event>
                                                 <event name="OnTextEnter">rectangleOnTextEnter</event>
                                             </object>
                                         </object>
@@ -3144,6 +3151,7 @@
                                                 <property name="window_extra_style"></property>
                                                 <property name="window_name"></property>
                                                 <property name="window_style"></property>
+                                                <event name="OnKillFocus">rectangleOnKillFocus</event>
                                                 <event name="OnTextEnter">rectangleOnTextEnter</event>
                                             </object>
                                         </object>

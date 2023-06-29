@@ -66,10 +66,16 @@ private:
     void onLayerSelection( wxCommandEvent& event ) override;
     void startCtrlOnTextEnter( wxCommandEvent& event ) override;
     void endCtrlOnTextEnter( wxCommandEvent& event ) override;
+    void startOnTextEnter( wxCommandEvent& event ) override;
+    void startOnKillFocus( wxFocusEvent& event ) override;
+    void endOnTextEnter( wxCommandEvent& event ) override;
+    void endOnKillFocus( wxFocusEvent& event ) override;
 
     void segmentOnTextEnter( wxCommandEvent& event ) override;
+    void segmentOnKillFocus( wxFocusEvent& event ) override;
 
     void rectangleOnTextEnter( wxCommandEvent& event ) override;
+    void rectangleOnKillFocus( wxFocusEvent& event ) override;
 
     bool Validate() override;
 
@@ -119,7 +125,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
     m_bezierCtrl2X( aParent, m_BezierPointC2XLabel, m_BezierC2X_Ctrl, m_BezierPointC2XUnit ),
     m_bezierCtrl2Y( aParent, m_BezierPointC2YLabel, m_BezierC2Y_Ctrl, m_BezierPointC2YUnit ),
     m_flipStartEnd( false )
-{
+{   
     // Configure display origin transforms
     m_startX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
     m_startY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
@@ -236,7 +242,7 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::onFilledCheckbox( wxCommandEvent& event )
     }
 }
 
-void DIALOG_GRAPHIC_ITEM_PROPERTIES::startCtrlOnTextEnter( wxCommandEvent& event )
+void DIALOG_GRAPHIC_ITEM_PROPERTIES::startOnTextEnter( wxCommandEvent& event )
 {
     switch( m_item->GetShape() )
     {
@@ -253,7 +259,25 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::startCtrlOnTextEnter( wxCommandEvent& event
     }
 }
 
-void DIALOG_GRAPHIC_ITEM_PROPERTIES::endCtrlOnTextEnter( wxCommandEvent& event )
+void DIALOG_GRAPHIC_ITEM_PROPERTIES::startOnKillFocus( wxFocusEvent& event )
+{
+    switch( m_item->GetShape() )
+    {
+    case SHAPE_T::SEGMENT:
+        TransferDataFromWindow();
+        TransferDataToWindow();
+        break;
+    case SHAPE_T::RECT:
+        TransferDataFromWindow();
+        TransferDataToWindow();
+        break;
+    default: break;
+    }
+
+    event.Skip();
+}
+
+void DIALOG_GRAPHIC_ITEM_PROPERTIES::endOnTextEnter( wxCommandEvent& event )
 {
     switch( m_item->GetShape() )
     {
@@ -270,16 +294,48 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::endCtrlOnTextEnter( wxCommandEvent& event )
     }
 }
 
+void DIALOG_GRAPHIC_ITEM_PROPERTIES::endOnKillFocus( wxFocusEvent& event )
+{
+    switch( m_item->GetShape() )
+    {
+    case SHAPE_T::SEGMENT:
+        TransferDataFromWindow();
+        TransferDataToWindow();
+        break;
+    case SHAPE_T::RECT:
+        TransferDataFromWindow();
+        TransferDataToWindow();
+        break;
+    default: break;
+    }
+
+    event.Skip();
+}
+
 void DIALOG_GRAPHIC_ITEM_PROPERTIES::segmentOnTextEnter( wxCommandEvent& event )
 {
     TransferDataFromWindow();
     TransferDataToWindow();
 }
 
+void DIALOG_GRAPHIC_ITEM_PROPERTIES::segmentOnKillFocus( wxFocusEvent& event )
+{
+    TransferDataFromWindow();
+    TransferDataToWindow();
+    event.Skip();
+}
+
 void DIALOG_GRAPHIC_ITEM_PROPERTIES::rectangleOnTextEnter( wxCommandEvent& event )
 {
     TransferDataFromWindow();
     TransferDataToWindow();
+}
+
+void DIALOG_GRAPHIC_ITEM_PROPERTIES::rectangleOnKillFocus( wxFocusEvent& event )
+{
+    TransferDataFromWindow();
+    TransferDataToWindow();
+    event.Skip();
 }
 
 bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
