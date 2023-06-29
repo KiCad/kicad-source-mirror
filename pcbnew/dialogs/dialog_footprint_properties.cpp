@@ -300,6 +300,8 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
 
     // Show the footprint's FPID.
     m_tcLibraryID->SetValue( m_footprint->GetFPID().Format() );
+    // Show the footprint's UUID.
+    m_tcUUID->SetValue( m_footprint->GetPath().AsString() );
 
     for( int col = 0; col < m_itemsGrid->GetNumberCols(); col++ )
     {

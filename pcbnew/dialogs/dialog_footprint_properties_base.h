@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -98,6 +98,8 @@ class DIALOG_FOOTPRINT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextInfoPaste;
 		wxStaticText* m_staticText16;
 		wxChoice* m_ZoneConnectionChoice;
+		wxStaticText* m_uuidLabel;
+		wxTextCtrl* m_tcUUID;
 		wxStaticText* m_libraryIDLabel;
 		wxTextCtrl* m_tcLibraryID;
 		wxStdDialogButtonSizer* m_sdbSizerStdButtons;

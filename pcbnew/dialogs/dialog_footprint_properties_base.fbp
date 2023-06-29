@@ -36,6 +36,7 @@
             <property name="center"></property>
             <property name="context_help"></property>
             <property name="context_menu">1</property>
+            <property name="drag_accept_files">0</property>
             <property name="enabled">1</property>
             <property name="event_handler">impl_virtual</property>
             <property name="extra_style"></property>
@@ -89,6 +90,7 @@
                         <property name="dock">Dock</property>
                         <property name="dock_fixed">0</property>
                         <property name="docking">Left</property>
+                        <property name="drag_accept_files">0</property>
                         <property name="enabled">1</property>
                         <property name="fg"></property>
                         <property name="floatable">1</property>
@@ -146,6 +148,7 @@
                                 <property name="dock">Dock</property>
                                 <property name="dock_fixed">0</property>
                                 <property name="docking">Left</property>
+                                <property name="drag_accept_files">0</property>
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
@@ -231,6 +234,7 @@
                                                     <property name="dock">Dock</property>
                                                     <property name="dock_fixed">0</property>
                                                     <property name="docking">Left</property>
+                                                    <property name="drag_accept_files">0</property>
                                                     <property name="drag_col_move">0</property>
                                                     <property name="drag_col_size">1</property>
                                                     <property name="drag_grid_size">0</property>
@@ -321,6 +325,7 @@
                                                             <property name="dock">Dock</property>
                                                             <property name="dock_fixed">0</property>
                                                             <property name="docking">Left</property>
+                                                            <property name="drag_accept_files">0</property>
                                                             <property name="enabled">1</property>
                                                             <property name="fg"></property>
                                                             <property name="floatable">1</property>
@@ -405,6 +410,7 @@
                                                             <property name="dock">Dock</property>
                                                             <property name="dock_fixed">0</property>
                                                             <property name="docking">Left</property>
+                                                            <property name="drag_accept_files">0</property>
                                                             <property name="enabled">1</property>
                                                             <property name="fg"></property>
                                                             <property name="floatable">1</property>
@@ -524,6 +530,7 @@
                                                                             <property name="dock">Dock</property>
                                                                             <property name="dock_fixed">0</property>
                                                                             <property name="docking">Left</property>
+                                                                            <property name="drag_accept_files">0</property>
                                                                             <property name="enabled">1</property>
                                                                             <property name="fg"></property>
                                                                             <property name="floatable">1</property>
@@ -585,6 +592,7 @@
                                                                             <property name="dock">Dock</property>
                                                                             <property name="dock_fixed">0</property>
                                                                             <property name="docking">Left</property>
+                                                                            <property name="drag_accept_files">0</property>
                                                                             <property name="enabled">1</property>
                                                                             <property name="fg"></property>
                                                                             <property name="floatable">1</property>
@@ -649,6 +657,7 @@
                                                                             <property name="dock">Dock</property>
                                                                             <property name="dock_fixed">0</property>
                                                                             <property name="docking">Left</property>
+                                                                            <property name="drag_accept_files">0</property>
                                                                             <property name="enabled">1</property>
                                                                             <property name="fg"></property>
                                                                             <property name="floatable">1</property>
@@ -710,6 +719,7 @@
                                                                             <property name="dock">Dock</property>
                                                                             <property name="dock_fixed">0</property>
                                                                             <property name="docking">Left</property>
+                                                                            <property name="drag_accept_files">0</property>
                                                                             <property name="enabled">1</property>
                                                                             <property name="fg"></property>
                                                                             <property name="floatable">1</property>
@@ -771,6 +781,7 @@
                                                                             <property name="dock">Dock</property>
                                                                             <property name="dock_fixed">0</property>
                                                                             <property name="docking">Left</property>
+                                                                            <property name="drag_accept_files">0</property>
                                                                             <property name="enabled">1</property>
                                                                             <property name="fg"></property>
                                                                             <property name="floatable">1</property>
@@ -835,6 +846,7 @@
                                                                             <property name="dock">Dock</property>
                                                                             <property name="dock_fixed">0</property>
                                                                             <property name="docking">Left</property>
+                                                                            <property name="drag_accept_files">0</property>
                                                                             <property name="enabled">1</property>
                                                                             <property name="fg"></property>
                                                                             <property name="floatable">1</property>
@@ -896,6 +908,7 @@
                                                                             <property name="dock">Dock</property>
                                                                             <property name="dock_fixed">0</property>
                                                                             <property name="docking">Left</property>
+                                                                            <property name="drag_accept_files">0</property>
                                                                             <property name="enabled">1</property>
                                                                             <property name="fg"></property>
                                                                             <property name="floatable">1</property>
@@ -958,6 +971,7 @@
                                                                             <property name="dock">Dock</property>
                                                                             <property name="dock_fixed">0</property>
                                                                             <property name="docking">Left</property>
+                                                                            <property name="drag_accept_files">0</property>
                                                                             <property name="enabled">1</property>
                                                                             <property name="fg"></property>
                                                                             <property name="floatable">1</property>
@@ -1032,6 +1046,7 @@
                                                                             <property name="dock">Dock</property>
                                                                             <property name="dock_fixed">0</property>
                                                                             <property name="docking">Left</property>
+                                                                            <property name="drag_accept_files">0</property>
                                                                             <property name="enabled">1</property>
                                                                             <property name="fg"></property>
                                                                             <property name="floatable">1</property>
@@ -1094,6 +1109,7 @@
                                                                             <property name="dock">Dock</property>
                                                                             <property name="dock_fixed">0</property>
                                                                             <property name="docking">Left</property>
+                                                                            <property name="drag_accept_files">0</property>
                                                                             <property name="enabled">1</property>
                                                                             <property name="fg"></property>
                                                                             <property name="floatable">1</property>
@@ -1160,6 +1176,7 @@
                                                                     <property name="dock">Dock</property>
                                                                     <property name="dock_fixed">0</property>
                                                                     <property name="docking">Left</property>
+                                                                    <property name="drag_accept_files">0</property>
                                                                     <property name="enabled">1</property>
                                                                     <property name="fg"></property>
                                                                     <property name="floatable">1</property>
@@ -1257,6 +1274,7 @@
                                                                             <property name="dock">Dock</property>
                                                                             <property name="dock_fixed">0</property>
                                                                             <property name="docking">Left</property>
+                                                                            <property name="drag_accept_files">0</property>
                                                                             <property name="enabled">1</property>
                                                                             <property name="fg"></property>
                                                                             <property name="floatable">1</property>
@@ -1319,6 +1337,7 @@
                                                                             <property name="dock">Dock</property>
                                                                             <property name="dock_fixed">0</property>
                                                                             <property name="docking">Left</property>
+                                                                            <property name="drag_accept_files">0</property>
                                                                             <property name="enabled">1</property>
                                                                             <property name="fg"></property>
                                                                             <property name="floatable">1</property>
@@ -1395,6 +1414,7 @@
                                                                     <property name="dock">Dock</property>
                                                                     <property name="dock_fixed">0</property>
                                                                     <property name="docking">Left</property>
+                                                                    <property name="drag_accept_files">0</property>
                                                                     <property name="enabled">1</property>
                                                                     <property name="fg"></property>
                                                                     <property name="floatable">1</property>
@@ -1459,6 +1479,7 @@
                                                                     <property name="dock">Dock</property>
                                                                     <property name="dock_fixed">0</property>
                                                                     <property name="docking">Left</property>
+                                                                    <property name="drag_accept_files">0</property>
                                                                     <property name="enabled">1</property>
                                                                     <property name="fg"></property>
                                                                     <property name="floatable">1</property>
@@ -1523,6 +1544,7 @@
                                                                     <property name="dock">Dock</property>
                                                                     <property name="dock_fixed">0</property>
                                                                     <property name="docking">Left</property>
+                                                                    <property name="drag_accept_files">0</property>
                                                                     <property name="enabled">1</property>
                                                                     <property name="fg"></property>
                                                                     <property name="floatable">1</property>
@@ -1587,6 +1609,7 @@
                                                                     <property name="dock">Dock</property>
                                                                     <property name="dock_fixed">0</property>
                                                                     <property name="docking">Left</property>
+                                                                    <property name="drag_accept_files">0</property>
                                                                     <property name="enabled">1</property>
                                                                     <property name="fg"></property>
                                                                     <property name="floatable">1</property>
@@ -1651,6 +1674,7 @@
                                                                     <property name="dock">Dock</property>
                                                                     <property name="dock_fixed">0</property>
                                                                     <property name="docking">Left</property>
+                                                                    <property name="drag_accept_files">0</property>
                                                                     <property name="enabled">1</property>
                                                                     <property name="fg"></property>
                                                                     <property name="floatable">1</property>
@@ -1741,6 +1765,7 @@
                                                                     <property name="dock">Dock</property>
                                                                     <property name="dock_fixed">0</property>
                                                                     <property name="docking">Left</property>
+                                                                    <property name="drag_accept_files">0</property>
                                                                     <property name="enabled">1</property>
                                                                     <property name="fg"></property>
                                                                     <property name="floatable">1</property>
@@ -1815,6 +1840,7 @@
                                                                     <property name="dock">Dock</property>
                                                                     <property name="dock_fixed">0</property>
                                                                     <property name="docking">Left</property>
+                                                                    <property name="drag_accept_files">0</property>
                                                                     <property name="enabled">1</property>
                                                                     <property name="fg"></property>
                                                                     <property name="floatable">1</property>
@@ -1889,6 +1915,7 @@
                                                                     <property name="dock">Dock</property>
                                                                     <property name="dock_fixed">0</property>
                                                                     <property name="docking">Left</property>
+                                                                    <property name="drag_accept_files">0</property>
                                                                     <property name="enabled">1</property>
                                                                     <property name="fg"></property>
                                                                     <property name="floatable">1</property>
@@ -1973,6 +2000,7 @@
                                                                     <property name="dock">Dock</property>
                                                                     <property name="dock_fixed">0</property>
                                                                     <property name="docking">Left</property>
+                                                                    <property name="drag_accept_files">0</property>
                                                                     <property name="enabled">1</property>
                                                                     <property name="fg"></property>
                                                                     <property name="floatable">1</property>
@@ -2061,6 +2089,7 @@
                                 <property name="dock">Dock</property>
                                 <property name="dock_fixed">0</property>
                                 <property name="docking">Left</property>
+                                <property name="drag_accept_files">0</property>
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
@@ -2133,6 +2162,7 @@
                                                     <property name="dock">Dock</property>
                                                     <property name="dock_fixed">0</property>
                                                     <property name="docking">Left</property>
+                                                    <property name="drag_accept_files">0</property>
                                                     <property name="enabled">1</property>
                                                     <property name="fg"></property>
                                                     <property name="floatable">1</property>
@@ -2212,6 +2242,7 @@
                                                             <property name="dock">Dock</property>
                                                             <property name="dock_fixed">0</property>
                                                             <property name="docking">Left</property>
+                                                            <property name="drag_accept_files">0</property>
                                                             <property name="enabled">1</property>
                                                             <property name="fg"></property>
                                                             <property name="floatable">1</property>
@@ -2276,6 +2307,7 @@
                                                             <property name="dock">Dock</property>
                                                             <property name="dock_fixed">0</property>
                                                             <property name="docking">Left</property>
+                                                            <property name="drag_accept_files">0</property>
                                                             <property name="enabled">1</property>
                                                             <property name="fg"></property>
                                                             <property name="floatable">1</property>
@@ -2343,6 +2375,7 @@
                                                             <property name="dock">Dock</property>
                                                             <property name="dock_fixed">0</property>
                                                             <property name="docking">Left</property>
+                                                            <property name="drag_accept_files">0</property>
                                                             <property name="enabled">1</property>
                                                             <property name="fg"></property>
                                                             <property name="floatable">1</property>
@@ -2407,6 +2440,7 @@
                                                             <property name="dock">Dock</property>
                                                             <property name="dock_fixed">0</property>
                                                             <property name="docking">Left</property>
+                                                            <property name="drag_accept_files">0</property>
                                                             <property name="enabled">1</property>
                                                             <property name="fg"></property>
                                                             <property name="floatable">1</property>
@@ -2471,6 +2505,7 @@
                                                             <property name="dock">Dock</property>
                                                             <property name="dock_fixed">0</property>
                                                             <property name="docking">Left</property>
+                                                            <property name="drag_accept_files">0</property>
                                                             <property name="enabled">1</property>
                                                             <property name="fg"></property>
                                                             <property name="floatable">1</property>
@@ -2538,6 +2573,7 @@
                                                             <property name="dock">Dock</property>
                                                             <property name="dock_fixed">0</property>
                                                             <property name="docking">Left</property>
+                                                            <property name="drag_accept_files">0</property>
                                                             <property name="enabled">1</property>
                                                             <property name="fg"></property>
                                                             <property name="floatable">1</property>
@@ -2603,6 +2639,7 @@
                                                             <property name="dock">Dock</property>
                                                             <property name="dock_fixed">0</property>
                                                             <property name="docking">Left</property>
+                                                            <property name="drag_accept_files">0</property>
                                                             <property name="enabled">1</property>
                                                             <property name="fg"></property>
                                                             <property name="floatable">1</property>
@@ -2669,6 +2706,7 @@
                                                             <property name="dock">Dock</property>
                                                             <property name="dock_fixed">0</property>
                                                             <property name="docking">Left</property>
+                                                            <property name="drag_accept_files">0</property>
                                                             <property name="enabled">1</property>
                                                             <property name="fg"></property>
                                                             <property name="floatable">1</property>
@@ -2733,6 +2771,7 @@
                                                             <property name="dock">Dock</property>
                                                             <property name="dock_fixed">0</property>
                                                             <property name="docking">Left</property>
+                                                            <property name="drag_accept_files">0</property>
                                                             <property name="enabled">1</property>
                                                             <property name="fg"></property>
                                                             <property name="floatable">1</property>
@@ -2800,6 +2839,7 @@
                                                             <property name="dock">Dock</property>
                                                             <property name="dock_fixed">0</property>
                                                             <property name="docking">Left</property>
+                                                            <property name="drag_accept_files">0</property>
                                                             <property name="enabled">1</property>
                                                             <property name="fg"></property>
                                                             <property name="floatable">1</property>
@@ -2864,6 +2904,7 @@
                                                             <property name="dock">Dock</property>
                                                             <property name="dock_fixed">0</property>
                                                             <property name="docking">Left</property>
+                                                            <property name="drag_accept_files">0</property>
                                                             <property name="enabled">1</property>
                                                             <property name="fg"></property>
                                                             <property name="floatable">1</property>
@@ -2928,6 +2969,7 @@
                                                             <property name="dock">Dock</property>
                                                             <property name="dock_fixed">0</property>
                                                             <property name="docking">Left</property>
+                                                            <property name="drag_accept_files">0</property>
                                                             <property name="enabled">1</property>
                                                             <property name="fg"></property>
                                                             <property name="floatable">1</property>
@@ -2995,6 +3037,7 @@
                                                             <property name="dock">Dock</property>
                                                             <property name="dock_fixed">0</property>
                                                             <property name="docking">Left</property>
+                                                            <property name="drag_accept_files">0</property>
                                                             <property name="enabled">1</property>
                                                             <property name="fg"></property>
                                                             <property name="floatable">1</property>
@@ -3076,6 +3119,7 @@
                                                     <property name="dock">Dock</property>
                                                     <property name="dock_fixed">0</property>
                                                     <property name="docking">Left</property>
+                                                    <property name="drag_accept_files">0</property>
                                                     <property name="enabled">1</property>
                                                     <property name="fg"></property>
                                                     <property name="floatable">1</property>
@@ -3137,6 +3181,7 @@
                                                     <property name="dock">Dock</property>
                                                     <property name="dock_fixed">0</property>
                                                     <property name="docking">Left</property>
+                                                    <property name="drag_accept_files">0</property>
                                                     <property name="enabled">1</property>
                                                     <property name="fg"></property>
                                                     <property name="floatable">1</property>
@@ -3212,6 +3257,7 @@
                                                     <property name="dock">Dock</property>
                                                     <property name="dock_fixed">0</property>
                                                     <property name="docking">Left</property>
+                                                    <property name="drag_accept_files">0</property>
                                                     <property name="enabled">1</property>
                                                     <property name="fg"></property>
                                                     <property name="floatable">1</property>
@@ -3274,6 +3320,7 @@
                                                     <property name="dock">Dock</property>
                                                     <property name="dock_fixed">0</property>
                                                     <property name="docking">Left</property>
+                                                    <property name="drag_accept_files">0</property>
                                                     <property name="enabled">1</property>
                                                     <property name="fg"></property>
                                                     <property name="floatable">1</property>
@@ -3321,184 +3368,292 @@
                 </object>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxEXPAND|wxTOP|wxLEFT</property>
+                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxEXPAND</property>
                     <property name="proportion">0</property>
-                    <object class="wxBoxSizer" expanded="1">
+                    <object class="wxFlexGridSizer" expanded="1">
+                        <property name="cols">2</property>
+                        <property name="flexible_direction">wxBOTH</property>
+                        <property name="growablecols">1</property>
+                        <property name="growablerows"></property>
+                        <property name="hgap">0</property>
                         <property name="minimum_size"></property>
-                        <property name="name">bSizerButtons</property>
-                        <property name="orient">wxHORIZONTAL</property>
+                        <property name="name">fgSizerSymbolRef</property>
+                        <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                         <property name="permission">none</property>
+                        <property name="rows">0</property>
+                        <property name="vgap">4</property>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT</property>
-                            <property name="proportion">1</property>
-                            <object class="wxFlexGridSizer" expanded="1">
-                                <property name="cols">2</property>
-                                <property name="flexible_direction">wxBOTH</property>
-                                <property name="growablecols">1</property>
-                                <property name="growablerows"></property>
-                                <property name="hgap">0</property>
+                            <property name="flag">wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL</property>
+                            <property name="proportion">0</property>
+                            <object class="wxStaticText" expanded="1">
+                                <property name="BottomDockable">1</property>
+                                <property name="LeftDockable">1</property>
+                                <property name="RightDockable">1</property>
+                                <property name="TopDockable">1</property>
+                                <property name="aui_layer"></property>
+                                <property name="aui_name"></property>
+                                <property name="aui_position"></property>
+                                <property name="aui_row"></property>
+                                <property name="best_size"></property>
+                                <property name="bg"></property>
+                                <property name="caption"></property>
+                                <property name="caption_visible">1</property>
+                                <property name="center_pane">0</property>
+                                <property name="close_button">1</property>
+                                <property name="context_help"></property>
+                                <property name="context_menu">1</property>
+                                <property name="default_pane">0</property>
+                                <property name="dock">Dock</property>
+                                <property name="dock_fixed">0</property>
+                                <property name="docking">Left</property>
+                                <property name="drag_accept_files">0</property>
+                                <property name="enabled">1</property>
+                                <property name="fg"></property>
+                                <property name="floatable">1</property>
+                                <property name="font"></property>
+                                <property name="gripper">0</property>
+                                <property name="hidden">0</property>
+                                <property name="id">wxID_ANY</property>
+                                <property name="label">UUID:</property>
+                                <property name="markup">0</property>
+                                <property name="max_size"></property>
+                                <property name="maximize_button">0</property>
+                                <property name="maximum_size"></property>
+                                <property name="min_size"></property>
+                                <property name="minimize_button">0</property>
                                 <property name="minimum_size"></property>
-                                <property name="name">fgSizerSymbolRef</property>
-                                <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
-                                <property name="permission">none</property>
-                                <property name="rows">0</property>
-                                <property name="vgap">4</property>
-                                <object class="sizeritem" expanded="0">
-                                    <property name="border">2</property>
-                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
-                                    <property name="proportion">0</property>
-                                    <object class="wxStaticText" expanded="0">
-                                        <property name="BottomDockable">1</property>
-                                        <property name="LeftDockable">1</property>
-                                        <property name="RightDockable">1</property>
-                                        <property name="TopDockable">1</property>
-                                        <property name="aui_layer"></property>
-                                        <property name="aui_name"></property>
-                                        <property name="aui_position"></property>
-                                        <property name="aui_row"></property>
-                                        <property name="best_size"></property>
-                                        <property name="bg"></property>
-                                        <property name="caption"></property>
-                                        <property name="caption_visible">1</property>
-                                        <property name="center_pane">0</property>
-                                        <property name="close_button">1</property>
-                                        <property name="context_help"></property>
-                                        <property name="context_menu">1</property>
-                                        <property name="default_pane">0</property>
-                                        <property name="dock">Dock</property>
-                                        <property name="dock_fixed">0</property>
-                                        <property name="docking">Left</property>
-                                        <property name="enabled">1</property>
-                                        <property name="fg"></property>
-                                        <property name="floatable">1</property>
-                                        <property name="font"></property>
-                                        <property name="gripper">0</property>
-                                        <property name="hidden">0</property>
-                                        <property name="id">wxID_ANY</property>
-                                        <property name="label">Library link:</property>
-                                        <property name="markup">0</property>
-                                        <property name="max_size"></property>
-                                        <property name="maximize_button">0</property>
-                                        <property name="maximum_size"></property>
-                                        <property name="min_size"></property>
-                                        <property name="minimize_button">0</property>
-                                        <property name="minimum_size"></property>
-                                        <property name="moveable">1</property>
-                                        <property name="name">m_libraryIDLabel</property>
-                                        <property name="pane_border">1</property>
-                                        <property name="pane_position"></property>
-                                        <property name="pane_size"></property>
-                                        <property name="permission">protected</property>
-                                        <property name="pin_button">1</property>
-                                        <property name="pos"></property>
-                                        <property name="resize">Resizable</property>
-                                        <property name="show">1</property>
-                                        <property name="size"></property>
-                                        <property name="style"></property>
-                                        <property name="subclass">; forward_declare</property>
-                                        <property name="toolbar_pane">0</property>
-                                        <property name="tooltip"></property>
-                                        <property name="window_extra_style"></property>
-                                        <property name="window_name"></property>
-                                        <property name="window_style"></property>
-                                        <property name="wrap">-1</property>
-                                    </object>
-                                </object>
-                                <object class="sizeritem" expanded="0">
-                                    <property name="border">5</property>
-                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT</property>
-                                    <property name="proportion">0</property>
-                                    <object class="wxTextCtrl" expanded="0">
-                                        <property name="BottomDockable">1</property>
-                                        <property name="LeftDockable">1</property>
-                                        <property name="RightDockable">1</property>
-                                        <property name="TopDockable">1</property>
-                                        <property name="aui_layer"></property>
-                                        <property name="aui_name"></property>
-                                        <property name="aui_position"></property>
-                                        <property name="aui_row"></property>
-                                        <property name="best_size"></property>
-                                        <property name="bg">wxSYS_COLOUR_BTNFACE</property>
-                                        <property name="caption"></property>
-                                        <property name="caption_visible">1</property>
-                                        <property name="center_pane">0</property>
-                                        <property name="close_button">1</property>
-                                        <property name="context_help"></property>
-                                        <property name="context_menu">1</property>
-                                        <property name="default_pane">0</property>
-                                        <property name="dock">Dock</property>
-                                        <property name="dock_fixed">0</property>
-                                        <property name="docking">Left</property>
-                                        <property name="enabled">1</property>
-                                        <property name="fg"></property>
-                                        <property name="floatable">1</property>
-                                        <property name="font"></property>
-                                        <property name="gripper">0</property>
-                                        <property name="hidden">0</property>
-                                        <property name="id">wxID_ANY</property>
-                                        <property name="max_size"></property>
-                                        <property name="maximize_button">0</property>
-                                        <property name="maximum_size"></property>
-                                        <property name="maxlength"></property>
-                                        <property name="min_size"></property>
-                                        <property name="minimize_button">0</property>
-                                        <property name="minimum_size"></property>
-                                        <property name="moveable">1</property>
-                                        <property name="name">m_tcLibraryID</property>
-                                        <property name="pane_border">1</property>
-                                        <property name="pane_position"></property>
-                                        <property name="pane_size"></property>
-                                        <property name="permission">protected</property>
-                                        <property name="pin_button">1</property>
-                                        <property name="pos"></property>
-                                        <property name="resize">Resizable</property>
-                                        <property name="show">1</property>
-                                        <property name="size"></property>
-                                        <property name="style">wxTE_READONLY</property>
-                                        <property name="subclass">; ; forward_declare</property>
-                                        <property name="toolbar_pane">0</property>
-                                        <property name="tooltip">The library ID and footprint ID currently assigned.  Use &quot;Change Footprint...&quot; to assign a different footprint.</property>
-                                        <property name="validator_data_type"></property>
-                                        <property name="validator_style">wxFILTER_NONE</property>
-                                        <property name="validator_type">wxDefaultValidator</property>
-                                        <property name="validator_variable"></property>
-                                        <property name="value"></property>
-                                        <property name="window_extra_style"></property>
-                                        <property name="window_name"></property>
-                                        <property name="window_style">wxBORDER_NONE</property>
-                                    </object>
-                                </object>
+                                <property name="moveable">1</property>
+                                <property name="name">m_uuidLabel</property>
+                                <property name="pane_border">1</property>
+                                <property name="pane_position"></property>
+                                <property name="pane_size"></property>
+                                <property name="permission">protected</property>
+                                <property name="pin_button">1</property>
+                                <property name="pos"></property>
+                                <property name="resize">Resizable</property>
+                                <property name="show">1</property>
+                                <property name="size"></property>
+                                <property name="style"></property>
+                                <property name="subclass">; forward_declare</property>
+                                <property name="toolbar_pane">0</property>
+                                <property name="tooltip"></property>
+                                <property name="window_extra_style"></property>
+                                <property name="window_name"></property>
+                                <property name="window_style"></property>
+                                <property name="wrap">-1</property>
                             </object>
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND</property>
                             <property name="proportion">0</property>
-                            <object class="spacer" expanded="1">
-                                <property name="height">0</property>
+                            <object class="wxTextCtrl" expanded="1">
+                                <property name="BottomDockable">1</property>
+                                <property name="LeftDockable">1</property>
+                                <property name="RightDockable">1</property>
+                                <property name="TopDockable">1</property>
+                                <property name="aui_layer"></property>
+                                <property name="aui_name"></property>
+                                <property name="aui_position"></property>
+                                <property name="aui_row"></property>
+                                <property name="best_size"></property>
+                                <property name="bg">wxSYS_COLOUR_BTNFACE</property>
+                                <property name="caption"></property>
+                                <property name="caption_visible">1</property>
+                                <property name="center_pane">0</property>
+                                <property name="close_button">1</property>
+                                <property name="context_help"></property>
+                                <property name="context_menu">1</property>
+                                <property name="default_pane">0</property>
+                                <property name="dock">Dock</property>
+                                <property name="dock_fixed">0</property>
+                                <property name="docking">Left</property>
+                                <property name="drag_accept_files">0</property>
+                                <property name="enabled">1</property>
+                                <property name="fg"></property>
+                                <property name="floatable">1</property>
+                                <property name="font"></property>
+                                <property name="gripper">0</property>
+                                <property name="hidden">0</property>
+                                <property name="id">wxID_ANY</property>
+                                <property name="max_size"></property>
+                                <property name="maximize_button">0</property>
+                                <property name="maximum_size"></property>
+                                <property name="maxlength"></property>
+                                <property name="min_size"></property>
+                                <property name="minimize_button">0</property>
+                                <property name="minimum_size"></property>
+                                <property name="moveable">1</property>
+                                <property name="name">m_tcUUID</property>
+                                <property name="pane_border">1</property>
+                                <property name="pane_position"></property>
+                                <property name="pane_size"></property>
                                 <property name="permission">protected</property>
-                                <property name="width">20</property>
+                                <property name="pin_button">1</property>
+                                <property name="pos"></property>
+                                <property name="resize">Resizable</property>
+                                <property name="show">1</property>
+                                <property name="size"></property>
+                                <property name="style">wxTE_READONLY</property>
+                                <property name="subclass">; ; forward_declare</property>
+                                <property name="toolbar_pane">0</property>
+                                <property name="tooltip">The library ID and footprint ID currently assigned.  Use &quot;Change Footprint...&quot; to assign a different footprint.</property>
+                                <property name="validator_data_type"></property>
+                                <property name="validator_style">wxFILTER_NONE</property>
+                                <property name="validator_type">wxDefaultValidator</property>
+                                <property name="validator_variable"></property>
+                                <property name="value"></property>
+                                <property name="window_extra_style"></property>
+                                <property name="window_name"></property>
+                                <property name="window_style">wxBORDER_NONE</property>
+                            </object>
+                        </object>
+                        <object class="sizeritem" expanded="0">
+                            <property name="border">2</property>
+                            <property name="flag">wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL</property>
+                            <property name="proportion">0</property>
+                            <object class="wxStaticText" expanded="0">
+                                <property name="BottomDockable">1</property>
+                                <property name="LeftDockable">1</property>
+                                <property name="RightDockable">1</property>
+                                <property name="TopDockable">1</property>
+                                <property name="aui_layer"></property>
+                                <property name="aui_name"></property>
+                                <property name="aui_position"></property>
+                                <property name="aui_row"></property>
+                                <property name="best_size"></property>
+                                <property name="bg"></property>
+                                <property name="caption"></property>
+                                <property name="caption_visible">1</property>
+                                <property name="center_pane">0</property>
+                                <property name="close_button">1</property>
+                                <property name="context_help"></property>
+                                <property name="context_menu">1</property>
+                                <property name="default_pane">0</property>
+                                <property name="dock">Dock</property>
+                                <property name="dock_fixed">0</property>
+                                <property name="docking">Left</property>
+                                <property name="drag_accept_files">0</property>
+                                <property name="enabled">1</property>
+                                <property name="fg"></property>
+                                <property name="floatable">1</property>
+                                <property name="font"></property>
+                                <property name="gripper">0</property>
+                                <property name="hidden">0</property>
+                                <property name="id">wxID_ANY</property>
+                                <property name="label">Library link:</property>
+                                <property name="markup">0</property>
+                                <property name="max_size"></property>
+                                <property name="maximize_button">0</property>
+                                <property name="maximum_size"></property>
+                                <property name="min_size"></property>
+                                <property name="minimize_button">0</property>
+                                <property name="minimum_size"></property>
+                                <property name="moveable">1</property>
+                                <property name="name">m_libraryIDLabel</property>
+                                <property name="pane_border">1</property>
+                                <property name="pane_position"></property>
+                                <property name="pane_size"></property>
+                                <property name="permission">protected</property>
+                                <property name="pin_button">1</property>
+                                <property name="pos"></property>
+                                <property name="resize">Resizable</property>
+                                <property name="show">1</property>
+                                <property name="size"></property>
+                                <property name="style"></property>
+                                <property name="subclass">; forward_declare</property>
+                                <property name="toolbar_pane">0</property>
+                                <property name="tooltip"></property>
+                                <property name="window_extra_style"></property>
+                                <property name="window_name"></property>
+                                <property name="window_style"></property>
+                                <property name="wrap">-1</property>
                             </object>
                         </object>
                         <object class="sizeritem" expanded="0">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND|wxALL</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT</property>
                             <property name="proportion">0</property>
-                            <object class="wxStdDialogButtonSizer" expanded="0">
-                                <property name="Apply">0</property>
-                                <property name="Cancel">1</property>
-                                <property name="ContextHelp">0</property>
-                                <property name="Help">0</property>
-                                <property name="No">0</property>
-                                <property name="OK">1</property>
-                                <property name="Save">0</property>
-                                <property name="Yes">0</property>
+                            <object class="wxTextCtrl" expanded="0">
+                                <property name="BottomDockable">1</property>
+                                <property name="LeftDockable">1</property>
+                                <property name="RightDockable">1</property>
+                                <property name="TopDockable">1</property>
+                                <property name="aui_layer"></property>
+                                <property name="aui_name"></property>
+                                <property name="aui_position"></property>
+                                <property name="aui_row"></property>
+                                <property name="best_size"></property>
+                                <property name="bg">wxSYS_COLOUR_BTNFACE</property>
+                                <property name="caption"></property>
+                                <property name="caption_visible">1</property>
+                                <property name="center_pane">0</property>
+                                <property name="close_button">1</property>
+                                <property name="context_help"></property>
+                                <property name="context_menu">1</property>
+                                <property name="default_pane">0</property>
+                                <property name="dock">Dock</property>
+                                <property name="dock_fixed">0</property>
+                                <property name="docking">Left</property>
+                                <property name="drag_accept_files">0</property>
+                                <property name="enabled">1</property>
+                                <property name="fg"></property>
+                                <property name="floatable">1</property>
+                                <property name="font"></property>
+                                <property name="gripper">0</property>
+                                <property name="hidden">0</property>
+                                <property name="id">wxID_ANY</property>
+                                <property name="max_size"></property>
+                                <property name="maximize_button">0</property>
+                                <property name="maximum_size"></property>
+                                <property name="maxlength"></property>
+                                <property name="min_size"></property>
+                                <property name="minimize_button">0</property>
                                 <property name="minimum_size"></property>
-                                <property name="name">m_sdbSizerStdButtons</property>
+                                <property name="moveable">1</property>
+                                <property name="name">m_tcLibraryID</property>
+                                <property name="pane_border">1</property>
+                                <property name="pane_position"></property>
+                                <property name="pane_size"></property>
                                 <property name="permission">protected</property>
+                                <property name="pin_button">1</property>
+                                <property name="pos"></property>
+                                <property name="resize">Resizable</property>
+                                <property name="show">1</property>
+                                <property name="size"></property>
+                                <property name="style">wxTE_READONLY</property>
+                                <property name="subclass">; ; forward_declare</property>
+                                <property name="toolbar_pane">0</property>
+                                <property name="tooltip">The library ID and footprint ID currently assigned.  Use &quot;Change Footprint...&quot; to assign a different footprint.</property>
+                                <property name="validator_data_type"></property>
+                                <property name="validator_style">wxFILTER_NONE</property>
+                                <property name="validator_type">wxDefaultValidator</property>
+                                <property name="validator_variable"></property>
+                                <property name="value"></property>
+                                <property name="window_extra_style"></property>
+                                <property name="window_name"></property>
+                                <property name="window_style">wxBORDER_NONE</property>
                             </object>
                         </object>
+                    </object>
+                </object>
+                <object class="sizeritem" expanded="0">
+                    <property name="border">5</property>
+                    <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
+                    <property name="proportion">0</property>
+                    <object class="wxStdDialogButtonSizer" expanded="0">
+                        <property name="Apply">0</property>
+                        <property name="Cancel">1</property>
+                        <property name="ContextHelp">0</property>
+                        <property name="Help">0</property>
+                        <property name="No">0</property>
+                        <property name="OK">1</property>
+                        <property name="Save">0</property>
+                        <property name="Yes">0</property>
+                        <property name="minimum_size"></property>
+                        <property name="name">m_sdbSizerStdButtons</property>
+                        <property name="permission">protected</property>
                     </object>
                 </object>
             </object>

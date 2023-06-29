@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -375,18 +375,25 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 
 	m_GeneralBoxSizer->Add( m_NoteBook, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
-	wxBoxSizer* bSizerButtons;
-	bSizerButtons = new wxBoxSizer( wxHORIZONTAL );
-
 	wxFlexGridSizer* fgSizerSymbolRef;
 	fgSizerSymbolRef = new wxFlexGridSizer( 0, 2, 4, 0 );
 	fgSizerSymbolRef->AddGrowableCol( 1 );
 	fgSizerSymbolRef->SetFlexibleDirection( wxBOTH );
 	fgSizerSymbolRef->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
+	m_uuidLabel = new wxStaticText( this, wxID_ANY, _("UUID:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_uuidLabel->Wrap( -1 );
+	fgSizerSymbolRef->Add( m_uuidLabel, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_tcUUID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxBORDER_NONE );
+	m_tcUUID->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
+	m_tcUUID->SetToolTip( _("The library ID and footprint ID currently assigned.  Use \"Change Footprint...\" to assign a different footprint.") );
+
+	fgSizerSymbolRef->Add( m_tcUUID, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+
 	m_libraryIDLabel = new wxStaticText( this, wxID_ANY, _("Library link:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_libraryIDLabel->Wrap( -1 );
-	fgSizerSymbolRef->Add( m_libraryIDLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 2 );
+	fgSizerSymbolRef->Add( m_libraryIDLabel, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 2 );
 
 	m_tcLibraryID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxBORDER_NONE );
 	m_tcLibraryID->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
@@ -395,10 +402,7 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 	fgSizerSymbolRef->Add( m_tcLibraryID, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizerButtons->Add( fgSizerSymbolRef, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
-
-
-	bSizerButtons->Add( 20, 0, 0, wxEXPAND, 5 );
+	m_GeneralBoxSizer->Add( fgSizerSymbolRef, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxEXPAND, 5 );
 
 	m_sdbSizerStdButtons = new wxStdDialogButtonSizer();
 	m_sdbSizerStdButtonsOK = new wxButton( this, wxID_OK );
@@ -407,10 +411,7 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 	m_sdbSizerStdButtons->AddButton( m_sdbSizerStdButtonsCancel );
 	m_sdbSizerStdButtons->Realize();
 
-	bSizerButtons->Add( m_sdbSizerStdButtons, 0, wxEXPAND|wxALL, 5 );
-
-
-	m_GeneralBoxSizer->Add( bSizerButtons, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
+	m_GeneralBoxSizer->Add( m_sdbSizerStdButtons, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	this->SetSizer( m_GeneralBoxSizer );
