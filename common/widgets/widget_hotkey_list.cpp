@@ -291,7 +291,7 @@ void WIDGET_HOTKEY_LIST::updateFromClientData()
             const HOTKEY& changed_hk = hkdata->GetChangedHotkey();
             wxString      label = changed_hk.m_Actions[ 0 ]->GetLabel();
             wxString      key_text = KeyNameFromKeyCode( changed_hk.m_EditKeycode );
-            wxString      description = changed_hk.m_Actions[ 0 ]->GetDescription( false );
+            wxString      description = changed_hk.m_Actions[ 0 ]->GetDescription();
 
             if( label.IsEmpty() )
                 label = changed_hk.m_Actions[ 0 ]->GetName();

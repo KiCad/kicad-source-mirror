@@ -130,7 +130,7 @@ void ACTION_TOOLBAR_PALETTE::AddAction( const TOOL_ACTION& aAction )
     button->SetBitmap( normalBmp );
     button->SetDisabledBitmap( disabledBmp );
     button->SetPadding( padding );
-    button->SetToolTip( aAction.GetDescription() );
+    button->SetToolTip( aAction.GetTooltip() );
     button->AcceptDragInAsClick();
 
     m_buttons[aAction.GetUIId()] = button;
@@ -237,7 +237,7 @@ void ACTION_TOOLBAR::Add( const TOOL_ACTION& aAction, bool aIsToggleEntry, bool 
 
     AddTool( toolId, wxEmptyString, bmp, MakeDisabledBitmap( bmp ),
              aIsToggleEntry ? wxITEM_CHECK : wxITEM_NORMAL,
-             aAction.GetDescription(), wxEmptyString, nullptr );
+             aAction.GetTooltip(), wxEmptyString, nullptr );
 
     m_toolKinds[ toolId ]       = aIsToggleEntry;
     m_toolActions[ toolId ]     = &aAction;
@@ -251,7 +251,7 @@ void ACTION_TOOLBAR::AddButton( const TOOL_ACTION& aAction )
     wxBitmap bmp    = KiScaledBitmap( aAction.GetIcon(), GetParent() );
 
     AddTool( toolId, wxEmptyString, bmp, MakeDisabledBitmap( bmp ),
-             wxITEM_NORMAL, aAction.GetDescription(), wxEmptyString, nullptr );
+             wxITEM_NORMAL, aAction.GetTooltip(), wxEmptyString, nullptr );
 
     m_toolKinds[ toolId ] = false;
     m_toolActions[ toolId ] = &aAction;
@@ -333,7 +333,7 @@ void ACTION_TOOLBAR::doSelectAction( ACTION_GROUP* aGroup, const TOOL_ACTION& aA
         return;
 
     // Update the item information
-    item->SetShortHelp( aAction.GetDescription() );
+    item->SetShortHelp( aAction.GetTooltip() );
     item->SetBitmap( KiScaledBitmap( aAction.GetIcon(), GetParent() ) );
 #if wxCHECK_VERSION( 3, 1, 6 )
     item->SetDisabledBitmap(

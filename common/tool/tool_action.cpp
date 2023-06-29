@@ -85,6 +85,9 @@ TOOL_ACTION::TOOL_ACTION( const TOOL_ACTION_ARGS& aArgs ) :
     if( aArgs.m_param.has_value() )
         m_param = aArgs.m_param;
 
+    if( aArgs.m_description.has_value() )
+        m_description = aArgs.m_description;
+
     ACTION_MANAGER::GetActionList().push_back( this );
 }
 
@@ -127,7 +130,17 @@ wxString TOOL_ACTION::GetMenuItem() const
 }
 
 
-wxString TOOL_ACTION::GetDescription( bool aIncludeHotkey ) const
+wxString TOOL_ACTION::GetDescription() const
+{
+    // If no description provided, use the tooltip without a hotkey
+    if( !m_description.has_value() )
+        return GetTooltip( false );
+
+    return wxGetTranslation( m_description.value() );
+}
+
+
+wxString TOOL_ACTION::GetTooltip( bool aIncludeHotkey ) const
 {
     wxString tooltip = wxGetTranslation( m_tooltip );
 

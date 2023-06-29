@@ -170,7 +170,7 @@ wxMenuItem* ACTION_MENU::Add( const TOOL_ACTION& aAction, bool aIsCheckmarkEntry
     wxString menuLabel = aOverrideLabel.IsEmpty() ? aAction.GetMenuItem() : aOverrideLabel;
 
     wxMenuItem* item = new wxMenuItem( this, aAction.GetUIId(), menuLabel,
-                                       aAction.GetDescription(),
+                                       aAction.GetTooltip(),
                                        aIsCheckmarkEntry ? wxITEM_CHECK : wxITEM_NORMAL );
     if( !!icon )
         AddBitmapToMenuItem( item, KiBitmap( icon ) );

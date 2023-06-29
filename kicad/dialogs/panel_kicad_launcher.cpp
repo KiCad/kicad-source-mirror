@@ -68,7 +68,7 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
             btn->SetBitmap( aBitmap );
             btn->SetDisabledBitmap( wxBitmap( aBitmap.ConvertToImage().ConvertToGreyscale() ) );
             btn->SetPadding( 5 );
-            btn->SetToolTip( aAction.GetDescription() );
+            btn->SetToolTip( aAction.GetTooltip() );
 
             auto handler =
                     [&]( wxEvent& aEvent )
@@ -88,7 +88,7 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
             wxStaticText* label = new wxStaticText( this, wxID_ANY, aAction.GetLabel() );
             wxStaticText* help;
 
-            label->SetToolTip( aAction.GetDescription() );
+            label->SetToolTip( aAction.GetTooltip() );
             label->SetFont( titleFont );
 
             help = new wxStaticText( this, wxID_ANY, aHelpText );

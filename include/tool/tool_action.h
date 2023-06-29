@@ -123,6 +123,15 @@ public:
     }
 
     /**
+     * The description of the action.
+     */
+    TOOL_ACTION_ARGS& Description( wxString aDescription )
+    {
+        m_description = aDescription;
+        return *this;
+    }
+
+    /**
      * The bitmap to use as the icon for the action in toolbars and menus.
      */
     TOOL_ACTION_ARGS& Icon( BITMAPS aIcon )
@@ -174,6 +183,7 @@ protected:
 
     std::optional<wxString>             m_menuText;
     std::optional<wxString>             m_tooltip;
+    std::optional<wxString>             m_description;
 
     std::optional<BITMAPS>              m_icon;
 
@@ -275,7 +285,8 @@ public:
 
     wxString GetLabel() const;
     wxString GetMenuItem() const;
-    wxString GetDescription( bool aIncludeHotkey = true ) const;
+    wxString GetTooltip( bool aIncludeHotkey = true ) const;
+    wxString GetDescription() const;
 
     TOOL_ACTION_SCOPE GetScope() const { return m_scope; }
 
@@ -353,8 +364,10 @@ protected:
     int                  m_hotKey;         // The current hotkey (post-user-settings-application)
     const std::string    m_legacyName;     // Name for reading legacy hotkey settings
 
-    wxString             m_label;
-    wxString             m_tooltip;
+    wxString                m_label;       // Menu label
+    wxString                m_tooltip;     // User-facing tooltip help text
+    std::optional<wxString> m_description; // Description of the action
+
     BITMAPS              m_icon;           // Icon for the menu entry
 
     int                  m_id;             // Unique ID for maps. Assigned by ACTION_MANAGER.

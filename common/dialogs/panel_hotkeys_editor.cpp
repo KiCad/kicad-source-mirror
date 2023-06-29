@@ -248,7 +248,7 @@ void PANEL_HOTKEYS_EDITOR::dumpHotkeys()
                 stream << wxT( "  |" ) << endl;
             }
 
-            stream << wxT( "  | " ) << hk.m_Actions[0]->GetDescription( false ) << endl;
+            stream << wxT( "  | " ) << hk.m_Actions[0]->GetDescription() << endl;
         }
 
         stream << wxT( "|===" ) << endl << endl;
