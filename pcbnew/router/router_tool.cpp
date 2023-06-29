@@ -111,6 +111,7 @@ static const TOOL_ACTION ACT_EndTrack( TOOL_ACTION_ARGS()
         .Tooltip( _( "Stops laying the current track." ) )
         .Icon( BITMAPS::checked_ok ) );
 
+// Pass all the parameters as int to allow combining flags
 static const TOOL_ACTION ACT_PlaceThroughVia( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveRouter.PlaceVia" )
         .Scope( AS_CONTEXT )
@@ -120,7 +121,7 @@ static const TOOL_ACTION ACT_PlaceThroughVia( TOOL_ACTION_ARGS()
         .Tooltip( _( "Adds a through-hole via at the end of currently routed track." ) )
         .Icon( BITMAPS::via )
         .Flags( AF_NONE )
-        .Parameter( VIA_ACTION_FLAGS::VIA ) );
+        .Parameter<int>( VIA_ACTION_FLAGS::VIA ) );
 
 static const TOOL_ACTION ACT_PlaceBlindVia( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveRouter.PlaceBlindVia" )
@@ -131,7 +132,7 @@ static const TOOL_ACTION ACT_PlaceBlindVia( TOOL_ACTION_ARGS()
         .Tooltip( _( "Adds a blind or buried via at the end of currently routed track.") )
         .Icon( BITMAPS::via_buried )
         .Flags( AF_NONE )
-        .Parameter( VIA_ACTION_FLAGS::BLIND_VIA ) );
+        .Parameter<int>( VIA_ACTION_FLAGS::BLIND_VIA ) );
 
 static const TOOL_ACTION ACT_PlaceMicroVia( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveRouter.PlaceMicroVia" )
@@ -142,7 +143,7 @@ static const TOOL_ACTION ACT_PlaceMicroVia( TOOL_ACTION_ARGS()
         .Tooltip( _( "Adds a microvia at the end of currently routed track." ) )
         .Icon( BITMAPS::via_microvia )
         .Flags( AF_NONE )
-        .Parameter( VIA_ACTION_FLAGS::MICROVIA ) );
+        .Parameter<int>( VIA_ACTION_FLAGS::MICROVIA ) );
 
 static const TOOL_ACTION ACT_SelLayerAndPlaceThroughVia( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveRouter.SelLayerAndPlaceVia" )
@@ -153,7 +154,7 @@ static const TOOL_ACTION ACT_SelLayerAndPlaceThroughVia( TOOL_ACTION_ARGS()
         .Tooltip( _( "Select a layer, then add a through-hole via at the end of currently routed track." ) )
         .Icon( BITMAPS::select_w_layer )
         .Flags( AF_NONE )
-        .Parameter( VIA_ACTION_FLAGS::VIA | VIA_ACTION_FLAGS::SELECT_LAYER ) );
+        .Parameter<int>( VIA_ACTION_FLAGS::VIA | VIA_ACTION_FLAGS::SELECT_LAYER ) );
 
 static const TOOL_ACTION ACT_SelLayerAndPlaceBlindVia( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveRouter.SelLayerAndPlaceBlindVia" )
@@ -164,7 +165,7 @@ static const TOOL_ACTION ACT_SelLayerAndPlaceBlindVia( TOOL_ACTION_ARGS()
         .Tooltip( _( "Select a layer, then add a blind or buried via at the end of currently routed track." ) )
         .Icon( BITMAPS::select_w_layer )
         .Flags( AF_NONE )
-        .Parameter( VIA_ACTION_FLAGS::BLIND_VIA | VIA_ACTION_FLAGS::SELECT_LAYER ) );
+        .Parameter<int>( VIA_ACTION_FLAGS::BLIND_VIA | VIA_ACTION_FLAGS::SELECT_LAYER ) );
 
 static const TOOL_ACTION ACT_SelLayerAndPlaceMicroVia( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveRouter.SelLayerAndPlaceMicroVia" )
@@ -173,7 +174,7 @@ static const TOOL_ACTION ACT_SelLayerAndPlaceMicroVia( TOOL_ACTION_ARGS()
         .Tooltip( _( "Select a layer, then add a micro via at the end of currently routed track." ) )
         .Icon( BITMAPS::select_w_layer )
         .Flags( AF_NONE )
-        .Parameter( VIA_ACTION_FLAGS::MICROVIA | VIA_ACTION_FLAGS::SELECT_LAYER ) );
+        .Parameter<int>( VIA_ACTION_FLAGS::MICROVIA | VIA_ACTION_FLAGS::SELECT_LAYER ) );
 
 static const TOOL_ACTION ACT_CustomTrackWidth( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveRouter.CustomTrackViaSize" )
@@ -1038,7 +1039,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
     // Otherwise it is one of the router-specific via commands
     if( targetLayer == UNDEFINED_LAYER )
     {
-        const int actViaFlags = static_cast<int>( aEvent.Parameter<VIA_ACTION_FLAGS>() );
+        const int actViaFlags = aEvent.Parameter<int>();
         selectLayer           = actViaFlags & VIA_ACTION_FLAGS::SELECT_LAYER;
 
         viaType = getViaTypeFromFlags( actViaFlags );
