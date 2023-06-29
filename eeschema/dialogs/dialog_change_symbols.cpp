@@ -506,7 +506,10 @@ int DIALOG_CHANGE_SYMBOLS::processMatchingSymbols( SCH_COMMIT* aCommit )
         }
     }
 
-    matchesProcessed += processSymbols( aCommit, symbols );
+    if( symbols.size() > 0 )
+        matchesProcessed += processSymbols( aCommit, symbols );
+    else
+        m_messagePanel->Report( _( "*** No symbols matching criteria found ***" ), RPT_SEVERITY_ERROR );
 
     frame->GetCurrentSheet().UpdateAllScreenReferences();
 
