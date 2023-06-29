@@ -164,10 +164,17 @@ static inline void handleNodeForParse( tao::pegtl::parse_tree::node& aNode,
 
         for( const auto& subnode : aNode.children )
         {
-            if( subnode->is_type<SIM_VALUE_PARSER::intPart>() )
-                aParseResult.intPart = std::stol( subnode->string() );
-            else if( subnode->is_type<SIM_VALUE_PARSER::fracPart>() )
-                aParseResult.fracPart = std::stol( subnode->string() );
+            try
+            {
+                if( subnode->is_type<SIM_VALUE_PARSER::intPart>() )
+                    aParseResult.intPart = std::stoll( subnode->string() );
+                else if( subnode->is_type<SIM_VALUE_PARSER::fracPart>() )
+                    aParseResult.fracPart = std::stoll( subnode->string() );
+            }
+            catch( const std::exception& )
+            {
+                aParseResult.isOk = false;
+            }
         }
     }
     else if( aNode.is_type<SIM_VALUE_PARSER::exponent>() )
