@@ -663,6 +663,7 @@ void TOOL_MANAGER::RunMainStack( TOOL_BASE* aTool, std::function<void()> aFunc )
 {
     TOOL_STATE* st = m_toolState[aTool];
     setActiveState( st );
+    wxCHECK( st->cofunc, /* void */ );
     st->cofunc->RunMainStack( std::move( aFunc ) );
 }
 
@@ -677,6 +678,8 @@ TOOL_EVENT* TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool, const TOOL_EVENT_LIST&
     // woken up when an event matching aConditions arrive
     st->pendingWait = true;
     st->waitEvents = aConditions;
+
+    wxCHECK( st->cofunc, nullptr );
 
     // switch context back to event dispatcher loop
     st->cofunc->KiYield();
