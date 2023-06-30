@@ -34,6 +34,7 @@
 
 #include <math/vector2d.h>
 #include <optional>
+#include <atomic>
 
 #include <tool/tool_action.h>
 #include <wx/debug.h>
