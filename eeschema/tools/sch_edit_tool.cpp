@@ -1246,6 +1246,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
     {
         SCH_ITEM*          newItem = item->Duplicate();
         EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+        bool               restore_state = false;
 
         if( SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( newItem ) )
         {
@@ -1288,33 +1289,27 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
                                           annotateStartNum, false, false, reporter );
             }
 
-            m_toolMgr->RunAction( EE_ACTIONS::move, &commit );
-
-            while( m_toolMgr->GetTool<SCH_MOVE_TOOL>()->IsToolActive() )
-            {
-                wxMilliSleep( 50 );
-                wxYield();
-            }
+            restore_state = !m_toolMgr->RunSynchronousAction( EE_ACTIONS::move, &commit );
         }
 
-        newItems.Add( newItem );
+        if( restore_state )
+        {
+            commit.Revert();
+        }
+        else
+        {
+            newItems.Add( newItem );
 
-        newItem->ClearFlags();
+            SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
+            lwbTool->TrimOverLappingWires( &commit, &newItems );
+            lwbTool->AddJunctionsIfNeeded( &commit, &newItems );
+
+            m_frame->SchematicCleanUp( &commit );
+            m_frame->GetCanvas()->Refresh();
+            commit.Push( _( "Repeat Item" ) );
+        }
+
     }
-
-    if( !newItems.Empty() )
-    {
-        SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
-        lwbTool->TrimOverLappingWires( &commit, &newItems );
-        lwbTool->AddJunctionsIfNeeded( &commit, &newItems );
-
-        m_frame->SchematicCleanUp( &commit );
-    }
-
-    m_frame->GetCanvas()->Refresh();
-
-    if( !commit.Empty() )
-        commit.Push( _( "Repeat Item" ) );
 
     if( !newItems.Empty() )
         m_frame->SaveCopyForRepeatItem( static_cast<SCH_ITEM*>( newItems[0] ) );
@@ -2410,16 +2405,10 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
         m_frame->TestDanglingEnds();
         m_frame->GetCanvas()->Refresh();
 
-        m_toolMgr->RunAction( EE_ACTIONS::drag, &commit );
-
-        while( m_toolMgr->GetTool<SCH_MOVE_TOOL>()->IsToolActive() )
-        {
-            wxMilliSleep( 50 );
-            wxYield();
-        }
-
-        if( !commit.Empty() )
+        if( m_toolMgr->RunSynchronousAction( EE_ACTIONS::drag, &commit, isSlice ) )
             commit.Push( isSlice ? _( "Slice Wire" ) : _( "Break Wire" ) );
+        else
+            commit.Revert();
     }
 
     return 0;

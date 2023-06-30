@@ -1115,7 +1115,6 @@ bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, std::vector<BOARD_ITEM
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
     PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
-    EDIT_TOOL*          editTool = m_toolMgr->GetTool<EDIT_TOOL>();
 
     std::vector<BOARD_ITEM*> itemsToSel;
     itemsToSel.reserve( aItems.size() );
@@ -1194,7 +1193,7 @@ bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, std::vector<BOARD_ITEM
 
         m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
 
-        return editTool->DoMoveSelection( PCB_ACTIONS::move.MakeEvent(), aCommit );
+        return m_toolMgr->RunSynchronousAction( PCB_ACTIONS::move, aCommit );
     }
 
     return true;

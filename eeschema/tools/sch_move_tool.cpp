@@ -355,19 +355,6 @@ void SCH_MOVE_TOOL::orthoLineDrag( SCH_COMMIT* aCommit, SCH_LINE* line, const VE
 
 int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 {
-    EESCHEMA_SETTINGS*    cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
-    KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    EE_GRID_HELPER        grid( m_toolMgr );
-    bool                  wasDragging = m_moveInProgress && m_isDrag;
-    bool                  isSlice = false;
-    SCH_COMMIT            localCommit( m_toolMgr );
-    SCH_COMMIT*           commit = dynamic_cast<SCH_COMMIT*>( aEvent.Commit() );
-
-    if( !commit )
-        commit = &localCommit;
-
-    m_anchorPos.reset();
-
     if( aEvent.IsAction( &EE_ACTIONS::move ) )
     {
         m_isDrag = false;
@@ -375,16 +362,54 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     else if( aEvent.IsAction( &EE_ACTIONS::drag ) )
     {
         m_isDrag = true;
-        isSlice = commit != &localCommit;
     }
     else if( aEvent.IsAction( &EE_ACTIONS::moveActivate ) )
     {
+        EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
         m_isDrag = !cfg->m_Input.drag_is_move;
     }
     else
     {
-        return 0;
+        return false;
     }
+
+    if( SCH_COMMIT* commit = dynamic_cast<SCH_COMMIT*>( aEvent.Commit() ) )
+    {
+        bool isSlice = false;
+
+        if( m_isDrag )
+            isSlice = aEvent.Parameter<bool>();
+
+        wxCHECK( aEvent.SynchronousState(), 0 );
+        aEvent.SynchronousState()->store( STS_RUNNING );
+
+        if( doMoveSelection( aEvent, commit, isSlice ) )
+            aEvent.SynchronousState()->store( STS_FINISHED );
+        else
+            aEvent.SynchronousState()->store( STS_CANCELLED );
+    }
+    else
+    {
+        SCH_COMMIT localCommit( m_toolMgr );
+
+        if( doMoveSelection( aEvent, &localCommit, false ) )
+            localCommit.Push( m_isDrag ? _( "Drag" ) : _( "Move" ) );
+        else
+            localCommit.Revert();
+    }
+
+    return 0;
+}
+
+
+bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aCommit, bool aIsSlice )
+{
+    EESCHEMA_SETTINGS*    cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    EE_GRID_HELPER        grid( m_toolMgr );
+    bool                  wasDragging = m_moveInProgress && m_isDrag;
+
+    m_anchorPos.reset();
 
     if( m_moveInProgress )
     {
@@ -396,16 +421,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 // Reset the selected items so we can start again with the current m_isDrag
                 // state.
-                try
-                {
-                    commit->Revert();
-                }
-                catch( const IO_ERROR& exc )
-                {
-                    wxLogWarning( wxS( "Exception \"%s\" rolling back schematic undo ocurred." ),
-                                  exc.What() );
-                    return 1;
-                }
+                aCommit->Revert();
 
                 m_selectionTool->RemoveItemsFromSel( &m_dragAdditions, QUIET_MODE );
                 m_anchorPos = m_cursor - m_moveOffset;
@@ -423,11 +439,11 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             m_toolMgr->PostAction( ACTIONS::cursorClick );
         }
 
-        return 0;
+        return false;
     }
 
     if( m_inMoveTool )      // Must come after m_moveInProgress checks above...
-        return 0;
+        return false;
 
     REENTRANCY_GUARD guard( &m_inMoveTool );
 
@@ -451,7 +467,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         // Note that it's important to go through push/pop even when the selection is empty.
         // This keeps other tools from having to special-case an empty move.
         m_frame->PopTool( aEvent );
-        return 0;
+        return false;
     }
 
     bool        restore_state = false;
@@ -502,7 +518,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
                 // Drag of split items start over top of their other segment so
                 // we want to skip grabbing the segments we split from
-                if( m_isDrag && !isSlice )
+                if( m_isDrag && !aIsSlice )
                 {
                     EDA_ITEMS connectedDragItems;
 
@@ -533,7 +549,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                         }
 
                         for( const VECTOR2I& point : connections )
-                            getConnectedDragItems( commit, item, point, connectedDragItems );
+                            getConnectedDragItems( aCommit, item, point, connectedDragItems );
                     }
 
                     // Go back and get all label connections now that we can test for drag-selected
@@ -541,7 +557,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     for( SCH_ITEM* item : stageTwo )
                     {
                         for( const VECTOR2I& point : item->GetConnectionPoints() )
-                            getConnectedDragItems( commit, item, point, connectedDragItems );
+                            getConnectedDragItems( aCommit, item, point, connectedDragItems );
                     }
 
                     for( EDA_ITEM* item : connectedDragItems )
@@ -608,7 +624,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     }
                     else
                     {
-                        commit->Modify( (SCH_ITEM*) item, m_frame->GetScreen() );
+                        aCommit->Modify( (SCH_ITEM*) item, m_frame->GetScreen() );
                     }
 
                     SCH_ITEM* schItem = (SCH_ITEM*) item;
@@ -751,7 +767,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                             && line
                             && line->HasFlag( STARTPOINT ) != line->HasFlag( ENDPOINT ) )
                     {
-                        orthoLineDrag( commit, line, splitDelta, xBendCount, yBendCount, grid );
+                        orthoLineDrag( aCommit, line, splitDelta, xBendCount, yBendCount, grid );
                     }
 
                     // Move all other items normally, including the selected end of partially
@@ -842,11 +858,11 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsAction( &EE_ACTIONS::rotateCW ) )
         {
-            m_toolMgr->RunAction( EE_ACTIONS::rotateCW, &commit );
+            m_toolMgr->RunSynchronousAction( EE_ACTIONS::rotateCW, aCommit );
         }
         else if( evt->IsAction( &EE_ACTIONS::rotateCCW ) )
         {
-            m_toolMgr->RunAction( EE_ACTIONS::rotateCCW, &commit );
+            m_toolMgr->RunSynchronousAction( EE_ACTIONS::rotateCCW, aCommit );
         }
         else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
         {
@@ -894,7 +910,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     } while( ( evt = Wait() ) ); //Should be assignment not equality test
 
     // Create a selection of original selection, drag selected/changed items, and new
-    // bend lines for later before we clear them in the commit. We'll need these
+    // bend lines for later before we clear them in the aCommit. We'll need these
     // to check for new junctions needed, etc.
     EE_SELECTION selectionCopy( selection );
 
@@ -908,7 +924,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     for( SCH_LINE* newLine : m_newDragLines )
     {
         newLine->ClearEditFlags();
-        commit->Added( newLine, m_frame->GetScreen() );
+        aCommit->Added( newLine, m_frame->GetScreen() );
     }
 
     // These lines have been changed, but aren't selected. We need
@@ -931,7 +947,6 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     if( restore_state )
     {
         m_selectionTool->RemoveItemsFromSel( &m_dragAdditions, QUIET_MODE );
-        commit->Revert();
     }
     else
     {
@@ -951,26 +966,23 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         for( const DANGLING_END_ITEM& it : internalPoints )
         {
             if( m_frame->GetScreen()->IsExplicitJunctionNeeded( it.GetPosition()) )
-                m_frame->AddJunction( commit, m_frame->GetScreen(), it.GetPosition() );
+                m_frame->AddJunction( aCommit, m_frame->GetScreen(), it.GetPosition() );
         }
 
         SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
-        lwbTool->TrimOverLappingWires( commit, &selectionCopy );
-        lwbTool->AddJunctionsIfNeeded( commit, &selectionCopy );
+        lwbTool->TrimOverLappingWires( aCommit, &selectionCopy );
+        lwbTool->AddJunctionsIfNeeded( aCommit, &selectionCopy );
 
         // This needs to run prior to `RecalculateConnections` because we need to identify
         // the lines that are newly dangling
-        if( m_isDrag && !isSlice )
-            trimDanglingLines( commit );
+        if( m_isDrag && !aIsSlice )
+            trimDanglingLines( aCommit );
 
         // Auto-rotate any moved labels
         for( EDA_ITEM* item : selection )
             m_frame->AutoRotateItem( m_frame->GetScreen(), static_cast<SCH_ITEM*>( item ) );
 
-        m_frame->SchematicCleanUp( commit );
-
-        if( commit == &localCommit )
-            commit->Push( m_isDrag ? _( "Drag" ) : _( "Move" ) );
+        m_frame->SchematicCleanUp( aCommit );
     }
 
     for( EDA_ITEM* item : m_frame->GetScreen()->Items() )
@@ -991,7 +1003,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     m_moveInProgress = false;
     m_frame->PopTool( aEvent );
 
-    return 0;
+    return !restore_state;
 }
 
 

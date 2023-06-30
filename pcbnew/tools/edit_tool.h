@@ -154,8 +154,6 @@ public:
      */
     int CreateArray( const TOOL_EVENT& aEvent );
 
-    bool DoMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit );
-
     /**
      * A selection filter which prunes the selection to contain only items of type #PCB_MODULE_T.
      */
@@ -196,6 +194,8 @@ private:
 
     bool pickReferencePoint( const wxString& aTooltip, const wxString& aSuccessMessage,
                              const wxString& aCanceledMessage, VECTOR2I& aReferencePoint );
+
+    bool doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit );
 
     ///< Rebuilds the ratsnest for operations that require it outside the commit rebuild
     void rebuildConnectivity();

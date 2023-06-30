@@ -2209,7 +2209,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
                                                      (int) new_items.size() ) );
 
         // If items were duplicated, pick them up
-        if( DoMoveSelection( aEvent, &commit ) )
+        if( doMoveSelection( aEvent, &commit ) )
             commit.Push( _( "Duplicate" ) );
         else
             commit.Revert();

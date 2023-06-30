@@ -63,6 +63,8 @@ public:
     int AlignElements( const TOOL_EVENT& aEvent );
 
 private:
+    bool doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aCommit, bool aIsSlice );
+
     void moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta );
 
     ///< Find additional items for a drag operation.

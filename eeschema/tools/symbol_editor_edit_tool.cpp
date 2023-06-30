@@ -817,8 +817,11 @@ int SYMBOL_EDITOR_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
     if( !selection.Empty() )
     {
         selection.SetReferencePoint( getViewControls()->GetCursorPosition( true ) );
-        m_toolMgr->RunAction( EE_ACTIONS::move, &commit );
-        commit.Push( _( "Paste" ) );
+
+        if( m_toolMgr->RunSynchronousAction( EE_ACTIONS::move, &commit ) )
+            commit.Push( _( "Paste" ) );
+        else
+            commit.Revert();
     }
 
     return 0;
@@ -874,8 +877,11 @@ int SYMBOL_EDITOR_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction<EDA_ITEMS*>( EE_ACTIONS::addItemsToSel, &newItems );
 
     selection.SetReferencePoint( mapCoords( getViewControls()->GetCursorPosition( true ) ) );
-    m_toolMgr->RunAction( EE_ACTIONS::move, &commit );
-    commit.Push( _( "Duplicate" ) );
+
+    if( m_toolMgr->RunSynchronousAction( EE_ACTIONS::move, &commit ) )
+        commit.Push( _( "Duplicate" ) );
+    else
+        commit.Revert();
 
     return 0;
 }

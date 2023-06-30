@@ -326,8 +326,12 @@ bool TOOL_MANAGER::doRunAction( const TOOL_ACTION& aAction, bool aNow, std::any 
     if( m_shuttingDown )
         return true;
 
-    bool       handled = false;
+    bool       retVal = false;
     TOOL_EVENT event = aAction.MakeEvent();
+
+    // We initialize the SYNCHRONOUS state to finished so that tools that don't have an event
+    // loop won't hang if someone forgets to set the state.
+    std::atomic<SYNCRONOUS_TOOL_STATE> synchronousControl = STS_FINISHED;
 
     if( event.Category() == TC_COMMAND )
         event.SetMousePosition( GetCursorPosition() );
@@ -338,12 +342,33 @@ bool TOOL_MANAGER::doRunAction( const TOOL_ACTION& aAction, bool aNow, std::any 
 
     // Pass the commit (if any)
     if( aCommit )
+    {
+        event.SetSynchronous( &synchronousControl );
         event.SetCommit( aCommit );
+    }
 
     if( aNow )
     {
         TOOL_STATE* current = m_activeState;
-        handled = processEvent( event );
+
+        if( aCommit )
+        {
+            // An event with a commit must be run synchronously
+            processEvent( event );
+
+            while( synchronousControl == STS_RUNNING )
+            {
+                wxMilliSleep( 50 );
+                wxYield();
+            }
+
+            retVal = synchronousControl != STS_CANCELLED;
+        }
+        else
+        {
+            retVal = processEvent( event );
+        }
+
         setActiveState( current );
         UpdateUI( event );
     }
@@ -352,7 +377,7 @@ bool TOOL_MANAGER::doRunAction( const TOOL_ACTION& aAction, bool aNow, std::any 
         PostEvent( event );
     }
 
-    return handled;
+    return retVal;
 }
 
 

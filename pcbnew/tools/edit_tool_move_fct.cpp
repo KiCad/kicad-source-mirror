@@ -195,7 +195,7 @@ int EDIT_TOOL::PackAndMoveFootprints( const TOOL_EVENT& aEvent )
 
     SpreadFootprints( &footprintsToPack, footprintsBbox.Normalize().GetOrigin(), false );
 
-    if( DoMoveSelection( aEvent, &commit ) )
+    if( doMoveSelection( aEvent, &commit ) )
         commit.Push( _( "Pack footprints" ) );
     else
         commit.Revert();
@@ -212,12 +212,25 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    BOARD_COMMIT commit( this );
+    if( BOARD_COMMIT* commit = dynamic_cast<BOARD_COMMIT*>( aEvent.Commit() ) )
+    {
+        wxCHECK( aEvent.SynchronousState(), 0 );
+        aEvent.SynchronousState()->store( STS_RUNNING );
 
-    if( DoMoveSelection( aEvent, &commit ) )
-        commit.Push( _( "Move" ) );
+        if( doMoveSelection( aEvent, commit ) )
+            aEvent.SynchronousState()->store( STS_FINISHED );
+        else
+            aEvent.SynchronousState()->store( STS_CANCELLED );
+    }
     else
-        commit.Revert();
+    {
+        BOARD_COMMIT localCommit( this );
+
+        if( doMoveSelection( aEvent, &localCommit ) )
+            localCommit.Push( _( "Move" ) );
+        else
+            localCommit.Revert();
+    }
 
     return 0;
 }
@@ -257,7 +270,7 @@ VECTOR2I EDIT_TOOL::getSafeMovement( const VECTOR2I& aMovement, const BOX2I& aSo
 }
 
 
-bool EDIT_TOOL::DoMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit )
+bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit )
 {
     bool moveWithReference = aEvent.IsAction( &PCB_ACTIONS::moveWithReference );
     bool moveIndividually = aEvent.IsAction( &PCB_ACTIONS::moveIndividually );

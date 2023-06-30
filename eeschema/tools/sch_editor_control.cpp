@@ -1952,16 +1952,10 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             selection.SetReferencePoint( item->GetPosition() );
         }
 
-        m_toolMgr->RunAction( EE_ACTIONS::move, &commit );
-
-        while( m_toolMgr->GetTool<SCH_MOVE_TOOL>()->IsToolActive() )
-        {
-            wxMilliSleep( 50 );
-            wxYield();
-        }
-
-        if( !commit.Empty() )
+        if( m_toolMgr->RunSynchronousAction( EE_ACTIONS::move, &commit ) )
             commit.Push( _( "Paste" ) );
+        else
+            commit.Revert();
     }
 
     return 0;

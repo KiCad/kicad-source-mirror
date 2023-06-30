@@ -152,6 +152,13 @@ enum CONTEXT_MENU_TRIGGER
     CMENU_OFF           // Never
 };
 
+enum SYNCRONOUS_TOOL_STATE
+{
+    STS_RUNNING,
+    STS_FINISHED,
+    STS_CANCELLED
+};
+
 /**
  * Generic, UI-independent tool event.
  */
@@ -173,6 +180,7 @@ public:
         m_mouseButtons( 0 ),
         m_keyCode( 0 ),
         m_modifiers( 0 ),
+        m_synchronousState( nullptr ),
         m_commit( nullptr ),
         m_firstResponder( nullptr )
     {
@@ -187,6 +195,7 @@ public:
         m_mouseButtons( 0 ),
         m_keyCode( 0 ),
         m_modifiers( 0 ),
+        m_synchronousState( nullptr ),
         m_commit( nullptr ),
         m_firstResponder( nullptr )
     {
@@ -219,6 +228,7 @@ public:
         m_mouseButtons( 0 ),
         m_keyCode( 0 ),
         m_modifiers( 0 ),
+        m_synchronousState( nullptr ),
         m_commit( nullptr ),
         m_firstResponder( nullptr )
     {
@@ -256,6 +266,9 @@ public:
     ///< Controls whether the tool is first being pushed to the stack or being reactivated after a pause
     bool IsReactivate() const { return m_reactivate; }
     void SetReactivate( bool aReactivate = true ) { m_reactivate = aReactivate; }
+
+    void SetSynchronous( std::atomic<SYNCRONOUS_TOOL_STATE>* aState ) { m_synchronousState = aState; }
+    std::atomic<SYNCRONOUS_TOOL_STATE>* SynchronousState() const { return m_synchronousState; }
 
     void SetCommit( COMMIT* aCommit ) { m_commit = aCommit; }
     COMMIT* Commit() const { return m_commit; }
@@ -582,6 +595,8 @@ private:
 
     ///< State of key modifiers (Ctrl/Alt/etc.)
     int m_modifiers;
+
+    std::atomic<SYNCRONOUS_TOOL_STATE>* m_synchronousState;
 
     /// Commit the tool handling the event should add to
     COMMIT* m_commit;

@@ -190,7 +190,16 @@ public:
      * @param aCommit is the commit object the tool handling the action should add the new edits to
      * @return True if the action was handled immediately
      */
-    bool RunAction( const TOOL_ACTION& aAction, COMMIT* aCommit )
+    template<typename T>
+    bool RunSynchronousAction( const TOOL_ACTION& aAction, COMMIT* aCommit, T aParam )
+    {
+        // Use a cast to ensure the proper type is stored inside the parameter
+        std::any a( static_cast<T>( aParam ) );
+
+        return doRunAction( aAction, true, a, aCommit );
+    }
+
+    bool RunSynchronousAction( const TOOL_ACTION& aAction, COMMIT* aCommit )
     {
         // Default initialize the parameter argument to an empty std::any
         std::any a;
