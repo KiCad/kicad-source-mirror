@@ -96,9 +96,13 @@ private:
 
     void testPadClearances();
 
+    void testGraphicClearances();
+
     void testZonesToZones();
 
     void testItemAgainstZone( BOARD_ITEM* aItem, ZONE* aZone, PCB_LAYER_ID aLayer );
+
+    void testKnockoutTextAgainstZone( BOARD_ITEM* aText, NETINFO_ITEM** aInheritedNet, ZONE* aZone );
 
     typedef struct checked
     {
@@ -158,6 +162,14 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
             return false;   // DRC cancelled
 
         testPadClearances();
+    }
+
+    if( !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE ) )
+    {
+        if( !reportPhase( _( "Checking copper graphic clearances..." ) ) )
+            return false;   // DRC cancelled
+
+        testGraphicClearances();
     }
 
     if( !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE ) )
@@ -449,6 +461,89 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
                     reportViolation( drce, pos, aLayer );
                 }
             }
+        }
+    }
+}
+
+
+/*
+ * We have to special-case knockout text as it's most often knocked-out of a zone, so it's
+ * presumed to collide with one.  However, if it collides with more than one, and they have
+ * different nets, then we have a short.
+ */
+void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testKnockoutTextAgainstZone( BOARD_ITEM* aText,
+                                                                      NETINFO_ITEM** aInheritedNet,
+                                                                      ZONE* aZone )
+{
+    bool testClearance = !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE );
+    bool testShorts = !m_drcEngine->IsErrorLimitExceeded( DRCE_SHORTING_ITEMS );
+
+    if( !testClearance && !testShorts )
+        return;
+
+    PCB_LAYER_ID layer = aText->GetLayer();
+
+    if( !aZone->GetLayerSet().test( layer ) )
+        return;
+
+    BOX2I itemBBox = aText->GetBoundingBox();
+    BOX2I worstCaseBBox = itemBBox;
+
+    worstCaseBBox.Inflate( m_board->m_DRCMaxClearance );
+
+    if( !worstCaseBBox.Intersects( aZone->GetBoundingBox() ) )
+        return;
+
+    DRC_RTREE*  zoneTree = m_board->m_CopperZoneRTreeCache[ aZone ].get();
+
+    if( !zoneTree )
+        return;
+
+    std::shared_ptr<SHAPE> itemShape = aText->GetEffectiveShape( layer, FLASHING::DEFAULT );
+
+    if( *aInheritedNet == nullptr )
+    {
+        if( zoneTree->QueryColliding( itemBBox, itemShape.get(), layer ) )
+            *aInheritedNet = aZone->GetNet();
+    }
+
+    if( *aInheritedNet == aZone->GetNet() )
+        return;
+
+    DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( CLEARANCE_CONSTRAINT, aText, aZone, layer );
+    int            clearance = constraint.GetValue().Min();
+    int            actual;
+    VECTOR2I       pos;
+
+    if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance >= 0 )
+    {
+        if( zoneTree->QueryColliding( itemBBox, itemShape.get(), layer,
+                                      std::max( 0, clearance - m_drcEpsilon ), &actual, &pos ) )
+        {
+            std::shared_ptr<DRC_ITEM> drce;
+            wxString                  msg;
+
+            if( testShorts && actual == 0 && *aInheritedNet )
+            {
+                drce = DRC_ITEM::Create( DRCE_SHORTING_ITEMS );
+                msg.Printf( _( "(nets %s and %s)" ),
+                              ( *aInheritedNet )->GetNetname(),
+                              aZone->GetNetname() );
+            }
+            else
+            {
+                drce = DRC_ITEM::Create( DRCE_CLEARANCE );
+                msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
+                                 constraint.GetName(),
+                                 clearance,
+                                 actual );
+            }
+
+            drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
+            drce->SetItems( aText, aZone );
+            drce->SetViolatingRule( constraint.GetParentRule() );
+
+            reportViolation( drce, pos, layer );
         }
     }
 }
@@ -855,12 +950,73 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
                 }
             }
 
-            if( !reportProgress( ii++, count, progressDelta ) )
+            if( !reportProgress( ii++, (int) count, progressDelta ) )
                 return;
         }
 
         if( m_drcEngine->IsCancelled() )
             return;
+    }
+}
+
+
+void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances( )
+{
+    const int progressDelta = 100;
+    size_t    count = m_board->Drawings().size();
+    int       ii = 0;
+
+    for( FOOTPRINT* footprint : m_board->Footprints() )
+        count += footprint->GraphicalItems().size();
+
+    reportAux( wxT( "Testing %d graphics..." ), count );
+
+    auto isKnockoutText =
+            []( BOARD_ITEM* item )
+            {
+                return item->Type() == PCB_TEXT_T && static_cast<PCB_TEXT*>( item )->IsKnockout();
+            };
+
+    auto testGraphicAgainstZone =
+            [&]( BOARD_ITEM* item )
+            {
+                if( !IsCopperLayer( item->GetLayer() ) )
+                    return;
+
+                // Knockout text is most often knocked-out of a zone, so it's presumed to
+                // collide with one.  However, if it collides with more than one, and they
+                // have different nets, then we have a short.
+                NETINFO_ITEM* inheritedNet = nullptr;
+
+                for( ZONE* zone : m_board->m_DRCCopperZones )
+                {
+                    if( isKnockoutText( item ) )
+                        testKnockoutTextAgainstZone( item, &inheritedNet, zone );
+                    else
+                        testItemAgainstZone( item, zone, item->GetLayer() );
+
+                    if( m_drcEngine->IsCancelled() )
+                        return;
+                }
+            };
+
+    for( BOARD_ITEM* item : m_board->Drawings() )
+    {
+        testGraphicAgainstZone( item );
+
+        if( !reportProgress( ii++, (int) count, progressDelta ) )
+            return;
+    }
+
+    for( FOOTPRINT* footprint : m_board->Footprints() )
+    {
+        for( BOARD_ITEM* item : footprint->GraphicalItems() )
+        {
+            testGraphicAgainstZone( item );
+
+            if( !reportProgress( ii++, (int) count, progressDelta ) )
+                return;
+        }
     }
 }
 

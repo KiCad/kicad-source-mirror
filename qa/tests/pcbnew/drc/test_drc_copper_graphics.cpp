@@ -30,9 +30,9 @@
 #include <settings/settings_manager.h>
 
 
-struct DRC_SOLDER_MASK_BRIDGING_TEST_FIXTURE
+struct DRC_COPPER_GRAPHICS_TEST_FIXTURE
 {
-    DRC_SOLDER_MASK_BRIDGING_TEST_FIXTURE() :
+    DRC_COPPER_GRAPHICS_TEST_FIXTURE() :
             m_settingsManager( true /* headless */ )
     { }
 
@@ -41,11 +41,13 @@ struct DRC_SOLDER_MASK_BRIDGING_TEST_FIXTURE
 };
 
 
-BOOST_FIXTURE_TEST_CASE( DRCSolderMaskBridgingTest, DRC_SOLDER_MASK_BRIDGING_TEST_FIXTURE )
+BOOST_FIXTURE_TEST_CASE( DRCCopperGraphicsTest, DRC_COPPER_GRAPHICS_TEST_FIXTURE )
 {
-    wxString brd_name( wxT( "solder_mask_bridge_test" ) );
+    wxString brd_name( wxT( "test_copper_graphics" ) );
     KI_TEST::LoadBoard( m_settingsManager, brd_name, m_board );
-    KI_TEST::FillZones( m_board.get() );
+
+    // Do NOT refill zones; this will prevent some of the items from being tested.
+    // KI_TEST::FillZones( m_board.get() );
 
     std::vector<DRC_ITEM>  violations;
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
@@ -56,6 +58,7 @@ BOOST_FIXTURE_TEST_CASE( DRCSolderMaskBridgingTest, DRC_SOLDER_MASK_BRIDGING_TES
     bds.m_DRCSeverities[ DRCE_COPPER_SLIVER ] = SEVERITY::RPT_SEVERITY_IGNORE;
     bds.m_DRCSeverities[ DRCE_STARVED_THERMAL ] = SEVERITY::RPT_SEVERITY_IGNORE;
     bds.m_DRCSeverities[ DRCE_SILK_CLEARANCE ] = SEVERITY::RPT_SEVERITY_IGNORE;
+    bds.m_DRCSeverities[ DRCE_ISOLATED_COPPER ] = SEVERITY::RPT_SEVERITY_IGNORE;
 
     bds.m_DRCEngine->SetViolationHandler(
             [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer )
@@ -68,12 +71,15 @@ BOOST_FIXTURE_TEST_CASE( DRCSolderMaskBridgingTest, DRC_SOLDER_MASK_BRIDGING_TES
 
     bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
 
-    const int expected_err_cnt = 5;
+    const int expected_err_cnt = 4;  // "What" copper text shorting zone
+                                     // Copper knockout text shorting two zones twice (but not
+                                     // three times as the two vertical zones are the same net)
+                                     // Net-tie rectangle shorting zone
 
     if( violations.size() == expected_err_cnt )
     {
         BOOST_CHECK_EQUAL( 1, 1 );  // quiet "did not check any assertions" warning
-        BOOST_TEST_MESSAGE( "DRC solder mask bridge test passed" );
+        BOOST_TEST_MESSAGE( "DRC copper graphics test passed" );
     }
     else
     {
@@ -87,6 +93,6 @@ BOOST_FIXTURE_TEST_CASE( DRCSolderMaskBridgingTest, DRC_SOLDER_MASK_BRIDGING_TES
         for( const DRC_ITEM& item : violations )
             BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap ) );
 
-        BOOST_ERROR( wxString::Format( "DRC solder mask bridge test failed board <%s>", brd_name ) );
+        BOOST_ERROR( wxString::Format( "DRC copper graphics test failed board <%s>", brd_name ) );
     }
 }
