@@ -564,7 +564,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                     if( item->GetParent() && item->GetParent()->IsSelected() )
                         continue;
 
-                    if( !item->IsNew() && item->IsMoving()
+                    if( !item->IsNew() && !item->IsMoving()
                             && ( !IsFootprintEditor() || aCommit->Empty() ) )
                     {
                         aCommit->Modify( item );
@@ -682,17 +682,6 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
             eatFirstMouseUp = false;
             evt->SetPassEvent();
         }
-        else if( evt->IsAction( &PCB_ACTIONS::moveExact ) )
-        {
-            // Reset positions so the Move Exactly is from the start.
-            for( EDA_ITEM* item : selection )
-            {
-                BOARD_ITEM* i = static_cast<BOARD_ITEM*>( item );
-                i->Move( -totalMovement );
-            }
-
-            break; // finish -- we moved exactly, so we are finished
-        }
         else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) || isSkip )
         {
             // Eat mouse-up/-click events that leaked through from the lock dialog
@@ -747,7 +736,12 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
             displayConstraintsMessage( hv45Mode );
             evt->SetPassEvent( false );
         }
-        else if( ZONE_FILLER_TOOL::IsZoneFillAction( evt ) || evt->IsAction( &ACTIONS::redo ))
+        else if( ZONE_FILLER_TOOL::IsZoneFillAction( evt )
+                 || evt->IsAction( &PCB_ACTIONS::moveExact )
+                 || evt->IsAction( &PCB_ACTIONS::moveWithReference )
+                 || evt->IsAction( &PCB_ACTIONS::copyWithReference )
+                 || evt->IsAction( &PCB_ACTIONS::positionRelative )
+                 || evt->IsAction( &ACTIONS::redo ) )
         {
             wxBell();
         }

@@ -91,10 +91,16 @@ POSITIONING_TOOLS_MENU::POSITIONING_TOOLS_MENU( TOOL_INTERACTIVE* aTool ) :
     SetIcon( BITMAPS::special_tools );
     SetTitle( _( "Positioning Tools" ) );
 
-    AddItem( PCB_ACTIONS::moveExact,         SELECTION_CONDITIONS::ShowAlways );
-    AddItem( PCB_ACTIONS::moveWithReference, SELECTION_CONDITIONS::ShowAlways );
-    AddItem( PCB_ACTIONS::copyWithReference, SELECTION_CONDITIONS::ShowAlways );
-    AddItem( PCB_ACTIONS::positionRelative,  SELECTION_CONDITIONS::ShowAlways );
+    auto notMovingCondition =
+            [ this ]( const SELECTION& aSelection )
+            {
+                return aSelection.Empty() || !aSelection.Front()->IsMoving();
+            };
+
+    AddItem( PCB_ACTIONS::moveExact,         SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
+    AddItem( PCB_ACTIONS::moveWithReference, SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
+    AddItem( PCB_ACTIONS::copyWithReference, SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
+    AddItem( PCB_ACTIONS::positionRelative,  SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
 }
 
 
@@ -165,9 +171,7 @@ bool EDIT_TOOL::Init()
     auto notMovingCondition =
             [ this ]( const SELECTION& aSelection )
             {
-                return !frame()->IsCurrentTool( PCB_ACTIONS::move )
-                       && !frame()->IsCurrentTool( PCB_ACTIONS::moveWithReference )
-                       && !frame()->IsCurrentTool( PCB_ACTIONS::moveIndividually );
+                return aSelection.Empty() || !aSelection.Front()->IsMoving();
             };
 
     auto noItemsCondition =
