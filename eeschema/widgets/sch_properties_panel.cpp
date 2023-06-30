@@ -124,7 +124,15 @@ void SCH_PROPERTIES_PANEL::AfterCommit()
 
 wxPGProperty* SCH_PROPERTIES_PANEL::createPGProperty( const PROPERTY_BASE* aProperty ) const
 {
-    return PGPropertyFactory( aProperty, m_frame );
+    wxPGProperty* prop = PGPropertyFactory( aProperty, m_frame );
+
+    if( auto colorProp = dynamic_cast<PGPROPERTY_COLOR4D*>( prop ) )
+    {
+        COLOR4D bg = m_frame->GetColorSettings()->GetColor( LAYER_SCHEMATIC_BACKGROUND );
+        colorProp->SetBackgroundColor( bg );
+    }
+
+    return prop;
 }
 
 

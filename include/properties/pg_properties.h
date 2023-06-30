@@ -194,7 +194,8 @@ class PGPROPERTY_COLOR4D : public wxStringProperty
 {
 public:
     PGPROPERTY_COLOR4D( const wxString& aLabel = wxPG_LABEL, const wxString& aName = wxPG_LABEL,
-                        KIGFX::COLOR4D aValue = KIGFX::COLOR4D::UNSPECIFIED );
+                        KIGFX::COLOR4D aValue = KIGFX::COLOR4D::UNSPECIFIED,
+                        KIGFX::COLOR4D aBackground = KIGFX::COLOR4D::UNSPECIFIED );
 
     virtual ~PGPROPERTY_COLOR4D() = default;
 
@@ -202,6 +203,13 @@ public:
 
      bool StringToValue( wxVariant &aVariant, const wxString &aText,
                         int aFlags = 0 ) const override;
+
+     void SetBackgroundColor( const KIGFX::COLOR4D& aColor ) { m_backgroundColor = aColor; }
+     const KIGFX::COLOR4D& GetBackgroundColor() const { return m_backgroundColor; }
+
+ private:
+     /// Used for rendering colors with opacity
+     KIGFX::COLOR4D m_backgroundColor;
 };
 
 #endif /* PG_PROPERTIES_H */

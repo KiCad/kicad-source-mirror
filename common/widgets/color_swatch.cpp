@@ -82,11 +82,11 @@ void COLOR_SWATCH::RenderToDC( wxDC* aDC, const KIGFX::COLOR4D& aColor,
             rowCycle = false;
         }
 
-        for( int x = aRect.GetTop(); x < aRect.GetBottom(); x += aCheckerboardSize.x )
+        for( int x = aRect.GetLeft(); x < aRect.GetRight(); x += aCheckerboardSize.x )
         {
             bool colCycle = rowCycle;
 
-            for( int y = aRect.GetLeft(); y < aRect.GetRight(); y += aCheckerboardSize.y )
+            for( int y = aRect.GetTop(); y < aRect.GetBottom(); y += aCheckerboardSize.y )
             {
                 COLOR4D color = colCycle ? black : white;
                 brush.SetColour( color.ToColour() );
@@ -94,7 +94,7 @@ void COLOR_SWATCH::RenderToDC( wxDC* aDC, const KIGFX::COLOR4D& aColor,
 
                 aDC->SetBrush( brush );
                 aDC->SetPen( pen );
-                aDC->DrawRectangle( x, y, x + aCheckerboardSize.x, y + aCheckerboardSize.y );
+                aDC->DrawRectangle( x, y, aCheckerboardSize.x, aCheckerboardSize.y );
 
                 colCycle = !colCycle;
             }

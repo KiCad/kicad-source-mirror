@@ -406,8 +406,9 @@ const wxPGEditor* PGPROPERTY_BOOL::DoGetEditorClass() const
 
 
 PGPROPERTY_COLOR4D::PGPROPERTY_COLOR4D( const wxString& aLabel, const wxString& aName,
-                                        COLOR4D aValue ) :
-        wxStringProperty( aLabel, aName, aValue.ToCSSString() )
+                                        COLOR4D aValue, COLOR4D aBackgroundColor ) :
+        wxStringProperty( aLabel, aName, aValue.ToCSSString() ),
+        m_backgroundColor( aBackgroundColor )
 {
     SetEditor( PG_COLOR_EDITOR::EDITOR_NAME );
     SetFlag( wxPG_PROP_NOEDITOR );

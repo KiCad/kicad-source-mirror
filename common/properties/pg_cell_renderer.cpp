@@ -41,19 +41,14 @@ bool PG_CELL_RENDERER::Render( wxDC &aDC, const wxRect &aRect, const wxPropertyG
             wxAny av = colorProp->GetValue().GetAny();
             KIGFX::COLOR4D color = av.IsNull() ? KIGFX::COLOR4D::UNSPECIFIED
                                                : av.As<KIGFX::COLOR4D>();
-            KIGFX::COLOR4D background;
-
-            PreDrawCell( aDC, aRect, aGrid, cell, aFlags );
 
             wxSize swatchSize = aGrid->ConvertDialogToPixels( wxSize( 24, 16 ) );
             int offset = ( aRect.GetHeight() - swatchSize.GetHeight() ) / 2;
             wxRect swatch( aRect.GetPosition() + wxPoint( offset, offset ), swatchSize );
 
-            COLOR_SWATCH::RenderToDC( &aDC, color, background, swatch,
+            COLOR_SWATCH::RenderToDC( &aDC, color, colorProp->GetBackgroundColor(), swatch,
                                       aGrid->ConvertDialogToPixels( CHECKERBOARD_SIZE_DU ),
-                                      aGrid->GetParent()->GetBackgroundColour() );
-
-            PostDrawCell( aDC, aGrid, cell, aFlags );
+                                      aGrid->GetBackgroundColour() );
 
             return true;
         }
