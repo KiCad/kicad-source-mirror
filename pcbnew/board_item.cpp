@@ -318,7 +318,13 @@ static struct BOARD_ITEM_DESC
         propMgr.AddProperty( new PROPERTY_ENUM<BOARD_ITEM, PCB_LAYER_ID>( _HKI( "Layer" ),
                     &BOARD_ITEM::SetLayer, &BOARD_ITEM::GetLayer ) );
         propMgr.AddProperty( new PROPERTY<BOARD_ITEM, bool>( _HKI( "Locked" ),
-                    &BOARD_ITEM::SetLocked, &BOARD_ITEM::IsLocked ) );
+                    &BOARD_ITEM::SetLocked, &BOARD_ITEM::IsLocked ) )
+               .SetAvailableFunc(
+                    [=]( INSPECTABLE* aItem ) -> bool
+                    {
+                        BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( aItem );
+                        return item && item->GetBoard() && !item->GetBoard()->IsFootprintHolder();
+                    } );
     }
 } _BOARD_ITEM_DESC;
 
