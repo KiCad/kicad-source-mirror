@@ -1,9 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2018 jp.charras at wanadoo.fr
- * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -370,7 +368,7 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
         SCH_SHEET_PATH sheetPath = (beginIter->second).second;
 
         wxString valueText = sym->GetValueFieldText( false, &sheetPath, false );
-        wxString footprintText = sym->GetFootprintFieldText( false, &sheetPath, false); 
+        wxString footprintText = sym->GetFootprintFieldText( false, &sheetPath, false);
         wxString deviceType = valueText + wxString("_") + footprintText;
 
         while( deviceType.GetChar(deviceType.Length()-1) == '_' )
@@ -645,6 +643,7 @@ wxString NETLIST_EXPORTER_ALLEGRO::getGroupField( int aGroupIndex, const wxArray
         for( auto field : aFieldArray )
         {
             SCH_FIELD* fld = sym->FindField( field, true, true );
+
             if( fld != NULL )
             {
                 wxString fieldText = fld->GetShownText( &sheetPath, true );
@@ -666,14 +665,15 @@ wxString NETLIST_EXPORTER_ALLEGRO::getGroupField( int aGroupIndex, const wxArray
     for( auto iter = pairIter.first; iter != pairIter.second; ++iter )
     {
         SCH_SYMBOL* sym = ( iter->second ).first;
-        SCH_SHEET_PATH sheetPath = ( iter->second ).second;
 
         for( auto field : aFieldArray )
         {
             LIB_FIELD* fld = sym->GetLibSymbolRef()->FindField( field, true );
+
             if( fld != NULL )
             {
-                wxString fieldText = fld->GetShownText( &sheetPath, true );
+                wxString fieldText = fld->GetShownText( false, 0 );
+
                 if( !fieldText.IsEmpty() )
                 {
                     if( aSanitize )
