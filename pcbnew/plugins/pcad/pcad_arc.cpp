@@ -175,7 +175,6 @@ void PCAD_ARC::Flip()
 void PCAD_ARC::AddToBoard( FOOTPRINT* aFootprint )
 {
     PCB_SHAPE* arc = new PCB_SHAPE( aFootprint, IsCircle() ? SHAPE_T::CIRCLE : SHAPE_T::ARC );
-    aFootprint->Add( arc );
 
     arc->SetCenter( VECTOR2I( m_PositionX, m_PositionY ) );
     arc->SetStart( VECTOR2I( m_StartX, m_StartY ) );
@@ -186,9 +185,12 @@ void PCAD_ARC::AddToBoard( FOOTPRINT* aFootprint )
 
     if( aFootprint )
     {
+        aFootprint->Add( arc );
         arc->Rotate( { 0, 0 }, aFootprint->GetOrientation() );
         arc->Move( aFootprint->GetPosition() );
     }
+    else
+        m_board->Add( arc );
 }
 
 
