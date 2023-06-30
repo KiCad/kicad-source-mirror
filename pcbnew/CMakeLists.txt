@@ -341,6 +341,7 @@ set( PCBNEW_CLASS_SRCS
     tools/global_edit_tool.cpp
     tools/group_tool.cpp
     tools/footprint_editor_control.cpp
+    tools/item_modification_routine.cpp
     tools/pad_tool.cpp
     tools/pcb_control.cpp
     tools/pcb_picker_tool.cpp

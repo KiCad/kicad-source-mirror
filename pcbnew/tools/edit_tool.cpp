@@ -45,6 +45,7 @@
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
 #include <tools/edit_tool.h>
+#include <tools/item_modification_routine.h>
 #include <tools/pcb_picker_tool.h>
 #include <tools/tool_event_utils.h>
 #include <tools/pcb_grid_helper.h>
@@ -1016,12 +1017,40 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
     return 0;
 }
 
-
-int EDIT_TOOL::FilletLines( const TOOL_EVENT& aEvent )
+/**
+ * Prompt the user for the fillet radius and return it.
+ *
+ * @param aFrame
+ * @param aErrorMsg filled with an error message if the parameter is invalid somehow
+ * @return std::optional<int> the fillet radius or std::nullopt if no
+ * valid fillet specified
+ */
+static std::optional<int> GetFilletParams( PCB_BASE_EDIT_FRAME& aFrame, wxString& aErrorMsg )
 {
     // Store last used fillet radius to allow pressing "enter" if repeat fillet is required
     static long long filletRadiusIU = 0;
 
+    WX_UNIT_ENTRY_DIALOG dia( &aFrame, _( "Enter fillet radius:" ), _( "Fillet Lines" ),
+                              filletRadiusIU );
+
+    if( dia.ShowModal() == wxID_CANCEL )
+        return std::nullopt;
+
+    filletRadiusIU = dia.GetValue();
+
+    if( filletRadiusIU == 0 )
+    {
+        aErrorMsg = _( "A radius of zero was entered.\n"
+                       "The fillet operation was not performed." );
+        return std::nullopt;
+    }
+
+    return filletRadiusIU;
+}
+
+
+int EDIT_TOOL::FilletLines( const TOOL_EVENT& aEvent )
+{
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
         []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
         {
@@ -1108,168 +1137,113 @@ int EDIT_TOOL::FilletLines( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    WX_UNIT_ENTRY_DIALOG dia( frame(), _( "Enter fillet radius:" ), _( "Fillet Lines" ),
-                              filletRadiusIU );
+    BOARD_COMMIT commit{ this };
 
-    if( dia.ShowModal() == wxID_CANCEL )
-        return 0;
+    // List of thing to select at the end of the operation
+    // (doing it as we go will invalidate the iterator)
+    std::vector<PCB_SHAPE*> items_to_select_on_success;
 
-    filletRadiusIU = dia.GetValue();
-
-    if( filletRadiusIU == 0 )
+    // Handle modifications to existing items by the routine
+    // How to deal with this depends on whether we're in the footprint editor or not
+    // and whether the item was conjured up by decomposing a polygon or rectangle
+    const auto item_modification_handler = [&]( PCB_SHAPE& aItem )
     {
-        frame()->ShowInfoBarMsg( _( "A radius of zero was entered.\n"
-                                    "The fillet operation was not performed." ) );
-        return 0;
+        if( !m_isFootprintEditor )
+        {
+            // If the item was "conjured up" it will be added later separately
+            if( std::find( lines_to_add.begin(), lines_to_add.end(), &aItem )
+                == lines_to_add.end() )
+            {
+                commit.Modify( &aItem );
+                items_to_select_on_success.push_back( &aItem );
+            }
+        }
+    };
+
+    bool       any_items_created = false;
+    const auto item_creation_handler = [&]( std::unique_ptr<PCB_SHAPE> aItem )
+    {
+        any_items_created = true;
+        items_to_select_on_success.push_back( aItem.get() );
+        commit.Add( aItem.release() );
+    };
+
+    // Construct an appropriate tool
+    std::unique_ptr<PAIRWISE_LINE_ROUTINE> pairwise_line_routine;
+    wxString                               error_message;
+
+    if( aEvent.IsAction( &PCB_ACTIONS::filletLines ) )
+    {
+        const std::optional<int> filletRadiusIU = GetFilletParams( *frame(), error_message );
+
+        if( filletRadiusIU.has_value() )
+        {
+            pairwise_line_routine = std::make_unique<LINE_FILLET_ROUTINE>(
+                    frame()->GetModel(), item_creation_handler, item_modification_handler,
+                    *filletRadiusIU );
+        }
     }
 
-    BOARD_COMMIT             commit( this );
-    bool                     operationPerformedOnAtLeastOne = false;
-    bool                     didOneAttemptFail              = false;
-    std::vector<BOARD_ITEM*> itemsToAddToSelection;
+    if( !pairwise_line_routine )
+    {
+        // Didn't construct any mofication routine - could be an error or cancellation
+        if( !error_message.empty() )
+        {
+            frame()->ShowInfoBarMsg( error_message );
+        }
+
+        return 0;
+    }
 
     // Only modify one parent in FP editor
     if( m_isFootprintEditor )
         commit.Modify( selection.Front() );
 
-    alg::for_all_pairs( selection.begin(), selection.end(), [&]( EDA_ITEM* a, EDA_ITEM* b )
-        {
-            PCB_SHAPE* line_a = static_cast<PCB_SHAPE*>( a );
-            PCB_SHAPE* line_b = static_cast<PCB_SHAPE*>( b );
-
-            if( line_a->GetLength() == 0.0 || line_b->GetLength() == 0 )
-                return;
-
-            SEG seg_a( line_a->GetStart(), line_a->GetEnd() );
-            SEG seg_b( line_b->GetStart(), line_b->GetEnd() );
-            VECTOR2I* a_pt;
-            VECTOR2I* b_pt;
-
-            if (seg_a.A == seg_b.A)
-            {
-                a_pt = &seg_a.A;
-                b_pt = &seg_b.A;
-            }
-            else if (seg_a.A == seg_b.B)
-            {
-                a_pt = &seg_a.A;
-                b_pt = &seg_b.B;
-            }
-            else if (seg_a.B == seg_b.A)
-            {
-                a_pt = &seg_a.B;
-                b_pt = &seg_b.A;
-            }
-            else if (seg_a.B == seg_b.B)
-            {
-                a_pt = &seg_a.B;
-                b_pt = &seg_b.B;
-            }
-            else
-                return;
-
-
-            SHAPE_ARC sArc( seg_a, seg_b, filletRadiusIU );
-            VECTOR2I  t1newPoint, t2newPoint;
-
-            auto setIfPointOnSeg =
-                    []( VECTOR2I& aPointToSet, SEG aSegment, VECTOR2I aVecToTest )
-                    {
-                        VECTOR2I segToVec = aSegment.NearestPoint( aVecToTest ) - aVecToTest;
-
-                        // Find out if we are on the segment (minimum precision)
-                        if( segToVec.EuclideanNorm() < SHAPE_ARC::MIN_PRECISION_IU )
+    // Apply the tool to every line pair
+    alg::for_all_pairs( selection.begin(), selection.end(),
+                        [&]( EDA_ITEM* a, EDA_ITEM* b )
                         {
-                            aPointToSet.x = aVecToTest.x;
-                            aPointToSet.y = aVecToTest.y;
-                            return true;
-                        }
+                            PCB_SHAPE* line_a = static_cast<PCB_SHAPE*>( a );
+                            PCB_SHAPE* line_b = static_cast<PCB_SHAPE*>( b );
 
-                        return false;
-                    };
+                            pairwise_line_routine->ProcessLinePair( *line_a, *line_b );
+                        } );
 
-            //Do not draw a fillet if the end points of the arc are not within the track segments
-            if( !setIfPointOnSeg( t1newPoint, seg_a, sArc.GetP0() )
-                    && !setIfPointOnSeg( t2newPoint, seg_b, sArc.GetP0() ) )
-            {
-                didOneAttemptFail = true;
-                return;
-            }
+    // Items created like lines from a rectangle
+    // Some of these might have been changed by the tool, but we need to
+    // add *all* of them to the selection and commit them
+    for( PCB_SHAPE* item : lines_to_add )
+    {
+        m_selectionTool->AddItemToSel( item, true );
+        commit.Add( item );
+    }
 
-            if( !setIfPointOnSeg( t1newPoint, seg_a, sArc.GetP1() )
-                    && !setIfPointOnSeg( t2newPoint, seg_b, sArc.GetP1() ) )
-            {
-                didOneAttemptFail = true;
-                return;
-            }
-
-            PCB_SHAPE* tArc = new PCB_SHAPE( frame()->GetModel(), SHAPE_T::ARC );
-
-            tArc->SetArcGeometry( sArc.GetP0(), sArc.GetArcMid(), sArc.GetP1() );
-            tArc->SetWidth( line_a->GetWidth() );
-            tArc->SetLayer( line_a->GetLayer() );
-            tArc->SetLocked( line_a->IsLocked() );
-
-            if( lines_to_add.count( line_a ) )
-            {
-                lines_to_add.erase( line_a );
-                itemsToAddToSelection.push_back( line_a );
-            }
-            else if( !m_isFootprintEditor )
-            {
-                commit.Modify( line_a );
-            }
-
-            if( lines_to_add.count( line_b ) )
-            {
-                lines_to_add.erase( line_b );
-                itemsToAddToSelection.push_back( line_b );
-            }
-            else if( !m_isFootprintEditor )
-            {
-                commit.Modify( line_b );
-            }
-
-            itemsToAddToSelection.push_back( tArc );
-            *a_pt = t1newPoint;
-            *b_pt = t2newPoint;
-            line_a->SetStart( seg_a.A );
-            line_a->SetEnd( seg_a.B );
-            line_b->SetStart( seg_b.A );
-            line_b->SetEnd( seg_b.B );
-
-            operationPerformedOnAtLeastOne = true;
-
-        } );
-
+    // Remove items like rectangles that we decomposed into lines
     for( PCB_SHAPE* item : items_to_remove )
     {
         commit.Remove( item );
         m_selectionTool->RemoveItemFromSel( item, true );
     }
 
-    //select the newly created arcs
-    for( BOARD_ITEM* item : itemsToAddToSelection )
-    {
-        commit.Add( item );
+    // Select added and modified items
+    for( PCB_SHAPE* item : items_to_select_on_success )
         m_selectionTool->AddItemToSel( item, true );
-    }
 
     if( !items_to_remove.empty() )
         m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
 
-    if( !itemsToAddToSelection.empty() )
+    if( !any_items_created )
         m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
 
     // Notify other tools of the changes
     m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
-    commit.Push( _( "Fillet Lines" ) );
+    commit.Push( pairwise_line_routine->GetCommitDescription() );
 
-    if( !operationPerformedOnAtLeastOne )
-        frame()->ShowInfoBarMsg( _( "Unable to fillet the selected lines." ) );
-    else if( didOneAttemptFail )
-        frame()->ShowInfoBarMsg( _( "Some of the lines could not be filleted." ) );
+    if( pairwise_line_routine->GetSuccesses() == 0 )
+        frame()->ShowInfoBarMsg( pairwise_line_routine->GetCompleteFailureMessage() );
+    else if( pairwise_line_routine->GetFailures() > 0 )
+        frame()->ShowInfoBarMsg( pairwise_line_routine->GetSomeFailuresMessage() );
 
     return 0;
 }
