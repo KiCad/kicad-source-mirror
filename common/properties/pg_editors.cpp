@@ -252,5 +252,11 @@ wxPGWindowList PG_COLOR_EDITOR::CreateControls( wxPropertyGrid* aGrid, wxPGPrope
         aGrid->ChangePropertyValue( aProperty, val );
     }
 
+    // Deselect property so that this gets called again on next click
+    aGrid->CallAfter( [=]()
+                      {
+                          aGrid->RemoveFromSelection( aProperty );
+                      } );
+
     return nullptr;
 }
