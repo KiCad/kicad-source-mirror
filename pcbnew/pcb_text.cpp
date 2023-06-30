@@ -365,7 +365,7 @@ void PCB_TEXT::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aL
 {
     SHAPE_POLY_SET poly;
 
-    TransformTextToPolySet( poly, 0, GetBoard()->GetDesignSettings().m_MaxError, ERROR_INSIDE );
+    TransformTextToPolySet( poly, 0, GetBoard()->GetDesignSettings().m_MaxError, aErrorLoc );
 
     buildBoundingHull( &aBuffer, poly, aClearance );
 }

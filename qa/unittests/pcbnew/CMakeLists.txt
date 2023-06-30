@@ -47,6 +47,7 @@ set( QA_PCBNEW_SRCS
     drc/test_drc_courtyard_overlap.cpp
     drc/test_drc_regressions.cpp
     drc/test_drc_copper_conn.cpp
+    drc/test_drc_copper_graphics.cpp
     drc/test_drc_copper_sliver.cpp
     drc/test_solder_mask_bridging.cpp
 
