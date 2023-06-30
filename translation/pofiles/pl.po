@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:33-0700\n"
-"PO-Revision-Date: 2023-06-30 01:49+0000\n"
+"PO-Revision-Date: 2023-07-01 06:52+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v7/pl/>\n"
 "Language: pl\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.18.1\n"
+"X-Generator: Weblate 5.0-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -13270,9 +13270,9 @@ msgid "Abort Project Save"
 msgstr "Przerwij zapis projektu"
 
 #: eeschema/files-io.cpp:1220
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' is already open by '%s' at '%s'."
-msgstr "Schemat '%s' jest już otwarty."
+msgstr "Schemat '%s' jest już otwarty przez '%s' na '%s'."
 
 #: eeschema/files-io.cpp:1233
 msgid "Importing Schematic"
@@ -33645,9 +33645,9 @@ msgstr ""
 "pobranej z grubości linii brzegowych umieszczonych na warstwie Edge.Cuts."
 
 #: pcbnew/files.cpp:616
-#, fuzzy, c-format
+#, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
-msgstr "Plik PCB '%s' jest już otwarty."
+msgstr "Plik PCB '%s' jest już otwarty przez '%s' na '%s'."
 
 #: pcbnew/files.cpp:627
 msgid "The current PCB has been modified.  Save changes?"
@@ -38419,12 +38419,12 @@ msgid "Pack footprints"
 msgstr "Pakuj footprinty"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Click to place %s (item %zu of %zu)\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"Kliknij by umieścić %s (jednostka %ld z %ld)\n"
+"Kliknij by umieścić %s (jednostka %zu z %zu)\n"
 "Naciśnij <Esc> by przerwać lub kliknij dwukrotnie by zatwierdzić"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:367
