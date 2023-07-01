@@ -126,17 +126,12 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
     }
 
     // And a special case for the "head" via's hole.
-
-
     if( holeH && shouldWeConsiderHoleCollisions( this, holeH ) )
     {
-        if (collideSimple( holeH, aNode, aCtx ) )
-        {
+        if( collideSimple( holeH, aNode, aCtx ) )
             collisionsFound = true;
-        }
     }
 
-    
     // Sadly collision routines ignore SHAPE_POLY_LINE widths so we have to pass them in as part
     // of the clearance value.
     if( m_kind == LINE_T )
@@ -156,9 +151,7 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
     int           clearance;
 
     if( aCtx )
-    {
         differentNetsOnly = aCtx->options.m_differentNetsOnly;
-    }
 
     // Hole-to-hole collisions don't have anything to do with nets
     if( Kind() == HOLE_T && aHead->Kind() == HOLE_T )
