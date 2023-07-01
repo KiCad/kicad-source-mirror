@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -106,9 +106,9 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 	fgSizer3->SetFlexibleDirection( wxBOTH );
 	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_minAmplLabel = new wxStaticText( sbSizerLower->GetStaticBox(), wxID_ANY, _("Min amplitude (Amin):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_minAmplLabel = new wxStaticText( sbSizerLower->GetStaticBox(), wxID_ANY, _("Min amplitude (A):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_minAmplLabel->Wrap( -1 );
-	fgSizer3->Add( m_minAmplLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizer3->Add( m_minAmplLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_minAmplText = new wxTextCtrl( sbSizerLower->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer3->Add( m_minAmplText, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -117,9 +117,9 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 	m_minAmplUnit->Wrap( -1 );
 	fgSizer3->Add( m_minAmplUnit, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
 
-	m_maxAmplLabel = new wxStaticText( sbSizerLower->GetStaticBox(), wxID_ANY, _("Max amplitude (Amax):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_maxAmplLabel = new wxStaticText( sbSizerLower->GetStaticBox(), wxID_ANY, _("Max amplitude (A):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_maxAmplLabel->Wrap( -1 );
-	fgSizer3->Add( m_maxAmplLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizer3->Add( m_maxAmplLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
 
 	m_maxAmplText = new wxTextCtrl( sbSizerLower->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer3->Add( m_maxAmplText, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
@@ -130,7 +130,7 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 
 	m_spacingLabel = new wxStaticText( sbSizerLower->GetStaticBox(), wxID_ANY, _("Min spacing (s):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_spacingLabel->Wrap( -1 );
-	fgSizer3->Add( m_spacingLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizer3->Add( m_spacingLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
 
 	m_spacingText = new wxTextCtrl( sbSizerLower->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_spacingText->SetToolTip( _("Minimum spacing between adjacent meander segments. The resulting spacing may be greater based on design rules.") );
@@ -143,7 +143,7 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 
 	m_staticText14 = new wxStaticText( sbSizerLower->GetStaticBox(), wxID_ANY, _("Miter style:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText14->Wrap( -1 );
-	fgSizer3->Add( m_staticText14, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizer3->Add( m_staticText14, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
 
 	wxString m_miterStyleChoices[] = { _("45 degree"), _("arc") };
 	int m_miterStyleNChoices = sizeof( m_miterStyleChoices ) / sizeof( wxString );
@@ -165,7 +165,7 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 
 	m_radiusLabel = new wxStaticText( sbSizerLower->GetStaticBox(), wxID_ANY, _("Miter radius (r):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_radiusLabel->Wrap( -1 );
-	fgSizer3->Add( m_radiusLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer3->Add( m_radiusLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	m_radiusText = new TEXT_CTRL_EVAL( sbSizerLower->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer3->Add( m_radiusText, 0, wxALL|wxEXPAND, 5 );
@@ -175,7 +175,7 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 	fgSizer3->Add( m_radiusUnit, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
-	sbSizerLower->Add( fgSizer3, 1, wxEXPAND, 5 );
+	sbSizerLower->Add( fgSizer3, 1, wxEXPAND|wxLEFT, 5 );
 
 
 	bMainSizer->Add( sbSizerLower, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
