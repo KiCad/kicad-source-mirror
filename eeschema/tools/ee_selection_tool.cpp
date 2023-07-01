@@ -670,9 +670,11 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             }
         }
 
-        if( EDA_ITEM* item = m_frame->GetItem( rolloverItem ) )
+        if( rolloverItem != niluuid )
         {
-            if( !( item->GetFlags() & IS_ROLLOVER ) )
+            EDA_ITEM* item = m_frame->GetItem( rolloverItem );
+
+            if( item && !( item->GetFlags() & IS_ROLLOVER ) )
             {
                 item->SetFlags( IS_ROLLOVER );
                 lastRolloverItem = rolloverItem;
