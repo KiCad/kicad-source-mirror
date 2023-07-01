@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:33-0700\n"
-"PO-Revision-Date: 2023-07-01 06:52+0000\n"
+"PO-Revision-Date: 2023-07-03 07:51+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v7/pl/>\n"
 "Language: pl\n"
@@ -7664,9 +7664,8 @@ msgid "Delete all associations?"
 msgstr "Usuń wszystkie przydzielnia footprintów?"
 
 #: cvpcb/tools/cvpcb_control.cpp:183
-#, fuzzy
 msgid "Unable to create the footprint viewer frame"
-msgstr "Nie można utworzyć pliku raportu '%s'"
+msgstr "Nie można utworzyć ramki przeglądarki footprintów"
 
 #: eeschema/annotate.cpp:265
 #, c-format
@@ -17323,7 +17322,7 @@ msgstr "Dodaj blok tekstu"
 
 #: eeschema/tools/ee_actions.cpp:248
 msgid "Add a text box item"
-msgstr "Dodaj element graficzny w postaci bloku tekstu"
+msgstr "Dodaj ramkę z tekstem"
 
 #: eeschema/tools/ee_actions.cpp:253 eeschema/tools/ee_actions.cpp:834
 msgid "Add Lines"
@@ -19939,9 +19938,8 @@ msgid "Precision of gerber coordinates, valid options: 5 or 6"
 msgstr "Precyzja współrzędnych plików Gerber, poprawne opcje: 5 lub 6"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:85
-#, fuzzy
 msgid "Use KiCad gerber file extension"
-msgstr "Użyj sugerowanych przez Protel rozszerzeń plików"
+msgstr "Użyj rozszerzeń plików programu KiCad"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:45
 msgid ""
