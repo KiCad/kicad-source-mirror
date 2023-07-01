@@ -2068,30 +2068,36 @@ int PCB_EDIT_FRAME::ShowExchangeFootprintsDialog( FOOTPRINT* aFootprint, bool aU
 }
 
 
-namespace {
-
-
-void processTextItem( const PCB_TEXT& aSrc, PCB_TEXT& aDest,
-                      bool resetText, bool resetTextLayers, bool resetTextEffects,
-                      bool* aUpdated )
+/**
+ * copy text settings from aSrc to aDest
+ * @param aSrc is the PCB_TEXT source
+ * @param aDest is the PCB_TEXT target
+ * @param aResetText is true to use the target text (false to use the aDest text)
+ * @param aResetTextLayers is true to use the target layers setting (false to use the aDest setting)
+ * @param aResetTextEffects is true to use the target text effects (false to use the aDest effect)
+ * @param aUpdated is a refrence to a bool to keep trace of changes
+ */
+static void processTextItem( const PCB_TEXT& aSrc, PCB_TEXT& aDest,
+                             bool aResetText, bool aResetTextLayers, bool aResetTextEffects,
+                             bool* aUpdated )
 {
-    if( resetText )
-    {
+    if( aResetText )
         *aUpdated |= aSrc.GetText() != aDest.GetText();
-
+    else
         aDest.SetText( aSrc.GetText() );
-    }
 
-    if( resetTextLayers )
+    if( aResetTextLayers )
     {
         *aUpdated |= aSrc.GetLayer() != aDest.GetLayer();
         *aUpdated |= aSrc.IsVisible() != aDest.IsVisible();
-
+    }
+    else
+    {
         aDest.SetLayer( aSrc.GetLayer() );
         aDest.SetVisible( aSrc.IsVisible() );
     }
 
-    if( resetTextEffects )
+    if( aResetTextEffects )
     {
         *aUpdated |= aSrc.GetHorizJustify() != aDest.GetHorizJustify();
         *aUpdated |= aSrc.GetVertJustify() != aDest.GetVertJustify();
@@ -2099,7 +2105,9 @@ void processTextItem( const PCB_TEXT& aSrc, PCB_TEXT& aDest,
         *aUpdated |= aSrc.GetTextThickness() != aDest.GetTextThickness();
         *aUpdated |= aSrc.GetTextAngle() != aDest.GetTextAngle();
         *aUpdated |= aSrc.GetFPRelativePosition() != aDest.GetFPRelativePosition();
-
+    }
+    else
+    {
         // Careful: the visible bit and position are also set by SetAttributes()
         bool visible = aDest.IsVisible();
         aDest.SetAttributes( aSrc );
@@ -2111,7 +2119,7 @@ void processTextItem( const PCB_TEXT& aSrc, PCB_TEXT& aDest,
 }
 
 
-PCB_TEXT* getMatchingTextItem( PCB_TEXT* aRefItem, FOOTPRINT* aFootprint )
+static PCB_TEXT* getMatchingTextItem( PCB_TEXT* aRefItem, FOOTPRINT* aFootprint )
 {
     std::vector<PCB_TEXT*> candidates;
 
@@ -2156,9 +2164,6 @@ PCB_TEXT* getMatchingTextItem( PCB_TEXT* aRefItem, FOOTPRINT* aFootprint )
         return candidatesOnSameLayer[0];
     else
         return candidates[0];
-}
-
-
 }
 
 
@@ -2241,21 +2246,6 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
         pad->SetNetCode( pad_model ? pad_model->GetNetCode() : NETINFO_LIST::UNCONNECTED );
     }
 
-    // Copy reference
-    processTextItem( aExisting->Reference(), aNew->Reference(),
-                     // never reset reference text
-                     false,
-                     resetTextLayers, resetTextEffects, aUpdated );
-
-    // Copy value
-    processTextItem( aExisting->Value(), aNew->Value(),
-                     // reset value text only when it is a proxy for the footprint ID
-                     // (cf replacing value "MountingHole-2.5mm" with "MountingHole-4.0mm")
-                     aExisting->GetValue() == aExisting->GetFPID().GetLibItemName(),
-                     resetTextLayers, resetTextEffects, aUpdated );
-
-    // Copy fields in accordance with the reset* flags
-
     for( BOARD_ITEM* item : aExisting->GraphicalItems() )
     {
         PCB_TEXT* srcItem = dynamic_cast<PCB_TEXT*>( item );
@@ -2276,8 +2266,25 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
         }
     }
 
+    // Copy reference. The initial text is always used, never resetted
+    processTextItem( aExisting->Reference(), aNew->Reference(),
+                     false,
+                     resetTextLayers, resetTextEffects, aUpdated );
+
+    // Copy value
+    processTextItem( aExisting->Value(), aNew->Value(),
+                     // reset value text only when it is a proxy for the footprint ID
+                     // (cf replacing value "MountingHole-2.5mm" with "MountingHole-4.0mm")
+                     aExisting->GetValue() == aExisting->GetFPID().GetLibItemName(),
+                     resetTextLayers, resetTextEffects, aUpdated );
+
+    // Copy fields in accordance with the reset* flags
     for( PCB_FIELD* field : aExisting->GetFields() )
     {
+        // Reference and value are already handled
+        if( field->IsReference() || field->IsValue() )
+            continue;
+
         PCB_FIELD* newField = aNew->GetFieldByName( field->GetName() );
 
         if( !newField )
@@ -2287,7 +2294,9 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
             processTextItem( *field, *newField, true, true, true, aUpdated );
         }
         else
+        {
             processTextItem( *field, *newField, false, resetTextLayers, resetTextEffects, aUpdated );
+        }
 
     }
 
