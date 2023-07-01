@@ -2072,9 +2072,11 @@ int PCB_EDIT_FRAME::ShowExchangeFootprintsDialog( FOOTPRINT* aFootprint, bool aU
  * copy text settings from aSrc to aDest
  * @param aSrc is the PCB_TEXT source
  * @param aDest is the PCB_TEXT target
- * @param aResetText is true to use the target text (false to use the aDest text)
- * @param aResetTextLayers is true to use the target layers setting (false to use the aDest setting)
- * @param aResetTextEffects is true to use the target text effects (false to use the aDest effect)
+ * @param aResetText is true to keep the default target text (false to use the aSrc text)
+ * @param aResetTextLayers is true to keep the default target layers setting
+ * (false to use the aSrc setting)
+ * @param aResetTextEffects is true to keep the default target text effects
+ * (false to use the aSrc effect)
  * @param aUpdated is a refrence to a bool to keep trace of changes
  */
 static void processTextItem( const PCB_TEXT& aSrc, PCB_TEXT& aDest,
