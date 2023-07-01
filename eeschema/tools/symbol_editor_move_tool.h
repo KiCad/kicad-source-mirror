@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,16 +50,15 @@ public:
     int Main( const TOOL_EVENT& aEvent );
 
 private:
-    void moveItem( EDA_ITEM* aItem, VECTOR2I aDelta );
+    bool doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aCommit );
+
+    void moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta );
 
     ///< Set up handlers for various events.
     void setTransitions() override;
 
-    ///< Flag determining if anything is being dragged right now
+private:
     bool        m_moveInProgress;
-
-    ///< Used for chaining commands
-    VECTOR2I    m_moveOffset;
 
     ///< Last cursor position (needed for getModificationPoint() to avoid changes
     ///< of edit reference point).

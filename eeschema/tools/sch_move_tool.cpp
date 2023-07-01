@@ -471,7 +471,6 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
     }
 
     bool        restore_state = false;
-    bool        chain_commands = false;
     TOOL_EVENT  copy = aEvent;
     TOOL_EVENT* evt = &copy;
     VECTOR2I    prevPos;
@@ -842,19 +841,7 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
         }
         else if( evt->IsAction( &ACTIONS::duplicate ) )
         {
-            if( selection.Front()->IsNew() )
-            {
-                // This doesn't really make sense; we'll just end up dragging a stack of
-                // objects so we ignore the duplicate and just carry on.
-                wxBell();
-                continue;
-            }
-
-            // Move original back and exit.  The duplicate will run in its own loop.
-            restore_state = true;
-            unselect = false;
-            chain_commands = true;
-            break;
+            wxBell();
         }
         else if( evt->IsAction( &EE_ACTIONS::rotateCW ) )
         {
@@ -939,9 +926,7 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
     controls->ShowCursor( false );
     controls->SetAutoPan( false );
 
-    if( !chain_commands )
-        m_moveOffset = { 0, 0 };
-
+    m_moveOffset = { 0, 0 };
     m_anchorPos.reset();
 
     if( restore_state )

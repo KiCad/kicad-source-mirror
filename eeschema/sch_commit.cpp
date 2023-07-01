@@ -407,6 +407,7 @@ void SCH_COMMIT::revertLibEdit()
     // Symbol editor just saves copies of the whole symbol, so grab the first and discard the rest
     SYMBOL_EDIT_FRAME* frame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_toolMgr->GetToolHolder() );
     LIB_SYMBOL*        copy = dynamic_cast<LIB_SYMBOL*>( m_changes.front().m_copy );
+    EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
 
     if( frame && copy )
     {
@@ -416,6 +417,9 @@ void SCH_COMMIT::revertLibEdit()
 
     for( size_t ii = 1; ii < m_changes.size(); ++ii )
         delete m_changes[ii].m_copy;
+
+    if( selTool )
+        selTool->RebuildSelection();
 
     clear();
 }

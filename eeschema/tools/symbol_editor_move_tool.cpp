@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,8 +34,7 @@
 
 SYMBOL_EDITOR_MOVE_TOOL::SYMBOL_EDITOR_MOVE_TOOL() :
         EE_TOOL_BASE( "eeschema.SymbolMoveTool" ),
-        m_moveInProgress( false ),
-        m_moveOffset( 0, 0 )
+        m_moveInProgress( false )
 {
 }
 
@@ -81,21 +80,39 @@ void SYMBOL_EDITOR_MOVE_TOOL::Reset( RESET_REASON aReason )
     EE_TOOL_BASE::Reset( aReason );
 
     if( aReason == MODEL_RELOAD )
-    {
         m_moveInProgress = false;
-        m_moveOffset = { 0, 0 };
-    }
 }
 
 
 int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 {
-    KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    SCH_COMMIT            localCommit( m_toolMgr );
-    SCH_COMMIT*           commit = dynamic_cast<SCH_COMMIT*>( aEvent.Commit() );
+    if( SCH_COMMIT* commit = dynamic_cast<SCH_COMMIT*>( aEvent.Commit() ) )
+    {
+        wxCHECK( aEvent.SynchronousState(), 0 );
+        aEvent.SynchronousState()->store( STS_RUNNING );
 
-    if( !commit )
-        commit = &localCommit;
+        if( doMoveSelection( aEvent, commit ) )
+            aEvent.SynchronousState()->store( STS_FINISHED );
+        else
+            aEvent.SynchronousState()->store( STS_CANCELLED );
+    }
+    else
+    {
+        SCH_COMMIT localCommit( m_toolMgr );
+
+        if( doMoveSelection( aEvent, &localCommit ) )
+            localCommit.Push( _( "Move" ) );
+        else
+            localCommit.Revert();
+    }
+
+    return 0;
+}
+
+
+bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aCommit )
+{
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
 
     m_anchorPos = { 0, 0 };
 
@@ -107,13 +124,13 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     bool          unselect = selection.IsHover();
 
     if( !m_frame->IsSymbolEditable() || selection.Empty() )
-        return 0;
+        return false;
 
     if( m_moveInProgress )
     {
         // The tool hotkey is interpreted as a click when already moving
         m_toolMgr->RunAction( ACTIONS::cursorClick );
-        return 0;
+        return true;
     }
 
     m_frame->PushTool( aEvent );
@@ -124,13 +141,13 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     controls->SetAutoPan( true );
 
     bool        restore_state = false;
-    bool        chain_commands = false;
     TOOL_EVENT  copy = aEvent;
     TOOL_EVENT* evt = &copy;
     VECTOR2I    prevPos;
+    VECTOR2I    moveOffset;
 
     if( !selection.Front()->IsNew() )
-        commit->Modify( m_frame->GetCurSymbol(), m_frame->GetScreen() );
+        aCommit->Modify( m_frame->GetCurSymbol(), m_frame->GetScreen() );
 
     m_cursor = controls->GetCursorPosition( !aEvent.DisableGridSnapping() );
 
@@ -195,7 +212,7 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 // Apply any initial offset in case we're coming from a previous command.
                 //
                 for( EDA_ITEM* item : selection )
-                    moveItem( item, m_moveOffset );
+                    moveItem( item, moveOffset );
 
                 // Set up the starting position and move/drag offset
                 //
@@ -243,7 +260,7 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             VECTOR2I delta( m_cursor - prevPos );
             m_anchorPos = m_cursor;
 
-            m_moveOffset += delta;
+            moveOffset += delta;
             prevPos = m_cursor;
 
             for( EDA_ITEM* item : selection )
@@ -275,32 +292,14 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             unselect = true;
             break;
         }
-        else if( evt->Category() == TC_COMMAND )
+        else if( evt->IsAction( &ACTIONS::doDelete ) )
         {
-            if( evt->IsAction( &ACTIONS::doDelete ) )
-            {
-                // Exit on a remove operation; there is no further processing for removed items.
-                break;
-            }
-            else if( evt->IsAction( &ACTIONS::duplicate ) )
-            {
-                if( selection.Front()->IsNew() )
-                {
-                    // This doesn't really make sense; we'll just end up dragging a stack of
-                    // objects so Duplicate() is going to ignore this and we'll just carry on.
-                    continue;
-                }
-
-                // Move original back and exit.  The duplicate will run in its own loop.
-                restore_state = true;
-                unselect = false;
-                chain_commands = true;
-                break;
-            }
-            else
-            {
-                evt->SetPassEvent();
-            }
+            // Exit on a remove operation; there is no further processing for removed items.
+            break;
+        }
+        else if( evt->IsAction( &ACTIONS::duplicate ) )
+        {
+            wxBell();
         }
         //------------------------------------------------------------------------
         // Handle context menu
@@ -350,39 +349,22 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     controls->ShowCursor( false );
     controls->SetAutoPan( false );
 
-    if( !chain_commands )
-        m_moveOffset = { 0, 0 };
-
     m_anchorPos = { 0, 0 };
 
     for( EDA_ITEM* item : selection )
         item->ClearEditFlags();
 
-    if( restore_state )
-    {
-        commit->Revert();
-
-        if( unselect )
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
-        else
-            m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
-    }
-    else
-    {
-        if( unselect )
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
-
-        if( !localCommit.Empty() )
-            localCommit.Push( _( "Move" ) );
-    }
+    if( unselect )
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
     m_moveInProgress = false;
     m_frame->PopTool( aEvent );
-    return 0;
+
+    return !restore_state;
 }
 
 
-void SYMBOL_EDITOR_MOVE_TOOL::moveItem( EDA_ITEM* aItem, VECTOR2I aDelta )
+void SYMBOL_EDITOR_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
 {
     static_cast<LIB_ITEM*>( aItem )->Offset( mapCoords( aDelta ) );
     aItem->SetFlags( IS_MOVING );

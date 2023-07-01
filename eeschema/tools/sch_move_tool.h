@@ -103,7 +103,6 @@ private:
     ///< Lines changed by drag algorithm that weren't selected
     std::unordered_set<SCH_LINE*>       m_changedDragLines;
 
-    ///< Used for chaining commands
     VECTOR2I              m_moveOffset;
 
     ///< Last cursor position (needed for getModificationPoint() to avoid changes
