@@ -180,9 +180,10 @@ if(APPLE)
   target_link_libraries(nanodbc ${ODBC_LINK_FLAGS})
 endif()
 
-target_include_directories(nanodbc PUBLIC SYSTEM
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-  $<INSTALL_INTERFACE:include/nanodbc>) # <prefix>/include/nanodbc
+target_include_directories(nanodbc SYSTEM
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:include/nanodbc>) # <prefix>/include/nanodbc
 
 if(UNIX)
   set_target_properties(nanodbc PROPERTIES
