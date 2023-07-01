@@ -83,7 +83,10 @@ BOOST_FIXTURE_TEST_CASE( FailedToCleanRegressionTests, TRACK_CLEANER_TEST_FIXTUR
         TOOL_MANAGER toolMgr;
         toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, nullptr );
 
-        BOARD_COMMIT                                 commit( &toolMgr );
+        KI_TEST::DUMMY_TOOL* dummyTool = new KI_TEST::DUMMY_TOOL();
+        toolMgr.RegisterTool( dummyTool );
+
+        BOARD_COMMIT                                 commit( dummyTool );
         TRACKS_CLEANER                               cleaner( m_board.get(), commit );
         std::vector< std::shared_ptr<CLEANUP_ITEM> > dryRunItems;
         std::vector< std::shared_ptr<CLEANUP_ITEM> > realRunItems;
@@ -152,7 +155,10 @@ BOOST_FIXTURE_TEST_CASE( TrackCleanerRegressionTests, TRACK_CLEANER_TEST_FIXTURE
         TOOL_MANAGER toolMgr;
         toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, nullptr );
 
-        BOARD_COMMIT                                 commit( &toolMgr );
+        KI_TEST::DUMMY_TOOL* dummyTool = new KI_TEST::DUMMY_TOOL();
+        toolMgr.RegisterTool( dummyTool );
+
+        BOARD_COMMIT                                 commit( dummyTool );
         TRACKS_CLEANER                               cleaner( m_board.get(), commit );
         std::vector< std::shared_ptr<CLEANUP_ITEM> > dryRunItems;
         std::vector< std::shared_ptr<CLEANUP_ITEM> > realRunItems;

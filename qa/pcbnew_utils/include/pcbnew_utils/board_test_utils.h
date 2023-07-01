@@ -31,6 +31,7 @@
 #include <mutex>
 #include <map>
 #include <reporter.h>
+#include <tools/pcb_tool_base.h>
 
 class BOARD;
 class BOARD_ITEM;
@@ -45,6 +46,15 @@ class SETTINGS_MANAGER;
 
 namespace KI_TEST
 {
+class DUMMY_TOOL : public PCB_TOOL_BASE
+{
+public:
+    DUMMY_TOOL() :
+        PCB_TOOL_BASE( "testframework.dummytool" )
+    {};
+};
+
+
 /**
  * A helper that contains logic to assist in dumping boards to
  * disk depending on some environment variables.

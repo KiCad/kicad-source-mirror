@@ -109,7 +109,10 @@ void FillZones( BOARD* m_board )
     TOOL_MANAGER toolMgr;
     toolMgr.SetEnvironment( m_board, nullptr, nullptr, nullptr, nullptr );
 
-    BOARD_COMMIT       commit( &toolMgr );
+    KI_TEST::DUMMY_TOOL* dummyTool = new KI_TEST::DUMMY_TOOL();
+    toolMgr.RegisterTool( dummyTool );
+
+    BOARD_COMMIT       commit( dummyTool );
     ZONE_FILLER        filler( m_board, &commit );
     std::vector<ZONE*> toFill;
 

@@ -92,7 +92,7 @@ POSITIONING_TOOLS_MENU::POSITIONING_TOOLS_MENU( TOOL_INTERACTIVE* aTool ) :
     SetTitle( _( "Positioning Tools" ) );
 
     auto notMovingCondition =
-            [ this ]( const SELECTION& aSelection )
+            []( const SELECTION& aSelection )
             {
                 return aSelection.Empty() || !aSelection.Front()->IsMoving();
             };
@@ -169,7 +169,7 @@ bool EDIT_TOOL::Init()
             };
 
     auto notMovingCondition =
-            [ this ]( const SELECTION& aSelection )
+            []( const SELECTION& aSelection )
             {
                 return aSelection.Empty() || !aSelection.Front()->IsMoving();
             };

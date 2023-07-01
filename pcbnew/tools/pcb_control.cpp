@@ -873,7 +873,7 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
     if( isFootprintEditor && ( !board() || !footprint() ) )
         return 0;
 
-    BOARD_COMMIT commit( m_toolMgr );
+    BOARD_COMMIT commit( frame() );
     bool         cancelled = false;
 
     switch( clipItem->Type() )
@@ -1203,7 +1203,7 @@ bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, std::vector<BOARD_ITEM
 int PCB_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
 {
     PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
-    BOARD_COMMIT    commit( m_toolMgr );
+    BOARD_COMMIT    commit( editFrame );
 
     if( !editFrame )
         return 1;

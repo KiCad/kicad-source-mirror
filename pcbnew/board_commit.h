@@ -46,7 +46,6 @@ class TOOL_BASE;
 class BOARD_COMMIT : public COMMIT
 {
 public:
-    BOARD_COMMIT( TOOL_MANAGER* aToolMgr );
     BOARD_COMMIT( EDA_DRAW_FRAME* aFrame );
     BOARD_COMMIT( PCB_TOOL_BASE *aTool );
 

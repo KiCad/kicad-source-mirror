@@ -42,14 +42,6 @@
 using namespace std::placeholders;
 
 
-BOARD_COMMIT::BOARD_COMMIT( TOOL_MANAGER* aToolMgr ) :
-        m_toolMgr( aToolMgr ),
-        m_isFootprintEditor( false ),
-        m_isBoardEditor( false )
-{
-}
-
-
 BOARD_COMMIT::BOARD_COMMIT( PCB_TOOL_BASE* aTool )
 {
     m_toolMgr = aTool->GetManager();
