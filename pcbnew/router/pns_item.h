@@ -251,7 +251,11 @@ public:
     bool IsRoutable() const { return m_routable; }
 
     void SetIsFreePad( bool aIsFreePad = true ) { m_isFreePad = aIsFreePad; }
-    bool IsFreePad() const { return m_isFreePad; }
+
+    bool IsFreePad() const
+    {
+        return m_isFreePad || ( ParentPadVia() && ParentPadVia()->m_isFreePad );
+    }
 
     virtual ITEM* ParentPadVia() const { return nullptr; }
 
