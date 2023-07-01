@@ -1020,9 +1020,6 @@ bool TOOL_MANAGER::ProcessEvent( const TOOL_EVENT& aEvent )
 
     if( m_view && m_view->IsDirty() )
     {
-        if( GetToolHolder() )
-            GetToolHolder()->RefreshCanvas();
-
 #if defined( __WXMAC__ )
         wxTheApp->ProcessPendingEvents(); // required for updating brightening behind a popup menu
 #endif

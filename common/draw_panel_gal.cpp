@@ -62,9 +62,11 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
         m_MouseCapturedLost( false ),
         m_parent( aParentWindow ),
         m_edaFrame( nullptr ),
-        m_lastRepaint( 0 ),
+        m_lastRepaintStart( 0 ),
+        m_lastRepaintEnd( 0 ),
         m_drawing( false ),
         m_drawingEnabled( false ),
+        m_needIdleRefresh( false ),
         m_gal( nullptr ),
         m_view( nullptr ),
         m_painter( nullptr ),
@@ -150,7 +152,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
         Connect( eventType, wxEventHandler( EDA_DRAW_PANEL_GAL::OnEvent ), nullptr,
                  m_eventDispatcher );
 
-    // Set up timer that prevents too frequent redraw commands
+    // Set up timer to detect when drawing starts
     m_refreshTimer.SetOwner( this );
     Connect( m_refreshTimer.GetId(), wxEVT_TIMER,
              wxTimerEventHandler( EDA_DRAW_PANEL_GAL::onRefreshTimer ), nullptr, this );
@@ -204,7 +206,7 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint()
     if( m_drawing )
         return false;
 
-    m_lastRepaint = wxGetLocalTimeMillis();
+    m_lastRepaintStart = wxGetLocalTimeMillis();
 
     // Repaint the canvas, and fix scrollbar cursors
     // Usually called by a OnPaint event, but because it does not use a wxPaintDC,
@@ -334,6 +336,8 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint()
         );
     }
 
+    m_lastRepaintEnd = wxGetLocalTimeMillis();
+
     return true;
 }
 
@@ -378,26 +382,8 @@ void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
 
 void EDA_DRAW_PANEL_GAL::Refresh( bool aEraseBackground, const wxRect* aRect )
 {
-    wxLongLong t = wxGetLocalTimeMillis();
-    wxLongLong delta = t - m_lastRepaint;
-
-    int minRefreshPeriod = 13; // 77 FPS limit when v-sync not available.
-
-    if( m_gal && m_gal->IsInitialized() && m_gal->GetSwapInterval() != 0 )
-        minRefreshPeriod = 3;
-
-    // If it has been too long since the last frame (possible depending on platform timer latency),
-    // just do a refresh.  Otherwise, start the refresh timer if it hasn't already been started.
-    // This ensures that we will render often enough but not too often.
-    if( delta >= minRefreshPeriod )
-    {
-        if( !DoRePaint() )
-            m_refreshTimer.Start( minRefreshPeriod, true );
-    }
-    else if( !m_refreshTimer.IsRunning() )
-    {
-        m_refreshTimer.Start( ( minRefreshPeriod - delta ).ToLong(), true );
-    }
+    if( !DoRePaint() )
+        m_needIdleRefresh = true;
 }
 
 
@@ -424,7 +410,10 @@ void EDA_DRAW_PANEL_GAL::StopDrawing()
 {
     m_refreshTimer.Stop();
     m_drawingEnabled = false;
+
     Disconnect( wxEVT_PAINT, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), nullptr, this );
+
+    Disconnect( wxEVT_IDLE, wxIdleEventHandler( EDA_DRAW_PANEL_GAL::onIdle ), nullptr, this );
 }
 
 
@@ -570,7 +559,16 @@ void EDA_DRAW_PANEL_GAL::OnEvent( wxEvent& aEvent )
     else
         m_eventDispatcher->DispatchWxEvent( aEvent );
 
-    Refresh();
+    // Give events time to process, based on last render duration
+    wxLongLong endDelta = wxGetLocalTimeMillis() - m_lastRepaintEnd;
+    long long  timeLimit = ( m_lastRepaintEnd - m_lastRepaintStart ).GetValue() / 5;
+
+    timeLimit = std::clamp( timeLimit, 3LL, 150LL );
+
+    if( endDelta > timeLimit )
+        Refresh();
+    else
+        m_needIdleRefresh = true;
 }
 
 
@@ -599,6 +597,18 @@ void EDA_DRAW_PANEL_GAL::onLostFocus( wxFocusEvent& aEvent )
 }
 
 
+void EDA_DRAW_PANEL_GAL::onIdle( wxIdleEvent& aEvent )
+{
+    if( m_needIdleRefresh )
+    {
+        m_needIdleRefresh = false;
+        Refresh();
+    }
+
+    aEvent.Skip();
+}
+
+
 void EDA_DRAW_PANEL_GAL::onRefreshTimer( wxTimerEvent& aEvent )
 {
     if( !m_drawingEnabled )
@@ -607,6 +617,9 @@ void EDA_DRAW_PANEL_GAL::onRefreshTimer( wxTimerEvent& aEvent )
         {
             Connect( wxEVT_PAINT, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), nullptr,
                      this );
+
+            Connect( wxEVT_IDLE, wxIdleEventHandler( EDA_DRAW_PANEL_GAL::onIdle ), nullptr, this );
+
             m_drawingEnabled = true;
         }
         else

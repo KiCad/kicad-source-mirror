@@ -254,13 +254,15 @@ protected:
     void onSize( wxSizeEvent& aEvent );
     void onEnter( wxMouseEvent& aEvent );
     void onLostFocus( wxFocusEvent& aEvent );
+    void onIdle( wxIdleEvent& aEvent );
     void onRefreshTimer( wxTimerEvent& aEvent );
     void onShowTimer( wxTimerEvent& aEvent );
 
     wxWindow*                m_parent;           ///< Pointer to the parent window
     EDA_DRAW_FRAME*          m_edaFrame;         ///< Parent EDA_DRAW_FRAME (if available)
 
-    wxLongLong               m_lastRepaint;      ///< Timestamp of the last repaint start
+    wxLongLong               m_lastRepaintStart; ///< Timestamp of the last repaint start
+    wxLongLong               m_lastRepaintEnd;   ///< Timestamp of the last repaint end
     wxTimer                  m_refreshTimer;     ///< Timer to prevent too-frequent refreshing
 
     std::mutex               m_refreshMutex;     ///< Blocks multiple calls to the draw
@@ -270,6 +272,9 @@ protected:
 
     /// Flag that determines if VIEW may use GAL for redrawing the screen.
     bool                     m_drawingEnabled;
+
+    /// True when canvas needs to be refreshed from idle handler
+    bool                     m_needIdleRefresh;
 
     /// Timer used to execute OnShow() when the window finally appears on the screen.
     wxTimer                  m_onShowTimer;

@@ -333,7 +333,7 @@ void EDA_DRAW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
     if( m_canvasType != GetCanvas()->GetBackend() )
     {
         // Try to switch (will automatically fallback if necessary)
-        GetCanvas()->SwitchBackend( m_canvasType );
+        SwitchCanvas( m_canvasType );
         EDA_DRAW_PANEL_GAL::GAL_TYPE newGAL = GetCanvas()->GetBackend();
         bool                         success = newGAL == m_canvasType;
 
