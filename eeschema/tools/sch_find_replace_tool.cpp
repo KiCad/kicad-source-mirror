@@ -285,8 +285,11 @@ int SCH_FIND_REPLACE_TOOL::FindNext( const TOOL_EVENT& aEvent )
 
             if( item )
             {
-                m_frame->Schematic().SetCurrentSheet( *sheet );
-                m_frame->DisplayCurrentSheet();
+                if( m_frame->Schematic().CurrentSheet() != *sheet )
+                {
+                    m_frame->Schematic().SetCurrentSheet( *sheet );
+                    m_frame->DisplayCurrentSheet();
+                }
 
                 break;
             }
