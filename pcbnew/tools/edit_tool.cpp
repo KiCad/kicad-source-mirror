@@ -84,32 +84,33 @@ void EDIT_TOOL::Reset( RESET_REASON aReason )
     m_statusPopup = std::make_unique<STATUS_TEXT_POPUP>( getEditFrame<PCB_BASE_EDIT_FRAME>() );
 }
 
-
-POSITIONING_TOOLS_MENU::POSITIONING_TOOLS_MENU( TOOL_INTERACTIVE* aTool ) :
-        CONDITIONAL_MENU( aTool )
+static std::shared_ptr<CONDITIONAL_MENU> makePositioningToolsMenu( TOOL_INTERACTIVE* aTool )
 {
-    SetIcon( BITMAPS::special_tools );
-    SetTitle( _( "Positioning Tools" ) );
+    auto menu = std::make_shared<CONDITIONAL_MENU>( aTool );
 
-    auto notMovingCondition =
-            []( const SELECTION& aSelection )
-            {
-                return aSelection.Empty() || !aSelection.Front()->IsMoving();
-            };
+    menu->SetIcon( BITMAPS::special_tools );
+    menu->SetTitle( _( "Positioning Tools" ) );
 
-    AddItem( PCB_ACTIONS::moveExact,         SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
-    AddItem( PCB_ACTIONS::moveWithReference, SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
-    AddItem( PCB_ACTIONS::copyWithReference, SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
-    AddItem( PCB_ACTIONS::positionRelative,  SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
-}
+    auto notMovingCondition = []( const SELECTION& aSelection )
+    {
+        return aSelection.Empty() || !aSelection.Front()->IsMoving();
+    };
 
+    // clang-format off
+    menu->AddItem( PCB_ACTIONS::moveExact,         SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
+    menu->AddItem( PCB_ACTIONS::moveWithReference, SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
+    menu->AddItem( PCB_ACTIONS::copyWithReference, SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
+    menu->AddItem( PCB_ACTIONS::positionRelative,  SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
+    // clang-format on
+    return menu;
+};
 
 bool EDIT_TOOL::Init()
 {
     // Find the selection tool, so they can cooperate
     m_selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
 
-    auto positioningToolsSubMenu = std::make_shared<POSITIONING_TOOLS_MENU>( this );
+    std::shared_ptr<CONDITIONAL_MENU> positioningToolsSubMenu = makePositioningToolsMenu( this );
     m_selectionTool->GetToolMenu().RegisterSubMenu( positioningToolsSubMenu );
 
     auto propertiesCondition =

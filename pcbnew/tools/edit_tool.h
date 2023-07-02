@@ -45,19 +45,12 @@ namespace KIGFX::PREVIEW
 }
 
 
-class POSITIONING_TOOLS_MENU : public CONDITIONAL_MENU
-{
-public:
-    POSITIONING_TOOLS_MENU( TOOL_INTERACTIVE* aTool );
-};
-
 /**
  * The interactive edit tool.
  *
  * Allows one to move, rotate, flip and change properties of items selected using the
  * pcbnew.InteractiveSelection tool.
  */
-
 class EDIT_TOOL : public PCB_TOOL_BASE
 {
 public:
