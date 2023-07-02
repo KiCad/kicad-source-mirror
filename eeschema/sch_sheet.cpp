@@ -1116,7 +1116,7 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground ) const
     if( override || backgroundColor == COLOR4D::UNSPECIFIED )
         backgroundColor = aPlotter->RenderSettings()->GetLayerColor( LAYER_SHEET_BACKGROUND );
 
-    if( aBackground )
+    if( aBackground && backgroundColor.a > 0.0 )
     {
         aPlotter->SetColor( backgroundColor );
         aPlotter->Rect( m_pos, m_pos + m_size, FILL_T::FILLED_SHAPE, 1 );
@@ -1172,7 +1172,7 @@ void SCH_SHEET::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
     if( GetGRForceBlackPenState() )     // printing in black & white
         background = COLOR4D::UNSPECIFIED;
 
-    if( background != COLOR4D::UNSPECIFIED )
+    if( background.a > 0.0 )
         GRFilledRect( DC, pos, pos + m_size, 0, background, background );
 
     GRRect( DC, pos, pos + m_size, lineWidth, border );
