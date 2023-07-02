@@ -424,5 +424,14 @@ static struct SCH_PIN_DESC
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( SCH_PIN );
         propMgr.InheritsAfter( TYPE_HASH( SCH_PIN ), TYPE_HASH( SCH_ITEM ) );
+
+        propMgr.AddProperty( new PROPERTY<SCH_PIN, wxString>( _HKI( "Pin Name" ),
+                NO_SETTER( SCH_PIN, wxString ), &SCH_PIN::GetName ) );
+
+        propMgr.AddProperty( new PROPERTY<SCH_PIN, wxString>( _HKI( "Pin Number" ),
+                NO_SETTER( SCH_PIN, wxString ), &SCH_PIN::GetNumber ) );
+
+        propMgr.AddProperty( new PROPERTY<SCH_PIN, int>( _HKI( "Length" ),
+                NO_SETTER( SCH_PIN, int ), &SCH_PIN::GetLength, PROPERTY_DISPLAY::PT_SIZE ) );
     }
 } _SCH_PIN_DESC;

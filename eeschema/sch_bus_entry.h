@@ -71,6 +71,8 @@ public:
     VECTOR2I GetSize() const { return m_size; }
     void SetSize( const VECTOR2I& aSize ) { m_size = aSize; }
 
+    // Base class getter unused; necessary for property to compile
+    int GetPenWidth() const override;
     void SetPenWidth( int aWidth );
 
     virtual bool HasLineStroke() const override { return true; }

@@ -312,5 +312,9 @@ static struct SCH_JUNCTION_DESC
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( SCH_JUNCTION );
         propMgr.InheritsAfter( TYPE_HASH( SCH_JUNCTION ), TYPE_HASH( SCH_ITEM ) );
+
+        propMgr.AddProperty( new PROPERTY<SCH_JUNCTION, int>( _HKI( "Diameter" ),
+                &SCH_JUNCTION::SetDiameter, &SCH_JUNCTION::GetDiameter,
+                PROPERTY_DISPLAY::PT_SIZE ) );
     }
 } _SCH_JUNCTION_DESC;

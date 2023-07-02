@@ -366,3 +366,19 @@ void SCH_SHEET_PIN::Show( int nestLevel, std::ostream& os ) const
 }
 
 #endif
+
+
+static struct SCH_SHEET_PIN_DESC
+{
+    SCH_SHEET_PIN_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( SCH_SHEET_PIN );
+        propMgr.AddTypeCast( new TYPE_CAST<SCH_SHEET_PIN, SCH_HIERLABEL> );
+        propMgr.AddTypeCast( new TYPE_CAST<SCH_SHEET_PIN, SCH_LABEL_BASE> );
+        propMgr.AddTypeCast( new TYPE_CAST<SCH_SHEET_PIN, SCH_TEXT> );
+        propMgr.AddTypeCast( new TYPE_CAST<SCH_SHEET_PIN, EDA_TEXT> );
+
+        propMgr.InheritsAfter( TYPE_HASH( SCH_SHEET_PIN ), TYPE_HASH( SCH_HIERLABEL ) );
+    }
+} _SCH_SHEET_PIN_DESC;

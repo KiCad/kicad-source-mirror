@@ -190,6 +190,12 @@ void SCH_BUS_ENTRY_BASE::SetPenWidth( int aWidth )
 }
 
 
+int SCH_BUS_ENTRY_BASE::GetPenWidth() const
+{
+    return m_lastResolvedWidth;
+}
+
+
 void SCH_BUS_ENTRY_BASE::SetBusEntryColor( const COLOR4D& aColor )
 {
     m_stroke.SetColor( aColor );
@@ -581,5 +587,32 @@ static struct SCH_BUS_ENTRY_DESC
         propMgr.InheritsAfter( TYPE_HASH( SCH_BUS_ENTRY_BASE ), TYPE_HASH( SCH_ITEM ) );
         propMgr.InheritsAfter( TYPE_HASH( SCH_BUS_WIRE_ENTRY ), TYPE_HASH( SCH_BUS_ENTRY_BASE ) );
         propMgr.InheritsAfter( TYPE_HASH( SCH_BUS_BUS_ENTRY ), TYPE_HASH( SCH_BUS_ENTRY_BASE ) );
+
+        auto& plotDashTypeEnum = ENUM_MAP<PLOT_DASH_TYPE>::Instance();
+
+        if( plotDashTypeEnum.Choices().GetCount() == 0 )
+        {
+            plotDashTypeEnum.Map( PLOT_DASH_TYPE::DEFAULT, _HKI( "Default" ) )
+                            .Map( PLOT_DASH_TYPE::SOLID, _HKI( "Solid" ) )
+                            .Map( PLOT_DASH_TYPE::DASH, _HKI( "Dashed" ) )
+                            .Map( PLOT_DASH_TYPE::DOT, _HKI( "Dotted" ) )
+                            .Map( PLOT_DASH_TYPE::DASHDOT, _HKI( "Dash-Dot" ) )
+                            .Map( PLOT_DASH_TYPE::DASHDOTDOT, _HKI( "Dash-Dot-Dot" ) );
+        }
+
+        // TODO: Maybe SCH_BUS_ENTRY_BASE should inherit from or mix in with SCH_LINE
+        void ( SCH_BUS_ENTRY_BASE::*lineStyleSetter )( PLOT_DASH_TYPE ) =
+                &SCH_BUS_ENTRY_BASE::SetLineStyle;
+
+        propMgr.AddProperty( new PROPERTY_ENUM<SCH_BUS_ENTRY_BASE, PLOT_DASH_TYPE>(
+                _HKI( "Line Style" ),
+                lineStyleSetter, &SCH_BUS_ENTRY_BASE::GetLineStyle ) );
+
+        propMgr.AddProperty( new PROPERTY<SCH_BUS_ENTRY_BASE, int>( _HKI( "Line Width" ),
+                &SCH_BUS_ENTRY_BASE::SetPenWidth, &SCH_BUS_ENTRY_BASE::GetPenWidth,
+                PROPERTY_DISPLAY::PT_SIZE ) );
+
+        propMgr.AddProperty( new PROPERTY<SCH_BUS_ENTRY_BASE, COLOR4D>( _HKI( "Color" ),
+                &SCH_BUS_ENTRY_BASE::SetBusEntryColor, &SCH_BUS_ENTRY_BASE::GetBusEntryColor ) );
     }
 } _SCH_BUS_ENTRY_DESC;

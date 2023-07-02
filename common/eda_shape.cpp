@@ -1630,13 +1630,18 @@ static struct EDA_SHAPE_DESC
                     .Map( SHAPE_T::CIRCLE,  _HKI( "Circle" ) )
                     .Map( SHAPE_T::POLY,    _HKI( "Polygon" ) )
                     .Map( SHAPE_T::BEZIER,  _HKI( "Bezier" ) );
-        ENUM_MAP<PLOT_DASH_TYPE>::Instance()
-                    .Map( PLOT_DASH_TYPE::DEFAULT,    _HKI( "Default" ) )
-                    .Map( PLOT_DASH_TYPE::SOLID,      _HKI( "Solid" ) )
-                    .Map( PLOT_DASH_TYPE::DASH,       _HKI( "Dashed" ) )
-                    .Map( PLOT_DASH_TYPE::DOT,        _HKI( "Dotted" ) )
-                    .Map( PLOT_DASH_TYPE::DASHDOT,    _HKI( "Dash-Dot" ) )
-                    .Map( PLOT_DASH_TYPE::DASHDOTDOT, _HKI( "Dash-Dot-Dot" ) );
+
+        auto& plotDashTypeEnum = ENUM_MAP<PLOT_DASH_TYPE>::Instance();
+
+        if( plotDashTypeEnum.Choices().GetCount() == 0 )
+        {
+            plotDashTypeEnum.Map( PLOT_DASH_TYPE::DEFAULT, _HKI( "Default" ) )
+                            .Map( PLOT_DASH_TYPE::SOLID, _HKI( "Solid" ) )
+                            .Map( PLOT_DASH_TYPE::DASH, _HKI( "Dashed" ) )
+                            .Map( PLOT_DASH_TYPE::DOT, _HKI( "Dotted" ) )
+                            .Map( PLOT_DASH_TYPE::DASHDOT, _HKI( "Dash-Dot" ) )
+                            .Map( PLOT_DASH_TYPE::DASHDOTDOT, _HKI( "Dash-Dot-Dot" ) );
+        }
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( EDA_SHAPE );

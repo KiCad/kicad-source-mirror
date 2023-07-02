@@ -980,13 +980,17 @@ static struct SCH_LINE_DESC
 {
     SCH_LINE_DESC()
     {
-        ENUM_MAP<PLOT_DASH_TYPE>::Instance()
-                    .Map( PLOT_DASH_TYPE::DEFAULT,    _HKI( "Default" ) )
-                    .Map( PLOT_DASH_TYPE::SOLID,      _HKI( "Solid" ) )
-                    .Map( PLOT_DASH_TYPE::DASH,       _HKI( "Dashed" ) )
-                    .Map( PLOT_DASH_TYPE::DOT,        _HKI( "Dotted" ) )
-                    .Map( PLOT_DASH_TYPE::DASHDOT,    _HKI( "Dash-Dot" ) )
-                    .Map( PLOT_DASH_TYPE::DASHDOTDOT, _HKI( "Dash-Dot-Dot" ) );
+        auto& plotDashTypeEnum = ENUM_MAP<PLOT_DASH_TYPE>::Instance();
+
+        if( plotDashTypeEnum.Choices().GetCount() == 0 )
+        {
+            plotDashTypeEnum.Map( PLOT_DASH_TYPE::DEFAULT, _HKI( "Default" ) )
+                            .Map( PLOT_DASH_TYPE::SOLID, _HKI( "Solid" ) )
+                            .Map( PLOT_DASH_TYPE::DASH, _HKI( "Dashed" ) )
+                            .Map( PLOT_DASH_TYPE::DOT, _HKI( "Dotted" ) )
+                            .Map( PLOT_DASH_TYPE::DASHDOT, _HKI( "Dash-Dot" ) )
+                            .Map( PLOT_DASH_TYPE::DASHDOTDOT, _HKI( "Dash-Dot-Dot" ) );
+        }
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( SCH_LINE );
@@ -998,6 +1002,9 @@ static struct SCH_LINE_DESC
                 lineStyleSetter, &SCH_LINE::GetLineStyle ) );
 
         propMgr.AddProperty( new PROPERTY<SCH_LINE, int>( _HKI( "Line Width" ),
-                &SCH_LINE::SetLineWidth, &SCH_LINE::GetLineWidth ) );
+                &SCH_LINE::SetLineWidth, &SCH_LINE::GetLineWidth, PROPERTY_DISPLAY::PT_SIZE ) );
+
+        propMgr.AddProperty( new PROPERTY<SCH_LINE, COLOR4D>( _HKI( "Color" ),
+                &SCH_LINE::SetLineColor, &SCH_LINE::GetLineColor ) );
     }
 } _SCH_LINE_DESC;
