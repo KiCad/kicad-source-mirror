@@ -469,11 +469,15 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
             // All the coordinates will be rotated 90 deg when printing,
             // so the X,Y offset vector must be rotated -90 deg before printing
             std::swap( xoffset, yoffset );
+            std::swap( fitRect.width, fitRect.height );
             yoffset = -yoffset;
         }
 
         matrix.Translate( xoffset, yoffset );
         dc->SetTransformMatrix( matrix );
+
+        fitRect.x -= xoffset;
+        fitRect.y -= yoffset;
     }
     else
     {
