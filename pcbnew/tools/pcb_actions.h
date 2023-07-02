@@ -152,7 +152,13 @@ public:
 
     /// Fillet (i.e. adds an arc tangent to) all selected straight tracks by a user defined radius
     static TOOL_ACTION filletTracks;
+
+    /// Fillet (i.e. adds an arc tangent to) all selected straight lines by a user defined radius
     static TOOL_ACTION filletLines;
+    /// Chamfer (i.e. adds a straight line) all selected straight lines by a user defined setback
+    static TOOL_ACTION chamferLines;
+    /// Extend selected lines to meet at a point
+    static TOOL_ACTION extendLines;
 
     /// Activation of the edit tool
     static TOOL_ACTION properties;

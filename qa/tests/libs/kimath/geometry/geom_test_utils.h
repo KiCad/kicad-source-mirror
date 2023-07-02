@@ -313,6 +313,17 @@ inline bool IsPolySetValid( const SHAPE_POLY_SET& aSet )
     return true;
 }
 
+/**
+ * @brief Check that two SEGs have the same end points, in either order
+ *
+ * That is to say SEG(A, B) == SEG(A, B), but also SEG(A, B) == SEG(B, A)
+ */
+inline bool SegmentsHaveSameEndPoints( const SEG& aSeg1, const SEG& aSeg2 )
+{
+    return ( aSeg1.A == aSeg2.A && aSeg1.B == aSeg2.B )
+           || ( aSeg1.A == aSeg2.B && aSeg1.B == aSeg2.A );
+}
+
 } // namespace GEOM_TEST
 
 namespace BOOST_TEST_PRINT_NAMESPACE_OPEN

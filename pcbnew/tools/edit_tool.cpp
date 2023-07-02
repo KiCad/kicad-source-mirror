@@ -204,10 +204,11 @@ bool EDIT_TOOL::Init()
                                                PCB_ARC_T,
                                                PCB_VIA_T };
 
-    static std::vector<KICAD_T> filletTypes = { PCB_SHAPE_LOCATE_POLY_T,
-                                                PCB_SHAPE_LOCATE_RECT_T,
-                                                PCB_SHAPE_LOCATE_SEGMENT_T };
+    static std::vector<KICAD_T> filletChamferTypes = { PCB_SHAPE_LOCATE_POLY_T,
+                                                       PCB_SHAPE_LOCATE_RECT_T,
+                                                       PCB_SHAPE_LOCATE_SEGMENT_T };
 
+    static std::vector<KICAD_T> lineExtendTypes = { PCB_SHAPE_LOCATE_SEGMENT_T };
 
     // Add context menu entries that are displayed when selection tool is active
     CONDITIONAL_MENU& menu = m_selectionTool->GetToolMenu().GetMenu();
@@ -229,7 +230,10 @@ bool EDIT_TOOL::Init()
                                                       && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::DraggableItems )
                                                       && !SELECTION_CONDITIONS::OnlyTypes( { PCB_FOOTPRINT_T } ) );
     menu.AddItem( PCB_ACTIONS::filletTracks,      SELECTION_CONDITIONS::OnlyTypes( trackTypes ) );
-    menu.AddItem( PCB_ACTIONS::filletLines,       SELECTION_CONDITIONS::OnlyTypes( filletTypes ) );
+    menu.AddItem( PCB_ACTIONS::filletLines,       SELECTION_CONDITIONS::OnlyTypes( filletChamferTypes ) );
+    menu.AddItem( PCB_ACTIONS::chamferLines,      SELECTION_CONDITIONS::OnlyTypes( filletChamferTypes ) );
+    menu.AddItem( PCB_ACTIONS::extendLines,       SELECTION_CONDITIONS::OnlyTypes( lineExtendTypes )
+                                                    && SELECTION_CONDITIONS::Count( 2 ) );
     menu.AddItem( PCB_ACTIONS::rotateCcw,         SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::rotateCw,          SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::flip,              SELECTION_CONDITIONS::NotEmpty );
@@ -1048,8 +1052,45 @@ static std::optional<int> GetFilletParams( PCB_BASE_EDIT_FRAME& aFrame, wxString
     return filletRadiusIU;
 }
 
+/**
+ * Prompt the user for chamfer parameters
+ *
+ * @param aFrame
+ * @param aErrorMsg filled with an error message if the parameter is invalid somehow
+ * @return std::optional<int> the chamfer parameters or std::nullopt if no
+ * valid fillet specified
+ */
+static std::optional<CHAMFER_PARAMS> GetChamferParams( PCB_BASE_EDIT_FRAME& aFrame,
+                                                       wxString&            aErrorMsg )
+{
+    // Non-zero and the KLC default for Fab layer chamfers
+    const int default_setback = pcbIUScale.mmToIU( 1 );
+    // Store last used setback to allow pressing "enter" if repeat chamfer is required
+    static CHAMFER_PARAMS params{ default_setback, default_setback };
 
-int EDIT_TOOL::FilletLines( const TOOL_EVENT& aEvent )
+    WX_UNIT_ENTRY_DIALOG dia( &aFrame, _( "Enter chamfer setback:" ), _( "Chamfer Lines" ),
+                              params.m_chamfer_setback_a_IU );
+
+    if( dia.ShowModal() == wxID_CANCEL )
+        return std::nullopt;
+
+    params.m_chamfer_setback_a_IU = dia.GetValue();
+    // It's hard to easily specify an asymmetric chamfer (which line gets the longer
+    // setbeck?), so we just use the same setback for each
+    params.m_chamfer_setback_b_IU = params.m_chamfer_setback_a_IU;
+
+    // Some technically-valid chamfers are not useful to actually do
+    if( params.m_chamfer_setback_a_IU == 0 )
+    {
+        aErrorMsg = _( "A setback of zero was entered.\n"
+                       "The chamfer operation was not performed." );
+        return std::nullopt;
+    }
+
+    return params;
+}
+
+int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
 {
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
         []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
@@ -1181,6 +1222,30 @@ int EDIT_TOOL::FilletLines( const TOOL_EVENT& aEvent )
             pairwise_line_routine = std::make_unique<LINE_FILLET_ROUTINE>(
                     frame()->GetModel(), item_creation_handler, item_modification_handler,
                     *filletRadiusIU );
+        }
+    }
+    else if( aEvent.IsAction( &PCB_ACTIONS::chamferLines ) )
+    {
+        const std::optional<CHAMFER_PARAMS> chamfer_params =
+                GetChamferParams( *frame(), error_message );
+
+        if( chamfer_params.has_value() )
+        {
+            pairwise_line_routine = std::make_unique<LINE_CHAMFER_ROUTINE>(
+                    frame()->GetModel(), item_creation_handler, item_modification_handler,
+                    *chamfer_params );
+        }
+    }
+    else if( aEvent.IsAction( &PCB_ACTIONS::extendLines ) )
+    {
+        if( selection.CountType( PCB_SHAPE_LOCATE_SEGMENT_T ) != 2 )
+        {
+            error_message = _( "Exactly two lines must be selected to extend them." );
+        }
+        else
+        {
+            pairwise_line_routine = std::make_unique<LINE_EXTENSION_ROUTINE>(
+                    frame()->GetModel(), item_creation_handler, item_modification_handler );
         }
     }
 
@@ -2493,7 +2558,9 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::PackAndMoveFootprints, PCB_ACTIONS::packAndMoveFootprints.MakeEvent() );
     Go( &EDIT_TOOL::ChangeTrackWidth,      PCB_ACTIONS::changeTrackWidth.MakeEvent() );
     Go( &EDIT_TOOL::FilletTracks,          PCB_ACTIONS::filletTracks.MakeEvent() );
-    Go( &EDIT_TOOL::FilletLines,           PCB_ACTIONS::filletLines.MakeEvent() );
+    Go( &EDIT_TOOL::ModifyLines,           PCB_ACTIONS::filletLines.MakeEvent() );
+    Go( &EDIT_TOOL::ModifyLines,           PCB_ACTIONS::chamferLines.MakeEvent() );
+    Go( &EDIT_TOOL::ModifyLines,           PCB_ACTIONS::extendLines.MakeEvent() );
 
     Go( &EDIT_TOOL::copyToClipboard,       ACTIONS::copy.MakeEvent() );
     Go( &EDIT_TOOL::copyToClipboard,       PCB_ACTIONS::copyWithReference.MakeEvent() );

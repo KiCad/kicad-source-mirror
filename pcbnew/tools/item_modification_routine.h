@@ -32,6 +32,8 @@
 #include <board_item.h>
 #include <pcb_shape.h>
 
+#include <geometry/chamfer.h>
+
 /**
  * @brief An object that has the ability to modify items on a board
  *
@@ -47,7 +49,7 @@ public:
     /*
      * Handlers for receiving changes from the tool
      *
-     * These is used to allow the tool's caller to make changes to
+     * These are used to allow the tool's caller to make changes to
      * affected board items using extra information that the tool
      * does not have access to (e.g. is this an FP editor, was
      * the line created from a rectangle and needs to be added, not
@@ -55,11 +57,20 @@ public:
      *
      * We can't store them up until the end, because modifications
      * need the old state to be known.
+     */
+
+    /**
+     * Handler for creating a new item on the board
      *
-     * @param PCB_SHAPE& the line to modify
-     * @param bool true if the shape was created, false if it was only modified
+     * @param PCB_SHAPE& the shape to add
      */
     using CREATION_HANDLER = std::function<void( std::unique_ptr<PCB_SHAPE> )>;
+
+    /**
+     * Handler for modifying an existing item on the board
+     *
+     * @param PCB_SHAPE& the shape to modify
+     */
     using MODIFICATION_HANDLER = std::function<void( PCB_SHAPE& )>;
 
     ITEM_MODIFICATION_ROUTINE( BOARD_ITEM* aBoard, CREATION_HANDLER aCreationHandler,
@@ -169,6 +180,49 @@ public:
 
 private:
     int m_filletRadiusIU;
+};
+
+/**
+ * Pairwise line tool that adds a chamfer between the lines.
+ */
+class LINE_CHAMFER_ROUTINE : public PAIRWISE_LINE_ROUTINE
+{
+public:
+    LINE_CHAMFER_ROUTINE( BOARD_ITEM* aBoard, CREATION_HANDLER aCreationHandler,
+                          MODIFICATION_HANDLER aModificationHandler,
+                          CHAMFER_PARAMS       aChamferParams ) :
+            PAIRWISE_LINE_ROUTINE( aBoard, aCreationHandler, aModificationHandler ),
+            m_chamferParams( std::move( aChamferParams ) )
+    {
+    }
+
+    wxString GetCommitDescription() const override;
+    wxString GetCompleteFailureMessage() const override;
+    wxString GetSomeFailuresMessage() const override;
+
+    void ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB ) override;
+
+private:
+    const CHAMFER_PARAMS m_chamferParams;
+};
+
+/**
+ * Pairwise extend to corner or meeting tool
+ */
+class LINE_EXTENSION_ROUTINE : public PAIRWISE_LINE_ROUTINE
+{
+public:
+    LINE_EXTENSION_ROUTINE( BOARD_ITEM* aBoard, CREATION_HANDLER aCreationHandler,
+                            MODIFICATION_HANDLER aModificationHandler ) :
+            PAIRWISE_LINE_ROUTINE( aBoard, aCreationHandler, aModificationHandler )
+    {
+    }
+
+    wxString GetCommitDescription() const override;
+    wxString GetCompleteFailureMessage() const override;
+    wxString GetSomeFailuresMessage() const override;
+
+    void ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB ) override;
 };
 
 #endif /* ITEM_MODIFICATION_ROUTINE_H_ */

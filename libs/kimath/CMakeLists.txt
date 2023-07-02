@@ -10,6 +10,7 @@ set( KIMATH_SRCS
     src/md5_hash.cpp
     src/trigo.cpp
 
+	src/geometry/chamfer.cpp
 	src/geometry/eda_angle.cpp
 	src/geometry/ellipse.cpp
     src/geometry/circle.cpp

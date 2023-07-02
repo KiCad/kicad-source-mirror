@@ -403,6 +403,16 @@ TOOL_ACTION PCB_ACTIONS::filletLines( "pcbnew.InteractiveEdit.filletLines",
         AS_GLOBAL, 0, "",
         _( "Fillet Lines" ), _( "Adds arcs tangent to the selected lines" ) );
 
+TOOL_ACTION PCB_ACTIONS::chamferLines( "pcbnew.InteractiveEdit.chamferLines",
+        AS_GLOBAL, 0, "",
+        _( "Chamfer Lines" ),
+        _( "Cut away corners between selected lines" ) );
+
+TOOL_ACTION PCB_ACTIONS::extendLines( "pcbnew.InteractiveEdit.extendLines",
+        AS_GLOBAL, 0, "",
+        _( "Extend Lines to Meet" ),
+        _( "Extend lines to meet each other" ) );
+
 TOOL_ACTION PCB_ACTIONS::deleteFull( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveEdit.deleteFull" )
         .Scope( AS_GLOBAL )
