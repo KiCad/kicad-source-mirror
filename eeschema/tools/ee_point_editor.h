@@ -101,9 +101,6 @@ private:
     int removeCorner( const TOOL_EVENT& aEvent );
     int modifiedSelection( const TOOL_EVENT& aEvent );
 
-    void saveItemsToUndo();
-    void rollbackFromUndo();
-
 private:
     ///< Currently edited point, NULL if there is none.
     EDIT_POINT* m_editedPoint;

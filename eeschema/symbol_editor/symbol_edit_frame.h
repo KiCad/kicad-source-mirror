@@ -276,8 +276,6 @@ public:
     void GetSymbolFromUndoList();
     void GetSymbolFromRedoList();
 
-    void RollbackSymbolFromUndo();
-
     /**
      * Free the undo or redo list from \a aList element.
      *

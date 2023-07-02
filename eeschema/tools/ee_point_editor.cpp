@@ -28,6 +28,7 @@ using namespace std::placeholders;
 #include "ee_point_editor.h"
 #include <ee_grid_helper.h>
 #include <tool/tool_manager.h>
+#include <sch_commit.h>
 #include <view/view_controls.h>
 #include <geometry/seg.h>
 #include <tools/ee_actions.h>
@@ -436,7 +437,8 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     KIGFX::VIEW*          view = getView();
-    EDA_ITEM*             item = (EDA_ITEM*) selection.Front();
+    EDA_ITEM*             item = selection.Front();
+    SCH_COMMIT            commit( m_toolMgr );
 
     controls->ShowCursor( true );
 
@@ -445,7 +447,6 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
     setEditedPoint( nullptr );
     updateEditedPoint( aEvent );
     bool inDrag = false;
-    bool modified = false;
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -460,10 +461,23 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
         {
             if( !inDrag )
             {
-                saveItemsToUndo();
+                commit.Modify( m_editPoints->GetParent() );
+
+                if( m_editPoints->GetParent()->Type() == SCH_LINE_T )
+                {
+                    std::pair<EDA_ITEM*, int> connected = m_editPoints->Point( LINE_START ).GetConnected();
+
+                    if( connected.first )
+                        commit.Modify( connected.first );
+
+                    connected = m_editPoints->Point( LINE_END ).GetConnected();
+
+                    if( connected.first )
+                        commit.Modify( connected.first );
+                }
+
                 controls->ForceCursorPosition( false );
                 inDrag = true;
-                modified = true;
             }
 
             bool       snap = !evt->DisableGridSnapping();
@@ -479,11 +493,8 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
         }
         else if( inDrag && evt->IsMouseUp( BUT_LEFT ) )
         {
-            if( modified )
-            {
-                m_frame->OnModify();
-                modified = false;
-            }
+            if( !commit.Empty() )
+                commit.Push( _( "Move Point" ) );
 
             controls->SetAutoPan( false );
             inDrag = false;
@@ -492,9 +503,8 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
         {
             if( inDrag )      // Restore the last change
             {
-                rollbackFromUndo();
+                commit.Revert();
                 inDrag = false;
-                modified = false;
                 break;
             }
             else if( evt->IsCancelInteractive() )
@@ -521,9 +531,6 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
     if( m_editPoints )
     {
         view->Remove( m_editPoints.get() );
-
-        if( modified )
-            m_frame->OnModify();
 
         m_editPoints.reset();
         m_frame->GetCanvas()->Refresh();
@@ -1388,6 +1395,9 @@ int EE_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
 
     LIB_SHAPE*        shape = static_cast<LIB_SHAPE*>( m_editPoints->GetParent() );
     SHAPE_LINE_CHAIN& poly = shape->GetPolyShape().Outline( 0 );
+    SCH_COMMIT        commit( m_toolMgr );
+
+    commit.Modify( shape );
 
     VECTOR2I cursor = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
     VECTOR2I pos = mapCoords( cursor );
@@ -1406,13 +1416,12 @@ int EE_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
         }
     }
 
-    saveItemsToUndo();
     poly.Insert( closestLineStart + 1, pos );
 
     updateItem( shape, true );
     updatePoints();
 
-    m_frame->OnModify();
+    commit.Push( _( "Add Corner" ) );
 
     return 0;
 }
@@ -1425,17 +1434,19 @@ int EE_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
 
     LIB_SHAPE*        shape = static_cast<LIB_SHAPE*>( m_editPoints->GetParent() );
     SHAPE_LINE_CHAIN& poly = shape->GetPolyShape().Outline( 0 );
+    SCH_COMMIT        commit( m_toolMgr );
+
+    commit.Modify( shape );
 
     if( poly.GetPointCount() < 3 )
         return 0;
 
-    saveItemsToUndo();
     poly.Remove( getEditedPointIndex() );
 
     updateItem( shape, true );
     updatePoints();
 
-    m_frame->OnModify();
+    commit.Push( _( "Remove Corner" ) );
 
     return 0;
 }
@@ -1445,41 +1456,6 @@ int EE_POINT_EDITOR::modifiedSelection( const TOOL_EVENT& aEvent )
 {
     updatePoints();
     return 0;
-}
-
-
-void EE_POINT_EDITOR::saveItemsToUndo()
-{
-    if( m_isSymbolEditor )
-    {
-        saveCopyInUndoList( m_editPoints->GetParent()->GetParent(), UNDO_REDO::LIBEDIT );
-    }
-    else
-    {
-        saveCopyInUndoList( (SCH_ITEM*) m_editPoints->GetParent(), UNDO_REDO::CHANGED );
-
-        if( m_editPoints->GetParent()->Type() == SCH_LINE_T )
-        {
-            std::pair<EDA_ITEM*, int> connected = m_editPoints->Point( LINE_START ).GetConnected();
-
-            if( connected.first )
-                saveCopyInUndoList( (SCH_ITEM*) connected.first, UNDO_REDO::CHANGED, true );
-
-            connected = m_editPoints->Point( LINE_END ).GetConnected();
-
-            if( connected.first )
-                saveCopyInUndoList( (SCH_ITEM*) connected.first, UNDO_REDO::CHANGED, true );
-        }
-    }
-}
-
-
-void EE_POINT_EDITOR::rollbackFromUndo()
-{
-    if( m_isSymbolEditor )
-        static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->RollbackSymbolFromUndo();
-    else
-        static_cast<SCH_EDIT_FRAME*>( m_frame )->RollbackSchematicFromUndo();
 }
 
 

@@ -1447,6 +1447,9 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             SetCurSymbol( new LIB_SYMBOL( *lib_symbol ), false );
             RebuildSymbolUnitsList();
             SetShowDeMorgan( GetCurSymbol()->HasConversion() );
+
+            if( m_toolManager )
+                m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
         }
 
         break;

@@ -163,28 +163,3 @@ void SYMBOL_EDIT_FRAME::GetSymbolFromUndoList()
 }
 
 
-void SYMBOL_EDIT_FRAME::RollbackSymbolFromUndo()
-{
-    m_toolManager->RunAction( EE_ACTIONS::clearSelection );
-
-    // Load the last undo entry
-    PICKED_ITEMS_LIST* undoCommand = PopCommandFromUndoList();
-
-    // Check if we were already at the top of the stack
-    if( !undoCommand )
-        return;
-
-    ITEM_PICKER undoWrapper = undoCommand->PopItem();
-    delete undoCommand;
-    LIB_SYMBOL* symbol = (LIB_SYMBOL*) undoWrapper.GetItem();
-    symbol->ClearFlags( UR_TRANSIENT );
-    SetCurSymbol( symbol, false );
-
-    EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
-    selTool->RebuildSelection();
-
-    RebuildSymbolUnitsList();
-    SetShowDeMorgan( symbol->HasConversion() );
-
-    RebuildView();
-}
