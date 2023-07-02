@@ -235,6 +235,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::bug].emplace_back( BITMAPS::bug, wxT( "bug_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::bus_definition_tool].emplace_back( BITMAPS::bus_definition_tool, wxT( "bus_definition_tool_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::cancel].emplace_back( BITMAPS::cancel, wxT( "cancel_24.png" ), 24, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::chamfer].emplace_back( BITMAPS::chamfer, wxT( "chamfer_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::change_entry_orient].emplace_back( BITMAPS::change_entry_orient, wxT( "change_entry_orient_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::contrast_mode].emplace_back( BITMAPS::contrast_mode, wxT( "contrast_mode_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::curved_ratsnest].emplace_back( BITMAPS::curved_ratsnest, wxT( "curved_ratsnest_24.png" ), 24, wxT( "light" ) );
@@ -302,6 +303,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::file_pos].emplace_back( BITMAPS::file_pos, wxT( "file_pos_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::file_svg].emplace_back( BITMAPS::file_svg, wxT( "file_svg_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::fill_zone].emplace_back( BITMAPS::fill_zone, wxT( "fill_zone_24.png" ), 24, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::fillet].emplace_back( BITMAPS::fillet, wxT( "fillet_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::filter].emplace_back( BITMAPS::filter, wxT( "filter_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::find].emplace_back( BITMAPS::find, wxT( "find_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::find_replace].emplace_back( BITMAPS::find_replace, wxT( "find_replace_24.png" ), 24, wxT( "light" ) );
@@ -621,6 +623,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::bug].emplace_back( BITMAPS::bug, wxT( "bug_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::bus_definition_tool].emplace_back( BITMAPS::bus_definition_tool, wxT( "bus_definition_tool_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::cancel].emplace_back( BITMAPS::cancel, wxT( "cancel_dark_24.png" ), 24, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::chamfer].emplace_back( BITMAPS::chamfer, wxT( "chamfer_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::change_entry_orient].emplace_back( BITMAPS::change_entry_orient, wxT( "change_entry_orient_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::contrast_mode].emplace_back( BITMAPS::contrast_mode, wxT( "contrast_mode_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::curved_ratsnest].emplace_back( BITMAPS::curved_ratsnest, wxT( "curved_ratsnest_dark_24.png" ), 24, wxT( "dark" ) );
@@ -688,6 +691,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::file_pos].emplace_back( BITMAPS::file_pos, wxT( "file_pos_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::file_svg].emplace_back( BITMAPS::file_svg, wxT( "file_svg_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::fill_zone].emplace_back( BITMAPS::fill_zone, wxT( "fill_zone_dark_24.png" ), 24, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::fillet].emplace_back( BITMAPS::fillet, wxT( "fillet_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::filter].emplace_back( BITMAPS::filter, wxT( "filter_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::find].emplace_back( BITMAPS::find, wxT( "find_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::find_replace].emplace_back( BITMAPS::find_replace, wxT( "find_replace_dark_24.png" ), 24, wxT( "dark" ) );

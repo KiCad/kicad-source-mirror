@@ -212,6 +212,7 @@ set( BMAPS_MID
     bug
     bus_definition_tool
     cancel
+    chamfer
     change_entry_orient
     contrast_mode
     curved_ratsnest
@@ -279,6 +280,7 @@ set( BMAPS_MID
     file_pos
     file_svg
     fill_zone
+    fillet
     filter
     find
     find_replace

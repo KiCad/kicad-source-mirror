@@ -401,12 +401,14 @@ TOOL_ACTION PCB_ACTIONS::filletTracks( "pcbnew.InteractiveEdit.filletTracks",
 
 TOOL_ACTION PCB_ACTIONS::filletLines( "pcbnew.InteractiveEdit.filletLines",
         AS_GLOBAL, 0, "",
-        _( "Fillet Lines" ), _( "Adds arcs tangent to the selected lines" ) );
+        _( "Fillet Lines" ), _( "Adds arcs tangent to the selected lines" ),
+        BITMAPS::fillet );
 
 TOOL_ACTION PCB_ACTIONS::chamferLines( "pcbnew.InteractiveEdit.chamferLines",
         AS_GLOBAL, 0, "",
         _( "Chamfer Lines" ),
-        _( "Cut away corners between selected lines" ) );
+        _( "Cut away corners between selected lines" ),
+        BITMAPS::chamfer );
 
 TOOL_ACTION PCB_ACTIONS::extendLines( "pcbnew.InteractiveEdit.extendLines",
         AS_GLOBAL, 0, "",
