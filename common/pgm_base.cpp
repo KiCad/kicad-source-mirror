@@ -655,7 +655,7 @@ bool PGM_BASE::SetLanguage( wxString& aErrMsg, bool first_time )
 
     // don't use wxLOCALE_LOAD_DEFAULT flag so that Init() doesn't return
     // false just because it failed to load wxstd catalog
-    if( !m_locale->Init( m_language_id, wxLOCALE_DONT_LOAD_DEFAULT ) )
+    if( !m_locale->Init( m_language_id ) )
     {
         wxLogTrace( traceLocale, wxT( "This language is not supported by the system." ) );
 
@@ -663,7 +663,7 @@ bool PGM_BASE::SetLanguage( wxString& aErrMsg, bool first_time )
         delete m_locale;
 
         m_locale = new wxLocale;
-        m_locale->Init( wxLANGUAGE_DEFAULT, wxLOCALE_DONT_LOAD_DEFAULT);
+        m_locale->Init( wxLANGUAGE_DEFAULT );
 
         aErrMsg = _( "This language is not supported by the operating system." );
         return false;
@@ -714,7 +714,7 @@ bool PGM_BASE::SetLanguage( wxString& aErrMsg, bool first_time )
         delete m_locale;
 
         m_locale = new wxLocale;
-        m_locale->Init( wxLANGUAGE_DEFAULT, wxLOCALE_DONT_LOAD_DEFAULT);
+        m_locale->Init( wxLANGUAGE_DEFAULT );
 
         aErrMsg = _( "The KiCad language file for this language is not installed." );
         return false;
