@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2012-2021 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2023 Kicad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017-2018 CERN
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -537,17 +537,27 @@ void CAIRO_GAL_BASE::DrawBitmap( const BITMAP_BASE& aBitmap, double alphaBlend )
     {
         for( int col = 0; col < w; col++ )
         {
-            // Build the RGB24 pixel:
-            uint32_t pixel = bm_pix_buffer.GetRed( col, row ) << 16;
-            pixel += bm_pix_buffer.GetGreen( col, row ) << 8;
-            pixel += bm_pix_buffer.GetBlue( col, row );
+            unsigned char r = bm_pix_buffer.GetRed( col, row );
+            unsigned char g = bm_pix_buffer.GetGreen( col, row );
+            unsigned char b = bm_pix_buffer.GetBlue( col, row );
+            unsigned char a = wxALPHA_OPAQUE;
 
             if( bm_pix_buffer.HasAlpha() )
-                pixel += bm_pix_buffer.GetAlpha( col, row ) << 24;
-            else if( bm_pix_buffer.HasMask() && pixel == mask_color )
-                pixel += ( wxALPHA_TRANSPARENT << 24 );
-            else
-                pixel += ( wxALPHA_OPAQUE << 24 );
+            {
+                a = bm_pix_buffer.GetAlpha( col, row );
+
+                // ARGB32 format needs pre-multiplied alpha
+                r = int32_t( r ) * a / 0xFF;
+                g = int32_t( g ) * a / 0xFF;
+                b = int32_t( b ) * a / 0xFF;
+            }
+            else if( bm_pix_buffer.HasMask() && ( r << 16 | g << 8 | b ) == mask_color )
+            {
+                a = wxALPHA_TRANSPARENT;
+            }
+
+            // Build the ARGB24 pixel:
+            uint32_t pixel = a << 24 | r << 16 | g << 8 | b;
 
             // Write the pixel to the cairo image buffer:
             uint32_t* pix_ptr = (uint32_t*) pix_buffer;
