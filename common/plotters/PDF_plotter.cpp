@@ -498,6 +498,10 @@ void PDF_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double
              "  /H %d\n"
              "ID\n", m_colorMode ? "/RGB" : "/G", pix_size.x, pix_size.y );
 
+    wxColor bg = m_renderSettings->GetBackgroundColor() != COLOR4D::UNSPECIFIED
+                         ? m_renderSettings->GetBackgroundColor().ToColour()
+                         : wxColor( 255, 255, 255 );
+
     /* Here comes the stream (in binary!). I *could* have hex or ascii84
        encoded it, but who cares? I'll go through zlib anyway */
     for( int y = 0; y < pix_size.y; y++ )
@@ -508,7 +512,7 @@ void PDF_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double
             unsigned char g = aImage.GetGreen( x, y ) & 0xFF;
             unsigned char b = aImage.GetBlue( x, y ) & 0xFF;
 
-            // PDF inline images don't support alpha, so premultiply against white background
+            // PDF inline images don't support alpha, so blend with background color
             if( aImage.HasAlpha() )
             {
                 unsigned char alpha = aImage.GetAlpha( x, y ) & 0xFF;
@@ -516,10 +520,10 @@ void PDF_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double
                 if( alpha < 0xFF )
                 {
                     float d = alpha / 255.0;
-                    float a = 1.0 - d;
-                    r = std::min( KiROUND( r * d + ( a * 0xFF ) ), 0xFF );
-                    g = std::min( KiROUND( g * d + ( a * 0xFF ) ), 0xFF );
-                    b = std::min( KiROUND( b * d + ( a * 0xFF ) ), 0xFF );
+
+                    r = wxColour::AlphaBlend( r, bg.Red(), d );
+                    g = wxColour::AlphaBlend( g, bg.Green(), d );
+                    b = wxColour::AlphaBlend( b, bg.Blue(), d );
                 }
             }
 
