@@ -463,7 +463,8 @@ void DS_DRAW_ITEM_BITMAP::PrintWsItem( const RENDER_SETTINGS* aSettings, const V
     if( !bitmap->m_ImageBitmap )
         return;
 
-    bitmap->m_ImageBitmap->DrawBitmap( aSettings->GetPrintDC(), m_pos + aOffset );
+    bitmap->m_ImageBitmap->DrawBitmap( aSettings->GetPrintDC(), m_pos + aOffset,
+                                       aSettings->GetBackgroundColor() );
 }
 
 

@@ -281,7 +281,8 @@ const BOX2I BITMAP_BASE::GetBoundingBox() const
 }
 
 
-void BITMAP_BASE::DrawBitmap( wxDC* aDC, const VECTOR2I& aPos )
+void BITMAP_BASE::DrawBitmap( wxDC* aDC, const VECTOR2I& aPos,
+                              const KIGFX::COLOR4D& aBackgroundColor )
 {
     if( m_bitmap == nullptr )
         return;
@@ -358,7 +359,26 @@ void BITMAP_BASE::DrawBitmap( wxDC* aDC, const VECTOR2I& aPos )
     aDC->SetClippingRegion( clipAreaPos, wxSize( size.x, size.y ) );
     #endif
 
-    if( GetGRForceBlackPenState() )
+    if( aBackgroundColor != COLOR4D::UNSPECIFIED && m_bitmap->HasAlpha() )
+    {
+        // Most printers don't support transparent images properly,
+        // so blend the image with background color.
+
+        int w = m_bitmap->GetWidth();
+        int h = m_bitmap->GetHeight();
+
+        wxImage  image( w, h );
+        wxColour bgColor = aBackgroundColor.ToColour();
+
+        image.SetRGB( wxRect( 0, 0, w, h ), bgColor.Red(), bgColor.Green(), bgColor.Blue() );
+        image.Paste( m_bitmap->ConvertToImage(), 0, 0, wxIMAGE_ALPHA_BLEND_COMPOSE );
+
+        if( GetGRForceBlackPenState() )
+            image = image.ConvertToGreyscale();
+
+        aDC->DrawBitmap( wxBitmap( image ), pos.x, pos.y, true );
+    }
+    else if( GetGRForceBlackPenState() )
     {
         wxBitmap result( m_bitmap->ConvertToImage().ConvertToGreyscale() );
         aDC->DrawBitmap( result, pos.x, pos.y, true );

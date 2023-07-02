@@ -131,7 +131,7 @@ void SCH_BITMAP::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffse
 {
     VECTOR2I pos = m_pos + aOffset;
 
-    m_bitmapBase->DrawBitmap( aSettings->GetPrintDC(), pos );
+    m_bitmapBase->DrawBitmap( aSettings->GetPrintDC(), pos, aSettings->GetBackgroundColor() );
 }
 
 
