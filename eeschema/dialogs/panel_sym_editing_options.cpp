@@ -99,6 +99,8 @@ void PANEL_SYM_EDITING_OPTIONS::onKillFocusPinPitch( wxFocusEvent& aEvent )
     pitch_mils = KiROUND( double( pitch_mils ) / MIN_GRID ) * MIN_GRID;
 
     m_pinPitch.SetValue( schIUScale.MilsToIU( pitch_mils ) );
+
+    aEvent.Skip();
 }
 
 
