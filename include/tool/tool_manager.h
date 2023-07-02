@@ -545,8 +545,8 @@ private:
     /**
      * Helper function to actually run an action.
      */
-    bool doRunAction( const TOOL_ACTION& aAction, bool aNow, std::any aParam, COMMIT* aCommit );
-    bool doRunAction( const std::string& aActionName, bool aNow, std::any aParam, COMMIT* aCommit );
+    bool doRunAction( const TOOL_ACTION& aAction, bool aNow, const std::any& aParam, COMMIT* aCommit );
+    bool doRunAction( const std::string& aActionName, bool aNow, const std::any& aParam, COMMIT* aCommit );
 
     /**
      * Pass an event at first to the active tools, then to all others.
