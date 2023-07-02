@@ -686,6 +686,7 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
             {
                 if( !count || line_start.x != x1 )
                 {
+#ifndef __WXMAC__   // Drawing the vertical lines spoils anti-aliasing on Retina displays
                     if( count && dupx0 > 1 && ymin0 != ymax0 )
                     {
                         // Vertical points are merged, draw the pending vertical line
@@ -693,6 +694,7 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
                         // the main trace show this point
                         dc.DrawLine( x0, ymin0, x0, ymax0 );
                     }
+#endif
 
                     x0 = x1;
                     ymin0 = ymax0 = y1;
@@ -2370,12 +2372,12 @@ void mpWindow::DelAllLayers( bool alsoDeleteObject, bool refreshDisplay )
 
 void mpWindow::OnPaint( wxPaintEvent& WXUNUSED( event ) )
 {
-    wxPaintDC dc( this );
+    wxPaintDC paintDC( this );
 
-    dc.GetSize( &m_scrX, &m_scrY );    // This is the size of the visible area only!
+    paintDC.GetSize( &m_scrX, &m_scrY );    // This is the size of the visible area only!
 
     // Selects direct or buffered draw:
-    wxDC* trgDc;
+    wxDC* targetDC = &paintDC;
 
     // J.L.Blanco @ Aug 2007: Added double buffer support
     if( m_enableDoubleBuffer )
@@ -2389,68 +2391,40 @@ void mpWindow::OnPaint( wxPaintEvent& WXUNUSED( event ) )
             m_last_ly   = m_scrY;
         }
 
-        trgDc = &m_buff_dc;
-    }
-    else
-    {
-        trgDc = &dc;
+        targetDC = &m_buff_dc;
     }
 
-    // Draw background:
-    // trgDc->SetDeviceOrigin(0,0);
-
-    if( wxGraphicsContext* ctx = trgDc->GetGraphicsContext() )
+    if( wxGraphicsContext* ctx = targetDC->GetGraphicsContext() )
     {
-        if( !ctx->SetInterpolationQuality( wxINTERPOLATION_BEST )
-                || !ctx->SetInterpolationQuality( wxINTERPOLATION_GOOD ) )
-        {
-            ctx->SetInterpolationQuality( wxINTERPOLATION_FAST );
-        }
+        if( !ctx->SetInterpolationQuality( wxINTERPOLATION_BEST ) )
+            if( !ctx->SetInterpolationQuality( wxINTERPOLATION_GOOD ) )
+                ctx->SetInterpolationQuality( wxINTERPOLATION_FAST );
 
         ctx->SetAntialiasMode( wxANTIALIAS_DEFAULT );
     }
 
-    trgDc->SetPen( *wxTRANSPARENT_PEN );
+    // Draw background:
+    targetDC->SetPen( *wxTRANSPARENT_PEN );
     wxBrush brush( GetBackgroundColour() );
-    trgDc->SetBrush( brush );
-    trgDc->SetTextForeground( m_fgColour );
-    trgDc->DrawRectangle( 0, 0, m_scrX, m_scrY );
+    targetDC->SetBrush( brush );
+    targetDC->SetTextForeground( m_fgColour );
+    targetDC->DrawRectangle( 0, 0, m_scrX, m_scrY );
 
     // Draw all the layers:
-    // trgDc->SetDeviceOrigin( m_scrX>>1, m_scrY>>1);  // Origin at the center
-    wxLayerList::iterator li;
-
-    for( li = m_layers.begin(); li != m_layers.end(); li++ )
-        (*li)->Plot( *trgDc, *this );
+    for( mpLayer* layer : m_layers )
+        layer->Plot( *targetDC, *this );
 
     if( m_zooming )
     {
         wxPen pen( m_fgColour, 1, wxPENSTYLE_DOT );
-        trgDc->SetPen( pen );
-        trgDc->SetBrush( *wxTRANSPARENT_BRUSH );
-        trgDc->DrawRectangle( m_zoomRect );
+        targetDC->SetPen( pen );
+        targetDC->SetBrush( *wxTRANSPARENT_BRUSH );
+        targetDC->DrawRectangle( m_zoomRect );
     }
 
     // If doublebuffer, draw now to the window:
     if( m_enableDoubleBuffer )
-    {
-        // trgDc->SetDeviceOrigin(0,0);
-        // dc.SetDeviceOrigin(0,0);  // Origin at the center
-        dc.Blit( 0, 0, m_scrX, m_scrY, trgDc, 0, 0 );
-    }
-
-    // If scrollbars are enabled, refresh them
-    if( m_enableScrollBars )
-    {
-        /*       m_scroll.x = (int) floor((m_posX - m_minX)*m_scaleX);
-         *        m_scroll.y = (int) floor((m_maxY - m_posY )*m_scaleY);
-         *        Scroll(m_scroll.x, m_scroll.y);*/
-        // Scroll(x2p(m_posX), y2p(m_posY));
-        // SetVirtualSize((int) ((m_maxX - m_minX)*m_scaleX), (int) ((m_maxY - m_minY)*m_scaleY));
-        // int centerX = (m_scrX - m_marginLeft - m_marginRight)/2; // + m_marginLeft; // c.x = m_scrX/2;
-        // int centerY = (m_scrY - m_marginTop - m_marginBottom)/2; // - m_marginTop; // c.y = m_scrY/2;
-        /*SetScrollbars(1, 1, (int) ((m_maxX - m_minX)*m_scaleX), (int) ((m_maxY - m_minY)*m_scaleY));*/    // , x2p(m_posX + centerX/m_scaleX), y2p(m_posY - centerY/m_scaleY), true);
-    }
+        paintDC.Blit( 0, 0, m_scrX, m_scrY, targetDC, 0, 0 );
 }
 
 
