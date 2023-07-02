@@ -21,7 +21,6 @@
 #include <wx/textctrl.h>
 #include <wx/gbsizer.h>
 #include <wx/checkbox.h>
-#include <wx/choice.h>
 #include <wx/spinctrl.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
@@ -59,10 +58,14 @@ class PANEL_SYM_EDITING_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxStaticText* m_repeatLabel;
 		wxStaticLine* m_staticline2;
 		wxStaticText* m_pinPitchLabel;
-		wxChoice* m_choicePinDisplacement;
+		wxTextCtrl* m_pinPitchCtrl;
 		wxStaticText* m_pinPitchUnits;
 		wxStaticText* m_labelIncrementLabel1;
 		wxSpinCtrl* m_spinRepeatLabel;
+
+		// Virtual event handlers, override them in your derived class
+		virtual void onKillFocusPinPitch( wxFocusEvent& event ) { event.Skip(); }
+
 
 	public:
 

@@ -10,7 +10,7 @@
         <property name="disconnect_python_events">0</property>
         <property name="embedded_files_path">res</property>
         <property name="encoding">UTF-8</property>
-        <property name="event_generation">table</property>
+        <property name="event_generation">connect</property>
         <property name="file">panel_sym_editing_options_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
@@ -1456,24 +1456,26 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND|wxTOP|wxLEFT</property>
+                            <property name="flag">wxEXPAND|wxTOP|wxRIGHT|wxLEFT</property>
                             <property name="proportion">1</property>
-                            <object class="wxFlexGridSizer" expanded="1">
-                                <property name="cols">3</property>
+                            <object class="wxGridBagSizer" expanded="1">
+                                <property name="empty_cell_size"></property>
                                 <property name="flexible_direction">wxBOTH</property>
-                                <property name="growablecols">1</property>
+                                <property name="growablecols"></property>
                                 <property name="growablerows"></property>
                                 <property name="hgap">0</property>
                                 <property name="minimum_size"></property>
-                                <property name="name">fgSizer1</property>
+                                <property name="name">gbSizer2</property>
                                 <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                                 <property name="permission">none</property>
-                                <property name="rows">0</property>
-                                <property name="vgap">3</property>
-                                <object class="sizeritem" expanded="1">
+                                <property name="vgap">5</property>
+                                <object class="gbsizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT</property>
-                                    <property name="proportion">0</property>
+                                    <property name="colspan">1</property>
+                                    <property name="column">0</property>
+                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                                    <property name="row">0</property>
+                                    <property name="rowspan">1</property>
                                     <object class="wxStaticText" expanded="1">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
@@ -1531,11 +1533,14 @@
                                         <property name="wrap">-1</property>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="1">
+                                <object class="gbsizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxEXPAND|wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL</property>
-                                    <property name="proportion">0</property>
-                                    <object class="wxChoice" expanded="1">
+                                    <property name="colspan">1</property>
+                                    <property name="column">1</property>
+                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT</property>
+                                    <property name="row">0</property>
+                                    <property name="rowspan">1</property>
+                                    <object class="wxTextCtrl" expanded="1">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
                                         <property name="RightDockable">1</property>
@@ -1549,7 +1554,6 @@
                                         <property name="caption"></property>
                                         <property name="caption_visible">1</property>
                                         <property name="center_pane">0</property>
-                                        <property name="choices">&quot;100&quot; &quot;50&quot;</property>
                                         <property name="close_button">1</property>
                                         <property name="context_help"></property>
                                         <property name="context_menu">1</property>
@@ -1567,11 +1571,12 @@
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
                                         <property name="maximum_size"></property>
+                                        <property name="maxlength"></property>
                                         <property name="min_size"></property>
                                         <property name="minimize_button">0</property>
                                         <property name="minimum_size"></property>
                                         <property name="moveable">1</property>
-                                        <property name="name">m_choicePinDisplacement</property>
+                                        <property name="name">m_pinPitchCtrl</property>
                                         <property name="pane_border">1</property>
                                         <property name="pane_position"></property>
                                         <property name="pane_size"></property>
@@ -1579,26 +1584,30 @@
                                         <property name="pin_button">1</property>
                                         <property name="pos"></property>
                                         <property name="resize">Resizable</property>
-                                        <property name="selection">0</property>
                                         <property name="show">1</property>
                                         <property name="size"></property>
                                         <property name="style"></property>
-                                        <property name="subclass"></property>
+                                        <property name="subclass">; ; forward_declare</property>
                                         <property name="toolbar_pane">0</property>
                                         <property name="tooltip"></property>
                                         <property name="validator_data_type"></property>
                                         <property name="validator_style">wxFILTER_NONE</property>
                                         <property name="validator_type">wxDefaultValidator</property>
                                         <property name="validator_variable"></property>
+                                        <property name="value"></property>
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
+                                        <event name="OnKillFocus">onKillFocusPinPitch</event>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="1">
+                                <object class="gbsizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT</property>
-                                    <property name="proportion">0</property>
+                                    <property name="colspan">1</property>
+                                    <property name="column">2</property>
+                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
+                                    <property name="row">0</property>
+                                    <property name="rowspan">1</property>
                                     <object class="wxStaticText" expanded="1">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
@@ -1656,10 +1665,13 @@
                                         <property name="wrap">-1</property>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="1">
+                                <object class="gbsizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT</property>
-                                    <property name="proportion">0</property>
+                                    <property name="colspan">1</property>
+                                    <property name="column">0</property>
+                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                                    <property name="row">1</property>
+                                    <property name="rowspan">1</property>
                                     <object class="wxStaticText" expanded="1">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
@@ -1717,10 +1729,13 @@
                                         <property name="wrap">-1</property>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="1">
+                                <object class="gbsizeritem" expanded="1">
                                     <property name="border">5</property>
-                                    <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
-                                    <property name="proportion">0</property>
+                                    <property name="colspan">2</property>
+                                    <property name="column">1</property>
+                                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT</property>
+                                    <property name="row">1</property>
+                                    <property name="rowspan">1</property>
                                     <object class="wxSpinCtrl" expanded="1">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
@@ -1777,16 +1792,6 @@
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
-                                    </object>
-                                </object>
-                                <object class="sizeritem" expanded="1">
-                                    <property name="border">5</property>
-                                    <property name="flag"></property>
-                                    <property name="proportion">0</property>
-                                    <object class="spacer" expanded="1">
-                                        <property name="height">0</property>
-                                        <property name="permission">protected</property>
-                                        <property name="width">0</property>
                                     </object>
                                 </object>
                             </object>

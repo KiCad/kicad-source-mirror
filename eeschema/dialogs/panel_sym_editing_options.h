@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -40,6 +40,8 @@ public:
 private:
     void loadSymEditorSettings( SYMBOL_EDITOR_SETTINGS* aCfg );
 
+    void onKillFocusPinPitch( wxFocusEvent& aEvent ) override;
+
 private:
     UNIT_BINDER        m_lineWidth;
     UNIT_BINDER        m_textSize;
@@ -47,6 +49,8 @@ private:
     UNIT_BINDER        m_pinLength;
     UNIT_BINDER        m_pinNameSize;
     UNIT_BINDER        m_pinNumberSize;
+
+    UNIT_BINDER        m_pinPitch;
 };
 
 

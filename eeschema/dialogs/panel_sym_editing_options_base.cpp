@@ -111,38 +111,31 @@ PANEL_SYM_EDITING_OPTIONS_BASE::PANEL_SYM_EDITING_OPTIONS_BASE( wxWindow* parent
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	leftColumn->Add( m_staticline2, 0, wxEXPAND|wxBOTTOM, 5 );
 
-	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 0, 3, 3, 0 );
-	fgSizer1->AddGrowableCol( 1 );
-	fgSizer1->SetFlexibleDirection( wxBOTH );
-	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxGridBagSizer* gbSizer2;
+	gbSizer2 = new wxGridBagSizer( 5, 0 );
+	gbSizer2->SetFlexibleDirection( wxBOTH );
+	gbSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_pinPitchLabel = new wxStaticText( this, wxID_ANY, _("&Pitch of repeated pins:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_pinPitchLabel->Wrap( -1 );
-	fgSizer1->Add( m_pinPitchLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+	gbSizer2->Add( m_pinPitchLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	wxString m_choicePinDisplacementChoices[] = { _("100"), _("50") };
-	int m_choicePinDisplacementNChoices = sizeof( m_choicePinDisplacementChoices ) / sizeof( wxString );
-	m_choicePinDisplacement = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choicePinDisplacementNChoices, m_choicePinDisplacementChoices, 0 );
-	m_choicePinDisplacement->SetSelection( 0 );
-	fgSizer1->Add( m_choicePinDisplacement, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	m_pinPitchCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer2->Add( m_pinPitchCtrl, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT, 5 );
 
 	m_pinPitchUnits = new wxStaticText( this, wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_pinPitchUnits->Wrap( -1 );
-	fgSizer1->Add( m_pinPitchUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
+	gbSizer2->Add( m_pinPitchUnits, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_labelIncrementLabel1 = new wxStaticText( this, wxID_ANY, _("Label increment:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelIncrementLabel1->Wrap( -1 );
-	fgSizer1->Add( m_labelIncrementLabel1, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	gbSizer2->Add( m_labelIncrementLabel1, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_spinRepeatLabel = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, -10, 10, 1 );
-	fgSizer1->Add( m_spinRepeatLabel, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	gbSizer2->Add( m_spinRepeatLabel, wxGBPosition( 1, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT, 5 );
 
 
-	fgSizer1->Add( 0, 0, 0, 0, 5 );
-
-
-	leftColumn->Add( fgSizer1, 1, wxEXPAND|wxTOP|wxLEFT, 5 );
+	leftColumn->Add( gbSizer2, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	p1mainSizer->Add( leftColumn, 0, wxEXPAND, 5 );
@@ -151,8 +144,14 @@ PANEL_SYM_EDITING_OPTIONS_BASE::PANEL_SYM_EDITING_OPTIONS_BASE( wxWindow* parent
 	this->SetSizer( p1mainSizer );
 	this->Layout();
 	p1mainSizer->Fit( this );
+
+	// Connect Events
+	m_pinPitchCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_SYM_EDITING_OPTIONS_BASE::onKillFocusPinPitch ), NULL, this );
 }
 
 PANEL_SYM_EDITING_OPTIONS_BASE::~PANEL_SYM_EDITING_OPTIONS_BASE()
 {
+	// Disconnect Events
+	m_pinPitchCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( PANEL_SYM_EDITING_OPTIONS_BASE::onKillFocusPinPitch ), NULL, this );
+
 }

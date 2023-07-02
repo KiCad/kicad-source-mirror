@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,8 @@
 #include "panel_sym_editing_options.h"
 
 
+#define MIN_GRID 25
+
 PANEL_SYM_EDITING_OPTIONS::PANEL_SYM_EDITING_OPTIONS( wxWindow* aWindow,
                                                       UNITS_PROVIDER* aUnitsProvider,
                                                       wxWindow* aEventSource ) :
@@ -37,7 +39,8 @@ PANEL_SYM_EDITING_OPTIONS::PANEL_SYM_EDITING_OPTIONS( wxWindow* aWindow,
         m_textSize( aUnitsProvider, aEventSource, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits ),
         m_pinLength( aUnitsProvider, aEventSource, m_pinLengthLabel, m_pinLengthCtrl, m_pinLengthUnits ),
         m_pinNameSize( aUnitsProvider, aEventSource ,m_pinNameSizeLabel, m_pinNameSizeCtrl, m_pinNameSizeUnits ),
-        m_pinNumberSize( aUnitsProvider, aEventSource, m_pinNumSizeLabel, m_pinNumSizeCtrl, m_pinNumSizeUnits )
+        m_pinNumberSize( aUnitsProvider, aEventSource, m_pinNumSizeLabel, m_pinNumSizeCtrl, m_pinNumSizeUnits ),
+        m_pinPitch( aUnitsProvider, aEventSource, m_pinPitchLabel, m_pinPitchCtrl, m_pinPitchUnits )
 {
     m_widthHelpText->SetFont( KIUI::GetInfoFont( this ).Italic() );
 }
@@ -50,7 +53,7 @@ void PANEL_SYM_EDITING_OPTIONS::loadSymEditorSettings( SYMBOL_EDITOR_SETTINGS* a
     m_pinLength.SetValue( schIUScale.MilsToIU( aCfg->m_Defaults.pin_length ) );
     m_pinNumberSize.SetValue( schIUScale.MilsToIU( aCfg->m_Defaults.pin_num_size ) );
     m_pinNameSize.SetValue( schIUScale.MilsToIU( aCfg->m_Defaults.pin_name_size ) );
-    m_choicePinDisplacement->SetSelection( aCfg->m_Repeat.pin_step == 50 ? 1 : 0 );
+    m_pinPitch.SetValue( schIUScale.MilsToIU( aCfg->m_Repeat.pin_step ) );
     m_spinRepeatLabel->SetValue( aCfg->m_Repeat.label_delta );
     m_cbShowPinElectricalType->SetValue( aCfg->m_ShowPinElectricalType );
 }
@@ -72,16 +75,30 @@ bool PANEL_SYM_EDITING_OPTIONS::TransferDataFromWindow()
     SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
     SYMBOL_EDITOR_SETTINGS* settings = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
 
-    settings->m_Defaults.line_width = schIUScale.IUToMils( (int) m_lineWidth.GetValue() );
-    settings->m_Defaults.text_size = schIUScale.IUToMils( (int) m_textSize.GetValue() );
-    settings->m_Defaults.pin_length = schIUScale.IUToMils( (int) m_pinLength.GetValue() );
-    settings->m_Defaults.pin_num_size = schIUScale.IUToMils( (int) m_pinNumberSize.GetValue() );
-    settings->m_Defaults.pin_name_size = schIUScale.IUToMils( (int) m_pinNameSize.GetValue() );
+    settings->m_Defaults.line_width = schIUScale.IUToMils( m_lineWidth.GetIntValue() );
+    settings->m_Defaults.text_size = schIUScale.IUToMils( m_textSize.GetIntValue() );
+    settings->m_Defaults.pin_length = schIUScale.IUToMils( m_pinLength.GetIntValue() );
+    settings->m_Defaults.pin_num_size = schIUScale.IUToMils( m_pinNumberSize.GetIntValue() );
+    settings->m_Defaults.pin_name_size = schIUScale.IUToMils( m_pinNameSize.GetIntValue() );
     settings->m_Repeat.label_delta = m_spinRepeatLabel->GetValue();
-    settings->m_Repeat.pin_step = m_choicePinDisplacement->GetSelection() == 1 ? 50 : 100;
+    settings->m_Repeat.pin_step = schIUScale.IUToMils( m_pinPitch.GetIntValue() );
     settings->m_ShowPinElectricalType = m_cbShowPinElectricalType->GetValue();
 
+    // Force pin_step to a grid multiple
+    settings->m_Repeat.pin_step = KiROUND( double( settings->m_Repeat.pin_step ) / MIN_GRID ) * MIN_GRID;
+
     return true;
+}
+
+
+void PANEL_SYM_EDITING_OPTIONS::onKillFocusPinPitch( wxFocusEvent& aEvent )
+{
+    int pitch_mils = schIUScale.IUToMils( m_pinPitch.GetIntValue() );
+
+    // Force pin_step to a grid multiple
+    pitch_mils = KiROUND( double( pitch_mils ) / MIN_GRID ) * MIN_GRID;
+
+    m_pinPitch.SetValue( schIUScale.MilsToIU( pitch_mils ) );
 }
 
 
