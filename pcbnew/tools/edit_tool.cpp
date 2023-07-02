@@ -106,6 +106,27 @@ static std::shared_ptr<CONDITIONAL_MENU> makePositioningToolsMenu( TOOL_INTERACT
     return menu;
 };
 
+static std::shared_ptr<CONDITIONAL_MENU> makeShapeModificationMenu( TOOL_INTERACTIVE* aTool )
+{
+    auto menu = std::make_shared<CONDITIONAL_MENU>( aTool );
+
+    menu->SetTitle( _( "Shape Modification" ) );
+
+    static std::vector<KICAD_T> filletChamferTypes = { PCB_SHAPE_LOCATE_POLY_T,
+                                                       PCB_SHAPE_LOCATE_RECT_T,
+                                                       PCB_SHAPE_LOCATE_SEGMENT_T };
+
+    static std::vector<KICAD_T> lineExtendTypes = { PCB_SHAPE_LOCATE_SEGMENT_T };
+
+    // clang-format off
+    menu->AddItem( PCB_ACTIONS::filletLines,        SELECTION_CONDITIONS::OnlyTypes( filletChamferTypes ) );
+    menu->AddItem( PCB_ACTIONS::chamferLines,       SELECTION_CONDITIONS::OnlyTypes( filletChamferTypes ) );
+    menu->AddItem( PCB_ACTIONS::extendLines,        SELECTION_CONDITIONS::OnlyTypes( lineExtendTypes )
+                                                        && SELECTION_CONDITIONS::Count( 2 ) );
+    // clang-format on
+    return menu;
+};
+
 bool EDIT_TOOL::Init()
 {
     // Find the selection tool, so they can cooperate
@@ -113,6 +134,9 @@ bool EDIT_TOOL::Init()
 
     std::shared_ptr<CONDITIONAL_MENU> positioningToolsSubMenu = makePositioningToolsMenu( this );
     m_selectionTool->GetToolMenu().RegisterSubMenu( positioningToolsSubMenu );
+
+    std::shared_ptr<CONDITIONAL_MENU> shapeModificationSubMenu = makeShapeModificationMenu( this );
+    m_selectionTool->GetToolMenu().RegisterSubMenu( shapeModificationSubMenu );
 
     auto propertiesCondition =
             [&]( const SELECTION& aSel )
@@ -204,15 +228,10 @@ bool EDIT_TOOL::Init()
                                                PCB_ARC_T,
                                                PCB_VIA_T };
 
-    static std::vector<KICAD_T> filletChamferTypes = { PCB_SHAPE_LOCATE_POLY_T,
-                                                       PCB_SHAPE_LOCATE_RECT_T,
-                                                       PCB_SHAPE_LOCATE_SEGMENT_T };
-
-    static std::vector<KICAD_T> lineExtendTypes = { PCB_SHAPE_LOCATE_SEGMENT_T };
-
     // Add context menu entries that are displayed when selection tool is active
     CONDITIONAL_MENU& menu = m_selectionTool->GetToolMenu().GetMenu();
 
+    // clang-format off
     menu.AddItem( PCB_ACTIONS::move,              SELECTION_CONDITIONS::NotEmpty
                                                       && notMovingCondition );
     menu.AddItem( PCB_ACTIONS::unrouteSelected,   SELECTION_CONDITIONS::NotEmpty
@@ -230,10 +249,6 @@ bool EDIT_TOOL::Init()
                                                       && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::DraggableItems )
                                                       && !SELECTION_CONDITIONS::OnlyTypes( { PCB_FOOTPRINT_T } ) );
     menu.AddItem( PCB_ACTIONS::filletTracks,      SELECTION_CONDITIONS::OnlyTypes( trackTypes ) );
-    menu.AddItem( PCB_ACTIONS::filletLines,       SELECTION_CONDITIONS::OnlyTypes( filletChamferTypes ) );
-    menu.AddItem( PCB_ACTIONS::chamferLines,      SELECTION_CONDITIONS::OnlyTypes( filletChamferTypes ) );
-    menu.AddItem( PCB_ACTIONS::extendLines,       SELECTION_CONDITIONS::OnlyTypes( lineExtendTypes )
-                                                    && SELECTION_CONDITIONS::Count( 2 ) );
     menu.AddItem( PCB_ACTIONS::rotateCcw,         SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::rotateCw,          SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::flip,              SELECTION_CONDITIONS::NotEmpty );
@@ -255,8 +270,9 @@ bool EDIT_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::updateFootprint,   singleFootprintCondition );
     menu.AddItem( PCB_ACTIONS::changeFootprint,   singleFootprintCondition );
 
-    // Add the submenu for the special positioning tools
+    // Add the submenu for the special tools: modfiers and positioning tools
     menu.AddSeparator( 100 );
+    menu.AddMenu( shapeModificationSubMenu.get(), SELECTION_CONDITIONS::NotEmpty, 100 );
     menu.AddMenu( positioningToolsSubMenu.get(),  SELECTION_CONDITIONS::NotEmpty, 100 );
 
     menu.AddSeparator( 150 );
@@ -271,7 +287,8 @@ bool EDIT_TOOL::Init()
     menu.AddItem( ACTIONS::doDelete,              SELECTION_CONDITIONS::NotEmpty, 150 );
 
     menu.AddSeparator( 150 );
-    menu.AddItem( ACTIONS::selectAll, noItemsCondition, 150 );
+    menu.AddItem( ACTIONS::selectAll,             noItemsCondition, 150 );
+    // clang-format on
 
     return true;
 }
