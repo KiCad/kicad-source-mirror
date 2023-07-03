@@ -101,14 +101,6 @@ class DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE : public DIALOG_SHIM
 		// Virtual event handlers, override them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
-		virtual void startOnKillFocus( wxFocusEvent& event ) { event.Skip(); }
-		virtual void startOnTextEnter( wxCommandEvent& event ) { event.Skip(); }
-		virtual void endOnKillFocus( wxFocusEvent& event ) { event.Skip(); }
-		virtual void endOnTextEnter( wxCommandEvent& event ) { event.Skip(); }
-		virtual void segmentOnKillFocus( wxFocusEvent& event ) { event.Skip(); }
-		virtual void segmentOnTextEnter( wxCommandEvent& event ) { event.Skip(); }
-		virtual void rectangleOnKillFocus( wxFocusEvent& event ) { event.Skip(); }
-		virtual void rectangleOnTextEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onFilledCheckbox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onLayerSelection( wxCommandEvent& event ) { event.Skip(); }
 

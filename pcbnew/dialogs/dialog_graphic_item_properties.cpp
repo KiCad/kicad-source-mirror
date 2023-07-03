@@ -64,18 +64,6 @@ private:
     void onFilledCheckbox( wxCommandEvent& event ) override;
 
     void onLayerSelection( wxCommandEvent& event ) override;
-    void startCtrlOnTextEnter( wxCommandEvent& event ) override;
-    void endCtrlOnTextEnter( wxCommandEvent& event ) override;
-    void startOnTextEnter( wxCommandEvent& event ) override;
-    void startOnKillFocus( wxFocusEvent& event ) override;
-    void endOnTextEnter( wxCommandEvent& event ) override;
-    void endOnKillFocus( wxFocusEvent& event ) override;
-
-    void segmentOnTextEnter( wxCommandEvent& event ) override;
-    void segmentOnKillFocus( wxFocusEvent& event ) override;
-
-    void rectangleOnTextEnter( wxCommandEvent& event ) override;
-    void rectangleOnKillFocus( wxFocusEvent& event ) override;
 
     bool Validate() override;
 
@@ -240,102 +228,6 @@ void DIALOG_GRAPHIC_ITEM_PROPERTIES::onFilledCheckbox( wxCommandEvent& event )
         m_lineStyleLabel->Enable( true );
         m_lineStyleCombo->Enable( true );
     }
-}
-
-void DIALOG_GRAPHIC_ITEM_PROPERTIES::startOnTextEnter( wxCommandEvent& event )
-{
-    switch( m_item->GetShape() )
-    {
-    case SHAPE_T::SEGMENT:
-        TransferDataFromWindow();
-        TransferDataToWindow();
-        break;
-    case SHAPE_T::RECT:
-        TransferDataFromWindow();
-        TransferDataToWindow();
-        break;
-    default:
-        break;
-    }
-}
-
-void DIALOG_GRAPHIC_ITEM_PROPERTIES::startOnKillFocus( wxFocusEvent& event )
-{
-    switch( m_item->GetShape() )
-    {
-    case SHAPE_T::SEGMENT:
-        TransferDataFromWindow();
-        TransferDataToWindow();
-        break;
-    case SHAPE_T::RECT:
-        TransferDataFromWindow();
-        TransferDataToWindow();
-        break;
-    default: break;
-    }
-
-    event.Skip();
-}
-
-void DIALOG_GRAPHIC_ITEM_PROPERTIES::endOnTextEnter( wxCommandEvent& event )
-{
-    switch( m_item->GetShape() )
-    {
-    case SHAPE_T::SEGMENT:
-        TransferDataFromWindow();
-        TransferDataToWindow();
-        break;
-    case SHAPE_T::RECT:
-        TransferDataFromWindow();
-        TransferDataToWindow();
-        break;
-    default: 
-        break;
-    }
-}
-
-void DIALOG_GRAPHIC_ITEM_PROPERTIES::endOnKillFocus( wxFocusEvent& event )
-{
-    switch( m_item->GetShape() )
-    {
-    case SHAPE_T::SEGMENT:
-        TransferDataFromWindow();
-        TransferDataToWindow();
-        break;
-    case SHAPE_T::RECT:
-        TransferDataFromWindow();
-        TransferDataToWindow();
-        break;
-    default: break;
-    }
-
-    event.Skip();
-}
-
-void DIALOG_GRAPHIC_ITEM_PROPERTIES::segmentOnTextEnter( wxCommandEvent& event )
-{
-    TransferDataFromWindow();
-    TransferDataToWindow();
-}
-
-void DIALOG_GRAPHIC_ITEM_PROPERTIES::segmentOnKillFocus( wxFocusEvent& event )
-{
-    TransferDataFromWindow();
-    TransferDataToWindow();
-    event.Skip();
-}
-
-void DIALOG_GRAPHIC_ITEM_PROPERTIES::rectangleOnTextEnter( wxCommandEvent& event )
-{
-    TransferDataFromWindow();
-    TransferDataToWindow();
-}
-
-void DIALOG_GRAPHIC_ITEM_PROPERTIES::rectangleOnKillFocus( wxFocusEvent& event )
-{
-    TransferDataFromWindow();
-    TransferDataToWindow();
-    event.Skip();
 }
 
 bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
@@ -601,22 +493,22 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
 
         if( !( change_begin && change_end ) )
         {
-            rectangle_height = m_rectangleHeight.GetValue();
-            rectangle_width = m_rectangleWidth.GetValue();
+           rectangle_height = m_rectangleHeight.GetValue();
+           rectangle_width = m_rectangleWidth.GetValue();
 
-            if( change_height || change_width )
-            {
-                if( change_end )
-                {
-                    m_item->SetStartX( m_item->GetEndX() - rectangle_width );
-                    m_item->SetStartY( m_item->GetEndY() - rectangle_height );
-                }
-                else
-                {
-                    m_item->SetEndX( m_item->GetStartX() + rectangle_width );
-                    m_item->SetEndY( m_item->GetStartY() + rectangle_height );
-                }
-            }
+           if( change_height || change_width )
+           {
+               if( change_end )
+               {
+                   m_item->SetStartX( m_item->GetEndX() - rectangle_width );
+                   m_item->SetStartY( m_item->GetEndY() - rectangle_height );
+               }
+               else
+               {
+                   m_item->SetEndX( m_item->GetStartX() + rectangle_width );
+                   m_item->SetEndY( m_item->GetStartY() + rectangle_height );
+               }
+           }
         }
 
         m_item->SetRectangle( m_rectangleHeight.GetValue(), m_rectangleWidth.GetValue() );

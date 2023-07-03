@@ -274,22 +274,6 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::OnClose ) );
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::OnInitDlg ) );
-	m_startXCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::startOnKillFocus ), NULL, this );
-	m_startXCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::startOnTextEnter ), NULL, this );
-	m_startYCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::startOnKillFocus ), NULL, this );
-	m_startYCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::startOnTextEnter ), NULL, this );
-	m_endXCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::endOnKillFocus ), NULL, this );
-	m_endXCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::endOnTextEnter ), NULL, this );
-	m_endYCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::endOnKillFocus ), NULL, this );
-	m_endYCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::endOnTextEnter ), NULL, this );
-	m_segmentLengthCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::segmentOnKillFocus ), NULL, this );
-	m_segmentLengthCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::segmentOnTextEnter ), NULL, this );
-	m_segmentAngleCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::segmentOnKillFocus ), NULL, this );
-	m_segmentAngleCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::segmentOnTextEnter ), NULL, this );
-	m_rectangleHeightCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::rectangleOnKillFocus ), NULL, this );
-	m_rectangleHeightCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::rectangleOnTextEnter ), NULL, this );
-	m_rectangleWidthCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::rectangleOnKillFocus ), NULL, this );
-	m_rectangleWidthCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::rectangleOnTextEnter ), NULL, this );
 	m_filledCtrl->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::onFilledCheckbox ), NULL, this );
 	m_LayerSelectionCtrl->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::onLayerSelection ), NULL, this );
 }
@@ -299,22 +283,6 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::~DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE()
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::OnClose ) );
 	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::OnInitDlg ) );
-	m_startXCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::startOnKillFocus ), NULL, this );
-	m_startXCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::startOnTextEnter ), NULL, this );
-	m_startYCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::startOnKillFocus ), NULL, this );
-	m_startYCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::startOnTextEnter ), NULL, this );
-	m_endXCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::endOnKillFocus ), NULL, this );
-	m_endXCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::endOnTextEnter ), NULL, this );
-	m_endYCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::endOnKillFocus ), NULL, this );
-	m_endYCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::endOnTextEnter ), NULL, this );
-	m_segmentLengthCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::segmentOnKillFocus ), NULL, this );
-	m_segmentLengthCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::segmentOnTextEnter ), NULL, this );
-	m_segmentAngleCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::segmentOnKillFocus ), NULL, this );
-	m_segmentAngleCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::segmentOnTextEnter ), NULL, this );
-	m_rectangleHeightCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::rectangleOnKillFocus ), NULL, this );
-	m_rectangleHeightCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::rectangleOnTextEnter ), NULL, this );
-	m_rectangleWidthCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::rectangleOnKillFocus ), NULL, this );
-	m_rectangleWidthCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::rectangleOnTextEnter ), NULL, this );
 	m_filledCtrl->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::onFilledCheckbox ), NULL, this );
 	m_LayerSelectionCtrl->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::onLayerSelection ), NULL, this );
 
