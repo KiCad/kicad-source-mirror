@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:35-0700\n"
-"PO-Revision-Date: 2023-07-03 07:52+0000\n"
+"PO-Revision-Date: 2023-07-04 03:18+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -1459,7 +1459,7 @@ msgstr "300"
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:49
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:98
 msgid "Options"
-msgstr "Inställningar"
+msgstr "Alternativ"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:143
 msgid "Black / white threshold:"
@@ -3365,8 +3365,8 @@ msgid ""
 "If not checked, hotkeys will immediately perform an action even if the "
 "relevant tool was not previously selected."
 msgstr ""
-"Om det inte är markerat kommer snabbtangenter omedelbart att utföra en "
-"åtgärd även om det aktuella verktyget inte tidigare valts."
+"Om det inte är markerat kommer snabbtangenter att utföra en åtgärd "
+"omedelbart, även om det aktuella verktyget inte tidigare valts."
 
 #: common/dialogs/panel_common_settings_base.cpp:270
 msgid "Session"
@@ -3553,7 +3553,7 @@ msgstr "Ångra alla ändringar som gjorts hittills i denna dialog"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:123
 msgid "Import Hotkeys..."
-msgstr "Importera Snabbtangenter..."
+msgstr "Importera snabbtangenter..."
 
 #: common/dialogs/panel_hotkeys_editor.cpp:124
 msgid ""
@@ -4254,7 +4254,7 @@ msgstr "Mus och Pekplatta"
 
 #: common/eda_base_frame.cpp:1086
 msgid "Hotkeys"
-msgstr "Kortkommandon"
+msgstr "Snabbtangenter"
 
 #: common/eda_base_frame.cpp:1093
 msgid "Data Collection"
@@ -8726,7 +8726,7 @@ msgstr "Tid i sekunder för hur länge databasförfrågningar skall cachelagras"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.h:79
 msgid "Database Library Settings"
-msgstr "Databasbiblioteksinställningar"
+msgstr "Inställningar för databasbibliotek"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:545
 #, c-format
@@ -15747,7 +15747,7 @@ msgstr "Förväntar CELL eller BLOCK"
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:469
 #, c-format
 msgid "Symbol '%s.asy' not found"
-msgstr "Symbolen '%s.asy' hittades inte."
+msgstr "Symbolen '%s.asy' hittades inte"
 
 #: eeschema/sch_reference_list.cpp:692
 #, c-format
@@ -19237,7 +19237,7 @@ msgstr "Vik ut från buss"
 
 #: eeschema/tools/ee_actions.cpp:1024
 msgid "Break a wire out of a bus"
-msgstr "Bryt en tråd ur en buss"
+msgstr "Bryt ut en ledare ur en buss"
 
 #: eeschema/tools/ee_actions.cpp:1034
 msgid "Draw graphic lines"
@@ -19611,13 +19611,12 @@ msgid "Change Item Type"
 msgstr "Ändra objekttyp"
 
 #: eeschema/tools/sch_edit_tool.cpp:2422
-#, fuzzy
 msgid "Slice Wire"
-msgstr "Skiva"
+msgstr "Skär av ledningen"
 
 #: eeschema/tools/sch_edit_tool.cpp:2422
 msgid "Break Wire"
-msgstr "Bryt tråd"
+msgstr "Bryt ledare"
 
 #: eeschema/tools/sch_edit_tool.cpp:2437
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
@@ -21106,7 +21105,7 @@ msgstr "Kunde inte få åtkomst till låsfilen"
 
 #: include/panel_hotkeys_editor.h:55
 msgid "Reset all hotkeys to the built-in KiCad defaults"
-msgstr "Återställ alla snabbtangenter till de inbyggda KiCad-standardvärdena"
+msgstr "Återställ alla snabbtangenter till KiCads standardvärden"
 
 #: include/stroke_params.h:81
 msgid "Leave unchanged"
@@ -25569,9 +25568,8 @@ msgid "Enable Teardrops"
 msgstr "Aktivera kragförstärkningar"
 
 #: pcbnew/board_connected_item.cpp:243
-#, fuzzy
 msgid "Best Length Ratio"
-msgstr "Bästa längdförhållande:"
+msgstr "Bästa längdförhållande"
 
 #: pcbnew/board_connected_item.cpp:249
 msgid "Max Length"
@@ -27952,7 +27950,7 @@ msgstr "Första lödytenummer:"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.h:48
 msgid "Pad Enumeration Settings"
-msgstr "Inställningar för paduppräkning"
+msgstr "Inställningar för lödytenumrering"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:73
 msgid "Change Footprints"
@@ -29202,7 +29200,7 @@ msgstr "Använd alternativt borrläge"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:69
 msgid "Oval Holes Drill Mode"
-msgstr "Oval hål borrläge"
+msgstr "Borrläge ovala hål"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:71
 msgid ""
@@ -31444,11 +31442,11 @@ msgstr "Mått för differentiellt par"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:81
 msgid "Single Track Length Tuning"
-msgstr "Längdjustering av en ledare"
+msgstr "Längdjustering av enskild ledare"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:87
 msgid "Differential Pair Length Tuning"
-msgstr "Differentialpar längdinställning"
+msgstr "Längdjustering av differentialpar"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:93
 msgid "Differential Pair Skew Tuning"
@@ -32891,10 +32889,11 @@ msgid ""
 "\n"
 "Continue and delete the extra inner copper layers from the current board?"
 msgstr ""
-"Importerade inställningar har färre kopparskikt än det nuvarande kortet (%i "
-"istället för %i).\n"
+"Importerade inställningar har färre kopparskikt än det nuvarande "
+"mönsterkortet (%i istället för %i).\n"
 "\n"
-"Fortsätta och ta bort de extra inre kopparskikten från det aktuella kortet?"
+"Vill du fortsätta och ta bort de extra inre kopparskikten från det aktuella "
+"mönsterkortet?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:799
 msgid "Inner Layers To Be Deleted"
@@ -35784,7 +35783,7 @@ msgstr "Skapade Gerber-jobbfil '%s'."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:592
 msgid "Board stackup settings not up to date."
-msgstr "Kortets lageruppbyggnadsinställningar är inte aktuella."
+msgstr "Mönsterkortets lageruppbyggnadsinställningar är inte aktuella."
 
 #: pcbnew/exporters/step/exporter_step.cpp:457
 msgid "Determining PCB data\n"
@@ -35900,7 +35899,8 @@ msgstr ""
 "kant-avstånd att användas (se Mönsterkortsinställningar > Designregler > "
 "Begränsningar).\n"
 "Detta kan resultera i fyllningar som skiljer sig från tidigare Kicad-"
-"versioner som använde linjetjockleken för kortkanten på Edge Cuts-lagret."
+"versioner som använde linjetjockleken för mönsterkortskanten på Edge Cuts-"
+"lagret."
 
 #: pcbnew/files.cpp:611
 #, c-format
@@ -41383,7 +41383,7 @@ msgstr "Mönsterkortsinställningar..."
 #: pcbnew/tools/pcb_actions.cpp:689
 msgid "Edit board setup including layers, design rules and various defaults"
 msgstr ""
-"Redigera kortinställningar inklusive lager, designregler och olika "
+"Redigera mönsterkortsinställningar inklusive lager, designregler och olika "
 "standardinställningar"
 
 #: pcbnew/tools/pcb_actions.cpp:694
@@ -42235,7 +42235,7 @@ msgstr "Inställningar för interaktiv router..."
 
 #: pcbnew/tools/pcb_actions.cpp:1618
 msgid "Open Interactive Router settings"
-msgstr "Öppna Interactive Router-inställningar"
+msgstr "Öppna inställningar för interaktiv ledardragning"
 
 #: pcbnew/tools/pcb_actions.cpp:1623
 msgid "Differential Pair Dimensions..."
@@ -42354,11 +42354,11 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1770
 msgid "Length Tuning Settings..."
-msgstr "Inställningar för längdinställning ..."
+msgstr "Inställningar för ledarlängdsjustering..."
 
 #: pcbnew/tools/pcb_actions.cpp:1771
 msgid "Sets the length tuning parameters for currently routed item."
-msgstr "Ställer in längdinställningsparametrar för aktuellt kopplat objekt."
+msgstr "Ställer in längdjusteringsparametrar för aktuellt ledardragningsobjekt."
 
 #: pcbnew/tools/pcb_control.cpp:226
 msgid "Don't show again"
@@ -43455,9 +43455,8 @@ msgid "gerbview;PCB;Gerber;"
 msgstr ""
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
-#, fuzzy
 msgid "Projectmanager;"
-msgstr "Projekthanterare"
+msgstr "Projekthanterare;"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -43477,9 +43476,8 @@ msgid "KiCad PCB Calculator"
 msgstr "KiCad Beräkningsverktyg"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
-#, fuzzy
 msgid "PCB;Calculator;"
-msgstr "KiCad Beräkningsverktyg"
+msgstr "Mönsterkort;Beräkningsverktyg;"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "PCB Calculator"
