@@ -130,23 +130,74 @@ bool NGSPICE_CIRCUIT_MODEL::ParseDCCommand( const wxString& aCmd, SPICE_DC_PARAM
     wxString          cmd = aCmd.Mid( 3 );
     wxStringTokenizer tokens( cmd, wxS( " \t" ), wxTOKEN_STRTOK );
 
-    size_t num = tokens.CountTokens();
-
-    if( num != 4 && num != 8 )
-        return false;
-
     aSource1->m_source = tokens.GetNextToken();
     aSource1->m_vstart = SPICE_VALUE( tokens.GetNextToken() );
     aSource1->m_vend = SPICE_VALUE( tokens.GetNextToken() );
     aSource1->m_vincrement = SPICE_VALUE( tokens.GetNextToken() );
 
-    if( num == 8 )
+    aSource2->m_source = tokens.GetNextToken();
+    aSource2->m_vstart = SPICE_VALUE( tokens.GetNextToken() );
+    aSource2->m_vend = SPICE_VALUE( tokens.GetNextToken() );
+    aSource2->m_vincrement = SPICE_VALUE( tokens.GetNextToken() );
+
+    return true;
+}
+
+
+bool NGSPICE_CIRCUIT_MODEL::ParseNoiseCommand( const wxString& aCmd, wxString* aOutput,
+                                               wxString* aRef, wxString* aSource, wxString* aScale,
+                                               SPICE_VALUE* aPts, SPICE_VALUE* aFStart,
+                                               SPICE_VALUE* aFStop )
+{
+    if( !aCmd.Lower().StartsWith( wxS( ".noise" ) ) )
+        return false;
+
+    wxString cmd = aCmd.Mid( 6 );
+
+    cmd.Trim( false );
+
+    if( !cmd.Lower().StartsWith( wxS( "v(" ) ) )
+        return false;
+
+    cmd = cmd.Mid( 2 );
+
+    wxString function = cmd.Before( ')' );
+    wxString params = cmd.After( ')' );
+
+    wxStringTokenizer func_tokens( function, wxS( " ,\t" ), wxTOKEN_STRTOK );
+
+    *aOutput = func_tokens.GetNextToken();
+    *aRef = func_tokens.GetNextToken();
+
+    wxStringTokenizer tokens( params, wxS( " \t" ), wxTOKEN_STRTOK );
+    wxString          token = tokens.GetNextToken();
+
+    if( !token.IsEmpty() )
     {
-        aSource2->m_source = tokens.GetNextToken();
-        aSource2->m_vstart = SPICE_VALUE( tokens.GetNextToken() );
-        aSource2->m_vend = SPICE_VALUE( tokens.GetNextToken() );
-        aSource2->m_vincrement = SPICE_VALUE( tokens.GetNextToken() );
+        *aSource = token;
+        token = tokens.GetNextToken();
     }
+
+    if( token.Lower() == "dec" || token.Lower() == "oct" || token.Lower() == "lin" )
+    {
+        *aScale = token;
+        token = tokens.GetNextToken();
+    }
+
+    if( !token.IsEmpty() )
+    {
+        *aPts = token;
+        token = tokens.GetNextToken();
+    }
+
+    if( !token.IsEmpty() )
+    {
+        *aFStart = SPICE_VALUE( token );
+        token = tokens.GetNextToken();
+    }
+
+    if( !token.IsEmpty() )
+        *aFStop = SPICE_VALUE( token );
 
     return true;
 }

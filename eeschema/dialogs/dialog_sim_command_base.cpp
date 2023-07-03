@@ -69,10 +69,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	fgSizer1->Add( m_staticText110, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
 
 
-	bSizer3->Add( fgSizer1, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
-
-
-	bSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizer3->Add( fgSizer1, 0, wxEXPAND|wxALL, 5 );
 
 
 	m_pgAC->SetSizer( bSizer3 );
@@ -194,15 +191,15 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	gbSizer1->Add( m_src2DCStepUnit, wxGBPosition( 5, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bSizer82->Add( gbSizer1, 0, wxTOP|wxBOTTOM, 5 );
+	bSizer82->Add( gbSizer1, 0, wxALL, 5 );
 
 
-	bSizer82->Add( 0, 5, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	bSizer82->Add( 0, 10, 0, wxEXPAND, 5 );
 
 	m_swapDCSources = new wxButton( m_pgDC, wxID_ANY, _("Swap sources"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_swapDCSources->SetMinSize( wxSize( 132,-1 ) );
 
-	bSizer82->Add( m_swapDCSources, 0, wxALL, 5 );
+	bSizer82->Add( m_swapDCSources, 0, wxALL, 10 );
 
 
 	m_pgDC->SetSizer( bSizer82 );
@@ -212,25 +209,22 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_pgDistortion = new wxPanel( m_simPages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_simPages->AddPage( m_pgDistortion, _("Distortion"), false );
 	m_pgNoise = new wxPanel( m_simPages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_pgNoise->Hide();
-
 	wxBoxSizer* bSizer15;
 	bSizer15 = new wxBoxSizer( wxVERTICAL );
 
-
-	bSizer15->Add( 0, 0, 1, wxEXPAND, 5 );
-
 	wxFlexGridSizer* fgSizer7;
-	fgSizer7 = new wxFlexGridSizer( 0, 3, 2, 0 );
+	fgSizer7 = new wxFlexGridSizer( 0, 3, 5, 0 );
 	fgSizer7->SetFlexibleDirection( wxBOTH );
 	fgSizer7->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_staticText14 = new wxStaticText( m_pgNoise, wxID_ANY, _("Measured node:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText14->Wrap( -1 );
-	fgSizer7->Add( m_staticText14, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizer7->Add( m_staticText14, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_noiseMeas = new wxComboBox( m_pgNoise, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	fgSizer7->Add( m_noiseMeas, 1, wxTOP|wxALIGN_CENTER_VERTICAL, 5 );
+	wxArrayString m_noiseMeasChoices;
+	m_noiseMeas = new wxChoice( m_pgNoise, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_noiseMeasChoices, 0 );
+	m_noiseMeas->SetSelection( 0 );
+	fgSizer7->Add( m_noiseMeas, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 
 	fgSizer7->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -239,8 +233,10 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_staticText15->Wrap( -1 );
 	fgSizer7->Add( m_staticText15, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_noiseRef = new wxComboBox( m_pgNoise, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	fgSizer7->Add( m_noiseRef, 1, wxALIGN_CENTER_VERTICAL, 5 );
+	wxArrayString m_noiseRefChoices;
+	m_noiseRef = new wxChoice( m_pgNoise, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_noiseRefChoices, 0 );
+	m_noiseRef->SetSelection( 0 );
+	fgSizer7->Add( m_noiseRef, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_staticText23 = new wxStaticText( m_pgNoise, wxID_ANY, _("(optional; default GND)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText23->Wrap( -1 );
@@ -248,19 +244,18 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 
 	m_staticText16 = new wxStaticText( m_pgNoise, wxID_ANY, _("Noise source:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText16->Wrap( -1 );
-	fgSizer7->Add( m_staticText16, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer7->Add( m_staticText16, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_noiseSrc = new wxComboBox( m_pgNoise, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	fgSizer7->Add( m_noiseSrc, 1, wxBOTTOM|wxALIGN_CENTER_VERTICAL, 5 );
+	wxArrayString m_noiseSrcChoices;
+	m_noiseSrc = new wxChoice( m_pgNoise, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_noiseSrcChoices, 0 );
+	m_noiseSrc->SetSelection( 0 );
+	fgSizer7->Add( m_noiseSrc, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 
 	fgSizer7->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
-	bSizer15->Add( fgSizer7, 0, 0, 5 );
-
-
-	bSizer15->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizer15->Add( fgSizer7, 0, wxALL, 5 );
 
 	wxBoxSizer* bSizer10;
 	bSizer10 = new wxBoxSizer( wxHORIZONTAL );
@@ -284,6 +279,8 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	fgSizer11->Add( m_staticText11, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_noisePointsNumber = new wxTextCtrl( m_pgNoise, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_noisePointsNumber->SetMinSize( wxSize( 80,-1 ) );
+
 	fgSizer11->Add( m_noisePointsNumber, 1, wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
 
 
@@ -294,6 +291,8 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	fgSizer11->Add( m_staticText21, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_noiseFreqStart = new wxTextCtrl( m_pgNoise, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_noiseFreqStart->SetMinSize( wxSize( 80,-1 ) );
+
 	fgSizer11->Add( m_noiseFreqStart, 1, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_noiseFreqStartUnits = new wxStaticText( m_pgNoise, wxID_ANY, _("Hz"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -305,6 +304,8 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	fgSizer11->Add( m_staticText31, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_noiseFreqStop = new wxTextCtrl( m_pgNoise, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_noiseFreqStop->SetMinSize( wxSize( 80,-1 ) );
+
 	fgSizer11->Add( m_noiseFreqStop, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 
 	m_noiseFreqStopUnits = new wxStaticText( m_pgNoise, wxID_ANY, _("Hz"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -315,19 +316,13 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	bSizer10->Add( fgSizer11, 0, wxALIGN_BOTTOM|wxBOTTOM|wxLEFT, 4 );
 
 
-	bSizer15->Add( bSizer10, 0, wxEXPAND, 5 );
-
-
-	bSizer15->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	bSizer15->Add( 0, 0, 1, wxEXPAND, 5 );
+	bSizer15->Add( bSizer10, 0, wxEXPAND|wxTOP, 5 );
 
 
 	m_pgNoise->SetSizer( bSizer15 );
 	m_pgNoise->Layout();
 	bSizer15->Fit( m_pgNoise );
-	m_simPages->AddPage( m_pgNoise, _("Noise"), false );
+	m_simPages->AddPage( m_pgNoise, _("Noise"), true );
 	m_pgOP = new wxPanel( m_simPages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxVERTICAL );
@@ -430,13 +425,13 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	gbSizer2->Add( m_useInitialConditionsHelp, wxGBPosition( 4, 3 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizer81->Add( gbSizer2, 1, wxEXPAND, 5 );
+	bSizer81->Add( gbSizer2, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
 	m_pgTransient->SetSizer( bSizer81 );
 	m_pgTransient->Layout();
 	bSizer81->Fit( m_pgTransient );
-	m_simPages->AddPage( m_pgTransient, _("Transient"), true );
+	m_simPages->AddPage( m_pgTransient, _("Transient"), false );
 	m_pgCustom = new wxPanel( m_simPages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxVERTICAL );

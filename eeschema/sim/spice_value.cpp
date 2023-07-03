@@ -34,7 +34,6 @@
 #include <wx/numformatter.h>
 #include <confirm.h>
 #include <common.h>
-#include <ki_exception.h>
 #include <locale_io.h>
 
 
@@ -64,38 +63,37 @@ void SPICE_VALUE_FORMAT::UpdateUnits( const wxString& aUnits )
 }
 
 
-SPICE_VALUE::SPICE_VALUE( const wxString& aString )
+SPICE_VALUE::SPICE_VALUE( const wxString& aString ) :
+        m_base( 0.0 ),
+        m_prefix( PFX_NONE ),
+        m_spiceStr( false )
 {
-    char buf[8] = { 0, };
-
     if( aString.IsEmpty() )
-        throw KI_PARAM_ERROR( _( "Spice value cannot be empty" ) );
+        return;
 
-    LOCALE_IO dummy;    // All numeric values should be in "C" locale(decimal separator = .)
+    char      units[8] = { 0, };
+    LOCALE_IO dummy;              // Numeric values must be in "C" locale ('.' decimal separator)
 
-    if( sscanf( (const char*) aString.c_str(), "%lf%7s", &m_base, buf ) == 0 )
-        throw KI_PARAM_ERROR( _( "Invalid Spice value string" ) );
+    sscanf( (const char*) aString.c_str(), "%lf%7s", &m_base, units );
 
-    if( *buf == 0 )
+    if( *units == 0 )
     {
-        m_prefix = PFX_NONE;
-        m_spiceStr = false;
         Normalize();
         return;
     }
 
     m_spiceStr = true;
 
-    for( char* bufPtr = buf; *bufPtr; ++bufPtr )
+    for( char* bufPtr = units; *bufPtr; ++bufPtr )
         *bufPtr = tolower( *bufPtr );
 
-    if( !strcmp( buf, "meg" ) )
+    if( strcmp( units, "meg" ) == 0 )
     {
         m_prefix = PFX_MEGA;
     }
     else
     {
-        switch( buf[0] )
+        switch( units[0] )
         {
             case 'f': m_prefix = PFX_FEMTO; break;
             case 'p': m_prefix = PFX_PICO; break;
@@ -105,9 +103,7 @@ SPICE_VALUE::SPICE_VALUE( const wxString& aString )
             case 'k': m_prefix = PFX_KILO; break;
             case 'g': m_prefix = PFX_GIGA; break;
             case 't': m_prefix = PFX_TERA; break;
-
-            default:
-                throw KI_PARAM_ERROR( _( "Invalid unit prefix" ) );
+            default:  m_prefix = PFX_NONE; break;
         }
     }
 

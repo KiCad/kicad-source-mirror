@@ -252,7 +252,7 @@ bool SIM_MODEL_SERIALIZER::ParseParams( const std::string& aParams )
         }
     }
 
-    return !m_model.HasPrimaryValue() || isPrimaryValueSet;
+    return !m_model.HasPrimaryValue() || m_model.HasAutofill() || isPrimaryValueSet;
 }
 
 

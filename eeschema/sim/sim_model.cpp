@@ -1351,8 +1351,17 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, std::vector<T_field>* aFields,
     {
         if( aModelParams->IsEmpty() && !value.IsEmpty() )
         {
+            wxString param = "dc";
+
             if( value.StartsWith( wxT( "DC " ) ) )
+            {
                 value = value.Right( value.Length() - 3 );
+            }
+            else if( value.StartsWith( wxT( "AC " ) ) )
+            {
+                value = value.Right( value.Length() - 3 );
+                param = "ac";
+            }
 
             wxRegEx sourceVal( wxT( "^"
                                     "([0-9\\,\\. ]+)"
@@ -1373,13 +1382,15 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, std::vector<T_field>* aFields,
 
                 if( valueMantissa.Contains( wxT( "." ) ) || valueFraction.IsEmpty() )
                 {
-                    aModelParams->Printf( wxT( "dc=\"%s%s\"" ),
+                    aModelParams->Printf( wxT( "%s=\"%s%s\"" ),
+                                          param,
                                           valueMantissa,
                                           convertNotation( valueExponent ) );
                 }
                 else
                 {
-                    aModelParams->Printf( wxT( "dc=\"%s.%s%s\"" ),
+                    aModelParams->Printf( wxT( "%s=\"%s.%s%s\"" ),
+                                          param,
                                           valueMantissa,
                                           valueFraction,
                                           convertNotation( valueExponent ) );
@@ -1387,7 +1398,7 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, std::vector<T_field>* aFields,
             }
             else
             {
-                aModelParams->Printf( wxT( "dc=\"%s\"" ), value );
+                aModelParams->Printf( wxT( "%s=\"%s\"" ), param, value );
             }
         }
 
@@ -1719,16 +1730,20 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
                 pinMapInfo.m_Text = generateDefaultPinMapFromSymbol( sourcePins );
         }
     }
-    else if( ( spiceDeviceType == "R" || spiceDeviceType == "L" || spiceDeviceType == "C" )
+    else if( (    spiceDeviceType == wxS( "R" )
+               || spiceDeviceType == wxS( "L" )
+               || spiceDeviceType == wxS( "C" )
+               || spiceDeviceType == wxS( "V" )
+               || spiceDeviceType == wxS( "I" ) )
             && prefix.StartsWith( spiceDeviceType )
             && modelFromValueField )
     {
         inferredModel = true;
     }
-    else
+    else if( spiceDeviceType == wxS( "V" ) || spiceDeviceType == wxS( "I" ) )
     {
-        // See if we have a SPICE model such as "sin(0 1 60)" or "sin 0 1 60" that can be handled
-        // by a built-in SIM_MODEL.
+        // See if we have a SPICE time-dependent function such as "sin(0 1 60)" or "sin 0 1 60"
+        // that can be handled by a built-in SIM_MODEL_SOURCE.
 
         wxStringTokenizer tokenizer( spiceModel, wxT( "() " ), wxTOKEN_STRTOK );
 

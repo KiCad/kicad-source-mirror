@@ -57,8 +57,8 @@ static wxString getStringSelection( const wxChoice* aCtrl )
 
 
 DIALOG_SIM_COMMAND::DIALOG_SIM_COMMAND( wxWindow* aParent,
-                                          std::shared_ptr<NGSPICE_CIRCUIT_MODEL> aCircuitModel,
-                                          std::shared_ptr<SPICE_SIMULATOR_SETTINGS>& aSettings ) :
+                                        std::shared_ptr<NGSPICE_CIRCUIT_MODEL> aCircuitModel,
+                                        std::shared_ptr<SPICE_SIMULATOR_SETTINGS>& aSettings ) :
         DIALOG_SIM_COMMAND_BASE( aParent ),
         m_circuitModel( aCircuitModel ),
         m_settings( aSettings ),
@@ -87,12 +87,32 @@ DIALOG_SIM_COMMAND::DIALOG_SIM_COMMAND( wxWindow* aParent,
     m_transInitial->SetValidator( m_spiceEmptyValidator );
     m_transMaxStep->SetValidator( m_spiceEmptyValidator );
 
+    wxChar type1 = getStringSelection( m_dcSourceType1 ).Upper().GetChar( 0 );
+    updateDCSources( type1, m_dcSource1 );
+
+    wxChar type2 = getStringSelection( m_dcSourceType2 ).Upper().GetChar( 0 );
+    updateDCSources( type2, m_dcSource2 );
+
+    // NoiseRef is optional
+    m_noiseRef->Append( wxEmptyString );
+
+    for( const std::string& net : m_circuitModel->GetNets() )
+    {
+        m_noiseMeas->Append( net );
+        m_noiseRef->Append( net );
+    }
+
+    for( const SPICE_ITEM& item : m_circuitModel->GetItems() )
+    {
+        if( item.model->GetDeviceType() == SIM_MODEL::DEVICE_T::V )
+            m_noiseSrc->Append( item.refName );
+    }
+
     refreshUIControls();
 
     // Hide pages that aren't fully implemented yet
     // wxPanel::Hide() isn't enough on some platforms
     m_simPages->RemovePage( m_simPages->FindPage( m_pgDistortion ) );
-    m_simPages->RemovePage( m_simPages->FindPage( m_pgNoise ) );
     m_simPages->RemovePage( m_simPages->FindPage( m_pgPoleZero ) );
     m_simPages->RemovePage( m_simPages->FindPage( m_pgSensitivity ) );
     m_simPages->RemovePage( m_simPages->FindPage( m_pgTransferFunction ) );
@@ -104,7 +124,7 @@ DIALOG_SIM_COMMAND::DIALOG_SIM_COMMAND( wxWindow* aParent,
 }
 
 wxString DIALOG_SIM_COMMAND::evaluateDCControls( wxChoice* aDcSource, wxTextCtrl* aDcStart,
-                                                  wxTextCtrl* aDcStop, wxTextCtrl* aDcIncr )
+                                                 wxTextCtrl* aDcStop, wxTextCtrl* aDcIncr )
 {
     wxString  dcSource;
     wxWindow* ctrlWithError = nullptr;
@@ -114,11 +134,9 @@ wxString DIALOG_SIM_COMMAND::evaluateDCControls( wxChoice* aDcSource, wxTextCtrl
 
     if( dcSource.IsEmpty() )
     {
-        DisplayError( this, _( "You need to select DC source" ) );
+        DisplayError( this, _( "A DC source must be specified." ) );
         ctrlWithError = aDcSource;
     }
-    /// @todo for some reason it does not trigger the assigned SPICE_VALIDATOR,
-    // hence try..catch below
     else if( !aDcStart->Validate() )
         ctrlWithError = aDcStart;
     else if( !aDcStop->Validate() )
@@ -132,31 +150,14 @@ wxString DIALOG_SIM_COMMAND::evaluateDCControls( wxChoice* aDcSource, wxTextCtrl
         return wxEmptyString;
     }
 
-    try
-    {
-        // pick device name from exporter when something different than temperature is selected
-        if( dcSource.Cmp( "TEMP" ) )
-            dcSource = m_circuitModel->GetItemName( std::string( dcSource.ToUTF8() ) );
+    // pick device name from exporter when something different than temperature is selected
+    if( dcSource.Cmp( "TEMP" ) )
+        dcSource = m_circuitModel->GetItemName( std::string( dcSource.ToUTF8() ) );
 
-        return wxString::Format( "%s %s %s %s", dcSource,
-                                 SPICE_VALUE( aDcStart->GetValue() ).ToSpiceString(),
-                                 SPICE_VALUE( aDcStop->GetValue() ).ToSpiceString(),
-                                 SPICE_VALUE( aDcIncr->GetValue() ).ToSpiceString() );
-    }
-    catch( std::exception& e )
-    {
-        DisplayError( this, e.what() );
-        return wxEmptyString;
-    }
-    catch( const KI_PARAM_ERROR& e )
-    {
-        DisplayError( this, e.What() );
-        return wxEmptyString;
-    }
-    catch( ... )
-    {
-        return wxEmptyString;
-    }
+    return wxString::Format( "%s %s %s %s", dcSource,
+                             SPICE_VALUE( aDcStart->GetValue() ).ToSpiceString(),
+                             SPICE_VALUE( aDcStop->GetValue() ).ToSpiceString(),
+                             SPICE_VALUE( aDcIncr->GetValue() ).ToSpiceString() );
 }
 
 
@@ -218,7 +219,7 @@ bool DIALOG_SIM_COMMAND::TransferDataFromWindow()
 
             if( m_dcSource1->GetStringSelection() == m_dcSource2->GetStringSelection() )
             {
-                DisplayError( this, _( "Source 1 and Source 2 must be different" ) );
+                DisplayError( this, _( "Source 1 and Source 2 must be different." ) );
                 return false;
             }
         }
@@ -227,31 +228,27 @@ bool DIALOG_SIM_COMMAND::TransferDataFromWindow()
     }
     else if( page == m_pgNoise )        // Noise analysis
     {
-        /*const std::map<wxString, int>& netMap = m_circuitModel->GetNetIndexMap();
+        wxString output = m_noiseMeas->GetStringSelection();
+        wxString ref = m_noiseRef->GetStringSelection();
+        wxString noiseSource = m_noiseSrc->GetStringSelection();
 
-        if( empty( m_noiseMeas ) || empty( m_noiseSrc ) || empty( m_noisePointsNumber )
-                || empty( m_noiseFreqStart ) || empty( m_noiseFreqStop ) )
+        if( m_noiseFreqStart->IsEmpty() || m_noiseFreqStop->IsEmpty() )
         {
+            DisplayError( this, _( "A frequency range must be specified." ) );
             return false;
         }
 
-        wxString ref;
+        if( !ref.IsEmpty() )
+            ref = wxS( "," ) + m_circuitModel->GetItemName( std::string( ref.ToUTF8() ) );
 
-        if( !empty( m_noiseRef ) )
-            ref = wxString::Format( ", %d", netMap.at( m_noiseRef->GetValue() ) );
-
-        wxString noiseSource = m_circuitModel->GetSpiceDevice( m_noiseSrc->GetValue() );
-
-        // Add voltage source prefix if needed
-        if( noiseSource[0] != 'v' && noiseSource[0] != 'V' )
-            noiseSource += 'v' + noiseSource;
-
-        m_simCommand.Printf( ".noise v(%d%s) %s %s %s %s %s",
-                             netMap.at( m_noiseMeas->GetValue() ), ref,
-                             noiseSource, scaleToString( m_noiseScale->GetSelection() ),
+        m_simCommand.Printf( ".noise v(%s%s) %s %s %s %s %s",
+                             output,
+                             ref,
+                             noiseSource,
+                             scaleToString( m_noiseScale->GetSelection() ),
                              m_noisePointsNumber->GetValue(),
                              SPICE_VALUE( m_noiseFreqStart->GetValue() ).ToSpiceString(),
-                             SPICE_VALUE( m_noiseFreqStop->GetValue() ).ToSpiceString() );*/
+                             SPICE_VALUE( m_noiseFreqStop->GetValue() ).ToSpiceString() );
     }
     else if( page == m_pgOP )           // DC operating point analysis
     {
@@ -277,7 +274,9 @@ bool DIALOG_SIM_COMMAND::TransferDataFromWindow()
             optionals = wxS( "uic" );
 
         if( !empty( m_transMaxStep ) )
+        {
             optionals = SPICE_VALUE( m_transMaxStep->GetValue() ).ToSpiceString() + spc + optionals;
+        }
         else if( !optionals.IsEmpty() )
         {
             SPICE_VALUE maxStep = ( finalTime - startTime ) / 50.0;
@@ -359,53 +358,10 @@ bool DIALOG_SIM_COMMAND::TransferDataToWindow()
         }
     }
 
-    if( !m_dcSource1->GetCount() )
-    {
-        wxChar type1 = getStringSelection( m_dcSourceType1 ).Upper().GetChar( 0 );
-        updateDCSources( type1, m_dcSource1 );
-    }
-
-    if( !m_dcSource2->GetCount() )
-    {
-        wxChar type2 = getStringSelection( m_dcSourceType2 ).Upper().GetChar( 0 );
-        updateDCSources( type2, m_dcSource2 );
-    }
-
     if( m_simCommand.IsEmpty() && !empty( m_customTxt ) )
-        return parseCommand( m_customTxt->GetValue() );
+        parseCommand( m_customTxt->GetValue() );
 
     return true;
-}
-
-
-int DIALOG_SIM_COMMAND::ShowModal()
-{
-    // Fill out comboboxes that allows one to select nets
-    // Map comoboxes to their current values
-    std::map<wxComboBox*, wxString> cmbNet = {
-        { m_noiseMeas, m_noiseMeas->GetStringSelection() },
-        { m_noiseRef, m_noiseRef->GetStringSelection() }
-    };
-
-    for( const std::pair<wxComboBox* const, wxString>& c : cmbNet )
-        c.first->Clear();
-
-    for( const std::string& net : m_circuitModel->GetNets() )
-    {
-        for( const std::pair<wxComboBox* const, wxString>& c : cmbNet )
-            c.first->Append( net );
-    }
-
-    // Try to restore the previous selection, if possible
-    for( const std::pair<wxComboBox* const, wxString>& c : cmbNet )
-    {
-        int idx = c.first->FindString( c.second );
-
-        if( idx != wxNOT_FOUND )
-            c.first->SetSelection( idx );
-    }
-
-    return DIALOG_SIM_COMMAND_BASE::ShowModal();
 }
 
 
@@ -453,117 +409,137 @@ void DIALOG_SIM_COMMAND::updateDCSources( wxChar aType, wxChoice* aSource )
 }
 
 
-bool DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
+void DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
 {
     if( aCommand.IsEmpty() )
-        return false;
+        return;
 
     wxStringTokenizer tokenizer( aCommand, " " );
-    wxString tkn = tokenizer.GetNextToken().Lower();
+    wxString          token = tokenizer.GetNextToken().Lower();
 
-    try
+    if( token == ".ac" )
     {
-        if( tkn == ".ac" )
+        m_simPages->SetSelection( m_simPages->FindPage( m_pgAC ) );
+
+        token = tokenizer.GetNextToken().Lower();
+
+        for( SCALE_TYPE candidate : { DECADE, OCTAVE, LINEAR } )
         {
-            m_simPages->SetSelection( m_simPages->FindPage( m_pgAC ) );
-
-            tkn = tokenizer.GetNextToken().Lower();
-
-            if( tkn == "dec" )
-                m_acScale->SetSelection( 0 );
-            else if( tkn == "oct" )
-                m_acScale->SetSelection( 1 );
-            else if( tkn == "lin" )
-                m_acScale->SetSelection( 2 );
-            else
-                return false;
-
-            // If the fields below are empty, it will be caught by the exception handler
-            m_acPointsNumber->SetValue( tokenizer.GetNextToken() );
-            m_acFreqStart->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
-            m_acFreqStop->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
-        }
-        else if( tkn == ".dc" )
-        {
-            m_simPages->SetSelection( m_simPages->FindPage( m_pgDC ) );
-
-            SPICE_DC_PARAMS src1, src2;
-            src2.m_vincrement = SPICE_VALUE( -1 );
-
-            if( !m_circuitModel->ParseDCCommand( aCommand, &src1, &src2 ) )
-                return false;
-
-            if( src1.m_source.IsSameAs( wxT( "TEMP" ), false ) )
-                setStringSelection( m_dcSourceType1, wxT( "TEMP" ) );
-            else
-                setStringSelection( m_dcSourceType1, src1.m_source.GetChar( 0 ) );
-
-            updateDCSources( src1.m_source.GetChar( 0 ), m_dcSource1 );
-            m_dcSource1->SetStringSelection( src1.m_source );
-            m_dcStart1->SetValue( src1.m_vstart.ToSpiceString() );
-            m_dcStop1->SetValue( src1.m_vend.ToSpiceString() );
-            m_dcIncr1->SetValue( src1.m_vincrement.ToSpiceString() );
-
-            if( src2.m_vincrement.ToDouble() != -1 )
+            if( scaleToString( candidate ) == token )
             {
-                if( src2.m_source.IsSameAs( wxT( "TEMP" ), false ) )
-                    setStringSelection( m_dcSourceType2, wxT( "TEMP" ) );
-                else
-                    setStringSelection( m_dcSourceType2, src2.m_source.GetChar( 0 ) );
-
-                updateDCSources( src2.m_source.GetChar( 0 ), m_dcSource2 );
-                m_dcSource2->SetStringSelection( src2.m_source );
-                m_dcStart2->SetValue( src2.m_vstart.ToSpiceString() );
-                m_dcStop2->SetValue( src2.m_vend.ToSpiceString() );
-                m_dcIncr2->SetValue( src2.m_vincrement.ToSpiceString() );
-
-                m_dcEnable2->SetValue( true );
+                m_acScale->SetSelection( candidate );
+                break;
             }
-
-            refreshUIControls();
         }
-        else if( tkn == ".tran" )
-        {
-            m_simPages->SetSelection( m_simPages->FindPage( m_pgTransient ) );
 
-            // If the fields below are empty, it will be caught by the exception handler
-            m_transStep->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
-            m_transFinal->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
-
-            // Initial time is an optional field
-            tkn = tokenizer.GetNextToken();
-
-            if( !tkn.IsEmpty() )
-                m_transInitial->SetValue( SPICE_VALUE( tkn ).ToSpiceString() );
-
-            // Max step is an optional field
-            tkn = tokenizer.GetNextToken();
-
-            if( !tkn.IsEmpty() )
-                m_transMaxStep->SetValue( SPICE_VALUE( tkn ).ToSpiceString() );
-
-            // uic is an optional field
-            tkn = tokenizer.GetNextToken();
-
-            if( tkn.IsSameAs( wxS( "uic" ) ) )
-                m_useInitialConditions->SetValue( true );
-        }
-        else if( tkn == ".op" )
-        {
-            m_simPages->SetSelection( m_simPages->FindPage( m_pgOP ) );
-        }
-        else if( !empty( m_customTxt ) )        // Custom directives
-        {
-            m_simPages->SetSelection( m_simPages->FindPage( m_pgCustom ) );
-        }
+        m_acPointsNumber->SetValue( tokenizer.GetNextToken() );
+        m_acFreqStart->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
+        m_acFreqStop->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
     }
-    catch( ... )
+    else if( token == ".dc" )
     {
-        // Nothing really bad has happened
-        return false;
-    }
+        m_simPages->SetSelection( m_simPages->FindPage( m_pgDC ) );
 
-    return true;
+        SPICE_DC_PARAMS src1, src2;
+        src2.m_vincrement = SPICE_VALUE( -1 );
+
+        m_circuitModel->ParseDCCommand( aCommand, &src1, &src2 );
+
+        if( src1.m_source.IsSameAs( wxT( "TEMP" ), false ) )
+            setStringSelection( m_dcSourceType1, wxT( "TEMP" ) );
+        else
+            setStringSelection( m_dcSourceType1, src1.m_source.GetChar( 0 ) );
+
+        updateDCSources( src1.m_source.GetChar( 0 ), m_dcSource1 );
+        m_dcSource1->SetStringSelection( src1.m_source );
+        m_dcStart1->SetValue( src1.m_vstart.ToSpiceString() );
+        m_dcStop1->SetValue( src1.m_vend.ToSpiceString() );
+        m_dcIncr1->SetValue( src1.m_vincrement.ToSpiceString() );
+
+        if( src2.m_vincrement.ToDouble() != -1 )
+        {
+            if( src2.m_source.IsSameAs( wxT( "TEMP" ), false ) )
+                setStringSelection( m_dcSourceType2, wxT( "TEMP" ) );
+            else
+                setStringSelection( m_dcSourceType2, src2.m_source.GetChar( 0 ) );
+
+            updateDCSources( src2.m_source.GetChar( 0 ), m_dcSource2 );
+            m_dcSource2->SetStringSelection( src2.m_source );
+            m_dcStart2->SetValue( src2.m_vstart.ToSpiceString() );
+            m_dcStop2->SetValue( src2.m_vend.ToSpiceString() );
+            m_dcIncr2->SetValue( src2.m_vincrement.ToSpiceString() );
+
+            m_dcEnable2->SetValue( true );
+        }
+
+        refreshUIControls();
+    }
+    else if( token == ".noise" )
+    {
+        m_simPages->SetSelection( m_simPages->FindPage( m_pgNoise ) );
+
+        wxString    output;
+        wxString    ref;
+        wxString    source;
+        wxString    scale;
+        SPICE_VALUE pts;
+        SPICE_VALUE fStart;
+        SPICE_VALUE fStop;
+
+        m_circuitModel->ParseNoiseCommand( aCommand, &output, &ref, &source, &scale, &pts,
+                                           &fStart, &fStop );
+
+        m_noiseMeas->SetStringSelection( output );
+        m_noiseRef->SetStringSelection( ref );
+        m_noiseSrc->SetStringSelection( source );
+
+        for( SCALE_TYPE candidate : { DECADE, OCTAVE, LINEAR } )
+        {
+            if( scaleToString( candidate ) == scale )
+            {
+                m_noiseScale->SetSelection( candidate );
+                break;
+            }
+        }
+
+        m_noisePointsNumber->SetValue( pts.ToSpiceString() );
+        m_noiseFreqStart->SetValue( fStart.ToSpiceString() );
+        m_noiseFreqStop->SetValue( fStop.ToSpiceString() );
+    }
+    else if( token == ".tran" )
+    {
+        m_simPages->SetSelection( m_simPages->FindPage( m_pgTransient ) );
+
+        // If the fields below are empty, it will be caught by the exception handler
+        m_transStep->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
+        m_transFinal->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
+
+        // Initial time is an optional field
+        token = tokenizer.GetNextToken();
+
+        if( !token.IsEmpty() )
+            m_transInitial->SetValue( SPICE_VALUE( token ).ToSpiceString() );
+
+        // Max step is an optional field
+        token = tokenizer.GetNextToken();
+
+        if( !token.IsEmpty() )
+            m_transMaxStep->SetValue( SPICE_VALUE( token ).ToSpiceString() );
+
+        // uic is an optional field
+        token = tokenizer.GetNextToken();
+
+        if( token.IsSameAs( wxS( "uic" ) ) )
+            m_useInitialConditions->SetValue( true );
+    }
+    else if( token == ".op" )
+    {
+        m_simPages->SetSelection( m_simPages->FindPage( m_pgOP ) );
+    }
+    else if( !empty( m_customTxt ) )        // Custom directives
+    {
+        m_simPages->SetSelection( m_simPages->FindPage( m_pgCustom ) );
+    }
 }
 
 

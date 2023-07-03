@@ -29,7 +29,6 @@
 #include <wx/choice.h>
 #include <wx/gbsizer.h>
 #include <wx/button.h>
-#include <wx/combobox.h>
 #include <wx/notebook.h>
 #include <wx/dialog.h>
 
@@ -83,12 +82,12 @@ class DIALOG_SIM_COMMAND_BASE : public DIALOG_SHIM
 		wxPanel* m_pgDistortion;
 		wxPanel* m_pgNoise;
 		wxStaticText* m_staticText14;
-		wxComboBox* m_noiseMeas;
+		wxChoice* m_noiseMeas;
 		wxStaticText* m_staticText15;
-		wxComboBox* m_noiseRef;
+		wxChoice* m_noiseRef;
 		wxStaticText* m_staticText23;
 		wxStaticText* m_staticText16;
-		wxComboBox* m_noiseSrc;
+		wxChoice* m_noiseSrc;
 		wxRadioBox* m_noiseScale;
 		wxStaticText* m_staticText11;
 		wxTextCtrl* m_noisePointsNumber;

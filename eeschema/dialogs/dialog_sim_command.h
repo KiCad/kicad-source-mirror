@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016-2022 CERN
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -48,14 +48,10 @@ public:
         return m_simCommand;
     }
 
-    bool SetSimCommand( const wxString& aCommand )
+    void SetSimCommand( const wxString& aCommand )
     {
-        bool res = parseCommand( aCommand );
-
-        if( res )
-            m_simCommand = aCommand;
-
-        return res;
+        parseCommand( aCommand );
+        m_simCommand = aCommand;
     }
 
     int GetSimOptions() const
@@ -96,8 +92,6 @@ public:
     {
         return true;
     }
-
-    int ShowModal() override;
 
 private:
     enum SCALE_TYPE
@@ -147,9 +141,8 @@ private:
      * Parse a Spice directive.
      *
      * @param aCommand is the directive to be parsed (e.g. ".tran 10n 1000n").
-     * @return true if the directive was parsed correctly.
      */
-    bool parseCommand( const wxString& aCommand );
+    void parseCommand( const wxString& aCommand );
 
     void onLoadDirectives( wxCommandEvent& event ) override
     {
