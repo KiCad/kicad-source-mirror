@@ -42,19 +42,24 @@
 using namespace std::placeholders;
 
 
-BOARD_COMMIT::BOARD_COMMIT( PCB_TOOL_BASE* aTool )
+BOARD_COMMIT::BOARD_COMMIT( TOOL_BASE* aTool ) :
+        m_toolMgr( aTool->GetManager() ),
+        m_isFootprintEditor( false ),
+        m_isBoardEditor( false )
 {
-    m_toolMgr = aTool->GetManager();
-    m_isFootprintEditor = aTool->IsFootprintEditor();
-    m_isBoardEditor = aTool->IsBoardEditor();
+    if( PCB_TOOL_BASE* pcb_tool = dynamic_cast<PCB_TOOL_BASE*>( aTool ) )
+    {
+        m_isFootprintEditor = pcb_tool->IsFootprintEditor();
+        m_isBoardEditor = pcb_tool->IsBoardEditor();
+    }
 }
 
 
-BOARD_COMMIT::BOARD_COMMIT( EDA_DRAW_FRAME* aFrame )
+BOARD_COMMIT::BOARD_COMMIT( EDA_DRAW_FRAME* aFrame ) :
+        m_toolMgr( aFrame->GetToolManager() ),
+        m_isFootprintEditor( aFrame->IsType( FRAME_FOOTPRINT_EDITOR ) ),
+        m_isBoardEditor( aFrame->IsType( FRAME_PCB_EDITOR ) )
 {
-    m_toolMgr = aFrame->GetToolManager();
-    m_isFootprintEditor = aFrame->IsType( FRAME_FOOTPRINT_EDITOR );
-    m_isBoardEditor = aFrame->IsType( FRAME_PCB_EDITOR );
 }
 
 

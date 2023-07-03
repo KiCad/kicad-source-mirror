@@ -31,7 +31,7 @@
 #include <mutex>
 #include <map>
 #include <reporter.h>
-#include <tools/pcb_tool_base.h>
+#include <tool/tool_manager.h>
 
 class BOARD;
 class BOARD_ITEM;
@@ -46,14 +46,14 @@ class SETTINGS_MANAGER;
 
 namespace KI_TEST
 {
-class DUMMY_TOOL : public PCB_TOOL_BASE
+class DUMMY_TOOL : public TOOL_BASE
 {
 public:
     DUMMY_TOOL() :
-        PCB_TOOL_BASE( "testframework.dummytool" )
+        TOOL_BASE( BATCH, TOOL_MANAGER::MakeToolId( "" ), "testframework.dummytool" )
     {};
 
-    bool Init() override { return true };
+    void Reset( RESET_REASON aReason ) override {}
 };
 
 
