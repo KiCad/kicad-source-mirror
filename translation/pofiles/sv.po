@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:33-0700\n"
-"PO-Revision-Date: 2023-06-30 01:49+0000\n"
+"PO-Revision-Date: 2023-07-04 03:18+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v7/sv/>\n"
 "Language: sv\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18.1\n"
+"X-Generator: Weblate 5.0-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -1384,7 +1384,7 @@ msgstr "300"
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:98
 #: pcbnew/teardrop/dialog_teardrop_base.cpp:376
 msgid "Options"
-msgstr "Inställningar"
+msgstr "Alternativ"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:145
 msgid "Black / white threshold:"
@@ -3206,8 +3206,8 @@ msgid ""
 "If not checked, hotkeys will immediately perform an action even if the "
 "relevant tool was not previously selected."
 msgstr ""
-"Om det inte är markerat kommer snabbtangenter omedelbart att utföra en "
-"åtgärd även om det aktuella verktyget inte tidigare valts."
+"Om det inte är markerat kommer snabbtangenter att utföra en åtgärd "
+"omedelbart, även om det aktuella verktyget inte tidigare valts."
 
 #: common/dialogs/panel_common_settings_base.cpp:265
 msgid "Session"
@@ -3394,7 +3394,7 @@ msgstr "Ångra alla ändringar som gjorts hittills i denna dialog"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:123
 msgid "Import Hotkeys..."
-msgstr "Importera Snabbtangenter..."
+msgstr "Importera snabbtangenter..."
 
 #: common/dialogs/panel_hotkeys_editor.cpp:124
 msgid ""
@@ -4082,7 +4082,7 @@ msgstr "Mus och Pekplatta"
 
 #: common/eda_base_frame.cpp:1049
 msgid "Hotkeys"
-msgstr "Kortkommandon"
+msgstr "Snabbtangenter"
 
 #: common/eda_base_frame.cpp:1056
 msgid "Data Collection"
@@ -18031,7 +18031,7 @@ msgstr "Vik ut från buss"
 
 #: eeschema/tools/ee_actions.cpp:827
 msgid "Break a wire out of a bus"
-msgstr "Bryt en tråd ur en buss"
+msgstr "Bryt ut en ledare ur en buss"
 
 #: eeschema/tools/ee_actions.cpp:840 pcbnew/tools/pcb_actions.cpp:1502
 msgid "Undo Last Segment"
@@ -19653,7 +19653,7 @@ msgstr "Kunde inte få åtkomst till låsfilen"
 
 #: include/panel_hotkeys_editor.h:55
 msgid "Reset all hotkeys to the built-in KiCad defaults"
-msgstr "Återställ alla snabbtangenter till de inbyggda KiCad-standardvärdena"
+msgstr "Återställ alla snabbtangenter till KiCads standardvärden"
 
 #: include/stroke_params.h:81
 msgid "Leave unchanged"
@@ -26056,7 +26056,7 @@ msgstr "Första lödytenummer:"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.h:48
 msgid "Pad Enumeration Settings"
-msgstr "Inställningar för paduppräkning"
+msgstr "Inställningar för lödytenumrering"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:73
 msgid "Change Footprints"
@@ -27338,7 +27338,7 @@ msgstr "Använd alternativt borrläge"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:69
 msgid "Oval Holes Drill Mode"
-msgstr "Oval hål borrläge"
+msgstr "Borrläge ovala hål"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:71
 msgid ""
@@ -29369,11 +29369,11 @@ msgstr "Mått för differentiellt par"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:81
 msgid "Single Track Length Tuning"
-msgstr "Längdjustering av en ledare"
+msgstr "Längdjustering av enskild ledare"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:87
 msgid "Differential Pair Length Tuning"
-msgstr "Differentialpar längdinställning"
+msgstr "Längdjustering av differentialpar"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:93
 msgid "Differential Pair Skew Tuning"
@@ -30804,10 +30804,11 @@ msgid ""
 "\n"
 "Continue and delete the extra inner copper layers from the current board?"
 msgstr ""
-"Importerade inställningar har färre kopparskikt än det nuvarande kortet (%i "
-"istället för %i).\n"
+"Importerade inställningar har färre kopparskikt än det nuvarande "
+"mönsterkortet (%i istället för %i).\n"
 "\n"
-"Fortsätta och ta bort de extra inre kopparskikten från det aktuella kortet?"
+"Vill du fortsätta och ta bort de extra inre kopparskikten från det aktuella "
+"mönsterkortet?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:800
 msgid "Inner Layers To Be Deleted"
@@ -33386,7 +33387,7 @@ msgstr "Skapade Gerber-jobbfil '%s'."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:592
 msgid "Board stackup settings not up to date."
-msgstr "Kortets lageruppbyggnadsinställningar är inte aktuella."
+msgstr "Mönsterkortets lageruppbyggnadsinställningar är inte aktuella."
 
 #: pcbnew/exporters/step/exporter_step.cpp:343
 msgid "Determining PCB data\n"
@@ -33502,7 +33503,8 @@ msgstr ""
 "kant-avstånd att användas (se Mönsterkortsinställningar > Designregler > "
 "Begränsningar).\n"
 "Detta kan resultera i fyllningar som skiljer sig från tidigare Kicad-"
-"versioner som använde linjetjockleken för kortkanten på Edge Cuts-lagret."
+"versioner som använde linjetjockleken för mönsterkortskanten på Edge Cuts-"
+"lagret."
 
 #: pcbnew/files.cpp:616
 #, c-format
@@ -38981,7 +38983,7 @@ msgstr "Mönsterkortsinställningar..."
 #: pcbnew/tools/pcb_actions.cpp:630
 msgid "Edit board setup including layers, design rules and various defaults"
 msgstr ""
-"Redigera kortinställningar inklusive lager, designregler och olika "
+"Redigera mönsterkortsinställningar inklusive lager, designregler och olika "
 "standardinställningar"
 
 #: pcbnew/tools/pcb_actions.cpp:635
@@ -39835,7 +39837,7 @@ msgstr "Inställningar för interaktiv router..."
 
 #: pcbnew/tools/pcb_actions.cpp:1442
 msgid "Open Interactive Router settings"
-msgstr "Öppna Interactive Router-inställningar"
+msgstr "Öppna inställningar för interaktiv ledardragning"
 
 #: pcbnew/tools/pcb_actions.cpp:1447
 msgid "Differential Pair Dimensions..."
@@ -39954,11 +39956,11 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1564
 msgid "Length Tuning Settings..."
-msgstr "Inställningar för längdinställning ..."
+msgstr "Inställningar för ledarlängdsjustering..."
 
 #: pcbnew/tools/pcb_actions.cpp:1565
 msgid "Sets the length tuning parameters for currently routed item."
-msgstr "Ställer in längdinställningsparametrar för aktuellt kopplat objekt."
+msgstr "Ställer in längdjusteringsparametrar för aktuellt ledardragningsobjekt."
 
 #: pcbnew/tools/pcb_control.cpp:226
 msgid "Don't show again"
