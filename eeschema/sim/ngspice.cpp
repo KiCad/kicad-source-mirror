@@ -329,8 +329,10 @@ wxString NGSPICE::GetXAxis( SIM_TYPE aType ) const
     switch( aType )
     {
     case ST_AC:
-    case ST_NOISE:
         return wxS( "frequency" );
+
+    case ST_NOISE:
+        return wxS( "noise1.frequency" );
 
     case ST_DC:
         // find plot, which ends with "-sweep"

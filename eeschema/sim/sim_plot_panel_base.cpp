@@ -59,6 +59,7 @@ bool SIM_PLOT_PANEL_BASE::IsPlottable( SIM_TYPE aSimType )
     case ST_AC:
     case ST_DC:
     case ST_TRANSIENT:
+    case ST_NOISE:
         return true;
 
     default:

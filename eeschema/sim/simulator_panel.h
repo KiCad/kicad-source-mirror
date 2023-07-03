@@ -283,6 +283,8 @@ private:
      */
     SIM_TRACE_TYPE getXAxisType( SIM_TYPE aType ) const;
 
+    wxString getNoiseSource() const;
+
     void parseTraceParams( SIM_PLOT_PANEL* aPlotPanel, TRACE* aTrace, const wxString& aSignalName,
                            const wxString& aParams );
 

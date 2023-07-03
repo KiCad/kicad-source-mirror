@@ -699,7 +699,8 @@ void SIMULATOR_PANEL::rebuildSignalsList()
                 }
             };
 
-    if( options & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES )
+    if( ( options & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES )
+            && ( simType == ST_TRANSIENT || simType == ST_DC || simType == ST_AC ) )
     {
         for( const std::string& net : circuitModel()->GetNets() )
         {
@@ -736,6 +737,12 @@ void SIMULATOR_PANEL::rebuildSignalsList()
                 addSignal( wxString::Format( wxS( "P(%s)" ), name ) );
             }
         }
+    }
+
+    if( simType == ST_NOISE )
+    {
+        addSignal( wxS( "inoise" ) );
+        addSignal( wxS( "onoise" ) );
     }
 
     // Add .PROBE directives
@@ -840,14 +847,26 @@ wxString SIMULATOR_PANEL::vectorNameFromSignalName( const wxString& aSignalName,
 
     if( aTraceType )
     {
-        wxUniChar firstChar = aSignalName.Upper()[0];
+        wxString name = aSignalName.Upper();
 
-        if( firstChar == 'V' )
-            *aTraceType = SPT_VOLTAGE;
-        else if( firstChar == 'I' )
-            *aTraceType = SPT_CURRENT;
-        else if( firstChar == 'P' )
-            *aTraceType = SPT_POWER;
+        if( name == wxS( "INOISE" ) || name == wxS( "ONOISE" ) )
+        {
+            if( getNoiseSource().Upper().StartsWith( 'I' ) )
+                *aTraceType = SPT_CURRENT;
+            else
+                *aTraceType = SPT_VOLTAGE;
+        }
+        else if( !name.IsEmpty() )
+        {
+            wxUniChar firstChar = name[0];
+
+            if( firstChar == 'V' )
+                *aTraceType = SPT_VOLTAGE;
+            else if( firstChar == 'I' )
+                *aTraceType = SPT_CURRENT;
+            else if( firstChar == 'P' )
+                *aTraceType = SPT_POWER;
+        }
     }
 
     wxString suffix;
@@ -1432,6 +1451,10 @@ void SIMULATOR_PANEL::updateTrace( const wxString& aVectorName, int aTraceType,
         break;
 
     case ST_NOISE:
+        simVectorName = wxString::Format( wxS( "noise1.%s_spectrum" ), simVectorName );
+        data_y = simulator()->GetMagPlot( (const char*) simVectorName.c_str() );
+        break;
+
     case ST_DC:
     case ST_TRANSIENT:
         data_y = simulator()->GetMagPlot( (const char*) simVectorName.c_str() );
@@ -2099,8 +2122,26 @@ SIM_TRACE_TYPE SIMULATOR_PANEL::getXAxisType( SIM_TYPE aType ) const
     case ST_AC:        return SPT_LIN_FREQUENCY;
     case ST_DC:        return SPT_SWEEP;
     case ST_TRANSIENT: return SPT_TIME;
+    case ST_NOISE:     return SPT_LIN_FREQUENCY;
     default:           wxFAIL_MSG( wxS( "Unhandled simulation type" ) ); return SPT_UNKNOWN;
     }
+}
+
+
+wxString SIMULATOR_PANEL::getNoiseSource() const
+{
+    wxString    output;
+    wxString    ref;
+    wxString    source;
+    wxString    scale;
+    SPICE_VALUE pts;
+    SPICE_VALUE fStart;
+    SPICE_VALUE fStop;
+
+    circuitModel()->ParseNoiseCommand( circuitModel()->GetSimCommand(), &output, &ref, &source,
+                                       &scale, &pts, &fStart, &fStop );
+
+    return source;
 }
 
 
@@ -2359,6 +2400,7 @@ void SIMULATOR_PANEL::OnSimRefresh( bool aFinal )
     }
 
     std::vector<wxString> oldSignals = m_signals;
+    wxString              msg;
 
     applyUserDefinedSignals();
     rebuildSignalsList();
@@ -2366,6 +2408,23 @@ void SIMULATOR_PANEL::OnSimRefresh( bool aFinal )
     // If there are any signals plotted, update them
     if( SIM_PLOT_PANEL_BASE::IsPlottable( simType ) )
     {
+        if( simType == ST_NOISE && aFinal )
+        {
+            m_simConsole->AppendText( _( "\n\nSimulation results:\n\n" ) );
+            m_simConsole->SetInsertionPointEnd();
+
+            for( const std::string& vec : simulator()->AllPlots() )
+            {
+                std::vector<double> val_list = simulator()->GetRealPlot( vec, 1 );
+                wxString            value = SPICE_VALUE( val_list[ 0 ] ).ToSpiceString();
+
+                msg.Printf( wxS( "%s: %sV\n" ), vec, value );
+
+                m_simConsole->AppendText( msg );
+                m_simConsole->SetInsertionPointEnd();
+            }
+        }
+
         SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( plotPanelWindow );
         wxCHECK_RET( plotPanel, wxT( "not a SIM_PLOT_PANEL" ) );
 
@@ -2427,17 +2486,12 @@ void SIMULATOR_PANEL::OnSimRefresh( bool aFinal )
         for( const std::string& vec : simulator()->AllPlots() )
         {
             std::vector<double> val_list = simulator()->GetRealPlot( vec, 1 );
+            wxString            value = SPICE_VALUE( val_list[ 0 ] ).ToSpiceString();
+            wxString            signal;
+            SIM_TRACE_TYPE      type = circuitModel()->VectorToSignal( vec, signal );
 
-            if( val_list.size() == 0 )      // The list of values can be empty!
-                continue;
-
-            wxString       value = SPICE_VALUE( val_list.at( 0 ) ).ToSpiceString();
-            wxString       msg;
-            wxString       signal;
-            SIM_TRACE_TYPE type = circuitModel()->VectorToSignal( vec, signal );
-
-            const size_t   tab = 25; //characters
-            size_t         padding = ( signal.length() < tab ) ? ( tab - signal.length() ) : 1;
+            const size_t tab = 25; //characters
+            size_t       padding = ( signal.length() < tab ) ? ( tab - signal.length() ) : 1;
 
             value.Append( type == SPT_CURRENT ? wxS( "A" ) : wxS( "V" ) );
 

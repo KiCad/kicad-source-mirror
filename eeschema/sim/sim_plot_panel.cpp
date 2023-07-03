@@ -528,13 +528,28 @@ void SIM_PLOT_PANEL::updateAxes( int aNewTraceType )
                 m_axis_x->SetNameAlign( mpALIGN_BOTTOM );
                 m_plotWin->AddLayer( m_axis_x );
 
-                m_axis_y1 = new mpScaleY( wxEmptyString, mpALIGN_LEFT, false );
-                m_axis_y1->SetNameAlign( mpALIGN_LEFT );
-                m_plotWin->AddLayer( m_axis_y1 );
+                if( ( aNewTraceType & SPT_CURRENT ) == 0 )
+                {
+                    m_axis_y1 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "" ), mpALIGN_LEFT );
+                    m_axis_y1->SetNameAlign( mpALIGN_LEFT );
+                    m_plotWin->AddLayer( m_axis_y1 );
+                }
+                else
+                {
+                    m_axis_y2 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "" ), mpALIGN_RIGHT );
+                    m_axis_y2->SetNameAlign( mpALIGN_RIGHT );
+                    m_plotWin->AddLayer( m_axis_y2 );
+                }
             }
 
             m_axis_x->SetName( _( "Frequency" ) );
-            m_axis_y1->SetName( _( "noise [(V or A)^2/Hz]" ) );
+
+            if( m_axis_y1 )
+                m_axis_y1->SetName( _( "Noise (V/√Hz)" ) );
+
+            if( m_axis_y2 )
+                m_axis_y2->SetName( _( "Noise (A/√Hz)" ) );
+
             break;
 
         case ST_TRANSIENT:

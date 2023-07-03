@@ -264,17 +264,16 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	int m_noiseScaleNChoices = sizeof( m_noiseScaleChoices ) / sizeof( wxString );
 	m_noiseScale = new wxRadioBox( m_pgNoise, wxID_ANY, _("Frequency scale"), wxDefaultPosition, wxDefaultSize, m_noiseScaleNChoices, m_noiseScaleChoices, 1, wxRA_SPECIFY_COLS );
 	m_noiseScale->SetSelection( 0 );
+	m_noiseScale->Hide();
+
 	bSizer10->Add( m_noiseScale, 0, wxALL, 5 );
-
-
-	bSizer10->Add( 30, 0, 0, wxEXPAND, 5 );
 
 	wxFlexGridSizer* fgSizer11;
 	fgSizer11 = new wxFlexGridSizer( 0, 3, 3, 0 );
 	fgSizer11->SetFlexibleDirection( wxBOTH );
 	fgSizer11->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticText11 = new wxStaticText( m_pgNoise, wxID_ANY, _("Number of points:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText11 = new wxStaticText( m_pgNoise, wxID_ANY, _("Number of points per decade:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText11->Wrap( -1 );
 	fgSizer11->Add( m_staticText11, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
@@ -313,7 +312,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	fgSizer11->Add( m_noiseFreqStopUnits, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizer10->Add( fgSizer11, 0, wxALIGN_BOTTOM|wxBOTTOM|wxLEFT, 4 );
+	bSizer10->Add( fgSizer11, 0, wxALIGN_BOTTOM|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 
 	bSizer15->Add( bSizer10, 0, wxEXPAND|wxTOP, 5 );

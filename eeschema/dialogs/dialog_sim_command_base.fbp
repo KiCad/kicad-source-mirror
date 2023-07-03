@@ -3076,7 +3076,7 @@
                                                     <property name="floatable">1</property>
                                                     <property name="font"></property>
                                                     <property name="gripper">0</property>
-                                                    <property name="hidden">0</property>
+                                                    <property name="hidden">1</property>
                                                     <property name="id">wxID_ANY</property>
                                                     <property name="label">Frequency scale</property>
                                                     <property name="majorDimension">1</property>
@@ -3113,17 +3113,7 @@
                                             </object>
                                             <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
-                                                <property name="flag">wxEXPAND</property>
-                                                <property name="proportion">0</property>
-                                                <object class="spacer" expanded="1">
-                                                    <property name="height">0</property>
-                                                    <property name="permission">protected</property>
-                                                    <property name="width">30</property>
-                                                </object>
-                                            </object>
-                                            <object class="sizeritem" expanded="1">
-                                                <property name="border">4</property>
-                                                <property name="flag">wxALIGN_BOTTOM|wxBOTTOM|wxLEFT</property>
+                                                <property name="flag">wxALIGN_BOTTOM|wxTOP|wxBOTTOM|wxLEFT</property>
                                                 <property name="proportion">0</property>
                                                 <object class="wxFlexGridSizer" expanded="1">
                                                     <property name="cols">3</property>
@@ -3169,7 +3159,7 @@
                                                             <property name="gripper">0</property>
                                                             <property name="hidden">0</property>
                                                             <property name="id">wxID_ANY</property>
-                                                            <property name="label">Number of points:</property>
+                                                            <property name="label">Number of points per decade:</property>
                                                             <property name="markup">0</property>
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
