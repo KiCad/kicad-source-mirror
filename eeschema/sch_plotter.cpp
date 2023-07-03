@@ -41,6 +41,13 @@
 #include <sch_screen.h>
 #include <settings/settings_manager.h>
 
+// Note:
+// We need to switch between sheets to plot a hierarchy and update references and sheet number
+// Use SCHEMATIC::SetCurrentSheet( xxx ) to switch to a sheet.
+// Do not use SCH_EDIT_FRAME::SetCurrentSheet( xxx ) to switch to a sheet, because the new sheet
+// is not displayed, but SCH_EDIT_FRAME::SetCurrentSheet() has side effects to the current VIEW
+// (clear some data used to show the sheet on screen) and does not fully restore the "old" screen
+
 
 static const wxChar* plot_sheet_list( HPGL_PAGE_SIZE aSize )
 {
@@ -136,13 +143,8 @@ void SCH_PLOTTER::createPDFFile( const SCH_PLOT_SETTINGS& aPlotSettings,
 
     for( unsigned i = 0; i < sheetList.size(); i++ )
     {
-        if( m_schFrame )
-            m_schFrame->SetCurrentSheet( sheetList[i] );
-        else
-            m_schematic->SetCurrentSheet( sheetList[i] );
-
+        m_schematic->SetCurrentSheet( sheetList[i] );
         m_schematic->CurrentSheet().UpdateAllScreenReferences();
-
         m_schematic->SetSheetNumberAndCount();
 
         SCH_SCREEN* screen = m_schematic->CurrentSheet().LastScreen();
@@ -310,13 +312,8 @@ void SCH_PLOTTER::createPSFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
 
     for( unsigned i = 0; i < sheetList.size(); i++ )
     {
-        if( m_schFrame )
-            m_schFrame->SetCurrentSheet( sheetList[i] );
-        else
-            m_schematic->SetCurrentSheet( sheetList[i] );
-
+        m_schematic->SetCurrentSheet( sheetList[i] );
         m_schematic->CurrentSheet().UpdateAllScreenReferences();
-
         m_schematic->SetSheetNumberAndCount();
 
         SCH_SCREEN* screen = m_schematic->CurrentSheet().LastScreen();
@@ -394,14 +391,7 @@ void SCH_PLOTTER::createPSFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
         aReporter->ReportTail( _( "Done." ), RPT_SEVERITY_INFO );
     }
 
-    if( m_schFrame )
-        m_schFrame->SetCurrentSheet( oldsheetpath );
-    else
-        m_schematic->SetCurrentSheet( oldsheetpath );
-
-    m_schematic->CurrentSheet().UpdateAllScreenReferences();
-
-    m_schematic->SetSheetNumberAndCount();
+    restoreEnvironment( nullptr, oldsheetpath );
 }
 
 
@@ -483,13 +473,9 @@ void SCH_PLOTTER::createSVGFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
     for( unsigned i = 0; i < sheetList.size(); i++ )
     {
         SCH_SCREEN* screen;
-        if( m_schFrame )
-            m_schFrame->SetCurrentSheet( sheetList[i] );
-        else
-            m_schematic->SetCurrentSheet( sheetList[i] );
 
+        m_schematic->SetCurrentSheet( sheetList[i] );
         m_schematic->CurrentSheet().UpdateAllScreenReferences();
-
         m_schematic->SetSheetNumberAndCount();
 
         screen = m_schematic->CurrentSheet().LastScreen();
@@ -548,14 +534,7 @@ void SCH_PLOTTER::createSVGFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
         aReporter->ReportTail( _( "Done" ), RPT_SEVERITY_INFO );
     }
 
-    if( m_schFrame )
-        m_schFrame->SetCurrentSheet( oldsheetpath );
-    else
-        m_schematic->SetCurrentSheet( oldsheetpath );
-
-    m_schematic->CurrentSheet().UpdateAllScreenReferences();
-
-    m_schematic->SetSheetNumberAndCount();
+    restoreEnvironment( nullptr, oldsheetpath );
 }
 
 
@@ -667,12 +646,8 @@ void SCH_PLOTTER::createHPGLFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
 
     for( unsigned i = 0; i < sheetList.size(); i++ )
     {
-        if( m_schFrame )
-            m_schFrame->SetCurrentSheet( sheetList[i] );
-        else
-            m_schematic->SetCurrentSheet( sheetList[i] );
+        m_schematic->SetCurrentSheet( sheetList[i] );
         m_schematic->CurrentSheet().UpdateAllScreenReferences();
-
         m_schematic->SetSheetNumberAndCount();
 
         screen = m_schematic->CurrentSheet().LastScreen();
@@ -749,14 +724,7 @@ void SCH_PLOTTER::createHPGLFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
         aReporter->ReportTail( _( "Done." ), RPT_SEVERITY_INFO );
     }
 
-    if( m_schFrame )
-        m_schFrame->SetCurrentSheet( oldsheetpath );
-    else
-        m_schematic->SetCurrentSheet( oldsheetpath );
-
-    m_schematic->CurrentSheet().UpdateAllScreenReferences();
-
-    m_schematic->SetSheetNumberAndCount();
+    restoreEnvironment( nullptr, oldsheetpath );
 }
 
 
@@ -860,12 +828,8 @@ void SCH_PLOTTER::createDXFFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
 
     for( unsigned i = 0; i < sheetList.size(); i++ )
     {
-        if( m_schFrame )
-            m_schFrame->SetCurrentSheet( sheetList[i] );
-        else
-            m_schematic->SetCurrentSheet( sheetList[i] );
+        m_schematic->SetCurrentSheet( sheetList[i] );
         m_schematic->CurrentSheet().UpdateAllScreenReferences();
-
         m_schematic->SetSheetNumberAndCount();
 
         SCH_SCREEN* screen = m_schematic->CurrentSheet().LastScreen();
@@ -915,13 +879,8 @@ void SCH_PLOTTER::createDXFFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
                 aReporter->Report( msg, RPT_SEVERITY_ERROR );
             }
 
-            if( m_schFrame )
-                m_schFrame->SetCurrentSheet( oldsheetpath );
-            else
-                m_schematic->SetCurrentSheet( oldsheetpath );
-
+            m_schematic->SetCurrentSheet( oldsheetpath );
             m_schematic->CurrentSheet().UpdateAllScreenReferences();
-
             m_schematic->SetSheetNumberAndCount();
             return;
         }
@@ -930,14 +889,7 @@ void SCH_PLOTTER::createDXFFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
     if( aReporter )
         aReporter->ReportTail( _( "Done." ), RPT_SEVERITY_INFO );
 
-    if( m_schFrame )
-        m_schFrame->SetCurrentSheet( oldsheetpath );
-    else
-        m_schematic->SetCurrentSheet( oldsheetpath );
-
-    m_schematic->CurrentSheet().UpdateAllScreenReferences();
-
-    m_schematic->SetSheetNumberAndCount();
+    restoreEnvironment( nullptr, oldsheetpath );
 }
 
 
@@ -998,17 +950,15 @@ bool SCH_PLOTTER::plotOneSheetDXF( const wxString& aFileName, SCH_SCREEN* aScree
 
 void SCH_PLOTTER::restoreEnvironment( PDF_PLOTTER* aPlotter, SCH_SHEET_PATH& aOldsheetpath )
 {
-    aPlotter->EndPlot();
-    delete aPlotter;
+    if( aPlotter )
+    {
+        aPlotter->EndPlot();
+        delete aPlotter;
+    }
 
-    // Restore the previous sheet
-    if( m_schFrame )
-        m_schFrame->SetCurrentSheet( aOldsheetpath );
-    else
-        m_schematic->SetCurrentSheet( aOldsheetpath );
-
+    // Restore the initial sheet
+    m_schematic->SetCurrentSheet( aOldsheetpath );
     m_schematic->CurrentSheet().UpdateAllScreenReferences();
-
     m_schematic->SetSheetNumberAndCount();
 }
 
