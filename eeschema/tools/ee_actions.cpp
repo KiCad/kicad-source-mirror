@@ -30,6 +30,9 @@
 #include <tool/tool_action.h>
 
 
+// Forward-define of parameter types
+class SCH_BITMAP;
+
 // Actions, being statically-defined, require specialized I18N handling.  We continue to
 // use the _() macro so that string harvesting by the I18N framework doesn't have to be
 // specialized, but we don't translate on initialization and instead do it in the getters.
@@ -455,10 +458,14 @@ TOOL_ACTION EE_ACTIONS::drawArc( TOOL_ACTION_ARGS()
         .Flags( AF_ACTIVATE )
         .Parameter( SHAPE_T::ARC ) );
 
-TOOL_ACTION EE_ACTIONS::placeImage( "eeschema.InteractiveDrawing.placeImage",
-        AS_GLOBAL, 0, "",
-        _( "Add Image" ), _( "Add bitmap images" ),
-        BITMAPS::image, AF_ACTIVATE );
+TOOL_ACTION EE_ACTIONS::placeImage( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.placeImage" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Add Image" ) )
+        .Tooltip( _( "Add bitmap images" ) )
+        .Icon( BITMAPS::image )
+        .Flags( AF_ACTIVATE )
+        .Parameter<SCH_BITMAP*>( nullptr ) );
 
 TOOL_ACTION EE_ACTIONS::finishSheet( "eeschema.InteractiveDrawing.finishSheet",
         AS_GLOBAL, 0, "",
