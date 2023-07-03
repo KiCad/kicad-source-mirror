@@ -52,6 +52,8 @@ public:
     DUMMY_TOOL() :
         PCB_TOOL_BASE( "testframework.dummytool" )
     {};
+
+    bool Init() override { return true };
 };
 
 
