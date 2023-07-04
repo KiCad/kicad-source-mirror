@@ -97,6 +97,7 @@ class DIALOG_SIM_COMMAND_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText31;
 		wxTextCtrl* m_noiseFreqStop;
 		wxStaticText* m_noiseFreqStopUnits;
+		wxCheckBox* m_saveAllNoise;
 		wxPanel* m_pgOP;
 		wxStaticText* m_staticText13;
 		wxPanel* m_pgPoleZero;

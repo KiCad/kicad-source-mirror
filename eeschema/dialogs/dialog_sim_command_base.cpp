@@ -312,10 +312,13 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	fgSizer11->Add( m_noiseFreqStopUnits, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizer10->Add( fgSizer11, 0, wxALIGN_BOTTOM|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bSizer10->Add( fgSizer11, 0, wxALIGN_BOTTOM|wxTOP|wxLEFT, 5 );
 
 
 	bSizer15->Add( bSizer10, 0, wxEXPAND|wxTOP, 5 );
+
+	m_saveAllNoise = new wxCheckBox( m_pgNoise, wxID_ANY, _("Save contributions from all noise generators"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer15->Add( m_saveAllNoise, 0, wxALL, 10 );
 
 
 	m_pgNoise->SetSizer( bSizer15 );

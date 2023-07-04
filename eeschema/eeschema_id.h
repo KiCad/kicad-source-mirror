@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2008-2021 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2008-2023 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,14 +27,6 @@
 
 #include <id.h>
 
-
-/**
- * The maximum number of items in the clarify selection context menu.  While in
- * most cases it is highly unlikely that there would ever be more than 10 items
- * at the current cursor, there are some exceptions  (a bunch of pins created at
- * once, for instance).  The current setting of 200 is arbitrary.
- */
-#define MAX_SELECT_ITEM_IDS 200
 
 /**
  * The maximum number of units per package.
@@ -74,11 +66,6 @@ enum id_eeschema_frm
     ID_LIBVIEW_LIB_LIST,
     ID_LIBVIEW_SYM_FILTER,
     ID_LIBVIEW_SYM_LIST,
-
-    ID_SIM_RUN,
-    ID_SIM_TUNE,
-    ID_SIM_PROBE,
-    ID_SIM_ADD_SIGNALS,
 
     ID_END_EESCHEMA_ID_LIST,    // End of IDs specific to Eeschema
 

@@ -741,8 +741,8 @@ void SIMULATOR_PANEL::rebuildSignalsList()
 
     if( simType == ST_NOISE )
     {
-        addSignal( wxS( "inoise" ) );
-        addSignal( wxS( "onoise" ) );
+        addSignal( wxS( "inoise_spectrum" ) );
+        addSignal( wxS( "onoise_spectrum" ) );
     }
 
     // Add .PROBE directives
@@ -847,18 +847,16 @@ wxString SIMULATOR_PANEL::vectorNameFromSignalName( const wxString& aSignalName,
 
     if( aTraceType )
     {
-        wxString name = aSignalName.Upper();
-
-        if( name == wxS( "INOISE" ) || name == wxS( "ONOISE" ) )
+        if( circuitModel()->GetSimType() == ST_NOISE )
         {
             if( getNoiseSource().Upper().StartsWith( 'I' ) )
                 *aTraceType = SPT_CURRENT;
             else
                 *aTraceType = SPT_VOLTAGE;
         }
-        else if( !name.IsEmpty() )
+        else
         {
-            wxUniChar firstChar = name[0];
+            wxUniChar firstChar = aSignalName.Upper()[0];
 
             if( firstChar == 'V' )
                 *aTraceType = SPT_VOLTAGE;
@@ -1451,10 +1449,6 @@ void SIMULATOR_PANEL::updateTrace( const wxString& aVectorName, int aTraceType,
         break;
 
     case ST_NOISE:
-        simVectorName = wxString::Format( wxS( "noise1.%s_spectrum" ), simVectorName );
-        data_y = simulator()->GetMagPlot( (const char*) simVectorName.c_str() );
-        break;
-
     case ST_DC:
     case ST_TRANSIENT:
         data_y = simulator()->GetMagPlot( (const char*) simVectorName.c_str() );
@@ -2137,9 +2131,10 @@ wxString SIMULATOR_PANEL::getNoiseSource() const
     SPICE_VALUE pts;
     SPICE_VALUE fStart;
     SPICE_VALUE fStop;
+    bool        saveAll;
 
     circuitModel()->ParseNoiseCommand( circuitModel()->GetSimCommand(), &output, &ref, &source,
-                                       &scale, &pts, &fStart, &fStop );
+                                       &scale, &pts, &fStart, &fStop, &saveAll );
 
     return source;
 }
@@ -2388,6 +2383,17 @@ void SIMULATOR_PANEL::OnSimReport( const wxString& aMsg )
 }
 
 
+std::vector<wxString> SIMULATOR_PANEL::Signals()
+{
+    std::vector<wxString> signals;
+
+    for( const std::string& vec : simulator()->AllVectors() )
+        signals.emplace_back( vec );
+
+    return signals;
+}
+
+
 void SIMULATOR_PANEL::OnSimRefresh( bool aFinal )
 {
     SIM_TYPE             simType = circuitModel()->GetSimType();
@@ -2413,7 +2419,9 @@ void SIMULATOR_PANEL::OnSimRefresh( bool aFinal )
             m_simConsole->AppendText( _( "\n\nSimulation results:\n\n" ) );
             m_simConsole->SetInsertionPointEnd();
 
-            for( const std::string& vec : simulator()->AllPlots() )
+            simulator()->Command( "setplot noise2" );
+
+            for( const std::string& vec : simulator()->AllVectors() )
             {
                 std::vector<double> val_list = simulator()->GetRealPlot( vec, 1 );
                 wxString            value = SPICE_VALUE( val_list[ 0 ] ).ToSpiceString();
@@ -2423,6 +2431,8 @@ void SIMULATOR_PANEL::OnSimRefresh( bool aFinal )
                 m_simConsole->AppendText( msg );
                 m_simConsole->SetInsertionPointEnd();
             }
+
+            simulator()->Command( "setplot noise1" );
         }
 
         SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( plotPanelWindow );
@@ -2483,7 +2493,7 @@ void SIMULATOR_PANEL::OnSimRefresh( bool aFinal )
         m_simConsole->AppendText( _( "\n\nSimulation results:\n\n" ) );
         m_simConsole->SetInsertionPointEnd();
 
-        for( const std::string& vec : simulator()->AllPlots() )
+        for( const std::string& vec : simulator()->AllVectors() )
         {
             std::vector<double> val_list = simulator()->GetRealPlot( vec, 1 );
             wxString            value = SPICE_VALUE( val_list[ 0 ] ).ToSpiceString();

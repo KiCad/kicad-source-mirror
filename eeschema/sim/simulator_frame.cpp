@@ -427,7 +427,7 @@ void SIMULATOR_FRAME::NewPlotPanel( const wxString& aSimCommand, int aOptions )
 }
 
 
-const std::vector<wxString>& SIMULATOR_FRAME::Signals()
+const std::vector<wxString> SIMULATOR_FRAME::Signals()
 {
     return m_panel->Signals();
 }

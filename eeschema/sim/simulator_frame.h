@@ -95,7 +95,10 @@ public:
      */
     bool EditSimCommand();
 
-    const std::vector<wxString>& Signals();
+    /**
+     * @return the list of signals in the current simulation results.
+     */
+    const std::vector<wxString> Signals();
 
     const std::map<int, wxString>& UserDefinedSignals();
 

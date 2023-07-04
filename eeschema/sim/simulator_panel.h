@@ -91,7 +91,7 @@ public:
      */
     SIM_PLOT_PANEL_BASE* NewPlotPanel( const wxString& aSimCommand, int aSimOptions );
 
-    const std::vector<wxString>& Signals() { return m_signals; }
+    std::vector<wxString> Signals();
 
     const std::map<int, wxString>& UserDefinedSignals() { return m_userDefinedSignals; }
     void SetUserDefinedSignals( const std::map<int, wxString>& aSignals );

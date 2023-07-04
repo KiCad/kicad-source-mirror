@@ -123,6 +123,41 @@ DIALOG_SIM_COMMAND::DIALOG_SIM_COMMAND( wxWindow* aParent,
     SetupStandardButtons();
 }
 
+bool DIALOG_SIM_COMMAND::TransferDataToWindow()
+{
+    /// @todo one day it could interpret the sim command and fill out appropriate fields.
+    if( empty( m_customTxt ) )
+        loadDirectives();
+
+    m_fixIncludePaths->SetValue( m_settings->GetFixIncludePaths() );
+
+    NGSPICE_SIMULATOR_SETTINGS* ngspiceSettings =
+            dynamic_cast<NGSPICE_SIMULATOR_SETTINGS*>( m_settings.get() );
+
+    if( ngspiceSettings )
+    {
+        switch( ngspiceSettings->GetModelMode() )
+        {
+        case NGSPICE_MODEL_MODE::USER_CONFIG: m_compatibilityModeChoice->SetSelection( 0 ); break;
+        case NGSPICE_MODEL_MODE::NGSPICE:     m_compatibilityModeChoice->SetSelection( 1 ); break;
+        case NGSPICE_MODEL_MODE::PSPICE:      m_compatibilityModeChoice->SetSelection( 2 ); break;
+        case NGSPICE_MODEL_MODE::LTSPICE:     m_compatibilityModeChoice->SetSelection( 3 ); break;
+        case NGSPICE_MODEL_MODE::LT_PSPICE:   m_compatibilityModeChoice->SetSelection( 4 ); break;
+        case NGSPICE_MODEL_MODE::HSPICE:      m_compatibilityModeChoice->SetSelection( 5 ); break;
+        default:
+            wxFAIL_MSG( wxString::Format( "Unknown NGSPICE_MODEL_MODE %d.",
+                                          ngspiceSettings->GetModelMode() ) );
+            break;
+        }
+    }
+
+    if( m_simCommand.IsEmpty() && !empty( m_customTxt ) )
+        parseCommand( m_customTxt->GetValue() );
+
+    return true;
+}
+
+
 wxString DIALOG_SIM_COMMAND::evaluateDCControls( wxChoice* aDcSource, wxTextCtrl* aDcStart,
                                                  wxTextCtrl* aDcStop, wxTextCtrl* aDcIncr )
 {
@@ -241,14 +276,15 @@ bool DIALOG_SIM_COMMAND::TransferDataFromWindow()
         if( !ref.IsEmpty() )
             ref = wxS( "," ) + m_circuitModel->GetItemName( std::string( ref.ToUTF8() ) );
 
-        m_simCommand.Printf( ".noise v(%s%s) %s %s %s %s %s",
+        m_simCommand.Printf( ".noise v(%s%s) %s %s %s %s %s %s",
                              output,
                              ref,
                              noiseSource,
                              scaleToString( m_noiseScale->GetSelection() ),
                              m_noisePointsNumber->GetValue(),
                              SPICE_VALUE( m_noiseFreqStart->GetValue() ).ToSpiceString(),
-                             SPICE_VALUE( m_noiseFreqStop->GetValue() ).ToSpiceString() );
+                             SPICE_VALUE( m_noiseFreqStop->GetValue() ).ToSpiceString(),
+                             m_saveAllNoise->GetValue() ? "1" : "" );
     }
     else if( page == m_pgOP )           // DC operating point analysis
     {
@@ -325,41 +361,6 @@ bool DIALOG_SIM_COMMAND::TransferDataFromWindow()
         m_simCommand.Trim();
 
     m_settings->SetFixIncludePaths( m_fixIncludePaths->GetValue() );
-
-    return true;
-}
-
-
-bool DIALOG_SIM_COMMAND::TransferDataToWindow()
-{
-    /// @todo one day it could interpret the sim command and fill out appropriate fields.
-    if( empty( m_customTxt ) )
-        loadDirectives();
-
-    m_fixIncludePaths->SetValue( m_settings->GetFixIncludePaths() );
-
-    NGSPICE_SIMULATOR_SETTINGS* ngspiceSettings =
-            dynamic_cast<NGSPICE_SIMULATOR_SETTINGS*>( m_settings.get() );
-
-    if( ngspiceSettings )
-    {
-        switch( ngspiceSettings->GetModelMode() )
-        {
-        case NGSPICE_MODEL_MODE::USER_CONFIG: m_compatibilityModeChoice->SetSelection( 0 ); break;
-        case NGSPICE_MODEL_MODE::NGSPICE:     m_compatibilityModeChoice->SetSelection( 1 ); break;
-        case NGSPICE_MODEL_MODE::PSPICE:      m_compatibilityModeChoice->SetSelection( 2 ); break;
-        case NGSPICE_MODEL_MODE::LTSPICE:     m_compatibilityModeChoice->SetSelection( 3 ); break;
-        case NGSPICE_MODEL_MODE::LT_PSPICE:   m_compatibilityModeChoice->SetSelection( 4 ); break;
-        case NGSPICE_MODEL_MODE::HSPICE:      m_compatibilityModeChoice->SetSelection( 5 ); break;
-        default:
-            wxFAIL_MSG( wxString::Format( "Unknown NGSPICE_MODEL_MODE %d.",
-                                          ngspiceSettings->GetModelMode() ) );
-            break;
-        }
-    }
-
-    if( m_simCommand.IsEmpty() && !empty( m_customTxt ) )
-        parseCommand( m_customTxt->GetValue() );
 
     return true;
 }
@@ -485,9 +486,10 @@ void DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
         SPICE_VALUE pts;
         SPICE_VALUE fStart;
         SPICE_VALUE fStop;
+        bool        saveAll;
 
         m_circuitModel->ParseNoiseCommand( aCommand, &output, &ref, &source, &scale, &pts,
-                                           &fStart, &fStop );
+                                           &fStart, &fStop, &saveAll );
 
         m_noiseMeas->SetStringSelection( output );
         m_noiseRef->SetStringSelection( ref );
@@ -505,6 +507,8 @@ void DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
         m_noisePointsNumber->SetValue( pts.ToSpiceString() );
         m_noiseFreqStart->SetValue( fStart.ToSpiceString() );
         m_noiseFreqStop->SetValue( fStop.ToSpiceString() );
+
+        m_saveAllNoise->SetValue( saveAll );
     }
     else if( token == ".tran" )
     {

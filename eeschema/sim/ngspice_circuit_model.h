@@ -129,7 +129,7 @@ public:
 
     bool ParseNoiseCommand( const wxString& aCmd, wxString* aOutput, wxString* aRef,
                             wxString* aSource, wxString* aScale, SPICE_VALUE* aPts,
-                            SPICE_VALUE* aFStart, SPICE_VALUE* aFStop );
+                            SPICE_VALUE* aFStart, SPICE_VALUE* aFStop, bool* aSaveAll );
 
     /**
      * Determine if a directive is a simulation command.

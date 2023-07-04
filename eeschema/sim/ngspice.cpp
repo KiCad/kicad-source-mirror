@@ -84,25 +84,25 @@ void NGSPICE::Init( const SPICE_SIMULATOR_SETTINGS* aSettings )
 }
 
 
-std::vector<std::string> NGSPICE::AllPlots() const
+std::vector<std::string> NGSPICE::AllVectors() const
 {
     LOCALE_IO c_locale; // ngspice works correctly only with C locale
     char*     currentPlot = m_ngSpice_CurPlot();
-    char**    allPlots    = m_ngSpice_AllVecs( currentPlot );
-    int       noOfPlots   = 0;
+    char**    allVectors  = m_ngSpice_AllVecs( currentPlot );
+    int       noOfVectors = 0;
 
     std::vector<std::string> retVal;
 
-    if( allPlots != nullptr )
+    if( allVectors != nullptr )
     {
-        for( char** plot = allPlots; *plot != nullptr; plot++ )
-            noOfPlots++;
+        for( char** plot = allVectors; *plot != nullptr; plot++ )
+            noOfVectors++;
 
-        retVal.reserve( noOfPlots );
+        retVal.reserve( noOfVectors );
 
-        for( int i = 0; i < noOfPlots; i++, allPlots++ )
+        for( int i = 0; i < noOfVectors; i++, allVectors++ )
         {
-            std::string vec = *allPlots;
+            std::string vec = *allVectors;
             retVal.push_back( vec );
         }
     }
@@ -336,10 +336,10 @@ wxString NGSPICE::GetXAxis( SIM_TYPE aType ) const
 
     case ST_DC:
         // find plot, which ends with "-sweep"
-        for( wxString plot : AllPlots() )
+        for( wxString vector : AllVectors() )
         {
-            if( plot.Lower().EndsWith( wxS( "-sweep" ) ) )
-                return plot;
+            if( vector.Lower().EndsWith( wxS( "-sweep" ) ) )
+                return vector;
         }
 
         return wxS( "sweep" );

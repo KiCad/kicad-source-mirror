@@ -91,7 +91,7 @@ public:
      *
      * @return List of vector names. ?May not match to the net name elements.
      */
-    virtual std::vector<std::string> AllPlots() const = 0;
+    virtual std::vector<std::string> AllVectors() const = 0;
 
     /**
      * Return a requested vector with complex values. If the vector is real, then

@@ -147,7 +147,7 @@ bool NGSPICE_CIRCUIT_MODEL::ParseDCCommand( const wxString& aCmd, SPICE_DC_PARAM
 bool NGSPICE_CIRCUIT_MODEL::ParseNoiseCommand( const wxString& aCmd, wxString* aOutput,
                                                wxString* aRef, wxString* aSource, wxString* aScale,
                                                SPICE_VALUE* aPts, SPICE_VALUE* aFStart,
-                                               SPICE_VALUE* aFStop )
+                                               SPICE_VALUE* aFStop, bool* aSaveAll )
 {
     if( !aCmd.Lower().StartsWith( wxS( ".noise" ) ) )
         return false;
@@ -197,7 +197,13 @@ bool NGSPICE_CIRCUIT_MODEL::ParseNoiseCommand( const wxString& aCmd, wxString* a
     }
 
     if( !token.IsEmpty() )
+    {
         *aFStop = SPICE_VALUE( token );
+        token = tokens.GetNextToken();
+    }
+
+    if( !token.IsEmpty() )
+        *aSaveAll = true;
 
     return true;
 }

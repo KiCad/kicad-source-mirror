@@ -80,8 +80,8 @@ public:
     ///< @copydoc SPICE_SIMULATOR::GetXAxis()
     wxString GetXAxis( SIM_TYPE aType ) const override final;
 
-    ///< @copydoc SPICE_SIMULATOR::AllPlots()
-    std::vector<std::string> AllPlots() const override final;
+    ///< @copydoc SPICE_SIMULATOR::AllVectors()
+    std::vector<std::string> AllVectors() const override final;
 
     ///< @copydoc SPICE_SIMULATOR::GetPlot()
     std::vector<COMPLEX> GetPlot( const std::string& aName, int aMaxLen = -1 ) override final;
