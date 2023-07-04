@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:35-0700\n"
-"PO-Revision-Date: 2023-07-04 03:18+0000\n"
+"PO-Revision-Date: 2023-07-07 16:49+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -11504,7 +11504,7 @@ msgstr "Byt källor"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:211
 msgid "DC Transfer"
-msgstr "DC-överföring"
+msgstr "DC-svep"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:213
 #: eeschema/sim/spice_simulator.cpp:73
@@ -11529,7 +11529,7 @@ msgstr "Bruskälla:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:282
 msgid "Number of points:"
-msgstr "Antal poäng:"
+msgstr "Antal punkter:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:330
 #: eeschema/sim/spice_simulator.cpp:77
