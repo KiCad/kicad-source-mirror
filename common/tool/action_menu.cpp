@@ -333,7 +333,6 @@ ACTION_MENU* ACTION_MENU::create() const
 
 TOOL_MANAGER* ACTION_MENU::getToolManager() const
 {
-    wxASSERT( m_tool );
     return m_tool ? m_tool->GetManager() : nullptr;
 }
 
@@ -341,6 +340,8 @@ TOOL_MANAGER* ACTION_MENU::getToolManager() const
 void ACTION_MENU::updateHotKeys()
 {
     TOOL_MANAGER* toolMgr = getToolManager();
+
+    wxASSERT( toolMgr );
 
     for( std::pair<const int, const TOOL_ACTION*>& ii : m_toolActions )
     {
@@ -399,19 +400,20 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
 {
     OPT_TOOL_EVENT evt;
     wxString       menuText;
-    wxEventType    type = aEvent.GetEventType();
-    wxWindow*      focus = wxWindow::FindFocus();
+    wxEventType    type    = aEvent.GetEventType();
+    wxWindow*      focus   = wxWindow::FindFocus();
+    TOOL_MANAGER*  toolMgr = getToolManager();
 
     if( type == wxEVT_MENU_OPEN )
     {
-        if( m_dirty && m_tool )
-            getToolManager()->RunAction<ACTION_MENU*>( ACTIONS::updateMenu, this );
+        if( m_dirty && toolMgr )
+            toolMgr->RunAction<ACTION_MENU*>( ACTIONS::updateMenu, this );
 
         wxMenu* parent = dynamic_cast<wxMenu*>( GetParent() );
 
         // Don't update the position if this menu has a parent
-        if( !parent && m_tool )
-            g_menu_open_position = getToolManager()->GetMousePosition();
+        if( !parent && toolMgr )
+            g_menu_open_position = toolMgr->GetMousePosition();
 
         g_last_menu_highlighted_id = 0;
     }
@@ -477,7 +479,7 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
         }
 
         // Check if there is a TOOL_ACTION for the given UI ID
-        if( getToolManager()->GetActionManager()->IsActionUIId( m_selected ) )
+        if( toolMgr && toolMgr->GetActionManager()->IsActionUIId( m_selected ) )
             evt = findToolAction( m_selected );
 
         if( !evt )
@@ -535,7 +537,7 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
 
     // forward the action/update event to the TOOL_MANAGER
     // clients that don't supply a tool will have to check GetSelected() themselves
-    if( evt && m_tool )
+    if( evt && toolMgr )
     {
         wxLogTrace( kicadTraceToolStack, wxS( "ACTION_MENU::OnMenuEvent %s" ), evt->Format() );
 
@@ -559,11 +561,10 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
         // manager so that immediate actions work.
         else
         {
-            evt->SetMousePosition( getToolManager()->GetMousePosition() );
+            evt->SetMousePosition( toolMgr->GetMousePosition() );
         }
 
-        if( m_tool->GetManager() )
-            m_tool->GetManager()->ProcessEvent( *evt );
+        toolMgr->ProcessEvent( *evt );
     }
     else
     {
