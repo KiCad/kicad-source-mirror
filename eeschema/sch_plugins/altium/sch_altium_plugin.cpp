@@ -2639,27 +2639,7 @@ void SCH_ALTIUM_PLUGIN::ParseNetLabel( const std::map<wxString, wxString>& aProp
     SCH_SCREEN* screen = getCurrentScreen();
     wxCHECK( screen, /* void */ );
 
-    switch( elem.orientation )
-    {
-    case ASCH_RECORD_ORIENTATION::RIGHTWARDS:
-        label->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );
-        break;
-
-    case ASCH_RECORD_ORIENTATION::UPWARDS:
-        label->SetTextSpinStyle( TEXT_SPIN_STYLE::UP );
-        break;
-
-    case ASCH_RECORD_ORIENTATION::LEFTWARDS:
-        label->SetTextSpinStyle( TEXT_SPIN_STYLE::LEFT );
-        break;
-
-    case ASCH_RECORD_ORIENTATION::DOWNWARDS:
-        label->SetTextSpinStyle( TEXT_SPIN_STYLE::BOTTOM );
-        break;
-
-    default:
-        break;
-    }
+    SetTextPositioning( label, elem.justification, elem.orientation );
 
     label->SetFlags( IS_NEW );
     screen->Append( label );
