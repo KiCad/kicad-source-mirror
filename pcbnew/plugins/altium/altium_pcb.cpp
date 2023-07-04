@@ -3145,57 +3145,11 @@ void ALTIUM_PCB::ConvertTexts6ToEdaTextSettings( const ATEXT6& aElem, EDA_TEXT* 
     aEdaText->SetItalic( aElem.isItalic );
     aEdaText->SetMirrored( aElem.isMirrored );
 
-    if( aElem.isDesignator || aElem.isComment ) // That's just a bold assumption
-    {
-        aEdaText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-        aEdaText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
-    }
-    else
-    {
-        switch( aElem.textposition )
-        {
-        case ALTIUM_TEXT_POSITION::LEFT_TOP:
-        case ALTIUM_TEXT_POSITION::LEFT_CENTER:
-        case ALTIUM_TEXT_POSITION::LEFT_BOTTOM:
-            aEdaText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-            break;
-        case ALTIUM_TEXT_POSITION::CENTER_TOP:
-        case ALTIUM_TEXT_POSITION::CENTER_CENTER:
-        case ALTIUM_TEXT_POSITION::CENTER_BOTTOM:
-            aEdaText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
-            break;
-        case ALTIUM_TEXT_POSITION::RIGHT_TOP:
-        case ALTIUM_TEXT_POSITION::RIGHT_CENTER:
-        case ALTIUM_TEXT_POSITION::RIGHT_BOTTOM:
-            aEdaText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-            break;
-        default:
-            wxLogError( wxT( "Unexpected horizontal Text Position. This should never happen." ) );
-            break;
-        }
+    // Altium position always specifies the bottom left corner
+    aEdaText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+    aEdaText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
 
-        switch( aElem.textposition )
-        {
-        case ALTIUM_TEXT_POSITION::LEFT_TOP:
-        case ALTIUM_TEXT_POSITION::CENTER_TOP:
-        case ALTIUM_TEXT_POSITION::RIGHT_TOP:
-            aEdaText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-            break;
-        case ALTIUM_TEXT_POSITION::LEFT_CENTER:
-        case ALTIUM_TEXT_POSITION::CENTER_CENTER:
-        case ALTIUM_TEXT_POSITION::RIGHT_CENTER:
-            aEdaText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
-            break;
-        case ALTIUM_TEXT_POSITION::LEFT_BOTTOM:
-        case ALTIUM_TEXT_POSITION::CENTER_BOTTOM:
-        case ALTIUM_TEXT_POSITION::RIGHT_BOTTOM:
-            aEdaText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
-            break;
-        default:
-            wxLogError( wxT( "Unexpected vertical text position. This should never happen." ) );
-            break;
-        }
-    }
+    // TODO: correct the position and set proper justification
 }
 
 
