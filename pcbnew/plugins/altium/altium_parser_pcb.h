@@ -687,6 +687,7 @@ struct ATEXT6
     bool isDesignator;
 
     ALTIUM_TEXT_TYPE fonttype;
+    wxString         fontname;
 
     wxString text;
 

@@ -170,6 +170,21 @@ public:
         }
     }
 
+    int ReadBytes( char* aOut, size_t aSize )
+    {
+        if( aSize > GetRemainingBytes() )
+        {
+            m_error = true;
+            return 0;
+        }
+        else
+        {
+            memcpy( aOut, m_pos, aSize );
+            m_pos += aSize;
+            return aSize;
+        }
+    }
+
     int32_t ReadKicadUnit()
     {
         return ConvertToKicadUnit( Read<int32_t>() );

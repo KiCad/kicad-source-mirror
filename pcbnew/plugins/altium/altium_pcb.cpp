@@ -3132,8 +3132,9 @@ void ALTIUM_PCB::ConvertTexts6ToEdaTextSettings( const ATEXT6& aElem, EDA_TEXT* 
 {
     if( aElem.fonttype == ALTIUM_TEXT_TYPE::TRUETYPE )
     {
-        // TODO: why is this required? Somehow, truetype size is calculated differently
-        aEdaText->SetTextSize( VECTOR2I( aElem.height / 2, aElem.height / 2 ) );
+        // TODO: why is this required? Somehow, truetype size is calculated differently (tuned to Arial)
+        aEdaText->SetTextSize( VECTOR2I( aElem.height * 0.63, aElem.height * 0.63 ) );
+        aEdaText->SetFont( KIFONT::FONT::GetFont( aElem.fontname, aElem.isBold, aElem.isItalic ) );
     }
     else
     {
