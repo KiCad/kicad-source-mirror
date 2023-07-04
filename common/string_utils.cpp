@@ -203,7 +203,7 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
             {
                 unsigned int code = c;
                 char buffer[16];
-                snprintf( buffer, sizeof(buffer), "\\\\u%4.4X", code );
+                snprintf( buffer, sizeof(buffer), "\\u%4.4X", code );
                 converted += buffer;
             }
             else

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -493,6 +493,7 @@ protected:
 
     int m_pageTreeHandle;           ///< Handle to the root of the page tree object
     int m_fontResDictHandle;        ///< Font resource dictionary
+    int m_jsNamesHandle;            ///< Handle for Names dictionary with JS
     std::vector<int> m_pageHandles; ///< Handles to the page objects
     int m_pageStreamHandle;         ///< Handle of the page content object
     int m_streamLengthHandle;       ///< Handle to the deferred stream length

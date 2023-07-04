@@ -909,6 +909,8 @@ bool PDF_PLOTTER::StartPlot( const wxString& aPageNumber, const wxString& aPageN
        (it *could* be inherited via the Pages tree */
     m_fontResDictHandle = allocPdfObject();
 
+    m_jsNamesHandle = allocPdfObject();
+
     /* Now, the PDF is read from the end, (more or less)... so we start
        with the page stream for page 1. Other more important stuff is written
        at the end */
@@ -980,31 +982,32 @@ void PDF_PLOTTER::emitOutlineNode( OUTLINE_NODE* node, int parentHandle, int nex
         startPdfObject( nodeHandle );
 
         fprintf( m_outputFile,
-                 "<< /Title %s\n"
-                 "   /Parent %d 0 R\n",
+                 "<<\n"
+                 "/Title %s\n"
+                 "/Parent %d 0 R\n",
                  encodeStringForPlotter(node->title ).c_str(),
                  parentHandle);
 
         if( nextNode > 0 )
         {
-            fprintf( m_outputFile, "   /Next %d 0 R\n", nextNode );
+            fprintf( m_outputFile, "/Next %d 0 R\n", nextNode );
         }
 
         if( prevNode > 0 )
         {
-            fprintf( m_outputFile, "   /Prev %d 0 R\n", prevNode );
+            fprintf( m_outputFile, "/Prev %d 0 R\n", prevNode );
         }
 
         if( node->children.size() > 0 )
         {
-            fprintf( m_outputFile, "   /Count %zd\n", -1 * node->children.size() );
-            fprintf( m_outputFile, "   /First %d 0 R\n", node->children.front()->entryHandle );
-            fprintf( m_outputFile, "   /Last %d 0 R\n", node->children.back()->entryHandle );
+            fprintf( m_outputFile, "/Count %zd\n", -1 * node->children.size() );
+            fprintf( m_outputFile, "/First %d 0 R\n", node->children.front()->entryHandle );
+            fprintf( m_outputFile, "/Last %d 0 R\n", node->children.back()->entryHandle );
         }
 
         if( node->actionHandle != -1 )
         {
-            fprintf( m_outputFile, "   /A %d 0 R\n", node->actionHandle );
+            fprintf( m_outputFile, "/A %d 0 R\n", node->actionHandle );
         }
 
         fputs( ">>\n", m_outputFile );
@@ -1114,10 +1117,11 @@ bool PDF_PLOTTER::EndPlot()
         startPdfObject( linkHandle );
 
         fprintf( m_outputFile,
-                 "<< /Type /Annot\n"
-                 "   /Subtype /Link\n"
-                 "   /Rect [%g %g %g %g]\n"
-                 "   /Border [16 16 0]\n",
+                 "<<\n"
+                 "/Type /Annot\n"
+                 "/Subtype /Link\n"
+                 "/Rect [%g %g %g %g]\n"
+                 "/Border [16 16 0]\n",
                  box.GetLeft(), box.GetBottom(), box.GetRight(), box.GetTop() );
 
         wxString pageNumber;
@@ -1130,7 +1134,7 @@ bool PDF_PLOTTER::EndPlot()
                 if( m_pageNumbers[ii] == pageNumber )
                 {
                     fprintf( m_outputFile,
-                             "   /Dest [%d 0 R /FitB]\n"
+                             "/Dest [%d 0 R /FitB]\n"
                              ">>\n",
                              m_pageHandles[ii] );
 
@@ -1142,15 +1146,14 @@ bool PDF_PLOTTER::EndPlot()
             if( !pageFound )
             {
                 // destination page is not being plotted, assign the NOP action to the link
-                fprintf( m_outputFile,
-                         "   /A << /Type /Action /S /NOP >>\n"
-                         ">>\n" );
+                fprintf( m_outputFile, "/A << /Type /Action /S /NOP >>\n"
+                                       ">>\n" );
             }
         }
         else
         {
             fprintf( m_outputFile,
-                     "   /A << /Type /Action /S /URI /URI %s >>\n"
+                     "/A << /Type /Action /S /URI /URI %s >>\n"
                      ">>\n",
                      encodeStringForPlotter( url ).c_str() );
         }
@@ -1162,7 +1165,7 @@ bool PDF_PLOTTER::EndPlot()
     {
         const BOX2D&                 box = menuPair.first;
         const std::vector<wxString>& urls = menuPair.second;
-        wxString                     js = wxT( "var aParams = [ " );
+        wxString                     js = wxT( "ShM([\n" );
 
         for( const wxString& url : urls )
         {
@@ -1174,7 +1177,7 @@ bool PDF_PLOTTER::EndPlot()
                 {
                     wxString href = property.substr( property.Find( "http:" ) );
 
-                    js += wxString::Format( wxT( "{ cName: '%s', cReturn: '%s' }, " ),
+                    js += wxString::Format( wxT( "[\"%s\", \"%s\"],\n" ),
                                             EscapeString( property, CTX_JS_STR ),
                                             EscapeString( href, CTX_JS_STR ) );
                 }
@@ -1182,13 +1185,13 @@ bool PDF_PLOTTER::EndPlot()
                 {
                     wxString href = property.substr( property.Find( "https:" ) );
 
-                    js += wxString::Format( wxT( "{ cName: '%s', cReturn: '%s' }, " ),
+                    js += wxString::Format( wxT( "[\"%s\", \"%s\"],\n" ),
                                             EscapeString( property, CTX_JS_STR ),
                                             EscapeString( href, CTX_JS_STR ) );
                 }
                 else
                 {
-                    js += wxString::Format( wxT( "{ cName: '%s', cReturn: null }, " ),
+                    js += wxString::Format( wxT( "[\"%s\"],\n" ),
                                             EscapeString( property, CTX_JS_STR ) );
                 }
             }
@@ -1202,7 +1205,7 @@ bool PDF_PLOTTER::EndPlot()
                     {
                         wxString menuText = wxString::Format( _( "Show Page %s" ), pageNumber );
 
-                        js += wxString::Format( wxT( "{ cName: '%s', cReturn: '#%d' }, " ),
+                        js += wxString::Format( wxT( "[\"%s\", \"#%d\"],\n" ),
                                                 EscapeString( menuText, CTX_JS_STR ),
                                                 static_cast<int>( ii ) );
                         break;
@@ -1213,33 +1216,58 @@ bool PDF_PLOTTER::EndPlot()
             {
                 wxString menuText = wxString::Format( _( "Open %s" ), url );
 
-                js += wxString::Format( wxT( "{ cName: '%s', cReturn: '%s' }, " ),
+                js += wxString::Format( wxT( "[\"%s\", \"%s\"],\n" ),
                                         EscapeString( menuText, CTX_JS_STR ),
                                         EscapeString( url, CTX_JS_STR ) );
             }
         }
 
-        js += wxT( "]; " );
-
-        js += wxT( "var cChoice = app.popUpMenuEx.apply\\( app, aParams \\); " );
-        js += wxT( "if\\( cChoice != null && cChoice.substring\\( 0, 1 \\) == '#' \\)"
-                   "    this.pageNum = parseInt\\( cChoice.slice\\( 1 \\) \\); " );
-        js += wxT( "else if\\( cChoice != null && cChoice.substring\\( 0, 4 \\) == 'http' \\)"
-                   "    app.launchURL\\( cChoice \\);" );
+        js += wxT( "]);" );
 
         startPdfObject( menuHandle );
 
         fprintf( m_outputFile,
-                 "<< /Type /Annot\n"
-                 "   /Subtype /Link\n"
-                 "   /Rect [%g %g %g %g]\n"
-                 "   /Border [16 16 0]\n",
+                 "<<\n"
+                 "/Type /Annot\n"
+                 "/Subtype /Link\n"
+                 "/Rect [%g %g %g %g]\n"
+                 "/Border [16 16 0]\n",
                  box.GetLeft(), box.GetBottom(), box.GetRight(), box.GetTop() );
 
         fprintf( m_outputFile,
-                 "   /A << /Type /Action /S /JavaScript /JS (%s) >>\n"
+                 "/A << /Type /Action /S /JavaScript /JS %s >>\n"
                  ">>\n",
-                 js.ToStdString().c_str() );
+                 encodeStringForPlotter( js ).c_str() );
+
+        closePdfObject();
+    }
+
+    {
+        startPdfObject( m_jsNamesHandle );
+
+        wxString js = R"JS(
+function ShM(aEntries) {
+    var aParams = [];
+    for (var i in aEntries) {
+        aParams.push({
+            cName: aEntries[i][0],
+            cReturn: aEntries[i][1]
+        })
+    }
+
+    var cChoice = app.popUpMenuEx.apply(app, aParams);
+    if (cChoice != null && cChoice.substring(0, 1) == '#') this.pageNum = parseInt(cChoice.slice(1));
+    else if (cChoice != null && cChoice.substring(0, 4) == 'http') app.launchURL(cChoice);
+}
+)JS";
+
+        fprintf( m_outputFile,
+                 "<< /JavaScript\n"
+                 " << /Names\n"
+                 "    [ (JSInit) << /Type /Action /S /JavaScript /JS %s >> ]\n"
+                 " >>\n"
+                 ">>\n",
+                 encodeStringForPlotter( js ).c_str() );
 
         closePdfObject();
     }
@@ -1303,10 +1331,12 @@ bool PDF_PLOTTER::EndPlot()
                  "/Version /1.5\n"
                  "/PageMode /UseOutlines\n"
                  "/Outlines %d 0 R\n"
+                 "/Names %d 0 R\n"
                  "/PageLayout /SinglePage\n"
                  ">>\n",
                  m_pageTreeHandle,
-                 outlineHandle );
+                 outlineHandle,
+                 m_jsNamesHandle );
     }
     else
     {
