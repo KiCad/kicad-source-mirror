@@ -667,6 +667,9 @@ ASCH_NET_LABEL::ASCH_NET_LABEL( const std::map<wxString, wxString>& aProps )
     location = VECTOR2I( ReadKiCadUnitFrac( aProps, "LOCATION.X" ),
                          -ReadKiCadUnitFrac( aProps, "LOCATION.Y" ) );
 
+    justification = ReadEnum<ASCH_LABEL_JUSTIFICATION>( aProps, "JUSTIFICATION", 0, 8,
+                                                        ASCH_LABEL_JUSTIFICATION::BOTTOM_LEFT );
+
     orientation = ReadEnum<ASCH_RECORD_ORIENTATION>( aProps, "ORIENTATION", 0, 3,
                                                      ASCH_RECORD_ORIENTATION::RIGHTWARDS );
 }

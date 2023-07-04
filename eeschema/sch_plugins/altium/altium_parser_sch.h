@@ -664,6 +664,7 @@ struct ASCH_NET_LABEL
 
     VECTOR2I location;
 
+    ASCH_LABEL_JUSTIFICATION justification;
     ASCH_RECORD_ORIENTATION orientation;
 
     explicit ASCH_NET_LABEL( const std::map<wxString, wxString>& aProps );
