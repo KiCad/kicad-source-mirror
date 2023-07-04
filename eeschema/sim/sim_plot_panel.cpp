@@ -493,7 +493,7 @@ wxString SIM_PLOT_PANEL::GetUnitsY3() const
 
 void SIM_PLOT_PANEL::updateAxes( int aNewTraceType )
 {
-    switch( GetType() )
+    switch( GetSimType() )
     {
         case ST_AC:
             if( !m_axis_x )
@@ -755,7 +755,7 @@ TRACE* SIM_PLOT_PANEL::AddTrace( const wxString& aVectorName, int aType )
     {
         updateAxes( aType );
 
-        if( GetType() == ST_TRANSIENT || GetType() == ST_DC )
+        if( GetSimType() == ST_TRANSIENT || GetSimType() == ST_DC )
         {
             bool hasVoltageTraces = false;
 
@@ -795,7 +795,7 @@ void SIM_PLOT_PANEL::SetTraceData( TRACE* trace, unsigned int aPoints, const dou
 {
     std::vector<double> tmp( aY, aY + aPoints );
 
-    if( GetType() == ST_AC )
+    if( GetSimType() == ST_AC )
     {
         if( trace->GetType() & SPT_AC_PHASE )
         {

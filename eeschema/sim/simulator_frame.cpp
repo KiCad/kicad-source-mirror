@@ -384,7 +384,7 @@ void SIMULATOR_FRAME::StartSimulation()
     {
         m_circuitModel->SetSimCommandOverride( plotWindow->GetSimCommand() );
 
-        if( plotWindow->GetType() == schTextSimType
+        if( plotWindow->GetSimType() == schTextSimType
                 && schTextSimCommand != m_circuitModel->GetLastSchTextSimCommand() )
         {
             if( IsOK( this, _( "Schematic sheet simulation command directive has changed.  "
@@ -554,7 +554,7 @@ bool SIMULATOR_FRAME::EditSimCommand()
         }
         // If it is a new simulation type, open a new plot.  For the DC sim, check if sweep
         // source type has changed (char 4 will contain 'v', 'i', 'r' or 't'.
-        else if( plotPanelWindow->GetType() != newSimType
+        else if( plotPanelWindow->GetSimType() != newSimType
                     || ( newSimType == ST_DC
                          && oldCommand.Lower().GetChar( 4 ) != newCommand.Lower().GetChar( 4 ) ) )
         {

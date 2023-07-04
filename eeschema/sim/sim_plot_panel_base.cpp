@@ -68,7 +68,7 @@ bool SIM_PLOT_PANEL_BASE::IsPlottable( SIM_TYPE aSimType )
 }
 
 
-SIM_TYPE SIM_PLOT_PANEL_BASE::GetType() const
+SIM_TYPE SIM_PLOT_PANEL_BASE::GetSimType() const
 {
     return NGSPICE_CIRCUIT_MODEL::CommandToSimType( m_simCommand );
 }

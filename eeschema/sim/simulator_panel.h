@@ -31,15 +31,9 @@
 
 #include <sim/simulator_panel_base.h>
 #include <sim/sim_types.h>
-
-#include <kiway_player.h>
-#include <dialogs/dialog_sim_command.h>
+#include <sim/sim_plot_panel.h>
 
 #include <wx/event.h>
-
-#include <list>
-#include <memory>
-#include <map>
 
 class SCH_EDIT_FRAME;
 class SCH_SYMBOL;
@@ -48,10 +42,6 @@ class SPICE_SIMULATOR;
 class SPICE_SIMULATOR_SETTINGS;
 class EESCHEMA_SETTINGS;
 class NGSPICE_CIRCUIT_MODEL;
-
-#include <sim/sim_plot_panel.h>
-#include <sim/sim_plot_panel_base.h>
-#include "widgets/sim_notebook.h"
 
 class SIM_THREAD_REPORTER;
 class TUNER_SLIDER;
@@ -91,7 +81,7 @@ public:
      */
     SIM_PLOT_PANEL_BASE* NewPlotPanel( const wxString& aSimCommand, int aSimOptions );
 
-    std::vector<wxString> Signals();
+    std::vector<wxString> Signals() const;
 
     const std::map<int, wxString>& UserDefinedSignals() { return m_userDefinedSignals; }
     void SetUserDefinedSignals( const std::map<int, wxString>& aSignals );
@@ -163,6 +153,8 @@ public:
      */
     void UpdateMeasurement( int aRow );
 
+    void DoFourier( const wxString& aSignal, const wxString& aFundamental );
+
     /**
      * Return the netlist exporter object used for simulations.
      */
@@ -217,8 +209,8 @@ public:
         if( !plotWindow )
             return nullptr;
 
-        return plotWindow->GetType() == ST_UNKNOWN ? nullptr
-                                                   : dynamic_cast<SIM_PLOT_PANEL*>( plotWindow );
+        return plotWindow->GetSimType() == ST_UNKNOWN ? nullptr
+                                                      : dynamic_cast<SIM_PLOT_PANEL*>( plotWindow );
     }
 
     int GetPlotIndex( SIM_PLOT_PANEL_BASE* aPlot ) const

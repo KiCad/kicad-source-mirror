@@ -46,12 +46,12 @@ public:
 
     virtual void OnLanguageChanged() = 0;
 
-    SIM_TYPE GetType() const;
+    SIM_TYPE GetSimType() const;
 
     const wxString& GetSimCommand() const { return m_simCommand; }
     void SetSimCommand( const wxString& aSimCommand )
     {
-        wxCHECK_RET( GetType() == NGSPICE_CIRCUIT_MODEL::CommandToSimType( aSimCommand ),
+        wxCHECK_RET( GetSimType() == NGSPICE_CIRCUIT_MODEL::CommandToSimType( aSimCommand ),
                      "Cannot change the type of simulation of the existing plot panel" );
 
         m_simCommand = aSimCommand;

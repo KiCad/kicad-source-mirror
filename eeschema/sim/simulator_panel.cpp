@@ -43,6 +43,7 @@
 #include <sim/sim_plot_panel.h>
 #include <sim/spice_simulator.h>
 #include "fmt/format.h"
+#include "dialogs/dialog_text_entry.h"
 #include <dialogs/dialog_sim_format_value.h>
 #include <eeschema_settings.h>
 
@@ -94,6 +95,7 @@ enum
     MYID_MEASURE_MIN_AT,
     MYID_MEASURE_MAX_AT,
     MYID_MEASURE_INTEGRAL,
+    MYID_FOURIER,
 
     MYID_FORMAT_VALUE,
     MYID_DELETE_MEASUREMENT
@@ -143,6 +145,14 @@ void SIGNALS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
         menu.Append( MYID_MEASURE_MIN_AT, _( "Measure Time of Min" ) );
         menu.Append( MYID_MEASURE_MAX_AT, _( "Measure Time of Max" ) );
         menu.Append( MYID_MEASURE_INTEGRAL, _( "Measure Integral" ) );
+
+        SIM_PLOT_PANEL* panel = m_parent->GetCurrentPlot();
+
+        if( panel && panel->GetSimType() == ST_TRANSIENT )
+        {
+            menu.AppendSeparator();
+            menu.Append( MYID_FOURIER, _( "Perform Fourier Analysis..." ) );
+        }
 
         menu.AppendSeparator();
     }
@@ -220,8 +230,31 @@ void SIGNALS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
         for( const wxString& signal : signals )
             m_parent->AddMeasurement( wxString::Format( wxS( "INTEG %s" ), signal ) );
     }
+    else if( event.GetId() == MYID_FOURIER )
+    {
+        wxString title;
+        wxString fundamental = wxT( "1K" );
+
+        if( signals.size() == 1 )
+            title.Printf( _( "Fourier Analysis of %s" ), signals[0] );
+        else
+            title = _( "Fourier Analyses of Multiple Signals" );
+
+        WX_TEXT_ENTRY_DIALOG dlg( m_parent, _( "Fundamental frequency:" ), title, fundamental );
+
+        if( dlg.ShowModal() != wxID_OK )
+            return;
+
+        if( !dlg.GetValue().IsEmpty() )
+            fundamental = dlg.GetValue();
+
+        for( const wxString& signal : signals )
+            m_parent->DoFourier( signal, fundamental );
+    }
     else
+    {
         GRID_TRICKS::doPopupSelection( event );
+    }
 }
 
 
@@ -497,7 +530,7 @@ void SIMULATOR_PANEL::ShowChangedLanguage()
 
         plot->OnLanguageChanged();
 
-        wxString pageTitle( simulator()->TypeToName( plot->GetType(), true ) );
+        wxString pageTitle( simulator()->TypeToName( plot->GetSimType(), true ) );
         pageTitle.Prepend( wxString::Format( _( "Plot%u - " ), ii+1 /* 1-based */ ) );
 
         m_plotNotebook->SetPageText( ii, pageTitle );
@@ -1105,7 +1138,7 @@ void SIMULATOR_PANEL::UpdateMeasurement( int aRow )
         return;
     }
 
-    wxString simType = simulator()->TypeToName( plotPanel->GetType(), true );
+    wxString simType = simulator()->TypeToName( plotPanel->GetSimType(), true );
     wxString resultName = wxString::Format( wxS( "meas_result_%u" ), aRow );
     wxString result = wxS( "?" );
 
@@ -1132,7 +1165,7 @@ void SIMULATOR_PANEL::UpdateMeasurement( int aRow )
             units = wxS( "s" );
         else if( func.StartsWith( wxS( "INTEG" ) ) )
         {
-            switch( plotPanel->GetType() )
+            switch( plotPanel->GetSimType() )
             {
                 case SIM_TYPE::ST_TRANSIENT:
                     if ( signalType == 'P' )
@@ -1270,7 +1303,7 @@ void SIMULATOR_PANEL::AddMeasurement( const wxString& aCmd )
     if( !plotPanel )
         return;
 
-    wxString simType = simulator()->TypeToName( plotPanel->GetType(), true );
+    wxString simType = simulator()->TypeToName( plotPanel->GetSimType(), true );
     int      row;
 
     for( row = 0; row < m_measurementsGrid->GetNumberRows(); ++row )
@@ -1296,6 +1329,16 @@ void SIMULATOR_PANEL::AddMeasurement( const wxString& aCmd )
 
     if( !m_measurementsGrid->GetCellValue( row, COL_MEASUREMENT ).IsEmpty() )
         m_measurementsGrid->AppendRows( 1 );
+}
+
+
+void SIMULATOR_PANEL::DoFourier( const wxString& aSignal, const wxString& aFundamental )
+{
+    wxString cmd = wxString::Format( wxS( "fourier %s %s" ),
+                                     SPICE_VALUE( aFundamental ).ToSpiceString(),
+                                     aSignal );
+
+    simulator()->Command( cmd.ToStdString() );
 }
 
 
@@ -1362,7 +1405,7 @@ void SIMULATOR_PANEL::SetUserDefinedSignals( const std::map<int, wxString>& aNew
 
             if( aNewSignals.count( id ) == 0 )
             {
-                if( plotPanel->GetType() == ST_AC )
+                if( plotPanel->GetSimType() == ST_AC )
                 {
                     for( int subType : { SPT_AC_MAG, SPT_AC_PHASE } )
                         plotPanel->DeleteTrace( vectorName, traceType | subType );
@@ -1374,7 +1417,7 @@ void SIMULATOR_PANEL::SetUserDefinedSignals( const std::map<int, wxString>& aNew
             }
             else
             {
-                if( plotPanel->GetType() == ST_AC )
+                if( plotPanel->GetSimType() == ST_AC )
                 {
                     for( int subType : { SPT_AC_MAG, SPT_AC_PHASE } )
                     {
@@ -1905,7 +1948,7 @@ bool SIMULATOR_PANEL::LoadWorkbook( const wxString& aPath )
         {
             auto* plot = dynamic_cast<const SIM_PLOT_PANEL_BASE*>( m_plotNotebook->GetPage( ii ) );
 
-            if( plot && plot->GetType() == schTextSimType )
+            if( plot && plot->GetSimType() == schTextSimType )
             {
                 if( schTextSimType == ST_DC )
                 {
@@ -1974,7 +2017,7 @@ bool SIMULATOR_PANEL::SaveWorkbook( const wxString& aPath )
             continue;
         }
 
-        file.AddLine( wxString::Format( wxT( "%d" ), basePanel->GetType() ) );
+        file.AddLine( wxString::Format( wxT( "%d" ), basePanel->GetSimType() ) );
 
         wxString command = basePanel->GetSimCommand();
         int      options = basePanel->GetSimOptions();
@@ -2177,7 +2220,7 @@ void SIMULATOR_PANEL::onPlotClosed( wxAuiNotebookEvent& event )
 
                    SIM_PLOT_PANEL_BASE* panel = GetCurrentPlotWindow();
 
-                   if( !panel || panel->GetType() != ST_OP )
+                   if( !panel || panel->GetSimType() != ST_OP )
                    {
                        SCHEMATIC& schematic = m_schematicFrame->Schematic();
                        schematic.ClearOperatingPoints();
@@ -2383,7 +2426,7 @@ void SIMULATOR_PANEL::OnSimReport( const wxString& aMsg )
 }
 
 
-std::vector<wxString> SIMULATOR_PANEL::Signals()
+std::vector<wxString> SIMULATOR_PANEL::Signals() const
 {
     std::vector<wxString> signals;
 
@@ -2399,7 +2442,7 @@ void SIMULATOR_PANEL::OnSimRefresh( bool aFinal )
     SIM_TYPE             simType = circuitModel()->GetSimType();
     SIM_PLOT_PANEL_BASE* plotPanelWindow = GetCurrentPlotWindow();
 
-    if( !plotPanelWindow || plotPanelWindow->GetType() != simType )
+    if( !plotPanelWindow || plotPanelWindow->GetSimType() != simType )
     {
         plotPanelWindow = NewPlotPanel( circuitModel()->GetSimCommand(),
                                         circuitModel()->GetSimOptions() );
