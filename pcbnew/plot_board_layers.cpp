@@ -108,6 +108,8 @@ void PlotInteractiveLayer( BOARD* aBoard, PLOTTER* aPlotter, const PCB_PLOT_PARA
                                                    fp->GetKeywords() ) );
 
         aPlotter->HyperlinkMenu( fp->GetBoundingBox(), properties );
+
+        aPlotter->Bookmark( fp->GetBoundingBox(), fp->GetReference(), _( "Footprints" ) );
     }
 }
 
@@ -542,7 +544,6 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         }
 
         aPlotter->EndBlock( nullptr );
-        aPlotter->Bookmark( footprint->GetBoundingBox(), footprint->GetReference(), _( "Footprints" ) );
     }
 
     // Plot vias on copper layers, and if aPlotOpt.GetPlotViaOnMaskLayer() is true,
