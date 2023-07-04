@@ -324,6 +324,7 @@ public:
             NOISE,
             DISTRIBUTED_QUANTITIES,
             LIMITING_VALUES,
+            S_PARAM,
             ADVANCED,
             FLAGS,
             WAVEFORM,

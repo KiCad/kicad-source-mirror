@@ -517,6 +517,28 @@ void SIM_PLOT_PANEL::updateAxes( int aNewTraceType )
             m_axis_y2->SetName( _( "Phase" ) );
             break;
 
+        case ST_S_PARAM:
+            if( !m_axis_x )
+            {
+                m_axis_x = new LOG_SCALE<mpScaleXLog>( wxEmptyString, wxT( "Hz" ), mpALIGN_BOTTOM );
+                m_axis_x->SetNameAlign( mpALIGN_BOTTOM );
+                m_plotWin->AddLayer( m_axis_x );
+
+                m_axis_y1 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "" ), mpALIGN_LEFT );
+                m_axis_y1->SetNameAlign( mpALIGN_LEFT );
+                m_plotWin->AddLayer( m_axis_y1 );
+
+                m_axis_y2 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "°" ), mpALIGN_RIGHT );
+                m_axis_y2->SetNameAlign( mpALIGN_RIGHT );
+                m_axis_y2->SetMasterScale( m_axis_y1 );
+                m_plotWin->AddLayer( m_axis_y2 );
+            }
+
+            m_axis_x->SetName( _( "Frequency" ) );
+            m_axis_y1->SetName( _( "Ampltiude" ) );
+            m_axis_y2->SetName( _( "Phase" ) );
+            break;
+
         case ST_DC:
             prepareDCAxes( aNewTraceType );
             break;

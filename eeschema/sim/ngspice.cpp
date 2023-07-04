@@ -329,6 +329,7 @@ wxString NGSPICE::GetXAxis( SIM_TYPE aType ) const
     switch( aType )
     {
     case ST_AC:
+    case ST_S_PARAM:
         return wxS( "frequency" );
 
     case ST_NOISE:

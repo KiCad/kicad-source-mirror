@@ -115,6 +115,8 @@ private:
                                                                  const std::string& aUnit );
 
     static void appendAcParamInfos( std::vector<PARAM::INFO>& aParamInfos, const std::string& aUnit );
+    static void appendSpParamInfos( std::vector<PARAM::INFO>& aParamInfos, const std::string& aUnit );
+
 };
 
 #endif // SIM_MODEL_SOURCE_H

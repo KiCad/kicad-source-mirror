@@ -243,7 +243,25 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
             ph = SIM_VALUE::ToSpice( ph_param->value );
 
         emptyLine = false;
-        item.modelName += fmt::format( "AC {} {}", ac, ph );
+        item.modelName += fmt::format( "AC {} {} ", ac, ph );
+    }
+
+    std::string portnum = "";
+
+    if( const SIM_MODEL::PARAM* portnum_param = m_model.FindParam( "portnum" ) )
+        portnum = SIM_VALUE::ToSpice( portnum_param->value );
+
+    if( portnum != "" )
+    {
+        item.modelName += fmt::format( "portnum {} ", portnum );
+
+        std::string z0 = "";
+
+        if( const SIM_MODEL::PARAM* z0_param = m_model.FindParam( "z0" ) )
+            z0 = SIM_VALUE::ToSpice( z0_param->value );
+
+        if( z0 != "" )
+            item.modelName += fmt::format( "z0 {} ", z0 );
     }
 
     if( emptyLine )
@@ -414,6 +432,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeDcParamInfos( const st
     paramInfos.push_back( paramInfo );
 
     appendAcParamInfos( paramInfos, aUnit );
+    appendSpParamInfos( paramInfos, aUnit );
     return paramInfos;
 }
 
@@ -473,6 +492,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeSinParamInfos( const s
     paramInfos.push_back( paramInfo );
 
     appendAcParamInfos( paramInfos, aUnit );
+    appendSpParamInfos( paramInfos, aUnit );
     return paramInfos;
 }
 
@@ -548,6 +568,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makePulseParamInfos( const
     paramInfos.push_back( paramInfo );
 
     appendAcParamInfos( paramInfos, aUnit );
+    appendSpParamInfos( paramInfos, aUnit );
     return paramInfos;
 }
 
@@ -607,6 +628,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeExpParamInfos( const s
     paramInfos.push_back( paramInfo );
 
     appendAcParamInfos( paramInfos, aUnit );
+    appendSpParamInfos( paramInfos, aUnit );
     return paramInfos;
 }
 
@@ -841,6 +863,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makePwlParamInfos( const s
     paramInfos.push_back( paramInfo );*/
 
     appendAcParamInfos( paramInfos, aUnit );
+    appendSpParamInfos( paramInfos, aUnit );
     return paramInfos;
 }
 
@@ -868,6 +891,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeWhiteNoiseParamInfos( 
     paramInfos.push_back( paramInfo );
 
     appendAcParamInfos( paramInfos, aUnit );
+    appendSpParamInfos( paramInfos, aUnit );
     return paramInfos;
 }
 
@@ -903,6 +927,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makePinkNoiseParamInfos( c
     paramInfos.push_back( paramInfo );
 
     appendAcParamInfos( paramInfos, aUnit );
+    appendSpParamInfos( paramInfos, aUnit );
     return paramInfos;
 }
 
@@ -938,6 +963,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeBurstNoiseParamInfos( 
     paramInfos.push_back( paramInfo );
 
     appendAcParamInfos( paramInfos, aUnit );
+    appendSpParamInfos( paramInfos, aUnit );
     return paramInfos;
 }
 
@@ -981,6 +1007,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeRandomUniformParamInfo
     paramInfos.push_back( paramInfo );
 
     appendAcParamInfos( paramInfos, aUnit );
+    appendSpParamInfos( paramInfos, aUnit );
     return paramInfos;
 }
 
@@ -1024,6 +1051,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeRandomNormalParamInfos
     paramInfos.push_back( paramInfo );
 
     appendAcParamInfos( paramInfos, aUnit );
+    appendSpParamInfos( paramInfos, aUnit );
     return paramInfos;
 }
 
@@ -1067,6 +1095,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeRandomExpParamInfos( c
     paramInfos.push_back( paramInfo );
 
     appendAcParamInfos( paramInfos, aUnit );
+    appendSpParamInfos( paramInfos, aUnit );
     return paramInfos;
 }
 
@@ -1110,6 +1139,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeRandomPoissonParamInfo
     paramInfos.push_back( paramInfo );
 
     appendAcParamInfos( paramInfos, aUnit );
+    appendSpParamInfos( paramInfos, aUnit );
     return paramInfos;
 }
 
@@ -1132,6 +1162,31 @@ void SIM_MODEL_SOURCE::appendAcParamInfos( std::vector<PARAM::INFO>& aParamInfos
     paramInfo.defaultValue = "0";
     paramInfo.description = "AC phase";
     aParamInfos.push_back( paramInfo );
+}
+
+void SIM_MODEL_SOURCE::appendSpParamInfos( std::vector<PARAM::INFO>& aParamInfos,
+                                           const std::string&        aUnit )
+{
+    PARAM::INFO paramInfo;
+
+    if( !strcmp( aUnit.c_str(), "V" ) )
+    {
+        paramInfo.name = "portnum";
+        paramInfo.type = SIM_VALUE::TYPE_INT;
+        paramInfo.unit = "";
+        paramInfo.category = SIM_MODEL::PARAM::CATEGORY::S_PARAM;
+        paramInfo.defaultValue = "";
+        paramInfo.description = "Port number";
+        aParamInfos.push_back( paramInfo );
+
+        paramInfo.name = "z0";
+        paramInfo.type = SIM_VALUE::TYPE_FLOAT;
+        paramInfo.unit = "Ohm";
+        paramInfo.category = SIM_MODEL::PARAM::CATEGORY::S_PARAM;
+        paramInfo.defaultValue = "";
+        paramInfo.description = "Internal impedance";
+        aParamInfos.push_back( paramInfo );
+    }
 }
 
 

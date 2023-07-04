@@ -114,6 +114,8 @@ SIM_TYPE NGSPICE_CIRCUIT_MODEL::CommandToSimType( const wxString& aCmd )
         return ST_POLE_ZERO;
     else if( cmd.StartsWith( wxT( ".sens" ) ) )
         return ST_SENSITIVITY;
+    else if( cmd.StartsWith( wxT( ".sp" ) ) )
+        return ST_S_PARAM;
     else if( cmd.StartsWith( wxT( ".tf" ) ) )
         return ST_TRANS_FUNC;
     else

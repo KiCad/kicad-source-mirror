@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-88b0f50)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -54,6 +54,17 @@ class DIALOG_SIM_COMMAND_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText3;
 		wxTextCtrl* m_acFreqStop;
 		wxStaticText* m_staticText110;
+		wxPanel* m_pgSP;
+		wxRadioBox* m_spScale;
+		wxStaticText* m_staticText12;
+		wxTextCtrl* m_spPointsNumber;
+		wxStaticText* m_staticText22;
+		wxTextCtrl* m_spFreqStart;
+		wxStaticText* m_staticText191;
+		wxStaticText* m_staticText32;
+		wxTextCtrl* m_spFreqStop;
+		wxStaticText* m_staticText1101;
+		wxCheckBox* m_spDoNoise;
 		wxPanel* m_pgDC;
 		wxCheckBox* m_dcEnable2;
 		wxChoice* m_dcSourceType1;

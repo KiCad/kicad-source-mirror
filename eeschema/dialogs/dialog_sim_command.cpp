@@ -70,6 +70,10 @@ DIALOG_SIM_COMMAND::DIALOG_SIM_COMMAND( wxWindow* aParent,
     m_acFreqStart->SetValidator( m_spiceValidator );
     m_acFreqStop->SetValidator( m_spiceValidator );
 
+    m_spPointsNumber->SetValidator( m_posIntValidator );
+    m_spFreqStart->SetValidator( m_spiceValidator );
+    m_spFreqStop->SetValidator( m_spiceValidator );
+
     m_dcStart1->SetValidator( m_spiceValidator );
     m_dcStop1->SetValidator( m_spiceValidator );
     m_dcIncr1->SetValidator( m_spiceValidator );
@@ -231,6 +235,17 @@ bool DIALOG_SIM_COMMAND::TransferDataFromWindow()
                              m_acPointsNumber->GetValue(),
                              SPICE_VALUE( m_acFreqStart->GetValue() ).ToSpiceString(),
                              SPICE_VALUE( m_acFreqStop->GetValue() ).ToSpiceString() );
+    }
+    else if( page == m_pgSP ) // S-params analysis
+    {
+        if( !m_pgSP->Validate() )
+            return false;
+
+        m_simCommand.Printf( ".sp %s %s %s %s %s", scaleToString( m_spScale->GetSelection() ),
+                             m_spPointsNumber->GetValue(),
+                             SPICE_VALUE( m_spFreqStart->GetValue() ).ToSpiceString(),
+                             SPICE_VALUE( m_spFreqStop->GetValue() ).ToSpiceString(),
+                             m_spDoNoise ? "1" : "" );
     }
     else if( page == m_pgDC )           // DC transfer analysis
     {
@@ -437,6 +452,30 @@ void DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
         m_acFreqStart->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
         m_acFreqStop->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
     }
+    else if( token == ".sp" )
+	{
+        m_simPages->SetSelection( m_simPages->FindPage( m_pgSP ) );
+
+        token = tokenizer.GetNextToken().Lower();
+
+        for( SCALE_TYPE candidate : { DECADE, OCTAVE, LINEAR } )
+        {
+            if( scaleToString( candidate ) == token )
+            {
+                m_spScale->SetSelection( candidate );
+                break;
+            }
+        }
+
+        m_spPointsNumber->SetValue( tokenizer.GetNextToken() );
+        m_spFreqStart->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
+        m_spFreqStop->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
+
+	    if( tokenizer.HasMoreTokens() )
+		m_spDoNoise->SetValue(
+			SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() == "1" ? true
+			                                                               : false );
+	}
     else if( token == ".dc" )
     {
         m_simPages->SetSelection( m_simPages->FindPage( m_pgDC ) );

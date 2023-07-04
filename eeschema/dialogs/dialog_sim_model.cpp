@@ -521,6 +521,9 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateModelParamsTab( SIM_MODEL* aMode
         m_paramGrid->Append( new wxPropertyCategory( "DC" ) );
         m_paramGrid->HideProperty( "DC" );
 
+        m_paramGrid->Append( new wxPropertyCategory( "S-Parameters" ) );
+        m_paramGrid->HideProperty( "S-Parameters" );
+
         m_paramGrid->Append( new wxPropertyCategory( "Capacitance" ) );
         m_paramGrid->HideProperty( "Capacitance" );
 
@@ -771,6 +774,11 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::addParamPropertyIfRelevant( SIM_MODEL*
     case CATEGORY::DC:
         m_paramGrid->HideProperty( "DC", false );
         m_paramGrid->AppendIn( "DC", newParamProperty( aModel, aParamIndex ) );
+        break;
+
+    case CATEGORY::S_PARAM:
+        m_paramGrid->HideProperty( "S-Parameters", false );
+        m_paramGrid->AppendIn( "S-Parameters", newParamProperty( aModel, aParamIndex ) );
         break;
 
     case CATEGORY::CAPACITANCE:

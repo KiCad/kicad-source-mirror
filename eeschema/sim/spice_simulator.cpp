@@ -87,6 +87,7 @@ wxString SPICE_SIMULATOR::TypeToName( SIM_TYPE aType, bool aShortName )
     case ST_TRANS_FUNC:
         return aShortName ? wxString( wxT( "TF" ) )
                                       : _( "Transfer function" );
+    case ST_S_PARAM: return aShortName ? wxString( wxT( "SP" ) ) : _( "S-Parameters" );
 
     default:
     case ST_UNKNOWN:

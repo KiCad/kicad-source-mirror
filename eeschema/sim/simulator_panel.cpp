@@ -726,6 +726,11 @@ void SIMULATOR_PANEL::rebuildSignalsList()
                     m_signals.push_back( aSignalName + _( " (gain)" ) );
                     m_signals.push_back( aSignalName + _( " (phase)" ) );
                 }
+                else if( simType == ST_S_PARAM )
+                {
+                    m_signals.push_back( aSignalName + _( " (amplitude)" ) );
+                    m_signals.push_back( aSignalName + _( " (phase)" ) );
+                }
                 else
                 {
                     m_signals.push_back( aSignalName );
@@ -776,6 +781,33 @@ void SIMULATOR_PANEL::rebuildSignalsList()
     {
         addSignal( wxS( "inoise_spectrum" ) );
         addSignal( wxS( "onoise_spectrum" ) );
+    }
+
+    if( simType == ST_S_PARAM )
+    {
+        std::vector<std::string> portnums;
+
+        for( const SPICE_ITEM& item : circuitModel()->GetItems() )
+        {
+            wxString name = item.model->SpiceGenerator().ItemName( item );
+
+            // We are only looking for voltage sources in .SP mode
+            if( !name.StartsWith( "V" ) )
+                continue;
+
+            const SIM_MODEL::PARAM* portNum = item.model->FindParam( "portnum" );
+
+            if( portNum )
+                portnums.push_back( SIM_VALUE::ToSpice( portNum->value ) );
+        }
+
+        for( const std::string& portnum1 : portnums )
+        {
+            for( const std::string& portnum2 : portnums )
+            {
+                addSignal( wxString::Format( wxS( "S_%s_%s" ), portnum1, portnum2 ) );
+            }
+        }
     }
 
     // Add .PROBE directives
@@ -875,6 +907,7 @@ wxString vectorNameFromSignalId( int aUserDefinedSignalId )
 wxString SIMULATOR_PANEL::vectorNameFromSignalName( const wxString& aSignalName, int* aTraceType )
 {
     std::map<wxString, int> suffixes;
+    suffixes[_( " (amplitude)" )] = SPT_SP_AMP;
     suffixes[ _( " (gain)" ) ] = SPT_AC_MAG;
     suffixes[ _( " (phase)" ) ] = SPT_AC_PHASE;
 
@@ -1174,6 +1207,7 @@ void SIMULATOR_PANEL::UpdateMeasurement( int aRow )
                         units += wxS( ".s" );
                     break;
                 case SIM_TYPE::ST_AC:
+                case SIM_TYPE::ST_S_PARAM:
                 case SIM_TYPE::ST_DISTORTION:
                 case SIM_TYPE::ST_NOISE:
                 case SIM_TYPE::ST_SENSITIVITY: // If there is a vector, it is frequency
@@ -1379,6 +1413,11 @@ void SIMULATOR_PANEL::AddTrace( const wxString& aName, SIM_TRACE_TYPE aType )
         updateTrace( aName, aType | SPT_AC_MAG, plotPanel );
         updateTrace( aName, aType | SPT_AC_PHASE, plotPanel );
     }
+    if( simType == ST_S_PARAM )
+    {
+        updateTrace( aName, aType | SPT_AC_MAG, plotPanel );
+        updateTrace( aName, aType | SPT_AC_PHASE, plotPanel );
+    }
     else
     {
         updateTrace( aName, aType, plotPanel );
@@ -1410,6 +1449,11 @@ void SIMULATOR_PANEL::SetUserDefinedSignals( const std::map<int, wxString>& aNew
                     for( int subType : { SPT_AC_MAG, SPT_AC_PHASE } )
                         plotPanel->DeleteTrace( vectorName, traceType | subType );
                 }
+                else if( plotPanel->GetType() == ST_S_PARAM )
+                {
+                    for( int subType : { SPT_SP_AMP, SPT_AC_PHASE } )
+                        plotPanel->DeleteTrace( vectorName, traceType | subType );
+                }
                 else
                 {
                     plotPanel->DeleteTrace( vectorName, traceType );
@@ -1420,6 +1464,14 @@ void SIMULATOR_PANEL::SetUserDefinedSignals( const std::map<int, wxString>& aNew
                 if( plotPanel->GetSimType() == ST_AC )
                 {
                     for( int subType : { SPT_AC_MAG, SPT_AC_PHASE } )
+                    {
+                        if( TRACE* trace = plotPanel->GetTrace( vectorName, traceType | subType ) )
+                            trace->SetName( aNewSignals.at( id ) );
+                    }
+                }
+                else if( plotPanel->GetType() == ST_S_PARAM )
+                {
+                    for( int subType : { SPT_SP_AMP, SPT_AC_PHASE } )
                     {
                         if( TRACE* trace = plotPanel->GetTrace( vectorName, traceType | subType ) )
                             trace->SetName( aNewSignals.at( id ) );
@@ -1488,6 +1540,15 @@ void SIMULATOR_PANEL::updateTrace( const wxString& aVectorName, int aTraceType,
             data_y = simulator()->GetPhasePlot( (const char*) simVectorName.c_str() );
         else
             wxFAIL_MSG( wxT( "Plot type missing AC_PHASE or AC_MAG bit" ) );
+
+        break;
+    case ST_S_PARAM:
+        if( aTraceType & SPT_SP_AMP )
+            data_y = simulator()->GetMagPlot( (const char*) simVectorName.c_str() );
+        else if( aTraceType & SPT_AC_PHASE )
+            data_y = simulator()->GetPhasePlot( (const char*) simVectorName.c_str() );
+        else
+            wxFAIL_MSG( wxT( "Plot type missing AC_PHASE or SPT_SP_AMP bit" ) );
 
         break;
 
@@ -2157,6 +2218,7 @@ SIM_TRACE_TYPE SIMULATOR_PANEL::getXAxisType( SIM_TYPE aType ) const
     {
     /// @todo SPT_LOG_FREQUENCY
     case ST_AC:        return SPT_LIN_FREQUENCY;
+    case ST_S_PARAM: return SPT_LIN_FREQUENCY;
     case ST_DC:        return SPT_SWEEP;
     case ST_TRANSIENT: return SPT_TIME;
     case ST_NOISE:     return SPT_LIN_FREQUENCY;
@@ -2498,6 +2560,14 @@ void SIMULATOR_PANEL::OnSimRefresh( bool aFinal )
                 {
                     if( TRACE* trace = plotPanel->GetTrace( vectorName, traceType | subType ) )
                         traceMap[ trace ] = { vectorName, traceType };
+                }
+            }
+            if( simType == ST_S_PARAM )
+            {
+                for( int subType : { SPT_SP_AMP, SPT_AC_PHASE } )
+                {
+                    if( TRACE* trace = plotPanel->GetTrace( vectorName, traceType | subType ) )
+                        traceMap[trace] = { vectorName, traceType };
                 }
             }
             else

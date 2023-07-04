@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-88b0f50)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -76,6 +76,68 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_pgAC->Layout();
 	bSizer3->Fit( m_pgAC );
 	m_simPages->AddPage( m_pgAC, _("AC"), false );
+	m_pgSP = new wxPanel( m_simPages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer31;
+	bSizer31 = new wxBoxSizer( wxVERTICAL );
+
+	wxString m_spScaleChoices[] = { _("Decade"), _("Octave"), _("Linear") };
+	int m_spScaleNChoices = sizeof( m_spScaleChoices ) / sizeof( wxString );
+	m_spScale = new wxRadioBox( m_pgSP, wxID_ANY, _("Frequency scale"), wxDefaultPosition, wxDefaultSize, m_spScaleNChoices, m_spScaleChoices, 1, wxRA_SPECIFY_COLS );
+	m_spScale->SetSelection( 0 );
+	m_spScale->Hide();
+
+	bSizer31->Add( m_spScale, 0, wxALL|wxEXPAND, 5 );
+
+	wxFlexGridSizer* fgSizer12;
+	fgSizer12 = new wxFlexGridSizer( 0, 3, 5, 0 );
+	fgSizer12->SetFlexibleDirection( wxHORIZONTAL );
+	fgSizer12->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_staticText12 = new wxStaticText( m_pgSP, wxID_ANY, _("Number of points per decade:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText12->Wrap( -1 );
+	fgSizer12->Add( m_staticText12, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_spPointsNumber = new wxTextCtrl( m_pgSP, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer12->Add( m_spPointsNumber, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+
+	fgSizer12->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_staticText22 = new wxStaticText( m_pgSP, wxID_ANY, _("Start frequency:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText22->Wrap( -1 );
+	fgSizer12->Add( m_staticText22, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_spFreqStart = new wxTextCtrl( m_pgSP, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_spFreqStart->SetMinSize( wxSize( 100,-1 ) );
+
+	fgSizer12->Add( m_spFreqStart, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+	m_staticText191 = new wxStaticText( m_pgSP, wxID_ANY, _("Hz"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText191->Wrap( -1 );
+	fgSizer12->Add( m_staticText191, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+
+	m_staticText32 = new wxStaticText( m_pgSP, wxID_ANY, _("Stop frequency:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText32->Wrap( -1 );
+	fgSizer12->Add( m_staticText32, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_spFreqStop = new wxTextCtrl( m_pgSP, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer12->Add( m_spFreqStop, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+	m_staticText1101 = new wxStaticText( m_pgSP, wxID_ANY, _("Hz"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1101->Wrap( -1 );
+	fgSizer12->Add( m_staticText1101, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+
+	m_spDoNoise = new wxCheckBox( m_pgSP, wxID_ANY, _("Compute noise current correlation matrix"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer12->Add( m_spDoNoise, 0, wxALL, 5 );
+
+
+	bSizer31->Add( fgSizer12, 0, wxEXPAND|wxALL, 5 );
+
+
+	m_pgSP->SetSizer( bSizer31 );
+	m_pgSP->Layout();
+	bSizer31->Fit( m_pgSP );
+	m_simPages->AddPage( m_pgSP, _("S-params"), false );
 	m_pgDC = new wxPanel( m_simPages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer82;
 	bSizer82 = new wxBoxSizer( wxVERTICAL );

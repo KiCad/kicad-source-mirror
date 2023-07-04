@@ -39,7 +39,8 @@ enum SIM_TYPE
     ST_POLE_ZERO,
     ST_SENSITIVITY,
     ST_TRANS_FUNC,
-    ST_TRANSIENT
+    ST_TRANSIENT,
+    ST_S_PARAM
 };
 
 ///< Possible trace types
@@ -51,6 +52,7 @@ enum SIM_TRACE_TYPE
     SPT_AC_PHASE      = 0x0004,
     SPT_AC_MAG        = 0x0008,
     SPT_POWER         = 0x0010,
+    SPT_SP_AMP        = 0x0020,
     SPT_Y_AXIS_MASK   = 0x00FF,
 
     // X axis
