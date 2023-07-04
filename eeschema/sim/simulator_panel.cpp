@@ -1449,7 +1449,7 @@ void SIMULATOR_PANEL::SetUserDefinedSignals( const std::map<int, wxString>& aNew
                     for( int subType : { SPT_AC_MAG, SPT_AC_PHASE } )
                         plotPanel->DeleteTrace( vectorName, traceType | subType );
                 }
-                else if( plotPanel->GetType() == ST_S_PARAM )
+                else if( plotPanel->GetSimType() == ST_S_PARAM )
                 {
                     for( int subType : { SPT_SP_AMP, SPT_AC_PHASE } )
                         plotPanel->DeleteTrace( vectorName, traceType | subType );
@@ -1469,7 +1469,7 @@ void SIMULATOR_PANEL::SetUserDefinedSignals( const std::map<int, wxString>& aNew
                             trace->SetName( aNewSignals.at( id ) );
                     }
                 }
-                else if( plotPanel->GetType() == ST_S_PARAM )
+                else if( plotPanel->GetSimType() == ST_S_PARAM )
                 {
                     for( int subType : { SPT_SP_AMP, SPT_AC_PHASE } )
                     {
