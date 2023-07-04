@@ -1616,7 +1616,7 @@ void EAGLE_PLUGIN::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, FP_TE
         int align = ETEXT::BOTTOM_LEFT;     // bottom-left is eagle default
 
         if( a.align )
-            align = a.align;
+            align = *a.align;
 
         // The "rot" in a EATTR seems to be assumed to be zero if it is not
         // present, and this zero rotation becomes an override to the
