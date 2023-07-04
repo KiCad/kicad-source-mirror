@@ -91,22 +91,34 @@ void PlotInteractiveLayer( BOARD* aBoard, PLOTTER* aPlotter, const PCB_PLOT_PARA
                                                    _( "Value" ),
                                                    fp->Value().GetShownText( false ) ) );
 
-        for( int i = VALUE_FIELD; i < fp->GetFieldCount(); i++ )
-            properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
-                                                       fp->GetFields().at( i )->GetName(),
-                                                       fp->GetFields().at( i )->GetText() ) );
-
         properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
                                                    _( "Footprint" ),
-                                                   fp->GetFPIDAsString() ) );
+                                                   fp->GetFPID().GetUniStringLibItemName() ) );
 
+        for( int i = 0; i < fp->GetFieldCount(); i++ )
+        {
+            PCB_FIELD* field = fp->GetFields().at( i );
+
+            if( field->IsReference() || field->IsValue() || field->IsFootprint() )
+                continue;
+
+            if( field->GetText().IsEmpty() )
+                continue;
+
+            properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                       field->GetName(),
+                                                       field->GetText() ) );
+        }
+
+        // These 2 properties are not very useful in a plot file (like a PDF)
+#if 0
         properties.emplace_back( wxString::Format( wxT( "!%s = %s" ), _( "Library Description" ),
                                                    fp->GetLibDescription() ) );
 
         properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
                                                    _( "Keywords" ),
                                                    fp->GetKeywords() ) );
-
+#endif
         aPlotter->HyperlinkMenu( fp->GetBoundingBox(), properties );
 
         aPlotter->Bookmark( fp->GetBoundingBox(), fp->GetReference(), _( "Footprints" ) );
