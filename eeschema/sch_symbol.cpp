@@ -2266,18 +2266,21 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground ) const
 
         for( const SCH_FIELD& field : GetFields() )
         {
+            wxString text_field = field.GetShownText( sheet, false);
+
+            if( text_field.IsEmpty() )
+                continue;
+
             properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
-                                                       field.GetName(),
-                                                       field.GetShownText( sheet, false) ) );
+                                                       field.GetName(), text_field ) );
         }
 
-        properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
-                                                   _( "Description" ),
-                                                   m_part->GetDescription() ) );
-
-        properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
-                                                   _( "Keywords" ),
-                                                   m_part->GetKeyWords() ) );
+        if( !m_part->GetKeyWords().IsEmpty() )
+        {
+            properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                       _( "Keywords" ),
+                                                       m_part->GetKeyWords() ) );
+        }
 
         aPlotter->HyperlinkMenu( GetBoundingBox(), properties );
 
