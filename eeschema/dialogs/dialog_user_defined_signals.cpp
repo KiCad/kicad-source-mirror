@@ -28,6 +28,7 @@
 #include <dialogs/html_message_box.h>
 #include <../sim/simulator_frame.h>
 #include <dialog_user_defined_signals.h>
+#include <string_utils.h>
 
 
 DIALOG_USER_DEFINED_SIGNALS::DIALOG_USER_DEFINED_SIGNALS( SIMULATOR_FRAME* aParent,
@@ -245,7 +246,20 @@ bool DIALOG_USER_DEFINED_SIGNALS::TransferDataFromWindow()
 
 void DIALOG_USER_DEFINED_SIGNALS::OnFormattingHelp( wxHyperlinkEvent& aEvent )
 {
-    m_helpWindow = SCH_TEXT::ShowSyntaxHelp( this );
+    wxString msg =
+#include "../sim/user_defined_signals_help_md.h"
+     ;
+
+    m_helpWindow = new HTML_MESSAGE_BOX( nullptr, _( "Syntax Help" ) );
+
+    wxSize sz( 320, 320 );
+    m_helpWindow->SetMinSize( m_helpWindow->ConvertDialogToPixels( sz ) );
+    m_helpWindow->SetDialogSizeInDU( sz.x, sz.y );
+
+    wxString html_txt;
+    ConvertMarkdown2Html( wxGetTranslation( msg ), html_txt );
+    m_helpWindow->AddHTML_Text( html_txt );
+    m_helpWindow->ShowModeless();
 }
 
 

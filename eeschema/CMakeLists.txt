@@ -442,6 +442,23 @@ set_source_files_properties( sch_text.cpp
         OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/sch_text_help_md.h
     )
 
+# Create a C++ compilable string initializer containing markdown text into a *.h file:
+add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/sim/user_defined_signals_help_md.h
+    COMMAND ${CMAKE_COMMAND}
+        -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/sim/user_defined_signals_help.md
+        -DoutputFile=${CMAKE_CURRENT_SOURCE_DIR}/sim/user_defined_signals_help_md.h
+        -P ${KICAD_CMAKE_MODULE_PATH}/BuildSteps/markdown2C.cmake
+    DEPENDS ${KICAD_CMAKE_MODULE_PATH}/BuildSteps/markdown2C.cmake sim/user_defined_signals_help.md
+    COMMENT "creating ${CMAKE_CURRENT_SOURCE_DIR}/sim/user_defined_signals_help_md.h
+       from ${CMAKE_CURRENT_SOURCE_DIR}/sch_spice_fcn_help.md"
+    )
+
+set_source_files_properties( dialogs/dialog_user_defined_signals.cpp
+    PROPERTIES
+        OBJECT_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/sim/user_defined_signals_help_md.h
+    )
+
 if( APPLE )
     # setup bundle
     set( EESCHEMA_RESOURCES eeschema.icns eeschema_doc.icns )
