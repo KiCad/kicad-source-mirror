@@ -31,13 +31,13 @@
 #include <dialogs/dialog_layer_selection_base.h>
 #include <router/router_tool.h>
 #include <settings/color_settings.h>
-
+#include <tools/pcb_actions.h>
 
 // Column position by function:
 #define SELECT_COLNUM       0
 #define COLOR_COLNUM        1
 #define LAYERNAME_COLNUM    2
-
+#define LAYER_HK_COLUMN     3
 
 /*
  * Display a layer list using a wxGrid.
@@ -95,6 +95,12 @@ private:
     // Will close the dialog on ESC key
     void onCharHook( wxKeyEvent& event );
 
+    wxString getLayerHotKey( PCB_LAYER_ID aLayer ) const
+    {
+        int code = PCB_ACTIONS::LayerIDToAction( aLayer )->GetHotKey();
+        return AddHotkeyName( wxS( "" ), code, IS_COMMENT );
+    }
+
     void buildList();
 
     PCB_LAYER_ID              m_layerSelected;
@@ -122,6 +128,9 @@ PCB_ONE_LAYER_SELECTOR::PCB_ONE_LAYER_SELECTOR( PCB_BASE_FRAME* aParent, BOARD* 
     m_rightGridLayers->SetCellHighlightPenWidth( 0 );
     m_leftGridLayers->SetColFormatBool( SELECT_COLNUM );
     m_rightGridLayers->SetColFormatBool( SELECT_COLNUM );
+
+    m_leftGridLayers->AppendCols( 1 );
+
     buildList();
 
     if( aHideCheckBoxes )
@@ -161,7 +170,7 @@ void PCB_ONE_LAYER_SELECTOR::OnMouseMove( wxUpdateUIEvent& aEvent )
         if( row != wxNOT_FOUND && row < static_cast<int>( m_layersIdLeftColumn.size() ) )
         {
             m_layerSelected = m_layersIdLeftColumn[ row ];
-            m_leftGridLayers->SelectBlock( row, LAYERNAME_COLNUM, row, LAYERNAME_COLNUM);
+            m_leftGridLayers->SelectBlock( row, LAYERNAME_COLNUM, row, LAYER_HK_COLUMN );
             return;
         }
     }
@@ -214,6 +223,7 @@ void PCB_ONE_LAYER_SELECTOR::buildList()
 
             m_leftGridLayers->SetCellBackgroundColour ( left_row, COLOR_COLNUM, color );
             m_leftGridLayers->SetCellValue( left_row, LAYERNAME_COLNUM, layername );
+            m_leftGridLayers->SetCellValue( left_row, LAYER_HK_COLUMN, getLayerHotKey( layerid ) );
 
             if( m_layerSelected == layerid )
                 m_leftGridLayers->SetCellValue( left_row, SELECT_COLNUM, wxT( "1" ) );
