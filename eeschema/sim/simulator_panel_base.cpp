@@ -280,6 +280,7 @@ SIMULATOR_PANEL_BASE::SIMULATOR_PANEL_BASE( wxWindow* parent, wxWindowID id, con
 	// Connect Events
 	m_plotNotebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, wxAuiNotebookEventHandler( SIMULATOR_PANEL_BASE::onPlotDragged ), NULL, this );
 	m_plotNotebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( SIMULATOR_PANEL_BASE::onPlotChanged ), NULL, this );
+	m_plotNotebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, wxAuiNotebookEventHandler( SIMULATOR_PANEL_BASE::onPlotChanging ), NULL, this );
 	m_plotNotebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, wxAuiNotebookEventHandler( SIMULATOR_PANEL_BASE::onPlotClose ), NULL, this );
 	m_plotNotebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSED, wxAuiNotebookEventHandler( SIMULATOR_PANEL_BASE::onPlotClosed ), NULL, this );
 	m_filter->Connect( wxEVT_MOTION, wxMouseEventHandler( SIMULATOR_PANEL_BASE::OnFilterMouseMoved ), NULL, this );
@@ -294,6 +295,7 @@ SIMULATOR_PANEL_BASE::~SIMULATOR_PANEL_BASE()
 	// Disconnect Events
 	m_plotNotebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, wxAuiNotebookEventHandler( SIMULATOR_PANEL_BASE::onPlotDragged ), NULL, this );
 	m_plotNotebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( SIMULATOR_PANEL_BASE::onPlotChanged ), NULL, this );
+	m_plotNotebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, wxAuiNotebookEventHandler( SIMULATOR_PANEL_BASE::onPlotChanging ), NULL, this );
 	m_plotNotebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, wxAuiNotebookEventHandler( SIMULATOR_PANEL_BASE::onPlotClose ), NULL, this );
 	m_plotNotebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSED, wxAuiNotebookEventHandler( SIMULATOR_PANEL_BASE::onPlotClosed ), NULL, this );
 	m_filter->Disconnect( wxEVT_MOTION, wxMouseEventHandler( SIMULATOR_PANEL_BASE::OnFilterMouseMoved ), NULL, this );

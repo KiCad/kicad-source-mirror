@@ -251,23 +251,21 @@ std::vector<double> NGSPICE::GetPhaseVector( const std::string& aName, int aMaxL
 }
 
 
-bool NGSPICE::Attach( const std::shared_ptr<SIMULATION_MODEL>& aModel, REPORTER& aReporter )
+bool NGSPICE::Attach( const std::shared_ptr<SIMULATION_MODEL>& aModel, const wxString& aSimCommand,
+                      unsigned aSimOptions, REPORTER& aReporter )
 {
     NGSPICE_CIRCUIT_MODEL* model = dynamic_cast<NGSPICE_CIRCUIT_MODEL*>( aModel.get() );
-    STRING_FORMATTER formatter;
+    STRING_FORMATTER       formatter;
 
-    if( model && model->GetNetlist( &formatter, aReporter ) )
+    if( model && model->GetNetlist( aSimCommand, aSimOptions, &formatter, aReporter ) )
     {
-        SIMULATOR::Attach( aModel, aReporter );
-
+        SIMULATOR::Attach( aModel, aSimCommand, aSimOptions, aReporter );
         LoadNetlist( formatter.GetString() );
-
         return true;
     }
     else
     {
-        SIMULATOR::Attach( nullptr, aReporter );
-
+        SIMULATOR::Attach( nullptr, wxEmptyString, 0, aReporter );
         return false;
     }
 }
@@ -335,11 +333,10 @@ wxString NGSPICE::GetXAxis( SIM_TYPE aType ) const
     switch( aType )
     {
     case ST_AC:
-    case ST_S_PARAM:
-        return wxS( "frequency" );
-
+    case ST_SP:
     case ST_NOISE:
-        return wxS( "noise1.frequency" );
+    case ST_FFT:
+        return wxS( "frequency" );
 
     case ST_DC:
         // find plot, which ends with "-sweep"
@@ -351,7 +348,7 @@ wxString NGSPICE::GetXAxis( SIM_TYPE aType ) const
 
         return wxS( "sweep" );
 
-    case ST_TRANSIENT:
+    case ST_TRAN:
         return wxS( "time" );
 
     default:

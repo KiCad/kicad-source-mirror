@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016-2022 CERN
- * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -26,6 +26,7 @@
 #include "dialog_sim_command.h"
 #include <sim/ngspice_circuit_model.h>
 #include <sim/ngspice.h>
+#include <sim/simulator_frame.h>
 
 #include <confirm.h>
 
@@ -56,10 +57,11 @@ static wxString getStringSelection( const wxChoice* aCtrl )
 }
 
 
-DIALOG_SIM_COMMAND::DIALOG_SIM_COMMAND( wxWindow* aParent,
+DIALOG_SIM_COMMAND::DIALOG_SIM_COMMAND( SIMULATOR_FRAME* aParent,
                                         std::shared_ptr<NGSPICE_CIRCUIT_MODEL> aCircuitModel,
                                         std::shared_ptr<SPICE_SIMULATOR_SETTINGS>& aSettings ) :
         DIALOG_SIM_COMMAND_BASE( aParent ),
+        m_simulatorFrame( aParent ),
         m_circuitModel( aCircuitModel ),
         m_settings( aSettings ),
         m_spiceEmptyValidator( true )
@@ -91,6 +93,8 @@ DIALOG_SIM_COMMAND::DIALOG_SIM_COMMAND( wxWindow* aParent,
     m_transInitial->SetValidator( m_spiceEmptyValidator );
     m_transMaxStep->SetValidator( m_spiceEmptyValidator );
 
+    m_inputSignalsFilter->SetDescriptiveText( _( "Filter" ) );
+
     wxChar type1 = getStringSelection( m_dcSourceType1 ).Upper().GetChar( 0 );
     updateDCSources( type1, m_dcSource1 );
 
@@ -111,15 +115,6 @@ DIALOG_SIM_COMMAND::DIALOG_SIM_COMMAND( wxWindow* aParent,
         if( item.model->GetDeviceType() == SIM_MODEL::DEVICE_T::V )
             m_noiseSrc->Append( item.refName );
     }
-
-    refreshUIControls();
-
-    // Hide pages that aren't fully implemented yet
-    // wxPanel::Hide() isn't enough on some platforms
-    m_simPages->RemovePage( m_simPages->FindPage( m_pgDistortion ) );
-    m_simPages->RemovePage( m_simPages->FindPage( m_pgPoleZero ) );
-    m_simPages->RemovePage( m_simPages->FindPage( m_pgSensitivity ) );
-    m_simPages->RemovePage( m_simPages->FindPage( m_pgTransferFunction ) );
 
     if( !dynamic_cast<NGSPICE_SIMULATOR_SETTINGS*>( aSettings.get() ) )
         m_compatibilityMode->Show( false );
@@ -158,6 +153,7 @@ bool DIALOG_SIM_COMMAND::TransferDataToWindow()
     if( m_simCommand.IsEmpty() && !empty( m_customTxt ) )
         parseCommand( m_customTxt->GetValue() );
 
+    refreshUIControls();
     return true;
 }
 
@@ -225,7 +221,7 @@ bool DIALOG_SIM_COMMAND::TransferDataFromWindow()
     wxString previousSimCommand = m_simCommand;
     wxWindow* page = m_simPages->GetCurrentPage();
 
-    if( page == m_pgAC )                // AC analysis
+    if( page == m_pgAC )                // AC small-signal analysis
     {
         if( !m_pgAC->Validate() )
             return false;
@@ -236,7 +232,7 @@ bool DIALOG_SIM_COMMAND::TransferDataFromWindow()
                              SPICE_VALUE( m_acFreqStart->GetValue() ).ToSpiceString(),
                              SPICE_VALUE( m_acFreqStop->GetValue() ).ToSpiceString() );
     }
-    else if( page == m_pgSP ) // S-params analysis
+    else if( page == m_pgSP )           // S-params analysis
     {
         if( !m_pgSP->Validate() )
             return false;
@@ -276,7 +272,22 @@ bool DIALOG_SIM_COMMAND::TransferDataFromWindow()
 
         m_simCommand = simCmd;
     }
-    else if( page == m_pgNoise )        // Noise analysis
+    else if( page == m_pgFFT )          // Fast Fourier transform
+    {
+        wxString vectors;
+
+        for( int ii = 0; ii < (int) m_inputSignalsList->GetCount(); ++ii )
+        {
+            if( m_inputSignalsList->IsChecked( ii ) )
+                vectors += wxS( " " ) + m_inputSignalsList->GetString( ii );
+        }
+
+        if( m_linearize->IsChecked() )
+            m_simCommand = wxT( "linearize" ) + vectors + wxS( "\n" );
+
+        m_simCommand = wxT( "fft" ) + vectors;
+    }
+    else if( page == m_pgNOISE )        // Noise analysis
     {
         wxString output = m_noiseMeas->GetStringSelection();
         wxString ref = m_noiseRef->GetStringSelection();
@@ -305,9 +316,9 @@ bool DIALOG_SIM_COMMAND::TransferDataFromWindow()
     {
         m_simCommand = wxString( ".op" );
     }
-    else if( page == m_pgTransient )    // Transient analysis
+    else if( page == m_pgTRAN )         // Transient analysis
     {
-        if( !m_pgTransient->Validate() )
+        if( !m_pgTRAN->Validate() )
             return false;
 
         const wxString    spc = wxS( " " );
@@ -430,11 +441,37 @@ void DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
     if( aCommand.IsEmpty() )
         return;
 
-    wxStringTokenizer tokenizer( aCommand, " " );
+    if( aCommand == wxT( "*" ) )
+    {
+        SetTitle( _( "New Simulation" ) );
+
+        m_commandType->Clear();
+
+        for( SIM_TYPE type : { ST_AC, ST_DC, ST_NOISE, ST_OP, ST_TRAN, ST_SP, ST_FFT } )
+        {
+            m_commandType->Append( SPICE_SIMULATOR::TypeToName( type, true )
+                                        + wxT( "  \u2014  " )
+                                        + SPICE_SIMULATOR::TypeToName( type, false ) );
+        }
+
+        m_commandTypeSizer->Show( true );
+        return;
+    }
+
+    SIM_TYPE simType = NGSPICE_CIRCUIT_MODEL::CommandToSimType( aCommand );
+
+    SetTitle( SPICE_SIMULATOR::TypeToName( simType, true )
+                    + wxT( "  \u2014  " )
+                    + SPICE_SIMULATOR::TypeToName( simType, false ) );
+
+    m_commandTypeSizer->Show( false );
+
+    wxStringTokenizer tokenizer( aCommand, wxS( " \t\n\r" ), wxTOKEN_STRTOK );
     wxString          token = tokenizer.GetNextToken().Lower();
 
-    if( token == ".ac" )
+    switch( simType )
     {
+    case ST_AC:
         m_simPages->SetSelection( m_simPages->FindPage( m_pgAC ) );
 
         token = tokenizer.GetNextToken().Lower();
@@ -451,9 +488,9 @@ void DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
         m_acPointsNumber->SetValue( tokenizer.GetNextToken() );
         m_acFreqStart->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
         m_acFreqStop->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
-    }
-    else if( token == ".sp" )
-	{
+        break;
+
+    case ST_SP:
         m_simPages->SetSelection( m_simPages->FindPage( m_pgSP ) );
 
         token = tokenizer.GetNextToken().Lower();
@@ -472,11 +509,11 @@ void DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
         m_spFreqStop->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
 
 	    if( tokenizer.HasMoreTokens() )
-		m_spDoNoise->SetValue(
-			SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() == "1" ? true
-			                                                               : false );
-	}
-    else if( token == ".dc" )
+            m_spDoNoise->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() == "1" );
+
+        break;
+
+    case ST_DC:
     {
         m_simPages->SetSelection( m_simPages->FindPage( m_pgDC ) );
 
@@ -512,11 +549,12 @@ void DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
             m_dcEnable2->SetValue( true );
         }
 
-        refreshUIControls();
+        break;
     }
-    else if( token == ".noise" )
+
+    case ST_NOISE:
     {
-        m_simPages->SetSelection( m_simPages->FindPage( m_pgNoise ) );
+        m_simPages->SetSelection( m_simPages->FindPage( m_pgNOISE ) );
 
         wxString    output;
         wxString    ref;
@@ -548,10 +586,11 @@ void DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
         m_noiseFreqStop->SetValue( fStop.ToSpiceString() );
 
         m_saveAllNoise->SetValue( saveAll );
+        break;
     }
-    else if( token == ".tran" )
-    {
-        m_simPages->SetSelection( m_simPages->FindPage( m_pgTransient ) );
+
+    case ST_TRAN:
+        m_simPages->SetSelection( m_simPages->FindPage( m_pgTRAN ) );
 
         // If the fields below are empty, it will be caught by the exception handler
         m_transStep->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
@@ -574,14 +613,51 @@ void DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
 
         if( token.IsSameAs( wxS( "uic" ) ) )
             m_useInitialConditions->SetValue( true );
-    }
-    else if( token == ".op" )
-    {
+
+        break;
+
+    case ST_OP:
         m_simPages->SetSelection( m_simPages->FindPage( m_pgOP ) );
-    }
-    else if( !empty( m_customTxt ) )        // Custom directives
+        break;
+
+    case ST_FFT:
     {
+        m_simPages->SetSelection( m_simPages->FindPage( m_pgFFT ) );
+
+        while( tokenizer.HasMoreTokens() )
+            m_fftInputSignals.insert( tokenizer.GetNextToken() );
+
+        break;
+    }
+
+    default:
         m_simPages->SetSelection( m_simPages->FindPage( m_pgCustom ) );
+        break;
+    }
+}
+
+
+void DIALOG_SIM_COMMAND::OnCommandType( wxCommandEvent& event )
+{
+    int      sel = ST_UNKNOWN;
+    wxString str = m_commandType->GetString( event.GetSelection() );
+
+    for( int type = ST_UNKNOWN; type < ST_LAST; ++type )
+    {
+        if( str.StartsWith( SPICE_SIMULATOR::TypeToName( (SIM_TYPE) type, true ) ) )
+            sel = type;
+    }
+
+    switch( sel )
+    {
+    case ST_AC:    m_simPages->SetSelection( m_simPages->FindPage( m_pgAC ) );     break;
+    case ST_SP:    m_simPages->SetSelection( m_simPages->FindPage( m_pgSP ) );     break;
+    case ST_DC:    m_simPages->SetSelection( m_simPages->FindPage( m_pgDC ) );     break;
+    case ST_NOISE: m_simPages->SetSelection( m_simPages->FindPage( m_pgNOISE ) );  break;
+    case ST_TRAN:  m_simPages->SetSelection( m_simPages->FindPage( m_pgTRAN ) );   break;
+    case ST_OP:    m_simPages->SetSelection( m_simPages->FindPage( m_pgOP ) );     break;
+    case ST_FFT:   m_simPages->SetSelection( m_simPages->FindPage( m_pgFFT ) );    break;
+    default:       m_simPages->SetSelection( m_simPages->FindPage( m_pgCustom ) ); break;
     }
 }
 
@@ -616,6 +692,22 @@ void DIALOG_SIM_COMMAND::onSwapDCSources( wxCommandEvent& event )
 
     updateDCUnits( type1, m_dcSource1, m_src1DCStartValUnit, m_src1DCEndValUnit, m_src1DCStepUnit );
     updateDCUnits( type2, m_dcSource2, m_src2DCStartValUnit, m_src2DCEndValUnit, m_src2DCStepUnit );
+}
+
+
+void DIALOG_SIM_COMMAND::onDCSource1Selected( wxCommandEvent& event )
+{
+    wxChar type = m_dcSourceType1->GetString( m_dcSourceType1->GetSelection() ).Upper()[ 0 ];
+    updateDCSources( type, m_dcSource1 );
+    updateDCUnits( type, m_dcSource1, m_src1DCStartValUnit, m_src1DCEndValUnit, m_src1DCStepUnit );
+}
+
+
+void DIALOG_SIM_COMMAND::onDCSource2Selected( wxCommandEvent& event )
+{
+    wxChar type = m_dcSourceType2->GetString( m_dcSourceType2->GetSelection() ).Upper()[ 0 ];
+    updateDCSources( type, m_dcSource2 );
+    updateDCUnits( type, m_dcSource2, m_src2DCStartValUnit, m_src2DCEndValUnit, m_src2DCStepUnit );
 }
 
 
@@ -658,6 +750,53 @@ void DIALOG_SIM_COMMAND::loadDirectives()
 {
     if( m_circuitModel )
         m_customTxt->SetValue( m_circuitModel->GetSchTextSimCommand() );
+}
+
+
+void DIALOG_SIM_COMMAND::OnFilterText( wxCommandEvent& aEvent )
+{
+    for( int ii = 0; ii < (int) m_inputSignalsList->GetCount(); ++ii )
+    {
+        if( m_inputSignalsList->IsChecked( ii ) )
+            m_fftInputSignals.insert( m_inputSignalsList->GetString( ii ) );
+        else
+            m_fftInputSignals.erase( m_inputSignalsList->GetString( ii ) );
+    }
+
+    m_inputSignalsList->Clear();
+
+    wxString aFilter = m_inputSignalsFilter->GetValue();
+
+    if( aFilter.IsEmpty() )
+        aFilter = wxS( "*" );
+
+    EDA_COMBINED_MATCHER matcher( aFilter.Upper(), CTX_SIGNAL );
+
+    for( const wxString& signal : m_simulatorFrame->Signals() )
+    {
+        if( matcher.Find( signal.Upper() ) )
+        {
+            m_inputSignalsList->Append( signal );
+
+            if( m_fftInputSignals.count( signal ) )
+                m_inputSignalsList->Check( m_inputSignalsList->GetCount() - 1 );
+        }
+    }
+}
+
+
+void DIALOG_SIM_COMMAND::OnFilterMouseMoved( wxMouseEvent& aEvent )
+{
+    wxPoint pos = aEvent.GetPosition();
+    wxRect  ctrlRect = m_inputSignalsFilter->GetScreenRect();
+    int     buttonWidth = ctrlRect.GetHeight();         // Presume buttons are square
+
+    if( m_inputSignalsFilter->IsSearchButtonVisible() && pos.x < buttonWidth )
+        SetCursor( wxCURSOR_ARROW );
+    else if( m_inputSignalsFilter->IsCancelButtonVisible() && pos.x > ctrlRect.GetWidth() - buttonWidth )
+        SetCursor( wxCURSOR_ARROW );
+    else
+        SetCursor( wxCURSOR_IBEAM );
 }
 
 

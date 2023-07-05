@@ -481,6 +481,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::shape_3d_back].emplace_back( BITMAPS::shape_3d_back, wxT( "shape_3d_back_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::sheetset].emplace_back( BITMAPS::sheetset, wxT( "sheetset_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::simulator].emplace_back( BITMAPS::simulator, wxT( "simulator_24.png" ), 24, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::sim_add_plot].emplace_back( BITMAPS::sim_add_plot, wxT( "sim_add_plot_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::sim_command].emplace_back( BITMAPS::sim_command, wxT( "sim_command_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::sim_run].emplace_back( BITMAPS::sim_run, wxT( "sim_run_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::sim_stop].emplace_back( BITMAPS::sim_stop, wxT( "sim_stop_24.png" ), 24, wxT( "light" ) );

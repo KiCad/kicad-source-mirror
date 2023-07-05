@@ -405,10 +405,9 @@ void CURSOR::UpdateReference()
 }
 
 
-SIM_PLOT_PANEL::SIM_PLOT_PANEL( const wxString& aCommand, int aOptions, wxWindow* parent,
-                                wxWindowID id, const wxPoint& pos, const wxSize& size, long style,
-                                const wxString& name ) :
-        SIM_PLOT_PANEL_BASE( aCommand, aOptions, parent, id, pos, size, style, name ),
+SIM_PLOT_PANEL::SIM_PLOT_PANEL( const wxString& aSimCommand, unsigned aSimOptions,
+                                wxWindow* parent ) :
+        SIM_PLOT_PANEL_BASE( aSimCommand, aSimOptions, parent ),
         m_axis_x( nullptr ),
         m_axis_y1( nullptr ),
         m_axis_y2( nullptr ),
@@ -416,7 +415,7 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( const wxString& aCommand, int aOptions, wxWindow
         m_dotted_cp( false )
 {
     m_sizer   = new wxBoxSizer( wxVERTICAL );
-    m_plotWin = new mpWindow( this, wxID_ANY, pos, size, style );
+    m_plotWin = new mpWindow( this, wxID_ANY );
 
     m_plotWin->LimitView( true );
     m_plotWin->SetMargins( 35, 70, 35, 70 );
@@ -517,7 +516,7 @@ void SIM_PLOT_PANEL::updateAxes( int aNewTraceType )
             m_axis_y2->SetName( _( "Phase" ) );
             break;
 
-        case ST_S_PARAM:
+        case ST_SP:
             if( !m_axis_x )
             {
                 m_axis_x = new LOG_SCALE<mpScaleXLog>( wxEmptyString, wxT( "Hz" ), mpALIGN_BOTTOM );
@@ -574,7 +573,23 @@ void SIM_PLOT_PANEL::updateAxes( int aNewTraceType )
 
             break;
 
-        case ST_TRANSIENT:
+        case ST_FFT:
+            if( !m_axis_x )
+            {
+                m_axis_x = new LOG_SCALE<mpScaleXLog>( wxEmptyString, wxT( "Hz" ), mpALIGN_BOTTOM );
+                m_axis_x->SetNameAlign( mpALIGN_BOTTOM );
+                m_plotWin->AddLayer( m_axis_x );
+
+                m_axis_y1 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "dB" ), mpALIGN_LEFT );
+                m_axis_y1->SetNameAlign( mpALIGN_LEFT );
+                m_plotWin->AddLayer( m_axis_y1 );
+            }
+
+            m_axis_x->SetName( _( "Frequency" ) );
+            m_axis_y1->SetName( _( "Intensity" ) );
+            break;
+
+        case ST_TRAN:
             if( !m_axis_x )
             {
                 m_axis_x = new TIME_SCALE( wxEmptyString, wxT( "s" ), mpALIGN_BOTTOM );
@@ -777,7 +792,7 @@ TRACE* SIM_PLOT_PANEL::AddTrace( const wxString& aVectorName, int aType )
     {
         updateAxes( aType );
 
-        if( GetSimType() == ST_TRANSIENT || GetSimType() == ST_DC )
+        if( GetSimType() == ST_TRAN || GetSimType() == ST_DC )
         {
             bool hasVoltageTraces = false;
 
@@ -815,27 +830,37 @@ TRACE* SIM_PLOT_PANEL::AddTrace( const wxString& aVectorName, int aType )
 void SIM_PLOT_PANEL::SetTraceData( TRACE* trace, unsigned int aPoints, const double* aX,
                                    const double* aY )
 {
-    std::vector<double> tmp( aY, aY + aPoints );
+    std::vector<double> x( aX, aX + aPoints );
+    std::vector<double> y( aY, aY + aPoints );
 
-    if( GetSimType() == ST_AC )
+    if( GetSimType() == ST_AC || GetSimType() == ST_SP || GetSimType() == ST_FFT )
+    {
+        // log( 0 ) is not valid.
+        {
+            x.erase( x.begin() );
+            y.erase( y.begin() );
+        }
+    }
+
+    if( GetSimType() == ST_AC || GetSimType() == ST_FFT )
     {
         if( trace->GetType() & SPT_AC_PHASE )
         {
             for( unsigned int i = 0; i < aPoints; i++ )
-                tmp[i] = tmp[i] * 180.0 / M_PI;                 // convert to degrees
+                y[i] = y[i] * 180.0 / M_PI;                 // convert to degrees
         }
         else
         {
             for( unsigned int i = 0; i < aPoints; i++ )
             {
                 // log( 0 ) is not valid.
-                if( tmp[i] != 0 )
-                    tmp[i] = 20 * log( tmp[i] ) / log( 10.0 );  // convert to dB
+                if( y[i] != 0 )
+                    y[i] = 20 * log( y[i] ) / log( 10.0 );  // convert to dB
             }
         }
     }
 
-    trace->SetData( std::vector<double>( aX, aX + aPoints ), tmp );
+    trace->SetData( x, y );
 
     if( ( trace->GetType() & SPT_AC_PHASE ) || ( trace->GetType() & SPT_CURRENT ) )
         trace->SetScale( m_axis_x, m_axis_y2 );

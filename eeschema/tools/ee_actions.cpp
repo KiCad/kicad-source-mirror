@@ -1121,7 +1121,7 @@ TOOL_ACTION EE_ACTIONS::newPlot( "eeschema.Simulation.newPlot",
         AS_GLOBAL,
         MD_CTRL + 'N', LEGACY_HK_NAME( "New" ),
         _( "New Plot" ), "",
-        BITMAPS::new_generic );
+        BITMAPS::sim_add_plot );
 
 TOOL_ACTION EE_ACTIONS::openWorkbook( "eeschema.Simulation.openWorkbook",
         AS_GLOBAL,
@@ -1200,12 +1200,6 @@ TOOL_ACTION EE_ACTIONS::editUserDefinedSignals( "eeschema.Simulation.editUserDef
         _( "User-defined Signals..." ),
         _( "Add, edit or delete user-defined simulation signals" ),
         BITMAPS::sim_add_signal );
-
-TOOL_ACTION EE_ACTIONS::showFFT( "eeschema.Simulation.showFFT",
-        AS_GLOBAL, 0, "",
-        _( "Show FFT" ),
-        _( "Show frequency distribution of transient analysis data using fast Fourier transform" ),
-        BITMAPS::mw_add_shape );
 
 TOOL_ACTION EE_ACTIONS::showNetlist( "eeschema.Simulation.showNetlist",
         AS_GLOBAL, 0, "",

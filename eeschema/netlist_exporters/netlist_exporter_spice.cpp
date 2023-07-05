@@ -106,32 +106,32 @@ bool NETLIST_EXPORTER_SPICE::WriteNetlist( const wxString& aOutFileName, unsigne
 {
     m_libMgr.SetReporter( &aReporter );
     FILE_OUTPUTFORMATTER formatter( aOutFileName, wxT( "wt" ), '\'' );
-    return DoWriteNetlist( formatter, aNetlistOptions, aReporter );
+    return DoWriteNetlist( wxEmptyString, aNetlistOptions, formatter, aReporter );
 }
 
 
-bool NETLIST_EXPORTER_SPICE::DoWriteNetlist( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions,
-                                             REPORTER& aReporter )
+bool NETLIST_EXPORTER_SPICE::DoWriteNetlist( const wxString& aSimCommand, unsigned aSimOptions,
+                                             OUTPUTFORMATTER& aFormatter, REPORTER& aReporter )
 {
     LOCALE_IO dummy;
 
    // Cleanup list to avoid duplicate if the netlist exporter is run more than once.
     m_rawIncludes.clear();
 
-    bool result = ReadSchematicAndLibraries( aNetlistOptions, aReporter );
+    bool result = ReadSchematicAndLibraries( aSimOptions, aReporter );
 
-    WriteHead( aFormatter, aNetlistOptions );
+    WriteHead( aFormatter, aSimOptions );
 
-    writeIncludes( aFormatter, aNetlistOptions );
+    writeIncludes( aFormatter, aSimOptions );
     writeModels( aFormatter );
 
     // Skip this if there is no netlist to avoid an ngspice segfault
     if( !m_items.empty() )
-        WriteDirectives( aFormatter, aNetlistOptions );
+        WriteDirectives( aSimCommand, aSimOptions, aFormatter );
 
     writeItems( aFormatter );
 
-    WriteTail( aFormatter, aNetlistOptions );
+    WriteTail( aFormatter, aSimOptions );
 
     return result;
 }
@@ -588,16 +588,16 @@ void NETLIST_EXPORTER_SPICE::writeItems( OUTPUTFORMATTER& aFormatter )
 }
 
 
-void NETLIST_EXPORTER_SPICE::WriteDirectives( OUTPUTFORMATTER& aFormatter,
-                                              unsigned aNetlistOptions ) const
+void NETLIST_EXPORTER_SPICE::WriteDirectives( const wxString& aSimCommand, unsigned aSimOptions,
+                                              OUTPUTFORMATTER& aFormatter ) const
 {
-    if( aNetlistOptions & OPTION_SAVE_ALL_VOLTAGES )
+    if( aSimOptions & OPTION_SAVE_ALL_VOLTAGES )
         aFormatter.Print( 0, ".save all\n" );
 
-    if( aNetlistOptions & OPTION_SAVE_ALL_CURRENTS )
+    if( aSimOptions & OPTION_SAVE_ALL_CURRENTS )
         aFormatter.Print( 0, ".probe alli\n" );
 
-    if( aNetlistOptions & OPTION_SAVE_ALL_DISSIPATIONS )
+    if( aSimOptions & OPTION_SAVE_ALL_DISSIPATIONS )
     {
         for( const SPICE_ITEM& item : m_items )
         {
@@ -638,7 +638,7 @@ void NETLIST_EXPORTER_SPICE::WriteDirectives( OUTPUTFORMATTER& aFormatter,
                         || isSimCommand( candidate, wxS( ".TF" ) ) );
         }
 
-        if( !simCommand || ( aNetlistOptions & OPTION_SIM_COMMAND ) )
+        if( !simCommand || ( aSimOptions & OPTION_SIM_COMMAND ) )
             aFormatter.Print( 0, "%s\n", UTF8( directive ).c_str() );
     }
 }

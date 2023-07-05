@@ -76,8 +76,8 @@ public:
     /**
      * Write the netlist in aFormatter.
      */
-    bool DoWriteNetlist( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions,
-                         REPORTER& aReporter );
+    bool DoWriteNetlist( const wxString& aSimCommand, unsigned aSimOptions,
+                         OUTPUTFORMATTER& aFormatter, REPORTER& aReporter );
 
     /**
      * Write the netlist head (title and so on).
@@ -132,7 +132,8 @@ public:
 
 protected:
     void ReadDirectives( unsigned aNetlistOptions );
-    virtual void WriteDirectives( OUTPUTFORMATTER& candidate, unsigned aNetlistOptions ) const;
+    virtual void WriteDirectives( const wxString& aSimCommand, unsigned aSimOptions,
+                                  OUTPUTFORMATTER& candidate ) const;
 
     virtual std::string GenerateItemPinNetName( const std::string& aNetName,
                                                 int& aNcCounter ) const;

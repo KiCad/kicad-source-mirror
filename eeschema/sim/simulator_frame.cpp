@@ -113,7 +113,6 @@ SIMULATOR_FRAME::SIMULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_schematicFrame( nullptr ),
         m_toolBar( nullptr ),
         m_panel( nullptr ),
-        m_lastSimPlot( nullptr ),
         m_simFinished( false ),
         m_workbookModified( false )
 {
@@ -168,7 +167,7 @@ SIMULATOR_FRAME::SIMULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     Bind( wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIMULATOR_FRAME::onExit ), this,
           wxID_EXIT );
 
-    Bind( EVT_SIM_UPDATE, &SIMULATOR_FRAME::onSimUpdate, this );
+    Bind( EVT_SIM_UPDATE, &SIMULATOR_FRAME::onUpdateSim, this );
     Bind( EVT_SIM_REPORT, &SIMULATOR_FRAME::onSimReport, this );
     Bind( EVT_SIM_STARTED, &SIMULATOR_FRAME::onSimStarted, this );
     Bind( EVT_SIM_FINISHED, &SIMULATOR_FRAME::onSimFinished, this );
@@ -196,7 +195,7 @@ SIMULATOR_FRAME::~SIMULATOR_FRAME()
 {
     NULL_REPORTER devnull;
 
-    m_simulator->Attach( nullptr, devnull );
+    m_simulator->Attach( nullptr, wxEmptyString, 0, devnull );
     m_simulator->SetReporter( nullptr );
     delete m_reporter;
 }
@@ -285,8 +284,8 @@ WINDOW_SETTINGS* SIMULATOR_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
 
 wxString SIMULATOR_FRAME::GetCurrentSimCommand() const
 {
-    if( m_panel->GetCurrentPlotWindow() )
-        return m_panel->GetCurrentPlotWindow()->GetSimCommand();
+    if( m_panel->GetCurrentPlotPanel() )
+        return m_panel->GetCurrentPlotPanel()->GetSimCommand();
     else
         return m_circuitModel->GetSchTextSimCommand();
 }
@@ -300,10 +299,10 @@ SIM_TYPE SIMULATOR_FRAME::GetCurrentSimType() const
 
 int SIMULATOR_FRAME::GetCurrentOptions() const
 {
-    if( m_panel->GetCurrentPlotWindow() )
-        return m_panel->GetCurrentPlotWindow()->GetSimOptions();
+    if( SIM_PLOT_PANEL_BASE* plotPanel = m_panel->GetCurrentPlotPanel() )
+        return plotPanel->GetSimOptions();
     else
-        return m_circuitModel->GetSimOptions();
+        return NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS;
 }
 
 
@@ -338,7 +337,7 @@ void SIMULATOR_FRAME::UpdateTitle()
 
 
 
-bool SIMULATOR_FRAME::LoadSimulator()
+bool SIMULATOR_FRAME::LoadSimulator( const wxString& aSimCommand, unsigned aSimOptions )
 {
     wxString           errors;
     WX_STRING_REPORTER reporter( &errors );
@@ -350,7 +349,7 @@ bool SIMULATOR_FRAME::LoadSimulator()
     if( ADVANCED_CFG::GetCfg().m_IncrementalConnectivity )
         m_schematicFrame->RecalculateConnections( nullptr, GLOBAL_CLEANUP );
 
-    if( !m_simulator->Attach( m_circuitModel, reporter ) )
+    if( !m_simulator->Attach( m_circuitModel, aSimCommand, aSimOptions, reporter ) )
     {
         DisplayErrorMessage( this, _( "Errors during netlist generation.\n\n" ) + errors );
         return false;
@@ -362,56 +361,69 @@ bool SIMULATOR_FRAME::LoadSimulator()
 
 void SIMULATOR_FRAME::StartSimulation()
 {
-    if( m_circuitModel->CommandToSimType( GetCurrentSimCommand() ) == ST_UNKNOWN )
+    SIM_PLOT_PANEL_BASE* plotPanel = m_panel->GetCurrentPlotPanel();
+
+    if( !plotPanel )
+        return;
+
+    if( plotPanel->GetSimCommand().Upper().StartsWith( wxT( "FFT" ) ) )
     {
-        if( !EditSimCommand() )
-            return;
+        wxString tranSpicePlot;
 
-        if( m_circuitModel->CommandToSimType( GetCurrentSimCommand() ) == ST_UNKNOWN )
-            return;
-    }
+        if( SIM_PLOT_PANEL_BASE* tranPlotPanel = m_panel->GetPlotPanel( ST_TRAN ) )
+            tranSpicePlot = tranPlotPanel->GetSpicePlotName();
 
-    wxString             schTextSimCommand = m_circuitModel->GetSchTextSimCommand();
-    SIM_TYPE             schTextSimType = NGSPICE_CIRCUIT_MODEL::CommandToSimType( schTextSimCommand );
-    SIM_PLOT_PANEL_BASE* plotWindow = m_panel->GetCurrentPlotWindow();
+        if( tranSpicePlot.IsEmpty() )
+        {
+            DisplayErrorMessage( this, _( "You must run a TRAN simulation first; its results"
+                                          "will be used for the fast Fourier transform." ) );
+        }
+        else
+        {
+            m_simulator->Command( "setplot " + tranSpicePlot.ToStdString() );
 
-    if( !plotWindow )
-    {
-        NewPlotPanel( schTextSimCommand, m_circuitModel->GetSimOptions() );
-        OnModify();
+            wxArrayString commands = wxSplit( plotPanel->GetSimCommand(), '\n' );
+
+            for( const wxString& command : commands )
+            {
+                wxBusyCursor wait;
+                m_simulator->Command( command.ToStdString() );
+            }
+
+            plotPanel->SetSpicePlotName( m_simulator->CurrentPlotName() );
+            m_panel->OnSimRefresh( true );
+
+#if 0
+            m_simulator->Command( "setplot" );  // Print available plots to console
+            m_simulator->Command( "display" );  // Print vectors in current plot to console
+#endif
+        }
+
+        return;
     }
     else
     {
-        m_circuitModel->SetSimCommandOverride( plotWindow->GetSimCommand() );
-
-        if( plotWindow->GetSimType() == schTextSimType
-                && schTextSimCommand != m_circuitModel->GetLastSchTextSimCommand() )
+        if( m_panel->GetPlotIndex( plotPanel ) == 0
+                && m_circuitModel->GetSchTextSimCommand() != plotPanel->GetLastSchTextSimCommand() )
         {
             if( IsOK( this, _( "Schematic sheet simulation command directive has changed.  "
                                "Do you wish to update the Simulation Command?" ) ) )
             {
-                m_circuitModel->SetSimCommandOverride( wxEmptyString );
-                plotWindow->SetSimCommand( schTextSimCommand );
+                plotPanel->SetSimCommand( m_circuitModel->GetSchTextSimCommand() );
+                plotPanel->SetLastSchTextSimCommand( plotPanel->GetSimCommand() );
                 OnModify();
             }
         }
     }
 
-    m_circuitModel->SetSimOptions( GetCurrentOptions() );
-
-    if( !LoadSimulator() )
+    if( !LoadSimulator( plotPanel->GetSimCommand(), plotPanel->GetSimOptions() ) )
         return;
 
     std::unique_lock<std::mutex> simulatorLock( m_simulator->GetMutex(), std::try_to_lock );
 
     if( simulatorLock.owns_lock() )
     {
-        wxBusyCursor toggle;
-
         m_panel->OnSimUpdate();
-
-        // Prevents memory leak on succeding simulations by deleting old vectors
-        m_simulator->Clean();
         m_simulator->Run();
     }
     else
@@ -421,9 +433,15 @@ void SIMULATOR_FRAME::StartSimulation()
 }
 
 
-void SIMULATOR_FRAME::NewPlotPanel( const wxString& aSimCommand, int aOptions )
+void SIMULATOR_FRAME::NewPlotPanel( const wxString& aSimCommand, unsigned aOptions )
 {
     m_panel->NewPlotPanel( aSimCommand, aOptions );
+}
+
+
+const std::vector<wxString> SIMULATOR_FRAME::SimPlotVectors()
+{
+    return m_panel->SimPlotVectors();
 }
 
 
@@ -463,9 +481,9 @@ void SIMULATOR_FRAME::AddTuner( const SCH_SHEET_PATH& aSheetPath, SCH_SYMBOL* aS
 }
 
 
-SIM_PLOT_PANEL* SIMULATOR_FRAME::GetCurrentPlot() const
+SIM_PLOT_PANEL_BASE* SIMULATOR_FRAME::GetCurrentPlotPanel() const
 {
-    return m_panel->GetCurrentPlot();
+    return m_panel->GetCurrentPlotPanel();
 }
 
 
@@ -511,10 +529,13 @@ void SIMULATOR_FRAME::ToggleDarkModePlots()
 
 bool SIMULATOR_FRAME::EditSimCommand()
 {
-    SIM_PLOT_PANEL_BASE* plotPanelWindow = m_panel->GetCurrentPlotWindow();
+    SIM_PLOT_PANEL_BASE* plotPanel = m_panel->GetCurrentPlotPanel();
     DIALOG_SIM_COMMAND   dlg( this, m_circuitModel, m_simulator->Settings() );
     wxString             errors;
     WX_STRING_REPORTER   reporter( &errors );
+
+    if( !plotPanel )
+        return false;
 
     if( !m_circuitModel->ReadSchematicAndLibraries( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS,
                                                     reporter ) )
@@ -523,55 +544,15 @@ bool SIMULATOR_FRAME::EditSimCommand()
                                    + errors );
     }
 
-    if( m_panel->GetPlotIndex( plotPanelWindow ) != wxNOT_FOUND )
-    {
-        dlg.SetSimCommand( plotPanelWindow->GetSimCommand() );
-        dlg.SetSimOptions( plotPanelWindow->GetSimOptions() );
-    }
-    else
-    {
-        dlg.SetSimOptions( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS );
-    }
+    dlg.SetSimCommand( plotPanel->GetSimCommand() );
+    dlg.SetSimOptions( plotPanel->GetSimOptions() );
 
     if( dlg.ShowModal() == wxID_OK )
     {
-        wxString oldCommand;
-
-        if( m_panel->GetPlotIndex( plotPanelWindow ) != wxNOT_FOUND )
-            oldCommand = plotPanelWindow->GetSimCommand();
-        else
-            oldCommand = wxString();
-
-        const wxString& newCommand = dlg.GetSimCommand();
-        int             newOptions = dlg.GetSimOptions();
-        SIM_TYPE        newSimType = NGSPICE_CIRCUIT_MODEL::CommandToSimType( newCommand );
-
-        if( !plotPanelWindow )
-        {
-            m_circuitModel->SetSimCommandOverride( newCommand );
-            m_circuitModel->SetSimOptions( newOptions );
-            NewPlotPanel( newCommand, newOptions );
-        }
-        // If it is a new simulation type, open a new plot.  For the DC sim, check if sweep
-        // source type has changed (char 4 will contain 'v', 'i', 'r' or 't'.
-        else if( plotPanelWindow->GetSimType() != newSimType
-                    || ( newSimType == ST_DC
-                         && oldCommand.Lower().GetChar( 4 ) != newCommand.Lower().GetChar( 4 ) ) )
-        {
-            NewPlotPanel( newCommand, newOptions );
-        }
-        else
-        {
-            if( m_panel->GetPlotIndex( plotPanelWindow ) == 0 )
-                m_circuitModel->SetSimCommandOverride( newCommand );
-
-            // Update simulation command in the current plot
-            plotPanelWindow->SetSimCommand( newCommand );
-            plotPanelWindow->SetSimOptions( newOptions );
-        }
-
+        plotPanel->SetSimCommand( dlg.GetSimCommand() );
+        plotPanel->SetSimOptions( dlg.GetSimOptions() );
+        m_panel->OnPlotSettingsChanged();
         OnModify();
-        m_simulator->Init();
         return true;
     }
 
@@ -633,22 +614,22 @@ void SIMULATOR_FRAME::setupUIConditions()
     auto showGridCondition =
             [this]( const SELECTION& aSel )
             {
-                SIM_PLOT_PANEL* plot = GetCurrentPlot();
-                return plot && plot->IsGridShown();
+                SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( GetCurrentPlotPanel() );
+                return plotPanel && plotPanel->IsGridShown();
             };
 
     auto showLegendCondition =
             [this]( const SELECTION& aSel )
             {
-                SIM_PLOT_PANEL* plot = GetCurrentPlot();
-                return plot && plot->IsLegendShown();
+                SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( GetCurrentPlotPanel() );
+                return plotPanel && plotPanel->IsLegendShown();
             };
 
     auto showDottedCondition =
             [this]( const SELECTION& aSel )
             {
-                SIM_PLOT_PANEL* plot = GetCurrentPlot();
-                return plot && plot->GetDottedSecondary();
+                SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( GetCurrentPlotPanel() );
+                return plotPanel && plotPanel->GetDottedSecondary();
             };
 
     auto darkModePlotCondition =
@@ -669,10 +650,16 @@ void SIMULATOR_FRAME::setupUIConditions()
                 return m_simFinished;
             };
 
+    auto haveSim =
+            [this]( const SELECTION& aSel )
+            {
+                return GetCurrentPlotPanel() != nullptr;
+            };
+
     auto havePlot =
             [this]( const SELECTION& aSel )
             {
-                return GetCurrentPlot() != nullptr;
+                return dynamic_cast<SIM_PLOT_PANEL*>( GetCurrentPlotPanel() ) != nullptr;
             };
 
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )
@@ -690,7 +677,8 @@ void SIMULATOR_FRAME::setupUIConditions()
     mgr->SetConditions( EE_ACTIONS::toggleDottedSecondary, CHECK( showDottedCondition ) );
     mgr->SetConditions( EE_ACTIONS::toggleDarkModePlots,   CHECK( darkModePlotCondition ) );
 
-    mgr->SetConditions( EE_ACTIONS::simCommand,            ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
+    mgr->SetConditions( EE_ACTIONS::newPlot,               ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
+    mgr->SetConditions( EE_ACTIONS::simCommand,            ENABLE( haveSim ) );
     mgr->SetConditions( EE_ACTIONS::runSimulation,         ENABLE( !simRunning ) );
     mgr->SetConditions( EE_ACTIONS::stopSimulation,        ENABLE( simRunning ) );
     mgr->SetConditions( EE_ACTIONS::simProbe,              ENABLE( simFinished ) );
@@ -710,13 +698,6 @@ void SIMULATOR_FRAME::onSimStarted( wxCommandEvent& aEvent )
 
 void SIMULATOR_FRAME::onSimFinished( wxCommandEvent& aEvent )
 {
-    SetCursor( wxCURSOR_ARROW );
-
-    SIM_TYPE simType = m_circuitModel->GetSimType();
-
-    if( simType == ST_UNKNOWN )
-        return;
-
     // Sometimes (for instance with a directive like wrdata my_file.csv "my_signal")
     // the simulator is in idle state (simulation is finished), but still running, during
     // the time the file is written. So gives a slice of time to fully finish the work:
@@ -745,12 +726,10 @@ void SIMULATOR_FRAME::onSimFinished( wxCommandEvent& aEvent )
 
     m_schematicFrame->RefreshOperatingPointDisplay();
     m_schematicFrame->GetCanvas()->Refresh();
-
-    m_lastSimPlot = m_panel->GetCurrentPlotWindow();
 }
 
 
-void SIMULATOR_FRAME::onSimUpdate( wxCommandEvent& aEvent )
+void SIMULATOR_FRAME::onUpdateSim( wxCommandEvent& aEvent )
 {
     static bool updateInProgress = false;
 
@@ -763,25 +742,16 @@ void SIMULATOR_FRAME::onSimUpdate( wxCommandEvent& aEvent )
     if( m_simulator->IsRunning() )
         m_simulator->Stop();
 
-    if( m_panel->GetCurrentPlotWindow() != m_lastSimPlot )
+    std::unique_lock<std::mutex> simulatorLock( m_simulator->GetMutex(), std::try_to_lock );
+
+    if( simulatorLock.owns_lock() )
     {
-        // We need to rerun simulation, as the simulator currently stores results for another
-        // plot
-        StartSimulation();
+        m_panel->OnSimUpdate();
+        m_simulator->Run();
     }
     else
     {
-        std::unique_lock<std::mutex> simulatorLock( m_simulator->GetMutex(), std::try_to_lock );
-
-        if( simulatorLock.owns_lock() )
-        {
-            m_panel->OnSimUpdate();
-            m_simulator->Run();
-        }
-        else
-        {
-            DisplayErrorMessage( this, _( "Another simulation is already running." ) );
-        }
+        DisplayErrorMessage( this, _( "Another simulation is already running." ) );
     }
 
     updateInProgress = false;

@@ -35,12 +35,13 @@
 
 class NGSPICE_CIRCUIT_MODEL;
 class SPICE_SIMULATOR_SETTINGS;
+class SIMULATOR_FRAME;
 
 
 class DIALOG_SIM_COMMAND : public DIALOG_SIM_COMMAND_BASE
 {
 public:
-    DIALOG_SIM_COMMAND( wxWindow* aParent, std::shared_ptr<NGSPICE_CIRCUIT_MODEL> aCircuitModel,
+    DIALOG_SIM_COMMAND( SIMULATOR_FRAME* aParent, std::shared_ptr<NGSPICE_CIRCUIT_MODEL> aCircuitModel,
                         std::shared_ptr<SPICE_SIMULATOR_SETTINGS>& aSettings );
 
     const wxString& GetSimCommand() const
@@ -52,6 +53,7 @@ public:
     {
         parseCommand( aCommand );
         m_simCommand = aCommand;
+        refreshUIControls();
     }
 
     int GetSimOptions() const
@@ -107,6 +109,7 @@ private:
         wxQueueEvent( m_dcEnable2, new wxCommandEvent( wxEVT_CHECKBOX ) );
         wxQueueEvent( m_dcSourceType1, new wxCommandEvent( wxEVT_RADIOBOX ) );
         wxQueueEvent( m_dcSourceType2, new wxCommandEvent( wxEVT_RADIOBOX ) );
+        wxQueueEvent( m_inputSignalsFilter, new wxCommandEvent( wxEVT_TEXT ) );
     }
 
     /**
@@ -151,23 +154,8 @@ private:
 
     void onDCEnableSecondSource( wxCommandEvent& event ) override;
     void onSwapDCSources( wxCommandEvent& event ) override;
-    void onDCSource1Selected( wxCommandEvent& event ) override
-    {
-        wxChar type =
-                m_dcSourceType1->GetString( m_dcSourceType1->GetSelection() ).Upper().GetChar( 0 );
-        updateDCSources( type, m_dcSource1 );
-        updateDCUnits( type, m_dcSource1, m_src1DCStartValUnit, m_src1DCEndValUnit,
-                       m_src1DCStepUnit );
-    }
-
-    void onDCSource2Selected( wxCommandEvent& event ) override
-    {
-        wxChar type =
-                m_dcSourceType2->GetString( m_dcSourceType2->GetSelection() ).Upper().GetChar( 0 );
-        updateDCSources( type, m_dcSource2 );
-        updateDCUnits( type, m_dcSource2, m_src2DCStartValUnit, m_src2DCEndValUnit,
-                       m_src2DCStepUnit );
-    }
+    void onDCSource1Selected( wxCommandEvent& event ) override;
+    void onDCSource2Selected( wxCommandEvent& event ) override;
 
     static wxString scaleToString( int aOption )
     {
@@ -180,15 +168,21 @@ private:
         }
     }
 
+    void OnCommandType( wxCommandEvent& event ) override;
+    void OnFilterMouseMoved( wxMouseEvent& event ) override;
+    void OnFilterText( wxCommandEvent& event ) override;
+
     void loadDirectives();
 
 private:
+    SIMULATOR_FRAME*                          m_simulatorFrame;
     wxString                                  m_simCommand;
     std::shared_ptr<NGSPICE_CIRCUIT_MODEL>    m_circuitModel;
     std::shared_ptr<SPICE_SIMULATOR_SETTINGS> m_settings;
     SPICE_VALIDATOR                           m_spiceValidator;
     SPICE_VALIDATOR                           m_spiceEmptyValidator;
     wxIntegerValidator<int>                   m_posIntValidator;
+    std::set<wxString>                        m_fftInputSignals;
 };
 
 #endif /* DIALOG_SIM_COMMAND_H */

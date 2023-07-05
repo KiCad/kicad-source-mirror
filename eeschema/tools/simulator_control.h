@@ -30,6 +30,7 @@
 class SIMULATOR_FRAME;
 class NGSPICE_CIRCUIT_MODEL;
 class SPICE_SIMULATOR;
+class SIM_PLOT_PANEL;
 
 
 /**
@@ -83,6 +84,8 @@ private:
      * Return the default path to be used in file browser dialog.
      */
     wxString getDefaultPath();
+
+    SIM_PLOT_PANEL* GetCurrentPlotPanel();
 
     ///< Set up handlers for various events.
     void setTransitions() override;

@@ -54,18 +54,19 @@ wxString SPICE_SIMULATOR::TypeToName( SIM_TYPE aType, bool aShortName )
 {
     switch( aType )
     {
-    case ST_OP:          return aShortName ? wxString( wxT( "OP" ) )    : _( "Operating Point" );
-    case ST_AC:          return aShortName ? wxString( wxT( "AC" ) )    : _( "AC" );
-    case ST_DC:          return aShortName ? wxString( wxT( "DC" ) )    : _( "DC Sweep" );
-    case ST_TRANSIENT:   return aShortName ? wxString( wxT( "TRAN" ) )  : _( "Transient" );
-    case ST_DISTORTION:  return aShortName ? wxString( wxT( "DISTO" ) ) : _( "Distortion" );
-    case ST_NOISE:       return aShortName ? wxString( wxT( "NOISE" ) ) : _( "Noise" );
-    case ST_POLE_ZERO:   return aShortName ? wxString( wxT( "PZ" ) )    : _( "Pole-zero" );
-    case ST_SENSITIVITY: return aShortName ? wxString( wxT( "SENS" ) )  : _( "Sensitivity" );
-    case ST_TRANS_FUNC:  return aShortName ? wxString( wxT( "TF" ) )    : _( "Transfer function" );
-    case ST_S_PARAM:     return aShortName ? wxString( wxT( "SP" ) )    : _( "S-Parameters" );
+    case ST_OP:      return aShortName ? wxString( wxT( "OP" ) )    : _( "DC Operating Point" );
+    case ST_AC:      return aShortName ? wxString( wxT( "AC" ) )    : _( "Small-Signal Analysis" );
+    case ST_DC:      return aShortName ? wxString( wxT( "DC" ) )    : _( "DC Sweep Analysis" );
+    case ST_TRAN:    return aShortName ? wxString( wxT( "TRAN" ) )  : _( "Transient Analysis" );
+    case ST_DISTO:   return aShortName ? wxString( wxT( "DISTO" ) ) : _( "Small-Signal Distortion Analysis" );
+    case ST_NOISE:   return aShortName ? wxString( wxT( "NOISE" ) ) : _( "Noise Analysis" );
+    case ST_PZ:      return aShortName ? wxString( wxT( "PZ" ) )    : _( "Pole-Zero Analysis" );
+    case ST_SENS:    return aShortName ? wxString( wxT( "SENS" ) )  : _( "Sensitivity Analysis" );
+    case ST_TF:      return aShortName ? wxString( wxT( "TF" ) )    : _( "Transfer Function Analysis" );
+    case ST_SP:      return aShortName ? wxString( wxT( "SP" ) )    : _( "S-Parameter Analysis" );
+    case ST_FFT:     return aShortName ? wxString( wxT( "FFT" ) )   : _( "Frequency Content Analysis" );
     default:
-    case ST_UNKNOWN:     return aShortName ? wxString( wxT( "??" ) )    : _( "Unknown" );
+    case ST_UNKNOWN: return aShortName ? wxString( wxT( "??" ) )    : _( "Unknown" );
     }
 }
 

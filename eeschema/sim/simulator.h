@@ -58,7 +58,8 @@ public:
      *
      * @return True in case of success, false otherwise.
      */
-    virtual bool Attach( const std::shared_ptr<SIMULATION_MODEL>& aModel, REPORTER& aReporter )
+    virtual bool Attach( const std::shared_ptr<SIMULATION_MODEL>& aModel,
+                         const wxString& aSimCommand, unsigned aSimOptions, REPORTER& aReporter )
     {
         m_simModel = aModel;
         return true;

@@ -26,8 +26,8 @@
 #ifndef __SIM_PLOT_PANEL_BASE_H
 #define __SIM_PLOT_PANEL_BASE_H
 
-#include "sim_types.h"
-#include "ngspice_circuit_model.h"
+#include <sim/sim_types.h>
+#include <sim/ngspice_circuit_model.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
@@ -37,9 +37,7 @@ class SIM_PLOT_PANEL_BASE : public wxWindow
 {
 public:
     SIM_PLOT_PANEL_BASE();
-    SIM_PLOT_PANEL_BASE( const wxString& aCommand, int aOptions, wxWindow* parent, wxWindowID id,
-                         const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-                         long style = 0, const wxString& name = wxPanelNameStr );
+    SIM_PLOT_PANEL_BASE( const wxString& aSimCommand, unsigned aSimOptions, wxWindow* parent );
     virtual ~SIM_PLOT_PANEL_BASE();
 
     static bool IsPlottable( SIM_TYPE aSimType );
@@ -49,29 +47,29 @@ public:
     SIM_TYPE GetSimType() const;
 
     const wxString& GetSimCommand() const { return m_simCommand; }
-    void SetSimCommand( const wxString& aSimCommand )
-    {
-        wxCHECK_RET( GetSimType() == NGSPICE_CIRCUIT_MODEL::CommandToSimType( aSimCommand ),
-                     "Cannot change the type of simulation of the existing plot panel" );
-
-        m_simCommand = aSimCommand;
-    }
+    void SetSimCommand( const wxString& aSimCommand ) { m_simCommand = aSimCommand; }
 
     int GetSimOptions() const { return m_simOptions; }
     void SetSimOptions( int aOptions ) { m_simOptions = aOptions; }
 
+    wxString GetLastSchTextSimCommand() const { return m_lastSchTextSimCommand; }
+    void SetLastSchTextSimCommand( const wxString& aCmd ) { m_lastSchTextSimCommand = aCmd; }
+
+    const wxString& GetSpicePlotName() const { return m_spicePlotName; }
+    void SetSpicePlotName( const wxString& aPlotName ) { m_spicePlotName = aPlotName; }
+
 private:
     wxString m_simCommand;
-    int      m_simOptions;
+    unsigned m_simOptions;
+    wxString m_lastSchTextSimCommand;
+    wxString m_spicePlotName;
 };
 
 
 class SIM_NOPLOT_PANEL : public SIM_PLOT_PANEL_BASE
 {
 public:
-    SIM_NOPLOT_PANEL( const wxString& aCommand, int aOptions, wxWindow* parent, wxWindowID id,
-                      const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-                      long style = 0, const wxString& name = wxPanelNameStr );
+    SIM_NOPLOT_PANEL( const wxString& aSimCommand, unsigned aSimOptions, wxWindow* parent );
 
     virtual ~SIM_NOPLOT_PANEL();
 

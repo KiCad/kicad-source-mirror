@@ -458,6 +458,7 @@ set( BMAPS_MID
     shape_3d_back
     sheetset
     simulator
+    sim_add_plot
     sim_command
     sim_run
     sim_stop

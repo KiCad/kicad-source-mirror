@@ -1060,10 +1060,7 @@ class WXDLLIMPEXP_MATHPLOT mpWindow : public wxWindow
 {
 public:
     mpWindow();
-    mpWindow( wxWindow* parent, wxWindowID id,
-              const wxPoint& pos = wxDefaultPosition,
-              const wxSize& size = wxDefaultSize,
-              long flags = 0 );
+    mpWindow( wxWindow* parent, wxWindowID id );
     ~mpWindow();
 
     /** Get reference to context menu of the plot canvas.

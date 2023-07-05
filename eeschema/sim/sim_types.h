@@ -33,14 +33,16 @@ enum SIM_TYPE
     ST_UNKNOWN,
     ST_AC,
     ST_DC,
-    ST_DISTORTION,
+    ST_DISTO,
     ST_NOISE,
     ST_OP,
-    ST_POLE_ZERO,
-    ST_SENSITIVITY,
-    ST_TRANS_FUNC,
-    ST_TRANSIENT,
-    ST_S_PARAM
+    ST_PZ,
+    ST_SENS,
+    ST_TF,
+    ST_TRAN,
+    ST_SP,
+    ST_FFT,
+    ST_LAST
 };
 
 ///< Possible trace types

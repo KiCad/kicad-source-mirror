@@ -37,12 +37,11 @@ SIM_PLOT_PANEL_BASE::SIM_PLOT_PANEL_BASE() :
 }
 
 
-SIM_PLOT_PANEL_BASE::SIM_PLOT_PANEL_BASE( const wxString& aCommand, int aOptions, wxWindow* parent,
-                                          wxWindowID id, const wxPoint& pos, const wxSize& size,
-                                          long style, const wxString& name ) :
-        wxWindow( parent, id, pos, size, style, name ),
-        m_simCommand( aCommand ),
-        m_simOptions( aOptions )
+SIM_PLOT_PANEL_BASE::SIM_PLOT_PANEL_BASE( const wxString& aSimCommand, unsigned aSimOptions,
+                                          wxWindow* parent ) :
+        wxWindow( parent, wxID_ANY ),
+        m_simCommand( aSimCommand ),
+        m_simOptions( aSimOptions )
 {
 }
 
@@ -58,9 +57,10 @@ bool SIM_PLOT_PANEL_BASE::IsPlottable( SIM_TYPE aSimType )
     {
     case ST_AC:
     case ST_DC:
-    case ST_S_PARAM:
-    case ST_TRANSIENT:
+    case ST_SP:
+    case ST_TRAN:
     case ST_NOISE:
+    case ST_FFT:
         return true;
 
     default:
@@ -75,10 +75,9 @@ SIM_TYPE SIM_PLOT_PANEL_BASE::GetSimType() const
 }
 
 
-SIM_NOPLOT_PANEL::SIM_NOPLOT_PANEL( const wxString& aCommand, int aOptions, wxWindow* parent,
-                                    wxWindowID id, const wxPoint& pos, const wxSize& size,
-                                    long style, const wxString& name ) :
-        SIM_PLOT_PANEL_BASE( aCommand, aOptions, parent, id, pos, size, style, name )
+SIM_NOPLOT_PANEL::SIM_NOPLOT_PANEL( const wxString& aSimCommand, unsigned aSimOptions,
+                                    wxWindow* parent ) :
+        SIM_PLOT_PANEL_BASE( aSimCommand, aSimOptions, parent )
 {
     m_sizer = new wxBoxSizer( wxVERTICAL );
     m_sizer->Add( 0, 1, 1, wxEXPAND, 5 );

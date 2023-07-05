@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-88b0f50)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -12,24 +12,26 @@
 #include <wx/intl.h>
 #include "dialog_shim.h"
 #include <wx/string.h>
-#include <wx/radiobox.h>
+#include <wx/stattext.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/stattext.h>
+#include <wx/choice.h>
+#include <wx/sizer.h>
+#include <wx/radiobox.h>
 #include <wx/textctrl.h>
 #include <wx/valtext.h>
-#include <wx/sizer.h>
 #include <wx/panel.h>
+#include <wx/checkbox.h>
+#include <wx/gbsizer.h>
+#include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/checkbox.h>
-#include <wx/choice.h>
-#include <wx/gbsizer.h>
-#include <wx/button.h>
-#include <wx/notebook.h>
+#include <wx/srchctrl.h>
+#include <wx/checklst.h>
+#include <wx/simplebook.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -43,7 +45,10 @@ class DIALOG_SIM_COMMAND_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		wxNotebook* m_simPages;
+		wxBoxSizer* m_commandTypeSizer;
+		wxStaticText* m_commandTypeLabel;
+		wxChoice* m_commandType;
+		wxSimplebook* m_simPages;
 		wxPanel* m_pgAC;
 		wxRadioBox* m_acScale;
 		wxStaticText* m_staticText1;
@@ -54,17 +59,6 @@ class DIALOG_SIM_COMMAND_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText3;
 		wxTextCtrl* m_acFreqStop;
 		wxStaticText* m_staticText110;
-		wxPanel* m_pgSP;
-		wxRadioBox* m_spScale;
-		wxStaticText* m_staticText12;
-		wxTextCtrl* m_spPointsNumber;
-		wxStaticText* m_staticText22;
-		wxTextCtrl* m_spFreqStart;
-		wxStaticText* m_staticText191;
-		wxStaticText* m_staticText32;
-		wxTextCtrl* m_spFreqStop;
-		wxStaticText* m_staticText1101;
-		wxCheckBox* m_spDoNoise;
 		wxPanel* m_pgDC;
 		wxCheckBox* m_dcEnable2;
 		wxChoice* m_dcSourceType1;
@@ -90,8 +84,29 @@ class DIALOG_SIM_COMMAND_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_dcIncr2;
 		wxStaticText* m_src2DCStepUnit;
 		wxButton* m_swapDCSources;
-		wxPanel* m_pgDistortion;
-		wxPanel* m_pgNoise;
+		wxPanel* m_pgOP;
+		wxPanel* m_pgTRAN;
+		wxStaticText* m_timeLabel;
+		wxTextCtrl* m_transStep;
+		wxStaticText* m_timeUnits;
+		wxStaticText* m_transFinalLabel;
+		wxTextCtrl* m_transFinal;
+		wxStaticText* m_transFinalUnits;
+		wxStaticText* m_transInitialLabel;
+		wxTextCtrl* m_transInitial;
+		wxStaticText* m_transInitialUnits;
+		wxStaticText* m_transInitialHelp;
+		wxStaticText* m_maxStepLabel;
+		wxTextCtrl* m_transMaxStep;
+		wxStaticText* m_transMaxStepUnit;
+		wxStaticText* m_transMaxHelp;
+		wxCheckBox* m_useInitialConditions;
+		wxPanel* m_pgFFT;
+		wxStaticText* m_signalsLabel;
+		wxSearchCtrl* m_inputSignalsFilter;
+		wxCheckListBox* m_inputSignalsList;
+		wxCheckBox* m_linearize;
+		wxPanel* m_pgNOISE;
 		wxStaticText* m_staticText14;
 		wxChoice* m_noiseMeas;
 		wxStaticText* m_staticText15;
@@ -109,27 +124,17 @@ class DIALOG_SIM_COMMAND_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_noiseFreqStop;
 		wxStaticText* m_noiseFreqStopUnits;
 		wxCheckBox* m_saveAllNoise;
-		wxPanel* m_pgOP;
-		wxStaticText* m_staticText13;
-		wxPanel* m_pgPoleZero;
-		wxPanel* m_pgSensitivity;
-		wxPanel* m_pgTransferFunction;
-		wxPanel* m_pgTransient;
-		wxStaticText* m_timeLabel;
-		wxTextCtrl* m_transStep;
-		wxStaticText* m_timeUnits;
-		wxStaticText* m_transFinalLabel;
-		wxTextCtrl* m_transFinal;
-		wxStaticText* m_transFinalUnits;
-		wxStaticText* m_transInitialLabel;
-		wxTextCtrl* m_transInitial;
-		wxStaticText* m_transInitialUnits;
-		wxStaticText* m_transInitialHelp;
-		wxStaticText* m_maxStepLabel;
-		wxTextCtrl* m_transMaxStep;
-		wxStaticText* m_transMaxStepUnit;
-		wxStaticText* m_transMaxHelp;
-		wxCheckBox* m_useInitialConditions;
+		wxPanel* m_pgSP;
+		wxRadioBox* m_spScale;
+		wxStaticText* m_staticText12;
+		wxTextCtrl* m_spPointsNumber;
+		wxStaticText* m_staticText22;
+		wxTextCtrl* m_spFreqStart;
+		wxStaticText* m_staticText191;
+		wxStaticText* m_staticText32;
+		wxTextCtrl* m_spFreqStop;
+		wxStaticText* m_staticText1101;
+		wxCheckBox* m_spDoNoise;
 		wxPanel* m_pgCustom;
 		wxStaticText* m_staticText18;
 		wxTextCtrl* m_customTxt;
@@ -146,10 +151,13 @@ class DIALOG_SIM_COMMAND_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, override them in your derived class
 		virtual void onInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
+		virtual void OnCommandType( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onDCEnableSecondSource( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onDCSource1Selected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onDCSource2Selected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSwapDCSources( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnFilterMouseMoved( wxMouseEvent& event ) { event.Skip(); }
+		virtual void OnFilterText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onLoadDirectives( wxCommandEvent& event ) { event.Skip(); }
 
 

@@ -67,6 +67,7 @@ class SIMULATOR_PANEL_BASE : public wxPanel
 		// Virtual event handlers, override them in your derived class
 		virtual void onPlotDragged( wxAuiNotebookEvent& event ) { event.Skip(); }
 		virtual void onPlotChanged( wxAuiNotebookEvent& event ) { event.Skip(); }
+		virtual void onPlotChanging( wxAuiNotebookEvent& event ) { event.Skip(); }
 		virtual void onPlotClose( wxAuiNotebookEvent& event ) { event.Skip(); }
 		virtual void onPlotClosed( wxAuiNotebookEvent& event ) { event.Skip(); }
 		virtual void OnFilterMouseMoved( wxMouseEvent& event ) { event.Skip(); }

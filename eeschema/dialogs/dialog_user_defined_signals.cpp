@@ -143,7 +143,7 @@ void DIALOG_USER_DEFINED_SIGNALS::onScintillaCharAdded( wxStyledTextEvent &aEven
     wxStyledTextCtrl* textCtrl = aTricks->Scintilla();
     wxArrayString     tokens;
 
-    for( const wxString& signal : m_frame->Signals() )
+    for( const wxString& signal : m_frame->SimPlotVectors() )
         tokens.push_back( signal );
 
     tokens.push_back( wxS( "sqrt(x)" ) );

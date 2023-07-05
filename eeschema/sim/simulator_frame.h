@@ -77,7 +77,7 @@ public:
      * Check and load the current netlist into the simulator.
      * @return true if document is fully annotated and netlist was loaded successfully.
      */
-    bool LoadSimulator();
+    bool LoadSimulator( const wxString& aSimCommand, unsigned aSimOptions );
 
     void StartSimulation();
 
@@ -87,7 +87,7 @@ public:
      * @param aSimCommand is requested simulation command.
      * @param aSimOptions netlisting options
      */
-    void NewPlotPanel( const wxString& aSimCommand, int aSimOptions );
+    void NewPlotPanel( const wxString& aSimCommand, unsigned aSimOptions );
 
     /**
      * Shows a dialog for editing the current tab's simulation command, or creating a new tab
@@ -96,7 +96,12 @@ public:
     bool EditSimCommand();
 
     /**
-     * @return the list of signals in the current simulation results.
+     * @return the list of vectors (signals) in the current simulation results.
+     */
+    const std::vector<wxString> SimPlotVectors();
+
+    /**
+     * @return the list of schematic signals + any user defined signals.
      */
     const std::vector<wxString> Signals();
 
@@ -127,7 +132,7 @@ public:
     /**
      * Return the current tab (or NULL if there is none).
      */
-    SIM_PLOT_PANEL* GetCurrentPlot() const;
+    SIM_PLOT_PANEL_BASE* GetCurrentPlotPanel() const;
 
     /**
      * Toggle dark-mode of the plot tabs.
@@ -187,7 +192,7 @@ private:
     bool canCloseWindow( wxCloseEvent& aEvent ) override;
     void doCloseWindow() override;
 
-    void onSimUpdate( wxCommandEvent& aEvent );
+    void onUpdateSim( wxCommandEvent& aEvent );
     void onSimReport( wxCommandEvent& aEvent );
     void onSimStarted( wxCommandEvent& aEvent );
     void onSimFinished( wxCommandEvent& aEvent );
@@ -203,7 +208,6 @@ private:
     SIM_THREAD_REPORTER*                   m_reporter;
     std::shared_ptr<NGSPICE_CIRCUIT_MODEL> m_circuitModel;
 
-    SIM_PLOT_PANEL_BASE*                   m_lastSimPlot;
     bool                                   m_simFinished;
     bool                                   m_workbookModified;
 };

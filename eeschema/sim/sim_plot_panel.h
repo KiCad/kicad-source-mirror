@@ -194,9 +194,7 @@ protected:
 class SIM_PLOT_PANEL : public SIM_PLOT_PANEL_BASE
 {
 public:
-    SIM_PLOT_PANEL( const wxString& aCommand, int aOptions, wxWindow* parent, wxWindowID id,
-                    const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-                    long style = 0, const wxString& name = wxPanelNameStr );
+    SIM_PLOT_PANEL( const wxString& aSimCommand, unsigned aSimOptions, wxWindow* parent );
 
     virtual ~SIM_PLOT_PANEL();
 
@@ -239,10 +237,18 @@ public:
 
     void ShowGrid( bool aEnable )
     {
-        m_axis_x->SetTicks( !aEnable );
-        m_axis_y1->SetTicks( !aEnable );
-        m_axis_y2->SetTicks( !aEnable );
-        m_axis_y3->SetTicks( !aEnable );
+        if( m_axis_x )
+            m_axis_x->SetTicks( !aEnable );
+
+        if( m_axis_y1 )
+            m_axis_y1->SetTicks( !aEnable );
+
+        if( m_axis_y2 )
+            m_axis_y2->SetTicks( !aEnable );
+
+        if( m_axis_y3 )
+            m_axis_y3->SetTicks( !aEnable );
+
         m_plotWin->UpdateAll();
     }
 
@@ -320,6 +326,8 @@ public:
     bool DeleteTrace( const wxString& aVectorName, int aTraceType );
     void DeleteTrace( TRACE* aTrace );
 
+    std::vector<std::pair<wxString, wxString>>& Measurements() { return m_measurements; }
+
 private:
     wxString getTraceId( const wxString& aVectorName, int aType ) const
     {
@@ -349,6 +357,9 @@ private:
     mpInfoLegend*              m_legend;
 
     bool                       m_dotted_cp;
+
+    // Measurements (and their format strings)
+    std::vector<std::pair<wxString, wxString>> m_measurements;
 };
 
 wxDECLARE_EVENT( EVT_SIM_CURSOR_UPDATE, wxCommandEvent );

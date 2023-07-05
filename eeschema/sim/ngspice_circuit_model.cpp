@@ -84,13 +84,7 @@ wxString NGSPICE_CIRCUIT_MODEL::GetSchTextSimCommand()
             simCmd += wxString::Format( wxT( "%s\r\n" ), directive );
     }
 
-    return simCmd;
-}
-
-
-SIM_TYPE NGSPICE_CIRCUIT_MODEL::GetSimType()
-{
-    return CommandToSimType( GetSimCommand() );
+    return simCmd.Trim();
 }
 
 
@@ -98,28 +92,18 @@ SIM_TYPE NGSPICE_CIRCUIT_MODEL::CommandToSimType( const wxString& aCmd )
 {
     wxString cmd = aCmd.Lower().Trim();
 
-    if( cmd.StartsWith( wxT( ".ac" ) ) )
-        return ST_AC;
-    else if( cmd.StartsWith( wxT( ".dc" ) ) )
-        return ST_DC;
-    else if( cmd.StartsWith( wxT( ".tran" ) ) )
-        return ST_TRANSIENT;
-    else if( cmd == wxT( ".op" ) )
-        return ST_OP;
-    else if( cmd.StartsWith( wxT( ".disto" ) ) )
-        return ST_DISTORTION;
-    else if( cmd.StartsWith( wxT( ".noise" ) ) )
-        return ST_NOISE;
-    else if( cmd.StartsWith( wxT( ".pz" ) ) )
-        return ST_POLE_ZERO;
-    else if( cmd.StartsWith( wxT( ".sens" ) ) )
-        return ST_SENSITIVITY;
-    else if( cmd.StartsWith( wxT( ".sp" ) ) )
-        return ST_S_PARAM;
-    else if( cmd.StartsWith( wxT( ".tf" ) ) )
-        return ST_TRANS_FUNC;
-    else
-        return ST_UNKNOWN;
+    if( cmd == wxT( ".op" ) )                    return ST_OP;
+    else if( cmd.StartsWith( wxT( ".ac" ) ) )    return ST_AC;
+    else if( cmd.StartsWith( wxT( ".dc" ) ) )    return ST_DC;
+    else if( cmd.StartsWith( wxT( ".tran" ) ) )  return ST_TRAN;
+    else if( cmd.StartsWith( wxT( ".disto" ) ) ) return ST_DISTO;
+    else if( cmd.StartsWith( wxT( ".noise" ) ) ) return ST_NOISE;
+    else if( cmd.StartsWith( wxT( ".pz" ) ) )    return ST_PZ;
+    else if( cmd.StartsWith( wxT( ".sens" ) ) )  return ST_SENS;
+    else if( cmd.StartsWith( wxT( ".sp" ) ) )    return ST_SP;
+    else if( cmd.StartsWith( wxT( ".tf" ) ) )    return ST_TF;
+    else if( cmd.StartsWith( wxT( "fft" ) ) )    return ST_FFT;
+    else                                         return ST_UNKNOWN;
 }
 
 
@@ -211,14 +195,14 @@ bool NGSPICE_CIRCUIT_MODEL::ParseNoiseCommand( const wxString& aCmd, wxString* a
 }
 
 
-void NGSPICE_CIRCUIT_MODEL::WriteDirectives( OUTPUTFORMATTER& aFormatter,
-                                             unsigned         aNetlistOptions ) const
+void NGSPICE_CIRCUIT_MODEL::WriteDirectives( const wxString& aSimCommand, unsigned aSimOptions,
+                                             OUTPUTFORMATTER& aFormatter ) const
 {
-    if( GetSimCommandOverride().IsEmpty() )
-        aNetlistOptions |= OPTION_SIM_COMMAND;
+    if( aSimCommand.IsEmpty() )
+        aSimOptions |= OPTION_SIM_COMMAND;
 
-    NETLIST_EXPORTER_SPICE::WriteDirectives( aFormatter, aNetlistOptions );
+    NETLIST_EXPORTER_SPICE::WriteDirectives( aSimCommand, aSimOptions, aFormatter );
 
-    if( !GetSimCommandOverride().IsEmpty() )
-        aFormatter.Print( 0, "%s\n", TO_UTF8( GetSimCommandOverride() ) );
+    if( !aSimCommand.IsEmpty() )
+        aFormatter.Print( 0, "%s\n", TO_UTF8( aSimCommand ) );
 }

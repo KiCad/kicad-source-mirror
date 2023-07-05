@@ -1676,12 +1676,8 @@ mpWindow::mpWindow() :
     }
 }
 
-mpWindow::mpWindow( wxWindow* parent,
-        wxWindowID id,
-        const wxPoint& pos,
-        const wxSize& size,
-        long flag )
-    : wxWindow( parent, id, pos, size, flag, wxT( "mathplot" ) )
+mpWindow::mpWindow( wxWindow* parent, wxWindowID id ) :
+        wxWindow( parent, id, wxDefaultPosition, wxDefaultSize, 0, wxT( "mathplot" ) )
 {
     m_zooming   = false;
     m_scaleX    = m_scaleY = 1.0;

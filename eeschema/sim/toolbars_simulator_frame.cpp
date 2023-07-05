@@ -49,6 +49,7 @@ void SIMULATOR_FRAME::ReCreateHToolbar()
     m_toolBar->Add( EE_ACTIONS::saveWorkbook );
 
     m_toolBar->AddScaledSeparator( this );
+    m_toolBar->Add( EE_ACTIONS::newPlot );
     m_toolBar->Add( EE_ACTIONS::simCommand );
 
     m_toolBar->AddScaledSeparator( this );
@@ -134,6 +135,7 @@ void SIMULATOR_FRAME::doReCreateMenuBar()
     simulationMenu->Add( EE_ACTIONS::simTune );
 
     simulationMenu->AppendSeparator();
+    simulationMenu->Add( EE_ACTIONS::editUserDefinedSignals );
     simulationMenu->Add( EE_ACTIONS::showNetlist );
 
 

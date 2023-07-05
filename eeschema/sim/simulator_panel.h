@@ -79,7 +79,9 @@ public:
      * @param aSimOptions netlisting options
      * @return The new plot panel.
      */
-    SIM_PLOT_PANEL_BASE* NewPlotPanel( const wxString& aSimCommand, int aSimOptions );
+    SIM_PLOT_PANEL_BASE* NewPlotPanel( const wxString& aSimCommand, unsigned aSimOptions );
+
+    std::vector<wxString> SimPlotVectors() const;
 
     std::vector<wxString> Signals() const;
 
@@ -194,29 +196,30 @@ public:
     /**
      * Return the currently opened plot panel (or NULL if there is none).
      */
-    SIM_PLOT_PANEL_BASE* GetCurrentPlotWindow() const
+    SIM_PLOT_PANEL_BASE* GetCurrentPlotPanel() const
     {
         return dynamic_cast<SIM_PLOT_PANEL_BASE*>( m_plotNotebook->GetCurrentPage() );
     }
 
-    /**
-     * Return the current tab (or NULL if there is none).
-     */
-    SIM_PLOT_PANEL* GetCurrentPlot() const
+    SIM_PLOT_PANEL_BASE* GetPlotPanel( SIM_TYPE aType ) const
     {
-        SIM_PLOT_PANEL_BASE* plotWindow = GetCurrentPlotWindow();
+        for( int ii = 0; ii < (int) m_plotNotebook->GetPageCount(); ++ii )
+        {
+            auto* candidate = dynamic_cast<SIM_PLOT_PANEL_BASE*>( m_plotNotebook->GetPage( ii ) );
 
-        if( !plotWindow )
-            return nullptr;
+            if( candidate && candidate->GetSimType() == aType )
+                return candidate;
+        }
 
-        return plotWindow->GetSimType() == ST_UNKNOWN ? nullptr
-                                                      : dynamic_cast<SIM_PLOT_PANEL*>( plotWindow );
+        return nullptr;
     }
 
     int GetPlotIndex( SIM_PLOT_PANEL_BASE* aPlot ) const
     {
         return m_plotNotebook->GetPageIndex( aPlot );
     }
+
+    void OnPlotSettingsChanged();
 
     void OnSimUpdate();
     void OnSimReport( const wxString& aMsg );
@@ -226,7 +229,8 @@ private:
     /**
      * Get the simulator output vector name for a given signal name and type.
      */
-    wxString vectorNameFromSignalName( const wxString& aSignalName, int* aTraceType );
+    wxString vectorNameFromSignalName( SIM_PLOT_PANEL* aPlotPanel, const wxString& aSignalName,
+                                       int* aTraceType );
 
     /**
      * Update a trace in a particular SIM_PLOT_PANEL.  If the panel does not contain the given
@@ -266,6 +270,11 @@ private:
     void applyUserDefinedSignals();
 
     /**
+     * Rebuild the measurements grid for the current plot.
+     */
+    void rebuildMeasurementsGrid();
+
+    /**
      * Apply component values specified using tuner sliders to the current netlist.
      */
     void applyTuners();
@@ -286,6 +295,7 @@ private:
     // Event handlers
     void onPlotClose( wxAuiNotebookEvent& event ) override;
     void onPlotClosed( wxAuiNotebookEvent& event ) override;
+    void onPlotChanging( wxAuiNotebookEvent& event ) override;
     void onPlotChanged( wxAuiNotebookEvent& event ) override;
     void onPlotDragged( wxAuiNotebookEvent& event ) override;
 

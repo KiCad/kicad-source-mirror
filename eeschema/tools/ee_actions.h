@@ -277,7 +277,6 @@ public:
     static TOOL_ACTION runSimulation;
     static TOOL_ACTION stopSimulation;
     static TOOL_ACTION editUserDefinedSignals;
-    static TOOL_ACTION showFFT;
     static TOOL_ACTION showNetlist;
 
     // Net highlighting

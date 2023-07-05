@@ -48,8 +48,7 @@ class NGSPICE_CIRCUIT_MODEL : public NETLIST_EXPORTER_SPICE, public SIMULATION_M
 {
 public:
     NGSPICE_CIRCUIT_MODEL( SCHEMATIC_IFACE* aSchematic, wxWindow* aDialogParent = nullptr ) :
-            NETLIST_EXPORTER_SPICE( aSchematic, aDialogParent ),
-            m_options( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS )
+            NETLIST_EXPORTER_SPICE( aSchematic, aDialogParent )
     {}
 
     virtual ~NGSPICE_CIRCUIT_MODEL() {}
@@ -64,59 +63,17 @@ public:
      */
     SIM_TRACE_TYPE VectorToSignal( const std::string& aVector, wxString& aSignal ) const;
 
-    void SetSimOptions( int aOptions ) { m_options = aOptions; }
-    int  GetSimOptions() const { return m_options; }
-
-    bool GetNetlist( OUTPUTFORMATTER* aFormatter, REPORTER& aReporter )
+    bool GetNetlist( const wxString& aSimCommand, unsigned aSimOptions,
+                     OUTPUTFORMATTER* aFormatter, REPORTER& aReporter )
     {
-        return NGSPICE_CIRCUIT_MODEL::DoWriteNetlist( *aFormatter, m_options, aReporter );
+        return NGSPICE_CIRCUIT_MODEL::DoWriteNetlist( aSimCommand, aSimOptions, *aFormatter,
+                                                      aReporter );
     }
-
-    /**
-     * Override the simulation command directive.
-     */
-    void SetSimCommandOverride( const wxString& aCmd )
-    {
-        if( aCmd != m_simCommand )
-        {
-            m_lastSchTextSimCommand = GetSchTextSimCommand();
-            m_simCommand = aCmd;
-        }
-    }
-
-    /**
-     * Return the command directive that is in use (either from the sheet or from m_simCommand)
-     * @return
-     */
-    wxString GetSimCommand()
-    {
-        return m_simCommand.IsEmpty() ? GetSchTextSimCommand() : m_simCommand;
-    }
-
-    /**
-     * Return the simulation command directive if stored separately (not as a sheet directive).
-     */
-    wxString GetSimCommandOverride() const { return m_simCommand; }
-
-    /**
-     * Return simulation type basing on the simulation command directives.
-     *
-     * Simulation directives set using SetSimCommandOverride() have priority over the ones placed in
-     * schematic sheets.
-     */
-    SIM_TYPE GetSimType();
 
     /**
      * Return simulation command directives placed in schematic sheets (if any).
      */
     wxString GetSchTextSimCommand();
-
-    /**
-     * Return the sim command present as a sheet directive when the sim command override was last
-     * updated.
-     * @return
-     */
-    wxString GetLastSchTextSimCommand() const { return m_lastSchTextSimCommand; }
 
     /**
      * Parse a two-source .dc command directive into its symbols.
@@ -145,16 +102,8 @@ public:
     static SIM_TYPE CommandToSimType( const wxString& aCmd );
 
 protected:
-    void WriteDirectives( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions ) const override;
-
-private:
-    ///< Custom simulation command (has priority over the schematic sheet simulation commands)
-    wxString m_simCommand;
-
-    ///< Value of schematic sheet simulation command when override was last updated
-    wxString m_lastSchTextSimCommand;
-
-    int      m_options;
+    void WriteDirectives( const wxString& aSimCommand, unsigned aSimOptions,
+                          OUTPUTFORMATTER& aFormatter ) const override;
 };
 
 #endif /* NGSPICE_CIRCUIT_MODEL_H */

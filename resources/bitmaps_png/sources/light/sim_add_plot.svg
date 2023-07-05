@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="sim_add_plot.svg"
+   inkscape:version="1.2.1 (9c6d41e, 2022-07-14)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1728"
+     inkscape:window-height="987"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="39.543586"
+     inkscape:cx="12.03735"
+     inkscape:cy="15.286929"
+     inkscape:window-x="0"
+     inkscape:window-y="38"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>simulator</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs159987">
+    <style
+       id="style159985">.cls-1{fill:#b9b9b9;}.cls-2,.cls-3{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.25px;}.cls-2{stroke:#bf2641;}.cls-3{stroke:#1a81c4;}</style>
+  </defs>
+  <title
+     id="title159989">simulator</title>
+  <circle
+     style="fill:#ffffff;fill-opacity:1;stroke:#545454;stroke-width:1.37198;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="path841"
+     cx="11.987356"
+     cy="11.987356"
+     r="10.289825" />
+  <path
+     style="fill:none;stroke:#545454;stroke-width:0.953986;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 2.251549,12.5 H 19.543938"
+     id="path843"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#545454;stroke-width:0.898072;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 5.5,16.008526 V 4.7248423"
+     id="path845"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#1a81c4;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 3.5,14.5 c 0,0 1.3518787,-7 2.8518787,-7 1.5,0 1.6002744,8.070806 3.0698938,8.060622 C 11.421725,15.546763 10.617219,4.5 12.617219,4.5 c 2,0 1.314653,14.512198 2.814653,14.512198 1.201824,0 1.002258,-3.266618 1.988097,-4.624305 C 17.831854,13.820649 18.5,13 19,13"
+     id="path865"
+     sodipodi:nodetypes="cssssac" />
+  <ellipse
+     style="fill:none;fill-opacity:1;stroke:#545454;stroke-width:1.37119;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="circle851"
+     cx="12"
+     cy="12.012644"
+     rx="10.277575"
+     ry="10.290219" />
+  <g
+     id="g856"
+     style="display:inline"
+     transform="translate(-0.00609355,0.0252947)">
+    <circle
+       class="cls-5"
+       cx="16.800095"
+       cy="16.793707"
+       id="circle27864"
+       style="fill:#bf2641;stroke-width:0.971428"
+       r="6.8000002" />
+    <line
+       class="cls-6"
+       x1="17.094093"
+       y1="13.593705"
+       x2="17.094093"
+       y2="20.593706"
+       id="line27866"
+       style="fill:none;stroke:#f5f5f5;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none" />
+    <line
+       class="cls-6"
+       x1="20.594093"
+       y1="17.093706"
+       x2="13.594093"
+       y2="17.093706"
+       id="line27868"
+       style="fill:none;stroke:#f5f5f5;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none" />
+  </g>
+  <ellipse
+     style="fill:none;stroke:#ffffff;stroke-width:0.93712;stroke-dasharray:none;stroke-opacity:1"
+     id="path693"
+     cx="17.08"
+     cy="17.130001"
+     rx="6.8064399"
+     ry="6.8064404" />
+</svg>

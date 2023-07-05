@@ -62,13 +62,22 @@ void SIMULATOR_CONTROL::Reset( RESET_REASON aReason )
 
 int SIMULATOR_CONTROL::NewPlot( const TOOL_EVENT& aEvent )
 {
-    SIM_TYPE type = m_circuitModel->GetSimType();
+    DIALOG_SIM_COMMAND dlg( m_simulatorFrame, m_circuitModel, m_simulator->Settings() );
+    wxString           errors;
+    WX_STRING_REPORTER reporter( &errors );
 
-    if( SIM_PLOT_PANEL_BASE::IsPlottable( type ) )
+    if( !m_circuitModel->ReadSchematicAndLibraries( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS,
+                                                    reporter ) )
     {
-        m_simulatorFrame->NewPlotPanel( m_circuitModel->GetSimCommand(),
-                                        m_circuitModel->GetSimOptions() );
+        DisplayErrorMessage( m_simulatorFrame,
+                             _( "Errors during netlist generation.\n\n" ) + errors );
     }
+
+    dlg.SetSimCommand( wxS( "*" ) );
+    dlg.SetSimOptions( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS );
+
+    if( dlg.ShowModal() == wxID_OK )
+        m_simulatorFrame->NewPlotPanel( dlg.GetSimCommand(), dlg.GetSimOptions() );
 
     return 0;
 }
@@ -145,71 +154,77 @@ int SIMULATOR_CONTROL::SaveWorkbook( const TOOL_EVENT& aEvent )
 
 int SIMULATOR_CONTROL::ExportPlotAsPNG( const TOOL_EVENT& aEvent )
 {
-    if( !m_simulatorFrame->GetCurrentPlot() )
-        return -1;
+    if( SIM_PLOT_PANEL* plotPanel = GetCurrentPlotPanel() )
+    {
+        wxFileDialog saveDlg( m_simulatorFrame, _( "Save Plot as Image" ), "", "",
+                              PngFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
-    wxFileDialog saveDlg( m_simulatorFrame, _( "Save Plot as Image" ), "", "", PngFileWildcard(),
-                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+        if( saveDlg.ShowModal() == wxID_CANCEL )
+            return -1;
 
-    if( saveDlg.ShowModal() == wxID_CANCEL )
-        return -1;
-
-    m_simulatorFrame->GetCurrentPlot()->GetPlotWin()->SaveScreenshot( saveDlg.GetPath(),
-                                                                      wxBITMAP_TYPE_PNG );
+        plotPanel->GetPlotWin()->SaveScreenshot( saveDlg.GetPath(), wxBITMAP_TYPE_PNG );
+    }
 
     return 0;
 }
 
 
+SIM_PLOT_PANEL* SIMULATOR_CONTROL::GetCurrentPlotPanel()
+{
+    return dynamic_cast<SIM_PLOT_PANEL*>( m_simulatorFrame->GetCurrentPlotPanel() );
+}
+
+
 int SIMULATOR_CONTROL::ExportPlotAsCSV( const TOOL_EVENT& aEvent )
 {
-    if( !m_simulatorFrame->GetCurrentPlot() )
-        return -1;
-
-    const wxChar SEPARATOR = ';';
-
-    wxFileDialog saveDlg( m_simulatorFrame, _( "Save Plot Data" ), "", "", CsvFileWildcard(),
-                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
-
-    if( saveDlg.ShowModal() == wxID_CANCEL )
-        return -1;
-
-    wxFFile out( saveDlg.GetPath(), "wb" );
-
-    std::map<wxString, TRACE*> traces = m_simulatorFrame->GetCurrentPlot()->GetTraces();
-
-    if( traces.size() == 0 )
-        return -1;
-
-    SIM_TYPE simType = m_circuitModel->GetSimType();
-
-    std::size_t rowCount = traces.begin()->second->GetDataX().size();
-
-    // write column header names on the first row
-    wxString xAxisName( m_simulator->GetXAxis( simType ) );
-    out.Write( wxString::Format( wxT( "%s%c" ), xAxisName, SEPARATOR ) );
-
-    for( const auto& [name, trace] : traces )
-        out.Write( wxString::Format( wxT( "%s%c" ), name, SEPARATOR ) );
-
-    out.Write( wxS( "\r\n" ) );
-
-    // write each row's numerical value
-    for ( std::size_t curRow=0; curRow < rowCount; curRow++ )
+    if( SIM_PLOT_PANEL* plotPanel = GetCurrentPlotPanel() )
     {
-        double xAxisValue = traces.begin()->second->GetDataX().at( curRow );
-        out.Write( wxString::Format( wxT( "%g%c" ), xAxisValue, SEPARATOR ) );
+        const wxChar SEPARATOR = ';';
+
+        wxFileDialog saveDlg( m_simulatorFrame, _( "Save Plot Data" ), "", "", CsvFileWildcard(),
+                              wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+        if( saveDlg.ShowModal() == wxID_CANCEL )
+            return -1;
+
+        wxFFile out( saveDlg.GetPath(), "wb" );
+
+        std::map<wxString, TRACE*> traces = plotPanel->GetTraces();
+
+        if( traces.size() == 0 )
+            return -1;
+
+        SIM_TYPE simType = plotPanel->GetSimType();
+
+        std::size_t rowCount = traces.begin()->second->GetDataX().size();
+
+        // write column header names on the first row
+        wxString xAxisName( m_simulator->GetXAxis( simType ) );
+        out.Write( wxString::Format( wxT( "%s%c" ), xAxisName, SEPARATOR ) );
 
         for( const auto& [name, trace] : traces )
-        {
-            double yAxisValue = trace->GetDataY().at( curRow );
-            out.Write( wxString::Format( wxT( "%g%c" ), yAxisValue, SEPARATOR ) );
-        }
+            out.Write( wxString::Format( wxT( "%s%c" ), name, SEPARATOR ) );
 
         out.Write( wxS( "\r\n" ) );
+
+        // write each row's numerical value
+        for ( std::size_t curRow=0; curRow < rowCount; curRow++ )
+        {
+            double xAxisValue = traces.begin()->second->GetDataX().at( curRow );
+            out.Write( wxString::Format( wxT( "%g%c" ), xAxisValue, SEPARATOR ) );
+
+            for( const auto& [name, trace] : traces )
+            {
+                double yAxisValue = trace->GetDataY().at( curRow );
+                out.Write( wxString::Format( wxT( "%g%c" ), yAxisValue, SEPARATOR ) );
+            }
+
+            out.Write( wxS( "\r\n" ) );
+        }
+
+        out.Close();
     }
 
-    out.Close();
     return 0;
 }
 
@@ -223,14 +238,11 @@ int SIMULATOR_CONTROL::Close( const TOOL_EVENT& aEvent )
 
 int SIMULATOR_CONTROL::Zoom( const TOOL_EVENT& aEvent )
 {
-    if( m_simulatorFrame->GetCurrentPlot() )
+    if( SIM_PLOT_PANEL* plotPanel = GetCurrentPlotPanel() )
     {
-        if( aEvent.IsAction( &ACTIONS::zoomInCenter ) )
-            m_simulatorFrame->GetCurrentPlot()->GetPlotWin()->ZoomIn();
-        else if( aEvent.IsAction( &ACTIONS::zoomOutCenter ) )
-            m_simulatorFrame->GetCurrentPlot()->GetPlotWin()->ZoomOut();
-        else if( aEvent.IsAction( &ACTIONS::zoomFitScreen ) )
-            m_simulatorFrame->GetCurrentPlot()->GetPlotWin()->Fit();
+        if(      aEvent.IsAction( &ACTIONS::zoomInCenter ) )  plotPanel->GetPlotWin()->ZoomIn();
+        else if( aEvent.IsAction( &ACTIONS::zoomOutCenter ) ) plotPanel->GetPlotWin()->ZoomOut();
+        else if( aEvent.IsAction( &ACTIONS::zoomFitScreen ) ) plotPanel->GetPlotWin()->Fit();
     }
 
     return 0;
@@ -239,11 +251,9 @@ int SIMULATOR_CONTROL::Zoom( const TOOL_EVENT& aEvent )
 
 int SIMULATOR_CONTROL::ToggleGrid( const TOOL_EVENT& aEvent )
 {
-    SIM_PLOT_PANEL* plot = m_simulatorFrame->GetCurrentPlot();
-
-    if( plot )
+    if( SIM_PLOT_PANEL* plotPanel = GetCurrentPlotPanel() )
     {
-        plot->ShowGrid( !plot->IsGridShown() );
+        plotPanel->ShowGrid( !plotPanel->IsGridShown() );
         m_simulatorFrame->OnModify();
     }
 
@@ -253,11 +263,9 @@ int SIMULATOR_CONTROL::ToggleGrid( const TOOL_EVENT& aEvent )
 
 int SIMULATOR_CONTROL::ToggleLegend( const TOOL_EVENT& aEvent )
 {
-    SIM_PLOT_PANEL* plot = m_simulatorFrame->GetCurrentPlot();
-
-    if( plot )
+    if( SIM_PLOT_PANEL* plotPanel = GetCurrentPlotPanel() )
     {
-        plot->ShowLegend( !plot->IsLegendShown() );
+        plotPanel->ShowLegend( !plotPanel->IsLegendShown() );
         m_simulatorFrame->OnModify();
     }
 
@@ -267,11 +275,9 @@ int SIMULATOR_CONTROL::ToggleLegend( const TOOL_EVENT& aEvent )
 
 int SIMULATOR_CONTROL::ToggleDottedSecondary( const TOOL_EVENT& aEvent )
 {
-    SIM_PLOT_PANEL* plot = m_simulatorFrame->GetCurrentPlot();
-
-    if( plot )
+    if( SIM_PLOT_PANEL* plotPanel = GetCurrentPlotPanel() )
     {
-        plot->SetDottedSecondary( !plot->GetDottedSecondary() );
+        plotPanel->SetDottedSecondary( !plotPanel->GetDottedSecondary() );
         m_simulatorFrame->OnModify();
     }
 
@@ -296,9 +302,18 @@ int SIMULATOR_CONTROL::EditSimCommand( const TOOL_EVENT& aEvent )
 int SIMULATOR_CONTROL::RunSimulation( const TOOL_EVENT& aEvent )
 {
     if( m_simulator->IsRunning() )
+    {
         m_simulator->Stop();
-    else
-        m_simulatorFrame->StartSimulation();
+        return 0;
+    }
+
+    if( !GetCurrentPlotPanel() )
+        NewPlot( aEvent );
+
+    if( !GetCurrentPlotPanel() )
+        return 0;
+
+    m_simulatorFrame->StartSimulation();
 
     return 0;
 }
@@ -444,8 +459,9 @@ int SIMULATOR_CONTROL::ShowNetlist( const TOOL_EVENT& aEvent )
     STRING_FORMATTER    formatter;
     NETLIST_VIEW_DIALOG dlg( m_simulatorFrame );
 
-    m_circuitModel->SetSimOptions( m_simulatorFrame->GetCurrentOptions() );
-    m_circuitModel->GetNetlist( &formatter, *dlg.GetReporter() );
+    m_circuitModel->GetNetlist( m_simulatorFrame->GetCurrentSimCommand(),
+                                m_simulatorFrame->GetCurrentOptions(),
+                                &formatter, *dlg.GetReporter() );
 
     dlg.SetNetlist( wxString( formatter.GetString() ) );
     dlg.ShowModal();
