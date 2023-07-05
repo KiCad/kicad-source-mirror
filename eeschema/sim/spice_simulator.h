@@ -87,9 +87,12 @@ public:
     }
 
     /**
-     * Return a list with all vectors generated in current simulation.
-     *
-     * @return List of vector names. ?May not match to the net name elements.
+     * @return the current simulation plot name (tran1, tran2, etc.)
+     */
+    virtual wxString CurrentPlotName() const = 0;
+
+    /**
+     * @return list of simulation vector (signal) names.
      */
     virtual std::vector<std::string> AllVectors() const = 0;
 
@@ -102,7 +105,7 @@ public:
      * if -1 (default) all available values are returned.
      * @return Requested vector. It might be empty if there is no vector with requested name.
      */
-    virtual std::vector<COMPLEX> GetPlot( const std::string& aName, int aMaxLen = -1 ) = 0;
+    virtual std::vector<COMPLEX> GetComplexVector( const std::string& aName, int aMaxLen = -1 ) = 0;
 
     /**
      * Return a requested vector with real values. If the vector is complex, then
@@ -113,7 +116,7 @@ public:
      * if -1 (default) all available values are returned.
      * @return Requested vector. It might be empty if there is no vector with requested name.
      */
-    virtual std::vector<double> GetRealPlot( const std::string& aName, int aMaxLen = -1 ) = 0;
+    virtual std::vector<double> GetRealVector( const std::string& aName, int aMaxLen = -1 ) = 0;
 
     /**
      * Return a requested vector with imaginary values. If the vector is complex, then
@@ -124,7 +127,7 @@ public:
      * if -1 (default) all available values are returned.
      * @return Requested vector. It might be empty if there is no vector with requested name.
      */
-    virtual std::vector<double> GetImagPlot( const std::string& aName, int aMaxLen = -1 ) = 0;
+    virtual std::vector<double> GetImaginaryVector( const std::string& aName, int aMaxLen = -1 ) = 0;
 
     /**
      * Return a requested vector with magnitude values.
@@ -134,7 +137,7 @@ public:
      * if -1 (default) all available values are returned.
      * @return Requested vector. It might be empty if there is no vector with requested name.
      */
-    virtual std::vector<double> GetMagPlot( const std::string& aName, int aMaxLen = -1 ) = 0;
+    virtual std::vector<double> GetGainVector( const std::string& aName, int aMaxLen = -1 ) = 0;
 
     /**
      * Return a requested vector with phase values.
@@ -144,7 +147,7 @@ public:
      * if -1 (default) all available values are returned.
      * @return Requested vector. It might be empty if there is no vector with requested name.
      */
-    virtual std::vector<double> GetPhasePlot( const std::string& aName, int aMaxLen = -1 ) = 0;
+    virtual std::vector<double> GetPhaseVector( const std::string& aName, int aMaxLen = -1 ) = 0;
 
     /**
      * Return current SPICE netlist used by the simulator.

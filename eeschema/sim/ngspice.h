@@ -80,23 +80,26 @@ public:
     ///< @copydoc SPICE_SIMULATOR::GetXAxis()
     wxString GetXAxis( SIM_TYPE aType ) const override final;
 
+    ///< @copydoc SPICE_SIMULATOR::CurrentPlotName()
+    wxString CurrentPlotName() const override final;
+
     ///< @copydoc SPICE_SIMULATOR::AllVectors()
     std::vector<std::string> AllVectors() const override final;
 
-    ///< @copydoc SPICE_SIMULATOR::GetPlot()
-    std::vector<COMPLEX> GetPlot( const std::string& aName, int aMaxLen = -1 ) override final;
+    ///< @copydoc SPICE_SIMULATOR::GetComplexVector()
+    std::vector<COMPLEX> GetComplexVector( const std::string& aName, int aMaxLen = -1 ) override final;
 
-    ///< @copydoc SPICE_SIMULATOR::GetRealPlot()
-    std::vector<double> GetRealPlot( const std::string& aName, int aMaxLen = -1 ) override final;
+    ///< @copydoc SPICE_SIMULATOR::GetRealVector()
+    std::vector<double> GetRealVector( const std::string& aName, int aMaxLen = -1 ) override final;
 
-    ///< @copydoc SPICE_SIMULATOR::GetImagPlot()
-    std::vector<double> GetImagPlot( const std::string& aName, int aMaxLen = -1 ) override final;
+    ///< @copydoc SPICE_SIMULATOR::GetImaginaryVector()
+    std::vector<double> GetImaginaryVector( const std::string& aName, int aMaxLen = -1 ) override final;
 
-    ///< @copydoc SPICE_SIMULATOR::GetMagPlot()
-    std::vector<double> GetMagPlot( const std::string& aName, int aMaxLen = -1 ) override final;
+    ///< @copydoc SPICE_SIMULATOR::GetGainVector()
+    std::vector<double> GetGainVector( const std::string& aName, int aMaxLen = -1 ) override final;
 
-    ///< @copydoc SPICE_SIMULATOR::GetPhasePlot()
-    std::vector<double> GetPhasePlot( const std::string& aName, int aMaxLen = -1 ) override final;
+    ///< @copydoc SPICE_SIMULATOR::GetPhaseVector()
+    std::vector<double> GetPhaseVector( const std::string& aName, int aMaxLen = -1 ) override final;
 
     std::vector<std::string> GetSettingCommands() const override final;
 

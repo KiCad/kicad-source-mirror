@@ -193,7 +193,7 @@ public:
         {
             NGSPICE* ngspice = static_cast<NGSPICE*>( m_simulator.get() );
 
-            std::vector<double> vector = ngspice->GetRealPlot( aVectorName );
+            std::vector<double> vector = ngspice->GetRealVector( aVectorName );
 
             BOOST_REQUIRE_EQUAL( vector.size(), 1 );
 
@@ -214,7 +214,7 @@ public:
         {
             NGSPICE* ngspice = static_cast<NGSPICE*>( m_simulator.get() );
 
-            std::vector<double> xVector = ngspice->GetRealPlot( aXVectorName );
+            std::vector<double> xVector = ngspice->GetRealVector( aXVectorName );
             std::size_t i = 0;
 
             for(; i < xVector.size(); ++i )
@@ -237,7 +237,7 @@ public:
 
             for( auto& [vectorName, refValue] : aTestVectorsAndValues )
             {
-                std::vector<double> yVector = ngspice->GetMagPlot( vectorName );
+                std::vector<double> yVector = ngspice->GetGainVector( vectorName );
 
                 BOOST_REQUIRE_GE( yVector.size(), i + 1 );
 

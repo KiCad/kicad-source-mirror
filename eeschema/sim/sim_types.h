@@ -50,7 +50,7 @@ enum SIM_TRACE_TYPE
     SPT_VOLTAGE       = 0x0001,
     SPT_CURRENT       = 0x0002,
     SPT_AC_PHASE      = 0x0004,
-    SPT_AC_MAG        = 0x0008,
+    SPT_AC_GAIN       = 0x0008,
     SPT_POWER         = 0x0010,
     SPT_SP_AMP        = 0x0020,
     SPT_Y_AXIS_MASK   = 0x00FF,

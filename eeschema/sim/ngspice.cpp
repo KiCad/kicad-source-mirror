@@ -84,6 +84,12 @@ void NGSPICE::Init( const SPICE_SIMULATOR_SETTINGS* aSettings )
 }
 
 
+wxString NGSPICE::CurrentPlotName() const
+{
+    return wxString( m_ngSpice_CurPlot() );
+}
+
+
 std::vector<std::string> NGSPICE::AllVectors() const
 {
     LOCALE_IO c_locale; // ngspice works correctly only with C locale
@@ -112,7 +118,7 @@ std::vector<std::string> NGSPICE::AllVectors() const
 }
 
 
-std::vector<COMPLEX> NGSPICE::GetPlot( const std::string& aName, int aMaxLen )
+std::vector<COMPLEX> NGSPICE::GetComplexVector( const std::string& aName, int aMaxLen )
 {
     LOCALE_IO            c_locale;       // ngspice works correctly only with C locale
     std::vector<COMPLEX> data;
@@ -139,7 +145,7 @@ std::vector<COMPLEX> NGSPICE::GetPlot( const std::string& aName, int aMaxLen )
 }
 
 
-std::vector<double> NGSPICE::GetRealPlot( const std::string& aName, int aMaxLen )
+std::vector<double> NGSPICE::GetRealVector( const std::string& aName, int aMaxLen )
 {
     LOCALE_IO           c_locale;       // ngspice works correctly only with C locale
     std::vector<double> data;
@@ -169,7 +175,7 @@ std::vector<double> NGSPICE::GetRealPlot( const std::string& aName, int aMaxLen 
 }
 
 
-std::vector<double> NGSPICE::GetImagPlot( const std::string& aName, int aMaxLen )
+std::vector<double> NGSPICE::GetImaginaryVector( const std::string& aName, int aMaxLen )
 {
     LOCALE_IO           c_locale;       // ngspice works correctly only with C locale
     std::vector<double> data;
@@ -191,7 +197,7 @@ std::vector<double> NGSPICE::GetImagPlot( const std::string& aName, int aMaxLen 
 }
 
 
-std::vector<double> NGSPICE::GetMagPlot( const std::string& aName, int aMaxLen )
+std::vector<double> NGSPICE::GetGainVector( const std::string& aName, int aMaxLen )
 {
     LOCALE_IO           c_locale;       // ngspice works correctly only with C locale
     std::vector<double> data;
@@ -218,7 +224,7 @@ std::vector<double> NGSPICE::GetMagPlot( const std::string& aName, int aMaxLen )
 }
 
 
-std::vector<double> NGSPICE::GetPhasePlot( const std::string& aName, int aMaxLen )
+std::vector<double> NGSPICE::GetPhaseVector( const std::string& aName, int aMaxLen )
 {
     LOCALE_IO c_locale;       // ngspice works correctly only with C locale
     std::vector<double> data;

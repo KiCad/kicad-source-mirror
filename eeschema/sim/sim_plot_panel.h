@@ -145,7 +145,7 @@ public:
 
         mpFXYVector::SetName( aName );
 
-        if( m_type & SPT_AC_MAG )
+        if( m_type & SPT_AC_GAIN )
             m_displayName = aName + _( " (gain)" );
         else if( m_type & SPT_AC_PHASE )
             m_displayName = aName + _( " (phase)" );

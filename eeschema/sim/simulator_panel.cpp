@@ -907,8 +907,8 @@ wxString vectorNameFromSignalId( int aUserDefinedSignalId )
 wxString SIMULATOR_PANEL::vectorNameFromSignalName( const wxString& aSignalName, int* aTraceType )
 {
     std::map<wxString, int> suffixes;
-    suffixes[_( " (amplitude)" )] = SPT_SP_AMP;
-    suffixes[ _( " (gain)" ) ] = SPT_AC_MAG;
+    suffixes[ _( " (amplitude)" ) ] = SPT_SP_AMP;
+    suffixes[ _( " (gain)" ) ] = SPT_AC_GAIN;
     suffixes[ _( " (phase)" ) ] = SPT_AC_PHASE;
 
     if( aTraceType )
@@ -1234,7 +1234,7 @@ void SIMULATOR_PANEL::UpdateMeasurement( int aRow )
         simulator()->Command( "echo " + cmd.ToStdString() );
         simulator()->Command( cmd.ToStdString() );
 
-        std::vector<double> resultVec = simulator()->GetMagPlot( resultName.ToStdString() );
+        std::vector<double> resultVec = simulator()->GetGainVector( resultName.ToStdString() );
 
         if( resultVec.size() > 0 )
             result = SPICE_VALUE( resultVec[0] ).ToString( GetMeasureFormat( aRow ) );
@@ -1410,12 +1410,12 @@ void SIMULATOR_PANEL::AddTrace( const wxString& aName, SIM_TRACE_TYPE aType )
 
     if( simType == ST_AC )
     {
-        updateTrace( aName, aType | SPT_AC_MAG, plotPanel );
+        updateTrace( aName, aType | SPT_AC_GAIN, plotPanel );
         updateTrace( aName, aType | SPT_AC_PHASE, plotPanel );
     }
     if( simType == ST_S_PARAM )
     {
-        updateTrace( aName, aType | SPT_AC_MAG, plotPanel );
+        updateTrace( aName, aType | SPT_AC_GAIN, plotPanel );
         updateTrace( aName, aType | SPT_AC_PHASE, plotPanel );
     }
     else
@@ -1446,7 +1446,7 @@ void SIMULATOR_PANEL::SetUserDefinedSignals( const std::map<int, wxString>& aNew
             {
                 if( plotPanel->GetSimType() == ST_AC )
                 {
-                    for( int subType : { SPT_AC_MAG, SPT_AC_PHASE } )
+                    for( int subType : { SPT_AC_GAIN, SPT_AC_PHASE } )
                         plotPanel->DeleteTrace( vectorName, traceType | subType );
                 }
                 else if( plotPanel->GetSimType() == ST_S_PARAM )
@@ -1463,7 +1463,7 @@ void SIMULATOR_PANEL::SetUserDefinedSignals( const std::map<int, wxString>& aNew
             {
                 if( plotPanel->GetSimType() == ST_AC )
                 {
-                    for( int subType : { SPT_AC_MAG, SPT_AC_PHASE } )
+                    for( int subType : { SPT_AC_GAIN, SPT_AC_PHASE } )
                     {
                         if( TRACE* trace = plotPanel->GetTrace( vectorName, traceType | subType ) )
                             trace->SetName( aNewSignals.at( id ) );
@@ -1529,24 +1529,24 @@ void SIMULATOR_PANEL::updateTrace( const wxString& aVectorName, int aTraceType,
     std::vector<double> data_x;
     std::vector<double> data_y;
 
-    data_x = simulator()->GetMagPlot( (const char*) xAxisName.c_str() );
+    data_x = simulator()->GetGainVector( (const char*) xAxisName.c_str() );
 
     switch( simType )
     {
     case ST_AC:
-        if( aTraceType & SPT_AC_MAG )
-            data_y = simulator()->GetMagPlot( (const char*) simVectorName.c_str() );
+        if( aTraceType & SPT_AC_GAIN )
+            data_y = simulator()->GetGainVector( (const char*) simVectorName.c_str() );
         else if( aTraceType & SPT_AC_PHASE )
-            data_y = simulator()->GetPhasePlot( (const char*) simVectorName.c_str() );
+            data_y = simulator()->GetPhaseVector( (const char*) simVectorName.c_str() );
         else
             wxFAIL_MSG( wxT( "Plot type missing AC_PHASE or AC_MAG bit" ) );
 
         break;
     case ST_S_PARAM:
         if( aTraceType & SPT_SP_AMP )
-            data_y = simulator()->GetMagPlot( (const char*) simVectorName.c_str() );
+            data_y = simulator()->GetGainVector( (const char*) simVectorName.c_str() );
         else if( aTraceType & SPT_AC_PHASE )
-            data_y = simulator()->GetPhasePlot( (const char*) simVectorName.c_str() );
+            data_y = simulator()->GetPhaseVector( (const char*) simVectorName.c_str() );
         else
             wxFAIL_MSG( wxT( "Plot type missing AC_PHASE or SPT_SP_AMP bit" ) );
 
@@ -1555,7 +1555,7 @@ void SIMULATOR_PANEL::updateTrace( const wxString& aVectorName, int aTraceType,
     case ST_NOISE:
     case ST_DC:
     case ST_TRANSIENT:
-        data_y = simulator()->GetMagPlot( (const char*) simVectorName.c_str() );
+        data_y = simulator()->GetGainVector( (const char*) simVectorName.c_str() );
         break;
 
     default:
@@ -2524,11 +2524,14 @@ void SIMULATOR_PANEL::OnSimRefresh( bool aFinal )
             m_simConsole->AppendText( _( "\n\nSimulation results:\n\n" ) );
             m_simConsole->SetInsertionPointEnd();
 
+            // The simulator will create noise1 & noise2 on the first run, noise3 and noise4
+            // on the second, etc.  The first plot for each run contains the spectral density
+            // noise vectors and second contains the integrated noise.
             simulator()->Command( "setplot noise2" );
 
             for( const std::string& vec : simulator()->AllVectors() )
             {
-                std::vector<double> val_list = simulator()->GetRealPlot( vec, 1 );
+                std::vector<double> val_list = simulator()->GetRealVector( vec, 1 );
                 wxString            value = SPICE_VALUE( val_list[ 0 ] ).ToSpiceString();
 
                 msg.Printf( wxS( "%s: %sV\n" ), vec, value );
@@ -2556,7 +2559,7 @@ void SIMULATOR_PANEL::OnSimRefresh( bool aFinal )
 
             if( simType == ST_AC )
             {
-                for( int subType : { SPT_AC_MAG, SPT_AC_PHASE } )
+                for( int subType : { SPT_AC_GAIN, SPT_AC_PHASE } )
                 {
                     if( TRACE* trace = plotPanel->GetTrace( vectorName, traceType | subType ) )
                         traceMap[ trace ] = { vectorName, traceType };
@@ -2608,7 +2611,7 @@ void SIMULATOR_PANEL::OnSimRefresh( bool aFinal )
 
         for( const std::string& vec : simulator()->AllVectors() )
         {
-            std::vector<double> val_list = simulator()->GetRealPlot( vec, 1 );
+            std::vector<double> val_list = simulator()->GetRealVector( vec, 1 );
             wxString            value = SPICE_VALUE( val_list[ 0 ] ).ToSpiceString();
             wxString            signal;
             SIM_TRACE_TYPE      type = circuitModel()->VectorToSignal( vec, signal );

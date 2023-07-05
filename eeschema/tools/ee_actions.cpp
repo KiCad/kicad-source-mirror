@@ -1195,14 +1195,20 @@ TOOL_ACTION EE_ACTIONS::simTune( "eeschema.Simulation.tune",
         _( "Add Tuned Value..." ), _( "Select a value to be tuned" ),
         BITMAPS::sim_tune );
 
+TOOL_ACTION EE_ACTIONS::editUserDefinedSignals( "eeschema.Simulation.editUserDefinedSignals",
+        AS_GLOBAL, 0, "",
+        _( "User-defined Signals..." ),
+        _( "Add, edit or delete user-defined simulation signals" ),
+        BITMAPS::sim_add_signal );
+
+TOOL_ACTION EE_ACTIONS::showFFT( "eeschema.Simulation.showFFT",
+        AS_GLOBAL, 0, "",
+        _( "Show FFT" ),
+        _( "Show frequency distribution of transient analysis data using fast Fourier transform" ),
+        BITMAPS::mw_add_shape );
+
 TOOL_ACTION EE_ACTIONS::showNetlist( "eeschema.Simulation.showNetlist",
         AS_GLOBAL, 0, "",
         _( "Show SPICE Netlist" ), "",
         BITMAPS::netlist );
-
-TOOL_ACTION EE_ACTIONS::editUserDefinedSignals( "eeschema.Simulation.editUserDefinedSignals",
-        AS_GLOBAL, 0, "",
-        _( "User-defined Signals" ),
-        _( "Add, edit or delete user-defined simulation signals" ),
-        BITMAPS::sim_add_signal );
 
