@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:33-0700\n"
-"PO-Revision-Date: 2023-03-19 08:40+0000\n"
+"PO-Revision-Date: 2023-07-07 16:49+0000\n"
 "Last-Translator: turkce <turkceceviri@protonmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v7/tr/>\n"
 "Language: tr\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 5.0-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -25544,23 +25544,23 @@ msgstr "Yatay olarak: soldan sağa doğru"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:78
 msgid "Horizontally:: bottom right to top left"
-msgstr ""
+msgstr "Yatay :: sağ alttan sola"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:86
 msgid "Vertically: top left to bottom right"
-msgstr ""
+msgstr "Dikey olarak: sol üstten sağa"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:97
 msgid "Vertically: top right to bottom left"
-msgstr ""
+msgstr "Dikey olarak: sağ üstten sola"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:108
 msgid "Vertically: bottom left to top right"
-msgstr ""
+msgstr "Dikey olarak: soldan sağa doğru"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:119
 msgid "Vertically: bottom right to top left"
-msgstr ""
+msgstr "Dikey olarak: sağ alttan sola"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:132
 #, fuzzy
@@ -25584,6 +25584,9 @@ msgid ""
 "to this grid before sorting.\n"
 "This helps with misaligned parts."
 msgstr ""
+"Bileşen konumu yuvarlatılacaktır\n"
+"sıralamadan önce bu ızgaraya.\n"
+"Bu, yanlış hizalanmış parçalara yardımcı olur."
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:163
 #, fuzzy
