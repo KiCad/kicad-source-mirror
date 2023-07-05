@@ -91,10 +91,13 @@ function graph(glyph, subst, ofx, ofy,   sx, sy, cn, data, i, j, o, c) {
 	cn = cname(glyph)
 	data = ""
 	for(i = 0; i<fontnst[cn]; i++) {
-		if(i>0) data = data " R"
 		for(j = 0; j<fontsl[cn" "i]; j++) {
 			c = ntochar(fontx[cn" "i" "j]*sx+ofx) ntochar(fonty[cn" "i" "j]*sy+ofy)
 			if(c!=o) {
+				if (j==0 && i>0)
+					# A new stroke is started only when the previous one
+					# ended at a point different from the starting point of this one.
+					data = data " R"
 				data = data c
 				o = c
 			}

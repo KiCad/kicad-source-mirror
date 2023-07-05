@@ -146,3 +146,5 @@
  */
 
 #include <newstroke_font.h>
+
+/* clang-format off */
