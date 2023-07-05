@@ -27,6 +27,7 @@
 #ifndef __PCB_ACTIONS_H
 #define __PCB_ACTIONS_H
 
+#include <layer_ids.h>
 #include <tool/tool_action.h>
 #include <tool/actions.h>
 
@@ -48,6 +49,14 @@ enum class ZONE_MODE
 class PCB_ACTIONS : public ACTIONS
 {
 public:
+    /**
+     * Translate a layer ID into the action that switches to that layer.
+     *
+     * @param aLayerID is the layer to switch to
+     * @return the action that will switch to the specified layer
+     */
+    static TOOL_ACTION* LayerIDToAction( PCB_LAYER_ID aLayerID );
+
     // Selection Tool
     /// Activation of the selection tool
     static TOOL_ACTION selectionActivate;
