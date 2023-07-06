@@ -714,7 +714,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
                     // Pick up new item
                     aCommit->Modify( nextItem );
-                    nextItem->SetPosition( controls->GetMousePosition( true ) );
+                    nextItem->Move( controls->GetCursorPosition( true ) - nextItem->GetPosition() );
 
                     continue;
                 }
