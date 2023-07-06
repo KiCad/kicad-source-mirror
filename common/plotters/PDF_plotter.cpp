@@ -367,8 +367,8 @@ void PDF_PLOTTER::Arc( const VECTOR2I& aCenter, const VECTOR2I& aStart, const VE
 }
 
 
-void PDF_PLOTTER::Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
-                       const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill, int aWidth )
+void PDF_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
+                       const EDA_ANGLE& aEndAngle, double aRadius, FILL_T aFill, int aWidth )
 {
     wxASSERT( m_workFile );
 
