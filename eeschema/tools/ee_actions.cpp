@@ -1024,11 +1024,16 @@ TOOL_ACTION EE_ACTIONS::drawBus( TOOL_ACTION_ARGS()
         .Flags( AF_ACTIVATE )
         .Parameter( &drawBusActionParam ) );
 
-TOOL_ACTION EE_ACTIONS::unfoldBus( "eeschema.InteractiveDrawingLineWireBus.unfoldBus",
-        AS_GLOBAL,
-        'C', LEGACY_HK_NAME( "Unfold from Bus" ),
-        _( "Unfold from Bus" ), _( "Break a wire out of a bus" ),
-                                   BITMAPS::INVALID_BITMAP, AF_ACTIVATE );
+TOOL_ACTION EE_ACTIONS::unfoldBus( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawingLineWireBus.unfoldBus" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'C' )
+        .LegacyHotkeyName( "Unfold from Bus" )
+        .MenuText( _( "Unfold from Bus" ) )
+        .Tooltip( _( "Break a wire out of a bus" ) )
+        .Icon( BITMAPS::INVALID_BITMAP )
+        .Flags( AF_ACTIVATE )
+        .Parameter<wxString*>( nullptr ) );
 
 const DRAW_SEGMENT_EVENT_PARAMS drawLinesActionParam = { LAYER_NOTES, false, nullptr };
 TOOL_ACTION EE_ACTIONS::drawLines( TOOL_ACTION_ARGS()
