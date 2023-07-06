@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:33-0700\n"
-"PO-Revision-Date: 2023-07-03 07:51+0000\n"
+"PO-Revision-Date: 2023-07-07 16:49+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v7/pl/>\n"
 "Language: pl\n"
@@ -861,7 +861,7 @@ msgstr "Wyłącz antyaliasing"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:88
 msgid "Disable thickness"
-msgstr "Wyłącz grubość"
+msgstr "Wyłącz pogrubienia"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:91
 msgid "Disable vias"
@@ -3716,7 +3716,7 @@ msgstr "Prześwit między ścieżkami pary różnicowej"
 
 #: common/dialogs/panel_setup_netclasses.cpp:506
 msgid "Schematic wire thickness"
-msgstr "Domyślna szerokość linii"
+msgstr "Grubość połączeń"
 
 #: common/dialogs/panel_setup_netclasses.cpp:507
 msgid "Bus wire thickness"
@@ -3788,7 +3788,7 @@ msgstr "Dystans DP"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
 msgid "Wire Thickness"
-msgstr "Grubość linii"
+msgstr "Grubość połączenia"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "Bus Thickness"
@@ -27066,7 +27066,7 @@ msgid ""
 "The text thickness is too large for the text size.\n"
 "It will be clamped."
 msgstr ""
-"Grubość linii tekstu jest nieproporcjonalna do jego rozmiaru.\n"
+"Grubość tekstu jest nieproporcjonalna do jego rozmiaru.\n"
 "Zostanie zmniejszona."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:61
