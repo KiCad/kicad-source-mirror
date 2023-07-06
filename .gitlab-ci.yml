@@ -23,8 +23,10 @@ test_formatting:
   allow_failure: true
   before_script:
     # We must manually add the KiCad remote to ensure it is named sensibly
-    - git remote add product https://gitlab.com/kicad/code/kicad.git
-    - git remote add source ${CI_MERGE_REQUEST_SOURCE_PROJECT_URL}.git
+    - git remote add product https://gitlab.com/kicad/code/kicad.git ||
+      git remote set-url product https://gitlab.com/kicad/code/kicad.git
+    - git remote add source ${CI_MERGE_REQUEST_SOURCE_PROJECT_URL}.git ||
+      git remote set-url source ${CI_MERGE_REQUEST_SOURCE_PROJECT_URL}.git
     - git fetch -n product
     - git fetch -n source
     # Get the SHAs of the commits
