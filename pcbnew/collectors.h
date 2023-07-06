@@ -255,11 +255,6 @@ public:
     static const std::vector<KICAD_T> Tracks;
 
     /**
-     * A scan list for TRACKs, VIAs, FOOTPRINTs
-     */
-    static const std::vector<KICAD_T> LockableItems;
-
-    /**
      * A scan list for dimensions
      */
     static const std::vector<KICAD_T> Dimensions;

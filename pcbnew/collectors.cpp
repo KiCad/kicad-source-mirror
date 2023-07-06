@@ -119,15 +119,6 @@ const std::vector<KICAD_T> GENERAL_COLLECTOR::Tracks = {
 };
 
 
-const std::vector<KICAD_T> GENERAL_COLLECTOR::LockableItems = {
-    PCB_FOOTPRINT_T,
-    PCB_GROUP_T,  // Can a group be locked?
-    PCB_TRACE_T,
-    PCB_ARC_T,
-    PCB_VIA_T
-};
-
-
 const std::vector<KICAD_T> GENERAL_COLLECTOR::Dimensions = {
     PCB_DIM_ALIGNED_T,
     PCB_DIM_LEADER_T,
