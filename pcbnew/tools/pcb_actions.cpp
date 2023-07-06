@@ -31,6 +31,7 @@
 #include <layer_ids.h>
 #include <microwave/microwave_tool.h>
 #include <tool/tool_manager.h>
+#include <tools/pcb_selection_tool.h>
 #include <router/pns_router.h>
 #include <router/pns_routing_settings.h>
 
@@ -1522,8 +1523,10 @@ TOOL_ACTION PCB_ACTIONS::selectionActivate( "pcbnew.InteractiveSelection",
         AS_GLOBAL, 0, "", "", "",   // No description, not shown anywhere
         BITMAPS::INVALID_BITMAP, AF_ACTIVATE );
 
-TOOL_ACTION PCB_ACTIONS::selectionCursor( "pcbnew.InteractiveSelection.Cursor",
-        AS_GLOBAL );
+TOOL_ACTION PCB_ACTIONS::selectionCursor( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveSelection.Cursor" )
+        .Scope( AS_GLOBAL )
+        .Parameter<CLIENT_SELECTION_FILTER>( nullptr ) );
 
 TOOL_ACTION PCB_ACTIONS::selectItem( "pcbnew.InteractiveSelection.SelectItem",
         AS_GLOBAL );
