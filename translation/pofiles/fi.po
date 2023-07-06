@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:33-0700\n"
 "PO-Revision-Date: 2023-07-07 16:49+0000\n"
-"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v7/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -26442,7 +26442,7 @@ msgstr "Haluatko varmasti korvata olemassa olevan tiedoston?"
 #: pcbnew/plugins/altium/altium_pcb.cpp:1630
 #, c-format
 msgid "Failed to create folder '%s'."
-msgstr "Epäonnistui luoda kansiota '%s'."
+msgstr "Kansion '%s' luominen epäonnistui."
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
 msgid "Save VRML Board File"
