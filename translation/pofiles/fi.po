@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:35-0700\n"
 "PO-Revision-Date: 2023-07-07 16:49+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
 "Language: fi\n"
@@ -13018,7 +13018,7 @@ msgstr "Katkoviivan pituus:"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:235
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:35
 msgid "Gap length:"
-msgstr "Raon pituus:"
+msgstr "Välin pituus:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:245
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:45
@@ -14386,7 +14386,7 @@ msgstr "Tyhjennä Viimeisimmät Tiedostot"
 
 #: eeschema/menubar.cpp:98
 msgid "Insert Schematic Sheet Content..."
-msgstr "Liitä Kytkentökaavion sisältö..."
+msgstr "Liitä Kytkentäkaaviosivun Sisältö..."
 
 #: eeschema/menubar.cpp:99
 msgid ""
@@ -18320,7 +18320,7 @@ msgstr "Lisää tekstikohde"
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:448
 #: pcbnew/tools/pcb_actions.cpp:139
 msgid "Add Text Box"
-msgstr "Lisää tekstiruutu"
+msgstr "Lisää Tekstiruutu"
 
 #: eeschema/tools/ee_actions.cpp:270
 msgid "Add a text box item"
