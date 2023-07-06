@@ -145,13 +145,31 @@ double PLOTTER::GetDashGapLenIU( int aLineWidth ) const
     return userToDeviceSize( m_renderSettings->GetGapLength( aLineWidth ) );
 }
 
-
+#include <wx/log.h>
 void PLOTTER::Arc( const VECTOR2I& aCenter, const VECTOR2I& aStart, const VECTOR2I& aEnd,
                    FILL_T aFill, int aWidth, int aMaxError )
 {
-    EDA_ANGLE startAngle( aStart - aCenter );
-    EDA_ANGLE endAngle( aEnd - aCenter );
-    int       radius = ( aStart - aCenter ).EuclideanNorm();
+    // Recalculate aCenter using double to be sure we will use a exact value, from aStart and aEnd
+    // it must be on the line passing by the middle of segment {aStart, aEnd}
+    // To simplify calculations, use aStart as origin in intermediate calculations
+    VECTOR2D center = aCenter - aStart;
+    VECTOR2D end = aEnd - aStart;
+    EDA_ANGLE segAngle( end );
+
+    // Rotate end and center, to make segment {aStart, aEnd} horizontal
+    RotatePoint( end, segAngle );
+    RotatePoint( center, segAngle );
+
+    // center.x must be at end.x/2 coordinate
+    center.x = end.x / 2;
+
+    // Now calculate the right center position
+    RotatePoint( center, -segAngle );
+    center += aStart;
+
+    EDA_ANGLE startAngle( VECTOR2D( aStart ) - center );
+    EDA_ANGLE endAngle( VECTOR2D( aEnd ) - center );
+    double    radius = ( VECTOR2D( aStart ) - center ).EuclideanNorm();
 
     if( startAngle > endAngle )
     {
@@ -168,12 +186,12 @@ void PLOTTER::Arc( const VECTOR2I& aCenter, const VECTOR2I& aStart, const VECTOR
     startAngle = -startAngle;
     endAngle = -endAngle;
 
-    Arc( aCenter, startAngle, endAngle, radius, aFill, aWidth );
+    Arc( center, startAngle, endAngle, radius, aFill, aWidth );
 }
 
 
-void PLOTTER::Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
-                   const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill, int aWidth )
+void PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
+                   const EDA_ANGLE& aEndAngle, double aRadius, FILL_T aFill, int aWidth )
 {
     EDA_ANGLE       startAngle( aStartAngle );
     EDA_ANGLE       endAngle( aEndAngle );
@@ -570,8 +588,8 @@ void PLOTTER::ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int widt
 }
 
 
-void PLOTTER::ThickArc( const VECTOR2I& centre, const EDA_ANGLE& aStartAngle,
-                        const EDA_ANGLE& aEndAngle, int aRadius, int aWidth,
+void PLOTTER::ThickArc( const VECTOR2D& centre, const EDA_ANGLE& aStartAngle,
+                        const EDA_ANGLE& aEndAngle, double aRadius, int aWidth,
                         OUTLINE_MODE aTraceMode, void* aData )
 {
     if( aTraceMode == FILLED )

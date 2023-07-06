@@ -272,12 +272,12 @@ public:
                              APERTURE::APERTURE_TYPE aType, int aApertureAttribute );
 
 protected:
-    virtual void Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
-                      const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill,
+    virtual void Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
+                      const EDA_ANGLE& aEndAngle, double aRadius, FILL_T aFill,
                       int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
 
-    virtual void ThickArc( const VECTOR2I& aCentre, const EDA_ANGLE& aStartAngle,
-                           const EDA_ANGLE& aEndAngle, int aRadius, int aWidth,
+    virtual void ThickArc( const VECTOR2D& aCentre, const EDA_ANGLE& aStartAngle,
+                           const EDA_ANGLE& aEndAngle, double aRadius, int aWidth,
                            OUTLINE_MODE aTraceMode, void* aData ) override;
 
     /**

@@ -567,8 +567,8 @@ void HPGL_PLOTTER::ThickSegment( const VECTOR2I& start, const VECTOR2I& end,
 }
 
 
-void HPGL_PLOTTER::Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
-                        const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill, int aWidth )
+void HPGL_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
+                        const EDA_ANGLE& aEndAngle, double aRadius, FILL_T aFill, int aWidth )
 {
     if( aRadius <= 0 )
         return;

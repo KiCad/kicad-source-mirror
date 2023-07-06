@@ -443,8 +443,8 @@ void SVG_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T fill, int wi
 }
 
 
-void SVG_PLOTTER::Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
-                       const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill, int aWidth )
+void SVG_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
+                       const EDA_ANGLE& aEndAngle, double aRadius, FILL_T aFill, int aWidth )
 {
     /* Draws an arc of a circle, centered on (xc,yc), with starting point (x1, y1) and ending
      * at (x2, y2). The current pen is used for the outline and the current brush for filling

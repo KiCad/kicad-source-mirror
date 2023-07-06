@@ -550,13 +550,19 @@ public:
 protected:
     /**
      * Generic fallback: arc rendered as a polyline.
+     * Note also aCentre and aRadius are double to avoid creating rounding issues due
+     * to the fact a arc is defined in Kicad by a start point, a end point and third point
+     * not angles and radius.
+     * In some plotters (i.e. dxf) whe need a good precision when calculating an arc
+     * without error introduced by rounding, to avoid moving the end points,
+     * usually important in outlines when plotting an arc given by center, radius and angles
      */
-    virtual void Arc( const VECTOR2I& aCentre, const EDA_ANGLE& aStartAngle,
-                      const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill,
+    virtual void Arc( const VECTOR2D& aCentre, const EDA_ANGLE& aStartAngle,
+                      const EDA_ANGLE& aEndAngle, double aRadius, FILL_T aFill,
                       int aWidth = USE_DEFAULT_LINE_WIDTH );
 
-    virtual void ThickArc( const VECTOR2I& aCentre, const EDA_ANGLE& StAngle,
-                           const EDA_ANGLE& EndAngle, int aRadius, int aWidth,
+    virtual void ThickArc( const VECTOR2D& aCentre, const EDA_ANGLE& StAngle,
+                           const EDA_ANGLE& EndAngle, double aRadius, int aWidth,
                            OUTLINE_MODE aTraceMode, void* aData );
 
     // These are marker subcomponents

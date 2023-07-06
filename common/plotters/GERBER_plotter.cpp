@@ -817,8 +817,8 @@ void GERBER_PLOTTER::Circle( const VECTOR2I& aCenter, int aDiameter, FILL_T aFil
 
 
 
-void GERBER_PLOTTER::Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
-                          const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill, int aWidth )
+void GERBER_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
+                          const EDA_ANGLE& aEndAngle, double aRadius, FILL_T aFill, int aWidth )
 {
     SetCurrentLineWidth( aWidth );
 
@@ -1140,8 +1140,8 @@ void GERBER_PLOTTER::ThickSegment( const VECTOR2I& start, const VECTOR2I& end, i
     }
 }
 
-void GERBER_PLOTTER::ThickArc( const VECTOR2I& aCentre, const EDA_ANGLE& aStartAngle,
-                               const EDA_ANGLE& aEndAngle, int aRadius, int aWidth,
+void GERBER_PLOTTER::ThickArc( const VECTOR2D& aCentre, const EDA_ANGLE& aStartAngle,
+                               const EDA_ANGLE& aEndAngle, double aRadius, int aWidth,
                                OUTLINE_MODE aTraceMode, void* aData )
 {
     GBR_METADATA *gbr_metadata = static_cast<GBR_METADATA*>( aData );

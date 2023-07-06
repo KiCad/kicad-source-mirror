@@ -423,8 +423,8 @@ protected:
     OUTLINE_NODE* addOutlineNode( OUTLINE_NODE* aParent, int aActionHandle,
                                   const wxString& aTitle );
 
-    virtual void Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
-                      const EDA_ANGLE& aEndAngle, int aRadius,
+    virtual void Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
+                      const EDA_ANGLE& aEndAngle, double aRadius,
                       FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
 
     /// convert a wxString unicode string to a char string compatible with the accepted
@@ -625,8 +625,8 @@ public:
                            void*                    aData = nullptr ) override;
 
 protected:
-    virtual void Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
-                      const EDA_ANGLE& aEndAngle, int aRadius,
+    virtual void Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
+                      const EDA_ANGLE& aEndAngle, double aRadius,
                       FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
 
     /**

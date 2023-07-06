@@ -30,6 +30,7 @@
 #include <string_utils.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <trigo.h>
+#include <fmt/core.h>
 
 /**
  * Oblique angle for DXF native text
@@ -143,6 +144,26 @@ void DXF_PLOTTER::SetUnits( DXF_UNITS aUnit )
         m_unitScalingFactor = 0.0001;
         m_measurementDirective = 0;
     }
+}
+
+
+// convert aValue to a string, and remove trailing zeros
+// In DXF files coordinates need a high precision: at least 9 digits when given
+// in inches and 7 digits when in mm.
+// So we use 16 digits and remove trailing 0 (if any)
+static std::string formatCoord( double aValue )
+{
+    std::string buf;
+
+    buf = fmt::format( "{:.16f}", aValue );
+
+    // remove trailing zeros
+    while( !buf.empty() && buf[buf.size() - 1] == '0' )
+    {
+        buf.pop_back();
+    }
+
+    return buf;
 }
 
 
@@ -437,22 +458,28 @@ void DXF_PLOTTER::Circle( const VECTOR2I& centre, int diameter, FILL_T fill, int
 
         if( fill == FILL_T::NO_FILL )
         {
-            fprintf( m_outputFile, "0\nCIRCLE\n8\n%s\n10\n%g\n20\n%g\n40\n%g\n",
+            fprintf( m_outputFile, "0\nCIRCLE\n8\n%s\n10\n%s\n20\n%s\n40\n%s\n",
                      TO_UTF8( cname ),
-                     centre_dev.x, centre_dev.y, radius );
+                     formatCoord( centre_dev.x ).c_str(),
+                     formatCoord( centre_dev.y ).c_str(),
+                     formatCoord( radius ).c_str() );
         }
         else if( fill == FILL_T::FILLED_SHAPE )
         {
             double r = radius*0.5;
             fprintf( m_outputFile, "0\nPOLYLINE\n" );
             fprintf( m_outputFile, "8\n%s\n66\n1\n70\n1\n", TO_UTF8( cname ) );
-            fprintf( m_outputFile, "40\n%g\n41\n%g\n", radius, radius);
+            fprintf( m_outputFile, "40\n%s\n41\n%s\n",
+                                    formatCoord( radius ).c_str(),
+                                    formatCoord( radius ).c_str() );
             fprintf( m_outputFile, "0\nVERTEX\n8\n%s\n", TO_UTF8( cname ) );
-            fprintf( m_outputFile, "10\n%g\n 20\n%g\n42\n1.0\n",
-                     centre_dev.x-r, centre_dev.y );
+            fprintf( m_outputFile, "10\n%s\n 20\n%s\n42\n1.0\n",
+                                    formatCoord( centre_dev.x-r ).c_str(),
+                                    formatCoord( centre_dev.y ).c_str() );
             fprintf( m_outputFile, "0\nVERTEX\n8\n%s\n", TO_UTF8( cname ) );
-            fprintf( m_outputFile, "10\n%g\n 20\n%g\n42\n1.0\n",
-                     centre_dev.x+r, centre_dev.y );
+            fprintf( m_outputFile, "10\n%s\n 20\n%s\n42\n1.0\n",
+                                    formatCoord( centre_dev.x+r ).c_str(),
+                                    formatCoord( centre_dev.y ).c_str() );
             fprintf( m_outputFile, "0\nSEQEND\n");
         }
     }
@@ -578,9 +605,12 @@ void DXF_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
         // DXF LINE
         wxString    cname = getDXFColorName( m_currentColor );
         const char* lname = getDXFLineType( static_cast<PLOT_DASH_TYPE>( m_currentLineType ) );
-        fprintf( m_outputFile, "0\nLINE\n8\n%s\n6\n%s\n10\n%g\n20\n%g\n11\n%g\n21\n%g\n",
+        fprintf( m_outputFile, "0\nLINE\n8\n%s\n6\n%s\n10\n%s\n20\n%s\n11\n%s\n21\n%s\n",
                  TO_UTF8( cname ), lname,
-                 pen_lastpos_dev.x, pen_lastpos_dev.y, pos_dev.x, pos_dev.y );
+                 formatCoord( pen_lastpos_dev.x ).c_str(),
+                 formatCoord( pen_lastpos_dev.y ).c_str(),
+                 formatCoord( pos_dev.x ).c_str(),
+                 formatCoord( pos_dev.y ).c_str() );
     }
 
     m_penLastpos = pos;
@@ -626,8 +656,8 @@ void DXF_PLOTTER::ThickSegment( const VECTOR2I& aStart, const VECTOR2I& aEnd, in
 }
 
 
-void DXF_PLOTTER::Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
-                       const EDA_ANGLE& aEndAngle, int aRadius, FILL_T aFill, int aWidth )
+void DXF_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
+                       const EDA_ANGLE& aEndAngle, double aRadius, FILL_T aFill, int aWidth )
 {
     wxASSERT( m_outputFile );
 
@@ -648,9 +678,11 @@ void DXF_PLOTTER::Arc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
     // Emit a DXF ARC entity
     wxString cname = getDXFColorName( m_currentColor );
     fprintf( m_outputFile,
-             "0\nARC\n8\n%s\n10\n%g\n20\n%g\n40\n%g\n50\n%g\n51\n%g\n",
+             "0\nARC\n8\n%s\n10\n%s\n20\n%s\n40\n%s\n50\n%.8f\n51\n%.8f\n",
              TO_UTF8( cname ),
-             centre_device.x, centre_device.y, radius_device,
+             formatCoord( centre_device.x ).c_str(),
+             formatCoord( centre_device.y ).c_str(),
+             formatCoord( radius_device ).c_str(),
              startAngle.AsDegrees(), endAngle.AsDegrees() );
 }
 
@@ -936,21 +968,21 @@ void DXF_PLOTTER::plotOneLineOfText( const VECTOR2I& aPos, const COLOR4D& aColor
              "  8\n"
              "%s\n"          // Layer name
              "  10\n"
-             "%g\n"          // First point X
+             "%s\n"          // First point X
              "  11\n"
-             "%g\n"          // Second point X
+             "%s\n"          // Second point X
              "  20\n"
-             "%g\n"          // First point Y
+             "%s\n"          // First point Y
              "  21\n"
-             "%g\n"          // Second point Y
+             "%s\n"          // Second point Y
              "  40\n"
-             "%g\n"          // Text height
+             "%s\n"          // Text height
              "  41\n"
-             "%g\n"          // Width factor
+             "%s\n"          // Width factor
              "  50\n"
-             "%g\n"          // Rotation
+             "%.8f\n"        // Rotation
              "  51\n"
-             "%g\n"          // Oblique angle
+             "%.8f\n"        // Oblique angle
              "  71\n"
              "%d\n"          // Mirror flags
              "  72\n"
@@ -960,9 +992,9 @@ void DXF_PLOTTER::plotOneLineOfText( const VECTOR2I& aPos, const COLOR4D& aColor
              aAttributes.m_Bold ?
                 (aAttributes.m_Italic ? "KICADBI" : "KICADB")
                 : (aAttributes.m_Italic ? "KICADI" : "KICAD"), TO_UTF8( cname ),
-             origin_dev.x, origin_dev.x,
-             origin_dev.y, origin_dev.y,
-             size_dev.y, fabs( size_dev.x / size_dev.y ),
+             formatCoord( origin_dev.x ).c_str(), formatCoord( origin_dev.x ).c_str(),
+             formatCoord( origin_dev.y ).c_str(), formatCoord( origin_dev.y ).c_str(),
+             formatCoord( size_dev.y ).c_str(), formatCoord( fabs( size_dev.x / size_dev.y ) ).c_str(),
              aAttributes.m_Angle.AsDegrees(),
              aAttributes.m_Italic ? DXF_OBLIQUE_ANGLE : 0,
              aAttributes.m_Mirrored ? 2 : 0, // X mirror flag
