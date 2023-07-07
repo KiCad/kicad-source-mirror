@@ -1233,6 +1233,10 @@ void PCB_BASE_FRAME::OnFpChangeDebounceTimer( wxTimerEvent& aEvent )
     FOOTPRINT* fp = GetBoard()->GetFirstFootprint();
     FP_LIB_TABLE* tbl = Prj().PcbFootprintLibs();
 
+    // When loading a footprint from a library in the footprint editor
+    // the items UUIDs must be keep and not reinitialized
+    bool keepUUID = IsType( FRAME_FOOTPRINT_EDITOR );
+
     if( !fp || !tbl )
         return;
 
@@ -1245,16 +1249,39 @@ void PCB_BASE_FRAME::OnFpChangeDebounceTimer( wxTimerEvent& aEvent )
 
         try
         {
-            FOOTPRINT* newfp = tbl->FootprintLoad( nickname, fpname );
+            FOOTPRINT* newfp = tbl->FootprintLoad( nickname, fpname, keepUUID );
 
             if( newfp )
             {
+                std::vector<KIID> selectedItems;
+
+                for( const EDA_ITEM* item : GetCurrentSelection() )
+                {
+                    wxString uuidStr = item->m_Uuid.AsString();
+                    selectedItems.emplace_back( item->m_Uuid );
+                }
+
+                m_toolManager->RunAction( PCB_ACTIONS::selectionClear );
+
                 ReloadFootprint( newfp );
 
                 newfp->ClearAllNets();
                 GetCanvas()->UpdateColors();
                 GetCanvas()->DisplayBoard( GetBoard() );
                 m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+
+                std::vector<EDA_ITEM*> sel;
+
+                for( const KIID& uuid : selectedItems )
+                {
+                    BOARD_ITEM* item = GetBoard()->GetItem( uuid );
+
+                    if( item != DELETED_BOARD_ITEM::GetInstance() )
+                        sel.push_back( item );
+                }
+
+                if( !sel.empty() )
+                    m_toolManager->RunAction( PCB_ACTIONS::selectItems, &sel );
             }
         }
         catch( const IO_ERROR& ioe )
