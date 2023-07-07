@@ -628,15 +628,12 @@ void SIMULATOR_PANEL::rebuildSignalsGrid( wxString aFilter )
 
     m_signalsGrid->ClearRows();
 
-    if( aFilter.IsEmpty() )
-        aFilter = wxS( "*" );
+    SIM_PLOT_PANEL*  plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( GetCurrentPlotPanel() );
 
-    EDA_COMBINED_MATCHER  matcher( aFilter.Upper(), CTX_SIGNAL );
-    SIM_PLOT_PANEL*       plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( GetCurrentPlotPanel() );
+    if( !plotPanel )
+        return;
+
     std::vector<wxString> signals;
-    int                   row = 0;
-
-    wxCHECK( plotPanel, /* void */ );
 
     if( plotPanel->GetSimType() == ST_FFT )
     {
@@ -652,6 +649,12 @@ void SIMULATOR_PANEL::rebuildSignalsGrid( wxString aFilter )
     {
         signals.insert( signals.end(), m_signals.begin(), m_signals.end() );
     }
+
+    if( aFilter.IsEmpty() )
+        aFilter = wxS( "*" );
+
+    EDA_COMBINED_MATCHER  matcher( aFilter.Upper(), CTX_SIGNAL );
+    int                   row = 0;
 
     for( const wxString& signal : signals )
     {

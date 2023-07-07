@@ -1342,7 +1342,7 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, std::vector<T_field>* aFields,
     }
 
     if(   ( ( *aDeviceType == wxT( "V" ) || *aDeviceType == wxT( "I" ) )
-            && aModelType->IsEmpty() )
+            && ( aModelType->IsEmpty() || *aModelType == wxT( "DC" ) ) )
        ||
           ( aDeviceType->IsEmpty()
             && aModelType->IsEmpty()
