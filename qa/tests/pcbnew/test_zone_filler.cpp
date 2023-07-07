@@ -189,7 +189,9 @@ BOOST_FIXTURE_TEST_CASE( RegressionZoneFillTests, ZONE_FILL_TEST_FIXTURE )
                                     "issue6039",
                                     "issue6260",
                                     "issue6284",
-                                    "issue7086" };
+                                    "issue7086",
+                                    "issue14294"   // Bad Clipper2 fill
+                                };
 
     for( const wxString& relPath : tests )
     {

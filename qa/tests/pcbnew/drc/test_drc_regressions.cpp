@@ -61,14 +61,13 @@ BOOST_FIXTURE_TEST_CASE( DRCFalsePositiveRegressions, DRC_REGRESSION_TEST_FIXTUR
         "issue10906",   // Soldermask bridge for only one object
         "issue11814",   // Bad cache hit in isInsideArea
         "issue12609",   // Arc collison edge case
-        "issue14294",   // Bad Clipper2 fill
         "issue14412"    // Solder mask bridge between pads in a net-tie pad group
     };
 
     for( const wxString& relPath : tests )
     {
         KI_TEST::LoadBoard( m_settingsManager, relPath, m_board );
-        KI_TEST::FillZones( m_board.get() );
+        // Do not refill zones here because this is testing the DRC engine, not the zone filler
 
         std::vector<DRC_ITEM>  violations;
         BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
@@ -118,7 +117,7 @@ BOOST_FIXTURE_TEST_CASE( DRCFalsePositiveRegressions, DRC_REGRESSION_TEST_FIXTUR
 
 BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTURE )
 {
-    // These documents at one time failed to catch DRC errors that they should have.
+    // These documents at one time failed to catch DRC errors that they should have
 
     std::vector< std::pair<wxString, int> > tests =
     {
@@ -131,78 +130,19 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
         { "issue6945",  2 },
         { "issue7241",  1 },
         { "issue7267",  4 },
-        { "issue7325",  2 },
+        { "issue7325",  4 },
         { "issue8003",  2 },
         { "issue9081",  2 },
-        { "issue12109", 8 },    // Pads fail annular width test
-        { "issue14334", 2 },    // Thermal spoke to otherwise unconnected island
-        { "reverse_via", 3 }    // Via/track ordering
-    };
-
-    for( const std::pair<wxString, int>& entry : tests )
-    {
-        KI_TEST::LoadBoard( m_settingsManager, entry.first, m_board );
-        KI_TEST::FillZones( m_board.get() );
-
-        std::vector<DRC_ITEM>  violations;
-        BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
-
-        // Disable DRC tests not useful in this testcase
-        bds.m_DRCSeverities[ DRCE_COPPER_SLIVER ] = SEVERITY::RPT_SEVERITY_IGNORE;
-        bds.m_DRCSeverities[ DRCE_LIB_FOOTPRINT_ISSUES ] = SEVERITY::RPT_SEVERITY_IGNORE;
-        bds.m_DRCSeverities[ DRCE_LIB_FOOTPRINT_MISMATCH ] = SEVERITY::RPT_SEVERITY_IGNORE;
-
-        bds.m_DRCEngine->SetViolationHandler(
-                [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer )
-                {
-                    PCB_MARKER temp( aItem, aPos );
-
-                    if( bds.m_DrcExclusions.find( temp.Serialize() ) == bds.m_DrcExclusions.end() )
-                        violations.push_back( *aItem );
-                } );
-
-        bds.m_DRCEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
-
-        if( violations.size() == entry.second )
-        {
-            BOOST_CHECK_EQUAL( 1, 1 );  // quiet "did not check any assertions" warning
-            BOOST_TEST_MESSAGE( wxString::Format( "DRC regression: %s, passed", entry.first ) );
-        }
-        else
-        {
-            BOOST_CHECK_EQUAL( violations.size(), entry.second );
-
-            UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::INCHES );
-
-            std::map<KIID, EDA_ITEM*> itemMap;
-            m_board->FillItemMap( itemMap );
-
-            for( const DRC_ITEM& item : violations )
-            {
-                BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR,
-                                                     itemMap ) );
-            }
-
-            BOOST_ERROR( wxString::Format( "DRC regression: %s, failed", entry.first ) );
-        }
-    }
-}
-
-
-BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressionsNoFill, DRC_REGRESSION_TEST_FIXTURE )
-{
-    // These documents at one time failed to catch DRC errors that they should have but only
-    // when the zones were filled.  In other words, refilling the zone will fix the error, but
-    // DRC should have caught it regardless
-
-    std::vector< std::pair<wxString, int> > tests =
-    {
+        { "issue12109", 8 },        // Pads fail annular width test
+        { "issue14334", 2 },        // Thermal spoke to otherwise unconnected island
+        { "reverse_via", 3 },       // Via/track ordering
         { "intersectingzones",  1 } // zones are too close to each other
     };
 
     for( const std::pair<wxString, int>& entry : tests )
     {
         KI_TEST::LoadBoard( m_settingsManager, entry.first, m_board );
+        // Do not refill zones here because this is testing the DRC engine, not the zone filler
 
         std::vector<DRC_ITEM>  violations;
         BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
