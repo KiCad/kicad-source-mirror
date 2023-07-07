@@ -85,9 +85,28 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
 
     drawList.BuildDrawItemsList( aPageInfo, aTitleBlock );
 
-    // Draw item list
+    // Draw bitmaps first
     for( DS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item; item = drawList.GetNext() )
     {
+        if( item->Type() == WSG_BITMAP_T )
+        {
+            DS_DRAW_ITEM_BITMAP* drawItem = (DS_DRAW_ITEM_BITMAP*) item;
+            DS_DATA_ITEM_BITMAP* bitmap = (DS_DATA_ITEM_BITMAP*) drawItem->GetPeer();
+
+            if( bitmap->m_ImageBitmap == nullptr )
+                continue;
+
+            bitmap->m_ImageBitmap->PlotImage( plotter, drawItem->GetPosition(), plotColor,
+                                              PLOTTER::USE_DEFAULT_LINE_WIDTH );
+        }
+    }
+
+    // Draw other items
+    for( DS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item; item = drawList.GetNext() )
+    {
+        if( item->Type() == WSG_BITMAP_T )
+            continue;
+
         plotter->SetColor( plotColor );
         plotter->SetCurrentLineWidth( PLOTTER::USE_DEFAULT_LINE_WIDTH );
 
@@ -154,19 +173,6 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
 
                 plotter->PlotPoly( points, FILL_T::FILLED_SHAPE, penWidth );
             }
-        }
-            break;
-
-        case WSG_BITMAP_T:
-        {
-            DS_DRAW_ITEM_BITMAP* drawItem = (DS_DRAW_ITEM_BITMAP*) item;
-            DS_DATA_ITEM_BITMAP* bitmap = (DS_DATA_ITEM_BITMAP*) drawItem->GetPeer();
-
-            if( bitmap->m_ImageBitmap == nullptr )
-                break;
-
-            bitmap->m_ImageBitmap->PlotImage( plotter, drawItem->GetPosition(), plotColor,
-                                              PLOTTER::USE_DEFAULT_LINE_WIDTH );
         }
             break;
 

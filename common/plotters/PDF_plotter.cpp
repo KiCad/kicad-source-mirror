@@ -33,6 +33,8 @@
 #include <wx/filename.h>
 #include <wx/mstream.h>
 #include <wx/zstream.h>
+#include <wx/wfstream.h>
+#include <wx/datstrm.h>
 
 #include <advanced_config.h>
 #include <eda_text.h> // for IsGotoPageHref
@@ -471,6 +473,53 @@ void PDF_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double
     VECTOR2I start( aPos.x - drawsize.x / 2, aPos.y + drawsize.y / 2 );
     VECTOR2D dev_start = userToDeviceCoordinates( start );
 
+    // Deduplicate images
+    auto findHandleForImage = [&]( const wxImage& aImage ) -> int
+    {
+        for( const auto& [imgHandle, image] : m_imageHandles )
+        {
+            if( image.IsSameAs( aImage ) )
+                return imgHandle;
+
+            if( image.GetWidth() != aImage.GetWidth() )
+                continue;
+
+            if( image.GetHeight() != aImage.GetHeight() )
+                continue;
+
+            if( image.GetType() != aImage.GetType() )
+                continue;
+
+            if( image.HasAlpha() != aImage.HasAlpha() )
+                continue;
+
+            if( image.HasMask() != aImage.HasMask() || image.GetMaskRed() != aImage.GetMaskRed()
+                || image.GetMaskGreen() != aImage.GetMaskGreen()
+                || image.GetMaskBlue() != aImage.GetMaskBlue() )
+                continue;
+
+            int pixCount = image.GetWidth() * image.GetHeight();
+            
+            if( memcmp( image.GetData(), aImage.GetData(), pixCount * 3 ) != 0 )
+                continue;
+
+            if( image.HasAlpha() && memcmp( image.GetAlpha(), aImage.GetAlpha(), pixCount ) != 0 )
+                continue;
+
+            return imgHandle;
+        }
+
+        return -1;
+    };
+
+    int imgHandle = findHandleForImage( aImage );
+
+    if( imgHandle == -1 )
+    {
+        imgHandle = allocPdfObject();
+        m_imageHandles.emplace( imgHandle, aImage );
+    }
+
     /* PDF has an uhm... simplified coordinate system handling. There is
        *one* operator to do everything (the PS concat equivalent). At least
        they kept the matrix stack to save restore environments. Also images
@@ -486,75 +535,8 @@ void PDF_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double
              userToDeviceSize( drawsize.y ),
              dev_start.x, dev_start.y );
 
-    /* An inline image is a cross between a dictionary and a stream.
-       A real ugly construct (compared with the elegance of the PDF
-       format). Also it accepts some 'abbreviations', which is stupid
-       since the content stream is usually compressed anyway... */
-    fprintf( m_workFile,
-             "BI\n"
-             "  /BPC 8\n"
-             "  /CS %s\n"
-             "  /W %d\n"
-             "  /H %d\n"
-             "ID\n", m_colorMode ? "/RGB" : "/G", pix_size.x, pix_size.y );
-
-    wxColor bg = m_renderSettings->GetBackgroundColor() != COLOR4D::UNSPECIFIED
-                         ? m_renderSettings->GetBackgroundColor().ToColour()
-                         : wxColor( 255, 255, 255 );
-
-    /* Here comes the stream (in binary!). I *could* have hex or ascii84
-       encoded it, but who cares? I'll go through zlib anyway */
-    for( int y = 0; y < pix_size.y; y++ )
-    {
-        for( int x = 0; x < pix_size.x; x++ )
-        {
-            unsigned char r = aImage.GetRed( x, y ) & 0xFF;
-            unsigned char g = aImage.GetGreen( x, y ) & 0xFF;
-            unsigned char b = aImage.GetBlue( x, y ) & 0xFF;
-
-            // PDF inline images don't support alpha, so blend with background color
-            if( aImage.HasAlpha() )
-            {
-                unsigned char alpha = aImage.GetAlpha( x, y ) & 0xFF;
-
-                if( alpha < 0xFF )
-                {
-                    float d = alpha / 255.0;
-
-                    r = wxColour::AlphaBlend( r, bg.Red(), d );
-                    g = wxColour::AlphaBlend( g, bg.Green(), d );
-                    b = wxColour::AlphaBlend( b, bg.Blue(), d );
-                }
-            }
-
-            if( aImage.HasMask() )
-            {
-                if( r == aImage.GetMaskRed() && g == aImage.GetMaskGreen()
-                  && b == aImage.GetMaskBlue() )
-                {
-                    r = 0xFF;
-                    g = 0xFF;
-                    b = 0xFF;
-                }
-            }
-
-            // As usual these days, stdio buffering has to suffeeeeerrrr
-            if( m_colorMode )
-            {
-                putc( r, m_workFile );
-                putc( g, m_workFile );
-                putc( b, m_workFile );
-            }
-            else
-            {
-                // Greyscale conversion (CIE 1931)
-                unsigned char grey = KiROUND( r * 0.2126 + g * 0.7152 + b * 0.0722 );
-                putc( grey, m_workFile );
-            }
-        }
-    }
-
-    fputs( "EI Q\n", m_workFile ); // Finish step 2 and do step 3
+    fprintf( m_workFile, "/Im%d Do\n", imgHandle );
+    fputs( "Q\n", m_workFile );
 }
 
 
@@ -712,6 +694,82 @@ void PDF_PLOTTER::StartPage( const wxString& aPageNumber, const wxString& aPageN
 }
 
 
+void WriteImageStream( const wxImage& aImage, wxDataOutputStream& aOut, wxColor bg, bool colorMode )
+{
+    int w = aImage.GetWidth();
+    int h = aImage.GetHeight();
+
+    for( int y = 0; y < h; y++ )
+    {
+        for( int x = 0; x < w; x++ )
+        {
+            unsigned char r = aImage.GetRed( x, y ) & 0xFF;
+            unsigned char g = aImage.GetGreen( x, y ) & 0xFF;
+            unsigned char b = aImage.GetBlue( x, y ) & 0xFF;
+
+            if( aImage.HasMask() )
+            {
+                if( r == aImage.GetMaskRed() && g == aImage.GetMaskGreen()
+                    && b == aImage.GetMaskBlue() )
+                {
+                    r = bg.Red();
+                    g = bg.Green();
+                    b = bg.Blue();
+                }
+            }
+
+            if( colorMode )
+            {
+                aOut.Write8( r );
+                aOut.Write8( g );
+                aOut.Write8( b );
+            }
+            else
+            {
+                // Greyscale conversion (CIE 1931)
+                unsigned char grey = KiROUND( r * 0.2126 + g * 0.7152 + b * 0.0722 );
+                
+                aOut.Write8( grey );
+            }
+        }
+    }
+}
+
+
+void WriteImageSMaskStream( const wxImage& aImage, wxDataOutputStream& aOut )
+{
+    int w = aImage.GetWidth();
+    int h = aImage.GetHeight();
+
+    if( aImage.HasMask() )
+    {
+        for( int y = 0; y < h; y++ )
+        {
+            for( int x = 0; x < w; x++ )
+            {
+                unsigned char a = 255;
+                unsigned char r = aImage.GetRed( x, y );
+                unsigned char g = aImage.GetGreen( x, y );
+                unsigned char b = aImage.GetBlue( x, y );
+
+                if( r == aImage.GetMaskRed() && g == aImage.GetMaskGreen()
+                    && b == aImage.GetMaskBlue() )
+                {
+                    a = 0;
+                }
+
+                aOut.Write8( a );
+            }
+        }
+    }
+    else if( aImage.HasAlpha() )
+    {
+        int size = w * h;
+        aOut.Write8( aImage.GetAlpha(), size );
+    }
+}
+
+
 void PDF_PLOTTER::ClosePage()
 {
     wxASSERT( m_workFile );
@@ -807,11 +865,13 @@ void PDF_PLOTTER::ClosePage()
              "/Parent %d 0 R\n"
              "/Resources <<\n"
              "    /ProcSet [/PDF /Text /ImageC /ImageB]\n"
-             "    /Font %d 0 R >>\n"
+             "    /Font %d 0 R\n"
+             "    /XObject %d 0 R >>\n"
              "/MediaBox [0 0 %g %g]\n"
              "/Contents %d 0 R\n",
              m_pageTreeHandle,
              m_fontResDictHandle,
+             m_imgResDictHandle,
              psPaperSize.x,
              psPaperSize.y,
              m_pageStreamHandle );
@@ -908,6 +968,8 @@ bool PDF_PLOTTER::StartPlot( const wxString& aPageNumber, const wxString& aPageN
     /* In the same way, the font resource dictionary is used by every page
        (it *could* be inherited via the Pages tree */
     m_fontResDictHandle = allocPdfObject();
+
+    m_imgResDictHandle = allocPdfObject();
 
     m_jsNamesHandle = allocPdfObject();
 
@@ -1108,6 +1170,112 @@ bool PDF_PLOTTER::EndPlot()
 
     fputs( ">>\n", m_outputFile );
     closePdfObject();
+
+    // Named image dictionary (was allocated, now we emit it)
+    startPdfObject( m_imgResDictHandle );
+    fputs( "<<\n", m_outputFile );
+
+    for( const auto& [imgHandle, image] : m_imageHandles )
+    {
+        fprintf( m_outputFile, "    /Im%d %d 0 R\n", imgHandle, imgHandle );
+    }
+
+    fputs( ">>\n", m_outputFile );
+    closePdfObject();
+
+    // Emit images with optional SMask for transparency
+    for( const auto& [imgHandle, image] : m_imageHandles )
+    {
+        // Init wxFFile so wxFFileOutputStream won't close file in dtor.
+        wxFFile outputFFile( m_outputFile );
+
+        // Image
+        startPdfObject( imgHandle );
+        int imgLenHandle = allocPdfObject();
+        int smaskHandle = ( image.HasAlpha() || image.HasMask() ) ? allocPdfObject() : -1;
+
+        fprintf( m_outputFile,
+                 "<<\n"
+                 "/Type /XObject\n"
+                 "/Subtype /Image\n"
+                 "/BitsPerComponent 8\n"
+                 "/ColorSpace %s\n"
+                 "/Width %d\n"
+                 "/Height %d\n"
+                 "/Filter /FlateDecode\n"
+                 "/Length %d 0 R\n", // Length is deferred
+                 m_colorMode ? "/DeviceRGB" : "/DeviceGray", image.GetWidth(), image.GetHeight(),
+                 imgLenHandle );
+
+        if( smaskHandle != -1 )
+            fprintf( m_outputFile, "/SMask %d 0 R\n", smaskHandle );
+
+        fputs( ">>\n", m_outputFile );
+        fputs( "stream\n", m_outputFile );
+
+        long imgStreamStart = ftell( m_outputFile );
+
+        {
+            wxFFileOutputStream ffos( outputFFile );
+            wxZlibOutputStream  zos( ffos, wxZ_BEST_COMPRESSION, wxZLIB_ZLIB );
+            wxDataOutputStream  dos( zos );
+
+            WriteImageStream( image, dos, m_renderSettings->GetBackgroundColor().ToColour(),
+                              m_colorMode );
+        }
+
+        long imgStreamSize = ftell( m_outputFile ) - imgStreamStart;
+
+        fputs( "\nendstream\n", m_outputFile );
+        closePdfObject();
+
+        startPdfObject( imgLenHandle );
+        fprintf( m_outputFile, "%ld\n", imgStreamSize );
+        closePdfObject();
+
+        if( smaskHandle != -1 )
+        {
+            // SMask
+            startPdfObject( smaskHandle );
+            int smaskLenHandle = allocPdfObject();
+
+            fprintf( m_outputFile,
+                     "<<\n"
+                     "/Type /XObject\n"
+                     "/Subtype /Image\n"
+                     "/BitsPerComponent 8\n"
+                     "/ColorSpace /DeviceGray\n"
+                     "/Width %d\n"
+                     "/Height %d\n"
+                     "/Length %d 0 R\n"
+                     "/Filter /FlateDecode\n"
+                     ">>\n", // Length is deferred
+                     image.GetWidth(), image.GetHeight(), smaskLenHandle );
+
+            fputs( "stream\n", m_outputFile );
+
+            long smaskStreamStart = ftell( m_outputFile );
+
+            {
+                wxFFileOutputStream ffos( outputFFile );
+                wxZlibOutputStream  zos( ffos, wxZ_BEST_COMPRESSION, wxZLIB_ZLIB );
+                wxDataOutputStream  dos( zos );
+
+                WriteImageSMaskStream( image, dos );
+            }
+
+            long smaskStreamSize = ftell( m_outputFile ) - smaskStreamStart;
+
+            fputs( "\nendstream\n", m_outputFile );
+            closePdfObject();
+
+            startPdfObject( smaskLenHandle );
+            fprintf( m_outputFile, "%u\n", (unsigned) smaskStreamSize );
+            closePdfObject();
+        }
+
+        outputFFile.Detach(); // Don't close it
+    }
 
     for( const auto& [ linkHandle, linkPair ] : m_hyperlinkHandles )
     {

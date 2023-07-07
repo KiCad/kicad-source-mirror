@@ -493,6 +493,7 @@ protected:
 
     int m_pageTreeHandle;           ///< Handle to the root of the page tree object
     int m_fontResDictHandle;        ///< Font resource dictionary
+    int m_imgResDictHandle;         ///< Image resource dictionary
     int m_jsNamesHandle;            ///< Handle for Names dictionary with JS
     std::vector<int> m_pageHandles; ///< Handles to the page objects
     int m_pageStreamHandle;         ///< Handle of the page content object
@@ -514,6 +515,8 @@ protected:
     std::map<int, std::pair<BOX2D, std::vector<wxString>>> m_hyperlinkMenuHandles;
 
     std::map<wxString, std::vector<std::pair<BOX2I, wxString>>>      m_bookmarksInPage;
+
+    std::map<int, wxImage> m_imageHandles;
 
     std::unique_ptr<OUTLINE_NODE> m_outlineRoot;    ///< Root outline node
     int                           m_totalOutlineNodes;  ///< Total number of outline nodes
