@@ -333,7 +333,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
         if( text->GetText() == wxT( "${VALUE}" ) && !GetPlotValue() )
             continue;
 
-        PlotText( text, textLayer, textItem->IsKnockout() );
+        PlotText( text, textLayer, text->IsKnockout() );
     }
 }
 
