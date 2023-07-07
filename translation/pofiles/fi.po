@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:35-0700\n"
-"PO-Revision-Date: 2023-07-07 16:49+0000\n"
+"PO-Revision-Date: 2023-07-09 09:52+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
@@ -29047,7 +29047,7 @@ msgstr "Erilliset etupuolen ja kääntöpuolen tiedostot"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:61
 msgid "Single file for board"
-msgstr "Yksi tiedosto taululle"
+msgstr "Yksi tiedosto piirilevylle"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:63
 msgid "Files"
