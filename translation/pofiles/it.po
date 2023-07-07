@@ -110,7 +110,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:33-0700\n"
-"PO-Revision-Date: 2023-06-12 14:32+0200\n"
+"PO-Revision-Date: 2023-07-07 10:24+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -7768,9 +7768,8 @@ msgid "Delete all associations?"
 msgstr "Cancellare tutte le associazioni?"
 
 #: cvpcb/tools/cvpcb_control.cpp:183
-#, fuzzy
 msgid "Unable to create the footprint viewer frame"
-msgstr "Impossibile caricare l'impronta \"%s\" da \"%s\""
+msgstr "Impossibile creare riquadro visualizzatore impronta"
 
 #: eeschema/annotate.cpp:265
 #, c-format
@@ -13362,9 +13361,9 @@ msgid "Abort Project Save"
 msgstr "Annulla salvataggio progetto"
 
 #: eeschema/files-io.cpp:1220
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' is already open by '%s' at '%s'."
-msgstr "Lo schema \"%s\" è già aperto."
+msgstr "Lo schema '%s' è già aperto da '%s' in '%s'."
 
 #: eeschema/files-io.cpp:1233
 msgid "Importing Schematic"
@@ -16396,9 +16395,9 @@ msgid "Voltage (measured)"
 msgstr "Tensione (misurata)"
 
 #: eeschema/sim/spice_library_parser.cpp:89
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create sim model from %s"
-msgstr "Impossibile creare la cartella '%s'."
+msgstr "Impossibile creare modello sim da %s"
 
 #: eeschema/sim/spice_model_parser.cpp:84
 #: eeschema/sim/spice_model_parser.cpp:186
@@ -19811,14 +19810,12 @@ msgid "Malformed expression"
 msgstr "Espressione malformata"
 
 #: include/lockfile.h:105
-#, fuzzy
 msgid "Lock file already exists"
-msgstr "Il file %s esiste già."
+msgstr "Il file di lock esiste già"
 
 #: include/lockfile.h:124
-#, fuzzy
 msgid "Failed to access lock file"
-msgstr "Fallito caricamento file schema\n"
+msgstr "Fallito accesso al file di lock"
 
 #: include/panel_hotkeys_editor.h:55
 msgid "Reset all hotkeys to the built-in KiCad defaults"
@@ -20009,9 +20006,8 @@ msgid "Precision of gerber coordinates, valid options: 5 or 6"
 msgstr "Precisione delle coordinate gerber, opzioni valide: 5 or 6"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:85
-#, fuzzy
 msgid "Use KiCad gerber file extension"
-msgstr "Usa le estensioni dei nomi file Protel"
+msgstr "Usa estensioni file gerber KiCad"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:45
 msgid ""
@@ -33701,9 +33697,9 @@ msgstr ""
 "usavano lo spessore della linea del bordo scheda sullo strato Edge Cuts."
 
 #: pcbnew/files.cpp:616
-#, fuzzy, c-format
+#, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
-msgstr "Il file del C.S. '%s' è già aperto."
+msgstr "Il file del C.S. '%s' è già aperto da '%s' in '%s'."
 
 #: pcbnew/files.cpp:627
 msgid "The current PCB has been modified.  Save changes?"
@@ -38465,12 +38461,12 @@ msgid "Pack footprints"
 msgstr "Compatta impronte"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Click to place %s (item %zu of %zu)\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"Fare clic per piazzare %s (elemento %ld di %ld)\n"
+"Fare clic per piazzare %s (elemento %zu di %zu)\n"
 "Premere <Esc> per annullare tutto; doppio clic per completare"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:367
