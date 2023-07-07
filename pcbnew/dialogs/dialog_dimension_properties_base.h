@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.1.0-0-g733bf3d)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -38,7 +38,6 @@ class PCB_LAYER_BOX_SELECTOR;
 
 ///////////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_DIMENSION_PROPERTIES_BASE
 ///////////////////////////////////////////////////////////////////////////////
@@ -71,10 +70,12 @@ class DIALOG_DIMENSION_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_lblSuffix;
 		wxTextCtrl* m_txtSuffix;
 		wxStaticText* m_lblPrecision;
+		wxStaticText* m_lblArrowDirection;
 		wxChoice* m_cbPrecision;
-		wxCheckBox* m_cbSuppressZeroes;
-		wxStaticText* m_lblLayer;
+		wxChoice* m_cbArrowDirection;
 		PCB_LAYER_BOX_SELECTOR* m_cbLayer;
+		wxStaticText* m_lblLayer;
+		wxCheckBox* m_cbSuppressZeroes;
 		wxStaticText* m_lblPreview;
 		wxStaticText* m_staticTextPreview;
 		wxStaticBoxSizer* m_sizerText;

@@ -3913,6 +3913,10 @@ PCB_DIMENSION_BASE* PCB_IO_KICAD_SEXPR_PARSER::parseDIMENSION( BOARD_ITEM* aPare
         }
 
         NeedRIGHT();
+
+        // Before parsing further, set default properites for old KiCad file
+        // versions that didnt have these properties:
+        dim->SetArrowDirection( DIM_ARROW_DIRECTION::OUTWARD );
     }
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
@@ -4111,7 +4115,22 @@ PCB_DIMENSION_BASE* PCB_IO_KICAD_SEXPR_PARSER::parseDIMENSION( BOARD_ITEM* aPare
                     NeedRIGHT();
                     break;
 
+                case T_arrow_direction:
+                {
+                    token = NextTok();
+
+                    if( token == T_inward )
+                        dim->ChangeArrowDirection( DIM_ARROW_DIRECTION::INWARD );
+                    else if( token == T_outward )
+                        dim->ChangeArrowDirection( DIM_ARROW_DIRECTION::OUTWARD );
+                    else
+                        Expecting( "inward or outward" );
+
+                    NeedRIGHT();
+                    break;
+                }
                 case T_arrow_length:
+
                     dim->SetArrowLength( parseBoardUnits( "arrow length value" ) );
                     NeedRIGHT();
                     break;
@@ -4158,8 +4177,8 @@ PCB_DIMENSION_BASE* PCB_IO_KICAD_SEXPR_PARSER::parseDIMENSION( BOARD_ITEM* aPare
                 }
 
                 default:
-                    Expecting( "thickness, arrow_length, text_position_mode, extension_height, "
-                               "extension_offset" );
+                    Expecting( "thickness, arrow_length, arrow_direction, text_position_mode, "
+                               "extension_height, extension_offset" );
                 }
             }
 

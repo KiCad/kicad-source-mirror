@@ -41,6 +41,7 @@ arrow1a
 arrow1b
 arrow2a
 arrow2b
+arrow_direction
 arrow_length
 at
 attr
@@ -180,6 +181,7 @@ host
 href
 id
 image
+inward
 island
 island_removal_mode
 island_area_min
@@ -237,6 +239,7 @@ orientation
 orthogonal
 other_layers_line_width
 other_layers_text_dims
+outward
 oval
 override_value
 pad

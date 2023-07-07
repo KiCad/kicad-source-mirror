@@ -955,6 +955,20 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_DIMENSION_BASE* aDimension, int aNest
                   formatInternalUnits( aDimension->GetArrowLength() ).c_str(),
                   static_cast<int>( aDimension->GetTextPositionMode() ) );
 
+    if( ortho || aligned )
+    {
+        switch( aDimension->GetArrowDirection() )
+        {
+        case DIM_ARROW_DIRECTION::OUTWARD:
+            m_out->Print( 0, " (arrow_direction outward)" );
+            break;
+        case DIM_ARROW_DIRECTION::INWARD:
+            m_out->Print( 0, " (arrow_direction inward)" );
+            break;
+        // No default, handle all cases
+        }
+    }
+
     if( aligned )
     {
         m_out->Print( 0, " (extension_height %s)",

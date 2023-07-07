@@ -40,6 +40,7 @@
 #include <settings/settings_manager.h>
 #include <trigo.h>
 
+static const int INWARD_ARROW_LENGTH_TO_HEAD_RATIO = 2;
 
 static const EDA_ANGLE s_arrowAngle( 27.5, DEGREES_T );
 
@@ -133,6 +134,7 @@ PCB_DIMENSION_BASE::PCB_DIMENSION_BASE( BOARD_ITEM* aParent, KICAD_T aType ) :
         m_units( EDA_UNITS::INCHES ),
         m_autoUnits( false ),
         m_unitsFormat( DIM_UNITS_FORMAT::BARE_SUFFIX ),
+        m_arrowDirection( DIM_ARROW_DIRECTION::OUTWARD ),
         m_precision( DIM_PRECISION::X_XXXX ),
         m_suppressZeroes( false ),
         m_lineThickness( pcbIUScale.mmToIU( 0.2 ) ),
@@ -245,6 +247,26 @@ double PCB_DIMENSION_BASE::Similarity( const BOARD_ITEM& aOther ) const
     similarity *= EDA_TEXT::Similarity( other );
 
     return similarity;
+}
+
+
+void PCB_DIMENSION_BASE::drawAnArrow( VECTOR2I startPoint, EDA_ANGLE anAngle, int aLength )
+{
+    if( aLength )
+    {
+        VECTOR2I tailEnd( aLength, 0 );
+        RotatePoint( tailEnd, -anAngle );
+        m_shapes.emplace_back( new SHAPE_SEGMENT( startPoint, startPoint + tailEnd ) );
+    }
+
+    VECTOR2I arrowEndPos( m_arrowLength, 0 );
+    VECTOR2I arrowEndNeg( m_arrowLength, 0 );
+
+    RotatePoint( arrowEndPos, -anAngle + s_arrowAngle );
+    RotatePoint( arrowEndNeg, -anAngle - s_arrowAngle );
+
+    m_shapes.emplace_back( new SHAPE_SEGMENT( startPoint, startPoint + arrowEndPos ) );
+    m_shapes.emplace_back( new SHAPE_SEGMENT( startPoint, startPoint + arrowEndNeg ) );
 }
 
 
@@ -796,17 +818,20 @@ void PCB_DIM_ALIGNED::updateGeometry()
 
     CollectKnockedOutSegments( polyBox, crossbar, m_shapes );
 
-    // Add arrows
-    VECTOR2I arrowEndPos( m_arrowLength, 0 );
-    VECTOR2I arrowEndNeg( m_arrowLength, 0 );
-    RotatePoint( arrowEndPos, -EDA_ANGLE( dimension ) + s_arrowAngle );
-    RotatePoint( arrowEndNeg, -EDA_ANGLE( dimension ) - s_arrowAngle );
-
-    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarStart, m_crossBarStart + arrowEndPos ) );
-    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarStart, m_crossBarStart + arrowEndNeg ) );
-    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarEnd, m_crossBarEnd - arrowEndPos ) );
-    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarEnd, m_crossBarEnd - arrowEndNeg ) );
+    if( m_arrowDirection == DIM_ARROW_DIRECTION::INWARD )
+    {
+        drawAnArrow( m_crossBarStart, EDA_ANGLE( dimension ) + EDA_ANGLE( 180 ),
+                     m_arrowLength * INWARD_ARROW_LENGTH_TO_HEAD_RATIO );
+        drawAnArrow( m_crossBarEnd, EDA_ANGLE( dimension ),
+                     m_arrowLength * INWARD_ARROW_LENGTH_TO_HEAD_RATIO );
+    }
+    else
+    {
+        drawAnArrow( m_crossBarStart, EDA_ANGLE( dimension ), 0 );
+        drawAnArrow( m_crossBarEnd, EDA_ANGLE( dimension ) + EDA_ANGLE( 180 ), 0 );
+    }
 }
+
 
 void PCB_DIM_ALIGNED::updateText()
 {
@@ -976,17 +1001,20 @@ void PCB_DIM_ORTHOGONAL::updateGeometry()
 
     CollectKnockedOutSegments( polyBox, crossbar, m_shapes );
 
-    // Add arrows
     EDA_ANGLE crossBarAngle( m_crossBarEnd - m_crossBarStart );
-    VECTOR2I  arrowEndPos( m_arrowLength, 0 );
-    VECTOR2I  arrowEndNeg( m_arrowLength, 0 );
-    RotatePoint( arrowEndPos, -crossBarAngle + s_arrowAngle );
-    RotatePoint( arrowEndNeg, -crossBarAngle - s_arrowAngle );
 
-    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarStart, m_crossBarStart + arrowEndPos ) );
-    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarStart, m_crossBarStart + arrowEndNeg ) );
-    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarEnd, m_crossBarEnd - arrowEndPos ) );
-    m_shapes.emplace_back( new SHAPE_SEGMENT( m_crossBarEnd, m_crossBarEnd - arrowEndNeg ) );
+    if( m_arrowDirection == DIM_ARROW_DIRECTION::INWARD )
+    {
+        // Arrows with fixed length.
+        drawAnArrow( m_crossBarStart, crossBarAngle + EDA_ANGLE( 180 ),
+                     m_arrowLength * INWARD_ARROW_LENGTH_TO_HEAD_RATIO );
+        drawAnArrow( m_crossBarEnd, crossBarAngle, m_arrowLength * INWARD_ARROW_LENGTH_TO_HEAD_RATIO );
+    }
+    else
+    {
+        drawAnArrow( m_crossBarStart, crossBarAngle, 0 );
+        drawAnArrow( m_crossBarEnd, crossBarAngle + EDA_ANGLE( 180 ), 0 );
+    }
 }
 
 
@@ -1166,15 +1194,7 @@ void PCB_DIM_LEADER::updateGeometry()
 
     m_shapes.emplace_back( new SHAPE_SEGMENT( start, *arrowSegEnd ) );
 
-    // Add arrows
-    VECTOR2I arrowEndPos( m_arrowLength, 0 );
-    VECTOR2I arrowEndNeg( m_arrowLength, 0 );
-    RotatePoint( arrowEndPos, -EDA_ANGLE( firstLine ) + s_arrowAngle );
-    RotatePoint( arrowEndNeg, -EDA_ANGLE( firstLine ) - s_arrowAngle );
-
-    m_shapes.emplace_back( new SHAPE_SEGMENT( start, start + arrowEndPos ) );
-    m_shapes.emplace_back( new SHAPE_SEGMENT( start, start + arrowEndNeg ) );
-
+    drawAnArrow( start, EDA_ANGLE( firstLine ), 0 );
 
     if( !GetText().IsEmpty() )
     {
@@ -1335,14 +1355,7 @@ void PCB_DIM_RADIAL::updateGeometry()
     CollectKnockedOutSegments( polyBox, arrowSeg, m_shapes );
     CollectKnockedOutSegments( polyBox, textSeg, m_shapes );
 
-    // Add arrows
-    VECTOR2I arrowEndPos( m_arrowLength, 0 );
-    VECTOR2I arrowEndNeg( m_arrowLength, 0 );
-    RotatePoint( arrowEndPos, -EDA_ANGLE( radial ) + s_arrowAngle );
-    RotatePoint( arrowEndNeg, -EDA_ANGLE( radial ) - s_arrowAngle );
-
-    m_shapes.emplace_back( new SHAPE_SEGMENT( m_end, m_end + arrowEndPos ) );
-    m_shapes.emplace_back( new SHAPE_SEGMENT( m_end, m_end + arrowEndNeg ) );
+    drawAnArrow( m_end, EDA_ANGLE( radial ), 0 );
 }
 
 
@@ -1440,6 +1453,10 @@ static struct DIMENSION_DESC
                     .Map( DIM_UNITS_MODE::MILLIMETRES, _HKI( "Millimeters" ) )
                     .Map( DIM_UNITS_MODE::AUTOMATIC,   _HKI( "Automatic" ) );
 
+        ENUM_MAP<DIM_ARROW_DIRECTION>::Instance()
+                    .Map( DIM_ARROW_DIRECTION::INWARD,      _HKI( "Inward" ) )
+                    .Map( DIM_ARROW_DIRECTION::OUTWARD,     _HKI( "Outward" ) );
+
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( PCB_DIMENSION_BASE );
         propMgr.AddTypeCast( new TYPE_CAST<PCB_DIMENSION_BASE, PCB_TEXT> );
@@ -1462,7 +1479,13 @@ static struct DIMENSION_DESC
         auto isNotLeader =
                 []( INSPECTABLE* aItem ) -> bool
                 {
-            return dynamic_cast<PCB_DIM_LEADER*>( aItem ) == nullptr;
+                    return dynamic_cast<PCB_DIM_LEADER*>( aItem ) == nullptr;
+                };
+
+        auto isMultiArrowDirection =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    return dynamic_cast<PCB_DIM_ALIGNED*>( aItem ) != nullptr;
                 };
 
         propMgr.AddProperty( new PROPERTY<PCB_DIMENSION_BASE, wxString>( _HKI( "Prefix" ),
@@ -1500,6 +1523,11 @@ static struct DIMENSION_DESC
                 groupDimension )
                 .SetAvailableFunc( isNotLeader );
 
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_DIMENSION_BASE, DIM_ARROW_DIRECTION>( _HKI( "Arrow Direction"),
+                &PCB_DIMENSION_BASE::ChangeArrowDirection, &PCB_DIMENSION_BASE::GetArrowDirection ),
+                groupDimension )
+                .SetAvailableFunc( isMultiArrowDirection );
+
         const wxString groupText = _HKI( "Text Properties" );
 
         const auto isTextOrientationWriteable =
@@ -1525,6 +1553,7 @@ static struct DIMENSION_DESC
 ENUM_TO_WXANY( DIM_PRECISION )
 ENUM_TO_WXANY( DIM_UNITS_FORMAT )
 ENUM_TO_WXANY( DIM_UNITS_MODE )
+ENUM_TO_WXANY( DIM_ARROW_DIRECTION )
 
 
 static struct ALIGNED_DIMENSION_DESC

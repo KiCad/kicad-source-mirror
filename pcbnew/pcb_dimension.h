@@ -77,6 +77,15 @@ enum class DIM_UNITS_MODE
 };
 
 /**
+* Used for dimension's arrow.
+*/
+enum class DIM_ARROW_DIRECTION
+{
+    INWARD,  ///< >-----<
+    OUTWARD, ///< <----->
+};
+
+/**
  * Frame to show around dimension text
  */
 enum class DIM_TEXT_BORDER
@@ -183,6 +192,19 @@ public:
     {
         SetSuffix( aSuffix );
         Update();
+    }
+
+    DIM_ARROW_DIRECTION GetArrowDirection() const { return m_arrowDirection; }
+    void                SetArrowDirection( const DIM_ARROW_DIRECTION& aDirection )
+    {
+        m_arrowDirection = aDirection;
+    }
+
+    void ChangeArrowDirection( const DIM_ARROW_DIRECTION& aDirection )
+    {
+        SetArrowDirection( aDirection );
+        updateText();
+        updateGeometry();
     }
 
     EDA_UNITS GetUnits() const { return m_units; }
@@ -313,28 +335,39 @@ protected:
     template<typename ShapeType>
     void addShape( const ShapeType& aShape );
 
+    /**
+     * Draws an arrow and updates the shape container.
+     * example arrow 0Deg tail:4  (---->)
+     *
+     * @param startPoint arrow point.
+     * @param anAngle arrow angle.
+     * @param aLength arrow tail length.
+     */
+    void drawAnArrow( VECTOR2I aStartPoint, EDA_ANGLE anAngle, int aLength );
+
     // Value format
-    bool              m_overrideTextEnabled;   ///< Manually specify the displayed measurement value
-    wxString          m_valueString;     ///< Displayed value when m_overrideValue = true
-    wxString          m_prefix;          ///< String prepended to the value
-    wxString          m_suffix;          ///< String appended to the value
-    EDA_UNITS         m_units;           ///< 0 = inches, 1 = mm
-    bool              m_autoUnits;       ///< If true, follow the currently selected UI units
-    DIM_UNITS_FORMAT  m_unitsFormat;     ///< How to render the units suffix
-    DIM_PRECISION     m_precision;       ///< Number of digits to display after decimal
-    bool              m_suppressZeroes;  ///< Suppress trailing zeroes
+    bool                    m_overrideTextEnabled;   ///< Manually specify the displayed measurement value
+    wxString                m_valueString;     ///< Displayed value when m_overrideValue = true
+    wxString                m_prefix;          ///< String prepended to the value
+    wxString                m_suffix;          ///< String appended to the value
+    EDA_UNITS               m_units;           ///< 0 = inches, 1 = mm
+    bool                    m_autoUnits;       ///< If true, follow the currently selected UI units
+    DIM_UNITS_FORMAT        m_unitsFormat;     ///< How to render the units suffix
+    DIM_ARROW_DIRECTION     m_arrowDirection;  ///< direction of dimension arrow.
+    DIM_PRECISION           m_precision;       ///< Number of digits to display after decimal
+    bool                    m_suppressZeroes;  ///< Suppress trailing zeroes
 
     // Geometry
-    int               m_lineThickness;    ///< Thickness used for all graphics in the dimension
-    int               m_arrowLength;      ///< Length of arrow shapes
-    int               m_extensionOffset;  ///< Distance from feature points to extension line start
-    DIM_TEXT_POSITION m_textPosition;     ///< How to position the text
-    bool              m_keepTextAligned;  ///< Calculate text orientation to match dimension
+    int                     m_lineThickness;    ///< Thickness used for all graphics in the dimension
+    int                     m_arrowLength;      ///< Length of arrow shapes
+    int                     m_extensionOffset;  ///< Distance from feature points to extension line start
+    DIM_TEXT_POSITION       m_textPosition;     ///< How to position the text
+    bool                    m_keepTextAligned;  ///< Calculate text orientation to match dimension
 
     // Internal
-    int               m_measuredValue;    ///< value of PCB dimensions
-    VECTOR2I          m_start;
-    VECTOR2I          m_end;
+    int                     m_measuredValue;    ///< value of PCB dimensions
+    VECTOR2I                m_start;
+    VECTOR2I                m_end;
 
     ///< Internal cache of drawn shapes
     std::vector<std::shared_ptr<SHAPE>> m_shapes;
