@@ -178,9 +178,6 @@ bool DIALOG_SHEET_PIN_PROPERTIES::TransferDataFromWindow()
     if( !commit.Empty() )
         commit.Push( _( "Edit Sheet Pin" ) );
 
-    m_frame->UpdateItem( m_sheetPin, false, true );
-    m_frame->GetCanvas()->Refresh();
-
     return true;
 }
 

@@ -1305,7 +1305,6 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
             lwbTool->AddJunctionsIfNeeded( &commit, &newItems );
 
             m_frame->SchematicCleanUp( &commit );
-            m_frame->GetCanvas()->Refresh();
             commit.Push( _( "Repeat Item" ) );
         }
 
@@ -1420,7 +1419,6 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
             m_frame->DeleteJunction( &commit, junction );
     }
 
-    m_frame->GetCanvas()->Refresh();
     commit.Push( _( "Delete" ) );
 
     return 0;
@@ -1538,8 +1536,6 @@ void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
 
     if( !commit.Empty() )
         commit.Push( caption, SKIP_CONNECTIVITY );
-
-    m_frame->UpdateItem( aField, false, true );
 }
 
 
@@ -2403,7 +2399,6 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
     if( !lines.empty() )
     {
         m_frame->TestDanglingEnds();
-        m_frame->GetCanvas()->Refresh();
 
         if( m_toolMgr->RunSynchronousAction( EE_ACTIONS::drag, &commit, isSlice ) )
             commit.Push( isSlice ? _( "Slice Wire" ) : _( "Break Wire" ) );

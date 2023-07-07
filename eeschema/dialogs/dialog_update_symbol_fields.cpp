@@ -219,8 +219,8 @@ void DIALOG_UPDATE_SYMBOL_FIELDS::onOkButtonClicked( wxCommandEvent& aEvent )
     m_symbol->SetFields( result );
 
     commit.Push( _( "Update Symbol Fields" ) );
-
     m_editFrame->RebuildView();
+
     wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
 }
 

@@ -226,7 +226,6 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
     commit.Push( _( "Annotate" ) );
 
     m_MessageWindow->Flush( true );             // Now update to show all messages
-    m_Parent->GetCanvas()->Refresh();
 
     m_sdbSizer1Cancel->SetDefault();
 

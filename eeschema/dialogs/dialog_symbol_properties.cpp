@@ -859,14 +859,11 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
                             src_pin->SetAlt( model_pin.GetAlt() );
                     }
                 }
-
-                GetParent()->UpdateItem( otherUnit, false, true );
             }
         }
     }
 
     currentScreen->Append( m_symbol );
-    GetParent()->UpdateItem( m_symbol, false, true );
 
     if( !commit.Empty() )
         commit.Push( _( "Edit Symbol Properties" ) );

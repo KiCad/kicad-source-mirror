@@ -226,13 +226,9 @@ bool DIALOG_WIRE_BUS_PROPERTIES::TransferDataFromWindow()
             if( !m_junctionSize.IsIndeterminate() )
                 junction->SetDiameter( m_junctionSize.GetValue() );
         }
-
-        m_frame->UpdateItem( item, false, true );
     }
 
     commit.Push( wxString::Format( _( "Edit %s" ), m_items.size() == 1 ? _( "Wire/Bus" )
                                                                        : _( "Wires/Buses" ) ) );
-    m_frame->GetCanvas()->Refresh();
-
     return true;
 }

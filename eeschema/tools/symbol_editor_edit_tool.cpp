@@ -323,9 +323,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
         symbol->RemoveDrawItem( item );
 
     commit.Push( _( "Delete" ) );
-
     m_frame->RebuildView();
-
     return 0;
 }
 

@@ -266,7 +266,6 @@ void SCH_EDIT_FRAME::BreakSegment( SCH_COMMIT* aCommit, SCH_LINE* aSegment, cons
 
     AddToScreen( newSegment, aScreen );
     aCommit->Added( newSegment, aScreen );
-    UpdateItem( aSegment, false, true );
 
     *aNewSegment = newSegment;
 }

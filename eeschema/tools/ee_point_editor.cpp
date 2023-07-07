@@ -1422,7 +1422,6 @@ int EE_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
     updatePoints();
 
     commit.Push( _( "Add Corner" ) );
-
     return 0;
 }
 
@@ -1447,7 +1446,6 @@ int EE_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
     updatePoints();
 
     commit.Push( _( "Remove Corner" ) );
-
     return 0;
 }
 

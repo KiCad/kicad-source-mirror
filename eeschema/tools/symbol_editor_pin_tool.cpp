@@ -188,7 +188,6 @@ bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
     }
 
     commit.Push( _( "Edit Pin Properties" ) );
-    m_frame->UpdateItem( aPin, false, true );
 
     std::vector<MSG_PANEL_ITEM> items;
     aPin->GetMsgPanelInfo( m_frame, items );

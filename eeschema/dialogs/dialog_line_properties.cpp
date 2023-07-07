@@ -136,7 +136,7 @@ bool DIALOG_LINE_PROPERTIES::TransferDataFromWindow()
         commit.Modify( line, m_frame->GetScreen() );
 
         if( !m_width.IsIndeterminate() )
-            line->SetLineWidth( std::max( (long long int) 0, m_width.GetValue() ) );
+            line->SetLineWidth( std::max( 0, m_width.GetIntValue() ) );
 
         auto it = lineTypeNames.begin();
         std::advance( it, m_typeCombo->GetSelection() );
@@ -147,12 +147,8 @@ bool DIALOG_LINE_PROPERTIES::TransferDataFromWindow()
             line->SetLineStyle( it->first );
 
         line->SetLineColor( m_colorSwatch->GetSwatchColor() );
-
-        m_frame->UpdateItem( line, false, true );
     }
 
     commit.Push( m_lines.size() == 1 ? _( "Edit Line" ) : _( "Edit Lines" ), SKIP_CONNECTIVITY );
-    m_frame->GetCanvas()->Refresh();
-
     return true;
 }

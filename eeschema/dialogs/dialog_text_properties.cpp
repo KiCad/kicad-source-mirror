@@ -580,9 +580,6 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     if( !commit.Empty() )
         commit.Push( _( "Edit Text" ), SKIP_CONNECTIVITY );
 
-    m_frame->UpdateItem( m_currentItem, false, true );
-    m_frame->GetCanvas()->Refresh();
-
     return true;
 }
 

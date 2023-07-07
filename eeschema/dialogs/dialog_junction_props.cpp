@@ -112,7 +112,6 @@ bool DIALOG_JUNCTION_PROPS::TransferDataFromWindow()
 
     commit.Push( m_junctions.size() == 1 ? _( "Edit Junction" ) : _( "Edit Junctions" ),
                  SKIP_CONNECTIVITY );
-    m_frame->GetCanvas()->Refresh();
 
     return true;
 }

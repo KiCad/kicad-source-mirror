@@ -2131,8 +2131,6 @@ void SCH_EDIT_FRAME::SaveSymbolToSchematic( const LIB_SYMBOL& aSymbol,
 
     if( !commit.Empty() )
         commit.Push( _( "Save Symbol to Schematic" ) );
-
-    GetCanvas()->Refresh();
 }
 
 

@@ -1754,7 +1754,6 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
 
     m_frame->SchematicCleanUp( &commit );
     commit.Push( _( "Align" ) );
-
     return 0;
 }
 

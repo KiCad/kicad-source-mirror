@@ -248,6 +248,9 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
                     view->Add( schItem );
             }
 
+            if( frame )
+                frame->UpdateItem( schItem, true, true );
+
             bulkAddedItems.push_back( schItem );
 
             break;
@@ -280,6 +283,9 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
                     view->Remove( schItem );
             }
 
+            if( frame )
+                frame->UpdateItem( schItem, true, true );
+
             bulkRemovedItems.push_back( schItem );
 
             break;
@@ -296,8 +302,8 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
                 ent.m_copy = nullptr;   // We've transferred ownership to the undo list
             }
 
-            if( view )
-                view->Update( schItem );
+            if( frame )
+                frame->UpdateItem( schItem, false, true );
 
             itemsChanged.push_back( schItem );
 
@@ -350,6 +356,9 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
     if( selectedModified )
         m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
+
+    if( frame && frame->GetCanvas() )
+        frame->GetCanvas()->Refresh();
 
     if( !( aCommitFlags & SKIP_SET_DIRTY ) )
     {

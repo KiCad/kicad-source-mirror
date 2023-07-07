@@ -154,8 +154,6 @@ void SCH_EDIT_FRAME::DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool aRe
 
     commit.Push( _( "Delete Annotation" ) );
 
-    GetCanvas()->Refresh();
-
     // Must go after OnModify() so the connectivity graph has been updated
     UpdateNetHighlightStatus();
 }

@@ -266,7 +266,6 @@ void SCH_EDIT_FRAME::SelectUnit( SCH_SYMBOL* aSymbol, int aUnit )
         if( eeconfig()->m_AutoplaceFields.enable )
             aSymbol->AutoAutoplaceFields( GetScreen() );
 
-        UpdateItem( aSymbol, false, true );
         commit.Push( _( "Change Unit" ) );
     }
 }
@@ -307,6 +306,5 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_SYMBOL* aSymbol )
     if( aSymbol->IsSelected() )
         m_toolManager->RunAction<EDA_ITEM*>( EE_ACTIONS::addItemToSel, aSymbol );
 
-    UpdateItem( aSymbol, false, true );
     commit.Push( _( "Convert Symbol" ) );
 }

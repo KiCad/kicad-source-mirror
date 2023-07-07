@@ -580,12 +580,8 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
     if( doAutoplace )
         m_currentLabel->AutoAutoplaceFields( m_Parent->GetScreen() );
 
-    m_Parent->UpdateItem( m_currentLabel );
-
     if( !commit.Empty() )
         commit.Push( _( "Edit Label" ), SKIP_CONNECTIVITY );
-
-    m_Parent->GetCanvas()->Refresh();
 
     return true;
 }
