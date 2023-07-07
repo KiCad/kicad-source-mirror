@@ -3089,9 +3089,9 @@ void PCB_PARSER::parsePCB_TEXT_effects( PCB_TEXT* aText )
 
             if( (int) token != DSN_RIGHT )
                 Expecting( DSN_RIGHT );
-        }
 
             break;
+        }
 
         case T_layer:
             aText->SetLayer( parseBoardItemLayer() );
@@ -3123,9 +3123,13 @@ void PCB_PARSER::parsePCB_TEXT_effects( PCB_TEXT* aText )
 
             break;
 
-        case T_effects: parseEDA_TEXT( static_cast<EDA_TEXT*>( aText ) ); break;
+        case T_effects:
+            parseEDA_TEXT( static_cast<EDA_TEXT*>( aText ) );
+            break;
 
-        case T_render_cache: parseRenderCache( static_cast<EDA_TEXT*>( aText ) ); break;
+        case T_render_cache:
+            parseRenderCache( static_cast<EDA_TEXT*>( aText ) );
+            break;
 
         default:
             if( parentFP )

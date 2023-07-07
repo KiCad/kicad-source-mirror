@@ -28,13 +28,17 @@
 #include <i18n_utility.h>
 
 PCB_FIELD::PCB_FIELD( FOOTPRINT* aParent, int aFieldId, const wxString& aName ) :
-        PCB_TEXT( aParent, PCB_FIELD_T ), m_id( aFieldId ), m_name( aName )
+        PCB_TEXT( aParent, PCB_FIELD_T ),
+        m_id( aFieldId ),
+        m_name( aName )
 {
 }
 
 
 PCB_FIELD::PCB_FIELD( const PCB_TEXT& aText, int aFieldId, const wxString& aName ) :
-        PCB_TEXT( aText ), m_id( aFieldId ), m_name( aName )
+        PCB_TEXT( aText ),
+        m_id( aFieldId ),
+        m_name( aName )
 {
 }
 
@@ -129,6 +133,7 @@ wxString PCB_FIELD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
     // Can't get here, but gcc doesn't seem to know that....
     return wxEmptyString;
 }
+
 
 double PCB_FIELD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
