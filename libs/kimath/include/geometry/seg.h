@@ -364,6 +364,14 @@ public:
         return A + ( B - A ) / 2;
     }
 
+    bool operator<( const SEG& aSeg ) const
+    {
+        if( A == aSeg.A )
+            return B < aSeg.B;
+
+        return A < aSeg.A;
+    }
+
 private:
     bool ccw( const VECTOR2I& aA, const VECTOR2I& aB, const VECTOR2I &aC ) const;
 

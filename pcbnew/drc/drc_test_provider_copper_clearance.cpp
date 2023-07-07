@@ -28,6 +28,7 @@
 #include <pcb_shape.h>
 #include <pad.h>
 #include <pcb_track.h>
+#include <thread_pool.h>
 #include <zone.h>
 
 #include <geometry/seg.h>
@@ -40,6 +41,8 @@
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider_clearance_base.h>
 #include <pcb_dimension.h>
+
+#include <future>
 
 /*
     Copper clearance test. Checks all copper items (pads, vias, tracks, drawings, zones) for their
@@ -1028,19 +1031,81 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
     bool      testClearance = !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE );
     bool      testIntersects = !m_drcEngine->IsErrorLimitExceeded( DRCE_ZONES_INTERSECT );
 
-    SHAPE_POLY_SET  buffer;
-    SHAPE_POLY_SET* boardOutline = nullptr;
     DRC_CONSTRAINT  constraint;
-    int             zone2zoneClearance;
+    bool            cancelled = false;
+    std::vector<std::map<PCB_LAYER_ID, std::vector<SEG>>> poly_segments;
 
-    if( m_board->GetBoardPolygonOutlines( buffer ) )
-        boardOutline = &buffer;
+    poly_segments.resize( m_board->m_DRCCopperZones.size() );
+
+    // Contains the index for zoneA, zoneB, the conflict point, the actual clearance, the required clearance, and the layer
+    using report_data = std::tuple<int, int, VECTOR2I, int, int, PCB_LAYER_ID>;
+    const int invalid_zone = -1;
+
+    std::vector<std::future<report_data>> futures;
+    thread_pool& tp = GetKiCadThreadPool();
+
+    auto checkZones = [testClearance, testIntersects, &poly_segments, &cancelled, invalid_zone]
+                        ( int zoneA, int zoneB,
+                          int zone2zoneClearance, PCB_LAYER_ID layer ) -> report_data
+    {
+        // Iterate through all the segments of refSmoothedPoly
+        std::map<VECTOR2I, int> conflictPoints;
+
+        std::vector<SEG>& refSegments = poly_segments[zoneA][layer];
+        std::vector<SEG>& testSegments = poly_segments[zoneB][layer];
+        bool reported = false;
+        auto invalid_result = std::make_tuple( invalid_zone, invalid_zone, VECTOR2I(), 0, 0, F_Cu );
+
+        for( SEG& refSegment : refSegments )
+        {
+            int ax1 = refSegment.A.x;
+            int ay1 = refSegment.A.y;
+            int ax2 = refSegment.B.x;
+            int ay2 = refSegment.B.y;
+
+            // Iterate through all the segments in smoothed_polys[ia2]
+            for( SEG& testSegment : testSegments )
+            {
+                // Build test segment
+                VECTOR2I pt;
+
+                int bx1 = testSegment.A.x;
+                int by1 = testSegment.A.y;
+                int bx2 = testSegment.B.x;
+                int by2 = testSegment.B.y;
+
+                // We have ensured that the A segment starts before the B segment, so if the
+                // A segment ends before the B segment starts, we can skip to the next A
+                if( ax2 < bx1 )
+                    break;
+
+                int d = GetClearanceBetweenSegments( bx1, by1, bx2, by2, 0,
+                                                     ax1, ay1, ax2, ay2, 0,
+                                                     zone2zoneClearance, &pt.x, &pt.y );
+
+                if( d < zone2zoneClearance )
+                {
+                    if( d == 0 && testIntersects )
+                        reported = true;
+                    else if( testClearance )
+                        reported = true;
+
+                    if( reported )
+                        return std::make_tuple( zoneA, zoneB, pt, d, zone2zoneClearance, layer );
+                }
+
+                if( cancelled )
+                    return invalid_result;
+            }
+        }
+
+        return invalid_result;
+    };
 
     for( int layer_id = F_Cu; layer_id <= B_Cu; ++layer_id )
     {
         PCB_LAYER_ID layer = static_cast<PCB_LAYER_ID>( layer_id );
-        std::vector<SHAPE_POLY_SET> smoothed_polys;
-        smoothed_polys.resize( m_board->m_DRCCopperZones.size() );
+        int          zone2zoneClearance;
 
         // Skip over layers not used on the current board
         if( !m_board->IsLayerEnabled( layer ) )
@@ -1050,12 +1115,30 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
         {
             if( m_board->m_DRCCopperZones[ii]->IsOnLayer( layer ) )
             {
-                m_board->m_DRCCopperZones[ii]->BuildSmoothedPoly( smoothed_polys[ii], layer,
-                                                                  boardOutline );
+                SHAPE_POLY_SET poly =
+                        *m_board->m_DRCCopperZones[ii]->GetFilledPolysList( layer );
+                std::vector<SEG>& poly_segs = poly_segments[ii][layer];
+
+                poly.Fracture( SHAPE_POLY_SET::PM_FAST );
+                poly.BuildBBoxCaches();
+                poly_segs.reserve( poly.FullPointCount() );
+
+                for( auto it = poly.IterateSegmentsWithHoles(); it; it++ )
+                {
+                    SEG seg = *it;
+
+                    if( seg.A.x > seg.B.x )
+                        seg.Reverse();
+
+                    poly_segs.push_back( seg );
+                }
+
+                std::sort( poly_segs.begin(), poly_segs.end() );
             }
         }
 
-        // iterate through all areas
+        std::vector<std::pair<int, int>> zonePairs;
+
         for( size_t ia = 0; ia < m_board->m_DRCCopperZones.size(); ia++ )
         {
             if( !reportProgress( layer_id * m_board->m_DRCCopperZones.size() + ia,
@@ -1081,100 +1164,62 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                 if( zoneA->GetNetCode() == zoneB->GetNetCode() && zoneA->GetNetCode() >= 0 )
                     continue;
 
-                // test for different priorities
-                if( zoneA->GetAssignedPriority() != zoneB->GetAssignedPriority() )
-                    continue;
-
                 // rule areas may overlap at will
                 if( zoneA->GetIsRuleArea() || zoneB->GetIsRuleArea() )
                     continue;
 
                 // Examine a candidate zone: compare zoneB to zoneA
+                SHAPE_POLY_SET* polyA = m_board->m_DRCCopperZones[ia]->GetFill( layer );
+                SHAPE_POLY_SET* polyB = m_board->m_DRCCopperZones[ia2]->GetFill( layer );
+
+                if( !polyA->BBoxFromCaches().Intersects( polyB->BBoxFromCaches() ) )
+                    continue;
 
                 // Get clearance used in zone to zone test.
                 constraint = m_drcEngine->EvalRules( CLEARANCE_CONSTRAINT, zoneA, zoneB, layer );
                 zone2zoneClearance = constraint.GetValue().Min();
 
-                if( constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
+                if( constraint.GetSeverity() == RPT_SEVERITY_IGNORE || zone2zoneClearance <= 0 )
                     continue;
 
-                if( testIntersects )
+                futures.push_back( tp.submit( checkZones, ia, ia2, zone2zoneClearance, layer ) );
+            }
+        }
+    }
+
+    for( auto& task : futures )
+    {
+        if( !task.valid() )
+            continue;
+
+        std::future_status result;
+
+        while( true )
+        {
+            result = task.wait_for( std::chrono::milliseconds( 200 ) );
+
+            if( m_drcEngine->IsCancelled() )
+            {
+                cancelled = true;
+                break;
+            }
+
+            if( result == std::future_status::ready )
+            {
+                report_data data = task.get();
+                int zoneA_id = std::get<0>( data );
+                int zoneB_id = std::get<1>( data );
+                VECTOR2I pt = std::get<2>( data );
+                int actual = std::get<3>( data );
+                int required = std::get<4>( data );
+                PCB_LAYER_ID layer = std::get<5>( data );
+
+                if( zoneA_id != invalid_zone )
                 {
-                    // test for some corners of zoneA inside zoneB
-                    for( auto it = smoothed_polys[ia].IterateWithHoles(); it; it++ )
-                    {
-                        VECTOR2I currentVertex = *it;
+                    ZONE* zoneA = m_board->m_DRCCopperZones[zoneA_id];
+                    ZONE* zoneB = m_board->m_DRCCopperZones[zoneB_id];
 
-                        if( smoothed_polys[ia2].Contains( currentVertex ) )
-                        {
-                            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_ZONES_INTERSECT );
-                            drce->SetItems( zoneA, zoneB );
-                            drce->SetViolatingRule( constraint.GetParentRule() );
-
-                            reportViolation( drce, currentVertex, layer );
-                        }
-                    }
-
-                    // test for some corners of zoneB inside zoneA
-                    for( auto it = smoothed_polys[ia2].IterateWithHoles(); it; it++ )
-                    {
-                        VECTOR2I currentVertex = *it;
-
-                        if( smoothed_polys[ia].Contains( currentVertex ) )
-                        {
-                            std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_ZONES_INTERSECT );
-                            drce->SetItems( zoneB, zoneA );
-                            drce->SetViolatingRule( constraint.GetParentRule() );
-
-                            reportViolation( drce, currentVertex, layer );
-                        }
-                    }
-                }
-
-                // Iterate through all the segments of refSmoothedPoly
-                std::map<VECTOR2I, int> conflictPoints;
-
-                for( auto refIt = smoothed_polys[ia].IterateSegmentsWithHoles(); refIt; refIt++ )
-                {
-                    // Build ref segment
-                    SEG refSegment = *refIt;
-
-                    // Iterate through all the segments in smoothed_polys[ia2]
-                    for( auto it = smoothed_polys[ia2].IterateSegmentsWithHoles(); it; it++ )
-                    {
-                        // Build test segment
-                        SEG testSegment = *it;
-                        VECTOR2I pt;
-
-                        int ax1, ay1, ax2, ay2;
-                        ax1 = refSegment.A.x;
-                        ay1 = refSegment.A.y;
-                        ax2 = refSegment.B.x;
-                        ay2 = refSegment.B.y;
-
-                        int bx1, by1, bx2, by2;
-                        bx1 = testSegment.A.x;
-                        by1 = testSegment.A.y;
-                        bx2 = testSegment.B.x;
-                        by2 = testSegment.B.y;
-
-                        int d = GetClearanceBetweenSegments( bx1, by1, bx2, by2, 0,
-                                                             ax1, ay1, ax2, ay2, 0,
-                                                             zone2zoneClearance, &pt.x, &pt.y );
-
-                        if( d < zone2zoneClearance )
-                        {
-                            if( conflictPoints.count( pt ) )
-                                conflictPoints[ pt ] = std::min( conflictPoints[ pt ], d );
-                            else
-                                conflictPoints[ pt ] = d;
-                        }
-                    }
-                }
-
-                for( const std::pair<const VECTOR2I, int>& conflict : conflictPoints )
-                {
-                    int actual = conflict.second;
+                    constraint = m_drcEngine->EvalRules( CLEARANCE_CONSTRAINT, zoneA, zoneB, layer );
                     std::shared_ptr<DRC_ITEM> drce;
 
                     if( actual <= 0 && testIntersects )
@@ -1186,7 +1231,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                         drce = DRC_ITEM::Create( DRCE_CLEARANCE );
                         wxString msg = formatMsg( _( "(%s clearance %s; actual %s)" ),
                                                   constraint.GetName(),
-                                                  zone2zoneClearance,
+                                                  required,
                                                   std::max( actual, 0 ) );
 
                         drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
@@ -1197,13 +1242,13 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                         drce->SetItems( zoneA, zoneB );
                         drce->SetViolatingRule( constraint.GetParentRule() );
 
-                        reportViolation( drce, conflict.first, layer );
+                        reportViolation( drce, pt, layer );
                     }
                 }
 
-                if( m_drcEngine->IsCancelled() )
-                    return;
+                break;
             }
+
         }
     }
 }
