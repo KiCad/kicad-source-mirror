@@ -361,6 +361,8 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAndFindNext( const TOOL_EVENT& aEvent )
     if( data.findString.IsEmpty() )
         return FindAndReplace( ACTIONS::find.MakeEvent() );
 
+    // TODO: move to SCH_COMMIT....
+
     if( item && HasMatch() )
     {
         SCH_ITEM* sch_item = static_cast<SCH_ITEM*>( item );
@@ -397,7 +399,7 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAll( const TOOL_EVENT& aEvent )
     {
     }
 
-    bool modified = false;
+    bool modified = false;      // TODO: move to SCH_COMMIT....
 
     if( data.findString.IsEmpty() )
         return FindAndReplace( ACTIONS::find.MakeEvent() );
