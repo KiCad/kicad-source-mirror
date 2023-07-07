@@ -548,11 +548,11 @@ void CAIRO_GAL_BASE::DrawBitmap( const BITMAP_BASE& aBitmap, double alphaBlend )
                 a = bm_pix_buffer.GetAlpha( col, row );
 
                 // ARGB32 format needs pre-multiplied alpha
-                r = int32_t( r ) * a / 0xFF;
-                g = int32_t( g ) * a / 0xFF;
-                b = int32_t( b ) * a / 0xFF;
+                r = uint32_t( r ) * a / 0xFF;
+                g = uint32_t( g ) * a / 0xFF;
+                b = uint32_t( b ) * a / 0xFF;
             }
-            else if( bm_pix_buffer.HasMask() && ( r << 16 | g << 8 | b ) == mask_color )
+            else if( bm_pix_buffer.HasMask() && (uint32_t)( r << 16 | g << 8 | b ) == mask_color )
             {
                 a = wxALPHA_TRANSPARENT;
             }

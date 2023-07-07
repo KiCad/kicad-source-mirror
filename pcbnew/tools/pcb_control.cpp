@@ -1203,7 +1203,6 @@ bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, std::vector<BOARD_ITEM
 int PCB_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
 {
     PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
-    BOARD_COMMIT    commit( editFrame );
 
     if( !editFrame )
         return 1;
@@ -1212,6 +1211,8 @@ int PCB_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
 
     if( !brd )
         return 1;
+
+    BOARD_COMMIT    commit( editFrame );
 
     // Mark existing items, in order to know what are the new items so we can select only
     // the new items after loading

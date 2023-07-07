@@ -609,7 +609,7 @@ wxString NETLIST_EXPORTER_ALLEGRO::formatFunction( wxString aName, LIB_PINS aPin
 
     out_str.Printf( wxT( "PINORDER %s " ), TO_UTF8( aName ) );
 
-    for( auto pinName : pinNameList )
+    for( wxString& pinName : pinNameList )
     {
         str.Printf( ",\n\t%s", TO_UTF8( pinName ) );
         out_str += str;
