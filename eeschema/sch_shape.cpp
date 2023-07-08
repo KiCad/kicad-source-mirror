@@ -51,6 +51,8 @@ EDA_ITEM* SCH_SHAPE::Clone() const
 
 void SCH_SHAPE::SwapData( SCH_ITEM* aItem )
 {
+    SCH_ITEM::SwapFlags( aItem );
+
     SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( aItem );
 
     EDA_SHAPE::SwapShape( shape );

@@ -134,14 +134,21 @@ public:
         return m_flags & mask;
     }
 
-    void ClearTempFlags()
-    {
-        ClearFlags( CANDIDATE | SELECTED_BY_DRAG | IS_LINKED | SKIP_STRUCT );
-    }
-
     void ClearEditFlags()
     {
         ClearFlags( GetEditFlags() );
+    }
+
+    EDA_ITEM_FLAGS GetTempFlags() const
+    {
+        constexpr int mask = ( CANDIDATE | SELECTED_BY_DRAG | IS_LINKED | SKIP_STRUCT );
+
+        return m_flags & mask;
+    }
+
+    void ClearTempFlags()
+    {
+        ClearFlags( GetTempFlags() );
     }
 
     virtual bool RenderAsBitmap( double aWorldScale ) const { return false; }

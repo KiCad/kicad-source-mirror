@@ -837,6 +837,8 @@ bool SCH_LINE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) con
 
 void SCH_LINE::SwapData( SCH_ITEM* aItem )
 {
+    SCH_ITEM::SwapFlags( aItem );
+
     SCH_LINE* item = (SCH_LINE*) aItem;
 
     std::swap( m_layer, item->m_layer );

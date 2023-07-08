@@ -138,6 +138,8 @@ VECTOR2I SCH_BUS_ENTRY_BASE::GetEnd() const
 
 void SCH_BUS_ENTRY_BASE::SwapData( SCH_ITEM* aItem )
 {
+    SCH_ITEM::SwapFlags( aItem );
+
     SCH_BUS_ENTRY_BASE* item = dynamic_cast<SCH_BUS_ENTRY_BASE*>( aItem );
     wxCHECK_RET( item, wxT( "Cannot swap bus entry data with invalid item." ) );
 

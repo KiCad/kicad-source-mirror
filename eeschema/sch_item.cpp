@@ -259,6 +259,27 @@ void SCH_ITEM::SwapData( SCH_ITEM* aItem )
 }
 
 
+void SCH_ITEM::SwapFlags( SCH_ITEM* aItem )
+{
+    EDA_ITEM_FLAGS editFlags = GetEditFlags();
+    EDA_ITEM_FLAGS tempFlags = GetTempFlags();
+    EDA_ITEM_FLAGS aItem_editFlags = aItem->GetEditFlags();
+    EDA_ITEM_FLAGS aItem_tempFlags = aItem->GetTempFlags();
+
+    std::swap( m_flags, aItem->m_flags );
+
+    ClearEditFlags();
+    SetFlags( editFlags );
+    ClearTempFlags();
+    SetFlags( tempFlags );
+
+    aItem->ClearEditFlags();
+    aItem->SetFlags( aItem_editFlags );
+    aItem->ClearTempFlags();
+    aItem->SetFlags( aItem_tempFlags );
+}
+
+
 void SCH_ITEM::ClearCaches()
 {
     auto clearTextCaches =

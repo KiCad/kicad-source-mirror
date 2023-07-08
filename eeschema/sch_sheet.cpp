@@ -311,6 +311,8 @@ bool SCH_SHEET::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, in
 
 void SCH_SHEET::SwapData( SCH_ITEM* aItem )
 {
+    SCH_ITEM::SwapFlags( aItem );
+
     wxCHECK_RET( aItem->Type() == SCH_SHEET_T,
                  wxString::Format( wxT( "SCH_SHEET object cannot swap data with %s object." ),
                                    aItem->GetClass() ) );

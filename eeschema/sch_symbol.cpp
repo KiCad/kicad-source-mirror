@@ -1119,6 +1119,8 @@ std::vector<SCH_PIN*> SCH_SYMBOL::GetPins( const SCH_SHEET_PATH* aSheet ) const
 
 void SCH_SYMBOL::SwapData( SCH_ITEM* aItem )
 {
+    SCH_ITEM::SwapFlags( aItem );
+
     wxCHECK_RET( aItem != nullptr && aItem->Type() == SCH_SYMBOL_T,
                  wxT( "Cannot swap data with invalid symbol." ) );
 

@@ -230,6 +230,8 @@ void SCH_TEXT::SetTextSpinStyle( TEXT_SPIN_STYLE aSpinStyle )
 
 void SCH_TEXT::SwapData( SCH_ITEM* aItem )
 {
+    SCH_ITEM::SwapFlags( aItem );
+
     SCH_TEXT* item = static_cast<SCH_TEXT*>( aItem );
 
     std::swap( m_layer, item->m_layer );

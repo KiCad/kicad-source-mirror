@@ -190,6 +190,11 @@ public:
     virtual void SwapData( SCH_ITEM* aItem );
 
     /**
+     * Swap the non-temp and non-edit flags.
+     */
+    void SwapFlags( SCH_ITEM* aItem );
+
+    /**
      * Routine to create a new copy of given item.
      * The new object is not put in draw list (not linked).
      *
