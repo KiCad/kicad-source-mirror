@@ -279,8 +279,11 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard, PROGRESS_REPORTER* aReport
         m_view->Add( zone );
 
     // Ratsnest
-    m_ratsnest = std::make_unique<RATSNEST_VIEW_ITEM>( aBoard->GetConnectivity() );
-    m_view->Add( m_ratsnest.get() );
+    if( !aBoard->IsFootprintHolder() )
+    {
+        m_ratsnest = std::make_unique<RATSNEST_VIEW_ITEM>( aBoard->GetConnectivity() );
+        m_view->Add( m_ratsnest.get() );
+    }
 }
 
 
