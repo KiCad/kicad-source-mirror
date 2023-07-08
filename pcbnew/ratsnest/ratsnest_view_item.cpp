@@ -68,7 +68,7 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     constexpr int CROSS_SIZE = 200000;
 
-    PCBNEW_SETTINGS* cfg = static_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
+    PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
 
     if( !cfg )
         return;
