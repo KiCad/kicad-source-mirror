@@ -836,7 +836,7 @@ public:
         return ( t1.m_Pos != t2.m_Pos || t1.m_Size != t2.m_Size );
     }
 
-    const bool IsValid() const
+    bool IsValid() const
     {
         return m_init;
     }
