@@ -355,7 +355,7 @@ FOOTPRINT* PCB_BASE_FRAME::loadFootprint( const LIB_ID& aFootprintId )
         // any netinfo list (should be not needed, but it can be edited from the footprint editor )
         footprint->ClearAllNets();
 
-        if( m_pcb )
+        if( m_pcb && !IsType( FRAME_FOOTPRINT_EDITOR ) )
             footprint->ApplyDefaultFieldSettings( *m_pcb );
     }
 
