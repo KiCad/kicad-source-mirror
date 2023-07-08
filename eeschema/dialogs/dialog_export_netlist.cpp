@@ -58,8 +58,11 @@
 #define CUSTOMPANEL_COUNTMAX 8  // Max number of netlist plugins
 
 
-/* panel (notebook page) identifiers */
-enum panel_netlist_index
+/* panel (notebook page) identifiers
+ * if modified, fix also the DEFINED_NETLISTS_COUNT value
+ * PANEL_NETLIST_INDEX values are used as index in m_PanelNetType[]
+ */
+enum PANEL_NETLIST_INDEX
 {
     PANELPCBNEW = 0, /* Handle Netlist format Pcbnew */
     PANELORCADPCB2,  /* Handle Netlist format OracdPcb2 */
@@ -68,9 +71,12 @@ enum panel_netlist_index
     PANELSPICE,      /* Handle Netlist format Spice */
     PANELSPICEMODEL, /* Handle Netlist format Spice Model (subcircuit) */
     PANELCUSTOMBASE  /* First auxiliary panel (custom netlists).
-                            * others use PANELCUSTOMBASE+1, PANELCUSTOMBASE+2.. */
+                      * others use PANELCUSTOMBASE+1, PANELCUSTOMBASE+2.. */
 };
 
+// The count of panels for internally defined netlist formats
+// (the max count of panel is DEFINED_NETLISTS_COUNT+CUSTOMPANEL_COUNTMAX)
+#define DEFINED_NETLISTS_COUNT 6
 
 /* wxPanels for creating the NoteBook pages for each netlist format: */
 class EXPORT_NETLIST_PAGE : public wxPanel
@@ -168,7 +174,7 @@ private:
 
 public:
     SCH_EDIT_FRAME*      m_Parent;
-    EXPORT_NETLIST_PAGE* m_PanelNetType[5 + CUSTOMPANEL_COUNTMAX];
+    EXPORT_NETLIST_PAGE* m_PanelNetType[DEFINED_NETLISTS_COUNT + CUSTOMPANEL_COUNTMAX];
 };
 
 
@@ -502,7 +508,7 @@ bool DIALOG_EXPORT_NETLIST::TransferDataFromWindow()
         break;
 
     case NET_TYPE_ALLEGRO:
-        break;              
+        break;
 
     default:    // custom, NET_TYPE_CUSTOM1 and greater
     {
