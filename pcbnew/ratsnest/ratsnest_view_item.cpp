@@ -71,7 +71,7 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 	gal->SetIsStroke( true );
     gal->SetIsFill( false );
     gal->SetLineWidth( 1.0 );
-    auto cfg = static_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
+    auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
 
     if( !cfg )
         return;
