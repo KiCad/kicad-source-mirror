@@ -2578,8 +2578,9 @@ void SCH_PAINTER::draw( const SCH_LABEL *aLabel, int aLayer )
 void SCH_PAINTER::draw( const SCH_HIERLABEL *aLabel, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+    bool drawingDangling = aLayer == LAYER_DANGLING;
 
-    if( !drawingShadows || eeconfig()->m_Selection.draw_selected_children )
+    if( !( drawingShadows || drawingDangling ) || eeconfig()->m_Selection.draw_selected_children )
     {
         for( const SCH_FIELD& field : aLabel->GetFields() )
             draw( &field, aLayer, false );
@@ -2592,6 +2593,18 @@ void SCH_PAINTER::draw( const SCH_HIERLABEL *aLabel, int aLayer )
         return;
 
     COLOR4D color = getRenderColor( aLabel, LAYER_HIERLABEL, drawingShadows );
+
+    if( drawingDangling )
+    {
+        if( aLabel->IsDangling() )
+        {
+            drawDanglingSymbol( aLabel->GetTextPos(), color,
+                                schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE / 2 ), true,
+                                drawingShadows, aLabel->IsBrightened() );
+        }
+
+        return;
+    }
 
     if( m_schematic )
     {
@@ -2693,52 +2706,13 @@ void SCH_PAINTER::draw( const SCH_SHEET *aSheet, int aLayer )
     {
         for( const SCH_FIELD& field : aSheet->GetFields() )
             draw( &field, aLayer, false );
+
+        for( SCH_SHEET_PIN* sheetPin : aSheet->GetPins() )
+            draw( static_cast<SCH_HIERLABEL*>( sheetPin ), aLayer );
     }
 
     if( isFieldsLayer( aLayer ) )
         return;
-
-    if( aLayer == LAYER_HIERLABEL || aLayer == LAYER_SELECTION_SHADOWS )
-    {
-        for( SCH_SHEET_PIN* sheetPin : aSheet->GetPins() )
-        {
-            if( drawingShadows )
-            {
-                if( ( aSheet->IsBrightened() || aSheet->IsSelected() )
-                        && eeconfig()->m_Selection.draw_selected_children )
-                {
-                    // fall through to draw
-                }
-                else if( sheetPin->IsBrightened() || sheetPin->IsSelected() )
-                {
-                    // fall through to draw
-                }
-                else
-                {
-                    continue;
-                }
-            }
-
-            int     width = std::max( aSheet->GetPenWidth(), m_schSettings.GetDefaultPenWidth() );
-            VECTOR2I initial_pos = sheetPin->GetTextPos();
-            VECTOR2I offset_pos = initial_pos;
-
-            // For aesthetic reasons, the SHEET_PIN is drawn with a small offset of width / 2
-            switch( sheetPin->GetSide() )
-            {
-            case SHEET_SIDE::TOP: offset_pos.y += KiROUND( width / 2.0 ); break;
-            case SHEET_SIDE::BOTTOM: offset_pos.y -= KiROUND( width / 2.0 ); break;
-            case SHEET_SIDE::RIGHT: offset_pos.x -= KiROUND( width / 2.0 ); break;
-            case SHEET_SIDE::LEFT: offset_pos.x += KiROUND( width / 2.0 ); break;
-            default: break;
-            }
-
-            sheetPin->SetTextPos( offset_pos );
-            draw( static_cast<SCH_HIERLABEL*>( sheetPin ), aLayer );
-            m_gal->DrawLine( offset_pos, initial_pos );
-            sheetPin->SetTextPos( initial_pos );
-        }
-    }
 
     VECTOR2D pos  = aSheet->GetPosition();
     VECTOR2D size = aSheet->GetSize();

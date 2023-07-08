@@ -327,6 +327,7 @@ int COMMON_TOOLS::doZoomFit( ZOOM_FIT_TYPE_T aFitType )
     if( !std::isfinite( scale ) )
     {
         view->SetCenter( VECTOR2D( 0, 0 ) );
+        canvas->Refresh();
         return 0;
     }
 
@@ -355,6 +356,7 @@ int COMMON_TOOLS::doZoomFit( ZOOM_FIT_TYPE_T aFitType )
 
     view->SetScale( scale / margin_scale_factor );
     view->SetCenter( bBox.Centre() );
+    canvas->Refresh();
 
     return 0;
 }
@@ -374,6 +376,7 @@ int COMMON_TOOLS::CenterContents( const TOOL_EVENT& aEvent )
     VECTOR2D scrollbarSize = VECTOR2D( canvas->GetSize() - canvas->GetClientSize() );
     VECTOR2D worldScrollbarSize = getView()->ToWorld( scrollbarSize, false );
     getView()->SetCenter( getView()->GetCenter() + worldScrollbarSize / 2.0 );
+    canvas->Refresh();
 
     return 0;
 }
@@ -414,6 +417,8 @@ int COMMON_TOOLS::doZoomToPreset( int idx, bool aCenterOnCursor )
     {
         getView()->SetScale( scale );
     }
+
+    m_frame->GetCanvas()->Refresh();
 
     return 0;
 }

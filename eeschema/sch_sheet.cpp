@@ -648,14 +648,16 @@ void SCH_SHEET::AutoplaceFields( SCH_SCREEN* aScreen, bool /* aManual */ )
 
 void SCH_SHEET::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aCount     = 7;
-    aLayers[0] = LAYER_HIERLABEL;
-    aLayers[1] = LAYER_SHEETNAME;
-    aLayers[2] = LAYER_SHEETFILENAME;
-    aLayers[3] = LAYER_SHEETFIELDS;
-    aLayers[4] = LAYER_SHEET;
-    aLayers[5] = LAYER_SHEET_BACKGROUND;
-    aLayers[6] = LAYER_SELECTION_SHADOWS;
+    aCount     = 8;
+    aLayers[0] = LAYER_DANGLING;     // Sheet pins are drawn by their parent sheet, so the
+                                     //   parent needs to draw to LAYER_DANGLING
+    aLayers[1] = LAYER_HIERLABEL;
+    aLayers[2] = LAYER_SHEETNAME;
+    aLayers[3] = LAYER_SHEETFILENAME;
+    aLayers[4] = LAYER_SHEETFIELDS;
+    aLayers[5] = LAYER_SHEET;
+    aLayers[6] = LAYER_SHEET_BACKGROUND;
+    aLayers[7] = LAYER_SELECTION_SHADOWS;
 }
 
 

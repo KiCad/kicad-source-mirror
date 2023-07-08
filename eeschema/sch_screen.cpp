@@ -1357,21 +1357,28 @@ void SCH_SCREEN::TestDanglingEnds( const SCH_SHEET_PATH* aPath,
 {
     std::vector<DANGLING_END_ITEM> endPoints;
 
+    auto testDanglingEnds =
+            [&]( SCH_ITEM* item )
+            {
+                if( item->IsConnectable() )
+                {
+                    endPoints.clear();
+
+                    for( SCH_ITEM* overlapping : Items().Overlapping( item->GetBoundingBox() ) )
+                        overlapping->GetEndPoints( endPoints );
+
+                    if( item->UpdateDanglingState( endPoints, aPath ) )
+                    {
+                        if( aChangedHandler )
+                            (*aChangedHandler)( item );
+                    }
+                }
+            };
+
     for( SCH_ITEM* item : Items() )
     {
-        if( item->IsConnectable() )
-        {
-            endPoints.clear();
-
-            for( SCH_ITEM* overlapping : Items().Overlapping( item->GetBoundingBox() ) )
-                overlapping->GetEndPoints( endPoints );
-
-            if( item->UpdateDanglingState( endPoints, aPath ) )
-            {
-                if( aChangedHandler )
-                    (*aChangedHandler)( item );
-            }
-        }
+        testDanglingEnds( item );
+        item->RunOnChildren( testDanglingEnds );
     }
 }
 
