@@ -406,8 +406,9 @@ void SIMULATOR_FRAME::StartSimulation()
         if( m_panel->GetPlotIndex( plotPanel ) == 0
                 && m_circuitModel->GetSchTextSimCommand() != plotPanel->GetLastSchTextSimCommand() )
         {
-            if( IsOK( this, _( "Schematic sheet simulation command directive has changed.  "
-                               "Do you wish to update the Simulation Command?" ) ) )
+            if( plotPanel->GetLastSchTextSimCommand().IsEmpty()
+                || IsOK( this, _( "Schematic sheet simulation command directive has changed.  "
+                                  "Do you wish to update the Simulation Command?" ) ) )
             {
                 plotPanel->SetSimCommand( m_circuitModel->GetSchTextSimCommand() );
                 plotPanel->SetLastSchTextSimCommand( plotPanel->GetSimCommand() );
