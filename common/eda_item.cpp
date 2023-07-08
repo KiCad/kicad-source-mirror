@@ -358,6 +358,7 @@ static struct EDA_ITEM_DESC
             .Map( SCH_BUS_BUS_ENTRY_T,     _HKI( "Bus Entry" ) )
             .Map( SCH_LINE_T,              _HKI( "Line" ) )
             .Map( SCH_BITMAP_T,            _HKI( "Bitmap" ) )
+            .Map( SCH_SHAPE_T,             _HKI( "Graphic" ) )
             .Map( SCH_TEXT_T,              _HKI( "Text" ) )
             .Map( SCH_TEXTBOX_T,           _HKI( "Text Box" ) )
             .Map( SCH_LABEL_T,             _HKI( "Net Label" ) )
