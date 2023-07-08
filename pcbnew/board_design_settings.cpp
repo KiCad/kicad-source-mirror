@@ -116,6 +116,8 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_TextItalic[ LAYER_CLASS_OTHERS ] = false;
     m_TextUpright[ LAYER_CLASS_OTHERS ] = false;
 
+    m_StyleFootprintFields = true;
+
     m_DimensionPrecision       = DIM_PRECISION::X_XXXX;
     m_DimensionUnitsMode       = DIM_UNITS_MODE::AUTOMATIC;
     m_DimensionUnitsFormat     = DIM_UNITS_FORMAT::BARE_SUFFIX;
@@ -693,6 +695,9 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_params.emplace_back( new PARAM<bool>( "defaults.other_text_upright",
             &m_TextUpright[LAYER_CLASS_OTHERS], true ) );
 
+    m_params.emplace_back( new PARAM<bool>( "defaults.style_footprint_fields",
+            &m_StyleFootprintFields, true ) );
+
     m_params.emplace_back( new PARAM_ENUM<DIM_UNITS_MODE>( "defaults.dimension_units",
             &m_DimensionUnitsMode, DIM_UNITS_MODE::AUTOMATIC, DIM_UNITS_MODE::INCHES,
             DIM_UNITS_MODE::AUTOMATIC ) );
@@ -877,6 +882,8 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
 
     std::copy( std::begin( aOther.m_TextUpright ), std::end( aOther.m_TextUpright ),
                std::begin( m_TextUpright ) );
+
+    m_StyleFootprintFields     = aOther.m_StyleFootprintFields;
 
     m_DimensionUnitsMode       = aOther.m_DimensionUnitsMode;
     m_DimensionPrecision       = aOther.m_DimensionPrecision;
@@ -1291,3 +1298,7 @@ bool BOARD_DESIGN_SETTINGS::GetTextUpright( PCB_LAYER_ID aLayer ) const
 }
 
 
+bool BOARD_DESIGN_SETTINGS::GetStyleFootprintFields() const
+{
+    return m_StyleFootprintFields;
+}

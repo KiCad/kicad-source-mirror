@@ -46,6 +46,7 @@ using namespace std::placeholders;
 #include <macros.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
+#include <board_design_settings.h>
 #include <view/view_controls.h>
 #include <widgets/lib_tree.h>
 #include <widgets/wx_progress_reporters.h>
@@ -355,8 +356,11 @@ FOOTPRINT* PCB_BASE_FRAME::loadFootprint( const LIB_ID& aFootprintId )
         // any netinfo list (should be not needed, but it can be edited from the footprint editor )
         footprint->ClearAllNets();
 
-        if( m_pcb && !IsType( FRAME_FOOTPRINT_EDITOR ) )
+        if( m_pcb && !IsType( FRAME_FOOTPRINT_EDITOR )
+            && m_pcb->GetDesignSettings().GetStyleFootprintFields() )
+        {
             footprint->ApplyDefaultFieldSettings( *m_pcb );
+        }
     }
 
     return footprint;

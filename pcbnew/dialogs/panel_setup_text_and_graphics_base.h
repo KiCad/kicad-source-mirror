@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -18,10 +18,10 @@ class WX_GRID;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/grid.h>
 #include <wx/statline.h>
-#include <wx/choice.h>
+#include <wx/grid.h>
 #include <wx/checkbox.h>
+#include <wx/choice.h>
 #include <wx/textctrl.h>
 #include <wx/gbsizer.h>
 #include <wx/sizer.h>
@@ -39,7 +39,9 @@ class PANEL_SETUP_TEXT_AND_GRAPHICS_BASE : public wxPanel
 	protected:
 		wxBoxSizer* m_gridSizer;
 		wxStaticText* m_staticTextDefProp;
+		wxStaticLine* m_staticline11;
 		WX_GRID* m_grid;
+		wxCheckBox* m_styleFootprintFields;
 		wxStaticText* m_staticTextDefPropDim;
 		wxStaticLine* m_staticline1;
 		wxStaticText* m_lblDimensionUnits;

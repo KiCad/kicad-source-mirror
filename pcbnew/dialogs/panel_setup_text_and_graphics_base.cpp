@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,6 +21,9 @@ PANEL_SETUP_TEXT_AND_GRAPHICS_BASE::PANEL_SETUP_TEXT_AND_GRAPHICS_BASE( wxWindow
 	m_staticTextDefProp = new wxStaticText( this, wxID_ANY, _("Default properties for new graphic items:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDefProp->Wrap( -1 );
 	m_gridSizer->Add( m_staticTextDefProp, 0, wxTOP|wxRIGHT|wxLEFT, 8 );
+
+	m_staticline11 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	m_gridSizer->Add( m_staticline11, 0, wxEXPAND | wxALL, 5 );
 
 
 	m_gridSizer->Add( 0, 3, 0, wxEXPAND, 5 );
@@ -68,6 +71,12 @@ PANEL_SETUP_TEXT_AND_GRAPHICS_BASE::PANEL_SETUP_TEXT_AND_GRAPHICS_BASE( wxWindow
 	// Cell Defaults
 	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_gridSizer->Add( m_grid, 0, wxBOTTOM, 15 );
+
+	m_styleFootprintFields = new wxCheckBox( this, wxID_ANY, _("Style footprint fields"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_styleFootprintFields->SetValue(true);
+	m_styleFootprintFields->SetToolTip( _("When checked, the default text style of footprint fields will be overridden by the board settings") );
+
+	m_gridSizer->Add( m_styleFootprintFields, 0, wxALL, 5 );
 
 
 	m_gridSizer->Add( 0, 0, 0, wxEXPAND|wxTOP, 5 );

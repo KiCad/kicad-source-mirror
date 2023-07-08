@@ -621,6 +621,12 @@ public:
     bool GetTextItalic( PCB_LAYER_ID aLayer ) const;
     bool GetTextUpright( PCB_LAYER_ID aLayer ) const;
 
+    /**
+     * Return whether footprint field text styles library values are overridden
+     * with the board default settings for text/graphic items.
+     */
+    bool GetStyleFootprintFields() const;
+
     int GetLayerClass( PCB_LAYER_ID aLayer ) const;
 
     void            SetAuxOrigin( const VECTOR2I& aOrigin ) { m_auxOrigin = aOrigin; }
@@ -702,6 +708,7 @@ public:
     int        m_TextThickness[ LAYER_CLASS_COUNT ];
     bool       m_TextItalic[ LAYER_CLASS_COUNT ];
     bool       m_TextUpright[ LAYER_CLASS_COUNT ];
+    bool       m_StyleFootprintFields;
 
     // Default values for dimension objects
     DIM_UNITS_MODE    m_DimensionUnitsMode;
