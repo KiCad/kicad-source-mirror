@@ -89,6 +89,8 @@ std::vector<KICAD_T> SCH_PAINTER::g_ScaledSelectionTypes = {
     SCH_BITMAP_T,
     SCH_GLOBAL_LABEL_T,
     SCH_DIRECTIVE_LABEL_T,
+    SCH_HIER_LABEL_T,
+    SCH_SHEET_PIN_T,
     LIB_SYMBOL_T, SCH_SYMBOL_T,
     SCH_SHEET_T,
     LIB_PIN_T, SCH_PIN_T
@@ -2086,7 +2088,6 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer )
 void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
-    bool drawingDangling = aLayer == LAYER_DANGLING;
 
     if( drawingShadows && !( aText->IsBrightened() || aText->IsSelected() ) )
         return;
@@ -2120,18 +2121,6 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer )
             color = getRenderColor( aText, LAYER_HIDDEN, drawingShadows );
         else
             return;
-    }
-
-    if( drawingDangling )
-    {
-        if( aText->IsDangling() )
-        {
-            drawDanglingSymbol( aText->GetTextPos(), color,
-                                schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE / 2 ), true,
-                                drawingShadows, aText->IsBrightened() );
-        }
-
-        return;
     }
 
     m_gal->SetStrokeColor( color );
@@ -2713,6 +2702,7 @@ void SCH_PAINTER::draw( const SCH_GLOBALLABEL* aLabel, int aLayer )
 void SCH_PAINTER::draw( const SCH_LABEL* aLabel, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+    bool drawingDangling = aLayer == LAYER_DANGLING;
 
     if( !drawingShadows || eeconfig()->m_Selection.draw_selected_children )
     {
@@ -2725,6 +2715,20 @@ void SCH_PAINTER::draw( const SCH_LABEL* aLabel, int aLayer )
 
     if( drawingShadows && !( aLabel->IsBrightened() || aLabel->IsSelected() ) )
         return;
+
+    COLOR4D color = getRenderColor( aLabel, LAYER_HIERLABEL, drawingShadows );
+
+    if( drawingDangling )
+    {
+        if( aLabel->IsDangling() )
+        {
+            drawDanglingSymbol( aLabel->GetTextPos(), color,
+                                schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE / 2 ), true,
+                                drawingShadows, aLabel->IsBrightened() );
+        }
+
+        return;
+    }
 
     draw( static_cast<const SCH_TEXT*>( aLabel ), aLayer );
 }
