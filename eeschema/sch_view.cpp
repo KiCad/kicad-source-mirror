@@ -31,6 +31,7 @@
 #include <view/view_rtree.h>
 #include <view/wx_view_controls.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
+#include <tool/tool_manager.h>
 #include <layer_ids.h>
 #include <sch_screen.h>
 #include <schematic.h>
@@ -126,6 +127,10 @@ void SCH_VIEW::DisplaySheet( const SCH_SCREEN *aScreen )
     Add( m_drawingSheet.get() );
 
     InitPreview();
+
+    // Allow tools to add anything they require to the view (such as the selection VIEW_GROUP)
+    if( m_frame && m_frame->GetToolManager() )
+        m_frame->GetToolManager()->ResetTools( TOOL_BASE::REDRAW );
 }
 
 
