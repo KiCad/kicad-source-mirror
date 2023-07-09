@@ -290,11 +290,9 @@ public:
      *
      * @param aSchematic is the schematic object.
      * @param aRootSheet is the root sheet referencing variable.
-     * @param aSchPlugin is plugin releaser object, used to free memory when loading is done.
      * @param aLibraryFileName is the name of the library which gets created when the plugin runs.
      */
-    void Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
-               SCH_PLUGIN::SCH_PLUGIN_RELEASER* aSchPlugin, const wxFileName& aLibraryFileName );
+    void Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet, const wxFileName& aLibraryFileName );
 
     /**
      * Used to check if the given symbol is subschematic or not.

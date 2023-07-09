@@ -98,11 +98,7 @@ SCH_SHEET* SCH_LTSPICE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSche
     }
 
     LTSPICE_SCHEMATIC               ascFile( aFileName, ltspiceDataDir, nullptr, nullptr );
-    SCH_PLUGIN::SCH_PLUGIN_RELEASER sch_plugin;
-
-    sch_plugin.set( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
-
-    ascFile.Load( aSchematic, rootSheet, &sch_plugin, aFileName );
+    ascFile.Load( aSchematic, rootSheet, aFileName );
 
     aSchematic->CurrentSheet().UpdateAllScreenReferences();
 

@@ -34,7 +34,6 @@
 
 
 void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
-                              SCH_PLUGIN::SCH_PLUGIN_RELEASER* aSchPlugin,
                               const wxFileName& aLibraryFileName )
 {
     std::vector<LTSPICE_FILE>    sourceFiles;
