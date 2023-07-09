@@ -19,15 +19,15 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:33-0700\n"
-"PO-Revision-Date: 2023-05-11 15:51+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"PO-Revision-Date: 2023-07-11 14:52+0000\n"
+"Last-Translator: Luc <some_physics@live.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v7/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 5.0-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -72,11 +72,10 @@ msgstr ""
 "vollständige Analyse ausführen."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:700
-#, fuzzy
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
-"Platinenumriss fehlt oder ist fehlerhaft. Den Footprint-Checker (DRC) für "
-"eine vollständige Analyse ausführen."
+"Platinenumriss fehlt oder ist fehlerhaft. Bitte den Design-Rule-Check (DRC) "
+"für eine vollständige Analyse ausführen."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:226
 msgid "Create tracks and vias"
@@ -108,19 +107,17 @@ msgid "Simplify holes contours"
 msgstr "Lochkonturen vereinfachen"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:862
-#, fuzzy
 msgid "Build Tech layers"
 msgstr "Technische Lagen erstellen"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:901
-#, fuzzy, c-format
+#, c-format
 msgid "Build Tech layer %d"
 msgstr "Technische Lage %d erstellen"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1061
-#, fuzzy
 msgid "Build BVH for holes and vias"
-msgstr "BVH für Bohrungen und Durchkontaktierungen erstellen"
+msgstr "Bounding Volume Hierarchie (BVH) für Löcher und Vias erstellen"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:390
 msgid "OpenGL context creation error"
@@ -4170,7 +4167,6 @@ msgid "Schematic Editor"
 msgstr "Schaltplaneditor"
 
 #: common/eda_base_frame.cpp:1087
-#, fuzzy
 msgid "Annotation Options"
 msgstr "Anmerkungsoptionen"
 
@@ -10738,9 +10734,8 @@ msgid "Replace matches in reference designators"
 msgstr "Fundstellen in Referenzbezeichnern ersetzen"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:120
-#, fuzzy
 msgid "Replace"
-msgstr "Er&setzen"
+msgstr "Ersetzen"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:40
 msgid "Schematic Setup"
@@ -10972,9 +10967,8 @@ msgid "Background fill:"
 msgstr "Hintergrundfüllung:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:178
-#, fuzzy
 msgid "Page number:"
-msgstr "Seite:"
+msgstr "Seitenzahl:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:193
 msgid "Hierarchical path:"
@@ -12791,12 +12785,12 @@ msgid "Unknown netlist format.\n"
 msgstr "Unbekanntes Netzlistenformat.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:347
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr "Plotte Symbol \"%s\" Einheit %d auf \"%s\"\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:358
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
 msgstr "Plotte Symbol \"%s\" auf \"%s\"\n"
 
@@ -16425,9 +16419,9 @@ msgid "Voltage (measured)"
 msgstr "Spannung (gemessen)"
 
 #: eeschema/sim/spice_library_parser.cpp:89
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create sim model from %s"
-msgstr "Kann Ordner \"%s\" nicht erstellen."
+msgstr "Simulationsmodell kann nicht aus '%s' erstellt werden"
 
 #: eeschema/sim/spice_model_parser.cpp:84
 #: eeschema/sim/spice_model_parser.cpp:186
@@ -18022,7 +18016,7 @@ msgstr "Bauteilliste (BoM) erstellen..."
 
 #: eeschema/tools/ee_actions.cpp:670
 msgid "Generate a bill of materials for the current schematic"
-msgstr "Erstellt eine Bauteilliste (BoM, Bill of Materials) aus dem Schaltplan"
+msgstr "Erstelle eine Bauteilliste (BoM, Bill of Materials) aus dem Schaltplan"
 
 #: eeschema/tools/ee_actions.cpp:675
 msgid "Export Symbols to Library..."
@@ -19872,14 +19866,12 @@ msgid "Malformed expression"
 msgstr "Fehlerhafter Ausdruck"
 
 #: include/lockfile.h:105
-#, fuzzy
 msgid "Lock file already exists"
-msgstr "Datei \"%s\" existiert bereits."
+msgstr "Sperrdatei existiert bereits"
 
 #: include/lockfile.h:124
-#, fuzzy
 msgid "Failed to access lock file"
-msgstr "Konnte Schaltplandatei nicht laden\n"
+msgstr "Fehler beim Zugriff auf Sperrdatei"
 
 #: include/panel_hotkeys_editor.h:55
 msgid "Reset all hotkeys to the built-in KiCad defaults"
@@ -20071,9 +20063,8 @@ msgid "Precision of gerber coordinates, valid options: 5 or 6"
 msgstr "Genauigkeit von Gerber-Koordinaten, gültige Optionen: 5 oder 6"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:85
-#, fuzzy
 msgid "Use KiCad gerber file extension"
-msgstr "Protel-Dateinamen-Endungen verwenden"
+msgstr "Gerber-Dateinamen-Endungen von KiCad verwenden"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:45
 msgid ""
@@ -20314,9 +20305,8 @@ msgstr ""
 "bearbeiten"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:146
-#, fuzzy
 msgid "Preview Gerber files"
-msgstr "Gerber Dateien betrachten und prüfen"
+msgstr "Gerber Dateien betrachten"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:150
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
@@ -21282,7 +21272,6 @@ msgid "Calculator Tools"
 msgstr "Berechnungswerkzeuge"
 
 #: kicad/tools/kicad_manager_actions.cpp:115
-#, fuzzy
 msgid "Run component calculations, track width calculations, etc."
 msgstr "Berechnen von Bauteilen, Leiterbahnbreiten und vieles mehr"
 
@@ -23912,9 +23901,8 @@ msgstr "Pads"
 #: pcbnew/widgets/appearance_controls.cpp:333
 #: pcbnew/widgets/panel_selection_filter.cpp:189
 #: pcbnew/widgets/panel_selection_filter_base.cpp:41
-#, fuzzy
 msgid "Vias"
-msgstr "Durchkontaktierung"
+msgstr "Vias"
 
 #: pcbnew/board.cpp:1407 pcbnew/pcb_draw_panel_gal.cpp:529
 msgid "Track Segments"
@@ -25197,7 +25185,6 @@ msgid "Stop Layer"
 msgstr "Endlage"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:253
-#, fuzzy
 msgid "Drill Holes"
 msgstr "Bohrungen"
 
@@ -35430,27 +35417,22 @@ msgid "Dimension '%s' on %s"
 msgstr "Bemaßung \"%s\" auf %s"
 
 #: pcbnew/pcb_dimension.cpp:1319
-#, fuzzy
 msgid "1234.0"
-msgstr "1234"
+msgstr "1234.0"
 
 #: pcbnew/pcb_dimension.cpp:1320
-#, fuzzy
 msgid "1234.0 mm"
-msgstr "1234 mm"
+msgstr "1234.0 mm"
 
 #: pcbnew/pcb_dimension.cpp:1321
-#, fuzzy
 msgid "1234.0 (mm)"
-msgstr "1234 (mm)"
+msgstr "1234.0 (mm)"
 
 #: pcbnew/pcb_dimension.cpp:1353
-#, fuzzy
 msgid "Units Format"
-msgstr "Einheitenformat:"
+msgstr "Einheitenformat"
 
 #: pcbnew/pcb_dimension.cpp:1359
-#, fuzzy
 msgid "Suppress Trailing Zeroes"
 msgstr "Nullen am Ende unterdrücken"
 
@@ -35465,14 +35447,12 @@ msgid "Extension Line Overshoot"
 msgstr "Verlängerungslinienversatz:"
 
 #: pcbnew/pcb_dimension.cpp:1456
-#, fuzzy
 msgid "Leader Length"
-msgstr "Via-Länge"
+msgstr "Hinweislinienlänge"
 
 #: pcbnew/pcb_dimension.cpp:1496
-#, fuzzy
 msgid "Text Frame"
-msgstr "Textrahmen:"
+msgstr "Textrahmen"
 
 #: pcbnew/pcb_edit_frame.cpp:203
 msgid "KiCad PCB Editor"
@@ -35773,9 +35753,9 @@ msgid "Error creating svg file"
 msgstr "Fehler beim Erstellen der SVG-Datei"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:343 pcbnew/pcbnew_jobs_handler.cpp:422
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to plot to '%s'.\n"
-msgstr "Fehler beim Laden von \"%s\"."
+msgstr "Fehler beim Plotten von \"%s\".\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:632 pcbnew/pcbnew_jobs_handler.cpp:703
 msgid "Loading footprint library\n"
@@ -36013,7 +35993,7 @@ msgstr "Footprint %s Pad %s verwendet ein Loch von unbekannter Art %d."
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
 msgstr ""
 "Footprint %s Pad %s verwendet einen komplexen Padstack (noch nicht "
-"unterstützt)."
+"unterstützt)"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2561
 #, c-format
@@ -38688,12 +38668,12 @@ msgid "Pack footprints"
 msgstr "Footprints zusammenfassen"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Click to place %s (item %zu of %zu)\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"Klicken, um %s zu platzieren (Element %ld von %ld)\n"
+"Klicken, um %s zu platzieren (Element %zu von %zu)\n"
 "<esc> drücken, um alles abzubrechen; Doppelklick zum Beenden"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:367
@@ -39216,12 +39196,10 @@ msgid "Import footprint from file"
 msgstr "Footprint aus Datei importieren"
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export Footprint..."
-msgstr "Footprint exportieren"
+msgstr "Footprint exportieren..."
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export footprint to file"
 msgstr "Footprint in Datei exportieren"
 
