@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:33-0700\n"
-"PO-Revision-Date: 2023-07-07 16:49+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"PO-Revision-Date: 2023-07-11 14:52+0000\n"
+"Last-Translator: Elias Sjögreen <eliassjogreen1@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v7/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -18449,7 +18449,6 @@ msgstr ""
 "användning."
 
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:49
-#, fuzzy
 msgid ""
 "Add new entry to the global symbol library table.\n"
 "\n"
