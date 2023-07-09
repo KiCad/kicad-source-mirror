@@ -236,18 +236,13 @@ FOOTPRINT* try_load_footprint( const wxFileName& aFileName, IO_MGR::PCB_FILE_T a
 
 FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
 {
-    wxString lastOpenedPathForLoading = m_mruPath;
-    FOOTPRINT_EDITOR_SETTINGS* cfg    = GetSettings();
-
-    if( !cfg->m_LastImportExportPath.empty() )
-        lastOpenedPathForLoading = cfg->m_LastImportExportPath;
-
-    wxFileName fn;
+    FOOTPRINT_EDITOR_SETTINGS* cfg = GetSettings();
+    wxFileName                 fn;
 
     if( aName != wxT("") )
         fn = aName;
     else
-        fn = getFootprintFilenameFromUser( this, lastOpenedPathForLoading );
+        fn = getFootprintFilenameFromUser( this, m_mruPath );
 
     if( !fn.IsOk() )
         return nullptr;
@@ -261,7 +256,7 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
         return nullptr;
     }
 
-    m_mruPath = cfg->m_LastImportExportPath = fn.GetPath();
+    m_mruPath = fn.GetPath();
 
     wxString footprintName;
     IO_MGR::PCB_FILE_T fileType = detect_file_type( fp, fn.GetFullPath(), &footprintName );
@@ -332,8 +327,8 @@ void FOOTPRINT_EDIT_FRAME::ExportFootprint( FOOTPRINT* aFootprint )
 
     fn.SetExt( KiCadFootprintFileExtension );
 
-    if( !cfg->m_LastImportExportPath.empty() )
-        fn.SetPath( cfg->m_LastImportExportPath );
+    if( !cfg->m_LastExportPath.empty() )
+        fn.SetPath( cfg->m_LastExportPath );
     else
         fn.SetPath( m_mruPath );
 
@@ -344,7 +339,7 @@ void FOOTPRINT_EDIT_FRAME::ExportFootprint( FOOTPRINT* aFootprint )
         return;
 
     fn = EnsureFileExtension( dlg.GetPath(), KiCadFootprintFileExtension );
-    cfg->m_LastImportExportPath = fn.GetPath();
+    cfg->m_LastExportPath = fn.GetPath();
 
     try
     {
