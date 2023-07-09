@@ -1135,6 +1135,7 @@ const std::vector<KICAD_T> swappableItems = {
     SCH_TEXT_T,
     SCH_TEXTBOX_T,
     SCH_LABEL_T,
+    SCH_SHEET_PIN_T,
     SCH_GLOBAL_LABEL_T,
     SCH_HIER_LABEL_T,
     SCH_DIRECTIVE_LABEL_T,
@@ -1151,6 +1152,26 @@ int SCH_EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION&          selection = m_selectionTool->RequestSelection( swappableItems );
     std::vector<EDA_ITEM*> sorted = selection.GetItemsSortedBySelectionOrder();
+
+    // Sheet pins are special, we need to make sure if we have any sheet pins,
+    // that we only have sheet pins, and that they have the same parent
+    if( selection.CountType( SCH_SHEET_PIN_T ) > 0 )
+    {
+        if( !selection.OnlyContains( { SCH_SHEET_PIN_T } ) )
+            return 0;
+
+        SCH_SHEET_PIN* firstPin = static_cast<SCH_SHEET_PIN*>( selection.Front() );
+        SCH_SHEET*     parent = firstPin->GetParent();
+
+        for( EDA_ITEM* item : selection )
+        {
+            SCH_SHEET_PIN* pin = static_cast<SCH_SHEET_PIN*>( item );
+
+            if( pin->GetParent() != parent )
+                return 0;
+        }
+    }
+
 
     if( selection.Size() < 2 )
         return 0;
@@ -1172,6 +1193,18 @@ int SCH_EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
         saveCopyInUndoList( a, UNDO_REDO::CHANGED, appendUndo );
         appendUndo = true;
         saveCopyInUndoList( b, UNDO_REDO::CHANGED, appendUndo );
+
+        // Sheet pins need to have their sides swapped before we change their
+        // positions
+        if( a->Type() == SCH_SHEET_PIN_T )
+        {
+            SCH_SHEET_PIN* aPin = static_cast<SCH_SHEET_PIN*>( a );
+            SCH_SHEET_PIN* bPin = static_cast<SCH_SHEET_PIN*>( b );
+            SHEET_SIDE     aSide = aPin->GetSide(), bSide = bPin->GetSide();
+            std::swap( aSide, bSide );
+            aPin->SetSide( aSide );
+            bPin->SetSide( bSide );
+        }
 
         a->SetPosition( aPos );
         b->SetPosition( bPos );
