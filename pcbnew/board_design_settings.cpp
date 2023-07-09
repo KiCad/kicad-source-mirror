@@ -1298,7 +1298,7 @@ bool BOARD_DESIGN_SETTINGS::GetTextUpright( PCB_LAYER_ID aLayer ) const
 }
 
 
-bool BOARD_DESIGN_SETTINGS::GetStyleFootprintFields() const
+bool BOARD_DESIGN_SETTINGS::GetStyleNewFootprints() const
 {
     return m_StyleFootprintFields;
 }

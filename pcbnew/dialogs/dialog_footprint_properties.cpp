@@ -141,6 +141,8 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
     m_bpAdd->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
     m_bpDelete->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
 
+    m_tcLibraryID->SetBackgroundColour( KIPLATFORM::UI::GetDialogBGColour() );
+
     // We can't set the tab order through wxWidgets due to shortcomings in their mnemonics
     // implementation on MSW
     m_tabOrder = {
@@ -300,8 +302,6 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
 
     // Show the footprint's FPID.
     m_tcLibraryID->SetValue( m_footprint->GetFPID().Format() );
-    // Show the footprint's UUID.
-    m_tcUUID->SetValue( m_footprint->GetPath().AsString() );
 
     for( int col = 0; col < m_itemsGrid->GetNumberCols(); col++ )
     {

@@ -250,6 +250,16 @@ int PCB_TEXT::getKnockoutMargin() const
 }
 
 
+void PCB_TEXT::StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings )
+{
+    SetTextSize( settings.GetTextSize( GetLayer() ) );
+    SetTextThickness( settings.GetTextThickness( GetLayer() ) );
+    SetItalic( settings.GetTextItalic( GetLayer() ) );
+    SetKeepUpright( settings.GetTextUpright( GetLayer() ) );
+    SetMirrored( IsBackLayer( GetLayer() ) );
+}
+
+
 void PCB_TEXT::KeepUpright( const EDA_ANGLE& aOldOrientation, const EDA_ANGLE& aNewOrientation )
 {
     if( !IsKeepUpright() )

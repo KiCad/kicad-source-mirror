@@ -43,16 +43,6 @@ PCB_FIELD::PCB_FIELD( const PCB_TEXT& aText, int aFieldId, const wxString& aName
 }
 
 
-void PCB_FIELD::StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings )
-{
-    SetTextSize( settings.GetTextSize( GetLayer() ) );
-    SetTextThickness( settings.GetTextThickness( GetLayer() ) );
-    SetItalic( settings.GetTextItalic( GetLayer() ) );
-    SetKeepUpright( settings.GetTextUpright( GetLayer() ) );
-    SetMirrored( IsBackLayer( GetLayer() ) );
-}
-
-
 wxString PCB_FIELD::GetName( bool aUseDefaultName ) const
 {
     if( m_parent && m_parent->Type() == PCB_FOOTPRINT_T )

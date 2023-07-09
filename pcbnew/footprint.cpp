@@ -85,7 +85,7 @@ FOOTPRINT::FOOTPRINT( BOARD* parent ) :
 
         // Style according to the board settings if we have them
         if( parent )
-            ApplyDefaultFieldSettings( *parent );
+            ApplyDefaultSettings( *parent );
 
         switch( i )
         {
@@ -356,10 +356,13 @@ void FOOTPRINT::RemoveField( const wxString& aFieldName )
 }
 
 
-void FOOTPRINT::ApplyDefaultFieldSettings( BOARD& board )
+void FOOTPRINT::ApplyDefaultSettings( BOARD& board )
 {
-    for( PCB_FIELD* f : m_fields )
-        f->StyleFromSettings( board.GetDesignSettings() );
+    for( PCB_FIELD* field : m_fields )
+        field->StyleFromSettings( board.GetDesignSettings() );
+
+    for( BOARD_ITEM* item : m_drawings )
+        item->StyleFromSettings( board.GetDesignSettings() );
 }
 
 

@@ -655,7 +655,7 @@ public:
      * being created in the footprint library cache, and we want these fields to have
      * the correct default text properties.
      */
-    void ApplyDefaultFieldSettings( BOARD& board );
+    void ApplyDefaultSettings( BOARD& board );
 
     bool IsBoardOnly() const { return m_attributes & FP_BOARD_ONLY; }
     void SetBoardOnly( bool aIsBoardOnly = true )

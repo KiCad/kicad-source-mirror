@@ -360,6 +360,8 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
     m_pinGrid->PushEventHandler( new GRID_TRICKS( m_pinGrid ) );
     m_pinGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
+    m_tcLibraryID->SetBackgroundColour( KIPLATFORM::UI::GetDialogBGColour() );
+
     wxToolTip::Enable( true );
     SetupStandardButtons();
 

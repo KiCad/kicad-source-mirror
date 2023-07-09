@@ -41,6 +41,12 @@ bool KIPLATFORM::UI::IsDarkTheme()
 }
 
 
+wxColour KIPLATFORM::UI::GetDialogBGColour()
+{
+    return wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE );
+}
+
+
 void KIPLATFORM::UI::ForceFocus( wxWindow* aWindow )
 {
     aWindow->SetFocus();

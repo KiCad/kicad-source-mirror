@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009-2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -625,7 +625,7 @@ public:
      * Return whether footprint field text styles library values are overridden
      * with the board default settings for text/graphic items.
      */
-    bool GetStyleFootprintFields() const;
+    bool GetStyleNewFootprints() const;
 
     int GetLayerClass( PCB_LAYER_ID aLayer ) const;
 

@@ -86,8 +86,6 @@ public:
      */
     PCB_FIELD* CloneField() const { return (PCB_FIELD*) Clone(); }
 
-    void StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings );
-
     /**
      * Return the field name (not translated)..
      *

@@ -71,6 +71,8 @@ public:
     STROKE_PARAMS GetStroke() const override { return m_stroke; }
     void SetStroke( const STROKE_PARAMS& aStroke ) override { m_stroke = aStroke; }
 
+    void StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings ) override;
+
     /**
      * Return 4 corners for a rectangle or rotated rectangle (stored as a poly).  Unimplemented
      * for other shapes.

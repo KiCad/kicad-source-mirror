@@ -98,7 +98,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Default properties for new graphic items:</property>
+                                <property name="label">Default properties for new graphics and text:</property>
                                 <property name="markup">0</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
@@ -285,7 +285,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxALL</property>
+                            <property name="flag">wxBOTTOM|wxRIGHT</property>
                             <property name="proportion">0</property>
                             <object class="wxCheckBox" expanded="1">
                                 <property name="BottomDockable">1</property>
@@ -316,7 +316,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Style footprint fields</property>
+                                <property name="label">Apply default properties to graphics and text in new footprints</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
                                 <property name="maximum_size"></property>
@@ -349,7 +349,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND|wxTOP</property>
+                            <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
                             <property name="proportion">0</property>
                             <object class="spacer" expanded="1">
                                 <property name="height">0</property>

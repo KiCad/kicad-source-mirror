@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wandadoo.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +33,7 @@
 #include <geometry/eda_angle.h>
 
 class BOARD;
+class BOARD_DESIGN_SETTINGS;
 class BOARD_ITEM_CONTAINER;
 class SHAPE_POLY_SET;
 class SHAPE_SEGMENT;
@@ -268,6 +269,8 @@ public:
 
     virtual bool IsLocked() const;
     virtual void SetLocked( bool aLocked ) { m_isLocked = aLocked; }
+
+    virtual void StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings ) { }
 
     /**
      * Delete this object after removing from its parent if it has one.

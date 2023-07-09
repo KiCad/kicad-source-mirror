@@ -65,6 +65,8 @@ public:
         return false;
     }
 
+    void StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings ) override;
+
     /**
      * Called when rotating the parent footprint.
      */

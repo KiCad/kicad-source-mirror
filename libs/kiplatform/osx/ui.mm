@@ -49,6 +49,19 @@ bool KIPLATFORM::UI::IsDarkTheme()
 }
 
 
+wxColour KIPLATFORM::UI::GetDialogBGColour()
+{
+     wxColor bg = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE );
+
+    if( KIPLATFORM::UI::IsDarkTheme() )
+        bg = bg.ChangeLightness( 80 );
+    else
+        bg = bg.ChangeLightness( 160 );
+
+    return bg;
+}
+
+
 void KIPLATFORM::UI::ForceFocus( wxWindow* aWindow )
 {
     // On OSX we need to forcefully give the focus to the window

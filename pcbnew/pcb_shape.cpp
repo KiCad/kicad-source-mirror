@@ -86,6 +86,12 @@ bool PCB_SHAPE::IsType( const std::vector<KICAD_T>& aScanTypes ) const
 }
 
 
+void PCB_SHAPE::StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings )
+{
+    m_stroke.SetWidth( settings.GetLineThickness( GetLayer() ) );
+}
+
+
 const VECTOR2I PCB_SHAPE::GetFocusPosition() const
 {
     // For some shapes return the visual center, but for not filled polygonal shapes,

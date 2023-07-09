@@ -294,8 +294,6 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 
 	// Cell Defaults
 	m_pinGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	m_pinGrid->SetMinSize( wxSize( 512,320 ) );
-
 	bMargins->Add( m_pinGrid, 1, wxEXPAND|wxALL, 5 );
 
 
@@ -307,7 +305,7 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	pinTableSizer->Fit( m_pinTablePage );
 	m_notebook1->AddPage( m_pinTablePage, _("Alternate Pin Assignments"), false );
 
-	mainSizer->Add( m_notebook1, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+	mainSizer->Add( m_notebook1, 1, wxEXPAND|wxALL, 10 );
 
 	wxBoxSizer* bSizerBottom;
 	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
@@ -315,20 +313,18 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	wxBoxSizer* bLibLink;
 	bLibLink = new wxBoxSizer( wxHORIZONTAL );
 
-	m_libraryIDLabel = new wxStaticText( this, wxID_ANY, _("Library link:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_libraryIDLabel->Wrap( -1 );
-	bLibLink->Add( m_libraryIDLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 2 );
-
-	m_tcLibraryID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxBORDER_NONE );
-	m_tcLibraryID->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
-
-	bLibLink->Add( m_tcLibraryID, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
-
 
 	bSizerBottom->Add( bLibLink, 1, wxLEFT|wxEXPAND, 12 );
 
+	m_libraryIDLabel = new wxStaticText( this, wxID_ANY, _("Library link:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_libraryIDLabel->Wrap( -1 );
+	bSizerBottom->Add( m_libraryIDLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	bSizerBottom->Add( 5, 0, 0, 0, 5 );
+	m_tcLibraryID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxBORDER_NONE );
+	bSizerBottom->Add( m_tcLibraryID, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+
+	bSizerBottom->Add( 10, 0, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_spiceFieldsButton = new wxButton( this, wxID_ANY, _("Simulation Model..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerBottom->Add( m_spiceFieldsButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 15 );
@@ -343,7 +339,7 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	bSizerBottom->Add( m_stdDialogButtonSizer, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
-	mainSizer->Add( bSizerBottom, 0, wxEXPAND|wxTOP, 5 );
+	mainSizer->Add( bSizerBottom, 0, wxEXPAND|wxLEFT, 5 );
 
 
 	this->SetSizer( mainSizer );

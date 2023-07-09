@@ -38,6 +38,8 @@ namespace KIPLATFORM
          */
         bool IsDarkTheme();
 
+        wxColour GetDialogBGColour();
+
         /**
          * Pass the current focus to the window. On OSX this will forcefully give the focus to
          * the desired window, while on MSW and GTK it will simply call the wxWidgets SetFocus()
