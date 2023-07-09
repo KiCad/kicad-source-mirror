@@ -637,7 +637,6 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddSeparator( 400 );
     selToolMenu.AddItem( ACTIONS::selectAll,           hasElements, 400 );
 
-
     return true;
 }
 
@@ -1172,7 +1171,6 @@ int SCH_EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
         }
     }
 
-
     if( selection.Size() < 2 )
         return 0;
 
@@ -1382,6 +1380,7 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
     std::deque<EDA_ITEM*> items = m_selectionTool->RequestSelection( deletableItems ).GetItems();
     SCH_COMMIT            commit( m_toolMgr );
     std::vector<VECTOR2I> pts;
+    bool                  updateHierarchy = false;
 
     if( items.empty() )
         return 0;
@@ -1417,27 +1416,20 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 
             if( !alg::contains( items, sheet ) )
             {
-                pin->SetFlags( STRUCT_DELETED );
-                updateItem( pin, false );
+                commit.Modify( sheet, m_frame->GetScreen() );
                 sheet->RemovePin( pin );
-                commit.Removed( pin, m_frame->GetScreen() );
             }
         }
         else if( sch_item->Type() == SCH_FIELD_T )
         {
             commit.Modify( item, m_frame->GetScreen() );
             static_cast<SCH_FIELD*>( sch_item )->SetVisible( false );
-            updateItem( sch_item, false );
         }
         else
         {
             sch_item->SetFlags( STRUCT_DELETED );
-            updateItem( sch_item, false );
-            m_frame->RemoveFromScreen( sch_item, m_frame->GetScreen() );
-            commit.Removed( item, m_frame->GetScreen() );
-
-            if( sch_item->Type() == SCH_SHEET_T )
-                m_frame->UpdateHierarchyNavigator();
+            commit.Remove( item, m_frame->GetScreen() );
+            updateHierarchy |= ( sch_item->Type() == SCH_SHEET_T );
         }
     }
 
@@ -1453,6 +1445,9 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
     }
 
     commit.Push( _( "Delete" ) );
+
+    if( updateHierarchy )
+        m_frame->UpdateHierarchyNavigator();
 
     return 0;
 }
