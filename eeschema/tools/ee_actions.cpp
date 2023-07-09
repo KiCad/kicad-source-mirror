@@ -1168,7 +1168,7 @@ TOOL_ACTION EE_ACTIONS::toggleDarkModePlots( "eeschema.Simulator.toggleDarkModeP
 
 TOOL_ACTION EE_ACTIONS::simCommand( "eeschema.Simulation.simCommand",
         AS_GLOBAL, 0, "",
-        _( "Simulation Command..." ),
+        _( "Edit Simulation Command..." ),
         _( "Edit the simulation command for the current plot tab" ),
         BITMAPS::sim_command );
 

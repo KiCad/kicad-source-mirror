@@ -127,6 +127,7 @@ void SIMULATOR_FRAME::doReCreateMenuBar()
     //
     ACTION_MENU* simulationMenu = new ACTION_MENU( false, tool );
 
+    simulationMenu->Add( EE_ACTIONS::newPlot );
     simulationMenu->Add( EE_ACTIONS::simCommand );
     simulationMenu->Add( EE_ACTIONS::runSimulation );
 
