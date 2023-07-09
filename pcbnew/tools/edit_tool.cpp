@@ -1203,7 +1203,7 @@ int EDIT_TOOL::FilletLines( const TOOL_EVENT& aEvent )
                 return;
             }
 
-            PCB_SHAPE* tArc = new PCB_SHAPE( frame()->GetBoard(), SHAPE_T::ARC );
+            PCB_SHAPE* tArc = new PCB_SHAPE( frame()->GetModel(), SHAPE_T::ARC );
 
             tArc->SetArcGeometry( sArc.GetP0(), sArc.GetArcMid(), sArc.GetP1() );
             tArc->SetWidth( line_a->GetWidth() );
@@ -1774,6 +1774,12 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         case PCB_SHAPE_T:
         case PCB_TEXTBOX_T:
         case PCB_BITMAP_T:
+        case PCB_DIMENSION_T:
+        case PCB_DIM_ALIGNED_T:
+        case PCB_DIM_LEADER_T:
+        case PCB_DIM_CENTER_T:
+        case PCB_DIM_RADIAL_T:
+        case PCB_DIM_ORTHOGONAL_T:
             if( parentFP )
             {
                 commit.Modify( parentFP );
@@ -1889,6 +1895,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         }
 
         default:
+            wxASSERT_MSG( parentFP == nullptr, wxT( "Try to delete an item living in a footrprint" ) );
             commit.Remove( board_item );
             break;
         }
