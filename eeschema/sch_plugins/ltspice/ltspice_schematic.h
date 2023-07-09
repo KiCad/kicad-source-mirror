@@ -32,15 +32,15 @@
 
 struct LTSPICE_FILE
 {
-    wxFileName     Name;
+    wxString       ElementName;
     VECTOR2I       Offset;
     int            ParentIndex;
     SCH_SHEET*     Sheet;
     SCH_SCREEN*    Screen;
     SCH_SHEET_PATH SheetPath;
 
-    LTSPICE_FILE( const wxFileName& aFilename, const VECTOR2I& aOffset ) :
-            Name( aFilename ),
+    LTSPICE_FILE( const wxString& aElementName, const VECTOR2I& aOffset ) :
+            ElementName( aElementName.Lower() ),
             Offset( aOffset ),
             ParentIndex( 0 ),
             Sheet( nullptr ),
@@ -49,7 +49,7 @@ struct LTSPICE_FILE
 
     bool operator<( const LTSPICE_FILE& t ) const
     {
-        return this->Name.GetFullName() < t.Name.GetFullName();
+        return ElementName < t.ElementName;
     }
 };
 

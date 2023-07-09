@@ -90,14 +90,26 @@ SCH_SHEET* SCH_LTSPICE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSche
     wxFileName ltspiceDataDir( KIPLATFORM::ENV::GetUserDataPath(), wxEmptyString );
     ltspiceDataDir.RemoveLastDir();        // "kicad"
     ltspiceDataDir.AppendDir( wxS( "LTspice" ) );
+    ltspiceDataDir.AppendDir( "lib" );
 
     if( !ltspiceDataDir.DirExists() )
     {
-        ltspiceDataDir = wxFileName( KIPLATFORM::ENV::GetDocumentsPath(), wxEmptyString );
-        ltspiceDataDir.AppendDir( wxS( "LTspiceXVII" ) );
+        // See if user has older version of LTspice installed (e.g. C:\Users\USERNAME\Documents\LTspiceXVII\lib
+        wxString foundFile = wxFindFirstFile( KIPLATFORM::ENV::GetDocumentsPath() + wxFileName::GetPathSeparator() + "LTspice*", wxDIR );
+
+        while( !foundFile.empty() )
+        {
+            ltspiceDataDir = wxFileName(foundFile, wxEmptyString);
+            ltspiceDataDir.AppendDir( "lib" );
+
+            if( ltspiceDataDir.DirExists() )
+                break;
+
+            foundFile = wxFindNextFile();
+        }
     }
 
-    LTSPICE_SCHEMATIC               ascFile( aFileName, ltspiceDataDir, nullptr, nullptr );
+    LTSPICE_SCHEMATIC ascFile( aFileName, ltspiceDataDir, m_reporter, m_progressReporter );
     ascFile.Load( aSchematic, rootSheet, aFileName );
 
     aSchematic->CurrentSheet().UpdateAllScreenReferences();

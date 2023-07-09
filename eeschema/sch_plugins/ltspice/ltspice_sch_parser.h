@@ -66,7 +66,7 @@ class SCH_SHAPE;
 class LTSPICE_SCH_PARSER
 {
 public:
-    explicit LTSPICE_SCH_PARSER( const wxString& aFilename,  LTSPICE_SCHEMATIC* aLTSchematic ) :
+    explicit LTSPICE_SCH_PARSER( LTSPICE_SCHEMATIC* aLTSchematic ) :
             m_lt_schematic( aLTSchematic ),
             m_powerSymbolIndex( 0 )
     { }

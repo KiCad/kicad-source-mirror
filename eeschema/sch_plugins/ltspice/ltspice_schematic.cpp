@@ -43,7 +43,7 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
     m_schematic = aSchematic;
 
     std::queue<LTSPICE_FILE> ascFileQueue;
-    LTSPICE_FILE             ascFileObject( aLibraryFileName, { 0, 0 } );
+    LTSPICE_FILE             ascFileObject( aLibraryFileName.GetName(), { 0, 0 } );
 
     ascFileObject.Screen = aRootSheet->GetScreen();
 
@@ -70,7 +70,7 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
         SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
 
         // Reading the .asc file
-        wxString fileIndex = ascFileQueue.front().Name.GetName() + "." + LtspiceSchematicExtension;
+        wxString fileIndex = ascFileQueue.front().ElementName;
         wxString ascFilePath = mapOfAscFiles[fileIndex];
         wxString buffer = SafeReadFile( ascFilePath, "r" );
 
@@ -87,12 +87,10 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
 
             newSubSchematicElements[i].Screen = screen;
 
-            wxString   ascFileName = newSubSchematicElements[i].Name.GetName();
             SCH_SHEET* sheet = new SCH_SHEET();
 
             newSubSchematicElements[i].Sheet = sheet;
-
-            ascSheetMap[ascFileName] = sheet;
+            ascSheetMap[newSubSchematicElements[i].ElementName] = sheet;
 
             ascFileQueue.push( newSubSchematicElements[i] );
             ascFiles.push_back( newSubSchematicElements[i] );
@@ -106,9 +104,7 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
     for( unsigned int i = 0; i < ascFiles.size(); i++ )
     {
         // Reading the .asc file
-        wxString fileName = ascFiles[i].Name.GetName();
-        wxString fileIndex = fileName + wxS( "." ) + LtspiceSchematicExtension;
-        wxString buffer = SafeReadFile( mapOfAscFiles[ fileIndex ], wxS( "r" ) );
+        wxString buffer = SafeReadFile( mapOfAscFiles[ascFiles[i].ElementName], wxS( "r" ) );
 
         // Getting the keywords to read
         sourceFiles = GetSchematicElements( buffer );
@@ -118,7 +114,7 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
 
         SCH_SHEET*         curSheet;
         SCH_SHEET_PATH     curSheetPath;
-        LTSPICE_SCH_PARSER parser( fileName, this );
+        LTSPICE_SCH_PARSER parser( this );
 
         if( i > 0 )
         {
@@ -128,11 +124,11 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
             curSheet = ascFiles[i].Sheet;
 
             std::map  tempAsyMap = ReadAsyFiles( tempVector, mapOfAsyFiles );
-            wxString  ascFileName = ascFiles[i].Name.GetName();
+            wxString  ascFileName = ascFiles[i].ElementName;
             LT_ASC    dummyAsc;
             LT_SYMBOL tempSymbol = SymbolBuilder( ascFileName, tempAsyMap[ascFileName], dummyAsc );
 
-            LIB_SYMBOL* tempLibSymbol = new LIB_SYMBOL( std::string( ascFiles[i].Name.GetName() ) );
+            LIB_SYMBOL* tempLibSymbol = new LIB_SYMBOL( ascFiles[i].ElementName );
             parser.CreateSymbol( tempSymbol, tempLibSymbol );
 
             BOX2I bbox = tempLibSymbol->GetBoundingBox();
@@ -144,7 +140,7 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
             SCH_FIELD& sheetNameField = curSheet->GetFields()[SHEETNAME];
             SCH_FIELD& fileNameSheet = curSheet->GetFields()[SHEETFILENAME];
             wxString   sheetName = wxString::Format( wxS( "%s-subsheet-%d" ),
-                                                     ascFiles[i].Name.GetName(),
+                                                     ascFiles[i].ElementName,
                                                      i );
 
             sheetNameField.SetText( sheetName );
@@ -173,7 +169,7 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
         std::vector<wxString> subSchematicAsyFiles;
 
         for( const LTSPICE_FILE& ascFile : ascFiles )
-            subSchematicAsyFiles.push_back( ascFile.Name.GetName() );
+            subSchematicAsyFiles.push_back( ascFile.ElementName );
 
         std::vector<LTSPICE_SCHEMATIC::LT_ASC> lt_ascs = StructureBuilder();
         parser.Parse( &curSheetPath, lt_ascs, subSchematicAsyFiles );
@@ -187,9 +183,7 @@ void LTSPICE_SCHEMATIC::SubSchematicCheck( std::vector<LTSPICE_FILE>& aSchematic
 {
     for( const LTSPICE_FILE& it : aSchematicElementsArray )
     {
-        wxString libAscFile = it.Name.GetName() + ".asc";
-
-        if( aMapOfAscFiles[libAscFile] != "" )
+        if( aMapOfAscFiles[it.ElementName] != "" )
             aSubSchematicSet.push_back( it );
     }
 }
@@ -199,32 +193,51 @@ void LTSPICE_SCHEMATIC::GetAscAndAsyFilePaths( std::map<wxString, wxString>& aMa
                                                std::map<wxString, wxString>& aMapOfAsyFiles,
                                                const wxFileName& parentFileName )
 {
-    wxString      ltSpiceFolder = m_ltspiceDataDir.GetFullPath();
-    wxString      cmpFolder = ltSpiceFolder + wxS( "lib/cmp/" );
-    wxString      subFolder = ltSpiceFolder + wxS( "lib/sub/" );
-    wxString      symFolder = ltSpiceFolder + wxS( "lib/sym/" );
-    wxArrayString fileList;
+    // List of files to search (Give highest priority to files contained in same directory)
+    std::vector<wxString> searchDirs;
+    searchDirs.push_back( parentFileName.GetPath() );
+    searchDirs.push_back( m_ltspiceDataDir.GetPathWithSep() + wxS( "sub" ) );
+    searchDirs.push_back( m_ltspiceDataDir.GetPathWithSep() + wxS( "sym" ) );
 
-    wxDir::GetAllFiles( ltSpiceFolder, &fileList );
-
-    for( const wxString& filepath : fileList )
+    for( const wxString& searchDir : searchDirs )
     {
-        wxString relPath = filepath;
+        wxArrayString fileList;
+        wxDir::GetAllFiles( searchDir, &fileList );
 
-        if( relPath.StartsWith( cmpFolder ) )
-            relPath = relPath.Mid( cmpFolder.length() );
-        else if( relPath.StartsWith( subFolder ) )
-            relPath = relPath.Mid( subFolder.length() );
-        else if( relPath.StartsWith( symFolder ) )
-            relPath = relPath.Mid( symFolder.length() );
+        for( const wxString& filepath : fileList )
+        {
+            wxFileName path = filepath;
+            path.MakeRelativeTo( searchDir );
+            wxString elementName = ( path.GetPathWithSep() + path.GetName() ).Lower();
+            wxString extension = path.GetExt().Lower();
 
-        if( filepath.EndsWith( wxS( ".asc" ) ) )
-            aMapOfAscFiles.insert( { relPath, filepath } );
-        else if( filepath.EndsWith( wxS( ".asy" ) ) )
-            aMapOfAsyFiles.insert( { relPath, filepath } );
+            elementName.Replace( '\\', '/' );
+
+            auto logToMap = [&]( std::map<wxString, wxString>& aMapToLogTo )
+            {
+
+                if( aMapToLogTo.count( elementName ) )
+                {
+                    if( m_reporter )
+                    {
+                        m_reporter->Report( wxString::Format(
+                                _( "File at '%s' was ignored. Using previously found "
+                                   "file at '%s' instead." ),
+                                filepath, aMapToLogTo.at( elementName ) ) );
+                    }
+                }
+                else
+                {
+                    aMapToLogTo.insert( { elementName, filepath } );
+                }
+            };
+
+            if( extension == wxS( "asc" ) )
+                logToMap( aMapOfAscFiles );
+            else if( extension == wxS( "asy" ) )
+                logToMap( aMapOfAsyFiles );
+        }
     }
-
-    aMapOfAscFiles.insert( { parentFileName.GetFullName(), parentFileName.GetFullPath() } );
 }
 
 
@@ -236,11 +249,10 @@ LTSPICE_SCHEMATIC::ReadAsyFiles( const std::vector<LTSPICE_FILE>& aSourceFiles,
 
     for( const LTSPICE_FILE& source : aSourceFiles )
     {
-        wxString fileName = source.Name.GetFullPath();
-        wxString fileFullName = fileName + wxS( ".asy" );
+        wxString fileName = source.ElementName;
 
-        if( aAsyFileMap.count( fileFullName ) )
-            resultantMap[ fileName ] = SafeReadFile( aAsyFileMap.at( fileFullName ), wxS( "r" ) );
+        if( aAsyFileMap.count( fileName ) )
+            resultantMap[fileName] = SafeReadFile( aAsyFileMap.at( fileName ), wxS( "r" ) );
     }
 
     return resultantMap;
@@ -258,17 +270,15 @@ std::vector<LTSPICE_FILE> LTSPICE_SCHEMATIC::GetSchematicElements( const wxStrin
 
         if( !tokens.IsEmpty() && tokens[0].Upper() == wxS( "SYMBOL" ) )
         {
-            wxString rawName( tokens[1] );
+            wxString elementName( tokens[1] );
             long     posX, posY;
 
             tokens[2].ToLong( &posX );
             tokens[3].ToLong( &posY );
 
-            rawName.Replace( '\\', '/' );
+            elementName.Replace( '\\', '/' );
 
-            wxFileName symbolName( rawName );
-
-            LTSPICE_FILE asyFile( symbolName, VECTOR2I( (int) posX, (int) posY ) );
+            LTSPICE_FILE asyFile( elementName, VECTOR2I( (int) posX, (int) posY ) );
 
             resultantArray.push_back( asyFile );
         }
@@ -464,10 +474,10 @@ LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::SymbolBuilder( const wxString& a
 {
     const std::map<wxString, wxString>& asyFiles = m_fileCache[ wxS( "asyFiles" ) ];
 
-    if( !asyFiles.count( aAscFileName ) )
+    if( !asyFiles.count( aAscFileName.Lower() ) )
         THROW_IO_ERROR( wxString::Format( _( "Symbol '%s.asy' not found" ), aAscFileName ) );
 
-    return SymbolBuilder( aAscFileName, asyFiles.at( aAscFileName ), aAscFile );
+    return SymbolBuilder( aAscFileName, asyFiles.at( aAscFileName.Lower() ), aAscFile );
 }
 
 LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::SymbolBuilder( const wxString& aAscFileName,
