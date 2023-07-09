@@ -1405,6 +1405,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 }
                 else
                 {
+                    m_frame->SaveCopyForRepeatItem( item );
                     m_frame->AddToScreen( item, m_frame->GetScreen() );
                     commit.Added( item, m_frame->GetScreen() );
                 }
