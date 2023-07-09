@@ -5,13 +5,14 @@
 # Richard Jonsson <richard_jonsson@hotmail.com>, 2021.
 # Henrik Kauhanen <henrik@kauhanen.se>, 2022, 2023.
 # Hanna Breisand <weblate.org@breisand.se>, 2022.
+# Elias Sjögreen <eliassjogreen1@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:35-0700\n"
-"PO-Revision-Date: 2023-07-07 16:49+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"PO-Revision-Date: 2023-07-11 14:52+0000\n"
+"Last-Translator: Elias Sjögreen <eliassjogreen1@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
 "Language: sv\n"
@@ -19909,7 +19910,6 @@ msgstr ""
 "användning."
 
 #: eeschema/widgets/symbol_legacyfiledlg_save_as.h:49
-#, fuzzy
 msgid ""
 "Add new entry to the global symbol library table.\n"
 "\n"
