@@ -2257,13 +2257,13 @@ void OPENGL_GAL::drawSegmentChain( const std::function<VECTOR2D( int )>& aPointG
         auto start = aPointGetter( i - 1 );
         auto end = aPointGetter( i );
 
-        VECTOR2D startEndVector = start - end;
+        VECTOR2D startEndVector = end - start;
         double   lineLength = startEndVector.EuclideanNorm();
 
         float startx = start.x;
-        float starty = end.y;
+        float starty = start.y;
         float endx = start.x + lineLength;
-        float endy = end.y + lineLength;
+        float endy = start.y + lineLength;
 
         // Be careful about floating point rounding.  As we draw segments in larger and larger
         // coordinates, the shader (which uses floats) will lose precision and stop drawing small
