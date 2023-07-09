@@ -52,7 +52,7 @@ class ACTION_TOOLBAR;
  *
  * The SIMULATOR_FRAME holds the main user-interface for running simulations.
  *
- * It contains a workbook with multiple tabs, each tab holding a SIM_PLOT_PANEL, a specific
+ * It contains a workbook with multiple tabs, each tab holding a SIM_PLOT_TAB, a specific
  * simulation command (.TRAN, .AC, etc.), and simulation settings (save all currents, etc.).
  *
  * Each plot can have multiple TRACEs.  While internally each TRACE can have multiple cursors,
@@ -132,7 +132,7 @@ public:
     /**
      * Return the current tab (or NULL if there is none).
      */
-    SIM_PLOT_PANEL_BASE* GetCurrentPlotPanel() const;
+    SIM_TAB* GetCurrentSimTab() const;
 
     /**
      * Toggle dark-mode of the plot tabs.

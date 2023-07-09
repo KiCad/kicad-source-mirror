@@ -52,7 +52,7 @@
 #include "ngspice.h"
 #include <sim/simulator_frame.h>
 #include <sim/simulator_panel.h>
-#include <sim/sim_plot_panel.h>
+#include <sim/sim_plot_tab.h>
 #include <sim/spice_simulator.h>
 #include <sim/spice_reporter.h>
 #include <eeschema_settings.h>
@@ -284,8 +284,8 @@ WINDOW_SETTINGS* SIMULATOR_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
 
 wxString SIMULATOR_FRAME::GetCurrentSimCommand() const
 {
-    if( m_panel->GetCurrentPlotPanel() )
-        return m_panel->GetCurrentPlotPanel()->GetSimCommand();
+    if( m_panel->GetCurrentSimTab() )
+        return m_panel->GetCurrentSimTab()->GetSimCommand();
     else
         return m_circuitModel->GetSchTextSimCommand();
 }
@@ -299,8 +299,8 @@ SIM_TYPE SIMULATOR_FRAME::GetCurrentSimType() const
 
 int SIMULATOR_FRAME::GetCurrentOptions() const
 {
-    if( SIM_PLOT_PANEL_BASE* plotPanel = m_panel->GetCurrentPlotPanel() )
-        return plotPanel->GetSimOptions();
+    if( SIM_TAB* simTab = m_panel->GetCurrentSimTab() )
+        return simTab->GetSimOptions();
     else
         return NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS;
 }
@@ -361,17 +361,17 @@ bool SIMULATOR_FRAME::LoadSimulator( const wxString& aSimCommand, unsigned aSimO
 
 void SIMULATOR_FRAME::StartSimulation()
 {
-    SIM_PLOT_PANEL_BASE* plotPanel = m_panel->GetCurrentPlotPanel();
+    SIM_TAB* simTab = m_panel->GetCurrentSimTab();
 
-    if( !plotPanel )
+    if( !simTab )
         return;
 
-    if( plotPanel->GetSimCommand().Upper().StartsWith( wxT( "FFT" ) ) )
+    if( simTab->GetSimCommand().Upper().StartsWith( wxT( "FFT" ) ) )
     {
         wxString tranSpicePlot;
 
-        if( SIM_PLOT_PANEL_BASE* tranPlotPanel = m_panel->GetPlotPanel( ST_TRAN ) )
-            tranSpicePlot = tranPlotPanel->GetSpicePlotName();
+        if( SIM_TAB* tranPlotTab = m_panel->GetSimTab( ST_TRAN ) )
+            tranSpicePlot = tranPlotTab->GetSpicePlotName();
 
         if( tranSpicePlot.IsEmpty() )
         {
@@ -382,7 +382,7 @@ void SIMULATOR_FRAME::StartSimulation()
         {
             m_simulator->Command( "setplot " + tranSpicePlot.ToStdString() );
 
-            wxArrayString commands = wxSplit( plotPanel->GetSimCommand(), '\n' );
+            wxArrayString commands = wxSplit( simTab->GetSimCommand(), '\n' );
 
             for( const wxString& command : commands )
             {
@@ -390,7 +390,7 @@ void SIMULATOR_FRAME::StartSimulation()
                 m_simulator->Command( command.ToStdString() );
             }
 
-            plotPanel->SetSpicePlotName( m_simulator->CurrentPlotName() );
+            simTab->SetSpicePlotName( m_simulator->CurrentPlotName() );
             m_panel->OnSimRefresh( true );
 
 #if 0
@@ -403,21 +403,21 @@ void SIMULATOR_FRAME::StartSimulation()
     }
     else
     {
-        if( m_panel->GetPlotIndex( plotPanel ) == 0
-                && m_circuitModel->GetSchTextSimCommand() != plotPanel->GetLastSchTextSimCommand() )
+        if( m_panel->GetSimTabIndex( simTab ) == 0
+                && m_circuitModel->GetSchTextSimCommand() != simTab->GetLastSchTextSimCommand() )
         {
-            if( plotPanel->GetLastSchTextSimCommand().IsEmpty()
+            if( simTab->GetLastSchTextSimCommand().IsEmpty()
                 || IsOK( this, _( "Schematic sheet simulation command directive has changed.  "
                                   "Do you wish to update the Simulation Command?" ) ) )
             {
-                plotPanel->SetSimCommand( m_circuitModel->GetSchTextSimCommand() );
-                plotPanel->SetLastSchTextSimCommand( plotPanel->GetSimCommand() );
+                simTab->SetSimCommand( m_circuitModel->GetSchTextSimCommand() );
+                simTab->SetLastSchTextSimCommand( simTab->GetSimCommand() );
                 OnModify();
             }
         }
     }
 
-    if( !LoadSimulator( plotPanel->GetSimCommand(), plotPanel->GetSimOptions() ) )
+    if( !LoadSimulator( simTab->GetSimCommand(), simTab->GetSimOptions() ) )
         return;
 
     std::unique_lock<std::mutex> simulatorLock( m_simulator->GetMutex(), std::try_to_lock );
@@ -436,7 +436,7 @@ void SIMULATOR_FRAME::StartSimulation()
 
 void SIMULATOR_FRAME::NewPlotPanel( const wxString& aSimCommand, unsigned aOptions )
 {
-    m_panel->NewPlotPanel( aSimCommand, aOptions );
+    m_panel->NewSimTab( aSimCommand, aOptions );
 }
 
 
@@ -482,9 +482,9 @@ void SIMULATOR_FRAME::AddTuner( const SCH_SHEET_PATH& aSheetPath, SCH_SYMBOL* aS
 }
 
 
-SIM_PLOT_PANEL_BASE* SIMULATOR_FRAME::GetCurrentPlotPanel() const
+SIM_TAB* SIMULATOR_FRAME::GetCurrentSimTab() const
 {
-    return m_panel->GetCurrentPlotPanel();
+    return m_panel->GetCurrentSimTab();
 }
 
 
@@ -530,12 +530,12 @@ void SIMULATOR_FRAME::ToggleDarkModePlots()
 
 bool SIMULATOR_FRAME::EditSimCommand()
 {
-    SIM_PLOT_PANEL_BASE* plotPanel = m_panel->GetCurrentPlotPanel();
-    DIALOG_SIM_COMMAND   dlg( this, m_circuitModel, m_simulator->Settings() );
-    wxString             errors;
-    WX_STRING_REPORTER   reporter( &errors );
+    SIM_TAB*           simTab = m_panel->GetCurrentSimTab();
+    DIALOG_SIM_COMMAND dlg( this, m_circuitModel, m_simulator->Settings() );
+    wxString           errors;
+    WX_STRING_REPORTER reporter( &errors );
 
-    if( !plotPanel )
+    if( !simTab )
         return false;
 
     if( !m_circuitModel->ReadSchematicAndLibraries( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS,
@@ -545,13 +545,13 @@ bool SIMULATOR_FRAME::EditSimCommand()
                                    + errors );
     }
 
-    dlg.SetSimCommand( plotPanel->GetSimCommand() );
-    dlg.SetSimOptions( plotPanel->GetSimOptions() );
+    dlg.SetSimCommand( simTab->GetSimCommand() );
+    dlg.SetSimOptions( simTab->GetSimOptions() );
 
     if( dlg.ShowModal() == wxID_OK )
     {
-        plotPanel->SetSimCommand( dlg.GetSimCommand() );
-        plotPanel->SetSimOptions( dlg.GetSimOptions() );
+        simTab->SetSimCommand( dlg.GetSimCommand() );
+        simTab->SetSimOptions( dlg.GetSimOptions() );
         m_panel->OnPlotSettingsChanged();
         OnModify();
         return true;
@@ -615,22 +615,22 @@ void SIMULATOR_FRAME::setupUIConditions()
     auto showGridCondition =
             [this]( const SELECTION& aSel )
             {
-                SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( GetCurrentPlotPanel() );
-                return plotPanel && plotPanel->IsGridShown();
+                SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
+                return plotTab && plotTab->IsGridShown();
             };
 
     auto showLegendCondition =
             [this]( const SELECTION& aSel )
             {
-                SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( GetCurrentPlotPanel() );
-                return plotPanel && plotPanel->IsLegendShown();
+                SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
+                return plotTab && plotTab->IsLegendShown();
             };
 
     auto showDottedCondition =
             [this]( const SELECTION& aSel )
             {
-                SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( GetCurrentPlotPanel() );
-                return plotPanel && plotPanel->GetDottedSecondary();
+                SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
+                return plotTab && plotTab->GetDottedSecondary();
             };
 
     auto darkModePlotCondition =
@@ -654,13 +654,13 @@ void SIMULATOR_FRAME::setupUIConditions()
     auto haveSim =
             [this]( const SELECTION& aSel )
             {
-                return GetCurrentPlotPanel() != nullptr;
+                return GetCurrentSimTab() != nullptr;
             };
 
     auto havePlot =
             [this]( const SELECTION& aSel )
             {
-                return dynamic_cast<SIM_PLOT_PANEL*>( GetCurrentPlotPanel() ) != nullptr;
+                return dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() ) != nullptr;
             };
 
 #define ENABLE( x ) ACTION_CONDITIONS().Enable( x )

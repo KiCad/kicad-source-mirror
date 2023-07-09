@@ -30,7 +30,7 @@
 class SIMULATOR_FRAME;
 class NGSPICE_CIRCUIT_MODEL;
 class SPICE_SIMULATOR;
-class SIM_PLOT_PANEL_BASE;
+class SIM_TAB;
 
 
 /**
@@ -85,7 +85,7 @@ private:
      */
     wxString getDefaultPath();
 
-    SIM_PLOT_PANEL_BASE* GetCurrentPlotPanel();
+    SIM_TAB* GetCurrentPlotPanel();
 
     ///< Set up handlers for various events.
     void setTransitions() override;

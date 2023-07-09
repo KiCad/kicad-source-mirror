@@ -33,18 +33,18 @@
 #include <widgets/mathplot.h>
 #include <wx/colour.h>
 #include <wx/sizer.h>
-#include "sim_plot_panel_base.h"
+#include "sim_tab.h"
 #include "sim_plot_colors.h"
 
 class SIMULATOR_FRAME;
-class SIM_PLOT_PANEL;
+class SIM_PLOT_TAB;
 class TRACE;
 
 /**
  *
  * The SIMULATOR_FRAME holds the main user-interface for running simulations.
  *
- * It contains a workbook with multiple tabs, each tab holding a SIM_PLOT_PANEL, a specific
+ * It contains a workbook with multiple tabs, each tab holding a SIM_PLOT_TAB, a specific
  * simulation command (.TRAN, .AC, etc.), and simulation settings (save all currents, etc.).
  *
  * Each plot can have multiple TRACEs.  While internally each TRACE can have multiple cursors,
@@ -63,7 +63,7 @@ class TRACE;
 class CURSOR : public mpInfoLayer
 {
 public:
-    CURSOR( TRACE* aTrace, SIM_PLOT_PANEL* aPlotPanel ) :
+    CURSOR( TRACE* aTrace, SIM_PLOT_TAB* aPlotTab ) :
             mpInfoLayer( wxRect( 0, 0, DRAG_MARGIN, DRAG_MARGIN ), wxTRANSPARENT_BRUSH ),
             m_trace( aTrace ),
             m_updateRequired( true ),
@@ -191,12 +191,12 @@ protected:
 };
 
 
-class SIM_PLOT_PANEL : public SIM_PLOT_PANEL_BASE
+class SIM_PLOT_TAB : public SIM_TAB
 {
 public:
-    SIM_PLOT_PANEL( const wxString& aSimCommand, unsigned aSimOptions, wxWindow* parent );
+    SIM_PLOT_TAB( const wxString& aSimCommand, unsigned aSimOptions, wxWindow* parent );
 
-    virtual ~SIM_PLOT_PANEL();
+    virtual ~SIM_PLOT_TAB();
 
     wxString GetLabelX() const
     {

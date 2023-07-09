@@ -229,8 +229,8 @@ set( EESCHEMA_SIM_SRCS
     sim/simulator_panel.cpp
     sim/simulator_panel_base.cpp
     sim/sim_plot_colors.cpp
-    sim/sim_plot_panel_base.cpp
-    sim/sim_plot_panel.cpp
+        sim/sim_tab.cpp
+        sim/sim_plot_tab.cpp
     sim/sim_property.cpp
     sim/spice_simulator.cpp
     sim/spice_value.cpp

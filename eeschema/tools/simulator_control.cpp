@@ -154,7 +154,7 @@ int SIMULATOR_CONTROL::SaveWorkbook( const TOOL_EVENT& aEvent )
 
 int SIMULATOR_CONTROL::ExportPlotAsPNG( const TOOL_EVENT& aEvent )
 {
-    if( SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( GetCurrentPlotPanel() ) )
+    if( SIM_PLOT_TAB* plotPanel = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentPlotPanel() ) )
     {
         wxFileDialog saveDlg( m_simulatorFrame, _( "Save Plot as Image" ), "", "",
                               PngFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
@@ -169,15 +169,15 @@ int SIMULATOR_CONTROL::ExportPlotAsPNG( const TOOL_EVENT& aEvent )
 }
 
 
-SIM_PLOT_PANEL_BASE* SIMULATOR_CONTROL::GetCurrentPlotPanel()
+SIM_TAB* SIMULATOR_CONTROL::GetCurrentPlotPanel()
 {
-    return m_simulatorFrame->GetCurrentPlotPanel();
+    return m_simulatorFrame->GetCurrentSimTab();
 }
 
 
 int SIMULATOR_CONTROL::ExportPlotAsCSV( const TOOL_EVENT& aEvent )
 {
-    if( SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( GetCurrentPlotPanel() ) )
+    if( SIM_PLOT_TAB* plotPanel = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentPlotPanel() ) )
     {
         const wxChar SEPARATOR = ';';
 
@@ -238,7 +238,7 @@ int SIMULATOR_CONTROL::Close( const TOOL_EVENT& aEvent )
 
 int SIMULATOR_CONTROL::Zoom( const TOOL_EVENT& aEvent )
 {
-    if( SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( GetCurrentPlotPanel() ) )
+    if( SIM_PLOT_TAB* plotPanel = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentPlotPanel() ) )
     {
         if(      aEvent.IsAction( &ACTIONS::zoomInCenter ) )  plotPanel->GetPlotWin()->ZoomIn();
         else if( aEvent.IsAction( &ACTIONS::zoomOutCenter ) ) plotPanel->GetPlotWin()->ZoomOut();
@@ -251,7 +251,7 @@ int SIMULATOR_CONTROL::Zoom( const TOOL_EVENT& aEvent )
 
 int SIMULATOR_CONTROL::ToggleGrid( const TOOL_EVENT& aEvent )
 {
-    if( SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( GetCurrentPlotPanel() ) )
+    if( SIM_PLOT_TAB* plotPanel = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentPlotPanel() ) )
     {
         plotPanel->ShowGrid( !plotPanel->IsGridShown() );
         m_simulatorFrame->OnModify();
@@ -263,7 +263,7 @@ int SIMULATOR_CONTROL::ToggleGrid( const TOOL_EVENT& aEvent )
 
 int SIMULATOR_CONTROL::ToggleLegend( const TOOL_EVENT& aEvent )
 {
-    if( SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( GetCurrentPlotPanel() ) )
+    if( SIM_PLOT_TAB* plotPanel = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentPlotPanel() ) )
     {
         plotPanel->ShowLegend( !plotPanel->IsLegendShown() );
         m_simulatorFrame->OnModify();
@@ -275,7 +275,7 @@ int SIMULATOR_CONTROL::ToggleLegend( const TOOL_EVENT& aEvent )
 
 int SIMULATOR_CONTROL::ToggleDottedSecondary( const TOOL_EVENT& aEvent )
 {
-    if( SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( GetCurrentPlotPanel() ) )
+    if( SIM_PLOT_TAB* plotPanel = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentPlotPanel() ) )
     {
         plotPanel->SetDottedSecondary( !plotPanel->GetDottedSecondary() );
         m_simulatorFrame->OnModify();

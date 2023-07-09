@@ -39,7 +39,7 @@
 #include <pgm_base.h>
 #include <sim/simulator_panel.h>
 #include <sim/simulator_frame.h>
-#include <sim/sim_plot_panel.h>
+#include <sim/sim_plot_tab.h>
 #include <sim/spice_simulator.h>
 #include "fmt/format.h"
 #include <dialogs/dialog_text_entry.h>
@@ -134,7 +134,7 @@ void SIGNALS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 
         m_grid->SetGridCursor( m_menuRow, m_menuCol );
 
-        if( SIM_PLOT_PANEL_BASE* panel = m_parent->GetCurrentPlotPanel() )
+        if( SIM_TAB* panel = m_parent->GetCurrentSimTab() )
         {
             if( panel->GetSimType() == ST_TRAN || panel->GetSimType() == ST_AC
                 || panel->GetSimType() == ST_DC || panel->GetSimType() == ST_SP )
@@ -526,13 +526,13 @@ void SIMULATOR_PANEL::ShowChangedLanguage()
 {
     for( int ii = 0; ii < (int) m_plotNotebook->GetPageCount(); ++ii )
     {
-        auto plot = dynamic_cast<SIM_PLOT_PANEL_BASE*>( m_plotNotebook->GetPage( ii ) );
+        SIM_TAB* simTab = dynamic_cast<SIM_TAB*>( m_plotNotebook->GetPage( ii ) );
 
-        wxCHECK( plot, /* void */ );
+        wxCHECK( simTab, /* void */ );
 
-        plot->OnLanguageChanged();
+        simTab->OnLanguageChanged();
 
-        wxString pageTitle( simulator()->TypeToName( plot->GetSimType(), true ) );
+        wxString pageTitle( simulator()->TypeToName( simTab->GetSimType(), true ) );
         pageTitle.Prepend( wxString::Format( _( "Plot%u - " ), ii+1 /* 1-based */ ) );
 
         m_plotNotebook->SetPageText( ii, pageTitle );
@@ -595,7 +595,7 @@ void SIMULATOR_PANEL::InitWorkbook()
         wxString schTextSimCommand = circuitModel()->GetSchTextSimCommand();
 
         if( !schTextSimCommand.IsEmpty() )
-            NewPlotPanel( schTextSimCommand, NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS );
+            NewSimTab( schTextSimCommand, NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS );
 
         rebuildSignalsList();
         rebuildSignalsGrid( m_filter->GetValue() );
@@ -628,7 +628,7 @@ void SIMULATOR_PANEL::rebuildSignalsGrid( wxString aFilter )
 
     m_signalsGrid->ClearRows();
 
-    SIM_PLOT_PANEL*  plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( GetCurrentPlotPanel() );
+    SIM_PLOT_TAB*  plotPanel = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
 
     if( !plotPanel )
         return;
@@ -870,32 +870,31 @@ void SIMULATOR_PANEL::rebuildSignalsList()
 }
 
 
-SIM_PLOT_PANEL_BASE* SIMULATOR_PANEL::NewPlotPanel( const wxString& aSimCommand,
-                                                    unsigned aSimOptions )
+SIM_TAB* SIMULATOR_PANEL::NewSimTab( const wxString& aSimCommand, unsigned aSimOptions )
 {
-    SIM_PLOT_PANEL_BASE* plotPanel = nullptr;
-    SIM_TYPE             simType   = NGSPICE_CIRCUIT_MODEL::CommandToSimType( aSimCommand );
+    SIM_TAB* simTab = nullptr;
+    SIM_TYPE simType = NGSPICE_CIRCUIT_MODEL::CommandToSimType( aSimCommand );
 
-    if( SIM_PLOT_PANEL_BASE::IsPlottable( simType ) )
+    if( SIM_TAB::IsPlottable( simType ) )
     {
-        SIM_PLOT_PANEL* panel = new SIM_PLOT_PANEL( aSimCommand, aSimOptions, m_plotNotebook );
-        plotPanel = panel;
+        SIM_PLOT_TAB* panel = new SIM_PLOT_TAB( aSimCommand, aSimOptions, m_plotNotebook );
+        simTab = panel;
 
         COMMON_SETTINGS::INPUT cfg = Pgm().GetCommonSettings()->m_Input;
         panel->GetPlotWin()->EnableMouseWheelPan( cfg.scroll_modifier_zoom != 0 );
     }
     else
     {
-        plotPanel = new SIM_NOPLOT_PANEL( aSimCommand, aSimOptions, m_plotNotebook );
+        simTab = new SIM_NOPLOT_TAB( aSimCommand, aSimOptions, m_plotNotebook );
     }
 
     wxString pageTitle( simulator()->TypeToName( simType, true ) );
     pageTitle.Prepend( wxString::Format( _( "Plot%u - " ), (unsigned int) ++m_plotNumber ) );
 
-    m_plotNotebook->AddPage( dynamic_cast<wxWindow*>( plotPanel ), pageTitle, true );
+    m_plotNotebook->AddPage( simTab, pageTitle, true );
 
     m_simulatorFrame->OnModify();
-    return plotPanel;
+    return simTab;
 }
 
 
@@ -930,7 +929,7 @@ wxString vectorNameFromSignalId( int aUserDefinedSignalId )
  * For user-defined signals we display the user-oriented signal name such as "V(out)-V(in)",
  * but the simulator vector we actually have to plot will be "user0" or some-such.
  */
-wxString SIMULATOR_PANEL::vectorNameFromSignalName( SIM_PLOT_PANEL* aPlotPanel,
+wxString SIMULATOR_PANEL::vectorNameFromSignalName( SIM_PLOT_TAB* aPlotTab,
                                                     const wxString& aSignalName, int* aTraceType )
 {
     std::map<wxString, int> suffixes;
@@ -940,7 +939,7 @@ wxString SIMULATOR_PANEL::vectorNameFromSignalName( SIM_PLOT_PANEL* aPlotPanel,
 
     if( aTraceType )
     {
-        if( aPlotPanel && aPlotPanel->GetSimType() == ST_NOISE )
+        if( aPlotTab && aPlotTab->GetSimType() == ST_NOISE )
         {
             if( getNoiseSource().Upper().StartsWith( 'I' ) )
                 *aTraceType = SPT_CURRENT;
@@ -991,20 +990,20 @@ void SIMULATOR_PANEL::onSignalsGridCellChanged( wxGridEvent& aEvent )
     if( m_SuppressGridEvents > 0 )
         return;
 
-    int             row = aEvent.GetRow();
-    int             col = aEvent.GetCol();
-    wxString        text = m_signalsGrid->GetCellValue( row, col );
-    SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( GetCurrentPlotPanel() );
-    wxString        signalName = m_signalsGrid->GetCellValue( row, COL_SIGNAL_NAME );
-    int             traceType = SPT_UNKNOWN;
-    wxString        vectorName = vectorNameFromSignalName( plotPanel, signalName, &traceType );
+    int           row = aEvent.GetRow();
+    int           col = aEvent.GetCol();
+    wxString      text = m_signalsGrid->GetCellValue( row, col );
+    SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
+    wxString      signalName = m_signalsGrid->GetCellValue( row, COL_SIGNAL_NAME );
+    int           traceType = SPT_UNKNOWN;
+    wxString      vectorName = vectorNameFromSignalName( plotTab, signalName, &traceType );
 
     if( col == COL_SIGNAL_SHOW )
     {
         if( text == wxS( "1" ) )
-            updateTrace( vectorName, traceType, plotPanel );
+            updateTrace( vectorName, traceType, plotTab );
         else
-            plotPanel->DeleteTrace( vectorName, traceType );
+            plotTab->DeleteTrace( vectorName, traceType );
 
         // Update enabled/visible states of other controls
         updateSignalsGrid();
@@ -1014,13 +1013,13 @@ void SIMULATOR_PANEL::onSignalsGridCellChanged( wxGridEvent& aEvent )
     else if( col == COL_SIGNAL_COLOR )
     {
         KIGFX::COLOR4D color( m_signalsGrid->GetCellValue( row, COL_SIGNAL_COLOR ) );
-        TRACE*         trace = plotPanel->GetTrace( vectorName, traceType );
+        TRACE*         trace = plotTab->GetTrace( vectorName, traceType );
 
         if( trace )
         {
             trace->SetTraceColour( color.ToColour() );
-            plotPanel->UpdateTraceStyle( trace );
-            plotPanel->UpdatePlotColors();
+            plotTab->UpdateTraceStyle( trace );
+            plotTab->UpdatePlotColors();
             m_simulatorFrame->OnModify();
         }
     }
@@ -1029,12 +1028,12 @@ void SIMULATOR_PANEL::onSignalsGridCellChanged( wxGridEvent& aEvent )
         for( int ii = 0; ii < m_signalsGrid->GetNumberRows(); ++ii )
         {
             signalName = m_signalsGrid->GetCellValue( ii, COL_SIGNAL_NAME );
-            vectorName = vectorNameFromSignalName( plotPanel, signalName, &traceType );
+            vectorName = vectorNameFromSignalName( plotTab, signalName, &traceType );
 
             int  id = col == COL_CURSOR_1 ? 1 : 2;
             bool enable = ii == row && text == wxS( "1" );
 
-            plotPanel->EnableCursor( vectorName, traceType, id, enable, signalName );
+            plotTab->EnableCursor( vectorName, traceType, id, enable, signalName );
             m_simulatorFrame->OnModify();
         }
 
@@ -1049,9 +1048,9 @@ void SIMULATOR_PANEL::onCursorsGridCellChanged( wxGridEvent& aEvent )
     if( m_SuppressGridEvents > 0 )
         return;
 
-    SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( GetCurrentPlotPanel() );
+    SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
 
-    if( !plotPanel )
+    if( !plotTab )
         return;
 
     int      row = aEvent.GetRow();
@@ -1064,7 +1063,7 @@ void SIMULATOR_PANEL::onCursorsGridCellChanged( wxGridEvent& aEvent )
         CURSOR* cursor1 = nullptr;
         CURSOR* cursor2 = nullptr;
 
-        for( const auto& [name, trace] : plotPanel->GetTraces() )
+        for( const auto& [name, trace] : plotTab->GetTraces() )
         {
             if( CURSOR* cursor = trace->GetCursor( 1 ) )
                 cursor1 = cursor;
@@ -1119,9 +1118,9 @@ void SIMULATOR_PANEL::DeleteMeasurement( int aRow )
 
 void SIMULATOR_PANEL::onMeasurementsGridCellChanged( wxGridEvent& aEvent )
 {
-    SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( GetCurrentPlotPanel() );
+    SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
 
-    if( !plotPanel )
+    if( !plotTab )
         return;
 
     int      row = aEvent.GetRow();
@@ -1185,9 +1184,9 @@ void SIMULATOR_PANEL::UpdateMeasurement( int aRow )
                                             " +"
                                             "([a-zA-Z])\\(([^\\)]+)\\)" ) );
 
-    SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( GetCurrentPlotPanel() );
+    SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
 
-    if( !plotPanel )
+    if( !plotTab )
         return;
 
     wxString text = m_measurementsGrid->GetCellValue( aRow, COL_MEASUREMENT );
@@ -1198,7 +1197,7 @@ void SIMULATOR_PANEL::UpdateMeasurement( int aRow )
         return;
     }
 
-    wxString simType = simulator()->TypeToName( plotPanel->GetSimType(), true );
+    wxString simType = simulator()->TypeToName( plotTab->GetSimType(), true );
     wxString resultName = wxString::Format( wxS( "meas_result_%u" ), aRow );
     wxString result = wxS( "?" );
 
@@ -1225,7 +1224,7 @@ void SIMULATOR_PANEL::UpdateMeasurement( int aRow )
             units = wxS( "s" );
         else if( func.StartsWith( wxS( "INTEG" ) ) )
         {
-            switch( plotPanel->GetSimType() )
+            switch( plotTab->GetSimType() )
             {
                 case SIM_TYPE::ST_TRAN:
                     if ( signalType == 'P' )
@@ -1274,9 +1273,9 @@ void SIMULATOR_PANEL::UpdateMeasurement( int aRow )
 
 void SIMULATOR_PANEL::AddTuner( const SCH_SHEET_PATH& aSheetPath, SCH_SYMBOL* aSymbol )
 {
-    SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( GetCurrentPlotPanel() );
+    SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
 
-    if( !plotPanel )
+    if( !plotTab )
         return;
 
     wxString ref = aSymbol->GetRef( &aSheetPath );
@@ -1310,7 +1309,7 @@ void SIMULATOR_PANEL::AddTuner( const SCH_SHEET_PATH& aSheetPath, SCH_SYMBOL* aS
 
 
 void SIMULATOR_PANEL::UpdateTunerValue( const SCH_SHEET_PATH& aSheetPath, const KIID& aSymbol,
-                                       const wxString& aRef, const wxString& aValue )
+                                        const wxString& aRef, const wxString& aValue )
 {
     SCH_ITEM*   item = aSheetPath.GetItem( aSymbol );
     SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item );
@@ -1360,12 +1359,12 @@ void SIMULATOR_PANEL::AddMeasurement( const wxString& aCmd )
             return; // Don't create duplicates
     }
 
-    SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( GetCurrentPlotPanel() );
+    SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
 
-    if( !plotPanel )
+    if( !plotTab )
         return;
 
-    wxString simType = simulator()->TypeToName( plotPanel->GetSimType(), true );
+    wxString simType = simulator()->TypeToName( plotTab->GetSimType(), true );
     int      row;
 
     for( row = 0; row < m_measurementsGrid->GetNumberRows(); ++row )
@@ -1412,14 +1411,14 @@ const NGSPICE_CIRCUIT_MODEL* SIMULATOR_PANEL::GetExporter() const
 
 void SIMULATOR_PANEL::AddTrace( const wxString& aName, SIM_TRACE_TYPE aType )
 {
-    if( !GetCurrentPlotPanel() )
+    if( !GetCurrentSimTab() )
     {
         m_simConsole->AppendText( _( "Error: no current simulation.\n" ) );
         m_simConsole->SetInsertionPointEnd();
         return;
     }
 
-    SIM_TYPE simType = NGSPICE_CIRCUIT_MODEL::CommandToSimType( GetCurrentPlotPanel()->GetSimCommand() );
+    SIM_TYPE simType = NGSPICE_CIRCUIT_MODEL::CommandToSimType( GetCurrentSimTab()->GetSimCommand() );
 
     if( simType == ST_UNKNOWN )
     {
@@ -1427,29 +1426,29 @@ void SIMULATOR_PANEL::AddTrace( const wxString& aName, SIM_TRACE_TYPE aType )
         m_simConsole->SetInsertionPointEnd();
         return;
     }
-    else if( !SIM_PLOT_PANEL_BASE::IsPlottable( simType ) )
+    else if( !SIM_TAB::IsPlottable( simType ) )
     {
         m_simConsole->AppendText( _( "Error: simulation type doesn't support plotting.\n" ) );
         m_simConsole->SetInsertionPointEnd();
         return;
     }
 
-    SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( GetCurrentPlotPanel() );
-    wxCHECK( plotPanel, /* void */ );
+    SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
+    wxCHECK( plotTab, /* void */ );
 
     if( simType == ST_AC )
     {
-        updateTrace( aName, aType | SPT_AC_GAIN, plotPanel );
-        updateTrace( aName, aType | SPT_AC_PHASE, plotPanel );
+        updateTrace( aName, aType | SPT_AC_GAIN, plotTab );
+        updateTrace( aName, aType | SPT_AC_PHASE, plotTab );
     }
     else if( simType == ST_SP )
     {
-        updateTrace( aName, aType | SPT_AC_GAIN, plotPanel );
-        updateTrace( aName, aType | SPT_AC_PHASE, plotPanel );
+        updateTrace( aName, aType | SPT_AC_GAIN, plotTab );
+        updateTrace( aName, aType | SPT_AC_PHASE, plotTab );
     }
     else
     {
-        updateTrace( aName, aType, plotPanel );
+        updateTrace( aName, aType, plotTab );
     }
 
     updateSignalsGrid();
@@ -1461,54 +1460,54 @@ void SIMULATOR_PANEL::SetUserDefinedSignals( const std::map<int, wxString>& aNew
 {
     for( size_t ii = 0; ii < m_plotNotebook->GetPageCount(); ++ii )
     {
-        SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( m_plotNotebook->GetPage( ii ) );
+        SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( m_plotNotebook->GetPage( ii ) );
 
-        if( !plotPanel )
+        if( !plotTab )
             continue;
 
         for( const auto& [ id, existingSignal ] : m_userDefinedSignals )
         {
             int      traceType = SPT_UNKNOWN;
-            wxString vectorName = vectorNameFromSignalName( plotPanel, existingSignal, &traceType );
+            wxString vectorName = vectorNameFromSignalName( plotTab, existingSignal, &traceType );
 
             if( aNewSignals.count( id ) == 0 )
             {
-                if( plotPanel->GetSimType() == ST_AC )
+                if( plotTab->GetSimType() == ST_AC )
                 {
                     for( int subType : { SPT_AC_GAIN, SPT_AC_PHASE } )
-                        plotPanel->DeleteTrace( vectorName, traceType | subType );
+                        plotTab->DeleteTrace( vectorName, traceType | subType );
                 }
-                else if( plotPanel->GetSimType() == ST_SP )
+                else if( plotTab->GetSimType() == ST_SP )
                 {
                     for( int subType : { SPT_SP_AMP, SPT_AC_PHASE } )
-                        plotPanel->DeleteTrace( vectorName, traceType | subType );
+                        plotTab->DeleteTrace( vectorName, traceType | subType );
                 }
                 else
                 {
-                    plotPanel->DeleteTrace( vectorName, traceType );
+                    plotTab->DeleteTrace( vectorName, traceType );
                 }
             }
             else
             {
-                if( plotPanel->GetSimType() == ST_AC )
+                if( plotTab->GetSimType() == ST_AC )
                 {
                     for( int subType : { SPT_AC_GAIN, SPT_AC_PHASE } )
                     {
-                        if( TRACE* trace = plotPanel->GetTrace( vectorName, traceType | subType ) )
+                        if( TRACE* trace = plotTab->GetTrace( vectorName, traceType | subType ) )
                             trace->SetName( aNewSignals.at( id ) );
                     }
                 }
-                else if( plotPanel->GetSimType() == ST_SP )
+                else if( plotTab->GetSimType() == ST_SP )
                 {
                     for( int subType : { SPT_SP_AMP, SPT_AC_PHASE } )
                     {
-                        if( TRACE* trace = plotPanel->GetTrace( vectorName, traceType | subType ) )
+                        if( TRACE* trace = plotTab->GetTrace( vectorName, traceType | subType ) )
                             trace->SetName( aNewSignals.at( id ) );
                     }
                 }
                 else
                 {
-                    if( TRACE* trace = plotPanel->GetTrace( vectorName, traceType ) )
+                    if( TRACE* trace = plotTab->GetTrace( vectorName, traceType ) )
                         trace->SetName( aNewSignals.at( id ) );
                 }
             }
@@ -1529,9 +1528,9 @@ void SIMULATOR_PANEL::SetUserDefinedSignals( const std::map<int, wxString>& aNew
 
 
 void SIMULATOR_PANEL::updateTrace( const wxString& aVectorName, int aTraceType,
-                                   SIM_PLOT_PANEL* aPlotPanel )
+                                   SIM_PLOT_TAB* aPlotTab )
 {
-    SIM_TYPE simType = NGSPICE_CIRCUIT_MODEL::CommandToSimType( aPlotPanel->GetSimCommand() );
+    SIM_TYPE simType = NGSPICE_CIRCUIT_MODEL::CommandToSimType( aPlotTab->GetSimCommand() );
 
     aTraceType &= aTraceType & SPT_Y_AXIS_MASK;
     aTraceType |= getXAxisType( simType );
@@ -1541,7 +1540,7 @@ void SIMULATOR_PANEL::updateTrace( const wxString& aVectorName, int aTraceType,
     if( aTraceType & SPT_POWER )
         simVectorName = simVectorName.AfterFirst( '(' ).BeforeLast( ')' ) + wxS( ":power" );
 
-    if( !SIM_PLOT_PANEL_BASE::IsPlottable( simType ) )
+    if( !SIM_TAB::IsPlottable( simType ) )
     {
         // There is no plot to be shown
         simulator()->Command( wxString::Format( wxT( "print %s" ), aVectorName ).ToStdString() );
@@ -1599,8 +1598,8 @@ void SIMULATOR_PANEL::updateTrace( const wxString& aVectorName, int aTraceType,
     SPICE_DC_PARAMS source1, source2;
 
     if( simType == ST_DC
-        && circuitModel()->ParseDCCommand( aPlotPanel->GetSimCommand(), &source1, &source2 )
-        && !source2.m_source.IsEmpty() )
+            && circuitModel()->ParseDCCommand( aPlotTab->GetSimCommand(), &source1, &source2 )
+            && !source2.m_source.IsEmpty() )
     {
         // Source 1 is the inner loop, so lets add traces for each Source 2 (outer loop) step
         SPICE_VALUE v = source2.m_vstart;
@@ -1613,7 +1612,7 @@ void SIMULATOR_PANEL::updateTrace( const wxString& aVectorName, int aTraceType,
 
         for( size_t idx = 0; idx <= outer; idx++ )
         {
-            if( TRACE* trace = aPlotPanel->AddTrace( aVectorName, aTraceType ) )
+            if( TRACE* trace = aPlotTab->AddTrace( aVectorName, aTraceType ) )
             {
                 if( data_y.size() >= size )
                 {
@@ -1622,7 +1621,7 @@ void SIMULATOR_PANEL::updateTrace( const wxString& aVectorName, int aTraceType,
                     std::vector<double> sub_y( data_y.begin() + offset,
                                                data_y.begin() + offset + inner );
 
-                    aPlotPanel->SetTraceData( trace, inner, sub_x.data(), sub_y.data() );
+                    aPlotTab->SetTraceData( trace, inner, sub_x.data(), sub_y.data() );
                 }
             }
 
@@ -1630,25 +1629,25 @@ void SIMULATOR_PANEL::updateTrace( const wxString& aVectorName, int aTraceType,
             offset += inner;
         }
     }
-    else if( TRACE* trace = aPlotPanel->AddTrace( aVectorName, aTraceType ) )
+    else if( TRACE* trace = aPlotTab->AddTrace( aVectorName, aTraceType ) )
     {
         if( data_y.size() >= size )
-            aPlotPanel->SetTraceData( trace, size, data_x.data(), data_y.data() );
+            aPlotTab->SetTraceData( trace, size, data_x.data(), data_y.data() );
     }
 }
 
 
 void SIMULATOR_PANEL::updateSignalsGrid()
 {
-    SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( GetCurrentPlotPanel() );
+    SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
 
     for( int row = 0; row < m_signalsGrid->GetNumberRows(); ++row )
     {
         wxString signalName = m_signalsGrid->GetCellValue( row, COL_SIGNAL_NAME );
         int      traceType = SPT_UNKNOWN;
-        wxString vectorName = vectorNameFromSignalName( plotPanel, signalName, &traceType );
+        wxString vectorName = vectorNameFromSignalName( plotTab, signalName, &traceType );
 
-        if( TRACE* trace = plotPanel ? plotPanel->GetTrace( vectorName, traceType ) : nullptr )
+        if( TRACE* trace = plotTab ? plotTab->GetTrace( vectorName, traceType ) : nullptr )
         {
             m_signalsGrid->SetCellValue( row, COL_SIGNAL_SHOW, wxS( "1" ) );
 
@@ -1764,20 +1763,20 @@ void SIMULATOR_PANEL::applyTuners()
 }
 
 
-void SIMULATOR_PANEL::parseTraceParams( SIM_PLOT_PANEL* aPlotPanel, TRACE* aTrace,
-                                       const wxString& aSignalName, const wxString& aParams )
+void SIMULATOR_PANEL::parseTraceParams( SIM_PLOT_TAB* aPlotTab, TRACE* aTrace,
+                                        const wxString& aSignalName, const wxString& aParams )
 {
     auto addCursor =
             [&]( int aCursorId, double x )
             {
-                CURSOR* cursor = new CURSOR( aTrace, aPlotPanel );
+                CURSOR* cursor = new CURSOR( aTrace, aPlotTab );
 
                 cursor->SetName( aSignalName );
                 cursor->SetPen( wxPen( aTrace->GetTraceColour() ) );
                 cursor->SetCoordX( x );
 
                 aTrace->SetCursor( aCursorId, cursor );
-                aPlotPanel->GetPlotWin()->AddLayer( cursor );
+                aPlotTab->GetPlotWin()->AddLayer( cursor );
             };
 
     wxArrayString items = wxSplit( aParams, '|' );
@@ -1789,7 +1788,7 @@ void SIMULATOR_PANEL::parseTraceParams( SIM_PLOT_PANEL* aPlotPanel, TRACE* aTrac
             wxColour color;
             color.Set( item );
             aTrace->SetTraceColour( color );
-            aPlotPanel->UpdateTraceStyle( aTrace );
+            aPlotTab->UpdateTraceStyle( aTrace );
         }
         else if( item.StartsWith( wxS( "cursor1" ) ) )
         {
@@ -1829,11 +1828,11 @@ void SIMULATOR_PANEL::parseTraceParams( SIM_PLOT_PANEL* aPlotPanel, TRACE* aTrac
         }
         else if( item == wxS( "dottedSecondary" ) )
         {
-            aPlotPanel->SetDottedSecondary( true );
+            aPlotTab->SetDottedSecondary( true );
         }
         else if( item == wxS( "hideGrid" ) )
         {
-            aPlotPanel->ShowGrid( false );
+            aPlotTab->ShowGrid( false );
         }
     }
 }
@@ -1853,7 +1852,7 @@ bool SIMULATOR_PANEL::LoadWorkbook( const wxString& aPath )
 
     long     version = 1;
     wxString firstLine = file.GetFirstLine();
-    wxString plotCountLine;
+    wxString pageCountLine;
 
     if( firstLine.StartsWith( wxT( "version " ) ) )
     {
@@ -1865,16 +1864,16 @@ bool SIMULATOR_PANEL::LoadWorkbook( const wxString& aPath )
             return false;
         }
 
-        plotCountLine = file.GetNextLine();
+        pageCountLine = file.GetNextLine();
     }
     else
     {
-        plotCountLine = firstLine;
+        pageCountLine = firstLine;
     }
 
-    long plotsCount;
+    long pageCount;
 
-    if( !plotCountLine.ToLong( &plotsCount ) )
+    if( !pageCountLine.ToLong( &pageCount ) )
     {
         DISPLAY_LOAD_ERROR( "Error loading workbook: Line %d is not an integer." );
         file.Close();
@@ -1882,13 +1881,13 @@ bool SIMULATOR_PANEL::LoadWorkbook( const wxString& aPath )
         return false;
     }
 
-    std::map<SIM_PLOT_PANEL*, std::vector<std::tuple<long, wxString, wxString>>> traceInfo;
+    std::map<SIM_PLOT_TAB*, std::vector<std::tuple<long, wxString, wxString>>> traceInfo;
 
-    for( long i = 0; i < plotsCount; ++i )
+    for( long i = 0; i < pageCount; ++i )
     {
-        long plotType, tracesCount;
+        long simType, tracesCount;
 
-        if( !file.GetNextLine().ToLong( &plotType ) )
+        if( !file.GetNextLine().ToLong( &simType ) )
         {
             DISPLAY_LOAD_ERROR( "Error loading workbook: Line %d is not an integer." );
             file.Close();
@@ -1929,8 +1928,8 @@ bool SIMULATOR_PANEL::LoadWorkbook( const wxString& aPath )
                 simCommand += line + wxT( "\n" );
         }
 
-        SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( NewPlotPanel( simCommand,
-                                                                                 simOptions ) );
+        SIM_TAB*      simTab = NewSimTab( simCommand, simOptions );
+        SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( simTab );
 
         if( !file.GetNextLine().ToLong( &tracesCount ) )
         {
@@ -1940,8 +1939,8 @@ bool SIMULATOR_PANEL::LoadWorkbook( const wxString& aPath )
             return false;
         }
 
-        if( plotPanel )
-            traceInfo[ plotPanel ] = {};
+        if( plotTab )
+            traceInfo[plotTab] = {};
 
         for( long j = 0; j < tracesCount; ++j )
         {
@@ -1968,8 +1967,8 @@ bool SIMULATOR_PANEL::LoadWorkbook( const wxString& aPath )
 
             param = file.GetNextLine();
 
-            if( plotPanel )
-                traceInfo[ plotPanel ].emplace_back( std::make_tuple( traceType, name, param ) );
+            if( plotTab )
+                traceInfo[plotTab].emplace_back( std::make_tuple( traceType, name, param ) );
         }
 
         if( version > 4 )
@@ -1983,8 +1982,8 @@ bool SIMULATOR_PANEL::LoadWorkbook( const wxString& aPath )
                 wxString measurement = file.GetNextLine();
                 wxString format = file.GetNextLine();
 
-                if( plotPanel )
-                    plotPanel->Measurements().emplace_back( measurement, format );
+                if( plotTab )
+                    plotTab->Measurements().emplace_back( measurement, format );
             }
         }
     }
@@ -1997,7 +1996,7 @@ bool SIMULATOR_PANEL::LoadWorkbook( const wxString& aPath )
             m_userDefinedSignals[ ii ] = file.GetNextLine();
     }
 
-    for( const auto& [ plotPanel, traceInfoVector ] : traceInfo )
+    for( const auto& [plotTab, traceInfoVector ] : traceInfo )
     {
         for( const auto& [ traceType, signalName, param ] : traceInfoVector )
         {
@@ -2012,32 +2011,32 @@ bool SIMULATOR_PANEL::LoadWorkbook( const wxString& aPath )
 
                     coords[0].ToLong( &x );
                     coords[1].ToLong( &y );
-                    plotPanel->SetLegendPosition( wxPoint( (int) x, (int) y ) );
+                    plotTab->SetLegendPosition( wxPoint( (int) x, (int) y ) );
                 }
 
-                plotPanel->ShowLegend( true );
+                plotTab->ShowLegend( true );
             }
             else
             {
-                wxString vectorName = vectorNameFromSignalName( plotPanel, signalName, nullptr );
-                TRACE*   trace = plotPanel->AddTrace( vectorName, (int) traceType );
+                wxString vectorName = vectorNameFromSignalName( plotTab, signalName, nullptr );
+                TRACE*   trace = plotTab->AddTrace( vectorName, (int) traceType );
 
                 if( version >= 4 && trace )
-                    parseTraceParams( plotPanel, trace, signalName, param );
+                    parseTraceParams( plotTab, trace, signalName, param );
             }
         }
 
-        plotPanel->UpdatePlotColors();
+        plotTab->UpdatePlotColors();
     }
 
-    if( SIM_PLOT_PANEL_BASE* plotPanel = GetCurrentPlotPanel() )
+    if( SIM_TAB* simTab = GetCurrentSimTab() )
     {
-        m_simulatorFrame->LoadSimulator( plotPanel->GetSimCommand(), plotPanel->GetSimOptions() );
+        m_simulatorFrame->LoadSimulator( simTab->GetSimCommand(), simTab->GetSimOptions() );
 
         if( version >= 5 )
         {
-            plotPanel = dynamic_cast<SIM_PLOT_PANEL_BASE*>( m_plotNotebook->GetPage( 0 ) );
-            plotPanel->SetLastSchTextSimCommand( file.GetNextLine() );
+            simTab = dynamic_cast<SIM_TAB*>( m_plotNotebook->GetPage( 0 ) );
+            simTab->SetLastSchTextSimCommand( file.GetNextLine() );
         }
     }
 
@@ -2085,18 +2084,18 @@ bool SIMULATOR_PANEL::SaveWorkbook( const wxString& aPath )
 
     for( size_t i = 0; i < m_plotNotebook->GetPageCount(); i++ )
     {
-        auto* basePanel = dynamic_cast<SIM_PLOT_PANEL_BASE*>( m_plotNotebook->GetPage( i ) );
+        SIM_TAB* simTab = dynamic_cast<SIM_TAB*>( m_plotNotebook->GetPage( i ) );
 
-        if( !basePanel )
+        if( !simTab )
         {
             file.AddLine( wxString::Format( wxT( "%llu" ), 0ull ) );
             continue;
         }
 
-        file.AddLine( wxString::Format( wxT( "%d" ), basePanel->GetSimType() ) );
+        file.AddLine( wxString::Format( wxT( "%d" ), simTab->GetSimType() ) );
 
-        wxString command = basePanel->GetSimCommand();
-        int      options = basePanel->GetSimOptions();
+        wxString command = simTab->GetSimCommand();
+        int      options = simTab->GetSimOptions();
 
         if( options & NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS )
             command += wxT( "\n.kicad adjustpaths" );
@@ -2112,17 +2111,17 @@ bool SIMULATOR_PANEL::SaveWorkbook( const wxString& aPath )
 
         file.AddLine( EscapeString( command, CTX_LINE ) );
 
-        SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( basePanel );
+        SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( simTab );
 
-        if( !plotPanel )
+        if( !plotTab )
         {
             file.AddLine( wxString::Format( wxT( "%llu" ), 0ull ) );
             continue;
         }
 
-        size_t traceCount = plotPanel->GetTraces().size();
+        size_t traceCount = plotTab->GetTraces().size();
 
-        if( plotPanel->IsLegendShown() )
+        if( plotTab->IsLegendShown() )
             traceCount++;
 
         file.AddLine( wxString::Format( wxT( "%llu" ), traceCount ) );
@@ -2139,7 +2138,7 @@ bool SIMULATOR_PANEL::SaveWorkbook( const wxString& aPath )
                     return aVectorName;
                 };
 
-        for( const auto& [name, trace] : plotPanel->GetTraces() )
+        for( const auto& [name, trace] : plotTab->GetTraces() )
         {
             file.AddLine( wxString::Format( wxT( "%d" ), trace->GetType() ) );
             file.AddLine( findSignalName( trace->GetName() ) );
@@ -2169,27 +2168,26 @@ bool SIMULATOR_PANEL::SaveWorkbook( const wxString& aPath )
                                          m_cursorFormats[2][1].ToString() );
             }
 
-            if( plotPanel->GetDottedSecondary() )
+            if( plotTab->GetDottedSecondary() )
                 msg += wxS( "|dottedSecondary" );
 
-            if( !plotPanel->IsGridShown() )
+            if( !plotTab->IsGridShown() )
                 msg += wxS( "|hideGrid" );
 
             file.AddLine( msg );
         }
 
-        if( plotPanel->IsLegendShown() )
+        if( plotTab->IsLegendShown() )
         {
             file.AddLine( wxString::Format( wxT( "%d" ), SPT_UNKNOWN ) );
             file.AddLine( wxT( "$LEGEND" ) );
-            file.AddLine( wxString::Format( wxT( "%d %d" ),
-                                            plotPanel->GetLegendPosition().x,
-                                            plotPanel->GetLegendPosition().y - 40 ) );
+            file.AddLine( wxString::Format( wxT( "%d %d" ), plotTab->GetLegendPosition().x,
+                                            plotTab->GetLegendPosition().y - 40 ) );
         }
 
-        file.AddLine( wxString::Format( wxT( "%llu" ), plotPanel->Measurements().size() ) );
+        file.AddLine( wxString::Format( wxT( "%llu" ), plotTab->Measurements().size() ) );
 
-        for( const auto& [ measurement, format ] : plotPanel->Measurements() )
+        for( const auto& [ measurement, format ] : plotTab->Measurements() )
         {
             file.AddLine( measurement );
             file.AddLine( format );
@@ -2208,8 +2206,8 @@ bool SIMULATOR_PANEL::SaveWorkbook( const wxString& aPath )
 
     if( m_plotNotebook->GetPageCount() > 0 )
     {
-        auto* basePanel = dynamic_cast<SIM_PLOT_PANEL_BASE*>( m_plotNotebook->GetPage( 0 ) );
-        lastSchTextSimCommand = basePanel->GetLastSchTextSimCommand();
+        SIM_TAB* simTab = dynamic_cast<SIM_TAB*>( m_plotNotebook->GetPage( 0 ) );
+        lastSchTextSimCommand = simTab->GetLastSchTextSimCommand();
     }
 
     file.AddLine( lastSchTextSimCommand );
@@ -2255,9 +2253,9 @@ wxString SIMULATOR_PANEL::getNoiseSource() const
     SPICE_VALUE fStop;
     bool        saveAll;
 
-    if( GetCurrentPlotPanel() )
+    if( GetCurrentSimTab() )
     {
-        circuitModel()->ParseNoiseCommand( GetCurrentPlotPanel()->GetSimCommand(), &output, &ref,
+        circuitModel()->ParseNoiseCommand( GetCurrentSimTab()->GetSimCommand(), &output, &ref,
                                            &source, &scale, &pts, &fStart, &fStop, &saveAll );
     }
 
@@ -2272,17 +2270,17 @@ void SIMULATOR_PANEL::ToggleDarkModePlots()
     // Rebuild the color list to plot traces
     SIM_PLOT_COLORS::FillDefaultColorList( m_darkMode );
 
-    // Now send changes to all SIM_PLOT_PANEL
+    // Now send changes to all SIM_PLOT_TAB
     for( size_t page = 0; page < m_plotNotebook->GetPageCount(); page++ )
     {
         wxWindow* curPage = m_plotNotebook->GetPage( page );
 
-        // ensure it is truly a plot panel and not the (zero plots) placeholder
-        // which is only SIM_PLOT_PANEL_BASE
-        SIM_PLOT_PANEL* panel = dynamic_cast<SIM_PLOT_PANEL*>( curPage );
+        // ensure it is truly a plot plotTab and not the (zero plots) placeholder
+        // which is only SIM_TAB
+        SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( curPage );
 
-        if( panel )
-            panel->UpdatePlotColors();
+        if( plotTab )
+            plotTab->UpdatePlotColors();
     }
 }
 
@@ -2300,7 +2298,7 @@ void SIMULATOR_PANEL::onPlotClosed( wxAuiNotebookEvent& event )
                    rebuildSignalsGrid( m_filter->GetValue() );
                    updatePlotCursors();
 
-                   SIM_PLOT_PANEL_BASE* panel = GetCurrentPlotPanel();
+                   SIM_TAB* panel = GetCurrentSimTab();
 
                    if( !panel || panel->GetSimType() != ST_OP )
                    {
@@ -2315,9 +2313,9 @@ void SIMULATOR_PANEL::onPlotClosed( wxAuiNotebookEvent& event )
 
 void SIMULATOR_PANEL::onPlotChanging( wxAuiNotebookEvent& event )
 {
-    if( SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( GetCurrentPlotPanel() ) )
+    if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() ) )
     {
-        std::vector<std::pair<wxString, wxString>>& measurements = plotPanel->Measurements();
+        std::vector<std::pair<wxString, wxString>>& measurements = plotTab->Measurements();
 
         measurements.clear();
 
@@ -2350,8 +2348,8 @@ void SIMULATOR_PANEL::OnPlotSettingsChanged()
 
 void SIMULATOR_PANEL::onPlotChanged( wxAuiNotebookEvent& event )
 {
-    if( SIM_PLOT_PANEL_BASE* plotWindow = GetCurrentPlotPanel() )
-        simulator()->Command( "setplot " + plotWindow->GetSpicePlotName().ToStdString() );
+    if( SIM_TAB* simTab = GetCurrentSimTab() )
+        simulator()->Command( "setplot " + simTab->GetSpicePlotName().ToStdString() );
 
     OnPlotSettingsChanged();
 
@@ -2363,9 +2361,9 @@ void SIMULATOR_PANEL::rebuildMeasurementsGrid()
 {
     m_measurementsGrid->ClearRows();
 
-    if( SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( GetCurrentPlotPanel() ) )
+    if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() ) )
     {
-        for( const auto& [ measurement, format ] : plotPanel->Measurements() )
+        for( const auto& [ measurement, format ] : plotTab->Measurements() )
         {
             int row = m_measurementsGrid->GetNumberRows();
             m_measurementsGrid->AppendRows();
@@ -2373,8 +2371,8 @@ void SIMULATOR_PANEL::rebuildMeasurementsGrid()
             m_measurementsGrid->SetCellValue( row, COL_MEASUREMENT_FORMAT, format );
         }
 
-        if( plotPanel->GetSimType() == ST_TRAN || plotPanel->GetSimType() == ST_AC
-            || plotPanel->GetSimType() == ST_DC || plotPanel->GetSimType() == ST_SP )
+        if( plotTab->GetSimType() == ST_TRAN || plotTab->GetSimType() == ST_AC
+            || plotTab->GetSimType() == ST_DC || plotTab->GetSimType() == ST_SP )
         {
             m_measurementsGrid->AppendRows();   // Empty row at end
         }
@@ -2412,9 +2410,9 @@ void SIMULATOR_PANEL::updatePlotCursors()
 
     m_cursorsGrid->ClearRows();
 
-    SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( GetCurrentPlotPanel() );
+    SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
 
-    if( !plotPanel )
+    if( !plotTab )
         return;
 
     // Update cursor values
@@ -2429,22 +2427,22 @@ void SIMULATOR_PANEL::updatePlotCursors()
             [&]( TRACE* aTrace ) -> wxString
             {
                 if( ( aTrace->GetType() & SPT_AC_PHASE ) || ( aTrace->GetType() & SPT_CURRENT ) )
-                    return plotPanel->GetUnitsY2();
+                    return plotTab->GetUnitsY2();
                 else if( aTrace->GetType() & SPT_POWER )
-                    return plotPanel->GetUnitsY3();
+                    return plotTab->GetUnitsY3();
                 else
-                    return plotPanel->GetUnitsY1();
+                    return plotTab->GetUnitsY1();
             };
 
     auto getNameY =
             [&]( TRACE* aTrace ) -> wxString
             {
                 if( ( aTrace->GetType() & SPT_AC_PHASE ) || ( aTrace->GetType() & SPT_CURRENT ) )
-                    return plotPanel->GetLabelY2();
+                    return plotTab->GetLabelY2();
                 else if( aTrace->GetType() & SPT_POWER )
-                    return plotPanel->GetLabelY3();
+                    return plotTab->GetLabelY3();
                 else
-                    return plotPanel->GetLabelY1();
+                    return plotTab->GetLabelY1();
             };
 
     auto formatValue =
@@ -2456,7 +2454,7 @@ void SIMULATOR_PANEL::updatePlotCursors()
                     return SPICE_VALUE( aValue ).ToString( m_cursorFormats[ aCursorId ][ aCol ] );
             };
 
-    for( const auto& [name, trace] : plotPanel->GetTraces() )
+    for( const auto& [name, trace] : plotTab->GetTraces() )
     {
         if( CURSOR* cursor = trace->GetCursor( 1 ) )
         {
@@ -2467,7 +2465,7 @@ void SIMULATOR_PANEL::updatePlotCursors()
             wxRealPoint coords = cursor->GetCoords();
             int         row = m_cursorsGrid->GetNumberRows();
 
-            m_cursorFormats[0][0].UpdateUnits( plotPanel->GetUnitsX() );
+            m_cursorFormats[0][0].UpdateUnits( plotTab->GetUnitsX() );
             m_cursorFormats[0][1].UpdateUnits( cursor1Units );
 
             m_cursorsGrid->AppendRows( 1 );
@@ -2479,7 +2477,7 @@ void SIMULATOR_PANEL::updatePlotCursors()
         }
     }
 
-    for( const auto& [name, trace] : plotPanel->GetTraces() )
+    for( const auto& [name, trace] : plotTab->GetTraces() )
     {
         if( CURSOR* cursor = trace->GetCursor( 2 ) )
         {
@@ -2490,7 +2488,7 @@ void SIMULATOR_PANEL::updatePlotCursors()
             wxRealPoint coords = cursor->GetCoords();
             int         row = m_cursorsGrid->GetNumberRows();
 
-            m_cursorFormats[1][0].UpdateUnits( plotPanel->GetUnitsX() );
+            m_cursorFormats[1][0].UpdateUnits( plotTab->GetUnitsX() );
             m_cursorFormats[1][1].UpdateUnits( cursor2Units );
 
             m_cursorsGrid->AppendRows( 1 );
@@ -2507,7 +2505,7 @@ void SIMULATOR_PANEL::updatePlotCursors()
         wxRealPoint coords = cursor2->GetCoords() - cursor1->GetCoords();
         wxString    signal;
 
-        m_cursorFormats[2][0].UpdateUnits( plotPanel->GetUnitsX() );
+        m_cursorFormats[2][0].UpdateUnits( plotTab->GetUnitsX() );
         m_cursorFormats[2][1].UpdateUnits( cursor1Units );
 
         if( cursor1->GetName() == cursor2->GetName() )
@@ -2523,7 +2521,7 @@ void SIMULATOR_PANEL::updatePlotCursors()
     }
 
     // Set up the labels
-    m_cursorsGrid->SetColLabelValue( COL_CURSOR_X, plotPanel->GetLabelX() );
+    m_cursorsGrid->SetColLabelValue( COL_CURSOR_X, plotTab->GetLabelX() );
 
     wxString valColName = _( "Value" );
 
@@ -2550,8 +2548,8 @@ void SIMULATOR_PANEL::onPlotCursorUpdate( wxCommandEvent& aEvent )
 
 void SIMULATOR_PANEL::OnSimUpdate()
 {
-    if( SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( GetCurrentPlotPanel() ) )
-        plotPanel->ResetScales( true );
+    if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() ) )
+        plotTab->ResetScales( true );
 
     m_simConsole->Clear();
 
@@ -2596,21 +2594,21 @@ std::vector<wxString> SIMULATOR_PANEL::Signals() const
 
 void SIMULATOR_PANEL::OnSimRefresh( bool aFinal )
 {
-    SIM_PLOT_PANEL_BASE*  plotPanelBase = GetCurrentPlotPanel();
+    SIM_TAB* simTab = GetCurrentSimTab();
 
-    if( !plotPanelBase )
+    if( !simTab )
         return;
 
-    SIM_TYPE              simType = plotPanelBase->GetSimType();
+    SIM_TYPE              simType = simTab->GetSimType();
     std::vector<wxString> oldSignals = m_signals;
     wxString              msg;
 
-    plotPanelBase->SetSpicePlotName( simulator()->CurrentPlotName() );
+    simTab->SetSpicePlotName( simulator()->CurrentPlotName() );
     applyUserDefinedSignals();
     rebuildSignalsList();
 
     // If there are any signals plotted, update them
-    if( SIM_PLOT_PANEL_BASE::IsPlottable( simType ) )
+    if( SIM_TAB::IsPlottable( simType ) )
     {
         if( simType == ST_NOISE && aFinal )
         {
@@ -2635,28 +2633,28 @@ void SIMULATOR_PANEL::OnSimRefresh( bool aFinal )
             }
 
             simulator()->Command( fmt::format( "setplot noise{}", number - 1 ) );
-            plotPanelBase->SetSpicePlotName( simulator()->CurrentPlotName() );
+            simTab->SetSpicePlotName( simulator()->CurrentPlotName() );
         }
 
-        SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( plotPanelBase );
-        wxCHECK_RET( plotPanel, wxT( "not a SIM_PLOT_PANEL" ) );
+        SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( simTab );
+        wxCHECK_RET( plotTab, wxT( "not a SIM_PLOT_TAB" ) );
 
         // Map of TRACE* to { vectorName, traceType }
         std::map<TRACE*, std::pair<wxString, int>> traceMap;
 
-        for( const auto& [ name, trace ] : plotPanel->GetTraces() )
+        for( const auto& [ name, trace ] : plotTab->GetTraces() )
             traceMap[ trace ] = { wxEmptyString, SPT_UNKNOWN };
 
         for( const wxString& signal : m_signals )
         {
             int      traceType = SPT_UNKNOWN;
-            wxString vectorName = vectorNameFromSignalName( plotPanel, signal, &traceType );
+            wxString vectorName = vectorNameFromSignalName( plotTab, signal, &traceType );
 
             if( simType == ST_AC )
             {
                 for( int subType : { SPT_AC_GAIN, SPT_AC_PHASE } )
                 {
-                    if( TRACE* trace = plotPanel->GetTrace( vectorName, traceType | subType ) )
+                    if( TRACE* trace = plotTab->GetTrace( vectorName, traceType | subType ) )
                         traceMap[ trace ] = { vectorName, traceType };
                 }
             }
@@ -2664,13 +2662,13 @@ void SIMULATOR_PANEL::OnSimRefresh( bool aFinal )
             {
                 for( int subType : { SPT_SP_AMP, SPT_AC_PHASE } )
                 {
-                    if( TRACE* trace = plotPanel->GetTrace( vectorName, traceType | subType ) )
+                    if( TRACE* trace = plotTab->GetTrace( vectorName, traceType | subType ) )
                         traceMap[trace] = { vectorName, traceType };
                 }
             }
             else
             {
-                if( TRACE* trace = plotPanel->GetTrace( vectorName, traceType ) )
+                if( TRACE* trace = plotTab->GetTrace( vectorName, traceType ) )
                     traceMap[ trace ] = { vectorName, traceType };
             }
         }
@@ -2680,24 +2678,24 @@ void SIMULATOR_PANEL::OnSimRefresh( bool aFinal )
         for( const auto& [ trace, traceInfo ] : traceMap )
         {
             if( traceInfo.first.IsEmpty() )
-                plotPanel->DeleteTrace( trace );
+                plotTab->DeleteTrace( trace );
         }
 
         for( const auto& [ trace, traceInfo ] : traceMap )
         {
             if( !traceInfo.first.IsEmpty() )
-                updateTrace( traceInfo.first, traceInfo.second, plotPanel );
+                updateTrace( traceInfo.first, traceInfo.second, plotTab );
         }
 
         rebuildSignalsGrid( m_filter->GetValue() );
         updateSignalsGrid();
 
-        plotPanel->GetPlotWin()->UpdateAll();
+        plotTab->GetPlotWin()->UpdateAll();
 
         if( aFinal )
-            plotPanel->ResetScales( true );
+            plotTab->ResetScales( true );
 
-        plotPanel->GetPlotWin()->Fit();
+        plotTab->GetPlotWin()->Fit();
 
         updatePlotCursors();
 

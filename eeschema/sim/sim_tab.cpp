@@ -24,21 +24,20 @@
  */
 
 #include "confirm.h"
-#include "sim_plot_panel_base.h"
+#include "sim_tab.h"
 
 #include "simulator_frame.h"
 #include "ngspice_circuit_model.h"
 
 
-SIM_PLOT_PANEL_BASE::SIM_PLOT_PANEL_BASE() :
+SIM_TAB::SIM_TAB() :
         m_simCommand( wxEmptyString ),
         m_simOptions( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS )
 {
 }
 
 
-SIM_PLOT_PANEL_BASE::SIM_PLOT_PANEL_BASE( const wxString& aSimCommand, unsigned aSimOptions,
-                                          wxWindow* parent ) :
+SIM_TAB::SIM_TAB( const wxString& aSimCommand, unsigned aSimOptions, wxWindow* parent ) :
         wxWindow( parent, wxID_ANY ),
         m_simCommand( aSimCommand ),
         m_simOptions( aSimOptions )
@@ -46,12 +45,12 @@ SIM_PLOT_PANEL_BASE::SIM_PLOT_PANEL_BASE( const wxString& aSimCommand, unsigned 
 }
 
 
-SIM_PLOT_PANEL_BASE::~SIM_PLOT_PANEL_BASE()
+SIM_TAB::~SIM_TAB()
 {
 }
 
 
-bool SIM_PLOT_PANEL_BASE::IsPlottable( SIM_TYPE aSimType )
+bool SIM_TAB::IsPlottable( SIM_TYPE aSimType )
 {
     switch( aSimType )
     {
@@ -69,15 +68,15 @@ bool SIM_PLOT_PANEL_BASE::IsPlottable( SIM_TYPE aSimType )
 }
 
 
-SIM_TYPE SIM_PLOT_PANEL_BASE::GetSimType() const
+SIM_TYPE SIM_TAB::GetSimType() const
 {
     return NGSPICE_CIRCUIT_MODEL::CommandToSimType( m_simCommand );
 }
 
 
-SIM_NOPLOT_PANEL::SIM_NOPLOT_PANEL( const wxString& aSimCommand, unsigned aSimOptions,
-                                    wxWindow* parent ) :
-        SIM_PLOT_PANEL_BASE( aSimCommand, aSimOptions, parent )
+SIM_NOPLOT_TAB::SIM_NOPLOT_TAB( const wxString& aSimCommand, unsigned aSimOptions,
+                                wxWindow* parent ) :
+        SIM_TAB( aSimCommand, aSimOptions, parent )
 {
     m_sizer = new wxBoxSizer( wxVERTICAL );
     m_sizer->Add( 0, 1, 1, wxEXPAND, 5 );
@@ -96,12 +95,12 @@ SIM_NOPLOT_PANEL::SIM_NOPLOT_PANEL( const wxString& aSimCommand, unsigned aSimOp
 }
 
 
-SIM_NOPLOT_PANEL::~SIM_NOPLOT_PANEL()
+SIM_NOPLOT_TAB::~SIM_NOPLOT_TAB()
 {
 }
 
 
-void SIM_NOPLOT_PANEL::OnLanguageChanged()
+void SIM_NOPLOT_TAB::OnLanguageChanged()
 {
     m_textInfo->SetLabel( _( "Simulation provided no plots. Please refer to console window "
                              "for results." ) );

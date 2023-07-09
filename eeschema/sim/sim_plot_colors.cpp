@@ -25,7 +25,7 @@
 
 
 #include "sim_plot_colors.h"
-#include "sim_plot_panel.h"
+#include <sim/sim_plot_tab.h>
 #include <wx/stc/stc.h>
 
 

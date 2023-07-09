@@ -31,7 +31,7 @@
 
 #include <sim/simulator_panel_base.h>
 #include <sim/sim_types.h>
-#include <sim/sim_plot_panel.h>
+#include <sim/sim_plot_tab.h>
 
 #include <wx/event.h>
 
@@ -51,7 +51,7 @@ class TUNER_SLIDER;
  *
  * The SIMULATOR_PANEL holds the main user-interface for running simulations.
  *
- * It contains a workbook with multiple tabs, each tab holding a SIM_PLOT_PANEL, a specific
+ * It contains a workbook with multiple tabs, each tab holding a SIM_PLOT_TAB, a specific
  * simulation command (.TRAN, .AC, etc.), and simulation settings (save all currents, etc.).
  *
  * Each plot can have multiple TRACEs.  While internally each TRACE can have multiple cursors,
@@ -73,13 +73,13 @@ public:
     ~SIMULATOR_PANEL();
 
     /**
-     * Create a new plot tab for a given simulation type.
+     * Create a new simulation tab for a given simulation type.
      *
      * @param aSimCommand is requested simulation command.
      * @param aSimOptions netlisting options
      * @return The new plot panel.
      */
-    SIM_PLOT_PANEL_BASE* NewPlotPanel( const wxString& aSimCommand, unsigned aSimOptions );
+    SIM_TAB* NewSimTab( const wxString& aSimCommand, unsigned aSimOptions );
 
     std::vector<wxString> SimPlotVectors() const;
 
@@ -196,16 +196,16 @@ public:
     /**
      * Return the currently opened plot panel (or NULL if there is none).
      */
-    SIM_PLOT_PANEL_BASE* GetCurrentPlotPanel() const
+    SIM_TAB* GetCurrentSimTab() const
     {
-        return dynamic_cast<SIM_PLOT_PANEL_BASE*>( m_plotNotebook->GetCurrentPage() );
+        return dynamic_cast<SIM_TAB*>( m_plotNotebook->GetCurrentPage() );
     }
 
-    SIM_PLOT_PANEL_BASE* GetPlotPanel( SIM_TYPE aType ) const
+    SIM_TAB* GetSimTab( SIM_TYPE aType ) const
     {
         for( int ii = 0; ii < (int) m_plotNotebook->GetPageCount(); ++ii )
         {
-            auto* candidate = dynamic_cast<SIM_PLOT_PANEL_BASE*>( m_plotNotebook->GetPage( ii ) );
+            SIM_TAB* candidate = dynamic_cast<SIM_TAB*>( m_plotNotebook->GetPage( ii ) );
 
             if( candidate && candidate->GetSimType() == aType )
                 return candidate;
@@ -214,7 +214,7 @@ public:
         return nullptr;
     }
 
-    int GetPlotIndex( SIM_PLOT_PANEL_BASE* aPlot ) const
+    int GetSimTabIndex( SIM_TAB* aPlot ) const
     {
         return m_plotNotebook->GetPageIndex( aPlot );
     }
@@ -229,18 +229,18 @@ private:
     /**
      * Get the simulator output vector name for a given signal name and type.
      */
-    wxString vectorNameFromSignalName( SIM_PLOT_PANEL* aPlotPanel, const wxString& aSignalName,
+    wxString vectorNameFromSignalName( SIM_PLOT_TAB* aPlotTab, const wxString& aSignalName,
                                        int* aTraceType );
 
     /**
-     * Update a trace in a particular SIM_PLOT_PANEL.  If the panel does not contain the given
+     * Update a trace in a particular SIM_PLOT_TAB.  If the panel does not contain the given
      * trace, then add it.
      *
      * @param aVectorName is the SPICE vector name, such as "I(Net-C1-Pad1)".
      * @param aTraceType describes the type of plot.
-     * @param aPlotPanel is the panel that should receive the update.
+     * @param aPlotTab is the tab that should receive the update.
      */
-    void updateTrace( const wxString& aVectorName, int aTraceType, SIM_PLOT_PANEL* aPlotPanel );
+    void updateTrace( const wxString& aVectorName, int aTraceType, SIM_PLOT_TAB* aPlotTab );
 
     /**
      * Rebuild the list of signals available from the netlist.
@@ -286,7 +286,7 @@ private:
 
     wxString getNoiseSource() const;
 
-    void parseTraceParams( SIM_PLOT_PANEL* aPlotPanel, TRACE* aTrace, const wxString& aSignalName,
+    void parseTraceParams( SIM_PLOT_TAB* aPlotTab, TRACE* aTrace, const wxString& aSignalName,
                            const wxString& aParams );
 
     std::shared_ptr<SPICE_SIMULATOR> simulator() const;

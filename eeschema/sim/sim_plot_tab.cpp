@@ -26,7 +26,7 @@
  */
 
 #include "sim_plot_colors.h"
-#include "sim_plot_panel.h"
+#include "sim_plot_tab.h"
 #include "simulator_frame.h"
 #include "core/kicad_algo.h"
 
@@ -405,9 +405,8 @@ void CURSOR::UpdateReference()
 }
 
 
-SIM_PLOT_PANEL::SIM_PLOT_PANEL( const wxString& aSimCommand, unsigned aSimOptions,
-                                wxWindow* parent ) :
-        SIM_PLOT_PANEL_BASE( aSimCommand, aSimOptions, parent ),
+SIM_PLOT_TAB::SIM_PLOT_TAB( const wxString& aSimCommand, unsigned aSimOptions, wxWindow* parent ) :
+        SIM_TAB( aSimCommand, aSimOptions, parent ),
         m_axis_x( nullptr ),
         m_axis_y1( nullptr ),
         m_axis_y2( nullptr ),
@@ -437,13 +436,13 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( const wxString& aSimCommand, unsigned aSimOption
 }
 
 
-SIM_PLOT_PANEL::~SIM_PLOT_PANEL()
+SIM_PLOT_TAB::~SIM_PLOT_TAB()
 {
     // ~mpWindow destroys all the added layers, so there is no need to destroy m_traces contents
 }
 
 
-wxString SIM_PLOT_PANEL::GetUnitsX() const
+wxString SIM_PLOT_TAB::GetUnitsX() const
 {
     LOG_SCALE<mpScaleXLog>* logScale = dynamic_cast<LOG_SCALE<mpScaleXLog>*>( m_axis_x );
     LIN_SCALE<mpScaleX>*    linScale = dynamic_cast<LIN_SCALE<mpScaleX>*>( m_axis_x );
@@ -457,7 +456,7 @@ wxString SIM_PLOT_PANEL::GetUnitsX() const
 }
 
 
-wxString SIM_PLOT_PANEL::GetUnitsY1() const
+wxString SIM_PLOT_TAB::GetUnitsY1() const
 {
     LIN_SCALE<mpScaleY>* linScale = dynamic_cast<LIN_SCALE<mpScaleY>*>( m_axis_y1 );
 
@@ -468,7 +467,7 @@ wxString SIM_PLOT_PANEL::GetUnitsY1() const
 }
 
 
-wxString SIM_PLOT_PANEL::GetUnitsY2() const
+wxString SIM_PLOT_TAB::GetUnitsY2() const
 {
     LIN_SCALE<mpScaleY>* linScale = dynamic_cast<LIN_SCALE<mpScaleY>*>( m_axis_y2 );
 
@@ -479,7 +478,7 @@ wxString SIM_PLOT_PANEL::GetUnitsY2() const
 }
 
 
-wxString SIM_PLOT_PANEL::GetUnitsY3() const
+wxString SIM_PLOT_TAB::GetUnitsY3() const
 {
     LIN_SCALE<mpScaleY>* linScale = dynamic_cast<LIN_SCALE<mpScaleY>*>( m_axis_y3 );
 
@@ -490,7 +489,7 @@ wxString SIM_PLOT_PANEL::GetUnitsY3() const
 }
 
 
-void SIM_PLOT_PANEL::updateAxes( int aNewTraceType )
+void SIM_PLOT_TAB::updateAxes( int aNewTraceType )
 {
     switch( GetSimType() )
     {
@@ -644,7 +643,7 @@ void SIM_PLOT_PANEL::updateAxes( int aNewTraceType )
 }
 
 
-void SIM_PLOT_PANEL::prepareDCAxes( int aNewTraceType )
+void SIM_PLOT_TAB::prepareDCAxes( int aNewTraceType )
 {
     wxString sim_cmd = GetSimCommand().Lower();
     wxString rem;
@@ -746,7 +745,7 @@ void SIM_PLOT_PANEL::prepareDCAxes( int aNewTraceType )
 }
 
 
-void SIM_PLOT_PANEL::UpdatePlotColors()
+void SIM_PLOT_TAB::UpdatePlotColors()
 {
     // Update bg and fg colors:
     m_plotWin->SetColourTheme( m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::BACKGROUND ),
@@ -767,14 +766,14 @@ void SIM_PLOT_PANEL::UpdatePlotColors()
 }
 
 
-void SIM_PLOT_PANEL::OnLanguageChanged()
+void SIM_PLOT_TAB::OnLanguageChanged()
 {
     updateAxes();
     m_plotWin->UpdateAll();
 }
 
 
-void SIM_PLOT_PANEL::UpdateTraceStyle( TRACE* trace )
+void SIM_PLOT_TAB::UpdateTraceStyle( TRACE* trace )
 {
     int        type = trace->GetType();
     wxPenStyle penStyle = ( ( ( type & SPT_AC_PHASE ) || ( type & SPT_CURRENT ) ) && m_dotted_cp )
@@ -784,7 +783,7 @@ void SIM_PLOT_PANEL::UpdateTraceStyle( TRACE* trace )
 }
 
 
-TRACE* SIM_PLOT_PANEL::AddTrace( const wxString& aVectorName, int aType )
+TRACE* SIM_PLOT_TAB::AddTrace( const wxString& aVectorName, int aType )
 {
     TRACE* trace = GetTrace( aVectorName, aType );
 
@@ -827,8 +826,8 @@ TRACE* SIM_PLOT_PANEL::AddTrace( const wxString& aVectorName, int aType )
 }
 
 
-void SIM_PLOT_PANEL::SetTraceData( TRACE* trace, unsigned int aPoints, const double* aX,
-                                   const double* aY )
+void SIM_PLOT_TAB::SetTraceData( TRACE* trace, unsigned int aPoints, const double* aX,
+                                 const double* aY )
 {
     std::vector<double> x( aX, aX + aPoints );
     std::vector<double> y( aY, aY + aPoints );
@@ -879,7 +878,7 @@ void SIM_PLOT_PANEL::SetTraceData( TRACE* trace, unsigned int aPoints, const dou
 }
 
 
-void SIM_PLOT_PANEL::DeleteTrace( TRACE* aTrace )
+void SIM_PLOT_TAB::DeleteTrace( TRACE* aTrace )
 {
     for( const auto& [ name, trace ] : m_traces )
     {
@@ -901,7 +900,7 @@ void SIM_PLOT_PANEL::DeleteTrace( TRACE* aTrace )
 }
 
 
-bool SIM_PLOT_PANEL::DeleteTrace( const wxString& aVectorName, int aTraceType )
+bool SIM_PLOT_TAB::DeleteTrace( const wxString& aVectorName, int aTraceType )
 {
     if( TRACE* trace = GetTrace( aVectorName, aTraceType ) )
     {
@@ -913,8 +912,8 @@ bool SIM_PLOT_PANEL::DeleteTrace( const wxString& aVectorName, int aTraceType )
 }
 
 
-void SIM_PLOT_PANEL::EnableCursor( const wxString& aVectorName, int aType, int aCursorId,
-                                   bool aEnable, const wxString& aSignalName )
+void SIM_PLOT_TAB::EnableCursor( const wxString& aVectorName, int aType, int aCursorId,
+                                 bool aEnable, const wxString& aSignalName )
 {
     TRACE* t = GetTrace( aVectorName, aType );
 
@@ -947,7 +946,7 @@ void SIM_PLOT_PANEL::EnableCursor( const wxString& aVectorName, int aType, int a
 }
 
 
-void SIM_PLOT_PANEL::ResetScales( bool aIncludeX )
+void SIM_PLOT_TAB::ResetScales( bool aIncludeX )
 {
     if( m_axis_x && aIncludeX )
         m_axis_x->ResetDataRange();
