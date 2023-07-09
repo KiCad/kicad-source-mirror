@@ -25,6 +25,7 @@
  */
 
 #include "panel_preview_3d_model.h"
+#include <dialogs/dialog_unit_entry.h>
 #include <3d_canvas/eda_3d_canvas.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
@@ -46,14 +47,14 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
                                                 FOOTPRINT* aFootprint,
                                                 std::vector<FP_3DMODEL>* aParentModelList ) :
         PANEL_PREVIEW_3D_MODEL_BASE( aParent, wxID_ANY ),
+        m_parentFrame( aFrame ),
         m_previewPane( nullptr ),
         m_infobar( nullptr ),
         m_boardAdapter(),
         m_currentCamera( m_trackBallCamera ),
-        m_trackBallCamera( 2 * RANGE_SCALE_3D ),
-        m_boardThickness( aFrame, nullptr, m_boardThicknessCtrl, m_boardThicknessUnits )
+        m_trackBallCamera( 2 * RANGE_SCALE_3D )
 {
-    m_userUnits = aFrame->GetUserUnits();
+    m_userUnits = m_parentFrame->GetUserUnits();
 
     m_dummyBoard = new BOARD();
 
@@ -83,6 +84,7 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
     m_bpvBottom->SetBitmap( KiBitmap( BITMAPS::axis3d_bottom ) );
     m_bpvISO->SetBitmap( KiBitmap( BITMAPS::ortho ) );
     m_bpUpdate->SetBitmap( KiBitmap( BITMAPS::reload ) );
+    m_bpSettings->SetBitmap( KiBitmap( BITMAPS::options_3drender ) );
 
     // Set the min and max values of spin buttons (mandatory on Linux)
     // They are not used, so they are set to min and max 32 bits int values
@@ -164,6 +166,7 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
     m_bpvBottom->SetMinSize( m_bpvBottom->GetSize() + borderFix );
     m_bpvISO->SetMinSize( m_bpvISO->GetSize() + borderFix );
     m_bpUpdate->SetMinSize( m_bpUpdate->GetSize() + borderFix );
+    m_bpSettings->SetMinSize( m_bpSettings->GetSize() + borderFix );
 #endif
 }
 
@@ -327,9 +330,6 @@ void PANEL_PREVIEW_3D_MODEL::SetSelectedModel( int idx )
 
         m_opacity->SetValue( 100 );
     }
-
-    BOARD_DESIGN_SETTINGS dummy_bds = m_dummyBoard->GetDesignSettings();
-    m_boardThickness.ChangeValue( dummy_bds.GetBoardThickness() );
 }
 
 
@@ -382,16 +382,27 @@ void PANEL_PREVIEW_3D_MODEL::onOpacitySlider( wxCommandEvent& event )
 }
 
 
-void PANEL_PREVIEW_3D_MODEL::updateBoardThickness( wxCommandEvent& event )
+void PANEL_PREVIEW_3D_MODEL::View3DSettings( wxCommandEvent& event )
 {
-    BOARD_DESIGN_SETTINGS dummy_bds = m_dummyBoard->GetDesignSettings();
-    dummy_bds.SetBoardThickness( m_boardThickness.GetValue() );
+    BOARD_DESIGN_SETTINGS bds = m_dummyBoard->GetDesignSettings();
+    int                   thickness = bds.GetBoardThickness();
 
-    BOARD_STACKUP& dummy_board_stackup = m_dummyBoard->GetDesignSettings().GetStackupDescriptor();
-    dummy_board_stackup.RemoveAll();
-    dummy_board_stackup.BuildDefaultStackupList( &dummy_bds, 2 );
+    WX_UNIT_ENTRY_DIALOG dlg( m_parentFrame, _( "Board thickness:" ),
+                              _( "3D Preview Options" ), thickness );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return;
+
+    bds.SetBoardThickness( (int) dlg.GetValue() );
+
+    BOARD_STACKUP& boardStackup = m_dummyBoard->GetDesignSettings().GetStackupDescriptor();
+    boardStackup.RemoveAll();
+    boardStackup.BuildDefaultStackupList( &bds, 2 );
 
     UpdateDummyFootprint( true );
+
+    m_previewPane->ReloadRequest();
+    m_previewPane->Refresh();
 }
 
 

@@ -135,8 +135,6 @@ private:
 
     void onOpacitySlider( wxCommandEvent& event ) override;
 
-    void updateBoardThickness( wxCommandEvent& event ) override;
-
     void doIncrementScale( wxSpinEvent& aEvent, double aSign );
     void doIncrementRotation( wxSpinEvent& aEvent, double aSign );
     void doIncrementOffset( wxSpinEvent& aEvent, double aSign );
@@ -174,6 +172,8 @@ private:
         m_previewPane->Refresh();
     }
 
+    void View3DSettings( wxCommandEvent& event ) override;
+
 	void View3DRight( wxCommandEvent& event ) override
     {
         m_previewPane->SetView3D( ID_VIEW3D_RIGHT );
@@ -190,6 +190,7 @@ private:
     }
 
 private:
+    PCB_BASE_FRAME*          m_parentFrame;
     EDA_3D_CANVAS*           m_previewPane;
     WX_INFOBAR*              m_infobar;
     BOARD_ADAPTER            m_boardAdapter;
@@ -202,7 +203,6 @@ private:
     std::vector<FP_3DMODEL>* m_parentModelList;
     int                      m_selected;   /// Index into m_parentInfoList
 
-    UNIT_BINDER              m_boardThickness;
     EDA_UNITS                m_userUnits;
 };
 

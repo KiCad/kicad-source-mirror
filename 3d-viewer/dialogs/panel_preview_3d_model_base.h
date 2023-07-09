@@ -66,8 +66,6 @@ class PANEL_PREVIEW_3D_MODEL_BASE : public wxPanel
 		wxTextCtrl* zoff;
 		wxSpinButton* m_spinZoffset;
 		wxSlider* m_opacity;
-		wxTextCtrl* m_boardThicknessCtrl;
-		wxStaticText* m_boardThicknessUnits;
 		wxStaticText* m_previewLabel;
 		wxBoxSizer* m_SizerPanelView;
 		wxBitmapButton* m_bpvISO;
@@ -78,6 +76,7 @@ class PANEL_PREVIEW_3D_MODEL_BASE : public wxPanel
 		wxBitmapButton* m_bpvTop;
 		wxBitmapButton* m_bpvBottom;
 		wxBitmapButton* m_bpUpdate;
+		wxBitmapButton* m_bpSettings;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void onMouseWheelScale( wxMouseEvent& event ) { event.Skip(); }
@@ -91,8 +90,6 @@ class PANEL_PREVIEW_3D_MODEL_BASE : public wxPanel
 		virtual void onDecrementOffset( wxSpinEvent& event ) { event.Skip(); }
 		virtual void onIncrementOffset( wxSpinEvent& event ) { event.Skip(); }
 		virtual void onOpacitySlider( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onMouseWheelBoardThickness( wxMouseEvent& event ) { event.Skip(); }
-		virtual void updateBoardThickness( wxCommandEvent& event ) { event.Skip(); }
 		virtual void View3DISO( wxCommandEvent& event ) { event.Skip(); }
 		virtual void View3DLeft( wxCommandEvent& event ) { event.Skip(); }
 		virtual void View3DRight( wxCommandEvent& event ) { event.Skip(); }
@@ -101,6 +98,7 @@ class PANEL_PREVIEW_3D_MODEL_BASE : public wxPanel
 		virtual void View3DTop( wxCommandEvent& event ) { event.Skip(); }
 		virtual void View3DBottom( wxCommandEvent& event ) { event.Skip(); }
 		virtual void View3DUpdate( wxCommandEvent& event ) { event.Skip(); }
+		virtual void View3DSettings( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

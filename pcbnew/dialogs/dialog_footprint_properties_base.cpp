@@ -106,7 +106,7 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 	sbSizer7 = new wxStaticBoxSizer( new wxStaticBox( m_PanelGeneral, wxID_ANY, _("Position") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerPos;
-	fgSizerPos = new wxFlexGridSizer( 4, 3, 3, 0 );
+	fgSizerPos = new wxFlexGridSizer( 4, 3, 2, 0 );
 	fgSizerPos->AddGrowableCol( 1 );
 	fgSizerPos->AddGrowableRow( 2 );
 	fgSizerPos->SetFlexibleDirection( wxBOTH );
@@ -143,7 +143,7 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 	m_orientationCtrl->Append( _("90") );
 	m_orientationCtrl->Append( _("-90") );
 	m_orientationCtrl->Append( _("180") );
-	fgSizerPos->Add( m_orientationCtrl, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerPos->Add( m_orientationCtrl, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 2 );
 
 
 	fgSizerPos->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -156,7 +156,7 @@ DIALOG_FOOTPRINT_PROPERTIES_BASE::DIALOG_FOOTPRINT_PROPERTIES_BASE( wxWindow* pa
 	int m_BoardSideCtrlNChoices = sizeof( m_BoardSideCtrlChoices ) / sizeof( wxString );
 	m_BoardSideCtrl = new wxChoice( sbSizer7->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_BoardSideCtrlNChoices, m_BoardSideCtrlChoices, 0 );
 	m_BoardSideCtrl->SetSelection( 1 );
-	fgSizerPos->Add( m_BoardSideCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizerPos->Add( m_BoardSideCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 
 	sbSizer7->Add( fgSizerPos, 0, wxEXPAND|wxBOTTOM, 3 );
