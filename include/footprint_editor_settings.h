@@ -73,7 +73,7 @@ public:
 
     int m_LibWidth;
 
-    wxString m_LastImportExportPath;
+    wxString m_LastExportPath;
 
     wxString m_FootprintTextShownColumns;
 

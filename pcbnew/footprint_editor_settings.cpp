@@ -48,7 +48,7 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
         m_Use45Limit( true ),
         m_ArcEditMode( ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS ),
         m_LibWidth( 250 ),
-        m_LastImportExportPath(),
+        m_LastExportPath(),
         m_FootprintTextShownColumns()
 {
     m_MagneticItems.pads     = MAGNETIC_OPTIONS::CAPTURE_ALWAYS;
@@ -72,7 +72,7 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
             &m_AuiPanels.appearance_panel_tab, 0, 0, 2 ) );
 
     m_params.emplace_back( new PARAM<wxString>( "system.last_import_export_path",
-            &m_LastImportExportPath, "" ) );
+            &m_LastExportPath, "" ) );
 
     m_params.emplace_back( new PARAM<wxString>( "window.footprint_text_shown_columns",
             &m_FootprintTextShownColumns, "0 1 2 3 4 5 6" ) );
