@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2016 CERN
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
@@ -247,13 +247,14 @@ void DS_DATA_MODEL_IO::format( DS_DATA_ITEM_TEXT* aItem, int aNestLevel ) const
     // Write font info, only if it is not the default setup
     bool write_size = aItem->m_TextSize.x != 0.0 || aItem->m_TextSize.y != 0.0;
     bool write_thickness = aItem->m_LineWidth != 0.0;
+    bool write_face = aItem->m_Font && !aItem->m_Font->GetName().IsEmpty();
 
-    if( write_thickness || write_size || aItem->m_Bold
-        || aItem->m_Italic || aItem->m_TextColor != COLOR4D::UNSPECIFIED )
+    if( write_thickness || write_size || aItem->m_Bold || aItem->m_Italic
+        || write_face || aItem->m_TextColor != COLOR4D::UNSPECIFIED )
     {
         m_out->Print( 0, " (font" );
 
-        if( aItem->m_Font && !aItem->m_Font->GetName().IsEmpty() )
+        if( write_face )
             m_out->Print( 0, " (face \"%s\")", aItem->m_Font->NameAsToken() );
 
         if( write_thickness )
