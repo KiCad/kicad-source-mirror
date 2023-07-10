@@ -323,7 +323,9 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint()
         else
         {
             // We're well and truly banjaxed if we get here without a fallback.
-            DisplayInfoMessage( m_parent, _( "Could not use OpenGL" ), wxString( err.what() ) );
+            DisplayErrorMessage( m_parent, _( "Graphics error" ), wxString( err.what() ) );
+
+            StopDrawing();
         }
     }
 
