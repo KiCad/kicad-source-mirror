@@ -187,8 +187,8 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOption
 
 COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) const
 {
-    const EDA_ITEM*             item = dynamic_cast<const EDA_ITEM*>( aItem );
-    const BOARD_CONNECTED_ITEM* conItem = dynamic_cast<const BOARD_CONNECTED_ITEM*> ( aItem );
+    const BOARD_ITEM*           item = dynamic_cast<const BOARD_ITEM*>( aItem );
+    const BOARD_CONNECTED_ITEM* conItem = dynamic_cast<const BOARD_CONNECTED_ITEM*>( aItem );
     int                         netCode = -1;
     int                         originalLayer = aLayer;
 
@@ -233,6 +233,24 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
         aLayer = LAYER_PADS_TH;
     else if( aLayer == LAYER_VIA_HOLEWALLS )
         aLayer = LAYER_VIA_THROUGH;
+
+    // Show via mask layers if appropriate
+    if( aLayer == LAYER_VIA_THROUGH && !m_isPrinting )
+    {
+        if( item && item->GetBoard() )
+        {
+            LSET visibleLayers = item->GetBoard()->GetVisibleLayers()
+                                 & item->GetBoard()->GetEnabledLayers()
+                                 & item->GetLayerSet();
+
+            if( GetActiveLayer() == F_Mask && visibleLayers.test( F_Mask ) )
+                aLayer = F_Mask;
+            else if( GetActiveLayer() == B_Mask && visibleLayers.test( B_Mask ) )
+                aLayer = B_Mask;
+            else if( ( visibleLayers & LSET::AllCuMask() ).none() )
+                aLayer = visibleLayers.Seq().back();
+        }
+    }
 
     // Normal path: get the layer base color
     COLOR4D color = m_layerColors[aLayer];

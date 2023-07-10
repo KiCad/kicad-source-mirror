@@ -1245,21 +1245,31 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
         GetCanvas()->GetView()->UpdateAllItemsConditionally(
                 [&]( KIGFX::VIEW_ITEM* aItem ) -> int
                 {
-                    if( dynamic_cast<PCB_TRACK*>( aItem ) )
-                    {
-                        if( settings->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS )
-                            return KIGFX::REPAINT;
-                    }
-                    else if( dynamic_cast<PAD*>( aItem ) )
-                    {
-                        if( settings->m_Display.m_PadClearance )
-                            return KIGFX::REPAINT;
+                    BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( aItem );
+                    int         flags = 0;
 
+                    if( !item )
+                        return flags;
+
+                    if( item->Type() == PCB_VIA_T || item->Type() == PCB_PAD_T )
+                    {
                         // Note: KIGFX::REPAINT isn't enough for things that go from invisible
                         // to visible as they won't be found in the view layer's itemset for
                         // re-painting.
                         if( ( GetBoard()->GetVisibleLayers() & maskAndPasteLayers ).any() )
-                            return KIGFX::ALL;
+                            flags |= KIGFX::ALL;
+                    }
+
+                    if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T || item->Type() == PCB_VIA_T )
+                    {
+                        if( settings->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS )
+                            flags |= KIGFX::REPAINT;
+                    }
+
+                    if( item->Type() == PCB_PAD_T )
+                    {
+                        if( settings->m_Display.m_PadClearance )
+                            flags |= KIGFX::REPAINT;
                     }
 
                     EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
@@ -1268,10 +1278,10 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
                     {
                         text->ClearRenderCache();
                         text->ClearBoundingBoxCache();
-                        return KIGFX::GEOMETRY | KIGFX::REPAINT;
+                        flags |= KIGFX::GEOMETRY | KIGFX::REPAINT;
                     }
 
-                    return 0;
+                    return flags;
                 } );
 
         GetCanvas()->Refresh();

@@ -635,10 +635,8 @@ bool PCB_VIA::FlashLayer( int aLayer ) const
     if( !IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) ) )
         return false;
 
-    if( !m_removeUnconnectedLayer )
-    {
+    if( !m_removeUnconnectedLayer || !IsCopperLayer( aLayer ) )
         return true;
-    }
 
     if( m_keepStartEndLayer && ( aLayer == m_layer || aLayer == m_bottomLayer ) )
         return true;
