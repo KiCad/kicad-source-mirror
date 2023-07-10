@@ -638,6 +638,9 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
         Schematic().SetProject( nullptr );
         GetSettingsManager()->UnloadProject( &Prj(), false );
 
+        // Clear view before destroying schematic as repaints depend on schematic being valid
+        SetScreen( nullptr );
+
         Schematic().Reset();
 
         wxFileName projectFn( dlg.GetPath() );
