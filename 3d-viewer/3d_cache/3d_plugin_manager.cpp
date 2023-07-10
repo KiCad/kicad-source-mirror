@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -292,6 +292,13 @@ void S3D_PLUGIN_MANAGER::checkPluginName( const wxString& aPath,
             return;
 
         ++bl;
+    }
+
+    // prevent loading non-plugin dlls 
+    if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+    {
+        if( !path.GetName().StartsWith( "s3d_plugin" ) )
+            return;
     }
 
     aPluginList.push_back( wxpath );
