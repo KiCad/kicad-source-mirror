@@ -123,15 +123,15 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
             tempVector.push_back( ascFiles[i] );
             curSheet = ascFiles[i].Sheet;
 
-            std::map  tempAsyMap = ReadAsyFiles( tempVector, mapOfAsyFiles );
-            wxString  ascFileName = ascFiles[i].ElementName;
-            LT_ASC    dummyAsc;
-            LT_SYMBOL tempSymbol = SymbolBuilder( ascFileName, tempAsyMap[ascFileName], dummyAsc );
+            std::map   tempAsyMap = ReadAsyFiles( tempVector, mapOfAsyFiles );
+            wxString   ascFileName = ascFiles[i].ElementName;
+            LT_ASC     dummyAsc;
+            LT_SYMBOL  tempSymbol = SymbolBuilder( ascFileName, tempAsyMap[ascFileName], dummyAsc );
+            LIB_SYMBOL tempLibSymbol( ascFiles[i].ElementName );
 
-            LIB_SYMBOL* tempLibSymbol = new LIB_SYMBOL( ascFiles[i].ElementName );
-            parser.CreateSymbol( tempSymbol, tempLibSymbol );
+            parser.CreateSymbol( tempSymbol, &tempLibSymbol );
 
-            BOX2I bbox = tempLibSymbol->GetBoundingBox();
+            BOX2I bbox = tempLibSymbol.GetBoundingBox();
 
             curSheet->SetSize( bbox.GetSize() );
             curSheet->SetPosition( parser.ToKicadCoords( ascFiles[i].Offset ) + bbox.GetOrigin() );
