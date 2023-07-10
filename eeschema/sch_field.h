@@ -94,7 +94,7 @@ public:
 
     bool IsHypertext() const override
     {
-        return m_id == 0 && m_parent && m_parent->Type() == SCH_GLOBAL_LABEL_T;
+        return GetCanonicalName() == wxT( "Intersheetrefs" );
     }
 
     void DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const override;

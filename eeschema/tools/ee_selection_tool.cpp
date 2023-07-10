@@ -1159,7 +1159,7 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
                     }
                 }
 
-                text->GetEffectiveTextShape( false )->Collide( poss, closestDist, &dist );
+                text->GetEffectiveTextShape( false )->Collide( poss, INT_MAX / 2, &dist );
             }
             else if( symbol )
             {

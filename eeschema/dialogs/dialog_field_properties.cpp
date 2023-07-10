@@ -646,7 +646,7 @@ void DIALOG_SCH_FIELD_PROPERTIES::UpdateField( SCH_COMMIT* aCommit, SCH_FIELD* a
     }
     else if( parent && parent->Type() == SCH_GLOBAL_LABEL_T )
     {
-        if( fieldType == 0 )
+        if( aField->GetCanonicalName() == wxT( "Intersheetrefs" ) )
         {
             if( m_visible->GetValue() != parent->Schematic()->Settings().m_IntersheetRefsShow )
             {
