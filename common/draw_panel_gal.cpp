@@ -317,6 +317,8 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint()
             DisplayInfoMessage( m_parent,
                                 _( "Could not use OpenGL, falling back to software rendering" ),
                                 wxString( err.what() ) );
+
+            StartDrawing();
         }
         else
         {
