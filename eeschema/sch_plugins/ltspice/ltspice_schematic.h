@@ -108,6 +108,7 @@ public:
         VBOTTOM,  // Vertical Bottom Justification
         VLEFT,    // Vertical Left Justification
         VRIGHT,   // Vertical Right Justification
+        VCENTER,  // Vertical Center Justification
         VTOP      // Vertical Top Justification.
     };
 

@@ -699,48 +699,51 @@ SCH_TEXT* LTSPICE_SCH_PARSER::CreateSCH_TEXT( VECTOR2I aOffset, const wxString& 
 
     switch( aJustification )
     {
-    case LTSPICE_SCHEMATIC::JUSTIFICATION::VLEFT:
-        textItem->SetTextSpinStyle( TEXT_SPIN_STYLE::UP );
-        textItem->Move( { textItem->GetTextSize().x / 2, 0 } );
-        break;
-
-    case LTSPICE_SCHEMATIC::JUSTIFICATION::VTOP:
-        textItem->SetTextSpinStyle( TEXT_SPIN_STYLE::UP );
-        textItem->Move( { -textItem->GetTextSize().x / 2, 0 } );
-        break;
-
-    case LTSPICE_SCHEMATIC::JUSTIFICATION::VBOTTOM:
-        textItem->SetTextSpinStyle( TEXT_SPIN_STYLE::UP );
-        break;
-
     case LTSPICE_SCHEMATIC::JUSTIFICATION::LEFT:
-        textItem->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );
-        textItem->Move( { 0, textItem->GetTextSize().x / 2 } );
-        break;
-
-    case LTSPICE_SCHEMATIC::JUSTIFICATION::TOP:
-        textItem->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );
-        textItem->Move( { 0, -textItem->GetTextSize().x / 2 } );
-        break;
-
-    case LTSPICE_SCHEMATIC::JUSTIFICATION::BOTTOM:
-        textItem->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );
-        break;
-
-    case LTSPICE_SCHEMATIC::JUSTIFICATION::VRIGHT:
-        textItem->SetTextSpinStyle( TEXT_SPIN_STYLE::BOTTOM );
-        break;
-
-    case LTSPICE_SCHEMATIC::JUSTIFICATION::RIGHT:
-        textItem->SetTextSpinStyle( TEXT_SPIN_STYLE::LEFT );
+        textItem->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        textItem->SetTextAngle( ANGLE_HORIZONTAL );
         break;
 
     case LTSPICE_SCHEMATIC::JUSTIFICATION::CENTER:
         textItem->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+        textItem->SetTextAngle( ANGLE_HORIZONTAL );
+        break;
+
+    case LTSPICE_SCHEMATIC::JUSTIFICATION::RIGHT:
+        textItem->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+        textItem->SetTextAngle( ANGLE_HORIZONTAL );
+        break;
+
+    case LTSPICE_SCHEMATIC::JUSTIFICATION::VLEFT:
+        textItem->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        textItem->SetTextAngle( ANGLE_VERTICAL );
+        break;
+
+    case LTSPICE_SCHEMATIC::JUSTIFICATION::VCENTER:
+        textItem->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+        textItem->SetTextAngle( ANGLE_VERTICAL );
+        break;
+
+    case LTSPICE_SCHEMATIC::JUSTIFICATION::VRIGHT:
+        textItem->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+        textItem->SetTextAngle( ANGLE_VERTICAL );
+        break;
+
+    case LTSPICE_SCHEMATIC::JUSTIFICATION::VBOTTOM:
+        textItem->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+        textItem->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+        textItem->SetTextAngle( ANGLE_VERTICAL );
+        break;
+
+    case LTSPICE_SCHEMATIC::JUSTIFICATION::VTOP:
+        textItem->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+        textItem->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+        textItem->SetTextAngle( ANGLE_VERTICAL );
         break;
 
     case LTSPICE_SCHEMATIC::JUSTIFICATION::NONE:
-        break;
+    case LTSPICE_SCHEMATIC::JUSTIFICATION::BOTTOM:
+    case LTSPICE_SCHEMATIC::JUSTIFICATION::TOP: break;
     }
 
     return textItem;
@@ -1135,6 +1138,11 @@ void LTSPICE_SCH_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol,
 
             case LTSPICE_SCHEMATIC::JUSTIFICATION::VLEFT:
                 field->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+                field->SetTextAngle( ANGLE_VERTICAL );
+                break;
+
+            case LTSPICE_SCHEMATIC::JUSTIFICATION::VCENTER:
+                field->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
                 field->SetTextAngle( ANGLE_VERTICAL );
                 break;
 

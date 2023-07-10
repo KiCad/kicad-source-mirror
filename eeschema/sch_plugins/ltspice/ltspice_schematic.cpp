@@ -391,13 +391,14 @@ LTSPICE_SCHEMATIC::JUSTIFICATION LTSPICE_SCHEMATIC::getTextJustification( const 
     justificationMap["RIGHT"] = JUSTIFICATION::RIGHT;
     justificationMap["VLEFT"] = JUSTIFICATION::VLEFT;
     justificationMap["VRIGHT"] = JUSTIFICATION::VRIGHT;
+    justificationMap["VCENTER"] = JUSTIFICATION::VCENTER;
     justificationMap["BOTTOM"] = JUSTIFICATION::CENTER;
     justificationMap["TOP"] = JUSTIFICATION::TOP;
     justificationMap["VBOTTOM"] = JUSTIFICATION::VBOTTOM;
     justificationMap["VTOP"] = JUSTIFICATION::VTOP;
 
     if( justificationMap.find( aValue.Upper() ) == justificationMap.end() )
-        THROW_IO_ERROR( _( "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VTOP or VBOTTOM" ) );
+        THROW_IO_ERROR( _( "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP or VBOTTOM" ) );
 
     return justificationMap[ aValue.Upper() ];
 }
@@ -415,10 +416,11 @@ LTSPICE_SCHEMATIC::JUSTIFICATION LTSPICE_SCHEMATIC::getPinJustification( const w
     pinJustificationMap["VBOTTOM"] = JUSTIFICATION::VBOTTOM;
     pinJustificationMap["VLEFT"] = JUSTIFICATION::VLEFT;
     pinJustificationMap["VRIGHT"] = JUSTIFICATION::VRIGHT;
+    pinJustificationMap["VCENTER"] = JUSTIFICATION::VCENTER;
     pinJustificationMap["VTOP"] = JUSTIFICATION::VTOP;
 
     if( pinJustificationMap.find( aValue.Upper() ) == pinJustificationMap.end() )
-        THROW_IO_ERROR( _( "Expecting NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VLEFT or VRIGHT" ) );
+        THROW_IO_ERROR( _( "Expecting NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VCENTER, VLEFT or VRIGHT" ) );
 
     return pinJustificationMap[ aValue.Upper() ];
 }
