@@ -24,6 +24,7 @@
 #ifndef WX_TREEBOOK_H
 #define WX_TREEBOOK_H
 
+#include <functional>
 #include <wx/treebook.h>
 
 class WX_TREEBOOK : public wxTreebook
