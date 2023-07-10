@@ -295,17 +295,6 @@ public:
     void Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet, const wxFileName& aLibraryFileName );
 
     /**
-     * Used to check if the given symbol is subschematic or not.
-     *
-     * @param aSchematicElementsArray array which stores which elements names.
-     * @param aMapOfAscFiles map of string containing content from asc files.
-     * @param aSubSchematicList list of subschematic elements.
-     */
-    void SubSchematicCheck( std::vector<LTSPICE_FILE>& aSchematicElementsArray,
-                            std::map<wxString, wxString>& aMapOfAscFiles,
-                            std::vector<LTSPICE_FILE>& aSubSchematicList );
-
-    /**
      * Used to get file path for Asc and Asy files.
      *
      * @param aMapOfAscFiles map of string containing content from asc files.

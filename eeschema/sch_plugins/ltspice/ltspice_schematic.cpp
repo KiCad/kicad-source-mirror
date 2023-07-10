@@ -36,64 +36,52 @@
 void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
                               const wxFileName& aLibraryFileName )
 {
-    std::vector<LTSPICE_FILE>    sourceFiles;
     std::map<wxString, wxString> mapOfAscFiles;
     std::map<wxString, wxString> mapOfAsyFiles;
 
+    GetAscAndAsyFilePaths( mapOfAscFiles, mapOfAsyFiles, aLibraryFileName );
+
     m_schematic = aSchematic;
 
-    std::queue<LTSPICE_FILE> ascFileQueue;
-    LTSPICE_FILE             ascFileObject( aLibraryFileName.GetName(), { 0, 0 } );
+    std::queue<wxString> ascFileQueue;
+    ascFileQueue.push( aLibraryFileName.GetName().Lower() );
 
-    ascFileObject.Screen = aRootSheet->GetScreen();
+    LTSPICE_FILE rootAscFile( ascFileQueue.front(), { 0, 0 } );
 
-    ascFileQueue.push( ascFileObject );
-
-    GetAscAndAsyFilePaths( mapOfAscFiles, mapOfAsyFiles, aLibraryFileName );
+    rootAscFile.Sheet = aRootSheet;
+    rootAscFile.Screen = new SCH_SCREEN();
 
     int parentSheetIndex = 0;
 
     // Asc files who are subschematic in nature
     std::vector<LTSPICE_FILE> ascFiles;
 
-    ascFileObject.Sheet = aRootSheet;
-
-    ascFileObject.Screen = new SCH_SCREEN();
-
-    ascFiles.push_back( ascFileObject );
-
-    // Map stores sheetName and sheet
-    std::map<wxString, SCH_SHEET*> ascSheetMap;
+    ascFiles.push_back( rootAscFile );
 
     while( !ascFileQueue.empty() )
     {
         SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
 
         // Reading the .asc file
-        wxString fileIndex = ascFileQueue.front().ElementName;
-        wxString ascFilePath = mapOfAscFiles[fileIndex];
+        wxString ascFilePath = mapOfAscFiles[ ascFileQueue.front() ];
         wxString buffer = SafeReadFile( ascFilePath, "r" );
 
-        std::vector<LTSPICE_FILE> newSubSchematicElements;
+        std::vector<LTSPICE_FILE> newSubSchematicElements = GetSchematicElements( buffer );
 
-        // Getting the keywords to read
-        sourceFiles = GetSchematicElements( buffer );
+        alg::delete_if( newSubSchematicElements,
+                        [&mapOfAscFiles]( const LTSPICE_FILE& ii )
+                        {
+                            return mapOfAscFiles[ii.ElementName].IsEmpty();
+                        } );
 
-        SubSchematicCheck( sourceFiles, mapOfAscFiles, newSubSchematicElements );
-
-        for( unsigned int i = 0; i < newSubSchematicElements.size(); i++ )
+        for( LTSPICE_FILE& newSubSchematicElement : newSubSchematicElements )
         {
-            newSubSchematicElements[i].ParentIndex = parentSheetIndex;
+            newSubSchematicElement.ParentIndex = parentSheetIndex;
+            newSubSchematicElement.Screen = screen;
+            newSubSchematicElement.Sheet = new SCH_SHEET();
 
-            newSubSchematicElements[i].Screen = screen;
-
-            SCH_SHEET* sheet = new SCH_SHEET();
-
-            newSubSchematicElements[i].Sheet = sheet;
-            ascSheetMap[newSubSchematicElements[i].ElementName] = sheet;
-
-            ascFileQueue.push( newSubSchematicElements[i] );
-            ascFiles.push_back( newSubSchematicElements[i] );
+            ascFileQueue.push( newSubSchematicElement.ElementName );
+            ascFiles.push_back( newSubSchematicElement );
         }
 
         ascFileQueue.pop();
@@ -107,7 +95,7 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
         wxString buffer = SafeReadFile( mapOfAscFiles[ascFiles[i].ElementName], wxS( "r" ) );
 
         // Getting the keywords to read
-        sourceFiles = GetSchematicElements( buffer );
+        std::vector<LTSPICE_FILE> sourceFiles = GetSchematicElements( buffer );
 
         m_fileCache[ wxS( "asyFiles" ) ] = ReadAsyFiles( sourceFiles, mapOfAsyFiles );
         m_fileCache[ wxS( "ascFiles" ) ][ wxS( "parentFile" ) ] = buffer;
@@ -173,18 +161,6 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
 
         std::vector<LTSPICE_SCHEMATIC::LT_ASC> lt_ascs = StructureBuilder();
         parser.Parse( &curSheetPath, lt_ascs, subSchematicAsyFiles );
-    }
-}
-
-
-void LTSPICE_SCHEMATIC::SubSchematicCheck( std::vector<LTSPICE_FILE>& aSchematicElementsArray,
-                                           std::map<wxString, wxString>& aMapOfAscFiles,
-                                           std::vector<LTSPICE_FILE>& aSubSchematicSet )
-{
-    for( const LTSPICE_FILE& it : aSchematicElementsArray )
-    {
-        if( aMapOfAscFiles[it.ElementName] != "" )
-            aSubSchematicSet.push_back( it );
     }
 }
 
