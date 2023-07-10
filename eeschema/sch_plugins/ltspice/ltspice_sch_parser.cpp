@@ -439,7 +439,7 @@ void LTSPICE_SCH_PARSER::RotateMirror( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol,
     else if( aLTSymbol.SymbolOrientation == LTSPICE_SCHEMATIC::ORIENTATION::M270 )
     {
         aSchSymbol->SetOrientation( SYM_MIRROR_Y );
-        aSchSymbol->SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
+        aSchSymbol->SetOrientation( SYM_ROTATE_CLOCKWISE );
     }
 }
 
