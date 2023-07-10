@@ -22,13 +22,14 @@
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023.
 # wh201906 <wh201906@yandex.com>, 2023.
 # Hubert Hu <qinghan.hu@gmail.com>, 2023.
+# Li Yidong <alenks@foxmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:35-0700\n"
-"PO-Revision-Date: 2023-06-03 06:51+0000\n"
-"Last-Translator: Hubert Hu <qinghan.hu@gmail.com>\n"
+"PO-Revision-Date: 2023-07-11 14:52+0000\n"
+"Last-Translator: Li Yidong <alenks@foxmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -36,7 +37,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 5.0-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -12096,7 +12097,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:216
 #: pcbnew/footprint.cpp:3005
 msgid "Do not populate"
-msgstr "不填充"
+msgstr "不贴装"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:230
 msgid "Update Symbol from Library..."
