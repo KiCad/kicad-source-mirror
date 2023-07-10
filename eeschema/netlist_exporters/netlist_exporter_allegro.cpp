@@ -95,9 +95,10 @@ bool NETLIST_EXPORTER_ALLEGRO::WriteNetlist( const wxString& aOutFileName,
 }
 
 
-bool NETLIST_EXPORTER_ALLEGRO::CompareSymbolSheetpath(
-        const std::pair<SCH_SYMBOL*, SCH_SHEET_PATH>& aItem1,
-        const std::pair<SCH_SYMBOL*, SCH_SHEET_PATH>& aItem2 )
+bool NETLIST_EXPORTER_ALLEGRO::CompareSymbolSheetpath( const std::pair<SCH_SYMBOL*,
+                                                       SCH_SHEET_PATH>& aItem1,
+                                                       const std::pair<SCH_SYMBOL*,
+                                                       SCH_SHEET_PATH>& aItem2 )
 {
     wxString refText1 = aItem1.first->GetRef( &aItem1.second );
     wxString refText2 = aItem2.first->GetRef( &aItem2.second );
@@ -189,8 +190,11 @@ void NETLIST_EXPORTER_ALLEGRO::extractComponentsInfo()
                 continue;
             }
 
-            m_packageProperties.insert(std::pair<wxString, wxString>(sheet.PathHumanReadable(), symbol->GetRef(&sheet)));
-            m_orderedSymbolsSheetpath.push_back(std::pair<SCH_SYMBOL*, SCH_SHEET_PATH>(symbol, sheet));
+            m_packageProperties.insert( std::pair<wxString,
+                                        wxString>( sheet.PathHumanReadable(),
+                                                   symbol->GetRef( &sheet ) ) );
+            m_orderedSymbolsSheetpath.push_back( std::pair<SCH_SYMBOL*,
+                                                 SCH_SHEET_PATH>( symbol, sheet ) );
         }
     }
 
@@ -224,7 +228,8 @@ void NETLIST_EXPORTER_ALLEGRO::extractComponentsInfo()
 
         for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
         {
-            bool nc = subgraph->GetNoConnect() && subgraph->GetNoConnect()->Type() == SCH_NO_CONNECT_T;
+            bool nc = subgraph->GetNoConnect() &&
+                      subgraph->GetNoConnect()->Type() == SCH_NO_CONNECT_T;
             const SCH_SHEET_PATH& sheet = subgraph->GetSheet();
 
             for( SCH_ITEM* item : subgraph->GetItems() )
@@ -258,16 +263,16 @@ void NETLIST_EXPORTER_ALLEGRO::extractComponentsInfo()
 
         // Netlist ordering: Net name, then ref des, then pin name
         std::sort( net_record->m_Nodes.begin(), net_record->m_Nodes.end(),
-        []( const NET_NODE& a, const NET_NODE& b )
-                {
-                    wxString refA = a.m_Pin->GetParentSymbol()->GetRef( &a.m_Sheet );
-                    wxString refB = b.m_Pin->GetParentSymbol()->GetRef( &b.m_Sheet );
+                   []( const NET_NODE& a, const NET_NODE& b )
+                   {
+                       wxString refA = a.m_Pin->GetParentSymbol()->GetRef( &a.m_Sheet );
+                       wxString refB = b.m_Pin->GetParentSymbol()->GetRef( &b.m_Sheet );
 
-                    if( refA == refB )
-                        return a.m_Pin->GetShownNumber() < b.m_Pin->GetShownNumber();
+                       if( refA == refB )
+                           return a.m_Pin->GetShownNumber() < b.m_Pin->GetShownNumber();
 
-                    return refA < refB;
-                } );
+                       return refA < refB;
+                   } );
 
         // Some duplicates can exist, for example on multi-unit parts with duplicated pins across
         // units.  If the user connects the pins on each unit, they will appear on separate
@@ -312,8 +317,8 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
     {
         std::pair<SCH_SYMBOL*, SCH_SHEET_PATH> first_ele = m_orderedSymbolsSheetpath.front();
         m_orderedSymbolsSheetpath.pop_front();
-        m_componentGroups.insert(
-                std::pair<int, std::pair<SCH_SYMBOL*, SCH_SHEET_PATH>>( groupCount, first_ele ) );
+        m_componentGroups.insert( std::pair<int, std::pair<SCH_SYMBOL*,
+                                  SCH_SHEET_PATH>>( groupCount, first_ele ) );
 
         for( auto it = m_orderedSymbolsSheetpath.begin(); it != m_orderedSymbolsSheetpath.end();
              ++it )
@@ -332,11 +337,13 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
 
             wxString ref1 = it->first->GetRef( &it->second );
             wxString ref2 = first_ele.first->GetRef( &first_ele.second );
+
             if( removeTailDigits( ref1 ) == removeTailDigits( ref2 ) )
             {
-                m_componentGroups.insert( std::pair<int, std::pair<SCH_SYMBOL*, SCH_SHEET_PATH>>(
-                        groupCount, ( *it ) ) );
+                m_componentGroups.insert( std::pair<int, std::pair<SCH_SYMBOL*,
+                                          SCH_SHEET_PATH>>( groupCount, ( *it ) ) );
                 it = m_orderedSymbolsSheetpath.erase( it );
+
                 if( std::distance( it, m_orderedSymbolsSheetpath.begin() ) > 0 )
                     it--;
                 else if( it == m_orderedSymbolsSheetpath.end() )
@@ -360,12 +367,12 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
 
     for( int groupIndex = 1; groupIndex < groupCount; groupIndex++ )
     {
-        auto pairIter = m_componentGroups.equal_range(groupIndex);
+        auto pairIter = m_componentGroups.equal_range( groupIndex );
         auto beginIter = pairIter.first;
         auto endIter = pairIter.second;
 
-        SCH_SYMBOL* sym = (beginIter->second).first;
-        SCH_SHEET_PATH sheetPath = (beginIter->second).second;
+        SCH_SYMBOL* sym = ( beginIter->second ).first;
+        SCH_SHEET_PATH sheetPath = ( beginIter->second ).second;
 
         wxString valueText = sym->GetValueFieldText( false, &sheetPath, false );
         wxString footprintText = sym->GetFootprintFieldText( false, &sheetPath, false);
@@ -379,22 +386,23 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
         deviceType = formatDevice( deviceType );
 
         wxArrayString fieldArray;
-        fieldArray.Add("Spice_Model");
-        fieldArray.Add("VALUE");
+        fieldArray.Add( "Spice_Model" );
+        fieldArray.Add( "VALUE" );
 
         wxString value = getGroupField( groupIndex, fieldArray );
 
         fieldArray.clear();
-        fieldArray.Add("TOLERANCE");
-        fieldArray.Add("TOL");
+        fieldArray.Add( "TOLERANCE" );
+        fieldArray.Add( "TOL" );
         wxString tol = getGroupField( groupIndex, fieldArray );
 
         std::vector<std::pair<SCH_SYMBOL*, SCH_SHEET_PATH>> symbolSheetpaths;
 
         for( auto iter = beginIter; iter != endIter; iter++ )
         {
-            symbolSheetpaths.push_back( std::pair<SCH_SYMBOL*, SCH_SHEET_PATH>(
-                    iter->second.first, iter->second.second ) );
+            symbolSheetpaths.push_back( std::pair<SCH_SYMBOL*,
+                                        SCH_SHEET_PATH>( iter->second.first,
+                                                         iter->second.second ) );
         }
 
         std::stable_sort( symbolSheetpaths.begin(), symbolSheetpaths.end(),
@@ -407,7 +415,9 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
 
         // Write out the corresponding device file
         FILE* d = nullptr;
-        wxString deviceFileName = wxFileName(m_exportPath, deviceType, wxString("txt")).GetFullPath();
+        wxString deviceFileName = wxFileName( m_exportPath, deviceType,
+                                              wxString( "txt" ) ).GetFullPath();
+
         if( ( d = wxFopen( deviceFileName, wxT( "wt" ) ) ) == nullptr )
         {
             wxString msg;
@@ -459,10 +469,12 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
          * found more than once.
          */
         sort( pinList.begin(), pinList.end(), NETLIST_EXPORTER_ALLEGRO::CompareLibPin );
+
         for( int ii = 0; ii < (int) pinList.size() - 1; ii++ )
         {
             if( pinList[ii]->GetNumber() == pinList[ii + 1]->GetNumber() )
-            { // 2 pins have the same number, remove the redundant pin at index i+1
+            {
+                // 2 pins have the same number, remove the redundant pin at index i+1
                 pinList.erase( pinList.begin() + ii + 1 );
                 ii--;
             }
@@ -506,6 +518,7 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
         propArray.Add( "mpn" );
         propArray.Add( "mfr_pn" );
         wxString data = getGroupField( groupIndex, propArray );
+
         if(!data.IsEmpty())
         {
             fprintf( d, "PACKAGEPROP %s %s\n", TO_UTF8( propArray[0] ), TO_UTF8( data ) );
@@ -514,6 +527,7 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
         propArray.clear();
         propArray.Add( "HEIGHT" );
         data = getGroupField( groupIndex, propArray );
+
         if(!data.IsEmpty())
         {
             fprintf( d, "PACKAGEPROP %s %s\n", TO_UTF8( propArray[0] ), TO_UTF8( data ) );
@@ -554,6 +568,7 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
             wxString       refText = sym->GetRef( &sheetPath );
             ret |= fprintf( m_f, ",\n\t%s", TO_UTF8( refText ) );
         }
+
         ret |= fprintf( m_f, "\n" );
     }
 
@@ -577,6 +592,7 @@ wxString NETLIST_EXPORTER_ALLEGRO::formatText( wxString aString )
     wxString   processedString = wxString( std::regex_replace( std::string( aString ), reg, "?" ) );
 
     std::regex search_reg( "[^a-zA-Z0-9_/]" );
+
     if( std::regex_search( std::string( processedString ), search_reg ) )
     {
         return wxString( "'" ) + processedString + wxString( "'" );
@@ -649,6 +665,7 @@ wxString NETLIST_EXPORTER_ALLEGRO::getGroupField( int aGroupIndex, const wxArray
             if( fld != NULL )
             {
                 wxString fieldText = fld->GetShownText( &sheetPath, true );
+
                 if( !fieldText.IsEmpty() )
                 {
                     if( aSanitize )
@@ -694,12 +711,14 @@ wxString NETLIST_EXPORTER_ALLEGRO::getGroupField( int aGroupIndex, const wxArray
     return wxString( "" );
 }
 
+
 wxString NETLIST_EXPORTER_ALLEGRO::formatDevice( wxString aString )
 {
     aString.MakeLower();
     std::regex reg( "[^a-z0-9_-]" );
     return wxString( std::regex_replace( std::string( aString ), reg, "_" ) );
 }
+
 
 void NETLIST_EXPORTER_ALLEGRO::toAllegroPackageProperties()
 {
@@ -718,11 +737,13 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackageProperties()
         std::vector<wxString> refTexts;
 
         auto pairIter = m_packageProperties.equal_range( sheetPathText );
+
         for( iter = pairIter.first; iter != pairIter.second; ++iter )
         {
             wxString refText = iter->second;
             refTexts.push_back( refText );
         }
+
         m_packageProperties.erase( pairIter.first, pairIter.second );
 
         std::stable_sort( refTexts.begin(), refTexts.end(),
@@ -732,9 +753,11 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackageProperties()
         {
             ret |= fprintf( m_f, ",\n\t%s", TO_UTF8( *it ) );
         }
+
         ret |= fprintf( m_f, "\n" );
     }
 }
+
 
 void NETLIST_EXPORTER_ALLEGRO::toAllegroNets()
 {
@@ -752,11 +775,13 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroNets()
         ret |= fprintf( m_f, "%s;", TO_UTF8( formatText( netName ).MakeUpper() ) );
 
         auto pairIter = m_netNameNodes.equal_range( netName );
+
         for( iter = pairIter.first; iter != pairIter.second; ++iter )
         {
             NET_NODE netNode = iter->second;
             netNodes.push_back( netNode );
         }
+
         m_netNameNodes.erase( pairIter.first, pairIter.second );
 
         std::stable_sort( netNodes.begin(), netNodes.end() );
@@ -768,9 +793,11 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroNets()
             wxString pinText = netNode.m_Pin->GetShownNumber();
             ret |= fprintf( m_f, ",\n\t%s.%s", TO_UTF8( refText ), TO_UTF8( pinText ) );
         }
+
         ret |= fprintf( m_f, "\n" );
     }
 }
+
 
 wxString NETLIST_EXPORTER_ALLEGRO::removeTailDigits( wxString aString )
 {
@@ -779,12 +806,15 @@ wxString NETLIST_EXPORTER_ALLEGRO::removeTailDigits( wxString aString )
     {
         aString.RemoveLast();
     }
+
     return aString;
 }
+
 
 unsigned int NETLIST_EXPORTER_ALLEGRO::extractTailNumber( wxString aString )
 {
     wxString numString;
+
     while( ( aString.GetChar( aString.Length() - 1 ) >= '0' )
            && ( aString.GetChar( aString.Length() - 1 ) <= '9' ) )
     {
@@ -793,6 +823,7 @@ unsigned int NETLIST_EXPORTER_ALLEGRO::extractTailNumber( wxString aString )
     }
 
     unsigned long val;
+
     //From wxWidgets 3.1.6, here we can use ToUInt instead of ToULong function.
     numString.ToULong( &val );
     return (unsigned int) val;

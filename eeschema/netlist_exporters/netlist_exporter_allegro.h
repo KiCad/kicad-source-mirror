@@ -97,9 +97,11 @@ private:
     void toAllegroPackageProperties();
 
     /**
-     * Converts a string into one safe for a Telesis device name.
+     * Convert a string into one safe for a Telesis device name.
+     *
      * These are all lowercase and have a more restricted set of characters.
-     * FIXME: replace unsupported characters with an encoding instead
+     *
+     * @bug Replace unsupported characters with an encoding instead.
      *
      * @param aString wxString to be formatted.
      * @return a formatted wxString.
@@ -109,8 +111,9 @@ private:
     /**
      * Convert a string into Telesis-safe format. Unsupported characters are
      * replaced with ?'s, and the string is quoted if necessary.
-     * FIXME: replace unsupported characters with an encoding instead, to avoid
-     * having similar strings mapped to each other.
+     *
+     * @bug Replace unsupported characters with an encoding to avoid having similar strings
+     *      mapped to each other.
      *
      * @param aString
      * @return wxString
@@ -118,11 +121,13 @@ private:
     wxString formatText( wxString aString );
 
     /**
-     * Generates a Telesis-compatible pin name from a pin node.
+     * Generate a Telesis-compatible pin name from a pin node.
+     (
      * Telesis requires all pin names to be unique, and doesn't have separate
      * fields for pin number and pin name/function, so we combine them together to
      * make a unique name that still describes its function if you check pin info.
-     * FIXME: replace unsupported characters with an encoding instead
+     *
+     * @bug Replace unsupported characters with an encoding instead.
      *
      * @param aPin
      * @return wxString
@@ -130,7 +135,7 @@ private:
     wxString formatPin( const LIB_PIN& aPin );
 
     /**
-     * Generates the definition of a function in Telesis format, which consists of
+     * Generate the definition of a function in Telesis format, which consists of
      * multiple declarations (PINORDER, PINSWAP, and FUNCTIONs).
      *
      * @param aName
@@ -181,12 +186,15 @@ private:
         {
             wxString refText1 = m_Pin->GetParentSymbol()->GetRef( &m_Sheet );
             wxString refText2 = aNetNode.m_Pin->GetParentSymbol()->GetRef( &aNetNode.m_Sheet );
+
             if( refText1 == refText2 )
             {
                 unsigned long val1, val2;
-                //From wxWidgets 3.1.6, the function ToULong can be repalced with ToUInt
+
+                //From wxWidgets 3.1.6, the function ToULong can be replaced with ToUInt
                 bool convertingResult = m_Pin->GetShownNumber().ToULong( &val1 );
                 convertingResult &= aNetNode.m_Pin->GetShownNumber().ToULong( &val2 );
+
                 if( convertingResult )
                 {
                     return val1 < val2;
@@ -196,6 +204,7 @@ private:
                     return m_Pin->GetShownNumber() < aNetNode.m_Pin->GetShownNumber();
                 }
             }
+
             return CompareSymbolRef( refText1, refText2 );
         }
 
@@ -204,12 +213,15 @@ private:
         bool           m_NoConnect;
     };
 
-    FILE* m_f;    ///< file pointer for netlist file writing operation
-    wxString m_exportPath;    ///< directory to store device files
+    FILE* m_f            ;    ///< File pointer for netlist file writing operation.
+    wxString m_exportPath;    ///< Directory to store device files.
     std::multimap<wxString, wxString> m_packageProperties;
-    std::multimap<int, std::pair<SCH_SYMBOL*, SCH_SHEET_PATH> > m_componentGroups;    ///< Store the component group
-    std::list<std::pair<SCH_SYMBOL*, SCH_SHEET_PATH>>
-            m_orderedSymbolsSheetpath; ///< Store the ordered symbols with sheetpath
+
+    /// Store the component group.
+    std::multimap<int, std::pair<SCH_SYMBOL*, SCH_SHEET_PATH> > m_componentGroups;
+
+    /// Store the ordered symbols with sheetpath.
+    std::list<std::pair<SCH_SYMBOL*, SCH_SHEET_PATH>> m_orderedSymbolsSheetpath;
     std::multimap<wxString, NET_NODE> m_netNameNodes;    ///< Store the NET_NODE with the net name
 };
 
