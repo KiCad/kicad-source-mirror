@@ -19,6 +19,7 @@
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
+#include <wx/checkbox.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -37,6 +38,9 @@ class PANEL_SETUP_FORMATTING_BASE : public wxPanel
 		wxStaticText* gapLengthLabel;
 		wxTextCtrl* m_gapLengthCtrl;
 		wxStaticText* m_dashedLineHelp;
+		wxCheckBox* m_styleFields;
+		wxCheckBox* m_styleText;
+		wxCheckBox* m_styleGrahics;
 
 	public:
 

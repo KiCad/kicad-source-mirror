@@ -356,10 +356,10 @@ FOOTPRINT* PCB_BASE_FRAME::loadFootprint( const LIB_ID& aFootprintId )
         // any netinfo list (should be not needed, but it can be edited from the footprint editor )
         footprint->ClearAllNets();
 
-        if( m_pcb && !m_pcb->IsFootprintHolder()
-            && m_pcb->GetDesignSettings().GetStyleNewFootprints() )
+        if( m_pcb && !m_pcb->IsFootprintHolder() )
         {
-            footprint->ApplyDefaultSettings( *m_pcb );
+            footprint->ApplyDefaultSettings( *m_pcb, GetPcbNewSettings()->m_StyleFootprintFields,
+                                             GetPcbNewSettings()->m_StyleFootprintTextAndGraphics );
         }
     }
 

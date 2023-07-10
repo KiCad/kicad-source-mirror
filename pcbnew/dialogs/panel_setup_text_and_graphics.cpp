@@ -170,8 +170,6 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataToWindow()
         }
     }
 
-    m_styleFootprintFields->SetValue( m_BrdSettings->m_StyleFootprintFields );
-
     // Work around an issue where wxWidgets doesn't calculate the row width on its own
     for( int col = 0; col < m_grid->GetNumberCols(); col++ )
         m_grid->SetColMinimalWidth( col, m_grid->GetVisibleWidth( col ) );
@@ -216,8 +214,6 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataFromWindow()
         m_BrdSettings->m_TextUpright[ i ] =
                 wxGridCellBoolEditor::IsTrueValue( m_grid->GetCellValue( i, COL_TEXT_UPRIGHT ) );
     }
-
-    m_BrdSettings->m_StyleFootprintFields = m_styleFootprintFields->GetValue();
 
     // These are all stored in project file, not board, so no need for OnModify()
 

@@ -83,10 +83,6 @@ FOOTPRINT::FOOTPRINT( BOARD* parent ) :
         PCB_FIELD* field = new PCB_FIELD( this, i );
         m_fields.push_back( field );
 
-        // Style according to the board settings if we have them
-        if( parent )
-            ApplyDefaultSettings( *parent );
-
         switch( i )
         {
         case REFERENCE_FIELD:
@@ -356,13 +352,20 @@ void FOOTPRINT::RemoveField( const wxString& aFieldName )
 }
 
 
-void FOOTPRINT::ApplyDefaultSettings( BOARD& board )
+void FOOTPRINT::ApplyDefaultSettings( const BOARD& board, bool aStyleFields,
+                                      bool aStyleTextAndGraphics )
 {
-    for( PCB_FIELD* field : m_fields )
-        field->StyleFromSettings( board.GetDesignSettings() );
+    if( aStyleFields )
+    {
+        for( PCB_FIELD* field : m_fields )
+            field->StyleFromSettings( board.GetDesignSettings() );
+    }
 
-    for( BOARD_ITEM* item : m_drawings )
-        item->StyleFromSettings( board.GetDesignSettings() );
+    if( aStyleTextAndGraphics )
+    {
+        for( BOARD_ITEM* item : m_drawings )
+            item->StyleFromSettings( board.GetDesignSettings() );
+    }
 }
 
 

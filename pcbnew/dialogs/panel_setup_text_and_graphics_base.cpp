@@ -72,12 +72,6 @@ PANEL_SETUP_TEXT_AND_GRAPHICS_BASE::PANEL_SETUP_TEXT_AND_GRAPHICS_BASE( wxWindow
 	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_gridSizer->Add( m_grid, 0, wxBOTTOM, 15 );
 
-	m_styleFootprintFields = new wxCheckBox( this, wxID_ANY, _("Apply default properties to graphics and text in new footprints"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_styleFootprintFields->SetValue(true);
-	m_styleFootprintFields->SetToolTip( _("When checked, the default text style of footprint fields will be overridden by the board settings") );
-
-	m_gridSizer->Add( m_styleFootprintFields, 0, wxBOTTOM|wxRIGHT, 5 );
-
 
 	m_gridSizer->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 

@@ -17,16 +17,15 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/statline.h>
-#include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
+#include <wx/sizer.h>
 #include <wx/choice.h>
 #include <wx/statbox.h>
+#include <wx/statline.h>
 #include <wx/radiobox.h>
 #include <wx/panel.h>
 #include <wx/spinctrl.h>
-#include <wx/radiobut.h>
 #include <wx/simplebook.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -39,17 +38,17 @@ class PANEL_EDIT_OPTIONS_BASE : public RESETTABLE_PANEL
 	private:
 
 	protected:
-		wxBoxSizer* m_sizerBoardEdit;
-		wxCheckBox* m_flipLeftRight;
-		wxCheckBox* m_allowFreePads;
-		wxStaticLine* m_staticline3;
 		wxCheckBox* m_cbConstrainHV45Mode;
 		wxStaticText* m_rotationAngleLabel;
 		wxTextCtrl* m_rotationAngleCtrl;
 		wxStaticText* m_rotationAngleUnits;
-		wxStaticLine* m_staticline4;
 		wxStaticText* m_arcEditModeLabel;
 		wxChoice* m_arcEditMode;
+		wxBoxSizer* m_sizerBoardEdit;
+		wxStaticText* m_trackMouseDragLabel;
+		wxChoice* m_trackMouseDragCtrl;
+		wxCheckBox* m_flipLeftRight;
+		wxCheckBox* m_allowFreePads;
 		wxStaticBoxSizer* m_mouseCmdsWinLin;
 		wxStaticText* m_staticText181;
 		wxRadioBox* m_rbCtrlClickAction;
@@ -69,14 +68,12 @@ class PANEL_EDIT_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxCheckBox* m_OptDisplayCurvedRatsnestLines;
 		wxStaticText* m_ratsnestThicknessLabel;
 		wxSpinCtrlDouble* m_ratsnestThickness;
-		wxStaticText* m_staticText5;
-		wxRadioButton* m_rbTrackDragMove;
-		wxRadioButton* m_rbTrackDrag45;
-		wxRadioButton* m_rbTrackDragFree;
 		wxCheckBox* m_escClearsNetHighlight;
 		wxCheckBox* m_showPageLimits;
 		wxCheckBox* m_cbCourtyardCollisions;
 		wxCheckBox* m_autoRefillZones;
+		wxCheckBox* m_styleFields;
+		wxCheckBox* m_styleTextAndGraphics;
 
 	public:
 

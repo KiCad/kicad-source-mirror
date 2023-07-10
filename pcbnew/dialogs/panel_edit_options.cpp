@@ -61,27 +61,22 @@ PANEL_EDIT_OPTIONS::PANEL_EDIT_OPTIONS( wxWindow* aParent, UNITS_PROVIDER* aUnit
 
 void PANEL_EDIT_OPTIONS::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
 {
+    m_cbConstrainHV45Mode->SetValue( aCfg->m_Use45DegreeLimit );
     m_rotationAngle.SetAngleValue( aCfg->m_RotationAngle );
+    m_arcEditMode->SetSelection( (int) aCfg->m_ArcEditMode );
+    m_trackMouseDragCtrl->SetSelection( (int) aCfg->m_TrackDragAction );
+    m_flipLeftRight->SetValue( aCfg->m_FlipLeftRight );
+    m_allowFreePads->SetValue( aCfg->m_AllowFreePads );
+    m_autoRefillZones->SetValue( aCfg->m_AutoRefillZones );
+
     m_magneticPadChoice->SetSelection( static_cast<int>( aCfg->m_MagneticItems.pads ) );
     m_magneticTrackChoice->SetSelection( static_cast<int>( aCfg->m_MagneticItems.tracks ) );
     m_magneticGraphicsChoice->SetSelection( !aCfg->m_MagneticItems.graphics );
-    m_flipLeftRight->SetValue( aCfg->m_FlipLeftRight );
-    m_cbConstrainHV45Mode->SetValue( aCfg->m_Use45DegreeLimit );
-    m_cbCourtyardCollisions->SetValue( aCfg->m_ShowCourtyardCollisions );
-    m_arcEditMode->SetSelection(
-            aCfg->m_ArcEditMode == ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS ? 0 : 1 );
 
     /* Set display options */
     m_OptDisplayCurvedRatsnestLines->SetValue( aCfg->m_Display.m_DisplayRatsnestLinesCurved );
     m_showSelectedRatsnest->SetValue( aCfg->m_Display.m_ShowModuleRatsnest );
     m_ratsnestThickness->SetValue( aCfg->m_Display.m_RatsnestThickness );
-
-    switch( aCfg->m_TrackDragAction )
-    {
-    case TRACK_DRAG_ACTION::MOVE:            m_rbTrackDragMove->SetValue( true ); break;
-    case TRACK_DRAG_ACTION::DRAG:            m_rbTrackDrag45->SetValue( true );   break;
-    case TRACK_DRAG_ACTION::DRAG_FREE_ANGLE: m_rbTrackDragFree->SetValue( true ); break;
-    }
 
 #ifdef __WXOSX_MAC__
     m_rbCtrlClickActionMac->SetSelection( aCfg->m_CtrlClickHighlight );
@@ -89,11 +84,12 @@ void PANEL_EDIT_OPTIONS::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
     m_rbCtrlClickAction->SetSelection( aCfg->m_CtrlClickHighlight );
 #endif
 
-    m_showPageLimits->SetValue( aCfg->m_ShowPageLimits );
-    m_autoRefillZones->SetValue( aCfg->m_AutoRefillZones );
-    m_allowFreePads->SetValue( aCfg->m_AllowFreePads );
-
     m_escClearsNetHighlight->SetValue( aCfg->m_ESCClearsNetHighlight );
+    m_showPageLimits->SetValue( aCfg->m_ShowPageLimits );
+    m_cbCourtyardCollisions->SetValue( aCfg->m_ShowCourtyardCollisions );
+
+    m_styleFields->SetValue( aCfg->m_StyleFootprintFields );
+    m_styleTextAndGraphics->SetValue( aCfg->m_StyleFootprintTextAndGraphics );
 }
 
 
@@ -144,10 +140,7 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
         cfg->m_MagneticItems.graphics = m_magneticGraphics->GetValue();
 
         cfg->m_Use45Limit = m_cbConstrainHV45Mode->GetValue();
-
-        cfg->m_ArcEditMode = m_arcEditMode->GetSelection() == 0
-                                     ? ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS
-                                     : ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION;
+        cfg->m_ArcEditMode = (ARC_EDIT_MODE) m_arcEditMode->GetSelection();
     }
     else
     {
@@ -157,37 +150,31 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
         cfg->m_Display.m_ShowModuleRatsnest = m_showSelectedRatsnest->GetValue();
         cfg->m_Display.m_RatsnestThickness = m_ratsnestThickness->GetValue();
 
+        cfg->m_Use45DegreeLimit = m_cbConstrainHV45Mode->GetValue();
         cfg->m_RotationAngle = m_rotationAngle.GetAngleValue();
+        cfg->m_ArcEditMode = (ARC_EDIT_MODE) m_arcEditMode->GetSelection();
+        cfg->m_TrackDragAction = (TRACK_DRAG_ACTION) m_trackMouseDragCtrl->GetSelection();
+        cfg->m_FlipLeftRight = m_flipLeftRight->GetValue();
+        cfg->m_AllowFreePads = m_allowFreePads->GetValue();
+        cfg->m_AutoRefillZones = m_autoRefillZones->GetValue();
 
         cfg->m_MagneticItems.pads = static_cast<MAGNETIC_OPTIONS>( m_magneticPadChoice->GetSelection() );
         cfg->m_MagneticItems.tracks = static_cast<MAGNETIC_OPTIONS>( m_magneticTrackChoice->GetSelection() );
         cfg->m_MagneticItems.graphics = !m_magneticGraphicsChoice->GetSelection();
 
-        cfg->m_FlipLeftRight = m_flipLeftRight->GetValue();
         cfg->m_ESCClearsNetHighlight = m_escClearsNetHighlight->GetValue();
-        cfg->m_AutoRefillZones = m_autoRefillZones->GetValue();
-        cfg->m_AllowFreePads = m_allowFreePads->GetValue();
         cfg->m_ShowPageLimits = m_showPageLimits->GetValue();
+        cfg->m_ShowCourtyardCollisions = m_cbCourtyardCollisions->GetValue();
 
-        if( m_rbTrackDragMove->GetValue() )
-            cfg->m_TrackDragAction = TRACK_DRAG_ACTION::MOVE;
-        else if( m_rbTrackDrag45->GetValue() )
-            cfg->m_TrackDragAction = TRACK_DRAG_ACTION::DRAG;
-        else if( m_rbTrackDragFree->GetValue() )
-            cfg->m_TrackDragAction = TRACK_DRAG_ACTION::DRAG_FREE_ANGLE;
+        cfg->m_StyleFootprintFields = m_styleFields->GetValue();
+        cfg->m_StyleFootprintTextAndGraphics = m_styleTextAndGraphics->GetValue();
+
 
 #ifdef __WXOSX_MAC__
         cfg->m_CtrlClickHighlight = m_rbCtrlClickActionMac->GetSelection();
 #else
         cfg->m_CtrlClickHighlight = m_rbCtrlClickAction->GetSelection();
 #endif
-
-        cfg->m_Use45DegreeLimit = m_cbConstrainHV45Mode->GetValue();
-        cfg->m_ShowCourtyardCollisions = m_cbCourtyardCollisions->GetValue();
-
-        cfg->m_ArcEditMode = m_arcEditMode->GetSelection() == 0
-                                     ? ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS
-                                     : ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION;
     }
 
     return true;
