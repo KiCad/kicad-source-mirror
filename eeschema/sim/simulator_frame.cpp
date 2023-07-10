@@ -716,8 +716,12 @@ void SIMULATOR_FRAME::onSimFinished( wxCommandEvent& aEvent )
 
         } while( max_time && m_simulator->IsRunning() );
     }
-    // Is a warning message useful if the simulatior is still running?
 
+    // ensure the shown cursor is the default cursor, not the wxCURSOR_ARROWWAIT set when
+    // staring the simulator in onSimStarted:
+    SetCursor( wxNullCursor );
+
+    // Is a warning message useful if the simulatior is still running?
     SCHEMATIC& schematic = m_schematicFrame->Schematic();
     schematic.ClearOperatingPoints();
 
