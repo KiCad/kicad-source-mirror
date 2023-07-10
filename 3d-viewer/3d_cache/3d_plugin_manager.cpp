@@ -297,8 +297,11 @@ void S3D_PLUGIN_MANAGER::checkPluginName( const wxString& aPath,
     // prevent loading non-plugin dlls 
     if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
     {
-        if( !path.GetName().StartsWith( "s3d_plugin" ) )
+        if( !path.GetName().StartsWith( "s3d_plugin" )
+            && !path.GetName().StartsWith( "libs3d_plugin" ) )
+        {
             return;
+        }
     }
 
     aPluginList.push_back( wxpath );
