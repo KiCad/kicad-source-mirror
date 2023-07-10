@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -242,7 +242,9 @@ void PROJECT_TREE_PANE::onCreateNewDirectory( wxCommandEvent& event )
 
         wxString full_dirname = curr_dir + wxFileName::GetPathSeparator() + new_dir;
 
-        wxMkdir( full_dirname );
+        if( !wxMkdir( full_dirname ) )
+            return;
+
         addItemToProjectTree( full_dirname, item_data->GetId(), nullptr, false );
     }
 }

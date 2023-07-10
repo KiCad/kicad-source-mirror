@@ -421,7 +421,7 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
         wxArrayString footprintAlt;
         wxArrayString footprintArray = sym->GetLibSymbolRef()->GetFPFilters();
 
-        for( auto fp : footprintArray )
+        for( const wxString& fp : footprintArray )
         {
             if( ( fp.Find( '*' ) != wxNOT_FOUND ) || ( fp.Find( '?' ) != wxNOT_FOUND ) )
             {
@@ -491,10 +491,12 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
             fprintf( d, "PACKAGEPROP ALT_SYMBOLS '(" );
 
             wxString footprintAltSymbolsText;
-            for( auto fp : footprintAlt )
+
+            for( const wxString& fp : footprintAlt )
             {
                 footprintAltSymbolsText += fp + wxString( "," );
             }
+
             footprintAltSymbolsText.Truncate( footprintAltSymbolsText.Length() - 1 );
             fprintf( d, "%s)'\n", TO_UTF8( footprintAltSymbolsText ) );
         }
@@ -609,7 +611,7 @@ wxString NETLIST_EXPORTER_ALLEGRO::formatFunction( wxString aName, LIB_PINS aPin
 
     out_str.Printf( wxT( "PINORDER %s " ), TO_UTF8( aName ) );
 
-    for( wxString& pinName : pinNameList )
+    for( const wxString& pinName : pinNameList )
     {
         str.Printf( ",\n\t%s", TO_UTF8( pinName ) );
         out_str += str;
@@ -640,7 +642,7 @@ wxString NETLIST_EXPORTER_ALLEGRO::getGroupField( int aGroupIndex, const wxArray
         SCH_SYMBOL* sym = ( iter->second ).first;
         SCH_SHEET_PATH sheetPath = ( iter->second ).second;
 
-        for( auto field : aFieldArray )
+        for( const wxString& field : aFieldArray )
         {
             SCH_FIELD* fld = sym->FindField( field, true, true );
 
@@ -666,7 +668,7 @@ wxString NETLIST_EXPORTER_ALLEGRO::getGroupField( int aGroupIndex, const wxArray
     {
         SCH_SYMBOL* sym = ( iter->second ).first;
 
-        for( auto field : aFieldArray )
+        for( const wxString& field : aFieldArray )
         {
             LIB_FIELD* fld = sym->GetLibSymbolRef()->FindField( field, true );
 
