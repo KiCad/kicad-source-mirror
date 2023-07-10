@@ -229,10 +229,14 @@ void DIALOG_TEXT_PROPERTIES::getContextualTextVars( const wxString& aCrossRef,
         SCHEMATIC* schematic = m_currentItem->Schematic();
 
         if( schematic && schematic->CurrentSheet().Last() )
+        {
             schematic->CurrentSheet().Last()->GetContextualTextVars( aTokens );
-
-        for( std::pair<wxString, wxString> entry : Prj().GetTextVars() )
-            aTokens->push_back( entry.first );
+        }
+        else
+        {
+            for( std::pair<wxString, wxString> entry : Prj().GetTextVars() )
+                aTokens->push_back( entry.first );
+        }
     }
 }
 
