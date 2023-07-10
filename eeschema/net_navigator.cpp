@@ -209,6 +209,12 @@ void SCH_EDIT_FRAME::MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemI
 
         for( const SCH_ITEM* item : subGraph->GetItems() )
         {
+            KICAD_T type = item->Type();
+
+            if( ( type == SCH_LINE_T ) || ( type == SCH_JUNCTION_T )
+              || ( type == SCH_BUS_WIRE_ENTRY_T ) || ( type == SCH_BUS_BUS_ENTRY_T ) )
+                continue;
+
             itemData = new NET_NAVIGATOR_ITEM_DATA( sheetPath, item );
             wxTreeItemId id = m_netNavigator->AppendItem( sheetId,
                                                           GetNetNavigatorItemText( item, sheetPath,
@@ -224,8 +230,7 @@ void SCH_EDIT_FRAME::MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemI
         }
     }
 
-    if( !aSelection )
-        m_netNavigator->Expand( aParentId );
+    m_netNavigator->Expand( aParentId );
 }
 
 
@@ -333,7 +338,7 @@ const SCH_ITEM* SCH_EDIT_FRAME::GetSelectedNetNavigatorItem() const
 
     wxTreeItemId id = m_netNavigator->GetSelection();
 
-    if( !id.IsOk() )
+    if( !id.IsOk() || ( id == m_netNavigator->GetRootItem() ) )
         return nullptr;
 
     NET_NAVIGATOR_ITEM_DATA* itemData =
