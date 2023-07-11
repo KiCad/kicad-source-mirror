@@ -73,9 +73,10 @@ COMMIT& SCH_COMMIT::Stage( EDA_ITEM *aItem, CHANGE_TYPE aChangeType, BASE_SCREEN
 
     // If aItem belongs a symbol, sheet or label, the full parent will be saved because undo/redo
     // does not handle "sub items" modifications.
-    if( aItem->GetParent() && aItem->GetParent()->IsType( { SCH_SYMBOL_T, LIB_SYMBOL_T,
-                                                            SCH_SHEET_T,
-                                                            SCH_LABEL_LOCATE_ANY_T } ) )
+    if( aItem->Type() != SCH_SHEET_T
+            && aItem->GetParent() && aItem->GetParent()->IsType( { SCH_SYMBOL_T, LIB_SYMBOL_T,
+                                                                   SCH_SHEET_T,
+                                                                   SCH_LABEL_LOCATE_ANY_T } ) )
     {
         aItem->SetFlags( IS_MODIFIED_CHILD );
         aItem = aItem->GetParent();
