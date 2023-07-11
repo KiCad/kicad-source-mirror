@@ -248,7 +248,10 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
             else if( GetActiveLayer() == B_Mask && visibleLayers.test( B_Mask ) )
                 aLayer = B_Mask;
             else if( ( visibleLayers & LSET::AllCuMask() ).none() )
-                aLayer = visibleLayers.Seq().back();
+            {
+                if( visibleLayers.any() )
+                    aLayer = visibleLayers.Seq().back();
+            }
         }
     }
 
