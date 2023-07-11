@@ -316,6 +316,8 @@ void LTSPICE_SCH_PARSER::CreateSymbol( LTSPICE_SCHEMATIC::LT_SYMBOL& aLtSymbol,
         CreatePin( aLtSymbol, j, pin );
         aLibSymbol->AddDrawItem( pin );
     }
+
+    aLibSymbol->SetShowPinNumbers( false );
 }
 
 
@@ -1217,6 +1219,9 @@ void LTSPICE_SCH_PARSER::CreatePin( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int
     else
     {
         aPin->SetName( lt_pin.PinAttribute[ wxS( "PinName" ) ] );
+
+        if( lt_pin.PinJustification == LTSPICE_SCHEMATIC::JUSTIFICATION::NONE )
+            aPin->SetNameTextSize( 0 );
     }
 
     aPin->SetNumber( wxString::Format( wxS( "%d" ), aIndex + 1 ) );
