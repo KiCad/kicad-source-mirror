@@ -132,6 +132,12 @@ KICAD_CURL_EASY::KICAD_CURL_EASY() :
     curl_easy_setopt( m_CURL, CURLOPT_SSL_OPTIONS, CURLSSLOPT_NATIVE_CA );
     #endif
 
+    if( wxGetEnv( wxT( "KICAD_CURL_VERBOSE" ), nullptr ) )
+    {
+        // note: curl verbose will end up in stderr
+        curl_easy_setopt( m_CURL, CURLOPT_VERBOSE, 1L );
+    }
+
     wxPlatformInfo platformInfo;
     wxString application( Pgm().App().GetAppName() );
     wxString version( GetBuildVersion() );
