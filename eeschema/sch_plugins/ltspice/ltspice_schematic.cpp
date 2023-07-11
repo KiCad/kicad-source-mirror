@@ -353,9 +353,10 @@ LTSPICE_SCHEMATIC::LINESTYLE LTSPICE_SCHEMATIC::getLineStyle( int aValue )
     lineStyleMap[1] = LINESTYLE::DASH;
     lineStyleMap[2] = LINESTYLE::DOT;
     lineStyleMap[3] = LINESTYLE::DASHDOT;
+    lineStyleMap[4] = LINESTYLE::DASHDOTDOT;
 
     if( lineStyleMap.find( aValue ) == lineStyleMap.end() )
-        THROW_IO_ERROR( _( "Expecting 0, 1, 2 or 3" ) );
+        THROW_IO_ERROR( _( "Expecting 0, 1, 2, 3 or 4" ) );
 
     return lineStyleMap[ aValue ];
 }

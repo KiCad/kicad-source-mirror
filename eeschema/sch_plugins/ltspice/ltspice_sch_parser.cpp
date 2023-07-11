@@ -588,8 +588,10 @@ void LTSPICE_SCH_PARSER::CreatePin( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIn
         }
     }
 
-    SCH_HIERLABEL* sheetPin = new SCH_HIERLABEL( ToKicadCoords( iopin.Location ) + m_originOffset,
-                                                 ioPinName, SCH_HIER_LABEL_T );
+    SCH_HIERLABEL* sheetPin =
+            new SCH_HIERLABEL( ToKicadCoords( iopin.Location ), ioPinName, SCH_HIER_LABEL_T );
+
+    sheetPin->Move( m_originOffset );
 
     sheetPin->SetShape( getLabelShape( iopin.Polarity ) );
     aSheet->LastScreen()->Append( sheetPin );
@@ -600,13 +602,13 @@ void LTSPICE_SCH_PARSER::CreateLine( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aI
                                      SCH_SHEET_PATH* aSheet )
 {
     LTSPICE_SCHEMATIC::LINE& lt_line = aAscfile.Lines[aIndex];
-    SCH_SHAPE*               shape = new SCH_SHAPE( SHAPE_T::POLY );
+    SCH_LINE* line = new SCH_LINE( ToKicadCoords( lt_line.Start ), SCH_LAYER_ID::LAYER_NOTES );
 
-    shape->AddPoint( ToInvertedKicadCoords( lt_line.End ) + m_originOffset );
-    shape->AddPoint( ToInvertedKicadCoords( lt_line.Start ) + m_originOffset );
-    shape->SetStroke( getStroke( lt_line.LineWidth, lt_line.LineStyle ) );
+    line->SetEndPoint( ToKicadCoords( lt_line.End ) );
+    line->SetStroke( getStroke( lt_line.LineWidth, lt_line.LineStyle ) );
+    line->Move( m_originOffset );
 
-    aSheet->LastScreen()->Append( shape );
+    aSheet->LastScreen()->Append( line );
 }
 
 
@@ -619,9 +621,10 @@ void LTSPICE_SCH_PARSER::CreateCircle( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int 
     VECTOR2I c = ( lt_circle.TopLeft + lt_circle.BotRight ) / 2;
     int r = ( lt_circle.TopLeft.x - lt_circle.BotRight.x ) / 2;
 
-    circle->SetPosition( ToInvertedKicadCoords( c ) );
-    circle->SetEnd( ToInvertedKicadCoords( c ) + VECTOR2I( abs( ToKicadCoords( r ) ), 0 ) );
+    circle->SetPosition( ToKicadCoords( c ) );
+    circle->SetEnd( ToKicadCoords( c ) + VECTOR2I( abs( ToKicadCoords( r ) ), 0 ) );
     circle->SetStroke( getStroke( lt_circle.LineWidth, lt_circle.LineStyle ) );
+    circle->Move( m_originOffset );
 
     aSheet->LastScreen()->Append( circle );
 }
@@ -633,10 +636,11 @@ void LTSPICE_SCH_PARSER::CreateArc( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIn
     LTSPICE_SCHEMATIC::ARC& lt_arc = aAscfile.Arcs[aIndex];
     SCH_SHAPE*              arc = new SCH_SHAPE( SHAPE_T::ARC );
 
-    arc->SetCenter( ToInvertedKicadCoords( ( lt_arc.TopLeft + lt_arc.BotRight ) / 2 ) );
-    arc->SetEnd( ToInvertedKicadCoords( lt_arc.ArcEnd ) );
-    arc->SetStart( ToInvertedKicadCoords( lt_arc.ArcStart ) );
+    arc->SetCenter( ToKicadCoords( ( lt_arc.TopLeft + lt_arc.BotRight ) / 2 ) );
+    arc->SetEnd( ToKicadCoords( lt_arc.ArcEnd ) );
+    arc->SetStart( ToKicadCoords( lt_arc.ArcStart ) );
     arc->SetStroke( getStroke( lt_arc.LineWidth, lt_arc.LineStyle ) );
+    arc->Move( m_originOffset );
 
     aSheet->LastScreen()->Append( arc );
 }
@@ -648,9 +652,10 @@ void LTSPICE_SCH_PARSER::CreateRect( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aI
     LTSPICE_SCHEMATIC::RECTANGLE& lt_rect = aAscfile.Rectangles[aIndex];
     SCH_SHAPE*                    rectangle = new SCH_SHAPE( SHAPE_T::RECT );
 
-    rectangle->SetPosition( ToInvertedKicadCoords( lt_rect.BotRight ) );
-    rectangle->SetEnd( ToInvertedKicadCoords( lt_rect.TopLeft ) );
+    rectangle->SetPosition( ToKicadCoords( lt_rect.TopLeft ) );
+    rectangle->SetEnd( ToKicadCoords( lt_rect.BotRight ) );
     rectangle->SetStroke( getStroke( lt_rect.LineWidth, lt_rect.LineStyle ) );
+    rectangle->Move( m_originOffset );
 
     aSheet->LastScreen()->Append( rectangle );
 }
