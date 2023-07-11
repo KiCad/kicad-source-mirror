@@ -1399,6 +1399,12 @@ TOOL_ACTION PCB_ACTIONS::diffFootprint( "pcbnew.InspectionTool.DiffFootprint",
         _( "Show differences between board footprint and its library equivalent" ),
         BITMAPS::library );
 
+TOOL_ACTION PCB_ACTIONS::showFootprintAssociations( "pcbnew.InspectionTool.ShowFootprintAssociations",
+         AS_GLOBAL, 0, "",
+         _( "Show Footprint Associations" ),
+         _( "Show footprint library and schematic symbol associations" ),
+         BITMAPS::edit_cmp_symb_links );
+
 //Geographic re-annotation tool
 TOOL_ACTION PCB_ACTIONS::boardReannotate( "pcbnew.ReannotateTool.ShowReannotateDialog",
         AS_GLOBAL, 0, "",

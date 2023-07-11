@@ -501,6 +501,7 @@ public:
     static TOOL_ACTION inspectClearance;
     static TOOL_ACTION inspectConstraints;
     static TOOL_ACTION diffFootprint;
+    static TOOL_ACTION showFootprintAssociations;
 
     // Appearance controls
     static TOOL_ACTION clearHighlight;          // Turns off highlight and resets previous highlight

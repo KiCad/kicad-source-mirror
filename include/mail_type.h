@@ -47,6 +47,7 @@ enum MAIL_T
     MAIL_SCH_UPDATE,               // PCB->SCH forward update
     MAIL_IMPORT_FILE,              // Import a different format file
     MAIL_SCH_GET_NETLIST,          // Fetch a netlist from schematics
+    MAIL_SCH_GET_ITEM,             // Fetch item from KIID
     MAIL_PCB_GET_NETLIST,          // Fetch a netlist from PCB layout
     MAIL_PCB_UPDATE_LINKS,         // Update the schematic symbol paths in the PCB's footprints
     MAIL_SCH_REFRESH,              // Tell the schematic editor to refresh the display.

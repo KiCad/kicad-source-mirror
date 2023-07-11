@@ -89,6 +89,8 @@ public:
 
     int InspectConstraints( const TOOL_EVENT& aEvent );
 
+    int ShowFootprintLinks( const TOOL_EVENT& aEvent );
+
     int DiffFootprint( const TOOL_EVENT& aEvent );
     void DiffFootprint( FOOTPRINT* aFootprint );
 

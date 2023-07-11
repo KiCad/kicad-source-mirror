@@ -52,6 +52,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_drc_base.cpp
     dialogs/dialog_footprint_checker.cpp
     dialogs/dialog_footprint_checker_base.cpp
+        dialogs/dialog_footprint_associations.cpp
+        dialogs/dialog_footprint_associations_base.cpp
     dialogs/dialog_footprint_properties.cpp
     dialogs/dialog_footprint_properties_base.cpp
     dialogs/dialog_footprint_properties_fp_editor.cpp

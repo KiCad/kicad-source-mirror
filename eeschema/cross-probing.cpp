@@ -915,8 +915,26 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         exporter.Format( &formatter, GNL_ALL | GNL_OPT_KICAD );
 
         payload = formatter.GetString();
-    }
         break;
+    }
+
+    case MAIL_SCH_GET_ITEM:
+    {
+        KIID           uuid( payload );
+        SCH_SHEET_PATH path;
+
+        if( SCH_ITEM* item = m_schematic->GetSheets().GetItem( uuid, &path ) )
+        {
+            if( item->Type() == SCH_SHEET_T )
+                payload = static_cast<SCH_SHEET*>( item )->GetShownName( false );
+            else if( item->Type() == SCH_SYMBOL_T )
+                payload = static_cast<SCH_SYMBOL*>( item )->GetRef( &path, true );
+            else
+                payload = item->GetFriendlyName();
+        }
+
+        break;
+    }
 
     case MAIL_ASSIGN_FOOTPRINTS:
         try
@@ -935,8 +953,8 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
         GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
         GetCanvas()->Refresh();
-    }
         break;
+    }
 
     case MAIL_IMPORT_FILE:
     {
@@ -960,8 +978,9 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
         if( importFormat >= 0 )
             importFile( path, importFormat );
-    }
+
         break;
+    }
 
     case MAIL_SCH_SAVE:
         if( SaveProject() )

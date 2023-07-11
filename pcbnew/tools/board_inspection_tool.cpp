@@ -34,6 +34,7 @@
 #include <dialogs/dialog_book_reporter.h>
 #include <dialogs/dialog_net_inspector.h>
 #include <dialogs/panel_setup_rules_base.h>
+#include <dialogs/dialog_footprint_associations.h>
 #include <string_utils.h>
 #include <tools/board_inspection_tool.h>
 #include <fp_lib_table.h>
@@ -1410,6 +1411,30 @@ int BOARD_INSPECTION_TOOL::DiffFootprint( const TOOL_EVENT& aEvent )
 }
 
 
+int BOARD_INSPECTION_TOOL::ShowFootprintLinks( const TOOL_EVENT& aEvent )
+{
+    wxCHECK( m_frame, 0 );
+
+    PCB_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+
+    wxCHECK( selTool, 0 );
+
+    const PCB_SELECTION& selection = selTool->GetSelection();
+
+    if( selection.Size() != 1 || selection.Front()->Type() != PCB_FOOTPRINT_T )
+    {
+        m_frame->ShowInfoBarError( _( "Select a footprint for a footprint associations report." ) );
+        return 0;
+    }
+
+    DIALOG_FOOTPRINT_ASSOCIATIONS dlg( m_frame, static_cast<FOOTPRINT*>( selection.Front() ) );
+
+    dlg.ShowModal();
+
+    return 0;
+}
+
+
 void BOARD_INSPECTION_TOOL::DiffFootprint( FOOTPRINT* aFootprint )
 {
     DIALOG_BOOK_REPORTER* dialog = m_frame->GetFootprintDiffDialog();
@@ -1999,6 +2024,7 @@ void BOARD_INSPECTION_TOOL::setTransitions()
     Go( &BOARD_INSPECTION_TOOL::InspectClearance,    PCB_ACTIONS::inspectClearance.MakeEvent() );
     Go( &BOARD_INSPECTION_TOOL::InspectConstraints,  PCB_ACTIONS::inspectConstraints.MakeEvent() );
     Go( &BOARD_INSPECTION_TOOL::DiffFootprint,       PCB_ACTIONS::diffFootprint.MakeEvent() );
+    Go( &BOARD_INSPECTION_TOOL::ShowFootprintLinks,  PCB_ACTIONS::showFootprintAssociations.MakeEvent() );
 
     Go( &BOARD_INSPECTION_TOOL::HighlightNet,        PCB_ACTIONS::highlightNet.MakeEvent() );
     Go( &BOARD_INSPECTION_TOOL::HighlightNet,        PCB_ACTIONS::highlightNetSelection.MakeEvent() );
