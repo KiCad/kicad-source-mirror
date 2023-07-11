@@ -991,6 +991,9 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
                 fixUuid( const_cast<KIID&>( aChild->m_Uuid ) );
             } );
 
+    newFootprint->ApplyDefaultSettings( *m_pcb, GetPcbNewSettings()->m_StyleFootprintFields,
+                                        GetPcbNewSettings()->m_StyleFootprintTextAndGraphics );
+
     if( sourceFootprint )         // this is an update command
     {
         // In the main board the new footprint replaces the old one (pos, orient, ref, value,
