@@ -355,8 +355,11 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
 
         CONVERT_SETTINGS resolvedSettings = m_userSettings;
 
-        if( resolvedSettings.m_LineWidth == 0 )
-            resolvedSettings.m_LineWidth = bds.m_LineThickness[ bds.GetLayerClass( layer ) ];
+        if( resolvedSettings.m_Strategy != CENTERLINE )
+        {
+            if( resolvedSettings.m_LineWidth == 0 )
+                resolvedSettings.m_LineWidth = bds.m_LineThickness[ bds.GetLayerClass( layer ) ];
+        }
 
         if( resolvedSettings.m_Strategy == BOUNDING_HULL )
         {
@@ -400,6 +403,7 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
             graphic->SetShape( SHAPE_T::POLY );
             graphic->SetStroke( STROKE_PARAMS( resolvedSettings.m_LineWidth, PLOT_DASH_TYPE::SOLID,
                                                COLOR4D::UNSPECIFIED ) );
+            graphic->SetFilled( resolvedSettings.m_Strategy == CENTERLINE );
             graphic->SetLayer( destLayer );
             graphic->SetPolyShape( poly );
 
