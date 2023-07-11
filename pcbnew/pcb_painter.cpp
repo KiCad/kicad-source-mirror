@@ -994,6 +994,17 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         m_gal->SetIsFill( true );
         m_gal->DrawCircle( center, getViaDrillSize( aVia ) / 2.0 );
     }
+    else if( ( aLayer == F_Mask && aVia->IsOnLayer( F_Mask ) )
+             || ( aLayer == B_Mask && aVia->IsOnLayer( B_Mask ) ) )
+    {
+        int margin = board->GetDesignSettings().m_SolderMaskExpansion;
+
+        m_gal->SetIsFill( true );
+        m_gal->SetIsStroke( false );
+
+        m_gal->SetLineWidth( margin );
+        m_gal->DrawCircle( center, ( aVia->GetWidth() + margin ) / 2.0 );
+    }
     else if( aLayer == LAYER_VIA_THROUGH || m_pcbSettings.IsPrinting() )
     {
         int    annular_width = ( aVia->GetWidth() - getViaDrillSize( aVia ) ) / 2.0;

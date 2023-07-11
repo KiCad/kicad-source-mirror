@@ -761,6 +761,14 @@ void PCB_VIA::ViewGetLayers( int aLayers[], int& aCount ) const
 
     if( IsLocked() )
         aLayers[ aCount++ ] = LAYER_LOCKED_ITEM_SHADOW;
+
+    // Vias can also be on a solder mask layer. They are on these layers or not,
+    // depending on the plot and solder mask options
+    if( IsOnLayer( F_Mask ) )
+        aLayers[ aCount++ ] = F_Mask;
+
+    if( IsOnLayer( B_Mask ) )
+        aLayers[ aCount++ ] = B_Mask;
 }
 
 
