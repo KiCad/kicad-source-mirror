@@ -76,12 +76,23 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
 
         for( LTSPICE_FILE& newSubSchematicElement : newSubSchematicElements )
         {
-            newSubSchematicElement.ParentIndex = parentSheetIndex;
-            newSubSchematicElement.Screen = screen;
-            newSubSchematicElement.Sheet = new SCH_SHEET();
+            wxString asyName = newSubSchematicElement.ElementName;
+            auto     it = mapOfAsyFiles.find( asyName );
 
-            ascFileQueue.push( newSubSchematicElement.ElementName );
-            ascFiles.push_back( newSubSchematicElement );
+            if( it == mapOfAsyFiles.end() )
+                continue;
+
+            wxString asyBuffer = SafeReadFile( it->second, "r" );
+
+            if( IsAsySubsheet( asyBuffer ) )
+            {
+                newSubSchematicElement.ParentIndex = parentSheetIndex;
+                newSubSchematicElement.Screen = screen;
+                newSubSchematicElement.Sheet = new SCH_SHEET();
+
+                ascFileQueue.push( newSubSchematicElement.ElementName );
+                ascFiles.push_back( newSubSchematicElement );
+            }
         }
 
         ascFileQueue.pop();
@@ -261,6 +272,25 @@ std::vector<LTSPICE_FILE> LTSPICE_SCHEMATIC::GetSchematicElements( const wxStrin
     }
 
     return resultantArray;
+}
+
+
+bool LTSPICE_SCHEMATIC::IsAsySubsheet( const wxString& aAsyFile )
+{
+    wxStringTokenizer lines( aAsyFile, "\n" );
+
+    while( lines.HasMoreTokens() )
+    {
+        wxStringTokenizer parts( lines.GetNextToken(), " " );
+
+        if( parts.GetNextToken().IsSameAs( wxS( "SYMATTR" ), false )
+            && parts.GetNextToken().IsSameAs( wxS( "Prefix" ), false ) )
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 

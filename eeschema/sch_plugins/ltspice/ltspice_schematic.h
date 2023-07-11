@@ -315,6 +315,13 @@ public:
     std::vector<LTSPICE_FILE> GetSchematicElements( const wxString& aAscFile );
 
     /**
+     * Check if the asy file content indicates that we need to load subsheet.
+     *
+     * @param aAsyFile contents of .asy file.
+     */
+    bool IsAsySubsheet( const wxString& aAsyFile );
+
+    /**
      * The function returns a map. This map has all the asy files in form of string. For asy files
      * the key will be symbol name.
      *
