@@ -1006,7 +1006,7 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         m_gal->SetIsStroke( false );
 
         m_gal->SetLineWidth( margin );
-        m_gal->DrawCircle( center, ( aVia->GetWidth() + margin ) / 2.0 );
+        m_gal->DrawCircle( center, aVia->GetWidth() / 2.0 + margin );
     }
     else if( aLayer == LAYER_VIA_THROUGH || m_pcbSettings.IsPrinting() )
     {
