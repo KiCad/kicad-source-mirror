@@ -35,6 +35,7 @@
 #include <sch_plugins/ltspice/ltspice_schematic.h>
 
 
+class EDA_TEXT;
 class LIB_SHAPE;
 class LIB_PIN;
 class SCH_LABEL_BASE;
@@ -282,6 +283,8 @@ private:
 
     STROKE_PARAMS getStroke( const LTSPICE_SCHEMATIC::LINEWIDTH& aLineWidth,
                              const LTSPICE_SCHEMATIC::LINESTYLE& aLineStyle );
+
+    void setTextJustification( EDA_TEXT* aText, LTSPICE_SCHEMATIC::JUSTIFICATION aJustification );
 
     void readIncludes( std::vector<LTSPICE_SCHEMATIC::LT_ASC>& outLT_ASCs );
 

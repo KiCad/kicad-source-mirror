@@ -352,10 +352,12 @@ LTSPICE_SCHEMATIC::POLARITY LTSPICE_SCHEMATIC::getPolarity( const wxString& aVal
     polarityMap["I"] = POLARITY::INPUT;
     polarityMap["O"] = POLARITY::OUTPUT;
     polarityMap["B"] = POLARITY::BIDIR;
+    polarityMap["IN"] = POLARITY::INPUT;
     polarityMap["OUT"] = POLARITY::OUTPUT;
+    polarityMap["BIDIR"] = POLARITY::BIDIR;
 
     if( polarityMap.find( aValue.Upper() ) == polarityMap.end() )
-        THROW_IO_ERROR( _( "Expecting I, O, B or OUT" ) );
+        THROW_IO_ERROR( _( "Expecting I, O, B, IN, OUT or BIDIR" ) );
 
     return polarityMap[ aValue.Upper() ];
 }
@@ -392,7 +394,7 @@ LTSPICE_SCHEMATIC::JUSTIFICATION LTSPICE_SCHEMATIC::getTextJustification( const 
     justificationMap["VLEFT"] = JUSTIFICATION::VLEFT;
     justificationMap["VRIGHT"] = JUSTIFICATION::VRIGHT;
     justificationMap["VCENTER"] = JUSTIFICATION::VCENTER;
-    justificationMap["BOTTOM"] = JUSTIFICATION::CENTER;
+    justificationMap["BOTTOM"] = JUSTIFICATION::BOTTOM;
     justificationMap["TOP"] = JUSTIFICATION::TOP;
     justificationMap["VBOTTOM"] = JUSTIFICATION::VBOTTOM;
     justificationMap["VTOP"] = JUSTIFICATION::VTOP;
