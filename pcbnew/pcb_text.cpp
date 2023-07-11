@@ -352,7 +352,10 @@ void PCB_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearance, 
     else
     {
         if( aClearance > 0 )
-            textShape.Inflate( aClearance, aClearance );
+        {
+            const int arc2segmentCount = 16;
+            textShape.Inflate( aClearance, arc2segmentCount );
+        }
 
         aBuffer.Append( textShape );
     }
