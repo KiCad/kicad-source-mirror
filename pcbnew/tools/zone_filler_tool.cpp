@@ -39,6 +39,7 @@
 #include <wx/hyperlink.h>
 #include <tool/tool_manager.h>
 #include <tool/actions.h>
+#include <tools/pcb_selection_tool.h>
 #include "pcb_actions.h"
 #include "zone_filler_tool.h"
 #include "zone_filler.h"
@@ -309,8 +310,6 @@ int ZONE_FILLER_TOOL::ZoneFill( const TOOL_EVENT& aEvent )
         return -1;
     }
 
-    m_fillInProgress = true;
-
     std::vector<ZONE*> toFill;
 
     if( ZONE* passedZone = aEvent.Parameter<ZONE*>() )
@@ -319,12 +318,26 @@ int ZONE_FILLER_TOOL::ZoneFill( const TOOL_EVENT& aEvent )
     }
     else
     {
-        for( EDA_ITEM* item : selection() )
+        const PCB_SELECTION& sel = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->RequestSelection(
+                []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
+                {
+                } );
+
+        for( EDA_ITEM* item : sel )
         {
             if( ZONE* zone = dynamic_cast<ZONE*>( item ) )
                 toFill.push_back( zone );
         }
     }
+
+    // Bail out of the filler if there is nothing to fill
+    if( toFill.empty() )
+    {
+        wxBell();
+        return -1;
+    }
+
+    m_fillInProgress = true;
 
     BOARD_COMMIT                          commit( this );
     std::unique_ptr<WX_PROGRESS_REPORTER> reporter;
@@ -362,14 +375,30 @@ int ZONE_FILLER_TOOL::ZoneFillAll( const TOOL_EVENT& aEvent )
 
 int ZONE_FILLER_TOOL::ZoneUnfill( const TOOL_EVENT& aEvent )
 {
+    const PCB_SELECTION& sel = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
+            {
+            } );
+
+    std::vector<ZONE*> toUnfill;
+
+    for( EDA_ITEM* item : sel )
+    {
+        if( ZONE* zone = dynamic_cast<ZONE*>( item ) )
+            toUnfill.push_back( zone );
+    }
+
+    // Bail out if there are no zones
+    if( toUnfill.empty() )
+    {
+        wxBell();
+        return -1;
+    }
+
     BOARD_COMMIT commit( this );
 
-    for( EDA_ITEM* item : selection() )
+    for( ZONE* zone : toUnfill )
     {
-        assert( item->Type() == PCB_ZONE_T );
-
-        ZONE* zone = static_cast<ZONE*>( item );
-
         commit.Modify( zone );
 
         zone->UnFill();

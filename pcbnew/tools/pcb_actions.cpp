@@ -1635,11 +1635,13 @@ TOOL_ACTION PCB_ACTIONS::filterSelection( "pcbnew.InteractiveSelection.FilterSel
 
 // ZONE_FILLER_TOOL
 //
-TOOL_ACTION PCB_ACTIONS::zoneFill( "pcbnew.ZoneFiller.zoneFill",
-        AS_GLOBAL, 0, "",
-        _( "Draft Fill Selected Zone(s)" ),
-        _( "Update copper fill of selected zone(s) without regard to other interacting zones" ),
-        BITMAPS::fill_zone );
+TOOL_ACTION PCB_ACTIONS::zoneFill( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.ZoneFiller.zoneFill" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Draft Fill Selected Zone(s)" ) )
+        .Tooltip( _( "Update copper fill of selected zone(s) without regard to other interacting zones" ) )
+        .Icon( BITMAPS::fill_zone )
+        .Parameter<ZONE*>( nullptr ) );
 
 TOOL_ACTION PCB_ACTIONS::zoneFillAll( "pcbnew.ZoneFiller.zoneFillAll",
         AS_GLOBAL,
