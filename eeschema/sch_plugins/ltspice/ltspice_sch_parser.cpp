@@ -752,7 +752,28 @@ void LTSPICE_SCH_PARSER::setTextJustification( EDA_TEXT*                        
     default: break;
     }
 
-    // TODO: (V)Center aligns by first line in multiline text
+    // Center, Left, Right aligns by first line in multiline text
+    if( wxSplit( aText->GetText(), '\n', '\0' ).size() > 1 )
+    {
+        switch( aJustification )
+        {
+        case LTSPICE_SCHEMATIC::JUSTIFICATION::LEFT:
+        case LTSPICE_SCHEMATIC::JUSTIFICATION::CENTER:
+        case LTSPICE_SCHEMATIC::JUSTIFICATION::RIGHT:
+            aText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+            aText->Offset( VECTOR2I( 0, -aText->GetTextHeight() / 2 ) );
+            break;
+
+        case LTSPICE_SCHEMATIC::JUSTIFICATION::VLEFT:
+        case LTSPICE_SCHEMATIC::JUSTIFICATION::VCENTER:
+        case LTSPICE_SCHEMATIC::JUSTIFICATION::VRIGHT:
+            aText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+            aText->Offset( VECTOR2I( -aText->GetTextHeight() / 2, 0 ) );
+            break;
+
+        default: break;
+        }
+    }
 }
 
 
