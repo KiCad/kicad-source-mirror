@@ -199,6 +199,12 @@ private:
     bool        unitMatch( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef );
     bool        groupMatch( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef );
 
+    /* Helper function to get the resolved field value.
+     * Handles symbols that are missing fields that would have a variable
+     * in their value because their name is the same as a variable.
+     * Example: BOM template provides ${DNP} as a field, but they symbol doesn't have the field. */
+    wxString getFieldShownText( const SCH_REFERENCE& aRef, const wxString& aFieldName );
+
     void Sort();
 
 

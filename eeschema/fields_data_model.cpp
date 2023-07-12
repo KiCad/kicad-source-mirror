@@ -1,6 +1,7 @@
 #include <wx/string.h>
 #include <wx/debug.h>
 #include <wx/grid.h>
+#include <common.h>
 #include <widgets/wx_grid.h>
 #include <sch_reference_list.h>
 #include <schematic_settings.h>
@@ -21,7 +22,16 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName, const
     for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
     {
         if( SCH_SYMBOL* symbol = m_symbolsList[i].GetSymbol() )
-            m_dataStore[symbol->m_Uuid][aFieldName] = symbol->GetFieldText( aFieldName );
+        {
+            if( SCH_FIELD* field = symbol->GetFieldByName( aFieldName ) )
+                m_dataStore[symbol->m_Uuid][aFieldName] = field->GetText();
+            // Handle fields with variables as names that are not present in the symbol
+            // by giving them the correct value
+            else if( aFieldName.StartsWith( wxT( "${" ) ) )
+                m_dataStore[symbol->m_Uuid][aFieldName] = aFieldName;
+            else
+                m_dataStore[symbol->m_Uuid][aFieldName] = wxEmptyString;
+        }
     }
 }
 
@@ -142,12 +152,7 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const DATA_MODEL_ROW& group, i
             wxString refFieldValue;
 
             if( resolveVars )
-            {
-                SCH_FIELD* field = ref.GetSymbol()->GetFieldByName( m_cols[aCol].m_fieldName );
-
-                if( field != nullptr )
-                    refFieldValue = field->GetShownText( &ref.GetSheetPath(), false );
-            }
+                refFieldValue = getFieldShownText( ref, m_cols[aCol].m_fieldName );
             else
                 refFieldValue = m_dataStore[symbolID][m_cols[aCol].m_fieldName];
 
@@ -345,15 +350,8 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef,
         if( !m_cols[i].m_group )
             continue;
 
-        wxString fieldName = m_cols[i].m_fieldName;
-        SCH_FIELD* lhField = lhRef.GetSymbol()->GetFieldByName( m_cols[i].m_fieldName );
-        SCH_FIELD* rhField = rhRef.GetSymbol()->GetFieldByName( m_cols[i].m_fieldName );
-
-        if( lhField == nullptr || rhField == nullptr )
-            return false;
-
-        if( lhField->GetShownText( &lhRef.GetSheetPath(), false )
-            != rhField->GetShownText( &rhRef.GetSheetPath(), false ) )
+        if( getFieldShownText( lhRef, m_cols[i].m_fieldName )
+            != getFieldShownText( rhRef, m_cols[i].m_fieldName ) )
         {
             return false;
         }
@@ -362,6 +360,34 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef,
     }
 
     return matchFound;
+}
+
+
+wxString FIELDS_EDITOR_GRID_DATA_MODEL::getFieldShownText( const SCH_REFERENCE& aRef,
+                                                           const wxString&      aFieldName )
+{
+    SCH_FIELD* field = aRef.GetSymbol()->GetFieldByName( aFieldName );
+
+    if( field )
+        return field->GetShownText( &aRef.GetSheetPath(), false );
+
+    // Handle fields with variables as names that are not present in the symbol
+    // by giving them the correct value by resolving against the symbol
+    if( aFieldName.StartsWith( wxT( "${" ) ) )
+    {
+        int                   depth = 0;
+        const SCH_SHEET_PATH& path = aRef.GetSheetPath();
+
+        std::function<bool( wxString* )> symbolResolver =
+                [&]( wxString* token ) -> bool
+                {
+                    return aRef.GetSymbol()->ResolveTextVar( &path, token, depth + 1 );
+                };
+
+        return ExpandTextVars( aFieldName, &symbolResolver );
+    }
+
+    return wxEmptyString;
 }
 
 
