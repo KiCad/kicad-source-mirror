@@ -39,16 +39,17 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
     std::map<wxString, wxString> mapOfAscFiles;
     std::map<wxString, wxString> mapOfAsyFiles;
 
-    // List of files to search (Give highest priority to files contained in same directory)
-    std::vector<wxString> searchDirs;
-    searchDirs.push_back( aLibraryFileName.GetPath() );
-    searchDirs.push_back( m_ltspiceDataDir.GetPathWithSep() + wxS( "sub" ) );
-    searchDirs.push_back( m_ltspiceDataDir.GetPathWithSep() + wxS( "sym" ) );
+    // Library paths to search (Give highest priority to files contained in same directory)
+    GetAscAndAsyFilePaths( aLibraryFileName.GetPath(), false, mapOfAscFiles, mapOfAsyFiles );
 
-    for( const wxString& searchDir : searchDirs )
-    {
-        GetAscAndAsyFilePaths( mapOfAscFiles, mapOfAsyFiles, wxDir( searchDir ), wxEmptyString );
-    }
+    // TODO: Custom paths go here (non-recursive)
+
+    // Default LTspice libs
+    GetAscAndAsyFilePaths( m_ltspiceDataDir.GetPathWithSep() + wxS( "sub" ), true, mapOfAscFiles,
+                           mapOfAsyFiles );
+
+    GetAscAndAsyFilePaths( m_ltspiceDataDir.GetPathWithSep() + wxS( "sym" ), true, mapOfAscFiles,
+                           mapOfAsyFiles );
 
     m_schematic = aSchematic;
 
@@ -185,9 +186,10 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
 }
 
 
-void LTSPICE_SCHEMATIC::GetAscAndAsyFilePaths( std::map<wxString, wxString>& aMapOfAscFiles,
+void LTSPICE_SCHEMATIC::GetAscAndAsyFilePaths( const wxDir& aDir, bool aRecursive,
+                                               std::map<wxString, wxString>& aMapOfAscFiles,
                                                std::map<wxString, wxString>& aMapOfAsyFiles,
-                                               const wxDir& aDir, const wxString& aBase )
+                                               const wxString&               aBase )
 {
     wxString filename;
 
@@ -239,6 +241,7 @@ void LTSPICE_SCHEMATIC::GetAscAndAsyFilePaths( std::map<wxString, wxString>& aMa
         }
     }
 
+    if( aRecursive )
     {
         bool cont = aDir.GetFirst( &filename, wxEmptyString, wxDIR_DIRS | wxDIR_HIDDEN );
 
@@ -247,7 +250,8 @@ void LTSPICE_SCHEMATIC::GetAscAndAsyFilePaths( std::map<wxString, wxString>& aMa
             wxFileName path( aDir.GetName(), filename );
             wxDir      subDir( path.GetFullPath() );
 
-            GetAscAndAsyFilePaths( aMapOfAscFiles, aMapOfAsyFiles, subDir, filename + wxS( "/" ) );
+            GetAscAndAsyFilePaths( subDir, true, aMapOfAscFiles, aMapOfAsyFiles,
+                                   filename + wxS( "/" ) );
 
             cont = aDir.GetNext( &filename );
         }

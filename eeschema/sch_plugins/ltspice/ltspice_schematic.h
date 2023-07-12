@@ -302,9 +302,10 @@ public:
      * @param aMapOfAscFiles map of string containing content from asc files.
      * @param aMapOfAsyFiles map of string containing content from asy files.
      */
-    void GetAscAndAsyFilePaths( std::map<wxString, wxString>& aMapOfAscFiles,
-                                std::map<wxString, wxString>& aMapOfAsyFiles, const wxDir& aDir,
-                                const wxString& aBase );
+    void GetAscAndAsyFilePaths( const wxDir& aDir, bool aRecursive,
+                                std::map<wxString, wxString>& aMapOfAscFiles,
+                                std::map<wxString, wxString>& aMapOfAsyFiles,
+                                const wxString&               aBase = wxEmptyString );
 
     /**
      * Used to get symbols list present in asc file.
