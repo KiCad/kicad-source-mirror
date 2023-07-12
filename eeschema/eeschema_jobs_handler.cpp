@@ -326,7 +326,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
                                    field.name )
                         != aBomJob->m_fieldsGroupBy.end();
         field.label =
-                ( ( aBomJob->m_fieldsLabels.size() < i ) && !aBomJob->m_fieldsLabels[i].IsEmpty() )
+                ( ( aBomJob->m_fieldsLabels.size() > i ) && !aBomJob->m_fieldsLabels[i].IsEmpty() )
                         ? aBomJob->m_fieldsLabels[i]
                         : field.name;
 

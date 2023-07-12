@@ -33,16 +33,16 @@ CLI::EXPORT_SCH_BOM_COMMAND::EXPORT_SCH_BOM_COMMAND() : EXPORT_PCB_BASE_COMMAND(
 {
     // Field output options
     m_argParser.add_argument( ARG_FIELDS )
-            .help( UTF8STDSTR( _( ARG_FIELDS ) ) )
-            .default_value( std::string( "Reference,Value,Footprint,Quantity" ) );
+            .help( UTF8STDSTR( _( ARG_FIELDS_DESC ) ) )
+            .default_value( std::string( "Reference,Value,Footprint,Quantity,${DNP}" ) );
 
     m_argParser.add_argument( ARG_LABELS )
             .help( UTF8STDSTR( _( ARG_LABELS_DESC ) ) )
-            .default_value( std::string( "Refs,Value,Footprint,Qty" ) );
+            .default_value( std::string( "Refs,Value,Footprint,Qty,DNP" ) );
 
     m_argParser.add_argument( ARG_GROUP_BY )
             .help( UTF8STDSTR( _( ARG_GROUP_BY_DESC ) ) )
-            .default_value( std::string( "Value,Footprint" ) );
+            .default_value( std::string( "Value,Footprint,${DNP}" ) );
 
     m_argParser.add_argument( ARG_SORT_FIELD )
             .help( UTF8STDSTR( _( ARG_SORT_FIELD_DESC ) ) )
