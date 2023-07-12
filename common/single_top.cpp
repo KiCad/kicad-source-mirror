@@ -357,6 +357,7 @@ bool PGM_SINGLE_TOP::OnPgmInit()
     // OpenProjectFiles() that can update/use some widgets.
     // The 2 calls to wxSafeYield are needed on wxGTK for best results.
     wxSafeYield();
+    HideSplash();
     frame->Show();
     wxSafeYield();
 
@@ -407,8 +408,6 @@ bool PGM_SINGLE_TOP::OnPgmInit()
 
         frame->OpenProjectFiles( fileArgs );
     }
-
-    HideSplash();
 
     return true;
 }
