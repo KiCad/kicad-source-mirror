@@ -61,12 +61,12 @@ SCH_FIELD::SCH_FIELD( const VECTOR2I& aPos, int aFieldId, SCH_ITEM* aParent,
     SCH_ITEM( aParent, SCH_FIELD_T ),
     EDA_TEXT( schIUScale, wxEmptyString ),
     m_id( 0 ),
-    m_name( aName ),
     m_showName( false ),
     m_allowAutoPlace( true ),
     m_renderCacheValid( false ),
     m_lastResolvedColor( COLOR4D::UNSPECIFIED )
 {
+    SetName( aName );
     SetTextPos( aPos );
     SetId( aFieldId );  // will also set the layer
     SetVisible( false );
@@ -87,6 +87,7 @@ SCH_FIELD::SCH_FIELD( const SCH_FIELD& aField ) :
     m_name           = aField.m_name;
     m_showName       = aField.m_showName;
     m_allowAutoPlace = aField.m_allowAutoPlace;
+    m_isNamedVariable = aField.m_isNamedVariable;
 
     m_renderCache.clear();
 
@@ -107,10 +108,11 @@ SCH_FIELD& SCH_FIELD::operator=( const SCH_FIELD& aField )
 {
     EDA_TEXT::operator=( aField );
 
-    m_id             = aField.m_id;
-    m_name           = aField.m_name;
-    m_showName       = aField.m_showName;
-    m_allowAutoPlace = aField.m_allowAutoPlace;
+    m_id              = aField.m_id;
+    m_name            = aField.m_name;
+    m_showName        = aField.m_showName;
+    m_allowAutoPlace  = aField.m_allowAutoPlace;
+    m_isNamedVariable = aField.m_isNamedVariable;
 
     m_renderCache.clear();
 
@@ -172,6 +174,12 @@ void SCH_FIELD::SetId( int aId )
 }
 
 
+wxString SCH_FIELD::GetShownName() const
+{
+    return m_isNamedVariable ? GetTextVars( GetName() ) : GetName();
+}
+
+
 wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText,
                                   int aDepth ) const
 {
@@ -197,7 +205,7 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
     wxString text = EDA_TEXT::GetShownText( aAllowExtraText, aDepth );
 
     if( IsNameShown() && aAllowExtraText )
-        text = GetName() << wxS( ": " ) << text;
+        text = GetShownName() << wxS( ": " ) << text;
 
     if( text == wxS( "~" ) ) // Legacy placeholder for empty string
     {
@@ -417,6 +425,7 @@ void SCH_FIELD::SwapData( SCH_ITEM* aItem )
     std::swap( m_layer, item->m_layer );
     std::swap( m_showName, item->m_showName );
     std::swap( m_allowAutoPlace, item->m_allowAutoPlace );
+    std::swap( m_isNamedVariable, item->m_isNamedVariable );
     SwapText( *item );
     SwapAttributes( *item );
 
@@ -835,6 +844,27 @@ void SCH_FIELD::DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const
 }
 
 
+void SCH_FIELD::SetName( const wxString& aName )
+{
+    m_name = aName;
+    m_isNamedVariable = m_name.StartsWith( wxT( "${" ) );
+
+    if( m_isNamedVariable )
+        EDA_TEXT::SetText( aName );
+}
+
+
+void SCH_FIELD::SetText( const wxString& aText )
+{
+    // Don't allow modification of text value when using named variables
+    // as field name.
+    if( m_isNamedVariable )
+        return;
+
+    EDA_TEXT::SetText( aText );
+}
+
+
 wxString SCH_FIELD::GetName( bool aUseDefaultName ) const
 {
     if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
@@ -1163,5 +1193,17 @@ static struct SCH_FIELD_DESC
         propMgr.Mask( TYPE_HASH( SCH_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Visible" ) );
         propMgr.Mask( TYPE_HASH( SCH_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Width" ) );
         propMgr.Mask( TYPE_HASH( SCH_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Height" ) );
+
+        auto isNotNamedVariable =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( SCH_FIELD* field = dynamic_cast<SCH_FIELD*>( aItem ) )
+                        return !field->IsNamedVariable();
+
+                    return true;
+                };
+
+        propMgr.OverrideWriteability( TYPE_HASH( SCH_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Text" ),
+                                      isNotNamedVariable );
     }
 } _SCH_FIELD_DESC;

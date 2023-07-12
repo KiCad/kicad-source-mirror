@@ -500,7 +500,7 @@ DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
 
     init();
 
-    if( m_isSheetFilename )
+    if( m_isSheetFilename || m_field->IsNamedVariable() )
     {
         m_StyledTextCtrl->Enable( false );
         m_TextCtrl->Enable( false );

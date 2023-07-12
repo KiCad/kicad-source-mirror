@@ -341,6 +341,11 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties()
             m_grid->SetColAttr( col, attr );
             m_grid->SetColFormatNumber( col );
         }
+        else if( m_dataModel->GetColFieldName( col ).StartsWith( wxS( "${" ) ) )
+        {
+            attr->SetReadOnly();
+            m_grid->SetColAttr( col, attr );
+        }
         else
         {
             attr->SetEditor( m_grid->GetDefaultEditor() );
@@ -574,14 +579,15 @@ void DIALOG_SYMBOL_FIELDS_TABLE::LoadFieldNames()
     }
 
     for( const wxString& fieldName : userFieldNames )
-        AddField( fieldName, fieldName, true, false );
+        AddField( fieldName, GetTextVars( fieldName ), true, false );
 
     // Add any templateFieldNames which aren't already present in the userFieldNames
     for( const TEMPLATE_FIELDNAME& templateFieldname :
          m_schSettings.m_TemplateFieldNames.GetTemplateFieldNames() )
     {
         if( userFieldNames.count( templateFieldname.m_Name ) == 0 )
-            AddField( templateFieldname.m_Name, templateFieldname.m_Name, false, false );
+            AddField( templateFieldname.m_Name, GetTextVars( templateFieldname.m_Name ), false,
+                      false );
     }
 }
 
@@ -611,7 +617,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnAddField( wxCommandEvent& event )
         }
     }
 
-    AddField( fieldName, fieldName, true, false, true );
+    AddField( fieldName, GetTextVars( fieldName ), true, false, true );
 
     wxGridCellAttr* attr = new wxGridCellAttr;
     m_grid->SetColAttr( m_dataModel->GetColsCount() - 1, attr );
@@ -1536,7 +1542,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
 
         // Properties like label, etc. will be added in the next loop
         if( !found )
-            AddField( fieldName, fieldName, false, false );
+            AddField( fieldName, GetTextVars( fieldName ), false, false );
     }
 
     // Sync all fields

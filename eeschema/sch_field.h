@@ -114,7 +114,9 @@ public:
      */
     wxString GetCanonicalName() const;
 
-    void SetName( const wxString& aName ) { m_name = aName; }
+    void SetName( const wxString& aName );
+
+    void SetText( const wxString& aText ) override;
 
     /**
      * Get the initial name of the field set at creation (or set by SetName()).
@@ -126,6 +128,12 @@ public:
 
     void SetId( int aId );
 
+    /**
+     * Gets the fields name as displayed on the schematic or
+     * in the symbol fields table. This is either the same as GetName() or
+     * if the field has a variable for name, the variable namer with the ${} stripped.
+     */
+    wxString GetShownName() const;
     wxString GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText,
                            int aDepth = 0 ) const;
 
@@ -162,6 +170,14 @@ public:
 
     bool IsNameShown() const { return m_showName; }
     void SetNameShown( bool aShown = true ) { m_showName = aShown; }
+
+    /**
+     * Named variables are fields whose names are variables like ${VAR}.
+     *
+     * The shown name of these fields is VAR and the value is resolved from
+     * ${VAR}
+     */
+    bool IsNamedVariable() const { return m_isNamedVariable; }
 
     bool CanAutoplace() const { return m_allowAutoPlace; }
     void SetCanAutoplace( bool aCanPlace ) { m_allowAutoPlace = aCanPlace; }
@@ -258,6 +274,8 @@ private:
 
     bool     m_showName;   ///< Render the field name in addition to its value
     bool     m_allowAutoPlace;  ///< This field can be autoplaced
+    bool     m_isNamedVariable; ///< If the field name is a variable name, e.g. ${DNP}
+                                ///< then the value field is forced to be the same as the name
 
     mutable bool                                        m_renderCacheValid;
     mutable VECTOR2I                                    m_renderCachePos;

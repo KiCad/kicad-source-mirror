@@ -19,6 +19,7 @@
  */
 
 #include "eeschema_jobs_handler.h"
+#include <common.h>
 #include <pgm_base.h>
 #include <cli/exit_codes.h>
 #include <sch_plotter.h>
@@ -301,14 +302,15 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     }
 
     for( const wxString& fieldName : userFieldNames )
-        dataModel.AddColumn( fieldName, fieldName, true );
+        dataModel.AddColumn( fieldName, GetTextVars( fieldName ), true );
 
     // Add any templateFieldNames which aren't already present in the userFieldNames
     for( const TEMPLATE_FIELDNAME& templateFieldname :
          sch->Settings().m_TemplateFieldNames.GetTemplateFieldNames() )
     {
         if( userFieldNames.count( templateFieldname.m_Name ) == 0 )
-            dataModel.AddColumn( templateFieldname.m_Name, templateFieldname.m_Name, false );
+            dataModel.AddColumn( templateFieldname.m_Name, GetTextVars( templateFieldname.m_Name ),
+                                 false );
     }
 
     BOM_PRESET preset;
