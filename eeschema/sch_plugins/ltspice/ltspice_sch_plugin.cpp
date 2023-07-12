@@ -95,7 +95,7 @@ SCH_SHEET* SCH_LTSPICE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSche
     if( !ltspiceDataDir.DirExists() )
     {
         // Mac path
-        wxFileName ltspiceDataDir( KIPLATFORM::ENV::GetUserDataPath(), wxEmptyString );
+        ltspiceDataDir = wxFileName( KIPLATFORM::ENV::GetUserDataPath(), wxEmptyString );
         ltspiceDataDir.RemoveLastDir();        // "kicad"
         ltspiceDataDir.AppendDir( wxS( "LTspice" ) );
         ltspiceDataDir.AppendDir( wxS( "lib" ) );
