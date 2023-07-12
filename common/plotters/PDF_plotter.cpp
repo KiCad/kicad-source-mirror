@@ -474,36 +474,36 @@ void PDF_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double
     VECTOR2D dev_start = userToDeviceCoordinates( start );
 
     // Deduplicate images
-    auto findHandleForImage = [&]( const wxImage& aImage ) -> int
+    auto findHandleForImage = [&]( const wxImage& aCurrImage ) -> int
     {
         for( const auto& [imgHandle, image] : m_imageHandles )
         {
-            if( image.IsSameAs( aImage ) )
+            if( image.IsSameAs( aCurrImage ) )
                 return imgHandle;
 
-            if( image.GetWidth() != aImage.GetWidth() )
+            if( image.GetWidth() != aCurrImage.GetWidth() )
                 continue;
 
-            if( image.GetHeight() != aImage.GetHeight() )
+            if( image.GetHeight() != aCurrImage.GetHeight() )
                 continue;
 
-            if( image.GetType() != aImage.GetType() )
+            if( image.GetType() != aCurrImage.GetType() )
                 continue;
 
-            if( image.HasAlpha() != aImage.HasAlpha() )
+            if( image.HasAlpha() != aCurrImage.HasAlpha() )
                 continue;
 
-            if( image.HasMask() != aImage.HasMask() || image.GetMaskRed() != aImage.GetMaskRed()
-                || image.GetMaskGreen() != aImage.GetMaskGreen()
-                || image.GetMaskBlue() != aImage.GetMaskBlue() )
+            if( image.HasMask() != aCurrImage.HasMask() || image.GetMaskRed() != aCurrImage.GetMaskRed()
+                || image.GetMaskGreen() != aCurrImage.GetMaskGreen()
+                || image.GetMaskBlue() != aCurrImage.GetMaskBlue() )
                 continue;
 
             int pixCount = image.GetWidth() * image.GetHeight();
-            
-            if( memcmp( image.GetData(), aImage.GetData(), pixCount * 3 ) != 0 )
+
+            if( memcmp( image.GetData(), aCurrImage.GetData(), pixCount * 3 ) != 0 )
                 continue;
 
-            if( image.HasAlpha() && memcmp( image.GetAlpha(), aImage.GetAlpha(), pixCount ) != 0 )
+            if( image.HasAlpha() && memcmp( image.GetAlpha(), aCurrImage.GetAlpha(), pixCount ) != 0 )
                 continue;
 
             return imgHandle;
@@ -728,7 +728,7 @@ void WriteImageStream( const wxImage& aImage, wxDataOutputStream& aOut, wxColor 
             {
                 // Greyscale conversion (CIE 1931)
                 unsigned char grey = KiROUND( r * 0.2126 + g * 0.7152 + b * 0.0722 );
-                
+
                 aOut.Write8( grey );
             }
         }
