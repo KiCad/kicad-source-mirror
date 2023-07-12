@@ -18,10 +18,10 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <tool/tool_manager.h>
-#include <gerbview_id.h>
 #include <bitmaps.h>
-#include "gerbview_actions.h"
+#include <tool/tool_action.h>
+#include <tool/tool_manager.h>
+#include <tools/gerbview_actions.h>
 
 
 // Actions, being statically-defined, require specialized I18N handling.  We continue to
@@ -34,195 +34,255 @@
 
 // GERBVIEW_CONTROL
 //
-TOOL_ACTION GERBVIEW_ACTIONS::openAutodetected( "gerbview.Control.openAutodetected",
-        AS_GLOBAL, 0, "",
-        _( "Open Autodetected File(s)..." ),
-        _( "Open Autodetected file(s) on a new layer." ),
-        BITMAPS::load_gerber );
+TOOL_ACTION GERBVIEW_ACTIONS::openAutodetected( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.openAutodetected" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Open Autodetected File(s)..." ) )
+        .Tooltip( _( "Open Autodetected file(s) on a new layer." ) )
+        .Icon( BITMAPS::load_gerber ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::openGerber( "gerbview.Control.openGerber",
-        AS_GLOBAL, 0, "",
-        _( "Open Gerber Plot File(s)..." ),
-        _( "Open Gerber plot file(s) on a new layer." ),
-        BITMAPS::load_gerber );
+TOOL_ACTION GERBVIEW_ACTIONS::openGerber( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.openGerber" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Open Gerber Plot File(s)..." ) )
+        .Tooltip( _( "Open Gerber plot file(s) on a new layer." ) )
+        .Icon( BITMAPS::load_gerber ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::openDrillFile( "gerbview.Control.openDrillFile",
-        AS_GLOBAL, 0, "",
-        _( "Open Excellon Drill File(s)..." ),
-        _( "Open Excellon drill file(s) on a new layer." ),
-        BITMAPS::load_drill );
+TOOL_ACTION GERBVIEW_ACTIONS::openDrillFile( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.openDrillFile" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Open Excellon Drill File(s)..." ) )
+        .Tooltip( _( "Open Excellon drill file(s) on a new layer." ) )
+        .Icon( BITMAPS::load_drill ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::openJobFile( "gerbview.Control.openJobFile",
-        AS_GLOBAL, 0, "",
-        _( "Open Gerber Job File..." ),
-        _( "Open a Gerber job file and its associated gerber plot files" ),
-        BITMAPS::file_gerber_job );
+TOOL_ACTION GERBVIEW_ACTIONS::openJobFile( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.openJobFile" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Open Gerber Job File..." ) )
+        .Tooltip( _( "Open a Gerber job file and its associated gerber plot files" ) )
+        .Icon( BITMAPS::file_gerber_job ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::openZipFile( "gerbview.Control.openZipFile",
-        AS_GLOBAL, 0, "",
-        _( "Open Zip Archive File..." ),
-        _( "Open a zipped archive (Gerber and Drill) file" ),
-        BITMAPS::zip );
+TOOL_ACTION GERBVIEW_ACTIONS::openZipFile( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.openZipFile" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Open Zip Archive File..." ) )
+        .Tooltip( _( "Open a zipped archive (Gerber and Drill) file" ) )
+        .Icon( BITMAPS::zip ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::toggleLayerManager( "gerbview.Control.toggleLayerManager",
-        AS_GLOBAL, 0, "",
-        _( "Show Layers Manager" ),
-        _( "Show or hide the layer manager" ),
-        BITMAPS::layers_manager );
+TOOL_ACTION GERBVIEW_ACTIONS::toggleLayerManager( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.toggleLayerManager" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Show Layers Manager" ) )
+        .Tooltip( _( "Show or hide the layer manager" ) )
+        .Icon( BITMAPS::layers_manager ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::showDCodes( "gerbview.Inspection.showDCodes",
-        AS_GLOBAL, 0, "",
-        _( "List DCodes..." ),
-        _( "List D-codes defined in Gerber files" ),
-        BITMAPS::show_dcodenumber );
+TOOL_ACTION GERBVIEW_ACTIONS::showDCodes( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Inspection.showDCodes" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "List DCodes..." ) )
+        .Tooltip( _( "List D-codes defined in Gerber files" ) )
+        .Icon( BITMAPS::show_dcodenumber ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::showSource( "gerbview.Inspection.showSource",
-        AS_GLOBAL, 0, "",
-        _( "Show Source..." ),
-        _( "Show source file for the current layer" ),
-        BITMAPS::tools );
+TOOL_ACTION GERBVIEW_ACTIONS::showSource( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Inspection.showSource" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Show Source..." ) )
+        .Tooltip( _( "Show source file for the current layer" ) )
+        .Icon( BITMAPS::tools ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::exportToPcbnew( "gerbview.Control.exportToPcbnew",
-        AS_GLOBAL, 0, "",
-        _( "Export to PCB Editor..." ),
-        _( "Export data as a KiCad PCB file" ),
-        BITMAPS::export_to_pcbnew );
+TOOL_ACTION GERBVIEW_ACTIONS::exportToPcbnew( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.exportToPcbnew" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Export to PCB Editor..." ) )
+        .Tooltip( _( "Export data as a KiCad PCB file" ) )
+        .Icon( BITMAPS::export_to_pcbnew ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::clearLayer( "gerbview.Control.clearLayer",
-        AS_GLOBAL, 0, "",
-        _( "Clear Current Layer..." ), _( "Clear the selected graphic layer" ),
-        BITMAPS::delete_sheet );
+TOOL_ACTION GERBVIEW_ACTIONS::clearLayer( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.clearLayer" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Clear Current Layer..." ) )
+        .Tooltip( _( "Clear the selected graphic layer" ) )
+        .Icon( BITMAPS::delete_sheet ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::clearAllLayers( "gerbview.Control.clearAllLayers",
-        AS_GLOBAL, 0, "",
-        _( "Clear All Layers" ),
-        _( "Clear all layers. All data will be deleted" ),
-        BITMAPS::delete_gerber );
+TOOL_ACTION GERBVIEW_ACTIONS::clearAllLayers( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.clearAllLayers" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Clear All Layers" ) )
+        .Tooltip( _( "Clear all layers. All data will be deleted" ) )
+        .Icon( BITMAPS::delete_gerber ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::reloadAllLayers( "gerbview.Control.reloadAllLayers",
-        AS_GLOBAL, 0, "",
-        _( "Reload All Layers" ),
-        _( "Reload all layers. All data will be reloaded" ),
-        BITMAPS::reload );
+TOOL_ACTION GERBVIEW_ACTIONS::reloadAllLayers( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.reloadAllLayers" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Reload All Layers" ) )
+        .Tooltip( _( "Reload all layers. All data will be reloaded" ) )
+        .Icon( BITMAPS::reload ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::layerChanged( "gerbview.Control.layerChanged",
-        AS_GLOBAL, 0, "", "", "",
-        BITMAPS::INVALID_BITMAP, AF_NOTIFY );
+TOOL_ACTION GERBVIEW_ACTIONS::layerChanged( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.layerChanged" )
+        .Scope( AS_GLOBAL )
+        .Flags( AF_NOTIFY ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::highlightClear( "gerbview.Control.highlightClear",
-        AS_GLOBAL, 0, "",
-        _( "Clear Highlight" ), _( "Clear Highlight" ),
-        BITMAPS::cancel );
+TOOL_ACTION GERBVIEW_ACTIONS::highlightClear( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.highlightClear" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Clear Highlight" ) )
+        .Tooltip( _( "Clear Highlight" ) )
+        .Icon( BITMAPS::cancel ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::highlightNet( "gerbview.Control.highlightNet",
-        AS_GLOBAL, 0, "",
-        _( "Highlight Net" ), _( "Highlight Net" ),
-        BITMAPS::general_ratsnest );
+TOOL_ACTION GERBVIEW_ACTIONS::highlightNet( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.highlightNet" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Highlight Net" ) )
+        .Tooltip( _( "Highlight Net" ) )
+        .Icon( BITMAPS::general_ratsnest ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::highlightComponent( "gerbview.Control.highlightComponent",
-        AS_GLOBAL, 0, "",
-        _( "Highlight Component" ), _( "Highlight Component" ),
-        BITMAPS::module );
+TOOL_ACTION GERBVIEW_ACTIONS::highlightComponent( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.highlightComponent" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Highlight Component" ) )
+        .Tooltip( _( "Highlight Component" ) )
+        .Icon( BITMAPS::module ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::highlightAttribute( "gerbview.Control.highlightAttribute",
-        AS_GLOBAL, 0, "",
-        _( "Highlight Attribute" ), _( "Highlight Attribute" ),
-        BITMAPS::flag );
+TOOL_ACTION GERBVIEW_ACTIONS::highlightAttribute( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.highlightAttribute" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Highlight Attribute" ) )
+        .Tooltip( _( "Highlight Attribute" ) )
+        .Icon( BITMAPS::flag ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::highlightDCode( "gerbview.Control.highlightDCode",
-        AS_GLOBAL, 0, "",
-        _( "Highlight DCode" ), _( "Highlight DCode" ),
-        BITMAPS::show_dcodenumber );
+TOOL_ACTION GERBVIEW_ACTIONS::highlightDCode( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.highlightDCode" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Highlight DCode" ) )
+        .Tooltip( _( "Highlight DCode" ) )
+        .Icon( BITMAPS::show_dcodenumber ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::layerNext( "gerbview.Control.layerNext",
-        AS_GLOBAL,
-        WXK_PAGEDOWN, LEGACY_HK_NAME( "Switch to Next Layer" ),
-        _( "Next Layer" ), _( "Next Layer" ) );
+TOOL_ACTION GERBVIEW_ACTIONS::layerNext( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.layerNext" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( WXK_PAGEDOWN )
+        .LegacyHotkeyName( "Switch to Next Layer" )
+        .MenuText( _( "Next Layer" ) )
+        .Tooltip( _( "Next Layer" ) ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::layerPrev( "gerbview.Control.layerPrev",
-        AS_GLOBAL,
-        WXK_PAGEUP, LEGACY_HK_NAME( "Switch to Previous Layer" ),
-        _( "Previous Layer" ), _( "Previous Layer" ) );
+TOOL_ACTION GERBVIEW_ACTIONS::layerPrev( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.layerPrev" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( WXK_PAGEUP )
+        .LegacyHotkeyName( "Switch to Previous Layer" )
+        .MenuText( _( "Previous Layer" ) )
+        .Tooltip( _( "Previous Layer" ) ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::moveLayerUp( "gerbview.Control.moveLayerUp",
-        AS_GLOBAL,
-        '+', "",
-        _( "Move Layer Up" ), _( "Move Current Layer Up" ),
-        BITMAPS::up );
+TOOL_ACTION GERBVIEW_ACTIONS::moveLayerUp( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.moveLayerUp" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( '+' )
+        .MenuText( _( "Move Layer Up" ) )
+        .Tooltip( _( "Move Current Layer up" ) )
+        .Icon( BITMAPS::up ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::moveLayerDown( "gerbview.Control.moveLayerDown",
-        AS_GLOBAL,
-        '-', "",
-        _( "Move Layer Down" ), _( "Move Current Layer Down" ),
-        BITMAPS::down );
+TOOL_ACTION GERBVIEW_ACTIONS::moveLayerDown( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.moveLayerDown" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( '-' )
+        .MenuText( _( "Move Layer Down" ) )
+        .Tooltip( _( "Move Current Layer Down" ) )
+        .Icon( BITMAPS::down ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::linesDisplayOutlines( "gerbview.Control.linesDisplayOutlines",
-        AS_GLOBAL,
-        'L', LEGACY_HK_NAME( "Gbr Lines Display Mode" ),
-        _( "Sketch Lines" ), _( "Show lines in outline mode" ),
-        BITMAPS::showtrack );
+TOOL_ACTION GERBVIEW_ACTIONS::linesDisplayOutlines( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.linesDisplayOutlines" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'L' )
+        .LegacyHotkeyName( "Gbr Lines Display Mode" )
+        .MenuText( _( "Sketch Lines" ) )
+        .Tooltip( _( "Show lines in outline mode" ) )
+        .Icon( BITMAPS::showtrack ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::flashedDisplayOutlines( "gerbview.Control.flashedDisplayOutlines",
-        AS_GLOBAL,
-        'F', LEGACY_HK_NAME( "Gbr Flashed Display Mode" ),
-        _( "Sketch Flashed Items" ), _( "Show flashed items in outline mode" ),
-        BITMAPS::pad_sketch );
+TOOL_ACTION GERBVIEW_ACTIONS::flashedDisplayOutlines( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.flashedDisplayOutlines" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'F' )
+        .LegacyHotkeyName( "Gbr Flashed Display Mode" )
+        .MenuText( _( "Sketch Flashed Items" ) )
+        .Tooltip( _( "Show flashed items in outline mode" ) )
+        .Icon( BITMAPS::pad_sketch ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::polygonsDisplayOutlines( "gerbview.Control.polygonsDisplayOutlines",
-        AS_GLOBAL,
-        'P', LEGACY_HK_NAME( "Gbr Polygons Display Mode" ),
-        _( "Sketch Polygons" ), _( "Show polygons in outline mode" ),
-        BITMAPS::opt_show_polygon );
+TOOL_ACTION GERBVIEW_ACTIONS::polygonsDisplayOutlines( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.polygonsDisplayOutlines" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'P' )
+        .LegacyHotkeyName( "Gbr Polygons Display Mode" )
+        .MenuText( _( "Sketch Polygons" ) )
+        .Tooltip( _( "Show polygons in outline mode" ) )
+        .Icon( BITMAPS::opt_show_polygon ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::negativeObjectDisplay( "gerbview.Control.negativeObjectDisplay",
-        AS_GLOBAL,
-        'N', LEGACY_HK_NAME( "Gbr Negative Obj Display Mode" ),
-        _( "Ghost Negative Objects" ), _( "Show negative objects in ghost color" ),
-        BITMAPS::gerbview_show_negative_objects );
+TOOL_ACTION GERBVIEW_ACTIONS::negativeObjectDisplay( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.negativeObjectDisplay" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'N' )
+        .LegacyHotkeyName( "Gbr Negative Obj Display Mode" )
+        .MenuText( _( "Ghost Negative Objects" ) )
+        .Tooltip( _( "Show negative objects in ghost color" ) )
+        .Icon( BITMAPS::gerbview_show_negative_objects ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::dcodeDisplay( "gerbview.Control.dcodeDisplay",
-        AS_GLOBAL,
-        'D', LEGACY_HK_NAME( "DCodes Display Mode" ),
-        _( "Show DCodes" ), _( "Show dcode number" ),
-        BITMAPS::show_dcodenumber );
+TOOL_ACTION GERBVIEW_ACTIONS::dcodeDisplay( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.dcodeDisplay" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'D' )
+        .LegacyHotkeyName( "DCodes Display Mode" )
+        .MenuText( _( "Show DCodes" ) )
+        .Tooltip( _( "Show dcode number" ) )
+        .Icon( BITMAPS::show_dcodenumber ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::toggleDiffMode( "gerbview.Control.toggleDiffMode",
-        AS_GLOBAL, 0, "",
-        _( "Show in Differential Mode" ), _( "Show layers in differential compare mode" ),
-        BITMAPS::gbr_select_mode1 );
+TOOL_ACTION GERBVIEW_ACTIONS::toggleDiffMode( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.toggleDiffMode" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Show in Differential Mode" ) )
+        .Tooltip( _( "Show layers in differential compare mode" ) )
+        .Icon( BITMAPS::gbr_select_mode1 ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::toggleXORMode( "gerbview.Control.toggleXORMode",
-        AS_GLOBAL, 0, "",
-        _( "Show in XOR Mode" ), _( "Show layers in exclusive-or compare mode" ),
-        BITMAPS::gbr_select_mode2 );
+TOOL_ACTION GERBVIEW_ACTIONS::toggleXORMode( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.toggleXORMode" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Show in XOR Mode" ) )
+        .Tooltip( _( "Show layers in exclusive-or compare mode" ) )
+        .Icon( BITMAPS::gbr_select_mode2 ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::flipGerberView( "gerbview.Control.flipGerberView",
-        AS_GLOBAL, 0, "",
-        _( "Flip Gerber View" ), _( "Show as mirror image" ),
-        BITMAPS::flip_board );
+TOOL_ACTION GERBVIEW_ACTIONS::flipGerberView( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.flipGerberView" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Flip Gerber View" ) )
+        .Tooltip( _( "Show as mirror image" ) )
+        .Icon( BITMAPS::flip_board ) );
 
 
 // GERBVIEW_SELECTION_TOOL
 //
-TOOL_ACTION GERBVIEW_ACTIONS::selectionActivate( "gerbview.InteractiveSelection",
-        AS_GLOBAL, 0, "",
-        "", "", // No description, it is not supposed to be shown anywhere
-        BITMAPS::INVALID_BITMAP, AF_ACTIVATE );
+TOOL_ACTION GERBVIEW_ACTIONS::selectionActivate( TOOL_ACTION_ARGS()
+        .Name( "gerbview.InteractiveSelection" )
+        .Scope( AS_GLOBAL )
+        .Flags( AF_ACTIVATE ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::selectItem( "gerbview.InteractiveSelection.SelectItem",
-        AS_GLOBAL );
+TOOL_ACTION GERBVIEW_ACTIONS::selectItem( TOOL_ACTION_ARGS()
+        .Name( "gerbview.InteractiveSelection.SelectItem" )
+        .Scope( AS_GLOBAL ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::unselectItem( "gerbview.InteractiveSelection.UnselectItem",
-        AS_GLOBAL );
+TOOL_ACTION GERBVIEW_ACTIONS::unselectItem( TOOL_ACTION_ARGS()
+        .Name( "gerbview.InteractiveSelection.UnselectItem" )
+        .Scope( AS_GLOBAL ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::selectionClear( "gerbview.InteractiveSelection.Clear",
-        AS_GLOBAL );
+TOOL_ACTION GERBVIEW_ACTIONS::selectionClear( TOOL_ACTION_ARGS()
+        .Name( "gerbview.InteractiveSelection.Clear" )
+        .Scope( AS_GLOBAL ) );
 
 
 // Drag and drop
 //
-TOOL_ACTION GERBVIEW_ACTIONS::loadZipFile( "gerbview.Control.loadZipFile",
-        AS_GLOBAL );
+TOOL_ACTION GERBVIEW_ACTIONS::loadZipFile( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.loadZipFile" )
+        .Scope( AS_GLOBAL ) );
 
-TOOL_ACTION GERBVIEW_ACTIONS::loadGerbFiles( "gerbview.Control.loadGerbFiles",
-        AS_GLOBAL );
+TOOL_ACTION GERBVIEW_ACTIONS::loadGerbFiles( TOOL_ACTION_ARGS()
+        .Name( "gerbview.Control.loadGerbFiles" )
+        .Scope( AS_GLOBAL ) );
