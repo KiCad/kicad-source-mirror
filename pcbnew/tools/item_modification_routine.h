@@ -81,6 +81,8 @@ public:
     {
     }
 
+    virtual ~ITEM_MODIFICATION_ROUTINE() = default;
+
     unsigned GetSuccesses() const { return m_numSuccesses; }
 
     unsigned GetFailures() const { return m_numFailures; }
