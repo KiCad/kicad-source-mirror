@@ -334,6 +334,9 @@ private:
     void destroyLayers();
 
     // Helper functions to create the board
+    void createViaWithMargin( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDstContainer,
+                              int aMargin );
+
     void createTrack( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDstContainer );
 
     void createPadWithMargin( const PAD *aPad, CONTAINER_2D_BASE* aDstContainer,

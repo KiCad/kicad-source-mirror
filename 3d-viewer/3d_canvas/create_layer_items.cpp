@@ -978,6 +978,35 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             }
         }
 
+        // Add via tech layers
+        if( ( layer == F_Mask || layer == B_Mask ) && !m_board->GetTentVias() )
+        {
+            int maskExpansion = GetBoard()->GetDesignSettings().m_SolderMaskExpansion;
+
+            for( PCB_TRACK* track : m_board->Tracks() )
+            {
+                if( track->Type() == PCB_VIA_T
+                        && static_cast<const PCB_VIA*>( track )->FlashLayer( layer )  )
+                {
+                    createViaWithMargin( track, layerContainer, maskExpansion );
+                }
+            }
+
+            // Add via tech layers - contours (vertical walls)
+            if( buildVerticalWallsForTechLayers )
+            {
+                for( PCB_TRACK* track : m_board->Tracks() )
+                {
+                    if( track->Type() == PCB_VIA_T
+                            && static_cast<const PCB_VIA*>( track )->FlashLayer( layer )  )
+                    {
+                        track->TransformShapeToPolygon( *layerPoly, layer, maskExpansion, maxError,
+                                                        ERROR_INSIDE );
+                    }
+                }
+            }
+        }
+
         // Add footprints tech layers - objects
         for( FOOTPRINT* footprint : m_board->Footprints() )
         {

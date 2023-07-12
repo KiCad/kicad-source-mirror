@@ -229,6 +229,19 @@ void BOARD_ADAPTER::addFootprintShapes( const FOOTPRINT* aFootprint, CONTAINER_2
 }
 
 
+void BOARD_ADAPTER::createViaWithMargin( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDstContainer,
+                                         int aMargin )
+{
+    SFVEC2F start3DU = TO_SFVEC2F( aTrack->GetStart() );
+    SFVEC2F end3DU = TO_SFVEC2F( aTrack->GetEnd() );
+
+    const float radius3DU = TO_3DU( ( aTrack->GetWidth() / 2 ) + aMargin );
+
+    if( radius3DU > 0.0 )
+        aDstContainer->Add( new FILLED_CIRCLE_2D( start3DU, radius3DU, *aTrack ) );
+}
+
+
 void BOARD_ADAPTER::createTrack( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDstContainer )
 {
     SFVEC2F start3DU = TO_SFVEC2F( aTrack->GetStart() );
@@ -238,7 +251,7 @@ void BOARD_ADAPTER::createTrack( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDs
     {
     case PCB_VIA_T:
     {
-        const float radius3DU = TO_3DU(  aTrack->GetWidth() / 2 );
+        const float radius3DU = TO_3DU( aTrack->GetWidth() / 2 );
 
         if( radius3DU > 0.0 )
             aDstContainer->Add( new FILLED_CIRCLE_2D( start3DU, radius3DU, *aTrack ) );
