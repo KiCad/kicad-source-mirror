@@ -530,6 +530,10 @@ void PCB_VIA::SetLayerSet( LSET aLayerSet )
 
     for( PCB_LAYER_ID layer : aLayerSet.Seq() )
     {
+        // m_layer and m_bottomLayer are copper layers, so consider only copper layers in aLayerSet
+        if( !IsCopperLayer( layer ) )
+            continue;
+
         if( first )
         {
             m_layer = layer;

@@ -407,6 +407,11 @@ public:
     bool IsOnLayer( PCB_LAYER_ID aLayer, bool aIncludeCourtyards = false ) const override;
 
     virtual LSET GetLayerSet() const override;
+
+    /**
+     * Note SetLayerSet() initialize the first and last copper layers connected by the via.
+     * So currently SetLayerSet ignore non copper layers
+     */
     virtual void SetLayerSet( LSET aLayers ) override;
 
     /**
