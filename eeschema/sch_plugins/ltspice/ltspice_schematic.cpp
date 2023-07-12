@@ -39,7 +39,16 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
     std::map<wxString, wxString> mapOfAscFiles;
     std::map<wxString, wxString> mapOfAsyFiles;
 
-    GetAscAndAsyFilePaths( mapOfAscFiles, mapOfAsyFiles, aLibraryFileName );
+    // List of files to search (Give highest priority to files contained in same directory)
+    std::vector<wxString> searchDirs;
+    searchDirs.push_back( aLibraryFileName.GetPath() );
+    searchDirs.push_back( m_ltspiceDataDir.GetPathWithSep() + wxS( "sub" ) );
+    searchDirs.push_back( m_ltspiceDataDir.GetPathWithSep() + wxS( "sym" ) );
+
+    for( const wxString& searchDir : searchDirs )
+    {
+        GetAscAndAsyFilePaths( mapOfAscFiles, mapOfAsyFiles, wxDir( searchDir ), wxEmptyString );
+    }
 
     m_schematic = aSchematic;
 
@@ -178,51 +187,69 @@ void LTSPICE_SCHEMATIC::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
 
 void LTSPICE_SCHEMATIC::GetAscAndAsyFilePaths( std::map<wxString, wxString>& aMapOfAscFiles,
                                                std::map<wxString, wxString>& aMapOfAsyFiles,
-                                               const wxFileName& parentFileName )
+                                               const wxDir& aDir, const wxString& aBase )
 {
-    // List of files to search (Give highest priority to files contained in same directory)
-    std::vector<wxString> searchDirs;
-    searchDirs.push_back( parentFileName.GetPath() );
-    searchDirs.push_back( m_ltspiceDataDir.GetPathWithSep() + wxS( "sub" ) );
-    searchDirs.push_back( m_ltspiceDataDir.GetPathWithSep() + wxS( "sym" ) );
+    wxString filename;
 
-    for( const wxString& searchDir : searchDirs )
     {
-        wxArrayString fileList;
-        wxDir::GetAllFiles( searchDir, &fileList );
+        bool cont = aDir.GetFirst( &filename, wxEmptyString, wxDIR_FILES | wxDIR_HIDDEN );
 
-        for( const wxString& filepath : fileList )
+        while( cont )
         {
-            wxFileName path = filepath;
-            path.MakeRelativeTo( searchDir );
-            wxString elementName = ( path.GetPathWithSep() + path.GetName() ).Lower();
-            wxString extension = path.GetExt().Lower();
+            wxFileName path( aDir.GetName(), filename );
 
-            elementName.Replace( '\\', '/' );
-
-            auto logToMap = [&]( std::map<wxString, wxString>& aMapToLogTo )
+            auto logToMap = [&]( std::map<wxString, wxString>& aMapToLogTo, const wxString& aKey )
             {
-
-                if( aMapToLogTo.count( elementName ) )
+                if( aMapToLogTo.count( aKey ) )
                 {
                     if( m_reporter )
                     {
                         m_reporter->Report( wxString::Format(
                                 _( "File at '%s' was ignored. Using previously found "
                                    "file at '%s' instead." ),
-                                filepath, aMapToLogTo.at( elementName ) ) );
+                                path.GetFullPath(), aMapToLogTo.at( aKey ) ) );
                     }
                 }
                 else
                 {
-                    aMapToLogTo.insert( { elementName, filepath } );
+                    aMapToLogTo.emplace( aKey, path.GetFullPath() );
                 }
             };
 
+            wxString elementName1 = ( aBase + path.GetName() ).Lower();
+            wxString elementName2 = path.GetName().Lower();
+            wxString extension = path.GetExt().Lower();
+
             if( extension == wxS( "asc" ) )
-                logToMap( aMapOfAscFiles );
+            {
+                logToMap( aMapOfAscFiles, elementName1 );
+
+                if( !aBase.IsEmpty() )
+                    logToMap( aMapOfAscFiles, elementName2 );
+            }
             else if( extension == wxS( "asy" ) )
-                logToMap( aMapOfAsyFiles );
+            {
+                logToMap( aMapOfAsyFiles, elementName1 );
+
+                if( !aBase.IsEmpty() )
+                    logToMap( aMapOfAsyFiles, elementName2 );
+            }
+
+            cont = aDir.GetNext( &filename );
+        }
+    }
+
+    {
+        bool cont = aDir.GetFirst( &filename, wxEmptyString, wxDIR_DIRS | wxDIR_HIDDEN );
+
+        while( cont )
+        {
+            wxFileName path( aDir.GetName(), filename );
+            wxDir      subDir( path.GetFullPath() );
+
+            GetAscAndAsyFilePaths( aMapOfAscFiles, aMapOfAsyFiles, subDir, filename + wxS( "/" ) );
+
+            cont = aDir.GetNext( &filename );
         }
     }
 }

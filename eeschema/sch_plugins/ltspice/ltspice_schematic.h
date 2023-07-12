@@ -27,6 +27,7 @@
 #include <pin_type.h>
 #include <layer_ids.h>
 #include <wx/filename.h>
+#include <wx/dir.h>
 #include <plotters/plotter.h>
 
 
@@ -302,8 +303,8 @@ public:
      * @param aMapOfAsyFiles map of string containing content from asy files.
      */
     void GetAscAndAsyFilePaths( std::map<wxString, wxString>& aMapOfAscFiles,
-                                std::map<wxString, wxString>& aMapOfAsyFiles,
-                                const wxFileName& parentFileName );
+                                std::map<wxString, wxString>& aMapOfAsyFiles, const wxDir& aDir,
+                                const wxString& aBase );
 
     /**
      * Used to get symbols list present in asc file.
