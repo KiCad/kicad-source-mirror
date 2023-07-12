@@ -621,8 +621,8 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
 
         // Min-thickness is the web thickness.  On the other hand, a blob min-thickness by
         // min-thickness is not useful.  Since there's no obvious definition of web vs. blob, we
-        // arbitrarily choose "at least 2X the area".
-        double minArea = (double) zone->GetMinThickness() * zone->GetMinThickness() * 2;
+        // arbitrarily choose "at least 3X the area".
+        double minArea = (double) zone->GetMinThickness() * zone->GetMinThickness() * 3;
 
         for( PCB_LAYER_ID layer : zoneCopperLayers.Seq() )
         {
@@ -1530,13 +1530,22 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
 
     // Min-thickness is the web thickness.  On the other hand, a blob min-thickness by
     // min-thickness is not useful.  Since there's no obvious definition of web vs. blob, we
-    // arbitrarily choose "at least 1/2 min-thickness on one axis".
+    // arbitrarily choose "at least 2X min-thickness on one axis".  (Since we're doing this
+    // during the deflated state, that means we test for "at least min-thickness".)
     for( int ii = aFillPolys.OutlineCount() - 1; ii >= 0; ii-- )
     {
         std::vector<SHAPE_LINE_CHAIN>& island = aFillPolys.Polygon( ii );
-        BOX2I                          islandExtents = island.front().BBox();
+        BOX2I                          islandExtents;
 
-        if( islandExtents.GetSizeMax() < half_min_width )
+        for( const VECTOR2I& pt : island.front().CPoints() )
+        {
+            islandExtents.Merge( pt );
+
+            if( islandExtents.GetSizeMax() > aZone->GetMinThickness() )
+                break;
+        }
+
+        if( islandExtents.GetSizeMax() < aZone->GetMinThickness() )
             aFillPolys.DeletePolygon( ii );
     }
 
