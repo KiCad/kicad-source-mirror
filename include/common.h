@@ -92,6 +92,11 @@ wxString ExpandTextVars( const wxString& aSource,
 wxString ExpandTextVars( const wxString& aSource, const PROJECT* aProject );
 
 /**
+ * Returns any variables unexpanded, e.g. ${VAR} -> VAR
+ */
+wxString GetTextVars( const wxString& aSource );
+
+/**
  * Replace any environment and/or text variables in file-path uris (leaving network-path URIs
  * alone).
  */

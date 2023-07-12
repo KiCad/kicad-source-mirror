@@ -112,6 +112,18 @@ wxString ExpandTextVars( const wxString& aSource,
 }
 
 
+wxString GetTextVars( const wxString& aSource )
+{
+    std::function<bool( wxString* )> tokenExtractor =
+            [&]( wxString* token ) -> bool
+            {
+                return true;
+            };
+
+    return ExpandTextVars( aSource, &tokenExtractor );
+}
+
+
 //
 // Stolen from wxExpandEnvVars and then heavily optimized
 //
