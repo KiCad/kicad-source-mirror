@@ -20,6 +20,8 @@
 #ifndef KICAD_WX_STL_COMPAT_H
 #define KICAD_WX_STL_COMPAT_H
 
+#include <string_view>
+
 #include <wx/gdicmn.h>
 #include <wx/string.h>
 
@@ -54,6 +56,11 @@ namespace std
         bool operator()( const wxPoint& aA, const wxPoint& aB ) const;
     };
 }
+
+/***
+ * Helper function to construct a wxString from a std::string_view.
+ */
+wxString TowxString( const std::string_view& view );
 
 /**
  * Helper function to print the given wxSize to a stream.

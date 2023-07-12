@@ -30,7 +30,9 @@
 #include <algorithm>
 #include <bitmaps.h>
 #include <hotkeys_basic.h>
-#include <wx/stringimpl.h>
+
+#include <core/wx_stl_compat.h>
+#include <wx/string.h>
 #include <wx/translation.h>
 
 TOOL_ACTION::TOOL_ACTION( const std::string& aName, TOOL_ACTION_SCOPE aScope,
@@ -69,8 +71,8 @@ TOOL_ACTION::TOOL_ACTION( const TOOL_ACTION_ARGS& aArgs ) :
         m_defaultHotKey( aArgs.m_defaultHotKey.value_or( 0 ) ),
         m_hotKey( aArgs.m_defaultHotKey.value_or( 0 ) ),
         m_legacyName( aArgs.m_legacyName.value_or( "" ) ),
-        m_label( aArgs.m_menuText.value_or( wxEmptyString ) ),
-        m_tooltip( aArgs.m_tooltip.value_or( wxEmptyString ) ),
+        m_label( TowxString( aArgs.m_menuText.value_or( "" ) ) ),
+        m_tooltip( TowxString( aArgs.m_tooltip.value_or( "" ) ) ),
         m_icon( aArgs.m_icon.value_or( BITMAPS::INVALID_BITMAP) ),
         m_id( -1 ),
         m_uiid( std::nullopt ),
@@ -86,7 +88,7 @@ TOOL_ACTION::TOOL_ACTION( const TOOL_ACTION_ARGS& aArgs ) :
         m_param = aArgs.m_param;
 
     if( aArgs.m_description.has_value() )
-        m_description = aArgs.m_description;
+        m_description = TowxString( aArgs.m_description.value() );
 
     ACTION_MANAGER::GetActionList().push_back( this );
 }

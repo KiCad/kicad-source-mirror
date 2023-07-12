@@ -39,6 +39,12 @@ bool std::less<wxPoint>::operator()( const wxPoint& aA, const wxPoint& aB ) cons
 #endif
 
 
+wxString TowxString( const std::string_view& view )
+{
+    return wxString( view.data(), view.length() );
+}
+
+
 std::ostream& operator<<( std::ostream& out, const wxSize& size )
 {
     out << " width=\"" << size.GetWidth() << "\" height=\"" << size.GetHeight() << "\"";

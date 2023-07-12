@@ -29,9 +29,10 @@
 #define __TOOL_ACTION_H
 
 #include <any>
-#include <string>
 #include <cassert>
 #include <optional>
+#include <string>
+#include <string_view>
 
 #include <wx/string.h>
 
@@ -58,6 +59,9 @@ enum TOOL_ACTION_FLAGS
 /**
  * Build up the properties of a TOOL_ACTION in an incremental manner that is static-construction
  * safe.
+ *
+ * Note: This is meant to be constructed and immediately passed into the TOOL_ACTION constructor.
+ *       Construction should not be delayed, since this only retains pointers to the strings used.
  */
 class TOOL_ACTION_ARGS
 {
@@ -69,7 +73,7 @@ public:
      *
      * This is a required property.
      */
-    TOOL_ACTION_ARGS& Name( std::string aName )
+    TOOL_ACTION_ARGS& Name( const std::string_view& aName )
     {
         m_name = aName;
         return *this;
@@ -98,7 +102,7 @@ public:
      *
      * This property is only needed for existing actions and shouldn't be used in new actions.
      */
-    TOOL_ACTION_ARGS& LegacyHotkeyName( std::string aLegacyName )
+    TOOL_ACTION_ARGS& LegacyHotkeyName( const std::string_view& aLegacyName )
     {
         m_legacyName = aLegacyName;
         return *this;
@@ -107,7 +111,7 @@ public:
     /**
      *The string to use when displaying the action in a menu.
      */
-    TOOL_ACTION_ARGS& MenuText( wxString aMenuText )
+    TOOL_ACTION_ARGS& MenuText( const std::string_view& aMenuText )
     {
         m_menuText = aMenuText;
         return *this;
@@ -116,7 +120,7 @@ public:
     /**
      * The string to use as a tooltip for the action in menus and toolbars.
      */
-    TOOL_ACTION_ARGS& Tooltip( wxString aTooltip )
+    TOOL_ACTION_ARGS& Tooltip( const std::string_view& aTooltip )
     {
         m_tooltip = aTooltip;
         return *this;
@@ -125,7 +129,7 @@ public:
     /**
      * The description of the action.
      */
-    TOOL_ACTION_ARGS& Description( wxString aDescription )
+    TOOL_ACTION_ARGS& Description( const std::string_view& aDescription )
     {
         m_description = aDescription;
         return *this;
@@ -172,18 +176,18 @@ protected:
     // Let the TOOL_ACTION constructor have direct access to the members here
     friend class TOOL_ACTION;
 
-    std::optional<std::string>          m_name;
+    std::optional<std::string_view>     m_name;
     std::optional<TOOL_ACTION_SCOPE>    m_scope;
     std::optional<TOOL_ACTION_FLAGS>    m_flags;
 
     std::optional<int>                  m_uiid;
 
     std::optional<int>                  m_defaultHotKey;
-    std::optional<std::string>          m_legacyName;
+    std::optional<std::string_view>     m_legacyName;
 
-    std::optional<wxString>             m_menuText;
-    std::optional<wxString>             m_tooltip;
-    std::optional<wxString>             m_description;
+    std::optional<std::string_view>     m_menuText;
+    std::optional<std::string_view>     m_tooltip;
+    std::optional<std::string_view>     m_description;
 
     std::optional<BITMAPS>              m_icon;
 
