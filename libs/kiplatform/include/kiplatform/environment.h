@@ -73,6 +73,13 @@ namespace KIPLATFORM
         wxString GetUserDataPath();
 
         /**
+         * Retrieves the operating system specific path for a user's local data store
+         *
+         * @return User config path
+         */
+        wxString GetUserLocalDataPath();
+
+        /**
          * Retrieves the operating system specific path for user's application cache
          *
          * @return User cache path

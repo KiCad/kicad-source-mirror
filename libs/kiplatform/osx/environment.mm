@@ -91,6 +91,12 @@ wxString KIPLATFORM::ENV::GetUserDataPath()
 }
 
 
+wxString KIPLATFORM::ENV::GetUserLocalDataPath()
+{
+    return wxStandardPaths::Get().GetUserLocalDataDir();
+}
+
+
 wxString KIPLATFORM::ENV::GetUserCachePath()
 {
     NSURL* url = [[NSFileManager defaultManager] URLForDirectory:NSCachesDirectory

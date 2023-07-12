@@ -115,6 +115,12 @@ wxString KIPLATFORM::ENV::GetUserDataPath()
 }
 
 
+wxString KIPLATFORM::ENV::GetUserLocalDataPath()
+{
+    return g_get_user_data_dir();
+}
+
+
 wxString KIPLATFORM::ENV::GetUserCachePath()
 {
     return g_get_user_cache_dir();

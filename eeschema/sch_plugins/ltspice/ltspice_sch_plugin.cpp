@@ -86,11 +86,20 @@ SCH_SHEET* SCH_LTSPICE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSche
     SYMBOL_LIB_TABLE* libTable = aSchematic->Prj().SchSymbolLibTable();
 
     wxCHECK_MSG( libTable, nullptr, "Could not load symbol lib table." );
-
-    wxFileName ltspiceDataDir( KIPLATFORM::ENV::GetUserDataPath(), wxEmptyString );
-    ltspiceDataDir.RemoveLastDir();        // "kicad"
+    
+    // Windows path: C:\Users\USERNAME\AppData\Local\LTspice\lib
+    wxFileName ltspiceDataDir( KIPLATFORM::ENV::GetUserLocalDataPath(), wxEmptyString );
     ltspiceDataDir.AppendDir( wxS( "LTspice" ) );
-    ltspiceDataDir.AppendDir( "lib" );
+    ltspiceDataDir.AppendDir( wxS( "lib" ) );
+
+    if( !ltspiceDataDir.DirExists() )
+    {
+        // Mac path
+        wxFileName ltspiceDataDir( KIPLATFORM::ENV::GetUserDataPath(), wxEmptyString );
+        ltspiceDataDir.RemoveLastDir();        // "kicad"
+        ltspiceDataDir.AppendDir( wxS( "LTspice" ) );
+        ltspiceDataDir.AppendDir( wxS( "lib" ) );
+    }
 
     if( !ltspiceDataDir.DirExists() )
     {
@@ -100,7 +109,7 @@ SCH_SHEET* SCH_LTSPICE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSche
         while( !foundFile.empty() )
         {
             ltspiceDataDir = wxFileName(foundFile, wxEmptyString);
-            ltspiceDataDir.AppendDir( "lib" );
+            ltspiceDataDir.AppendDir( wxS( "lib" ) );
 
             if( ltspiceDataDir.DirExists() )
                 break;
