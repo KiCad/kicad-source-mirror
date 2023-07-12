@@ -1177,6 +1177,9 @@ void LTSPICE_SCH_PARSER::CreateRect( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, in
     aRectangle->SetPosition( ToInvertedKicadCoords( lt_rect.BotRight ) );
     aRectangle->SetEnd( ToInvertedKicadCoords( lt_rect.TopLeft ) );
     aRectangle->SetStroke( getStroke(  lt_rect.LineWidth, lt_rect.LineStyle ) );
+
+    if( aLTSymbol.SymAttributes[wxS( "Prefix" )] == wxS( "X" ) )
+        aRectangle->SetFillMode( FILL_T::FILLED_WITH_BG_BODYCOLOR );
 }
 
 

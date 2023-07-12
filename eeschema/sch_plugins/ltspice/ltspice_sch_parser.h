@@ -203,11 +203,11 @@ public:
     void CreateArc( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex, SCH_SHEET_PATH* aSheet );
 
     /**
-     * Method for setting Text Justification.
+     * Method for plotting rectangle from Asc files
      *
      * @param aAscfile object representing asc file.
      * @param aIndex index.
-     * @param aSheet a object on which the text is represented used for justification.
+     * @param aSheet a object on which the rectangle is represented.
      */
     void CreateRect( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex, SCH_SHEET_PATH* aSheet );
 
