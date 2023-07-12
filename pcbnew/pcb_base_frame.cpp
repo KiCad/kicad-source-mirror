@@ -1148,10 +1148,14 @@ void PCB_BASE_FRAME::SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions, boo
 
 void PCB_BASE_FRAME::setFPWatcher( FOOTPRINT* aFootprint )
 {
+    wxLogTrace( "KICAD_LIB_WATCH", "setFPWatcher" );
+
     Unbind( wxEVT_FSWATCHER, &PCB_BASE_FRAME::OnFPChange, this );
 
     if( !aFootprint )
     {
+        wxLogTrace( "KICAD_LIB_WATCH", "Remove watch" );
+        m_watcher->RemoveAll();
         m_watcher.reset();
         return;
     }
@@ -1197,6 +1201,8 @@ void PCB_BASE_FRAME::setFPWatcher( FOOTPRINT* aFootprint )
     wxFileName fn;
     fn.AssignDir( m_watcherFileName.GetPath() );
     fn.DontFollowLink();
+
+    wxLogTrace( "KICAD_LIB_WATCH", "Add watch: %s", fn.GetPath() );
 
     m_watcher->AddTree( fn );
 }
