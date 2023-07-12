@@ -53,37 +53,47 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
 
     m_params.emplace_back( new PARAM_WXSTRING_MAP( "text_variables", &m_TextVars, {} ) );
 
-    m_params.emplace_back(
-            new PARAM_LIST<wxString>( "libraries.pinned_symbol_libs", &m_PinnedSymbolLibs, {} ) );
+    m_params.emplace_back( new PARAM_LIST<wxString>( "libraries.pinned_symbol_libs",
+            &m_PinnedSymbolLibs, {} ) );
 
-    m_params.emplace_back( new PARAM_LIST<wxString>(
-            "libraries.pinned_footprint_libs", &m_PinnedFootprintLibs, {} ) );
+    m_params.emplace_back( new PARAM_LIST<wxString>( "libraries.pinned_footprint_libs",
+            &m_PinnedFootprintLibs, {} ) );
 
-    m_params.emplace_back(
-            new PARAM_PATH_LIST( "cvpcb.equivalence_files", &m_EquivalenceFiles, {} ) );
+    m_params.emplace_back( new PARAM_PATH_LIST( "cvpcb.equivalence_files",
+            &m_EquivalenceFiles, {} ) );
 
-    m_params.emplace_back(
-            new PARAM_PATH( "pcbnew.page_layout_descr_file", &m_BoardDrawingSheetFile, "" ) );
+    m_params.emplace_back( new PARAM_PATH( "pcbnew.page_layout_descr_file",
+            &m_BoardDrawingSheetFile, "" ) );
 
-    m_params.emplace_back(
-            new PARAM_PATH( "pcbnew.last_paths.netlist", &m_PcbLastPath[LAST_PATH_NETLIST], "" ) );
+    m_params.emplace_back( new PARAM_PATH( "pcbnew.last_paths.netlist",
+            &m_PcbLastPath[LAST_PATH_NETLIST], "" ) );
 
-    m_params.emplace_back(
-            new PARAM_PATH( "pcbnew.last_paths.step", &m_PcbLastPath[LAST_PATH_STEP], "" ) );
+    m_params.emplace_back( new PARAM_PATH( "pcbnew.last_paths.step",
+            &m_PcbLastPath[LAST_PATH_STEP], "" ) );
 
-    m_params.emplace_back(
-            new PARAM_PATH( "pcbnew.last_paths.idf", &m_PcbLastPath[LAST_PATH_IDF], "" ) );
+    m_params.emplace_back( new PARAM_PATH( "pcbnew.last_paths.idf",
+            &m_PcbLastPath[LAST_PATH_IDF], "" ) );
 
-    m_params.emplace_back(
-            new PARAM_PATH( "pcbnew.last_paths.vrml", &m_PcbLastPath[LAST_PATH_VRML], "" ) );
+    m_params.emplace_back( new PARAM_PATH( "pcbnew.last_paths.vrml",
+            &m_PcbLastPath[LAST_PATH_VRML], "" ) );
 
-    m_params.emplace_back( new PARAM_PATH(
-            "pcbnew.last_paths.specctra_dsn", &m_PcbLastPath[LAST_PATH_SPECCTRADSN], "" ) );
+    m_params.emplace_back( new PARAM_PATH( "pcbnew.last_paths.specctra_dsn",
+            &m_PcbLastPath[LAST_PATH_SPECCTRADSN], "" ) );
 
-    m_params.emplace_back(
-            new PARAM_PATH( "pcbnew.last_paths.gencad", &m_PcbLastPath[LAST_PATH_GENCAD], "" ) );
+    m_params.emplace_back( new PARAM_PATH( "pcbnew.last_paths.gencad",
+            &m_PcbLastPath[LAST_PATH_GENCAD], "" ) );
 
-    m_params.emplace_back( new PARAM<wxString>( "schematic.legacy_lib_dir", &m_LegacyLibDir, "" ) );
+    m_params.emplace_back( new PARAM_PATH( "pcbnew.last_paths.pos_files",
+            &m_PcbLastPath[LAST_PATH_POS_FILES], "" ) );
+
+    m_params.emplace_back( new PARAM_PATH( "pcbnew.last_paths.svg",
+            &m_PcbLastPath[LAST_PATH_SVG], "" ) );
+
+    m_params.emplace_back( new PARAM_PATH( "pcbnew.last_paths.plot",
+            &m_PcbLastPath[LAST_PATH_PLOT], "" ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "schematic.legacy_lib_dir",
+            &m_LegacyLibDir, "" ) );
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "schematic.legacy_lib_list",
             [&]() -> nlohmann::json
@@ -571,6 +581,7 @@ bool PROJECT_FILE::SaveAs( const wxString& aDirectory, const wxString& aFile )
 {
     wxFileName oldFilename( GetFilename() );
     wxString   oldProjectName = oldFilename.GetName();
+    wxString   oldProjectPath = oldFilename.GetPath();
 
     Set( "meta.filename", aFile + "." + ProjectFileExtension );
     SetFilename( aFile );
@@ -580,14 +591,28 @@ bool PROJECT_FILE::SaveAs( const wxString& aDirectory, const wxString& aFile )
             {
                 if( aPath.StartsWith( oldProjectName + wxS( "." ) ) )
                     aPath.Replace( oldProjectName, aFile, false );
+                else if( aPath.StartsWith( oldProjectPath + wxS( "/" ) ) )
+                    aPath.Replace( oldProjectPath, aDirectory, false );
             };
 
-    updatePath( m_PcbLastPath[ LAST_PATH_NETLIST ] );
-    updatePath( m_PcbLastPath[ LAST_PATH_STEP ] );
-    updatePath( m_PcbLastPath[ LAST_PATH_IDF ] );
-    updatePath( m_PcbLastPath[ LAST_PATH_VRML ] );
-    updatePath( m_PcbLastPath[ LAST_PATH_SPECCTRADSN ] );
-    updatePath( m_PcbLastPath[ LAST_PATH_GENCAD ] );
+    updatePath( m_BoardDrawingSheetFile );
+
+    for( int ii = LAST_PATH_FIRST; ii < (int) LAST_PATH_SIZE; ++ii )
+        updatePath( m_PcbLastPath[ ii ] );
+
+    auto updatePathByPtr =
+            [&]( const std::string& aPtr )
+            {
+                if( std::optional<wxString> path = Get<wxString>( aPtr ) )
+                {
+                    updatePath( path.value() );
+                    Set( aPtr, path.value() );
+                }
+            };
+
+    updatePathByPtr( "schematic.page_layout_descr_file" );
+    updatePathByPtr( "schematic.plot_directory" );
+    updatePathByPtr( "schematic.ngspice.workbook_filename" );
 
     // While performing Save As, we have already checked that we can write to the directory
     // so don't carry the previous flag

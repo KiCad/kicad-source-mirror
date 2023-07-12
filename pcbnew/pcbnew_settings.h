@@ -193,7 +193,7 @@ public:
         bool             one_file;
         bool             plot_board_edges;
         int              page_size;
-        wxString         output_dir;
+        wxString         output_dir;        // legacy; now in project settings
         std::vector<int> layers;
     };
 
@@ -250,7 +250,7 @@ public:
 
     struct DIALOG_PLACE_FILE
     {
-        wxString output_directory;
+        wxString output_directory;  // legacy; now in project settings
         int      units;
         int      file_options;
         int      file_format;

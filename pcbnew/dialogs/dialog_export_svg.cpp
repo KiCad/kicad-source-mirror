@@ -27,13 +27,10 @@
 #include <pcbnew_settings.h>
 #include <wildcards_and_files_ext.h>
 #include <reporter.h>
-#include <board_design_settings.h>
 #include <confirm.h>
 #include <core/arraydim.h>
-#include <core/kicad_algo.h>
 #include <pcbplot.h>
 #include <locale_io.h>
-#include <board.h>
 #include <dialog_export_svg_base.h>
 #include <bitmaps.h>
 #include <widgets/std_bitmap_button.h>
@@ -41,6 +38,7 @@
 #include <plotters/plotters_pslike.h>
 #include <wx/dirdlg.h>
 #include <pgm_base.h>
+#include <project/project_file.h>
 #include <pcb_plot_svg.h>
 
 class DIALOG_EXPORT_SVG : public DIALOG_EXPORT_SVG_BASE
@@ -104,6 +102,8 @@ DIALOG_EXPORT_SVG::~DIALOG_EXPORT_SVG()
     m_outputDirectory = m_outputDirectoryName->GetValue();
     m_outputDirectory.Replace( wxT( "\\" ), wxT( "/" ) );
 
+    m_parent->Prj().GetProjectFile().m_PcbLastPath[ LAST_PATH_SVG ] = m_outputDirectory;
+
     auto cfg = m_parent->GetPcbNewSettings();
 
     cfg->m_ExportSvg.black_and_white  = m_printBW;
@@ -137,12 +137,17 @@ DIALOG_EXPORT_SVG::~DIALOG_EXPORT_SVG()
 
 void DIALOG_EXPORT_SVG::initDialog()
 {
+    PROJECT_FILE&    projectFile = m_parent->Prj().GetProjectFile();
     PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
 
     m_printBW         = cfg->m_ExportSvg.black_and_white;
     m_printMirror     = cfg->m_ExportSvg.mirror;
     m_oneFileOnly     = cfg->m_ExportSvg.one_file;
-    m_outputDirectory = cfg->m_ExportSvg.output_dir;
+
+    if( !projectFile.m_PcbLastPath[ LAST_PATH_SVG ].IsEmpty() )
+        m_outputDirectory = projectFile.m_PcbLastPath[ LAST_PATH_SVG ];
+    else
+        m_outputDirectory = cfg->m_ExportSvg.output_dir;
 
     m_rbSvgPageSizeOpt->SetSelection( cfg->m_ExportSvg.page_size );
     m_checkboxPagePerLayer->SetValue( !m_oneFileOnly );

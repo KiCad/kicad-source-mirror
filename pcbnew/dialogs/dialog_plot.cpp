@@ -25,11 +25,10 @@
 #include <wx/clntdata.h>
 #include <wx/rearrangectrl.h>
 
-#include <kiface_base.h>
 #include <plotters/plotter.h>
 #include <confirm.h>
 #include <pcb_edit_frame.h>
-#include <pcbnew_settings.h>
+#include <project/project_file.h>
 #include <pcbplot.h>
 #include <pgm_base.h>
 #include <gerber_jobfile_writer.h>
@@ -38,8 +37,6 @@
 #include <layer_ids.h>
 #include <locale_io.h>
 #include <bitmaps.h>
-#include <board.h>
-#include <board_design_settings.h>
 #include <dialog_plot.h>
 #include <dialog_gendrill.h>
 #include <widgets/wx_html_report_panel.h>
@@ -200,7 +197,11 @@ void DIALOG_PLOT::init_Dialog()
     BOARD*      board = m_parent->GetBoard();
     wxFileName  fileName;
 
-    auto cfg = m_parent->GetPcbNewSettings();
+    PROJECT_FILE&    projectFile = m_parent->Prj().GetProjectFile();
+    PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
+
+    if( !projectFile.m_PcbLastPath[ LAST_PATH_PLOT ].IsEmpty() )
+        m_plotOpts.SetOutputDirectory( projectFile.m_PcbLastPath[ LAST_PATH_PLOT ] );
 
     m_XScaleAdjust = cfg->m_Plot.fine_scale_x;
     m_YScaleAdjust = cfg->m_Plot.fine_scale_y;
@@ -940,6 +941,7 @@ void DIALOG_PLOT::applyPlotSettings()
     dirStr = m_outputDirectoryName->GetValue();
     dirStr.Replace( wxT( "\\" ), wxT( "/" ) );
     tempOptions.SetOutputDirectory( dirStr );
+    m_parent->Prj().GetProjectFile().m_PcbLastPath[ LAST_PATH_PLOT ] = dirStr;
 
     if( !m_plotOpts.IsSameAs( tempOptions ) )
     {

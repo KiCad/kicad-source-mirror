@@ -27,14 +27,12 @@
  */
 
 #include <confirm.h>
-#include <string_utils.h>
-#include <gestfich.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
+#include <project/project_file.h>
 #include <bitmaps.h>
 #include <reporter.h>
 #include <tools/board_editor_control.h>
-#include <board.h>
 #include <wildcards_and_files_ext.h>
 #include <kiface_base.h>
 #include <widgets/wx_html_report_panel.h>
@@ -169,12 +167,16 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
 {
     m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
 
+    PROJECT_FILE&    projectFile = m_parent->Prj().GetProjectFile();
     PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
 
     m_units = cfg->m_PlaceFile.units == 0 ? EDA_UNITS::INCHES : EDA_UNITS::MILLIMETRES;
 
     // Output directory
-    m_outputDirectoryName->SetValue( cfg->m_PlaceFile.output_directory );
+    if( !projectFile.m_PcbLastPath[ LAST_PATH_POS_FILES ].IsEmpty() )
+        m_outputDirectoryName->SetValue( projectFile.m_PcbLastPath[ LAST_PATH_POS_FILES ] );
+    else
+        m_outputDirectoryName->SetValue( cfg->m_PlaceFile.output_directory );
 
     // Update Options
     m_radioBoxUnits->SetSelection( cfg->m_PlaceFile.units );
@@ -190,6 +192,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
     m_messagesPanel->MsgPanelSetMinSize( wxSize( -1, 160 ) );
     GetSizer()->SetSizeHints( this );
 }
+
 
 void DIALOG_GEN_FOOTPRINT_POSITION::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
 {
@@ -212,9 +215,11 @@ void DIALOG_GEN_FOOTPRINT_POSITION::OnOutputDirectoryBrowseClicked( wxCommandEve
         wxString boardFilePath = ( (wxFileName) m_parent->GetBoard()->GetFileName() ).GetPath();
 
         if( !dirName.MakeRelativeTo( boardFilePath ) )
+        {
             wxMessageBox( _( "Cannot make path relative (target volume different from board "
                              "file volume)!" ),
                           _( "Plot Output Directory" ), wxOK | wxICON_ERROR );
+        }
     }
 
     m_outputDirectoryName->SetValue( dirName.GetFullPath() );
@@ -231,8 +236,8 @@ void DIALOG_GEN_FOOTPRINT_POSITION::OnGenerate( wxCommandEvent& event )
     // Keep unix directory format convention in cfg files
     dirStr.Replace( wxT( "\\" ), wxT( "/" ) );
 
+    m_parent->Prj().GetProjectFile().m_PcbLastPath[LAST_PATH_POS_FILES] = dirStr;
     cfg->m_PlaceFile.output_directory   = dirStr;
-
     cfg->m_PlaceFile.units              = m_units == EDA_UNITS::INCHES ? 0 : 1;
     cfg->m_PlaceFile.file_options       = m_radioBoxFilesCount->GetSelection();
     cfg->m_PlaceFile.file_format        = m_rbFormat->GetSelection();
@@ -252,7 +257,6 @@ void DIALOG_GEN_FOOTPRINT_POSITION::OnGenerate( wxCommandEvent& event )
 bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
 {
     BOARD*     brd = m_parent->GetBoard();
-    wxFileName fn;
     wxString   msg;
     int        fullcount = 0;
 
@@ -282,13 +286,13 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
         return false;
     }
 
-    fn = m_parent->GetBoard()->GetFileName();
+    wxFileName fn = m_parent->GetBoard()->GetFileName();
     fn.SetPath( outputDir.GetPath() );
 
     // Create the Front and Top side placement files. Gerber P&P files are always separated.
     // Not also they include all footprints
     PLACEFILE_GERBER_WRITER exporter( brd );
-    wxString filename = exporter.GetPlaceFileName( fn.GetFullPath(), F_Cu );
+    wxString                filename = exporter.GetPlaceFileName( fn.GetFullPath(), F_Cu );
 
     int fpcount = exporter.CreatePlaceFile( filename, F_Cu, m_cbIncludeBoardEdge->GetValue() );
 
@@ -341,7 +345,6 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
 bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
 {
     BOARD *    brd = m_parent->GetBoard();
-    wxFileName fn;
     wxString   msg;
     bool       singleFile = OneFileOnly();
     bool       useCSVfmt = m_rbFormat->GetSelection() == 1;
@@ -390,7 +393,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
         return false;
     }
 
-    fn = m_parent->GetBoard()->GetFileName();
+    wxFileName fn = m_parent->GetBoard()->GetFileName();
     fn.SetPath( outputDir.GetPath() );
 
     // Create the Front or Top side placement file, or a single file
@@ -493,16 +496,13 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     }
 
     m_reporter->Report( _( "File generation successful." ), RPT_SEVERITY_INFO );
-
     return true;
 }
 
 
 int BOARD_EDITOR_CONTROL::GeneratePosFile( const TOOL_EVENT& aEvent )
 {
-    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
-    DIALOG_GEN_FOOTPRINT_POSITION dlg( editFrame );
-
+    DIALOG_GEN_FOOTPRINT_POSITION dlg( getEditFrame<PCB_EDIT_FRAME>() );
     dlg.ShowModal();
     return 0;
 }
@@ -548,7 +548,7 @@ void PCB_EDIT_FRAME::GenFootprintsReport( wxCommandEvent& event )
 {
     wxFileName fn;
 
-    wxString boardFilePath = ( (wxFileName) GetBoard()->GetFileName() ).GetPath();
+    wxString    boardFilePath = ( (wxFileName) GetBoard()->GetFileName() ).GetPath();
     wxDirDialog dirDialog( this, _( "Select Output Directory" ), boardFilePath );
 
     if( dirDialog.ShowModal() == wxID_CANCEL )
@@ -568,7 +568,6 @@ void PCB_EDIT_FRAME::GenFootprintsReport( wxCommandEvent& event )
         msg.Printf( _( "Footprint report file created:\n'%s'." ), fn.GetFullPath() );
         wxMessageBox( msg, _( "Footprint Report" ), wxICON_INFORMATION );
     }
-
     else
     {
         msg.Printf( _( "Failed to create file '%s'." ), fn.GetFullPath() );

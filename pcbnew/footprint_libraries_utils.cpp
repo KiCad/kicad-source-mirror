@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,9 +37,7 @@
 #include <tools/pcb_actions.h>
 #include <tools/board_editor_control.h>
 #include <tools/pad_tool.h>
-#include <board.h>
 #include <footprint.h>
-#include <pcb_text.h>
 #include <board_commit.h>
 #include <footprint_edit_frame.h>
 #include <wildcards_and_files_ext.h>
@@ -236,8 +234,7 @@ FOOTPRINT* try_load_footprint( const wxFileName& aFileName, IO_MGR::PCB_FILE_T a
 
 FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
 {
-    FOOTPRINT_EDITOR_SETTINGS* cfg = GetSettings();
-    wxFileName                 fn;
+    wxFileName fn;
 
     if( aName != wxT("") )
         fn = aName;
