@@ -361,7 +361,7 @@ bool PROPERTIES_PANEL::extractValueAndWritability( const SELECTION& aSelection,
             return false;
 
         // If read-only for any of the selection, read-only for the whole selection.
-        if( !aProperty->Writeable( item ) )
+        if( !propMgr.IsWriteableFor( TYPE_HASH( *item ), aProperty, item ) )
             aWritable = false;
 
         wxVariant value;

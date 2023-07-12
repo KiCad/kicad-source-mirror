@@ -199,12 +199,31 @@ public:
                                std::function<bool( INSPECTABLE* )> aFunc );
 
     /**
+     * Sets an override writeability functor for a base class property of a given derived class.
+     *
+     * @param aDerived is the type to apply the mask for.
+     * @param aBase is the type that aName belongs to.
+     * @param aName is the name of a property on the base class.
+     * @param aFunc is the new availability functor to apply.
+     */
+    void OverrideWriteability( TYPE_ID aDerived, TYPE_ID aBase, const wxString& aName,
+                               std::function<bool( INSPECTABLE* )> aFunc );
+
+    /**
      * Checks overriden availability and original availability of a property, returns false
      * if the property is unavailable in either case.
      * 
      * TODO: This isn't the cleanest API, consider how to merge with PROPERTY_BASE::Available
      */
     bool IsAvailableFor( TYPE_ID aItemClass, PROPERTY_BASE* aProp, INSPECTABLE* aItem );
+
+    /**
+     * Checks overriden availability and original availability of a property, returns false
+     * if the property is unavailable in either case.
+     *
+     * TODO: This isn't the cleanest API, consider how to merge with PROPERTY_BASE::Writeable
+     */
+    bool IsWriteableFor( TYPE_ID aItemClass, PROPERTY_BASE* aProp, INSPECTABLE* aItem );
 
     /**
      * Return true if aDerived is inherited from aBase.
@@ -282,6 +301,9 @@ private:
 
         ///< Overrides for base class property availabilities
         PROPERTY_FUNCTOR_MAP m_availabilityOverrides;
+
+        ///< Overrides for base class property writeable status
+        PROPERTY_FUNCTOR_MAP m_writeabilityOverrides;
 
         ///< All properties (both unique to the type and inherited)
         std::vector<PROPERTY_BASE*> m_allProperties;

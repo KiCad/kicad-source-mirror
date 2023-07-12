@@ -206,6 +206,18 @@ void PROPERTY_MANAGER::OverrideAvailability( TYPE_ID aDerived, TYPE_ID aBase,
 }
 
 
+void PROPERTY_MANAGER::OverrideWriteability( TYPE_ID aDerived, TYPE_ID aBase,
+                                             const wxString& aName,
+                                             std::function<bool( INSPECTABLE* )> aFunc )
+{
+    wxASSERT_MSG( aDerived != aBase, "Class cannot override from itself" );
+
+    CLASS_DESC& derived = getClass( aDerived );
+    derived.m_writeabilityOverrides[std::make_pair( aBase, aName )] = aFunc;
+    m_dirty = true;
+}
+
+
 bool PROPERTY_MANAGER::IsAvailableFor( TYPE_ID aItemClass, PROPERTY_BASE* aProp,
                                        INSPECTABLE* aItem )
 {
@@ -218,6 +230,24 @@ bool PROPERTY_MANAGER::IsAvailableFor( TYPE_ID aItemClass, PROPERTY_BASE* aProp,
                                                                     aProp->Name() ) );
 
     if( it != derived.m_availabilityOverrides.end() )
+        return it->second( aItem );
+
+    return true;
+}
+
+
+bool PROPERTY_MANAGER::IsWriteableFor( TYPE_ID aItemClass, PROPERTY_BASE* aProp,
+                                       INSPECTABLE* aItem )
+{
+    if( !aProp->Writeable( aItem ) )
+        return false;
+
+    CLASS_DESC& derived = getClass( aItemClass );
+
+    auto it = derived.m_writeabilityOverrides.find( std::make_pair( aProp->BaseHash(),
+                                                                    aProp->Name() ) );
+
+    if( it != derived.m_writeabilityOverrides.end() )
         return it->second( aItem );
 
     return true;
