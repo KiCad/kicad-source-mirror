@@ -27,12 +27,13 @@
 #include <vector>
 #include <view/view_controls.h>
 #include <tool/selection.h>
-#include <tool/tool_action.h>
 
 struct ACTION_CONDITIONS;
 
 class ACTIONS;
+class TOOL_ACTION;
 class TOOL_DISPATCHER;
+class TOOL_EVENT;
 class TOOL_MANAGER;
 
 /*
@@ -61,10 +62,7 @@ public:
      * @param aConditions are the UI conditions to use for the control states.
      */
     virtual void RegisterUIUpdateHandler( const TOOL_ACTION& aAction,
-                                          const ACTION_CONDITIONS& aConditions )
-    {
-        RegisterUIUpdateHandler( aAction.GetUIId(), aConditions );
-    }
+                                          const ACTION_CONDITIONS& aConditions );
 
     /**
      * Register a UI update handler for the control with ID @c aID.
@@ -80,10 +78,7 @@ public:
      *
      * @param aAction is the action to unregister the handler for.
      */
-    virtual void UnregisterUIUpdateHandler( const TOOL_ACTION& aAction )
-    {
-        UnregisterUIUpdateHandler( aAction.GetUIId() );
-    }
+    virtual void UnregisterUIUpdateHandler( const TOOL_ACTION& aAction );
 
     /**
      * Unregister a UI handler for a given ID that was registered using @c RegisterUIUpdateHandler.

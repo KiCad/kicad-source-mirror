@@ -39,6 +39,18 @@ TOOLS_HOLDER::TOOLS_HOLDER() :
         m_moveWarpsCursor( true )
 { }
 
+void TOOLS_HOLDER::RegisterUIUpdateHandler( const TOOL_ACTION& aAction,
+                                            const ACTION_CONDITIONS& aConditions )
+{
+    RegisterUIUpdateHandler( aAction.GetUIId(), aConditions );
+}
+
+
+void TOOLS_HOLDER::UnregisterUIUpdateHandler( const TOOL_ACTION& aAction )
+{
+    UnregisterUIUpdateHandler( aAction.GetUIId() );
+}
+
 
 // TODO: Implement an RAII mechanism for the stack PushTool/PopTool pairs
 void TOOLS_HOLDER::PushTool( const TOOL_EVENT& aEvent )
