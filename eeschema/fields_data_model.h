@@ -32,6 +32,7 @@ struct DATA_MODEL_ROW
         m_Flag = aType;
     }
 
+    int                        m_ItemNumber;
     GROUP_TYPE                 m_Flag;
     std::vector<SCH_REFERENCE> m_Refs;
 };
@@ -121,6 +122,7 @@ public:
 
     bool ColIsReference( int aCol );
     bool ColIsQuantity( int aCol );
+    bool ColIsItemNumber( int aCol );
 
     void SetSorting( int aCol, bool ascending )
     {

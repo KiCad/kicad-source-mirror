@@ -125,7 +125,7 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const DATA_MODEL_ROW& group, i
 
     for( const SCH_REFERENCE& ref : group.m_Refs )
     {
-        if( ColIsReference( aCol ) || ColIsQuantity( aCol ) )
+        if( ColIsReference( aCol ) || ColIsQuantity( aCol ) || ColIsItemNumber( aCol ) )
         {
             references.push_back( ref );
         }
@@ -158,7 +158,7 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const DATA_MODEL_ROW& group, i
         }
     }
 
-    if( ColIsReference( aCol ) || ColIsQuantity( aCol ) )
+    if( ColIsReference( aCol ) || ColIsQuantity( aCol ) || ColIsItemNumber( aCol ) )
     {
         // Remove duplicates (other units of multi-unit parts)
         std::sort( references.begin(), references.end(),
@@ -189,6 +189,8 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const DATA_MODEL_ROW& group, i
         fieldValue = SCH_REFERENCE_LIST::Shorthand( references, refDelimiter, refRangeDelimiter );
     else if( ColIsQuantity( aCol ) )
         fieldValue = wxString::Format( wxT( "%d" ), (int) references.size() );
+    else if( ColIsItemNumber( aCol ) && group.m_Flag != CHILD_ITEM )
+        fieldValue = wxString::Format( wxT( "%d" ), group.m_ItemNumber );
 
     return fieldValue;
 }
@@ -218,6 +220,12 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsQuantity( int aCol )
 {
     wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), false );
     return m_cols[aCol].m_fieldName == wxS( "Quantity" );
+}
+
+bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsItemNumber( int aCol )
+{
+    wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), false );
+    return m_cols[aCol].m_fieldName == wxS( "Item Number" );
 }
 
 
@@ -283,6 +291,13 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::Sort()
                {
                    return cmp( lhs, rhs, this, m_sortColumn, m_sortAscending );
                } );
+
+    // Time to renumber the item numbers
+    int itemNumber = 1;
+    for( DATA_MODEL_ROW& row : m_rows )
+    {
+        row.m_ItemNumber = itemNumber++;
+    }
 
     ExpandAfterSort();
 }
