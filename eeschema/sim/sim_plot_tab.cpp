@@ -832,9 +832,10 @@ void SIM_PLOT_TAB::SetTraceData( TRACE* trace, unsigned int aPoints, const doubl
     std::vector<double> x( aX, aX + aPoints );
     std::vector<double> y( aY, aY + aPoints );
 
-    if( GetSimType() == ST_AC || GetSimType() == ST_SP || GetSimType() == ST_FFT )
+    if( dynamic_cast<LOG_SCALE<mpScaleXLog>*>( m_axis_x ) )
     {
         // log( 0 ) is not valid.
+        if( x.size() > 0 && x[0] == 0 )
         {
             x.erase( x.begin() );
             y.erase( y.begin() );
