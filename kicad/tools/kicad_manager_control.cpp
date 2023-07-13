@@ -883,8 +883,8 @@ int KICAD_MANAGER_CONTROL::Execute( const TOOL_EVENT& aEvent )
 
 int KICAD_MANAGER_CONTROL::ShowPluginManager( const TOOL_EVENT& aEvent )
 {
-    if( KIPLATFORM::POLICY::GetPolicyState( POLICY_KEY_PCM )
-        == KIPLATFORM::POLICY::STATE::DISABLED )
+    if( KIPLATFORM::POLICY::GetPolicyBool( POLICY_KEY_PCM )
+        == KIPLATFORM::POLICY::PBOOL::DISABLED )
     {
         // policy disables the plugin manager
         return 0;

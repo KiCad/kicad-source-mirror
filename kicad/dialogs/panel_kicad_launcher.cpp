@@ -162,8 +162,8 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
             addLauncher( KICAD_MANAGER_ACTIONS::showPluginManager,
                          KiScaledBitmap( BITMAPS::icon_pcm, this, 48, true ),
                          _( "Manage downloadable packages from KiCad and 3rd party repositories" ),
-                         ( KIPLATFORM::POLICY::GetPolicyState( POLICY_KEY_PCM )
-                           != KIPLATFORM::POLICY::STATE::DISABLED ) );
+                         ( KIPLATFORM::POLICY::GetPolicyBool( POLICY_KEY_PCM )
+                           != KIPLATFORM::POLICY::PBOOL::DISABLED ) );
 
     m_frame->SetPcmButton( bb );
 

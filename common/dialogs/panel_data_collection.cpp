@@ -47,9 +47,9 @@ bool PANEL_DATA_COLLECTION::TransferDataToWindow()
 {
     applySettingsToPanel();
 
-    KIPLATFORM::POLICY::STATE policyState =
-            KIPLATFORM::POLICY::GetPolicyState( POLICY_KEY_DATACOLLECTION );
-    if( policyState != KIPLATFORM::POLICY::STATE::NOT_CONFIGURED )
+    KIPLATFORM::POLICY::PBOOL policyState =
+            KIPLATFORM::POLICY::GetPolicyBool( POLICY_KEY_DATACOLLECTION );
+    if( policyState != KIPLATFORM::POLICY::PBOOL::NOT_CONFIGURED )
     {
         Disable();
     }

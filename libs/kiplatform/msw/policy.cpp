@@ -21,41 +21,91 @@
 #include <kiplatform/policy.h>
 
 #include <wx/string.h>
+#include <wx/tokenzr.h>
 #include <wx/msw/registry.h>
+
+#include <memory>
 
 #define POLICY_KEY_ROOT "Software\\Policies\\KiCad\\KiCad"
 
 
-KIPLATFORM::POLICY::STATE KIPLATFORM::POLICY::GetPolicyState( const wxString& aKey )
+static wxRegKey* GetPolicyRegKey( wxString& aKey )
 {
+    wxString  key = aKey;
     wxRegKey* keyToUse = nullptr;
-    wxRegKey  userKey( wxRegKey::HKCU, POLICY_KEY_ROOT );
-    wxRegKey  compKey( wxRegKey::HKLM, POLICY_KEY_ROOT );
+
+    wxString keyPath = POLICY_KEY_ROOT;
+
+    wxStringTokenizer tokenizer( aKey, "\\" );
+    while( tokenizer.HasMoreTokens() )
+    {
+        wxString token = tokenizer.GetNextToken();
+
+        if( tokenizer.HasMoreTokens() )
+        {
+            keyPath.Append( "\\" );
+            keyPath.Append( token );
+        }
+        else
+            key = token;
+    }
+
+    std::unique_ptr<wxRegKey> userKey = std::make_unique<wxRegKey>( wxRegKey::HKCU, keyPath );
 
     // we have user level policies take precedence over computer level policies
-    if( userKey.Exists() && userKey.HasValue( aKey ) )
+    if( userKey->Exists() && userKey->HasValue( key ) )
     {
-        keyToUse = &userKey;
+        keyToUse = userKey.release();
     }
     else
     {
-        if( compKey.Exists() && compKey.HasValue( aKey ) )
+        std::unique_ptr<wxRegKey> compKey = std::make_unique<wxRegKey>( wxRegKey::HKLM, keyPath );
+
+        if( compKey->Exists() && compKey->HasValue( key ) )
         {
-            keyToUse = &compKey;
+            keyToUse = compKey.release();
         }
     }
+
+    aKey = key;
+    return keyToUse;
+}
+
+
+KIPLATFORM::POLICY::PBOOL KIPLATFORM::POLICY::GetPolicyBool( const wxString& aKey )
+{
+    wxString  key = aKey;
+    std::unique_ptr<wxRegKey> keyToUse( GetPolicyRegKey( key ) );
 
     if( keyToUse != nullptr )
     {
         long value;
-        if( keyToUse->QueryValue( aKey, &value ) )
+        if( keyToUse->QueryValue( key, &value ) )
         {
             if( value == 1 )
-                return POLICY::STATE::ENABLED;
+                return POLICY::PBOOL::ENABLED;
             else
-                return POLICY::STATE::DISABLED;
+                return POLICY::PBOOL::DISABLED;
         }
     }
 
-    return STATE::NOT_CONFIGURED;
+    return PBOOL::NOT_CONFIGURED;
+}
+
+
+std::uint32_t KIPLATFORM::POLICY::GetPolicyEnumUInt( const wxString& aKey )
+{
+    wxString  key = aKey;
+    std::unique_ptr<wxRegKey> keyToUse( GetPolicyRegKey( key ) );
+
+    if( keyToUse != nullptr )
+    {
+        long value;
+        if( keyToUse->QueryValue( key, &value ) )
+        {
+            return value;
+        }
+    }
+
+    return 0;
 }

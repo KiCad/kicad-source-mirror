@@ -917,7 +917,7 @@ void KICAD_MANAGER_FRAME::OnIdle( wxIdleEvent& aEvent )
         }
     }
 
-    if( KIPLATFORM::POLICY::GetPolicyState( POLICY_KEY_PCM ) != KIPLATFORM::POLICY::STATE::DISABLED
+    if( KIPLATFORM::POLICY::GetPolicyBool( POLICY_KEY_PCM ) != KIPLATFORM::POLICY::PBOOL::DISABLED
         && settings->m_PcmUpdateCheck )
     {
         m_pcm->RunBackgroundUpdate();

@@ -22,20 +22,29 @@
 #ifndef KIPLATFORM_POLICY_H_
 #define KIPLATFORM_POLICY_H_
 
+#include <cstdint>
+
 class wxString;
 
 namespace KIPLATFORM
 {
     namespace POLICY
     {
-        enum class STATE
+        enum class PBOOL
         {
             ENABLED,
             DISABLED,
             NOT_CONFIGURED
         };
 
-        STATE GetPolicyState( const wxString& aKey );
+        PBOOL         GetPolicyBool( const wxString& aKey );
+        std::uint32_t GetPolicyEnumUInt( const wxString& aKey );
+
+        template <typename T>
+        T GetPolicyEnum( const wxString& aKey )
+        {
+            return static_cast<T>( GetPolicyEnumUInt( aKey ) );
+        }
     }
 }
 
