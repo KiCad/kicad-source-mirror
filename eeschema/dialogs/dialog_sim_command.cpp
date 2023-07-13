@@ -485,6 +485,8 @@ void DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
         }
 
         m_commandTypeSizer->Show( true );
+        m_commandType->SetSelection( 0 );
+        m_simPages->SetSelection( m_simPages->FindPage( m_pgOP ) );
         return;
     }
 
