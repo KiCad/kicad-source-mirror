@@ -31,7 +31,7 @@ class WX_TREEBOOK;
 class PAGED_DIALOG : public DIALOG_SHIM
 {
 public:
-    PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aShowReset,
+    PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aShowReset, bool aShowOpenFolder,
                   const wxString& aAuxiliaryAction = wxEmptyString,
                   const wxSize&   aInitialSize = wxDefaultSize );
     ~PAGED_DIALOG() override;
@@ -60,6 +60,7 @@ protected:
 
     virtual void onAuxiliaryAction( wxCommandEvent& aEvent ) { aEvent.Skip(); }
     virtual void onResetButton( wxCommandEvent& aEvent );
+    virtual void onOpenPreferencesButton( wxCommandEvent& aEvent );
     virtual void onPageChanged( wxBookCtrlEvent& aEvent );
     virtual void onPageChanging( wxBookCtrlEvent& aEvent );
     virtual void onCharHook( wxKeyEvent& aEvent );
@@ -67,6 +68,7 @@ protected:
     WX_TREEBOOK* m_treebook;
     wxButton*    m_auxiliaryButton;
     wxButton*    m_resetButton;
+    wxButton*    m_openPreferencesButton;
     wxButton*    m_cancelButton;
     WX_INFOBAR*  m_infoBar;
 

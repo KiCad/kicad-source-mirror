@@ -32,6 +32,10 @@
 #include <wx/listctrl.h>
 #include <wx/stc/stc.h>
 
+#include <settings/settings_manager.h>
+
+#include <launch_ext.h>
+
 #include <algorithm>
 
 // Maps from dialogTitle <-> pageTitle for keeping track of last-selected pages.
@@ -40,7 +44,7 @@ std::map<wxString, wxString> g_lastPage;
 std::map<wxString, wxString> g_lastParentPage;
 
 
-PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aShowReset,
+PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aShowReset, bool aShowOpenFolder,
                             const wxString& aAuxiliaryAction, const wxSize& aInitialSize ) :
         DIALOG_SHIM( aParent, wxID_ANY, aTitle, wxDefaultPosition, aInitialSize,
                      wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
@@ -80,6 +84,13 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSho
         m_buttonsSizer->Add( m_resetButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
     }
 
+    if( aShowOpenFolder )
+    {
+        m_openPreferencesButton = new wxButton( this, wxID_ANY, _( "Open preferences folder" ) );
+        m_buttonsSizer->Add( m_openPreferencesButton, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxLEFT, 5 );
+    }
+
+
     if( !aAuxiliaryAction.IsEmpty() )
     {
         m_auxiliaryButton = new wxButton( this, wxID_ANY, aAuxiliaryAction );
@@ -114,6 +125,11 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSho
     if( m_resetButton )
     {
         m_resetButton->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &PAGED_DIALOG::onResetButton, this );
+    }
+
+    if( m_openPreferencesButton )
+    {
+        m_openPreferencesButton->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &PAGED_DIALOG::onOpenPreferencesButton, this );
     }
 
     m_treebook->Bind( wxEVT_CHAR_HOOK, &PAGED_DIALOG::onCharHook, this );
@@ -181,6 +197,11 @@ PAGED_DIALOG::~PAGED_DIALOG()
     if( m_resetButton )
     {
         m_resetButton->Unbind( wxEVT_COMMAND_BUTTON_CLICKED, &PAGED_DIALOG::onResetButton, this );
+    }
+
+    if( m_openPreferencesButton )
+    {
+        m_openPreferencesButton->Unbind( wxEVT_COMMAND_BUTTON_CLICKED, &PAGED_DIALOG::onOpenPreferencesButton, this );
     }
 
     m_treebook->Unbind( wxEVT_CHAR_HOOK, &PAGED_DIALOG::onCharHook, this );
@@ -478,4 +499,10 @@ void PAGED_DIALOG::onResetButton( wxCommandEvent& aEvent )
         wxCommandEvent resetCommand( wxEVT_COMMAND_BUTTON_CLICKED, ID_RESET_PANEL );
         panel->ProcessWindowEvent( resetCommand );
     }
+}
+
+void PAGED_DIALOG::onOpenPreferencesButton( wxCommandEvent& aEvent )
+{
+    wxString dir( SETTINGS_MANAGER::GetUserSettingsPath() );
+    LaunchExternal( dir );
 }

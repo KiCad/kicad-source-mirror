@@ -1059,7 +1059,7 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
 {
     wxBeginBusyCursor( wxHOURGLASS_CURSOR );
 
-    PAGED_DIALOG dlg( this, _( "Preferences" ), true, wxEmptyString, wxSize( 980, 560 ) );
+    PAGED_DIALOG dlg( this, _( "Preferences" ), true, true, wxEmptyString, wxSize( 980, 560 ) );
 
     dlg.SetEvtHandlerEnabled( false );
 

@@ -37,7 +37,7 @@
 
 
 DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
-        PAGED_DIALOG( aFrame, _( "Schematic Setup" ), true,
+        PAGED_DIALOG( aFrame, _( "Schematic Setup" ), true, false,
                       _( "Import Settings from Another Project..." ), wxSize( 920, 460 ) ),
         m_frame( aFrame )
 {
