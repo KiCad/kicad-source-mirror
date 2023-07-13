@@ -2702,7 +2702,7 @@ void SIMULATOR_PANEL::OnSimRefresh( bool aFinal )
         for( int row = 0; row < m_measurementsGrid->GetNumberRows(); ++row )
             UpdateMeasurement( row );
     }
-    else if( simType == ST_OP )
+    else if( simType == ST_OP && aFinal )
     {
         m_simConsole->AppendText( _( "\n\nSimulation results:\n\n" ) );
         m_simConsole->SetInsertionPointEnd();
@@ -2731,6 +2731,12 @@ void SIMULATOR_PANEL::OnSimRefresh( bool aFinal )
 
             m_schematicFrame->Schematic().SetOperatingPoint( signal, val_list.at( 0 ) );
         }
+    }
+    else if( simType == ST_PZ && aFinal )
+    {
+        m_simConsole->AppendText( _( "\n\nSimulation results:\n\n" ) );
+        m_simConsole->SetInsertionPointEnd();
+        simulator()->Command( "print all" );
     }
 }
 
