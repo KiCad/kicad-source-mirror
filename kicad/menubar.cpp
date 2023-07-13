@@ -177,8 +177,8 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
 
     wxMenuItem* pcmMenuItem = toolsMenu->Add( KICAD_MANAGER_ACTIONS::showPluginManager );
 
-    if( KIPLATFORM::POLICY::GetPolicyState( POLICY_KEY_PCM )
-        == KIPLATFORM::POLICY::STATE::DISABLED )
+    if( KIPLATFORM::POLICY::GetPolicyBool( POLICY_KEY_PCM )
+        == KIPLATFORM::POLICY::PBOOL::DISABLED )
     {
         pcmMenuItem->Enable( false );
     }

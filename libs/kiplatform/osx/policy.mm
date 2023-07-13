@@ -22,7 +22,14 @@
 
 #include <wx/string.h>
 
-KIPLATFORM::POLICY::STATE KIPLATFORM::POLICY::GetPolicyState( const wxString& aKey )
+
+KIPLATFORM::POLICY::PBOOL KIPLATFORM::POLICY::GetPolicyBool( const wxString& aKey )
 {
-    return STATE::NOT_CONFIGURED;
+    return PBOOL::NOT_CONFIGURED;
+}
+
+
+std::uint32_t KIPLATFORM::POLICY::GetPolicyEnumUInt( const wxString& aKey )
+{
+    return 0;
 }
