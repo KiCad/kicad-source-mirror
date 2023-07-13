@@ -826,19 +826,15 @@ TRACE* SIM_PLOT_TAB::AddTrace( const wxString& aVectorName, int aType )
 }
 
 
-void SIM_PLOT_TAB::SetTraceData( TRACE* trace, unsigned int aPoints, const double* aX,
-                                 const double* aY )
+void SIM_PLOT_TAB::SetTraceData( TRACE* trace, std::vector<double>& aX, std::vector<double>& aY )
 {
-    std::vector<double> x( aX, aX + aPoints );
-    std::vector<double> y( aY, aY + aPoints );
-
     if( dynamic_cast<LOG_SCALE<mpScaleXLog>*>( m_axis_x ) )
     {
         // log( 0 ) is not valid.
-        if( x.size() > 0 && x[0] == 0 )
+        if( aX.size() > 0 && aX[0] == 0 )
         {
-            x.erase( x.begin() );
-            y.erase( y.begin() );
+            aX.erase( aX.begin() );
+            aY.erase( aY.begin() );
         }
     }
 
@@ -846,21 +842,21 @@ void SIM_PLOT_TAB::SetTraceData( TRACE* trace, unsigned int aPoints, const doubl
     {
         if( trace->GetType() & SPT_AC_PHASE )
         {
-            for( unsigned int i = 0; i < aPoints; i++ )
-                y[i] = y[i] * 180.0 / M_PI;                 // convert to degrees
+            for( double& pt : aY )
+                pt = pt * 180.0 / M_PI;                     // convert to degrees
         }
         else
         {
-            for( unsigned int i = 0; i < aPoints; i++ )
+            for( double& pt : aY )
             {
                 // log( 0 ) is not valid.
-                if( y[i] != 0 )
-                    y[i] = 20 * log( y[i] ) / log( 10.0 );  // convert to dB
+                if( pt != 0 )
+                    pt = 20 * log( pt ) / log( 10.0 );      // convert to dB
             }
         }
     }
 
-    trace->SetData( x, y );
+    trace->SetData( aX, aY );
 
     if( ( trace->GetType() & SPT_AC_PHASE ) || ( trace->GetType() & SPT_CURRENT ) )
         trace->SetScale( m_axis_x, m_axis_y2 );

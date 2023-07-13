@@ -1621,7 +1621,7 @@ void SIMULATOR_PANEL::updateTrace( const wxString& aVectorName, int aTraceType,
                     std::vector<double> sub_y( data_y.begin() + offset,
                                                data_y.begin() + offset + inner );
 
-                    aPlotTab->SetTraceData( trace, inner, sub_x.data(), sub_y.data() );
+                    aPlotTab->SetTraceData( trace, sub_x, sub_y );
                 }
             }
 
@@ -1632,7 +1632,7 @@ void SIMULATOR_PANEL::updateTrace( const wxString& aVectorName, int aTraceType,
     else if( TRACE* trace = aPlotTab->AddTrace( aVectorName, aTraceType ) )
     {
         if( data_y.size() >= size )
-            aPlotTab->SetTraceData( trace, size, data_x.data(), data_y.data() );
+            aPlotTab->SetTraceData( trace, data_x, data_y );
     }
 }
 
