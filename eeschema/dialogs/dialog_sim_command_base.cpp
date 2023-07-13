@@ -540,6 +540,85 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_pgCustom->Layout();
 	bSizer2->Fit( m_pgCustom );
 	m_simPages->AddPage( m_pgCustom, _("a page"), false );
+	m_pgPZ = new wxPanel( m_simPages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer821;
+	bSizer821 = new wxBoxSizer( wxVERTICAL );
+
+	wxGridBagSizer* gbSizer11;
+	gbSizer11 = new wxGridBagSizer( 6, 0 );
+	gbSizer11->SetFlexibleDirection( wxBOTH );
+	gbSizer11->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_pzFunctionTypeLabel = new wxStaticText( m_pgPZ, wxID_ANY, _("Transfer function:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_pzFunctionTypeLabel->Wrap( -1 );
+	gbSizer11->Add( m_pzFunctionTypeLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	wxString m_pzFunctionTypeChoices[] = { _("(output voltage) / (input voltage)"), _("(output voltage) / (input current)") };
+	int m_pzFunctionTypeNChoices = sizeof( m_pzFunctionTypeChoices ) / sizeof( wxString );
+	m_pzFunctionType = new wxChoice( m_pgPZ, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_pzFunctionTypeNChoices, m_pzFunctionTypeChoices, 0 );
+	m_pzFunctionType->SetSelection( 0 );
+	gbSizer11->Add( m_pzFunctionType, wxGBPosition( 0, 1 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 10 );
+
+	m_pzInputLabel = new wxStaticText( m_pgPZ, wxID_ANY, _("Input:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_pzInputLabel->Wrap( -1 );
+	gbSizer11->Add( m_pzInputLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	wxArrayString m_pzInputChoices;
+	m_pzInput = new wxChoice( m_pgPZ, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_pzInputChoices, 0 );
+	m_pzInput->SetSelection( 0 );
+	gbSizer11->Add( m_pzInput, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 10 );
+
+	m_pzInputRefLabel = new wxStaticText( m_pgPZ, wxID_ANY, _("Ref:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_pzInputRefLabel->Wrap( -1 );
+	gbSizer11->Add( m_pzInputRefLabel, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	wxArrayString m_pzInputRefChoices;
+	m_pzInputRef = new wxChoice( m_pgPZ, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_pzInputRefChoices, 0 );
+	m_pzInputRef->SetSelection( 0 );
+	gbSizer11->Add( m_pzInputRef, wxGBPosition( 1, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxEXPAND, 10 );
+
+	m_pzOutputLabel = new wxStaticText( m_pgPZ, wxID_ANY, _("Output:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_pzOutputLabel->Wrap( -1 );
+	gbSizer11->Add( m_pzOutputLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	wxArrayString m_pzOutputChoices;
+	m_pzOutput = new wxChoice( m_pgPZ, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_pzOutputChoices, 0 );
+	m_pzOutput->SetSelection( 0 );
+	gbSizer11->Add( m_pzOutput, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxEXPAND, 10 );
+
+	m_pzOutputRefLabel = new wxStaticText( m_pgPZ, wxID_ANY, _("Ref:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_pzOutputRefLabel->Wrap( -1 );
+	gbSizer11->Add( m_pzOutputRefLabel, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	wxArrayString m_pzOutputRefChoices;
+	m_pzOutputRef = new wxChoice( m_pgPZ, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_pzOutputRefChoices, 0 );
+	m_pzOutputRef->SetSelection( 0 );
+	gbSizer11->Add( m_pzOutputRef, wxGBPosition( 2, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxEXPAND, 10 );
+
+
+	bSizer821->Add( gbSizer11, 0, wxALL, 10 );
+
+	wxBoxSizer* bSizer17;
+	bSizer17 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_pzAnalysesLabel = new wxStaticText( m_pgPZ, wxID_ANY, _("Find:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_pzAnalysesLabel->Wrap( -1 );
+	bSizer17->Add( m_pzAnalysesLabel, 0, wxALL, 5 );
+
+	wxString m_pzAnalysesChoices[] = { _("Poles and Zeros"), _("Poles"), _("Zeros"), wxEmptyString };
+	int m_pzAnalysesNChoices = sizeof( m_pzAnalysesChoices ) / sizeof( wxString );
+	m_pzAnalyses = new wxChoice( m_pgPZ, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_pzAnalysesNChoices, m_pzAnalysesChoices, 0 );
+	m_pzAnalyses->SetSelection( 0 );
+	bSizer17->Add( m_pzAnalyses, 0, wxALL, 5 );
+
+
+	bSizer821->Add( bSizer17, 1, wxEXPAND|wxTOP|wxLEFT, 5 );
+
+
+	m_pgPZ->SetSizer( bSizer821 );
+	m_pgPZ->Layout();
+	bSizer821->Fit( m_pgPZ );
+	m_simPages->AddPage( m_pgPZ, _("a page"), false );
 
 	bSizer1->Add( m_simPages, 1, wxEXPAND | wxALL, 5 );
 
@@ -604,6 +683,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_inputSignalsFilter->Connect( wxEVT_MOTION, wxMouseEventHandler( DIALOG_SIM_COMMAND_BASE::OnFilterMouseMoved ), NULL, this );
 	m_inputSignalsFilter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SIM_COMMAND_BASE::OnFilterText ), NULL, this );
 	m_loadDirectives->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SIM_COMMAND_BASE::onLoadDirectives ), NULL, this );
+	m_pzFunctionType->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_COMMAND_BASE::onDCSource1Selected ), NULL, this );
 }
 
 DIALOG_SIM_COMMAND_BASE::~DIALOG_SIM_COMMAND_BASE()
@@ -618,5 +698,6 @@ DIALOG_SIM_COMMAND_BASE::~DIALOG_SIM_COMMAND_BASE()
 	m_inputSignalsFilter->Disconnect( wxEVT_MOTION, wxMouseEventHandler( DIALOG_SIM_COMMAND_BASE::OnFilterMouseMoved ), NULL, this );
 	m_inputSignalsFilter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SIM_COMMAND_BASE::OnFilterText ), NULL, this );
 	m_loadDirectives->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SIM_COMMAND_BASE::onLoadDirectives ), NULL, this );
+	m_pzFunctionType->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_COMMAND_BASE::onDCSource1Selected ), NULL, this );
 
 }

@@ -130,6 +130,48 @@ bool NGSPICE_CIRCUIT_MODEL::ParseDCCommand( const wxString& aCmd, SPICE_DC_PARAM
 }
 
 
+bool NGSPICE_CIRCUIT_MODEL::ParsePZCommand( const wxString& aCmd, wxString* transferFunction,
+                                            wxString* input, wxString* inputRef,
+                                            wxString* output, wxString* outputRef,
+                                            SPICE_PZ_ANALYSES* analyses )
+{
+    if( !aCmd.Lower().StartsWith( wxS( ".pz" ) ) )
+        return false;
+
+    *transferFunction = "vol";
+    analyses->m_Poles = true;
+    analyses->m_Zeros = true;
+
+    wxStringTokenizer tokens( aCmd.Mid( 3 ), wxS( " \t" ), wxTOKEN_STRTOK );
+
+    if( tokens.HasMoreTokens() )
+        *input = tokens.GetNextToken();
+
+    if( tokens.HasMoreTokens() )
+        *inputRef = tokens.GetNextToken();
+
+    if( tokens.HasMoreTokens() )
+        *output = tokens.GetNextToken();
+
+    if( tokens.HasMoreTokens() )
+        *outputRef = tokens.GetNextToken();
+
+    if( tokens.HasMoreTokens() )
+        *transferFunction = tokens.GetNextToken();
+
+    if( tokens.HasMoreTokens() )
+    {
+        wxString token = tokens.GetNextToken().Lower();
+
+        if( token == wxS( "pol" ) )
+            analyses->m_Zeros = false;
+        else if( token == wxS( "zer" ) )
+            analyses->m_Poles = false;
+    }
+
+    return true;
+}
+
 bool NGSPICE_CIRCUIT_MODEL::ParseNoiseCommand( const wxString& aCmd, wxString* aOutput,
                                                wxString* aRef, wxString* aSource, wxString* aScale,
                                                SPICE_VALUE* aPts, SPICE_VALUE* aFStart,

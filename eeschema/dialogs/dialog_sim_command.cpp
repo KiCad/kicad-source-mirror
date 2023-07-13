@@ -106,6 +106,11 @@ DIALOG_SIM_COMMAND::DIALOG_SIM_COMMAND( SIMULATOR_FRAME* aParent,
 
     for( const std::string& net : m_circuitModel->GetNets() )
     {
+        m_pzInput->Append( net );
+        m_pzInputRef->Append( net );
+        m_pzOutput->Append( net );
+        m_pzOutputRef->Append( net );
+
         m_noiseMeas->Append( net );
         m_noiseRef->Append( net );
     }
@@ -287,6 +292,31 @@ bool DIALOG_SIM_COMMAND::TransferDataFromWindow()
 
         m_simCommand = wxT( "fft" ) + vectors;
     }
+    else if( page == m_pgPZ )           // Pole-zero analyses
+    {
+        wxString input = m_pzInput->GetStringSelection();
+        wxString inputRef = m_pzInputRef->GetStringSelection();
+        wxString output = m_pzOutput->GetStringSelection();
+        wxString outputRef = m_pzOutputRef->GetStringSelection();
+        wxString transferFunction = wxS( "vol" );
+        wxString analyses = wxS( "pz" );
+
+        if( m_pzFunctionType->GetSelection() == 1 )
+            transferFunction = wxS( "cur" );
+
+        if( m_pzAnalyses->GetSelection() == 1 )
+            analyses = wxS( "pol" );
+        else if( m_pzAnalyses->GetSelection() == 2 )
+            analyses = wxS( "zer" );
+
+        m_simCommand.Printf( ".pz %s %s %s %s %s %s",
+                             input,
+                             inputRef,
+                             output,
+                             outputRef,
+                             transferFunction,
+                             analyses );
+    }
     else if( page == m_pgNOISE )        // Noise analysis
     {
         wxString output = m_noiseMeas->GetStringSelection();
@@ -447,7 +477,7 @@ void DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
 
         m_commandType->Clear();
 
-        for( SIM_TYPE type : { ST_AC, ST_DC, ST_NOISE, ST_OP, ST_TRAN, ST_SP, ST_FFT } )
+        for( SIM_TYPE type : { ST_OP, ST_DC, ST_AC, ST_TRAN, ST_PZ, ST_NOISE, ST_SP, ST_FFT } )
         {
             m_commandType->Append( SPICE_SIMULATOR::TypeToName( type, true )
                                         + wxT( "  \u2014  " )
@@ -548,6 +578,35 @@ void DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
 
             m_dcEnable2->SetValue( true );
         }
+
+        break;
+    }
+
+    case ST_PZ:
+    {
+        m_simPages->SetSelection( m_simPages->FindPage( m_pgPZ ) );
+
+        wxString          transferFunction;
+        wxString          input, inputRef;
+        wxString          output, outputRef;
+        SPICE_PZ_ANALYSES analyses;
+
+        m_circuitModel->ParsePZCommand( aCommand, &transferFunction, &input, &inputRef, &output,
+                                        &outputRef, &analyses );
+
+        m_pzInput->SetStringSelection( input );
+        m_pzInputRef->SetStringSelection( inputRef );
+        m_pzOutput->SetStringSelection( output );
+        m_pzOutputRef->SetStringSelection( outputRef );
+
+        m_pzFunctionType->SetSelection( transferFunction.Lower() == "cur" ? 1 : 0 );
+
+        if( analyses.m_Poles && analyses.m_Zeros )
+            m_pzAnalyses->SetSelection( 0 );
+        else if( analyses.m_Poles )
+            m_pzAnalyses->SetSelection( 1 );
+        else
+            m_pzAnalyses->SetSelection( 2 );
 
         break;
     }
@@ -653,6 +712,7 @@ void DIALOG_SIM_COMMAND::OnCommandType( wxCommandEvent& event )
     case ST_AC:    m_simPages->SetSelection( m_simPages->FindPage( m_pgAC ) );     break;
     case ST_SP:    m_simPages->SetSelection( m_simPages->FindPage( m_pgSP ) );     break;
     case ST_DC:    m_simPages->SetSelection( m_simPages->FindPage( m_pgDC ) );     break;
+    case ST_PZ:    m_simPages->SetSelection( m_simPages->FindPage( m_pgPZ ) );     break;
     case ST_NOISE: m_simPages->SetSelection( m_simPages->FindPage( m_pgNOISE ) );  break;
     case ST_TRAN:  m_simPages->SetSelection( m_simPages->FindPage( m_pgTRAN ) );   break;
     case ST_OP:    m_simPages->SetSelection( m_simPages->FindPage( m_pgOP ) );     break;

@@ -43,6 +43,13 @@ struct SPICE_DC_PARAMS
     SPICE_VALUE m_vincrement;
 };
 
+
+struct SPICE_PZ_ANALYSES
+{
+    bool m_Poles;
+    bool m_Zeros;
+};
+
 /// Special netlist exporter flavor that allows one to override simulation commands
 class NGSPICE_CIRCUIT_MODEL : public NETLIST_EXPORTER_SPICE, public SIMULATION_MODEL
 {
@@ -83,6 +90,10 @@ public:
      */
     bool ParseDCCommand( const wxString& aCmd, SPICE_DC_PARAMS* aSource1,
                          SPICE_DC_PARAMS* aSource2 );
+
+    bool ParsePZCommand( const wxString& aCmd, wxString* transferFunction, wxString* input,
+                         wxString* inputRef, wxString* output, wxString* outputRef,
+                         SPICE_PZ_ANALYSES* analyses );
 
     bool ParseNoiseCommand( const wxString& aCmd, wxString* aOutput, wxString* aRef,
                             wxString* aSource, wxString* aScale, SPICE_VALUE* aPts,
