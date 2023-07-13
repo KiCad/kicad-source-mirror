@@ -426,13 +426,13 @@ void BOARD::Move( const VECTOR2I& aMoveVector ) // overload
     INSPECTOR_FUNC inspector =
             [&] ( EDA_ITEM* item, void* testData )
             {
-                BOARD_ITEM* brdItem = static_cast<BOARD_ITEM*>( item );
-
-                // aMoveVector was snapshotted, don't need "data".
-                // Only move the top level group
-                if( brdItem->GetParentGroup() == nullptr
-                        && brdItem->GetParentFootprint() == nullptr )
-                    brdItem->Move( aMoveVector );
+                if( BOARD_ITEM* board_item = dynamic_cast<BOARD_ITEM*>( item ) )
+                {
+                    // aMoveVector was snapshotted, don't need "data".
+                    // Only move the top level group
+                    if( !board_item->GetParentGroup() && !board_item->GetParentFootprint() )
+                        board_item->Move( aMoveVector );
+                }
 
                 return INSPECT_RESULT::CONTINUE;
             };
@@ -2257,11 +2257,14 @@ BOARD::GroupLegalOpsField BOARD::GroupLegalOps( const PCB_SELECTION& selection )
 
     for( EDA_ITEM* item : selection )
     {
-        if( item->Type() == PCB_GROUP_T )
-            hasGroup = true;
+        if( BOARD_ITEM* board_item = dynamic_cast<BOARD_ITEM*>( item ) )
+        {
+            if( board_item->Type() == PCB_GROUP_T )
+                hasGroup = true;
 
-        if( static_cast<BOARD_ITEM*>( item )->GetParentGroup() )
-            hasMember = true;
+            if( board_item->GetParentGroup() )
+                hasMember = true;
+        }
     }
 
     GroupLegalOpsField legalOps;

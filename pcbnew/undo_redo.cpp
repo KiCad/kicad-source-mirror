@@ -112,39 +112,37 @@ static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
 {
     for( PCB_TRACK* item : aPcb->Tracks() )
     {
-        if( aItem == static_cast<BOARD_ITEM*>( item ) )
+        if( aItem == item)
             return true;
     }
 
     for( FOOTPRINT* item : aPcb->Footprints() )
     {
-        if( aItem == static_cast<BOARD_ITEM*>( item ) )
+        if( aItem == item )
             return true;
     }
 
     for( BOARD_ITEM* item : aPcb->Drawings() )
     {
-        if( aItem == static_cast<BOARD_ITEM*>( item ) )
+        if( aItem == item )
             return true;
     }
 
     for( ZONE* item : aPcb->Zones() )
     {
-        if( aItem == static_cast<BOARD_ITEM*>( item ) )
+        if( aItem == item )
             return true;
     }
 
-    NETINFO_LIST& netInfo = aPcb->GetNetInfo();
-
-    for( NETINFO_LIST::iterator i = netInfo.begin(); i != netInfo.end(); ++i )
+    for( const NETINFO_ITEM* item : aPcb->GetNetInfo() )
     {
-        if( aItem == static_cast<BOARD_ITEM*>( *i ) )
+        if( aItem == item )
             return true;
     }
 
     for( PCB_GROUP* item : aPcb->Groups() )
     {
-        if( aItem == static_cast<BOARD_ITEM*>( item ) )
+        if( aItem == item )
             return true;
     }
 
@@ -536,14 +534,20 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
         case UNDO_REDO::REGROUP:
             aList->SetPickedItemStatus( UNDO_REDO::UNGROUP, ii );
-            static_cast<BOARD_ITEM*>( eda_item )->SetParentGroup( nullptr );
+
+            if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( eda_item ) )
+                boardItem->SetParentGroup( nullptr );
+
             break;
 
         case UNDO_REDO::UNGROUP:
             aList->SetPickedItemStatus( UNDO_REDO::REGROUP, ii );
 
-            if( group )
-                group->AddItem( static_cast<BOARD_ITEM*>( eda_item ) );
+            if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( eda_item ) )
+            {
+                if( group )
+                    group->AddItem( boardItem );
+            }
 
             break;
 
@@ -626,11 +630,14 @@ void PCB_BASE_EDIT_FRAME::ClearUndoORRedoList( UNDO_REDO_LIST whichList, int aIt
 
 void PCB_BASE_EDIT_FRAME::ClearListAndDeleteItems( PICKED_ITEMS_LIST* aList )
 {
-    aList->ClearListAndDeleteItems( []( EDA_ITEM* item )
-                                    {
-                                        static_cast<BOARD_ITEM*>( item )->SetParentGroup( nullptr );
-                                        delete item;
-                                    } );
+    aList->ClearListAndDeleteItems(
+            []( EDA_ITEM* item )
+            {
+                if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item ) )
+                    boardItem->SetParentGroup( nullptr );
+
+                delete item;
+            } );
 }
 
 

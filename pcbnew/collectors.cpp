@@ -136,26 +136,16 @@ const std::vector<KICAD_T> GENERAL_COLLECTOR::DraggableItems = {
 };
 
 
-INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
+INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData )
 {
-    BOARD_ITEM*         item        = static_cast<BOARD_ITEM*>( testItem );
-    FOOTPRINT*          footprint   = item->GetParentFootprint();
-    PCB_GROUP*          group       = nullptr;
-    PAD*                pad         = nullptr;
-    bool                pad_through = false;
-    PCB_VIA*            via         = nullptr;
-    PCB_MARKER*         marker      = nullptr;
-    ZONE*               zone        = nullptr;
-    PCB_DIMENSION_BASE* dimension   = nullptr;
-
-#if 0   // debugging
+#if 1   // debugging
     static int  breakhere = 0;
 
-    switch( item->Type() )
+    switch( aTestItem->Type() )
     {
     case PCB_PAD_T:
         {
-            FOOTPRINT* footprint = (FOOTPRINT*) item->GetParent();
+            FOOTPRINT* footprint = (FOOTPRINT*) aTestItem->GetParent();
 
             if( footprint->GetReference() == wxT( "Y2" ) )
                 breakhere++;
@@ -190,7 +180,7 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 
     case PCB_FOOTPRINT_T:
         {
-            FOOTPRINT* footprint = (FOOTPRINT*) item;
+            FOOTPRINT* footprint = (FOOTPRINT*) aTestItem;
 
             if( footprint->GetReference() == wxT( "C98" ) )
                 breakhere++;
@@ -208,7 +198,19 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 
 #endif
 
-    switch( item->Type() )
+    BOARD_ITEM*         boardItem   = nullptr;
+    FOOTPRINT*          footprint   = nullptr;
+    PCB_GROUP*          group       = nullptr;
+    PAD*                pad         = nullptr;
+    bool                pad_through = false;
+    PCB_VIA*            via         = nullptr;
+    PCB_MARKER*         marker      = nullptr;
+    ZONE*               zone        = nullptr;
+    PCB_FIELD*          field       = nullptr;
+    PCB_TEXT*           text        = nullptr;
+    PCB_DIMENSION_BASE* dimension   = nullptr;
+
+    switch( aTestItem->Type() )
     {
     case PCB_PAD_T:
         // there are pad specific visibility controls.
@@ -217,7 +219,8 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         // board side must be visible
         // if pad is a thru hole, then it can be visible when its parent footprint is not.
         // for through pads: pads on Front or Back board sides must be visible
-        pad = static_cast<PAD*>( item );
+        pad = static_cast<PAD*>( aTestItem );
+        boardItem = pad;
 
         if( ( pad->GetAttribute() != PAD_ATTRIB::SMD ) &&
             ( pad->GetAttribute() != PAD_ATTRIB::CONN ) )  // a hole is present, so multiple layers
@@ -230,7 +233,8 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         break;
 
     case PCB_VIA_T:     // vias are on many layers, so layer test is specific
-        via = static_cast<PCB_VIA*>( item );
+        via = static_cast<PCB_VIA*>( aTestItem );
+        boardItem = via;
         break;
 
     case PCB_TRACE_T:
@@ -238,14 +242,17 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         if( m_Guide->IgnoreTracks() )
             return INSPECT_RESULT::CONTINUE;
 
+        boardItem = static_cast<PCB_TRACK*>( aTestItem );
         break;
 
     case PCB_ZONE_T:
-        zone = static_cast<ZONE*>( item );
+        zone = static_cast<ZONE*>( aTestItem );
+        boardItem = zone;
         break;
 
     case PCB_TEXTBOX_T:
     case PCB_SHAPE_T:
+        boardItem = static_cast<BOARD_ITEM*>( aTestItem );
         break;
 
     case PCB_DIM_ALIGNED_T:
@@ -253,29 +260,32 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     case PCB_DIM_RADIAL_T:
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
-        dimension = static_cast<PCB_DIMENSION_BASE*>( item );
+        dimension = static_cast<PCB_DIMENSION_BASE*>( aTestItem );
+        boardItem = dimension;
         break;
 
     case PCB_TARGET_T:
+        boardItem = static_cast<BOARD_ITEM*>( aTestItem );
         break;
 
     case PCB_FIELD_T:
-    {
-        PCB_FIELD* field = static_cast<PCB_FIELD*>( item );
+        field = static_cast<PCB_FIELD*>( aTestItem );
 
         if( field->IsReference() && m_Guide->IgnoreFPReferences() )
             return INSPECT_RESULT::CONTINUE;
 
         if( field->IsValue() && m_Guide->IgnoreFPValues() )
             return INSPECT_RESULT::CONTINUE;
-    }
 
         KI_FALLTHROUGH;
+
     case PCB_TEXT_T:
-        if( item->GetParentFootprint() )
+        text = static_cast<PCB_TEXT*>( aTestItem );
+        boardItem = text;
+
+        if( text->GetParentFootprint() )
         {
-            PCB_TEXT*    text = static_cast<PCB_TEXT*>( item );
-            PCB_LAYER_ID layer = item->GetLayer();
+            PCB_LAYER_ID layer = text->GetLayer();
 
             if( m_Guide->IgnoreHiddenFPText() )
             {
@@ -293,20 +303,27 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         break;
 
     case PCB_FOOTPRINT_T:
-        footprint = static_cast<FOOTPRINT*>( item );
+        footprint = static_cast<FOOTPRINT*>( aTestItem );
+        boardItem = footprint;
         break;
 
     case PCB_GROUP_T:
-        group = static_cast<PCB_GROUP*>( item );
+        group = static_cast<PCB_GROUP*>( aTestItem );
+        boardItem = group;
         break;
 
     case PCB_MARKER_T:
-        marker = static_cast<PCB_MARKER*>( item );
+        marker = static_cast<PCB_MARKER*>( aTestItem );
+        boardItem = marker;
         break;
 
     default:
+        boardItem = dynamic_cast<BOARD_ITEM*>( aTestItem );
         break;
     }
+
+    if( boardItem && !footprint )
+        footprint = boardItem->GetParentFootprint();
 
     // common tests:
 
@@ -341,7 +358,7 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     {
         // Markers are not sensitive to the layer
         if( marker->HitTest( m_refPos ) )
-            Append( item );
+            Append( aTestItem );
 
         return INSPECT_RESULT::CONTINUE;
     }
@@ -350,7 +367,7 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     {
         // Groups are not sensitive to the layer ... ?
         if( group->HitTest( m_refPos ) )
-            Append( item );
+            Append( aTestItem );
 
         return INSPECT_RESULT::CONTINUE;
     }
@@ -367,8 +384,9 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         }
     }
 
-    if( ( item->IsOnLayer( m_Guide->GetPreferredLayer() ) )
-            && ( !item->IsLocked() || !m_Guide->IgnoreLockedItems() ) )
+    if( boardItem
+            && ( boardItem->IsOnLayer( m_Guide->GetPreferredLayer() ) )
+            && ( !boardItem->IsLocked() || !m_Guide->IgnoreLockedItems() ) )
     {
         // footprints and their subcomponents: reference, value and pads are not sensitive
         // to the layer visibility controls.  They all have their own separate visibility
@@ -382,7 +400,7 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
             if( zone->HitTestForCorner( m_refPos, accuracy * 2 )
                     || zone->HitTestForEdge( m_refPos, accuracy ) )
             {
-                Append( item );
+                Append( aTestItem );
                 return INSPECT_RESULT::CONTINUE;
             }
             else if( !m_Guide->IgnoreZoneFills() )
@@ -392,32 +410,32 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                     if( m_Guide->IsLayerVisible( layer )
                             && zone->HitTestFilledArea( layer, m_refPos ) )
                     {
-                        Append( item );
+                        Append( aTestItem );
                         return INSPECT_RESULT::CONTINUE;
                     }
                 }
             }
         }
-        else if( item == footprint )
+        else if( aTestItem == footprint )
         {
             if( footprint->HitTest( m_refPos, accuracy )
                     && footprint->HitTestAccurate( m_refPos, accuracy ) )
             {
-                Append( item );
+                Append( aTestItem );
                 return INSPECT_RESULT::CONTINUE;
             }
         }
         else if( pad || via )
         {
-            if( item->HitTest( m_refPos, accuracy ) )
+            if( aTestItem->HitTest( m_refPos, accuracy ) )
             {
-                Append( item );
+                Append( aTestItem );
                 return INSPECT_RESULT::CONTINUE;
             }
         }
         else
         {
-            PCB_LAYER_ID layer = item->GetLayer();
+            PCB_LAYER_ID layer = boardItem->GetLayer();
 
             if( m_Guide->IsLayerVisible( layer ) )
             {
@@ -428,16 +446,17 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                     accuracy = KiROUND( accuracy * 1.5 );
                 }
 
-                if( item->HitTest( m_refPos, accuracy ) )
+                if( aTestItem->HitTest( m_refPos, accuracy ) )
                 {
-                    Append( item );
+                    Append( aTestItem );
                     return INSPECT_RESULT::CONTINUE;
                 }
             }
         }
     }
 
-    if( m_Guide->IncludeSecondary() && ( !item->IsLocked() || !m_Guide->IgnoreLockedItems() ) )
+    if( m_Guide->IncludeSecondary()
+            && ( !boardItem || !boardItem->IsLocked() || !m_Guide->IgnoreLockedItems() ) )
     {
         // for now, "secondary" means "tolerate any visible layer".  It has no effect on other
         // criteria, since there is a separate "ignore" control for those in the COLLECTORS_GUIDE
@@ -454,7 +473,7 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
             if( zone->HitTestForCorner( m_refPos, accuracy * 2 )
                     || zone->HitTestForEdge( m_refPos, accuracy ) )
             {
-                Append2nd( item );
+                Append2nd( aTestItem );
                 return INSPECT_RESULT::CONTINUE;
             }
             else if( !m_Guide->IgnoreZoneFills() )
@@ -464,47 +483,42 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                     if( m_Guide->IsLayerVisible( layer )
                             && zone->HitTestFilledArea( layer, m_refPos ) )
                     {
-                        Append2nd( item );
+                        Append2nd( aTestItem );
                         return INSPECT_RESULT::CONTINUE;
                     }
                 }
             }
         }
-        else if( item->Type() == PCB_FOOTPRINT_T )
+        else if( aTestItem->Type() == PCB_FOOTPRINT_T )
         {
             if( footprint->HitTest( m_refPos, accuracy )
                     && footprint->HitTestAccurate( m_refPos, accuracy ) )
             {
-                Append2nd( item );
+                Append2nd( aTestItem );
                 return INSPECT_RESULT::CONTINUE;
             }
         }
         else if( pad || via )
         {
-            if( item->HitTest( m_refPos, accuracy ) )
+            if( aTestItem->HitTest( m_refPos, accuracy ) )
             {
-                Append2nd( item );
+                Append2nd( aTestItem );
                 return INSPECT_RESULT::CONTINUE;
             }
         }
-        else
+        else if( boardItem && m_Guide->IsLayerVisible( boardItem->GetLayer() ) )
         {
-            PCB_LAYER_ID layer = item->GetLayer();
-
-            if( m_Guide->IsLayerVisible( layer ) )
+            if( dimension )
             {
-                if( dimension )
-                {
-                    // Dimensions feel particularly hard to select, probably due to their
-                    // noisy shape making it feel like they should have a larger boundary.
-                    accuracy = KiROUND( accuracy * 1.5 );
-                }
+                // Dimensions feel particularly hard to select, probably due to their
+                // noisy shape making it feel like they should have a larger boundary.
+                accuracy = KiROUND( accuracy * 1.5 );
+            }
 
-                if( item->HitTest( m_refPos, accuracy ) )
-                {
-                    Append2nd( item );
-                    return INSPECT_RESULT::CONTINUE;
-                }
+            if( aTestItem->HitTest( m_refPos, accuracy ) )
+            {
+                Append2nd( aTestItem );
+                return INSPECT_RESULT::CONTINUE;
             }
         }
     }

@@ -1348,13 +1348,14 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     else if( selection.Size() == 1 )
     {
         // Display properties dialog
-        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.Front() );
+        if( BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( selection.Front() ) )
+        {
+            // Do not handle undo buffer, it is done by the properties dialogs
+            editFrame->OnEditItemRequest( item );
 
-        // Do not handle undo buffer, it is done by the properties dialogs
-        editFrame->OnEditItemRequest( item );
-
-        // Notify other tools of the changes
-        m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
+            // Notify other tools of the changes
+            m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
+        }
     }
     else if( selection.Size() == 0 && getView()->IsLayerVisible( LAYER_DRAWINGSHEET ) )
     {
@@ -1380,10 +1381,11 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
         for( EDA_ITEM* eda_item : selCopy )
         {
-            BOARD_ITEM* item = static_cast<BOARD_ITEM*>( eda_item );
-
-            if( !( item->GetLayerSet() & visible ).any() )
-                m_selectionTool->RemoveItemFromSel( item );
+            if( BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( eda_item ) )
+            {
+                if( !( item->GetLayerSet() & visible ).any() )
+                    m_selectionTool->RemoveItemFromSel( item );
+            }
         }
     }
 
@@ -1490,7 +1492,8 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                 }
             }
 
-            static_cast<BOARD_ITEM*>( item )->Rotate( refPt, rotateAngle );
+            if( BOARD_ITEM* board_item = dynamic_cast<BOARD_ITEM*>( item ) )
+                board_item->Rotate( refPt, rotateAngle );
         }
 
         if( !localCommit.Empty() )
@@ -1752,28 +1755,33 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     {
         if( m_dragging && selection.HasReferencePoint() )
             refPt = selection.GetReferencePoint();
-        else
-            refPt = static_cast<BOARD_ITEM*>( selection.GetItem( 0 ) )->GetPosition();
+        else if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( selection.Front() ) )
+            refPt = boardItem->GetPosition();
     }
 
     bool leftRight = frame()->GetPcbNewSettings()->m_FlipLeftRight;
 
     for( EDA_ITEM* item : selection )
     {
-        if( !item->IsNew() && !item->IsMoving() && ( !IsFootprintEditor() || commit->Empty() ) )
+        if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item ) )
         {
-            commit->Modify( item );
-
-            if( item->Type() == PCB_GROUP_T )
+            if( !boardItem->IsNew() && !boardItem->IsMoving()
+                    && ( !IsFootprintEditor() || commit->Empty() ) )
             {
-                static_cast<PCB_GROUP*>( item )->RunOnDescendants( [&]( BOARD_ITEM* bItem )
-                                                                   {
-                                                                       commit->Modify( bItem );
-                                                                   });
-            }
-        }
+                commit->Modify( boardItem );
 
-        static_cast<BOARD_ITEM*>( item )->Flip( refPt, leftRight );
+                if( boardItem->Type() == PCB_GROUP_T )
+                {
+                    static_cast<PCB_GROUP*>( boardItem )->RunOnDescendants(
+                            [&]( BOARD_ITEM* descendant )
+                            {
+                                commit->Modify( descendant );
+                            });
+                }
+            }
+
+            boardItem->Flip( refPt, leftRight );
+        }
     }
 
     if( !localCommit.Empty() )
@@ -1807,9 +1815,12 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
 
     for( EDA_ITEM* item : aItems )
     {
-        BOARD_ITEM* board_item = static_cast<BOARD_ITEM*>( item );
-        FOOTPRINT*  parentFP = board_item->GetParentFootprint();
-        PCB_GROUP*  parentGroup = board_item->GetParentGroup();
+        BOARD_ITEM* board_item = dynamic_cast<BOARD_ITEM*>( item );
+
+        wxCHECK2( board_item, continue );
+
+        FOOTPRINT* parentFP = board_item->GetParentFootprint();
+        PCB_GROUP* parentGroup = board_item->GetParentGroup();
 
         if( parentGroup )
         {
@@ -2090,46 +2101,47 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
         if( IsFootprintEditor() )
             commit.Modify( selection.Front() );
 
-        for( EDA_ITEM* selItem : selection )
+        for( EDA_ITEM* item : selection )
         {
-            BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selItem );
+            BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item );
 
-            if( !item->IsNew() && !IsFootprintEditor() )
+            wxCHECK2( boardItem, continue );
+
+            if( !boardItem->IsNew() && !IsFootprintEditor() )
             {
-                commit.Modify( item );
+                commit.Modify( boardItem );
 
-                if( item->Type() == PCB_GROUP_T )
+                if( boardItem->Type() == PCB_GROUP_T )
                 {
-                    PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
+                    PCB_GROUP* group = static_cast<PCB_GROUP*>( boardItem );
 
-                    group->RunOnDescendants( [&]( BOARD_ITEM* bItem )
+                    group->RunOnDescendants( [&]( BOARD_ITEM* descendant )
                                              {
-                                                 commit.Modify( bItem );
+                                                 commit.Modify( descendant );
                                              });
                 }
             }
 
-            if( !item->GetParent() || !item->GetParent()->IsSelected() )
-                item->Move( translation );
+            if( !boardItem->GetParent() || !boardItem->GetParent()->IsSelected() )
+                boardItem->Move( translation );
 
             switch( rotationAnchor )
             {
             case ROTATE_AROUND_ITEM_ANCHOR:
-                item->Rotate( item->GetPosition(), angle );
+                boardItem->Rotate( boardItem->GetPosition(), angle );
                 break;
-            case ROTATE_AROUND_SEL_CENTER:
-                item->Rotate( selCenter, angle );
+            case ROTATE_AROUND_SEL_CENTER: boardItem->Rotate( selCenter, angle );
                 break;
             case ROTATE_AROUND_USER_ORIGIN:
-                item->Rotate( frame()->GetScreen()->m_LocalOrigin, angle );
+                boardItem->Rotate( frame()->GetScreen()->m_LocalOrigin, angle );
                 break;
             case ROTATE_AROUND_AUX_ORIGIN:
-                item->Rotate( board()->GetDesignSettings().GetAuxOrigin(), angle );
+                boardItem->Rotate( board()->GetDesignSettings().GetAuxOrigin(), angle );
                 break;
             }
 
             if( !m_dragging )
-                getView()->Update( item );
+                getView()->Update( boardItem );
         }
 
         commit.Push( _( "Move exact" ) );
@@ -2183,7 +2195,9 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     for( EDA_ITEM* item : selection )
     {
         BOARD_ITEM* dupe_item = nullptr;
-        BOARD_ITEM* orig_item = static_cast<BOARD_ITEM*>( item );
+        BOARD_ITEM* orig_item = dynamic_cast<BOARD_ITEM*>( item );
+
+        wxCHECK2( orig_item, continue );
 
         if( m_isFootprintEditor )
         {
@@ -2324,9 +2338,7 @@ void EDIT_TOOL::PadFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector,
 {
     for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
     {
-        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( aCollector[i] );
-
-        if( item->Type() != PCB_PAD_T )
+        if( aCollector[i]->Type() != PCB_PAD_T )
             aCollector.Remove( i );
     }
 }
@@ -2337,9 +2349,7 @@ void EDIT_TOOL::FootprintFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector,
 {
     for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
     {
-        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( aCollector[i] );
-
-        if( item->Type() != PCB_FOOTPRINT_T )
+        if( aCollector[i]->Type() != PCB_FOOTPRINT_T )
             aCollector.Remove( i );
     }
 }
@@ -2357,9 +2367,8 @@ bool EDIT_TOOL::updateModificationPoint( PCB_SELECTION& aSelection )
     // When there is only one item selected, the reference point is its position...
     if( aSelection.Size() == 1 )
     {
-        auto item =  static_cast<BOARD_ITEM*>( aSelection.Front() );
-        auto pos = item->GetPosition();
-        aSelection.SetReferencePoint( VECTOR2I( pos.x, pos.y ) );
+        if( BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( aSelection.Front() ) )
+            aSelection.SetReferencePoint( item->GetPosition() );
     }
     // ...otherwise modify items with regard to the grid-snapped center position
     else
@@ -2491,7 +2500,10 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
         std::vector<BOARD_ITEM*> items;
 
         for( EDA_ITEM* item : selection )
-            items.push_back( static_cast<BOARD_ITEM*>( item ) );
+        {
+            if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item ) )
+                items.push_back( boardItem );
+        }
 
         VECTOR2I refPoint;
 

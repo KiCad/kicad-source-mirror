@@ -1212,9 +1212,9 @@ int BOARD_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
 
         for( EDA_ITEM* item : selection )
         {
-            BOARD_ITEM* board_item = static_cast<BOARD_ITEM*>( item );
+            BOARD_ITEM* board_item = dynamic_cast<BOARD_ITEM*>( item );
 
-            if( board_item->IsLocked() )
+            if( board_item && board_item->IsLocked() )
             {
                 aMode = OFF;
                 break;
@@ -1226,7 +1226,9 @@ int BOARD_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
 
     for( EDA_ITEM* item : selection )
     {
-        BOARD_ITEM* board_item = static_cast<BOARD_ITEM*>( item );
+        BOARD_ITEM* board_item = dynamic_cast<BOARD_ITEM*>( item );
+
+        wxCHECK2( board_item, continue );
 
         commit.Modify( board_item );
 

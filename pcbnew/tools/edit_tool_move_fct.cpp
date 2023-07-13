@@ -95,9 +95,9 @@ int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
             if( item->Type() == PCB_GROUP_T )
             {
                 PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
-                group->RunOnDescendants( [&]( BOARD_ITEM* bItem )
+                group->RunOnDescendants( [&]( BOARD_ITEM* descendant )
                                          {
-                                             commit->Modify( bItem );
+                                             commit->Modify( descendant );
                                          });
             }
         }
@@ -105,8 +105,10 @@ int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
 
     for( size_t i = 0; i < sorted.size() - 1; i++ )
     {
-        BOARD_ITEM* a = static_cast<BOARD_ITEM*>( sorted[i] );
-        BOARD_ITEM* b = static_cast<BOARD_ITEM*>( sorted[( i + 1 ) % sorted.size()] );
+        BOARD_ITEM* a = dynamic_cast<BOARD_ITEM*>( sorted[i] );
+        BOARD_ITEM* b = dynamic_cast<BOARD_ITEM*>( sorted[( i + 1 ) % sorted.size()] );
+
+        wxCHECK2( a && b, continue );
 
         // Swap X,Y position
         VECTOR2I aPos = a->GetPosition(), bPos = b->GetPosition();
@@ -404,7 +406,10 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
         orig_items.clear();
 
         for( EDA_ITEM* item : selection.GetItemsSortedBySelectionOrder() )
-            orig_items.push_back( static_cast<BOARD_ITEM*>( item ) );
+        {
+            if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item ) )
+                orig_items.push_back( boardItem );
+        }
 
         updateStatusPopup( orig_items[ itemIdx ], itemIdx + 1, orig_items.size() );
         statusPopup.Popup();

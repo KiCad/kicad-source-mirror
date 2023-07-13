@@ -82,7 +82,10 @@ void ARRAY_CREATOR::Invoke()
 
         for ( int i = 0; i < m_selection.Size(); ++i )
         {
-            BOARD_ITEM* item = static_cast<BOARD_ITEM*>( m_selection[ i ] );
+            BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( m_selection[ i ] );
+
+            if( !item )
+                continue;
 
             if( item->Type() == PCB_PAD_T && !m_isFootprintEditor )
             {

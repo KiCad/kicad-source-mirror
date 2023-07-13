@@ -109,8 +109,11 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
 
         for( const EDA_ITEM* item : aSelected )
         {
-            const PCB_GROUP* group = dynamic_cast<const PCB_GROUP*>( item );
-            BOARD_ITEM*      clone;
+            const BOARD_ITEM* boardItem = dynamic_cast<const BOARD_ITEM*>( item );
+            const PCB_GROUP*  group = dynamic_cast<const PCB_GROUP*>( item );
+            BOARD_ITEM*       clone = nullptr;
+
+            wxCHECK2( boardItem, continue );
 
             if( const PCB_FIELD* field = dynamic_cast<const PCB_FIELD*>( item ) )
             {
@@ -121,7 +124,7 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
             if( group )
                 clone = static_cast<BOARD_ITEM*>( group->DeepClone() );
             else
-                clone = static_cast<BOARD_ITEM*>( item->Clone() );
+                clone = static_cast<BOARD_ITEM*>( boardItem->Clone() );
 
             // If it is only a footprint, clear the nets from the pads
             if( PAD* pad = dynamic_cast<PAD*>( clone ) )
@@ -198,39 +201,41 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
 
         m_formatter.Print( 0, "\n" );
 
-        for( EDA_ITEM* i : aSelected )
+        for( EDA_ITEM* item : aSelected )
         {
-            BOARD_ITEM* item = static_cast<BOARD_ITEM*>( i );
+            BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item );
             BOARD_ITEM* copy = nullptr;
 
-            if( item->Type() == PCB_FIELD_T || item->Type() == PCB_TEXT_T )
+            wxCHECK2( boardItem, continue );
+
+            if( boardItem->Type() == PCB_FIELD_T || boardItem->Type() == PCB_TEXT_T )
             {
-                copy = static_cast<BOARD_ITEM*>( item->Clone() );
+                copy = static_cast<BOARD_ITEM*>( boardItem->Clone() );
 
                 PCB_TEXT* textItem = static_cast<PCB_TEXT*>( copy );
 
                 if( textItem->GetText() == wxT( "${VALUE}" ) )
-                    textItem->SetText( item->GetParentFootprint()->GetValue() );
+                    textItem->SetText( boardItem->GetParentFootprint()->GetValue() );
                 else if( textItem->GetText() == wxT( "${REFERENCE}" ) )
-                    textItem->SetText( item->GetParentFootprint()->GetReference() );
+                    textItem->SetText( boardItem->GetParentFootprint()->GetReference() );
             }
-            else if( item->Type() == PCB_PAD_T )
+            else if( boardItem->Type() == PCB_PAD_T )
             {
                 // Create a parent to own the copied pad
                 FOOTPRINT* footprint = new FOOTPRINT( m_board );
-                PAD*       pad = (PAD*) item->Clone();
+                PAD*       pad = (PAD*) boardItem->Clone();
 
                 footprint->SetPosition( pad->GetPosition() );
                 footprint->Add( pad );
                 copy = footprint;
             }
-            else if( item->Type() == PCB_GROUP_T )
+            else if( boardItem->Type() == PCB_GROUP_T )
             {
-                copy = static_cast<PCB_GROUP*>( item )->DeepClone();
+                copy = static_cast<PCB_GROUP*>( boardItem )->DeepClone();
             }
             else
             {
-                copy = static_cast<BOARD_ITEM*>( item->Clone() );
+                copy = static_cast<BOARD_ITEM*>( boardItem->Clone() );
             }
 
             auto prepItem = [&]( BOARD_ITEM* aItem )

@@ -190,7 +190,7 @@ BOARD_ITEM* BOARD_ITEM::Duplicate() const
     if( dupe->GetParentGroup() )
         dupe->GetParentGroup()->AddItem( dupe );
 
-    return static_cast<BOARD_ITEM*>( dupe );
+    return dupe;
 }
 
 

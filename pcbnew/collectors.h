@@ -209,7 +209,7 @@ protected:
      * "2nd" choice, which will be appended to the end of COLLECTOR's prime
      * "list" at the end of the search.
      */
-    std::vector<BOARD_ITEM*>    m_List2nd;
+    std::vector<EDA_ITEM*>      m_List2nd;
 
     /**
      * Determine which items are to be collected by Inspect().
@@ -275,7 +275,7 @@ public:
         m_List2nd.clear();
     }
 
-    void Append2nd( BOARD_ITEM* item )
+    void Append2nd( EDA_ITEM* item )
     {
         m_List2nd.push_back( item );
     }
@@ -294,10 +294,10 @@ public:
      * Search and collect all the objects which match the test data.
      *
      * @param testItem An EDA_ITEM to examine.
-     * @param testData is not used in this class.
+     * @param aTestData is not used in this class.
      * @return SEARCH_QUIT if the Iterator is to stop the scan, else SCAN_CONTINUE
      */
-    INSPECT_RESULT Inspect( EDA_ITEM* testItem, void* testData )  override;
+    INSPECT_RESULT Inspect( EDA_ITEM* aTestItem, void* aTestData )  override;
 
     /**
      * Scan a BOARD_ITEM using this class's Inspector method, which does the collection.

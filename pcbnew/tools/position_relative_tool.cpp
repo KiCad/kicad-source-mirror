@@ -127,27 +127,30 @@ int POSITION_RELATIVE_TOOL::RelativeItemSelectionMove( const VECTOR2I& aPosAncho
 
     for( EDA_ITEM* item : m_selection )
     {
-        // Don't move a pad by itself unless editing the footprint
-        if( item->Type() == PCB_PAD_T
-            && !frame()->GetPcbNewSettings()->m_AllowFreePads
-            && frame()->IsType( FRAME_PCB_EDITOR ) )
+        if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item ) )
         {
-            item = item->GetParent();
+            // Don't move a pad by itself unless editing the footprint
+            if( boardItem->Type() == PCB_PAD_T
+                && !frame()->GetPcbNewSettings()->m_AllowFreePads
+                && frame()->IsType( FRAME_PCB_EDITOR ) )
+            {
+                boardItem = boardItem->GetParent();
+            }
+
+            m_commit->Modify( boardItem );
+
+            // If moving a group, record position of all the descendants for undo
+            if( boardItem->Type() == PCB_GROUP_T )
+            {
+                PCB_GROUP* group = static_cast<PCB_GROUP*>( boardItem );
+                group->RunOnDescendants( [&]( BOARD_ITEM* descendant )
+                                         {
+                                             m_commit->Modify( descendant );
+                                         });
+            }
+
+            boardItem->Move( aggregateTranslation );
         }
-
-        m_commit->Modify( item );
-
-        // If moving a group, record position of all the descendants for undo
-        if( item->Type() == PCB_GROUP_T )
-        {
-            PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
-            group->RunOnDescendants( [&]( BOARD_ITEM* bItem )
-                                     {
-                                         m_commit->Modify( bItem );
-                                     });
-        }
-
-        static_cast<BOARD_ITEM*>( item )->Move( aggregateTranslation );
     }
 
     m_commit->Push( _( "Position Relative" ) );

@@ -91,7 +91,9 @@ std::vector<std::pair<BOARD_ITEM*, BOX2I>> GetBoundingBoxes( const T& aItems )
 
     for( EDA_ITEM* item : aItems )
     {
-        BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
+        BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item );
+
+        wxCHECK2( boardItem, continue );
 
         if( item->Type() == PCB_FOOTPRINT_T )
         {
@@ -163,7 +165,9 @@ size_t ALIGN_DISTRIBUTE_TOOL::GetSelections( std::vector<std::pair<BOARD_ITEM*, 
 
     for( EDA_ITEM* item : selection )
     {
-        BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
+        BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item );
+
+        wxCHECK2( boardItem, continue );
 
         // We do not lock items in the footprint editor
         if( boardItem->IsLocked() && m_frame->IsType( FRAME_PCB_EDITOR ) )

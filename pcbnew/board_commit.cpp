@@ -269,7 +269,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
     {
         int changeType = ent.m_type & CHT_TYPE;
         int changeFlags = ent.m_type & CHT_FLAGS;
-        BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( ent.m_item );
 
         wxASSERT( ent.m_item );
 
@@ -307,7 +306,10 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             }
         }
 
-        if( m_isBoardEditor )
+        BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( ent.m_item );
+        wxCHECK2( boardItem, continue );
+
+        if( m_isBoardEditor && boardItem )
         {
             if( boardItem->Type() == PCB_VIA_T || boardItem->Type() == PCB_FOOTPRINT_T
                     || boardItem->IsOnLayer( F_Mask ) || boardItem->IsOnLayer( B_Mask ) )
@@ -519,26 +521,28 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
         case CHT_MODIFY:
         {
+            BOARD_ITEM* boardItemCopy = dynamic_cast<BOARD_ITEM*>( ent.m_copy );
+
             if( !m_isFootprintEditor && !( aCommitFlags & SKIP_UNDO ) )
             {
                 ITEM_PICKER itemWrapper( nullptr, boardItem, UNDO_REDO::CHANGED );
-                wxASSERT( ent.m_copy );
-                itemWrapper.SetLink( ent.m_copy );
+                wxASSERT( boardItemCopy );
+                itemWrapper.SetLink( boardItemCopy );
                 undoList.PushItem( itemWrapper );
             }
 
             if( !( aCommitFlags & SKIP_CONNECTIVITY ) )
             {
-                if( ent.m_copy )
-                    connectivity->MarkItemNetAsDirty( static_cast<BOARD_ITEM*>( ent.m_copy ) );
+                if( boardItemCopy )
+                    connectivity->MarkItemNetAsDirty( boardItemCopy );
 
                 connectivity->Update( boardItem );
             }
 
             if( autofillZones )
             {
-                dirtyIntersectingZones( static_cast<BOARD_ITEM*>( ent.m_copy ), changeType );   // before
-                dirtyIntersectingZones( boardItem, changeType );                                // after
+                dirtyIntersectingZones( boardItemCopy, changeType );   // before
+                dirtyIntersectingZones( boardItem, changeType );       // after
             }
 
             if( view )
@@ -565,7 +569,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         }
 
         default:
-            wxASSERT( false );
+            UNIMPLEMENTED_FOR( boardItem->GetClass() );
             break;
         }
 
@@ -616,12 +620,16 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         for( size_t i = num_changes; i < m_changes.size(); ++i )
         {
             COMMIT_LINE& ent = m_changes[i];
-            BOARD_ITEM*  boardItem = static_cast<BOARD_ITEM*>( ent.m_item );
+            BOARD_ITEM*  boardItem = dynamic_cast<BOARD_ITEM*>( ent.m_item );
+            BOARD_ITEM*  boardItemCopy = dynamic_cast<BOARD_ITEM*>( ent.m_copy );
+
+            wxCHECK2( boardItem, continue );
 
             if( !( aCommitFlags & SKIP_UNDO ) )
             {
                 ITEM_PICKER itemWrapper( nullptr, boardItem, convert( ent.m_type & CHT_TYPE ) );
-                itemWrapper.SetLink( ent.m_copy );
+                wxASSERT( boardItemCopy );
+                itemWrapper.SetLink( boardItemCopy );
                 undoList.PushItem( itemWrapper );
             }
             else
@@ -686,9 +694,11 @@ EDA_ITEM* BOARD_COMMIT::parentObject( EDA_ITEM* aItem ) const
 
 EDA_ITEM* BOARD_COMMIT::makeImage( EDA_ITEM* aItem ) const
 {
-    BOARD_ITEM* clone = static_cast<BOARD_ITEM*>( aItem->Clone() );
+    EDA_ITEM* clone = aItem->Clone();
 
-    clone->SetParentGroup( nullptr );
+    if( BOARD_ITEM* board_item = dynamic_cast<BOARD_ITEM*>( clone ) )
+        board_item->SetParentGroup( nullptr );
+
     return clone;
 }
 
@@ -709,10 +719,11 @@ void BOARD_COMMIT::Revert()
     for( auto it = m_changes.rbegin(); it != m_changes.rend(); ++it )
     {
         COMMIT_LINE& ent = *it;
-        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( ent.m_item );
-        BOARD_ITEM* copy = static_cast<BOARD_ITEM*>( ent.m_copy );
-        int changeType = ent.m_type & CHT_TYPE;
-        int changeFlags = ent.m_type & CHT_FLAGS;
+        BOARD_ITEM*  boardItem = dynamic_cast<BOARD_ITEM*>( ent.m_item );
+        int          changeType = ent.m_type & CHT_TYPE;
+        int          changeFlags = ent.m_type & CHT_FLAGS;
+
+        wxCHECK2( boardItem, continue );
 
         switch( changeType )
         {
@@ -720,32 +731,34 @@ void BOARD_COMMIT::Revert()
             if( !( changeFlags & CHT_DONE ) )
                 break;
 
-            view->Remove( item );
-            connectivity->Remove( item );
-            board->Remove( item, REMOVE_MODE::BULK );
-            bulkRemovedItems.push_back( item );
+            view->Remove( boardItem );
+            connectivity->Remove( boardItem );
+            board->Remove( boardItem, REMOVE_MODE::BULK );
+            bulkRemovedItems.push_back( boardItem );
             break;
 
         case CHT_REMOVE:
             if( !( changeFlags & CHT_DONE ) )
                 break;
 
-            view->Add( item );
-            connectivity->Add( item );
-            board->Add( item, ADD_MODE::INSERT );
-            bulkAddedItems.push_back( item );
+            view->Add( boardItem );
+            connectivity->Add( boardItem );
+            board->Add( boardItem, ADD_MODE::INSERT );
+            bulkAddedItems.push_back( boardItem );
             break;
 
         case CHT_MODIFY:
         {
-            view->Remove( item );
-            connectivity->Remove( item );
+            view->Remove( boardItem );
+            connectivity->Remove( boardItem );
 
-            item->SwapItemData( copy );
+            BOARD_ITEM* boardItemCopy = dynamic_cast<BOARD_ITEM*>( ent.m_copy );
+            wxASSERT( boardItemCopy );
+            boardItem->SwapItemData( boardItemCopy );
 
-            if( item->Type() == PCB_GROUP_T )
+            if( boardItem->Type() == PCB_GROUP_T )
             {
-                PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
+                PCB_GROUP* group = static_cast<PCB_GROUP*>( boardItem );
 
                 group->RunOnChildren( [&]( BOARD_ITEM* child )
                                       {
@@ -753,21 +766,21 @@ void BOARD_COMMIT::Revert()
                                       } );
             }
 
-            view->Add( item );
-            connectivity->Add( item );
-            board->OnItemChanged( item );
-            itemsChanged.push_back( item );
+            view->Add( boardItem );
+            connectivity->Add( boardItem );
+            board->OnItemChanged( boardItem );
+            itemsChanged.push_back( boardItem );
 
-            delete copy;
+            delete ent.m_copy;
             break;
         }
 
         default:
-            wxASSERT( false );
+            UNIMPLEMENTED_FOR( boardItem->GetClass() );
             break;
         }
 
-        item->ClearEditFlags();
+        boardItem->ClearEditFlags();
     }
 
     if( bulkAddedItems.size() > 0 )

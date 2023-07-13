@@ -1524,7 +1524,9 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
     for( std::unique_ptr<EDA_ITEM>& ptr : list )
     {
-        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( ptr.get() );
+        BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( ptr.get() );
+
+        wxCHECK2( item, continue );
 
         newItems.push_back( item );
 
