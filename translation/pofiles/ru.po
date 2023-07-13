@@ -14,17 +14,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:35-0700\n"
-"PO-Revision-Date: 2023-05-16 20:36+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"PO-Revision-Date: 2023-07-14 07:58+0000\n"
+"Last-Translator: Andrey Fedorushkov <andrf@mail.ru>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 5.0-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -572,7 +572,6 @@ msgid "Render Solid Colors"
 msgstr "Отображать полные цвета"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:292
-#, fuzzy
 msgid "Use only the diffuse color property from model 3D model file"
 msgstr "Использовать только значение диффузии цвета из файла 3D-модели"
 
@@ -614,14 +613,15 @@ msgid "Toggle 3D models not in pos file"
 msgstr "Переключить отображение 3D-моделей отсутствующих в pos файле"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:344
-#, fuzzy
 msgid "Toggle 3D models marked DNP"
-msgstr "Переключить отображение 3D-модели поверхностного монтажа"
+msgstr ""
+"Переключить отображение 3D-моделей с пометкой \"Не устанавливать (DNP)\""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:345
-#, fuzzy
 msgid "Toggle 3D models for components marked 'Do Not Place'"
-msgstr "Исключить 3D модели для компонентов с атрибутом 'virtual'"
+msgstr ""
+"Переключение отбражения 3D-моделей для компонентов с пометкой «Не "
+"устанавливать (DNP)»"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:352
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:353
@@ -1492,9 +1492,8 @@ msgid "Negative"
 msgstr "Негативно"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:158
-#, fuzzy
 msgid "Pcb Layer for Graphics"
-msgstr "Разместить импортированную графику"
+msgstr "Слой печатной платы для изображения"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:525
@@ -1509,17 +1508,17 @@ msgstr "Верхняя паяльная маска"
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 #, fuzzy
 msgid "Front Fab layer"
-msgstr "Верхний слой"
+msgstr "Верхний Произв. слой"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 #, fuzzy
 msgid "User layer drawings"
-msgstr "User.Drawings"
+msgstr "Рисунки пользовательского слоя"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 #, fuzzy
 msgid "User layer comments"
-msgstr "Слой пользователя Eco1"
+msgstr "Комментарии к пользовательскому слою"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 msgid "User layer Eco1"
@@ -3282,14 +3281,21 @@ msgstr ""
 "редакторов перемещаются на передний план."
 
 #: common/dialogs/panel_common_settings_base.cpp:157
+#, fuzzy
 msgid "Show popup indicator when toggling settings with hotkeys"
 msgstr ""
+"Показывать всплывающий индикатор при переключении настроек с помощью горячих "
+"клавиш"
 
 #: common/dialogs/panel_common_settings_base.cpp:158
+#, fuzzy
 msgid ""
 "When enabled, certain hotkeys that cycle between settings will show a popup "
 "indicator briefly to indicate the change in settings."
 msgstr ""
+"Когда этот параметр включен, некоторые горячие клавиши переключения между "
+"настройками, будут отображать всплывающий индикатор, указывающий на "
+"изменение настроек."
 
 #: common/dialogs/panel_common_settings_base.cpp:168
 msgid "Icon theme:"
@@ -3622,7 +3628,7 @@ msgstr "Масштаб изображения:"
 
 #: common/dialogs/panel_image_editor_base.cpp:47
 msgid "PPI:"
-msgstr ""
+msgstr "PPI:"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: pcbnew/dialogs/panel_edit_options_base.cpp:224
@@ -4474,9 +4480,9 @@ msgid "Zoom %.2f"
 msgstr "Масштаб %.2f"
 
 #: common/eda_draw_frame.cpp:621
-#, fuzzy, c-format
+#, c-format
 msgid "grid %s"
-msgstr "Поле %s"
+msgstr "сетка %s"
 
 #: common/eda_draw_frame.cpp:634 pagelayout_editor/pl_editor_frame.cpp:752
 msgid "inches"
@@ -5703,14 +5709,13 @@ msgid "Illegal character found in logical library name"
 msgstr "Найден недопустимый символ в логическом имени библиотеки"
 
 #: common/lib_table_grid_tricks.cpp:32
-#, fuzzy
 msgid "Edit options..."
-msgstr "Редактировать параметры"
+msgstr "Редактировать параметры..."
 
 #: common/lib_table_grid_tricks.cpp:33
 #, fuzzy
 msgid "Edit options for this library entry"
-msgstr "Параметры для библиотеки '%s'"
+msgstr "Изменить параметры для библиотечного элемента"
 
 #: common/lib_table_grid_tricks.cpp:56
 msgid "Activate selected"
@@ -5721,9 +5726,9 @@ msgid "Deactivate selected"
 msgstr "Отключить выбранное"
 
 #: common/lib_table_grid_tricks.cpp:67
-#, fuzzy, c-format
+#, c-format
 msgid "Library settings for %s..."
-msgstr "Расположение библиотеки: %s"
+msgstr "Настройки для библиотеки %s..."
 
 #: common/lib_tree_model.cpp:146
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
@@ -6050,9 +6055,8 @@ msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
 msgstr "OUTPUTSTREAM_OUTPUTFORMATTER ошибка записи"
 
 #: common/settings/bom_settings.cpp:132
-#, fuzzy
 msgid "Grouped By Value"
-msgstr "Группировать по имени"
+msgstr "Группировать по значению"
 
 #: common/settings/bom_settings.cpp:132 common/settings/bom_settings.cpp:149
 #: eeschema/dialogs/dialog_rescue_each.cpp:129
@@ -6062,9 +6066,8 @@ msgid "Reference"
 msgstr "Обозначение"
 
 #: common/settings/bom_settings.cpp:149
-#, fuzzy
 msgid "Grouped By Value and Footprint"
-msgstr "Найти и переместить посад.место"
+msgstr "Группировать по значению и посад.месту"
 
 #: common/settings/bom_settings.cpp:213
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:49
@@ -6072,14 +6075,12 @@ msgid "CSV"
 msgstr "CSV"
 
 #: common/settings/bom_settings.cpp:218
-#, fuzzy
 msgid "TSV"
-msgstr "V"
+msgstr "TSV"
 
 #: common/settings/bom_settings.cpp:224
-#, fuzzy
 msgid "Semicolons"
-msgstr "Полные цвета"
+msgstr "Точка с запятой"
 
 #: common/settings/color_settings.cpp:334
 msgid "(Footprints)"
@@ -6312,7 +6313,6 @@ msgid "Find Previous"
 msgstr "Найти обратно"
 
 #: common/tool/actions.cpp:258
-#, fuzzy
 msgid "Find previous match"
 msgstr "Найти предыдущее совпадение"
 
@@ -7051,12 +7051,11 @@ msgstr "Выбор каталога"
 
 #: common/widgets/lib_tree.cpp:89
 msgid "Sort by Best Match"
-msgstr ""
+msgstr "Сортировать по лучшему совпадению"
 
 #: common/widgets/lib_tree.cpp:90
-#, fuzzy
 msgid "Sort Alphabetically"
-msgstr "Отразить по верт."
+msgstr "Сортировать по алфавиту"
 
 #: common/widgets/lib_tree.cpp:337
 msgid "recent searches"
@@ -7339,7 +7338,7 @@ msgstr "Файлы схемы Eagle XML"
 #: common/wildcards_and_files_ext.cpp:310
 #, fuzzy
 msgid "Ltspice schematic files"
-msgstr "Файлы схемы Altium"
+msgstr "Файлы схем Ltspice"
 
 #: common/wildcards_and_files_ext.cpp:316
 msgid "Eagle XML files"
@@ -7385,7 +7384,7 @@ msgstr "Файлы платы Altium Circuit Maker"
 #: common/wildcards_and_files_ext.cpp:371
 #, fuzzy
 msgid "Solidworks PCB files"
-msgstr "Сплошной"
+msgstr "Файлы платы Solidworks"
 
 #: common/wildcards_and_files_ext.cpp:376
 msgid "Fabmaster PCB files"
@@ -7656,7 +7655,7 @@ msgstr "Фильтры: %s"
 #: cvpcb/cvpcb_mainframe.cpp:824
 #, fuzzy, c-format
 msgid ": %i matching footprints"
-msgstr "Отсутствует посад.место"
+msgstr ":%i найдено посад.мест"
 
 #: cvpcb/cvpcb_mainframe.cpp:836
 #, c-format
@@ -12291,7 +12290,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:216
 #: pcbnew/footprint.cpp:3005
 msgid "Do not populate"
-msgstr "Не размещать (DNP)"
+msgstr "Не устанавливать (DNP)"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:230
 msgid "Update Symbol from Library..."
@@ -19041,27 +19040,24 @@ msgstr ""
 "Удаление производственного атрибута 'исключён из перечня элементов' из %s."
 
 #: eeschema/tools/ee_actions.cpp:749
-#, fuzzy
 msgid "Set do not populate"
-msgstr "Не размещать (DNP)"
+msgstr "Не устанавливать (DNP)"
 
 #: eeschema/tools/ee_actions.cpp:749
 msgid "Set the do not populate attribute"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:754
-#, fuzzy
 msgid "Unset do not populate"
-msgstr "Не размещать (DNP)"
+msgstr "Отменить \"Не устанавливать (DNP)\""
 
 #: eeschema/tools/ee_actions.cpp:754
 msgid "Clear the do not populate attribute"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:759
-#, fuzzy
 msgid "Toggle do not populate"
-msgstr "Не размещать (DNP)"
+msgstr "Переключить \"Не устанавливать (DNP)\""
 
 #: eeschema/tools/ee_actions.cpp:759
 #, fuzzy
