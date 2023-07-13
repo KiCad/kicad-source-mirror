@@ -236,12 +236,16 @@ void PCB_BASE_EDIT_FRAME::saveCopyInUndoList( PICKED_ITEMS_LIST* commandToUndo,
         case UNDO_REDO::CHANGED:
         case UNDO_REDO::DRILLORIGIN:
         case UNDO_REDO::GRIDORIGIN:
-
             // If we don't yet have a copy in the link, set one up
             if( !commandToUndo->GetPickedItemLink( ii ) )
             {
-                BOARD_ITEM* clone = static_cast<BOARD_ITEM*>( item->Clone() );
-                clone->SetParentGroup( nullptr );
+                // Warning: DRILLORIGIN and GRIDORIGIN undo/redo command create EDA_ITEMs
+                // that cannot be casted blindly to BOARD_ITEMs (a BOARD_ITEM is derived from a EDA_ITEM)
+                // Especially SetParentGroup() does not exist in EDA_ITEM
+                EDA_ITEM* clone = static_cast<EDA_ITEM*>( item->Clone() );
+
+                if( BOARD_ITEM* brdclone = dynamic_cast<BOARD_ITEM*>( clone ) )
+                    brdclone->SetParentGroup( nullptr );
 
                 commandToUndo->SetPickedItemLink( clone, ii );
             }
@@ -546,15 +550,16 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         case UNDO_REDO::DRILLORIGIN:
         case UNDO_REDO::GRIDORIGIN:
         {
-            BOARD_ITEM* item = (BOARD_ITEM*) eda_item;
-            BOARD_ITEM* image = (BOARD_ITEM*) aList->GetPickedItemLink( ii );
+            // Warning: DRILLORIGIN and GRIDORIGIN undo/redo command create EDA_ITEMs
+            // that cannot be casted to BOARD_ITEMs
+            EDA_ITEM* image = aList->GetPickedItemLink( ii );
             VECTOR2D origin = image->GetPosition();
             image->SetPosition( eda_item->GetPosition() );
 
             if( aList->GetPickedItemStatus( ii ) == UNDO_REDO::DRILLORIGIN )
-                BOARD_EDITOR_CONTROL::DoSetDrillOrigin( view, this, item, origin );
+                BOARD_EDITOR_CONTROL::DoSetDrillOrigin( view, this, eda_item, origin );
             else
-                PCB_CONTROL::DoSetGridOrigin( view, this, item, origin );
+                PCB_CONTROL::DoSetGridOrigin( view, this, eda_item, origin );
 
             break;
         }
