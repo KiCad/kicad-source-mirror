@@ -121,7 +121,7 @@ bool SIM_STRING_PROPERTY::OnEvent( wxPropertyGrid* propgrid, wxWindow* wnd_prima
         {
             double value = SIM_VALUE::ToDouble( m_eval.Result().ToStdString() );
 
-            if( isnan( value ) || SIM_VALUE::Equal( value, textEntry->GetValue().ToStdString() ) )
+            if( std::isnan( value ) || SIM_VALUE::Equal( value, textEntry->GetValue().ToStdString() ) )
             {
                 // Don't mess up user formatting if eval'ing didn't actually change the value.
             }
@@ -195,7 +195,7 @@ bool SIM_STRING_PROPERTY::StringToValue( wxVariant& aVariant, const wxString& aT
     {
         double value = SIM_VALUE::ToDouble( m_eval.Result().ToStdString() );
 
-        if( isnan( value ) || SIM_VALUE::Equal( value, aText.ToStdString() ) )
+        if( std::isnan( value ) || SIM_VALUE::Equal( value, aText.ToStdString() ) )
         {
             // Don't mess up user formatting if eval'ing didn't actually change the value.
         }

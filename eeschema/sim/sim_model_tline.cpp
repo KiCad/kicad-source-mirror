@@ -40,7 +40,7 @@ std::string SPICE_GENERATOR_TLINE::ModelLine( const SPICE_ITEM& aItem ) const
         double z0 = SIM_VALUE::ToDouble( m_model.FindParam( "z0" )->value );
         double td = SIM_VALUE::ToDouble( m_model.FindParam( "td" )->value );
 
-        if( isnan( z0 ) || isnan( td ) )
+        if( std::isnan( z0 ) || std::isnan( td ) )
             return fmt::format( ".model {} LTRA()\n", aItem.modelName );
 
         l = fmt::format( "{:g}", td * z0 );

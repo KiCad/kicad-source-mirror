@@ -180,21 +180,21 @@ KIBIS_PIN::KIBIS_PIN( KIBIS* aTopLevel, IbisComponentPin& aPin, IbisComponentPac
     // @TODO : Reading the IBIS standard, I can't figure out if we are supposed
     // to replace typ, min, and max, or just the typ ?
 
-    if( !isnan( aPin.m_Rpin ) )
+    if( !std::isnan( aPin.m_Rpin ) )
     {
         m_Rpin.value[IBIS_CORNER::TYP] = aPin.m_Rpin;
         m_Rpin.value[IBIS_CORNER::MIN] = aPin.m_Rpin;
         m_Rpin.value[IBIS_CORNER::MAX] = aPin.m_Rpin;
     }
 
-    if( !isnan( aPin.m_Lpin ) )
+    if( !std::isnan( aPin.m_Lpin ) )
     {
         m_Lpin.value[IBIS_CORNER::TYP] = aPin.m_Lpin;
         m_Lpin.value[IBIS_CORNER::MIN] = aPin.m_Lpin;
         m_Lpin.value[IBIS_CORNER::MAX] = aPin.m_Lpin;
     }
 
-    if( !isnan( aPin.m_Cpin ) )
+    if( !std::isnan( aPin.m_Cpin ) )
     {
         m_Cpin.value[IBIS_CORNER::TYP] = aPin.m_Cpin;
         m_Cpin.value[IBIS_CORNER::MIN] = aPin.m_Cpin;

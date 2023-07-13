@@ -76,7 +76,7 @@ bool IBIS_MATRIX_BANDED::Check()
 
     for( int i = 0; i < m_bandwidth * m_dim; i++ )
     {
-        if( isnan( m_data[i] ) )
+        if( std::isnan( m_data[i] ) )
         {
             Report( _( "There are NaN elements in a matrix." ), RPT_SEVERITY_ERROR );
             status = false;
@@ -99,7 +99,7 @@ bool IBIS_MATRIX_FULL::Check()
 
     for( int i = 0; i < m_dim * m_dim; i++ )
     {
-        if( isnan( m_data[i] ) )
+        if( std::isnan( m_data[i] ) )
         {
             Report( _( "There are NaN elements in a matrix." ), RPT_SEVERITY_ERROR );
             status = false;
@@ -122,7 +122,7 @@ bool IBIS_MATRIX_SPARSE::Check()
 
     for( int i = 0; i < m_dim * m_dim; i++ )
     {
-        if( isnan( m_data[i] ) )
+        if( std::isnan( m_data[i] ) )
         {
             Report( _( "There are NaN elements in a matrix." ), RPT_SEVERITY_ERROR );
             status = false;
@@ -143,11 +143,11 @@ bool TypMinMaxValue::Check()
 {
     bool status = true;
 
-    if( isnan( value[IBIS_CORNER::TYP] ) )
+    if( std::isnan( value[IBIS_CORNER::TYP] ) )
         status = false;
-    if( isnan( value[IBIS_CORNER::MIN] ) && !isNumberNA( value[IBIS_CORNER::MIN] ) )
+    if( std::isnan( value[IBIS_CORNER::MIN] ) && !isNumberNA( value[IBIS_CORNER::MIN] ) )
         status = false;
-    if( isnan( value[IBIS_CORNER::MAX] ) && !isNumberNA( value[IBIS_CORNER::MAX] ) )
+    if( std::isnan( value[IBIS_CORNER::MAX] ) && !isNumberNA( value[IBIS_CORNER::MAX] ) )
         status = false;
 
     return status;
@@ -209,7 +209,7 @@ bool IbisComponentPin::Check()
             Report( _( "Model name cannot be empty." ), RPT_SEVERITY_ERROR );
             status = false;
         }
-        if( isnan( m_Rpin ) && !isNumberNA( m_Rpin ) )
+        if( std::isnan( m_Rpin ) && !isNumberNA( m_Rpin ) )
         {
             if(status )
                 Report( message.str(), RPT_SEVERITY_ACTION );
@@ -217,7 +217,7 @@ bool IbisComponentPin::Check()
            Report( _( "Rpin is not valid." ), RPT_SEVERITY_ERROR );
             status = false;
         }
-        if( isnan( m_Lpin )&& !isNumberNA( m_Lpin )  )
+        if( std::isnan( m_Lpin )&& !isNumberNA( m_Lpin )  )
         {
             if(status )
                 Report( message.str(), RPT_SEVERITY_ACTION );
@@ -225,7 +225,7 @@ bool IbisComponentPin::Check()
             Report( _( "Lpin is not valid." ), RPT_SEVERITY_ERROR );
             status = false;
         }
-        if( isnan( m_Cpin )&& !isNumberNA( m_Cpin ) )
+        if( std::isnan( m_Cpin )&& !isNumberNA( m_Cpin ) )
         {
             if(status )
                 Report( message.str(), RPT_SEVERITY_ACTION );
@@ -391,7 +391,7 @@ bool IVtable::Check()
     bool status = true;
     for( IVtableEntry& entry : m_entries )
     {
-        if( isnan( entry.V ) )
+        if( std::isnan( entry.V ) )
         {
             Report( _( "There is an invalid voltage in an IV table" ), RPT_SEVERITY_ERROR );
             status = false;
@@ -417,20 +417,20 @@ bool dvdtTypMinMax::Check()
 {
     bool status = true;
 
-    if( isnan( value[IBIS_CORNER::TYP].m_dv ) )
+    if( std::isnan( value[IBIS_CORNER::TYP].m_dv ) )
         status = false;
-    if( isnan( value[IBIS_CORNER::TYP].m_dt ) )
-        status = false;
-
-
-    if( isnan( value[IBIS_CORNER::MIN].m_dv ) && !isNumberNA( value[IBIS_CORNER::MIN].m_dv ) )
-        status = false;
-    if( isnan( value[IBIS_CORNER::MIN].m_dt ) && !isNumberNA( value[IBIS_CORNER::MIN].m_dt ) )
+    if( std::isnan( value[IBIS_CORNER::TYP].m_dt ) )
         status = false;
 
-    if( isnan( value[IBIS_CORNER::MIN].m_dv ) && !isNumberNA( value[IBIS_CORNER::MIN].m_dv ) )
+
+    if( std::isnan( value[IBIS_CORNER::MIN].m_dv ) && !isNumberNA( value[IBIS_CORNER::MIN].m_dv ) )
         status = false;
-    if( isnan( value[IBIS_CORNER::MIN].m_dt ) && !isNumberNA( value[IBIS_CORNER::MIN].m_dt ) )
+    if( std::isnan( value[IBIS_CORNER::MIN].m_dt ) && !isNumberNA( value[IBIS_CORNER::MIN].m_dt ) )
+        status = false;
+
+    if( std::isnan( value[IBIS_CORNER::MIN].m_dv ) && !isNumberNA( value[IBIS_CORNER::MIN].m_dv ) )
+        status = false;
+    if( std::isnan( value[IBIS_CORNER::MIN].m_dt ) && !isNumberNA( value[IBIS_CORNER::MIN].m_dt ) )
         status = false;
 
     return status;
@@ -440,7 +440,7 @@ bool IbisRamp::Check()
 {
     bool status = true;
 
-    if( isnan( m_Rload ) )
+    if( std::isnan( m_Rload ) )
     {
         status = false;
         Report( _( "Invalid R_load." ), RPT_SEVERITY_ERROR );
@@ -483,7 +483,7 @@ bool IbisModel::Check()
         status = false;
     }
 
-    if( isnan( m_vinh ) && !isNumberNA( m_vinh ) )
+    if( std::isnan( m_vinh ) && !isNumberNA( m_vinh ) )
     {
         if( status )
             Report( message.str(), RPT_SEVERITY_ACTION );
@@ -491,7 +491,7 @@ bool IbisModel::Check()
         Report( _( "Invalid Vinh value." ), RPT_SEVERITY_ERROR );
         status = false;
     }
-    if( isnan( m_vinl ) && !isNumberNA( m_vinl ) )
+    if( std::isnan( m_vinl ) && !isNumberNA( m_vinl ) )
     {
         if( status )
             Report( message.str(), RPT_SEVERITY_ACTION );
@@ -499,7 +499,7 @@ bool IbisModel::Check()
         Report( _( "Invalid Vinl value." ), RPT_SEVERITY_ERROR );
         status = false;
     }
-    if( isnan( m_rref ) && !isNumberNA( m_rref ) )
+    if( std::isnan( m_rref ) && !isNumberNA( m_rref ) )
     {
         if( status )
             Report( message.str(), RPT_SEVERITY_ACTION );
@@ -507,7 +507,7 @@ bool IbisModel::Check()
         Report( _( "Invalid R_ref value." ), RPT_SEVERITY_ERROR );
         status = false;
     }
-    if( isnan( m_cref ) && !isNumberNA( m_cref ) )
+    if( std::isnan( m_cref ) && !isNumberNA( m_cref ) )
     {
         if( status )
             Report( message.str(), RPT_SEVERITY_ACTION );
@@ -515,7 +515,7 @@ bool IbisModel::Check()
         Report( _( "Invalid C_ref value." ), RPT_SEVERITY_ERROR );
         status = false;
     }
-    if( isnan( m_vref ) && !isNumberNA( m_vref ) )
+    if( std::isnan( m_vref ) && !isNumberNA( m_vref ) )
     {
         if( status )
             Report( message.str(), RPT_SEVERITY_ACTION );
@@ -523,7 +523,7 @@ bool IbisModel::Check()
         Report( _( "Invalid V_ref value." ), RPT_SEVERITY_ERROR );
         status = false;
     }
-    if( isnan( m_vmeas ) && !isNumberNA( m_vmeas ) )
+    if( std::isnan( m_vmeas ) && !isNumberNA( m_vmeas ) )
     {
         if( status )
             Report( message.str(), RPT_SEVERITY_ACTION );
