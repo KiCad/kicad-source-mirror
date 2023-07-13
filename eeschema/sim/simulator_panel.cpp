@@ -1844,8 +1844,10 @@ bool SIMULATOR_PANEL::LoadWorkbook( const wxString& aPath )
 
     wxTextFile file( aPath );
 
-#define DISPLAY_LOAD_ERROR( fmt ) DisplayErrorMessage( this, wxString::Format( _( fmt ), \
-            file.GetCurrentLine()+1 ) )
+#define EXPECTING( msg )                                                                          \
+        DisplayErrorMessage( this, wxString::Format( _( "Error loading workbook: line %d: %s." ), \
+                                                     file.GetCurrentLine()+1,                     \
+                                                     msg ) )
 
     if( !file.Open() )
         return false;
@@ -1858,7 +1860,7 @@ bool SIMULATOR_PANEL::LoadWorkbook( const wxString& aPath )
     {
         if( !firstLine.substr( 8 ).ToLong( &version ) )
         {
-            DISPLAY_LOAD_ERROR( "Error loading workbook: Line %d is not an integer." );
+            EXPECTING( _( "expecting version" ) );
             file.Close();
 
             return false;
@@ -1875,7 +1877,7 @@ bool SIMULATOR_PANEL::LoadWorkbook( const wxString& aPath )
 
     if( !pageCountLine.ToLong( &pageCount ) )
     {
-        DISPLAY_LOAD_ERROR( "Error loading workbook: Line %d is not an integer." );
+        EXPECTING( _( "expecting simulation tab count" ) );
         file.Close();
 
         return false;
@@ -1889,7 +1891,7 @@ bool SIMULATOR_PANEL::LoadWorkbook( const wxString& aPath )
 
         if( !file.GetNextLine().ToLong( &simType ) )
         {
-            DISPLAY_LOAD_ERROR( "Error loading workbook: Line %d is not an integer." );
+            EXPECTING( _( "expecting simulation tab type" ) );
             file.Close();
 
             return false;
@@ -1933,7 +1935,7 @@ bool SIMULATOR_PANEL::LoadWorkbook( const wxString& aPath )
 
         if( !file.GetNextLine().ToLong( &tracesCount ) )
         {
-            DISPLAY_LOAD_ERROR( "Error loading workbook: Line %d is not an integer." );
+            EXPECTING( _( "expecting trace count" ) );
             file.Close();
 
             return false;
@@ -1949,7 +1951,7 @@ bool SIMULATOR_PANEL::LoadWorkbook( const wxString& aPath )
 
             if( !file.GetNextLine().ToLong( &traceType ) )
             {
-                DISPLAY_LOAD_ERROR( "Error loading workbook: Line %d is not an integer." );
+                EXPECTING( _( "expecting trace type" ) );
                 file.Close();
 
                 return false;
@@ -1959,13 +1961,21 @@ bool SIMULATOR_PANEL::LoadWorkbook( const wxString& aPath )
 
             if( name.IsEmpty() )
             {
-                DISPLAY_LOAD_ERROR( "Error loading workbook: Line %d is empty." );
+                EXPECTING( _( "expecting trace name" ) );
                 file.Close();
 
                 return false;
             }
 
             param = file.GetNextLine();
+
+            if( param.IsEmpty() )
+            {
+                EXPECTING( _( "expecting trace color" ) );
+                file.Close();
+
+                return false;
+            }
 
             if( plotTab )
                 traceInfo[plotTab].emplace_back( std::make_tuple( traceType, name, param ) );
@@ -1975,12 +1985,35 @@ bool SIMULATOR_PANEL::LoadWorkbook( const wxString& aPath )
         {
             long measurementCount;
 
-            file.GetNextLine().ToLong( &measurementCount );
+            if( !file.GetNextLine().ToLong( &measurementCount ) )
+            {
+                EXPECTING( _( "expecting measurement count" ) );
+                file.Close();
+
+                return false;
+            }
 
             for( int ii = 0; ii < (int) measurementCount; ++ ii )
             {
                 wxString measurement = file.GetNextLine();
+
+                if( measurement.IsEmpty() )
+                {
+                    EXPECTING( _( "expecting measurement definition" ) );
+                    file.Close();
+
+                    return false;
+                }
+
                 wxString format = file.GetNextLine();
+
+                if( format.IsEmpty() )
+                {
+                    EXPECTING( _( "expecting measurement format definition" ) );
+                    file.Close();
+
+                    return false;
+                }
 
                 if( plotTab )
                     plotTab->Measurements().emplace_back( measurement, format );
