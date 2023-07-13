@@ -348,7 +348,8 @@ void DisplayHotkeyList( EDA_BASE_FRAME* aParent )
 }
 
 
-void ReadHotKeyConfig( const wxString& aFileName, std::map<std::string, int>& aHotKeys )
+void ReadHotKeyConfig( const wxString&                             aFileName,
+                       std::map<std::string, std::pair<int, int>>& aHotKeys )
 {
     wxString fileName = aFileName;
 
@@ -377,18 +378,20 @@ void ReadHotKeyConfig( const wxString& aFileName, std::map<std::string, int>& aH
     {
         wxStringTokenizer lineTokenizer( fileTokenizer.GetNextToken(), wxS( "\t" ) );
 
-        wxString cmdName = lineTokenizer.GetNextToken();
-        wxString keyName = lineTokenizer.GetNextToken();
+        wxString cmdName   = lineTokenizer.GetNextToken();
+        wxString primary   = lineTokenizer.GetNextToken();
+        wxString secondary = lineTokenizer.GetNextToken();
 
         if( !cmdName.IsEmpty() )
-            aHotKeys[ cmdName.ToStdString() ] = KeyCodeFromKeyName( keyName );
+            aHotKeys[cmdName.ToStdString()] = std::pair<int, int>(
+                    KeyCodeFromKeyName( primary ), KeyCodeFromKeyName( secondary ) );
     }
 }
 
 
 void ReadHotKeyConfigIntoActions( const wxString& aFileName, std::vector<TOOL_ACTION*>& aActions )
 {
-    std::map<std::string, int> hotkeys;
+    std::map<std::string, std::pair<int, int>> hotkeys;
 
     // Read the existing config (all hotkeys)
     ReadHotKeyConfig( aFileName, hotkeys );
@@ -396,13 +399,16 @@ void ReadHotKeyConfigIntoActions( const wxString& aFileName, std::vector<TOOL_AC
     // Set each tool action hotkey to the config file hotkey if present
     for( TOOL_ACTION* action : aActions )
         if( hotkeys.find( action->GetName() ) != hotkeys.end() )
-            action->SetHotKey( hotkeys[action->GetName()] );
+        {
+            std::pair<int, int> keys = hotkeys[action->GetName()];
+            action->SetHotKey( keys.first, keys.second );
+        }
 }
 
 
 int WriteHotKeyConfig( const std::vector<TOOL_ACTION*>& aActions )
 {
-    std::map<std::string, int> hotkeys;
+    std::map<std::string, std::pair<int, int>> hotkeys;
     wxFileName fn( "user" );
 
     fn.SetExt( HotkeyFileExtension );
@@ -413,14 +419,16 @@ int WriteHotKeyConfig( const std::vector<TOOL_ACTION*>& aActions )
 
     // Overlay the current app's hotkey definitions onto the map
     for( const TOOL_ACTION* action : aActions )
-        hotkeys[ action->GetName() ] = action->GetHotKey();
+        hotkeys[ action->GetName() ] = std::pair<int, int>( action->GetHotKey(), action->GetHotKeyAlt() );
 
     // Write entire hotkey set
     wxFFileOutputStream outStream( fn.GetFullPath() );
     wxTextOutputStream  txtStream( outStream, wxEOL_UNIX );
 
-    for( const std::pair<const std::string, int>& entry : hotkeys )
-        txtStream << entry.first << "\t" << KeyNameFromKeyCode( entry.second ) << endl;
+    for( const std::pair<const std::string, std::pair<int, int>>& entry : hotkeys )
+        txtStream << entry.first
+            << "\t" << KeyNameFromKeyCode( entry.second.first )
+            << "\t" << KeyNameFromKeyCode( entry.second.second ) << endl;
 
     txtStream.Flush();
     outStream.Close();

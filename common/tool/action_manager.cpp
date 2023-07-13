@@ -268,7 +268,7 @@ int ACTION_MANAGER::GetHotKey( const TOOL_ACTION& aAction ) const
 void ACTION_MANAGER::UpdateHotKeys( bool aFullUpdate )
 {
     static std::map<std::string, int> legacyHotKeyMap;
-    static std::map<std::string, int> userHotKeyMap;
+    static std::map<std::string, std::pair<int, int>> userHotKeyMap;
     static bool                       mapsInitialized = false;
 
     m_actionHotKeys.clear();
@@ -285,23 +285,28 @@ void ACTION_MANAGER::UpdateHotKeys( bool aFullUpdate )
     {
         TOOL_ACTION* action = ii.second;
         int          hotkey = 0;
+        int          alt    = 0;
 
         if( aFullUpdate )
-            hotkey = processHotKey( action, legacyHotKeyMap, userHotKeyMap );
-        else
-            hotkey = action->GetHotKey();
+            processHotKey( action, legacyHotKeyMap, userHotKeyMap );
+
+        hotkey = action->GetHotKey();
+        alt    = action->GetHotKeyAlt();
 
         if( hotkey > 0 )
             m_actionHotKeys[hotkey].push_back( action );
+
+        if( alt > 0 )
+            m_actionHotKeys[alt].push_back( action );
 
         m_hotkeys[action->GetId()] = hotkey;
     }
 }
 
 
-int ACTION_MANAGER::processHotKey( TOOL_ACTION* aAction,
-                                   const std::map<std::string, int>& aLegacyMap,
-                                   const std::map<std::string, int>& aHotKeyMap )
+void ACTION_MANAGER::processHotKey( TOOL_ACTION*                                      aAction,
+                                    const std::map<std::string, int>&                 aLegacyMap,
+                                    const std::map<std::string, std::pair<int, int>>& aHotKeyMap )
 {
     aAction->m_hotKey = aAction->m_defaultHotKey;
 
@@ -309,7 +314,8 @@ int ACTION_MANAGER::processHotKey( TOOL_ACTION* aAction,
         aAction->SetHotKey( aLegacyMap.at( aAction->m_legacyName ) );
 
     if( aHotKeyMap.count( aAction->m_name ) )
-        aAction->SetHotKey( aHotKeyMap.at( aAction->m_name ) );
-
-    return aAction->m_hotKey;
+    {
+        std::pair<int, int> keys = aHotKeyMap.at( aAction->m_name );
+        aAction->SetHotKey( keys.first, keys.second );
+    }
 }

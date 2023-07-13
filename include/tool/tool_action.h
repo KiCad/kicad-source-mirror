@@ -98,6 +98,15 @@ public:
     }
 
     /**
+     * The default alternate hotkey to assign to the action.
+     */
+    TOOL_ACTION_ARGS& DefaultHotkeyAlt( int aDefaultHotkeyAlt )
+    {
+        m_defaultHotKeyAlt = aDefaultHotkeyAlt;
+        return *this;
+    }
+
+    /**
      * The legacy hotkey name from the old system.
      *
      * This property is only needed for existing actions and shouldn't be used in new actions.
@@ -183,6 +192,7 @@ protected:
     std::optional<int>                  m_uiid;
 
     std::optional<int>                  m_defaultHotKey;
+    std::optional<int>                  m_defaultHotKeyAlt;
     std::optional<std::string_view>     m_legacyName;
 
     std::optional<std::string_view>     m_menuText;
@@ -245,12 +255,14 @@ public:
      * Return the default hotkey (if any) for the action.
      */
     int GetDefaultHotKey() const { return m_defaultHotKey; }
+    int GetDefaultHotKeyAlt() const { return m_defaultHotKeyAlt; }
 
     /**
      * Return the hotkey keycode which initiates the action.
      */
     int GetHotKey() const { return m_hotKey; }
-    void SetHotKey( int aKeycode );
+    int GetHotKeyAlt() const { return m_hotKeyAlt; }
+    void SetHotKey( int aKeycode, int aKeycodeAlt = 0 );
 
     /**
      * Return the unique id of the TOOL_ACTION object.
@@ -364,8 +376,10 @@ protected:
     std::string          m_name;
     TOOL_ACTION_SCOPE    m_scope;
 
-    const int            m_defaultHotKey;  // Default hot key
+    const int            m_defaultHotKey;    // Default hot key
+    const int            m_defaultHotKeyAlt; // Default hot key alternate
     int                  m_hotKey;         // The current hotkey (post-user-settings-application)
+    int                  m_hotKeyAlt;      // The alternate hotkey (post-user-settings-application)
     const std::string    m_legacyName;     // Name for reading legacy hotkey settings
 
     wxString                m_label;       // Menu label

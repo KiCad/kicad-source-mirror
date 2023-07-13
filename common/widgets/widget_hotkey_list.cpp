@@ -43,9 +43,11 @@
 enum ID_WHKL_MENU_IDS
 {
     ID_EDIT_HOTKEY = 2001,
+    ID_EDIT_ALT,
     ID_RESET,
     ID_DEFAULT,
-    ID_CLEAR
+    ID_CLEAR,
+    ID_CLEAR_ALT,
 };
 
 
@@ -291,6 +293,7 @@ void WIDGET_HOTKEY_LIST::updateFromClientData()
             const HOTKEY& changed_hk = hkdata->GetChangedHotkey();
             wxString      label = changed_hk.m_Actions[ 0 ]->GetLabel();
             wxString      key_text = KeyNameFromKeyCode( changed_hk.m_EditKeycode );
+            wxString      alt_text = KeyNameFromKeyCode( changed_hk.m_EditKeycodeAlt );
             wxString      description = changed_hk.m_Actions[ 0 ]->GetDescription();
 
             if( label.IsEmpty() )
@@ -307,14 +310,15 @@ void WIDGET_HOTKEY_LIST::updateFromClientData()
             description.Replace( wxS( "\r" ), wxS( " " ) );
 
             SetItemText( i, 0, label );
-            SetItemText( i, 1, key_text);
-            SetItemText( i, 2, description );
+            SetItemText( i, 1, key_text );
+            SetItemText( i, 2, alt_text );
+            SetItemText( i, 3, description );
         }
     }
 }
 
 
-void WIDGET_HOTKEY_LIST::changeHotkey( HOTKEY& aHotkey, long aKey )
+void WIDGET_HOTKEY_LIST::changeHotkey( HOTKEY& aHotkey, long aKey, bool alternate )
 {
     // See if this key code is handled in hotkeys names list
     bool exists;
@@ -323,12 +327,17 @@ void WIDGET_HOTKEY_LIST::changeHotkey( HOTKEY& aHotkey, long aKey )
     if( exists && aHotkey.m_EditKeycode != aKey )
     {
         if( aKey == 0 || resolveKeyConflicts( aHotkey.m_Actions[ 0 ], aKey ) )
-            aHotkey.m_EditKeycode = aKey;
+        {
+            if( alternate )
+                aHotkey.m_EditKeycodeAlt = aKey;
+            else
+                aHotkey.m_EditKeycode = aKey;
+        }
     }
 }
 
 
-void WIDGET_HOTKEY_LIST::editItem( wxTreeListItem aItem )
+void WIDGET_HOTKEY_LIST::editItem( wxTreeListItem aItem, int aEditId )
 {
     WIDGET_HOTKEY_CLIENT_DATA* hkdata = getExpectedHkClientData( aItem );
 
@@ -336,7 +345,8 @@ void WIDGET_HOTKEY_LIST::editItem( wxTreeListItem aItem )
         return;
 
     wxString    name = GetItemText( aItem, 0 );
-    wxString    current_key = GetItemText( aItem, 1 );
+    wxString    current_key =
+            aEditId == ID_EDIT_HOTKEY ? GetItemText( aItem, 1 ) : GetItemText( aItem, 2 );
 
     wxKeyEvent key_event = HK_PROMPT_DIALOG::PromptForKey( this, name, current_key );
     long key = MapKeypressToKeycode( key_event );
@@ -355,7 +365,7 @@ void WIDGET_HOTKEY_LIST::editItem( wxTreeListItem aItem )
             return;
         }
 
-        changeHotkey( hkdata->GetChangedHotkey(), key );
+        changeHotkey( hkdata->GetChangedHotkey(), key, aEditId == ID_EDIT_ALT );
         updateFromClientData();
     }
 }
@@ -371,11 +381,19 @@ void WIDGET_HOTKEY_LIST::resetItem( wxTreeListItem aItem, int aResetId )
     HOTKEY& changed_hk = hkdata->GetChangedHotkey();
 
     if( aResetId == ID_RESET )
-        changeHotkey( changed_hk, changed_hk.m_Actions[ 0 ]->GetHotKey() );
+    {
+        changeHotkey( changed_hk, changed_hk.m_Actions[0]->GetHotKey(), false );
+        changeHotkey( changed_hk, changed_hk.m_Actions[0]->GetHotKey(), true );
+    }
     else if( aResetId == ID_CLEAR )
-        changeHotkey( changed_hk, 0 );
+        changeHotkey( changed_hk, 0, false );
+    else if( aResetId == ID_CLEAR_ALT )
+        changeHotkey( changed_hk, 0, true );
     else if( aResetId == ID_DEFAULT )
-        changeHotkey( changed_hk, changed_hk.m_Actions[ 0 ]->GetDefaultHotKey() );
+    {
+        changeHotkey( changed_hk, changed_hk.m_Actions[0]->GetDefaultHotKey(), false );
+        changeHotkey( changed_hk, changed_hk.m_Actions[0]->GetDefaultHotKeyAlt(), true );
+    }
 
     updateFromClientData();
 }
@@ -383,7 +401,7 @@ void WIDGET_HOTKEY_LIST::resetItem( wxTreeListItem aItem, int aResetId )
 
 void WIDGET_HOTKEY_LIST::onActivated( wxTreeListEvent& aEvent )
 {
-    editItem( aEvent.GetItem());
+    editItem( aEvent.GetItem(), ID_EDIT_HOTKEY );
 }
 
 
@@ -400,9 +418,11 @@ void WIDGET_HOTKEY_LIST::onContextMenu( wxTreeListEvent& aEvent )
     if( hkdata )
     {
         menu.Append( ID_EDIT_HOTKEY, _( "Edit..." ) );
+        menu.Append( ID_EDIT_ALT, _( "Edit Alternate..." ) );
         menu.Append( ID_RESET, _( "Undo Changes" ) );
         menu.Append( ID_CLEAR, _( "Clear Assigned Hotkey" ) );
-        menu.Append( ID_DEFAULT, _( "Restore Default" ) );
+        menu.Append( ID_CLEAR_ALT, _( "Clear Assigned Alternate" ) );
+        menu.Append( ID_DEFAULT, _( "Restore Defaults" ) );
         menu.Append( wxID_SEPARATOR );
 
         PopupMenu( &menu );
@@ -415,13 +435,15 @@ void WIDGET_HOTKEY_LIST::onMenu( wxCommandEvent& aEvent )
     switch( aEvent.GetId() )
     {
     case ID_EDIT_HOTKEY:
-        editItem( m_context_menu_item );
+    case ID_EDIT_ALT:
+        editItem( m_context_menu_item, aEvent.GetId() );
         break;
 
     case ID_RESET:
     case ID_CLEAR:
+    case ID_CLEAR_ALT:
     case ID_DEFAULT:
-        resetItem( m_context_menu_item, aEvent.GetId());
+        resetItem( m_context_menu_item, aEvent.GetId() );
         break;
 
     default:
@@ -473,6 +495,7 @@ WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkey
 
     AppendColumn( command_header, 450, wxALIGN_LEFT, wxCOL_RESIZABLE | wxCOL_SORTABLE );
     AppendColumn( _( "Hotkey" ), 120, wxALIGN_LEFT, wxCOL_RESIZABLE | wxCOL_SORTABLE );
+    AppendColumn( _( "Alternate" ), 120, wxALIGN_LEFT, wxCOL_RESIZABLE | wxCOL_SORTABLE );
     AppendColumn( _( "Description" ), 900, wxALIGN_LEFT, wxCOL_RESIZABLE | wxCOL_SORTABLE );
 
 
@@ -487,7 +510,8 @@ WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkey
 
     dv->GetColumn( 0 )->SetMinWidth( aParent->GetTextExtent( command_header ).x * 2 + pad );
     dv->GetColumn( 1 )->SetMinWidth( aParent->GetTextExtent( longKey ).x + pad );
-    dv->GetColumn( 2 )->SetMinWidth( aParent->GetTextExtent( command_header ).x * 5 + pad );
+    dv->GetColumn( 2 )->SetMinWidth( aParent->GetTextExtent( longKey ).x + pad );
+    dv->GetColumn( 3 )->SetMinWidth( aParent->GetTextExtent( command_header ).x * 5 + pad );
 
     CallAfter( [&]()
                {
@@ -576,6 +600,14 @@ void WIDGET_HOTKEY_LIST::updateColumnWidths()
 #endif
 
     col = GetDataView()->GetColumn( 2 );
+    col->SetWidth( wxCOL_WIDTH_AUTOSIZE );
+    col->SetWidth( col->GetWidth() );
+
+#if defined( __WXGTK__ ) && !wxCHECK_VERSION( 3, 1, 0 )
+    col->SetResizeable( true );
+#endif
+
+    col = GetDataView()->GetColumn( 3 );
     col->SetWidth( wxCOL_WIDTH_AUTOSIZE );
     col->SetWidth( col->GetWidth() );
 

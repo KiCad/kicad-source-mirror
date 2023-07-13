@@ -35,13 +35,15 @@ struct HOTKEY
 {
     std::vector<TOOL_ACTION*> m_Actions;
     int                       m_EditKeycode;
+    int                       m_EditKeycodeAlt;
 
     HOTKEY() :
             m_EditKeycode( 0 )
     { }
 
     HOTKEY( TOOL_ACTION* aAction ) :
-            m_EditKeycode( aAction->GetHotKey() )
+            m_EditKeycode( aAction->GetHotKey() ),
+            m_EditKeycodeAlt( aAction->GetHotKeyAlt() )
     {
         m_Actions.push_back( aAction );
     }

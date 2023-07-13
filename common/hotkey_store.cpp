@@ -114,7 +114,10 @@ void HOTKEY_STORE::Init( std::vector<TOOL_ACTION*> aActionsList, bool aIncludeRe
         hotkey.m_Actions.push_back( action );
 
         if( !hotkey.m_EditKeycode )
+        {
             hotkey.m_EditKeycode = action->GetHotKey();
+            hotkey.m_EditKeycodeAlt = action->GetHotKeyAlt();
+        }
     }
 
     wxString        currentApp;
@@ -170,7 +173,7 @@ void HOTKEY_STORE::SaveAllHotkeys()
         for( HOTKEY& hotkey : section.m_HotKeys )
         {
             for( TOOL_ACTION* action : hotkey.m_Actions )
-                action->SetHotKey( hotkey.m_EditKeycode );
+                action->SetHotKey( hotkey.m_EditKeycode, hotkey.m_EditKeycodeAlt );
         }
     }
 }
@@ -181,7 +184,10 @@ void HOTKEY_STORE::ResetAllHotkeysToDefault()
     for( HOTKEY_SECTION& section : m_hk_sections )
     {
         for( HOTKEY& hotkey : section.m_HotKeys )
-            hotkey.m_EditKeycode = hotkey.m_Actions[ 0 ]->GetDefaultHotKey();
+        {
+            hotkey.m_EditKeycode    = hotkey.m_Actions[ 0 ]->GetDefaultHotKey();
+            hotkey.m_EditKeycodeAlt = hotkey.m_Actions[ 0 ]->GetDefaultHotKeyAlt();
+        }
     }
 }
 
@@ -191,7 +197,10 @@ void HOTKEY_STORE::ResetAllHotkeysToOriginal()
     for( HOTKEY_SECTION& section : m_hk_sections )
     {
         for( HOTKEY& hotkey : section.m_HotKeys )
-            hotkey.m_EditKeycode = hotkey.m_Actions[ 0 ]->GetHotKey();
+        {
+            hotkey.m_EditKeycode    = hotkey.m_Actions[ 0 ]->GetHotKey();
+            hotkey.m_EditKeycodeAlt = hotkey.m_Actions[ 0 ]->GetHotKeyAlt();
+        }
     }
 }
 
@@ -219,7 +228,7 @@ bool HOTKEY_STORE::CheckKeyConflicts( TOOL_ACTION* aAction, long aKey, HOTKEY** 
             if( hotkey.m_Actions[0] == aAction )
                 continue;
 
-            if( hotkey.m_EditKeycode == aKey )
+            if( hotkey.m_EditKeycode == aKey || hotkey.m_EditKeycodeAlt == aKey )
             {
                 // We can use the same key for a different action if both actions are contextual and
                 // for different tools.

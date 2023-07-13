@@ -180,8 +180,8 @@ public:
 private:
     // Resolve a hotkey by applying legacy and current settings over the action's
     // default hotkey.
-    int processHotKey( TOOL_ACTION* aAction, const std::map<std::string, int>& aLegacyMap,
-                       const std::map<std::string, int>& aHotKeyMap );
+    void processHotKey( TOOL_ACTION* aAction, const std::map<std::string, int>& aLegacyMap,
+                        const std::map<std::string, std::pair<int, int>>& aHotKeyMap );
 
     ///< Tool manager needed to run actions
     TOOL_MANAGER* m_toolMgr;

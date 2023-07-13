@@ -42,6 +42,7 @@ TOOL_ACTION::TOOL_ACTION( const std::string& aName, TOOL_ACTION_SCOPE aScope,
         m_name( aName ),
         m_scope( aScope ),
         m_defaultHotKey( aDefaultHotKey ),
+        m_defaultHotKeyAlt( 0 ),
         m_legacyName( aLegacyHotKeyName ),
         m_label( aLabel ),
         m_tooltip( aTooltip ),
@@ -57,6 +58,7 @@ TOOL_ACTION::TOOL_ACTION( const std::string& aName, TOOL_ACTION_SCOPE aScope,
 TOOL_ACTION::TOOL_ACTION() :
         m_scope( AS_GLOBAL ),
         m_defaultHotKey( 0 ),
+        m_defaultHotKeyAlt( 0 ),
         m_icon( BITMAPS::INVALID_BITMAP ),
         m_id( -1 ),
         m_flags( AF_NONE )
@@ -69,6 +71,7 @@ TOOL_ACTION::TOOL_ACTION( const TOOL_ACTION_ARGS& aArgs ) :
         m_name( aArgs.m_name.value_or( "" ) ),
         m_scope( aArgs.m_scope.value_or( AS_CONTEXT ) ),
         m_defaultHotKey( aArgs.m_defaultHotKey.value_or( 0 ) ),
+        m_defaultHotKeyAlt( aArgs.m_defaultHotKeyAlt.value_or( 0 ) ),
         m_hotKey( aArgs.m_defaultHotKey.value_or( 0 ) ),
         m_legacyName( aArgs.m_legacyName.value_or( "" ) ),
         m_label( TowxString( aArgs.m_menuText.value_or( "" ) ) ),
@@ -153,9 +156,10 @@ wxString TOOL_ACTION::GetTooltip( bool aIncludeHotkey ) const
 }
 
 
-void TOOL_ACTION::SetHotKey( int aKeycode )
+void TOOL_ACTION::SetHotKey( int aKeycode, int aKeycodeAlt )
 {
     m_hotKey = aKeycode;
+    m_hotKeyAlt = aKeycodeAlt;
 }
 
 

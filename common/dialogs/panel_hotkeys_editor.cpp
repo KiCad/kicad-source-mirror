@@ -191,7 +191,7 @@ void PANEL_HOTKEYS_EDITOR::ImportHotKeys()
     if( filename.IsEmpty() )
         return;
 
-    std::map<std::string, int> importedHotKeys;
+    std::map<std::string, std::pair<int, int>> importedHotKeys;
     ReadHotKeyConfig( filename, importedHotKeys );
     m_frame->SetMruPath( wxFileName( filename ).GetPath() );
 
@@ -201,7 +201,10 @@ void PANEL_HOTKEYS_EDITOR::ImportHotKeys()
         for( HOTKEY& hotkey: section.m_HotKeys )
         {
             if( importedHotKeys.count( hotkey.m_Actions[ 0 ]->GetName() ) )
-                hotkey.m_EditKeycode = importedHotKeys[ hotkey.m_Actions[ 0 ]->GetName() ];
+            {
+                hotkey.m_EditKeycode    = importedHotKeys[ hotkey.m_Actions[ 0 ]->GetName() ].first;
+                hotkey.m_EditKeycodeAlt = importedHotKeys[ hotkey.m_Actions[ 0 ]->GetName() ].second;
+            }
         }
     }
 

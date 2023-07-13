@@ -92,7 +92,7 @@ protected:
      * Method editItem
      * Prompt the user for a new hotkey given a list item.
      */
-    void editItem( wxTreeListItem aItem );
+    void editItem( wxTreeListItem aItem, int aEditId );
 
     /**
      * Method resetItem
@@ -171,8 +171,9 @@ private:
      *
      * @param aHotkey the change-able hotkey to try to change
      * @param aKey the key code to change it to
+     * @param alternate Change the secondary hotkey
      */
-    void changeHotkey( HOTKEY& aHotkey, long aKey );
+    void changeHotkey( HOTKEY& aHotkey, long aKey, bool alternate );
 
     /**
      * Recalculates column widths after model has changed

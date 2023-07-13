@@ -101,7 +101,8 @@ void DisplayHotkeyList( EDA_BASE_FRAME* aFrame );
  *
  * If \a aFileName is empty it will read in the default hotkeys file.
  */
-void ReadHotKeyConfig( const wxString& aFileName, std::map<std::string, int>& aHotKeys );
+void ReadHotKeyConfig( const wxString&                             aFileName,
+                       std::map<std::string, std::pair<int, int>>& aHotKeys );
 
 /**
  * Reads a hotkey config file into a list of actions
