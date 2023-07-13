@@ -35,6 +35,9 @@
 #include <router/pns_router.h>
 #include <router/pns_routing_settings.h>
 
+// Forward declarations for types needed in the parameters
+class PCB_BITMAP;
+
 // Actions, being statically-defined, require specialized I18N handling.  We continue to
 // use the _() macro so that string harvesting by the I18N framework doesn't have to be
 // specialized, but we don't translate on initialization and instead do it in the getters.
@@ -124,10 +127,14 @@ TOOL_ACTION PCB_ACTIONS::placeStackup( "pcbnew.InteractiveDrawing.placeStackup",
         _( "Add a board stackup table on a graphic layer" ),
         BITMAPS::INVALID_BITMAP, AF_ACTIVATE );
 
-TOOL_ACTION PCB_ACTIONS::placeImage( "pcbnew.InteractiveDrawing.placeImage",
-        AS_GLOBAL, 0, "",
-        _( "Add Image" ), _( "Add bitmap image" ),
-        BITMAPS::image, AF_ACTIVATE );
+TOOL_ACTION PCB_ACTIONS::placeImage( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveDrawing.placeImage" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Add Image" ) )
+        .Tooltip( _( "Add bitmap image" ) )
+        .Icon( BITMAPS::image )
+        .Flags( AF_ACTIVATE )
+        .Parameter<PCB_BITMAP*>( nullptr ) );
 
 TOOL_ACTION PCB_ACTIONS::placeText( "pcbnew.InteractiveDrawing.text",
         AS_GLOBAL,
