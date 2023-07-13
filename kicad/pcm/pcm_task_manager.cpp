@@ -54,10 +54,10 @@ void compile_keep_on_update_regex( const PCM_PACKAGE& pkg, const PACKAGE_VERSION
 }
 
 
-void PCM_TASK_MANAGER::DownloadAndInstall( const PCM_PACKAGE& aPackage, const wxString& aVersion,
+PCM_TASK_MANAGER::STATUS PCM_TASK_MANAGER::DownloadAndInstall( const PCM_PACKAGE& aPackage, const wxString& aVersion,
                                            const wxString& aRepositoryId, const bool isUpdate )
 {
-    PCM_TASK download_task = [aPackage, aVersion, aRepositoryId, isUpdate, this]()
+    PCM_TASK download_task = [aPackage, aVersion, aRepositoryId, isUpdate, this]() -> PCM_TASK_MANAGER::STATUS
     {
         wxFileName file_path( PATHS::GetUserCachePath(), "" );
         file_path.AppendDir( "pcm" );
@@ -74,7 +74,7 @@ void PCM_TASK_MANAGER::DownloadAndInstall( const PCM_PACKAGE& aPackage, const wx
             m_reporter->PCMReport( wxString::Format( _( "Version %s of package %s not found!" ),
                                                      aVersion, aPackage.identifier ),
                                    RPT_SEVERITY_ERROR );
-            return;
+            return PCM_TASK_MANAGER::STATUS::FAILED;
         }
 
         if( !wxDirExists( file_path.GetPath() )
@@ -82,7 +82,7 @@ void PCM_TASK_MANAGER::DownloadAndInstall( const PCM_PACKAGE& aPackage, const wx
         {
             m_reporter->PCMReport( _( "Unable to create download directory!" ),
                                    RPT_SEVERITY_ERROR );
-            return;
+            return PCM_TASK_MANAGER::STATUS::FAILED;
         }
 
         int code = downloadFile( file_path.GetFullPath(), *find_pkgver->download_url );
@@ -91,18 +91,21 @@ void PCM_TASK_MANAGER::DownloadAndInstall( const PCM_PACKAGE& aPackage, const wx
         {
             // Cleanup after ourselves and exit
             wxRemoveFile( file_path.GetFullPath() );
-            return;
+            return PCM_TASK_MANAGER::STATUS::FAILED;
         }
 
         PCM_TASK install_task = [aPackage, aVersion, aRepositoryId, file_path, isUpdate, this]()
         {
-            installDownloadedPackage( aPackage, aVersion, aRepositoryId, file_path, isUpdate );
+            return installDownloadedPackage( aPackage, aVersion, aRepositoryId, file_path, isUpdate );
         };
 
         m_install_queue.push( install_task );
+
+        return PCM_TASK_MANAGER::STATUS::SUCCESS;
     };
 
     m_download_queue.push( download_task );
+    return PCM_TASK_MANAGER::STATUS::SUCCESS;
 }
 
 
@@ -149,7 +152,7 @@ int PCM_TASK_MANAGER::downloadFile( const wxString& aFilePath, const wxString& u
 }
 
 
-void PCM_TASK_MANAGER::installDownloadedPackage( const PCM_PACKAGE& aPackage,
+PCM_TASK_MANAGER::STATUS PCM_TASK_MANAGER::installDownloadedPackage( const PCM_PACKAGE& aPackage,
                                                  const wxString&    aVersion,
                                                  const wxString&    aRepositoryId,
                                                  const wxFileName& aFilePath, const bool isUpdate )
@@ -165,7 +168,7 @@ void PCM_TASK_MANAGER::installDownloadedPackage( const PCM_PACKAGE& aPackage,
         m_reporter->PCMReport( wxString::Format( _( "Version %s of package %s not found!" ),
                                                  aVersion, aPackage.identifier ),
                                RPT_SEVERITY_ERROR );
-        return;
+        return PCM_TASK_MANAGER::STATUS::FAILED;
     }
 
     // wxRegEx is not CopyConstructible hence the weird choice of forward_list
@@ -190,8 +193,10 @@ void PCM_TASK_MANAGER::installDownloadedPackage( const PCM_PACKAGE& aPackage,
                                                     "This may indicate a problem with the "
                                                     "package, if the issue persists "
                                                     "report this to repository maintainers." ),
-                                                 aPackage.identifier ),
+                                                 aPackage.name ),
                                RPT_SEVERITY_ERROR );
+        wxRemoveFile( aFilePath.GetFullPath() );
+        return PCM_TASK_MANAGER::STATUS::FAILED;
     }
     else
     {
@@ -199,14 +204,14 @@ void PCM_TASK_MANAGER::installDownloadedPackage( const PCM_PACKAGE& aPackage,
         {
             m_reporter->PCMReport(
                     wxString::Format( _( "Removing previous version of package '%s'." ),
-                                      aPackage.identifier ),
+                                      aPackage.name ),
                     RPT_SEVERITY_INFO );
 
             deletePackageDirectories( aPackage.identifier, keep_on_update );
         }
 
         m_reporter->PCMReport(
-                wxString::Format( _( "Extracting package '%s'." ), aPackage.identifier ),
+                wxString::Format( _( "Installing package '%s'." ), aPackage.name ),
                 RPT_SEVERITY_INFO );
 
         if( extract( aFilePath.GetFullPath(), aPackage.identifier, true ) )
@@ -223,11 +228,8 @@ void PCM_TASK_MANAGER::installDownloadedPackage( const PCM_PACKAGE& aPackage,
         m_changed_package_types.insert( aPackage.type );
     }
 
-    m_reporter->PCMReport(
-            wxString::Format( _( "Removing downloaded archive '%s'." ), aFilePath.GetFullName() ),
-            RPT_SEVERITY_INFO );
-
     wxRemoveFile( aFilePath.GetFullPath() );
+    return PCM_TASK_MANAGER::STATUS::SUCCESS;
 }
 
 
@@ -267,8 +269,6 @@ bool PCM_TASK_MANAGER::extract( const wxString& aFilePath, const wxString& aPack
             continue;
         }
 
-        // m_reporter->Report( wxString::Format( _( "Extracting file '%s'\n" ), entry->GetName() ),
-        //                     RPT_SEVERITY_INFO );
 
         // Transform paths from
         // <PackageRoot>/$folder/$contents
@@ -313,21 +313,21 @@ bool PCM_TASK_MANAGER::extract( const wxString& aFilePath, const wxString& aPack
         return false;
     }
 
-    m_reporter->PCMReport( _( "Extracted package\n" ), RPT_SEVERITY_INFO );
     m_reporter->SetPackageProgress( entries, entries );
 
     return true;
 }
 
 
-void PCM_TASK_MANAGER::InstallFromFile( wxWindow* aParent, const wxString& aFilePath )
+PCM_TASK_MANAGER::STATUS PCM_TASK_MANAGER::InstallFromFile( wxWindow*       aParent,
+                                                            const wxString& aFilePath )
 {
     wxFFileInputStream stream( aFilePath );
 
     if( !stream.IsOk() )
     {
         wxLogError( _( "Could not open archive file." ) );
-        return;
+        return PCM_TASK_MANAGER::STATUS::FAILED;
     }
 
     wxZipInputStream zip( stream );
@@ -335,7 +335,7 @@ void PCM_TASK_MANAGER::InstallFromFile( wxWindow* aParent, const wxString& aFile
     if( !zip.IsOk() )
     {
         wxLogError( _( "Invalid archive file format." ) );
-        return;
+        return PCM_TASK_MANAGER::STATUS::FAILED;
     }
 
     nlohmann::json metadata;
@@ -367,7 +367,7 @@ void PCM_TASK_MANAGER::InstallFromFile( wxWindow* aParent, const wxString& aFile
     if( metadata.empty() )
     {
         wxLogError( _( "Archive does not contain a valid metadata.json file" ) );
-        return;
+        return PCM_TASK_MANAGER::STATUS::FAILED;
     }
 
     PCM_PACKAGE package = metadata.get<PCM_PACKAGE>();
@@ -375,7 +375,7 @@ void PCM_TASK_MANAGER::InstallFromFile( wxWindow* aParent, const wxString& aFile
     if( package.versions.size() != 1 )
     {
         wxLogError( _( "Archive metadata must have a single version defined" ) );
-        return;
+        return PCM_TASK_MANAGER::STATUS::FAILED;
     }
 
     bool isUpdate = false;
@@ -397,7 +397,7 @@ void PCM_TASK_MANAGER::InstallFromFile( wxWindow* aParent, const wxString& aFile
                             package.identifier ),
                     _( "Update package" ), wxICON_EXCLAMATION | wxYES_NO, aParent )
             == wxNO )
-            return;
+            return PCM_TASK_MANAGER::STATUS::INITIALIZED;
 
         isUpdate = true;
 
@@ -414,7 +414,7 @@ void PCM_TASK_MANAGER::InstallFromFile( wxWindow* aParent, const wxString& aFile
     if( isUpdate )
     {
         m_reporter->PCMReport( wxString::Format( _( "Removing previous version of package '%s'." ),
-                                                 package.identifier ),
+                                                 package.name ),
                                RPT_SEVERITY_INFO );
 
         deletePackageDirectories( package.identifier, keep_on_update );
@@ -432,6 +432,7 @@ void PCM_TASK_MANAGER::InstallFromFile( wxWindow* aParent, const wxString& aFile
 
     std::unique_lock lock( m_changed_package_types_guard );
     m_changed_package_types.insert( package.type );
+    return PCM_TASK_MANAGER::STATUS::SUCCESS;
 }
 
 
@@ -529,9 +530,6 @@ void PCM_TASK_MANAGER::deletePackageDirectories( const wxString&                
 
                     if( re.Matches( tmp ) )
                     {
-                        // m_reporter->PCMReport( wxString::Format( _( "Keeping file '%s'." ), tmp ),
-                        //                        RPT_SEVERITY_INFO );
-
                         del = false;
                         break;
                     }
@@ -552,7 +550,7 @@ void PCM_TASK_MANAGER::deletePackageDirectories( const wxString&                
 }
 
 
-void PCM_TASK_MANAGER::Uninstall( const PCM_PACKAGE& aPackage )
+PCM_TASK_MANAGER::STATUS PCM_TASK_MANAGER::Uninstall( const PCM_PACKAGE& aPackage )
 {
     PCM_TASK task = [aPackage, this]
     {
@@ -564,11 +562,13 @@ void PCM_TASK_MANAGER::Uninstall( const PCM_PACKAGE& aPackage )
         m_changed_package_types.insert( aPackage.type );
 
         m_reporter->PCMReport(
-                wxString::Format( _( "Package %s uninstalled" ), aPackage.identifier ),
+                wxString::Format( _( "Package %s uninstalled" ), aPackage.name ),
                 RPT_SEVERITY_INFO );
+        return PCM_TASK_MANAGER::STATUS::SUCCESS;
     };
 
     m_install_queue.push( task );
+    return PCM_TASK_MANAGER::STATUS::SUCCESS;
 }
 
 
@@ -588,6 +588,9 @@ void PCM_TASK_MANAGER::RunQueue( wxWindow* aParent )
     std::mutex              mutex;
     std::condition_variable condvar;
     bool                    download_complete = false;
+    int                     count_tasks = 0;
+    int                     count_failed_tasks = 0;
+    int                     count_success_tasks = 0;
 
     std::thread download_thread(
             [&]()
@@ -625,7 +628,15 @@ void PCM_TASK_MANAGER::RunQueue( wxWindow* aParent )
                     {
                         PCM_TASK task;
                         m_install_queue.pop( task );
-                        task();
+                        PCM_TASK_MANAGER::STATUS task_status = task();
+
+                        count_tasks++;
+
+                        if( task_status == PCM_TASK_MANAGER::STATUS::SUCCESS )
+                            count_success_tasks++;
+                        else if( task_status != PCM_TASK_MANAGER::STATUS::INITIALIZED )
+                            count_failed_tasks++;
+                        
                         m_reporter->AdvancePhase();
                     }
 
@@ -634,7 +645,26 @@ void PCM_TASK_MANAGER::RunQueue( wxWindow* aParent )
                 } while( ( !m_install_queue.empty() || !download_complete )
                          && !m_reporter->IsCancelled() );
 
-                m_reporter->PCMReport( _( "Done." ), RPT_SEVERITY_INFO );
+                if( count_failed_tasks != 0 )
+                {
+                    m_reporter->PCMReport(
+                            wxString::Format( _( "%d out of %d operations failed." ), count_failed_tasks, count_tasks ),
+                            RPT_SEVERITY_INFO );
+                }
+                else
+                {
+                    if( count_success_tasks == count_tasks )
+                    {
+                        m_reporter->PCMReport( _( "All operations completed successfully." ), RPT_SEVERITY_INFO );
+                    }
+                    else
+                    {
+                        m_reporter->PCMReport(
+                                wxString::Format( _( "%d out of %d operations were initialized but not successful." ),
+                                                    count_tasks - count_success_tasks, count_tasks ),
+                                RPT_SEVERITY_INFO );
+                    }
+                }
 
                 m_reporter->SetFinished();
             } );

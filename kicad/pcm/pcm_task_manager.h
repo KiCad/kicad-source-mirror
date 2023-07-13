@@ -36,9 +36,6 @@
 #include <wx/string.h>
 
 
-typedef std::function<void()> PCM_TASK;
-
-
 /**
  * @brief Helper class that handles package (un)installation
  *
@@ -50,6 +47,15 @@ typedef std::function<void()> PCM_TASK;
 class PCM_TASK_MANAGER
 {
 public:
+    enum class STATUS
+    {
+        FAILED             = -1,
+        INITIALIZED       = 0,
+        SUCCESS           = 1
+    };
+
+    typedef std::function<STATUS()> PCM_TASK;
+
     PCM_TASK_MANAGER( std::shared_ptr<PLUGIN_CONTENT_MANAGER> pcm ) : m_pcm( pcm ){};
 
     /**
@@ -66,8 +72,10 @@ public:
      * @param aPackage package metadata
      * @param aVersion version to be installed
      * @param aRepositoryId id of the source repository
+     * 
+     * @return int status of the process
      */
-    void DownloadAndInstall( const PCM_PACKAGE& aPackage, const wxString& aVersion,
+    PCM_TASK_MANAGER::STATUS DownloadAndInstall( const PCM_PACKAGE& aPackage, const wxString& aVersion,
                              const wxString& aRepositoryId, const bool isUpdate );
 
     /**
@@ -77,8 +85,10 @@ public:
      * as uninstalled.
      *
      * @param aPackage package metadata
+     * 
+     * @return int status of the process
      */
-    void Uninstall( const PCM_PACKAGE& aPackage );
+    PCM_TASK_MANAGER::STATUS Uninstall( const PCM_PACKAGE& aPackage );
 
     /**
      * @brief Run queue of pending actions
@@ -101,8 +111,10 @@ public:
      *
      * @param aParent parent dialog for progress window
      * @param aFilePath path to the archive file
+     * 
+     * @return int status of the process
      */
-    void InstallFromFile( wxWindow* aParent, const wxString& aFilePath );
+    PCM_TASK_MANAGER::STATUS InstallFromFile( wxWindow* aParent, const wxString& aFilePath );
 
     /**
      * @return types of packages that were installed/uninstalled by the task manager
@@ -130,10 +142,13 @@ private:
      * @param aRepositoryId id of the source repository
      * @param aFilePath path to the archive
      * @param isUpdate true if this is an update operation
+     * @return int status of the operation
      */
-    void installDownloadedPackage( const PCM_PACKAGE& aPackage, const wxString& aVersion,
-                                   const wxString& aRepositoryId, const wxFileName& aFilePath,
-                                   const bool isUpdate );
+    PCM_TASK_MANAGER::STATUS installDownloadedPackage( const PCM_PACKAGE& aPackage,
+                                                       const wxString&    aVersion,
+                                                       const wxString&    aRepositoryId,
+                                                       const wxFileName&  aFilePath,
+                                                       const bool         isUpdate );
 
     /**
      * @brief Extract package archive
