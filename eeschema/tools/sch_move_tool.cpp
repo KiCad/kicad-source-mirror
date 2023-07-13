@@ -1165,7 +1165,11 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aSelectedItem, const VECTOR
 
                 newWire->SetFlags( IS_NEW );
                 newWire->SetConnectivityDirty( true );
-                newWire->SetLastResolvedState( selected );
+
+                if( dynamic_cast<const SCH_LINE*>( selected ) )
+                    newWire->SetLastResolvedState( selected );
+                else if( dynamic_cast<const SCH_LINE*>( fixed ) )
+                    newWire->SetLastResolvedState( fixed );
 
                 newWire->SetEndPoint( end );
                 m_frame->AddToScreen( newWire, m_frame->GetScreen() );
