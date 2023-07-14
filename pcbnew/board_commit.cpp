@@ -269,6 +269,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
     {
         int changeType = ent.m_type & CHT_TYPE;
         int changeFlags = ent.m_type & CHT_FLAGS;
+        BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( ent.m_item );
 
         wxASSERT( ent.m_item );
 
@@ -306,10 +307,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             }
         }
 
-        BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( ent.m_item );
         wxCHECK2( boardItem, continue );
 
-        if( m_isBoardEditor && boardItem )
+        if( m_isBoardEditor )
         {
             if( boardItem->Type() == PCB_VIA_T || boardItem->Type() == PCB_FOOTPRINT_T
                     || boardItem->IsOnLayer( F_Mask ) || boardItem->IsOnLayer( B_Mask ) )
