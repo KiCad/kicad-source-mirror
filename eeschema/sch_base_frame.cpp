@@ -627,17 +627,18 @@ void SCH_BASE_FRAME::setSymWatcher( const LIB_ID* aID )
 {
     Unbind( wxEVT_FSWATCHER, &SCH_BASE_FRAME::OnSymChange, this );
 
-    if( !aID )
+    if( m_watcher )
     {
-        wxLogTrace( "KICAD_LIB_WATCH", "No symbol library specified, disabling watcher" );
+        wxLogTrace( "KICAD_LIB_WATCH", "Remove watch" );
+        m_watcher->RemoveAll();
+        m_watcher->SetOwner( nullptr );
         m_watcher.reset();
-        return;
     }
 
     wxString libfullname;
     SYMBOL_LIB_TABLE* tbl = Prj().SchSymbolLibTable();
 
-    if( !tbl )
+    if( !id || !tbl )
         return;
 
     try

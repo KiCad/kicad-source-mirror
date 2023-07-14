@@ -1152,18 +1152,12 @@ void PCB_BASE_FRAME::setFPWatcher( FOOTPRINT* aFootprint )
 
     Unbind( wxEVT_FSWATCHER, &PCB_BASE_FRAME::OnFPChange, this );
 
-    if( !aFootprint )
+    if( m_watcher )
     {
         wxLogTrace( "KICAD_LIB_WATCH", "Remove watch" );
-
-        if( m_watcher )
-        {
-            m_watcher->RemoveAll();
-            m_watcher->SetOwner( nullptr );
-            m_watcher.reset();
-        }
-
-        return;
+        m_watcher->RemoveAll();
+        m_watcher->SetOwner( nullptr );
+        m_watcher.reset();
     }
 
     wxString libfullname;
