@@ -1962,6 +1962,8 @@ bool SIMULATOR_FRAME_UI::SaveWorkbook( const wxString& aPath )
         if( !simTab )
             continue;
 
+        SIM_TYPE simType = simTab->GetSimType();
+
         nlohmann::json commands_js = nlohmann::json::array();
 
         commands_js.push_back( simTab->GetSimCommand() );
@@ -1980,7 +1982,9 @@ bool SIMULATOR_FRAME_UI::SaveWorkbook( const wxString& aPath )
         if( simTab->GetSimOptions() & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_DISSIPATIONS )
             commands_js.push_back( ".probe allp" );
 
-        nlohmann::json tab_js = nlohmann::json( { { "commands", commands_js } } );
+        nlohmann::json tab_js = nlohmann::json(
+                                    { { "analysis", SPICE_SIMULATOR::TypeToName( simType, true ) },
+                                      { "commands", commands_js } } );
 
         if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( simTab ) )
         {
@@ -2001,9 +2005,9 @@ bool SIMULATOR_FRAME_UI::SaveWorkbook( const wxString& aPath )
             for( const auto& [name, trace] : plotTab->GetTraces() )
             {
                 nlohmann::json trace_js = nlohmann::json(
-                        { { "trace_type", (int) trace->GetType() },
-                          { "signal",     findSignalName( trace->GetName() ) },
-                          { "color",      COLOR4D( trace->GetTraceColour() ).ToCSSString() } } );
+                            { { "trace_type", (int) trace->GetType() },
+                              { "signal",     findSignalName( trace->GetName() ) },
+                              { "color",      COLOR4D( trace->GetTraceColour() ).ToCSSString() } } );
 
                 if( CURSOR* cursor = trace->GetCursor( 1 ) )
                 {
