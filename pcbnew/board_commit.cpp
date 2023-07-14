@@ -555,7 +555,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                             [&]( BOARD_ITEM* aChild )
                             {
                                 view->Update( aChild );
-                            });
+                            } );
                 }
             }
 
@@ -574,6 +574,15 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         }
 
         boardItem->ClearEditFlags();
+
+        if( m_isFootprintEditor && boardItem->Type() == PCB_FOOTPRINT_T )
+        {
+            static_cast<FOOTPRINT*>( boardItem )->RunOnChildren(
+                    [&]( BOARD_ITEM* aChild )
+                    {
+                        aChild->ClearEditFlags();
+                    } );
+        }
     }
 
     if( bulkAddedItems.size() > 0 )
