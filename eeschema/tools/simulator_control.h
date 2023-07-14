@@ -28,7 +28,7 @@
 #include <tool/tool_interactive.h>
 
 class SIMULATOR_FRAME;
-class NGSPICE_CIRCUIT_MODEL;
+class SPICE_CIRCUIT_MODEL;
 class SPICE_SIMULATOR;
 class SIM_TAB;
 
@@ -91,10 +91,10 @@ private:
     void setTransitions() override;
 
 private:
-    SIMULATOR_FRAME*                       m_simulatorFrame;
-    SCH_EDIT_FRAME*                        m_schematicFrame;
-    std::shared_ptr<NGSPICE_CIRCUIT_MODEL> m_circuitModel;
-    std::shared_ptr<SPICE_SIMULATOR>       m_simulator;
+    SIMULATOR_FRAME*                     m_simulatorFrame;
+    SCH_EDIT_FRAME*                      m_schematicFrame;
+    std::shared_ptr<SPICE_CIRCUIT_MODEL> m_circuitModel;
+    std::shared_ptr<SPICE_SIMULATOR>     m_simulator;
 };
 
 

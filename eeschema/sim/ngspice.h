@@ -56,7 +56,7 @@ public:
     virtual ~NGSPICE();
 
     ///< @copydoc SPICE_SIMULATOR::Init()
-    void Init( const SPICE_SIMULATOR_SETTINGS* aSettings = nullptr ) override final;
+    void Init( const SPICE_SETTINGS* aSettings = nullptr ) override final;
 
     ///< @copydoc SPICE_SIMULATOR::Attach()
     bool Attach( const std::shared_ptr<SIMULATION_MODEL>& aModel, const wxString& aSimCommand,

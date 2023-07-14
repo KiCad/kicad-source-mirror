@@ -211,12 +211,9 @@ protected:
                                    REPORTER* aReporter = nullptr );
 
 private:
-    SCH_EDIT_FRAME* m_schFrame;
     SCHEMATIC*      m_schematic;
-
     COLOR_SETTINGS* m_colorSettings;
-
-    wxString m_lastOutputFilePath;
+    wxString        m_lastOutputFilePath;
 };
 
 #endif

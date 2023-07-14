@@ -51,17 +51,17 @@
 #include <pgm_base.h>
 #include "ngspice.h"
 #include <sim/simulator_frame.h>
-#include <sim/simulator_panel.h>
+#include <sim/simulator_frame_ui.h>
 #include <sim/sim_plot_tab.h>
 #include <sim/spice_simulator.h>
-#include <sim/spice_reporter.h>
+#include <sim/simulator_reporter.h>
 #include <eeschema_settings.h>
 #include <advanced_config.h>
 
 #include <memory>
 
 
-class SIM_THREAD_REPORTER : public SPICE_REPORTER
+class SIM_THREAD_REPORTER : public SIMULATOR_REPORTER
 {
 public:
     SIM_THREAD_REPORTER( SIMULATOR_FRAME* aParent ) :
@@ -82,7 +82,7 @@ public:
         return false;       // Technically "indeterminate" rather than false.
     }
 
-    void OnSimStateChange( SPICE_SIMULATOR* aObject, SIM_STATE aNewState ) override
+    void OnSimStateChange( SIMULATOR* aObject, SIM_STATE aNewState ) override
     {
         wxCommandEvent* event = nullptr;
 
@@ -112,7 +112,7 @@ SIMULATOR_FRAME::SIMULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       wxDefaultSize, wxDEFAULT_FRAME_STYLE, wxT( "simulator" ), unityScale ),
         m_schematicFrame( nullptr ),
         m_toolBar( nullptr ),
-        m_panel( nullptr ),
+        m_ui( nullptr ),
         m_simFinished( false ),
         m_workbookModified( false )
 {
@@ -135,28 +135,27 @@ SIMULATOR_FRAME::SIMULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
    	m_toolBar->Realize();
     mainSizer->Add( m_toolBar, 0, wxEXPAND, 5 );
 
-    m_panel = new SIMULATOR_PANEL( this, m_schematicFrame );
-    mainSizer->Add( m_panel, 1, wxEXPAND, 5 );
+    m_ui = new SIMULATOR_FRAME_UI( this, m_schematicFrame );
+    mainSizer->Add( m_ui, 1, wxEXPAND, 5 );
 
     m_simulator = SIMULATOR::CreateInstance( "ngspice" );
     wxASSERT( m_simulator );
 
     LoadSettings( config() );
 
-    NGSPICE_SIMULATOR_SETTINGS* settings =
-            dynamic_cast<NGSPICE_SIMULATOR_SETTINGS*>( m_simulator->Settings().get() );
+    NGSPICE_SETTINGS* settings = dynamic_cast<NGSPICE_SETTINGS*>( m_simulator->Settings().get() );
 
     wxCHECK2( settings, /* do nothing in release builds*/ );
 
     if( settings && settings->GetWorkbookFilename().IsEmpty() )
-        settings->SetModelMode( NGSPICE_MODEL_MODE::LT_PSPICE );
+        settings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::LT_PSPICE );
 
     m_simulator->Init();
 
     m_reporter = new SIM_THREAD_REPORTER( this );
     m_simulator->SetReporter( m_reporter );
 
-    m_circuitModel = std::make_shared<NGSPICE_CIRCUIT_MODEL>( &m_schematicFrame->Schematic(), this );
+    m_circuitModel = std::make_shared<SPICE_CIRCUIT_MODEL>( &m_schematicFrame->Schematic(), this );
 
     setupTools();
     setupUIConditions();
@@ -181,12 +180,12 @@ SIMULATOR_FRAME::SIMULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Otherwise, the changes made by setSubWindowsSashSize are overwritten by one these
     // events
     wxSafeYield();
-    m_panel->SetSubWindowsSashSize();
+    m_ui->SetSubWindowsSashSize();
 
     // Ensure the window is on top
     Raise();
 
-    m_panel->InitWorkbook();
+    m_ui->InitWorkbook();
     UpdateTitle();
 }
 
@@ -226,7 +225,7 @@ void SIMULATOR_FRAME::ShowChangedLanguage()
 
     UpdateTitle();
 
-    m_panel->ShowChangedLanguage();
+    m_ui->ShowChangedLanguage();
 }
 
 
@@ -238,7 +237,7 @@ void SIMULATOR_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     if( cfg )
     {
         EDA_BASE_FRAME::LoadSettings( cfg );
-        m_panel->LoadSettings( cfg );
+        m_ui->LoadSettings( cfg );
     }
 
     PROJECT_FILE& project = Prj().GetProjectFile();
@@ -246,7 +245,7 @@ void SIMULATOR_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     NGSPICE* currentSim = dynamic_cast<NGSPICE*>( m_simulator.get() );
 
     if( currentSim )
-        m_simulator->Settings() = project.m_SchematicSettings->m_NgspiceSimulatorSettings;
+        m_simulator->Settings() = project.m_SchematicSettings->m_NgspiceSettings;
 }
 
 
@@ -258,14 +257,14 @@ void SIMULATOR_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     if( cfg )
     {
         EDA_BASE_FRAME::SaveSettings( cfg );
-        m_panel->SaveSettings( cfg );
+        m_ui->SaveSettings( cfg );
     }
 
     PROJECT_FILE& project = Prj().GetProjectFile();
 
     if( project.m_SchematicSettings )
     {
-        bool modified = project.m_SchematicSettings->m_NgspiceSimulatorSettings->SaveToFile();
+        bool modified = project.m_SchematicSettings->m_NgspiceSettings->SaveToFile();
 
         if( m_schematicFrame && modified )
             m_schematicFrame->OnModify();
@@ -284,8 +283,8 @@ WINDOW_SETTINGS* SIMULATOR_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
 
 wxString SIMULATOR_FRAME::GetCurrentSimCommand() const
 {
-    if( m_panel->GetCurrentSimTab() )
-        return m_panel->GetCurrentSimTab()->GetSimCommand();
+    if( m_ui->GetCurrentSimTab() )
+        return m_ui->GetCurrentSimTab()->GetSimCommand();
     else
         return m_circuitModel->GetSchTextSimCommand();
 }
@@ -293,13 +292,13 @@ wxString SIMULATOR_FRAME::GetCurrentSimCommand() const
 
 SIM_TYPE SIMULATOR_FRAME::GetCurrentSimType() const
 {
-    return NGSPICE_CIRCUIT_MODEL::CommandToSimType( GetCurrentSimCommand() );
+    return SPICE_CIRCUIT_MODEL::CommandToSimType( GetCurrentSimCommand() );
 }
 
 
 int SIMULATOR_FRAME::GetCurrentOptions() const
 {
-    if( SIM_TAB* simTab = m_panel->GetCurrentSimTab() )
+    if( SIM_TAB* simTab = m_ui->GetCurrentSimTab() )
         return simTab->GetSimOptions();
     else
         return NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS;
@@ -361,7 +360,7 @@ bool SIMULATOR_FRAME::LoadSimulator( const wxString& aSimCommand, unsigned aSimO
 
 void SIMULATOR_FRAME::StartSimulation()
 {
-    SIM_TAB* simTab = m_panel->GetCurrentSimTab();
+    SIM_TAB* simTab = m_ui->GetCurrentSimTab();
 
     if( !simTab )
         return;
@@ -370,7 +369,7 @@ void SIMULATOR_FRAME::StartSimulation()
     {
         wxString tranSpicePlot;
 
-        if( SIM_TAB* tranPlotTab = m_panel->GetSimTab( ST_TRAN ) )
+        if( SIM_TAB* tranPlotTab = m_ui->GetSimTab( ST_TRAN ) )
             tranSpicePlot = tranPlotTab->GetSpicePlotName();
 
         if( tranSpicePlot.IsEmpty() )
@@ -391,7 +390,7 @@ void SIMULATOR_FRAME::StartSimulation()
             }
 
             simTab->SetSpicePlotName( m_simulator->CurrentPlotName() );
-            m_panel->OnSimRefresh( true );
+            m_ui->OnSimRefresh( true );
 
 #if 0
             m_simulator->Command( "setplot" );  // Print available plots to console
@@ -403,7 +402,7 @@ void SIMULATOR_FRAME::StartSimulation()
     }
     else
     {
-        if( m_panel->GetSimTabIndex( simTab ) == 0
+        if( m_ui->GetSimTabIndex( simTab ) == 0
                 && m_circuitModel->GetSchTextSimCommand() != simTab->GetLastSchTextSimCommand() )
         {
             if( simTab->GetLastSchTextSimCommand().IsEmpty()
@@ -424,7 +423,7 @@ void SIMULATOR_FRAME::StartSimulation()
 
     if( simulatorLock.owns_lock() )
     {
-        m_panel->OnSimUpdate();
+        m_ui->OnSimUpdate();
         m_simulator->Run();
     }
     else
@@ -436,61 +435,61 @@ void SIMULATOR_FRAME::StartSimulation()
 
 void SIMULATOR_FRAME::NewPlotPanel( const wxString& aSimCommand, unsigned aOptions )
 {
-    m_panel->NewSimTab( aSimCommand, aOptions );
+    m_ui->NewSimTab( aSimCommand, aOptions );
 }
 
 
 const std::vector<wxString> SIMULATOR_FRAME::SimPlotVectors()
 {
-    return m_panel->SimPlotVectors();
+    return m_ui->SimPlotVectors();
 }
 
 
 const std::vector<wxString> SIMULATOR_FRAME::Signals()
 {
-    return m_panel->Signals();
+    return m_ui->Signals();
 }
 
 
 const std::map<int, wxString>& SIMULATOR_FRAME::UserDefinedSignals()
 {
-    return m_panel->UserDefinedSignals();
+    return m_ui->UserDefinedSignals();
 }
 
 
 void SIMULATOR_FRAME::SetUserDefinedSignals( const std::map<int, wxString>& aSignals )
 {
-    m_panel->SetUserDefinedSignals( aSignals );
+    m_ui->SetUserDefinedSignals( aSignals );
 }
 
 
 void SIMULATOR_FRAME::AddVoltageTrace( const wxString& aNetName )
 {
-    m_panel->AddTrace( aNetName, SPT_VOLTAGE );
+    m_ui->AddTrace( aNetName, SPT_VOLTAGE );
 }
 
 
 void SIMULATOR_FRAME::AddCurrentTrace( const wxString& aDeviceName )
 {
-    m_panel->AddTrace( aDeviceName, SPT_CURRENT );
+    m_ui->AddTrace( aDeviceName, SPT_CURRENT );
 }
 
 
 void SIMULATOR_FRAME::AddTuner( const SCH_SHEET_PATH& aSheetPath, SCH_SYMBOL* aSymbol )
 {
-    m_panel->AddTuner( aSheetPath, aSymbol );
+    m_ui->AddTuner( aSheetPath, aSymbol );
 }
 
 
 SIM_TAB* SIMULATOR_FRAME::GetCurrentSimTab() const
 {
-    return m_panel->GetCurrentSimTab();
+    return m_ui->GetCurrentSimTab();
 }
 
 
 bool SIMULATOR_FRAME::LoadWorkbook( const wxString& aPath )
 {
-    if( m_panel->LoadWorkbook( aPath ) )
+    if( m_ui->LoadWorkbook( aPath ) )
     {
         UpdateTitle();
 
@@ -510,7 +509,7 @@ bool SIMULATOR_FRAME::LoadWorkbook( const wxString& aPath )
 
 bool SIMULATOR_FRAME::SaveWorkbook( const wxString& aPath )
 {
-    if( m_panel->SaveWorkbook( aPath ) )
+    if( m_ui->SaveWorkbook( aPath ) )
     {
         UpdateTitle();
         m_workbookModified = false;
@@ -524,13 +523,13 @@ bool SIMULATOR_FRAME::SaveWorkbook( const wxString& aPath )
 
 void SIMULATOR_FRAME::ToggleDarkModePlots()
 {
-    m_panel->ToggleDarkModePlots();
+    m_ui->ToggleDarkModePlots();
 }
 
 
 bool SIMULATOR_FRAME::EditSimCommand()
 {
-    SIM_TAB*           simTab = m_panel->GetCurrentSimTab();
+    SIM_TAB*           simTab = m_ui->GetCurrentSimTab();
     DIALOG_SIM_COMMAND dlg( this, m_circuitModel, m_simulator->Settings() );
     wxString           errors;
     WX_STRING_REPORTER reporter( &errors );
@@ -552,7 +551,7 @@ bool SIMULATOR_FRAME::EditSimCommand()
     {
         simTab->SetSimCommand( dlg.GetSimCommand() );
         simTab->SetSimOptions( dlg.GetSimOptions() );
-        m_panel->OnPlotSettingsChanged();
+        m_ui->OnPlotSettingsChanged();
         OnModify();
         return true;
     }
@@ -636,7 +635,7 @@ void SIMULATOR_FRAME::setupUIConditions()
     auto darkModePlotCondition =
             [this]( const SELECTION& aSel )
             {
-                return m_panel->DarkModePlots();
+                return m_ui->DarkModePlots();
             };
 
     auto simRunning =
@@ -727,7 +726,7 @@ void SIMULATOR_FRAME::onSimFinished( wxCommandEvent& aEvent )
 
     m_simFinished = true;
 
-    m_panel->OnSimRefresh( true );
+    m_ui->OnSimRefresh( true );
 
     m_schematicFrame->RefreshOperatingPointDisplay();
     m_schematicFrame->GetCanvas()->Refresh();
@@ -751,7 +750,7 @@ void SIMULATOR_FRAME::onUpdateSim( wxCommandEvent& aEvent )
 
     if( simulatorLock.owns_lock() )
     {
-        m_panel->OnSimUpdate();
+        m_ui->OnSimUpdate();
         m_simulator->Run();
     }
     else
@@ -765,7 +764,7 @@ void SIMULATOR_FRAME::onUpdateSim( wxCommandEvent& aEvent )
 
 void SIMULATOR_FRAME::onSimReport( wxCommandEvent& aEvent )
 {
-    m_panel->OnSimReport( aEvent.GetString() );
+    m_ui->OnSimReport( aEvent.GetString() );
 }
 
 

@@ -29,7 +29,7 @@
 #define SIMULATOR_FRAME_H
 
 
-#include <sim/simulator_panel_base.h>
+#include <sim/simulator_frame_ui_base.h>
 #include <sim/sim_types.h>
 
 #include <kiway_player.h>
@@ -43,7 +43,7 @@
 
 class SCH_EDIT_FRAME;
 class SCH_SYMBOL;
-class SIMULATOR_PANEL;
+class SIMULATOR_FRAME_UI;
 class SIM_THREAD_REPORTER;
 class ACTION_TOOLBAR;
 
@@ -161,7 +161,7 @@ public:
 
     SCH_EDIT_FRAME* GetSchematicFrame() const { return m_schematicFrame; }
 
-    std::shared_ptr<NGSPICE_CIRCUIT_MODEL> GetCircuitModel() const { return m_circuitModel; }
+    std::shared_ptr<SPICE_CIRCUIT_MODEL> GetCircuitModel() const { return m_circuitModel; }
 
     std::shared_ptr<SPICE_SIMULATOR> GetSimulator() const { return m_simulator; }
 
@@ -200,16 +200,16 @@ private:
     void onExit( wxCommandEvent& event );
 
 private:
-    SCH_EDIT_FRAME*                        m_schematicFrame;
-    ACTION_TOOLBAR*                        m_toolBar;
-    SIMULATOR_PANEL*                       m_panel;
+    SCH_EDIT_FRAME*                      m_schematicFrame;
+    ACTION_TOOLBAR*                      m_toolBar;
+    SIMULATOR_FRAME_UI*                  m_ui;
 
-    std::shared_ptr<SPICE_SIMULATOR>       m_simulator;
-    SIM_THREAD_REPORTER*                   m_reporter;
-    std::shared_ptr<NGSPICE_CIRCUIT_MODEL> m_circuitModel;
+    std::shared_ptr<SPICE_SIMULATOR>     m_simulator;
+    SIM_THREAD_REPORTER*                 m_reporter;
+    std::shared_ptr<SPICE_CIRCUIT_MODEL> m_circuitModel;
 
-    bool                                   m_simFinished;
-    bool                                   m_workbookModified;
+    bool                                 m_simFinished;
+    bool                                 m_workbookModified;
 };
 
 // Commands

@@ -37,7 +37,7 @@
 #include <eda_pattern_match.h>
 #include <string_utils.h>
 #include <pgm_base.h>
-#include <sim/simulator_panel.h>
+#include <sim/simulator_frame_ui.h>
 #include <sim/simulator_frame.h>
 #include <sim/sim_plot_tab.h>
 #include <sim/spice_simulator.h>
@@ -104,7 +104,7 @@ enum
 class SIGNALS_GRID_TRICKS : public GRID_TRICKS
 {
 public:
-    SIGNALS_GRID_TRICKS( SIMULATOR_PANEL* aParent, WX_GRID* aGrid ) :
+    SIGNALS_GRID_TRICKS( SIMULATOR_FRAME_UI* aParent, WX_GRID* aGrid ) :
             GRID_TRICKS( aGrid ),
             m_parent( aParent ),
             m_menuRow( 0 ),
@@ -116,9 +116,9 @@ protected:
     void doPopupSelection( wxCommandEvent& event ) override;
 
 protected:
-    SIMULATOR_PANEL* m_parent;
-    int              m_menuRow;
-    int              m_menuCol;
+    SIMULATOR_FRAME_UI* m_parent;
+    int                 m_menuRow;
+    int                 m_menuCol;
 };
 
 
@@ -263,7 +263,7 @@ void SIGNALS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 class CURSORS_GRID_TRICKS : public GRID_TRICKS
 {
 public:
-    CURSORS_GRID_TRICKS( SIMULATOR_PANEL* aParent, WX_GRID* aGrid ) :
+    CURSORS_GRID_TRICKS( SIMULATOR_FRAME_UI* aParent, WX_GRID* aGrid ) :
             GRID_TRICKS( aGrid ),
             m_parent( aParent ),
             m_menuRow( 0 ),
@@ -275,9 +275,9 @@ protected:
     void doPopupSelection( wxCommandEvent& event ) override;
 
 protected:
-    SIMULATOR_PANEL* m_parent;
-    int              m_menuRow;
-    int              m_menuCol;
+    SIMULATOR_FRAME_UI* m_parent;
+    int                 m_menuRow;
+    int                 m_menuCol;
 };
 
 
@@ -320,7 +320,7 @@ void CURSORS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 class MEASUREMENTS_GRID_TRICKS : public GRID_TRICKS
 {
 public:
-    MEASUREMENTS_GRID_TRICKS( SIMULATOR_PANEL* aParent, WX_GRID* aGrid ) :
+    MEASUREMENTS_GRID_TRICKS( SIMULATOR_FRAME_UI* aParent, WX_GRID* aGrid ) :
             GRID_TRICKS( aGrid ),
             m_parent( aParent ),
             m_menuRow( 0 ),
@@ -332,9 +332,9 @@ protected:
     void doPopupSelection( wxCommandEvent& event ) override;
 
 protected:
-    SIMULATOR_PANEL* m_parent;
-    int              m_menuRow;
-    int              m_menuCol;
+    SIMULATOR_FRAME_UI* m_parent;
+    int                 m_menuRow;
+    int                 m_menuCol;
 };
 
 
@@ -421,7 +421,7 @@ void MEASUREMENTS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 class SUPPRESS_GRID_CELL_EVENTS
 {
 public:
-    SUPPRESS_GRID_CELL_EVENTS( SIMULATOR_PANEL* aFrame ) :
+    SUPPRESS_GRID_CELL_EVENTS( SIMULATOR_FRAME_UI* aFrame ) :
             m_frame( aFrame )
     {
         m_frame->m_SuppressGridEvents++;
@@ -433,7 +433,7 @@ public:
     }
 
 private:
-    SIMULATOR_PANEL* m_frame;
+    SIMULATOR_FRAME_UI* m_frame;
 };
 
 
@@ -441,9 +441,9 @@ private:
 #define REFRESH_INTERVAL 50   // 20 frames/second.
 
 
-SIMULATOR_PANEL::SIMULATOR_PANEL( SIMULATOR_FRAME* aSimulatorFrame,
-                                  SCH_EDIT_FRAME* aSchematicFrame ) :
-        SIMULATOR_PANEL_BASE( aSimulatorFrame ),
+SIMULATOR_FRAME_UI::SIMULATOR_FRAME_UI( SIMULATOR_FRAME* aSimulatorFrame,
+                                        SCH_EDIT_FRAME* aSchematicFrame ) :
+        SIMULATOR_FRAME_UI_BASE( aSimulatorFrame ),
         m_SuppressGridEvents( 0 ),
         m_simulatorFrame( aSimulatorFrame ),
         m_schematicFrame( aSchematicFrame ),
@@ -493,8 +493,8 @@ SIMULATOR_PANEL::SIMULATOR_PANEL( SIMULATOR_FRAME* aSimulatorFrame,
     // Prepare the color list to plot traces
     SIM_PLOT_COLORS::FillDefaultColorList( m_darkMode );
 
-    Bind( EVT_SIM_CURSOR_UPDATE, &SIMULATOR_PANEL::onPlotCursorUpdate, this );
-    Bind( EVT_WORKBOOK_MODIFIED, &SIMULATOR_PANEL::onNotebookModified, this );
+    Bind( EVT_SIM_CURSOR_UPDATE, &SIMULATOR_FRAME_UI::onPlotCursorUpdate, this );
+    Bind( EVT_WORKBOOK_MODIFIED, &SIMULATOR_FRAME_UI::onNotebookModified, this );
 
     Bind( wxEVT_TIMER,
             [&]( wxTimerEvent& aEvent )
@@ -513,7 +513,7 @@ SIMULATOR_PANEL::SIMULATOR_PANEL( SIMULATOR_FRAME* aSimulatorFrame,
 }
 
 
-SIMULATOR_PANEL::~SIMULATOR_PANEL()
+SIMULATOR_FRAME_UI::~SIMULATOR_FRAME_UI()
 {
     // Delete the GRID_TRICKS.
     m_signalsGrid->PopEventHandler( true );
@@ -522,7 +522,7 @@ SIMULATOR_PANEL::~SIMULATOR_PANEL()
 }
 
 
-void SIMULATOR_PANEL::ShowChangedLanguage()
+void SIMULATOR_FRAME_UI::ShowChangedLanguage()
 {
     for( int ii = 0; ii < (int) m_plotNotebook->GetPageCount(); ++ii )
     {
@@ -557,7 +557,7 @@ void SIMULATOR_PANEL::ShowChangedLanguage()
 }
 
 
-void SIMULATOR_PANEL::LoadSettings( EESCHEMA_SETTINGS* aCfg )
+void SIMULATOR_FRAME_UI::LoadSettings( EESCHEMA_SETTINGS* aCfg )
 {
     // Read subwindows sizes (should be > 0 )
     m_splitterLeftRightSashPosition      = aCfg->m_Simulator.plot_panel_width;
@@ -569,7 +569,7 @@ void SIMULATOR_PANEL::LoadSettings( EESCHEMA_SETTINGS* aCfg )
 }
 
 
-void SIMULATOR_PANEL::SaveSettings( EESCHEMA_SETTINGS* aCfg )
+void SIMULATOR_FRAME_UI::SaveSettings( EESCHEMA_SETTINGS* aCfg )
 {
     aCfg->m_Simulator.plot_panel_width          = m_splitterLeftRight->GetSashPosition();
     aCfg->m_Simulator.plot_panel_height         = m_splitterPlotAndConsole->GetSashPosition();
@@ -580,7 +580,7 @@ void SIMULATOR_PANEL::SaveSettings( EESCHEMA_SETTINGS* aCfg )
 }
 
 
-void SIMULATOR_PANEL::InitWorkbook()
+void SIMULATOR_FRAME_UI::InitWorkbook()
 {
     if( !simulator()->Settings()->GetWorkbookFilename().IsEmpty() )
     {
@@ -603,7 +603,7 @@ void SIMULATOR_PANEL::InitWorkbook()
 }
 
 
-void SIMULATOR_PANEL::SetSubWindowsSashSize()
+void SIMULATOR_FRAME_UI::SetSubWindowsSashSize()
 {
     if( m_splitterLeftRightSashPosition > 0 )
         m_splitterLeftRight->SetSashPosition( m_splitterLeftRightSashPosition );
@@ -622,7 +622,7 @@ void SIMULATOR_PANEL::SetSubWindowsSashSize()
 }
 
 
-void SIMULATOR_PANEL::rebuildSignalsGrid( wxString aFilter )
+void SIMULATOR_FRAME_UI::rebuildSignalsGrid( wxString aFilter )
 {
     SUPPRESS_GRID_CELL_EVENTS raii( this );
 
@@ -730,7 +730,7 @@ void SIMULATOR_PANEL::rebuildSignalsGrid( wxString aFilter )
 }
 
 
-void SIMULATOR_PANEL::rebuildSignalsList()
+void SIMULATOR_FRAME_UI::rebuildSignalsList()
 {
     m_signals.clear();
 
@@ -870,10 +870,10 @@ void SIMULATOR_PANEL::rebuildSignalsList()
 }
 
 
-SIM_TAB* SIMULATOR_PANEL::NewSimTab( const wxString& aSimCommand, unsigned aSimOptions )
+SIM_TAB* SIMULATOR_FRAME_UI::NewSimTab( const wxString& aSimCommand, unsigned aSimOptions )
 {
     SIM_TAB* simTab = nullptr;
-    SIM_TYPE simType = NGSPICE_CIRCUIT_MODEL::CommandToSimType( aSimCommand );
+    SIM_TYPE simType = SPICE_CIRCUIT_MODEL::CommandToSimType( aSimCommand );
 
     if( SIM_TAB::IsPlottable( simType ) )
     {
@@ -898,13 +898,13 @@ SIM_TAB* SIMULATOR_PANEL::NewSimTab( const wxString& aSimCommand, unsigned aSimO
 }
 
 
-void SIMULATOR_PANEL::OnFilterText( wxCommandEvent& aEvent )
+void SIMULATOR_FRAME_UI::OnFilterText( wxCommandEvent& aEvent )
 {
     rebuildSignalsGrid( m_filter->GetValue() );
 }
 
 
-void SIMULATOR_PANEL::OnFilterMouseMoved( wxMouseEvent& aEvent )
+void SIMULATOR_FRAME_UI::OnFilterMouseMoved( wxMouseEvent& aEvent )
 {
     wxPoint pos = aEvent.GetPosition();
     wxRect  ctrlRect = m_filter->GetScreenRect();
@@ -929,8 +929,9 @@ wxString vectorNameFromSignalId( int aUserDefinedSignalId )
  * For user-defined signals we display the user-oriented signal name such as "V(out)-V(in)",
  * but the simulator vector we actually have to plot will be "user0" or some-such.
  */
-wxString SIMULATOR_PANEL::vectorNameFromSignalName( SIM_PLOT_TAB* aPlotTab,
-                                                    const wxString& aSignalName, int* aTraceType )
+wxString SIMULATOR_FRAME_UI::vectorNameFromSignalName( SIM_PLOT_TAB* aPlotTab,
+                                                       const wxString& aSignalName,
+                                                       int* aTraceType )
 {
     std::map<wxString, int> suffixes;
     suffixes[ _( " (amplitude)" ) ] = SPT_SP_AMP;
@@ -985,7 +986,7 @@ wxString SIMULATOR_PANEL::vectorNameFromSignalName( SIM_PLOT_TAB* aPlotTab,
 };
 
 
-void SIMULATOR_PANEL::onSignalsGridCellChanged( wxGridEvent& aEvent )
+void SIMULATOR_FRAME_UI::onSignalsGridCellChanged( wxGridEvent& aEvent )
 {
     if( m_SuppressGridEvents > 0 )
         return;
@@ -1043,7 +1044,7 @@ void SIMULATOR_PANEL::onSignalsGridCellChanged( wxGridEvent& aEvent )
 }
 
 
-void SIMULATOR_PANEL::onCursorsGridCellChanged( wxGridEvent& aEvent )
+void SIMULATOR_FRAME_UI::onCursorsGridCellChanged( wxGridEvent& aEvent )
 {
     if( m_SuppressGridEvents > 0 )
         return;
@@ -1091,7 +1092,7 @@ void SIMULATOR_PANEL::onCursorsGridCellChanged( wxGridEvent& aEvent )
 }
 
 
-SPICE_VALUE_FORMAT SIMULATOR_PANEL::GetMeasureFormat( int aRow ) const
+SPICE_VALUE_FORMAT SIMULATOR_FRAME_UI::GetMeasureFormat( int aRow ) const
 {
     SPICE_VALUE_FORMAT result;
     result.FromString( m_measurementsGrid->GetCellValue( aRow, COL_MEASUREMENT_FORMAT ) );
@@ -1099,14 +1100,14 @@ SPICE_VALUE_FORMAT SIMULATOR_PANEL::GetMeasureFormat( int aRow ) const
 }
 
 
-void SIMULATOR_PANEL::SetMeasureFormat( int aRow, const SPICE_VALUE_FORMAT& aFormat )
+void SIMULATOR_FRAME_UI::SetMeasureFormat( int aRow, const SPICE_VALUE_FORMAT& aFormat )
 {
     m_measurementsGrid->SetCellValue( aRow, COL_MEASUREMENT_FORMAT, aFormat.ToString() );
     m_simulatorFrame->OnModify();
 }
 
 
-void SIMULATOR_PANEL::DeleteMeasurement( int aRow )
+void SIMULATOR_FRAME_UI::DeleteMeasurement( int aRow )
 {
     if( aRow < ( m_measurementsGrid->GetNumberRows() - 1 ) )
     {
@@ -1116,7 +1117,7 @@ void SIMULATOR_PANEL::DeleteMeasurement( int aRow )
 }
 
 
-void SIMULATOR_PANEL::onMeasurementsGridCellChanged( wxGridEvent& aEvent )
+void SIMULATOR_FRAME_UI::onMeasurementsGridCellChanged( wxGridEvent& aEvent )
 {
     SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
 
@@ -1176,7 +1177,7 @@ void SIMULATOR_PANEL::onMeasurementsGridCellChanged( wxGridEvent& aEvent )
  * we want to show:
  *    15W
  */
-void SIMULATOR_PANEL::UpdateMeasurement( int aRow )
+void SIMULATOR_FRAME_UI::UpdateMeasurement( int aRow )
 {
     static wxRegEx measureParamsRegEx( wxT( "^"
                                             " *"
@@ -1271,7 +1272,7 @@ void SIMULATOR_PANEL::UpdateMeasurement( int aRow )
 }
 
 
-void SIMULATOR_PANEL::AddTuner( const SCH_SHEET_PATH& aSheetPath, SCH_SYMBOL* aSymbol )
+void SIMULATOR_FRAME_UI::AddTuner( const SCH_SHEET_PATH& aSheetPath, SCH_SYMBOL* aSymbol )
 {
     SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
 
@@ -1308,8 +1309,8 @@ void SIMULATOR_PANEL::AddTuner( const SCH_SHEET_PATH& aSheetPath, SCH_SYMBOL* aS
 }
 
 
-void SIMULATOR_PANEL::UpdateTunerValue( const SCH_SHEET_PATH& aSheetPath, const KIID& aSymbol,
-                                        const wxString& aRef, const wxString& aValue )
+void SIMULATOR_FRAME_UI::UpdateTunerValue( const SCH_SHEET_PATH& aSheetPath, const KIID& aSymbol,
+                                           const wxString& aRef, const wxString& aValue )
 {
     SCH_ITEM*   item = aSheetPath.GetItem( aSymbol );
     SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item );
@@ -1341,7 +1342,7 @@ void SIMULATOR_PANEL::UpdateTunerValue( const SCH_SHEET_PATH& aSheetPath, const 
 }
 
 
-void SIMULATOR_PANEL::RemoveTuner( TUNER_SLIDER* aTuner )
+void SIMULATOR_FRAME_UI::RemoveTuner( TUNER_SLIDER* aTuner )
 {
     m_tuners.remove( aTuner );
     aTuner->Destroy();
@@ -1350,7 +1351,7 @@ void SIMULATOR_PANEL::RemoveTuner( TUNER_SLIDER* aTuner )
 }
 
 
-void SIMULATOR_PANEL::AddMeasurement( const wxString& aCmd )
+void SIMULATOR_FRAME_UI::AddMeasurement( const wxString& aCmd )
 {
     // -1 because the last one is for user input
     for( int i = 0; i < m_measurementsGrid->GetNumberRows(); i++ )
@@ -1393,7 +1394,7 @@ void SIMULATOR_PANEL::AddMeasurement( const wxString& aCmd )
 }
 
 
-void SIMULATOR_PANEL::DoFourier( const wxString& aSignal, const wxString& aFundamental )
+void SIMULATOR_FRAME_UI::DoFourier( const wxString& aSignal, const wxString& aFundamental )
 {
     wxString cmd = wxString::Format( wxS( "fourier %s %s" ),
                                      SPICE_VALUE( aFundamental ).ToSpiceString(),
@@ -1403,13 +1404,13 @@ void SIMULATOR_PANEL::DoFourier( const wxString& aSignal, const wxString& aFunda
 }
 
 
-const NGSPICE_CIRCUIT_MODEL* SIMULATOR_PANEL::GetExporter() const
+const SPICE_CIRCUIT_MODEL* SIMULATOR_FRAME_UI::GetExporter() const
 {
     return circuitModel().get();
 }
 
 
-void SIMULATOR_PANEL::AddTrace( const wxString& aName, SIM_TRACE_TYPE aType )
+void SIMULATOR_FRAME_UI::AddTrace( const wxString& aName, SIM_TRACE_TYPE aType )
 {
     if( !GetCurrentSimTab() )
     {
@@ -1418,7 +1419,7 @@ void SIMULATOR_PANEL::AddTrace( const wxString& aName, SIM_TRACE_TYPE aType )
         return;
     }
 
-    SIM_TYPE simType = NGSPICE_CIRCUIT_MODEL::CommandToSimType( GetCurrentSimTab()->GetSimCommand() );
+    SIM_TYPE simType = SPICE_CIRCUIT_MODEL::CommandToSimType( GetCurrentSimTab()->GetSimCommand() );
 
     if( simType == ST_UNKNOWN )
     {
@@ -1456,7 +1457,7 @@ void SIMULATOR_PANEL::AddTrace( const wxString& aName, SIM_TRACE_TYPE aType )
 }
 
 
-void SIMULATOR_PANEL::SetUserDefinedSignals( const std::map<int, wxString>& aNewSignals )
+void SIMULATOR_FRAME_UI::SetUserDefinedSignals( const std::map<int, wxString>& aNewSignals )
 {
     for( size_t ii = 0; ii < m_plotNotebook->GetPageCount(); ++ii )
     {
@@ -1527,10 +1528,10 @@ void SIMULATOR_PANEL::SetUserDefinedSignals( const std::map<int, wxString>& aNew
 }
 
 
-void SIMULATOR_PANEL::updateTrace( const wxString& aVectorName, int aTraceType,
-                                   SIM_PLOT_TAB* aPlotTab )
+void SIMULATOR_FRAME_UI::updateTrace( const wxString& aVectorName, int aTraceType,
+                                      SIM_PLOT_TAB* aPlotTab )
 {
-    SIM_TYPE simType = NGSPICE_CIRCUIT_MODEL::CommandToSimType( aPlotTab->GetSimCommand() );
+    SIM_TYPE simType = SPICE_CIRCUIT_MODEL::CommandToSimType( aPlotTab->GetSimCommand() );
 
     aTraceType &= aTraceType & SPT_Y_AXIS_MASK;
     aTraceType |= getXAxisType( simType );
@@ -1637,7 +1638,7 @@ void SIMULATOR_PANEL::updateTrace( const wxString& aVectorName, int aTraceType,
 }
 
 
-void SIMULATOR_PANEL::updateSignalsGrid()
+void SIMULATOR_FRAME_UI::updateSignalsGrid()
 {
     SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
 
@@ -1705,7 +1706,7 @@ void SIMULATOR_PANEL::updateSignalsGrid()
 }
 
 
-void SIMULATOR_PANEL::applyUserDefinedSignals()
+void SIMULATOR_FRAME_UI::applyUserDefinedSignals()
 {
     auto quoteNetNames =
             [&]( wxString aExpression ) -> wxString
@@ -1726,7 +1727,7 @@ void SIMULATOR_PANEL::applyUserDefinedSignals()
 }
 
 
-void SIMULATOR_PANEL::applyTuners()
+void SIMULATOR_FRAME_UI::applyTuners()
 {
     wxString            errors;
     WX_STRING_REPORTER  reporter( &errors );
@@ -1763,8 +1764,8 @@ void SIMULATOR_PANEL::applyTuners()
 }
 
 
-void SIMULATOR_PANEL::parseTraceParams( SIM_PLOT_TAB* aPlotTab, TRACE* aTrace,
-                                        const wxString& aSignalName, const wxString& aParams )
+void SIMULATOR_FRAME_UI::parseTraceParams( SIM_PLOT_TAB* aPlotTab, TRACE* aTrace,
+                                           const wxString& aSignalName, const wxString& aParams )
 {
     auto addCursor =
             [&]( int aCursorId, double x )
@@ -1838,7 +1839,7 @@ void SIMULATOR_PANEL::parseTraceParams( SIM_PLOT_TAB* aPlotTab, TRACE* aTrace,
 }
 
 
-bool SIMULATOR_PANEL::LoadWorkbook( const wxString& aPath )
+bool SIMULATOR_FRAME_UI::LoadWorkbook( const wxString& aPath )
 {
     m_plotNotebook->DeleteAllPages();
 
@@ -2092,7 +2093,7 @@ bool SIMULATOR_PANEL::LoadWorkbook( const wxString& aPath )
 }
 
 
-bool SIMULATOR_PANEL::SaveWorkbook( const wxString& aPath )
+bool SIMULATOR_FRAME_UI::SaveWorkbook( const wxString& aPath )
 {
     wxFileName filename = aPath;
     filename.SetExt( WorkbookFileExtension );
@@ -2259,7 +2260,7 @@ bool SIMULATOR_PANEL::SaveWorkbook( const wxString& aPath )
 }
 
 
-SIM_TRACE_TYPE SIMULATOR_PANEL::getXAxisType( SIM_TYPE aType ) const
+SIM_TRACE_TYPE SIMULATOR_FRAME_UI::getXAxisType( SIM_TYPE aType ) const
 {
     switch( aType )
     {
@@ -2275,7 +2276,7 @@ SIM_TRACE_TYPE SIMULATOR_PANEL::getXAxisType( SIM_TYPE aType ) const
 }
 
 
-wxString SIMULATOR_PANEL::getNoiseSource() const
+wxString SIMULATOR_FRAME_UI::getNoiseSource() const
 {
     wxString    output;
     wxString    ref;
@@ -2296,7 +2297,7 @@ wxString SIMULATOR_PANEL::getNoiseSource() const
 }
 
 
-void SIMULATOR_PANEL::ToggleDarkModePlots()
+void SIMULATOR_FRAME_UI::ToggleDarkModePlots()
 {
     m_darkMode = !m_darkMode;
 
@@ -2318,12 +2319,12 @@ void SIMULATOR_PANEL::ToggleDarkModePlots()
 }
 
 
-void SIMULATOR_PANEL::onPlotClose( wxAuiNotebookEvent& event )
+void SIMULATOR_FRAME_UI::onPlotClose( wxAuiNotebookEvent& event )
 {
 }
 
 
-void SIMULATOR_PANEL::onPlotClosed( wxAuiNotebookEvent& event )
+void SIMULATOR_FRAME_UI::onPlotClosed( wxAuiNotebookEvent& event )
 {
     CallAfter( [this]()
                {
@@ -2344,7 +2345,7 @@ void SIMULATOR_PANEL::onPlotClosed( wxAuiNotebookEvent& event )
 }
 
 
-void SIMULATOR_PANEL::onPlotChanging( wxAuiNotebookEvent& event )
+void SIMULATOR_FRAME_UI::onPlotChanging( wxAuiNotebookEvent& event )
 {
     if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() ) )
     {
@@ -2366,7 +2367,7 @@ void SIMULATOR_PANEL::onPlotChanging( wxAuiNotebookEvent& event )
 }
 
 
-void SIMULATOR_PANEL::OnPlotSettingsChanged()
+void SIMULATOR_FRAME_UI::OnPlotSettingsChanged()
 {
     rebuildSignalsList();
     rebuildSignalsGrid( m_filter->GetValue() );
@@ -2379,7 +2380,7 @@ void SIMULATOR_PANEL::OnPlotSettingsChanged()
 }
 
 
-void SIMULATOR_PANEL::onPlotChanged( wxAuiNotebookEvent& event )
+void SIMULATOR_FRAME_UI::onPlotChanged( wxAuiNotebookEvent& event )
 {
     if( SIM_TAB* simTab = GetCurrentSimTab() )
         simulator()->Command( "setplot " + simTab->GetSpicePlotName().ToStdString() );
@@ -2390,7 +2391,7 @@ void SIMULATOR_PANEL::onPlotChanged( wxAuiNotebookEvent& event )
 }
 
 
-void SIMULATOR_PANEL::rebuildMeasurementsGrid()
+void SIMULATOR_FRAME_UI::rebuildMeasurementsGrid()
 {
     m_measurementsGrid->ClearRows();
 
@@ -2413,31 +2414,31 @@ void SIMULATOR_PANEL::rebuildMeasurementsGrid()
 }
 
 
-void SIMULATOR_PANEL::onPlotDragged( wxAuiNotebookEvent& event )
+void SIMULATOR_FRAME_UI::onPlotDragged( wxAuiNotebookEvent& event )
 {
 }
 
 
-void SIMULATOR_PANEL::onNotebookModified( wxCommandEvent& event )
+void SIMULATOR_FRAME_UI::onNotebookModified( wxCommandEvent& event )
 {
     m_simulatorFrame->OnModify();
     m_simulatorFrame->UpdateTitle();
 }
 
 
-std::shared_ptr<SPICE_SIMULATOR> SIMULATOR_PANEL::simulator() const
+std::shared_ptr<SPICE_SIMULATOR> SIMULATOR_FRAME_UI::simulator() const
 {
     return m_simulatorFrame->GetSimulator();
 }
 
 
-std::shared_ptr<NGSPICE_CIRCUIT_MODEL> SIMULATOR_PANEL::circuitModel() const
+std::shared_ptr<SPICE_CIRCUIT_MODEL> SIMULATOR_FRAME_UI::circuitModel() const
 {
     return m_simulatorFrame->GetCircuitModel();
 }
 
 
-void SIMULATOR_PANEL::updatePlotCursors()
+void SIMULATOR_FRAME_UI::updatePlotCursors()
 {
     SUPPRESS_GRID_CELL_EVENTS raii( this );
 
@@ -2572,14 +2573,14 @@ void SIMULATOR_PANEL::updatePlotCursors()
 }
 
 
-void SIMULATOR_PANEL::onPlotCursorUpdate( wxCommandEvent& aEvent )
+void SIMULATOR_FRAME_UI::onPlotCursorUpdate( wxCommandEvent& aEvent )
 {
     updatePlotCursors();
     m_simulatorFrame->OnModify();
 }
 
 
-void SIMULATOR_PANEL::OnSimUpdate()
+void SIMULATOR_FRAME_UI::OnSimUpdate()
 {
     if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() ) )
         plotTab->ResetScales( true );
@@ -2593,14 +2594,14 @@ void SIMULATOR_PANEL::OnSimUpdate()
 }
 
 
-void SIMULATOR_PANEL::OnSimReport( const wxString& aMsg )
+void SIMULATOR_FRAME_UI::OnSimReport( const wxString& aMsg )
 {
     m_simConsole->AppendText( aMsg + "\n" );
     m_simConsole->SetInsertionPointEnd();
 }
 
 
-std::vector<wxString> SIMULATOR_PANEL::SimPlotVectors() const
+std::vector<wxString> SIMULATOR_FRAME_UI::SimPlotVectors() const
 {
     std::vector<wxString> signals;
 
@@ -2611,7 +2612,7 @@ std::vector<wxString> SIMULATOR_PANEL::SimPlotVectors() const
 }
 
 
-std::vector<wxString> SIMULATOR_PANEL::Signals() const
+std::vector<wxString> SIMULATOR_FRAME_UI::Signals() const
 {
     std::vector<wxString> signals;
 
@@ -2625,7 +2626,7 @@ std::vector<wxString> SIMULATOR_PANEL::Signals() const
 }
 
 
-void SIMULATOR_PANEL::OnSimRefresh( bool aFinal )
+void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
 {
     SIM_TAB* simTab = GetCurrentSimTab();
 

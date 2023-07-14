@@ -100,7 +100,7 @@ void SCHEMATIC::SetProject( PROJECT* aPrj )
         project.m_SchematicSettings = new SCHEMATIC_SETTINGS( &project, "schematic" );
 
         project.m_SchematicSettings->LoadFromFile();
-        project.m_SchematicSettings->m_NgspiceSimulatorSettings->LoadFromFile();
+        project.m_SchematicSettings->m_NgspiceSettings->LoadFromFile();
         project.m_ErcSettings->LoadFromFile();
     }
 }

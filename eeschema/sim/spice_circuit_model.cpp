@@ -23,15 +23,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "ngspice_circuit_model.h"
+#include "spice_circuit_model.h"
 #include <macros.h>     // for TO_UTF8 def
 #include <wx/regex.h>
 #include <wx/tokenzr.h>
 #include <locale_io.h>
 
 
-SIM_TRACE_TYPE NGSPICE_CIRCUIT_MODEL::VectorToSignal( const std::string& aVector,
-                                                      wxString& aSignal ) const
+SIM_TRACE_TYPE SPICE_CIRCUIT_MODEL::VectorToSignal( const std::string& aVector,
+                                                    wxString& aSignal ) const
 {
     static wxString BRANCH( wxS( "#branch" ) );
     // See ngspice manual chapt. 31.1 "Accessing internal device parameters"
@@ -72,7 +72,7 @@ SIM_TRACE_TYPE NGSPICE_CIRCUIT_MODEL::VectorToSignal( const std::string& aVector
 }
 
 
-wxString NGSPICE_CIRCUIT_MODEL::GetSchTextSimCommand()
+wxString SPICE_CIRCUIT_MODEL::GetSchTextSimCommand()
 {
     wxString      simCmd;
 
@@ -88,7 +88,7 @@ wxString NGSPICE_CIRCUIT_MODEL::GetSchTextSimCommand()
 }
 
 
-SIM_TYPE NGSPICE_CIRCUIT_MODEL::CommandToSimType( const wxString& aCmd )
+SIM_TYPE SPICE_CIRCUIT_MODEL::CommandToSimType( const wxString& aCmd )
 {
     wxString cmd = aCmd.Lower().Trim();
 
@@ -107,8 +107,8 @@ SIM_TYPE NGSPICE_CIRCUIT_MODEL::CommandToSimType( const wxString& aCmd )
 }
 
 
-bool NGSPICE_CIRCUIT_MODEL::ParseDCCommand( const wxString& aCmd, SPICE_DC_PARAMS* aSource1,
-                                            SPICE_DC_PARAMS* aSource2 )
+bool SPICE_CIRCUIT_MODEL::ParseDCCommand( const wxString& aCmd, SPICE_DC_PARAMS* aSource1,
+                                          SPICE_DC_PARAMS* aSource2 )
 {
     if( !aCmd.Lower().StartsWith( ".dc" ) )
         return false;
@@ -130,10 +130,9 @@ bool NGSPICE_CIRCUIT_MODEL::ParseDCCommand( const wxString& aCmd, SPICE_DC_PARAM
 }
 
 
-bool NGSPICE_CIRCUIT_MODEL::ParsePZCommand( const wxString& aCmd, wxString* transferFunction,
-                                            wxString* input, wxString* inputRef,
-                                            wxString* output, wxString* outputRef,
-                                            SPICE_PZ_ANALYSES* analyses )
+bool SPICE_CIRCUIT_MODEL::ParsePZCommand( const wxString& aCmd, wxString* transferFunction,
+                                          wxString* input, wxString* inputRef, wxString* output,
+                                          wxString* outputRef, SPICE_PZ_ANALYSES* analyses )
 {
     if( !aCmd.Lower().StartsWith( wxS( ".pz" ) ) )
         return false;
@@ -172,10 +171,10 @@ bool NGSPICE_CIRCUIT_MODEL::ParsePZCommand( const wxString& aCmd, wxString* tran
     return true;
 }
 
-bool NGSPICE_CIRCUIT_MODEL::ParseNoiseCommand( const wxString& aCmd, wxString* aOutput,
-                                               wxString* aRef, wxString* aSource, wxString* aScale,
-                                               SPICE_VALUE* aPts, SPICE_VALUE* aFStart,
-                                               SPICE_VALUE* aFStop, bool* aSaveAll )
+bool SPICE_CIRCUIT_MODEL::ParseNoiseCommand( const wxString& aCmd, wxString* aOutput,
+                                             wxString* aRef, wxString* aSource, wxString* aScale,
+                                             SPICE_VALUE* aPts, SPICE_VALUE* aFStart,
+                                             SPICE_VALUE* aFStop, bool* aSaveAll )
 {
     if( !aCmd.Lower().StartsWith( wxS( ".noise" ) ) )
         return false;
@@ -237,8 +236,8 @@ bool NGSPICE_CIRCUIT_MODEL::ParseNoiseCommand( const wxString& aCmd, wxString* a
 }
 
 
-void NGSPICE_CIRCUIT_MODEL::WriteDirectives( const wxString& aSimCommand, unsigned aSimOptions,
-                                             OUTPUTFORMATTER& aFormatter ) const
+void SPICE_CIRCUIT_MODEL::WriteDirectives( const wxString& aSimCommand, unsigned aSimOptions,
+                                           OUTPUTFORMATTER& aFormatter ) const
 {
     if( aSimCommand.IsEmpty() )
         aSimOptions |= OPTION_SIM_COMMAND;

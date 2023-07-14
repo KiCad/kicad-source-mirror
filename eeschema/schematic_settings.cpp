@@ -62,7 +62,7 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
         m_SpiceSaveAllCurrents( false ),
         m_SpiceSaveAllDissipations( false ),
         m_SpiceModelCurSheetAsRoot( true ),
-        m_NgspiceSimulatorSettings( nullptr )
+        m_NgspiceSettings( nullptr )
 {
     EESCHEMA_SETTINGS* appSettings = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
 
@@ -235,8 +235,7 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
     m_params.emplace_back( new PARAM<int>( "annotate_start_num",
             &m_AnnotateStartNum, 0 ) );
 
-    m_NgspiceSimulatorSettings =
-        std::make_shared<NGSPICE_SIMULATOR_SETTINGS>( this, "ngspice" );
+    m_NgspiceSettings = std::make_shared<NGSPICE_SETTINGS>( this, "ngspice" );
 
     registerMigration( 0, 1,
             [&]() -> bool
@@ -253,8 +252,8 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
 
 SCHEMATIC_SETTINGS::~SCHEMATIC_SETTINGS()
 {
-    ReleaseNestedSettings( m_NgspiceSimulatorSettings.get() );
-    m_NgspiceSimulatorSettings.reset();
+    ReleaseNestedSettings( m_NgspiceSettings.get() );
+    m_NgspiceSettings.reset();
 
     if( m_parent )
     {

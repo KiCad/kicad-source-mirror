@@ -223,11 +223,11 @@ set( EESCHEMA_SIM_SRCS
     sim/kibis/ibis_parser.cpp
     sim/kibis/kibis.cpp
 
-    sim/ngspice_circuit_model.cpp
+        sim/spice_circuit_model.cpp
     sim/ngspice.cpp
     sim/simulator_frame.cpp
-    sim/simulator_panel.cpp
-    sim/simulator_panel_base.cpp
+        sim/simulator_frame_ui.cpp
+        sim/simulator_frame_ui_base.cpp
     sim/sim_plot_colors.cpp
         sim/sim_tab.cpp
         sim/sim_plot_tab.cpp

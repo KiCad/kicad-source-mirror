@@ -27,7 +27,7 @@
 #define __SIM_PLOT_PANEL_BASE_H
 
 #include <sim/sim_types.h>
-#include <sim/ngspice_circuit_model.h>
+#include <sim/spice_circuit_model.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>

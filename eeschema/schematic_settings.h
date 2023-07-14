@@ -25,7 +25,7 @@
 #include <settings/bom_settings.h>
 #include <template_fieldnames.h>
 
-class NGSPICE_SIMULATOR_SETTINGS;
+class NGSPICE_SETTINGS;
 
 /**
  * These settings were stored in SCH_BASE_FRAME previously.
@@ -96,7 +96,7 @@ public:
     /**
      * Ngspice simulator settings.
      */
-    std::shared_ptr<NGSPICE_SIMULATOR_SETTINGS> m_NgspiceSimulatorSettings;
+    std::shared_ptr<NGSPICE_SETTINGS> m_NgspiceSettings;
 };
 
 #endif

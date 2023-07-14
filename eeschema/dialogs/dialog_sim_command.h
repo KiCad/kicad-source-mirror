@@ -33,16 +33,17 @@
 
 #include <wx/valnum.h>
 
-class NGSPICE_CIRCUIT_MODEL;
-class SPICE_SIMULATOR_SETTINGS;
+class SPICE_CIRCUIT_MODEL;
+class SPICE_SETTINGS;
 class SIMULATOR_FRAME;
 
 
 class DIALOG_SIM_COMMAND : public DIALOG_SIM_COMMAND_BASE
 {
 public:
-    DIALOG_SIM_COMMAND( SIMULATOR_FRAME* aParent, std::shared_ptr<NGSPICE_CIRCUIT_MODEL> aCircuitModel,
-                        std::shared_ptr<SPICE_SIMULATOR_SETTINGS>& aSettings );
+    DIALOG_SIM_COMMAND( SIMULATOR_FRAME* aParent,
+                        std::shared_ptr<SPICE_CIRCUIT_MODEL> aCircuitModel,
+                        std::shared_ptr<SPICE_SETTINGS>& aSettings );
 
     const wxString& GetSimCommand() const
     {
@@ -175,14 +176,14 @@ private:
     void loadDirectives();
 
 private:
-    SIMULATOR_FRAME*                          m_simulatorFrame;
-    wxString                                  m_simCommand;
-    std::shared_ptr<NGSPICE_CIRCUIT_MODEL>    m_circuitModel;
-    std::shared_ptr<SPICE_SIMULATOR_SETTINGS> m_settings;
-    SPICE_VALIDATOR                           m_spiceValidator;
-    SPICE_VALIDATOR                           m_spiceEmptyValidator;
-    wxIntegerValidator<int>                   m_posIntValidator;
-    std::set<wxString>                        m_fftInputSignals;
+    SIMULATOR_FRAME*                     m_simulatorFrame;
+    wxString                             m_simCommand;
+    std::shared_ptr<SPICE_CIRCUIT_MODEL> m_circuitModel;
+    std::shared_ptr<SPICE_SETTINGS>      m_settings;
+    SPICE_VALIDATOR                      m_spiceValidator;
+    SPICE_VALIDATOR                      m_spiceEmptyValidator;
+    wxIntegerValidator<int>              m_posIntValidator;
+    std::set<wxString>                   m_fftInputSignals;
 };
 
 #endif /* DIALOG_SIM_COMMAND_H */

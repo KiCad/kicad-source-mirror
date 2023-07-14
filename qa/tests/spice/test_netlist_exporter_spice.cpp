@@ -24,7 +24,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <boost/test/results_collector.hpp> // To check if the current test failed (to be moved?).
 #include <test_netlist_exporter_spice.h>
-#include <sim/spice_reporter.h>
+#include <sim/simulator_reporter.h>
 #include <mock_pgm_base.h>
 #include <locale_io.h>
 

@@ -25,11 +25,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SIMULATOR_PANEL_H
-#define SIMULATOR_PANEL_H
+#ifndef SIMULATOR_FRAME_UI_H
+#define SIMULATOR_FRAME_UI_H
 
 
-#include <sim/simulator_panel_base.h>
+#include <sim/simulator_frame_ui_base.h>
 #include <sim/sim_types.h>
 #include <sim/sim_plot_tab.h>
 
@@ -39,9 +39,9 @@ class SCH_EDIT_FRAME;
 class SCH_SYMBOL;
 
 class SPICE_SIMULATOR;
-class SPICE_SIMULATOR_SETTINGS;
+class SPICE_SETTINGS;
 class EESCHEMA_SETTINGS;
-class NGSPICE_CIRCUIT_MODEL;
+class SPICE_CIRCUIT_MODEL;
 
 class SIM_THREAD_REPORTER;
 class TUNER_SLIDER;
@@ -49,7 +49,7 @@ class TUNER_SLIDER;
 
 /**
  *
- * The SIMULATOR_PANEL holds the main user-interface for running simulations.
+ * The SIMULATOR_FRAME_UI holds the main user-interface for running simulations.
  *
  * It contains a workbook with multiple tabs, each tab holding a SIM_PLOT_TAB, a specific
  * simulation command (.TRAN, .AC, etc.), and simulation settings (save all currents, etc.).
@@ -66,11 +66,11 @@ class TUNER_SLIDER;
  */
 
 
-class SIMULATOR_PANEL : public SIMULATOR_PANEL_BASE
+class SIMULATOR_FRAME_UI : public SIMULATOR_FRAME_UI_BASE
 {
 public:
-    SIMULATOR_PANEL( SIMULATOR_FRAME* aSimulatorFrame, SCH_EDIT_FRAME* aSchematicFrame );
-    ~SIMULATOR_PANEL();
+    SIMULATOR_FRAME_UI( SIMULATOR_FRAME* aSimulatorFrame, SCH_EDIT_FRAME* aSchematicFrame );
+    ~SIMULATOR_FRAME_UI();
 
     /**
      * Create a new simulation tab for a given simulation type.
@@ -160,7 +160,7 @@ public:
     /**
      * Return the netlist exporter object used for simulations.
      */
-    const NGSPICE_CIRCUIT_MODEL* GetExporter() const;
+    const SPICE_CIRCUIT_MODEL* GetExporter() const;
 
     bool DarkModePlots() const { return m_darkMode; }
     void ToggleDarkModePlots();
@@ -290,7 +290,7 @@ private:
                            const wxString& aParams );
 
     std::shared_ptr<SPICE_SIMULATOR> simulator() const;
-    std::shared_ptr<NGSPICE_CIRCUIT_MODEL> circuitModel() const;
+    std::shared_ptr<SPICE_CIRCUIT_MODEL> circuitModel() const;
 
     // Event handlers
     void onPlotClose( wxAuiNotebookEvent& event ) override;
@@ -338,4 +338,4 @@ private:
     wxTimer                      m_refreshTimer;
 };
 
-#endif // SIMULATOR_PANEL_H
+#endif // SIMULATOR_FRAME_UI_H

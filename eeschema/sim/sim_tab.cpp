@@ -27,7 +27,7 @@
 #include "sim_tab.h"
 
 #include "simulator_frame.h"
-#include "ngspice_circuit_model.h"
+#include "spice_circuit_model.h"
 
 
 SIM_TAB::SIM_TAB() :
@@ -70,7 +70,7 @@ bool SIM_TAB::IsPlottable( SIM_TYPE aSimType )
 
 SIM_TYPE SIM_TAB::GetSimType() const
 {
-    return NGSPICE_CIRCUIT_MODEL::CommandToSimType( m_simCommand );
+    return SPICE_CIRCUIT_MODEL::CommandToSimType( m_simCommand );
 }
 
 

@@ -27,7 +27,7 @@
 #include <eeschema_test_utils.h>
 #include <netlist_exporter_spice.h>
 #include <sim/ngspice.h>
-#include <sim/spice_reporter.h>
+#include <sim/simulator_reporter.h>
 #include <wx/ffile.h>
 #include <mock_pgm_base.h>
 #include <locale_io.h>

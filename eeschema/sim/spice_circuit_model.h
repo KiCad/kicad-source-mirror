@@ -24,8 +24,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef NGSPICE_CIRCUIT_MODEL_H
-#define NGSPICE_CIRCUIT_MODEL_H
+#ifndef SPICE_CIRCUIT_MODEL_H
+#define SPICE_CIRCUIT_MODEL_H
 
 #include <netlist_exporters/netlist_exporter_spice.h>
 #include <vector>
@@ -51,14 +51,14 @@ struct SPICE_PZ_ANALYSES
 };
 
 /// Special netlist exporter flavor that allows one to override simulation commands
-class NGSPICE_CIRCUIT_MODEL : public NETLIST_EXPORTER_SPICE, public SIMULATION_MODEL
+class SPICE_CIRCUIT_MODEL : public NETLIST_EXPORTER_SPICE, public SIMULATION_MODEL
 {
 public:
-    NGSPICE_CIRCUIT_MODEL( SCHEMATIC_IFACE* aSchematic, wxWindow* aDialogParent = nullptr ) :
+    SPICE_CIRCUIT_MODEL( SCHEMATIC_IFACE* aSchematic, wxWindow* aDialogParent = nullptr ) :
             NETLIST_EXPORTER_SPICE( aSchematic, aDialogParent )
     {}
 
-    virtual ~NGSPICE_CIRCUIT_MODEL() {}
+    virtual ~SPICE_CIRCUIT_MODEL() {}
 
     /**
      * Return name of Spice dataset for a specific trace.
@@ -70,11 +70,10 @@ public:
      */
     SIM_TRACE_TYPE VectorToSignal( const std::string& aVector, wxString& aSignal ) const;
 
-    bool GetNetlist( const wxString& aSimCommand, unsigned aSimOptions,
-                     OUTPUTFORMATTER* aFormatter, REPORTER& aReporter )
+    bool GetNetlist( const wxString& aCommand, unsigned aOptions, OUTPUTFORMATTER* aFormatter,
+                     REPORTER& aReporter )
     {
-        return NGSPICE_CIRCUIT_MODEL::DoWriteNetlist( aSimCommand, aSimOptions, *aFormatter,
-                                                      aReporter );
+        return SPICE_CIRCUIT_MODEL::DoWriteNetlist( aCommand, aOptions, *aFormatter, aReporter );
     }
 
     /**
@@ -117,4 +116,4 @@ protected:
                           OUTPUTFORMATTER& aFormatter ) const override;
 };
 
-#endif /* NGSPICE_CIRCUIT_MODEL_H */
+#endif /* SPICE_CIRCUIT_MODEL_H */

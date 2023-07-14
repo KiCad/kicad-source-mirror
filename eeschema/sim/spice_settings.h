@@ -33,16 +33,16 @@
 /**
  * Storage for simulator specific settings.
  */
-class SPICE_SIMULATOR_SETTINGS : public NESTED_SETTINGS
+class SPICE_SETTINGS : public NESTED_SETTINGS
 {
 public:
-    SPICE_SIMULATOR_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath );
+    SPICE_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath );
 
-    virtual ~SPICE_SIMULATOR_SETTINGS() {}
+    virtual ~SPICE_SETTINGS() {}
 
-    virtual bool operator==( const SPICE_SIMULATOR_SETTINGS& aRhs ) const = 0;
+    virtual bool operator==( const SPICE_SETTINGS& aRhs ) const = 0;
 
-    bool operator!=( const SPICE_SIMULATOR_SETTINGS& aRhs ) const { return !( *this == aRhs ); }
+    bool operator!=( const SPICE_SETTINGS& aRhs ) const { return !( *this == aRhs ); }
 
     wxString GetWorkbookFilename() const { return m_workbookFilename; }
     void     SetWorkbookFilename( const wxString& aFilename ) { m_workbookFilename = aFilename; }
@@ -59,11 +59,12 @@ private:
 };
 
 /**
- * Ngspice simulator  model compatibility modes.
+ * Ngspice simulator compatibility modes.
  *
  * @note The ngspice model modes are mutually exclusive.
  */
-enum class NGSPICE_MODEL_MODE {
+enum class NGSPICE_COMPATIBILITY_MODE
+{
     USER_CONFIG,
     NGSPICE,
     PSPICE,
@@ -76,19 +77,19 @@ enum class NGSPICE_MODEL_MODE {
 /**
  * Container for Ngspice simulator settings.
  */
-class NGSPICE_SIMULATOR_SETTINGS : public SPICE_SIMULATOR_SETTINGS
+class NGSPICE_SETTINGS : public SPICE_SETTINGS
 {
 public:
-    NGSPICE_SIMULATOR_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath );
-    virtual ~NGSPICE_SIMULATOR_SETTINGS() {}
+    NGSPICE_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath );
+    virtual ~NGSPICE_SETTINGS() {}
 
-    bool operator==( const SPICE_SIMULATOR_SETTINGS& aRhs ) const override;
+    bool operator==( const SPICE_SETTINGS& aRhs ) const override;
 
-    NGSPICE_MODEL_MODE GetModelMode() const { return m_modelMode; }
-    void SetModelMode( NGSPICE_MODEL_MODE aMode ) { m_modelMode = aMode; }
+    NGSPICE_COMPATIBILITY_MODE GetCompatibilityMode() const { return m_compatibilityMode; }
+    void SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE aMode ) { m_compatibilityMode = aMode; }
 
 private:
-    NGSPICE_MODEL_MODE m_modelMode;
+    NGSPICE_COMPATIBILITY_MODE m_compatibilityMode;
 };
 
 

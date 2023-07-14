@@ -31,42 +31,38 @@
 const int spiceSettingsSchemaVersion = 0;
 
 
-SPICE_SIMULATOR_SETTINGS::SPICE_SIMULATOR_SETTINGS( JSON_SETTINGS* aParent,
-                                                    const std::string& aPath ) :
-    NESTED_SETTINGS( "simulator", spiceSettingsSchemaVersion, aParent, aPath ),
-    m_fixIncludePaths( true )
+SPICE_SETTINGS::SPICE_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
+        NESTED_SETTINGS( "simulator", spiceSettingsSchemaVersion, aParent, aPath ),
+        m_fixIncludePaths( true )
 {
     m_params.emplace_back( new PARAM<wxString>( "workbook_filename", &m_workbookFilename, "" ) );
     m_params.emplace_back( new PARAM<bool>( "fix_include_paths", &m_fixIncludePaths, true ) );
 }
 
 
-bool SPICE_SIMULATOR_SETTINGS::operator==( const SPICE_SIMULATOR_SETTINGS &aRhs ) const
+bool SPICE_SETTINGS::operator==( const SPICE_SETTINGS&aRhs ) const
 {
     return m_workbookFilename == aRhs.m_workbookFilename
-        && m_fixIncludePaths == aRhs.m_fixIncludePaths;
+            && m_fixIncludePaths == aRhs.m_fixIncludePaths;
 }
 
 
-NGSPICE_SIMULATOR_SETTINGS::NGSPICE_SIMULATOR_SETTINGS( JSON_SETTINGS* aParent,
-                                                        const std::string& aPath ) :
-        SPICE_SIMULATOR_SETTINGS( aParent, aPath ),
-        m_modelMode( NGSPICE_MODEL_MODE::LT_PSPICE )
+NGSPICE_SETTINGS::NGSPICE_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
+        SPICE_SETTINGS( aParent, aPath ),
+        m_compatibilityMode( NGSPICE_COMPATIBILITY_MODE::LT_PSPICE )
 {
-    m_params.emplace_back( new PARAM_ENUM<NGSPICE_MODEL_MODE>( "model_mode", &m_modelMode,
-                                                               NGSPICE_MODEL_MODE::LT_PSPICE,
-                                                               NGSPICE_MODEL_MODE::USER_CONFIG,
-                                                               NGSPICE_MODEL_MODE::HSPICE ) );
+    m_params.emplace_back( new PARAM_ENUM<NGSPICE_COMPATIBILITY_MODE>( "model_mode",
+            &m_compatibilityMode, NGSPICE_COMPATIBILITY_MODE::LT_PSPICE,
+            NGSPICE_COMPATIBILITY_MODE::USER_CONFIG, NGSPICE_COMPATIBILITY_MODE::HSPICE ) );
 }
 
 
-bool NGSPICE_SIMULATOR_SETTINGS::operator==( const SPICE_SIMULATOR_SETTINGS& aRhs ) const
+bool NGSPICE_SETTINGS::operator==( const SPICE_SETTINGS& aRhs ) const
 {
-    const NGSPICE_SIMULATOR_SETTINGS* settings =
-            dynamic_cast<const NGSPICE_SIMULATOR_SETTINGS*>( &aRhs );
+    const NGSPICE_SETTINGS* settings = dynamic_cast<const NGSPICE_SETTINGS*>( &aRhs );
 
     wxCHECK( settings, false );
 
-    return ( *static_cast<const SPICE_SIMULATOR_SETTINGS*>( this ) ) == aRhs
-        && m_modelMode == settings->m_modelMode;
+    return SPICE_SETTINGS::operator==( aRhs )
+            && m_compatibilityMode == settings->m_compatibilityMode;
 }

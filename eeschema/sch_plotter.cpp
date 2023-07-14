@@ -71,7 +71,6 @@ static const wxChar* plot_sheet_list( HPGL_PAGE_SIZE aSize )
 
 
 SCH_PLOTTER::SCH_PLOTTER( SCHEMATIC* aSchematic ) :
-        m_schFrame( nullptr ),
         m_schematic( aSchematic )
 {
     m_colorSettings = nullptr;
@@ -79,7 +78,6 @@ SCH_PLOTTER::SCH_PLOTTER( SCHEMATIC* aSchematic ) :
 
 
 SCH_PLOTTER::SCH_PLOTTER( SCH_EDIT_FRAME* aFrame ) :
-        m_schFrame( aFrame ),
         m_schematic( &aFrame->Schematic() )
 {
     m_colorSettings = nullptr;

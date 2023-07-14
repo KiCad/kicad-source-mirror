@@ -31,9 +31,9 @@
 #include <fmt/core.h>
 #include <paths.h>
 
-#include "ngspice_circuit_model.h"
+#include "spice_circuit_model.h"
 #include "ngspice.h"
-#include "spice_reporter.h"
+#include "simulator_reporter.h"
 #include "spice_settings.h"
 
 #include <wx/stdpaths.h>
@@ -72,7 +72,7 @@ NGSPICE::NGSPICE() :
 NGSPICE::~NGSPICE() = default;
 
 
-void NGSPICE::Init( const SPICE_SIMULATOR_SETTINGS* aSettings )
+void NGSPICE::Init( const SPICE_SETTINGS* aSettings )
 {
     Command( "reset" );
 
@@ -254,8 +254,8 @@ std::vector<double> NGSPICE::GetPhaseVector( const std::string& aName, int aMaxL
 bool NGSPICE::Attach( const std::shared_ptr<SIMULATION_MODEL>& aModel, const wxString& aSimCommand,
                       unsigned aSimOptions, REPORTER& aReporter )
 {
-    NGSPICE_CIRCUIT_MODEL* model = dynamic_cast<NGSPICE_CIRCUIT_MODEL*>( aModel.get() );
-    STRING_FORMATTER       formatter;
+    SPICE_CIRCUIT_MODEL* model = dynamic_cast<SPICE_CIRCUIT_MODEL*>( aModel.get() );
+    STRING_FORMATTER     formatter;
 
     if( model && model->GetNetlist( aSimCommand, aSimOptions, &formatter, aReporter ) )
     {
@@ -359,42 +359,22 @@ wxString NGSPICE::GetXAxis( SIM_TYPE aType ) const
 
 std::vector<std::string> NGSPICE::GetSettingCommands() const
 {
-    const NGSPICE_SIMULATOR_SETTINGS* settings =
-            dynamic_cast<const NGSPICE_SIMULATOR_SETTINGS*>( Settings().get() );
+    const NGSPICE_SETTINGS* settings = dynamic_cast<const NGSPICE_SETTINGS*>( Settings().get() );
 
     std::vector<std::string> commands;
 
     wxCHECK( settings, commands );
 
-    switch( settings->GetModelMode() )
+    switch( settings->GetCompatibilityMode() )
     {
-    case NGSPICE_MODEL_MODE::USER_CONFIG:
-        break;
-
-    case NGSPICE_MODEL_MODE::NGSPICE:
-        commands.emplace_back( "unset ngbehavior" );
-        break;
-
-    case NGSPICE_MODEL_MODE::PSPICE:
-        commands.emplace_back( "set ngbehavior=psa" );
-        break;
-
-    case NGSPICE_MODEL_MODE::LTSPICE:
-        commands.emplace_back( "set ngbehavior=lta" );
-        break;
-
-    case NGSPICE_MODEL_MODE::LT_PSPICE:
-        commands.emplace_back( "set ngbehavior=ltpsa" );
-        break;
-
-    case NGSPICE_MODEL_MODE::HSPICE:
-        commands.emplace_back( "set ngbehavior=hsa" );
-        break;
-
-    default:
-        wxFAIL_MSG( wxString::Format( "Undefined NGSPICE_MODEL_MODE %d.",
-                                      settings->GetModelMode() ) );
-        break;
+    case NGSPICE_COMPATIBILITY_MODE::USER_CONFIG:                                                break;
+    case NGSPICE_COMPATIBILITY_MODE::NGSPICE:   commands.emplace_back( "unset ngbehavior" );     break;
+    case NGSPICE_COMPATIBILITY_MODE::PSPICE:    commands.emplace_back( "set ngbehavior=psa" );   break;
+    case NGSPICE_COMPATIBILITY_MODE::LTSPICE:   commands.emplace_back( "set ngbehavior=lta" );   break;
+    case NGSPICE_COMPATIBILITY_MODE::LT_PSPICE: commands.emplace_back( "set ngbehavior=ltpsa" ); break;
+    case NGSPICE_COMPATIBILITY_MODE::HSPICE:    commands.emplace_back( "set ngbehavior=hsa" );   break;
+    default:    wxFAIL_MSG( wxString::Format( "Undefined NGSPICE_COMPATIBILITY_MODE %d.",
+                                              settings->GetCompatibilityMode() ) );              break;
     }
 
     return commands;

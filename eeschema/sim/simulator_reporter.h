@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
+* Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -22,12 +23,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SPICE_REPORTER_H
-#define SPICE_REPORTER_H
+#ifndef SIM_REPORTER_H
+#define SIM_REPORTER_H
 
 #include <reporter.h>
 
-class SPICE_SIMULATOR;
+class SIMULATOR;
 
 enum SIM_STATE
 {
@@ -38,14 +39,14 @@ enum SIM_STATE
 /**
  * @brief Interface to receive simulation updates from SPICE_SIMULATOR class.
  */
-class SPICE_REPORTER : public REPORTER
+class SIMULATOR_REPORTER : public REPORTER
 {
 public:
-    virtual ~SPICE_REPORTER()
+    virtual ~SIMULATOR_REPORTER()
     {
     }
 
-    virtual void OnSimStateChange( SPICE_SIMULATOR* aObject, SIM_STATE aNewState ) = 0;
+    virtual void OnSimStateChange( SIMULATOR* aObject, SIM_STATE aNewState ) = 0;
 };
 
-#endif /* SPICE_REPORTER_H */
+#endif /* SIM_REPORTER_H */

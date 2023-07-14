@@ -39,7 +39,7 @@
 
 #include <wx/string.h>
 
-class SPICE_REPORTER;
+class SIMULATOR_REPORTER;
 
 typedef std::complex<double> COMPLEX;
 
@@ -61,7 +61,7 @@ public:
      * @param aSettings [in] are the simulator specific settings.  Can be null if no settings need
      *                  to be initialized.
      */
-    virtual void Init( const SPICE_SIMULATOR_SETTINGS* aSettings = nullptr ) = 0;
+    virtual void Init( const SPICE_SETTINGS* aSettings = nullptr ) = 0;
 
     /**
      * Load a netlist for the simulation.
@@ -80,8 +80,8 @@ public:
     ///< Return X axis name for a given simulation type
     virtual wxString GetXAxis( SIM_TYPE aType ) const = 0;
 
-    ///< Set a #SPICE_REPORTER object to receive the simulation log.
-    virtual void SetReporter( SPICE_REPORTER* aReporter )
+    ///< Set a #SIMULATOR_REPORTER object to receive the simulation log.
+    virtual void SetReporter( SIMULATOR_REPORTER* aReporter )
     {
         m_reporter = aReporter;
     }
@@ -166,9 +166,9 @@ public:
      *
      * @return the simulator specific settings.
      */
-    std::shared_ptr<SPICE_SIMULATOR_SETTINGS>& Settings() { return m_settings; }
+    std::shared_ptr<SPICE_SETTINGS>& Settings() { return m_settings; }
 
-    const std::shared_ptr<SPICE_SIMULATOR_SETTINGS>& Settings() const { return m_settings; }
+    const std::shared_ptr<SPICE_SETTINGS>& Settings() const { return m_settings; }
 
     /**
      * Return a string with simulation name based on enum.
@@ -182,10 +182,10 @@ public:
 
 protected:
     ///< Reporter object to receive simulation log.
-    SPICE_REPORTER* m_reporter;
+    SIMULATOR_REPORTER* m_reporter;
 
     ///< We don't own this.  We are just borrowing it from the #SCHEMATIC_SETTINGS.
-    std::shared_ptr<SPICE_SIMULATOR_SETTINGS> m_settings;
+    std::shared_ptr<SPICE_SETTINGS> m_settings;
 };
 
 #endif /* SPICE_SIMULATOR_H */

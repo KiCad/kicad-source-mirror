@@ -24,7 +24,7 @@
 
 /**
  * @file
- * Test suite for NGSPICE_CIRCUIT_MODEL
+ * Test suite for SPICE_CIRCUIT_MODEL
  */
 
 #include <string.h>
@@ -36,7 +36,7 @@
 #include <project.h>
 #include <schematic.h>
 #include <settings/settings_manager.h>
-#include <sim/ngspice_circuit_model.h>
+#include <sim/spice_circuit_model.h>
 
 class TEST_NGSPICE_HELPERS
 {
@@ -59,7 +59,7 @@ public:
 
     SCHEMATIC m_schematic;
 
-    NGSPICE_CIRCUIT_MODEL m_exporter;
+    SPICE_CIRCUIT_MODEL m_exporter;
 };
 
 
@@ -109,7 +109,7 @@ BOOST_AUTO_TEST_CASE( CommandToSimType )
 
     for( auto& step : testData )
     {
-        SIM_TYPE result = NGSPICE_CIRCUIT_MODEL::CommandToSimType( step.command );
+        SIM_TYPE result = SPICE_CIRCUIT_MODEL::CommandToSimType( step.command );
 
         BOOST_CHECK_EQUAL( result, step.type );
     }
@@ -117,7 +117,7 @@ BOOST_AUTO_TEST_CASE( CommandToSimType )
     for( auto& step : testData )
     {
         step.command.Append( "\n" );
-        SIM_TYPE result = NGSPICE_CIRCUIT_MODEL::CommandToSimType( step.command );
+        SIM_TYPE result = SPICE_CIRCUIT_MODEL::CommandToSimType( step.command );
 
         BOOST_CHECK_EQUAL( result, step.type );
     }

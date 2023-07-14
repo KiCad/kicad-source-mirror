@@ -24,7 +24,7 @@
  */
 
 #include "dialog_sim_command.h"
-#include <sim/ngspice_circuit_model.h>
+#include <sim/spice_circuit_model.h>
 #include <sim/ngspice.h>
 #include <sim/simulator_frame.h>
 
@@ -58,8 +58,8 @@ static wxString getStringSelection( const wxChoice* aCtrl )
 
 
 DIALOG_SIM_COMMAND::DIALOG_SIM_COMMAND( SIMULATOR_FRAME* aParent,
-                                        std::shared_ptr<NGSPICE_CIRCUIT_MODEL> aCircuitModel,
-                                        std::shared_ptr<SPICE_SIMULATOR_SETTINGS>& aSettings ) :
+                                        std::shared_ptr<SPICE_CIRCUIT_MODEL> aCircuitModel,
+                                        std::shared_ptr<SPICE_SETTINGS>& aSettings ) :
         DIALOG_SIM_COMMAND_BASE( aParent ),
         m_simulatorFrame( aParent ),
         m_circuitModel( aCircuitModel ),
@@ -121,8 +121,8 @@ DIALOG_SIM_COMMAND::DIALOG_SIM_COMMAND( SIMULATOR_FRAME* aParent,
             m_noiseSrc->Append( item.refName );
     }
 
-    if( !dynamic_cast<NGSPICE_SIMULATOR_SETTINGS*>( aSettings.get() ) )
-        m_compatibilityMode->Show( false );
+    if( !dynamic_cast<NGSPICE_SETTINGS*>( aSettings.get() ) )
+        m_compatibilityModeSizer->Show( false );
 
     SetupStandardButtons();
 }
@@ -135,23 +135,20 @@ bool DIALOG_SIM_COMMAND::TransferDataToWindow()
 
     m_fixIncludePaths->SetValue( m_settings->GetFixIncludePaths() );
 
-    NGSPICE_SIMULATOR_SETTINGS* ngspiceSettings =
-            dynamic_cast<NGSPICE_SIMULATOR_SETTINGS*>( m_settings.get() );
+    NGSPICE_SETTINGS* ngspiceSettings = dynamic_cast<NGSPICE_SETTINGS*>( m_settings.get() );
 
     if( ngspiceSettings )
     {
-        switch( ngspiceSettings->GetModelMode() )
+        switch( ngspiceSettings->GetCompatibilityMode() )
         {
-        case NGSPICE_MODEL_MODE::USER_CONFIG: m_compatibilityModeChoice->SetSelection( 0 ); break;
-        case NGSPICE_MODEL_MODE::NGSPICE:     m_compatibilityModeChoice->SetSelection( 1 ); break;
-        case NGSPICE_MODEL_MODE::PSPICE:      m_compatibilityModeChoice->SetSelection( 2 ); break;
-        case NGSPICE_MODEL_MODE::LTSPICE:     m_compatibilityModeChoice->SetSelection( 3 ); break;
-        case NGSPICE_MODEL_MODE::LT_PSPICE:   m_compatibilityModeChoice->SetSelection( 4 ); break;
-        case NGSPICE_MODEL_MODE::HSPICE:      m_compatibilityModeChoice->SetSelection( 5 ); break;
-        default:
-            wxFAIL_MSG( wxString::Format( "Unknown NGSPICE_MODEL_MODE %d.",
-                                          ngspiceSettings->GetModelMode() ) );
-            break;
+        case NGSPICE_COMPATIBILITY_MODE::USER_CONFIG: m_compatibilityMode->SetSelection( 0 ); break;
+        case NGSPICE_COMPATIBILITY_MODE::NGSPICE:     m_compatibilityMode->SetSelection( 1 ); break;
+        case NGSPICE_COMPATIBILITY_MODE::PSPICE:      m_compatibilityMode->SetSelection( 2 ); break;
+        case NGSPICE_COMPATIBILITY_MODE::LTSPICE:     m_compatibilityMode->SetSelection( 3 ); break;
+        case NGSPICE_COMPATIBILITY_MODE::LT_PSPICE:   m_compatibilityMode->SetSelection( 4 ); break;
+        case NGSPICE_COMPATIBILITY_MODE::HSPICE:      m_compatibilityMode->SetSelection( 5 ); break;
+        default:  wxFAIL_MSG( wxString::Format( "Unknown NGSPICE_COMPATIBILITY_MODE %d.",
+                                                ngspiceSettings->GetCompatibilityMode() ) );  break;
         }
     }
 
@@ -207,19 +204,16 @@ bool DIALOG_SIM_COMMAND::TransferDataFromWindow()
         return false;
 
     // The simulator dependent settings always get transferred.
-    NGSPICE_SIMULATOR_SETTINGS* ngspiceSettings =
-            dynamic_cast<NGSPICE_SIMULATOR_SETTINGS*>( m_settings.get() );
-
-    if( ngspiceSettings )
+    if( NGSPICE_SETTINGS* ngspiceSettings = dynamic_cast<NGSPICE_SETTINGS*>( m_settings.get() ) )
     {
-        switch( m_compatibilityModeChoice->GetSelection() )
+        switch( m_compatibilityMode->GetSelection() )
         {
-        case 0: ngspiceSettings->SetModelMode( NGSPICE_MODEL_MODE::USER_CONFIG ); break;
-        case 1: ngspiceSettings->SetModelMode( NGSPICE_MODEL_MODE::NGSPICE );     break;
-        case 2: ngspiceSettings->SetModelMode( NGSPICE_MODEL_MODE::PSPICE );      break;
-        case 3: ngspiceSettings->SetModelMode( NGSPICE_MODEL_MODE::LTSPICE );     break;
-        case 4: ngspiceSettings->SetModelMode( NGSPICE_MODEL_MODE::LT_PSPICE );   break;
-        case 5: ngspiceSettings->SetModelMode( NGSPICE_MODEL_MODE::HSPICE );      break;
+        case 0: ngspiceSettings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::USER_CONFIG ); break;
+        case 1: ngspiceSettings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::NGSPICE );     break;
+        case 2: ngspiceSettings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::PSPICE );      break;
+        case 3: ngspiceSettings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::LTSPICE );     break;
+        case 4: ngspiceSettings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::LT_PSPICE );   break;
+        case 5: ngspiceSettings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::HSPICE );      break;
         }
     }
 
@@ -490,7 +484,7 @@ void DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
         return;
     }
 
-    SIM_TYPE simType = NGSPICE_CIRCUIT_MODEL::CommandToSimType( aCommand );
+    SIM_TYPE simType = SPICE_CIRCUIT_MODEL::CommandToSimType( aCommand );
 
     SetTitle( SPICE_SIMULATOR::TypeToName( simType, true )
                     + wxT( "  \u2014  " )

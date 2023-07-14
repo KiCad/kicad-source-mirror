@@ -25,7 +25,7 @@
 
 #include <sim/kibis/kibis.h>
 #include <netlist_exporter_spice.h>
-#include <sim/ngspice_circuit_model.h>
+#include <sim/spice_circuit_model.h>
 #include <sim/sim_library_spice.h>
 #include <sim/sim_model_raw_spice.h>
 #include <sim/sim_model_ideal.h>

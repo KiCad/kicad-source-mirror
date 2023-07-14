@@ -135,7 +135,7 @@ void SCH_EDIT_FRAME::saveProjectSettings()
     RecordERCExclusions();
 
     if( Kiway().Player( FRAME_SIMULATOR, false ) )
-        Prj().GetProjectFile().m_SchematicSettings->m_NgspiceSimulatorSettings->SaveToFile();
+        Prj().GetProjectFile().m_SchematicSettings->m_NgspiceSettings->SaveToFile();
 
     // Save the page layout file if doesn't exist yet (e.g. if we opened a non-kicad schematic)
 
