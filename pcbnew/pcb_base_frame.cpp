@@ -1155,8 +1155,12 @@ void PCB_BASE_FRAME::setFPWatcher( FOOTPRINT* aFootprint )
     if( !aFootprint )
     {
         wxLogTrace( "KICAD_LIB_WATCH", "Remove watch" );
-        m_watcher->RemoveAll();
+
+        if( m_watcher )
+            m_watcher->RemoveAll();
+
         m_watcher.reset();
+
         return;
     }
 
