@@ -41,6 +41,8 @@
 #include <kiplatform/environment.h>
 #include <pgm_base.h>
 
+#include <kiplatform/policy.h>
+#include <policy_keys.h>
 
 struct CURL_PROGRESS
 {
@@ -127,9 +129,21 @@ KICAD_CURL_EASY::KICAD_CURL_EASY() :
     curl_easy_setopt( m_CURL, CURLOPT_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS );
 #endif
 
-    #ifdef _WIN32
+    #ifdef _WIN32    
     // We need this to use the Windows Certificate store
-    curl_easy_setopt( m_CURL, CURLOPT_SSL_OPTIONS, CURLSSLOPT_NATIVE_CA );
+    long sslOpts = CURLSSLOPT_NATIVE_CA;
+
+    POLICY_CURL_SSL_REVOKE policyState = KIPLATFORM::POLICY::GetPolicyEnum<POLICY_CURL_SSL_REVOKE>( POLICY_KEY_REQUESTS_CURL_REVOKE );
+    if( policyState == POLICY_CURL_SSL_REVOKE::BEST_EFFORT )
+    {
+        sslOpts |= CURLSSLOPT_REVOKE_BEST_EFFORT;
+    }
+    else if( policyState == POLICY_CURL_SSL_REVOKE::NONE )
+    {
+        sslOpts |= CURLSSLOPT_NO_REVOKE;
+    }
+
+    curl_easy_setopt( m_CURL, CURLOPT_SSL_OPTIONS, sslOpts );
     #endif
 
     if( wxGetEnv( wxT( "KICAD_CURL_VERBOSE" ), nullptr ) )
