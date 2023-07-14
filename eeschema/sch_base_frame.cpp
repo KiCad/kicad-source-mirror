@@ -638,7 +638,7 @@ void SCH_BASE_FRAME::setSymWatcher( const LIB_ID* aID )
     wxString libfullname;
     SYMBOL_LIB_TABLE* tbl = Prj().SchSymbolLibTable();
 
-    if( !aId || !tbl )
+    if( !aID || !tbl )
         return;
 
     try
