@@ -1857,8 +1857,8 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
                         plotTab->Measurements().emplace_back( m_js[ "expr" ], m_js[ "format" ] );
                 }
 
-                plotTab->SetDottedSecondary( tab_js[ "dottedSecondary" ] == "true" );
-                plotTab->ShowGrid( tab_js[ "showGrid" ] == "true" );
+                plotTab->SetDottedSecondary( tab_js[ "dottedSecondary" ] );
+                plotTab->ShowGrid( tab_js[ "showGrid" ] );
             }
         }
 
