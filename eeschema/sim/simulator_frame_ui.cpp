@@ -24,6 +24,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <memory>
+
+#include <fmt/format.h>
+#include <wx/wfstream.h>
+#include <wx/stdstream.h>
 #include <wx/debug.h>
 
 #include <project/project_file.h>
@@ -41,12 +46,9 @@
 #include <sim/simulator_frame.h>
 #include <sim/sim_plot_tab.h>
 #include <sim/spice_simulator.h>
-#include "fmt/format.h"
 #include <dialogs/dialog_text_entry.h>
 #include <dialogs/dialog_sim_format_value.h>
 #include <eeschema_settings.h>
-
-#include <memory>
 
 
 SIM_TRACE_TYPE operator|( SIM_TRACE_TYPE aFirst, SIM_TRACE_TYPE aSecond )
@@ -1764,314 +1766,31 @@ void SIMULATOR_FRAME_UI::applyTuners()
 }
 
 
-void SIMULATOR_FRAME_UI::parseTraceParams( SIM_PLOT_TAB* aPlotTab, TRACE* aTrace,
-                                           const wxString& aSignalName, const wxString& aParams )
-{
-    auto addCursor =
-            [&]( int aCursorId, double x )
-            {
-                CURSOR* cursor = new CURSOR( aTrace, aPlotTab );
-
-                cursor->SetName( aSignalName );
-                cursor->SetPen( wxPen( aTrace->GetTraceColour() ) );
-                cursor->SetCoordX( x );
-
-                aTrace->SetCursor( aCursorId, cursor );
-                aPlotTab->GetPlotWin()->AddLayer( cursor );
-            };
-
-    wxArrayString items = wxSplit( aParams, '|' );
-
-    for( const wxString& item : items )
-    {
-        if( item.StartsWith( wxS( "rgb" ) ) )
-        {
-            wxColour color;
-            color.Set( item );
-            aTrace->SetTraceColour( color );
-            aPlotTab->UpdateTraceStyle( aTrace );
-        }
-        else if( item.StartsWith( wxS( "cursor1" ) ) )
-        {
-            wxArrayString parts = wxSplit( item, ':' );
-            double        val;
-
-            if( parts.size() == 3 )
-            {
-                parts[0].AfterFirst( '=' ).ToDouble( &val );
-                m_cursorFormats[0][0].FromString( parts[1] );
-                m_cursorFormats[0][1].FromString( parts[2] );
-                addCursor( 1, val );
-            }
-        }
-        else if( item.StartsWith( wxS( "cursor2" ) ) )
-        {
-            wxArrayString parts = wxSplit( item, ':' );
-            double        val;
-
-            if( parts.size() == 3 )
-            {
-                parts[0].AfterFirst( '=' ).ToDouble( &val );
-                m_cursorFormats[1][0].FromString( parts[1] );
-                m_cursorFormats[1][1].FromString( parts[2] );
-                addCursor( 2, val );
-            }
-        }
-        else if( item.StartsWith( wxS( "cursorD" ) ) )
-        {
-            wxArrayString parts = wxSplit( item, ':' );
-
-            if( parts.size() == 3 )
-            {
-                m_cursorFormats[2][0].FromString( parts[1] );
-                m_cursorFormats[2][1].FromString( parts[2] );
-            }
-        }
-        else if( item == wxS( "dottedSecondary" ) )
-        {
-            aPlotTab->SetDottedSecondary( true );
-        }
-        else if( item == wxS( "hideGrid" ) )
-        {
-            aPlotTab->ShowGrid( false );
-        }
-    }
-}
-
-
 bool SIMULATOR_FRAME_UI::LoadWorkbook( const wxString& aPath )
 {
-    m_plotNotebook->DeleteAllPages();
-
     wxTextFile file( aPath );
-
-#define EXPECTING( msg )                                                                          \
-        DisplayErrorMessage( this, wxString::Format( _( "Error loading workbook: line %d: %s." ), \
-                                                     file.GetCurrentLine()+1,                     \
-                                                     msg ) )
 
     if( !file.Open() )
         return false;
 
-    long     version = 1;
     wxString firstLine = file.GetFirstLine();
-    wxString pageCountLine;
+    long     dummy;
+    bool     legacy = firstLine.StartsWith( wxT( "version " ) ) || firstLine.ToLong( &dummy );
 
-    if( firstLine.StartsWith( wxT( "version " ) ) )
+    file.Close();
+
+    m_plotNotebook->DeleteAllPages();
+    m_userDefinedSignals.clear();
+
+    if( legacy )
     {
-        if( !firstLine.substr( 8 ).ToLong( &version ) )
-        {
-            EXPECTING( _( "expecting version" ) );
-            file.Close();
-
+        if( !loadLegacyWorkbook( aPath ) )
             return false;
-        }
-
-        pageCountLine = file.GetNextLine();
     }
     else
     {
-        pageCountLine = firstLine;
-    }
-
-    long pageCount;
-
-    if( !pageCountLine.ToLong( &pageCount ) )
-    {
-        EXPECTING( _( "expecting simulation tab count" ) );
-        file.Close();
-
-        return false;
-    }
-
-    std::map<SIM_PLOT_TAB*, std::vector<std::tuple<long, wxString, wxString>>> traceInfo;
-
-    for( long i = 0; i < pageCount; ++i )
-    {
-        long simType, tracesCount;
-
-        if( !file.GetNextLine().ToLong( &simType ) )
-        {
-            EXPECTING( _( "expecting simulation tab type" ) );
-            file.Close();
-
+        if( !loadJsonWorkbook( aPath ) )
             return false;
-        }
-
-        wxString          command = UnescapeString( file.GetNextLine() );
-        wxString          simCommand;
-        int               simOptions = NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS;
-        wxStringTokenizer tokenizer( command, wxT( "\r\n" ), wxTOKEN_STRTOK );
-
-        if( version >= 2 )
-        {
-            simOptions &= ~NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS;
-            simOptions &= ~NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES;
-            simOptions &= ~NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS;
-        }
-
-        if( version >= 3 )
-        {
-            simOptions &= ~NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_DISSIPATIONS;
-        }
-
-        while( tokenizer.HasMoreTokens() )
-        {
-            wxString line = tokenizer.GetNextToken();
-
-            if( line.StartsWith( wxT( ".kicad adjustpaths" ) ) )
-                simOptions |= NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS;
-            else if( line.StartsWith( wxT( ".save all" ) ) )
-                simOptions |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES;
-            else if( line.StartsWith( wxT( ".probe alli" ) ) )
-                simOptions |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS;
-            else if( line.StartsWith( wxT( ".probe allp" ) ) )
-                simOptions |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_DISSIPATIONS;
-            else
-                simCommand += line + wxT( "\n" );
-        }
-
-        SIM_TAB*      simTab = NewSimTab( simCommand, simOptions );
-        SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( simTab );
-
-        if( !file.GetNextLine().ToLong( &tracesCount ) )
-        {
-            EXPECTING( _( "expecting trace count" ) );
-            file.Close();
-
-            return false;
-        }
-
-        if( plotTab )
-            traceInfo[plotTab] = {};
-
-        for( long j = 0; j < tracesCount; ++j )
-        {
-            long traceType;
-            wxString name, param;
-
-            if( !file.GetNextLine().ToLong( &traceType ) )
-            {
-                EXPECTING( _( "expecting trace type" ) );
-                file.Close();
-
-                return false;
-            }
-
-            name = file.GetNextLine();
-
-            if( name.IsEmpty() )
-            {
-                EXPECTING( _( "expecting trace name" ) );
-                file.Close();
-
-                return false;
-            }
-
-            param = file.GetNextLine();
-
-            if( param.IsEmpty() )
-            {
-                EXPECTING( _( "expecting trace color" ) );
-                file.Close();
-
-                return false;
-            }
-
-            if( plotTab )
-                traceInfo[plotTab].emplace_back( std::make_tuple( traceType, name, param ) );
-        }
-
-        if( version > 4 )
-        {
-            long measurementCount;
-
-            if( !file.GetNextLine().ToLong( &measurementCount ) )
-            {
-                EXPECTING( _( "expecting measurement count" ) );
-                file.Close();
-
-                return false;
-            }
-
-            for( int ii = 0; ii < (int) measurementCount; ++ ii )
-            {
-                wxString measurement = file.GetNextLine();
-
-                if( measurement.IsEmpty() )
-                {
-                    EXPECTING( _( "expecting measurement definition" ) );
-                    file.Close();
-
-                    return false;
-                }
-
-                wxString format = file.GetNextLine();
-
-                if( format.IsEmpty() )
-                {
-                    EXPECTING( _( "expecting measurement format definition" ) );
-                    file.Close();
-
-                    return false;
-                }
-
-                if( plotTab )
-                    plotTab->Measurements().emplace_back( measurement, format );
-            }
-        }
-    }
-
-    long userDefinedSignalCount;
-
-    if( file.GetNextLine().ToLong( &userDefinedSignalCount ) )
-    {
-        for( int ii = 0; ii < (int) userDefinedSignalCount; ++ii )
-            m_userDefinedSignals[ ii ] = file.GetNextLine();
-    }
-
-    for( const auto& [plotTab, traceInfoVector ] : traceInfo )
-    {
-        for( const auto& [ traceType, signalName, param ] : traceInfoVector )
-        {
-            if( traceType == SPT_UNKNOWN && signalName == wxS( "$LEGEND" ) )
-            {
-                wxArrayString coords = wxSplit( param, ' ' );
-
-                if( coords.size() >= 2 )
-                {
-                    long x = 0;
-                    long y = 0;
-
-                    coords[0].ToLong( &x );
-                    coords[1].ToLong( &y );
-                    plotTab->SetLegendPosition( wxPoint( (int) x, (int) y ) );
-                }
-
-                plotTab->ShowLegend( true );
-            }
-            else
-            {
-                wxString vectorName = vectorNameFromSignalName( plotTab, signalName, nullptr );
-                TRACE*   trace = plotTab->AddTrace( vectorName, (int) traceType );
-
-                if( version >= 4 && trace )
-                    parseTraceParams( plotTab, trace, signalName, param );
-            }
-        }
-
-        plotTab->UpdatePlotColors();
-    }
-
-    if( SIM_TAB* simTab = GetCurrentSimTab() )
-    {
-        m_simulatorFrame->LoadSimulator( simTab->GetSimCommand(), simTab->GetSimOptions() );
-
-        if( version >= 5 )
-        {
-            simTab = dynamic_cast<SIM_TAB*>( m_plotNotebook->GetPage( 0 ) );
-            simTab->SetLastSchTextSimCommand( file.GetNextLine() );
-        }
     }
 
     rebuildSignalsList();
@@ -2080,8 +1799,6 @@ bool SIMULATOR_FRAME_UI::LoadWorkbook( const wxString& aPath )
     updateSignalsGrid();
     updatePlotCursors();
     rebuildMeasurementsGrid();
-
-    file.Close();
 
     wxFileName filename( aPath );
     filename.MakeRelativeTo( m_schematicFrame->Prj().GetProjectPath() );
@@ -2093,160 +1810,272 @@ bool SIMULATOR_FRAME_UI::LoadWorkbook( const wxString& aPath )
 }
 
 
+bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
+{
+    wxFFileInputStream fp( aPath, wxT( "rt" ) );
+    wxStdInputStream   fstream( fp );
+
+    if( !fp.IsOk() )
+        return false;
+
+    try
+    {
+        nlohmann::json js = nlohmann::json::parse( fstream, nullptr, true, true );
+
+        std::map<SIM_PLOT_TAB*, nlohmann::json> traceInfo;
+
+        for( const nlohmann::json& tab_js : js[ "tabs" ] )
+        {
+            wxString simCommand;
+            int      simOptions = NETLIST_EXPORTER_SPICE::OPTION_ADJUST_PASSIVE_VALS;
+
+            for( const nlohmann::json& cmd : tab_js[ "commands" ] )
+            {
+                if( cmd == ".kicad adjustpaths" )
+                    simOptions |= NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS;
+                else if( cmd == ".save all" )
+                    simOptions |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES;
+                else if( cmd == ".probe alli" )
+                    simOptions |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS;
+                else if( cmd == ".probe allp" )
+                    simOptions |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_DISSIPATIONS;
+                else
+                    simCommand += wxString( cmd ) + wxT( "\n" );
+            }
+
+            SIM_TAB*      simTab = NewSimTab( simCommand, simOptions );
+            SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( simTab );
+
+            if( plotTab )
+            {
+                if( tab_js.contains( "traces" ) )
+                    traceInfo[plotTab] = tab_js[ "traces" ];
+
+                if( js.contains( "measurements" ) )
+                {
+                    for( const nlohmann::json& m_js : tab_js[ "measurements" ] )
+                        plotTab->Measurements().emplace_back( m_js[ "expr" ], m_js[ "format" ] );
+                }
+
+                plotTab->SetDottedSecondary( tab_js[ "dottedSecondary" ] == "true" );
+                plotTab->ShowGrid( tab_js[ "showGrid" ] == "true" );
+            }
+        }
+
+        int ii = 0;
+
+        if( js.contains( "user_defined_signals" ) )
+        {
+            for( const nlohmann::json& signal_js : js[ "user_defined_signals" ] )
+                m_userDefinedSignals[ii++] = wxString( signal_js );
+        }
+
+        auto addCursor =
+                [this]( SIM_PLOT_TAB* aPlotTab, TRACE* aTrace, const wxString& aSignalName,
+                        int aCursorId, const nlohmann::json& aCursor_js )
+                {
+                    if( aCursorId == 1 || aCursorId == 2 )
+                    {
+                        CURSOR* cursor = new CURSOR( aTrace, aPlotTab );
+
+                        cursor->SetName( aSignalName );
+                        cursor->SetPen( wxPen( aTrace->GetTraceColour() ) );
+                        cursor->SetCoordX( aCursor_js[ "position" ] );
+
+                        aTrace->SetCursor( aCursorId, cursor );
+                        aPlotTab->GetPlotWin()->AddLayer( cursor );
+                    }
+
+                    m_cursorFormats[aCursorId-1][0].FromString( aCursor_js[ "x_format" ] );
+                    m_cursorFormats[aCursorId-1][1].FromString( aCursor_js[ "y_format" ] );
+                };
+
+        for( const auto& [ plotTab, traces_js ] : traceInfo )
+        {
+            for( const nlohmann::json& trace_js : traces_js )
+            {
+                wxString signalName = trace_js[ "signal" ];
+                wxString vectorName = vectorNameFromSignalName( plotTab, signalName, nullptr );
+                TRACE*   trace = plotTab->AddTrace( vectorName, trace_js[ "trace_type" ] );
+
+                if( trace )
+                {
+                    if( trace_js.contains( "cursor1" ) )
+                        addCursor( plotTab, trace, signalName, 1, trace_js[ "cursor1" ] );
+
+                    if( trace_js.contains( "cursor2" ) )
+                        addCursor( plotTab, trace, signalName, 2, trace_js[ "cursor2" ] );
+
+                    if( trace_js.contains( "cursorD" ) )
+                        addCursor( plotTab, trace, signalName, 3, trace_js[ "cursorD" ] );
+
+                    if( trace_js.contains( "color" ) )
+                    {
+                        wxColour color;
+                        color.Set( wxString( trace_js[ "color" ] ) );
+                        trace->SetTraceColour( color );
+                        plotTab->UpdateTraceStyle( trace );
+                    }
+                }
+            }
+
+            plotTab->UpdatePlotColors();
+        }
+
+        if( SIM_TAB* simTab = GetCurrentSimTab() )
+        {
+            m_simulatorFrame->LoadSimulator( simTab->GetSimCommand(), simTab->GetSimOptions() );
+
+            simTab = dynamic_cast<SIM_TAB*>( m_plotNotebook->GetPage( 0 ) );
+            simTab->SetLastSchTextSimCommand( js[ "last_sch_text_sim_command" ] );
+        }
+    }
+    catch( nlohmann::json::parse_error& error )
+    {
+        wxLogTrace( traceSettings, wxT( "Json parse error reading %s: %s" ), aPath, error.what() );
+
+        return false;
+    }
+
+    return true;
+}
+
+
 bool SIMULATOR_FRAME_UI::SaveWorkbook( const wxString& aPath )
 {
     wxFileName filename = aPath;
     filename.SetExt( WorkbookFileExtension );
 
-    wxTextFile file( filename.GetFullPath() );
+    wxFile file;
 
-    if( file.Exists() )
-    {
-        if( !file.Open() )
-            return false;
+    file.Create( filename.GetFullPath(), true /* overwrite */ );
 
-        file.Clear();
-    }
-    else
-    {
-        file.Create();
-    }
+    if( !file.IsOpened() )
+        return false;
 
-    file.AddLine( wxT( "version 5" ) );
-
-    file.AddLine( wxString::Format( wxT( "%llu" ), m_plotNotebook->GetPageCount() ) );
+    nlohmann::json tabs_js = nlohmann::json::array();
 
     for( size_t i = 0; i < m_plotNotebook->GetPageCount(); i++ )
     {
         SIM_TAB* simTab = dynamic_cast<SIM_TAB*>( m_plotNotebook->GetPage( i ) );
 
         if( !simTab )
-        {
-            file.AddLine( wxString::Format( wxT( "%llu" ), 0ull ) );
             continue;
-        }
 
-        file.AddLine( wxString::Format( wxT( "%d" ), simTab->GetSimType() ) );
+        nlohmann::json commands_js = nlohmann::json::array();
 
-        wxString command = simTab->GetSimCommand();
-        int      options = simTab->GetSimOptions();
+        commands_js.push_back( simTab->GetSimCommand() );
 
-        if( options & NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS )
-            command += wxT( "\n.kicad adjustpaths" );
+        int options = simTab->GetSimOptions();
 
-        if( options & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES )
-            command += wxT( "\n.save all" );
+        if( simTab->GetSimOptions() & NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS )
+            commands_js.push_back( ".kicad adjustpaths" );
 
-        if( options & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS )
-            command += wxT( "\n.probe alli" );
+        if( simTab->GetSimOptions() & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES )
+            commands_js.push_back( ".save all" );
 
-        if( options & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_DISSIPATIONS )
-            command += wxT( "\n.probe allp" );
+        if( simTab->GetSimOptions() & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS )
+            commands_js.push_back( ".probe alli" );
 
-        file.AddLine( EscapeString( command, CTX_LINE ) );
+        if( simTab->GetSimOptions() & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_DISSIPATIONS )
+            commands_js.push_back( ".probe allp" );
 
-        SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( simTab );
+        nlohmann::json tab_js = nlohmann::json( { { "commands", commands_js } } );
 
-        if( !plotTab )
+        if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( simTab ) )
         {
-            file.AddLine( wxString::Format( wxT( "%llu" ), 0ull ) );
-            continue;
-        }
+            nlohmann::json traces_js = nlohmann::json::array();
 
-        size_t traceCount = plotTab->GetTraces().size();
-
-        if( plotTab->IsLegendShown() )
-            traceCount++;
-
-        file.AddLine( wxString::Format( wxT( "%llu" ), traceCount ) );
-
-        auto findSignalName =
-                [&]( const wxString& aVectorName ) -> wxString
-                {
-                    for( const auto& [ id, signal ] : m_userDefinedSignals )
+            auto findSignalName =
+                    [&]( const wxString& aVectorName ) -> wxString
                     {
-                        if( aVectorName == vectorNameFromSignalId( id ) )
-                            return signal;
-                    }
+                        for( const auto& [ id, signal ] : m_userDefinedSignals )
+                        {
+                            if( aVectorName == vectorNameFromSignalId( id ) )
+                                return signal;
+                        }
 
-                    return aVectorName;
-                };
+                        return aVectorName;
+                    };
 
-        for( const auto& [name, trace] : plotTab->GetTraces() )
-        {
-            file.AddLine( wxString::Format( wxT( "%d" ), trace->GetType() ) );
-            file.AddLine( findSignalName( trace->GetName() ) );
-
-            wxString msg = COLOR4D( trace->GetTraceColour() ).ToCSSString();
-
-            if( CURSOR* cursor = trace->GetCursor( 1 ) )
+            for( const auto& [name, trace] : plotTab->GetTraces() )
             {
-                msg += wxString::Format( wxS( "|cursor1=%E:%s:%s" ),
-                                         cursor->GetCoords().x,
-                                         m_cursorFormats[0][0].ToString(),
-                                         m_cursorFormats[0][1].ToString() );
+                nlohmann::json trace_js = nlohmann::json(
+                        { { "trace_type", (int) trace->GetType() },
+                          { "signal",     findSignalName( trace->GetName() ) },
+                          { "color",      COLOR4D( trace->GetTraceColour() ).ToCSSString() } } );
+
+                if( CURSOR* cursor = trace->GetCursor( 1 ) )
+                {
+                    trace_js["cursor1"] = nlohmann::json(
+                                            { { "position", cursor->GetCoords().x },
+                                              { "x_format", m_cursorFormats[0][0].ToString() },
+                                              { "y_format", m_cursorFormats[0][1].ToString() } } );
+                }
+
+                if( CURSOR* cursor = trace->GetCursor( 2 ) )
+                {
+                    trace_js["cursor2"] = nlohmann::json(
+                                            { { "position", cursor->GetCoords().x },
+                                              { "x_format", m_cursorFormats[1][0].ToString() },
+                                              { "y_format", m_cursorFormats[1][1].ToString() } } );
+                }
+
+                if( trace->GetCursor( 1 ) || trace->GetCursor( 2 ) )
+                {
+                    trace_js["cursorD"] = nlohmann::json(
+                                            { { "x_format", m_cursorFormats[2][0].ToString() },
+                                              { "y_format", m_cursorFormats[2][1].ToString() } } );
+                }
+
+                traces_js.push_back( trace_js );
             }
 
-            if( CURSOR* cursor = trace->GetCursor( 2 ) )
+            nlohmann::json measurements_js = nlohmann::json::array();
+
+            for( const auto& [ measurement, format ] : plotTab->Measurements() )
             {
-                msg += wxString::Format( wxS( "|cursor2=%E:%s:%s" ),
-                                         cursor->GetCoords().x,
-                                         m_cursorFormats[1][0].ToString(),
-                                         m_cursorFormats[1][1].ToString() );
+                measurements_js.push_back( nlohmann::json( { { "expr",   measurement },
+                                                             { "format", format } } ) );
             }
 
-            if( trace->GetCursor( 1 ) || trace->GetCursor( 2 ) )
+            tab_js[ "traces" ]          = traces_js;
+            tab_js[ "measurements" ]    = measurements_js;
+            tab_js[ "dottedSecondary" ] = plotTab->GetDottedSecondary();
+            tab_js[ "showGrid" ]        = plotTab->IsGridShown();
+
+            if( plotTab->IsLegendShown() )
             {
-                msg += wxString::Format( wxS( "|cursorD:%s:%s" ),
-                                         m_cursorFormats[2][0].ToString(),
-                                         m_cursorFormats[2][1].ToString() );
+                tab_js[ "legend" ] = nlohmann::json( { { "x", plotTab->GetLegendPosition().x },
+                                                       { "y", plotTab->GetLegendPosition().y } } );
             }
-
-            if( plotTab->GetDottedSecondary() )
-                msg += wxS( "|dottedSecondary" );
-
-            if( !plotTab->IsGridShown() )
-                msg += wxS( "|hideGrid" );
-
-            file.AddLine( msg );
         }
 
-        if( plotTab->IsLegendShown() )
-        {
-            file.AddLine( wxString::Format( wxT( "%d" ), SPT_UNKNOWN ) );
-            file.AddLine( wxT( "$LEGEND" ) );
-            file.AddLine( wxString::Format( wxT( "%d %d" ), plotTab->GetLegendPosition().x,
-                                            plotTab->GetLegendPosition().y - 40 ) );
-        }
-
-        file.AddLine( wxString::Format( wxT( "%llu" ), plotTab->Measurements().size() ) );
-
-        for( const auto& [ measurement, format ] : plotTab->Measurements() )
-        {
-            file.AddLine( measurement );
-            file.AddLine( format );
-        }
+        tabs_js.push_back( tab_js );
     }
 
-    file.AddLine( wxString::Format( wxT( "%llu" ), m_userDefinedSignals.size() ) );
+    nlohmann::json userDefinedSignals_js = nlohmann::json::array();
 
     for( const auto& [ id, signal ] : m_userDefinedSignals )
-        file.AddLine( signal );
+        userDefinedSignals_js.push_back( signal );
+
+    nlohmann::json js = nlohmann::json( { { "version",              6 },
+                                          { "tabs",                 tabs_js },
+                                          { "user_defined_signals", userDefinedSignals_js } } );
 
     // Store the value of any simulation command found on the schematic sheet in a SCH_TEXT
     // object.  If this changes we want to warn the user and ask them if they want to update
     // the corresponding panel's sim command.
-    wxString lastSchTextSimCommand;
-
     if( m_plotNotebook->GetPageCount() > 0 )
     {
         SIM_TAB* simTab = dynamic_cast<SIM_TAB*>( m_plotNotebook->GetPage( 0 ) );
-        lastSchTextSimCommand = simTab->GetLastSchTextSimCommand();
+        js[ "last_sch_text_sim_command" ] = simTab->GetLastSchTextSimCommand();
     }
 
-    file.AddLine( lastSchTextSimCommand );
+    std::stringstream buffer;
+    buffer << std::setw( 2 ) << js << std::endl;
 
-    bool res = file.Write();
+    bool res = file.Write( buffer.str() );
     file.Close();
 
     // Store the filename of the last saved workbook.

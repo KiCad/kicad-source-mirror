@@ -223,18 +223,20 @@ set( EESCHEMA_SIM_SRCS
     sim/kibis/ibis_parser.cpp
     sim/kibis/kibis.cpp
 
-        sim/spice_circuit_model.cpp
+    sim/spice_circuit_model.cpp
     sim/ngspice.cpp
     sim/simulator_frame.cpp
-        sim/simulator_frame_ui.cpp
-        sim/simulator_frame_ui_base.cpp
+    sim/simulator_frame_ui.cpp
+    sim/simulator_frame_ui_base.cpp
     sim/sim_plot_colors.cpp
-        sim/sim_tab.cpp
-        sim/sim_plot_tab.cpp
+    sim/sim_plot_tab.cpp
     sim/sim_property.cpp
+    sim/sim_tab.cpp
     sim/spice_simulator.cpp
     sim/spice_value.cpp
     sim/toolbars_simulator_frame.cpp
+
+    sim/legacy_workbook.cpp
 
     widgets/sim_notebook.cpp
     widgets/tuner_slider.cpp
