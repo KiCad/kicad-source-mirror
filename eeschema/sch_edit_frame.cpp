@@ -44,7 +44,6 @@
 #include <symbol_viewer_frame.h>
 #include <pgm_base.h>
 #include <profile.h>
-#include <project.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include <python_scripting.h>
@@ -90,8 +89,6 @@
 #include <wx/filedlg.h>
 #include <wx/socket.h>
 #include <widgets/wx_aui_utils.h>
-
-#include <gal/graphics_abstraction_layer.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 
 
@@ -232,7 +229,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                                             .CloseButton( true )
                                             .DestroyOnClose( false )
                                             .Show( m_show_search ) );
-
 
     FinishAUIInitialization();
 
@@ -789,17 +785,13 @@ SCHEMATIC& SCH_EDIT_FRAME::Schematic() const
 
 wxString SCH_EDIT_FRAME::GetScreenDesc() const
 {
-    wxString s = GetCurrentSheet().Last()->GetName();
-
-    return s;
+    return GetCurrentSheet().Last()->GetName();
 }
 
 
 wxString SCH_EDIT_FRAME::GetFullScreenDesc() const
 {
-    wxString s = GetCurrentSheet().PathHumanReadable();
-
-    return s;
+    return GetCurrentSheet().PathHumanReadable();
 }
 
 
@@ -966,11 +958,6 @@ void SCH_EDIT_FRAME::doCloseWindow()
     m_netNavigator->Unbind( wxEVT_TREE_SEL_CHANGED, &SCH_EDIT_FRAME::onNetNavigatorSelection,
                             this );
 
-    wxWindow* open_dlg = wxWindow::FindWindowByName( DIALOG_ERC_WINDOW_NAME );
-
-    if( open_dlg )
-        open_dlg->Destroy();
-
     // Close the find dialog and preserve its setting if it is displayed.
     if( m_findReplaceDialog )
     {
@@ -1105,10 +1092,7 @@ void SCH_EDIT_FRAME::OnModify()
 {
     EDA_BASE_FRAME::OnModify();
 
-    wxASSERT( GetScreen() );
-
-    if( !GetScreen() )
-        return;
+    wxCHECK( GetScreen(), /* void */ );
 
     GetScreen()->SetContentModified();
     m_autoSaveRequired = true;
@@ -1594,21 +1578,24 @@ void SCH_EDIT_FRAME::AutoRotateItem( SCH_SCREEN* aScreen, SCH_ITEM* aItem )
 {
     if( aItem->IsType( { SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T } ) )
     {
-        auto label = static_cast<SCH_LABEL_BASE*>( aItem );
+        SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( aItem );
+
         if( label->AutoRotateOnPlacement() )
         {
-            auto textSpin = aScreen->GetLabelOrientationForPoint(
-                    label->GetPosition(), label->GetTextSpinStyle(), &GetCurrentSheet() );
-            if( textSpin != label->GetTextSpinStyle() )
+            TEXT_SPIN_STYLE spin = aScreen->GetLabelOrientationForPoint( label->GetPosition(),
+                                                                         label->GetTextSpinStyle(),
+                                                                         &GetCurrentSheet() );
+
+            if( spin != label->GetTextSpinStyle() )
             {
-                label->SetTextSpinStyle( textSpin );
+                label->SetTextSpinStyle( spin );
+
                 for( SCH_ITEM* item : aScreen->Items().OfType( SCH_GLOBAL_LABEL_T ) )
                 {
                     SCH_LABEL_BASE* otherLabel = static_cast<SCH_LABEL_BASE*>( item );
+
                     if( otherLabel != label && otherLabel->GetText() == label->GetText() )
-                    {
                         otherLabel->AutoplaceFields( aScreen, false );
-                    }
                 }
             }
         }
