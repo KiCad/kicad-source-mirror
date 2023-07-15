@@ -87,7 +87,7 @@ int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
     // Save items, so changes can be undone
     for( EDA_ITEM* item : selection )
     {
-        if( !item->IsNew() && !item->IsMoving() && ( !IsFootprintEditor() || commit->Empty() ) )
+        if( !item->IsNew() && !item->IsMoving() )
         {
             commit->Modify( item );
 
@@ -369,10 +369,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
     for( EDA_ITEM* item : selection )
     {
-        BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item );
-        FOOTPRINT*  footprint = dynamic_cast<FOOTPRINT*>( item );
-
-        if( boardItem )
+        if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item ) )
         {
             if( !is_hover )
                 orig_items.push_back( boardItem );
@@ -380,7 +377,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
             sel_items.push_back( boardItem );
         }
 
-        if( footprint )
+        if( FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( item ) )
         {
             for( PAD* pad : footprint->Pads() )
                 sel_items.push_back( pad );
@@ -569,8 +566,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                     if( item->GetParent() && item->GetParent()->IsSelected() )
                         continue;
 
-                    if( !item->IsNew() && !item->IsMoving()
-                            && ( !IsFootprintEditor() || aCommit->Empty() ) )
+                    if( !item->IsNew() && !item->IsMoving() )
                     {
                         aCommit->Modify( item );
                         item->SetFlags( IS_MOVING );

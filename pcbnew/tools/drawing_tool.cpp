@@ -344,7 +344,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
         if( line )
         {
             commit.Add( line );
-            commit.Push( _( "Draw a line segment" ) );
+            commit.Push( _( "Draw Line" ) );
             startingPoint = VECTOR2D( line->GetEnd() );
             committedLines.push( line );
         }
@@ -408,7 +408,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
             {
                 rect->NormalizeRect();
                 commit.Add( rect );
-                commit.Push( isTextBox ? _( "Draw a text box" ) : _( "Draw a rectangle" ) );
+                commit.Push( isTextBox ? _( "Draw Text Box" ) : _( "Draw Rectangle" ) );
 
                 m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, rect );
             }
@@ -456,7 +456,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
         if( circle )
         {
             commit.Add( circle );
-            commit.Push( _( "Draw a circle" ) );
+            commit.Push( _( "Draw Circle" ) );
 
             m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, circle );
         }
@@ -503,7 +503,7 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
         if( arc )
         {
             commit.Add( arc );
-            commit.Push( _( "Draw an arc" ) );
+            commit.Push( _( "Draw Arc" ) );
 
             m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, arc );
         }
@@ -601,7 +601,7 @@ int DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
                 COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
 
-        if( evt->IsCancelInteractive() || evt->IsAction( &ACTIONS::undo ) )
+        if( evt->IsCancelInteractive() || ( image && evt->IsAction( &ACTIONS::undo ) ) )
         {
             if( image )
             {
@@ -703,7 +703,7 @@ int DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
             else
             {
                 commit.Add( image );
-                commit.Push( _( "Place an image" ) );
+                commit.Push( _( "Place Image" ) );
 
                 m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, image );
 
@@ -727,7 +727,8 @@ int DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
 
             m_menu.ShowContextMenu( selectionTool->GetSelection() );
         }
-        else if( image && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
+        else if( image && (   evt->IsAction( &ACTIONS::refreshPreview )
+                           || evt->IsMotion() ) )
         {
             image->SetPosition( cursorPos );
             m_view->ClearPreview();
@@ -738,11 +739,8 @@ int DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
         {
             cleanup();
         }
-        else if( image && ZONE_FILLER_TOOL::IsZoneFillAction( evt ) )
-        {
-            wxBell();
-        }
-        else if( evt->IsAction( &ACTIONS::redo ) )
+        else if( image && (   ZONE_FILLER_TOOL::IsZoneFillAction( evt )
+                           || evt->IsAction( &ACTIONS::redo ) ) )
         {
             wxBell();
         }
@@ -837,7 +835,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
 
-        if( evt->IsCancelInteractive() || evt->IsAction( &ACTIONS::undo ) )
+        if( evt->IsCancelInteractive() || ( text && evt->IsAction( &ACTIONS::undo ) ) )
         {
             if( text )
             {
@@ -891,15 +889,10 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 textAttrs.m_Halign = GR_TEXT_H_ALIGN_LEFT;
                 textAttrs.m_Valign = GR_TEXT_V_ALIGN_BOTTOM;
 
-                // Init the new item attributes
                 if( m_isFootprintEditor )
-                {
                     text = new PCB_TEXT( static_cast<FOOTPRINT*>( m_frame->GetModel() ) );
-                }
                 else
-                {
                     text = new PCB_TEXT( m_frame->GetModel() );
-                }
 
                 text->SetLayer( layer );
                 text->SetAttributes( textAttrs );
@@ -948,7 +941,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
                 commit.Add( text );
-                commit.Push( _( "Place a text" ) );
+                commit.Push( _( "Place Text" ) );
 
                 m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, text );
 
@@ -977,32 +970,23 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
             m_controls->CaptureCursor( text != nullptr );
             m_controls->SetAutoPan( text != nullptr );
         }
-        else if( text && ( evt->IsMotion() || evt->IsAction( &PCB_ACTIONS::refreshPreview ) ) )
+        else if( text && (   evt->IsMotion()
+                          || evt->IsAction( &PCB_ACTIONS::refreshPreview ) ) )
         {
             text->SetPosition( cursorPos );
             selection().SetReferencePoint( cursorPos );
             m_view->Update( &selection() );
         }
-        else if( text && ZONE_FILLER_TOOL::IsZoneFillAction( evt ) )
+        else if( text && (   ZONE_FILLER_TOOL::IsZoneFillAction( evt )
+                          || evt->IsAction( &ACTIONS::redo ) ) )
         {
             wxBell();
         }
-        else if( evt->IsAction( &PCB_ACTIONS::properties ) )
+        else if( text && evt->IsAction( &PCB_ACTIONS::properties ) )
         {
-            if( text )
-            {
-                frame()->OnEditItemRequest( text );
-                m_view->Update( &selection() );
-                frame()->SetMsgPanel( text );
-            }
-            else
-            {
-                evt->SetPassEvent();
-            }
-        }
-        else if( evt->IsAction( &ACTIONS::redo ) )
-        {
-            wxBell();
+            frame()->OnEditItemRequest( text );
+            m_view->Update( &selection() );
+            frame()->SetMsgPanel( text );
         }
         else
         {
@@ -1124,7 +1108,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
         m_controls->ForceCursorPosition( true, cursorPos );
 
-        if( evt->IsCancelInteractive() || evt->IsAction( &ACTIONS::undo ) )
+        if( evt->IsCancelInteractive() || ( dimension && evt->IsAction( &ACTIONS::undo ) ) )
         {
             m_controls->SetAutoPan( false );
 
@@ -1283,7 +1267,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 preview.Remove( dimension );
 
                 commit.Add( dimension );
-                commit.Push( _( "Draw a dimension" ) );
+                commit.Push( _( "Draw Dimension" ) );
 
                 // Run the edit immediately to set the leader text
                 if( t == PCB_DIM_LEADER_T )
@@ -1443,11 +1427,8 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 wxBell();
             }
         }
-        else if( dimension && ZONE_FILLER_TOOL::IsZoneFillAction( evt ) )
-        {
-            wxBell();
-        }
-        else if( evt->IsAction( &ACTIONS::redo ) )
+        else if( dimension && (   ZONE_FILLER_TOOL::IsZoneFillAction( evt )
+                               || evt->IsAction( &ACTIONS::redo ) ) )
         {
             wxBell();
         }
@@ -1525,7 +1506,6 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     for( std::unique_ptr<EDA_ITEM>& ptr : list )
     {
         BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( ptr.get() );
-
         wxCHECK2( item, continue );
 
         newItems.push_back( item );
@@ -1545,7 +1525,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
         for( BOARD_ITEM* item : newItems )
             commit.Add( item );
 
-        commit.Push( _( "Place a DXF_SVG drawing" ) );
+        commit.Push( _( "Import Graphic" ) );
         return 0;
     }
 
@@ -1632,7 +1612,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
             for( BOARD_ITEM* item : newItems )
                 commit.Add( item );
 
-            commit.Push( _( "Place a DXF_SVG drawing" ) );
+            commit.Push( _( "Import Graphic" ) );
             break;   // This is a one-shot command, not a tool
         }
         else if( ZONE_FILLER_TOOL::IsZoneFillAction( evt ) )
@@ -1713,7 +1693,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
             VECTOR2I moveVector = footprint->GetPosition() - cursorPos;
             footprint->MoveAnchorPosition( moveVector );
 
-            commit.Push( _( "Move the footprint reference anchor" ) );
+            commit.Push( _( "Move Footprint Anchor" ) );
 
             // Usually, we do not need to change twice the anchor position,
             // so deselect the active tool
@@ -1807,12 +1787,12 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
     }
 
     // geometric construction manager
-    KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER twoPointManager;
+    KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER twoPointMgr;
 
     // drawing assistant overlay
     // TODO: workaround because EDA_SHAPE_TYPE_T is not visible from commons.
     KIGFX::PREVIEW::GEOM_SHAPE geomShape( static_cast<KIGFX::PREVIEW::GEOM_SHAPE>( shape ) );
-    KIGFX::PREVIEW::TWO_POINT_ASSISTANT twoPointAsst( twoPointManager, pcbIUScale, userUnits, geomShape );
+    KIGFX::PREVIEW::TWO_POINT_ASSISTANT twoPointAsst( twoPointMgr, pcbIUScale, userUnits, geomShape );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     PCB_SELECTION preview;
@@ -1976,8 +1956,8 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
 
                 grid.SetSkipPoint( cursorPos );
 
-                twoPointManager.SetOrigin( cursorPos );
-                twoPointManager.SetEnd( cursorPos );
+                twoPointMgr.SetOrigin( cursorPos );
+                twoPointMgr.SetEnd( cursorPos );
 
                 if( !isLocalOriginSet )
                     m_frame->GetScreen()->m_LocalOrigin = cursorPos;
@@ -1993,35 +1973,28 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
                     m_frame->GetCanvas()->Refresh();
                 }
 
-                updateSegmentFromGeometryMgr( twoPointManager, graphic );
+                updateSegmentFromGeometryMgr( twoPointMgr, graphic );
 
                 started = true;
-            }
-            else if( shape == SHAPE_T::CIRCLE )
-            {
-                // No clever logic if drawing a circle
-                preview.Clear();
-                twoPointManager.Reset();
-                break;
             }
             else
             {
                 PCB_SHAPE* snapItem = dynamic_cast<PCB_SHAPE*>( grid.GetSnapped() );
 
-                if( twoPointManager.GetOrigin() == twoPointManager.GetEnd()
-                    || ( evt->IsDblClick( BUT_LEFT ) && shape == SHAPE_T::SEGMENT )
-                    || snapItem )
-                // User has clicked twice in the same spot
-                //  or clicked on the end of an existing segment (closing a path)
+                if( shape == SHAPE_T::SEGMENT && ( twoPointMgr.GetOrigin() == twoPointMgr.GetEnd()
+                                                     || evt->IsDblClick( BUT_LEFT )
+                                                     || snapItem ) )
                 {
+                    // User has clicked twice in the same spot
+                    //  or clicked on the end of an existing segment (closing a path)
                     BOARD_COMMIT commit( m_frame );
 
                     // If the user clicks on an existing snap point from a drawsegment
                     //  we finish the segment as they are likely closing a path
-                    if( snapItem && ( shape == SHAPE_T::RECT || graphic->GetLength() > 0.0 ) )
+                    if( snapItem && graphic->GetLength() > 0.0 )
                     {
                         commit.Add( graphic );
-                        commit.Push( _( "Draw a line segment" ) );
+                        commit.Push( _( "Draw Line" ) );
                         m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, graphic );
                     }
                     else
@@ -2033,59 +2006,53 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
                 }
 
                 preview.Clear();
-                twoPointManager.Reset();
+                twoPointMgr.Reset();
                 break;
             }
 
-            twoPointManager.SetEnd( GetClampedCoords( cursorPos ) );
+            twoPointMgr.SetEnd( GetClampedCoords( cursorPos ) );
         }
         else if( evt->IsMotion() )
         {
             VECTOR2I clampedCursorPos = cursorPos;
 
             if( shape == SHAPE_T::CIRCLE || shape == SHAPE_T::ARC )
-            {
-                clampedCursorPos = getClampedRadiusEnd( twoPointManager.GetOrigin(), cursorPos );
-            }
+                clampedCursorPos = getClampedRadiusEnd( twoPointMgr.GetOrigin(), cursorPos );
             else
-            {
-                clampedCursorPos = getClampedDifferenceEnd( twoPointManager.GetOrigin(),
-                                                            cursorPos );
-            }
+                clampedCursorPos = getClampedDifferenceEnd( twoPointMgr.GetOrigin(), cursorPos );
 
             // 45 degree lines
             if( started && Is45Limited() )
             {
-                const VECTOR2I lineVector( clampedCursorPos
-                                           - VECTOR2I( twoPointManager.GetOrigin() ) );
+                const VECTOR2I lineVector( clampedCursorPos - VECTOR2I( twoPointMgr.GetOrigin() ) );
 
                 // get a restricted 45/H/V line from the last fixed point to the cursor
                 VECTOR2I newEnd = GetVectorSnapped45( lineVector, ( shape == SHAPE_T::RECT ) );
-                m_controls->ForceCursorPosition( true, VECTOR2I( twoPointManager.GetEnd() ) );
-                twoPointManager.SetEnd( twoPointManager.GetOrigin() + newEnd );
-                twoPointManager.SetAngleSnap( true );
+                m_controls->ForceCursorPosition( true, VECTOR2I( twoPointMgr.GetEnd() ) );
+                twoPointMgr.SetEnd( twoPointMgr.GetOrigin() + newEnd );
+                twoPointMgr.SetAngleSnap( true );
             }
             else
             {
-                twoPointManager.SetEnd( clampedCursorPos );
-                twoPointManager.SetAngleSnap( false );
+                twoPointMgr.SetEnd( clampedCursorPos );
+                twoPointMgr.SetAngleSnap( false );
             }
 
-            updateSegmentFromGeometryMgr( twoPointManager, graphic );
+            updateSegmentFromGeometryMgr( twoPointMgr, graphic );
             m_view->Update( &preview );
             m_view->Update( &twoPointAsst );
         }
-        else if( evt->IsAction( &ACTIONS::undo )
-                 || evt->IsAction( &PCB_ACTIONS::doDelete )
-                 || evt->IsAction( &PCB_ACTIONS::deleteLastPoint ) )
+        else if( started && (   evt->IsAction( &ACTIONS::undo )
+                             || evt->IsAction( &PCB_ACTIONS::doDelete )
+                             || evt->IsAction( &PCB_ACTIONS::deleteLastPoint ) ) )
         {
-            if( graphic && !aCommittedGraphics->empty() )
+            if( aCommittedGraphics && !aCommittedGraphics->empty() )
             {
-                twoPointManager.SetOrigin( aCommittedGraphics->top()->GetStart() );
-                twoPointManager.SetEnd( aCommittedGraphics->top()->GetEnd() );
+                twoPointMgr.SetOrigin( aCommittedGraphics->top()->GetStart() );
+                twoPointMgr.SetEnd( aCommittedGraphics->top()->GetEnd() );
                 aCommittedGraphics->pop();
 
-                getViewControls()->WarpMouseCursor( twoPointManager.GetEnd(), true );
+                getViewControls()->WarpMouseCursor( twoPointMgr.GetEnd(), true );
 
                 if( PICKED_ITEMS_LIST* undo = m_frame->PopCommandFromUndoList() )
                 {
@@ -2094,11 +2061,11 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
                     delete undo;
                 }
 
-                updateSegmentFromGeometryMgr( twoPointManager, graphic );
+                updateSegmentFromGeometryMgr( twoPointMgr, graphic );
                 m_view->Update( &preview );
                 m_view->Update( &twoPointAsst );
             }
-            else if( graphic )
+            else
             {
                 cleanup();
             }
@@ -2109,10 +2076,6 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
             graphic->SetStroke( m_stroke );
             m_view->Update( &preview );
             frame()->SetMsgPanel( graphic );
-        }
-        else if( evt->IsAction( &ACTIONS::redo ) )
-        {
-            wxBell();
         }
         else if( graphic && evt->IsAction( &PCB_ACTIONS::decWidth ) )
         {
@@ -2131,7 +2094,8 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
             frame()->SetMsgPanel( graphic );
             break;
         }
-        else if( started && ZONE_FILLER_TOOL::IsZoneFillAction( evt ) )
+        else if( started && (   ZONE_FILLER_TOOL::IsZoneFillAction( evt )
+                             || evt->IsAction( &ACTIONS::redo ) ) )
         {
             wxBell();
         }
@@ -2273,7 +2237,7 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
                 grid.BestSnapAnchor( m_controls->GetMousePosition(), graphic ), COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
 
-        if( evt->IsCancelInteractive() || evt->IsAction( &ACTIONS::undo ) )
+        if( evt->IsCancelInteractive() || ( started && evt->IsAction( &ACTIONS::undo ) ) )
         {
             cleanup();
 
@@ -2406,18 +2370,26 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
         else if( evt->IsAction( &PCB_ACTIONS::incWidth ) )
         {
             m_stroke.SetWidth( m_stroke.GetWidth() + WIDTH_STEP );
-            graphic->SetStroke( m_stroke );
-            m_view->Update( &preview );
-            frame()->SetMsgPanel( graphic );
+
+            if( graphic )
+            {
+                graphic->SetStroke( m_stroke );
+                m_view->Update( &preview );
+                frame()->SetMsgPanel( graphic );
+            }
         }
         else if( evt->IsAction( &PCB_ACTIONS::decWidth ) )
         {
             if( (unsigned) m_stroke.GetWidth() > WIDTH_STEP )
             {
                 m_stroke.SetWidth( m_stroke.GetWidth() - WIDTH_STEP );
-                graphic->SetStroke( m_stroke );
-                m_view->Update( &preview );
-                frame()->SetMsgPanel( graphic );
+
+                if( graphic )
+                {
+                    graphic->SetStroke( m_stroke );
+                    m_view->Update( &preview );
+                    frame()->SetMsgPanel( graphic );
+                }
             }
         }
         else if( evt->IsAction( &PCB_ACTIONS::arcPosture ) )
@@ -2430,11 +2402,8 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
             m_view->Update( &arcAsst );
             evt->SetPassEvent();
         }
-        else if( started && ZONE_FILLER_TOOL::IsZoneFillAction( evt ) )
-        {
-            wxBell();
-        }
-        else if( evt->IsAction( &ACTIONS::redo ) )
+        else if( started && (   ZONE_FILLER_TOOL::IsZoneFillAction( evt )
+                             || evt->IsAction( &ACTIONS::redo ) ) )
         {
             wxBell();
         }
@@ -2602,7 +2571,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
 
         if( evt->IsCancelInteractive() )
         {
-            if( polyGeomMgr.IsPolygonInProgress() )
+            if( started )
             {
                 cleanup();
             }
@@ -2616,7 +2585,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsActivate() )
         {
-            if( polyGeomMgr.IsPolygonInProgress() )
+            if( started )
                 cleanup();
 
             if( evt->IsPointEditor() )
@@ -2686,9 +2655,9 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
                 }
             }
         }
-        else if( evt->IsAction( &PCB_ACTIONS::deleteLastPoint )
-                 || evt->IsAction( &ACTIONS::doDelete )
-                 || evt->IsAction( &ACTIONS::undo ) )
+        else if( started && (   evt->IsAction( &PCB_ACTIONS::deleteLastPoint )
+                             || evt->IsAction( &ACTIONS::doDelete )
+                             || evt->IsAction( &ACTIONS::undo ) ) )
         {
             if( std::optional<VECTOR2I> last = polyGeomMgr.DeleteLastCorner() )
             {
@@ -2697,21 +2666,22 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
                 m_controls->ForceCursorPosition( true, cursorPos );
                 polyGeomMgr.SetCursorPosition( cursorPos );
             }
-            else if( polyGeomMgr.IsPolygonInProgress() )
+            else
             {
                 cleanup();
             }
         }
-        else if( polyGeomMgr.IsPolygonInProgress()
-                 && ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
+        else if( started && (   evt->IsMotion()
+                             || evt->IsDrag( BUT_LEFT ) ) )
         {
             polyGeomMgr.SetCursorPosition( cursorPos );
         }
-        else if( started && ZONE_FILLER_TOOL::IsZoneFillAction( evt ) )
+        else if( started && (   ZONE_FILLER_TOOL::IsZoneFillAction( evt )
+                             || evt->IsAction( &ACTIONS::redo ) ) )
         {
             wxBell();
         }
-        else if( started&& evt->IsAction( &PCB_ACTIONS::properties ) )
+        else if( started && evt->IsAction( &PCB_ACTIONS::properties ) )
         {
             frame()->OnEditItemRequest( zoneTool.GetZone() );
             zoneTool.OnGeometryChange( polyGeomMgr );
@@ -2725,10 +2695,6 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
             // m_view->Update( &zoneAsst );
             evt->SetPassEvent();
         }*/
-        else if( evt->IsAction( &ACTIONS::redo ) )
-        {
-            wxBell();
-        }
         else
         {
             evt->SetPassEvent();

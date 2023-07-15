@@ -203,7 +203,7 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE& aZone, const ZONE& aCutout )
 
     // TODO Refill zones when KiCad supports auto re-fill
 
-    commit.Push( _( "Add a zone cutout" ) );
+    commit.Push( _( "Add Zone Cutout" ) );
 
     // Select the new zone and set it as the source for the next cutout
     if( newZones.empty() )
@@ -215,7 +215,6 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE& aZone, const ZONE& aCutout )
         m_params.m_sourceZone = newZones[0];
         toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, newZones[0] );
     }
-
 }
 
 
@@ -238,17 +237,16 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE> aZone )
             commit.Add( aZone.get() );
             commit.Push( _( "Add a zone" ) );
 
-            m_tool.GetManager()->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem,
-                                                       aZone.release() );
+            m_tool.GetManager()->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, aZone.release() );
             break;
         }
 
         case ZONE_MODE::GRAPHIC_POLYGON:
         {
-            BOARD_COMMIT          commit( &m_tool );
-            BOARD*                board = m_tool.getModel<BOARD>();
-            PCB_LAYER_ID          layer = m_params.m_layer;
-            PCB_SHAPE*            poly = new PCB_SHAPE( m_tool.m_frame->GetModel() );
+            BOARD_COMMIT  commit( &m_tool );
+            BOARD*        board = m_tool.getModel<BOARD>();
+            PCB_LAYER_ID  layer = m_params.m_layer;
+            PCB_SHAPE*    poly = new PCB_SHAPE( m_tool.m_frame->GetModel() );
 
             poly->SetShape( SHAPE_T::POLY );
 
@@ -265,8 +263,7 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE> aZone )
             commit.Add( poly );
             m_tool.GetManager()->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, poly );
 
-            commit.Push( _( "Add a graphical polygon" ) );
-
+            commit.Push( _( "Add Polygon" ) );
             break;
         }
     }

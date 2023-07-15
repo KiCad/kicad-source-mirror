@@ -532,10 +532,7 @@ int FOOTPRINT_EDITOR_CONTROL::ImportFootprint( const TOOL_EVENT& aEvent )
 
 int FOOTPRINT_EDITOR_CONTROL::ExportFootprint( const TOOL_EVENT& aEvent )
 {
-    LIB_ID     fpID = m_frame->GetTreeFPID();
-    FOOTPRINT* fp = m_frame->GetBoard()->GetFirstFootprint();
-
-    if( fp )
+    if( FOOTPRINT* fp = m_frame->GetBoard()->GetFirstFootprint() )
         m_frame->ExportFootprint( fp );
 
     return 0;
@@ -604,13 +601,12 @@ int FOOTPRINT_EDITOR_CONTROL::ToggleProperties( const TOOL_EVENT& aEvent )
 
 int FOOTPRINT_EDITOR_CONTROL::Properties( const TOOL_EVENT& aEvent )
 {
-    FOOTPRINT* footprint = m_frame->GetBoard()->GetFirstFootprint();
-
-    if( footprint )
+    if( FOOTPRINT* footprint = m_frame->GetBoard()->GetFirstFootprint() )
     {
         getEditFrame<FOOTPRINT_EDIT_FRAME>()->OnEditItemRequest( footprint );
         m_frame->GetCanvas()->Refresh();
     }
+
     return 0;
 }
 
@@ -637,7 +633,6 @@ int FOOTPRINT_EDITOR_CONTROL::CheckFootprint( const TOOL_EVENT& aEvent )
     if( !m_checkerDialog )
     {
         m_checkerDialog = new DIALOG_FOOTPRINT_CHECKER( m_frame );
-
         m_checkerDialog->Show( true );
     }
     else // The dialog is just not visible (because the user has double clicked on an error item)

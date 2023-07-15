@@ -254,46 +254,31 @@ int GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
 
     if( m_isFootprintEditor )
     {
-        FOOTPRINT* parentFootprint = board->GetFirstFootprint();
+        group = new PCB_GROUP( board->GetFirstFootprint() );
+        board->GetFirstFootprint()->Add( group );
+    }
+    else
+    {
+        group = new PCB_GROUP( board );
+        board->Add( group );
+    }
 
-        m_frame->SaveCopyInUndoList( parentFootprint, UNDO_REDO::CHANGED );
+    PICKED_ITEMS_LIST undoList;
+    undoList.PushItem( ITEM_PICKER( nullptr, group, UNDO_REDO::NEWITEM ) );
 
-        group = new PCB_GROUP( parentFootprint );
-        parentFootprint->Add( group );
-
-        for( EDA_ITEM* eda_item : selection )
+    for( EDA_ITEM* eda_item : selection )
+    {
+        if( BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( eda_item ) )
         {
-            BOARD_ITEM* item = static_cast<BOARD_ITEM*>( eda_item );
-
             if( item->IsLocked() )
                 lockGroup = true;
 
             group->AddItem( item );
-        }
-    }
-    else
-    {
-        PICKED_ITEMS_LIST undoList;
-
-        group = new PCB_GROUP( board );
-        board->Add( group );
-
-        undoList.PushItem( ITEM_PICKER( nullptr, group, UNDO_REDO::NEWITEM ) );
-
-        for( EDA_ITEM* eda_item : selection )
-        {
-            BOARD_ITEM* item = static_cast<BOARD_ITEM*>( eda_item );
-
-            if( item->IsLocked() )
-                lockGroup = true;
-
-            group->AddItem( static_cast<BOARD_ITEM*>( item ) );
-
             undoList.PushItem( ITEM_PICKER( nullptr, item, UNDO_REDO::REGROUP ) );
         }
-
-        m_frame->SaveCopyInUndoList( undoList, UNDO_REDO::REGROUP );
     }
+
+    m_frame->SaveCopyInUndoList( undoList, UNDO_REDO::REGROUP );
 
     if( lockGroup )
         group->SetLocked( true );
@@ -326,33 +311,23 @@ int GROUP_TOOL::Ungroup( const TOOL_EVENT& aEvent )
 
         if( group )
         {
-            if( m_isFootprintEditor )
+            PICKED_ITEMS_LIST undoList;
+
+            for( BOARD_ITEM* member : group->GetItems() )
             {
-                FOOTPRINT* parentFootprint = board->GetFirstFootprint();
-
-                m_frame->SaveCopyInUndoList( parentFootprint, UNDO_REDO::CHANGED );
-
-                group->RemoveAll();
-                parentFootprint->Remove( group );
+                undoList.PushItem( ITEM_PICKER( nullptr, member, UNDO_REDO::UNGROUP ) );
+                members.push_back( member );
             }
+
+            group->RemoveAll();
+
+            if( m_isFootprintEditor )
+                board->GetFirstFootprint()->Remove( group );
             else
-            {
-                PICKED_ITEMS_LIST undoList;
-
-                for( BOARD_ITEM* member : group->GetItems() )
-                {
-                    undoList.PushItem( ITEM_PICKER( nullptr, member, UNDO_REDO::UNGROUP ) );
-                    members.push_back( member );
-                }
-
-                group->RemoveAll();
                 board->Remove( group );
 
-                undoList.PushItem( ITEM_PICKER( nullptr, group, UNDO_REDO::DELETED ) );
-
-                m_frame->SaveCopyInUndoList( undoList, UNDO_REDO::UNGROUP );
-            }
-
+            undoList.PushItem( ITEM_PICKER( nullptr, group, UNDO_REDO::DELETED ) );
+            m_frame->SaveCopyInUndoList( undoList, UNDO_REDO::UNGROUP );
             group->SetSelected();
         }
     }

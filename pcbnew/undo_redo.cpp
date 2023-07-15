@@ -29,7 +29,6 @@
 using namespace std::placeholders;
 #include <macros.h>
 #include <pcb_edit_frame.h>
-#include <board.h>
 #include <pcb_track.h>
 #include <pcb_group.h>
 #include <pcb_target.h>
@@ -95,126 +94,14 @@ using namespace std::placeholders;
  */
 
 
-/**
- * Test if aItem exists somewhere in undo/redo lists of items.  Used by PutDataInPreviousState
- * to be sure an item was not deleted since an undo or redo.
- *
- * This could be possible:
- *   - if a call to SaveCopyInUndoList was forgotten in Pcbnew
- *   - in zones outlines, when a change in one zone merges this zone with an other
- * Before using this function to test existence of items, it must be called with aItem = NULL to
- * prepare the list.
- *
- * @param aPcb is the board to test.
- * @param aItem is the item to find or NULL to build the list of existing items.
- */
-static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
-{
-    for( PCB_TRACK* item : aPcb->Tracks() )
-    {
-        if( aItem == item)
-            return true;
-    }
-
-    for( FOOTPRINT* item : aPcb->Footprints() )
-    {
-        if( aItem == item )
-            return true;
-    }
-
-    for( BOARD_ITEM* item : aPcb->Drawings() )
-    {
-        if( aItem == item )
-            return true;
-    }
-
-    for( ZONE* item : aPcb->Zones() )
-    {
-        if( aItem == item )
-            return true;
-    }
-
-    for( const NETINFO_ITEM* item : aPcb->GetNetInfo() )
-    {
-        if( aItem == item )
-            return true;
-    }
-
-    for( PCB_GROUP* item : aPcb->Groups() )
-    {
-        if( aItem == item )
-            return true;
-    }
-
-    return false;
-}
-
-
 void PCB_BASE_EDIT_FRAME::saveCopyInUndoList( PICKED_ITEMS_LIST* commandToUndo,
                                               const PICKED_ITEMS_LIST& aItemsList,
                                               UNDO_REDO aCommandType )
 {
     int preExisting = commandToUndo->GetCount();
 
-    // First, filter unnecessary stuff from the list (i.e. for multiple pads / labels modified),
-    // take the first occurrence of the footprint (we save copies of footprints when one of its
-    // subitems is changed).
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
-    {
-        ITEM_PICKER curr_picker = aItemsList.GetItemWrapper(ii);
-        BOARD_ITEM* item        = dynamic_cast<BOARD_ITEM*>( aItemsList.GetPickedItem( ii ) );
-
-        // For items belonging to footprints, we need to save state of the parent footprint
-        if( item && item->GetParent() && item->GetParent()->Type() == PCB_FOOTPRINT_T )
-        {
-            item = item->GetParent();
-
-            // Check if the parent footprint has already been saved in another entry
-            bool found = false;
-
-            for( unsigned j = 0; j < commandToUndo->GetCount(); j++ )
-            {
-                if( commandToUndo->GetPickedItem( j ) == item
-                        && commandToUndo->GetPickedItemStatus( j ) == UNDO_REDO::CHANGED )
-                {
-                    found = true;
-                    break;
-                }
-            }
-
-            if( !found )
-            {
-                // Create a clean copy of the parent footprint
-                FOOTPRINT* orig = static_cast<FOOTPRINT*>( item );
-                FOOTPRINT* clone = new FOOTPRINT( *orig );
-                clone->SetParent( GetBoard() );
-                clone->SetParentGroup( nullptr );
-
-                // Clear current flags (which can be temporary set by a current edit command)
-                for( BOARD_ITEM* child : clone->GraphicalItems() )
-                    child->ClearEditFlags();
-
-                for( PAD* pad : clone->Pads() )
-                    pad->ClearEditFlags();
-
-                clone->Reference().ClearEditFlags();
-                clone->Value().ClearEditFlags();
-
-                ITEM_PICKER picker( nullptr, item, UNDO_REDO::CHANGED );
-                picker.SetLink( clone );
-                commandToUndo->PushItem( picker );
-            }
-            else
-            {
-                continue;
-            }
-        }
-        else
-        {
-            // Normal case: all other BOARD_ITEMs, are simply copied to the new list
-            commandToUndo->PushItem( curr_picker );
-        }
-    }
+        commandToUndo->PushItem( aItemsList.GetItemWrapper(ii) );
 
     for( unsigned ii = preExisting; ii < commandToUndo->GetCount(); ii++ )
     {
@@ -258,8 +145,7 @@ void PCB_BASE_EDIT_FRAME::saveCopyInUndoList( PICKED_ITEMS_LIST* commandToUndo,
             break;
 
         default:
-            wxFAIL_MSG( wxString::Format( wxT( "SaveCopyInUndoList() error (unknown code %X)" ),
-                                          command ) );
+            wxFAIL_MSG( wxString::Format( wxT( "Unrecognized undo command: %X" ), command ) );
             break;
         }
     }
@@ -412,7 +298,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                 && status != UNDO_REDO::GRIDORIGIN      // origin markers never on board
                 && status != UNDO_REDO::PAGESETTINGS )  // nor are page settings proxy items
         {
-            if( !TestForExistingItem( GetBoard(), (BOARD_ITEM*) eda_item ) )
+            if( GetBoard()->GetItem( eda_item->m_Uuid ) == DELETED_BOARD_ITEM::GetInstance() )
             {
                 // Checking if it ever happens
                 wxASSERT_MSG( false, wxT( "Item in the undo buffer does not exist" ) );

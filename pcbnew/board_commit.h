@@ -49,7 +49,7 @@ public:
     BOARD_COMMIT( EDA_DRAW_FRAME* aFrame );
     BOARD_COMMIT( TOOL_BASE *aTool );
 
-    virtual ~BOARD_COMMIT();
+    virtual ~BOARD_COMMIT() {}
 
     BOARD* GetBoard() const;
 
@@ -74,7 +74,6 @@ private:
 
 private:
     TOOL_MANAGER*  m_toolMgr;
-    bool           m_isFootprintEditor;
     bool           m_isBoardEditor;
 };
 

@@ -194,7 +194,6 @@ int PCB_CONTROL::ViaDisplayMode( const TOOL_EVENT& aEvent )
     }
 
     canvas()->Refresh();
-
     return 0;
 }
 
@@ -301,7 +300,6 @@ int PCB_CONTROL::HighContrastMode( const TOOL_EVENT& aEvent )
                                         : HIGH_CONTRAST_MODE::NORMAL;
 
     m_frame->SetDisplayOptions( opts );
-
     return 0;
 }
 
@@ -320,7 +318,6 @@ int PCB_CONTROL::HighContrastModeCycle( const TOOL_EVENT& aEvent )
     m_frame->SetDisplayOptions( opts );
 
     m_toolMgr->PostEvent( EVENTS::ContrastModeChangedByKeyEvent );
-
     return 0;
 }
 
@@ -343,8 +340,10 @@ int PCB_CONTROL::ContrastModeFeedback( const TOOL_EVENT& aEvent )
     HOTKEY_CYCLE_POPUP* popup = m_frame->GetHotkeyPopup();
 
     if( popup )
+    {
         popup->Popup( _( "Inactive Layer Display" ), labels,
                       static_cast<int>( opts.m_ContrastModeDisplay ) );
+    }
 
     return 0;
 }
@@ -362,7 +361,6 @@ int PCB_CONTROL::NetColorModeCycle( const TOOL_EVENT& aEvent )
     }
 
     m_frame->SetDisplayOptions( opts );
-
     return 0;
 }
 

@@ -475,9 +475,19 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
     }
 
     if( aEvent.IsAction( &PCB_ACTIONS::convertToPoly ) )
-        commit.Push( _( "Convert shapes to polygon" ) );
+    {
+        if( m_userSettings.m_DeleteOriginals )
+            commit.Push( _( "Convert to Polygon" ) );
+        else
+            commit.Push( _( "Create Polygon" ) );
+    }
     else
-        commit.Push( _( "Convert shapes to zone" ) );
+    {
+        if( m_userSettings.m_DeleteOriginals )
+            commit.Push( _( "Convert to Zone" ) );
+        else
+            commit.Push( _( "Create Zone" ) );
+    }
 
     return 0;
 }
@@ -1018,7 +1028,7 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
         }
     }
 
-    commit.Push( _( "Convert polygons to lines" ) );
+    commit.Push( _( "Create Lines" ) );
 
     return 0;
 }
@@ -1105,7 +1115,7 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
         commit.Add( arc );
     }
 
-    commit.Push( _( "Create arc from line segment" ) );
+    commit.Push( _( "Create Arc" ) );
 
     return 0;
 }

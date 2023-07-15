@@ -1209,8 +1209,7 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
         if( !m_isFootprintEditor )
         {
             // If the item was "conjured up" it will be added later separately
-            if( std::find( lines_to_add.begin(), lines_to_add.end(), &aItem )
-                == lines_to_add.end() )
+            if( !alg::contains( lines_to_add, &aItem ) )
             {
                 commit.Modify( &aItem );
                 items_to_select_on_success.push_back( &aItem );
@@ -1270,16 +1269,10 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
     {
         // Didn't construct any mofication routine - could be an error or cancellation
         if( !error_message.empty() )
-        {
             frame()->ShowInfoBarMsg( error_message );
-        }
 
         return 0;
     }
-
-    // Only modify one parent in FP editor
-    if( m_isFootprintEditor )
-        commit.Modify( selection.Front() );
 
     // Apply the tool to every line pair
     alg::for_all_pairs( selection.begin(), selection.end(),
@@ -1478,7 +1471,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     {
         for( EDA_ITEM* item : selection )
         {
-            if( !item->IsNew() && !item->IsMoving() && ( !IsFootprintEditor() || commit->Empty() ) )
+            if( !item->IsNew() && !item->IsMoving() )
             {
                 commit->Modify( item );
 
@@ -1653,7 +1646,7 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         if( !item->IsType( MirrorableItems ) )
             continue;
 
-        if( !item->IsNew() && !item->IsMoving() && ( !IsFootprintEditor() || commit->Empty() ) )
+        if( !item->IsNew() && !item->IsMoving() )
             commit->Modify( item );
 
         // modify each object as necessary
@@ -1765,8 +1758,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     {
         if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item ) )
         {
-            if( !boardItem->IsNew() && !boardItem->IsMoving()
-                    && ( !IsFootprintEditor() || commit->Empty() ) )
+            if( !boardItem->IsNew() && !boardItem->IsMoving() )
             {
                 commit->Modify( boardItem );
 
@@ -1816,13 +1808,11 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
     for( EDA_ITEM* item : aItems )
     {
         BOARD_ITEM* board_item = dynamic_cast<BOARD_ITEM*>( item );
-
         wxCHECK2( board_item, continue );
 
         FOOTPRINT* parentFP = board_item->GetParentFootprint();
-        PCB_GROUP* parentGroup = board_item->GetParentGroup();
 
-        if( parentGroup )
+        if( PCB_GROUP* parentGroup = board_item->GetParentGroup() )
         {
             commit.Modify( parentGroup );
             parentGroup->RemoveItem( board_item );
@@ -2097,17 +2087,13 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
         if( !frame()->GetPcbNewSettings()->m_Display.m_DisplayInvertYAxis )
             rotation = -rotation;
 
-        // When editing footprints, all items have the same parent
-        if( IsFootprintEditor() )
-            commit.Modify( selection.Front() );
-
         for( EDA_ITEM* item : selection )
         {
             BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item );
 
             wxCHECK2( boardItem, continue );
 
-            if( !boardItem->IsNew() && !IsFootprintEditor() )
+            if( !boardItem->IsNew() )
             {
                 commit.Modify( boardItem );
 

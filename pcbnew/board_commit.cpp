@@ -44,26 +44,16 @@ using namespace std::placeholders;
 
 BOARD_COMMIT::BOARD_COMMIT( TOOL_BASE* aTool ) :
         m_toolMgr( aTool->GetManager() ),
-        m_isFootprintEditor( false ),
         m_isBoardEditor( false )
 {
     if( PCB_TOOL_BASE* pcb_tool = dynamic_cast<PCB_TOOL_BASE*>( aTool ) )
-    {
-        m_isFootprintEditor = pcb_tool->IsFootprintEditor();
         m_isBoardEditor = pcb_tool->IsBoardEditor();
-    }
 }
 
 
 BOARD_COMMIT::BOARD_COMMIT( EDA_DRAW_FRAME* aFrame ) :
         m_toolMgr( aFrame->GetToolManager() ),
-        m_isFootprintEditor( aFrame->IsType( FRAME_FOOTPRINT_EDITOR ) ),
         m_isBoardEditor( aFrame->IsType( FRAME_PCB_EDITOR ) )
-{
-}
-
-
-BOARD_COMMIT::~BOARD_COMMIT()
 {
 }
 
@@ -78,68 +68,15 @@ COMMIT& BOARD_COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType, BASE_SCRE
 {
     wxCHECK( aItem, *this );
 
-    aItem->ClearFlags( IS_MODIFIED_CHILD );
-
-    // If aItem belongs a footprint, the full footprint will be saved because undo/redo does
-    // not handle "sub items" modifications.  This has implications for some udpate mechanisms,
-    // such as auto-zone-refill and teardrop regeneration, so we need to store a bit more
-    // information.
-    if( aChangeType == CHT_MODIFY )
+    if( aChangeType == CHT_MODIFY && aItem->Type() == PCB_GROUP_T )
     {
-        if( aItem->Type() == PCB_FOOTPRINT_T )
-        {
-            static_cast<FOOTPRINT*>( aItem )->RunOnChildren(
-                    [&]( BOARD_ITEM* child )
-                    {
-                        child->SetFlags( IS_MODIFIED_CHILD );
-                    } );
-
-            return COMMIT::Stage( aItem, aChangeType );
-        }
-        else if( aItem->GetParent() && aItem->GetParent()->Type() == PCB_FOOTPRINT_T )
-        {
-            FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( aItem->GetParent() );
-            bool       parentFootprintStaged = alg::contains( m_changedItems, parentFootprint );
-
-            if( !parentFootprintStaged )
-            {
-                parentFootprint->RunOnChildren(
-                        [&]( BOARD_ITEM* child )
-                        {
-                            child->ClearFlags( IS_MODIFIED_CHILD );
-                        } );
-            }
-
-            if( aItem->Type() == PCB_GROUP_T )
-            {
-                static_cast<PCB_GROUP*>( aItem )->RunOnChildren(
-                        [&]( BOARD_ITEM* child )
-                        {
-                            child->SetFlags( IS_MODIFIED_CHILD );
-                        } );
-            }
-            else
-            {
-                aItem->SetFlags( IS_MODIFIED_CHILD );
-            }
-
-            if( !parentFootprintStaged )
-                return COMMIT::Stage( parentFootprint, aChangeType );
-
-            return *this;
-        }
-        else if( aItem->Type() == PCB_GROUP_T )
-        {
-            // Many operations on group (move, rotate, etc.) are applied directly to their
-            // children, so it's the children that must be staged.
-            static_cast<PCB_GROUP*>( aItem )->RunOnChildren(
-                    [&]( BOARD_ITEM* child )
-                    {
-                        COMMIT::Stage( child, aChangeType );
-                    } );
-
-            return COMMIT::Stage( aItem, aChangeType );
-        }
+        // Many operations on group (move, rotate, etc.) are applied directly to their
+        // children, so it's the children that must be staged.
+        static_cast<PCB_GROUP*>( aItem )->RunOnChildren(
+                [&]( BOARD_ITEM* child )
+                {
+                    COMMIT::Stage( child, aChangeType );
+                } );
     }
 
     return COMMIT::Stage( aItem, aChangeType );
@@ -169,24 +106,12 @@ void BOARD_COMMIT::dirtyIntersectingZones( BOARD_ITEM* item, int aChangeType )
     if( item->Type() == PCB_ZONE_T )
         zoneFillerTool->DirtyZone( static_cast<ZONE*>( item ) );
 
-    if( item->Type() == PCB_FOOTPRINT_T )
-    {
-        static_cast<FOOTPRINT*>( item )->RunOnChildren(
-                [&]( BOARD_ITEM* child )
-                {
-                    if( aChangeType != CHT_MODIFY || ( child->GetFlags() & IS_MODIFIED_CHILD ) )
-                        dirtyIntersectingZones( child, aChangeType );
-
-                    child->ClearFlags( IS_MODIFIED_CHILD );
-                } );
-    }
-    else if( item->Type() == PCB_GROUP_T )
+    if( item->Type() == PCB_GROUP_T )
     {
         static_cast<PCB_GROUP*>( item )->RunOnChildren(
                 [&]( BOARD_ITEM* child )
                 {
                     dirtyIntersectingZones( child, aChangeType );
-                    child->ClearFlags( IS_MODIFIED_CHILD );
                 } );
     }
     else
@@ -214,8 +139,6 @@ void BOARD_COMMIT::dirtyIntersectingZones( BOARD_ITEM* item, int aChangeType )
                 }
             }
         }
-
-        item->ClearFlags( IS_MODIFIED_CHILD );
     }
 }
 
@@ -229,7 +152,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
     // Notification info
     PICKED_ITEMS_LIST   undoList;
-    std::set<EDA_ITEM*> savedModules;
     bool                itemsDeselected = false;
     bool                selectedModified = false;
 
@@ -246,10 +168,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = board->GetConnectivity();
 
-    // Note:
-    // frame == nullptr happens in QA tests
-    // in this case m_isBoardEditor and m_isFootprintEditor are set to false
-    // But we also test frame == nullptr mainly to make Coverity happy
+    // Note: frame == nullptr happens in QA tests
 
     std::vector<BOARD_ITEM*> bulkAddedItems;
     std::vector<BOARD_ITEM*> bulkRemovedItems;
@@ -272,41 +191,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( ent.m_item );
 
         wxASSERT( ent.m_item );
-
-        // Module items need to be saved in the undo buffer before modification
-        if( m_isFootprintEditor )
-        {
-            // Be sure that we are storing a footprint
-            if( ent.m_item->Type() != PCB_FOOTPRINT_T )
-            {
-                ent.m_item = ent.m_item->GetParent();
-                wxASSERT( ent.m_item );
-            }
-
-            // We have not saved the footprint yet, so let's create an entry
-            if( savedModules.count( ent.m_item ) == 0 )
-            {
-                if( !ent.m_copy )
-                {
-                    wxASSERT( changeType != CHT_MODIFY );     // too late to make a copy..
-                    ent.m_copy = makeImage( ent.m_item );
-                }
-
-                wxASSERT( ent.m_item->Type() == PCB_FOOTPRINT_T );
-                wxASSERT( ent.m_copy->Type() == PCB_FOOTPRINT_T );
-
-                if( !( aCommitFlags & SKIP_UNDO ) && frame )
-                {
-                    ITEM_PICKER itemWrapper( nullptr, ent.m_item, UNDO_REDO::CHANGED );
-                    itemWrapper.SetLink( ent.m_copy );
-                    undoList.PushItem( itemWrapper );
-                    frame->SaveCopyInUndoList( undoList, UNDO_REDO::CHANGED );
-                }
-
-                savedModules.insert( ent.m_item );
-            }
-        }
-
         wxCHECK2( boardItem, continue );
 
         if( m_isBoardEditor )
@@ -354,43 +238,25 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         if( boardItem->IsSelected() )
             selectedModified = true;
 
-        // If we're the footprint editor, the boardItem will always be the containing footprint
-        if( m_isFootprintEditor && boardItem->Type() == PCB_FOOTPRINT_T )
-        {
-            static_cast<FOOTPRINT*>( boardItem )->RunOnChildren(
-                    [&selectedModified]( BOARD_ITEM* aItem )
-                    {
-                        if( aItem->HasFlag( IS_MODIFIED_CHILD ) )
-                            selectedModified = true;
-                    } );
-        }
-
         switch( changeType )
         {
         case CHT_ADD:
-        {
             if( selTool && selTool->GetEnteredGroup() && !boardItem->GetParentGroup()
                     && PCB_GROUP::IsGroupableType( boardItem->Type() ) )
             {
                 selTool->GetEnteredGroup()->AddItem( boardItem );
             }
 
-            if( m_isFootprintEditor )
+            if( !( aCommitFlags & SKIP_UNDO ) )
+                undoList.PushItem( ITEM_PICKER( nullptr, boardItem, UNDO_REDO::NEWITEM ) );
+
+            if( !( changeFlags & CHT_DONE ) )
             {
-                // footprints inside footprints are not supported yet
-                wxASSERT( boardItem->Type() != PCB_FOOTPRINT_T );
-
-                boardItem->SetParent( board->Footprints().front() );
-
-                if( !( changeFlags & CHT_DONE ) )
-                    board->Footprints().front()->Add( boardItem );
-            }
-            else if( !boardItem->GetParentFootprint() )
-            {
-                if( !( aCommitFlags & SKIP_UNDO ) )
-                    undoList.PushItem( ITEM_PICKER( nullptr, boardItem, UNDO_REDO::NEWITEM ) );
-
-                if( !( changeFlags & CHT_DONE ) )
+                if( FOOTPRINT* parentFP = boardItem->GetParentFootprint() )
+                {
+                    parentFP->Add( boardItem );
+                }
+                else
                 {
                     board->Add( boardItem, ADD_MODE::BULK_INSERT ); // handles connectivity
                     bulkAddedItems.push_back( boardItem );
@@ -404,14 +270,13 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 view->Add( boardItem );
 
             break;
-        }
 
         case CHT_REMOVE:
         {
             FOOTPRINT* parentFP = boardItem->GetParentFootprint();
             PCB_GROUP* parentGroup = boardItem->GetParentGroup();
 
-            if( !m_isFootprintEditor && !( aCommitFlags & SKIP_UNDO ) )
+            if( !( aCommitFlags & SKIP_UNDO ) )
                 undoList.PushItem( ITEM_PICKER( nullptr, boardItem, UNDO_REDO::DELETED ) );
 
             if( boardItem->IsSelected() )
@@ -424,6 +289,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
             if( parentGroup && !( parentGroup->GetFlags() & STRUCT_DELETED ) )
                 parentGroup->RemoveItem( boardItem );
+
+            if( parentFP && !( parentFP->GetFlags() & STRUCT_DELETED ) )
+                ent.m_parent = parentFP->m_Uuid;
 
             if( autofillZones )
                 dirtyIntersectingZones( boardItem, changeType );
@@ -447,6 +315,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             case PCB_TARGET_T:           // a target (graphic item)
             case PCB_MARKER_T:           // a marker used to show something
             case PCB_ZONE_T:
+            case PCB_FOOTPRINT_T:
                 if( view )
                     view->Remove( boardItem );
 
@@ -464,27 +333,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 }
 
                 break;
-
-            case PCB_FOOTPRINT_T:
-            {
-                // No support for nested footprints (yet)
-                wxASSERT( !m_isFootprintEditor );
-
-                FOOTPRINT* footprint = static_cast<FOOTPRINT*>( boardItem );
-
-                if( view )
-                    view->Remove( footprint );
-
-                footprint->ClearFlags();
-
-                if( !( changeFlags & CHT_DONE ) )
-                {
-                    board->Remove( footprint, REMOVE_MODE::BULK ); // handles connectivity
-                    bulkRemovedItems.push_back( footprint );
-                }
-            }
-
-            break;
 
             case PCB_GROUP_T:
                 if( view )
@@ -523,7 +371,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         {
             BOARD_ITEM* boardItemCopy = dynamic_cast<BOARD_ITEM*>( ent.m_copy );
 
-            if( !m_isFootprintEditor && !( aCommitFlags & SKIP_UNDO ) )
+            if( !( aCommitFlags & SKIP_UNDO ) )
             {
                 ITEM_PICKER itemWrapper( nullptr, boardItem, UNDO_REDO::CHANGED );
                 wxASSERT( boardItemCopy );
@@ -539,25 +387,14 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 connectivity->Update( boardItem );
             }
 
-            if( autofillZones )
+            if( m_isBoardEditor && autofillZones )
             {
                 dirtyIntersectingZones( boardItemCopy, changeType );   // before
                 dirtyIntersectingZones( boardItem, changeType );       // after
             }
 
             if( view )
-            {
                 view->Update( boardItem );
-
-                if( m_isFootprintEditor )
-                {
-                    static_cast<FOOTPRINT*>( boardItem )->RunOnChildren(
-                            [&]( BOARD_ITEM* aChild )
-                            {
-                                view->Update( aChild );
-                            } );
-                }
-            }
 
             itemsChanged.push_back( boardItem );
 
@@ -574,15 +411,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         }
 
         boardItem->ClearEditFlags();
-
-        if( m_isFootprintEditor && boardItem->Type() == PCB_FOOTPRINT_T )
-        {
-            static_cast<FOOTPRINT*>( boardItem )->RunOnChildren(
-                    [&]( BOARD_ITEM* aChild )
-                    {
-                        aChild->ClearEditFlags();
-                    } );
-        }
     }
 
     if( bulkAddedItems.size() > 0 )
@@ -658,12 +486,15 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         }
     }
 
-    if( m_isBoardEditor && !( aCommitFlags & SKIP_UNDO ) && frame )
+    if( frame )
     {
-        if( aCommitFlags & APPEND_UNDO )
-            frame->AppendCopyToUndoList( undoList, UNDO_REDO::UNSPECIFIED );
-        else
-            frame->SaveCopyInUndoList( undoList, UNDO_REDO::UNSPECIFIED );
+        if( !( aCommitFlags & SKIP_UNDO ) )
+        {
+            if( aCommitFlags & APPEND_UNDO )
+                frame->AppendCopyToUndoList( undoList, UNDO_REDO::UNSPECIFIED );
+            else
+                frame->SaveCopyInUndoList( undoList, UNDO_REDO::UNSPECIFIED );
+        }
     }
 
     m_toolMgr->PostEvent( { TC_MESSAGE, TA_MODEL_CHANGE, AS_GLOBAL } );
@@ -742,8 +573,17 @@ void BOARD_COMMIT::Revert()
 
             view->Remove( boardItem );
             connectivity->Remove( boardItem );
-            board->Remove( boardItem, REMOVE_MODE::BULK );
-            bulkRemovedItems.push_back( boardItem );
+
+            if( FOOTPRINT* parentFP = boardItem->GetParentFootprint() )
+            {
+                parentFP->Remove( boardItem );
+            }
+            else
+            {
+                board->Remove( boardItem, REMOVE_MODE::BULK );
+                bulkRemovedItems.push_back( boardItem );
+            }
+
             break;
 
         case CHT_REMOVE:
@@ -752,8 +592,17 @@ void BOARD_COMMIT::Revert()
 
             view->Add( boardItem );
             connectivity->Add( boardItem );
-            board->Add( boardItem, ADD_MODE::INSERT );
-            bulkAddedItems.push_back( boardItem );
+
+            if( FOOTPRINT* parentFP = dynamic_cast<FOOTPRINT*>( board->GetItem( ent.m_parent ) ) )
+            {
+                parentFP->Add( boardItem, ADD_MODE::INSERT );
+            }
+            else
+            {
+                board->Add( boardItem, ADD_MODE::INSERT );
+                bulkAddedItems.push_back( boardItem );
+            }
+
             break;
 
         case CHT_MODIFY:
@@ -801,7 +650,7 @@ void BOARD_COMMIT::Revert()
     if( itemsChanged.size() > 0 )
         board->OnItemsChanged( itemsChanged );
 
-    if ( !m_isFootprintEditor )
+    if( m_isBoardEditor )
     {
         connectivity->RecalculateRatsnest();
         board->UpdateRatsnestExclusions();

@@ -1046,7 +1046,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
         if( reselect && fp )
             m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, fp );
 
-        if( evt->IsCancelInteractive() )
+        if( evt->IsCancelInteractive() || ( fp && evt->IsAction( &ACTIONS::undo ) ) )
         {
             if( fp )
             {
@@ -1156,7 +1156,8 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
             // Calling 'Properties' action clears the selection, so we need to restore it
             reselect = true;
         }
-        else if( fp && ZONE_FILLER_TOOL::IsZoneFillAction( evt ) )
+        else if( fp && (   ZONE_FILLER_TOOL::IsZoneFillAction( evt )
+                        || evt->IsAction( &ACTIONS::redo ) ) )
         {
             wxBell();
         }
@@ -1227,7 +1228,6 @@ int BOARD_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
     for( EDA_ITEM* item : selection )
     {
         BOARD_ITEM* board_item = dynamic_cast<BOARD_ITEM*>( item );
-
         wxCHECK2( board_item, continue );
 
         commit.Modify( board_item );
@@ -1369,7 +1369,7 @@ int BOARD_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
     {
         if( mergeZones( m_frame, commit, toMerge, merged ) )
         {
-            commit.Push( wxT( "Merge zones" ) );
+            commit.Push( wxT( "Merge Zones" ) );
 
             for( EDA_ITEM* item : merged )
                 m_toolMgr->RunAction( PCB_ACTIONS::selectItem, item );
@@ -1425,7 +1425,7 @@ int BOARD_EDITOR_CONTROL::ZoneDuplicate( const TOOL_EVENT& aEvent )
         newZone->Move( VECTOR2I( pcbIUScale.IU_PER_MM, pcbIUScale.IU_PER_MM ) );
 
     commit.Add( newZone.release() );
-    commit.Push( _( "Duplicate zone" ) );
+    commit.Push( _( "Duplicate Zone" ) );
 
     return 0;
 }
@@ -1434,7 +1434,6 @@ int BOARD_EDITOR_CONTROL::ZoneDuplicate( const TOOL_EVENT& aEvent )
 int BOARD_EDITOR_CONTROL::CrossProbeToSch( const TOOL_EVENT& aEvent )
 {
     doCrossProbePcbToSch( aEvent, false );
-
     return 0;
 }
 
@@ -1442,7 +1441,6 @@ int BOARD_EDITOR_CONTROL::CrossProbeToSch( const TOOL_EVENT& aEvent )
 int BOARD_EDITOR_CONTROL::ExplicitCrossProbeToSch( const TOOL_EVENT& aEvent )
 {
     doCrossProbePcbToSch( aEvent, true );
-
     return 0;
 }
 
@@ -1618,20 +1616,17 @@ void BOARD_EDITOR_CONTROL::setTransitions()
 
     Go( &BOARD_EDITOR_CONTROL::BoardSetup,             PCB_ACTIONS::boardSetup.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ImportNetlist,          PCB_ACTIONS::importNetlist.MakeEvent() );
-    Go( &BOARD_EDITOR_CONTROL::ImportSpecctraSession,
-        PCB_ACTIONS::importSpecctraSession.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::ImportSpecctraSession,  PCB_ACTIONS::importSpecctraSession.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ExportSpecctraDSN,      PCB_ACTIONS::exportSpecctraDSN.MakeEvent() );
 
     if( ADVANCED_CFG::GetCfg().m_ShowPcbnewExportNetlist && m_frame &&
         m_frame->GetExportNetlistAction() )
         Go( &BOARD_EDITOR_CONTROL::ExportNetlist, m_frame->GetExportNetlistAction()->MakeEvent() );
 
-    Go( &BOARD_EDITOR_CONTROL::GenerateDrillFiles,
-        PCB_ACTIONS::generateDrillFiles.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::GenerateDrillFiles,     PCB_ACTIONS::generateDrillFiles.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::GenerateFabFiles,       PCB_ACTIONS::generateGerbers.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::GeneratePosFile,        PCB_ACTIONS::generatePosFile.MakeEvent() );
-    Go( &BOARD_EDITOR_CONTROL::GenerateFabFiles,
-        PCB_ACTIONS::generateReportFile.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::GenerateFabFiles,       PCB_ACTIONS::generateReportFile.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::GenerateFabFiles,       PCB_ACTIONS::generateD356File.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::GenerateFabFiles,       PCB_ACTIONS::generateBOM.MakeEvent() );
 
@@ -1666,10 +1661,8 @@ void BOARD_EDITOR_CONTROL::setTransitions()
 
     Go( &BOARD_EDITOR_CONTROL::AssignNetclass,         PCB_ACTIONS::assignNetClass.MakeEvent() );
 
-    Go( &BOARD_EDITOR_CONTROL::UpdatePCBFromSchematic,
-        ACTIONS::updatePcbFromSchematic.MakeEvent() );
-    Go( &BOARD_EDITOR_CONTROL::UpdateSchematicFromPCB,
-        ACTIONS::updateSchematicFromPcb.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::UpdatePCBFromSchematic, ACTIONS::updatePcbFromSchematic.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::UpdateSchematicFromPCB, ACTIONS::updateSchematicFromPcb.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ShowEeschema,           PCB_ACTIONS::showEeschema.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ToggleLayersManager,    PCB_ACTIONS::showLayersManager.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ToggleProperties,       ACTIONS::showProperties.MakeEvent() );

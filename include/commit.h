@@ -32,6 +32,7 @@
 #include <vector>
 #include <wx/string.h>
 #include <undo_redo_container.h>
+#include <kiid.h>
 
 class EDA_ITEM;
 class BASE_SCREEN;
@@ -43,9 +44,7 @@ enum CHANGE_TYPE {
     CHT_MODIFY  = 4,
     CHT_TYPE    = CHT_ADD | CHT_REMOVE | CHT_MODIFY,
 
-    ///< Flag to indicate the change is already applied,
-    ///< just notify observers (not compatible with CHT_MODIFY)
-    CHT_DONE    = 8,
+    CHT_DONE    = 8,             ///< Flag to indicate the change is already applied
     CHT_FLAGS   = CHT_DONE
 };
 
@@ -151,9 +150,10 @@ public:
 protected:
     struct COMMIT_LINE
     {
-        EDA_ITEM*   m_item;       ///< Main item that is added/deleted/modified
-        EDA_ITEM*   m_copy;       ///< Optional copy of the item
-        CHANGE_TYPE m_type;       ///< Modification type
+        EDA_ITEM*    m_item;                ///< Main item that is added/deleted/modified
+        EDA_ITEM*    m_copy;                ///< Optional copy of the item
+        CHANGE_TYPE  m_type;                ///< Modification type
+        KIID         m_parent = NilUuid();  ///< Parent item (primarily for undo of deleted items)
         BASE_SCREEN* m_screen;
     };
 

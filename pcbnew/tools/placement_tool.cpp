@@ -166,7 +166,6 @@ size_t ALIGN_DISTRIBUTE_TOOL::GetSelections( std::vector<std::pair<BOARD_ITEM*, 
     for( EDA_ITEM* item : selection )
     {
         BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item );
-
         wxCHECK2( boardItem, continue );
 
         // We do not lock items in the footprint editor
@@ -175,13 +174,9 @@ size_t ALIGN_DISTRIBUTE_TOOL::GetSelections( std::vector<std::pair<BOARD_ITEM*, 
             // Locking a pad but not the footprint means that we align the footprint using
             // the pad position.  So we test for footprint locking here
             if( boardItem->Type() == PCB_PAD_T && !boardItem->GetParent()->IsLocked() )
-            {
                 itemsToAlign.push_back( boardItem );
-            }
             else
-            {
                 lockedItems.push_back( boardItem );
-            }
         }
         else
             itemsToAlign.push_back( boardItem );
@@ -202,9 +197,9 @@ int ALIGN_DISTRIBUTE_TOOL::AlignTop( const TOOL_EVENT& aEvent )
     std::vector<std::pair<BOARD_ITEM*, BOX2I>> locked_items;
 
     if( !GetSelections( itemsToAlign, locked_items,
-            []( const std::pair<BOARD_ITEM*, BOX2I> left, const std::pair<BOARD_ITEM*, BOX2I> right)
+            []( const std::pair<BOARD_ITEM*, BOX2I>& lhs, const std::pair<BOARD_ITEM*, BOX2I>& rhs )
             {
-                return ( left.second.GetTop() < right.second.GetTop() );
+                return ( lhs.second.GetTop() < rhs.second.GetTop() );
             } ) )
     {
         return 0;
@@ -235,8 +230,7 @@ int ALIGN_DISTRIBUTE_TOOL::AlignTop( const TOOL_EVENT& aEvent )
         item->Move( VECTOR2I( 0, difference ) );
     }
 
-    commit.Push( _( "Align to top" ) );
-
+    commit.Push( _( "Align to Top" ) );
     return 0;
 }
 
@@ -247,9 +241,9 @@ int ALIGN_DISTRIBUTE_TOOL::AlignBottom( const TOOL_EVENT& aEvent )
     std::vector<std::pair<BOARD_ITEM*, BOX2I>> locked_items;
 
     if( !GetSelections( itemsToAlign, locked_items,
-            []( const std::pair<BOARD_ITEM*, BOX2I> left, const std::pair<BOARD_ITEM*, BOX2I> right)
+            []( const std::pair<BOARD_ITEM*, BOX2I>& lhs, const std::pair<BOARD_ITEM*, BOX2I>& rhs)
             {
-                return ( left.second.GetBottom() > right.second.GetBottom() );
+                return ( lhs.second.GetBottom() > rhs.second.GetBottom() );
             } ) )
     {
         return 0;
@@ -280,8 +274,7 @@ int ALIGN_DISTRIBUTE_TOOL::AlignBottom( const TOOL_EVENT& aEvent )
         item->Move( VECTOR2I( 0, difference ) );
     }
 
-    commit.Push( _( "Align to bottom" ) );
-
+    commit.Push( _( "Align to Bottom" ) );
     return 0;
 }
 
@@ -291,13 +284,9 @@ int ALIGN_DISTRIBUTE_TOOL::AlignLeft( const TOOL_EVENT& aEvent )
     // Because this tool uses bounding boxes and they aren't mirrored even when
     // the view is mirrored, we need to call the other one if mirrored.
     if( getView()->IsMirroredX() )
-    {
         return doAlignRight();
-    }
     else
-    {
         return doAlignLeft();
-    }
 }
 
 
@@ -307,9 +296,9 @@ int ALIGN_DISTRIBUTE_TOOL::doAlignLeft()
     std::vector<std::pair<BOARD_ITEM*, BOX2I>> locked_items;
 
     if( !GetSelections( itemsToAlign, locked_items,
-            []( const std::pair<BOARD_ITEM*, BOX2I> left, const std::pair<BOARD_ITEM*, BOX2I> right)
+            []( const std::pair<BOARD_ITEM*, BOX2I>& lhs, const std::pair<BOARD_ITEM*, BOX2I>& rhs )
             {
-                return ( left.second.GetLeft() < right.second.GetLeft() );
+                return ( lhs.second.GetLeft() < rhs.second.GetLeft() );
             } ) )
     {
         return 0;
@@ -340,8 +329,7 @@ int ALIGN_DISTRIBUTE_TOOL::doAlignLeft()
         item->Move( VECTOR2I( difference, 0 ) );
     }
 
-    commit.Push( _( "Align to left" ) );
-
+    commit.Push( _( "Align to Left" ) );
     return 0;
 }
 
@@ -351,13 +339,9 @@ int ALIGN_DISTRIBUTE_TOOL::AlignRight( const TOOL_EVENT& aEvent )
     // Because this tool uses bounding boxes and they aren't mirrored even when
     // the view is mirrored, we need to call the other one if mirrored.
     if( getView()->IsMirroredX() )
-    {
         return doAlignLeft();
-    }
     else
-    {
         return doAlignRight();
-    }
 }
 
 
@@ -367,9 +351,9 @@ int ALIGN_DISTRIBUTE_TOOL::doAlignRight()
     std::vector<std::pair<BOARD_ITEM*, BOX2I>> locked_items;
 
     if( !GetSelections( itemsToAlign, locked_items,
-            []( const std::pair<BOARD_ITEM*, BOX2I> left, const std::pair<BOARD_ITEM*, BOX2I> right)
+            []( const std::pair<BOARD_ITEM*, BOX2I>& lhs, const std::pair<BOARD_ITEM*, BOX2I>& rhs )
             {
-                return ( left.second.GetRight() > right.second.GetRight() );
+                return ( lhs.second.GetRight() > rhs.second.GetRight() );
             } ) )
     {
         return 0;
@@ -400,8 +384,7 @@ int ALIGN_DISTRIBUTE_TOOL::doAlignRight()
         item->Move( VECTOR2I( difference, 0 ) );
     }
 
-    commit.Push( _( "Align to right" ) );
-
+    commit.Push( _( "Align to Right" ) );
     return 0;
 }
 
@@ -412,9 +395,9 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterX( const TOOL_EVENT& aEvent )
     std::vector<std::pair<BOARD_ITEM*, BOX2I>> locked_items;
 
     if( !GetSelections( itemsToAlign, locked_items,
-            []( const std::pair<BOARD_ITEM*, BOX2I> left, const std::pair<BOARD_ITEM*, BOX2I> right)
+            []( const std::pair<BOARD_ITEM*, BOX2I>& lhs, const std::pair<BOARD_ITEM*, BOX2I>& rhs )
             {
-                return ( left.second.Centre().x < right.second.Centre().x );
+                return ( lhs.second.Centre().x < rhs.second.Centre().x );
             } ) )
     {
         return 0;
@@ -445,8 +428,7 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterX( const TOOL_EVENT& aEvent )
         item->Move( VECTOR2I( difference, 0 ) );
     }
 
-    commit.Push( _( "Align to middle" ) );
-
+    commit.Push( _( "Align to Middle" ) );
     return 0;
 }
 
@@ -457,9 +439,9 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterY( const TOOL_EVENT& aEvent )
     std::vector<std::pair<BOARD_ITEM*, BOX2I>> locked_items;
 
     if( !GetSelections( itemsToAlign, locked_items,
-            []( const std::pair<BOARD_ITEM*, BOX2I> left, const std::pair<BOARD_ITEM*, BOX2I> right)
+            []( const std::pair<BOARD_ITEM*, BOX2I>& lhs, const std::pair<BOARD_ITEM*, BOX2I>& rhs )
             {
-                return ( left.second.Centre().y < right.second.Centre().y );
+                return ( lhs.second.Centre().y < rhs.second.Centre().y );
             } ) )
     {
         return 0;
@@ -490,8 +472,7 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterY( const TOOL_EVENT& aEvent )
         item->Move( VECTOR2I( 0, difference ) );
     }
 
-    commit.Push( _( "Align to center" ) );
-
+    commit.Push( _( "Align to Center" ) );
     return 0;
 }
 
@@ -520,10 +501,9 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
 
     // find the last item by reverse sorting
     std::sort( itemsToDistribute.begin(), itemsToDistribute.end(),
-            [] ( const std::pair<BOARD_ITEM*, BOX2I> left,
-                 const std::pair<BOARD_ITEM*, BOX2I> right)
+            []( const std::pair<BOARD_ITEM*, BOX2I>& lhs, const std::pair<BOARD_ITEM*, BOX2I>& rhs )
             {
-                return ( left.second.GetRight() > right.second.GetRight() );
+                return ( lhs.second.GetRight() > rhs.second.GetRight() );
             } );
 
     BOARD_ITEM* lastItem = itemsToDistribute.begin()->first;
@@ -531,10 +511,9 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
 
     // sort to get starting order
     std::sort( itemsToDistribute.begin(), itemsToDistribute.end(),
-            [] ( const std::pair<BOARD_ITEM*, BOX2I> left,
-                 const std::pair<BOARD_ITEM*, BOX2I> right)
+            []( const std::pair<BOARD_ITEM*, BOX2I>& lhs, const std::pair<BOARD_ITEM*, BOX2I>& rhs )
             {
-                return ( left.second.GetX() < right.second.GetX() );
+                return ( lhs.second.GetX() < rhs.second.GetX() );
             } );
 
     const int minX = itemsToDistribute.begin()->second.GetX();
@@ -555,8 +534,7 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
         doDistributeGapsHorizontally( itemsToDistribute, commit, lastItem, totalGap );
     }
 
-    commit.Push( _( "Distribute horizontally" ) );
-
+    commit.Push( _( "Distribute Horizontally" ) );
     return 0;
 }
 
@@ -596,13 +574,12 @@ void ALIGN_DISTRIBUTE_TOOL::doDistributeCentersHorizontally( std::vector<std::pa
                                                              BOARD_COMMIT& aCommit ) const
 {
     std::sort( aItems.begin(), aItems.end(),
-            [] ( const std::pair<BOARD_ITEM*, BOX2I> left, const std::pair<BOARD_ITEM*, BOX2I> right)
+            []( const std::pair<BOARD_ITEM*, BOX2I>& lhs, const std::pair<BOARD_ITEM*, BOX2I>& rhs )
             {
-                return ( left.second.Centre().x < right.second.Centre().x );
+                return ( lhs.second.Centre().x < rhs.second.Centre().x );
             } );
 
-    const int totalGap = ( aItems.end() - 1 )->second.Centre().x
-                         - aItems.begin()->second.Centre().x;
+    const int totalGap = ( aItems.end()-1 )->second.Centre().x - aItems.begin()->second.Centre().x;
     const int itemGap = totalGap / ( aItems.size() - 1 );
     int       targetX = aItems.begin()->second.Centre().x;
 
@@ -649,20 +626,20 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
 
     // find the last item by reverse sorting
     std::sort( itemsToDistribute.begin(), itemsToDistribute.end(),
-        [] ( const std::pair<BOARD_ITEM*, BOX2I> left, const std::pair<BOARD_ITEM*, BOX2I> right)
-        {
-            return ( left.second.GetBottom() > right.second.GetBottom() );
-        } );
+            []( const std::pair<BOARD_ITEM*, BOX2I>& lhs, const std::pair<BOARD_ITEM*, BOX2I>& rhs )
+            {
+                return ( lhs.second.GetBottom() > rhs.second.GetBottom() );
+            } );
 
     BOARD_ITEM* lastItem = itemsToDistribute.begin()->first;
     const int   maxBottom = itemsToDistribute.begin()->second.GetBottom();
 
     // sort to get starting order
     std::sort( itemsToDistribute.begin(), itemsToDistribute.end(),
-        [] ( const std::pair<BOARD_ITEM*, BOX2I> left, const std::pair<BOARD_ITEM*, BOX2I> right)
-        {
-            return ( left.second.Centre().y < right.second.Centre().y );
-        } );
+            []( const std::pair<BOARD_ITEM*, BOX2I>& lhs, const std::pair<BOARD_ITEM*, BOX2I>& rhs )
+            {
+                return ( lhs.second.Centre().y < rhs.second.Centre().y );
+            } );
 
     int minY = itemsToDistribute.begin()->second.GetY();
     int totalGap = maxBottom - minY;
@@ -682,8 +659,7 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
         doDistributeGapsVertically( itemsToDistribute, commit, lastItem, totalGap );
     }
 
-    commit.Push( _( "Distribute vertically" ) );
-
+    commit.Push( _( "Distribute Vertically" ) );
     return 0;
 }
 
@@ -723,9 +699,9 @@ void ALIGN_DISTRIBUTE_TOOL::doDistributeCentersVertically( std::vector<std::pair
                                                            BOARD_COMMIT& aCommit ) const
 {
     std::sort( aItems.begin(), aItems.end(),
-        [] ( const std::pair<BOARD_ITEM*, BOX2I> left, const std::pair<BOARD_ITEM*, BOX2I> right)
+        [] ( const std::pair<BOARD_ITEM*, BOX2I>& lhs, const std::pair<BOARD_ITEM*, BOX2I>& rhs)
         {
-            return ( left.second.Centre().y < right.second.Centre().y );
+            return ( lhs.second.Centre().y < rhs.second.Centre().y );
         } );
 
     const int totalGap = ( aItems.end() - 1 )->second.Centre().y
