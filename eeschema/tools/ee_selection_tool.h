@@ -119,7 +119,7 @@ public:
      * @param aPosition Cursor position from which the search should be made.
      * @return a connected item or nullptr.
      */
-    EDA_ITEM* GetNode( VECTOR2I aPosition );
+    EDA_ITEM* GetNode( const VECTOR2I& aPosition );
 
     /**
      * Selects the connected item at the current cursor position.  Iterative process with a
@@ -176,8 +176,8 @@ public:
 
     ///< Set selection to items passed by parameter.
     ///< Zooms to fit, if enabled.
-    int SyncSelection( std::optional<SCH_SHEET_PATH> targetSheetPath, SCH_ITEM* focusItem,
-                       std::vector<SCH_ITEM*> items );
+    void SyncSelection( const std::optional<SCH_SHEET_PATH>& targetSheetPath, SCH_ITEM* focusItem,
+                        const std::vector<SCH_ITEM*>& items );
 
 protected:
     SELECTION& selection() override { return m_selection; }

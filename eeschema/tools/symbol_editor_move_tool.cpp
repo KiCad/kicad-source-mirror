@@ -159,8 +159,7 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
         if( evt->IsAction( &EE_ACTIONS::move )
                 || evt->IsMotion()
                 || evt->IsDrag( BUT_LEFT )
-                || evt->IsAction( &ACTIONS::refreshPreview )
-                || evt->IsAction( &EE_ACTIONS::symbolMoveActivate ) )
+                || evt->IsAction( &ACTIONS::refreshPreview ) )
         {
             if( !m_moveInProgress )    // Prepare to start moving/dragging
             {
@@ -192,11 +191,11 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
                             for( LIB_PIN* pin : pins )
                             {
                                 if( !got_unit[pin->GetUnit()]
-                                 && pin->GetPosition() == cur_pin->GetPosition()
-                                 && pin->GetOrientation() == cur_pin->GetOrientation()
-                                 && pin->GetConvert() == cur_pin->GetConvert()
-                                 && pin->GetType() == cur_pin->GetType()
-                                 && pin->GetName() == cur_pin->GetName()  )
+                                        && pin->GetPosition() == cur_pin->GetPosition()
+                                        && pin->GetOrientation() == cur_pin->GetOrientation()
+                                        && pin->GetConvert() == cur_pin->GetConvert()
+                                        && pin->GetType() == cur_pin->GetType()
+                                        && pin->GetName() == cur_pin->GetName()  )
                                 {
                                     if( sync_pins.insert( pin ).second )
                                         got_unit[pin->GetUnit()] = true;
@@ -374,5 +373,4 @@ void SYMBOL_EDITOR_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta 
 void SYMBOL_EDITOR_MOVE_TOOL::setTransitions()
 {
     Go( &SYMBOL_EDITOR_MOVE_TOOL::Main,               EE_ACTIONS::move.MakeEvent() );
-    Go( &SYMBOL_EDITOR_MOVE_TOOL::Main,               EE_ACTIONS::symbolMoveActivate.MakeEvent() );
 }

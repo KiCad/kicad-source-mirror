@@ -1093,14 +1093,6 @@ TOOL_ACTION EE_ACTIONS::drag( "eeschema.InteractiveMove.drag",
         'G', LEGACY_HK_NAME( "Drag Item" ),
         _( "Drag" ), _( "Drags the selected item(s)" ), BITMAPS::move, AF_ACTIVATE );
 
-TOOL_ACTION EE_ACTIONS::moveActivate( "eeschema.InteractiveMove",
-        AS_GLOBAL, 0, "",
-        _( "Move Activate" ), "", BITMAPS::move, AF_ACTIVATE );
-
-TOOL_ACTION EE_ACTIONS::symbolMoveActivate( "eeschema.SymbolMoveTool",
-        AS_GLOBAL, 0, "",
-        _( "Symbol Move Activate" ), "", BITMAPS::move, AF_ACTIVATE );
-
 TOOL_ACTION EE_ACTIONS::alignToGrid( "eeschema.AlignToGrid",
         AS_GLOBAL, 0, "",
         _( "Align Elements to Grid" ), "", BITMAPS::move, AF_ACTIVATE );

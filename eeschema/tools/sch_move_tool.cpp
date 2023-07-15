@@ -355,23 +355,7 @@ void SCH_MOVE_TOOL::orthoLineDrag( SCH_COMMIT* aCommit, SCH_LINE* line, const VE
 
 int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 {
-    if( aEvent.IsAction( &EE_ACTIONS::move ) )
-    {
-        m_isDrag = false;
-    }
-    else if( aEvent.IsAction( &EE_ACTIONS::drag ) )
-    {
-        m_isDrag = true;
-    }
-    else if( aEvent.IsAction( &EE_ACTIONS::moveActivate ) )
-    {
-        EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
-        m_isDrag = !cfg->m_Input.drag_is_move;
-    }
-    else
-    {
-        return false;
-    }
+    m_isDrag = aEvent.IsAction( &EE_ACTIONS::drag );
 
     if( SCH_COMMIT* commit = dynamic_cast<SCH_COMMIT*>( aEvent.Commit() ) )
     {
@@ -485,8 +469,7 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
-        if( evt->IsAction( &EE_ACTIONS::moveActivate )
-                || evt->IsAction( &EE_ACTIONS::restartMove )
+        if( evt->IsAction( &EE_ACTIONS::restartMove )
                 || evt->IsAction( &EE_ACTIONS::move )
                 || evt->IsAction( &EE_ACTIONS::drag )
                 || evt->IsMotion()
@@ -1777,7 +1760,6 @@ void SCH_MOVE_TOOL::clearNewDragLines()
 
 void SCH_MOVE_TOOL::setTransitions()
 {
-    Go( &SCH_MOVE_TOOL::Main,               EE_ACTIONS::moveActivate.MakeEvent() );
     Go( &SCH_MOVE_TOOL::Main,               EE_ACTIONS::move.MakeEvent() );
     Go( &SCH_MOVE_TOOL::Main,               EE_ACTIONS::drag.MakeEvent() );
     Go( &SCH_MOVE_TOOL::AlignElements,      EE_ACTIONS::alignToGrid.MakeEvent() );

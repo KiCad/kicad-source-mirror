@@ -546,11 +546,10 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 // Check if dragging has started within any of selected items bounding box
                 if( selectionContains( evt->DragOrigin() ) )
                 {
-                    // Yes -> run the move tool and wait till it finishes
-                    if( m_isSymbolEditor )
-                        m_toolMgr->InvokeTool( "eeschema.SymbolMoveTool" );
+                    if( m_frame->eeconfig()->m_Input.drag_is_move )
+                        m_toolMgr->RunSynchronousAction( EE_ACTIONS::move, nullptr );
                     else
-                        m_toolMgr->InvokeTool( "eeschema.InteractiveMove" );
+                        m_toolMgr->RunSynchronousAction( EE_ACTIONS::drag, nullptr );
                 }
                 else
                 {
@@ -1141,7 +1140,7 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
 
             if( line )
             {
-                dist = DistanceLinePoint( line->GetStartPoint(), line->GetEndPoint(), pos );
+                dist = KiROUND( DistanceLinePoint( line->GetStartPoint(), line->GetEndPoint(), pos ) );
             }
             else if( text )
             {
@@ -1177,13 +1176,13 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
                 SHAPE_RECT rect( bbox.GetPosition(), bbox.GetWidth(), bbox.GetHeight() );
 
                 if( bbox.Contains( pos ) )
-                    dist = EuclideanNorm( bbox.GetCenter() - pos );
+                    dist = KiROUND( EuclideanNorm( bbox.GetCenter() - pos ) );
                 else
                     rect.Collide( poss, closestDist, &dist );
             }
             else
             {
-                dist = EuclideanNorm( bbox.GetCenter() - pos );
+                dist = KiROUND( EuclideanNorm( bbox.GetCenter() - pos ) );
             }
         }
         else
@@ -1413,9 +1412,7 @@ bool EE_SELECTION_TOOL::selectMultiple()
                             // We changed one line endpoint on a selected line,
                             // update the view at least.
                             if( flags && !anySubtracted )
-                            {
                                 getView()->Update( aItem );
-                            }
                         }
                         else
                         {
@@ -1533,7 +1530,7 @@ bool EE_SELECTION_TOOL::selectMultiple()
 }
 
 
-EDA_ITEM* EE_SELECTION_TOOL::GetNode( VECTOR2I aPosition )
+EDA_ITEM* EE_SELECTION_TOOL::GetNode( const VECTOR2I& aPosition )
 {
     EE_COLLECTOR collector;
 
@@ -1560,7 +1557,6 @@ int EE_SELECTION_TOOL::SelectNode( const TOOL_EVENT& aEvent )
     VECTOR2I cursorPos = getViewControls()->GetCursorPosition( false );
 
     SelectPoint( cursorPos, connectedTypes );
-
     return 0;
 }
 
@@ -1607,7 +1603,6 @@ int EE_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
 int EE_SELECTION_TOOL::ClearSelection( const TOOL_EVENT& aEvent )
 {
     ClearSelection();
-
     return 0;
 }
 
@@ -1720,13 +1715,13 @@ void EE_SELECTION_TOOL::ZoomFitCrossProbeBBox( const BOX2I& aBBox )
 }
 
 
-int EE_SELECTION_TOOL::SyncSelection( std::optional<SCH_SHEET_PATH> targetSheetPath,
-                                      SCH_ITEM* focusItem, std::vector<SCH_ITEM*> items )
+void EE_SELECTION_TOOL::SyncSelection( const std::optional<SCH_SHEET_PATH>& targetSheetPath,
+                                       SCH_ITEM* focusItem, const std::vector<SCH_ITEM*>& items )
 {
     SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
 
-    if( !editFrame || m_isSymbolEditor || m_isSymbolViewer )
-        return 0;
+    if( !editFrame )
+        return;
 
     if( targetSheetPath && targetSheetPath != editFrame->Schematic().CurrentSheet() )
     {
@@ -1758,8 +1753,6 @@ int EE_SELECTION_TOOL::SyncSelection( std::optional<SCH_SHEET_PATH> targetSheetP
 
     if( m_selection.Size() > 0 )
         m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
-
-    return 0;
 }
 
 
