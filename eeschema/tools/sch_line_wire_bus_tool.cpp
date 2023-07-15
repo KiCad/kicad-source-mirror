@@ -1034,8 +1034,10 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, int aType, 
 SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::startSegments( int aType, const VECTOR2D& aPos,
                                                  SCH_LINE* aSegment )
 {
-    // If a segment isn't provided to copy properties from, we need to create one
-    if( aSegment == nullptr )
+    if( !aSegment )
+        aSegment = m_frame->GetScreen()->GetLine( aPos, 0, aType );
+
+    if( !aSegment )
     {
         switch( aType )
         {
