@@ -663,8 +663,7 @@ char* GetLine( FILE* File, char* Line, int* LineNum, int SizeLine )
 
 wxString GetISO8601CurrentDateTime()
 {
-    std::string str = fmt::format( "{:%FT%T%z}", fmt::localtime( std::time( nullptr ) ) );
-    return FROM_UTF8( str.c_str() );
+    return fmt::format( "{:%FT%T%z}", fmt::localtime( std::time( nullptr ) ) );
 }
 
 
