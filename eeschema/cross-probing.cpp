@@ -30,8 +30,6 @@
 #include <sch_sheet.h>
 #include <sch_symbol.h>
 #include <sch_reference_list.h>
-#include <schematic.h>
-#include <reporter.h>
 #include <string_utils.h>
 #include <netlist_exporters/netlist_exporter_kicad.h>
 #include <project/project_file.h>
@@ -39,7 +37,6 @@
 #include <tools/ee_actions.h>
 #include <tools/sch_editor_control.h>
 #include <advanced_config.h>
-#include <netclass.h>
 #include <wx/log.h>
 
 SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString* aPath, const wxString* aReference,
@@ -47,8 +44,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString* aPath, const wx
                                                  const wxString& aSearchText )
 {
     SCH_SHEET_PATH* sheetWithSymbolFound = nullptr;
-    SCH_SYMBOL*     symbol                  = nullptr;
-    VECTOR2I        pos;
+    SCH_SYMBOL*     symbol = nullptr;
     SCH_PIN*        pin = nullptr;
     SCH_SHEET_LIST  sheetList;
     SCH_ITEM*       foundItem = nullptr;
@@ -86,8 +82,6 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString* aPath, const wx
 
                 if( aSearchType == HIGHLIGHT_PIN )
                 {
-                    // temporary: will be changed if the pin is found.
-                    pos = symbol->GetPosition();
                     pin = symbol->GetPin( aSearchText );
 
                     // Ensure we have found the right unit in case of multi-units symbol
@@ -102,14 +96,12 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString* aPath, const wx
                         }
 
                         // Get pin position in true schematic coordinate
-                        pos = pin->GetPosition();
                         foundItem = pin;
                         break;
                     }
                 }
                 else
                 {
-                    pos = symbol->GetPosition();
                     foundItem = symbol;
                     break;
                 }
@@ -121,7 +113,6 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString* aPath, const wx
     }
 
     CROSS_PROBING_SETTINGS& crossProbingSettings = m_frame->eeconfig()->m_CrossProbing;
-
 
     if( symbol )
     {
@@ -176,7 +167,6 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString* aPath, const wx
     }
 
     m_frame->SetStatusText( msg );
-
     m_frame->GetCanvas()->Refresh();
 
     return foundItem;
@@ -308,11 +298,9 @@ void SCH_EDIT_FRAME::SendSelectItemsToPcb( const std::vector<EDA_ITEM*>& aItems,
         case SCH_SYMBOL_T:
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-
-            wxString ref = symbol->GetField( REFERENCE_FIELD )->GetText();
+            wxString    ref = symbol->GetField( REFERENCE_FIELD )->GetText();
 
             parts.push_back( wxT( "F" ) + EscapeString( ref, CTX_IPC ) );
-
             break;
         }
 
@@ -320,11 +308,9 @@ void SCH_EDIT_FRAME::SendSelectItemsToPcb( const std::vector<EDA_ITEM*>& aItems,
         {
             // For cross probing, we need the full path of the sheet, because
             // we search by the footprint path prefix in the PCB editor
-
             wxString full_path = GetCurrentSheet().PathAsString() + item->m_Uuid.AsString();
 
             parts.push_back( wxT( "S" ) + full_path );
-
             break;
         }
 
@@ -332,23 +318,20 @@ void SCH_EDIT_FRAME::SendSelectItemsToPcb( const std::vector<EDA_ITEM*>& aItems,
         {
             SCH_PIN*    pin = static_cast<SCH_PIN*>( item );
             SCH_SYMBOL* symbol = pin->GetParentSymbol();
-
-            wxString ref = symbol->GetField( REFERENCE_FIELD )->GetText();
+            wxString    ref = symbol->GetField( REFERENCE_FIELD )->GetText();
 
             parts.push_back( wxT( "P" ) + EscapeString( ref, CTX_IPC ) + wxT( "/" )
                              + EscapeString( pin->GetShownNumber(), CTX_IPC ) );
-
             break;
         }
 
-        default: break;
+        default:
+            break;
         }
     }
 
     if( parts.empty() )
-    {
         return;
-    }
 
     std::string command = "$SELECT: 0,";
 

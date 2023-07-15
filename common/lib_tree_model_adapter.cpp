@@ -46,24 +46,6 @@ LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ToNode( wxDataViewItem aItem )
 }
 
 
-unsigned int LIB_TREE_MODEL_ADAPTER::IntoArray( const LIB_TREE_NODE& aNode,
-                                                wxDataViewItemArray& aChildren )
-{
-    unsigned int n = 0;
-
-    for( std::unique_ptr<LIB_TREE_NODE> const& child: aNode.m_Children )
-    {
-        if( child->m_Score > 0 )
-        {
-            aChildren.Add( ToItem( &*child ) );
-            ++n;
-        }
-    }
-
-    return n;
-}
-
-
 LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent,
                                                 const wxString& aPinnedKey ) :
         m_parent( aParent ),
@@ -221,14 +203,13 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( const wxString& aSearch, bool a
         wxDataViewItem item = ToItem( firstMatch );
         m_widget->Select( item );
 
-        // Make sure the *parent* item is visible. The selected item is the
-        // first (shown) child of the parent. So it's always right below the parent,
-        // and this way the user can also see what library the selected part belongs to,
-        // without having a case where the selection is off the screen (unless the
-        // window is a single row high, which is unlikely)
+        // Make sure the *parent* item is visible. The selected item is the first (shown) child
+        // of the parent. So it's always right below the parent, and this way the user can also
+        // see what library the selected part belongs to, without having a case where the selection
+        // is off the screen (unless the window is a single row high, which is unlikely).
         //
-        // This also happens to circumvent https://bugs.launchpad.net/kicad/+bug/1804400
-        // which appears to be a GTK+3 bug.
+        // This also happens to circumvent https://bugs.launchpad.net/kicad/+bug/1804400 which
+        // appears to be a GTK+3 bug.
         {
             wxDataViewItem parent = GetParent( item );
 
@@ -352,13 +333,7 @@ void LIB_TREE_MODEL_ADAPTER::SetShownColumns( const std::vector<wxString>& aColu
 LIB_ID LIB_TREE_MODEL_ADAPTER::GetAliasFor( const wxDataViewItem& aSelection ) const
 {
     const LIB_TREE_NODE* node = ToNode( aSelection );
-
-    LIB_ID emptyId;
-
-    if( !node )
-        return emptyId;
-
-    return node->m_LibId;
+    return node ? node->m_LibId : LIB_ID();
 }
 
 
@@ -427,18 +402,23 @@ unsigned int LIB_TREE_MODEL_ADAPTER::GetChildren( const wxDataViewItem&   aItem,
                                                   wxDataViewItemArray&    aChildren ) const
 {
     const LIB_TREE_NODE* node = ( aItem.IsOk() ? ToNode( aItem ) : &m_tree );
+    unsigned int         count = 0;
 
     if( node->m_Type == LIB_TREE_NODE::TYPE::ROOT
             || node->m_Type == LIB_TREE_NODE::LIB
             || ( m_show_units && node->m_Type == LIB_TREE_NODE::TYPE::LIBID ) )
     {
-        return IntoArray( *node, aChildren );
-    }
-    else
-    {
-        return 0;
+        for( std::unique_ptr<LIB_TREE_NODE> const& child: node->m_Children )
+        {
+            if( child->m_Score > 0 )
+            {
+                aChildren.Add( ToItem( &*child ) );
+                ++count;
+            }
+        }
     }
 
+    return count;
 }
 
 
@@ -466,12 +446,6 @@ void LIB_TREE_MODEL_ADAPTER::FinishTreeInitialization()
     header = m_columns[idx]->GetTitle();
 
     m_columns[idx]->SetWidth( std::max( m_colWidths[header], remainingWidth ) );
-}
-
-
-void LIB_TREE_MODEL_ADAPTER::OnSize( wxSizeEvent& aEvent )
-{
-    aEvent.Skip();
 }
 
 
@@ -561,7 +535,7 @@ void LIB_TREE_MODEL_ADAPTER::GetValue( wxVariant&              aVariant,
     }
 
     LIB_TREE_NODE* node = ToNode( aItem );
-    wxASSERT( node );
+    wxCHECK( node, /* void */ );
 
     switch( aCol )
     {
@@ -599,24 +573,19 @@ bool LIB_TREE_MODEL_ADAPTER::GetAttr( const wxDataViewItem&   aItem,
         return false;
 
     LIB_TREE_NODE* node = ToNode( aItem );
-    wxASSERT( node );
+    wxCHECK( node, false );
 
-    if( node->m_Type != LIB_TREE_NODE::LIBID )
+    if( node->m_Type == LIB_TREE_NODE::LIBID )
     {
-        // Currently only aliases are formatted at all
-        return false;
+        if( !node->m_IsRoot && aCol == 0 )
+        {
+            // Names of non-root aliases are italicized
+            aAttr.SetItalic( true );
+            return true;
+        }
     }
 
-    if( !node->m_IsRoot && aCol == 0 )
-    {
-        // Names of non-root aliases are italicized
-        aAttr.SetItalic( true );
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return false;
 }
 
 

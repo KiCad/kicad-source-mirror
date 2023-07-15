@@ -226,7 +226,6 @@ public:
      */
     void FinishTreeInitialization();
 
-    void OnSize( wxSizeEvent& aEvent );
     /**
      * Return the alias for the given item.
      *
@@ -323,11 +322,6 @@ protected:
      * Convert wxDataViewItem -> #SYM_TREE_NODE.
      */
     static LIB_TREE_NODE* ToNode( wxDataViewItem aItem );
-
-    /**
-     * Convert SYM_TREE_NODE's children to wxDataViewItemArray.
-     */
-    static unsigned int IntoArray( const LIB_TREE_NODE& aNode, wxDataViewItemArray& aChildren );
 
     /**
      * Create the adapter.

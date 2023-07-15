@@ -175,7 +175,6 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
 
     SetSizer( sizer );
 
-    m_tree_ctrl->Bind( wxEVT_SIZE, &LIB_TREE::onSize, this );
     m_tree_ctrl->Bind( wxEVT_DATAVIEW_ITEM_ACTIVATED, &LIB_TREE::onTreeActivate, this );
     m_tree_ctrl->Bind( wxEVT_DATAVIEW_SELECTION_CHANGED, &LIB_TREE::onTreeSelect, this );
     m_tree_ctrl->Bind( wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &LIB_TREE::onItemContextMenu, this );
@@ -376,9 +375,7 @@ wxWindow* LIB_TREE::GetFocusTarget()
 void LIB_TREE::FocusSearchFieldIfExists()
 {
     if( m_query_ctrl )
-    {
         m_query_ctrl->SetFocus();
-    }
 }
 
 
@@ -639,12 +636,6 @@ void LIB_TREE::onTreeActivate( wxDataViewEvent& aEvent )
         toggleExpand( m_tree_ctrl->GetSelection() );    // Expand library/part units subtree
     else
         postSelectEvent();                              // Open symbol/footprint
-}
-
-
-void LIB_TREE::onSize( wxSizeEvent& aEvent )
-{
-    m_adapter->OnSize( aEvent );
 }
 
 
