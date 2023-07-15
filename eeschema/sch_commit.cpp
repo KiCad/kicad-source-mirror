@@ -69,8 +69,6 @@ COMMIT& SCH_COMMIT::Stage( EDA_ITEM *aItem, CHANGE_TYPE aChangeType, BASE_SCREEN
 {
     wxCHECK( aItem, *this );
 
-    aItem->ClearFlags( IS_MODIFIED_CHILD );
-
     // If aItem belongs a symbol, sheet or label, the full parent will be saved because undo/redo
     // does not handle "sub items" modifications.
     if( aItem->Type() != SCH_SHEET_T
@@ -78,7 +76,6 @@ COMMIT& SCH_COMMIT::Stage( EDA_ITEM *aItem, CHANGE_TYPE aChangeType, BASE_SCREEN
                                                                    SCH_SHEET_T,
                                                                    SCH_LABEL_LOCATE_ANY_T } ) )
     {
-        aItem->SetFlags( IS_MODIFIED_CHILD );
         aItem = aItem->GetParent();
         aChangeType = CHT_MODIFY;
     }
@@ -121,7 +118,6 @@ void SCH_COMMIT::pushLibEdit( const wxString& aMessage, int aCommitFlags )
 {
     KIGFX::VIEW*       view = m_toolMgr->GetView();
     SYMBOL_EDIT_FRAME* frame = static_cast<SYMBOL_EDIT_FRAME*>( m_toolMgr->GetToolHolder() );
-    bool               selectedModified = false;
 
     if( Empty() )
         return;
@@ -132,16 +128,6 @@ void SCH_COMMIT::pushLibEdit( const wxString& aMessage, int aCommitFlags )
 
     if( symbol )
     {
-        if( symbol->IsSelected() )
-            selectedModified = true;
-
-        symbol->RunOnChildren(
-                [&selectedModified]( LIB_ITEM* aItem )
-                {
-                    if( aItem->HasFlag( IS_MODIFIED_CHILD ) )
-                        selectedModified = true;
-                } );
-
         if( view )
         {
             view->Update( symbol );
@@ -171,9 +157,7 @@ void SCH_COMMIT::pushLibEdit( const wxString& aMessage, int aCommitFlags )
     }
 
     m_toolMgr->PostEvent( { TC_MESSAGE, TA_MODEL_CHANGE, AS_GLOBAL } );
-
-    if( selectedModified )
-        m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
+    m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
     if( !( aCommitFlags & SKIP_SET_DIRTY ) )
     {

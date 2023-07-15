@@ -224,14 +224,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                     for( PCB_VIA* via : connectedVias )
                         staleTeardropPadsAndVias.push_back( via );
                 }
-                else if( boardItem->Type() == PCB_FOOTPRINT_T )
-                {
-                    for( PAD* pad : static_cast<FOOTPRINT*>( boardItem )->Pads() )
-                    {
-                        if( pad->GetFlags() & IS_MODIFIED_CHILD )
-                            staleTeardropPadsAndVias.push_back( pad );
-                    }
-                }
             }
         }
 

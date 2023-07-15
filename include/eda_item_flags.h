@@ -67,8 +67,8 @@
 #define SHOW_ELEC_TYPE (1 << 25)   ///< Show pin electrical type.  Shared with IS_ROLLOVER.
 #define BRIGHTENED     (1 << 26)   ///< item is drawn with a bright contour
 
-#define IS_MODIFIED_CHILD (1 << 27)///< when a child is promoted to its parent for a COMMIT, this
-                                   ///< flag indicates the modified child
+// 27 is unused
+
 #define UR_TRANSIENT   (1 << 28)   ///< indicates the item is owned by the undo/redo stack
 
 #define IS_DANGLING    (1 << 29)   ///< indicates a pin is dangling
