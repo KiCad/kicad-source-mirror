@@ -366,4 +366,12 @@ std::string UIDouble2Str( double aValue );
  */
 std::string FormatDouble2Str( double aValue );
 
+/**
+ * Convert an expected UTF8 encoded std::string to a wxString.
+ * If fails, tray to convert using current locale
+ * If still fails, return the initial string (can be already a converted string)
+ */
+wxString From_UTF8( const std::string& aString );
+wxString From_UTF8( const char* cstring );
+
 #endif  // STRING_UTILS_H

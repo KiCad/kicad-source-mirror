@@ -1161,3 +1161,37 @@ std::string UIDouble2Str( double aValue )
 
     return std::string( buf, len );
 }
+
+
+wxString From_UTF8( const char* cstring )
+{
+    // Convert an expected UTF8 encoded C string to a wxString
+    wxString line = wxString::FromUTF8( cstring );
+
+    if( line.IsEmpty() )  // happens when cstring is not a valid UTF8 sequence
+    {
+        line = wxConvCurrent->cMB2WC( cstring );    // try to use locale conversion
+
+        if( line.IsEmpty() )
+            line = wxString::From8BitData( cstring );    // try to use native string
+    }
+
+    return line;
+}
+
+
+wxString From_UTF8( const std::string& aString )
+{
+    // Convert an expected UTF8 encoded std::string to a wxString
+    wxString line = wxString::FromUTF8( aString );
+
+    if( line.IsEmpty() )  // happens when aString is not a valid UTF8 sequence
+    {
+        line = wxConvCurrent->cMB2WC( aString.c_str() );    // try to use locale conversion
+
+        if( line.IsEmpty() )
+            line = wxString::From8BitData( aString.c_str() );    // try to use native string
+    }
+
+   return line;
+}

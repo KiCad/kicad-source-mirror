@@ -105,17 +105,15 @@
 #define TO_STR(x) TO_STR2(x)
 
 /**
- * Convert a UTF8 encoded C string to a wxString for all wxWidgets build modes.
+ * Convert an expected UTF8 encoded C string to a wxString.
+ * If fails, tray to convert using current locale
+ * If still fails, return an empty wxString
+ * This macro is obsolete. Replaced by
+ * wxString From_UTF8( const char* cstring )
+ * (and also wxString From_UTF8( const std::string& aString ) )
  */
-static inline wxString FROM_UTF8( const char* cstring )
-{
-    wxString line = wxString::FromUTF8( cstring );
-
-    if( line.IsEmpty() )  // happens when cstring is not a valid UTF8 sequence
-        line = wxConvCurrent->cMB2WC( cstring );    // try to use locale conversion
-
-    return line;
-}
+wxString From_UTF8( const char* cstring );
+#define FROM_UTF8(x) From_UTF8(x)
 
 #define UNIMPLEMENTED_FOR( type ) \
         wxFAIL_MSG( wxString::Format( wxT( "%s: unimplemented for %s" ), __FUNCTION__, type ) )
