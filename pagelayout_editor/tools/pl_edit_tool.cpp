@@ -139,7 +139,7 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             m_frame->SaveCopyInUndoList();
         }
-        catch( const fmt::v9::format_error& exc )
+        catch( const fmt::v10::format_error& exc )
         {
             wxLogWarning( wxS( "Exception \"%s\" serializing string ocurred." ),
                           exc.what() );
