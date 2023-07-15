@@ -312,7 +312,7 @@ static bool isEdge( const PNS::ITEM* aItem )
     if ( !aItem )
         return false;
 
-    const BOARD_ITEM *parent = aItem->BoardItem();
+    const PCB_SHAPE *parent = dynamic_cast<PCB_SHAPE*>( aItem->BoardItem() );
 
     return parent && ( parent->IsOnLayer( Edge_Cuts ) || parent->IsOnLayer( Margin ) );
 }
