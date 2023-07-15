@@ -239,14 +239,18 @@ bool PNS_PCBNEW_RULE_RESOLVER::IsKeepout( const PNS::ITEM* aA, const PNS::ITEM* 
                 return false;
             };
 
-    if( const ZONE* zoneA = dynamic_cast<ZONE*>( aA->Parent() ) )
+    if( aA->Parent() && aA->Parent()->Type() == PCB_ZONE_T )
     {
+        const ZONE* zoneA = static_cast<ZONE*>( aA->Parent() );
+
         if( zoneA->GetIsRuleArea() && aB->Parent() )
             return checkKeepout( zoneA, aB->Parent() );
     }
 
-    if( const ZONE* zoneB = dynamic_cast<ZONE*>( aB->Parent() ) )
+    if( aB->Parent() && aB->Parent()->Type() == PCB_ZONE_T )
     {
+        const ZONE* zoneB = static_cast<ZONE*>( aB->Parent() );
+
         if( zoneB->GetIsRuleArea() && aA->Parent() )
             return checkKeepout( zoneB, aA->Parent() );
     }
@@ -915,13 +919,11 @@ public:
         SetView( aView );
     }
 
-
     ~PNS_PCBNEW_DEBUG_DECORATOR()
     {
         PNS_PCBNEW_DEBUG_DECORATOR::Clear();
         delete m_items;
     }
-
 
     void SetView( KIGFX::VIEW* aView )
     {
@@ -941,7 +943,6 @@ public:
         m_view->Add( m_items );
     }
 
-
     void AddPoint( const VECTOR2I& aP, const KIGFX::COLOR4D& aColor, int aSize,
                    const wxString&          aName = wxT( "" ),
                    const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override
@@ -960,7 +961,6 @@ public:
         AddShape( &sh, aColor, sh.Width(), aName, aSrcLoc );
     }
 
-
     void AddItem( const PNS::ITEM* aItem, const KIGFX::COLOR4D& aColor, int aOverrideWidth = 0,
                   const wxString&          aName = wxT( "" ),
                   const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override
@@ -977,7 +977,6 @@ public:
         m_items->Add( pitem );
         m_view->Update( m_items );
     }
-
 
     void AddShape( const BOX2I& aBox, const KIGFX::COLOR4D& aColor, int aOverrideWidth = 0,
                    const wxString&          aName = wxT( "" ),
@@ -998,7 +997,6 @@ public:
         AddShape( &l, aColor, aOverrideWidth, aName, aSrcLoc );
     }
 
-
     void AddShape( const SHAPE* aShape, const KIGFX::COLOR4D& aColor, int aOverrideWidth = 0,
                    const wxString&          aName = wxT( "" ),
                    const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override
@@ -1015,7 +1013,6 @@ public:
         m_items->Add( pitem );
         m_view->Update( m_items );
     }
-
 
     void Clear() override
     {
@@ -1864,7 +1861,6 @@ void PNS_KICAD_IFACE::UpdateItem( PNS::ITEM* aItem )
 
 void PNS_KICAD_IFACE_BASE::AddItem( PNS::ITEM* aItem )
 {
-
 }
 
 
