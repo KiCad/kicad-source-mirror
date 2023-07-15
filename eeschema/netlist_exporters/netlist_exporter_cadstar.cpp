@@ -57,7 +57,7 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName,
     wxString title = wxT( "Eeschema " ) + GetBuildVersion();
 
     ret |= fprintf( f, "%sHEA\n", TO_UTF8( StartLine ) );
-    ret |= fprintf( f, "%sTIM %s\n", TO_UTF8( StartLine ), TO_UTF8( DateAndTime() ) );
+    ret |= fprintf( f, "%sTIM %s\n", TO_UTF8( StartLine ), TO_UTF8( GetISO8601CurrentDateTime() ) );
     ret |= fprintf( f, "%sAPP ", TO_UTF8( StartLine ) );
     ret |= fprintf( f, "\"%s\"\n", TO_UTF8( title ) );
     ret |= fprintf( f, ".TYP FULL\n\n" );

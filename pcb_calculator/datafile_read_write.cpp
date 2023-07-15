@@ -135,7 +135,7 @@ int PCB_CALCULATOR_DATAFILE::WriteHeader( OUTPUTFORMATTER* aFormatter ) const
     aFormatter->Print( nestlevel++, "(datafile\n");
     aFormatter->Print( nestlevel++, "(version 1)\n" );
     aFormatter->Print( nestlevel++, "(date %s)\n",
-                       aFormatter->Quotew( DateAndTime() ).c_str() );
+                       aFormatter->Quotew( GetISO8601CurrentDateTime() ).c_str() );
     aFormatter->Print( nestlevel++, "(tool %s)\n",
                        aFormatter->Quotew( Pgm().App().GetAppName() +
                                             wxChar(' ') + GetBuildVersion() ).c_str() );

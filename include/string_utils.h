@@ -153,7 +153,7 @@ char* StrPurge( char* text );
 /**
  * @return a string giving the current date and time.
  */
-wxString DateAndTime();
+wxString GetISO8601CurrentDateTime();
 
 /**
  * Compare two strings with alphanumerical content.

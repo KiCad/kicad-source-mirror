@@ -211,7 +211,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
     else
     {
         // Write file header
-        snprintf( line, sizeof(line), "### Footprint positions - created on %s ###\n", TO_UTF8( DateAndTime() ) );
+        snprintf( line, sizeof(line), "### Footprint positions - created on %s ###\n", TO_UTF8( GetISO8601CurrentDateTime() ) );
 
         buffer += line;
 
@@ -293,7 +293,7 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
 
     // Generate header file comments.)
     char line[1024];
-    snprintf( line, sizeof(line), "## Footprint report - date %s\n", TO_UTF8( DateAndTime() ) );
+    snprintf( line, sizeof(line), "## Footprint report - date %s\n", TO_UTF8( GetISO8601CurrentDateTime() ) );
     buffer += line;
 
     wxString Title = GetBuildVersion();

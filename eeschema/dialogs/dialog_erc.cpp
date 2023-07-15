@@ -998,7 +998,7 @@ bool DIALOG_ERC::writeReport( const wxString& aFullFileName )
     if( !file.IsOpened() )
         return false;
 
-    wxString msg = wxString::Format( _( "ERC report (%s, Encoding UTF8)\n" ), DateAndTime() );
+    wxString msg = wxString::Format( _( "ERC report (%s, Encoding UTF8)\n" ), GetISO8601CurrentDateTime() );
 
     std::map<KIID, EDA_ITEM*> itemMap;
 

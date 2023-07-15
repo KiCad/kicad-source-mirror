@@ -497,7 +497,7 @@ void EXCELLON_WRITER::writeEXCELLONHeader( DRILL_LAYER_PAIR aLayerPair, TYPE_FIL
         wxString msg;
         msg << wxT( "KiCad " ) << GetBuildVersion();
 
-        fprintf( m_file, "; DRILL file {%s} date %s\n", TO_UTF8( msg ), TO_UTF8( DateAndTime() ) );
+        fprintf( m_file, "; DRILL file {%s} date %s\n", TO_UTF8( msg ), TO_UTF8( GetISO8601CurrentDateTime() ) );
         msg = wxT( "; FORMAT={" );
 
         // Print precision:

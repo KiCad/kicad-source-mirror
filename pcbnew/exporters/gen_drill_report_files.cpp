@@ -369,7 +369,7 @@ bool GENDRILL_WRITER_BASE::GenDrillReportFile( const wxString& aFullFileName )
     std::vector<DRILL_LAYER_PAIR> hole_sets = getUniqueLayerPairs();
 
     out.Print( 0, "Drill report for %s\n", TO_UTF8( brdFilename.GetFullName() ) );
-    out.Print( 0, "Created on %s\n\n", TO_UTF8( DateAndTime() ) );
+    out.Print( 0, "Created on %s\n\n", TO_UTF8( GetISO8601CurrentDateTime() ) );
 
     // Output the cu layer stackup, so layer name references make sense.
     out.Print( 0, "Copper Layer Stackup:\n" );

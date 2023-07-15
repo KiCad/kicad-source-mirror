@@ -68,7 +68,7 @@ bool NETLIST_EXPORTER_ALLEGRO::WriteNetlist( const wxString& aOutFileName,
     }
 
     ret |= fprintf( m_f, "(Source: %s)\n", TO_UTF8( m_schematic->GetFileName() ) );
-    ret |= fprintf( m_f, "(Date: %s)\n", TO_UTF8( DateAndTime() ) );
+    ret |= fprintf( m_f, "(Date: %s)\n", TO_UTF8( GetISO8601CurrentDateTime() ) );
 
     m_packageProperties.clear();
     m_componentGroups.clear();

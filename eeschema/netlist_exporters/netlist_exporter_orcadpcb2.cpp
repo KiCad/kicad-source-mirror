@@ -57,7 +57,7 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
     std::vector< SCH_REFERENCE > cmpList;
 
     ret |= fprintf( f, "( { %s created  %s }\n",
-                        NETLIST_HEAD_STRING, TO_UTF8( DateAndTime() ) );
+                        NETLIST_HEAD_STRING, TO_UTF8( GetISO8601CurrentDateTime() ) );
 
     // Create netlist footprints section
     m_referencesAlreadyFound.Clear();

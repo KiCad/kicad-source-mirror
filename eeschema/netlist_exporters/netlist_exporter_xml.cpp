@@ -419,7 +419,7 @@ XNODE* NETLIST_EXPORTER_XML::makeDesignHeader()
     // the root sheet is a special sheet, call it source
     xdesign->AddChild( node( wxT( "source" ), m_schematic->GetFileName() ) );
 
-    xdesign->AddChild( node( wxT( "date" ), DateAndTime() ) );
+    xdesign->AddChild( node( wxT( "date" ), GetISO8601CurrentDateTime() ) );
 
     // which Eeschema tool
     xdesign->AddChild( node( wxT( "tool" ), wxT( "Eeschema " ) + GetBuildVersion() ) );

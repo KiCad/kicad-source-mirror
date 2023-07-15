@@ -32,6 +32,7 @@
 #include <macros.h>
 #include <richio.h>                        // StrPrintf
 #include <string_utils.h>
+#include <fmt/chrono.h>
 
 
 /**
@@ -660,12 +661,10 @@ char* GetLine( FILE* File, char* Line, int* LineNum, int SizeLine )
 }
 
 
-wxString DateAndTime()
+wxString GetISO8601CurrentDateTime()
 {
-    wxDateTime datetime = wxDateTime::Now();
-
-    datetime.SetCountry( wxDateTime::Country_Default );
-    return datetime.Format( wxDefaultDateTimeFormat, wxDateTime::Local );
+    std::string str = fmt::format( "{:%FT%T%z}", fmt::localtime( std::time( nullptr ) ) );
+    return FROM_UTF8( str.c_str() );
 }
 
 

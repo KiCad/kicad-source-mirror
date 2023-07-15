@@ -40,7 +40,7 @@ bool RecreateCmpFile( BOARD * aBrd, const wxString& aFullCmpFileName )
     if( cmpFile == nullptr )
         return false;
 
-    fprintf( cmpFile, "Cmp-Mod V01 Created by PcbNew   date = %s\n", TO_UTF8( DateAndTime() ) );
+    fprintf( cmpFile, "Cmp-Mod V01 Created by PcbNew   date = %s\n", TO_UTF8( GetISO8601CurrentDateTime() ) );
 
     for( FOOTPRINT* fp : aBrd->Footprints() )
     {
