@@ -94,7 +94,6 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     LIB_ITEM*             item   = nullptr;
     bool                  isText = aEvent.IsAction( &EE_ACTIONS::placeSymbolText );
     COMMON_SETTINGS*      common_settings = Pgm().GetCommonSettings();
-    wxString              description;
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
@@ -212,7 +211,6 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 {
                     item = pinTool->CreatePin( VECTOR2I( cursorPos.x, -cursorPos.y ), symbol );
                     g_lastPinWeakPtr = item;
-                    description = _( "Add Pin" );
                     break;
                 }
                 case LIB_TEXT_T:
@@ -237,7 +235,6 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     else
                         item = text;
 
-                    description = _( "Add Text" );
                     break;
                 }
                 default:
@@ -283,19 +280,22 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 {
                 case LIB_PIN_T:
                     pinTool->PlacePin( (LIB_PIN*) item );
+                    item->ClearEditFlags();
+                    commit.Push( _( "Add Pin" ) );
                     break;
+
                 case LIB_TEXT_T:
                     symbol->AddDrawItem( (LIB_TEXT*) item );
+                    item->ClearEditFlags();
+                    commit.Push( _( "Add Text" ) );
                     break;
+
                 default:
                     wxFAIL_MSG( "TwoClickPlace(): unknown type" );
                 }
 
-                item->ClearEditFlags();
                 item = nullptr;
                 m_view->ClearPreview();
-
-                commit.Push( description );
                 m_frame->RebuildView();
             }
         }
