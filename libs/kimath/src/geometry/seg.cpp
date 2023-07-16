@@ -251,7 +251,7 @@ bool SEG::Collide( const SEG& aSeg, int aClearance, int* aActual ) const
     if( dist_sq == 0 || dist_sq < (ecoord) aClearance * aClearance )
     {
         if( aActual )
-            *aActual = isqrt( dist_sq );
+            *aActual = int( isqrt( dist_sq ) );
 
         return true;
     }
@@ -328,13 +328,13 @@ VECTOR2I SEG::LineProject( const VECTOR2I& aP ) const
 
 int SEG::Distance( const SEG& aSeg ) const
 {
-    return isqrt( SquaredDistance( aSeg ) );
+    return int( isqrt( SquaredDistance( aSeg ) ) );
 }
 
 
 int SEG::Distance( const VECTOR2I& aP ) const
 {
-    return isqrt( SquaredDistance( aP ) );
+    return int( isqrt( SquaredDistance( aP ) ) );
 }
 
 

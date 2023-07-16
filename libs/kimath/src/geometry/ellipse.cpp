@@ -43,7 +43,7 @@ ELLIPSE<NumericType>::ELLIPSE( const VECTOR2<NumericType>& aCenter,
         EndAngle( aEndAngle )
 {
     MajorRadius = aMajor.EuclideanNorm();
-    MinorRadius = MajorRadius * aRatio;
+    MinorRadius = NumericType( MajorRadius * aRatio );
     Rotation = EDA_ANGLE( std::atan2( aMajor.y, aMajor.x ), RADIANS_T );
 }
 

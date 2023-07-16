@@ -311,8 +311,8 @@ const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aEnd,
     if( d_squared > 0.0 )
         d = sqrt( d_squared );
 
-    VECTOR2D vec2 = (end - start).Resize( d );
-    VECTOR2D vc = (end - start).Resize( chord / 2 );
+    VECTOR2D vec2 = VECTOR2D(end - start).Resize( d );
+    VECTOR2D vc = VECTOR2D(end - start).Resize( chord / 2 );
 
     RotatePoint( vec2, -ANGLE_90 );
 
