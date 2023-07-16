@@ -167,6 +167,11 @@ public:
     const BOX2I GetBoundingBox() const override;
     const BOX2I GetBoundingBox( bool aIncludeText, bool aIncludeInvisibleText ) const;
 
+    VECTOR2I GetCenter() const override
+    {
+        return GetBoundingBox( false, false ).GetCenter();
+    }
+
     PADS& Pads()             { return m_pads; }
     const PADS& Pads() const { return m_pads; }
 
