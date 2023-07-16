@@ -109,6 +109,8 @@ wxString AddFileExtListToFilter( const std::vector<std::string>& aExts );
 wxString formatWildcardExt( const wxString& aWildcard );
 
 extern const std::string BackupFileSuffix;
+extern const std::string LockFilePrefix;
+extern const std::string LockFileExtension;
 
 extern const std::string SchematicSymbolFileExtension;
 extern const std::string LegacySymbolLibFileExtension;

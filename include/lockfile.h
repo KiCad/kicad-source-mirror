@@ -35,6 +35,7 @@
 #include <wx/log.h>
 #include <wx/filename.h>
 #include <nlohmann/json.hpp>
+#include <wildcards_and_files_ext.h>
 
 #define LCK "KICAD_LOCKING"
 
@@ -50,8 +51,8 @@ public:
 
         wxLogTrace( LCK, "Trying to lock %s", filename );
         wxFileName fn( filename );
-        fn.SetName( "~" + fn.GetName() );
-        fn.SetExt( fn.GetExt() + ".lck" );
+        fn.SetName( LockFilePrefix + fn.GetName() );
+        fn.SetExt( fn.GetExt() + '.' + LockFileExtension );
 
         if( !fn.IsDirWritable() )
         {
@@ -193,7 +194,7 @@ public:
             catch( std::exception& e )
             {
                 wxLogError( "Got exception trying to override lock on %s: %s",
-                        m_lockFilename, e.what() );
+                            m_lockFilename, e.what() );
 
                 return false;
             }
@@ -253,8 +254,7 @@ private:
 
         if( !fileName.FileExists() )
         {
-            wxLogTrace
-            ( LCK, "File does not exist: %s", m_lockFilename );
+            wxLogTrace( LCK, "File does not exist: %s", m_lockFilename );
             return false;
         }
 
@@ -266,24 +266,23 @@ private:
                 wxString lock_info;
                 file.ReadAll( &lock_info );
                 nlohmann::json j = nlohmann::json::parse( std::string( lock_info.mb_str() ) );
+
                 if( m_username == wxString( j["username"].get<std::string>() )
                         && m_hostname == wxString( j["hostname"].get<std::string>() ) )
                 {
-                    wxLogTrace
-                        ( LCK, "User and host match for lock %s", m_lockFilename );
+                    wxLogTrace( LCK, "User and host match for lock %s", m_lockFilename );
                     return true;
                 }
             }
         }
         catch( std::exception &e )
         {
-            wxLogError
-                ( "Got exception trying to check user/host for lock on %s: %s", m_lockFilename,
-                    e.what() );
+            wxLogError( "Got exception trying to check user/host for lock on %s: %s",
+                        m_lockFilename,
+                        e.what() );
         }
 
-        wxLogTrace
-            ( LCK, "User and host DID NOT match for lock %s", m_lockFilename );
+        wxLogTrace( LCK, "User and host DID NOT match for lock %s", m_lockFilename );
         return false;
     }
 };

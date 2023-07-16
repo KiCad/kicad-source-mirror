@@ -536,6 +536,10 @@ public:
             gerbview->SaveFileAs( m_projectDirPath, m_projectName, m_newProjectDirPath,
                                   m_newProjectName, aSrcFilePath, m_errors );
         }
+        else if(destFile.GetName().StartsWith( LockFilePrefix ) && ext == LockFileExtension )
+        {
+            // Ignore lock files
+        }
         else
         {
             // Everything we don't recognize just gets a straight copy.
