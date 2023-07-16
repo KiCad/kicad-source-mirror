@@ -2337,15 +2337,14 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
 
     if( aSymbol->GetDNP() )
     {
-        COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
-        BOX2I           bbox = aSymbol->GetBodyAndPinsBoundingBox();
-        VECTOR2I        pt1 = bbox.GetOrigin();
-        VECTOR2I        pt2 = bbox.GetEnd();
+        BOX2I    bbox = aSymbol->GetBodyAndPinsBoundingBox();
+        VECTOR2I pt1 = bbox.GetOrigin();
+        VECTOR2I pt2 = bbox.GetEnd();
 
         m_gal->SetIsStroke( true );
         m_gal->SetIsFill( true );
-        m_gal->SetStrokeColor( colors->GetColor( LAYER_ERC_ERR ) );
-        m_gal->SetFillColor( colors->GetColor( LAYER_ERC_ERR ) );
+        m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_ERC_ERR ) );
+        m_gal->SetFillColor( m_schSettings.GetLayerColor( LAYER_ERC_ERR ) );
 
         m_gal->DrawSegment( pt1, pt2, 3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ) );
         std::swap( pt1.x, pt2.x );
