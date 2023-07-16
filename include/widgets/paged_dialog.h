@@ -68,7 +68,7 @@ protected:
     WX_TREEBOOK* m_treebook;
     wxButton*    m_auxiliaryButton;
     wxButton*    m_resetButton;
-    wxButton*    m_openPreferencesButton;
+    wxButton*    m_openPrefsDirButton;
     wxButton*    m_cancelButton;
     WX_INFOBAR*  m_infoBar;
 

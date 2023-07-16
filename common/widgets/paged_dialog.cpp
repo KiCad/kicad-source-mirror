@@ -50,6 +50,7 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSho
                      wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
         m_auxiliaryButton( nullptr ),
         m_resetButton( nullptr ),
+        m_openPrefsDirButton( nullptr ),
         m_cancelButton( nullptr ),
         m_title( aTitle )
 {
@@ -86,8 +87,12 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSho
 
     if( aShowOpenFolder )
     {
-        m_openPreferencesButton = new wxButton( this, wxID_ANY, _( "Open preferences folder" ) );
-        m_buttonsSizer->Add( m_openPreferencesButton, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxLEFT, 5 );
+#ifdef __WXMAC__
+        m_openPrefsDirButton = new wxButton( this, wxID_ANY, _( "Reveal Preferences in Finder" ) );
+#else
+        m_openPrefsDirButton = new wxButton( this, wxID_ANY, _( "Open Preferences Directory" ) );
+#endif
+        m_buttonsSizer->Add( m_openPrefsDirButton, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxLEFT, 5 );
     }
 
 
@@ -127,9 +132,9 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSho
         m_resetButton->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &PAGED_DIALOG::onResetButton, this );
     }
 
-    if( m_openPreferencesButton )
+    if( m_openPrefsDirButton )
     {
-        m_openPreferencesButton->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &PAGED_DIALOG::onOpenPreferencesButton, this );
+        m_openPrefsDirButton->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &PAGED_DIALOG::onOpenPreferencesButton, this );
     }
 
     m_treebook->Bind( wxEVT_CHAR_HOOK, &PAGED_DIALOG::onCharHook, this );
@@ -199,9 +204,9 @@ PAGED_DIALOG::~PAGED_DIALOG()
         m_resetButton->Unbind( wxEVT_COMMAND_BUTTON_CLICKED, &PAGED_DIALOG::onResetButton, this );
     }
 
-    if( m_openPreferencesButton )
+    if( m_openPrefsDirButton )
     {
-        m_openPreferencesButton->Unbind( wxEVT_COMMAND_BUTTON_CLICKED, &PAGED_DIALOG::onOpenPreferencesButton, this );
+        m_openPrefsDirButton->Unbind( wxEVT_COMMAND_BUTTON_CLICKED, &PAGED_DIALOG::onOpenPreferencesButton, this );
     }
 
     m_treebook->Unbind( wxEVT_CHAR_HOOK, &PAGED_DIALOG::onCharHook, this );
