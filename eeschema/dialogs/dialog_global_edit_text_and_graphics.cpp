@@ -498,23 +498,25 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
     }
 
     case SCH_LINE_T:
-    {
-        SCH_LINE* line = static_cast<SCH_LINE*>( aItem );
-
-        if( m_schTextAndGraphics->GetValue() && line->GetLayer() == LAYER_NOTES )
+        if( m_schTextAndGraphics->GetValue() && aItem->GetLayer() == LAYER_NOTES )
             processItem( aSheetPath, aItem );
-        else if( m_wires->GetValue() && line->GetLayer() == LAYER_WIRE )
+        else if( m_wires->GetValue() && aItem->GetLayer() == LAYER_WIRE )
             processItem( aSheetPath, aItem );
-        else if( m_buses->GetValue() && line->GetLayer() == LAYER_BUS )
+        else if( m_buses->GetValue() && aItem->GetLayer() == LAYER_BUS )
             processItem( aSheetPath, aItem );
 
         break;
-    }
 
     case SCH_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIER_LABEL_T:
     case SCH_DIRECTIVE_LABEL_T:
+        if( m_wires->GetValue() && aItem->IsType( { SCH_LABEL_LOCATE_WIRE_T } ) )
+            processItem( aSheetPath, aItem );
+
+        if( m_buses->GetValue() && aItem->IsType( { SCH_LABEL_LOCATE_BUS_T } ) )
+            processItem( aSheetPath, aItem );
+
         if( m_globalLabels->GetValue() && aItem->Type() == SCH_GLOBAL_LABEL_T )
             processItem( aSheetPath, aItem );
 
