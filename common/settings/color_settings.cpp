@@ -65,6 +65,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) 
     CLR( "schematic.component_body",    LAYER_DEVICE_BACKGROUND      );
     CLR( "schematic.component_outline", LAYER_DEVICE                 );
     CLR( "schematic.cursor",            LAYER_SCHEMATIC_CURSOR       );
+    CLR( "schematic.dnp_marker",        LAYER_DNP_MARKER             );
     CLR( "schematic.erc_error",         LAYER_ERC_ERR                );
     CLR( "schematic.erc_warning",       LAYER_ERC_WARN               );
     CLR( "schematic.erc_exclusion",     LAYER_ERC_EXCLUSION          );

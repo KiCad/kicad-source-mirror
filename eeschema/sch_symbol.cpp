@@ -482,7 +482,7 @@ void SCH_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffse
     {
         BOX2I bbox = GetBodyAndPinsBoundingBox();
         wxDC* DC = aSettings->GetPrintDC();
-        COLOR4D dnp_color = aSettings->GetLayerColor( LAYER_ERC_ERR );
+        COLOR4D dnp_color = aSettings->GetLayerColor( LAYER_DNP_MARKER );
 
         GRFilledSegment( DC, bbox.GetOrigin(), bbox.GetEnd(),
                              3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ),
@@ -2302,7 +2302,7 @@ void SCH_SYMBOL::PlotDNP( PLOTTER* aPlotter ) const
 
     COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
 
-    aPlotter->SetColor( colors->GetColor( LAYER_ERC_ERR ) );
+    aPlotter->SetColor( colors->GetColor( LAYER_DNP_MARKER ) );
 
     aPlotter->ThickSegment( bbox.GetOrigin(), bbox.GetEnd(),
                             3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ),

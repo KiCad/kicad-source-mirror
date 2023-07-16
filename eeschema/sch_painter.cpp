@@ -2507,8 +2507,8 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
         m_gal->AdvanceDepth();
         m_gal->SetIsStroke( true );
         m_gal->SetIsFill( true );
-        m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_ERC_ERR ) );
-        m_gal->SetFillColor( m_schSettings.GetLayerColor( LAYER_ERC_ERR ) );
+        m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_DNP_MARKER ) );
+        m_gal->SetFillColor( m_schSettings.GetLayerColor( LAYER_DNP_MARKER ) );
 
         m_gal->DrawSegment( pt1, pt2, 3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ) );
         std::swap( pt1.x, pt2.x );
