@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:33-0700\n"
-"PO-Revision-Date: 2023-06-26 17:51+0000\n"
+"PO-Revision-Date: 2023-07-18 08:04+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v7/cs/>\n"
 "Language: cs\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.18.1\n"
+"X-Generator: Weblate 5.0-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -516,7 +516,7 @@ msgstr "Vykreslení plných barev"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:195
 msgid "Use only the diffuse color property from model 3D model file"
-msgstr "Použít pouze vlastnosti difúzní barvy z 3D modelu"
+msgstr "Použít pouze vlastnost difúzní barvy ze souboru 3D modelu"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:201
 msgid "Render CAD Colors"
@@ -13142,9 +13142,9 @@ msgid "Abort Project Save"
 msgstr "Přerušit uložení projektu"
 
 #: eeschema/files-io.cpp:1220
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' is already open by '%s' at '%s'."
-msgstr "Schéma '%s' je již otevřeno."
+msgstr "Schéma '%s' je již otevřeno '%s' v '%s'."
 
 #: eeschema/files-io.cpp:1233
 msgid "Importing Schematic"
@@ -14307,11 +14307,12 @@ msgstr "Chyba při čtení databázové tabulky %s: %s"
 #, c-format
 msgid "Could not load database library: settings file %s missing or invalid"
 msgstr ""
+"Nelze načíst databázovou knihovnu: soubor nastavení %s chybí nebo je neplatný"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:281
 #, c-format
 msgid "Could not load database library: could not connect to database %s (%s)"
-msgstr ""
+msgstr "Nelze načíst databázovou knihovnu: nelze se připojit k databázi %s (%s)"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:438
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:3110
@@ -39448,7 +39449,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1513
 msgid "Attempt Finish"
-msgstr ""
+msgstr "Pokus o dokončení"
 
 #: pcbnew/tools/pcb_actions.cpp:1514
 msgid "Attempts to complete current route to nearest ratsnest end."
