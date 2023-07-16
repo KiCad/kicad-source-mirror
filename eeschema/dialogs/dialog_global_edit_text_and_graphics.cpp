@@ -418,7 +418,9 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( SCH_COMMIT* aCommit,
         }
     }
 
-    if( aItem->Type() == SCH_SYMBOL_T )
+    switch( aItem->Type() )
+    {
+    case SCH_SYMBOL_T:
     {
         SCH_SYMBOL* symbol = (SCH_SYMBOL*) aItem;
 
@@ -442,8 +444,11 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( SCH_COMMIT* aCommit,
                 }
             }
         }
+
+        break;
     }
-    else if( aItem->Type() == SCH_SHEET_T )
+
+    case SCH_SHEET_T:
     {
         SCH_SHEET* sheet = static_cast<SCH_SHEET*>( aItem );
 
@@ -484,19 +489,28 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( SCH_COMMIT* aCommit,
             for( SCH_SHEET_PIN* pin : sheet->GetPins() )
                 processItem( aCommit, aSheetPath, pin );
         }
+
+        break;
     }
-    else if( m_wires->GetValue() && aItem->IsType( { SCH_ITEM_LOCATE_WIRE_T,
-                                                     SCH_LABEL_LOCATE_WIRE_T } ) )
+
+    case SCH_LINE_T:
     {
-        processItem( aCommit, aSheetPath, aItem );
+        SCH_LINE* line = static_cast<SCH_LINE*>( aItem );
+
+        if( m_schTextAndGraphics->GetValue() && line->GetLayer() == LAYER_NOTES )
+            processItem( aCommit, aSheetPath, aItem );
+        else if( m_wires->GetValue() && line->GetLayer() == LAYER_WIRE )
+            processItem( aCommit, aSheetPath, aItem );
+        else if( m_buses->GetValue() && line->GetLayer() == LAYER_BUS )
+            processItem( aCommit, aSheetPath, aItem );
+
+        break;
     }
-    else if( m_buses->GetValue() && aItem->IsType( { SCH_ITEM_LOCATE_BUS_T,
-                                                     SCH_LABEL_LOCATE_BUS_T } ) )
-    {
-        processItem( aCommit, aSheetPath, aItem );
-    }
-    else if( aItem->IsType( { SCH_LABEL_LOCATE_ANY_T } ) )
-    {
+
+    case SCH_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIER_LABEL_T:
+    case SCH_DIRECTIVE_LABEL_T:
         if( m_globalLabels->GetValue() && aItem->Type() == SCH_GLOBAL_LABEL_T )
             processItem( aCommit, aSheetPath, aItem );
 
@@ -516,8 +530,10 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( SCH_COMMIT* aCommit,
                 }
             }
         }
-    }
-    else if( aItem->Type() == SCH_JUNCTION_T )
+
+        break;
+
+    case SCH_JUNCTION_T:
     {
         SCH_JUNCTION* junction = static_cast<SCH_JUNCTION*>( aItem );
 
@@ -534,12 +550,20 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( SCH_COMMIT* aCommit,
                 break;
             }
         }
+
+        break;
     }
-    else if( m_schTextAndGraphics->GetValue() && aItem->IsType( { SCH_TEXT_T, SCH_TEXTBOX_T,
-                                                                  SCH_ITEM_LOCATE_GRAPHIC_LINE_T,
-                                                                  SCH_SHAPE_T } ) )
-    {
-        processItem( aCommit, aSheetPath, aItem );
+
+    case SCH_TEXT_T:
+    case SCH_TEXTBOX_T:
+    case SCH_SHAPE_T:
+        if( m_schTextAndGraphics->GetValue() )
+            processItem( aCommit, aSheetPath, aItem );
+
+        break;
+
+    default:
+        break;
     }
 }
 
@@ -574,6 +598,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
 
     // Reset the view to where we left the user
     m_parent->SetCurrentSheet( currentSheet );
+    m_parent->Refresh();
 
     return true;
 }
