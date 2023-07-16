@@ -663,7 +663,14 @@ char* GetLine( FILE* File, char* Line, int* LineNum, int SizeLine )
 
 wxString GetISO8601CurrentDateTime()
 {
+    // on msys2 the %z format (offset from UTC in the ISO 8601 format, e.g. -0430) does not work,
+    // and is in fact %Z (locale-dependent time zone name or abbreviation) which breaks our date.
+    // so do not use it (until %z works)
+#ifdef __MINGW32__
+    return fmt::format( "{:%FT%T}", fmt::localtime( std::time( nullptr ) ) );
+#else
     return fmt::format( "{:%FT%T%z}", fmt::localtime( std::time( nullptr ) ) );
+#endif
 }
 
 
