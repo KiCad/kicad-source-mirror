@@ -52,6 +52,7 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSho
         m_resetButton( nullptr ),
         m_openPrefsDirButton( nullptr ),
         m_cancelButton( nullptr ),
+        m_openPreferencesButton( nullptr ),
         m_title( aTitle )
 {
     wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
@@ -94,7 +95,6 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSho
 #endif
         m_buttonsSizer->Add( m_openPrefsDirButton, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxLEFT, 5 );
     }
-
 
     if( !aAuxiliaryAction.IsEmpty() )
     {
