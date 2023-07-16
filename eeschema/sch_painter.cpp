@@ -2491,7 +2491,15 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
 
     if( aSymbol->GetDNP() )
     {
-        BOX2I    bbox = aSymbol->GetBodyAndPinsBoundingBox();
+        BOX2I    bbox = aSymbol->GetBodyBoundingBox();
+        BOX2I    pins = aSymbol->GetBodyAndPinsBoundingBox();
+        VECTOR2D margins( std::max( bbox.GetX() - pins.GetX(), pins.GetEnd().x - bbox.GetEnd().x ),
+                          std::max( bbox.GetY() - pins.GetY(), pins.GetEnd().y - bbox.GetEnd().y ) );
+
+        margins.x = std::max( margins.x * 0.6, margins.y * 0.3 );
+        margins.y = std::max( margins.y * 0.6, margins.x * 0.3 );
+        bbox.Inflate( KiROUND( margins.x ), KiROUND( margins.y ) );
+
         VECTOR2I pt1 = bbox.GetOrigin();
         VECTOR2I pt2 = bbox.GetEnd();
 
