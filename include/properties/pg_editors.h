@@ -99,13 +99,15 @@ public:
     wxPGWindowList CreateControls( wxPropertyGrid* aGrid, wxPGProperty* aProperty,
                                    const wxPoint& aPos, const wxSize& aSize ) const override;
 
-    void UpdateControl( wxPGProperty* aProperty, wxWindow* aCtrl ) const override {}
+    void UpdateControl( wxPGProperty* aProperty, wxWindow* aCtrl ) const override;
 
     bool OnEvent( wxPropertyGrid* aGrid, wxPGProperty* aProperty, wxWindow* aWindow,
-                  wxEvent& aEvent ) const override
-    {
-        return false;
-    }
+                  wxEvent& aEvent ) const override;
+
+private:
+    KIGFX::COLOR4D colorFromVariant( const wxVariant& aVariant ) const;
+
+    KIGFX::COLOR4D colorFromProperty( wxPGProperty* aProperty ) const;
 };
 
 #endif //KICAD_PG_EDITORS_H

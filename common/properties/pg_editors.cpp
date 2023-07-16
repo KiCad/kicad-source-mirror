@@ -22,6 +22,7 @@
 #include <properties/eda_angle_variant.h>
 #include <properties/pg_editors.h>
 #include <properties/pg_properties.h>
+#include <widgets/color_swatch.h>
 #include <widgets/unit_binder.h>
 
 #include <wx/log.h>
@@ -225,38 +226,69 @@ wxPGWindowList PG_CHECKBOX_EDITOR::CreateControls( wxPropertyGrid* aGrid, wxPGPr
 }
 
 
+bool PG_COLOR_EDITOR::OnEvent( wxPropertyGrid* aGrid, wxPGProperty* aProperty, wxWindow* aWindow,
+                               wxEvent& aEvent ) const
+{
+    return false;
+}
+
+
 wxPGWindowList PG_COLOR_EDITOR::CreateControls( wxPropertyGrid* aGrid, wxPGProperty* aProperty,
                                                 const wxPoint& aPos, const wxSize& aSize ) const
 {
-    wxVariant val = aProperty->GetValue();
+    auto colorProp = dynamic_cast<PGPROPERTY_COLOR4D*>( aProperty );
 
+    if( !colorProp )
+        return nullptr;
+
+    KIGFX::COLOR4D color    = colorFromProperty( aProperty );
+    KIGFX::COLOR4D defColor = colorFromVariant( colorProp->GetDefaultValue() );
+
+    COLOR_SWATCH* editor = new COLOR_SWATCH( aGrid->GetPanel(), color, wxID_ANY,
+                                             colorProp->GetBackgroundColor(), defColor,
+                                             SWATCH_LARGE, true );
+    editor->SetPosition( aPos );
+    editor->SetSize( aSize );
+
+    editor->Bind( COLOR_SWATCH_CHANGED,
+                  [=]( wxCommandEvent& aEvt )
+                  {
+                      wxVariant val;
+                      auto data = new COLOR4D_VARIANT_DATA( editor->GetSwatchColor() );
+                      val.SetData( data );
+                      aGrid->ChangePropertyValue( colorProp, val );
+                  } );
+
+    if( aGrid->GetInternalFlags() & wxPG_FL_ACTIVATION_BY_CLICK )
+        aGrid->CallAfter( [=]() { editor->GetNewSwatchColor(); } );
+
+    return editor;
+}
+
+
+void PG_COLOR_EDITOR::UpdateControl( wxPGProperty* aProperty, wxWindow* aCtrl ) const
+{
+    if( auto swatch = dynamic_cast<COLOR_SWATCH*>( aCtrl ) )
+        swatch->SetSwatchColor( colorFromProperty( aProperty ), false );
+}
+
+
+KIGFX::COLOR4D PG_COLOR_EDITOR::colorFromVariant( const wxVariant& aVariant ) const
+{
     KIGFX::COLOR4D color = KIGFX::COLOR4D::UNSPECIFIED;
     COLOR4D_VARIANT_DATA* data = nullptr;
 
-    if( val.IsType( wxS( "COLOR4D" ) ) )
+    if( aVariant.IsType( wxS( "COLOR4D" ) ) )
     {
-        data = static_cast<COLOR4D_VARIANT_DATA*>( val.GetData() );
+        data = static_cast<COLOR4D_VARIANT_DATA*>( aVariant.GetData() );
         color = data->Color();
     }
 
-    DIALOG_COLOR_PICKER dialog( ::wxGetTopLevelParent( aGrid ), color, true,
-                                nullptr, KIGFX::COLOR4D::UNSPECIFIED );
+    return color;
+}
 
-    int res = dialog.ShowModal();
 
-    if( res == wxID_OK )
-    {
-        data = new COLOR4D_VARIANT_DATA();
-        data->SetColor( dialog.GetColor() );
-        val.SetData( data );
-        aGrid->ChangePropertyValue( aProperty, val );
-    }
-
-    // Deselect property so that this gets called again on next click
-    aGrid->CallAfter( [=]()
-                      {
-                          aGrid->RemoveFromSelection( aProperty );
-                      } );
-
-    return nullptr;
+KIGFX::COLOR4D PG_COLOR_EDITOR::colorFromProperty( wxPGProperty* aProperty ) const
+{
+    return colorFromVariant( aProperty->GetValue() );
 }

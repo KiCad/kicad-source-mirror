@@ -66,7 +66,7 @@ public:
      */
     COLOR_SWATCH( wxWindow* aParent, const KIGFX::COLOR4D& aColor, int aID,
                   const KIGFX::COLOR4D& aBackground, const KIGFX::COLOR4D& aDefault,
-                  SWATCH_SIZE aSwatchType );
+                  SWATCH_SIZE aSwatchType, bool aTriggerWithSingleClick = false );
 
     /**
      * constructor for wxFormBuilder
@@ -137,7 +137,7 @@ public:
                             const KIGFX::COLOR4D& aCheckerboardBackground );
 
 private:
-    void setupEvents();
+    void setupEvents( bool aTriggerWithSingleClick );
 
     /**
      * Pass unwanted events on to listeners of this object

@@ -123,7 +123,7 @@ void COLOR_SWATCH::RenderToDC( wxDC* aDC, const KIGFX::COLOR4D& aColor,
 
 COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, const COLOR4D& aColor, int aID,
                             const COLOR4D& aBackground, const COLOR4D& aDefault,
-                            SWATCH_SIZE aSwatchSize ) :
+                            SWATCH_SIZE aSwatchSize, bool aTriggerWithSingleClick ) :
         wxPanel( aParent, aID ),
         m_color( aColor ),
         m_background( aBackground ),
@@ -164,7 +164,7 @@ COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, const COLOR4D& aColor, int aID,
 
     sizer->Add( m_swatch, 0, 0 );
 
-    setupEvents();
+    setupEvents( aTriggerWithSingleClick );
 }
 
 
@@ -194,11 +194,11 @@ COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, wxWindowID aID, const wxPoint& aP
 
     sizer->Add( m_swatch, 0, 0 );
 
-    setupEvents();
+    setupEvents( false );
 }
 
 
-void COLOR_SWATCH::setupEvents()
+void COLOR_SWATCH::setupEvents( bool aTriggerWithSingleClick )
 {
     wxWindow* topLevelParent = GetParent();
 
@@ -224,6 +224,15 @@ void COLOR_SWATCH::setupEvents()
                         {
                             GetNewSwatchColor();
                         } );
+
+        if( aTriggerWithSingleClick )
+        {
+            m_swatch->Bind( wxEVT_LEFT_UP,
+                        [this] ( wxMouseEvent& aEvt )
+                        {
+                            GetNewSwatchColor();
+                        } );
+        }
     }
 
     m_swatch->Bind( wxEVT_MIDDLE_DOWN,
