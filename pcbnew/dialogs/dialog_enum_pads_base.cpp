@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -50,6 +50,13 @@ DIALOG_ENUM_PADS_BASE::DIALOG_ENUM_PADS_BASE( wxWindow* parent, wxWindowID id, c
 
 	m_padStartNum = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 999, 1 );
 	fgSizer->Add( m_padStartNum, 0, wxALL|wxEXPAND, 5 );
+
+	m_lblPadNumStep = new wxStaticText( this, wxID_ANY, _("Numbering step:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_lblPadNumStep->Wrap( -1 );
+	fgSizer->Add( m_lblPadNumStep, 0, wxALL, 5 );
+
+	m_padNumStep = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 999, 1 );
+	fgSizer->Add( m_padNumStep, 0, wxALL|wxEXPAND, 5 );
 
 
 	bMainSizer->Add( fgSizer, 1, wxEXPAND|wxALL, 5 );

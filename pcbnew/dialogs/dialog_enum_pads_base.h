@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -39,6 +39,8 @@ class DIALOG_ENUM_PADS_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_padPrefix;
 		wxStaticText* m_lblPadStartNum;
 		wxSpinCtrl* m_padStartNum;
+		wxStaticText* m_lblPadNumStep;
+		wxSpinCtrl* m_padNumStep;
 		wxStdDialogButtonSizer* m_stdButtons;
 		wxButton* m_stdButtonsOK;
 		wxButton* m_stdButtonsCancel;

@@ -274,6 +274,27 @@ int PAD_TOOL::pushPadSettings( const TOOL_EVENT& aEvent )
 }
 
 
+/**
+ * @brief Prompts the user for parameters for sequential pad numbering
+ *
+ * @param aFrame The parent window for the dialog
+ * @return The parameters, or nullopt if no parameters, e.g. user cancelled the dialog
+*/
+static std::optional<SEQUENTIAL_PAD_ENUMERATION_PARAMS>
+GetSequentialPadNumberingParams( wxWindow* aFrame )
+{
+    // Persistent settings for the pad enumeration dialog.
+    static SEQUENTIAL_PAD_ENUMERATION_PARAMS s_lastUsedParams;
+
+    DIALOG_ENUM_PADS settingsDlg( aFrame, s_lastUsedParams );
+
+    if( settingsDlg.ShowModal() != wxID_OK )
+        return std::nullopt;
+
+    return s_lastUsedParams;
+}
+
+
 int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
 {
     if( !m_isFootprintEditor )
@@ -290,14 +311,16 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     guide.SetIgnoreModulesVals( true );
     guide.SetIgnoreModulesRefs( true );
 
-    DIALOG_ENUM_PADS settingsDlg( frame() );
+    const std::optional<SEQUENTIAL_PAD_ENUMERATION_PARAMS> params =
+            GetSequentialPadNumberingParams( frame() );
 
-    if( settingsDlg.ShowModal() != wxID_OK )
+    // Cancelled or otherwise failed to get any useful parameters
+    if( !params )
         return 0;
 
-    int             seqPadNum = settingsDlg.GetStartNumber();
-    wxString        padPrefix = settingsDlg.GetPrefix();
-    std::deque<int> storedPadNumbers;
+    int seqPadNum = params->m_start_number;
+
+    std::deque<int>                              storedPadNumbers;
     std::map<wxString, std::pair<int, wxString>> oldNumbers;
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
@@ -333,8 +356,22 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     setCursor();
 
     STATUS_TEXT_POPUP statusPopup( frame() );
-    wxString msg = _( "Click on pad %s%d\nPress <esc> to cancel all; double-click to finish" );
-    statusPopup.SetText( wxString::Format( msg, padPrefix, seqPadNum ) );
+
+    // Callable lambda to construct the pad number string for the given value
+    const auto constructPadNumber = [&]( int aValue )
+    {
+        return wxString::Format( wxT( "%s%d" ), params->m_prefix.value_or( "" ), aValue );
+    };
+
+    // Callable lambda to set the popup text for the given pad value
+    const auto setPopupTextForValue = [&]( int aValue )
+    {
+        const wxString msg =
+                _( "Click on pad %s\nPress <esc> to cancel all; double-click to finish" );
+        statusPopup.SetText( wxString::Format( msg, constructPadNumber( aValue ) ) );
+    };
+
+    setPopupTextForValue( seqPadNum );
     statusPopup.Popup();
     statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
     canvas()->SetStatusPopup( statusPopup.GetPanel() );
@@ -409,9 +446,12 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
                         storedPadNumbers.pop_front();
                     }
                     else
-                        newval = seqPadNum++;
+                    {
+                        newval = seqPadNum;
+                        seqPadNum += params->m_step;
+                    }
 
-                    wxString newNumber = wxString::Format( wxT( "%s%d" ), padPrefix, newval );
+                    const wxString newNumber = constructPadNumber( newval );
                     oldNumbers[newNumber] = { newval, pad->GetNumber() };
                     pad->SetNumber( newNumber );
                     SetLastPadNumber( newNumber );
@@ -424,7 +464,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
                     else
                         newval = seqPadNum;
 
-                    statusPopup.SetText( wxString::Format( msg, padPrefix, newval ) );
+                    setPopupTextForValue( newval );
                 }
 
                 // ... or restore the old name if it was enumerated and clicked again
@@ -440,9 +480,8 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
                         SetLastPadNumber( it->second.second );
                         oldNumbers.erase( it );
 
-                        int newval = storedPadNumbers.front();
-
-                        statusPopup.SetText( wxString::Format( msg, padPrefix, newval ) );
+                        const int newval = storedPadNumbers.front();
+                        setPopupTextForValue( newval );
                     }
 
                     pad->ClearSelected();
