@@ -18,16 +18,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:35-0700\n"
-"PO-Revision-Date: 2023-06-27 08:53+0000\n"
+"PO-Revision-Date: 2023-07-18 08:06+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.18.1\n"
+"X-Generator: Weblate 5.0-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -556,9 +556,8 @@ msgid "Render Solid Colors"
 msgstr "Vykreslení plných barev"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:292
-#, fuzzy
 msgid "Use only the diffuse color property from model 3D model file"
-msgstr "Použít pouze vlastnosti difúzní barvy z 3D modelu "
+msgstr "Použít pouze vlastnost difúzní barvy ze souboru 3D modelu"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:299
 msgid "Render CAD Colors"
@@ -598,14 +597,12 @@ msgid "Toggle 3D models not in pos file"
 msgstr "Přepínat viditelnost 3D modelů, které nejsou v souboru pos"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:344
-#, fuzzy
 msgid "Toggle 3D models marked DNP"
-msgstr "Načítání 3D modelů"
+msgstr "Přepnout 3D modely označené DNP"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:345
-#, fuzzy
 msgid "Toggle 3D models for components marked 'Do Not Place'"
-msgstr "Vyloučit 3D modely pro komponenty s atributem 'virtual'"
+msgstr "Přepnout 3D modely pro součásti označené 'Neumisťovat'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:352
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:353
@@ -3582,7 +3579,7 @@ msgstr "Měřítko obrázku:"
 
 #: common/dialogs/panel_image_editor_base.cpp:47
 msgid "PPI:"
-msgstr ""
+msgstr "PPI:"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: pcbnew/dialogs/panel_edit_options_base.cpp:224
@@ -5650,9 +5647,8 @@ msgid "Illegal character found in logical library name"
 msgstr "Nedovolený znak nalezen v logickém názvu knihovny"
 
 #: common/lib_table_grid_tricks.cpp:32
-#, fuzzy
 msgid "Edit options..."
-msgstr "Upravit možnosti"
+msgstr "Upravit možnosti..."
 
 #: common/lib_table_grid_tricks.cpp:33
 #, fuzzy
@@ -5668,9 +5664,9 @@ msgid "Deactivate selected"
 msgstr "Deaktivujte vyznačené"
 
 #: common/lib_table_grid_tricks.cpp:67
-#, fuzzy, c-format
+#, c-format
 msgid "Library settings for %s..."
-msgstr "Upravit nastavení pro nové plošky"
+msgstr "Nastavení knihovny pro %s ..."
 
 #: common/lib_tree_model.cpp:146
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
@@ -5996,9 +5992,8 @@ msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
 msgstr "OUTPUTSTREAM_OUTPUTFORMATTER chyba zápisu"
 
 #: common/settings/bom_settings.cpp:132
-#, fuzzy
 msgid "Grouped By Value"
-msgstr "Skupina podle jména"
+msgstr "Skupina podle hodnoty"
 
 #: common/settings/bom_settings.cpp:132 common/settings/bom_settings.cpp:149
 #: eeschema/dialogs/dialog_rescue_each.cpp:129
@@ -6008,9 +6003,8 @@ msgid "Reference"
 msgstr "Reference"
 
 #: common/settings/bom_settings.cpp:149
-#, fuzzy
 msgid "Grouped By Value and Footprint"
-msgstr "Vybrat a přesunout pouzdro"
+msgstr "Seskupeno podle hodnoty a pouzdra"
 
 #: common/settings/bom_settings.cpp:213
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:49
@@ -6018,9 +6012,8 @@ msgid "CSV"
 msgstr "CSV"
 
 #: common/settings/bom_settings.cpp:218
-#, fuzzy
 msgid "TSV"
-msgstr "TV"
+msgstr "TSV"
 
 #: common/settings/bom_settings.cpp:224
 #, fuzzy
@@ -7281,9 +7274,8 @@ msgid "Eagle XML schematic files"
 msgstr "Eagle XML soubory schématu"
 
 #: common/wildcards_and_files_ext.cpp:310
-#, fuzzy
 msgid "Ltspice schematic files"
-msgstr "Soubory schématu Altium"
+msgstr "Soubory schématu Ltspice"
 
 #: common/wildcards_and_files_ext.cpp:316
 msgid "Eagle XML files"
@@ -7327,9 +7319,8 @@ msgid "Altium Circuit Maker PCB files"
 msgstr "Soubory PCB Altium Circuit Maker"
 
 #: common/wildcards_and_files_ext.cpp:371
-#, fuzzy
 msgid "Solidworks PCB files"
-msgstr "Pevné vyplnění"
+msgstr "Soubory DPS Solidworks"
 
 #: common/wildcards_and_files_ext.cpp:376
 msgid "Fabmaster PCB files"
@@ -7596,9 +7587,9 @@ msgid "Filtered by %s"
 msgstr "Filtrováno podle %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:824
-#, fuzzy, c-format
+#, c-format
 msgid ": %i matching footprints"
-msgstr "Chybějící pouzdro"
+msgstr ": %i odpovídající stopy"
 
 #: cvpcb/cvpcb_mainframe.cpp:836
 #, c-format
@@ -7940,9 +7931,8 @@ msgid "Unable to create the footprint viewer frame"
 msgstr "Nelze vytvořit soubor hlášení '%s'"
 
 #: eeschema/annotate.cpp:155
-#, fuzzy
 msgid "Delete Annotation"
-msgstr "Vyčistit očíslování"
+msgstr "Smazat očíslování"
 
 #: eeschema/annotate.cpp:261
 #, c-format
@@ -8458,9 +8448,8 @@ msgid "Update"
 msgstr "Aktualizovat"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:403
-#, fuzzy
 msgid "Update Symbols"
-msgstr "Aktualizovat symbol..."
+msgstr "Aktualizace symbolů"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:544
 msgid "*** symbol not found ***"
@@ -8617,52 +8606,46 @@ msgid "No symbol selected"
 msgstr "Není vybrán žádný symbol"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:98
-#, fuzzy
 msgid "Connected to database successfully"
-msgstr "Aktualizace netlistu proběhla úspěšně!"
+msgstr "Úspěšně připojeno k databázi"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Database connection failed: %s"
-msgstr "Připojení zóny %s: %s."
+msgstr "Připojení databáze selhalo: %s"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:117
-#, fuzzy
 msgid "No connection to database"
-msgstr "Připojení plošky do zón:"
+msgstr "Bez připojení k databázi"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Loaded %zu libraries"
-msgstr "Uložit knihovny"
+msgstr "Načteno %zu knihoven"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:32
-#, fuzzy
 msgid "Connection"
 msgstr "Připojení"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:39
 msgid "DSN:"
-msgstr ""
+msgstr "DSN:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:45
-#, fuzzy
 msgid "Username:"
-msgstr "Nový název:"
+msgstr "Uživatelské jméno:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
 msgid "Password:"
-msgstr ""
+msgstr "Heslo:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:71
-#, fuzzy
 msgid "Connection String:"
-msgstr "Konektor:"
+msgstr "Řetězec připojení:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:85
-#, fuzzy
 msgid "Test"
-msgstr "&Test ERC"
+msgstr "Test"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:99
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:191
@@ -8672,9 +8655,8 @@ msgid "Libraries"
 msgstr "Knihovny"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:104
-#, fuzzy
 msgid "Reload Configuration"
-msgstr "Uživatelská konfigurace"
+msgstr "Znovu načíst konfiguraci"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:105
 #, fuzzy
@@ -8682,14 +8664,12 @@ msgid "Reload the database library configuration file"
 msgstr "Načíst soubor nastavení klávesových zkratek"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:120
-#, fuzzy
 msgid "Caching"
-msgstr "Hledám..."
+msgstr "Ukládání do mezipaměti"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:127
-#, fuzzy
 msgid "Cache size:"
-msgstr "Velikost stránky:"
+msgstr "Velikost mezipaměti:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:129
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:134
@@ -8697,9 +8677,8 @@ msgid "How many database queries to cache"
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:138
-#, fuzzy
 msgid "Cache timeout:"
-msgstr "Symbol mezipaměti:"
+msgstr "Časový limit mezipaměti:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:140
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:145
@@ -8707,9 +8686,8 @@ msgid "Time in seconds that database queries will be cached for"
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.h:79
-#, fuzzy
 msgid "Database Library Settings"
-msgstr "Soubory databázové knihovny KiCad"
+msgstr "Nastavení databáze knihoven"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:545
 #, c-format
@@ -9444,9 +9422,8 @@ msgstr "Filtrovat položky podle sítě:"
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:102
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:91
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:121
-#, fuzzy
 msgid "Selected items only"
-msgstr "Pouze &výběr"
+msgstr "Pouze vybrané položky"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:159
 msgid "Set To"
@@ -9579,19 +9556,16 @@ msgid "Ibis parser"
 msgstr ""
 
 #: eeschema/dialogs/dialog_image_properties.cpp:75
-#, fuzzy
 msgid "Image Properties"
-msgstr "Vlastnosti značky"
+msgstr "Vlastnosti obrázku"
 
 #: eeschema/dialogs/dialog_junction_props.cpp:113
-#, fuzzy
 msgid "Edit Junction"
-msgstr "Přidat propojení"
+msgstr "Upravit propojení"
 
 #: eeschema/dialogs/dialog_junction_props.cpp:113
-#, fuzzy
 msgid "Edit Junctions"
-msgstr "Propojení"
+msgstr "Upravit propojení"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
@@ -9651,9 +9625,8 @@ msgid "untitled"
 msgstr "nepojmenováno"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:586
-#, fuzzy
 msgid "Edit Label"
-msgstr "Upravit označení..."
+msgstr "Upravit označení"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:671
 msgid "The first field is mandatory."
@@ -10195,9 +10168,8 @@ msgstr "Název symbolu '%s' je již používán v knihovně '%s'."
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:370
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:375
 #: eeschema/dialogs/dialog_symbol_properties.cpp:872
-#, fuzzy
 msgid "Edit Symbol Properties"
-msgstr "Vlastnosti symbolu"
+msgstr "Upravit vlastnosti symbolu"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:496
 #, c-format
@@ -11163,9 +11135,9 @@ msgstr "Poznámka: Barvy jednotlivých prvků jsou přepsány v Nastavení."
 
 #: eeschema/dialogs/dialog_shape_properties.cpp:169
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:233
-#, fuzzy, c-format
+#, c-format
 msgid "Edit %s"
-msgstr "U&pravit"
+msgstr "Upravit %s"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:88
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:158
@@ -11491,23 +11463,20 @@ msgid "Distortion"
 msgstr "Zkreslení"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:228
-#, fuzzy
 msgid "Measured node:"
-msgstr "Měřený uzel"
+msgstr "Měřený uzel:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:238
-#, fuzzy
 msgid "Reference node:"
-msgstr "Referenční uzel"
+msgstr "Referenční uzel:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:245
 msgid "(optional; default GND)"
 msgstr "(volitelné; výchozí GND)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:249
-#, fuzzy
 msgid "Noise source:"
-msgstr "Zdroj šumu"
+msgstr "Zdroj šumu:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:282
 msgid "Number of points:"
@@ -11564,9 +11533,8 @@ msgid "(optional; default 0)"
 msgstr "(volitelné; výchozí 0)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:410
-#, fuzzy
 msgid "Max time step:"
-msgstr "Časový krok:"
+msgstr "Max časový krok:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:421
 #, fuzzy
@@ -11911,9 +11879,8 @@ msgid "Are you sure you want to remove the field '%s'?"
 msgstr "Opravdu chcete odstranit pole '%s'?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:693
-#, fuzzy
 msgid "Rename Field"
-msgstr "Přejmenovat soubor"
+msgstr "Přejmenovat pole"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:708
 #, fuzzy, c-format
@@ -11926,15 +11893,13 @@ msgid "The Quantity column cannot be grouped by."
 msgstr "Sloupec Reference nelze skrýt."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1074
-#, fuzzy
 msgid "Selected Output Filename"
-msgstr "Název výstupního souboru"
+msgstr "Vybraný název výstupního souboru"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1086
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1095
-#, fuzzy
 msgid "BOM Output File"
-msgstr "Výstupní velikost"
+msgstr "Výstupní soubor BOM"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1093
 #, fuzzy
@@ -11954,14 +11919,14 @@ msgid "Changes are unsaved. Export unsaved data?"
 msgstr "Změny nejsou uloženy. Exportovat neuložená data?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1130
-#, fuzzy, c-format
+#, c-format
 msgid "Could not write BOM output to '%s'."
-msgstr "Nelze zapisovat soubory kreslení do složky '%s'."
+msgstr "Nelze zapsat výstup BOM do '%s'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1159
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote BOM output to '%s'"
-msgstr "Nelze vytvořit výstupní adresář '%s'."
+msgstr "Zapisován výstup BOM do '%s'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1287
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1689
@@ -11977,15 +11942,13 @@ msgstr "Smazat předvolbu..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1410
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1798
-#, fuzzy
 msgid "BOM preset name:"
-msgstr "Název předvolby vrstvy:"
+msgstr "Název předvolby BOM:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1410
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1798
-#, fuzzy
 msgid "Save BOM Preset"
-msgstr "Uložit předvolbu vrstvy"
+msgstr "Uložit předvolbu BOM"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1455
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1843
@@ -12006,9 +11969,8 @@ msgid "Select preset:"
 msgstr "Vybrat předvolbu:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:37
-#, fuzzy
 msgid "View Preset:"
-msgstr "Předvolby:"
+msgstr "Zobrazit předvolbu:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:41
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:177
@@ -12018,9 +11980,8 @@ msgid "(unsaved)"
 msgstr "(neuloženo)"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:95
-#, fuzzy
 msgid "Exclude DNP"
-msgstr "Vyloučeno"
+msgstr "Vyloučit DNP"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:103
 msgid "Group symbols"
@@ -12031,9 +11992,8 @@ msgid "Group symbols together based on common properties"
 msgstr "Symboly seskupovat na základě společných vlastností"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:161
-#, fuzzy
 msgid "Edit"
-msgstr "U&pravit"
+msgstr "Upravit"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:173
 #, fuzzy
@@ -12089,9 +12049,8 @@ msgid "Keep Line Breaks:"
 msgstr "Bez spojů"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:233
-#, fuzzy
 msgid "Output file:"
-msgstr "Výstupní složka:"
+msgstr "Výstupní soubor:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:278
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:288
@@ -12400,7 +12359,6 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_text_properties.cpp:581
-#, fuzzy
 msgid "Edit Text"
 msgstr "Upravit text"
 
@@ -12488,19 +12446,16 @@ msgstr "Resetovat pole, pokud jsou v nadřazeném symbolu prázdná"
 
 #: eeschema/dialogs/dialog_user_defined_signals_base.h:63
 #: eeschema/tools/ee_actions.cpp:1194
-#, fuzzy
 msgid "User-defined Signals"
-msgstr "Uživatelem definovaný počátek"
+msgstr "Uživatelem definované signály"
 
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:233
-#, fuzzy
 msgid "Wire/Bus"
-msgstr "Dráty"
+msgstr "Drát/Sběrnice"
 
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:234
-#, fuzzy
 msgid "Wires/Buses"
-msgstr "Migrovat sběnice"
+msgstr "Dráty/Sběrnice"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:30
 msgid "Wire/bus width:"
@@ -13846,9 +13801,9 @@ msgid "Allow Autoplacement"
 msgstr "Povolit automatické umístění"
 
 #: eeschema/files-io.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' is already open by '%s' at '%s'."
-msgstr "Schéma '%s' je již otevřeno."
+msgstr "Schéma '%s' je již otevřeno '%s' v '%s'."
 
 #: eeschema/files-io.cpp:130
 #, c-format
@@ -14211,29 +14166,29 @@ msgid "Hidden pin %s [%s, %s]"
 msgstr "Skrytý vývod %s [%s, %s]"
 
 #: eeschema/lib_shape.cpp:474
-#, fuzzy, c-format
+#, c-format
 msgid "Arc with radius %s"
-msgstr "Oblouk, poloměr %s"
+msgstr "Oblouk s poloměrem %s"
 
 #: eeschema/lib_shape.cpp:478
-#, fuzzy, c-format
+#, c-format
 msgid "Circle with radius %s"
-msgstr "Kruh, poloměr %s"
+msgstr "Kruh s poloměrem %s"
 
 #: eeschema/lib_shape.cpp:482
-#, fuzzy, c-format
+#, c-format
 msgid "Rectangle with width %s height %s"
-msgstr "Obdélník, šířka %s výška %s"
+msgstr "Obdélník s šířkou %s výškou %s"
 
 #: eeschema/lib_shape.cpp:487
-#, fuzzy, c-format
+#, c-format
 msgid "Polyline with %d points"
-msgstr "Křivka, %d bodů"
+msgstr "Křivka s %d bodů"
 
 #: eeschema/lib_shape.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier Curve with %d points"
-msgstr "Bezierova křivka, %d bodů"
+msgstr "Bezierova křivka s %d bodů"
 
 #: eeschema/lib_symbol.cpp:266
 msgid "Power flag differs."
@@ -14257,19 +14212,18 @@ msgid "%s differs."
 msgstr ""
 
 #: eeschema/lib_symbol.cpp:338
-#, fuzzy
 msgid "Pin count differs."
-msgstr "Počet vývodů"
+msgstr "Počet vývodů se liší."
 
 #: eeschema/lib_symbol.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s not found."
-msgstr "%s nenalezeno"
+msgstr "Vývod %s nenalezen."
 
 #: eeschema/lib_symbol.cpp:362
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s differs."
-msgstr "Počet vývodů"
+msgstr "Vývod %s se liší."
 
 #: eeschema/lib_symbol.cpp:393
 #, c-format
@@ -15448,11 +15402,12 @@ msgstr "Chyba při čtení databázové tabulky %s: %s"
 #, c-format
 msgid "Could not load database library: settings file %s missing or invalid"
 msgstr ""
+"Nelze načíst databázovou knihovnu: soubor nastavení %s chybí nebo je neplatný"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:280
 #, c-format
 msgid "Could not load database library: could not connect to database %s (%s)"
-msgstr ""
+msgstr "Nelze načíst databázovou knihovnu: nelze se připojit k databázi %s (%s)"
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:442
 #, c-format
@@ -15460,6 +15415,8 @@ msgid ""
 "'%s' is an Eagle binary-format schematic file; only Eagle XML-format "
 "schematics can be imported."
 msgstr ""
+"'%s' je soubor schématu v binárním formátu Eagle; importovat lze pouze "
+"schémata ve formátu Eagle XML."
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:449
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:3100
@@ -15692,47 +15649,49 @@ msgstr "očekávaný řetězec bez uvozovek"
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:289
 #, c-format
 msgid "Expecting integer at line %d in file %s"
-msgstr ""
+msgstr "Očekáváno celé číslo na řádku %d v souboru %s"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:312
 #, c-format
 msgid "Expected data missing on line %d in file %s"
-msgstr ""
+msgstr "Očekávaná data chybí na řádku %d v souboru %s"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:318
 #, c-format
 msgid "Extra data found on line %d in file %s"
-msgstr ""
+msgstr "Další data nalezená na řádku %d v souboru %s"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:343
 msgid "Expecting 0, 1, 2 or 3"
-msgstr ""
+msgstr "Očekávám 0, 1, 2 nebo 3"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:357
 msgid "Expecting NORMAL or WIDE"
-msgstr ""
+msgstr "Očekávám NORMAL nebo WIDE"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:373
 msgid "Expecting I, O, B or OUT"
-msgstr ""
+msgstr "Očekávám I, O, B nebo OUT"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:394
 msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
-msgstr ""
+msgstr "Očekávám R0, R90, R18, R270, M0, M90, M180 nebo M270"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:415
 msgid ""
 "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VTOP or VBOTTOM"
 msgstr ""
+"Očekávám LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VTOP nebo VBOTTOM"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:436
 msgid ""
 "Expecting NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VLEFT or VRIGHT"
 msgstr ""
+"Očekávám NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VLEFT nebo VRIGHT"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:450
 msgid "Expecting CELL or BLOCK"
-msgstr ""
+msgstr "Očekávám CELL nebo BLOCK"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:469
 #, fuzzy, c-format
@@ -23604,11 +23563,11 @@ msgstr "Násobitel"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:19
 msgid "IPC 2221"
-msgstr ""
+msgstr "IPC 2221"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:21
 msgid "IEC 60664"
-msgstr ""
+msgstr "IEC 60664"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:24
 msgid "Insulation for equipment within low-voltage supply systems"
@@ -23624,11 +23583,11 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:43
 msgid "Voltage of the mains supply"
-msgstr ""
+msgstr "Napětí hlavního zdroje"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:54
 msgid "Overvoltage category:"
-msgstr ""
+msgstr "Kategorie přepětí:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:56
 msgid ""
@@ -23647,19 +23606,19 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:60
 msgid "OVC I"
-msgstr ""
+msgstr "OVC I"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:60
 msgid "OVC II"
-msgstr ""
+msgstr "OVC II"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:60
 msgid "OVC III"
-msgstr ""
+msgstr "OVC III"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:60
 msgid "OVC IV"
-msgstr ""
+msgstr "OVC IV"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:83
 #, fuzzy
@@ -23750,7 +23709,7 @@ msgstr "Propojení"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:170
 msgid "Basic"
-msgstr ""
+msgstr "Základní"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:170
 msgid "Reinforced"
@@ -23816,11 +23775,11 @@ msgstr "I"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:200
 msgid "IIIa"
-msgstr ""
+msgstr "IIIa"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:200
 msgid "IIIb"
-msgstr ""
+msgstr "IIIb"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:209
 #, fuzzy
@@ -23973,11 +23932,11 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_eseries_display_base.cpp:21
 msgid "E24,E48,E96"
-msgstr ""
+msgstr "E24,E48,E96"
 
 #: pcb_calculator/calculator_panels/panel_eseries_display_base.cpp:52
 msgid "E1,E3,E6,E12"
-msgstr ""
+msgstr "E1,E3,E6,E12"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:231
 msgid "Current calculation is underestimated due to long fusing time."
@@ -29428,7 +29387,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:179
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:135
 msgid "(as a percentage of pad/via size)"
-msgstr ""
+msgstr "(jako procento z velikosti plošky/prokovu)"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:222
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:698
@@ -35064,7 +35023,7 @@ msgstr "Místní přepsání"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:632
 msgid "3D model count differs."
-msgstr ""
+msgstr "Počet modelů 3D se liší."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:654
 #, fuzzy
@@ -42047,7 +42006,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1713
 msgid "Attempt Finish"
-msgstr ""
+msgstr "Pokus o dokončení"
 
 #: pcbnew/tools/pcb_actions.cpp:1714
 msgid "Attempts to complete current route to nearest ratsnest end."
