@@ -1301,7 +1301,7 @@ bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
                                  KICTL_EAGLE_BRD | KICTL_IMPORT_LIB );
 
     default:
-        return false;
+        break;
     }
 
     return false;

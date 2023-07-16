@@ -114,14 +114,13 @@ wxString PCB_FIELD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
         return wxString::Format( _( "Datasheet '%s' of %s" ),
                                  KIUI::EllipsizeMenuText( GetText() ),
                                  GetParentFootprint()->GetReference() );
-    default:
-        return wxString::Format( _( "Field '%s' of %s" ),
-                                 KIUI::EllipsizeMenuText( GetText() ),
-                                 GetParentFootprint()->GetReference() );
+
+    default: 
+        break; // avoid unreachable code / missing return statement warnings
     }
 
-    // Can't get here, but gcc doesn't seem to know that....
-    return wxEmptyString;
+    return wxString::Format( _( "Field '%s' of %s" ), KIUI::EllipsizeMenuText( GetText() ),
+                             GetParentFootprint()->GetReference() );
 }
 
 

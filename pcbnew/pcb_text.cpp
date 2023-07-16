@@ -383,15 +383,10 @@ wxString PCB_TEXT::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
         return wxString::Format( _( "Footprint Text '%s' of %s" ),
                                  KIUI::EllipsizeMenuText( GetText() ), parentFP->GetReference() );
     }
-    else
-    {
-        return wxString::Format( _( "PCB Text '%s' on %s"),
-                                 KIUI::EllipsizeMenuText( GetText() ),
-                                 GetLayerName() );
-    }
-
-    // Can't get here, but gcc doesn't seem to know that....
-    return wxEmptyString;
+    
+    return wxString::Format( _( "PCB Text '%s' on %s" ),
+                             KIUI::EllipsizeMenuText( GetText() ),
+                             GetLayerName() );
 }
 
 

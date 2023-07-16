@@ -738,11 +738,10 @@ FILL_T SCH_LEGACY_PLUGIN_CACHE::parseFillMode( LINE_READER& aReader, const char*
     case 'F': return FILL_T::FILLED_SHAPE;
     case 'f': return FILL_T::FILLED_WITH_BG_BODYCOLOR;
     case 'N': return FILL_T::NO_FILL;
-    default:  SCH_PARSE_ERROR( "invalid fill type, expected f, F, or N", aReader, aLine );
+    default:  break;
     }
 
-    // This will never be reached but quiets the compiler warnings
-    return FILL_T::NO_FILL;
+    SCH_PARSE_ERROR( "invalid fill type, expected f, F, or N", aReader, aLine );
 }
 
 
