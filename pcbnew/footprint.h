@@ -172,6 +172,11 @@ public:
     const BOX2I GetBoundingBox() const override;
     const BOX2I GetBoundingBox( bool aIncludeText, bool aIncludeInvisibleText ) const;
 
+    VECTOR2I GetCenter() const override
+    {
+        return GetBoundingBox( false, false ).GetCenter();
+    }
+
     PCB_FIELDS& Fields()                   { return m_fields; }
     const PCB_FIELDS& Fields() const       { return m_fields; }
 
