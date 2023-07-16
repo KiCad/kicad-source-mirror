@@ -304,25 +304,21 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .MinSize( 180, -1 ).BestSize( 180, -1 ) );
 
     m_auimgr.AddPane( m_propertiesPanel, EDA_PANE().Name( PropertiesPaneName() )
-                      .Left().Layer( 5 ).Caption( _( "Properties" ) )
-                      .PaneBorder( false ).MinSize( 240, -1 ).BestSize( 300, -1 ) );
+                      .Left().Layer( 5 )
+                      .Caption( _( "Properties" ) ).PaneBorder( false )
+                      .MinSize( 240, -1 ).BestSize( 300, -1 ) );
 
     // Center
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( wxS( "DrawFrame" ) )
                       .Center() );
 
-
-    m_auimgr.AddPane( m_searchPane, EDA_PANE()
-                                                 .Name( SearchPaneName() )
-                                                 .Bottom()
-                                                 .Caption( _( "Search" ) )
-                                                 .PaneBorder( false )
-                                                 .MinSize( 180, -1 )
-                                                 .BestSize( 180, -1 )
-                                                 .FloatingSize( 480, 200 )
-                                                 .CloseButton( true )
-                                                 .DestroyOnClose( false ) );
-
+    m_auimgr.AddPane( m_searchPane, EDA_PANE().Name( SearchPaneName() )
+                      .Bottom()
+                      .Caption( _( "Search" ) ) .PaneBorder( false )
+                      .MinSize( 180, -1 ).BestSize( 180, -1 )
+                      .FloatingSize( 480, 200 )
+                      .CloseButton( true )
+                      .DestroyOnClose( false ) );
 
     m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
     m_auimgr.GetPane( "SelectionFilter" ).Show( m_show_layer_manager_tools );
@@ -358,7 +354,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
             searchPane.Direction( settings->m_AuiPanels.search_panel_dock_direction );
             SetAuiPaneSize( m_auimgr, searchPane, -1, settings->m_AuiPanels.search_panel_height );
         }
-
         else if( settings->m_AuiPanels.search_panel_width > 0
                 && ( settings->m_AuiPanels.search_panel_dock_direction == wxAUI_DOCK_LEFT
                     || settings->m_AuiPanels.search_panel_dock_direction == wxAUI_DOCK_RIGHT ) )

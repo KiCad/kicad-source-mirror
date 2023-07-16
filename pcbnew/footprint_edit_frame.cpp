@@ -223,8 +223,9 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .Caption( _( "Libraries" ) )
                       .MinSize( 250, -1 ).BestSize( 250, -1 ) );
     m_auimgr.AddPane( m_propertiesPanel, EDA_PANE().Name( PropertiesPaneName() )
-                      .Left().Layer( 3 ).Caption( _( "Properties" ) )
-                      .PaneBorder( false ).MinSize( 240, -1 ).BestSize( 300, -1 ) );
+                      .Left().Layer( 3 )
+                      .Caption( _( "Properties" ) ).PaneBorder( false )
+                      .MinSize( 240, -1 ).BestSize( 300, -1 ) );
     m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" )
                       .Left().Layer( 2 ) );
 
@@ -237,7 +238,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( m_selectionFilterPanel, EDA_PANE().Palette().Name( "SelectionFilter" )
                       .Right().Layer( 3 ).Position( 2 )
                       .Caption( _( "Selection Filter" ) ).PaneBorder( false )
-                      .MinSize( 160, -1 ).BestSize( m_selectionFilterPanel->GetBestSize() ) );
+                      .MinSize( 180, -1 ).BestSize( 180, -1 ) );
 
     // Center
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" )
@@ -259,44 +260,21 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     FinishAUIInitialization();
 
     // Apply saved visibility stuff at the end
-    FOOTPRINT_EDITOR_SETTINGS* cfg = GetSettings();
-    wxAuiPaneInfo&             treePane = m_auimgr.GetPane( "Footprints" );
-    wxAuiPaneInfo&             layersManager = m_auimgr.GetPane( "LayersManager" );
-
-    // wxAUI hack: force widths by setting MinSize() and then Fixed()
-    // thanks to ZenJu http://trac.wxwidgets.org/ticket/13180
-
-    if( cfg->m_LibWidth > 0 )
+    if( FOOTPRINT_EDITOR_SETTINGS* cfg = dynamic_cast<FOOTPRINT_EDITOR_SETTINGS*>( GetSettings() ) )
     {
-        SetAuiPaneSize( m_auimgr, treePane, cfg->m_LibWidth, -1 );
+        wxAuiPaneInfo& treePane = m_auimgr.GetPane( "Footprints" );
+        wxAuiPaneInfo& layersManager = m_auimgr.GetPane( "LayersManager" );
 
-        treePane.MinSize( cfg->m_LibWidth, -1 );
-        treePane.Fixed();
+        if( cfg->m_LibWidth > 0 )
+            SetAuiPaneSize( m_auimgr, treePane, cfg->m_LibWidth, -1 );
+
+        if( cfg->m_AuiPanels.right_panel_width > 0 )
+            SetAuiPaneSize( m_auimgr, layersManager, cfg->m_AuiPanels.right_panel_width, -1 );
+
+        m_appearancePanel->SetUserLayerPresets( cfg->m_LayerPresets );
+        m_appearancePanel->ApplyLayerPreset( cfg->m_ActiveLayerPreset );
+        m_appearancePanel->SetTabIndex( cfg->m_AuiPanels.appearance_panel_tab );
     }
-
-    if( cfg->m_AuiPanels.right_panel_width > 0 )
-    {
-        SetAuiPaneSize( m_auimgr, layersManager, cfg->m_AuiPanels.right_panel_width, -1 );
-
-        layersManager.MinSize( cfg->m_LibWidth, -1 );
-        layersManager.Fixed();
-    }
-
-    // Apply fixed sizes
-    m_auimgr.Update();
-
-    // Now make them resizable again
-    treePane.Resizable();
-    m_auimgr.Update();
-
-    // Note: DO NOT call m_auimgr.Update() anywhere after this; it will nuke the sizes
-    // back to minimum.
-    treePane.MinSize( 250, -1 );
-    layersManager.MinSize( 250, -1 );
-
-    m_appearancePanel->SetUserLayerPresets( cfg->m_LayerPresets );
-    m_appearancePanel->ApplyLayerPreset( cfg->m_ActiveLayerPreset );
-    m_appearancePanel->SetTabIndex( cfg->m_AuiPanels.appearance_panel_tab );
 
     GetToolManager()->PostAction( ACTIONS::zoomFitScreen );
     UpdateTitle();
