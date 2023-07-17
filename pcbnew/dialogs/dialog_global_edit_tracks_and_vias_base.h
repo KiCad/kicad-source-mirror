@@ -60,12 +60,12 @@ class DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE : public DIALOG_SHIM
 		wxStaticText* m_viaSizeFilterUnits;
 		wxCheckBox* m_selectedItemsFilter;
 		wxRadioButton* m_setToSpecifiedValues;
-		wxStaticText* m_staticTextTrackWidth;
-		wxStaticText* m_staticTextViaSize;
-		wxStaticText* m_staticTextLayer;
-		wxChoice* m_trackWidthSelectBox;
-		wxChoice* m_viaSizesSelectBox;
-		PCB_LAYER_BOX_SELECTOR* m_layerBox;
+		wxStaticText* m_trackWidthLabel;
+		wxStaticText* m_viaSizeLabel;
+		wxStaticText* m_layerLabel;
+		wxChoice* m_trackWidthCtrl;
+		wxChoice* m_viaSizesCtrl;
+		PCB_LAYER_BOX_SELECTOR* m_layerCtrl;
 		wxRadioButton* m_setToNetclassValues;
 		wxGrid* m_netclassGrid;
 		wxStdDialogButtonSizer* m_sdbSizer;
@@ -77,7 +77,7 @@ class DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE : public DIALOG_SHIM
 		virtual void OnLayerFilterSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTrackWidthText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnViaSizeText( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onSpecifiedValuesUpdateUi( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void onActionButtonChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSizeNetclassGrid( wxSizeEvent& event ) { event.Skip(); }
 
 

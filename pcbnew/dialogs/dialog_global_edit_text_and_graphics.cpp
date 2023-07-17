@@ -238,6 +238,9 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
     m_visible->Set3StateValue( wxCHK_UNDETERMINED );
     m_LayerCtrl->SetLayerSelection( UNDEFINED_LAYER );
 
+    wxCommandEvent dummy;
+    onActionButtonChange( dummy );
+
 #define SET_INT_VALUE( aRow, aCol, aValue ) \
         m_grid->SetCellValue( aRow, aCol, m_parent->StringFromValue( aValue, true ) )
 
@@ -309,10 +312,19 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::onActionButtonChange( wxCommandEvent&
     // Update the UNIT_BINDER controls if the action to take is changed
     bool enable = m_setToSpecifiedValues->GetValue();
 
+    m_LayerLabel->Enable( enable );
+    m_LayerCtrl->Enable( enable );
+
     m_lineWidth.Enable( enable );
     m_textWidth.Enable( enable );
     m_textHeight.Enable( enable );
     m_thickness.Enable( enable );
+
+    m_fontLabel->Enable( enable );
+    m_fontCtrl->Enable( enable );
+
+    enable = !enable;
+    m_grid->Enable( enable );
 }
 
 

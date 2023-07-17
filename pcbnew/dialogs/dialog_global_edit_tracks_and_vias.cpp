@@ -73,7 +73,7 @@ public:
     ~DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS() override;
 
 protected:
-    void onSpecifiedValuesUpdateUi( wxUpdateUIEvent& event ) override;
+    void onActionButtonChange( wxCommandEvent& event ) override;
     void OnSizeNetclassGrid( wxSizeEvent& event ) override;
 
     void OnNetclassFilterSelect( wxCommandEvent& event ) override
@@ -140,16 +140,16 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT
 
     buildFilterLists();
 
-    m_parent->UpdateTrackWidthSelectBox( m_trackWidthSelectBox, false );
-    m_trackWidthSelectBox->Append( INDETERMINATE_ACTION );
-    m_parent->UpdateViaSizeSelectBox( m_viaSizesSelectBox, false );
-    m_viaSizesSelectBox->Append( INDETERMINATE_ACTION );
+    m_parent->UpdateTrackWidthSelectBox( m_trackWidthCtrl, false );
+    m_trackWidthCtrl->Append( INDETERMINATE_ACTION );
+    m_parent->UpdateViaSizeSelectBox( m_viaSizesCtrl, false );
+    m_viaSizesCtrl->Append( INDETERMINATE_ACTION );
 
-    m_layerBox->SetBoardFrame( m_parent );
-    m_layerBox->SetLayersHotkeys( false );
-    m_layerBox->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
-    m_layerBox->SetUndefinedLayerName( INDETERMINATE_ACTION );
-    m_layerBox->Resync();
+    m_layerCtrl->SetBoardFrame( m_parent );
+    m_layerCtrl->SetLayersHotkeys( false );
+    m_layerCtrl->SetNotAllowedLayerSet( LSET::AllNonCuMask() );
+    m_layerCtrl->SetUndefinedLayerName( INDETERMINATE_ACTION );
+    m_layerCtrl->Resync();
 
     m_netclassGrid->SetDefaultCellFont( KIUI::GetInfoFont( this ) );
     buildNetclassesGrid();
@@ -198,16 +198,16 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::~DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS()
 
 void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::onUnitsChanged( wxCommandEvent& aEvent )
 {
-    int trackSel = m_trackWidthSelectBox->GetSelection();
-    int viaSel = m_viaSizesSelectBox->GetSelection();
+    int trackSel = m_trackWidthCtrl->GetSelection();
+    int viaSel = m_viaSizesCtrl->GetSelection();
 
-    m_parent->UpdateTrackWidthSelectBox( m_trackWidthSelectBox, false );
-    m_trackWidthSelectBox->Append( INDETERMINATE_ACTION );
-    m_parent->UpdateViaSizeSelectBox( m_viaSizesSelectBox, false );
-    m_viaSizesSelectBox->Append( INDETERMINATE_ACTION );
+    m_parent->UpdateTrackWidthSelectBox( m_trackWidthCtrl, false );
+    m_trackWidthCtrl->Append( INDETERMINATE_ACTION );
+    m_parent->UpdateViaSizeSelectBox( m_viaSizesCtrl, false );
+    m_viaSizesCtrl->Append( INDETERMINATE_ACTION );
 
-    m_trackWidthSelectBox->SetSelection( trackSel );
-    m_viaSizesSelectBox->SetSelection( viaSel );
+    m_trackWidthCtrl->SetSelection( trackSel );
+    m_viaSizesCtrl->SetSelection( viaSel );
 
     m_netclassGrid->ClearGrid();
     buildNetclassesGrid();
@@ -334,20 +334,33 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataToWindow()
         m_viaSizeFilter.SetValue( g_viaSizeFilter );
     }
 
-    m_trackWidthSelectBox->SetSelection( (int) m_trackWidthSelectBox->GetCount() - 1 );
-    m_viaSizesSelectBox->SetSelection( (int) m_viaSizesSelectBox->GetCount() - 1 );
-    m_layerBox->SetStringSelection( INDETERMINATE_ACTION );
+    m_trackWidthCtrl->SetSelection( (int) m_trackWidthCtrl->GetCount() - 1 );
+    m_viaSizesCtrl->SetSelection( (int) m_viaSizesCtrl->GetCount() - 1 );
+    m_layerCtrl->SetStringSelection( INDETERMINATE_ACTION );
 
     m_selectedItemsFilter->SetValue( g_filterSelected );
+
+    wxCommandEvent dummy;
+    onActionButtonChange( dummy );
 
     return true;
 }
 
 
-void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::onSpecifiedValuesUpdateUi( wxUpdateUIEvent& event )
+void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::onActionButtonChange( wxCommandEvent& event )
 {
     // Enable the items in the use specified values section
-    event.Enable( m_setToSpecifiedValues->GetValue() );
+    bool enable = m_setToSpecifiedValues->GetValue();
+
+    m_trackWidthLabel->Enable( enable );
+    m_trackWidthCtrl->Enable( enable );
+    m_viaSizeLabel->Enable( enable );
+    m_viaSizesCtrl->Enable( enable );
+    m_layerLabel->Enable( enable );
+    m_layerCtrl->Enable( enable );
+
+    enable = !enable;
+    m_netclassGrid->Enable( enable );
 }
 
 
@@ -361,11 +374,10 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoLi
 
     if( m_setToSpecifiedValues->GetValue() )
     {
-        if( ( isArc || isTrack )
-                && m_trackWidthSelectBox->GetStringSelection() != INDETERMINATE_ACTION )
+        if( ( isArc || isTrack ) && m_trackWidthCtrl->GetStringSelection() != INDETERMINATE_ACTION )
         {
             unsigned int prevTrackWidthIndex = brdSettings.GetTrackWidthIndex();
-            int trackWidthIndex = m_trackWidthSelectBox->GetSelection();
+            int trackWidthIndex = m_trackWidthCtrl->GetSelection();
 
             if( trackWidthIndex >= 0 )
                 brdSettings.SetTrackWidthIndex( static_cast<unsigned>( trackWidthIndex ) );
@@ -374,10 +386,10 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoLi
 
             brdSettings.SetTrackWidthIndex( prevTrackWidthIndex );
         }
-        else if( isVia && m_viaSizesSelectBox->GetStringSelection() != INDETERMINATE_ACTION )
+        else if( isVia && m_viaSizesCtrl->GetStringSelection() != INDETERMINATE_ACTION )
         {
             unsigned int prevViaSizeIndex = brdSettings.GetViaSizeIndex();
-            int viaSizeIndex = m_viaSizesSelectBox->GetSelection();
+            int          viaSizeIndex = m_viaSizesCtrl->GetSelection();
 
             if( viaSizeIndex >= 0 )
                 brdSettings.SetViaSizeIndex( static_cast<unsigned>( viaSizeIndex ) );
@@ -387,7 +399,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoLi
             brdSettings.SetViaSizeIndex( prevViaSizeIndex );
         }
 
-        if( ( isArc || isTrack ) && m_layerBox->GetLayerSelection() != UNDEFINED_LAYER )
+        if( ( isArc || isTrack ) && m_layerCtrl->GetLayerSelection() != UNDEFINED_LAYER )
         {
             if( aUndoList->FindItem( aItem ) < 0 )
             {
@@ -396,7 +408,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoLi
                 aUndoList->PushItem( picker );
             }
 
-            aItem->SetLayer( ToLAYER_ID( m_layerBox->GetLayerSelection() ) );
+            aItem->SetLayer( ToLAYER_ID( m_layerCtrl->GetLayerSelection() ) );
             m_parent->GetBoard()->GetConnectivity()->Update( aItem );
         }
     }

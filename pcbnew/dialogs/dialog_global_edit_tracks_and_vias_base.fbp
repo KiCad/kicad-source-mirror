@@ -1221,12 +1221,13 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnRadioButton">onActionButtonChange</event>
                             </object>
                         </object>
                         <object class="sizeritem" expanded="1">
-                            <property name="border">15</property>
+                            <property name="border">22</property>
                             <property name="flag">wxBOTTOM|wxEXPAND|wxLEFT</property>
-                            <property name="proportion">1</property>
+                            <property name="proportion">0</property>
                             <object class="wxFlexGridSizer" expanded="1">
                                 <property name="cols">3</property>
                                 <property name="flexible_direction">wxHORIZONTAL</property>
@@ -1271,7 +1272,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Track Width</property>
+                                        <property name="label">Track width:</property>
                                         <property name="markup">0</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
@@ -1280,7 +1281,7 @@
                                         <property name="minimize_button">0</property>
                                         <property name="minimum_size"></property>
                                         <property name="moveable">1</property>
-                                        <property name="name">m_staticTextTrackWidth</property>
+                                        <property name="name">m_trackWidthLabel</property>
                                         <property name="pane_border">1</property>
                                         <property name="pane_position"></property>
                                         <property name="pane_size"></property>
@@ -1332,7 +1333,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Via Size</property>
+                                        <property name="label">Via size:</property>
                                         <property name="markup">0</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
@@ -1341,7 +1342,7 @@
                                         <property name="minimize_button">0</property>
                                         <property name="minimum_size"></property>
                                         <property name="moveable">1</property>
-                                        <property name="name">m_staticTextViaSize</property>
+                                        <property name="name">m_viaSizeLabel</property>
                                         <property name="pane_border">1</property>
                                         <property name="pane_position"></property>
                                         <property name="pane_size"></property>
@@ -1393,7 +1394,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Layer</property>
+                                        <property name="label">Layer:</property>
                                         <property name="markup">0</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
@@ -1402,7 +1403,7 @@
                                         <property name="minimize_button">0</property>
                                         <property name="minimum_size"></property>
                                         <property name="moveable">1</property>
-                                        <property name="name">m_staticTextLayer</property>
+                                        <property name="name">m_layerLabel</property>
                                         <property name="pane_border">1</property>
                                         <property name="pane_position"></property>
                                         <property name="pane_size"></property>
@@ -1462,7 +1463,7 @@
                                         <property name="minimize_button">0</property>
                                         <property name="minimum_size"></property>
                                         <property name="moveable">1</property>
-                                        <property name="name">m_trackWidthSelectBox</property>
+                                        <property name="name">m_trackWidthCtrl</property>
                                         <property name="pane_border">1</property>
                                         <property name="pane_position"></property>
                                         <property name="pane_size"></property>
@@ -1484,7 +1485,6 @@
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
-                                        <event name="OnUpdateUI">onSpecifiedValuesUpdateUi</event>
                                     </object>
                                 </object>
                                 <object class="sizeritem" expanded="1">
@@ -1527,7 +1527,7 @@
                                         <property name="minimize_button">0</property>
                                         <property name="minimum_size"></property>
                                         <property name="moveable">1</property>
-                                        <property name="name">m_viaSizesSelectBox</property>
+                                        <property name="name">m_viaSizesCtrl</property>
                                         <property name="pane_border">1</property>
                                         <property name="pane_position"></property>
                                         <property name="pane_size"></property>
@@ -1549,7 +1549,6 @@
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
-                                        <event name="OnUpdateUI">onSpecifiedValuesUpdateUi</event>
                                     </object>
                                 </object>
                                 <object class="sizeritem" expanded="1">
@@ -1592,7 +1591,7 @@
                                         <property name="minimize_button">0</property>
                                         <property name="minimum_size"></property>
                                         <property name="moveable">1</property>
-                                        <property name="name">m_layerBox</property>
+                                        <property name="name">m_layerCtrl</property>
                                         <property name="pane_border">1</property>
                                         <property name="pane_position"></property>
                                         <property name="pane_size"></property>
@@ -1681,12 +1680,13 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnRadioButton">onActionButtonChange</event>
                             </object>
                         </object>
                         <object class="sizeritem" expanded="1">
-                            <property name="border">15</property>
+                            <property name="border">22</property>
                             <property name="flag">wxEXPAND|wxLEFT</property>
-                            <property name="proportion">0</property>
+                            <property name="proportion">1</property>
                             <object class="wxGrid" expanded="1">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
@@ -1760,7 +1760,7 @@
                                 <property name="row_label_values"></property>
                                 <property name="row_label_vert_alignment">wxALIGN_CENTER</property>
                                 <property name="row_sizes"></property>
-                                <property name="rows">1</property>
+                                <property name="rows">6</property>
                                 <property name="show">1</property>
                                 <property name="size"></property>
                                 <property name="subclass"></property>
@@ -1768,16 +1768,16 @@
                                 <property name="tooltip"></property>
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
-                                <property name="window_style">wxBORDER_DEFAULT|wxVSCROLL</property>
+                                <property name="window_style">wxBORDER_SIMPLE|wxVSCROLL</property>
                                 <event name="OnSize">OnSizeNetclassGrid</event>
                             </object>
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND|wxTOP</property>
-                            <property name="proportion">1</property>
+                            <property name="flag">wxEXPAND</property>
+                            <property name="proportion">0</property>
                             <object class="spacer" expanded="1">
-                                <property name="height">0</property>
+                                <property name="height">5</property>
                                 <property name="permission">protected</property>
                                 <property name="width">0</property>
                             </object>

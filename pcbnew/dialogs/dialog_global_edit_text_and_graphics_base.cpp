@@ -231,14 +231,14 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 
 	m_ThicknessLabel = new wxStaticText( m_specifiedValues, wxID_ANY, _("Text thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ThicknessLabel->Wrap( -1 );
-	fgSizer1->Add( m_ThicknessLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	fgSizer1->Add( m_ThicknessLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_ThicknessCtrl = new wxTextCtrl( m_specifiedValues, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_ThicknessCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_ThicknessCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_ThicknessUnit = new wxStaticText( m_specifiedValues, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ThicknessUnit->Wrap( -1 );
-	fgSizer1->Add( m_ThicknessUnit, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	fgSizer1->Add( m_ThicknessUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
 	bSizer2->Add( fgSizer1, 1, wxEXPAND|wxTOP, 2 );
@@ -247,7 +247,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	m_specifiedValues->SetSizer( bSizer2 );
 	m_specifiedValues->Layout();
 	bSizer2->Fit( m_specifiedValues );
-	sbAction->Add( m_specifiedValues, 0, wxEXPAND|wxBOTTOM|wxLEFT, 12 );
+	sbAction->Add( m_specifiedValues, 0, wxEXPAND|wxBOTTOM|wxLEFT, 18 );
 
 	m_setToLayerDefaults = new wxRadioButton( sbAction->GetStaticBox(), ID_ALL_TRACKS_VIAS, _("Set to layer default values:"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbAction->Add( m_setToLayerDefaults, 0, wxTOP|wxBOTTOM|wxEXPAND, 5 );
@@ -285,7 +285,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	m_grid->SetDefaultCellBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 	m_grid->SetDefaultCellFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
-	sbAction->Add( m_grid, 0, wxEXPAND|wxLEFT, 15 );
+	sbAction->Add( m_grid, 0, wxEXPAND|wxLEFT, 22 );
 
 
 	sbAction->Add( 0, 0, 0, wxEXPAND|wxBOTTOM, 5 );
