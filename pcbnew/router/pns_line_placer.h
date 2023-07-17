@@ -320,7 +320,7 @@ private:
     bool rhWalkBase( const VECTOR2I& aP, LINE& aWalkLine, int aCollisionMask, bool& aViaOk );
     bool splitHeadTail( const LINE& aNewLine, const LINE& aOldTail, LINE& aNewHead, LINE& aNewTail );
     bool cursorDistMinimum( const SHAPE_LINE_CHAIN& aL, const VECTOR2I& aCursor,  double lengthThreshold, SHAPE_LINE_CHAIN& aOut );
-    bool clipAndCheckCollisions( VECTOR2I aP, SHAPE_LINE_CHAIN aL, SHAPE_LINE_CHAIN& aOut, int &thresholdDist );
+    bool clipAndCheckCollisions( const VECTOR2I& aP, const SHAPE_LINE_CHAIN& aL, SHAPE_LINE_CHAIN& aOut, int &thresholdDist );
 
     void updatePStart( const LINE& tail );
 

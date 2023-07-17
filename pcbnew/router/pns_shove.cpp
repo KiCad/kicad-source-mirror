@@ -23,8 +23,6 @@
 #include <cassert>
 #include <math/box2.h>
 
-#include <geometry/shape_compound.h>
-
 #include <wx/log.h>
 
 #include "pns_arc.h"
@@ -70,8 +68,8 @@ void SHOVE::replaceLine( LINE& aOld, LINE& aNew, bool aIncludeInChangedArea, NOD
             SHAPE_RECT r( *changed_area );
             PNS_DBG(Dbg(), AddShape, &r, BLUE, 0, wxT( "shove-changed-area" ) );
 
-            m_affectedArea =
-                    m_affectedArea ? m_affectedArea->Merge( *changed_area ) : *changed_area;
+            m_affectedArea = m_affectedArea ? m_affectedArea->Merge( *changed_area )
+                                            : *changed_area;
         }
     }
 
@@ -85,7 +83,7 @@ void SHOVE::replaceLine( LINE& aOld, LINE& aNew, bool aIncludeInChangedArea, NOD
 
     // Check if the shoved line already has an ancestor (e.g. line from a previous shove
     // iteration/cursor movement)
-    for( auto link : aOld.Links() )
+    for( LINKED_ITEM* link : aOld.Links() )
     {
         auto oldLineIter = m_rootLineHistory.find( link );
 
@@ -100,12 +98,10 @@ void SHOVE::replaceLine( LINE& aOld, LINE& aNew, bool aIncludeInChangedArea, NOD
     // If found, use it, otherwise, create new entry in the map (we have a genuine new 'root' line)
     if( !foundPredecessor )
     {
-        for( auto link : aOld.Links() )
+        for( LINKED_ITEM* link : aOld.Links() )
         {
             if( ! rootLine )
-            {
                 rootLine = aOld.Clone();
-            }
 
             m_rootLineHistory[link] = rootLine;
         }
@@ -113,19 +109,13 @@ void SHOVE::replaceLine( LINE& aOld, LINE& aNew, bool aIncludeInChangedArea, NOD
 
     // Now update the NODE (calling Replace invalidates the Links() in a LINE)
     if( aNode )
-    {
         aNode->Replace( aOld, aNew );
-    }
     else
-    {
         m_currentNode->Replace( aOld, aNew );
-    }
 
     // point the Links() of the new line to its oldest ancestor
-    for( auto link : aNew.Links() )
-    {
+    for( LINKED_ITEM* link : aNew.Links() )
         m_rootLineHistory[ link ] = rootLine;
-    }
 }
 
 
@@ -135,17 +125,6 @@ int SHOVE::getClearance( const ITEM* aA, const ITEM* aB ) const
         return m_forceClearance;
 
     return m_currentNode->GetClearance( aA, aB, false );
-}
-
-
-int SHOVE::getHoleClearance( const ITEM* aA, const ITEM* aB ) const
-{
-   /* if( m_forceClearance >= 0 )
-        return m_forceClearance;
-
-    return m_currentNode->GetHoleClearance( aA, aB );*/
-
-    return -1; // fixme hole
 }
 
 
@@ -230,14 +209,14 @@ SHOVE::SHOVE_STATUS SHOVE::shoveLineFromLoneVia( const LINE& aCurLine, const LIN
 {
     // Build a hull for aCurLine's via and re-walk aObstacleLine around it.
 
-    int obstacleLineWidth = aObstacleLine.Width();
-    int clearance = getClearance( &aCurLine, &aObstacleLine );
+    int        obstacleLineWidth = aObstacleLine.Width();
+    const VIA& via = aCurLine.Via();
+    int        clearance = getClearance( &via, &aObstacleLine );
+    HOLE*      viaHole = via.Hole();
+    int        holeClearance = getClearance( viaHole, &aObstacleLine );
 
-/*    int holeClearance = getHoleClearance( &aCurLine.Via(), &aObstacleLine );
-
-    if( holeClearance + aCurLine.Via().Drill() / 2 > clearance + aCurLine.Via().Diameter() / 2 )
-        clearance = holeClearance + aCurLine.Via().Drill() / 2 - aCurLine.Via().Diameter() / 2;
-*/
+    if( holeClearance + via.Drill() / 2 > clearance + via.Diameter() / 2 )
+        clearance = holeClearance + via.Drill() / 2 - via.Diameter() / 2;
 
     SHAPE_LINE_CHAIN hull = aCurLine.Via().Hull( clearance, obstacleLineWidth, aCurLine.Layer() );
     SHAPE_LINE_CHAIN path_cw;
@@ -452,20 +431,15 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveObstacleLine( const LINE& aCurLine, const LINE& 
         for( int i = 0; i < currentLineSegmentCount; i++ )
         {
             SEGMENT seg( aCurLine, aCurLine.CSegment( i ) );
-            int     extra = 0;
 
             // Arcs need additional clearance to ensure the hulls are always bigger than the arc
             if( aCurLine.CLine().IsArcSegment( i ) )
-                extra = SHAPE_ARC::DefaultAccuracyForPCB();
-
-            if( extra > 0 )
-	    {
-                PNS_DBG( Dbg(), Message, wxString::Format( wxT( "shove add-extra-clearance %d" ),
-                                          extra ) );
+            {
+                PNS_DBG( Dbg(), Message, wxString::Format( wxT( "shove add-extra-clearance %d" ), SHAPE_ARC::DefaultAccuracyForPCB() ) );
+                clearance += KiROUND( SHAPE_ARC::DefaultAccuracyForPCB() );
             }
 
-            SHAPE_LINE_CHAIN hull =
-                    seg.Hull( clearance + extra, obstacleLineWidth, aObstacleLine.Layer() );
+            SHAPE_LINE_CHAIN hull = seg.Hull( clearance, obstacleLineWidth, aObstacleLine.Layer() );
 
             hulls.push_back( hull );
         }
@@ -473,11 +447,12 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveObstacleLine( const LINE& aCurLine, const LINE& 
         if( viaOnEnd )
         {
             const VIA& via = aCurLine.Via();
-            int viaClearance = getClearance( &via, &aObstacleLine );
-            /*int holeClearance = getHoleClearance( &via, &aObstacleLine );
+            int        viaClearance = getClearance( &via, &aObstacleLine );
+            HOLE*      viaHole = via.Hole();
+            int        holeClearance = getClearance( viaHole, &aObstacleLine );
 
             if( holeClearance + via.Drill() / 2 > viaClearance + via.Diameter() / 2 )
-                viaClearance = holeClearance + via.Drill() / 2 - via.Diameter() / 2;*/
+                viaClearance = holeClearance + via.Drill() / 2 - via.Diameter() / 2;
 
             hulls.push_back( aCurLine.Via().Hull( viaClearance, obstacleLineWidth ) );
         }
@@ -689,13 +664,10 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSolid( LINE& aCurrent, ITEM* aObstacle, OB
     std::set<ITEM*> cluster = topo.AssembleCluster( aObstacle, aCurrent.Layers().Start() );
 
 
-
     PNS_DBG( Dbg(), BeginGroup, "walk-cluster", 1 );
 
-    for( auto item : cluster )
-    {
+    for( ITEM* item : cluster )
         PNS_DBG( Dbg(), AddItem, item, RED, 10000, wxT( "cl-item" ) );
-    }
 
     PNS_DBGN( Dbg(), EndGroup );
 
@@ -713,15 +685,9 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSolid( LINE& aCurrent, ITEM* aObstacle, OB
     for( int attempt = 0; attempt < 2; attempt++ )
     {
         if( attempt == 1 || Settings().JumpOverObstacles() )
-        {
-
             nextRank = currentRank - 1;
-        }
         else
-        {
             nextRank = currentRank + 10000;
-        }
-
 
     	WALKAROUND::WALKAROUND_STATUS status = walkaround.Route( aCurrent, walkaroundLine, false );
 
@@ -881,8 +847,7 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
 
     if( !jt )
     {
-        PNS_DBG( Dbg(), Message,
-                 wxString::Format( wxT( "weird, can't find the center-of-via joint\n" ) ) );
+        PNS_DBG( Dbg(), Message, wxT( "weird, can't find the center-of-via joint\n" ) );
         return SH_INCOMPLETE;
     }
 
@@ -969,7 +934,6 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
         {
             replaceLine( lp.first, lp.second );
             lp.second.SetRank( aCurrentRank - 1 );
-
 
             PNS_DBG( Dbg(), Message, wxString::Format("PushViaF %p %d\n", &lp.second, lp.second.SegmentCount() ) );
 
@@ -1166,7 +1130,9 @@ void SHOVE::unwindLineStack( const LINKED_ITEM* aSeg )
             i = m_lineStack.erase( i );
         }
         else
+        {
             i++;
+        }
 
         d++;
     }
@@ -1340,7 +1306,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
     Dbg()->SetIteration( aIter );
     }
 
-    PNS_DBG( Dbg(), AddItem, &currentLine, RED, currentLine.Width(), wxString::Format( "current-coll-chk rank %d", currentLine.Rank() ) );
+    PNS_DBG( Dbg(), AddItem, &currentLine, RED, currentLine.Width(), wxString::Format( wxT( "current-coll-chk rank %d" ), currentLine.Rank() ) );
 
     for( ITEM::PnsKind search_order : { ITEM::SOLID_T, ITEM::VIA_T, ITEM::SEGMENT_T } )
     {
@@ -1351,11 +1317,12 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
 
          if( nearest )
          {
-             PNS_DBG( Dbg(), Message,
-                      wxString::Format( wxT( "nearest %p %s rank %d" ), nearest->m_item,
-                                        nearest->m_item->KindStr(), nearest->m_item->Rank() ) );
+             PNS_DBG( Dbg(), Message, wxString::Format( wxT( "nearest %p %s rank %d" ),
+                                                        nearest->m_item,
+                                                        nearest->m_item->KindStr(),
+                                                        nearest->m_item->Rank() ) );
 
-            PNS_DBG( Dbg(), AddShape, nearest->m_item->Shape(), YELLOW, 10000, wxT("nearest") );
+            PNS_DBG( Dbg(), AddShape, nearest->m_item->Shape(), YELLOW, 10000, wxT( "nearest" ) );
          }   
 
          if( nearest )
@@ -1365,13 +1332,13 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
     if( !nearest )
     {
         m_lineStack.pop_back();
-        PNS_DBG( Dbg(), Message, "no-nearest-item ");
+        PNS_DBG( Dbg(), Message, wxT( "no-nearest-item ") );
         return SH_OK;
     }
 
     bool viaFixup = fixupViaCollisions( &currentLine, *nearest );
 
-    PNS_DBG( Dbg(), Message, wxString::Format( "iter %d: VF %d", aIter, viaFixup?1:0 ) );
+    PNS_DBG( Dbg(), Message, wxString::Format( wxT( "iter %d: VF %d" ), aIter, viaFixup?1:0 ) );
 
 
     ITEM* ni = nearest->m_item;
@@ -1386,7 +1353,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
         {
         case ITEM::VIA_T:
         {
-            PNS_DBG( Dbg(), BeginGroup, wxString::Format( "iter %d: reverse-collide-via", aIter ).ToStdString(), 0 );
+            PNS_DBG( Dbg(), BeginGroup, wxString::Format( wxT( "iter %d: reverse-collide-via" ), aIter ), 0 );
 
             if( currentLine.EndsWithVia() && nearest->m_item->Collide( &currentLine.Via(), m_currentNode ) )
             {
@@ -1404,8 +1371,8 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
 
         case ITEM::SEGMENT_T:
         {
-            PNS_DBG( Dbg(), BeginGroup, wxString::Format( "iter %d: reverse-collide-segment ",
-                                                       aIter ).ToStdString(), 0 );
+            PNS_DBG( Dbg(), BeginGroup, wxString::Format( wxT( "iter %d: reverse-collide-segment " ),
+                                                          aIter ), 0 );
             LINE revLine = assembleLine( static_cast<SEGMENT*>( ni ) );
 
             popLineStack();
@@ -1426,7 +1393,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
         case ITEM::ARC_T:
         {
             //TODO(snh): Handle Arc shove separate from track
-            PNS_DBG( Dbg(), BeginGroup, wxString::Format( "iter %d: reverse-collide-arc ", aIter ).ToStdString(), 0 );
+            PNS_DBG( Dbg(), BeginGroup, wxString::Format( wxT( "iter %d: reverse-collide-arc " ), aIter ), 0 );
             LINE revLine = assembleLine( static_cast<ARC*>( ni ) );
 
             popLineStack();
@@ -1451,7 +1418,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
         switch( ni->Kind() )
         {
         case ITEM::SEGMENT_T:
-            PNS_DBG( Dbg(), BeginGroup, wxString::Format( "iter %d: collide-segment ", aIter ), 0 );
+            PNS_DBG( Dbg(), BeginGroup, wxString::Format( wxT( "iter %d: collide-segment " ), aIter ), 0 );
 
             st = onCollidingSegment( currentLine, (SEGMENT*) ni );
 
@@ -1464,7 +1431,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
 
             //TODO(snh): Customize Arc collide
         case ITEM::ARC_T:
-            PNS_DBG( Dbg(), BeginGroup, wxString::Format( "iter %d: collide-arc ", aIter ), 0 );
+            PNS_DBG( Dbg(), BeginGroup, wxString::Format( wxT( "iter %d: collide-arc " ), aIter ), 0 );
 
             st = onCollidingArc( currentLine, static_cast<ARC*>( ni ) );
 
@@ -1476,7 +1443,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
             break;
 
         case ITEM::VIA_T:
-            PNS_DBG( Dbg(), BeginGroup, wxString::Format( "iter %d: collide-via (fixup: %d)", aIter, 0 ), 0 );            
+            PNS_DBG( Dbg(), BeginGroup, wxString::Format( wxT( "iter %d: collide-via (fixup: %d)" ), aIter, 0 ), 0 );
             st = onCollidingVia( &currentLine, (VIA*) ni, *nearest );
 
             if( st == SH_TRY_WALK )
@@ -1487,7 +1454,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
             break;
 
         case ITEM::SOLID_T:
-            PNS_DBG( Dbg(), BeginGroup, wxString::Format( "iter %d: walk-solid ", aIter ), 0);
+            PNS_DBG( Dbg(), BeginGroup, wxString::Format( wxT( "iter %d: walk-solid " ), aIter ), 0);
             st = onCollidingSolid( currentLine, (SOLID*) ni, *nearest );
 
             PNS_DBGN( Dbg(), EndGroup );
@@ -1744,7 +1711,7 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveMultiLines( const ITEM_SET& aHeadSet )
     m_currentNode->RemoveByMarker( MK_HEAD );
 
     PNS_DBG( Dbg(), Message, wxString::Format( "Shove status : %s after %d iterations",
-           ( st == SH_OK ? "OK" : "FAILURE"), m_iter ) );
+                                               ( st == SH_OK ? "OK" : "FAILURE"), m_iter ) );
 
     if( st == SH_OK )
     {
@@ -1851,9 +1818,9 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveDraggingVia( const VIA_HANDLE aOldVia, const VEC
 
 LINE* SHOVE::findRootLine( LINE *aLine )
 {
-    for( auto link : aLine->Links() )
+    for( LINKED_ITEM* link : aLine->Links() )
     {
-        if( auto seg = dyn_cast<SEGMENT*>( link ) )
+        if( SEGMENT* seg = dyn_cast<SEGMENT*>( link ) )
         {
             auto it = m_rootLineHistory.find( seg );
 
@@ -1896,7 +1863,6 @@ void SHOVE::runOptimizer( NODE* aNode )
 
     case OE_MEDIUM:
         optFlags |= OPTIMIZER::MERGE_SEGMENTS;
-
         n_passes = 2;
         break;
 
@@ -1944,10 +1910,10 @@ void SHOVE::runOptimizer( NODE* aNode )
                 if( optimizer.Optimize( &line, &optimized, root ) )
                 {
                     PNS_DBG( Dbg(), AddShape, &line.CLine(), BLUE, 0, wxT( "shove-pre-opt" ) );
+
                     if( root )
-		    {
                         PNS_DBG( Dbg(), AddItem, root, RED, 0, wxT( "shove-root-opt" ) );
-                    }
+
                     replaceLine( line, optimized, false, aNode );
                     line = optimized; // keep links in the lines in the queue up to date
 

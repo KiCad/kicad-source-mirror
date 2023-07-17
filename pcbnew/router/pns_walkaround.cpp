@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -25,7 +25,6 @@
 
 #include "pns_walkaround.h"
 #include "pns_optimizer.h"
-#include "pns_utils.h"
 #include "pns_router.h"
 #include "pns_debug_decorator.h"
 #include "pns_solid.h"
@@ -72,7 +71,7 @@ void WALKAROUND::RestrictToSet( bool aEnabled, const std::set<ITEM*>& aSet )
 
     if( aEnabled )
     {
-        for( auto item : aSet )
+        for( ITEM* item : aSet )
         {
             m_restrictedSet.insert( item );
 
@@ -81,12 +80,10 @@ void WALKAROUND::RestrictToSet( bool aEnabled, const std::set<ITEM*>& aSet )
         }
     }
 
-    for( auto item : aSet )
+    for( ITEM* item : aSet )
     {
-        if( auto solid = dyn_cast<SOLID*>( item ) )
-        {
+        if( SOLID* solid = dyn_cast<SOLID*>( item ) )
             m_restrictedVertices.push_back( solid->Anchor( 0 ) );
-        }
     }
 }
 
@@ -255,8 +252,7 @@ WALKAROUND::WALKAROUND_STATUS WALKAROUND::Route( const LINE& aInitialPath, LINE&
     // special case for via-in-the-middle-of-track placement
     if( aInitialPath.PointCount() <= 1 )
     {
-        if( aInitialPath.EndsWithVia() && m_world->CheckColliding( &aInitialPath.Via(),
-                                                                   m_itemMask ) )
+        if( aInitialPath.EndsWithVia() && m_world->CheckColliding( &aInitialPath.Via(), m_itemMask ) )
             return STUCK;
 
         aWalkPath = aInitialPath;
