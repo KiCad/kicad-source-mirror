@@ -141,21 +141,20 @@ void LAYER_BOX_SELECTOR::ResyncBitmapOnly()
 }
 
 
+#ifdef __WXMAC__
+
 void LAYER_BOX_SELECTOR::onKeyDown( wxKeyEvent& aEvent )
 {
-#ifdef __WXOSX_MAC__
     if( aEvent.GetKeyCode() == WXK_ESCAPE && IsPopupShown() )
     {
         Dismiss();
         return;
     }
-#endif
 
     aEvent.Skip();
 }
 
 
-#ifdef __WXMAC__
 void LAYER_BOX_SELECTOR::OnDrawBackground( wxDC& dc, const wxRect& rect, int item, int flags) const
 {
     if( ( flags & wxODCB_PAINTING_CONTROL ) && !IsEnabled() )
@@ -178,4 +177,5 @@ void LAYER_BOX_SELECTOR::OnDrawBackground( wxDC& dc, const wxRect& rect, int ite
 
     wxBitmapComboBox::OnDrawBackground( dc, rect, item, flags );
 }
+
 #endif

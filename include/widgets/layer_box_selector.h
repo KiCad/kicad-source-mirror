@@ -85,9 +85,8 @@ public:
     void ResyncBitmapOnly();
 
 private:
-    void onKeyDown( wxKeyEvent& aEvent );
-
 #ifdef __WXMAC__
+    void onKeyDown( wxKeyEvent& aEvent );
     void OnDrawBackground( wxDC& dc, const wxRect& rect, int item, int flags) const override;
 #endif
 };
