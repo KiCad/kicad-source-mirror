@@ -157,3 +157,8 @@ void KIPLATFORM::UI::WarpPointer( wxWindow* aWindow, int aX, int aY )
 {
     aWindow->WarpPointer( aX, aY );
 }
+
+
+void KIPLATFORM::UI::ImmControl( wxWindow* aWindow, bool aEnable )
+{
+}

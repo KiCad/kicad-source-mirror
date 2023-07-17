@@ -143,6 +143,11 @@ namespace KIPLATFORM
          * @param aY destination y position
          */
         void WarpPointer( wxWindow* aWindow, int aX, int aY );
+
+        /**
+         * Configures the IME mode of a given control handle
+         */
+        void ImmControl( wxWindow* aWindow, bool aEnable );
     }
 }
 

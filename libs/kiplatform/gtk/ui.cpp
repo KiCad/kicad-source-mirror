@@ -216,3 +216,8 @@ void KIPLATFORM::UI::WarpPointer( wxWindow* aWindow, int aX, int aY )
         gdk_window_set_cursor( win, cur_cursor );
     }
 }
+
+
+void KIPLATFORM::UI::ImmControl( wxWindow* aWindow, bool aEnable )
+{
+}
