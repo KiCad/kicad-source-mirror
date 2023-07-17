@@ -83,15 +83,19 @@ LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id, const w
     if( choices != nullptr )
         ResyncBitmapOnly();
 
+#ifdef __WXMAC__
     GetParent()->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( LAYER_BOX_SELECTOR::onKeyDown ),
                           nullptr, this );
+#endif
 }
 
 
 LAYER_BOX_SELECTOR::~LAYER_BOX_SELECTOR()
 {
+#ifdef __WXMAC__
     GetParent()->Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( LAYER_BOX_SELECTOR::onKeyDown ),
                              nullptr, this );
+#endif
 }
 
 
