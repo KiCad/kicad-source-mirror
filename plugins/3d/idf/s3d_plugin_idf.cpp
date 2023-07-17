@@ -24,8 +24,6 @@
 
 // Note: the board's bottom side is at Z = 0
 
-#include <iostream>
-#include <sstream>
 #include <cmath>
 #include <string>
 #include <map>

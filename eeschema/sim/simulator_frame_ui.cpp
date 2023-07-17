@@ -1970,16 +1970,16 @@ bool SIMULATOR_FRAME_UI::SaveWorkbook( const wxString& aPath )
 
         int options = simTab->GetSimOptions();
 
-        if( simTab->GetSimOptions() & NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS )
+        if( options & NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS )
             commands_js.push_back( ".kicad adjustpaths" );
 
-        if( simTab->GetSimOptions() & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES )
+        if( options & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES )
             commands_js.push_back( ".save all" );
 
-        if( simTab->GetSimOptions() & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS )
+        if( options & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS )
             commands_js.push_back( ".probe alli" );
 
-        if( simTab->GetSimOptions() & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_DISSIPATIONS )
+        if( options & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_DISSIPATIONS )
             commands_js.push_back( ".probe allp" );
 
         nlohmann::json tab_js = nlohmann::json(

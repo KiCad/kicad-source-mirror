@@ -339,7 +339,9 @@ bool SIMULATOR_FRAME_UI::loadLegacyWorkbook( const wxString& aPath )
         if( version >= 5 )
         {
             simTab = dynamic_cast<SIM_TAB*>( m_plotNotebook->GetPage( 0 ) );
-            simTab->SetLastSchTextSimCommand( file.GetNextLine() );
+
+            if( simTab )
+                simTab->SetLastSchTextSimCommand( file.GetNextLine() );
         }
     }
 

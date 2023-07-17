@@ -38,7 +38,8 @@ struct HOTKEY
     int                       m_EditKeycodeAlt;
 
     HOTKEY() :
-            m_EditKeycode( 0 )
+            m_EditKeycode( 0 ),
+            m_EditKeycodeAlt( 0 )
     { }
 
     HOTKEY( TOOL_ACTION* aAction ) :
