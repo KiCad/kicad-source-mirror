@@ -3,15 +3,20 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:33-0700\n"
-"PO-Revision-Date: 2018-07-15 17:07+0200\n"
+"PO-Revision-Date: 2023-07-18 08:04+0000\n"
+"Last-Translator: Djamel Dellaa <d2jamel@gmail.com>\n"
+"Language-Team: Arabic <https://hosted.weblate.org/projects/kicad/v7/ar/>\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"X-Generator: Weblate 5.0-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
-msgstr ""
+msgstr "جميع الملفات"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:322
 msgid "Build board outline"
@@ -19,12 +24,12 @@ msgstr ""
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:530
 msgid "Create layers"
-msgstr ""
+msgstr "إنشاء طبقات"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:674
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:116
 msgid "No footprint loaded."
-msgstr ""
+msgstr "لم يتم تحميل أي أثر."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:691
 msgid ""
@@ -42,11 +47,11 @@ msgstr ""
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:676
 msgid "Create zones"
-msgstr ""
+msgstr "إنشاء مناطق"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:743
 msgid "Simplifying copper layers polygons"
-msgstr ""
+msgstr "تبسيط مضلعات طبقات النحاس"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:752
 msgid "Simplifying polygons on F_Cu"
@@ -63,7 +68,7 @@ msgstr ""
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:833
 msgid "Simplify holes contours"
-msgstr ""
+msgstr "تبسيط حدود الثقوب"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:862
 msgid "Build Tech layers"
@@ -84,7 +89,7 @@ msgstr ""
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:421
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
-msgstr ""
+msgstr "إصدار OpenGL الخاص بك غير مدعوم. الحد الأدنى المطلوب هو 1.5."
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:555
 #, c-format
@@ -121,7 +126,7 @@ msgstr ""
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:566
 msgid "Load OpenGL: layers"
-msgstr ""
+msgstr "تحميل OpenGL: الطبقات"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:579
 #, c-format
@@ -132,7 +137,7 @@ msgstr ""
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:791
 #: pcbnew/plugins/altium/altium_pcb.cpp:1605
 msgid "Loading 3D models..."
-msgstr ""
+msgstr "جار تحميل النماذج ثلاثية الأبعاد..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:687
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:949
@@ -155,7 +160,7 @@ msgstr ""
 #: 3d-viewer/3d_rendering/opengl/render_3d_opengl.cpp:566
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:175
 msgid "Loading..."
-msgstr ""
+msgstr "جار التحميل..."
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:387
 msgid "Load Raytracing: board"
@@ -191,11 +196,11 @@ msgstr ""
 #: common/hotkey_store.cpp:76 common/tool/actions.cpp:590
 #: pcbnew/footprint_viewer_frame.cpp:1155 pcbnew/pcb_base_frame.cpp:685
 msgid "3D Viewer"
-msgstr ""
+msgstr "عارض ثلاثي الأبعاد"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:69
 msgid "Copy 3D Image"
-msgstr ""
+msgstr "نسخ صورة ثلاثية الأبعاد"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:107
 msgid "Raytracing"
@@ -208,7 +213,7 @@ msgstr ""
 #: pagelayout_editor/menubar.cpp:160 pcbnew/menubar_footprint_editor.cpp:242
 #: pcbnew/menubar_pcb_editor.cpp:459
 msgid "Preferences..."
-msgstr ""
+msgstr "التفضيلات..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:113 common/tool/actions.cpp:626
 #: cvpcb/menubar.cpp:75 eeschema/menubar.cpp:305
@@ -217,15 +222,15 @@ msgstr ""
 #: pagelayout_editor/menubar.cpp:161 pcbnew/menubar_footprint_editor.cpp:243
 #: pcbnew/menubar_pcb_editor.cpp:460
 msgid "Show preferences for all open tools"
-msgstr ""
+msgstr "عرض التفضيلات لجميع الأدوات المفتوحة"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:117
 msgid "Reset to Default Settings"
-msgstr ""
+msgstr "إعادة الضبط إلى الإعدادات الافتراضية"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:133
 msgid "3D Grid"
-msgstr ""
+msgstr "شبكة ثلاثية الأبعاد"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:146
 #: bitmap2component/bitmap2cmp_gui.cpp:237 cvpcb/menubar.cpp:87
@@ -236,7 +241,7 @@ msgstr ""
 #: pcbnew/menubar_footprint_editor.cpp:252 pcbnew/menubar_pcb_editor.cpp:470
 #: pcbnew/toolbars_footprint_viewer.cpp:193
 msgid "&File"
-msgstr ""
+msgstr "&ملف"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:147 cvpcb/menubar.cpp:88
 #: eeschema/menubar.cpp:316
@@ -244,7 +249,7 @@ msgstr ""
 #: pagelayout_editor/menubar.cpp:171 pcbnew/menubar_footprint_editor.cpp:253
 #: pcbnew/menubar_pcb_editor.cpp:471
 msgid "&Edit"
-msgstr ""
+msgstr "&تحرير"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:148 eeschema/menubar.cpp:317
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:182
@@ -253,12 +258,12 @@ msgstr ""
 #: pcbnew/menubar_footprint_editor.cpp:254 pcbnew/menubar_pcb_editor.cpp:472
 #: pcbnew/toolbars_footprint_viewer.cpp:194
 msgid "&View"
-msgstr ""
+msgstr "&عرض"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:149 cvpcb/menubar.cpp:89
 #: gerbview/menubar.cpp:240 kicad/menubar.cpp:217
 msgid "&Preferences"
-msgstr ""
+msgstr "&التفضيلات"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:59
 #: pcbnew/widgets/appearance_controls.cpp:2751
@@ -269,12 +274,12 @@ msgstr ""
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:68
 #: pcbnew/widgets/appearance_controls.cpp:2760
 msgid "Save viewport..."
-msgstr ""
+msgstr "حفظ العرض..."
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:69
 #: pcbnew/widgets/appearance_controls.cpp:2761
 msgid "Delete viewport..."
-msgstr ""
+msgstr "حذف العرض..."
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:71
 #, c-format
@@ -287,11 +292,11 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:83
 msgid "Reload board"
-msgstr ""
+msgstr "إعادة تحميل اللوحة"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:88
 msgid "Copy 3D image to clipboard"
-msgstr ""
+msgstr "نسخ صورة ثلاثية الأبعاد إلى الحافظة"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:93
 msgid "Render current view using Raytracing"
@@ -305,31 +310,31 @@ msgstr ""
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:517
 #: pcbnew/widgets/appearance_controls.cpp:2809
 msgid "Viewport name:"
-msgstr ""
+msgstr "اسم العرض:"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:517
 #: pcbnew/widgets/appearance_controls.cpp:2809
 msgid "Save Viewport"
-msgstr ""
+msgstr "حفظ العرض"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:556
 #: pcbnew/widgets/appearance_controls.cpp:2848
 msgid "Viewports"
-msgstr ""
+msgstr "العروض"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:565
 #: pcbnew/widgets/appearance_controls.cpp:2857
 msgid "Delete Viewport"
-msgstr ""
+msgstr "حذف العرض"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:566
 #: pcbnew/widgets/appearance_controls.cpp:2858
 msgid "Select viewport:"
-msgstr ""
+msgstr "اختر العرض:"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:764
 msgid "3D Image File Name"
-msgstr ""
+msgstr "اسم ملف الصورة ثلاثية الأبعاد"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:785
 #: common/eda_base_frame.cpp:1255 common/eda_base_frame.cpp:1259
@@ -351,79 +356,79 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:203
 #: pcbnew/pcb_marker.cpp:205
 msgid "Error"
-msgstr ""
+msgstr "خطأ"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:819
 msgid "Failed to copy image to clipboard"
-msgstr ""
+msgstr "فشل نسخ الصورة إلى الحافظة"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:830
 msgid "Can't save file"
-msgstr ""
+msgstr "لا يمكن حفظ الملف"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:43
 msgid "Center pivot rotation"
-msgstr ""
+msgstr "محور الدوران في الوسط"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:43
 msgid "Center pivot rotation (middle mouse click)"
-msgstr ""
+msgstr "محور الدوران في الوسط (النقر بالماوس الأوسط)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:48
 msgid "Rotate X Clockwise"
-msgstr ""
+msgstr "تدوير المحور X باتجاه عقارب الساعة"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:53
 msgid "Rotate X Counterclockwise"
-msgstr ""
+msgstr "تدوير المحور X عكس اتجاه عقارب الساعة"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:58
 msgid "Rotate Y Clockwise"
-msgstr ""
+msgstr "تدوير المحور Y باتجاه عقارب الساعة"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:63
 msgid "Rotate Y Counterclockwise"
-msgstr ""
+msgstr "تدوير المحور Y عكس اتجاه عقارب الساعة"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:68
 msgid "Rotate Z Clockwise"
-msgstr ""
+msgstr "تدوير المحور Z باتجاه عقارب الساعة"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:73
 msgid "Rotate Z Counterclockwise"
-msgstr ""
+msgstr "تدوير المحور Z عكس اتجاه عقارب الساعة"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:79
 msgid "Move board Left"
-msgstr ""
+msgstr "تحريك اللوح لليسار"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:85
 msgid "Move board Right"
-msgstr ""
+msgstr "تحريك اللوح لليمين"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:91
 msgid "Move board Up"
-msgstr ""
+msgstr "تحريك اللوح للأعلى"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:97
 msgid "Move board Down"
-msgstr ""
+msgstr "تحريك اللوح للأسفل"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:103
 msgid "Home view"
-msgstr ""
+msgstr "عرض البداية"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:109
 msgid "Reset view"
-msgstr ""
+msgstr "إعادة ضبط العرض"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:115
 msgid "Flip Board"
-msgstr ""
+msgstr "اقلب اللوحة"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:115
 msgid "Flip the board view"
-msgstr ""
+msgstr "اقلب عرض اللوحة"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:120
 msgid "Toggle orthographic projection"
@@ -436,55 +441,55 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:126
 msgid "View Front"
-msgstr ""
+msgstr "عرض الواجهة"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:132
 msgid "View Back"
-msgstr ""
+msgstr "عرض الخلفية"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:138
 msgid "View Left"
-msgstr ""
+msgstr "عرض اليسار"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:144
 msgid "View Right"
-msgstr ""
+msgstr "عرض اليمين"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:150
 msgid "View Top"
-msgstr ""
+msgstr "عرض الأعلى"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:156
 msgid "View Bottom"
-msgstr ""
+msgstr "عرض الأسفل"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:161
 msgid "No 3D Grid"
-msgstr ""
+msgstr "لا توجد شبكة ثلاثية الأبعاد"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:166
 msgid "3D Grid 10mm"
-msgstr ""
+msgstr "شبكة ثلاثية الأبعاد 10 مم"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:171
 msgid "3D Grid 5mm"
-msgstr ""
+msgstr "شبكة ثلاثية الأبعاد 5 مم"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:176
 msgid "3D Grid 2.5mm"
-msgstr ""
+msgstr "شبكة ثلاثية الأبعاد 2.5 مم"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:181
 msgid "3D Grid 1mm"
-msgstr ""
+msgstr "شبكة ثلاثية الأبعاد 1 مم"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:187
 msgid "Render Realistic Materials"
-msgstr ""
+msgstr "تقديم مواد واقعية"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:188
 msgid "Use all material properties from each 3D model file"
-msgstr ""
+msgstr "استخدام جميع خصائص المواد من كل ملف نموذج ثلاثي الأبعاد"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:194
 msgid "Render Solid Colors"
@@ -492,7 +497,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:195
 msgid "Use only the diffuse color property from model 3D model file"
-msgstr ""
+msgstr "استخدام خاصية اللون الانعكاسي فقط من ملف نموذج ثلاثي الأبعاد"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:201
 msgid "Render CAD Colors"
@@ -500,7 +505,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:202
 msgid "Use a CAD color style based on the diffuse color of the material"
-msgstr ""
+msgstr "استخدام نمط لون CAD يعتمد على اللون الانعكاسي للمادة"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:208
 msgid "Toggle Through Hole 3D models"
@@ -520,7 +525,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
 msgid "Toggle unspecified 3D models"
-msgstr ""
+msgstr "تبديل نماذج ثلاثية الأبعاد غير المحددة"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:222
 msgid "Toggle 3D models for 'unspecified' type components"
@@ -528,15 +533,15 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:228
 msgid "Toggle 3D models not in pos file"
-msgstr ""
+msgstr "تبديل نماذج ثلاثية الأبعاد غير الموجودة في ملف pos"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:233
 msgid "Show Model Bounding Boxes"
-msgstr ""
+msgstr "عرض إطارات الحدود للنماذج"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:238
 msgid "Toggle realistic mode"
-msgstr ""
+msgstr "تبديل وضع واقعي"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:242
 msgid "Toggle board body display"
@@ -824,15 +829,15 @@ msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:72
 msgid "While Moving"
-msgstr ""
+msgstr "أثناء التحريك"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:85
 msgid "Disable anti-aliasing"
-msgstr ""
+msgstr "تعطيل التمويج الحاد (anti-aliasing)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:88
 msgid "Disable thickness"
-msgstr ""
+msgstr "تعطيل السماكة"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:91
 msgid "Disable vias"
@@ -840,7 +845,7 @@ msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:94
 msgid "Disable holes"
-msgstr ""
+msgstr "تعطيل الثقوب"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:27
 msgid "Procedural textures (slow)"
@@ -857,11 +862,11 @@ msgstr ""
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:39
 msgid ""
 "Screen space ambient occlusions and global illumination reflections (slow)"
-msgstr ""
+msgstr "التظليل الجوي في مساحة الشاشة والانعكاسات العالمية للإضاءة (بطيئة)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:54
 msgid "Number of Samples"
-msgstr ""
+msgstr "عدد العينات"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:58
 msgid "Spread Factor %"
@@ -897,7 +902,7 @@ msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:98
 msgid "Refractions:"
-msgstr ""
+msgstr "الانكسارات:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:103
 msgid "Number of rays that will be cast to evaluate a refraction point"
@@ -905,28 +910,28 @@ msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:111
 msgid "Number of bounces that a ray can hit reflective objects"
-msgstr ""
+msgstr "عدد الترددات التي يمكن أن تصطدم بها الأشعة مع الأجسام الانعكاسية"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:121
 msgid "Lights Configuration"
-msgstr ""
+msgstr "تكوين الإضاءة"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:134
 msgid "Ambient camera light:"
-msgstr ""
+msgstr "إضاءة الكاميرا البيئية:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:146
 msgid "Top light:"
-msgstr ""
+msgstr "الإضاءة العلوية:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:158
 msgid "Bottom light:"
-msgstr ""
+msgstr "الإضاءة السفلية:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:184
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:201
 msgid "Elevation (deg)"
-msgstr ""
+msgstr "الارتفاع (درجة)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:188
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:205
@@ -935,40 +940,40 @@ msgstr ""
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:209
 msgid "Light 1:"
-msgstr ""
+msgstr "الضوء 1:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:227
 msgid "Light 5:"
-msgstr ""
+msgstr "الضوء 5:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:242
 msgid "Light 2:"
-msgstr ""
+msgstr "الضوء 2:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:260
 msgid "Light 6:"
-msgstr ""
+msgstr "الضوء 6:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:275
 msgid "Light 3:"
-msgstr ""
+msgstr "الضوء 3:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:293
 msgid "Light 7:"
-msgstr ""
+msgstr "الضوء 7:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:308
 msgid "Light 4:"
-msgstr ""
+msgstr "الضوء 4:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:326
 msgid "Light 8:"
-msgstr ""
+msgstr "الضوء 8:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56 pcbnew/pcb_bitmap.cpp:261
 msgid "Scale"
-msgstr ""
+msgstr "مقياس"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:29
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:74
@@ -991,7 +996,7 @@ msgstr ""
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:62
 #: pcbnew/microwave/microwave_polygon.cpp:145
 msgid "X:"
-msgstr ""
+msgstr "X:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:39
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:84
@@ -1017,7 +1022,7 @@ msgstr ""
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:83
 #: pcbnew/microwave/microwave_polygon.cpp:154
 msgid "Y:"
-msgstr ""
+msgstr "Y:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:49
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:94
@@ -1025,21 +1030,21 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:328
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:340
 msgid "Z:"
-msgstr ""
+msgstr "Z:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:66
 #: gerbview/gerber_draw_item.cpp:674 pcbnew/footprint.cpp:1083
 #: pcbnew/pad.cpp:1054
 msgid "Rotation"
-msgstr ""
+msgstr "دوران"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:111
 msgid "Offset"
-msgstr ""
+msgstr "إزاحة"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:156
 msgid "Opacity"
-msgstr ""
+msgstr "الشفافية"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:165
 msgid "Board Thickness"
@@ -1275,7 +1280,7 @@ msgstr ""
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:47
 msgid "Image size:"
-msgstr ""
+msgstr "حجم الصورة:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:51
 #: bitmap2component/bitmap2cmp_gui_base.cpp:55
@@ -1283,19 +1288,19 @@ msgstr ""
 #: bitmap2component/bitmap2cmp_gui_base.cpp:71
 #: bitmap2component/bitmap2cmp_gui_base.cpp:83
 msgid "0000"
-msgstr ""
+msgstr "0000"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:59
 msgid "pixels"
-msgstr ""
+msgstr "بكسل"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:63
 msgid "Image PPI:"
-msgstr ""
+msgstr "الدقة بالبوصة PPI للصورة:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:75
 msgid "PPI"
-msgstr ""
+msgstr "PPI"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:79
 msgid "BPP:"
