@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -12,7 +12,7 @@
 #include <wx/intl.h>
 #include "dialog_shim.h"
 #include <wx/string.h>
-#include <wx/radiobox.h>
+#include <wx/radiobut.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
@@ -34,14 +34,16 @@ class DIALOG_PNS_SETTINGS_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		wxRadioBox* m_mode;
+		wxRadioButton* m_rbMarkObstacles;
 		wxCheckBox* m_freeAngleMode;
+		wxCheckBox* m_violateDrc;
+		wxRadioButton* m_rbShove;
 		wxCheckBox* m_shoveVias;
 		wxCheckBox* m_backPressure;
+		wxRadioButton* m_rbWalkaround;
 		wxCheckBox* m_removeLoops;
 		wxCheckBox* m_smartPads;
 		wxCheckBox* m_smoothDragged;
-		wxCheckBox* m_violateDrc;
 		wxCheckBox* m_suggestEnding;
 		wxCheckBox* m_optimizeEntireDraggedTrack;
 		wxCheckBox* m_autoPosture;

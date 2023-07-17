@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2014  CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -19,32 +19,27 @@
  * with this program.  If not, see <http://www.gnu.or/licenses/>.
  */
 
-/**
- * Push and Shove router settings dialog.
- */
-
-#ifndef __dialog_pns_settings__
-#define __dialog_pns_settings__
+#ifndef DIALOG_PNS_SETTINGS_H
+#define DIALOG_PNS_SETTINGS_H
 
 #include "dialog_pns_settings_base.h"
 
 namespace PNS {
-
 class ROUTING_SETTINGS;
-
 }
 
 class DIALOG_PNS_SETTINGS : public DIALOG_PNS_SETTINGS_BASE
 {
-    public:
-        DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS::ROUTING_SETTINGS& aSettings );
+public:
+    DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS::ROUTING_SETTINGS& aSettings );
 
-        bool TransferDataFromWindow() override;
+    bool TransferDataFromWindow() override;
 
-    private:
-        virtual void onModeChange( wxCommandEvent& aEvent ) override;
+private:
+    virtual void onModeChange( wxCommandEvent& aEvent ) override;
 
-        PNS::ROUTING_SETTINGS& m_settings;
+private:
+    PNS::ROUTING_SETTINGS& m_settings;
 };
 
-#endif // __dialog_pns_settings__
+#endif // DIALOG_PNS_SETTINGS_H
