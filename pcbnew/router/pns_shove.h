@@ -161,7 +161,6 @@ private:
     SHOVE_STATUS shoveMainLoop();
 
     int getClearance( const ITEM* aA, const ITEM* aB ) const;
-    int getHoleClearance( const ITEM* aA, const ITEM* aB ) const;
     bool fixupViaCollisions( const LINE* aCurrent, OBSTACLE& obs );
     void sanityCheck( LINE* aOld, LINE* aNew );
 

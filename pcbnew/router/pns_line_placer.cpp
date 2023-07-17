@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -32,7 +32,6 @@
 #include "pns_topology.h"
 #include "pns_walkaround.h"
 #include "pns_mouse_trail_tracer.h"
-#include "pns_utils.h"
 
 #include <wx/log.h>
 
@@ -392,29 +391,8 @@ bool LINE_PLACER::mergeHead()
 }
 
 
-VECTOR2I closestProjectedPoint( const SHAPE_LINE_CHAIN& line, const VECTOR2I& p )
-{
-    // Keep distances squared for performance
-    SEG::ecoord min_dist_sq = VECTOR2I::ECOORD_MAX;
-    VECTOR2I    closest;
-
-    for( int i = 0; i < line.SegmentCount(); i++ )
-    {
-        const SEG& s = line.CSegment( i );
-        VECTOR2I   a = s.NearestPoint( p );
-        int        d_sq = (a - p).SquaredEuclideanNorm();
-
-        if( d_sq < min_dist_sq )
-        {
-            min_dist_sq = d_sq;
-            closest = a;
-        }
-    }
-
-    return closest;
-}
-
-bool LINE_PLACER::clipAndCheckCollisions( VECTOR2I aP, SHAPE_LINE_CHAIN aL, SHAPE_LINE_CHAIN& aOut, int &thresholdDist )
+bool LINE_PLACER::clipAndCheckCollisions( const VECTOR2I& aP, const SHAPE_LINE_CHAIN& aL,
+                                          SHAPE_LINE_CHAIN& aOut, int &thresholdDist )
 {
     SHAPE_LINE_CHAIN l( aL );
     int idx = l.Split( aP );
@@ -448,7 +426,8 @@ bool LINE_PLACER::clipAndCheckCollisions( VECTOR2I aP, SHAPE_LINE_CHAIN aL, SHAP
 }
 
 
-bool LINE_PLACER::cursorDistMinimum( const SHAPE_LINE_CHAIN& aL, const VECTOR2I& aCursor,  double lengthThreshold, SHAPE_LINE_CHAIN &aOut )
+bool LINE_PLACER::cursorDistMinimum( const SHAPE_LINE_CHAIN& aL, const VECTOR2I& aCursor,
+                                     double lengthThreshold, SHAPE_LINE_CHAIN &aOut )
 {
     std::vector<int>      dists;
     std::vector<VECTOR2I> pts;
@@ -657,16 +636,15 @@ bool LINE_PLACER::rhWalkBase( const VECTOR2I& aP, LINE& aWalkLine, int aCollisio
 
             PNS_DBG( Dbg(), AddItem, &wr.lineCcw, RED, 20000, wxT( "wf-result-ccw-postopt" ) );
             len_ccw = wr.lineCcw.CLine().Length();
+
             if( len_ccw < len_cw )
-                {
                 bestLine = wr.lineCcw;
-                }
-            }
+        }
 
         int bestLength = len_cw < len_ccw ? len_cw : len_ccw;
 
         if( bestLength < hugThresholdLengthComplete && bestLine.has_value() )
-            {
+        {
             walkFull.SetShape( bestLine->CLine() );
             walkP = walkFull.CLine().CPoint(-1);
             PNS_DBGN( Dbg(), EndGroup );
@@ -681,41 +659,41 @@ bool LINE_PLACER::rhWalkBase( const VECTOR2I& aP, LINE& aWalkLine, int aCollisio
         SHAPE_LINE_CHAIN l_cw, l_ccw;
 
         if( wr.statusCw != WALKAROUND::STUCK )
-                {
+        {
             validCw = cursorDistMinimum( wr.lineCw.CLine(), aP, hugThresholdLength, l_cw );
+
             if( validCw )
-            {
                 distCw = ( aP - l_cw.CPoint( -1 ) ).EuclideanNorm();
-                }
-            PNS_DBG( Dbg(), AddShape, &l_cw, MAGENTA, 200000,
-                     wxString::Format( "wh-result-cw %s",
-                                       validCw ? "non-colliding" : "colliding" ) );
-            }
+
+            PNS_DBG( Dbg(), AddShape, &l_cw, MAGENTA, 200000, wxString::Format( "wh-result-cw %s",
+                                                                                 validCw ? "non-colliding"
+                                                                                         : "colliding" ) );
+        }
 
         if( wr.statusCcw != WALKAROUND::STUCK )
         {
             validCcw = cursorDistMinimum( wr.lineCcw.CLine(), aP, hugThresholdLength, l_ccw );
+
             if( validCcw )
-            {
                 distCcw = ( aP - l_ccw.CPoint( -1 ) ).EuclideanNorm();
-            }
-            PNS_DBG( Dbg(), AddShape, &l_ccw, MAGENTA, 200000,
-                     wxString::Format( "wh-result-ccw %s",
-                                       validCcw ? "non-colliding" : "colliding" ) );
+
+            PNS_DBG( Dbg(), AddShape, &l_ccw, MAGENTA, 200000, wxString::Format( "wh-result-ccw %s",
+                                                                                 validCcw ? "non-colliding"
+                                                                                          : "colliding" ) );
         }
 
 
         if( distCw < distCcw && validCw )
-            {
-                walkFull.SetShape( l_cw );
+        {
+            walkFull.SetShape( l_cw );
             walkP = l_cw.CPoint(-1);
-            }
+        }
         else if( validCcw )
-            {
-                walkFull.SetShape( l_ccw );
+        {
+            walkFull.SetShape( l_ccw );
             walkP = l_ccw.CPoint(-1);
-            }
-            else
+        }
+        else
         {
             PNS_DBGN( Dbg(), EndGroup );
             return false;
@@ -835,9 +813,7 @@ bool LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, LINE& aNewHead, LINE& aNe
         auto nearest = hull.NearestPoint( aP );
 
         if( ( nearest - aP ).EuclideanNorm() < m_head.Width() / 2 )
-        {
             buildInitialLine( nearest, m_head );
-        }
     }
 
     // Note: Something like the below could be used to implement a "stop at first obstacle" mode,
@@ -900,13 +876,9 @@ bool LINE_PLACER::splitHeadTail( const LINE& aNewLine, const LINE& aOldTail, LIN
         newHead.Clear();
 
         if( i == 0 )
-        {
             newTail.Clear();
-        }
-    else
-    {
+        else
             newTail.SetShape( l2.CLine().Slice( 0, i ) );
-    }
 
         newHead.SetShape( l2.CLine().Slice( i, -1 ) );
     }
@@ -922,11 +894,11 @@ bool LINE_PLACER::splitHeadTail( const LINE& aNewLine, const LINE& aOldTail, LIN
     aNewTail = newTail;
 
     return true;
-    }
+}
 
 
 bool LINE_PLACER::rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead, LINE& aNewTail )
-    {
+{
     LINE walkSolids;
 
     bool viaOk = false;
@@ -948,9 +920,7 @@ bool LINE_PLACER::rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead, LINE& aNewTai
     LINE newHead( walkSolids );
 
     if( walkSolids.EndsWithVia() )
-    {
         PNS_DBG( Dbg(), AddPoint, newHead.Via().Pos(), RED, 1000000, wxString::Format( "SVIA [%d]", viaOk?1:0 ) );
-    }
 
     if( m_placingVia && viaOk )
     {
@@ -1004,9 +974,7 @@ bool LINE_PLACER::rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead, LINE& aNewTai
             return false;
 
         if( newHead.EndsWithVia() )
-        {
             aNewHead.AppendVia( newHead.Via() );
-        }
 
         optimizer.SetEffortLevel( effort );
         optimizer.SetCollisionMask( ITEM::ANY_T );
@@ -1087,7 +1055,6 @@ bool LINE_PLACER::optimizeTailHeadTransition()
     // If so, replace the (threshold) last tail points and the head with
     // the optimized line
 
-
     PNS_DBG( Dbg(), AddItem, &new_head, LIGHTCYAN, 10000, wxT( "ht-newline" ) );
 
     if( OPTIMIZER::Optimize( &new_head, OPTIMIZER::MERGE_SEGMENTS, m_currentNode ) )
@@ -1109,13 +1076,9 @@ bool LINE_PLACER::optimizeTailHeadTransition()
 void LINE_PLACER::updatePStart( const LINE& tail )
 {
     if( tail.CLine().PointCount() )
-        {
-            m_p_start = tail.CLine().CPoint(-1);
-        }
-        else
-        {
-            m_p_start = m_currentStart;
-        }
+        m_p_start = tail.CLine().CPoint(-1);
+    else
+        m_p_start = m_currentStart;
 }
 
 void LINE_PLACER::routeStep( const VECTOR2I& aP )
@@ -1127,9 +1090,9 @@ void LINE_PLACER::routeStep( const VECTOR2I& aP )
 
 
     PNS_DBG( Dbg(), Message, wxString::Format( "routeStep: direction: %s head: %d, tail: %d shapes" ,
-                m_direction.Format(),
-                m_head.ShapeCount(),
-                m_tail.ShapeCount() ) );
+                                               m_direction.Format(),
+                                               m_head.ShapeCount(),
+                                               m_tail.ShapeCount() ) );
 
     PNS_DBG( Dbg(), BeginGroup, wxT( "route-step" ), 0 );
 
@@ -1446,8 +1409,7 @@ void LINE_PLACER::initPlacement()
 bool LINE_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 {
     LINE current;
-    VECTOR2I p = aP;
-    int eiDepth = -1;
+    int  eiDepth = -1;
 
     if( aEndItem && aEndItem->Owner() )
         eiDepth = static_cast<const NODE*>( aEndItem->Owner() )->Depth();
@@ -1460,7 +1422,7 @@ bool LINE_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 
     m_endItem = aEndItem;
 
-    bool reachesEnd = route( p );
+    bool reachesEnd = route( aP );
 
     current = Trace();
 
@@ -1886,8 +1848,8 @@ void LINE_PLACER::UpdateSizes( const SIZES_SETTINGS& aSizes )
         // If the track width continues from an existing track, we don't want to change the width.
         // Disallow changing width after the first segment has been fixed because we don't want to
         // go back and rip up tracks or allow DRC errors
-        if( m_sizes.TrackWidthIsExplicit() || ( !HasPlacedAnything()
-                        && ( !m_startItem || m_startItem->Kind() != ITEM::SEGMENT_T ) ) )
+        if( m_sizes.TrackWidthIsExplicit()
+            || ( !HasPlacedAnything() && ( !m_startItem || m_startItem->Kind() != ITEM::SEGMENT_T ) ) )
         {
             m_head.SetWidth( m_sizes.TrackWidth() );
             m_tail.SetWidth( m_sizes.TrackWidth() );
@@ -1925,9 +1887,8 @@ bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead, bool aForce
     SHAPE_LINE_CHAIN l;
     DIRECTION_45 guessedDir = m_mouseTrailTracer.GetPosture( aP );
 
-    PNS_DBG( Dbg(), Message,
-                wxString::Format( "buildInitialLine: m_direction %s, guessedDir %s, tail points %d",
-                m_direction.Format(), guessedDir.Format(), m_tail.PointCount() ) );
+    PNS_DBG( Dbg(), Message, wxString::Format( wxT( "buildInitialLine: m_direction %s, guessedDir %s, tail points %d" ),
+                                               m_direction.Format(), guessedDir.Format(), m_tail.PointCount() ) );
 
     DIRECTION_45::CORNER_MODE cornerMode = Settings().GetCornerMode();
     // Rounded corners don't make sense when routing orthogonally (single track at a time)
@@ -1988,26 +1949,23 @@ bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead, bool aForce
     for( int attempt = 0; attempt < 2; attempt++)
     {
         VECTOR2I lead = aP - m_p_start;
-    VECTOR2I force;
+        VECTOR2I force;
 
         if( attempt == 1 && m_last_p_end.has_value() )
-        {
             lead = aP - m_last_p_end.value();
-        }
 
         if( v.PushoutForce( m_currentNode, lead, force, collMask, iterLimit ) )
-    {
-        SHAPE_LINE_CHAIN line =
-                guessedDir.BuildInitialTrace( m_p_start, aP + force, false, cornerMode );
-        aHead = LINE( aHead, line );
+        {
+            SHAPE_LINE_CHAIN line = guessedDir.BuildInitialTrace( m_p_start, aP + force, false, cornerMode );
+            aHead = LINE( aHead, line );
 
-        v.SetPos( v.Pos() + force );
+            v.SetPos( v.Pos() + force );
 
             aHead.AppendVia( v );
 
-	PNS_DBG( Dbg(), AddPoint, v.Pos(), GREEN, 1000000, "via-force-coll-2" );
+            PNS_DBG( Dbg(), AddPoint, v.Pos(), GREEN, 1000000, "via-force-coll-2" );
 
-        return true;
+            return true;
         }
     }
 
