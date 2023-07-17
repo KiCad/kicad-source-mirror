@@ -92,7 +92,9 @@ public:
 private:
     void onKeyDown( wxKeyEvent& aEvent );
 
+#ifdef __WXMAC__
     void OnDrawBackground( wxDC& dc, const wxRect& rect, int item, int flags) const override;
+#endif
 };
 
 #endif // LAYER_BOX_SELECTOR_H

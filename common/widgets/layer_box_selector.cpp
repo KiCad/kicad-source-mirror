@@ -168,9 +168,9 @@ void LAYER_BOX_SELECTOR::onKeyDown( wxKeyEvent& aEvent )
 }
 
 
+#ifdef __WXMAC__
 void LAYER_BOX_SELECTOR::OnDrawBackground( wxDC& dc, const wxRect& rect, int item, int flags) const
 {
-#ifndef __WXMSW__
     if( ( flags & wxODCB_PAINTING_CONTROL ) && !IsEnabled() )
     {
         wxColour fgCol = wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT );
@@ -188,7 +188,7 @@ void LAYER_BOX_SELECTOR::OnDrawBackground( wxDC& dc, const wxRect& rect, int ite
         dc.SetClippingRegion( rect );
         return;
     }
-#endif
 
     wxBitmapComboBox::OnDrawBackground( dc, rect, item, flags );
 }
+#endif
