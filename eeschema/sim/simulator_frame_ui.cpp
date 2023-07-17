@@ -1859,6 +1859,13 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
 
                 plotTab->SetDottedSecondary( tab_js[ "dottedSecondary" ] );
                 plotTab->ShowGrid( tab_js[ "showGrid" ] );
+
+                if( tab_js.contains( "legend" ) )
+                {
+                    const nlohmann::json& legend_js = tab_js[ "legend" ];
+                    plotTab->SetLegendPosition( wxPoint( legend_js[ "x" ], legend_js[ "y" ] ) );
+                    plotTab->ShowLegend( true );
+                }
             }
         }
 

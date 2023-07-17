@@ -653,11 +653,11 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
     }
     else
     {
-        int count = 0;
-        int x0=0;               // X position of merged current vertical line
-        int ymin0=0;            // y min coord of merged current vertical line
-        int ymax0=0;            // y max coord of merged current vertical line
-        int dupx0 = 0;          // count of currently merged vertical lines
+        int     count = 0;
+        int     x0 = 0;         // X position of merged current vertical line
+        int     ymin0 = 0;      // y min coord of merged current vertical line
+        int     ymax0 = 0;      // y max coord of merged current vertical line
+        int     dupx0 = 0;      // count of currently merged vertical lines
         wxPoint line_start;     // starting point of the current line to draw
 
         // A buffer to store coordinates of lines to draw
@@ -694,6 +694,8 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
                         // the main trace show this point
                         dc.DrawLine( x0, ymin0, x0, ymax0 );
                     }
+#else
+                    if( x0 ) { };    // Quiet CLang
 #endif
 
                     x0 = x1;
@@ -1885,12 +1887,12 @@ void mpWindow::OnMouseMove( wxMouseEvent& event )
             dc.SetPen( pen );
             dc.SetBrush( *wxTRANSPARENT_BRUSH );
             dc.DrawRectangle( m_mouseLClick.x, m_mouseLClick.y,
-                    event.GetX() - m_mouseLClick.x, event.GetY() - m_mouseLClick.y );
+                              event.GetX() - m_mouseLClick.x, event.GetY() - m_mouseLClick.y );
             m_zooming = true;
-            m_zoomRect.x    = m_mouseLClick.x;
-            m_zoomRect.y    = m_mouseLClick.y;
-            m_zoomRect.width    = event.GetX() - m_mouseLClick.x;
-            m_zoomRect.height   = event.GetY() - m_mouseLClick.y;
+            m_zoomRect.x      = m_mouseLClick.x;
+            m_zoomRect.y      = m_mouseLClick.y;
+            m_zoomRect.width  = event.GetX() - m_mouseLClick.x;
+            m_zoomRect.height = event.GetY() - m_mouseLClick.y;
         }
 
         UpdateAll();
