@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,9 +39,7 @@ class LAYER_SELECTOR
 public:
     LAYER_SELECTOR();
 
-    virtual ~LAYER_SELECTOR()
-    {
-    }
+    virtual ~LAYER_SELECTOR() { }
 
     bool SetLayersHotkeys( bool value );
 
@@ -72,9 +70,6 @@ public:
     LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize, int n = 0,
                         const wxString choices[] = nullptr );
-
-    LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
-                        const wxArrayString& choices );
 
     ~LAYER_BOX_SELECTOR() override;
 
