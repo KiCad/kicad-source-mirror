@@ -26,10 +26,12 @@
 #include <wx/dcmemory.h>
 #include <wx/odcombo.h>
 #include <wx/menuitem.h>
+#include <wx/settings.h>
 
 #include <gal/dpi_scaling.h>
 #include <layer_ids.h>
 #include <widgets/layer_box_selector.h>
+#include "kiplatform/ui.h"
 
 
 LAYER_SELECTOR::LAYER_SELECTOR()
@@ -163,4 +165,30 @@ void LAYER_BOX_SELECTOR::onKeyDown( wxKeyEvent& aEvent )
 #endif
 
     aEvent.Skip();
+}
+
+
+void LAYER_BOX_SELECTOR::OnDrawBackground( wxDC& dc, const wxRect& rect, int item, int flags) const
+{
+#ifndef __WXMSW__
+    if( ( flags & wxODCB_PAINTING_CONTROL ) && !IsEnabled() )
+    {
+        wxColour fgCol = wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT );
+        wxColour bgCol = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE );
+
+        if( KIPLATFORM::UI::IsDarkTheme() )
+            bgCol = bgCol.ChangeLightness( 106 );
+        else
+            bgCol = bgCol.ChangeLightness( 160 );
+
+        dc.SetTextForeground( fgCol );
+        dc.SetBrush( bgCol );
+        dc.SetPen( bgCol );
+        dc.DrawRectangle( rect.Inflate( 1, 1 ) );
+        dc.SetClippingRegion( rect );
+        return;
+    }
+#endif
+
+    wxBitmapComboBox::OnDrawBackground( dc, rect, item, flags );
 }

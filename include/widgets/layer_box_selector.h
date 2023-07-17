@@ -91,6 +91,8 @@ public:
 
 private:
     void onKeyDown( wxKeyEvent& aEvent );
+
+    void OnDrawBackground( wxDC& dc, const wxRect& rect, int item, int flags) const override;
 };
 
 #endif // LAYER_BOX_SELECTOR_H
