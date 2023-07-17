@@ -168,10 +168,10 @@ void KIPLATFORM::UI::ImmControl( wxWindow* aWindow, bool aEnable )
 {
     if ( !aEnable )
     {
-        //ImmAssociateContext( aWindow->GetHWND(), NULL );
+        ImmAssociateContext( aWindow->GetHWND(), NULL );
     }
     else
     {
-       // ImmAssociateContextEx( aWindow->GetHWND(), 0, IACE_DEFAULT );
+        ImmAssociateContextEx( aWindow->GetHWND(), 0, IACE_DEFAULT );
     }
 }
