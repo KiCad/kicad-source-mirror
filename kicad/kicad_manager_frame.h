@@ -153,6 +153,8 @@ public:
 
     void SetPcmButton( BITMAP_BUTTON* aButton );
 
+    void CreatePCM();   // creates the PLUGIN_CONTENT_MANAGER
+
     DECLARE_EVENT_TABLE()
 
 protected:

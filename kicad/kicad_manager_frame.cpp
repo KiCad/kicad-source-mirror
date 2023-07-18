@@ -167,25 +167,6 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
 
     m_pcmButton = nullptr;
     m_pcmUpdateCount = 0;
-    m_pcm = std::make_shared<PLUGIN_CONTENT_MANAGER>(
-            [this]( int aUpdateCount )
-            {
-                m_pcmUpdateCount = aUpdateCount;
-                CallAfter(
-                        [this]()
-                        {
-                            updatePcmButtonBadge();
-                        } );
-            },
-            [this]( const wxString aText )
-            {
-                CallAfter(
-                        [aText, this]()
-                        {
-                            SetStatusText( aText, 1 );
-                        } );
-            } );
-    m_pcm->SetRepositoryList( kicadSettings()->m_PcmRepositories );
 
     // Left window: is the box which display tree project
     m_leftWin = new PROJECT_TREE_PANE( this );
@@ -269,13 +250,43 @@ KICAD_MANAGER_FRAME::~KICAD_MANAGER_FRAME()
     if( m_toolManager )
         m_toolManager->ShutdownAllTools();
 
-    m_pcm->StopBackgroundUpdate();
+    if( m_pcm )
+        m_pcm->StopBackgroundUpdate();
 
     delete m_actions;
     delete m_toolManager;
     delete m_toolDispatcher;
 
     m_auimgr.UnInit();
+}
+
+
+void KICAD_MANAGER_FRAME::CreatePCM()
+{
+    // creates the PLUGIN_CONTENT_MANAGER, if not exists
+    if( m_pcm )
+        return;
+
+    m_pcm = std::make_shared<PLUGIN_CONTENT_MANAGER>(
+            [this]( int aUpdateCount )
+            {
+                m_pcmUpdateCount = aUpdateCount;
+                CallAfter(
+                        [this]()
+                        {
+                            updatePcmButtonBadge();
+                        } );
+            },
+            [this]( const wxString aText )
+            {
+                CallAfter(
+                        [aText, this]()
+                        {
+                            SetStatusText( aText, 1 );
+                        } );
+            } );
+
+    m_pcm->SetRepositoryList( kicadSettings()->m_PcmRepositories );
 }
 
 
@@ -754,7 +765,7 @@ void KICAD_MANAGER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTex
 {
     EDA_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
-    if( aEnvVarsChanged )
+    if( m_pcm && aEnvVarsChanged )
     {
         m_pcm->ReadEnvVar();
     }
@@ -920,6 +931,9 @@ void KICAD_MANAGER_FRAME::OnIdle( wxIdleEvent& aEvent )
     if( KIPLATFORM::POLICY::GetPolicyBool( POLICY_KEY_PCM ) != KIPLATFORM::POLICY::PBOOL::DISABLED
         && settings->m_PcmUpdateCheck )
     {
+        if( !m_pcm )
+            CreatePCM();
+
         m_pcm->RunBackgroundUpdate();
     }
 }
