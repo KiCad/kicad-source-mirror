@@ -71,7 +71,6 @@ public:
             m_coords( 0.0, 0.0 ),
             m_window( nullptr )
     {
-        SetDrawOutsideMargins( false );
     }
 
     void Plot( wxDC& aDC, mpWindow& aWindow ) override;
@@ -129,9 +128,7 @@ public:
            m_type( aType )
     {
         SetContinuity( true );
-        SetDrawOutsideMargins( false );
         ShowName( false );
-
         SetName( aName );
     }
 

@@ -120,7 +120,6 @@ enum
     mpID_ZOOM_IN,       // !< Zoom into view at clickposition / window center
     mpID_ZOOM_OUT,      // !< Zoom out
     mpID_CENTER,        // !< Center view on click position
-    mpID_LOCKASPECT,    // !< Lock x/y scaling aspect
 };
 
 // -----------------------------------------------------------------------------
@@ -285,19 +284,6 @@ public:
      */
     void SetPen( const wxPen& pen )     { m_pen = pen;  }
 
-    /** Set Draw mode: inside or outside margins. Default is outside, which allows the layer to draw up to the mpWindow border.
-     *  @param drawModeOutside The draw mode to be set */
-    void SetDrawOutsideMargins( bool drawModeOutside ) { m_drawOutsideMargins = drawModeOutside; };
-
-    /** Get Draw mode: inside or outside margins.
-     *  @return The draw mode */
-    bool GetDrawOutsideMargins() { return m_drawOutsideMargins; };
-
-    /** Get a small square bitmap filled with the colour of the pen used in the layer. Useful to create legends or similar reference to the layers.
-     *  @param side side length in pixels
-     *  @return a wxBitmap filled with layer's colour */
-    wxBitmap GetColourSquare( int side = 16 ) const;
-
     /** Get layer type: a Layer can be of different types: plot lines, axis, info boxes, etc, this method returns the right value.
      *  @return An integer indicating layer type */
     mpLayerType GetLayerType() const { return m_type; };
@@ -327,7 +313,6 @@ protected:
     wxString    m_displayName;
     bool        m_continuous;         // !< Specify if the layer will be plotted as a continuous line or a set of points.
     bool        m_showName;           // !< States whether the name of the layer must be shown (default is true).
-    bool        m_drawOutsideMargins; // !< select if the layer should draw only inside margins or over all DC
     mpLayerType m_type;               // !< Define layer type, which is assigned by constructor
     bool        m_visible;            // !< Toggles layer visibility
 
@@ -356,12 +341,6 @@ public:
 
     /** Destructor */
     virtual ~mpInfoLayer();
-
-    /** Updates the content of the info box. Should be overridden by derived classes.
-     *  Update may behave in different ways according to the type of event which called it.
-     *  @param w parent mpWindow from which to obtain information
-     *  @param event The event which called the update. */
-    virtual void UpdateInfo( mpWindow& w, wxEvent& event );
 
     /** mpInfoLayer has not bounding box. @sa mpLayer::HasBBox
      *  @return always \a false */
@@ -411,37 +390,6 @@ protected:
     DECLARE_DYNAMIC_CLASS( mpInfoLayer )
 };
 
-/** @class mpInfoCoords
- *  @brief Implements an overlay box which shows the mouse coordinates in plot units.
- *  When an mpInfoCoords layer is activated, when mouse is moved over the mpWindow, its coordinates (in mpWindow units, not pixels) are continuously reported inside the layer box. */
-class WXDLLIMPEXP_MATHPLOT mpInfoCoords : public mpInfoLayer
-{
-public:
-    /** Default constructor */
-    mpInfoCoords();
-    /** Complete constructor, setting initial rectangle and background brush.
-     *  @param rect The initial bounding rectangle.
-     *  @param brush The wxBrush to be used for box background: default is transparent */
-    mpInfoCoords( wxRect rect, const wxBrush* brush = wxTRANSPARENT_BRUSH );
-
-    /** Default destructor */
-    ~mpInfoCoords();
-
-    /** Updates the content of the info box. It is used to update coordinates.
-     *  @param w parent mpWindow from which to obtain information
-     *  @param event The event which called the update. */
-    virtual void UpdateInfo( mpWindow& w, wxEvent& event ) override;
-
-    /** Plot method.
-     *  @param dc the device content where to plot
-     *  @param w the window to plot
-     *  @sa mpLayer::Plot */
-    virtual void Plot( wxDC& dc, mpWindow& w ) override;
-
-protected:
-    wxString m_content;     // !< string holding the coordinates to be drawn.
-};
-
 /** @class mpInfoLegend
  *  @brief Implements the legend to be added to the plot
  *  This layer allows you to add a legend to describe the plots in the window. The legend uses the layer name as a label, and displays only layers of type mpLAYER_PLOT. */
@@ -459,11 +407,6 @@ public:
 
     /**  Default destructor */
     ~mpInfoLegend();
-
-    /** Updates the content of the info box. Unused in this class.
-     *  @param w parent mpWindow from which to obtain information
-     *  @param event The event which called the update. */
-    virtual void UpdateInfo( mpWindow& w, wxEvent& event ) override;
 
     /** Plot method.
      *  @param dc the device content where to plot
@@ -1229,19 +1172,6 @@ public:
      */
     void EnableMouseWheelPan( bool enabled ) { m_enableMouseWheelPan = enabled; }
 
-    /** Enable or disable X/Y scale aspect locking for the view.
-     *  @note Explicit calls to mpWindow::SetScaleX and mpWindow::SetScaleY will set
-     *  an unlocked aspect, but any other action changing the view scale will
-     *  lock the aspect again.
-     */
-    void LockAspect( bool enable = true );
-
-    /** Checks whether the X/Y scale aspect is locked.
-     *  @retval true Locked
-     *  @retval false Unlocked
-     */
-    inline bool IsAspectLocked() const { return m_lockaspect; }
-
     /** Set view to fit global bounding box of all plot layers and refresh display.
      *  Scale and position will be set to show all attached mpLayers.
      *  The X/Y scale aspect lock is taken into account.
@@ -1255,7 +1185,7 @@ public:
      *  as the "desired borders", since this use will be invoked only when printing.
      */
     void Fit( double xMin, double xMax, double yMin, double yMax,
-              wxCoord* printSizeX = NULL, wxCoord* printSizeY = NULL );
+              const wxCoord* printSizeX = nullptr, const wxCoord* printSizeY = nullptr );
 
     /** Zoom into current view and refresh display
      * @param centerPoint The point (pixel coordinates) that will stay in the same
@@ -1292,22 +1222,9 @@ public:
 
     // Added methods by Davide Rondini
 
-    /** Counts the number of plot layers, excluding axes or text: this is to count only the layers
-     * which have a bounding box.
-     *  \return The number of profiles plotted.
-     */
-    unsigned int CountLayers() const;
-
     /** Counts the number of plot layers, whether or not they have a bounding box.
      *  \return The number of layers in the mpWindow. */
     unsigned int CountAllLayers() const { return m_layers.size(); };
-
-#if 0
-    /** Draws the mpWindow on a page for printing
-     *  \param print the mpPrintout where to print the graph
-     */
-    void PrintGraph(mpPrintout *print);
-#endif
 
     /** Returns the left-border layer coordinate that the user wants the mpWindow to show
      * (it may be not exactly the actual shown coordinate in the case of locked aspect ratio).
@@ -1337,14 +1254,6 @@ public:
      *  @param bbox Pointer to a 6-element double array where to store bounding box coordinates.
      */
     void GetBoundingBox( double* bbox ) const;
-
-    /** Enable/disable scrollbars
-     *  @param status Set to true to show scrollbars */
-    void SetMPScrollbars( bool status );
-
-    /** Get scrollbars status.
-     *  @return true if scrollbars are visible */
-    bool GetMPScrollbars() const { return m_enableScrollBars; };
 
     /** Draw the window on a wxBitmap, then save it to a file.
      *  @param filename File name where to save the screenshot
@@ -1385,18 +1294,6 @@ public:
     int GetMarginBottom() const { return m_marginBottom; };
     /** @return the left margin. */
     int GetMarginLeft() const { return m_marginLeft; };
-
-#if 0
-    /** Sets whether to show coordinate tooltip when mouse passes over the plot.
-     * \param value true for enable, false for disable
-     */
-    // void EnableCoordTooltip(bool value = true);
-
-    /** Gets coordinate tooltip status.
-     * \return true for enable, false for disable
-     */
-    // bool GetCoordTooltip() { return m_coordTooltip; };
-#endif
 
     /** Check if a given point is inside the area of a mpInfoLayer and eventually returns its pointer.
      *  @param point The position to be checked
@@ -1454,21 +1351,11 @@ protected:
     void    OnFit( wxCommandEvent& event );                 // !< Context menu handler
     void    OnZoomIn( wxCommandEvent& event );              // !< Context menu handler
     void    OnZoomOut( wxCommandEvent& event );             // !< Context menu handler
-    void    OnLockAspect( wxCommandEvent& event );          // !< Context menu handler
     void    OnMouseWheel( wxMouseEvent& event );            // !< Mouse handler for the wheel
     void    OnMagnify( wxMouseEvent& event );               // !< Pinch zoom handler
     void    OnMouseMove( wxMouseEvent& event );             // !< Mouse handler for mouse motion (for pan)
     void    OnMouseLeftDown( wxMouseEvent& event );         // !< Mouse left click (for rect zoom)
     void    OnMouseLeftRelease( wxMouseEvent& event );      // !< Mouse left click (for rect zoom)
-    void    OnScrollThumbTrack( wxScrollWinEvent& event );  // !< Scroll thumb on scroll bar moving
-    void    OnScrollPageUp( wxScrollWinEvent& event );      // !< Scroll page up
-    void    OnScrollPageDown( wxScrollWinEvent& event );    // !< Scroll page down
-    void    OnScrollLineUp( wxScrollWinEvent& event );      // !< Scroll line up
-    void    OnScrollLineDown( wxScrollWinEvent& event );    // !< Scroll line down
-    void    OnScrollTop( wxScrollWinEvent& event );         // !< Scroll to top
-    void    OnScrollBottom( wxScrollWinEvent& event );      // !< Scroll to bottom
-
-    void DoScrollCalc( const int position, const int orientation );
 
     void    DoZoomInXCalc( const int staticXpixel );
     void    DoZoomInYCalc( const int staticYpixel );
@@ -1509,8 +1396,6 @@ protected:
     // wxList m_layers;    //!< List of attached plot layers
     wxLayerList m_layers;   // !< List of attached plot layers
     wxMenu m_popmenu;       // !< Canvas' context menu
-    bool m_lockaspect;      // !< Scale aspect is locked or not
-    // bool   m_coordTooltip; //!< Selects whether to show coordinate tooltip
     wxColour m_bgColour;    // !< Background Colour
     wxColour m_fgColour;    // !< Foreground Colour
     wxColour m_axColour;    // !< Axes Colour
@@ -1953,84 +1838,5 @@ public:
             bool closedShape = true );
 };
 
-// -----------------------------------------------------------------------------
-// mpMovableObject  - provided by Jose Luis Blanco
-// -----------------------------------------------------------------------------
-/** This virtual class represents objects that can be moved to an arbitrary 2D location+rotation.
- *  The current transformation is set through SetCoordinateBase.
- *  To ease the implementation of descendent classes, mpMovableObject will
- *  be in charge of Bounding Box computation and layer render, assuming that
- *  the object updates its shape in m_shape_xs & m_shape_ys.
- */
-class WXDLLIMPEXP_MATHPLOT mpBitmapLayer : public mpLayer
-{
-public:
-    /** Default constructor.
-     */
-    mpBitmapLayer()
-    {
-        m_min_x = m_max_x =
-                      m_min_y = m_max_y = 0;
-        m_scaledBitmap_offset_x = 0;
-        m_scaledBitmap_offset_y = 0;
-        m_validImg = false;
-        m_type = mpLAYER_BITMAP;
-    }
-
-    virtual ~mpBitmapLayer() {};
-
-    /** Returns a copy of the current bitmap assigned to the layer.
-     */
-    void GetBitmapCopy( wxImage& outBmp ) const;
-
-    /** Change the bitmap associated with the layer (to update the screen, refresh the mpWindow).
-     *  @param inBmp The bitmap to associate. A copy is made, thus it can be released after calling this.
-     *  @param x The left corner X coordinate (in plot units).
-     *  @param y The top corner Y coordinate (in plot units).
-     *  @param lx The width in plot units.
-     *  @param ly The height in plot units.
-     */
-    void SetBitmap( const wxImage& inBmp, double x, double y, double lx, double ly );
-
-    virtual bool HasBBox() const override { return true; }
-
-    /** Get inclusive left border of bounding box.
-     */
-    virtual double GetMinX() const override { return m_min_x; }
-
-    /** Get inclusive right border of bounding box.
-     */
-    virtual double GetMaxX() const override { return m_max_x; }
-
-    /** Get inclusive bottom border of bounding box.
-     */
-    virtual double GetMinY() const override { return m_min_y; }
-
-    /** Get inclusive top border of bounding box.
-     */
-    virtual double GetMaxY() const override { return m_max_y; }
-
-    virtual void Plot( wxDC& dc, mpWindow& w ) override;
-
-    /** Set label axis alignment.
-     *  @param align alignment (choose between mpALIGN_NE, mpALIGN_NW, mpALIGN_SW, mpALIGN_SE
-     */
-    void SetAlign( int align ) { m_flags = align; };
-
-protected:
-    int m_flags;     // !< Holds label alignment
-
-    /** The internal copy of the Bitmap:
-     */
-    wxImage m_bitmap;
-    wxBitmap m_scaledBitmap;
-    wxCoord m_scaledBitmap_offset_x, m_scaledBitmap_offset_y;
-
-    bool m_validImg;
-
-    /** The shape of the bitmap:
-     */
-    double m_min_x, m_max_x, m_min_y, m_max_y;
-};
 
 #endif    // _MP_MATHPLOT_H_
