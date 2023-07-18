@@ -30,7 +30,8 @@ FILE* KIPLATFORM::IO::SeqFOpen( const wxString& aPath, const wxString& aMode )
 {
     FILE* fp = wxFopen( aPath, aMode );
 
-    posix_fadvise( fileno( fp ), 0, 0, POSIX_FADV_SEQUENTIAL );
+    if( fp )
+        posix_fadvise( fileno( fp ), 0, 0, POSIX_FADV_SEQUENTIAL );
 
     return fp;
 }
