@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:33-0700\n"
-"PO-Revision-Date: 2023-07-18 09:05+0000\n"
+"PO-Revision-Date: 2023-07-19 09:07+0000\n"
 "Last-Translator: Hubert Hu <qinghan.hu@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v7/zh_Hans/>\n"
@@ -18700,7 +18700,7 @@ msgstr "绘图层"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:240
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:106
 msgid "Position"
-msgstr "坐标"
+msgstr "起点坐标"
 
 #: gerbview/gerber_draw_item.cpp:663
 msgid "Start"
