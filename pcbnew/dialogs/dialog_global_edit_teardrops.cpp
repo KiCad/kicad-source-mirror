@@ -473,13 +473,12 @@ bool DIALOG_GLOBAL_EDIT_TEARDROPS::TransferDataFromWindow()
     }
 
     // If there are no filters then a force-full-update is equivalent, and will be faster.
-    if( 1 /*&&!m_netFilterOpt->GetValue()
+    if( !m_netFilterOpt->GetValue()
             && !m_netclassFilterOpt->GetValue()
             && !m_layerFilterOpt->GetValue()
             && !m_roundPadsFilter->GetValue()
             && !m_existingFilter->GetValue()
-            && !m_selectedItemsFilter->GetValue()*/
-        )
+            && !m_selectedItemsFilter->GetValue() )
     {
         commit.Push( _( "Edit Teardrops" ), SKIP_TEARDROPS );
 
