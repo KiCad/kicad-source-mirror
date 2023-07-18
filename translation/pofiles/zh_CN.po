@@ -28,8 +28,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:35-0700\n"
-"PO-Revision-Date: 2023-07-11 14:52+0000\n"
-"Last-Translator: Li Yidong <alenks@foxmail.com>\n"
+"PO-Revision-Date: 2023-07-18 09:05+0000\n"
+"Last-Translator: Hubert Hu <qinghan.hu@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -22540,7 +22540,7 @@ msgstr "从："
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:293
 msgid "End Position"
-msgstr "端位置"
+msgstr "终点坐标"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:365
 #: pcbnew/dialogs/dialog_pad_primitives_properties_base.cpp:241
