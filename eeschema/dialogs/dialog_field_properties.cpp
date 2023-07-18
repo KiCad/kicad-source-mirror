@@ -395,6 +395,7 @@ void DIALOG_FIELD_PROPERTIES::updateText( EDA_TEXT* aText )
     if( aText->GetTextWidth() != m_size )
         aText->SetTextSize( VECTOR2I( m_size, m_size ) );
 
+    aText->SetFont( m_font );
     aText->SetVisible( m_isVisible );
     aText->SetTextAngle( m_isVertical ? ANGLE_VERTICAL : ANGLE_HORIZONTAL );
     aText->SetItalic( m_isItalic );
@@ -414,6 +415,8 @@ DIALOG_LIB_FIELD_PROPERTIES::DIALOG_LIB_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
 
     if( m_fieldId == VALUE_FIELD )
         m_text = UnescapeString( aField->GetText() );
+
+    m_font = aField->GetFont();
 
     m_nameVisible->Show();
     m_cbAllowAutoPlace->Show();
@@ -677,8 +680,6 @@ void DIALOG_SCH_FIELD_PROPERTIES::UpdateField( SCH_COMMIT* aCommit, SCH_FIELD* a
     aField->SetText( m_text );
     updateText( aField );
     aField->SetPosition( m_position );
-
-    aField->SetFont( m_font );
 
     aField->SetNameShown( m_isNameVisible );
     aField->SetCanAutoplace( m_allowAutoplace );
