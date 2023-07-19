@@ -2171,34 +2171,8 @@ void PCB_PARSER::parseSetup()
             break;
 
         case T_filled_areas_thickness:
-            if( parseBool() )
-            {
-                if( m_showLegacy5ZoneWarning )
-                {
-                    if( Pgm().IsGUI() )
-                    {
-                        // Thick outline fill mode no longer supported.  Make sure user is OK with
-                        // converting fills.
-                        KIDIALOG dlg( nullptr,
-                                      _( "The legacy zone fill strategy is no longer "
-                                         "supported.\nConvert zones to smoothed polygon "
-                                         "fills?" ),
-                                      _( "Legacy Zone Warning" ), wxYES_NO | wxICON_WARNING );
-
-                        dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
-
-                        if( dlg.ShowModal() == wxID_NO )
-                            THROW_IO_ERROR( wxT( "CANCEL" ) );
-
-                        m_showLegacy5ZoneWarning = false;
-                    }
-                    else
-                    {
-                        THROW_IO_ERROR( wxT( "Legacy zone fill strategy was found, open the project in the PCB Editor to resolve" ) );
-                    }
-                }
-            }
-
+            // Ignore this value, it is not used anymore
+            parseBool();
             NeedRIGHT();
             break;
 
@@ -5558,6 +5532,17 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
     zone->SetAssignedPriority( 0 );
 
+    bool isLegacy = false;
+
+    if( m_requiredVersion < 20210606 )
+    {
+        // A new zone fill strategy was added in v6, so we need to know if we're parsing
+        // a file that was written before that date.  Note that the change was implemented as
+        // a new parameter without changing the version number, so we need to check for the
+        // presence of the new parameter instead of just the version number.
+        isLegacy = true;
+    }
+
     // This is the default for board files:
     zone->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::ALWAYS );
 
@@ -5674,24 +5659,9 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
             break;
 
         case T_filled_areas_thickness:
-            if( parseBool() )
-            {
-                if( m_showLegacy5ZoneWarning && m_queryUserCallback )
-                {
-                    if( !m_queryUserCallback(
-                                _( "Legacy Zone Warning" ), wxICON_WARNING,
-                                _( "The legacy zone fill strategy is no longer supported.\n"
-                                   "Convert zones to smoothed polygon fills?" ),
-                                _( "Convert" ) ) )
-                    {
-                        THROW_IO_ERROR( wxT( "CANCEL" ) );
-                    }
-                }
 
-                m_showLegacy5ZoneWarning = false;
-                zone->SetFlags( CANDIDATE );
-                dropFilledPolygons = true;
-            }
+            if( parseBool() )
+                isLegacy = true;
 
             NeedRIGHT();
             break;
@@ -6123,6 +6093,26 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
         // Set hatch here, after outlines corners are read
         zone->SetBorderDisplayStyle( hatchStyle, hatchPitch, true );
+    }
+
+    if( isLegacy && !zone->GetIsRuleArea() )
+    {
+        if( m_showLegacy5ZoneWarning && m_queryUserCallback )
+        {
+            if( !m_queryUserCallback(
+                        _( "Legacy Zone Warning" ), wxICON_WARNING,
+                        _( "The legacy zone fill strategy is no longer supported.\n"
+                            "Convert zones to smoothed polygon fills?" ),
+                        _( "Convert" ) ) )
+            {
+                THROW_IO_ERROR( wxT( "CANCEL" ) );
+            }
+
+            m_showLegacy5ZoneWarning = false;
+        }
+
+        zone->SetFlags( CANDIDATE );
+        dropFilledPolygons = true;
     }
 
     if( addedFilledPolygons && !dropFilledPolygons )
