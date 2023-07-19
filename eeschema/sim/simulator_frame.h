@@ -85,15 +85,14 @@ public:
      * Create a new plot tab for a given simulation type.
      *
      * @param aSimCommand is requested simulation command.
-     * @param aSimOptions netlisting options
      */
-    void NewPlotPanel( const wxString& aSimCommand, unsigned aSimOptions );
+    SIM_TAB* NewSimTab( const wxString& aSimCommand );
 
     /**
      * Shows a dialog for editing the current tab's simulation command, or creating a new tab
      * with a different simulation command type.
      */
-    bool EditSimCommand();
+    bool EditAnalysis();
 
     /**
      * @return the list of vectors (signals) in the current simulation results.

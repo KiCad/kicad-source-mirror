@@ -18,7 +18,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 
 	m_commandTypeSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_commandTypeLabel = new wxStaticText( this, wxID_ANY, _("Simulation type:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_commandTypeLabel = new wxStaticText( this, wxID_ANY, _("Analysis type:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_commandTypeLabel->Wrap( -1 );
 	m_commandTypeSizer->Add( m_commandTypeLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -31,7 +31,15 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 
 	bSizer1->Add( m_commandTypeSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
-	m_simPages = new wxSimplebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+
+	bSizer1->Add( 0, 5, 0, wxEXPAND, 5 );
+
+	m_notebook1 = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_panelCommand = new wxPanel( m_notebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bCommandSizer;
+	bCommandSizer = new wxBoxSizer( wxVERTICAL );
+
+	m_simPages = new wxSimplebook( m_panelCommand, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_pgAC = new wxPanel( m_simPages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxVERTICAL );
@@ -620,34 +628,34 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	bSizer821->Fit( m_pgPZ );
 	m_simPages->AddPage( m_pgPZ, _("a page"), false );
 
-	bSizer1->Add( m_simPages, 1, wxEXPAND | wxALL, 5 );
+	bCommandSizer->Add( m_simPages, 1, wxEXPAND | wxALL, 5 );
 
 	wxBoxSizer* bSizer88;
 	bSizer88 = new wxBoxSizer( wxVERTICAL );
 
-	m_fixIncludePaths = new wxCheckBox( this, wxID_ANY, _("Add full path for .include library directives"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_fixIncludePaths = new wxCheckBox( m_panelCommand, wxID_ANY, _("Add full path for .include library directives"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_fixIncludePaths->SetValue(true);
 	bSizer88->Add( m_fixIncludePaths, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_saveAllVoltages = new wxCheckBox( this, wxID_ANY, _("Save all voltages"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_saveAllVoltages = new wxCheckBox( m_panelCommand, wxID_ANY, _("Save all voltages"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer88->Add( m_saveAllVoltages, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_saveAllCurrents = new wxCheckBox( this, wxID_ANY, _("Save all currents"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_saveAllCurrents = new wxCheckBox( m_panelCommand, wxID_ANY, _("Save all currents"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer88->Add( m_saveAllCurrents, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_saveAllDissipations = new wxCheckBox( this, wxID_ANY, _("Save all power dissipations"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_saveAllDissipations = new wxCheckBox( m_panelCommand, wxID_ANY, _("Save all power dissipations"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer88->Add( m_saveAllDissipations, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_compatibilityModeSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	wxStaticText* compatibilityLabel;
-	compatibilityLabel = new wxStaticText( this, wxID_ANY, _("Compatibility mode:"), wxDefaultPosition, wxDefaultSize, 0 );
+	compatibilityLabel = new wxStaticText( m_panelCommand, wxID_ANY, _("Compatibility mode:"), wxDefaultPosition, wxDefaultSize, 0 );
 	compatibilityLabel->Wrap( -1 );
 	m_compatibilityModeSizer->Add( compatibilityLabel, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 8 );
 
 	wxString m_compatibilityModeChoices[] = { _("User configuration"), _("Spice"), _("PSpice"), _("LTSpice"), _("PSpice and LTSpice"), _("HSpice") };
 	int m_compatibilityModeNChoices = sizeof( m_compatibilityModeChoices ) / sizeof( wxString );
-	m_compatibilityMode = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_compatibilityModeNChoices, m_compatibilityModeChoices, 0 );
+	m_compatibilityMode = new wxChoice( m_panelCommand, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_compatibilityModeNChoices, m_compatibilityModeChoices, 0 );
 	m_compatibilityMode->SetSelection( 0 );
 	m_compatibilityModeSizer->Add( m_compatibilityMode, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -655,7 +663,240 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	bSizer88->Add( m_compatibilityModeSizer, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
-	bSizer1->Add( bSizer88, 0, wxEXPAND|wxTOP|wxLEFT, 10 );
+	bCommandSizer->Add( bSizer88, 0, wxEXPAND|wxTOP|wxLEFT, 10 );
+
+
+	m_panelCommand->SetSizer( bCommandSizer );
+	m_panelCommand->Layout();
+	bCommandSizer->Fit( m_panelCommand );
+	m_notebook1->AddPage( m_panelCommand, _("SPICE Command"), false );
+	m_panelPlotSetup = new wxPanel( m_notebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bPlotSetupSizer;
+	bPlotSetupSizer = new wxBoxSizer( wxVERTICAL );
+
+	m_bSizerY1 = new wxBoxSizer( wxVERTICAL );
+
+	m_lockY1 = new wxCheckBox( m_panelPlotSetup, wxID_ANY, _("Fixed %s scale"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_bSizerY1->Add( m_lockY1, 0, wxRIGHT|wxLEFT, 5 );
+
+
+	m_bSizerY1->Add( 0, 2, 1, wxEXPAND, 5 );
+
+	wxFlexGridSizer* fgSizerY1;
+	fgSizerY1 = new wxFlexGridSizer( 0, 6, 0, 0 );
+	fgSizerY1->SetFlexibleDirection( wxBOTH );
+	fgSizerY1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_y1MinLabel = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("Min:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_y1MinLabel->Wrap( -1 );
+	fgSizerY1->Add( m_y1MinLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 25 );
+
+	m_y1Min = new wxTextCtrl( m_panelPlotSetup, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerY1->Add( m_y1Min, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_y1MinUnits = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_y1MinUnits->Wrap( -1 );
+	m_y1MinUnits->SetMinSize( wxSize( 40,-1 ) );
+
+	fgSizerY1->Add( m_y1MinUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 3 );
+
+	m_y1MaxLabel = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("Max:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_y1MaxLabel->Wrap( -1 );
+	fgSizerY1->Add( m_y1MaxLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 18 );
+
+	m_y1Max = new wxTextCtrl( m_panelPlotSetup, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerY1->Add( m_y1Max, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_y1MaxUnits = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_y1MaxUnits->Wrap( -1 );
+	m_y1MaxUnits->SetMinSize( wxSize( 40,-1 ) );
+
+	fgSizerY1->Add( m_y1MaxUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 3 );
+
+
+	m_bSizerY1->Add( fgSizerY1, 0, wxBOTTOM, 8 );
+
+
+	bPlotSetupSizer->Add( m_bSizerY1, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_bSizerY2 = new wxBoxSizer( wxVERTICAL );
+
+	m_lockY2 = new wxCheckBox( m_panelPlotSetup, wxID_ANY, _("Fixed %s scale"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_bSizerY2->Add( m_lockY2, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	m_bSizerY2->Add( 0, 2, 1, wxEXPAND, 5 );
+
+	wxFlexGridSizer* fgSizerY2;
+	fgSizerY2 = new wxFlexGridSizer( 0, 6, 0, 0 );
+	fgSizerY2->SetFlexibleDirection( wxBOTH );
+	fgSizerY2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_y2MinLabel = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("Min:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_y2MinLabel->Wrap( -1 );
+	fgSizerY2->Add( m_y2MinLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 25 );
+
+	m_y2Min = new wxTextCtrl( m_panelPlotSetup, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerY2->Add( m_y2Min, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_y2MinUnits = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_y2MinUnits->Wrap( -1 );
+	m_y2MinUnits->SetMinSize( wxSize( 40,-1 ) );
+
+	fgSizerY2->Add( m_y2MinUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 3 );
+
+	m_y2MaxLabel = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("Max:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_y2MaxLabel->Wrap( -1 );
+	fgSizerY2->Add( m_y2MaxLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 18 );
+
+	m_y2Max = new wxTextCtrl( m_panelPlotSetup, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerY2->Add( m_y2Max, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_y2MaxUnits = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_y2MaxUnits->Wrap( -1 );
+	fgSizerY2->Add( m_y2MaxUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 3 );
+
+
+	m_bSizerY2->Add( fgSizerY2, 0, wxBOTTOM, 8 );
+
+
+	bPlotSetupSizer->Add( m_bSizerY2, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_bSizerY3 = new wxBoxSizer( wxVERTICAL );
+
+	m_lockY3 = new wxCheckBox( m_panelPlotSetup, wxID_ANY, _("Fixed %s scale"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_bSizerY3->Add( m_lockY3, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	m_bSizerY3->Add( 0, 2, 1, wxEXPAND, 5 );
+
+	wxFlexGridSizer* fgSizerY3;
+	fgSizerY3 = new wxFlexGridSizer( 0, 6, 0, 0 );
+	fgSizerY3->SetFlexibleDirection( wxBOTH );
+	fgSizerY3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_y3MinLabel = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("Min:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_y3MinLabel->Wrap( -1 );
+	fgSizerY3->Add( m_y3MinLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 25 );
+
+	m_y3Min = new wxTextCtrl( m_panelPlotSetup, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerY3->Add( m_y3Min, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_y3MinUnits = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_y3MinUnits->Wrap( -1 );
+	m_y3MinUnits->SetMinSize( wxSize( 40,-1 ) );
+
+	fgSizerY3->Add( m_y3MinUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 3 );
+
+	m_y3MaxLabel = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("Max:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_y3MaxLabel->Wrap( -1 );
+	fgSizerY3->Add( m_y3MaxLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 18 );
+
+	m_y3Max = new wxTextCtrl( m_panelPlotSetup, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerY3->Add( m_y3Max, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_y3MaxUnits = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_y3MaxUnits->Wrap( -1 );
+	m_y3MaxUnits->SetMinSize( wxSize( 40,-1 ) );
+
+	fgSizerY3->Add( m_y3MaxUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 3 );
+
+
+	m_bSizerY3->Add( fgSizerY3, 0, wxBOTTOM, 8 );
+
+
+	bPlotSetupSizer->Add( m_bSizerY3, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	wxBoxSizer* bSizerCheckboxes;
+	bSizerCheckboxes = new wxBoxSizer( wxVERTICAL );
+
+	m_grid = new wxCheckBox( m_panelPlotSetup, wxID_ANY, _("Show grid"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_grid->SetValue(true);
+	bSizerCheckboxes->Add( m_grid, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_legend = new wxCheckBox( m_panelPlotSetup, wxID_ANY, _("Show legend"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerCheckboxes->Add( m_legend, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_dottedSecondary = new wxCheckBox( m_panelPlotSetup, wxID_ANY, _("Dotted current/phase"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_dottedSecondary->SetValue(true);
+	bSizerCheckboxes->Add( m_dottedSecondary, 0, wxRIGHT|wxLEFT, 5 );
+
+
+	bPlotSetupSizer->Add( bSizerCheckboxes, 0, wxEXPAND|wxLEFT, 5 );
+
+	m_marginsLabel = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("Margins:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_marginsLabel->Wrap( -1 );
+	bPlotSetupSizer->Add( m_marginsLabel, 0, wxTOP|wxRIGHT|wxLEFT, 10 );
+
+	wxBoxSizer* bSizerMargins;
+	bSizerMargins = new wxBoxSizer( wxHORIZONTAL );
+
+	wxBoxSizer* bSizerLeft;
+	bSizerLeft = new wxBoxSizer( wxHORIZONTAL );
+
+	m_marginLeftLabel = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("Left:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_marginLeftLabel->Wrap( -1 );
+	bSizerLeft->Add( m_marginLeftLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 20 );
+
+	m_marginLeft = new wxTextCtrl( m_panelPlotSetup, wxID_ANY, _("70"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_marginLeft->SetMinSize( wxSize( 60,-1 ) );
+
+	bSizerLeft->Add( m_marginLeft, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+
+	bSizerMargins->Add( bSizerLeft, 0, wxEXPAND|wxLEFT, 5 );
+
+	wxFlexGridSizer* fgSizerTopBottom;
+	fgSizerTopBottom = new wxFlexGridSizer( 0, 2, 4, 0 );
+	fgSizerTopBottom->SetFlexibleDirection( wxBOTH );
+	fgSizerTopBottom->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_marginTopLabel = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("Top:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_marginTopLabel->Wrap( -1 );
+	fgSizerTopBottom->Add( m_marginTopLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 15 );
+
+	m_marginTop = new wxTextCtrl( m_panelPlotSetup, wxID_ANY, _("35"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_marginTop->SetMinSize( wxSize( 60,-1 ) );
+
+	fgSizerTopBottom->Add( m_marginTop, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+
+	m_marginBottomLabel = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("Bottom:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_marginBottomLabel->Wrap( -1 );
+	fgSizerTopBottom->Add( m_marginBottomLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 15 );
+
+	m_marginBottom = new wxTextCtrl( m_panelPlotSetup, wxID_ANY, _("35"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_marginBottom->SetMinSize( wxSize( 60,-1 ) );
+
+	fgSizerTopBottom->Add( m_marginBottom, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+
+
+	bSizerMargins->Add( fgSizerTopBottom, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+	wxBoxSizer* bSizerRight;
+	bSizerRight = new wxBoxSizer( wxHORIZONTAL );
+
+	m_marginRightLabel = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("Right:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_marginRightLabel->Wrap( -1 );
+	bSizerRight->Add( m_marginRightLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 15 );
+
+	m_marginRight = new wxTextCtrl( m_panelPlotSetup, wxID_ANY, _("70"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_marginRight->SetMinSize( wxSize( 60,-1 ) );
+
+	bSizerRight->Add( m_marginRight, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+
+	bSizerMargins->Add( bSizerRight, 0, wxEXPAND, 5 );
+
+
+	bPlotSetupSizer->Add( bSizerMargins, 0, wxRIGHT|wxLEFT, 5 );
+
+
+	m_panelPlotSetup->SetSizer( bPlotSetupSizer );
+	m_panelPlotSetup->Layout();
+	bPlotSetupSizer->Fit( m_panelPlotSetup );
+	m_notebook1->AddPage( m_panelPlotSetup, _("Plot Setup"), true );
+
+	bSizer1->Add( m_notebook1, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -684,6 +925,24 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_inputSignalsFilter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SIM_COMMAND_BASE::OnFilterText ), NULL, this );
 	m_loadDirectives->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SIM_COMMAND_BASE::onLoadDirectives ), NULL, this );
 	m_pzFunctionType->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_COMMAND_BASE::onDCSource1Selected ), NULL, this );
+	m_y1MinLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY1 ), NULL, this );
+	m_y1Min->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY1 ), NULL, this );
+	m_y1MinUnits->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY1 ), NULL, this );
+	m_y1MaxLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY1 ), NULL, this );
+	m_y1Max->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY1 ), NULL, this );
+	m_y1MaxUnits->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY1 ), NULL, this );
+	m_y2MinLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY2 ), NULL, this );
+	m_y2Min->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY2 ), NULL, this );
+	m_y2MinUnits->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY2 ), NULL, this );
+	m_y2MaxLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY2 ), NULL, this );
+	m_y2Max->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY2 ), NULL, this );
+	m_y2MaxUnits->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY2 ), NULL, this );
+	m_y3MinLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY3 ), NULL, this );
+	m_y3Min->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY3 ), NULL, this );
+	m_y3MinUnits->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY3 ), NULL, this );
+	m_y3MaxLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY3 ), NULL, this );
+	m_y3Max->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY3 ), NULL, this );
+	m_y3MaxUnits->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY3 ), NULL, this );
 }
 
 DIALOG_SIM_COMMAND_BASE::~DIALOG_SIM_COMMAND_BASE()
@@ -699,5 +958,23 @@ DIALOG_SIM_COMMAND_BASE::~DIALOG_SIM_COMMAND_BASE()
 	m_inputSignalsFilter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SIM_COMMAND_BASE::OnFilterText ), NULL, this );
 	m_loadDirectives->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SIM_COMMAND_BASE::onLoadDirectives ), NULL, this );
 	m_pzFunctionType->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_COMMAND_BASE::onDCSource1Selected ), NULL, this );
+	m_y1MinLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY1 ), NULL, this );
+	m_y1Min->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY1 ), NULL, this );
+	m_y1MinUnits->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY1 ), NULL, this );
+	m_y1MaxLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY1 ), NULL, this );
+	m_y1Max->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY1 ), NULL, this );
+	m_y1MaxUnits->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY1 ), NULL, this );
+	m_y2MinLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY2 ), NULL, this );
+	m_y2Min->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY2 ), NULL, this );
+	m_y2MinUnits->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY2 ), NULL, this );
+	m_y2MaxLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY2 ), NULL, this );
+	m_y2Max->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY2 ), NULL, this );
+	m_y2MaxUnits->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY2 ), NULL, this );
+	m_y3MinLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY3 ), NULL, this );
+	m_y3Min->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY3 ), NULL, this );
+	m_y3MinUnits->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY3 ), NULL, this );
+	m_y3MaxLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY3 ), NULL, this );
+	m_y3Max->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY3 ), NULL, this );
+	m_y3MaxUnits->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY3 ), NULL, this );
 
 }

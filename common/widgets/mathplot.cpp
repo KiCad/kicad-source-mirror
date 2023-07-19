@@ -782,6 +782,9 @@ void mpScaleX::recalculateTicks( wxDC& dc, mpWindow& w )
 mpScaleBase::mpScaleBase()
 {
     m_rangeSet = false;
+    m_axisLocked = false;
+    m_axisMin = 0;
+    m_axisMax = 0;
     m_nameFlags = mpALIGN_BORDER_BOTTOM;
 
     // initialize these members mainly to avoid not initialized values
@@ -870,13 +873,11 @@ void mpScaleY::computeSlaveTicks( mpWindow& w )
 
     m_tickValues.clear();
 
-    double m;
-
     m_absVisibleMaxV = 0;
 
-    for( unsigned int i = 0; i < m_masterScale->m_tickValues.size(); i++ )
+    for( double tickValue : m_masterScale->m_tickValues )
     {
-        m = TransformFromPlot( m_masterScale->TransformToPlot( m_masterScale->m_tickValues[i] ) );
+        double m = TransformFromPlot( m_masterScale->TransformToPlot( tickValue ) );
         m_tickValues.push_back( m );
         m_tickLabels.emplace_back( m );
         m_absVisibleMaxV = std::max( m_absVisibleMaxV, fabs( m ) );
@@ -941,9 +942,7 @@ void mpScaleY::recalculateTicks( wxDC& dc, mpWindow& w )
 
     // something weird happened...
     if( i == iterLimit )
-    {
         m_tickValues.clear();
-    }
 
     if( zeroOffset <= bestStep )
     {
@@ -1383,6 +1382,7 @@ mpWindow::mpWindow() :
         m_scrY( 64 ),
         m_clickedX( 0 ),
         m_clickedY( 0 ),
+        m_yLocked( false ),
         m_desiredXmin( 0.0 ),
         m_desiredXmax( 1.0 ),
         m_desiredYmin( 0.0 ),
@@ -1528,7 +1528,7 @@ void mpWindow::OnMouseWheel( wxMouseEvent& event )
                 SetXView( m_posX + changeUnitsX, m_desiredXmax + changeUnitsX,
                           m_desiredXmin + changeUnitsX );
             }
-            else
+            else if( !m_yLocked )
             {
                 SetYView( m_posY + changeUnitsY, m_desiredYmax + changeUnitsY,
                           m_desiredYmin + changeUnitsY );
@@ -1541,7 +1541,7 @@ void mpWindow::OnMouseWheel( wxMouseEvent& event )
                 SetXView( m_posX + changeUnitsX, m_desiredXmax + changeUnitsX,
                           m_desiredXmin + changeUnitsX );
             }
-            else
+            else if( !m_yLocked )
             {
                 SetYView( m_posY + changeUnitsY, m_desiredYmax + changeUnitsY,
                           m_desiredYmin + changeUnitsY );
@@ -1867,8 +1867,10 @@ void mpWindow::ZoomIn( const wxPoint& centerPoint, double zoomFactor )
     // Baaaaad things happen when you zoom in too much..
     if( newScaleX <= MAX_SCALE && newScaleY <= MAX_SCALE )
     {
-        m_scaleX    = newScaleX;
-        m_scaleY    = newScaleY;
+        m_scaleX = newScaleX;
+
+        if( !m_yLocked )
+            m_scaleY = newScaleY;
     }
     else
     {
@@ -1876,8 +1878,10 @@ void mpWindow::ZoomIn( const wxPoint& centerPoint, double zoomFactor )
     }
 
     // Adjust the new m_posx/y:
-    m_posX  = prior_layer_x - c.x / m_scaleX;
-    m_posY  = prior_layer_y + c.y / m_scaleY;
+    m_posX = prior_layer_x - c.x / m_scaleX;
+
+    if( !m_yLocked )
+        m_posY = prior_layer_y + c.y / m_scaleY;
 
     m_desiredXmin   = m_posX;
     m_desiredXmax   = m_posX + (m_scrX - m_marginLeft - m_marginRight) / m_scaleX;
@@ -1911,11 +1915,15 @@ void mpWindow::ZoomOut( const wxPoint& centerPoint, double zoomFactor )
 
     // Zoom out:
     m_scaleX = m_scaleX / zoomFactor;
-    m_scaleY = m_scaleY / zoomFactor;
+
+    if( !m_yLocked )
+        m_scaleY = m_scaleY / zoomFactor;
 
     // Adjust the new m_posx/y:
-    m_posX  = prior_layer_x - c.x / m_scaleX;
-    m_posY  = prior_layer_y + c.y / m_scaleY;
+    m_posX = prior_layer_x - c.x / m_scaleX;
+
+    if( !m_yLocked )
+        m_posY = prior_layer_y + c.y / m_scaleY;
 
     m_desiredXmin   = m_posX;
     m_desiredXmax   = m_posX + (m_scrX - m_marginLeft - m_marginRight) / m_scaleX;
@@ -1952,6 +1960,12 @@ void mpWindow::ZoomRect( wxPoint p0, wxPoint p1 )
     double  zoom_x_max = p0x>p1x ? p0x : p1x;
     double  zoom_y_min = p0y<p1y ? p0y : p1y;
     double  zoom_y_max = p0y>p1y ? p0y : p1y;
+
+    if( m_yLocked )
+    {
+        zoom_y_min = m_desiredYmin;
+        zoom_y_max = m_desiredYmax;
+    }
 
     Fit( zoom_x_min, zoom_x_max, zoom_y_min, zoom_y_max );
     AdjustLimitedView();

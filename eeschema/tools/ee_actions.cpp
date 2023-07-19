@@ -1109,10 +1109,10 @@ TOOL_ACTION EE_ACTIONS::ddAppendFile( "eeschema.EditorControl.ddAppendFile",
         AS_GLOBAL );
 
 // SIMULATOR
-TOOL_ACTION EE_ACTIONS::newPlot( "eeschema.Simulation.newPlot",
+TOOL_ACTION EE_ACTIONS::newAnalysisTab( "eeschema.Simulation.newAnalysisTab",
         AS_GLOBAL,
         MD_CTRL + 'N', LEGACY_HK_NAME( "New" ),
-        _( "New Plot" ), "",
+        _( "New Analysis Tab..." ), "",
         BITMAPS::sim_add_plot );
 
 TOOL_ACTION EE_ACTIONS::openWorkbook( "eeschema.Simulation.openWorkbook",
@@ -1158,10 +1158,10 @@ TOOL_ACTION EE_ACTIONS::toggleDarkModePlots( "eeschema.Simulator.toggleDarkModeP
         _( "Dark Mode Plots" ),
         _( "Draw plots with a black background" ) );
 
-TOOL_ACTION EE_ACTIONS::simCommand( "eeschema.Simulation.simCommand",
+TOOL_ACTION EE_ACTIONS::simAnalysisProperties( "eeschema.Simulation.simAnalysisProperties",
         AS_GLOBAL, 0, "",
-        _( "Edit Simulation Command..." ),
-        _( "Edit the simulation command for the current plot tab" ),
+        _( "Edit Analysis Tab..." ),
+        _( "Edit the SPICE command and plot setup for the current analysis tab" ),
         BITMAPS::sim_command );
 
 TOOL_ACTION EE_ACTIONS::runSimulation( "eeschema.Simulation.runSimulation",

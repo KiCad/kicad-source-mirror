@@ -433,9 +433,9 @@ void SIMULATOR_FRAME::StartSimulation()
 }
 
 
-void SIMULATOR_FRAME::NewPlotPanel( const wxString& aSimCommand, unsigned aOptions )
+SIM_TAB* SIMULATOR_FRAME::NewSimTab( const wxString& aSimCommand )
 {
-    m_ui->NewSimTab( aSimCommand, aOptions );
+    return m_ui->NewSimTab( aSimCommand );
 }
 
 
@@ -527,7 +527,7 @@ void SIMULATOR_FRAME::ToggleDarkModePlots()
 }
 
 
-bool SIMULATOR_FRAME::EditSimCommand()
+bool SIMULATOR_FRAME::EditAnalysis()
 {
     SIM_TAB*           simTab = m_ui->GetCurrentSimTab();
     DIALOG_SIM_COMMAND dlg( this, m_circuitModel, m_simulator->Settings() );
@@ -546,11 +546,12 @@ bool SIMULATOR_FRAME::EditSimCommand()
 
     dlg.SetSimCommand( simTab->GetSimCommand() );
     dlg.SetSimOptions( simTab->GetSimOptions() );
+    dlg.SetPlotSettings( simTab );
 
     if( dlg.ShowModal() == wxID_OK )
     {
         simTab->SetSimCommand( dlg.GetSimCommand() );
-        simTab->SetSimOptions( dlg.GetSimOptions() );
+        dlg.ApplySettings( simTab );
         m_ui->OnPlotSettingsChanged();
         OnModify();
         return true;
@@ -677,8 +678,8 @@ void SIMULATOR_FRAME::setupUIConditions()
     mgr->SetConditions( EE_ACTIONS::toggleDottedSecondary, CHECK( showDottedCondition ) );
     mgr->SetConditions( EE_ACTIONS::toggleDarkModePlots,   CHECK( darkModePlotCondition ) );
 
-    mgr->SetConditions( EE_ACTIONS::newPlot,               ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
-    mgr->SetConditions( EE_ACTIONS::simCommand,            ENABLE( haveSim ) );
+    mgr->SetConditions( EE_ACTIONS::newAnalysisTab,        ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
+    mgr->SetConditions( EE_ACTIONS::simAnalysisProperties, ENABLE( haveSim ) );
     mgr->SetConditions( EE_ACTIONS::runSimulation,         ENABLE( !simRunning ) );
     mgr->SetConditions( EE_ACTIONS::stopSimulation,        ENABLE( simRunning ) );
     mgr->SetConditions( EE_ACTIONS::simProbe,              ENABLE( simFinished ) );

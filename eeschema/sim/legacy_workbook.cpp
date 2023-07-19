@@ -200,8 +200,10 @@ bool SIMULATOR_FRAME_UI::loadLegacyWorkbook( const wxString& aPath )
                 simCommand += line + wxT( "\n" );
         }
 
-        SIM_TAB*      simTab = NewSimTab( simCommand, simOptions );
+        SIM_TAB*      simTab = NewSimTab( simCommand );
         SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( simTab );
+
+        simTab->SetSimOptions( simOptions );
 
         if( !file.GetNextLine().ToLong( &tracesCount ) )
         {

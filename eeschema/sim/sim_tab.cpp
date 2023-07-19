@@ -37,10 +37,10 @@ SIM_TAB::SIM_TAB() :
 }
 
 
-SIM_TAB::SIM_TAB( const wxString& aSimCommand, unsigned aSimOptions, wxWindow* parent ) :
+SIM_TAB::SIM_TAB( const wxString& aSimCommand, wxWindow* parent ) :
         wxWindow( parent, wxID_ANY ),
         m_simCommand( aSimCommand ),
-        m_simOptions( aSimOptions )
+        m_simOptions( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS )
 {
 }
 
@@ -74,9 +74,8 @@ SIM_TYPE SIM_TAB::GetSimType() const
 }
 
 
-SIM_NOPLOT_TAB::SIM_NOPLOT_TAB( const wxString& aSimCommand, unsigned aSimOptions,
-                                wxWindow* parent ) :
-        SIM_TAB( aSimCommand, aSimOptions, parent )
+SIM_NOPLOT_TAB::SIM_NOPLOT_TAB( const wxString& aSimCommand, wxWindow* parent ) :
+        SIM_TAB( aSimCommand, parent )
 {
     m_sizer = new wxBoxSizer( wxVERTICAL );
     m_sizer->Add( 0, 1, 1, wxEXPAND, 5 );

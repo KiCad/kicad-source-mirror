@@ -191,7 +191,7 @@ protected:
 class SIM_PLOT_TAB : public SIM_TAB
 {
 public:
-    SIM_PLOT_TAB( const wxString& aSimCommand, unsigned aSimOptions, wxWindow* parent );
+    SIM_PLOT_TAB( const wxString& aSimCommand, wxWindow* parent );
 
     virtual ~SIM_PLOT_TAB();
 
@@ -214,6 +214,34 @@ public:
     {
         return m_axis_y3 ? m_axis_y3->GetName() : wxString( wxS( "" ) );
     }
+
+    bool GetY1Scale( double* aMin, double* aMax ) const
+    {
+        if( m_axis_y1 )
+            return m_axis_y1->GetAxisMinMax( aMin, aMax );
+
+        return false;
+    }
+
+    bool GetY2Scale( double* aMin, double* aMax ) const
+    {
+        if( m_axis_y2 )
+            return m_axis_y2->GetAxisMinMax( aMin, aMax );
+
+        return false;
+    }
+
+    bool GetY3Scale( double* aMin, double* aMax ) const
+    {
+        if( m_axis_y3 )
+            return m_axis_y3->GetAxisMinMax( aMin, aMax );
+
+        return false;
+    }
+
+    void SetY1Scale( bool aLock, double aMin, double aMax );
+    void SetY2Scale( bool aLock, double aMin, double aMax );
+    void SetY3Scale( bool aLock, double aMin, double aMax );
 
     wxString GetUnitsX() const;
     wxString GetUnitsY1() const;
@@ -287,8 +315,8 @@ public:
     {
         m_dotted_cp = aEnable;
 
-        for( const auto& tr : m_traces )
-            UpdateTraceStyle( tr.second );
+        for( const auto& [ name, trace ] : m_traces )
+            UpdateTraceStyle( trace );
 
         m_plotWin->UpdateAll();
     }
@@ -304,6 +332,8 @@ public:
 
     ///< Reset scale ranges to fit the current traces.
     void ResetScales( bool aIncludeX );
+
+    void FitScales();
 
     ///< Update trace line style
     void UpdateTraceStyle( TRACE* trace );

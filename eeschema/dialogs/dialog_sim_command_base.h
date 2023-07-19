@@ -32,6 +32,7 @@
 #include <wx/srchctrl.h>
 #include <wx/checklst.h>
 #include <wx/simplebook.h>
+#include <wx/notebook.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -48,6 +49,8 @@ class DIALOG_SIM_COMMAND_BASE : public DIALOG_SHIM
 		wxBoxSizer* m_commandTypeSizer;
 		wxStaticText* m_commandTypeLabel;
 		wxChoice* m_commandType;
+		wxNotebook* m_notebook1;
+		wxPanel* m_panelCommand;
 		wxSimplebook* m_simPages;
 		wxPanel* m_pgAC;
 		wxRadioBox* m_acScale;
@@ -158,6 +161,43 @@ class DIALOG_SIM_COMMAND_BASE : public DIALOG_SHIM
 		wxCheckBox* m_saveAllDissipations;
 		wxBoxSizer* m_compatibilityModeSizer;
 		wxChoice* m_compatibilityMode;
+		wxPanel* m_panelPlotSetup;
+		wxBoxSizer* m_bSizerY1;
+		wxCheckBox* m_lockY1;
+		wxStaticText* m_y1MinLabel;
+		wxTextCtrl* m_y1Min;
+		wxStaticText* m_y1MinUnits;
+		wxStaticText* m_y1MaxLabel;
+		wxTextCtrl* m_y1Max;
+		wxStaticText* m_y1MaxUnits;
+		wxBoxSizer* m_bSizerY2;
+		wxCheckBox* m_lockY2;
+		wxStaticText* m_y2MinLabel;
+		wxTextCtrl* m_y2Min;
+		wxStaticText* m_y2MinUnits;
+		wxStaticText* m_y2MaxLabel;
+		wxTextCtrl* m_y2Max;
+		wxStaticText* m_y2MaxUnits;
+		wxBoxSizer* m_bSizerY3;
+		wxCheckBox* m_lockY3;
+		wxStaticText* m_y3MinLabel;
+		wxTextCtrl* m_y3Min;
+		wxStaticText* m_y3MinUnits;
+		wxStaticText* m_y3MaxLabel;
+		wxTextCtrl* m_y3Max;
+		wxStaticText* m_y3MaxUnits;
+		wxCheckBox* m_grid;
+		wxCheckBox* m_legend;
+		wxCheckBox* m_dottedSecondary;
+		wxStaticText* m_marginsLabel;
+		wxStaticText* m_marginLeftLabel;
+		wxTextCtrl* m_marginLeft;
+		wxStaticText* m_marginTopLabel;
+		wxTextCtrl* m_marginTop;
+		wxStaticText* m_marginBottomLabel;
+		wxTextCtrl* m_marginBottom;
+		wxStaticText* m_marginRightLabel;
+		wxTextCtrl* m_marginRight;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -172,11 +212,14 @@ class DIALOG_SIM_COMMAND_BASE : public DIALOG_SHIM
 		virtual void OnFilterMouseMoved( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnFilterText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onLoadDirectives( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnUpdateUILockY1( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void OnUpdateUILockY2( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void OnUpdateUILockY3( wxUpdateUIEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Simulation Command"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Simulation Analysis"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_SIM_COMMAND_BASE();
 

@@ -259,7 +259,7 @@ public:
     static TOOL_ACTION toggleAnnotateAuto;
 
     // SPICE
-    static TOOL_ACTION newPlot;
+    static TOOL_ACTION newAnalysisTab;
     static TOOL_ACTION openWorkbook;
     static TOOL_ACTION saveWorkbook;
     static TOOL_ACTION saveWorkbookAs;
@@ -271,7 +271,7 @@ public:
     static TOOL_ACTION toggleLegend;
     static TOOL_ACTION toggleDottedSecondary;
     static TOOL_ACTION toggleDarkModePlots;
-    static TOOL_ACTION simCommand;
+    static TOOL_ACTION simAnalysisProperties;
     static TOOL_ACTION runSimulation;
     static TOOL_ACTION stopSimulation;
     static TOOL_ACTION editUserDefinedSignals;

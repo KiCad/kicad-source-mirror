@@ -53,7 +53,7 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
 
-    int NewPlot( const TOOL_EVENT& aEvent );
+    int NewAnalysisTab( const TOOL_EVENT& aEvent );
     int OpenWorkbook( const TOOL_EVENT& aEvent );
     int SaveWorkbook( const TOOL_EVENT& aEvent );
     int ExportPlotAsPNG( const TOOL_EVENT& aEvent );
@@ -66,7 +66,7 @@ public:
     int ToggleDottedSecondary( const TOOL_EVENT& aEvent );
     int ToggleDarkModePlots( const TOOL_EVENT& aEvent );
 
-    int EditSimCommand( const TOOL_EVENT& aEvent );
+    int EditAnalysisTab( const TOOL_EVENT& aEvent );
     int RunSimulation( const TOOL_EVENT& aEvent );
     int Probe( const TOOL_EVENT& aEvent );
     int Tune( const TOOL_EVENT& aEvent );
@@ -85,7 +85,7 @@ private:
      */
     wxString getDefaultPath();
 
-    SIM_TAB* GetCurrentPlotPanel();
+    SIM_TAB* getCurrentSimTab();
 
     ///< Set up handlers for various events.
     void setTransitions() override;

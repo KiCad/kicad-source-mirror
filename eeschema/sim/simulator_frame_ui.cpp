@@ -535,7 +535,7 @@ void SIMULATOR_FRAME_UI::ShowChangedLanguage()
         simTab->OnLanguageChanged();
 
         wxString pageTitle( simulator()->TypeToName( simTab->GetSimType(), true ) );
-        pageTitle.Prepend( wxString::Format( _( "Plot%u - " ), ii+1 /* 1-based */ ) );
+        pageTitle.Prepend( wxString::Format( _( "Analysis %u - " ), ii+1 /* 1-based */ ) );
 
         m_plotNotebook->SetPageText( ii, pageTitle );
     }
@@ -597,7 +597,10 @@ void SIMULATOR_FRAME_UI::InitWorkbook()
         wxString schTextSimCommand = circuitModel()->GetSchTextSimCommand();
 
         if( !schTextSimCommand.IsEmpty() )
-            NewSimTab( schTextSimCommand, NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS );
+        {
+            SIM_TAB* simTab = NewSimTab( schTextSimCommand );
+            simTab->SetSimOptions( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS );
+        }
 
         rebuildSignalsList();
         rebuildSignalsGrid( m_filter->GetValue() );
@@ -872,14 +875,14 @@ void SIMULATOR_FRAME_UI::rebuildSignalsList()
 }
 
 
-SIM_TAB* SIMULATOR_FRAME_UI::NewSimTab( const wxString& aSimCommand, unsigned aSimOptions )
+SIM_TAB* SIMULATOR_FRAME_UI::NewSimTab( const wxString& aSimCommand )
 {
     SIM_TAB* simTab = nullptr;
     SIM_TYPE simType = SPICE_CIRCUIT_MODEL::CommandToSimType( aSimCommand );
 
     if( SIM_TAB::IsPlottable( simType ) )
     {
-        SIM_PLOT_TAB* panel = new SIM_PLOT_TAB( aSimCommand, aSimOptions, m_plotNotebook );
+        SIM_PLOT_TAB* panel = new SIM_PLOT_TAB( aSimCommand, m_plotNotebook );
         simTab = panel;
 
         COMMON_SETTINGS::INPUT cfg = Pgm().GetCommonSettings()->m_Input;
@@ -887,11 +890,11 @@ SIM_TAB* SIMULATOR_FRAME_UI::NewSimTab( const wxString& aSimCommand, unsigned aS
     }
     else
     {
-        simTab = new SIM_NOPLOT_TAB( aSimCommand, aSimOptions, m_plotNotebook );
+        simTab = new SIM_NOPLOT_TAB( aSimCommand, m_plotNotebook );
     }
 
     wxString pageTitle( simulator()->TypeToName( simType, true ) );
-    pageTitle.Prepend( wxString::Format( _( "Plot%u - " ), (unsigned int) ++m_plotNumber ) );
+    pageTitle.Prepend( wxString::Format( _( "Analysis %u - " ), (unsigned int) ++m_plotNumber ) );
 
     m_plotNotebook->AddPage( simTab, pageTitle, true );
 
@@ -1843,8 +1846,10 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
                     simCommand += wxString( cmd ) + wxT( "\n" );
             }
 
-            SIM_TAB*      simTab = NewSimTab( simCommand, simOptions );
+            SIM_TAB*      simTab = NewSimTab( simCommand );
             SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( simTab );
+
+            simTab->SetSimOptions( simOptions );
 
             if( plotTab )
             {
@@ -1860,11 +1865,38 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
                 plotTab->SetDottedSecondary( tab_js[ "dottedSecondary" ] );
                 plotTab->ShowGrid( tab_js[ "showGrid" ] );
 
+                if( tab_js.contains( "fixedY1scale" ) )
+                {
+                    const nlohmann::json& scale_js = tab_js[ "fixedY1scale" ];
+                    plotTab->SetY1Scale( true, scale_js[ "min" ], scale_js[ "max" ] );
+                }
+
+                if( tab_js.contains( "fixedY2scale" ) )
+                {
+                    const nlohmann::json& scale_js = tab_js[ "fixedY2scale" ];
+                    plotTab->SetY2Scale( true, scale_js[ "min" ], scale_js[ "max" ] );
+                }
+
+                if( tab_js.contains( "fixedY3scale" ) )
+                {
+                    const nlohmann::json& scale_js = tab_js[ "fixedY3scale" ];
+                    plotTab->SetY3Scale( true, scale_js[ "min" ], scale_js[ "max" ] );
+                }
+
                 if( tab_js.contains( "legend" ) )
                 {
                     const nlohmann::json& legend_js = tab_js[ "legend" ];
                     plotTab->SetLegendPosition( wxPoint( legend_js[ "x" ], legend_js[ "y" ] ) );
                     plotTab->ShowLegend( true );
+                }
+
+                if( tab_js.contains( "margins" ) )
+                {
+                    const nlohmann::json& margins_js = tab_js[ "margins" ];
+                    plotTab->GetPlotWin()->SetMargins( margins_js[ "top" ],
+                                                       margins_js[ "right" ],
+                                                       margins_js[ "bottom" ],
+                                                       margins_js[ "left" ] );
                 }
             }
         }
@@ -2055,11 +2087,29 @@ bool SIMULATOR_FRAME_UI::SaveWorkbook( const wxString& aPath )
             tab_js[ "dottedSecondary" ] = plotTab->GetDottedSecondary();
             tab_js[ "showGrid" ]        = plotTab->IsGridShown();
 
+            double min, max;
+
+            if( plotTab->GetY1Scale( &min, &max ) )
+                tab_js[ "fixedY1scale" ] = nlohmann::json( { { "min", min }, { "max", max } } );
+
+            if( plotTab->GetY2Scale( &min, &max ) )
+                tab_js[ "fixedY2scale" ] = nlohmann::json( { { "min", min }, { "max", max } } );
+
+            if( plotTab->GetY3Scale( &min, &max ) )
+                tab_js[ "fixedY3scale" ] = nlohmann::json( { { "min", min }, { "max", max } } );
+
             if( plotTab->IsLegendShown() )
             {
                 tab_js[ "legend" ] = nlohmann::json( { { "x", plotTab->GetLegendPosition().x },
                                                        { "y", plotTab->GetLegendPosition().y } } );
             }
+
+            mpWindow* plotWin = plotTab->GetPlotWin();
+
+            tab_js[ "margins" ] = nlohmann::json( { { "left",   plotWin->GetMarginLeft() },
+                                                    { "right",  plotWin->GetMarginRight() },
+                                                    { "top",    plotWin->GetMarginTop() },
+                                                    { "bottom", plotWin->GetMarginBottom() } } );
         }
 
         tabs_js.push_back( tab_js );
@@ -2569,7 +2619,7 @@ void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
         if( aFinal )
             plotTab->ResetScales( true );
 
-        plotTab->GetPlotWin()->Fit();
+        plotTab->FitScales();
 
         updatePlotCursors();
 

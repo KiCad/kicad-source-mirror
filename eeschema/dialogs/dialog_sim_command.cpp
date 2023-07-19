@@ -27,7 +27,6 @@
 #include <sim/spice_circuit_model.h>
 #include <sim/ngspice.h>
 #include <sim/simulator_frame.h>
-
 #include <confirm.h>
 
 #include <wx/tokenzr.h>
@@ -35,8 +34,6 @@
 #include <vector>
 #include <utility>
 
-/// @todo ngspice offers more types of analysis,
-//so there are a few tabs missing (e.g. pole-zero, distortion, sensitivity)
 
 // Helper function to shorten conditions
 static bool empty( const wxTextEntryBase* aCtrl )
@@ -124,6 +121,18 @@ DIALOG_SIM_COMMAND::DIALOG_SIM_COMMAND( SIMULATOR_FRAME* aParent,
     if( !dynamic_cast<NGSPICE_SETTINGS*>( aSettings.get() ) )
         m_compatibilityModeSizer->Show( false );
 
+    int minWidth = GetTextExtent( wxS( "XXX.XXXXXXX" ) ).x;
+    m_y1Min->SetMinSize( wxSize( minWidth, -1 ) );
+    m_y1Max->SetMinSize( wxSize( minWidth, -1 ) );
+    m_y2Min->SetMinSize( wxSize( minWidth, -1 ) );
+    m_y2Max->SetMinSize( wxSize( minWidth, -1 ) );
+    m_y3Min->SetMinSize( wxSize( minWidth, -1 ) );
+    m_y3Max->SetMinSize( wxSize( minWidth, -1 ) );
+
+    m_bSizerY1->Show( false );
+    m_bSizerY2->Show( false );
+    m_bSizerY3->Show( false );
+
     SetupStandardButtons();
 }
 
@@ -135,11 +144,9 @@ bool DIALOG_SIM_COMMAND::TransferDataToWindow()
 
     m_fixIncludePaths->SetValue( m_settings->GetFixIncludePaths() );
 
-    NGSPICE_SETTINGS* ngspiceSettings = dynamic_cast<NGSPICE_SETTINGS*>( m_settings.get() );
-
-    if( ngspiceSettings )
+    if( NGSPICE_SETTINGS* settings = dynamic_cast<NGSPICE_SETTINGS*>( m_settings.get() ) )
     {
-        switch( ngspiceSettings->GetCompatibilityMode() )
+        switch( settings->GetCompatibilityMode() )
         {
         case NGSPICE_COMPATIBILITY_MODE::USER_CONFIG: m_compatibilityMode->SetSelection( 0 ); break;
         case NGSPICE_COMPATIBILITY_MODE::NGSPICE:     m_compatibilityMode->SetSelection( 1 ); break;
@@ -147,16 +154,106 @@ bool DIALOG_SIM_COMMAND::TransferDataToWindow()
         case NGSPICE_COMPATIBILITY_MODE::LTSPICE:     m_compatibilityMode->SetSelection( 3 ); break;
         case NGSPICE_COMPATIBILITY_MODE::LT_PSPICE:   m_compatibilityMode->SetSelection( 4 ); break;
         case NGSPICE_COMPATIBILITY_MODE::HSPICE:      m_compatibilityMode->SetSelection( 5 ); break;
-        default:  wxFAIL_MSG( wxString::Format( "Unknown NGSPICE_COMPATIBILITY_MODE %d.",
-                                                ngspiceSettings->GetCompatibilityMode() ) );  break;
+        default:    wxFAIL_MSG( wxString::Format( "Unknown NGSPICE_COMPATIBILITY_MODE %d.",
+                                                  settings->GetCompatibilityMode() ) );       break;
         }
     }
 
-    if( m_simCommand.IsEmpty() && !empty( m_customTxt ) )
-        parseCommand( m_customTxt->GetValue() );
-
-    refreshUIControls();
     return true;
+}
+
+
+void DIALOG_SIM_COMMAND::OnUpdateUILockY1( wxUpdateUIEvent& event )
+{
+    event.Enable( m_lockY1->GetValue() );
+}
+
+
+void DIALOG_SIM_COMMAND::OnUpdateUILockY2( wxUpdateUIEvent& event )
+{
+    event.Enable( m_lockY2->GetValue() );
+}
+
+
+void DIALOG_SIM_COMMAND::OnUpdateUILockY3( wxUpdateUIEvent& event )
+{
+    event.Enable( m_lockY3->GetValue() );
+}
+
+
+void DIALOG_SIM_COMMAND::SetPlotSettings( const SIM_TAB* aSimTab )
+{
+#define GET_STR( val ) EDA_UNIT_UTILS::UI::MessageTextFromValue( unityScale, EDA_UNITS::UNSCALED, \
+                                                                 val, false /* no units */ )
+
+    if( const SIM_PLOT_TAB* plotTab = dynamic_cast<const SIM_PLOT_TAB*>( aSimTab ) )
+    {
+        if( !plotTab->GetLabelY1().IsEmpty() )
+        {
+            m_bSizerY1->Show( true );
+            m_lockY1->SetLabel( wxString::Format( m_lockY1->GetLabel(), plotTab->GetLabelY1() ) );
+            m_y1MinUnits->SetLabel( plotTab->GetUnitsY1() );
+            m_y1MaxUnits->SetLabel( plotTab->GetUnitsY1() );
+
+            double min, max;
+            bool   locked = plotTab->GetY1Scale( &min, &max );
+            m_lockY1->SetValue( locked );
+
+            if( !std::isnan( min ) )
+                m_y1Min->SetValue( SIM_VALUE::Normalize( min ) );
+
+            if( !std::isnan( max ) )
+                m_y1Max->SetValue( SIM_VALUE::Normalize( max ) );
+        }
+
+        /* JEY TODO: figure out how to decuple slave axes from master axis
+         *
+        if( !plotTab->GetLabelY2().IsEmpty() )
+        {
+            m_bSizerY2->Show( true );
+            m_lockY2->SetLabel( wxString::Format( m_lockY2->GetLabel(), plotTab->GetLabelY2() ) );
+            m_y2MinUnits->SetLabel( plotTab->GetUnitsY2() );
+            m_y2MaxUnits->SetLabel( plotTab->GetUnitsY2() );
+
+            double min, max;
+            bool   locked = plotTab->GetY2Scale( &min, &max );
+            m_lockY2->SetValue( locked );
+
+            if( !std::isnan( min ) )
+                m_y2Min->SetValue( SIM_VALUE::Normalize( min ) );
+
+            if( !std::isnan( max ) )
+                m_y2Max->SetValue( SIM_VALUE::Normalize( max ) );
+        }
+
+        if( !plotTab->GetLabelY3().IsEmpty() )
+        {
+            m_bSizerY3->Show( true );
+            m_lockY3->SetLabel( wxString::Format( m_lockY3->GetLabel(), plotTab->GetLabelY3() ) );
+            m_y3MinUnits->SetLabel( plotTab->GetUnitsY3() );
+            m_y3MaxUnits->SetLabel( plotTab->GetUnitsY3() );
+
+            double min, max;
+            bool   locked = plotTab->GetY3Scale( &min, &max );
+            m_lockY3->SetValue( locked );
+
+            if( !std::isnan( min ) )
+                m_y3Min->SetValue( SIM_VALUE::Normalize( min ) );
+
+            if( !std::isnan( max ) )
+                m_y3Max->SetValue( SIM_VALUE::Normalize( max ) );
+        }
+         */
+
+        m_grid->SetValue( plotTab->IsGridShown() );
+        m_legend->SetValue( plotTab->IsLegendShown() );
+        m_dottedSecondary->SetValue( plotTab->GetDottedSecondary() );
+
+        m_marginLeft->SetValue( GET_STR( plotTab->GetPlotWin()->GetMarginLeft() ) );
+        m_marginTop->SetValue( GET_STR( plotTab->GetPlotWin()->GetMarginTop() ) );
+        m_marginRight->SetValue( GET_STR( plotTab->GetPlotWin()->GetMarginRight() ) );
+        m_marginBottom->SetValue( GET_STR( plotTab->GetPlotWin()->GetMarginBottom() ) );
+    }
 }
 
 
@@ -204,16 +301,16 @@ bool DIALOG_SIM_COMMAND::TransferDataFromWindow()
         return false;
 
     // The simulator dependent settings always get transferred.
-    if( NGSPICE_SETTINGS* ngspiceSettings = dynamic_cast<NGSPICE_SETTINGS*>( m_settings.get() ) )
+    if( NGSPICE_SETTINGS* settings = dynamic_cast<NGSPICE_SETTINGS*>( m_settings.get() ) )
     {
         switch( m_compatibilityMode->GetSelection() )
         {
-        case 0: ngspiceSettings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::USER_CONFIG ); break;
-        case 1: ngspiceSettings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::NGSPICE );     break;
-        case 2: ngspiceSettings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::PSPICE );      break;
-        case 3: ngspiceSettings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::LTSPICE );     break;
-        case 4: ngspiceSettings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::LT_PSPICE );   break;
-        case 5: ngspiceSettings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::HSPICE );      break;
+        case 0: settings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::USER_CONFIG ); break;
+        case 1: settings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::NGSPICE );     break;
+        case 2: settings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::PSPICE );      break;
+        case 3: settings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::LTSPICE );     break;
+        case 4: settings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::LT_PSPICE );   break;
+        case 5: settings->SetCompatibilityMode( NGSPICE_COMPATIBILITY_MODE::HSPICE );      break;
         }
     }
 
@@ -387,23 +484,6 @@ bool DIALOG_SIM_COMMAND::TransferDataFromWindow()
     }
     else
     {
-        if( m_simCommand.IsEmpty() )
-        {
-            KIDIALOG dlg( this, _( "No valid simulation is configured." ), _( "Warning" ),
-                          wxOK | wxCANCEL | wxICON_EXCLAMATION | wxCENTER );
-
-            dlg.SetExtendedMessage( _( "A valid simulation can be configured by selecting a "
-                                       "simulation tab, setting the simulation parameters and "
-                                       "clicking the OK button with the tab selected." ) );
-            dlg.SetOKCancelLabels(
-                    wxMessageDialog::ButtonLabel( _( "Exit Without Valid Simulation" ) ),
-                    wxMessageDialog::ButtonLabel( _( "Configure Valid Simulation" ) ) );
-            dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
-
-            if( dlg.ShowModal() == wxID_OK )
-                return true;
-        }
-
         return false;
     }
 
@@ -413,6 +493,64 @@ bool DIALOG_SIM_COMMAND::TransferDataFromWindow()
     m_settings->SetFixIncludePaths( m_fixIncludePaths->GetValue() );
 
     return true;
+}
+
+
+void DIALOG_SIM_COMMAND::ApplySettings( SIM_TAB* aTab )
+{
+    int options = NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS;
+
+    if( !m_fixIncludePaths->GetValue() )
+        options &= ~NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS;
+
+    if( !m_saveAllVoltages->GetValue() )
+        options &= ~NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES;
+
+    if( !m_saveAllCurrents->GetValue() )
+        options &= ~NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS;
+
+    if( !m_saveAllDissipations->GetValue() )
+        options &= ~NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_DISSIPATIONS;
+
+    aTab->SetSimOptions( options );
+
+#define TO_INT( ctrl ) (int) EDA_UNIT_UTILS::UI::ValueFromString( unityScale, EDA_UNITS::UNSCALED, \
+                                                                  ctrl->GetValue() )
+
+    if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( aTab ) )
+    {
+        if( !plotTab->GetLabelY1().IsEmpty() )
+        {
+            plotTab->SetY1Scale( m_lockY1->GetValue(),
+                                 SIM_VALUE::ToDouble( m_y1Min->GetValue().ToStdString() ),
+                                 SIM_VALUE::ToDouble( m_y1Max->GetValue().ToStdString() ) );
+        }
+
+        if( !plotTab->GetLabelY2().IsEmpty() )
+        {
+            plotTab->SetY2Scale( m_lockY2->GetValue(),
+                                 SIM_VALUE::ToDouble( m_y2Min->GetValue().ToStdString() ),
+                                 SIM_VALUE::ToDouble( m_y2Max->GetValue().ToStdString() ) );
+        }
+
+        if( !plotTab->GetLabelY3().IsEmpty() )
+        {
+            plotTab->SetY3Scale( m_lockY3->GetValue(),
+                                 SIM_VALUE::ToDouble( m_y3Min->GetValue().ToStdString() ),
+                                 SIM_VALUE::ToDouble( m_y3Max->GetValue().ToStdString() ) );
+        }
+
+        plotTab->ShowGrid( m_grid->GetValue() );
+        plotTab->ShowLegend( m_legend->GetValue() );
+        plotTab->SetDottedSecondary( m_dottedSecondary->GetValue() );
+
+        plotTab->GetPlotWin()->SetMarginLeft( TO_INT( m_marginLeft ) );
+        plotTab->GetPlotWin()->SetMarginRight( TO_INT( m_marginRight ) );
+        plotTab->GetPlotWin()->SetMarginTop( TO_INT( m_marginTop ) );
+        plotTab->GetPlotWin()->SetMarginBottom( TO_INT( m_marginBottom ) );
+
+        plotTab->GetPlotWin()->UpdateAll();
+    }
 }
 
 
@@ -467,7 +605,7 @@ void DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
 
     if( aCommand == wxT( "*" ) )
     {
-        SetTitle( _( "New Simulation" ) );
+        SetTitle( _( "New Simulation Tab" ) );
 
         m_commandType->Clear();
 
@@ -746,8 +884,8 @@ void DIALOG_SIM_COMMAND::onSwapDCSources( wxCommandEvent& event )
     m_dcSource1->SetSelection( src2 );
     m_dcSource2->SetSelection( src1 );
 
-    updateDCUnits( type1, m_dcSource1, m_src1DCStartValUnit, m_src1DCEndValUnit, m_src1DCStepUnit );
-    updateDCUnits( type2, m_dcSource2, m_src2DCStartValUnit, m_src2DCEndValUnit, m_src2DCStepUnit );
+    updateDCUnits( type1, m_src1DCStartValUnit, m_src1DCEndValUnit, m_src1DCStepUnit );
+    updateDCUnits( type2, m_src2DCStartValUnit, m_src2DCEndValUnit, m_src2DCStepUnit );
 }
 
 
@@ -755,7 +893,7 @@ void DIALOG_SIM_COMMAND::onDCSource1Selected( wxCommandEvent& event )
 {
     wxChar type = m_dcSourceType1->GetString( m_dcSourceType1->GetSelection() ).Upper()[ 0 ];
     updateDCSources( type, m_dcSource1 );
-    updateDCUnits( type, m_dcSource1, m_src1DCStartValUnit, m_src1DCEndValUnit, m_src1DCStepUnit );
+    updateDCUnits( type, m_src1DCStartValUnit, m_src1DCEndValUnit, m_src1DCStepUnit );
 }
 
 
@@ -763,7 +901,7 @@ void DIALOG_SIM_COMMAND::onDCSource2Selected( wxCommandEvent& event )
 {
     wxChar type = m_dcSourceType2->GetString( m_dcSourceType2->GetSelection() ).Upper()[ 0 ];
     updateDCSources( type, m_dcSource2 );
-    updateDCUnits( type, m_dcSource2, m_src2DCStartValUnit, m_src2DCEndValUnit, m_src2DCStepUnit );
+    updateDCUnits( type, m_src2DCStartValUnit, m_src2DCEndValUnit, m_src2DCStepUnit );
 }
 
 
@@ -780,9 +918,8 @@ void DIALOG_SIM_COMMAND::onDCEnableSecondSource( wxCommandEvent& event )
 }
 
 
-void DIALOG_SIM_COMMAND::updateDCUnits( wxChar aType, wxChoice* aSource,
-                                         wxStaticText* aStartValUnit, wxStaticText* aEndValUnit,
-                                         wxStaticText* aStepUnit )
+void DIALOG_SIM_COMMAND::updateDCUnits( wxChar aType, wxStaticText* aStartValUnit,
+                                        wxStaticText* aEndValUnit, wxStaticText* aStepUnit )
 {
     wxString unit;
 

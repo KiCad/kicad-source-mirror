@@ -76,10 +76,8 @@ public:
      * Create a new simulation tab for a given simulation type.
      *
      * @param aSimCommand is requested simulation command.
-     * @param aSimOptions netlisting options
-     * @return The new plot panel.
      */
-    SIM_TAB* NewSimTab( const wxString& aSimCommand, unsigned aSimOptions );
+    SIM_TAB* NewSimTab( const wxString& aSimCommand );
 
     std::vector<wxString> SimPlotVectors() const;
 

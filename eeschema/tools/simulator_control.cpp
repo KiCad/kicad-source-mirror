@@ -60,7 +60,7 @@ void SIMULATOR_CONTROL::Reset( RESET_REASON aReason )
 }
 
 
-int SIMULATOR_CONTROL::NewPlot( const TOOL_EVENT& aEvent )
+int SIMULATOR_CONTROL::NewAnalysisTab( const TOOL_EVENT& aEvent )
 {
     DIALOG_SIM_COMMAND dlg( m_simulatorFrame, m_circuitModel, m_simulator->Settings() );
     wxString           errors;
@@ -77,7 +77,10 @@ int SIMULATOR_CONTROL::NewPlot( const TOOL_EVENT& aEvent )
     dlg.SetSimOptions( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS );
 
     if( dlg.ShowModal() == wxID_OK )
-        m_simulatorFrame->NewPlotPanel( dlg.GetSimCommand(), dlg.GetSimOptions() );
+    {
+        SIM_TAB* tab = m_simulatorFrame->NewSimTab( dlg.GetSimCommand() );
+        dlg.ApplySettings( tab );
+    }
 
     return 0;
 }
@@ -154,7 +157,7 @@ int SIMULATOR_CONTROL::SaveWorkbook( const TOOL_EVENT& aEvent )
 
 int SIMULATOR_CONTROL::ExportPlotAsPNG( const TOOL_EVENT& aEvent )
 {
-    if( SIM_PLOT_TAB* plotPanel = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentPlotPanel() ) )
+    if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( getCurrentSimTab() ) )
     {
         wxFileDialog saveDlg( m_simulatorFrame, _( "Save Plot as Image" ), "", "",
                               PngFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
@@ -162,14 +165,14 @@ int SIMULATOR_CONTROL::ExportPlotAsPNG( const TOOL_EVENT& aEvent )
         if( saveDlg.ShowModal() == wxID_CANCEL )
             return -1;
 
-        plotPanel->GetPlotWin()->SaveScreenshot( saveDlg.GetPath(), wxBITMAP_TYPE_PNG );
+        plotTab->GetPlotWin()->SaveScreenshot( saveDlg.GetPath(), wxBITMAP_TYPE_PNG );
     }
 
     return 0;
 }
 
 
-SIM_TAB* SIMULATOR_CONTROL::GetCurrentPlotPanel()
+SIM_TAB* SIMULATOR_CONTROL::getCurrentSimTab()
 {
     return m_simulatorFrame->GetCurrentSimTab();
 }
@@ -177,7 +180,7 @@ SIM_TAB* SIMULATOR_CONTROL::GetCurrentPlotPanel()
 
 int SIMULATOR_CONTROL::ExportPlotAsCSV( const TOOL_EVENT& aEvent )
 {
-    if( SIM_PLOT_TAB* plotPanel = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentPlotPanel() ) )
+    if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( getCurrentSimTab() ) )
     {
         const wxChar SEPARATOR = ';';
 
@@ -189,12 +192,12 @@ int SIMULATOR_CONTROL::ExportPlotAsCSV( const TOOL_EVENT& aEvent )
 
         wxFFile out( saveDlg.GetPath(), "wb" );
 
-        std::map<wxString, TRACE*> traces = plotPanel->GetTraces();
+        std::map<wxString, TRACE*> traces = plotTab->GetTraces();
 
         if( traces.size() == 0 )
             return -1;
 
-        SIM_TYPE simType = plotPanel->GetSimType();
+        SIM_TYPE simType = plotTab->GetSimType();
 
         std::size_t rowCount = traces.begin()->second->GetDataX().size();
 
@@ -238,11 +241,14 @@ int SIMULATOR_CONTROL::Close( const TOOL_EVENT& aEvent )
 
 int SIMULATOR_CONTROL::Zoom( const TOOL_EVENT& aEvent )
 {
-    if( SIM_PLOT_TAB* plotPanel = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentPlotPanel() ) )
+    if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( getCurrentSimTab() ) )
     {
-        if(      aEvent.IsAction( &ACTIONS::zoomInCenter ) )  plotPanel->GetPlotWin()->ZoomIn();
-        else if( aEvent.IsAction( &ACTIONS::zoomOutCenter ) ) plotPanel->GetPlotWin()->ZoomOut();
-        else if( aEvent.IsAction( &ACTIONS::zoomFitScreen ) ) plotPanel->GetPlotWin()->Fit();
+        if(      aEvent.IsAction( &ACTIONS::zoomInCenter ) )
+            plotTab->GetPlotWin()->ZoomIn();
+        else if( aEvent.IsAction( &ACTIONS::zoomOutCenter ) )
+            plotTab->GetPlotWin()->ZoomOut();
+        else if( aEvent.IsAction( &ACTIONS::zoomFitScreen ) )
+            plotTab->GetPlotWin()->Fit();
     }
 
     return 0;
@@ -251,9 +257,9 @@ int SIMULATOR_CONTROL::Zoom( const TOOL_EVENT& aEvent )
 
 int SIMULATOR_CONTROL::ToggleGrid( const TOOL_EVENT& aEvent )
 {
-    if( SIM_PLOT_TAB* plotPanel = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentPlotPanel() ) )
+    if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( getCurrentSimTab() ) )
     {
-        plotPanel->ShowGrid( !plotPanel->IsGridShown() );
+        plotTab->ShowGrid( !plotTab->IsGridShown() );
         m_simulatorFrame->OnModify();
     }
 
@@ -263,9 +269,9 @@ int SIMULATOR_CONTROL::ToggleGrid( const TOOL_EVENT& aEvent )
 
 int SIMULATOR_CONTROL::ToggleLegend( const TOOL_EVENT& aEvent )
 {
-    if( SIM_PLOT_TAB* plotPanel = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentPlotPanel() ) )
+    if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( getCurrentSimTab() ) )
     {
-        plotPanel->ShowLegend( !plotPanel->IsLegendShown() );
+        plotTab->ShowLegend( !plotTab->IsLegendShown() );
         m_simulatorFrame->OnModify();
     }
 
@@ -275,9 +281,9 @@ int SIMULATOR_CONTROL::ToggleLegend( const TOOL_EVENT& aEvent )
 
 int SIMULATOR_CONTROL::ToggleDottedSecondary( const TOOL_EVENT& aEvent )
 {
-    if( SIM_PLOT_TAB* plotPanel = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentPlotPanel() ) )
+    if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( getCurrentSimTab() ) )
     {
-        plotPanel->SetDottedSecondary( !plotPanel->GetDottedSecondary() );
+        plotTab->SetDottedSecondary( !plotTab->GetDottedSecondary() );
         m_simulatorFrame->OnModify();
     }
 
@@ -292,9 +298,9 @@ int SIMULATOR_CONTROL::ToggleDarkModePlots( const TOOL_EVENT& aEvent )
 }
 
 
-int SIMULATOR_CONTROL::EditSimCommand( const TOOL_EVENT& aEvent )
+int SIMULATOR_CONTROL::EditAnalysisTab( const TOOL_EVENT& aEvent )
 {
-    m_simulatorFrame->EditSimCommand();
+    m_simulatorFrame->EditAnalysis();
     return 0;
 }
 
@@ -307,10 +313,10 @@ int SIMULATOR_CONTROL::RunSimulation( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    if( !GetCurrentPlotPanel() )
-        NewPlot( aEvent );
+    if( !getCurrentSimTab() )
+        NewAnalysisTab( aEvent );
 
-    if( !GetCurrentPlotPanel() )
+    if( !getCurrentSimTab() )
         return 0;
 
     m_simulatorFrame->StartSimulation();
@@ -472,7 +478,7 @@ int SIMULATOR_CONTROL::ShowNetlist( const TOOL_EVENT& aEvent )
 
 void SIMULATOR_CONTROL::setTransitions()
 {
-    Go( &SIMULATOR_CONTROL::NewPlot,                EE_ACTIONS::newPlot.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::NewAnalysisTab,         EE_ACTIONS::newAnalysisTab.MakeEvent() );
     Go( &SIMULATOR_CONTROL::OpenWorkbook,           EE_ACTIONS::openWorkbook.MakeEvent() );
     Go( &SIMULATOR_CONTROL::SaveWorkbook,           EE_ACTIONS::saveWorkbook.MakeEvent() );
     Go( &SIMULATOR_CONTROL::SaveWorkbook,           EE_ACTIONS::saveWorkbookAs.MakeEvent() );
@@ -488,7 +494,7 @@ void SIMULATOR_CONTROL::setTransitions()
     Go( &SIMULATOR_CONTROL::ToggleDottedSecondary,  EE_ACTIONS::toggleDottedSecondary.MakeEvent() );
     Go( &SIMULATOR_CONTROL::ToggleDarkModePlots,    EE_ACTIONS::toggleDarkModePlots.MakeEvent() );
 
-    Go( &SIMULATOR_CONTROL::EditSimCommand,         EE_ACTIONS::simCommand.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::EditAnalysisTab,        EE_ACTIONS::simAnalysisProperties.MakeEvent() );
     Go( &SIMULATOR_CONTROL::RunSimulation,          EE_ACTIONS::runSimulation.MakeEvent() );
     Go( &SIMULATOR_CONTROL::RunSimulation,          EE_ACTIONS::stopSimulation.MakeEvent() );
     Go( &SIMULATOR_CONTROL::Probe,                  EE_ACTIONS::simProbe.MakeEvent() );

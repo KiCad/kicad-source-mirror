@@ -37,7 +37,7 @@ class SIM_TAB : public wxWindow
 {
 public:
     SIM_TAB();
-    SIM_TAB( const wxString& aSimCommand, unsigned aSimOptions, wxWindow* parent );
+    SIM_TAB( const wxString& aSimCommand, wxWindow* parent );
     virtual ~SIM_TAB();
 
     static bool IsPlottable( SIM_TYPE aSimType );
@@ -69,7 +69,7 @@ private:
 class SIM_NOPLOT_TAB : public SIM_TAB
 {
 public:
-    SIM_NOPLOT_TAB( const wxString& aSimCommand, unsigned aSimOptions, wxWindow* parent );
+    SIM_NOPLOT_TAB( const wxString& aSimCommand, wxWindow* parent );
 
     virtual ~SIM_NOPLOT_TAB();
 

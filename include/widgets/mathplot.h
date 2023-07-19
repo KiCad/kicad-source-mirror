@@ -678,13 +678,6 @@ public:
     // virtual double X2p( mpWindow &w, double x ) = 0;
     // virtual double P2x( mpWindow &w, double x ) = 0;
 
-    void SetDataRange( double minV, double maxV )
-    {
-        m_rangeSet = true;
-        m_minV  = minV;
-        m_maxV  = maxV;
-    }
-
     void GetDataRange( double& minV, double& maxV ) const
     {
         minV = m_minV;
@@ -727,6 +720,29 @@ public:
         return m_absVisibleMaxV;
     }
 
+    void SetAxisMinMax( bool lock, double minV, double maxV )
+    {
+        m_axisLocked = lock;
+        m_axisMin = minV;
+        m_axisMax = maxV;
+    }
+
+    bool GetAxisMinMax( double* minV, double* maxV )
+    {
+        if( m_axisLocked )
+        {
+            *minV = m_axisMin;
+            *maxV = m_axisMax;
+        }
+        else if( !m_tickValues.empty() )
+        {
+            *minV = m_tickValues.front();
+            *maxV = m_tickValues.back();
+        }
+
+        return m_axisLocked;
+    }
+
     virtual double TransformToPlot( double x ) const { return 0.0; };
     virtual double TransformFromPlot( double xplot ) const { return 0.0; };
 
@@ -755,12 +771,12 @@ protected:
 
     int tickCount() const
     {
-        return m_tickValues.size();
+        return (int) m_tickValues.size();
     }
 
     virtual int labelCount() const
     {
-        return m_tickLabels.size();
+        return (int) m_tickLabels.size();
     }
 
     virtual const wxString formatLabel( double value, int nDigits ) { return wxT( "" ); }
@@ -781,18 +797,22 @@ protected:
         return m_tickLabels[n].label;
     }
 
-    std::vector<double> m_tickValues;
+protected:
+    std::vector<double>    m_tickValues;
     std::vector<TickLabel> m_tickLabels;
 
-    double m_offset, m_scale;
-    double m_absVisibleMaxV;
-    int m_flags;        // !< Flag for axis alignment
-    int m_nameFlags;
-    bool m_ticks;       // !< Flag to toggle between ticks or grid
-    double m_minV, m_maxV;
-    bool    m_rangeSet;
-    int m_maxLabelHeight;
-    int m_maxLabelWidth;
+    double                 m_offset, m_scale;
+    double                 m_absVisibleMaxV;
+    int                    m_flags;            // !< Flag for axis alignment
+    int                    m_nameFlags;
+    bool                   m_ticks;            // !< Flag to toggle between ticks or grid
+    double                 m_minV, m_maxV;
+    bool                   m_rangeSet;
+    bool                   m_axisLocked;
+    double                 m_axisMin;
+    double                 m_axisMax;
+    int                    m_maxLabelHeight;
+    int                    m_maxLabelWidth;
 };
 
 class WXDLLIMPEXP_MATHPLOT mpScaleXBase : public mpScaleBase
@@ -1058,29 +1078,25 @@ public:
      *  See @ref mpLayer::Plot "rules for coordinate transformation"
      *  @return Scale
      */
-    double GetXscl() const { return m_scaleX; }
-    double GetScaleX( void ) const { return m_scaleX; };  // Schaling's method: maybe another method exists with the same name
+    double GetScaleX() const { return m_scaleX; };
 
     /** Get current view's Y scale.
      *  See @ref mpLayer::Plot "rules for coordinate transformation"
      *  @return Scale
      */
-    double GetYscl() const { return m_scaleY; }
-    double GetScaleY( void ) const { return m_scaleY; }   // Schaling's method: maybe another method exists with the same name
+    double GetScaleY() const { return m_scaleY; }
 
     /** Get current view's X position.
      *  See @ref mpLayer::Plot "rules for coordinate transformation"
      *  @return X Position in layer coordinate system, that corresponds to the center point of the view.
      */
-    double GetXpos() const { return m_posX; }
-    double GetPosX( void ) const { return m_posX; }
+    double GetPosX() const { return m_posX; }
 
     /** Get current view's Y position.
      *  See @ref mpLayer::Plot "rules for coordinate transformation"
      *  @return Y Position in layer coordinate system, that corresponds to the center point of the view.
      */
-    double GetYpos() const { return m_posY; }
-    double GetPosY( void ) const { return m_posY; }
+    double GetPosY() const { return m_posY; }
 
     /** Get current view's X dimension in device context units.
      *  Usually this is equal to wxDC::GetSize, but it might differ thus mpLayer
@@ -1088,8 +1104,8 @@ public:
      *  See @ref mpLayer::Plot "rules for coordinate transformation"
      *  @return X dimension.
      */
-    int GetScrX( void ) const { return m_scrX; }
-    int GetXScreen( void ) const { return m_scrX; }
+    int GetScrX() const { return m_scrX; }
+    int GetXScreen() const { return m_scrX; }
 
     /** Get current view's Y dimension in device context units.
      *  Usually this is equal to wxDC::GetSize, but it might differ thus mpLayer
@@ -1097,8 +1113,8 @@ public:
      *  See @ref mpLayer::Plot "rules for coordinate transformation"
      *  @return Y dimension.
      */
-    int GetScrY( void ) const { return m_scrY; }
-    int GetYScreen( void ) const { return m_scrY; }
+    int GetScrY() const { return m_scrY; }
+    int GetYScreen() const { return m_scrY; }
 
     /** Set current view's X scale and refresh display.
      *  @param scaleX New scale, must not be 0.
@@ -1338,6 +1354,10 @@ public:
         m_enableLimitedView = aEnable;
     }
 
+    void LockY( bool aLock ) { m_yLocked = aLock; }
+
+    void AdjustLimitedView();
+
 protected:
     void    OnPaint( wxPaintEvent& event );             // !< Paint handler, will plot all attached layers
     void    OnSize( wxSizeEvent& event );               // !< Size handler, will update scroll bar sizes
@@ -1376,8 +1396,6 @@ protected:
                       || desiredMin < m_minY + m_marginTop / m_scaleY) );
     }
 
-    void AdjustLimitedView();
-
     /** Recalculate global layer bounding box, and save it in m_minX,...
      * \return true if there is any valid BBox information.
      */
@@ -1413,6 +1431,8 @@ protected:
     int m_clickedX;         // !< Last mouse click X position, for centering and zooming the view
     int m_clickedY;         // !< Last mouse click Y position, for centering and zooming the view
 
+    bool m_yLocked;
+
     /** These are updated in Fit() only, and may be different from the real borders
      * (layer coordinates) only if lock aspect ratio is true.
      */
@@ -1429,8 +1449,6 @@ protected:
     bool    m_enableLimitedView;
     wxPoint m_mouseMClick;                  // !< For the middle button "drag" feature
     wxPoint m_mouseLClick;                  // !< Starting coords for rectangular zoom selection
-    bool    m_enableScrollBars;
-    wxPoint m_scroll;
     mpInfoLayer* m_movingInfoLayer;          // !< For moving info layers over the window area
     bool m_zooming;
     wxRect m_zoomRect;

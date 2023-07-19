@@ -36,6 +36,7 @@
 class SPICE_CIRCUIT_MODEL;
 class SPICE_SETTINGS;
 class SIMULATOR_FRAME;
+class SIM_TAB;
 
 
 class DIALOG_SIM_COMMAND : public DIALOG_SIM_COMMAND_BASE
@@ -57,25 +58,6 @@ public:
         refreshUIControls();
     }
 
-    int GetSimOptions() const
-    {
-        int options = NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS;
-
-        if( !m_fixIncludePaths->GetValue() )
-            options &= ~NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS;
-
-        if( !m_saveAllVoltages->GetValue() )
-            options &= ~NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_VOLTAGES;
-
-        if( !m_saveAllCurrents->GetValue() )
-            options &= ~NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS;
-
-        if( !m_saveAllDissipations->GetValue() )
-            options &= ~NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_DISSIPATIONS;
-
-        return options;
-    }
-
     void SetSimOptions( int aOptions )
     {
         m_fixIncludePaths->SetValue( aOptions & NETLIST_EXPORTER_SPICE::OPTION_ADJUST_INCLUDE_PATHS );
@@ -83,6 +65,8 @@ public:
         m_saveAllCurrents->SetValue( aOptions & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS );
         m_saveAllDissipations->SetValue( aOptions & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_DISSIPATIONS );
     }
+
+    void SetPlotSettings( const SIM_TAB* aSimTab );
 
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
@@ -95,6 +79,8 @@ public:
     {
         return true;
     }
+
+    void ApplySettings( SIM_TAB* aTab );
 
 private:
     enum SCALE_TYPE
@@ -129,8 +115,8 @@ private:
     /**
      * Update units on labels depending on selected source.
      */
-    void updateDCUnits( wxChar aType, wxChoice* aSource, wxStaticText* aStartValUnit,
-                        wxStaticText* aEndValUnit, wxStaticText* aStepUnit );
+    void updateDCUnits( wxChar aType, wxStaticText* aStartValUnit, wxStaticText* aEndValUnit,
+                        wxStaticText* aStepUnit );
 
     virtual void onInitDlg( wxInitDialogEvent& event ) override
     {
@@ -157,6 +143,10 @@ private:
     void onSwapDCSources( wxCommandEvent& event ) override;
     void onDCSource1Selected( wxCommandEvent& event ) override;
     void onDCSource2Selected( wxCommandEvent& event ) override;
+
+    void OnUpdateUILockY1( wxUpdateUIEvent& event ) override;
+    void OnUpdateUILockY2( wxUpdateUIEvent& event ) override;
+    void OnUpdateUILockY3( wxUpdateUIEvent& event ) override;
 
     static wxString scaleToString( int aOption )
     {

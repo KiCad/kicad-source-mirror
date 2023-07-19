@@ -49,8 +49,8 @@ void SIMULATOR_FRAME::ReCreateHToolbar()
     m_toolBar->Add( EE_ACTIONS::saveWorkbook );
 
     m_toolBar->AddScaledSeparator( this );
-    m_toolBar->Add( EE_ACTIONS::newPlot );
-    m_toolBar->Add( EE_ACTIONS::simCommand );
+    m_toolBar->Add( EE_ACTIONS::newAnalysisTab );
+    m_toolBar->Add( EE_ACTIONS::simAnalysisProperties );
 
     m_toolBar->AddScaledSeparator( this );
     m_toolBar->Add( EE_ACTIONS::runSimulation );
@@ -93,7 +93,7 @@ void SIMULATOR_FRAME::doReCreateMenuBar()
     //
     ACTION_MENU* fileMenu = new ACTION_MENU( false, tool );
 
-    fileMenu->Add( EE_ACTIONS::newPlot );
+    fileMenu->Add( EE_ACTIONS::newAnalysisTab );
 
     fileMenu->AppendSeparator();
     fileMenu->Add( EE_ACTIONS::openWorkbook );
@@ -127,8 +127,8 @@ void SIMULATOR_FRAME::doReCreateMenuBar()
     //
     ACTION_MENU* simulationMenu = new ACTION_MENU( false, tool );
 
-    simulationMenu->Add( EE_ACTIONS::newPlot );
-    simulationMenu->Add( EE_ACTIONS::simCommand );
+    simulationMenu->Add( EE_ACTIONS::newAnalysisTab );
+    simulationMenu->Add( EE_ACTIONS::simAnalysisProperties );
     simulationMenu->Add( EE_ACTIONS::runSimulation );
 
     simulationMenu->AppendSeparator();
