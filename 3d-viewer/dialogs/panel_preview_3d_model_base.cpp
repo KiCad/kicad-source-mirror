@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -190,10 +190,18 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bSizer3DButtons;
 	bSizer3DButtons = new wxBoxSizer( wxVERTICAL );
 
+
+	bSizer3DButtons->Add( 0, 10, 0, 0, 5 );
+
 	m_bpvISO = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_bpvISO->SetToolTip( _("Enable/disable orthographic projection") );
 
-	bSizer3DButtons->Add( m_bpvISO, 0, wxTOP, 14 );
+	bSizer3DButtons->Add( m_bpvISO, 0, wxTOP, 5 );
+
+	m_bpvBodyStyle = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_bpvBodyStyle->SetToolTip( _("Show or hide the board body\nIf hidden, show only copper and silkscreen layers.") );
+
+	bSizer3DButtons->Add( m_bpvBodyStyle, 0, wxTOP|wxBOTTOM, 5 );
 
 
 	bSizer3DButtons->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -225,7 +233,10 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 	bSizer3DButtons->Add( m_bpUpdate, 0, wxBOTTOM, 5 );
 
 	m_bpSettings = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer3DButtons->Add( m_bpSettings, 0, 0, 5 );
+	bSizer3DButtons->Add( m_bpSettings, 0, wxBOTTOM, 5 );
+
+
+	bSizer3DButtons->Add( 0, 10, 0, 0, 5 );
 
 
 	bSizermain->Add( bSizer3DButtons, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
@@ -274,6 +285,7 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 	m_spinZoffset->Connect( wxEVT_SCROLL_LINEUP, wxSpinEventHandler( PANEL_PREVIEW_3D_MODEL_BASE::onIncrementOffset ), NULL, this );
 	m_opacity->Connect( wxEVT_SLIDER, wxCommandEventHandler( PANEL_PREVIEW_3D_MODEL_BASE::onOpacitySlider ), NULL, this );
 	m_bpvISO->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PREVIEW_3D_MODEL_BASE::View3DISO ), NULL, this );
+	m_bpvBodyStyle->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PREVIEW_3D_MODEL_BASE::setBodyStyleView ), NULL, this );
 	m_bpvLeft->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PREVIEW_3D_MODEL_BASE::View3DLeft ), NULL, this );
 	m_bpvRight->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PREVIEW_3D_MODEL_BASE::View3DRight ), NULL, this );
 	m_bpvFront->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PREVIEW_3D_MODEL_BASE::View3DFront ), NULL, this );
@@ -325,6 +337,7 @@ PANEL_PREVIEW_3D_MODEL_BASE::~PANEL_PREVIEW_3D_MODEL_BASE()
 	m_spinZoffset->Disconnect( wxEVT_SCROLL_LINEUP, wxSpinEventHandler( PANEL_PREVIEW_3D_MODEL_BASE::onIncrementOffset ), NULL, this );
 	m_opacity->Disconnect( wxEVT_SLIDER, wxCommandEventHandler( PANEL_PREVIEW_3D_MODEL_BASE::onOpacitySlider ), NULL, this );
 	m_bpvISO->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PREVIEW_3D_MODEL_BASE::View3DISO ), NULL, this );
+	m_bpvBodyStyle->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PREVIEW_3D_MODEL_BASE::setBodyStyleView ), NULL, this );
 	m_bpvLeft->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PREVIEW_3D_MODEL_BASE::View3DLeft ), NULL, this );
 	m_bpvRight->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PREVIEW_3D_MODEL_BASE::View3DRight ), NULL, this );
 	m_bpvFront->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PREVIEW_3D_MODEL_BASE::View3DFront ), NULL, this );

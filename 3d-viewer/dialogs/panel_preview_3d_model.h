@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2015-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -151,6 +151,11 @@ private:
         m_previewPane->Refresh();
     }
 
+    // turn ON or OFF options to show the board body. If OFF, solder paste, soldermask
+    // and board body are hidden, to allows a good view of the 3D model and its pads.
+    // Useful for 3D model placement
+	void setBodyStyleView( wxCommandEvent& event ) override;
+
 	void View3DLeft( wxCommandEvent& event ) override
     {
         m_previewPane->SetView3D( VIEW3D_TYPE::VIEW3D_LEFT );
@@ -201,9 +206,12 @@ private:
     FOOTPRINT*               m_dummyFootprint;
 
     std::vector<FP_3DMODEL>* m_parentModelList;
-    int                      m_selected;   /// Index into m_parentInfoList
+    int                      m_selected;            /// Index into m_parentInfoList
 
     EDA_UNITS                m_userUnits;
+    bool                     m_bodyStyleShowAll;    /// true if the board body is show
+    /// The 3d viewer Render initial settings (must be saved and restored)
+    EDA_3D_VIEWER_SETTINGS::RENDER_SETTINGS m_initialRender;
 };
 
 #endif  // PANEL_PREVIEW_3D_MODEL_H

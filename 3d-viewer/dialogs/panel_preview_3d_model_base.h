@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -69,6 +69,7 @@ class PANEL_PREVIEW_3D_MODEL_BASE : public wxPanel
 		wxStaticText* m_previewLabel;
 		wxBoxSizer* m_SizerPanelView;
 		wxBitmapButton* m_bpvISO;
+		wxBitmapButton* m_bpvBodyStyle;
 		wxBitmapButton* m_bpvLeft;
 		wxBitmapButton* m_bpvRight;
 		wxBitmapButton* m_bpvFront;
@@ -91,6 +92,7 @@ class PANEL_PREVIEW_3D_MODEL_BASE : public wxPanel
 		virtual void onIncrementOffset( wxSpinEvent& event ) { event.Skip(); }
 		virtual void onOpacitySlider( wxCommandEvent& event ) { event.Skip(); }
 		virtual void View3DISO( wxCommandEvent& event ) { event.Skip(); }
+		virtual void setBodyStyleView( wxCommandEvent& event ) { event.Skip(); }
 		virtual void View3DLeft( wxCommandEvent& event ) { event.Skip(); }
 		virtual void View3DRight( wxCommandEvent& event ) { event.Skip(); }
 		virtual void View3DFront( wxCommandEvent& event ) { event.Skip(); }

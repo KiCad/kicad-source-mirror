@@ -63,6 +63,8 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
     // This board will only be used to hold a footprint for viewing
     m_dummyBoard->SetBoardUse( BOARD_USE::FPHOLDER );
 
+    m_bodyStyleShowAll = true;
+
     BOARD_DESIGN_SETTINGS parent_bds = aFrame->GetDesignSettings();
     BOARD_DESIGN_SETTINGS& dummy_bds = m_dummyBoard->GetDesignSettings();
     dummy_bds.SetBoardThickness( parent_bds.GetBoardThickness() );
@@ -83,6 +85,7 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
     m_bpvRight->SetBitmap( KiBitmap( BITMAPS::axis3d_right ) );
     m_bpvBottom->SetBitmap( KiBitmap( BITMAPS::axis3d_bottom ) );
     m_bpvISO->SetBitmap( KiBitmap( BITMAPS::ortho ) );
+    m_bpvBodyStyle->SetBitmap( KiBitmap( BITMAPS::axis3d ) );
     m_bpUpdate->SetBitmap( KiBitmap( BITMAPS::reload ) );
     m_bpSettings->SetBitmap( KiBitmap( BITMAPS::options_3drender ) );
 
@@ -174,6 +177,10 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
 
 PANEL_PREVIEW_3D_MODEL::~PANEL_PREVIEW_3D_MODEL()
 {
+    // Restore the 3D viewer Render settings, that can be modified by the panel tools
+    if( m_boardAdapter.m_Cfg )
+        m_boardAdapter.m_Cfg->m_Render = m_initialRender;
+
     delete m_dummyBoard;
     delete m_previewPane;
 }
@@ -228,11 +235,21 @@ void PANEL_PREVIEW_3D_MODEL::loadSettings()
 
     if( cfg )
     {
+        // Save the 3D viewer render settings, to restore it after closing the preview
+        m_initialRender = cfg->m_Render;
+
         m_boardAdapter.m_Cfg = cfg;
 
         m_previewPane->SetAnimationEnabled( cfg->m_Camera.animation_enabled );
         m_previewPane->SetMovingSpeedMultiplier( cfg->m_Camera.moving_speed_multiplier );
         m_previewPane->SetProjectionMode( cfg->m_Camera.projection_mode );
+
+        // Ensure the board body is always shown, and do not use the settings of the 3D viewer
+        cfg->m_Render.show_soldermask = m_bodyStyleShowAll;
+        cfg->m_Render.show_solderpaste = m_bodyStyleShowAll;
+        cfg->m_Render.show_zones = m_bodyStyleShowAll;
+        cfg->m_Render.show_board_body = m_bodyStyleShowAll;
+        cfg->m_Render.realistic = m_bodyStyleShowAll;
     }
 }
 
@@ -380,6 +397,28 @@ void PANEL_PREVIEW_3D_MODEL::onOpacitySlider( wxCommandEvent& event )
         // Update the dummy footprint for the preview
         UpdateDummyFootprint( false );
     }
+}
+
+
+void PANEL_PREVIEW_3D_MODEL::setBodyStyleView( wxCommandEvent& event )
+{
+    // turn ON or OFF options to show the board body if OFF, soder paste, soldermask
+    // and board body are hidden, to allows a good view of the 3D model and its pads.
+    EDA_3D_VIEWER_SETTINGS* cfg = m_boardAdapter.m_Cfg;
+
+    if( !cfg )
+        return;
+
+    m_bodyStyleShowAll = !m_bodyStyleShowAll;
+
+    cfg->m_Render.show_soldermask = m_bodyStyleShowAll;
+    cfg->m_Render.show_solderpaste = m_bodyStyleShowAll;
+    cfg->m_Render.show_zones = m_bodyStyleShowAll;
+    cfg->m_Render.show_board_body = m_bodyStyleShowAll;
+    cfg->m_Render.realistic = m_bodyStyleShowAll;
+
+    m_previewPane->ReloadRequest();
+    m_previewPane->Refresh();
 }
 
 
