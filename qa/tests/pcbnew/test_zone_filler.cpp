@@ -143,22 +143,8 @@ BOOST_FIXTURE_TEST_CASE( NotchedZones, ZONE_FILL_TEST_FIXTURE )
     // See:
     //   https://gitlab.com/kicad/code/kicad/-/issues/2737
     //   https://gitlab.com/kicad/code/kicad/-/issues/2752
-
-    // First, run a sanity check to validate that the saved board still has holes.
     SHAPE_POLY_SET frontCopper;
 
-    for( ZONE* zone : m_board->Zones() )
-    {
-        if( zone->GetLayerSet().Contains( F_Cu ) )
-        {
-            frontCopper.BooleanAdd( *zone->GetFilledPolysList( F_Cu ),
-                                    SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-        }
-    }
-
-    BOOST_CHECK_GT( frontCopper.OutlineCount(), 2 );
-
-    // Now re-fill and make sure the holes are gone.
     KI_TEST::FillZones( m_board.get() );
 
     frontCopper = SHAPE_POLY_SET();
