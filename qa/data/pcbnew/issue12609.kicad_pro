@@ -55,9 +55,7 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [
-        "courtyards_overlap|156916541|75399999|c252dcdc-a75f-458d-80db-287ecab15830|ff13b34e-f2dd-464a-8eab-fcfac643f59c"
-      ],
+      "drc_exclusions": [],
       "meta": {
         "version": 2
       },
@@ -404,7 +402,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "minikv_primary.kicad_pro",
+    "filename": "issue12609.kicad_pro",
     "version": 1
   },
   "net_settings": {

@@ -70,6 +70,7 @@
       "rule_severities": {
         "annular_width": "error",
         "clearance": "error",
+        "connection_width": "warning",
         "copper_edge_clearance": "ignore",
         "copper_sliver": "warning",
         "courtyards_overlap": "error",
@@ -78,6 +79,7 @@
         "drill_out_of_range": "error",
         "duplicate_footprints": "warning",
         "extra_footprint": "warning",
+        "footprint": "error",
         "footprint_type_mismatch": "ignore",
         "hole_clearance": "error",
         "hole_near_hole": "error",
@@ -94,7 +96,6 @@
         "missing_footprint": "warning",
         "net_conflict": "warning",
         "npth_inside_courtyard": "ignore",
-        "overlapping_pads": "warning",
         "padstack": "error",
         "pth_inside_courtyard": "ignore",
         "shorting_items": "error",
@@ -121,6 +122,7 @@
         "allow_microvias": false,
         "max_error": 0.005,
         "min_clearance": 0.0,
+        "min_connection": 0.0,
         "min_copper_edge_clearance": 0.25,
         "min_hole_clearance": 0.254,
         "min_hole_to_hole": 0.25,
@@ -421,7 +423,7 @@
   "net_settings": {
     "classes": [
       {
-        "bus_width": 12.0,
+        "bus_width": 12,
         "clearance": 0.15,
         "diff_pair_gap": 0.1524,
         "diff_pair_via_gap": 0.25,
@@ -435,10 +437,10 @@
         "track_width": 0.1524,
         "via_diameter": 0.45,
         "via_drill": 0.2,
-        "wire_width": 6.0
+        "wire_width": 6
       },
       {
-        "bus_width": 12.0,
+        "bus_width": 12,
         "clearance": 1.0,
         "diff_pair_gap": 0.25,
         "diff_pair_via_gap": 0.25,
@@ -447,28 +449,15 @@
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
         "name": "HV",
-        "nets": [
-          "/ATN_IN",
-          "/SIG_100XC2",
-          "/SIG_1X",
-          "/SIG_1XC",
-          "/SIG_1XC2",
-          "/SIG_50_{OPEN}",
-          "/SIG_IN_{1}",
-          "/SIG_IN_{2}",
-          "/SIG_IN_{3}",
-          "/SIG_{1}",
-          "/SIG_{2}"
-        ],
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.1524,
         "via_diameter": 0.45,
         "via_drill": 0.2,
-        "wire_width": 6.0
+        "wire_width": 6
       },
       {
-        "bus_width": 12.0,
+        "bus_width": 12,
         "clearance": 0.4,
         "diff_pair_gap": 0.1524,
         "diff_pair_via_gap": 0.25,
@@ -477,22 +466,73 @@
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
         "name": "VaricapBias",
-        "nets": [
-          "/VFILT'",
-          "/VFILTER"
-        ],
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
         "track_width": 0.1524,
         "via_diameter": 0.45,
         "via_drill": 0.2,
-        "wire_width": 6.0
+        "wire_width": 6
       }
     ],
     "meta": {
-      "version": 2
+      "version": 3
     },
-    "net_colors": null
+    "net_colors": null,
+    "netclass_assignments": null,
+    "netclass_patterns": [
+      {
+        "netclass": "HV",
+        "pattern": "/ATN_IN"
+      },
+      {
+        "netclass": "HV",
+        "pattern": "/SIG_100XC2"
+      },
+      {
+        "netclass": "HV",
+        "pattern": "/SIG_1X"
+      },
+      {
+        "netclass": "HV",
+        "pattern": "/SIG_1XC"
+      },
+      {
+        "netclass": "HV",
+        "pattern": "/SIG_1XC2"
+      },
+      {
+        "netclass": "HV",
+        "pattern": "/SIG_50_{OPEN}"
+      },
+      {
+        "netclass": "HV",
+        "pattern": "/SIG_IN_{1}"
+      },
+      {
+        "netclass": "HV",
+        "pattern": "/SIG_IN_{2}"
+      },
+      {
+        "netclass": "HV",
+        "pattern": "/SIG_IN_{3}"
+      },
+      {
+        "netclass": "HV",
+        "pattern": "/SIG_{1}"
+      },
+      {
+        "netclass": "HV",
+        "pattern": "/SIG_{2}"
+      },
+      {
+        "netclass": "VaricapBias",
+        "pattern": "/VFILT'"
+      },
+      {
+        "netclass": "VaricapBias",
+        "pattern": "/VFILTER"
+      }
+    ]
   },
   "pcbnew": {
     "last_paths": {
