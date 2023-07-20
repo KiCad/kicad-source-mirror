@@ -907,7 +907,7 @@ ATEXT6::ATEXT6( ALTIUM_PARSER& aReader, std::map<uint32_t, wxString>& aStringTab
 
     char fontData[64] = { 0 };
     aReader.ReadBytes( fontData, sizeof( fontData ) );
-    fontname = wxString( fontData, wxMBConvUTF16LE(), sizeof( fontData ) );
+    fontname = wxString( fontData, wxMBConvUTF16LE(), sizeof( fontData ) ).BeforeFirst( '\0' );
 
     isInverted = aReader.Read<uint8_t>() != 0;
     aReader.Skip( 4 );
