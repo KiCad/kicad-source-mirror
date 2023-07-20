@@ -5112,22 +5112,11 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
     std::map<PCB_LAYER_ID, SHAPE_POLY_SET> pts;
     PCB_LAYER_ID filledLayer;
     bool         addedFilledPolygons = false;
-    bool         dropFilledPolygons = false;
+    bool         isStrokedFill = true;
 
     std::unique_ptr<ZONE> zone = std::make_unique<ZONE>( aParent );
 
     zone->SetAssignedPriority( 0 );
-
-    bool isLegacy = false;
-
-    if( m_requiredVersion < 20210606 )
-    {
-        // A new zone fill strategy was added in v6, so we need to know if we're parsing
-        // a file that was written before that date.  Note that the change was implemented as
-        // a new parameter without changing the version number, so we need to check for the
-        // presence of the new parameter instead of just the version number.
-        isLegacy = true;
-    }
 
     // This is the default for board files:
     zone->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::ALWAYS );
@@ -5245,9 +5234,13 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
             break;
 
         case T_filled_areas_thickness:
+            // A new zone fill strategy was added in v6, so we need to know if we're parsing
+            // a zone that was filled before that. Note that the change was implemented as
+            // a new parameter, so we need to check for the  presence of filled_areas_thickness
+            // instead of just its value.
 
-            if( parseBool() )
-                isLegacy = true;
+            if( !parseBool() )
+                isStrokedFill = false;
 
             NeedRIGHT();
             break;
@@ -5675,36 +5668,31 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
         zone->SetBorderDisplayStyle( hatchStyle, hatchPitch, true );
     }
 
-    if( isLegacy && !zone->GetIsRuleArea() )
+    if( addedFilledPolygons )
     {
-        if( m_showLegacy5ZoneWarning )
+        if( isStrokedFill && !zone->GetIsRuleArea() )
         {
-            if( Pgm().IsGUI() && m_queryUserCallback )
+            if( m_showLegacy5ZoneWarning && m_queryUserCallback )
             {
-                if( !m_queryUserCallback(
-                            _( "Legacy Zone Warning" ), wxICON_WARNING,
-                            _( "The legacy zone fill strategy is no longer supported.\n"
-                                "Convert zones to smoothed polygon fills?" ),
-                            _( "Convert" ) ) )
+                wxLogWarning(
+                        _( "Legacy zone fill strategy is not supported anymore.\nZone fills will "
+                           "be converted on best-effort basis." ) );
+
+                m_showLegacy5ZoneWarning = false;
+            }
+
+            if( zone->GetMinThickness() > 0 )
+            {
+                for( auto& pair : pts )
                 {
-                    THROW_IO_ERROR( wxT( "CANCEL" ) );
+                    pair.second.Inflate( zone->GetMinThickness() / 2,
+                                         SHAPE_POLY_SET::ROUND_ALL_CORNERS, ARC_HIGH_DEF / 2 );
+
+                    pair.second.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
                 }
             }
-            else
-            {
-                THROW_IO_ERROR( wxT( "Legacy zone fill strategy was found; "
-                                        "open the board in the PCB Editor to resolve." ) );
-            }
-
-            m_showLegacy5ZoneWarning = false;
         }
 
-        zone->SetFlags( CANDIDATE );
-        dropFilledPolygons = true;
-    }
-
-    if( addedFilledPolygons && !dropFilledPolygons )
-    {
         for( auto& pair : pts )
             zone->SetFilledPolysList( pair.first, pair.second );
 
