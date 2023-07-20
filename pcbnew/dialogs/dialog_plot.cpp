@@ -332,7 +332,7 @@ void DIALOG_PLOT::init_Dialog()
     m_plotMirrorOpt->SetValue( m_plotOpts.GetMirror() );
 
     // Put vias on mask layer
-    m_plotNoViaOnMaskOpt->SetValue( m_plotOpts.GetPlotViaOnMaskLayer() );
+    m_plotViaOnMaskOpt->SetValue( m_plotOpts.GetPlotViaOnMaskLayer() );
 
     // Black and white plotting
     m_SVGColorChoice->SetSelection( m_plotOpts.GetBlackAndWhite() ? 1 : 0 );
@@ -792,7 +792,7 @@ void DIALOG_PLOT::applyPlotSettings()
     sel = m_DXF_plotUnits->GetSelection();
     tempOptions.SetDXFPlotUnits( sel == 0 ? DXF_UNITS::INCHES : DXF_UNITS::MILLIMETERS );
 
-    tempOptions.SetPlotViaOnMaskLayer( m_plotNoViaOnMaskOpt->GetValue() );
+    tempOptions.SetPlotViaOnMaskLayer( m_plotViaOnMaskOpt->GetValue() );
 
     if( !m_DXF_plotTextStrokeFontOpt->IsEnabled() ) // Currently, only DXF supports this option
         tempOptions.SetTextMode( PLOT_TEXT_MODE::DEFAULT );

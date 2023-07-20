@@ -102,7 +102,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     // we used 0.1mils for SVG step before, but nm precision is more accurate, so we use nm
     m_svgPrecision               = SVG_PRECISION_DEFAULT;
     m_plotDrawingSheet = false;
-    m_plotViaOnMaskLayer         = false;
+    m_plotViaOnMaskLayer         = true;
     m_plotMode                   = FILLED;
     m_DXFPolygonMode = true;
     m_DXFUnits = DXF_UNITS::INCHES;

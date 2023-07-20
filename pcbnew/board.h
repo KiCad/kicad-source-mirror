@@ -632,8 +632,8 @@ public:
 
     void SetZoneSettings( const ZONE_SETTINGS& aSettings ) override;
 
-    bool GetTentVias() const            { return !m_plotOptions.GetPlotViaOnMaskLayer(); }
-    void SetTentVias( bool aFlag )      { m_plotOptions.SetPlotViaOnMaskLayer( !aFlag ); }
+    bool GetTentVias() const            { return m_plotOptions.GetPlotViaOnMaskLayer(); }
+    void SetTentVias( bool aFlag )      { m_plotOptions.SetPlotViaOnMaskLayer( aFlag ); }
 
     const PAGE_INFO& GetPageSettings() const                { return m_paper; }
     void SetPageSettings( const PAGE_INFO& aPageSettings )  { m_paper = aPageSettings; }
