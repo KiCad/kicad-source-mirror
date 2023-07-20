@@ -302,15 +302,31 @@ void CURSORS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 
 void CURSORS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 {
+    auto getSignalName =
+            [this]( int row ) -> wxString
+            {
+                wxString signal = m_grid->GetCellValue( row, COL_CURSOR_SIGNAL );
+
+                if( signal.EndsWith( "[2 - 1]" ) )
+                    signal = signal.Left( signal.size() - 7 );
+
+                return signal;
+            };
+
     if( event.GetId() == MYID_FORMAT_VALUE )
     {
-        int                     cursorId = m_menuRow;
-        int                     cursorAxis = m_menuCol - COL_CURSOR_X;
-        SPICE_VALUE_FORMAT      format = m_parent->GetCursorFormat( cursorId, cursorAxis );
+        int                     axis = m_menuCol - COL_CURSOR_X;
+        SPICE_VALUE_FORMAT      format = m_parent->GetCursorFormat( m_menuRow, axis );
         DIALOG_SIM_FORMAT_VALUE formatDialog( m_parent, &format );
 
         if( formatDialog.ShowModal() == wxID_OK )
-            m_parent->SetCursorFormat( cursorId, cursorAxis, format );
+        {
+            for( int row = 0; row < m_grid->GetNumberRows(); ++row )
+            {
+                if( getSignalName( row ) == getSignalName( m_menuRow ) )
+                    m_parent->SetCursorFormat( row, axis, format );
+            }
+        }
     }
     else
     {
