@@ -669,7 +669,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_panelCommand->SetSizer( bCommandSizer );
 	m_panelCommand->Layout();
 	bCommandSizer->Fit( m_panelCommand );
-	m_notebook1->AddPage( m_panelCommand, _("SPICE Command"), false );
+	m_notebook1->AddPage( m_panelCommand, _("SPICE Command"), true );
 	m_panelPlotSetup = new wxPanel( m_notebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bPlotSetupSizer;
 	bPlotSetupSizer = new wxBoxSizer( wxVERTICAL );
@@ -879,7 +879,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_panelPlotSetup->SetSizer( bPlotSetupSizer );
 	m_panelPlotSetup->Layout();
 	bPlotSetupSizer->Fit( m_panelPlotSetup );
-	m_notebook1->AddPage( m_panelPlotSetup, _("Plot Setup"), true );
+	m_notebook1->AddPage( m_panelPlotSetup, _("Plot Setup"), false );
 
 	bSizer1->Add( m_notebook1, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 

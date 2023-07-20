@@ -534,6 +534,10 @@ void DIALOG_SIM_COMMAND::ApplySettings( SIM_TAB* aTab )
                                  SIM_VALUE::ToDouble( m_y3Max->GetValue().ToStdString() ) );
         }
 
+        plotTab->GetPlotWin()->LockY( m_lockY1->GetValue()
+                                      || m_lockY2->GetValue()
+                                      || m_lockY3->GetValue() );
+
         plotTab->ShowGrid( m_grid->GetValue() );
         plotTab->ShowLegend( m_legend->GetValue() );
         plotTab->SetDottedSecondary( m_dottedSecondary->GetValue() );
@@ -543,6 +547,7 @@ void DIALOG_SIM_COMMAND::ApplySettings( SIM_TAB* aTab )
         plotTab->GetPlotWin()->SetMarginTop( TO_INT( m_marginTop ) );
         plotTab->GetPlotWin()->SetMarginBottom( TO_INT( m_marginBottom ) );
 
+        plotTab->GetPlotWin()->AdjustLimitedView();
         plotTab->GetPlotWin()->UpdateAll();
     }
 }

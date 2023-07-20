@@ -441,16 +441,6 @@ SIM_PLOT_TAB::~SIM_PLOT_TAB()
 void SIM_PLOT_TAB::SetY1Scale( bool aLock, double aMin, double aMax )
 {
     m_axis_y1->SetAxisMinMax( aLock, aMin, aMax );
-
-    if( aLock )
-    {
-        m_plotWin->LockY( true );
-        m_plotWin->AdjustLimitedView();
-    }
-    else
-    {
-        m_plotWin->LockY( false );
-    }
 }
 
 

@@ -1869,18 +1869,21 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
                 {
                     const nlohmann::json& scale_js = tab_js[ "fixedY1scale" ];
                     plotTab->SetY1Scale( true, scale_js[ "min" ], scale_js[ "max" ] );
+                    plotTab->GetPlotWin()->LockY( true );
                 }
 
                 if( tab_js.contains( "fixedY2scale" ) )
                 {
                     const nlohmann::json& scale_js = tab_js[ "fixedY2scale" ];
                     plotTab->SetY2Scale( true, scale_js[ "min" ], scale_js[ "max" ] );
+                    plotTab->GetPlotWin()->LockY( true );
                 }
 
                 if( tab_js.contains( "fixedY3scale" ) )
                 {
                     const nlohmann::json& scale_js = tab_js[ "fixedY3scale" ];
                     plotTab->SetY3Scale( true, scale_js[ "min" ], scale_js[ "max" ] );
+                    plotTab->GetPlotWin()->LockY( true );
                 }
 
                 if( tab_js.contains( "legend" ) )
