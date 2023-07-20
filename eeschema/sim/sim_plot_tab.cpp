@@ -444,8 +444,6 @@ void SIM_PLOT_TAB::SetY1Scale( bool aLock, double aMin, double aMax )
 
     if( aLock )
     {
-        m_plotWin->Fit( m_plotWin->GetDesiredXmin(), m_plotWin->GetDesiredXmax(),
-                        m_axis_y1->TransformToPlot( aMin ), m_axis_y1->TransformToPlot( aMax ) );
         m_plotWin->LockY( true );
         m_plotWin->AdjustLimitedView();
     }
@@ -459,16 +457,12 @@ void SIM_PLOT_TAB::SetY1Scale( bool aLock, double aMin, double aMax )
 void SIM_PLOT_TAB::SetY2Scale( bool aLock, double aMin, double aMax )
 {
     m_axis_y2->SetAxisMinMax( aLock, aMin, aMax );
-
-    // TODO: de-couple Y2 from Y1 and independently set Y2's scale
 }
 
 
 void SIM_PLOT_TAB::SetY3Scale( bool aLock, double aMin, double aMax )
 {
     m_axis_y3->SetAxisMinMax( aLock, aMin, aMax );
-
-    // TODO: de-couple Y2 from Y1 and independently set Y2's scale
 }
 
 
@@ -989,23 +983,6 @@ void SIM_PLOT_TAB::ResetScales( bool aIncludeX )
 
     for( auto& [ name, trace ] : m_traces )
         trace->UpdateScales();
-}
-
-
-void SIM_PLOT_TAB::FitScales()
-{
-    GetPlotWin()->Fit();
-
-    double min, max;
-
-    if( m_axis_y1 && m_axis_y1->GetAxisMinMax( &min, &max ) )
-        SetY1Scale( true, min, max );
-
-    if( m_axis_y2 && m_axis_y2->GetAxisMinMax( &min, &max ) )
-        SetY2Scale( true, min, max );
-
-    if( m_axis_y3 && m_axis_y3->GetAxisMinMax( &min, &max ) )
-        SetY3Scale( true, min, max );
 }
 
 

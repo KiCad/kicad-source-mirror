@@ -1355,6 +1355,7 @@ public:
     }
 
     void LockY( bool aLock ) { m_yLocked = aLock; }
+    bool GetYLocked() const { return m_yLocked; }
 
     void AdjustLimitedView();
 

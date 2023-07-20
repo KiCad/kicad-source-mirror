@@ -183,17 +183,13 @@ void DIALOG_SIM_COMMAND::OnUpdateUILockY3( wxUpdateUIEvent& event )
 
 void DIALOG_SIM_COMMAND::SetPlotSettings( const SIM_TAB* aSimTab )
 {
-#define GET_STR( val ) EDA_UNIT_UTILS::UI::MessageTextFromValue( unityScale, EDA_UNITS::UNSCALED, \
-                                                                 val, false /* no units */ )
-
     if( const SIM_PLOT_TAB* plotTab = dynamic_cast<const SIM_PLOT_TAB*>( aSimTab ) )
     {
         if( !plotTab->GetLabelY1().IsEmpty() )
         {
             m_bSizerY1->Show( true );
             m_lockY1->SetLabel( wxString::Format( m_lockY1->GetLabel(), plotTab->GetLabelY1() ) );
-            m_y1MinUnits->SetLabel( plotTab->GetUnitsY1() );
-            m_y1MaxUnits->SetLabel( plotTab->GetUnitsY1() );
+            m_y1Units->SetLabel( plotTab->GetUnitsY1() );
 
             double min, max;
             bool   locked = plotTab->GetY1Scale( &min, &max );
@@ -206,14 +202,11 @@ void DIALOG_SIM_COMMAND::SetPlotSettings( const SIM_TAB* aSimTab )
                 m_y1Max->SetValue( SIM_VALUE::Normalize( max ) );
         }
 
-        /* JEY TODO: figure out how to decuple slave axes from master axis
-         *
         if( !plotTab->GetLabelY2().IsEmpty() )
         {
             m_bSizerY2->Show( true );
             m_lockY2->SetLabel( wxString::Format( m_lockY2->GetLabel(), plotTab->GetLabelY2() ) );
-            m_y2MinUnits->SetLabel( plotTab->GetUnitsY2() );
-            m_y2MaxUnits->SetLabel( plotTab->GetUnitsY2() );
+            m_y2Units->SetLabel( plotTab->GetUnitsY2() );
 
             double min, max;
             bool   locked = plotTab->GetY2Scale( &min, &max );
@@ -230,8 +223,7 @@ void DIALOG_SIM_COMMAND::SetPlotSettings( const SIM_TAB* aSimTab )
         {
             m_bSizerY3->Show( true );
             m_lockY3->SetLabel( wxString::Format( m_lockY3->GetLabel(), plotTab->GetLabelY3() ) );
-            m_y3MinUnits->SetLabel( plotTab->GetUnitsY3() );
-            m_y3MaxUnits->SetLabel( plotTab->GetUnitsY3() );
+            m_y3Units->SetLabel( plotTab->GetUnitsY3() );
 
             double min, max;
             bool   locked = plotTab->GetY3Scale( &min, &max );
@@ -243,11 +235,13 @@ void DIALOG_SIM_COMMAND::SetPlotSettings( const SIM_TAB* aSimTab )
             if( !std::isnan( max ) )
                 m_y3Max->SetValue( SIM_VALUE::Normalize( max ) );
         }
-         */
 
         m_grid->SetValue( plotTab->IsGridShown() );
         m_legend->SetValue( plotTab->IsLegendShown() );
         m_dottedSecondary->SetValue( plotTab->GetDottedSecondary() );
+
+#define GET_STR( val ) EDA_UNIT_UTILS::UI::MessageTextFromValue( unityScale, EDA_UNITS::UNSCALED, \
+                                                                 val, false /* no units */ )
 
         m_marginLeft->SetValue( GET_STR( plotTab->GetPlotWin()->GetMarginLeft() ) );
         m_marginTop->SetValue( GET_STR( plotTab->GetPlotWin()->GetMarginTop() ) );

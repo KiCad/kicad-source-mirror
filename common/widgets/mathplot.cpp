@@ -887,17 +887,26 @@ void mpScaleY::computeSlaveTicks( mpWindow& w )
 
 void mpScaleY::recalculateTicks( wxDC& dc, mpWindow& w )
 {
-    if( m_masterScale )
+    double minVvis, maxVvis;
+
+    if( m_axisLocked )
+    {
+        minVvis = m_axisMin;
+        maxVvis = m_axisMax;
+        m_offset = -m_axisMin;
+        m_scale = 1.0 / ( m_axisMax - m_axisMin );
+    }
+    else if( m_masterScale )
     {
         computeSlaveTicks( w );
         updateTickLabels( dc, w );
 
         return;
     }
-
-    double minV, maxV, minVvis, maxVvis;
-    GetDataRange( minV, maxV );
-    getVisibleDataRange( w, minVvis, maxVvis );
+    else
+    {
+        getVisibleDataRange( w, minVvis, maxVvis );
+    }
 
     m_absVisibleMaxV = std::max( std::abs( minVvis ), std::abs( maxVvis ) );
     m_tickValues.clear();
@@ -908,8 +917,8 @@ void mpScaleY::recalculateTicks( wxDC& dc, mpWindow& w )
 
     for( int i = 10; i <= 20; i += 2 )
     {
-        double  curr_step    = fabs( maxVvis - minVvis ) / (double) i;
-        double  base    = pow( 10, floor( log10( curr_step ) ) );
+        double  curr_step = fabs( maxVvis - minVvis ) / (double) i;
+        double  base = pow( 10, floor( log10( curr_step ) ) );
         double  stepInt = floor( curr_step / base ) * base;
         double  err = fabs( curr_step - stepInt );
 
@@ -920,15 +929,12 @@ void mpScaleY::recalculateTicks( wxDC& dc, mpWindow& w )
         }
     }
 
-
     double v = floor( minVvis / bestStep ) * bestStep;
-
     double zeroOffset = 100000000.0;
+    const  int iterLimit = 1000;
+    int    i = 0;
 
-    const int iterLimit = 1000;
-    int i = 0;
-
-    while( v < maxVvis && i < iterLimit )
+    while( v <= maxVvis && i < iterLimit )
     {
         m_tickValues.push_back( v );
 
@@ -938,7 +944,6 @@ void mpScaleY::recalculateTicks( wxDC& dc, mpWindow& w )
         v += bestStep;
         i++;
     }
-
 
     // something weird happened...
     if( i == iterLimit )

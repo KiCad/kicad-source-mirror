@@ -333,8 +333,6 @@ public:
     ///< Reset scale ranges to fit the current traces.
     void ResetScales( bool aIncludeX );
 
-    void FitScales();
-
     ///< Update trace line style
     void UpdateTraceStyle( TRACE* trace );
 

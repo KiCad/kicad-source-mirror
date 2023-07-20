@@ -683,22 +683,16 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_bSizerY1->Add( 0, 2, 1, wxEXPAND, 5 );
 
 	wxFlexGridSizer* fgSizerY1;
-	fgSizerY1 = new wxFlexGridSizer( 0, 6, 0, 0 );
+	fgSizerY1 = new wxFlexGridSizer( 0, 5, 0, 0 );
 	fgSizerY1->SetFlexibleDirection( wxBOTH );
 	fgSizerY1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_y1MinLabel = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("Min:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_y1MinLabel->Wrap( -1 );
-	fgSizerY1->Add( m_y1MinLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 25 );
+	fgSizerY1->Add( m_y1MinLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
 
 	m_y1Min = new wxTextCtrl( m_panelPlotSetup, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerY1->Add( m_y1Min, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-
-	m_y1MinUnits = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_y1MinUnits->Wrap( -1 );
-	m_y1MinUnits->SetMinSize( wxSize( 40,-1 ) );
-
-	fgSizerY1->Add( m_y1MinUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 3 );
 
 	m_y1MaxLabel = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("Max:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_y1MaxLabel->Wrap( -1 );
@@ -707,17 +701,17 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_y1Max = new wxTextCtrl( m_panelPlotSetup, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerY1->Add( m_y1Max, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_y1MaxUnits = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_y1MaxUnits->Wrap( -1 );
-	m_y1MaxUnits->SetMinSize( wxSize( 40,-1 ) );
+	m_y1Units = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_y1Units->Wrap( -1 );
+	m_y1Units->SetMinSize( wxSize( 40,-1 ) );
 
-	fgSizerY1->Add( m_y1MaxUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 3 );
+	fgSizerY1->Add( m_y1Units, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 3 );
 
 
 	m_bSizerY1->Add( fgSizerY1, 0, wxBOTTOM, 8 );
 
 
-	bPlotSetupSizer->Add( m_bSizerY1, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bPlotSetupSizer->Add( m_bSizerY1, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_bSizerY2 = new wxBoxSizer( wxVERTICAL );
 
@@ -728,22 +722,16 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_bSizerY2->Add( 0, 2, 1, wxEXPAND, 5 );
 
 	wxFlexGridSizer* fgSizerY2;
-	fgSizerY2 = new wxFlexGridSizer( 0, 6, 0, 0 );
+	fgSizerY2 = new wxFlexGridSizer( 0, 5, 0, 0 );
 	fgSizerY2->SetFlexibleDirection( wxBOTH );
 	fgSizerY2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_y2MinLabel = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("Min:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_y2MinLabel->Wrap( -1 );
-	fgSizerY2->Add( m_y2MinLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 25 );
+	fgSizerY2->Add( m_y2MinLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
 
 	m_y2Min = new wxTextCtrl( m_panelPlotSetup, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerY2->Add( m_y2Min, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-
-	m_y2MinUnits = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_y2MinUnits->Wrap( -1 );
-	m_y2MinUnits->SetMinSize( wxSize( 40,-1 ) );
-
-	fgSizerY2->Add( m_y2MinUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 3 );
 
 	m_y2MaxLabel = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("Max:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_y2MaxLabel->Wrap( -1 );
@@ -752,15 +740,15 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_y2Max = new wxTextCtrl( m_panelPlotSetup, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerY2->Add( m_y2Max, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_y2MaxUnits = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_y2MaxUnits->Wrap( -1 );
-	fgSizerY2->Add( m_y2MaxUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 3 );
+	m_y2Units = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_y2Units->Wrap( -1 );
+	fgSizerY2->Add( m_y2Units, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 3 );
 
 
 	m_bSizerY2->Add( fgSizerY2, 0, wxBOTTOM, 8 );
 
 
-	bPlotSetupSizer->Add( m_bSizerY2, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bPlotSetupSizer->Add( m_bSizerY2, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_bSizerY3 = new wxBoxSizer( wxVERTICAL );
 
@@ -771,22 +759,16 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_bSizerY3->Add( 0, 2, 1, wxEXPAND, 5 );
 
 	wxFlexGridSizer* fgSizerY3;
-	fgSizerY3 = new wxFlexGridSizer( 0, 6, 0, 0 );
+	fgSizerY3 = new wxFlexGridSizer( 0, 5, 0, 0 );
 	fgSizerY3->SetFlexibleDirection( wxBOTH );
 	fgSizerY3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_y3MinLabel = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("Min:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_y3MinLabel->Wrap( -1 );
-	fgSizerY3->Add( m_y3MinLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 25 );
+	fgSizerY3->Add( m_y3MinLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
 
 	m_y3Min = new wxTextCtrl( m_panelPlotSetup, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerY3->Add( m_y3Min, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-
-	m_y3MinUnits = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_y3MinUnits->Wrap( -1 );
-	m_y3MinUnits->SetMinSize( wxSize( 40,-1 ) );
-
-	fgSizerY3->Add( m_y3MinUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 3 );
 
 	m_y3MaxLabel = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("Max:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_y3MaxLabel->Wrap( -1 );
@@ -795,11 +777,11 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_y3Max = new wxTextCtrl( m_panelPlotSetup, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerY3->Add( m_y3Max, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_y3MaxUnits = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_y3MaxUnits->Wrap( -1 );
-	m_y3MaxUnits->SetMinSize( wxSize( 40,-1 ) );
+	m_y3Units = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_y3Units->Wrap( -1 );
+	m_y3Units->SetMinSize( wxSize( 40,-1 ) );
 
-	fgSizerY3->Add( m_y3MaxUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 3 );
+	fgSizerY3->Add( m_y3Units, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 3 );
 
 
 	m_bSizerY3->Add( fgSizerY3, 0, wxBOTTOM, 8 );
@@ -812,7 +794,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 
 	m_grid = new wxCheckBox( m_panelPlotSetup, wxID_ANY, _("Show grid"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_grid->SetValue(true);
-	bSizerCheckboxes->Add( m_grid, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerCheckboxes->Add( m_grid, 0, wxALL, 5 );
 
 	m_legend = new wxCheckBox( m_panelPlotSetup, wxID_ANY, _("Show legend"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerCheckboxes->Add( m_legend, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -823,6 +805,9 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 
 
 	bPlotSetupSizer->Add( bSizerCheckboxes, 0, wxEXPAND|wxLEFT, 5 );
+
+
+	bPlotSetupSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_marginsLabel = new wxStaticText( m_panelPlotSetup, wxID_ANY, _("Margins:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_marginsLabel->Wrap( -1 );
@@ -888,7 +873,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	bSizerMargins->Add( bSizerRight, 0, wxEXPAND, 5 );
 
 
-	bPlotSetupSizer->Add( bSizerMargins, 0, wxRIGHT|wxLEFT, 5 );
+	bPlotSetupSizer->Add( bSizerMargins, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	m_panelPlotSetup->SetSizer( bPlotSetupSizer );
@@ -927,22 +912,19 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_pzFunctionType->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_COMMAND_BASE::onDCSource1Selected ), NULL, this );
 	m_y1MinLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY1 ), NULL, this );
 	m_y1Min->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY1 ), NULL, this );
-	m_y1MinUnits->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY1 ), NULL, this );
 	m_y1MaxLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY1 ), NULL, this );
 	m_y1Max->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY1 ), NULL, this );
-	m_y1MaxUnits->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY1 ), NULL, this );
+	m_y1Units->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY1 ), NULL, this );
 	m_y2MinLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY2 ), NULL, this );
 	m_y2Min->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY2 ), NULL, this );
-	m_y2MinUnits->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY2 ), NULL, this );
 	m_y2MaxLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY2 ), NULL, this );
 	m_y2Max->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY2 ), NULL, this );
-	m_y2MaxUnits->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY2 ), NULL, this );
+	m_y2Units->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY2 ), NULL, this );
 	m_y3MinLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY3 ), NULL, this );
 	m_y3Min->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY3 ), NULL, this );
-	m_y3MinUnits->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY3 ), NULL, this );
 	m_y3MaxLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY3 ), NULL, this );
 	m_y3Max->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY3 ), NULL, this );
-	m_y3MaxUnits->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY3 ), NULL, this );
+	m_y3Units->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY3 ), NULL, this );
 }
 
 DIALOG_SIM_COMMAND_BASE::~DIALOG_SIM_COMMAND_BASE()
@@ -960,21 +942,18 @@ DIALOG_SIM_COMMAND_BASE::~DIALOG_SIM_COMMAND_BASE()
 	m_pzFunctionType->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_COMMAND_BASE::onDCSource1Selected ), NULL, this );
 	m_y1MinLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY1 ), NULL, this );
 	m_y1Min->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY1 ), NULL, this );
-	m_y1MinUnits->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY1 ), NULL, this );
 	m_y1MaxLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY1 ), NULL, this );
 	m_y1Max->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY1 ), NULL, this );
-	m_y1MaxUnits->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY1 ), NULL, this );
+	m_y1Units->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY1 ), NULL, this );
 	m_y2MinLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY2 ), NULL, this );
 	m_y2Min->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY2 ), NULL, this );
-	m_y2MinUnits->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY2 ), NULL, this );
 	m_y2MaxLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY2 ), NULL, this );
 	m_y2Max->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY2 ), NULL, this );
-	m_y2MaxUnits->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY2 ), NULL, this );
+	m_y2Units->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY2 ), NULL, this );
 	m_y3MinLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY3 ), NULL, this );
 	m_y3Min->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY3 ), NULL, this );
-	m_y3MinUnits->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY3 ), NULL, this );
 	m_y3MaxLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY3 ), NULL, this );
 	m_y3Max->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY3 ), NULL, this );
-	m_y3MaxUnits->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY3 ), NULL, this );
+	m_y3Units->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_COMMAND_BASE::OnUpdateUILockY3 ), NULL, this );
 
 }

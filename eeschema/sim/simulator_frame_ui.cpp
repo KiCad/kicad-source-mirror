@@ -484,8 +484,8 @@ SIMULATOR_FRAME_UI::SIMULATOR_FRAME_UI( SIMULATOR_FRAME* aSimulatorFrame,
 
     for( int cursorId = 0; cursorId < 3; ++cursorId )
     {
-        m_cursorFormats[ cursorId ][ 0 ] = { 3, wxS( "~s" ) };
-        m_cursorFormats[ cursorId ][ 1 ] = { 3, wxS( "~V" ) };
+        m_cursorFormats[ cursorId ][ 0 ] = { 2, wxS( "~s" ) };
+        m_cursorFormats[ cursorId ][ 1 ] = { 2, wxS( "~V" ) };
     }
 
     attr = new wxGridCellAttr;
@@ -1386,7 +1386,7 @@ void SIMULATOR_FRAME_UI::AddMeasurement( const wxString& aCmd )
     }
 
     m_measurementsGrid->SetCellValue( row, COL_MEASUREMENT, aCmd );
-    SetMeasureFormat( row, { 3, wxS( "~V" ) } );
+    SetMeasureFormat( row, { 2, wxS( "~V" ) } );
 
     UpdateMeasurement( row );
     m_simulatorFrame->OnModify();
@@ -2619,7 +2619,7 @@ void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
         if( aFinal )
             plotTab->ResetScales( true );
 
-        plotTab->FitScales();
+        plotTab->GetPlotWin()->Fit();
 
         updatePlotCursors();
 
