@@ -102,6 +102,35 @@ static PAD_ATTRIB code_type[] =
 #define APERTURE_DLG_TYPE 4
 
 
+/**
+ * @brief Returns true if the pad's rounding ratio is valid (i.e. the pad
+ * has a shape where that is meaningful)
+ */
+static bool PadHasMeaningfulRoundingRadius( const PAD& aPad )
+{
+    const PAD_SHAPE shape = aPad.GetShape();
+    return shape == PAD_SHAPE::ROUNDRECT || shape == PAD_SHAPE::CHAMFERED_RECT;
+}
+
+
+/**
+ * @brief Get a sensible default for a rounded rectangle pad's rounding ratio
+ *
+ * According to IPC-7351C, this is 25%, or 0.25mm, whichever is smaller
+ */
+static double GetDefaultIpcRoundingRatio( const PAD& aPad )
+{
+    const double defaultProportion = 0.25;
+    const double minimumSizeIU = pcbIUScale.mmToIU( 0.25 );
+
+    const int    padMinSizeIU = std::min( aPad.GetSizeX(), aPad.GetSizeY() );
+    const double defaultRadiusIU = std::min( minimumSizeIU, padMinSizeIU * defaultProportion );
+
+    // Convert back to a ratio
+    return defaultRadiusIU / padMinSizeIU;
+}
+
+
 void PCB_BASE_FRAME::ShowPadPropertiesDialog( PAD* aPad )
 {
     DIALOG_PAD_PROPERTIES dlg( this, aPad );
@@ -182,6 +211,14 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
         *m_previewPad = *m_masterPad;
         m_previewPad->GetTeardropParams() = m_masterPad->GetTeardropParams();
     }
+
+    // Pads have a hardcoded internal rounding ratio which is 0.25 by default, even if
+    // they're not a rounded shape. This makes it hard to detect an intentional 0.25
+    // ratio, or one that's only there because it's the PAD default.
+    // Zero it out here to mark that we should recompute a better ratio if the user
+    // selects a pad shape which would need a default rounding ratio computed for it
+    if( !PadHasMeaningfulRoundingRadius( *m_previewPad ) )
+        m_previewPad->SetRoundRectRadiusRatio( 0.0 );
 
     if( m_isFpEditor )
     {
@@ -828,9 +865,9 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
     {
         m_shapePropsBook->SetSelection( 2 );
 
-        // A reasonable default (from  IPC-7351C)
+        // Reasonable defaults
         if( m_previewPad->GetRoundRectRadiusRatio() == 0.0 )
-            m_cornerRatio.ChangeDoubleValue( 25.0 );
+            m_cornerRatio.ChangeDoubleValue( GetDefaultIpcRoundingRatio( *m_previewPad ) * 100 );
 
         break;
     }
@@ -860,15 +897,13 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
     case CHOICE_SHAPE_CHAMFERED_ROUNDED_RECT:
         m_shapePropsBook->SetSelection( 4 );
 
-        // Reasonable defaults (corner radius from  IPC-7351C)
+        // Reasonable defaults
         if( m_previewPad->GetRoundRectRadiusRatio() == 0.0
                 && m_previewPad->GetChamferRectRatio() == 0.0 )
         {
-            if( m_previewPad->GetRoundRectRadiusRatio() == 0.0 )
-                m_previewPad->SetRoundRectRadiusRatio( 0.25 );
-
-            if( m_previewPad->GetChamferRectRatio() == 0.0 )
-                m_previewPad->SetChamferRectRatio( 0.2 );
+            m_previewPad->SetRoundRectRadiusRatio(
+                    GetDefaultIpcRoundingRatio( *m_previewPad ) );
+            m_previewPad->SetChamferRectRatio( 0.2 );
         }
 
         // Ensure the displayed values are up to date:
