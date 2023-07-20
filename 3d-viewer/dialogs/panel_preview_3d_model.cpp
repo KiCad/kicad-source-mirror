@@ -108,6 +108,15 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
 
     m_dummyFootprint = new FOOTPRINT( *aFootprint );
     m_dummyFootprint->SetParentGroup( nullptr );
+
+    // Ensure the footprint is shown like in Fp editor: rot 0, not flipped
+    // to avoid mistakes when setting the3D shape position/rotation
+    if( m_dummyFootprint->IsFlipped() )
+        m_dummyFootprint->Flip( m_dummyFootprint->GetPosition(), false );
+
+    m_dummyFootprint->SetOrientation( ANGLE_0 );
+
+
     m_dummyBoard->Add( m_dummyFootprint );
 
     // Create the 3D canvas
