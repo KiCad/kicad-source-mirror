@@ -194,45 +194,56 @@ void SIGNALS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
     if( signals.size() < 1 )
         signals.push_back( m_grid->GetCellValue( m_menuRow, m_menuCol ) );
 
+    auto addMeasurement =
+            [this]( const wxString& cmd, wxString signal )
+            {
+                if( signal.EndsWith( _( " (phase)" ) ) )
+                    return;
+                else if( signal.EndsWith( _( " (gain)" ) ) )
+                    signal = signal.Left( signal.length() - 7 );
+
+                m_parent->AddMeasurement( cmd + wxS( " " ) + signal );
+            };
+
     if( event.GetId() == MYID_MEASURE_MIN )
     {
         for( const wxString& signal : signals )
-            m_parent->AddMeasurement( wxString::Format( wxS( "MIN %s" ), signal ) );
+            addMeasurement( wxS( "MIN" ), signal );
     }
     else if( event.GetId() == MYID_MEASURE_MAX )
     {
         for( const wxString& signal : signals )
-            m_parent->AddMeasurement( wxString::Format( wxS( "MAX %s" ), signal ) );
+            addMeasurement( wxS( "MAX" ), signal );
     }
     else if( event.GetId() == MYID_MEASURE_AVG )
     {
         for( const wxString& signal : signals )
-            m_parent->AddMeasurement( wxString::Format( wxS( "AVG %s" ), signal ) );
+            addMeasurement( wxS( "AVG" ), signal );
     }
     else if( event.GetId() == MYID_MEASURE_RMS )
     {
         for( const wxString& signal : signals )
-            m_parent->AddMeasurement( wxString::Format( wxS( "RMS %s" ), signal ) );
+            addMeasurement( wxS( "RMS" ), signal );
     }
     else if( event.GetId() == MYID_MEASURE_PP )
     {
         for( const wxString& signal : signals )
-            m_parent->AddMeasurement( wxString::Format( wxS( "PP %s" ), signal ) );
+            addMeasurement( wxS( "PP" ), signal );
     }
     else if( event.GetId() == MYID_MEASURE_MIN_AT )
     {
         for( const wxString& signal : signals )
-            m_parent->AddMeasurement( wxString::Format( wxS( "MIN_AT %s" ), signal ) );
+            addMeasurement( wxS( "MIN_AT" ), signal );
     }
     else if( event.GetId() == MYID_MEASURE_MAX_AT )
     {
         for( const wxString& signal : signals )
-            m_parent->AddMeasurement( wxString::Format( wxS( "MAX_AT %s" ), signal ) );
+            addMeasurement( wxS( "MAX_AT" ), signal );
     }
     else if( event.GetId() == MYID_MEASURE_INTEGRAL )
     {
         for( const wxString& signal : signals )
-            m_parent->AddMeasurement( wxString::Format( wxS( "INTEG %s" ), signal ) );
+            addMeasurement( wxS( "INTEG" ), signal );
     }
     else if( event.GetId() == MYID_FOURIER )
     {
@@ -308,7 +319,7 @@ void CURSORS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
                 wxString signal = m_grid->GetCellValue( row, COL_CURSOR_SIGNAL );
 
                 if( signal.EndsWith( "[2 - 1]" ) )
-                    signal = signal.Left( signal.size() - 7 );
+                    signal = signal.Left( signal.length() - 7 );
 
                 return signal;
             };
