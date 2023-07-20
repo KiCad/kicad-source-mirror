@@ -1874,7 +1874,7 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
                 else if( cmd == ".probe allp" )
                     simOptions |= NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_DISSIPATIONS;
                 else
-                    simCommand += wxString( cmd ) + wxT( "\n" );
+                    simCommand += wxString( cmd ).Trim();
             }
 
             SIM_TAB*      simTab = NewSimTab( simCommand );

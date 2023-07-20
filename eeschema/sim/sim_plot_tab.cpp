@@ -420,7 +420,7 @@ SIM_PLOT_TAB::SIM_PLOT_TAB( const wxString& aSimCommand, wxWindow* parent ) :
     updateAxes();
 
     // a mpInfoLegend displays le name of traces on the left top panel corner:
-    m_legend = new mpInfoLegend( wxRect( 0, 40, 200, 40 ), wxTRANSPARENT_BRUSH );
+    m_legend = new mpInfoLegend( wxRect( 0, 0, 200, 40 ), wxTRANSPARENT_BRUSH );
     m_legend->SetVisible( false );
     m_plotWin->AddLayer( m_legend );
 
