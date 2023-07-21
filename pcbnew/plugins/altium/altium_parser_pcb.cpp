@@ -1055,6 +1055,9 @@ AREGION6::AREGION6( ALTIUM_PARSER& aReader, bool aExtendedVertices )
 
     uint32_t num_outline_vertices = aReader.Read<uint32_t>();
 
+    if( aExtendedVertices )
+        num_outline_vertices++; // Has a closing vertex
+
     for( uint32_t i = 0; i < num_outline_vertices; i++ )
     {
         if( aExtendedVertices )
@@ -1076,21 +1079,17 @@ AREGION6::AREGION6( ALTIUM_PARSER& aReader, bool aExtendedVertices )
         }
     }
 
-    // TODO: for now we only support holes in regions where there are stored as double
-    if( !aExtendedVertices )
+    holes.resize( holecount );
+    for( uint16_t k = 0; k < holecount; k++ )
     {
-        holes.resize( holecount );
-        for( uint16_t k = 0; k < holecount; k++ )
-        {
-            uint32_t num_hole_vertices = aReader.Read<uint32_t>();
-            holes.at( k ).reserve( num_hole_vertices );
+        uint32_t num_hole_vertices = aReader.Read<uint32_t>();
+        holes.at( k ).reserve( num_hole_vertices );
 
-            for( uint32_t i = 0; i < num_hole_vertices; i++ )
-            {
-                int32_t x = ALTIUM_PARSER::ConvertToKicadUnit( aReader.Read<double>() );
-                int32_t y = ALTIUM_PARSER::ConvertToKicadUnit( -aReader.Read<double>() );
-                holes.at( k ).emplace_back( VECTOR2I( x, y ) );
-            }
+        for( uint32_t i = 0; i < num_hole_vertices; i++ )
+        {
+            int32_t x = ALTIUM_PARSER::ConvertToKicadUnit( aReader.Read<double>() );
+            int32_t y = ALTIUM_PARSER::ConvertToKicadUnit( -aReader.Read<double>() );
+            holes.at( k ).emplace_back( VECTOR2I( x, y ) );
         }
     }
 

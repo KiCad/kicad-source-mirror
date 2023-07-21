@@ -2035,9 +2035,23 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItemOnLayer( const AREGION6& aE
         return;
     }
 
+    SHAPE_POLY_SET polySet;
+    polySet.AddOutline( linechain );
+
+    for( const std::vector<ALTIUM_VERTICE>& hole : aElem.holes )
+    {
+        SHAPE_LINE_CHAIN hole_linechain;
+        HelperShapeLineChainFromAltiumVertices( hole_linechain, hole );
+
+        if( hole_linechain.PointCount() < 3 )
+            continue;
+
+        polySet.AddHole( hole_linechain );
+    }
+
     PCB_SHAPE* shape = new PCB_SHAPE( m_board, SHAPE_T::POLY );
 
-    shape->SetPolyShape( linechain );
+    shape->SetPolyShape( polySet );
     shape->SetFilled( true );
     shape->SetLayer( aLayer );
     shape->SetStroke( STROKE_PARAMS( 0 ) );
