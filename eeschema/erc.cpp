@@ -307,7 +307,7 @@ int ERC_TESTER::TestConflictingBusAliases()
 
     for( SCH_SCREEN* screen = screens.GetFirst(); screen != nullptr; screen = screens.GetNext() )
     {
-        const std::set< std::shared_ptr<BUS_ALIAS> > screen_aliases = screen->GetBusAliases();
+        const auto& screen_aliases = screen->GetBusAliases();
 
         for( const std::shared_ptr<BUS_ALIAS>& alias : screen_aliases )
         {
