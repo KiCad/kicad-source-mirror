@@ -41,6 +41,7 @@
 
 #include <compoundfilereader.h>
 #include <convert_basic_shapes_to_polygon.h>
+#include <font/outline_font.h>
 #include <project.h>
 #include <trigo.h>
 #include <utf.h>
@@ -3130,15 +3131,21 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
 
 void ALTIUM_PCB::ConvertTexts6ToEdaTextSettings( const ATEXT6& aElem, EDA_TEXT* aEdaText )
 {
+    aEdaText->SetTextSize( VECTOR2I( aElem.height, aElem.height ) ); // TODO: parse text width
+
     if( aElem.fonttype == ALTIUM_TEXT_TYPE::TRUETYPE )
     {
-        // TODO: why is this required? Somehow, truetype size is calculated differently (tuned to Arial)
-        aEdaText->SetTextSize( VECTOR2I( aElem.height * 0.63, aElem.height * 0.63 ) );
-        aEdaText->SetFont( KIFONT::FONT::GetFont( aElem.fontname, aElem.isBold, aElem.isItalic ) );
-    }
-    else
-    {
-        aEdaText->SetTextSize( VECTOR2I( aElem.height, aElem.height ) ); // TODO: parse text width
+        KIFONT::FONT* font = KIFONT::FONT::GetFont( aElem.fontname, aElem.isBold, aElem.isItalic );
+        aEdaText->SetFont( font );
+
+        if( font->IsOutline() )
+        {
+            // TODO: why is this required? Somehow, truetype size is calculated differently
+            if( font->GetName().Contains( wxS( "Arial" ) ) )
+                aEdaText->SetTextSize( VECTOR2I( aElem.height * 0.63, aElem.height * 0.63 ) );
+            else
+                aEdaText->SetTextSize( VECTOR2I( aElem.height * 0.5, aElem.height * 0.5 ) );
+        }
     }
 
     aEdaText->SetTextThickness( aElem.strokewidth );
