@@ -155,7 +155,7 @@ long KIDIALOG::getStyle( KD_TYPE aType )
 }
 
 
-bool OverrideLock( wxWindow* aParent, const wxString& aMessage )
+bool AskOverrideLock( wxWindow* aParent, const wxString& aMessage )
 {
 #ifdef __APPLE__
     // wxMessageDialog gets the button spacing wrong on Mac so we have to use wxRichMessageDialog.

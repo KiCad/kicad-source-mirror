@@ -86,7 +86,7 @@ protected:
  * Display a dialog indicating the file is already open, with an option to reset the lock.
  * @return true if the lock was reset.
  */
-bool OverrideLock( wxWindow* aParent, const wxString& aMessage  );
+bool AskOverrideLock( wxWindow* aParent, const wxString& aMessage  );
 
 
 /**

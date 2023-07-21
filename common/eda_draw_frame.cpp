@@ -230,6 +230,15 @@ bool EDA_DRAW_FRAME::LockFile( const wxString& aFileName )
 
     m_file_checker = std::make_unique<LOCKFILE>( aFileName );
 
+    if( !m_file_checker->Valid() && m_file_checker->IsLockedByMe() )
+    {
+        // If we cannot acquire the lock but we appear to be the one who
+        // locked it, check to see if there is another KiCad instance running.
+        // If there is not, then we can override the lock.  This could happen if
+        // KiCad crashed or was interrupted
+        if( !Pgm().SingleInstance()->IsAnotherRunning() )
+            m_file_checker->OverrideLock();
+    }
     // If the file is valid, return true.  This could mean that the file is
     // locked or it could mean that the file is read-only
     return m_file_checker->Valid();

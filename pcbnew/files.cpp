@@ -53,6 +53,7 @@
 #include <widgets/wx_progress_reporters.h>
 #include <settings/settings_manager.h>
 #include <paths.h>
+#include <pgm_base.h>
 #include <project/project_file.h>
 #include <project/project_local_settings.h>
 #include <project/net_settings.h>
@@ -611,12 +612,23 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     std::unique_ptr<LOCKFILE> lock = std::make_unique<LOCKFILE>( fullFileName );
 
-    if( !lock->Locked() )
+    if( !lock->Valid() && lock->IsLockedByMe() )
+    {
+        // If we cannot acquire the lock but we appear to be the one who
+        // locked it, check to see if there is another KiCad instance running.
+        // If there is not, then we can override the lock.  This could happen if
+        // KiCad crashed or was interrupted
+
+        if( !Pgm().SingleInstance()->IsAnotherRunning() )
+            lock->OverrideLock();
+    }
+
+    if( !lock->Valid() )
     {
         msg.Printf( _( "PCB '%s' is already open by '%s' at '%s'." ), wx_filename.GetFullName(),
                 lock->GetUsername(), lock->GetHostname() );
 
-        if( !OverrideLock( this, msg ) )
+        if( !AskOverrideLock( this, msg ) )
             return false;
 
         lock->OverrideLock();

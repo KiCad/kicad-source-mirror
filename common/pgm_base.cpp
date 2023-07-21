@@ -161,6 +161,8 @@ void PGM_BASE::Destroy()
     // unlike a normal destructor, this is designed to be called more than once safely:
     delete m_locale;
     m_locale = nullptr;
+
+    m_pgm_checker.reset();
 }
 
 
@@ -443,6 +445,8 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
         return false;
     }
 #endif
+    m_pgm_checker = std::make_unique<wxSingleInstanceChecker>();
+    m_pgm_checker->Create( pgm_name, wxStandardPaths::Get().GetTempDir() );
 
     // Init KiCad environment
     // the environment variable KICAD (if exists) gives the kicad path:

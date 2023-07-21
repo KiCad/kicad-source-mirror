@@ -207,6 +207,11 @@ public:
         return true;
     }
 
+    bool IsLockedByMe()
+    {
+        return m_username == wxGetUserId() && m_hostname == wxGetHostName();
+    }
+
     /**
      * @return Current username.  If we own the lock, this is us.  Otherwise, this is the user that does own it
      */
