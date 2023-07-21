@@ -38,11 +38,11 @@
 #include <search_stack.h>
 #include <settings/environment.h>
 #include <wx/filename.h>
+#include <wx/snglinst.h>
 
 #undef pid_t
 #include <pybind11/embed.h>
 
-class wxSingleInstanceChecker;
 class wxApp;
 class wxMenu;
 class wxWindow;
@@ -358,6 +358,14 @@ public:
     void HideSplash();
 
     /**
+     * Allows access to the wxSingleInstanceChecker to test for other running KiCads
+    */
+    std::unique_ptr<wxSingleInstanceChecker>& SingleInstance()
+    {
+        return m_pgm_checker;
+    }
+
+    /**
      * wxWidgets on MSW tends to crash if you spool up more than one print job at a time.
      */
     bool m_Printing;
@@ -390,6 +398,10 @@ protected:
     std::unique_ptr<SETTINGS_MANAGER> m_settings_manager;
 
     std::unique_ptr<SCRIPTING> m_python_scripting;
+
+    /// Checks if there is another copy of Kicad running at the same time
+    std::unique_ptr<wxSingleInstanceChecker> m_pgm_checker;
+
 
     wxString        m_bin_dir;                /// full path to this program
     wxString        m_kicad_env;              /// The KICAD system environment variable.
