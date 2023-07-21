@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019-2020 Thomas Pointhuber <thomas.pointhuber@gmx.at>
+ * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -196,11 +197,13 @@ private:
     void ParseShapeBasedRegions6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                       const CFB::COMPOUND_FILE_ENTRY* aEntry );
     void ConvertShapeBasedRegions6ToBoardItem( const AREGION6& aElem );
-    void ConvertShapeBasedRegions6ToFootprintItem( FOOTPRINT* aFootprint, const AREGION6& aElem );
+    void ConvertShapeBasedRegions6ToFootprintItem( FOOTPRINT* aFootprint, const AREGION6& aElem,
+                                                   const int aPrimitiveIndex );
     void ConvertShapeBasedRegions6ToBoardItemOnLayer( const AREGION6& aElem, PCB_LAYER_ID aLayer );
     void ConvertShapeBasedRegions6ToFootprintItemOnLayer( FOOTPRINT*      aFootprint,
                                                           const AREGION6& aElem,
-                                                          PCB_LAYER_ID    aLayer );
+                                                          PCB_LAYER_ID    aLayer,
+                                                          const int       aPrimitiveIndex );
     void ParseExtendedPrimitiveInformationData( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                                 const CFB::COMPOUND_FILE_ENTRY* aEntry );
     void ParseRegions6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,

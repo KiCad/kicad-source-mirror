@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Thomas Pointhuber <thomas.pointhuber@gmx.at>
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -105,8 +105,9 @@ enum class ALTIUM_RULE_KIND
     HOLE_TO_HOLE_CLEARANCE = 5,
     WIDTH                  = 6,
     PASTE_MASK_EXPANSION   = 7,
-    PLANE_CLEARANCE        = 8,
-    POLYGON_CONNECT        = 9,
+    SOLDER_MASK_EXPANSION  = 8,
+    PLANE_CLEARANCE        = 9,
+    POLYGON_CONNECT        = 10,
 };
 
 enum class ALTIUM_CONNECT_STYLE
@@ -501,6 +502,12 @@ struct ARULE6
 
     // ALTIUM_RULE_KIND::PLANE_CLEARANCE
     int planeclearanceClearance;
+
+    // ALTIUM_RULE_KIND::SOLDER_MASK_EXPANSION
+    int soldermaskExpansion;
+
+    // ALTIUM_RULE_KIND::PASTE_MASK_EXPANSION
+    int pastemaskExpansion;
 
     // ALTIUM_RULE_KIND::POLYGON_CONNECT
     int32_t              polygonconnectAirgapwidth;

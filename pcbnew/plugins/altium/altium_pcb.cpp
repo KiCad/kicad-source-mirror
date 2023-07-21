@@ -728,7 +728,7 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
         case ALTIUM_RECORD::REGION:
         {
             AREGION6 region( parser, false );
-            ConvertShapeBasedRegions6ToFootprintItem( footprint.get(), region );
+            ConvertShapeBasedRegions6ToFootprintItem( footprint.get(), region, primitiveIndex );
             break;
         }
         case ALTIUM_RECORD::MODEL:
@@ -1824,6 +1824,15 @@ void ALTIUM_PCB::ParseRules6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile
                 } );
     }
 
+    const ARULE6* soldermaskRule = GetRuleDefault( ALTIUM_RULE_KIND::SOLDER_MASK_EXPANSION );
+    const ARULE6* pastemaskRule = GetRuleDefault( ALTIUM_RULE_KIND::PASTE_MASK_EXPANSION );
+
+    if( soldermaskRule )
+        m_board->GetDesignSettings().m_SolderMaskExpansion = soldermaskRule->soldermaskExpansion;
+
+    if( pastemaskRule )
+        m_board->GetDesignSettings().m_SolderPasteMargin = pastemaskRule->pastemaskExpansion;
+
     if( reader.GetRemainingBytes() != 0 )
         THROW_IO_ERROR( wxT( "Rules6 stream is not fully parsed" ) );
 }
@@ -1852,11 +1861,12 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data( const ALTIUM_COMPOUND_FILE&     aA
                                               const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     if( m_progressReporter )
-        m_progressReporter->Report( _( "Loading zones..." ) );
+        m_progressReporter->Report( _( "Loading polygons..." ) );
 
     ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
 
-    while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
+    /* TODO: use Header section of file */
+    for( int primitiveIndex = 0; reader.GetRemainingBytes() >= 4; primitiveIndex++ )
     {
         checkpoint();
         AREGION6 elem( reader, true );
@@ -1870,7 +1880,7 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data( const ALTIUM_COMPOUND_FILE&     aA
         else
         {
             FOOTPRINT* footprint = HelperGetFootprint( elem.component );
-            ConvertShapeBasedRegions6ToFootprintItem( footprint, elem );
+            ConvertShapeBasedRegions6ToFootprintItem( footprint, elem, primitiveIndex );
         }
     }
 
@@ -1932,7 +1942,8 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItem( const AREGION6& aElem )
 
 
 void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItem( FOOTPRINT*      aFootprint,
-                                                           const AREGION6& aElem )
+                                                           const AREGION6& aElem,
+                                                           const int       aPrimitiveIndex )
 {
     if( aElem.kind == ALTIUM_REGION_KIND::POLYGON_CUTOUT || aElem.is_keepout )
     {
@@ -1968,7 +1979,8 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItem( FOOTPRINT*      aFoot
         if( aElem.subpolyindex == ALTIUM_POLYGON_NONE )
         {
             for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aElem.layer ) )
-                ConvertShapeBasedRegions6ToFootprintItemOnLayer( aFootprint, aElem, klayer );
+                ConvertShapeBasedRegions6ToFootprintItemOnLayer( aFootprint, aElem, klayer,
+                                                                 aPrimitiveIndex );
         }
     }
     else
@@ -2020,7 +2032,8 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItemOnLayer( const AREGION6& aE
 
 void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItemOnLayer( FOOTPRINT*      aFootprint,
                                                                   const AREGION6& aElem,
-                                                                  PCB_LAYER_ID    aLayer )
+                                                                  PCB_LAYER_ID    aLayer,
+                                                                  const int       aPrimitiveIndex )
 {
     SHAPE_LINE_CHAIN linechain;
     HelperShapeLineChainFromAltiumVertices( linechain, aElem.outline );
@@ -2034,14 +2047,84 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItemOnLayer( FOOTPRINT*    
         return;
     }
 
-    PCB_SHAPE* shape = new PCB_SHAPE( aFootprint, SHAPE_T::POLY );
+    SHAPE_POLY_SET polySet;
+    polySet.AddOutline( linechain );
 
-    shape->SetPolyShape( linechain );
-    shape->SetFilled( true );
-    shape->SetLayer( aLayer );
-    shape->SetStroke( STROKE_PARAMS( 0 ) );
+    for( const std::vector<ALTIUM_VERTICE>& hole : aElem.holes )
+    {
+        SHAPE_LINE_CHAIN hole_linechain;
+        HelperShapeLineChainFromAltiumVertices( hole_linechain, hole );
 
-    aFootprint->Add( shape, ADD_MODE::APPEND );
+        if( hole_linechain.PointCount() < 3 )
+            continue;
+
+        polySet.AddHole( hole_linechain );
+    }
+
+    if( aLayer == F_Cu || aLayer == B_Cu )
+    {
+        PAD* pad = new PAD( aFootprint );
+
+        LSET padLayers;
+        padLayers.set( aLayer );
+
+        pad->SetKeepTopBottom( false ); // TODO: correct? This seems to be KiCad default on import
+        pad->SetAttribute( PAD_ATTRIB::SMD );
+        pad->SetShape( PAD_SHAPE::CUSTOM );
+
+        int      anchorSize = 1;
+        VECTOR2I anchorPos = linechain.CPoint( 0 );
+
+        pad->SetShape( PAD_SHAPE::CUSTOM );
+        pad->SetAnchorPadShape( PAD_SHAPE::CIRCLE );
+        pad->SetSize( { anchorSize, anchorSize } );
+        pad->SetPosition( anchorPos );
+
+        SHAPE_POLY_SET shapePolys = polySet;
+        shapePolys.Move( -anchorPos );
+        pad->AddPrimitivePoly( shapePolys, 0, true );
+
+        auto& map = m_extendedPrimitiveInformationMaps[ALTIUM_RECORD::REGION];
+        auto  it = map.find( aPrimitiveIndex );
+
+        if( it != map.end() )
+        {
+            const AEXTENDED_PRIMITIVE_INFORMATION& info = it->second;
+
+            if( info.pastemaskexpansionmode == ALTIUM_MODE::MANUAL )
+            {
+                pad->SetLocalSolderPasteMargin(
+                        info.pastemaskexpansionmanual ? info.pastemaskexpansionmanual : 1 );
+            }
+
+            if( info.soldermaskexpansionmode == ALTIUM_MODE::MANUAL )
+            {
+                pad->SetLocalSolderMaskMargin(
+                        info.soldermaskexpansionmanual ? info.soldermaskexpansionmanual : 1 );
+            }
+
+            if( info.pastemaskexpansionmode != ALTIUM_MODE::NONE )
+                padLayers.set( aLayer == F_Cu ? F_Paste : B_Paste );
+
+            if( info.soldermaskexpansionmode != ALTIUM_MODE::NONE )
+                padLayers.set( aLayer == F_Cu ? F_Mask : B_Mask );
+        }
+
+        pad->SetLayerSet( padLayers );
+
+        aFootprint->Add( pad, ADD_MODE::APPEND );
+    }
+    else
+    {
+        PCB_SHAPE* shape = new PCB_SHAPE( aFootprint, SHAPE_T::POLY );
+
+        shape->SetPolyShape( polySet );
+        shape->SetFilled( true );
+        shape->SetLayer( aLayer );
+        shape->SetStroke( STROKE_PARAMS( 0 ) );
+
+        aFootprint->Add( shape, ADD_MODE::APPEND );
+    }
 }
 
 

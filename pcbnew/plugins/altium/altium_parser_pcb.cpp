@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Thomas Pointhuber <thomas.pointhuber@gmx.at>
+ * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -533,6 +534,13 @@ ARULE6::ARULE6( ALTIUM_PARSER& aReader )
     else if( rulekind == wxT( "PasteMaskExpansion" ) )
     {
         kind = ALTIUM_RULE_KIND::PASTE_MASK_EXPANSION;
+        pastemaskExpansion = ALTIUM_PARSER::ReadKicadUnit( props, wxT( "EXPANSION" ), wxT( "0" ) );
+    }
+    else if( rulekind == wxT( "SolderMaskExpansion" ) )
+    {
+        kind = ALTIUM_RULE_KIND::SOLDER_MASK_EXPANSION;
+        soldermaskExpansion =
+                ALTIUM_PARSER::ReadKicadUnit( props, wxT( "EXPANSION" ), wxT( "4mil" ) );
     }
     else if( rulekind == wxT( "PlaneClearance" ) )
     {
