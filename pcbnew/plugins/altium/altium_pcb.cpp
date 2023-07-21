@@ -1689,11 +1689,12 @@ void ALTIUM_PCB::ParsePolygons6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbF
         SHAPE_LINE_CHAIN linechain;
         HelperShapeLineChainFromAltiumVertices( linechain, elem.vertices );
 
-        if( linechain.PointCount() < 2 )
+        if( linechain.PointCount() < 3 )
         {
             // We have found multiple Altium files with polygon records containing nothing but two
             // coincident vertices.  These polygons do not appear when opening the file in Altium.
             // https://gitlab.com/kicad/code/kicad/-/issues/8183
+            // Also, polygons with less than 3 points are not supported in KiCad.
             //
             // wxLogError( _( "Polygon has only %d point extracted from %ld vertices. At least 2 "
             //                "points are required." ),
@@ -1889,11 +1890,12 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItem( const AREGION6& aElem )
         SHAPE_LINE_CHAIN linechain;
         HelperShapeLineChainFromAltiumVertices( linechain, aElem.outline );
 
-        if( linechain.PointCount() < 2 )
+        if( linechain.PointCount() < 3 )
         {
             // We have found multiple Altium files with polygon records containing nothing but
             // two coincident vertices.  These polygons do not appear when opening the file in
             // Altium.  https://gitlab.com/kicad/code/kicad/-/issues/8183
+            // Also, polygons with less than 3 points are not supported in KiCad.
             return;
         }
 
@@ -1937,11 +1939,12 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItem( FOOTPRINT*      aFoot
         SHAPE_LINE_CHAIN linechain;
         HelperShapeLineChainFromAltiumVertices( linechain, aElem.outline );
 
-        if( linechain.PointCount() < 2 )
+        if( linechain.PointCount() < 3 )
         {
             // We have found multiple Altium files with polygon records containing nothing but
             // two coincident vertices. These polygons do not appear when opening the file in
             // Altium. https://gitlab.com/kicad/code/kicad/-/issues/8183
+            // Also, polygons with less than 3 points are not supported in KiCad.
             return;
         }
 
@@ -1981,11 +1984,12 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItemOnLayer( const AREGION6& aE
     SHAPE_LINE_CHAIN linechain;
     HelperShapeLineChainFromAltiumVertices( linechain, aElem.outline );
 
-    if( linechain.PointCount() < 2 )
+    if( linechain.PointCount() < 3 )
     {
         // We have found multiple Altium files with polygon records containing nothing
         // but two coincident vertices. These polygons do not appear when opening the
         // file in Altium. https://gitlab.com/kicad/code/kicad/-/issues/8183
+        // Also, polygons with less than 3 points are not supported in KiCad.
         return;
     }
 
@@ -2007,11 +2011,12 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItemOnLayer( FOOTPRINT*    
     SHAPE_LINE_CHAIN linechain;
     HelperShapeLineChainFromAltiumVertices( linechain, aElem.outline );
 
-    if( linechain.PointCount() < 2 )
+    if( linechain.PointCount() < 3 )
     {
         // We have found multiple Altium files with polygon records containing nothing
         // but two coincident vertices. These polygons do not appear when opening the
         // file in Altium. https://gitlab.com/kicad/code/kicad/-/issues/8183
+        // Also, polygons with less than 3 points are not supported in KiCad.
         return;
     }
 
