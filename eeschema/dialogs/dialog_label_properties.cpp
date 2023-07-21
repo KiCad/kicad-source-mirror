@@ -289,7 +289,7 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataToWindow()
                 }
             }
 
-            std::set<std::shared_ptr<BUS_ALIAS>> sheetAliases = screen->GetBusAliases();
+            auto& sheetAliases = screen->GetBusAliases();
             busAliases.insert( busAliases.end(), sheetAliases.begin(), sheetAliases.end() );
         }
 
