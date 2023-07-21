@@ -19,8 +19,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:33-0700\n"
-"PO-Revision-Date: 2023-07-11 14:52+0000\n"
-"Last-Translator: Luc <some_physics@live.com>\n"
+"PO-Revision-Date: 2023-07-23 21:07+0000\n"
+"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v7/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -7721,9 +7721,9 @@ msgid "Delete all associations?"
 msgstr "Alle Zuordnungen entfernen?"
 
 #: cvpcb/tools/cvpcb_control.cpp:183
-#, fuzzy
 msgid "Unable to create the footprint viewer frame"
-msgstr "Protokolldatei \"%s\" konnte nicht erstellt werden"
+msgstr ""
+"Fensterbereich für die Footprint-Darstellung konnte nicht erstellt werden"
 
 #: eeschema/annotate.cpp:265
 #, c-format
@@ -8013,7 +8013,6 @@ msgid "Bill of Materials"
 msgstr "Bauteilliste (BoM)"
 
 #: eeschema/dialogs/dialog_bom_help_md.h:2
-#, fuzzy
 msgid ""
 "# 1. Summary\n"
 "\n"
@@ -8100,8 +8099,8 @@ msgstr ""
 "Das Bauteillisten-Werkzeug erstellt eine Liste von Bauteilen (engl. BoM, "
 "Bill of Materials), welche im Schaltplan-Design enthalten sind.\n"
 "\n"
-"Das Werkzeug verwendet ein externes Skript, um eine Liste von Bauteilen "
-"(BoM) im gewünschten Ausgabeformat zu erstellen. Die Auswahl eines anderen "
+"Das Werkzeug verwendet ein externes Skript, um eine Liste von Bauteilen (BoM)"
+" im gewünschten Ausgabeformat zu erstellen. Die Auswahl eines anderen "
 "Skripts verändert die Formatierung der Liste von Bauteilen (BoM).\n"
 "\n"
 "Die Erzeugung einer Liste von Bauteilen (BoM) wird eingehender im Handbuch "
@@ -8139,13 +8138,12 @@ msgstr ""
 "Formatierungsparameter wird ersetzt durch einen projektspezifischen Pfad- "
 "oder Dateinamen. Die unterstützten Formatierungsparameter lauten:\n"
 "\n"
-"* `%I`: absoluter Pfad und Dateiname der Zwischen-Netzlistendatei, welche "
+" * `%I`: absoluter Pfad und Dateiname der Zwischen-Netzlistendatei, welche "
 "als Eingabe an das BoM-Generator Skript fungiert\n"
-"(die Zwischennetzlistendatei).\n"
-"* `%O`: absoluter Pfad und Dateiname für die BoM-Ausgabedatei (ohne "
+" * `%O`: absoluter Pfad und Dateiname für die BoM-Ausgabedatei (ohne "
 "Dateinamenserweiterung)\n"
-"* `%B`: Basisdateiname der BoM-Ausgabedatei (ohne Dateinamenserweiterung)\n"
-"* `%P`: absoluter Pfad des Projektverzeichnisses, ohne nachfolgendes '/'-"
+" * `%B`: Basisdateiname der BoM-Ausgabedatei (ohne Dateinamenserweiterung)\n"
+" * `%P`: absoluter Pfad des Projektverzeichnisses, ohne nachfolgendes '/'-"
 "Zeichen\n"
 "\n"
 "**Hinweis:** Der Ausgabedatei-Parameter `%O` enthält keine "
@@ -13347,9 +13345,9 @@ msgid "Abort Project Save"
 msgstr "Speichern des Projekts abbrechen"
 
 #: eeschema/files-io.cpp:1220
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' is already open by '%s' at '%s'."
-msgstr "Schaltplan \"%s\" ist bereits geöffnet."
+msgstr "Schaltplan \"%s\" ist bereits geöffnet durch \"%s\" auf \"%s\"."
 
 #: eeschema/files-io.cpp:1233
 msgid "Importing Schematic"
@@ -19203,7 +19201,7 @@ msgstr "Gerberdatei(en) öffnen"
 
 #: gerbview/files.cpp:236
 msgid "Open NC (Excellon) Drill File(s)"
-msgstr "Öffnen NC (Excellon) Bohrdatei(en)"
+msgstr "NC (Excellon) Bohrdatei(en) öffnen"
 
 #: gerbview/files.cpp:274
 msgid "File not found:"
@@ -19956,7 +19954,7 @@ msgstr "Minimaler Header"
 
 #: kicad/cli/command_export_pcb_drill.cpp:72
 msgid "Generate independent files for NPTH and PTH holes"
-msgstr "Unabhängige Dateien für NPTH- und PTH-Bohrdaten erzeugen"
+msgstr "Getrennte Bohrdateien für NPTH- und PTH-Löcher erzeugen"
 
 #: kicad/cli/command_export_pcb_drill.cpp:77
 msgid "Generate map / summary of drill hits"
@@ -20327,10 +20325,9 @@ msgstr ""
 "Leiterplattenentwürfen bearbeiten"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:164
-#, fuzzy
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
 msgstr ""
-"Herunterladbare Pakete aus KiCad- und Drittanbieter Zusammenstellungen "
+"Herunterladbare Pakete aus KiCad- und Drittanbieter-Zusammenstellungen "
 "verwalten"
 
 #: kicad/files-io.cpp:46
@@ -20740,7 +20737,6 @@ msgid "Author"
 msgstr "Autor"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:277
-#, fuzzy
 msgid "Maintainer"
 msgstr "Betreuer"
 
@@ -27547,7 +27543,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:456
 msgid "Save Drill Report File"
-msgstr "Bohrplan-Protokolldatei speichern"
+msgstr "Bohrprotokoll-Datei speichern"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:24
 msgid "Output folder:"
@@ -27555,7 +27551,7 @@ msgstr "Ausgabeordner:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:44
 msgid "Drill File Format"
-msgstr "Bohrplan Dateiformat"
+msgstr "Bohr-Dateiformat"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:46
 msgid "Excellon"
@@ -33849,9 +33845,9 @@ msgstr ""
 "verwendet wurde."
 
 #: pcbnew/files.cpp:616
-#, fuzzy, c-format
+#, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
-msgstr "Platine \"%s\" ist bereits geöffnet."
+msgstr "Platine \"%s\" ist bereits geöffnet durch \"%s\" auf \"%s\"."
 
 #: pcbnew/files.cpp:627
 msgid "The current PCB has been modified.  Save changes?"
@@ -35437,14 +35433,12 @@ msgid "Suppress Trailing Zeroes"
 msgstr "Nullen am Ende unterdrücken"
 
 #: pcbnew/pcb_dimension.cpp:1387
-#, fuzzy
 msgid "Crossbar Height"
-msgstr "Cursor rechts"
+msgstr "Höhe des Querstrichs"
 
 #: pcbnew/pcb_dimension.cpp:1391
-#, fuzzy
 msgid "Extension Line Overshoot"
-msgstr "Verlängerungslinienversatz:"
+msgstr "Überhang der Maßhilfslinie"
 
 #: pcbnew/pcb_dimension.cpp:1456
 msgid "Leader Length"
@@ -39475,7 +39469,7 @@ msgstr "Gerber-Dateien für die Fertigung erstellen"
 
 #: pcbnew/tools/pcb_actions.cpp:655
 msgid "Drill Files (.drl)..."
-msgstr "Bohrdaten (*.drl)|*."
+msgstr "Bohrdateien (*.drl)..."
 
 #: pcbnew/tools/pcb_actions.cpp:655
 msgid "Generate Excellon drill file(s)"
@@ -41641,7 +41635,7 @@ msgstr "Gerber-Datei"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:27
 msgid "Excellon drill file"
-msgstr "Excellon Bohrdatei"
+msgstr "Excellon-Bohrdatei"
 
 #: resources/linux/mime/kicad-kicad.xml.in:5
 msgid "KiCad Project"
