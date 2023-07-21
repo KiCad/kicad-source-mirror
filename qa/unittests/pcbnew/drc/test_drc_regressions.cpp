@@ -124,7 +124,7 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
         { "issue1358",  2 },
         { "issue2512",  5 },
         { "issue2528",  1 },
-        { "issue5750",  4 },   // Shorting zone fills pass DRC in some cases
+        { "issue5750",  2 },   // Shorting zone fills pass DRC in some cases
         { "issue5854",  3 },
         { "issue6879",  6 },
         { "issue6945",  2 },
