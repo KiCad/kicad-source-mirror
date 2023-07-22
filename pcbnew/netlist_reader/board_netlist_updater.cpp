@@ -373,6 +373,17 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
                     newField->SetVisible( false );
                     newField->SetLayer( aPcbFootprint->GetLayer() == F_Cu ? F_Fab : B_Fab );
                     newField->StyleFromSettings( m_frame->GetDesignSettings() );
+
+                    // Give the relative position (0,0) in footprint
+                    newField->SetPosition( aPcbFootprint->GetPosition() );
+                    // Give the footprint orientation
+                    newField->Rotate( aPcbFootprint->GetPosition(), aPcbFootprint->GetOrientation() );
+
+                    if( m_frame )
+                    {
+                        auto view = m_frame->GetCanvas()->GetView();
+                        view->Add( newField );
+                    }
                 }
             }
         }
