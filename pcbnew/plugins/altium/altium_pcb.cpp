@@ -623,6 +623,7 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
 
     m_unicodeStrings.clear();
     m_extendedPrimitiveInformationMaps.clear();
+
     // TODO: WideStrings are stored as parameterMap in the case of footprints, not as binary
     //    std::string                     unicodeStringsStreamName = aFootprintName.ToStdString() + "\\WideStrings";
     //    const CFB::COMPOUND_FILE_ENTRY* unicodeStringsData = altiumLibFile.FindStream( unicodeStringsStreamName );
@@ -631,7 +632,15 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
     //        ParseWideStrings6Data( altiumLibFile, unicodeStringsData );
     //    }
 
-    const std::vector<std::string>  streamName{ aFootprintName.ToStdString(), "Data" };
+    wxString fpDirName = altiumLibFile.FindLibFootprintDirName(aFootprintName);
+
+    if( fpDirName.IsEmpty() )
+    {
+        THROW_IO_ERROR(
+                wxString::Format( _( "Footprint directory not found: '%s'." ), aFootprintName ) );
+    }
+
+    const std::vector<std::string>  streamName{ fpDirName.ToStdString(), "Data" };
     const CFB::COMPOUND_FILE_ENTRY* footprintData = altiumLibFile.FindStream( streamName );
 
     if( footprintData == nullptr )
@@ -643,13 +652,13 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
     ALTIUM_PARSER parser( altiumLibFile, footprintData );
 
     parser.ReadAndSetSubrecordLength();
-    wxString footprintName = parser.ReadWxString();
+    //wxString footprintName = parser.ReadWxString(); // Not used (single-byte char set)
     parser.SkipSubrecord();
 
-    LIB_ID fpID = AltiumToKiCadLibID( "", footprintName ); // TODO: library name
+    LIB_ID fpID = AltiumToKiCadLibID( "", aFootprintName ); // TODO: library name
     footprint->SetFPID( fpID );
 
-    const std::vector<std::string>  parametersStreamName{ aFootprintName.ToStdString(),
+    const std::vector<std::string>  parametersStreamName{ fpDirName.ToStdString(),
                                                          "Parameters" };
     const CFB::COMPOUND_FILE_ENTRY* parametersData =
             altiumLibFile.FindStream( parametersStreamName );
@@ -670,7 +679,7 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
     }
 
     const std::vector<std::string> extendedPrimitiveInformationStreamName{
-        aFootprintName.ToStdString(), "ExtendedPrimitiveInformation", "Data"
+        fpDirName.ToStdString(), "ExtendedPrimitiveInformation", "Data"
     };
     const CFB::COMPOUND_FILE_ENTRY* extendedPrimitiveInformationData =
             altiumLibFile.FindStream( extendedPrimitiveInformationStreamName );
@@ -679,9 +688,18 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
         ParseExtendedPrimitiveInformationData( altiumLibFile, extendedPrimitiveInformationData );
 
     footprint->SetReference( wxT( "REF**" ) );
-    footprint->SetValue( footprintName );
+    footprint->SetValue( aFootprintName );
     footprint->Reference().SetVisible( true ); // TODO: extract visibility information
     footprint->Value().SetVisible( true );
+
+    const VECTOR2I defaultTextSize( pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) );
+    const int      defaultTextThickness( pcbIUScale.mmToIU( 0.15 ) );
+
+    for( PCB_FIELD* field : footprint->Fields() )
+    {
+        field->SetTextSize( defaultTextSize );
+        field->SetTextThickness( defaultTextThickness );
+    }
 
     for( int primitiveIndex = 0; parser.GetRemainingBytes() >= 4; primitiveIndex++ )
     {
@@ -740,6 +758,22 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
         default:
             THROW_IO_ERROR( wxString::Format( _( "Record of unknown type: '%d'." ), recordtype ) );
         }
+    }
+
+    // Auto-position reference and value
+    BOX2I bbox = footprint.get()->GetBoundingBox( false, false );
+    bbox.Inflate( pcbIUScale.mmToIU( 0.2 ) ); // Gap between graphics and text
+
+    if( footprint->Reference().GetPosition() == VECTOR2I( 0, 0 ) )
+    {
+        footprint->Reference().SetX( bbox.GetCenter().x );
+        footprint->Reference().SetY( bbox.GetTop() - footprint->Reference().GetTextSize().y / 2 );
+    }
+
+    if( footprint->Value().GetPosition() == VECTOR2I( 0, 0 ) )
+    {
+        footprint->Value().SetX( bbox.GetCenter().x );
+        footprint->Value().SetY( bbox.GetBottom() + footprint->Value().GetTextSize().y / 2 );
     }
 
     if( parser.HasParsingError() )

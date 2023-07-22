@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019-2020 Thomas Pointhuber <thomas.pointhuber@gmx.at>
+ * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -88,26 +89,106 @@ ALTIUM_COMPOUND_FILE::ALTIUM_COMPOUND_FILE( const wxString& aFilePath )
 }
 
 
-static const CFB::COMPOUND_FILE_ENTRY*
-FindStreamSingleLevel( const CFB::CompoundFileReader&  aReader,
-                       const CFB::COMPOUND_FILE_ENTRY* aEntry, const std::string aName,
-                       const bool aIsStream )
+std::map<wxString, wxString> ALTIUM_COMPOUND_FILE::ListLibFootprints() const
 {
+    std::map<wxString, wxString> patternMap;
+
+    if( !m_reader )
+        return patternMap;
+
+    const CFB::COMPOUND_FILE_ENTRY* root = m_reader->GetRootEntry();
+
+    if( !root )
+        return patternMap;
+
+    m_reader->EnumFiles( root, 2,
+                         [&]( const CFB::COMPOUND_FILE_ENTRY* entry, const CFB::utf16string& dir,
+                              int level ) -> void
+                         {
+                             std::wstring dirName = UTF16ToWstring( dir.data(), dir.size() );
+                             std::wstring fileName = UTF16ToWstring( entry->name, entry->nameLen );
+
+                             if( m_reader->IsStream( entry ) && fileName == L"Parameters" )
+                             {
+                                 ALTIUM_PARSER                parametersReader( *this, entry );
+                                 std::map<wxString, wxString> parameterProperties =
+                                         parametersReader.ReadProperties();
+
+                                 wxString key = ALTIUM_PARSER::ReadString(
+                                         parameterProperties, wxT( "PATTERN" ), wxT( "" ) );
+
+                                 wxString fpName = ALTIUM_PARSER::ReadUnicodeString(
+                                         parameterProperties, wxT( "PATTERN" ), wxT( "" ) );
+
+                                 patternMap.emplace( key, fpName );
+                             }
+                         } );
+
+    return patternMap;
+}
+
+
+wxString ALTIUM_COMPOUND_FILE::FindLibFootprintDirName( const wxString& aFpUnicodeName ) const
+{
+    if( !m_reader )
+        return wxEmptyString;
+
+    const CFB::COMPOUND_FILE_ENTRY* root = m_reader->GetRootEntry();
+
+    if( !root )
+        return wxEmptyString;
+
+    wxString ret;
+
+    m_reader->EnumFiles( root, 2,
+                         [&]( const CFB::COMPOUND_FILE_ENTRY* entry, const CFB::utf16string& dir,
+                              int level ) -> void
+                         {
+                             std::wstring dirName = UTF16ToWstring( dir.data(), dir.size() );
+                             std::wstring fileName = UTF16ToWstring( entry->name, entry->nameLen );
+
+                             if( m_reader->IsStream( entry ) && fileName == L"Parameters" )
+                             {
+                                 ALTIUM_PARSER                parametersReader( *this, entry );
+                                 std::map<wxString, wxString> parameterProperties =
+                                         parametersReader.ReadProperties();
+
+                                 wxString fpName = ALTIUM_PARSER::ReadUnicodeString(
+                                         parameterProperties, wxT( "PATTERN" ), wxT( "" ) );
+
+                                 if( fpName == aFpUnicodeName )
+                                 {
+                                     ret = dirName;
+                                 }
+                             }
+                         } );
+
+    return ret;
+}
+
+
+const CFB::COMPOUND_FILE_ENTRY*
+ALTIUM_COMPOUND_FILE::FindStreamSingleLevel( const CFB::COMPOUND_FILE_ENTRY* aEntry,
+                                             const std::string aName, const bool aIsStream ) const
+{
+    if( !m_reader || !aEntry )
+        return nullptr;
+
     const CFB::COMPOUND_FILE_ENTRY* ret = nullptr;
 
-    aReader.EnumFiles( aEntry, 1,
-                       [&]( const CFB::COMPOUND_FILE_ENTRY* entry, const CFB::utf16string& dir,
-                            int level ) -> void
-                       {
-                           if( aReader.IsStream( entry ) == aIsStream )
-                           {
-                               std::string name = UTF16ToUTF8( entry->name );
-                               if( name == aName.c_str() )
-                               {
-                                   ret = entry;
-                               }
-                           }
-                       } );
+    m_reader->EnumFiles( aEntry, 1,
+                         [&]( const CFB::COMPOUND_FILE_ENTRY* entry, const CFB::utf16string& dir,
+                              int level ) -> void
+                         {
+                             if( m_reader->IsStream( entry ) == aIsStream )
+                             {
+                                 std::string name = UTF16ToUTF8( entry->name );
+                                 if( name == aName.c_str() )
+                                 {
+                                     ret = entry;
+                                 }
+                             }
+                         } );
     return ret;
 }
 
@@ -116,9 +197,7 @@ const CFB::COMPOUND_FILE_ENTRY*
 ALTIUM_COMPOUND_FILE::FindStream( const std::vector<std::string>& aStreamPath ) const
 {
     if( !m_reader )
-    {
         return nullptr;
-    }
 
     const CFB::COMPOUND_FILE_ENTRY* currentDirEntry = m_reader->GetRootEntry();
 
@@ -129,12 +208,11 @@ ALTIUM_COMPOUND_FILE::FindStream( const std::vector<std::string>& aStreamPath ) 
 
         if( ++it == aStreamPath.cend() )
         {
-            return FindStreamSingleLevel( *m_reader.get(), currentDirEntry, name, true );
+            return FindStreamSingleLevel( currentDirEntry, name, true );
         }
         else
         {
-            currentDirEntry =
-                    FindStreamSingleLevel( *m_reader.get(), currentDirEntry, name, false );
+            currentDirEntry = FindStreamSingleLevel( currentDirEntry, name, false );
         }
     }
 
@@ -232,9 +310,12 @@ std::map<wxString, wxString> ALTIUM_PARSER::ReadProperties()
         else
             value = wxString( valueS.c_str(), wxConvISO8859_1 );
 
-        // Breathless hack because I haven't a clue what the story is here (but this character
-        // appears in a lot of radial dimensions and is rendered by Altium as a space).
-        value.Replace( wxT( "ÿ" ), wxT( " " ) );
+        if( canonicalKey != wxS( "PATTERN" ) && canonicalKey != wxS( "SOURCEFOOTPRINTLIBRARY" ) )
+        {
+            // Breathless hack because I haven't a clue what the story is here (but this character
+            // appears in a lot of radial dimensions and is rendered by Altium as a space).
+            value.Replace( wxT( "ÿ" ), wxT( " " ) );
+        }
 
         if( canonicalKey == wxT( "DESIGNATOR" )
                 || canonicalKey == wxT( "NAME" )
@@ -340,4 +421,29 @@ wxString ALTIUM_PARSER::ReadString( const std::map<wxString, wxString>& aProps,
         return value->second;
 
     return aDefault;
+}
+
+
+wxString ALTIUM_PARSER::ReadUnicodeString( const std::map<wxString, wxString>& aProps,
+                                           const wxString& aKey, const wxString& aDefault )
+{
+    const auto& unicodeFlag = aProps.find( wxS( "UNICODE" ) );
+
+    if( unicodeFlag != aProps.end() && unicodeFlag->second.Contains( wxS( "EXISTS" ) ) )
+    {
+        const auto& unicodeValue = aProps.find( wxString( "UNICODE__" ) + aKey );
+
+        if( unicodeValue != aProps.end() )
+        {
+            wxArrayString arr = wxSplit( unicodeValue->second, ',', '\0' );
+            wxString      out;
+
+            for( wxString part : arr )
+                out += wxString( wchar_t( wxAtoi( part ) ) );
+
+            return out;
+        }
+    }
+
+    return ReadString( aProps, aKey, aDefault );
 }
