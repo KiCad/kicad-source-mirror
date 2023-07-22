@@ -931,10 +931,33 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
     {
         float ratio =
                 std::max( 1.0f, m_objectContainer.GetBBox().GetMaxDimension() / RANGE_SCALE_3D );
-        m_camera.SetMaxZoom( CAMERA::DEFAULT_MAX_ZOOM * ratio );
 
-        m_camera.SetMinZoom( static_cast<float>( MIN_DISTANCE_IU * m_boardAdapter.BiuTo3dUnits()
-                                                 / -m_camera.GetCameraInitPos().z ) );
+        float max_zoom = CAMERA::DEFAULT_MAX_ZOOM * ratio;
+        float min_zoom = static_cast<float>( MIN_DISTANCE_IU * m_boardAdapter.BiuTo3dUnits()
+                                             / -m_camera.GetCameraInitPos().z );
+
+        if( min_zoom > max_zoom )
+            std::swap( min_zoom, max_zoom );
+
+        float zoom_ratio = max_zoom / min_zoom;
+
+        // Set the minimum number of zoom 'steps' between max and min.
+        int steps = 3 * 3;
+        steps -= static_cast<int>( ceil( log( zoom_ratio ) / log( 1.26f ) ) );
+        steps = std::max( steps, 0 );
+
+        // Resize max and min zoom to accomplish the number of steps.
+        float increased_zoom = pow( 1.26f, steps / 2 );
+        max_zoom *= increased_zoom;
+        min_zoom /= increased_zoom;
+
+        if( steps & 1 )
+            min_zoom /= 1.26f;
+
+        min_zoom = std::min( min_zoom, 1.0f );
+
+        m_camera.SetMaxZoom( max_zoom );
+        m_camera.SetMinZoom( min_zoom );
     }
 
     // Create an accelerator
