@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019-2020 Thomas Pointhuber <thomas.pointhuber@gmx.at>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,7 +63,15 @@ public:
 
     const CFB::CompoundFileReader& GetCompoundFileReader() const { return *m_reader; }
 
+    std::map<wxString, wxString> ListLibFootprints() const;
+
+    wxString FindLibFootprintDirName( const wxString& aFpUnicodeName ) const;
+
     const CFB::COMPOUND_FILE_ENTRY* FindStream( const std::vector<std::string>& aStreamPath ) const;
+
+    const CFB::COMPOUND_FILE_ENTRY* FindStreamSingleLevel( const CFB::COMPOUND_FILE_ENTRY* aEntry,
+                                                           const std::string               aName,
+                                                           const bool aIsStream ) const;
 
 private:
     std::unique_ptr<CFB::CompoundFileReader> m_reader;
@@ -107,22 +115,29 @@ public:
         return result;
     }
 
-    wxString ReadWxString()
+    wxScopedCharBuffer ReadCharBuffer()
     {
         uint8_t len = Read<uint8_t>();
         if( GetRemainingBytes() >= len )
         {
-            // TODO: Identify where the actual code page is stored. For now, this default code page
-            //       has limited impact, because recent Altium files come with a UTF16 string table
-            wxString val = wxString( m_pos, wxConvISO8859_1, len );
+            char* buf = new char[len];
+            memcpy( buf, m_pos, len );
             m_pos += len;
-            return val;
+
+            return wxScopedCharBuffer::CreateOwned( buf, len );
         }
         else
         {
             m_error = true;
-            return wxString( "" );
+            return wxScopedCharBuffer();
         }
+    }
+
+    wxString ReadWxString()
+    {
+        // TODO: Identify where the actual code page is stored. For now, this default code page
+        //       has limited impact, because recent Altium files come with a UTF16 string table
+        return wxString( ReadCharBuffer(), wxConvISO8859_1 );
     }
 
     std::map<uint32_t, wxString> ReadWideStringTable()
@@ -224,6 +239,9 @@ public:
 
     static wxString ReadString( const std::map<wxString, wxString>& aProps,
                                 const wxString& aKey, const wxString& aDefault );
+
+    static wxString ReadUnicodeString( const std::map<wxString, wxString>& aProps,
+                                       const wxString& aKey, const wxString& aDefault );
 
     void Skip( size_t aLength )
     {

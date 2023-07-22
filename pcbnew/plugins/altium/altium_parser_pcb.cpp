@@ -331,8 +331,10 @@ ACOMPONENT6::ACOMPONENT6( ALTIUM_PARSER& aReader )
     nameon           = ALTIUM_PARSER::ReadBool( props, wxT( "NAMEON" ), true );
     commenton        = ALTIUM_PARSER::ReadBool( props, wxT( "COMMENTON" ), false );
     sourcedesignator = ALTIUM_PARSER::ReadString( props, wxT( "SOURCEDESIGNATOR" ), wxT( "" ) );
-    sourcefootprintlibrary = ALTIUM_PARSER::ReadString( props, wxT( "SOURCEFOOTPRINTLIBRARY" ), wxT( "" ) );
-    pattern = ALTIUM_PARSER::ReadString( props, wxT( "PATTERN" ), wxT( "" ) );
+
+    sourcefootprintlibrary =
+            ALTIUM_PARSER::ReadUnicodeString( props, wxT( "SOURCEFOOTPRINTLIBRARY" ), wxT( "" ) );
+    pattern = ALTIUM_PARSER::ReadUnicodeString( props, wxT( "PATTERN" ), wxT( "" ) );
 
     sourcecomponentlibrary = ALTIUM_PARSER::ReadString( props, wxT( "SOURCECOMPONENTLIBRARY" ), wxT( "" ) );
     sourcelibreference = ALTIUM_PARSER::ReadString( props, wxT( "SOURCELIBREFERENCE" ), wxT( "" ) );

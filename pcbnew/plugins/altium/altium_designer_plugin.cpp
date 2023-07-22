@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Thomas Pointhuber <thomas.pointhuber@gmx.at>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -144,6 +144,9 @@ void ALTIUM_DESIGNER_PLUGIN::FootprintEnumerate( wxArrayString&  aFootprintNames
 
     try
     {
+        // Map code-page-dependent names to unicode names
+        std::map<wxString, wxString> patternMap = altiumLibFile.ListLibFootprints();
+
         const std::vector<std::string>  streamName = { "Library", "Data" };
         const CFB::COMPOUND_FILE_ENTRY* libraryData = altiumLibFile.FindStream( streamName );
         if( libraryData == nullptr )
@@ -161,8 +164,20 @@ void ALTIUM_DESIGNER_PLUGIN::FootprintEnumerate( wxArrayString&  aFootprintNames
         for( size_t i = 0; i < numberOfFootprints; i++ )
         {
             parser.ReadAndSetSubrecordLength();
-            wxString footprintName = parser.ReadWxString();
-            aFootprintNames.Add( footprintName );
+
+            wxScopedCharBuffer charBuffer = parser.ReadCharBuffer();
+            wxString           fpPattern( charBuffer, wxConvISO8859_1 );
+
+            auto it = patternMap.find( fpPattern );
+            if( it != patternMap.end() )
+            {
+                aFootprintNames.Add( it->second ); // Proper unicode name
+            }
+            else
+            {
+                THROW_IO_ERROR( wxString::Format( "Component name not found: '%s'", fpPattern ) );
+            }
+
             parser.SkipSubrecord();
         }
 
