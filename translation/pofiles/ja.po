@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:33-0700\n"
-"PO-Revision-Date: 2023-05-06 17:51+0000\n"
+"PO-Revision-Date: 2023-07-23 21:07+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v7/ja/>\n"
 "Language: ja\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 5.0-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -13169,9 +13169,9 @@ msgid "Abort Project Save"
 msgstr "プロジェクト保存の中止"
 
 #: eeschema/files-io.cpp:1220
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' is already open by '%s' at '%s'."
-msgstr "回路図 '%s' はすでに開かれています。"
+msgstr "回路図 ’%s’ はすでに[ユーザー:'%s' ホスト:'%s']によって開かれています。"
 
 #: eeschema/files-io.cpp:1233
 msgid "Importing Schematic"
@@ -16201,9 +16201,9 @@ msgid "Voltage (measured)"
 msgstr "電圧 (measured)"
 
 #: eeschema/sim/spice_library_parser.cpp:89
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create sim model from %s"
-msgstr "フォルダ '%s' を作成できません。"
+msgstr "%s　からシミュレーションモデルを作成できません"
 
 #: eeschema/sim/spice_model_parser.cpp:84
 #: eeschema/sim/spice_model_parser.cpp:186
@@ -19602,14 +19602,12 @@ msgid "Malformed expression"
 msgstr "不正な式"
 
 #: include/lockfile.h:105
-#, fuzzy
 msgid "Lock file already exists"
-msgstr "ファイル %s はすでに存在します。"
+msgstr "ロックファイルはすでに存在しています"
 
 #: include/lockfile.h:124
-#, fuzzy
 msgid "Failed to access lock file"
-msgstr "回路図 \"%s\" のロードに失敗しました\n"
+msgstr "ロックファイルのアクセスに失敗しました"
 
 #: include/panel_hotkeys_editor.h:55
 msgid "Reset all hotkeys to the built-in KiCad defaults"
@@ -19800,9 +19798,8 @@ msgid "Precision of gerber coordinates, valid options: 5 or 6"
 msgstr "ガーバー座標系の精度の有効なオプション: 5,6"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:85
-#, fuzzy
 msgid "Use KiCad gerber file extension"
-msgstr "Protelの拡張子を使用"
+msgstr "KiCadのガーバーファイル拡張子を使用"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:45
 msgid ""
@@ -33377,9 +33374,9 @@ msgstr ""
 "バージョンの KiCad とは異なった塗りつぶしの結果となります。"
 
 #: pcbnew/files.cpp:616
-#, fuzzy, c-format
+#, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
-msgstr "プリント基板 '%s' はすでに開かれています。"
+msgstr "PCB '%s' はすでに[ユーザー:'%s' ホスト:'%s']によって開かれています。"
 
 #: pcbnew/files.cpp:627
 msgid "The current PCB has been modified.  Save changes?"
@@ -34947,9 +34944,8 @@ msgid "Extension Line Overshoot"
 msgstr "寸法補助線へのオフセット:"
 
 #: pcbnew/pcb_dimension.cpp:1456
-#, fuzzy
 msgid "Leader Length"
-msgstr "ビア長さ"
+msgstr "引出線の長さ"
 
 #: pcbnew/pcb_dimension.cpp:1496
 msgid "Text Frame"
@@ -38116,13 +38112,13 @@ msgid "Pack footprints"
 msgstr "フットプリントを詰める"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Click to place %s (item %zu of %zu)\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"クリックで %s を配置 (%ld 個目のアイテム:%ld個中)\n"
-"<esc> を押すとすべてキャンセル、ダブルクリックすると完了"
+"クリックで %s を配置 (%zu 個目のアイテム:%zu個中)\n"
+"<esc> を押すとすべてキャンセル、ダブルクリックで完了します"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:367
 #, c-format
