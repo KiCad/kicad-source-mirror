@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:35-0700\n"
-"PO-Revision-Date: 2023-07-09 09:52+0000\n"
+"PO-Revision-Date: 2023-07-23 21:05+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
@@ -4194,7 +4194,7 @@ msgstr "tarvitset numeron \"%s\""
 
 #: common/dsnlexer.cpp:696 common/dsnlexer.cpp:757
 msgid "Un-terminated delimited string"
-msgstr "Päättämätön erotettu merkkijono"
+msgstr "Päättämätön rajattu merkkijono"
 
 #: common/dsnlexer.cpp:718
 msgid "String delimiter must be a single character of ', \", or $"
@@ -29039,7 +29039,7 @@ msgstr "ASCII"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:49
 msgid "Gerber X3"
-msgstr "Gerber X3"
+msgstr "Gerber-X3"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:61
 msgid "Separate files for front, back"
@@ -29058,8 +29058,8 @@ msgid ""
 "Creates 2 files: one for each board side or\n"
 "Creates only one file containing all footprints to place\n"
 msgstr ""
-"Luo molemmille puolille omansa sijoittelutiedoston tai\n"
-"yhteisen sijoittelutiedoston kaikille osille\n"
+"Luo 2 tiedostoa: yhden kummallekin levyn puolelle tai\n"
+"Luo vain yhden tiedoston, joka sisältää kaikki sijoitettavat jalanjäljet\n"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:75
 msgid "Include only SMD footprints"
@@ -29092,11 +29092,11 @@ msgstr "Valitse GenCAD-vientitiedostonimi"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:136
 msgid "Flip bottom footprint padstacks"
-msgstr "Käännä pohja jalanjälki padstacks"
+msgstr "Käännä alimman jalanjäljen anturapinot"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:137
 msgid "Generate unique pin names"
-msgstr "Luo yksilölliset PIN-nimet"
+msgstr "Luo yksilölliset nastanimet"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:138
 msgid "Generate a new shape for each footprint instance (do not reuse shapes)"
@@ -29199,7 +29199,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:78
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:84
 msgid "Gerber X2"
-msgstr "Gerber X2()"
+msgstr "Gerber-X2"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:84
 msgid "PostScript"
