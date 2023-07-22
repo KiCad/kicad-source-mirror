@@ -1958,6 +1958,40 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItem( const AREGION6& aElem )
         zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
                                      ZONE::GetDefaultHatchPitch(), true );
     }
+    else if( aElem.kind == ALTIUM_REGION_KIND::DASHED_OUTLINE )
+    {
+        PCB_LAYER_ID klayer = GetKicadLayer( aElem.layer );
+
+        if( klayer == UNDEFINED_LAYER )
+        {
+            wxLogWarning(
+                    _( "Dashed outline found on an Altium layer (%d) with no KiCad equivalent. "
+                       "It has been moved to KiCad layer Eco1_User." ),
+                    aElem.layer );
+            klayer = Eco1_User;
+        }
+
+        SHAPE_LINE_CHAIN linechain;
+        HelperShapeLineChainFromAltiumVertices( linechain, aElem.outline );
+
+        if( linechain.PointCount() < 3 )
+        {
+            // We have found multiple Altium files with polygon records containing nothing but
+            // two coincident vertices. These polygons do not appear when opening the file in
+            // Altium. https://gitlab.com/kicad/code/kicad/-/issues/8183
+            // Also, polygons with less than 3 points are not supported in KiCad.
+            return;
+        }
+
+        PCB_SHAPE* shape = new PCB_SHAPE( m_board, SHAPE_T::POLY );
+
+        shape->SetPolyShape( linechain );
+        shape->SetFilled( false );
+        shape->SetLayer( klayer );
+        shape->SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( 0.1 ), PLOT_DASH_TYPE::DASH ) );
+
+        m_board->Add( shape, ADD_MODE::APPEND );
+    }
     else if( aElem.kind == ALTIUM_REGION_KIND::COPPER )
     {
         if( aElem.subpolyindex == ALTIUM_POLYGON_NONE )
@@ -2016,6 +2050,40 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItem( FOOTPRINT*      aFoot
                 ConvertShapeBasedRegions6ToFootprintItemOnLayer( aFootprint, aElem, klayer,
                                                                  aPrimitiveIndex );
         }
+    }
+    else if( aElem.kind == ALTIUM_REGION_KIND::DASHED_OUTLINE )
+    {
+        PCB_LAYER_ID klayer = GetKicadLayer( aElem.layer );
+
+        if( klayer == UNDEFINED_LAYER )
+        {
+            wxLogWarning(
+                    _( "Dashed outline found on an Altium layer (%d) with no KiCad equivalent. "
+                       "It has been moved to KiCad layer Eco1_User." ),
+                    aElem.layer );
+            klayer = Eco1_User;
+        }
+
+        SHAPE_LINE_CHAIN linechain;
+        HelperShapeLineChainFromAltiumVertices( linechain, aElem.outline );
+
+        if( linechain.PointCount() < 3 )
+        {
+            // We have found multiple Altium files with polygon records containing nothing but
+            // two coincident vertices. These polygons do not appear when opening the file in
+            // Altium. https://gitlab.com/kicad/code/kicad/-/issues/8183
+            // Also, polygons with less than 3 points are not supported in KiCad.
+            return;
+        }
+
+        PCB_SHAPE* shape = new PCB_SHAPE( aFootprint, SHAPE_T::POLY );
+
+        shape->SetPolyShape( linechain );
+        shape->SetFilled( false );
+        shape->SetLayer( klayer );
+        shape->SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( 0.1 ), PLOT_DASH_TYPE::DASH ) );
+
+        aFootprint->Add( shape, ADD_MODE::APPEND );
     }
     else
     {

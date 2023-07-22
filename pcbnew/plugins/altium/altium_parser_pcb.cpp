@@ -1054,7 +1054,7 @@ AREGION6::AREGION6( ALTIUM_PARSER& aReader, bool aExtendedVertices )
         kind = ALTIUM_REGION_KIND::POLYGON_CUTOUT;
         break;
     case 2:
-        kind = ALTIUM_REGION_KIND::UNKNOWN_2; // TODO: what kind is this?
+        kind = ALTIUM_REGION_KIND::DASHED_OUTLINE;
         break;
     case 3:
         kind = ALTIUM_REGION_KIND::UNKNOWN_3; // TODO: what kind is this?

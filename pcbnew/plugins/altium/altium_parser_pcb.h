@@ -88,7 +88,7 @@ enum class ALTIUM_REGION_KIND
 
     COPPER            = 0, // KIND=0
     POLYGON_CUTOUT    = 1, // KIND=1
-    UNKNOWN_2         = 2, // KIND=2
+    DASHED_OUTLINE    = 2, // KIND=2
     UNKNOWN_3         = 3, // KIND=3
     CAVITY_DEFINITION = 4, // KIND=4
     BOARD_CUTOUT      = 5, // KIND=0 AND ISBOARDCUTOUT=TRUE
