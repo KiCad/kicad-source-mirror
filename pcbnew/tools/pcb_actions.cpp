@@ -585,6 +585,27 @@ TOOL_ACTION PCB_ACTIONS::extendLines( TOOL_ACTION_ARGS()
         .MenuText( _( "Extend Lines to Meet" ) )
         .Tooltip( _( "Extend lines to meet each other" ) ) );
 
+TOOL_ACTION PCB_ACTIONS::mergePolygons( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveEdit.mergePolygons" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Merge Polygons" ) )
+        .Tooltip( _( "Merge selected polygons into a single polygon" ) )
+        .Icon( BITMAPS::merge_polygons ) );
+
+TOOL_ACTION PCB_ACTIONS::subtractPolygons( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveEdit.subtractPolygons" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Subtract Polygons" ) )
+        .Tooltip( _( "Subtract selected polygons from the last one selected" ) )
+        .Icon( BITMAPS::subtract_polygons ) );
+
+TOOL_ACTION PCB_ACTIONS::intersectPolygons( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveEdit.intersectPolygons" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Intersect Polygons" ) )
+        .Tooltip( _( "Create the intersection of the selected polygons" ) )
+        .Icon( BITMAPS::intersect_polygons ) );
+
 TOOL_ACTION PCB_ACTIONS::deleteFull( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveEdit.deleteFull" )
         .Scope( AS_GLOBAL )

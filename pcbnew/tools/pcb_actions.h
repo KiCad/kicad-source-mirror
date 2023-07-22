@@ -160,6 +160,13 @@ public:
     /// Extend selected lines to meet at a point
     static TOOL_ACTION extendLines;
 
+    /// Merge multiple polygons into a single polygon
+    static TOOL_ACTION mergePolygons;
+    /// Subtract polygons from other polygons
+    static TOOL_ACTION subtractPolygons;
+    /// Intersection of multiple polygons
+    static TOOL_ACTION intersectPolygons;
+
     /// Activation of the edit tool
     static TOOL_ACTION properties;
 

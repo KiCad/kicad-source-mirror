@@ -301,3 +301,194 @@ void LINE_EXTENSION_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLin
 
     AddSuccess();
 }
+
+
+void POLYGON_BOOLEAN_ROUTINE::ProcessShape( PCB_SHAPE& aPcbShape )
+{
+    std::unique_ptr<SHAPE_POLY_SET> poly;
+
+    switch( aPcbShape.GetShape() )
+    {
+    case SHAPE_T::POLY:
+    {
+        poly = std::make_unique<SHAPE_POLY_SET>( aPcbShape.GetPolyShape() );
+        break;
+    }
+    case SHAPE_T::RECTANGLE:
+    {
+        SHAPE_POLY_SET rect_poly;
+
+        const std::vector<VECTOR2I> rect_pts = aPcbShape.GetRectCorners();
+
+        rect_poly.NewOutline();
+
+        for( const VECTOR2I& pt : rect_pts )
+        {
+            rect_poly.Append( pt );
+        }
+
+        poly = std::make_unique<SHAPE_POLY_SET>( std::move( rect_poly ) );
+        break;
+    }
+    default:
+    {
+        break;
+    }
+    }
+
+    if( !poly )
+    {
+        // Not a polygon or rectangle, nothing to do
+        return;
+    }
+
+    if( !m_workingPolygon )
+    {
+        auto initial = std::make_unique<PCB_SHAPE>( GetBoard(), SHAPE_T::POLY );
+        initial->SetPolyShape( *poly );
+
+        // Copy properties
+        initial->SetLayer( aPcbShape.GetLayer() );
+        initial->SetWidth( aPcbShape.GetWidth() );
+
+        // Keep the pointer
+        m_workingPolygon = initial.get();
+        // Hand over ownership
+        GetHandler().AddNewItem( std::move( initial ) );
+
+        // And remove the shape
+        GetHandler().DeleteItem( aPcbShape );
+    }
+    else
+    {
+        if( ProcessSubsequentPolygon( *poly ) )
+        {
+            // If we could process the polygon, delete the source
+            GetHandler().DeleteItem( aPcbShape );
+            AddSuccess();
+        }
+        else
+        {
+            AddFailure();
+        }
+    }
+}
+
+
+wxString POLYGON_MERGE_ROUTINE::GetCommitDescription() const
+{
+    return _( "Merge polygons." );
+}
+
+
+std::optional<wxString> POLYGON_MERGE_ROUTINE::GetStatusMessage() const
+{
+    if( GetSuccesses() == 0 )
+    {
+        return _( "Unable to merge the selected polygons." );
+    }
+    else if( GetFailures() > 0 )
+    {
+        return _( "Some of the polygons could not be merged." );
+    }
+    return std::nullopt;
+}
+
+
+bool POLYGON_MERGE_ROUTINE::ProcessSubsequentPolygon( const SHAPE_POLY_SET& aPolygon )
+{
+    const SHAPE_POLY_SET::POLYGON_MODE poly_mode = SHAPE_POLY_SET::POLYGON_MODE::PM_FAST;
+
+    SHAPE_POLY_SET working_copy = GetWorkingPolygon()->GetPolyShape();
+    working_copy.BooleanAdd( aPolygon, poly_mode );
+
+    // Check it's not disjoint - this doesn't work well in the UI
+    if( working_copy.OutlineCount() != 1 )
+    {
+        return false;
+    }
+
+    GetWorkingPolygon()->SetPolyShape( working_copy );
+    return true;
+}
+
+
+wxString POLYGON_SUBTRACT_ROUTINE::GetCommitDescription() const
+{
+    return _( "Subtract polygons." );
+}
+
+
+std::optional<wxString> POLYGON_SUBTRACT_ROUTINE::GetStatusMessage() const
+{
+    if( GetSuccesses() == 0 )
+    {
+        return _( "Unable to subtract the selected polygons." );
+    }
+    else if( GetFailures() > 0 )
+    {
+        return _( "Some of the polygons could not be subtracted." );
+    }
+    return std::nullopt;
+}
+
+
+bool POLYGON_SUBTRACT_ROUTINE::ProcessSubsequentPolygon( const SHAPE_POLY_SET& aPolygon )
+{
+    const SHAPE_POLY_SET::POLYGON_MODE poly_mode = SHAPE_POLY_SET::POLYGON_MODE::PM_FAST;
+
+    SHAPE_POLY_SET working_copy = GetWorkingPolygon()->GetPolyShape();
+    working_copy.BooleanSubtract( aPolygon, poly_mode );
+
+    // Subtraction can create holes or delete the polygon
+    // In theory we can allow holes as the EDA_SHAPE will fracture for us, but that's
+    // probably not what the user has in mind (?)
+    if( working_copy.OutlineCount() != 1 || working_copy.HoleCount( 0 ) > 0
+        || working_copy.VertexCount( 0 ) == 0 )
+    {
+        // If that happens, just skip the operation
+        return false;
+    }
+
+    GetWorkingPolygon()->SetPolyShape( working_copy );
+    return true;
+}
+
+wxString POLYGON_INTERSECT_ROUTINE::GetCommitDescription() const
+{
+    return _( "Intersect polygons." );
+}
+
+
+std::optional<wxString> POLYGON_INTERSECT_ROUTINE::GetStatusMessage() const
+{
+    if( GetSuccesses() == 0 )
+    {
+        return _( "Unable to intersect the selected polygons." );
+    }
+    else if( GetFailures() > 0 )
+    {
+        return _( "Some of the polygons could not be intersected." );
+    }
+    return std::nullopt;
+}
+
+
+bool POLYGON_INTERSECT_ROUTINE::ProcessSubsequentPolygon( const SHAPE_POLY_SET& aPolygon )
+{
+    const SHAPE_POLY_SET::POLYGON_MODE poly_mode = SHAPE_POLY_SET::POLYGON_MODE::PM_FAST;
+
+    SHAPE_POLY_SET working_copy = GetWorkingPolygon()->GetPolyShape();
+    working_copy.BooleanIntersection( aPolygon, poly_mode );
+
+    // Is there anything left?
+    if( working_copy.OutlineCount() == 0 )
+    {
+        // There was no intersection. Rather than deleting the working polygon, we'll skip
+        // and report a failure.
+        return false;
+    }
+
+    GetWorkingPolygon()->SetPolyShape( working_copy );
+    return true;
+}

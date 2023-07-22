@@ -297,4 +297,74 @@ public:
     void ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB ) override;
 };
 
+
+/**
+ * A routine that modifies polygons using boolean operations
+ */
+class POLYGON_BOOLEAN_ROUTINE : public ITEM_MODIFICATION_ROUTINE
+{
+public:
+    POLYGON_BOOLEAN_ROUTINE( BOARD_ITEM* aBoard, CHANGE_HANDLER& aHandler ) :
+            ITEM_MODIFICATION_ROUTINE( aBoard, aHandler ), m_workingPolygon( nullptr )
+    {
+    }
+
+    void ProcessShape( PCB_SHAPE& aPcbShape );
+
+protected:
+    PCB_SHAPE* GetWorkingPolygon() const { return m_workingPolygon; }
+
+    virtual bool ProcessSubsequentPolygon( const SHAPE_POLY_SET& aPolygon ) = 0;
+
+private:
+    PCB_SHAPE* m_workingPolygon;
+};
+
+class POLYGON_MERGE_ROUTINE : public POLYGON_BOOLEAN_ROUTINE
+{
+public:
+    POLYGON_MERGE_ROUTINE( BOARD_ITEM* aBoard, CHANGE_HANDLER& aHandler ) :
+            POLYGON_BOOLEAN_ROUTINE( aBoard, aHandler )
+    {
+    }
+
+    wxString                GetCommitDescription() const override;
+    std::optional<wxString> GetStatusMessage() const override;
+
+private:
+    bool ProcessSubsequentPolygon( const SHAPE_POLY_SET& aPolygon ) override;
+};
+
+
+class POLYGON_SUBTRACT_ROUTINE : public POLYGON_BOOLEAN_ROUTINE
+{
+public:
+    POLYGON_SUBTRACT_ROUTINE( BOARD_ITEM* aBoard, CHANGE_HANDLER& aHandler ) :
+            POLYGON_BOOLEAN_ROUTINE( aBoard, aHandler )
+    {
+    }
+
+    wxString                GetCommitDescription() const override;
+    std::optional<wxString> GetStatusMessage() const override;
+
+private:
+    bool ProcessSubsequentPolygon( const SHAPE_POLY_SET& aPolygon ) override;
+};
+
+
+class POLYGON_INTERSECT_ROUTINE : public POLYGON_BOOLEAN_ROUTINE
+{
+public:
+    POLYGON_INTERSECT_ROUTINE( BOARD_ITEM* aBoard, CHANGE_HANDLER& aHandler ) :
+            POLYGON_BOOLEAN_ROUTINE( aBoard, aHandler )
+    {
+    }
+
+    wxString                GetCommitDescription() const override;
+    std::optional<wxString> GetStatusMessage() const override;
+
+private:
+    bool ProcessSubsequentPolygon( const SHAPE_POLY_SET& aPolygon ) override;
+};
+
 #endif /* ITEM_MODIFICATION_ROUTINE_H_ */

@@ -327,6 +327,7 @@ set( BMAPS_MID
     import
     info
     insert_module_board
+    intersect_polygons
     language
     layers_manager
     leave_sheet
@@ -351,7 +352,7 @@ set( BMAPS_MID
     marker_next
     marker_previous
     measurement
-    pcb_target
+    merge_polygons
     mirror_h
     mirror_v
     mode_module
@@ -405,6 +406,7 @@ set( BMAPS_MID
     part_properties
     paste
     paste_special
+    pcb_target
     pin2pin
     pin_size_to
     pin_show_etype
@@ -496,6 +498,7 @@ set( BMAPS_MID
     show_back_assembly_layers
     special_tools
     spreadsheet
+    subtract_polygons
     swap
     swap_layer
     switch_corner_rounding_shape

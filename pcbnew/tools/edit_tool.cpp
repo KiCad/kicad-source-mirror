@@ -116,11 +116,14 @@ static std::shared_ptr<CONDITIONAL_MENU> makeShapeModificationMenu( TOOL_INTERAC
 
     menu->SetTitle( _( "Shape Modification" ) );
 
-    static std::vector<KICAD_T> filletChamferTypes = { PCB_SHAPE_LOCATE_POLY_T,
-                                                       PCB_SHAPE_LOCATE_RECT_T,
-                                                       PCB_SHAPE_LOCATE_SEGMENT_T };
+    static const std::vector<KICAD_T> filletChamferTypes = { PCB_SHAPE_LOCATE_POLY_T,
+                                                             PCB_SHAPE_LOCATE_RECT_T,
+                                                             PCB_SHAPE_LOCATE_SEGMENT_T };
 
-    static std::vector<KICAD_T> lineExtendTypes = { PCB_SHAPE_LOCATE_SEGMENT_T };
+    static const std::vector<KICAD_T> lineExtendTypes = { PCB_SHAPE_LOCATE_SEGMENT_T };
+
+    static const std::vector<KICAD_T> polygonBooleanTypes = { PCB_SHAPE_LOCATE_RECT_T,
+                                                              PCB_SHAPE_LOCATE_POLY_T };
 
     auto hasCornerCondition =
             [aTool]( const SELECTION& aSelection )
@@ -145,6 +148,15 @@ static std::shared_ptr<CONDITIONAL_MENU> makeShapeModificationMenu( TOOL_INTERAC
                                                              && SELECTION_CONDITIONS::Count( 2 ) );
     menu->AddItem( PCB_ACTIONS::pointEditorMoveCorner,   hasCornerCondition );
     menu->AddItem( PCB_ACTIONS::pointEditorMoveMidpoint, hasMidpointCondition );
+
+    menu->AddSeparator();
+
+    menu->AddItem( PCB_ACTIONS::mergePolygons,           SELECTION_CONDITIONS::OnlyTypes( polygonBooleanTypes )
+                                                             && SELECTION_CONDITIONS::MoreThan( 1 ) );
+    menu->AddItem( PCB_ACTIONS::subtractPolygons,        SELECTION_CONDITIONS::OnlyTypes( polygonBooleanTypes )
+                                                             && SELECTION_CONDITIONS::MoreThan( 1 ) );
+    menu->AddItem( PCB_ACTIONS::intersectPolygons,       SELECTION_CONDITIONS::OnlyTypes( polygonBooleanTypes )
+                                                             && SELECTION_CONDITIONS::MoreThan( 1 ) );
     // clang-format on
 
     return menu;
@@ -1387,6 +1399,117 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
     commit.Push( pairwise_line_routine->GetCommitDescription() );
 
     if (const std::optional<wxString> msg = pairwise_line_routine->GetStatusMessage()) {
+        frame()->ShowInfoBarMsg( *msg );
+    }
+
+    return 0;
+}
+
+
+int EDIT_TOOL::BooleanPolygons( const TOOL_EVENT& aEvent )
+{
+    PCB_SELECTION& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
+            {
+                // Iterate from the back so we don't have to worry about removals.
+                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+                {
+                    BOARD_ITEM* item = aCollector[i];
+
+                    if( !item->IsType( {
+                                PCB_SHAPE_LOCATE_POLY_T,
+                                PCB_SHAPE_LOCATE_RECT_T,
+                        } ) )
+                    {
+                        aCollector.Remove( item );
+                    }
+                }
+            },
+            true /* prompt user regarding locked items */ );
+
+    const EDA_ITEM* const last_item = selection.GetLastAddedItem();
+
+    // Gather or construct polygon source shapes to merge
+    std::vector<PCB_SHAPE*> items_to_process;
+    for( EDA_ITEM* item : selection )
+    {
+        items_to_process.push_back( static_cast<PCB_SHAPE*>( item ) );
+
+        // put the last one in the selection at the front of the vector
+        // so it can be used as the property donor and as the basis for the
+        // boolean operation
+        if( item == last_item )
+        {
+            std::swap( items_to_process.back(), items_to_process.front() );
+        }
+    }
+
+    BOARD_COMMIT commit{ this };
+
+    // Handle modifications to existing items by the routine
+    const auto item_modification_handler = [&]( PCB_SHAPE& aItem )
+    {
+        commit.Modify( &aItem );
+    };
+
+    std::vector<PCB_SHAPE*> items_to_select_on_success;
+    const auto              item_creation_handler = [&]( std::unique_ptr<PCB_SHAPE> aItem )
+    {
+        items_to_select_on_success.push_back( aItem.get() );
+        commit.Add( aItem.release() );
+    };
+
+    const auto item_removal_handler = [&]( PCB_SHAPE& aItem )
+    {
+        commit.Remove( &aItem );
+    };
+
+    // Combine these callbacks into a CHANGE_HANDLER to inject in the ROUTINE
+    ITEM_MODIFICATION_ROUTINE::CALLABLE_BASED_HANDLER change_handler(
+            item_creation_handler, item_modification_handler, item_removal_handler );
+
+    // Construct an appropriate routine
+    std::unique_ptr<POLYGON_BOOLEAN_ROUTINE> boolean_routine;
+    if( aEvent.IsAction( &PCB_ACTIONS::mergePolygons ) )
+    {
+        boolean_routine =
+                std::make_unique<POLYGON_MERGE_ROUTINE>( frame()->GetModel(), change_handler );
+    }
+    else if( aEvent.IsAction( &PCB_ACTIONS::subtractPolygons ) )
+    {
+        boolean_routine =
+                std::make_unique<POLYGON_SUBTRACT_ROUTINE>( frame()->GetModel(), change_handler );
+    }
+    else if( aEvent.IsAction( &PCB_ACTIONS::intersectPolygons ) )
+    {
+        boolean_routine =
+                std::make_unique<POLYGON_INTERSECT_ROUTINE>( frame()->GetModel(), change_handler );
+    }
+    else
+    {
+        wxASSERT_MSG( false, "Could not find a polygon routine for this action" );
+        return 0;
+    }
+
+    // Perform the operation on each polygon
+    for( PCB_SHAPE* shape : items_to_process )
+    {
+        boolean_routine->ProcessShape( *shape );
+    }
+
+    // Select new items
+    for( PCB_SHAPE* item : items_to_select_on_success )
+    {
+        m_selectionTool->AddItemToSel( item, true );
+    }
+
+    // Notify other tools of the changes
+    m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
+
+    commit.Push( boolean_routine->GetCommitDescription() );
+
+    if( const std::optional<wxString> msg = boolean_routine->GetStatusMessage() )
+    {
         frame()->ShowInfoBarMsg( *msg );
     }
 
@@ -2642,6 +2765,9 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::ModifyLines,           PCB_ACTIONS::filletLines.MakeEvent() );
     Go( &EDIT_TOOL::ModifyLines,           PCB_ACTIONS::chamferLines.MakeEvent() );
     Go( &EDIT_TOOL::ModifyLines,           PCB_ACTIONS::extendLines.MakeEvent() );
+    Go( &EDIT_TOOL::BooleanPolygons,       PCB_ACTIONS::mergePolygons.MakeEvent() );
+    Go( &EDIT_TOOL::BooleanPolygons,       PCB_ACTIONS::subtractPolygons.MakeEvent() );
+    Go( &EDIT_TOOL::BooleanPolygons,       PCB_ACTIONS::intersectPolygons.MakeEvent() );
 
     Go( &EDIT_TOOL::copyToClipboard,       ACTIONS::copy.MakeEvent() );
     Go( &EDIT_TOOL::copyToClipboard,       PCB_ACTIONS::copyWithReference.MakeEvent() );

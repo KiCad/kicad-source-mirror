@@ -127,6 +127,12 @@ public:
     int ModifyLines( const TOOL_EVENT& aEvent );
 
     /**
+     * Modify selected polygons into a single polygon using boolean operations
+     * such as merge (union) or subtract (difference)
+     */
+    int BooleanPolygons( const TOOL_EVENT& aEvent );
+
+    /**
      * Delete currently selected items.
      */
     int Remove( const TOOL_EVENT& aEvent );
