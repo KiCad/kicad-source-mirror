@@ -1036,7 +1036,8 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisible
             if( !isFPEdit && m_privateLayers.test( text->GetLayer() ) )
                 continue;
 
-            bbox.Merge( text->GetBoundingBox() );
+            if( aIncludeInvisibleText || text->IsVisible() )
+                bbox.Merge( text->GetBoundingBox() );
         }
 
         // This can be further optimized when aIncludeInvisibleText is true, but currently
