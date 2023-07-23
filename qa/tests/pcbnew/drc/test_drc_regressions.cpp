@@ -109,7 +109,8 @@ BOOST_FIXTURE_TEST_CASE( DRCFalsePositiveRegressions, DRC_REGRESSION_TEST_FIXTUR
                                                      itemMap ) );
             }
 
-            BOOST_ERROR( wxString::Format( "DRC regression: %s, failed", relPath ) );
+            BOOST_ERROR( wxString::Format( "DRC regression: %s, failed (err: expected 0 found %d",
+                                            relPath, (int)violations.size() ) );
         }
     }
 }
