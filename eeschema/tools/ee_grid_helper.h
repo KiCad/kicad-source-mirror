@@ -34,11 +34,15 @@
 class SCH_ITEM;
 
 
-enum EE_GRID_HELPER_LAYERS : int
+enum GRID_HELPER_GRIDS : int
 {
-    LAYER_ANY = SCH_LAYER_ID_END + 1,
-    LAYER_CONNECTABLE,
-    LAYER_GRAPHICS
+    // When the item doesn't match an override, use the current user grid
+    GRID_CURRENT,
+
+    GRID_CONNECTABLE,
+    GRID_WIRES,
+    GRID_TEXT,
+    GRID_GRAPHICS
 };
 
 
@@ -47,6 +51,10 @@ class EE_GRID_HELPER : public GRID_HELPER
 public:
 
     EE_GRID_HELPER( TOOL_MANAGER* aToolMgr );
+
+    using GRID_HELPER::Align;
+    using GRID_HELPER::AlignGrid;
+    VECTOR2I Align( const VECTOR2I& aPoint, GRID_HELPER_GRIDS aGrid ) const;
 
     /**
      * Function GetSnapped
@@ -57,10 +65,19 @@ public:
      */
     SCH_ITEM* GetSnapped() const;
 
-    VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, int aLayer, const EE_SELECTION& aItems );
+    VECTOR2D GetGridSize( GRID_HELPER_GRIDS aGrid ) const;
+    using GRID_HELPER::GetGrid;
 
-    VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, int aLayer, SCH_ITEM* aDraggedItem );
-    VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, int aLayer, const EE_SELECTION& aSkip = {} );
+    GRID_HELPER_GRIDS GetSelectionGrid( const EE_SELECTION& aItem );
+    GRID_HELPER_GRIDS GetItemGrid( const SCH_ITEM* aItem );
+
+    VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, GRID_HELPER_GRIDS aGrid,
+                             const EE_SELECTION& aItems );
+
+    VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, GRID_HELPER_GRIDS aGrid,
+                             SCH_ITEM* aDraggedItem );
+    VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, GRID_HELPER_GRIDS aGrid,
+                             const EE_SELECTION& aSkip = {} );
 
 private:
     std::set<SCH_ITEM*> queryVisible( const BOX2I& aArea, const EE_SELECTION& aSkipList ) const;

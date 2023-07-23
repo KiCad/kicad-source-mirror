@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -135,8 +135,6 @@ DIALOG_GRID_SETTINGS_BASE::DIALOG_GRID_SETTINGS_BASE( wxWindow* parent, wxWindow
 	wxArrayString m_grid1CtrlChoices;
 	m_grid1Ctrl = new wxChoice( sbFastSwitchSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_grid1CtrlChoices, 0 );
 	m_grid1Ctrl->SetSelection( 0 );
-	m_grid1Ctrl->SetMinSize( wxSize( 240,-1 ) );
-
 	fgSizer3->Add( m_grid1Ctrl, 1, wxALL|wxEXPAND, 5 );
 
 	m_grid1HotKey = new wxStaticText( sbFastSwitchSizer->GetStaticBox(), wxID_ANY, _("(hotkey)"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -150,8 +148,6 @@ DIALOG_GRID_SETTINGS_BASE::DIALOG_GRID_SETTINGS_BASE( wxWindow* parent, wxWindow
 	wxArrayString m_grid2CtrlChoices;
 	m_grid2Ctrl = new wxChoice( sbFastSwitchSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_grid2CtrlChoices, 0 );
 	m_grid2Ctrl->SetSelection( 0 );
-	m_grid2Ctrl->SetMinSize( wxSize( 240,-1 ) );
-
 	fgSizer3->Add( m_grid2Ctrl, 1, wxALL|wxEXPAND, 5 );
 
 	m_grid2HotKey = new wxStaticText( sbFastSwitchSizer->GetStaticBox(), wxID_ANY, _("(hotkey)"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -163,6 +159,76 @@ DIALOG_GRID_SETTINGS_BASE::DIALOG_GRID_SETTINGS_BASE( wxWindow* parent, wxWindow
 
 
 	bSizerMain->Add( sbFastSwitchSizer, 0, wxEXPAND|wxALL, 10 );
+
+	sbGridOverridesSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Grid Overrides") ), wxVERTICAL );
+
+	wxFlexGridSizer* fgGridOverrides;
+	fgGridOverrides = new wxFlexGridSizer( 4, 4, 0, 0 );
+	fgGridOverrides->AddGrowableCol( 2 );
+	fgGridOverrides->SetFlexibleDirection( wxBOTH );
+	fgGridOverrides->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_checkGridOverrideConnectables = new wxCheckBox( sbGridOverridesSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgGridOverrides->Add( m_checkGridOverrideConnectables, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 10 );
+
+	m_staticTextConnectables = new wxStaticText( sbGridOverridesSizer->GetStaticBox(), wxID_ANY, _("Connectable Items:"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
+	m_staticTextConnectables->Wrap( -1 );
+	fgGridOverrides->Add( m_staticTextConnectables, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
+
+	m_GridOverrideConnectablesSize = new wxTextCtrl( sbGridOverridesSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgGridOverrides->Add( m_GridOverrideConnectablesSize, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+
+	m_staticTextConnectablesUnits = new wxStaticText( sbGridOverridesSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextConnectablesUnits->Wrap( -1 );
+	fgGridOverrides->Add( m_staticTextConnectablesUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	m_checkGridOverrideWires = new wxCheckBox( sbGridOverridesSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgGridOverrides->Add( m_checkGridOverrideWires, 0, wxALIGN_CENTER|wxALIGN_CENTER_HORIZONTAL|wxALL|wxLEFT|wxRIGHT, 5 );
+
+	m_staticTextWires = new wxStaticText( sbGridOverridesSizer->GetStaticBox(), wxID_ANY, _("Wires:"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
+	m_staticTextWires->Wrap( -1 );
+	fgGridOverrides->Add( m_staticTextWires, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_GridOverrideWiresSize = new wxTextCtrl( sbGridOverridesSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgGridOverrides->Add( m_GridOverrideWiresSize, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+
+	m_staticTextWiresUnits = new wxStaticText( sbGridOverridesSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextWiresUnits->Wrap( -1 );
+	fgGridOverrides->Add( m_staticTextWiresUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxRIGHT, 5 );
+
+	m_checkGridOverrideText = new wxCheckBox( sbGridOverridesSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgGridOverrides->Add( m_checkGridOverrideText, 0, wxALIGN_CENTER|wxALL|wxLEFT|wxRIGHT, 5 );
+
+	m_staticTextText = new wxStaticText( sbGridOverridesSizer->GetStaticBox(), wxID_ANY, _("Text:"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
+	m_staticTextText->Wrap( -1 );
+	fgGridOverrides->Add( m_staticTextText, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
+
+	m_GridOverrideTextSize = new wxTextCtrl( sbGridOverridesSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgGridOverrides->Add( m_GridOverrideTextSize, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+
+	m_staticTextTextUnits = new wxStaticText( sbGridOverridesSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
+	m_staticTextTextUnits->Wrap( -1 );
+	fgGridOverrides->Add( m_staticTextTextUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxRIGHT, 5 );
+
+	m_checkGridOverrideGraphics = new wxCheckBox( sbGridOverridesSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgGridOverrides->Add( m_checkGridOverrideGraphics, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 10 );
+
+	m_staticTextGraphics = new wxStaticText( sbGridOverridesSizer->GetStaticBox(), wxID_ANY, _("Graphics:"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
+	m_staticTextGraphics->Wrap( -1 );
+	fgGridOverrides->Add( m_staticTextGraphics, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_GridOverrideGraphicsSize = new wxTextCtrl( sbGridOverridesSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgGridOverrides->Add( m_GridOverrideGraphicsSize, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+
+	m_staticTextGraphicsUnits = new wxStaticText( sbGridOverridesSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
+	m_staticTextGraphicsUnits->Wrap( -1 );
+	fgGridOverrides->Add( m_staticTextGraphicsUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	sbGridOverridesSizer->Add( fgGridOverrides, 1, wxBOTTOM|wxEXPAND, 5 );
+
+
+	bSizerMain->Add( sbGridOverridesSizer, 0, wxALL|wxEXPAND, 10 );
 
 	wxBoxSizer* bButtonSizer;
 	bButtonSizer = new wxBoxSizer( wxHORIZONTAL );

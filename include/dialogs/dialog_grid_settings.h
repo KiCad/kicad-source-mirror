@@ -48,6 +48,10 @@ private:
     UNIT_BINDER m_gridOriginY;
     UNIT_BINDER m_userGridX;
     UNIT_BINDER m_userGridY;
+    UNIT_BINDER m_gridOverrideConnectables;
+    UNIT_BINDER m_gridOverrideWires;
+    UNIT_BINDER m_gridOverrideText;
+    UNIT_BINDER m_gridOverrideGraphics;
 };
 
 #endif // DIALOG_GRID_SETTINGS_H

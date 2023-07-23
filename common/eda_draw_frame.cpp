@@ -531,6 +531,22 @@ void EDA_DRAW_FRAME::SetGridVisibility( bool aVisible )
 }
 
 
+bool EDA_DRAW_FRAME::IsGridOverridden() const
+{
+    wxCHECK( config(), false );
+
+    return config()->m_Window.grid.overrides_enabled;
+}
+
+
+void EDA_DRAW_FRAME::SetGridOverrides( bool aOverride )
+{
+    wxCHECK( config(), /* void */ );
+
+    config()->m_Window.grid.overrides_enabled = aOverride;
+}
+
+
 void EDA_DRAW_FRAME::UpdateZoomSelectBox()
 {
     if( m_zoomSelectBox == nullptr )

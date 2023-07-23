@@ -142,6 +142,7 @@ public:
     static TOOL_ACTION gridResetOrigin;
     static TOOL_ACTION gridPreset;
     static TOOL_ACTION toggleGrid;
+    static TOOL_ACTION toggleGridOverrides;
     static TOOL_ACTION gridProperties;
 
     // Units

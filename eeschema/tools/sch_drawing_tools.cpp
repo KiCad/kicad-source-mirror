@@ -803,7 +803,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
         cursorPos = evt->IsPrime() ? evt->Position() : controls->GetMousePosition();
-        cursorPos = grid.BestSnapAnchor( cursorPos, LAYER_CONNECTABLE, nullptr );
+        cursorPos = grid.BestSnapAnchor( cursorPos, grid.GetItemGrid( previewItem ), nullptr );
         controls->ForceCursorPosition( true, cursorPos );
 
         if( evt->IsCancelInteractive() )
@@ -1151,7 +1151,8 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     bool isClassLabel  = aEvent.IsAction( &EE_ACTIONS::placeClassLabel );
     bool isNetLabel    = aEvent.IsAction( &EE_ACTIONS::placeLabel );
     bool isSheetPin    = aEvent.IsAction( &EE_ACTIONS::importSheetPin );
-    int  snapLayer     = isText ? LAYER_GRAPHICS : LAYER_CONNECTABLE;
+
+    GRID_HELPER_GRIDS snapGrid = isText ? GRID_TEXT : GRID_CONNECTABLE;
 
     // If we have a selected sheet use it, otherwise try to get one under the cursor
     if( isSheetPin )
@@ -1228,7 +1229,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
         VECTOR2I cursorPos = controls->GetMousePosition();
-        cursorPos = grid.BestSnapAnchor( cursorPos, snapLayer, item );
+        cursorPos = grid.BestSnapAnchor( cursorPos, snapGrid, item );
         controls->ForceCursorPosition( true, cursorPos );
 
         // The tool hotkey is interpreted as a click when drawing
@@ -1362,7 +1363,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 {
                     getViewControls()->PinCursorInsideNonAutoscrollArea( true );
                     cursorPos = getViewControls()->GetMousePosition();
-                    cursorPos = grid.BestSnapAnchor( cursorPos, snapLayer, item );
+                    cursorPos = grid.BestSnapAnchor( cursorPos, snapGrid, item );
                 }
 
                 if( item )

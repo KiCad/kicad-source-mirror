@@ -46,8 +46,12 @@ public:
     void SetAuxAxes( bool aEnable, const VECTOR2I& aOrigin = VECTOR2I( 0, 0 ) );
 
     virtual VECTOR2I Align( const VECTOR2I& aPoint ) const;
+    virtual VECTOR2I Align( const VECTOR2I& aPoint, const VECTOR2D& aGrid,
+                            const VECTOR2D& aOffset ) const;
 
     VECTOR2I AlignGrid( const VECTOR2I& aPoint ) const;
+    VECTOR2I AlignGrid( const VECTOR2I& aPoint, const VECTOR2D& aGrid,
+                        const VECTOR2D& aOffset ) const;
 
     void SetSkipPoint( const VECTOR2I& aPoint )
     {
@@ -124,6 +128,9 @@ protected:
     {
         return m_enableGrid && m_toolMgr->GetView()->GetGAL()->GetGridSnapping();
     }
+
+    VECTOR2I computeNearest( const VECTOR2I& aPoint, const VECTOR2I& aGrid,
+                             const VECTOR2I& aOffset ) const;
 
 protected:
     std::vector<ANCHOR>    m_anchors;

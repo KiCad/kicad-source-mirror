@@ -83,6 +83,7 @@ public:
     int GridFast1( const TOOL_EVENT& aEvent );
     int GridFast2( const TOOL_EVENT& aEvent );
     int ToggleGrid( const TOOL_EVENT& aEvent );
+    int ToggleGridOverrides( const TOOL_EVENT& aEvent );
     int GridProperties( const TOOL_EVENT& aEvent );
     int GridPreset( int idx );
     int OnGridChanged( bool aFromHotkey = true );

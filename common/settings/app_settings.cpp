@@ -354,6 +354,59 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
     m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.user_grid_y",
             &aWindow->grid.user_grid_y, "10 mil" ) );
 
+    // for grid overrides, give just the schematic and symbol editors sane values
+    if( m_filename == wxS( "eeschema" ) || m_filename == wxS( "symbol_editor" ) )
+    {
+        m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.overrides_enabled",
+                                                &aWindow->grid.overrides_enabled, true ) );
+        m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.override_connectables",
+                                                &aWindow->grid.override_connectables, true ) );
+        m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.override_wires",
+                                                &aWindow->grid.override_wires, true ) );
+        m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.override_text",
+                                                &aWindow->grid.override_text, false ) );
+        m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.override_graphics",
+                                                &aWindow->grid.override_graphics, false ) );
+
+        m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.override_connectables_size",
+                                                    &aWindow->grid.override_connectables_size,
+                                                    "50 mil" ) );
+        m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.override_wires_size",
+                                                    &aWindow->grid.override_wires_size,
+                                                    "50 mil" ) );
+        m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.override_text_size",
+                                                    &aWindow->grid.override_text_size, "10 mil" ) );
+        m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.override_graphics_size",
+                                                    &aWindow->grid.override_graphics_size,
+                                                    "25 mil" ) );
+    }
+    else
+    {
+        m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.overrides_enabled",
+                                                &aWindow->grid.overrides_enabled, false ) );
+        m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.override_connectables",
+                                                &aWindow->grid.override_connectables, false ) );
+        m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.override_wires",
+                                                &aWindow->grid.override_wires, false ) );
+        m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.override_text",
+                                                &aWindow->grid.override_text, false ) );
+        m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.override_graphics",
+                                                &aWindow->grid.override_graphics, false ) );
+
+        m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.override_connectables_size",
+                                                    &aWindow->grid.override_connectables_size,
+                                                    "100 mil" ) );
+        m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.override_text_size",
+                                                    &aWindow->grid.override_text_size, "10 mil" ) );
+        m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.override_wires_size",
+                                                    &aWindow->grid.override_wires_size,
+                                                    "10 mil" ) );
+        m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.override_graphics_size",
+                                                    &aWindow->grid.override_graphics_size,
+                                                    "10 mil" ) );
+    }
+
+
     m_params.emplace_back( new PARAM<double>( aJsonPath + ".grid.line_width",
             &aWindow->grid.line_width, 1.0 ) );
 

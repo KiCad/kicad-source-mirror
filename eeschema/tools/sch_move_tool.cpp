@@ -458,7 +458,7 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
     TOOL_EVENT  copy = aEvent;
     TOOL_EVENT* evt = &copy;
     VECTOR2I    prevPos;
-    int         snapLayer = UNDEFINED_LAYER;
+    GRID_HELPER_GRIDS snapLayer = GRID_CURRENT;
 
     m_cursor = controls->GetCursorPosition();
 
@@ -577,25 +577,12 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
                         static_cast<SCH_ITEM*>( item )->UpdateDanglingState( internalPoints );
                 }
 
+
                 // Generic setup
-                //
+                snapLayer = grid.GetSelectionGrid( selection );
+
                 for( EDA_ITEM* item : selection )
                 {
-                    if( static_cast<SCH_ITEM*>( item )->IsConnectable() )
-                    {
-                        if( snapLayer == LAYER_GRAPHICS )
-                            snapLayer = LAYER_ANY;
-                        else
-                            snapLayer = LAYER_CONNECTABLE;
-                    }
-                    else
-                    {
-                        if( snapLayer == LAYER_CONNECTABLE )
-                            snapLayer = LAYER_ANY;
-                        else
-                            snapLayer = LAYER_GRAPHICS;
-                    }
-
                     if( item->IsNew() )
                     {
                         // Item was added to commit in a previous command

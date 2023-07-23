@@ -221,6 +221,7 @@ enum class BITMAPS : unsigned int
     go_down,
     go_up,
     grid,
+    grid_override,
     grid_select,
     grid_select_axis,
     group,

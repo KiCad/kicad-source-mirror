@@ -196,6 +196,7 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
     }
 
     m_optionsToolBar->Add( ACTIONS::toggleGrid,          ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::toggleGridOverrides, ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::inchesUnits,         ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::milsUnits,           ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::millimetersUnits,    ACTION_TOOLBAR::TOGGLE );

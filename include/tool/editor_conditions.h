@@ -101,6 +101,15 @@ public:
     SELECTION_CONDITION GridVisible();
 
     /**
+     * Create a functor testing if the grid overrides wires is enabled in a frame.
+     *
+     * @note This requires the frame passed into the constructor be be derived from EDA_DRAW_FRAME.
+     *
+     * @return Functor testing if grid overrides are enabled
+     */
+    SELECTION_CONDITION GridOverrides();
+
+    /**
      * Create a functor testing if polar coordinates are current being used.
      *
      * @note This requires the frame passed into the constructor be be derived from EDA_DRAW_FRAME.
@@ -151,6 +160,9 @@ protected:
 
     ///< Helper function used by GridVisible().
     static bool gridFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame );
+
+    ///< Helper function used by GridOverrides().
+    static bool gridOverridesFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame );
 
     ///< Helper function used by PolarCoordinates().
     static bool polarCoordFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame );

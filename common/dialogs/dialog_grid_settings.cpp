@@ -32,13 +32,20 @@
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 
-DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( EDA_DRAW_FRAME* aParent ):
-    DIALOG_GRID_SETTINGS_BASE( aParent ),
-    m_parent( aParent ),
-    m_gridOriginX( aParent, m_staticTextGridPosX, m_GridOriginXCtrl, m_TextPosXUnits ),
-    m_gridOriginY( aParent, m_staticTextGridPosY, m_GridOriginYCtrl, m_TextPosYUnits ),
-    m_userGridX( aParent, m_staticTextSizeX, m_OptGridSizeX, m_TextSizeXUnits ),
-    m_userGridY( aParent, m_staticTextSizeY, m_OptGridSizeY, m_TextSizeYUnits )
+DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( EDA_DRAW_FRAME* aParent ) :
+        DIALOG_GRID_SETTINGS_BASE( aParent ), m_parent( aParent ),
+        m_gridOriginX( aParent, m_staticTextGridPosX, m_GridOriginXCtrl, m_TextPosXUnits ),
+        m_gridOriginY( aParent, m_staticTextGridPosY, m_GridOriginYCtrl, m_TextPosYUnits ),
+        m_userGridX( aParent, m_staticTextSizeX, m_OptGridSizeX, m_TextSizeXUnits ),
+        m_userGridY( aParent, m_staticTextSizeY, m_OptGridSizeY, m_TextSizeYUnits ),
+        m_gridOverrideConnectables( aParent, m_staticTextConnectables,
+                                    m_GridOverrideConnectablesSize, m_staticTextConnectablesUnits ),
+        m_gridOverrideWires( aParent, m_staticTextWires, m_GridOverrideWiresSize,
+                             m_staticTextWiresUnits ),
+        m_gridOverrideText( aParent, m_staticTextText, m_GridOverrideTextSize,
+                            m_staticTextTextUnits ),
+        m_gridOverrideGraphics( aParent, m_staticTextGraphics, m_GridOverrideGraphicsSize,
+                                m_staticTextGraphicsUnits )
 {
     // Configure display origin transforms
     m_gridOriginX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
@@ -58,6 +65,7 @@ DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( EDA_DRAW_FRAME* aParent ):
     else
     {
         m_book->SetSelection( 0 );
+        sbGridOverridesSizer->ShowItems( false );
     }
 
     int hk1 = ACTIONS::gridFast1.GetHotKey();
@@ -108,11 +116,13 @@ void DIALOG_GRID_SETTINGS::RebuildGridSizes()
 bool DIALOG_GRID_SETTINGS::TransferDataFromWindow()
 {
     // Validate new settings
-    if( !m_userGridX.Validate( 0.001, 1000.0, EDA_UNITS::MILLIMETRES ) )
-        return false;
-
-    if( !m_userGridY.Validate( 0.001, 1000.0, EDA_UNITS::MILLIMETRES ) )
-        return false;
+    for( UNIT_BINDER* entry :
+         { &m_userGridX, &m_userGridY, &m_gridOverrideConnectables, &m_gridOverrideWires,
+           &m_gridOverrideText, &m_gridOverrideGraphics } )
+    {
+        if( !entry->Validate( 0.001, 1000.0, EDA_UNITS::MILLIMETRES ) )
+            return false;
+    }
 
     // Apply the new settings
     APP_SETTINGS_BASE* cfg = m_parent->config();
@@ -124,6 +134,17 @@ bool DIALOG_GRID_SETTINGS::TransferDataFromWindow()
     gridCfg.user_grid_y = m_parent->StringFromValue( m_userGridY.GetValue(), true );
     gridCfg.fast_grid_1 = m_grid1Ctrl->GetSelection();
     gridCfg.fast_grid_2 = m_grid2Ctrl->GetSelection();
+
+    gridCfg.override_connectables = m_checkGridOverrideConnectables->GetValue();
+    gridCfg.override_connectables_size =
+            m_parent->StringFromValue( m_gridOverrideConnectables.GetValue(), true );
+    gridCfg.override_wires = m_checkGridOverrideWires->GetValue();
+    gridCfg.override_wires_size = m_parent->StringFromValue( m_gridOverrideWires.GetValue(), true );
+    gridCfg.override_text = m_checkGridOverrideText->GetValue();
+    gridCfg.override_text_size = m_parent->StringFromValue( m_gridOverrideText.GetValue(), true );
+    gridCfg.override_graphics = m_checkGridOverrideGraphics->GetValue();
+    gridCfg.override_graphics_size =
+            m_parent->StringFromValue( m_gridOverrideGraphics.GetValue(), true );
 
     // Notify TOOLS
     TOOL_MANAGER* mgr = m_parent->GetToolManager();
@@ -152,6 +173,17 @@ bool DIALOG_GRID_SETTINGS::TransferDataToWindow()
 
     m_userGridX.SetValue( m_parent->ValueFromString( gridCfg.user_grid_x ) );
     m_userGridY.SetValue( m_parent->ValueFromString( gridCfg.user_grid_y ) );
+
+    m_gridOverrideConnectables.SetValue(
+            m_parent->ValueFromString( gridCfg.override_connectables_size ) );
+    m_gridOverrideWires.SetValue( m_parent->ValueFromString( gridCfg.override_wires_size ) );
+    m_gridOverrideText.SetValue( m_parent->ValueFromString( gridCfg.override_text_size ) );
+    m_gridOverrideGraphics.SetValue( m_parent->ValueFromString( gridCfg.override_graphics_size ) );
+
+    m_checkGridOverrideConnectables->SetValue( gridCfg.override_connectables );
+    m_checkGridOverrideWires->SetValue( gridCfg.override_wires );
+    m_checkGridOverrideText->SetValue( gridCfg.override_text );
+    m_checkGridOverrideGraphics->SetValue( gridCfg.override_graphics );
 
     m_gridOriginX.SetValue( m_parent->GetGridOrigin().x );
     m_gridOriginY.SetValue( m_parent->GetGridOrigin().y );

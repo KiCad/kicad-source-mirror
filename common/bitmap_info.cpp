@@ -316,6 +316,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::general_ratsnest].emplace_back( BITMAPS::general_ratsnest, wxT( "general_ratsnest_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::grid_select].emplace_back( BITMAPS::grid_select, wxT( "grid_select_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::grid_select_axis].emplace_back( BITMAPS::grid_select_axis, wxT( "grid_select_axis_24.png" ), 24, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::grid_override].emplace_back( BITMAPS::grid_override, wxT( "grid_override_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::grid].emplace_back( BITMAPS::grid, wxT( "grid_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::group].emplace_back( BITMAPS::group, wxT( "group_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::group_enter].emplace_back( BITMAPS::group_enter, wxT( "group_enter_24.png" ), 24, wxT( "light" ) );
@@ -704,6 +705,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::general_ratsnest].emplace_back( BITMAPS::general_ratsnest, wxT( "general_ratsnest_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::grid_select].emplace_back( BITMAPS::grid_select, wxT( "grid_select_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::grid_select_axis].emplace_back( BITMAPS::grid_select_axis, wxT( "grid_select_axis_dark_24.png" ), 24, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::grid_override].emplace_back( BITMAPS::grid_override, wxT( "grid_override_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::grid].emplace_back( BITMAPS::grid, wxT( "grid_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::group].emplace_back( BITMAPS::group, wxT( "group_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::group_enter].emplace_back( BITMAPS::group_enter, wxT( "group_enter_dark_24.png" ), 24, wxT( "dark" ) );

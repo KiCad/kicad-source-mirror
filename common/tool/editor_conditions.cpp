@@ -84,6 +84,17 @@ SELECTION_CONDITION EDITOR_CONDITIONS::GridVisible()
 }
 
 
+SELECTION_CONDITION EDITOR_CONDITIONS::GridOverrides()
+{
+    // The grid lock check requires a draw frame
+    EDA_DRAW_FRAME* drwFrame = dynamic_cast<EDA_DRAW_FRAME*>( m_frame );
+
+    wxASSERT( drwFrame );
+
+    return std::bind( &EDITOR_CONDITIONS::gridOverridesFunc, _1, drwFrame );
+}
+
+
 SELECTION_CONDITION EDITOR_CONDITIONS::PolarCoordinates()
 {
     // The polar coordinates require a draw frame
@@ -167,6 +178,12 @@ bool EDITOR_CONDITIONS::noToolFunc( const SELECTION& aSelection, EDA_BASE_FRAME*
 bool EDITOR_CONDITIONS::gridFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame )
 {
     return aFrame->IsGridVisible();
+}
+
+
+bool EDITOR_CONDITIONS::gridOverridesFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame )
+{
+    return aFrame->IsGridOverridden();
 }
 
 

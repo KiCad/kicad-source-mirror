@@ -729,7 +729,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 OPT_TOOL_EVENT EE_SELECTION_TOOL::autostartEvent( TOOL_EVENT* aEvent, EE_GRID_HELPER& aGrid,
                                                   SCH_ITEM* aItem )
 {
-    VECTOR2I pos = aGrid.BestSnapAnchor( aEvent->Position(), LAYER_CONNECTABLE );
+    VECTOR2I pos = aGrid.BestSnapAnchor( aEvent->Position(), aGrid.GetItemGrid( aItem ) );
 
     if( m_frame->eeconfig()->m_Drawing.auto_start_wires
             && !m_toolMgr->GetTool<EE_POINT_EDITOR>()->HasPoint()
@@ -1826,7 +1826,8 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, const VECTOR2I* aPos,
             {
                 EE_GRID_HELPER grid( m_toolMgr );
 
-                if( pin->IsPointClickableAnchor( grid.BestSnapAnchor( *aPos, LAYER_CONNECTABLE ) ) )
+                if( pin->IsPointClickableAnchor( grid.BestSnapAnchor(
+                            *aPos, grid.GetItemGrid( static_cast<const SCH_ITEM*>( aItem ) ) ) ) )
                     return true;
             }
 

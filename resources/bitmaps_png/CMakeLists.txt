@@ -293,6 +293,7 @@ set( BMAPS_MID
     general_ratsnest
     grid_select
     grid_select_axis
+    grid_override
     grid
     group
     group_enter

@@ -542,6 +542,7 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( EE_ACTIONS::showNetNavigator, CHECK( netNavigatorCond ) );
     mgr->SetConditions( ACTIONS::showProperties,      CHECK( propertiesCond ) );
     mgr->SetConditions( ACTIONS::toggleGrid,          CHECK( cond.GridVisible() ) );
+    mgr->SetConditions( ACTIONS::toggleGridOverrides, CHECK( cond.GridOverrides() ) );
     mgr->SetConditions( ACTIONS::toggleCursorStyle,   CHECK( cond.FullscreenCursor() ) );
     mgr->SetConditions( ACTIONS::millimetersUnits,
                         CHECK( cond.Units( EDA_UNITS::MILLIMETRES ) ) );

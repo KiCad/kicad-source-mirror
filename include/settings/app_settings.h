@@ -61,6 +61,16 @@ struct GRID_SETTINGS
     bool show;
     int style;
     int snap;
+    bool force_component_snap;
+    bool     overrides_enabled;
+    bool     override_connectables;
+    wxString override_connectables_size;
+    bool     override_wires;
+    wxString override_wires_size;
+    bool     override_text;
+    wxString override_text_size;
+    bool     override_graphics;
+    wxString override_graphics_size;
 };
 
 /**

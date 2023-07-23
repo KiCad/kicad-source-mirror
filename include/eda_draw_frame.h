@@ -217,6 +217,9 @@ public:
     bool IsGridVisible() const;
     virtual void SetGridVisibility( bool aVisible );
 
+    bool         IsGridOverridden() const;
+    virtual void SetGridOverrides( bool aOverride );
+
     virtual COLOR4D GetGridColor() { return m_gridColor; }
     virtual void SetGridColor( const COLOR4D& aColor ) { m_gridColor = aColor; }
 

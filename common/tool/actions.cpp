@@ -551,10 +551,20 @@ TOOL_ACTION ACTIONS::gridPreset( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .Parameter<int>( 0 ) );          // Default to the 1st element of the list
 
-TOOL_ACTION ACTIONS::toggleGrid( "common.Control.toggleGrid",
-        AS_GLOBAL, 0, "",
-        _( "Show Grid" ), _( "Display background grid in the edit window" ),
-        BITMAPS::grid );
+TOOL_ACTION ACTIONS::toggleGrid( TOOL_ACTION_ARGS()
+        .Name("common.Control.toggleGrid")
+        .Scope( AS_GLOBAL)
+        .MenuText( _( "Show Grid" ) )
+        .Tooltip( _( "Display background grid in the edit window" ) )
+        .Icon( BITMAPS::grid ) );
+
+TOOL_ACTION ACTIONS::toggleGridOverrides( TOOL_ACTION_ARGS()
+        .Name("common.Control.toggleGridOverrides")
+        .DefaultHotkey( MD_CTRL + MD_SHIFT + 'G' )
+        .Scope( AS_GLOBAL)
+        .MenuText( _( "Grid Overrides" ) )
+        .Tooltip( _( "Enables item-specific grids that override the current grid" ) )
+        .Icon( BITMAPS::grid_override ) );
 
 TOOL_ACTION ACTIONS::gridProperties( "common.Control.gridProperties",
         AS_GLOBAL, 0, "",

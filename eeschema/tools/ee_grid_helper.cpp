@@ -29,6 +29,7 @@
 #include <sch_line.h>
 #include <sch_painter.h>
 #include <tool/tool_manager.h>
+#include <settings/app_settings.h>
 #include <trigo.h>
 #include <view/view.h>
 #include "ee_grid_helper.h"
@@ -60,7 +61,13 @@ EE_GRID_HELPER::EE_GRID_HELPER( TOOL_MANAGER* aToolMgr ) :
 }
 
 
-VECTOR2I EE_GRID_HELPER::BestDragOrigin( const VECTOR2I& aMousePos, int aLayer,
+VECTOR2I EE_GRID_HELPER::Align( const VECTOR2I& aPoint, GRID_HELPER_GRIDS aGrid ) const
+{
+    return Align( aPoint, GetGridSize( aGrid ), GetOrigin() );
+}
+
+
+VECTOR2I EE_GRID_HELPER::BestDragOrigin( const VECTOR2I& aMousePos, GRID_HELPER_GRIDS aGrid,
                                          const EE_SELECTION& aItems )
 {
     clearAnchors();
@@ -77,9 +84,9 @@ VECTOR2I EE_GRID_HELPER::BestDragOrigin( const VECTOR2I& aMousePos, int aLayer,
     double worldScale = m_toolMgr->GetView()->GetGAL()->GetWorldScale();
     double lineSnapMinCornerDistance = 50.0 / worldScale;
 
-    ANCHOR* nearestOutline = nearestAnchor( aMousePos, OUTLINE, aLayer );
-    ANCHOR* nearestCorner = nearestAnchor( aMousePos, CORNER, aLayer );
-    ANCHOR* nearestOrigin = nearestAnchor( aMousePos, ORIGIN, aLayer );
+    ANCHOR* nearestOutline = nearestAnchor( aMousePos, OUTLINE, aGrid );
+    ANCHOR* nearestCorner = nearestAnchor( aMousePos, CORNER, aGrid );
+    ANCHOR* nearestOrigin = nearestAnchor( aMousePos, ORIGIN, aGrid );
     ANCHOR* best = nullptr;
     double minDist = std::numeric_limits<double>::max();
 
@@ -112,16 +119,17 @@ VECTOR2I EE_GRID_HELPER::BestDragOrigin( const VECTOR2I& aMousePos, int aLayer,
 }
 
 
-VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, int aLayer, SCH_ITEM* aSkip )
+VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, GRID_HELPER_GRIDS aGrid,
+                                         SCH_ITEM* aSkip )
 {
     EE_SELECTION skipItems;
     skipItems.Add( aSkip );
 
-    return BestSnapAnchor( aOrigin, aLayer, skipItems );
+    return BestSnapAnchor( aOrigin, aGrid, skipItems );
 }
 
 
-VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, int aLayer,
+VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, GRID_HELPER_GRIDS aGrid,
                                          const EE_SELECTION& aSkip )
 {
     constexpr int snapRange = SNAP_RANGE * schIUScale.IU_PER_MILS;
@@ -141,8 +149,8 @@ VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, int aLayer,
     for( SCH_ITEM* item : queryVisible( bb, aSkip ) )
         computeAnchors( item, aOrigin );
 
-    ANCHOR*  nearest = nearestAnchor( aOrigin, SNAPPABLE, aLayer );
-    VECTOR2I nearestGrid = Align( aOrigin );
+    ANCHOR*  nearest = nearestAnchor( aOrigin, SNAPPABLE, aGrid );
+    VECTOR2I nearestGrid = Align( aOrigin, aGrid );
 
     if( m_enableSnapLine && m_snapItem && m_skipPoint != VECTOR2I( m_viewSnapLine.GetPosition() ) )
     {
@@ -233,6 +241,50 @@ VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, int aLayer,
     return pt;
 }
 
+
+VECTOR2D EE_GRID_HELPER::GetGridSize( GRID_HELPER_GRIDS aGrid ) const
+{
+    const GRID_SETTINGS& grid = m_toolMgr->GetSettings()->m_Window.grid;
+
+    VECTOR2D g = m_toolMgr->GetView()->GetGAL()->GetGridSize();
+
+    if( !grid.overrides_enabled )
+        return g;
+
+    switch( aGrid )
+    {
+    case GRID_CONNECTABLE:
+        if( grid.override_connectables )
+            g.x = g.y = EDA_UNIT_UTILS::UI::DoubleValueFromString(
+                    schIUScale, EDA_UNITS::MILS, grid.override_connectables_size );
+
+        break;
+    case GRID_WIRES:
+        if( grid.override_wires )
+            g.x = g.y = EDA_UNIT_UTILS::UI::DoubleValueFromString( schIUScale, EDA_UNITS::MILS,
+                                                                   grid.override_wires_size );
+
+        break;
+    case GRID_TEXT:
+        if( grid.override_text )
+            g.x = g.y = EDA_UNIT_UTILS::UI::DoubleValueFromString( schIUScale, EDA_UNITS::MILS,
+                                                                   grid.override_text_size );
+
+        break;
+    case GRID_GRAPHICS:
+        if( grid.override_graphics )
+            g.x = g.y = EDA_UNIT_UTILS::UI::DoubleValueFromString( schIUScale, EDA_UNITS::MILS,
+                                                                   grid.override_graphics_size );
+
+        break;
+    case GRID_CURRENT:
+        break;
+    }
+
+    return g;
+}
+
+
 SCH_ITEM* EE_GRID_HELPER::GetSnapped() const
 {
     if( !m_snapItem )
@@ -267,6 +319,68 @@ std::set<SCH_ITEM*> EE_GRID_HELPER::queryVisible( const BOX2I& aArea,
     return items;
 }
 
+
+GRID_HELPER_GRIDS EE_GRID_HELPER::GetSelectionGrid( const EE_SELECTION& aSelection )
+{
+    GRID_HELPER_GRIDS grid = GetItemGrid( static_cast<const SCH_ITEM*>( aSelection.Front() ) );
+
+    // Find the largest grid of all the items and use that
+    for( EDA_ITEM* item : aSelection )
+    {
+        GRID_HELPER_GRIDS itemGrid = GetItemGrid( static_cast<SCH_ITEM*>( item ) );
+
+        if( GetGridSize( itemGrid ) > GetGridSize( grid ) )
+            grid = itemGrid;
+    }
+
+    return grid;
+}
+
+
+GRID_HELPER_GRIDS EE_GRID_HELPER::GetItemGrid( const SCH_ITEM* aItem )
+{
+    if( !aItem )
+        return GRID_CURRENT;
+
+    switch( aItem->Type() )
+    {
+    case SCH_SYMBOL_T:
+    case SCH_PIN_T:
+    case SCH_SHEET_PIN_T:
+    case SCH_SHEET_T:
+    case SCH_NO_CONNECT_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIER_LABEL_T:
+    case SCH_LABEL_T:
+    case SCH_DIRECTIVE_LABEL_T:
+        return GRID_CONNECTABLE;
+
+    case SCH_TEXT_T:
+    case SCH_TEXTBOX_T:
+    case SCH_FIELD_T:
+        return GRID_TEXT;
+
+    case SCH_SHAPE_T:
+    case SCH_BITMAP_T:
+        return GRID_GRAPHICS;
+
+    case SCH_JUNCTION_T:
+        return GRID_WIRES;
+
+    case SCH_LINE_T:
+        if( aItem->IsConnectable() )
+            return GRID_WIRES;
+        else
+            return GRID_GRAPHICS;
+
+    case SCH_BUS_BUS_ENTRY_T:
+    case SCH_BUS_WIRE_ENTRY_T:
+        return GRID_WIRES;
+
+    default:
+        return GRID_CURRENT;
+    }
+}
 
 void EE_GRID_HELPER::computeAnchors( SCH_ITEM *aItem, const VECTOR2I &aRefPos, bool aFrom,
                                      bool aIncludeText )
@@ -346,9 +460,9 @@ EE_GRID_HELPER::ANCHOR* EE_GRID_HELPER::nearestAnchor( const VECTOR2I& aPos, int
         if( ( aFlags & a.flags ) != aFlags )
             continue;
 
-        if( aMatchLayer == LAYER_CONNECTABLE && !item->IsConnectable() )
+        if( aMatchLayer == LAYER_NOCONNECT && !item->IsConnectable() )
             continue;
-        else if( aMatchLayer == LAYER_GRAPHICS && item->IsConnectable() )
+        else if( aMatchLayer == GRID_GRAPHICS && item->IsConnectable() )
             continue;
 
         double dist = a.Distance( aPos );

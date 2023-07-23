@@ -517,6 +517,14 @@ int COMMON_TOOLS::ToggleGrid( const TOOL_EVENT& aEvent )
 }
 
 
+int COMMON_TOOLS::ToggleGridOverrides( const TOOL_EVENT& aEvent )
+{
+    m_frame->SetGridOverrides( !m_frame->IsGridOverridden() );
+
+    return 0;
+}
+
+
 int COMMON_TOOLS::GridProperties( const TOOL_EVENT& aEvent )
 {
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
@@ -664,6 +672,7 @@ void COMMON_TOOLS::setTransitions()
     Go( &COMMON_TOOLS::GridFast1,           ACTIONS::gridFast1.MakeEvent() );
     Go( &COMMON_TOOLS::GridFast2,           ACTIONS::gridFast2.MakeEvent() );
     Go( &COMMON_TOOLS::ToggleGrid,          ACTIONS::toggleGrid.MakeEvent() );
+    Go( &COMMON_TOOLS::ToggleGridOverrides, ACTIONS::toggleGridOverrides.MakeEvent() );
     Go( &COMMON_TOOLS::GridProperties,      ACTIONS::gridProperties.MakeEvent() );
 
     // Units and coordinates

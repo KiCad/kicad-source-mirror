@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -23,6 +23,7 @@
 #include <wx/panel.h>
 #include <wx/choice.h>
 #include <wx/simplebook.h>
+#include <wx/checkbox.h>
 #include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -60,6 +61,23 @@ class DIALOG_GRID_SETTINGS_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextGrid2;
 		wxChoice* m_grid2Ctrl;
 		wxStaticText* m_grid2HotKey;
+		wxStaticBoxSizer* sbGridOverridesSizer;
+		wxCheckBox* m_checkGridOverrideConnectables;
+		wxStaticText* m_staticTextConnectables;
+		wxTextCtrl* m_GridOverrideConnectablesSize;
+		wxStaticText* m_staticTextConnectablesUnits;
+		wxCheckBox* m_checkGridOverrideWires;
+		wxStaticText* m_staticTextWires;
+		wxTextCtrl* m_GridOverrideWiresSize;
+		wxStaticText* m_staticTextWiresUnits;
+		wxCheckBox* m_checkGridOverrideText;
+		wxStaticText* m_staticTextText;
+		wxTextCtrl* m_GridOverrideTextSize;
+		wxStaticText* m_staticTextTextUnits;
+		wxCheckBox* m_checkGridOverrideGraphics;
+		wxStaticText* m_staticTextGraphics;
+		wxTextCtrl* m_GridOverrideGraphicsSize;
+		wxStaticText* m_staticTextGraphicsUnits;
 		wxButton* m_buttonResetOrigin;
 		wxButton* m_buttonResetSizes;
 		wxStdDialogButtonSizer* m_sdbSizer;
