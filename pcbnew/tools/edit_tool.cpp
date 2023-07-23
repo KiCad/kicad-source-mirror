@@ -1197,6 +1197,10 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
 
     BOARD_COMMIT commit{ this };
 
+    // Only modify one parent in FP editor
+    if( m_isFootprintEditor )
+        commit.Modify( selection.Front() );
+
     // List of thing to select at the end of the operation
     // (doing it as we go will invalidate the iterator)
     std::vector<PCB_SHAPE*> items_to_select_on_success;
