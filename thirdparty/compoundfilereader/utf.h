@@ -139,7 +139,6 @@ std::string WstringToUTF8(const T* wstr)
                 u8 += static_cast<char>( c[i] );
             }
         }
+        return u8;
     }
-    return u8;
-#endif
 }
