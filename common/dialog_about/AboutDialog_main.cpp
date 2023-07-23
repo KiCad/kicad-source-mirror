@@ -659,7 +659,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           wxEmptyString,
                                           wxEmptyString,
                                           wxS( "Greek (el_GR)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxS( "aris-kimi" ),
+    aInfo.AddTranslator( new CONTRIBUTOR( wxS( "Aristeidis Kimirtzis" ),
                                           wxEmptyString,
                                           wxEmptyString,
                                           wxS( "Greek (el_GR)" ) ) );
