@@ -225,6 +225,8 @@ public:
     void SetVisibleViewArea( const BOX2I& aExtents ) { m_visibleViewArea = aExtents; }
     const BOX2I& VisibleViewArea() const { return m_visibleViewArea; }
 
+    std::vector<PNS::ITEM*> GetLastCommittedLeaderSegments();
+
 private:
     bool movePlacing( const VECTOR2I& aP, ITEM* aItem );
     bool moveDragging( const VECTOR2I& aP, ITEM* aItem );
@@ -250,6 +252,7 @@ private:
     std::unique_ptr<PLACEMENT_ALGO> m_placer;
     std::unique_ptr<DRAG_ALGO>      m_dragger;
     std::unique_ptr<SHOVE>          m_shove;
+    std::vector<PNS::ITEM*>         m_leaderSegments;
 
     ROUTER_IFACE*     m_iface;
 

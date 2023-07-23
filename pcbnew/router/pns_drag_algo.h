@@ -122,6 +122,8 @@ public:
 
     virtual bool GetForceMarkObstaclesMode( bool* aDragStatus ) const = 0;
 
+    virtual std::vector<PNS::ITEM*> GetLastCommittedLeaderSegments() { return std::vector<PNS::ITEM*>(); };
+
 protected:
     NODE*   m_world;
 
