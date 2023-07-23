@@ -45,7 +45,7 @@ public:
             m_sortField(),
             m_sortAsc( true ),
             m_filterString(),
-            m_groupSymbols( true )
+            m_excludeDNP( false )
     {
     }
 
@@ -68,7 +68,7 @@ public:
     wxString              m_sortField;
     bool                  m_sortAsc;
     wxString              m_filterString;
-    bool                  m_groupSymbols;
+    bool                  m_excludeDNP;
 };
 
 #endif

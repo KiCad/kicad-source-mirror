@@ -336,8 +336,9 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
     preset.sortAsc = aBomJob->m_sortAsc;
     preset.sortField = aBomJob->m_sortField;
-    preset.groupSymbols = aBomJob->m_groupSymbols;
     preset.filterString = aBomJob->m_filterString;
+    preset.groupSymbols = ( aBomJob->m_fieldsGroupBy.size() > 0 );
+    preset.excludeDNP = aBomJob->m_excludeDNP;
 
     dataModel.ApplyBomPreset( preset );
 

@@ -64,9 +64,6 @@ namespace CLI
 #define ARG_FILTER "--filter"
 #define ARG_FILTER_DESC "Filter string to remove output lines."
 
-#define ARG_GROUP_SYMBOLS "--group"
-#define ARG_GROUP_SYMBOLS_DESC "Enable grouping of references with matching group-by fields."
-
 #define ARG_EXCLUDE_DNP "--exclude-dnp"
 #define ARG_EXCLUDE_DNP_DESC "Exclude symbols marked Do-Not-Populate."
 
