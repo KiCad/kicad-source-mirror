@@ -372,7 +372,6 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
                     newField->SetText( pair.second );
                     newField->SetVisible( false );
                     newField->SetLayer( aPcbFootprint->GetLayer() == F_Cu ? F_Fab : B_Fab );
-                    newField->StyleFromSettings( m_frame->GetDesignSettings() );
 
                     // Give the relative position (0,0) in footprint
                     newField->SetPosition( aPcbFootprint->GetPosition() );
@@ -381,7 +380,8 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
 
                     if( m_frame )
                     {
-                        auto view = m_frame->GetCanvas()->GetView();
+                        newField->StyleFromSettings( m_frame->GetDesignSettings() );
+                        KIGFX::PCB_VIEW* view = m_frame->GetCanvas()->GetView();
                         view->Add( newField );
                     }
                 }
