@@ -60,6 +60,8 @@ public:
 
     LINKED_ITEM* GetLink( int aIndex ) const
     {
+        if( aIndex < 0 )
+            aIndex += m_links.size();
         return m_links[aIndex];
     }
 
