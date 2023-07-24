@@ -113,6 +113,9 @@ std::wstring UTF16ToWstring(const T* u16, size_t len = 0)
         size_t   pos = 0;
         while( GetNextCodePointFromUTF16( u16, len, &pos, &cp ) )
         {
+            if( !cp )
+                break;
+
             ret += cp;
         }
     }
