@@ -511,8 +511,8 @@ bool SIMULATOR_FRAME::SaveWorkbook( const wxString& aPath )
 {
     if( m_ui->SaveWorkbook( aPath ) )
     {
-        UpdateTitle();
         m_workbookModified = false;
+        UpdateTitle();
 
         return true;
     }
