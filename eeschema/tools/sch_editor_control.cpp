@@ -1541,12 +1541,13 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     // SCH_SEXP_PLUGIN added the items to the paste screen, but not to the view or anything
     // else.  Pull them back out to start with.
-    SCH_COMMIT      commit( m_toolMgr );
-    EDA_ITEMS       loadedItems;
-    bool            sheetsPasted = false;
-    SCH_SHEET_LIST  hierarchy = m_frame->Schematic().GetSheets();
-    SCH_SHEET_PATH& pasteRoot = m_frame->GetCurrentSheet();
-    wxFileName      destFn = pasteRoot.Last()->GetFileName();
+    SCH_COMMIT             commit( m_toolMgr );
+    EDA_ITEMS              loadedItems;
+    std::vector<SCH_ITEM*> sortedLoadedItems;
+    bool                   sheetsPasted = false;
+    SCH_SHEET_LIST         hierarchy = m_frame->Schematic().GetSheets();
+    SCH_SHEET_PATH&        pasteRoot = m_frame->GetCurrentSheet();
+    wxFileName             destFn = pasteRoot.Last()->GetFileName();
 
     if( destFn.IsRelative() )
         destFn.MakeAbsolute( m_frame->Prj().GetProjectPath() );
@@ -1579,12 +1580,30 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     for( SCH_ITEM* item : tempScreen->Items() )
     {
+        if( item->Type() == SCH_SHEET_T )
+            sortedLoadedItems.push_back( item );
+        else
+            loadedItems.push_back( item );
+    }
+
+    sort( sortedLoadedItems.begin(), sortedLoadedItems.end(),
+          []( SCH_ITEM* firstItem, SCH_ITEM* secondItem )
+          {
+              SCH_SHEET* firstSheet = static_cast<SCH_SHEET*>( firstItem );
+              SCH_SHEET* secondSheet = static_cast<SCH_SHEET*>( secondItem );
+              return StrNumCmp( firstSheet->GetName(), secondSheet->GetName(), false ) < 0;
+          });
+
+
+    for( SCH_ITEM* item : sortedLoadedItems )
+    {
         loadedItems.push_back( item );
 
-        //@todo: we might want to sort the sheets by page number before adding to loadedItems
         if( item->Type() == SCH_SHEET_T )
         {
             SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+            SCH_FIELD& nameField = sheet->GetFields()[SHEETNAME];
+            wxString   baseName = nameField.GetText();
             wxFileName srcFn = sheet->GetFileName();
 
             if( srcFn.IsRelative() )
