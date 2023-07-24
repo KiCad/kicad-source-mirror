@@ -86,6 +86,7 @@ target_include_directories( kiplatform PUBLIC
     )
 
 target_link_libraries( kiplatform
+    core
     ${wxWidgets_LIBRARIES}
     ${PLATFORM_LIBS}
     )
