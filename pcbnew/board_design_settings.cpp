@@ -1050,8 +1050,11 @@ bool BOARD_DESIGN_SETTINGS::Ignore( int aDRCErrorCode )
 
 int BOARD_DESIGN_SETTINGS::GetBiggestClearanceValue() const
 {
-    int            biggest = 0;
+    int            biggest = std::max( m_MinClearance, m_HoleClearance );
     DRC_CONSTRAINT constraint;
+
+    biggest = std::max( biggest, m_HoleToHoleMin );
+    biggest = std::max( biggest, m_CopperEdgeClearance );
 
     if( m_DRCEngine )
     {
