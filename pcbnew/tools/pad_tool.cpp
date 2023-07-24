@@ -725,7 +725,7 @@ PCB_LAYER_ID PAD_TOOL::explodePad( PAD* aPad )
             switch( shape->GetShape() )
             {
             case SHAPE_T::SEGMENT:
-            case SHAPE_T::RECT:
+            case SHAPE_T::RECTANGLE:
             case SHAPE_T::CIRCLE:
                 shape->SetStart( primitive->GetStart() );
                 shape->SetEnd( primitive->GetEnd() );
@@ -903,7 +903,7 @@ std::vector<PCB_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun, BOARD
             switch( primitive->GetShape() )
             {
             case SHAPE_T::SEGMENT:
-            case SHAPE_T::RECT:
+            case SHAPE_T::RECTANGLE:
             case SHAPE_T::CIRCLE:
                 primitive->SetStart( fpShape->GetStart() );
                 primitive->SetEnd( fpShape->GetEnd() );

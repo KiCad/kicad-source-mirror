@@ -429,7 +429,7 @@ TOOL_ACTION EE_ACTIONS::drawTextBox( TOOL_ACTION_ARGS()
         .Tooltip( _( "Draw text box items" ) )
         .Icon( BITMAPS::add_textbox )
         .Flags( AF_ACTIVATE )
-        .Parameter( SHAPE_T::RECT ) );
+        .Parameter( SHAPE_T::RECTANGLE ) );
 
 TOOL_ACTION EE_ACTIONS::drawRectangle( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveDrawing.drawRectangle" )
@@ -438,7 +438,7 @@ TOOL_ACTION EE_ACTIONS::drawRectangle( TOOL_ACTION_ARGS()
         .Tooltip( _( "Draw rectangles" ) )
         .Icon( BITMAPS::add_rectangle )
         .Flags( AF_ACTIVATE )
-        .Parameter( SHAPE_T::RECT ) );
+        .Parameter( SHAPE_T::RECTANGLE ) );
 
 TOOL_ACTION EE_ACTIONS::drawCircle( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveDrawing.drawCircle" )

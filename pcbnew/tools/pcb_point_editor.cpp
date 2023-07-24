@@ -185,7 +185,7 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
 
         // We can't currently handle TEXTBOXes that have been turned into SHAPE_T::POLYs due
         // to non-cardinal rotations
-        if( shape->GetShape() != SHAPE_T::RECT )
+        if( shape->GetShape() != SHAPE_T::RECTANGLE )
             return points;
     }
 
@@ -218,7 +218,7 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
             points->AddPoint( shape->GetEnd() );
             break;
 
-        case SHAPE_T::RECT:
+        case SHAPE_T::RECTANGLE:
             points->AddPoint( shape->GetTopLeft() );
             points->AddPoint( VECTOR2I( shape->GetBotRight().x, shape->GetTopLeft().y ) );
             points->AddPoint( shape->GetBotRight() );
@@ -1122,7 +1122,7 @@ void PCB_POINT_EDITOR::updateItem() const
 
             break;
 
-        case SHAPE_T::RECT:
+        case SHAPE_T::RECTANGLE:
         {
             VECTOR2I topLeft = m_editPoints->Point( RECT_TOP_LEFT ).GetPosition();
             VECTOR2I topRight = m_editPoints->Point( RECT_TOP_RIGHT ).GetPosition();
@@ -1675,7 +1675,7 @@ void PCB_POINT_EDITOR::updatePoints()
     case PCB_TEXTBOX_T:
     {
         const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( item );
-        int              target = shape->GetShape() == SHAPE_T::RECT ? 4 : 0;
+        int              target = shape->GetShape() == SHAPE_T::RECTANGLE ? 4 : 0;
 
         // Careful; textbox shape is mutable between cardinal and non-cardinal rotations...
         if( int( m_editPoints->PointsSize() ) != target )
@@ -1691,7 +1691,7 @@ void PCB_POINT_EDITOR::updatePoints()
             break;
         }
 
-        if( shape->GetShape() == SHAPE_T::RECT )
+        if( shape->GetShape() == SHAPE_T::RECTANGLE )
         {
             m_editPoints->Point( RECT_TOP_LEFT ).SetPosition( shape->GetTopLeft() );
             m_editPoints->Point( RECT_TOP_RIGHT ).SetPosition( shape->GetBotRight().x,
@@ -1719,7 +1719,7 @@ void PCB_POINT_EDITOR::updatePoints()
             m_editPoints->Point( SEG_END ).SetPosition( shape->GetEnd() );
             break;
 
-        case SHAPE_T::RECT:
+        case SHAPE_T::RECTANGLE:
             m_editPoints->Point( RECT_TOP_LEFT ).SetPosition( shape->GetTopLeft() );
             m_editPoints->Point( RECT_TOP_RIGHT ).SetPosition( shape->GetBotRight().x,
                                                                shape->GetTopLeft().y );

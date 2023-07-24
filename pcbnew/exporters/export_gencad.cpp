@@ -1238,7 +1238,7 @@ static void FootprintWriteShape( FILE* aFile, FOOTPRINT* aFootprint, const wxStr
                          -end.y / SCALE_FACTOR );
                 break;
 
-            case SHAPE_T::RECT:
+            case SHAPE_T::RECTANGLE:
                 fprintf( aFile, "LINE %g %g %g %g\n",
                          start.x / SCALE_FACTOR,
                          -start.y / SCALE_FACTOR,

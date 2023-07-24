@@ -134,7 +134,7 @@ bool primitiveNeedsUpdate( const std::shared_ptr<PCB_SHAPE>& a,
     switch( a->GetShape() )
     {
     case SHAPE_T::SEGMENT:
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
     case SHAPE_T::CIRCLE:
         TEST( a->GetStart(), b->GetStart(), "" );
         TEST( a->GetEnd(), b->GetEnd(), "" );
@@ -274,7 +274,7 @@ bool shapeNeedsUpdate( const PCB_SHAPE* a, const PCB_SHAPE* b )
 
     switch( a->GetShape() )
     {
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
     {
         BOX2I aRect( a->GetStart(), a->GetEnd() - a->GetStart() );
         BOX2I bRect( b->GetStart(), b->GetEnd() - b->GetStart() );

@@ -550,7 +550,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                         addAnchor( shape->GetCenter(), ORIGIN | SNAPPABLE, shape );
                         break;
 
-                    case SHAPE_T::RECT:
+                    case SHAPE_T::RECTANGLE:
                     {
                         VECTOR2I point2( end.x, start.y );
                         VECTOR2I point3( start.x, end.y );

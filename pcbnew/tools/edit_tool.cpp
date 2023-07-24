@@ -1141,7 +1141,7 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
         PCB_LAYER_ID layer = graphic->GetLayer();
         int width = graphic->GetWidth();
 
-        if( graphic->GetShape() == SHAPE_T::RECT )
+        if( graphic->GetShape() == SHAPE_T::RECTANGLE )
         {
             items_to_remove.push_back( graphic );
             VECTOR2I start( graphic->GetStart() );

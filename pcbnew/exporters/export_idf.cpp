@@ -98,7 +98,7 @@ static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
             break;
         }
 
-        case SHAPE_T::RECT:
+        case SHAPE_T::RECTANGLE:
         {
             if( graphic->GetStart() == graphic->GetEnd() )
                 break;

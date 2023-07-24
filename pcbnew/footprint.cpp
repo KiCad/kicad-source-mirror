@@ -2151,7 +2151,7 @@ double FOOTPRINT::GetCoverageArea( const BOARD_ITEM* aItem, const GENERAL_COLLEC
         case SHAPE_T::BEZIER:
             return shape->GetWidth() * shape->GetWidth();
 
-        case SHAPE_T::RECT:
+        case SHAPE_T::RECTANGLE:
         case SHAPE_T::CIRCLE:
         case SHAPE_T::POLY:
         {

@@ -303,7 +303,7 @@ void LTSPICE_SCH_PARSER::CreateSymbol( LTSPICE_SCHEMATIC::LT_SYMBOL& aLtSymbol,
 
     for( int j = 0; j < (int) aLtSymbol.Rectangles.size(); j++ )
     {
-        LIB_SHAPE* rectangle = new LIB_SHAPE( aLibSymbol, SHAPE_T::RECT );
+        LIB_SHAPE* rectangle = new LIB_SHAPE( aLibSymbol, SHAPE_T::RECTANGLE );
 
         CreateRect( aLtSymbol, j, rectangle );
         aLibSymbol->AddDrawItem( rectangle );
@@ -650,7 +650,7 @@ void LTSPICE_SCH_PARSER::CreateRect( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aI
                                      SCH_SHEET_PATH* aSheet )
 {
     LTSPICE_SCHEMATIC::RECTANGLE& lt_rect = aAscfile.Rectangles[aIndex];
-    SCH_SHAPE*                    rectangle = new SCH_SHAPE( SHAPE_T::RECT );
+    SCH_SHAPE*                    rectangle = new SCH_SHAPE( SHAPE_T::RECTANGLE );
 
     rectangle->SetPosition( ToKicadCoords( lt_rect.TopLeft ) );
     rectangle->SetEnd( ToKicadCoords( lt_rect.BotRight ) );
@@ -737,7 +737,7 @@ void LTSPICE_SCH_PARSER::setTextJustification( EDA_TEXT*                        
     case LTSPICE_SCHEMATIC::JUSTIFICATION::CENTER:
     case LTSPICE_SCHEMATIC::JUSTIFICATION::RIGHT:
     case LTSPICE_SCHEMATIC::JUSTIFICATION::BOTTOM:
-    case LTSPICE_SCHEMATIC::JUSTIFICATION::TOP: 
+    case LTSPICE_SCHEMATIC::JUSTIFICATION::TOP:
         aText->SetTextAngle( ANGLE_HORIZONTAL );
         break;
 
@@ -1187,7 +1187,7 @@ void LTSPICE_SCH_PARSER::CreateRect( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, in
                                      SCH_SHEET_PATH* aSheet )
 {
     LTSPICE_SCHEMATIC::RECTANGLE& lt_rect = aLTSymbol.Rectangles[aIndex];
-    SCH_SHAPE*                    rectangle = new SCH_SHAPE( SHAPE_T::RECT );
+    SCH_SHAPE*                    rectangle = new SCH_SHAPE( SHAPE_T::RECTANGLE );
 
     rectangle->SetPosition( ToInvertedKicadCoords( lt_rect.BotRight ) );
     rectangle->SetEnd( ToInvertedKicadCoords( lt_rect.TopLeft ) );

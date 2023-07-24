@@ -1526,7 +1526,7 @@ void SCH_ALTIUM_PLUGIN::ParseRoundRectangle( const std::map<wxString, wxString>&
     if( elem.OwnerPartID == ALTIUM_COMPONENT_NONE )
     {
         // TODO: misses rounded edges
-        SCH_SHAPE* rect = new SCH_SHAPE( SHAPE_T::RECT );
+        SCH_SHAPE* rect = new SCH_SHAPE( SHAPE_T::RECTANGLE );
 
         rect->SetPosition( sheetTopRight );
         rect->SetEnd( sheetBottomLeft );
@@ -1554,7 +1554,7 @@ void SCH_ALTIUM_PLUGIN::ParseRoundRectangle( const std::map<wxString, wxString>&
 
         SCH_SYMBOL* symbol = m_symbols.at( libSymbolIt->first );
         // TODO: misses rounded edges
-        LIB_SHAPE*  rect = new LIB_SHAPE( libSymbolIt->second, SHAPE_T::RECT );
+        LIB_SHAPE*  rect = new LIB_SHAPE( libSymbolIt->second, SHAPE_T::RECTANGLE );
         libSymbolIt->second->AddDrawItem( rect );
 
         rect->SetUnit( elem.OwnerPartID );
@@ -1956,7 +1956,7 @@ void SCH_ALTIUM_PLUGIN::ParseRectangle( const std::map<wxString, wxString>& aPro
 
     if( elem.OwnerPartID == ALTIUM_COMPONENT_NONE )
     {
-        SCH_SHAPE* rect = new SCH_SHAPE( SHAPE_T::RECT );
+        SCH_SHAPE* rect = new SCH_SHAPE( SHAPE_T::RECTANGLE );
 
         rect->SetPosition( sheetTopRight );
         rect->SetEnd( sheetBottomLeft );
@@ -1982,7 +1982,7 @@ void SCH_ALTIUM_PLUGIN::ParseRectangle( const std::map<wxString, wxString>& aPro
             return;
 
         SCH_SYMBOL* symbol = m_symbols.at( libSymbolIt->first );
-        LIB_SHAPE*  rect = new LIB_SHAPE( libSymbolIt->second, SHAPE_T::RECT );
+        LIB_SHAPE*  rect = new LIB_SHAPE( libSymbolIt->second, SHAPE_T::RECTANGLE );
         libSymbolIt->second->AddDrawItem( rect );
 
         rect->SetUnit( elem.OwnerPartID );

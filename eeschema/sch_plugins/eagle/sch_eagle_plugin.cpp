@@ -1464,7 +1464,7 @@ SCH_SHAPE* SCH_EAGLE_PLUGIN::loadCircle( wxXmlNode* aCircleNode )
 
 SCH_SHAPE* SCH_EAGLE_PLUGIN::loadRectangle( wxXmlNode* aRectNode )
 {
-    std::unique_ptr<SCH_SHAPE> rectangle = std::make_unique<SCH_SHAPE>( SHAPE_T::RECT );
+    std::unique_ptr<SCH_SHAPE> rectangle = std::make_unique<SCH_SHAPE>( SHAPE_T::RECTANGLE );
     ERECT      rect( aRectNode );
 
     rectangle->SetLayer( kiCadLayer( rect.layer ) );
@@ -2163,7 +2163,7 @@ LIB_SHAPE* SCH_EAGLE_PLUGIN::loadSymbolRectangle( std::unique_ptr<LIB_SYMBOL>& a
                                                   wxXmlNode* aRectNode, int aGateNumber )
 {
     ERECT      rect( aRectNode );
-    LIB_SHAPE* rectangle = new LIB_SHAPE( aSymbol.get(), SHAPE_T::RECT );
+    LIB_SHAPE* rectangle = new LIB_SHAPE( aSymbol.get(), SHAPE_T::RECTANGLE );
 
     rectangle->SetPosition( VECTOR2I( rect.x1.ToSchUnits(), rect.y1.ToSchUnits() ) );
     rectangle->SetEnd( VECTOR2I( rect.x2.ToSchUnits(), rect.y2.ToSchUnits() ) );

@@ -1194,7 +1194,7 @@ void SCH_SEXPR_PLUGIN::saveShape( SCH_SHAPE* aShape, int aNestLevel )
                       aShape->GetFillColor(), aShape->m_Uuid );
         break;
 
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
         formatRect( m_out, aNestLevel, aShape, false, aShape->GetStroke(), aShape->GetFillMode(),
                     aShape->GetFillColor(), aShape->m_Uuid );
         break;

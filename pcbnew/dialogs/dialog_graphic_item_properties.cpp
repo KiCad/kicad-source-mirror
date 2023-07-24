@@ -227,7 +227,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
         m_filledCtrl->Show( true );
         break;
 
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
         SetTitle( _( "Rectangle Properties" ) );
 
         m_filledCtrl->Show( true );
@@ -444,7 +444,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate()
 
         break;
 
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
         // Check for null rect.
         if( m_startX.GetValue() == m_endX.GetValue() && m_startY.GetValue() == m_endY.GetValue() )
             errors.Add( _( "Rectangle cannot be empty." ) );

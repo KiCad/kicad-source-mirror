@@ -41,12 +41,12 @@ using KIGFX::COLOR4D;
 enum class SHAPE_T : int
 {
     SEGMENT = 0,
-    RECT,
+    RECTANGLE,      /// use RECTANGLE instead of RECT to avoid collision in a Windows header
     ARC,
     CIRCLE,
     POLY,
     BEZIER,
-    LAST          ///< marker for list end
+    LAST            ///< marker for list end
 };
 
 

@@ -2168,7 +2168,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         const GRAPHIC_RECTANGLE *lsrc =
                                 static_cast<const GRAPHIC_RECTANGLE*>( seg.get() );
 
-                        PCB_SHAPE* rect = new PCB_SHAPE( fp, SHAPE_T::RECT );
+                        PCB_SHAPE* rect = new PCB_SHAPE( fp, SHAPE_T::RECTANGLE );
 
                         if( src->mirror )
                         {
@@ -2842,7 +2842,7 @@ bool FABMASTER::loadOutline( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
             const GRAPHIC_RECTANGLE *src =
                     static_cast<const GRAPHIC_RECTANGLE*>( seg.get() );
 
-            PCB_SHAPE* rect = new PCB_SHAPE( aBoard, SHAPE_T::RECT );
+            PCB_SHAPE* rect = new PCB_SHAPE( aBoard, SHAPE_T::RECTANGLE );
             rect->SetLayer( layer );
             rect->SetStart( VECTOR2I( src->start_x, src->start_y ) );
             rect->SetEnd( VECTOR2I( src->end_x, src->end_y ) );
@@ -2968,7 +2968,7 @@ bool FABMASTER::loadGraphics( BOARD* aBoard )
                 const GRAPHIC_RECTANGLE *src =
                         static_cast<const GRAPHIC_RECTANGLE*>( seg.get() );
 
-                PCB_SHAPE* rect = new PCB_SHAPE( aBoard, SHAPE_T::RECT );
+                PCB_SHAPE* rect = new PCB_SHAPE( aBoard, SHAPE_T::RECTANGLE );
                 rect->SetLayer( layer );
                 rect->SetStart( VECTOR2I( src->start_x, src->start_y ) );
                 rect->SetEnd( VECTOR2I( src->end_x, src->end_y ) );

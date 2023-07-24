@@ -44,7 +44,7 @@ using KIGFX::SCH_RENDER_SETTINGS;
 
 LIB_TEXTBOX::LIB_TEXTBOX( LIB_SYMBOL* aParent, int aLineWidth, FILL_T aFillType,
                           const wxString& text ) :
-        LIB_SHAPE( aParent, SHAPE_T::RECT, aLineWidth, aFillType, LIB_TEXTBOX_T ),
+        LIB_SHAPE( aParent, SHAPE_T::RECTANGLE, aLineWidth, aFillType, LIB_TEXTBOX_T ),
         EDA_TEXT( schIUScale, text )
 {
     SetTextSize( VECTOR2I( schIUScale.MilsToIU( DEFAULT_TEXT_SIZE ),

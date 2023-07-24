@@ -3416,7 +3416,7 @@ void ALTIUM_PCB::ConvertFills6ToFootprintItem( FOOTPRINT* aFootprint, const AFIL
         || aElem.layer == ALTIUM_LAYER::KEEP_OUT_LAYER ) // TODO: what about plane layers?
     {
         // This is not the actual board item. We can use it to create the polygon for the region
-        PCB_SHAPE shape( nullptr, SHAPE_T::RECT );
+        PCB_SHAPE shape( nullptr, SHAPE_T::RECTANGLE );
         shape.SetStart( aElem.pos1 );
         shape.SetEnd( aElem.pos2 );
         shape.SetStroke( STROKE_PARAMS( 0, PLOT_DASH_TYPE::SOLID ) );
@@ -3491,7 +3491,7 @@ void ALTIUM_PCB::ConvertFills6ToBoardItemWithNet( const AFILL6& aElem )
 
 void ALTIUM_PCB::ConvertFills6ToBoardItemOnLayer( const AFILL6& aElem, PCB_LAYER_ID aLayer )
 {
-    PCB_SHAPE* fill = new PCB_SHAPE( m_board, SHAPE_T::RECT );
+    PCB_SHAPE* fill = new PCB_SHAPE( m_board, SHAPE_T::RECTANGLE );
 
     fill->SetFilled( true );
     fill->SetLayer( aLayer );
@@ -3514,7 +3514,7 @@ void ALTIUM_PCB::ConvertFills6ToBoardItemOnLayer( const AFILL6& aElem, PCB_LAYER
 void ALTIUM_PCB::ConvertFills6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, const AFILL6& aElem,
                                                       PCB_LAYER_ID aLayer )
 {
-    PCB_SHAPE* fill = new PCB_SHAPE( aFootprint, SHAPE_T::RECT );
+    PCB_SHAPE* fill = new PCB_SHAPE( aFootprint, SHAPE_T::RECTANGLE );
 
     fill->SetFilled( true );
     fill->SetLayer( aLayer );

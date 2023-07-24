@@ -70,7 +70,7 @@ bool PCB_SHAPE::IsType( const std::vector<KICAD_T>& aScanTypes ) const
         else if( scanType == PCB_SHAPE_LOCATE_CIRCLE_T )
             sametype = m_shape == SHAPE_T::CIRCLE;
         else if( scanType == PCB_SHAPE_LOCATE_RECT_T )
-            sametype = m_shape == SHAPE_T::RECT;
+            sametype = m_shape == SHAPE_T::RECTANGLE;
         else if( scanType == PCB_SHAPE_LOCATE_SEGMENT_T )
             sametype = m_shape == SHAPE_T::SEGMENT;
         else if( scanType == PCB_SHAPE_LOCATE_POLY_T )
@@ -105,7 +105,7 @@ const VECTOR2I PCB_SHAPE::GetFocusPosition() const
         else
             return GetCenter();
 
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
         if( !IsFilled() )
             return GetStart();
         else
@@ -138,7 +138,7 @@ std::vector<VECTOR2I> PCB_SHAPE::GetCorners() const
 {
     std::vector<VECTOR2I> pts;
 
-    if( GetShape() == SHAPE_T::RECT )
+    if( GetShape() == SHAPE_T::RECTANGLE )
     {
         pts = GetRectCorners();
     }
@@ -176,7 +176,7 @@ void PCB_SHAPE::Scale( double aScale )
 
 void PCB_SHAPE::NormalizeRect()
 {
-    if( m_shape == SHAPE_T::RECT )
+    if( m_shape == SHAPE_T::RECTANGLE )
     {
         VECTOR2I start = GetStart();
         VECTOR2I end = GetEnd();
@@ -211,7 +211,7 @@ void PCB_SHAPE::NormalizeRect()
                 && horizontal( outline.Segment( 2 ) )
                 && vertical( outline.Segment( 3 ) ) )
             {
-                m_shape = SHAPE_T::RECT;
+                m_shape = SHAPE_T::RECTANGLE;
                 m_start.x = std::min( outline.Segment( 0 ).A.x, outline.Segment( 0 ).B.x );
                 m_start.y = std::min( outline.Segment( 1 ).A.y, outline.Segment( 1 ).B.y );
                 m_end.x = std::max( outline.Segment( 0 ).A.x, outline.Segment( 0 ).B.x );
@@ -222,7 +222,7 @@ void PCB_SHAPE::NormalizeRect()
                   && vertical( outline.Segment( 2 ) )
                   && horizontal( outline.Segment( 3 ) ) )
             {
-                m_shape = SHAPE_T::RECT;
+                m_shape = SHAPE_T::RECTANGLE;
                 m_start.x = std::min( outline.Segment( 1 ).A.x, outline.Segment( 1 ).B.x );
                 m_start.y = std::min( outline.Segment( 0 ).A.y, outline.Segment( 0 ).B.y );
                 m_end.x = std::max( outline.Segment( 1 ).A.x, outline.Segment( 1 ).B.x );
@@ -256,7 +256,7 @@ void PCB_SHAPE::Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis )
     {
     case SHAPE_T::ARC:
     case SHAPE_T::SEGMENT:
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
     case SHAPE_T::CIRCLE:
     case SHAPE_T::BEZIER:
         if( aMirrorAroundXAxis )

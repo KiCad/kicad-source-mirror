@@ -795,7 +795,7 @@ void DIALOG_PAD_PROPERTIES::displayPrimitivesList()
                                            primitive->GetPolyShape().Outline( 0 ).PointCount() );
             break;
 
-        case SHAPE_T::RECT:
+        case SHAPE_T::RECTANGLE:
             if( primitive->IsAnnotationProxy() )
                 bs_info[0] = _( "Number box" );
             else
@@ -2268,7 +2268,7 @@ void DIALOG_PAD_PROPERTIES::onAddPrimitive( wxCommandEvent& event )
         return;
 
     SHAPE_T listtype[] = { SHAPE_T::SEGMENT, SHAPE_T::ARC, SHAPE_T::BEZIER, SHAPE_T::CIRCLE,
-                           SHAPE_T::POLY, SHAPE_T::RECT };
+                           SHAPE_T::POLY, SHAPE_T::RECTANGLE };
 
     PCB_SHAPE* primitive = new PCB_SHAPE();
     primitive->SetShape( listtype[type] );

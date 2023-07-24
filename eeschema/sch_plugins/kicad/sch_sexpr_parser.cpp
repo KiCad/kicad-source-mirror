@@ -1593,7 +1593,7 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseRectangle()
     T token;
     STROKE_PARAMS stroke( schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     FILL_PARAMS fill;
-    std::unique_ptr<LIB_SHAPE> rectangle = std::make_unique<LIB_SHAPE>( nullptr, SHAPE_T::RECT );
+    std::unique_ptr<LIB_SHAPE> rectangle = std::make_unique<LIB_SHAPE>( nullptr, SHAPE_T::RECTANGLE );
 
     rectangle->SetUnit( m_unit );
     rectangle->SetConvert( m_convert );
@@ -3655,7 +3655,7 @@ SCH_SHAPE* SCH_SEXPR_PARSER::parseSchRectangle()
     T             token;
     STROKE_PARAMS stroke( schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ), PLOT_DASH_TYPE::DEFAULT );
     FILL_PARAMS   fill;
-    std::unique_ptr<SCH_SHAPE> rectangle = std::make_unique<SCH_SHAPE>( SHAPE_T::RECT );
+    std::unique_ptr<SCH_SHAPE> rectangle = std::make_unique<SCH_SHAPE>( SHAPE_T::RECTANGLE );
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {

@@ -39,7 +39,7 @@
 
 
 PCB_TEXTBOX::PCB_TEXTBOX( BOARD_ITEM* parent ) :
-    PCB_SHAPE( parent, PCB_TEXTBOX_T, SHAPE_T::RECT ),
+    PCB_SHAPE( parent, PCB_TEXTBOX_T, SHAPE_T::RECTANGLE ),
     EDA_TEXT( pcbIUScale )
 {
     SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
@@ -330,13 +330,13 @@ void PCB_TEXTBOX::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
     PCB_SHAPE::Rotate( aRotCentre, aAngle );
     EDA_TEXT::SetTextAngle( ( GetTextAngle() + aAngle ).Normalized() );
 
-    if( GetTextAngle().IsCardinal() && GetShape() != SHAPE_T::RECT )
+    if( GetTextAngle().IsCardinal() && GetShape() != SHAPE_T::RECTANGLE )
     {
         std::vector<VECTOR2I> corners = GetCorners();
         VECTOR2I              diag = corners[2] - corners[0];
         EDA_ANGLE             angle = GetTextAngle();
 
-        SetShape( SHAPE_T::RECT );
+        SetShape( SHAPE_T::RECTANGLE );
         SetStart( corners[0] );
 
         angle.Normalize();
@@ -503,7 +503,7 @@ void PCB_TEXTBOX::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID
 
     int width = GetWidth() + ( 2 * aClearance );
 
-    if( GetShape() == SHAPE_T::RECT )
+    if( GetShape() == SHAPE_T::RECTANGLE )
     {
         std::vector<VECTOR2I> pts = GetRectCorners();
 

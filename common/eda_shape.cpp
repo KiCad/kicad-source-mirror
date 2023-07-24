@@ -62,7 +62,7 @@ wxString EDA_SHAPE::ShowShape() const
     switch( m_shape )
     {
     case SHAPE_T::SEGMENT: return _( "Line" );
-    case SHAPE_T::RECT:    return _( "Rect" );
+    case SHAPE_T::RECTANGLE:    return _( "Rect" );
     case SHAPE_T::ARC:     return _( "Arc" );
     case SHAPE_T::CIRCLE:  return _( "Circle" );
     case SHAPE_T::BEZIER:  return _( "Bezier Curve" );
@@ -76,14 +76,14 @@ wxString EDA_SHAPE::SHAPE_T_asString() const
 {
     switch( m_shape )
     {
-    case SHAPE_T::SEGMENT: return wxS( "S_SEGMENT" );
-    case SHAPE_T::RECT:    return wxS( "S_RECT" );
-    case SHAPE_T::ARC:     return wxS( "S_ARC" );
-    case SHAPE_T::CIRCLE:  return wxS( "S_CIRCLE" );
-    case SHAPE_T::POLY:    return wxS( "S_POLYGON" );
-    case SHAPE_T::BEZIER:  return wxS( "S_CURVE" );
-    case SHAPE_T::LAST:    return wxS( "!S_LAST!" );  // Synthetic value, but if we come across it then
-                                               // we're going to want to know.
+    case SHAPE_T::SEGMENT:   return wxS( "S_SEGMENT" );
+    case SHAPE_T::RECTANGLE: return wxS( "S_RECT" );
+    case SHAPE_T::ARC:       return wxS( "S_ARC" );
+    case SHAPE_T::CIRCLE:    return wxS( "S_CIRCLE" );
+    case SHAPE_T::POLY:      return wxS( "S_POLYGON" );
+    case SHAPE_T::BEZIER:    return wxS( "S_CURVE" );
+    // Synthetic value, but if we come across it then we're going to want to know.
+    case SHAPE_T::LAST:      return wxS( "!S_LAST!" );
     }
 
     return wxEmptyString;  // Just to quiet GCC.
@@ -143,7 +143,7 @@ bool EDA_SHAPE::IsClosed() const
     switch( m_shape )
     {
     case SHAPE_T::CIRCLE:
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
         return true;
 
     case SHAPE_T::ARC:
@@ -176,7 +176,7 @@ void EDA_SHAPE::move( const VECTOR2I& aMoveVector )
     {
     case SHAPE_T::ARC:
     case SHAPE_T::SEGMENT:
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
     case SHAPE_T::CIRCLE:
         m_start += aMoveVector;
         m_end += aMoveVector;
@@ -217,7 +217,7 @@ void EDA_SHAPE::scale( double aScale )
     {
     case SHAPE_T::ARC:
     case SHAPE_T::SEGMENT:
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
         scalePt( m_start );
         scalePt( m_end );
         scalePt( m_arcCenter );
@@ -276,7 +276,7 @@ void EDA_SHAPE::rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
         RotatePoint( m_arcCenter, aRotCentre, aAngle );
         break;
 
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
         if( aAngle.IsCardinal() )
         {
             RotatePoint( m_start, aRotCentre, aAngle );
@@ -322,7 +322,7 @@ void EDA_SHAPE::flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
     switch ( m_shape )
     {
     case SHAPE_T::SEGMENT:
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
         if( aFlipLeftRight )
         {
             m_start.x = aCentre.x - ( m_start.x - aCentre.x );
@@ -456,7 +456,7 @@ VECTOR2I EDA_SHAPE::getCenter() const
         return ( m_start + m_end ) / 2;
 
     case SHAPE_T::POLY:
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
     case SHAPE_T::BEZIER:
         return getBoundingBox().Centre();
 
@@ -616,7 +616,7 @@ wxString EDA_SHAPE::GetFriendlyName() const
     case SHAPE_T::ARC:      return _( "Arc" );
     case SHAPE_T::BEZIER:   return _( "Curve" );
     case SHAPE_T::POLY:     return _( "Polygon" );
-    case SHAPE_T::RECT:     return IsAnnotationProxy() ? _( "Pad Number Box" ) : _( "Rectangle" );
+    case SHAPE_T::RECTANGLE:     return IsAnnotationProxy() ? _( "Pad Number Box" ) : _( "Rectangle" );
     case SHAPE_T::SEGMENT:  return _( "Segment" );
     default:                return _( "Unrecognized" );
     }
@@ -653,7 +653,7 @@ void EDA_SHAPE::ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
         aList.emplace_back( _( "Points" ), msg );
         break;
 
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
         aList.emplace_back( _( "Width" ),
                             aFrame->MessageTextFromValue( std::abs( GetEnd().x - GetStart().x ) ) );
 
@@ -687,7 +687,7 @@ const BOX2I EDA_SHAPE::getBoundingBox() const
 
     switch( m_shape )
     {
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
         for( VECTOR2I& pt : GetRectCorners() )
             bbox.Merge( pt );
 
@@ -815,7 +815,7 @@ bool EDA_SHAPE::hitTest( const VECTOR2I& aPosition, int aAccuracy ) const
     case SHAPE_T::SEGMENT:
         return TestSegmentHit( aPosition, GetStart(), GetEnd(), maxdist );
 
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
         if( IsAnnotationProxy() || IsFilled() )         // Filled rect hit-test
         {
             SHAPE_POLY_SET poly;
@@ -898,7 +898,7 @@ bool EDA_SHAPE::hitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
             }
         }
 
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
         if( aContained )
         {
             return arect.Contains( bbox );
@@ -1107,7 +1107,7 @@ std::vector<SHAPE*> EDA_SHAPE::makeEffectiveShapes( bool aEdgeOnly, bool aLineCh
         effectiveShapes.emplace_back( new SHAPE_SEGMENT( m_start, m_end, width ) );
         break;
 
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
     {
         std::vector<VECTOR2I> pts = GetRectCorners();
 
@@ -1229,7 +1229,7 @@ void EDA_SHAPE::beginEdit( const VECTOR2I& aPosition )
     {
     case SHAPE_T::SEGMENT:
     case SHAPE_T::CIRCLE:
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
         SetStart( aPosition );
         SetEnd( aPosition );
         break;
@@ -1261,7 +1261,7 @@ bool EDA_SHAPE::continueEdit( const VECTOR2I& aPosition )
     case SHAPE_T::ARC:
     case SHAPE_T::SEGMENT:
     case SHAPE_T::CIRCLE:
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
         return false;
 
     case SHAPE_T::POLY:
@@ -1289,7 +1289,7 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
     {
     case SHAPE_T::SEGMENT:
     case SHAPE_T::CIRCLE:
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
         SetEnd( aPosition );
         break;
 
@@ -1418,7 +1418,7 @@ void EDA_SHAPE::endEdit( bool aClosed )
     case SHAPE_T::ARC:
     case SHAPE_T::SEGMENT:
     case SHAPE_T::CIRCLE:
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
         break;
 
     case SHAPE_T::POLY:
@@ -1528,7 +1528,7 @@ void EDA_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance
         break;
     }
 
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
     {
         std::vector<VECTOR2I> pts = GetRectCorners();
 
@@ -1624,12 +1624,12 @@ static struct EDA_SHAPE_DESC
     EDA_SHAPE_DESC()
     {
         ENUM_MAP<SHAPE_T>::Instance()
-                    .Map( SHAPE_T::SEGMENT, _HKI( "Segment" ) )
-                    .Map( SHAPE_T::RECT,    _HKI( "Rectangle" ) )
-                    .Map( SHAPE_T::ARC,     _HKI( "Arc" ) )
-                    .Map( SHAPE_T::CIRCLE,  _HKI( "Circle" ) )
-                    .Map( SHAPE_T::POLY,    _HKI( "Polygon" ) )
-                    .Map( SHAPE_T::BEZIER,  _HKI( "Bezier" ) );
+                    .Map( SHAPE_T::SEGMENT,   _HKI( "Segment" ) )
+                    .Map( SHAPE_T::RECTANGLE, _HKI( "Rectangle" ) )
+                    .Map( SHAPE_T::ARC,       _HKI( "Arc" ) )
+                    .Map( SHAPE_T::CIRCLE,    _HKI( "Circle" ) )
+                    .Map( SHAPE_T::POLY,      _HKI( "Polygon" ) )
+                    .Map( SHAPE_T::BEZIER,    _HKI( "Bezier" ) );
 
         auto& plotDashTypeEnum = ENUM_MAP<PLOT_DASH_TYPE>::Instance();
 
@@ -1709,7 +1709,7 @@ static struct EDA_SHAPE_DESC
                           switch( itemShape )
                           {
                           case SHAPE_T::POLY:
-                          case SHAPE_T::RECT:
+                          case SHAPE_T::RECTANGLE:
                           case SHAPE_T::CIRCLE:
                               return true;
 

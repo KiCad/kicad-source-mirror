@@ -102,7 +102,7 @@ public:
                 points->AddPoint( mapCoords( shape->GetEnd() ) );
                 break;
 
-            case SHAPE_T::RECT:
+            case SHAPE_T::RECTANGLE:
             {
                 shape->Normalize();
 
@@ -186,7 +186,7 @@ public:
                 points->AddPoint( shape->GetEnd() );
                 break;
 
-            case SHAPE_T::RECT:
+            case SHAPE_T::RECTANGLE:
             {
                 shape->Normalize();
 
@@ -686,7 +686,7 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
 
             break;
 
-        case SHAPE_T::RECT:
+        case SHAPE_T::RECTANGLE:
         {
             EE_GRID_HELPER gridHelper( m_toolMgr );
             VECTOR2I       topLeft = m_editPoints->Point( RECT_TOPLEFT ).GetPosition();
@@ -840,7 +840,7 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
 
             break;
 
-        case SHAPE_T::RECT:
+        case SHAPE_T::RECTANGLE:
         {
             EE_GRID_HELPER gridHelper( m_toolMgr );
             VECTOR2I       topLeft = m_editPoints->Point( RECT_TOPLEFT ).GetPosition();
@@ -1142,7 +1142,7 @@ void EE_POINT_EDITOR::updatePoints()
             break;
         }
 
-        case SHAPE_T::RECT:
+        case SHAPE_T::RECTANGLE:
         {
             // point editor works only with rectangles having width and height > 0
             // Some symbols can have rectangles with width or height < 0
@@ -1230,7 +1230,7 @@ void EE_POINT_EDITOR::updatePoints()
             break;
         }
 
-        case SHAPE_T::RECT:
+        case SHAPE_T::RECTANGLE:
         {
             // point editor works only with rectangles having width and height > 0
             // Some symbols can have rectangles with width or height < 0

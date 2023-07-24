@@ -167,7 +167,7 @@ static LIB_SYMBOL* dummy()
     {
         symbol = new LIB_SYMBOL( wxEmptyString );
 
-        LIB_SHAPE* square = new LIB_SHAPE( symbol, SHAPE_T::RECT );
+        LIB_SHAPE* square = new LIB_SHAPE( symbol, SHAPE_T::RECTANGLE );
 
         square->MoveTo( VECTOR2I( schIUScale.MilsToIU( -200 ), schIUScale.MilsToIU( 200 ) ) );
         square->SetEnd( VECTOR2I( schIUScale.MilsToIU( 200 ), schIUScale.MilsToIU( -200 ) ) );
@@ -905,7 +905,7 @@ void SCH_PAINTER::draw( const LIB_SHAPE* aShape, int aLayer, bool aDimmed )
                     m_gal->DrawCircle( mapCoords( shape->GetPosition() ), shape->GetRadius() );
                     break;
 
-                case SHAPE_T::RECT:
+                case SHAPE_T::RECTANGLE:
                     m_gal->DrawRectangle( mapCoords( shape->GetPosition() ),
                                           mapCoords( shape->GetEnd() ) );
                     break;
@@ -1979,7 +1979,7 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer )
                     m_gal->DrawCircle( shape->GetPosition(), shape->GetRadius() );
                     break;
 
-                case SHAPE_T::RECT:
+                case SHAPE_T::RECTANGLE:
                     m_gal->DrawRectangle( shape->GetPosition(), shape->GetEnd() );
                     break;
 

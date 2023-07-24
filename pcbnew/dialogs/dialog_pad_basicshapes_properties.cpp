@@ -155,7 +155,7 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
         m_filledCtrl->Show( true );
         break;
 
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
         if( m_shape->IsAnnotationProxy() )
             SetTitle( _( "Number Box" ) );
         else
@@ -209,7 +209,7 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataFromWindow()
     switch( m_shape->GetShape() )
     {
     case SHAPE_T::SEGMENT:
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
         m_shape->SetStart( VECTOR2I( m_startX.GetIntValue(), m_startY.GetIntValue() ) );
         m_shape->SetEnd( VECTOR2I( m_endX.GetIntValue(), m_endY.GetIntValue() ) );
         break;

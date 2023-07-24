@@ -87,7 +87,7 @@ bool GRAPHICS_CLEANER::isNullShape( PCB_SHAPE* aShape )
     switch( aShape->GetShape() )
     {
     case SHAPE_T::SEGMENT:
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
     case SHAPE_T::ARC:
         return equivalent( aShape->GetStart(), aShape->GetEnd(), m_epsilon );
 
@@ -126,7 +126,7 @@ bool GRAPHICS_CLEANER::areEquivalent( PCB_SHAPE* aShape1, PCB_SHAPE* aShape2 )
     switch( aShape1->GetShape() )
     {
     case SHAPE_T::SEGMENT:
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
     case SHAPE_T::CIRCLE:
         return equivalent( aShape1->GetStart(), aShape2->GetStart(), m_epsilon )
                 && equivalent( aShape1->GetEnd(), aShape2->GetEnd(), m_epsilon );
@@ -321,7 +321,7 @@ void GRAPHICS_CLEANER::mergeRects()
                 {
                     PCB_SHAPE* rect = new PCB_SHAPE( m_parentFootprint );
 
-                    rect->SetShape( SHAPE_T::RECT );
+                    rect->SetShape( SHAPE_T::RECTANGLE );
                     rect->SetFilled( false );
                     rect->SetStart( top->start );
                     rect->SetEnd( bottom->end );

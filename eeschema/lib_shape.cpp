@@ -92,7 +92,7 @@ void LIB_SHAPE::MoveTo( const VECTOR2I& aPosition )
 
 void LIB_SHAPE::Normalize()
 {
-    if( GetShape() == SHAPE_T::RECT )
+    if( GetShape() == SHAPE_T::RECTANGLE )
     {
         VECTOR2I size = GetEnd() - GetPosition();
 
@@ -249,7 +249,7 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
         aPlotter->Circle( center, GetRadius() * 2, fill, penWidth );
         break;
 
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
         aPlotter->Rect( start, end, fill, penWidth );
         break;
 
@@ -373,7 +373,7 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
             GRFilledCircle( DC, pt1, GetRadius(), 0, fillColor, fillColor );
             break;
 
-        case SHAPE_T::RECT:
+        case SHAPE_T::RECTANGLE:
             GRFilledRect( DC, pt1, pt2, 0, fillColor, fillColor );
             break;
 
@@ -408,7 +408,7 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
                 GRCircle( DC, pt1, GetRadius(), penWidth, color );
                 break;
 
-            case SHAPE_T::RECT:
+            case SHAPE_T::RECTANGLE:
                 GRRect( DC, pt1, pt2, penWidth, color );
                 break;
 
@@ -478,7 +478,7 @@ wxString LIB_SHAPE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
         return wxString::Format( _( "Circle with radius %s" ),
                                  aUnitsProvider->MessageTextFromValue( GetRadius() ) );
 
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
         return wxString::Format( _( "Rectangle with width %s height %s" ),
                                  aUnitsProvider->MessageTextFromValue( std::abs( m_start.x - m_end.x ) ),
                                  aUnitsProvider->MessageTextFromValue( std::abs( m_start.y - m_end.y ) ) );
@@ -505,7 +505,7 @@ BITMAPS LIB_SHAPE::GetMenuImage() const
     case SHAPE_T::SEGMENT: return BITMAPS::add_line;
     case SHAPE_T::ARC:     return BITMAPS::add_arc;
     case SHAPE_T::CIRCLE:  return BITMAPS::add_circle;
-    case SHAPE_T::RECT:    return BITMAPS::add_rectangle;
+    case SHAPE_T::RECTANGLE:    return BITMAPS::add_rectangle;
     case SHAPE_T::POLY:    return BITMAPS::add_graphical_segments;
 
     default:

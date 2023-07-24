@@ -815,7 +815,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
 
             break;
 
-        case SHAPE_T::RECT:
+        case SHAPE_T::RECTANGLE:
         {
             std::vector<VECTOR2I> pts = aShape->GetRectCorners();
 

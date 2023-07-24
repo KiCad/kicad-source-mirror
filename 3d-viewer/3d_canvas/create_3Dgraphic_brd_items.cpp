@@ -646,7 +646,7 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
             break;
         }
 
-        case SHAPE_T::RECT:
+        case SHAPE_T::RECTANGLE:
             if( aShape->IsFilled() )
             {
                 SHAPE_POLY_SET polyList;

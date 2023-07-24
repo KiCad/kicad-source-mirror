@@ -258,7 +258,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
             if( !aAllowUseArcsInPolygons )
                 currContour.ClearArcs();
         }
-        else if( graphic->GetShape() == SHAPE_T::RECT )
+        else if( graphic->GetShape() == SHAPE_T::RECTANGLE )
         {
             std::vector<VECTOR2I> pts = graphic->GetRectCorners();
 
@@ -290,7 +290,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
             {
                 switch( graphic->GetShape() )
                 {
-                case SHAPE_T::RECT:
+                case SHAPE_T::RECTANGLE:
                 case SHAPE_T::CIRCLE:
                 {
                     // As a non-first item, closed shapes can't be anything but self-intersecting

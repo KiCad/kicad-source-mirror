@@ -748,7 +748,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
             break;
         }
 
-        case SHAPE_T::RECT:
+        case SHAPE_T::RECTANGLE:
         {
             outline = new SHAPE( image, T_outline );
 

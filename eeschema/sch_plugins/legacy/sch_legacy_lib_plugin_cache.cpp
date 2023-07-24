@@ -967,7 +967,7 @@ LIB_SHAPE* SCH_LEGACY_PLUGIN_CACHE::loadRect( std::unique_ptr<LIB_SYMBOL>& aSymb
 
     wxCHECK_MSG( strCompare( "S", line, &line ), nullptr, "Invalid rectangle definition" );
 
-    LIB_SHAPE* rectangle = new LIB_SHAPE( aSymbol.get(), SHAPE_T::RECT );
+    LIB_SHAPE* rectangle = new LIB_SHAPE( aSymbol.get(), SHAPE_T::RECTANGLE );
 
     VECTOR2I pos;
 
@@ -1497,7 +1497,7 @@ void SCH_LEGACY_PLUGIN_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& 
                 case SHAPE_T::BEZIER: saveBezier( &shape, aFormatter );        break;
                 case SHAPE_T::CIRCLE: saveCircle( &shape, aFormatter );        break;
                 case SHAPE_T::POLY:   savePolyLine( &shape, aFormatter );      break;
-                case SHAPE_T::RECT:   saveRectangle( &shape, aFormatter );     break;
+                case SHAPE_T::RECTANGLE:   saveRectangle( &shape, aFormatter );     break;
                 default:                                                       break;
                 }
             }
@@ -1708,7 +1708,7 @@ void SCH_LEGACY_PLUGIN_CACHE::savePolyLine( LIB_SHAPE* aPolyLine, OUTPUTFORMATTE
 
 void SCH_LEGACY_PLUGIN_CACHE::saveRectangle( LIB_SHAPE* aRectangle, OUTPUTFORMATTER& aFormatter )
 {
-    wxCHECK_RET( aRectangle && aRectangle->GetShape() == SHAPE_T::RECT, "Invalid RECT object." );
+    wxCHECK_RET( aRectangle && aRectangle->GetShape() == SHAPE_T::RECTANGLE, "Invalid RECT object." );
 
     aFormatter.Print( 0, "S %d %d %d %d %d %d %d %c\n",
                       schIUScale.IUToMils( aRectangle->GetPosition().x ),

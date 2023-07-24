@@ -136,7 +136,7 @@ void PAD::AddPrimitiveCircle( const VECTOR2I& aCenter, int aRadius, int aThickne
 void PAD::AddPrimitiveRect( const VECTOR2I& aStart, const VECTOR2I& aEnd, int aThickness,
                             bool aFilled)
 {
-    PCB_SHAPE* item = new PCB_SHAPE( nullptr, SHAPE_T::RECT );
+    PCB_SHAPE* item = new PCB_SHAPE( nullptr, SHAPE_T::RECTANGLE );
     item->SetFilled( aFilled );
     item->SetStart( aStart );
     item->SetEnd( aEnd );
@@ -149,7 +149,7 @@ void PAD::AddPrimitiveRect( const VECTOR2I& aStart, const VECTOR2I& aEnd, int aT
 
 void PAD::AddPrimitiveAnnotationBox( const VECTOR2I& aStart, const VECTOR2I& aEnd )
 {
-    PCB_SHAPE* item = new PCB_SHAPE( nullptr, SHAPE_T::RECT );
+    PCB_SHAPE* item = new PCB_SHAPE( nullptr, SHAPE_T::RECTANGLE );
     item->SetIsAnnotationProxy();
     item->SetFilled( false );
     item->SetStart( aStart );

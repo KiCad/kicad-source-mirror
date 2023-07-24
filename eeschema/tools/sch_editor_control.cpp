@@ -1929,7 +1929,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
                         switch( shape->GetShape() )
                         {
-                        case SHAPE_T::RECT:
+                        case SHAPE_T::RECTANGLE:
                             for( const VECTOR2I& pt : shape->GetRectCorners() )
                                 processPt( pt );
 

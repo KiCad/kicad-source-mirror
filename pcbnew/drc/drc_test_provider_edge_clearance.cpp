@@ -184,7 +184,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                 if( item->IsOnLayer( Edge_Cuts ) )
                     stroke.SetWidth( 0 );
 
-                if( shape->GetShape() == SHAPE_T::RECT && !shape->IsFilled() )
+                if( shape->GetShape() == SHAPE_T::RECTANGLE && !shape->IsFilled() )
                 {
                     // A single rectangle for the board would make the RTree useless, so convert
                     // to 4 edges

@@ -832,7 +832,7 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
                         case SHAPE_T::SEGMENT:
                         case SHAPE_T::ARC:
                         case SHAPE_T::POLY:
-                        case SHAPE_T::RECT:
+                        case SHAPE_T::RECTANGLE:
                             break;
 
                         default:
@@ -872,7 +872,7 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
                     {
                         set = graphic->GetPolyShape();
                     }
-                    else if( graphic->GetShape() == SHAPE_T::RECT )
+                    else if( graphic->GetShape() == SHAPE_T::RECTANGLE )
                     {
                         SHAPE_LINE_CHAIN outline;
                         VECTOR2I start( graphic->GetStart() );

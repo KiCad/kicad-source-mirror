@@ -74,7 +74,7 @@ void SCH_SHAPE::Move( const VECTOR2I& aOffset )
 
 void SCH_SHAPE::Normalize()
 {
-    if( GetShape() == SHAPE_T::RECT )
+    if( GetShape() == SHAPE_T::RECTANGLE )
     {
         VECTOR2I size = GetEnd() - GetPosition();
 
@@ -153,7 +153,7 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground ) const
                 aPlotter->Circle( getCenter(), GetRadius() * 2, m_fill, 0 );
                 break;
 
-            case SHAPE_T::RECT:
+            case SHAPE_T::RECTANGLE:
                 aPlotter->Rect( GetStart(), GetEnd(), m_fill, 0 );
                 break;
 
@@ -196,7 +196,7 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground ) const
             aPlotter->Circle( getCenter(), GetRadius() * 2, FILL_T::NO_FILL, pen_size );
             break;
 
-        case SHAPE_T::RECT:
+        case SHAPE_T::RECTANGLE:
         {
             std::vector<VECTOR2I> pts = GetRectCorners();
 
@@ -287,7 +287,7 @@ void SCH_SHAPE::PrintBackground( const RENDER_SETTINGS* aSettings, const VECTOR2
             GRFilledCircle( DC, GetStart(), GetRadius(), 0, color, color );
             break;
 
-        case SHAPE_T::RECT:
+        case SHAPE_T::RECTANGLE:
             GRFilledRect( DC, GetStart(), GetEnd(), 0, color, color );
             break;
 
@@ -364,7 +364,7 @@ void SCH_SHAPE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
             GRFilledCircle( DC, GetStart(), GetRadius(), 0, fillColor, fillColor );
             break;
 
-        case SHAPE_T::RECT:
+        case SHAPE_T::RECTANGLE:
             GRFilledRect( DC, GetStart(), GetEnd(), 0, fillColor, fillColor );
             break;
 
@@ -399,7 +399,7 @@ void SCH_SHAPE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
                 GRCircle( DC, GetStart(), GetRadius(), penWidth, color );
                 break;
 
-            case SHAPE_T::RECT:
+            case SHAPE_T::RECTANGLE:
                 GRRect( DC, GetStart(), GetEnd(), penWidth, color );
                 break;
 
@@ -457,7 +457,7 @@ wxString SCH_SHAPE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
         return wxString::Format( _( "Circle, radius %s" ),
                                  aUnitsProvider->MessageTextFromValue( GetRadius() ) );
 
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
         return wxString::Format( _( "Rectangle, width %s height %s" ),
                                  aUnitsProvider->MessageTextFromValue( std::abs( m_start.x - m_end.x ) ),
                                  aUnitsProvider->MessageTextFromValue( std::abs( m_start.y - m_end.y ) ) );
@@ -484,7 +484,7 @@ BITMAPS SCH_SHAPE::GetMenuImage() const
     case SHAPE_T::SEGMENT: return BITMAPS::add_line;
     case SHAPE_T::ARC:     return BITMAPS::add_arc;
     case SHAPE_T::CIRCLE:  return BITMAPS::add_circle;
-    case SHAPE_T::RECT:    return BITMAPS::add_rectangle;
+    case SHAPE_T::RECTANGLE:    return BITMAPS::add_rectangle;
     case SHAPE_T::POLY:    return BITMAPS::add_graphical_segments;
 
     default:

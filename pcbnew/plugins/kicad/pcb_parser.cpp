@@ -2655,7 +2655,7 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
     case T_gr_bbox:
     case T_gr_rect:
     case T_fp_rect:
-        shape->SetShape( SHAPE_T::RECT );
+        shape->SetShape( SHAPE_T::RECTANGLE );
         token = NextTok();
 
         if( token == T_locked )
@@ -2861,7 +2861,7 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
         // Legacy versions didn't have a filled flag but allowed some shapes to indicate they
         // should be filled by specifying a 0 stroke-width.
         if( stroke.GetWidth() == 0
-            && ( shape->GetShape() == SHAPE_T::RECT || shape->GetShape() == SHAPE_T::CIRCLE ) )
+            && ( shape->GetShape() == SHAPE_T::RECTANGLE || shape->GetShape() == SHAPE_T::CIRCLE ) )
         {
             shape->SetFilled( true );
         }

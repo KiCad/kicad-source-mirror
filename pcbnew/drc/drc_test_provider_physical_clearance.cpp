@@ -343,7 +343,7 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
                                 break;
                             }
 
-                            case SHAPE_T::RECT:
+                            case SHAPE_T::RECTANGLE:
                             {
                                 SHAPE_LINE_CHAIN asPoly;
                                 std::vector<VECTOR2I> pts = shape->GetRectCorners();

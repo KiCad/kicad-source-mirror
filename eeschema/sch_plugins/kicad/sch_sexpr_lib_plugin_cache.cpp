@@ -343,7 +343,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveSymbolDrawItem( LIB_ITEM* aItem, OUTPUTFORMATTE
             formatCircle( &aFormatter, aNestLevel, shape, isPrivate, stroke, fillMode, fillColor );
             break;
 
-        case SHAPE_T::RECT:
+        case SHAPE_T::RECTANGLE:
             formatRect( &aFormatter, aNestLevel, shape, isPrivate, stroke, fillMode, fillColor );
             break;
 

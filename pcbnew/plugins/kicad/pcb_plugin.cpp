@@ -915,7 +915,7 @@ void PCB_PLUGIN::format( const PCB_SHAPE* aShape, int aNestLevel ) const
                       formatInternalUnits( aShape->GetEnd(), parentFP ).c_str() );
         break;
 
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
         m_out->Print( aNestLevel, "(%s_rect%s (start %s) (end %s)\n",
                       prefix.c_str(),
                       locked.c_str(),
@@ -978,7 +978,7 @@ void PCB_PLUGIN::format( const PCB_SHAPE* aShape, int aNestLevel ) const
 
     // The filled flag represents if a solid fill is present on circles, rectangles and polygons
     if( ( aShape->GetShape() == SHAPE_T::POLY )
-        || ( aShape->GetShape() == SHAPE_T::RECT )
+        || ( aShape->GetShape() == SHAPE_T::RECTANGLE )
         || ( aShape->GetShape() == SHAPE_T::CIRCLE ) )
     {
         m_out->Print( 0, aShape->IsFilled() ? " (fill solid)" : " (fill none)" );
@@ -1675,7 +1675,7 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
                               formatInternalUnits( primitive->GetEnd() ).c_str() );
                 break;
 
-            case SHAPE_T::RECT:
+            case SHAPE_T::RECTANGLE:
                 if( primitive->IsAnnotationProxy() )
                 {
                     m_out->Print( nested_level, "(gr_bbox (start %s) (end %s)",
@@ -1734,7 +1734,7 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
             // The filled flag represents if a solid fill is present on circles,
             // rectangles and polygons
             if( ( primitive->GetShape() == SHAPE_T::POLY )
-                || ( primitive->GetShape() == SHAPE_T::RECT )
+                || ( primitive->GetShape() == SHAPE_T::RECTANGLE )
                 || ( primitive->GetShape() == SHAPE_T::CIRCLE ) )
             {
                 m_out->Print( 0, primitive->IsFilled() ? " (fill yes)" : " (fill none)" );
@@ -1831,7 +1831,7 @@ void PCB_PLUGIN::format( const PCB_TEXTBOX* aTextBox, int aNestLevel ) const
                   aTextBox->IsLocked() ? " locked" : "",
                   m_out->Quotew( aTextBox->GetText() ).c_str() );
 
-    if( aTextBox->GetShape() == SHAPE_T::RECT )
+    if( aTextBox->GetShape() == SHAPE_T::RECTANGLE )
     {
         m_out->Print( aNestLevel + 1, "(start %s) (end %s)\n",
                       formatInternalUnits( aTextBox->GetStart(), parentFP ).c_str(),

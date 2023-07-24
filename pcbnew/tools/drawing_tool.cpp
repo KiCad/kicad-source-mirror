@@ -380,7 +380,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
     std::optional<VECTOR2D> startingPoint;
 
     rect = isTextBox ? new PCB_TEXTBOX( parent ) : new PCB_SHAPE( parent );
-    rect->SetShape( SHAPE_T::RECT );
+    rect->SetShape( SHAPE_T::RECTANGLE );
     rect->SetFilled( false );
     rect->SetFlags( IS_NEW );
 
@@ -415,7 +415,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
         }
 
         rect = isTextBox ? new PCB_TEXTBOX( parent ) : new PCB_SHAPE( parent );
-        rect->SetShape( SHAPE_T::RECT );
+        rect->SetShape( SHAPE_T::RECTANGLE );
         rect->SetFilled( false );
         rect->SetFlags( IS_NEW );
         startingPoint = std::nullopt;
@@ -1762,7 +1762,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
     SHAPE_T shape = ( *aGraphic )->GetShape();
 
     // Only three shapes are currently supported
-    wxASSERT( shape == SHAPE_T::SEGMENT || shape == SHAPE_T::CIRCLE || shape == SHAPE_T::RECT );
+    wxASSERT( shape == SHAPE_T::SEGMENT || shape == SHAPE_T::CIRCLE || shape == SHAPE_T::RECTANGLE );
 
     const BOARD_DESIGN_SETTINGS& bds = m_frame->GetDesignSettings();
     EDA_UNITS                    userUnits = m_frame->GetUserUnits();
@@ -2027,7 +2027,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
                 const VECTOR2I lineVector( clampedCursorPos - VECTOR2I( twoPointMgr.GetOrigin() ) );
 
                 // get a restricted 45/H/V line from the last fixed point to the cursor
-                VECTOR2I newEnd = GetVectorSnapped45( lineVector, ( shape == SHAPE_T::RECT ) );
+                VECTOR2I newEnd = GetVectorSnapped45( lineVector, ( shape == SHAPE_T::RECTANGLE ) );
                 m_controls->ForceCursorPosition( true, VECTOR2I( twoPointMgr.GetEnd() ) );
                 twoPointMgr.SetEnd( twoPointMgr.GetOrigin() + newEnd );
                 twoPointMgr.SetAngleSnap( true );
