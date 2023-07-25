@@ -2036,7 +2036,20 @@ void ROUTER_TOOL::NeighboringSegmentFilter( const VECTOR2I& aPt, GENERAL_COLLECT
     int traces = aCollector.CountType( PCB_TRACE_T );
     int arcs = aCollector.CountType( PCB_ARC_T );
 
-    if( arcs > 0 || vias > 1 || traces > 2 || vias + traces < 1 )
+    // We eliminate arcs because they are not supported in the inline drag code.
+    if( arcs > 0 )
+        return;
+
+    // We need to have at least 1 via or track
+    if( vias + traces == 0 )
+        return;
+
+    // We cannot drag more than one via at a time
+    if( vias > 1 )
+        return;
+
+    // We cannot drag more than two track segments at a time
+    if( traces > 2 )
         return;
 
     // Fetch first PCB_TRACK (via or trace) as our reference
@@ -2044,6 +2057,10 @@ void ROUTER_TOOL::NeighboringSegmentFilter( const VECTOR2I& aPt, GENERAL_COLLECT
 
     for( int i = 0; !reference && i < aCollector.GetCount(); i++ )
         reference = dynamic_cast<PCB_TRACK*>( aCollector[i] );
+
+    // This should never happen, but just in case...
+    if( !reference )
+        return;
 
     int refNet = reference->GetNetCode();
 
