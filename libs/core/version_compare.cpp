@@ -25,13 +25,13 @@ const std::vector<int> parseVersionString( const std::string& versionString )
     std::vector<int> versionComponents;
     auto             it = versionString.begin();
     auto             end = versionString.end();
-
+    const char*      end_char = versionString.data() + versionString.size();
     while( it != end )
     {
         versionComponents.emplace_back( 0 );
 
         // On error, the last element will be 0
-        auto result = std::from_chars( &( *it ), &( *end ), versionComponents.back() );
+        auto result = std::from_chars( &( *it ), end_char, versionComponents.back() );
 
         it += std::distance( &( *it ), result.ptr ); // Update the iterator
         if( it != end && *it == '.' )
