@@ -996,10 +996,14 @@ void SIMULATOR_FRAME_UI::onSignalsGridCellChanged( wxGridEvent& aEvent )
     if( m_SuppressGridEvents > 0 )
         return;
 
+    SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
+
+    if( !plotTab )
+        return;
+
     int           row = aEvent.GetRow();
     int           col = aEvent.GetCol();
     wxString      text = m_signalsGrid->GetCellValue( row, col );
-    SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
     wxString      signalName = m_signalsGrid->GetCellValue( row, COL_SIGNAL_NAME );
     int           traceType = SPT_UNKNOWN;
     wxString      vectorName = vectorNameFromSignalName( plotTab, signalName, &traceType );
