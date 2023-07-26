@@ -497,3 +497,25 @@ void LIB_TEXT::CalcEdit( const VECTOR2I& aPosition )
 {
     SetTextPos( aPosition );
 }
+
+
+static struct LIB_TEXT_DESC
+{
+    LIB_TEXT_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( LIB_TEXT );
+        propMgr.AddTypeCast( new TYPE_CAST<LIB_TEXT, LIB_ITEM> );
+        propMgr.AddTypeCast( new TYPE_CAST<LIB_TEXT, EDA_TEXT> );
+        propMgr.InheritsAfter( TYPE_HASH( LIB_TEXT ), TYPE_HASH( LIB_ITEM ) );
+        propMgr.InheritsAfter( TYPE_HASH( LIB_TEXT ), TYPE_HASH( EDA_TEXT ) );
+
+        propMgr.Mask( TYPE_HASH( LIB_TEXT ), TYPE_HASH( EDA_TEXT ), _HKI( "Mirrored" ) );
+        propMgr.Mask( TYPE_HASH( LIB_TEXT ), TYPE_HASH( EDA_TEXT ), _HKI( "Visible" ) );
+        propMgr.Mask( TYPE_HASH( LIB_TEXT ), TYPE_HASH( EDA_TEXT ), _HKI( "Width" ) );
+        propMgr.Mask( TYPE_HASH( LIB_TEXT ), TYPE_HASH( EDA_TEXT ), _HKI( "Height" ) );
+
+        // Orientation is exposed differently in schematic; mask the base for now
+        propMgr.Mask( TYPE_HASH( LIB_TEXT ), TYPE_HASH( EDA_TEXT ), _HKI( "Orientation" ) );
+    }
+} _LIB_TEXT_DESC;

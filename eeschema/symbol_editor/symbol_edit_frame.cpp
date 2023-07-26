@@ -51,6 +51,7 @@
 #include <tool/common_tools.h>
 #include <tool/editor_conditions.h>
 #include <tool/picker_tool.h>
+#include <tool/properties_tool.h>
 #include <tool/selection.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
@@ -68,6 +69,7 @@
 #include <widgets/wx_infobar.h>
 #include <widgets/lib_tree.h>
 #include <widgets/wx_progress_reporters.h>
+#include <widgets/sch_properties_panel.h>
 #include <widgets/symbol_tree_pane.h>
 #include <widgets/wx_aui_utils.h>
 #include <wildcards_and_files_ext.h>
@@ -174,6 +176,9 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     UpdateSymbolMsgPanelInfo();
     RebuildSymbolUnitsList();
 
+    m_propertiesPanel = new SCH_PROPERTIES_PANEL( this, this );
+    m_propertiesPanel->SetSplitterProportion( m_settings->m_AuiPanels.properties_splitter_proportion );
+
     m_auimgr.SetManagedWindow( this );
 
     CreateInfoBar();
@@ -190,6 +195,9 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .Left().Layer( 3 )
                       .Caption( _( "Libraries" ) )
                       .MinSize( 250, -1 ).BestSize( 250, -1 ) );
+
+    m_auimgr.AddPane( m_propertiesPanel, defaultPropertiesPaneInfo() );
+
     m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" )
                       .Left().Layer( 2 ) );
 
@@ -336,6 +344,7 @@ void SYMBOL_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new SYMBOL_EDITOR_MOVE_TOOL );
     m_toolManager->RegisterTool( new SYMBOL_EDITOR_EDIT_TOOL );
     m_toolManager->RegisterTool( new SYMBOL_EDITOR_CONTROL );
+    m_toolManager->RegisterTool( new PROPERTIES_TOOL );
     m_toolManager->InitTools();
 
     // Run the selection tool, it is supposed to be always active
@@ -440,9 +449,16 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
                 return IsSymbolTreeShown();
             };
 
+    auto propertiesCond =
+            [this] ( const SELECTION& )
+            {
+                return m_auimgr.GetPane( PropertiesPaneName() ).IsShown();
+            };
+
     mgr->SetConditions( EE_ACTIONS::showElectricalTypes, CHECK( pinTypeCond ) );
     mgr->SetConditions( ACTIONS::toggleBoundingBoxes,    CHECK( cond.BoundingBoxes() ) );
     mgr->SetConditions( EE_ACTIONS::showSymbolTree,      CHECK( showCompTreeCond ) );
+    mgr->SetConditions( ACTIONS::showProperties,         CHECK( propertiesCond ) );
 
     auto demorganCond =
             [this]( const SELECTION& )

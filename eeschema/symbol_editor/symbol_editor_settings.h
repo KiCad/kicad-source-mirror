@@ -31,6 +31,13 @@ class SYMBOL_EDITOR_SETTINGS : public APP_SETTINGS_BASE
 {
 public:
 
+    struct AUI_PANELS
+    {
+        int  properties_panel_width;
+        float properties_splitter_proportion;
+        bool show_properties;
+    };
+
     struct DEFAULTS
     {
         int line_width;
@@ -51,6 +58,8 @@ public:
     virtual ~SYMBOL_EDITOR_SETTINGS() {}
 
     virtual bool MigrateFromLegacy( wxConfigBase* aLegacyConfig ) override;
+
+    AUI_PANELS m_AuiPanels;
 
     DEFAULTS m_Defaults;
 

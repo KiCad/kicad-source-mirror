@@ -540,3 +540,33 @@ void LIB_SHAPE::ViewGetLayers( int aLayers[], int& aCount ) const
     aLayers[1] = IsPrivate() ? LAYER_NOTES_BACKGROUND : LAYER_DEVICE_BACKGROUND;
     aLayers[2] = LAYER_SELECTION_SHADOWS;
 }
+
+
+static struct LIB_SHAPE_DESC
+{
+    LIB_SHAPE_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( LIB_SHAPE );
+        propMgr.AddTypeCast( new TYPE_CAST<LIB_SHAPE, LIB_ITEM> );
+        propMgr.AddTypeCast( new TYPE_CAST<LIB_SHAPE, EDA_SHAPE> );
+        propMgr.InheritsAfter( TYPE_HASH( LIB_SHAPE ), TYPE_HASH( LIB_ITEM ) );
+        propMgr.InheritsAfter( TYPE_HASH( LIB_SHAPE ), TYPE_HASH( EDA_SHAPE ) );
+
+        // Only polygons have meaningful Position properties.
+        // On other shapes, these are duplicates of the Start properties.
+        auto isPolygon =
+                []( INSPECTABLE* aItem ) -> bool
+        {
+            if( LIB_SHAPE* shape = dynamic_cast<LIB_SHAPE*>( aItem ) )
+                return shape->GetShape() == SHAPE_T::POLY;
+
+            return false;
+        };
+
+        propMgr.OverrideAvailability( TYPE_HASH( LIB_SHAPE ), TYPE_HASH( LIB_ITEM ),
+                                      _HKI( "Position X" ), isPolygon );
+        propMgr.OverrideAvailability( TYPE_HASH( LIB_SHAPE ), TYPE_HASH( LIB_ITEM ),
+                                      _HKI( "Position Y" ), isPolygon );
+    }
+} _LIB_SHAPE_DESC;

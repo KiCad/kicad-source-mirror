@@ -182,6 +182,8 @@ public:
 
     void OnToggleSymbolTree( wxCommandEvent& event );
 
+    void ToggleProperties() override;
+
     bool IsSymbolTreeShown() const;
     void FreezeLibraryTree();
     void ThawLibraryTree();

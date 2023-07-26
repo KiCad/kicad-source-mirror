@@ -586,3 +586,32 @@ bool LIB_FIELD::IsMandatory() const
 {
     return m_id >= 0 && m_id < MANDATORY_FIELDS;
 }
+
+
+static struct LIB_FIELD_DESC
+{
+    LIB_FIELD_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( LIB_FIELD );
+        propMgr.AddTypeCast( new TYPE_CAST<LIB_FIELD, LIB_ITEM> );
+        propMgr.AddTypeCast( new TYPE_CAST<LIB_FIELD, EDA_TEXT> );
+        propMgr.InheritsAfter( TYPE_HASH( LIB_FIELD ), TYPE_HASH( LIB_ITEM ) );
+        propMgr.InheritsAfter( TYPE_HASH( LIB_FIELD ), TYPE_HASH( EDA_TEXT ) );
+
+        propMgr.AddProperty( new PROPERTY<LIB_FIELD, bool>( _HKI( "Show Field Name" ),
+                &LIB_FIELD::SetNameShown, &LIB_FIELD::IsNameShown ) );
+
+        propMgr.AddProperty( new PROPERTY<LIB_FIELD, bool>( _HKI( "Allow Autoplacement" ),
+                &LIB_FIELD::SetCanAutoplace, &LIB_FIELD::CanAutoplace ) );
+
+        propMgr.Mask( TYPE_HASH( LIB_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Hyperlink" ) );
+        propMgr.Mask( TYPE_HASH( LIB_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Thickness" ) );
+        propMgr.Mask( TYPE_HASH( LIB_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Mirrored" ) );
+        propMgr.Mask( TYPE_HASH( LIB_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Visible" ) );
+        propMgr.Mask( TYPE_HASH( LIB_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Width" ) );
+        propMgr.Mask( TYPE_HASH( LIB_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Height" ) );
+
+        propMgr.Mask( TYPE_HASH( LIB_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Orientation" ) );
+    }
+} _LIB_FIELD_DESC;

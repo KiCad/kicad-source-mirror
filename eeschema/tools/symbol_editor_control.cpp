@@ -487,6 +487,15 @@ int SYMBOL_EDITOR_CONTROL::ToggleSymbolTree( const TOOL_EVENT& aEvent )
 }
 
 
+int SYMBOL_EDITOR_CONTROL::ToggleProperties( const TOOL_EVENT& aEvent )
+{
+    if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
+        getEditFrame<SYMBOL_EDIT_FRAME>()->ToggleProperties();
+
+    return 0;
+}
+
+
 int SYMBOL_EDITOR_CONTROL::ShowElectricalTypes( const TOOL_EVENT& aEvent )
 {
     KIGFX::SCH_RENDER_SETTINGS* renderSettings = m_frame->GetRenderSettings();
@@ -726,4 +735,5 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
     Go( &SYMBOL_EDITOR_CONTROL::ToggleSymbolTree,      EE_ACTIONS::showSymbolTree.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::ToggleSymbolTree,      EE_ACTIONS::hideSymbolTree.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::ToggleSyncedPinsMode,  EE_ACTIONS::toggleSyncedPinsMode.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ToggleProperties,      ACTIONS::showProperties.MakeEvent() );
 }

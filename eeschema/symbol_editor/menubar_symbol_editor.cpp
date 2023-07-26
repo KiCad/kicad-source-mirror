@@ -107,6 +107,7 @@ void SYMBOL_EDIT_FRAME::doReCreateMenuBar()
     ACTION_MENU* viewMenu = new ACTION_MENU( false, selTool );
 
     viewMenu->Add( ACTIONS::showSymbolBrowser );
+    viewMenu->Add( ACTIONS::showProperties, ACTION_MENU::CHECK );
 
     viewMenu->AppendSeparator();
     viewMenu->Add( ACTIONS::zoomInCenter );

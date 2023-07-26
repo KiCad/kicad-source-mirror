@@ -27,11 +27,15 @@
 #include <eeschema_id.h>
 #include <symbol_edit_frame.h>
 #include <sch_painter.h>
+#include <symbol_editor_settings.h>
 #include <symbol_library_manager.h>
 #include <tool/action_toolbar.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
 #include <tools/ee_selection_tool.h>
+#include <widgets/sch_properties_panel.h>
+#include <widgets/sch_properties_panel.h>
+#include <widgets/wx_aui_utils.h>
 
 #ifdef __UNIX__
 #define LISTBOX_WIDTH 140
@@ -167,6 +171,7 @@ void SYMBOL_EDIT_FRAME::ReCreateOptToolbar()
 
     m_optionsToolBar->AddScaledSeparator( this );
     m_optionsToolBar->Add( EE_ACTIONS::showSymbolTree,      ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::showProperties,         ACTION_TOOLBAR::TOGGLE );
 
     EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
     std::unique_ptr<ACTION_MENU> gridMenu = std::make_unique<ACTION_MENU>( false, selTool );
@@ -174,4 +179,27 @@ void SYMBOL_EDIT_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->AddToolContextMenu( ACTIONS::toggleGrid, std::move( gridMenu ) );
 
     m_optionsToolBar->Realize();
+}
+
+
+void SYMBOL_EDIT_FRAME::ToggleProperties()
+{
+    if( !m_propertiesPanel )
+        return;
+
+    bool show = !m_propertiesPanel->IsShownOnScreen();
+
+    wxAuiPaneInfo& propertiesPaneInfo = m_auimgr.GetPane( PropertiesPaneName() );
+    propertiesPaneInfo.Show( show );
+
+    if( show )
+    {
+        SetAuiPaneSize( m_auimgr, propertiesPaneInfo,
+                        m_settings->m_AuiPanels.properties_panel_width, -1 );
+    }
+    else
+    {
+        m_settings->m_AuiPanels.properties_panel_width = m_propertiesPanel->GetSize().x;
+        m_auimgr.Update();
+    }
 }

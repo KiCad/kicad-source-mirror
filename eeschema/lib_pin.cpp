@@ -1457,3 +1457,23 @@ void LIB_PIN::CalcEdit( const VECTOR2I& aPosition )
     if( IsMoving() )
         MoveTo( aPosition );
 }
+
+
+static struct LIB_PIN_DESC
+{
+    LIB_PIN_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( LIB_PIN );
+        propMgr.InheritsAfter( TYPE_HASH( LIB_PIN ), TYPE_HASH( SCH_ITEM ) );
+
+        propMgr.AddProperty( new PROPERTY<LIB_PIN, wxString>( _HKI( "Pin Name" ),
+                NO_SETTER( LIB_PIN, wxString ), &LIB_PIN::GetName ) );
+
+        propMgr.AddProperty( new PROPERTY<LIB_PIN, wxString>( _HKI( "Pin Number" ),
+                NO_SETTER( LIB_PIN, wxString ), &LIB_PIN::GetNumber ) );
+
+        propMgr.AddProperty( new PROPERTY<LIB_PIN, int>( _HKI( "Length" ),
+                NO_SETTER( LIB_PIN, int ), &LIB_PIN::GetLength, PROPERTY_DISPLAY::PT_SIZE ) );
+    }
+} _LIB_PIN_DESC;

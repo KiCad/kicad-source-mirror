@@ -68,6 +68,7 @@ public:
     int PinLibrary( const TOOL_EVENT& aEvent );
     int UnpinLibrary( const TOOL_EVENT& aEvent );
     int ToggleSymbolTree( const TOOL_EVENT& aEvent );
+    int ToggleProperties( const TOOL_EVENT& aEvent );
     int ToggleSyncedPinsMode( const TOOL_EVENT& aEvent );
 
     int DdAddLibrary( const TOOL_EVENT& aEvent );
