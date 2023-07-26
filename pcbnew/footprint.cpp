@@ -1520,7 +1520,7 @@ const BOX2I FOOTPRINT::ViewBBox() const
 
     if( board )
     {
-        int biggest_clearance = board->GetDesignSettings().GetBiggestClearanceValue();
+        int biggest_clearance = board->GetMaxClearanceValue();
         area.Inflate( biggest_clearance );
     }
 
