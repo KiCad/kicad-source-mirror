@@ -100,7 +100,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
 
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
-    m_worstClearance = bds.GetBiggestClearanceValue();
+    m_worstClearance = m_board->GetMaxClearanceValue();
 
     if( m_progressReporter )
     {
@@ -118,10 +118,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
     // make them thread-safe.
     //
     for( ZONE* zone : m_board->Zones() )
-    {
         zone->CacheBoundingBox();
-        m_worstClearance = std::max( m_worstClearance, zone->GetLocalClearance() );
-    }
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
     {
@@ -132,15 +129,10 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
                 pad->BuildEffectiveShapes( UNDEFINED_LAYER );
                 pad->BuildEffectivePolygon();
             }
-
-            m_worstClearance = std::max( m_worstClearance, pad->GetLocalClearance() );
         }
 
         for( ZONE* zone : footprint->Zones() )
-        {
             zone->CacheBoundingBox();
-            m_worstClearance = std::max( m_worstClearance, zone->GetLocalClearance() );
-        }
 
         // Rules may depend on insideCourtyard() or other expressions
         footprint->BuildCourtyardCaches();

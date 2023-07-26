@@ -1087,6 +1087,13 @@ public:
                              bool aVisibleOnly, bool aIgnoreLocked = false ) const;
 
     /**
+     * Returns the maximum clearance value for any object on the board.  This considers
+     * the clearances from board design settings as well as embedded clearances in footprints,
+     * pads and zones.  Includes electrical, physical, hole and edge clearances.
+    */
+    int GetMaxClearanceValue() const;
+
+    /**
      * Map all nets in the given board to nets with the same name (if any) in the destination
      * board.  This allows us to share layouts which came from the same hierarchical sheet in
      * the schematic.

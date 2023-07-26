@@ -742,6 +742,27 @@ void BOARD::SetZoneSettings( const ZONE_SETTINGS& aSettings )
     GetDesignSettings().SetDefaultZoneSettings( aSettings );
 }
 
+int BOARD::GetMaxClearanceValue() const
+{
+    int worstClearance = m_designSettings->GetBiggestClearanceValue();
+
+       for( ZONE* zone : m_zones )
+        worstClearance = std::max( worstClearance, zone->GetLocalClearance() );
+
+    for( FOOTPRINT* footprint : m_footprints )
+    {
+        worstClearance = std::max( worstClearance, footprint->GetLocalClearance() );
+
+        for( PAD* pad : footprint->Pads() )
+            worstClearance = std::max( worstClearance, pad->GetLocalClearance() );
+
+        for( ZONE* zone : footprint->Zones() )
+            worstClearance = std::max( worstClearance, zone->GetLocalClearance() );
+    }
+
+    return worstClearance;
+}
+
 
 void BOARD::CacheTriangulation( PROGRESS_REPORTER* aReporter, const std::vector<ZONE*>& aZones )
 {

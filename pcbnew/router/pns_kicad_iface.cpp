@@ -1519,7 +1519,7 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
         return;
     }
 
-    int worstClearance = m_board->GetDesignSettings().GetBiggestClearanceValue();
+    int worstClearance = m_board->GetMaxClearanceValue();
 
     m_world = aWorld;
 

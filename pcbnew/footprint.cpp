@@ -1684,7 +1684,7 @@ const BOX2I FOOTPRINT::ViewBBox() const
     // Inflate in case clearance lines are drawn around pads, etc.
     if( const BOARD* board = GetBoard() )
     {
-        int biggest_clearance = board->GetDesignSettings().GetBiggestClearanceValue();
+        int biggest_clearance = board->GetMaxClearanceValue();
         area.Inflate( biggest_clearance );
     }
 

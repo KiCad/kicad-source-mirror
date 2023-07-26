@@ -1449,7 +1449,7 @@ const BOX2I PAD::ViewBBox() const
     if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() ) )
     {
         if( cfg && cfg->m_Display.m_PadClearance && GetBoard() )
-            clearance = GetBoard()->GetDesignSettings().GetBiggestClearanceValue();
+            clearance = GetBoard()->GetMaxClearanceValue();
     }
 
     // Look for the biggest possible bounding box

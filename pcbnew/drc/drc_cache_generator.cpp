@@ -35,22 +35,18 @@ bool DRC_CACHE_GENERATOR::Run()
 {
     m_board = m_drcEngine->GetBoard();
 
-    int&           m_largestClearance = m_board->m_DRCMaxClearance;
-    int&           m_largestPhysicalClearance = m_board->m_DRCMaxPhysicalClearance;
+    int&           largestClearance = m_board->m_DRCMaxClearance;
+    int&           largestPhysicalClearance = m_board->m_DRCMaxPhysicalClearance;
     DRC_CONSTRAINT worstConstraint;
     LSET           boardCopperLayers = LSET::AllCuMask( m_board->GetCopperLayerCount() );
 
-    if( m_drcEngine->QueryWorstConstraint( CLEARANCE_CONSTRAINT, worstConstraint ) )
-        m_largestClearance = worstConstraint.GetValue().Min();
-
-    if( m_drcEngine->QueryWorstConstraint( HOLE_CLEARANCE_CONSTRAINT, worstConstraint ) )
-        m_largestClearance = std::max( m_largestClearance, worstConstraint.GetValue().Min() );
+    largestClearance = std::max( largestClearance, m_board->GetMaxClearanceValue() );
 
     if( m_drcEngine->QueryWorstConstraint( PHYSICAL_CLEARANCE_CONSTRAINT, worstConstraint ) )
-        m_largestPhysicalClearance = worstConstraint.GetValue().Min();
+        largestPhysicalClearance = worstConstraint.GetValue().Min();
 
     if( m_drcEngine->QueryWorstConstraint( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT, worstConstraint ) )
-        m_largestPhysicalClearance = std::max( m_largestPhysicalClearance, worstConstraint.GetValue().Min() );
+        largestPhysicalClearance = std::max( largestPhysicalClearance, worstConstraint.GetValue().Min() );
 
     std::set<ZONE*> allZones;
 
@@ -65,16 +61,12 @@ bool DRC_CACHE_GENERATOR::Run()
             if( ( zone->GetLayerSet() & boardCopperLayers ).any() )
             {
                 m_board->m_DRCCopperZones.push_back( zone );
-                m_largestClearance = std::max( m_largestClearance, zone->GetLocalClearance() );
             }
         }
     }
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
     {
-        for( PAD* pad : footprint->Pads() )
-            m_largestClearance = std::max( m_largestClearance, pad->GetLocalClearance() );
-
         for( ZONE* zone : footprint->Zones() )
         {
             allZones.insert( zone );
@@ -84,10 +76,7 @@ bool DRC_CACHE_GENERATOR::Run()
                 m_board->m_DRCZones.push_back( zone );
 
                 if( ( zone->GetLayerSet() & boardCopperLayers ).any() )
-                {
                     m_board->m_DRCCopperZones.push_back( zone );
-                    m_largestClearance = std::max( m_largestClearance, zone->GetLocalClearance() );
-                }
             }
         }
     }
@@ -124,7 +113,7 @@ bool DRC_CACHE_GENERATOR::Run()
                 for( PCB_LAYER_ID layer : copperLayers.Seq() )
                 {
                     if( IsCopperLayer( layer ) )
-                        m_board->m_CopperItemRTreeCache->Insert( item, layer, m_largestClearance );
+                        m_board->m_CopperItemRTreeCache->Insert( item, layer, largestClearance );
                 }
 
                 return true;

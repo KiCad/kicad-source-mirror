@@ -176,7 +176,8 @@ BOOST_FIXTURE_TEST_CASE( RegressionZoneFillTests, ZONE_FILL_TEST_FIXTURE )
                                     "issue6260",
                                     "issue6284",
                                     "issue7086",
-                                    "issue14294"   // Bad Clipper2 fill
+                                    "issue14294",   // Bad Clipper2 fill
+                                    "fill_bad"      // Missing zone clearance expansion
                                 };
 
     for( const wxString& relPath : tests )
