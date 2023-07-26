@@ -546,7 +546,9 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 // Check if dragging has started within any of selected items bounding box
                 if( selectionContains( evt->DragOrigin() ) )
                 {
-                    if( m_frame->eeconfig()->m_Input.drag_is_move )
+                    // drag_is_move option exists only in schematic editor, not in symbol editor
+                    // (m_frame->eeconfig() returns nullptr in Symbol Editor)
+                    if( m_isSymbolEditor || m_frame->eeconfig()->m_Input.drag_is_move )
                         m_toolMgr->RunSynchronousAction( EE_ACTIONS::move, nullptr );
                     else
                         m_toolMgr->RunSynchronousAction( EE_ACTIONS::drag, nullptr );
