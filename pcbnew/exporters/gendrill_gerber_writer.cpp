@@ -158,7 +158,7 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
     plotter.SetCreator( wxT( "PCBNEW" ) );
 
     // Add the standard X2 FileFunction for drill files
-    // %TF.FileFunction,Plated[NonPlated],layer1num,layer2num,PTH[NPTH][Blind][Buried],Drill[Route][Mixed]*%
+    // %TF.FileFunction,Plated[NonPlated],layer1num,layer2num,PTH[NPTH][Blind][Buried],Drill[Rout][Mixed]*%
     wxString text = BuildFileFunctionAttributeString( aLayerPair,
                                                       aIsNpth ? TYPE_FILE::NPTH_FILE
                                                               : TYPE_FILE::PTH_FILE );
