@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:33-0700\n"
-"PO-Revision-Date: 2023-07-23 21:07+0000\n"
+"PO-Revision-Date: 2023-07-28 10:07+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v7/ja/>\n"
 "Language: ja\n"
@@ -7310,9 +7310,8 @@ msgstr "プロジェクト ファイル: '%s'"
 #: gerbview/tools/gerbview_inspection_tool.cpp:185
 #: kicad/project_tree_pane.cpp:781
 msgid "No text editor selected in KiCad.  Please choose one."
-msgstr ""
-"KiCad で使用するテキスト エディターが設定されていません。一つ選択してくださ"
-"い。"
+msgstr "KiCad で使用するテキスト エディターが設定されていません。  "
+"一つ選択してください。"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:244
 msgid "Footprint Association File"
@@ -7630,9 +7629,8 @@ msgid "Delete all associations?"
 msgstr "すべての関連付けを削除しますか？"
 
 #: cvpcb/tools/cvpcb_control.cpp:183
-#, fuzzy
 msgid "Unable to create the footprint viewer frame"
-msgstr "レポート ファイル '%s' を作成できません"
+msgstr "フットプリント ビューアーのフレームを作成できません"
 
 #: eeschema/annotate.cpp:265
 #, c-format
@@ -18217,9 +18215,9 @@ msgid ""
 "was dropped because the destination already has the sheet or one of its "
 "subsheets as a parent."
 msgstr ""
-"ペーストされたシート '%s'\n"
-"は除外されました。貼り付け先はすでにシートを持っているか、親としてサブシート"
-"の一つになっているためです。"
+"貼り付けたシート '%s'\n"
+"は貼り付け先にすでにそのシートがあるか、親としてサブシートの一つになっている"
+"ため削除されました。"
 
 #: eeschema/tools/sch_editor_control.cpp:1974
 msgid "Symbols with broken library symbol links cannot be edited."
