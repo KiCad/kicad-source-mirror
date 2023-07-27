@@ -61,6 +61,12 @@ EE_GRID_HELPER::EE_GRID_HELPER( TOOL_MANAGER* aToolMgr ) :
 }
 
 
+VECTOR2I EE_GRID_HELPER::AlignGrid( const VECTOR2I& aPoint, GRID_HELPER_GRIDS aGrid ) const
+{
+    return AlignGrid( aPoint, GetGridSize( aGrid ), GetOrigin() );
+}
+
+
 VECTOR2I EE_GRID_HELPER::Align( const VECTOR2I& aPoint, GRID_HELPER_GRIDS aGrid ) const
 {
     return Align( aPoint, GetGridSize( aGrid ), GetOrigin() );
@@ -356,12 +362,13 @@ GRID_HELPER_GRIDS EE_GRID_HELPER::GetItemGrid( const SCH_ITEM* aItem )
         return GRID_CONNECTABLE;
 
     case SCH_TEXT_T:
-    case SCH_TEXTBOX_T:
     case SCH_FIELD_T:
         return GRID_TEXT;
 
     case SCH_SHAPE_T:
     case SCH_BITMAP_T:
+    // The text box's border lines are what need to be on the graphic grid
+    case SCH_TEXTBOX_T:
         return GRID_GRAPHICS;
 
     case SCH_JUNCTION_T:

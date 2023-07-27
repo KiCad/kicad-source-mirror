@@ -1564,6 +1564,7 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
 {
     EE_GRID_HELPER grid( m_toolMgr);
     EE_SELECTION&  selection = m_selectionTool->RequestSelection( EE_COLLECTOR::MovableItems );
+    GRID_HELPER_GRIDS selectionGrid = grid.GetSelectionGrid( selection );
     SCH_COMMIT     commit( m_toolMgr );
 
     auto doMoveItem =
@@ -1616,7 +1617,7 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
                 getConnectedDragItems( &commit, line, pts[ii], drag_items );
                 std::set<EDA_ITEM*> unique_items( drag_items.begin(), drag_items.end() );
 
-                VECTOR2I gridpt = grid.AlignGrid( pts[ii] ) - pts[ii];
+                VECTOR2I gridpt = grid.AlignGrid( pts[ii], selectionGrid ) - pts[ii];
 
                 if( gridpt != VECTOR2I( 0, 0 ) )
                 {
@@ -1630,9 +1631,10 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
                 }
             }
         }
-        else if( item->Type() == SCH_FIELD_T )
+        else if( item->Type() == SCH_FIELD_T || item->Type() == SCH_TEXT_T )
         {
-            VECTOR2I gridpt = grid.AlignGrid( item->GetPosition() ) - item->GetPosition();
+            VECTOR2I gridpt =
+                    grid.AlignGrid( item->GetPosition(), selectionGrid ) - item->GetPosition();
 
             if( gridpt != VECTOR2I( 0, 0 ) )
                 doMoveItem( item, gridpt );
@@ -1642,8 +1644,8 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
             SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
             VECTOR2I   topLeft = sheet->GetPosition();
             VECTOR2I   bottomRight = topLeft + sheet->GetSize();
-            VECTOR2I   tl_gridpt = grid.AlignGrid( topLeft ) - topLeft;
-            VECTOR2I   br_gridpt = grid.AlignGrid( bottomRight ) - bottomRight;
+            VECTOR2I   tl_gridpt = grid.AlignGrid( topLeft, selectionGrid ) - topLeft;
+            VECTOR2I   br_gridpt = grid.AlignGrid( bottomRight, selectionGrid ) - bottomRight;
 
             if( tl_gridpt != VECTOR2I( 0, 0 ) || br_gridpt != VECTOR2I( 0, 0 ) )
             {
@@ -1696,7 +1698,7 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
 
             for( const VECTOR2I& conn : connections )
             {
-                VECTOR2I gridpt = grid.AlignGrid( conn ) - conn;
+                VECTOR2I gridpt = grid.AlignGrid( conn, selectionGrid ) - conn;
 
                 shifts[gridpt]++;
 

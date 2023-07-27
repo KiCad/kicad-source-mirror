@@ -55,6 +55,7 @@ public:
     using GRID_HELPER::Align;
     using GRID_HELPER::AlignGrid;
     VECTOR2I Align( const VECTOR2I& aPoint, GRID_HELPER_GRIDS aGrid ) const;
+    VECTOR2I AlignGrid( const VECTOR2I& aPoint, GRID_HELPER_GRIDS aGrid ) const;
 
     /**
      * Function GetSnapped
