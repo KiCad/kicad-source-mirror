@@ -461,19 +461,19 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
         {
             if( !inDrag )
             {
-                commit.Modify( m_editPoints->GetParent() );
+                commit.Modify( m_editPoints->GetParent(), m_frame->GetScreen() );
 
                 if( m_editPoints->GetParent()->Type() == SCH_LINE_T )
                 {
                     std::pair<EDA_ITEM*, int> connected = m_editPoints->Point( LINE_START ).GetConnected();
 
                     if( connected.first )
-                        commit.Modify( connected.first );
+                        commit.Modify( connected.first, m_frame->GetScreen() );
 
                     connected = m_editPoints->Point( LINE_END ).GetConnected();
 
                     if( connected.first )
-                        commit.Modify( connected.first );
+                        commit.Modify( connected.first, m_frame->GetScreen() );
                 }
 
                 controls->ForceCursorPosition( false );
@@ -1397,7 +1397,7 @@ int EE_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
     SHAPE_LINE_CHAIN& poly = shape->GetPolyShape().Outline( 0 );
     SCH_COMMIT        commit( m_toolMgr );
 
-    commit.Modify( shape );
+    commit.Modify( shape, m_frame->GetScreen() );
 
     VECTOR2I cursor = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
     VECTOR2I pos = mapCoords( cursor );
@@ -1435,7 +1435,7 @@ int EE_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
     SHAPE_LINE_CHAIN& poly = shape->GetPolyShape().Outline( 0 );
     SCH_COMMIT        commit( m_toolMgr );
 
-    commit.Modify( shape );
+    commit.Modify( shape, m_frame->GetScreen() );
 
     if( poly.GetPointCount() < 3 )
         return 0;
