@@ -434,7 +434,7 @@ const wxString GENDRILL_WRITER_BASE::BuildFileFunctionAttributeString(
     else if( hasDrill )
         text << wxT( ",Drill" );
     else if( hasOblong )
-        text << wxT( ",Route" );
+        text << wxT( ",Rout" );
 
     // else: empty file.
 
