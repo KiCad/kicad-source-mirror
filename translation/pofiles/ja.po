@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:35-0700\n"
-"PO-Revision-Date: 2023-07-23 21:05+0000\n"
+"PO-Revision-Date: 2023-07-28 10:06+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -558,10 +558,8 @@ msgid "Render Solid Colors"
 msgstr "塗りつぶしで描画"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:292
-#, fuzzy
 msgid "Use only the diffuse color property from model 3D model file"
-msgstr ""
-"3D モデル ファイルからディフューズ カラー(拡散反射色)のプロパティのみを使用 "
+msgstr "3D モデル ファイルからディフューズ カラー(拡散反射色)のプロパティのみを使用"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:299
 msgid "Render CAD Colors"
@@ -601,9 +599,8 @@ msgid "Toggle 3D models not in pos file"
 msgstr "posファイルにない3Dモデルの切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:344
-#, fuzzy
 msgid "Toggle 3D models marked DNP"
-msgstr "SMDの3Dモデル表示を切り替え"
+msgstr "「未実装にする」部品の3Dモデル表示を切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:345
 #, fuzzy
@@ -1487,9 +1484,8 @@ msgid "Front solder mask"
 msgstr "表面ハンダマスク"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
-#, fuzzy
 msgid "Front Fab layer"
-msgstr "Front_layer"
+msgstr "表面Fabレイヤー"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 #, fuzzy
@@ -7607,9 +7603,9 @@ msgid "Filtered by %s"
 msgstr "フィルター: %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:824
-#, fuzzy, c-format
+#, c-format
 msgid ": %i matching footprints"
-msgstr "欠落したフットプリントはありません。"
+msgstr ":%i 個の該当するフットプリント"
 
 #: cvpcb/cvpcb_mainframe.cpp:836
 #, c-format
@@ -7655,9 +7651,8 @@ msgstr "プロジェクト ファイル: '%s'"
 #: gerbview/tools/gerbview_inspection_tool.cpp:185
 #: kicad/project_tree_pane.cpp:781
 msgid "No text editor selected in KiCad.  Please choose one."
-msgstr ""
-"KiCad で使用するテキスト エディターが設定されていません。一つ選択してくださ"
-"い。"
+msgstr "KiCad で使用するテキスト エディターが設定されていません。  "
+"一つ選択してください。"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:244
 msgid "Footprint Association File"
@@ -7953,9 +7948,8 @@ msgid "Delete all associations?"
 msgstr "すべての関連付けを削除しますか？"
 
 #: cvpcb/tools/cvpcb_control.cpp:181
-#, fuzzy
 msgid "Unable to create the footprint viewer frame"
-msgstr "レポート ファイル '%s' を作成できません"
+msgstr "フットプリント ビューアーのフレームを作成できません"
 
 #: eeschema/annotate.cpp:155
 msgid "Delete Annotation"
@@ -8649,9 +8643,9 @@ msgid "No connection to database"
 msgstr "パッドをゾーンへ接続:"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Loaded %zu libraries"
-msgstr "ライブラリーを保存"
+msgstr "%zu 個のライブラリーをロード"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:32
 #, fuzzy
@@ -11174,9 +11168,9 @@ msgstr "注: アイテム カラーは現在の設定値で上書きされます
 
 #: eeschema/dialogs/dialog_shape_properties.cpp:169
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:233
-#, fuzzy, c-format
+#, c-format
 msgid "Edit %s"
-msgstr "編集"
+msgstr "%s を編集"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:88
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:158
@@ -12048,9 +12042,8 @@ msgid "Format Preset:"
 msgstr "フォーマット %s"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:183
-#, fuzzy
 msgid "Field Delimeter:"
-msgstr "ミリメートル"
+msgstr "フィールド区切り文字:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:187
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:201
@@ -12067,14 +12060,12 @@ msgid "\""
 msgstr "\""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:197
-#, fuzzy
 msgid "Reference Delimiter:"
-msgstr "リファレンス指定子"
+msgstr "リファレンス区切り文字:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:204
-#, fuzzy
 msgid "Range Delimiter:"
-msgstr "ページ数制限"
+msgstr "範囲区切り文字:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:208
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:35
@@ -12086,14 +12077,12 @@ msgid "Leave blank to disable ranges."
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:213
-#, fuzzy
 msgid "Keep Tabs:"
-msgstr "ビアの配置を禁止"
+msgstr "タブを保持:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:220
-#, fuzzy
 msgid "Keep Line Breaks:"
-msgstr "配線を禁止"
+msgstr "改行を保持:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:233
 #, fuzzy
@@ -14458,14 +14447,14 @@ msgid "P&references"
 msgstr "設定 (&r)"
 
 #: eeschema/net_navigator.cpp:55
-#, fuzzy, c-format
+#, c-format
 msgid "Wire from %s, %s to %s, %s"
-msgstr "%s ワイヤー 始点 (%s, %s) 終点 (%s, %s)"
+msgstr "ワイヤー 始点 (%s, %s) 終点 (%s, %s)"
 
 #: eeschema/net_navigator.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid "Bus from %s, %s to %s, %s"
-msgstr "%s バス 始点 (%s, %s) 終点 (%s, %s)"
+msgstr "バス 始点 (%s, %s) 終点 (%s, %s)"
 
 #: eeschema/net_navigator.cpp:71
 #, fuzzy
@@ -14478,9 +14467,9 @@ msgid "Symbol '%s' pin '%s'"
 msgstr "シンボル %s [%s]"
 
 #: eeschema/net_navigator.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid "Sheet '%s' pin '%s'"
-msgstr "シートピン"
+msgstr "シート '%s' ピン '%s'"
 
 #: eeschema/net_navigator.cpp:104
 #, fuzzy, c-format
@@ -14488,29 +14477,29 @@ msgid "Label '%s' at %s, %s"
 msgstr "テキスト %s (位置 %s, %s)"
 
 #: eeschema/net_navigator.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid "Global label '%s' at %s, %s"
-msgstr "グローバル ラベル '%s'"
+msgstr "グローバル ラベル '%s' (座標 %s, %s)"
 
 #: eeschema/net_navigator.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label '%s' at %s, %s"
-msgstr "階層ラベル '%s'"
+msgstr "階層ラベル '%s' (座標 %s, %s)"
 
 #: eeschema/net_navigator.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Junction at %s, %s"
-msgstr "ジャンクションの点のサイズ:"
+msgstr "ジャンクション (座標 %s, %s)"
 
 #: eeschema/net_navigator.cpp:144
-#, fuzzy, c-format
+#, c-format
 msgid "Bus to wire entry from %s, %s to %s, %s"
-msgstr "%s ワイヤー 始点 (%s, %s) 終点 (%s, %s)"
+msgstr "ワイヤー-バス エントリー (%s, %s) 終点 (%s, %s)"
 
 #: eeschema/net_navigator.cpp:156
-#, fuzzy, c-format
+#, c-format
 msgid "Bus to bus entry from %s, %s to %s, %s"
-msgstr "%s バス 始点 (%s, %s) 終点 (%s, %s)"
+msgstr "バス-バス エントリー 始点 (%s, %s) 終点 (%s, %s)"
 
 #: eeschema/net_navigator.cpp:164
 #, fuzzy, c-format
@@ -15506,9 +15495,9 @@ msgid "library %s does not contain a symbol named %s"
 msgstr "ライブラリ %s は %s と言う名前のシンボルを含んでいません"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:183
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse %s as a symbol"
-msgstr "エイリアスはシンボルと同じ名前を持つことができません。"
+msgstr "%s をシンボルとして読み込めません"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:220
 msgid "Invalid symbol name"
@@ -19583,14 +19572,14 @@ msgstr "シートピンを追加"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1620
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:453
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s"
-msgstr "バスを追加"
+msgstr "%s を追加"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1674
-#, fuzzy, c-format
+#, c-format
 msgid "Draw %s"
-msgstr "描画オプション"
+msgstr "%s を描画"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1798
 msgid "Press <ESC> to cancel sheet creation."
@@ -19734,9 +19723,9 @@ msgid ""
 "was dropped because the destination already has the sheet or one of its "
 "subsheets as a parent."
 msgstr ""
-"ペーストされたシート '%s'\n"
-"は除外されました。貼り付け先はすでにシートを持っているか、親としてサブシート"
-"の一つになっているためです。"
+"貼り付けたシート '%s'\n"
+"は貼り付け先にすでにそのシートがあるか、親としてサブシートの一つになっている"
+"ため削除されました。"
 
 #: eeschema/tools/sch_editor_control.cpp:1989
 msgid "Symbols with broken library symbol links cannot be edited."
@@ -23623,11 +23612,11 @@ msgstr "乗数"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:19
 msgid "IPC 2221"
-msgstr ""
+msgstr "IPC 2221"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:21
 msgid "IEC 60664"
-msgstr ""
+msgstr "IEC 60664"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:24
 msgid "Insulation for equipment within low-voltage supply systems"
@@ -23990,11 +23979,11 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_eseries_display_base.cpp:21
 msgid "E24,E48,E96"
-msgstr ""
+msgstr "E24,E48,E96"
 
 #: pcb_calculator/calculator_panels/panel_eseries_display_base.cpp:52
 msgid "E1,E3,E6,E12"
-msgstr ""
+msgstr "E1,E3,E6,E12"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:231
 msgid "Current calculation is underestimated due to long fusing time."
@@ -24986,7 +24975,6 @@ msgstr ""
 "変更を破棄して終了しますか？"
 
 #: pcb_calculator/r_calculator_help.h:2
-#, fuzzy
 msgid ""
 "- This calculator finds combinations of standard E-series (between 10Ω and "
 "1MΩ) to create arbitrary values.\n"
@@ -25003,23 +24991,12 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"E系列はIEC 60063で定義されています。\n"
-"\n"
-"使用可能な値は、対数スケールでほぼ等間隔に配置されています。\n"
-"\n"
-"\tE24(5%):  1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 4.3 "
-"4.7 5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
-"\tE12(10%): 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
-"\tE6(20%):  1.0  -  1.5  -  2.2  -  3.3  -  4.7  -  6.8  -\n"
-"\tE3(50%):  1.0  -   -   -  2.2  -   -   -  4.7  -   -   -\n"
-"\tE1     :  1.0  -   -   -   -   -   -   -   -   -   -   -\n"
-"\n"
-"- この電卓は、標準的なE系列の部品(10Ω から1MΩ )から任意の値を作成する組み合わ"
-"せを見つけます。\n"
+"- この電卓は、標準的なE系列の部品(10Ω から1MΩ "
+")から任意の値を作成する組み合わせを見つけます。\n"
 "- 求める抵抗値には0.0025Ωから4000 kΩまで入力できます。\n"
 "- 最大で4つの部品を使用する解が求められます。\n"
 "\n"
-"求める抵抗値の値は常に解の組み合わせから除外されます。\n"
+"求める抵抗値の値は常に解の組み合わせから除外されます。<br>\n"
 "部品が利用できない場合は、解から除外する値を追加で2つまで指定することができま"
 "す。\n"
 "\n"
@@ -28437,9 +28414,9 @@ msgid "'%s' found"
 msgstr "'%s' が見つかりました"
 
 #: pcbnew/dialogs/dialog_find.cpp:401
-#, fuzzy, c-format
+#, c-format
 msgid "Hit(s): %d / %zu"
-msgstr "該当: %ld / %lu"
+msgstr "該当: %d / %zu"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:28
 msgid "Search for:"
@@ -29355,39 +29332,33 @@ msgid "Delete Items"
 msgstr "アイテムを削除"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:108
-#, fuzzy
 msgid "Set teardrops to default values for shape"
-msgstr "デフォルト値を使用するために 0 を設定"
+msgstr "ティアドロップを形状のデフォルト値に設定"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:109
-#, fuzzy
 msgid "Set teardrops to specified values:"
-msgstr "指定した値に設定:"
+msgstr "ティアドロップを指定した値に設定:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:113
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:120
-#, fuzzy
 msgid "Add teardrops with default values for shape"
-msgstr "円状の図形にのみティアドロップを追加します "
+msgstr "形状のデフォルト値でティアドロップを追加"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:114
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:129
-#, fuzzy
 msgid "Add teardrops with specified values:"
-msgstr "指定した値に設定:"
+msgstr "指定した値でティアドロップを追加:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:483
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:487
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:491
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:510
-#, fuzzy
 msgid "Edit Teardrops"
-msgstr "ティアドロップを追加"
+msgstr "ティアドロップを編集"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:27
-#, fuzzy
 msgid "PTH pads"
-msgstr "%sのNPTHパッド"
+msgstr "PTHパッド"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:31
 msgid "SMD pads"
@@ -29418,9 +29389,8 @@ msgid "Round pads only"
 msgstr "円形パッドのみ"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:99
-#, fuzzy
 msgid "Existing teardrops only"
-msgstr "ネットを更新…"
+msgstr "既存のティアドロップのみ"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:114
 msgid "Remove teardrops"
@@ -32023,9 +31993,8 @@ msgstr ""
 "ます"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:73
-#, fuzzy
 msgid "Start X:"
-msgstr "始点X"
+msgstr "始点 X:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:91
 msgid "End X:"
@@ -32041,9 +32010,8 @@ msgid "Use net class widths"
 msgstr "ネットクラスの幅を使用"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:195
-#, fuzzy
 msgid "Pos X:"
-msgstr "座標 X"
+msgstr "座標 X:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:235
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:36
@@ -32384,9 +32352,8 @@ msgid "Show ratsnest with curved lines"
 msgstr "曲線でラッツネストを表示"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:350
-#, fuzzy
 msgid "Ratsnest line thickness:"
-msgstr "標準の線幅"
+msgstr "ラッツネストの線幅:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:365
 msgid "Track Editing"
@@ -35301,19 +35268,19 @@ msgid "%s layers differ."
 msgstr "%s は異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:392
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad connection property differs."
-msgstr "%s のパッド接続タイプ: %s."
+msgstr "%s のパッド接続が異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:394
-#, fuzzy, c-format
+#, c-format
 msgid "%s local clearance differs."
-msgstr "ローカル クリアランス値"
+msgstr "%s のローカル クリアランスが異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:396
-#, fuzzy, c-format
+#, c-format
 msgid "%s thermal relief gap differs."
-msgstr "%s のサーマルリリーフ ギャップ: %s."
+msgstr "%s のサーマルリリーフ ギャップが異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:398
 #, fuzzy, c-format
@@ -35321,9 +35288,9 @@ msgid "%s thermal relief spoke width differs."
 msgstr "解決されたサーマルリリーフ スポーク幅: %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:401
-#, fuzzy, c-format
+#, c-format
 msgid "%s min thickness differs."
-msgstr "%s の最小幅: %s."
+msgstr "%s の最小幅が異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:404
 #, c-format
@@ -43394,9 +43361,8 @@ msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] ロードに失敗しました: 入力行が長すぎます\n"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
-#, fuzzy
 msgid "bitmap2component;Bitmap;Converter;"
-msgstr "ビットマップ - コンポーネント変換"
+msgstr "bitmap2component;Bitmap;Converter;"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Bitmap to Component Converter"
@@ -43435,9 +43401,8 @@ msgid "gerbview;PCB;Gerber;"
 msgstr ""
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
-#, fuzzy
 msgid "Projectmanager;"
-msgstr "プロジェクト マネージャー"
+msgstr "Projectmanager;"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
@@ -43457,9 +43422,8 @@ msgid "KiCad PCB Calculator"
 msgstr "KiCad PCB 計算機"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
-#, fuzzy
 msgid "PCB;Calculator;"
-msgstr "PCB 電卓"
+msgstr "PCB;Calculator;"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "PCB Calculator"
