@@ -35,8 +35,8 @@ bool KIPLATFORM::DRIVERS::Valid3DConnexionDriverVersion()
     NSDictionary *infoDictionary = [frameworkBundle infoDictionary];
     NSString *version = infoDictionary[@"CFBundleShortVersionString"];
 
-    if (!version)
+    if( !version )
         return false;
 
-    return compareVersions(version.UTF8String, MIN_MAC_VERSION ) >= 0;
+    return compareVersionStrings( version.UTF8String, MIN_MAC_VERSION );
 }
