@@ -368,6 +368,9 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
         wxFileName fn;
         SYMBOL_LIB_TABLE* libTable = m_frame->SelectSymLibTable();
 
+        if( !libTable )     // Cancelled by user
+            return 0;
+
         if( !m_frame->LibraryFileBrowser( false, fn, KiCadSymbolLibFileWildcard(),
                                           KiCadSymbolLibFileExtension, false,
                                           ( libTable == &SYMBOL_LIB_TABLE::GetGlobalLibTable() ),
