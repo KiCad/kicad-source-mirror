@@ -96,7 +96,7 @@ static int externalPinDecoSize( const RENDER_SETTINGS* aSettings, const LIB_PIN 
 
 LIB_PIN::LIB_PIN( LIB_SYMBOL* aParent ) :
         LIB_ITEM( LIB_PIN_T, aParent ),
-        m_orientation( PIN_RIGHT ),
+        m_orientation( PIN_ORIENTATION::PIN_RIGHT ),
         m_shape( GRAPHIC_PINSHAPE::LINE ),
         m_type( ELECTRICAL_PINTYPE::PT_UNSPECIFIED ),
         m_attributes( 0 )
@@ -122,8 +122,9 @@ LIB_PIN::LIB_PIN( LIB_SYMBOL* aParent ) :
 
 
 LIB_PIN::LIB_PIN( LIB_SYMBOL* aParent, const wxString& aName, const wxString& aNumber,
-                  int aOrientation, ELECTRICAL_PINTYPE aPinType, int aLength, int aNameTextSize,
-                  int aNumTextSize, int aConvert, const VECTOR2I& aPos, int aUnit ) :
+                  PIN_ORIENTATION aOrientation, ELECTRICAL_PINTYPE aPinType, int aLength,
+                  int aNameTextSize, int aNumTextSize, int aConvert, const VECTOR2I& aPos,
+                  int aUnit ) :
         LIB_ITEM( LIB_PIN_T, aParent ),
         m_position( aPos ),
         m_length( aLength ),
@@ -186,10 +187,10 @@ VECTOR2I LIB_PIN::GetPinRoot() const
     switch( m_orientation )
     {
     default:
-    case PIN_RIGHT: return VECTOR2I( m_position.x + m_length, -( m_position.y ) );
-    case PIN_LEFT:  return VECTOR2I( m_position.x - m_length, -( m_position.y ) );
-    case PIN_UP:    return VECTOR2I( m_position.x, -( m_position.y + m_length ) );
-    case PIN_DOWN:  return VECTOR2I( m_position.x, -( m_position.y - m_length ) );
+    case PIN_ORIENTATION::PIN_RIGHT: return VECTOR2I( m_position.x + m_length, -( m_position.y ) );
+    case PIN_ORIENTATION::PIN_LEFT:  return VECTOR2I( m_position.x - m_length, -( m_position.y ) );
+    case PIN_ORIENTATION::PIN_UP:    return VECTOR2I( m_position.x, -( m_position.y + m_length ) );
+    case PIN_ORIENTATION::PIN_DOWN:  return VECTOR2I( m_position.x, -( m_position.y - m_length ) );
     }
 }
 
@@ -207,7 +208,7 @@ void LIB_PIN::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, 
     wxCHECK( part && opts, /* void */ );
 
     /* Calculate pin orient taking in account the symbol orientation. */
-    int orient = PinDrawOrient( aTransform );
+    PIN_ORIENTATION orient = PinDrawOrient( aTransform );
 
     /* Calculate the pin position */
     VECTOR2I pos1 = aTransform.TransformCoordinate( m_position ) + aOffset;
@@ -248,7 +249,8 @@ void LIB_PIN::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, 
 }
 
 
-void LIB_PIN::printPinSymbol( const RENDER_SETTINGS* aSettings, const VECTOR2I& aPos, int aOrient, bool aDimmed )
+void LIB_PIN::printPinSymbol( const RENDER_SETTINGS* aSettings, const VECTOR2I& aPos,
+                              PIN_ORIENTATION aOrient, bool aDimmed )
 {
     wxDC*   DC = aSettings->GetPrintDC();
     int     MapX1, MapY1, x1, y1;
@@ -275,10 +277,10 @@ void LIB_PIN::printPinSymbol( const RENDER_SETTINGS* aSettings, const VECTOR2I& 
 
     switch( aOrient )
     {
-    case PIN_UP:     y1 = posY - len;  MapY1 = 1;   break;
-    case PIN_DOWN:   y1 = posY + len;  MapY1 = -1;  break;
-    case PIN_LEFT:   x1 = posX - len;  MapX1 = 1;   break;
-    case PIN_RIGHT:  x1 = posX + len;  MapX1 = -1;  break;
+    case PIN_ORIENTATION::PIN_UP:     y1 = posY - len;  MapY1 = 1;   break;
+    case PIN_ORIENTATION::PIN_DOWN:   y1 = posY + len;  MapY1 = -1;  break;
+    case PIN_ORIENTATION::PIN_LEFT:   x1 = posX - len;  MapX1 = 1;   break;
+    case PIN_ORIENTATION::PIN_RIGHT:  x1 = posX + len;  MapX1 = -1;  break;
     }
 
     if( m_shape == GRAPHIC_PINSHAPE::INVERTED || m_shape == GRAPHIC_PINSHAPE::INVERTED_CLOCK )
@@ -372,8 +374,9 @@ void LIB_PIN::printPinSymbol( const RENDER_SETTINGS* aSettings, const VECTOR2I& 
 }
 
 
-void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos, int aPinOrient,
-                             int aTextInside, bool aDrawPinNum, bool aDrawPinName, bool aDimmed )
+void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos,
+                             PIN_ORIENTATION aPinOrient, int aTextInside, bool aDrawPinNum,
+                             bool aDrawPinName, bool aDimmed )
 {
     if( !aDrawPinName && !aDrawPinNum )
         return;
@@ -417,10 +420,10 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
 
     switch( aPinOrient )
     {
-    case PIN_UP:    y1 -= m_length; break;
-    case PIN_DOWN:  y1 += m_length; break;
-    case PIN_LEFT:  x1 -= m_length; break;
-    case PIN_RIGHT: x1 += m_length; break;
+    case PIN_ORIENTATION::PIN_UP:    y1 -= m_length; break;
+    case PIN_ORIENTATION::PIN_DOWN:  y1 += m_length; break;
+    case PIN_ORIENTATION::PIN_LEFT:  x1 -= m_length; break;
+    case PIN_ORIENTATION::PIN_RIGHT: x1 += m_length; break;
     }
 
     wxString name = GetShownName();
@@ -434,12 +437,13 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
 
     if( aTextInside )  // Draw the text inside, but the pin numbers outside.
     {
-        if(( aPinOrient == PIN_LEFT) || ( aPinOrient == PIN_RIGHT) )
+        if( ( aPinOrient == PIN_ORIENTATION::PIN_LEFT )
+            || ( aPinOrient == PIN_ORIENTATION::PIN_RIGHT ) )
         {
             // It is an horizontal line
             if( aDrawPinName )
             {
-                if( aPinOrient == PIN_RIGHT )
+                if( aPinOrient == PIN_ORIENTATION::PIN_RIGHT )
                 {
                     x = x1 + aTextInside;
                     GRPrintText( DC, VECTOR2I( x, y1 ), nameColor, name, ANGLE_HORIZONTAL,
@@ -465,7 +469,7 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
         else            /* Its a vertical line. */
         {
             // Text is drawn from bottom to top (i.e. to negative value for Y axis)
-            if( aPinOrient == PIN_DOWN )
+            if( aPinOrient == PIN_ORIENTATION::PIN_DOWN )
             {
                 y = y1 + aTextInside;
 
@@ -505,19 +509,20 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
     }
     else     /**** Draw num & text pin outside  ****/
     {
-        if( ( aPinOrient == PIN_LEFT) || ( aPinOrient == PIN_RIGHT) )
+        if( ( aPinOrient == PIN_ORIENTATION::PIN_LEFT )
+            || ( aPinOrient == PIN_ORIENTATION::PIN_RIGHT ) )
         {
             /* Its an horizontal line. */
             if( aDrawPinName )
             {
-                x = ( x1 + aPinPos.x) / 2;
+                x = ( x1 + aPinPos.x ) / 2;
                 GRPrintText( DC, VECTOR2I( x, y1 - name_offset ), nameColor, name, ANGLE_HORIZONTAL,
                              pinNameSize, GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM,
                              namePenWidth, false, false, font );
             }
             if( aDrawPinNum )
             {
-                x = ( x1 + aPinPos.x) / 2;
+                x = ( x1 + aPinPos.x ) / 2;
                 GRPrintText( DC, VECTOR2I( x, y1 + num_offset ), numColor, number, ANGLE_HORIZONTAL,
                              pinNumSize, GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_TOP,
                              numPenWidth, false, false, font );
@@ -544,9 +549,8 @@ void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, VECTOR2I& aPinPos
 }
 
 
-
 void LIB_PIN::printPinElectricalTypeName( const RENDER_SETTINGS* aSettings, VECTOR2I& aPosition,
-                                          int aOrientation, bool aDimmed )
+                                          PIN_ORIENTATION aOrientation, bool aDimmed )
 {
     wxDC*       DC = aSettings->GetPrintDC();
     wxString    typeName = GetElectricalTypeName();
@@ -586,22 +590,22 @@ void LIB_PIN::printPinElectricalTypeName( const RENDER_SETTINGS* aSettings, VECT
 
     switch( aOrientation )
     {
-    case PIN_UP:
+    case PIN_ORIENTATION::PIN_UP:
         txtpos.y += offset;
         orient = ANGLE_VERTICAL;
         hjustify = GR_TEXT_H_ALIGN_RIGHT;
         break;
 
-    case PIN_DOWN:
+    case PIN_ORIENTATION::PIN_DOWN:
         txtpos.y -= offset;
         orient = ANGLE_VERTICAL;
         break;
 
-    case PIN_LEFT:
+    case PIN_ORIENTATION::PIN_LEFT:
         txtpos.x += offset;
         break;
 
-    case PIN_RIGHT:
+    case PIN_ORIENTATION::PIN_RIGHT:
         txtpos.x -= offset;
         hjustify = GR_TEXT_H_ALIGN_RIGHT;
         break;
@@ -612,8 +616,8 @@ void LIB_PIN::printPinElectricalTypeName( const RENDER_SETTINGS* aSettings, VECT
 }
 
 
-void LIB_PIN::PlotSymbol( PLOTTER *aPlotter, const VECTOR2I &aPosition, int aOrientation,
-        bool aDimmed ) const
+void LIB_PIN::PlotSymbol( PLOTTER *aPlotter, const VECTOR2I &aPosition,
+                          PIN_ORIENTATION aOrientation, bool aDimmed ) const
 {
     int     MapX1, MapY1, x1, y1;
     COLOR4D color = aPlotter->RenderSettings()->GetLayerColor( LAYER_PIN );
@@ -637,10 +641,10 @@ void LIB_PIN::PlotSymbol( PLOTTER *aPlotter, const VECTOR2I &aPosition, int aOri
 
     switch( aOrientation )
     {
-    case PIN_UP:     y1 = aPosition.y - m_length;  MapY1 = 1;   break;
-    case PIN_DOWN:   y1 = aPosition.y + m_length;  MapY1 = -1;  break;
-    case PIN_LEFT:   x1 = aPosition.x - m_length;  MapX1 = 1;   break;
-    case PIN_RIGHT:  x1 = aPosition.x + m_length;  MapX1 = -1;  break;
+    case PIN_ORIENTATION::PIN_UP:     y1 = aPosition.y - m_length;  MapY1 = 1;   break;
+    case PIN_ORIENTATION::PIN_DOWN:   y1 = aPosition.y + m_length;  MapY1 = -1;  break;
+    case PIN_ORIENTATION::PIN_LEFT:   x1 = aPosition.x - m_length;  MapX1 = 1;   break;
+    case PIN_ORIENTATION::PIN_RIGHT:  x1 = aPosition.x + m_length;  MapX1 = -1;  break;
     }
 
     if( m_shape == GRAPHIC_PINSHAPE::INVERTED || m_shape == GRAPHIC_PINSHAPE::INVERTED_CLOCK )
@@ -755,8 +759,10 @@ void LIB_PIN::PlotSymbol( PLOTTER *aPlotter, const VECTOR2I &aPosition, int aOri
     }
 }
 
-void LIB_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, int aPinOrient,
-        int aTextInside, bool aDrawPinNum, bool aDrawPinName, bool aDimmed ) const
+
+void LIB_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIENTATION aPinOrient,
+                            int aTextInside, bool aDrawPinNum, bool aDrawPinName,
+                            bool aDimmed ) const
 {
     RENDER_SETTINGS* settings = aPlotter->RenderSettings();
     KIFONT::FONT*    font = KIFONT::FONT::GetFont( settings->GetDefaultFont(), false, false );
@@ -801,10 +807,10 @@ void LIB_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, int aPin
 
     switch( aPinOrient )
     {
-    case PIN_UP:     y1 -= m_length;  break;
-    case PIN_DOWN:   y1 += m_length;  break;
-    case PIN_LEFT:   x1 -= m_length;  break;
-    case PIN_RIGHT:  x1 += m_length;  break;
+    case PIN_ORIENTATION::PIN_UP:     y1 -= m_length;  break;
+    case PIN_ORIENTATION::PIN_DOWN:   y1 += m_length;  break;
+    case PIN_ORIENTATION::PIN_LEFT:   x1 -= m_length;  break;
+    case PIN_ORIENTATION::PIN_RIGHT:  x1 += m_length;  break;
     }
 
     auto plotText =
@@ -826,12 +832,14 @@ void LIB_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, int aPin
     /* Draw the text inside, but the pin numbers outside. */
     if( aTextInside )
     {
-        if( ( aPinOrient == PIN_LEFT) || ( aPinOrient == PIN_RIGHT) ) /* Its an horizontal line. */
+        if( ( aPinOrient == PIN_ORIENTATION::PIN_LEFT )
+            || ( aPinOrient == PIN_ORIENTATION::PIN_RIGHT ) ) /* Its an horizontal line. */
         {
             if( aDrawPinName )
             {
                 GR_TEXT_H_ALIGN_T hjustify;
-                if( aPinOrient == PIN_RIGHT )
+
+                if( aPinOrient == PIN_ORIENTATION::PIN_RIGHT )
                 {
                     x = x1 + aTextInside;
                     hjustify = GR_TEXT_H_ALIGN_LEFT;
@@ -855,7 +863,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, int aPin
         }
         else         /* Its a vertical line. */
         {
-            if( aPinOrient == PIN_DOWN )
+            if( aPinOrient == PIN_ORIENTATION::PIN_DOWN )
             {
                 y = y1 + aTextInside;
 
@@ -893,7 +901,8 @@ void LIB_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, int aPin
     }
     else     /* Draw num & text pin outside */
     {
-        if(( aPinOrient == PIN_LEFT) || ( aPinOrient == PIN_RIGHT) )
+        if( ( aPinOrient == PIN_ORIENTATION::PIN_LEFT )
+            || ( aPinOrient == PIN_ORIENTATION::PIN_RIGHT ) )
         {
             /* Its an horizontal line. */
             if( aDrawPinName )
@@ -929,34 +938,34 @@ void LIB_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, int aPin
 }
 
 
-int LIB_PIN::PinDrawOrient( const TRANSFORM& aTransform ) const
+PIN_ORIENTATION LIB_PIN::PinDrawOrient( const TRANSFORM& aTransform ) const
 {
-    int      orient;
+    PIN_ORIENTATION orient;
     VECTOR2I end; // position of pin end starting at 0,0 according to its orientation, length = 1
 
     switch( m_orientation )
     {
-    case PIN_UP:     end.y = 1;   break;
-    case PIN_DOWN:   end.y = -1;  break;
-    case PIN_LEFT:   end.x = -1;  break;
-    case PIN_RIGHT:  end.x = 1;   break;
+    case PIN_ORIENTATION::PIN_UP:     end.y = 1;   break;
+    case PIN_ORIENTATION::PIN_DOWN:   end.y = -1;  break;
+    case PIN_ORIENTATION::PIN_LEFT:   end.x = -1;  break;
+    case PIN_ORIENTATION::PIN_RIGHT:  end.x = 1;   break;
     }
 
     // = pos of end point, according to the symbol orientation.
     end    = aTransform.TransformCoordinate( end );
-    orient = PIN_UP;
+    orient = PIN_ORIENTATION::PIN_UP;
 
     if( end.x == 0 )
     {
         if( end.y > 0 )
-            orient = PIN_DOWN;
+            orient = PIN_ORIENTATION::PIN_DOWN;
     }
     else
     {
-        orient = PIN_RIGHT;
+        orient = PIN_ORIENTATION::PIN_RIGHT;
 
         if( end.x < 0 )
-            orient = PIN_LEFT;
+            orient = PIN_ORIENTATION::PIN_LEFT;
     }
 
     return orient;
@@ -1000,7 +1009,7 @@ int LIB_PIN::compare( const LIB_ITEM& aOther, int aCompareFlags ) const
         return m_length - tmp->m_length;
 
     if( m_orientation != tmp->m_orientation )
-        return m_orientation - tmp->m_orientation;
+        return static_cast<int>( m_orientation ) - static_cast<int>( tmp->m_orientation );
 
     if( m_shape != tmp->m_shape )
         return static_cast<int>( m_shape ) - static_cast<int>( tmp->m_shape );
@@ -1054,16 +1063,16 @@ void LIB_PIN::ChangeLength( int aLength )
 
     switch( m_orientation )
     {
-    case PIN_RIGHT:
+    case PIN_ORIENTATION::PIN_RIGHT:
         offsetX = lengthChange;
         break;
-    case PIN_LEFT:
+    case PIN_ORIENTATION::PIN_LEFT:
         offsetX = -1 * lengthChange;
         break;
-    case PIN_UP:
+    case PIN_ORIENTATION::PIN_UP:
         offsetY = lengthChange;
         break;
-    case PIN_DOWN:
+    case PIN_ORIENTATION::PIN_DOWN:
         offsetY = -1 * lengthChange;
         break;
     }
@@ -1092,10 +1101,10 @@ void LIB_PIN::MirrorHorizontal( const VECTOR2I& aCenter )
     m_position.x *= -1;
     m_position.x += aCenter.x;
 
-    if( m_orientation == PIN_RIGHT )
-        m_orientation = PIN_LEFT;
-    else if( m_orientation == PIN_LEFT )
-        m_orientation = PIN_RIGHT;
+    if( m_orientation == PIN_ORIENTATION::PIN_RIGHT )
+        m_orientation = PIN_ORIENTATION::PIN_LEFT;
+    else if( m_orientation == PIN_ORIENTATION::PIN_LEFT )
+        m_orientation = PIN_ORIENTATION::PIN_RIGHT;
 }
 
 
@@ -1105,10 +1114,10 @@ void LIB_PIN::MirrorVertical( const VECTOR2I& aCenter )
     m_position.y *= -1;
     m_position.y += aCenter.y;
 
-    if( m_orientation == PIN_UP )
-        m_orientation = PIN_DOWN;
-    else if( m_orientation == PIN_DOWN )
-        m_orientation = PIN_UP;
+    if( m_orientation == PIN_ORIENTATION::PIN_UP )
+        m_orientation = PIN_ORIENTATION::PIN_DOWN;
+    else if( m_orientation == PIN_ORIENTATION::PIN_DOWN )
+        m_orientation = PIN_ORIENTATION::PIN_UP;
 }
 
 
@@ -1122,20 +1131,20 @@ void LIB_PIN::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
     {
         switch( m_orientation )
         {
-        case PIN_RIGHT: m_orientation = PIN_UP;    break;
-        case PIN_UP:    m_orientation = PIN_LEFT;  break;
-        case PIN_LEFT:  m_orientation = PIN_DOWN;  break;
-        case PIN_DOWN:  m_orientation = PIN_RIGHT; break;
+        case PIN_ORIENTATION::PIN_RIGHT: m_orientation = PIN_ORIENTATION::PIN_UP;    break;
+        case PIN_ORIENTATION::PIN_UP:    m_orientation = PIN_ORIENTATION::PIN_LEFT;  break;
+        case PIN_ORIENTATION::PIN_LEFT:  m_orientation = PIN_ORIENTATION::PIN_DOWN;  break;
+        case PIN_ORIENTATION::PIN_DOWN:  m_orientation = PIN_ORIENTATION::PIN_RIGHT; break;
         }
     }
     else
     {
         switch( m_orientation )
         {
-        case PIN_RIGHT: m_orientation = PIN_DOWN;  break;
-        case PIN_UP:    m_orientation = PIN_RIGHT; break;
-        case PIN_LEFT:  m_orientation = PIN_UP;    break;
-        case PIN_DOWN:  m_orientation = PIN_LEFT;  break;
+        case PIN_ORIENTATION::PIN_RIGHT: m_orientation = PIN_ORIENTATION::PIN_DOWN;  break;
+        case PIN_ORIENTATION::PIN_UP:    m_orientation = PIN_ORIENTATION::PIN_RIGHT; break;
+        case PIN_ORIENTATION::PIN_LEFT:  m_orientation = PIN_ORIENTATION::PIN_UP;    break;
+        case PIN_ORIENTATION::PIN_DOWN:  m_orientation = PIN_ORIENTATION::PIN_LEFT;  break;
         }
     }
 }
@@ -1147,7 +1156,7 @@ void LIB_PIN::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffset
     if( !IsVisible() || aBackground )
         return;
 
-    int     orient = PinDrawOrient( aTransform );
+    PIN_ORIENTATION orient = PinDrawOrient( aTransform );
     VECTOR2I pos = aTransform.TransformCoordinate( m_position ) + aOffset;
 
     PlotSymbol( aPlotter, pos, orient, aDimmed );
@@ -1171,8 +1180,7 @@ void LIB_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
     // Display pin length
     aList.emplace_back( _( "Length" ), aFrame->MessageTextFromValue( m_length, true ) );
 
-    int i = PinOrientationIndex( m_orientation );
-    aList.emplace_back( _( "Orientation" ), PinOrientationName( (unsigned) i ) );
+    aList.emplace_back( _( "Orientation" ), PinOrientationName( m_orientation ) );
 
     VECTOR2I pinpos = GetPosition();
     pinpos.y = -pinpos.y;   // Display coords are top to bottom; lib item coords are bottom to top
@@ -1326,30 +1334,30 @@ const BOX2I LIB_PIN::GetBoundingBox( bool aIncludeInvisiblePins, bool aIncludeNa
     }
 
     // Now, calculate boundary box corners position for the actual pin orientation
-    int orient = PinDrawOrient( DefaultTransform );
+    PIN_ORIENTATION orient = PinDrawOrient( DefaultTransform );
 
     /* Calculate the pin position */
     switch( orient )
     {
-    case PIN_UP:
+    case PIN_ORIENTATION::PIN_UP:
         // Pin is rotated and texts positions are mirrored
         RotatePoint( begin, VECTOR2I( 0, 0 ), -ANGLE_90 );
         RotatePoint( end, VECTOR2I( 0, 0 ), -ANGLE_90 );
         break;
 
-    case PIN_DOWN:
+    case PIN_ORIENTATION::PIN_DOWN:
         RotatePoint( begin, VECTOR2I( 0, 0 ), ANGLE_90 );
         RotatePoint( end, VECTOR2I( 0, 0 ), ANGLE_90 );
         begin.x = -begin.x;
         end.x = -end.x;
         break;
 
-    case PIN_LEFT:
+    case PIN_ORIENTATION::PIN_LEFT:
         begin.x = -begin.x;
         end.x = -end.x;
         break;
 
-    case PIN_RIGHT:
+    case PIN_ORIENTATION::PIN_RIGHT:
         break;
     }
 
@@ -1463,17 +1471,88 @@ static struct LIB_PIN_DESC
 {
     LIB_PIN_DESC()
     {
+        auto& pinTypeEnum = ENUM_MAP<ELECTRICAL_PINTYPE>::Instance();
+
+        if( pinTypeEnum.Choices().GetCount() == 0 )
+        {
+            pinTypeEnum.Map( ELECTRICAL_PINTYPE::PT_INPUT,         _HKI( "Input" ) )
+                       .Map( ELECTRICAL_PINTYPE::PT_OUTPUT,        _HKI( "Output" ) )
+                       .Map( ELECTRICAL_PINTYPE::PT_BIDI,          _HKI( "Bidirectional" ) )
+                       .Map( ELECTRICAL_PINTYPE::PT_TRISTATE,      _HKI( "Tri-state" ) )
+                       .Map( ELECTRICAL_PINTYPE::PT_PASSIVE,       _HKI( "Passive" ) )
+                       .Map( ELECTRICAL_PINTYPE::PT_NIC,           _HKI( "Free" ) )
+                       .Map( ELECTRICAL_PINTYPE::PT_UNSPECIFIED,   _HKI( "Unspecified" ) )
+                       .Map( ELECTRICAL_PINTYPE::PT_POWER_IN,      _HKI( "Power input" ) )
+                       .Map( ELECTRICAL_PINTYPE::PT_POWER_OUT,     _HKI( "Power output" ) )
+                       .Map( ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR, _HKI( "Open collector" ) )
+                       .Map( ELECTRICAL_PINTYPE::PT_OPENEMITTER,   _HKI( "Open emitter" ) )
+                       .Map( ELECTRICAL_PINTYPE::PT_NC,            _HKI( "Unconnected" ) );
+        }
+
+        auto& pinShapeEnum = ENUM_MAP<GRAPHIC_PINSHAPE>::Instance();
+
+        if( pinShapeEnum.Choices().GetCount() == 0 )
+        {
+            pinShapeEnum.Map( GRAPHIC_PINSHAPE::LINE,               _HKI( "Line" ) )
+                        .Map( GRAPHIC_PINSHAPE::INVERTED,           _HKI( "Inverted" ) )
+                        .Map( GRAPHIC_PINSHAPE::CLOCK,              _HKI( "Clock" ) )
+                        .Map( GRAPHIC_PINSHAPE::INVERTED_CLOCK,     _HKI( "Inverted clock" ) )
+                        .Map( GRAPHIC_PINSHAPE::INPUT_LOW,          _HKI( "Input low" ) )
+                        .Map( GRAPHIC_PINSHAPE::CLOCK_LOW,          _HKI( "Clock low" ) )
+                        .Map( GRAPHIC_PINSHAPE::OUTPUT_LOW,         _HKI( "Output low" ) )
+                        .Map( GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK, _HKI( "Falling edge clock" ) )
+                        .Map( GRAPHIC_PINSHAPE::NONLOGIC,           _HKI( "NonLogic" ) );
+        }
+
+        auto& orientationEnum = ENUM_MAP<PIN_ORIENTATION>::Instance();
+
+        if( orientationEnum.Choices().GetCount() == 0 )
+        {
+            orientationEnum.Map( PIN_ORIENTATION::PIN_RIGHT, _( "Right" ) )
+                           .Map( PIN_ORIENTATION::PIN_LEFT,  _( "Left" ) )
+                           .Map( PIN_ORIENTATION::PIN_UP,    _( "Up" ) )
+                           .Map( PIN_ORIENTATION::PIN_DOWN,  _( "Down" ) );
+        }
+
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( LIB_PIN );
         propMgr.InheritsAfter( TYPE_HASH( LIB_PIN ), TYPE_HASH( SCH_ITEM ) );
 
         propMgr.AddProperty( new PROPERTY<LIB_PIN, wxString>( _HKI( "Pin Name" ),
-                NO_SETTER( LIB_PIN, wxString ), &LIB_PIN::GetName ) );
+                &LIB_PIN::SetName, &LIB_PIN::GetName ) );
+
+        propMgr.AddProperty( new PROPERTY<LIB_PIN, int>( _HKI( "Name Text Size" ),
+                &LIB_PIN::SetNameTextSize, &LIB_PIN::GetNameTextSize, PROPERTY_DISPLAY::PT_SIZE ) );
 
         propMgr.AddProperty( new PROPERTY<LIB_PIN, wxString>( _HKI( "Pin Number" ),
-                NO_SETTER( LIB_PIN, wxString ), &LIB_PIN::GetNumber ) );
+                &LIB_PIN::SetNumber, &LIB_PIN::GetNumber ) );
+
+        propMgr.AddProperty( new PROPERTY<LIB_PIN, int>( _HKI( "Number Text Size" ),
+                &LIB_PIN::SetNumberTextSize, &LIB_PIN::GetNumberTextSize,
+                PROPERTY_DISPLAY::PT_SIZE ) );
 
         propMgr.AddProperty( new PROPERTY<LIB_PIN, int>( _HKI( "Length" ),
-                NO_SETTER( LIB_PIN, int ), &LIB_PIN::GetLength, PROPERTY_DISPLAY::PT_SIZE ) );
+                &LIB_PIN::SetLength, &LIB_PIN::GetLength, PROPERTY_DISPLAY::PT_SIZE ) );
+
+        propMgr.AddProperty( new PROPERTY_ENUM<LIB_PIN,
+                                               ELECTRICAL_PINTYPE>( _HKI( "Electrical Type" ),
+                             &LIB_PIN::SetType, &LIB_PIN::GetType ) );
+
+        propMgr.AddProperty( new PROPERTY_ENUM<LIB_PIN, GRAPHIC_PINSHAPE>( _HKI( "Graphic Style" ),
+                             &LIB_PIN::SetShape, &LIB_PIN::GetShape ) );
+
+        propMgr.AddProperty( new PROPERTY<LIB_PIN, int>( _HKI( "Position X" ),
+                &LIB_PIN::SetX, &LIB_PIN::GetX, PROPERTY_DISPLAY::PT_COORD ) );
+
+        propMgr.AddProperty( new PROPERTY<LIB_PIN, int>( _HKI( "Position Y" ),
+                &LIB_PIN::SetY, &LIB_PIN::GetY, PROPERTY_DISPLAY::PT_COORD ) );
+
+        propMgr.AddProperty( new PROPERTY_ENUM<LIB_PIN, PIN_ORIENTATION>( _HKI( "Orientation" ),
+                             &LIB_PIN::SetOrientation, &LIB_PIN::GetOrientation ) );
     }
 } _LIB_PIN_DESC;
+
+
+ENUM_TO_WXANY( PIN_ORIENTATION )
+ENUM_TO_WXANY( GRAPHIC_PINSHAPE )
+ENUM_TO_WXANY( ELECTRICAL_PINTYPE )

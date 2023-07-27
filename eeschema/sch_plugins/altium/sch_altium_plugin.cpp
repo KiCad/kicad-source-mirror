@@ -909,22 +909,22 @@ void SCH_ALTIUM_PLUGIN::ParsePin( const std::map<wxString, wxString>& aPropertie
     switch( elem.orientation )
     {
     case ASCH_RECORD_ORIENTATION::RIGHTWARDS:
-        pin->SetOrientation( DrawPinOrient::PIN_LEFT );
+        pin->SetOrientation( PIN_ORIENTATION::PIN_LEFT );
         pinLocation.x += elem.pinlength;
         break;
 
     case ASCH_RECORD_ORIENTATION::UPWARDS:
-        pin->SetOrientation( DrawPinOrient::PIN_DOWN );
+        pin->SetOrientation( PIN_ORIENTATION::PIN_DOWN );
         pinLocation.y -= elem.pinlength;
         break;
 
     case ASCH_RECORD_ORIENTATION::LEFTWARDS:
-        pin->SetOrientation( DrawPinOrient::PIN_RIGHT );
+        pin->SetOrientation( PIN_ORIENTATION::PIN_RIGHT );
         pinLocation.x -= elem.pinlength;
         break;
 
     case ASCH_RECORD_ORIENTATION::DOWNWARDS:
-        pin->SetOrientation( DrawPinOrient::PIN_UP );
+        pin->SetOrientation( PIN_ORIENTATION::PIN_UP );
         pinLocation.y += elem.pinlength;
         break;
 

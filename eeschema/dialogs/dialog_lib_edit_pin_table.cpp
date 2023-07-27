@@ -329,10 +329,15 @@ public:
 
                     auto* cfg = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
 
-                    if( last->GetOrientation() == PIN_LEFT || last->GetOrientation() == PIN_RIGHT )
+                    if( last->GetOrientation() == PIN_ORIENTATION::PIN_LEFT
+                        || last->GetOrientation() == PIN_ORIENTATION::PIN_RIGHT )
+                    {
                         pos.y -= schIUScale.MilsToIU( cfg->m_Repeat.pin_step );
+                    }
                     else
+                    {
                         pos.x += schIUScale.MilsToIU( cfg->m_Repeat.pin_step );
+                    }
 
                     newPin->SetPosition( pos );
 
@@ -957,10 +962,15 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnAddRow( wxCommandEvent& event )
 
         SYMBOL_EDITOR_SETTINGS* cfg = m_editFrame->GetSettings();
 
-        if( last->GetOrientation() == PIN_LEFT || last->GetOrientation() == PIN_RIGHT )
-            pos.y -= schIUScale.MilsToIU(cfg->m_Repeat.pin_step);
+        if( last->GetOrientation() == PIN_ORIENTATION::PIN_LEFT
+            || last->GetOrientation() == PIN_ORIENTATION::PIN_RIGHT )
+        {
+            pos.y -= schIUScale.MilsToIU( cfg->m_Repeat.pin_step );
+        }
         else
-            pos.x += schIUScale.MilsToIU(cfg->m_Repeat.pin_step);
+        {
+            pos.x += schIUScale.MilsToIU( cfg->m_Repeat.pin_step );
+        }
 
         newPin->SetPosition( pos );
     }

@@ -1231,22 +1231,22 @@ void LTSPICE_SCH_PARSER::CreatePin( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int
     {
     case LTSPICE_SCHEMATIC::JUSTIFICATION::LEFT:
     case LTSPICE_SCHEMATIC::JUSTIFICATION::VLEFT:
-        aPin->SetOrientation( PIN_RIGHT );
+        aPin->SetOrientation( PIN_ORIENTATION::PIN_RIGHT );
         break;
 
     case LTSPICE_SCHEMATIC::JUSTIFICATION::RIGHT:
     case LTSPICE_SCHEMATIC::JUSTIFICATION::VRIGHT:
-        aPin->SetOrientation( PIN_LEFT );
+        aPin->SetOrientation( PIN_ORIENTATION::PIN_LEFT );
         break;
 
     case LTSPICE_SCHEMATIC::JUSTIFICATION::BOTTOM:
     case LTSPICE_SCHEMATIC::JUSTIFICATION::VBOTTOM:
-        aPin->SetOrientation( PIN_UP );
+        aPin->SetOrientation( PIN_ORIENTATION::PIN_UP );
         break;
 
     case LTSPICE_SCHEMATIC::JUSTIFICATION::TOP:
     case LTSPICE_SCHEMATIC::JUSTIFICATION::VTOP:
-        aPin->SetOrientation( PIN_DOWN );
+        aPin->SetOrientation( PIN_ORIENTATION::PIN_DOWN );
         break;
 
     default: break;

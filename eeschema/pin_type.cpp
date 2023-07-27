@@ -24,6 +24,7 @@
 #include <bitmaps.h>
 #include <cstddef>
 #include <core/arraydim.h>
+#include <magic_enum.hpp>
 #include <lib_pin.h>
 #include "pgm_base.h"
 
@@ -88,15 +89,6 @@ const std::map<GRAPHIC_PINSHAPE, struct pinShapeStruct> pinShapes = {
 // clang-format on
 
 
-static const int pin_orientation_codes[] =
-{
-    PIN_RIGHT,
-    PIN_LEFT,
-    PIN_UP,
-    PIN_DOWN
-};
-
-
 // bitmaps to show pins orientations in dialog editor
 // must have same order than pin_orientation_names
 static const BITMAPS iconsPinsOrientations[] =
@@ -108,53 +100,29 @@ static const BITMAPS iconsPinsOrientations[] =
 };
 
 
-#define PIN_ORIENTATION_CNT arrayDim( pin_orientation_codes )
+// clang-format off
+std::map<PIN_ORIENTATION, struct pinShapeStruct> pinOrientations = {
+    { PIN_ORIENTATION::PIN_RIGHT, { _( "Right" ), BITMAPS::pinorient_right } },
+    { PIN_ORIENTATION::PIN_LEFT,  { _( "Left" ),  BITMAPS::pinorient_left } },
+    { PIN_ORIENTATION::PIN_UP,    { _( "Up" ),    BITMAPS::pinorient_up } },
+    { PIN_ORIENTATION::PIN_DOWN,  { _( "Down" ),  BITMAPS::pinorient_down } },
+};
+// clang-format on
 
 
-// Helper functions to get the pin orientation name from pin_orientation_codes
-// Note: the strings are *not* static because they are translated and must be built
-// on the fly, to be properly translated
-
-wxString PinOrientationName( unsigned aPinOrientationCode )
+PIN_ORIENTATION PinOrientationCode( size_t index )
 {
-    /* Note: The following name lists are sentence capitalized per the GNOME UI
-     *       standards for list controls.  Please do not change the capitalization
-     *       of these strings unless the GNOME UI standards are changed.
-     */
-    const wxString pin_orientation_names[] =
-    {
-        _( "Right" ),
-        _( "Left" ),
-        _( "Up" ),
-        _( "Down" ),
-        wxT( "???" )
-    };
-
-    if( aPinOrientationCode > PIN_ORIENTATION_CNT )
-        aPinOrientationCode = PIN_ORIENTATION_CNT;
-
-    return pin_orientation_names[ aPinOrientationCode ];
+    wxASSERT( index < magic_enum::enum_count<PIN_ORIENTATION>() );
+    return magic_enum::enum_value<PIN_ORIENTATION>( index );
 }
 
 
-int PinOrientationCode( int index )
+int PinOrientationIndex( PIN_ORIENTATION code )
 {
-    if( index >= 0 && index < (int) PIN_ORIENTATION_CNT )
-        return pin_orientation_codes[ index ];
+    auto index = magic_enum::enum_index<PIN_ORIENTATION>( code );
 
-    return PIN_RIGHT;
-}
-
-
-int PinOrientationIndex( int code )
-{
-    size_t i;
-
-    for( i = 0; i < PIN_ORIENTATION_CNT; i++ )
-    {
-        if( pin_orientation_codes[i] == code )
-            return (int) i;
-    }
+    if( index.has_value() )
+        return index.value();
 
     return wxNOT_FOUND;
 }
@@ -174,10 +142,10 @@ void InitTables()
         g_shapeNames.push_back( PinShapeGetText( static_cast<GRAPHIC_PINSHAPE>( i ) ) );
     }
 
-    for( unsigned i = 0; i < PIN_ORIENTATION_CNT; ++i )
+    for( PIN_ORIENTATION orientation : magic_enum::enum_values<PIN_ORIENTATION>() )
     {
-        g_orientationIcons.push_back( iconsPinsOrientations[ i ] );
-        g_orientationNames.push_back( PinOrientationName( i ) );
+        g_orientationIcons.push_back( PinOrientationGetBitmap( orientation ) );
+        g_orientationNames.push_back( PinOrientationName( orientation ) );
     }
 }
 
@@ -294,3 +262,22 @@ BITMAPS PinShapeGetBitmap( GRAPHIC_PINSHAPE aShape )
 }
 
 
+wxString PinOrientationName( PIN_ORIENTATION aOrientation )
+{
+    auto findIt = pinOrientations.find( aOrientation );
+
+    wxCHECK_MSG( findIt != pinOrientations.end(), wxT( "?" ), wxT( "Pin orientation not found!" ) );
+
+    return findIt->second.name;
+}
+
+
+BITMAPS PinOrientationGetBitmap( PIN_ORIENTATION aOrientation )
+{
+    auto findIt = pinOrientations.find( aOrientation );
+
+    wxCHECK_MSG( findIt != pinOrientations.end(), BITMAPS::INVALID_BITMAP,
+                 wxT( "Pin orientation not found!" ) );
+
+    return findIt->second.bitmap;
+}

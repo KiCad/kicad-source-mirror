@@ -149,14 +149,14 @@ const char* getPinShapeToken( GRAPHIC_PINSHAPE aShape )
 }
 
 
-EDA_ANGLE getPinAngle( int aOrientation )
+EDA_ANGLE getPinAngle( PIN_ORIENTATION aOrientation )
 {
     switch( aOrientation )
     {
-    case PIN_RIGHT: return ANGLE_0;
-    case PIN_LEFT:  return ANGLE_180;
-    case PIN_UP:    return ANGLE_90;
-    case PIN_DOWN:  return ANGLE_270;
+    case PIN_ORIENTATION::PIN_RIGHT: return ANGLE_0;
+    case PIN_ORIENTATION::PIN_LEFT:  return ANGLE_180;
+    case PIN_ORIENTATION::PIN_UP:    return ANGLE_90;
+    case PIN_ORIENTATION::PIN_DOWN:  return ANGLE_270;
     default:        wxFAIL_MSG( "Missing symbol library pin orientation type" ); return ANGLE_0;
     }
 }

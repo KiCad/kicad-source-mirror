@@ -3303,13 +3303,13 @@ void CADSTAR_SCH_ARCHIVE_LOADER::fixUpLibraryPins( LIB_SYMBOL* aSymbolToFix, int
                     angle.Normalize180();
 
                     if( angle >= -ANGLE_45 && angle <= ANGLE_45 )
-                        pin->SetOrientation( 'R' ); // 0 degrees
+                        pin->SetOrientation( PIN_ORIENTATION::PIN_RIGHT ); // 0 degrees
                     else if( angle >= ANGLE_45 && angle <= ANGLE_135 )
-                        pin->SetOrientation( 'U' ); // 90 degrees
+                        pin->SetOrientation( PIN_ORIENTATION::PIN_UP ); // 90 degrees
                     else if( angle >= ANGLE_135 || angle <= -ANGLE_135 )
-                        pin->SetOrientation( 'L' ); // 180 degrees
+                        pin->SetOrientation( PIN_ORIENTATION::PIN_LEFT ); // 180 degrees
                     else
-                        pin->SetOrientation( 'D' ); // -90 degrees
+                        pin->SetOrientation( PIN_ORIENTATION::PIN_DOWN ); // -90 degrees
                 };
 
         if( uniqueSegments.count( pin->GetPosition() ) )

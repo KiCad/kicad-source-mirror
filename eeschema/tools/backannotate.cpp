@@ -485,10 +485,10 @@ static TEXT_SPIN_STYLE orientLabel( SCH_PIN* aPin )
     // Initial orientation from the pin
     switch( aPin->GetLibPin()->GetOrientation() )
     {
-    case PIN_UP:    spin = TEXT_SPIN_STYLE::BOTTOM; break;
-    case PIN_DOWN:  spin = TEXT_SPIN_STYLE::UP;     break;
-    case PIN_LEFT:  spin = TEXT_SPIN_STYLE::RIGHT;  break;
-    case PIN_RIGHT: spin = TEXT_SPIN_STYLE::LEFT;   break;
+    case PIN_ORIENTATION::PIN_UP:    spin = TEXT_SPIN_STYLE::BOTTOM; break;
+    case PIN_ORIENTATION::PIN_DOWN:  spin = TEXT_SPIN_STYLE::UP;     break;
+    case PIN_ORIENTATION::PIN_LEFT:  spin = TEXT_SPIN_STYLE::RIGHT;  break;
+    case PIN_ORIENTATION::PIN_RIGHT: spin = TEXT_SPIN_STYLE::LEFT;   break;
     }
 
     // Reorient based on the actual symbol orientation now

@@ -1395,10 +1395,10 @@ LIB_PIN* SCH_SEXPR_PARSER::parsePin()
 
             switch( parseInt( "pin orientation" ) )
             {
-            case 0:   pin->SetOrientation( PIN_RIGHT ); break;
-            case 90:  pin->SetOrientation( PIN_UP );    break;
-            case 180: pin->SetOrientation( PIN_LEFT );  break;
-            case 270: pin->SetOrientation( PIN_DOWN );  break;
+            case 0:   pin->SetOrientation( PIN_ORIENTATION::PIN_RIGHT ); break;
+            case 90:  pin->SetOrientation( PIN_ORIENTATION::PIN_UP );    break;
+            case 180: pin->SetOrientation( PIN_ORIENTATION::PIN_LEFT );  break;
+            case 270: pin->SetOrientation( PIN_ORIENTATION::PIN_DOWN );  break;
             default:  Expecting( "0, 90, 180, or 270" );
             }
 

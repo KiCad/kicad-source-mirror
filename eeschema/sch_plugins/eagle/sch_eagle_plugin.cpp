@@ -2302,10 +2302,10 @@ LIB_PIN* SCH_EAGLE_PLUGIN::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlN
 
     switch( roti )
     {
-    case 0:   pin->SetOrientation( 'R' ); break;
-    case 90:  pin->SetOrientation( 'U' ); break;
-    case 180: pin->SetOrientation( 'L' ); break;
-    case 270: pin->SetOrientation( 'D' ); break;
+    case 0:   pin->SetOrientation( PIN_ORIENTATION::PIN_RIGHT ); break;
+    case 90:  pin->SetOrientation( PIN_ORIENTATION::PIN_UP ); break;
+    case 180: pin->SetOrientation( PIN_ORIENTATION::PIN_LEFT ); break;
+    case 270: pin->SetOrientation( PIN_ORIENTATION::PIN_DOWN ); break;
     default:  wxFAIL_MSG( wxString::Format( wxT( "Unhandled orientation (%d degrees)." ), roti ) );
     }
 
@@ -3382,10 +3382,10 @@ void SCH_EAGLE_PLUGIN::addImplicitConnections( SCH_SYMBOL* aSymbol, SCH_SCREEN* 
 
                     switch( pin->GetOrientation() )
                     {
-                    case PIN_LEFT:  netLabel->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );  break;
-                    case PIN_RIGHT: netLabel->SetTextSpinStyle( TEXT_SPIN_STYLE::LEFT );   break;
-                    case PIN_UP:    netLabel->SetTextSpinStyle( TEXT_SPIN_STYLE::UP );     break;
-                    case PIN_DOWN:  netLabel->SetTextSpinStyle( TEXT_SPIN_STYLE::BOTTOM ); break;
+                    case PIN_ORIENTATION::PIN_LEFT:  netLabel->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );  break;
+                    case PIN_ORIENTATION::PIN_RIGHT: netLabel->SetTextSpinStyle( TEXT_SPIN_STYLE::LEFT );   break;
+                    case PIN_ORIENTATION::PIN_UP:    netLabel->SetTextSpinStyle( TEXT_SPIN_STYLE::UP );     break;
+                    case PIN_ORIENTATION::PIN_DOWN:  netLabel->SetTextSpinStyle( TEXT_SPIN_STYLE::BOTTOM ); break;
                     }
 
                     aScreen->Append( netLabel );

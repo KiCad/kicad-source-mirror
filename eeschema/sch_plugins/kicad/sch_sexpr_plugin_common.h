@@ -43,7 +43,7 @@ extern const char* getPinElectricalTypeToken( ELECTRICAL_PINTYPE aType );
 
 extern const char* getPinShapeToken( GRAPHIC_PINSHAPE aShape );
 
-extern EDA_ANGLE getPinAngle( int aOrientation );
+extern EDA_ANGLE getPinAngle( PIN_ORIENTATION aOrientation );
 
 extern const char* getSheetPinShapeToken( LABEL_FLAG_SHAPE aShape );
 

@@ -132,7 +132,7 @@ GRAPHIC_PINSHAPE SCH_PIN::GetShape() const
 }
 
 
-int SCH_PIN::GetOrientation() const
+PIN_ORIENTATION SCH_PIN::GetOrientation() const
 {
     return m_libPin->GetOrientation();
 }
@@ -224,8 +224,7 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 
     aList.emplace_back( _( "Length" ), aFrame->MessageTextFromValue( GetLength() ), true );
 
-    int i = PinOrientationIndex( GetOrientation() );
-    aList.emplace_back( _( "Orientation" ), PinOrientationName( (unsigned) i ) );
+    aList.emplace_back( _( "Orientation" ), PinOrientationName( GetOrientation() ) );
 
     SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );
     SCH_SHEET_PATH* currentSheet = schframe ? &schframe->GetCurrentSheet() : nullptr;

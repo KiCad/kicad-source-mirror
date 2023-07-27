@@ -533,6 +533,10 @@ target_include_directories( common SYSTEM PUBLIC
     $<TARGET_PROPERTY:nanodbc,INTERFACE_INCLUDE_DIRECTORIES>
     )
 
+target_include_directories( common PUBLIC
+    $<TARGET_PROPERTY:magic_enum,INTERFACE_INCLUDE_DIRECTORIES>
+    )
+
 
 set( PCB_COMMON_SRCS
     fp_lib_table.cpp

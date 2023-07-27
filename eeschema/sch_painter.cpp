@@ -1350,27 +1350,27 @@ void SCH_PAINTER::draw( const LIB_PIN* aPin, int aLayer, bool aDimmed )
     VECTOR2I p0;
     VECTOR2I dir;
     int      len = aPin->GetLength();
-    int      orient = aPin->GetOrientation();
+    PIN_ORIENTATION orient = aPin->GetOrientation();
 
     switch( orient )
     {
-    case PIN_UP:
+    case PIN_ORIENTATION::PIN_UP:
         p0 = VECTOR2I( pos.x, pos.y - len );
         dir = VECTOR2I( 0, 1 );
         break;
 
-    case PIN_DOWN:
+    case PIN_ORIENTATION::PIN_DOWN:
         p0 = VECTOR2I( pos.x, pos.y + len );
         dir = VECTOR2I( 0, -1 );
         break;
 
-    case PIN_LEFT:
+    case PIN_ORIENTATION::PIN_LEFT:
         p0 = VECTOR2I( pos.x - len, pos.y );
         dir = VECTOR2I( 1, 0 );
         break;
 
     default:
-    case PIN_RIGHT:
+    case PIN_ORIENTATION::PIN_RIGHT:
         p0 = VECTOR2I( pos.x + len, pos.y );
         dir = VECTOR2I( -1, 0 );
         break;
@@ -1701,7 +1701,7 @@ void SCH_PAINTER::draw( const LIB_PIN* aPin, int aLayer, bool aDimmed )
 
     switch( orient )
     {
-    case PIN_LEFT:
+    case PIN_ORIENTATION::PIN_LEFT:
         if( size[INSIDE] )
         {
             drawText( INSIDE, pos + VECTOR2D( -insideOffset - (float) len, 0 ),
@@ -1724,7 +1724,7 @@ void SCH_PAINTER::draw( const LIB_PIN* aPin, int aLayer, bool aDimmed )
         }
         break;
 
-    case PIN_RIGHT:
+    case PIN_ORIENTATION::PIN_RIGHT:
         if( size[INSIDE] )
         {
             drawText( INSIDE, pos + VECTOR2D( insideOffset + (float) len, 0 ),
@@ -1747,7 +1747,7 @@ void SCH_PAINTER::draw( const LIB_PIN* aPin, int aLayer, bool aDimmed )
         }
         break;
 
-    case PIN_DOWN:
+    case PIN_ORIENTATION::PIN_DOWN:
         if( size[INSIDE] )
         {
             drawText( INSIDE, pos + VECTOR2D( 0, insideOffset + (float) len ),
@@ -1770,7 +1770,7 @@ void SCH_PAINTER::draw( const LIB_PIN* aPin, int aLayer, bool aDimmed )
         }
         break;
 
-    case PIN_UP:
+    case PIN_ORIENTATION::PIN_UP:
         if( size[INSIDE] )
         {
             drawText( INSIDE, pos + VECTOR2D( 0, -insideOffset - (float) len ),

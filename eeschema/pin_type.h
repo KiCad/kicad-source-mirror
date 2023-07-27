@@ -69,6 +69,16 @@ enum class GRAPHIC_PINSHAPE
 
 #define GRAPHIC_PINSHAPES_TOTAL ( static_cast<int>( GRAPHIC_PINSHAPE::LAST_OPTION ) + 1 )
 
+/**
+ *  The symbol library pin object orientations.
+ */
+enum class PIN_ORIENTATION {
+    PIN_RIGHT = 'R',
+    PIN_LEFT  = 'L',
+    PIN_UP    = 'U',
+    PIN_DOWN  = 'D',
+};
+
 
 // UI
 
@@ -78,9 +88,10 @@ BITMAPS PinShapeGetBitmap( GRAPHIC_PINSHAPE shape );
 wxString ElectricalPinTypeGetText( ELECTRICAL_PINTYPE );
 BITMAPS ElectricalPinTypeGetBitmap( ELECTRICAL_PINTYPE );
 
-wxString PinOrientationName( unsigned aPinOrientationCode );
-int PinOrientationCode( int index );
-int PinOrientationIndex( int code );
+wxString PinOrientationName( PIN_ORIENTATION aPinOrientation );
+BITMAPS PinOrientationGetBitmap( PIN_ORIENTATION aPinOrientation );
+PIN_ORIENTATION PinOrientationCode( size_t index );
+int PinOrientationIndex( PIN_ORIENTATION code );
 
 const wxArrayString& PinTypeNames();
 const std::vector<BITMAPS>& PinTypeIcons();

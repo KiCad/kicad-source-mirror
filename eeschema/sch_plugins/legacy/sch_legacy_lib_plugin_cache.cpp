@@ -17,6 +17,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <magic_enum.hpp>
 #include <wx/log.h>
 
 #include <lib_shape.h>
@@ -1068,7 +1069,12 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     }
 
     pos += tmp.size() + 1;
-    int orientation = tmp[0];
+
+    PIN_ORIENTATION orientation = PIN_ORIENTATION::PIN_RIGHT;
+    std::optional<PIN_ORIENTATION> optVal = magic_enum::enum_cast<PIN_ORIENTATION>( tmp[0] );
+
+    if( optVal.has_value() )
+        orientation = optVal.value();
 
     tmp = tokens.GetNextToken();
 

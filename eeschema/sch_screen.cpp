@@ -576,19 +576,19 @@ TEXT_SPIN_STYLE SCH_SCREEN::GetLabelOrientationForPoint( const VECTOR2I&       a
             {
                 if( pin->GetPosition() == aPosition )
                 {
-                    if( pin->GetOrientation() == PIN_RIGHT )
+                    if( pin->GetOrientation() == PIN_ORIENTATION::PIN_RIGHT )
                     {
                         ret = TEXT_SPIN_STYLE::LEFT;
                     }
-                    else if( pin->GetOrientation() == PIN_LEFT )
+                    else if( pin->GetOrientation() == PIN_ORIENTATION::PIN_LEFT )
                     {
                         ret = TEXT_SPIN_STYLE::RIGHT;
                     }
-                    else if( pin->GetOrientation() == PIN_UP )
+                    else if( pin->GetOrientation() == PIN_ORIENTATION::PIN_UP )
                     {
                         ret = TEXT_SPIN_STYLE::BOTTOM;
                     }
-                    else if( pin->GetOrientation() == PIN_DOWN )
+                    else if( pin->GetOrientation() == PIN_ORIENTATION::PIN_DOWN )
                     {
                         ret = TEXT_SPIN_STYLE::UP;
                     }

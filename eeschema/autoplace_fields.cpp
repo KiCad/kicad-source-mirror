@@ -234,14 +234,14 @@ protected:
      */
     SIDE getPinSide( SCH_PIN* aPin )
     {
-        int pin_orient = aPin->GetLibPin()->PinDrawOrient( m_symbol->GetTransform() );
+        PIN_ORIENTATION pin_orient = aPin->GetLibPin()->PinDrawOrient( m_symbol->GetTransform() );
 
         switch( pin_orient )
         {
-            case PIN_RIGHT: return SIDE_LEFT;
-            case PIN_LEFT:  return SIDE_RIGHT;
-            case PIN_UP:    return SIDE_BOTTOM;
-            case PIN_DOWN:  return SIDE_TOP;
+            case PIN_ORIENTATION::PIN_RIGHT: return SIDE_LEFT;
+            case PIN_ORIENTATION::PIN_LEFT:  return SIDE_RIGHT;
+            case PIN_ORIENTATION::PIN_UP:    return SIDE_BOTTOM;
+            case PIN_ORIENTATION::PIN_DOWN:  return SIDE_TOP;
             default:
                 wxFAIL_MSG( wxS( "Invalid pin orientation" ) );
                 return SIDE_LEFT;
