@@ -45,6 +45,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::label_align_top].emplace_back( BITMAPS::label_align_top, wxT( "label_align_top_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::label_align_bottom].emplace_back( BITMAPS::label_align_bottom, wxT( "label_align_bottom_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::list_nets_16].emplace_back( BITMAPS::list_nets_16, wxT( "list_nets_16_16.png" ), 16, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::notifications].emplace_back( BITMAPS::notifications, wxT( "notifications_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::options_generic_16].emplace_back( BITMAPS::options_generic_16, wxT( "options_generic_16_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::pinorient_right].emplace_back( BITMAPS::pinorient_right, wxT( "pinorient_right_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::pinorient_left].emplace_back( BITMAPS::pinorient_left, wxT( "pinorient_left_16.png" ), 16, wxT( "light" ) );
@@ -115,6 +116,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::label_align_top].emplace_back( BITMAPS::label_align_top, wxT( "label_align_top_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::label_align_bottom].emplace_back( BITMAPS::label_align_bottom, wxT( "label_align_bottom_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::list_nets_16].emplace_back( BITMAPS::list_nets_16, wxT( "list_nets_16_dark_16.png" ), 16, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::notifications].emplace_back( BITMAPS::notifications, wxT( "notifications_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::options_generic_16].emplace_back( BITMAPS::options_generic_16, wxT( "options_generic_16_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::pinorient_right].emplace_back( BITMAPS::pinorient_right, wxT( "pinorient_right_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::pinorient_left].emplace_back( BITMAPS::pinorient_left, wxT( "pinorient_left_dark_16.png" ), 16, wxT( "dark" ) );

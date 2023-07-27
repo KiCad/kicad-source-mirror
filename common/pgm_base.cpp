@@ -43,6 +43,7 @@
 #include <wx/tooltip.h>
 
 #include <advanced_config.h>
+#include <background_jobs_monitor.h>
 #include <bitmaps.h>
 #include <cli/cli_names.h> // Needed for the pre wx 3.2 cli workaround
 #include <common.h>
@@ -57,6 +58,7 @@
 #include <kiplatform/policy.h>
 #include <macros.h>
 #include <menus_helpers.h>
+#include <notifications_manager.h>
 #include <paths.h>
 #include <pgm_base.h>
 #include <policy_keys.h>
@@ -511,6 +513,8 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
     SetDefaultLanguage( tmp );
 
     m_settings_manager = std::make_unique<SETTINGS_MANAGER>( aHeadless );
+    m_background_jobs_monitor = std::make_unique<BACKGROUND_JOBS_MONITOR>();
+    m_notifications_manager = std::make_unique<NOTIFICATIONS_MANAGER>();
 
     // Our unit test mocks break if we continue
     // A bug caused InitPgm to terminate early in unit tests and the mocks are...simplistic
@@ -546,6 +550,8 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
 #endif
 
     ReadPdfBrowserInfos();      // needs GetCommonSettings()
+
+    GetNotificationsManager().Load();
 
     // Create the python scripting stuff
     // Skip it fot applications that do not use it

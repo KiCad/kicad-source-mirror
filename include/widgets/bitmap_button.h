@@ -115,6 +115,11 @@ public:
         m_badgeTextColor = aBadgeTextColor;
     }
 
+    void SetBitmapCentered( bool aCentered )
+    {
+        m_centerBitmap = aCentered;
+    }
+
 protected:
     void setupEvents();
 
@@ -157,6 +162,9 @@ private:
 
     ///< Accept mouse-up as click even if mouse-down happened outside of the control
     bool      m_acceptDraggedInClicks;
+
+    ///< Draws bitmap centered in the control
+    bool      m_centerBitmap;
 };
 
 #endif /*BITMAP_BUTTON_H_*/

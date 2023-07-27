@@ -186,6 +186,7 @@ set( COMMON_WIDGET_SRCS
     widgets/grid_text_helpers.cpp
     widgets/indicator_icon.cpp
     widgets/wx_infobar.cpp
+    widgets/kistatusbar.cpp
     widgets/layer_box_selector.cpp
     widgets/lib_tree.cpp
     widgets/mathplot.cpp
@@ -300,6 +301,7 @@ set( COMMON_SRCS
     array_axis.cpp
     array_options.cpp
     asset_archive.cpp
+    background_jobs_monitor.cpp
     base_screen.cpp
     base64.cpp
     bin_mod.cpp
@@ -363,6 +365,7 @@ set( COMMON_SRCS
     marker_base.cpp
     markup_parser.cpp
     netclass.cpp
+    notifications_manager.cpp
     observable.cpp
     origin_transforms.cpp
     page_info.cpp
@@ -494,6 +497,7 @@ target_link_libraries( common
     gal
     scripting
     threadpool
+    nlohmann_json
     pybind11::embed
     compoundfilereader
     pcm_settings

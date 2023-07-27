@@ -48,6 +48,8 @@ class wxMenu;
 class wxWindow;
 class wxSplashScreen;
 
+class BACKGROUND_JOBS_MONITOR;
+class NOTIFICATIONS_MANAGER;
 class COMMON_SETTINGS;
 class SETTINGS_MANAGER;
 class SCRIPTING;
@@ -136,7 +138,11 @@ public:
 
     virtual SETTINGS_MANAGER& GetSettingsManager() const { return *m_settings_manager; }
 
-    virtual COMMON_SETTINGS* GetCommonSettings() const;
+    virtual COMMON_SETTINGS*  GetCommonSettings() const;
+
+    virtual BACKGROUND_JOBS_MONITOR& GetBackgroundJobMonitor() const { return *m_background_jobs_monitor; }
+
+    virtual NOTIFICATIONS_MANAGER& GetNotificationsManager() const { return *m_notifications_manager; }
 
     virtual void SetTextEditor( const wxString& aFileName );
 
@@ -396,6 +402,8 @@ protected:
 
 protected:
     std::unique_ptr<SETTINGS_MANAGER> m_settings_manager;
+    std::unique_ptr<BACKGROUND_JOBS_MONITOR> m_background_jobs_monitor;
+    std::unique_ptr<NOTIFICATIONS_MANAGER> m_notifications_manager;
 
     std::unique_ptr<SCRIPTING> m_python_scripting;
 

@@ -62,6 +62,8 @@ public:
     void OnFileHistory( wxCommandEvent& event );
     void OnClearFileHistory( wxCommandEvent& aEvent );
     void OnExit( wxCommandEvent& event );
+    wxStatusBar* OnCreateStatusBar( int number, long style, wxWindowID id,
+                                    const wxString& name ) override;
 
     void RecreateBaseHToolbar();
 

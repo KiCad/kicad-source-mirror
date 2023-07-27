@@ -87,6 +87,7 @@ set( BMAPS_SMALL
     label_align_top
     label_align_bottom
     list_nets_16
+    notifications
     options_generic_16
     pinorient_right
     pinorient_left

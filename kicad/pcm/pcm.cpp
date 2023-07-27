@@ -24,6 +24,7 @@
 #include <kicad_curl/kicad_curl.h>
 
 #include "core/wx_stl_compat.h"
+#include <background_jobs_monitor.h>
 #include "build_version.h"
 #include "paths.h"
 #include "pcm.h"
@@ -59,47 +60,10 @@ class THROWING_ERROR_HANDLER : public nlohmann::json_schema::error_handler
 };
 
 
-class STATUS_TEXT_REPORTER : public PROGRESS_REPORTER_BASE
-{
-public:
-    STATUS_TEXT_REPORTER( std::function<void( const wxString )> aStatusCallback ) :
-            PROGRESS_REPORTER_BASE( 1 ), m_statusCallback( aStatusCallback )
-    {
-    }
-
-    void SetTitle( const wxString& aTitle ) override
-    {
-        m_title = aTitle;
-        m_report = wxT( "" );
-    }
-
-    void Report( const wxString& aMessage ) override
-    {
-        m_report = wxString::Format( wxT( ": %s" ), aMessage );
-    }
-
-    void Cancel() { m_cancelled.store( true ); }
-
-private:
-    bool updateUI() override
-    {
-        m_statusCallback( wxString::Format( wxT( "%s%s" ), m_title, m_report ) );
-        return true;
-    }
-
-    const std::function<void( const wxString )> m_statusCallback;
-
-    wxString m_title;
-    wxString m_report;
-};
-
-
 PLUGIN_CONTENT_MANAGER::PLUGIN_CONTENT_MANAGER(
-                                        std::function<void( int )> aAvailableUpdateCallback,
-                                        std::function<void( const wxString )> aStatusCallback ) :
+                                        std::function<void( int )> aAvailableUpdateCallback ) :
         m_dialog( nullptr ),
-        m_availableUpdateCallback( aAvailableUpdateCallback ),
-        m_statusCallback( aStatusCallback )
+        m_availableUpdateCallback( aAvailableUpdateCallback )
 {
     ReadEnvVar();
 
@@ -437,7 +401,7 @@ bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryId )
     if( m_dialog )
         reporter = std::make_shared<WX_PROGRESS_REPORTER>( m_dialog, wxEmptyString, 1 );
     else
-        reporter = m_statusReporter;
+        reporter = m_updateBackgroundJob->m_reporter;
 
     if( !FetchRepository( url, current_repo, reporter.get() ) )
         return false;
@@ -1136,13 +1100,18 @@ void PLUGIN_CONTENT_MANAGER::RunBackgroundUpdate()
     if( m_updateThread.joinable() )
         return;
 
-    m_statusReporter = std::make_shared<STATUS_TEXT_REPORTER>( m_statusCallback );
+
+    m_updateBackgroundJob = Pgm().GetBackgroundJobMonitor().Create( _( "PCM Update" ) );
 
     m_updateThread = std::thread(
             [this]()
             {
                 if( m_installed.size() == 0 )
                     return;
+
+                int maxProgress = m_repository_list.size() + m_installed.size();
+                m_updateBackgroundJob->m_reporter->SetNumPhases( maxProgress );
+                m_updateBackgroundJob->m_reporter->Report( _( "Preparing to fetch repositories" ) );
 
                 // Only fetch repositories that have installed not pinned packages
                 std::unordered_set<wxString> repo_ids;
@@ -1155,24 +1124,30 @@ void PLUGIN_CONTENT_MANAGER::RunBackgroundUpdate()
 
                 for( const auto& [ repository_id, name, url ] : m_repository_list )
                 {
+                    m_updateBackgroundJob->m_reporter->AdvancePhase();
                     if( repo_ids.count( repository_id ) == 0 )
                         continue;
 
+                    m_updateBackgroundJob->m_reporter->Report(
+                            _( "Fetching repository..." ) );
                     CacheRepository( repository_id );
 
-                    if( m_statusReporter->IsCancelled() )
+                    if( m_updateBackgroundJob->m_reporter->IsCancelled() )
                         break;
                 }
 
-                if( m_statusReporter->IsCancelled() )
+                if( m_updateBackgroundJob->m_reporter->IsCancelled() )
                     return;
 
                 // Count packages with updates
                 int availableUpdateCount = 0;
 
+                m_updateBackgroundJob->m_reporter->Report( _( "Reviewing packages..." ) );
                 for( std::pair<const wxString, PCM_INSTALLATION_ENTRY>& pair : m_installed )
                 {
                     PCM_INSTALLATION_ENTRY& entry = pair.second;
+
+                    m_updateBackgroundJob->m_reporter->AdvancePhase();
 
                     if( m_repository_cache.find( entry.repository_id ) != m_repository_cache.end() )
                     {
@@ -1183,15 +1158,15 @@ void PLUGIN_CONTENT_MANAGER::RunBackgroundUpdate()
                             availableUpdateCount++;
                     }
 
-                    if( m_statusReporter->IsCancelled() )
+                    if( m_updateBackgroundJob->m_reporter->IsCancelled() )
                         return;
                 }
 
+                Pgm().GetBackgroundJobMonitor().Remove( m_updateBackgroundJob );
+                m_updateBackgroundJob = nullptr;
+
                 // Update the badge on PCM button
                 m_availableUpdateCallback( availableUpdateCount );
-
-                m_statusCallback( availableUpdateCount > 0 ? _( "Package updates are available" )
-                                                           : _( "No package updates available" ) );
             } );
 }
 
@@ -1200,7 +1175,8 @@ void PLUGIN_CONTENT_MANAGER::StopBackgroundUpdate()
 {
     if( m_updateThread.joinable() )
     {
-        m_statusReporter->Cancel();
+        if( m_updateBackgroundJob )
+            m_updateBackgroundJob->m_reporter->Cancel();
         m_updateThread.join();
     }
 }

@@ -370,6 +370,7 @@ enum class BITMAPS : unsigned int
     new_project_from_template,
     new_python,
     noconn,
+    notifications,
     normal,
     open_project,
     open_project_demo,

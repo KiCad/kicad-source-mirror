@@ -76,7 +76,7 @@ typedef std::vector<std::pair<wxString, wxString>>            STRING_PAIR_LIST;
 typedef std::vector<std::tuple<wxString, wxString, wxString>> STRING_TUPLE_LIST;
 
 
-class STATUS_TEXT_REPORTER;
+struct BACKGROUND_JOB;
 
 
 /**
@@ -101,8 +101,7 @@ class STATUS_TEXT_REPORTER;
 class PLUGIN_CONTENT_MANAGER
 {
 public:
-    PLUGIN_CONTENT_MANAGER( std::function<void( int )>            aAvailableUpdateCallback,
-                            std::function<void( const wxString )> aStatusCallback );
+    PLUGIN_CONTENT_MANAGER( std::function<void( int )> aAvailableUpdateCallbac );
     ~PLUGIN_CONTENT_MANAGER();
 
     /**
@@ -400,10 +399,9 @@ private:
     std::map<wxString, PCM_INSTALLATION_ENTRY> m_installed;
     const static std::tuple<int, int, int>     m_kicad_version;
     std::function<void( int )>                 m_availableUpdateCallback;
-    std::function<void( const wxString )>      m_statusCallback;
     std::thread                                m_updateThread;
 
-    std::shared_ptr<STATUS_TEXT_REPORTER> m_statusReporter;
+    BACKGROUND_JOB*                       m_updateBackgroundJob;
 };
 
 #endif // PCM_H_

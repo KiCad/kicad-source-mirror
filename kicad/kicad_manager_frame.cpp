@@ -30,6 +30,7 @@
 #include "widgets/bitmap_button.h"
 
 #include <advanced_config.h>
+#include <background_jobs_monitor.h>
 #include <bitmaps.h>
 #include <build_version.h>
 #include <dialogs/panel_kicad_launcher.h>
@@ -44,6 +45,7 @@
 #include <kiway.h>
 #include <kiway_express.h>
 #include <launch_ext.h>
+#include <notifications_manager.h>
 #include <reporter.h>
 #include <project/project_local_settings.h>
 #include <sch_file_versions.h>
@@ -57,6 +59,7 @@
 #include <tools/kicad_manager_control.h>
 #include <wildcards_and_files_ext.h>
 #include <widgets/app_progress_dialog.h>
+#include <widgets/kistatusbar.h>
 #include <wx/ffile.h>
 #include <wx/filedlg.h>
 #include <wx/dcclient.h>
@@ -134,7 +137,9 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
 
     // Create the status line (bottom of the frame).  Left half is for project name; right half
     // is for Reporter (currently used by archiver/unarchiver and PCM).
-    CreateStatusBar( 2 );
+    CreateStatusBar( 3 );
+    Pgm().GetBackgroundJobMonitor().RegisterStatusBar( (KISTATUSBAR*) GetStatusBar() );
+    Pgm().GetNotificationsManager().RegisterStatusBar( (KISTATUSBAR*) GetStatusBar() );
     GetStatusBar()->SetFont( KIUI::GetStatusFont( this ) );
 
     // Give an icon
@@ -246,6 +251,9 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
 
 KICAD_MANAGER_FRAME::~KICAD_MANAGER_FRAME()
 {
+    Pgm().GetBackgroundJobMonitor().UnregisterStatusBar( (KISTATUSBAR*) GetStatusBar() );
+    Pgm().GetNotificationsManager().UnregisterStatusBar( (KISTATUSBAR*) GetStatusBar() );
+
     // Shutdown all running tools
     if( m_toolManager )
         m_toolManager->ShutdownAllTools();
@@ -261,6 +269,13 @@ KICAD_MANAGER_FRAME::~KICAD_MANAGER_FRAME()
 }
 
 
+wxStatusBar* KICAD_MANAGER_FRAME::OnCreateStatusBar( int number, long style, wxWindowID id,
+                                                     const wxString& name )
+{
+    return new KISTATUSBAR( number, this, id );
+}
+
+
 void KICAD_MANAGER_FRAME::CreatePCM()
 {
     // creates the PLUGIN_CONTENT_MANAGER, if not exists
@@ -271,20 +286,26 @@ void KICAD_MANAGER_FRAME::CreatePCM()
             [this]( int aUpdateCount )
             {
                 m_pcmUpdateCount = aUpdateCount;
+
+                if( aUpdateCount > 0 )
+                {
+                    Pgm().GetNotificationsManager().Create(
+                            wxS( "pcm" ),
+                            _( "PCM Updates Available" ),
+                            wxString::Format( _( "%d package update(s) avaliable" ), aUpdateCount ),
+                            wxT( "" ) );
+                }
+                else
+                {
+                    Pgm().GetNotificationsManager().Remove( wxS( "pcm" ) );
+                }
+
                 CallAfter(
                         [this]()
                         {
                             updatePcmButtonBadge();
                         } );
-            },
-            [this]( const wxString aText )
-            {
-                CallAfter(
-                        [aText, this]()
-                        {
-                            SetStatusText( aText, 1 );
-                        } );
-            } );
+            });
 
     m_pcm->SetRepositoryList( kicadSettings()->m_PcmRepositories );
 }

@@ -41,7 +41,8 @@ BITMAP_BUTTON::BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId, const wxPoint& 
         m_badgeTextColor( wxColor( wxT( "white" ) ) ),
         m_buttonState( 0 ),
         m_padding( 0 ),
-        m_acceptDraggedInClicks( false )
+        m_acceptDraggedInClicks( false ),
+        m_centerBitmap( false )
 {
     if( aSize == wxDefaultSize )
         SetMinSize( wxButton::GetDefaultSize() + wxSize( m_padding * 2, m_padding * 2) );
@@ -57,12 +58,17 @@ BITMAP_BUTTON::BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId, const wxBitmap&
         wxPanel( aParent, aId, aPos, aSize, aStyles ),
         m_isRadioButton( false ),
         m_showBadge( false ),
+        m_badgeColor( wxColor( 210, 0, 0 ) ), // dark red
+        m_badgeTextColor( wxColor( wxT( "white" ) ) ),
         m_buttonState( 0 ),
         m_padding( 5 ),
-        m_acceptDraggedInClicks( false )
+        m_acceptDraggedInClicks( false ),
+        m_centerBitmap( false )
 {
     if( aSize == wxDefaultSize )
         SetMinSize( wxButton::GetDefaultSize() + wxSize( m_padding * 2, m_padding * 2) );
+
+    m_badgeFont = GetFont().Smaller().MakeBold();
 
     setupEvents();
 }
@@ -144,9 +150,9 @@ void BITMAP_BUTTON::OnMouseEnter( wxEvent& aEvent )
 
 void BITMAP_BUTTON::OnKillFocus( wxEvent& aEvent )
 {
-    if( hasFlag( wxCONTROL_FOCUSED | wxCONTROL_CURRENT | wxCONTROL_PRESSED ) )
+    if( hasFlag( wxCONTROL_FOCUSED | wxCONTROL_CURRENT | wxCONTROL_PRESSED | wxCONTROL_SELECTED ) )
     {
-        clearFlag( wxCONTROL_FOCUSED | wxCONTROL_CURRENT | wxCONTROL_PRESSED );
+        clearFlag( wxCONTROL_FOCUSED | wxCONTROL_CURRENT | wxCONTROL_PRESSED | wxCONTROL_SELECTED );
         Refresh();
     }
 
@@ -279,18 +285,30 @@ void BITMAP_BUTTON::OnPaint( wxPaintEvent& aEvent )
 
     const wxBitmapBundle& bmp = hasFlag( wxCONTROL_DISABLED ) ? m_disabledBitmap : m_normalBitmap;
 
+    wxPoint drawBmpPos( m_padding, m_padding );
+    wxBitmap bmpImg = bmp.GetBitmapFor( this );
+    if( m_centerBitmap )
+    {
+        drawBmpPos = wxPoint( (rect.width - bmpImg.GetWidth()) / 2, (rect.height - bmpImg.GetHeight()) / 2 );
+    }
+
     // Draw the bitmap with the upper-left corner offset by the padding
     if( bmp.IsOk() )
-        dc.DrawBitmap( bmp.GetBitmapFor( this ), m_padding, m_padding, true );
+        dc.DrawBitmap( bmpImg, drawBmpPos, true );
 
     // Draw the badge
     if( m_showBadge )
     {
         dc.SetFont( m_badgeFont );
 
-        wxSize box_size = dc.GetTextExtent( m_badgeText ) + wxSize( 6, 2 );
-        wxSize box_offset = box_size + wxSize( m_padding - 2, m_padding );
-        wxSize text_offset = box_offset - wxSize( 3, 1 );
+        wxSize box_size = dc.GetTextExtent( m_badgeText );
+        wxSize box_offset = box_size;
+        wxSize text_offset = box_offset;
+        if( m_padding != 0 )
+        {
+            box_offset += wxSize( m_padding - 2, m_padding );
+            text_offset -= wxSize( 3, 1 );
+        }
 
         dc.SetPen( wxPen( m_badgeColor ) );
         dc.SetBrush( wxBrush( m_badgeColor ) );
