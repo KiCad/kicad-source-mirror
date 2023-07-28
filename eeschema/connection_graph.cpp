@@ -2178,7 +2178,7 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, boo
     SCH_CONNECTION* conn = aSubgraph->m_driver_connection;
     std::vector<CONNECTION_SUBGRAPH*> search_list;
     std::unordered_set<CONNECTION_SUBGRAPH*> visited;
-    std::vector<SCH_CONNECTION*> stale_bus_members;
+    std::unordered_set<SCH_CONNECTION*> stale_bus_members;
 
     auto visit =
             [&]( CONNECTION_SUBGRAPH* aParent )
