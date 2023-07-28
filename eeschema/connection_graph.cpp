@@ -2290,7 +2290,7 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, boo
                     >= CONNECTION_SUBGRAPH::PRIORITY::POWER_PIN )
                 {
                     member->Clone( *neighbor_conn );
-                    stale_bus_members.push_back( member );
+                    stale_bus_members.insert( member );
                 }
                 else
                 {
