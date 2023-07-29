@@ -1243,19 +1243,12 @@ bool PANEL_SETUP_BOARD_STACKUP::TransferDataFromWindow()
     // on that panel and it doesn't make sense to split it up.
 
     BOARD_STACKUP& brd_stackup = m_brdSettings->GetStackupDescriptor();
-
     STRING_FORMATTER old_stackup;
 
     // FormatBoardStackup() (using FormatInternalUnits()) expects a "C" locale
     // to execute some tests. So switch to the suitable locale
     LOCALE_IO dummy;
     brd_stackup.FormatBoardStackup( &old_stackup, m_board, 0 );
-
-    brd_stackup.m_FinishType = m_stackup.m_FinishType;
-    brd_stackup.m_HasDielectricConstrains = m_stackup.m_HasDielectricConstrains;
-    brd_stackup.m_EdgeConnectorConstraints = m_stackup.m_EdgeConnectorConstraints;
-    brd_stackup.m_CastellatedPads = m_stackup.m_CastellatedPads;
-    brd_stackup.m_EdgePlating = m_stackup.m_EdgePlating;
 
     // copy enabled items to the new board stackup
     brd_stackup.RemoveAll();
