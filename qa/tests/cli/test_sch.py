@@ -23,51 +23,10 @@
 import utils
 import cairosvg
 import re
-import os
 from pathlib import Path
 import pytest
 from typing import List
-import platform
-from PIL import Image, ImageChops, ImageFilter
-import numpy as np
 
-def images_are_equal( image1: str, image2: str ):
-    image1 = Image.open( image1 )
-    image2 = Image.open( image2 )
-
-    if image1.size != image2.size:
-        return False
-
-    if image1.mode != image2.mode:
-        return False
-
-    sum = np.sum( ( np.asarray ( image1 ).astype( np.float32 ) - np.asarray( image2 ).astype( np.float32 ) ) ** 2.0 )
-    retval = True
-
-    if sum != 0.0:
-        # images are not identical - lets allow 1 pixel error difference (for curved edges)
-
-        diff = ImageChops.difference( image1, image2 )
-        diffgray=diff.convert("L")
-        diffThresholded=diffgray.point(lambda x: 255 if x > 1 else 0)
-        diffBinary=diffThresholded.convert("1")
-
-        # erode binary image by 1 pixel
-        diffEroded = diffBinary.filter(ImageFilter.MinFilter(3))
-        
-        erodedSum = np.sum( np.asarray ( diffEroded ).astype( np.float32 ) )
-
-        retval = erodedSum == 0
-
-        if not retval:
-            diff_name = image1.filename + ".diff1.png"
-            diff.save( diff_name )
-            diffEroded_name = image1.filename + ".diffEroded_erodedsum" + str(erodedSum)+ ".png"
-            diffEroded.convert("RGB")
-            diffEroded.save( diffEroded_name )
-
-
-    return retval
 
 @pytest.mark.parametrize("test_file,output_dir,compare_fn,cli_args",
                             [("cli/basic_test/basic_test.kicad_sch", "basic_test", "cli/basic_test/basic_test.png", []),
@@ -109,7 +68,7 @@ def test_sch_export_svg( kitest,
 
     cairosvg.svg2png( url=str( output_svg_path ), write_to=str( png_converted_from_svg_path ), dpi=1200 )
 
-    assert images_are_equal( png_converted_from_svg_path, compare_file_path  )
+    assert utils.images_are_equal( png_converted_from_svg_path, compare_file_path  )
 
 
 @pytest.mark.parametrize("test_file,output_fn,line_skip_count,skip_compare,cli_args",
