@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2019 CERN
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
@@ -487,6 +487,13 @@ public:
     SHAPE_POLY_SET( const SHAPE_LINE_CHAIN& aOutline );
 
     /**
+     * Construct a SHAPE_POLY_SET with the first polygon given by aPolygon.
+     *
+     * @param aPolygon is a polygon
+     */
+    SHAPE_POLY_SET( const POLYGON& aPolygon );
+
+    /**
      * Copy constructor SHAPE_POLY_SET
      * Performs a deep copy of \p aOther into \p this.
      *
@@ -560,6 +567,9 @@ public:
 
     /// Adds a new hole to the given outline (default: last) and returns its index
     int AddHole( const SHAPE_LINE_CHAIN& aHole, int aOutline = -1 );
+
+    /// Adds a polygon to the set
+    int AddPolygon( const POLYGON& apolygon );
 
     /// Return the area of this poly set
     double Area();
@@ -742,6 +752,8 @@ public:
     {
         return m_polys[aIndex];
     }
+
+    const std::vector<POLYGON>& CPolygons() const { return m_polys; }
 
     /**
      * Return an object to iterate through the points of the polygons between \p aFirst and

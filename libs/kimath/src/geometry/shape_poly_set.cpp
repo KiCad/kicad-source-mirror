@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2019 CERN
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
@@ -86,6 +86,13 @@ SHAPE_POLY_SET::SHAPE_POLY_SET( const SHAPE_LINE_CHAIN& aOutline ) :
     SHAPE( SH_POLY_SET )
 {
     AddOutline( aOutline );
+}
+
+
+SHAPE_POLY_SET::SHAPE_POLY_SET( const POLYGON& aPolygon ) :
+    SHAPE( SH_POLY_SET )
+{
+    AddPolygon( aPolygon );
 }
 
 
@@ -553,6 +560,14 @@ int SHAPE_POLY_SET::AddHole( const SHAPE_LINE_CHAIN& aHole, int aOutline )
     poly.push_back( aHole );
 
     return poly.size() - 2;
+}
+
+
+int SHAPE_POLY_SET::AddPolygon( const POLYGON& apolygon )
+{
+    m_polys.push_back( apolygon );
+
+    return m_polys.size() - 1;
 }
 
 
