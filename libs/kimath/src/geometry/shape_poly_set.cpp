@@ -877,6 +877,15 @@ void SHAPE_POLY_SET::BooleanIntersection( const SHAPE_POLY_SET& b, POLYGON_MODE 
 }
 
 
+void SHAPE_POLY_SET::BooleanXor( const SHAPE_POLY_SET& b, POLYGON_MODE aFastMode )
+{
+    if( ADVANCED_CFG::GetCfg().m_UseClipper2 )
+        booleanOp( Clipper2Lib::ClipType::Xor, b );
+    else
+        booleanOp( ClipperLib::ctXor, b, aFastMode );
+}
+
+
 void SHAPE_POLY_SET::BooleanAdd( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b,
                                  POLYGON_MODE aFastMode )
 {
@@ -904,6 +913,16 @@ void SHAPE_POLY_SET::BooleanIntersection( const SHAPE_POLY_SET& a, const SHAPE_P
         booleanOp( Clipper2Lib::ClipType::Intersection, a, b );
     else
         booleanOp( ClipperLib::ctIntersection, a, b, aFastMode );
+}
+
+
+void SHAPE_POLY_SET::BooleanXor( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b,
+                                          POLYGON_MODE aFastMode )
+{
+    if( ADVANCED_CFG::GetCfg().m_UseClipper2 )
+        booleanOp( Clipper2Lib::ClipType::Xor, a, b );
+    else
+        booleanOp( ClipperLib::ctXor, a, b, aFastMode );
 }
 
 

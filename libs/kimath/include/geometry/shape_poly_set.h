@@ -978,6 +978,10 @@ public:
     /// For \a aFastMode meaning, see function booleanOp
     void BooleanIntersection( const SHAPE_POLY_SET& b, POLYGON_MODE aFastMode );
 
+    /// Perform boolean polyset exclusive or
+    /// For \a aFastMode meaning, see function booleanOp
+    void BooleanXor( const SHAPE_POLY_SET& b, POLYGON_MODE aFastMode );
+
     /// Perform boolean polyset union between a and b, store the result in it self
     /// For \a aFastMode meaning, see function booleanOp
     void BooleanAdd( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b,
@@ -991,6 +995,11 @@ public:
     /// Perform boolean polyset intersection between a and b, store the result in it self
     /// For \a aFastMode meaning, see function booleanOp
     void BooleanIntersection( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b,
+                              POLYGON_MODE aFastMode );
+
+    /// Perform boolean polyset exclusive or between a and b, store the result in it self
+    /// For \a aFastMode meaning, see function booleanOp
+    void BooleanXor( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b,
                               POLYGON_MODE aFastMode );
 
     /// define how inflate transform build inflated polygon
