@@ -91,6 +91,14 @@ public:
     bool SetUserAgent( const std::string& aAgent );
 
     /**
+     * Set fields for application/x-www-form-urlencoded POST request.
+     *
+     * @param aFields is the vector of fields (key-value pairs).
+     * @return True if successful, false if not.
+     */
+    bool SetPostFields( const std::vector<std::pair<std::string, std::string>>& aFields );
+
+    /**
      * Set the request URL.
      *
      * @param aURL is the URL.

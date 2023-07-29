@@ -230,6 +230,28 @@ bool KICAD_CURL_EASY::SetUserAgent( const std::string& aAgent )
 }
 
 
+bool KICAD_CURL_EASY::SetPostFields(
+        const std::vector<std::pair<std::string, std::string>>& aFields )
+{
+    std::string postfields;
+
+    for( int i = 0; i < aFields.size(); i++ )
+    {
+        if( i > 0 )
+            postfields += "&";
+
+        postfields += Escape( aFields[i].first );
+        postfields += "=";
+        postfields += Escape( aFields[i].second );
+    }
+
+    if( setOption<const char*>( CURLOPT_COPYPOSTFIELDS, postfields.c_str() ) != CURLE_OK )
+        return false;
+
+    return true;
+}
+
+
 bool KICAD_CURL_EASY::SetURL( const std::string& aURL )
 {
     if( setOption<const char*>( CURLOPT_URL, aURL.c_str() ) == CURLE_OK )
