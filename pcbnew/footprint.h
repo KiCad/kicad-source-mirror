@@ -776,6 +776,11 @@ public:
     wxString GetNextPadNumber( const wxString& aLastPadName ) const;
 
     /**
+     * Position Reference and Value fields at the top and bottom of footprint's bounding box.
+     */
+    void AutoPositionFields();
+
+    /**
      * Get the type of footprint
      * @return "SMD"/"Through hole"/"Other" based on attributes
      */

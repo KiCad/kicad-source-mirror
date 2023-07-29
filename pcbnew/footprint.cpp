@@ -2179,6 +2179,26 @@ wxString FOOTPRINT::GetNextPadNumber( const wxString& aLastPadNumber ) const
 }
 
 
+void FOOTPRINT::AutoPositionFields()
+{
+    // Auto-position reference and value
+    BOX2I bbox = GetBoundingBox( false, false );
+    bbox.Inflate( pcbIUScale.mmToIU( 0.2 ) ); // Gap between graphics and text
+
+    if( Reference().GetPosition() == VECTOR2I( 0, 0 ) )
+    {
+        Reference().SetX( bbox.GetCenter().x );
+        Reference().SetY( bbox.GetTop() - Reference().GetTextSize().y / 2 );
+    }
+
+    if( Value().GetPosition() == VECTOR2I( 0, 0 ) )
+    {
+        Value().SetX( bbox.GetCenter().x );
+        Value().SetY( bbox.GetBottom() + Value().GetTextSize().y / 2 );
+    }
+}
+
+
 void FOOTPRINT::IncrementReference( int aDelta )
 {
     const wxString& refdes = GetReference();

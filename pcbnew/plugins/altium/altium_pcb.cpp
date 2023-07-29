@@ -761,20 +761,7 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
     }
 
     // Auto-position reference and value
-    BOX2I bbox = footprint.get()->GetBoundingBox( false, false );
-    bbox.Inflate( pcbIUScale.mmToIU( 0.2 ) ); // Gap between graphics and text
-
-    if( footprint->Reference().GetPosition() == VECTOR2I( 0, 0 ) )
-    {
-        footprint->Reference().SetX( bbox.GetCenter().x );
-        footprint->Reference().SetY( bbox.GetTop() - footprint->Reference().GetTextSize().y / 2 );
-    }
-
-    if( footprint->Value().GetPosition() == VECTOR2I( 0, 0 ) )
-    {
-        footprint->Value().SetX( bbox.GetCenter().x );
-        footprint->Value().SetY( bbox.GetBottom() + footprint->Value().GetTextSize().y / 2 );
-    }
+    footprint->AutoPositionFields();
 
     if( parser.HasParsingError() )
     {
