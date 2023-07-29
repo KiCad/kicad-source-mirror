@@ -1201,6 +1201,9 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
     // (doing it as we go will invalidate the iterator)
     std::vector<PCB_SHAPE*> items_to_select_on_success;
 
+    // And same for items to deselect
+    std::vector<PCB_SHAPE*> items_to_deselect_on_success;
+
     // Handle modifications to existing items by the routine
     // How to deal with this depends on whether we're in the footprint editor or not
     // and whether the item was conjured up by decomposing a polygon or rectangle
@@ -1214,13 +1217,25 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
         }
     };
 
-    bool       any_items_created = false;
+    bool       any_items_created = !lines_to_add.empty();
     const auto item_creation_handler = [&]( std::unique_ptr<PCB_SHAPE> aItem )
     {
         any_items_created = true;
         items_to_select_on_success.push_back( aItem.get() );
         commit.Add( aItem.release() );
     };
+
+    bool       any_items_removed = !items_to_remove.empty();
+    const auto item_removal_handler = [&]( PCB_SHAPE& aItem )
+    {
+        any_items_removed = true;
+        items_to_deselect_on_success.push_back( &aItem );
+        commit.Remove( &aItem );
+    };
+
+    // Combine these callbacks into a CHANGE_HANDLER to inject in the ROUTINE
+    ITEM_MODIFICATION_ROUTINE::CALLABLE_BASED_HANDLER change_handler(
+            item_creation_handler, item_modification_handler, item_removal_handler );
 
     // Construct an appropriate tool
     std::unique_ptr<PAIRWISE_LINE_ROUTINE> pairwise_line_routine;
@@ -1233,8 +1248,7 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
         if( filletRadiusIU.has_value() )
         {
             pairwise_line_routine = std::make_unique<LINE_FILLET_ROUTINE>(
-                    frame()->GetModel(), item_creation_handler, item_modification_handler,
-                    *filletRadiusIU );
+                    frame()->GetModel(), change_handler, *filletRadiusIU );
         }
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::chamferLines ) )
@@ -1245,8 +1259,7 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
         if( chamfer_params.has_value() )
         {
             pairwise_line_routine = std::make_unique<LINE_CHAMFER_ROUTINE>(
-                    frame()->GetModel(), item_creation_handler, item_modification_handler,
-                    *chamfer_params );
+                    frame()->GetModel(), change_handler, *chamfer_params );
         }
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::extendLines ) )
@@ -1257,8 +1270,8 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
         }
         else
         {
-            pairwise_line_routine = std::make_unique<LINE_EXTENSION_ROUTINE>(
-                    frame()->GetModel(), item_creation_handler, item_modification_handler );
+            pairwise_line_routine =
+                    std::make_unique<LINE_EXTENSION_ROUTINE>( frame()->GetModel(), change_handler );
         }
     }
 
@@ -1301,10 +1314,14 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
     for( PCB_SHAPE* item : items_to_select_on_success )
         m_selectionTool->AddItemToSel( item, true );
 
-    if( !items_to_remove.empty() )
+    // Deselect removed items
+    for( PCB_SHAPE* item : items_to_deselect_on_success )
+        m_selectionTool->RemoveItemFromSel( item, true );
+
+    if( any_items_removed )
         m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
 
-    if( !any_items_created )
+    if( any_items_created )
         m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
 
     // Notify other tools of the changes

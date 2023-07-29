@@ -47,37 +47,112 @@ class ITEM_MODIFICATION_ROUTINE
 {
 public:
     /*
-     * Handlers for receiving changes from the tool
-     *
-     * These are used to allow the tool's caller to make changes to
-     * affected board items using extra information that the tool
-     * does not have access to (e.g. is this an FP editor, was
-     * the line created from a rectangle and needs to be added, not
-     * modified, etc).
-     *
-     * We can't store them up until the end, because modifications
-     * need the old state to be known.
-     */
+    * Handlers for receiving changes from the tool
+    *
+    * These are used to allow the tool's caller to make changes to
+    * affected board items using extra information that the tool
+    * does not have access to (e.g. is this an FP editor, was
+    * the line created from a rectangle and needs to be added, not
+    * modified, etc).
+    *
+    * We can't store them up until the end, because modifications
+    * need the old state to be known, so this allows the caller to
+    * inject the dependencies for how to handle the changes.
+    */
+    class CHANGE_HANDLER
+    {
+    public:
+        virtual ~CHANGE_HANDLER() = default;
+
+        /**
+         * @brief Report that the tools wants to add a new item to the board
+         *
+         * @param aItem the new item
+         */
+        virtual void AddNewItem( std::unique_ptr<PCB_SHAPE> aItem ) = 0;
+
+        /**
+         * @brief Report that the tool has modified an item on the board
+         *
+         * @param aItem the modified item
+         */
+        virtual void MarkItemModified( PCB_SHAPE& aItem ) = 0;
+
+        /**
+         * @brief Report that the tool has deleted an item on the board
+         *
+         * @param aItem the deleted item
+         */
+        virtual void DeleteItem( PCB_SHAPE& aItem ) = 0;
+    };
 
     /**
-     * Handler for creating a new item on the board
-     *
-     * @param PCB_SHAPE& the shape to add
+     * @brief A handler that is based on a set of callbacks provided
+     * by the user of the ITEM_MODIFICATION_ROUTINE
      */
-    using CREATION_HANDLER = std::function<void( std::unique_ptr<PCB_SHAPE> )>;
+    class CALLABLE_BASED_HANDLER : public CHANGE_HANDLER
+    {
+    public:
+        /**
+         * Handler for creating a new item on the board
+         *
+         * @param PCB_SHAPE& the shape to add
+         */
+        using CREATION_HANDLER = std::function<void( std::unique_ptr<PCB_SHAPE> )>;
 
-    /**
-     * Handler for modifying an existing item on the board
-     *
-     * @param PCB_SHAPE& the shape to modify
-     */
-    using MODIFICATION_HANDLER = std::function<void( PCB_SHAPE& )>;
+        /**
+         * Handler for modifying or deleting an existing item on the board
+         *
+         * @param PCB_SHAPE& the shape to modify
+         */
+        using MODIFICATION_HANDLER = std::function<void( PCB_SHAPE& )>;
 
-    ITEM_MODIFICATION_ROUTINE( BOARD_ITEM* aBoard, CREATION_HANDLER aCreationHandler,
-                               MODIFICATION_HANDLER aModificationHandler ) :
-            m_board( aBoard ),
-            m_creationHandler( aCreationHandler ), m_modificationHandler( aModificationHandler ),
-            m_numSuccesses( 0 ), m_numFailures( 0 )
+        /**
+         * Handler for modifying or deleting an existing item on the board
+         *
+         * @param PCB_SHAPE& the shape to delete
+         */
+        using DELETION_HANDLER = std::function<void( PCB_SHAPE& )>;
+
+        CALLABLE_BASED_HANDLER( CREATION_HANDLER     aCreationHandler,
+                                MODIFICATION_HANDLER aModificationHandler,
+                                DELETION_HANDLER     aDeletionHandler ) :
+                m_creationHandler( aCreationHandler ),
+                m_modificationHandler( aModificationHandler ), m_deletionHandler( aDeletionHandler )
+        {
+        }
+
+        /**
+         * @brief Report that the tools wants to add a new item to the board
+         *
+         * @param aItem the new item
+         */
+        void AddNewItem( std::unique_ptr<PCB_SHAPE> aItem ) override
+        {
+            m_creationHandler( std::move( aItem ) );
+        }
+
+        /**
+         * @brief Report that the tool has modified an item on the board
+         *
+         * @param aItem the modified item
+         */
+        void MarkItemModified( PCB_SHAPE& aItem ) override { m_modificationHandler( aItem ); }
+
+        /**
+         * @brief Report that the tool has deleted an item on the board
+         *
+         * @param aItem the deleted item
+         */
+        void DeleteItem( PCB_SHAPE& aItem ) override { m_deletionHandler( aItem ); }
+
+        CREATION_HANDLER     m_creationHandler;
+        MODIFICATION_HANDLER m_modificationHandler;
+        DELETION_HANDLER     m_deletionHandler;
+    };
+
+    ITEM_MODIFICATION_ROUTINE( BOARD_ITEM* aBoard, CHANGE_HANDLER& aHandler ) :
+            m_board( aBoard ), m_handler( aHandler ), m_numSuccesses( 0 ), m_numFailures( 0 )
     {
     }
 
@@ -109,23 +184,22 @@ protected:
     void AddFailure() { ++m_numFailures; }
 
     /**
-     * @brief Report that the tools wants to add a new item to the board
+     *  @brief Helper function useful for multiple tools: modify a line or delete
+     * it if it has zero length
      *
-     * @param aItem the new item
+     * @param aItem the line to modify
+     * @param aSeg the new line geometry
      */
-    void AddNewItem( std::unique_ptr<PCB_SHAPE> aItem ) { m_creationHandler( std::move( aItem ) ); }
+    bool ModifyLineOrDeleteIfZeroLength( PCB_SHAPE& aItem, const SEG& aSeg );
 
     /**
-     * @brief Report that the tool has modified an item on the board
-     *
-     * @param aItem the modified item
+     * @brief Access the handler for making changes to the board
      */
-    void MarkItemModified( PCB_SHAPE& aItem ) { m_modificationHandler( aItem ); }
+    CHANGE_HANDLER& GetHandler() { return m_handler; }
 
 private:
     BOARD_ITEM*          m_board;
-    CREATION_HANDLER     m_creationHandler;
-    MODIFICATION_HANDLER m_modificationHandler;
+    CHANGE_HANDLER&      m_handler;
 
     unsigned m_numSuccesses;
     unsigned m_numFailures;
@@ -137,9 +211,8 @@ private:
 class PAIRWISE_LINE_ROUTINE : public ITEM_MODIFICATION_ROUTINE
 {
 public:
-    PAIRWISE_LINE_ROUTINE( BOARD_ITEM* aBoard, CREATION_HANDLER aCreationHandler,
-                           MODIFICATION_HANDLER aModificationHandler ) :
-            ITEM_MODIFICATION_ROUTINE( aBoard, aCreationHandler, aModificationHandler )
+    PAIRWISE_LINE_ROUTINE( BOARD_ITEM* aBoard, CHANGE_HANDLER& aHandler ) :
+            ITEM_MODIFICATION_ROUTINE( aBoard, aHandler )
     {
     }
 
@@ -167,10 +240,8 @@ public:
 class LINE_FILLET_ROUTINE : public PAIRWISE_LINE_ROUTINE
 {
 public:
-    LINE_FILLET_ROUTINE( BOARD_ITEM* aBoard, CREATION_HANDLER aCreationHandler,
-                         MODIFICATION_HANDLER aModificationHandler, int filletRadiusIU ) :
-            PAIRWISE_LINE_ROUTINE( aBoard, aCreationHandler, aModificationHandler ),
-            m_filletRadiusIU( filletRadiusIU )
+    LINE_FILLET_ROUTINE( BOARD_ITEM* aBoard, CHANGE_HANDLER& aHandler, int filletRadiusIU ) :
+            PAIRWISE_LINE_ROUTINE( aBoard, aHandler ), m_filletRadiusIU( filletRadiusIU )
     {
     }
 
@@ -190,10 +261,9 @@ private:
 class LINE_CHAMFER_ROUTINE : public PAIRWISE_LINE_ROUTINE
 {
 public:
-    LINE_CHAMFER_ROUTINE( BOARD_ITEM* aBoard, CREATION_HANDLER aCreationHandler,
-                          MODIFICATION_HANDLER aModificationHandler,
-                          CHAMFER_PARAMS       aChamferParams ) :
-            PAIRWISE_LINE_ROUTINE( aBoard, aCreationHandler, aModificationHandler ),
+    LINE_CHAMFER_ROUTINE( BOARD_ITEM* aBoard, CHANGE_HANDLER& aHandler,
+                          CHAMFER_PARAMS aChamferParams ) :
+            PAIRWISE_LINE_ROUTINE( aBoard, aHandler ),
             m_chamferParams( std::move( aChamferParams ) )
     {
     }
@@ -214,9 +284,8 @@ private:
 class LINE_EXTENSION_ROUTINE : public PAIRWISE_LINE_ROUTINE
 {
 public:
-    LINE_EXTENSION_ROUTINE( BOARD_ITEM* aBoard, CREATION_HANDLER aCreationHandler,
-                            MODIFICATION_HANDLER aModificationHandler ) :
-            PAIRWISE_LINE_ROUTINE( aBoard, aCreationHandler, aModificationHandler )
+    LINE_EXTENSION_ROUTINE( BOARD_ITEM* aBoard, CHANGE_HANDLER& aHandler ) :
+            PAIRWISE_LINE_ROUTINE( aBoard, aHandler )
     {
     }
 

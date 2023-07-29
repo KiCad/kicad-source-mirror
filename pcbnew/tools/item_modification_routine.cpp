@@ -36,6 +36,28 @@ bool SegmentsShareEndpoint( const SEG& aSegA, const SEG& aSegB )
 
 } // namespace
 
+
+bool ITEM_MODIFICATION_ROUTINE::ModifyLineOrDeleteIfZeroLength( PCB_SHAPE& aLine, const SEG& aSeg )
+{
+    wxASSERT_MSG( aLine.GetShape() == SHAPE_T::SEGMENT, "Can only modify segments" );
+
+    const bool removed = aSeg.Length() == 0;
+    if( !removed )
+    {
+        // Mark modified, then change it
+        GetHandler().MarkItemModified( aLine );
+        aLine.SetStart( aSeg.A );
+        aLine.SetEnd( aSeg.B );
+    }
+    else
+    {
+        // The line has become zero length - delete it
+        GetHandler().DeleteItem( aLine );
+    }
+    return removed;
+}
+
+
 wxString LINE_FILLET_ROUTINE::GetCommitDescription() const
 {
     return _( "Fillet Lines" );
@@ -128,17 +150,15 @@ void LINE_FILLET_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB 
     tArc->SetLayer( aLineA.GetLayer() );
     tArc->SetLocked( aLineA.IsLocked() );
 
-    MarkItemModified( aLineA );
-    MarkItemModified( aLineB );
+    CHANGE_HANDLER& handler = GetHandler();
 
-    AddNewItem( std::move( tArc ) );
+    handler.AddNewItem( std::move( tArc ) );
 
     *a_pt = t1newPoint;
     *b_pt = t2newPoint;
-    aLineA.SetStart( seg_a.A );
-    aLineA.SetEnd( seg_a.B );
-    aLineB.SetStart( seg_b.A );
-    aLineB.SetEnd( seg_b.B );
+
+    ModifyLineOrDeleteIfZeroLength( aLineA, seg_a );
+    ModifyLineOrDeleteIfZeroLength( aLineB, seg_b );
 
     AddSuccess();
 }
@@ -194,16 +214,12 @@ void LINE_CHAMFER_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLineB
     tSegment->SetLayer( aLineA.GetLayer() );
     tSegment->SetLocked( aLineA.IsLocked() );
 
-    AddNewItem( std::move( tSegment ) );
+    CHANGE_HANDLER& handler = GetHandler();
 
-    MarkItemModified( aLineA );
-    MarkItemModified( aLineB );
+    handler.AddNewItem( std::move( tSegment ) );
 
-    // Shorten the original lines
-    aLineA.SetStart( chamfer_result->m_updated_seg_a->A );
-    aLineA.SetEnd( chamfer_result->m_updated_seg_a->B );
-    aLineB.SetStart( chamfer_result->m_updated_seg_b->A );
-    aLineB.SetEnd( chamfer_result->m_updated_seg_b->B );
+    ModifyLineOrDeleteIfZeroLength( aLineA, *chamfer_result->m_updated_seg_a );
+    ModifyLineOrDeleteIfZeroLength( aLineB, *chamfer_result->m_updated_seg_b );
 
     AddSuccess();
 }
@@ -247,6 +263,8 @@ void LINE_EXTENSION_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLin
         return;
     }
 
+    CHANGE_HANDLER& handler = GetHandler();
+
     const auto line_extender = [&]( const SEG& aSeg, PCB_SHAPE& aLine )
     {
         // If the intersection point is not already n the line, we'll extend to it
@@ -257,7 +275,7 @@ void LINE_EXTENSION_ROUTINE::ProcessLinePair( PCB_SHAPE& aLineA, PCB_SHAPE& aLin
 
             const VECTOR2I& furthest_pt = ( dist_start < dist_end ) ? aSeg.B : aSeg.A;
 
-            MarkItemModified( aLine );
+            handler.MarkItemModified( aLine );
             aLine.SetStart( furthest_pt );
             aLine.SetEnd( *intersection );
         }
