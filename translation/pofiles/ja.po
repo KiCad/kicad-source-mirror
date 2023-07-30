@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:35-0700\n"
-"PO-Revision-Date: 2023-07-30 09:50+0000\n"
+"PO-Revision-Date: 2023-07-31 15:07+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -18757,7 +18757,7 @@ msgstr "ピンの一括編集用にピン テーブルを表示"
 
 #: eeschema/tools/ee_actions.cpp:660
 msgid "Break"
-msgstr "切断"
+msgstr "分割"
 
 #: eeschema/tools/ee_actions.cpp:660
 msgid "Divide into connected segments"
@@ -18765,7 +18765,7 @@ msgstr "接続されたセグメントに分割します"
 
 #: eeschema/tools/ee_actions.cpp:665
 msgid "Slice"
-msgstr "スライス"
+msgstr "切断"
 
 #: eeschema/tools/ee_actions.cpp:665
 msgid "Divide into unconnected segments"
@@ -19633,13 +19633,12 @@ msgid "Change Item Type"
 msgstr "テキストに変更"
 
 #: eeschema/tools/sch_edit_tool.cpp:2422
-#, fuzzy
 msgid "Slice Wire"
-msgstr "ワイヤーを削除"
+msgstr "配線を切断"
 
 #: eeschema/tools/sch_edit_tool.cpp:2422
 msgid "Break Wire"
-msgstr "配線を切断"
+msgstr "配線を分割"
 
 #: eeschema/tools/sch_edit_tool.cpp:2437
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
@@ -39598,7 +39597,7 @@ msgstr "強制的にドラッグ"
 
 #: pcbnew/router/router_tool.cpp:2477 pcbnew/tools/pcb_actions.cpp:1745
 msgid "Break Track"
-msgstr "配線を切断"
+msgstr "配線を分割"
 
 #: pcbnew/router/router_tool.cpp:2556
 #, c-format
