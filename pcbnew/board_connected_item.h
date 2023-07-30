@@ -57,6 +57,7 @@ public:
         case PCB_ARC_T:
         case PCB_VIA_T:
         case PCB_ZONE_T:
+        case PCB_SHAPE_T:
             return true;
 
         default:

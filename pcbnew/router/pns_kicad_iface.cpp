@@ -1363,14 +1363,13 @@ bool PNS_KICAD_IFACE_BASE::syncGraphicalItem( PNS::NODE* aWorld, PCB_SHAPE* aIte
                 }
             }
 
-            solid->SetNet( -1 );
+            solid->SetAnchorPoints( aItem->GetConnectionPoints() );
+            solid->SetNet( aItem->GetNetCode() );
             solid->SetParent( aItem );
             solid->SetShape( shape );       // takes ownership
 
             if( shapes.size() > 1 )
                 solid->SetIsCompoundShapePrimitive();
-
-            solid->SetRoutable( false );
 
             aWorld->Add( std::move( solid ) );
         }

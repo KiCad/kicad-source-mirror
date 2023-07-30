@@ -42,6 +42,10 @@ int CN_ITEM::AnchorCount() const
     case PCB_TRACE_T:
     case PCB_ARC_T:
         return 2;  // start and end
+
+    case PCB_SHAPE_T:
+        return m_anchors.size();
+
     default:
         return 1;
     }
@@ -67,6 +71,9 @@ const VECTOR2I CN_ITEM::GetAnchor( int n ) const
 
     case PCB_VIA_T:
         return static_cast<const PCB_VIA*>( m_parent )->GetStart();
+
+    case PCB_SHAPE_T:
+        return ( n < static_cast<int>( m_anchors.size() ) ) ? m_anchors[n]->Pos() : VECTOR2I();
 
     default:
         UNIMPLEMENTED_FOR( m_parent->GetClass() );
@@ -247,6 +254,21 @@ CN_ITEM* CN_LIST::Add( CN_ZONE_LAYER* zitem )
 }
 
 
+CN_ITEM* CN_LIST::Add( PCB_SHAPE* shape )
+{
+    CN_ITEM* item = new CN_ITEM( shape, true );
+    m_items.push_back( item );
+
+    for( const VECTOR2I& point : shape->GetConnectionPoints() )
+        item->AddAnchor( point );
+
+    item->SetLayer( shape->GetLayer() );
+    addItemtoTree( item );
+    SetDirty();
+    return item;
+}
+
+
 void CN_LIST::RemoveInvalidItems( std::vector<CN_ITEM*>& aGarbage )
 {
     if( !m_hasInvalid )
@@ -318,7 +340,16 @@ bool CN_ANCHOR::IsDangling() const
         return connected_count < minimal_count;
 
     if( Parent()->Type() == PCB_TRACE_T || Parent()->Type() == PCB_ARC_T )
+    {
         accuracy = KiROUND( static_cast<const PCB_TRACK*>( Parent() )->GetWidth() / 2 );
+    }
+    else if( Parent()->Type() == PCB_SHAPE_T )
+    {
+        auto shape = static_cast<const PCB_SHAPE*>( Parent() );
+
+        if( !shape->IsFilled() )
+            accuracy = KiROUND( shape->GetWidth() / 2 );
+    }
 
     // Items with multiple anchors have usually items connected to each anchor.
     // We want only the item count of this anchor point

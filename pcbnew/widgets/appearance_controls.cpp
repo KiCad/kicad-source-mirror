@@ -2947,11 +2947,11 @@ void APPEARANCE_CONTROLS::onObjectOpacitySlider( int aLayer, float aOpacity )
 
     switch( aLayer )
     {
-    case static_cast<int>( LAYER_TRACKS ):       options.m_TrackOpacity   = aOpacity; break;
-    case static_cast<int>( LAYER_VIAS ):         options.m_ViaOpacity     = aOpacity; break;
-    case static_cast<int>( LAYER_PADS ):         options.m_PadOpacity     = aOpacity; break;
-    case static_cast<int>( LAYER_ZONES ):        options.m_ZoneOpacity    = aOpacity; break;
-    case static_cast<int>( LAYER_DRAW_BITMAPS ): options.m_ImageOpacity   = aOpacity; break;
+    case static_cast<int>( LAYER_TRACKS ):        options.m_TrackOpacity    = aOpacity; break;
+    case static_cast<int>( LAYER_VIAS ):          options.m_ViaOpacity      = aOpacity; break;
+    case static_cast<int>( LAYER_PADS ):          options.m_PadOpacity      = aOpacity; break;
+    case static_cast<int>( LAYER_ZONES ):         options.m_ZoneOpacity     = aOpacity; break;
+    case static_cast<int>( LAYER_DRAW_BITMAPS ):  options.m_ImageOpacity    = aOpacity; break;
     default: return;
     }
 

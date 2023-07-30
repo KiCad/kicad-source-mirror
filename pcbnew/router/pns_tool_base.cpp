@@ -423,7 +423,28 @@ const VECTOR2I TOOL_BASE::snapToItem( ITEM* aItem, const VECTOR2I& aP )
     switch( aItem->Kind() )
     {
     case ITEM::SOLID_T:
-        return static_cast<SOLID*>( aItem )->Pos();
+    {
+        SOLID* solid = static_cast<SOLID*>( aItem );
+
+        if( solid->AnchorPoints().empty() )
+            return solid->Anchor( 0 );
+
+        VECTOR2I anchor;
+        SEG::ecoord minDist = std::numeric_limits<SEG::ecoord>::max();
+
+        for( VECTOR2I anchorCandidate : solid->AnchorPoints() )
+        {
+            SEG::ecoord distSq = ( aP - anchorCandidate ).SquaredEuclideanNorm();
+
+            if( distSq < minDist )
+            {
+                minDist = distSq;
+                anchor  = anchorCandidate;
+            }
+        }
+
+        return anchor;
+    }
 
     case ITEM::VIA_T:
         return static_cast<VIA*>( aItem )->Pos();

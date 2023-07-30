@@ -1108,12 +1108,14 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
         knockoutTrackClearance( track );
     }
 
-    // Add graphic item clearances.  They are by definition unconnected, and have no clearance
-    // definitions of their own.
+    // Add graphic item clearances.
     //
     auto knockoutGraphicClearance =
             [&]( BOARD_ITEM* aItem )
             {
+                int shapeNet = ( aItem->Type() == PCB_SHAPE_T ) ? static_cast<PCB_SHAPE*>( aItem )->GetNetCode() : -1;
+                bool sameNet = shapeNet == aZone->GetNetCode() && aZone->GetNetCode() != 0;
+
                 // A item on the Edge_Cuts or Margin is always seen as on any layer:
                 if( aItem->IsOnLayer( aLayer )
                         || aItem->IsOnLayer( Edge_Cuts )
@@ -1125,7 +1127,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                         int  gap = evalRulesForItems( PHYSICAL_CLEARANCE_CONSTRAINT,
                                                       aZone, aItem, aLayer );
 
-                        if( aItem->IsOnLayer( aLayer ) )
+                        if( aItem->IsOnLayer( aLayer ) && !sameNet )
                         {
                             gap = std::max( gap, evalRulesForItems( CLEARANCE_CONSTRAINT,
                                                                     aZone, aItem, aLayer ) );
@@ -1142,7 +1144,8 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                                                                     aZone, aItem, Margin ) );
                         }
 
-                        addKnockout( aItem, aLayer, gap + extra_margin, ignoreLineWidths, aHoles );
+                        if( gap > 0 )
+                            addKnockout( aItem, aLayer, gap + extra_margin, ignoreLineWidths, aHoles );
                     }
                 }
             };

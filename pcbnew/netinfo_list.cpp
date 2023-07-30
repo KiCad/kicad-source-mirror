@@ -25,6 +25,7 @@
 #include <footprint.h>
 #include <macros.h>
 #include <pad.h>
+#include <pcb_shape.h>
 #include <pcb_track.h>
 #include <zone.h>
 #include <netinfo.h>
@@ -225,6 +226,17 @@ void NETINFO_MAPPING::Update()
     // Tracks
     for( PCB_TRACK* track : m_board->Tracks() )
         nets.insert( track->GetNetCode() );
+
+    for( BOARD_ITEM* item : m_board->Drawings() )
+    {
+        if( item->Type() != PCB_SHAPE_T )
+            continue;
+
+        PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
+
+        if( shape->GetNetCode() > 0 )
+            nets.insert( shape->GetNetCode() );
+    }
 
     // footprints/pads
     for( FOOTPRINT* footprint : m_board->Footprints() )

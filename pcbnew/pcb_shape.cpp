@@ -36,14 +36,14 @@
 #include <pcb_painter.h>
 
 PCB_SHAPE::PCB_SHAPE( BOARD_ITEM* aParent, KICAD_T aItemType, SHAPE_T aShapeType ) :
-    BOARD_ITEM( aParent, aItemType ),
+    BOARD_CONNECTED_ITEM( aParent, aItemType ),
     EDA_SHAPE( aShapeType, pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH ), FILL_T::NO_FILL )
 {
 }
 
 
 PCB_SHAPE::PCB_SHAPE( BOARD_ITEM* aParent, SHAPE_T shapetype ) :
-    BOARD_ITEM( aParent, PCB_SHAPE_T ),
+    BOARD_CONNECTED_ITEM( aParent, PCB_SHAPE_T ),
     EDA_SHAPE( shapetype, pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH ), FILL_T::NO_FILL )
 {
 }
@@ -83,6 +83,58 @@ bool PCB_SHAPE::IsType( const std::vector<KICAD_T>& aScanTypes ) const
     }
 
     return false;
+}
+
+
+void PCB_SHAPE::SetLayer( PCB_LAYER_ID aLayer )
+{
+    BOARD_ITEM::SetLayer( aLayer );
+
+    if( !IsOnCopperLayer() )
+        SetNetCode( -1 );
+}
+
+
+std::vector<VECTOR2I> PCB_SHAPE::GetConnectionPoints() const
+{
+    std::vector<VECTOR2I> ret;
+
+    // For filled shapes, we may as well use a centroid
+    if( IsFilled() )
+    {
+        ret.emplace_back( GetCenter() );
+        return ret;
+    }
+
+    switch( m_shape )
+    {
+    case SHAPE_T::ARC:
+        ret.emplace_back( GetArcMid() );
+        KI_FALLTHROUGH;
+
+    case SHAPE_T::SEGMENT:
+    case SHAPE_T::BEZIER:
+        ret.emplace_back( GetStart() );
+        ret.emplace_back( GetEnd() );
+        break;
+
+    case SHAPE_T::POLY:
+        for( auto iter = GetPolyShape().CIterate(); iter; ++iter )
+            ret.emplace_back( *iter );
+
+        break;
+
+    case SHAPE_T::RECTANGLE:
+        for( const VECTOR2I& pt : GetRectCorners() )
+            ret.emplace_back( pt );
+
+        break;
+
+    default:
+        break;
+    }
+
+    return ret;
 }
 
 
@@ -329,6 +381,25 @@ double PCB_SHAPE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 }
 
 
+void PCB_SHAPE::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    aLayers[0] = GetLayer();
+
+    if( IsOnCopperLayer() )
+    {
+        aLayers[1] = GetNetnameLayer( aLayers[0] );
+        aCount = 2;
+    }
+    else
+    {
+        aCount = 1;
+    }
+
+    if( IsLocked() )
+        aLayers[ aCount++ ] = LAYER_LOCKED_ITEM_SHADOW;
+}
+
+
 void PCB_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     if( aFrame->GetName() == PCB_EDIT_FRAME_NAME )
@@ -350,7 +421,15 @@ void PCB_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 
 wxString PCB_SHAPE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
-    return wxString::Format( _( "%s on %s" ), GetFriendlyName(), GetLayerName() );
+    if( GetNetCode() > 0 )
+    {
+        return wxString::Format( _( "%s %s on %s" ), GetFriendlyName(), GetNetnameMsg(),
+                                 GetLayerName() );
+    }
+    else
+    {
+        return wxString::Format( _( "%s on %s" ), GetFriendlyName(), GetLayerName() );
+    }
 }
 
 
@@ -439,9 +518,9 @@ static struct PCB_SHAPE_DESC
     {
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( PCB_SHAPE );
-        propMgr.AddTypeCast( new TYPE_CAST<PCB_SHAPE, BOARD_ITEM> );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_SHAPE, BOARD_CONNECTED_ITEM> );
         propMgr.AddTypeCast( new TYPE_CAST<PCB_SHAPE, EDA_SHAPE> );
-        propMgr.InheritsAfter( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( BOARD_ITEM ) );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
         propMgr.InheritsAfter( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ) );
 
         // Need to initialise enum_map before we can use a Property enum for it
@@ -455,10 +534,13 @@ static struct PCB_SHAPE_DESC
                 layerEnum.Map( *seq, LSET::Name( *seq ) );
         }
 
-        auto layerProperty = new PROPERTY_ENUM<PCB_SHAPE, PCB_LAYER_ID, BOARD_ITEM>(
-                _HKI( "Layer" ), &PCB_SHAPE::SetLayer, &PCB_SHAPE::GetLayer );
+        void ( PCB_SHAPE::*shapeLayerSetter )( PCB_LAYER_ID ) = &PCB_SHAPE::SetLayer;
+        PCB_LAYER_ID ( PCB_SHAPE::*shapeLayerGetter )() const = &PCB_SHAPE::GetLayer;
 
-        propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ), layerProperty );
+        auto layerProperty = new PROPERTY_ENUM<PCB_SHAPE, PCB_LAYER_ID>(
+                _HKI( "Layer" ), shapeLayerSetter, shapeLayerGetter );
+
+        propMgr.ReplaceProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ), layerProperty );
 
         // Only polygons have meaningful Position properties.
         // On other shapes, these are duplicates of the Start properties.
@@ -475,5 +557,17 @@ static struct PCB_SHAPE_DESC
                                       _HKI( "Position X" ), isPolygon );
         propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( BOARD_ITEM ),
                                       _HKI( "Position Y" ), isPolygon );
+
+        auto isCopper =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aItem ) )
+                        return shape->IsOnCopperLayer();
+
+                    return false;
+                };
+
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( BOARD_CONNECTED_ITEM ),
+                                      _HKI( "Net" ), isCopper );
     }
 } _PCB_SHAPE_DESC;

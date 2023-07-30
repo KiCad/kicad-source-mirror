@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -23,6 +23,7 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/gbsizer.h>
 #include <wx/checkbox.h>
 #include <wx/bmpcbox.h>
+#include <widgets/net_selector.h>
 #include <wx/sizer.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -79,6 +80,8 @@ class DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE : public DIALOG_SHIM
 		wxBitmapComboBox* m_lineStyleCombo;
 		wxStaticText* m_LayerLabel;
 		PCB_LAYER_BOX_SELECTOR* m_LayerSelectionCtrl;
+		wxStaticText* m_netLabel;
+		NET_SELECTOR* m_netSelector;
 		wxStdDialogButtonSizer* m_StandardButtonsSizer;
 		wxButton* m_StandardButtonsSizerOK;
 		wxButton* m_StandardButtonsSizerCancel;

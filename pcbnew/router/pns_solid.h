@@ -64,6 +64,7 @@ public:
         m_pos = aSolid.m_pos;
         m_padToDie = aSolid.m_padToDie;
         m_orientation = aSolid.m_orientation;
+        m_anchorPoints = aSolid.m_anchorPoints;
     }
 
     SOLID& operator=( const SOLID& aB )
@@ -77,6 +78,7 @@ public:
         m_pos = aB.m_pos;
         m_padToDie = aB.m_padToDie;
         m_orientation = aB.m_orientation;
+        m_anchorPoints = aB.m_anchorPoints;
         return *this;
     }
 
@@ -105,15 +107,12 @@ public:
     int GetPadToDie() const { return m_padToDie; }
     void SetPadToDie( int aLen ) { m_padToDie = aLen; }
 
-    virtual VECTOR2I Anchor( int aN ) const override
-    {
-        return m_pos;
-    }
+    virtual VECTOR2I Anchor( int aN ) const override;
 
-    virtual int AnchorCount() const override
-    {
-        return 1;
-    }
+    virtual int AnchorCount() const override;
+
+    const std::vector<VECTOR2I>& AnchorPoints() const { return m_anchorPoints; }
+    void SetAnchorPoints( const std::vector<VECTOR2I>& aPoints ) { m_anchorPoints = aPoints; }
 
     VECTOR2I Offset() const { return m_offset; }
     void SetOffset( const VECTOR2I& aOffset ) { m_offset = aOffset; }
@@ -143,6 +142,7 @@ private:
     int         m_padToDie;
     EDA_ANGLE   m_orientation;
     HOLE*       m_hole;
+    std::vector<VECTOR2I> m_anchorPoints;
 };
 
 }

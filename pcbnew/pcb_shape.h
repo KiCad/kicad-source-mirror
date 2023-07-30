@@ -25,7 +25,7 @@
 #ifndef PCB_SHAPE_H
 #define PCB_SHAPE_H
 
-#include <board_item.h>
+#include <board_connected_item.h>
 #include <eda_shape.h>
 
 
@@ -35,7 +35,7 @@ class FOOTPRINT;
 class MSG_PANEL_ITEM;
 
 
-class PCB_SHAPE : public BOARD_ITEM, public EDA_SHAPE
+class PCB_SHAPE : public BOARD_CONNECTED_ITEM, public EDA_SHAPE
 {
 public:
     PCB_SHAPE( BOARD_ITEM* aParent, KICAD_T aItemType, SHAPE_T aShapeType );
@@ -61,10 +61,19 @@ public:
 
     bool IsType( const std::vector<KICAD_T>& aScanTypes ) const override;
 
+    void SetLayer( PCB_LAYER_ID aLayer ) override;
+    PCB_LAYER_ID GetLayer() const override { return m_layer; }
+
     void SetPosition( const VECTOR2I& aPos ) override { setPosition( aPos ); }
     VECTOR2I GetPosition() const override { return getPosition(); }
 
     VECTOR2I GetCenter() const override { return getCenter(); }
+
+    /**
+     * @return a list of connection points (may be empty): points where this shape can form
+     * electrical connections to other shapes that are natural "start/end" points.
+     */
+    std::vector<VECTOR2I> GetConnectionPoints() const;
 
     bool HasLineStroke() const override { return true; }
 
@@ -138,6 +147,8 @@ public:
     virtual EDA_ITEM* Clone() const override;
 
     virtual const BOX2I ViewBBox() const override;
+
+    virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     ///< @copydoc VIEW_ITEM::ViewGetLOD
     double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;

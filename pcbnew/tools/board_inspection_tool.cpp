@@ -38,6 +38,7 @@
 #include <string_utils.h>
 #include <tools/board_inspection_tool.h>
 #include <fp_lib_table.h>
+#include <pcb_shape.h>
 #include <pcbnew_settings.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/wx_html_report_box.h>
@@ -84,17 +85,45 @@ bool BOARD_INSPECTION_TOOL::Init()
     std::shared_ptr<NET_CONTEXT_MENU> netSubMenu = std::make_shared<NET_CONTEXT_MENU>();
     netSubMenu->SetTool( this );
 
-    static std::vector<KICAD_T> connectedTypes = { PCB_TRACE_T,
-                                                   PCB_VIA_T,
-                                                   PCB_ARC_T,
-                                                   PCB_PAD_T,
-                                                   PCB_ZONE_T };
+    // Only show the net menu if all items in the selection are connectable
+    auto showNetMenuFunc =
+            []( const SELECTION& aSelection )
+            {
+                if( aSelection.Empty() )
+                    return false;
+
+                for( const EDA_ITEM* item : aSelection )
+                {
+                    switch( item->Type() )
+                    {
+                    case PCB_TRACE_T:
+                    case PCB_ARC_T:
+                    case PCB_VIA_T:
+                    case PCB_PAD_T:
+                    case PCB_ZONE_T:
+                        continue;
+
+                    case PCB_SHAPE_T:
+                    {
+                        if( !static_cast<const PCB_SHAPE*>( item )->IsOnCopperLayer() )
+                            return false;
+                        else
+                            continue;
+                    }
+
+                    default:
+                        return false;
+                    }
+                }
+
+                return true;
+            };
 
     CONDITIONAL_MENU& menu = selectionTool->GetToolMenu().GetMenu();
 
     selectionTool->GetToolMenu().RegisterSubMenu( netSubMenu );
 
-    menu.AddMenu( netSubMenu.get(), SELECTION_CONDITIONS::OnlyTypes( connectedTypes ), 100 );
+    menu.AddMenu( netSubMenu.get(), showNetMenuFunc, 100 );
 
     return true;
 }
@@ -1616,7 +1645,7 @@ int BOARD_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
         guide.SetPreferredLayer( activeLayer );
 
         GENERAL_COLLECTOR collector;
-        collector.Collect( board, { PCB_PAD_T, PCB_VIA_T, PCB_TRACE_T, PCB_ARC_T }, aPosition,
+        collector.Collect( board, { PCB_PAD_T, PCB_VIA_T, PCB_TRACE_T, PCB_ARC_T, PCB_SHAPE_T }, aPosition,
                            guide );
 
         if( collector.GetCount() == 0 )
@@ -1935,7 +1964,8 @@ void BOARD_INSPECTION_TOOL::calculateSelectionRatsnest( const VECTOR2I& aDelta )
                                                     || aItem->Type() == PCB_ARC_T
                                                     || aItem->Type() == PCB_ZONE_T
                                                     || aItem->Type() == PCB_FOOTPRINT_T
-                                                    || aItem->Type() == PCB_VIA_T );
+                                                    || aItem->Type() == PCB_VIA_T
+                                                    || aItem->Type() == PCB_SHAPE_T );
                                        } ) )
     {
         return;

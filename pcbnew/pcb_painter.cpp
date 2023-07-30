@@ -461,6 +461,8 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
         color.a *= m_zoneOpacity;
     else if( item->Type() == PCB_BITMAP_T )
         color.a *= m_imageOpacity;
+    else if( item->Type() == PCB_SHAPE_T && item->IsOnCopperLayer() )
+        color.a *= m_trackOpacity;
 
     if( item->GetForcedTransparency() > 0.0 )
         color = color.WithAlpha( color.a * ( 1.0 - item->GetForcedTransparency() ) );
@@ -690,78 +692,8 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
         if( aTrack->GetNetCode() <= NETINFO_LIST::UNCONNECTED )
             return;
 
-        // When drawing netnames, clip the track to the viewport
-        BOX2D             viewport;
-        VECTOR2D          screenSize = m_gal->GetScreenPixelSize();
-        const MATRIX3x3D& matrix = m_gal->GetScreenWorldMatrix();
-
-        viewport.SetOrigin( VECTOR2D( matrix * VECTOR2D( 0, 0 ) ) );
-        viewport.SetEnd( VECTOR2D( matrix * screenSize ) );
-        viewport.Normalize();
-
-        BOX2I clipBox( viewport.GetOrigin(), viewport.GetSize() );
-        SEG   visibleSeg( start, end );
-
-        ClipLine( &clipBox, visibleSeg.A.x, visibleSeg.A.y, visibleSeg.B.x, visibleSeg.B.y );
-
-        wxString netName = aTrack->GetUnescapedShortNetname();
-        size_t  num_char = netName.size();
-
-        // Check if the track is long enough to have a netname displayed
-        int seg_minlength = track_width * num_char;
-
-        if( visibleSeg.Length() < seg_minlength )
-            return;
-
-        double    textSize = track_width;
-        double    penWidth = textSize / 12.0;
-        EDA_ANGLE textOrientation;
-        int num_names = 1;
-
-        if( end.y == start.y ) // horizontal
-        {
-            textOrientation = ANGLE_HORIZONTAL;
-            num_names = std::max( num_names,
-                    static_cast<int>( aTrack->GetLength() / viewport.GetWidth() ) );
-        }
-        else if( end.x == start.x ) // vertical
-        {
-            textOrientation = ANGLE_VERTICAL;
-            num_names = std::max( num_names,
-                    static_cast<int>( aTrack->GetLength() / viewport.GetHeight() ) );
-        }
-        else
-        {
-            textOrientation = -EDA_ANGLE( visibleSeg.B - visibleSeg.A );
-            textOrientation.Normalize90();
-
-            double min_size = std::min( viewport.GetWidth(), viewport.GetHeight() );
-            num_names = std::max( num_names,
-                    static_cast<int>( aTrack->GetLength() / ( M_SQRT2 * min_size ) ) );
-        }
-
-        m_gal->SetIsStroke( true );
-        m_gal->SetIsFill( false );
-        m_gal->SetStrokeColor( color );
-        m_gal->SetLineWidth( penWidth );
-        m_gal->SetFontBold( false );
-        m_gal->SetFontItalic( false );
-        m_gal->SetFontUnderlined( false );
-        m_gal->SetTextMirrored( false );
-        m_gal->SetGlyphSize( VECTOR2D( textSize * 0.55, textSize * 0.55 ) );
-        m_gal->SetHorizontalJustify( GR_TEXT_H_ALIGN_CENTER );
-        m_gal->SetVerticalJustify( GR_TEXT_V_ALIGN_CENTER );
-
-        for( int ii = 0; ii < num_names; ++ii )
-        {
-            VECTOR2I textPosition =
-                      VECTOR2D( start ) * static_cast<double>( num_names - ii ) / ( num_names + 1 )
-                    + VECTOR2D( end ) * static_cast<double>( ii + 1 ) / ( num_names + 1 );
-
-            if( clipBox.Contains( textPosition ) )
-                m_gal->BitmapText( netName, textPosition, textOrientation );
-        }
-
+        SHAPE_SEGMENT trackShape( { aTrack->GetStart(), aTrack->GetEnd() }, aTrack->GetWidth() );
+        renderNetNameForSegment( trackShape, color, aTrack->GetUnescapedShortNetname() );
         return;
     }
     else if( IsCopperLayer( aLayer ) || aLayer == LAYER_LOCKED_ITEM_SHADOW )
@@ -793,6 +725,85 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
         m_gal->SetIsStroke( true );
         m_gal->SetStrokeColor( color );
         m_gal->DrawSegment( start, end, track_width + clearance * 2 );
+    }
+}
+
+
+void PCB_PAINTER::renderNetNameForSegment( const SHAPE_SEGMENT& aSeg, const COLOR4D& aColor,
+                                           const wxString& aNetName ) const
+{
+    // When drawing netnames, clip the track to the viewport
+    BOX2D             viewport;
+    VECTOR2D          screenSize = m_gal->GetScreenPixelSize();
+    const MATRIX3x3D& matrix = m_gal->GetScreenWorldMatrix();
+
+    viewport.SetOrigin( VECTOR2D( matrix * VECTOR2D( 0, 0 ) ) );
+    viewport.SetEnd( VECTOR2D( matrix * screenSize ) );
+    viewport.Normalize();
+
+    BOX2I clipBox( viewport.GetOrigin(), viewport.GetSize() );
+    SEG   visibleSeg( aSeg.GetSeg().A, aSeg.GetSeg().B );
+
+    ClipLine( &clipBox, visibleSeg.A.x, visibleSeg.A.y, visibleSeg.B.x, visibleSeg.B.y );
+
+    size_t  num_char = aNetName.size();
+
+    // Check if the track is long enough to have a netname displayed
+    int seg_minlength = aSeg.GetWidth() * num_char;
+
+    if( visibleSeg.Length() < seg_minlength )
+        return;
+
+    double    textSize = aSeg.GetWidth();
+    double    penWidth = textSize / 12.0;
+    EDA_ANGLE textOrientation;
+    int num_names = 1;
+
+    VECTOR2I start = aSeg.GetSeg().A;
+    VECTOR2I end   = aSeg.GetSeg().B;
+
+    if( end.y == start.y ) // horizontal
+    {
+        textOrientation = ANGLE_HORIZONTAL;
+        num_names = std::max( num_names,
+                static_cast<int>( aSeg.GetSeg().Length() / viewport.GetWidth() ) );
+    }
+    else if( end.x == start.x ) // vertical
+    {
+        textOrientation = ANGLE_VERTICAL;
+        num_names = std::max( num_names,
+                static_cast<int>( aSeg.GetSeg().Length() / viewport.GetHeight() ) );
+    }
+    else
+    {
+        textOrientation = -EDA_ANGLE( visibleSeg.B - visibleSeg.A );
+        textOrientation.Normalize90();
+
+        double min_size = std::min( viewport.GetWidth(), viewport.GetHeight() );
+        num_names = std::max( num_names,
+                static_cast<int>( aSeg.GetSeg().Length() / ( M_SQRT2 * min_size ) ) );
+    }
+
+    m_gal->SetIsStroke( true );
+    m_gal->SetIsFill( false );
+    m_gal->SetStrokeColor( aColor );
+    m_gal->SetLineWidth( penWidth );
+    m_gal->SetFontBold( false );
+    m_gal->SetFontItalic( false );
+    m_gal->SetFontUnderlined( false );
+    m_gal->SetTextMirrored( false );
+    m_gal->SetGlyphSize( VECTOR2D( textSize * 0.55, textSize * 0.55 ) );
+    m_gal->SetHorizontalJustify( GR_TEXT_H_ALIGN_CENTER );
+    m_gal->SetVerticalJustify( GR_TEXT_V_ALIGN_CENTER );
+
+    for( int ii = 0; ii < num_names; ++ii )
+    {
+        VECTOR2I textPosition =
+                  VECTOR2D( start ) * static_cast<double>( num_names - ii ) / ( num_names + 1 )
+                + VECTOR2D( end ) * static_cast<double>( ii + 1 ) / ( num_names + 1 );
+
+        if( clipBox.Contains( textPosition ) )
+            m_gal->BitmapText( aNetName, textPosition, textOrientation );
     }
 }
 
@@ -1666,10 +1677,35 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
 void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
 {
-    COLOR4D        color = m_pcbSettings.GetColor( aShape, aShape->GetLayer() );
+    COLOR4D        color = m_pcbSettings.GetColor( aShape, aLayer );
     bool           outline_mode = !viewer_settings()->m_ViewersDisplay.m_DisplayGraphicsFill;
     int            thickness = getLineThickness( aShape->GetWidth() );
     PLOT_DASH_TYPE lineStyle = aShape->GetStroke().GetPlotStyle();
+
+    if( IsNetnameLayer( aLayer ) )
+    {
+        if( !pcbconfig() || pcbconfig()->m_Display.m_NetNames < 2 )
+            return;
+
+        if( aShape->GetNetCode() <= NETINFO_LIST::UNCONNECTED )
+            return;
+
+        wxString netname = aShape->GetUnescapedShortNetname();
+
+        if( netname.IsEmpty() )
+            return;
+
+        if( aShape->GetShape() == SHAPE_T::SEGMENT )
+        {
+            SHAPE_SEGMENT seg( { aShape->GetStart(), aShape->GetEnd() }, aShape->GetWidth() );
+            renderNetNameForSegment( seg, color, netname );
+            return;
+        }
+
+        // TODO: Maybe use some of the pad code?
+
+        return;
+    }
 
     if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
     {

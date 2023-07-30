@@ -253,8 +253,8 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                 {
                     if( At( ptr ).is_array() )
                     {
-                        At( ptr ).push_back( LAYER_PADS );
-                        At( ptr ).push_back( LAYER_ZONES );
+                        At( ptr ).push_back( LAYER_PADS - GAL_LAYER_ID_START );
+                        At( ptr ).push_back( LAYER_ZONES - GAL_LAYER_ID_START );
                     }
                     else
                     {

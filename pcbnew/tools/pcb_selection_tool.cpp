@@ -1258,6 +1258,7 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
     std::map<VECTOR2I, std::vector<PCB_TRACK*>> trackMap;
     std::map<VECTOR2I, PCB_VIA*>                viaMap;
     std::map<VECTOR2I, PAD*>                    padMap;
+    std::map<VECTOR2I, std::vector<PCB_SHAPE*>> shapeMap;
     std::set<PAD*>                              startPadSet;
     std::vector<BOARD_CONNECTED_ITEM*>          cleanupItems;
     std::vector<std::pair<VECTOR2I, LSET>>      activePts;
@@ -1275,7 +1276,7 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
             continue;
 
         auto connectedItems = connectivity->GetConnectedItems( startItem,
-                { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T }, true );
+                { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T, PCB_SHAPE_T }, true );
 
         // Build maps of connected items
         for( BOARD_CONNECTED_ITEM* item : connectedItems )
@@ -1305,6 +1306,16 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
                 break;
             }
 
+            case PCB_SHAPE_T:
+            {
+                PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
+
+                for( const auto& point : shape->GetConnectionPoints() )
+                    shapeMap[point].push_back( shape );
+
+                break;
+            }
+
             default:
                 break;
             }
@@ -1330,6 +1341,14 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
         case PCB_PAD_T:
             activePts.push_back( { startItem->GetPosition(), startItem->GetLayerSet() } );
             break;
+
+        case PCB_SHAPE_T:
+        {
+            PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( startItem );
+
+            for( const auto& point : shape->GetConnectionPoints() )
+                activePts.push_back( { point, startItem->GetLayerSet() } );
+        }
 
         default:
             break;
@@ -1419,6 +1438,31 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
                             activePts.push_back( { track->GetEnd(), track->GetLayerSet() } );
                         else
                             activePts.push_back( { track->GetStart(), track->GetLayerSet() } );
+
+                        expand = true;
+                    }
+                }
+
+                for( PCB_SHAPE* shape : shapeMap[pt] )
+                {
+                    if( !layerSetCu.Contains( shape->GetLayer() ) )
+                        continue;
+
+                    if( !shape->IsSelected() )
+                        select( shape );
+
+                    if( !shape->HasFlag( SKIP_STRUCT ) )
+                    {
+                        shape->SetFlags( SKIP_STRUCT );
+                        cleanupItems.push_back( shape );
+
+                        for( const VECTOR2I& newPoint : shape->GetConnectionPoints() )
+                        {
+                            if( newPoint == pt )
+                                continue;
+
+                            activePts.push_back( { newPoint, shape->GetLayerSet() } );
+                        }
 
                         expand = true;
                     }

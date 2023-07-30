@@ -292,9 +292,6 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
                 failureReason = _( "Cannot start routing from a text item." );
                 break;
 
-            case PCB_SHAPE_T:
-                failureReason = _( "Cannot start routing from a graphic." );
-
             default:
                 break;
             }

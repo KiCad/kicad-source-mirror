@@ -34,6 +34,7 @@
 #include <geometry/geometry_utils.h>
 #include <board_commit.h>
 #include <thread_pool.h>
+#include <pcb_shape.h>
 
 #include <wx/log.h>
 
@@ -59,25 +60,11 @@ bool CN_CONNECTIVITY_ALGO::Remove( BOARD_ITEM* aItem )
         break;
 
     case PCB_PAD_T:
-        m_itemMap[aItem].MarkItemsAsInvalid();
-        m_itemMap.erase( aItem );
-        m_itemList.SetDirty( true );
-        break;
-
     case PCB_TRACE_T:
     case PCB_ARC_T:
-        m_itemMap[aItem].MarkItemsAsInvalid();
-        m_itemMap.erase( aItem );
-        m_itemList.SetDirty( true );
-        break;
-
     case PCB_VIA_T:
-        m_itemMap[aItem].MarkItemsAsInvalid();
-        m_itemMap.erase( aItem );
-        m_itemList.SetDirty( true );
-        break;
-
     case PCB_ZONE_T:
+    case PCB_SHAPE_T:
         m_itemMap[aItem].MarkItemsAsInvalid();
         m_itemMap.erase ( aItem );
         m_itemList.SetDirty( true );
@@ -187,6 +174,16 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
             return false;
 
         add( m_itemList, static_cast<PCB_VIA*>( aItem ) );
+        break;
+
+    case PCB_SHAPE_T:
+        if( alreadyAdded( aItem ) )
+            return false;
+
+        if( !IsCopperLayer( aItem->GetLayer() ) )
+            return false;
+
+        add( m_itemList, static_cast<PCB_SHAPE*>( aItem ) );
         break;
 
     case PCB_ZONE_T:
@@ -305,13 +302,15 @@ const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUST
     if( aMode == CSM_PROPAGATE )
     {
         return SearchClusters( aMode,
-                               { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_VIA_T, PCB_FOOTPRINT_T },
+                               { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_VIA_T, PCB_FOOTPRINT_T,
+                                 PCB_SHAPE_T },
                                -1 );
     }
     else
     {
         return SearchClusters( aMode,
-                               { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_VIA_T, PCB_ZONE_T, PCB_FOOTPRINT_T },
+                               { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_VIA_T, PCB_ZONE_T,
+                                 PCB_FOOTPRINT_T, PCB_SHAPE_T },
                                -1 );
     }
 }
@@ -454,6 +453,7 @@ void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
     size += zitems.size();        // Once for building RTrees
     size += zitems.size();        // Once for adding to connectivity
     size += aBoard->Tracks().size();
+    size += aBoard->Drawings().size();
 
     for( FOOTPRINT* footprint : aBoard->Footprints() )
         size += footprint->Pads().size();
@@ -534,6 +534,17 @@ void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
         }
     }
 
+    for( BOARD_ITEM* drawing : aBoard->Drawings() )
+    {
+        if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( drawing ) )
+        {
+            if( shape->IsOnCopperLayer() )
+                Add( shape );
+        }
+
+        report( ++ii );
+    }
+
     if( aReporter )
     {
         aReporter->SetCurrentProgress( (double) ii / (double) size );
@@ -553,6 +564,7 @@ void CN_CONNECTIVITY_ALGO::LocalBuild( const std::vector<BOARD_ITEM*>& aItems )
         case PCB_VIA_T:
         case PCB_PAD_T:
         case PCB_FOOTPRINT_T:
+        case PCB_SHAPE_T:
             Add( item );
             break;
 

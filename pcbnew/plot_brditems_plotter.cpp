@@ -714,6 +714,13 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
             gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_ETCHEDCMP );
             gbr_metadata.SetCopper( true );
         }
+        else if( aShape->GetNetCode() > 0 )
+        {
+            gbr_metadata.SetCopper( true );
+            gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CONDUCTOR );
+            gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_NET );
+            gbr_metadata.SetNetName( aShape->GetNetname() );
+        }
         else
         {
             // Graphic items (PCB_SHAPE, TEXT) having no net have the NonConductor attribute

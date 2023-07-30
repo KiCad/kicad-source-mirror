@@ -153,6 +153,12 @@ int PCB_CONTROL::TrackDisplayMode( const TOOL_EVENT& aEvent )
             view()->Update( track, KIGFX::REPAINT );
     }
 
+    for( BOARD_ITEM* shape : board()->Drawings() )
+    {
+        if( shape->Type() == PCB_SHAPE_T && static_cast<PCB_SHAPE*>( shape )->IsOnCopperLayer() )
+            view()->Update( shape, KIGFX::REPAINT );
+    }
+
     canvas()->Refresh();
 
     return 0;

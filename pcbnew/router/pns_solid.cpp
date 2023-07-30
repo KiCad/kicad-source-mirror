@@ -92,4 +92,15 @@ void SOLID::SetPos( const VECTOR2I& aCenter )
 }
 
 
+VECTOR2I SOLID::Anchor( int aN ) const
+{
+    return m_anchorPoints.empty() ? m_pos : m_anchorPoints[aN];
+}
+
+ int SOLID::AnchorCount() const
+{
+    return m_anchorPoints.empty() ? 1 : m_anchorPoints.size();
+}
+
+
 }

@@ -2851,8 +2851,17 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
             NeedRIGHT();
             break;
 
+        case T_net:
+            if( !shape->SetNetCode( getNetCode( parseInt( "net number" ) ), /* aNoAssert */ true ) )
+            {
+                wxLogError( _( "Invalid net ID in\nfile: '%s'\nline: %d\noffset: %d." ),
+                            CurSource(), CurLineNumber(), CurOffset() );
+            }
+            NeedRIGHT();
+            break;
+
         default:
-            Expecting( "layer, width, fill, tstamp, locked or status" );
+            Expecting( "layer, width, fill, tstamp, locked, net or status" );
         }
     }
 

@@ -986,6 +986,9 @@ void PCB_PLUGIN::format( const PCB_SHAPE* aShape, int aNestLevel ) const
 
     formatLayer( aShape->GetLayer() );
 
+    if( aShape->GetNetCode() > 0 )
+        m_out->Print( 0, " (net %d)", m_mapping->Translate( aShape->GetNetCode() ) );
+
     m_out->Print( 0, " (tstamp %s)", TO_UTF8( aShape->m_Uuid.AsString() ) );
 
     m_out->Print( 0, ")\n" );

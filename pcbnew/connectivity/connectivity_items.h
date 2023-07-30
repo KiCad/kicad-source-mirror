@@ -33,6 +33,7 @@
 #include <pad.h>
 #include <footprint.h>
 #include <pcb_track.h>
+#include <pcb_shape.h>
 #include <zone.h>
 
 #include <geometry/shape_poly_set.h>
@@ -423,6 +424,7 @@ public:
     CN_ITEM* Add( PCB_ARC* track );
     CN_ITEM* Add( PCB_VIA* via );
     CN_ITEM* Add( CN_ZONE_LAYER* zitem );
+    CN_ITEM* Add( PCB_SHAPE* shape );
 
     const std::vector<CN_ITEM*> Add( ZONE* zone, PCB_LAYER_ID aLayer );
 

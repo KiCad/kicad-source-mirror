@@ -217,6 +217,8 @@ protected:
     void strokeText( const wxString& aText, const VECTOR2I& aPosition,
                      const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics );
 
+    void renderNetNameForSegment( const SHAPE_SEGMENT& aSeg, const COLOR4D& aColor, const wxString& aNetName ) const;
+
 protected:
     PCB_RENDER_SETTINGS m_pcbSettings;
     FRAME_T             m_frameType;

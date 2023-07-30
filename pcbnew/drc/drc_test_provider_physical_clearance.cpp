@@ -357,6 +357,16 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
                                 break;
                             }
 
+                            case SHAPE_T::SEGMENT:
+                            {
+                                SHAPE_LINE_CHAIN asPoly;
+                                asPoly.Append( shape->GetStart() );
+                                asPoly.Append( shape->GetEnd() );
+
+                                testShapeLineChain( asPoly, shape->GetWidth(), layer, item, c );
+                                break;
+                            }
+
                             default:
                                 UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
                             }

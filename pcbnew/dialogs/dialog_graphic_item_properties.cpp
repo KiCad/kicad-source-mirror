@@ -132,6 +132,33 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
     m_LayerSelectionCtrl->SetBoardFrame( m_parent );
     m_LayerSelectionCtrl->Resync();
 
+    m_netSelector->SetBoard( aParent->GetBoard() );
+    m_netSelector->SetNetInfo( &aParent->GetBoard()->GetNetInfo() );
+
+    int net = aShape->GetNetCode();
+
+    if( net >= 0 )
+    {
+        m_netSelector->SetSelectedNetcode( net );
+    }
+    else
+    {
+        m_netSelector->SetIndeterminateString( INDETERMINATE_STATE );
+        m_netSelector->SetIndeterminate();
+    }
+
+    auto showHideNetInfo =
+            [&]()
+            {
+                m_netSelector->Show( aShape->IsOnCopperLayer() );
+                m_netLabel->Show( aShape->IsOnCopperLayer() );
+            };
+
+    showHideNetInfo();
+    m_LayerSelectionCtrl->Bind( wxEVT_COMBOBOX,
+                                [&]( wxCommandEvent& aEvt ) { showHideNetInfo() ;} );
+
+
     SetInitialFocus( m_startXCtrl );
 
     SetupStandardButtons();
@@ -198,6 +225,9 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
         m_bezierCtrl2X.Show( false );
         m_bezierCtrl2Y.Show( false );
     }
+
+    m_netSelector->Show( m_item->IsOnCopperLayer() );
+    m_netLabel->Show( m_item->IsOnCopperLayer() );
 
     // Change texts according to the segment shape:
     switch( m_item->GetShape() )
@@ -380,6 +410,11 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     m_item->SetLayer( ToLAYER_ID( layer ) );
 
     m_item->RebuildBezierToSegmentsPointsList( m_item->GetWidth() );
+
+    if( m_item->IsOnCopperLayer() )
+        m_item->SetNetCode( m_netSelector->GetSelectedNetcode() );
+    else
+        m_item->SetNetCode( -1 );
 
     commit.Push( _( "Modify drawing properties" ) );
 
