@@ -185,8 +185,8 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     LIB_FIELD* simEnableField = m_libEntry->FindField( SIM_ENABLE_FIELD );
     m_excludeFromSim->SetValue( simEnableField && simEnableField->GetText() == wxT( "0" ) );
 
-    m_excludeFromBomCheckBox->SetValue( !m_libEntry->GetExcludedFromBOM() );
-    m_excludeFromBoardCheckBox->SetValue( !m_libEntry->GetExcludedFromBoard() );
+    m_excludeFromBomCheckBox->SetValue( m_libEntry->GetExcludedFromBOM() );
+    m_excludeFromBoardCheckBox->SetValue( m_libEntry->GetExcludedFromBoard() );
 
     m_ShowPinNumButt->SetValue( m_libEntry->ShowPinNumbers() );
     m_ShowPinNameButt->SetValue( m_libEntry->ShowPinNames() );
