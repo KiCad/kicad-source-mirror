@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:33-0700\n"
-"PO-Revision-Date: 2023-07-11 14:52+0000\n"
-"Last-Translator: Elias Sjögreen <eliassjogreen1@gmail.com>\n"
+"PO-Revision-Date: 2023-07-31 15:04+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v7/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -17525,7 +17525,7 @@ msgstr "Tilldela en annan symbol från biblioteket"
 
 #: eeschema/tools/ee_actions.cpp:477
 msgid "Update Symbol..."
-msgstr "Uppdateringssymbol ..."
+msgstr "Uppdatera symbol..."
 
 #: eeschema/tools/ee_actions.cpp:478
 msgid "Update symbol to include any changes from the library"
