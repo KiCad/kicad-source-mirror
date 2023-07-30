@@ -197,6 +197,9 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .MinSize( 250, -1 ).BestSize( 250, -1 ) );
 
     m_auimgr.AddPane( m_propertiesPanel, defaultPropertiesPaneInfo() );
+    // Show or hide m_propertiesPanel depending on current settings:
+    wxAuiPaneInfo& propertiesPaneInfo = m_auimgr.GetPane( PropertiesPaneName() );
+    propertiesPaneInfo.Show( m_settings->m_AuiPanels.show_properties );
 
     m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" )
                       .Left().Layer( 2 ) );
@@ -302,6 +305,10 @@ void SYMBOL_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     m_settings->m_LibWidth               = m_treePane->GetSize().x;
 
     m_settings->m_LibrarySortMode = m_treePane->GetLibTree()->GetSortMode();
+
+    m_settings->m_AuiPanels.properties_splitter_proportion = m_propertiesPanel->SplitterProportion();
+    bool prop_shown = m_auimgr.GetPane( PropertiesPaneName() ).IsShown();
+    m_settings->m_AuiPanels.show_properties = prop_shown;
 }
 
 

@@ -200,6 +200,7 @@ void SYMBOL_EDIT_FRAME::ToggleProperties()
     else
     {
         m_settings->m_AuiPanels.properties_panel_width = m_propertiesPanel->GetSize().x;
-        m_auimgr.Update();
     }
+
+    m_auimgr.Update();
 }
