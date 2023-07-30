@@ -5502,6 +5502,7 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
     // bigger scope since each filled_polygon is concatenated in here
     std::map<PCB_LAYER_ID, SHAPE_POLY_SET> pts;
+    std::map<PCB_LAYER_ID, std::vector<SEG>> legacySegs;
     bool         inFootprint = false;
     PCB_LAYER_ID filledLayer;
     bool         addedFilledPolygons = false;
@@ -5664,32 +5665,15 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                     if( token != T_segment && token != T_hatch && token != T_polygon )
                         Expecting( "segment, hatch or polygon" );
 
-                    if( token == T_segment )    // deprecated
+                    switch( token )
                     {
-                        if( m_showLegacySegmentZoneWarning && m_queryUserCallback )
-                        {
-                            if( !m_queryUserCallback(
-                                        _( "Legacy Zone Warning" ), wxICON_WARNING,
-                                        _( "The segment zone fill mode is no longer supported.\n"
-                                           "Convert zones to smoothed polygon fills?" ),
-                                        _( "Convert" ) ) )
-                            {
-                                THROW_IO_ERROR( wxT( "CANCEL" ) );
-                            }
-                        }
+                    case T_hatch:
+                        zone->SetFillMode( ZONE_FILL_MODE::HATCH_PATTERN ); break;
 
-                        m_showLegacySegmentZoneWarning = false;
-                        zone->SetFlags( CANDIDATE );
-                        zone->SetFillMode( ZONE_FILL_MODE::POLYGONS );
-                        m_board->SetModified();
-                    }
-                    else if( token == T_hatch )
-                    {
-                        zone->SetFillMode( ZONE_FILL_MODE::HATCH_PATTERN );
-                    }
-                    else
-                    {
-                        zone->SetFillMode( ZONE_FILL_MODE::POLYGONS );
+                    case T_segment: // deprecated, convert to polygons
+                    case T_polygon:
+                    default: 
+                        zone->SetFillMode( ZONE_FILL_MODE::POLYGONS ); break;
                     }
 
                     NeedRIGHT();
@@ -5960,6 +5944,8 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
         case T_fill_segments:
         {
+            // Legacy segment fill
+
             for( token = NextTok(); token != T_RIGHT; token = NextTok() )
             {
                 if( token != T_LEFT )
@@ -5967,27 +5953,19 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
                 token = NextTok();
 
-                if( token == T_layer )
-                {
-                    filledLayer = parseBoardItemLayer();
-                    NeedRIGHT();
-                    token = NextTok();
-
-                    if( token != T_LEFT )
-                        Expecting( T_LEFT );
-
-                    token = NextTok();
-                }
-                else
-                {
-                    filledLayer = zone->GetLayer();
-                }
-
                 if( token != T_pts )
                     Expecting( T_pts );
 
-                ignore_unused( parseXY() );
-                ignore_unused( parseXY() );
+                // Legacy zones only had one layer
+                filledLayer = zone->GetFirstLayer();
+                
+                SEG fillSegment;
+
+                fillSegment.A = parseXY();
+                fillSegment.B = parseXY();                              
+
+                legacySegs[filledLayer].push_back( fillSegment );
+
                 NeedRIGHT();
             }
 
@@ -6079,7 +6057,7 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
     {
         if( isStrokedFill && !zone->GetIsRuleArea() )
         {
-            if( m_showLegacy5ZoneWarning && m_queryUserCallback )
+            if( m_showLegacy5ZoneWarning )
             {
                 wxLogWarning(
                         _( "Legacy zone fill strategy is not supported anymore.\nZone fills will "
@@ -6093,19 +6071,58 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                 int numSegs =
                         GetArcToSegmentCount( zone->GetMinThickness(), ARC_HIGH_DEF, FULL_CIRCLE );
 
-                for( auto& pair : pts )
+                for( auto& [layer, polyset] : pts )
                 {
-                    pair.second.InflateWithLinkedHoles( zone->GetMinThickness() / 2, numSegs,
-                                                        SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+                    polyset.InflateWithLinkedHoles( zone->GetMinThickness() / 2, numSegs,
+                                                    SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
                 }
             }
         }
-
-        for( auto& pair : pts )
-            zone->SetFilledPolysList( pair.first, pair.second );
+                
+        for( auto& [layer, polyset] : pts )
+            zone->SetFilledPolysList( layer, polyset );
 
         zone->CalculateFilledArea();
     }
+    else if( legacySegs.size() > 0 )
+    {
+        // No polygons, just segment fill?
+        // Note RFB: This code might be removed if turns out this never existed for sexpr file format or otherwise we
+        // should add a test case to the qa folder
+
+        if( m_showLegacySegmentZoneWarning )
+        {
+            wxLogWarning( _( "The legacy segment zone fill mode is no longer supported.\n"
+                             "Zone fills will be converted on a best-effort basis." ) );
+
+            m_showLegacySegmentZoneWarning = false;
+        }
+
+
+        for( const auto& [layer, segments] : legacySegs )
+        {
+            SHAPE_POLY_SET layerFill;
+
+            if( zone->HasFilledPolysForLayer( layer ) )
+                layerFill = SHAPE_POLY_SET( *zone->GetFill( layer ) );
+
+            for( const auto& seg : segments )
+            {
+                SHAPE_POLY_SET segPolygon;
+
+                TransformOvalToPolygon( segPolygon, seg.A, seg.B, zone->GetMinThickness(),
+                                        ARC_HIGH_DEF, ERROR_OUTSIDE );
+
+                layerFill.BooleanAdd( segPolygon, SHAPE_POLY_SET::PM_FAST );
+            }
+
+            
+            zone->SetFilledPolysList( layer, layerFill );
+            zone->CalculateFilledArea();
+        }
+    }
+    
 
     // Ensure keepout and non copper zones do not have a net
     // (which have no sense for these zones)
