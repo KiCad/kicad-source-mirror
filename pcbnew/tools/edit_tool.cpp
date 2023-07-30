@@ -1197,10 +1197,6 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
 
     BOARD_COMMIT commit{ this };
 
-    // Only modify one parent in FP editor
-    if( m_isFootprintEditor )
-        commit.Modify( selection.Front() );
-
     // List of thing to select at the end of the operation
     // (doing it as we go will invalidate the iterator)
     std::vector<PCB_SHAPE*> items_to_select_on_success;
@@ -1210,14 +1206,11 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
     // and whether the item was conjured up by decomposing a polygon or rectangle
     const auto item_modification_handler = [&]( PCB_SHAPE& aItem )
     {
-        if( !m_isFootprintEditor )
+        // If the item was "conjured up" it will be added later separately
+        if( !alg::contains( lines_to_add, &aItem ) )
         {
-            // If the item was "conjured up" it will be added later separately
-            if( !alg::contains( lines_to_add, &aItem ) )
-            {
-                commit.Modify( &aItem );
-                items_to_select_on_success.push_back( &aItem );
-            }
+            commit.Modify( &aItem );
+            items_to_select_on_success.push_back( &aItem );
         }
     };
 
