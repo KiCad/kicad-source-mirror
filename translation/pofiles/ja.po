@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:33-0700\n"
-"PO-Revision-Date: 2023-07-28 10:07+0000\n"
+"PO-Revision-Date: 2023-07-31 15:04+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v7/ja/>\n"
 "Language: ja\n"
@@ -17605,7 +17605,7 @@ msgstr "ピンの一括編集用にピン テーブルを表示"
 
 #: eeschema/tools/ee_actions.cpp:553
 msgid "Break"
-msgstr "切断"
+msgstr "分割"
 
 #: eeschema/tools/ee_actions.cpp:553
 msgid "Divide into connected segments"
@@ -17613,7 +17613,7 @@ msgstr "接続されたセグメントに分割します"
 
 #: eeschema/tools/ee_actions.cpp:558
 msgid "Slice"
-msgstr "スライス"
+msgstr "切断"
 
 #: eeschema/tools/ee_actions.cpp:558
 msgid "Divide into unconnected segments"
@@ -37041,7 +37041,7 @@ msgstr "強制的にドラッグ"
 
 #: pcbnew/router/router_tool.cpp:2406 pcbnew/tools/pcb_actions.cpp:1539
 msgid "Break Track"
-msgstr "配線を切断"
+msgstr "配線を分割"
 
 #: pcbnew/router/router_tool.cpp:2485
 #, c-format
