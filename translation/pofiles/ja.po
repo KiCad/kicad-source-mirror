@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 15:35-0700\n"
-"PO-Revision-Date: 2023-07-28 10:06+0000\n"
+"PO-Revision-Date: 2023-07-30 09:50+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -600,7 +600,7 @@ msgstr "posファイルにない3Dモデルの切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:344
 msgid "Toggle 3D models marked DNP"
-msgstr "「未実装にする」部品の3Dモデル表示を切り替え"
+msgstr "[未実装]の部品の3Dモデル表示を切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:345
 #, fuzzy
@@ -1488,14 +1488,12 @@ msgid "Front Fab layer"
 msgstr "表面Fabレイヤー"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
-#, fuzzy
 msgid "User layer drawings"
-msgstr "ユーザー レイヤー:"
+msgstr "描画ユーザーレイヤー"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
-#, fuzzy
 msgid "User layer comments"
-msgstr "ユーザー レイヤー Eco1"
+msgstr "コメントユーザーレイヤー"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 msgid "User layer Eco1"
@@ -13009,9 +13007,8 @@ msgid "Dash and dot lengths are ratios of the line width."
 msgstr "破線とドットの長さは、線幅の比率です。"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:253
-#, fuzzy
 msgid "Operating-point Overlay"
-msgstr "動作点"
+msgstr "動作点のオーバーレイ"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:262
 msgid "Significant digits (voltages):"
@@ -18439,7 +18436,6 @@ msgid "Add Net Class Directive"
 msgstr "ネットクラス指示を追加"
 
 #: eeschema/tools/ee_actions.cpp:386
-#, fuzzy
 msgid "Add net class directive labels"
 msgstr "ネットクラス指示ラベルを追加"
 
@@ -18814,64 +18810,52 @@ msgid "Open the selected symbol in the Symbol Editor"
 msgstr "選択したシンボルをシンボル エディターで開く"
 
 #: eeschema/tools/ee_actions.cpp:704
-#, fuzzy
 msgid "Set the exclude from bill of materials attribute"
-msgstr "部品表から除外"
+msgstr "[部品表から除外]の属性を設定"
 
 #: eeschema/tools/ee_actions.cpp:709
-#, fuzzy
 msgid "Include in bill of materials"
-msgstr "部品表から除外"
+msgstr "部品表に含める"
 
 #: eeschema/tools/ee_actions.cpp:709
-#, fuzzy
 msgid "Clear the exclude from bill of materials attribute"
-msgstr "部品表から除外"
+msgstr "[部品表から除外]の属性を削除"
 
 #: eeschema/tools/ee_actions.cpp:714
-#, fuzzy
 msgid "Toggle Exclude from BOM"
-msgstr "部品表から除外"
+msgstr "[部品表から除外]の設定を切り替え"
 
 #: eeschema/tools/ee_actions.cpp:714
-#, fuzzy
 msgid "Toggle the exclude from bill of materials attribute"
-msgstr "部品表から除外"
+msgstr "[部品表から除外]の設定を切り替え"
 
 #: eeschema/tools/ee_actions.cpp:719
-#, fuzzy
 msgid "Set the exclude from simulation attribute"
-msgstr "%s に製造属性 '部品表から除外' を追加しました。"
+msgstr "[シミュレーションから除外]の属性を設定"
 
 #: eeschema/tools/ee_actions.cpp:724
-#, fuzzy
 msgid "Include in simulation"
-msgstr "シミュレーションにおける Spice の値"
+msgstr "シミュレーションに含める"
 
 #: eeschema/tools/ee_actions.cpp:724
-#, fuzzy
 msgid "Clear the exclude from simulation attribute"
-msgstr "%s に製造属性 '部品表から除外' を追加しました。"
+msgstr "[シミュレーションから除外]の属性を削除"
 
 #: eeschema/tools/ee_actions.cpp:729
-#, fuzzy
 msgid "Toggle Exclude from simulation"
-msgstr "シミュレーションから除外"
+msgstr "[シミュレーションから除外]を切り替え"
 
 #: eeschema/tools/ee_actions.cpp:729
-#, fuzzy
 msgid "Toggle the exclude from simulation attribute"
-msgstr "%s の[部品表から除外]の製造属性を削除します。"
+msgstr "[シミュレーションから除外]の属性を切り替え"
 
 #: eeschema/tools/ee_actions.cpp:734
-#, fuzzy
 msgid "Set the exclude from board attribute"
-msgstr "%s に製造属性 '部品表から除外' を追加しました。"
+msgstr "[部品表から除外]の属性を設定"
 
 #: eeschema/tools/ee_actions.cpp:739
-#, fuzzy
 msgid "Include on board"
-msgstr "基板から除外"
+msgstr "基板に含める"
 
 #: eeschema/tools/ee_actions.cpp:739
 #, fuzzy
@@ -18879,14 +18863,12 @@ msgid "Clear the exclude from board attribute"
 msgstr "%s に製造属性 '部品表から除外' を追加しました。"
 
 #: eeschema/tools/ee_actions.cpp:744
-#, fuzzy
 msgid "Toggle Exclude from board"
-msgstr "基板から除外"
+msgstr "[基板から除外]の設定を切り替え"
 
 #: eeschema/tools/ee_actions.cpp:744
-#, fuzzy
 msgid "Toggle the exclude from board attribute"
-msgstr "%s の[部品表から除外]の製造属性を削除します。"
+msgstr "[基板から除外]の属性を切り替え"
 
 #: eeschema/tools/ee_actions.cpp:749
 #, fuzzy
@@ -18907,14 +18889,12 @@ msgid "Clear the do not populate attribute"
 msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:759
-#, fuzzy
 msgid "Toggle do not populate"
-msgstr "未実装"
+msgstr "[未実装]の設定を切り替え"
 
 #: eeschema/tools/ee_actions.cpp:759
-#, fuzzy
 msgid "Toggle the do not populate attribute"
-msgstr "'Virtual' 属性の 3D モデルを切替"
+msgstr "[未実装]の属性を切り替え"
 
 #: eeschema/tools/ee_actions.cpp:764
 msgid "Open the library symbol in the Symbol Editor"
@@ -19085,14 +19065,12 @@ msgid "Toggle display of hidden text fields"
 msgstr "非表示テキスト フィールドの表示を切り替え"
 
 #: eeschema/tools/ee_actions.cpp:867
-#, fuzzy
 msgid "Show Directive Labels"
-msgstr "指示ラベル"
+msgstr "指示ラベルを表示"
 
 #: eeschema/tools/ee_actions.cpp:867
-#, fuzzy
 msgid "Toggle display of directive labels"
-msgstr "接着剤 (Adhesive) レイヤーの表示を切り替え"
+msgstr "指示ラベルの表示を切り替え"
 
 #: eeschema/tools/ee_actions.cpp:871
 msgid "Show ERC Warnings"
@@ -19686,9 +19664,8 @@ msgid "Clear Attribute"
 msgstr "属性をクリア"
 
 #: eeschema/tools/sch_edit_tool.cpp:2630
-#, fuzzy
 msgid "Toggle Attribute"
-msgstr "属性情報"
+msgstr "属性を切り替え"
 
 #: eeschema/tools/sch_editor_control.cpp:150
 #, c-format
