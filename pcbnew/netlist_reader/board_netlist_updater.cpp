@@ -346,7 +346,13 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
 
     std::map<wxString, wxString> fpFieldsAsMap;
     for( PCB_FIELD* field : aPcbFootprint->GetFields() )
+    {
+        // These fields are individually checked above, and are not currently present in (fields) anyway.
+        if( field->IsReference() || field->IsValue() || field->IsFootprint() )
+            continue;
+
         fpFieldsAsMap[field->GetName()] = field->GetText();
+    }
 
     if( fpFieldsAsMap != aNetlistComponent->GetFields() )
     {
@@ -396,6 +402,9 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
 
                 if( aNetlistComponent->GetFields().count( field->GetName() ) == 0 )
                     aPcbFootprint->RemoveField( field->GetCanonicalName() );
+
+                if( m_frame )
+                    m_frame->GetCanvas()->GetView()->Remove( field );
             }
         }
 
