@@ -1790,7 +1790,8 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
             aList.emplace_back( _( "Footprint" ), msg );
 
             // Display description of the symbol, and keywords found in lib
-            aList.emplace_back( _( "Description" ) + wxT( ": " ) + m_part->GetDescription(),
+            aList.emplace_back( _( "Description" ) + wxT( ": " )
+                                        + GetField( DESCRIPTION_FIELD )->GetText(),
                                 _( "Keywords" ) + wxT( ": " ) + m_part->GetKeyWords() );
         }
     }
