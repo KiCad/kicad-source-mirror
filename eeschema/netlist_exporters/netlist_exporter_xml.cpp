@@ -94,8 +94,9 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
                                             SCH_SHEET_PATH* aSheet )
 {
     wxString                     value;
-    wxString                     datasheet;
     wxString                     footprint;
+    wxString                     datasheet;
+    wxString                     description;
     wxString                     candidate;
     std::map<wxString, wxString> userFields;
 
@@ -127,16 +128,20 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
                 int unit = symbol2->GetUnitSelection( aSheet );
 
                 // The lowest unit number wins.  User should only set fields in any one unit.
+
+                // Value
                 candidate = symbol2->GetValueFieldText( m_resolveTextVars, &sheetList[i], false );
 
                 if( !candidate.IsEmpty() && ( unit < minUnit || value.IsEmpty() ) )
                     value = candidate;
 
+                // Footprint
                 candidate = symbol2->GetFootprintFieldText( m_resolveTextVars, &sheetList[i], false );
 
                 if( !candidate.IsEmpty() && ( unit < minUnit || footprint.IsEmpty() ) )
                     footprint = candidate;
 
+                // Datasheet
                 candidate = m_resolveTextVars
                                 ? symbol2->GetField( DATASHEET_FIELD )->GetShownText( &sheetList[i], false )
                                 : symbol2->GetField( DATASHEET_FIELD )->GetText();
@@ -144,6 +149,15 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
                 if( !candidate.IsEmpty() && ( unit < minUnit || datasheet.IsEmpty() ) )
                     datasheet = candidate;
 
+                // Description
+                candidate = m_resolveTextVars
+                                ? symbol2->GetField( DESCRIPTION_FIELD )->GetShownText( &sheetList[i], false )
+                                : symbol2->GetField( DESCRIPTION_FIELD )->GetText();
+
+                if( !candidate.IsEmpty() && ( unit < minUnit || description.IsEmpty() ) )
+                    description = candidate;
+
+                // All non-mandatory fields
                 for( int ii = MANDATORY_FIELDS; ii < symbol2->GetFieldCount(); ++ii )
                 {
                     const SCH_FIELD& f = symbol2->GetFields()[ ii ];
@@ -167,10 +181,17 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
         value = aSymbol->GetValueFieldText( m_resolveTextVars, aSheet, false );
         footprint = aSymbol->GetFootprintFieldText( m_resolveTextVars, aSheet, false );
 
+        // Datasheet
         if( m_resolveTextVars )
             datasheet = aSymbol->GetField( DATASHEET_FIELD )->GetShownText( aSheet, false );
         else
             datasheet = aSymbol->GetField( DATASHEET_FIELD )->GetText();
+
+        // Description
+        if( m_resolveTextVars )
+            description = aSymbol->GetField( DESCRIPTION_FIELD )->GetShownText( aSheet, false );
+        else
+            description = aSymbol->GetField( DESCRIPTION_FIELD )->GetText();
 
         for( int ii = MANDATORY_FIELDS; ii < aSymbol->GetFieldCount(); ++ii )
         {
@@ -198,10 +219,25 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
     if( datasheet.size() )
         aNode->AddChild( node( wxT( "datasheet" ), UnescapeString( datasheet ) ) );
 
+    if( datasheet.size() )
+        aNode->AddChild( node( wxT( "description" ), UnescapeString( description ) ) );
+
     if( userFields.size() )
     {
         XNODE* xfields;
         aNode->AddChild( xfields = node( wxT( "fields" ) ) );
+
+        XNODE* datasheetField = node( wxT( "field" ), UnescapeString( datasheet ) );
+        datasheetField->AddAttribute(
+                wxT( "name" ),
+                UnescapeString( TEMPLATE_FIELDNAME::GetDefaultFieldName( DATASHEET_FIELD ) ) );
+        xfields->AddChild( datasheetField );
+
+        XNODE* descriptionField = node( wxT( "field" ), UnescapeString( description ) );
+        descriptionField->AddAttribute(
+                wxT( "name" ),
+                UnescapeString( TEMPLATE_FIELDNAME::GetDefaultFieldName( DESCRIPTION_FIELD ) ) );
+        xfields->AddChild( descriptionField );
 
         // non MANDATORY fields are output alphabetically
         for( const std::pair<const wxString, wxString>& f : userFields )

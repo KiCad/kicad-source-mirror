@@ -31,7 +31,7 @@
 
 // Saved dialog settings
 DIALOG_UPDATE_FROM_PCB::DIALOG_UPDATE_FROM_PCB_SAVED_STATE
-        DIALOG_UPDATE_FROM_PCB::s_savedDialogState{ false, true, true, true, false, true };
+        DIALOG_UPDATE_FROM_PCB::s_savedDialogState{ false, true, true, true, false, true, true };
 
 
 DIALOG_UPDATE_FROM_PCB::DIALOG_UPDATE_FROM_PCB( SCH_EDIT_FRAME* aParent )
@@ -62,6 +62,7 @@ DIALOG_UPDATE_FROM_PCB::DIALOG_UPDATE_FROM_PCB( SCH_EDIT_FRAME* aParent )
     m_cbUpdateValues->SetValue( s_savedDialogState.UpdateValues );
     m_cbUpdateNetNames->SetValue( s_savedDialogState.UpdateNetNames );
     m_cbUpdateAttributes->SetValue( s_savedDialogState.UpdateAttributes );
+    m_cbUpdateOtherFields->SetValue( s_savedDialogState.UpdateOtherFields );
 
     SetupStandardButtons( { { wxID_OK,     _( "Update Schematic" ) },
                             { wxID_CANCEL, _( "Close" )            } } );
@@ -82,6 +83,7 @@ void DIALOG_UPDATE_FROM_PCB::updateData()
                             m_cbUpdateReferences->GetValue(),
                             m_cbUpdateNetNames->GetValue(),
                             m_cbUpdateAttributes->GetValue(),
+                            m_cbUpdateOtherFields->GetValue(),
                             true );
     std::string   netlist;
 
@@ -135,6 +137,8 @@ void DIALOG_UPDATE_FROM_PCB::OnOptionChanged( wxCommandEvent& event )
         s_savedDialogState.UpdateNetNames = m_cbUpdateNetNames->GetValue();
     else if( event.GetEventObject() == m_cbUpdateAttributes )
         s_savedDialogState.UpdateAttributes = m_cbUpdateAttributes->GetValue();
+    else if( event.GetEventObject() == m_cbUpdateOtherFields )
+        s_savedDialogState.UpdateOtherFields = m_cbUpdateOtherFields->GetValue();
 }
 
 
@@ -150,6 +154,7 @@ void DIALOG_UPDATE_FROM_PCB::OnUpdateClick( wxCommandEvent& event )
                             m_cbUpdateReferences->GetValue(),
                             m_cbUpdateNetNames->GetValue(),
                             m_cbUpdateAttributes->GetValue(),
+                            m_cbUpdateOtherFields->GetValue(),
                             false );
 
     if( backAnno.FetchNetlistFromPCB( netlist ) && backAnno.BackAnnotateSymbols( netlist ) )

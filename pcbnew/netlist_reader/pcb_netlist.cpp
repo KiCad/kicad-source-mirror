@@ -93,6 +93,15 @@ void COMPONENT::Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl )
 
         aOut->Print( nl+1, "(timestamp %s)\n", aOut->Quotew( path ).c_str() );
 
+        // Add all fields as a (field) under a (fields) node
+        aOut->Print( nl + 1, "(fields" );
+
+        for( std::pair<wxString, wxString> field : m_fields )
+            aOut->Print( nl + 2, "\n(field (name %s) %s)", aOut->Quotew( field.first ).c_str(),
+                         aOut->Quotew( field.second ).c_str() );
+
+        aOut->Print( 0, ")\n" );
+
         // Add DNP and Exclude from BOM properties if we have them
         if( m_properties.count( "dnp" ) )
             aOut->Print( nl + 1, "(property (name \"dnp\"))\n" );

@@ -563,6 +563,12 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
                 }
             }
 
+            std::map<wxString, wxString> fields;
+            for( PCB_FIELD* field : footprint->Fields() )
+                fields[field->GetCanonicalName()] = field->GetText();
+
+            component->SetFields( fields );
+
             // Add DNP and Exclude from BOM properties
             std::map<wxString, wxString> properties;
 

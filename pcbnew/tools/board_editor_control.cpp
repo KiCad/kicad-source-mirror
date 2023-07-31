@@ -473,6 +473,12 @@ int BOARD_EDITOR_CONTROL::ExportNetlist( const TOOL_EVENT& aEvent )
             }
         }
 
+        std::map<wxString, wxString> fields;
+        for( PCB_FIELD* field : footprint->Fields() )
+            fields[field->GetCanonicalName()] = field->GetText();
+
+        component->SetFields( fields );
+
         netlist.AddComponent( component );
     }
 

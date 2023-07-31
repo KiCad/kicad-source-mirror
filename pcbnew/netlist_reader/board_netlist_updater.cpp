@@ -360,6 +360,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
 
             changed = true;
 
+            // Add or change field value
             for( auto pair : aNetlistComponent->GetFields() )
             {
                 if( aPcbFootprint->HasFieldByName( pair.first ) )
@@ -385,6 +386,16 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
                         view->Add( newField );
                     }
                 }
+            }
+
+            // Remove fields that aren't present in the symbol
+            for( PCB_FIELD* field : aPcbFootprint->GetFields() )
+            {
+                if( field->IsMandatoryField() )
+                    continue;
+
+                if( aNetlistComponent->GetFields().count( field->GetName() ) == 0 )
+                    aPcbFootprint->RemoveField( field->GetCanonicalName() );
             }
         }
 

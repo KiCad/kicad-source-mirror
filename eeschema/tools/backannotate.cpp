@@ -44,7 +44,8 @@
 BACK_ANNOTATE::BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter, bool aRelinkFootprints,
                               bool aProcessFootprints, bool aProcessValues,
                               bool aProcessReferences, bool aProcessNetNames,
-                              bool aProcessAttributes, bool aDryRun ) :
+                              bool aProcessAttributes, bool aProcessOtherFields,
+                              bool aDryRun ) :
         m_reporter( aReporter ),
         m_matchByReference( aRelinkFootprints ),
         m_processFootprints( aProcessFootprints ),
@@ -52,6 +53,7 @@ BACK_ANNOTATE::BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter, bool 
         m_processReferences( aProcessReferences ),
         m_processNetNames( aProcessNetNames ),
         m_processAttributes( aProcessAttributes ),
+        m_processOtherFields( aProcessOtherFields ),
         m_dryRun( aDryRun ),
         m_frame( aFrame ),
         m_changesCount( 0 )
@@ -150,7 +152,7 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
     {
         wxString path, value, footprint;
         bool     dnp = false, exBOM = false;
-        std::map<wxString, wxString> pinNetMap;
+        std::map<wxString, wxString> pinNetMap, fieldsMap;
         wxASSERT( item.first == "ref" );
         wxString ref = getStr( item.second );
 
@@ -170,6 +172,29 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
 
             footprint = getStr( item.second.get_child( "fpid" ) );
             value     = getStr( item.second.get_child( "value" ) );
+
+            // Get child PTREE of fields
+            boost::optional<const PTREE&> fields = item.second.get_child_optional( "fields" );
+
+            // Parse each field out of the fields string
+            if( fields )
+            {
+                for( const std::pair<const std::string, PTREE>& field : fields.get() )
+                {
+                    if( field.first != "field" )
+                        continue;
+
+                    // Fields are of the format "(field (name "name") "12345")
+                    auto fieldName = field.second.get_child_optional( "name" );
+                    auto fieldValue = field.second.back().first;
+
+                    if( !fieldName )
+                        continue;
+
+                    fieldsMap[getStr( fieldName.get() )] = fieldValue;
+                }
+            }
+
 
             // Get DNP and Exclude from BOM out of the properties if they exist
             for( const auto& child : item.second )
@@ -226,7 +251,7 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
         {
             // Add footprint to the map
             auto data = std::make_shared<PCB_FP_DATA>( ref, footprint, value, dnp, exBOM,
-                                                       pinNetMap );
+                                                       pinNetMap, fieldsMap );
             m_pcbFootprints.insert( nearestItem, std::make_pair( path, data ) );
         }
     }
@@ -461,6 +486,81 @@ void BACK_ANNOTATE::applyChangelist()
                 {
                     processNetNameChange( &commit, ref.GetRef(), pin, connection,
                                           connection->Name( true ), shortNetName );
+                }
+            }
+        }
+
+        if( m_processOtherFields )
+        {
+            // Need to handle three cases: existing field, new field, deleted field
+            for( const std::pair<const wxString, wxString>& field : fpData.m_fieldsMap )
+            {
+                const wxString& fpFieldName = field.first;
+                const wxString& fpFieldValue = field.second;
+                SCH_FIELD*      symField = symbol->FindField( fpFieldName );
+
+                // 1. Existing fields has changed value
+                // PCB Field value is checked against the shown text because this is the value
+                // with all the variables resolved. The footprints field value gets the symbol's
+                // resolved value when the PCB is updated from the schematic.
+                if( symField
+                    && symField->GetShownText( &ref.GetSheetPath(), false ) != fpFieldValue )
+                {
+                    m_changesCount++;
+                    msg.Printf( _( "Change field '%s' value to '%s'." ),
+                                symField->GetCanonicalName(), fpFieldValue );
+
+                    if( !m_dryRun )
+                    {
+                        commit.Modify( symbol, screen );
+                        symField->SetText( fpFieldValue );
+                    }
+
+                    m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
+                }
+
+                // 2. New field has been added to footprint and needs to be added to symbol
+                if( symField == nullptr )
+                {
+                    m_changesCount++;
+                    msg.Printf( _( "Add field '%s' with value '%s'." ), fpFieldName, fpFieldValue );
+
+                    if( !m_dryRun )
+                    {
+                        commit.Modify( symbol, screen );
+
+                        SCH_FIELD newField( VECTOR2I( 0, 0 ), symbol->GetFieldCount(), symbol,
+                                            fpFieldName );
+                        newField.SetText( fpFieldValue );
+                        symbol->AddField( newField );
+                    }
+
+                    m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
+                }
+            }
+
+            // 3. Existing field has been deleted from footprint and needs to be deleted from symbol
+            // Check all symbol fields for existence in the footprint field map
+            for( SCH_FIELD& field : symbol->GetFields() )
+            {
+                // Never delete mandatory fields
+                if( field.GetId() < MANDATORY_FIELDS )
+                    continue;
+
+                if( fpData.m_fieldsMap.find( field.GetCanonicalName() )
+                    == fpData.m_fieldsMap.end() )
+                {
+                    // Field not found in footprint field map, delete it
+                    m_changesCount++;
+                    msg.Printf( _( "Delete field '%s.'" ), field.GetCanonicalName() );
+
+                    if( !m_dryRun )
+                    {
+                        commit.Modify( symbol, screen );
+                        symbol->RemoveField( &field );
+                    }
+
+                    m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
                 }
             }
         }

@@ -72,6 +72,11 @@ DIALOG_UPDATE_FROM_PCB_BASE::DIALOG_UPDATE_FROM_PCB_BASE( wxWindow* parent, wxWi
 	m_cbUpdateAttributes = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Attributes"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_cbUpdateAttributes, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
+	m_cbUpdateOtherFields = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, _("Other fields"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbUpdateOtherFields->SetToolTip( _("Update all other fields in the symbol from the footprint") );
+
+	fgSizer2->Add( m_cbUpdateOtherFields, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+
 
 	sbSizer2->Add( fgSizer2, 1, wxEXPAND, 5 );
 
@@ -112,6 +117,7 @@ DIALOG_UPDATE_FROM_PCB_BASE::DIALOG_UPDATE_FROM_PCB_BASE( wxWindow* parent, wxWi
 	m_cbUpdateValues->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_FROM_PCB_BASE::OnOptionChanged ), NULL, this );
 	m_cbUpdateNetNames->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_FROM_PCB_BASE::OnOptionChanged ), NULL, this );
 	m_cbUpdateAttributes->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_FROM_PCB_BASE::OnOptionChanged ), NULL, this );
+	m_cbUpdateOtherFields->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_FROM_PCB_BASE::OnOptionChanged ), NULL, this );
 	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_FROM_PCB_BASE::OnUpdateClick ), NULL, this );
 }
 
@@ -124,6 +130,7 @@ DIALOG_UPDATE_FROM_PCB_BASE::~DIALOG_UPDATE_FROM_PCB_BASE()
 	m_cbUpdateValues->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_FROM_PCB_BASE::OnOptionChanged ), NULL, this );
 	m_cbUpdateNetNames->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_FROM_PCB_BASE::OnOptionChanged ), NULL, this );
 	m_cbUpdateAttributes->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_FROM_PCB_BASE::OnOptionChanged ), NULL, this );
+	m_cbUpdateOtherFields->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_FROM_PCB_BASE::OnOptionChanged ), NULL, this );
 	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_UPDATE_FROM_PCB_BASE::OnUpdateClick ), NULL, this );
 
 }
