@@ -394,6 +394,10 @@ LAYER_PRESET APPEARANCE_CONTROLS::presetBack( _HKI( "Back Layers" ),
 LAYER_PRESET APPEARANCE_CONTROLS::presetBackAssembly( _HKI( "Back Assembly View" ),
         LSET::BackAssembly().set( Edge_Cuts ), GAL_SET::DefaultVisible(), B_SilkS );
 
+// this one is only used to store the object visibility settings  of the last used
+// built-in layer preset
+LAYER_PRESET APPEARANCE_CONTROLS::m_lastBuiltinPreset;
+
 
 APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFocusOwner,
                                           bool aFpEditorMode ) :
@@ -2693,6 +2697,14 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
         return;
     }
 
+    // Store the objects visibility settings if the presedt is not a user preset,
+    // to be reused when selecting a new built-in layer preset, even if a previous
+    // user preset has changed the object visibility
+    if( !m_currentPreset || m_currentPreset->readOnly )
+    {
+        m_lastBuiltinPreset.renderLayers = getVisibleObjects();
+    }
+
     LAYER_PRESET* preset = static_cast<LAYER_PRESET*>( m_cbLayerPresets->GetClientData( index ) );
     m_currentPreset      = preset;
 
@@ -2702,7 +2714,12 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
     {
         // Change board layers visibility, but do not change objects visibility
         LAYER_PRESET curr_layers_choice = *preset;
-        curr_layers_choice.renderLayers = getVisibleObjects();
+
+        // For predefined presets that do not manage objects visibility, use
+        // the objects visibility settings of the last used predefined preset.
+        if( curr_layers_choice.readOnly )
+            curr_layers_choice.renderLayers = m_lastBuiltinPreset.renderLayers;
+
         doApplyLayerPreset( curr_layers_choice );
     }
 

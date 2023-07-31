@@ -430,6 +430,9 @@ private:
     static LAYER_PRESET presetFrontAssembly;
     static LAYER_PRESET presetBack;
     static LAYER_PRESET presetBackAssembly;
+    // a LAYER_PRESET used only to store the objects visibility of the
+    // last selected built-in LAYER_PRESET preset
+    static LAYER_PRESET m_lastBuiltinPreset;
 
     int m_pointSize;
 
