@@ -329,9 +329,7 @@ public:
     bool IsFlipped() const { return GetLayer() == B_Cu; }
 
     /**
-     * A special IsOnLayer for footprints: return true if the footprint contains only items on the
-     * given layer, even if that layer is not one of the valid footprint layers F_Cu and B_Cu.
-     * This allows selection of "graphic" footprints that contain only silkscreen, for example.
+     * @copydoc BOARD_ITEM::IsOnLayer
      */
     bool IsOnLayer( PCB_LAYER_ID aLayer ) const override;
 
@@ -517,6 +515,18 @@ public:
     bool HitTestAccurate( const VECTOR2I& aPosition, int aAccuracy = 0 ) const;
 
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
+
+    /**
+     * Test if the point hits one or more of the footprint elements on a given layer.
+     *
+     * @param aPosition is the point to test
+     * @param aAccuracy is the hit test accuracy
+     * @param aLayer is the layer to test
+     * @return true if aPosition hits a footprint element on aLayer
+     */
+    bool HitTestOnLayer( const VECTOR2I& aPosition, PCB_LAYER_ID aLayer, int aAccuracy = 0 ) const;
+
+    bool HitTestOnLayer( const BOX2I& aRect, bool aContained, PCB_LAYER_ID aLayer, int aAccuracy = 0 ) const;
 
     /**
      * @return reference designator text.

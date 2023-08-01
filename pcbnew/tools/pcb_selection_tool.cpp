@@ -744,6 +744,8 @@ bool PCB_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
     // Apply the stateful filter
     FilterCollectedItems( collector, false );
 
+    FilterCollectorForFootprints( collector, aWhere );
+
     // For subtracting, we only want items that are selected
     if( m_subtractive )
     {
@@ -964,6 +966,7 @@ bool PCB_SELECTION_TOOL::selectMultiple()
             for( const KIGFX::VIEW::LAYER_ITEM_PAIR& candidate : candidates )
             {
                 BOARD_ITEM* item = static_cast<BOARD_ITEM*>( candidate.first );
+
 
                 if( item && Selectable( item ) && item->HitTest( selectionRect, !greedySelection )
                         && ( greedySelection || !group_items.count( item ) ) )
@@ -2938,10 +2941,9 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
         for( int i = 0; i < aCollector.GetCount(); ++i )
         {
             BOARD_ITEM* item = aCollector[i];
-            KICAD_T type = item->Type();
 
-            if( ( type == PCB_TEXT_T || type == PCB_TEXTBOX_T || type == PCB_SHAPE_T )
-                    && silkLayers[item->GetLayer()] )
+            if( item->IsType( { PCB_TEXT_T, PCB_TEXTBOX_T, PCB_SHAPE_T, PCB_FOOTPRINT_T } )
+                && item->IsOnLayer( activeLayer ) )
             {
                 preferred.insert( item );
             }
@@ -3194,6 +3196,67 @@ void PCB_SELECTION_TOOL::FilterCollectorForMarkers( GENERAL_COLLECTOR& aCollecto
         BOARD_ITEM* item = aCollector[i];
 
         if( item->Type() == PCB_MARKER_T )
+            aCollector.Remove( item );
+    }
+}
+
+void PCB_SELECTION_TOOL::FilterCollectorForFootprints( GENERAL_COLLECTOR& aCollector, const VECTOR2I& aWhere ) const
+{
+    const RENDER_SETTINGS* settings = getView()->GetPainter()->GetSettings();
+
+    auto visibleLayers =
+            [&]()
+            {
+                if( m_isFootprintEditor )
+                {
+                    LSET set;
+
+                    for( PCB_LAYER_ID layer : LSET::AllLayersMask().Seq() )
+                        set.set( layer, view()->IsLayerVisible( layer ) );
+
+                    return set;
+                }
+                else
+                {
+                    return board()->GetVisibleLayers();
+                }
+            };
+
+    LSET layers = visibleLayers();
+
+    if( settings->GetHighContrast() )
+    {
+        layers.reset();
+
+        const std::set<int> activeLayers = settings->GetHighContrastLayers();
+
+        for( int layer : activeLayers )
+        {
+            if( layer >= 0 && layer < PCB_LAYER_ID_COUNT )
+                layers.set( layer );
+        }
+    }
+
+    // Iterate from the back so we don't have to worry about removals.
+    for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+    {
+        bool has_hit = false;
+        BOARD_ITEM* item = aCollector[i];
+        FOOTPRINT* fp = dyn_cast<FOOTPRINT*>( item );
+
+        if( !fp )
+            continue;
+
+        for( PCB_LAYER_ID layer : layers.Seq() )
+        {
+            if( fp->HitTestOnLayer( aWhere, layer ) )
+            {
+                has_hit = true;
+                break;
+            }
+        }
+
+        if( !has_hit )
             aCollector.Remove( item );
     }
 }

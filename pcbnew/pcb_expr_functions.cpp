@@ -117,7 +117,7 @@ static void existsOnLayerFunc( LIBEVAL::CONTEXT* aCtx, void *self )
                         {
                             anyMatch = true;
 
-                            if( item->IsOnLayer( ToLAYER_ID( entry.GetValue())))
+                            if( item->IsOnLayer( ToLAYER_ID( entry.GetValue() ) ) )
                                 return 1.0;
                         }
                     }
