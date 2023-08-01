@@ -288,8 +288,6 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
         dataModel.AddColumn( TEMPLATE_FIELDNAME::GetDefaultFieldName( i ),
                              TEMPLATE_FIELDNAME::GetDefaultFieldName( i, true ), false );
 
-    dataModel.AddColumn( wxS( "Quantity" ), _( "Qty" ), false );
-
     // User field names in symbols second
     std::set<wxString> userFieldNames;
 

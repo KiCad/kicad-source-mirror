@@ -59,6 +59,9 @@ public:
         m_symbolsList.SplitReferences();
     }
 
+    static const wxString QUANTITY_VARIABLE;
+    static const wxString ITEM_NUMBER_VARIABLE;
+
     void AddColumn( const wxString& aFieldName, const wxString& aLabel, bool aAddedByUser );
     void RemoveColumn( int aCol );
     void RenameColumn( int aCol, const wxString& newName );

@@ -335,14 +335,13 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties()
             attr->SetEditor( new GRID_CELL_URL_EDITOR( this, Prj().SchSearchS() ) );
             m_grid->SetColAttr( col, attr );
         }
-        else if( m_dataModel->GetColFieldName( col ) == wxS( "Quantity" )
-                 || m_dataModel->GetColFieldName( col ) == wxS( "Item Number" ) )
+        else if( m_dataModel->ColIsQuantity( col ) || m_dataModel->ColIsItemNumber( col ) )
         {
             attr->SetReadOnly();
             m_grid->SetColAttr( col, attr );
             m_grid->SetColFormatNumber( col );
         }
-        else if( m_dataModel->GetColFieldName( col ).StartsWith( wxS( "${" ) ) )
+        else if( IsTextVar( m_dataModel->GetColFieldName( col ) ) )
         {
             attr->SetReadOnly();
             m_grid->SetColAttr( col, attr );
@@ -519,6 +518,12 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataFromWindow()
 void DIALOG_SYMBOL_FIELDS_TABLE::AddField( const wxString& aFieldName, const wxString& aLabelValue,
                                            bool show, bool groupBy, bool addedByUser )
 {
+    // Users can add fields with variable names that match the special names in the grid,
+    // e.g. ${QUANTITY} so make sure we don't add them twice
+    for( int i = 0; i < m_fieldsCtrl->GetItemCount(); i++ )
+        if( m_fieldsCtrl->GetTextValue( i, FIELD_NAME_COLUMN ) == aFieldName )
+            return;
+
     m_dataModel->AddColumn( aFieldName, aLabelValue, addedByUser );
 
     wxVector<wxVariant> fieldsCtrlRow;
@@ -565,11 +570,11 @@ void DIALOG_SYMBOL_FIELDS_TABLE::LoadFieldNames()
                   TEMPLATE_FIELDNAME::GetDefaultFieldName( i, true ), show, groupBy );
     }
 
-    // Generated field that isn't in any symbol
-    AddField( wxS( "Quantity" ), _( "Qty" ), true, false );
-    AddField( wxS( "Item Number" ), _( "#" ), true, false );
+    // Generated fields present only in the fields table
+    AddField( FIELDS_EDITOR_GRID_DATA_MODEL::QUANTITY_VARIABLE, _( "Qty" ), true, false );
+    AddField( FIELDS_EDITOR_GRID_DATA_MODEL::ITEM_NUMBER_VARIABLE, _( "#" ), true, false );
 
-    // User fields second
+    // User fields next
     std::set<wxString> userFieldNames;
 
     for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )

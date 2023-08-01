@@ -9,6 +9,8 @@
 
 #include "fields_data_model.h"
 
+const wxString FIELDS_EDITOR_GRID_DATA_MODEL::QUANTITY_VARIABLE = wxS( "${QUANTITY}" );
+const wxString FIELDS_EDITOR_GRID_DATA_MODEL::ITEM_NUMBER_VARIABLE = wxS( "${ITEM_NUMBER}" );
 
 void FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName, const wxString& aLabel,
                                                bool aAddedByUser )
@@ -27,7 +29,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName, const
                 m_dataStore[symbol->m_Uuid][aFieldName] = field->GetText();
             // Handle fields with variables as names that are not present in the symbol
             // by giving them the correct value
-            else if( aFieldName.StartsWith( wxT( "${" ) ) )
+            else if( IsTextVar( aFieldName ) )
                 m_dataStore[symbol->m_Uuid][aFieldName] = aFieldName;
             else
                 m_dataStore[symbol->m_Uuid][aFieldName] = wxEmptyString;
@@ -203,8 +205,11 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const DATA_MODEL_ROW& group, i
 
 void FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxString& aValue )
 {
-    if( ColIsReference( aCol ) || ColIsQuantity( aCol ) )
-        return; // Can't modify references or quantity
+    wxCHECK_RET( aCol >= 0 && aCol < (int) m_cols.size(), wxS( "Invalid column number" ) );
+
+    // Can't modify references or text variables column, e.g. ${QUANTITY}
+    if( ColIsReference( aCol ) || IsTextVar( m_cols[aCol].m_fieldName ) )
+        return;
 
     DATA_MODEL_ROW& rowGroup = m_rows[aRow];
 
@@ -224,13 +229,13 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsReference( int aCol )
 bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsQuantity( int aCol )
 {
     wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), false );
-    return m_cols[aCol].m_fieldName == wxS( "Quantity" );
+    return m_cols[aCol].m_fieldName == QUANTITY_VARIABLE;
 }
 
 bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsItemNumber( int aCol )
 {
     wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), false );
-    return m_cols[aCol].m_fieldName == wxS( "Item Number" );
+    return m_cols[aCol].m_fieldName == ITEM_NUMBER_VARIABLE;
 }
 
 
@@ -373,7 +378,7 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::getFieldShownText( const SCH_REFERENCE& 
 
     // Handle fields with variables as names that are not present in the symbol
     // by giving them the correct value by resolving against the symbol
-    if( aFieldName.StartsWith( wxT( "${" ) ) )
+    if( IsTextVar( aFieldName ) )
     {
         int                   depth = 0;
         const SCH_SHEET_PATH& path = aRef.GetSheetPath();
@@ -584,7 +589,8 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData(
 
         for( const std::pair<wxString, wxString> srcData : fieldStore )
         {
-            if( srcData.first == _( "Quantity" ) )
+            // Skip special fields with variables as names (e.g. ${QUANTITY})
+            if( IsTextVar( srcData.first ) )
                 continue;
 
             const wxString& srcName = srcData.first;
@@ -680,7 +686,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyBomPreset( const BOM_PRESET& aPreset )
         int col = GetFieldNameCol( field.name );
 
         // Add any missing fields, if the user doesn't add any data
-        // they won't be saved to the symbols anywa
+        // they won't be saved to the symbols anyway
         if( col == -1 )
         {
             AddColumn( field.name, field.label, true );

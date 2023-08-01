@@ -136,7 +136,7 @@ BOM_PRESET BOM_PRESET::GroupedByValue()
         { "Value", "Value", true, true },
         { "Datasheet", "Datasheet", true, false },
         { "Footprint", "Footprint", true, false },
-        { "Quantity", "Qty", true, false },
+        { "${QUANTITY}", "Qty", true, false },
         { "${DNP}", "DNP", true, true },
     };
 
@@ -155,7 +155,7 @@ BOM_PRESET BOM_PRESET::GroupedByValueFootprint()
         { "Value", "Value", true, true },
         { "Datasheet", "Datasheet", true, false },
         { "Footprint", "Footprint", true, true },
-        { "Quantity", "Qty", true, false },
+        { "${QUANTITY}", "Qty", true, false },
         { "${DNP}", "DNP", true, true },
     };
 

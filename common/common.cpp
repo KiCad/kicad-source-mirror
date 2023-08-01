@@ -124,6 +124,12 @@ wxString GetTextVars( const wxString& aSource )
 }
 
 
+bool IsTextVar( const wxString& aSource )
+{
+    return aSource.StartsWith( wxS( "${" ) );
+}
+
+
 //
 // Stolen from wxExpandEnvVars and then heavily optimized
 //

@@ -97,6 +97,11 @@ wxString ExpandTextVars( const wxString& aSource, const PROJECT* aProject );
 wxString GetTextVars( const wxString& aSource );
 
 /**
+ * Returns true if the string is a text var, e.g starts with ${
+ */
+bool IsTextVar( const wxString& aSource );
+
+/**
  * Replace any environment and/or text variables in file-path uris (leaving network-path URIs
  * alone).
  */
