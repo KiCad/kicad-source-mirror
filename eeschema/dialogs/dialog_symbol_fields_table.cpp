@@ -299,7 +299,57 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
 }
 
 
-void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties()
+void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties( int aCol )
+{
+    wxGridCellAttr* attr = new wxGridCellAttr;
+    attr->SetReadOnly( false );
+
+    // Set some column types to specific editors
+    if( m_dataModel->ColIsReference( aCol ) )
+    {
+        attr->SetReadOnly();
+        m_grid->SetColAttr( aCol, attr );
+    }
+    else if( m_dataModel->GetColFieldName( aCol )
+             == TEMPLATE_FIELDNAME::GetDefaultFieldName( FOOTPRINT_FIELD ) )
+    {
+        attr->SetEditor( new GRID_CELL_FPID_EDITOR( this, wxEmptyString ) );
+        m_grid->SetColAttr( aCol, attr );
+    }
+    else if( m_dataModel->GetColFieldName( aCol )
+             == TEMPLATE_FIELDNAME::GetDefaultFieldName( DATASHEET_FIELD ) )
+    {
+        // set datasheet column viewer button
+        attr->SetEditor( new GRID_CELL_URL_EDITOR( this, Prj().SchSearchS() ) );
+        m_grid->SetColAttr( aCol, attr );
+    }
+    else if( m_dataModel->ColIsQuantity( aCol ) || m_dataModel->ColIsItemNumber( aCol ) )
+    {
+        attr->SetReadOnly();
+        m_grid->SetColAttr( aCol, attr );
+        m_grid->SetColFormatNumber( aCol );
+    }
+    else if( m_dataModel->ColIsAttribute( aCol ) )
+    {
+        attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+        m_grid->SetColAttr( aCol, attr );
+        m_grid->SetColFormatBool( aCol );
+    }
+    else if( IsTextVar( m_dataModel->GetColFieldName( aCol ) ) )
+    {
+        attr->SetReadOnly();
+        m_grid->SetColAttr( aCol, attr );
+    }
+    else
+    {
+        attr->SetEditor( m_grid->GetDefaultEditor() );
+        m_grid->SetColAttr( aCol, attr );
+        m_grid->SetColFormatCustom( aCol, wxGRID_VALUE_STRING );
+    }
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::SetupAllColumnProperties()
 {
     EESCHEMA_SETTINGS* cfg = m_parent->eeconfig();
     wxSize defaultDlgSize = ConvertDialogToPixels( wxSize( 600, 300 ) );
@@ -309,49 +359,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties()
     int  sortCol = 0;
     bool sortAscending = true;
 
-
     for( int col = 0; col < m_grid->GetNumberCols(); ++col )
     {
-        wxGridCellAttr* attr = new wxGridCellAttr;
-        attr->SetReadOnly( false );
-
-        // Set some column types to specific editors
-        if( m_dataModel->GetColFieldName( col )
-            == TEMPLATE_FIELDNAME::GetDefaultFieldName( REFERENCE_FIELD ) )
-        {
-            attr->SetReadOnly();
-            m_grid->SetColAttr( col, attr );
-        }
-        else if( m_dataModel->GetColFieldName( col )
-                 == TEMPLATE_FIELDNAME::GetDefaultFieldName( FOOTPRINT_FIELD ) )
-        {
-            attr->SetEditor( new GRID_CELL_FPID_EDITOR( this, wxEmptyString ) );
-            m_grid->SetColAttr( col, attr );
-        }
-        else if( m_dataModel->GetColFieldName( col )
-                 == TEMPLATE_FIELDNAME::GetDefaultFieldName( DATASHEET_FIELD ) )
-        {
-            // set datasheet column viewer button
-            attr->SetEditor( new GRID_CELL_URL_EDITOR( this, Prj().SchSearchS() ) );
-            m_grid->SetColAttr( col, attr );
-        }
-        else if( m_dataModel->ColIsQuantity( col ) || m_dataModel->ColIsItemNumber( col ) )
-        {
-            attr->SetReadOnly();
-            m_grid->SetColAttr( col, attr );
-            m_grid->SetColFormatNumber( col );
-        }
-        else if( IsTextVar( m_dataModel->GetColFieldName( col ) ) )
-        {
-            attr->SetReadOnly();
-            m_grid->SetColAttr( col, attr );
-        }
-        else
-        {
-            attr->SetEditor( m_grid->GetDefaultEditor() );
-            m_grid->SetColAttr( col, attr );
-            m_grid->SetColFormatCustom( col, wxGRID_VALUE_STRING );
-        }
+        SetupColumnProperties( col );
 
         if( col == m_dataModel->GetSortCol() )
         {
@@ -623,9 +633,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnAddField( wxCommandEvent& event )
 
     AddField( fieldName, GetTextVars( fieldName ), true, false, true );
 
-    wxGridCellAttr* attr = new wxGridCellAttr;
-    m_grid->SetColAttr( m_dataModel->GetColsCount() - 1, attr );
-    m_grid->SetColFormatCustom( m_dataModel->GetColsCount() - 1, wxGRID_VALUE_STRING );
+    SetupColumnProperties( m_dataModel->GetColsCount() - 1 );
 
     syncBomPresetSelection();
 }
@@ -896,7 +904,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnColMove( wxGridEvent& aEvent )
                 m_grid->ResetColPos();
 
                 // We need to reset all the column attr's to the correct column order
-                SetupColumnProperties();
+                SetupAllColumnProperties();
 
                 m_grid->ForceRefresh();
             } );
@@ -1598,7 +1606,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
     m_filter->ChangeValue( m_dataModel->GetFilter() );
     m_checkExcludeDNP->SetValue( m_dataModel->GetExcludeDNP() );
 
-    SetupColumnProperties();
+    SetupAllColumnProperties();
 
     // This will rebuild all rows and columns in the model such that the order
     // and labels are right, then we refresh the shown grid data to match

@@ -47,7 +47,8 @@ public:
     bool TransferDataFromWindow() override;
 
 private:
-    void SetupColumnProperties();
+    void SetupColumnProperties( int aCol );
+    void SetupAllColumnProperties();
     void AddField( const wxString& displayName, const wxString& aCanonicalName, bool show,
                    bool groupBy, bool addedByUser = false );
 
