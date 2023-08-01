@@ -685,6 +685,11 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
             m_draggedVia = newVia;
 
         m_draggedItems.Clear();
+
+         // If drag didn't work (i.e. dragged onto a collision) try walkaround instead
+        if( !ok )
+            ok = dragViaWalkaround( m_draggedVia, m_lastNode, aP );
+
         break;
     }
     }

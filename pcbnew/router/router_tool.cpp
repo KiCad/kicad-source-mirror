@@ -612,7 +612,9 @@ void ROUTER_TOOL::saveRouterDebugLog()
 
     for( auto item : removed )
     {
-        fprintf(f, "removed %s\n", item->Parent()->m_Uuid.AsString().c_str().AsChar() );
+        fprintf(f, "removed %s\n", item->Parent() ?
+                                   item->Parent()->m_Uuid.AsString().c_str().AsChar() :
+                                   item->Format().c_str() );
     }
 
     for( auto item : added )
