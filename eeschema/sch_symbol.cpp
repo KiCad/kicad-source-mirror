@@ -1186,6 +1186,7 @@ void SCH_SYMBOL::GetContextualTextVars( wxArrayString* aVars ) const
     aVars->push_back( wxT( "SYMBOL_KEYWORDS" ) );
     aVars->push_back( wxT( "EXCLUDE_FROM_BOM" ) );
     aVars->push_back( wxT( "EXCLUDE_FROM_BOARD" ) );
+    aVars->push_back( wxT( "EXCLUDE_FROM_SIM" ) );
     aVars->push_back( wxT( "DNP" ) );
 }
 
@@ -1325,6 +1326,12 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
     else if( token->IsSameAs( wxT( "EXCLUDE_FROM_BOARD" ) ) )
     {
         *token = this->GetExcludedFromBoard() ? _( "Excluded from board" )
+                                              : wxString( wxT( "" ) );
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "EXCLUDE_FROM_SIM" ) ) )
+    {
+        *token = this->GetExcludeFromSim() ? _( "Excluded from simulation" )
                                               : wxString( wxT( "" ) );
         return true;
     }

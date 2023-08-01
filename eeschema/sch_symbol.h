@@ -458,7 +458,7 @@ public:
      *
      * @param aFieldName is the name of the field to find.
      * @param aIncludeDefaultFields searches the library symbol default fields if true.
-     * @param aCaseInsensitive ignore the filed name case if true.     
+     * @param aCaseInsensitive ignore the filed name case if true.
      *
      * @return the field if found or NULL if the field was not found.
      */
