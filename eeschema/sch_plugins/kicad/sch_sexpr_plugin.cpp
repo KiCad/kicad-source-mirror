@@ -873,6 +873,11 @@ void SCH_SEXPR_PLUGIN::saveField( SCH_FIELD* aField, int aNestLevel )
 
     if( aField->GetId() == -1 /* undefined ID */ )
     {
+        // Replace the default name built by GetCanonicalName() by
+        // the field name if exists
+        if( !aField->GetName().IsEmpty() )
+            fieldName = aField->GetName();
+
         aField->SetId( m_nextFreeFieldId );
         m_nextFreeFieldId += 1;
     }

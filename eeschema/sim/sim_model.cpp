@@ -1051,6 +1051,24 @@ void SIM_MODEL::doReadDataFields( const std::vector<T>* aFields,
 template <typename T>
 void SIM_MODEL::doWriteFields( std::vector<T>& aFields ) const
 {
+    // Remove duplicate fields: they are at the end of list
+    for( size_t ii = aFields.size() - 1; ii > 0; ii-- )
+    {
+        wxString currFieldName = aFields[ii].GetName();
+
+        auto end_candidate_list = aFields.begin() + ii - 1;
+
+        auto fieldIt = std::find_if( aFields.begin(), end_candidate_list,
+                                     [&]( const T& f )
+                                     {
+                                        return f.GetName() == currFieldName;
+                                     } );
+
+        // If duplicate field found: remove current checked item
+        if( fieldIt != end_candidate_list )
+            aFields.erase( aFields.begin() + ii );
+    }
+
     SetFieldValue( aFields, SIM_DEVICE_TYPE_FIELD, m_serializer->GenerateDevice() );
     SetFieldValue( aFields, SIM_TYPE_FIELD, m_serializer->GenerateType() );
 
@@ -1061,6 +1079,24 @@ void SIM_MODEL::doWriteFields( std::vector<T>& aFields ) const
 
     if( IsStoredInValue() )
         SetFieldValue( aFields, SIM_VALUE_FIELD, m_serializer->GenerateValue() );
+
+    // New fields have a ID = -1 (undefined). so replace the undefined ID
+    // by a degined ID
+    int lastFreeId = MANDATORY_FIELDS;
+
+    // Search for the first available value:
+    for( auto& fld : aFields )
+    {
+        if( fld.GetId() >= lastFreeId )
+            lastFreeId = fld.GetId() + 1;
+    }
+
+    // Set undefined IDs to a better value
+    for( auto& fld : aFields )
+    {
+        if( fld.GetId() < 0 )
+            fld.SetId( lastFreeId++ );
+    }
 }
 
 
