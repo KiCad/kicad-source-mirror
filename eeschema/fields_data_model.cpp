@@ -27,6 +27,9 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName, const
         {
             if( SCH_FIELD* field = symbol->GetFieldByName( aFieldName ) )
                 m_dataStore[symbol->m_Uuid][aFieldName] = field->GetText();
+            else if( isAttribute( aFieldName ) )
+                m_dataStore[symbol->m_Uuid][aFieldName] =
+                        getAttributeValue( m_symbolsList[i], aFieldName );
             // Handle fields with variables as names that are not present in the symbol
             // by giving them the correct value
             else if( IsTextVar( aFieldName ) )
@@ -208,8 +211,11 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxString
     wxCHECK_RET( aCol >= 0 && aCol < (int) m_cols.size(), wxS( "Invalid column number" ) );
 
     // Can't modify references or text variables column, e.g. ${QUANTITY}
-    if( ColIsReference( aCol ) || IsTextVar( m_cols[aCol].m_fieldName ) )
+    if( ColIsReference( aCol )
+        || ( IsTextVar( m_cols[aCol].m_fieldName ) && !ColIsAttribute( aCol ) ) )
+    {
         return;
+    }
 
     DATA_MODEL_ROW& rowGroup = m_rows[aRow];
 
@@ -236,6 +242,12 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsItemNumber( int aCol )
 {
     wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), false );
     return m_cols[aCol].m_fieldName == ITEM_NUMBER_VARIABLE;
+}
+
+bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsAttribute( int aCol )
+{
+    wxCHECK( aCol >= 0 && aCol < (int) m_cols.size(), false );
+    return isAttribute( m_cols[aCol].m_fieldName );
 }
 
 
@@ -393,6 +405,48 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::getFieldShownText( const SCH_REFERENCE& 
     }
 
     return wxEmptyString;
+}
+
+
+bool FIELDS_EDITOR_GRID_DATA_MODEL::isAttribute( const wxString& aFieldName )
+{
+    return aFieldName == wxS( "${DNP}" )
+           || aFieldName == wxS( "${EXCLUDE_FROM_BOARD}" )
+           || aFieldName == wxS( "${EXCLUDE_FROM_BOM}" )
+           || aFieldName == wxS( "${EXCLUDE_FROM_SIM}" );
+}
+
+
+wxString FIELDS_EDITOR_GRID_DATA_MODEL::getAttributeValue( const SCH_REFERENCE& aRef,
+                                                           const wxString&      aAttributeName )
+{
+    if( aAttributeName == wxS( "${DNP}" ) )
+        return aRef.GetSymbol()->GetDNP() ? wxS( "1" ) : wxS( "0" );
+
+    if( aAttributeName == wxS( "${EXCLUDE_FROM_BOARD}" ) )
+        return aRef.GetSymbol()->GetExcludedFromBoard() ? wxS( "1" ) : wxS( "0" );
+
+    if( aAttributeName == wxS( "${EXCLUDE_FROM_BOM}" ) )
+        return aRef.GetSymbol()->GetExcludedFromBOM() ? wxS( "1" ) : wxS( "0" );
+
+    if( aAttributeName == wxS( "${EXCLUDE_FROM_SIM}" ) )
+        return aRef.GetSymbol()->GetExcludeFromSim() ? wxS( "1" ) : wxS( "0" );
+
+    return wxS( "0" );
+}
+
+void FIELDS_EDITOR_GRID_DATA_MODEL::setAttributeValue( const SCH_REFERENCE& aRef,
+                                                       const wxString&      aAttributeName,
+                                                       const wxString&      aValue )
+{
+    if( aAttributeName == wxS( "${DNP}" ) )
+        aRef.GetSymbol()->SetDNP( aValue == wxS( "1" ) );
+    else if( aAttributeName == wxS( "${EXCLUDE_FROM_BOARD}" ) )
+        aRef.GetSymbol()->SetExcludedFromBoard( aValue == wxS( "1" ) );
+    else if( aAttributeName == wxS( "${EXCLUDE_FROM_BOM}" ) )
+        aRef.GetSymbol()->SetExcludedFromBOM( aValue == wxS( "1" ) );
+    else if( aAttributeName == wxS( "${EXCLUDE_FROM_SIM}" ) )
+        aRef.GetSymbol()->SetExcludeFromSim( aValue == wxS( "1" ) );
 }
 
 
@@ -589,12 +643,21 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData(
 
         for( const std::pair<wxString, wxString> srcData : fieldStore )
         {
-            // Skip special fields with variables as names (e.g. ${QUANTITY})
-            if( IsTextVar( srcData.first ) )
-                continue;
-
             const wxString& srcName = srcData.first;
             const wxString& srcValue = srcData.second;
+
+            // Attributes bypass the field logic, so handle them first
+            if( isAttribute( srcName ) )
+            {
+                setAttributeValue( m_symbolsList[i], srcName, srcValue );
+                continue;
+            }
+
+            // Skip special fields with variables as names (e.g. ${QUANTITY}),
+            // they can't be edited
+            if( IsTextVar( srcName ) )
+                continue;
+
             SCH_FIELD*      destField = symbol.FindField( srcName );
             int             col = GetFieldNameCol( srcName );
             bool            userAdded = ( col != -1 && m_cols[col].m_userAdded );

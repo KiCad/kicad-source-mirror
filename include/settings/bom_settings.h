@@ -61,6 +61,7 @@ struct BOM_PRESET
 
     static BOM_PRESET GroupedByValue();
     static BOM_PRESET GroupedByValueFootprint();
+    static BOM_PRESET Attributes();
 };
 
 bool operator!=( const BOM_PRESET& lhs, const BOM_PRESET& rhs );

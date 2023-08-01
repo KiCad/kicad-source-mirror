@@ -163,6 +163,26 @@ BOM_PRESET BOM_PRESET::GroupedByValueFootprint()
 }
 
 
+BOM_PRESET BOM_PRESET::Attributes()
+{
+    BOM_PRESET p{
+        _HKI( "Attributes" ), true, {}, _( "Reference" ), true, "", true, false
+    };
+
+    p.fieldsOrdered = std::vector<BOM_FIELD>{
+        { "Reference", "Reference", true, false },
+        { "Value", "Value", true, true },
+        { "Datasheet", "Datasheet", false, false },
+        { "Footprint", "Footprint", false, true },
+        { "${DNP}", "Do Not Place", true, false },
+        { "${EXCLUDE_FROM_BOM}", "Exclude from BOM", true, false },
+        { "${EXCLUDE_FROM_BOARD}", "Exclude from Board", true, false },
+        { "${EXCLUDE_FROM_SIM}", "Exclude from Simulation", true, false },
+    };
+
+    return p;
+}
+
 //Implementations for BOM_FMT_PRESET
 bool BOM_FMT_PRESET::operator==( const BOM_FMT_PRESET& rhs ) const
 {

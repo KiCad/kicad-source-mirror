@@ -126,6 +126,7 @@ public:
     bool ColIsReference( int aCol );
     bool ColIsQuantity( int aCol );
     bool ColIsItemNumber( int aCol );
+    bool ColIsAttribute( int aCol );
 
     void SetSorting( int aCol, bool ascending )
     {
@@ -201,6 +202,13 @@ private:
                      FIELDS_EDITOR_GRID_DATA_MODEL* dataModel, int sortCol, bool ascending );
     bool        unitMatch( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef );
     bool        groupMatch( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef );
+
+    // Helper functions to deal with translating wxGrid values to and from
+    // named field values like ${DNP}
+    bool     isAttribute( const wxString& aFieldName );
+    wxString getAttributeValue( const SCH_REFERENCE& aRef, const wxString& aAttributeName );
+    void     setAttributeValue( const SCH_REFERENCE& aRef, const wxString& aAttributeName,
+                                const wxString& aValue );
 
     /* Helper function to get the resolved field value.
      * Handles symbols that are missing fields that would have a variable

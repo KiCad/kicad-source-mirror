@@ -1279,7 +1279,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::loadDefaultBomPresets()
 
     // Load the read-only defaults
     for( const BOM_PRESET& preset : { BOM_PRESET::GroupedByValue(),
-                                      BOM_PRESET::GroupedByValueFootprint() } )
+                                      BOM_PRESET::GroupedByValueFootprint(),
+                                      BOM_PRESET::Attributes() } )
     {
         m_bomPresets[preset.name] = preset;
         m_bomPresets[preset.name].readOnly = true;
