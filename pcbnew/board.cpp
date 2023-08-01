@@ -367,8 +367,11 @@ void BOARD::GetContextualTextVars( wxArrayString* aVars ) const
 
     GetTitleBlock().GetContextualTextVars( aVars );
 
-    for( std::pair<wxString, wxString> entry : GetProject()->GetTextVars() )
-        add( entry.first );
+    if( GetProject() )
+    {
+        for( std::pair<wxString, wxString> entry : GetProject()->GetTextVars() )
+            add( entry.first );
+    }
 }
 
 
