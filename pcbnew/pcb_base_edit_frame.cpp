@@ -335,9 +335,6 @@ void PCB_BASE_EDIT_FRAME::GetContextualTextVars( BOARD_ITEM* aSourceItem, const 
 
         if( FOOTPRINT* footprint = aSourceItem->GetParentFootprint() )
             footprint->GetContextualTextVars( aTokens );
-
-        for( std::pair<wxString, wxString> entry : board->GetProject()->GetTextVars() )
-            aTokens->push_back( entry.first );
     }
 }
 
