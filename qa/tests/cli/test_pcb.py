@@ -38,11 +38,11 @@ def test_pcb_export_svg( kitest: KiTestFixture,
                          test_file: str,
                          output_dir: str,
                          layers_to_test: List[str] ):
-    
+
     input_file = kitest.get_data_file_path( test_file )
-    
+
     for layername in layers_to_test:
-        layerNameFixed = "-" + layername.replace( ".", "_" ) 
+        layerNameFixed = "-" + layername.replace( ".", "_" )
         generated_svg_dir = str( kitest.get_output_path( "cli/{}/".format( output_dir ) ) )
         generated_svg_name = Path( input_file ).stem + layerNameFixed + "-generated.svg"
         generated_svg_path = Path( generated_svg_dir + "/" + generated_svg_name )
@@ -70,4 +70,5 @@ def test_pcb_export_svg( kitest: KiTestFixture,
         svg_source_path = str( Path( input_file ).with_suffix( "" ) )
         svg_source_path += layerNameFixed + ".svg"
 
-        assert utils.svgs_are_equivalent( str( generated_svg_path ), svg_source_path, 1200 )
+        # Comparison DPI = 1270 => 1px == 20um. I.e. allowable error of 60 um after eroding
+        assert utils.svgs_are_equivalent( str( generated_svg_path ), svg_source_path, 1270 )

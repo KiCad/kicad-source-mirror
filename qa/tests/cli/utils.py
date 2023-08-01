@@ -41,7 +41,7 @@ def run_and_capture( command: list ) -> Tuple[ str, str, int ]:
     )
 
     out,err = proc.communicate()
-    
+
     return out, err, proc.returncode
 
 def textdiff_files( golden_filepath: str, new_filepath: str, skip: int = 0 ) -> bool:
@@ -63,12 +63,14 @@ def textdiff_files( golden_filepath: str, new_filepath: str, skip: int = 0 ) -> 
     return diff_text == ""
 
 
-def images_are_equal( image1: str, image2: str ) -> bool:
+def images_are_equal( image1_path: str, image2_path: str, alpha_colour = (50, 100, 50) ) -> bool:
+    # Note: if modifying this function - please add new tests for it in test_utils.py
+
     # Increase limit to ~500MB uncompressed
     Image.MAX_IMAGE_PIXELS=2 * 1024 * 1024 * 1024 // 4 // 3
 
-    image1 = Image.open( image1 )
-    image2 = Image.open( image2 )
+    image1 = Image.open( image1_path )
+    image2 = Image.open( image2_path )
 
     if image1.size != image2.size:
         return False
@@ -76,36 +78,45 @@ def images_are_equal( image1: str, image2: str ) -> bool:
     if image1.mode != image2.mode:
         return False
 
-    sum = np.sum( ( np.asarray ( image1 ).astype( np.float32 ) - np.asarray( image2 ).astype( np.float32 ) ) ** 2.0 )
+    diff = ImageChops.difference( image1, image2 )
+    sum = np.sum( np.asarray( diff ) )
     retval = True
 
     if sum != 0.0:
-        # images are not identical - lets allow 1 pixel error difference (for curved edges)
+        # Images are not identical - lets allow 1 pixel error difference (for curved edges)
+        diff_multi_bands = diff.split()
+        binary_multi_bands = []
 
-        diff = ImageChops.difference( image1, image2 )
-        diffThresholded = diff.point( lambda x: 255 if x > 1 else 0 )
+        for band_diff in diff_multi_bands:
+            thresholded_band = band_diff.point( lambda x: x > 0 and 255 )
+            binary_multi_bands.append( thresholded_band.convert( "1" ) )
 
-        # erode binary image by 1 pixel
-        diffEroded = diffThresholded.filter(ImageFilter.MinFilter(3))
-        
-        erodedSum = np.sum( np.asarray( diffEroded ).astype( np.float32 ) )
+        binary_result = binary_multi_bands[0]
 
-        retval = erodedSum == 0
+        for i in range( 1, len( binary_multi_bands ) ):
+            binary_result = ImageChops.logical_or( binary_result, binary_multi_bands[i] )
+
+        eroded_result = binary_result.copy().filter( ImageFilter.MinFilter( 3 ) ) # erode once (trim 1 pixel)
+
+        eroded_result_sum = np.sum( np.asarray( eroded_result ) )
+        retval = eroded_result_sum == 0
 
         # Save images
-        diff_name = image1.filename + ".diff1.png"
-        diff.save( diff_name )
-        diff_name = image1.filename + ".diffthresholded.png"
-        diffThresholded.save( diff_name )
-        diffEroded_name = image1.filename + ".diffEroded_erodedsum" + str(erodedSum)+ ".png"
-        diffEroded.save( diffEroded_name )
+        #if not retval:
+        diff_name = image1.filename + ".diff.png"
+        diff.save( diff_name ) # Note: if the image has alpha, the diff will be mostly transparent
 
+        diff_name = image1.filename + ".binary_result.png"
+        binary_result.save( diff_name )
+
+        diff_name = image1.filename + ".eroded_result_" + str( eroded_result_sum )+ ".png"
+        eroded_result.save( diff_name )
 
     return retval
 
 
 def svgs_are_equivalent( svg_generated_path : str, svg_source_path : str, comparison_dpi : int ) -> bool:
-    
+
     png_generated_path = Path( svg_generated_path ).with_suffix( ".png" )
 
     # store source png in same folder as generated, easier to compare
@@ -115,7 +126,7 @@ def svgs_are_equivalent( svg_generated_path : str, svg_source_path : str, compar
     cairosvg.svg2png( url=svg_generated_path,
                       write_to=str( png_generated_path ),
                       dpi=comparison_dpi )
-    
+
     cairosvg.svg2png( url=svg_source_path,
                      write_to=str( png_source_path ),
                       dpi=comparison_dpi )
