@@ -1347,7 +1347,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
     PNS_DBG( Dbg(), Message,
              wxString::Format( wxT( "NI: %s (%s)" ), ni->Format(), ni->Parent()
                                                 ? ni->Parent()->GetItemDescription( &up )
-                                                : "null" ) );
+                                                : wxString( wxT( "null" ) ) ) );
 
     unwindLineStack( ni );
 
