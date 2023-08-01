@@ -1308,7 +1308,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
 
     PNS_DBG( Dbg(), AddItem, &currentLine, RED, currentLine.Width(), wxString::Format( wxT( "current-coll-chk rank %d" ), currentLine.Rank() ) );
 
-    for( ITEM::PnsKind search_order : { ITEM::SOLID_T, ITEM::VIA_T, ITEM::SEGMENT_T } )
+    for( ITEM::PnsKind search_order : { ITEM::HOLE_T, ITEM::SOLID_T, ITEM::VIA_T, ITEM::SEGMENT_T } )
     {
         COLLISION_SEARCH_OPTIONS opts;
         opts.m_kindMask = search_order;
@@ -1342,6 +1342,12 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
 
 
     ITEM* ni = nearest->m_item;
+
+    UNITS_PROVIDER up( pcbIUScale, EDA_UNITS::MILLIMETRES );
+    PNS_DBG( Dbg(), Message,
+             wxString::Format( wxT( "NI: %s (%s)" ), ni->Format(), ni->Parent()
+                                                ? ni->Parent()->GetItemDescription( &up )
+                                                : "null" ) );
 
     unwindLineStack( ni );
 
@@ -1793,13 +1799,21 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveDraggingVia( const VIA_HANDLE aOldVia, const VEC
         st = shoveMainLoop();
 
     if( st == SH_OK )
+    {
         runOptimizer( m_currentNode );
+
+        // m_draggedVia will only be updated if pushOrShoveVia makes progress...
+        // this should probably be refactored/cleaned up.
+        PNS::VIA* viaCheck = m_draggedVia ? m_draggedVia : viaToDrag;
+
+        st = m_currentNode->CheckColliding( viaCheck ) ? SH_INCOMPLETE : SH_OK;
+    }
 
     if( st == SH_OK || st == SH_HEAD_MODIFIED )
     {
         wxLogTrace( "PNS","setNewV %p", m_draggedVia );
 
-        if (!m_draggedVia)
+        if( !m_draggedVia )
             m_draggedVia = viaToDrag;
 
         aNewVia = m_draggedVia->MakeHandle();
