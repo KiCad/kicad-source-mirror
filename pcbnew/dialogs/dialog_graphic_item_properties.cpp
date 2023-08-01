@@ -146,7 +146,7 @@ void PCB_BASE_EDIT_FRAME::ShowGraphicItemPropertiesDialog( PCB_SHAPE* aShape )
 
     if( dlg.ShowQuasiModal() == wxID_OK )
     {
-        if( aShape->IsOnLayer( GetActiveLayer(), true ) )
+        if( aShape->IsOnLayer( GetActiveLayer() ) )
         {
             DRAWING_TOOL* drawingTool = m_toolManager->GetTool<DRAWING_TOOL>();
             drawingTool->SetStroke( aShape->GetStroke(), GetActiveLayer() );

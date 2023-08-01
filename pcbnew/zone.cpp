@@ -342,7 +342,7 @@ double ZONE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 }
 
 
-bool ZONE::IsOnLayer( PCB_LAYER_ID aLayer, bool aIncludeCourtyards ) const
+bool ZONE::IsOnLayer( PCB_LAYER_ID aLayer ) const
 {
     return m_layerSet.test( aLayer );
 }

@@ -259,7 +259,7 @@ public:
      * @param aLayer The layer to test for.
      * @return true if on given layer, else false.
      */
-    virtual bool IsOnLayer( PCB_LAYER_ID aLayer, bool aIncludeCourtyards = false ) const
+    virtual bool IsOnLayer( PCB_LAYER_ID aLayer  ) const
     {
         return m_layer == aLayer;
     }

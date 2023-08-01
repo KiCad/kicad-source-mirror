@@ -321,12 +321,12 @@ LSET PCB_GROUP::GetLayerSet() const
 }
 
 
-bool PCB_GROUP::IsOnLayer( PCB_LAYER_ID aLayer, bool aIncludeCourtyards ) const
+bool PCB_GROUP::IsOnLayer( PCB_LAYER_ID aLayer ) const
 {
     // A group is on a layer if any item is on the layer
     for( BOARD_ITEM* item : m_items )
     {
-        if( item->IsOnLayer( aLayer, aIncludeCourtyards ) )
+        if( item->IsOnLayer( aLayer ) )
             return true;
     }
 

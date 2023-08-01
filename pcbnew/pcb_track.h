@@ -404,7 +404,7 @@ public:
     bool IsTented() const override;
     int GetSolderMaskExpansion() const;
 
-    bool IsOnLayer( PCB_LAYER_ID aLayer, bool aIncludeCourtyards = false ) const override;
+    bool IsOnLayer( PCB_LAYER_ID aLayer ) const override;
 
     virtual LSET GetLayerSet() const override;
 

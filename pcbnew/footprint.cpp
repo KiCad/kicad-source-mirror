@@ -1255,37 +1255,102 @@ void FOOTPRINT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 }
 
 
-bool FOOTPRINT::IsOnLayer( PCB_LAYER_ID aLayer, bool aIncludeCourtyards ) const
+bool FOOTPRINT::IsOnLayer( PCB_LAYER_ID aLayer ) const
 {
-    static const LSET courtyardLayers( 2, B_CrtYd, F_CrtYd );
-
-    if( aIncludeCourtyards && courtyardLayers[aLayer] )
-        return !GetCourtyard( aLayer ).IsEmpty();
-
     // If we have any pads, fall back on normal checking
-    if( !m_pads.empty() )
-        return m_layer == aLayer;
+    for( PAD* pad : m_pads )
+    {
+        if( pad->IsOnLayer( aLayer ) )
+            return true;
+    }
 
-    // No pads?  Check if this entire footprint exists on the given layer
     for( ZONE* zone : m_zones )
     {
-        if( !zone->IsOnLayer( aLayer ) )
-            return false;
+        if( zone->IsOnLayer( aLayer ) )
+            return true;
     }
 
     for( PCB_FIELD* field : m_fields )
     {
-        if( !field->IsOnLayer( aLayer ) )
-            return false;
+        if( field->IsOnLayer( aLayer ) )
+            return true;
     }
 
     for( BOARD_ITEM* item : m_drawings )
     {
-        if( !item->IsOnLayer( aLayer ) )
+        if( item->IsOnLayer( aLayer ) )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool FOOTPRINT::HitTestOnLayer( const VECTOR2I& aPosition, PCB_LAYER_ID aLayer, int aAccuracy ) const
+{
+    for( PAD* pad : m_pads )
+    {
+        if( pad->IsOnLayer( aLayer ) && pad->HitTest( aPosition, aAccuracy ) )
+            return true;
+    }
+
+    for( ZONE* zone : m_zones )
+    {
+        if( zone->IsOnLayer( aLayer ) && zone->HitTest( aPosition, aAccuracy ) )
+            return true;
+    }
+
+    for( BOARD_ITEM* item : m_drawings )
+    {
+        if( item->Type() != PCB_TEXT_T && item->IsOnLayer( aLayer )
+            && item->HitTest( aPosition, aAccuracy ) )
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+bool FOOTPRINT::HitTestOnLayer( const BOX2I& aRect, bool aContained, PCB_LAYER_ID aLayer, int aAccuracy ) const
+{
+    std::vector<BOARD_ITEM*> items;
+
+    for( PAD* pad : m_pads )
+    {
+        if( pad->IsOnLayer( aLayer ) )
+            items.push_back( pad );
+    }
+
+    for( ZONE* zone : m_zones )
+    {
+        if( zone->IsOnLayer( aLayer ) )
+            items.push_back( zone );
+    }
+
+    for( BOARD_ITEM* item : m_drawings )
+    {
+        if( item->Type() != PCB_TEXT_T && item->IsOnLayer( aLayer ) )
+            items.push_back( item );
+    }
+
+    // If we require the elements to be contained in the rect and any of them are not,
+    // we can return false;
+    // Conversely, if we just require any of the elements to have a hit, we can return true
+    // when the first one is found.
+    for( BOARD_ITEM* item : items )
+    {
+        if( !aContained && item->HitTest( aRect, aContained, aAccuracy ) )
+            return true;
+        else if( aContained && !item->HitTest( aRect, aContained, aAccuracy ) )
             return false;
     }
 
-    return true;
+    // If we didn't exit in the loop, that means that we did not return false for aContained or
+    // we did not return true for !aContained.  So we can just return the bool with a test of
+    // whether there were any elements or not.
+    return !items.empty() && aContained;
 }
 
 

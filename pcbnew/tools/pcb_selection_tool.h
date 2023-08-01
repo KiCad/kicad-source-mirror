@@ -211,6 +211,11 @@ public:
      */
     void FilterCollectedItems( GENERAL_COLLECTOR& aCollector, bool aMultiSelect );
 
+    /**
+     * Drop footprints that are not directly selected
+    */
+    void FilterCollectorForFootprints( GENERAL_COLLECTOR& aCollector, const VECTOR2I& aWhere ) const;
+
 protected:
     KIGFX::PCB_VIEW* view() const
     {
