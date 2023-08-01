@@ -387,10 +387,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties()
                 int textWidth = m_dataModel->GetDataWidth( col ) + COLUMN_MARGIN;
                 int maxWidth = defaultDlgSize.x / 3;
 
-                if( col == m_grid->GetNumberCols() - 1 )
-                    m_grid->SetColSize( col, Clamp( 50, textWidth, maxWidth ) );
-                else
-                    m_grid->SetColSize( col, Clamp( 100, textWidth, maxWidth ) );
+                m_grid->SetColSize( col, Clamp( 100, textWidth, maxWidth ) );
             }
         }
         else
@@ -676,14 +673,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRemoveField( wxCommandEvent& event )
                                 m_fieldsCtrl->GetItemCount(), 1 );
 
     m_grid->ProcessTableMessage( msg );
-
-    // set up attributes on the new quantities column
-    wxGridCellAttr* attr = new wxGridCellAttr;
-    attr->SetReadOnly();
-
-    m_grid->SetColAttr( m_dataModel->GetColsCount() - 1, attr );
-    m_grid->SetColFormatNumber( m_dataModel->GetColsCount() - 1 );
-    m_grid->SetColSize( m_dataModel->GetColsCount() - 1, 50 );
 
     syncBomPresetSelection();
 }
