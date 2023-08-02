@@ -37,8 +37,8 @@ class SCINTILLA_TRICKS : public wxEvtHandler
 public:
 
     SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString& aBraces, bool aSingleLine,
-                      std::function<void()> onAcceptHandler =
-                            []()
+                      std::function<void( wxKeyEvent& )> onAcceptHandler =
+                            []( wxKeyEvent& aEvent )
                             { },
                       std::function<void( wxStyledTextEvent& )> onCharAddedHandler =
                             []( wxStyledTextEvent& )
@@ -73,9 +73,8 @@ protected:
     bool                  m_singleLine;            // Treat <return> as OK, and skip special tab
                                                    //  stop handling (including monospaced font).
 
-    std::function<void()> m_onAcceptHandler;       // Process <return> in singleLine, and
-                                                   //  <shift> + <return> irrespective.
-
+    // Process <return> in singleLine, and <shift> + <return> irrespective.
+    std::function<void( wxKeyEvent& aEvent )>        m_onAcceptHandler;
     std::function<void( wxStyledTextEvent& aEvent )> m_onCharAddedHandler;
 };
 

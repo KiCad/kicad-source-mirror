@@ -33,7 +33,8 @@
 #include <confirm.h>
 
 SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString& aBraces,
-                                    bool aSingleLine, std::function<void()> onAcceptHandler,
+                                    bool aSingleLine,
+                                    std::function<void( wxKeyEvent& )> onAcceptHandler,
                                     std::function<void( wxStyledTextEvent& )> onCharAddedHandler ) :
         m_te( aScintilla ),
         m_braces( aBraces ),
@@ -180,6 +181,10 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
             m_te->AutoCompCancel();
             m_suppressAutocomplete = true; // Don't run autocomplete again on the next char...
         }
+        else if( aEvent.GetKeyCode() == WXK_RETURN || aEvent.GetKeyCode() == WXK_NUMPAD_ENTER )
+        {
+            m_te->AutoCompComplete();
+        }
         else
         {
             aEvent.Skip();
@@ -194,7 +199,7 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
     if( ( aEvent.GetKeyCode() == WXK_RETURN || aEvent.GetKeyCode() == WXK_NUMPAD_ENTER )
         && ( m_singleLine || aEvent.ShiftDown() ) )
     {
-        m_onAcceptHandler();
+        m_onAcceptHandler( aEvent );
     }
     else if( ConvertSmartQuotesAndDashes( &c ) )
     {

@@ -31,6 +31,7 @@
 #include <sch_item.h>
 #include <template_fieldnames.h>
 #include <general.h>
+#include "scintilla_tricks.h"
 
 class SCH_EDIT_FRAME;
 class LIB_FIELD;
@@ -232,6 +233,8 @@ public:
     void MirrorHorizontally( int aCenter ) override
     {
     }
+
+    void OnScintillaCharAdded( SCINTILLA_TRICKS* aScintillaTricks, wxStyledTextEvent &aEvent ) const;
 
     bool Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const override;
 

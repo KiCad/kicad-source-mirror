@@ -55,6 +55,7 @@
 #include <tool/tool_manager.h>
 #include <tools/sch_navigate_tool.h>
 #include <font/outline_font.h>
+#include "sim/sim_lib_mgr.h"
 
 SCH_FIELD::SCH_FIELD( const VECTOR2I& aPos, int aFieldId, SCH_ITEM* aParent,
                       const wxString& aName ) :
@@ -651,6 +652,127 @@ bool SCH_FIELD::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) co
     }
 
     return SCH_ITEM::Matches( text, aSearchData );
+}
+
+
+void SCH_FIELD::OnScintillaCharAdded( SCINTILLA_TRICKS* aScintillaTricks,
+                                      wxStyledTextEvent &aEvent ) const
+{
+    SCH_ITEM*  parent = dynamic_cast<SCH_ITEM*>( GetParent() );
+    SCHEMATIC* schematic = parent ? parent->Schematic() : nullptr;
+
+    if( !schematic )
+        return;
+
+    wxStyledTextCtrl* scintilla = aScintillaTricks->Scintilla();
+    int               key = aEvent.GetKey();
+
+    wxArrayString autocompleteTokens;
+    int           pos = scintilla->GetCurrentPos();
+    int           start = scintilla->WordStartPosition( pos, true );
+    wxString      partial;
+
+    // Currently, '\n' is not allowed in fields. So remove it when entered
+    // TODO: see if we must close the dialog. However this is not obvious, as
+    // if a \n is typed (and removed) when a text is selected, this text is deleted
+    // (in fact replaced by \n, that is removed by the filter)
+    if( key == '\n' )
+    {
+        wxString text = scintilla->GetText();
+        int currpos = scintilla->GetCurrentPos();
+        text.Replace( wxS( "\n" ), wxS( "" ) );
+        scintilla->SetText( text );
+        scintilla->GotoPos( currpos-1 );
+        return;
+    }
+
+    auto textVarRef =
+            [&]( int pt )
+            {
+                return pt >= 2
+                        && scintilla->GetCharAt( pt - 2 ) == '$'
+                        && scintilla->GetCharAt( pt - 1 ) == '{';
+            };
+
+    // Check for cross-reference
+    if( start > 1 && scintilla->GetCharAt( start - 1 ) == ':' )
+    {
+        int refStart = scintilla->WordStartPosition( start - 1, true );
+
+        if( textVarRef( refStart ) )
+        {
+            partial = scintilla->GetRange( start, pos );
+
+            wxString ref = scintilla->GetRange( refStart, start - 1 );
+
+            if( ref == wxS( "OP" ) )
+            {
+                // SPICE operating points use ':' syntax for ports
+                if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( parent ) )
+                {
+                    SCH_SHEET_PATH& sheet = schematic->CurrentSheet();
+                    SIM_LIB_MGR     mgr( &schematic->Prj() );
+                    SIM_MODEL&      model = mgr.CreateModel( &sheet, *symbol ).model;
+
+                    for( wxString pin : model.GetPinNames() )
+                    {
+                        if( pin.StartsWith( '<' ) && pin.EndsWith( '>' ) )
+                            autocompleteTokens.push_back( pin.Mid( 1, pin.Length() - 2 ) );
+                        else
+                            autocompleteTokens.push_back( pin );
+                    }
+                }
+            }
+            else
+            {
+                SCH_SHEET_LIST     sheets = schematic->GetSheets();
+                SCH_REFERENCE_LIST refs;
+                SCH_SYMBOL*        refSymbol = nullptr;
+
+                sheets.GetSymbols( refs );
+
+                for( size_t jj = 0; jj < refs.GetCount(); jj++ )
+                {
+                    if( refs[ jj ].GetSymbol()->GetRef( &refs[ jj ].GetSheetPath(), true ) == ref )
+                    {
+                        refSymbol = refs[ jj ].GetSymbol();
+                        break;
+                    }
+                }
+
+                if( refSymbol )
+                    refSymbol->GetContextualTextVars( &autocompleteTokens );
+            }
+        }
+    }
+    else if( textVarRef( start ) )
+    {
+        partial = scintilla->GetTextRange( start, pos );
+
+        SCH_SYMBOL*     symbol = dynamic_cast<SCH_SYMBOL*>( parent );
+        SCH_SHEET*      sheet = dynamic_cast<SCH_SHEET*>( parent );
+        SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( parent );
+
+        if( symbol )
+        {
+            symbol->GetContextualTextVars( &autocompleteTokens );
+
+            if( schematic->CurrentSheet().Last() )
+                schematic->CurrentSheet().Last()->GetContextualTextVars( &autocompleteTokens );
+        }
+
+        if( sheet )
+            sheet->GetContextualTextVars( &autocompleteTokens );
+
+        if( label )
+            label->GetContextualTextVars( &autocompleteTokens );
+
+        for( std::pair<wxString, wxString> entry : schematic->Prj().GetTextVars() )
+            autocompleteTokens.push_back( entry.first );
+    }
+
+    aScintillaTricks->DoAutocomplete( partial, autocompleteTokens );
+    scintilla->SetFocus();
 }
 
 

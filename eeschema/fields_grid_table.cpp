@@ -42,6 +42,7 @@
 #include "widgets/grid_color_swatch_helpers.h"
 #include "font/fontconfig.h"
 #include "font/kicad_font_name.h"
+#include "widgets/grid_text_helpers.h"
 #include <wx/settings.h>
 #include <string_utils.h>
 #include <widgets/grid_combobox.h>
@@ -190,9 +191,23 @@ void FIELDS_GRID_TABLE<T>::initGrid( WX_GRID* aGrid )
     m_referenceAttr->SetEditor( referenceEditor );
 
     m_valueAttr = new wxGridCellAttr;
-    GRID_CELL_TEXT_EDITOR* valueEditor = new GRID_CELL_TEXT_EDITOR();
-    valueEditor->SetValidator( m_valueValidator );
-    m_valueAttr->SetEditor( valueEditor );
+
+    if constexpr ( std::is_same_v<T, SCH_FIELD> )
+    {
+        GRID_CELL_STC_EDITOR* valueEditor = new GRID_CELL_STC_EDITOR( true,
+                [this]( wxStyledTextEvent& aEvent, SCINTILLA_TRICKS* aScintillaTricks )
+                {
+                    SCH_FIELD& valueField = static_cast<SCH_FIELD&>( this->at( VALUE_FIELD ) );
+                    valueField.OnScintillaCharAdded( aScintillaTricks, aEvent );
+                } );
+        m_valueAttr->SetEditor( valueEditor );
+    }
+    else
+    {
+        GRID_CELL_TEXT_EDITOR* valueEditor = new GRID_CELL_TEXT_EDITOR();
+        valueEditor->SetValidator( m_valueValidator );
+        m_valueAttr->SetEditor( valueEditor );
+    }
 
     m_footprintAttr = new wxGridCellAttr;
     GRID_CELL_FPID_EDITOR* fpIdEditor = new GRID_CELL_FPID_EDITOR( m_dialog, m_symbolNetlist );

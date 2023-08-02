@@ -72,7 +72,7 @@ DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const
     m_fieldId = VALUE_FIELD;
 
     m_scintillaTricks = new SCINTILLA_TRICKS( m_StyledTextCtrl, wxT( "{}" ), true,
-            [this]()
+            [this]( wxKeyEvent& aEvent )
             {
                 wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
             } );
@@ -513,119 +513,7 @@ DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
 
 void DIALOG_SCH_FIELD_PROPERTIES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 {
-    int key = aEvent.GetKey();
-
-    SCH_EDIT_FRAME* editFrame = static_cast<SCH_EDIT_FRAME*>( GetParent() );
-    wxArrayString   autocompleteTokens;
-    int             pos = m_StyledTextCtrl->GetCurrentPos();
-    int             start = m_StyledTextCtrl->WordStartPosition( pos, true );
-    wxString        partial;
-
-    // Currently, '\n' is not allowed in fields. So remove it when entered
-    // TODO: see if we must close the dialog. However this is not obvious, as
-    // if a \n is typed (and removed) when a text is selected, this text is deleted
-    // (in fact replaced by \n, that is removed by the filter)
-    if( key == '\n' )
-    {
-        wxString text = m_StyledTextCtrl->GetText();
-        int currpos = m_StyledTextCtrl->GetCurrentPos();
-        text.Replace( wxS( "\n" ), wxS( "" ) );
-        m_StyledTextCtrl->SetText( text );
-        m_StyledTextCtrl->GotoPos( currpos-1 );
-        return;
-    }
-
-    auto textVarRef =
-            [&]( int pt )
-            {
-                return pt >= 2
-                        && m_StyledTextCtrl->GetCharAt( pt - 2 ) == '$'
-                        && m_StyledTextCtrl->GetCharAt( pt - 1 ) == '{';
-            };
-
-    // Check for cross-reference
-    if( start > 1 && m_StyledTextCtrl->GetCharAt( start - 1 ) == ':' )
-    {
-        int refStart = m_StyledTextCtrl->WordStartPosition( start - 1, true );
-
-        if( textVarRef( refStart ) )
-        {
-            partial = m_StyledTextCtrl->GetRange( start, pos );
-
-            wxString ref = m_StyledTextCtrl->GetRange( refStart, start - 1 );
-
-            if( ref == wxS( "OP" ) )
-            {
-                // SPICE operating points use ':' syntax for ports
-                SCH_SYMBOL*     symbol = dynamic_cast<SCH_SYMBOL*>( m_field->GetParent() );
-                SCH_SHEET_PATH& sheet = editFrame->Schematic().CurrentSheet();
-
-                if( symbol )
-                {
-                    SIM_LIB_MGR mgr( &Prj() );
-                    SIM_MODEL&  model = mgr.CreateModel( &sheet, *symbol ).model;
-
-                    for( wxString pin : model.GetPinNames() )
-                    {
-                        if( pin.StartsWith( '<' ) && pin.EndsWith( '>' ) )
-                            autocompleteTokens.push_back( pin.Mid( 1, pin.Length() - 2 ) );
-                        else
-                            autocompleteTokens.push_back( pin );
-                    }
-                }
-            }
-            else
-            {
-                SCH_SHEET_LIST     sheets = editFrame->Schematic().GetSheets();
-                SCH_REFERENCE_LIST refs;
-                SCH_SYMBOL*        refSymbol = nullptr;
-
-                sheets.GetSymbols( refs );
-
-                for( size_t jj = 0; jj < refs.GetCount(); jj++ )
-                {
-                    if( refs[ jj ].GetSymbol()->GetRef( &refs[ jj ].GetSheetPath(), true ) == ref )
-                    {
-                        refSymbol = refs[ jj ].GetSymbol();
-                        break;
-                    }
-                }
-
-                if( refSymbol )
-                    refSymbol->GetContextualTextVars( &autocompleteTokens );
-            }
-        }
-    }
-    else if( textVarRef( start ) )
-    {
-        partial = m_StyledTextCtrl->GetTextRange( start, pos );
-
-        SCH_SYMBOL*     symbol = dynamic_cast<SCH_SYMBOL*>( m_field->GetParent() );
-        SCH_SHEET*      sheet = dynamic_cast<SCH_SHEET*>( m_field->GetParent() );
-        SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( m_field->GetParent() );
-
-        if( symbol )
-        {
-            symbol->GetContextualTextVars( &autocompleteTokens );
-
-            SCHEMATIC* schematic = symbol->Schematic();
-
-            if( schematic && schematic->CurrentSheet().Last() )
-                schematic->CurrentSheet().Last()->GetContextualTextVars( &autocompleteTokens );
-        }
-
-        if( sheet )
-            sheet->GetContextualTextVars( &autocompleteTokens );
-
-        if( label )
-            label->GetContextualTextVars( &autocompleteTokens );
-
-        for( std::pair<wxString, wxString> entry : Prj().GetTextVars() )
-            autocompleteTokens.push_back( entry.first );
-    }
-
-    m_scintillaTricks->DoAutocomplete( partial, autocompleteTokens );
-    m_StyledTextCtrl->SetFocus();
+    m_field->OnScintillaCharAdded( m_scintillaTricks, aEvent );
 }
 
 
