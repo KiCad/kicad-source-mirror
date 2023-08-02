@@ -2319,6 +2319,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
     ZONE_BORDER_DISPLAY_STYLE outline_hatch = ZONE_BORDER_DISPLAY_STYLE::NO_HATCH;
     bool    endContour = false;
+    bool    segmentFill = false;
     int     holeIndex = -1;     // -1 is the main outline; holeIndex >= 0 = hole index
     char    buf[1024];
     char*   line;
@@ -2454,33 +2455,22 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
             if( fillmode)
             {
-                // SEGMENT fill mode no longer supported.  Make sure user is OK with converting
-                // them.
+                segmentFill = true;
+
                 if( m_showLegacySegmentZoneWarning )
                 {
-                    KIDIALOG dlg( nullptr,
-                                  _( "The legacy segment fill mode is no longer supported.\n"
-                                     "Convert zones to smoothed polygon fills?" ),
-                                  _( "Legacy Zone Warning" ),
-                                  wxYES_NO | wxICON_WARNING );
-
-                    dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
-
-                    if( dlg.ShowModal() == wxID_NO )
-                        THROW_IO_ERROR( wxT( "CANCEL" ) );
+                    wxLogWarning( _( "The legacy segment zone fill mode is no longer supported.\n"
+                                     "Zone fills will be converted on a best-effort basis." ) );
 
                     m_showLegacySegmentZoneWarning = false;
                 }
-
-                // User OK'd; switch to polygon mode
-                zc->SetFillMode( ZONE_FILL_MODE::POLYGONS );
-                m_board->SetModified();
             }
             else
             {
-                zc->SetFillMode( ZONE_FILL_MODE::POLYGONS );
+                segmentFill = false;
             }
 
+            zc->SetFillMode( ZONE_FILL_MODE::POLYGONS );
             zc->SetIsFilled( fillstate == 'S' );
             zc->SetThermalReliefGap( thermalReliefGap );
             zc->SetThermalReliefSpokeWidth( thermalReliefCopperBridge );
@@ -2545,7 +2535,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                 makeNewOutline = end_contour;
             }
 
-            zc->SetFilledPolysList( zc->GetLayer(), polysList );
+            zc->SetFilledPolysList( zc->GetFirstLayer(), polysList );
         }
         else if( TESTLINE( "$FILLSEGMENTS" ) )
         {
@@ -2567,6 +2557,20 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             // (which have no sense for a keepout zone)
             if( zc->GetIsRuleArea() )
                 zc->SetNetCode( NETINFO_LIST::UNCONNECTED );
+
+            if( zc->GetMinThickness() > 0 )
+            {
+                // Inflate the fill polygon
+                PCB_LAYER_ID   layer = zc->GetFirstLayer();
+                SHAPE_POLY_SET inflatedFill = SHAPE_POLY_SET( *zc->GetFilledPolysList( layer ) );
+
+                inflatedFill.InflateWithLinkedHoles( zc->GetMinThickness() / 2,
+                                                     SHAPE_POLY_SET::ROUND_ALL_CORNERS,
+                                                     ARC_HIGH_DEF / 2,
+                                                     SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+                zc->SetFilledPolysList( layer, inflatedFill );
+            }
 
             // should always occur, but who knows, a zone without two corners
             // is no zone at all, it's a spot?

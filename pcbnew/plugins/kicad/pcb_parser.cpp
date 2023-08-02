@@ -5271,7 +5271,7 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
                     case T_segment: // deprecated, convert to polygons
                     case T_polygon:
-                    default: 
+                    default:
                         zone->SetFillMode( ZONE_FILL_MODE::POLYGONS ); break;
                     }
 
@@ -5557,11 +5557,11 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
                 // Legacy zones only had one layer
                 filledLayer = zone->GetFirstLayer();
-                
+
                 SEG fillSegment;
 
                 fillSegment.A = parseXY();
-                fillSegment.B = parseXY();                              
+                fillSegment.B = parseXY();
 
                 legacySegs[filledLayer].push_back( fillSegment );
 
@@ -5660,7 +5660,7 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                 }
             }
         }
-                
+
         for( auto& [layer, polyset] : pts )
             zone->SetFilledPolysList( layer, polyset );
 
@@ -5698,12 +5698,12 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                 layerFill.BooleanAdd( segPolygon, SHAPE_POLY_SET::PM_FAST );
             }
 
-            
+
             zone->SetFilledPolysList( layer, layerFill );
             zone->CalculateFilledArea();
         }
     }
-    
+
 
     // Ensure keepout and non copper zones do not have a net
     // (which have no sense for these zones)
