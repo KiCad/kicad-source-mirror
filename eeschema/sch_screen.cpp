@@ -451,6 +451,11 @@ std::set<SCH_ITEM*> SCH_SCREEN::MarkConnections( SCH_LINE* aSegment, bool aSecon
 
                     break;
                 }
+                else if( line->GetLayer() == LAYER_NOTES && item->GetLayer() == LAYER_NOTES )
+                {
+                    retval.insert( line );
+                    to_search.push( line );
+                }
             }
         }
     }

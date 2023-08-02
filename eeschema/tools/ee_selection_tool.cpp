@@ -1565,7 +1565,8 @@ int EE_SELECTION_TOOL::SelectNode( const TOOL_EVENT& aEvent )
 
 int EE_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
 {
-    RequestSelection( { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T } );
+    RequestSelection( { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T,
+                        SCH_ITEM_LOCATE_GRAPHIC_LINE_T } );
 
     if( m_selection.Empty() )
         return 0;
@@ -1578,7 +1579,8 @@ int EE_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
 
     for( SCH_ITEM* item : conns )
     {
-        if( item->IsType( { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T } )
+        if( item->IsType( { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T,
+                            SCH_ITEM_LOCATE_GRAPHIC_LINE_T } )
                 && !item->IsSelected() )
         {
             done = true;
