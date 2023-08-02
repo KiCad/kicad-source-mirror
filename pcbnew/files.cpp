@@ -980,31 +980,6 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     GetBoard()->Show( 0, std::cout );
 #endif
 
-    // Re-fill any zones which had their legacy fills deleted on open
-
-    for( ZONE* zone : GetBoard()->Zones() )
-    {
-        if( zone->GetFlags() & CANDIDATE )
-        {
-            toFill.push_back( zone );
-            zone->ClearTempFlags();
-        }
-    }
-
-    if( toFill.size() )
-    {
-        BOARD_COMMIT commit( this );
-        ZONE_FILLER  filler( GetBoard(), &commit );
-
-        progressReporter.Report( _( "Converting zone fills" ) );
-        filler.SetProgressReporter( &progressReporter );
-
-        if( filler.Fill( toFill ) )
-            commit.Push( _( "Convert Zone(s)" ), SKIP_CONNECTIVITY );
-
-        rebuildConnectivity();
-    }
-
     // from EDA_APPL which was first loaded BOARD only:
     {
         /* For an obscure reason the focus is lost after loading a board file
