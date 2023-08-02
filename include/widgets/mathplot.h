@@ -748,17 +748,16 @@ public:
 
     struct TickLabel
     {
-        TickLabel( double pos_ = 0.0, const wxString& label_ = wxT("") ) :
-            pos( pos_ ), label( label_ ), pixelPos( 0 ), visible( true )
+        TickLabel( double pos_ = 0.0, const wxString& label_ = wxT( "" ) ) :
+                pos( pos_ ),
+                label( label_ ),
+                visible( true )
         {}
 
-        double pos;
+        double   pos;
         wxString label;
-        int pixelPos;
-        bool visible;
+        bool     visible;
     };
-
-    std::vector<TickLabel>& TickLabels() { return m_tickLabels; };
 
 protected:
 
@@ -769,33 +768,8 @@ protected:
     virtual void getVisibleDataRange( mpWindow& w, double& minV, double& maxV ) {};
     virtual void recalculateTicks( wxDC& dc, mpWindow& w ) {};
 
-    int tickCount() const
-    {
-        return (int) m_tickValues.size();
-    }
-
-    virtual int labelCount() const
-    {
-        return (int) m_tickLabels.size();
-    }
-
     virtual const wxString formatLabel( double value, int nDigits ) { return wxT( "" ); }
     virtual void formatLabels() {};
-
-    virtual double getTickPos( int n ) const
-    {
-        return m_tickValues[n];
-    }
-
-    virtual double getLabelPos( int n ) const
-    {
-        return m_tickLabels[n].pos;
-    }
-
-    virtual wxString getLabel( int n ) const
-    {
-        return m_tickLabels[n].label;
-    }
 
 protected:
     std::vector<double>    m_tickValues;

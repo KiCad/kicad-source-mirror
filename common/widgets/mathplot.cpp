@@ -805,14 +805,14 @@ void mpScaleBase::computeLabelExtents( wxDC& dc, mpWindow& w )
     m_maxLabelHeight    = 0;
     m_maxLabelWidth     = 0;
 
-    for( int n = 0; n < labelCount(); n++ )
+    for( const TickLabel& tickLabel : m_tickLabels )
     {
-        int tx, ty;
-        const wxString s = getLabel( n );
+        int            tx, ty;
+        const wxString s = tickLabel.label;
 
         dc.GetTextExtent( s, &tx, &ty );
-        m_maxLabelHeight    = std::max( ty, m_maxLabelHeight );
-        m_maxLabelWidth     = std::max( tx, m_maxLabelWidth );
+        m_maxLabelHeight = std::max( ty, m_maxLabelHeight );
+        m_maxLabelWidth  = std::max( tx, m_maxLabelWidth );
     }
 }
 
@@ -1080,15 +1080,12 @@ void mpScaleXBase::Plot( wxDC& dc, mpWindow& w )
         int labelH = m_maxLabelHeight;    // Control labels height to decide where to put axis name (below labels or on top of axis)
 
         // int maxExtent = tc.MaxLabelWidth();
-        for( int n = 0; n < tickCount(); n++ )
+        for( double tp : m_tickValues )
         {
-            double tp = getTickPos( n );
-
-            double px = TransformToPlot( tp );
-
+            double    px = TransformToPlot( tp );
             const int p = (int) ( ( px - w.GetPosX() ) * w.GetScaleX() );
 
-            if( (p >= startPx) && (p <= endPx) )
+            if( p >= startPx && p <= endPx )
             {
                 if( m_ticks )    // draw axis ticks
                 {
@@ -1132,21 +1129,18 @@ void mpScaleXBase::Plot( wxDC& dc, mpWindow& w )
 
         // Actually draw labels, taking care of not overlapping them, and distributing them
         // regularly
-        for( int n = 0; n < labelCount(); n++ )
+        for( const TickLabel& tickLabel : m_tickLabels )
         {
-            double tp = getLabelPos( n );
-
-            if( !m_tickLabels[n].visible )
+            if( !tickLabel.visible )
                 continue;
 
-            double px = TransformToPlot( tp );
-
+            double    px = TransformToPlot( tickLabel.pos );
             const int p = (int) ( ( px - w.GetPosX() ) * w.GetScaleX() );
 
             if( (p >= startPx) && (p <= endPx) )
             {
                 // Write ticks labels in s string
-                wxString s = m_tickLabels[n].label;
+                wxString s = tickLabel.label;
 
                 dc.GetTextExtent( s, &tx, &ty );
 
@@ -1246,26 +1240,22 @@ void mpScaleY::Plot( wxDC& dc, mpWindow& w )
         // Draw line
         dc.DrawLine( orgx, minYpx, orgx, maxYpx );
 
-        wxCoord tx, ty;
-        wxString    s;
-        wxString    fmt;
-        int n = 0;
+        wxCoord  tx, ty;
+        wxString s;
+        wxString fmt;
 
         int labelW = 0;
         // Before staring cycle, calculate label height
         int labelHeight = 0;
-        s.Printf( fmt, n );
+        s.Printf( fmt, 0 );
         dc.GetTextExtent( s, &tx, &labelHeight );
 
-        for( n = 0; n < tickCount(); n++ )
+        for( double tp : m_tickValues )
         {
-            double tp = getTickPos( n );
-
-            double py = TransformToPlot( tp );
+            double    py = TransformToPlot( tp );
             const int p = (int) ( ( w.GetPosY() - py ) * w.GetScaleY() );
 
-
-            if( (p >= minYpx) && (p <= maxYpx) )
+            if( p >= minYpx && p <= maxYpx )
             {
                 if( m_ticks )    // Draw axis ticks
                 {
@@ -1291,19 +1281,17 @@ void mpScaleY::Plot( wxDC& dc, mpWindow& w )
             }
         }
 
-        for( n = 0; n < labelCount(); n++ )
+        for( const TickLabel& tickLabel : m_tickLabels )
         {
-            double tp = getLabelPos( n );
-
-            double py = TransformToPlot( tp );  // ( log10 ( tp ) - xlogmin) / (xlogmax - xlogmin);
+            double    py = TransformToPlot( tickLabel.pos );
             const int p = (int) ( ( w.GetPosY() - py ) * w.GetScaleY() );
 
-            if( !m_tickLabels[n].visible )
+            if( !tickLabel.visible )
                 continue;
 
-            if( (p >= minYpx) && (p <= maxYpx) )
+            if( p >= minYpx && p <= maxYpx )
             {
-                s = getLabel( n );
+                s = tickLabel.label;
                 dc.GetTextExtent( s, &tx, &ty );
 
                 if( m_flags == mpALIGN_BORDER_LEFT || m_flags == mpALIGN_RIGHT || m_flags == mpALIGN_FAR_RIGHT )
