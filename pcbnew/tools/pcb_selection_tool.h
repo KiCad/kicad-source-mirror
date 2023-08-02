@@ -336,6 +336,17 @@ private:
     void selectAllConnectedTracks( const std::vector<BOARD_CONNECTED_ITEM*>& aStartItems,
                                    STOP_CONDITION aStopCondition );
 
+    /**
+     * Selects all non-closed shapes that are graphically connected to the given start items.
+     * @param aStartItems is a list of one or more non-closed shapes
+     */
+    void selectAllConnectedShapes( const std::vector<PCB_SHAPE*>& aStartItems );
+
+    /**
+     * @return true if the given item is an open PCB_SHAPE on a non-copper layer
+     */
+    bool isExpandableGraphicShape( const EDA_ITEM* aItem ) const;
+
     /*
      * Select tracks and vias connected to specified board items.
      */

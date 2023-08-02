@@ -27,6 +27,7 @@
 #include <limits>
 #include <cmath>
 #include <functional>
+#include <stack>
 using namespace std::placeholders;
 #include <macros.h>
 #include <core/kicad_algo.h>
@@ -1173,6 +1174,9 @@ int PCB_SELECTION_TOOL::unrouteSelected( const TOOL_EVENT& aEvent )
 
 int PCB_SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
 {
+    // expandConnection will get called no matter whether the user selected a connected item or a
+    // non-connected shape (graphic on a non-copper layer). The algorithm for expanding to connected
+    // items is different from graphics, so they need to be handled separately.
     unsigned initialCount = 0;
 
     for( const EDA_ITEM* item : m_selection.GetItems() )
@@ -1182,7 +1186,22 @@ int PCB_SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
     }
 
     if( initialCount == 0 )
-        selectCursor( true, connectedItemFilter );
+    {
+        // First, process any graphic shapes we have
+        std::vector<PCB_SHAPE*> startShapes;
+
+        for( EDA_ITEM* item : m_selection.GetItems() )
+        {
+            if( isExpandableGraphicShape( item ) )
+                startShapes.push_back( static_cast<PCB_SHAPE*>( item ) );
+        }
+
+        // If no non-copper shapes; fall back to looking for connected items
+        if( !startShapes.empty() )
+            selectAllConnectedShapes( startShapes );
+        else
+            selectCursor( true, connectedItemFilter );
+    }
 
     m_frame->SetStatusText( _( "Select/Expand Connection..." ) );
 
@@ -1441,6 +1460,75 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
 
     for( BOARD_CONNECTED_ITEM* item : cleanupItems )
         item->ClearFlags( SKIP_STRUCT );
+}
+
+
+bool PCB_SELECTION_TOOL::isExpandableGraphicShape( const EDA_ITEM* aItem ) const
+{
+    if( aItem->Type() == PCB_SHAPE_T )
+    {
+        const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( aItem );
+
+        switch( shape->GetShape() )
+        {
+        case SHAPE_T::SEGMENT:
+        case SHAPE_T::ARC:
+        case SHAPE_T::BEZIER:
+            return !shape->IsOnCopperLayer();
+
+        case SHAPE_T::POLY:
+            return !shape->IsOnCopperLayer() && !shape->IsClosed();
+
+        default:
+            return false;
+        }
+    }
+
+    return false;
+}
+
+
+void PCB_SELECTION_TOOL::selectAllConnectedShapes( const std::vector<PCB_SHAPE*>& aStartItems )
+{
+    std::stack<PCB_SHAPE*> toSearch;
+    std::set<PCB_SHAPE*> toCleanup;
+
+    for( PCB_SHAPE* startItem : aStartItems )
+        toSearch.push( startItem );
+
+    GENERAL_COLLECTORS_GUIDE   guide = getCollectorsGuide();
+    GENERAL_COLLECTOR          collector;
+
+    auto searchPoint =
+            [&]( const VECTOR2I& aWhere )
+            {
+                collector.Collect( board(), { PCB_SHAPE_T }, aWhere, guide );
+
+                for( EDA_ITEM* item : collector )
+                {
+                    if( isExpandableGraphicShape( item ) )
+                        toSearch.push( static_cast<PCB_SHAPE*>( item ) );
+                }
+            };
+
+    while( !toSearch.empty() )
+    {
+        PCB_SHAPE* shape = toSearch.top();
+        toSearch.pop();
+
+        if( shape->HasFlag( SKIP_STRUCT ) )
+            continue;
+
+        select( shape );
+        shape->SetFlags( SKIP_STRUCT );
+        toCleanup.insert( shape );
+
+        searchPoint( shape->GetStart() );
+        searchPoint( shape->GetEnd() );
+    }
+
+    for( PCB_SHAPE* shape : toCleanup )
+        shape->ClearFlags( SKIP_STRUCT );
 }
 
 
