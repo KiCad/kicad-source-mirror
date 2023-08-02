@@ -52,6 +52,7 @@ bitmaps_png/tmp
 common/pcb_keywords.cpp
 include/pcb_lexer.h
 fp-info-cache
+qa/tests/output/**
 
 # demo project auxiliary files
 demos/**/*-bak
