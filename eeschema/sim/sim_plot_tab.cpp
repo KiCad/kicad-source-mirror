@@ -100,27 +100,32 @@ static void getSISuffix( double x, const wxString& unit, int& power, wxString& s
 
 static int countDecimalDigits( double x, int maxDigits )
 {
+    // avoid trying to count the decimals of NaN
     if( std::isnan( x ) )
-    {
-        // avoid trying to count the decimals of NaN
         return 0;
-    }
+
+    auto countSignificantDigits =
+            [&]( int64_t k )
+            {
+                while( k && ( k % 10LL ) == 0LL )
+                    k /= 10LL;
+
+                int n = 0;
+
+                while( k != 0LL )
+                {
+                    n++;
+                    k /= 10LL;
+                }
+
+                return n;
+            };
 
     int64_t k = (int)( ( x - floor( x ) ) * pow( 10.0, (double) maxDigits ) );
-    int n = 0;
+    int     n = countSignificantDigits( k );
 
-    while( k && ( ( k % 10LL ) == 0LL || ( k % 10LL ) == 9LL ) )
-    {
-        k /= 10LL;
-    }
-
-    n = 0;
-
-    while( k != 0LL )
-    {
-        n++;
-        k /= 10LL;
-    }
+    // check for trailing 9's
+    n = std::min( n, countSignificantDigits( k + 1 ) );
 
     return n;
 }
@@ -145,7 +150,7 @@ private:
         wxString      suffix;
         int           power = 0;
         int           digits = 0;
-        int constexpr DIGITS = 3;
+        int constexpr MAX_DIGITS = 3;
 
         getSISuffix( maxVis, m_unit, power, suffix );
 
@@ -153,7 +158,7 @@ private:
 
         for( mpScaleBase::TickLabel& l : parent::TickLabels() )
         {
-            int k = countDecimalDigits( l.pos / sf, DIGITS );
+            int k = countDecimalDigits( l.pos / sf, MAX_DIGITS );
 
             digits = std::max( digits, k );
         }
@@ -211,14 +216,15 @@ public:
 private:
     void formatLabels() override
     {
-        wxString suffix;
-        int      power;
+        wxString      suffix;
+        int           power;
+        int constexpr MAX_DIGITS = 3;
 
         for( mpScaleBase::TickLabel& l : parent::TickLabels() )
         {
             getSISuffix( l.pos, m_unit, power, suffix );
             double sf = pow( 10.0, power );
-            int    k = countDecimalDigits( l.pos / sf, 3 );
+            int    k = countDecimalDigits( l.pos / sf, MAX_DIGITS );
 
             l.label = formatFloat( l.pos / sf, k ) + suffix;
             l.visible = true;
