@@ -21,6 +21,9 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #
 
+# Disable shared library building for all thirdparty libraries
+set( BUILD_SHARED_LIBS OFF )
+
 # Note: The glew folder isn't added here because it is added inside the main CMakeLists.txt
 
 set( ARGPARSE_INSTALL OFF )
