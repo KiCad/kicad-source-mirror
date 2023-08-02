@@ -100,7 +100,6 @@ static void getSISuffix( double x, const wxString& unit, int& power, wxString& s
 
 static int countDecimalDigits( double x, int maxDigits )
 {
-    // avoid trying to count the decimals of NaN
     if( std::isnan( x ) )
         return 0;
 
@@ -151,23 +150,29 @@ private:
         int           power = 0;
         int           digits = 0;
         int constexpr MAX_DIGITS = 3;
+        bool          duplicateLabels = false;
 
         getSISuffix( maxVis, m_unit, power, suffix );
 
         double sf = pow( 10.0, power );
 
         for( mpScaleBase::TickLabel& l : parent::TickLabels() )
-        {
-            int k = countDecimalDigits( l.pos / sf, MAX_DIGITS );
+            digits = std::max( digits, countDecimalDigits( l.pos / sf, MAX_DIGITS ) );
 
-            digits = std::max( digits, k );
-        }
-
-        for( mpScaleBase::TickLabel& l : parent::TickLabels() )
+        do
         {
-            l.label = formatFloat( l.pos / sf, digits ) + suffix;
-            l.visible = true;
+            for( size_t ii = 0; ii < parent::TickLabels().size(); ++ii )
+            {
+                mpScaleBase::TickLabel& l = parent::TickLabels()[ii];
+
+                l.label = formatFloat( l.pos / sf, digits ) + suffix;
+                l.visible = true;
+
+                if( ii > 0 && l.label == parent::TickLabels()[ii-1].label )
+                    duplicateLabels = true;
+            }
         }
+        while( duplicateLabels && ++digits <= 6 );
     }
 
 private:
