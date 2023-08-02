@@ -253,11 +253,6 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName, const wxStri
     // first attempt to use the name as specified:
     wxString tname = aFileName;
 
-    #ifdef _WIN32
-    // translate from KiCad's internal UNIX-like path to MSWin paths
-    tname.Replace( wxT( "/" ), wxT( "\\" ) );
-    #endif
-
     // Note: variable expansion must preferably be performed via a threadsafe wrapper for the
     // getenv() system call. If we allow the wxFileName::Normalize() routine to perform expansion
     // then we will have a race condition since wxWidgets does not assure a threadsafe wrapper
