@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Terminal=false
-Icon=pcbcalculator
+Icon=@KICAD_DESKTOP_FILE_ICON_PREFIX@pcbcalculator
 Type=Application
 Categories=Science;Electronics;
 Exec=pcb_calculator

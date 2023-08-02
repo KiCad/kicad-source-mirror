@@ -53,6 +53,13 @@ set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
 set( KICAD_CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" )
 set( CMAKE_MODULE_PATH       "${KICAD_CMAKE_MODULE_PATH}" )
 
+# Create a flag to identify the non-Apple unix systems
+if( UNIX AND NOT APPLE )
+    set( UNIX_NOT_APPLE ON )
+else()
+    set( UNIX_NOT_APPLE OFF )
+endif()
+
 # On Windows, binaries created by link option -g3 are very large (more than 1Gb for pcbnew,
 # and more than 3Gb for the full kicad suite)
 # This option create binaries using link option -g1 that create much smaller files, but
@@ -91,6 +98,17 @@ option( KICAD_BUILD_I18N
 
 option( KICAD_I18N_UNIX_STRICT_PATH
     "Use standard Unix locale lookup path (default OFF)."
+    OFF )
+
+# Options to build with flatpak platform defaults (only on Linux)
+cmake_dependent_option( KICAD_BUILD_FLATPAK
+    "Build KiCad with metadata, launchers, icons, and MIME info following flatpak conventions"
+    OFF "UNIX_NOT_APPLE"
+    OFF )
+
+cmake_dependent_option( KICAD_BUILD_NIGHTLY_FLATPAK
+    "Build a Nightly flatpak (requires KICAD_BUILD_FLATPAK=ON)"
+    OFF "UNIX_NOT_APPLE"
     OFF )
 
 # Not supported by all platforms (for instance mingw)

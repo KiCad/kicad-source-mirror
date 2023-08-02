@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Terminal=false
-Icon=pcbnew
+Icon=@KICAD_DESKTOP_FILE_ICON_PREFIX@pcbnew
 Type=Application
 Categories=Science;Electronics;
 Exec=pcbnew %f
