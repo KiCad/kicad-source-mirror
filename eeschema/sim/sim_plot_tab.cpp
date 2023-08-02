@@ -130,12 +130,12 @@ static int countDecimalDigits( double x, int maxDigits )
 }
 
 
-template <typename parent>
-class LIN_SCALE : public parent
+template <typename T_PARENT>
+class LIN_SCALE : public T_PARENT
 {
 public:
     LIN_SCALE( const wxString& name, const wxString& unit, int flags ) :
-            parent( name, flags, false ),
+            T_PARENT( name, flags, false ),
             m_unit( unit )
     {};
 
@@ -144,35 +144,36 @@ public:
 private:
     void formatLabels() override
     {
-        double        maxVis = parent::AbsVisibleMaxValue();
+        double        maxVis = T_PARENT::AbsVisibleMaxValue();
 
         wxString      suffix;
         int           power = 0;
         int           digits = 0;
         int constexpr MAX_DIGITS = 3;
+        int constexpr MAX_DISAMBIGUATION_DIGITS = 6;
         bool          duplicateLabels = false;
 
         getSISuffix( maxVis, m_unit, power, suffix );
 
         double sf = pow( 10.0, power );
 
-        for( mpScaleBase::TickLabel& l : parent::TickLabels() )
+        for( mpScaleBase::TickLabel& l : T_PARENT::TickLabels() )
             digits = std::max( digits, countDecimalDigits( l.pos / sf, MAX_DIGITS ) );
 
         do
         {
-            for( size_t ii = 0; ii < parent::TickLabels().size(); ++ii )
+            for( size_t ii = 0; ii < T_PARENT::TickLabels().size(); ++ii )
             {
-                mpScaleBase::TickLabel& l = parent::TickLabels()[ii];
+                mpScaleBase::TickLabel& l = T_PARENT::TickLabels()[ii];
 
                 l.label = formatFloat( l.pos / sf, digits ) + suffix;
                 l.visible = true;
 
-                if( ii > 0 && l.label == parent::TickLabels()[ii-1].label )
+                if( ii > 0 && l.label == T_PARENT::TickLabels()[ii-1].label )
                     duplicateLabels = true;
             }
         }
-        while( duplicateLabels && ++digits <= 6 );
+        while( duplicateLabels && ++digits <= MAX_DISAMBIGUATION_DIGITS );
     }
 
 private:
@@ -207,12 +208,12 @@ public:
 };
 
 
-template <typename parent>
-class LOG_SCALE : public parent
+template <typename T_PARENT>
+class LOG_SCALE : public T_PARENT
 {
 public:
     LOG_SCALE( const wxString& name, const wxString& unit, int flags ) :
-            parent( name, flags, false ),
+            T_PARENT( name, flags, false ),
             m_unit( unit )
     {};
 
@@ -225,7 +226,7 @@ private:
         int           power;
         int constexpr MAX_DIGITS = 3;
 
-        for( mpScaleBase::TickLabel& l : parent::TickLabels() )
+        for( mpScaleBase::TickLabel& l : T_PARENT::TickLabels() )
         {
             getSISuffix( l.pos, m_unit, power, suffix );
             double sf = pow( 10.0, power );
