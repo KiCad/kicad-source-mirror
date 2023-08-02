@@ -35,6 +35,7 @@
 #include <grid_tricks.h>
 #include <string_utils.h>
 #include <kiface_base.h>
+#include <sch_commit.h>
 #include <sch_edit_frame.h>
 #include <sch_reference_list.h>
 #include <schematic.h>
@@ -501,15 +502,20 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataFromWindow()
     if( !wxDialog::TransferDataFromWindow() )
         return false;
 
+    SCH_EDIT_FRAME* parent = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
+    SCH_COMMIT      commit( parent );
+
     SCH_SHEET_PATH currentSheet = m_parent->GetCurrentSheet();
 
     std::function<void( SCH_SYMBOL&, SCH_SHEET_PATH & aPath )> changeHandler =
-            [this]( SCH_SYMBOL& aSymbol, SCH_SHEET_PATH& aPath ) -> void
+            [&commit]( SCH_SYMBOL& aSymbol, SCH_SHEET_PATH& aPath ) -> void
             {
-                m_parent->SaveCopyInUndoList( aPath.LastScreen(), &aSymbol, UNDO_REDO::CHANGED, true );
+                commit.Modify( &aSymbol, aPath.LastScreen() );
             };
 
     m_dataModel->ApplyData( changeHandler );
+
+    commit.Push( wxS( "Symbol Fields Table Edit" ) );
 
     // Reset the view to where we left the user
     m_parent->SetCurrentSheet( currentSheet );
