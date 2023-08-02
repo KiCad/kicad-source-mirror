@@ -121,6 +121,7 @@ void SCH_EDIT_FRAME::SchematicCleanUp( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen 
     std::vector<SCH_LINE*>       lines;
     std::vector<SCH_JUNCTION*>   junctions;
     std::vector<SCH_NO_CONNECT*> ncs;
+    std::vector<SCH_ITEM*>       items_to_remove;
     bool                         changed = true;
 
     if( aScreen == nullptr )
@@ -147,10 +148,13 @@ void SCH_EDIT_FRAME::SchematicCleanUp( SCH_COMMIT* aCommit, SCH_SCREEN* aScreen 
     for( SCH_ITEM* item : aScreen->Items().OfType( SCH_JUNCTION_T ) )
     {
         if( !aScreen->IsExplicitJunction( item->GetPosition() ) )
-            remove_item( item );
+            items_to_remove.push_back( item );
         else
             junctions.push_back( static_cast<SCH_JUNCTION*>( item ) );
     }
+
+    for( SCH_ITEM* item : items_to_remove )
+        remove_item( item );
 
     for( SCH_ITEM* item : aScreen->Items().OfType( SCH_NO_CONNECT_T ) )
         ncs.push_back( static_cast<SCH_NO_CONNECT*>( item ) );
