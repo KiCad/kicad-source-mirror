@@ -320,7 +320,7 @@ void mpFX::Plot( wxDC& dc, mpWindow& w )
                 iy = w.y2p( GetY( w.p2x( i ) ) );
 
                 // Draw the point only if you can draw outside margins or if the point is inside margins
-                if( (iy >= minYpx) && (iy <= maxYpx) )
+                if( iy >= minYpx && iy <= maxYpx )
                     dc.DrawLine( i, iy, i, iy );
             }
         }
@@ -335,8 +335,7 @@ void mpFX::Plot( wxDC& dc, mpWindow& w )
             if( (m_flags & mpALIGNMASK) == mpALIGN_RIGHT )
                 tx = (w.GetScrX() - tx) - w.GetMarginRight() - 8;
             else if( (m_flags & mpALIGNMASK) == mpALIGN_CENTER )
-                tx = ( (w.GetScrX() - w.GetMarginRight() - w.GetMarginLeft() - tx) / 2 ) +
-                     w.GetMarginLeft();
+                tx = ( (w.GetScrX() - w.GetMarginRight() - w.GetMarginLeft() - tx) / 2 ) + w.GetMarginLeft();
             else
                 tx = w.GetMarginLeft() + 8;
 
@@ -400,8 +399,7 @@ void mpFY::Plot( wxDC& dc, mpWindow& w )
             if( (m_flags & mpALIGNMASK) == mpALIGN_TOP )
                 ty = w.GetMarginTop() + 8;
             else if( (m_flags & mpALIGNMASK) == mpALIGN_CENTER )
-                ty = ( (w.GetScrY() - w.GetMarginTop() - w.GetMarginBottom() - ty) / 2 ) +
-                     w.GetMarginTop();
+                ty = ( ( w.GetScrY() - w.GetMarginTop() - w.GetMarginBottom() - ty) / 2 ) + w.GetMarginTop();
             else
                 ty = w.GetScrY() - 8 - ty - w.GetMarginBottom();
 
@@ -657,64 +655,6 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
 
 
 // -----------------------------------------------------------------------------
-// mpProfile implementation
-// -----------------------------------------------------------------------------
-
-IMPLEMENT_ABSTRACT_CLASS( mpProfile, mpLayer )
-
-mpProfile::mpProfile( const wxString& name, int flags )
-{
-    SetName( name );
-    m_flags = flags;
-    m_type  = mpLAYER_PLOT;
-}
-
-
-void mpProfile::Plot( wxDC& dc, mpWindow& w )
-{
-    if( m_visible )
-    {
-        dc.SetPen( m_pen );
-
-        wxCoord startPx = w.GetMarginLeft();
-        wxCoord endPx   = w.GetScrX() - w.GetMarginRight();
-        wxCoord minYpx  = w.GetMarginTop();
-        wxCoord maxYpx  = w.GetScrY() - w.GetMarginBottom();
-
-        // Plot profile linking subsequent point of the profile, instead of mpFY, which plots simple points.
-        for( wxCoord i = startPx; i < endPx; ++i )
-        {
-            wxCoord c0  = w.y2p( GetY( w.p2x( i ) ) );
-            wxCoord c1  = w.y2p( GetY( w.p2x( i + 1 ) ) );
-
-            c0  = (c0 <= maxYpx) ? ( (c0 >= minYpx) ? c0 : minYpx ) : maxYpx;
-            c1  = (c1 <= maxYpx) ? ( (c1 >= minYpx) ? c1 : minYpx ) : maxYpx;
-
-            dc.DrawLine( i, c0, i + 1, c1 );
-        }
-
-        if( !m_name.IsEmpty() )
-        {
-            dc.SetFont( m_font );
-
-            wxCoord tx, ty;
-            dc.GetTextExtent( m_name, &tx, &ty );
-
-            if( (m_flags & mpALIGNMASK) == mpALIGN_RIGHT )
-                tx = (w.GetScrX() - tx) - w.GetMarginRight() - 8;
-            else if( (m_flags & mpALIGNMASK) == mpALIGN_CENTER )
-                tx = ( (w.GetScrX() - w.GetMarginRight() - w.GetMarginLeft() - tx) / 2 ) +
-                     w.GetMarginLeft();
-            else
-                tx = w.GetMarginLeft() + 8;
-
-            dc.DrawText( m_name, tx, w.y2p( GetY( w.p2x( tx ) ) ) );
-        }
-    }
-}
-
-
-// -----------------------------------------------------------------------------
 // mpLayer implementations - furniture (scales, ...)
 // -----------------------------------------------------------------------------
 
@@ -749,9 +689,7 @@ void mpScaleX::recalculateTicks( wxDC& dc, mpWindow& w )
         }
     }
 
-
     double v = floor( minVvis / bestStep ) * bestStep;
-
     double zeroOffset = 100000000.0;
 
     while( v < maxVvis )
@@ -771,9 +709,7 @@ void mpScaleX::recalculateTicks( wxDC& dc, mpWindow& w )
     }
 
     for( double t : m_tickValues )
-    {
         m_tickLabels.emplace_back( t );
-    }
 
     updateTickLabels( dc, w );
 }
@@ -805,7 +741,7 @@ void mpScaleBase::computeLabelExtents( wxDC& dc, mpWindow& w )
     m_maxLabelHeight    = 0;
     m_maxLabelWidth     = 0;
 
-    for( const TickLabel& tickLabel : m_tickLabels )
+    for( const TICK_LABEL& tickLabel : m_tickLabels )
     {
         int            tx, ty;
         const wxString s = tickLabel.label;
@@ -1129,7 +1065,7 @@ void mpScaleXBase::Plot( wxDC& dc, mpWindow& w )
 
         // Actually draw labels, taking care of not overlapping them, and distributing them
         // regularly
-        for( const TickLabel& tickLabel : m_tickLabels )
+        for( const TICK_LABEL& tickLabel : m_tickLabels )
         {
             if( !tickLabel.visible )
                 continue;
@@ -1281,7 +1217,7 @@ void mpScaleY::Plot( wxDC& dc, mpWindow& w )
             }
         }
 
-        for( const TickLabel& tickLabel : m_tickLabels )
+        for( const TICK_LABEL& tickLabel : m_tickLabels )
         {
             double    py = TransformToPlot( tickLabel.pos );
             const int p = (int) ( ( w.GetPosY() - py ) * w.GetScaleY() );
@@ -1740,22 +1676,6 @@ void mpWindow::Fit( double xMin, double xMax, double yMin, double yMax,
 }
 
 
-// Patch ngpaton
-void mpWindow::DoZoomInXCalc( const int staticXpixel )
-{
-    // Preserve the position of the clicked point:
-    double staticX = p2x( staticXpixel );
-
-    // Zoom in:
-    m_scaleX = m_scaleX * zoomIncrementalFactor;
-    // Adjust the new m_posx
-    m_posX = staticX - (staticXpixel / m_scaleX);
-    // Adjust desired
-    m_desiredXmin   = m_posX;
-    m_desiredXmax   = m_posX + ( m_scrX - (m_marginLeft + m_marginRight) ) / m_scaleX;
-}
-
-
 void mpWindow::AdjustLimitedView()
 {
     if( !m_enableLimitedView )
@@ -1929,13 +1849,6 @@ void mpWindow::ZoomOut( const wxPoint& centerPoint, double zoomFactor )
         Fit();
     }
 
-    UpdateAll();
-}
-
-
-void mpWindow::ZoomInX()
-{
-    m_scaleX = m_scaleX * zoomIncrementalFactor;
     UpdateAll();
 }
 
@@ -2140,8 +2053,6 @@ void mpWindow::UpdateAll()
 }
 
 
-// End patch ngpaton
-
 void mpWindow::SetScaleX( double scaleX )
 {
     if( scaleX != 0 )
@@ -2262,9 +2173,7 @@ mpInfoLayer* mpWindow::IsInsideInfoLayer( wxPoint& point )
 
 void mpWindow::SetLayerVisible( const wxString& name, bool viewable )
 {
-    mpLayer* lx = GetLayerByName( name );
-
-    if( lx )
+    if( mpLayer* lx = GetLayerByName( name ) )
     {
         lx->SetVisible( viewable );
         UpdateAll();
@@ -2274,17 +2183,16 @@ void mpWindow::SetLayerVisible( const wxString& name, bool viewable )
 
 bool mpWindow::IsLayerVisible( const wxString& name ) const
 {
-    const mpLayer* lx = GetLayerByName( name );
+    if( const mpLayer* lx = GetLayerByName( name ) )
+        return lx->IsVisible();
 
-    return lx ? lx->IsVisible() : false;
+    return false;
 }
 
 
 void mpWindow::SetLayerVisible( const unsigned int position, bool viewable )
 {
-    mpLayer* lx = GetLayer( position );
-
-    if( lx )
+    if( mpLayer* lx = GetLayer( position ) )
     {
         lx->SetVisible( viewable );
         UpdateAll();
@@ -2294,9 +2202,10 @@ void mpWindow::SetLayerVisible( const unsigned int position, bool viewable )
 
 bool mpWindow::IsLayerVisible( unsigned int position ) const
 {
-    mpLayer* lx = GetLayer( position );
+    if( const mpLayer* lx = GetLayer( position ) )
+        return lx->IsVisible();
 
-    return (lx) ? lx->IsVisible() : false;
+    return false;
 }
 
 
@@ -2390,20 +2299,11 @@ double mpScaleXLog::TransformFromPlot( double xplot ) const
 }
 
 
-#if 0
-mpFSemiLogXVector::mpFSemiLogXVector( wxString name, int flags ) :
-    mpFXYVector( name, flags )
-{
-}
-
-
-IMPLEMENT_DYNAMIC_CLASS( mpFSemiLogXVector, mpFXYVector )
-#endif // 0
-
 void mpFXYVector::Rewind()
 {
     m_index = 0;
 }
+
 
 size_t mpFXYVector::GetCount() const
 {
@@ -2475,344 +2375,6 @@ void mpFXYVector::SetData( const std::vector<double>& xs, const std::vector<doub
         m_maxX  = 0;
         m_minY  = 0;
         m_maxY  = 0;
-    }
-}
-
-
-// -----------------------------------------------------------------------------
-// mpText - provided by Val Greene
-// -----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS( mpText, mpLayer )
-
-
-/** @param name text to be displayed
- *  @param offsetx x position in percentage (0-100)
- *  @param offsetx y position in percentage (0-100)
- */
-mpText::mpText( const wxString& name, int offsetx, int offsety )
-{
-    SetName( name );
-
-    if( offsetx >= 0 && offsetx <= 100 )
-        m_offsetx = offsetx;
-    else
-        m_offsetx = 5;
-
-    if( offsety >= 0 && offsety <= 100 )
-        m_offsety = offsety;
-    else
-        m_offsety = 50;
-
-    m_type = mpLAYER_INFO;
-}
-
-
-/** mpText Layer plot handler.
- *  This implementation will plot the text adjusted to the visible area.
- */
-
-void mpText::Plot( wxDC& dc, mpWindow& w )
-{
-    if( m_visible )
-    {
-        dc.SetPen( m_pen );
-        dc.SetFont( m_font );
-
-        wxCoord tw = 0, th = 0;
-        dc.GetTextExtent( GetName(), &tw, &th );
-
-        int px  = m_offsetx * ( w.GetScrX() - w.GetMarginLeft() - w.GetMarginRight() ) / 100;
-        int py  = m_offsety * ( w.GetScrY() - w.GetMarginTop() - w.GetMarginBottom() ) / 100;
-        dc.DrawText( GetName(), px, py );
-    }
-}
-
-
-// -----------------------------------------------------------------------------
-// mpMovableObject - provided by Jose Luis Blanco
-// -----------------------------------------------------------------------------
-void mpMovableObject::TranslatePoint( double x, double y, double& out_x, double& out_y )
-{
-    double  ccos    = cos( m_reference_phi ); // Avoid computing cos/sin twice.
-    double  csin    = sin( m_reference_phi );
-
-    out_x   = m_reference_x + ccos * x - csin * y;
-    out_y   = m_reference_y + csin * x + ccos * y;
-}
-
-
-// This method updates the buffers m_trans_shape_xs/ys, and the precomputed bounding box.
-void mpMovableObject::ShapeUpdated()
-{
-    // Just in case...
-    if( m_shape_xs.size() != m_shape_ys.size() )
-    {
-    }
-    else
-    {
-        double  ccos    = cos( m_reference_phi ); // Avoid computing cos/sin twice.
-        double  csin    = sin( m_reference_phi );
-
-        m_trans_shape_xs.resize( m_shape_xs.size() );
-        m_trans_shape_ys.resize( m_shape_xs.size() );
-
-        std::vector<double>::iterator   itXi, itXo;
-        std::vector<double>::iterator   itYi, itYo;
-
-        m_bbox_min_x    = 1e300;
-        m_bbox_max_x    = -1e300;
-        m_bbox_min_y    = 1e300;
-        m_bbox_max_y    = -1e300;
-
-        for( itXo = m_trans_shape_xs.begin(),
-             itYo = m_trans_shape_ys.begin(), itXi = m_shape_xs.begin(), itYi = m_shape_ys.begin();
-             itXo!=m_trans_shape_xs.end(); itXo++, itYo++, itXi++, itYi++ )
-        {
-            *itXo   = m_reference_x + ccos * (*itXi) - csin * (*itYi);
-            *itYo   = m_reference_y + csin * (*itXi) + ccos * (*itYi);
-
-            // Keep BBox:
-            if( *itXo < m_bbox_min_x )
-                m_bbox_min_x = *itXo;
-
-            if( *itXo > m_bbox_max_x )
-                m_bbox_max_x = *itXo;
-
-            if( *itYo < m_bbox_min_y )
-                m_bbox_min_y = *itYo;
-
-            if( *itYo > m_bbox_max_y )
-                m_bbox_max_y = *itYo;
-        }
-    }
-}
-
-
-void mpMovableObject::Plot( wxDC& dc, mpWindow& w )
-{
-    if( m_visible )
-    {
-        dc.SetPen( m_pen );
-
-
-        std::vector<double>::iterator   itX = m_trans_shape_xs.begin();
-        std::vector<double>::iterator   itY = m_trans_shape_ys.begin();
-
-        if( !m_continuous )
-        {
-            // for some reason DrawPoint does not use the current pen,
-            // so we use DrawLine for fat pens
-            if( m_pen.GetWidth() <= 1 )
-            {
-                while( itX!=m_trans_shape_xs.end() )
-                {
-                    dc.DrawPoint( w.x2p( *(itX++) ), w.y2p( *(itY++) ) );
-                }
-            }
-            else
-            {
-                while( itX!=m_trans_shape_xs.end() )
-                {
-                    wxCoord cx  = w.x2p( *(itX++) );
-                    wxCoord cy  = w.y2p( *(itY++) );
-                    dc.DrawLine( cx, cy, cx, cy );
-                }
-            }
-        }
-        else
-        {
-            wxCoord cx0 = 0, cy0 = 0;
-            bool first  = true;
-
-            while( itX != m_trans_shape_xs.end() )
-            {
-                wxCoord cx  = w.x2p( *(itX++) );
-                wxCoord cy  = w.y2p( *(itY++) );
-
-                if( first )
-                {
-                    first = false;
-                    cx0 = cx; cy0 = cy;
-                }
-
-                dc.DrawLine( cx0, cy0, cx, cy );
-                cx0 = cx; cy0 = cy;
-            }
-        }
-
-        if( !m_name.IsEmpty() && m_showName )
-        {
-            dc.SetFont( m_font );
-
-            wxCoord tx, ty;
-            dc.GetTextExtent( m_name, &tx, &ty );
-
-            if( HasBBox() )
-            {
-                wxCoord sx  = (wxCoord) ( ( m_bbox_max_x - w.GetPosX() ) * w.GetScaleX() );
-                wxCoord sy  = (wxCoord) ( (w.GetPosY() - m_bbox_max_y ) * w.GetScaleY() );
-
-                tx  = sx - tx - 8;
-                ty  = sy - 8 - ty;
-            }
-            else
-            {
-                const int   sx = w.GetScrX() >> 1;
-                const int   sy = w.GetScrY() >> 1;
-
-                if( (m_flags & mpALIGNMASK) == mpALIGN_NE )
-                {
-                    tx  = sx - tx - 8;
-                    ty  = -sy + 8;
-                }
-                else if( (m_flags & mpALIGNMASK) == mpALIGN_NW )
-                {
-                    tx  = -sx + 8;
-                    ty  = -sy + 8;
-                }
-                else if( (m_flags & mpALIGNMASK) == mpALIGN_SW )
-                {
-                    tx  = -sx + 8;
-                    ty  = sy - 8 - ty;
-                }
-                else
-                {
-                    tx  = sx - tx - 8;
-                    ty  = sy - 8 - ty;
-                }
-            }
-
-            dc.DrawText( m_name, tx, ty );
-        }
-    }
-}
-
-
-// -----------------------------------------------------------------------------
-// mpCovarianceEllipse - provided by Jose Luis Blanco
-// -----------------------------------------------------------------------------
-
-// Called to update the m_shape_xs, m_shape_ys vectors, whenever a parameter changes.
-void mpCovarianceEllipse::RecalculateShape()
-{
-    m_shape_xs.clear();
-    m_shape_ys.clear();
-
-    // Preliminary checks:
-    if( m_quantiles < 0 )
-        return;
-
-    if( m_cov_00 < 0 )
-        return;
-
-    if( m_cov_11 < 0 )
-        return;
-
-    m_shape_xs.resize( m_segments, 0 );
-    m_shape_ys.resize( m_segments, 0 );
-
-    // Compute the two eigenvalues of the covariance:
-    // -------------------------------------------------
-    double  b   = -m_cov_00 - m_cov_11;
-    double  c   =  m_cov_00 * m_cov_11 - m_cov_01 * m_cov_01;
-
-    double D = b * b - 4 * c;
-
-    if( D < 0 )
-        return;
-
-    double  eigenVal0   = 0.5 * ( -b + sqrt( D ) );
-    double  eigenVal1   = 0.5 * ( -b - sqrt( D ) );
-
-    // Compute the two corresponding eigenvectors:
-    // -------------------------------------------------
-    double  eigenVec0_x, eigenVec0_y;
-    double  eigenVec1_x, eigenVec1_y;
-
-    if( fabs( eigenVal0 - m_cov_00 ) > 1e-6 )
-    {
-        double k1x = m_cov_01 / ( eigenVal0 - m_cov_00 );
-        eigenVec0_y = 1;
-        eigenVec0_x = eigenVec0_y * k1x;
-    }
-    else
-    {
-        double k1y = m_cov_01 / ( eigenVal0 - m_cov_11 );
-        eigenVec0_x = 1;
-        eigenVec0_y = eigenVec0_x * k1y;
-    }
-
-    if( fabs( eigenVal1 - m_cov_00 ) > 1e-6 )
-    {
-        double k2x = m_cov_01 / ( eigenVal1 - m_cov_00 );
-        eigenVec1_y = 1;
-        eigenVec1_x = eigenVec1_y * k2x;
-    }
-    else
-    {
-        double k2y = m_cov_01 / ( eigenVal1 - m_cov_11 );
-        eigenVec1_x = 1;
-        eigenVec1_y = eigenVec1_x * k2y;
-    }
-
-    // Normalize the eigenvectors:
-    double len = sqrt( eigenVec0_x * eigenVec0_x + eigenVec0_y * eigenVec0_y );
-    eigenVec0_x /= len;    // It *CANNOT* be zero
-    eigenVec0_y /= len;
-
-    len = sqrt( eigenVec1_x * eigenVec1_x + eigenVec1_y * eigenVec1_y );
-    eigenVec1_x /= len;    // It *CANNOT* be zero
-    eigenVec1_y /= len;
-
-
-    // Take the sqrt of the eigenvalues (required for the ellipse scale):
-    eigenVal0   = sqrt( eigenVal0 );
-    eigenVal1   = sqrt( eigenVal1 );
-
-    // Compute the 2x2 matrix M = diag(eigVal) * (~eigVec)  (each eigen vector is a row):
-    double  M_00    = eigenVec0_x * eigenVal0;
-    double  M_01    = eigenVec0_y * eigenVal0;
-
-    double  M_10    = eigenVec1_x * eigenVal1;
-    double  M_11    = eigenVec1_y * eigenVal1;
-
-    // The points of the 2D ellipse:
-    double  ang;
-    double  Aang = 6.283185308 / (m_segments - 1);
-    int i;
-
-    for( i = 0, ang = 0; i < m_segments; i++, ang += Aang )
-    {
-        double  ccos    = cos( ang );
-        double  csin    = sin( ang );
-
-        m_shape_xs[i]   = m_quantiles * (ccos * M_00 + csin * M_10 );
-        m_shape_ys[i]   = m_quantiles * (ccos * M_01 + csin * M_11 );
-    }    // end for points on ellipse
-
-    ShapeUpdated();
-}
-
-
-// -----------------------------------------------------------------------------
-// mpPolygon - provided by Jose Luis Blanco
-// -----------------------------------------------------------------------------
-void mpPolygon::setPoints( const std::vector<double>& points_xs,
-                           const std::vector<double>& points_ys, bool closedShape )
-{
-    if( points_xs.size() == points_ys.size() )
-    {
-        m_shape_xs  = points_xs;
-        m_shape_ys  = points_ys;
-
-        if( closedShape && !points_xs.empty() )
-        {
-            m_shape_xs.push_back( points_xs[0] );
-            m_shape_ys.push_back( points_ys[0] );
-        }
-
-        ShapeUpdated();
     }
 }
 

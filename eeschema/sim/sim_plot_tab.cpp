@@ -157,14 +157,14 @@ private:
 
         double sf = pow( 10.0, power );
 
-        for( mpScaleBase::TickLabel& l : T_PARENT::m_tickLabels )
+        for( mpScaleBase::TICK_LABEL& l : T_PARENT::m_tickLabels )
             digits = std::max( digits, countDecimalDigits( l.pos / sf, MAX_DIGITS ) );
 
         do
         {
             for( size_t ii = 0; ii < T_PARENT::m_tickLabels.size(); ++ii )
             {
-                mpScaleBase::TickLabel& l = T_PARENT::m_tickLabels[ii];
+                mpScaleBase::TICK_LABEL& l = T_PARENT::m_tickLabels[ii];
 
                 l.label = formatFloat( l.pos / sf, digits ) + suffix;
                 l.visible = true;
@@ -226,7 +226,7 @@ private:
         int           power;
         int constexpr MAX_DIGITS = 3;
 
-        for( mpScaleBase::TickLabel& l : T_PARENT::m_tickLabels )
+        for( mpScaleBase::TICK_LABEL& l : T_PARENT::m_tickLabels )
         {
             getSISuffix( l.pos, m_unit, power, suffix );
             double sf = pow( 10.0, power );
