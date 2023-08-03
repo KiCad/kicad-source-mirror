@@ -523,6 +523,11 @@ TOOL_ACTION ACTIONS::gridFast2( "common.Control.gridFast2",
         MD_ALT + '2', LEGACY_HK_NAME( "Switch Grid To Fast Grid2" ),
         _( "Switch to Fast Grid 2" ), "" );
 
+TOOL_ACTION ACTIONS::gridFastCycle( "common.Control.gridFastCycle",
+        AS_GLOBAL,
+        MD_ALT + '4', LEGACY_HK_NAME( "Switch Grid To Next Fast Grid" ),
+        _( "Cycle Fast Grid"  ), "" );
+
 TOOL_ACTION ACTIONS::gridNext( "common.Control.gridNext",
         AS_GLOBAL,
         'N', LEGACY_HK_NAME( "Switch Grid To Next" ),
