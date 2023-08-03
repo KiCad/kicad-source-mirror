@@ -775,7 +775,8 @@ void mpScaleY::getVisibleDataRange( mpWindow& w, double& minV, double& maxV )
 
 void mpScaleY::computeSlaveTicks( mpWindow& w )
 {
-    if( m_masterScale->m_tickValues.size() == 0 )
+    // No need for slave ticks when there aren't 2 main ticks for them to go between
+    if( m_masterScale->m_tickValues.size() < 2 )
         return;
 
     m_tickValues.clear();
