@@ -499,6 +499,14 @@ void BACK_ANNOTATE::applyChangelist()
                 const wxString& fpFieldValue = field.second;
                 SCH_FIELD*      symField = symbol->FindField( fpFieldName );
 
+                // Skip fields that are individually controlled
+                if( fpFieldName == TEMPLATE_FIELDNAME::GetDefaultFieldName( REFERENCE_FIELD )
+                    || fpFieldName == TEMPLATE_FIELDNAME::GetDefaultFieldName( VALUE_FIELD )
+                    || fpFieldName == TEMPLATE_FIELDNAME::GetDefaultFieldName( FOOTPRINT_FIELD ) )
+                {
+                    continue;
+                }
+
                 // 1. Existing fields has changed value
                 // PCB Field value is checked against the shown text because this is the value
                 // with all the variables resolved. The footprints field value gets the symbol's
