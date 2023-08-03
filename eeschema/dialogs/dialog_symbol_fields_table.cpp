@@ -502,9 +502,7 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataFromWindow()
     if( !wxDialog::TransferDataFromWindow() )
         return false;
 
-    SCH_EDIT_FRAME* parent = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
-    SCH_COMMIT      commit( parent );
-
+    SCH_COMMIT     commit( m_parent );
     SCH_SHEET_PATH currentSheet = m_parent->GetCurrentSheet();
 
     std::function<void( SCH_SYMBOL&, SCH_SHEET_PATH & aPath )> changeHandler =
