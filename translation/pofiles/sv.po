@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-03 11:24-0700\n"
-"PO-Revision-Date: 2023-08-03 21:14+0000\n"
+"PO-Revision-Date: 2023-08-06 10:11+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v7/sv/>\n"
 "Language: sv\n"
@@ -1008,9 +1008,8 @@ msgid "Board thickness:"
 msgstr "Mönsterkortets tjocklek:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:400
-#, fuzzy
 msgid "3D Preview Options"
-msgstr "Linjeegenskaper"
+msgstr "Alternativ för 3D förhandsgranskning"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56 pcbnew/pcb_bitmap.cpp:261
@@ -32997,9 +32996,8 @@ msgid "Checking pads..."
 msgstr "Kontrollerar lödytor..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:172
-#, fuzzy
 msgid "Checking copper graphic clearances..."
-msgstr "Kontrollerar koppargrafik och textavstånd ..."
+msgstr "Kontrollerar frigång för koppargrafik..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:180
 msgid "Checking copper zone clearances..."
