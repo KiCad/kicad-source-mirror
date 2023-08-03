@@ -79,6 +79,7 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
     BOARD_DESIGN_SETTINGS&             bds = board->GetDesignSettings();
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = board->GetConnectivity();
     DRC_CONSTRAINT                     constraint;
+    wxString                           msg;
 
     const std::shared_ptr<SHAPE_POLY_SET>& zoneFill = aZone->GetFilledPolysList( aLayer );
     ISOLATED_ISLANDS                       isolatedIslands;
@@ -189,11 +190,21 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
             if( spokes < minCount )
             {
                 std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_STARVED_THERMAL );
-                wxString msg = wxString::Format( _( "(layer %s; %s min spoke count %d; actual %d)" ),
-                                                 board->GetLayerName( aLayer ),
-                                                 constraint.GetName(),
-                                                 minCount,
-                                                 spokes );
+
+                if( ignoredSpokes )
+                {
+                    msg = wxString::Format( _( "(layer %s; %d spokes connected to isolated island)" ),
+                                            board->GetLayerName( aLayer ),
+                                            ignoredSpokes );
+                }
+                else
+                {
+                    msg = wxString::Format( _( "(layer %s; %s min spoke count %d; actual %d)" ),
+                                            board->GetLayerName( aLayer ),
+                                            constraint.GetName(),
+                                            minCount,
+                                            spokes );
+                }
 
                 drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + msg );
                 drce->SetItems( aZone, pad );

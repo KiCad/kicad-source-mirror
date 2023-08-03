@@ -122,10 +122,10 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
 
     std::vector< std::pair<wxString, int> > tests =
     {
-        { "issue1358",  2 },
+        { "issue1358",  3 },
         { "issue2512",  5 },
         { "issue2528",  1 },
-        { "issue5750",  4 },   // Shorting zone fills pass DRC in some cases
+        { "issue5750",  6 },   // Shorting zone fills pass DRC in some cases
         { "issue5854",  3 },
         { "issue6879",  6 },
         { "issue6945",  2 },
@@ -137,7 +137,7 @@ BOOST_FIXTURE_TEST_CASE( DRCFalseNegativeRegressions, DRC_REGRESSION_TEST_FIXTUR
         { "issue12109", 8 },        // Pads fail annular width test
         { "issue14334", 2 },        // Thermal spoke to otherwise unconnected island
         { "reverse_via", 3 },       // Via/track ordering
-        { "intersectingzones", 1 }, // zones are too close to each other
+        { "intersectingzones", 2 }, // zones are too close to each other
         { "fill_bad",   1 }         // zone max BBox was too small
     };
 
