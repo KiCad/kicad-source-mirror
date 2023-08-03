@@ -847,9 +847,10 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                 const_cast<KIID&>( newItem->m_Uuid ) = KIID();
                 newItem->SetPosition( cursorPos );
                 newItem->SetFlags( IS_NEW );
+                m_frame->AddToScreen( newItem, screen );
 
                 SCH_COMMIT commit( m_toolMgr );
-                commit.Add( newItem, screen );
+                commit.Added( newItem, screen );
 
                 m_frame->SchematicCleanUp( &commit );
 
