@@ -64,6 +64,13 @@ DIALOG_LIB_TEXTBOX_PROPERTIES::DIALOG_LIB_TEXTBOX_PROPERTIES( SYMBOL_EDIT_FRAME*
 
     m_textCtrl->SetEOLMode( wxSTC_EOL_LF );
 
+#ifdef _WIN32
+    // Without this setting, on Windows, some esoteric unicode chars create display issue
+    // in a wxStyledTextCtrl.
+    // for SetTechnology() info, see https://www.scintilla.org/ScintillaDoc.html#SCI_SETTECHNOLOGY
+    m_textCtrl->SetTechnology(wxSTC_TECHNOLOGY_DIRECTWRITE);
+#endif
+
     m_scintillaTricks = new SCINTILLA_TRICKS( m_textCtrl, wxT( "{}" ), false,
             [this]()
             {

@@ -83,6 +83,14 @@ PROPERTIES_FRAME::PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent ) :
     m_stcText->SetUseVerticalScrollBar( false );
     m_stcText->SetUseHorizontalScrollBar( false );
     m_stcText->SetEOLMode( wxSTC_EOL_LF );  // Always use LF as eol char, regardless the platform
+
+#ifdef _WIN32
+    // Without this setting, on Windows, some esoteric unicode chars create display issue
+    // in a wxStyledTextCtrl.
+    // for SetTechnology() info, see https://www.scintilla.org/ScintillaDoc.html#SCI_SETTECHNOLOGY
+    m_stcText->SetTechnology(wxSTC_TECHNOLOGY_DIRECTWRITE);
+#endif
+
     m_scintillaTricks = new SCINTILLA_TRICKS( m_stcText, wxT( "{}" ), false );
 
     m_staticTextSizeInfo->SetFont( KIUI::GetInfoFont( this ).Italic() );
