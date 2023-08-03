@@ -76,7 +76,15 @@ DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const
             {
                 wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
             } );
+
     m_StyledTextCtrl->SetEOLMode( wxSTC_EOL_LF );   // Normalize EOL across platforms
+
+#ifdef _WIN32
+    // Without this setting, on Windows, some esoteric unicode chars create display issue
+    // in a wxStyledTextCtrl.
+    // for SetTechnology() info, see https://www.scintilla.org/ScintillaDoc.html#SCI_SETTECHNOLOGY
+    m_StyledTextCtrl->SetTechnology(wxSTC_TECHNOLOGY_DIRECTWRITE);
+#endif
 
     m_textColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
     m_textColorSwatch->SetSwatchBackground( schematicBackground );

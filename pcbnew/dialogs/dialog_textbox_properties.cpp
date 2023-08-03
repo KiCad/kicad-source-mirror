@@ -48,6 +48,13 @@ DIALOG_TEXTBOX_PROPERTIES::DIALOG_TEXTBOX_PROPERTIES( PCB_BASE_EDIT_FRAME* aPare
 {
     m_MultiLineText->SetEOLMode( wxSTC_EOL_LF );
 
+#ifdef _WIN32
+    // Without this setting, on Windows, some esoteric unicode chars create display issue
+    // in a wxStyledTextCtrl.
+    // for SetTechnology() info, see https://www.scintilla.org/ScintillaDoc.html#SCI_SETTECHNOLOGY
+    m_MultiLineText->SetTechnology(wxSTC_TECHNOLOGY_DIRECTWRITE);
+#endif
+
     m_scintillaTricks = new SCINTILLA_TRICKS( m_MultiLineText, wxT( "{}" ), false,
             // onAccept handler
             [this]( wxKeyEvent& aEvent )
