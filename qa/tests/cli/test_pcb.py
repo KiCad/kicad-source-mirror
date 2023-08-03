@@ -32,7 +32,7 @@ from conftest import KiTestFixture
 @pytest.mark.parametrize("test_file,output_dir,layers_to_test",
                           [
                             ("cli/artwork_generation_regressions/ZoneFill-4.0.7.kicad_pcb",  "artwork_generation_regressions/ZoneFill-4.0.7",  ["F.Cu","B.Cu"]),
-                            #("cli/artwork_generation_regressions/ZoneFill-Legacy.kicad_pcb", "artwork_generation_regressions/ZoneFill-Legacy", ["F.Cu","B.Cu"])
+                            ("cli/artwork_generation_regressions/ZoneFill-Legacy.brd",       "artwork_generation_regressions/ZoneFill-Legacy", ["F.Cu","B.Cu"])
                           ])
 def test_pcb_export_svg( kitest: KiTestFixture,
                          test_file: str,
