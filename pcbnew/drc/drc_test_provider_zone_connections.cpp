@@ -79,7 +79,6 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
     BOARD_DESIGN_SETTINGS&             bds = board->GetDesignSettings();
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = board->GetConnectivity();
     DRC_CONSTRAINT                     constraint;
-    wxString                           msg;
 
     const std::shared_ptr<SHAPE_POLY_SET>& zoneFill = aZone->GetFilledPolysList( aLayer );
     ISOLATED_ISLANDS                       isolatedIslands;

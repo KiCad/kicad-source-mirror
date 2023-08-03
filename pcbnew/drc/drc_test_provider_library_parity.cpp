@@ -119,6 +119,8 @@ public:
         } while (0)
 
 #define ITEM_DESC( item ) ( item )->GetItemDescription( &g_unitsProvider )
+#define PAD_DESC( pad ) wxString::Format( _( "Pad %s" ), ( pad )->GetNumber() )
+
 
 UNITS_PROVIDER g_unitsProvider( pcbIUScale, EDA_UNITS::MILLIMETRES );
 
@@ -173,52 +175,118 @@ bool primitiveNeedsUpdate( const std::shared_ptr<PCB_SHAPE>& a,
 }
 
 
-bool padNeedsUpdate( const PAD* a, const PAD* b )
+bool padHasOverrides( const PAD* a, const PAD* b, REPORTER* aReporter )
 {
-    REPORTER* aReporter = nullptr;
+    bool diff = false;
+
+    TEST( a->GetLocalClearance(), b->GetLocalClearance(),
+          wxString::Format( _( "%s has clearance override." ), PAD_DESC( a ) ) );
+    TEST( a->GetLocalSolderMaskMargin(), b->GetLocalSolderMaskMargin(),
+          wxString::Format( _( "%s has solder mask expansion override." ), PAD_DESC( a ) ) );
+    TEST( a->GetLocalSolderPasteMargin(), b->GetLocalSolderPasteMargin(),
+          wxString::Format( _( "%s has solder paste clearance override." ), PAD_DESC( a ) ) );
+    TEST_D( a->GetLocalSolderPasteMarginRatio(), b->GetLocalSolderPasteMarginRatio(),
+          wxString::Format( _( "%s has solder paste clearance override." ), PAD_DESC( a ) ) );
+
+    TEST( a->GetZoneConnection(), b->GetZoneConnection(),
+          wxString::Format( _( "%s has zone connection override." ), PAD_DESC( a ) ) );
+    TEST( a->GetThermalGap(), b->GetThermalGap(),
+          wxString::Format( _( "%s has thermal relief gap override." ), PAD_DESC( a ) ) );
+    TEST( a->GetThermalSpokeWidth(), b->GetThermalSpokeWidth(),
+          wxString::Format( _( "%s has thermal relief spoke width override." ), PAD_DESC( a ) ) );
+    TEST_D( a->GetThermalSpokeAngle().AsDegrees(), b->GetThermalSpokeAngle().AsDegrees(),
+            wxString::Format( _( "%s has thermal relief spoke angle override." ), PAD_DESC( a ) ) );
+    TEST( a->GetCustomShapeInZoneOpt(), b->GetCustomShapeInZoneOpt(),
+          wxString::Format( _( "%s has zone knockout setting override." ), PAD_DESC( a ) ) );
+
+    return diff;
+}
+
+
+bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
+{
     bool      diff = false;
 
-    TEST( a->GetPadToDieLength(), b->GetPadToDieLength(), "" );
-    TEST( a->GetFPRelativePosition(), b->GetFPRelativePosition(), "" );
+    TEST( a->GetPadToDieLength(), b->GetPadToDieLength(),
+          wxString::Format( _( "%s pad to die length differs." ), PAD_DESC( a ) ) );
+    TEST( a->GetFPRelativePosition(), b->GetFPRelativePosition(),
+          wxString::Format( _( "%s position differs." ), PAD_DESC( a ) ) );
 
-    TEST( a->GetNumber(), b->GetNumber(), "" );
+    TEST( a->GetNumber(), b->GetNumber(),
+          wxString::Format( _( "%s has different numbers." ), PAD_DESC( a ) ) );
 
     // These are assigned from the schematic and not from the library
     // TEST( a->GetPinFunction(), b->GetPinFunction() );
     // TEST( a->GetPinType(), b->GetPinType() );
 
-    TEST( a->GetRemoveUnconnected(), b->GetRemoveUnconnected(), "" );
+    bool layerSettingsDiffer = a->GetRemoveUnconnected() != b->GetRemoveUnconnected();
 
     // NB: KeepTopBottom is undefined if RemoveUnconnected is NOT set.
     if( a->GetRemoveUnconnected() )
-        TEST( a->GetKeepTopBottom(), b->GetKeepTopBottom(), "" );
-
-    TEST( a->GetShape(), b->GetShape(), "" );
+        layerSettingsDiffer |= a->GetKeepTopBottom() != b->GetKeepTopBottom();
 
     // Trim layersets to the current board before comparing
     LSET enabledLayers = a->GetBoard()->GetEnabledLayers();
     LSET aLayers = a->GetLayerSet() & enabledLayers;
     LSET bLayers = b->GetLayerSet() & enabledLayers;
-    TEST( aLayers, bLayers, "" );
 
-    TEST( a->GetAttribute(), b->GetAttribute(), "" );
-    TEST( a->GetProperty(), b->GetProperty(), "" );
+    if( layerSettingsDiffer || aLayers != bLayers )
+    {
+        diff = true;
+
+        if( aReporter )
+            aReporter->Report( wxString::Format( _( "%s layers differ." ), PAD_DESC( a ) ) );
+        else
+            return true;
+    }
+
+    TEST( a->GetShape(), b->GetShape(),
+          wxString::Format( _( "%s pad shape type differs." ), PAD_DESC( a ) ) );
+
+    TEST( a->GetAttribute(), b->GetAttribute(),
+          wxString::Format( _( "%s pad type differs." ), PAD_DESC( a ) ) );
+    TEST( a->GetProperty(), b->GetProperty(),
+          wxString::Format( _( "%s fabrication property differs." ), PAD_DESC( a ) ) );
 
     // The pad orientation, for historical reasons is the pad rotation + parent rotation.
     TEST_D( ( a->GetOrientation() - a->GetParentFootprint()->GetOrientation() ).Normalize().AsDegrees(),
             ( b->GetOrientation() - b->GetParentFootprint()->GetOrientation() ).Normalize().AsDegrees(),
-            "" );
+            wxString::Format( _( "%s orientation differs." ), PAD_DESC( a ) ) );
 
-    TEST( a->GetSize(), b->GetSize(), "" );
-    TEST( a->GetDelta(), b->GetDelta(), "" );
-    TEST( a->GetRoundRectCornerRadius(), b->GetRoundRectCornerRadius(), "" );
-    TEST_D( a->GetRoundRectRadiusRatio(), b->GetRoundRectRadiusRatio(), "" );
-    TEST_D( a->GetChamferRectRatio(), b->GetChamferRectRatio(), "" );
-    TEST( a->GetChamferPositions(), b->GetChamferPositions(), "" );
-    TEST( a->GetOffset(), b->GetOffset(), "" );
+    TEST( a->GetSize(), b->GetSize(),
+          wxString::Format( _( "%s size differs." ), PAD_DESC( a ) ) );
+    TEST( a->GetDelta(), b->GetDelta(),
+          wxString::Format( _( "%s trapezoid delta differs." ), PAD_DESC( a ) ) );
 
-    TEST( a->GetDrillShape(), b->GetDrillShape(), "" );
-    TEST( a->GetDrillSize(), b->GetDrillSize(), "" );
+    if( a->GetRoundRectCornerRadius() != b->GetRoundRectCornerRadius()
+        || a->GetRoundRectRadiusRatio() != b->GetRoundRectRadiusRatio() )
+    {
+        diff = true;
+
+        if( aReporter )
+            aReporter->Report( wxString::Format( _( "%s rounded corners differ." ), PAD_DESC( a ) ) );
+        else
+            return true;
+    }
+
+    if( a->GetChamferRectRatio() != b->GetChamferRectRatio()
+        || a->GetChamferPositions() != b->GetChamferPositions() )
+    {
+        diff = true;
+
+        if( aReporter )
+            aReporter->Report( wxString::Format( _( "%s chamfered corners differ." ), PAD_DESC( a ) ) );
+        else
+            return true;
+    }
+
+    TEST( a->GetOffset(), b->GetOffset(),
+          wxString::Format( _( "%s shape offset from hole differs." ), PAD_DESC( a ) ) );
+
+    TEST( a->GetDrillShape(), b->GetDrillShape(),
+          wxString::Format( _( "%s drill shape differs." ), PAD_DESC( a ) ) );
+    TEST( a->GetDrillSize(), b->GetDrillSize(),
+          wxString::Format( _( "%s drill size differs." ), PAD_DESC( a ) ) );
 
     // Clearance and zone connection overrides are as likely to be set at the board level as in
     // the library.
@@ -228,38 +296,38 @@ bool padNeedsUpdate( const PAD* a, const PAD* b )
     //
     // On the other hand, if we report them then boards that override at the board level are
     // going to be VERY noisy.
-#if 0
-    if( padHasOverrides( a, b )
-        return true;
-#endif
+    //
+    // So we just do it when we have a reporter.
+    if( aReporter && padHasOverrides( a, b, aReporter ) )
+        diff = true;
 
-    TEST( a->GetPrimitives().size(), b->GetPrimitives().size(), "" );
+    bool primitivesDiffer = false;
 
-    for( size_t ii = 0; ii < a->GetPrimitives().size(); ++ii )
+    if( a->GetPrimitives().size() != b->GetPrimitives().size() )
     {
-        if( primitiveNeedsUpdate( a->GetPrimitives()[ii], b->GetPrimitives()[ii] ) )
-            return true;
+        primitivesDiffer = true;
+    }
+    else
+    {
+        for( size_t ii = 0; ii < a->GetPrimitives().size(); ++ii )
+        {
+            if( primitiveNeedsUpdate( a->GetPrimitives()[ii], b->GetPrimitives()[ii] ) )
+            {
+                primitivesDiffer = true;
+                break;
+            }
+        }
     }
 
-    return diff;
-}
+    if( primitivesDiffer )
+    {
+        diff = true;
 
-
-bool padHasOverrides( const PAD* a, const PAD* b )
-{
-    REPORTER* aReporter = nullptr;
-    bool      diff = false;
-
-    TEST( a->GetLocalClearance(), b->GetLocalClearance(), "" );
-    TEST( a->GetLocalSolderMaskMargin(), b->GetLocalSolderMaskMargin(), "" );
-    TEST( a->GetLocalSolderPasteMargin(), b->GetLocalSolderPasteMargin(), "" );
-    TEST_D( a->GetLocalSolderPasteMarginRatio(), b->GetLocalSolderPasteMarginRatio(), "" );
-
-    TEST( a->GetZoneConnection(), b->GetZoneConnection(), "" );
-    TEST( a->GetThermalGap(), b->GetThermalGap(), "" );
-    TEST( a->GetThermalSpokeWidth(), b->GetThermalSpokeWidth(), "" );
-    TEST_D( a->GetThermalSpokeAngle().AsDegrees(), b->GetThermalSpokeAngle().AsDegrees(), "" );
-    TEST( a->GetCustomShapeInZoneOpt(), b->GetCustomShapeInZoneOpt(), "" );
+        if( aReporter )
+            aReporter->Report( wxString::Format( _( "%s shape primitives differ." ), PAD_DESC( a ) ) );
+        else
+            return true;
+    }
 
     return diff;
 }
@@ -611,16 +679,10 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFootprint, REPORTER* 
     {
         for( auto aIt = aPads.begin(), bIt = bPads.begin(); aIt != aPads.end(); aIt++, bIt++ )
         {
-            if( padNeedsUpdate( *aIt, *bIt ) )
-            {
+            if( padNeedsUpdate( *aIt, *bIt, aReporter ) )
                 diff = true;
-                REPORT( wxString::Format( _( "Pad %s differs." ), (*aIt)->GetNumber() ) );
-            }
-            else if( aReporter && padHasOverrides( *aIt, *bIt ) )
-            {
+            else if( aReporter && padHasOverrides( *aIt, *bIt, aReporter ) )
                 diff = true;
-                REPORT( wxString::Format( _( "Pad %s has overrides." ), (*aIt)->GetNumber() ) );
-            }
         }
     }
 
