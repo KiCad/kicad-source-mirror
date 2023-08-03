@@ -79,6 +79,7 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
     BOARD_DESIGN_SETTINGS&             bds = board->GetDesignSettings();
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = board->GetConnectivity();
     DRC_CONSTRAINT                     constraint;
+    wxString                           msg;
 
     const std::shared_ptr<SHAPE_POLY_SET>& zoneFill = aZone->GetFilledPolysList( aLayer );
     ISOLATED_ISLANDS                       isolatedIslands;
@@ -140,25 +141,28 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
 
             SHAPE_LINE_CHAIN& padOutline = padPoly.Outline( 0 );
             BOX2I             padBBox( item_bbox );
-            std::vector<SHAPE_LINE_CHAIN::INTERSECTION> intersections;
+            int               spokes = 0;
+            int               ignoredSpokes = 0;
 
             for( int jj = 0; jj < zoneFill->OutlineCount(); ++jj )
             {
+                std::vector<SHAPE_LINE_CHAIN::INTERSECTION> intersections;
+
+                zoneFill->Outline( jj ).Intersect( padOutline, intersections, true, &padBBox );
+
                 // If we connect to an island that only connects to a single item then we *are*
                 // that item.  Thermal spokes to this (otherwise isolated) island don't provide
                 // electrical connectivity to anything, so we don't count them.
                 if( alg::contains( isolatedIslands.m_SingleConnectionOutlines, jj ) )
-                    continue;
-
-                zoneFill->Outline( jj ).Intersect( padOutline, intersections, true, &padBBox );
+                    ignoredSpokes += (int) intersections.size() / 2;
+                else
+                    spokes += (int) intersections.size() / 2;
             }
 
-            int spokes = intersections.size() / 2;
-
-            if( spokes <= 0 )           // Not connected at all
+            if( spokes == 0 && ignoredSpokes == 0 )     // Not connected at all
                 continue;
 
-            if( spokes >= minCount )    // We already have enough
+            if( spokes >= minCount )                    // We already have enough
                 continue;
 
             //
@@ -186,7 +190,8 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
             if( spokes < minCount )
             {
                 std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_STARVED_THERMAL );
-                wxString msg = wxString::Format( _( "(%s min spoke count %d; actual %d)" ),
+                wxString msg = wxString::Format( _( "(layer %s; %s min spoke count %d; actual %d)" ),
+                                                 board->GetLayerName( aLayer ),
                                                  constraint.GetName(),
                                                  minCount,
                                                  spokes );

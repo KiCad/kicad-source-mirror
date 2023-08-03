@@ -600,19 +600,33 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
             aList.emplace_back( _( "Status" ), _( "Locked" ) );
     }
 
+    LSEQ     layers = m_layerSet.Seq();
     wxString layerDesc;
-    int count = 0;
 
-    for( PCB_LAYER_ID layer : m_layerSet.Seq() )
+    if( layers.size() == 1 )
     {
-        if( count == 0 )
-            layerDesc = GetBoard()->GetLayerName( layer );
-
-        count++;
+        layerDesc.Printf( _( "%s" ), GetBoard()->GetLayerName( layers[0] ) );
     }
-
-    if( count > 1 )
-        layerDesc.Printf( _( "%s and %d more" ), layerDesc, count - 1 );
+    else if (layers.size() == 2 )
+    {
+        layerDesc.Printf( _( "%s and %s" ),
+                          GetBoard()->GetLayerName( layers[0] ),
+                          GetBoard()->GetLayerName( layers[1] ) );
+    }
+    else if (layers.size() == 3 )
+    {
+        layerDesc.Printf( _( "%s, %s and %s" ),
+                          GetBoard()->GetLayerName( layers[0] ),
+                          GetBoard()->GetLayerName( layers[1] ),
+                          GetBoard()->GetLayerName( layers[2] ) );
+    }
+    else if( layers.size() > 3 )
+    {
+        layerDesc.Printf( _( "%s, %s and %d more" ),
+                          GetBoard()->GetLayerName( layers[0] ),
+                          GetBoard()->GetLayerName( layers[1] ),
+                          layers.size() - 2 );
+    }
 
     aList.emplace_back( _( "Layer" ), layerDesc );
 
@@ -644,7 +658,7 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
 
     if( !m_FilledPolysList.empty() )
     {
-        count = 0;
+        int count = 0;
 
         for( std::pair<const PCB_LAYER_ID, std::shared_ptr<SHAPE_POLY_SET>>& ii: m_FilledPolysList )
             count += ii.second->TotalVertices();
@@ -807,34 +821,48 @@ bool ZONE::AppendCorner( VECTOR2I aPosition, int aHoleIdx, bool aAllowDuplicatio
 
 wxString ZONE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
+    LSEQ     layers = m_layerSet.Seq();
     wxString layerDesc;
-    int      count = 0;
 
-    for( PCB_LAYER_ID layer : m_layerSet.Seq() )
+    if( layers.size() == 1 )
     {
-        if( count == 0 )
-            layerDesc = GetBoard()->GetLayerName( layer );
-
-        count++;
+        layerDesc.Printf( _( "on %s" ), GetBoard()->GetLayerName( layers[0] ) );
     }
-
-    if( count > 1 )
-        layerDesc.Printf( _( "%s and %d more" ), layerDesc, count - 1 );
+    else if (layers.size() == 2 )
+    {
+        layerDesc.Printf( _( "on %s and %s" ),
+                          GetBoard()->GetLayerName( layers[0] ),
+                          GetBoard()->GetLayerName( layers[1] ) );
+    }
+    else if (layers.size() == 3 )
+    {
+        layerDesc.Printf( _( "on %s, %s and %s" ),
+                          GetBoard()->GetLayerName( layers[0] ),
+                          GetBoard()->GetLayerName( layers[1] ),
+                          GetBoard()->GetLayerName( layers[2] ) );
+    }
+    else if( layers.size() > 3 )
+    {
+        layerDesc.Printf( _( "on %s, %s and %d more" ),
+                          GetBoard()->GetLayerName( layers[0] ),
+                          GetBoard()->GetLayerName( layers[1] ),
+                          layers.size() - 2 );
+    }
 
     // Check whether the selected contour is a hole (contour index > 0)
     if( m_CornerSelection != nullptr &&  m_CornerSelection->m_contour > 0 )
     {
         if( GetIsRuleArea() )
-            return wxString::Format( _( "Rule Area Cutout on %s" ), layerDesc  );
+            return wxString::Format( _( "Rule Area Cutout %s" ), layerDesc  );
         else
-            return wxString::Format( _( "Zone Cutout on %s" ), layerDesc  );
+            return wxString::Format( _( "Zone Cutout %s" ), layerDesc  );
     }
     else
     {
         if( GetIsRuleArea() )
-            return wxString::Format( _( "Rule Area on %s" ), layerDesc );
+            return wxString::Format( _( "Rule Area %s" ), layerDesc );
         else
-            return wxString::Format( _( "Zone %s on %s" ), GetNetnameMsg(), layerDesc );
+            return wxString::Format( _( "Zone %s %s" ), GetNetnameMsg(), layerDesc );
     }
 }
 
