@@ -315,7 +315,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 {
                     if( parentFP )
                     {
-                        parentFP->Delete( boardItem );
+                        parentFP->Remove( boardItem );
                     }
                     else
                     {
