@@ -104,8 +104,8 @@ VECTOR2I GRID_HELPER::AlignGrid( const VECTOR2I& aPoint, const VECTOR2D& aGrid,
 VECTOR2I GRID_HELPER::computeNearest( const VECTOR2I& aPoint, const VECTOR2I& aGrid,
                                       const VECTOR2I& aOffset ) const
 {
-    return VECTOR2I( KiROUND( ( aPoint.x - aOffset.x ) / aGrid.x ) * aGrid.x + aOffset.x,
-                     KiROUND( ( aPoint.y - aOffset.y ) / aGrid.y ) * aGrid.y + aOffset.y );
+    return VECTOR2I( KiROUND( (double) ( aPoint.x - aOffset.x ) / aGrid.x ) * aGrid.x + aOffset.x,
+                     KiROUND( (double) ( aPoint.y - aOffset.y ) / aGrid.y ) * aGrid.y + aOffset.y );
 }
 
 

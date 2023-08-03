@@ -1687,7 +1687,7 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
         {
             SCH_ITEM*             schItem = static_cast<SCH_ITEM*>( item );
             std::vector<VECTOR2I> connections = schItem->GetConnectionPoints();
-            EDA_ITEMS             drag_items{ item };
+            EDA_ITEMS             drag_items;
 
             for( const VECTOR2I& point : connections )
                 getConnectedDragItems( &commit, schItem, point, drag_items );
@@ -1711,6 +1711,8 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
 
             if( most_common != VECTOR2I( 0, 0 ) )
             {
+                doMoveItem( item, most_common );
+
                 for( EDA_ITEM* dragItem : drag_items )
                 {
                     if( dragItem->GetParent() && dragItem->GetParent()->IsSelected() )
