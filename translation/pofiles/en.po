@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-27 15:35-0700\n"
+"POT-Creation-Date: 2023-08-03 11:31-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -695,6 +695,12 @@ msgstr "Light 4:"
 msgid "Light 8:"
 msgstr "Light 8:"
 
+msgid "Board thickness:"
+msgstr "Board thickness:"
+
+msgid "3D Preview Options"
+msgstr "3D Preview Options"
+
 msgid "Scale"
 msgstr "Scale"
 
@@ -716,14 +722,15 @@ msgstr "Offset"
 msgid "Opacity"
 msgstr "Opacity"
 
-msgid "Board Thickness"
-msgstr "Board Thickness"
-
-msgid "mm"
-msgstr "mm"
-
 msgid "Preview"
 msgstr "Preview"
+
+msgid ""
+"Show or hide the board body\n"
+"If hidden, show only copper and silkscreen layers."
+msgstr ""
+"Show or hide the board body\n"
+"If hidden, show only copper and silkscreen layers."
 
 msgid "Reload board and 3D models"
 msgstr "Reload board and 3D models"
@@ -755,6 +762,9 @@ msgstr "Create Symbol Library"
 
 msgid "Create Footprint Library"
 msgstr "Create Footprint Library"
+
+msgid "mm"
+msgstr "mm"
 
 msgid "Inch"
 msgstr "Inch"
@@ -1333,6 +1343,21 @@ msgstr "(hotkey)"
 
 msgid "Grid 2:"
 msgstr "Grid 2:"
+
+msgid "Grid Overrides"
+msgstr "Grid Overrides"
+
+msgid "Connectable Items:"
+msgstr "Connectable Items:"
+
+msgid "Wires:"
+msgstr "Wires:"
+
+msgid "Text:"
+msgstr "Text:"
+
+msgid "Graphics:"
+msgstr "Graphics:"
 
 msgid "Reset Grid Origin"
 msgstr "Reset Grid Origin"
@@ -2055,28 +2080,28 @@ msgid ""
 "and help profile functionality to guide improvements.\n"
 "\n"
 "To link automatic reports from the same KiCad install, a unique identifier "
-"is generated that is completely random, it is only used for the purposes of "
+"is generated that is completely random, and is only used for the purposes of "
 "crash reporting. No personally identifiable information (PII) including IP "
 "address is stored or connected to this identifier. You may reset this id at "
 "anytime with the button provided.\n"
 "\n"
 "If you choose to voluntarily participate, KiCad will automatically handle "
 "sending said reports when crashes or events occur. Your design files such as "
-"schematic or PCB are not shared in this process."
+"schematic or PCB are never shared in this process."
 msgstr ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs across the user base more effectively "
 "and help profile functionality to guide improvements.\n"
 "\n"
 "To link automatic reports from the same KiCad install, a unique identifier "
-"is generated that is completely random, it is only used for the purposes of "
+"is generated that is completely random, and is only used for the purposes of "
 "crash reporting. No personally identifiable information (PII) including IP "
 "address is stored or connected to this identifier. You may reset this id at "
 "anytime with the button provided.\n"
 "\n"
 "If you choose to voluntarily participate, KiCad will automatically handle "
 "sending said reports when crashes or events occur. Your design files such as "
-"schematic or PCB are not shared in this process."
+"schematic or PCB are never shared in this process."
 
 msgid "I agree to provide anonymous reports"
 msgstr "I agree to provide anonymous reports"
@@ -2385,6 +2410,9 @@ msgstr "Text Substitution"
 
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "Could not use OpenGL, falling back to software rendering"
+
+msgid "Graphics error"
+msgstr "Graphics error"
 
 msgid "Could not use OpenGL"
 msgstr "Could not use OpenGL"
@@ -3244,6 +3272,9 @@ msgstr "Sheet pins"
 msgid "No-connect symbols"
 msgstr "No-connect symbols"
 
+msgid "DNP markers"
+msgstr "DNP markers"
+
 msgid "ERC warnings"
 msgstr "ERC warnings"
 
@@ -3624,6 +3655,9 @@ msgstr "Reference"
 msgid "Grouped By Value and Footprint"
 msgstr "Grouped By Value and Footprint"
 
+msgid "Attributes"
+msgstr "Attributes"
+
 msgid "CSV"
 msgstr "CSV"
 
@@ -3930,6 +3964,9 @@ msgstr "Switch to Fast Grid 1"
 msgid "Switch to Fast Grid 2"
 msgstr "Switch to Fast Grid 2"
 
+msgid "Cycle Fast Grid"
+msgstr "Cycle Fast Grid"
+
 msgid "Switch to Next Grid"
 msgstr "Switch to Next Grid"
 
@@ -3944,6 +3981,9 @@ msgstr "Show Grid"
 
 msgid "Display background grid in the edit window"
 msgstr "Display background grid in the edit window"
+
+msgid "Enables item-specific grids that override the current grid"
+msgstr "Enables item-specific grids that override the current grid"
 
 msgid "Grid Properties..."
 msgstr "Grid Properties..."
@@ -4369,6 +4409,12 @@ msgstr "Filter:"
 msgid "Reset to Defaults"
 msgstr "Reset to Defaults"
 
+msgid "Reveal Preferences in Finder"
+msgstr "Reveal Preferences in Finder"
+
+msgid "Open Preferences Directory"
+msgstr "Open Preferences Directory"
+
 #, c-format
 msgid "Reset %s to Defaults"
 msgstr "Reset %s to Defaults"
@@ -4410,14 +4456,20 @@ msgstr "'%s' is a reserved hotkey in KiCad and cannot be assigned."
 msgid "Edit..."
 msgstr "Edit…"
 
+msgid "Edit Alternate..."
+msgstr "Edit Alternate..."
+
 msgid "Undo Changes"
 msgstr "Undo Changes"
 
 msgid "Clear Assigned Hotkey"
 msgstr "Clear Assigned Hotkey"
 
-msgid "Restore Default"
-msgstr "Restore Default"
+msgid "Clear Assigned Alternate"
+msgstr "Clear Assigned Alternate"
+
+msgid "Restore Defaults"
+msgstr "Restore Defaults"
 
 #, c-format
 msgid ""
@@ -4438,6 +4490,9 @@ msgstr "(double-click to edit)"
 
 msgid "Hotkey"
 msgstr "Hotkey"
+
+msgid "Alternate"
+msgstr "Alternate"
 
 msgid "Error:"
 msgstr "Error:"
@@ -4538,6 +4593,9 @@ msgstr "OrcadPCB2 netlist files"
 
 msgid "KiCad netlist files"
 msgstr "KiCad netlist files"
+
+msgid "Allegro netlist files"
+msgstr "Allegro netlist files"
 
 msgid "KiCad printed circuit board files"
 msgstr "KiCad printed circuit board files"
@@ -5448,6 +5506,9 @@ msgstr "Update"
 msgid "Update Symbols"
 msgstr "Update Symbols"
 
+msgid "*** No symbols matching criteria found ***"
+msgstr "*** No symbols matching criteria found ***"
+
 msgid "*** symbol not found ***"
 msgstr "*** symbol not found ***"
 
@@ -5961,9 +6022,6 @@ msgstr ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
 
-msgid "Text:"
-msgstr "Text:"
-
 #, c-format
 msgid "(%s)"
 msgstr "(%s)"
@@ -6296,9 +6354,6 @@ msgstr "ALL"
 msgid "Standard"
 msgstr "Standard"
 
-msgid "Alternate"
-msgstr "Alternate"
-
 msgid "Count"
 msgstr "Count"
 
@@ -6598,9 +6653,6 @@ msgstr "Margin between the pin name position and the symbol body."
 
 msgid "units"
 msgstr "units"
-
-msgid "Attributes"
-msgstr "Attributes"
 
 msgid "Exclude from simulation"
 msgstr "Exclude from simulation"
@@ -7273,27 +7325,44 @@ msgstr "path"
 msgid "Sheet Properties"
 msgstr "Sheet Properties"
 
-msgid "You need to select DC source"
-msgstr "You need to select DC source"
+msgid "A DC source must be specified."
+msgstr "A DC source must be specified."
 
-msgid "Source 1 and Source 2 must be different"
-msgstr "Source 1 and Source 2 must be different"
+msgid "Source 1 and Source 2 must be different."
+msgstr "Source 1 and Source 2 must be different."
 
-msgid "No valid simulation is configured."
-msgstr "No valid simulation is configured."
+msgid "A frequency range must be specified."
+msgstr "A frequency range must be specified."
 
-msgid ""
-"A valid simulation can be configured by selecting a simulation tab, setting "
-"the simulation parameters and clicking the OK button with the tab selected."
-msgstr ""
-"A valid simulation can be configured by selecting a simulation tab, setting "
-"the simulation parameters and clicking the OK button with the tab selected."
+msgid "New Simulation Tab"
+msgstr "New Simulation Tab"
 
-msgid "Exit Without Valid Simulation"
-msgstr "Exit Without Valid Simulation"
+msgid "Analysis type:"
+msgstr "Analysis type:"
 
-msgid "Configure Valid Simulation"
-msgstr "Configure Valid Simulation"
+msgid "AC"
+msgstr "AC"
+
+msgid "DC"
+msgstr "DC"
+
+msgid "OP"
+msgstr "OP"
+
+msgid "TRAN"
+msgstr "TRAN"
+
+msgid "FFT"
+msgstr "FFT"
+
+msgid "NOISE"
+msgstr "NOISE"
+
+msgid "SP"
+msgstr "SP"
+
+msgid "Custom"
+msgstr "Custom"
 
 msgid "Decade"
 msgstr "Decade"
@@ -7318,9 +7387,6 @@ msgstr "Hz"
 
 msgid "Stop frequency:"
 msgstr "Stop frequency:"
-
-msgid "AC"
-msgstr "AC"
 
 msgid "Source 2"
 msgstr "Source 2"
@@ -7358,45 +7424,6 @@ msgstr "Increment step:"
 msgid "Swap sources"
 msgstr "Swap sources"
 
-msgid "DC Transfer"
-msgstr "DC Transfer"
-
-msgid "Distortion"
-msgstr "Distortion"
-
-msgid "Measured node:"
-msgstr "Measured node:"
-
-msgid "Reference node:"
-msgstr "Reference node:"
-
-msgid "(optional; default GND)"
-msgstr "(optional; default GND)"
-
-msgid "Noise source:"
-msgstr "Noise source:"
-
-msgid "Number of points:"
-msgstr "Number of points:"
-
-msgid "Noise"
-msgstr "Noise"
-
-msgid "This tab has no settings"
-msgstr "This tab has no settings"
-
-msgid "Operating Point"
-msgstr "Operating Point"
-
-msgid "Pole-Zero"
-msgstr "Pole-Zero"
-
-msgid "Sensitivity"
-msgstr "Sensitivity"
-
-msgid "Transfer Function"
-msgstr "Transfer Function"
-
 msgid "Time step:"
 msgstr "Time step:"
 
@@ -7421,11 +7448,29 @@ msgstr "(optional; default min{tstep, (tstop-tstart)/50})"
 msgid "Use initial conditions"
 msgstr "Use initial conditions"
 
-msgid "(optional; default off)"
-msgstr "(optional; default off)"
+msgid "Input signals:"
+msgstr "Input signals:"
 
-msgid "Transient"
-msgstr "Transient"
+msgid "Linearize inputs before performing FFT"
+msgstr "Linearize inputs before performing FFT"
+
+msgid "Measured node:"
+msgstr "Measured node:"
+
+msgid "Reference node:"
+msgstr "Reference node:"
+
+msgid "(optional; default GND)"
+msgstr "(optional; default GND)"
+
+msgid "Noise source:"
+msgstr "Noise source:"
+
+msgid "Save contributions from all noise generators"
+msgstr "Save contributions from all noise generators"
+
+msgid "Compute noise current correlation matrix"
+msgstr "Compute noise current correlation matrix"
 
 msgid "Spice directives:"
 msgstr "Spice directives:"
@@ -7433,8 +7478,35 @@ msgstr "Spice directives:"
 msgid "Load directives from schematic"
 msgstr "Load directives from schematic"
 
-msgid "Custom"
-msgstr "Custom"
+msgid "Transfer function:"
+msgstr "Transfer function:"
+
+msgid "(output voltage) / (input voltage)"
+msgstr "(output voltage) / (input voltage)"
+
+msgid "(output voltage) / (input current)"
+msgstr "(output voltage) / (input current)"
+
+msgid "Input:"
+msgstr "Input:"
+
+msgid "Ref:"
+msgstr "Ref:"
+
+msgid "Output:"
+msgstr "Output:"
+
+msgid "Find:"
+msgstr "Find:"
+
+msgid "Poles and Zeros"
+msgstr "Poles and Zeros"
+
+msgid "Poles"
+msgstr "Poles"
+
+msgid "Zeros"
+msgstr "Zeros"
 
 msgid "Add full path for .include library directives"
 msgstr "Add full path for .include library directives"
@@ -7460,8 +7532,54 @@ msgstr "PSpice and LTSpice"
 msgid "HSpice"
 msgstr "HSpice"
 
-msgid "Simulation Command"
-msgstr "Simulation Command"
+msgid "SPICE Command"
+msgstr "SPICE Command"
+
+#, c-format
+msgid "Fixed %s scale"
+msgstr "Fixed %s scale"
+
+msgid "Min:"
+msgstr "Min:"
+
+msgid "Max:"
+msgstr "Max:"
+
+msgid "Show grid"
+msgstr "Show grid"
+
+msgid "Show legend"
+msgstr "Show legend"
+
+msgid "Dotted current/phase"
+msgstr "Dotted current/phase"
+
+msgid "Margins:"
+msgstr "Margins:"
+
+msgid "Left:"
+msgstr "Left:"
+
+msgid "70"
+msgstr "70"
+
+msgid "Top:"
+msgstr "Top:"
+
+msgid "35"
+msgstr "35"
+
+msgid "Bottom:"
+msgstr "Bottom:"
+
+msgid "Right:"
+msgstr "Right:"
+
+msgid "Plot Setup"
+msgstr "Plot Setup"
+
+msgid "Simulation Analysis"
+msgstr "Simulation Analysis"
 
 msgid "Voltage"
 msgstr "Voltage"
@@ -7481,8 +7599,8 @@ msgstr "Gain"
 msgid "Phase"
 msgstr "Phase"
 
-msgid "Significant digits:"
-msgstr "Significant digits:"
+msgid "Precision:"
+msgstr "Precision:"
 
 msgid "Range:"
 msgstr "Range:"
@@ -7622,6 +7740,9 @@ msgstr "Group By"
 msgid "Qty"
 msgstr "Qty"
 
+msgid "#"
+msgstr "#"
+
 msgid "New field name:"
 msgstr "New field name:"
 
@@ -7648,6 +7769,9 @@ msgstr "Field name %s already exists. Cannot rename over existing field."
 
 msgid "The Quantity column cannot be grouped by."
 msgstr "The Quantity column cannot be grouped by."
+
+msgid "The Item Number column cannot be grouped by."
+msgstr "The Item Number column cannot be grouped by."
 
 msgid "Selected Output Filename"
 msgstr "Selected Output Filename"
@@ -8009,6 +8133,12 @@ msgstr "Update symbols values that have been replaced in the PCB editor."
 msgid "Net names"
 msgstr "Net names"
 
+msgid "Other fields"
+msgstr "Other fields"
+
+msgid "Update all other fields in the symbol from the footprint"
+msgstr "Update all other fields in the symbol from the footprint"
+
 msgid "Update Schematic from PCB"
 msgstr "Update Schematic from PCB"
 
@@ -8023,6 +8153,9 @@ msgstr "Remove fields if not in parent symbol"
 
 msgid "Reset fields if empty in parent symbol"
 msgstr "Reset fields if empty in parent symbol"
+
+msgid "Syntax Help"
+msgstr "Syntax Help"
 
 msgid "User-defined Signals"
 msgstr "User-defined Signals"
@@ -8501,12 +8634,6 @@ msgstr "Show pin &electrical type"
 msgid "&Pitch of repeated pins:"
 msgstr "&Pitch of repeated pins:"
 
-msgid "100"
-msgstr "100"
-
-msgid "50"
-msgstr "50"
-
 msgid "A library table row nickname and path cells are empty."
 msgstr "A library table row nickname and path cells are empty."
 
@@ -8954,9 +9081,6 @@ msgstr "Duplicate reference designators"
 msgid "Bus Entry needed"
 msgstr "Bus Entry needed"
 
-msgid "Quantity"
-msgstr "Quantity"
-
 msgid "Schematic Files"
 msgstr "Schematic Files"
 
@@ -9221,6 +9345,9 @@ msgstr "H Justification"
 msgid "V Justification"
 msgstr "V Justification"
 
+msgid "Show Field Name"
+msgstr "Show Field Name"
+
 msgid "no"
 msgstr "no"
 
@@ -9257,6 +9384,60 @@ msgstr "Hidden pin %s [%s, %s, %s]"
 #, c-format
 msgid "Hidden pin %s [%s, %s]"
 msgstr "Hidden pin %s [%s, %s]"
+
+msgid "Free"
+msgstr "Free"
+
+msgid "Unspecified"
+msgstr "Unspecified"
+
+msgid "Power input"
+msgstr "Power input"
+
+msgid "Power output"
+msgstr "Power output"
+
+msgid "Open collector"
+msgstr "Open collector"
+
+msgid "Open emitter"
+msgstr "Open emitter"
+
+msgid "Unconnected"
+msgstr "Unconnected"
+
+msgid "Inverted"
+msgstr "Inverted"
+
+msgid "Clock"
+msgstr "Clock"
+
+msgid "Inverted clock"
+msgstr "Inverted clock"
+
+msgid "Input low"
+msgstr "Input low"
+
+msgid "Clock low"
+msgstr "Clock low"
+
+msgid "Output low"
+msgstr "Output low"
+
+msgid "Falling edge clock"
+msgstr "Falling edge clock"
+
+msgid "NonLogic"
+msgstr "NonLogic"
+
+msgid "Pin Name"
+msgstr "Pin Name"
+
+msgid "Position X"
+msgstr "Position X"
+
+msgid "Position Y"
+msgstr "Position Y"
 
 #, c-format
 msgid "Arc with radius %s"
@@ -9470,6 +9651,13 @@ msgstr "Bus to bus entry from %s, %s to %s, %s"
 msgid "Unhandled item type %d"
 msgstr "Unhandled item type %d"
 
+msgid "Failed to create directory 'devices' ."
+msgstr "Failed to create directory 'devices' ."
+
+#, c-format
+msgid "Failed to create file '%s'.\n"
+msgstr "Failed to create file '%s'.\n"
+
 #, c-format
 msgid "Could not open file '%s' to write IBIS model"
 msgstr "Could not open file '%s' to write IBIS model"
@@ -9511,51 +9699,6 @@ msgstr "Convert Symbol"
 
 msgid "none"
 msgstr "none"
-
-msgid "Free"
-msgstr "Free"
-
-msgid "Unspecified"
-msgstr "Unspecified"
-
-msgid "Power input"
-msgstr "Power input"
-
-msgid "Power output"
-msgstr "Power output"
-
-msgid "Open collector"
-msgstr "Open collector"
-
-msgid "Open emitter"
-msgstr "Open emitter"
-
-msgid "Unconnected"
-msgstr "Unconnected"
-
-msgid "Inverted"
-msgstr "Inverted"
-
-msgid "Clock"
-msgstr "Clock"
-
-msgid "Inverted clock"
-msgstr "Inverted clock"
-
-msgid "Input low"
-msgstr "Input low"
-
-msgid "Clock low"
-msgstr "Clock low"
-
-msgid "Output low"
-msgstr "Output low"
-
-msgid "Falling edge clock"
-msgstr "Falling edge clock"
-
-msgid "NonLogic"
-msgstr "NonLogic"
 
 #, c-format
 msgid "Rename %s to %s"
@@ -9743,9 +9886,6 @@ msgstr "Back to Previous Selected Sheet"
 msgid "Sheet References"
 msgstr "Sheet References"
 
-msgid "Show Field Name"
-msgstr "Show Field Name"
-
 #, c-format
 msgid "Plugin \"%s\" does not implement the \"%s\" function."
 msgstr "Plugin “%s” does not implement the “%s” function."
@@ -9760,6 +9900,9 @@ msgstr "Unknown SCH_FILE_T value: %d"
 
 msgid "Size"
 msgstr "Size"
+
+msgid "Diameter"
+msgstr "Diameter"
 
 msgid "Tri-State"
 msgstr "Tri-State"
@@ -9794,9 +9937,6 @@ msgstr "Global Label '%s'"
 #, c-format
 msgid "Hierarchical Label '%s'"
 msgstr "Hierarchical Label '%s'"
-
-msgid "Syntax Help"
-msgstr "Syntax Help"
 
 msgid "Graphic Line"
 msgstr "Graphic Line"
@@ -10370,6 +10510,10 @@ msgid "expected unquoted string"
 msgstr "expected unquoted string"
 
 #, c-format
+msgid "File at '%s' was ignored. Using previously found file at '%s' instead."
+msgstr "File at '%s' was ignored. Using previously found file at '%s' instead."
+
+#, c-format
 msgid "Expecting integer at line %d in file %s"
 msgstr "Expecting integer at line %d in file %s"
 
@@ -10381,27 +10525,31 @@ msgstr "Expected data missing on line %d in file %s"
 msgid "Extra data found on line %d in file %s"
 msgstr "Extra data found on line %d in file %s"
 
-msgid "Expecting 0, 1, 2 or 3"
-msgstr "Expecting 0, 1, 2 or 3"
+msgid "Expecting 0, 1, 2, 3 or 4"
+msgstr "Expecting 0, 1, 2, 3 or 4"
 
 msgid "Expecting NORMAL or WIDE"
 msgstr "Expecting NORMAL or WIDE"
 
-msgid "Expecting I, O, B or OUT"
-msgstr "Expecting I, O, B or OUT"
+msgid "Expecting I, O, B, IN, OUT or BIDIR"
+msgstr "Expecting I, O, B, IN, OUT or BIDIR"
 
 msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
 msgstr "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
 
 msgid ""
-"Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VTOP or VBOTTOM"
+"Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP or "
+"VBOTTOM"
 msgstr ""
-"Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VTOP or VBOTTOM"
+"Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP or "
+"VBOTTOM"
 
 msgid ""
-"Expecting NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VLEFT or VRIGHT"
+"Expecting NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VCENTER, VLEFT or "
+"VRIGHT"
 msgstr ""
-"Expecting NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VLEFT or VRIGHT"
+"Expecting NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VCENTER, VLEFT or "
+"VRIGHT"
 
 msgid "Expecting CELL or BLOCK"
 msgstr "Expecting CELL or BLOCK"
@@ -10482,12 +10630,6 @@ msgstr "Polyline, %d points"
 msgid "Bezier Curve, %d points"
 msgstr "Bezier Curve, %d points"
 
-msgid "Position X"
-msgstr "Position X"
-
-msgid "Position Y"
-msgstr "Position Y"
-
 msgid "Sheet Name"
 msgstr "Sheet Name"
 
@@ -10522,6 +10664,9 @@ msgstr "Excluded from BOM"
 
 msgid "Excluded from board"
 msgstr "Excluded from board"
+
+msgid "Excluded from simulation"
+msgstr "Excluded from simulation"
 
 msgid "DNP"
 msgstr "DNP"
@@ -11381,6 +11526,40 @@ msgid "Bitrate could be too high for rising / falling edges"
 msgstr "Bitrate could be too high for rising / falling edges"
 
 #, c-format
+msgid "Error loading workbook: line %d: %s."
+msgstr "Error loading workbook: line %d: %s."
+
+msgid "expecting version"
+msgstr "expecting version"
+
+msgid "expecting simulation tab count"
+msgstr "expecting simulation tab count"
+
+msgid "expecting simulation tab type"
+msgstr "expecting simulation tab type"
+
+msgid "expecting trace count"
+msgstr "expecting trace count"
+
+msgid "expecting trace type"
+msgstr "expecting trace type"
+
+msgid "expecting trace name"
+msgstr "expecting trace name"
+
+msgid "expecting trace color"
+msgstr "expecting trace color"
+
+msgid "expecting measurement count"
+msgstr "expecting measurement count"
+
+msgid "expecting measurement definition"
+msgstr "expecting measurement definition"
+
+msgid "expecting measurement format definition"
+msgstr "expecting measurement format definition"
+
+#, c-format
 msgid "Simulation model library not found at '%s'"
 msgstr "Simulation model library not found at '%s'"
 
@@ -11491,8 +11670,17 @@ msgstr "Number of bits"
 msgid "%d"
 msgstr "%d"
 
-msgid "noise [(V or A)^2/Hz]"
-msgstr "noise [(V or A)^2/Hz]"
+msgid "Ampltiude"
+msgstr "Ampltiude"
+
+msgid "Noise (V/√Hz)"
+msgstr "Noise (V/√Hz)"
+
+msgid "Noise (A/√Hz)"
+msgstr "Noise (A/√Hz)"
+
+msgid "Intensity"
+msgstr "Intensity"
 
 msgid "Power"
 msgstr "Power"
@@ -11540,6 +11728,13 @@ msgstr ""
 "\n"
 
 msgid ""
+"You must run a TRAN simulation first; its resultswill be used for the fast "
+"Fourier transform."
+msgstr ""
+"You must run a TRAN simulation first; its resultswill be used for the fast "
+"Fourier transform."
+
+msgid ""
 "Schematic sheet simulation command directive has changed.  Do you wish to "
 "update the Simulation Command?"
 msgstr ""
@@ -11576,6 +11771,19 @@ msgstr "Measure Time of Max"
 msgid "Measure Integral"
 msgstr "Measure Integral"
 
+msgid "Perform Fourier Analysis..."
+msgstr "Perform Fourier Analysis..."
+
+#, c-format
+msgid "Fourier Analysis of %s"
+msgstr "Fourier Analysis of %s"
+
+msgid "Fourier Analyses of Multiple Signals"
+msgstr "Fourier Analyses of Multiple Signals"
+
+msgid "Fundamental frequency:"
+msgstr "Fundamental frequency:"
+
 #, c-format
 msgid "Format %s..."
 msgstr "Format %s..."
@@ -11587,8 +11795,8 @@ msgid "Delete Measurement"
 msgstr "Delete Measurement"
 
 #, c-format
-msgid "Plot%u - "
-msgstr "Plot%u - "
+msgid "Analysis %u - "
+msgstr "Analysis %u - "
 
 msgid "Signal"
 msgstr "Signal"
@@ -11598,6 +11806,9 @@ msgstr "Cursor 1"
 
 msgid "Cursor 2"
 msgstr "Cursor 2"
+
+msgid " (amplitude)"
+msgstr " (amplitude)"
 
 msgid "Diff"
 msgstr "Diff"
@@ -11643,26 +11854,38 @@ msgstr "Cannot create sim model from %s"
 msgid "Could not find model '%s' to copy for \"A Kind Of\" model '%s'"
 msgstr "Could not find model '%s' to copy for \"A Kind Of\" model '%s'"
 
-msgid "DC Sweep"
-msgstr "DC Sweep"
+msgid "DC Operating Point"
+msgstr "DC Operating Point"
 
-msgid "Pole-zero"
-msgstr "Pole-zero"
+msgid "Small-Signal Analysis"
+msgstr "Small-Signal Analysis"
 
-msgid "Transfer function"
-msgstr "Transfer function"
+msgid "DC Sweep Analysis"
+msgstr "DC Sweep Analysis"
 
-msgid "UNKNOWN!"
-msgstr "UNKNOWN!"
+msgid "Transient Analysis"
+msgstr "Transient Analysis"
 
-msgid "Spice value cannot be empty"
-msgstr "Spice value cannot be empty"
+msgid "Small-Signal Distortion Analysis"
+msgstr "Small-Signal Distortion Analysis"
 
-msgid "Invalid Spice value string"
-msgstr "Invalid Spice value string"
+msgid "Noise Analysis"
+msgstr "Noise Analysis"
 
-msgid "Invalid unit prefix"
-msgstr "Invalid unit prefix"
+msgid "Pole-Zero Analysis"
+msgstr "Pole-Zero Analysis"
+
+msgid "Sensitivity Analysis"
+msgstr "Sensitivity Analysis"
+
+msgid "Transfer Function Analysis"
+msgstr "Transfer Function Analysis"
+
+msgid "S-Parameter Analysis"
+msgstr "S-Parameter Analysis"
+
+msgid "Frequency Content Analysis"
+msgstr "Frequency Content Analysis"
 
 msgid "Please, fill required fields"
 msgstr "Please, fill required fields"
@@ -11673,6 +11896,79 @@ msgstr "'%s' is not a valid Spice value."
 
 msgid "&Simulation"
 msgstr "&Simulation"
+
+msgid ""
+"SPICE functions:\n"
+"\n"
+"    sqrt(x)\n"
+"    sin(x)\n"
+"    cos(x)\n"
+"    tan(x)\n"
+"    sinh(x)\n"
+"    cosh(x)\n"
+"    tanh(x)\n"
+"    asin(x)\n"
+"    acos(x)\n"
+"    atan(x)\n"
+"    asinh(x)\n"
+"    acosh(x)\n"
+"    atanh(x)\n"
+"    arctan(x)\n"
+"    exp(x)\n"
+"    ln(x)\n"
+"    log(x)\n"
+"    abs(x)\n"
+"    nint(x)\n"
+"    int(x)\n"
+"    floor(x)\n"
+"    ceil(x)\n"
+"    pow(x, y)\n"
+"    pwr(x, y)\n"
+"    min(x, y)\n"
+"    max(x, y)\n"
+"    sgn(x)\n"
+"    ternary_fcn(x, y, z)\n"
+"    gauss(nom, rvar, sigma)\n"
+"    agauss(nom, avar, sigma)\n"
+"    unif(nom, rvar)\n"
+"    aunif(nom, avar)\n"
+"    limit(nom, avar)\n"
+msgstr ""
+"SPICE functions:\n"
+"\n"
+"    sqrt(x)\n"
+"    sin(x)\n"
+"    cos(x)\n"
+"    tan(x)\n"
+"    sinh(x)\n"
+"    cosh(x)\n"
+"    tanh(x)\n"
+"    asin(x)\n"
+"    acos(x)\n"
+"    atan(x)\n"
+"    asinh(x)\n"
+"    acosh(x)\n"
+"    atanh(x)\n"
+"    arctan(x)\n"
+"    exp(x)\n"
+"    ln(x)\n"
+"    log(x)\n"
+"    abs(x)\n"
+"    nint(x)\n"
+"    int(x)\n"
+"    floor(x)\n"
+"    ceil(x)\n"
+"    pow(x, y)\n"
+"    pwr(x, y)\n"
+"    min(x, y)\n"
+"    max(x, y)\n"
+"    sgn(x)\n"
+"    ternary_fcn(x, y, z)\n"
+"    gauss(nom, rvar, sigma)\n"
+"    agauss(nom, avar, sigma)\n"
+"    unif(nom, rvar)\n"
+"    aunif(nom, avar)\n"
+"    limit(nom, avar)\n"
 
 #, c-format
 msgid "Loading library %s..."
@@ -12226,6 +12522,18 @@ msgstr "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
 #, c-format
 msgid "Cannot find %s pin '%s'."
 msgstr "Cannot find %s pin '%s'."
+
+#, c-format
+msgid "Change field '%s' value to '%s'."
+msgstr "Change field '%s' value to '%s'."
+
+#, c-format
+msgid "Add field '%s' with value '%s'."
+msgstr "Add field '%s' with value '%s'."
+
+#, c-format
+msgid "Delete field '%s.'"
+msgstr "Delete field '%s.'"
 
 #, c-format
 msgid "Change %s pin %s net label from '%s' to '%s'."
@@ -13148,12 +13456,6 @@ msgstr "Drag"
 msgid "Drags the selected item(s)"
 msgstr "Drags the selected item(s)"
 
-msgid "Move Activate"
-msgstr "Move Activate"
-
-msgid "Symbol Move Activate"
-msgstr "Symbol Move Activate"
-
 msgid "Align Elements to Grid"
 msgstr "Align Elements to Grid"
 
@@ -13163,8 +13465,8 @@ msgstr "Save Current Sheet Copy As..."
 msgid "Save a copy of the current sheet to another location or name"
 msgstr "Save a copy of the current sheet to another location or name"
 
-msgid "New Plot"
-msgstr "New Plot"
+msgid "New Analysis Tab..."
+msgstr "New Analysis Tab..."
 
 msgid "Open Workbook..."
 msgstr "Open Workbook..."
@@ -13196,11 +13498,11 @@ msgstr "Dark Mode Plots"
 msgid "Draw plots with a black background"
 msgstr "Draw plots with a black background"
 
-msgid "Simulation Command..."
-msgstr "Simulation Command..."
+msgid "Edit Analysis Tab..."
+msgstr "Edit Analysis Tab..."
 
-msgid "Edit the simulation command for the current plot tab"
-msgstr "Edit the simulation command for the current plot tab"
+msgid "Edit the SPICE command and plot setup for the current analysis tab"
+msgstr "Edit the SPICE command and plot setup for the current analysis tab"
 
 msgid "Run Simulation"
 msgstr "Run Simulation"
@@ -13220,11 +13522,14 @@ msgstr "Add Tuned Value..."
 msgid "Select a value to be tuned"
 msgstr "Select a value to be tuned"
 
-msgid "Show SPICE Netlist"
-msgstr "Show SPICE Netlist"
+msgid "User-defined Signals..."
+msgstr "User-defined Signals..."
 
 msgid "Add, edit or delete user-defined simulation signals"
 msgstr "Add, edit or delete user-defined simulation signals"
+
+msgid "Show SPICE Netlist"
+msgstr "Show SPICE Netlist"
 
 msgid "No symbol issues found."
 msgstr "No symbol issues found."
@@ -13272,6 +13577,12 @@ msgstr "Visual"
 
 msgid "No datasheet defined."
 msgstr "No datasheet defined."
+
+msgid "Move Point"
+msgstr "Move Point"
+
+msgid "Add Corner"
+msgstr "Add Corner"
 
 msgid "Press <ESC> to cancel symbol creation."
 msgstr "Press <ESC> to cancel symbol creation."
@@ -14230,8 +14541,8 @@ msgstr "Previous Layer"
 msgid "Move Layer Up"
 msgstr "Move Layer Up"
 
-msgid "Move Current Layer Up"
-msgstr "Move Current Layer Up"
+msgid "Move Current Layer up"
+msgstr "Move Current Layer up"
 
 msgid "Move Layer Down"
 msgstr "Move Layer Down"
@@ -14364,6 +14675,9 @@ msgstr "Sort Layers if X2 Mode"
 
 msgid "Sort Layers by File Extension"
 msgstr "Sort Layers by File Extension"
+
+msgid "Move Current Layer Up"
+msgstr "Move Current Layer Up"
 
 msgid "Change Layer Color for"
 msgstr "Change Layer Color for"
@@ -14896,6 +15210,9 @@ msgstr "Add repository"
 msgid "Add Existing"
 msgstr "Add Existing"
 
+msgid "Remove repository"
+msgstr "Remove repository"
+
 msgid "Manage Repositories"
 msgstr "Manage Repositories"
 
@@ -15222,18 +15539,11 @@ msgid "Removing previous version of package '%s'."
 msgstr "Removing previous version of package '%s'."
 
 #, c-format
-msgid "Extracting package '%s'."
-msgstr "Extracting package '%s'."
-
-#, c-format
-msgid "Removing downloaded archive '%s'."
-msgstr "Removing downloaded archive '%s'."
+msgid "Installing package '%s'."
+msgstr "Installing package '%s'."
 
 msgid "Aborting package installation."
 msgstr "Aborting package installation."
-
-msgid "Extracted package\n"
-msgstr "Extracted package\n"
 
 #, c-format
 msgid ""
@@ -15273,6 +15583,17 @@ msgstr "Failed to remove directory %s"
 #, c-format
 msgid "Package %s uninstalled"
 msgstr "Package %s uninstalled"
+
+#, c-format
+msgid "%d out of %d operations failed."
+msgstr "%d out of %d operations failed."
+
+msgid "All operations completed successfully."
+msgstr "All operations completed successfully."
+
+#, c-format
+msgid "%d out of %d operations were initialized but not successful."
+msgstr "%d out of %d operations were initialized but not successful."
 
 msgid "Could open the template path!"
 msgstr "Could open the template path!"
@@ -15693,18 +16014,6 @@ msgstr "Set to Default"
 
 msgid "Page Margins"
 msgstr "Page Margins"
-
-msgid "Left:"
-msgstr "Left:"
-
-msgid "Right:"
-msgstr "Right:"
-
-msgid "Top:"
-msgstr "Top:"
-
-msgid "Bottom:"
-msgstr "Bottom:"
 
 msgid "General Options"
 msgstr "General Options"
@@ -17982,6 +18291,9 @@ msgstr "Save Bill of Materials"
 msgid "Designator"
 msgstr "Designator"
 
+msgid "Quantity"
+msgstr "Quantity"
+
 msgid "Designation"
 msgstr "Designation"
 
@@ -19158,9 +19470,6 @@ msgstr "1234 (mm)"
 msgid "Text to print after the dimension value"
 msgstr "Text to print after the dimension value"
 
-msgid "Precision:"
-msgstr "Precision:"
-
 msgid "Choose how many digits of precision to display"
 msgstr "Choose how many digits of precision to display"
 
@@ -19365,6 +19674,9 @@ msgstr "Pad name prefix:"
 
 msgid "First pad number:"
 msgstr "First pad number:"
+
+msgid "Numbering step:"
+msgstr "Numbering step:"
 
 msgid "Pad Enumeration Settings"
 msgstr "Pad Enumeration Settings"
@@ -19785,6 +20097,24 @@ msgstr "Search net names"
 
 msgid "Restart Search"
 msgstr "Restart Search"
+
+msgid "Footprint: "
+msgstr "Footprint: "
+
+msgid "Symbol:"
+msgstr "Symbol:"
+
+msgid "Sheet: "
+msgstr "Sheet: "
+
+msgid "Library Association"
+msgstr "Library Association"
+
+msgid "Schematic Association"
+msgstr "Schematic Association"
+
+msgid "Footprint Associations"
+msgstr "Footprint Associations"
 
 msgid "Run Checks"
 msgstr "Run Checks"
@@ -20604,6 +20934,9 @@ msgstr "Filter tracks by width:"
 
 msgid "Filter vias by size:"
 msgstr "Filter vias by size:"
+
+msgid "Via size:"
+msgstr "Via size:"
 
 msgid "Set to net class values:"
 msgstr "Set to net class values:"
@@ -21629,11 +21962,11 @@ msgstr "Sketch pads on fabrication layers"
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
 msgstr "Include pad outlines on F.Fab and B.Fab layers when plotting"
 
-msgid "Do not tent vias"
-msgstr "Do not tent vias"
+msgid "Tent vias"
+msgstr "Tent vias"
 
-msgid "Remove soldermask on vias"
-msgstr "Remove soldermask on vias"
+msgid "Include soldermask over vias"
+msgstr "Include soldermask over vias"
 
 msgid ""
 "Use the drill/place file origin as the coordinate origin for plotted files"
@@ -21913,11 +22246,11 @@ msgstr "Target length:"
 msgid "Meandering"
 msgstr "Meandering"
 
-msgid "Min amplitude (Amin):"
-msgstr "Min amplitude (Amin):"
+msgid "Min amplitude (A):"
+msgstr "Min amplitude (A):"
 
-msgid "Max amplitude (Amax):"
-msgstr "Max amplitude (Amax):"
+msgid "Max amplitude (A):"
+msgstr "Max amplitude (A):"
 
 msgid "Min spacing (s):"
 msgstr "Min spacing (s):"
@@ -21947,29 +22280,27 @@ msgstr "Miter radius (r):"
 msgid "Trace Length Tuning"
 msgstr "Trace Length Tuning"
 
-msgid "DRC violation: highlight obstacles"
-msgstr "DRC violation: highlight obstacles"
-
-msgid "DRC violation: shove tracks and vias"
-msgstr "DRC violation: shove tracks and vias"
-
-msgid "DRC violation: walk around obstacles"
-msgstr "DRC violation: walk around obstacles"
+msgid "Mode"
+msgstr "Mode"
 
 msgid "Highlight collisions"
 msgstr "Highlight collisions"
 
+msgid "Free angle mode"
+msgstr "Free angle mode"
+
+msgid "Allow DRC violations"
+msgstr "Allow DRC violations"
+
+msgid ""
+"(Highlight collisions mode only) - allows one to establish a track even if "
+"is violating the DRC rules."
+msgstr ""
+"(Highlight collisions mode only) - allows one to establish a track even if "
+"is violating the DRC rules."
+
 msgid "Shove"
 msgstr "Shove"
-
-msgid "Walk around"
-msgstr "Walk around"
-
-msgid "Mode"
-msgstr "Mode"
-
-msgid "Free angle mode (no shove/walkaround)"
-msgstr "Free angle mode (no shove/walkaround)"
 
 msgid "Shove vias"
 msgstr "Shove vias"
@@ -21990,6 +22321,9 @@ msgid ""
 msgstr ""
 "When enabled, the router tries to move colliding traces behind solid "
 "obstacles (e.g. pads) instead of “reflecting” back the collision"
+
+msgid "Walk around"
+msgstr "Walk around"
 
 msgid "Remove redundant tracks"
 msgstr "Remove redundant tracks"
@@ -22024,16 +22358,6 @@ msgid ""
 msgstr ""
 "When enabled, the router attempts to merge several jagged segments into a "
 "single straight one (dragging mode)."
-
-msgid "Allow DRC violations"
-msgstr "Allow DRC violations"
-
-msgid ""
-"(Highlight collisions mode only) - allows one to establish a track even if "
-"is violating the DRC rules."
-msgstr ""
-"(Highlight collisions mode only) - allows one to establish a track even if "
-"is violating the DRC rules."
 
 msgid "Suggest track finish"
 msgstr "Suggest track finish"
@@ -22519,17 +22843,6 @@ msgstr ""
 "When enabled, edits to the board will cause the 3D view to refresh (may be "
 "slow with larger boards)"
 
-msgid "Flip board items L/R (default is T/B)"
-msgstr "Flip board items L/R (default is T/B)"
-
-msgid "Allow free pads"
-msgstr "Allow free pads"
-
-msgid ""
-"If checked, pads can be moved with respect to the rest of the footprint."
-msgstr ""
-"If checked, pads can be moved with respect to the rest of the footprint."
-
 msgid "Constrain actions to H, V, 45 degrees"
 msgstr "Constrain actions to H, V, 45 degrees"
 
@@ -22548,8 +22861,25 @@ msgstr "Keep center, adjust radius"
 msgid "Keep endpoints or direction of starting point"
 msgstr "Keep endpoints or direction of starting point"
 
-msgid "No modifier"
-msgstr "No modifier"
+msgid "Track mouse-drag mode:"
+msgstr "Track mouse-drag mode:"
+
+msgid "Drag (45 degree mode)"
+msgstr "Drag (45 degree mode)"
+
+msgid "Drag (free angle)"
+msgstr "Drag (free angle)"
+
+msgid "Flip board items L/R (default is T/B)"
+msgstr "Flip board items L/R (default is T/B)"
+
+msgid "Allow free pads"
+msgstr "Allow free pads"
+
+msgid ""
+"If checked, pads can be moved with respect to the rest of the footprint."
+msgstr ""
+"If checked, pads can be moved with respect to the rest of the footprint."
 
 msgid "Select item(s)."
 msgstr "Select item(s)."
@@ -22599,34 +22929,6 @@ msgstr "Show ratsnest with curved lines"
 msgid "Ratsnest line thickness:"
 msgstr "Ratsnest line thickness:"
 
-msgid "Track Editing"
-msgstr "Track Editing"
-
-msgid "Mouse drag track behavior:"
-msgstr "Mouse drag track behavior:"
-
-msgid ""
-"Choose the action to perform when dragging a track segment with the mouse"
-msgstr ""
-"Choose the action to perform when dragging a track segment with the mouse"
-
-msgid "Moves the track segment without moving connected tracks"
-msgstr "Moves the track segment without moving connected tracks"
-
-msgid "Drag (45 degree mode)"
-msgstr "Drag (45 degree mode)"
-
-msgid "Drags the track segment while keeping connected tracks at 45 degrees."
-msgstr "Drags the track segment while keeping connected tracks at 45 degrees."
-
-msgid "Drag (free angle)"
-msgstr "Drag (free angle)"
-
-msgid ""
-"Drags the nearest joint in the track without restricting the track angle."
-msgstr ""
-"Drags the nearest joint in the track without restricting the track angle."
-
 msgid "Draw an outline to show the sheet size."
 msgstr "Draw an outline to show the sheet size."
 
@@ -22638,6 +22940,15 @@ msgstr "Auto-refill zones"
 
 msgid "If checked, zones will be re-filled after each edit operation"
 msgstr "If checked, zones will be re-filled after each edit operation"
+
+msgid "When Adding Footprints to PCB"
+msgstr "When Adding Footprints to PCB"
+
+msgid "Apply board defaults to footprint fields"
+msgstr "Apply board defaults to footprint fields"
+
+msgid "Apply board defaults to footprint text && graphics"
+msgstr "Apply board defaults to footprint text && graphics"
 
 msgid "Internal Layers"
 msgstr "Internal Layers"
@@ -22939,6 +23250,15 @@ msgstr ""
 "When enabled, the distance between copper layers will be included in track "
 "length calculations for tracks with vias.  When disabled, via stackup height "
 "is ignored."
+
+msgid "Format Footprints when Added to Board"
+msgstr "Format Footprints when Added to Board"
+
+msgid "Apply board defaults to footprint text"
+msgstr "Apply board defaults to footprint text"
+
+msgid "Apply board defaults to footprint graphics"
+msgstr "Apply board defaults to footprint graphics"
 
 msgid "Use the Physical Stackup page to change the number of copper layers."
 msgstr "Use the Physical Stackup page to change the number of copper layers."
@@ -23314,9 +23634,6 @@ msgstr "Solder mask to copper clearance:"
 
 msgid "Allow bridged solder mask apertures between pads within footprints"
 msgstr "Allow bridged solder mask apertures between pads within footprints"
-
-msgid "Tent vias"
-msgstr "Tent vias"
 
 msgid ""
 "Global clearance between pads and the solder paste.\n"
@@ -24083,6 +24400,9 @@ msgstr "Tracks which are similar in size do not need teardrops."
 msgid "(as a percentage of larger track width)"
 msgstr "(as a percentage of larger track width)"
 
+msgid "Default properties for new graphics and text:"
+msgstr "Default properties for new graphics and text:"
+
 msgid "Default properties for new dimension objects:"
 msgstr "Default properties for new dimension objects:"
 
@@ -24127,9 +24447,6 @@ msgstr "7"
 
 msgid "Vias:"
 msgstr "Vias:"
-
-msgid "Diameter"
-msgstr "Diameter"
 
 msgid "Hole"
 msgstr "Hole"
@@ -24712,6 +25029,9 @@ msgstr "Checking pad clearances..."
 msgid "Checking pads..."
 msgstr "Checking pads..."
 
+msgid "Checking copper graphic clearances..."
+msgstr "Checking copper graphic clearances..."
+
 msgid "Checking copper zone clearances..."
 msgstr "Checking copper zone clearances..."
 
@@ -24782,6 +25102,106 @@ msgid "(%s min %s; actual %s)"
 msgstr "(%s min %s; actual %s)"
 
 #, c-format
+msgid "Pad %s"
+msgstr "Pad %s"
+
+#, c-format
+msgid "%s has clearance override."
+msgstr "%s has clearance override."
+
+#, c-format
+msgid "%s has solder mask expansion override."
+msgstr "%s has solder mask expansion override."
+
+#, c-format
+msgid "%s has solder paste clearance override."
+msgstr "%s has solder paste clearance override."
+
+#, c-format
+msgid "%s has zone connection override."
+msgstr "%s has zone connection override."
+
+#, c-format
+msgid "%s has thermal relief gap override."
+msgstr "%s has thermal relief gap override."
+
+#, c-format
+msgid "%s has thermal relief spoke width override."
+msgstr "%s has thermal relief spoke width override."
+
+#, c-format
+msgid "%s has thermal relief spoke angle override."
+msgstr "%s has thermal relief spoke angle override."
+
+#, c-format
+msgid "%s has zone knockout setting override."
+msgstr "%s has zone knockout setting override."
+
+#, c-format
+msgid "%s pad to die length differs."
+msgstr "%s pad to die length differs."
+
+#, c-format
+msgid "%s position differs."
+msgstr "%s position differs."
+
+#, c-format
+msgid "%s has different numbers."
+msgstr "%s has different numbers."
+
+#, c-format
+msgid "%s layers differ."
+msgstr "%s layers differ."
+
+#, c-format
+msgid "%s pad shape type differs."
+msgstr "%s pad shape type differs."
+
+#, c-format
+msgid "%s pad type differs."
+msgstr "%s pad type differs."
+
+#, c-format
+msgid "%s fabrication property differs."
+msgstr "%s fabrication property differs."
+
+#, c-format
+msgid "%s orientation differs."
+msgstr "%s orientation differs."
+
+#, c-format
+msgid "%s size differs."
+msgstr "%s size differs."
+
+#, c-format
+msgid "%s trapezoid delta differs."
+msgstr "%s trapezoid delta differs."
+
+#, c-format
+msgid "%s rounded corners differ."
+msgstr "%s rounded corners differ."
+
+#, c-format
+msgid "%s chamfered corners differ."
+msgstr "%s chamfered corners differ."
+
+#, c-format
+msgid "%s shape offset from hole differs."
+msgstr "%s shape offset from hole differs."
+
+#, c-format
+msgid "%s drill shape differs."
+msgstr "%s drill shape differs."
+
+#, c-format
+msgid "%s drill size differs."
+msgstr "%s drill size differs."
+
+#, c-format
+msgid "%s shape primitives differ."
+msgstr "%s shape primitives differ."
+
+#, c-format
 msgid "%s corner smoothing setting differs."
 msgstr "%s corner smoothing setting differs."
 
@@ -24820,10 +25240,6 @@ msgstr "%s keep out tracks setting differs."
 #, c-format
 msgid "%s keep out vias setting differs."
 msgstr "%s keep out vias setting differs."
-
-#, c-format
-msgid "%s layers differ."
-msgstr "%s layers differ."
 
 #, c-format
 msgid "%s pad connection property differs."
@@ -24942,14 +25358,6 @@ msgstr "Net tie pad groups differ."
 
 msgid "Pad count differs."
 msgstr "Pad count differs."
-
-#, c-format
-msgid "Pad %s differs."
-msgstr "Pad %s differs."
-
-#, c-format
-msgid "Pad %s has overrides."
-msgstr "Pad %s has overrides."
 
 msgid "3D model count differs."
 msgstr "3D model count differs."
@@ -25119,8 +25527,8 @@ msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s max diameter %s; actual %s)"
 
 #, c-format
-msgid "(%s min spoke count %d; actual %d)"
-msgstr "(%s min spoke count %d; actual %d)"
+msgid "(layer %s; %s min spoke count %d; actual %d)"
+msgstr "(layer %s; %s min spoke count %d; actual %d)"
 
 msgid "Checking thermal reliefs..."
 msgstr "Checking thermal reliefs..."
@@ -25295,12 +25703,6 @@ msgstr "Error saving footprint %s to project specific library."
 
 msgid "Error saving project specific footprint library table."
 msgstr "Error saving project specific footprint library table."
-
-msgid "Converting zone fills"
-msgstr "Converting zone fills"
-
-msgid "Convert Zone(s)"
-msgstr "Convert Zone(s)"
 
 #, c-format
 msgid "Insufficient permissions to write file '%s'."
@@ -26289,9 +26691,6 @@ msgstr ""
 msgid "pad"
 msgstr "pad"
 
-msgid "Pin Name"
-msgstr "Pin Name"
-
 msgid "Pin Type"
 msgstr "Pin Type"
 
@@ -26848,6 +27247,10 @@ msgid "File not found: '%s' for directory '%s'."
 msgstr "File not found: '%s' for directory '%s'."
 
 #, c-format
+msgid "Footprint directory not found: '%s'."
+msgstr "Footprint directory not found: '%s'."
+
+#, c-format
 msgid "Record of unknown type: '%d'."
 msgstr "Record of unknown type: '%d'."
 
@@ -26908,8 +27311,13 @@ msgstr "Loading rules..."
 msgid "Loading board regions..."
 msgstr "Loading board regions..."
 
-msgid "Loading zones..."
-msgstr "Loading zones..."
+#, c-format
+msgid ""
+"Dashed outline found on an Altium layer (%d) with no KiCad equivalent. It "
+"has been moved to KiCad layer Eco1_User."
+msgstr ""
+"Dashed outline found on an Altium layer (%d) with no KiCad equivalent. It "
+"has been moved to KiCad layer Eco1_User."
 
 #, c-format
 msgid "Ignored polygon shape of kind %d (not yet supported)."
@@ -27589,16 +27997,6 @@ msgstr "Layer '%s' in file '%s' at line %d is not in fixed layer hash."
 msgid "%d is not a valid layer count"
 msgstr "%d is not a valid layer count"
 
-msgid "Legacy Zone Warning"
-msgstr "Legacy Zone Warning"
-
-msgid ""
-"The legacy zone fill strategy is no longer supported.\n"
-"Convert zones to smoothed polygon fills?"
-msgstr ""
-"The legacy zone fill strategy is no longer supported.\n"
-"Convert zones to smoothed polygon fills?"
-
 #, c-format
 msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
 msgstr "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
@@ -27700,11 +28098,18 @@ msgstr ""
 "offset: %d."
 
 msgid ""
-"The segment zone fill mode is no longer supported.\n"
-"Convert zones to smoothed polygon fills?"
+"Legacy zone fill strategy is not supported anymore.\n"
+"Zone fills will be converted on best-effort basis."
 msgstr ""
-"The segment zone fill mode is no longer supported.\n"
-"Convert zones to smoothed polygon fills?"
+"Legacy zone fill strategy is not supported anymore.\n"
+"Zone fills will be converted on best-effort basis."
+
+msgid ""
+"The legacy segment zone fill mode is no longer supported.\n"
+"Zone fills will be converted on a best-effort basis."
+msgstr ""
+"The legacy segment zone fill mode is no longer supported.\n"
+"Zone fills will be converted on a best-effort basis."
 
 #, c-format
 msgid "Cannot create footprint library '%s'."
@@ -27807,13 +28212,6 @@ msgstr "Bad ZAux for CZONE_CONTAINER “%s”"
 #, c-format
 msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr "Bad ZSmoothing for CZONE_CONTAINER “%s”"
-
-msgid ""
-"The legacy segment fill mode is no longer supported.\n"
-"Convert zones to smoothed polygon fills?"
-msgstr ""
-"The legacy segment fill mode is no longer supported.\n"
-"Convert zones to smoothed polygon fills?"
 
 #, c-format
 msgid "Bad ZClearance padoption for CZONE_CONTAINER \"%s\""
@@ -28420,8 +28818,8 @@ msgstr "Some zone layer sets did not match and were not merged."
 msgid "Some zones did not intersect and were not merged."
 msgstr "Some zones did not intersect and were not merged."
 
-msgid "Duplicate zone"
-msgstr "Duplicate zone"
+msgid "Duplicate Zone"
+msgstr "Duplicate Zone"
 
 msgid "Selection contains no items with labeled nets."
 msgstr "Selection contains no items with labeled nets."
@@ -28684,6 +29082,9 @@ msgstr "Item allowed at current location."
 msgid "Select a footprint to diff with its library equivalent."
 msgstr "Select a footprint to diff with its library equivalent."
 
+msgid "Select a footprint for a footprint associations report."
+msgstr "Select a footprint for a footprint associations report."
+
 msgid "Board vs library diff for:"
 msgstr "Board vs library diff for:"
 
@@ -28699,17 +29100,23 @@ msgstr "Gap:"
 msgid "Create from Selection"
 msgstr "Create from Selection"
 
-msgid "Convert shapes to polygon"
-msgstr "Convert shapes to polygon"
+msgid "Convert to Polygon"
+msgstr "Convert to Polygon"
 
-msgid "Convert shapes to zone"
-msgstr "Convert shapes to zone"
+msgid "Create Polygon"
+msgstr "Create Polygon"
 
-msgid "Convert polygons to lines"
-msgstr "Convert polygons to lines"
+msgid "Convert to Zone"
+msgstr "Convert to Zone"
 
-msgid "Create arc from line segment"
-msgstr "Create arc from line segment"
+msgid "Create Zone"
+msgstr "Create Zone"
+
+msgid "Create Lines"
+msgstr "Create Lines"
+
+msgid "Create Arc"
+msgstr "Create Arc"
 
 msgid "Layer Name"
 msgstr "Layer Name"
@@ -28771,38 +29178,38 @@ msgstr "Yes, Bevelled"
 msgid "Select Via Size"
 msgstr "Select Via Size"
 
-msgid "Draw a line segment"
-msgstr "Draw a line segment"
+msgid "Draw Line"
+msgstr "Draw Line"
 
-msgid "Draw a text box"
-msgstr "Draw a text box"
+msgid "Draw Text Box"
+msgstr "Draw Text Box"
 
-msgid "Draw a rectangle"
-msgstr "Draw a rectangle"
+msgid "Draw Rectangle"
+msgstr "Draw Rectangle"
 
-msgid "Draw a circle"
-msgstr "Draw a circle"
+msgid "Draw Circle"
+msgstr "Draw Circle"
 
-msgid "Draw an arc"
-msgstr "Draw an arc"
+msgid "Draw Arc"
+msgstr "Draw Arc"
 
-msgid "Place an image"
-msgstr "Place an image"
+msgid "Place Image"
+msgstr "Place Image"
 
-msgid "Place a text"
-msgstr "Place a text"
+msgid "Place Text"
+msgstr "Place Text"
 
-msgid "Draw a dimension"
-msgstr "Draw a dimension"
+msgid "Draw Dimension"
+msgstr "Draw Dimension"
 
 msgid "No graphic items found in file."
 msgstr "No graphic items found in file."
 
-msgid "Place a DXF_SVG drawing"
-msgstr "Place a DXF_SVG drawing"
+msgid "Import Graphic"
+msgstr "Import Graphic"
 
-msgid "Move the footprint reference anchor"
-msgstr "Move the footprint reference anchor"
+msgid "Move Footprint Anchor"
+msgstr "Move Footprint Anchor"
 
 msgid "Via location violates DRC."
 msgstr "Via location violates DRC."
@@ -28821,6 +29228,9 @@ msgstr "DRC"
 
 msgid "Positioning Tools"
 msgstr "Positioning Tools"
+
+msgid "Shape Modification"
+msgstr "Shape Modification"
 
 #, c-format
 msgid "Unable to resize arc tracks of %s or greater."
@@ -28854,17 +29264,27 @@ msgstr "Unable to fillet the selected track segments."
 msgid "Some of the track segments could not be filleted."
 msgstr "Some of the track segments could not be filleted."
 
-msgid "A shape with least two lines must be selected."
-msgstr "A shape with least two lines must be selected."
-
 msgid "Fillet Lines"
 msgstr "Fillet Lines"
 
-msgid "Unable to fillet the selected lines."
-msgstr "Unable to fillet the selected lines."
+msgid "Enter chamfer setback:"
+msgstr "Enter chamfer setback:"
 
-msgid "Some of the lines could not be filleted."
-msgstr "Some of the lines could not be filleted."
+msgid "Chamfer Lines"
+msgstr "Chamfer Lines"
+
+msgid ""
+"A setback of zero was entered.\n"
+"The chamfer operation was not performed."
+msgstr ""
+"A setback of zero was entered.\n"
+"The chamfer operation was not performed."
+
+msgid "A shape with least two lines must be selected."
+msgstr "A shape with least two lines must be selected."
+
+msgid "Exactly two lines must be selected to extend them."
+msgstr "Exactly two lines must be selected to extend them."
 
 msgid "Change Side / Flip"
 msgstr "Change Side / Flip"
@@ -28928,6 +29348,27 @@ msgstr "Group is in inconsistent state:"
 msgid "Click on new member..."
 msgstr "Click on new member..."
 
+msgid "Unable to fillet the selected lines."
+msgstr "Unable to fillet the selected lines."
+
+msgid "Some of the lines could not be filleted."
+msgstr "Some of the lines could not be filleted."
+
+msgid "Unable to chamfer the selected lines."
+msgstr "Unable to chamfer the selected lines."
+
+msgid "Some of the lines could not be chamfered."
+msgstr "Some of the lines could not be chamfered."
+
+msgid "Extend Lines to Meet"
+msgstr "Extend Lines to Meet"
+
+msgid "Unable to extend the selected lines to meet."
+msgstr "Unable to extend the selected lines to meet."
+
+msgid "Some of the lines could not be extended to meet."
+msgstr "Some of the lines could not be extended to meet."
+
 msgid "Paste Pad Properties"
 msgstr "Paste Pad Properties"
 
@@ -28936,10 +29377,10 @@ msgstr "Push Pad Settings"
 
 #, c-format
 msgid ""
-"Click on pad %s%d\n"
+"Click on pad %s\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"Click on pad %s%d\n"
+"Click on pad %s\n"
 "Press <esc> to cancel all; double-click to finish"
 
 msgid "Renumber pads"
@@ -28998,9 +29439,6 @@ msgstr "Create Tracks from Selection"
 msgid "Creates tracks from the selected graphic lines"
 msgstr "Creates tracks from the selected graphic lines"
 
-msgid "Draw Line"
-msgstr "Draw Line"
-
 msgid "Draw a line"
 msgstr "Draw a line"
 
@@ -29010,14 +29448,14 @@ msgstr "Draw Graphic Polygon"
 msgid "Draw a graphic polygon"
 msgstr "Draw a graphic polygon"
 
-msgid "Draw Rectangle"
-msgstr "Draw Rectangle"
+msgid "Draw a rectangle"
+msgstr "Draw a rectangle"
 
-msgid "Draw Circle"
-msgstr "Draw Circle"
+msgid "Draw a circle"
+msgstr "Draw a circle"
 
-msgid "Draw Arc"
-msgstr "Draw Arc"
+msgid "Draw an arc"
+msgstr "Draw an arc"
 
 msgid "Add Board Characteristics"
 msgstr "Add Board Characteristics"
@@ -29227,6 +29665,12 @@ msgstr "Adds arcs tangent to the selected straight track segments"
 
 msgid "Adds arcs tangent to the selected lines"
 msgstr "Adds arcs tangent to the selected lines"
+
+msgid "Cut away corners between selected lines"
+msgstr "Cut away corners between selected lines"
+
+msgid "Extend lines to meet each other"
+msgstr "Extend lines to meet each other"
 
 msgid "Delete Full Track"
 msgstr "Delete Full Track"
@@ -29897,6 +30341,12 @@ msgstr "Show constraints resolution for the selected object"
 msgid "Show differences between board footprint and its library equivalent"
 msgstr "Show differences between board footprint and its library equivalent"
 
+msgid "Show Footprint Associations"
+msgstr "Show Footprint Associations"
+
+msgid "Show footprint library and schematic symbol associations"
+msgstr "Show footprint library and schematic symbol associations"
+
 msgid "Geographical Reannotate..."
 msgstr "Geographical Reannotate..."
 
@@ -30193,6 +30643,14 @@ msgid ""
 msgstr ""
 "Splits the track segment into two segments connected at the cursor position."
 
+msgid "Drags the track segment while keeping connected tracks at 45 degrees."
+msgstr "Drags the track segment while keeping connected tracks at 45 degrees."
+
+msgid ""
+"Drags the nearest joint in the track without restricting the track angle."
+msgstr ""
+"Drags the nearest joint in the track without restricting the track angle."
+
 msgid "Length Tuning Settings..."
 msgstr "Length Tuning Settings…"
 
@@ -30242,6 +30700,9 @@ msgstr ""
 "Error loading board.\n"
 "%s"
 
+msgid "Append Board"
+msgstr "Append Board"
+
 msgid "Resolved clearance"
 msgstr "Resolved clearance"
 
@@ -30284,29 +30745,11 @@ msgstr "Select/Expand Connection..."
 msgid "Align/Distribute"
 msgstr "Align/Distribute"
 
-msgid "Align to top"
-msgstr "Align to top"
+msgid "Align to Middle"
+msgstr "Align to Middle"
 
-msgid "Align to bottom"
-msgstr "Align to bottom"
-
-msgid "Align to left"
-msgstr "Align to left"
-
-msgid "Align to right"
-msgstr "Align to right"
-
-msgid "Align to middle"
-msgstr "Align to middle"
-
-msgid "Align to center"
-msgstr "Align to center"
-
-msgid "Distribute horizontally"
-msgstr "Distribute horizontally"
-
-msgid "Distribute vertically"
-msgstr "Distribute vertically"
+msgid "Align to Center"
+msgstr "Align to Center"
 
 msgid "Position Relative"
 msgstr "Position Relative"
@@ -30314,14 +30757,11 @@ msgstr "Position Relative"
 msgid "Click on reference item..."
 msgstr "Click on reference item..."
 
-msgid "Add a zone cutout"
-msgstr "Add a zone cutout"
+msgid "Add Zone Cutout"
+msgstr "Add Zone Cutout"
 
 msgid "Add a zone"
 msgstr "Add a zone"
-
-msgid "Add a graphical polygon"
-msgstr "Add a graphical polygon"
 
 msgid "Checking Zones"
 msgstr "Checking Zones"
@@ -30899,8 +31339,16 @@ msgid "Priority"
 msgstr "Priority"
 
 #, c-format
-msgid "%s and %d more"
-msgstr "%s and %d more"
+msgid "%s"
+msgstr "%s"
+
+#, c-format
+msgid "%s, %s and %s"
+msgstr "%s, %s and %s"
+
+#, c-format
+msgid "%s, %s and %d more"
+msgstr "%s, %s and %d more"
 
 msgid "Fill Mode"
 msgstr "Fill Mode"
@@ -30924,20 +31372,36 @@ msgid "Non-copper Zone"
 msgstr "Non-copper Zone"
 
 #, c-format
-msgid "Rule Area Cutout on %s"
-msgstr "Rule Area Cutout on %s"
+msgid "on %s"
+msgstr "on %s"
 
 #, c-format
-msgid "Zone Cutout on %s"
-msgstr "Zone Cutout on %s"
+msgid "on %s and %s"
+msgstr "on %s and %s"
 
 #, c-format
-msgid "Rule Area on %s"
-msgstr "Rule Area on %s"
+msgid "on %s, %s and %s"
+msgstr "on %s, %s and %s"
 
 #, c-format
-msgid "Zone %s on %s"
-msgstr "Zone %s on %s"
+msgid "on %s, %s and %d more"
+msgstr "on %s, %s and %d more"
+
+#, c-format
+msgid "Rule Area Cutout %s"
+msgstr "Rule Area Cutout %s"
+
+#, c-format
+msgid "Zone Cutout %s"
+msgstr "Zone Cutout %s"
+
+#, c-format
+msgid "Rule Area %s"
+msgstr "Rule Area %s"
+
+#, c-format
+msgid "Zone %s %s"
+msgstr "Zone %s %s"
 
 msgid "Minimum Width"
 msgstr "Minimum Width"
@@ -31091,6 +31555,360 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Board Thickness"
+#~ msgstr "Board Thickness"
+
+#~ msgid ""
+#~ "KiCad can anonymously report crashes and special event data to developers "
+#~ "in order to aid identifying critical bugs across the user base more "
+#~ "effectively and help profile functionality to guide improvements.\n"
+#~ "\n"
+#~ "To link automatic reports from the same KiCad install, a unique "
+#~ "identifier is generated that is completely random, it is only used for "
+#~ "the purposes of crash reporting. No personally identifiable information "
+#~ "(PII) including IP address is stored or connected to this identifier. You "
+#~ "may reset this id at anytime with the button provided.\n"
+#~ "\n"
+#~ "If you choose to voluntarily participate, KiCad will automatically handle "
+#~ "sending said reports when crashes or events occur. Your design files such "
+#~ "as schematic or PCB are not shared in this process."
+#~ msgstr ""
+#~ "KiCad can anonymously report crashes and special event data to developers "
+#~ "in order to aid identifying critical bugs across the user base more "
+#~ "effectively and help profile functionality to guide improvements.\n"
+#~ "\n"
+#~ "To link automatic reports from the same KiCad install, a unique "
+#~ "identifier is generated that is completely random, it is only used for "
+#~ "the purposes of crash reporting. No personally identifiable information "
+#~ "(PII) including IP address is stored or connected to this identifier. You "
+#~ "may reset this id at anytime with the button provided.\n"
+#~ "\n"
+#~ "If you choose to voluntarily participate, KiCad will automatically handle "
+#~ "sending said reports when crashes or events occur. Your design files such "
+#~ "as schematic or PCB are not shared in this process."
+
+#~ msgid "Restore Default"
+#~ msgstr "Restore Default"
+
+#~ msgid "You need to select DC source"
+#~ msgstr "You need to select DC source"
+
+#~ msgid "Source 1 and Source 2 must be different"
+#~ msgstr "Source 1 and Source 2 must be different"
+
+#~ msgid "No valid simulation is configured."
+#~ msgstr "No valid simulation is configured."
+
+#~ msgid ""
+#~ "A valid simulation can be configured by selecting a simulation tab, "
+#~ "setting the simulation parameters and clicking the OK button with the tab "
+#~ "selected."
+#~ msgstr ""
+#~ "A valid simulation can be configured by selecting a simulation tab, "
+#~ "setting the simulation parameters and clicking the OK button with the tab "
+#~ "selected."
+
+#~ msgid "Exit Without Valid Simulation"
+#~ msgstr "Exit Without Valid Simulation"
+
+#~ msgid "Configure Valid Simulation"
+#~ msgstr "Configure Valid Simulation"
+
+#~ msgid "DC Transfer"
+#~ msgstr "DC Transfer"
+
+#~ msgid "Distortion"
+#~ msgstr "Distortion"
+
+#~ msgid "Number of points:"
+#~ msgstr "Number of points:"
+
+#~ msgid "Noise"
+#~ msgstr "Noise"
+
+#~ msgid "This tab has no settings"
+#~ msgstr "This tab has no settings"
+
+#~ msgid "Operating Point"
+#~ msgstr "Operating Point"
+
+#~ msgid "Pole-Zero"
+#~ msgstr "Pole-Zero"
+
+#~ msgid "Sensitivity"
+#~ msgstr "Sensitivity"
+
+#~ msgid "Transfer Function"
+#~ msgstr "Transfer Function"
+
+#~ msgid "(optional; default off)"
+#~ msgstr "(optional; default off)"
+
+#~ msgid "Transient"
+#~ msgstr "Transient"
+
+#~ msgid "Simulation Command"
+#~ msgstr "Simulation Command"
+
+#~ msgid "Significant digits:"
+#~ msgstr "Significant digits:"
+
+#~ msgid "100"
+#~ msgstr "100"
+
+#~ msgid "50"
+#~ msgstr "50"
+
+#~ msgid "Expecting 0, 1, 2 or 3"
+#~ msgstr "Expecting 0, 1, 2 or 3"
+
+#~ msgid "Expecting I, O, B or OUT"
+#~ msgstr "Expecting I, O, B or OUT"
+
+#~ msgid ""
+#~ "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VTOP or VBOTTOM"
+#~ msgstr ""
+#~ "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VTOP or VBOTTOM"
+
+#~ msgid ""
+#~ "Expecting NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VLEFT or VRIGHT"
+#~ msgstr ""
+#~ "Expecting NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VLEFT or VRIGHT"
+
+#~ msgid "noise [(V or A)^2/Hz]"
+#~ msgstr "noise [(V or A)^2/Hz]"
+
+#, c-format
+#~ msgid "Plot%u - "
+#~ msgstr "Plot%u - "
+
+#~ msgid "DC Sweep"
+#~ msgstr "DC Sweep"
+
+#~ msgid "Pole-zero"
+#~ msgstr "Pole-zero"
+
+#~ msgid "Transfer function"
+#~ msgstr "Transfer function"
+
+#~ msgid "UNKNOWN!"
+#~ msgstr "UNKNOWN!"
+
+#~ msgid "Spice value cannot be empty"
+#~ msgstr "Spice value cannot be empty"
+
+#~ msgid "Invalid Spice value string"
+#~ msgstr "Invalid Spice value string"
+
+#~ msgid "Invalid unit prefix"
+#~ msgstr "Invalid unit prefix"
+
+#~ msgid "Move Activate"
+#~ msgstr "Move Activate"
+
+#~ msgid "Symbol Move Activate"
+#~ msgstr "Symbol Move Activate"
+
+#~ msgid "New Plot"
+#~ msgstr "New Plot"
+
+#~ msgid "Simulation Command..."
+#~ msgstr "Simulation Command..."
+
+#~ msgid "Edit the simulation command for the current plot tab"
+#~ msgstr "Edit the simulation command for the current plot tab"
+
+#, c-format
+#~ msgid "Extracting package '%s'."
+#~ msgstr "Extracting package '%s'."
+
+#, c-format
+#~ msgid "Removing downloaded archive '%s'."
+#~ msgstr "Removing downloaded archive '%s'."
+
+#~ msgid "Extracted package\n"
+#~ msgstr "Extracted package\n"
+
+#~ msgid "Do not tent vias"
+#~ msgstr "Do not tent vias"
+
+#~ msgid "Remove soldermask on vias"
+#~ msgstr "Remove soldermask on vias"
+
+#~ msgid "Min amplitude (Amin):"
+#~ msgstr "Min amplitude (Amin):"
+
+#~ msgid "Max amplitude (Amax):"
+#~ msgstr "Max amplitude (Amax):"
+
+#~ msgid "DRC violation: highlight obstacles"
+#~ msgstr "DRC violation: highlight obstacles"
+
+#~ msgid "DRC violation: shove tracks and vias"
+#~ msgstr "DRC violation: shove tracks and vias"
+
+#~ msgid "DRC violation: walk around obstacles"
+#~ msgstr "DRC violation: walk around obstacles"
+
+#~ msgid "Free angle mode (no shove/walkaround)"
+#~ msgstr "Free angle mode (no shove/walkaround)"
+
+#~ msgid "No modifier"
+#~ msgstr "No modifier"
+
+#~ msgid "Track Editing"
+#~ msgstr "Track Editing"
+
+#~ msgid "Mouse drag track behavior:"
+#~ msgstr "Mouse drag track behavior:"
+
+#~ msgid ""
+#~ "Choose the action to perform when dragging a track segment with the mouse"
+#~ msgstr ""
+#~ "Choose the action to perform when dragging a track segment with the mouse"
+
+#~ msgid "Moves the track segment without moving connected tracks"
+#~ msgstr "Moves the track segment without moving connected tracks"
+
+#, c-format
+#~ msgid "Pad %s differs."
+#~ msgstr "Pad %s differs."
+
+#, c-format
+#~ msgid "Pad %s has overrides."
+#~ msgstr "Pad %s has overrides."
+
+#, c-format
+#~ msgid "(%s min spoke count %d; actual %d)"
+#~ msgstr "(%s min spoke count %d; actual %d)"
+
+#~ msgid "Converting zone fills"
+#~ msgstr "Converting zone fills"
+
+#~ msgid "Convert Zone(s)"
+#~ msgstr "Convert Zone(s)"
+
+#~ msgid "Loading zones..."
+#~ msgstr "Loading zones..."
+
+#~ msgid "Legacy Zone Warning"
+#~ msgstr "Legacy Zone Warning"
+
+#~ msgid ""
+#~ "The legacy zone fill strategy is no longer supported.\n"
+#~ "Convert zones to smoothed polygon fills?"
+#~ msgstr ""
+#~ "The legacy zone fill strategy is no longer supported.\n"
+#~ "Convert zones to smoothed polygon fills?"
+
+#~ msgid ""
+#~ "The segment zone fill mode is no longer supported.\n"
+#~ "Convert zones to smoothed polygon fills?"
+#~ msgstr ""
+#~ "The segment zone fill mode is no longer supported.\n"
+#~ "Convert zones to smoothed polygon fills?"
+
+#~ msgid ""
+#~ "The legacy segment fill mode is no longer supported.\n"
+#~ "Convert zones to smoothed polygon fills?"
+#~ msgstr ""
+#~ "The legacy segment fill mode is no longer supported.\n"
+#~ "Convert zones to smoothed polygon fills?"
+
+#~ msgid "Duplicate zone"
+#~ msgstr "Duplicate zone"
+
+#~ msgid "Convert shapes to polygon"
+#~ msgstr "Convert shapes to polygon"
+
+#~ msgid "Convert shapes to zone"
+#~ msgstr "Convert shapes to zone"
+
+#~ msgid "Convert polygons to lines"
+#~ msgstr "Convert polygons to lines"
+
+#~ msgid "Create arc from line segment"
+#~ msgstr "Create arc from line segment"
+
+#~ msgid "Draw a line segment"
+#~ msgstr "Draw a line segment"
+
+#~ msgid "Draw a text box"
+#~ msgstr "Draw a text box"
+
+#~ msgid "Place an image"
+#~ msgstr "Place an image"
+
+#~ msgid "Place a text"
+#~ msgstr "Place a text"
+
+#~ msgid "Draw a dimension"
+#~ msgstr "Draw a dimension"
+
+#~ msgid "Place a DXF_SVG drawing"
+#~ msgstr "Place a DXF_SVG drawing"
+
+#~ msgid "Move the footprint reference anchor"
+#~ msgstr "Move the footprint reference anchor"
+
+#, c-format
+#~ msgid ""
+#~ "Click on pad %s%d\n"
+#~ "Press <esc> to cancel all; double-click to finish"
+#~ msgstr ""
+#~ "Click on pad %s%d\n"
+#~ "Press <esc> to cancel all; double-click to finish"
+
+#~ msgid "Align to top"
+#~ msgstr "Align to top"
+
+#~ msgid "Align to bottom"
+#~ msgstr "Align to bottom"
+
+#~ msgid "Align to left"
+#~ msgstr "Align to left"
+
+#~ msgid "Align to right"
+#~ msgstr "Align to right"
+
+#~ msgid "Align to middle"
+#~ msgstr "Align to middle"
+
+#~ msgid "Align to center"
+#~ msgstr "Align to center"
+
+#~ msgid "Distribute horizontally"
+#~ msgstr "Distribute horizontally"
+
+#~ msgid "Distribute vertically"
+#~ msgstr "Distribute vertically"
+
+#~ msgid "Add a zone cutout"
+#~ msgstr "Add a zone cutout"
+
+#~ msgid "Add a graphical polygon"
+#~ msgstr "Add a graphical polygon"
+
+#, c-format
+#~ msgid "%s and %d more"
+#~ msgstr "%s and %d more"
+
+#, c-format
+#~ msgid "Rule Area Cutout on %s"
+#~ msgstr "Rule Area Cutout on %s"
+
+#, c-format
+#~ msgid "Zone Cutout on %s"
+#~ msgstr "Zone Cutout on %s"
+
+#, c-format
+#~ msgid "Rule Area on %s"
+#~ msgstr "Rule Area on %s"
+
+#, c-format
+#~ msgid "Zone %s on %s"
+#~ msgstr "Zone %s on %s"
 
 #~ msgid "Use only the diffuse color property from 3D model file"
 #~ msgstr "Use only the diffuse color property from 3D model file"
@@ -37613,9 +38431,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "radians"
 #~ msgstr "radians"
-
-#~ msgid "Transient Analysis"
-#~ msgstr "Transient Analysis"
 
 #~ msgid "Initial value:"
 #~ msgstr "Initial value:"
@@ -44155,12 +44970,6 @@ msgstr "KiCad Printed Circuit Board"
 #~ msgid "Copy cancelled"
 #~ msgstr "Copy cancelled"
 
-#~ msgid "Convert to Polygon"
-#~ msgstr "Convert to Polygon"
-
-#~ msgid "Convert to Zone"
-#~ msgstr "Convert to Zone"
-
 #~ msgid "Convert to Lines"
 #~ msgstr "Convert to Lines"
 
@@ -50383,9 +51192,6 @@ msgstr "KiCad Printed Circuit Board"
 #~ msgid "Update dielectric thickness from board thickness"
 #~ msgstr "Update dielectric thickness from board thickness"
 
-#~ msgid "Board thickness:"
-#~ msgstr "Board thickness:"
-
 #~ msgid "Current thickness from stackup:"
 #~ msgstr "Current thickness from stackup:"
 
@@ -52541,9 +53347,6 @@ msgstr "KiCad Printed Circuit Board"
 #~ msgid "%s 3D models"
 #~ msgstr "%s 3D models"
 
-#~ msgid "%s"
-#~ msgstr "%s"
-
 #~ msgid "Warning: Pad drill bigger than pad size or shapes do not overlap"
 #~ msgstr "Warning: Pad drill bigger than pad size or shapes do not overlap"
 
@@ -54056,9 +54859,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "Hide grid"
 #~ msgstr "Hide grid"
-
-#~ msgid "Show grid"
-#~ msgstr "Show grid"
 
 #~ msgid "Redraw View"
 #~ msgstr "Redraw View"
@@ -59715,12 +60515,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "Not available in OpenGL/Cairo canvases."
 #~ msgstr "Not available in OpenGL/Cairo canvases."
-
-#~ msgid "Align to Middle"
-#~ msgstr "Align to Middle"
-
-#~ msgid "Align to Center"
-#~ msgstr "Align to Center"
 
 #~ msgid "Refill Zones"
 #~ msgstr "Refill Zones"
