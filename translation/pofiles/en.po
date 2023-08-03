@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-27 15:33-0700\n"
+"POT-Creation-Date: 2023-08-03 11:24-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -689,6 +689,12 @@ msgstr "Light 4:"
 msgid "Light 8:"
 msgstr "Light 8:"
 
+msgid "Board thickness:"
+msgstr "Board thickness:"
+
+msgid "3D Preview Options"
+msgstr "3D Preview Options"
+
 msgid "Scale"
 msgstr "Scale"
 
@@ -710,17 +716,14 @@ msgstr "Offset"
 msgid "Opacity"
 msgstr "Opacity"
 
-msgid "Board Thickness"
-msgstr "Board Thickness"
-
-msgid "mm"
-msgstr "mm"
-
 msgid "Preview"
 msgstr "Preview"
 
 msgid "Reload board and 3D models"
 msgstr "Reload board and 3D models"
+
+msgid "mm"
+msgstr "mm"
 
 msgid "Inch"
 msgstr "Inch"
@@ -23234,6 +23237,9 @@ msgstr "Checking pad clearances..."
 msgid "Checking pads..."
 msgstr "Checking pads..."
 
+msgid "Checking copper graphic clearances..."
+msgstr "Checking copper graphic clearances..."
+
 msgid "Checking copper zone clearances..."
 msgstr "Checking copper zone clearances..."
 
@@ -25852,16 +25858,6 @@ msgstr "Layer '%s' in file '%s' at line %d is not in fixed layer hash."
 msgid "%d is not a valid layer count"
 msgstr "%d is not a valid layer count"
 
-msgid ""
-"The legacy zone fill strategy is no longer supported.\n"
-"Convert zones to smoothed polygon fills?"
-msgstr ""
-"The legacy zone fill strategy is no longer supported.\n"
-"Convert zones to smoothed polygon fills?"
-
-msgid "Legacy Zone Warning"
-msgstr "Legacy Zone Warning"
-
 #, c-format
 msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
 msgstr "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
@@ -25962,11 +25958,21 @@ msgstr ""
 "line: %d\n"
 "offset: %d."
 
+msgid "Legacy Zone Warning"
+msgstr "Legacy Zone Warning"
+
 msgid ""
 "The segment zone fill mode is no longer supported.\n"
 "Convert zones to smoothed polygon fills?"
 msgstr ""
 "The segment zone fill mode is no longer supported.\n"
+"Convert zones to smoothed polygon fills?"
+
+msgid ""
+"The legacy zone fill strategy is no longer supported.\n"
+"Convert zones to smoothed polygon fills?"
+msgstr ""
+"The legacy zone fill strategy is no longer supported.\n"
 "Convert zones to smoothed polygon fills?"
 
 #, c-format
@@ -29435,6 +29441,9 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Board Thickness"
+#~ msgstr "Board Thickness"
 
 #, c-format
 #~ msgid "PCB '%s' is already open."
@@ -46648,9 +46657,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "Update dielectric thickness from board thickness"
 #~ msgstr "Update dielectric thickness from board thickness"
-
-#~ msgid "Board thickness:"
-#~ msgstr "Board thickness:"
 
 #~ msgid "Current thickness from stackup:"
 #~ msgstr "Current thickness from stackup:"
