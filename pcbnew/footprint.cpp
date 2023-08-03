@@ -1099,6 +1099,51 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisible
 }
 
 
+const BOX2I FOOTPRINT::GetLayerBoundingBox( LSET aLayers ) const
+{
+    std::vector<PCB_TEXT*> texts;
+    const BOARD* board = GetBoard();
+    bool         isFPEdit = board && board->IsFootprintHolder();
+
+    // Start with an uninitialized bounding box
+    BOX2I bbox;
+
+    for( BOARD_ITEM* item : m_drawings )
+    {
+        if( m_privateLayers.test( item->GetLayer() ) && !isFPEdit )
+            continue;
+
+        if( ( aLayers & item->GetLayerSet() ).none() )
+            continue;
+
+        // We want the bitmap bounding box just in the footprint editor
+        // so it will start with the correct initial zoom
+        if( item->Type() == PCB_BITMAP_T && !isFPEdit )
+            continue;
+
+        bbox.Merge( item->GetBoundingBox() );
+    }
+
+    for( PAD* pad : m_pads )
+    {
+        if( ( aLayers & pad->GetLayerSet() ).none() )
+            continue;
+
+        bbox.Merge( pad->GetBoundingBox() );
+    }
+
+    for( ZONE* zone : m_zones )
+    {
+        if( ( aLayers & zone->GetLayerSet() ).none() )
+            continue;
+
+        bbox.Merge( zone->GetBoundingBox() );
+    }
+
+    return bbox;
+}
+
+
 SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
 {
     const BOARD* board = GetBoard();

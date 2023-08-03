@@ -172,6 +172,11 @@ public:
     const BOX2I GetBoundingBox() const override;
     const BOX2I GetBoundingBox( bool aIncludeText, bool aIncludeInvisibleText ) const;
 
+    /**
+     * Return the bounding box of the footprint on a given set of layers
+    */
+    const BOX2I GetLayerBoundingBox( LSET aLayers ) const;
+
     VECTOR2I GetCenter() const override
     {
         return GetBoundingBox( false, false ).GetCenter();
