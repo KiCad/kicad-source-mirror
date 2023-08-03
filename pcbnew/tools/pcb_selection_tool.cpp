@@ -3261,6 +3261,8 @@ void PCB_SELECTION_TOOL::FilterCollectorForFootprints( GENERAL_COLLECTOR& aColle
 
             if( item->Type() != PCB_FOOTPRINT_T )
                 fp = static_cast<BOARD_ITEM*>( item )->GetParentFootprint();
+            else
+                fp = static_cast<FOOTPRINT*>( item );
 
             // If the selection contains items that are not footprints, then don't restrict
             // whether we deselect the item or not.
