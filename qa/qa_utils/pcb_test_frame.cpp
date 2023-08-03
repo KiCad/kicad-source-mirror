@@ -31,6 +31,7 @@
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <settings/color_settings.h>
+#include <settings/cvpcb_settings.h>
 #include <layer_ids.h>
 
 #include <gal/graphics_abstraction_layer.h>
@@ -124,6 +125,10 @@ class TEST_ACTIONS : public ACTIONS
 
 void PCB_TEST_FRAME_BASE::createView( wxWindow *aParent, PCB_DRAW_PANEL_GAL::GAL_TYPE aGalType )
 {
+    // Ensure dependency settings are created before starting up a GAL and loading color settings
+    Pgm().GetSettingsManager().RegisterSettings( new PCBNEW_SETTINGS, false );
+    Pgm().GetSettingsManager().RegisterSettings( new CVPCB_SETTINGS, false );
+
     // SUPERSAMPLING_X4;
     m_displayOptions.gl_antialiasing_mode = KIGFX::OPENGL_ANTIALIASING_MODE::NONE;
 
