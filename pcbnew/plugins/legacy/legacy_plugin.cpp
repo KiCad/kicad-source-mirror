@@ -847,6 +847,7 @@ void LEGACY_PLUGIN::loadSETUP()
     char*                     saveptr;
 
     m_board->m_LegacyDesignSettingsLoaded = true;
+    m_board->m_LegacyNetclassesLoaded = true;
 
     while( ( line = READLINE( m_reader ) ) != nullptr )
     {
