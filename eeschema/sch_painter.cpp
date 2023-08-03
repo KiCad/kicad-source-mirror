@@ -1047,25 +1047,38 @@ void SCH_PAINTER::draw( const LIB_TEXT* aText, int aLayer, bool aDimmed )
 
         attrs.m_StrokeWidth = KiROUND( getTextThickness( aText ) );
 
+        // Due to the fact a shadow text can be drawn left or right aligned,
+        // it needs an offset = shadowWidth/2 to be drawn at the same place as normal text
+        // texts drawn as GR_TEXT_H_ALIGN_CENTER do not need a specific offset.
+        // this offset is shadowWidth/2 but for some reason we need to slightly modify this offset
+        // for a better look (better alignment of shadow shape), for KiCad font only
+        double shadowOffset = 0.0;
+
         if( drawingShadows )
+        {
+            double shadowWidth = getShadowWidth( !aText->IsSelected() );
             attrs.m_StrokeWidth += getShadowWidth( !aText->IsSelected() );
+
+            const double adjust = 1.2f;      // Value chosen after tests
+            shadowOffset = shadowWidth/2.0f * adjust;
+        }
 
         if( attrs.m_Angle == ANGLE_VERTICAL )
         {
             switch( attrs.m_Halign )
             {
-            case GR_TEXT_H_ALIGN_LEFT:   pos.y = bBox.GetBottom();                         break;
+            case GR_TEXT_H_ALIGN_LEFT:   pos.y = bBox.GetBottom() + shadowOffset;          break;
             case GR_TEXT_H_ALIGN_CENTER: pos.y = ( bBox.GetTop() + bBox.GetBottom() ) / 2; break;
-            case GR_TEXT_H_ALIGN_RIGHT:  pos.y = bBox.GetTop();                            break;
+            case GR_TEXT_H_ALIGN_RIGHT:  pos.y = bBox.GetTop() - shadowOffset;             break;
             }
         }
         else
         {
             switch( attrs.m_Halign )
             {
-            case GR_TEXT_H_ALIGN_LEFT:   pos.x = bBox.GetLeft();                           break;
+            case GR_TEXT_H_ALIGN_LEFT:   pos.x = bBox.GetLeft() - shadowOffset;            break;
             case GR_TEXT_H_ALIGN_CENTER: pos.x = ( bBox.GetLeft() + bBox.GetRight() ) / 2; break;
-            case GR_TEXT_H_ALIGN_RIGHT:  pos.x = bBox.GetRight();                          break;
+            case GR_TEXT_H_ALIGN_RIGHT:  pos.x = bBox.GetRight() + shadowOffset;           break;
             }
         }
 
