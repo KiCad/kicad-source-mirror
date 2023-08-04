@@ -61,7 +61,8 @@ BOOST_FIXTURE_TEST_CASE( DRCFalsePositiveRegressions, DRC_REGRESSION_TEST_FIXTUR
         "issue10906",   // Soldermask bridge for only one object
         "issue11814",   // Bad cache hit in isInsideArea
         "issue12609",   // Arc collison edge case
-        "issue14412"    // Solder mask bridge between pads in a net-tie pad group
+        "issue14412",   // Solder mask bridge between pads in a net-tie pad group
+        "issue15280"    // Very wide spokes mis-counted as being single spoke
     };
 
     for( const wxString& relPath : tests )
