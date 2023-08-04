@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-03 11:24-0700\n"
-"PO-Revision-Date: 2023-07-14 07:57+0000\n"
-"Last-Translator: Andrey Fedorushkov <andrf@mail.ru>\n"
+"PO-Revision-Date: 2023-08-06 10:11+0000\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v7/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -1017,14 +1017,12 @@ msgid "Light 8:"
 msgstr "Свет 8:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:399
-#, fuzzy
 msgid "Board thickness:"
-msgstr "Толщина платы: "
+msgstr "Толщина платы:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:400
-#, fuzzy
 msgid "3D Preview Options"
-msgstr "Настройки предварительного просмотра"
+msgstr "Настройки предпросмотра 3D"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56 pcbnew/pcb_bitmap.cpp:261
@@ -7677,9 +7675,8 @@ msgid "Delete all associations?"
 msgstr "Удалить все связи посад.мест?"
 
 #: cvpcb/tools/cvpcb_control.cpp:183
-#, fuzzy
 msgid "Unable to create the footprint viewer frame"
-msgstr "Не удалось создать файл отчёта '%s'"
+msgstr "Не удалось создать рабочую область просмотрщика посад.мест"
 
 #: eeschema/annotate.cpp:265
 #, c-format
@@ -13219,9 +13216,9 @@ msgid "Abort Project Save"
 msgstr "Отменить сохранение проекта"
 
 #: eeschema/files-io.cpp:1220
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' is already open by '%s' at '%s'."
-msgstr "Схема '%s' уже открыта."
+msgstr "Схема '%s' уже открыта '%s' на '%s'."
 
 #: eeschema/files-io.cpp:1233
 msgid "Importing Schematic"
@@ -16236,9 +16233,9 @@ msgid "Voltage (measured)"
 msgstr "Напряжение (измеренное)"
 
 #: eeschema/sim/spice_library_parser.cpp:89
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create sim model from %s"
-msgstr "Не удалось создать каталог '%s'."
+msgstr "Невозможно создать модель симуляции из %s"
 
 #: eeschema/sim/spice_model_parser.cpp:84
 #: eeschema/sim/spice_model_parser.cpp:186
@@ -19637,14 +19634,12 @@ msgid "Malformed expression"
 msgstr "Неудачное выражение"
 
 #: include/lockfile.h:105
-#, fuzzy
 msgid "Lock file already exists"
-msgstr "Файл %s уже существует."
+msgstr "Файл блокировки уже существует"
 
 #: include/lockfile.h:124
-#, fuzzy
 msgid "Failed to access lock file"
-msgstr "Не удалось загрузить файл схемы\n"
+msgstr "Не удалось получить доступ к файлу блокировки"
 
 #: include/panel_hotkeys_editor.h:55
 msgid "Reset all hotkeys to the built-in KiCad defaults"
@@ -19835,9 +19830,8 @@ msgid "Precision of gerber coordinates, valid options: 5 or 6"
 msgstr "Точность координат Gerber, допустимые варианты: 5 или 6"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:85
-#, fuzzy
 msgid "Use KiCad gerber file extension"
-msgstr "Использовать Protel расширения файлов"
+msgstr "Использовать расширение .gbr для Gerber-файлов"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:45
 msgid ""
@@ -32990,9 +32984,8 @@ msgid "Checking pads..."
 msgstr "Проверка конт.пл..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:172
-#, fuzzy
 msgid "Checking copper graphic clearances..."
-msgstr "Зазоры текста и графики...\n"
+msgstr "Проверка зазоров медной графики..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:180
 msgid "Checking copper zone clearances..."
@@ -33516,9 +33509,9 @@ msgstr ""
 "контура платы."
 
 #: pcbnew/files.cpp:616
-#, fuzzy, c-format
+#, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
-msgstr "Файл печатной платы '%s' уже открыт."
+msgstr "Печатная плата '%s' уже открыта '%s' на '%s'."
 
 #: pcbnew/files.cpp:627
 msgid "The current PCB has been modified.  Save changes?"
@@ -38264,12 +38257,12 @@ msgid "Pack footprints"
 msgstr "Упаковка посад.мест"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Click to place %s (item %zu of %zu)\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"Размещение %s (элемент %ld из %ld)\n"
+"Размещение %s (элемент %zu из %zu)\n"
 "Нажмите <ESC> для отмены или щёлкните дважды для завершения"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:367
