@@ -16,7 +16,7 @@
 # Ian McInerney <ian.s.mcinerney@ieee.org>, 2022.
 # Eric <hamburger1024@firemail.cc>, 2022.
 # Eric <hamburger1024@mailbox.org>, 2022.
-# yangyangdaji <1504305527@qq.com>, 2022.
+# yangyangdaji <1504305527@qq.com>, 2022, 2023.
 # Huanyin Liu <13316560709@189.cn>, 2022.
 # Eric <hamburger1024@duck.com>, 2022.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023.
@@ -28,8 +28,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-03 11:31-0700\n"
-"PO-Revision-Date: 2023-07-25 09:56+0000\n"
-"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
+"PO-Revision-Date: 2023-08-06 10:12+0000\n"
+"Last-Translator: yangyangdaji <1504305527@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -569,7 +569,6 @@ msgid "Render Solid Colors"
 msgstr "渲染纯色"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:292
-#, fuzzy
 msgid "Use only the diffuse color property from model 3D model file"
 msgstr "仅使用 3D 模型文件中的漫反射颜色属性"
 
@@ -1062,14 +1061,12 @@ msgid "Light 8:"
 msgstr "浅色 8："
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:439
-#, fuzzy
 msgid "Board thickness:"
-msgstr "板厚： "
+msgstr "板厚："
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:440
-#, fuzzy
 msgid "3D Preview Options"
-msgstr "预览设置"
+msgstr "3D 预览设置"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56 eeschema/sch_bitmap.cpp:223
@@ -7997,9 +7994,8 @@ msgid "Delete all associations?"
 msgstr "是否删除所有关联？"
 
 #: cvpcb/tools/cvpcb_control.cpp:181
-#, fuzzy
 msgid "Unable to create the footprint viewer frame"
-msgstr "无法创建报告文件 \"%s\""
+msgstr "无法创建封装浏览框架"
 
 #: eeschema/annotate.cpp:155
 #, fuzzy
@@ -13962,9 +13958,9 @@ msgid "Allow Autoplacement"
 msgstr "允许自动放置"
 
 #: eeschema/files-io.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' is already open by '%s' at '%s'."
-msgstr "原理图 '%s' 已经打开。"
+msgstr "原理图 '%s' 已由 '%s' 在 '%s' 打开。"
 
 #: eeschema/files-io.cpp:133
 #, c-format
@@ -17449,9 +17445,9 @@ msgid "Format"
 msgstr "格式"
 
 #: eeschema/sim/spice_library_parser.cpp:166
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create sim model from %s"
-msgstr "无法创建文件夹 '%s'。"
+msgstr "无法从 %s 创建 SIM 模型"
 
 #: eeschema/sim/spice_model_parser.cpp:85
 #: eeschema/sim/spice_model_parser.cpp:187
@@ -21373,14 +21369,12 @@ msgid "Malformed expression"
 msgstr "格式错误的表达式"
 
 #: include/lockfile.h:106
-#, fuzzy
 msgid "Lock file already exists"
-msgstr "文件 \"%s\" 已经存在。"
+msgstr "锁定文件已经存在"
 
 #: include/lockfile.h:125
-#, fuzzy
 msgid "Failed to access lock file"
-msgstr "加载原理图文件失败\n"
+msgstr "无法访问锁定文件"
 
 #: include/panel_hotkeys_editor.h:55
 msgid "Reset all hotkeys to the built-in KiCad defaults"
@@ -21570,9 +21564,8 @@ msgid "Precision of gerber coordinates, valid options: 5 or 6"
 msgstr "Gerber 坐标精度，有效值：5 或 6"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:85
-#, fuzzy
 msgid "Use KiCad gerber file extension"
-msgstr "使用 Protel 文件扩展名"
+msgstr "使用 KiCad gerber 文件扩展"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:45
 msgid ""
@@ -35242,9 +35235,8 @@ msgid "Checking pads..."
 msgstr "正在检查焊盘..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:172
-#, fuzzy
 msgid "Checking copper graphic clearances..."
-msgstr "正在检查铜图形和文本间隙..."
+msgstr "检查铜层间隙..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:180
 msgid "Checking copper zone clearances..."
@@ -36102,9 +36094,9 @@ msgstr ""
 "果可能与老版本的填充结果不同。"
 
 #: pcbnew/files.cpp:623
-#, fuzzy, c-format
+#, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
-msgstr "PCB \"%s\" 已经打开。"
+msgstr "PCB '%s' 已由 '%s' 在 '%s' 打开。"
 
 #: pcbnew/files.cpp:634
 msgid "The current PCB has been modified.  Save changes?"
@@ -40747,13 +40739,13 @@ msgid "Pack footprints"
 msgstr "打包封装"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:344
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Click to place %s (item %zu of %zu)\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"单击放置 %s (%ld 的项目 %ld )\n"
-"按下 <esc> 取消全部；双击完成"
+"单击以放置 %s（item %zu of %zu）\n"
+"按 <enc> 取消全部； 双击完成"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:357
 #, c-format
