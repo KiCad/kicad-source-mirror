@@ -278,6 +278,11 @@ void LENGTH_TUNER_TOOL::setTransitions()
 
 int LENGTH_TUNER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
 {
+    if( m_inLengthTuner )
+        return 0;
+
+    REENTRANCY_GUARD guard( &m_inLengthTuner );
+
     // Deselect all items
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
