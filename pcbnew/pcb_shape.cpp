@@ -318,10 +318,10 @@ double PCB_SHAPE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
     if( FOOTPRINT* parent = GetParentFootprint() )
     {
-        if( parent->GetLayer() == F_Cu && !aView->IsLayerVisible( LAYER_MOD_FR ) )
+        if( parent->GetLayer() == F_Cu && !aView->IsLayerVisible( LAYER_FOOTPRINTS_FR ) )
             return HIDE;
 
-        if( parent->GetLayer() == B_Cu && !aView->IsLayerVisible( LAYER_MOD_BK ) )
+        if( parent->GetLayer() == B_Cu && !aView->IsLayerVisible( LAYER_FOOTPRINTS_BK ) )
             return HIDE;
     }
 

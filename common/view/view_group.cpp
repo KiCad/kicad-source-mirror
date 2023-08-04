@@ -155,8 +155,8 @@ void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
             case LAYER_PADS_TH:
             case LAYER_PAD_PLATEDHOLES:
             case LAYER_PAD_HOLEWALLS:
-            case LAYER_PAD_FR:
-            case LAYER_PAD_BK:
+            case LAYER_PADS_SMD_FR:
+            case LAYER_PADS_SMD_BK:
                 draw = true;
                 break;
             default:

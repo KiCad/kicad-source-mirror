@@ -132,10 +132,10 @@ double PCB_FIELD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         return 0.0;
 
     // Handle Render tab switches
-    if( IsValue() && !aView->IsLayerVisible( LAYER_MOD_VALUES ) )
+    if( IsValue() && !aView->IsLayerVisible( LAYER_FP_VALUES ) )
         return HIDE;
 
-    if( IsReference() && !aView->IsLayerVisible( LAYER_MOD_REFERENCES ) )
+    if( IsReference() && !aView->IsLayerVisible( LAYER_FP_REFERENCES ) )
         return HIDE;
 
     return PCB_TEXT::ViewGetLOD( aLayer, aView );

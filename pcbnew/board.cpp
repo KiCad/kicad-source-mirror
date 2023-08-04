@@ -720,8 +720,8 @@ bool BOARD::IsFootprintLayerVisible( PCB_LAYER_ID aLayer ) const
 {
     switch( aLayer )
     {
-    case F_Cu: return IsElementVisible( LAYER_MOD_FR );
-    case B_Cu: return IsElementVisible( LAYER_MOD_BK );
+    case F_Cu: return IsElementVisible( LAYER_FOOTPRINTS_FR );
+    case B_Cu: return IsElementVisible( LAYER_FOOTPRINTS_BK );
     default:   wxFAIL_MSG( wxT( "BOARD::IsModuleLayerVisible(): bad layer" ) ); return true;
     }
 }
@@ -1330,8 +1330,10 @@ BOX2I BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
 {
     BOX2I bbox;
     LSET  visible = GetVisibleLayers();
-    bool  showInvisibleText = IsElementVisible( LAYER_MOD_TEXT_INVISIBLE )
-                                      && PgmOrNull() && !PgmOrNull()->m_Printing;
+    bool  showHiddenText = IsElementVisible( LAYER_HIDDEN_TEXT );
+
+    if( PgmOrNull() && PgmOrNull()->m_Printing )
+        showHiddenText = false;
 
     // If the board is just showing a footprint, we want all footprint layers
     // included in the bounding box
@@ -1367,7 +1369,7 @@ BOX2I BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
         }
         else
         {
-            bbox.Merge( footprint->GetBoundingBox( true, showInvisibleText ) );
+            bbox.Merge( footprint->GetBoundingBox( true, showHiddenText ) );
         }
     }
 

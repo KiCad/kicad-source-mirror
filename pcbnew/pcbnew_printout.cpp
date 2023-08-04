@@ -161,15 +161,15 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
                         renderSettings->SetLayerColor( aLayer, invisible_color );
                 };
 
-        setVisibility( LAYER_MOD_FR );
-        setVisibility( LAYER_MOD_BK );
-        setVisibility( LAYER_MOD_VALUES );
-        setVisibility( LAYER_MOD_REFERENCES );
-        setVisibility( LAYER_MOD_TEXT );
-        setVisibility( LAYER_MOD_TEXT_INVISIBLE );
+        setVisibility( LAYER_FOOTPRINTS_FR );
+        setVisibility( LAYER_FOOTPRINTS_BK );
+        setVisibility( LAYER_FP_VALUES );
+        setVisibility( LAYER_FP_REFERENCES );
+        setVisibility( LAYER_FP_TEXT );
+        setVisibility( LAYER_HIDDEN_TEXT );
         setVisibility( LAYER_PADS );
-        setVisibility( LAYER_PAD_FR );
-        setVisibility( LAYER_PAD_BK );
+        setVisibility( LAYER_PADS_SMD_FR );
+        setVisibility( LAYER_PADS_SMD_BK );
         setVisibility( LAYER_PADS_TH );
 
         setVisibility( LAYER_TRACKS );
@@ -189,14 +189,14 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
     else
     {
         // Draw layers that must be not visible on printing are set to an invisible layer
-        // LAYER_PAD_FR, LAYER_PAD_BK and LAYER_PADS_TH must be enabled to print pads on
+        // LAYER_PADS_SMD_FR, LAYER_PADS_SMD_BK and LAYER_PADS_TH must be enabled to print pads on
         // technical layers, but not the pad on copper layer(s) if they are not enabled
 
         if( !aLayerSet.test( F_Cu ) )
-            renderSettings->SetLayerColor( LAYER_PAD_FR, invisible_color );
+            renderSettings->SetLayerColor( LAYER_PADS_SMD_FR, invisible_color );
 
         if( !aLayerSet.test( B_Cu ) )
-            renderSettings->SetLayerColor( LAYER_PAD_BK, invisible_color );
+            renderSettings->SetLayerColor( LAYER_PADS_SMD_BK, invisible_color );
 
         // Enable items on copper layers, but do not draw holes
         for( GAL_LAYER_ID layer : { LAYER_PADS_TH, LAYER_VIA_THROUGH, LAYER_VIA_MICROVIA, LAYER_VIA_BBLIND } )
@@ -208,14 +208,15 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
         }
 
         // Keep certain items always enabled/disabled and just rely on the layer visibility
-        // Note LAYER_PAD_FR, LAYER_PAD_BK, LAYER_PADS_TH are enabled here because paths must
+        // Note LAYER_PADS_SMD_FR, LAYER_PADS_SMD_BK, LAYER_PADS_TH are enabled here because paths must
         // be drawn on some other (technical) layers.
         const int alwaysEnabled[] =
                 {
-                    LAYER_MOD_TEXT, LAYER_MOD_FR, LAYER_MOD_BK,
-                    LAYER_MOD_VALUES, LAYER_MOD_REFERENCES, LAYER_TRACKS, LAYER_ZONES, LAYER_PADS,
-                    LAYER_VIAS,
-                    LAYER_PAD_FR, LAYER_PAD_BK, LAYER_PADS_TH
+                    LAYER_FP_TEXT, LAYER_FP_VALUES, LAYER_FP_REFERENCES,
+                    LAYER_FOOTPRINTS_FR, LAYER_FOOTPRINTS_BK,
+                    LAYER_TRACKS, LAYER_VIAS,
+                    LAYER_ZONES,
+                    LAYER_PADS, LAYER_PADS_SMD_FR, LAYER_PADS_SMD_BK, LAYER_PADS_TH
                 };
 
         for( int layer : alwaysEnabled )

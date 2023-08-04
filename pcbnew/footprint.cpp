@@ -1052,12 +1052,12 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisible
             // footprint text can also be turned off via the GAL meta-layers, so the 2nd and
             // 3rd "&&" conditionals handle that.
             valueLayerIsVisible = board->IsLayerVisible( Value().GetLayer() )
-                                  && board->IsElementVisible( LAYER_MOD_VALUES )
-                                  && board->IsElementVisible( LAYER_MOD_TEXT );
+                                  && board->IsElementVisible( LAYER_FP_VALUES )
+                                  && board->IsElementVisible( LAYER_FP_TEXT );
 
             refLayerIsVisible = board->IsLayerVisible( Reference().GetLayer() )
-                                && board->IsElementVisible( LAYER_MOD_REFERENCES )
-                                && board->IsElementVisible( LAYER_MOD_TEXT );
+                                && board->IsElementVisible( LAYER_FP_REFERENCES )
+                                && board->IsElementVisible( LAYER_FP_TEXT );
         }
 
 
@@ -1707,11 +1707,11 @@ void FOOTPRINT::ViewGetLayers( int aLayers[], int& aCount ) const
         KI_FALLTHROUGH;
 
     case F_Cu:
-        aLayers[1] = LAYER_MOD_FR;
+        aLayers[1] = LAYER_FOOTPRINTS_FR;
         break;
 
     case B_Cu:
-        aLayers[1] = LAYER_MOD_BK;
+        aLayers[1] = LAYER_FOOTPRINTS_BK;
         break;
     }
 
@@ -1751,10 +1751,10 @@ double FOOTPRINT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
     {
         // The locked shadow shape is shown only if the footprint itself is visible
-        if( ( m_layer == F_Cu ) && aView->IsLayerVisible( LAYER_MOD_FR ) )
+        if( ( m_layer == F_Cu ) && aView->IsLayerVisible( LAYER_FOOTPRINTS_FR ) )
             return 0.0;
 
-        if( ( m_layer == B_Cu ) && aView->IsLayerVisible( LAYER_MOD_BK ) )
+        if( ( m_layer == B_Cu ) && aView->IsLayerVisible( LAYER_FOOTPRINTS_BK ) )
             return 0.0;
 
         return std::numeric_limits<double>::max();
@@ -1763,17 +1763,17 @@ double FOOTPRINT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     if( aLayer == LAYER_CONFLICTS_SHADOW && IsConflicting() )
     {
         // The locked shadow shape is shown only if the footprint itself is visible
-        if( ( m_layer == F_Cu ) && aView->IsLayerVisible( LAYER_MOD_FR ) )
+        if( ( m_layer == F_Cu ) && aView->IsLayerVisible( LAYER_FOOTPRINTS_FR ) )
             return 0.0;
 
-        if( ( m_layer == B_Cu ) && aView->IsLayerVisible( LAYER_MOD_BK ) )
+        if( ( m_layer == B_Cu ) && aView->IsLayerVisible( LAYER_FOOTPRINTS_BK ) )
             return 0.0;
 
         return std::numeric_limits<double>::max();
     }
 
-    int layer = ( m_layer == F_Cu ) ? LAYER_MOD_FR :
-                ( m_layer == B_Cu ) ? LAYER_MOD_BK : LAYER_ANCHOR;
+    int layer = ( m_layer == F_Cu ) ? LAYER_FOOTPRINTS_FR :
+                ( m_layer == B_Cu ) ? LAYER_FOOTPRINTS_BK : LAYER_ANCHOR;
 
     // Currently this is only pertinent for the anchor layer; everything else is drawn from the
     // children.

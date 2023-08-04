@@ -329,13 +329,13 @@ const APPEARANCE_CONTROLS::APPEARANCE_SETTING APPEARANCE_CONTROLS::s_objectSetti
     RR( _HKI( "Zones" ),              LAYER_ZONES,              _HKI( "Show copper zones" ),   true ),
     RR( _HKI( "Images" ),             LAYER_DRAW_BITMAPS,       _HKI( "Show user images" ),    true ),
     RR(),
-    RR( _HKI( "Footprints Front" ),   LAYER_MOD_FR,             _HKI( "Show footprints that are on board's front" ) ),
-    RR( _HKI( "Footprints Back" ),    LAYER_MOD_BK,             _HKI( "Show footprints that are on board's back" ) ),
+    RR( _HKI( "Footprints Front" ),   LAYER_FOOTPRINTS_FR,      _HKI( "Show footprints that are on board's front" ) ),
+    RR( _HKI( "Footprints Back" ),    LAYER_FOOTPRINTS_BK,      _HKI( "Show footprints that are on board's back" ) ),
     RR( _HKI( "Through-hole Pads" ),  LAYER_PADS_TH,            _HKI( "Show through-hole pads" ) ),
-    RR( _HKI( "Values" ),             LAYER_MOD_VALUES,         _HKI( "Show footprint values" ) ),
-    RR( _HKI( "References" ),         LAYER_MOD_REFERENCES,     _HKI( "Show footprint references" ) ),
-    RR( _HKI( "Footprint Text" ),     LAYER_MOD_TEXT,           _HKI( "Show all footprint text" ) ),
-    RR( _HKI( "Hidden Text" ),        LAYER_MOD_TEXT_INVISIBLE, _HKI( "Show footprint text marked as invisible" ) ),
+    RR( _HKI( "Values" ),             LAYER_FP_VALUES,          _HKI( "Show footprint values" ) ),
+    RR( _HKI( "References" ),         LAYER_FP_REFERENCES,      _HKI( "Show footprint references" ) ),
+    RR( _HKI( "Footprint Text" ),     LAYER_FP_TEXT,            _HKI( "Show all footprint text" ) ),
+    RR( _HKI( "Hidden Text" ),        LAYER_HIDDEN_TEXT,        _HKI( "Show text marked as hidden" ) ),
     RR(),
     RR(),
     RR( _HKI( "Ratsnest" ),           LAYER_RATSNEST,           _HKI( "Show unconnected nets as a ratsnest") ),
@@ -356,10 +356,10 @@ static std::set<int> s_allowedInFpEditor =
             LAYER_PADS,
             LAYER_ZONES,
             LAYER_PADS_TH,
-            LAYER_MOD_VALUES,
-            LAYER_MOD_REFERENCES,
-            LAYER_MOD_TEXT,
-            LAYER_MOD_TEXT_INVISIBLE,
+            LAYER_FP_VALUES,
+            LAYER_FP_REFERENCES,
+            LAYER_FP_TEXT,
+            LAYER_HIDDEN_TEXT,
             LAYER_DRAW_BITMAPS,
             LAYER_GRID
         };
@@ -2049,28 +2049,28 @@ void APPEARANCE_CONTROLS::onObjectVisibilityChanged( GAL_LAYER_ID aLayer, bool i
         syncLayerPresetSelection();
         break;
 
-    case LAYER_MOD_TEXT:
+    case LAYER_FP_TEXT:
         // Because Footprint Text is a meta-control that also can disable values/references,
         // drag them along here so that the user is less likely to be confused.
         if( isFinal )
         {
             // Should only trigger when you actually click the Footprint Text button
             // Otherwise it goes into infinite recursive loop with the following case section
-            onObjectVisibilityChanged( LAYER_MOD_REFERENCES, isVisible, false );
-            onObjectVisibilityChanged( LAYER_MOD_VALUES, isVisible, false );
-            m_objectSettingsMap[LAYER_MOD_REFERENCES]->ctl_visibility->SetValue( isVisible );
-            m_objectSettingsMap[LAYER_MOD_VALUES]->ctl_visibility->SetValue( isVisible );
+            onObjectVisibilityChanged( LAYER_FP_REFERENCES, isVisible, false );
+            onObjectVisibilityChanged( LAYER_FP_VALUES, isVisible, false );
+            m_objectSettingsMap[LAYER_FP_REFERENCES]->ctl_visibility->SetValue( isVisible );
+            m_objectSettingsMap[LAYER_FP_VALUES]->ctl_visibility->SetValue( isVisible );
         }
         break;
 
-    case LAYER_MOD_REFERENCES:
-    case LAYER_MOD_VALUES:
+    case LAYER_FP_REFERENCES:
+    case LAYER_FP_VALUES:
         // In case that user changes Footprint Value/References when the Footprint Text
         // meta-control is disabled, we should put it back on.
         if( isVisible )
         {
-            onObjectVisibilityChanged( LAYER_MOD_TEXT, isVisible, false );
-            m_objectSettingsMap[LAYER_MOD_TEXT]->ctl_visibility->SetValue( isVisible );
+            onObjectVisibilityChanged( LAYER_FP_TEXT, isVisible, false );
+            m_objectSettingsMap[LAYER_FP_TEXT]->ctl_visibility->SetValue( isVisible );
         }
         break;
 
@@ -2924,9 +2924,9 @@ void APPEARANCE_CONTROLS::OnColorSwatchChanged( wxCommandEvent& aEvent )
         view->UpdateLayerColor( ZONE_LAYER_FOR( layer ) );
 
     if( layer == F_Cu )
-        view->UpdateLayerColor( LAYER_PAD_FR );
+        view->UpdateLayerColor( LAYER_PADS_SMD_FR );
     else if( layer == B_Cu )
-        view->UpdateLayerColor( LAYER_PAD_BK );
+        view->UpdateLayerColor( LAYER_PADS_SMD_BK );
 
     // Update the bitmap of the layer box
     if( m_frame->IsType( FRAME_PCB_EDITOR ) )

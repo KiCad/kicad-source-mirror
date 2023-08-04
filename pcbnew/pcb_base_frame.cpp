@@ -786,16 +786,16 @@ GENERAL_COLLECTORS_GUIDE PCB_BASE_FRAME::GetCollectorsGuide()
                                     GetCanvas()->GetView() );
 
     // account for the globals
-    guide.SetIgnoreMTextsMarkedNoShow( ! m_pcb->IsElementVisible( LAYER_MOD_TEXT_INVISIBLE ) );
-    guide.SetIgnoreMTextsOnBack( ! m_pcb->IsElementVisible( LAYER_MOD_TEXT ) );
-    guide.SetIgnoreMTextsOnFront( ! m_pcb->IsElementVisible( LAYER_MOD_TEXT ) );
-    guide.SetIgnoreModulesOnBack( ! m_pcb->IsElementVisible( LAYER_MOD_BK ) );
-    guide.SetIgnoreModulesOnFront( ! m_pcb->IsElementVisible( LAYER_MOD_FR ) );
-    guide.SetIgnorePadsOnBack( ! m_pcb->IsElementVisible( LAYER_PAD_BK ) );
-    guide.SetIgnorePadsOnFront( ! m_pcb->IsElementVisible( LAYER_PAD_FR ) );
+    guide.SetIgnoreMTextsMarkedNoShow( ! m_pcb->IsElementVisible( LAYER_HIDDEN_TEXT ) );
+    guide.SetIgnoreMTextsOnBack( ! m_pcb->IsElementVisible( LAYER_FP_TEXT ) );
+    guide.SetIgnoreMTextsOnFront( ! m_pcb->IsElementVisible( LAYER_FP_TEXT ) );
+    guide.SetIgnoreModulesOnBack( ! m_pcb->IsElementVisible( LAYER_FOOTPRINTS_BK ) );
+    guide.SetIgnoreModulesOnFront( ! m_pcb->IsElementVisible( LAYER_FOOTPRINTS_FR ) );
+    guide.SetIgnorePadsOnBack( ! m_pcb->IsElementVisible( LAYER_PADS_SMD_BK ) );
+    guide.SetIgnorePadsOnFront( ! m_pcb->IsElementVisible( LAYER_PADS_SMD_FR ) );
     guide.SetIgnoreThroughHolePads( ! m_pcb->IsElementVisible( LAYER_PADS_TH ) );
-    guide.SetIgnoreModulesVals( ! m_pcb->IsElementVisible( LAYER_MOD_VALUES ) );
-    guide.SetIgnoreModulesRefs( ! m_pcb->IsElementVisible( LAYER_MOD_REFERENCES ) );
+    guide.SetIgnoreModulesVals( ! m_pcb->IsElementVisible( LAYER_FP_VALUES ) );
+    guide.SetIgnoreModulesRefs( ! m_pcb->IsElementVisible( LAYER_FP_REFERENCES ) );
     guide.SetIgnoreThroughVias( ! m_pcb->IsElementVisible( LAYER_VIAS ) );
     guide.SetIgnoreBlindBuriedVias( ! m_pcb->IsElementVisible( LAYER_VIAS ) );
     guide.SetIgnoreMicroVias( ! m_pcb->IsElementVisible( LAYER_VIAS ) );

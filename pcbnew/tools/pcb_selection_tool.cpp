@@ -679,16 +679,16 @@ const GENERAL_COLLECTORS_GUIDE PCB_SELECTION_TOOL::getCollectorsGuide() const
     bool padsDisabled = !board()->IsElementVisible( LAYER_PADS );
 
     // account for the globals
-    guide.SetIgnoreMTextsMarkedNoShow( ! board()->IsElementVisible( LAYER_MOD_TEXT_INVISIBLE ) );
-    guide.SetIgnoreMTextsOnBack( ! board()->IsElementVisible( LAYER_MOD_TEXT ) );
-    guide.SetIgnoreMTextsOnFront( ! board()->IsElementVisible( LAYER_MOD_TEXT ) );
-    guide.SetIgnoreModulesOnBack( ! board()->IsElementVisible( LAYER_MOD_BK ) );
-    guide.SetIgnoreModulesOnFront( ! board()->IsElementVisible( LAYER_MOD_FR ) );
-    guide.SetIgnorePadsOnBack( padsDisabled || ! board()->IsElementVisible( LAYER_PAD_BK ) );
-    guide.SetIgnorePadsOnFront( padsDisabled || ! board()->IsElementVisible( LAYER_PAD_FR ) );
+    guide.SetIgnoreMTextsMarkedNoShow( ! board()->IsElementVisible( LAYER_HIDDEN_TEXT ) );
+    guide.SetIgnoreMTextsOnBack( ! board()->IsElementVisible( LAYER_FP_TEXT ) );
+    guide.SetIgnoreMTextsOnFront( ! board()->IsElementVisible( LAYER_FP_TEXT ) );
+    guide.SetIgnoreModulesOnBack( ! board()->IsElementVisible( LAYER_FOOTPRINTS_BK ) );
+    guide.SetIgnoreModulesOnFront( ! board()->IsElementVisible( LAYER_FOOTPRINTS_FR ) );
+    guide.SetIgnorePadsOnBack( padsDisabled || ! board()->IsElementVisible( LAYER_PADS_SMD_BK ) );
+    guide.SetIgnorePadsOnFront( padsDisabled || ! board()->IsElementVisible( LAYER_PADS_SMD_FR ) );
     guide.SetIgnoreThroughHolePads( padsDisabled || ! board()->IsElementVisible( LAYER_PADS_TH ) );
-    guide.SetIgnoreModulesVals( ! board()->IsElementVisible( LAYER_MOD_VALUES ) );
-    guide.SetIgnoreModulesRefs( ! board()->IsElementVisible( LAYER_MOD_REFERENCES ) );
+    guide.SetIgnoreModulesVals( ! board()->IsElementVisible( LAYER_FP_VALUES ) );
+    guide.SetIgnoreModulesRefs( ! board()->IsElementVisible( LAYER_FP_REFERENCES ) );
     guide.SetIgnoreThroughVias( ! board()->IsElementVisible( LAYER_VIAS ) );
     guide.SetIgnoreBlindBuriedVias( ! board()->IsElementVisible( LAYER_VIAS ) );
     guide.SetIgnoreMicroVias( ! board()->IsElementVisible( LAYER_VIAS ) );
@@ -2585,10 +2585,10 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
     case PCB_FIELD_T:
         field = static_cast<const PCB_FIELD*>( aItem );
 
-        if( field->IsReference() && !view()->IsLayerVisible( LAYER_MOD_REFERENCES ) )
+        if( field->IsReference() && !view()->IsLayerVisible( LAYER_FP_REFERENCES ) )
             return false;
 
-        if( field->IsValue() && !view()->IsLayerVisible( LAYER_MOD_VALUES ) )
+        if( field->IsValue() && !view()->IsLayerVisible( LAYER_FP_VALUES ) )
             return false;
 
         // Handle all other fields with normal text visibility controls
@@ -2598,7 +2598,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
         if( m_isFootprintEditor )
         {
-            if( !text->IsVisible() && !view()->IsLayerVisible( LAYER_MOD_TEXT_INVISIBLE ) )
+            if( !text->IsVisible() && !view()->IsLayerVisible( LAYER_HIDDEN_TEXT ) )
                 return false;
 
             if( !view()->IsLayerVisible( text->GetLayer() ) )
@@ -2612,12 +2612,12 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
             if( !board()->IsLayerVisible( text->GetLayer() ) )
                 return false;
 
-            int controlLayer = LAYER_MOD_TEXT;
+            int controlLayer = LAYER_FP_TEXT;
 
             if( text->GetText() == wxT( "${REFERENCE}" ) )
-                controlLayer = LAYER_MOD_REFERENCES;
+                controlLayer = LAYER_FP_REFERENCES;
             else if( text->GetText() == wxT( "${VALUE}" ) )
-                controlLayer = LAYER_MOD_VALUES;
+                controlLayer = LAYER_FP_VALUES;
 
             if( !view()->IsLayerVisible( controlLayer ) )
                 return false;
@@ -2661,9 +2661,9 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
         else
         {
             // Check render mode (from the Items tab) first
-            if( pad->IsOnLayer( F_Cu ) && !board()->IsElementVisible( LAYER_PAD_FR ) )
+            if( pad->IsOnLayer( F_Cu ) && !board()->IsElementVisible( LAYER_PADS_SMD_FR ) )
                 return false;
-            else if( pad->IsOnLayer( B_Cu ) && !board()->IsElementVisible( LAYER_PAD_BK ) )
+            else if( pad->IsOnLayer( B_Cu ) && !board()->IsElementVisible( LAYER_PADS_SMD_BK ) )
                 return false;
 
             if( !( pad->GetLayerSet() & visibleLayers() ).any() )

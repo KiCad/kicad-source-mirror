@@ -143,8 +143,8 @@ void PCB_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
     m_layerColors[LAYER_PAD_PLATEDHOLES] = aSettings->GetColor( LAYER_PCB_BACKGROUND );
     m_layerColors[LAYER_VIA_NETNAMES]    = COLOR4D( 0.2, 0.2, 0.2, 0.9 );
     m_layerColors[LAYER_PAD_NETNAMES]    = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
-    m_layerColors[LAYER_PAD_FR]          = aSettings->GetColor( F_Cu );
-    m_layerColors[LAYER_PAD_BK]          = aSettings->GetColor( B_Cu );
+    m_layerColors[LAYER_PADS_SMD_FR]     = aSettings->GetColor( F_Cu );
+    m_layerColors[LAYER_PADS_SMD_BK]     = aSettings->GetColor( B_Cu );
     m_layerColors[LAYER_PAD_FR_NETNAMES] = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
     m_layerColors[LAYER_PAD_BK_NETNAMES] = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
 
@@ -1592,7 +1592,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
     }
 
     if( pcbconfig() && pcbconfig()->m_Display.m_PadClearance
-            && ( aLayer == LAYER_PAD_FR || aLayer == LAYER_PAD_BK || aLayer == LAYER_PADS_TH )
+            && ( aLayer == LAYER_PADS_SMD_FR || aLayer == LAYER_PADS_SMD_BK || aLayer == LAYER_PADS_TH )
             && !m_pcbSettings.m_isPrinting )
     {
         /* Showing the clearance area is not obvious.

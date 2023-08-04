@@ -1324,7 +1324,7 @@ void PAD::ViewGetLayers( int aLayers[], int& aCount ) const
     }
     else if( IsOnLayer( F_Cu ) )
     {
-        aLayers[aCount++] = LAYER_PAD_FR;
+        aLayers[aCount++] = LAYER_PADS_SMD_FR;
 
         // Is this a PTH pad that has only front copper?  If so, we need to also display the
         // net name on the PTH netname layer so that it isn't blocked by the drill hole.
@@ -1335,7 +1335,7 @@ void PAD::ViewGetLayers( int aLayers[], int& aCount ) const
     }
     else if( IsOnLayer( B_Cu ) )
     {
-        aLayers[aCount++] = LAYER_PAD_BK;
+        aLayers[aCount++] = LAYER_PADS_SMD_BK;
 
         // Is this a PTH pad that has only back copper?  If so, we need to also display the
         // net name on the PTH netname layer so that it isn't blocked by the drill hole.
@@ -1387,16 +1387,16 @@ double PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         return HIDE;
     }
 
-    if( !IsFlipped() && !aView->IsLayerVisible( LAYER_MOD_FR ) )
+    if( !IsFlipped() && !aView->IsLayerVisible( LAYER_FOOTPRINTS_FR ) )
         return HIDE;
 
-    if( IsFlipped() && !aView->IsLayerVisible( LAYER_MOD_BK ) )
+    if( IsFlipped() && !aView->IsLayerVisible( LAYER_FOOTPRINTS_BK ) )
         return HIDE;
 
-    if( IsFrontLayer( (PCB_LAYER_ID) aLayer ) && !aView->IsLayerVisible( LAYER_PAD_FR ) )
+    if( IsFrontLayer( (PCB_LAYER_ID) aLayer ) && !aView->IsLayerVisible( LAYER_PADS_SMD_FR ) )
         return HIDE;
 
-    if( IsBackLayer( (PCB_LAYER_ID) aLayer ) && !aView->IsLayerVisible( LAYER_PAD_BK ) )
+    if( IsBackLayer( (PCB_LAYER_ID) aLayer ) && !aView->IsLayerVisible( LAYER_PADS_SMD_BK ) )
         return HIDE;
 
     LSET visible = board->GetVisibleLayers() & board->GetEnabledLayers();

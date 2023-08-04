@@ -330,10 +330,10 @@ double ZONE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         bool flipped = parentFP->GetLayer() == B_Cu;
 
         // Handle Render tab switches
-        if( !flipped && !aView->IsLayerVisible( LAYER_MOD_FR ) )
+        if( !flipped && !aView->IsLayerVisible( LAYER_FOOTPRINTS_FR ) )
             return HIDE;
 
-        if( flipped && !aView->IsLayerVisible( LAYER_MOD_BK ) )
+        if( flipped && !aView->IsLayerVisible( LAYER_FOOTPRINTS_BK ) )
             return HIDE;
     }
 

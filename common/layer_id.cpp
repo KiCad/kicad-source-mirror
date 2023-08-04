@@ -153,14 +153,14 @@ wxString LayerName( int aLayer )
 
     // GAL_LAYER_ID
 
-    case LAYER_MOD_FR:                  return _( "Footprints front" );
-    case LAYER_MOD_BK:                  return _( "Footprints back" );
-    case LAYER_MOD_VALUES:              return _( "Values" );
-    case LAYER_MOD_REFERENCES:          return _( "Reference designators" );
-    case LAYER_MOD_TEXT:                return _( "Footprint text" );
-    case LAYER_MOD_TEXT_INVISIBLE:      return _( "Hidden text" );
-    case LAYER_PAD_FR:                  return _( "SMD pads front" );
-    case LAYER_PAD_BK:                  return _( "SMD pads back" );
+    case LAYER_FOOTPRINTS_FR:           return _( "Footprints front" );
+    case LAYER_FOOTPRINTS_BK:           return _( "Footprints back" );
+    case LAYER_FP_VALUES:               return _( "Values" );
+    case LAYER_FP_REFERENCES:           return _( "Reference designators" );
+    case LAYER_FP_TEXT:                 return _( "Footprint text" );
+    case LAYER_HIDDEN_TEXT:             return _( "Hidden text" );
+    case LAYER_PADS_SMD_FR:             return _( "SMD pads front" );
+    case LAYER_PADS_SMD_BK:             return _( "SMD pads back" );
     case LAYER_PADS_TH:                 return _( "Through-hole pads" );
     case LAYER_TRACKS:                  return _( "Tracks" );
     case LAYER_VIA_THROUGH:             return _( "Through vias" );

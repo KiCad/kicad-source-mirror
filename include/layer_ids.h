@@ -195,20 +195,20 @@ enum GAL_LAYER_ID: int
     LAYER_VIA_BBLIND         = GAL_LAYER_ID_START +  2, ///< to draw blind/buried vias
     LAYER_VIA_THROUGH        = GAL_LAYER_ID_START +  3, ///< to draw usual through hole vias
     LAYER_NON_PLATEDHOLES    = GAL_LAYER_ID_START +  4, ///< handle color for not plated holes (holes, not pads)
-    LAYER_MOD_TEXT           = GAL_LAYER_ID_START +  5,
+    LAYER_FP_TEXT            = GAL_LAYER_ID_START +  5,
 //  LAYER_MOD_TEXT_BK deprecated                  +  6,
-    LAYER_MOD_TEXT_INVISIBLE = GAL_LAYER_ID_START +  7, ///< text marked as invisible
+    LAYER_HIDDEN_TEXT        = GAL_LAYER_ID_START +  7, ///< text marked as invisible
     LAYER_ANCHOR             = GAL_LAYER_ID_START +  8, ///< anchor of items having an anchor point (texts, footprints)
-    LAYER_PAD_FR             = GAL_LAYER_ID_START +  9, ///< smd pads, front layer
-    LAYER_PAD_BK             = GAL_LAYER_ID_START + 10, ///< smd pads, back layer
+    LAYER_PADS_SMD_FR        = GAL_LAYER_ID_START +  9, ///< smd pads, front layer
+    LAYER_PADS_SMD_BK        = GAL_LAYER_ID_START + 10, ///< smd pads, back layer
     LAYER_RATSNEST           = GAL_LAYER_ID_START + 11,
     LAYER_GRID               = GAL_LAYER_ID_START + 12,
     LAYER_GRID_AXES          = GAL_LAYER_ID_START + 13,
 //  LAYER_NO_CONNECTS deprecated                  + 14, ///< show a marker on pads with no nets
-    LAYER_MOD_FR             = GAL_LAYER_ID_START + 15, ///< show footprints on front
-    LAYER_MOD_BK             = GAL_LAYER_ID_START + 16, ///< show footprints on back
-    LAYER_MOD_VALUES         = GAL_LAYER_ID_START + 17, ///< show footprints values (when texts are visible)
-    LAYER_MOD_REFERENCES     = GAL_LAYER_ID_START + 18, ///< show footprints references (when texts are visible)
+    LAYER_FOOTPRINTS_FR      = GAL_LAYER_ID_START + 15, ///< show footprints on front
+    LAYER_FOOTPRINTS_BK      = GAL_LAYER_ID_START + 16, ///< show footprints on back
+    LAYER_FP_VALUES          = GAL_LAYER_ID_START + 17, ///< show footprints values (when texts are visible)
+    LAYER_FP_REFERENCES      = GAL_LAYER_ID_START + 18, ///< show footprints references (when texts are visible)
     LAYER_TRACKS             = GAL_LAYER_ID_START + 19,
     LAYER_PADS_TH            = GAL_LAYER_ID_START + 20, ///< multilayer pads, usually with holes
     LAYER_PAD_PLATEDHOLES    = GAL_LAYER_ID_START + 21, ///< to draw pad holes (plated)
@@ -847,7 +847,7 @@ inline bool IsNonCopperLayer( int aLayerId )
 
 /**
  * Tests whether a layer is a copper layer, optionally including synthetic copper layers such
- * as LAYER_VIA_THROUGH, LAYER_PAD_FR, etc.
+ * as LAYER_VIA_THROUGH, LAYER_PADS_SMD_FR, etc.
  *
  * @param aLayerId
  * @param aIncludeSyntheticCopperLayers
@@ -976,9 +976,9 @@ inline int GetNetnameLayer( int aLayer )
         return NETNAMES_LAYER_INDEX( aLayer );
     else if( aLayer == LAYER_PADS_TH )
         return LAYER_PAD_NETNAMES;
-    else if( aLayer == LAYER_PAD_FR )
+    else if( aLayer == LAYER_PADS_SMD_FR )
         return LAYER_PAD_FR_NETNAMES;
-    else if( aLayer == LAYER_PAD_BK )
+    else if( aLayer == LAYER_PADS_SMD_BK )
         return LAYER_PAD_BK_NETNAMES;
     else if( IsViaPadLayer( aLayer ) )
         return LAYER_VIA_NETNAMES;
@@ -1022,8 +1022,8 @@ inline bool IsNetCopperLayer( int aLayer )
 {
     static std::set<int> netCopperLayers =
             {
-                LAYER_PAD_FR,
-                LAYER_PAD_BK,
+                LAYER_PADS_SMD_FR,
+                LAYER_PADS_SMD_BK,
                 LAYER_PADS_TH,
                 LAYER_PAD_HOLEWALLS,
                 LAYER_VIA_THROUGH,

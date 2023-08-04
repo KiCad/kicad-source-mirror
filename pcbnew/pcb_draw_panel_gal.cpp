@@ -79,7 +79,7 @@ const int GAL_LAYER_ORDER[] =
     User_8, ZONE_LAYER_FOR( User_8 ),
     User_9, ZONE_LAYER_FOR( User_9 ),
 
-    LAYER_MOD_TEXT, LAYER_MOD_REFERENCES, LAYER_MOD_VALUES,
+    LAYER_FP_TEXT, LAYER_FP_REFERENCES, LAYER_FP_VALUES,
 
     LAYER_RATSNEST,
     LAYER_ANCHOR,
@@ -89,7 +89,7 @@ const int GAL_LAYER_ORDER[] =
     LAYER_VIA_THROUGH, LAYER_VIA_BBLIND, LAYER_VIA_MICROVIA,
     LAYER_PADS_TH,
 
-    LAYER_PAD_FR_NETNAMES, LAYER_PAD_FR,
+    LAYER_PAD_FR_NETNAMES, LAYER_PADS_SMD_FR,
     NETNAMES_LAYER_INDEX( F_Cu ), F_Cu, ZONE_LAYER_FOR( F_Cu ),
     F_Mask, ZONE_LAYER_FOR( F_Mask ),
     F_SilkS, ZONE_LAYER_FOR( F_SilkS ),
@@ -129,7 +129,7 @@ const int GAL_LAYER_ORDER[] =
     NETNAMES_LAYER_INDEX( In29_Cu ),  In29_Cu,  ZONE_LAYER_FOR( In29_Cu ),
     NETNAMES_LAYER_INDEX( In30_Cu ),  In30_Cu,  ZONE_LAYER_FOR( In30_Cu ),
 
-    LAYER_PAD_BK_NETNAMES, LAYER_PAD_BK,
+    LAYER_PAD_BK_NETNAMES, LAYER_PADS_SMD_BK,
     NETNAMES_LAYER_INDEX( B_Cu ), B_Cu, ZONE_LAYER_FOR( B_Cu ),
     B_Mask, ZONE_LAYER_FOR( B_Mask ),
     B_SilkS, ZONE_LAYER_FOR( B_SilkS ),
@@ -361,13 +361,13 @@ void PCB_DRAW_PANEL_GAL::SetHighContrastLayer( PCB_LAYER_ID aLayer )
         // Pads should be shown too
         if( aLayer == B_Cu )
         {
-            rSettings->SetLayerIsHighContrast( LAYER_PAD_BK );
-            rSettings->SetLayerIsHighContrast( LAYER_MOD_BK );
+            rSettings->SetLayerIsHighContrast( LAYER_PADS_SMD_BK );
+            rSettings->SetLayerIsHighContrast( LAYER_FOOTPRINTS_BK );
         }
         else if( aLayer == F_Cu )
         {
-            rSettings->SetLayerIsHighContrast( LAYER_PAD_FR );
-            rSettings->SetLayerIsHighContrast( LAYER_MOD_FR );
+            rSettings->SetLayerIsHighContrast( LAYER_PADS_SMD_FR );
+            rSettings->SetLayerIsHighContrast( LAYER_FOOTPRINTS_FR );
         }
     }
 
@@ -398,12 +398,12 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
 
     // Extra layers that are brought to the top if a F.* or B.* is selected
     const std::vector<int> frontLayers = {
-        F_Cu, F_Adhes, F_Paste, F_SilkS, F_Mask, F_Fab, F_CrtYd, LAYER_PAD_FR,
+        F_Cu, F_Adhes, F_Paste, F_SilkS, F_Mask, F_Fab, F_CrtYd, LAYER_PADS_SMD_FR,
         LAYER_PAD_FR_NETNAMES, NETNAMES_LAYER_INDEX( F_Cu )
     };
 
     const std::vector<int> backLayers = {
-        B_Cu, B_Adhes, B_Paste, B_SilkS, B_Mask, B_Fab, B_CrtYd, LAYER_PAD_BK,
+        B_Cu, B_Adhes, B_Paste, B_SilkS, B_Mask, B_Fab, B_CrtYd, LAYER_PADS_SMD_BK,
         LAYER_PAD_BK_NETNAMES, NETNAMES_LAYER_INDEX( B_Cu )
     };
 
@@ -470,8 +470,8 @@ void PCB_DRAW_PANEL_GAL::SyncLayersVisibility( const BOARD* aBoard )
     m_view->SetLayerVisible( LAYER_VIA_THROUGH, true );
 
     // Pad layers controlled by dependencies
-    m_view->SetLayerVisible( LAYER_PAD_FR, true );
-    m_view->SetLayerVisible( LAYER_PAD_BK, true );
+    m_view->SetLayerVisible( LAYER_PADS_SMD_FR, true );
+    m_view->SetLayerVisible( LAYER_PADS_SMD_BK, true );
 
     // Always enable netname layers, as their visibility is controlled by layer dependencies
     for( int i = NETNAMES_LAYER_ID_START; i < NETNAMES_LAYER_ID_END; ++i )
@@ -672,16 +672,16 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
 
     // Pad visibility
     m_view->SetRequired( LAYER_PADS_TH, LAYER_PADS );
-    m_view->SetRequired( LAYER_PAD_FR, LAYER_PADS );
-    m_view->SetRequired( LAYER_PAD_BK, LAYER_PADS );
+    m_view->SetRequired( LAYER_PADS_SMD_FR, LAYER_PADS );
+    m_view->SetRequired( LAYER_PADS_SMD_BK, LAYER_PADS );
 
     // Front footprints
-    m_view->SetRequired( LAYER_PAD_FR, F_Cu );
-    m_view->SetRequired( LAYER_PAD_FR_NETNAMES, LAYER_PAD_FR );
+    m_view->SetRequired( LAYER_PADS_SMD_FR, F_Cu );
+    m_view->SetRequired( LAYER_PAD_FR_NETNAMES, LAYER_PADS_SMD_FR );
 
     // Back footprints
-    m_view->SetRequired( LAYER_PAD_BK, B_Cu );
-    m_view->SetRequired( LAYER_PAD_BK_NETNAMES, LAYER_PAD_BK );
+    m_view->SetRequired( LAYER_PADS_SMD_BK, B_Cu );
+    m_view->SetRequired( LAYER_PAD_BK_NETNAMES, LAYER_PADS_SMD_BK );
 
     m_view->SetLayerTarget( LAYER_SELECT_OVERLAY, KIGFX::TARGET_OVERLAY );
     m_view->SetLayerDisplayOnly( LAYER_SELECT_OVERLAY ) ;

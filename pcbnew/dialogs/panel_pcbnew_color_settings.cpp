@@ -354,14 +354,14 @@ std::set<int> g_excludedLayers =
         {
             LAYER_VIAS,
             LAYER_VIA_HOLEWALLS,
-            LAYER_MOD_FR,
-            LAYER_MOD_BK,
-            LAYER_PAD_FR,
-            LAYER_PAD_BK,
-            LAYER_MOD_VALUES,
-            LAYER_MOD_REFERENCES,
+            LAYER_FOOTPRINTS_FR,
+            LAYER_FOOTPRINTS_BK,
+            LAYER_PADS_SMD_FR,
+            LAYER_PADS_SMD_BK,
+            LAYER_FP_VALUES,
+            LAYER_FP_REFERENCES,
             LAYER_TRACKS,
-            LAYER_MOD_TEXT,
+            LAYER_FP_TEXT,
             GAL_LAYER_ID_START + 6,     // where LAYER_MOD_TEXT_BK (deprecated) used to be
             GAL_LAYER_ID_START + 14,    // where LAYER_NO_CONNECTS (deprecated) used to be
             LAYER_PAD_PLATEDHOLES,

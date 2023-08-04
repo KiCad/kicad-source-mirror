@@ -149,7 +149,7 @@ void PCB_TEXT::ViewGetLayers( int aLayers[], int& aCount ) const
     if( GetParentFootprint() == nullptr || IsVisible() )
         aLayers[0] = GetLayer();
     else
-        aLayers[0] = LAYER_MOD_TEXT_INVISIBLE;
+        aLayers[0] = LAYER_HIDDEN_TEXT;
 
     aCount = 1;
 }
@@ -165,7 +165,7 @@ double PCB_TEXT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     KIGFX::PCB_PAINTER*  painter = static_cast<KIGFX::PCB_PAINTER*>( aView->GetPainter() );
     KIGFX::PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
 
-    // Hidden text gets put on the LAYER_MOD_TEXT_INVISIBLE for rendering, but
+    // Hidden text gets put on the LAYER_HIDDEN_TEXT for rendering, but
     // should only render if its native layer is visible.
     if( !aView->IsLayerVisible( GetLayer() ) )
         return HIDE;
@@ -185,23 +185,23 @@ double PCB_TEXT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         // Handle Render tab switches
         if( GetText() == wxT( "${VALUE}" ) )
         {
-            if( !aView->IsLayerVisible( LAYER_MOD_VALUES ) )
+            if( !aView->IsLayerVisible( LAYER_FP_VALUES ) )
                 return HIDE;
         }
 
         if( GetText() == wxT( "${REFERENCE}" ) )
         {
-            if( !aView->IsLayerVisible( LAYER_MOD_REFERENCES ) )
+            if( !aView->IsLayerVisible( LAYER_FP_REFERENCES ) )
                 return HIDE;
         }
 
-        if( parentFP->GetLayer() == F_Cu && !aView->IsLayerVisible( LAYER_MOD_FR ) )
+        if( parentFP->GetLayer() == F_Cu && !aView->IsLayerVisible( LAYER_FOOTPRINTS_FR ) )
             return HIDE;
 
-        if( parentFP->GetLayer() == B_Cu && !aView->IsLayerVisible( LAYER_MOD_BK ) )
+        if( parentFP->GetLayer() == B_Cu && !aView->IsLayerVisible( LAYER_FOOTPRINTS_BK ) )
             return HIDE;
 
-        if( !aView->IsLayerVisible( LAYER_MOD_TEXT ) )
+        if( !aView->IsLayerVisible( LAYER_FP_TEXT ) )
             return HIDE;
     }
 
