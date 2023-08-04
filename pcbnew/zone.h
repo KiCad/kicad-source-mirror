@@ -139,7 +139,7 @@ public:
     void SetLayerSet( LSET aLayerSet ) override;
     virtual LSET GetLayerSet() const override { return m_layerSet; }
 
-    wxString GetZoneName() const { return m_zoneName; }
+    const wxString& GetZoneName() const { return m_zoneName; }
     void SetZoneName( const wxString& aName ) { m_zoneName = aName; }
 
     bool Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const override
