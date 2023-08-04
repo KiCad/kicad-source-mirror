@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -95,11 +95,10 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	gbSizer1->Add( m_sketchPadsOnFabLayers, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_plotViaOnMaskOpt = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Tent vias"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_plotViaOnMaskOpt->SetValue(true);
-	m_plotViaOnMaskOpt->SetToolTip( _("Include soldermask over vias") );
+	m_tentVias = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Tent vias"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_tentVias->SetToolTip( _("Tented vias: not plotted on soldermask layer\nNot tented: vias are plotted on soldermask layer\n(Solder mask is a negative layer)") );
 
-	gbSizer1->Add( m_plotViaOnMaskOpt, wxGBPosition( 5, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
+	gbSizer1->Add( m_tentVias, wxGBPosition( 5, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
 
 	m_useAuxOriginCheckBox = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Use drill/place file origin"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_useAuxOriginCheckBox->SetToolTip( _("Use the drill/place file origin as the coordinate origin for plotted files") );

@@ -580,19 +580,8 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
         const PCB_VIA* via = static_cast<const PCB_VIA*>( track );
 
-        // vias are not plotted if not on selected layer, but if layer is SOLDERMASK_LAYER_BACK
-        // or SOLDERMASK_LAYER_FRONT, vias are drawn only if they are on the corresponding
-        // external copper layer
+        // vias are not plotted if not on selected layer
         LSET via_mask_layer = via->GetLayerSet();
-
-        if( aPlotOpt.GetPlotViaOnMaskLayer() )
-        {
-            if( via_mask_layer[B_Cu] )
-                via_mask_layer.set( B_Mask );
-
-            if( via_mask_layer[F_Cu] )
-                via_mask_layer.set( F_Mask );
-        }
 
         if( !( via_mask_layer & aLayerMask ).any() )
             continue;

@@ -331,8 +331,8 @@ void DIALOG_PLOT::init_Dialog()
     // Plot mirror option
     m_plotMirrorOpt->SetValue( m_plotOpts.GetMirror() );
 
-    // Put vias on mask layer
-    m_plotViaOnMaskOpt->SetValue( m_plotOpts.GetPlotViaOnMaskLayer() );
+    // Plot vias on mask layer (not tented) or not (tented)
+    m_tentVias->SetValue( !m_plotOpts.GetPlotViaOnMaskLayer() );
 
     // Black and white plotting
     m_SVGColorChoice->SetSelection( m_plotOpts.GetBlackAndWhite() ? 1 : 0 );
@@ -792,7 +792,7 @@ void DIALOG_PLOT::applyPlotSettings()
     sel = m_DXF_plotUnits->GetSelection();
     tempOptions.SetDXFPlotUnits( sel == 0 ? DXF_UNITS::INCHES : DXF_UNITS::MILLIMETERS );
 
-    tempOptions.SetPlotViaOnMaskLayer( m_plotViaOnMaskOpt->GetValue() );
+    tempOptions.SetPlotViaOnMaskLayer( !m_tentVias->GetValue() );
 
     if( !m_DXF_plotTextStrokeFontOpt->IsEnabled() ) // Currently, only DXF supports this option
         tempOptions.SetTextMode( PLOT_TEXT_MODE::DEFAULT );
