@@ -51,6 +51,7 @@ private:
 
     PNS::MEANDER_SETTINGS m_savedMeanderSettings;
     PNS::ROUTER_MODE      m_lastTuneMode;
+    bool                  m_inLengthTuner;
 };
 
 #endif
