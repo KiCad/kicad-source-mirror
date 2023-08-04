@@ -396,8 +396,8 @@ void PANEL_PREVIEW_3D_MODEL::View3DSettings( wxCommandEvent& event )
     BOARD_DESIGN_SETTINGS bds = m_dummyBoard->GetDesignSettings();
     int                   thickness = bds.GetBoardThickness();
 
-    WX_UNIT_ENTRY_DIALOG dlg( m_parentFrame, _( "Board thickness:" ),
-                              _( "3D Preview Options" ), thickness );
+    WX_UNIT_ENTRY_DIALOG dlg( m_parentFrame, _( "Board Thickness: " ),
+                              _( "Preview Settings" ), thickness );
 
     if( dlg.ShowModal() != wxID_OK )
         return;
