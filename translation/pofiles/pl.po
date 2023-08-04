@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-03 11:24-0700\n"
-"PO-Revision-Date: 2023-07-07 16:49+0000\n"
+"PO-Revision-Date: 2023-08-06 10:10+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v7/pl/>\n"
 "Language: pl\n"
@@ -1000,14 +1000,12 @@ msgid "Light 8:"
 msgstr "Jasny 8:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:399
-#, fuzzy
 msgid "Board thickness:"
-msgstr "Grubość płytki: "
+msgstr "Grubość płytki:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:400
-#, fuzzy
 msgid "3D Preview Options"
-msgstr "Ustawienia podglądu"
+msgstr "Ustawienia podglądu 3D"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56 pcbnew/pcb_bitmap.cpp:261
@@ -7003,7 +7001,7 @@ msgstr "Pliki listy sieci programu OrcadPCB2"
 
 #: common/wildcards_and_files_ext.cpp:320
 msgid "KiCad netlist files"
-msgstr "Pliki listy sieci"
+msgstr "Pliki listy sieci programu KiCad"
 
 #: common/wildcards_and_files_ext.cpp:326
 #: common/wildcards_and_files_ext.cpp:367
@@ -11021,7 +11019,7 @@ msgstr "Częstotliwość końcowa:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:81
 msgid "AC"
-msgstr "AC"
+msgstr "Zmiennoprądowa (AC)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:91
 msgid "Source 2"
@@ -33133,9 +33131,8 @@ msgid "Checking pads..."
 msgstr "Sprawdzam pola lutownicze..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:172
-#, fuzzy
 msgid "Checking copper graphic clearances..."
-msgstr "Sprawdzam prześwity tekstu oraz grafiki na warstwach sygnałowych..."
+msgstr "Sprawdzam prześwity grafik na warstwach sygnałowych..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:180
 msgid "Checking copper zone clearances..."
