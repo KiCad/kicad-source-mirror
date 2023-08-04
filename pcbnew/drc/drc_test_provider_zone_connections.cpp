@@ -136,8 +136,12 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
             if( constraint.GetSeverity() == RPT_SEVERITY_IGNORE || minCount <= 0 )
                 continue;
 
+            constraint = bds.m_DRCEngine->EvalRules( THERMAL_RELIEF_GAP_CONSTRAINT, pad, aZone,
+                                                     aLayer );
+            int mid_gap = constraint.m_Value.Min() / 2;
+
             SHAPE_POLY_SET padPoly;
-            pad->TransformShapeToPolygon( padPoly, aLayer, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
+            pad->TransformShapeToPolygon( padPoly, aLayer, mid_gap, ARC_LOW_DEF, ERROR_OUTSIDE );
 
             SHAPE_LINE_CHAIN& padOutline = padPoly.Outline( 0 );
             BOX2I             padBBox( item_bbox );
