@@ -2417,7 +2417,9 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, boo
     // member to have the correct connection info
     if( conn->IsBus() && !stale_bus_members.empty() )
     {
-        for( SCH_CONNECTION* stale_member : stale_bus_members )
+        std::unordered_set<SCH_CONNECTION*> cached_members = stale_bus_members;
+
+        for( SCH_CONNECTION* stale_member : cached_members )
         {
             for( CONNECTION_SUBGRAPH* subgraph : visited )
             {
