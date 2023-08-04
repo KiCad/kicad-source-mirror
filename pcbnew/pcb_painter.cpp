@@ -1995,7 +1995,7 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
     }
 
     TEXT_ATTRIBUTES attrs = aText->GetAttributes();
-    const COLOR4D& color = m_pcbSettings.GetColor( aText, aText->GetLayer() );
+    const COLOR4D& color = m_pcbSettings.GetColor( aText, aLayer );
     bool           outline_mode = !viewer_settings()->m_ViewersDisplay.m_DisplayTextFill;
 
     KIFONT::FONT* font = aText->GetFont();
