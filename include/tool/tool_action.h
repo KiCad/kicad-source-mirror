@@ -299,6 +299,9 @@ public:
      */
     TOOL_EVENT MakeEvent() const;
 
+    /**
+     * Return the translated label for the action.
+    */
     wxString GetLabel() const;
     wxString GetMenuItem() const;
     wxString GetTooltip( bool aIncludeHotkey = true ) const;

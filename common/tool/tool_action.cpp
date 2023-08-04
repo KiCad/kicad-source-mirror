@@ -123,6 +123,9 @@ TOOL_EVENT TOOL_ACTION::MakeEvent() const
 
 wxString TOOL_ACTION::GetLabel() const
 {
+    if( m_label.empty() )
+        return wxEmptyString;
+
     return wxGetTranslation( m_label );
 }
 
