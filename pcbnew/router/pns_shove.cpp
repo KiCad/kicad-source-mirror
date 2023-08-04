@@ -1492,9 +1492,10 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
 
             break;
 
+        case ITEM::HOLE_T:
         case ITEM::SOLID_T:
             PNS_DBG( Dbg(), BeginGroup, wxString::Format( "iter %d: walk-solid ", aIter ), 0);
-            st = onCollidingSolid( currentLine, (SOLID*) ni, *nearest );
+            st = onCollidingSolid( currentLine, ni, *nearest );
 
             PNS_DBGN( Dbg(), EndGroup );
 
