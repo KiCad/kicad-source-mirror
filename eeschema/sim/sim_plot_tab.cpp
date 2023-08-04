@@ -166,7 +166,7 @@ private:
             {
                 mpScaleBase::TICK_LABEL& l = T_PARENT::m_tickLabels[ii];
 
-                l.label = formatFloat( l.pos / sf, digits ) + suffix;
+                l.label = formatFloat( l.pos / sf, digits );
                 l.visible = true;
 
                 if( ii > 0 && l.label == T_PARENT::m_tickLabels[ii-1].label )
@@ -174,10 +174,16 @@ private:
             }
         }
         while( duplicateLabels && ++digits <= MAX_DISAMBIGUATION_DIGITS );
+
+        if( m_base_axis_label.IsEmpty() )
+            m_base_axis_label = T_PARENT::GetName();
+
+        T_PARENT::SetName( wxString::Format( "%s (%s)", m_base_axis_label, suffix ) );
     }
 
 private:
     const wxString m_unit;
+    wxString       m_base_axis_label;
 };
 
 
