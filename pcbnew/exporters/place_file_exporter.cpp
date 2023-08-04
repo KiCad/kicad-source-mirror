@@ -74,13 +74,15 @@ enum SELECT_SIDE
 };
 
 PLACE_FILE_EXPORTER::PLACE_FILE_EXPORTER( BOARD* aBoard, bool aUnitsMM, bool aOnlySMD,
-                                          bool aExcludeAllTH, bool aTopSide, bool aBottomSide,
-                                          bool aFormatCSV, bool aUseAuxOrigin, bool aNegateBottomX )
+                                          bool aExcludeAllTH, bool aExcludeDNP, bool aTopSide,
+                                          bool aBottomSide, bool aFormatCSV, bool aUseAuxOrigin,
+                                          bool aNegateBottomX )
 {
     m_board         = aBoard;
     m_unitsMM       = aUnitsMM;
     m_onlySMD       = aOnlySMD;
     m_excludeAllTH  = aExcludeAllTH;
+    m_excludeDNP    = aExcludeDNP;
     m_fpCount       = 0;
     m_negateBottomX = aNegateBottomX;
 
@@ -140,6 +142,9 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
             continue;
 
         if( m_excludeAllTH && footprint->HasThroughHolePads() )
+            continue;
+
+        if( m_excludeDNP && ( footprint->GetAttributes() & FP_DNP ) )
             continue;
 
         m_fpCount++;

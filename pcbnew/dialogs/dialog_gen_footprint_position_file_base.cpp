@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
+// C++ code generated with wxFormBuilder (version 3.10.1-254-gc2ef7767)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -78,6 +78,9 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	m_excludeTH = new wxCheckBox( this, wxID_ANY, _("Exclude all footprints with through hole pads"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerLower->Add( m_excludeTH, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
+	m_excludeDNP = new wxCheckBox( this, wxID_ANY, _("Exclude all footprints with the Do Not Populate flag set"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerLower->Add( m_excludeDNP, 0, wxALL, 5 );
+
 	m_cbIncludeBoardEdge = new wxCheckBox( this, wxID_ANY, _("Include board edge layer"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerLower->Add( m_cbIncludeBoardEdge, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
@@ -118,6 +121,7 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	m_radioBoxFilesCount->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIFileOpt ), NULL, this );
 	m_onlySMD->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIOnlySMD ), NULL, this );
 	m_excludeTH->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIExcludeTH ), NULL, this );
+	m_excludeDNP->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIExcludeTH ), NULL, this );
 	m_cbIncludeBoardEdge->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIincludeBoardEdge ), NULL, this );
 	m_negateXcb->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUInegXcoord ), NULL, this );
 	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::OnGenerate ), NULL, this );
@@ -132,6 +136,7 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::~DIALOG_GEN_FOOTPRINT_POSITION_BASE()
 	m_radioBoxFilesCount->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIFileOpt ), NULL, this );
 	m_onlySMD->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIOnlySMD ), NULL, this );
 	m_excludeTH->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIExcludeTH ), NULL, this );
+	m_excludeDNP->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIExcludeTH ), NULL, this );
 	m_cbIncludeBoardEdge->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIincludeBoardEdge ), NULL, this );
 	m_negateXcb->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUInegXcoord ), NULL, this );
 	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::OnGenerate ), NULL, this );

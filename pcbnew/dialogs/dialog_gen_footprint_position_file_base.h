@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
+// C++ code generated with wxFormBuilder (version 3.10.1-254-gc2ef7767)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -51,6 +51,7 @@ class DIALOG_GEN_FOOTPRINT_POSITION_BASE : public DIALOG_SHIM
 		wxRadioBox* m_radioBoxFilesCount;
 		wxCheckBox* m_onlySMD;
 		wxCheckBox* m_excludeTH;
+		wxCheckBox* m_excludeDNP;
 		wxCheckBox* m_cbIncludeBoardEdge;
 		wxCheckBox* m_useDrillPlaceOrigin;
 		wxCheckBox* m_negateXcb;

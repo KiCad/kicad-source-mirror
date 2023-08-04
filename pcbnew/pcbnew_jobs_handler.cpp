@@ -600,6 +600,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
         PLACE_FILE_EXPORTER exporter( brd,
                                       aPosJob->m_units == JOB_EXPORT_PCB_POS::UNITS::MILLIMETERS,
                                       aPosJob->m_smdOnly, aPosJob->m_excludeFootprintsWithTh,
+                                      aPosJob->m_excludeDNP,
                                       frontSide, backSide,
                                       aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV,
                                       aPosJob->m_useDrillPlaceFileOrigin,

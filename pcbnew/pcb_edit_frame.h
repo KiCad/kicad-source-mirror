@@ -314,6 +314,7 @@ public:
      * @param aOnlySMD true to force only footprints flagged smd to be in the list
      * @param aNoTHItems true to include only footprints with no TH pads no matter
      *                   the footprint flag
+     * @param aExcludeDNP true to exclude footprints flagged DNP
      * @param aTopSide true to list footprints on front (top) side.
      * @param aBottomSide true to list footprints on back (bottom) side, if \a aTopSide and
      *                    \a aTopSide are true, list footprints on both sides.
@@ -323,7 +324,7 @@ public:
      * @return the number of footprints found on aSide side or -1 if the file could not be created.
      */
     int DoGenFootprintsPositionFile( const wxString& aFullFileName, bool aUnitsMM, bool aOnlySMD,
-                                     bool aNoTHItems, bool aTopSide, bool aBottomSide,
+                                     bool aNoTHItems, bool aExcludeDNP, bool aTopSide, bool aBottomSide,
                                      bool aFormatCSV, bool aUseAuxOrigin, bool aNegateBottomX );
 
     /**

@@ -35,6 +35,7 @@ public:
             m_useDrillPlaceFileOrigin( true ),
             m_smdOnly( false ),
             m_excludeFootprintsWithTh( false ),
+            m_excludeDNP( false ),
             m_negateBottomX( false )
     {
         m_side = SIDE::BOTH;
@@ -49,6 +50,7 @@ public:
     bool m_useDrillPlaceFileOrigin;
     bool m_smdOnly;
     bool m_excludeFootprintsWithTh;
+    bool m_excludeDNP;
     bool m_negateBottomX;
 
     enum class SIDE

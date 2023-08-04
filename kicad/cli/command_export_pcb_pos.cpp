@@ -36,6 +36,7 @@
 #define ARG_USE_DRILL_FILE_ORIGIN "--use-drill-file-origin"
 #define ARG_SMD_ONLY "--smd-only"
 #define ARG_EXCLUDE_FOOTPRINTS_TH "--exclude-fp-th"
+#define ARG_EXCLUDE_DNP "--exclude-dnp"
 #define ARG_GERBER_BOARD_EDGE "--gerber-board-edge"
 
 
@@ -78,6 +79,12 @@ CLI::EXPORT_PCB_POS_COMMAND::EXPORT_PCB_POS_COMMAND() : EXPORT_PCB_BASE_COMMAND(
             .implicit_value( true )
             .default_value( false );
 
+    m_argParser.add_argument( ARG_EXCLUDE_DNP )
+            .help( UTF8STDSTR(
+                    _( "Exclude all footprints with the Do Not Populate flag set" ) ) )
+            .implicit_value( true )
+            .default_value( false );
+
     m_argParser.add_argument( ARG_GERBER_BOARD_EDGE )
             .help( UTF8STDSTR( _( "Include board edge layer (gerber only)" ) ) )
             .implicit_value( true )
@@ -106,6 +113,7 @@ int CLI::EXPORT_PCB_POS_COMMAND::doPerform( KIWAY& aKiway )
     aPosJob->m_smdOnly = m_argParser.get<bool>( ARG_SMD_ONLY );
     aPosJob->m_excludeFootprintsWithTh = m_argParser.get<bool>( ARG_EXCLUDE_FOOTPRINTS_TH );
     aPosJob->m_useDrillPlaceFileOrigin = m_argParser.get<bool>( ARG_USE_DRILL_FILE_ORIGIN );
+    aPosJob->m_excludeDNP = m_argParser.get<bool>( ARG_EXCLUDE_DNP );
     aPosJob->m_gerberBoardEdge = m_argParser.get<bool>( ARG_GERBER_BOARD_EDGE );
 
     wxString format = FROM_UTF8( m_argParser.get<std::string>( ARG_FORMAT ).c_str() );

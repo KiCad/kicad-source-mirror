@@ -156,6 +156,11 @@ private:
         return m_excludeTH->GetValue();
     }
 
+    bool ExcludeDNP()
+    {
+        return m_excludeDNP->GetValue();
+    }
+
 private:
     PCB_EDIT_FRAME* m_parent;
     REPORTER*       m_reporter;
@@ -356,8 +361,8 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
 
     // Test for any footprint candidate in list.
     {
-        PLACE_FILE_EXPORTER exporter( brd, UnitsMM(), OnlySMD(), ExcludeAllTH(), topSide,
-                                      bottomSide, useCSVfmt, useAuxOrigin, negateBottomX );
+        PLACE_FILE_EXPORTER exporter( brd, UnitsMM(), OnlySMD(), ExcludeAllTH(), ExcludeDNP(),
+                                      topSide, bottomSide, useCSVfmt, useAuxOrigin, negateBottomX );
         exporter.GenPositionData();
 
         if( exporter.GetFootprintCount() == 0 )
@@ -422,8 +427,9 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     }
 
     int fpcount = m_parent->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(), OnlySMD(),
-                                                         ExcludeAllTH(), topSide, bottomSide,
-                                                         useCSVfmt, useAuxOrigin, negateBottomX );
+                                                         ExcludeAllTH(), ExcludeDNP(), topSide,
+                                                         bottomSide, useCSVfmt, useAuxOrigin,
+                                                         negateBottomX );
     if( fpcount < 0 )
     {
         msg.Printf( _( "Failed to create file '%s'." ), fn.GetFullPath() );
@@ -467,7 +473,8 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     }
 
     fpcount = m_parent->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(), OnlySMD(),
-                                                     ExcludeAllTH(), topSide, bottomSide, useCSVfmt,
+                                                     ExcludeAllTH(), ExcludeDNP(), topSide,
+                                                     bottomSide, useCSVfmt,
                                                      useAuxOrigin, negateBottomX );
 
     if( fpcount < 0 )
@@ -509,8 +516,8 @@ int BOARD_EDITOR_CONTROL::GeneratePosFile( const TOOL_EVENT& aEvent )
 
 
 int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName, bool aUnitsMM,
-                                                 bool aOnlySMD, bool aNoTHItems, bool aTopSide,
-                                                 bool aBottomSide, bool aFormatCSV,
+                                                 bool aOnlySMD, bool aNoTHItems, bool aExcludeDNP,
+                                                 bool aTopSide, bool aBottomSide, bool aFormatCSV,
                                                  bool aUseAuxOrigin, bool aNegateBottomX )
 {
     FILE * file = nullptr;
@@ -524,8 +531,8 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName, 
     }
 
     std::string data;
-    PLACE_FILE_EXPORTER exporter( GetBoard(), aUnitsMM, aOnlySMD, aNoTHItems, aTopSide, aBottomSide,
-                                  aFormatCSV, aUseAuxOrigin, aNegateBottomX );
+    PLACE_FILE_EXPORTER exporter( GetBoard(), aUnitsMM, aOnlySMD, aNoTHItems, aExcludeDNP, aTopSide,
+                                  aBottomSide, aFormatCSV, aUseAuxOrigin, aNegateBottomX );
     data = exporter.GenPositionData();
 
     // if aFullFileName is empty, the file is not created, only the
@@ -586,6 +593,7 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
     std::string data;
     PLACE_FILE_EXPORTER exporter( GetBoard(), aUnitsMM,
                                   false, false,         // SMD aOnlySMD, aNoTHItems
+                                  false,                // aExcludeDNP
                                   true, true,           // aTopSide, aBottomSide
                                   false, true, false    // aFormatCSV, aUseAuxOrigin, aNegateBottomX
                                 );
