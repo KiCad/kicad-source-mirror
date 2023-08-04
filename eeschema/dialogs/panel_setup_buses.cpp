@@ -53,9 +53,6 @@ PANEL_SETUP_BUSES::PANEL_SETUP_BUSES( wxWindow* aWindow, SCH_EDIT_FRAME* aFrame 
     m_membersGrid->PushEventHandler( new GRID_TRICKS( m_membersGrid,
                                                       [this]( wxCommandEvent& aEvent )
                                                       {
-                                                          wxIdleEvent dummy;
-                                                          reloadMembersGridOnIdle( dummy );
-
                                                           OnAddMember( aEvent );
                                                       } ) );
 
@@ -306,6 +303,12 @@ void PANEL_SETUP_BUSES::OnMemberGridCellChanging( wxGridEvent& event )
                 // Parse a space-separated list and add each one
                 wxStringTokenizer tok( name, " " );
 
+                if( tok.CountTokens() > 1 )
+                {
+                    m_membersGridDirty = true;
+                    Bind( wxEVT_IDLE, &PANEL_SETUP_BUSES::reloadMembersGridOnIdle, this );
+                }
+
                 while( tok.HasMoreTokens() )
                     alias->Members().push_back( tok.GetNextToken() );
             }
@@ -314,9 +317,6 @@ void PANEL_SETUP_BUSES::OnMemberGridCellChanging( wxGridEvent& event )
                 alias->Members().push_back( m_membersGrid->GetCellValue( ii, 0 ) );
             }
         }
-
-        m_membersGridDirty = true;
-        Bind( wxEVT_IDLE, &PANEL_SETUP_BUSES::reloadMembersGridOnIdle, this );
     }
 }
 
