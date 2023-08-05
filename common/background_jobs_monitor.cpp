@@ -22,6 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <unordered_map>
+
 #include <wx/gauge.h>
 #include <wx/frame.h>
 #include <wx/panel.h>
