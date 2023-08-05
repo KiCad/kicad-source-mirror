@@ -931,6 +931,10 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
         {
             const PCB_VIA* via = static_cast<const PCB_VIA*>( track );
 
+            // Via are not always on all layers
+            if( ( via->GetLayerSet() & m_layerMask ).none() )
+                continue;
+
             plotOneDrillMark( PAD_DRILL_SHAPE_CIRCLE, via->GetStart(),
                               VECTOR2I( via->GetDrillValue(), 0 ), VECTOR2I( via->GetWidth(), 0 ),
                               ANGLE_0, smallDrill );
