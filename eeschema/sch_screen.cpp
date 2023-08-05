@@ -847,7 +847,7 @@ bool SCH_SCREEN::IsTerminalPoint( const VECTOR2I& aPosition, int aLayer ) const
 
         label = GetLabel( aPosition );
 
-        if( label && label->IsConnected( aPosition ) )
+        if( label && !label->IsNew() && label->IsConnected( aPosition ) )
             return true;
 
         break;
@@ -859,7 +859,7 @@ bool SCH_SCREEN::IsTerminalPoint( const VECTOR2I& aPosition, int aLayer ) const
         break;
 
     case LAYER_WIRE:
-        if( GetItem( aPosition, 1, SCH_BUS_WIRE_ENTRY_T) )
+        if( GetItem( aPosition, 1, SCH_BUS_WIRE_ENTRY_T ) )
             return true;
 
         if( GetItem( aPosition, 1, SCH_JUNCTION_T ) )
@@ -873,7 +873,7 @@ bool SCH_SCREEN::IsTerminalPoint( const VECTOR2I& aPosition, int aLayer ) const
 
         label = GetLabel( aPosition, 1 );
 
-        if( label && label->IsConnected( aPosition ) )
+        if( label && !label->IsNew() && label->IsConnected( aPosition ) )
             return true;
 
         sheetPin = GetSheetPin( aPosition );
