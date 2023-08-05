@@ -78,68 +78,87 @@ TOOL_ACTION PL_ACTIONS::placeImage( TOOL_ACTION_ARGS()
 
 // PL_EDIT_TOOL
 //
-TOOL_ACTION PL_ACTIONS::move( "plEditor.InteractiveMove.move",
-        AS_GLOBAL,
-        'M', LEGACY_HK_NAME( "Move Item" ),
-        _( "Move" ), _( "Moves the selected item(s)" ),
-        BITMAPS::move, AF_ACTIVATE );
+TOOL_ACTION PL_ACTIONS::move( TOOL_ACTION_ARGS()
+        .Name( "plEditor.InteractiveMove.move" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'M' )
+        .LegacyHotkeyName( "Move Item" )
+        .MenuText( _( "Move" ) )
+        .Tooltip( _( "Moves the selected item(s)" ) )
+        .Icon( BITMAPS::move )
+        .Flags( AF_ACTIVATE ) );
 
-TOOL_ACTION PL_ACTIONS::appendImportedDrawingSheet( "plEditor.InteractiveEdit.appendWorksheet",
-        AS_GLOBAL, 0, "",
-        _( "Append Existing Drawing Sheet..." ),
-        _( "Append an existing drawing sheet file to current file" ),
-        BITMAPS::import, AF_ACTIVATE );
+TOOL_ACTION PL_ACTIONS::appendImportedDrawingSheet( TOOL_ACTION_ARGS()
+        .Name( "plEditor.InteractiveEdit.appendWorksheet" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Append Existing Drawing Sheet..." ) )
+        .Tooltip( _( "Append an existing drawing sheet file to current file" ) )
+        .Icon( BITMAPS::import )
+        .Flags( AF_ACTIVATE ) );
 
 
 // PL_EDITOR_CONTROL
 //
-TOOL_ACTION PL_ACTIONS::showInspector( "plEditor.EditorControl.ShowInspector",
-        AS_GLOBAL, 0, "",
-        _( "Show Design Inspector" ), _( "Show the list of items in the drawing sheet" ),
-        BITMAPS::spreadsheet );
+TOOL_ACTION PL_ACTIONS::showInspector( TOOL_ACTION_ARGS()
+        .Name( "plEditor.EditorControl.ShowInspector" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Show Design Inspector" ) )
+        .Tooltip( _( "Show the list of items in the drawing sheet" ) )
+        .Icon( BITMAPS::spreadsheet ) );
 
-TOOL_ACTION PL_ACTIONS::previewSettings( "plEditor.EditorControl.PreviewSettings",
-        AS_GLOBAL, 0, "",
-        _( "Page Preview Settings..." ), _( "Edit preview data for page size and title block" ),
-        BITMAPS::sheetset );
+TOOL_ACTION PL_ACTIONS::previewSettings( TOOL_ACTION_ARGS()
+        .Name( "plEditor.EditorControl.PreviewSettings" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Page Preview Settings..." ) )
+        .Tooltip( _( "Edit preview data for page size and title block" ) )
+        .Icon( BITMAPS::sheetset ) );
 
-TOOL_ACTION PL_ACTIONS::layoutNormalMode( "plEditor.EditorControl.LayoutNormalMode",
-        AS_GLOBAL, 0, "",
-        _( "Show title block in preview mode" ),
-        _( "Show title block in preview mode:\n"
-           "text placeholders will be replaced with preview data." ),
-        BITMAPS::pagelayout_normal_view_mode );
+TOOL_ACTION PL_ACTIONS::layoutNormalMode( TOOL_ACTION_ARGS()
+        .Name( "plEditor.EditorControl.LayoutNormalMode" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Show title block in preview mode" ) )
+        .Tooltip( _( "Show title block in preview mode:\n"
+                     "text placeholders will be replaced with preview data." ) )
+        .Icon( BITMAPS::pagelayout_normal_view_mode ) );
 
-TOOL_ACTION PL_ACTIONS::layoutEditMode( "plEditor.EditorControl.LayoutEditMode",
-        AS_GLOBAL, 0, "",
-        _( "Show title block in edit mode" ),
-        _( "Show title block in edit mode:\n"
-           "text placeholders are shown as ${keyword} tokens." ),
-        BITMAPS::pagelayout_special_view_mode  );
+TOOL_ACTION PL_ACTIONS::layoutEditMode( TOOL_ACTION_ARGS()
+        .Name( "plEditor.EditorControl.LayoutEditMode" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Show title block in edit mode" ) )
+        .Tooltip( _( "Show title block in edit mode:\n"
+                     "text placeholders are shown as ${keyword} tokens." ) )
+        .Icon( BITMAPS::pagelayout_special_view_mode  ) );
 
 
 // PL_SELECTION_TOOL
 //
-TOOL_ACTION PL_ACTIONS::selectionActivate( "plEditor.InteractiveSelection",
-        AS_GLOBAL, 0, "", "", "",       // No description, not shown anywhere
-        BITMAPS::INVALID_BITMAP, AF_ACTIVATE );
+TOOL_ACTION PL_ACTIONS::selectionActivate( TOOL_ACTION_ARGS()
+        .Name( "plEditor.InteractiveSelection" )
+        .Scope( AS_GLOBAL )
+        .Flags( AF_ACTIVATE ) );
 
-TOOL_ACTION PL_ACTIONS::selectionMenu( "plEditor.InteractiveSelection.SelectionMenu",
-        AS_GLOBAL );
+TOOL_ACTION PL_ACTIONS::selectionMenu( TOOL_ACTION_ARGS()
+        .Name( "plEditor.InteractiveSelection.SelectionMenu" )
+        .Scope( AS_GLOBAL ) );
 
-TOOL_ACTION PL_ACTIONS::addItemToSel( "plEditor.InteractiveSelection.AddItemToSel",
-        AS_GLOBAL );
+TOOL_ACTION PL_ACTIONS::addItemToSel( TOOL_ACTION_ARGS()
+        .Name( "plEditor.InteractiveSelection.AddItemToSel" )
+        .Scope( AS_GLOBAL ) );
 
-TOOL_ACTION PL_ACTIONS::addItemsToSel( "plEditor.InteractiveSelection.AddItemsToSel",
-        AS_GLOBAL );
+TOOL_ACTION PL_ACTIONS::addItemsToSel( TOOL_ACTION_ARGS()
+        .Name( "plEditor.InteractiveSelection.AddItemsToSel" )
+        .Scope( AS_GLOBAL ) );
 
-TOOL_ACTION PL_ACTIONS::removeItemFromSel( "plEditor.InteractiveSelection.RemoveItemFromSel",
-        AS_GLOBAL );
+TOOL_ACTION PL_ACTIONS::removeItemFromSel( TOOL_ACTION_ARGS()
+        .Name( "plEditor.InteractiveSelection.RemoveItemFromSel" )
+        .Scope( AS_GLOBAL ) );
 
-TOOL_ACTION PL_ACTIONS::removeItemsFromSel( "plEditor.InteractiveSelection.RemoveItemsFromSel",
-        AS_GLOBAL );
+TOOL_ACTION PL_ACTIONS::removeItemsFromSel( TOOL_ACTION_ARGS()
+        .Name( "plEditor.InteractiveSelection.RemoveItemsFromSel" )
+        .Scope( AS_GLOBAL ) );
 
-TOOL_ACTION PL_ACTIONS::clearSelection( "plEditor.InteractiveSelection.ClearSelection",
-        AS_GLOBAL );
+TOOL_ACTION PL_ACTIONS::clearSelection( TOOL_ACTION_ARGS()
+        .Name( "plEditor.InteractiveSelection.ClearSelection" )
+        .Scope( AS_GLOBAL ) );
 
 
