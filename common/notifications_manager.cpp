@@ -175,7 +175,8 @@ class NOTIFICATIONS_LIST : public wxFrame
 {
 public:
     NOTIFICATIONS_LIST( NOTIFICATIONS_MANAGER* aManager, wxWindow* parent, const wxPoint& pos ) :
-            wxFrame( parent, wxID_ANY, _( "Notifications" ), pos, wxSize( 300, 150 ), wxFRAME_NO_TASKBAR ),
+            wxFrame( parent, wxID_ANY, _( "Notifications" ), pos, wxSize( 300, 150 ),
+                     wxFRAME_NO_TASKBAR | wxBORDER_SIMPLE ),
             m_manager( aManager )
     {
         SetSizeHints( wxDefaultSize, wxDefaultSize );
@@ -184,7 +185,7 @@ public:
         bSizer1 = new wxBoxSizer( wxVERTICAL );
 
         m_scrolledWindow = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition,
-                                                 wxSize( -1, -1 ), wxALWAYS_SHOW_SB | wxVSCROLL );
+                                                 wxSize( -1, -1 ), wxVSCROLL );
         m_scrolledWindow->SetScrollRate( 5, 5 );
         m_contentSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -192,6 +193,12 @@ public:
         m_scrolledWindow->Layout();
         m_contentSizer->Fit( m_scrolledWindow );
         bSizer1->Add( m_scrolledWindow, 1, wxEXPAND | wxALL, 0 );
+
+        m_noNotificationsText = new wxStaticText(
+                m_scrolledWindow, wxID_ANY, _( "There are no notifications available" ),
+                wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER_HORIZONTAL );
+        m_noNotificationsText->Wrap( -1 );
+        m_contentSizer->Add( m_noNotificationsText, 1, wxALL | wxEXPAND, 5 );
 
         Bind( wxEVT_KILL_FOCUS, &NOTIFICATIONS_LIST::onFocusLoss, this );
 
@@ -214,6 +221,8 @@ public:
 
     void Add( NOTIFICATION* aNoti )
     {
+        m_noNotificationsText->Hide();
+
         NOTIFICATION_PANEL* panel = new NOTIFICATION_PANEL( m_scrolledWindow, m_manager, aNoti );
         m_contentSizer->Add( panel, 0, wxEXPAND | wxALL, 2 );
         m_scrolledWindow->Layout();
@@ -237,13 +246,21 @@ public:
 
             m_panelMap.erase( it );
         }
+
+        if( m_panelMap.size() == 0 )
+        {
+            m_noNotificationsText->Show();
+        }
     }
 
 private:
     wxScrolledWindow*                                      m_scrolledWindow;
+    ///< Inner content of the scrolled window, add panels here
     wxBoxSizer*                                            m_contentSizer;
     std::unordered_map<NOTIFICATION*, NOTIFICATION_PANEL*> m_panelMap;
     NOTIFICATIONS_MANAGER*                                 m_manager;
+    ///< Text to be displayed when no notifications are present, this gets a Show/Hide call as needed
+    wxStaticText*                                          m_noNotificationsText;
 };
 
 

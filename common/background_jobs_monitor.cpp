@@ -92,7 +92,8 @@ class BACKGROUND_JOB_LIST : public wxFrame
 {
 public:
     BACKGROUND_JOB_LIST( wxWindow* parent, const wxPoint& pos ) :
-            wxFrame( parent, wxID_ANY, _( "Background Jobs" ), pos, wxSize( 300, 150 ), wxFRAME_NO_TASKBAR )
+            wxFrame( parent, wxID_ANY, _( "Background Jobs" ), pos, wxSize( 300, 150 ),
+                     wxFRAME_NO_TASKBAR | wxBORDER_SIMPLE )
     {
         SetSizeHints( wxDefaultSize, wxDefaultSize );
 
@@ -100,7 +101,7 @@ public:
         bSizer1 = new wxBoxSizer( wxVERTICAL );
 
         m_scrolledWindow = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition,
-                                                 wxSize( -1, -1 ), wxALWAYS_SHOW_SB | wxVSCROLL );
+                                                 wxSize( -1, -1 ), wxVSCROLL );
         m_scrolledWindow->SetScrollRate( 5, 5 );
         m_contentSizer = new wxBoxSizer( wxVERTICAL );
 
