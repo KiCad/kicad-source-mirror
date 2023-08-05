@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-03 11:24-0700\n"
-"PO-Revision-Date: 2023-06-30 01:49+0000\n"
+"PO-Revision-Date: 2023-08-06 10:10+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/v7/pt_BR/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.18.1\n"
+"X-Generator: Weblate 5.0-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -1017,14 +1017,12 @@ msgid "Light 8:"
 msgstr "Luz 8:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:399
-#, fuzzy
 msgid "Board thickness:"
-msgstr "Espessura da placa: "
+msgstr "Espessura da placa:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:400
-#, fuzzy
 msgid "3D Preview Options"
-msgstr "Configurações da pré-visualização"
+msgstr "Opções de visualização 3D"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56 pcbnew/pcb_bitmap.cpp:261
@@ -33254,9 +33252,8 @@ msgid "Checking pads..."
 msgstr "Verificando as ilhas..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:172
-#, fuzzy
 msgid "Checking copper graphic clearances..."
-msgstr "Isolamentos de texto e gráfico...\n"
+msgstr "Verificando as folgas dos gráficos de cobre..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:180
 msgid "Checking copper zone clearances..."
@@ -35530,7 +35527,7 @@ msgstr "Violação"
 #: pcbnew/pcb_marker.cpp:199 pcbnew/pcb_marker.cpp:202
 #: pcbnew/pcb_marker.cpp:205
 msgid "Severity"
-msgstr "Intensidade"
+msgstr "Gravidade"
 
 #: pcbnew/pcb_marker.cpp:263
 #, c-format
