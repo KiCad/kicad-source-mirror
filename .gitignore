@@ -1,8 +1,8 @@
 .downloads-by-cmake
 .gdb_history
 boost_root
-/Build
-/build
+/Build*
+/build*
 /cmake-build-*
 common/fp_lib_table_keywords.cpp
 common/drc_rules_keywords.cpp
@@ -27,6 +27,7 @@ eeschema/schematic_keywords.*
 pcbnew/pcb_plot_params_keywords.cpp
 pcbnew/pcb_plot_params_lexer.h
 Makefile
+CMakeUserPresets.json
 CMakeCache.txt
 .cache/
 auto_renamed_to_cpp
