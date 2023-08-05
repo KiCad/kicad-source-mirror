@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-03 11:24-0700\n"
-"PO-Revision-Date: 2023-07-23 21:07+0000\n"
+"PO-Revision-Date: 2023-08-06 10:10+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v7/fi/>\n"
 "Language: fi\n"
@@ -1015,14 +1015,12 @@ msgid "Light 8:"
 msgstr "Valo 8:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:399
-#, fuzzy
 msgid "Board thickness:"
-msgstr "Piirilevyn Paksuus: "
+msgstr "Piirilevyn paksuus:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:400
-#, fuzzy
 msgid "3D Preview Options"
-msgstr "GerbView:n asetukset"
+msgstr "3D-Esikatselun Valinnat"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56 pcbnew/pcb_bitmap.cpp:261
@@ -10963,7 +10961,7 @@ msgstr "Ohmia"
 #: eeschema/dialogs/dialog_sim_command_base.cpp:24
 #: eeschema/dialogs/dialog_sim_command_base.cpp:265
 msgid "Decade"
-msgstr "Decade()"
+msgstr "Dekadi"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:24
 #: eeschema/dialogs/dialog_sim_command_base.cpp:265
@@ -11256,7 +11254,7 @@ msgstr "Ei Kytketty"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:1065
 msgid "Browse Models"
-msgstr "Selaa Malleja"
+msgstr "Selaa malleja"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:30
 msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
@@ -11314,7 +11312,7 @@ msgstr "Symbolinasta"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:240
 msgid "Model Pin"
-msgstr "Mallinasta"
+msgstr "Nastan malli"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:301
 msgid "Pin Assignments"
@@ -16220,7 +16218,7 @@ msgstr "Taajuus"
 
 #: eeschema/sim/sim_plot_panel.cpp:352
 msgid "Gain"
-msgstr "Teho"
+msgstr "Kasvu"
 
 #: eeschema/sim/sim_plot_panel.cpp:353
 msgid "Phase"
@@ -32986,9 +32984,8 @@ msgid "Checking pads..."
 msgstr "Tarkistetaan anturat..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:172
-#, fuzzy
 msgid "Checking copper graphic clearances..."
-msgstr "Tarkastetaan kuparivyöhykkeen välyksiä ..."
+msgstr "Tarkistetaan kuparin graafisia välyksiä..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:180
 msgid "Checking copper zone clearances..."
