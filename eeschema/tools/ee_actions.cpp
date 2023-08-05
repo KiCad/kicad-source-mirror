@@ -43,205 +43,274 @@ class SCH_BITMAP;
 
 // EE_INSPECTION_TOOL
 //
-TOOL_ACTION EE_ACTIONS::runERC( "eeschema.InspectionTool.runERC",
-        AS_GLOBAL, 0, "",
-        _( "Electrical Rules Checker" ), _( "Perform electrical rules check" ),
-        BITMAPS::erc );
+TOOL_ACTION EE_ACTIONS::runERC( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InspectionTool.runERC" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Electrical Rules Checker" ) )
+        .Tooltip( _( "Perform electrical rules check" ) )
+        .Icon( BITMAPS::erc ) );
 
-TOOL_ACTION EE_ACTIONS::checkSymbol( "eeschema.InspectionTool.checkSymbol",
-        AS_GLOBAL, 0, "",
-        _( "Symbol Checker" ), _( "Show the symbol checker window" ),
-        BITMAPS::erc );
+TOOL_ACTION EE_ACTIONS::checkSymbol( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InspectionTool.checkSymbol" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Symbol Checker" ) )
+        .Tooltip( _( "Show the symbol checker window" ) )
+        .Icon( BITMAPS::erc ) );
 
-TOOL_ACTION EE_ACTIONS::diffSymbol( "eeschema.InspectionTool.diffSymbol",
-        AS_GLOBAL, 0, "",
-        _( "Diff Symbol with Library" ),
-        _( "Show differences between schematic symbol and its library equivalent" ),
-        BITMAPS::library );
+TOOL_ACTION EE_ACTIONS::diffSymbol( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InspectionTool.diffSymbol" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Diff Symbol with Library" ) )
+        .Tooltip( _( "Show differences between schematic symbol and its library equivalent" ) )
+        .Icon( BITMAPS::library ) );
 
-TOOL_ACTION EE_ACTIONS::showSimulator( "eeschema.EditorControl.showSimulator",
-        AS_GLOBAL, 0, "",
-        _( "Simulator" ), _( "Show simulation window for running SPICE or IBIS simulations." ),
-        BITMAPS::simulator );
+TOOL_ACTION EE_ACTIONS::showSimulator( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.showSimulator" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Simulator" ) )
+        .Tooltip( _( "Show simulation window for running SPICE or IBIS simulations." ) )
+        .Icon( BITMAPS::simulator ) );
 
-TOOL_ACTION EE_ACTIONS::showDatasheet( "eeschema.InspectionTool.showDatasheet",
-        AS_GLOBAL,
-        'D', LEGACY_HK_NAME( "Show Datasheet" ),
-        _( "Show Datasheet" ), _( "Opens the datasheet in a browser" ),
-        BITMAPS::datasheet );
+TOOL_ACTION EE_ACTIONS::showDatasheet( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InspectionTool.showDatasheet" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'D' )
+        .LegacyHotkeyName( "Show Datasheet" )
+        .MenuText( _( "Show Datasheet" ) )
+        .Tooltip( _( "Opens the datasheet in a browser" ) )
+        .Icon( BITMAPS::datasheet ) );
 
 
 // EE_POINT_EDITOR
 //
-TOOL_ACTION EE_ACTIONS::pointEditorAddCorner( "eeschema.PointEditor.addCorner",
-        AS_GLOBAL, 0, "",
-        _( "Create Corner" ), _( "Create a corner" ),
-        BITMAPS::add_corner );
+TOOL_ACTION EE_ACTIONS::pointEditorAddCorner( TOOL_ACTION_ARGS()
+        .Name( "eeschema.PointEditor.addCorner" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Create Corner" ) )
+        .Tooltip( _( "Create a corner" ) )
+        .Icon( BITMAPS::add_corner ) );
 
-TOOL_ACTION EE_ACTIONS::pointEditorRemoveCorner( "eeschema.PointEditor.removeCorner",
-        AS_GLOBAL, 0, "",
-        _( "Remove Corner" ), _( "Remove corner" ),
-        BITMAPS::delete_cursor );
+TOOL_ACTION EE_ACTIONS::pointEditorRemoveCorner( TOOL_ACTION_ARGS()
+        .Name( "eeschema.PointEditor.removeCorner" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Remove Corner" ) )
+        .Tooltip( _( "Remove corner" ) )
+        .Icon( BITMAPS::delete_cursor ) );
 
 
 // EE_SELECTION_TOOL
 //
-TOOL_ACTION EE_ACTIONS::selectionActivate( "eeschema.InteractiveSelection",
-        AS_GLOBAL, 0, "", "", "",      // No description, not shown anywhere
-        BITMAPS::INVALID_BITMAP, AF_ACTIVATE );
+TOOL_ACTION EE_ACTIONS::selectionActivate( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveSelection" )
+        .Scope( AS_GLOBAL )
+        .Flags( AF_ACTIVATE ) );
 
-TOOL_ACTION EE_ACTIONS::selectNode( "eeschema.InteractiveSelection.SelectNode",
-        AS_GLOBAL,
-        MD_ALT + '3', LEGACY_HK_NAME( "Select Node" ),
-        _( "Select Node" ), _( "Select a connection item under the cursor" ) );
+TOOL_ACTION EE_ACTIONS::selectNode( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveSelection.SelectNode" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_ALT + '3' )
+        .LegacyHotkeyName( "Select Node" )
+        .MenuText( _( "Select Node" ) )
+        .Tooltip( _( "Select a connection item under the cursor" ) ) );
 
-TOOL_ACTION EE_ACTIONS::selectConnection( "eeschema.InteractiveSelection.SelectConnection",
-        AS_GLOBAL,
-        MD_ALT + '4', LEGACY_HK_NAME( "Select Connection" ),
-        _( "Select Connection" ), _( "Select a complete connection" ),
-        BITMAPS::net_highlight_schematic);
+TOOL_ACTION EE_ACTIONS::selectConnection( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveSelection.SelectConnection" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_ALT + '4' )
+        .LegacyHotkeyName( "Select Connection" )
+        .MenuText( _( "Select Connection" ) )
+        .Tooltip( _( "Select a complete connection" ) )
+        .Icon( BITMAPS::net_highlight_schematic ) );
 
-TOOL_ACTION EE_ACTIONS::selectionMenu( "eeschema.InteractiveSelection.SelectionMenu",
-        AS_GLOBAL );
+TOOL_ACTION EE_ACTIONS::selectionMenu( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveSelection.SelectionMenu" )
+        .Scope( AS_GLOBAL ) );
 
-TOOL_ACTION EE_ACTIONS::addItemToSel( "eeschema.InteractiveSelection.AddItemToSel",
-        AS_GLOBAL );
+TOOL_ACTION EE_ACTIONS::addItemToSel( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveSelection.AddItemToSel" )
+        .Scope( AS_GLOBAL ) );
 
-TOOL_ACTION EE_ACTIONS::addItemsToSel( "eeschema.InteractiveSelection.AddItemsToSel",
-        AS_GLOBAL );
+TOOL_ACTION EE_ACTIONS::addItemsToSel( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveSelection.AddItemsToSel" )
+        .Scope( AS_GLOBAL ) );
 
-TOOL_ACTION EE_ACTIONS::removeItemFromSel( "eeschema.InteractiveSelection.RemoveItemFromSel",
-        AS_GLOBAL );
+TOOL_ACTION EE_ACTIONS::removeItemFromSel( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveSelection.RemoveItemFromSel" )
+        .Scope( AS_GLOBAL ) );
 
-TOOL_ACTION EE_ACTIONS::removeItemsFromSel( "eeschema.InteractiveSelection.RemoveItemsFromSel",
-        AS_GLOBAL );
+TOOL_ACTION EE_ACTIONS::removeItemsFromSel( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveSelection.RemoveItemsFromSel" )
+        .Scope( AS_GLOBAL ) );
 
-TOOL_ACTION EE_ACTIONS::clearSelection( "eeschema.InteractiveSelection.ClearSelection",
-        AS_GLOBAL );
+TOOL_ACTION EE_ACTIONS::clearSelection( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveSelection.ClearSelection" )
+        .Scope( AS_GLOBAL ) );
 
-TOOL_ACTION EE_ACTIONS::syncSelection( "eeschema.InteractiveSelection.SyncSelection",
-        AS_GLOBAL );
+TOOL_ACTION EE_ACTIONS::syncSelection( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveSelection.SyncSelection" )
+        .Scope( AS_GLOBAL ) );
 
 
 // SYMBOL_EDITOR_CONTROL
 //
-TOOL_ACTION EE_ACTIONS::saveLibraryAs( "eeschema.SymbolLibraryControl.saveLibraryAs",
-        AS_GLOBAL,
-        MD_SHIFT + MD_CTRL + 'S', LEGACY_HK_NAME( "Save As" ),
-        _( "Save Library As..." ), _( "Save the current library to a new file." ) );
+TOOL_ACTION EE_ACTIONS::saveLibraryAs( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.saveLibraryAs" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + MD_CTRL + 'S' )
+        .LegacyHotkeyName( "Save As" )
+        .MenuText( _( "Save Library As..." ) )
+        .Tooltip( _( "Save the current library to a new file." ) ) );
 
-TOOL_ACTION EE_ACTIONS::newSymbol( "eeschema.SymbolLibraryControl.newSymbol",
-        AS_GLOBAL,
-        'N', "",
-        _( "New Symbol..." ), _( "Create a new symbol" ),
-        BITMAPS::new_component );
+TOOL_ACTION EE_ACTIONS::newSymbol( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.newSymbol" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'N' )
+        .MenuText( _( "New Symbol..." ) )
+        .Tooltip( _( "Create a new symbol" ) )
+        .Icon( BITMAPS::new_component ) );
 
-TOOL_ACTION EE_ACTIONS::deriveFromExistingSymbol( "eeschema.SymbolLibraryControl.deriveFromExistingSymbol",
-        AS_GLOBAL, 0, "",
-        _( "Derive from existing symbol" ), _( "Create a new symbol, derived from an existing symbol" ),
-        BITMAPS::new_component );
+TOOL_ACTION EE_ACTIONS::deriveFromExistingSymbol( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.deriveFromExistingSymbol" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Derive from existing symbol" ) )
+        .Tooltip( _( "Create a new symbol, derived from an existing symbol" ) )
+        .Icon( BITMAPS::new_component ) );
 
-TOOL_ACTION EE_ACTIONS::editSymbol( "eeschema.SymbolLibraryControl.editSymbol",
-        AS_GLOBAL, 0, "",
-        _( "Edit Symbol" ), _( "Show selected symbol on editor canvas" ),
-        BITMAPS::edit );
+TOOL_ACTION EE_ACTIONS::editSymbol( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.editSymbol" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Edit Symbol" ) )
+        .Tooltip( _( "Show selected symbol on editor canvas" ) )
+        .Icon( BITMAPS::edit ) );
 
-TOOL_ACTION EE_ACTIONS::duplicateSymbol( "eeschema.SymbolLibraryControl.duplicateSymbol",
-        AS_GLOBAL, 0, "",
-        _( "Duplicate Symbol" ), _( "Make a copy of the selected symbol" ),
-        BITMAPS::duplicate );
+TOOL_ACTION EE_ACTIONS::duplicateSymbol( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.duplicateSymbol" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Duplicate Symbol" ) )
+        .Tooltip( _( "Make a copy of the selected symbol" ) )
+        .Icon( BITMAPS::duplicate ) );
 
-TOOL_ACTION EE_ACTIONS::renameSymbol( "eeschema.SymbolLibraryControl.renameFootprint",
-        AS_GLOBAL, 0, "",
-        _( "Rename Symbol..." ), _( "Rename the selected symbol" ),
-        BITMAPS::edit );
+TOOL_ACTION EE_ACTIONS::renameSymbol( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.renameFootprint" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Rename Symbol..." ) )
+        .Tooltip( _( "Rename the selected symbol" ) )
+        .Icon( BITMAPS::edit ) );
 
-TOOL_ACTION EE_ACTIONS::saveSymbolAs( "eeschema.SymbolLibraryControl.saveSymbolAs",
-        AS_GLOBAL, 0, "",
-        _( "Save As..." ),  _( "Save the current symbol to a different library." ),
-        BITMAPS::save_as );
+TOOL_ACTION EE_ACTIONS::saveSymbolAs( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.saveSymbolAs" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Save As..." ) )
+        .Tooltip( _( "Save the current symbol to a different library." ) )
+        .Icon( BITMAPS::save_as ) );
 
-TOOL_ACTION EE_ACTIONS::deleteSymbol( "eeschema.SymbolLibraryControl.deleteSymbol",
-        AS_GLOBAL, 0, "",
-        _( "Delete Symbol" ), _( "Remove the selected symbol from its library" ),
-        BITMAPS::trash );
+TOOL_ACTION EE_ACTIONS::deleteSymbol( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.deleteSymbol" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Delete Symbol" ) )
+        .Tooltip( _( "Remove the selected symbol from its library" ) )
+        .Icon( BITMAPS::trash ) );
 
-TOOL_ACTION EE_ACTIONS::cutSymbol( "eeschema.SymbolLibraryControl.cutSymbol",
-        AS_GLOBAL, 0, "",
-        _( "Cut" ), "",
-        BITMAPS::cut );
+TOOL_ACTION EE_ACTIONS::cutSymbol( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.cutSymbol" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Cut" ) )
+        .Icon( BITMAPS::cut ) );
 
-TOOL_ACTION EE_ACTIONS::copySymbol( "eeschema.SymbolLibraryControl.copySymbol",
-        AS_GLOBAL, 0, "",
-        _( "Copy" ), "",
-        BITMAPS::copy );
+TOOL_ACTION EE_ACTIONS::copySymbol( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.copySymbol" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Copy" ) )
+        .Icon( BITMAPS::copy ) );
 
-TOOL_ACTION EE_ACTIONS::pasteSymbol( "eeschema.SymbolLibraryControl.pasteSymbol",
-        AS_GLOBAL, 0, "",
-        _( "Paste Symbol" ), "",
-        BITMAPS::paste );
+TOOL_ACTION EE_ACTIONS::pasteSymbol( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.pasteSymbol" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Paste Symbol" ) )
+        .Icon( BITMAPS::paste ) );
 
-TOOL_ACTION EE_ACTIONS::importSymbol( "eeschema.SymbolLibraryControl.importSymbol",
-        AS_GLOBAL, 0, "",
-        _( "Import Symbol..." ), _( "Import a symbol to the current library" ),
-        BITMAPS::import_part );
+TOOL_ACTION EE_ACTIONS::importSymbol( TOOL_ACTION_ARGS()
+        .Name("eeschema.SymbolLibraryControl.importSymbol" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Import Symbol..." ) )
+        .Tooltip( _( "Import a symbol to the current library" ) )
+        .Icon( BITMAPS::import_part ) );
 
-TOOL_ACTION EE_ACTIONS::exportSymbol( "eeschema.SymbolLibraryControl.exportSymbol",
-        AS_GLOBAL, 0, "",
-        _( "Export..." ), _( "Export a symbol to a new library file" ),
-        BITMAPS::export_part );
+TOOL_ACTION EE_ACTIONS::exportSymbol( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.exportSymbol" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Export..." ) )
+        .Tooltip( _( "Export a symbol to a new library file" ) )
+        .Icon( BITMAPS::export_part ) );
 
-TOOL_ACTION EE_ACTIONS::updateSymbolFields( "eeschema.SymbolLibraryControl.updateSymbolFields",
-        AS_GLOBAL, 0, "",
-        _( "Update Symbol Fields..." ), _( "Update symbol to match changes made in parent symbol" ),
-        BITMAPS::refresh );
+TOOL_ACTION EE_ACTIONS::updateSymbolFields( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.updateSymbolFields" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Update Symbol Fields..." ) )
+        .Tooltip( _( "Update symbol to match changes made in parent symbol" ) )
+        .Icon( BITMAPS::refresh ) );
 
-TOOL_ACTION EE_ACTIONS::setUnitDisplayName( "eeschema.SymbolLibraryControl.setUnitDisplayName",
-                                            AS_GLOBAL, 0, "", _( "Set Unit Display Name..." ),
-                                            _( "Set the display name for a unit" ) );
+TOOL_ACTION EE_ACTIONS::setUnitDisplayName( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.setUnitDisplayName" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Set Unit Display Name..." ) )
+        .Tooltip( _( "Set the display name for a unit" ) ) );
 
-TOOL_ACTION EE_ACTIONS::addSymbolToSchematic( "eeschema.SymbolLibraryControl.addSymbolToSchematic",
-        AS_GLOBAL, 0, "",
-        _( "Add Symbol to Schematic" ), _( "Add Symbol to Schematic" ),
-        BITMAPS::add_symbol_to_schematic );
+TOOL_ACTION EE_ACTIONS::addSymbolToSchematic( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.addSymbolToSchematic" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Add Symbol to Schematic" ) )
+        .Tooltip( _( "Add Symbol to Schematic" ) )
+        .Icon( BITMAPS::add_symbol_to_schematic ) );
 
-TOOL_ACTION EE_ACTIONS::showElectricalTypes( "eeschema.SymbolLibraryControl.showElectricalTypes",
-        AS_GLOBAL, 0, "",
-        _( "Show Pin Electrical Types" ), _( "Annotate pins with their electrical types" ),
-        BITMAPS::pin_show_etype );
+TOOL_ACTION EE_ACTIONS::showElectricalTypes( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.showElectricalTypes" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Show Pin Electrical Types" ) )
+        .Tooltip( _( "Annotate pins with their electrical types" ) )
+        .Icon( BITMAPS::pin_show_etype ) );
 
-TOOL_ACTION EE_ACTIONS::showPinNumbers( "eeschema.SymbolLibraryControl.showPinNumbers",
-        AS_GLOBAL, 0, "",
-        _( "Show Pin Numbers" ), _( "Annotate pins with their numbers" ),
-        BITMAPS::pin );
+TOOL_ACTION EE_ACTIONS::showPinNumbers( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.showPinNumbers" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Show Pin Numbers" ) )
+        .Tooltip( _( "Annotate pins with their numbers" ) )
+        .Icon( BITMAPS::pin ) );
 
-TOOL_ACTION EE_ACTIONS::showSymbolTree( "eeschema.SymbolLibraryControl.showSymbolTree",
-        AS_GLOBAL, 0, "",
-        _( "Show Symbol Tree" ), "",
-        BITMAPS::search_tree );
+TOOL_ACTION EE_ACTIONS::showSymbolTree( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.showSymbolTree" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Show Symbol Tree" ) )
+        .Icon( BITMAPS::search_tree ) );
 
-TOOL_ACTION EE_ACTIONS::hideSymbolTree( "eeschema.SymbolLibraryControl.hideSymbolTree",
-        AS_GLOBAL, 0, "",
-        _( "Hide Symbol Tree" ), "",
-        BITMAPS::search_tree );
+TOOL_ACTION EE_ACTIONS::hideSymbolTree( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.hideSymbolTree" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Hide Symbol Tree" ) )
+        .Icon( BITMAPS::search_tree ) );
 
-TOOL_ACTION EE_ACTIONS::exportSymbolView( "eeschema.SymbolLibraryControl.exportSymbolView",
-        AS_GLOBAL, 0, "",
-        _( "Export View as PNG..." ), _( "Create PNG file from the current view" ),
-        BITMAPS::export_png );
+TOOL_ACTION EE_ACTIONS::exportSymbolView( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.exportSymbolView" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Export View as PNG..." ) )
+        .Tooltip( _( "Create PNG file from the current view" ) )
+        .Icon( BITMAPS::export_png ) );
 
-TOOL_ACTION EE_ACTIONS::exportSymbolAsSVG( "eeschema.SymbolLibraryControl.exportSymbolAsSVG",
-        AS_GLOBAL, 0, "",
-        _( "Export Symbol as SVG..." ), _( "Create SVG file from the current symbol" ),
-        BITMAPS::export_svg );
+TOOL_ACTION EE_ACTIONS::exportSymbolAsSVG( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.exportSymbolAsSVG" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Export Symbol as SVG..." ) )
+        .Tooltip( _( "Create SVG file from the current symbol" ) )
+        .Icon( BITMAPS::export_svg ) );
 
-TOOL_ACTION EE_ACTIONS::toggleSyncedPinsMode( "eeschema.SymbolLibraryControl.toggleSyncedPinsMode",
-        AS_GLOBAL, 0, "",
-        _( "Synchronized Pins Mode" ),
-        _( "Synchronized Pins Mode\n"
-           "When enabled propagates all changes (except pin numbers) to other units.\n"
-           "Enabled by default for multiunit parts with interchangeable units." ),
-        BITMAPS::pin2pin );
+TOOL_ACTION EE_ACTIONS::toggleSyncedPinsMode( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.toggleSyncedPinsMode" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Synchronized Pins Mode" ) )
+        .Tooltip( _( "Synchronized Pins Mode\n"
+                     "When enabled propagates all changes (except pin numbers) to other units.\n"
+                     "Enabled by default for multiunit parts with interchangeable units." ) )
+        .Icon( BITMAPS::pin2pin ) );
 
 
 // SYMBOL_EDITOR_DRAWING_TOOLS
@@ -292,32 +361,43 @@ TOOL_ACTION EE_ACTIONS::drawSymbolPolygon( TOOL_ACTION_ARGS()
         .Flags( AF_ACTIVATE )
         .Parameter( SHAPE_T::POLY ) );
 
-TOOL_ACTION EE_ACTIONS::placeSymbolAnchor( "eeschema.SymbolDrawing.placeSymbolAnchor",
-        AS_GLOBAL, 0, "",
-        _( "Move Symbol Anchor" ), _( "Specify a new location for the symbol anchor" ),
-        BITMAPS::anchor, AF_ACTIVATE );
+TOOL_ACTION EE_ACTIONS::placeSymbolAnchor( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolDrawing.placeSymbolAnchor" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Move Symbol Anchor" ) )
+        .Tooltip( _( "Specify a new location for the symbol anchor" ) )
+        .Icon( BITMAPS::anchor  )
+        .Flags( AF_ACTIVATE ) );
 
-TOOL_ACTION EE_ACTIONS::finishDrawing( "eeschema.SymbolDrawing.finishDrawing",
-        AS_GLOBAL, 0, "",
-        _( "Finish Drawing" ), _( "Finish drawing shape" ),
-        BITMAPS::checked_ok, AF_NONE );
+TOOL_ACTION EE_ACTIONS::finishDrawing( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolDrawing.finishDrawing" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Finish Drawing" ) )
+        .Tooltip( _( "Finish drawing shape" ) )
+        .Icon( BITMAPS::checked_ok ) );
 
 // SYMBOL_EDITOR_PIN_TOOL
 //
-TOOL_ACTION EE_ACTIONS::pushPinLength( "eeschema.PinEditing.pushPinLength",
-        AS_GLOBAL, 0, "",
-        _( "Push Pin Length" ), _( "Copy pin length to other pins in symbol" ),
-        BITMAPS::pin_size_to );
+TOOL_ACTION EE_ACTIONS::pushPinLength( TOOL_ACTION_ARGS()
+        .Name( "eeschema.PinEditing.pushPinLength" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Push Pin Length" ) )
+        .Tooltip( _( "Copy pin length to other pins in symbol" ) )
+        .Icon( BITMAPS::pin_size_to ) );
 
-TOOL_ACTION EE_ACTIONS::pushPinNameSize( "eeschema.PinEditing.pushPinNameSize",
-        AS_GLOBAL, 0, "",
-        _( "Push Pin Name Size" ), _( "Copy pin name size to other pins in symbol" ),
-        BITMAPS::pin_size_to );
+TOOL_ACTION EE_ACTIONS::pushPinNameSize( TOOL_ACTION_ARGS()
+        .Name( "eeschema.PinEditing.pushPinNameSize" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Push Pin Name Size" ) )
+        .Tooltip( _( "Copy pin name size to other pins in symbol" ) )
+        .Icon( BITMAPS::pin_size_to ) );
 
-TOOL_ACTION EE_ACTIONS::pushPinNumSize( "eeschema.PinEditing.pushPinNumSize",
-        AS_GLOBAL, 0, "",
-        _( "Push Pin Number Size" ), _( "Copy pin number size to other pins in symbol" ),
-        BITMAPS::pin_size_to );
+TOOL_ACTION EE_ACTIONS::pushPinNumSize( TOOL_ACTION_ARGS()
+        .Name( "eeschema.PinEditing.pushPinNumSize" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Push Pin Number Size" ) )
+        .Tooltip( _( "Copy pin number size to other pins in symbol" ) )
+        .Icon( BITMAPS::pin_size_to ) );
 
 
 // SCH_DRAWING_TOOLS
@@ -377,22 +457,33 @@ TOOL_ACTION EE_ACTIONS::placeBusWireEntry( TOOL_ACTION_ARGS()
         .Flags( AF_ACTIVATE )
         .Parameter( SCH_BUS_WIRE_ENTRY_T ) );
 
-TOOL_ACTION EE_ACTIONS::placeLabel( "eeschema.InteractiveDrawing.placeLabel",
-        AS_GLOBAL,
-        'L', LEGACY_HK_NAME( "Add Label" ),
-        _( "Add Label" ), _( "Draw net labels" ),
-        BITMAPS::add_label, AF_ACTIVATE );
+TOOL_ACTION EE_ACTIONS::placeLabel( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.placeLabel" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'L' )
+        .LegacyHotkeyName( "Add Label" )
+        .MenuText( _( "Add Label" ) )
+        .Tooltip( _( "Draw net labels" ) )
+        .Icon( BITMAPS::add_label )
+        .Flags( AF_ACTIVATE ) );
 
-TOOL_ACTION EE_ACTIONS::placeClassLabel( "eeschema.InteractiveDrawing.placeClassLabel",
-        AS_GLOBAL, 0, "",
-        _( "Add Net Class Directive" ), _( "Add net class directive labels" ),
-        BITMAPS::add_class_flag, AF_ACTIVATE );
+TOOL_ACTION EE_ACTIONS::placeClassLabel( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.placeClassLabel" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Add Net Class Directive" ) )
+        .Tooltip( _( "Add net class directive labels" ) )
+        .Icon( BITMAPS::add_class_flag )
+        .Flags( AF_ACTIVATE ) );
 
-TOOL_ACTION EE_ACTIONS::placeHierLabel( "eeschema.InteractiveDrawing.placeHierarchicalLabel",
-        AS_GLOBAL,
-        'H', LEGACY_HK_NAME( "Add Hierarchical Label" ),
-        _( "Add Hierarchical Label" ), _( "Add hierarchical labels" ),
-        BITMAPS::add_hierarchical_label, AF_ACTIVATE );
+TOOL_ACTION EE_ACTIONS::placeHierLabel( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.placeHierarchicalLabel" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'H' )
+        .LegacyHotkeyName( "Add Hierarchical Label" )
+        .MenuText( _( "Add Hierarchical Label" ) )
+        .Tooltip( _( "Add hierarchical labels" ) )
+        .Icon( BITMAPS::add_hierarchical_label )
+        .Flags( AF_ACTIVATE ) );
 
 TOOL_ACTION EE_ACTIONS::drawSheet( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveDrawing.drawSheet" )
@@ -405,22 +496,33 @@ TOOL_ACTION EE_ACTIONS::drawSheet( TOOL_ACTION_ARGS()
         .Flags( AF_ACTIVATE )
         .Parameter( SCH_SHEET_T ) );
 
-TOOL_ACTION EE_ACTIONS::importSheetPin( "eeschema.InteractiveDrawing.importSheetPin",
-        AS_GLOBAL, 0, "",
-        _( "Import Sheet Pin" ), _( "Import hierarchical sheet pins" ),
-        BITMAPS::import_hierarchical_label, AF_ACTIVATE );
+TOOL_ACTION EE_ACTIONS::importSheetPin( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.importSheetPin" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Import Sheet Pin" ) )
+        .Tooltip( _( "Import hierarchical sheet pins" ) )
+        .Icon( BITMAPS::import_hierarchical_label )
+        .Flags( AF_ACTIVATE ) );
 
-TOOL_ACTION EE_ACTIONS::placeGlobalLabel( "eeschema.InteractiveDrawing.placeGlobalLabel",
-        AS_GLOBAL,
-        MD_CTRL + 'L', LEGACY_HK_NAME( "Add Global Label" ),
-        _( "Add Global Label" ), _( "Add global labels" ),
-        BITMAPS::add_glabel, AF_ACTIVATE );
+TOOL_ACTION EE_ACTIONS::placeGlobalLabel( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.placeGlobalLabel" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'L' )
+        .LegacyHotkeyName( "Add Global Label" )
+        .MenuText( _( "Add Global Label" ) )
+        .Tooltip( _( "Add global labels" ) )
+        .Icon( BITMAPS::add_glabel )
+        .Flags( AF_ACTIVATE ) );
 
-TOOL_ACTION EE_ACTIONS::placeSchematicText( "eeschema.InteractiveDrawing.placeSchematicText",
-        AS_GLOBAL,
-        'T', LEGACY_HK_NAME( "Add Graphic Text" ),
-        _( "Add Text" ), _( "Draw text items" ),
-        BITMAPS::text, AF_ACTIVATE );
+TOOL_ACTION EE_ACTIONS::placeSchematicText( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.placeSchematicText" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'T' )
+        .LegacyHotkeyName( "Add Graphic Text" )
+        .MenuText( _( "Add Text" ) )
+        .Tooltip( _( "Draw text items" ) )
+        .Icon( BITMAPS::text )
+        .Flags( AF_ACTIVATE ) );
 
 TOOL_ACTION EE_ACTIONS::drawTextBox( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveDrawing.drawTextBox" )
@@ -467,125 +569,170 @@ TOOL_ACTION EE_ACTIONS::placeImage( TOOL_ACTION_ARGS()
         .Flags( AF_ACTIVATE )
         .Parameter<SCH_BITMAP*>( nullptr ) );
 
-TOOL_ACTION EE_ACTIONS::finishSheet( "eeschema.InteractiveDrawing.finishSheet",
-        AS_GLOBAL, 0, "",
-        _( "Finish Sheet" ), _( "Finish drawing sheet" ),
-        BITMAPS::checked_ok, AF_NONE );
+TOOL_ACTION EE_ACTIONS::finishSheet( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.finishSheet" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Finish Sheet" ) )
+        .Tooltip( _( "Finish drawing sheet" ) )
+        .Icon( BITMAPS::checked_ok ) );
 
 
 // SCH_EDIT_TOOL
 //
-TOOL_ACTION EE_ACTIONS::repeatDrawItem( "eeschema.InteractiveEdit.repeatDrawItem",
-        AS_GLOBAL,
+TOOL_ACTION EE_ACTIONS::repeatDrawItem( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.repeatDrawItem" )
+        .Scope( AS_GLOBAL )
 #ifdef __WXMAC__
-        WXK_F1, LEGACY_HK_NAME( "Repeat Last Item" ),
+        .DefaultHotkey( WXK_F1 )
 #else
-        WXK_INSERT, LEGACY_HK_NAME( "Repeat Last Item" ),
+        .DefaultHotkey( WXK_INSERT )
 #endif
-        _( "Repeat Last Item" ), _( "Duplicates the last drawn item" ) );
+        .LegacyHotkeyName( "Repeat Last Item" )
+        .MenuText( _( "Repeat Last Item" ) )
+        .Tooltip( _( "Duplicates the last drawn item" ) ) );
 
-TOOL_ACTION EE_ACTIONS::rotateCW( "eeschema.InteractiveEdit.rotateCW",
-        AS_GLOBAL, 0, "",
-        _( "Rotate Clockwise" ), _( "Rotates selected item(s) clockwise" ),
-        BITMAPS::rotate_cw );
+TOOL_ACTION EE_ACTIONS::rotateCW( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.rotateCW" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Rotate Clockwise" ) )
+        .Tooltip( _( "Rotates selected item(s) clockwise" ) )
+        .Icon( BITMAPS::rotate_cw ) );
 
-TOOL_ACTION EE_ACTIONS::rotateCCW( "eeschema.InteractiveEdit.rotateCCW",
-        AS_GLOBAL,
-        'R', LEGACY_HK_NAME( "Rotate Item" ),
-        _( "Rotate Counterclockwise" ), _( "Rotates selected item(s) counter-clockwise" ),
-        BITMAPS::rotate_ccw );
+TOOL_ACTION EE_ACTIONS::rotateCCW( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.rotateCCW" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'R' )
+        .LegacyHotkeyName( "Rotate Item" )
+        .MenuText( _( "Rotate Counterclockwise" ) )
+        .Tooltip( _( "Rotates selected item(s) counter-clockwise" ) )
+        .Icon( BITMAPS::rotate_ccw ) );
 
-TOOL_ACTION EE_ACTIONS::mirrorV( "eeschema.InteractiveEdit.mirrorV",
-        AS_GLOBAL,
-        'Y', LEGACY_HK_NAME( "Mirror X" ),  // Yes, these were backwards prior to 6.0....
-        _( "Mirror Vertically" ), _( "Flips selected item(s) from top to bottom" ),
-        BITMAPS::mirror_v );
+TOOL_ACTION EE_ACTIONS::mirrorV( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.mirrorV" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'Y' )
+        .LegacyHotkeyName( "Mirror X" )  // Yes, these were backwards prior to 6.0....
+        .MenuText( _( "Mirror Vertically" ) )
+        .Tooltip( _( "Flips selected item(s) from top to bottom" ) )
+        .Icon( BITMAPS::mirror_v ) );
 
-TOOL_ACTION EE_ACTIONS::mirrorH( "eeschema.InteractiveEdit.mirrorH",
-        AS_GLOBAL,
-        'X', LEGACY_HK_NAME( "Mirror Y" ),  // Yes, these were backwards prior to 6.0....
-        _( "Mirror Horizontally" ), _( "Flips selected item(s) from left to right" ),
-        BITMAPS::mirror_h );
+TOOL_ACTION EE_ACTIONS::mirrorH( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.mirrorH" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'X' )
+        .LegacyHotkeyName( "Mirror Y" )  // Yes, these were backwards prior to 6.0....
+        .MenuText( _( "Mirror Horizontally" ) )
+        .Tooltip( _( "Flips selected item(s) from left to right" ) )
+        .Icon( BITMAPS::mirror_h ) );
 
-TOOL_ACTION EE_ACTIONS::swap( "eeschema.InteractiveEdit.swap",
-        AS_GLOBAL,
-        'S', "",
-        _( "Swap" ), _( "Swaps selected items' positions" ),
-        BITMAPS::swap );
+TOOL_ACTION EE_ACTIONS::swap( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.swap" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'S' )
+        .MenuText( _( "Swap" ) )
+        .Tooltip( _( "Swaps selected items' positions" ) )
+        .Icon( BITMAPS::swap ) );
 
-TOOL_ACTION EE_ACTIONS::properties( "eeschema.InteractiveEdit.properties",
-        AS_GLOBAL,
-        'E', LEGACY_HK_NAME( "Edit Item" ),
-        _( "Properties..." ), _( "Displays item properties dialog" ),
-        BITMAPS::edit );
+TOOL_ACTION EE_ACTIONS::properties( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.properties" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'E' )
+        .LegacyHotkeyName( "Edit Item" )
+        .MenuText( _( "Properties..." ) )
+        .Tooltip( _( "Displays item properties dialog" ) )
+        .Icon( BITMAPS::edit ) );
 
-TOOL_ACTION EE_ACTIONS::editReference( "eeschema.InteractiveEdit.editReference",
-        AS_GLOBAL,
-        'U', LEGACY_HK_NAME( "Edit Symbol Reference" ),
-        _( "Edit Reference Designator..." ), _( "Displays reference designator dialog" ),
-        BITMAPS::edit_comp_ref );
+TOOL_ACTION EE_ACTIONS::editReference( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.editReference" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'U' )
+        .LegacyHotkeyName( "Edit Symbol Reference" )
+        .MenuText( _( "Edit Reference Designator..." ) )
+        .Tooltip( _( "Displays reference designator dialog" ) )
+        .Icon( BITMAPS::edit_comp_ref ) );
 
-TOOL_ACTION EE_ACTIONS::editValue( "eeschema.InteractiveEdit.editValue",
-        AS_GLOBAL,
-        'V', LEGACY_HK_NAME( "Edit Symbol Value" ),
-        _( "Edit Value..." ), _( "Displays value field dialog" ),
-        BITMAPS::edit_comp_value );
+TOOL_ACTION EE_ACTIONS::editValue( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.editValue" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'V' )
+        .LegacyHotkeyName( "Edit Symbol Value" )
+        .MenuText( _( "Edit Value..." ) )
+        .Tooltip( _( "Displays value field dialog" ) )
+        .Icon( BITMAPS::edit_comp_value ) );
 
-TOOL_ACTION EE_ACTIONS::editFootprint( "eeschema.InteractiveEdit.editFootprint",
-        AS_GLOBAL,
-        'F', LEGACY_HK_NAME( "Edit Symbol Footprint" ),
-        _( "Edit Footprint..." ), _( "Displays footprint field dialog" ),
-        BITMAPS::edit_comp_footprint );
+TOOL_ACTION EE_ACTIONS::editFootprint( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.editFootprint" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'F' )
+        .LegacyHotkeyName( "Edit Symbol Footprint" )
+        .MenuText( _( "Edit Footprint..." ) )
+        .Tooltip( _( "Displays footprint field dialog" ) )
+        .Icon( BITMAPS::edit_comp_footprint ) );
 
-TOOL_ACTION EE_ACTIONS::autoplaceFields( "eeschema.InteractiveEdit.autoplaceFields",
-        AS_GLOBAL,
-        'O', LEGACY_HK_NAME( "Autoplace Fields" ),
-        _( "Autoplace Fields" ), _( "Runs the automatic placement algorithm on the symbol or sheet's fields" ),
-        BITMAPS::autoplace_fields );
+TOOL_ACTION EE_ACTIONS::autoplaceFields( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.autoplaceFields" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'O' )
+        .LegacyHotkeyName( "Autoplace Fields" )
+        .MenuText( _( "Autoplace Fields" ) )
+        .Tooltip( _( "Runs the automatic placement algorithm on the symbol or sheet's fields" ) )
+        .Icon( BITMAPS::autoplace_fields ) );
 
-TOOL_ACTION EE_ACTIONS::changeSymbols( "eeschema.InteractiveEdit.changeSymbols",
-        AS_GLOBAL, 0, "",
-        _( "Change Symbols..." ),
-        _( "Assign different symbols from the library" ),
-        BITMAPS::exchange );
+TOOL_ACTION EE_ACTIONS::changeSymbols( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.changeSymbols" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Change Symbols..." ) )
+        .Tooltip( _( "Assign different symbols from the library" ) )
+        .Icon( BITMAPS::exchange ) );
 
-TOOL_ACTION EE_ACTIONS::updateSymbols( "eeschema.InteractiveEdit.updateSymbols",
-        AS_GLOBAL, 0, "",
-        _( "Update Symbols from Library..." ),
-        _( "Update symbols to include any changes from the library" ),
-        BITMAPS::refresh );
+TOOL_ACTION EE_ACTIONS::updateSymbols( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.updateSymbols" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Update Symbols from Library..." ) )
+        .Tooltip( _( "Update symbols to include any changes from the library" ) )
+        .Icon( BITMAPS::refresh ) );
 
-TOOL_ACTION EE_ACTIONS::changeSymbol( "eeschema.InteractiveEdit.changeSymbol",
-        AS_GLOBAL, 0, "",
-        _( "Change Symbol..." ),
-        _( "Assign a different symbol from the library" ),
-        BITMAPS::exchange );
+TOOL_ACTION EE_ACTIONS::changeSymbol( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.changeSymbol" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Change Symbol..." ) )
+        .Tooltip( _( "Assign a different symbol from the library" ) )
+        .Icon( BITMAPS::exchange ) );
 
-TOOL_ACTION EE_ACTIONS::updateSymbol( "eeschema.InteractiveEdit.updateSymbol",
-        AS_GLOBAL, 0, "",
-        _( "Update Symbol..." ),
-        _( "Update symbol to include any changes from the library" ),
-        BITMAPS::refresh );
+TOOL_ACTION EE_ACTIONS::updateSymbol( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.updateSymbol" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Update Symbol..." ) )
+        .Tooltip( _( "Update symbol to include any changes from the library" ) )
+        .Icon( BITMAPS::refresh ) );
 
-TOOL_ACTION EE_ACTIONS::assignNetclass( "eeschema.InteractiveEdit.assignNetclass",
-        AS_GLOBAL, 0, "",
-        _( "Assign Netclass..." ), _( "Assign a netclass to nets matching a pattern" ),
-        BITMAPS::netlist);
+TOOL_ACTION EE_ACTIONS::assignNetclass( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.assignNetclass" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Assign Netclass..." ) )
+        .Tooltip( _( "Assign a netclass to nets matching a pattern" ) )
+        .Icon( BITMAPS::netlist ) );
 
-TOOL_ACTION EE_ACTIONS::toggleDeMorgan( "eeschema.InteractiveEdit.toggleDeMorgan",
-        AS_GLOBAL, 0, "",
-        _( "De Morgan Conversion" ), _( "Switch between De Morgan representations" ),
-        BITMAPS::morgan2 );
+TOOL_ACTION EE_ACTIONS::toggleDeMorgan( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.toggleDeMorgan" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "De Morgan Conversion" ) )
+        .Tooltip( _( "Switch between De Morgan representations" ) )
+        .Icon( BITMAPS::morgan2 ) );
 
-TOOL_ACTION EE_ACTIONS::showDeMorganStandard( "eeschema.InteractiveEdit.showDeMorganStandard",
-        AS_GLOBAL, 0, "",
-        _( "De Morgan Standard" ), _( "Switch to standard De Morgan representation" ),
-        BITMAPS::morgan1 );
+TOOL_ACTION EE_ACTIONS::showDeMorganStandard( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.showDeMorganStandard" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "De Morgan Standard" ) )
+        .Tooltip( _( "Switch to standard De Morgan representation" ) )
+        .Icon( BITMAPS::morgan1 ) );
 
-TOOL_ACTION EE_ACTIONS::showDeMorganAlternate( "eeschema.InteractiveEdit.showDeMorganAlternate",
-        AS_GLOBAL, 0, "",
-        _( "De Morgan Alternate" ), _( "Switch to alternate De Morgan representation" ),
-        BITMAPS::morgan2 );
+TOOL_ACTION EE_ACTIONS::showDeMorganAlternate( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.showDeMorganAlternate" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "De Morgan Alternate" ) )
+        .Tooltip( _( "Switch to alternate De Morgan representation" ) )
+        .Icon( BITMAPS::morgan2 ) );
 
 TOOL_ACTION EE_ACTIONS::toLabel( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveEdit.toLabel" )
@@ -641,259 +788,336 @@ TOOL_ACTION EE_ACTIONS::toTextBox( TOOL_ACTION_ARGS()
         .Flags( AF_NONE )
         .Parameter( SCH_TEXTBOX_T ) );
 
-TOOL_ACTION EE_ACTIONS::cleanupSheetPins( "eeschema.InteractiveEdit.cleanupSheetPins",
-        AS_GLOBAL, 0, "",
-        _( "Cleanup Sheet Pins" ), _( "Delete unreferenced sheet pins" ) );
+TOOL_ACTION EE_ACTIONS::cleanupSheetPins( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.cleanupSheetPins" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Cleanup Sheet Pins" ) )
+        .Tooltip( _( "Delete unreferenced sheet pins" ) ) );
 
-TOOL_ACTION EE_ACTIONS::editTextAndGraphics( "eeschema.InteractiveEdit.editTextAndGraphics",
-        AS_GLOBAL, 0, "",
-        _( "Edit Text & Graphics Properties..." ),
-        _( "Edit text and graphics properties globally across schematic" ),
-        BITMAPS::text );
+TOOL_ACTION EE_ACTIONS::editTextAndGraphics( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.editTextAndGraphics" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Edit Text & Graphics Properties..." ) )
+        .Tooltip( _( "Edit text and graphics properties globally across schematic" ) )
+        .Icon( BITMAPS::text ) );
 
-TOOL_ACTION EE_ACTIONS::symbolProperties( "eeschema.InteractiveEdit.symbolProperties",
-        AS_GLOBAL, 0, "",
-        _( "Symbol Properties..." ), _( "Displays symbol properties dialog" ),
-        BITMAPS::part_properties );
+TOOL_ACTION EE_ACTIONS::symbolProperties( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.symbolProperties" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Symbol Properties..." ) )
+        .Tooltip( _( "Displays symbol properties dialog" ) )
+        .Icon( BITMAPS::part_properties ) );
 
-TOOL_ACTION EE_ACTIONS::pinTable( "eeschema.InteractiveEdit.pinTable",
-        AS_GLOBAL, 0, "",
-        _( "Pin Table..." ), _( "Displays pin table for bulk editing of pins" ),
-        BITMAPS::pin_table );
+TOOL_ACTION EE_ACTIONS::pinTable( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.pinTable" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Pin Table..." ) )
+        .Tooltip( _( "Displays pin table for bulk editing of pins" ) )
+        .Icon( BITMAPS::pin_table ) );
 
-TOOL_ACTION EE_ACTIONS::breakWire( "eeschema.InteractiveEdit.breakWire",
-        AS_GLOBAL, 0, "",
-        _( "Break" ), _( "Divide into connected segments" ),
-        BITMAPS::break_line );
+TOOL_ACTION EE_ACTIONS::breakWire( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.breakWire" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Break" ) )
+        .Tooltip( _( "Divide into connected segments" ) )
+        .Icon( BITMAPS::break_line ) );
 
-TOOL_ACTION EE_ACTIONS::slice( "eeschema.InteractiveEdit.slice",
-        AS_GLOBAL, 0, "",
-        _( "Slice" ), _( "Divide into unconnected segments" ),
-        BITMAPS::slice_line );
+TOOL_ACTION EE_ACTIONS::slice( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.slice" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Slice" ) )
+        .Tooltip( _( "Divide into unconnected segments" ) )
+        .Icon( BITMAPS::slice_line ) );
 
 // SCH_EDITOR_CONTROL
 //
-TOOL_ACTION EE_ACTIONS::restartMove( "eeschema.EditorControl.restartMove",
-        AS_GLOBAL );
+TOOL_ACTION EE_ACTIONS::restartMove( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.restartMove" )
+        .Scope( AS_GLOBAL ) );
 
-TOOL_ACTION EE_ACTIONS::highlightNet( "eeschema.EditorControl.highlightNet",
-        AS_GLOBAL,
-        '`', "",
-        _( "Highlight Net" ), _( "Highlight net under cursor" ),
-        BITMAPS::net_highlight_schematic );
+TOOL_ACTION EE_ACTIONS::highlightNet( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.highlightNet" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( '`' )
+        .MenuText( _( "Highlight Net" ) )
+        .Tooltip( _( "Highlight net under cursor" ) )
+        .Icon( BITMAPS::net_highlight_schematic ) );
 
-TOOL_ACTION EE_ACTIONS::clearHighlight( "eeschema.EditorControl.clearHighlight",
-        AS_GLOBAL, '~', "",
-        _( "Clear Net Highlighting" ), _( "Clear any existing net highlighting" ) );
+TOOL_ACTION EE_ACTIONS::clearHighlight( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.clearHighlight" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( '~' )
+        .MenuText( _( "Clear Net Highlighting" ) )
+        .Tooltip( _( "Clear any existing net highlighting" ) ) );
 
-TOOL_ACTION EE_ACTIONS::updateNetHighlighting( "eeschema.EditorControl.updateNetHighlighting",
-        AS_GLOBAL );
+TOOL_ACTION EE_ACTIONS::updateNetHighlighting( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.updateNetHighlighting" )
+        .Scope( AS_GLOBAL ) );
 
-TOOL_ACTION EE_ACTIONS::highlightNetTool( "eeschema.EditorControl.highlightNetTool",
-        AS_GLOBAL, 0, "",
-        _( "Highlight Nets" ), _( "Highlight wires and pins of a net" ),
-        BITMAPS::net_highlight_schematic, AF_ACTIVATE );
+TOOL_ACTION EE_ACTIONS::highlightNetTool( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.highlightNetTool" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Highlight Nets" ) )
+        .Tooltip( _( "Highlight wires and pins of a net" ) )
+        .Icon( BITMAPS::net_highlight_schematic )
+        .Flags( AF_ACTIVATE ) );
 
-TOOL_ACTION EE_ACTIONS::showNetNavigator( "eeschema.EditorControl.showNetNavigator",
-        AS_GLOBAL, 0, "",
-        _( "Show Net Navigator" ), _( "Toggle the net navigator panel visibility" ) );
+TOOL_ACTION EE_ACTIONS::showNetNavigator( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.showNetNavigator" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Show Net Navigator" ) )
+        .Tooltip( _( "Toggle the net navigator panel visibility" ) ) );
 
-TOOL_ACTION EE_ACTIONS::editWithLibEdit( "eeschema.EditorControl.editWithSymbolEditor",
-        AS_GLOBAL,
-        MD_CTRL + 'E', LEGACY_HK_NAME( "Edit with Symbol Editor" ),
-        _( "Edit with Symbol Editor" ), _( "Open the selected symbol in the Symbol Editor" ),
-        BITMAPS::libedit );
+TOOL_ACTION EE_ACTIONS::editWithLibEdit( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.editWithSymbolEditor" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'E' )
+        .LegacyHotkeyName( "Edit with Symbol Editor" )
+        .MenuText( _( "Edit with Symbol Editor" ) )
+        .Tooltip( _( "Open the selected symbol in the Symbol Editor" ) )
+        .Icon( BITMAPS::libedit ) );
 
-TOOL_ACTION EE_ACTIONS::setExcludeFromBOM( "eeschema.EditorControl.setExcludeFromBOM",
-        AS_GLOBAL,
-        0, "",
-        _( "Exclude from bill of materials" ), _( "Set the exclude from bill of materials attribute" ) );
+TOOL_ACTION EE_ACTIONS::setExcludeFromBOM( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.setExcludeFromBOM" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Exclude from bill of materials" ) )
+        .Tooltip( _( "Set the exclude from bill of materials attribute" ) ) );
 
-TOOL_ACTION EE_ACTIONS::unsetExcludeFromBOM( "eeschema.EditorControl.unsetExcludeFromBOM",
-        AS_GLOBAL,
-        0, "",
-        _( "Include in bill of materials" ), _( "Clear the exclude from bill of materials attribute" ) );
+TOOL_ACTION EE_ACTIONS::unsetExcludeFromBOM( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.unsetExcludeFromBOM" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Include in bill of materials" ) )
+        .Tooltip( _( "Clear the exclude from bill of materials attribute" ) ) );
 
-TOOL_ACTION EE_ACTIONS::toggleExcludeFromBOM( "eeschema.EditorControl.toggleExcludeFromBOM",
-        AS_GLOBAL,
-        0, "",
-        _( "Toggle Exclude from BOM" ), _( "Toggle the exclude from bill of materials attribute" ) );
+TOOL_ACTION EE_ACTIONS::toggleExcludeFromBOM( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.toggleExcludeFromBOM" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Toggle Exclude from BOM" ) )
+        .Tooltip( _( "Toggle the exclude from bill of materials attribute" ) ) );
 
-TOOL_ACTION EE_ACTIONS::setExcludeFromSimulation( "eeschema.EditorControl.setExcludeFromSimulation",
-        AS_GLOBAL,
-        0, "",
-        _( "Exclude from simulation" ), _( "Set the exclude from simulation attribute" ) );
+TOOL_ACTION EE_ACTIONS::setExcludeFromSimulation( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.setExcludeFromSimulation" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Exclude from simulation" ) )
+        .Tooltip( _( "Set the exclude from simulation attribute" ) ) );
 
-TOOL_ACTION EE_ACTIONS::unsetExcludeFromSimulation( "eeschema.EditorControl.unsetExcludeFromSimulation",
-        AS_GLOBAL,
-        0, "",
-        _( "Include in simulation" ), _( "Clear the exclude from simulation attribute" ) );
+TOOL_ACTION EE_ACTIONS::unsetExcludeFromSimulation( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.unsetExcludeFromSimulation" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Include in simulation" ) )
+        .Tooltip( _( "Clear the exclude from simulation attribute" ) ) );
 
-TOOL_ACTION EE_ACTIONS::toggleExcludeFromSimulation( "eeschema.EditorControl.toggleExcludeFromSimulation",
-        AS_GLOBAL,
-        0, "",
-        _( "Toggle Exclude from simulation" ), _( "Toggle the exclude from simulation attribute" ) );
+TOOL_ACTION EE_ACTIONS::toggleExcludeFromSimulation( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.toggleExcludeFromSimulation" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Toggle Exclude from simulation" ) )
+        .Tooltip( _( "Toggle the exclude from simulation attribute" ) ) );
 
-TOOL_ACTION EE_ACTIONS::setExcludeFromBoard( "eeschema.EditorControl.setExcludeFromBoard",
-        AS_GLOBAL,
-        0, "",
-        _( "Exclude from board" ), _( "Set the exclude from board attribute" ) );
+TOOL_ACTION EE_ACTIONS::setExcludeFromBoard( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.setExcludeFromBoard" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Exclude from board" ) )
+        .Tooltip( _( "Set the exclude from board attribute" ) ) );
 
-TOOL_ACTION EE_ACTIONS::unsetExcludeFromBoard( "eeschema.EditorControl.unsetExcludeFromBoard",
-        AS_GLOBAL,
-        0, "",
-        _( "Include on board" ), _( "Clear the exclude from board attribute" ) );
+TOOL_ACTION EE_ACTIONS::unsetExcludeFromBoard( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.unsetExcludeFromBoard" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Include on board" ) )
+        .Tooltip( _( "Clear the exclude from board attribute" ) ) );
 
-TOOL_ACTION EE_ACTIONS::toggleExcludeFromBoard( "eeschema.EditorControl.toggleExcludeFromBoard",
-        AS_GLOBAL,
-        0, "",
-        _( "Toggle Exclude from board" ), _( "Toggle the exclude from board attribute" ) );
+TOOL_ACTION EE_ACTIONS::toggleExcludeFromBoard( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.toggleExcludeFromBoard" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Toggle Exclude from board" ) )
+        .Tooltip( _( "Toggle the exclude from board attribute" ) ) );
 
-TOOL_ACTION EE_ACTIONS::setDNP( "eeschema.EditorControl.setDNP",
-        AS_GLOBAL,
-        0, "",
-        _( "Set do not populate" ), _( "Set the do not populate attribute" ) );
+TOOL_ACTION EE_ACTIONS::setDNP( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.setDNP" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Set do not populate" ) )
+        .Tooltip( _( "Set the do not populate attribute" ) ) );
 
-TOOL_ACTION EE_ACTIONS::unsetDNP( "eeschema.EditorControl.unsetDNP",
-        AS_GLOBAL,
-        0, "",
-        _( "Unset do not populate" ), _( "Clear the do not populate attribute" ) );
+TOOL_ACTION EE_ACTIONS::unsetDNP( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.unsetDNP" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Unset do not populate" ) )
+        .Tooltip( _( "Clear the do not populate attribute" ) ) );
 
-TOOL_ACTION EE_ACTIONS::toggleDNP( "eeschema.EditorControl.toggleDNP",
-        AS_GLOBAL,
-        0, "",
-        _( "Toggle do not populate" ), _( "Toggle the do not populate attribute" ) );
+TOOL_ACTION EE_ACTIONS::toggleDNP( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.toggleDNP" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Toggle do not populate" ) )
+        .Tooltip( _( "Toggle the do not populate attribute" ) ) );
 
-TOOL_ACTION EE_ACTIONS::editLibSymbolWithLibEdit( "eeschema.EditorControl.editLibSymbolWithSymbolEditor",
-        AS_GLOBAL,
-        MD_CTRL + MD_SHIFT + 'E', "",
-        _( "Edit Library Symbol..." ), _( "Open the library symbol in the Symbol Editor" ),
-        BITMAPS::libedit );
+TOOL_ACTION EE_ACTIONS::editLibSymbolWithLibEdit( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.editLibSymbolWithSymbolEditor" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + MD_SHIFT + 'E' )
+        .MenuText( _( "Edit Library Symbol..." ) )
+        .Tooltip( _( "Open the library symbol in the Symbol Editor" ) )
+        .Icon( BITMAPS::libedit ) );
 
-TOOL_ACTION EE_ACTIONS::editSymbolFields( "eeschema.EditorControl.editSymbolFields",
-        AS_GLOBAL, 0, "",
-        _( "Edit Symbol Fields..." ), _( "Bulk-edit fields of all symbols in schematic" ),
-        BITMAPS::spreadsheet );
+TOOL_ACTION EE_ACTIONS::editSymbolFields( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.editSymbolFields" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Edit Symbol Fields..." ) )
+        .Tooltip( _( "Bulk-edit fields of all symbols in schematic" ) )
+        .Icon( BITMAPS::spreadsheet ) );
 
-TOOL_ACTION EE_ACTIONS::editSymbolLibraryLinks( "eeschema.EditorControl.editSymbolLibraryLinks",
-        AS_GLOBAL, 0, "",
-        _( "Edit Symbol Library Links..." ), _( "Edit links between schematic and library symbols" ),
-        BITMAPS::edit_cmp_symb_links );
+TOOL_ACTION EE_ACTIONS::editSymbolLibraryLinks( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.editSymbolLibraryLinks" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Edit Symbol Library Links..." ) )
+        .Tooltip( _( "Edit links between schematic and library symbols" ) )
+        .Icon( BITMAPS::edit_cmp_symb_links ) );
 
-TOOL_ACTION EE_ACTIONS::assignFootprints( "eeschema.EditorControl.assignFootprints",
-        AS_GLOBAL, 0, "",
-        _( "Assign Footprints..." ), _( "Run footprint assignment tool" ),
-        BITMAPS::icon_cvpcb_24 );
+TOOL_ACTION EE_ACTIONS::assignFootprints( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.assignFootprints" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Assign Footprints..." ) )
+        .Tooltip( _( "Run footprint assignment tool" ) )
+        .Icon( BITMAPS::icon_cvpcb_24 ) );
 
-TOOL_ACTION EE_ACTIONS::importFPAssignments( "eeschema.EditorControl.importFPAssignments",
-        AS_GLOBAL, 0, "",
-        _( "Import Footprint Assignments..." ),
-        _( "Import symbol footprint assignments from .cmp file created by board editor" ),
-        BITMAPS::import_footprint_names );
+TOOL_ACTION EE_ACTIONS::importFPAssignments( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.importFPAssignments" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Import Footprint Assignments..." ) )
+        .Tooltip( _( "Import symbol footprint assignments from .cmp file created by board editor" ) )
+        .Icon( BITMAPS::import_footprint_names ) );
 
-TOOL_ACTION EE_ACTIONS::annotate( "eeschema.EditorControl.annotate",
-        AS_GLOBAL, 0, "",
-        _( "Annotate Schematic..." ), _( "Fill in schematic symbol reference designators" ),
-        BITMAPS::annotate );
+TOOL_ACTION EE_ACTIONS::annotate( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.annotate" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Annotate Schematic..." ) )
+        .Tooltip( _( "Fill in schematic symbol reference designators" ) )
+        .Icon( BITMAPS::annotate ) );
 
-TOOL_ACTION EE_ACTIONS::schematicSetup( "eeschema.EditorControl.schematicSetup",
-        AS_GLOBAL, 0, "",
-        _( "Schematic Setup..." ),
-        _( "Edit schematic setup including annotation styles and electrical rules" ),
-        BITMAPS::options_schematic );
+TOOL_ACTION EE_ACTIONS::schematicSetup( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.schematicSetup" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Schematic Setup..." ) )
+        .Tooltip( _( "Edit schematic setup including annotation styles and electrical rules" ) )
+        .Icon( BITMAPS::options_schematic ) );
 
-TOOL_ACTION EE_ACTIONS::editPageNumber( "eeschema.EditorControl.editPageNumber",
-        AS_GLOBAL, 0, "",
-        _( "Edit Sheet Page Number..." ),
-        _( "Edit the page number of the current or selected sheet" ) );
+TOOL_ACTION EE_ACTIONS::editPageNumber( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.editPageNumber" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Edit Sheet Page Number..." ) )
+        .Tooltip( _( "Edit the page number of the current or selected sheet" ) ) );
 
-TOOL_ACTION EE_ACTIONS::rescueSymbols( "eeschema.EditorControl.rescueSymbols",
-        AS_GLOBAL, 0, "",
-        _( "Rescue Symbols..." ),
-        _( "Find old symbols in project and rename/rescue them" ),
-        BITMAPS::rescue );
+TOOL_ACTION EE_ACTIONS::rescueSymbols( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.rescueSymbols" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Rescue Symbols..." ) )
+        .Tooltip( _( "Find old symbols in project and rename/rescue them" ) )
+        .Icon( BITMAPS::rescue ) );
 
-TOOL_ACTION EE_ACTIONS::remapSymbols( "eeschema.EditorControl.remapSymbols",
-        AS_GLOBAL, 0, "",
-        _( "Remap Legacy Library Symbols..." ),
-        _( "Remap library symbol references in legacy schematics to the symbol library table" ),
-        BITMAPS::rescue );
+TOOL_ACTION EE_ACTIONS::remapSymbols( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.remapSymbols" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Remap Legacy Library Symbols..." ) )
+        .Tooltip( _( "Remap library symbol references in legacy schematics to the symbol library table" ) )
+        .Icon( BITMAPS::rescue ) );
 
-TOOL_ACTION EE_ACTIONS::drawSheetOnClipboard( "eeschema.EditorControl.drawSheetOnClipboard",
-        AS_GLOBAL, 0, "",
-        _( "Export Drawing to Clipboard" ), _( "Export drawing of current sheet to clipboard" ),
-        BITMAPS::copy );
+TOOL_ACTION EE_ACTIONS::drawSheetOnClipboard( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.drawSheetOnClipboard" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Export Drawing to Clipboard" ) )
+        .Tooltip( _( "Export drawing of current sheet to clipboard" ) )
+        .Icon( BITMAPS::copy ) );
 
-TOOL_ACTION EE_ACTIONS::showPcbNew( "eeschema.EditorControl.showPcbNew",
-        AS_GLOBAL, 0, "",
-        _( "Switch to PCB Editor" ), _( "Open PCB in board editor" ),
-        BITMAPS::icon_pcbnew_24 );
+TOOL_ACTION EE_ACTIONS::showPcbNew( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.showPcbNew" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Switch to PCB Editor" ) )
+        .Tooltip( _( "Open PCB in board editor" ) )
+        .Icon( BITMAPS::icon_pcbnew_24 ) );
 
-TOOL_ACTION EE_ACTIONS::exportNetlist( "eeschema.EditorControl.exportNetlist",
-        AS_GLOBAL, 0, "",
-        _( "Export Netlist..." ), _( "Export file containing netlist in one of several formats" ),
-        BITMAPS::netlist );
+TOOL_ACTION EE_ACTIONS::exportNetlist( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.exportNetlist" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Export Netlist..." ) )
+        .Tooltip( _( "Export file containing netlist in one of several formats" ) )
+        .Icon( BITMAPS::netlist ) );
 
-TOOL_ACTION EE_ACTIONS::generateBOM( "eeschema.EditorControl.generateBOM",
-        AS_GLOBAL, 0, "",
-        _( "Generate BOM..." ), _( "Generate a bill of materials for the current schematic" ),
-        BITMAPS::post_bom );
+TOOL_ACTION EE_ACTIONS::generateBOM( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.generateBOM" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Generate BOM..." ) )
+        .Tooltip( _( "Generate a bill of materials for the current schematic" ) )
+        .Icon( BITMAPS::post_bom ) );
 
-TOOL_ACTION EE_ACTIONS::exportSymbolsToLibrary( "eeschema.EditorControl.exportSymbolsToLibrary",
-       AS_GLOBAL, 0, "",
-       _( "Export Symbols to Library..." ),
-       _( "Add symbols used in schematic to an existing symbol library\n"
-          "(does not remove other symbols from this library)" ),
-       BITMAPS::library_archive );
+TOOL_ACTION EE_ACTIONS::exportSymbolsToLibrary( TOOL_ACTION_ARGS()
+       .Name( "eeschema.EditorControl.exportSymbolsToLibrary" )
+       .Scope( AS_GLOBAL )
+       .MenuText( _( "Export Symbols to Library..." ) )
+       .Tooltip( _( "Add symbols used in schematic to an existing symbol library\n"
+                    "(does not remove other symbols from this library)" ) )
+       .Icon( BITMAPS::library_archive ) );
 
-TOOL_ACTION EE_ACTIONS::exportSymbolsToNewLibrary( "eeschema.EditorControl.exportSymbolsToNewLibrary",
-       AS_GLOBAL, 0, "",
-       _( "Export Symbols to New Library..." ),
-       _( "Create a new symbol library using the symbols used in the schematic\n"
-          "(if the library already exists it will be replaced)" ),
-       BITMAPS::library_archive_as );
+TOOL_ACTION EE_ACTIONS::exportSymbolsToNewLibrary( TOOL_ACTION_ARGS()
+       .Name( "eeschema.EditorControl.exportSymbolsToNewLibrary" )
+       .Scope( AS_GLOBAL )
+       .MenuText( _( "Export Symbols to New Library..." ) )
+       .Tooltip( _( "Create a new symbol library using the symbols used in the schematic\n"
+                    "(if the library already exists it will be replaced)" ) )
+       .Icon( BITMAPS::library_archive_as ) );
 
-TOOL_ACTION EE_ACTIONS::selectOnPCB( "eeschema.EditorControl.selectOnPCB",
-        AS_GLOBAL, 0, "",
-        _( "Select on PCB" ),
-        _( "Select corresponding items in PCB editor" ),
-        BITMAPS::select_same_sheet );
+TOOL_ACTION EE_ACTIONS::selectOnPCB( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.selectOnPCB" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Select on PCB" ) )
+        .Tooltip( _( "Select corresponding items in PCB editor" ) )
+        .Icon( BITMAPS::select_same_sheet ) );
 
-TOOL_ACTION EE_ACTIONS::toggleHiddenPins( "eeschema.EditorControl.showHiddenPins",
-        AS_GLOBAL, 0, "",
-        _( "Show Hidden Pins" ), _( "Toggle display of hidden pins" ),
-        BITMAPS::hidden_pin );
+TOOL_ACTION EE_ACTIONS::toggleHiddenPins( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.showHiddenPins" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Show Hidden Pins" ) )
+        .Tooltip( _( "Toggle display of hidden pins" ) )
+        .Icon( BITMAPS::hidden_pin ) );
 
-TOOL_ACTION EE_ACTIONS::toggleHiddenFields( "eeschema.EditorControl.showHiddenFields",
-        AS_GLOBAL, 0, "",
-        _( "Show Hidden Fields" ), _( "Toggle display of hidden text fields" ) );
+TOOL_ACTION EE_ACTIONS::toggleHiddenFields( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.showHiddenFields" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Show Hidden Fields" ) )
+        .Tooltip( _( "Toggle display of hidden text fields" ) ) );
 
-TOOL_ACTION EE_ACTIONS::toggleDirectiveLabels( "eeschema.EditorControl.showDirectiveLabels",
-        AS_GLOBAL, 0, "",
-        _( "Show Directive Labels" ), _( "Toggle display of directive labels" ) );
+TOOL_ACTION EE_ACTIONS::toggleDirectiveLabels( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.showDirectiveLabels" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Show Directive Labels" ) )
+        .Tooltip( _( "Toggle display of directive labels" ) ) );
 
-TOOL_ACTION EE_ACTIONS::toggleERCWarnings( "eeschema.EditorControl.showERCWarnings",
-        AS_GLOBAL, 0, "",
-        _( "Show ERC Warnings" ), _( "Show markers for electrical rules checker warnings" ) );
+TOOL_ACTION EE_ACTIONS::toggleERCWarnings( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.showERCWarnings" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Show ERC Warnings" ) )
+        .Tooltip( _( "Show markers for electrical rules checker warnings" ) ) );
 
-TOOL_ACTION EE_ACTIONS::toggleERCErrors( "eeschema.EditorControl.showERCErrors",
-        AS_GLOBAL, 0, "",
-        _( "Show ERC Errors" ), _( "Show markers for electrical rules checker errors" ) );
+TOOL_ACTION EE_ACTIONS::toggleERCErrors( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.showERCErrors" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Show ERC Errors" ) )
+        .Tooltip( _( "Show markers for electrical rules checker errors" ) ) );
 
-TOOL_ACTION EE_ACTIONS::toggleERCExclusions( "eeschema.EditorControl.showERCExclusions",
-        AS_GLOBAL, 0, "",
-        _( "Show ERC Exclusions" ),
-        _( "Show markers for excluded electrical rules checker violations" ) );
+TOOL_ACTION EE_ACTIONS::toggleERCExclusions( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.showERCExclusions" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Show ERC Exclusions" ) )
+        .Tooltip( _( "Show markers for excluded electrical rules checker violations" ) ) );
 
-TOOL_ACTION EE_ACTIONS::toggleOPVoltages( "eeschema.EditorControl.showOperatingPointVoltages",
-        AS_GLOBAL, 0, "",
-        _( "Show OP Voltages" ),
-        _( "Show operating point voltage data from simulation" ) );
+TOOL_ACTION EE_ACTIONS::toggleOPVoltages( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.showOperatingPointVoltages" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Show OP Voltages" ) )
+        .Tooltip( _( "Show operating point voltage data from simulation" ) ) );
 
-TOOL_ACTION EE_ACTIONS::toggleOPCurrents( "eeschema.EditorControl.showOperatingPointCurrents",
-        AS_GLOBAL, 0, "",
-        _( "Show OP Currents" ),
-        _( "Show operating point current data from simulation" ) );
+TOOL_ACTION EE_ACTIONS::toggleOPCurrents( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.showOperatingPointCurrents" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Show OP Currents" ) )
+        .Tooltip( _( "Show operating point current data from simulation" ) ) );
 
 TOOL_ACTION EE_ACTIONS::lineModeFree( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.lineModeFree" )
@@ -922,80 +1146,108 @@ TOOL_ACTION EE_ACTIONS::lineMode45( TOOL_ACTION_ARGS()
         .Flags( AF_NONE )
         .Parameter( LINE_MODE::LINE_MODE_45 ) );
 
-TOOL_ACTION EE_ACTIONS::lineModeNext( "eeschema.EditorControl.lineModeNext",
-        AS_GLOBAL, MD_SHIFT + WXK_SPACE, "",
-        _( "Line Mode for Wires and Buses" ), _( "Switch to next line mode" ),
-        BITMAPS::unknown );
+TOOL_ACTION EE_ACTIONS::lineModeNext( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.lineModeNext" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + WXK_SPACE )
+        .MenuText( _( "Line Mode for Wires and Buses" ) )
+        .Tooltip( _( "Switch to next line mode" ) )
+        .Icon( BITMAPS::unknown ) );
 
-TOOL_ACTION EE_ACTIONS::toggleAnnotateAuto( "eeschema.EditorControl.annotateAutomatically",
-        AS_GLOBAL, 0, "",
-        _( "Annotate Automatically" ), _( "Toggle automatic annotation of new symbols" ),
-        BITMAPS::annotate );
+TOOL_ACTION EE_ACTIONS::toggleAnnotateAuto( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.annotateAutomatically" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Annotate Automatically" ) )
+        .Tooltip( _( "Toggle automatic annotation of new symbols" ) )
+        .Icon( BITMAPS::annotate ) );
 
-TOOL_ACTION EE_ACTIONS::repairSchematic( "eeschema.EditorControl.repairSchematic",
-        AS_GLOBAL, 0, "",
-        _( "Repair Schematic" ),
-        _( "Run various diagnostics and attempt to repair schematic" ),
-        BITMAPS::rescue );
+TOOL_ACTION EE_ACTIONS::repairSchematic( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.repairSchematic" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Repair Schematic" ) )
+        .Tooltip( _( "Run various diagnostics and attempt to repair schematic" ) )
+        .Icon( BITMAPS::rescue ) );
 
 // Python Console
-TOOL_ACTION EE_ACTIONS::showPythonConsole( "eeschema.EditorControl.showPythonConsole",
-        AS_GLOBAL, 0, "",
-        _( "Scripting Console" ), _( "Show the Python scripting console" ),
-        BITMAPS::py_script );
+TOOL_ACTION EE_ACTIONS::showPythonConsole( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.showPythonConsole" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Scripting Console" ) )
+        .Tooltip( _( "Show the Python scripting console" ) )
+        .Icon( BITMAPS::py_script ) );
 
 // SCH_NAVIGATE_TOOL
 //
-TOOL_ACTION EE_ACTIONS::changeSheet( "eeschema.NavigateTool.changeSheet",
-        AS_CONTEXT, 0, "",
-        _( "Change Sheet" ), _( "Change to provided sheet's contents in the schematic editor" ),
-        BITMAPS::enter_sheet );
+TOOL_ACTION EE_ACTIONS::changeSheet( TOOL_ACTION_ARGS()
+        .Name( "eeschema.NavigateTool.changeSheet" )
+        .Scope( AS_CONTEXT )
+        .MenuText( _( "Change Sheet" ) )
+        .Tooltip( _( "Change to provided sheet's contents in the schematic editor" ) )
+        .Icon( BITMAPS::enter_sheet ) );
 
-TOOL_ACTION EE_ACTIONS::enterSheet( "eeschema.NavigateTool.enterSheet",
-        AS_GLOBAL, 0, "",
-        _( "Enter Sheet" ), _( "Display the selected sheet's contents in the schematic editor" ),
-        BITMAPS::enter_sheet );
+TOOL_ACTION EE_ACTIONS::enterSheet( TOOL_ACTION_ARGS()
+        .Name( "eeschema.NavigateTool.enterSheet" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Enter Sheet" ) )
+        .Tooltip( _( "Display the selected sheet's contents in the schematic editor" ) )
+        .Icon( BITMAPS::enter_sheet ) );
 
-TOOL_ACTION EE_ACTIONS::leaveSheet( "eeschema.NavigateTool.leaveSheet",
-        AS_GLOBAL,
-        MD_ALT + WXK_BACK, LEGACY_HK_NAME( "Leave Sheet" ),
-        _( "Leave Sheet" ), _( "Display the parent sheet in the schematic editor" ),
-        BITMAPS::leave_sheet );
+TOOL_ACTION EE_ACTIONS::leaveSheet( TOOL_ACTION_ARGS()
+        .Name( "eeschema.NavigateTool.leaveSheet" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_ALT + WXK_BACK )
+        .LegacyHotkeyName( "Leave Sheet" )
+        .MenuText( _( "Leave Sheet" ) )
+        .Tooltip( _( "Display the parent sheet in the schematic editor" ) )
+        .Icon( BITMAPS::leave_sheet ) );
 
-TOOL_ACTION EE_ACTIONS::navigateUp( "eeschema.NavigateTool.up",
-        AS_GLOBAL, MD_ALT + WXK_UP, "",
-        _( "Navigate Up" ), _( "Navigate up one sheet in the hierarchy" ),
-        BITMAPS::up );
+TOOL_ACTION EE_ACTIONS::navigateUp( TOOL_ACTION_ARGS()
+        .Name( "eeschema.NavigateTool.up" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_ALT + WXK_UP )
+        .MenuText( _( "Navigate Up" ) )
+        .Tooltip( _( "Navigate up one sheet in the hierarchy" ) )
+        .Icon( BITMAPS::up ) );
 
-TOOL_ACTION EE_ACTIONS::navigateBack( "eeschema.NavigateTool.back",
-        AS_GLOBAL,
-        MD_ALT + WXK_LEFT, "",
-        _( "Navigate Back" ), _( "Move backward in sheet navigation history" ),
-        BITMAPS::left );
+TOOL_ACTION EE_ACTIONS::navigateBack( TOOL_ACTION_ARGS()
+        .Name( "eeschema.NavigateTool.back" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_ALT + WXK_LEFT )
+        .MenuText( _( "Navigate Back" ) )
+        .Tooltip( _( "Move backward in sheet navigation history" ) )
+        .Icon( BITMAPS::left ) );
 
-TOOL_ACTION EE_ACTIONS::navigateForward( "eeschema.NavigateTool.forward",
-        AS_GLOBAL,
-        MD_ALT + WXK_RIGHT, "",
-        _( "Navigate Forward" ), _( "Move forward in sheet navigation history" ),
-        BITMAPS::right );
+TOOL_ACTION EE_ACTIONS::navigateForward( TOOL_ACTION_ARGS()
+        .Name( "eeschema.NavigateTool.forward" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_ALT + WXK_RIGHT )
+        .MenuText( _( "Navigate Forward" ) )
+        .Tooltip( _( "Move forward in sheet navigation history" ) )
+        .Icon( BITMAPS::right ) );
 
-TOOL_ACTION EE_ACTIONS::navigatePrevious( "eeschema.NavigateTool.previous",
-        AS_GLOBAL,
-        WXK_PAGEUP, "",
-        _( "Previous Sheet" ), _( "Move to previous sheet by number" ),
-        BITMAPS::left );
+TOOL_ACTION EE_ACTIONS::navigatePrevious( TOOL_ACTION_ARGS()
+        .Name( "eeschema.NavigateTool.previous" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( WXK_PAGEUP )
+        .MenuText( _( "Previous Sheet" ) )
+        .Tooltip( _( "Move to previous sheet by number" ) )
+        .Icon( BITMAPS::left ) );
 
-TOOL_ACTION EE_ACTIONS::navigateNext( "eeschema.NavigateTool.next",
-        AS_GLOBAL,
-        WXK_PAGEDOWN, "",
-        _( "Next Sheet" ), _( "Move to next sheet by number" ),
-        BITMAPS::right );
+TOOL_ACTION EE_ACTIONS::navigateNext( TOOL_ACTION_ARGS()
+        .Name( "eeschema.NavigateTool.next" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( WXK_PAGEDOWN )
+        .MenuText( _( "Next Sheet" ) )
+        .Tooltip( _( "Move to next sheet by number" ) )
+        .Icon( BITMAPS::right ) );
 
-TOOL_ACTION EE_ACTIONS::showHierarchy( "eeschema.EditorTool.showHierarchy",
-        AS_GLOBAL,
-        MD_CTRL + 'H', "",
-        _( "Hierarchy Navigator" ), _( "Show or hide the schematic sheet hierarchy navigator" ),
-        BITMAPS::hierarchy_nav );
+TOOL_ACTION EE_ACTIONS::showHierarchy( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorTool.showHierarchy" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'H' )
+        .MenuText( _( "Hierarchy Navigator" ) )
+        .Tooltip( _( "Show or hide the schematic sheet hierarchy navigator" ) )
+        .Icon( BITMAPS::hierarchy_nav ) );
 
 
 // SCH_LINE_WIRE_BUS_TOOL
@@ -1047,154 +1299,208 @@ TOOL_ACTION EE_ACTIONS::drawLines( TOOL_ACTION_ARGS()
         .Flags( AF_ACTIVATE )
         .Parameter( &drawLinesActionParam ) );
 
-TOOL_ACTION EE_ACTIONS::undoLastSegment( "eeschema.InteractiveDrawingLineWireBus.undoLastSegment",
-        AS_GLOBAL,
-        WXK_BACK, "",
-        _( "Undo Last Segment" ),  _( "Walks the current line back one segment." ),
-        BITMAPS::undo );
+TOOL_ACTION EE_ACTIONS::undoLastSegment( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawingLineWireBus.undoLastSegment")
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( WXK_BACK )
+        .MenuText( _( "Undo Last Segment" ) )
+        .Tooltip( _( "Walks the current line back one segment." ) )
+        .Icon( BITMAPS::undo ) );
 
-TOOL_ACTION EE_ACTIONS::switchSegmentPosture( "eeschema.InteractiveDrawingLineWireBus.switchPosture",
-        AS_GLOBAL,
-        '/', "",
-        _( "Switch Segment Posture" ), _( "Switches posture of the current segment." ),
-        BITMAPS::change_entry_orient, AF_NONE );
+TOOL_ACTION EE_ACTIONS::switchSegmentPosture( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawingLineWireBus.switchPosture" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( '/' )
+        .MenuText( _( "Switch Segment Posture" ) )
+        .Tooltip( _( "Switches posture of the current segment." ) )
+        .Icon( BITMAPS::change_entry_orient )
+        .Flags( AF_NONE ) );
 
-TOOL_ACTION EE_ACTIONS::finishLineWireOrBus( "eeschema.InteractiveDrawingLineWireBus.finish",
-        AS_GLOBAL,
-        'K', LEGACY_HK_NAME( "End Line Wire Bus" ),
-        _( "Finish Wire or Bus" ), _( "Complete drawing at current segment" ),
-        BITMAPS::checked_ok, AF_NONE );
+TOOL_ACTION EE_ACTIONS::finishLineWireOrBus( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawingLineWireBus.finish" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'K' )
+        .LegacyHotkeyName( "End Line Wire Bus" )
+        .MenuText( _( "Finish Wire or Bus" ) )
+        .Tooltip( _( "Complete drawing at current segment" ) )
+        .Icon( BITMAPS::checked_ok )
+        .Flags( AF_NONE ) );
 
-TOOL_ACTION EE_ACTIONS::finishWire( "eeschema.InteractiveDrawingLineWireBus.finishWire",
-        AS_GLOBAL, 0,  "",
-        _( "Finish Wire" ), _( "Complete wire with current segment" ),
-        BITMAPS::checked_ok, AF_NONE );
+TOOL_ACTION EE_ACTIONS::finishWire( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawingLineWireBus.finishWire" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Finish Wire" ) )
+        .Tooltip( _( "Complete wire with current segment" ) )
+        .Icon( BITMAPS::checked_ok )
+        .Flags( AF_NONE ) );
 
-TOOL_ACTION EE_ACTIONS::finishBus( "eeschema.InteractiveDrawingLineWireBus.finishBus",
-        AS_GLOBAL, 0,  "",
-        _( "Finish Bus" ), _( "Complete bus with current segment" ),
-        BITMAPS::checked_ok, AF_NONE );
+TOOL_ACTION EE_ACTIONS::finishBus( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawingLineWireBus.finishBus" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Finish Bus" ) )
+        .Tooltip( _( "Complete bus with current segment" ) )
+        .Icon( BITMAPS::checked_ok )
+        .Flags( AF_NONE ) );
 
-TOOL_ACTION EE_ACTIONS::finishLine( "eeschema.InteractiveDrawingLineWireBus.finishLine",
-        AS_GLOBAL, 0,  "",
-        _( "Finish Lines" ), _( "Complete connected lines with current segment" ),
-        BITMAPS::checked_ok, AF_NONE );
+TOOL_ACTION EE_ACTIONS::finishLine( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawingLineWireBus.finishLine" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Finish Lines" ) )
+        .Tooltip( _( "Complete connected lines with current segment" ) )
+        .Icon( BITMAPS::checked_ok )
+        .Flags( AF_NONE ) );
 
 
 // SCH_MOVE_TOOL
 //
-TOOL_ACTION EE_ACTIONS::move( "eeschema.InteractiveMove.move",
-        AS_GLOBAL,
-        'M', LEGACY_HK_NAME( "Move Item" ),
-        _( "Move" ), _( "Moves the selected item(s)" ), BITMAPS::move, AF_ACTIVATE );
+TOOL_ACTION EE_ACTIONS::move( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveMove.move" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'M' )
+        .LegacyHotkeyName( "Move Item" )
+        .MenuText( _( "Move" ) )
+        .Tooltip( _( "Moves the selected item(s)" ) )
+        .Icon( BITMAPS::move )
+        .Flags( AF_ACTIVATE ) );
 
-TOOL_ACTION EE_ACTIONS::drag( "eeschema.InteractiveMove.drag",
-        AS_GLOBAL,
-        'G', LEGACY_HK_NAME( "Drag Item" ),
-        _( "Drag" ), _( "Drags the selected item(s)" ), BITMAPS::move, AF_ACTIVATE );
+TOOL_ACTION EE_ACTIONS::drag( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveMove.drag" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'G' )
+        .LegacyHotkeyName( "Drag Item" )
+        .MenuText( _( "Drag" ) )
+        .Tooltip( _( "Drags the selected item(s)" ) )
+        .Icon( BITMAPS::move )
+        .Flags( AF_ACTIVATE ) );
 
-TOOL_ACTION EE_ACTIONS::alignToGrid( "eeschema.AlignToGrid",
-        AS_GLOBAL, 0, "",
-        _( "Align Elements to Grid" ), "", BITMAPS::move, AF_ACTIVATE );
+TOOL_ACTION EE_ACTIONS::alignToGrid( TOOL_ACTION_ARGS()
+        .Name( "eeschema.AlignToGrid" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Align Elements to Grid" ) )
+        .Icon( BITMAPS::move )
+        .Flags( AF_ACTIVATE ) );
 
 // Schematic editor save copy curr sheet command
-TOOL_ACTION EE_ACTIONS::saveCurrSheetCopyAs( "eeschema.EditorControl.saveCurrSheetCopyAs",
-        AS_GLOBAL,
-        0, "",
-        _( "Save Current Sheet Copy As..." ), _( "Save a copy of the current sheet to another location or name" ),
-        BITMAPS::save_as );
+TOOL_ACTION EE_ACTIONS::saveCurrSheetCopyAs( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.saveCurrSheetCopyAs" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Save Current Sheet Copy As..." ) )
+        .Tooltip( _( "Save a copy of the current sheet to another location or name" ) )
+        .Icon( BITMAPS::save_as ) );
 
 // Drag and drop
-TOOL_ACTION EE_ACTIONS::ddAppendFile( "eeschema.EditorControl.ddAppendFile",
-        AS_GLOBAL );
+TOOL_ACTION EE_ACTIONS::ddAppendFile( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.ddAppendFile" )
+        .Scope( AS_GLOBAL ) );
 
 // SIMULATOR
-TOOL_ACTION EE_ACTIONS::newAnalysisTab( "eeschema.Simulation.newAnalysisTab",
-        AS_GLOBAL,
-        MD_CTRL + 'N', LEGACY_HK_NAME( "New" ),
-        _( "New Analysis Tab..." ), "",
-        BITMAPS::sim_add_plot );
+TOOL_ACTION EE_ACTIONS::newAnalysisTab( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Simulation.newAnalysisTab" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'N' )
+        .LegacyHotkeyName( "New" )
+        .MenuText( _( "New Analysis Tab..." ) )
+        .Icon( BITMAPS::sim_add_plot ) );
 
-TOOL_ACTION EE_ACTIONS::openWorkbook( "eeschema.Simulation.openWorkbook",
-        AS_GLOBAL,
-        MD_CTRL + 'O', LEGACY_HK_NAME( "Open" ),
-        _( "Open Workbook..." ), "",
-        BITMAPS::directory_open );
+TOOL_ACTION EE_ACTIONS::openWorkbook( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Simulation.openWorkbook" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'O' )
+        .LegacyHotkeyName( "Open" )
+        .MenuText( _( "Open Workbook..." ) )
+        .Icon( BITMAPS::directory_open ) );
 
-TOOL_ACTION EE_ACTIONS::saveWorkbook( "eeschema.Simulation.saveWorkbook",
-        AS_GLOBAL,
-        MD_CTRL + 'S', LEGACY_HK_NAME( "Save" ),
-        _( "Save Workbook" ), "",
-        BITMAPS::save );
+TOOL_ACTION EE_ACTIONS::saveWorkbook( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Simulation.saveWorkbook" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'S' )
+        .LegacyHotkeyName( "Save" )
+        .MenuText( _( "Save Workbook" ) )
+        .Icon( BITMAPS::save ) );
 
-TOOL_ACTION EE_ACTIONS::saveWorkbookAs( "eeschema.Simulation.saveWorkbookAs",
-        AS_GLOBAL,
-        MD_SHIFT + MD_CTRL + 'S', LEGACY_HK_NAME( "Save As" ),
-        _( "Save Workbook As..." ), "",
-        BITMAPS::sim_add_signal );
+TOOL_ACTION EE_ACTIONS::saveWorkbookAs( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Simulation.saveWorkbookAs" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + MD_CTRL + 'S' )
+        .LegacyHotkeyName( "Save As" )
+        .MenuText( _( "Save Workbook As..." ) )
+        .Icon( BITMAPS::sim_add_signal ) );
 
-TOOL_ACTION EE_ACTIONS::exportPlotAsPNG( "eeschema.Simulator.exportPNG",
-        AS_GLOBAL, 0, "",
-        _( "Export Current Plot as PNG..." ), "",
-        BITMAPS::export_png );
+TOOL_ACTION EE_ACTIONS::exportPlotAsPNG( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Simulator.exportPNG" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Export Current Plot as PNG..." ) )
+        .Icon( BITMAPS::export_png ) );
 
-TOOL_ACTION EE_ACTIONS::exportPlotAsCSV( "eeschema.Simulator.exportCSV",
-        AS_GLOBAL, 0, "",
-        _( "Export Current Plot as CSV..." ), "",
-        BITMAPS::export_file );
+TOOL_ACTION EE_ACTIONS::exportPlotAsCSV( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Simulator.exportCSV" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Export Current Plot as CSV..." ) )
+        .Icon( BITMAPS::export_file ) );
 
-TOOL_ACTION EE_ACTIONS::toggleLegend( "eeschema.Simulator.toggleLegend",
-        AS_GLOBAL, 0, "",
-        _( "Show Legend" ), "",
-        BITMAPS::text );
+TOOL_ACTION EE_ACTIONS::toggleLegend( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Simulator.toggleLegend" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Show Legend" ) )
+        .Icon( BITMAPS::text ) );
 
-TOOL_ACTION EE_ACTIONS::toggleDottedSecondary( "eeschema.Simulator.toggleDottedSecondary",
-        AS_GLOBAL, 0, "",
-        _( "Dotted Current/Phase" ),
-        _( "Draw secondary signal trace (current or phase) with a dotted line" ) );
+TOOL_ACTION EE_ACTIONS::toggleDottedSecondary( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Simulator.toggleDottedSecondary" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Dotted Current/Phase" ) )
+        .Tooltip( _( "Draw secondary signal trace (current or phase) with a dotted line" ) ) );
 
-TOOL_ACTION EE_ACTIONS::toggleDarkModePlots( "eeschema.Simulator.toggleDarkModePlots",
-        AS_GLOBAL, 0, "",
-        _( "Dark Mode Plots" ),
-        _( "Draw plots with a black background" ) );
+TOOL_ACTION EE_ACTIONS::toggleDarkModePlots( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Simulator.toggleDarkModePlots" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Dark Mode Plots" ) )
+        .Tooltip( _( "Draw plots with a black background" ) ) );
 
-TOOL_ACTION EE_ACTIONS::simAnalysisProperties( "eeschema.Simulation.simAnalysisProperties",
-        AS_GLOBAL, 0, "",
-        _( "Edit Analysis Tab..." ),
-        _( "Edit the SPICE command and plot setup for the current analysis tab" ),
-        BITMAPS::sim_command );
+TOOL_ACTION EE_ACTIONS::simAnalysisProperties( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Simulation.simAnalysisProperties" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Edit Analysis Tab..." ) )
+        .Tooltip( _( "Edit the SPICE command and plot setup for the current analysis tab" ) )
+        .Icon( BITMAPS::sim_command ) );
 
-TOOL_ACTION EE_ACTIONS::runSimulation( "eeschema.Simulation.runSimulation",
-        AS_GLOBAL,
-        'R', "",
-        _( "Run Simulation" ), "",
-        BITMAPS::sim_run );
+TOOL_ACTION EE_ACTIONS::runSimulation( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Simulation.runSimulation" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'R' )
+        .MenuText( _( "Run Simulation" ) )
+        .Icon( BITMAPS::sim_run ) );
 
-TOOL_ACTION EE_ACTIONS::stopSimulation( "eeschema.Simulation.stopSimulation",
-        AS_GLOBAL, 0, "",
-        _( "Stop Simulation" ), "",
-        BITMAPS::sim_stop );
+TOOL_ACTION EE_ACTIONS::stopSimulation( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Simulation.stopSimulation" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Stop Simulation" ) )
+        .Icon( BITMAPS::sim_stop ) );
 
-TOOL_ACTION EE_ACTIONS::simProbe( "eeschema.Simulation.probe",
-        AS_GLOBAL,
-        'P', "",
-        _( "Probe Schematic..." ), _( "Add a simulator probe" ),
-        BITMAPS::sim_probe );
+TOOL_ACTION EE_ACTIONS::simProbe( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Simulation.probe" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'P' )
+        .MenuText( _( "Probe Schematic..." ) )
+        .Tooltip( _( "Add a simulator probe" ) )
+        .Icon( BITMAPS::sim_probe ) );
 
-TOOL_ACTION EE_ACTIONS::simTune( "eeschema.Simulation.tune",
-        AS_GLOBAL,
-        'T', "",
-        _( "Add Tuned Value..." ), _( "Select a value to be tuned" ),
-        BITMAPS::sim_tune );
+TOOL_ACTION EE_ACTIONS::simTune( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Simulation.tune" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'T' )
+        .MenuText( _( "Add Tuned Value..." ) )
+        .Tooltip( _( "Select a value to be tuned" ) )
+        .Icon( BITMAPS::sim_tune ) );
 
-TOOL_ACTION EE_ACTIONS::editUserDefinedSignals( "eeschema.Simulation.editUserDefinedSignals",
-        AS_GLOBAL, 0, "",
-        _( "User-defined Signals..." ),
-        _( "Add, edit or delete user-defined simulation signals" ),
-        BITMAPS::sim_add_signal );
+TOOL_ACTION EE_ACTIONS::editUserDefinedSignals( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Simulation.editUserDefinedSignals" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "User-defined Signals..." ) )
+        .Tooltip( _( "Add, edit or delete user-defined simulation signals" ) )
+        .Icon( BITMAPS::sim_add_signal ) );
 
-TOOL_ACTION EE_ACTIONS::showNetlist( "eeschema.Simulation.showNetlist",
-        AS_GLOBAL, 0, "",
-        _( "Show SPICE Netlist" ), "",
-        BITMAPS::netlist );
-
+TOOL_ACTION EE_ACTIONS::showNetlist( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Simulation.showNetlist" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Show SPICE Netlist" ) )
+        .Icon( BITMAPS::netlist ) );
