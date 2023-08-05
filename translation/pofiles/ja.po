@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-03 11:24-0700\n"
-"PO-Revision-Date: 2023-07-31 15:04+0000\n"
+"PO-Revision-Date: 2023-08-06 10:10+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v7/ja/>\n"
 "Language: ja\n"
@@ -17931,7 +17931,7 @@ msgstr "回路図エディターに親シートを表示"
 
 #: eeschema/tools/ee_actions.cpp:774
 msgid "Navigate Up"
-msgstr "上にナビゲート"
+msgstr "上の階層に移動"
 
 #: eeschema/tools/ee_actions.cpp:774
 msgid "Navigate up one sheet in the hierarchy"
@@ -17939,7 +17939,7 @@ msgstr "この階層内でひとつ上のシートにナビゲート"
 
 #: eeschema/tools/ee_actions.cpp:780
 msgid "Navigate Back"
-msgstr "後ろにナビゲート"
+msgstr "戻る"
 
 #: eeschema/tools/ee_actions.cpp:780
 msgid "Move backward in sheet navigation history"
@@ -17947,7 +17947,7 @@ msgstr "シート ナビゲーションの履歴を戻る"
 
 #: eeschema/tools/ee_actions.cpp:786
 msgid "Navigate Forward"
-msgstr "先にナビゲート"
+msgstr "進む"
 
 #: eeschema/tools/ee_actions.cpp:786
 msgid "Move forward in sheet navigation history"
@@ -17959,7 +17959,7 @@ msgstr "前のシート"
 
 #: eeschema/tools/ee_actions.cpp:792
 msgid "Move to previous sheet by number"
-msgstr "番号を指定して前のシートに戻る"
+msgstr "シート番号の順で前のシートに戻る"
 
 #: eeschema/tools/ee_actions.cpp:798
 msgid "Next Sheet"
@@ -17967,7 +17967,7 @@ msgstr "次のシート"
 
 #: eeschema/tools/ee_actions.cpp:798
 msgid "Move to next sheet by number"
-msgstr "番号を指定して次のシートに移動"
+msgstr "シート番号の順で次のシートに移動"
 
 #: eeschema/tools/ee_actions.cpp:804
 msgid "Hierarchy Navigator"
@@ -32866,9 +32866,8 @@ msgid "Checking pads..."
 msgstr "パッドをチェック中..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:172
-#, fuzzy
 msgid "Checking copper graphic clearances..."
-msgstr "テキストとグラフィックのクリアランス...\n"
+msgstr "導体層の図形のクリアランスをチェック..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:180
 msgid "Checking copper zone clearances..."
