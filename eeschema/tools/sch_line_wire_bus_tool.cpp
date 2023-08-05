@@ -381,6 +381,7 @@ int SCH_LINE_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
 SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet, const VECTOR2I& aPos )
 {
     SCHEMATIC_SETTINGS& cfg = getModel<SCHEMATIC>()->Settings();
+    SCH_SCREEN*         screen = m_frame->GetScreen();
 
     VECTOR2I pos = aPos;
 
@@ -390,7 +391,7 @@ SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet, const VECTO
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
     m_busUnfold.entry = new SCH_BUS_WIRE_ENTRY( pos );
-    m_busUnfold.entry->SetParent( m_frame->GetScreen() );
+    m_busUnfold.entry->SetParent( screen );
     m_frame->AddToScreen( m_busUnfold.entry, m_frame->GetScreen() );
 
     m_busUnfold.label = new SCH_LABEL( m_busUnfold.entry->GetEnd(), aNet );
@@ -404,6 +405,15 @@ SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet, const VECTO
     m_busUnfold.net_name = aNet;
 
     getViewControls()->SetCrossHairCursorPosition( m_busUnfold.entry->GetEnd(), false );
+
+    std::vector<DANGLING_END_ITEM> endPoints;
+
+    for( SCH_ITEM* item : screen->Items().Overlapping( m_busUnfold.entry->GetBoundingBox() ) )
+        item->GetEndPoints( endPoints );
+
+    m_busUnfold.entry->UpdateDanglingState( endPoints );
+    m_busUnfold.entry->SetEndDangling( false );
+    m_busUnfold.label->SetIsDangling( false );
 
     return startSegments( LAYER_WIRE, m_busUnfold.entry->GetEnd() );
 }
