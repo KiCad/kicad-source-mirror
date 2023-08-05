@@ -68,7 +68,7 @@ public:
     void SetNotificationCount( int aCount );
 
 private:
-    void OnSize( wxSizeEvent& aEvent );
+    void onSize( wxSizeEvent& aEvent );
     void onBackgroundProgressClick( wxMouseEvent& aEvent );
     void onNotificationsIconClick( wxCommandEvent& aEvent );
 
