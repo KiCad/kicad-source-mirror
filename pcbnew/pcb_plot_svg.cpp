@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -38,7 +38,23 @@ bool PCB_PLOT_SVG::Plot( BOARD* aBoard, const PCB_PLOT_SVG_OPTIONS& aSvgPlotOpti
 
     // Adding drill marks, for copper layers
     if( ( aSvgPlotOptions.m_printMaskLayer & LSET::AllCuMask() ).any() )
-        plot_opts.SetDrillMarksType( DRILL_MARKS::FULL_DRILL_SHAPE );
+    {
+        switch( aSvgPlotOptions.m_drillShapeOption )
+        {
+            default:
+            case 0:
+                plot_opts.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );
+                break;
+
+            case 1:
+                plot_opts.SetDrillMarksType( DRILL_MARKS::SMALL_DRILL_SHAPE );
+                break;
+
+            case 2:
+                plot_opts.SetDrillMarksType( DRILL_MARKS::FULL_DRILL_SHAPE );
+                break;
+        }
+    }
     else
         plot_opts.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );
 

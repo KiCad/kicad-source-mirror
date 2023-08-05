@@ -30,6 +30,8 @@
 
 #include <locale_io.h>
 
+#define ARG_DRILL_SHAPE_OPTION "--drill-shape-opt"
+
 
 CLI::EXPORT_PCB_PDF_COMMAND::EXPORT_PCB_PDF_COMMAND() : EXPORT_PCB_BASE_COMMAND( "pdf" )
 {
@@ -68,6 +70,12 @@ CLI::EXPORT_PCB_PDF_COMMAND::EXPORT_PCB_PDF_COMMAND() : EXPORT_PCB_BASE_COMMAND(
     m_argParser.add_argument( "-t", ARG_THEME )
             .default_value( std::string() )
             .help( UTF8STDSTR( _( "Color theme to use (will default to PCB Editor settings)" ) ) );
+
+    m_argParser.add_argument( ARG_DRILL_SHAPE_OPTION )
+            .help( UTF8STDSTR( _( "Set pad/via drill shape option (0 = no shape, 1 = "
+                                  "small shape, 2 = actual shape)" ) ) )
+            .scan<'i', int>()
+            .default_value( 2 );
 }
 
 
@@ -98,6 +106,8 @@ int CLI::EXPORT_PCB_PDF_COMMAND::doPerform( KIWAY& aKiway )
     pdfJob->m_blackAndWhite = m_argParser.get<bool>( ARG_BLACKANDWHITE );
     pdfJob->m_colorTheme = FROM_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
     pdfJob->m_negative = m_argParser.get<bool>( ARG_NEGATIVE );
+
+    pdfJob->m_drillShapeOption = m_argParser.get<int>( ARG_DRILL_SHAPE_OPTION );
 
     pdfJob->m_printMaskLayer = m_selectedLayers;
 

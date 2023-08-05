@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -33,6 +33,7 @@
 
 #define ARG_EXCLUDE_DRAWING_SHEET "--exclude-drawing-sheet"
 #define ARG_PAGE_SIZE "--page-size-mode"
+#define ARG_DRILL_SHAPE_OPTION "--drill-shape-opt"
 
 
 CLI::EXPORT_PCB_SVG_COMMAND::EXPORT_PCB_SVG_COMMAND() : EXPORT_PCB_BASE_COMMAND( "svg" )
@@ -68,6 +69,12 @@ CLI::EXPORT_PCB_SVG_COMMAND::EXPORT_PCB_SVG_COMMAND() : EXPORT_PCB_BASE_COMMAND(
             .help( UTF8STDSTR( _( "No drawing sheet" ) ) )
             .implicit_value( true )
             .default_value( false );
+
+    m_argParser.add_argument( ARG_DRILL_SHAPE_OPTION )
+            .help( UTF8STDSTR( _( "Set pad/via drill shape option (0 = no shape, 1 = "
+                                  "small shape, 2 = actual shape)" ) ) )
+            .scan<'i', int>()
+            .default_value( 2 );
 }
 
 
@@ -83,6 +90,7 @@ int CLI::EXPORT_PCB_SVG_COMMAND::doPerform( KIWAY& aKiway )
     svgJob->m_blackAndWhite = m_argParser.get<bool>( ARG_BLACKANDWHITE );
     svgJob->m_pageSizeMode = m_argParser.get<int>( ARG_PAGE_SIZE );
     svgJob->m_negative = m_argParser.get<bool>( ARG_NEGATIVE );
+    svgJob->m_drillShapeOption = m_argParser.get<int>( ARG_DRILL_SHAPE_OPTION );
 
     svgJob->m_filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
     svgJob->m_outputFile = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
