@@ -55,6 +55,11 @@ public:
     bool m_plotBorderTitleBlocks;
 
     LSET m_printMaskLayer;
+
+    // How holes in pads/vias are plotted:
+    // 0 = no hole, 1 = small shape, 2 = actual shape
+    // Not used in some plotters (Gerber)
+    int m_drillShapeOption;
 };
 
 #endif

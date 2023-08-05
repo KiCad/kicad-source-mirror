@@ -133,6 +133,7 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     svgPlotOptions.m_pageSizeMode = aSvgJob->m_pageSizeMode;
     svgPlotOptions.m_printMaskLayer = aSvgJob->m_printMaskLayer;
     svgPlotOptions.m_plotFrame = aSvgJob->m_plotDrawingSheet;
+    svgPlotOptions.m_drillShapeOption = aSvgJob->m_drillShapeOption;
 
     if( aJob->IsCli() )
         wxPrintf( _( "Loading board\n" ) );
@@ -241,6 +242,22 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
     plotOpts.SetMirror( aPdfJob->m_mirror );
     plotOpts.SetBlackAndWhite( aPdfJob->m_blackAndWhite );
     plotOpts.SetNegative( aPdfJob->m_negative );
+
+    switch( aPdfJob->m_drillShapeOption )
+    {
+        default:
+        case 0:
+            plotOpts.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );
+            break;
+
+        case 1:
+            plotOpts.SetDrillMarksType( DRILL_MARKS::SMALL_DRILL_SHAPE );
+            break;
+
+        case 2:
+            plotOpts.SetDrillMarksType( DRILL_MARKS::FULL_DRILL_SHAPE );
+            break;
+    }
 
     PDF_PLOTTER* plotter = (PDF_PLOTTER*) StartPlotBoard(
             brd, &plotOpts, UNDEFINED_LAYER, aPdfJob->m_outputFile, wxEmptyString, wxEmptyString );

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -34,6 +34,11 @@ struct PCB_PLOT_SVG_OPTIONS
     int m_pageSizeMode;
 
     LSET m_printMaskLayer;
+
+    // How holes in pads/vias are plotted:
+    // 0 = no hole, 1 = small shape, 2 = actual shape
+    // Not used in some plotters (Gerber)
+    int m_drillShapeOption;
 };
 
 class PCB_PLOT_SVG
