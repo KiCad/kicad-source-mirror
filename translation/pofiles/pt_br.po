@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-03 11:31-0700\n"
-"PO-Revision-Date: 2023-07-03 07:52+0000\n"
+"PO-Revision-Date: 2023-08-06 10:12+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -1071,14 +1071,12 @@ msgid "Light 8:"
 msgstr "Luz 8:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:439
-#, fuzzy
 msgid "Board thickness:"
-msgstr "Espessura da placa: "
+msgstr "Espessura da placa:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:440
-#, fuzzy
 msgid "3D Preview Options"
-msgstr "Configurações da pré-visualização"
+msgstr "Opções de visualização 3D"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56 eeschema/sch_bitmap.cpp:223
@@ -1172,6 +1170,8 @@ msgid ""
 "Show or hide the board body\n"
 "If hidden, show only copper and silkscreen layers."
 msgstr ""
+"Mostrar ou ocultar o corpo da placa\n"
+"Se escondido, mostre apenas as camadas de cobre e da serigrafia."
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:231
 msgid "Reload board and 3D models"
@@ -2343,19 +2343,16 @@ msgid "Grid 2:"
 msgstr "Grade 2:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:163 common/tool/actions.cpp:570
-#, fuzzy
 msgid "Grid Overrides"
-msgstr "Substitui"
+msgstr "Substituições da grade"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:174
-#, fuzzy
 msgid "Connectable Items:"
-msgstr "Itens desconectados"
+msgstr "Itens conectáveis:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:188
-#, fuzzy
 msgid "Wires:"
-msgstr "Fios"
+msgstr "Fios:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:202
 #: eeschema/dialogs/dialog_field_properties_base.cpp:32
@@ -2371,9 +2368,8 @@ msgid "Text:"
 msgstr "Texto:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:216
-#, fuzzy
 msgid "Graphics:"
-msgstr "Gráficos"
+msgstr "Gráficos:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:236 common/tool/actions.cpp:552
 msgid "Reset Grid Origin"
@@ -3586,7 +3582,6 @@ msgid "MB"
 msgstr "MB"
 
 #: common/dialogs/panel_data_collection_base.cpp:20
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs across the user base more effectively "
@@ -3609,14 +3604,14 @@ msgstr ""
 "\n"
 "Para vincular relatórios automáticos da mesma instalação do KiCad, é gerado "
 "um identificador exclusivo que é completamente aleatório, ele só é usado "
-"para fins do relatório de falhas. Nenhuma informação é pessoalmente "
-"identificável (PII), nem mesmo o endereço IP é armazenado ou conectado neste "
+"para fins do relatório de falhas. Nenhuma informação identificável da pessoa "
+"(PII), nem mesmo o endereço IP é armazenado ou conectado neste "
 "identificador. Você pode redefinir este id a qualquer momento com o botão "
 "disponibilizado.\n"
 "\n"
 "Caso opte por participar voluntariamente, o KiCad lidará automaticamente com "
-"o envio dos relatórios quando ocorrer problemas ou eventos. Os seus arquivos "
-"de design, como o esquema elétrico ou o design da PCI, não são "
+"o envio dos relatórios quando ocorrer travamentos ou problemas. Os seus "
+"arquivos de design, como o esquema elétrico ou o design da PCI, não são "
 "compartilhados neste processo."
 
 #: common/dialogs/panel_data_collection_base.cpp:24
@@ -4112,9 +4107,8 @@ msgstr ""
 "Não foi possível utilizar o OpenGL, retornando para renderização via software"
 
 #: common/draw_panel_gal.cpp:326
-#, fuzzy
 msgid "Graphics error"
-msgstr "Camada gráfica"
+msgstr "Erro gráfico"
 
 #: common/draw_panel_gal.cpp:487
 msgid "Could not use OpenGL"
@@ -5590,9 +5584,8 @@ msgid "No-connect symbols"
 msgstr "Símbolos sem conexão"
 
 #: common/layer_id.cpp:135
-#, fuzzy
 msgid "DNP markers"
-msgstr "Marcadores"
+msgstr "Marcadores DNP"
 
 #: common/layer_id.cpp:136
 msgid "ERC warnings"
@@ -6595,9 +6588,8 @@ msgid "Switch to Fast Grid 2"
 msgstr "Alterne para a grade rápida 2"
 
 #: common/tool/actions.cpp:529
-#, fuzzy
 msgid "Cycle Fast Grid"
-msgstr "Alterne para a grade rápida 1"
+msgstr "Alterne para a grade rápida"
 
 #: common/tool/actions.cpp:534
 msgid "Switch to Next Grid"
@@ -6621,7 +6613,7 @@ msgstr "Exiba a grade de fundo na janela de edição"
 
 #: common/tool/actions.cpp:571
 msgid "Enables item-specific grids that override the current grid"
-msgstr ""
+msgstr "Permite itens específicos das grades que substituem a grade atual"
 
 #: common/tool/actions.cpp:576
 msgid "Grid Properties..."
@@ -7223,14 +7215,12 @@ msgid "Reset to Defaults"
 msgstr "Restaure os padrões"
 
 #: common/widgets/paged_dialog.cpp:91
-#, fuzzy
 msgid "Reveal Preferences in Finder"
-msgstr "Revele os temas no Finder"
+msgstr "Revele as preferências no Finder"
 
 #: common/widgets/paged_dialog.cpp:93
-#, fuzzy
 msgid "Open Preferences Directory"
-msgstr "Abrir preferências"
+msgstr "Abrir o diretório de preferências"
 
 #: common/widgets/paged_dialog.cpp:367
 #, c-format
@@ -7288,9 +7278,8 @@ msgid "Edit..."
 msgstr "Edite..."
 
 #: common/widgets/widget_hotkey_list.cpp:421
-#, fuzzy
 msgid "Edit Alternate..."
-msgstr "Edita Footprint..."
+msgstr "Editar alternativo..."
 
 #: common/widgets/widget_hotkey_list.cpp:422
 msgid "Undo Changes"
@@ -7301,14 +7290,12 @@ msgid "Clear Assigned Hotkey"
 msgstr "Limpe a tecla de atalho que foi atribuída"
 
 #: common/widgets/widget_hotkey_list.cpp:424
-#, fuzzy
 msgid "Clear Assigned Alternate"
-msgstr "Limpe a tecla de atalho que foi atribuída"
+msgstr "Limpa a atribuição alternativa"
 
 #: common/widgets/widget_hotkey_list.cpp:425
-#, fuzzy
 msgid "Restore Defaults"
-msgstr "Restaure o padrão"
+msgstr "Restaurar os padrões"
 
 #: common/widgets/widget_hotkey_list.cpp:465
 #, c-format
@@ -7496,9 +7483,8 @@ msgid "KiCad netlist files"
 msgstr "Arquivos netlist do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:338
-#, fuzzy
 msgid "Allegro netlist files"
-msgstr "Gerar o arquivo netlist"
+msgstr "Arquivos netlist do Allegro"
 
 #: common/wildcards_and_files_ext.cpp:345
 #: common/wildcards_and_files_ext.cpp:391
@@ -8690,9 +8676,8 @@ msgid "Update Symbols"
 msgstr "Atualizar os símbolos"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:512
-#, fuzzy
 msgid "*** No symbols matching criteria found ***"
-msgstr "*** o símbolo não foi encontrado ***"
+msgstr "*** Não foram encontrados símbolos que correspondam aos critérios ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:547
 msgid "*** symbol not found ***"
@@ -11562,60 +11547,52 @@ msgid "Sheet Properties"
 msgstr "Propriedades da folha"
 
 #: eeschema/dialogs/dialog_sim_command.cpp:265
-#, fuzzy
 msgid "A DC source must be specified."
-msgstr "Uma folha deve ter um arquivo definido."
+msgstr "Uma fonte DC deve ser especificada."
 
 #: eeschema/dialogs/dialog_sim_command.cpp:358
-#, fuzzy
 msgid "Source 1 and Source 2 must be different."
-msgstr "A fonte 1 e a fonte 2 devem ser diferentes"
+msgstr "Origem 1 e origem 2 devem ser diferentes."
 
 #: eeschema/dialogs/dialog_sim_command.cpp:413
-#, fuzzy
 msgid "A frequency range must be specified."
-msgstr "Pelo menos uma ou mais camadas devem ser definidas\n"
+msgstr "Um intervalo de frequência deve ser especificado."
 
 #: eeschema/dialogs/dialog_sim_command.cpp:607
-#, fuzzy
 msgid "New Simulation Tab"
-msgstr "Simulação"
+msgstr "Nova guia de simulação"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:21
-#, fuzzy
 msgid "Analysis type:"
-msgstr "Tipo passivo"
+msgstr "Tipo de análise:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "AC"
 msgstr "CA"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
-#, fuzzy
 msgid "DC"
-msgstr "DRC"
+msgstr "DC"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
-#, fuzzy
 msgid "OP"
-msgstr "OSP"
+msgstr "OP"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "TRAN"
-msgstr ""
+msgstr "TRAN"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "FFT"
-msgstr ""
+msgstr "FFT"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "NOISE"
-msgstr ""
+msgstr "RUÍDO"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
-#, fuzzy
 msgid "SP"
-msgstr "OSP"
+msgstr "SP"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25 pcbnew/pad.cpp:1694
 msgid "Custom"
@@ -11777,14 +11754,12 @@ msgid "Use initial conditions"
 msgstr "Usar condições iniciais"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:323
-#, fuzzy
 msgid "Input signals:"
-msgstr "Entrada do pino"
+msgstr "Sinais de entrada:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:338
-#, fuzzy
 msgid "Linearize inputs before performing FFT"
-msgstr "Preencha todas as zonas antes de executar o DRC"
+msgstr "Linearize as entradas antes de executar o FFT"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:359
 msgid "Measured node:"
@@ -11804,11 +11779,11 @@ msgstr "Fonte de ruído:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:459
 msgid "Save contributions from all noise generators"
-msgstr ""
+msgstr "Salvar as contribuições de todos os geradores de ruído"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:519
 msgid "Compute noise current correlation matrix"
-msgstr ""
+msgstr "Calcular a matriz de correlação da corrente de ruído"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:534
 msgid "Spice directives:"
@@ -11819,51 +11794,45 @@ msgid "Load directives from schematic"
 msgstr "Carregue as diretivas do esquema"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:560
-#, fuzzy
 msgid "Transfer function:"
-msgstr "Função da transferência"
+msgstr "Função de transferência:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:564
 msgid "(output voltage) / (input voltage)"
-msgstr ""
+msgstr "(tensão de saída) / (tensão de entrada)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:564
 msgid "(output voltage) / (input current)"
-msgstr ""
+msgstr "(tensão de saída) / (corrente de entrada)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:570
-#, fuzzy
 msgid "Input:"
-msgstr "Entrada"
+msgstr "Entrada:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:579
 #: eeschema/dialogs/dialog_sim_command_base.cpp:597
 msgid "Ref:"
-msgstr ""
+msgstr "Ref:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:588
-#, fuzzy
 msgid "Output:"
-msgstr "Saída"
+msgstr "Saída:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:612
-#, fuzzy
 msgid "Find:"
-msgstr "Localize"
+msgstr "Localizar:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:616
-#, fuzzy
 msgid "Poles and Zeros"
-msgstr "Pólo-Zero"
+msgstr "Pólos e zeros"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:616
-#, fuzzy
 msgid "Poles"
-msgstr "Furos"
+msgstr "Pólos"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:616
 msgid "Zeros"
-msgstr ""
+msgstr "Zeros"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:636
 msgid "Add full path for .include library directives"
@@ -11898,47 +11867,43 @@ msgid "HSpice"
 msgstr "HSpice"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:672
-#, fuzzy
 msgid "SPICE Command"
-msgstr "Comando Sim"
+msgstr "Comando SPICE"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:679
 #: eeschema/dialogs/dialog_sim_command_base.cpp:718
 #: eeschema/dialogs/dialog_sim_command_base.cpp:755
 #, c-format
 msgid "Fixed %s scale"
-msgstr ""
+msgstr "Escala fixa %s"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:690
 #: eeschema/dialogs/dialog_sim_command_base.cpp:729
 #: eeschema/dialogs/dialog_sim_command_base.cpp:766
 msgid "Min:"
-msgstr ""
+msgstr "Mín:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:697
 #: eeschema/dialogs/dialog_sim_command_base.cpp:736
 #: eeschema/dialogs/dialog_sim_command_base.cpp:773
 msgid "Max:"
-msgstr ""
+msgstr "Máx:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:795
 msgid "Show grid"
 msgstr "Mostrar Grade"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:799
-#, fuzzy
 msgid "Show legend"
-msgstr "Mostrar a legenda"
+msgstr "Mostrar legenda"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:802
-#, fuzzy
 msgid "Dotted current/phase"
-msgstr "Corrente pontilhada/fase"
+msgstr "Pontilhada corrente/fase"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:812
-#, fuzzy
 msgid "Margins:"
-msgstr "Margem"
+msgstr "Margens:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:822
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:551
@@ -11947,9 +11912,8 @@ msgstr "Esquerda:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:826
 #: eeschema/dialogs/dialog_sim_command_base.cpp:867
-#, fuzzy
 msgid "70"
-msgstr "0"
+msgstr "70"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:839
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:579
@@ -11958,9 +11922,8 @@ msgstr "Em cima:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:843
 #: eeschema/dialogs/dialog_sim_command_base.cpp:852
-#, fuzzy
 msgid "35"
-msgstr "3"
+msgstr "35"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:848
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:593
@@ -11973,14 +11936,12 @@ msgid "Right:"
 msgstr "Direita:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:882
-#, fuzzy
 msgid "Plot Setup"
-msgstr "Configuração da placa"
+msgstr "Configuração do plot"
 
 #: eeschema/dialogs/dialog_sim_command_base.h:219
-#, fuzzy
 msgid "Simulation Analysis"
-msgstr "Configurações da simulação"
+msgstr "Análise da simulação"
 
 #: eeschema/dialogs/dialog_sim_format_value.cpp:36
 #: eeschema/sim/sim_plot_tab.cpp:635
@@ -12238,7 +12199,7 @@ msgstr "Qtd"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:586
 msgid "#"
-msgstr ""
+msgstr "#"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:615
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:707
@@ -12280,9 +12241,8 @@ msgid "The Quantity column cannot be grouped by."
 msgstr "A coluna Quantidade não pode ser agrupada por."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:820
-#, fuzzy
 msgid "The Item Number column cannot be grouped by."
-msgstr "A coluna Quantidade não pode ser agrupada por."
+msgstr "A coluna número do item não pode ser agrupada por."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1104
 msgid "Selected Output Filename"
@@ -12821,13 +12781,12 @@ msgid "Net names"
 msgstr "Os nomes da rede"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:75
-#, fuzzy
 msgid "Other fields"
-msgstr "Outros campos da folha"
+msgstr "Outros campos"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:76
 msgid "Update all other fields in the symbol from the footprint"
-msgstr ""
+msgstr "Atualize todos os outros campos no símbolo do footprint"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.h:57
 #: eeschema/tools/backannotate.cpp:584
@@ -14981,14 +14940,13 @@ msgid "Unhandled item type %d"
 msgstr "Tipo de item não processado %d"
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:56
-#, fuzzy
 msgid "Failed to create directory 'devices' ."
-msgstr "Houve uma falha ao remover diretório %s"
+msgstr "Houve uma falha ao criar o diretório 'dispositivos'."
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:424
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create file '%s'.\n"
-msgstr "Houve uma falha ao criar o arquivo '%s'."
+msgstr "Houve uma falha ao criar o arquivo '%s'.\n"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:480
 #, c-format
@@ -16137,6 +16095,8 @@ msgstr "era esperado uma string sem aspas"
 #, c-format
 msgid "File at '%s' was ignored. Using previously found file at '%s' instead."
 msgstr ""
+"O arquivo em '%s' foi ignorado. Usando o arquivo encontrado anteriormente em "
+"'%s'."
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:335
 #, c-format
@@ -16154,39 +16114,36 @@ msgid "Extra data found on line %d in file %s"
 msgstr "Dados extras foram encontrados na linha %d no arquivo %s"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:390
-#, fuzzy
 msgid "Expecting 0, 1, 2, 3 or 4"
-msgstr "Esperando 0, 1, 2 ou 3"
+msgstr "Esperando 0, 1, 2, 3 ou 4"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:404
 msgid "Expecting NORMAL or WIDE"
 msgstr "Esperando NORMAL ou AMPLO"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:422
-#, fuzzy
 msgid "Expecting I, O, B, IN, OUT or BIDIR"
-msgstr "Esperando I, O, B ou OUT"
+msgstr "Esperando I, O, B, IN, OUT ou BIDIR"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:443
 msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
 msgstr "Esperando R0, R90, R18, R270, M0, M90, M180 ou M270"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:465
-#, fuzzy
 msgid ""
 "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP or "
 "VBOTTOM"
 msgstr ""
-"Esperando ESQUERDA, CENTRO, DIREITA, SUPERIOR, INFERIOR, V ESQUERDA, VR "
-"DIREITA, VTOP ou VBOTTOM"
+"Esperando LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP ou "
+"VBOTTOM"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:487
-#, fuzzy
 msgid ""
 "Expecting NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VCENTER, VLEFT or "
 "VRIGHT"
 msgstr ""
-"Esperando NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VLEFT ou VRIGHT"
+"Esperando NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VCENTER, VLEFT ou "
+"VRIGHT"
 
 #: eeschema/sch_plugins/ltspice/ltspice_schematic.cpp:501
 msgid "Expecting CELL or BLOCK"
@@ -16339,9 +16296,8 @@ msgid "Excluded from board"
 msgstr "Excluída da placa"
 
 #: eeschema/sch_symbol.cpp:1334
-#, fuzzy
 msgid "Excluded from simulation"
-msgstr "Excluir da simulação"
+msgstr "Foi excluído da simulação"
 
 #: eeschema/sch_symbol.cpp:1340 eeschema/sch_symbol.cpp:1733
 #: pcbnew/footprint.cpp:1285
@@ -17386,60 +17342,49 @@ msgid "Bitrate could be too high for rising / falling edges"
 msgstr "A taxa de bits pode ser muito alta para elevar / reduzir as bordas"
 
 #: eeschema/sim/legacy_workbook.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading workbook: line %d: %s."
-msgstr ""
-"Houve um erro ao carregar o arquivo da placa:\n"
-"%s"
+msgstr "Houve um erro ao carregar a pasta de trabalho: linha %d: %s."
 
 #: eeschema/sim/legacy_workbook.cpp:133
-#, fuzzy
 msgid "expecting version"
-msgstr "Aguardando '%s'"
+msgstr "versão esperada"
 
 #: eeschema/sim/legacy_workbook.cpp:150
-#, fuzzy
 msgid "expecting simulation tab count"
-msgstr "o simulador externo não foi encontrado"
+msgstr "Contagem de registros esperada da simulação"
 
 #: eeschema/sim/legacy_workbook.cpp:164
-#, fuzzy
 msgid "expecting simulation tab type"
-msgstr "Abrir a pasta de trabalho da simulação"
+msgstr "tipos de registros esperados da simulação"
 
 #: eeschema/sim/legacy_workbook.cpp:210
-#, fuzzy
 msgid "expecting trace count"
-msgstr "pista existente"
+msgstr "quantidade esperada de trilhas"
 
 #: eeschema/sim/legacy_workbook.cpp:226
-#, fuzzy
 msgid "expecting trace type"
-msgstr "pista existente"
+msgstr "tipos de traços esperados"
 
 #: eeschema/sim/legacy_workbook.cpp:236
-#, fuzzy
 msgid "expecting trace name"
-msgstr "Esperando o número."
+msgstr "nome esperado do traço"
 
 #: eeschema/sim/legacy_workbook.cpp:246
-#, fuzzy
 msgid "expecting trace color"
-msgstr "Seleção da cor:"
+msgstr "cor esperado do traço"
 
 #: eeschema/sim/legacy_workbook.cpp:262
-#, fuzzy
 msgid "expecting measurement count"
-msgstr "Excluir a medição"
+msgstr "quantidade esperada de medições"
 
 #: eeschema/sim/legacy_workbook.cpp:274
-#, fuzzy
 msgid "expecting measurement definition"
-msgstr "A definição dos nomes do pin é inválido"
+msgstr "definição esperada da medição"
 
 #: eeschema/sim/legacy_workbook.cpp:284
 msgid "expecting measurement format definition"
-msgstr ""
+msgstr "definição esperada da medição do formato"
 
 #: eeschema/sim/sim_lib_mgr.cpp:80
 #, c-format
@@ -17590,22 +17535,20 @@ msgid "%d"
 msgstr "%d"
 
 #: eeschema/sim/sim_plot_tab.cpp:562
-#, fuzzy
 msgid "Ampltiude"
-msgstr "Amplitude:"
+msgstr "Ampltiude"
 
 #: eeschema/sim/sim_plot_tab.cpp:594
 msgid "Noise (V/√Hz)"
-msgstr ""
+msgstr "Ruído (V/√Hz)"
 
 #: eeschema/sim/sim_plot_tab.cpp:597
 msgid "Noise (A/√Hz)"
-msgstr ""
+msgstr "Ruído (A/√Hz)"
 
 #: eeschema/sim/sim_plot_tab.cpp:614
-#, fuzzy
 msgid "Intensity"
-msgstr "Densidade atual"
+msgstr "Intensidade"
 
 #: eeschema/sim/sim_plot_tab.cpp:649 eeschema/sim/sim_plot_tab.cpp:769
 msgid "Power"
@@ -17679,6 +17622,8 @@ msgid ""
 "You must run a TRAN simulation first; its resultswill be used for the fast "
 "Fourier transform."
 msgstr ""
+"Você precisa rodar a simulação TRAN primeiro; os seus resultados serão "
+"usados para a rápida transformação de Fourier."
 
 #: eeschema/sim/simulator_frame.cpp:409
 msgid ""
@@ -17730,21 +17675,20 @@ msgstr "Medida Integral"
 
 #: eeschema/sim/simulator_frame_ui.cpp:156
 msgid "Perform Fourier Analysis..."
-msgstr ""
+msgstr "Realizar a análise Fourier..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:254
-#, fuzzy, c-format
+#, c-format
 msgid "Fourier Analysis of %s"
-msgstr "Análise transiente"
+msgstr "Análise de Fourier de %s"
 
 #: eeschema/sim/simulator_frame_ui.cpp:256
 msgid "Fourier Analyses of Multiple Signals"
-msgstr ""
+msgstr "Análise Fourier de vários sinais"
 
 #: eeschema/sim/simulator_frame_ui.cpp:258
-#, fuzzy
 msgid "Fundamental frequency:"
-msgstr "Frequência do sinal:"
+msgstr "Frequência fundamental:"
 
 #: eeschema/sim/simulator_frame_ui.cpp:306
 #, c-format
@@ -17763,7 +17707,7 @@ msgstr "Excluir a medição"
 #: eeschema/sim/simulator_frame_ui.cpp:924
 #, c-format
 msgid "Analysis %u - "
-msgstr ""
+msgstr "Análise %u - "
 
 #: eeschema/sim/simulator_frame_ui.cpp:572
 #: eeschema/sim/simulator_frame_ui.cpp:579
@@ -17784,9 +17728,8 @@ msgstr "Cursor 2"
 
 #: eeschema/sim/simulator_frame_ui.cpp:788
 #: eeschema/sim/simulator_frame_ui.cpp:969
-#, fuzzy
 msgid " (amplitude)"
-msgstr "Amplitude:"
+msgstr " (amplitude)"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1118
 #: eeschema/sim/simulator_frame_ui.cpp:2475
@@ -17855,19 +17798,16 @@ msgstr ""
 "Of\" '%s'"
 
 #: eeschema/sim/spice_simulator.cpp:57
-#, fuzzy
 msgid "DC Operating Point"
-msgstr "Ponto de operação"
+msgstr "Ponto de operação CC"
 
 #: eeschema/sim/spice_simulator.cpp:58
-#, fuzzy
 msgid "Small-Signal Analysis"
-msgstr "Análise transiente"
+msgstr "Análise de sinais pequenos"
 
 #: eeschema/sim/spice_simulator.cpp:59
-#, fuzzy
 msgid "DC Sweep Analysis"
-msgstr "Análise CC/CA"
+msgstr "Análise de varredura CC"
 
 #: eeschema/sim/spice_simulator.cpp:60
 msgid "Transient Analysis"
@@ -17875,37 +17815,31 @@ msgstr "Análise transiente"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "Small-Signal Distortion Analysis"
-msgstr ""
+msgstr "Análise de distorção de sinais pequenos"
 
 #: eeschema/sim/spice_simulator.cpp:62
-#, fuzzy
 msgid "Noise Analysis"
-msgstr "Análise transiente"
+msgstr "Análise de ruído"
 
 #: eeschema/sim/spice_simulator.cpp:63
-#, fuzzy
 msgid "Pole-Zero Analysis"
-msgstr "Pólo-Zero"
+msgstr "Análise do polo zero"
 
 #: eeschema/sim/spice_simulator.cpp:64
-#, fuzzy
 msgid "Sensitivity Analysis"
-msgstr "Sensibilidade"
+msgstr "Análise de sensibilidade"
 
 #: eeschema/sim/spice_simulator.cpp:65
-#, fuzzy
 msgid "Transfer Function Analysis"
-msgstr "Função da transferência"
+msgstr "Análise da função de transferência"
 
 #: eeschema/sim/spice_simulator.cpp:66
-#, fuzzy
 msgid "S-Parameter Analysis"
-msgstr "Análise transiente"
+msgstr "Análise do parâmetro S"
 
 #: eeschema/sim/spice_simulator.cpp:67
-#, fuzzy
 msgid "Frequency Content Analysis"
-msgstr "Frequência do sinal da entrada"
+msgstr "Análise do conteúdo da frequência"
 
 #: eeschema/sim/spice_value.cpp:378
 msgid "Please, fill required fields"
@@ -17958,6 +17892,41 @@ msgid ""
 "    aunif(nom, avar)\n"
 "    limit(nom, avar)\n"
 msgstr ""
+"Funções SPIC:\n"
+"\n"
+"    sqrt(x)\n"
+"    sin(x)\n"
+"    cos(x)\n"
+"    tan(x)\n"
+"    sinh(x)\n"
+"    cosh(x)\n"
+"    tanh(x)\n"
+"    asin(x)\n"
+"    acos(x)\n"
+"    atan(x)\n"
+"    asinh(x)\n"
+"    acosh(x)\n"
+"    atanh(x)\n"
+"    arctan(x)\n"
+"    exp(x)\n"
+"    ln(x)\n"
+"    log(x)\n"
+"    abs(x)\n"
+"    nint(x)\n"
+"    int(x)\n"
+"    floor(x)\n"
+"    ceil(x)\n"
+"    pow(x, y)\n"
+"    pwr(x, y)\n"
+"    min(x, y)\n"
+"    max(x, y)\n"
+"    sgn(x)\n"
+"    ternary_fcn(x, y, z)\n"
+"    gauss(nom, rvar, sigma)\n"
+"    agauss(nom, avar, sigma)\n"
+"    unif(nom, rvar)\n"
+"    aunif(nom, avar)\n"
+"    limit(nom, avar)\n"
 
 #: eeschema/symbol_async_loader.cpp:108
 #, c-format
@@ -18704,19 +18673,19 @@ msgid "Cannot find %s pin '%s'."
 msgstr "Não é possível encontrar %s pino '%s'."
 
 #: eeschema/tools/backannotate.cpp:518
-#, fuzzy, c-format
+#, c-format
 msgid "Change field '%s' value to '%s'."
-msgstr "Alterar o link \"%s\" de \"%s\" para \"%s\"?"
+msgstr "Alterar o valor '%s' do campo para '%s'."
 
 #: eeschema/tools/backannotate.cpp:534
 #, c-format
 msgid "Add field '%s' with value '%s'."
-msgstr ""
+msgstr "Adicionar campo '%s' com o valor '%s'."
 
 #: eeschema/tools/backannotate.cpp:563
-#, fuzzy, c-format
+#, c-format
 msgid "Delete field '%s.'"
-msgstr "Exclua o campo"
+msgstr "Excluir o campo '%s.'"
 
 #: eeschema/tools/backannotate.cpp:703
 #, c-format
@@ -19990,7 +19959,7 @@ msgstr "Salva uma cópia do documento atual em outro local ou com um outro nome"
 
 #: eeschema/tools/ee_actions.cpp:1115
 msgid "New Analysis Tab..."
-msgstr ""
+msgstr "Nova guia de análise..."
 
 #: eeschema/tools/ee_actions.cpp:1121
 msgid "Open Workbook..."
@@ -20035,14 +20004,14 @@ msgid "Draw plots with a black background"
 msgstr "Desenhe os gráficos com um fundo preto"
 
 #: eeschema/tools/ee_actions.cpp:1163
-#, fuzzy
 msgid "Edit Analysis Tab..."
-msgstr "Editar Rótulo Global…"
+msgstr "Editar a guia de análise..."
 
 #: eeschema/tools/ee_actions.cpp:1164
-#, fuzzy
 msgid "Edit the SPICE command and plot setup for the current analysis tab"
-msgstr "Edita o comando de simulação para a guia do gráfico atual"
+msgstr ""
+"Editar o comando SPICE e a configuração do gráfico para a guia de análise "
+"atual"
 
 #: eeschema/tools/ee_actions.cpp:1170
 msgid "Run Simulation"
@@ -20069,9 +20038,8 @@ msgid "Select a value to be tuned"
 msgstr "Selecione um valor que será afinado"
 
 #: eeschema/tools/ee_actions.cpp:1192
-#, fuzzy
 msgid "User-defined Signals..."
-msgstr "Sinais definidos pelo usuário"
+msgstr "Sinais definidos pelo usuário..."
 
 #: eeschema/tools/ee_actions.cpp:1193
 msgid "Add, edit or delete user-defined simulation signals"
@@ -20156,14 +20124,12 @@ msgid "No datasheet defined."
 msgstr "Nenhuma folha de dados foi definida."
 
 #: eeschema/tools/ee_point_editor.cpp:497
-#, fuzzy
 msgid "Move Point"
-msgstr "Mover Ponto Final"
+msgstr "Mover o ponto"
 
 #: eeschema/tools/ee_point_editor.cpp:1424
-#, fuzzy
 msgid "Add Corner"
-msgstr "Adiciona alimentação"
+msgstr "Adicionar quina"
 
 #: eeschema/tools/sch_drawing_tools.cpp:282
 msgid "Press <ESC> to cancel symbol creation."
@@ -21552,9 +21518,8 @@ msgid "Move Layer Up"
 msgstr "Move a camada para cima"
 
 #: gerbview/tools/gerbview_actions.cpp:182
-#, fuzzy
 msgid "Move Current Layer up"
-msgstr "Move a camada atual para cima"
+msgstr "Mover a camada atual para cima"
 
 #: gerbview/tools/gerbview_actions.cpp:189
 msgid "Move Layer Down"
@@ -22499,9 +22464,8 @@ msgid "Add Existing"
 msgstr "Adiciona já existente"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:77
-#, fuzzy
 msgid "Remove repository"
-msgstr "Repositório"
+msgstr "Remover o repositório"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:62
 msgid "Manage Repositories"
@@ -22934,9 +22898,9 @@ msgid "Removing previous version of package '%s'."
 msgstr "Removendo a versão anterior do pacote '%s'."
 
 #: kicad/pcm/pcm_task_manager.cpp:214
-#, fuzzy, c-format
+#, c-format
 msgid "Installing package '%s'."
-msgstr "Extraindo o pacote '%s'."
+msgstr "Instalando o pacote '%s'."
 
 #: kicad/pcm/pcm_task_manager.cpp:312
 msgid "Aborting package installation."
@@ -22990,19 +22954,18 @@ msgid "Package %s uninstalled"
 msgstr "O pacote %s foi desinstalado"
 
 #: kicad/pcm/pcm_task_manager.cpp:651
-#, fuzzy, c-format
+#, c-format
 msgid "%d out of %d operations failed."
-msgstr "Operação de gravação do arquivo falhou."
+msgstr "%d de of %d operações falharam."
 
 #: kicad/pcm/pcm_task_manager.cpp:658
-#, fuzzy
 msgid "All operations completed successfully."
-msgstr "O arquivo foi gerado com sucesso."
+msgstr "Todas as operações foram conclídas com sucesso."
 
 #: kicad/pcm/pcm_task_manager.cpp:663
 #, c-format
 msgid "%d out of %d operations were initialized but not successful."
-msgstr ""
+msgstr "%d de of %d operações foram inicializadas, porém, sem sucesso."
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
@@ -28653,9 +28616,8 @@ msgid "First pad number:"
 msgstr "Número da primeira ilha:"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:54
-#, fuzzy
 msgid "Numbering step:"
-msgstr "Enumerando"
+msgstr "Quantidade de passos:"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.h:50
 msgid "Pad Enumeration Settings"
@@ -29233,34 +29195,28 @@ msgid "Restart Search"
 msgstr "Reinicie a procura"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:47
-#, fuzzy
 msgid "Footprint: "
-msgstr "Footprint: %s"
+msgstr "Footprint: "
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:96
-#, fuzzy
 msgid "Symbol:"
-msgstr "Símbolo"
+msgstr "Símbolo:"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:97
-#, fuzzy
 msgid "Sheet: "
-msgstr "Folha"
+msgstr "Página:> "
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.cpp:21
-#, fuzzy
 msgid "Library Association"
-msgstr "Descrição da biblioteca"
+msgstr "Associação com a biblioteca"
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.cpp:62
-#, fuzzy
 msgid "Schematic Association"
-msgstr "Editor esquemático"
+msgstr "Associação com o esquema"
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.h:52
-#, fuzzy
 msgid "Footprint Associations"
-msgstr "Cortar Associação de Footprint"
+msgstr "Associações com o footprint"
 
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:61
 msgid "Run Checks"
@@ -30473,9 +30429,8 @@ msgid "Filter vias by size:"
 msgstr "Filtra as vias por tamanho:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:151
-#, fuzzy
 msgid "Via size:"
-msgstr "Tamanho da via"
+msgstr "Tamanho da ilha:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 msgid "Set to net class values:"
@@ -31894,9 +31849,8 @@ msgid "Tent vias"
 msgstr "Cobertura das vias"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:100
-#, fuzzy
 msgid "Include soldermask over vias"
-msgstr "Remove a máscara de solda nas vias"
+msgstr "Incluir máscara de solda em cima das ilhas"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:105
 msgid ""
@@ -32272,14 +32226,12 @@ msgid "Meandering"
 msgstr "Sinuosidade"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:109
-#, fuzzy
 msgid "Min amplitude (A):"
-msgstr "Amplitude mínima (Amin):"
+msgstr "Amplitude mín (A):"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:120
-#, fuzzy
 msgid "Max amplitude (A):"
-msgstr "Amplitude máxima (Amax):"
+msgstr "Amplitude máx (A):"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:131
 msgid "Min spacing (s):"
@@ -32326,9 +32278,8 @@ msgid "Highlight collisions"
 msgstr "Destaca as colisões"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:31
-#, fuzzy
 msgid "Free angle mode"
-msgstr "Ângulo livre"
+msgstr "Modo de ângulo livre"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:34
 msgid "Allow DRC violations"
@@ -33098,9 +33049,8 @@ msgid "Keep endpoints or direction of starting point"
 msgstr "Mantenha os pontos da extremidade ou a direção do ponto de partida"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:70
-#, fuzzy
 msgid "Track mouse-drag mode:"
-msgstr "Comportamento ao arrastar o mouse:"
+msgstr "Modo de rastreamento por arrastro do mouse:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:77
 #: pcbnew/tools/pcb_actions.cpp:1851
@@ -33220,20 +33170,17 @@ msgstr ""
 "edição"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:392
-#, fuzzy
 msgid "When Adding Footprints to PCB"
-msgstr "Abre no editor de footprint"
+msgstr "Quando adicionar footprints na PCI"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:394
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:58
-#, fuzzy
 msgid "Apply board defaults to footprint fields"
-msgstr "Exiba todos os campos do footprint"
+msgstr "Aplicar as predefinições da placa aos campos do footprint"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:397
-#, fuzzy
 msgid "Apply board defaults to footprint text && graphics"
-msgstr "Símbolo do texto privado && gráficos"
+msgstr "Aplicar as predefinições da placa ao footprint de texto && gráficos"
 
 #: pcbnew/dialogs/panel_fp_editor_color_settings.cpp:113
 msgid "Internal Layers"
@@ -33618,19 +33565,16 @@ msgstr ""
 "desativado, a altura do empilhamento é ignorada."
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:56
-#, fuzzy
 msgid "Format Footprints when Added to Board"
-msgstr "&Atualizar Footprint na Placa"
+msgstr "Formate o footprint ao adicionar na placa"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:61
-#, fuzzy
 msgid "Apply board defaults to footprint text"
-msgstr "Nenhum footprint padrão"
+msgstr "Aplicar as predefinições da placa ao texto do footprint"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:64
-#, fuzzy
 msgid "Apply board defaults to footprint graphics"
-msgstr "Nenhum footprint padrão"
+msgstr "Aplicar as predefinições da placa aos gráficos do footprint"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:432
 msgid "Use the Physical Stackup page to change the number of copper layers."
@@ -35120,9 +35064,8 @@ msgid "(as a percentage of larger track width)"
 msgstr "(como uma porcentagem da maior largura da trilha)"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:21
-#, fuzzy
 msgid "Default properties for new graphics and text:"
-msgstr "Propriedades padrão para os novos itens gráficos:"
+msgstr "Propriedades padrão para novos textos e gráficos:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:78
 msgid "Default properties for new dimension objects:"
@@ -35969,9 +35912,8 @@ msgid "Checking pads..."
 msgstr "Verificando as ilhas..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:172
-#, fuzzy
 msgid "Checking copper graphic clearances..."
-msgstr "Isolamentos de texto e gráfico...\n"
+msgstr "Verificando as folgas dos gráficos de cobre..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:180
 msgid "Checking copper zone clearances..."
@@ -36090,65 +36032,65 @@ msgid "(%s min %s; actual %s)"
 msgstr "(%s mín %s; atual %s)"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:122
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s"
-msgstr "Ilha %s\t"
+msgstr "Ilha %s"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:195
-#, fuzzy, c-format
+#, c-format
 msgid "%s has clearance override."
-msgstr "O isolamento da ilha foi substituído."
+msgstr "%s possui(em) substituições de isolamento."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:197
-#, fuzzy, c-format
+#, c-format
 msgid "%s has solder mask expansion override."
-msgstr "A expansão da máscara de solda foi substituída."
+msgstr "%s possui(em)substituições da máscara de expansão."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:199
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:201
-#, fuzzy, c-format
+#, c-format
 msgid "%s has solder paste clearance override."
-msgstr "O isolamento absoluto da pasta de solda substituído."
+msgstr "%s possui(em) substituições no isolamento da pasta de solda."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:204
-#, fuzzy, c-format
+#, c-format
 msgid "%s has zone connection override."
-msgstr "A conexão da região foi substituída."
+msgstr "%s possui(em) substituições na região de conexão."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:206
-#, fuzzy, c-format
+#, c-format
 msgid "%s has thermal relief gap override."
-msgstr "%s lacuna(s) de alívio térmico diferem."
+msgstr "%s possui(em) substituições na lacuna do alívio térmico."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:208
-#, fuzzy, c-format
+#, c-format
 msgid "%s has thermal relief spoke width override."
-msgstr "%s raio(s) de alívio térmico diferem."
+msgstr "%s possui(em) substituições na largura do raio do alívio térmico."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:210
-#, fuzzy, c-format
+#, c-format
 msgid "%s has thermal relief spoke angle override."
-msgstr "%s raio(s) de alívio térmico diferem."
+msgstr "%s possui(em) substituições no ângulo do raio do alívio térmico."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:212
-#, fuzzy, c-format
+#, c-format
 msgid "%s has zone knockout setting override."
-msgstr "A conexão da região foi substituída."
+msgstr "%s possui(em) substituições na configuração da região de conexão."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:223
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad to die length differs."
-msgstr "%s largura do hachurado diferem."
+msgstr "%s comprimento(s) da ilha para o hachurado diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:225
-#, fuzzy, c-format
+#, c-format
 msgid "%s position differs."
-msgstr "%s prioridade(s) diferem."
+msgstr "%s posição(ões) diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:228
-#, fuzzy, c-format
+#, c-format
 msgid "%s has different numbers."
-msgstr "Ilhas com números diferentes se sobrepõem"
+msgstr "%s possui(em) diferentes números."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:250
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:469
@@ -36157,64 +36099,64 @@ msgid "%s layers differ."
 msgstr "%s camada(s) diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad shape type differs."
-msgstr "%s tipo(s) de preenchimento diferem."
+msgstr "%s tipo do formato da ilha diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:259
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad type differs."
-msgstr "%s tipo(s) de preenchimento diferem."
+msgstr "%s tipo da ilha diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:261
-#, fuzzy, c-format
+#, c-format
 msgid "%s fabrication property differs."
-msgstr "%s conexão(ões) da(s) Ilha(s) diferem."
+msgstr "%s propriedade de fabricação diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:266
-#, fuzzy, c-format
+#, c-format
 msgid "%s orientation differs."
-msgstr "%s orientação(ões) do hachurado diferem."
+msgstr "%s orientação diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "%s size differs."
-msgstr "%s campos diferem."
+msgstr "%s tamanho(s) diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "%s trapezoid delta differs."
-msgstr "%s campos diferem."
+msgstr "%s delta trapezóide(s) diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:279
-#, fuzzy, c-format
+#, c-format
 msgid "%s rounded corners differ."
-msgstr "%s canto(s) diferem."
+msgstr "%s canto(s) arredondados diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:290
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corners differ."
-msgstr "%s canto(s) diferem."
+msgstr "%s canto(s) chanfrados diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:296
-#, fuzzy, c-format
+#, c-format
 msgid "%s shape offset from hole differs."
-msgstr "%s conexão(ões) da(s) Ilha(s) diferem."
+msgstr "%s compensação(ões) do formato do furo diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:299
-#, fuzzy, c-format
+#, c-format
 msgid "%s drill shape differs."
-msgstr "%s tipo(s) de preenchimento diferem."
+msgstr "%s formato(s) da broca diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:301
-#, fuzzy, c-format
+#, c-format
 msgid "%s drill size differs."
-msgstr "%s tipo(s) de preenchimento diferem."
+msgstr "%s tamanho(s)da broca diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "%s shape primitives differ."
-msgstr "%s camada(s) diferem."
+msgstr "%s primitivo(s) de forma diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:447
 #, c-format
@@ -36646,9 +36588,9 @@ msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s diâmetro máx %s; atual %s)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:192
-#, fuzzy, c-format
+#, c-format
 msgid "(layer %s; %s min spoke count %d; actual %d)"
-msgstr "(%s contagem mín do raio: %d; atual: %d)"
+msgstr "(camada %s; %s quantidade de raio mín %d; atual %d)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:215
 msgid "Checking thermal reliefs..."
@@ -38622,7 +38564,7 @@ msgstr "Violação"
 #: pcbnew/pcb_marker.cpp:199 pcbnew/pcb_marker.cpp:202
 #: pcbnew/pcb_marker.cpp:205
 msgid "Severity"
-msgstr "Intensidade"
+msgstr "Gravidade"
 
 #: pcbnew/pcb_marker.cpp:263
 #, c-format
@@ -38921,9 +38863,9 @@ msgid "File not found: '%s' for directory '%s'."
 msgstr "Arquivo não encontrado: '%s' para o diretório '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:640
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint directory not found: '%s'."
-msgstr "A biblioteca do footprint não foi encontrado."
+msgstr "O diretório do footprint não foi encontrado: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:759
 #, c-format
@@ -39010,13 +38952,13 @@ msgstr "Carregando as regiões da placa..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1968
 #: pcbnew/plugins/altium/altium_pcb.cpp:2061
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dashed outline found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Uma zona foi encontrada numa camada Altium (%d) sem um equivalente no KiCad. "
-"Ele foi movido para a camada Eco1_User do KiCad."
+"Um contorno tracejado foi encontrada numa camada Altium (%d) sem um "
+"equivalente no KiCad. Ele foi movido para a camada Eco1_User do KiCad."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2007
 #: pcbnew/plugins/altium/altium_pcb.cpp:2090
@@ -39990,23 +39932,24 @@ msgstr ""
 "posição: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5647
-#, fuzzy
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
 msgstr ""
 "A estratégia de preenchimento legado da região não é mais suportada.\n"
-"Deseja converter as regiões em enchimentos com polígonos suavizados?"
+"O preenchimento de região será convertida com base no melhor esforço "
+"possível."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5677
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2463
-#, fuzzy
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
 msgstr ""
-"A estratégia de preenchimento legado da região não é mais suportada.\n"
-"Deseja converter as regiões em enchimentos com polígonos suavizados?"
+"A estratégia de preenchimento legado da região do segmento não é mais "
+"suportada.\n"
+"O preenchimento de região será convertida com base no melhor esforço "
+"possível."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:88
 #, c-format
@@ -40937,9 +40880,8 @@ msgid "Some zones did not intersect and were not merged."
 msgstr "Algumas regiões não se cruzaram e não foram mescladas."
 
 #: pcbnew/tools/board_editor_control.cpp:1434
-#, fuzzy
 msgid "Duplicate Zone"
-msgstr "Duplica a zona"
+msgstr "Duplicar a região"
 
 #: pcbnew/tools/board_editor_control.cpp:1507
 msgid "Selection contains no items with labeled nets."
@@ -41331,9 +41273,8 @@ msgstr ""
 "Selecione um footprint para criar um diff com a sua biblioteca equivalente."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1428
-#, fuzzy
 msgid "Select a footprint for a footprint associations report."
-msgstr "Selecione um item para um relatório da resolução das restrições."
+msgstr "Selecione um footprint para associar um relatório de footprint."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1455
 msgid "Board vs library diff for:"
@@ -41357,34 +41298,28 @@ msgid "Create from Selection"
 msgstr "Cria a partir da seleção"
 
 #: pcbnew/tools/convert_tool.cpp:480
-#, fuzzy
 msgid "Convert to Polygon"
-msgstr "&Linha ou Polígono"
+msgstr "Converter para polígono"
 
 #: pcbnew/tools/convert_tool.cpp:482
-#, fuzzy
 msgid "Create Polygon"
-msgstr "Crie as zonas"
+msgstr "Criar um polígono"
 
 #: pcbnew/tools/convert_tool.cpp:487
-#, fuzzy
 msgid "Convert to Zone"
-msgstr "Convertido"
+msgstr "Converter para região"
 
 #: pcbnew/tools/convert_tool.cpp:489
-#, fuzzy
 msgid "Create Zone"
-msgstr "Crie as zonas"
+msgstr "Criar região"
 
 #: pcbnew/tools/convert_tool.cpp:1031
-#, fuzzy
 msgid "Create Lines"
-msgstr "Crie as zonas"
+msgstr "Criar linhas"
 
 #: pcbnew/tools/convert_tool.cpp:1118
-#, fuzzy
 msgid "Create Arc"
-msgstr "Cria matriz"
+msgstr "Criar um arco"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:245
 msgid "Layer Name"
@@ -41472,9 +41407,8 @@ msgid "Draw Line"
 msgstr "Desenha linha"
 
 #: pcbnew/tools/drawing_tool.cpp:411
-#, fuzzy
 msgid "Draw Text Box"
-msgstr "Desenha uma caixa de texto"
+msgstr "Desenhar uma caixa de texto"
 
 #: pcbnew/tools/drawing_tool.cpp:411 pcbnew/tools/pcb_actions.cpp:103
 msgid "Draw Rectangle"
@@ -41489,33 +41423,28 @@ msgid "Draw Arc"
 msgstr "Desenha arco"
 
 #: pcbnew/tools/drawing_tool.cpp:706
-#, fuzzy
 msgid "Place Image"
-msgstr "Coloque uma imagem"
+msgstr "Adicionar uma imagem"
 
 #: pcbnew/tools/drawing_tool.cpp:944
-#, fuzzy
 msgid "Place Text"
 msgstr "Adicionar texto"
 
 #: pcbnew/tools/drawing_tool.cpp:1270
-#, fuzzy
 msgid "Draw Dimension"
-msgstr "Desenhe uma cota"
+msgstr "Desenhar dimensões"
 
 #: pcbnew/tools/drawing_tool.cpp:1481
 msgid "No graphic items found in file."
 msgstr "Nenhum item gráfico foi encontrado no arquivo."
 
 #: pcbnew/tools/drawing_tool.cpp:1528 pcbnew/tools/drawing_tool.cpp:1615
-#, fuzzy
 msgid "Import Graphic"
-msgstr "Importa os gráficos..."
+msgstr "Importar gráficos"
 
 #: pcbnew/tools/drawing_tool.cpp:1696
-#, fuzzy
 msgid "Move Footprint Anchor"
-msgstr "Coloca a âncora do footprint"
+msgstr "Mover a âncora do footprint"
 
 #: pcbnew/tools/drawing_tool.cpp:3037
 msgid "Via location violates DRC."
@@ -41543,9 +41472,8 @@ msgid "Positioning Tools"
 msgstr "Ferramentas de posicionamento"
 
 #: pcbnew/tools/edit_tool.cpp:113
-#, fuzzy
 msgid "Shape Modification"
-msgstr "Opção de Forma"
+msgstr "Alterações do formato"
 
 #: pcbnew/tools/edit_tool.cpp:453
 #, c-format
@@ -41596,34 +41524,32 @@ msgid "Fillet Lines"
 msgstr "linhas de filete"
 
 #: pcbnew/tools/edit_tool.cpp:1088
-#, fuzzy
 msgid "Enter chamfer setback:"
-msgstr "Distância do chanfro:"
+msgstr "Insira a distância do chanfro:"
 
 #: pcbnew/tools/edit_tool.cpp:1088
 #: pcbnew/tools/item_modification_routine.cpp:168
 #: pcbnew/tools/pcb_actions.cpp:416
-#, fuzzy
 msgid "Chamfer Lines"
-msgstr "Tamanho do chanfro:"
+msgstr "Linhas do chanfro"
 
 #: pcbnew/tools/edit_tool.cpp:1102
-#, fuzzy
 msgid ""
 "A setback of zero was entered.\n"
 "The chamfer operation was not performed."
 msgstr ""
-"Um raio zero foi inserido.\n"
-"A operação do filete não foi realizada."
+"Foi registrado um recuo zero.\n"
+"As operações do chanfro não foram realizadas."
 
 #: pcbnew/tools/edit_tool.cpp:1194
 msgid "A shape with least two lines must be selected."
 msgstr "Uma forma com pelo menos duas linhas deve ser selecionada."
 
 #: pcbnew/tools/edit_tool.cpp:1269
-#, fuzzy
 msgid "Exactly two lines must be selected to extend them."
-msgstr "Uma forma com pelo menos duas linhas deve ser selecionada."
+msgstr ""
+"Exatamente duas linhas precisam ser selecionada para que possam ser "
+"estendidas."
 
 #: pcbnew/tools/edit_tool.cpp:1794 pcbnew/tools/pcb_actions.cpp:369
 msgid "Change Side / Flip"
@@ -41714,30 +41640,25 @@ msgid "Some of the lines could not be filleted."
 msgstr "Algumas das linhas não puderam ser filetadas."
 
 #: pcbnew/tools/item_modification_routine.cpp:173
-#, fuzzy
 msgid "Unable to chamfer the selected lines."
-msgstr "Não é possível filetar as linhas selecionadas."
+msgstr "Não foi possível chanfrar as linhas selecionadas."
 
 #: pcbnew/tools/item_modification_routine.cpp:178
-#, fuzzy
 msgid "Some of the lines could not be chamfered."
-msgstr "Algumas das linhas não puderam ser filetadas."
+msgstr "Algumas das linhas não puderam ser chanfradas."
 
 #: pcbnew/tools/item_modification_routine.cpp:230
 #: pcbnew/tools/pcb_actions.cpp:422
-#, fuzzy
 msgid "Extend Lines to Meet"
-msgstr "Extensão do deslocamento da linha:"
+msgstr "Extender as linhas para que se encontrem"
 
 #: pcbnew/tools/item_modification_routine.cpp:235
-#, fuzzy
 msgid "Unable to extend the selected lines to meet."
-msgstr "Não é possível filetar as linhas selecionadas."
+msgstr "Não foi possível estender as linhas selecionadas para que se encontrem."
 
 #: pcbnew/tools/item_modification_routine.cpp:240
-#, fuzzy
 msgid "Some of the lines could not be extended to meet."
-msgstr "Algumas das linhas não puderam ser filetadas."
+msgstr "Algumas das linhas não puderam ser estendidas para que se encontrem."
 
 #: pcbnew/tools/pad_tool.cpp:159
 msgid "Paste Pad Properties"
@@ -41748,13 +41669,13 @@ msgid "Push Pad Settings"
 msgstr "Aplica as configurações da ilha"
 
 #: pcbnew/tools/pad_tool.cpp:370
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Click on pad %s\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"Clique na ilha %s%d\n"
-"Pressione <esc> para cancelar tudo; clique duas vezes para concluir"
+"Clique na ilha %s\n"
+"Pressione <esc> para cancelar tudo; clique duplo para encerrar"
 
 #: pcbnew/tools/pad_tool.cpp:396 pcbnew/tools/pad_tool.cpp:494
 msgid "Renumber pads"
@@ -42138,11 +42059,11 @@ msgstr "Adiciona a tangente dos arcos às linhas selecionadas"
 
 #: pcbnew/tools/pcb_actions.cpp:417
 msgid "Cut away corners between selected lines"
-msgstr ""
+msgstr "Elimine os cantos entre as linhas selecionadas"
 
 #: pcbnew/tools/pcb_actions.cpp:423
 msgid "Extend lines to meet each other"
-msgstr ""
+msgstr "Estender as linhas para que se encontrem uma com a outra"
 
 #: pcbnew/tools/pcb_actions.cpp:430
 msgid "Delete Full Track"
@@ -43061,15 +42982,13 @@ msgstr ""
 "biblioteca"
 
 #: pcbnew/tools/pcb_actions.cpp:1423
-#, fuzzy
 msgid "Show Footprint Associations"
-msgstr "Copiar Associação de Footprint"
+msgstr "Mostrar as associações dos footprints"
 
 #: pcbnew/tools/pcb_actions.cpp:1424
-#, fuzzy
 msgid "Show footprint library and schematic symbol associations"
 msgstr ""
-"Filtrar lista de footprint por palavras chave de símbolos de componente"
+"Mostrar a biblioteca do footprint e as associações simbólicas do esquema"
 
 #: pcbnew/tools/pcb_actions.cpp:1430
 msgid "Geographical Reannotate..."
@@ -43544,9 +43463,8 @@ msgstr ""
 "%s"
 
 #: pcbnew/tools/pcb_control.cpp:1307
-#, fuzzy
 msgid "Append Board"
-msgstr "Adiciona Placa..."
+msgstr "Adicionar placa"
 
 #: pcbnew/tools/pcb_control.cpp:1409
 msgid "Resolved clearance"
@@ -43609,9 +43527,8 @@ msgid "Align to Middle"
 msgstr "Alinhar ao Meio"
 
 #: pcbnew/tools/placement_tool.cpp:475
-#, fuzzy
 msgid "Align to Center"
-msgstr "Alinha ao centro"
+msgstr "Alinhar ao centro"
 
 #: pcbnew/tools/position_relative_tool.cpp:156
 msgid "Position Relative"
@@ -43622,9 +43539,8 @@ msgid "Click on reference item..."
 msgstr "Clique no item de referência..."
 
 #: pcbnew/tools/zone_create_helper.cpp:206
-#, fuzzy
 msgid "Add Zone Cutout"
-msgstr "Adiciona um recorte da zona"
+msgstr "Adicionar região de exclusão"
 
 #: pcbnew/tools/zone_create_helper.cpp:238
 msgid "Add a zone"
@@ -44431,14 +44347,14 @@ msgid "%s"
 msgstr "%s"
 
 #: pcbnew/zone.cpp:618
-#, fuzzy, c-format
+#, c-format
 msgid "%s, %s and %s"
-msgstr "%s e %s"
+msgstr "%s, %s e %s"
 
 #: pcbnew/zone.cpp:625
-#, fuzzy, c-format
+#, c-format
 msgid "%s, %s and %d more"
-msgstr "%s e mais %d"
+msgstr "%s, %s e %d mais"
 
 #: pcbnew/zone.cpp:643 pcbnew/zone.cpp:1476
 msgid "Fill Mode"
@@ -44469,44 +44385,44 @@ msgid "Non-copper Zone"
 msgstr "Zona sem cobre"
 
 #: pcbnew/zone.cpp:829
-#, fuzzy, c-format
+#, c-format
 msgid "on %s"
-msgstr "%s no %s"
+msgstr "no %s"
 
 #: pcbnew/zone.cpp:833
-#, fuzzy, c-format
+#, c-format
 msgid "on %s and %s"
-msgstr "%s e %s"
+msgstr "no %s e %s"
 
 #: pcbnew/zone.cpp:839
-#, fuzzy, c-format
+#, c-format
 msgid "on %s, %s and %s"
-msgstr "(redes %s e %s)"
+msgstr "no %s, %s e %s"
 
 #: pcbnew/zone.cpp:846
-#, fuzzy, c-format
+#, c-format
 msgid "on %s, %s and %d more"
-msgstr "%s e mais %d"
+msgstr "no %s, %s e %d mais"
 
 #: pcbnew/zone.cpp:856
-#, fuzzy, c-format
+#, c-format
 msgid "Rule Area Cutout %s"
-msgstr "Recorte regra da região em %s"
+msgstr "Regra da região de exclusão %s"
 
 #: pcbnew/zone.cpp:858
-#, fuzzy, c-format
+#, c-format
 msgid "Zone Cutout %s"
-msgstr "Recorte da zona em %s"
+msgstr "Região de exclusão %s"
 
 #: pcbnew/zone.cpp:863
-#, fuzzy, c-format
+#, c-format
 msgid "Rule Area %s"
-msgstr "Regra da região"
+msgstr "Regra da área %s"
 
 #: pcbnew/zone.cpp:865
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s %s"
-msgstr "Zona %s no %s"
+msgstr "Região %s %s"
 
 #: pcbnew/zone.cpp:1535
 msgid "Minimum Width"
