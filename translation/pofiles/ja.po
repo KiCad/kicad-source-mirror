@@ -12,10 +12,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-03 11:31-0700\n"
-"PO-Revision-Date: 2023-07-31 15:07+0000\n"
+"PO-Revision-Date: 2023-08-06 10:11+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -11477,9 +11477,8 @@ msgid "Source 1 and Source 2 must be different."
 msgstr "ソース 1 とソース 2 は異なっていなければなりません"
 
 #: eeschema/dialogs/dialog_sim_command.cpp:413
-#, fuzzy
 msgid "A frequency range must be specified."
-msgstr "一つ以上のレイヤーを指定する必要があります\n"
+msgstr "周波数の範囲を指定する必要があります。"
 
 #: eeschema/dialogs/dialog_sim_command.cpp:607
 #, fuzzy
@@ -14867,9 +14866,9 @@ msgid "Failed to create directory 'devices' ."
 msgstr "ディレクトリ '%s' の削除に失敗しました"
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:424
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create file '%s'.\n"
-msgstr "ファイル '%s' の作成に失敗しました。"
+msgstr "ファイル '%s' の作成に失敗しました。\n"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:480
 #, c-format
@@ -17632,9 +17631,8 @@ msgstr "カーソル 2"
 
 #: eeschema/sim/simulator_frame_ui.cpp:788
 #: eeschema/sim/simulator_frame_ui.cpp:969
-#, fuzzy
 msgid " (amplitude)"
-msgstr "振幅:"
+msgstr " (振幅)"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1118
 #: eeschema/sim/simulator_frame_ui.cpp:2475
@@ -19675,7 +19673,7 @@ msgstr "回路図エディターに親シートを表示"
 
 #: eeschema/tools/ee_actions.cpp:967
 msgid "Navigate Up"
-msgstr "上にナビゲート"
+msgstr "上の階層に移動"
 
 #: eeschema/tools/ee_actions.cpp:967
 msgid "Navigate up one sheet in the hierarchy"
@@ -19683,7 +19681,7 @@ msgstr "この階層内でひとつ上のシートにナビゲート"
 
 #: eeschema/tools/ee_actions.cpp:973
 msgid "Navigate Back"
-msgstr "後ろにナビゲート"
+msgstr "戻る"
 
 #: eeschema/tools/ee_actions.cpp:973
 msgid "Move backward in sheet navigation history"
@@ -19691,7 +19689,7 @@ msgstr "シート ナビゲーションの履歴を戻る"
 
 #: eeschema/tools/ee_actions.cpp:979
 msgid "Navigate Forward"
-msgstr "先にナビゲート"
+msgstr "進む"
 
 #: eeschema/tools/ee_actions.cpp:979
 msgid "Move forward in sheet navigation history"
@@ -19703,7 +19701,7 @@ msgstr "前のシート"
 
 #: eeschema/tools/ee_actions.cpp:985
 msgid "Move to previous sheet by number"
-msgstr "番号を指定して前のシートに戻る"
+msgstr "シート番号の順で前のシートに戻る"
 
 #: eeschema/tools/ee_actions.cpp:991
 msgid "Next Sheet"
@@ -19711,7 +19709,7 @@ msgstr "次のシート"
 
 #: eeschema/tools/ee_actions.cpp:991
 msgid "Move to next sheet by number"
-msgstr "番号を指定して次のシートに移動"
+msgstr "シート番号の順で次のシートに移動"
 
 #: eeschema/tools/ee_actions.cpp:997
 msgid "Hierarchy Navigator"
@@ -28940,9 +28938,8 @@ msgid "Restart Search"
 msgstr "検索を再開"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:47
-#, fuzzy
 msgid "Footprint: "
-msgstr "フットプリント: %s"
+msgstr "フットプリント: "
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:96
 #, fuzzy
@@ -28950,9 +28947,8 @@ msgid "Symbol:"
 msgstr "シンボル"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:97
-#, fuzzy
 msgid "Sheet: "
-msgstr "シート"
+msgstr "シート: "
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.cpp:21
 #, fuzzy
@@ -35610,9 +35606,8 @@ msgid "Checking pads..."
 msgstr "パッドをチェック中..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:172
-#, fuzzy
 msgid "Checking copper graphic clearances..."
-msgstr "テキストとグラフィックのクリアランス...\n"
+msgstr "導体層の図形のクリアランスをチェック..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:180
 msgid "Checking copper zone clearances..."
@@ -39599,23 +39594,21 @@ msgstr ""
 "オフセット: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5647
-#, fuzzy
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
 msgstr ""
 "以前のゾーンの塗りつぶし方式は現在ではサポートされていません。\n"
-"ゾーンをポリゴン塗りつぶしに変換しますか？"
+"ゾーンの塗りつぶしは可能な限り忠実に変換されます。"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5677
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2463
-#, fuzzy
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
 msgstr ""
 "以前のセグメントの塗りつぶしモードは現在サポートされていません。\n"
-"ゾーンをポリゴン塗りつぶしに変換しますか？"
+"ゾーン塗りつぶしは可能な限り忠実に変換されます。"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:88
 #, c-format
