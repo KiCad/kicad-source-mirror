@@ -193,28 +193,57 @@ void IO_MGR::Save( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* aBoar
 
 // These text strings are "truth" for identifying the plugins.  If you change the spellings,
 // you will obsolete library tables, so don't do it.  Additions are OK.
-static IO_MGR::REGISTER_PLUGIN registerEaglePlugin( IO_MGR::EAGLE, wxT("Eagle"),
-                                                    []() -> PLUGIN* { return new EAGLE_PLUGIN; } );
-static IO_MGR::REGISTER_PLUGIN registerKicadPlugin( IO_MGR::KICAD_SEXP,
-                                                    wxT("KiCad"), []() -> PLUGIN* { return new PCB_PLUGIN; } );
-static IO_MGR::REGISTER_PLUGIN registerPcadPlugin( IO_MGR::PCAD, wxT("P-Cad"),
-                                                   []() -> PLUGIN* { return new PCAD_PLUGIN; } );
-static IO_MGR::REGISTER_PLUGIN registerFabmasterPlugin( IO_MGR::FABMASTER, wxT( "Fabmaster" ),
-                                                   []() -> PLUGIN* { return new FABMASTER_PLUGIN; } );
-static IO_MGR::REGISTER_PLUGIN registerAltiumDesignerPlugin( IO_MGR::ALTIUM_DESIGNER,
-        wxT( "Altium Designer" ), []() -> PLUGIN* { return new ALTIUM_DESIGNER_PLUGIN; } );
-static IO_MGR::REGISTER_PLUGIN registerAltiumCircuitStudioPlugin( IO_MGR::ALTIUM_CIRCUIT_STUDIO,
+static IO_MGR::REGISTER_PLUGIN registerEaglePlugin(
+        IO_MGR::EAGLE,
+        wxT("Eagle"),
+        []() -> PLUGIN* { return new EAGLE_PLUGIN; } );
+
+static IO_MGR::REGISTER_PLUGIN registerKicadPlugin(
+        IO_MGR::KICAD_SEXP,
+        wxT("KiCad"),
+        []() -> PLUGIN* { return new PCB_PLUGIN; } );
+
+static IO_MGR::REGISTER_PLUGIN registerPcadPlugin(
+        IO_MGR::PCAD,
+        wxT("P-Cad"),
+        []() -> PLUGIN* { return new PCAD_PLUGIN; } );
+
+static IO_MGR::REGISTER_PLUGIN registerFabmasterPlugin(
+        IO_MGR::FABMASTER,
+        wxT( "Fabmaster" ),
+        []() -> PLUGIN* { return new FABMASTER_PLUGIN; } );
+
+static IO_MGR::REGISTER_PLUGIN registerAltiumDesignerPlugin(
+        IO_MGR::ALTIUM_DESIGNER,
+        wxT( "Altium Designer" ),
+        []() -> PLUGIN* { return new ALTIUM_DESIGNER_PLUGIN; } );
+
+static IO_MGR::REGISTER_PLUGIN registerAltiumCircuitStudioPlugin(
+        IO_MGR::ALTIUM_CIRCUIT_STUDIO,
         wxT( "Altium Circuit Studio" ),
         []() -> PLUGIN* { return new ALTIUM_CIRCUIT_STUDIO_PLUGIN; } );
-static IO_MGR::REGISTER_PLUGIN registerAltiumCircuitMakerPlugin( IO_MGR::ALTIUM_CIRCUIT_MAKER,
+
+static IO_MGR::REGISTER_PLUGIN registerAltiumCircuitMakerPlugin(
+        IO_MGR::ALTIUM_CIRCUIT_MAKER,
         wxT( "Altium Circuit Maker" ),
         []() -> PLUGIN* { return new ALTIUM_CIRCUIT_MAKER_PLUGIN; } );
-static IO_MGR::REGISTER_PLUGIN registerSolidworksPCBPlugin( IO_MGR::SOLIDWORKS_PCB,
+
+static IO_MGR::REGISTER_PLUGIN registerSolidworksPCBPlugin(
+        IO_MGR::SOLIDWORKS_PCB,
         wxT( "Solidworks PCB" ),
         []() -> PLUGIN* { return new SOLIDWORKS_PCB_PLUGIN; } );
-static IO_MGR::REGISTER_PLUGIN registerCadstarArchivePlugin( IO_MGR::CADSTAR_PCB_ARCHIVE,
-        wxT( "CADSTAR PCB Archive" ), []() -> PLUGIN* { return new CADSTAR_PCB_ARCHIVE_PLUGIN; } );
-static IO_MGR::REGISTER_PLUGIN registerLegacyPlugin( IO_MGR::LEGACY, wxT("Legacy"),
-                                                     []() -> PLUGIN* { return new LEGACY_PLUGIN; } );
-static IO_MGR::REGISTER_PLUGIN registerGPCBPlugin( IO_MGR::GEDA_PCB, wxT("GEDA/Pcb"),
-                                                   []() -> PLUGIN* { return new GPCB_PLUGIN; } );
+
+static IO_MGR::REGISTER_PLUGIN registerCadstarArchivePlugin(
+        IO_MGR::CADSTAR_PCB_ARCHIVE,
+        wxT( "CADSTAR PCB Archive" ),
+        []() -> PLUGIN* { return new CADSTAR_PCB_ARCHIVE_PLUGIN; } );
+
+static IO_MGR::REGISTER_PLUGIN registerLegacyPlugin(
+        IO_MGR::LEGACY,
+        wxT("Legacy"),
+        []() -> PLUGIN* { return new LEGACY_PLUGIN; } );
+
+static IO_MGR::REGISTER_PLUGIN registerGPCBPlugin(
+        IO_MGR::GEDA_PCB,
+        wxT("GEDA/Pcb"),
+        []() -> PLUGIN* { return new GPCB_PLUGIN; } );
