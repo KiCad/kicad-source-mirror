@@ -207,11 +207,11 @@ static IO_MGR::REGISTER_PLUGIN registerAltiumCircuitStudioPlugin( IO_MGR::ALTIUM
         wxT( "Altium Circuit Studio" ),
         []() -> PLUGIN* { return new ALTIUM_CIRCUIT_STUDIO_PLUGIN; } );
 static IO_MGR::REGISTER_PLUGIN registerAltiumCircuitMakerPlugin( IO_MGR::ALTIUM_CIRCUIT_MAKER,
-        wxT( "Solidworks PCB" ),
-        []() -> PLUGIN* { return new SOLIDWORKS_PCB_PLUGIN; } );
-static IO_MGR::REGISTER_PLUGIN registerSolidworksPCBPlugin( IO_MGR::SOLIDWORKS_PCB,
         wxT( "Altium Circuit Maker" ),
         []() -> PLUGIN* { return new ALTIUM_CIRCUIT_MAKER_PLUGIN; } );
+static IO_MGR::REGISTER_PLUGIN registerSolidworksPCBPlugin( IO_MGR::SOLIDWORKS_PCB,
+        wxT( "Solidworks PCB" ),
+        []() -> PLUGIN* { return new SOLIDWORKS_PCB_PLUGIN; } );
 static IO_MGR::REGISTER_PLUGIN registerCadstarArchivePlugin( IO_MGR::CADSTAR_PCB_ARCHIVE,
         wxT( "CADSTAR PCB Archive" ), []() -> PLUGIN* { return new CADSTAR_PCB_ARCHIVE_PLUGIN; } );
 static IO_MGR::REGISTER_PLUGIN registerLegacyPlugin( IO_MGR::LEGACY, wxT("Legacy"),
