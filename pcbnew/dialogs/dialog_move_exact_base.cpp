@@ -23,7 +23,7 @@ DIALOG_MOVE_EXACT_BASE::DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id,
 
 	m_xLabel = new wxStaticText( this, wxID_ANY, _("Move X:"), wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_xLabel->Wrap( -1 );
-	fgInputSizer->Add( m_xLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgInputSizer->Add( m_xLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_xEntry = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgInputSizer->Add( m_xEntry, 0, wxEXPAND, 5 );
@@ -37,7 +37,7 @@ DIALOG_MOVE_EXACT_BASE::DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id,
 
 	m_yLabel = new wxStaticText( this, wxID_ANY, _("Move Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_yLabel->Wrap( -1 );
-	fgInputSizer->Add( m_yLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgInputSizer->Add( m_yLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_yEntry = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgInputSizer->Add( m_yEntry, 0, wxEXPAND, 5 );
@@ -51,7 +51,7 @@ DIALOG_MOVE_EXACT_BASE::DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id,
 
 	m_rotLabel = new wxStaticText( this, wxID_ANY, _("Rotate:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rotLabel->Wrap( -1 );
-	fgInputSizer->Add( m_rotLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgInputSizer->Add( m_rotLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_rotEntry = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgInputSizer->Add( m_rotEntry, 0, wxEXPAND, 5 );
@@ -79,7 +79,7 @@ DIALOG_MOVE_EXACT_BASE::DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id,
 	bBottomSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_polarCoords = new wxCheckBox( this, wxID_ANY, _("Use polar coordinates"), wxDefaultPosition, wxDefaultSize, 0 );
-	bBottomSizer->Add( m_polarCoords, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	bBottomSizer->Add( m_polarCoords, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 10 );
 
 	m_stdButtons = new wxStdDialogButtonSizer();
 	m_stdButtonsOK = new wxButton( this, wxID_OK );

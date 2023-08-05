@@ -47,6 +47,7 @@
 #include <tools/edit_tool.h>
 #include <tools/item_modification_routine.h>
 #include <tools/pcb_picker_tool.h>
+#include <tools/pcb_point_editor.h>
 #include <tools/tool_event_utils.h>
 #include <tools/pcb_grid_helper.h>
 #include <tools/pad_tool.h>
@@ -85,6 +86,7 @@ void EDIT_TOOL::Reset( RESET_REASON aReason )
     m_statusPopup = std::make_unique<STATUS_TEXT_POPUP>( getEditFrame<PCB_BASE_EDIT_FRAME>() );
 }
 
+
 static std::shared_ptr<CONDITIONAL_MENU> makePositioningToolsMenu( TOOL_INTERACTIVE* aTool )
 {
     auto menu = std::make_shared<CONDITIONAL_MENU>( aTool );
@@ -106,6 +108,7 @@ static std::shared_ptr<CONDITIONAL_MENU> makePositioningToolsMenu( TOOL_INTERACT
     return menu;
 };
 
+
 static std::shared_ptr<CONDITIONAL_MENU> makeShapeModificationMenu( TOOL_INTERACTIVE* aTool )
 {
     auto menu = std::make_shared<CONDITIONAL_MENU>( aTool );
@@ -118,12 +121,31 @@ static std::shared_ptr<CONDITIONAL_MENU> makeShapeModificationMenu( TOOL_INTERAC
 
     static std::vector<KICAD_T> lineExtendTypes = { PCB_SHAPE_LOCATE_SEGMENT_T };
 
+    auto hasCornerCondition =
+            [aTool]( const SELECTION& aSelection )
+            {
+                PCB_POINT_EDITOR *pt_tool = aTool->GetManager()->GetTool<PCB_POINT_EDITOR>();
+
+                return pt_tool && pt_tool->HasCorner();
+            };
+
+    auto hasMidpointCondition =
+            [aTool]( const SELECTION& aSelection )
+            {
+                PCB_POINT_EDITOR *pt_tool = aTool->GetManager()->GetTool<PCB_POINT_EDITOR>();
+
+                return pt_tool && pt_tool->HasMidpoint();
+            };
+
     // clang-format off
-    menu->AddItem( PCB_ACTIONS::filletLines,        SELECTION_CONDITIONS::OnlyTypes( filletChamferTypes ) );
-    menu->AddItem( PCB_ACTIONS::chamferLines,       SELECTION_CONDITIONS::OnlyTypes( filletChamferTypes ) );
-    menu->AddItem( PCB_ACTIONS::extendLines,        SELECTION_CONDITIONS::OnlyTypes( lineExtendTypes )
-                                                        && SELECTION_CONDITIONS::Count( 2 ) );
+    menu->AddItem( PCB_ACTIONS::filletLines,             SELECTION_CONDITIONS::OnlyTypes( filletChamferTypes ) );
+    menu->AddItem( PCB_ACTIONS::chamferLines,            SELECTION_CONDITIONS::OnlyTypes( filletChamferTypes ) );
+    menu->AddItem( PCB_ACTIONS::extendLines,             SELECTION_CONDITIONS::OnlyTypes( lineExtendTypes )
+                                                             && SELECTION_CONDITIONS::Count( 2 ) );
+    menu->AddItem( PCB_ACTIONS::pointEditorMoveCorner,   hasCornerCondition );
+    menu->AddItem( PCB_ACTIONS::pointEditorMoveMidpoint, hasMidpointCondition );
     // clang-format on
+
     return menu;
 };
 
@@ -837,7 +859,7 @@ int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
 int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
 {
     // Store last used fillet radius to allow pressing "enter" if repeat fillet is required
-    static long long filletRadiusIU = 0;
+    static int filletRadius = 0;
 
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
@@ -859,15 +881,15 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    WX_UNIT_ENTRY_DIALOG dia( frame(), _( "Enter fillet radius:" ), _( "Fillet Tracks" ),
-                              filletRadiusIU );
+    WX_UNIT_ENTRY_DIALOG dlg( frame(), _( "Fillet Tracks" ), _( "Enter fillet radius:" ),
+                              filletRadius );
 
-    if( dia.ShowModal() == wxID_CANCEL )
+    if( dlg.ShowModal() == wxID_CANCEL )
         return 0;
 
-    filletRadiusIU = dia.GetValue();
+    filletRadius = dlg.GetValue();
 
-    if( filletRadiusIU == 0 )
+    if( filletRadius == 0 )
     {
         frame()->ShowInfoBarMsg( _( "A radius of zero was entered.\n"
                                     "The fillet operation was not performed." ) );
@@ -965,11 +987,11 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
             if( t1Seg.ApproxCollinear( t2Seg ) )
                 continue;
 
-            SHAPE_ARC sArc( t1Seg, t2Seg, filletRadiusIU );
+            SHAPE_ARC sArc( t1Seg, t2Seg, filletRadius );
             VECTOR2I  t1newPoint, t2newPoint;
 
             auto setIfPointOnSeg =
-                    []( VECTOR2I& aPointToSet, SEG aSegment, VECTOR2I aVecToTest )
+                    []( VECTOR2I& aPointToSet, const SEG& aSegment, const VECTOR2I& aVecToTest )
                     {
                         VECTOR2I segToVec = aSegment.NearestPoint( aVecToTest ) - aVecToTest;
 
@@ -1049,24 +1071,24 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
 static std::optional<int> GetFilletParams( PCB_BASE_EDIT_FRAME& aFrame, wxString& aErrorMsg )
 {
     // Store last used fillet radius to allow pressing "enter" if repeat fillet is required
-    static long long filletRadiusIU = 0;
+    static int filletRadius = 0;
 
-    WX_UNIT_ENTRY_DIALOG dia( &aFrame, _( "Enter fillet radius:" ), _( "Fillet Lines" ),
-                              filletRadiusIU );
+    WX_UNIT_ENTRY_DIALOG dlg( &aFrame, _( "Fillet Lines" ), _( "Enter fillet radius:" ),
+                              filletRadius );
 
-    if( dia.ShowModal() == wxID_CANCEL )
+    if( dlg.ShowModal() == wxID_CANCEL )
         return std::nullopt;
 
-    filletRadiusIU = dia.GetValue();
+    filletRadius = dlg.GetValue();
 
-    if( filletRadiusIU == 0 )
+    if( filletRadius == 0 )
     {
         aErrorMsg = _( "A radius of zero was entered.\n"
                        "The fillet operation was not performed." );
         return std::nullopt;
     }
 
-    return filletRadiusIU;
+    return filletRadius;
 }
 
 /**
@@ -1085,19 +1107,19 @@ static std::optional<CHAMFER_PARAMS> GetChamferParams( PCB_BASE_EDIT_FRAME& aFra
     // Store last used setback to allow pressing "enter" if repeat chamfer is required
     static CHAMFER_PARAMS params{ default_setback, default_setback };
 
-    WX_UNIT_ENTRY_DIALOG dia( &aFrame, _( "Enter chamfer setback:" ), _( "Chamfer Lines" ),
-                              params.m_chamfer_setback_a_IU );
+    WX_UNIT_ENTRY_DIALOG dlg( &aFrame, _( "Chamfer Lines" ), _( "Enter chamfer setback:" ),
+                              params.m_chamfer_setback_a );
 
-    if( dia.ShowModal() == wxID_CANCEL )
+    if( dlg.ShowModal() == wxID_CANCEL )
         return std::nullopt;
 
-    params.m_chamfer_setback_a_IU = dia.GetValue();
+    params.m_chamfer_setback_a = dlg.GetValue();
     // It's hard to easily specify an asymmetric chamfer (which line gets the longer
     // setbeck?), so we just use the same setback for each
-    params.m_chamfer_setback_b_IU = params.m_chamfer_setback_a_IU;
+    params.m_chamfer_setback_b = params.m_chamfer_setback_a;
 
     // Some technically-valid chamfers are not useful to actually do
-    if( params.m_chamfer_setback_a_IU == 0 )
+    if( params.m_chamfer_setback_a == 0 )
     {
         aErrorMsg = _( "A setback of zero was entered.\n"
                        "The chamfer operation was not performed." );
@@ -1110,26 +1132,26 @@ static std::optional<CHAMFER_PARAMS> GetChamferParams( PCB_BASE_EDIT_FRAME& aFra
 int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
 {
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
-        []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
-        {
-            std::vector<VECTOR2I> pts;
-
-            // Iterate from the back so we don't have to worry about removals.
-            for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
-                BOARD_ITEM* item = aCollector[i];
+                std::vector<VECTOR2I> pts;
 
-                // We've converted the polygon and rectangle to segments, so drop everything
-                // that isn't a segment at this point
-                if( !item->IsType( { PCB_SHAPE_LOCATE_SEGMENT_T,
-                                     PCB_SHAPE_LOCATE_POLY_T,
-                                     PCB_SHAPE_LOCATE_RECT_T } ) )
+                // Iterate from the back so we don't have to worry about removals.
+                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
                 {
-                    aCollector.Remove( item );
+                    BOARD_ITEM* item = aCollector[i];
+
+                    // We've converted the polygon and rectangle to segments, so drop everything
+                    // that isn't a segment at this point
+                    if( !item->IsType( { PCB_SHAPE_LOCATE_SEGMENT_T,
+                                         PCB_SHAPE_LOCATE_POLY_T,
+                                         PCB_SHAPE_LOCATE_RECT_T } ) )
+                    {
+                        aCollector.Remove( item );
+                    }
                 }
-            }
-        },
-        true /* prompt user regarding locked items */ );
+            },
+            true /* prompt user regarding locked items */ );
 
     std::set<PCB_SHAPE*>    lines_to_add;
     std::vector<PCB_SHAPE*> items_to_remove;

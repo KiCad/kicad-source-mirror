@@ -40,17 +40,33 @@
 class WX_UNIT_ENTRY_DIALOG : public WX_UNIT_ENTRY_DIALOG_BASE
 {
 public:
-    WX_UNIT_ENTRY_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aLabel, const wxString& aCaption,
-            const long long& aDefaultValue = 0 );
-
+    WX_UNIT_ENTRY_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aCaption, const wxString& aLabel,
+                          int aDefaultValue );
 
     /**
      * Returns the value in internal units
      */
-    long long GetValue();
+    int GetValue();
 
 private:
     UNIT_BINDER m_unit_binder;
+};
+
+
+class WX_PT_ENTRY_DIALOG : public WX_PT_ENTRY_DIALOG_BASE
+{
+public:
+    WX_PT_ENTRY_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aCaption, const wxString& aLabelX,
+                        const wxString& aLabelY, const VECTOR2I& aDefaultValue );
+
+    /**
+     * Returns the value in internal units
+     */
+    VECTOR2I GetValue();
+
+private:
+    UNIT_BINDER m_unit_binder_x;
+    UNIT_BINDER m_unit_binder_y;
 };
 
 #endif  // _DIALOG_UNIT_ENTRY_H_

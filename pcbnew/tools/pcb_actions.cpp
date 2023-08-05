@@ -334,6 +334,20 @@ TOOL_ACTION PCB_ACTIONS::moveExact( "pcbnew.InteractiveEdit.moveExact",
         _( "Move Exactly..." ), _( "Moves the selected item(s) by an exact amount" ),
         BITMAPS::move_exactly );
 
+TOOL_ACTION PCB_ACTIONS::pointEditorMoveCorner( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveEdit.moveCorner" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Move Corner To..." ) )
+        .Tooltip( _( "Move the active corner to an exact location" ) )
+        .Icon( BITMAPS::move_exactly ) );
+
+TOOL_ACTION PCB_ACTIONS::pointEditorMoveMidpoint( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveEdit.moveMidpoint" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Move Midpoint To..." ) )
+        .Tooltip( _( "Move the active midpoint to an exact location" ) )
+        .Icon( BITMAPS::move_exactly ) );
+
 TOOL_ACTION PCB_ACTIONS::createArray( "pcbnew.InteractiveEdit.createArray",
         AS_GLOBAL,
         MD_CTRL + 'T', LEGACY_HK_NAME( "Create Array" ),

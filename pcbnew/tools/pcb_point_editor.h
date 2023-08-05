@@ -62,7 +62,9 @@ public:
      *
      * Used to coordinate cursor shapes with other tools.
      */
-    bool HasPoint() { return m_editedPoint != nullptr; }
+    bool HasPoint()    { return m_editedPoint != nullptr; }
+    bool HasMidpoint() { return HasPoint() && dynamic_cast<EDIT_LINE*>( m_editedPoint ); }
+    bool HasCorner()   { return HasPoint() && !HasMidpoint(); }
 
 private:
     ///< Set up handlers for various events.
@@ -129,6 +131,7 @@ private:
     bool removeCornerCondition( const SELECTION& aSelection );
 
     /// TOOL_ACTION handlers
+    int movePoint( const TOOL_EVENT& aEvent );
     int addCorner( const TOOL_EVENT& aEvent );
     int removeCorner( const TOOL_EVENT& aEvent );
     int modifiedSelection( const TOOL_EVENT& aEvent );

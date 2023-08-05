@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,8 +22,6 @@
  */
 
 #include <boost/test/unit_test.hpp>
-
-#include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <geometry/chamfer.h>
 
@@ -49,8 +47,9 @@ struct TWO_LINE_CHAMFER_TEST_CASE
 static void DoChamferTestChecks( const TWO_LINE_CHAMFER_TEST_CASE& aTestCase )
 {
     // Actally do the chamfer
-    const std::optional<CHAMFER_RESULT> chamfer_result =
-            ComputeChamferPoints( aTestCase.m_seg_a, aTestCase.m_seg_b, aTestCase.m_params );
+    const std::optional<CHAMFER_RESULT> chamfer_result = ComputeChamferPoints( aTestCase.m_seg_a,
+                                                                               aTestCase.m_seg_b,
+                                                                               aTestCase.m_params );
 
     BOOST_REQUIRE_EQUAL( chamfer_result.has_value(), aTestCase.m_expected_result.has_value() );
 
@@ -64,14 +63,15 @@ static void DoChamferTestChecks( const TWO_LINE_CHAMFER_TEST_CASE& aTestCase )
 
         const auto check_updated_seg =
                 [&]( const std::optional<SEG>& updated_seg, const std::optional<SEG>& expected_seg )
-        {
-            BOOST_REQUIRE_EQUAL( updated_seg.has_value(), expected_seg.has_value() );
-            if( updated_seg.has_value() )
-            {
-                BOOST_CHECK_PREDICATE( GEOM_TEST::SegmentsHaveSameEndPoints,
-                                       ( *updated_seg )( *expected_seg ) );
-            }
-        };
+                {
+                    BOOST_REQUIRE_EQUAL( updated_seg.has_value(), expected_seg.has_value() );
+
+                    if( updated_seg.has_value() )
+                    {
+                        BOOST_CHECK_PREDICATE( GEOM_TEST::SegmentsHaveSameEndPoints,
+                                               ( *updated_seg )( *expected_seg ) );
+                    }
+                };
 
         check_updated_seg( actual_result.m_updated_seg_a, expected_result.m_updated_seg_a );
         check_updated_seg( actual_result.m_updated_seg_b, expected_result.m_updated_seg_b );
@@ -89,7 +89,8 @@ BOOST_AUTO_TEST_CASE( SimpleChamferAtOrigin )
      *      v 1000
      * */
 
-    const TWO_LINE_CHAMFER_TEST_CASE testcase{
+    const TWO_LINE_CHAMFER_TEST_CASE testcase
+    {
         { VECTOR2I( 0, 0 ), VECTOR2I( 1000, 0 ) },
         { VECTOR2I( 0, 0 ), VECTOR2I( 0, 1000 ) },
         { 10, 10 },
@@ -106,7 +107,8 @@ BOOST_AUTO_TEST_CASE( SimpleChamferAtOrigin )
 BOOST_AUTO_TEST_CASE( SimpleChamferNotAtOrigin )
 {
     // Same as above but the intersection is not at the origin
-    const TWO_LINE_CHAMFER_TEST_CASE testcase{
+    const TWO_LINE_CHAMFER_TEST_CASE testcase
+    {
         { VECTOR2I( 1000, 1000 ), VECTOR2I( 2000, 1000 ) },
         { VECTOR2I( 1000, 1000 ), VECTOR2I( 1000, 2000 ) },
         { 10, 10 },
@@ -123,7 +125,8 @@ BOOST_AUTO_TEST_CASE( SimpleChamferNotAtOrigin )
 BOOST_AUTO_TEST_CASE( AsymmetricChamfer )
 {
     // Same as above but the intersection is not at the origin
-    const TWO_LINE_CHAMFER_TEST_CASE testcase{
+    const TWO_LINE_CHAMFER_TEST_CASE testcase
+    {
         { VECTOR2I( 0, 0 ), VECTOR2I( 1000, 0 ) },
         { VECTOR2I( 0, 0 ), VECTOR2I( 0, 1000 ) },
         { 10, 100 },
@@ -140,7 +143,8 @@ BOOST_AUTO_TEST_CASE( AsymmetricChamfer )
 BOOST_AUTO_TEST_CASE( ChamferFullLength )
 {
     // Chamfer consumes the entire length of a line
-    const TWO_LINE_CHAMFER_TEST_CASE testcase{
+    const TWO_LINE_CHAMFER_TEST_CASE testcase
+    {
         { VECTOR2I( 0, 0 ), VECTOR2I( 1000, 0 ) },
         { VECTOR2I( 0, 0 ), VECTOR2I( 0, 100 ) },
         { 100, 100 },
@@ -157,7 +161,8 @@ BOOST_AUTO_TEST_CASE( ChamferFullLength )
 BOOST_AUTO_TEST_CASE( ChamferOverFullLength )
 {
     // Chamfer consumes the entire length of a line
-    const TWO_LINE_CHAMFER_TEST_CASE testcase{
+    const TWO_LINE_CHAMFER_TEST_CASE testcase
+    {
         { VECTOR2I( 0, 0 ), VECTOR2I( 1000, 0 ) },
         { VECTOR2I( 0, 0 ), VECTOR2I( 0, 100 ) },
         { 150, 150 }, // > 100

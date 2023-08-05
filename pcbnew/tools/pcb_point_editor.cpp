@@ -36,6 +36,7 @@ using namespace std::placeholders;
 #include <tools/pcb_selection_tool.h>
 #include <tools/pcb_point_editor.h>
 #include <tools/pcb_grid_helper.h>
+#include <dialogs/dialog_unit_entry.h>
 #include <board_commit.h>
 #include <pcb_edit_frame.h>
 #include <pcb_bitmap.h>
@@ -621,7 +622,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             getViewControls()->SetAutoPan( false );
             setAltConstraint( false );
 
-            commit.Push( _( "Drag a corner" ) );
+            commit.Push( _( "Drag Corner" ) );
             inDrag = false;
             frame()->UndoRedoBlock( false );
 
@@ -662,6 +663,42 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
     return 0;
 }
+
+
+int PCB_POINT_EDITOR::movePoint( const TOOL_EVENT& aEvent )
+{
+    if( !m_editPoints || !m_editPoints->GetParent() || !HasPoint() )
+        return 0;
+
+    BOARD_COMMIT commit( frame() );
+    commit.Stage( m_editPoints->GetParent(), CHT_MODIFY );
+
+    wxString title;
+    wxString msg;
+
+    if( dynamic_cast<EDIT_LINE*>( m_editedPoint ) )
+    {
+        title = _( "Move Midpoint to Location" );
+        msg = _( "Move Midpoint" );
+    }
+    else
+    {
+        title = _( "Move Corner to Location" );
+        msg = _( "Move Corner" );
+    }
+
+    WX_PT_ENTRY_DIALOG dlg( frame(), title, _( "X:" ), _( "Y:" ), m_editedPoint->GetPosition() );
+
+    if( dlg.ShowModal() == wxID_OK )
+    {
+        m_editedPoint->SetPosition( dlg.GetValue() );
+        updateItem();
+        commit.Push( msg );
+    }
+
+    return 0;
+}
+
 
 void PCB_POINT_EDITOR::editArcEndpointKeepTangent( PCB_SHAPE* aArc, const VECTOR2I& aCenter,
                                                    const VECTOR2I& aStart, const VECTOR2I& aMid,
@@ -2239,7 +2276,7 @@ int PCB_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
             static_cast<ZONE*>( item )->HatchBorder();
 
 
-        commit.Push( _( "Add a zone corner" ) );
+        commit.Push( _( "Add Zone Corner" ) );
     }
     else if( graphicItem && graphicItem->GetShape() == SHAPE_T::SEGMENT )
     {
@@ -2259,7 +2296,7 @@ int PCB_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
         newSegment->SetEnd( VECTOR2I( seg.B.x, seg.B.y ) );
 
         commit.Add( newSegment );
-        commit.Push( _( "Split segment" ) );
+        commit.Push( _( "Split Segment" ) );
     }
 
     updatePoints();
@@ -2330,7 +2367,10 @@ int PCB_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
 
         setEditedPoint( nullptr );
 
-        commit.Push( _( "Remove a zone/polygon corner" ) );
+        if( item->Type() == PCB_ZONE_T )
+            commit.Push( _( "Remove Zone Corner" ) );
+        else
+            commit.Push( _( "Remove Polygon Corner" ) );
 
         // Refresh zone hatching
         if( item->Type() == PCB_ZONE_T )
@@ -2388,6 +2428,8 @@ int PCB_POINT_EDITOR::changeArcEditMode( const TOOL_EVENT& aEvent )
 void PCB_POINT_EDITOR::setTransitions()
 {
     Go( &PCB_POINT_EDITOR::OnSelectionChange, ACTIONS::activatePointEditor.MakeEvent() );
+    Go( &PCB_POINT_EDITOR::movePoint,         PCB_ACTIONS::pointEditorMoveCorner.MakeEvent() );
+    Go( &PCB_POINT_EDITOR::movePoint,         PCB_ACTIONS::pointEditorMoveMidpoint.MakeEvent() );
     Go( &PCB_POINT_EDITOR::addCorner,         PCB_ACTIONS::pointEditorAddCorner.MakeEvent() );
     Go( &PCB_POINT_EDITOR::removeCorner,      PCB_ACTIONS::pointEditorRemoveCorner.MakeEvent() );
     Go( &PCB_POINT_EDITOR::changeArcEditMode, PCB_ACTIONS::pointEditorArcKeepCenter.MakeEvent() );

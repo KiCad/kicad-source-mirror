@@ -43,16 +43,16 @@ DIALOG_POSITION_RELATIVE_BASE::DIALOG_POSITION_RELATIVE_BASE( wxWindow* parent, 
 	bSizerButtOpts->Add( m_select_anchor_button, 1, wxALL|wxEXPAND, 5 );
 
 
-	bUpperSizer->Add( bSizerButtOpts, 1, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bUpperSizer->Add( bSizerButtOpts, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 	wxBoxSizer* bSizer6;
 	bSizer6 = new wxBoxSizer( wxVERTICAL );
 
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizer6->Add( m_staticline2, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizer6->Add( m_staticline2, 0, wxEXPAND|wxBOTTOM, 10 );
 
 
-	bUpperSizer->Add( bSizer6, 0, wxEXPAND|wxTOP, 3 );
+	bUpperSizer->Add( bSizer6, 0, wxEXPAND, 5 );
 
 
 	bMainSizer->Add( bUpperSizer, 0, wxEXPAND|wxALL, 5 );
@@ -65,7 +65,7 @@ DIALOG_POSITION_RELATIVE_BASE::DIALOG_POSITION_RELATIVE_BASE( wxWindow* parent, 
 
 	m_xLabel = new wxStaticText( this, wxID_ANY, _("Offset X:"), wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_xLabel->Wrap( -1 );
-	fgSizer2->Add( m_xLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	fgSizer2->Add( m_xLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_xEntry = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_xEntry, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
@@ -82,7 +82,7 @@ DIALOG_POSITION_RELATIVE_BASE::DIALOG_POSITION_RELATIVE_BASE( wxWindow* parent, 
 
 	m_yLabel = new wxStaticText( this, wxID_ANY, _("Offset Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_yLabel->Wrap( -1 );
-	fgSizer2->Add( m_yLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	fgSizer2->Add( m_yLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_yEntry = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_yEntry, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
@@ -98,14 +98,14 @@ DIALOG_POSITION_RELATIVE_BASE::DIALOG_POSITION_RELATIVE_BASE( wxWindow* parent, 
 	fgSizer2->Add( m_clearY, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
-	bMainSizer->Add( fgSizer2, 1, wxEXPAND|wxALL, 10 );
+	bMainSizer->Add( fgSizer2, 1, wxEXPAND|wxALL, 5 );
 
 	wxBoxSizer* bSizerBottom;
 	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
 
 	m_polarCoords = new wxCheckBox( this, wxID_ANY, _("Use polar coordinates"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_polarCoords->SetValue(true);
-	bSizerBottom->Add( m_polarCoords, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	bSizerBottom->Add( m_polarCoords, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
 
 
 	bSizerBottom->Add( 40, 0, 1, wxEXPAND, 5 );

@@ -23,11 +23,11 @@
 
 #include <geometry/chamfer.h>
 
-std::optional<CHAMFER_RESULT> ComputeChamferPoints( const SEG aSegA, const SEG& aSegB,
+std::optional<CHAMFER_RESULT> ComputeChamferPoints( const SEG& aSegA, const SEG& aSegB,
                                                     const CHAMFER_PARAMS& aChamferParams )
 {
-    const int line_a_setback = aChamferParams.m_chamfer_setback_a_IU;
-    const int line_b_setback = aChamferParams.m_chamfer_setback_b_IU;
+    const int line_a_setback = aChamferParams.m_chamfer_setback_a;
+    const int line_b_setback = aChamferParams.m_chamfer_setback_b;
 
     if( line_a_setback == 0 && line_b_setback == 0 )
     {
@@ -92,16 +92,14 @@ std::optional<CHAMFER_RESULT> ComputeChamferPoints( const SEG aSegA, const SEG& 
     // The adjusted segments go from the old end points to the chamfer ends
 
     std::optional<SEG> new_a;
+
     if( a_end_pt != chamfer.A )
-    {
         new_a = SEG{ a_end_pt, chamfer.A };
-    }
 
     std::optional<SEG> new_b;
+
     if( b_end_pt != chamfer.B )
-    {
         new_b = SEG{ b_end_pt, chamfer.B };
-    }
 
     return CHAMFER_RESULT{ chamfer, new_a, new_b };
 }

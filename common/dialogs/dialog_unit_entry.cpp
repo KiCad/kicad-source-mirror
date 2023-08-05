@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,9 +26,8 @@
 #include <dialogs/dialog_unit_entry.h>
 
 
-WX_UNIT_ENTRY_DIALOG::WX_UNIT_ENTRY_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aLabel,
-                                            const wxString& aCaption,
-                                            const long long& aDefaultValue ) :
+WX_UNIT_ENTRY_DIALOG::WX_UNIT_ENTRY_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aCaption,
+                                            const wxString& aLabel, int aDefaultValue ) :
         WX_UNIT_ENTRY_DIALOG_BASE( ( wxWindow* ) aParent, wxID_ANY, aCaption ),
         m_unit_binder( aParent, m_label, m_textCtrl, m_unit_label, true )
 {
@@ -39,7 +38,29 @@ WX_UNIT_ENTRY_DIALOG::WX_UNIT_ENTRY_DIALOG( EDA_DRAW_FRAME* aParent, const wxStr
 }
 
 
-long long WX_UNIT_ENTRY_DIALOG::GetValue()
+int WX_UNIT_ENTRY_DIALOG::GetValue()
 {
-    return m_unit_binder.GetValue();
+    return m_unit_binder.GetIntValue();
+}
+
+
+WX_PT_ENTRY_DIALOG::WX_PT_ENTRY_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aCaption,
+                                        const wxString& aLabelX, const wxString& aLabelY,
+                                        const VECTOR2I& aDefaultValue ) :
+        WX_PT_ENTRY_DIALOG_BASE( ( wxWindow* ) aParent, wxID_ANY, aCaption ),
+        m_unit_binder_x( aParent, m_labelX, m_textCtrlX, m_unitsX, true ),
+        m_unit_binder_y( aParent, m_labelY, m_textCtrlY, m_unitsY, true )
+{
+    m_labelX->SetLabel( aLabelX );
+    m_labelY->SetLabel( aLabelY );
+    m_unit_binder_x.SetValue( aDefaultValue.x );
+    m_unit_binder_y.SetValue( aDefaultValue.y );
+
+    SetupStandardButtons();
+}
+
+
+VECTOR2I WX_PT_ENTRY_DIALOG::GetValue()
+{
+    return VECTOR2I( m_unit_binder_x.GetIntValue(), m_unit_binder_y.GetIntValue() );
 }

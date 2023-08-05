@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -17,29 +17,23 @@ WX_UNIT_ENTRY_DIALOG_BASE::WX_UNIT_ENTRY_DIALOG_BASE( wxWindow* parent, wxWindow
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
 
 	wxBoxSizer* bSizerContent;
-	bSizerContent = new wxBoxSizer( wxVERTICAL );
+	bSizerContent = new wxBoxSizer( wxHORIZONTAL );
 
 	m_label = new wxStaticText( this, wxID_ANY, _("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_label->Wrap( -1 );
-	bSizerContent->Add( m_label, 0, wxALL|wxEXPAND, 5 );
-
-	wxBoxSizer* bSizerTextAndUnit;
-	bSizerTextAndUnit = new wxBoxSizer( wxHORIZONTAL );
+	bSizerContent->Add( m_label, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	m_textCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_textCtrl->SetMinSize( wxSize( 300,-1 ) );
 
-	bSizerTextAndUnit->Add( m_textCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	bSizerContent->Add( m_textCtrl, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_unit_label = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_unit_label->Wrap( -1 );
-	bSizerTextAndUnit->Add( m_unit_label, 0, wxALL, 5 );
+	bSizerContent->Add( m_unit_label, 0, wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizerContent->Add( bSizerTextAndUnit, 1, wxEXPAND, 5 );
-
-
-	bSizerMain->Add( bSizerContent, 1, wxALL|wxEXPAND, 5 );
+	bSizerMain->Add( bSizerContent, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
@@ -59,5 +53,67 @@ WX_UNIT_ENTRY_DIALOG_BASE::WX_UNIT_ENTRY_DIALOG_BASE( wxWindow* parent, wxWindow
 }
 
 WX_UNIT_ENTRY_DIALOG_BASE::~WX_UNIT_ENTRY_DIALOG_BASE()
+{
+}
+
+WX_PT_ENTRY_DIALOG_BASE::WX_PT_ENTRY_DIALOG_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+{
+	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+
+	wxBoxSizer* bSizerMain;
+	bSizerMain = new wxBoxSizer( wxVERTICAL );
+
+	wxFlexGridSizer* fgSizer;
+	fgSizer = new wxFlexGridSizer( 0, 3, 5, 0 );
+	fgSizer->SetFlexibleDirection( wxBOTH );
+	fgSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_labelX = new wxStaticText( this, wxID_ANY, _("X label:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelX->Wrap( -1 );
+	fgSizer->Add( m_labelX, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_textCtrlX = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_textCtrlX->SetMinSize( wxSize( 300,-1 ) );
+
+	fgSizer->Add( m_textCtrlX, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_unitsX = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_unitsX->Wrap( -1 );
+	fgSizer->Add( m_unitsX, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	m_labelY = new wxStaticText( this, wxID_ANY, _("Y label:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelY->Wrap( -1 );
+	fgSizer->Add( m_labelY, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_textCtrlY = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_textCtrlY->SetMinSize( wxSize( 300,-1 ) );
+
+	fgSizer->Add( m_textCtrlY, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_unitsY = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_unitsY->Wrap( -1 );
+	fgSizer->Add( m_unitsY, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+
+	bSizerMain->Add( fgSizer, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+
+	m_sdbSizer1 = new wxStdDialogButtonSizer();
+	m_sdbSizer1OK = new wxButton( this, wxID_OK );
+	m_sdbSizer1->AddButton( m_sdbSizer1OK );
+	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
+	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
+	m_sdbSizer1->Realize();
+
+	bSizerMain->Add( m_sdbSizer1, 0, wxALL|wxALIGN_RIGHT, 5 );
+
+
+	this->SetSizer( bSizerMain );
+	this->Layout();
+	bSizerMain->Fit( this );
+
+	this->Centre( wxBOTH );
+}
+
+WX_PT_ENTRY_DIALOG_BASE::~WX_PT_ENTRY_DIALOG_BASE()
 {
 }

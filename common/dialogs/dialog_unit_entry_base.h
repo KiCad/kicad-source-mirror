@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -42,8 +42,35 @@ class WX_UNIT_ENTRY_DIALOG_BASE : public DIALOG_SHIM
 
 	public:
 
-		WX_UNIT_ENTRY_DIALOG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		WX_UNIT_ENTRY_DIALOG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Title"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~WX_UNIT_ENTRY_DIALOG_BASE();
+
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class WX_PT_ENTRY_DIALOG_BASE
+///////////////////////////////////////////////////////////////////////////////
+class WX_PT_ENTRY_DIALOG_BASE : public DIALOG_SHIM
+{
+	private:
+
+	protected:
+		wxStaticText* m_labelX;
+		wxTextCtrl* m_textCtrlX;
+		wxStaticText* m_unitsX;
+		wxStaticText* m_labelY;
+		wxTextCtrl* m_textCtrlY;
+		wxStaticText* m_unitsY;
+		wxStdDialogButtonSizer* m_sdbSizer1;
+		wxButton* m_sdbSizer1OK;
+		wxButton* m_sdbSizer1Cancel;
+
+	public:
+
+		WX_PT_ENTRY_DIALOG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Move Point to Location"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
+		~WX_PT_ENTRY_DIALOG_BASE();
 
 };
 

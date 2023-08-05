@@ -36,9 +36,9 @@
 struct CHAMFER_PARAMS
 {
     /// Chamfer set-back distance along the first line
-    int m_chamfer_setback_a_IU;
+    int m_chamfer_setback_a;
     /// Chamfer set-back distance along the second line
-    int m_chamfer_setback_b_IU;
+    int m_chamfer_setback_b;
 };
 
 struct CHAMFER_RESULT
@@ -55,7 +55,7 @@ struct CHAMFER_RESULT
 /**
  * Compute the chamfer points for a given line pair and chamfer parameters.
  */
-std::optional<CHAMFER_RESULT> ComputeChamferPoints( const SEG aSegA, const SEG& aSegB,
+std::optional<CHAMFER_RESULT> ComputeChamferPoints( const SEG& aSegA, const SEG& aSegB,
                                                     const CHAMFER_PARAMS& aChamferParams );
 
 
