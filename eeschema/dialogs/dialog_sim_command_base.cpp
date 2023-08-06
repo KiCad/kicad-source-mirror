@@ -840,7 +840,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_marginTopLabel->Wrap( -1 );
 	fgSizerTopBottom->Add( m_marginTopLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 15 );
 
-	m_marginTop = new wxTextCtrl( m_panelPlotSetup, wxID_ANY, _("35"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_marginTop = new wxTextCtrl( m_panelPlotSetup, wxID_ANY, _("30"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_marginTop->SetMinSize( wxSize( 60,-1 ) );
 
 	fgSizerTopBottom->Add( m_marginTop, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
@@ -849,7 +849,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_marginBottomLabel->Wrap( -1 );
 	fgSizerTopBottom->Add( m_marginBottomLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 15 );
 
-	m_marginBottom = new wxTextCtrl( m_panelPlotSetup, wxID_ANY, _("35"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_marginBottom = new wxTextCtrl( m_panelPlotSetup, wxID_ANY, _("45"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_marginBottom->SetMinSize( wxSize( 60,-1 ) );
 
 	fgSizerTopBottom->Add( m_marginBottom, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );

@@ -431,7 +431,7 @@ SIM_PLOT_TAB::SIM_PLOT_TAB( const wxString& aSimCommand, wxWindow* parent ) :
     m_plotWin = new mpWindow( this, wxID_ANY );
 
     m_plotWin->LimitView( true );
-    m_plotWin->SetMargins( 35, 70, 35, 70 );
+    m_plotWin->SetMargins( 30, 70, 45, 70 );
 
     UpdatePlotColors();
 
@@ -643,7 +643,7 @@ void SIM_PLOT_TAB::updateAxes( int aNewTraceType )
 
             if( ( aNewTraceType & SPT_POWER ) && !m_axis_y3 )
             {
-                m_plotWin->SetMargins( 35, 140, 35, 70 );
+                m_plotWin->SetMargins( 30, 140, 45, 70 );
 
                 m_axis_y3 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "W" ), mpALIGN_FAR_RIGHT );
                 m_axis_y3->SetNameAlign( mpALIGN_FAR_RIGHT );
@@ -763,7 +763,7 @@ void SIM_PLOT_TAB::prepareDCAxes( int aNewTraceType )
 
         if( ( aNewTraceType & SPT_POWER ) && !m_axis_y3 )
         {
-            m_plotWin->SetMargins( 35, 140, 35, 70 );
+            m_plotWin->SetMargins( 30, 140, 45, 70 );
 
             m_axis_y3 = new LIN_SCALE<mpScaleY>( wxEmptyString, wxT( "W" ), mpALIGN_FAR_RIGHT );
             m_axis_y3->SetNameAlign( mpALIGN_FAR_RIGHT );
