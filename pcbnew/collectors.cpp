@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2008 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -138,66 +138,6 @@ const std::vector<KICAD_T> GENERAL_COLLECTOR::DraggableItems = {
 
 INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData )
 {
-#if 1   // debugging
-    static int  breakhere = 0;
-
-    switch( aTestItem->Type() )
-    {
-    case PCB_PAD_T:
-        {
-            FOOTPRINT* footprint = (FOOTPRINT*) aTestItem->GetParent();
-
-            if( footprint->GetReference() == wxT( "Y2" ) )
-                breakhere++;
-        }
-        break;
-
-    case PCB_VIA_T:
-        breakhere++;
-        break;
-
-    case PCB_TRACE_T:
-    case PCB_ARC_T:
-        breakhere++;
-        break;
-
-    case PCB_FIELD_T:
-    case PCB_TEXT_T:
-        breakhere++;
-        break;
-
-    case PCB_TEXTBOX_T:
-        breakhere++;
-        break;
-
-    case PCB_SHAPE_T:
-        breakhere++;
-        break;
-
-    case PCB_DIM_ALIGNED_T:
-        breakhere++;
-        break;
-
-    case PCB_FOOTPRINT_T:
-        {
-            FOOTPRINT* footprint = (FOOTPRINT*) aTestItem;
-
-            if( footprint->GetReference() == wxT( "C98" ) )
-                breakhere++;
-        }
-        break;
-
-    case PCB_MARKER_T:
-        breakhere++;
-        break;
-
-    default:
-        breakhere++;
-        break;
-    }
-
-#endif
-
     BOARD_ITEM*         boardItem   = nullptr;
     FOOTPRINT*          footprint   = nullptr;
     PCB_GROUP*          group       = nullptr;
