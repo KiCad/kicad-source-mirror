@@ -121,18 +121,19 @@ bool PROJECT_ARCHIVER::Archive( const wxString& aSrcDir, const wxString& aDestFi
             wxT( "*.kicad_mod" ),
             wxT( "*.kicad_dru" ),
             wxT( "*.kicad_wks" ),
+            wxT( "*.wbk" ),
             wxT( "fp-lib-table" ),
             wxT( "sym-lib-table" )
         };
 
     // List of additional file extensions that are only archived when aIncludeExtraFiles is true
     static const wxChar* extraExtensionList[] = {
-            wxT( "*.pro" ),
+            wxT( "*.pro" ),                         // Legacy project files
             wxT( "*.sch" ),                         // Legacy schematic files
             wxT( "*.lib" ), wxT( "*.dcm" ),         // Legacy schematic library files
             wxT( "*.cmp" ),
-            wxT( "*.brd" ),
-            wxT( "*.mod" ),
+            wxT( "*.brd" ),                         // Legacy PCB files
+            wxT( "*.mod" ),                         // Legacy footprint library files
             wxT( "*.stp" ), wxT( "*.step" ),        // 3d files
             wxT( "*.wrl" ),
             wxT( "*.g?" ), wxT( "*.g??" ),          // Gerber files
