@@ -22,12 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * Plot settings, and plotting engines (PostScript, Gerber, HPGL and DXF)
- *
- * @file plotter.h
- */
-
 #ifndef PLOT_COMMON_H_
 #define PLOT_COMMON_H_
 
@@ -426,26 +420,28 @@ public:
      * @param aData is a parameter used by some plotters in SetCurrentLineWidth(),
      *              not directly used here.
      */
-    virtual void Text( const VECTOR2I&             aPos,
-                       const COLOR4D&              aColor,
-                       const wxString&             aText,
-                       const EDA_ANGLE&            aOrient,
-                       const VECTOR2I&             aSize,
-                       enum GR_TEXT_H_ALIGN_T      aH_justify,
-                       enum GR_TEXT_V_ALIGN_T      aV_justify,
-                       int                         aPenWidth,
-                       bool                        aItalic,
-                       bool                        aBold,
-                       bool                        aMultilineAllowed,
-                       KIFONT::FONT*               aFont,
-                       void*                       aData = nullptr );
+    virtual void Text( const VECTOR2I&        aPos,
+                       const COLOR4D&         aColor,
+                       const wxString&        aText,
+                       const EDA_ANGLE&       aOrient,
+                       const VECTOR2I&        aSize,
+                       enum GR_TEXT_H_ALIGN_T aH_justify,
+                       enum GR_TEXT_V_ALIGN_T aV_justify,
+                       int                    aPenWidth,
+                       bool                   aItalic,
+                       bool                   aBold,
+                       bool                   aMultilineAllowed,
+                       KIFONT::FONT*          aFont,
+                       const KIFONT::METRICS& aFontMetrics,
+                       void*                  aData = nullptr );
 
-    virtual void PlotText( const VECTOR2I&          aPos,
-                           const COLOR4D&           aColor,
-                           const wxString&          aText,
-                           const TEXT_ATTRIBUTES&   aAttributes,
-                           KIFONT::FONT*            aFont,
-                           void*                    aData = nullptr );
+    virtual void PlotText( const VECTOR2I&        aPos,
+                           const COLOR4D&         aColor,
+                           const wxString&        aText,
+                           const TEXT_ATTRIBUTES& aAttributes,
+                           KIFONT::FONT*          aFont,
+                           const KIFONT::METRICS& aFontMetrics,
+                           void*                  aData = nullptr );
     /**
      * Create a clickable hyperlink with a rectangular click area
      *

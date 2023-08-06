@@ -863,19 +863,20 @@ bool containsNonAsciiChars( const wxString& string )
 }
 
 
-void DXF_PLOTTER::Text( const VECTOR2I&             aPos,
-                        const COLOR4D&              aColor,
-                        const wxString&             aText,
-                        const EDA_ANGLE&            aOrient,
-                        const VECTOR2I&             aSize,
-                        enum GR_TEXT_H_ALIGN_T      aH_justify,
-                        enum GR_TEXT_V_ALIGN_T      aV_justify,
-                        int                         aWidth,
-                        bool                        aItalic,
-                        bool                        aBold,
-                        bool                        aMultilineAllowed,
-                        KIFONT::FONT*               aFont,
-                        void*                       aData )
+void DXF_PLOTTER::Text( const VECTOR2I&        aPos,
+                        const COLOR4D&         aColor,
+                        const wxString&        aText,
+                        const EDA_ANGLE&       aOrient,
+                        const VECTOR2I&        aSize,
+                        enum GR_TEXT_H_ALIGN_T aH_justify,
+                        enum GR_TEXT_V_ALIGN_T aV_justify,
+                        int                    aWidth,
+                        bool                   aItalic,
+                        bool                   aBold,
+                        bool                   aMultilineAllowed,
+                        KIFONT::FONT*          aFont,
+                        const KIFONT::METRICS& aFontMetrics,
+                        void*                  aData )
 {
     // Fix me: see how to use DXF text mode for multiline texts
     if( aMultilineAllowed && !aText.Contains( wxT( "\n" ) ) )
@@ -889,7 +890,7 @@ void DXF_PLOTTER::Text( const VECTOR2I&             aPos,
         // Perhaps multiline texts could be handled as DXF text entity
         // but I do not want spend time about this (JPC)
         PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth, aItalic,
-                       aBold, aMultilineAllowed, aFont, aData );
+                       aBold, aMultilineAllowed, aFont, aFontMetrics, aData );
     }
     else
     {
@@ -907,11 +908,13 @@ void DXF_PLOTTER::Text( const VECTOR2I&             aPos,
 }
 
 
-void DXF_PLOTTER::PlotText( const VECTOR2I& aPos, const COLOR4D& aColor,
-                    const wxString& aText,
-                    const TEXT_ATTRIBUTES& aAttributes,
-                    KIFONT::FONT* aFont,
-                    void* aData )
+void DXF_PLOTTER::PlotText( const VECTOR2I&        aPos,
+                            const COLOR4D&         aColor,
+                            const wxString&        aText,
+                            const TEXT_ATTRIBUTES& aAttributes,
+                            KIFONT::FONT*          aFont,
+                            const KIFONT::METRICS& aFontMetrics,
+                            void*                  aData )
 {
     TEXT_ATTRIBUTES attrs = aAttributes;
     // Fix me: see how to use DXF text mode for multiline texts
@@ -925,15 +928,16 @@ void DXF_PLOTTER::PlotText( const VECTOR2I& aPos, const COLOR4D& aColor,
         // output text as graphics.
         // Perhaps multiline texts could be handled as DXF text entity
         // but I do not want spend time about that (JPC)
-        PLOTTER::PlotText( aPos, aColor, aText, aAttributes, aFont, aData );
+        PLOTTER::PlotText( aPos, aColor, aText, aAttributes, aFont, aFontMetrics, aData );
     }
     else
-       plotOneLineOfText( aPos, aColor, aText, attrs );
+    {
+        plotOneLineOfText( aPos, aColor, aText, attrs );
+    }
 }
 
 void DXF_PLOTTER::plotOneLineOfText( const VECTOR2I& aPos, const COLOR4D& aColor,
-                                    const wxString& aText,
-                                    const TEXT_ATTRIBUTES& aAttributes )
+                                     const wxString& aText, const TEXT_ATTRIBUTES& aAttributes )
 {
     /* Emit text as a text entity. This loses formatting and shape but it's
        more useful as a CAD object */
@@ -989,9 +993,9 @@ void DXF_PLOTTER::plotOneLineOfText( const VECTOR2I& aPos, const COLOR4D& aColor
              "%d\n"          // H alignment
              "  73\n"
              "%d\n",         // V alignment
-             aAttributes.m_Bold ?
-                (aAttributes.m_Italic ? "KICADBI" : "KICADB")
-                : (aAttributes.m_Italic ? "KICADI" : "KICAD"), TO_UTF8( cname ),
+             aAttributes.m_Bold ? ( aAttributes.m_Italic ? "KICADBI" : "KICADB" )
+                                : ( aAttributes.m_Italic ? "KICADI" : "KICAD" ),
+             TO_UTF8( cname ),
              formatCoord( origin_dev.x ).c_str(), formatCoord( origin_dev.x ).c_str(),
              formatCoord( origin_dev.y ).c_str(), formatCoord( origin_dev.y ).c_str(),
              formatCoord( size_dev.y ).c_str(), formatCoord( fabs( size_dev.x / size_dev.y ) ).c_str(),

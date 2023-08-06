@@ -26,6 +26,7 @@
 #include <plotters/plotter_gerber.h>
 #include <plotters/plotters_pslike.h>
 #include <eda_item.h>
+#include <font/font.h>
 #include <confirm.h>
 #include <string_utils.h>
 #include <locale_io.h>
@@ -275,7 +276,8 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
     attrs.m_Valign = GR_TEXT_V_ALIGN_CENTER;
     attrs.m_Multiline = false;
 
-    plotter->PlotText( VECTOR2I( plotX, plotY ), COLOR4D::UNSPECIFIED, Text, attrs, nullptr /* stroke font */ );
+    plotter->PlotText( VECTOR2I( plotX, plotY ), COLOR4D::UNSPECIFIED, Text, attrs,
+                       nullptr /* stroke font */, KIFONT::METRICS::Default() );
 
     // For some formats (PS, PDF SVG) we plot the drill size list on more than one column
     // because the list must be contained inside the printed page
@@ -334,7 +336,8 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
         if( tool.m_Hole_NotPlated )
             msg += wxT( " (not plated)" );
 
-        plotter->PlotText( VECTOR2I( plotX, y ), COLOR4D::UNSPECIFIED, msg, attrs, nullptr /* stroke font */ );
+        plotter->PlotText( VECTOR2I( plotX, y ), COLOR4D::UNSPECIFIED, msg, attrs,
+                           nullptr /* stroke font */, KIFONT::METRICS::Default() );
 
         intervalle = KiROUND( ( ( charSize * charScale ) + TextWidth ) * 1.2 );
 

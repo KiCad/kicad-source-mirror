@@ -1893,7 +1893,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
 
 
 void PCB_PAINTER::strokeText( const wxString& aText, const VECTOR2I& aPosition,
-                              const TEXT_ATTRIBUTES& aAttrs )
+                              const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics )
 {
     KIFONT::FONT* font = aAttrs.m_Font;
 
@@ -1919,7 +1919,7 @@ void PCB_PAINTER::strokeText( const wxString& aText, const VECTOR2I& aPosition,
         pos += fudge;
     }
 
-    font->Draw( m_gal, aText, pos, aAttrs );
+    font->Draw( m_gal, aText, pos, aAttrs, aFontMetrics );
 }
 
 
@@ -2045,7 +2045,7 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
         }
         else
         {
-            strokeText( resolvedText, aText->GetTextPos(), attrs );
+            strokeText( resolvedText, aText->GetTextPos(), attrs, aText->GetFontMetrics() );
         }
     }
 
@@ -2158,7 +2158,7 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
     }
     else
     {
-        strokeText( resolvedText, aTextBox->GetDrawPos(), attrs );
+        strokeText( resolvedText, aTextBox->GetDrawPos(), attrs, aTextBox->GetFontMetrics() );
     }
 }
 
@@ -2292,7 +2292,8 @@ void PCB_PAINTER::draw( const PCB_GROUP* aGroup, int aLayer )
             attrs.m_Size = VECTOR2I( textSize, textSize );
             attrs.m_StrokeWidth = GetPenSizeForNormal( textSize );
 
-            KIFONT::FONT::GetFont()->Draw( m_gal, aGroup->GetName(), topLeft + textOffset, attrs );
+            KIFONT::FONT::GetFont()->Draw( m_gal, aGroup->GetName(), topLeft + textOffset, attrs,
+                                           aGroup->GetFontMetrics() );
         }
     }
 }
@@ -2466,7 +2467,7 @@ void PCB_PAINTER::draw( const PCB_DIMENSION_BASE* aDimension, int aLayer )
     }
     else
     {
-        strokeText( resolvedText, aDimension->GetTextPos(), attrs );
+        strokeText( resolvedText, aDimension->GetTextPos(), attrs, aDimension->GetFontMetrics() );
     }
 }
 

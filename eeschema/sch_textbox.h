@@ -123,6 +123,8 @@ public:
 protected:
     KIFONT::FONT* getDrawFont() const override;
 
+    const KIFONT::METRICS& getFontMetrics() const override { return GetFontMetrics(); }
+
 protected:
     bool m_excludeFromSim;
 };

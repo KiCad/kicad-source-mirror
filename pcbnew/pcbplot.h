@@ -44,6 +44,12 @@ class ZONE;
 class REPORTER;
 class wxFileName;
 
+namespace KIFONT
+{
+class FONT;
+class METRICS;
+}
+
 
 // Define min and max reasonable values for plot/print scale
 #define PLOT_MIN_SCALE 0.01
@@ -82,7 +88,8 @@ public:
     void PlotDimension( const PCB_DIMENSION_BASE* aDim );
     void PlotPcbTarget( const PCB_TARGET* aMire );
     void PlotZones( const ZONE* aZone, PCB_LAYER_ID aLayer, const SHAPE_POLY_SET& aPolysList );
-    void PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, bool aIsKnockout );
+    void PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, bool aIsKnockout,
+                   const KIFONT::METRICS& aFontMetrics );
     void PlotShape( const PCB_SHAPE* aShape );
 
     /**

@@ -1074,7 +1074,7 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground ) const
     }
     else
     {
-        aPlotter->PlotText( textpos, color, GetShownText( true ), attrs, font );
+        aPlotter->PlotText( textpos, color, GetShownText( true ), attrs, font, GetFontMetrics() );
 
         if( s_poly.size() )
             aPlotter->PlotPoly( s_poly, FILL_T::NO_FILL, penWidth );

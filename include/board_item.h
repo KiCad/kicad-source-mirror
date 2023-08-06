@@ -42,6 +42,11 @@ class SHAPE;
 class PCB_GROUP;
 class FOOTPRINT;
 
+namespace KIFONT
+{
+class METRICS;
+}
+
 
 /**
  * Conditionally flashed vias and pads that interact with zones of different priority can be
@@ -190,6 +195,8 @@ public:
 
     virtual STROKE_PARAMS GetStroke() const;
     virtual void SetStroke( const STROKE_PARAMS& aStroke );
+
+    const KIFONT::METRICS& GetFontMetrics() const;
 
     /**
      * Return the primary layer this item is on.

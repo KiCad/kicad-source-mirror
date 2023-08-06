@@ -333,51 +333,15 @@ int PSLIKE_PLOTTER::returnPostscriptTextWidth( const wxString& aText, int aXSize
                                       : ( aItalic ? hvo_widths : hv_widths );
     double tally = 0;
 
-    for( unsigned i = 0; i < aText.length(); i++ )
+    for( wchar_t asciiCode : aText)
     {
-        wchar_t AsciiCode = aText[i];
-
         // Skip the negation marks and untabled points.
-        if( AsciiCode != '~' && AsciiCode < 256 )
-        {
-            tally += width_table[AsciiCode];
-        }
+        if( asciiCode != '~' && asciiCode < 256 )
+            tally += width_table[asciiCode];
     }
 
     // Widths are proportional to height, but height is enlarged by a scaling factor.
     return KiROUND( aXSize * tally / postscriptTextAscent );
-}
-
-
-void PSLIKE_PLOTTER::postscriptOverlinePositions( const wxString& aText, int aXSize,
-                                                  bool aItalic, bool aBold,
-                                                  std::vector<int> *pos_pairs )
-{
-    /* XXX This function is *too* similar to returnPostscriptTextWidth.
-       Consider merging them... */
-    const double *width_table = aBold ? ( aItalic ? hvbo_widths : hvb_widths )
-                                      : ( aItalic ? hvo_widths : hv_widths );
-    double tally = 0;
-
-    for( unsigned i = 0; i < aText.length(); i++ )
-    {
-        wchar_t AsciiCode = aText[i];
-
-        // Skip the negation marks and untabled points
-        if( AsciiCode != '~' && AsciiCode < 256 )
-        {
-            tally += width_table[AsciiCode];
-        }
-        else
-        {
-            if( AsciiCode == '~' )
-                pos_pairs->push_back( KiROUND( aXSize * tally / postscriptTextAscent ) );
-        }
-    }
-
-    // Special rule: we have to complete the last bar if the ~ aren't matched
-    if( pos_pairs->size() % 2 == 1 )
-        pos_pairs->push_back( KiROUND( aXSize * tally / postscriptTextAscent ) );
 }
 
 
@@ -937,19 +901,20 @@ bool PS_PLOTTER::EndPlot()
 
 
 
-void PS_PLOTTER::Text( const VECTOR2I&             aPos,
-                       const COLOR4D&              aColor,
-                       const wxString&             aText,
-                       const EDA_ANGLE&            aOrient,
-                       const VECTOR2I&             aSize,
-                       enum GR_TEXT_H_ALIGN_T      aH_justify,
-                       enum GR_TEXT_V_ALIGN_T      aV_justify,
-                       int                         aWidth,
-                       bool                        aItalic,
-                       bool                        aBold,
-                       bool                        aMultilineAllowed,
-                       KIFONT::FONT*               aFont,
-                       void*                       aData )
+void PS_PLOTTER::Text( const VECTOR2I&        aPos,
+                       const COLOR4D&         aColor,
+                       const wxString&        aText,
+                       const EDA_ANGLE&       aOrient,
+                       const VECTOR2I&        aSize,
+                       enum GR_TEXT_H_ALIGN_T aH_justify,
+                       enum GR_TEXT_V_ALIGN_T aV_justify,
+                       int                    aWidth,
+                       bool                   aItalic,
+                       bool                   aBold,
+                       bool                   aMultilineAllowed,
+                       KIFONT::FONT*          aFont,
+                       const KIFONT::METRICS& aFontMetrics,
+                       void*                  aData )
 {
     SetCurrentLineWidth( aWidth );
     SetColor( aColor );
@@ -963,16 +928,17 @@ void PS_PLOTTER::Text( const VECTOR2I&             aPos,
     }
 
     PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth, aItalic,
-                   aBold, aMultilineAllowed, aFont, aData );
+                   aBold, aMultilineAllowed, aFont, aFontMetrics, aData );
 }
 
 
-void PS_PLOTTER::PlotText( const VECTOR2I&          aPos,
-                           const COLOR4D&           aColor,
-                           const wxString&          aText,
-                           const TEXT_ATTRIBUTES&   aAttributes,
-                           KIFONT::FONT*            aFont,
-                           void*                    aData )
+void PS_PLOTTER::PlotText( const VECTOR2I&        aPos,
+                           const COLOR4D&         aColor,
+                           const wxString&        aText,
+                           const TEXT_ATTRIBUTES& aAttributes,
+                           KIFONT::FONT*          aFont,
+                           const KIFONT::METRICS& aFontMetrics,
+                           void*                  aData )
 {
     SetCurrentLineWidth( aAttributes.m_StrokeWidth );
     SetColor( aColor );
@@ -985,7 +951,7 @@ void PS_PLOTTER::PlotText( const VECTOR2I&          aPos,
         fprintf( m_outputFile, "%s %g %g phantomshow\n", ps_test.c_str(), pos_dev.x, pos_dev.y );
     }
 
-    PLOTTER::PlotText( aPos, aColor, aText, aAttributes, aFont, aData );
+    PLOTTER::PlotText( aPos, aColor, aText, aAttributes, aFont, aFontMetrics, aData );
 }
 
 

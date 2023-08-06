@@ -33,19 +33,10 @@ namespace KIGFX
     class COLOR4D;
 }
 
-/**
- * Minimum dimension in pixel for drawing/no drawing a text used in Pcbnew to decide to
- * draw (or not) some texts ( like net names on pads/tracks ).
- *
- * When a text height is smaller than MIN_TEXT_SIZE, it is not drawn by Pcbnew.
- */
-#define MIN_TEXT_SIZE   5
-
-/* Absolute minimum dimension in pixel to draw a text as text or a line
- * When a text height is smaller than MIN_DRAWABLE_TEXT_SIZE,
- * it is drawn, but like a line by the draw text function
-*/
-#define MIN_DRAWABLE_TEXT_SIZE 3
+namespace KIFONT
+{
+    class METRICS;
+}
 
 class PLOTTER;
 
@@ -105,12 +96,10 @@ inline int GetKnockoutTextMargin( const VECTOR2I& aSize, int aThickness )
 
 
 /**
- * The full X size is GraphicTextWidth + the thickness of graphic lines.
- *
  * @return the X size of the graphic text.
  */
-int GraphicTextWidth( const wxString& aText, KIFONT::FONT* aFont, const VECTOR2I& aSize,
-                      int aThickness, bool aBold, bool aItalic );
+int GRTextWidth( const wxString& aText, KIFONT::FONT* aFont, const VECTOR2I& aSize,
+                 int aThickness, bool aBold, bool aItalic, const KIFONT::METRICS& aFontMetrics );
 
 /**
  * Print a graphic text through wxDC.
@@ -133,7 +122,8 @@ int GraphicTextWidth( const wxString& aText, KIFONT::FONT* aFont, const VECTOR2I
 void GRPrintText( wxDC* aDC, const VECTOR2I& aPos, const KIGFX::COLOR4D& aColor,
                   const wxString& aText, const EDA_ANGLE& aOrient, const VECTOR2I& aSize,
                   enum GR_TEXT_H_ALIGN_T aH_justify, enum GR_TEXT_V_ALIGN_T aV_justify,
-                  int aWidth, bool aItalic, bool aBold, KIFONT::FONT* aFont );
+                  int aWidth, bool aItalic, bool aBold, KIFONT::FONT* aFont,
+                  const KIFONT::METRICS& aFontMetrics );
 
 
 #endif /* GR_TEXT_H */

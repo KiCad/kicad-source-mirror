@@ -488,7 +488,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground ) const
     {
         VECTOR2I  textpos = positions[ii] + text_offset;
         wxString& txt = strings_list.Item( ii );
-        aPlotter->PlotText( textpos, color, txt, attrs, font );
+        aPlotter->PlotText( textpos, color, txt, attrs, font, GetFontMetrics() );
     }
 
     if( HasHyperlink() )

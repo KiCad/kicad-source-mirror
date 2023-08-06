@@ -65,22 +65,10 @@ public:
     static STROKE_FONT* LoadFont( const wxString& aFontName );
 
     /**
-     * Compute the vertical position of an overbar.  This is the distance between the text
-     * baseline and the overbar.
-     */
-    double ComputeOverbarVerticalPosition( double aGlyphHeight ) const override;
-
-    /**
-     * Compute the vertical position of an underline.  This is the distance between the text
-     * baseline and the underline.
-     */
-    double ComputeUnderlineVerticalPosition( double aGlyphHeight ) const override;
-
-    /**
      * Compute the distance (interline) between 2 lines of text (for multiline texts).  This is
      * the distance between baselines, not the space between line bounding boxes.
      */
-    double GetInterline( double aGlyphHeight, double aLineSpacing = 1.0 ) const override;
+    double GetInterline( double aGlyphHeight, const METRICS& aFontMetrics ) const override;
 
     VECTOR2I GetTextAsGlyphs( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
                               const wxString& aText, const VECTOR2I& aSize,

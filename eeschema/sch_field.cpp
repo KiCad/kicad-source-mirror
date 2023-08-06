@@ -310,7 +310,8 @@ SCH_FIELD::GetRenderCache( const wxString& forResolvedText, const VECTOR2I& forP
         {
             m_renderCache.clear();
 
-            outlineFont->GetLinesAsGlyphs( &m_renderCache, forResolvedText, forPosition, aAttrs );
+            outlineFont->GetLinesAsGlyphs( &m_renderCache, forResolvedText, forPosition, aAttrs,
+                                           GetFontMetrics() );
 
             m_renderCachePos = forPosition;
             m_renderCacheValid = true;
@@ -402,7 +403,7 @@ void SCH_FIELD::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
 
     GRPrintText( DC, textpos, color, GetShownText( true ), orient, GetTextSize(),
                  GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(), IsBold(),
-                 font );
+                 font, GetFontMetrics() );
 }
 
 
@@ -1204,7 +1205,7 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground ) const
     attrs.m_Angle = orient;
     attrs.m_Multiline = false;
 
-    aPlotter->PlotText( textpos, color, GetShownText( true ), attrs, font );
+    aPlotter->PlotText( textpos, color, GetShownText( true ), attrs, font, GetFontMetrics() );
 
     if( IsHypertext() )
     {

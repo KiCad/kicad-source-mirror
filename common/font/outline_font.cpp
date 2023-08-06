@@ -4,8 +4,6 @@
  * Copyright (C) 2021 Ola Rinta-Koski <gitlab@rinta-koski.net>
  * Copyright (C) 2021-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
- * Outline font class
- *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -147,46 +145,17 @@ FT_Error OUTLINE_FONT::loadFace( const wxString& aFontFileName, int aFaceIndex )
 
 
 /**
- * Compute the vertical position of an overbar.  This is the distance between the text
- * baseline and the overbar.
- */
-double OUTLINE_FONT::ComputeOverbarVerticalPosition( double aGlyphHeight ) const
-{
-    // The overbar on actual text is positioned above the bounding box of the glyphs.  However,
-    // that's expensive to calculate so we use an estimation here (as this is only used for
-    // calculating bounding boxes).
-    return aGlyphHeight * m_outlineFontSizeCompensation;
-}
-
-
-/**
- * Compute the vertical position of an underline.  This is the distance between the text
- * baseline and the underline.
- */
-double OUTLINE_FONT::ComputeUnderlineVerticalPosition( double aGlyphHeight ) const
-{
-    return aGlyphHeight * m_underlineOffsetScaler;
-}
-
-
-/**
  * Compute the distance (interline) between 2 lines of text (for multiline texts).  This is
  * the distance between baselines, not the space between line bounding boxes.
  */
-double OUTLINE_FONT::GetInterline( double aGlyphHeight, double aLineSpacing ) const
+double OUTLINE_FONT::GetInterline( double aGlyphHeight, const METRICS& aFontMetrics ) const
 {
-    double pitch = INTERLINE_PITCH_RATIO;
+    double glyphToFontHeight = 1.0;
 
     if( GetFace()->units_per_EM )
-        pitch = GetFace()->height / GetFace()->units_per_EM;
+        glyphToFontHeight = GetFace()->height / GetFace()->units_per_EM;
 
-    double interline = aLineSpacing * aGlyphHeight * pitch * m_outlineFontSizeCompensation;
-
-    // FONT TODO this hack is an attempt to fix interline spacing by eyeballing it
-    static constexpr double interlineHackMultiplier = 1.2;
-    interline *= interlineHackMultiplier;
-
-    return interline;
+    return aFontMetrics.GetInterline( aGlyphHeight * glyphToFontHeight );
 }
 
 
@@ -241,7 +210,8 @@ BOX2I OUTLINE_FONT::getBoundingBox( const std::vector<std::unique_ptr<GLYPH>>& a
 
 void OUTLINE_FONT::GetLinesAsGlyphs( std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
                                      const wxString& aText, const VECTOR2I& aPosition,
-                                     const TEXT_ATTRIBUTES& aAttrs ) const
+                                     const TEXT_ATTRIBUTES& aAttrs,
+                                     const METRICS& aFontMetrics ) const
 {
     wxArrayString         strings;
     std::vector<VECTOR2I> positions;
@@ -251,12 +221,12 @@ void OUTLINE_FONT::GetLinesAsGlyphs( std::vector<std::unique_ptr<GLYPH>>* aGlyph
     if( aAttrs.m_Italic )
         textStyle |= TEXT_STYLE::ITALIC;
 
-    getLinePositions( aText, aPosition, strings, positions, extents, aAttrs );
+    getLinePositions( aText, aPosition, strings, positions, extents, aAttrs, aFontMetrics );
 
     for( size_t i = 0; i < strings.GetCount(); i++ )
     {
         (void) drawMarkup( nullptr, aGlyphs, strings.Item( i ), positions[i], aAttrs.m_Size,
-                           aAttrs.m_Angle, aAttrs.m_Mirrored, aPosition, textStyle );
+                           aAttrs.m_Angle, aAttrs.m_Mirrored, aPosition, textStyle, aFontMetrics );
     }
 }
 

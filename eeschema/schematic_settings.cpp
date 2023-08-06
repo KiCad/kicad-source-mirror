@@ -132,6 +132,9 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
     m_params.emplace_back( new PARAM<double>( "drawing.label_size_ratio",
             &m_LabelSizeRatio, DEFAULT_LABEL_SIZE_RATIO, 0.0, 2.0 ) );
 
+    m_params.emplace_back( new PARAM<double>( "drawing.overbar_offset_ratio",
+            &m_FontMetrics.m_OverbarHeight, m_FontMetrics.m_OverbarHeight ) );
+
     m_params.emplace_back( new PARAM_SCALED<int>( "drawing.pin_symbol_size",
             &m_PinSymbolSize, schIUScale.MilsToIU( defaultPinSymbolSize ), schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( 1000 ),
             1 / schIUScale.IU_PER_MILS ) );
@@ -188,15 +191,15 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
                     m_TemplateFieldNames.AddTemplateFieldNames( cfg->m_Drawing.field_names );
             }, {} ) );
 
-    m_params.emplace_back(
-            new PARAM<BOM_PRESET>( "bom_settings", &m_BomSettings, BOM_PRESET::GroupedByValue() ) );
-    m_params.emplace_back(
-            new PARAM_LIST<BOM_PRESET>( "bom_presets", &m_BomPresets, {} ) );
+    m_params.emplace_back( new PARAM<BOM_PRESET>( "bom_settings",
+            &m_BomSettings, BOM_PRESET::GroupedByValue() ) );
+    m_params.emplace_back( new PARAM_LIST<BOM_PRESET>( "bom_presets",
+            &m_BomPresets, {} ) );
 
-    m_params.emplace_back(
-            new PARAM<BOM_FMT_PRESET>( "bom_fmt_settings", &m_BomFmtSettings, BOM_FMT_PRESET::CSV() ) );
-    m_params.emplace_back(
-            new PARAM_LIST<BOM_FMT_PRESET>( "bom_fmt_presets", &m_BomFmtPresets, {} ) );
+    m_params.emplace_back( new PARAM<BOM_FMT_PRESET>( "bom_fmt_settings",
+            &m_BomFmtSettings, BOM_FMT_PRESET::CSV() ) );
+    m_params.emplace_back( new PARAM_LIST<BOM_FMT_PRESET>( "bom_fmt_presets",
+            &m_BomFmtPresets, {} ) );
 
     m_params.emplace_back( new PARAM<wxString>( "page_layout_descr_file",
             &m_SchDrawingSheetFileName, "" ) );

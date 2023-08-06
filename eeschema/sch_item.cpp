@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2006 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -320,6 +320,15 @@ const wxString& SCH_ITEM::GetDefaultFont() const
     EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
 
     return cfg->m_Appearance.default_font;
+}
+
+
+const KIFONT::METRICS& SCH_ITEM::GetFontMetrics() const
+{
+    if( SCHEMATIC* schematic = Schematic() )
+        return schematic->Settings().m_FontMetrics;
+
+    return KIFONT::METRICS::Default();
 }
 
 

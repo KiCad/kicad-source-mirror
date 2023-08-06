@@ -712,19 +712,20 @@ void PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill, int a
 }
 
 
-void PLOTTER::Text( const VECTOR2I&             aPos,
-                    const COLOR4D&              aColor,
-                    const wxString&             aText,
-                    const EDA_ANGLE&            aOrient,
-                    const VECTOR2I&             aSize,
-                    enum GR_TEXT_H_ALIGN_T      aH_justify,
-                    enum GR_TEXT_V_ALIGN_T      aV_justify,
-                    int                         aPenWidth,
-                    bool                        aItalic,
-                    bool                        aBold,
-                    bool                        aMultilineAllowed,
-                    KIFONT::FONT*               aFont,
-                    void*                       aData )
+void PLOTTER::Text( const VECTOR2I&       aPos,
+                    const COLOR4D&         aColor,
+                    const wxString&        aText,
+                    const EDA_ANGLE&       aOrient,
+                    const VECTOR2I&        aSize,
+                    enum GR_TEXT_H_ALIGN_T aH_justify,
+                    enum GR_TEXT_V_ALIGN_T aV_justify,
+                    int                    aPenWidth,
+                    bool                   aItalic,
+                    bool                   aBold,
+                    bool                   aMultilineAllowed,
+                    KIFONT::FONT*          aFont,
+                    const KIFONT::METRICS& aFontMetrics,
+                    void*                  aData )
 {
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
 
@@ -770,14 +771,16 @@ void PLOTTER::Text( const VECTOR2I&             aPos,
     if( !aFont )
         aFont = KIFONT::FONT::GetFont();
 
-    aFont->Draw( &callback_gal, aText, aPos, attributes );
+    aFont->Draw( &callback_gal, aText, aPos, attributes, aFontMetrics );
 }
 
-void PLOTTER::PlotText( const VECTOR2I& aPos, const COLOR4D& aColor,
-                    const wxString& aText,
-                    const TEXT_ATTRIBUTES& aAttributes,
-                    KIFONT::FONT* aFont,
-                    void* aData )
+void PLOTTER::PlotText( const VECTOR2I&        aPos,
+                        const COLOR4D&         aColor,
+                        const wxString&        aText,
+                        const TEXT_ATTRIBUTES& aAttributes,
+                        KIFONT::FONT*          aFont,
+                        const KIFONT::METRICS& aFontMetrics,
+                        void*                  aData )
 {
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
 
@@ -812,5 +815,5 @@ void PLOTTER::PlotText( const VECTOR2I& aPos, const COLOR4D& aColor,
     if( !aFont )
         aFont = KIFONT::FONT::GetFont();
 
-    aFont->Draw( &callback_gal, aText, aPos, attributes );
+    aFont->Draw( &callback_gal, aText, aPos, attributes, aFontMetrics );
 }

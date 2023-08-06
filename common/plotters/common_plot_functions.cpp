@@ -153,7 +153,7 @@ void PlotDrawingSheet( PLOTTER* plotter, const PROJECT* aProject, const TITLE_BL
             plotter->Text( text->GetTextPos(), color, text->GetShownText( true ),
                            text->GetTextAngle(), text->GetTextSize(), text->GetHorizJustify(),
                            text->GetVertJustify(), penWidth, text->IsItalic(), text->IsBold(),
-                           text->IsMultilineAllowed(), font );
+                           text->IsMultilineAllowed(), font, text->GetFontMetrics() );
         }
             break;
 

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -431,7 +431,8 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground ) const
 
     for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
     {
-        aPlotter->PlotText( positions[ii], color, strings_list.Item( ii ), attrs, font );
+        aPlotter->PlotText( positions[ii], color, strings_list.Item( ii ), attrs, font,
+                            GetFontMetrics() );
     }
 
     if( HasHyperlink() )

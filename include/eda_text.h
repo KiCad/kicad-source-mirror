@@ -49,6 +49,11 @@ namespace KIGFX
     class COLOR4D;
 }
 
+namespace KIFONT
+{
+    class METRICS;
+    }
+
 using KIGFX::RENDER_SETTINGS;
 using KIGFX::COLOR4D;
 
@@ -59,12 +64,10 @@ using KIGFX::COLOR4D;
 
 
 /**
- * This is the "default-of-the-default" hardcoded text size; individual
- * application define their own default policy starting with this
- * (usually with a user option or project).
+ * This is the "default-of-the-default" hardcoded text size; individual application define their
+ * own default policy starting with this (usually with a user option or project).
  */
 #define DEFAULT_SIZE_TEXT   50     // default text height (in mils, i.e. 1/1000")
-#define DIM_ANCRE_TEXTE     2      // Anchor size for text
 
 
 /**
@@ -233,8 +236,8 @@ public:
      * @param aColor text color.
      * @param aDisplay_mode #FILLED or #SKETCH.
      */
-    void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
-                const COLOR4D& aColor, OUTLINE_MODE aDisplay_mode = FILLED );
+    void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, const COLOR4D& aColor,
+                OUTLINE_MODE aDisplay_mode = FILLED );
 
     /**
      * build a list of segments (SHAPE_SEGMENT) to describe a text shape.
@@ -362,6 +365,8 @@ public:
 
 protected:
     virtual KIFONT::FONT* getDrawFont() const;
+
+    virtual const KIFONT::METRICS& getFontMetrics() const;
 
     void cacheShownText();
 

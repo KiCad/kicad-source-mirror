@@ -18,7 +18,6 @@
  */
 
 #include <font/text_attributes.h>
-
 #include <font/outline_font.h>
 
 
@@ -68,10 +67,10 @@ int TEXT_ATTRIBUTES::Compare( const TEXT_ATTRIBUTES& aRhs ) const
         return m_StrokeWidth - aRhs.m_StrokeWidth;
 
     if( m_Angle.AsDegrees() != aRhs.m_Angle.AsDegrees() )
-        return m_Angle.AsDegrees() - aRhs.m_Angle.AsDegrees();
+        return m_Angle.AsDegrees() < aRhs.m_Angle.AsDegrees() ? -1 : 1;
 
     if( m_LineSpacing != aRhs.m_LineSpacing )
-        return m_LineSpacing - aRhs.m_LineSpacing;
+        return m_LineSpacing < aRhs.m_LineSpacing ? -1 : 1;
 
     if( m_Halign != aRhs.m_Halign )
         return m_Halign - aRhs.m_Halign;

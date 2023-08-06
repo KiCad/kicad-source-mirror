@@ -63,6 +63,17 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	m_textSizeUnits->Wrap( -1 );
 	fgSizer2->Add( m_textSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxFIXED_MINSIZE, 5 );
 
+	m_overbarHieghtLabel = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, _("Overbar offset ratio:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_overbarHieghtLabel->Wrap( -1 );
+	fgSizer2->Add( m_overbarHieghtLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_overbarHeightCtrl = new wxTextCtrl( sbSizer4->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer2->Add( m_overbarHeightCtrl, 0, wxEXPAND, 5 );
+
+	m_overbarHeightUnits = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_overbarHeightUnits->Wrap( -1 );
+	fgSizer2->Add( m_overbarHeightUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
 	m_textOffsetRatioLabel = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, _("Label offset ratio:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textOffsetRatioLabel->Wrap( -1 );
 	m_textOffsetRatioLabel->SetToolTip( _("Percentage of the text size to offset labels above (or below) a wire, bus, or pin") );
@@ -78,7 +89,7 @@ PANEL_SETUP_FORMATTING_BASE::PANEL_SETUP_FORMATTING_BASE( wxWindow* parent, wxWi
 	m_offsetRatioUnits->Wrap( -1 );
 	fgSizer2->Add( m_offsetRatioUnits, 0, wxALIGN_CENTER_VERTICAL|wxFIXED_MINSIZE, 5 );
 
-	m_labelSizeRatioLabel = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, _("Global label margin:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelSizeRatioLabel = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, _("Global label margin ratio:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelSizeRatioLabel->Wrap( -1 );
 	m_labelSizeRatioLabel->SetToolTip( _("Percentage of the text size to use as space around a global label") );
 

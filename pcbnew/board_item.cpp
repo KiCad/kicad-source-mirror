@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,6 +89,12 @@ STROKE_PARAMS BOARD_ITEM::GetStroke() const
 void BOARD_ITEM::SetStroke( const STROKE_PARAMS& aStroke )
 {
     wxCHECK( false, /* void */ );
+}
+
+
+const KIFONT::METRICS& BOARD_ITEM::GetFontMetrics() const
+{
+    return KIFONT::METRICS::Default();
 }
 
 

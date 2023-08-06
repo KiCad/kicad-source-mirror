@@ -22,11 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file eda_text.cpp
- * @brief Implementation of base KiCad text object.
- */
-
 #include <algorithm>          // for max
 #include <stddef.h>           // for NULL
 #include <type_traits>        // for swap
@@ -473,6 +468,11 @@ KIFONT::FONT* EDA_TEXT::getDrawFont() const
 }
 
 
+const KIFONT::METRICS& EDA_TEXT::getFontMetrics() const
+{
+    return KIFONT::METRICS::Default();
+}
+
 
 void EDA_TEXT::ClearRenderCache()
 {
@@ -508,7 +508,7 @@ EDA_TEXT::GetRenderCache( const KIFONT::FONT* aFont, const wxString& forResolved
             attrs.m_Angle = resolvedAngle;
 
             font->GetLinesAsGlyphs( &m_render_cache, forResolvedText, GetDrawPos() + aOffset,
-                                    attrs );
+                                    attrs, getFontMetrics() );
             m_render_cache_font = aFont;
             m_render_cache_angle = resolvedAngle;
             m_render_cache_text = forResolvedText;
@@ -538,7 +538,7 @@ void EDA_TEXT::AddRenderCacheGlyph( const SHAPE_POLY_SET& aPoly )
 
 int EDA_TEXT::GetInterline() const
 {
-    return KiROUND( getDrawFont()->GetInterline( GetTextHeight() ) );
+    return KiROUND( getDrawFont()->GetInterline( GetTextHeight(), getFontMetrics() ) );
 }
 
 
@@ -577,20 +577,21 @@ BOX2I EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     VECTOR2D      fontSize( GetTextSize() );
     bool          bold = IsBold();
     bool          italic = IsItalic();
-    VECTOR2I      extents = font->StringBoundaryLimits( text, fontSize, thickness, bold, italic );
+    VECTOR2I      extents = font->StringBoundaryLimits( text, fontSize, thickness, bold, italic,
+                                                        getFontMetrics() );
     int           overbarOffset = 0;
 
     // Creates bounding box (rectangle) for horizontal, left and top justified text. The
     // bounding box will be moved later according to the actual text options
     VECTOR2I textsize = VECTOR2I( extents.x, extents.y );
     VECTOR2I pos = drawPos;
-    int      fudgeFactor = extents.y * 0.17;
+    int      fudgeFactor = KiROUND( extents.y * 0.17 );
 
     if( font->IsStroke() )
         textsize.y += fudgeFactor;
 
     if( IsMultilineAllowed() && aLine > 0 && aLine < (int) strings.GetCount() )
-        pos.y -= KiROUND( aLine * font->GetInterline( fontSize.y ) );
+        pos.y -= KiROUND( aLine * font->GetInterline( fontSize.y, getFontMetrics() ) );
 
     if( text.Contains( wxT( "~{" ) ) )
         overbarOffset = extents.y / 6;
@@ -606,13 +607,15 @@ BOX2I EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
         for( unsigned ii = 1; ii < strings.GetCount(); ii++ )
         {
             text = strings.Item( ii );
-            extents = font->StringBoundaryLimits( text, fontSize, thickness, bold, italic );
+            extents = font->StringBoundaryLimits( text, fontSize, thickness, bold, italic,
+                                                  getFontMetrics() );
             textsize.x = std::max( textsize.x, extents.x );
         }
 
         // interline spacing is only *between* lines, so total height is the height of the first
         // line plus the interline distance (with interline spacing) for all subsequent lines
-        textsize.y += KiROUND( ( strings.GetCount() - 1 ) * font->GetInterline( fontSize.y ) );
+        textsize.y += KiROUND( ( strings.GetCount() - 1 ) * font->GetInterline( fontSize.y,
+                                                                                getFontMetrics() ) );
     }
 
     textsize.y += overbarOffset;
@@ -780,7 +783,7 @@ void EDA_TEXT::printOneLineOfText( const RENDER_SETTINGS* aSettings, const VECTO
         font = KIFONT::FONT::GetFont( aSettings->GetDefaultFont(), IsBold(), IsItalic() );
 
     GRPrintText( DC, aOffset + aPos, aColor, aText, GetDrawRotation(), size, GetHorizJustify(),
-                 GetVertJustify(), penWidth, IsItalic(), IsBold(), font );
+                 GetVertJustify(), penWidth, IsItalic(), IsBold(), font, getFontMetrics() );
 }
 
 
@@ -949,7 +952,7 @@ std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( bool aTriangula
         if( cache )
             callback_gal.DrawGlyphs( *cache );
         else
-            font->Draw( &callback_gal, shownText, drawPos, attrs );
+            font->Draw( &callback_gal, shownText, drawPos, attrs, getFontMetrics() );
     }
     else
     {
@@ -969,7 +972,7 @@ std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( bool aTriangula
         if( cache )
             callback_gal.DrawGlyphs( *cache );
         else
-            font->Draw( &callback_gal, shownText, drawPos, attrs );
+            font->Draw( &callback_gal, shownText, drawPos, attrs, getFontMetrics() );
     }
 
     return shape;

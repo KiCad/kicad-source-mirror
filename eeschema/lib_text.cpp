@@ -327,7 +327,7 @@ void LIB_TEXT::Plot( PLOTTER* plotter, bool aBackground, const VECTOR2I& offset,
     attrs.m_StrokeWidth = penWidth;
     attrs.m_Angle = t1 ? ANGLE_HORIZONTAL : ANGLE_VERTICAL;
 
-    plotter->PlotText( pos, color, GetText(), attrs, font );
+    plotter->PlotText( pos, color, GetText(), attrs, font, GetFontMetrics() );
 }
 
 
@@ -411,7 +411,7 @@ void LIB_TEXT::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
 
     GRPrintText( DC, txtpos, color, GetShownText( true ), orient, GetTextSize(),
                  GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(), IsBold(),
-                 font );
+                 font, GetFontMetrics() );
 }
 
 

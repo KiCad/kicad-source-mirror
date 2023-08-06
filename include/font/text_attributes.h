@@ -23,7 +23,7 @@
 
 #include <math/vector2d.h>
 #include <gal/color4d.h>
-#include "../../libs/kimath/include/geometry/eda_angle.h"
+#include <geometry/eda_angle.h>
 
 
 namespace KIFONT
@@ -82,9 +82,7 @@ public:
     bool              m_Multiline;
     VECTOR2I          m_Size;
 
-    /**
-     * If true, keep rotation angle between -90...90 degrees for readability
-     */
+    // If true, keep rotation angle between -90...90 degrees for readability
     bool              m_KeepUpright;
 };
 

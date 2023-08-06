@@ -270,6 +270,8 @@ public:
 protected:
     KIFONT::FONT* getDrawFont() const override;
 
+    const KIFONT::METRICS& getFontMetrics() const override { return GetFontMetrics(); }
+
 private:
     int      m_id;         ///< Field index, @see enum MANDATORY_FIELD_T
 

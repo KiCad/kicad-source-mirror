@@ -195,13 +195,13 @@ private:
 
     void triLine( const VECTOR2D &a, const VECTOR2D &b, const VECTOR2D &c );
     void strokeText( const wxString& aText, const VECTOR2D& aPosition,
-                     const TEXT_ATTRIBUTES& aAttributes );
+                     const TEXT_ATTRIBUTES& aAttributes, const KIFONT::METRICS& aFontMetrics );
     void bitmapText( const wxString& aText, const VECTOR2D& aPosition,
                      const TEXT_ATTRIBUTES& aAttributes );
     void knockoutText( const wxString& aText, const VECTOR2D& aPosition,
-                       const TEXT_ATTRIBUTES& aAttrs );
+                       const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics );
     void boxText( const wxString& aText, const VECTOR2D& aPosition,
-                  const TEXT_ATTRIBUTES& aAttrs );
+                  const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics );
 
     wxString expandLibItemTextVars( const wxString& aSourceText, const SCH_SYMBOL* aSymbolContext );
 

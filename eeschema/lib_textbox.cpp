@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -323,7 +323,7 @@ void LIB_TEXTBOX::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
 
     GRPrintText( DC, text.GetDrawPos(), color, text.GetShownText( true ), text.GetTextAngle(),
                  text.GetTextSize(), text.GetHorizJustify(), text.GetVertJustify(), penWidth,
-                 text.IsItalic(), text.IsBold(), font );
+                 text.IsItalic(), text.IsBold(), font, GetFontMetrics() );
 }
 
 
@@ -472,7 +472,8 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOf
 
     for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
     {
-        aPlotter->PlotText( positions[ii], color, strings_list.Item( ii ), attrs, font );
+        aPlotter->PlotText( positions[ii], color, strings_list.Item( ii ), attrs, font,
+                            GetFontMetrics() );
     }
 }
 

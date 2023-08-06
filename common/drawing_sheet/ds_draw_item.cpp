@@ -58,8 +58,16 @@
 #include <gr_basic.h>
 #include <trigo.h>
 #include <render_settings.h>
+#include <font/font.h>
+
 
 // ============================ BASE CLASS ==============================
+
+const KIFONT::METRICS& DS_DRAW_ITEM_BASE::GetFontMetrics() const
+{
+    return KIFONT::METRICS::Default();
+}
+
 
 void DS_DRAW_ITEM_BASE::ViewGetLayers( int aLayers[], int& aCount ) const
 {

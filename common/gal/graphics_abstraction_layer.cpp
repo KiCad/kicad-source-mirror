@@ -273,7 +273,7 @@ void GAL::BitmapText( const wxString& aText, const VECTOR2I& aPosition, const ED
     attrs.m_Size = VECTOR2I( m_attributes.m_Size.x, m_attributes.m_Size.y * 0.95 );
     attrs.m_StrokeWidth = GetLineWidth() * 0.74;
 
-    font->Draw( this, aText, aPosition, attrs );
+    font->Draw( this, aText, aPosition, attrs, KIFONT::METRICS::Default() );
 }
 
 

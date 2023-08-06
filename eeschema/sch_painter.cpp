@@ -607,7 +607,7 @@ static bool isFieldsLayer( int aLayer )
 
 
 void SCH_PAINTER::strokeText( const wxString& aText, const VECTOR2D& aPosition,
-                              const TEXT_ATTRIBUTES& aAttrs )
+                              const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics )
 {
     KIFONT::FONT* font = aAttrs.m_Font;
 
@@ -620,7 +620,7 @@ void SCH_PAINTER::strokeText( const wxString& aText, const VECTOR2D& aPosition,
     m_gal->SetIsFill( font->IsOutline() );
     m_gal->SetIsStroke( font->IsStroke() );
 
-    font->Draw( m_gal, aText, aPosition, aAttrs );
+    font->Draw( m_gal, aText, aPosition, aAttrs, aFontMetrics );
 }
 
 
@@ -640,7 +640,7 @@ void SCH_PAINTER::bitmapText( const wxString& aText, const VECTOR2D& aPosition,
 
 
 void SCH_PAINTER::knockoutText( const wxString& aText, const VECTOR2D& aPosition,
-                                const TEXT_ATTRIBUTES& aAttrs )
+                                const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics )
 {
     TEXT_ATTRIBUTES attrs( aAttrs );
     KIFONT::FONT*   font = aAttrs.m_Font;
@@ -664,7 +664,7 @@ void SCH_PAINTER::knockoutText( const wxString& aText, const VECTOR2D& aPosition
     callback_gal.SetIsFill( false );
     callback_gal.SetIsStroke( true );
     callback_gal.SetLineWidth( (float) attrs.m_StrokeWidth );
-    font->Draw( &callback_gal, aText, aPosition, attrs );
+    font->Draw( &callback_gal, aText, aPosition, attrs, aFontMetrics );
 
     BOX2I          bbox = knockouts.BBox( attrs.m_StrokeWidth * 2 );
     SHAPE_POLY_SET finalPoly;
@@ -686,7 +686,7 @@ void SCH_PAINTER::knockoutText( const wxString& aText, const VECTOR2D& aPosition
 
 
 void SCH_PAINTER::boxText( const wxString& aText, const VECTOR2D& aPosition,
-                           const TEXT_ATTRIBUTES& aAttrs )
+                           const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics )
 {
     KIFONT::FONT* font = aAttrs.m_Font;
 
@@ -697,7 +697,7 @@ void SCH_PAINTER::boxText( const wxString& aText, const VECTOR2D& aPosition,
     }
 
     VECTOR2I extents = font->StringBoundaryLimits( aText, aAttrs.m_Size, aAttrs.m_StrokeWidth,
-                                                   aAttrs.m_Bold, aAttrs.m_Italic );
+                                                   aAttrs.m_Bold, aAttrs.m_Italic, aFontMetrics );
     BOX2I box( aPosition, VECTOR2I( extents.x, aAttrs.m_Size.y ) );
 
     switch( aAttrs.m_Halign )
@@ -1078,7 +1078,8 @@ void SCH_PAINTER::draw( const LIB_FIELD* aField, int aLayer, bool aDimmed )
         if( drawingShadows )
             attrs.m_StrokeWidth += getShadowWidth( !aField->IsSelected() );
 
-        strokeText( UnescapeString( aField->GetShownText( true ) ), textpos, attrs );
+        strokeText( UnescapeString( aField->GetShownText( true ) ), textpos, attrs,
+                    aField->GetFontMetrics() );
     }
 
     // Draw the umbilical line when in the schematic editor
@@ -1174,7 +1175,7 @@ void SCH_PAINTER::draw( const LIB_TEXT* aText, int aLayer, bool aDimmed )
         // vertically centered.
         attrs.m_Valign = GR_TEXT_V_ALIGN_CENTER;
 
-        strokeText( shownText, pos, attrs );
+        strokeText( shownText, pos, attrs, aText->GetFontMetrics() );
     }
 }
 
@@ -1205,7 +1206,7 @@ void SCH_PAINTER::draw( const LIB_TEXTBOX* aTextBox, int aLayer, bool aDimmed )
                 attrs.m_Angle = aTextBox->GetDrawRotation();
                 attrs.m_StrokeWidth = KiROUND( getTextThickness( aTextBox ) );
 
-                strokeText( shownText, aTextBox->GetDrawPos(), attrs );
+                strokeText( shownText, aTextBox->GetDrawPos(), attrs, aTextBox->GetFontMetrics() );
             };
 
     m_gal->SetStrokeColor( color );
@@ -1417,7 +1418,7 @@ void SCH_PAINTER::draw( const LIB_PIN* aPin, int aLayer, bool aDimmed )
             attrs.m_StrokeWidth = GetPenSizeForDemiBold( textSize );
             attrs.m_Color = m_schSettings.GetLayerColor( LAYER_OP_CURRENTS );
 
-            knockoutText( aPin->GetOperatingPoint(), mid, attrs );
+            knockoutText( aPin->GetOperatingPoint(), mid, attrs, aPin->GetFontMetrics() );
         }
     }
 
@@ -1694,11 +1695,11 @@ void SCH_PAINTER::draw( const LIB_PIN* aPin, int aLayer, bool aDimmed )
 
                 if( drawingShadows && !attrs.m_Font->IsOutline() )
                 {
-                    strokeText( text[i], aPos, attrs );
+                    strokeText( text[i], aPos, attrs, aPin->GetFontMetrics() );
                 }
                 else if( drawingShadows )
                 {
-                    boxText( text[i], aPos, attrs );
+                    boxText( text[i], aPos, attrs, aPin->GetFontMetrics() );
                 }
                 else if( nonCached( aPin ) && renderTextAsBitmap )
                 {
@@ -1707,7 +1708,7 @@ void SCH_PAINTER::draw( const LIB_PIN* aPin, int aLayer, bool aDimmed )
                 }
                 else
                 {
-                    strokeText( text[i], aPos, attrs );
+                    strokeText( text[i], aPos, attrs, aPin->GetFontMetrics() );
                     const_cast<LIB_PIN*>( aPin )->SetFlags( IS_SHOWN_AS_BITMAP );
                 }
             };
@@ -1931,7 +1932,7 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
         attrs.m_StrokeWidth = GetPenSizeForDemiBold( textSize );
         attrs.m_Color = m_schSettings.GetLayerColor( LAYER_OP_VOLTAGES );
 
-        knockoutText( aLine->GetOperatingPoint(), pos, attrs );
+        knockoutText( aLine->GetOperatingPoint(), pos, attrs, aLine->GetFontMetrics() );
     }
 
     if( drawingOP )
@@ -2168,7 +2169,7 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer )
         else if( attrs.m_Halign == GR_TEXT_H_ALIGN_LEFT && attrs.m_Angle == ANGLE_90 )
             text_offset.y += fudge;
 
-        strokeText( shownText, aText->GetDrawPos() + text_offset, attrs );
+        strokeText( shownText, aText->GetDrawPos() + text_offset, attrs, aText->GetFontMetrics() );
 
     }
     else if( drawingShadows )
@@ -2224,7 +2225,8 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer )
             }
             else
             {
-                strokeText( shownText, aText->GetDrawPos() + text_offset, attrs );
+                strokeText( shownText, aText->GetDrawPos() + text_offset, attrs,
+                            aText->GetFontMetrics() );
             }
 
             const_cast<SCH_TEXT*>( aText )->ClearFlags( IS_SHOWN_AS_BITMAP );
@@ -2268,7 +2270,7 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
                 }
                 else
                 {
-                    strokeText( shownText, aTextBox->GetDrawPos(), attrs );
+                    strokeText( shownText, aTextBox->GetDrawPos(), attrs, aTextBox->GetFontMetrics() );
                 }
             };
 
@@ -2653,7 +2655,7 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
             }
             else
             {
-                strokeText( shownText, textpos, attributes );
+                strokeText( shownText, textpos, attributes, aField->GetFontMetrics() );
             }
 
             const_cast<SCH_FIELD*>( aField )->ClearFlags( IS_SHOWN_AS_BITMAP );

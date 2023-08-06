@@ -118,7 +118,8 @@ void BOARD_ADAPTER::addText( const EDA_TEXT* aText, CONTAINER_2D_BASE* aContaine
 
         attrs.m_Angle = aText->GetDrawRotation();
 
-        font->Draw( &callback_gal, aText->GetShownText( true ), aText->GetDrawPos(), attrs );
+        font->Draw( &callback_gal, aText->GetShownText( true ), aText->GetDrawPos(), attrs,
+                    aOwner->GetFontMetrics() );
     }
 }
 

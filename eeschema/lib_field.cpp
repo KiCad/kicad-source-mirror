@@ -155,7 +155,7 @@ void LIB_FIELD::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
         font = KIFONT::FONT::GetFont( aSettings->GetDefaultFont(), IsBold(), IsItalic() );
 
     GRPrintText( DC, text_pos, color, text, GetTextAngle(), GetTextSize(), GetHorizJustify(),
-                 GetVertJustify(), penWidth, IsItalic(), IsBold(), font );
+                 GetVertJustify(), penWidth, IsItalic(), IsBold(), font, GetFontMetrics() );
 }
 
 
@@ -402,7 +402,7 @@ void LIB_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
     attrs.m_Angle = orient;
     attrs.m_Multiline = false;
 
-    aPlotter->PlotText( textpos, color, GetShownText( true ), attrs, font );
+    aPlotter->PlotText( textpos, color, GetShownText( true ), attrs, font, GetFontMetrics() );
 }
 
 

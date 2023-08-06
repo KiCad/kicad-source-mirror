@@ -1976,19 +1976,20 @@ void GERBER_PLOTTER::FlashRegularPolygon( const VECTOR2I& aShapePos, int aDiamet
 }
 
 
-void GERBER_PLOTTER::Text( const VECTOR2I&             aPos,
-                           const COLOR4D&              aColor,
-                           const wxString&             aText,
-                           const EDA_ANGLE&            aOrient,
-                           const VECTOR2I&             aSize,
-                           enum GR_TEXT_H_ALIGN_T      aH_justify,
-                           enum GR_TEXT_V_ALIGN_T      aV_justify,
-                           int                         aWidth,
-                           bool                        aItalic,
-                           bool                        aBold,
-                           bool                        aMultilineAllowed,
-                           KIFONT::FONT*               aFont,
-                           void*                       aData )
+void GERBER_PLOTTER::Text( const VECTOR2I&        aPos,
+                           const COLOR4D&         aColor,
+                           const wxString&        aText,
+                           const EDA_ANGLE&       aOrient,
+                           const VECTOR2I&        aSize,
+                           enum GR_TEXT_H_ALIGN_T aH_justify,
+                           enum GR_TEXT_V_ALIGN_T aV_justify,
+                           int                    aWidth,
+                           bool                   aItalic,
+                           bool                   aBold,
+                           bool                   aMultilineAllowed,
+                           KIFONT::FONT*          aFont,
+                           const KIFONT::METRICS& aFontMetrics,
+                           void*                  aData )
 {
     GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
 
@@ -1996,22 +1997,24 @@ void GERBER_PLOTTER::Text( const VECTOR2I&             aPos,
         formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
 
     PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth,
-                   aItalic, aBold, aMultilineAllowed, aFont, aData );
+                   aItalic, aBold, aMultilineAllowed, aFont, aFontMetrics, aData );
 }
 
 
-void GERBER_PLOTTER::PlotText( const VECTOR2I& aPos, const COLOR4D& aColor,
-                    const wxString& aText,
-                    const TEXT_ATTRIBUTES& aAttributes,
-                    KIFONT::FONT* aFont,
-                    void* aData )
+void GERBER_PLOTTER::PlotText( const VECTOR2I&        aPos,
+                               const COLOR4D&         aColor,
+                               const wxString&        aText,
+                               const TEXT_ATTRIBUTES& aAttributes,
+                               KIFONT::FONT*          aFont,
+                               const KIFONT::METRICS& aFontMetrics,
+                               void*                  aData )
 {
     GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
 
     if( gbr_metadata )
         formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
 
-    PLOTTER::PlotText( aPos, aColor, aText, aAttributes, aFont, aData );
+    PLOTTER::PlotText( aPos, aColor, aText, aAttributes, aFont, aFontMetrics, aData );
 }
 
 void GERBER_PLOTTER::SetLayerPolarity( bool aPositive )

@@ -83,9 +83,8 @@ public:
                                       void* aData ) override;
 
     /**
-     * The SetColor implementation is split with the subclasses:
-     * The PSLIKE computes the rgb values, the subclass emits the
-     * operator to actually do it
+     * The SetColor implementation is split with the subclasses: the PSLIKE computes the rgb
+     * values, the subclass emits the operator to actually do it
      */
     virtual void SetColor( const COLOR4D& color ) override;
 
@@ -93,9 +92,8 @@ protected:
     /**
      * This is the core for postscript/PDF text alignment.
      *
-     * It computes the transformation matrix to generate a user space
-     * system aligned with the text. Even the PS uses the concat
-     * operator to simplify PDF generation (concat is everything PDF
+     * It computes the transformation matrix to generate a user space system aligned with the text.
+     * Even the PS uses the concat operator to simplify PDF generation (concat is everything PDF
      * has to modify the CTM. Lots of parameters, both in and out.
      */
     void computeTextParameters( const VECTOR2I&          aPos,
@@ -117,15 +115,6 @@ protected:
                                 double                   *ctm_f,
                                 double                   *heightFactor );
 
-    /**
-     * Computes the x coordinates for the overlining in a string of text.
-     * Fills the passed vector with couples of (start, stop) values to be
-     * used in the text coordinate system (use computeTextParameters to
-     * obtain the parameters to establish such a system)
-     */
-    void postscriptOverlinePositions( const wxString& aText, int aXSize, bool aItalic, bool aBold,
-                                      std::vector<int> *pos_pairs );
-
     /// convert a wxString unicode string to a char string compatible with the accepted
     /// string plotter format (convert special chars and non ascii7 chars)
     virtual std::string encodeStringForPlotter( const wxString& aUnicode );
@@ -137,10 +126,9 @@ protected:
     static const double postscriptTextAscent; // = 0.718;
 
     /**
-     * Sister function for the GraphicTextWidth in drawtxt.cpp
-     * Does the same processing (i.e. calculates a text string width) but
-     * using postscript metrics for the Helvetica font (optionally used for
-     * PS and PDF plotting
+     * Sister function for the GRTextWidth in gr_text.cpp
+     * Does the same processing (i.e. calculates a text string width) but using postscript metrics
+     * for the Helvetica font (optionally used for PS and PDF plotting
      */
     int returnPostscriptTextWidth( const wxString& aText, int aXSize, bool aItalic, bool aBold );
 
@@ -217,26 +205,28 @@ public:
                             double aScaleFactor ) override;
 
     virtual void PenTo( const VECTOR2I& pos, char plume ) override;
-    virtual void Text( const VECTOR2I&             aPos,
-                       const COLOR4D&              aColor,
-                       const wxString&             aText,
-                       const EDA_ANGLE&            aOrient,
-                       const VECTOR2I&             aSize,
-                       enum GR_TEXT_H_ALIGN_T      aH_justify,
-                       enum GR_TEXT_V_ALIGN_T      aV_justify,
-                       int                         aWidth,
-                       bool                        aItalic,
-                       bool                        aBold,
-                       bool                        aMultilineAllowed = false,
-                       KIFONT::FONT*               aFont = nullptr,
-                       void*                       aData = nullptr ) override;
+    virtual void Text( const VECTOR2I&        aPos,
+                       const COLOR4D&         aColor,
+                       const wxString&        aText,
+                       const EDA_ANGLE&       aOrient,
+                       const VECTOR2I&        aSize,
+                       enum GR_TEXT_H_ALIGN_T aH_justify,
+                       enum GR_TEXT_V_ALIGN_T aV_justify,
+                       int                    aWidth,
+                       bool                   aItalic,
+                       bool                   aBold,
+                       bool                   aMultilineAllowed,
+                       KIFONT::FONT*          aFont,
+                       const KIFONT::METRICS& aFontMetrics,
+                       void*                  aData = nullptr ) override;
 
-    virtual void PlotText( const VECTOR2I&          aPos,
-                           const COLOR4D&           aColor,
-                           const wxString&          aText,
-                           const TEXT_ATTRIBUTES&   aAttributes,
-                           KIFONT::FONT*            aFont,
-                           void*                    aData = nullptr ) override;
+    virtual void PlotText( const VECTOR2I&        aPos,
+                           const COLOR4D&         aColor,
+                           const wxString&        aText,
+                           const TEXT_ATTRIBUTES& aAttributes,
+                           KIFONT::FONT*          aFont,
+                           const KIFONT::METRICS& aFontMetrics,
+                           void*                  aData = nullptr ) override;
 
 
 protected:
@@ -347,26 +337,28 @@ public:
 
     virtual void PenTo( const VECTOR2I& pos, char plume ) override;
 
-    virtual void Text( const VECTOR2I&             aPos,
-                       const COLOR4D&              aColor,
-                       const wxString&             aText,
-                       const EDA_ANGLE&            aOrient,
-                       const VECTOR2I&             aSize,
-                       enum GR_TEXT_H_ALIGN_T      aH_justify,
-                       enum GR_TEXT_V_ALIGN_T      aV_justify,
-                       int                         aWidth,
-                       bool                        aItalic,
-                       bool                        aBold,
-                       bool                        aMultilineAllowed = false,
-                       KIFONT::FONT*               aFont = nullptr,
-                       void*                       aData = nullptr ) override;
+    virtual void Text( const VECTOR2I&        aPos,
+                       const COLOR4D&         aColor,
+                       const wxString&        aText,
+                       const EDA_ANGLE&       aOrient,
+                       const VECTOR2I&        aSize,
+                       enum GR_TEXT_H_ALIGN_T aH_justify,
+                       enum GR_TEXT_V_ALIGN_T aV_justify,
+                       int                    aWidth,
+                       bool                   aItalic,
+                       bool                   aBold,
+                       bool                   aMultilineAllowed,
+                       KIFONT::FONT*          aFont,
+                       const KIFONT::METRICS& aFontMetrics,
+                       void*                  aData = nullptr ) override;
 
-    virtual void PlotText( const VECTOR2I&          aPos,
-                           const COLOR4D&           aColor,
-                           const wxString&          aText,
-                           const TEXT_ATTRIBUTES&   aAttributes,
-                           KIFONT::FONT*            aFont,
-                           void*                    aData = nullptr ) override;
+    virtual void PlotText( const VECTOR2I&        aPos,
+                           const COLOR4D&         aColor,
+                           const wxString&        aText,
+                           const TEXT_ATTRIBUTES& aAttributes,
+                           KIFONT::FONT*          aFont,
+                           const KIFONT::METRICS& aFontMetrics,
+                           void*                  aData = nullptr ) override;
 
     void HyperlinkBox( const BOX2I& aBox, const wxString& aDestinationURL ) override;
 
@@ -605,27 +597,29 @@ public:
      */
     virtual void EndBlock( void* aData ) override;
 
-    virtual void Text( const VECTOR2I&             aPos,
-                       const COLOR4D&              aColor,
-                       const wxString&             aText,
-                       const EDA_ANGLE&            aOrient,
-                       const VECTOR2I&             aSize,
-                       enum GR_TEXT_H_ALIGN_T      aH_justify,
-                       enum GR_TEXT_V_ALIGN_T      aV_justify,
-                       int                         aWidth,
-                       bool                        aItalic,
-                       bool                        aBold,
-                       bool                        aMultilineAllowed = false,
-                       KIFONT::FONT*               aFont = nullptr,
-                       void*                       aData = nullptr ) override;
+    virtual void Text( const VECTOR2I&        aPos,
+                       const COLOR4D&         aColor,
+                       const wxString&        aText,
+                       const EDA_ANGLE&       aOrient,
+                       const VECTOR2I&        aSize,
+                       enum GR_TEXT_H_ALIGN_T aH_justify,
+                       enum GR_TEXT_V_ALIGN_T aV_justify,
+                       int                    aWidth,
+                       bool                   aItalic,
+                       bool                   aBold,
+                       bool                   aMultilineAllowed,
+                       KIFONT::FONT*          aFont,
+                       const KIFONT::METRICS& aFontMetrics,
+                       void*                  aData = nullptr ) override;
 
 
-    virtual void PlotText( const VECTOR2I&          aPos,
-                           const COLOR4D&           aColor,
-                           const wxString&          aText,
-                           const TEXT_ATTRIBUTES&   aAttributes,
-                           KIFONT::FONT*            aFont,
-                           void*                    aData = nullptr ) override;
+    virtual void PlotText( const VECTOR2I&        aPos,
+                           const COLOR4D&         aColor,
+                           const wxString&        aText,
+                           const TEXT_ATTRIBUTES& aAttributes,
+                           KIFONT::FONT*          aFont,
+                           const KIFONT::METRICS& aFontMetrics,
+                           void*                  aData = nullptr ) override;
 
 protected:
     virtual void Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
@@ -665,9 +659,6 @@ protected:
                                         // color, pen size, fill mode ...
                                         // the new SVG stype must be output on file
     PLOT_DASH_TYPE m_dashed;            // plot line style
-    bool           m_useInch;           // is 0 if the step size is 10**-n*mm
-                                        // is 1 if the step size is 10**-n*inch
-                                        // Where n is given from m_precision
     unsigned       m_precision;         // How fine the step size is
                                         // Use 3-6 (3 means um precision, 6 nm precision) in PcbNew
                                         // 3-4 in other modules (avoid values >4 to avoid overflow)

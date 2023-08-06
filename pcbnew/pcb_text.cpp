@@ -484,7 +484,7 @@ void PCB_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearance, 
                     textShape.Append( point.x, point.y );
             } );
 
-    font->Draw( &callback_gal, GetShownText( true ), GetTextPos(), attrs );
+    font->Draw( &callback_gal, GetShownText( true ), GetTextPos(), attrs, GetFontMetrics() );
     textShape.Simplify( SHAPE_POLY_SET::PM_FAST );
 
     if( IsKnockout() )

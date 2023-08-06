@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -58,6 +58,12 @@ class PCB_MARKER;
 class NET_SETTINGS;
 class NETINFO_LIST;
 class TEXT_ATTRIBUTES;
+
+namespace KIFONT
+{
+class FONT;
+class METRICS;
+}
 
 namespace KIGFX
 {
@@ -209,7 +215,7 @@ protected:
     virtual int getViaDrillSize( const PCB_VIA* aVia ) const;
 
     void strokeText( const wxString& aText, const VECTOR2I& aPosition,
-                     const TEXT_ATTRIBUTES& aAttrs );
+                     const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics );
 
 protected:
     PCB_RENDER_SETTINGS m_pcbSettings;

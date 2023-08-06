@@ -476,7 +476,7 @@ void PCB_TEXTBOX::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearanc
                     buffer.Append( point.x, point.y );
             } );
 
-    font->Draw( &callback_gal, GetShownText( true ), GetDrawPos(), GetAttributes() );
+    font->Draw( &callback_gal, GetShownText( true ), GetDrawPos(), GetAttributes(), GetFontMetrics() );
 
     if( aClearance > 0 || aErrorLoc == ERROR_OUTSIDE )
     {

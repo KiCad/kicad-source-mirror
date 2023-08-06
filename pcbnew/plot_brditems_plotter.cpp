@@ -282,7 +282,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
     if( GetPlotReference() && m_layerMask[textLayer]
         && ( textItem->IsVisible() || GetPlotInvisibleText() ) )
     {
-        PlotText( textItem, textLayer, textItem->IsKnockout() );
+        PlotText( textItem, textLayer, textItem->IsKnockout(), textItem->GetFontMetrics() );
     }
 
     textItem  = &aFootprint->Value();
@@ -291,7 +291,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
     if( GetPlotValue() && m_layerMask[textLayer]
         && ( textItem->IsVisible() || GetPlotInvisibleText() ) )
     {
-        PlotText( textItem, textLayer, textItem->IsKnockout() );
+        PlotText( textItem, textLayer, textItem->IsKnockout(), textItem->GetFontMetrics() );
     }
 
 
@@ -333,7 +333,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
         if( text->GetText() == wxT( "${VALUE}" ) && !GetPlotValue() )
             continue;
 
-        PlotText( text, textLayer, text->IsKnockout() );
+        PlotText( text, textLayer, text->IsKnockout(), text->GetFontMetrics() );
     }
 }
 
@@ -349,14 +349,14 @@ void BRDITEMS_PLOTTER::PlotBoardGraphicItem( const BOARD_ITEM* item )
     case PCB_TEXT_T:
     {
         const PCB_TEXT* text = static_cast<const PCB_TEXT*>( item );
-        PlotText( text, text->GetLayer(), text->IsKnockout() );
+        PlotText( text, text->GetLayer(), text->IsKnockout(), text->GetFontMetrics() );
         break;
     }
 
     case PCB_TEXTBOX_T:
     {
         const PCB_TEXTBOX* textbox = static_cast<const PCB_TEXTBOX*>( item );
-        PlotText( textbox, textbox->GetLayer(), textbox->IsKnockout() );
+        PlotText( textbox, textbox->GetLayer(), textbox->IsKnockout(), textbox->GetFontMetrics() );
         PlotShape( textbox );
         break;
     }
@@ -390,7 +390,7 @@ void BRDITEMS_PLOTTER::PlotDimension( const PCB_DIMENSION_BASE* aDim )
     // the white items are not seen on a white paper or screen
     m_plotter->SetColor( color != WHITE ? color : LIGHTGRAY);
 
-    PlotText( aDim, aDim->GetLayer(), false );
+    PlotText( aDim, aDim->GetLayer(), false, aDim->GetFontMetrics() );
 
     PCB_SHAPE temp_item;
 
@@ -513,7 +513,8 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
 
             if( m_layerMask[ textbox->GetLayer() ] )
             {
-                PlotText( textbox, textbox->GetLayer(), textbox->IsKnockout() );
+                PlotText( textbox, textbox->GetLayer(), textbox->IsKnockout(),
+                          textbox->GetFontMetrics() );
                 PlotShape( textbox );
             }
 
@@ -546,7 +547,8 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
 
 
 #include <font/stroke_font.h>
-void BRDITEMS_PLOTTER::PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, bool aIsKnockout )
+void BRDITEMS_PLOTTER::PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, bool aIsKnockout,
+                                 const KIFONT::METRICS& aFontMetrics )
 {
     KIFONT::FONT* font = aText->GetFont();
 
@@ -609,12 +611,12 @@ void BRDITEMS_PLOTTER::PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, boo
         for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
         {
             wxString& txt =  strings_list.Item( ii );
-            m_plotter->PlotText( positions[ii], color, txt, attrs, font, &gbr_metadata );
+            m_plotter->PlotText( positions[ii], color, txt, attrs, font, aFontMetrics, &gbr_metadata );
         }
     }
     else
     {
-        m_plotter->PlotText( pos, color, shownText, attrs, font, &gbr_metadata );
+        m_plotter->PlotText( pos, color, shownText, attrs, font, aFontMetrics, &gbr_metadata );
     }
 }
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,11 +42,14 @@ class SCH_SHEET_PATH;
 class SCHEMATIC;
 class LINE_READER;
 class SCH_EDIT_FRAME;
-class wxFindReplaceData;
 class PLOTTER;
-class NETLIST_OBJECT;
 class NETLIST_OBJECT_LIST;
 class PLOTTER;
+
+namespace KIFONT
+{
+class METRICS;
+}
 
 using KIGFX::RENDER_SETTINGS;
 
@@ -271,6 +274,8 @@ public:
     virtual int GetPenWidth() const { return 0; }
 
     const wxString& GetDefaultFont() const;
+
+    const KIFONT::METRICS& GetFontMetrics() const;
 
     bool RenderAsBitmap( double aWorldScale ) const override;
 

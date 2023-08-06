@@ -1551,19 +1551,20 @@ function ShM(aEntries) {
 }
 
 
-void PDF_PLOTTER::Text( const VECTOR2I&             aPos,
-                        const COLOR4D&              aColor,
-                        const wxString&             aText,
-                        const EDA_ANGLE&            aOrient,
-                        const VECTOR2I&             aSize,
-                        enum GR_TEXT_H_ALIGN_T      aH_justify,
-                        enum GR_TEXT_V_ALIGN_T      aV_justify,
-                        int                         aWidth,
-                        bool                        aItalic,
-                        bool                        aBold,
-                        bool                        aMultilineAllowed,
-                        KIFONT::FONT*               aFont,
-                        void*                       aData )
+void PDF_PLOTTER::Text( const VECTOR2I&        aPos,
+                        const COLOR4D&         aColor,
+                        const wxString&        aText,
+                        const EDA_ANGLE&       aOrient,
+                        const VECTOR2I&        aSize,
+                        enum GR_TEXT_H_ALIGN_T aH_justify,
+                        enum GR_TEXT_V_ALIGN_T aV_justify,
+                        int                    aWidth,
+                        bool                   aItalic,
+                        bool                   aBold,
+                        bool                   aMultilineAllowed,
+                        KIFONT::FONT*          aFont,
+                        const KIFONT::METRICS& aFontMetrics,
+                        void*                  aData )
 {
     // PDF files do not like 0 sized texts which create broken files.
     if( aSize.x == 0 || aSize.y == 0 )
@@ -1596,7 +1597,8 @@ void PDF_PLOTTER::Text( const VECTOR2I&             aPos,
     if( !aFont )
         aFont = KIFONT::FONT::GetFont();
 
-    VECTOR2I full_box( aFont->StringBoundaryLimits( aText, t_size, aWidth, aBold, aItalic ) );
+    VECTOR2I full_box( aFont->StringBoundaryLimits( aText, t_size, aWidth, aBold, aItalic,
+                                                    aFontMetrics ) );
     VECTOR2I box_x( full_box.x, 0 );
     VECTOR2I box_y( 0, full_box.y );
 
@@ -1623,7 +1625,8 @@ void PDF_PLOTTER::Text( const VECTOR2I&             aPos,
 
         // Extract the changed width and rotate by the orientation to get the offset for the
         // next word
-        VECTOR2I bbox( aFont->StringBoundaryLimits( word, t_size, aWidth, aBold, aItalic ).x, 0 );
+        VECTOR2I bbox( aFont->StringBoundaryLimits( word, t_size, aWidth,
+                                                    aBold, aItalic, aFontMetrics ).x, 0 );
         RotatePoint( bbox, aOrient );
         pos += bbox;
 
@@ -1647,15 +1650,17 @@ void PDF_PLOTTER::Text( const VECTOR2I&             aPos,
 
     // Plot the stroked text (if requested)
     PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth, aItalic,
-                   aBold, aMultilineAllowed, aFont );
+                   aBold, aMultilineAllowed, aFont, aFontMetrics );
 }
 
 
-void PDF_PLOTTER::PlotText( const VECTOR2I& aPos, const COLOR4D& aColor,
-                    const wxString& aText,
-                    const TEXT_ATTRIBUTES& aAttributes,
-                    KIFONT::FONT* aFont,
-                    void* aData )
+void PDF_PLOTTER::PlotText( const VECTOR2I&        aPos,
+                            const COLOR4D&         aColor,
+                            const wxString&        aText,
+                            const TEXT_ATTRIBUTES& aAttributes,
+                            KIFONT::FONT*          aFont,
+                            const KIFONT::METRICS& aFontMetrics,
+                            void*                  aData )
 {
     VECTOR2I size = aAttributes.m_Size;
 
@@ -1666,12 +1671,9 @@ void PDF_PLOTTER::PlotText( const VECTOR2I& aPos, const COLOR4D& aColor,
     if( aAttributes.m_Mirrored )
         size.x = -size.x;
 
-    PDF_PLOTTER::Text( aPos, aColor, aText, aAttributes.m_Angle, size,
-                       aAttributes.m_Halign, aAttributes.m_Valign,
-                       aAttributes.m_StrokeWidth,
-                       aAttributes.m_Italic, aAttributes.m_Bold,
-                       aAttributes.m_Multiline,
-                       aFont, aData );
+    PDF_PLOTTER::Text( aPos, aColor, aText, aAttributes.m_Angle, size, aAttributes.m_Halign,
+                       aAttributes.m_Valign, aAttributes.m_StrokeWidth, aAttributes.m_Italic,
+                       aAttributes.m_Bold, aAttributes.m_Multiline, aFont, aFontMetrics, aData );
 }
 
 

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -15,12 +15,6 @@
  *
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-/**
- * Plotting engine (DXF)
- *
- * @file plotter_dxf.h
  */
 
 #pragma once
@@ -162,16 +156,19 @@ public:
                        int                    aWidth,
                        bool                   aItalic,
                        bool                   aBold,
-                       bool                   aMultilineAllowed = false,
-                       KIFONT::FONT*          aFont = nullptr,
+                       bool                   aMultilineAllowed,
+                       KIFONT::FONT*          aFont,
+                       const KIFONT::METRICS& aFontMetrics,
                        void*                  aData = nullptr ) override;
 
-    virtual void PlotText( const VECTOR2I&          aPos,
-                           const COLOR4D&           aColor,
-                           const wxString&          aText,
-                           const TEXT_ATTRIBUTES&   aAttributes,
-                           KIFONT::FONT*            aFont,
-                           void*                    aData = nullptr ) override;
+    virtual void PlotText( const VECTOR2I&        aPos,
+                           const COLOR4D&         aColor,
+                           const wxString&        aText,
+                           const TEXT_ATTRIBUTES& aAttributes,
+                           KIFONT::FONT*          aFont,
+                           const KIFONT::METRICS& aFontMetrics,
+                           void*                  aData = nullptr ) override;
+
     /**
      * Set the units to use for plotting the DXF file.
      *
@@ -215,9 +212,8 @@ protected:
                       const EDA_ANGLE& aEndAngle, double aRadius, FILL_T aFill,
                       int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
 
-    void plotOneLineOfText( const VECTOR2I& aPos, const COLOR4D& aColor,
-                            const wxString& aText,
-                            const TEXT_ATTRIBUTES& aAttributes );
+    void plotOneLineOfText( const VECTOR2I& aPos, const COLOR4D& aColor, const wxString& aText,
+                            const TEXT_ATTRIBUTES& aAttrs );
 
     bool           m_textAsLines;
     COLOR4D        m_currentColor;

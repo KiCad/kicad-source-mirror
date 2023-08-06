@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2021 Ola Rinta-Koski
- * Copyright (C) 2021-2022 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * Font abstract base class
  *
@@ -42,12 +42,12 @@ class GAL;
 
 enum TEXT_STYLE
 {
-    BOLD = 1,
-    ITALIC = 1 << 1,
-    SUBSCRIPT = 1 << 2,
+    BOLD        = 1,
+    ITALIC      = 1 << 1,
+    SUBSCRIPT   = 1 << 2,
     SUPERSCRIPT = 1 << 3,
-    OVERBAR = 1 << 4,
-    UNDERLINE = 1 << 5
+    OVERBAR     = 1 << 4,
+    UNDERLINE   = 1 << 5
 };
 
 
@@ -87,17 +87,42 @@ inline bool IsSubscript( TEXT_STYLE_FLAGS aFlags )
 }
 
 
-inline bool IsOverbar( TEXT_STYLE_FLAGS aFlags )
-{
-    return aFlags & TEXT_STYLE::OVERBAR;
-}
-
-
-std::string TextStyleAsString( TEXT_STYLE_FLAGS aFlags );
-
-
 namespace KIFONT
 {
+class METRICS
+{
+public:
+    /**
+     * Compute the vertical position of an overbar.  This is the distance between the text
+     * baseline and the overbar.
+     */
+    double GetOverbarVerticalPosition( double aGlyphHeight ) const
+    {
+        return aGlyphHeight * m_OverbarHeight;
+    }
+
+    /**
+     * Compute the vertical position of an underline.  This is the distance between the text
+     * baseline and the underline.
+     */
+    double GetUnderlineVerticalPosition( double aGlyphHeight ) const
+    {
+        return aGlyphHeight * m_UnderlineOffset;
+    }
+
+    double GetInterline( double aFontHeight ) const
+    {
+        return aFontHeight * m_InterlinePitch;
+    }
+
+    static const METRICS& Default();
+
+public:
+    double m_InterlinePitch  =  1.68;
+    double m_OverbarHeight   =  1.23;
+    double m_UnderlineOffset = -0.16;
+};
+
 /**
  * FONT is an abstract base class for both outline and stroke fonts
  */
@@ -132,12 +157,13 @@ public:
      * @param aAttrs are the styling attributes of the text, including its rotation
      */
     void Draw( KIGFX::GAL* aGal, const wxString& aText, const VECTOR2I& aPosition,
-               const VECTOR2I& aCursor, const TEXT_ATTRIBUTES& aAttrs ) const;
+               const VECTOR2I& aCursor, const TEXT_ATTRIBUTES& aAttributes,
+               const METRICS& aFontMetrics ) const;
 
     void Draw( KIGFX::GAL* aGal, const wxString& aText, const VECTOR2I& aPosition,
-               const TEXT_ATTRIBUTES& aAttributes ) const
+               const TEXT_ATTRIBUTES& aAttributes, const METRICS& aFontMetrics ) const
     {
-        Draw( aGal, aText, aPosition, VECTOR2I( 0, 0 ), aAttributes );
+        Draw( aGal, aText, aPosition, VECTOR2I( 0, 0 ), aAttributes, aFontMetrics );
     }
 
     /**
@@ -146,7 +172,7 @@ public:
      * @return a VECTOR2I giving the width and height of text.
      */
     VECTOR2I StringBoundaryLimits( const wxString& aText, const VECTOR2I& aSize, int aThickness,
-                                   bool aBold, bool aItalic ) const;
+                                   bool aBold, bool aItalic, const METRICS& aFontMetrics ) const;
 
     /**
      * Insert \n characters into text to ensure that no lines are wider than \a aColumnWidth.
@@ -155,22 +181,10 @@ public:
                         int aThickness, bool aBold, bool aItalic ) const;
 
     /**
-     * Compute the vertical position of an overbar.  This is the distance between the text
-     * baseline and the overbar.
-     */
-    virtual double ComputeOverbarVerticalPosition( double aGlyphHeight ) const = 0;
-
-    /**
-     * Compute the vertical position of an underline.  This is the distance between the text
-     * baseline and the underline.
-     */
-    virtual double ComputeUnderlineVerticalPosition( double aGlyphHeight ) const = 0;
-
-    /**
      * Compute the distance (interline) between 2 lines of text (for multiline texts).  This is
      * the distance between baselines, not the space between line bounding boxes.
      */
-    virtual double GetInterline( double aGlyphHeight, double aLineSpacing = 1.0 ) const = 0;
+    virtual double GetInterline( double aGlyphHeight, const METRICS& aFontMetrics ) const = 0;
 
     /**
      * Convert text string to an array of GLYPHs.
@@ -225,7 +239,7 @@ protected:
     void drawSingleLineText( KIGFX::GAL* aGal, BOX2I* aBoundingBox, const wxString& aText,
                              const VECTOR2I& aPosition, const VECTOR2I& aSize,
                              const EDA_ANGLE& aAngle, bool aMirror, const VECTOR2I& aOrigin,
-                             bool aItalic, bool aUnderline ) const;
+                             bool aItalic, bool aUnderline, const METRICS& aFontMetrics ) const;
 
     /**
      * Computes the bounding box for a single line of text.
@@ -238,22 +252,21 @@ protected:
      * @return new cursor position
      */
     VECTOR2I boundingBoxSingleLine( BOX2I* aBBox, const wxString& aText, const VECTOR2I& aPosition,
-                                    const VECTOR2I& aSize, bool aItalic ) const;
+                                    const VECTOR2I& aSize, bool aItalic, const METRICS& aFontMetrics ) const;
 
     void getLinePositions( const wxString& aText, const VECTOR2I& aPosition,
                            wxArrayString& aTextLines, std::vector<VECTOR2I>& aPositions,
-                           std::vector<VECTOR2I>& aExtents, const TEXT_ATTRIBUTES& aAttrs ) const;
+                           std::vector<VECTOR2I>& aExtents, const TEXT_ATTRIBUTES& aAttrs,
+                           const METRICS& aFontMetrics ) const;
 
     VECTOR2I drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
                          const wxString& aText, const VECTOR2I& aPosition,
                          const VECTOR2I& aSize, const EDA_ANGLE& aAngle, bool aMirror,
-                         const VECTOR2I& aOrigin, TEXT_STYLE_FLAGS aTextStyle ) const;
+                         const VECTOR2I& aOrigin, TEXT_STYLE_FLAGS aTextStyle,
+                         const METRICS& aFontMetrics ) const;
 
     void wordbreakMarkup( std::vector<std::pair<wxString, int>>* aWords, const wxString& aText,
                           const VECTOR2I& aSize, TEXT_STYLE_FLAGS aTextStyle ) const;
-
-    ///< Factor that determines the pitch between 2 lines.
-    static constexpr double INTERLINE_PITCH_RATIO = 1.61;   // The golden mean
 
 private:
     static FONT* getDefaultFont();

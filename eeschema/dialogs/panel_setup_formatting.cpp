@@ -110,6 +110,7 @@ bool PANEL_SETUP_FORMATTING::TransferDataToWindow()
         ctrl->SetValue( EDA_UNIT_UTILS::UI::StringFromValue( unityScale, units, value ) )
 
     SET_VALUE( m_textOffsetRatioCtrl, EDA_UNITS::PERCENT, settings.m_TextOffsetRatio * 100.0 );
+    SET_VALUE( m_overbarHeightCtrl, EDA_UNITS::PERCENT, settings.m_FontMetrics.m_OverbarHeight * 100.0 );
     SET_VALUE( m_dashLengthCtrl, EDA_UNITS::UNSCALED, settings.m_DashedLineDashRatio );
     SET_VALUE( m_gapLengthCtrl, EDA_UNITS::UNSCALED, settings.m_DashedLineGapRatio );
     SET_VALUE( m_labelSizeRatioCtrl, EDA_UNITS::PERCENT, settings.m_LabelSizeRatio * 100.0 );
@@ -166,6 +167,7 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
 #define GET_VALUE( units, str ) EDA_UNIT_UTILS::UI::DoubleValueFromString( unityScale, units, str )
 
     settings.m_TextOffsetRatio = GET_VALUE( EDA_UNITS::PERCENT, m_textOffsetRatioCtrl->GetValue() ) / 100.0;
+    settings.m_FontMetrics.m_OverbarHeight = GET_VALUE( EDA_UNITS::PERCENT, m_overbarHeightCtrl->GetValue() ) / 100.0;
     settings.m_DashedLineDashRatio = GET_VALUE( EDA_UNITS::UNSCALED, m_dashLengthCtrl->GetValue() );
     settings.m_DashedLineGapRatio = GET_VALUE( EDA_UNITS::UNSCALED, m_gapLengthCtrl->GetValue() );
     settings.m_LabelSizeRatio = GET_VALUE( EDA_UNITS::PERCENT, m_labelSizeRatioCtrl->GetValue() ) / 100.0;

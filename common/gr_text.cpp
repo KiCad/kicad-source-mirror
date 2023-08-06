@@ -110,13 +110,14 @@ int Clamp_Text_PenSize( int aPenSize, const VECTOR2I& aSize, bool aStrict )
 }
 
 
-int GraphicTextWidth( const wxString& aText, KIFONT::FONT* aFont, const VECTOR2I& aSize,
-                      int aThickness, bool aBold, bool aItalic )
+int GRTextWidth( const wxString& aText, KIFONT::FONT* aFont, const VECTOR2I& aSize,
+                 int aThickness, bool aBold, bool aItalic, const KIFONT::METRICS& aFontMetrics )
 {
     if( !aFont )
         aFont = KIFONT::FONT::GetFont();
 
-    return KiROUND( aFont->StringBoundaryLimits( aText, aSize, aThickness, aBold, aItalic ).x );
+    return KiROUND( aFont->StringBoundaryLimits( aText, aSize, aThickness, aBold, aItalic,
+                                                 aFontMetrics ).x );
 }
 
 
@@ -141,7 +142,8 @@ int GraphicTextWidth( const wxString& aText, KIFONT::FONT* aFont, const VECTOR2I
 void GRPrintText( wxDC* aDC, const VECTOR2I& aPos, const COLOR4D& aColor, const wxString& aText,
                   const EDA_ANGLE& aOrient, const VECTOR2I& aSize,
                   enum GR_TEXT_H_ALIGN_T aH_justify, enum GR_TEXT_V_ALIGN_T aV_justify,
-                  int aWidth, bool aItalic, bool aBold, KIFONT::FONT* aFont )
+                  int aWidth, bool aItalic, bool aBold, KIFONT::FONT* aFont,
+                  const KIFONT::METRICS& aFontMetrics )
 {
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
     bool                       fill_mode = true;
@@ -182,7 +184,7 @@ void GRPrintText( wxDC* aDC, const VECTOR2I& aPos, const COLOR4D& aColor, const 
     attributes.m_Valign = aV_justify;
     attributes.m_Size = aSize;
 
-    aFont->Draw( &callback_gal, aText, aPos, attributes );
+    aFont->Draw( &callback_gal, aText, aPos, attributes, aFontMetrics );
 }
 
 

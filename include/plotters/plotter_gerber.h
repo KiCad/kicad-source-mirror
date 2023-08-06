@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,12 +16,6 @@
  *
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-/**
- * Plotting engine (Gerber)
- *
- * @file plotter_gerber.h
  */
 
 #pragma once
@@ -110,27 +104,29 @@ public:
 
     virtual void PenTo( const VECTOR2I& pos, char plume ) override;
 
-    virtual void Text( const VECTOR2I&             aPos,
-                       const COLOR4D&              aColor,
-                       const wxString&             aText,
-                       const EDA_ANGLE&            aOrient,
-                       const VECTOR2I&              aSize,
-                       enum GR_TEXT_H_ALIGN_T      aH_justify,
-                       enum GR_TEXT_V_ALIGN_T      aV_justify,
-                       int                         aWidth,
-                       bool                        aItalic,
-                       bool                        aBold,
-                       bool                        aMultilineAllowed = false,
-                       KIFONT::FONT*               aFont = nullptr,
-                       void*                       aData = nullptr ) override;
+    virtual void Text( const VECTOR2I&        aPos,
+                       const COLOR4D&         aColor,
+                       const wxString&        aText,
+                       const EDA_ANGLE&       aOrient,
+                       const VECTOR2I&        aSize,
+                       enum GR_TEXT_H_ALIGN_T aH_justify,
+                       enum GR_TEXT_V_ALIGN_T aV_justify,
+                       int                    aWidth,
+                       bool                   aItalic,
+                       bool                   aBold,
+                       bool                   aMultilineAllowed,
+                       KIFONT::FONT*          aFont,
+                       const KIFONT::METRICS& aFontMetrics,
+                       void*                  aData = nullptr ) override;
 
 
-    virtual void PlotText( const VECTOR2I&          aPos,
-                           const COLOR4D&           aColor,
-                           const wxString&          aText,
-                           const TEXT_ATTRIBUTES&   aAttributes,
-                           KIFONT::FONT*            aFont,
-                           void*                    aData = nullptr ) override;
+    virtual void PlotText( const VECTOR2I&        aPos,
+                           const COLOR4D&         aColor,
+                           const wxString&        aText,
+                           const TEXT_ATTRIBUTES& aAttributes,
+                           KIFONT::FONT*          aFont,
+                           const KIFONT::METRICS& aFontMetrics,
+                           void*                  aData = nullptr ) override;
 
     /**
      * Filled circular flashes are stored as apertures

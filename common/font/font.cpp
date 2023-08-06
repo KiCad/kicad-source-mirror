@@ -46,6 +46,15 @@
 
 using namespace KIFONT;
 
+METRICS g_defaultMetrics;
+
+
+const METRICS& METRICS::Default()
+{
+    return g_defaultMetrics;
+}
+
+
 FONT* FONT::s_defaultFont = nullptr;
 
 std::map< std::tuple<wxString, bool, bool>, FONT*> FONT::s_fontMap;
@@ -165,20 +174,21 @@ bool FONT::IsStroke( const wxString& aFontName )
 
 void FONT::getLinePositions( const wxString& aText, const VECTOR2I& aPosition,
                              wxArrayString& aTextLines, std::vector<VECTOR2I>& aPositions,
-                             std::vector<VECTOR2I>& aExtents, const TEXT_ATTRIBUTES& aAttrs ) const
+                             std::vector<VECTOR2I>& aExtents, const TEXT_ATTRIBUTES& aAttrs,
+                             const METRICS& aFontMetrics ) const
 {
     wxStringSplit( aText, aTextLines, '\n' );
     int lineCount = aTextLines.Count();
     aPositions.reserve( lineCount );
 
-    int interline = GetInterline( aAttrs.m_Size.y, aAttrs.m_LineSpacing );
+    int interline = GetInterline( aAttrs.m_Size.y, aFontMetrics ) * aAttrs.m_LineSpacing;
     int height = 0;
 
     for( int i = 0; i < lineCount; i++ )
     {
         VECTOR2I pos( aPosition.x, aPosition.y + i * interline );
         VECTOR2I end = boundingBoxSingleLine( nullptr, aTextLines[i], pos, aAttrs.m_Size,
-                                              aAttrs.m_Italic );
+                                              aAttrs.m_Italic, aFontMetrics );
         VECTOR2I bBox( end - pos );
 
         aExtents.push_back( bBox );
@@ -236,7 +246,8 @@ void FONT::getLinePositions( const wxString& aText, const VECTOR2I& aPosition,
  * @param aAttrs are the styling attributes of the text, including its rotation
  */
 void FONT::Draw( KIGFX::GAL* aGal, const wxString& aText, const VECTOR2I& aPosition,
-                 const VECTOR2I& aCursor, const TEXT_ATTRIBUTES& aAttrs ) const
+                 const VECTOR2I& aCursor, const TEXT_ATTRIBUTES& aAttrs,
+                 const METRICS& aFontMetrics ) const
 {
     if( !aGal || aText.empty() )
         return;
@@ -248,7 +259,7 @@ void FONT::Draw( KIGFX::GAL* aGal, const wxString& aText, const VECTOR2I& aPosit
     std::vector<VECTOR2I> positions;
     std::vector<VECTOR2I> extents;
 
-    getLinePositions( aText, position, strings_list, positions, extents, aAttrs );
+    getLinePositions( aText, position, strings_list, positions, extents, aAttrs, aFontMetrics );
 
     aGal->SetLineWidth( aAttrs.m_StrokeWidth );
 
@@ -256,7 +267,7 @@ void FONT::Draw( KIGFX::GAL* aGal, const wxString& aText, const VECTOR2I& aPosit
     {
         drawSingleLineText( aGal, nullptr, strings_list[i], positions[i], aAttrs.m_Size,
                             aAttrs.m_Angle, aAttrs.m_Mirrored, aPosition, aAttrs.m_Italic,
-                            aAttrs.m_Underlined );
+                            aAttrs.m_Underlined, aFontMetrics );
     }
 }
 
@@ -267,7 +278,8 @@ void FONT::Draw( KIGFX::GAL* aGal, const wxString& aText, const VECTOR2I& aPosit
 VECTOR2I drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
                      const MARKUP::NODE* aNode, const VECTOR2I& aPosition,
                      const KIFONT::FONT* aFont, const VECTOR2I& aSize, const EDA_ANGLE& aAngle,
-                     bool aMirror, const VECTOR2I& aOrigin, TEXT_STYLE_FLAGS aTextStyle )
+                     bool aMirror, const VECTOR2I& aOrigin, TEXT_STYLE_FLAGS aTextStyle,
+                     const METRICS& aFontMetrics )
 {
     VECTOR2I nextPosition = aPosition;
     bool     drawUnderline = false;
@@ -307,7 +319,7 @@ VECTOR2I drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* a
         for( const std::unique_ptr<MARKUP::NODE>& child : aNode->children )
         {
             nextPosition = drawMarkup( aBoundingBox, aGlyphs, child.get(), nextPosition, aFont,
-                                       aSize, aAngle, aMirror, aOrigin, textStyle );
+                                       aSize, aAngle, aMirror, aOrigin, textStyle, aFontMetrics );
         }
     }
 
@@ -315,7 +327,7 @@ VECTOR2I drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* a
     {
         // Shorten the bar a little so its rounded ends don't make it over-long
         double barTrim = aSize.x * 0.1;
-        double barOffset = aFont->ComputeUnderlineVerticalPosition( aSize.y );
+        double barOffset = aFontMetrics.GetUnderlineVerticalPosition( aSize.y );
 
         VECTOR2D barStart( aPosition.x + barTrim, aPosition.y - barOffset );
         VECTOR2D barEnd( nextPosition.x - barTrim, nextPosition.y - barOffset );
@@ -337,7 +349,7 @@ VECTOR2I drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* a
     {
         // Shorten the bar a little so its rounded ends don't make it over-long
         double barTrim = aSize.x * 0.1;
-        double barOffset = aFont->ComputeOverbarVerticalPosition( aSize.y );
+        double barOffset = aFontMetrics.GetOverbarVerticalPosition( aSize.y );
 
         VECTOR2D barStart( aPosition.x + barTrim, aPosition.y - barOffset );
         VECTOR2D barEnd( nextPosition.x - barTrim, nextPosition.y - barOffset );
@@ -362,7 +374,7 @@ VECTOR2I drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* a
 VECTOR2I FONT::drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
                            const wxString& aText, const VECTOR2I& aPosition, const VECTOR2I& aSize,
                            const EDA_ANGLE& aAngle, bool aMirror, const VECTOR2I& aOrigin,
-                           TEXT_STYLE_FLAGS aTextStyle ) const
+                           TEXT_STYLE_FLAGS aTextStyle, const METRICS& aFontMetrics ) const
 {
     std::lock_guard<std::mutex> lock( s_markupCacheMutex );
 
@@ -381,14 +393,14 @@ VECTOR2I FONT::drawMarkup( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYP
     wxASSERT( markup && markup->root );
 
     return ::drawMarkup( aBoundingBox, aGlyphs, markup->root.get(), aPosition, this, aSize, aAngle,
-                         aMirror, aOrigin, aTextStyle );
+                         aMirror, aOrigin, aTextStyle, aFontMetrics );
 }
 
 
 void FONT::drawSingleLineText( KIGFX::GAL* aGal, BOX2I* aBoundingBox, const wxString& aText,
                                const VECTOR2I& aPosition, const VECTOR2I& aSize,
                                const EDA_ANGLE& aAngle, bool aMirror, const VECTOR2I& aOrigin,
-                               bool aItalic, bool aUnderline ) const
+                               bool aItalic, bool aUnderline, const METRICS& aFontMetrics ) const
 {
     if( !aGal )
         return;
@@ -404,14 +416,14 @@ void FONT::drawSingleLineText( KIGFX::GAL* aGal, BOX2I* aBoundingBox, const wxSt
     std::vector<std::unique_ptr<GLYPH>> glyphs;
 
     (void) drawMarkup( aBoundingBox, &glyphs, aText, aPosition, aSize, aAngle, aMirror, aOrigin,
-                       textStyle );
+                       textStyle, aFontMetrics );
 
     aGal->DrawGlyphs( glyphs );
 }
 
 
 VECTOR2I FONT::StringBoundaryLimits( const wxString& aText, const VECTOR2I& aSize, int aThickness,
-                                     bool aBold, bool aItalic ) const
+                                     bool aBold, bool aItalic, const METRICS& aFontMetrics ) const
 {
     // TODO do we need to parse every time - have we already parsed?
     BOX2I            boundingBox;
@@ -424,7 +436,7 @@ VECTOR2I FONT::StringBoundaryLimits( const wxString& aText, const VECTOR2I& aSiz
         textStyle |= TEXT_STYLE::ITALIC;
 
     (void) drawMarkup( &boundingBox, nullptr, aText, VECTOR2I(), aSize, ANGLE_0, false, VECTOR2I(),
-                       textStyle );
+                       textStyle, aFontMetrics );
 
     if( IsStroke() )
     {
@@ -442,7 +454,7 @@ VECTOR2I FONT::StringBoundaryLimits( const wxString& aText, const VECTOR2I& aSiz
 
 VECTOR2I FONT::boundingBoxSingleLine( BOX2I* aBBox, const wxString& aText,
                                       const VECTOR2I& aPosition, const VECTOR2I& aSize,
-                                      bool aItalic ) const
+                                      bool aItalic, const METRICS& aFontMetrics ) const
 {
     TEXT_STYLE_FLAGS textStyle = 0;
 
@@ -450,7 +462,7 @@ VECTOR2I FONT::boundingBoxSingleLine( BOX2I* aBBox, const wxString& aText,
         textStyle |= TEXT_STYLE::ITALIC;
 
     VECTOR2I extents = drawMarkup( aBBox, nullptr, aText, aPosition, aSize, ANGLE_0, false,
-                                   VECTOR2I(), textStyle );
+                                   VECTOR2I(), textStyle, aFontMetrics );
 
     return extents;
 }

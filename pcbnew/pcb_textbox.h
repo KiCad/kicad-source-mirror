@@ -136,6 +136,8 @@ public:
 
 protected:
     virtual void swapData( BOARD_ITEM* aImage ) override;
+
+    const KIFONT::METRICS& getFontMetrics() const override { return GetFontMetrics(); }
 };
 
 #endif  // #define PCB_TEXTBOX_H

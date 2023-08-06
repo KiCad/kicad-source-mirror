@@ -176,6 +176,8 @@ protected:
     virtual void swapData( BOARD_ITEM* aImage ) override;
 
     int getKnockoutMargin() const;
+
+    const KIFONT::METRICS& getFontMetrics() const override { return GetFontMetrics(); }
 };
 
 #endif  // #define PCB_TEXT_H

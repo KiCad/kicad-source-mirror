@@ -248,7 +248,7 @@ void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECT
         if( drawLabel )
         {
             wxString label = DimensionLabel( "", tickSpace * i, aIuScale, aUnits, false );
-            font->Draw( gal, label, tickPos + labelOffset, labelAttrs );
+            font->Draw( gal, label, tickPos + labelOffset, labelAttrs, KIFONT::METRICS::Default() );
         }
     }
 }

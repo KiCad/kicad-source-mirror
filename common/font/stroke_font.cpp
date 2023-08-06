@@ -6,8 +6,6 @@
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * Copyright (C) 2016-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
- * Stroke font class
- *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -42,12 +40,6 @@
 
 using namespace KIFONT;
 
-
-///< Factor that determines relative vertical position of the overbar.
-static constexpr double OVERBAR_POSITION_FACTOR = 1.23;
-
-///< Factor that determines relative vertical position of the underline.
-static constexpr double UNDERLINE_POSITION_FACTOR = -0.16;
 
 ///< Scale factor for a glyph
 static constexpr double STROKE_FONT_SCALE = 1.0 / 21.0;
@@ -199,23 +191,11 @@ void STROKE_FONT::loadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
 }
 
 
-double STROKE_FONT::GetInterline( double aGlyphHeight, double aLineSpacing ) const
+double STROKE_FONT::GetInterline( double aGlyphHeight, const METRICS& aFontMetrics ) const
 {
-    // Do not add the glyph thickness to the interline.  This makes bold text line-spacing
-    // different from normal text, which is poor typography.
-    return ( aGlyphHeight * aLineSpacing * INTERLINE_PITCH_RATIO );
-}
+    static double LEGACY_FACTOR = 1.0435;   // Adjustment to match legacy spacing
 
-
-double STROKE_FONT::ComputeOverbarVerticalPosition( double aGlyphHeight ) const
-{
-    return aGlyphHeight * OVERBAR_POSITION_FACTOR;
-}
-
-
-double STROKE_FONT::ComputeUnderlineVerticalPosition( double aGlyphHeight ) const
-{
-    return aGlyphHeight * UNDERLINE_POSITION_FACTOR;
+    return aFontMetrics.GetInterline( aGlyphHeight ) * LEGACY_FACTOR;
 }
 
 

@@ -233,6 +233,8 @@ public:
 protected:
     KIFONT::FONT* getDrawFont() const override;
 
+    const KIFONT::METRICS& getFontMetrics() const override { return GetFontMetrics(); }
+
 protected:
     /**
      * The orientation of text and any associated drawing elements of derived objects.

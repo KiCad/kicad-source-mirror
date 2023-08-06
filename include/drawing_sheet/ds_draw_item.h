@@ -75,6 +75,8 @@ public:
             return 1;
     }
 
+    const KIFONT::METRICS& GetFontMetrics() const;
+
     // The function to print a WS_DRAW_ITEM
     virtual void PrintWsItem( const RENDER_SETTINGS* aSettings )
     {
@@ -346,6 +348,9 @@ public:
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
+
+protected:
+    const KIFONT::METRICS& getFontMetrics() const override { return GetFontMetrics(); }
 };
 
 

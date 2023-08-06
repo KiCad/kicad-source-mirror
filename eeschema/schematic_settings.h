@@ -24,6 +24,7 @@
 #include <settings/nested_settings.h>
 #include <settings/bom_settings.h>
 #include <template_fieldnames.h>
+#include <font/font.h>
 
 class NGSPICE_SETTINGS;
 
@@ -86,12 +87,14 @@ public:
     TEMPLATES m_TemplateFieldNames;
 
     /// List of stored BOM presets
-    BOM_PRESET              m_BomSettings;
-    std::vector<BOM_PRESET> m_BomPresets;
+    BOM_PRESET                  m_BomSettings;
+    std::vector<BOM_PRESET>     m_BomPresets;
 
     /// List of stored BOM format presets
     BOM_FMT_PRESET              m_BomFmtSettings;
     std::vector<BOM_FMT_PRESET> m_BomFmtPresets;
+
+    KIFONT::METRICS             m_FontMetrics;
 
     /**
      * Ngspice simulator settings.

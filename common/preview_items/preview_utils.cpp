@@ -187,6 +187,6 @@ void KIGFX::PREVIEW::DrawTextNextToCursor( KIGFX::VIEW* aView, const VECTOR2D& a
     for( const wxString& str : aStrings )
     {
         textPos.y += textDims.LinePitch;
-        font->Draw( gal, str, textPos, textAttrs );
+        font->Draw( gal, str, textPos, textAttrs, KIFONT::METRICS::Default() );
     }
 }

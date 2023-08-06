@@ -169,7 +169,6 @@ SVG_PLOTTER::SVG_PLOTTER()
     m_brush_rgb_color = 0;          // current color value (black)
     m_brush_alpha     = 1.0;
     m_dashed          = PLOT_DASH_TYPE::SOLID;
-    m_useInch         = false;      // millimeters are always the svg unit
     m_precision       = 4;          // default: 4 digits in mantissa.
 }
 
@@ -778,19 +777,20 @@ bool SVG_PLOTTER::EndPlot()
 }
 
 
-void SVG_PLOTTER::Text( const VECTOR2I&             aPos,
-                        const COLOR4D&              aColor,
-                        const wxString&             aText,
-                        const EDA_ANGLE&            aOrient,
-                        const VECTOR2I&             aSize,
-                        enum GR_TEXT_H_ALIGN_T      aH_justify,
-                        enum GR_TEXT_V_ALIGN_T      aV_justify,
-                        int                         aWidth,
-                        bool                        aItalic,
-                        bool                        aBold,
-                        bool                        aMultilineAllowed,
-                        KIFONT::FONT*               aFont,
-                        void*                       aData )
+void SVG_PLOTTER::Text( const VECTOR2I&        aPos,
+                        const COLOR4D&         aColor,
+                        const wxString&        aText,
+                        const EDA_ANGLE&       aOrient,
+                        const VECTOR2I&        aSize,
+                        enum GR_TEXT_H_ALIGN_T aH_justify,
+                        enum GR_TEXT_V_ALIGN_T aV_justify,
+                        int                    aWidth,
+                        bool                   aItalic,
+                        bool                   aBold,
+                        bool                   aMultilineAllowed,
+                        KIFONT::FONT*          aFont,
+                        const KIFONT::METRICS& aFontMetrics,
+                        void*                  aData )
 {
     setFillMode( FILL_T::NO_FILL );
     SetColor( aColor );
@@ -817,7 +817,7 @@ void SVG_PLOTTER::Text( const VECTOR2I&             aPos,
 
     // aSize.x or aSize.y is < 0 for mirrored texts.
     // The actual text size value is the absolute value
-    text_size.x = std::abs( GraphicTextWidth( aText, aFont, aSize, aWidth, aBold, aItalic ) );
+    text_size.x = std::abs( GRTextWidth( aText, aFont, aSize, aWidth, aBold, aItalic, aFontMetrics ) );
     text_size.y = std::abs( aSize.x * 4/3 ); // Hershey font height to em size conversion
     VECTOR2D anchor_pos_dev = userToDeviceCoordinates( aPos );
     VECTOR2D text_pos_dev = userToDeviceCoordinates( text_pos );
@@ -849,27 +849,26 @@ void SVG_PLOTTER::Text( const VECTOR2I&             aPos,
              TO_UTF8( XmlEsc( aText ) ) );
 
     PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, aWidth, aItalic,
-                   aBold, aMultilineAllowed, aFont );
+                   aBold, aMultilineAllowed, aFont, aFontMetrics );
 
     fputs( "</g>", m_outputFile );
 }
 
 
-void SVG_PLOTTER::PlotText( const VECTOR2I& aPos, const COLOR4D& aColor,
-                    const wxString& aText,
-                    const TEXT_ATTRIBUTES& aAttributes,
-                    KIFONT::FONT* aFont,
-                    void* aData )
+void SVG_PLOTTER::PlotText( const VECTOR2I&        aPos,
+                            const COLOR4D&         aColor,
+                            const wxString&        aText,
+                            const TEXT_ATTRIBUTES& aAttributes,
+                            KIFONT::FONT*          aFont,
+                            const KIFONT::METRICS& aFontMetrics,
+                            void*                  aData )
 {
     VECTOR2I size = aAttributes.m_Size;
 
     if( aAttributes.m_Mirrored )
         size.x = -size.x;
 
-    SVG_PLOTTER::Text( aPos, aColor, aText, aAttributes.m_Angle, size,
-                       aAttributes.m_Halign, aAttributes.m_Valign,
-                       aAttributes.m_StrokeWidth,
-                       aAttributes.m_Italic, aAttributes.m_Bold,
-                       aAttributes.m_Multiline,
-                       aFont, aData );
+    SVG_PLOTTER::Text( aPos, aColor, aText, aAttributes.m_Angle, size, aAttributes.m_Halign,
+                       aAttributes.m_Valign, aAttributes.m_StrokeWidth, aAttributes.m_Italic,
+                       aAttributes.m_Bold, aAttributes.m_Multiline, aFont, aFontMetrics, aData );
 }

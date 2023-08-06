@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2021 Ola Rinta-Koski
- * Copyright (C) 2021-2022 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * Outline font class
  *
@@ -90,22 +90,10 @@ public:
     static OUTLINE_FONT* LoadFont( const wxString& aFontFileName, bool aBold, bool aItalic );
 
     /**
-     * Compute the vertical position of an overbar.  This is the distance between the text
-     * baseline and the overbar.
-     */
-    double ComputeOverbarVerticalPosition( double aGlyphHeight ) const override;
-
-    /**
-     * Compute the vertical position of an underline.  This is the distance between the text
-     * baseline and the underline.
-     */
-    double ComputeUnderlineVerticalPosition( double aGlyphHeight ) const override;
-
-    /**
      * Compute the distance (interline) between 2 lines of text (for multiline texts).  This is
      * the distance between baselines, not the space between line bounding boxes.
      */
-    double GetInterline( double aGlyphHeight = 0.0, double aLineSpacing = 1.0 ) const override;
+    double GetInterline( double aGlyphHeight, const METRICS& aFontMetrics ) const override;
 
     VECTOR2I GetTextAsGlyphs( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
                               const wxString& aText, const VECTOR2I& aSize,
@@ -113,7 +101,8 @@ public:
                               const VECTOR2I& aOrigin, TEXT_STYLE_FLAGS aTextStyle ) const override;
 
     void GetLinesAsGlyphs( std::vector<std::unique_ptr<GLYPH>>* aGlyphs, const wxString& aText,
-                           const VECTOR2I& aPosition, const TEXT_ATTRIBUTES& aAttrs ) const;
+                           const VECTOR2I& aPosition, const TEXT_ATTRIBUTES& aAttrs,
+                           const METRICS& aFontMetrics ) const;
 
     const FT_Face& GetFace() const { return m_face; }
 
