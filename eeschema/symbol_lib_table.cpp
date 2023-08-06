@@ -296,10 +296,8 @@ void SYMBOL_LIB_TABLE::Format( OUTPUTFORMATTER* aOutput, int aIndentLevel ) cons
     aOutput->Print( aIndentLevel, "(sym_lib_table\n" );
     aOutput->Print( aIndentLevel + 1, "(version %d)\n", m_version );
 
-    for( LIB_TABLE_ROWS_CITER it = m_rows.begin();  it != m_rows.end();  ++it )
-    {
-        it->Format( aOutput, aIndentLevel+1 );
-    }
+    for( const LIB_TABLE_ROW& row : m_rows )
+        row.Format( aOutput, aIndentLevel + 1 );
 
     aOutput->Print( aIndentLevel, ")\n" );
 }
@@ -374,7 +372,9 @@ void SYMBOL_LIB_TABLE::LoadSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
                                       const wxString& aNickname, bool aPowerSymbolsOnly )
 {
     SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname, true );
-    wxCHECK( row && row->plugin, /* void */  );
+
+    if( !row || !row->plugin )
+        return;
 
     std::lock_guard<std::mutex> lock( row->GetMutex() );
 

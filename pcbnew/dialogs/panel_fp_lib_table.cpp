@@ -973,9 +973,7 @@ bool PANEL_FP_LIB_TABLE::TransferDataFromWindow()
             m_parent->m_GlobalTableChanged = true;
 
             m_global->Clear();
-            m_global->m_rows.transfer( m_global->m_rows.end(), global_model()->m_rows.begin(),
-                                     global_model()->m_rows.end(), global_model()->m_rows );
-            m_global->reindex();
+            m_global->TransferRows( global_model()->m_rows );
         }
 
         if( project_model() && *project_model() != *m_project )
@@ -983,9 +981,7 @@ bool PANEL_FP_LIB_TABLE::TransferDataFromWindow()
             m_parent->m_ProjectTableChanged = true;
 
             m_project->Clear();
-            m_project->m_rows.transfer( m_project->m_rows.end(), project_model()->m_rows.begin(),
-                                      project_model()->m_rows.end(), project_model()->m_rows );
-            m_project->reindex();
+            m_project->TransferRows( project_model()->m_rows );
         }
 
         return true;

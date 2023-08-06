@@ -335,13 +335,7 @@ public:
     virtual ~LIB_TABLE();
 
     /// Delete all rows.
-    void Clear()
-    {
-        std::lock_guard<std::shared_mutex> lock( m_nickIndexMutex );
-
-        m_rows.clear();
-        m_nickIndex.clear();
-    }
+    void Clear();
 
     /**
      * Compares this table against another.
@@ -451,23 +445,30 @@ public:
     bool InsertRow( LIB_TABLE_ROW* aRow, bool doReplace = false );
 
     /**
-     * Removes a row from the table.
+     * Removes a row from the table and frees the pointer
      * @param aRow is the row to remove
      * @return true if the row was found (and removed)
      */
-    bool RemoveRow( const LIB_TABLE_ROW* aRow )
-    {
-        for( auto iter = m_rows.begin(); iter != m_rows.end(); ++iter )
-        {
-            if( *iter == *aRow )
-            {
-                m_rows.erase( iter, iter + 1 );
-                reindex();
-                return true;
-            }
-        }
-        return false;
-    }
+    bool RemoveRow( const LIB_TABLE_ROW* aRow );
+
+    /**
+     * Replaces the Nth row with the given new row
+     * @return true if successful
+     */
+    bool ReplaceRow( size_t aIndex, LIB_TABLE_ROW* aRow );
+
+    /**
+     * Moves a row within the table
+     * @param aIndex is the current index of the row to move
+     * @param aOffset is the number of positions to move it by in the table
+     * @return true if the move resulted in a change
+     */
+    bool ChangeRowOrder( size_t aIndex, int aOffset );
+
+    /**
+     * Takes ownership of another list of rows; the original list will be freed
+     */
+    void TransferRows( LIB_TABLE_ROWS& aRowsList );
 
     /**
      * @return a #LIB_TABLE_ROW pointer if \a aURI is found in this table or in any chained
@@ -528,18 +529,6 @@ public:
         return m_version;
     }
 
-    /**
-     * While this is an encapsulation leak, calling it before threaded loads *may* prevent
-     * some Sentry crashes we're seeing (KICAD-4S).
-     */
-    void EnsureIndex()
-    {
-        ensureIndex();
-
-        if( m_fallBack )
-            m_fallBack->EnsureIndex();
-    }
-
 protected:
     /**
      * Return a #LIB_TABLE_ROW if \a aNickname is found in this table or in any chained
@@ -559,60 +548,24 @@ protected:
      */
     bool migrate();
 
-    /**
-     * Rebuilds the m_nickIndex
-     *
-     * @param aForce is to avoid rebuilding the index multiple times because multiple threads hit ensureIndex
-     * at the same time
-     */
-    void reindex()
-    {
-        std::lock_guard<std::shared_mutex> lock( m_nickIndexMutex );
-
-        m_nickIndex.clear();
-
-        for( LIB_TABLE_ROWS_ITER it = m_rows.begin(); it != m_rows.end(); ++it )
-            m_nickIndex.insert( INDEX_VALUE( it->GetNickName(), it - m_rows.begin() ) );
-    }
-
-    void ensureIndex()
-    {
-        // The dialog lib table editor may not maintain the nickIndex.
-        // Lazy indexing may be required.  To handle lazy indexing, we must enforce
-        // that "nickIndex" is either empty or accurate, but never inaccurate.
-        {
-            std::shared_lock<std::shared_mutex> lock( m_nickIndexMutex );
-
-            if( m_nickIndex.size() )
-                return;
-        }
-
-        reindex();
-    }
-
-private:
-    friend class PANEL_FP_LIB_TABLE;
-    friend class LIB_TABLE_GRID;
+    void reindex();
 
 protected:
-    LIB_TABLE_ROWS m_rows;
-
-    /// this is a non-owning index into the LIB_TABLE_ROWS table
-    typedef std::map<wxString,int>      INDEX;              // "int" is std::vector array index
-    typedef INDEX::iterator             INDEX_ITER;
-    typedef INDEX::const_iterator       INDEX_CITER;
-    typedef INDEX::value_type           INDEX_VALUE;
-
-    /// this particular key is the nickName within each row.
-    INDEX m_nickIndex;
-
     LIB_TABLE* m_fallBack;
 
     /// Versioning to handle importing old tables
     mutable int m_version;
 
-    /// Mutex to protect access to the nickIndex variable
-    mutable std::shared_mutex m_nickIndexMutex;
+    /// Owning set of rows.
+    // TODO: This should really be private; but the lib table grids re-use it
+    //       (without using m_rowsMap).
+    LIB_TABLE_ROWS m_rows;
+
+    /// this is a non-owning index into the LIB_TABLE_ROWS table
+    std::map<wxString, LIB_TABLE_ROWS_ITER> m_rowsMap;
+
+    /// Mutex to protect access to the rows vector
+    mutable std::shared_mutex m_mutex;
 };
 
 #endif  // _LIB_TABLE_BASE_H_

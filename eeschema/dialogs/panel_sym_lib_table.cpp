@@ -200,7 +200,7 @@ protected:
                     tbl->AppendRows( tmp_tbl.GetCount() - tbl->GetNumberRows() );
 
                 for( unsigned i = 0;  i < tmp_tbl.GetCount();  ++i )
-                    tbl->m_rows.replace( i, tmp_tbl.At( i ).clone() );
+                    tbl->ReplaceRow( i, tmp_tbl.At( i ).clone() );
             }
 
             m_grid->AutoSizeColumns( false );
@@ -494,9 +494,6 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
         {
             SYMBOL_LIB_TABLE_ROW& row = dynamic_cast<SYMBOL_LIB_TABLE_ROW&>( table->At( r ) );
 
-            if( !row.GetParent() )
-                row.SetParent( table );
-
             if( !row.GetIsEnabled() )
                 continue;
 
@@ -712,11 +709,7 @@ void PANEL_SYM_LIB_TABLE::moveUpHandler( wxCommandEvent& event )
     // @todo: add multiple selection moves.
     if( curRow >= 1 )
     {
-        boost::ptr_vector< LIB_TABLE_ROW >::auto_type move_me =
-            tbl->m_rows.release( tbl->m_rows.begin() + curRow );
-
-        --curRow;
-        tbl->m_rows.insert( tbl->m_rows.begin() + curRow, move_me.release() );
+        tbl->ChangeRowOrder( curRow--, -1 );
 
         if( tbl->GetView() )
         {
@@ -742,11 +735,7 @@ void PANEL_SYM_LIB_TABLE::moveDownHandler( wxCommandEvent& event )
     // @todo: add multiple selection moves.
     if( unsigned( curRow + 1 ) < tbl->m_rows.size() )
     {
-        boost::ptr_vector< LIB_TABLE_ROW >::auto_type move_me =
-            tbl->m_rows.release( tbl->m_rows.begin() + curRow );
-
-        ++curRow;
-        tbl->m_rows.insert( tbl->m_rows.begin() + curRow, move_me.release() );
+        tbl->ChangeRowOrder( curRow++, 1 );
 
         if( tbl->GetView() )
         {
@@ -934,9 +923,7 @@ bool PANEL_SYM_LIB_TABLE::TransferDataFromWindow()
         m_parent->m_GlobalTableChanged = true;
 
         m_globalTable->Clear();
-        m_globalTable->m_rows.transfer( m_globalTable->m_rows.end(), global_model()->m_rows.begin(),
-                                      global_model()->m_rows.end(), global_model()->m_rows );
-        m_globalTable->reindex();
+        m_globalTable->TransferRows( global_model()->m_rows );
     }
 
     if( project_model() && *project_model() != *m_projectTable )
@@ -944,9 +931,7 @@ bool PANEL_SYM_LIB_TABLE::TransferDataFromWindow()
         m_parent->m_ProjectTableChanged = true;
 
         m_projectTable->Clear();
-        m_projectTable->m_rows.transfer( m_projectTable->m_rows.end(), project_model()->m_rows.begin(),
-                                       project_model()->m_rows.end(), project_model()->m_rows );
-        m_projectTable->reindex();
+        m_projectTable->TransferRows( project_model()->m_rows );
     }
 
     return true;
