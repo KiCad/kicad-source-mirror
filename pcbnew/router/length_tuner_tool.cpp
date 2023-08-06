@@ -80,7 +80,8 @@ static TOOL_ACTION ACT_AmplDecrease( "pcbnew.LengthTuner.AmplDecrease",
 
 
 LENGTH_TUNER_TOOL::LENGTH_TUNER_TOOL() :
-    TOOL_BASE( "pcbnew.LengthTuner" )
+    TOOL_BASE( "pcbnew.LengthTuner" ),
+    m_inLengthTuner( false )
 {
     // set the initial tune mode for the settings dialog,
     // in case the dialog is opened before the tool is activated the first time
