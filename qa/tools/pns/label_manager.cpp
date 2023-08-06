@@ -54,7 +54,8 @@ void LABEL_MANAGER::Add( VECTOR2I target, wxString msg, COLOR4D color )
     KIFONT::FONT* strokeFont = KIFONT::FONT::GetFont( wxEmptyString );
     UTF8 text( msg );
     VECTOR2I textDims = strokeFont->StringBoundaryLimits( text, VECTOR2D( m_textSize, m_textSize ),
-                                                          m_textSize/8, false, false );
+                                                          m_textSize / 8, false, false,
+                                                          KIFONT::METRICS::Default() );
 
     lbl.m_bbox.SetOrigin( lbl.m_target - textDims - VECTOR2I( m_textSize, m_textSize ) );
     lbl.m_bbox.SetSize( textDims );
