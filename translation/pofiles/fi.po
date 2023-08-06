@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-03 11:24-0700\n"
-"PO-Revision-Date: 2023-08-06 10:10+0000\n"
+"PO-Revision-Date: 2023-08-07 19:50+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v7/fi/>\n"
 "Language: fi\n"
@@ -16218,7 +16218,7 @@ msgstr "Taajuus"
 
 #: eeschema/sim/sim_plot_panel.cpp:352
 msgid "Gain"
-msgstr "Kasvu"
+msgstr "Vahvistus"
 
 #: eeschema/sim/sim_plot_panel.cpp:353
 msgid "Phase"
