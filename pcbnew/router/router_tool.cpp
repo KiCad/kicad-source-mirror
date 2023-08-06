@@ -62,6 +62,7 @@ using namespace std::placeholders;
 
 #include <project.h>
 #include <project/project_file.h>
+#include <project/project_local_settings.h>
 
 #include "router_tool.h"
 #include "pns_segment.h"
@@ -602,12 +603,12 @@ void ROUTER_TOOL::saveRouterDebugLog()
     if( !rv )
         return;
 
-    FILE*       f = fopen( fname_settings.GetFullPath().c_str(), "wb" );
+    FILE* f = wxFopen( fname_settings.GetFullPath(), "wb" );
     std::string settingsStr = m_router->Settings().FormatAsString();
     fprintf( f, "%s\n", settingsStr.c_str() );
     fclose( f );
 
-    f = fopen( fname_log.GetFullPath().c_str(), "wb" );
+    f = wxFopen( fname_log.GetFullPath(), "wb" );
 
     fprintf(f, "mode %d\n", m_router->Mode() );
 
@@ -635,6 +636,7 @@ void ROUTER_TOOL::saveRouterDebugLog()
 
     PROJECT* prj = m_iface->GetBoard()->GetProject();
     prj->GetProjectFile().SaveAs( cwd, "pns" );
+    prj->GetLocalSettings().SaveAs( cwd, "pns" );
 
     std::vector<PNS::ITEM*> added, removed, heads;
     m_router->GetUpdatedItems( removed, added, heads );

@@ -34,6 +34,9 @@
 #include <pcbnew/plugins/kicad/pcb_plugin.h>
 #include <pcbnew/drc/drc_engine.h>
 
+#include <project.h>
+#include <project/project_local_settings.h>
+
 #include <../../tests/common/console_log.h>
 
 BOARD_CONNECTED_ITEM* PNS_LOG_FILE::ItemById( const PNS_LOG_FILE::EVENT_ENTRY& evt )
@@ -383,6 +386,7 @@ bool PNS_LOG_FILE::Load( const wxFileName& logFileName, REPORTER* aRpt )
         BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
         bds.m_DRCEngine = drcEngine;
+        bds.m_UseConnectedTrackWidth = m_board->GetProject()->GetLocalSettings().m_AutoTrackWidth;
 
         m_board->SynchronizeNetsAndNetClasses( true );
 

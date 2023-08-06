@@ -56,8 +56,6 @@ void PNS_LOG_PLAYER::createRouter()
     m_router->Settings().SetMode( PNS::RM_Walkaround );
     m_router->Sizes().SetTrackWidth( 250000 );
 
-    //m_router->Settings().SetOptimizeDraggedTrack( true );
-
     m_debugDecorator = new PNS_TEST_DEBUG_DECORATOR;
     m_debugDecorator->Clear();
     m_iface->SetDebugDecorator( m_debugDecorator );
@@ -107,6 +105,7 @@ void PNS_LOG_PLAYER::ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex, int aF
 
         auto  item = aLog->ItemById( evt );
         ITEM* ritem = item ? m_router->GetWorld()->FindItemByParent( item ) : nullptr;
+        int routingLayer = ritem ? ritem->Layers().Start() : F_Cu;
 
         eventIdx++;
 
@@ -114,24 +113,36 @@ void PNS_LOG_PLAYER::ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex, int aF
         {
         case LOGGER::EVT_START_ROUTE:
         {
+            PNS::SIZES_SETTINGS sizes( m_router->Sizes() );
+            m_iface->SetStartLayer( routingLayer );
+            m_iface->ImportSizes( sizes, ritem, -1 );
+            m_router->UpdateSizes( sizes );
+
             m_debugDecorator->NewStage( "route-start", 0, PNSLOGINFO );
             m_viewTracker->SetStage( m_debugDecorator->GetStageCount() - 1 );
 
-            auto msg = wxString::Format( "event [%d/%d]: route-start (%d, %d)", eventIdx, totalEvents, evt.p.x, evt.p.y );
+            auto msg = wxString::Format( "event [%d/%d]: route-start (%d, %d)", eventIdx,
+                                         totalEvents, evt.p.x, evt.p.y );
 
             m_debugDecorator->Message( msg );
             m_reporter->Report( msg );
 
-            m_router->StartRouting( evt.p, ritem, ritem ? ritem->Layers().Start() : F_Cu );
+            m_router->StartRouting( evt.p, ritem, routingLayer );
             break;
         }
 
         case LOGGER::EVT_START_DRAG:
         {
+            PNS::SIZES_SETTINGS sizes( m_router->Sizes() );
+            m_iface->SetStartLayer( routingLayer );
+            m_iface->ImportSizes( sizes, ritem, -1 );
+            m_router->UpdateSizes( sizes );
+
             m_debugDecorator->NewStage( "drag-start", 0, PNSLOGINFO );
             m_viewTracker->SetStage( m_debugDecorator->GetStageCount() - 1 );
 
-            auto msg = wxString::Format( "event [%d/%d]: drag-start (%d, %d)", eventIdx, totalEvents, evt.p.x, evt.p.y );
+            auto msg = wxString::Format( "event [%d/%d]: drag-start (%d, %d)", eventIdx,
+                                         totalEvents, evt.p.x, evt.p.y );
 
             m_debugDecorator->Message( msg );
             m_reporter->Report( msg );
