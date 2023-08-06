@@ -592,17 +592,20 @@ void ROUTER_TOOL::saveRouterDebugLog()
     fname_settings.SetPath( cwd );
     fname_settings.SetName( "pns.settings" );
 
-    wxString msg = wxString::Format( _( "Event file: %s\nBoard dump: %s" ), fname_log.GetFullPath(), fname_log.GetFullPath() );
+    wxString msg = wxString::Format( _( "Event file: %s\nBoard dump: %s" ), fname_log.GetFullPath(),
+                                     fname_log.GetFullPath() );
 
-    int rv = OKOrCancelDialog( nullptr, _("Save router log"), _("Would you like to save the router\nevent log for debugging purposes?"), msg, _("OK"), _("Cancel") );
+    int rv = OKOrCancelDialog( nullptr, _( "Save router log" ),
+            _( "Would you like to save the router\nevent log for debugging purposes?" ), msg,
+            _( "OK" ), _( "Cancel" ) );
 
     if( !rv )
         return;
 
-    FILE *f = fopen( fname_settings.GetFullPath().c_str(), "wb" );
+    FILE*       f = fopen( fname_settings.GetFullPath().c_str(), "wb" );
     std::string settingsStr = m_router->Settings().FormatAsString();
-    fprintf(f,"%s\n", settingsStr.c_str( ) );
-    fclose(f);
+    fprintf( f, "%s\n", settingsStr.c_str() );
+    fclose( f );
 
     f = fopen( fname_log.GetFullPath().c_str(), "wb" );
 

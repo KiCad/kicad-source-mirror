@@ -479,8 +479,10 @@ bool JSON_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
 }
 
 
-const std::string JSON_SETTINGS::FormatAsString() const
+const std::string JSON_SETTINGS::FormatAsString()
 {
+    Store();
+
     LOCALE_IO dummy;
 
     std::stringstream buffer;

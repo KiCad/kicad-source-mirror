@@ -172,6 +172,9 @@ PNS_LOG_VIEWER_FRAME::PNS_LOG_VIEWER_FRAME( wxFrame* frame ) : PNS_LOG_VIEWER_FR
     m_overlay.reset( new PNS_LOG_VIEWER_OVERLAY ( m_galPanel->GetGAL() ) );
     m_galPanel->GetView()->Add( m_overlay.get() );
     m_galPanel->GetViewControls()->EnableCursorWarping(false);
+
+    for( PCB_LAYER_ID layer : LSET::AllNonCuMask().Seq() )
+        m_galPanel->GetView()->SetLayerVisible( layer, false );
 }
 
 

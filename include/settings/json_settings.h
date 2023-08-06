@@ -224,10 +224,10 @@ c     * @return true if the file was saved
     * @param aTarget is the storage destination
     * @return True if set, false if not
     */
-    static bool SetIfPresent( const nlohmann::json& aObj, const std::string& aPath,
+    static bool SetIfPresent( const nlohmann::json& aObj, const std::string& aPath ,
                               unsigned int& aTarget );
 
-    const std::string FormatAsString() const;
+    const std::string FormatAsString();
 
     bool LoadFromRawFile( const wxString& aPath );
 
