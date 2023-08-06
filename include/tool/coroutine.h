@@ -43,6 +43,7 @@
 
 #include <libcontext.h>
 #include <functional>
+#include <optional>
 #include <memory>
 #include <advanced_config.h>
 
@@ -50,8 +51,10 @@
 #include <wx/log.h>
 
 #ifdef _WIN32
-#include <optional>
 #include <windows.h>
+#else                   // Linux, BSD, MacOS
+#include <unistd.h>     // getpagesize
+#include <sys/mman.h>   // mmap, mprotect, munmap
 #endif
 
 /**
@@ -192,9 +195,6 @@ public:
      * Create a coroutine from a delegate object.
      */
     COROUTINE( std::function<ReturnType( ArgType )> aEntry ) :
-#ifdef _WIN32
-        m_stack( nullptr ),
-#endif
         m_func( std::move( aEntry ) ),
         m_running( false ),
         m_args( nullptr ),
@@ -223,11 +223,6 @@ public:
 
         if( m_callee.ctx )
             libcontext::release_fcontext( m_callee.ctx );
-
-#ifdef _WIN32
-        if( m_stack )
-            ::VirtualFree( m_stack, 0, MEM_RELEASE );
-#endif
     }
 
 public:
@@ -382,69 +377,32 @@ private:
 
         m_args = &aArgs;
 
-        assert( m_stack == nullptr );
-
-        size_t stackSize = m_stacksize;
+        std::size_t stackSize = m_stacksize;
         void* sp = nullptr;
 
 #ifndef LIBCONTEXT_HAS_OWN_STACK
-#ifdef _WIN32
-        // kind of a hack to avoid calling into GetSystemInfo constantly for page size
-        static std::optional<std::size_t> system_page_size;
-        if( !system_page_size.has_value() )
-        {
-            // For Windows, we want to use VirtualAlloc and VirtualProtect which let us
-            // trap stack overflows with the guard page, it'll still crash but this
-            // has a chance of preserving stack in dumps
-            SYSTEM_INFO si;
-            ::GetSystemInfo( &si );
+        assert( !m_stack );
 
-            system_page_size = static_cast<std::size_t>( si.dwPageSize );
-        }
-
-        // this shouldn't happen but just incase
-        if( m_stack )
-            ::VirtualFree( m_stack, 0, MEM_RELEASE );
+        const std::size_t systemPageSize = SystemPageSize();
 
         // calculate the correct number of pages to allocate based on request stack size
-        std::size_t pages = ( m_stacksize + system_page_size.value() - 1 ) / system_page_size.value();
+        std::size_t pages = ( m_stacksize + systemPageSize - 1 ) / systemPageSize;
 
         // we allocate an extra page for the guard
-        std::size_t alloc_size = ( pages + 1 ) * system_page_size.value();
+        stackSize = ( pages + 1 ) * systemPageSize;
 
-        m_stack = ::VirtualAlloc( 0, alloc_size, MEM_COMMIT, PAGE_READWRITE );
-        if( !m_stack )
-            throw std::bad_alloc();
+        m_stack.reset( static_cast<char*>( MapMemory( stackSize ) ) );
+        m_stack.get_deleter().SetSize( stackSize );
 
         // now configure the first page (by only specifying a single page_size from vp)
         // that will act as the guard page
         // the stack will grow from the end and hopefully never into this guarded region
-        DWORD      old_prot; // dummy var since the arg cannot be NULL
-        const BOOL res = ::VirtualProtect( m_stack, system_page_size.value(),
-                                           PAGE_READWRITE | PAGE_GUARD, &old_prot );
+        GuardMemory( m_stack.get(), systemPageSize );
 
-#ifdef NDEBUG
-        // Avoid compil warning (unused variable 'res')
-        (void) res;
-#else
-        assert( res != false );
-#endif
-
-        stackSize = alloc_size;
-        sp = static_cast<char*>( m_stack ) + stackSize;
-#else
-        // fixme: Clean up stack stuff. Add a guard
-        m_stack.reset( new char[stackSize] );
-
-        // align to 16 bytes
-        sp = (void*)((((ptrdiff_t) m_stack.get()) + stackSize - 0xf) & (~0x0f));
-
-        // correct the stack size
-        stackSize -= size_t( ( (ptrdiff_t) m_stack.get() + stackSize ) - (ptrdiff_t) sp );
+        sp = static_cast<char*>( m_stack.get() ) + stackSize;
 
 #ifdef KICAD_USE_VALGRIND
         m_valgrind_stack = VALGRIND_STACK_REGISTER( sp, m_stack.get() );
-#endif
 #endif
 #endif
 
@@ -464,6 +422,69 @@ private:
         // off we go!
         return jumpIn( aInvArgs );
     }
+
+#ifndef LIBCONTEXT_HAS_OWN_STACK
+    ///< A functor that frees the stack
+    struct STACK_DELETER
+    {
+#ifdef _WIN32
+        void SetSize( std::size_t ) {}
+        void operator()( void* aMem ) noexcept { ::VirtualFree( aMem, 0, MEM_RELEASE ); }
+#else
+        std::size_t m_size = 0;
+
+        void SetSize( std::size_t aSize ) { m_size = aSize; }
+        void operator()( void* aMem ) noexcept { ::munmap( aMem, m_size ); }
+#endif
+    };
+
+    ///< The size of the mappable memory page size
+    static inline size_t SystemPageSize()
+    {
+        static std::optional<size_t> systemPageSize;
+        if( !systemPageSize.has_value() )
+        {
+#ifdef _WIN32
+            SYSTEM_INFO si;
+            ::GetSystemInfo( &si );
+            systemPageSize = static_cast<size_t>( si.dwPageSize );
+#else
+            int size = getpagesize();
+            systemPageSize = static_cast<size_t>( size );
+#endif
+        }
+        return systemPageSize.value();
+    }
+
+    ///< Map a page-aligned memory region into our address space.
+    static inline void* MapMemory( size_t aAllocSize )
+    {
+#ifdef _WIN32
+        void* mem = ::VirtualAlloc( 0, aAllocSize, MEM_COMMIT, PAGE_READWRITE );
+        if( !mem )
+            throw std::bad_alloc();
+#else
+        void* mem = ::mmap( 0, aAllocSize, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0 );
+        if( mem == (void*) -1 )
+            throw std::bad_alloc();
+#endif
+        return mem;
+    }
+
+    ///< Change protection of memory page(s) to act as stack guards.
+    static inline void GuardMemory( void* aAddress, size_t aGuardSize )
+    {
+#ifdef _WIN32
+        DWORD old_prot; // dummy var since the arg cannot be NULL
+        BOOL res = ::VirtualProtect( aAddress, aGuardSize,
+                                    PAGE_READWRITE | PAGE_GUARD, &old_prot );
+#else
+        bool res = ( 0 == ::mprotect( aAddress, aGuardSize, PROT_NONE ) );
+#endif
+        if( !res )
+            wxLogTrace( kicadTraceCoroutineStack, wxT( "COROUTINE::GuardMemory has failes" ) );
+    }
+#endif // LIBCONTEXT_HAS_OWN_STACK
 
     INVOCATION_ARGS* doResume( INVOCATION_ARGS* args )
     {
@@ -532,11 +553,9 @@ private:
         }
     }
 
+#ifndef LIBCONTEXT_HAS_OWN_STACK
     ///< coroutine stack
-#ifdef _WIN32
-    void* m_stack;
-#else
-    std::unique_ptr<char[]> m_stack;
+    std::unique_ptr<char[], struct STACK_DELETER> m_stack;
 #endif
 
     int m_stacksize;
