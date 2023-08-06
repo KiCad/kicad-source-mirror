@@ -34,21 +34,39 @@
 #include <notifications_manager.h>
 #include <bitmaps.h>
 
+
+#define FIELD_OFFSET_BGJOB_TEXT 0
+#define FIELD_OFFSET_BGJOB_GAUGE 1
+#define FIELD_OFFSET_BGJOB_CANCEL 2
+#define FIELD_OFFSET_NOTIFICATION_BUTTON 3
+
+
 KISTATUSBAR::KISTATUSBAR( int aNumberFields, wxWindow* parent, wxWindowID id ) :
         wxStatusBar( parent, id ),
         m_normalFieldsCount( aNumberFields )
 {
+#ifdef __WXOSX__
+    // we need +1 extra field on OSX to offset from the rounded corner on the right
+    // OSX doesnt use resize grippers like the other platforms and the statusbar field
+    // includes the rounded part
+    const int ExtraFields = 5;
+#else
     const int ExtraFields = 4;
+#endif
     SetFieldsCount( aNumberFields + ExtraFields );
 
     int* widths = new int[aNumberFields + ExtraFields];
     for( int i = 0; i < aNumberFields; i++ )
         widths[i] = -1;
 
-    widths[aNumberFields] = 200;
-    widths[aNumberFields + 1] = 75;
-    widths[aNumberFields + 2] = 20;
-    widths[aNumberFields + 3] = 20;
+    widths[aNumberFields + FIELD_OFFSET_BGJOB_TEXT] = 200; // background status text field
+    widths[aNumberFields + FIELD_OFFSET_BGJOB_GAUGE] = 75; // background progress button
+    widths[aNumberFields + FIELD_OFFSET_BGJOB_CANCEL] = 20; // background stop button
+    widths[aNumberFields + FIELD_OFFSET_NOTIFICATION_BUTTON] = 20; // notifications button
+#ifdef __WXOSX__
+    // offset from the right edge
+    widths[aNumberFields + ExtraFields] = 15;
+#endif
 
     SetStatusWidths( aNumberFields + ExtraFields, widths );
     delete[] widths;
@@ -112,17 +130,16 @@ void KISTATUSBAR::onBackgroundProgressClick( wxMouseEvent& aEvent )
     Pgm().GetBackgroundJobMonitor().ShowList( this, pos );
 }
 
-
 void KISTATUSBAR::onSize( wxSizeEvent& aEvent )
 {
     wxRect r;
-    GetFieldRect( m_normalFieldsCount, r );
+    GetFieldRect( m_normalFieldsCount + FIELD_OFFSET_BGJOB_TEXT, r );
     int x = r.GetLeft();
     int y = r.GetTop();
 
     m_backgroundTxt->SetPosition( { x, y } );
 
-    GetFieldRect( m_normalFieldsCount + 1, r );
+    GetFieldRect( m_normalFieldsCount + FIELD_OFFSET_BGJOB_GAUGE, r );
     x = r.GetLeft();
     y = r.GetTop();
     int           w = r.GetWidth();
@@ -136,7 +153,7 @@ void KISTATUSBAR::onSize( wxSizeEvent& aEvent )
     m_backgroundProgressBar->SetPosition( { x, y } );
     m_backgroundProgressBar->SetSize( w - buttonSize.GetWidth() - b, h );
 
-    GetFieldRect( m_normalFieldsCount+3, r );
+    GetFieldRect( m_normalFieldsCount + FIELD_OFFSET_NOTIFICATION_BUTTON, r );
     x = r.GetLeft();
     y = r.GetTop();
     h = r.GetHeight();
