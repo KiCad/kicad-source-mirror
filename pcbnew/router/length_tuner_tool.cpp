@@ -85,6 +85,7 @@ LENGTH_TUNER_TOOL::LENGTH_TUNER_TOOL() :
     // set the initial tune mode for the settings dialog,
     // in case the dialog is opened before the tool is activated the first time
     m_lastTuneMode = PNS::ROUTER_MODE::PNS_MODE_TUNE_SINGLE;
+    m_inLengthTuner = false;
 }
 
 
@@ -95,6 +96,8 @@ LENGTH_TUNER_TOOL::~LENGTH_TUNER_TOOL()
 
 bool LENGTH_TUNER_TOOL::Init()
 {
+    m_inLengthTuner = false;
+
     auto& menu = m_menu.GetMenu();
 
     menu.SetTitle( _( "Length Tuner" ) );

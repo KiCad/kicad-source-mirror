@@ -39,7 +39,8 @@ public:
             m_plotFootprintValues( true ),
             m_plotRefDes( true ),
             m_plotBorderTitleBlocks( false ),
-            m_printMaskLayer()
+            m_printMaskLayer(),
+            m_drillShapeOption( 2 )
     {
     }
 

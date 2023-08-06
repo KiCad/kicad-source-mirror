@@ -322,7 +322,8 @@ void NOTIFICATIONS_MANAGER::Create( const wxString& aKey,
     }
     else
     {
-        m_notifications.emplace_back( NOTIFICATION{ aTitle, aDescription, aHref, aKey } );
+        m_notifications.emplace_back( NOTIFICATION{ aTitle, aDescription, aHref,
+                                                    aKey, wxEmptyString } );
     }
 
     if( m_shownDialogs.size() > 0 )
