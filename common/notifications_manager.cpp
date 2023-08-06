@@ -276,8 +276,7 @@ void NOTIFICATIONS_MANAGER::Load()
     }
     catch( std::exception& )
     {
-        // failed to load the json
-        return;
+        // failed to load the json, which is fine, default to no notificaitons
     }
 
     if( wxGetEnv( wxT( "KICAD_TEST_NOTI" ), nullptr ) )
