@@ -289,7 +289,10 @@ void BITMAP_BUTTON::OnPaint( wxPaintEvent& aEvent )
     wxBitmap bmpImg = bmp.GetBitmapFor( this );
     if( m_centerBitmap )
     {
-        drawBmpPos = wxPoint( (rect.width - bmpImg.GetWidth()) / 2, (rect.height - bmpImg.GetHeight()) / 2 );
+        // dont let it go negative if bmp is larger than the button
+        int x = std::max( ( rect.width - bmpImg.GetWidth() ) / 2, 0 );
+        int y = std::max( ( rect.height - bmpImg.GetHeight() ) / 2, 0 );
+        drawBmpPos = wxPoint( x, y );
     }
 
     // Draw the bitmap with the upper-left corner offset by the padding
