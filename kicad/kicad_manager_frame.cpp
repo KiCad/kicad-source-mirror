@@ -289,7 +289,7 @@ void KICAD_MANAGER_FRAME::CreatePCM()
 
                 if( aUpdateCount > 0 )
                 {
-                    Pgm().GetNotificationsManager().Create(
+                    Pgm().GetNotificationsManager().CreateOrUpdate(
                             wxS( "pcm" ),
                             _( "PCM Updates Available" ),
                             wxString::Format( _( "%d package update(s) avaliable" ), aUpdateCount ),

@@ -120,19 +120,11 @@ public:
 
         m_hlDismiss->Bind( wxEVT_HYPERLINK, &NOTIFICATION_PANEL::onDismiss, this );
 
-        Bind( wxEVT_SET_FOCUS, &NOTIFICATION_PANEL::onFocusSet, this );
-
         SetSizer( mainSizer );
         Layout();
     }
 
 private:
-    void onFocusSet( wxFocusEvent& aEvent )
-    {
-        // hmmph
-
-    }
-
     void onDetails( wxHyperlinkEvent& aEvent )
     {
         wxString url = aEvent.GetURL();
@@ -287,6 +279,12 @@ void NOTIFICATIONS_MANAGER::Load()
         // failed to load the json
         return;
     }
+
+    if( wxGetEnv( wxT( "KICAD_TEST_NOTI" ), nullptr ) )
+    {
+        CreateOrUpdate( wxS( "test" ), wxS( "Test Notification" ), wxS( "Test please ignore" ),
+                wxS( "https://kicad.org" ) );
+    }
 }
 
 
@@ -301,11 +299,13 @@ void NOTIFICATIONS_MANAGER::Save()
 }
 
 
-void NOTIFICATIONS_MANAGER::Create( const wxString& aKey,
+void NOTIFICATIONS_MANAGER::CreateOrUpdate( const wxString& aKey,
                                     const wxString& aTitle,
                                     const wxString& aDescription,
                                     const wxString& aHref )
 {
+    wxCHECK_RET( !aKey.IsEmpty(), wxS( "Notification key must not be empty" ) );
+
     auto it = std::find_if( m_notifications.begin(), m_notifications.end(),
                             [&]( const NOTIFICATION& noti )
                             {

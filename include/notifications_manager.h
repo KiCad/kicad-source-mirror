@@ -55,14 +55,15 @@ public:
     NOTIFICATIONS_MANAGER();
 
     /**
-     * Creates a notification with the given parameters
-     * @param aKey is a unique key for the notification, this allows removing
+     * Creates a notification with the given parameters or updates an existing one with the same key
+     *
+     * @param aKey is a unique key for the notification, this allows removing or updating the same notification
      * @param aTitle is the displayed title for the event
      * @param aDescription is the text that displays underneath the title and has slightly more info
      *   them later programtically in case a notificaiton is no logner required
      * @param aHref is link to external or internal content
      */
-    void Create( const wxString& aKey, const wxString& aTitle, const wxString& aDescription,
+    void CreateOrUpdate( const wxString& aKey, const wxString& aTitle, const wxString& aDescription,
                  const wxString& aHref = wxEmptyString );
 
     /**
