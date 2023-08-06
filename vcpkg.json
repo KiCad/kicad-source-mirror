@@ -33,6 +33,10 @@
     "opengl",
     "python3",
     "openssl",
+    {
+      "name": "sqlite3",
+      "features": [ "fts5", "fts4", "fts3", "rtree", "session" ]
+    },
     "icu",
     "ngspice",
     "wxpython"
