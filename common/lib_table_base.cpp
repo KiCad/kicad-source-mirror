@@ -127,6 +127,13 @@ LIB_TABLE::~LIB_TABLE()
 }
 
 
+void LIB_TABLE::Clear()
+{
+    m_rows.clear();
+    m_rowsMap.clear();
+}
+
+
 bool LIB_TABLE::IsEmpty( bool aIncludeFallback )
 {
     if( !aIncludeFallback || !m_fallBack )
@@ -191,31 +198,26 @@ LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName, bool aCheckIfEnabl
 
     do
     {
-        cur->ensureIndex();
+        std::shared_lock<std::shared_mutex> lock( cur->m_mutex, std::try_to_lock );
 
-        std::shared_lock<std::shared_mutex> lock( cur->m_nickIndexMutex );
+        if( !cur->m_rowsMap.count( aNickName ) )
+            continue;
 
-        for( const std::pair<const wxString, int>& entry : cur->m_nickIndex )
-        {
-            if( entry.first == aNickName )
-            {
-                row = &cur->m_rows[entry.second];
+        row = &*cur->m_rowsMap.at( aNickName );
 
-                if( !aCheckIfEnabled || row->GetIsEnabled() )
-                    return row;
-            }
-        }
+        if( !aCheckIfEnabled || row->GetIsEnabled() )
+            return row;
 
         // Repeat, this time looking for names that were "fixed" by legacy versions because
         // the old eeschema file format didn't support spaces in tokens.
-        for( const std::pair<const wxString, int>& entry : cur->m_nickIndex )
+        for( const std::pair<const wxString, LIB_TABLE_ROWS_ITER>& entry : cur->m_rowsMap )
         {
             wxString legacyLibName = entry.first;
             legacyLibName.Replace( " ", "_" );
 
             if( legacyLibName == aNickName )
             {
-                row = &cur->m_rows[entry.second];
+                row = &*entry.second;
 
                 if( !aCheckIfEnabled || row->GetIsEnabled() )
                     return row;
@@ -235,9 +237,7 @@ const LIB_TABLE_ROW* LIB_TABLE::FindRowByURI( const wxString& aURI )
 
     do
     {
-        cur->ensureIndex();
-
-        for( unsigned i = 0;  i < cur->m_rows.size();  i++ )
+        for( unsigned i = 0; i < cur->m_rows.size(); i++ )
         {
             wxString tmp = cur->m_rows[i].GetFullURI( true );
 
@@ -276,10 +276,10 @@ std::vector<wxString> LIB_TABLE::GetLogicalLibs()
 
     do
     {
-        for( LIB_TABLE_ROWS_CITER it = cur->m_rows.begin();  it!=cur->m_rows.end();  ++it )
+        for( const LIB_TABLE_ROW& row : cur->m_rows )
         {
-            if( it->GetIsEnabled() )
-                unique.insert( it->GetNickName() );
+            if( row.GetIsEnabled() )
+                unique.insert( row.GetNickName() );
         }
 
     } while( ( cur = cur->m_fallBack ) != nullptr );
@@ -303,28 +303,120 @@ std::vector<wxString> LIB_TABLE::GetLogicalLibs()
 
 bool LIB_TABLE::InsertRow( LIB_TABLE_ROW* aRow, bool doReplace )
 {
-    ensureIndex();
+    std::lock_guard<std::shared_mutex> lock( m_mutex );
 
-    std::lock_guard<std::shared_mutex> lock( m_nickIndexMutex );
+    auto it = m_rowsMap.find( aRow->GetNickName() );
 
-    INDEX_CITER it = m_nickIndex.find( aRow->GetNickName() );
+    if( it != m_rowsMap.end() )
+    {
+        if( !doReplace )
+            return false;
 
-    aRow->SetParent( this );
-
-    if( it == m_nickIndex.end() )
+        m_rows.replace( it->second, aRow );
+    }
+    else
     {
         m_rows.push_back( aRow );
-        m_nickIndex.insert( INDEX_VALUE( aRow->GetNickName(), m_rows.size() - 1 ) );
-        return true;
     }
 
-    if( doReplace )
+    aRow->SetParent( this );
+    reindex();
+    return true;
+}
+
+
+bool LIB_TABLE::RemoveRow( const LIB_TABLE_ROW* aRow )
+{
+    std::lock_guard<std::shared_mutex> lock( m_mutex );
+
+    bool found = false;
+    auto it = m_rowsMap.find( aRow->GetNickName() );
+
+    if( it != m_rowsMap.end() )
     {
-        m_rows.replace( it->second, aRow );
-        return true;
+        if( &*it->second == aRow )
+        {
+            found = true;
+            m_rows.erase( it->second );
+        }
     }
 
-    return false;
+    if( !found )
+    {
+        // Bookkeeping got messed up...
+        for( size_t i = m_rows.size() - 1; i >= 0; --i )
+        {
+            if( &m_rows[i] == aRow )
+            {
+                m_rows.erase( m_rows.begin() + i );
+                found = true;
+                break;
+            }
+        }
+    }
+
+    if( found )
+        reindex();
+
+    return found;
+}
+
+
+bool LIB_TABLE::ReplaceRow( size_t aIndex, LIB_TABLE_ROW* aRow )
+{
+    std::lock_guard<std::shared_mutex> lock( m_mutex );
+
+    if( aIndex >= m_rows.size() )
+        return false;
+
+    m_rowsMap.erase( m_rows[aIndex].GetNickName() );
+
+    m_rows.replace( aIndex, aRow );
+    reindex();
+    return true;
+}
+
+
+bool LIB_TABLE::ChangeRowOrder( size_t aIndex, int aOffset )
+{
+    std::lock_guard<std::shared_mutex> lock( m_mutex );
+
+    if( aIndex >= m_rows.size() )
+        return false;
+
+    int newPos = static_cast<int>( aIndex ) + aOffset;
+
+    if( newPos < 0 || newPos > static_cast<int>( m_rows.size() ) - 1 )
+        return false;
+
+    auto element = m_rows.release( m_rows.begin() + aIndex );
+
+    m_rows.insert( m_rows.begin() + newPos, element.release() );
+    reindex();
+
+    return true;
+}
+
+
+void LIB_TABLE::TransferRows( LIB_TABLE_ROWS& aRowsList )
+{
+    std::lock_guard<std::shared_mutex> lock( m_mutex );
+
+    m_rows.transfer( m_rows.end(), aRowsList.begin(), aRowsList.end(), aRowsList );
+
+    reindex();
+}
+
+
+void LIB_TABLE::reindex()
+{
+    m_rowsMap.clear();
+
+    for( LIB_TABLE_ROWS_ITER it = m_rows.begin(); it != m_rows.end(); ++it )
+    {
+        it->SetParent( this );
+        m_rowsMap[it->GetNickName()] = it;
+    }
 }
 
 
