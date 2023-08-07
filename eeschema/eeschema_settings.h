@@ -221,6 +221,7 @@ public:
         int                        page;
         wxString                   export_filename;
         int                        selection_mode;
+        int                        scope;
     };
 
     struct PANEL_LIB_VIEW

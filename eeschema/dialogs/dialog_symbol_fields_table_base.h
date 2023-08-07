@@ -70,6 +70,7 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		BITMAP_BUTTON* m_separator3;
 		wxBitmapButton* m_bRefresh;
 		wxRadioBox* m_radioSelect;
+		wxRadioBox* m_radioScope;
 		WX_GRID* m_grid;
 		wxPanel* m_panelExport;
 		wxStaticText* m_labelBomExportPresets;
@@ -112,6 +113,7 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		virtual void OnExcludeDNPToggled( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnGroupSymbolsToggled( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRegroupSymbols( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnScopeChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTableValueChanged( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnTableCellClick( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnTableItemContextMenu( wxGridEvent& event ) { event.Skip(); }

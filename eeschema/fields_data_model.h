@@ -51,10 +51,17 @@ struct DATA_MODEL_COL
 class FIELDS_EDITOR_GRID_DATA_MODEL : public wxGridTableBase
 {
 public:
+    enum SCOPE : int
+    {
+        SCOPE_ALL = 0,
+        SCOPE_SHEET = 1,
+        SCOPE_SHEET_RECURSIVE = 2
+    };
+
     FIELDS_EDITOR_GRID_DATA_MODEL( SCH_REFERENCE_LIST& aSymbolsList ) :
             m_symbolsList( aSymbolsList ), m_edited( false ), m_sortColumn( 0 ),
-            m_sortAscending( false ), m_groupingEnabled( false ), m_excludeDNP( false ),
-            m_includeExcluded( false ), m_rebuildsEnabled( true )
+            m_sortAscending( false ), m_scope( SCOPE_ALL ), m_groupingEnabled( false ),
+            m_excludeDNP( false ), m_includeExcluded( false ), m_rebuildsEnabled( true )
     {
         m_symbolsList.SplitReferences();
     }
@@ -158,6 +165,12 @@ public:
     void SetFilter( const wxString& aFilter ) { m_filter = aFilter; }
     const wxString& GetFilter() { return m_filter; }
 
+    void  SetScope( SCOPE aScope ) { m_scope = aScope; }
+    SCOPE GetScope() { return m_scope; }
+
+    void                  SetPath( const SCH_SHEET_PATH& aPath ) { m_path = aPath; }
+    const SCH_SHEET_PATH& GetPath() { return m_path; }
+
     void SetGroupingEnabled( bool group ) { m_groupingEnabled = group; }
     bool GetGroupingEnabled() { return m_groupingEnabled; }
 
@@ -225,6 +238,8 @@ protected:
     int                m_sortColumn;
     bool               m_sortAscending;
     wxString           m_filter;
+    enum SCOPE         m_scope;
+    SCH_SHEET_PATH     m_path;
     bool               m_groupingEnabled;
     bool               m_excludeDNP;
     bool               m_includeExcluded;

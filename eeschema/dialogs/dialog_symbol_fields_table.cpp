@@ -264,9 +264,8 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     ApplyBomFmtPreset( m_schSettings.m_BomFmtSettings );
     syncBomFmtPresetSelection();
 
-    m_grid->SelectRow( 0 );
-    m_grid->SetGridCursor( 0, 1 );
     SetInitialFocus( m_grid );
+    m_grid->ClearSelection();
 
     SetupStandardButtons();
 
@@ -281,6 +280,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
 
     m_nbPages->SetSelection( cfg->m_FieldEditorPanel.page );
     m_radioSelect->SetSelection( cfg->m_FieldEditorPanel.selection_mode );
+    m_radioScope->SetSelection( cfg->m_FieldEditorPanel.scope );
 
     m_outputFileName->SetValue( cfg->m_FieldEditorPanel.export_filename );
 
@@ -423,6 +423,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::~DIALOG_SYMBOL_FIELDS_TABLE()
     cfg->m_FieldEditorPanel.page = m_nbPages->GetSelection();
     cfg->m_FieldEditorPanel.export_filename = m_outputFileName->GetValue();
     cfg->m_FieldEditorPanel.selection_mode = m_radioSelect->GetSelection();
+    cfg->m_FieldEditorPanel.scope = m_radioScope->GetSelection();
 
 
     for( int i = 0; i < m_grid->GetNumberCols(); i++ )
@@ -492,6 +493,8 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataToWindow()
             }
         }
     }
+
+    UpdateScope();
 
     return true;
 }
@@ -961,6 +964,17 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRegroupSymbols( wxCommandEvent& aEvent )
     m_grid->ForceRefresh();
 }
 
+void DIALOG_SYMBOL_FIELDS_TABLE::OnScopeChanged( wxCommandEvent& aEvent )
+{
+    UpdateScope();
+}
+
+void DIALOG_SYMBOL_FIELDS_TABLE::UpdateScope()
+{
+    m_dataModel->SetPath( m_parent->GetCurrentSheet() );
+    m_dataModel->SetScope( (FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE) m_radioScope->GetSelection() );
+    m_dataModel->RebuildRows();
+}
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnTableCellClick( wxGridEvent& event )
 {

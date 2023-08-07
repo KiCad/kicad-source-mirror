@@ -492,6 +492,15 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
         if( !m_includeExcluded && ref.GetSymbol()->GetExcludedFromBOM() )
             continue;
 
+        // Check if the symbol if on the current sheet or, in the sheet path somewhere
+        // depending on scope
+        if( ( m_scope == SCOPE::SCOPE_SHEET && ref.GetSheetPath() != m_path )
+            || ( m_scope == SCOPE::SCOPE_SHEET_RECURSIVE
+                 && !ref.GetSheetPath().IsContainedWithin( m_path ) ) )
+        {
+            continue;
+        }
+
         bool matchFound = false;
 
         // Performance optimization for ungrouped case to skip the N^2 for loop
