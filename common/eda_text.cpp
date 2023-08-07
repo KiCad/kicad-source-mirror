@@ -95,7 +95,17 @@ EDA_TEXT::EDA_TEXT( const EDA_IU_SCALE& aIuScale, const wxString& aText ) :
 {
     SetTextSize( VECTOR2I( EDA_UNIT_UTILS::Mils2IU( m_IuScale, DEFAULT_SIZE_TEXT ),
                            EDA_UNIT_UTILS::Mils2IU( m_IuScale, DEFAULT_SIZE_TEXT ) ) );
-    cacheShownText();
+
+    if( m_text.IsEmpty() )
+    {
+        m_shown_text = wxEmptyString;
+        m_shown_text_has_text_var_refs = false;
+    }
+    else
+    {
+        m_shown_text = UnescapeString( m_text );
+        m_shown_text_has_text_var_refs = m_shown_text.Contains( wxT( "${" ) );
+    }
 }
 
 
@@ -170,22 +180,14 @@ EDA_TEXT& EDA_TEXT::operator=( const EDA_TEXT& aText )
 void EDA_TEXT::SetText( const wxString& aText )
 {
     m_text = aText;
-
     cacheShownText();
-
-    ClearRenderCache();
-    m_bounding_box_cache_valid = false;
 }
 
 
 void EDA_TEXT::CopyText( const EDA_TEXT& aSrc )
 {
     m_text = aSrc.m_text;
-    m_shown_text = aSrc.m_shown_text;
-    m_shown_text_has_text_var_refs = aSrc.m_shown_text_has_text_var_refs;
-
-    ClearRenderCache();
-    m_bounding_box_cache_valid = false;
+    cacheShownText();
 }
 
 
@@ -280,11 +282,7 @@ void EDA_TEXT::SetAttributes( const EDA_TEXT& aSrc )
 void EDA_TEXT::SwapText( EDA_TEXT& aTradingPartner )
 {
     std::swap( m_text, aTradingPartner.m_text );
-    std::swap( m_shown_text, aTradingPartner.m_shown_text );
-    std::swap( m_shown_text_has_text_var_refs, aTradingPartner.m_shown_text_has_text_var_refs );
-
-    ClearRenderCache();
-    m_bounding_box_cache_valid = false;
+    cacheShownText();
 }
 
 

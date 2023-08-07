@@ -161,7 +161,10 @@ SCH_LABEL_BASE::SCH_LABEL_BASE( const VECTOR2I& aPos, const wxString& aText, KIC
         m_lastResolvedColor( COLOR4D::UNSPECIFIED )
 {
     SetMultilineAllowed( false );
-    ClearFieldsAutoplaced();    // fiels are not yet autoplaced.
+    ClearFieldsAutoplaced();    // fields are not yet autoplaced.
+
+    if( !HasTextVars() )
+        m_cached_driver_name = EscapeString( EDA_TEXT::GetShownText( true, 0 ), CTX_NETNAME );
 }
 
 
@@ -170,7 +173,8 @@ SCH_LABEL_BASE::SCH_LABEL_BASE( const SCH_LABEL_BASE& aLabel ) :
         m_shape( aLabel.m_shape ),
         m_connectionType( aLabel.m_connectionType ),
         m_isDangling( aLabel.m_isDangling ),
-        m_lastResolvedColor( aLabel.m_lastResolvedColor )
+        m_lastResolvedColor( aLabel.m_lastResolvedColor ),
+        m_cached_driver_name( aLabel.m_cached_driver_name )
 {
     SetMultilineAllowed( false );
 
@@ -178,6 +182,16 @@ SCH_LABEL_BASE::SCH_LABEL_BASE( const SCH_LABEL_BASE& aLabel ) :
 
     for( SCH_FIELD& field : m_fields )
         field.SetParent( this );
+}
+
+
+SCH_LABEL_BASE& SCH_LABEL_BASE::operator=( const SCH_LABEL_BASE& aLabel )
+{
+    SCH_TEXT::operator=( aLabel );
+
+    m_cached_driver_name = aLabel.m_cached_driver_name;
+
+    return *this;
 }
 
 

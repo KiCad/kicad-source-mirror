@@ -38,6 +38,8 @@ public:
 
     SCH_LABEL_BASE( const SCH_LABEL_BASE& aLabel );
 
+    SCH_LABEL_BASE& operator=( const SCH_LABEL_BASE& aLabel );
+
     // Abstract class
     virtual wxString GetClass() const override = 0;
 
