@@ -27,6 +27,7 @@
 #include <view/view_group.h>
 #include <gal/graphics_abstraction_layer.h>
 
+#include <advanced_config.h>
 #include <settings/settings_manager.h>
 
 #include <pcb_painter.h>
@@ -64,7 +65,10 @@ ROUTER::ROUTER()
     m_state = IDLE;
     m_mode = PNS_MODE_ROUTE_SINGLE;
 
-    m_logger = new LOGGER;
+    m_logger = nullptr;
+
+    if( ADVANCED_CFG::GetCfg().m_EnableRouterDump )
+        m_logger = new LOGGER;
 
     // Initialize all other variables:
     m_lastNode = nullptr;
@@ -899,7 +903,9 @@ std::optional<VECTOR2I> ROUTER::UndoLastSegment()
     if( !RoutingInProgress() )
         return std::nullopt;
 
-    m_logger->Log( LOGGER::EVT_UNFIX );
+    if( m_logger )
+        m_logger->Log( LOGGER::EVT_UNFIX );
+
     return m_placer->UnfixRoute();
 }
 
