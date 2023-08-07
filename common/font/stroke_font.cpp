@@ -193,7 +193,7 @@ void STROKE_FONT::loadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
 
 double STROKE_FONT::GetInterline( double aGlyphHeight, const METRICS& aFontMetrics ) const
 {
-    static double LEGACY_FACTOR = 1.0435;   // Adjustment to match legacy spacing
+    static double LEGACY_FACTOR = 0.9583;   // Adjustment to match legacy spacing
 
     return aFontMetrics.GetInterline( aGlyphHeight ) * LEGACY_FACTOR;
 }
