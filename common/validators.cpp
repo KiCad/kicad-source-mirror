@@ -407,7 +407,7 @@ bool FIELD_VALIDATOR::Validate( wxWindow* aParent )
                 else if( excludeChar == ' ' )
                     badCharsFound.Add( _( "space" ) );
                 else
-                    badCharsFound.Add( wxString::Format( wxT( "'%s'" ), excludeChar ) );
+                    badCharsFound.Add( wxString::Format( wxT( "'%c'" ), excludeChar ) );
             }
         }
 #else
