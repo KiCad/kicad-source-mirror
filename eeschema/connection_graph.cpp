@@ -357,9 +357,12 @@ wxString CONNECTION_SUBGRAPH::driverName( SCH_ITEM* aItem ) const
 
 const wxString& CONNECTION_SUBGRAPH::GetNameForDriver( SCH_ITEM* aItem ) const
 {
-    auto [it, success] = m_driver_name_cache.try_emplace( aItem, driverName( aItem ) );
+    auto it = m_driver_name_cache.find( aItem );
 
-    return it->second;
+    if( it != m_driver_name_cache.end() )
+        return it->second;
+
+    return m_driver_name_cache.emplace( aItem, driverName( aItem ) ).first->second;
 }
 
 
