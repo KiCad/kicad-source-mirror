@@ -66,7 +66,7 @@ void SHOVE::replaceLine( LINE& aOld, LINE& aNew, bool aIncludeInChangedArea, NOD
         if( changed_area )
         {
             SHAPE_RECT r( *changed_area );
-            PNS_DBG(Dbg(), AddShape, &r, BLUE, 0, wxT( "shove-changed-area" ) );
+            PNS_DBG( Dbg(), AddShape, &r, BLUE, 0, wxT( "shove-changed-area" ) );
 
             m_affectedArea = m_affectedArea ? m_affectedArea->Merge( *changed_area )
                                             : *changed_area;
@@ -983,12 +983,12 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia, OB
         LINE* currentLine = (LINE*) aCurrent;
 
         PNS_DBG( Dbg(), AddItem, currentLine, LIGHTRED, 10000, wxT( "current-line" ) );
-        
+
         if( currentLine->EndsWithVia() )
         {
             PNS_DBG( Dbg(), AddItem, &currentLine->Via(), LIGHTRED, 10000, wxT( "current-line-via" ) );
         }
-        
+
         PNS_DBG( Dbg(), AddItem, &vtmp, LIGHTRED, 100000, wxT( "orig-via" ) );
 
         lineCollision = vtmp.Shape()->Collide( currentLine->Shape(),
@@ -1019,7 +1019,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia, OB
         mtv = VECTOR2I(0, 0);
 
     SHOVE::SHOVE_STATUS st = pushOrShoveVia( aObstacleVia, -mtv, aCurrent->Rank() );
-    PNS_DBG(Dbg(), Message, wxString::Format("push-or-shove-via st %d", st ) );
+    PNS_DBG( Dbg(), Message, wxString::Format("push-or-shove-via st %d", st ) );
 
     PNS_DBGN( Dbg(), EndGroup );
 
@@ -1056,12 +1056,11 @@ SHOVE::SHOVE_STATUS SHOVE::onReverseCollidingVia( LINE& aCurrent, VIA* aObstacle
 
             if( st != SH_OK )
             {
-#if 0
-                m_logger.NewGroup( "on-reverse-via-fail-shove", m_iter );
-                m_logger.Log( aObstacleVia, 0, "the-via" );
-                m_logger.Log( &aCurrent, 1, "current-line" );
-                m_logger.Log( &shoved, 3, "shoved-line" );
-#endif
+                PNS_DBG( Dbg(), BeginGroup, "on-reverse-via-fail-shove", m_iter );
+                PNS_DBG( Dbg(), AddItem, aObstacleVia, LIGHTRED,   100000, wxT( "the-via" ) );
+                PNS_DBG( Dbg(), AddItem, &aCurrent,    LIGHTGREEN, 10000,  wxT( "current-line" ) );
+                PNS_DBG( Dbg(), AddItem, &shoved,      LIGHTRED,   10000,  wxT( "shoved-line" ) );
+                PNS_DBGN( Dbg(), EndGroup );
 
                 return st;
             }
@@ -1073,11 +1072,10 @@ SHOVE::SHOVE_STATUS SHOVE::onReverseCollidingVia( LINE& aCurrent, VIA* aObstacle
 
     if( !n )
     {
-#if 0
-        m_logger.NewGroup( "on-reverse-via-fail-lonevia", m_iter );
-        m_logger.Log( aObstacleVia, 0, "the-via" );
-        m_logger.Log( &aCurrent, 1, "current-line" );
-#endif
+        PNS_DBG( Dbg(), BeginGroup, "on-reverse-via-fail-lonevia", m_iter );
+        PNS_DBG( Dbg(), AddItem, aObstacleVia, LIGHTRED, 100000, wxT( "the-via" ) );
+        PNS_DBG( Dbg(), AddItem, &aCurrent, LIGHTGREEN, 10000, wxT( "current-line" ) );
+        PNS_DBGN( Dbg(), EndGroup );
 
         LINE head( aCurrent );
         head.Line().Clear();
@@ -1095,16 +1093,11 @@ SHOVE::SHOVE_STATUS SHOVE::onReverseCollidingVia( LINE& aCurrent, VIA* aObstacle
     if( aCurrent.EndsWithVia() )
         shoved.AppendVia( aCurrent.Via() );
 
-#if 0
-    m_logger.NewGroup( "on-reverse-via", m_iter );
-    m_logger.Log( aObstacleVia, 0, "the-via" );
-    m_logger.Log( &aCurrent, 1, "current-line" );
-    m_logger.Log( &shoved, 3, "shoved-line" );
-#endif
-
+    PNS_DBG( Dbg(), BeginGroup, "on-reverse-via", m_iter );
     PNS_DBG( Dbg(), AddItem, aObstacleVia, YELLOW, 0, wxT( "rr-the-via" ) );
     PNS_DBG( Dbg(), AddItem, &aCurrent, BLUE, 0, wxT( "rr-current-line" ) );
     PNS_DBG( Dbg(), AddItem, &shoved, GREEN, 0, wxT( "rr-shoved-line" ) );
+    PNS_DBGN( Dbg(), EndGroup );
 
     int currentRank = aCurrent.Rank();
     replaceLine( aCurrent, shoved );
@@ -1323,7 +1316,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
                                                         nearest->m_item->Rank() ) );
 
             PNS_DBG( Dbg(), AddShape, nearest->m_item->Shape(), YELLOW, 10000, wxT( "nearest" ) );
-         }   
+         }
 
          if( nearest )
             break;
@@ -1565,10 +1558,6 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveLines( const LINE& aCurrentHead )
     m_optimizerQueue.clear();
     m_newHead = OPT_LINE();
 
-#if 0
-    m_logger.Clear();
-#endif
-
     // Pop NODEs containing previous shoves which are no longer necessary
     //
     ITEM_SET headSet;
@@ -1638,7 +1627,7 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveLines( const LINE& aCurrentHead )
         m_newHead = OPT_LINE();
     }
 
-    if(m_newHead)
+    if( m_newHead )
         m_newHead->Unmark();
 
     if( m_newHead && head.EndsWithVia() )
@@ -1673,10 +1662,6 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveMultiLines( const ITEM_SET& aHeadSet )
 
     m_lineStack.clear();
     m_optimizerQueue.clear();
-
-#if 0
-    m_logger.Clear();
-#endif
 
     VIA_HANDLE dummyVia;
 
