@@ -34,6 +34,7 @@
 #include <core/kicad_algo.h>
 #include <wx/wfstream.h>
 #include <xnode.h>      // also nests: <wx/xml/xml.h>
+#include <nlohmann/json.hpp>
 
 #include <symbol_lib_table.h>
 
@@ -98,7 +99,7 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
     wxString                     datasheet;
     wxString                     description;
     wxString                     candidate;
-    std::map<wxString, wxString> userFields;
+    nlohmann::ordered_map<wxString, wxString> userFields;
 
     if( aSymbol->GetUnitCount() > 1 )
     {
@@ -235,7 +236,6 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
                 UnescapeString( TEMPLATE_FIELDNAME::GetDefaultFieldName( DESCRIPTION_FIELD ) ) );
         xfields->AddChild( descriptionField );
 
-        // non MANDATORY fields are output alphabetically
         for( const std::pair<const wxString, wxString>& f : userFields )
         {
             XNODE* xfield = node( wxT( "field" ), UnescapeString( f.second ) );

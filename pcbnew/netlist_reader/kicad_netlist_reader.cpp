@@ -24,6 +24,7 @@
 
 #include <netlist_lexer.h>  // netlist_lexer is common to Eeschema and Pcbnew
 #include <macros.h>
+#include <nlohmann/json.hpp>
 
 #include "pcb_netlist.h"
 #include "netlist_reader.h"
@@ -310,7 +311,7 @@ void KICAD_NETLIST_PARSER::parseComponent()
 
     std::vector<KIID>            uuids;
     std::map<wxString, wxString> properties;
-    std::map<wxString, wxString> fields;
+    nlohmann::ordered_map<wxString, wxString> fields;
 
     // The token comp was read, so the next data is (ref P1)
     while( (token = NextTok() ) != T_RIGHT )

@@ -28,6 +28,7 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <wx/arrstr.h>
+#include <nlohmann/json.hpp>
 
 #include <lib_id.h>
 #include <footprint.h>
@@ -128,8 +129,11 @@ public:
     void SetValue( const wxString& aValue ) { m_value = aValue; }
     const wxString& GetValue() const { return m_value; }
 
-    void SetFields( std::map<wxString, wxString>& aFields ) { m_fields = std::move( aFields ); }
-    const std::map<wxString, wxString>& GetFields() const { return m_fields; }
+    void SetFields( nlohmann::ordered_map<wxString, wxString>& aFields )
+    {
+        m_fields = std::move( aFields );
+    }
+    const nlohmann::ordered_map<wxString, wxString>& GetFields() const { return m_fields; }
 
     void SetProperties( std::map<wxString, wxString>& aProps )
     {
@@ -202,7 +206,7 @@ private:
     std::map<wxString, wxString> m_properties;
 
     /// Component-specific user fields found in the netlist.
-    std::map<wxString, wxString> m_fields;
+    nlohmann::ordered_map<wxString, wxString> m_fields;
 
     static COMPONENT_NET         m_emptyNet;
 };

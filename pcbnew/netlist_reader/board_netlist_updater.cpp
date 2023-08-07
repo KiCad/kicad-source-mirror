@@ -344,7 +344,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
     }
 
-    std::map<wxString, wxString> fpFieldsAsMap;
+    nlohmann::ordered_map<wxString, wxString> fpFieldsAsMap;
     for( PCB_FIELD* field : aPcbFootprint->GetFields() )
     {
         // These fields are individually checked above, and are not currently present in (fields) anyway.

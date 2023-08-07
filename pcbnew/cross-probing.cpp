@@ -563,7 +563,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
                 }
             }
 
-            std::map<wxString, wxString> fields;
+            nlohmann::ordered_map<wxString, wxString> fields;
             for( PCB_FIELD* field : footprint->Fields() )
                 fields[field->GetCanonicalName()] = field->GetText();
 
