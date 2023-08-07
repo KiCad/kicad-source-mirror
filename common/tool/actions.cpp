@@ -738,10 +738,14 @@ TOOL_ACTION ACTIONS::updateSchematicFromPcb( "common.Control.updateSchematicFrom
         _( "Update Schematic from PCB..." ), _( "Update schematic with changes made to PCB" ),
         BITMAPS::update_sch_from_pcb );
 
-TOOL_ACTION ACTIONS::openPreferences( "common.SuiteControl.openPreferences",
-        AS_GLOBAL, MD_CTRL + ',', "",
-        _( "Preferences..." ), _( "Show preferences for all open tools" ),
-        BITMAPS::preference );
+TOOL_ACTION ACTIONS::openPreferences( TOOL_ACTION_ARGS()
+        .Name( "common.SuiteControl.openPreferences" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + ',' )
+        .MenuText( _( "Preferences..." ) )
+        .Tooltip( _( "Show preferences for all open tools" ) )
+        .Icon( BITMAPS::preference )
+        .UIId( wxID_PREFERENCES ) );
 
 TOOL_ACTION ACTIONS::configurePaths( "common.SuiteControl.configurePaths",
         AS_GLOBAL, 0, "",

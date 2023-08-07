@@ -68,13 +68,7 @@ void CVPCB_MAINFRAME::doReCreateMenuBar()
 
     prefsMenu->Add( ACTIONS::configurePaths );
     prefsMenu->Add( ACTIONS::showFootprintLibTable );
-
-    // We can't use ACTIONS::showPreferences yet because wxWidgets moves this on
-    // Mac, and it needs the wxID_PREFERENCES id to find it.
-    prefsMenu->Add( _( "Preferences..." ) + wxS( "\tCtrl+," ),
-                    _( "Show preferences for all open tools" ),
-                    wxID_PREFERENCES,
-                    BITMAPS::preference );
+    prefsMenu->Add( ACTIONS::openPreferences);
 
     prefsMenu->AppendSeparator();
     prefsMenu->Add( CVPCB_ACTIONS::showEquFileTable);

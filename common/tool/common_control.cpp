@@ -68,10 +68,7 @@ void COMMON_CONTROL::Reset( RESET_REASON aReason )
 
 int COMMON_CONTROL::OpenPreferences( const TOOL_EVENT& aEvent )
 {
-    wxCommandEvent dummy;
-
-    m_frame->OnPreferences( dummy );
-
+    m_frame->ShowPreferences( wxEmptyString, wxEmptyString );
     return 0;
 }
 

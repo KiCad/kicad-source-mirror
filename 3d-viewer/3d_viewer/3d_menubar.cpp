@@ -109,10 +109,7 @@ void EDA_3D_VIEWER_FRAME::CreateMenuBar()
                     BITMAPS::tools,
                     ACTION_MENU::CHECK );
 
-    prefsMenu->Add( _( "Preferences..." ) + wxT( "\tCtrl+," ),
-                    _( "Show preferences for all open tools" ),
-                    wxID_PREFERENCES,
-                    BITMAPS::preference );
+    prefsMenu->Add( ACTIONS::openPreferences );
 
     prefsMenu->Add( _( "Reset to Default Settings" ), ID_MENU3D_RESET_DEFAULTS, BITMAPS::tools );
 

@@ -221,12 +221,7 @@ void GERBVIEW_FRAME::doReCreateMenuBar()
     //
     ACTION_MENU* preferencesMenu = new ACTION_MENU( false, selTool );
 
-    // We can't use ACTIONS::showPreferences yet because wxWidgets moves this on
-    // Mac, and it needs the wxID_PREFERENCES id to find it.
-    preferencesMenu->Add( _( "Preferences..." ) + wxT( "\tCtrl+," ),
-                          _( "Show preferences for all open tools" ),
-                          wxID_PREFERENCES,
-                          BITMAPS::preference );
+    preferencesMenu->Add( ACTIONS::openPreferences );
 
     preferencesMenu->AppendSeparator();
     AddMenuLanguageList( preferencesMenu, selTool );

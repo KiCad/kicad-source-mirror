@@ -212,11 +212,6 @@ public:
     void OnKicadAbout( wxCommandEvent& event );
 
     /**
-     * Displays the preferences and settings of all opened editors paged dialog
-     */
-    void OnPreferences( wxCommandEvent& event );
-
-    /**
      * Displays the preferences and settings of all opened editors paged dialog, starting with
      * a particular page
      */

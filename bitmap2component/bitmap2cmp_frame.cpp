@@ -245,12 +245,7 @@ void BITMAP2CMP_FRAME::doReCreateMenuBar()
     //
     ACTION_MENU* prefsMenu = new ACTION_MENU( false, tool );
 
-    // We can't use ACTIONS::showPreferences yet because wxWidgets moves this on
-    // Mac, and it needs the wxID_PREFERENCES id to find it.
-    prefsMenu->Add( _( "Preferences..." ) + "\tCtrl+,",
-                    _( "Show preferences for all open tools" ),
-                    wxID_PREFERENCES,
-                    BITMAPS::preference );
+    prefsMenu->Add( ACTIONS::openPreferences );
 
     prefsMenu->AppendSeparator();
     AddMenuLanguageList( prefsMenu, tool );

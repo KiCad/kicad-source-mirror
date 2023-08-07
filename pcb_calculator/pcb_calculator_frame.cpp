@@ -28,6 +28,7 @@
 #include <geometry/shape_poly_set.h>
 #include <kiface_base.h>
 #include <menus_helpers.h>
+#include <tool/actions.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/common_control.h>
@@ -213,12 +214,7 @@ void PCB_CALCULATOR_FRAME::doReCreateMenuBar()
     //
     ACTION_MENU* prefsMenu = new ACTION_MENU( false, tool );
 
-    // We can't use ACTIONS::showPreferences yet because wxWidgets moves this on
-    // Mac, and it needs the wxID_PREFERENCES id to find it.
-    prefsMenu->Add( _( "Preferences..." ) + "\tCtrl+,",
-                    _( "Show preferences for all open tools" ),
-                    wxID_PREFERENCES,
-                    BITMAPS::preference );
+    prefsMenu->Add( ACTIONS::openPreferences );
 
     prefsMenu->AppendSeparator();
     AddMenuLanguageList( prefsMenu, tool );
