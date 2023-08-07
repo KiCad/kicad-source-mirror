@@ -111,6 +111,11 @@ static const wxChar CoroutineStackSize[] = wxT( "CoroutineStackSize" );
 static const wxChar ShowRouterDebugGraphics[] = wxT( "ShowRouterDebugGraphics" );
 
 /**
+ * Enable PNS router to dump state information for debug purpose (press `0` while routing)
+ */
+static const wxChar EnableRouterDump[] = wxT( "EnableRouterDump" );
+
+/**
  * Slide the zoom steps over for debugging things "up close".
  */
 static const wxChar HyperZoom[] = wxT( "HyperZoom" );
@@ -295,6 +300,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     // then the values will remain as set here.
     m_CoroutineStackSize        = AC_STACK::default_stack;
     m_ShowRouterDebugGraphics   = false;
+    m_EnableRouterDump          = false;
     m_HyperZoom                 = false;
     m_DrawArcAccuracy           = 10.0;
     m_DrawArcCenterMaxAngle     = 50.0;
@@ -409,6 +415,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ShowRouterDebugGraphics,
                                                 &m_ShowRouterDebugGraphics, m_ShowRouterDebugGraphics ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableRouterDump,
+                                                &m_EnableRouterDump, m_EnableRouterDump ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::HyperZoom,
                                                 &m_HyperZoom, m_HyperZoom ) );

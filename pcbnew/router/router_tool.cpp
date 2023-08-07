@@ -593,8 +593,11 @@ void ROUTER_TOOL::saveRouterDebugLog()
     fname_settings.SetPath( cwd );
     fname_settings.SetName( "pns.settings" );
 
-    wxString msg = wxString::Format( _( "Event file: %s\nBoard dump: %s" ), fname_log.GetFullPath(),
-                                     fname_log.GetFullPath() );
+    wxString msg = wxString::Format( _( "Path: %s\nEvent file: %s\nBoard dump: %s\nSettings dump: %s" ),
+                                     fname_log.GetPath(),
+                                     fname_log.GetFullName(),
+                                     fname_dump.GetFullName(),
+                                     fname_settings.GetFullName() );
 
     int rv = OKOrCancelDialog( nullptr, _( "Save router log" ),
             _( "Would you like to save the router\nevent log for debugging purposes?" ), msg,
@@ -670,15 +673,15 @@ void ROUTER_TOOL::handleCommonEvents( TOOL_EVENT& aEvent )
         m_router->SetVisibleViewArea( BOX2I( viewAreaD.GetOrigin(), viewAreaD.GetSize() ) );
     }
 
+    if( !ADVANCED_CFG::GetCfg().m_EnableRouterDump )
+        return;
+
     if( !aEvent.IsKeyPressed() )
         return;
 
     switch( aEvent.KeyCode() )
     {
     case '0':
-        if( !ADVANCED_CFG::GetCfg().m_ShowRouterDebugGraphics )
-            return;
-
         saveRouterDebugLog();
         aEvent.SetPassEvent( false );
         break;

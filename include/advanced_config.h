@@ -141,6 +141,11 @@ public:
     bool m_ShowRouterDebugGraphics;
 
     /**
+     * Enable PNS router to dump state information for debug purpose (press `0` while routing)
+     */
+    bool m_EnableRouterDump;
+
+    /**
      * Slide the zoom steps over for debugging things "up close".
      */
     bool m_HyperZoom;
