@@ -357,9 +357,6 @@ void SVG_PLOTTER::SetDash( int aLineWidth, PLOT_DASH_TYPE aLineStyle )
         m_graphics_changed = true;
         m_dashed = aLineStyle;
     }
-
-    if( m_graphics_changed )
-        setSVGPlotStyle( aLineWidth );
 }
 
 
@@ -798,6 +795,9 @@ void SVG_PLOTTER::Text( const VECTOR2I&        aPos,
     setFillMode( FILL_T::NO_FILL );
     SetColor( aColor );
     SetCurrentLineWidth( aWidth );
+
+    if( m_graphics_changed )
+        setSVGPlotStyle( GetCurrentLineWidth() );
 
     VECTOR2I    text_pos = aPos;
     const char* hjust = "start";
