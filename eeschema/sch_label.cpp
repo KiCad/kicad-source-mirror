@@ -691,6 +691,27 @@ bool SCH_LABEL_BASE::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* toke
 }
 
 
+bool SCH_LABEL_BASE::HasCachedDriverName() const
+{
+    return !HasTextVars();
+}
+
+
+const wxString& SCH_LABEL_BASE::GetCachedDriverName() const
+{
+    return m_cached_driver_name;
+}
+
+
+void SCH_LABEL_BASE::cacheShownText()
+{
+    EDA_TEXT::cacheShownText();
+
+    if( !HasTextVars() )
+        m_cached_driver_name = EscapeString( EDA_TEXT::GetShownText( true, 0 ), CTX_NETNAME );
+}
+
+
 wxString SCH_LABEL_BASE::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText,
                                        int aDepth ) const
 {

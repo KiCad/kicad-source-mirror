@@ -253,6 +253,13 @@ SCH_CONNECTION* SCH_ITEM::GetOrInitConnection( const SCH_SHEET_PATH& aSheet,
 }
 
 
+const wxString& SCH_ITEM::GetCachedDriverName() const
+{
+    static wxString s_empty;
+    return s_empty;
+}
+
+
 void SCH_ITEM::SwapData( SCH_ITEM* aItem )
 {
     UNIMPLEMENTED_FOR( GetClass() );

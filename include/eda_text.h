@@ -368,7 +368,7 @@ protected:
 
     virtual const KIFONT::METRICS& getFontMetrics() const;
 
-    void cacheShownText();
+    virtual void cacheShownText();
 
     /**
      * Print each line of this EDA_TEXT.

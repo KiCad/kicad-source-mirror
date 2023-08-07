@@ -356,8 +356,8 @@ wxString SCH_TEXT::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraTe
 
     if( aPath )
         sheet = aPath->Last();
-    else if( Schematic() )
-        sheet = Schematic()->CurrentSheet().Last();
+    else if( SCHEMATIC* schematic = Schematic() )
+        sheet = schematic->CurrentSheet().Last();
 
     std::function<bool( wxString* )> textResolver =
             [&]( wxString* token ) -> bool

@@ -156,6 +156,9 @@ public:
         return GetShownText( nullptr, aAllowExtraText, aDepth );
     }
 
+    bool HasCachedDriverName() const override;
+    const wxString& GetCachedDriverName() const override;
+
     void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) override;
 
     INSPECT_RESULT Visit( INSPECTOR inspector, void* testData,
@@ -232,6 +235,9 @@ public:
     virtual bool AutoRotateOnPlacementSupported() const = 0;
 
 protected:
+    void cacheShownText() override;
+
+protected:
     std::vector<SCH_FIELD>  m_fields;
 
     LABEL_FLAG_SHAPE        m_shape;
@@ -241,6 +247,8 @@ protected:
     bool                    m_autoRotateOnPlacement = false;
 
     mutable COLOR4D         m_lastResolvedColor;
+
+    wxString                m_cached_driver_name;
 };
 
 

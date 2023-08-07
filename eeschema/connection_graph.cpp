@@ -337,6 +337,7 @@ wxString CONNECTION_SUBGRAPH::driverName( SCH_ITEM* aItem ) const
     case SCH_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIER_LABEL_T:
+        // NB: any changes here will need corresponding changes in SCH_LABEL_BASE::cacheShownText()
         return EscapeString( static_cast<SCH_TEXT*>( aItem )->GetShownText( &m_sheet, false ),
                              CTX_NETNAME );
 
@@ -357,6 +358,9 @@ wxString CONNECTION_SUBGRAPH::driverName( SCH_ITEM* aItem ) const
 
 const wxString& CONNECTION_SUBGRAPH::GetNameForDriver( SCH_ITEM* aItem ) const
 {
+    if( aItem->HasCachedDriverName() )
+        return aItem->GetCachedDriverName();
+
     auto it = m_driver_name_cache.find( aItem );
 
     if( it != m_driver_name_cache.end() )
