@@ -371,6 +371,8 @@ bool PNS_LOG_FILE::Load( const wxFileName& logFileName, REPORTER* aRpt )
 
     m_settingsMgr.reset( new SETTINGS_MANAGER ( true ) );
     m_settingsMgr->LoadProject( fname_project.GetFullPath() );
+    PROJECT* project = m_settingsMgr->GetProject( fname_project.GetFullPath() );
+    project->SetReadOnly();
 
     try
     {
@@ -378,7 +380,7 @@ bool PNS_LOG_FILE::Load( const wxFileName& logFileName, REPORTER* aRpt )
         aRpt->Report( wxString::Format( wxT("Loading board snapshot from '%s'"), fname_dump.GetFullPath() ) );
 
         m_board.reset( io.Load( fname_dump.GetFullPath(), nullptr, nullptr ) );
-        m_board->SetProject( m_settingsMgr->GetProject( fname_project.GetFullPath() ) );
+        m_board->SetProject( project );
 
         std::shared_ptr<DRC_ENGINE> drcEngine( new DRC_ENGINE );
 
@@ -386,7 +388,7 @@ bool PNS_LOG_FILE::Load( const wxFileName& logFileName, REPORTER* aRpt )
         BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
         bds.m_DRCEngine = drcEngine;
-        bds.m_UseConnectedTrackWidth = m_board->GetProject()->GetLocalSettings().m_AutoTrackWidth;
+        bds.m_UseConnectedTrackWidth = project->GetLocalSettings().m_AutoTrackWidth;
 
         m_board->SynchronizeNetsAndNetClasses( true );
 
