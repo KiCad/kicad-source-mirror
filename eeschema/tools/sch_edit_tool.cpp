@@ -1826,8 +1826,9 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
             DIALOG_CHANGE_SYMBOLS dlg( m_frame, symbol, DIALOG_CHANGE_SYMBOLS::MODE::CHANGE );
             dlg.ShowQuasiModal();
         }
-    }
+
         break;
+    }
 
     case SCH_SHEET_T:
     {
@@ -1875,11 +1876,10 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
         // QuasiModal required for help dialog
         if( dlg.ShowQuasiModal() == wxID_OK )
-        {
             m_frame->OnModify();
-        }
-    }
+
         break;
+    }
 
     case SCH_TEXT_T:
     case SCH_TEXTBOX_T:
@@ -1888,9 +1888,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
         // QuasiModal required for syntax help and Scintilla auto-complete
         if( dlg.ShowQuasiModal() == wxID_OK )
-        {
             m_frame->OnModify();
-        }
     }
         break;
 
@@ -1903,11 +1901,10 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
         // Must be quasi modal for syntax help
         if( dlg.ShowQuasiModal() == wxID_OK )
-        {
             m_frame->OnModify();
-        }
-    }
+
         break;
+    }
 
     case SCH_FIELD_T:
     {
@@ -1917,19 +1914,19 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
         if( !field->IsVisible() )
             clearSelection = true;
-    }
+
         break;
+    }
 
     case SCH_SHAPE_T:
     {
         DIALOG_SHAPE_PROPERTIES dlg( m_frame, static_cast<SCH_SHAPE*>( curr_item ) );
 
         if( dlg.ShowModal() == wxID_OK )
-        {
             m_frame->OnModify();
-        }
-    }
+
         break;
+    }
 
     case SCH_BITMAP_T:
     {
@@ -1942,8 +1939,9 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
             getView()->RecacheAllItems();
             m_frame->OnModify();
         }
-    }
+
         break;
+    }
 
     case SCH_LINE_T:
     case SCH_BUS_WIRE_ENTRY_T:
@@ -1963,9 +1961,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
             DIALOG_LINE_PROPERTIES dlg( m_frame, lines );
 
             if( dlg.ShowModal() == wxID_OK )
-            {
                 m_frame->OnModify();
-            }
         }
         else if( std::all_of( selection.Items().begin(), selection.Items().end(),
                 [&]( const EDA_ITEM* item )
@@ -1981,9 +1977,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
             DIALOG_JUNCTION_PROPS dlg( m_frame, junctions );
 
             if( dlg.ShowModal() == wxID_OK )
-            {
                 m_frame->OnModify();
-            }
         }
         else if( std::all_of( selection.Items().begin(), selection.Items().end(),
                 [&]( const EDA_ITEM* item )
@@ -2004,9 +1998,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
             DIALOG_WIRE_BUS_PROPERTIES dlg( m_frame, items );
 
             if( dlg.ShowModal() == wxID_OK )
-            {
                 m_frame->OnModify();
-            }
         }
         else
         {
@@ -2038,10 +2030,11 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
     EE_SELECTION  selection = m_selectionTool->RequestSelection( { SCH_LABEL_LOCATE_ANY_T,
                                                                    SCH_TEXT_T,
                                                                    SCH_TEXTBOX_T } );
+    SCH_COMMIT    commit( m_toolMgr );
 
     for( unsigned int i = 0; i < selection.GetSize(); ++i )
     {
-        SCH_ITEM*    item = dynamic_cast<SCH_ITEM*>( selection.GetItem( i ) );
+        SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( selection.GetItem( i ) );
 
         if( item && item->Type() != convertTo )
         {
@@ -2337,8 +2330,6 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             if( selected )
                 m_toolMgr->RunAction<EDA_ITEM*>( EE_ACTIONS::removeItemFromSel, item );
 
-            SCH_COMMIT commit( m_toolMgr );
-
             if( !item->IsNew() )
             {
                 m_frame->RemoveFromScreen( item, m_frame->GetScreen() );
@@ -2348,28 +2339,17 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
                 commit.Added( newtext, m_frame->GetScreen() );
             }
 
-            commit.Push( _( "Change Item Type" ) );
-
             if( selected )
                 m_toolMgr->RunAction<EDA_ITEM*>( EE_ACTIONS::addItemToSel, newtext );
 
             // Otherwise, pointer is owned by the undo stack
             if( item->IsNew() )
                 delete item;
-
-            if( convertTo == SCH_TEXT_T || convertTo == SCH_TEXTBOX_T )
-            {
-                if( newtext->IsDangling() )
-                    getView()->Update( newtext, KIGFX::REPAINT );
-            }
-            else
-            {
-                m_frame->TestDanglingEnds();
-            }
-
-            m_frame->OnModify();
         }
     }
+
+    if( !commit.Empty() )
+        commit.Push( _( "Change To" ) );
 
     if( selection.IsHover() )
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
@@ -2573,7 +2553,9 @@ int SCH_EDIT_TOOL::SetAttribute( const TOOL_EVENT& aEvent )
         }
     }
 
-    commit.Push( _( "Set Attribute" ) );
+    if( !commit.Empty() )
+        commit.Push( _( "Set Attribute" ) );
+
     return 0;
 }
 
@@ -2608,7 +2590,9 @@ int SCH_EDIT_TOOL::UnsetAttribute( const TOOL_EVENT& aEvent )
         }
     }
 
-    commit.Push( _( "Clear Attribute" ) );
+    if( !commit.Empty() )
+        commit.Push( _( "Clear Attribute" ) );
+
     return 0;
 }
 
@@ -2643,7 +2627,9 @@ int SCH_EDIT_TOOL::ToggleAttribute( const TOOL_EVENT& aEvent )
         }
     }
 
-    commit.Push( _( "Toggle Attribute" ) );
+    if( !commit.Empty() )
+        commit.Push( _( "Toggle Attribute" ) );
+
     return 0;
 
 }

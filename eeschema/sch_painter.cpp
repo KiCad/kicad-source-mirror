@@ -2696,6 +2696,18 @@ void SCH_PAINTER::draw( const SCH_GLOBALLABEL* aLabel, int aLayer )
 
     COLOR4D color = getRenderColor( aLabel, LAYER_GLOBLABEL, drawingShadows );
 
+    if( drawingDangling )
+    {
+        if( aLabel->IsDangling() )
+        {
+            drawDanglingSymbol( aLabel->GetTextPos(), color,
+                                schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE / 2 ), true,
+                                drawingShadows, aLabel->IsBrightened() );
+        }
+
+        return;
+    }
+
     std::vector<VECTOR2I> pts;
     std::deque<VECTOR2D> pts2;
 
@@ -2714,7 +2726,7 @@ void SCH_PAINTER::draw( const SCH_GLOBALLABEL* aLabel, int aLayer )
         m_gal->SetFillColor( color );
         m_gal->DrawPolygon( pts2 );
     }
-    else if( !drawingDangling )
+    else
     {
         m_gal->SetIsFill( false );
         m_gal->DrawPolyline( pts2 );
