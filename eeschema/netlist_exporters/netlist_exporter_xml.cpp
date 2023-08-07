@@ -162,13 +162,12 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
                 {
                     const SCH_FIELD& f = symbol2->GetFields()[ ii ];
 
-                    if( f.GetText().size()
-                        && ( unit < minUnit || userFields.count( f.GetName() ) == 0 ) )
+                    if( unit < minUnit || userFields.count( f.GetName() ) == 0 )
                     {
                         if( m_resolveTextVars )
-                            userFields[ f.GetName() ] = f.GetShownText( aSheet, false );
+                            userFields[f.GetName()] = f.GetShownText( aSheet, false );
                         else
-                            userFields[ f.GetName() ] = f.GetText();
+                            userFields[f.GetName()] = f.GetText();
                     }
                 }
 
@@ -197,13 +196,10 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
         {
             const SCH_FIELD& f = aSymbol->GetFields()[ ii ];
 
-            if( f.GetText().size() )
-            {
-                if( m_resolveTextVars )
-                    userFields[ f.GetName() ] = f.GetShownText( aSheet, false );
-                else
-                    userFields[ f.GetName() ] = f.GetText();
-            }
+            if( m_resolveTextVars )
+                userFields[f.GetName()] = f.GetShownText( aSheet, false );
+            else
+                userFields[f.GetName()] = f.GetText();
         }
     }
 
@@ -614,12 +610,9 @@ XNODE* NETLIST_EXPORTER_XML::makeLibParts()
 
         for( const LIB_FIELD* field : fieldList )
         {
-            if( !field->GetText().IsEmpty() )
-            {
-                XNODE*     xfield;
-                xfields->AddChild( xfield = node( wxT( "field" ), field->GetText() ) );
-                xfield->AddAttribute( wxT( "name" ), field->GetCanonicalName() );
-            }
+            XNODE* xfield;
+            xfields->AddChild( xfield = node( wxT( "field" ), field->GetText() ) );
+            xfield->AddAttribute( wxT( "name" ), field->GetCanonicalName() );
         }
 
         //----- show the pins here ------------------------------------
