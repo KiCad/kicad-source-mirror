@@ -661,15 +661,23 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     int viaDiameter = bds.m_ViasMinSize;
     int viaDrill = bds.m_MinThroughDrill;
 
+    PNS::VIA dummyVia, coupledVia;
+
+    if( aStartItem )
+    {
+        dummyVia.SetNet( aStartItem->Net() );
+        coupledVia.SetNet( m_ruleResolver->DpCoupledNet( aStartItem->Net() ) );
+    }
+
     if( bds.UseNetClassVia() && aStartItem )   // netclass value
     {
-        if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_VIA_DIAMETER, aStartItem,
+        if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_VIA_DIAMETER, &dummyVia,
                                              nullptr, m_startLayer, &constraint ) )
         {
             viaDiameter = std::max( viaDiameter, constraint.m_Value.Opt() );
         }
 
-        if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_VIA_HOLE, aStartItem,
+        if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_VIA_HOLE, &dummyVia,
                                              nullptr, m_startLayer, &constraint ) )
         {
             viaDrill = std::max( viaDrill, constraint.m_Value.Opt() );
@@ -734,14 +742,7 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     aSizes.SetDiffPairViaGap( diffPairViaGap );
     aSizes.SetDiffPairViaGapSameAsTraceGap( false );
 
-    int      holeToHoleMin = bds.m_HoleToHoleMin;
-    PNS::VIA dummyVia, coupledVia;
-
-    if( aStartItem )
-    {
-        dummyVia.SetNet( aStartItem->Net() );
-        coupledVia.SetNet( m_ruleResolver->DpCoupledNet( aStartItem->Net() ) );
-    }
+    int holeToHoleMin = bds.m_HoleToHoleMin;
 
     if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE, &dummyVia,
                                          &dummyVia, UNDEFINED_LAYER, &constraint ) )
