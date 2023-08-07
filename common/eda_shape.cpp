@@ -1422,6 +1422,10 @@ void EDA_SHAPE::endEdit( bool aClosed )
             if( poly.CPoint( poly.GetPointCount() - 2 ) == poly.CLastPoint() )
             {
                 poly.SetClosed( aClosed );
+            }
+            else
+            {
+                poly.SetClosed( false );
                 poly.Remove( poly.GetPointCount() - 1 );
             }
         }
