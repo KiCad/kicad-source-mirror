@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -294,7 +294,7 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 
 	// Cell Defaults
 	m_pinGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bMargins->Add( m_pinGrid, 1, wxEXPAND|wxALL, 5 );
+	bMargins->Add( m_pinGrid, 1, wxEXPAND|wxALL|wxFIXED_MINSIZE, 5 );
 
 
 	pinTableSizer->Add( bMargins, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
