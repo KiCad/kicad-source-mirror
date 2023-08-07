@@ -576,7 +576,7 @@ void ROUTER_TOOL::saveRouterDebugLog()
 {
     auto logger = m_router->Logger();
 
-    if( ! logger )
+    if( !logger || logger->GetEvents().size() == 0 )
         return;
 
     wxString cwd = wxGetCwd();
@@ -662,6 +662,8 @@ void ROUTER_TOOL::saveRouterDebugLog()
     }
 
     fclose( f );
+
+    logger->Clear(); // prevent re-entry
 }
 
 
