@@ -220,6 +220,7 @@ public:
         int                        height;
         int                        page;
         wxString                   export_filename;
+        int                        selection_mode;
     };
 
     struct PANEL_LIB_VIEW

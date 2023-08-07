@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -118,6 +118,18 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 
 
 	bRightSizer->Add( bControls, 0, wxEXPAND|wxLEFT, 5 );
+
+	wxBoxSizer* bControls1;
+	bControls1 = new wxBoxSizer( wxHORIZONTAL );
+
+	wxString m_radioSelectChoices[] = { _("Highlight"), _("Select"), _("Off") };
+	int m_radioSelectNChoices = sizeof( m_radioSelectChoices ) / sizeof( wxString );
+	m_radioSelect = new wxRadioBox( m_rightPanel, wxID_ANY, _("Selection Control"), wxDefaultPosition, wxDefaultSize, m_radioSelectNChoices, m_radioSelectChoices, 3, wxRA_SPECIFY_COLS );
+	m_radioSelect->SetSelection( 0 );
+	bControls1->Add( m_radioSelect, 0, wxALL, 5 );
+
+
+	bRightSizer->Add( bControls1, 0, wxEXPAND|wxLEFT, 5 );
 
 	m_grid = new WX_GRID( m_rightPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 

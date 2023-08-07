@@ -126,6 +126,11 @@ public:
         return m_sheetPath.PathAsString() + m_symbolUuid.AsString();
     }
 
+    /*
+     * Compares by full path to make std::set work
+     */
+    bool operator<( const SCH_REFERENCE& aRef ) const { return GetFullPath() < aRef.GetFullPath(); }
+
     /**
      * Update the annotation of the symbol according the current object state.
      */

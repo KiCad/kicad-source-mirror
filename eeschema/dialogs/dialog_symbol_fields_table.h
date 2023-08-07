@@ -61,7 +61,7 @@ private:
     void OnColSort( wxGridEvent& aEvent );
     void OnColMove( wxGridEvent& aEvent );
     void OnColLabelChange( wxDataViewEvent& aEvent );
-    void OnTableRangeSelected( wxGridEvent& event );
+    void OnTableRangeSelected( wxGridRangeSelectEvent& aEvent );
 
     void OnColumnItemToggled( wxDataViewEvent& event ) override;
     void OnGroupSymbolsToggled( wxCommandEvent& event ) override;

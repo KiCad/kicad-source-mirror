@@ -280,6 +280,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     SetSize( dlgSize );
 
     m_nbPages->SetSelection( cfg->m_FieldEditorPanel.page );
+    m_radioSelect->SetSelection( cfg->m_FieldEditorPanel.selection_mode );
 
     m_outputFileName->SetValue( cfg->m_FieldEditorPanel.export_filename );
 
@@ -290,8 +291,8 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
                      wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColSort ), nullptr, this );
     m_grid->Connect( wxEVT_GRID_COL_MOVE,
                      wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColMove ), nullptr, this );
-    m_grid->Connect( wxEVT_GRID_RANGE_SELECT,
-                     wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected ),
+    m_grid->Connect( wxEVT_GRID_RANGE_SELECTED,
+                     wxGridRangeSelectEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected ),
                      nullptr, this );
     m_cbBomPresets->Bind( wxEVT_CHOICE, &DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged, this );
     m_cbBomFmtPresets->Bind( wxEVT_CHOICE, &DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged, this );
@@ -421,6 +422,8 @@ DIALOG_SYMBOL_FIELDS_TABLE::~DIALOG_SYMBOL_FIELDS_TABLE()
     cfg->m_FieldEditorPanel.height = GetSize().y;
     cfg->m_FieldEditorPanel.page = m_nbPages->GetSelection();
     cfg->m_FieldEditorPanel.export_filename = m_outputFileName->GetValue();
+    cfg->m_FieldEditorPanel.selection_mode = m_radioSelect->GetSelection();
+
 
     for( int i = 0; i < m_grid->GetNumberCols(); i++ )
     {
@@ -964,9 +967,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableCellClick( wxGridEvent& event )
     if( m_dataModel->ColIsReference( event.GetCol() ) )
     {
         m_grid->ClearSelection();
-        m_grid->SetGridCursor( event.GetRow(), event.GetCol() );
 
         m_dataModel->ExpandCollapseRow( event.GetRow() );
+        m_grid->SetGridCursor( event.GetRow(), event.GetCol() );
     }
     else
     {
@@ -974,41 +977,58 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableCellClick( wxGridEvent& event )
     }
 }
 
-void DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected( wxGridEvent& event )
+void DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent& aEvent )
 {
-    wxGridCellCoordsArray selectedCells = m_grid->GetSelectedCells();
+    // Multi-select can grab the rows that are expanded child refs, and also the row
+    // containing the list of all child refs. Make sure we add refs/symbols uniquely
+    std::set<SCH_REFERENCE> refs;
+    std::set<SCH_ITEM*>     symbols;
 
-    if( selectedCells.GetCount() == 1 )
+    // This handler handles selecting and deselecting
+    if( aEvent.Selecting() )
     {
-        int row = selectedCells[0].GetRow();
-        int flag = m_dataModel->GetRowFlags( row );
-        std::vector<SCH_REFERENCE> refs = m_dataModel->GetRowReferences( row );
+        for( int i = aEvent.GetTopRow(); i <= aEvent.GetBottomRow(); i++ )
+            for( SCH_REFERENCE ref : m_dataModel->GetRowReferences( i ) )
+                refs.insert( ref );
 
-        // Focus Eeschema view on the symbol selected in the dialog
-        // TODO: Highlight or select more than one unit
-        if( ( flag == GROUP_SINGLETON || flag == CHILD_ITEM ) && refs.size() >= 1 )
-        {
-            SCH_EDITOR_CONTROL* editor = m_parent->GetToolManager()->GetTool<SCH_EDITOR_CONTROL>();
-
-            std::sort( refs.begin(), refs.end(),
-                    []( const SCH_REFERENCE& a, const SCH_REFERENCE& b )
-                    {
-                        return a.GetUnit() < b.GetUnit();
-                    } );
-
-            // search and highlight the symbol found by its full path.
-            // It allows select of not yet annotated or duplicaded symbols
-            wxString symbol_path = refs[0].GetFullPath();
-            // wxString reference = refs[0].GetRef() + refs[0].GetRefNumber();  // Not used
-            editor->FindSymbolAndItem( &symbol_path, nullptr, true, HIGHLIGHT_SYMBOL, wxEmptyString );
-        }
-
-        return;
+        for( const SCH_REFERENCE& ref : refs )
+            symbols.insert( ref.GetSymbol() );
     }
 
-    event.Skip();
-}
+    switch( m_radioSelect->GetSelection() )
+    {
+    case 0:
+    {
+        SCH_EDITOR_CONTROL* editor = m_parent->GetToolManager()->GetTool<SCH_EDITOR_CONTROL>();
 
+        // Use of full path based on UUID allows select of not yet annotated or duplicaded symbols
+        wxString symbol_path = refs.begin()->GetFullPath();
+
+        if( refs.size() > 0 )
+            // Focus only handles on item at this time
+            editor->FindSymbolAndItem( &symbol_path, nullptr, true, HIGHLIGHT_SYMBOL,
+                                       wxEmptyString );
+        else
+            m_parent->FocusOnItem( nullptr );
+
+        break;
+    }
+    case 1:
+    {
+        EE_SELECTION_TOOL* selTool = m_parent->GetToolManager()->GetTool<EE_SELECTION_TOOL>();
+
+        std::vector<SCH_ITEM*> items( symbols.begin(), symbols.end() );
+
+        if( refs.size() > 0 )
+            selTool->SyncSelection( refs.begin()->GetSheetPath(), nullptr, items );
+        else
+            selTool->ClearSelection();
+
+        break;
+    }
+    default: break;
+    }
+}
 void DIALOG_SYMBOL_FIELDS_TABLE::OnTableItemContextMenu( wxGridEvent& event )
 {
     // TODO: Option to select footprint if FOOTPRINT column selected

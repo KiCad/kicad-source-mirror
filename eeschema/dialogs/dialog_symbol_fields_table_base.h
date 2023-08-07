@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -31,6 +31,7 @@ class WX_GRID;
 #include <wx/panel.h>
 #include <wx/srchctrl.h>
 #include <wx/checkbox.h>
+#include <wx/radiobox.h>
 #include <wx/grid.h>
 #include <wx/splitter.h>
 #include <wx/textctrl.h>
@@ -68,6 +69,7 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		wxCheckBox* m_groupSymbolsBox;
 		BITMAP_BUTTON* m_separator3;
 		wxBitmapButton* m_bRefresh;
+		wxRadioBox* m_radioSelect;
 		WX_GRID* m_grid;
 		wxPanel* m_panelExport;
 		wxStaticText* m_labelBomExportPresets;
