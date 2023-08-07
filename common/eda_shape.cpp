@@ -4,7 +4,7 @@
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -508,15 +508,10 @@ void EDA_SHAPE::CalcArcAngles( EDA_ANGLE& aStartAngle, EDA_ANGLE& aEndAngle ) co
     aEndAngle = EDA_ANGLE( endRadial );
 
     if( aEndAngle == aStartAngle )
-        aEndAngle = aStartAngle + ANGLE_360;   // ring, not null
+        aEndAngle = aStartAngle + ANGLE_360; // ring, not null
 
-    if( aStartAngle > aEndAngle )
-    {
-        if( aEndAngle < ANGLE_0 )
-            aEndAngle.Normalize();
-        else
-            aStartAngle = aStartAngle.Normalize() - ANGLE_360;
-    }
+    while( aEndAngle < aStartAngle )
+        aEndAngle += ANGLE_360;
 }
 
 
@@ -1295,7 +1290,8 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
 
     case SHAPE_T::ARC:
     {
-        int radius = GetRadius();
+        int       radius = GetRadius();
+        EDA_ANGLE lastAngle = GetArcAngle();
 
         // Edit state 0: drawing: place start
         // Edit state 1: drawing: place end (center calculated for 90-degree subtended angle)
@@ -1380,10 +1376,10 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
 
         case 2:
         case 3:
-            // Pick the one of c1, c2 to keep arc <= 180 deg
-            m_arcCenter = c1;   // first trial
+            // Pick the one of c1, c2 to keep arc on the same side
+            m_arcCenter = c1; // first trial
 
-            if( GetArcAngle() > ANGLE_180 )
+            if( ( lastAngle < ANGLE_180 ) != ( GetArcAngle() < ANGLE_180 ) )
                 m_arcCenter = c2;
 
             break;
@@ -1391,11 +1387,6 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
         case 4:
             // Pick the one closer to the mouse position
             m_arcCenter = GetLineLength( c1, aPosition ) < GetLineLength( c2, aPosition ) ? c1 : c2;
-
-            // keep arc angle <= 180 deg
-            if( GetArcAngle() > ANGLE_180 )
-                std::swap( m_start, m_end );
-
             break;
         }
     }

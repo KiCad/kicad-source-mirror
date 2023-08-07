@@ -152,8 +152,8 @@ void PLOTTER::Arc( const VECTOR2I& aCenter, const VECTOR2I& aStart, const VECTOR
     // Recalculate aCenter using double to be sure we will use a exact value, from aStart and aEnd
     // it must be on the line passing by the middle of segment {aStart, aEnd}
     // To simplify calculations, use aStart as origin in intermediate calculations
-    VECTOR2D center = aCenter - aStart;
-    VECTOR2D end = aEnd - aStart;
+    VECTOR2D  center = aCenter - aStart;
+    VECTOR2D  end = aEnd - aStart;
     EDA_ANGLE segAngle( end );
 
     // Rotate end and center, to make segment {aStart, aEnd} horizontal
@@ -171,14 +171,6 @@ void PLOTTER::Arc( const VECTOR2I& aCenter, const VECTOR2I& aStart, const VECTOR
     EDA_ANGLE endAngle( VECTOR2D( aEnd ) - center );
     double    radius = ( VECTOR2D( aStart ) - center ).EuclideanNorm();
 
-    if( startAngle > endAngle )
-    {
-        if( endAngle < ANGLE_0 )
-            endAngle.Normalize();
-        else
-            startAngle = startAngle.Normalize() - ANGLE_360;
-    }
-
     // In old Kicad code, calls to Arc() using angles calls this function after
     // swapping angles and negate them (to compensate the inverted Y axis).
     // So to be compatible with Arc() calls with angles, do the same thing
@@ -186,7 +178,7 @@ void PLOTTER::Arc( const VECTOR2I& aCenter, const VECTOR2I& aStart, const VECTOR
     startAngle = -startAngle;
     endAngle = -endAngle;
 
-    Arc( center, startAngle, endAngle, radius, aFill, aWidth );
+    Arc( aCenter, startAngle, endAngle, radius, aFill, aWidth );
 }
 
 
@@ -199,8 +191,8 @@ void PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
     VECTOR2I        start, end;
     const int       sign = -1;
 
-    if( startAngle > endAngle )
-        std::swap( startAngle, endAngle );
+    while( endAngle < startAngle )
+        endAngle += ANGLE_360;
 
     SetCurrentLineWidth( aWidth );
 

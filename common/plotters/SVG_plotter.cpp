@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -461,8 +461,8 @@ void SVG_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
     EDA_ANGLE startAngle( aStartAngle );
     EDA_ANGLE endAngle( aEndAngle );
 
-    if( startAngle > endAngle )
-        std::swap( startAngle, endAngle );
+    while( endAngle < startAngle )
+        endAngle += ANGLE_360;
 
     // Calculate start point.
     VECTOR2D  centre_device  = userToDeviceCoordinates( aCenter );

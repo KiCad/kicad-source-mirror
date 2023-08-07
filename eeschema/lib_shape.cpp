@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -139,7 +139,6 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
 
     VECTOR2I  start = aTransform.TransformCoordinate( m_start ) + aOffset;
     VECTOR2I  end = aTransform.TransformCoordinate( m_end ) + aOffset;
-    VECTOR2I  center = aTransform.TransformCoordinate( getCenter() ) + aOffset;
 
     static std::vector<VECTOR2I> cornerList;
 
@@ -157,21 +156,6 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
 
         for( const VECTOR2I& pt : m_bezierPoints )
             cornerList.push_back( aTransform.TransformCoordinate( pt ) + aOffset );
-    }
-    else if( GetShape() == SHAPE_T::ARC )
-    {
-        EDA_ANGLE t1, t2;
-
-        CalcArcAngles( t1, t2 );
-
-        // N.B. The order of evaluation is critical here as MapAngles will modify t1, t2
-        // and the Normalize routine depends on these modifications for the correct output
-        bool transformed = aTransform.MapAngles( &t1, &t2 );
-        EDA_ANGLE arc_angle =  ( t1 - t2 ).Normalize180();
-        bool transformed2 = ( arc_angle > ANGLE_0 ) && ( arc_angle < ANGLE_180 );
-
-        if( transformed  != transformed2 )
-            std::swap( start, end );
     }
 
     int            penWidth;
@@ -241,13 +225,24 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
         // In some plotters (not all) the arc is approximated by segments, and
         // a error max is needed. We try to approximate by 360/5 segments by 360 deg
         int arc2segment_error = CircleToEndSegmentDeltaRadius( GetRadius(), 360/5 );
-        aPlotter->Arc( center, start, end, fill, penWidth, arc2segment_error );
-    }
+
+        VECTOR2I mid = aTransform.TransformCoordinate( GetArcMid() ) + aOffset;
+        VECTOR2I center = CalcArcCenter( start, mid, end );
+
+        EDA_ANGLE startAngle = EDA_ANGLE( start - center );
+        EDA_ANGLE endAngle = EDA_ANGLE( end - center );
+
+        aPlotter->Arc( center, -startAngle, -endAngle, GetRadius(), fill, penWidth );
         break;
+    }
 
     case SHAPE_T::CIRCLE:
+    {
+        VECTOR2I center = aTransform.TransformCoordinate( getCenter() ) + aOffset;
+
         aPlotter->Circle( center, GetRadius() * 2, fill, penWidth );
         break;
+    }
 
     case SHAPE_T::RECTANGLE:
         aPlotter->Rect( start, end, fill, penWidth );

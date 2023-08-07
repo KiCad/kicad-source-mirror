@@ -890,14 +890,17 @@ void SCH_PAINTER::draw( const LIB_SHAPE* aShape, int aLayer, bool aDimmed )
                 {
                 case SHAPE_T::ARC:
                 {
-                    EDA_ANGLE startAngle;
-                    EDA_ANGLE endAngle;
-                    shape->CalcArcAngles( startAngle, endAngle );
+                    VECTOR2I start = mapCoords( shape->GetStart() );
+                    VECTOR2I mid = mapCoords( shape->GetArcMid() );
+                    VECTOR2I end = mapCoords( shape->GetEnd() );
+                    VECTOR2I center = CalcArcCenter( start, mid, end );
 
-                    TRANSFORM().MapAngles( &startAngle, &endAngle );
+                    EDA_ANGLE startAngle = EDA_ANGLE( start - center );
+                    EDA_ANGLE endAngle = EDA_ANGLE( end - center );
 
-                    m_gal->DrawArc( mapCoords( shape->GetCenter() ), shape->GetRadius(),
-                                    startAngle, endAngle );
+                    std::swap( startAngle, endAngle );
+
+                    m_gal->DrawArc( center, shape->GetRadius(), startAngle, endAngle );
                 }
                     break;
 

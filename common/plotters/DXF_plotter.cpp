@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -669,8 +669,8 @@ void DXF_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
 
     // In DXF, arcs are drawn CCW.
     // If startAngle > endAngle, it is CW. So transform it to CCW
-    if( startAngle > endAngle )
-        std::swap( startAngle, endAngle );
+    while( endAngle < startAngle )
+        endAngle += ANGLE_360;
 
     VECTOR2D centre_device = userToDeviceCoordinates( aCenter );
     double   radius_device = userToDeviceSize( aRadius );

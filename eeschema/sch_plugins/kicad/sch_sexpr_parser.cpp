@@ -1089,34 +1089,35 @@ LIB_SHAPE* SCH_SEXPR_PARSER::parseArc()
     {
         arc->SetArcGeometry( startPoint, midPoint, endPoint );
 
-    #if 1
-        // Should be not required. Unfortunately it is needed because some bugs created
-        // incorrect data after conversion of old libraries to the new arc format using
-        // startPoint, midPoint, endPoint
-        // Until now, in Eeschema the arc angle should be <= 180 deg.
-        // If > 180 (bug...) we need to swap arc ends.
-        // However arc angle == 180 deg can also create issues in some cases (plotters, hittest)
-        // so also avoid arc == 180 deg
-        EDA_ANGLE arc_start, arc_end, arc_angle;
-        arc->CalcArcAngles( arc_start, arc_end );
-        arc_angle = arc_end - arc_start;
+        if( m_requiredVersion <= 20230121 ) // Versions before 7.0
+        {
+            // Should be not required. Unfortunately it is needed because some bugs created
+            // incorrect data after conversion of old libraries to the new arc format using
+            // startPoint, midPoint, endPoint
+            // Until now, in Eeschema the arc angle should be <= 180 deg.
+            // If > 180 (bug...) we need to swap arc ends.
+            // However arc angle == 180 deg can also create issues in some cases (plotters, hittest)
+            // so also avoid arc == 180 deg
+            EDA_ANGLE arc_start, arc_end, arc_angle;
+            arc->CalcArcAngles( arc_start, arc_end );
+            arc_angle = arc_end - arc_start;
 
-        if( arc_angle > ANGLE_180 )
-        {
-            // Change arc to its complement (360deg - arc_angle)
-            arc->SetStart( endPoint );
-            arc->SetEnd( startPoint );
-            VECTOR2I new_center = CalcArcCenter( arc->GetStart(), arc->GetEnd(),
-                                                 ANGLE_360 - arc_angle );
-            arc->SetCenter( new_center );
+            if( arc_angle > ANGLE_180 )
+            {
+                // Change arc to its complement (360deg - arc_angle)
+                arc->SetStart( endPoint );
+                arc->SetEnd( startPoint );
+                VECTOR2I new_center =
+                        CalcArcCenter( arc->GetStart(), arc->GetEnd(), ANGLE_360 - arc_angle );
+                arc->SetCenter( new_center );
+            }
+            else if( arc_angle == ANGLE_180 )
+            {
+                VECTOR2I new_center = CalcArcCenter( arc->GetStart(), arc->GetEnd(),
+                                                     EDA_ANGLE( 179.5, DEGREES_T ) );
+                arc->SetCenter( new_center );
+            }
         }
-        else if( arc_angle == ANGLE_180 )
-        {
-            VECTOR2I new_center = CalcArcCenter( arc->GetStart(), arc->GetEnd(),
-                                                 EDA_ANGLE( 179.5, DEGREES_T ) );
-            arc->SetCenter( new_center );
-        }
-    #endif
     }
     else if( hasAngles )
     {

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -105,9 +105,6 @@ public:
 
     virtual void ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int width,
                                OUTLINE_MODE tracemode, void* aData ) override;
-
-    virtual void Arc( const VECTOR2I& aCenter, const VECTOR2I& aStart, const VECTOR2I& aEnd,
-                      FILL_T aFill, int aWidth, int aMaxError ) override;
 
     virtual void PenTo( const VECTOR2I& pos, char plume ) override;
 

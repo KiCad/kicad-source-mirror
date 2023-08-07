@@ -581,14 +581,19 @@ void HPGL_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
     chord_angle = std::max( m_arcMinChordDegrees, std::min( chord_angle, ANGLE_45 ) );
 
     VECTOR2D  centre_device = userToDeviceCoordinates( aCenter );
+
+    EDA_ANGLE startAngle( aStartAngle );
+    EDA_ANGLE endAngle( aEndAngle );
+
+    while( endAngle < startAngle )
+        endAngle += ANGLE_360;
+
     EDA_ANGLE angle;
 
     if( m_plotMirror )
-        angle = aStartAngle - aEndAngle;
+        angle = startAngle - endAngle;
     else
-        angle = aEndAngle - aStartAngle;
-
-    angle.Normalize180();
+        angle = endAngle - startAngle;
 
     // Calculate arc start point:
     VECTOR2I cmap( aCenter.x + KiROUND( aRadius * aStartAngle.Cos() ),
@@ -606,18 +611,6 @@ void HPGL_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
                                        VECTOR2D( radius_device * 2, radius_device * 2 ) ) );
     m_current_item->lift_after = true;
     flushItem();
-}
-
-
-void HPGL_PLOTTER::Arc( const VECTOR2I& aCenter, const VECTOR2I& aStart,
-                        const VECTOR2I& aEnd,
-                        FILL_T aFill, int aWidth, int aMaxError )
-{
-    EDA_ANGLE startAngle( aStart - aCenter );
-    EDA_ANGLE endAngle( aEnd - aCenter );
-    int       radius = ( aStart - aCenter ).EuclideanNorm();
-
-    Arc( aCenter, -endAngle, -startAngle, radius, aFill, aWidth );
 }
 
 

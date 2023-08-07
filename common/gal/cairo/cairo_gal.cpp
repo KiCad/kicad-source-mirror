@@ -155,8 +155,8 @@ void CAIRO_GAL_BASE::arc_angles_xform_and_normalize( double& aStartAngle, double
         endAngle = M_PI - endAngle;
     }
 
-    // Normalize arc angles
-    SWAP( startAngle, >, endAngle );
+    while( endAngle < startAngle )
+        endAngle += M_PI * 2;
 
     // now rotate arc according to the rotation transform matrix
     // Remark:

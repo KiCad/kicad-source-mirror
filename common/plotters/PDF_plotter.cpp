@@ -302,13 +302,8 @@ void PDF_PLOTTER::Arc( const VECTOR2I& aCenter, const VECTOR2I& aStart, const VE
     VECTOR2I  end( aEnd );
     VECTOR2I  pt;
 
-    if( startAngle > endAngle )
-    {
-        if( endAngle < ANGLE_0 )
-            endAngle.Normalize();
-        else
-            startAngle = startAngle.Normalize() - ANGLE_360;
-    }
+    while( endAngle < startAngle )
+        endAngle += ANGLE_360;
 
     SetCurrentLineWidth( aWidth );
     VECTOR2D pos_dev = userToDeviceCoordinates( start );
@@ -361,11 +356,8 @@ void PDF_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
     VECTOR2I        end;
     const EDA_ANGLE delta( 5, DEGREES_T );   // increment to draw circles
 
-    if( startAngle > endAngle )
-    {
-        std::swap( startAngle, endAngle );
-        std::swap( start, end );
-    }
+    while( endAngle < startAngle )
+        endAngle += ANGLE_360;
 
     SetCurrentLineWidth( aWidth );
 

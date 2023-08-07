@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -883,12 +883,8 @@ void GERBER_PLOTTER::plotArc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAn
     // devRelCenter is the position on arc center relative to the arc start, in Gerber coord.
     VECTOR2D devRelCenter = userToDeviceCoordinates( aCenter ) - userToDeviceCoordinates( start );
 
-    fprintf( m_outputFile, "G75*\n" );        // Multiquadrant (360 degrees) mode
-
-    if( aStartAngle < aEndAngle )
-        fprintf( m_outputFile, "G03*\n" );    // Active circular interpolation, CCW
-    else
-        fprintf( m_outputFile, "G02*\n" );    // Active circular interpolation, CW
+    fprintf( m_outputFile, "G75*\n" ); // Multiquadrant (360 degrees) mode
+    fprintf( m_outputFile, "G03*\n" ); // Active circular interpolation, CCW
 
     fprintf( m_outputFile, "X%dY%dI%dJ%dD01*\n",
              KiROUND( devEnd.x ), KiROUND( devEnd.y ),

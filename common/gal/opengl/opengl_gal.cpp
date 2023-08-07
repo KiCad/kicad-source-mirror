@@ -900,8 +900,8 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius,
     double startAngle = aStartAngle.AsRadians();
     double endAngle = aEndAngle.AsRadians();
 
-    // Swap the angles, if start angle is greater than end angle
-    SWAP( startAngle, >, endAngle );
+    while( endAngle < startAngle )
+        endAngle += M_PI * 2;
 
     const double alphaIncrement = calcAngleStep( aRadius );
 
