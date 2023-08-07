@@ -530,8 +530,6 @@ public:
         return PLOT_FORMAT::SVG;
     }
 
-    virtual void SetColor( const COLOR4D& color ) override;
-
     /**
      * Create SVG file header.
      */

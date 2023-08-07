@@ -87,7 +87,7 @@ public:
 
     void PlotDimension( const PCB_DIMENSION_BASE* aDim );
     void PlotPcbTarget( const PCB_TARGET* aMire );
-    void PlotZones( const ZONE* aZone, PCB_LAYER_ID aLayer, const SHAPE_POLY_SET& aPolysList );
+    void PlotZone( const ZONE* aZone, PCB_LAYER_ID aLayer, const SHAPE_POLY_SET& aPolysList );
     void PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, bool aIsKnockout,
                    const KIFONT::METRICS& aFontMetrics );
     void PlotShape( const PCB_SHAPE* aShape );

@@ -98,8 +98,6 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
     connectivity->ClearRatsnest();
     connectivity->Build( m_board, m_progressReporter );
 
-    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
-
     m_worstClearance = m_board->GetMaxClearanceValue();
 
     if( m_progressReporter )

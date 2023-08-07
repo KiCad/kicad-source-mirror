@@ -621,8 +621,8 @@ void BRDITEMS_PLOTTER::PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, boo
 }
 
 
-void BRDITEMS_PLOTTER::PlotZones( const ZONE* aZone, PCB_LAYER_ID aLayer,
-                                  const SHAPE_POLY_SET& aPolysList )
+void BRDITEMS_PLOTTER::PlotZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
+                                 const SHAPE_POLY_SET& aPolysList )
 {
     if( aPolysList.IsEmpty() )
         return;

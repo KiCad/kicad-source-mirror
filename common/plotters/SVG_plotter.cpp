@@ -152,7 +152,9 @@ static wxString XmlEsc( const wxString& aStr, bool isAttribute = false )
                 }
             }
             else
+            {
                 escaped.append(c);
+            }
         }
     }
 
@@ -200,15 +202,6 @@ void SVG_PLOTTER::SetSvgCoordinatesFormat( unsigned aPrecision )
     // Only number of digits in mantissa are adjustable.
     // SVG units are always mm
     m_precision = aPrecision;
-}
-
-
-void SVG_PLOTTER::SetColor( const COLOR4D& color )
-{
-    PSLIKE_PLOTTER::SetColor( color );
-
-    if( m_graphics_changed )
-        setSVGPlotStyle( GetCurrentLineWidth() );
 }
 
 
@@ -322,30 +315,19 @@ void SVG_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
         m_graphics_changed  = true;
         m_currentPenWidth   = aWidth;
     }
-
-    if( m_graphics_changed )
-        setSVGPlotStyle( aWidth );
 }
 
 
 void SVG_PLOTTER::StartBlock( void* aData )
 {
-    std::string* idstr = reinterpret_cast<std::string*>( aData );
-
-    fputs( "<g ", m_outputFile );
-
-    if( idstr )
-        fprintf( m_outputFile, "id=\"%s\"", idstr->c_str() );
-
-    fprintf( m_outputFile, ">\n" );
+    // We can't use <g></g> for blocks because we're already using it for graphics context, and
+    // our graphics context handling is lazy (ie: it leaves the last group open until the context
+    // changes).
 }
 
 
 void SVG_PLOTTER::EndBlock( void* aData )
 {
-    fprintf( m_outputFile, "</g>\n" );
-
-    m_graphics_changed = true;
 }
 
 
@@ -399,6 +381,9 @@ void SVG_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int
     setFillMode( fill );
     SetCurrentLineWidth( width );
 
+    if( m_graphics_changed )
+        setSVGPlotStyle( GetCurrentLineWidth() );
+
     // Rectangles having a 0 size value for height or width are just not drawn on Inkscape,
     // so use a line when happens.
     if( rect_dev.GetSize().x == 0.0 || rect_dev.GetSize().y == 0.0 )    // Draw a line
@@ -426,6 +411,9 @@ void SVG_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T fill, int wi
 
     setFillMode( fill );
     SetCurrentLineWidth( width );
+
+    if( m_graphics_changed )
+        setSVGPlotStyle( GetCurrentLineWidth() );
 
     // If diameter is less than width, switch to filled mode
     if( fill == FILL_T::NO_FILL && diametre < width )
@@ -524,6 +512,9 @@ void SVG_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
         setFillMode( aFill );
         SetCurrentLineWidth( 0 );
 
+        if( m_graphics_changed )
+            setSVGPlotStyle( GetCurrentLineWidth() );
+
         fprintf( m_outputFile, "<path d=\"M%.*f %.*f A%.*f %.*f 0.0 %d %d %.*f %.*f L %.*f %.*f Z\" />\n",
                  m_precision, start.x, m_precision, start.y,
                  m_precision, radius_device, m_precision, radius_device,
@@ -534,6 +525,10 @@ void SVG_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
 
     setFillMode( FILL_T::NO_FILL );
     SetCurrentLineWidth( aWidth );
+
+    if( m_graphics_changed )
+        setSVGPlotStyle( GetCurrentLineWidth() );
+
     fprintf( m_outputFile, "<path d=\"M%.*f %.*f A%.*f %.*f 0.0 %d %d %.*f %.*f\" />\n",
              m_precision, start.x, m_precision, start.y,
              m_precision, radius_device, m_precision, radius_device,
@@ -549,6 +544,9 @@ void SVG_PLOTTER::BezierCurve( const VECTOR2I& aStart, const VECTOR2I& aControl1
 #if 1
     setFillMode( FILL_T::NO_FILL );
     SetCurrentLineWidth( aLineThickness );
+
+    if( m_graphics_changed )
+        setSVGPlotStyle( GetCurrentLineWidth() );
 
     VECTOR2D start  = userToDeviceCoordinates( aStart );
     VECTOR2D ctrl1  = userToDeviceCoordinates( aControl1 );
@@ -633,7 +631,9 @@ void SVG_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double
         wxMemoryOutputStream img_stream;
 
         if( m_colorMode )
+        {
             aImage.SaveFile( img_stream, wxBITMAP_TYPE_PNG );
+        }
         else    // Plot in B&W
         {
             wxImage image = aImage.ConvertToGreyscale();
@@ -686,10 +686,10 @@ void SVG_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
         // Ensure we do not use a fill mode when moving the pen,
         // in SVG mode (i;e. we are plotting only basic lines, not a filled area
         if( m_fillMode != FILL_T::NO_FILL )
-        {
             setFillMode( FILL_T::NO_FILL );
+
+        if( m_graphics_changed )
             setSVGPlotStyle( GetCurrentLineWidth() );
-        }
 
         fprintf( m_outputFile, "<path d=\"M%.*f %.*f\n",
                  m_precision, pos_dev.x,
@@ -697,6 +697,9 @@ void SVG_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
     }
     else if( m_penState != plume || pos != m_penLastpos )
     {
+        if( m_graphics_changed )
+            setSVGPlotStyle( GetCurrentLineWidth() );
+
         VECTOR2D pos_dev = userToDeviceCoordinates( pos );
 
         fprintf( m_outputFile, "L%.*f %.*f\n",

@@ -178,20 +178,13 @@ void PSLIKE_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I&
                                         int aCornerRadius, const EDA_ANGLE& aOrient,
                                         OUTLINE_MODE aTraceMode, void* aData )
 {
-    VECTOR2I size( aSize );
-
     if( aTraceMode == FILLED )
-    {
         SetCurrentLineWidth( 0 );
-    }
     else
-    {
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-    }
-
 
     SHAPE_POLY_SET outline;
-    TransformRoundChamferedRectToPolygon( outline, aPadPos, size, aOrient, aCornerRadius, 0.0, 0,
+    TransformRoundChamferedRectToPolygon( outline, aPadPos, aSize, aOrient, aCornerRadius, 0.0, 0,
                                           0, GetPlotterArcHighDef(), ERROR_INSIDE );
 
     std::vector<VECTOR2I> cornerList;
@@ -215,17 +208,10 @@ void PSLIKE_PLOTTER::FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aS
                                      const EDA_ANGLE& aOrient, SHAPE_POLY_SET* aPolygons,
                                      OUTLINE_MODE aTraceMode, void* aData )
 {
-    VECTOR2I size( aSize );
-
     if( aTraceMode == FILLED )
-    {
         SetCurrentLineWidth( 0 );
-    }
     else
-    {
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-    }
-
 
     std::vector<VECTOR2I> cornerList;
 

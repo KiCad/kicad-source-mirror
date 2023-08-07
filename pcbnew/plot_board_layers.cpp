@@ -691,13 +691,13 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 }
             }
 
-            itemplotter.PlotZones( zone, layer, mainArea );
+            itemplotter.PlotZone( zone, layer, mainArea );
 
             if( !islands.IsEmpty() )
             {
                 ZONE dummy( *zone );
                 dummy.SetNet( &nonet );
-                itemplotter.PlotZones( &dummy, layer, islands );
+                itemplotter.PlotZone( &dummy, layer, islands );
             }
         }
     }
@@ -994,7 +994,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     areas.BooleanAdd( initialPolys, SHAPE_POLY_SET::PM_FAST );
     areas.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
-    itemplotter.PlotZones( &zone, layer, areas );
+    itemplotter.PlotZone( &zone, layer, areas );
 }
 
 
