@@ -26,10 +26,13 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 
 	m_staticTextPaper = new wxStaticText( this, wxID_ANY, _("Paper"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPaper->Wrap( -1 );
-	bleftSizer->Add( m_staticTextPaper, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	bleftSizer->Add( m_staticTextPaper, 0, wxALIGN_CENTER_HORIZONTAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bleftSizer->Add( m_staticline2, 0, wxEXPAND, 5 );
+	bleftSizer->Add( m_staticline2, 0, wxEXPAND|wxTOP, 1 );
+
+
+	bleftSizer->Add( 0, 10, 0, wxEXPAND, 5 );
 
 	m_staticTextSize = new wxStaticText( this, wxID_ANY, _("Size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextSize->Wrap( -1 );
@@ -119,10 +122,13 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 
 	m_staticTextPreview = new wxStaticText( this, wxID_ANY, _("Preview"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPreview->Wrap( -1 );
-	bleftSizer->Add( m_staticTextPreview, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	bleftSizer->Add( m_staticTextPreview, 0, wxALIGN_CENTER_HORIZONTAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_staticline31 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bleftSizer->Add( m_staticline31, 0, wxEXPAND|wxBOTTOM, 10 );
+	bleftSizer->Add( m_staticline31, 0, wxEXPAND|wxTOP, 1 );
+
+
+	bleftSizer->Add( 0, 12, 0, wxEXPAND, 5 );
 
 	m_PageLayoutExampleBitmap = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxFULL_REPAINT_ON_RESIZE|wxBORDER_SIMPLE );
 	m_PageLayoutExampleBitmap->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
@@ -134,17 +140,20 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	bUpperSizerH->Add( bleftSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	bUpperSizerH->Add( 10, 0, 0, wxEXPAND, 5 );
+	bUpperSizerH->Add( 15, 0, 0, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizerRight;
 	bSizerRight = new wxBoxSizer( wxVERTICAL );
 
 	m_staticTextDrawingSheet = new wxStaticText( this, wxID_ANY, _("Drawing Sheet"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDrawingSheet->Wrap( -1 );
-	bSizerRight->Add( m_staticTextDrawingSheet, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	bSizerRight->Add( m_staticTextDrawingSheet, 0, wxALIGN_CENTER_HORIZONTAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_staticline4 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerRight->Add( m_staticline4, 0, wxEXPAND, 5 );
+	bSizerRight->Add( m_staticline4, 0, wxEXPAND|wxTOP, 1 );
+
+
+	bSizerRight->Add( 0, 10, 0, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizerFilename;
 	bSizerFilename = new wxBoxSizer( wxVERTICAL );
@@ -173,10 +182,13 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 
 	m_staticTextTitleBlock = new wxStaticText( this, wxID_ANY, _("Title Block Parameters"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextTitleBlock->Wrap( -1 );
-	bSizerRight->Add( m_staticTextTitleBlock, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	bSizerRight->Add( m_staticTextTitleBlock, 0, wxALIGN_CENTER_HORIZONTAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerRight->Add( m_staticline3, 0, wxEXPAND, 5 );
+	bSizerRight->Add( m_staticline3, 0, wxEXPAND|wxTOP, 1 );
+
+
+	bSizerRight->Add( 0, 10, 0, wxEXPAND, 5 );
 
 	wxBoxSizer* SheetInfoSizer;
 	SheetInfoSizer = new wxBoxSizer( wxHORIZONTAL );
