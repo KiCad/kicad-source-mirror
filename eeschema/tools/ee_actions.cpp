@@ -1151,8 +1151,7 @@ TOOL_ACTION EE_ACTIONS::lineModeNext( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .DefaultHotkey( MD_SHIFT + WXK_SPACE )
         .MenuText( _( "Line Mode for Wires and Buses" ) )
-        .Tooltip( _( "Switch to next line mode" ) )
-        .Icon( BITMAPS::unknown ) );
+        .Tooltip( _( "Switch to next line mode" ) ) );
 
 TOOL_ACTION EE_ACTIONS::toggleAnnotateAuto( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.annotateAutomatically" )
