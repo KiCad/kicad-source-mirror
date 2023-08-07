@@ -720,7 +720,7 @@ bool LINE_PLACER::rhWalkBase( const VECTOR2I& aP, LINE& aWalkLine, int aCollisio
 
     aWalkLine = walkFull;
 
-    return true;
+    return !walkFull.EndsWithVia() || aViaOk;
 }
 
 
