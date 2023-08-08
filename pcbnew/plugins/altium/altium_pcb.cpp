@@ -2207,7 +2207,6 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItemOnLayer( FOOTPRINT*    
 
         pad->SetKeepTopBottom( false ); // TODO: correct? This seems to be KiCad default on import
         pad->SetAttribute( PAD_ATTRIB::SMD );
-        pad->SetShape( PAD_SHAPE::CUSTOM );
 
         int      anchorSize = 1;
         VECTOR2I anchorPos = linechain.CPoint( 0 );
@@ -2216,6 +2215,7 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItemOnLayer( FOOTPRINT*    
         pad->SetAnchorPadShape( PAD_SHAPE::CIRCLE );
         pad->SetSize( { anchorSize, anchorSize } );
         pad->SetPosition( anchorPos );
+        pad->SetLocalCoord();
 
         SHAPE_POLY_SET shapePolys = polySet;
         shapePolys.Move( -anchorPos );
