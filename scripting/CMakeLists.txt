@@ -67,6 +67,23 @@ if( APPLE )
     set_target_properties( scripting_kiface PROPERTIES
         LIBRARY_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_KIFACE_DIR}
         )
+    set_target_properties( scripting_kiface PROPERTIES INSTALL_RPATH
+            "@executable_path/../Frameworks;@executable_path/../Frameworks/Python.framework" )
+    set_target_properties( scripting_kiface PROPERTIES BUILD_WITH_INSTALL_RPATH 1 )
+
+    install( CODE "
+        set( KICAD_CMAKE_MODULE_PATH \"${KICAD_CMAKE_MODULE_PATH}\" )
+        set( OSX_BUNDLE_BUILD_KIFACE_DIR \"${OSX_BUNDLE_BUILD_KIFACE_DIR}\" )
+        set( OSX_BUNDLE_INSTALL_LIB_DIR \"${OSX_BUNDLE_INSTALL_LIB_DIR}\" )
+
+        include( ${KICAD_CMAKE_MODULE_PATH}/InstallSteps/InstallMacOS.cmake )
+
+        # Install any dependencies
+        install_runtime_deps( \"\"
+            \"${OSX_BUNDLE_BUILD_KIFACE_DIR}/_kipython.kiface\"
+            \"\"
+            )
+    " )
 else()
     install( TARGETS scripting_kiface
         DESTINATION ${KICAD_KIFACE}

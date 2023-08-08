@@ -185,24 +185,38 @@ if( APPLE )
     set_target_properties( gerbview_kiface PROPERTIES
         LIBRARY_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_KIFACE_DIR}
         )
+
+    set_target_properties( gerbview PROPERTIES INSTALL_RPATH
+            "@executable_path/../Frameworks;@executable_path/../Frameworks/Python.framework" )
+
+    set_target_properties( gerbview_kiface PROPERTIES INSTALL_RPATH
+            "@executable_path/../Frameworks;@executable_path/../Frameworks/Python.framework" )
+    set_target_properties( gerbview_kiface PROPERTIES BUILD_WITH_INSTALL_RPATH 1 )
+
     # put individual bundle outside of main bundle as a first step
     # will be pulled into the main bundle when creating main bundle
     install( TARGETS gerbview
         DESTINATION ${KICAD_BIN}
         COMPONENT binary
         )
-    install( CODE "
-            # override default embedded path settings
-            ${OSX_BUNDLE_OVERRIDE_PATHS}
 
-            # do all the work
-            include( BundleUtilities )
-            fixup_bundle( ${KICAD_BIN}/gerbview.app/Contents/MacOS/gerbview
-                \"\"
-                \"${PYTHON_FRAMEWORK}\"
-                )
-            " COMPONENT Runtime
-        )
+    install( CODE "
+        set( KICAD_CMAKE_MODULE_PATH \"${KICAD_CMAKE_MODULE_PATH}\" )
+        set( KICAD_BIN \"${KICAD_BIN}\" )
+        set( OSX_BUNDLE_INSTALL_BIN_DIR \"${OSX_BUNDLE_INSTALL_BIN_DIR}\" )
+        set( OSX_BUNDLE_INSTALL_LIB_DIR \"${OSX_BUNDLE_INSTALL_LIB_DIR}\" )
+        set( OSX_BUNDLE_BUILD_KIFACE_DIR \"${OSX_BUNDLE_BUILD_KIFACE_DIR}\" )
+    " )
+
+    install( CODE [[
+        include( ${KICAD_CMAKE_MODULE_PATH}/InstallSteps/InstallMacOS.cmake )
+
+        # Install any dependencies (this will generally duplicate kicad.app but we can't be sure)
+        install_runtime_deps( "${KICAD_BIN}/gerbview.app/Contents/MacOS/gerbview"
+            "${OSX_BUNDLE_BUILD_KIFACE_DIR}/_gerbview.kiface"
+            ""
+            )
+    ]] )
 else()
     if( MSVC )
         target_sources( gerbview_kiface PRIVATE ${CMAKE_SOURCE_DIR}/resources/msw/gerbview-dll.rc )

@@ -84,7 +84,7 @@ function( sign_kicad_bundle target signing_id use_secure_timestamp use_hardened_
                 RESULT_VARIABLE codesign_result)
 
         if( NOT codesign_result EQUAL 0 )
-            message( FATAL_ERROR "macOS signing failed; ran ${cmd}" )
+            message( WARNING "macOS signing failed; ${cmd} returned ${codesign_result}" )
         endif( )
     endforeach( )
 endfunction()

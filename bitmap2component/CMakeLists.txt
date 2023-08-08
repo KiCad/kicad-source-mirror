@@ -61,24 +61,32 @@ if( APPLE )
         MACOSX_BUNDLE_INFO_PLIST ${PROJECT_BINARY_DIR}/bitmap2component/Info.plist
         )
 
+    set_target_properties( bitmap2component PROPERTIES INSTALL_RPATH
+            "@executable_path/../Frameworks;@executable_path/../Frameworks/Python.framework" )
+
     # put individual bundle outside of main bundle as a first step
     # will be pulled into the main bundle when creating main bundle
     install( TARGETS bitmap2component
         DESTINATION ${KICAD_BIN}
         COMPONENT binary
         )
-    install( CODE "
-        # override default embedded path settings
-        ${OSX_BUNDLE_OVERRIDE_PATHS}
 
-        # do all the work
-        include( BundleUtilities )
-        fixup_bundle( ${KICAD_BIN}/bitmap2component.app/Contents/MacOS/bitmap2component
-            \"\"
-            \"${PYTHON_FRAMEWORK}\"
+    install( CODE "
+        set( KICAD_CMAKE_MODULE_PATH \"${KICAD_CMAKE_MODULE_PATH}\" )
+        set( KICAD_BIN \"${KICAD_BIN}\" )
+        set( OSX_BUNDLE_INSTALL_BIN_DIR \"${OSX_BUNDLE_INSTALL_BIN_DIR}\" )
+        set( OSX_BUNDLE_INSTALL_LIB_DIR \"${OSX_BUNDLE_INSTALL_LIB_DIR}\" )
+    " )
+
+    install( CODE [[
+        include( ${KICAD_CMAKE_MODULE_PATH}/InstallSteps/InstallMacOS.cmake )
+
+        # Install any dependencies (this will generally duplicate kicad.app but we can't be sure)
+        install_runtime_deps( "${KICAD_BIN}/bitmap2component.app/Contents/MacOS/bitmap2component"
+            ""
+            ""
             )
-        " COMPONENT Runtime
-        )
+    ]] )
 else()
     install( TARGETS bitmap2component
         DESTINATION ${KICAD_BIN}

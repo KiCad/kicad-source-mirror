@@ -147,6 +147,10 @@ cmake_dependent_option( KICAD_BUILD_SMALL_DEBUG_FILES
     OFF "NOT MSVC"
     OFF )
 
+cmake_dependent_option( KICAD_APPLE_MAKE_RELOCATEABLE_BUNDLE
+    "On macOS, post-process the build to make it relocateable (default ON)"
+    ON "APPLE" OFF )
+
 ####################################
 # Installation options
 ####################################
@@ -662,29 +666,6 @@ else()
 
     # RPATH settings for building shared libraries
     set( CMAKE_MACOSX_RPATH FALSE )
-
-    # Override default paths for fixup_bundle
-    set( OSX_BUNDLE_OVERRIDE_PATHS "
-        function( gp_item_default_embedded_path_override item default_embedded_path_var )
-            # by default, embed things right next to the main bundle executable:
-            set( path \"@executable_path/../../Contents/MacOS\" )
-            set( overridden 0 )
-
-            # embed .dylibs right next to the main bundle executable:
-            if( item MATCHES \"\\\\.dylib$\" )
-                set( path \"@executable_path/../Frameworks\" )
-                set( overridden 1 )
-            endif()
-
-            set( \${default_embedded_path_var} \"\${path}\" PARENT_SCOPE )
-        endfunction(gp_item_default_embedded_path_override)
-
-        # If `BU_CHMOD_BUNDLE_ITEMS` is not set, `install_name_tool` will fail to re-write some
-        # loader paths due to lack of writable permissions if the build dependencies were installed
-        # by brew (or didn't have writable permissions)
-        set ( BU_CHMOD_BUNDLE_ITEMS ON )
-        "
-        )
 endif()
 
 mark_as_advanced( KICAD_BIN

@@ -1,12 +1,14 @@
 # RefixupMacOS.cmake
 
-# Adjust rpaths and dependency information on macOS
-# after fixup_bundle.
+# Now that we don't use BundleUtilities and instead use GET_RUNTIME_DEPENDENCIES,
+# the binaries that are built all have absolute path library load commands.
+# What we need to do here is update all the paths for _the runtime dependencies
+# that we installed into the bundle_ to live in @rpath, with Python getting
+# special treatment in that it lives in @rpath/Frameworks.
 
-# Some of this comes from GetPrerequisites.cmake.
-
-# This is not intended to make an install completely
-# redistributable and relocatable.
+# Make sure GLOB_RECURSE doesn't follow symlinks
+cmake_policy( PUSH )
+cmake_policy( SET CMP0009 NEW )
 
 function( refix_kicad_bundle target )
     # target should be the path to the kicad.app directory
@@ -18,7 +20,7 @@ function( refix_kicad_bundle target )
     file( GLOB_RECURSE items ${target}/*.dylib ${target}/*.so ${target}/*.kiface )
 
     foreach( item ${items} )
-        message( "Refixing '${item}'" )
+        message( "Refixing prereqs for '${item}'" )
         refix_prereqs( ${item} )
     endforeach( )
 
@@ -27,30 +29,29 @@ function( refix_kicad_bundle target )
     foreach( subdir ${subdirs} )
         file( GLOB binaries ${subdir}/Contents/MacOS/* )
         foreach( binary ${binaries} )
-            message( "Refixing '${binary}'" )
-            refix_rpaths( ${binary} )
+            message( "Refixing rpaths and prereqs for '${binary}'" )
+            #refix_rpaths( ${binary} )
             refix_prereqs( ${binary} )
         endforeach( )
     endforeach( )
 
     file( GLOB pythonbinbinaries ${target}/Contents/Frameworks/Python.framework/Versions/3.*/bin/python3 )
     foreach( pythonbinbinary ${pythonbinbinaries} )
-        message( "Refixing '${pythonbinbinary}'" )
+        message( "Refixing rpaths and prereqs for '${pythonbinbinary}'" )
         refix_rpaths( ${pythonbinbinary} )
         refix_prereqs( ${pythonbinbinary} )
     endforeach()
 
     file( GLOB pythonresbinaries ${target}/Contents/Frameworks/Python.framework/Versions/3.*/Resources/Python.app/Contents/MacOS/Python )
     foreach( pythonresbinary ${pythonresbinaries} )
-        message( "Refixing '${pythonresbinary}'" )
+        message( "Refixing rpaths and prereqs for '${pythonresbinary}'" )
         refix_rpaths( ${pythonresbinary} )
         refix_prereqs( ${pythonresbinary} )
     endforeach()
 
     file( GLOB binaries ${target}/Contents/MacOS/* )
     foreach( binary ${binaries} )
-        message( "Refixing '${binary}'" )
-        refix_rpaths( ${binary} )
+        message( "Refixing prereqs for '${binary}'" )
         refix_prereqs( ${binary} )
     endforeach( )
 
@@ -66,8 +67,11 @@ function( cleanup_python bundle)
     # Remove extra Python
     file( REMOVE_RECURSE ${bundle}/Contents/MacOS/Python )
     file( GLOB extra_pythons LIST_DIRECTORIES true ${bundle}/Contents/Applications/*/Contents/MacOS/Python )
-    message( "Removing extra Pythons copied into Contents/MacOS: ${extra_pythons}" )
-    file( REMOVE_RECURSE ${extra_pythons} )
+
+    if( NOT "${extra_pythons}" STREQUAL "" )
+        message( "Removing extra Pythons copied into Contents/MacOS: ${extra_pythons}" )
+        file( REMOVE_RECURSE ${extra_pythons} )
+    endif()
 
     # Make sure Python's Current is a symlink to 3.x
     file( REMOVE_RECURSE ${bundle}/Contents/Frameworks/Python.framework/Versions/Current )
@@ -85,7 +89,6 @@ function( refix_rpaths binary )
     string( REGEX REPLACE "/+$" "" relative_python_framework_path "${relative_python_framework_path}" ) # remove trailing slash
     list( APPEND desired_rpaths "@executable_path/${relative_kicad_framework_path}" "@executable_path/${relative_python_framework_path}" )
 
-    get_item_rpaths( ${binary} old_rpaths )
     foreach( desired_rpath ${desired_rpaths} )
         execute_process(
                 COMMAND install_name_tool -add_rpath ${desired_rpath} ${binary}
@@ -100,7 +103,12 @@ function( refix_rpaths binary )
 endfunction( )
 
 function( refix_prereqs target )
-    # Replace '@executable_path/../Frameworks/' in dependencies with '@rpath/'
+    # file(GET_RUNTIME_DEPENDENCIES) does not seem to work properly on libraries, it returns empty
+    # results.  So, to figure out which ones we can remap to rpath, we make use of ${items}, which
+    # happens to contain all the shared libs we found in the bundle.  This is a big hack, because
+    # we're not actually checking that these shared libs live *in* the rpath, but in practice it
+    # should work.  If this stops being the case, we can always add more logic...
+
     execute_process(
             COMMAND otool -L ${target}
             RESULT_VARIABLE gp_rv
@@ -110,6 +118,8 @@ function( refix_prereqs target )
 
     if( NOT gp_rv STREQUAL "0" )
         message( FATAL_ERROR "otool failed: ${gp_rv}\n${gp_ev}" )
+    else()
+        message( DEBUG "otool -L ${target} returned: ${gp_cmd_ov}" )
     endif( )
 
     string( REPLACE ";" "\\;" candidates "${gp_cmd_ov}" )
@@ -141,24 +151,42 @@ function( refix_prereqs target )
         if( "${candidate}" MATCHES "${gp_regex}" )
             string( REGEX REPLACE "${otool_regex}" "\\1" raw_prereq "${candidate}" )
 
-            if ( raw_prereq MATCHES "^@executable_path/\\.\\./\\.\\./Contents/MacOS/Python$" )
-                set( changed_prereq "@rpath/Versions/Current/Python" )
-            elseif ( raw_prereq MATCHES "^@executable_path/\\.\\./Frameworks/" )
-                string( REPLACE "@executable_path/../Frameworks/"
-                        "@rpath/" changed_prereq
-                        "${raw_prereq}" )
-            elseif ( raw_prereq MATCHES "^@executable_path/\\.\\./PlugIns/" )
-                string( REPLACE "@executable_path/../PlugIns/"
-                        "@rpath/../PlugIns/" changed_prereq
-                        "${raw_prereq}" )
-            else( )
-                continue( )
-            endif( )
+            message( DEBUG "processing ${raw_prereq}")
+            if( raw_prereq MATCHES "^@rpath.*" )
+                message( DEBUG "    already an rpath; skipping" )
+                continue()
+            endif()
 
-            # Because of the above continue( ) in the else, we know we changed the prereq if we're here
+            get_filename_component( prereq_name ${raw_prereq} NAME )
+            message( DEBUG "    prereq name: ${prereq_name}" )
+            set( changed_prereq "" )
+
+            foreach( item ${items} )
+                get_filename_component( item_name ${item} NAME )
+                if( "${item_name}" STREQUAL "${prereq_name}" )
+                    message( DEBUG "    found match at ${item}" )
+
+                    if( item MATCHES "^.*/Contents/PlugIns/.*" )
+                        string( REGEX REPLACE "^.*/Contents/PlugIns/(.*)$"
+                                "@rpath/../PlugIns/\\1"
+                                changed_prereq
+                                "${item}" )
+                    else()
+                        set( changed_prereq "@rpath/${item_name}" )
+                    endif()
+                endif()
+            endforeach()
+
+            if( "${changed_prereq}" STREQUAL "" )
+                message( DEBUG "    not found in items; assumed to be system lib" )
+                continue()
+            endif()
+
+            # Because of the above continue()s, we know we changed the prereq if we're here
 
             if( raw_prereq STREQUAL gp_install_id )
                 set( cmd install_name_tool -id ${changed_prereq} "${target}" )
+                message( DEBUG "     updating install id: ${cmd}" )
                 execute_process( COMMAND ${cmd} RESULT_VARIABLE install_name_tool_result )
                 if( NOT install_name_tool_result EQUAL 0 )
                     string( REPLACE ";" "' '" msg "'${cmd}'" )
@@ -166,7 +194,6 @@ function( refix_prereqs target )
                 endif( )
                 continue( )
             endif( )
-
 
             if ( NOT raw_prereq STREQUAL changed_prereq )
                 # we know we need to change this prereq
@@ -177,6 +204,7 @@ function( refix_prereqs target )
 
     if( changes )
         set( cmd install_name_tool ${changes} "${target}" )
+        message( DEBUG "changing prereqs: ${changes}" )
         execute_process( COMMAND ${cmd} RESULT_VARIABLE install_name_tool_result )
         if( NOT install_name_tool_result EQUAL 0 )
             string( REPLACE ";" "' '" msg "'${cmd}'" )
@@ -184,3 +212,5 @@ function( refix_prereqs target )
         endif( )
     endif( )
 endfunction( )
+
+cmake_policy( POP )

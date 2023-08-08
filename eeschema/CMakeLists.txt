@@ -606,6 +606,14 @@ if( APPLE )
     set_target_properties( eeschema_kiface PROPERTIES
         LIBRARY_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_KIFACE_DIR}
         )
+
+    set_target_properties( eeschema PROPERTIES INSTALL_RPATH
+            "@executable_path/../Frameworks;@executable_path/../Frameworks/Python.framework" )
+
+    set_target_properties( eeschema_kiface PROPERTIES INSTALL_RPATH
+            "@executable_path/../Frameworks;@executable_path/../Frameworks/Python.framework" )
+    set_target_properties( eeschema_kiface PROPERTIES BUILD_WITH_INSTALL_RPATH 1 )
+
     # put individual bundle outside of main bundle as a first step
     # will be pulled into the main bundle when creating main bundle
     install( TARGETS eeschema
@@ -614,17 +622,12 @@ if( APPLE )
         )
 
     install( CODE "
-            # override default embedded path settings
-            ${OSX_BUNDLE_OVERRIDE_PATHS}
-
-            # do all the work
-            include( BundleUtilities )
-            fixup_bundle( ${KICAD_BIN}/eeschema.app/Contents/MacOS/eeschema
-                \"\"
-                \"${PYTHON_FRAMEWORK}\"
-                )
-            " COMPONENT Runtime
-        )
+        set( KICAD_CMAKE_MODULE_PATH \"${KICAD_CMAKE_MODULE_PATH}\" )
+        set( KICAD_BIN \"${KICAD_BIN}\" )
+        set( OSX_BUNDLE_INSTALL_BIN_DIR \"${OSX_BUNDLE_INSTALL_BIN_DIR}\" )
+        set( OSX_BUNDLE_INSTALL_LIB_DIR \"${OSX_BUNDLE_INSTALL_LIB_DIR}\" )
+        set( OSX_BUNDLE_BUILD_KIFACE_DIR \"${OSX_BUNDLE_BUILD_KIFACE_DIR}\" )
+    " )
 
     # bundle libngspice and codemodels
     get_filename_component( ABS_LIBNGSPICE ${NGSPICE_LIBRARY} ABSOLUTE )
@@ -635,6 +638,16 @@ if( APPLE )
             FILES_MATCHING PATTERN "*.dylib")
     install( DIRECTORY "${LIBNGSPICE_PATH}/ngspice"
              DESTINATION "${OSX_BUNDLE_INSTALL_PLUGIN_DIR}/sim" )
+
+    install( CODE [[
+        include( ${KICAD_CMAKE_MODULE_PATH}/InstallSteps/InstallMacOS.cmake )
+
+        # Install any dependencies (this will generally duplicate kicad.app but we can't be sure)
+        install_runtime_deps( "${KICAD_BIN}/eeschema.app/Contents/MacOS/eeschema"
+            "${OSX_BUNDLE_BUILD_KIFACE_DIR}/_eeschema.kiface"
+            ""
+            )
+    ]] )
 else()
     if( MSVC )
         target_sources( eeschema_kiface PRIVATE ${CMAKE_SOURCE_DIR}/resources/msw/eeschema-dll.rc )

@@ -96,6 +96,9 @@ if( APPLE )
     set_target_properties( cvpcb_kiface PROPERTIES
         LIBRARY_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_KIFACE_DIR}
         )
+    set_target_properties( cvpcb_kiface PROPERTIES INSTALL_RPATH
+            "@executable_path/../Frameworks;@executable_path/../Frameworks/Python.framework" )
+    set_target_properties( cvpcb_kiface PROPERTIES BUILD_WITH_INSTALL_RPATH 1 )
 else()
     install( TARGETS cvpcb_kiface
         DESTINATION ${KICAD_KIFACE}
