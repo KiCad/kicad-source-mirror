@@ -32,6 +32,9 @@ wxString LayerName( int aLayer )
     switch( aLayer )
     {
     // PCB_LAYER_ID
+    case UNDEFINED_LAYER:   return _( "undefined" );
+
+    // Copper
     case F_Cu:              return wxT( "F.Cu" );
     case In1_Cu:            return wxT( "In1.Cu" );
     case In2_Cu:            return wxT( "In2.Cu" );
