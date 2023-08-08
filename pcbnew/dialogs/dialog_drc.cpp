@@ -325,9 +325,7 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
     {
         wxMilliSleep( 500 );
         m_runningResultsBook->ChangeSelection( 1 );
-#ifndef __WXGTK__
-        KIPLATFORM::UI::ForceFocus( m_markerDataView );
-#endif
+        KIPLATFORM::UI::ForceFocus( m_Notebook );
     }
 
     refreshEditor();
