@@ -1015,13 +1015,15 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent& a
     {
         SCH_EDITOR_CONTROL* editor = m_parent->GetToolManager()->GetTool<SCH_EDITOR_CONTROL>();
 
-        // Use of full path based on UUID allows select of not yet annotated or duplicaded symbols
-        wxString symbol_path = refs.begin()->GetFullPath();
-
         if( refs.size() > 0 )
+        {
+            // Use of full path based on UUID allows select of not yet annotated or duplicaded symbols
+            wxString symbol_path = refs.begin()->GetFullPath();
+
             // Focus only handles on item at this time
             editor->FindSymbolAndItem( &symbol_path, nullptr, true, HIGHLIGHT_SYMBOL,
                                        wxEmptyString );
+        }
         else
             m_parent->FocusOnItem( nullptr );
 
