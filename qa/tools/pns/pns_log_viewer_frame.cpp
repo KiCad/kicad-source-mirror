@@ -180,6 +180,9 @@ PNS_LOG_VIEWER_FRAME::PNS_LOG_VIEWER_FRAME( wxFrame* frame ) : PNS_LOG_VIEWER_FR
 
 PNS_LOG_VIEWER_FRAME::~PNS_LOG_VIEWER_FRAME()
 {
+    m_board = nullptr;
+    m_logPlayer = nullptr;
+    m_logFile = nullptr;
     m_overlay = nullptr;
 }
 
@@ -318,11 +321,12 @@ void PNS_LOG_VIEWER_FRAME::drawLoggedItems( int iter )
 
 void PNS_LOG_VIEWER_FRAME::SetLogFile( PNS_LOG_FILE* aLog )
 {
+    m_logPlayer.reset( new PNS_LOG_PLAYER );
+    m_board = nullptr;
     m_logFile.reset( aLog );
 
     SetBoard( m_logFile->GetBoard() );
 
-    m_logPlayer.reset( new PNS_LOG_PLAYER );
     m_logPlayer->ReplayLog( m_logFile.get(), 0, 0, -1);
 
     auto dbgd = m_logPlayer->GetDebugDecorator();
