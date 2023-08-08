@@ -26,12 +26,15 @@
 // (unless you want to improve it).
 #include <string>
 
+#include <confirm.h>
 #include <wx/clipbrd.h>
 #include <pgm_base.h>
 #include <profile.h>
+#include <reporter.h>
 #include <trace_helpers.h>
 #include <view/view_overlay.h>
 #include <view/view_controls.h>
+#include <wildcards_and_files_ext.h>
 
 
 #include "label_manager.h"
@@ -113,7 +116,8 @@ void PNS_LOG_VIEWER_OVERLAY::DrawAnnotations()
 }
 
 
-PNS_LOG_VIEWER_FRAME::PNS_LOG_VIEWER_FRAME( wxFrame* frame ) : PNS_LOG_VIEWER_FRAME_BASE( frame )
+PNS_LOG_VIEWER_FRAME::PNS_LOG_VIEWER_FRAME( wxFrame* frame ) :
+        PNS_LOG_VIEWER_FRAME_BASE( frame ), m_rewindIter( 0 ), m_reporter( &m_consoleLog )
 {
     LoadSettings();
     createView( this, PCB_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
@@ -249,6 +253,7 @@ void PNS_LOG_VIEWER_FRAME::drawSimpleShape( SHAPE* aShape, bool aIsSelected, con
     }
 }
 
+
 void PNS_LOG_VIEWER_FRAME::drawLoggedItems( int iter )
 {
     if( !m_logPlayer )
@@ -319,6 +324,15 @@ void PNS_LOG_VIEWER_FRAME::drawLoggedItems( int iter )
 }
 
 
+void PNS_LOG_VIEWER_FRAME::LoadLogFile( const wxString& aFile )
+{
+    std::unique_ptr<PNS_LOG_FILE> logFile( new PNS_LOG_FILE );
+
+    if( logFile->Load( wxFileName( aFile ), &m_reporter ) )
+        SetLogFile( logFile.release() );
+}
+
+
 void PNS_LOG_VIEWER_FRAME::SetLogFile( PNS_LOG_FILE* aLog )
 {
     m_logPlayer.reset( new PNS_LOG_PLAYER );
@@ -352,7 +366,6 @@ void PNS_LOG_VIEWER_FRAME::SetLogFile( PNS_LOG_FILE* aLog )
 }
 
 
-
 void PNS_LOG_VIEWER_FRAME::SetBoard2( std::shared_ptr<BOARD> aBoard )
 {
     SetBoard( aBoard );
@@ -368,14 +381,51 @@ void PNS_LOG_VIEWER_FRAME::SetBoard2( std::shared_ptr<BOARD> aBoard )
     m_galPanel->GetView()->SetViewport( bbd );
 }
 
-void PNS_LOG_VIEWER_FRAME::onReload( wxCommandEvent& event )
+
+void PNS_LOG_VIEWER_FRAME::onOpen( wxCommandEvent& event )
 {
-    event.Skip();
+    wxFileDialog dlg( this, "Select Log File", m_mruPath, wxEmptyString,
+                      "PNS log files" + AddFileExtListToFilter( { "log" } ),
+                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
+    if( dlg.ShowModal() != wxID_CANCEL )
+    {
+        wxString logPath = dlg.GetPath();
+        LoadLogFile( logPath );
+        m_mruPath = wxFileName( logPath ).GetPath();
+    }
 }
+
+
+void PNS_LOG_VIEWER_FRAME::onSaveAs( wxCommandEvent& event )
+{
+    if( !m_logFile )
+    {
+        DisplayError( this, wxT( "No log file Loaded!" ) );
+        return;
+    }
+
+    wxFileDialog dlg( this, "New log file", m_mruPath, wxEmptyString,
+                      "PNS log files" + AddFileExtListToFilter( { "log" } ),
+                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    if( dlg.ShowModal() != wxID_CANCEL )
+    {
+        // Enforce the extension, wxFileDialog is inept.
+        wxFileName create_me = EnsureFileExtension( dlg.GetPath(), "log" );
+
+        wxASSERT_MSG( create_me.IsAbsolute(), wxS( "wxFileDialog returned non-absolute path" ) );
+
+        m_logFile->SaveLog( create_me, &m_reporter );
+        m_mruPath = create_me.GetPath();
+    }
+
+}
+
 
 void PNS_LOG_VIEWER_FRAME::onExit( wxCommandEvent& event )
 {
-    event.Skip();
+    Close();
 }
 
 
@@ -427,6 +477,7 @@ void PNS_LOG_VIEWER_FRAME::onBtnRewindLeft( wxCommandEvent& event )
         updateDumpPanel( m_rewindIter );
         updatePnsPreviewItems( m_rewindIter );
         m_rewindPos->SetValue( std::to_string( m_rewindIter ) );
+        m_rewindSlider->SetValue( m_rewindIter );
     }
 }
 
@@ -443,6 +494,7 @@ void PNS_LOG_VIEWER_FRAME::onBtnRewindRight( wxCommandEvent& event )
         updateDumpPanel( m_rewindIter );
         updatePnsPreviewItems( m_rewindIter );
         m_rewindPos->SetValue( std::to_string( m_rewindIter ) );
+        m_rewindSlider->SetValue( m_rewindIter );
     }
 }
 

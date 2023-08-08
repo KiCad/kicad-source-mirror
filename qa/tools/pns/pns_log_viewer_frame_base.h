@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Feb  6 2021)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -58,7 +58,8 @@ class PNS_LOG_VIEWER_FRAME_BASE : public wxFrame
 		wxStatusBar* m_statusBar;
 
 		// Virtual event handlers, override them in your derived class
-		virtual void onReload( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onOpen( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onSaveAs( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onExit( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBtnRewindLeft( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onRewindScroll( wxScrollEvent& event ) { event.Skip(); }

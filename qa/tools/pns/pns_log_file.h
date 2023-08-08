@@ -69,6 +69,9 @@ public:
         bool Compare( const COMMIT_STATE& aOther );
     };
 
+    // Saves a P&S event log only (e.g. after fixing a bug and wanting a new "golden" commit state)
+    bool SaveLog( const wxFileName& logFileName, REPORTER* aRpt );
+
     // Loads a P&S event log and the associated board file. These two always go together.
     bool Load( const wxFileName& logFileName, REPORTER* aRpt );
 

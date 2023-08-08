@@ -49,7 +49,7 @@ namespace KIGFX {
 class PCB_TEST_FRAME_BASE
 {
 public:
-    PCB_TEST_FRAME_BASE();  
+    PCB_TEST_FRAME_BASE();
     virtual ~PCB_TEST_FRAME_BASE();
 
     virtual void SetBoard( std::shared_ptr<BOARD> b);
@@ -68,6 +68,7 @@ protected:
     std::shared_ptr < PCB_DRAW_PANEL_GAL > m_galPanel;
     std::shared_ptr < BOARD > m_board;
     KIGFX::GAL_DISPLAY_OPTIONS m_displayOptions;
+    wxString m_mruPath;
 
 #ifdef USE_TOOL_MANAGER
     unique_ptr < TOOL_MANAGER > m_toolManager;

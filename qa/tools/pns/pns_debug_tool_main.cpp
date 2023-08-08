@@ -25,7 +25,7 @@
 #include <wx/cmdline.h>
 
 #include <qa_utils/utility_registry.h>
-#include <pcbnew_utils/board_test_utils.h>
+#include <advanced_config.h>
 
 #include "pns_log_file.h"
 #include "pns_log_viewer_frame.h"
@@ -62,7 +62,7 @@ static const wxCmdLineEntryDesc g_cmdLineDesc[] = {
             "filename",
             _( "log file name (no extensions)" ).mb_str(),
             wxCMD_LINE_VAL_STRING,
-            wxCMD_LINE_OPTION_MANDATORY,
+            wxCMD_LINE_PARAM_OPTIONAL,
     },
     { wxCMD_LINE_NONE }
 };
@@ -76,7 +76,7 @@ int replay_main_func( int argc, char* argv[] )
                 "in debug KiCad builds." ) );
 
     int cmd_parsed_ok = cl_parser.Parse();
-    
+
     if( cl_parser.Found("help") )
     {
         return 0;
@@ -88,7 +88,6 @@ int replay_main_func( int argc, char* argv[] )
         return ( cmd_parsed_ok == -1 ) ? KI_TEST::RET_CODES::OK : KI_TEST::RET_CODES::BAD_CMDLINE;
     }
 
-    wxString filename;
 
 #if 0
     long iter_limit = 256;
@@ -97,17 +96,12 @@ int replay_main_func( int argc, char* argv[] )
     cl_parser.Found( "steps-limit", &steps_limit );
 #endif
 
-    filename = cl_parser.GetParam(0);
-
     auto frame = new PNS_LOG_VIEWER_FRAME( nullptr );
 
-    PNS_LOG_FILE* logFile = new PNS_LOG_FILE;
-
-    KI_TEST::CONSOLE_LOG          log;
-    KI_TEST::CONSOLE_MSG_REPORTER reporter( &log );
-
-    logFile->Load( wxFileName( argv[1] ), &reporter );
-    frame->SetLogFile( logFile );
+    if( cl_parser.GetParamCount() > 0 )
+    {
+        frame->LoadLogFile( cl_parser.GetParam( 0 ) );
+    }
 
     return 0;
 }

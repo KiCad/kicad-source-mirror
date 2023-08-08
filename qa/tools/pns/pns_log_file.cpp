@@ -255,7 +255,7 @@ const std::set<PNS::ITEM*> deduplicate( const std::vector<PNS::ITEM*>& items )
                 rv.insert( item );
         }
     }
-    
+
     return rv;
 }
 
@@ -297,6 +297,21 @@ bool PNS_LOG_FILE::COMMIT_STATE::Compare( const PNS_LOG_FILE::COMMIT_STATE& aOth
     //printf("post-compare: %d/%d\n", chkAddedItems.size(), check.m_removedIds.size() );
 
     return chkAddedItems.empty() && check.m_removedIds.empty();
+}
+
+
+bool PNS_LOG_FILE::SaveLog( const wxFileName& logFileName, REPORTER* aRpt )
+{
+    std::vector<PNS::ITEM*> dummyHeads; // todo - save heads when we support it in QA
+
+    FILE*    log_f = wxFopen( logFileName.GetFullPath(), "wb" );
+    wxString logString = PNS::LOGGER::FormatLogFileAsString( m_mode, m_commitState.m_addedItems,
+                                                             m_commitState.m_removedIds, dummyHeads,
+                                                             m_events );
+    fprintf( log_f, "%s\n", logString.c_str().AsChar() );
+    fclose( log_f );
+
+    return true;
 }
 
 

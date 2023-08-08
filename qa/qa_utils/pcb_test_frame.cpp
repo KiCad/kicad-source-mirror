@@ -177,6 +177,7 @@ void PCB_TEST_FRAME_BASE::createView( wxWindow *aParent, PCB_DRAW_PANEL_GAL::GAL
 
 PCB_TEST_FRAME_BASE::PCB_TEST_FRAME_BASE()
 {
+    m_mruPath = wxGetCwd();
 }
 
 
