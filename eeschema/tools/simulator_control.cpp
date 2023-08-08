@@ -33,10 +33,12 @@
 #include <project/project_file.h>
 #include <sch_edit_frame.h>
 #include <sim/simulator_frame.h>
+#include <sim/sim_plot_tab.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
 #include <tools/simulator_control.h>
 #include <scintilla_tricks.h>
+#include <sim/spice_circuit_model.h>
 #include <dialogs/dialog_user_defined_signals.h>
 
 

@@ -27,6 +27,7 @@
 #include <sim/spice_circuit_model.h>
 #include <sim/ngspice.h>
 #include <sim/simulator_frame.h>
+#include <sim/sim_plot_tab.h>
 #include <confirm.h>
 
 #include <wx/tokenzr.h>

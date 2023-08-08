@@ -238,7 +238,6 @@ set( EESCHEMA_SIM_SRCS
 
     sim/legacy_workbook.cpp
 
-    widgets/sim_notebook.cpp
     widgets/tuner_slider.cpp
     widgets/tuner_slider_base.cpp
     )

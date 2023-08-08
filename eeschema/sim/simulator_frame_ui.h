@@ -307,8 +307,6 @@ private:
     bool loadLegacyWorkbook( const wxString & aPath );
     bool loadJsonWorkbook( const wxString & aPath );
 
-    void onNotebookModified( wxCommandEvent& event );
-
     void onPlotCursorUpdate( wxCommandEvent& aEvent );
 
 public:

@@ -523,7 +523,6 @@ SIMULATOR_FRAME_UI::SIMULATOR_FRAME_UI( SIMULATOR_FRAME* aSimulatorFrame,
     SIM_PLOT_COLORS::FillDefaultColorList( m_darkMode );
 
     Bind( EVT_SIM_CURSOR_UPDATE, &SIMULATOR_FRAME_UI::onPlotCursorUpdate, this );
-    Bind( EVT_WORKBOOK_MODIFIED, &SIMULATOR_FRAME_UI::onNotebookModified, this );
 
     Bind( wxEVT_TIMER,
             [&]( wxTimerEvent& aEvent )
@@ -2340,13 +2339,6 @@ void SIMULATOR_FRAME_UI::rebuildMeasurementsGrid()
 
 void SIMULATOR_FRAME_UI::onPlotDragged( wxAuiNotebookEvent& event )
 {
-}
-
-
-void SIMULATOR_FRAME_UI::onNotebookModified( wxCommandEvent& event )
-{
-    m_simulatorFrame->OnModify();
-    m_simulatorFrame->UpdateTitle();
 }
 
 

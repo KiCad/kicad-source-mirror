@@ -12,7 +12,6 @@
 #include <wx/intl.h>
 class WX_GRID;
 
-#include "sim_notebook.h"
 #include <wx/gdicmn.h>
 #include <wx/aui/auibook.h>
 #include <wx/font.h>
@@ -43,7 +42,7 @@ class SIMULATOR_FRAME_UI_BASE : public wxPanel
 		wxSplitterWindow* m_splitterPlotAndConsole;
 		wxPanel* m_plotPanel;
 		wxBoxSizer* m_sizerPlot;
-		SIM_NOTEBOOK* m_plotNotebook;
+		wxAuiNotebook* m_plotNotebook;
 		wxPanel* m_panelConsole;
 		wxBoxSizer* m_sizerConsole;
 		wxTextCtrl* m_simConsole;
