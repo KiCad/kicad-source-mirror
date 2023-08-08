@@ -79,7 +79,7 @@ const PNS_LOG_FILE::COMMIT_STATE PNS_LOG_PLAYER::GetRouterUpdatedItems()
 
     for( auto item : added )
     {
-        state.m_addedItems.insert( item );
+        state.m_addedItems.push_back( item );
     }
 
     // fixme: update the state with the head trace (not supported in current testsuite)

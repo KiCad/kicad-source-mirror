@@ -43,24 +43,6 @@ void LOGGER::Clear()
 }
 
 
-void LOGGER::Save( const std::string& aFilename )
-{
-    FILE* f = fopen( aFilename.c_str(), "wb" );
-
-    wxLogTrace( wxT( "PNS" ), wxT( "Saving to '%s' [%p]" ), aFilename.c_str(), f );
-
-    for( const EVENT_ENTRY& evt : m_events )
-    {
-        uint64_t id = 0;
-
-        fprintf( f, "event %d %d %d %s\n", evt.type, evt.p.x, evt.p.y,
-                 static_cast<const char*>( evt.uuid.AsString().c_str() ) );
-    }
-
-    fclose( f );
-}
-
-
 void LOGGER::Log( LOGGER::EVENT_TYPE evt, const VECTOR2I& pos, const ITEM* item,
                   const SIZES_SETTINGS* sizes )
 {
@@ -79,6 +61,59 @@ void LOGGER::Log( LOGGER::EVENT_TYPE evt, const VECTOR2I& pos, const ITEM* item,
         ent.uuid = item->Parent()->m_Uuid;
 
     m_events.push_back( ent );
+}
+
+
+wxString LOGGER::FormatLogFileAsString( int aMode,
+                                        const std::vector<ITEM*>& aAddedItems,
+                                        const std::set<KIID>&     aRemovedItems,
+                                        const std::vector<ITEM*>& aHeads,
+                                        const std::vector<LOGGER::EVENT_ENTRY>& aEvents )
+{
+    wxString result = wxString::Format( "mode %d\n", aMode );
+
+    for( const EVENT_ENTRY& evt : aEvents )
+        result += PNS::LOGGER::FormatEvent( evt );
+
+    for( const KIID& uuid : aRemovedItems )
+        result += wxString::Format( "removed %s\n", uuid.AsString().c_str() );
+
+    for( ITEM* item : aAddedItems )
+        result += wxString::Format( "added %s\n", item->Format().c_str() );
+
+    for( ITEM* item : aHeads )
+        result += wxString::Format( "head %s\n", item->Format().c_str() );
+
+    return result;
+}
+
+
+wxString LOGGER::FormatEvent( const LOGGER::EVENT_ENTRY& aEvent )
+{
+    return wxString::Format(
+            "event %d %d %d %s %d %d %d %d %d %d %d\n", aEvent.p.x, aEvent.p.y, aEvent.type,
+            static_cast<const char*>( aEvent.uuid.AsString().c_str() ), aEvent.sizes.TrackWidth(),
+            aEvent.sizes.ViaDiameter(), aEvent.sizes.ViaDrill(),
+            aEvent.sizes.TrackWidthIsExplicit() ? 1 : 0, aEvent.sizes.GetLayerBottom(),
+            aEvent.sizes.GetLayerTop(), static_cast<int>( aEvent.sizes.ViaType() ) );
+
+}
+
+
+LOGGER::EVENT_ENTRY LOGGER::ParseEvent( const wxString& aLine )
+{
+    wxStringTokenizer tokens( aLine );
+    wxString          cmd = tokens.GetNextToken();
+
+    wxCHECK_MSG( cmd == wxT( "event" ), EVENT_ENTRY(), "Line doesn't contain an event!" );
+
+    EVENT_ENTRY evt;
+    evt.p.x = wxAtoi( tokens.GetNextToken() );
+    evt.p.y = wxAtoi( tokens.GetNextToken() );
+    evt.type = (PNS::LOGGER::EVENT_TYPE) wxAtoi( tokens.GetNextToken() );
+    evt.uuid = KIID( tokens.GetNextToken() );
+
+    return evt;
 }
 
 }

@@ -39,7 +39,7 @@
 
 #include <../../tests/common/console_log.h>
 
-BOARD_CONNECTED_ITEM* PNS_LOG_FILE::ItemById( const PNS_LOG_FILE::EVENT_ENTRY& evt )
+BOARD_CONNECTED_ITEM* PNS_LOG_FILE::ItemById( const PNS::LOGGER::EVENT_ENTRY& evt )
 {
     BOARD_CONNECTED_ITEM* parent = nullptr;
 
@@ -236,7 +236,7 @@ bool comparePnsItems( const PNS::ITEM*a , const PNS::ITEM* b )
 }
 
 
-const std::set<PNS::ITEM*> deduplicate( const std::set<PNS::ITEM*>& items )
+const std::set<PNS::ITEM*> deduplicate( const std::vector<PNS::ITEM*>& items )
 {
     std::set<PNS::ITEM*> rv;
 
@@ -267,7 +267,7 @@ bool PNS_LOG_FILE::COMMIT_STATE::Compare( const PNS_LOG_FILE::COMMIT_STATE& aOth
     //printf("pre-compare: %d/%d\n", check.m_addedItems.size(), check.m_removedIds.size() );
     //printf("pre-compare (log): %d/%d\n", m_addedItems.size(), m_removedIds.size() );
 
-    for( auto uuid : m_removedIds )
+    for( const KIID& uuid : m_removedIds )
     {
         if( check.m_removedIds.find( uuid ) != check.m_removedIds.end() )
         {
@@ -321,11 +321,15 @@ bool PNS_LOG_FILE::Load( const wxFileName& logFileName, REPORTER* aRpt )
     aRpt->Report( wxString::Format( "Loading log from '%s'", fname_log.GetFullPath() ) );
 
     if( !f )
+    {
+        aRpt->Report( wxT( "Failed to load log" ), RPT_SEVERITY_ERROR );
         return false;
+    }
 
     while( !feof( f ) )
     {
-        wxStringTokenizer tokens( readLine( f ) );
+        wxString line = readLine( f );
+        wxStringTokenizer tokens( line );
 
         if( !tokens.CountTokens() )
             continue;
@@ -338,17 +342,12 @@ bool PNS_LOG_FILE::Load( const wxFileName& logFileName, REPORTER* aRpt )
         }
         else if( cmd == wxT("event") )
         {
-            EVENT_ENTRY evt;
-            evt.p.x = wxAtoi( tokens.GetNextToken() );
-            evt.p.y = wxAtoi( tokens.GetNextToken() );
-            evt.type = (PNS::LOGGER::EVENT_TYPE) wxAtoi( tokens.GetNextToken() );
-            evt.uuid = KIID( tokens.GetNextToken() );
-            m_events.push_back( evt );
+            m_events.push_back( PNS::LOGGER::ParseEvent( line ) );
         }
         else if ( cmd == wxT("added") )
         {
             auto item = parseItemFromString( tokens );
-            m_commitState.m_addedItems.insert( item );
+            m_commitState.m_addedItems.push_back( item );
         }
         else if ( cmd == wxT("removed") )
         {

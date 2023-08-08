@@ -53,15 +53,7 @@ public:
     PNS_LOG_FILE();
     ~PNS_LOG_FILE() {}
 
-    struct EVENT_ENTRY
-    {
-        VECTOR2I                p;
-        PNS::LOGGER::EVENT_TYPE type;
-        const PNS::ITEM*        item;
-        KIID                    uuid;
-    };
-
-    struct COMMIT_STATE 
+    struct COMMIT_STATE
     {
         COMMIT_STATE() {};
         COMMIT_STATE( const COMMIT_STATE& aOther ) :
@@ -72,7 +64,7 @@ public:
         }
 
         std::set<KIID>                      m_removedIds;
-        std::set<PNS::ITEM*>                m_addedItems;
+        std::vector<PNS::ITEM*>             m_addedItems;
 
         bool Compare( const COMMIT_STATE& aOther );
     };
@@ -80,9 +72,9 @@ public:
     // Loads a P&S event log and the associated board file. These two always go together.
     bool Load( const wxFileName& logFileName, REPORTER* aRpt );
 
-    BOARD_CONNECTED_ITEM* ItemById( const EVENT_ENTRY& evt );
+    BOARD_CONNECTED_ITEM* ItemById( const PNS::LOGGER::EVENT_ENTRY& evt );
 
-    std::vector<EVENT_ENTRY>& Events() { return m_events; }
+    std::vector<PNS::LOGGER::EVENT_ENTRY>& Events() { return m_events; }
 
     void SetBoard( std::shared_ptr<BOARD> brd ) { m_board = brd; }
     std::shared_ptr<BOARD> GetBoard() const { return m_board; }
@@ -96,7 +88,7 @@ public:
 private:
     std::shared_ptr<SETTINGS_MANAGER>      m_settingsMgr;
     std::unique_ptr<PNS::ROUTING_SETTINGS> m_routerSettings;
-    std::vector<EVENT_ENTRY>               m_events;
+    std::vector<PNS::LOGGER::EVENT_ENTRY>  m_events;
     std::shared_ptr<BOARD>                 m_board;
     COMMIT_STATE                           m_commitState;
     PNS::ROUTER_MODE                       m_mode;

@@ -63,8 +63,8 @@ public:
     LOGGER();
     ~LOGGER();
 
-    void Save( const std::string& aFilename );
     void Clear();
+
     void Log( EVENT_TYPE evt, const VECTOR2I& pos = VECTOR2I(), const ITEM* item = nullptr,
               const SIZES_SETTINGS* sizes = nullptr );
 
@@ -72,6 +72,16 @@ public:
     {
         return m_events;
     }
+
+    static wxString FormatLogFileAsString( int aMode,
+                                           const std::vector<ITEM*>& aAddedItems,
+                                           const std::set<KIID>&     aRemovedItems,
+                                           const std::vector<ITEM*>& aHeads,
+                                           const std::vector<EVENT_ENTRY>& aEvents );
+
+    static wxString FormatEvent( const EVENT_ENTRY& aEvent );
+
+    static EVENT_ENTRY ParseEvent( const wxString& aLine );
 
 private:
     std::vector<EVENT_ENTRY> m_events;

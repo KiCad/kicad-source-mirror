@@ -606,29 +606,10 @@ void ROUTER_TOOL::saveRouterDebugLog()
     if( !rv )
         return;
 
-    FILE* f = wxFopen( fname_settings.GetFullPath(), "wb" );
+    FILE* settings_f = wxFopen( fname_settings.GetFullPath(), "wb" );
     std::string settingsStr = m_router->Settings().FormatAsString();
-    fprintf( f, "%s\n", settingsStr.c_str() );
-    fclose( f );
-
-    f = wxFopen( fname_log.GetFullPath(), "wb" );
-
-    fprintf(f, "mode %d\n", m_router->Mode() );
-
-    const auto& events = logger->GetEvents();
-
-    for( const auto& evt : events)
-    {
-        fprintf( f, "event %d %d %d %s %d %d %d %d %d %d %d\n", evt.p.x, evt.p.y, evt.type,
-                 static_cast<const char*>( evt.uuid.AsString().c_str() ),
-                 evt.sizes.TrackWidth(),
-                 evt.sizes.ViaDiameter(),
-                 evt.sizes.ViaDrill(),
-                 evt.sizes.TrackWidthIsExplicit() ? 1: 0,
-                 evt.sizes.GetLayerBottom(),
-                 evt.sizes.GetLayerTop(),
-                 static_cast<int>( evt.sizes.ViaType() ) );
-    }
+    fprintf( settings_f, "%s\n", settingsStr.c_str() );
+    fclose( settings_f );
 
     // Export as *.kicad_pcb format, using a strategy which is specifically chosen
     // as an example on how it could also be used to send it to the system clipboard.
@@ -641,27 +622,26 @@ void ROUTER_TOOL::saveRouterDebugLog()
     prj->GetProjectFile().SaveAs( cwd, "pns" );
     prj->GetLocalSettings().SaveAs( cwd, "pns" );
 
+    // Build log file:
     std::vector<PNS::ITEM*> added, removed, heads;
     m_router->GetUpdatedItems( removed, added, heads );
 
+    std::set<KIID> removedKIIDs;
+
     for( auto item : removed )
     {
-        fprintf(f, "removed %s\n", item->Parent() ?
-                                   item->Parent()->m_Uuid.AsString().c_str().AsChar() :
-                                   item->Format().c_str() );
+        wxASSERT_MSG( item->Parent() != nullptr, "removed an item with no parent uuid?" );
+
+        if( item->Parent() )
+            removedKIIDs.insert( item->Parent()->m_Uuid );
     }
 
-    for( auto item : added )
-    {
-        fprintf(f, "added %s\n", item->Format().c_str() );
-    }
-
-    for( auto item : heads )
-    {
-        fprintf(f, "head %s\n", item->Format().c_str() );
-    }
-
-    fclose( f );
+    FILE*    log_f = wxFopen( fname_log.GetFullPath(), "wb" );
+    wxString logString = PNS::LOGGER::FormatLogFileAsString( m_router->Mode(),
+                                                             added, removedKIIDs, heads,
+                                                             logger->GetEvents() );
+    fprintf( log_f, "%s\n", logString.c_str().AsChar() );
+    fclose( log_f );
 
     logger->Clear(); // prevent re-entry
 }
