@@ -247,13 +247,16 @@ VECTOR2I ZONE::GetPosition() const
 
 PCB_LAYER_ID ZONE::GetLayer() const
 {
-    return BOARD_ITEM::GetLayer();
+    if( m_layerSet.count() == 1 )
+        return m_layerSet.UIOrder()[0];
+    else
+        return UNDEFINED_LAYER;
 }
 
 
 PCB_LAYER_ID ZONE::GetFirstLayer() const
 {
-    if( m_layerSet.size() )
+    if( m_layerSet.count() )
         return m_layerSet.UIOrder()[0];
     else
         return UNDEFINED_LAYER;
