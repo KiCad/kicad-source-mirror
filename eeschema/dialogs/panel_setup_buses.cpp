@@ -44,6 +44,9 @@ PANEL_SETUP_BUSES::PANEL_SETUP_BUSES( wxWindow* aWindow, SCH_EDIT_FRAME* aFrame 
 
     m_source->SetFont( KIUI::GetInfoFont( aWindow ) );
 
+    m_aliasesGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
+    m_membersGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
+
     m_aliasesGrid->PushEventHandler( new GRID_TRICKS( m_aliasesGrid,
                                                       [this]( wxCommandEvent& aEvent )
                                                       {
@@ -194,7 +197,7 @@ void PANEL_SETUP_BUSES::OnDeleteAlias( wxCommandEvent& aEvent )
     if( m_aliasesGrid->GetNumberRows() > 0 )
     {
         m_aliasesGrid->MakeCellVisible( std::max( 0, curRow-1 ), 0 );
-        m_aliasesGrid->SetGridCursor( std::max( 0, curRow-1 ), 0 );
+        m_aliasesGrid->SelectRow( curRow-1 );
     }
 }
 
@@ -234,12 +237,10 @@ void PANEL_SETUP_BUSES::OnRemoveMember( wxCommandEvent& aEvent )
     for( int ii = 0; ii < m_membersGrid->GetNumberRows(); ++ii )
         alias->Members().push_back( m_membersGrid->GetCellValue( ii, 0 ) );
 
-    m_membersGridDirty = true;
-
     if( m_membersGrid->GetNumberRows() > 0 )
     {
         m_membersGrid->MakeCellVisible( std::max( 0, curRow-1 ), 0 );
-        m_membersGrid->SetGridCursor( std::max( 0, curRow-1 ), 0 );
+        m_membersGrid->SelectRow( curRow-1 );
     }
 }
 
