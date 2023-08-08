@@ -58,6 +58,7 @@ struct MAPPABLE_SYMBOL_PROPERTIES
     std::string description;
     std::string footprint_filters;
     std::string keywords;
+    std::string exclude_from_sim;
     std::string exclude_from_bom;
     std::string exclude_from_board;
 };

@@ -2543,7 +2543,7 @@ int SCH_EDIT_TOOL::SetAttribute( const TOOL_EVENT& aEvent )
                 symbol->SetDNP( true );
 
             if( aEvent.IsAction( &EE_ACTIONS::setExcludeFromSimulation ) )
-                symbol->SetExcludeFromSim( true );
+                symbol->SetExcludedFromSim( true );
 
             if( aEvent.IsAction( &EE_ACTIONS::setExcludeFromBOM ) )
                 symbol->SetExcludedFromBOM( true );
@@ -2580,7 +2580,7 @@ int SCH_EDIT_TOOL::UnsetAttribute( const TOOL_EVENT& aEvent )
                 symbol->SetDNP( false );
 
             if( aEvent.IsAction( &EE_ACTIONS::unsetExcludeFromSimulation ) )
-                symbol->SetExcludeFromSim( false );
+                symbol->SetExcludedFromSim( false );
 
             if( aEvent.IsAction( &EE_ACTIONS::unsetExcludeFromBOM ) )
                 symbol->SetExcludedFromBOM( false );
@@ -2617,7 +2617,7 @@ int SCH_EDIT_TOOL::ToggleAttribute( const TOOL_EVENT& aEvent )
                 symbol->SetDNP( !symbol->GetDNP() );
 
             if( aEvent.IsAction( &EE_ACTIONS::toggleExcludeFromSimulation ) )
-                symbol->SetExcludeFromSim( !symbol->GetExcludeFromSim() );
+                symbol->SetExcludedFromSim( !symbol->GetExcludedFromSim() );
 
             if( aEvent.IsAction( &EE_ACTIONS::toggleExcludeFromBOM ) )
                 symbol->SetExcludedFromBOM( !symbol->GetExcludedFromBOM() );

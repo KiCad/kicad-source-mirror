@@ -430,7 +430,7 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::getAttributeValue( const SCH_REFERENCE& 
         return aRef.GetSymbol()->GetExcludedFromBOM() ? wxS( "1" ) : wxS( "0" );
 
     if( aAttributeName == wxS( "${EXCLUDE_FROM_SIM}" ) )
-        return aRef.GetSymbol()->GetExcludeFromSim() ? wxS( "1" ) : wxS( "0" );
+        return aRef.GetSymbol()->GetExcludedFromSim() ? wxS( "1" ) : wxS( "0" );
 
     return wxS( "0" );
 }
@@ -446,7 +446,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::setAttributeValue( const SCH_REFERENCE& aRef
     else if( aAttributeName == wxS( "${EXCLUDE_FROM_BOM}" ) )
         aRef.GetSymbol()->SetExcludedFromBOM( aValue == wxS( "1" ) );
     else if( aAttributeName == wxS( "${EXCLUDE_FROM_SIM}" ) )
-        aRef.GetSymbol()->SetExcludeFromSim( aValue == wxS( "1" ) );
+        aRef.GetSymbol()->SetExcludedFromSim( aValue == wxS( "1" ) );
 }
 
 

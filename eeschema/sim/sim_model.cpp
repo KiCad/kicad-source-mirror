@@ -1590,19 +1590,19 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
     FIELD_INFO pinMapInfo;
     bool       modelFromValueField = false;
 
-    if( aSymbol.FindField( wxT( "Spice_Primitive" ) )
-        || aSymbol.FindField( wxT( "Spice_Node_Sequence" ) )
-        || aSymbol.FindField( wxT( "Spice_Model" ) )
-        || aSymbol.FindField( wxT( "Spice_Netlist_Enabled" ) )
-        || aSymbol.FindField( wxT( "Spice_Lib_File" ) ) )
+    if( aSymbol.FindField( SIM_LEGACY_DEVICE_TYPE_FIELD )
+        || aSymbol.FindField( SIM_LEGACY_PINS_FIELD )
+        || aSymbol.FindField( SIM_LEGACY_TYPE_FIELD )
+        || aSymbol.FindField( SIM_LEGACY_ENABLE_FIELD )
+        || aSymbol.FindField( SIM_LEGACY_LIBRARY_FIELD ) )
     {
-        if( T_field* primitiveField = aSymbol.FindField( wxT( "Spice_Primitive" ) ) )
+        if( T_field* primitiveField = aSymbol.FindField( SIM_LEGACY_DEVICE_TYPE_FIELD ) )
         {
             spiceDeviceInfo = FIELD_INFO( primitiveField->GetText(), primitiveField );
             aSymbol.RemoveField( primitiveField );
         }
 
-        if( T_field* nodeSequenceField = aSymbol.FindField( wxT( "Spice_Node_Sequence" ) ) )
+        if( T_field* nodeSequenceField = aSymbol.FindField( SIM_LEGACY_PINS_FIELD ) )
         {
             const wxString  delimiters( "{:,; }" );
             const wxString& nodeSequence = nodeSequenceField->GetText();
@@ -1628,7 +1628,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
             aSymbol.RemoveField( nodeSequenceField );
         }
 
-        if( T_field* modelField = aSymbol.FindField( wxT( "Spice_Model" ) ) )
+        if( T_field* modelField = aSymbol.FindField( SIM_LEGACY_TYPE_FIELD ) )
         {
             spiceModelInfo = FIELD_INFO( getSIValue( modelField ), modelField );
             aSymbol.RemoveField( modelField );
@@ -1639,24 +1639,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
             modelFromValueField = true;
         }
 
-        if( T_field* netlistEnabledField = aSymbol.FindField( wxT( "Spice_Netlist_Enabled" ) ) )
-        {
-            wxString netlistEnabled = netlistEnabledField->GetText().Lower();
-
-            if( netlistEnabled.StartsWith( wxT( "0" ) )
-                || netlistEnabled.StartsWith( wxT( "n" ) )
-                || netlistEnabled.StartsWith( wxT( "f" ) ) )
-            {
-                netlistEnabledField->SetName( SIM_ENABLE_FIELD );
-                netlistEnabledField->SetText( wxT( "0" ) );
-            }
-            else
-            {
-                aSymbol.RemoveField( netlistEnabledField );
-            }
-        }
-
-        if( T_field* libFileField = aSymbol.FindField( wxT( "Spice_Lib_File" ) ) )
+        if( T_field* libFileField = aSymbol.FindField( SIM_LEGACY_LIBRARY_FIELD ) )
         {
             spiceLibInfo = FIELD_INFO( libFileField->GetText(), libFileField );
             aSymbol.RemoveField( libFileField );

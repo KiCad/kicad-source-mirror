@@ -262,7 +262,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
     m_textCtrl->SetValue( schematic.ConvertKIIDsToRefs( m_currentText->GetText() ) );
     m_textCtrl->EmptyUndoBuffer();
 
-    m_excludeFromSim->SetValue( m_currentItem->GetExcludeFromSim() );
+    m_excludeFromSim->SetValue( m_currentItem->GetExcludedFromSim() );
 
     m_fontCtrl->SetFontSelection( m_currentText->GetFont() );
     m_textSize.SetValue( m_currentText->GetTextWidth() );
@@ -482,7 +482,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
         return false;
     }
 
-    m_currentItem->SetExcludeFromSim( m_excludeFromSim->GetValue() );
+    m_currentItem->SetExcludedFromSim( m_excludeFromSim->GetValue() );
 
     if( !m_currentText->ValidateHyperlink( m_hyperlinkCombo->GetValue() ) )
     {

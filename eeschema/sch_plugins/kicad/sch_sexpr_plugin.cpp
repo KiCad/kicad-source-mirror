@@ -724,7 +724,9 @@ void SCH_SEXPR_PLUGIN::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSchema
 
     m_out->Print( 0, "\n" );
 
-    m_out->Print( aNestLevel + 1, "(in_bom %s)", ( aSymbol->GetExcludedFromBOM() ) ? "no" : "yes" );
+    m_out->Print( aNestLevel + 1, "(exclude_from_sim %s)",
+                  ( aSymbol->GetExcludedFromSim() ) ? "yes" : "no" );
+    m_out->Print( 0, " (in_bom %s)", ( aSymbol->GetExcludedFromBOM() ) ? "no" : "yes" );
     m_out->Print( 0, " (on_board %s)", ( aSymbol->GetExcludedFromBoard() ) ? "no" : "yes" );
     m_out->Print( 0, " (dnp %s)", ( aSymbol->GetDNP() ) ? "yes" : "no" );
 
@@ -1270,8 +1272,7 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
 
     if( aText->Type() == SCH_TEXT_T )
     {
-        m_out->Print( 0, " (exclude_from_sim %s)\n",
-                      aText->GetExcludeFromSim() ? "yes" : "no" );
+        m_out->Print( 0, " (exclude_from_sim %s)\n", aText->GetExcludedFromSim() ? "yes" : "no" );
     }
     else if( aText->Type() == SCH_DIRECTIVE_LABEL_T )
     {
@@ -1354,7 +1355,7 @@ void SCH_SEXPR_PLUGIN::saveTextBox( SCH_TEXTBOX* aTextBox, int aNestLevel )
     VECTOR2I size = aTextBox->GetEnd() - pos;
 
     m_out->Print( aNestLevel + 1, "(exclude_from_sim %s) (at %s %s %s) (size %s %s)\n",
-                  aTextBox->GetExcludeFromSim() ? "yes" : "no",
+                  aTextBox->GetExcludedFromSim() ? "yes" : "no",
                   EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pos.x ).c_str(),
                   EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pos.y ).c_str(),
                   EDA_UNIT_UTILS::FormatAngle( aTextBox->GetTextAngle() ).c_str(),

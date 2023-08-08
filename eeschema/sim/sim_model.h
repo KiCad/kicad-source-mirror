@@ -53,9 +53,17 @@ class PROJECT;
 #define SIM_TYPE_FIELD wxT( "Sim.Type" )
 #define SIM_PINS_FIELD wxT( "Sim.Pins" )
 #define SIM_PARAMS_FIELD wxT( "Sim.Params" )
+// Note: this has been moved to an actual attribute and is no longer written
+// out as a field
 #define SIM_ENABLE_FIELD wxT( "Sim.Enable" )
 #define SIM_LIBRARY_FIELD wxT( "Sim.Library" )
 #define SIM_NAME_FIELD wxT( "Sim.Name" )
+
+#define SIM_LEGACY_DEVICE_TYPE_FIELD    wxS( "Spice_Primitive" )
+#define SIM_LEGACY_TYPE_FIELD           wxS( "Spice_Model" )
+#define SIM_LEGACY_PINS_FIELD           wxS( "Spice_Node_Sequence" )
+#define SIM_LEGACY_ENABLE_FIELD         wxS( "Spice_Netlist_Enabled" )
+#define SIM_LEGACY_LIBRARY_FIELD        wxS( "Spice_Lib_File" )
 
 
 class SIM_MODEL

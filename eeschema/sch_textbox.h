@@ -70,8 +70,8 @@ public:
 
     void DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const override;
 
-    void SetExcludeFromSim( bool aExclude ) override { m_excludeFromSim = aExclude; }
-    bool GetExcludeFromSim() const override { return m_excludeFromSim; }
+    void SetExcludedFromSim( bool aExclude ) override { m_excludedFromSim = aExclude; }
+    bool GetExcludedFromSim() const override { return m_excludedFromSim; }
 
     void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& offset ) override;
 
@@ -126,7 +126,7 @@ protected:
     const KIFONT::METRICS& getFontMetrics() const override { return GetFontMetrics(); }
 
 protected:
-    bool m_excludeFromSim;
+    bool m_excludedFromSim;
 };
 
 

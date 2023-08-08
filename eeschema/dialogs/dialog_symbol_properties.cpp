@@ -511,7 +511,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     case SYM_MIRROR_Y: m_mirrorCtrl->SetSelection( 2 ); break;
     }
 
-    m_cbExcludeFromSim->SetValue( m_symbol->GetFieldText( SIM_ENABLE_FIELD ) == wxS( "0" ) );
+    m_cbExcludeFromSim->SetValue( m_symbol->GetExcludedFromSim() );
     m_cbExcludeFromBom->SetValue( m_symbol->GetExcludedFromBOM() );
     m_cbExcludeFromBoard->SetValue( m_symbol->GetExcludedFromBoard() );
     m_cbDNP->SetValue( m_symbol->GetDNP() );
@@ -530,45 +530,6 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     wxSafeYield();
 
     return true;
-}
-
-
-void DIALOG_SYMBOL_PROPERTIES::OnExcludeFromSimulation( wxCommandEvent& event )
-{
-    int simEnableFieldRow = -1;
-
-    for( int ii = MANDATORY_FIELDS; ii < m_fieldsGrid->GetNumberRows(); ++ii )
-    {
-        if( m_fieldsGrid->GetCellValue( ii, FDC_NAME ) == SIM_ENABLE_FIELD )
-            simEnableFieldRow = ii;
-    }
-
-    if( event.IsChecked() )
-    {
-        if( simEnableFieldRow == -1 )
-        {
-            simEnableFieldRow = (int) m_fields->size();
-            m_fields->emplace_back( VECTOR2I( 0, 0 ), simEnableFieldRow, m_symbol, SIM_ENABLE_FIELD );
-
-            // notify the grid
-            wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
-            m_fieldsGrid->ProcessTableMessage( msg );
-        }
-
-        m_fieldsGrid->SetCellValue( simEnableFieldRow, FDC_VALUE, wxT( "0" ) );
-        m_fieldsGrid->SetCellValue( simEnableFieldRow, FDC_SHOWN, wxT( "0" ) );
-        m_fieldsGrid->SetCellValue( simEnableFieldRow, FDC_SHOW_NAME, wxT( "0" ) );
-    }
-    else if( simEnableFieldRow >= 0 )
-    {
-        m_fields->erase( m_fields->begin() + simEnableFieldRow );
-
-        // notify the grid
-        wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, simEnableFieldRow, 1 );
-        m_fieldsGrid->ProcessTableMessage( msg );
-    }
-
-    OnModify();
 }
 
 
@@ -780,6 +741,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     m_symbol->SetValueFieldText( m_fields->at( VALUE_FIELD ).GetText() );
     m_symbol->SetFootprintFieldText(  m_fields->at( FOOTPRINT_FIELD ).GetText() );
 
+    m_symbol->SetExcludedFromSim( m_cbExcludeFromSim->IsChecked() );
     m_symbol->SetExcludedFromBOM( m_cbExcludeFromBom->IsChecked() );
     m_symbol->SetExcludedFromBoard( m_cbExcludeFromBoard->IsChecked() );
     m_symbol->SetDNP( m_cbDNP->IsChecked() );
@@ -847,6 +809,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
                         otherUnit->GetFields().erase( otherUnit->GetFields().begin() + ii );
                 }
 
+                otherUnit->SetExcludedFromSim( m_cbExcludeFromSim->IsChecked() );
                 otherUnit->SetExcludedFromBOM( m_cbExcludeFromBom->IsChecked() );
                 otherUnit->SetExcludedFromBoard( m_cbExcludeFromBoard->IsChecked() );
                 otherUnit->SetDNP( m_cbDNP->IsChecked() );
@@ -1168,19 +1131,6 @@ void DIALOG_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
         if( !m_fieldsGrid->IsCellEditControlShown() )
             AdjustFieldsGridColumns();
     }
-
-    wxString simEnable;
-
-    for( int ii = MANDATORY_FIELDS; ii < m_fieldsGrid->GetNumberRows(); ++ii )
-    {
-        if( m_fieldsGrid->GetCellValue( ii, FDC_NAME ) == SIM_ENABLE_FIELD )
-        {
-            simEnable = m_fieldsGrid->GetCellValue( ii, FDC_VALUE );
-            break;
-        }
-    }
-
-    m_cbExcludeFromSim->SetValue( simEnable == wxS( "0" ) );
 }
 
 

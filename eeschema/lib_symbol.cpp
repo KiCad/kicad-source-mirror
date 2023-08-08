@@ -108,6 +108,7 @@ struct null_deleter
 LIB_SYMBOL::LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent, SYMBOL_LIB* aLibrary ) :
     EDA_ITEM( LIB_SYMBOL_T ),
     m_me( this, null_deleter() ),
+    m_excludedFromSim( false ),
     m_excludedFromBOM( false ),
     m_excludedFromBoard( false )
 {
@@ -147,6 +148,7 @@ LIB_SYMBOL::LIB_SYMBOL( const LIB_SYMBOL& aSymbol, SYMBOL_LIB* aLibrary ) :
     m_unitsLocked    = aSymbol.m_unitsLocked;
     m_pinNameOffset  = aSymbol.m_pinNameOffset;
     m_showPinNumbers = aSymbol.m_showPinNumbers;
+    m_excludedFromSim = aSymbol.m_excludedFromSim;
     m_excludedFromBOM = aSymbol.m_excludedFromBOM;
     m_excludedFromBoard = aSymbol.m_excludedFromBoard;
     m_showPinNames      = aSymbol.m_showPinNames;
@@ -200,6 +202,7 @@ const LIB_SYMBOL& LIB_SYMBOL::operator=( const LIB_SYMBOL& aSymbol )
     m_pinNameOffset  = aSymbol.m_pinNameOffset;
     m_showPinNumbers = aSymbol.m_showPinNumbers;
     m_showPinNames   = aSymbol.m_showPinNames;
+    m_excludedFromSim = aSymbol.m_excludedFromSim;
     m_excludedFromBOM = aSymbol.m_excludedFromBOM;
     m_excludedFromBoard = aSymbol.m_excludedFromBoard;
     m_lastModDate    = aSymbol.m_lastModDate;
@@ -467,6 +470,15 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
                 return retv;
         }
 
+        if( m_excludedFromSim != aRhs.m_excludedFromSim )
+        {
+            retv = ( m_excludedFromSim ) ? -1 : 1;
+            REPORT( _( "Exclude from simulation settings differ." ) );
+
+            if( !aReporter )
+                return retv;
+        }
+
         if( m_excludedFromBOM != aRhs.m_excludedFromBOM )
         {
             retv = ( m_excludedFromBOM ) ? -1 : 1;
@@ -634,6 +646,7 @@ std::unique_ptr< LIB_SYMBOL > LIB_SYMBOL::Flatten() const
         retv->SetKeyWords( m_keyWords.IsEmpty() ? parent->GetKeyWords() : m_keyWords );
         retv->SetFPFilters( m_fpFilters.IsEmpty() ? parent->GetFPFilters() : m_fpFilters );
 
+        retv->SetExcludedFromSim( parent->GetExcludedFromSim() );
         retv->SetExcludedFromBOM( parent->GetExcludedFromBOM() );
         retv->SetExcludedFromBoard( parent->GetExcludedFromBoard() );
 

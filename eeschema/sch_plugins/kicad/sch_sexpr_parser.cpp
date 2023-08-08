@@ -60,6 +60,7 @@
 #include <trigo.h>
 #include <progress_reporter.h>
 #include <sch_shape.h>
+#include <sim/sim_model.h>
 
 
 using namespace TSCHEMATIC_T;
@@ -271,6 +272,11 @@ LIB_SYMBOL* SCH_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLibMap )
                 Expecting( "hide" );
 
             symbol->SetShowPinNumbers( false );
+            NeedRIGHT();
+            break;
+
+        case T_exclude_from_sim:
+            symbol->SetExcludedFromSim( parseBool() );
             NeedRIGHT();
             break;
 
@@ -2734,6 +2740,11 @@ SCH_SYMBOL* SCH_SEXPR_PARSER::parseSchematicSymbol()
             NeedRIGHT();
             break;
 
+        case T_exclude_from_sim:
+            symbol->SetExcludedFromSim( parseBool() );
+            NeedRIGHT();
+            break;
+
         case T_in_bom:
             symbol->SetExcludedFromBOM( !parseBool() );
             NeedRIGHT();
@@ -2885,6 +2896,21 @@ SCH_SYMBOL* SCH_SEXPR_PARSER::parseSchematicSymbol()
             // The field parent symbol must be set and its orientation must be set before
             // the field positions are set.
             field = parseSchField( symbol.get() );
+
+            // Exclude from simulation used to be managed by a Sim.Enable field set to "0" when
+            // simulation was disabled.
+            if( field->GetCanonicalName() == SIM_ENABLE_FIELD )
+            {
+                symbol->SetExcludedFromSim( field->GetText() == wxS( "0" ) );
+                break;
+            }
+
+            // Even longer ago, we had a "Spice_Netlist_Enabled" field
+            if( field->GetCanonicalName() == SIM_LEGACY_ENABLE_FIELD )
+            {
+                symbol->SetExcludedFromSim( field->GetText() == wxS( "N" ) );
+                break;
+            }
 
             if( ( field->GetId() >= MANDATORY_FIELDS ) && m_fieldIDsRead.count( field->GetId() ) )
             {
@@ -3800,7 +3826,7 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
         switch( token )
         {
         case T_exclude_from_sim:
-            text->SetExcludeFromSim( parseBool() );
+            text->SetExcludedFromSim( parseBool() );
             NeedRIGHT();
             break;
 
@@ -3983,7 +4009,7 @@ SCH_TEXTBOX* SCH_SEXPR_PARSER::parseSchTextBox()
         switch( token )
         {
         case T_exclude_from_sim:
-            textBox->SetExcludeFromSim( parseBool() );
+            textBox->SetExcludedFromSim( parseBool() );
             NeedRIGHT();
             break;
 

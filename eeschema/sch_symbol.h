@@ -152,9 +152,6 @@ public:
     void SortInstances( bool ( *aSortFunction )( const SCH_SYMBOL_INSTANCE& aLhs,
                                                  const SCH_SYMBOL_INSTANCE& aRhs ) );
 
-    void SetExcludeFromSim( bool aExclude ) override;
-    bool GetExcludeFromSim() const override;
-
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     /**
@@ -748,6 +745,9 @@ public:
 
     bool HasBrightenedPins();
 
+    bool GetExcludedFromSim() const override { return m_excludedFromSim; }
+    void SetExcludedFromSim( bool aExclude ) override { m_excludedFromSim = aExclude; }
+
     bool GetExcludedFromBOM() const { return m_excludedFromBOM; }
     void SetExcludedFromBOM( bool aIncludeInBOM ) { m_excludedFromBOM = aIncludeInBOM; }
 
@@ -803,10 +803,11 @@ private:
     std::vector<std::unique_ptr<SCH_PIN>>  m_pins;      ///< a SCH_PIN for every LIB_PIN (all units)
     std::unordered_map<LIB_PIN*, unsigned> m_pinMap;    ///< library pin pointer : SCH_PIN's index
 
-    bool        m_isInNetlist;  ///< True if the symbol should appear in the netlist
-    bool        m_excludedFromBOM;        ///< True to include in bill of materials export.
-    bool        m_excludedFromBoard;      ///< True to include in netlist when updating board.
-    bool        m_DNP;          ///< True if symbol is set to 'Do Not Populate'.
+    bool        m_isInNetlist;            ///< True if the symbol should appear in the netlist
+    bool        m_excludedFromSim;        ///< True to exclude from simulation.
+    bool        m_excludedFromBOM;        ///< True to exclude from bill of materials export.
+    bool        m_excludedFromBoard;      ///< True to exclude from netlist when updating board.
+    bool        m_DNP;                    ///< True if symbol is set to 'Do Not Populate'.
 
     // Defines the hierarchical path and reference of the symbol.  This allows support
     // for multiple references to a single sub-sheet.

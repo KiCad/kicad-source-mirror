@@ -56,12 +56,6 @@ public:
         LIB
     )
 
-    static constexpr auto LEGACY_TYPE_FIELD = "Spice_Primitive";
-    static constexpr auto LEGACY_PINS_FIELD = "Spice_Node_Sequence";
-    static constexpr auto LEGACY_MODEL_FIELD = "Spice_Model";
-    static constexpr auto LEGACY_ENABLED_FIELD = "Spice_Netlist_Enabled";
-    static constexpr auto LEGACY_LIB_FIELD = "Spice_Lib_File";
-
     SIM_MODEL_RAW_SPICE( const std::string& aSpiceSource = "" );
 
     void SetSource( const std::string& aSpiceSource ) { m_spiceCode = aSpiceSource; }

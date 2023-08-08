@@ -182,9 +182,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     if( m_libEntry->IsPower() )
         m_spiceFieldsButton->Hide();
 
-    LIB_FIELD* simEnableField = m_libEntry->FindField( SIM_ENABLE_FIELD );
-    m_excludeFromSim->SetValue( simEnableField && simEnableField->GetText() == wxT( "0" ) );
-
+    m_excludeFromSimCheckBox->SetValue( m_libEntry->GetExcludedFromSim() );
     m_excludeFromBomCheckBox->SetValue( m_libEntry->GetExcludedFromBOM() );
     m_excludeFromBoardCheckBox->SetValue( m_libEntry->GetExcludedFromBoard() );
 
@@ -224,45 +222,6 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     m_NoteBook->SetSelection( (unsigned) m_lastOpenedPage );
 
     return true;
-}
-
-
-void DIALOG_LIB_SYMBOL_PROPERTIES::OnExcludeFromSimulation( wxCommandEvent& event )
-{
-    int simEnableFieldRow = -1;
-
-    for( int ii = MANDATORY_FIELDS; ii < m_grid->GetNumberRows(); ++ii )
-    {
-        if( m_grid->GetCellValue( ii, FDC_NAME ) == SIM_ENABLE_FIELD )
-            simEnableFieldRow = ii;
-    }
-
-    if( event.IsChecked() )
-    {
-        if( simEnableFieldRow == -1 )
-        {
-            simEnableFieldRow = (int) m_fields->size();
-            m_fields->emplace_back( m_libEntry, simEnableFieldRow, SIM_ENABLE_FIELD );
-
-            // notify the grid
-            wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
-            m_grid->ProcessTableMessage( msg );
-        }
-
-        m_grid->SetCellValue( simEnableFieldRow, FDC_VALUE, wxT( "0" ) );
-        m_grid->SetCellValue( simEnableFieldRow, FDC_SHOWN, wxT( "0" ) );
-        m_grid->SetCellValue( simEnableFieldRow, FDC_SHOW_NAME, wxT( "0" ) );
-    }
-    else if( simEnableFieldRow >= 0 )
-    {
-        m_fields->erase( m_fields->begin() + simEnableFieldRow );
-
-        // notify the grid
-        wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, simEnableFieldRow, 1 );
-        m_grid->ProcessTableMessage( msg );
-    }
-
-    OnModify();
 }
 
 
@@ -437,6 +396,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
         m_libEntry->SetNormal();
     }
 
+    m_libEntry->SetExcludedFromSim( m_excludeFromSimCheckBox->GetValue() );
     m_libEntry->SetExcludedFromBOM( m_excludeFromBomCheckBox->GetValue() );
     m_libEntry->SetExcludedFromBoard( m_excludeFromBoardCheckBox->GetValue() );
 
@@ -895,19 +855,6 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
         m_delayedFocusRow = -1;
         m_delayedFocusColumn = -1;
     }
-
-    wxString simEnable;
-
-    for( int ii = MANDATORY_FIELDS; ii < m_fields->GetNumberRows(); ++ii )
-    {
-        if( m_fields->GetValue( ii, FDC_NAME ) == SIM_ENABLE_FIELD )
-        {
-            simEnable = m_fields->GetValue( ii, FDC_VALUE );
-            break;
-        }
-    }
-
-    m_excludeFromSim->SetValue( simEnable == wxS( "0" ) );
 }
 
 
@@ -940,16 +887,19 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::onPowerCheckBox( wxCommandEvent& aEvent )
 {
     if( m_OptionPower->IsChecked() )
     {
+        m_excludeFromSimCheckBox->SetValue( true );
         m_excludeFromBomCheckBox->SetValue( true );
         m_excludeFromBoardCheckBox->SetValue( true );
         m_excludeFromBomCheckBox->Enable( false );
         m_excludeFromBoardCheckBox->Enable( false );
+        m_excludeFromSimCheckBox->Enable( false );
         m_spiceFieldsButton->Show( false );
     }
     else
     {
         m_excludeFromBomCheckBox->Enable( true );
         m_excludeFromBoardCheckBox->Enable( true );
+        m_excludeFromSimCheckBox->Enable( true );
         m_spiceFieldsButton->Show( true );
     }
 

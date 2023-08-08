@@ -42,7 +42,6 @@
 
 #include <utility>
 #include "plotters/plotter.h"
-#include "sim/sim_model.h"
 
 
 std::unordered_map<TRANSFORM, int> SCH_SYMBOL::s_transformToOrientationCache;
@@ -137,6 +136,7 @@ SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const LIB_ID& aLibId,
 
     // Inherit the include in bill of materials and board netlist settings from flattened
     // library symbol.
+    m_excludedFromSim = m_part->GetExcludedFromSim();
     m_excludedFromBOM = m_part->GetExcludedFromBOM();
     m_excludedFromBoard = m_part->GetExcludedFromBoard();
     m_DNP = false;
@@ -169,6 +169,7 @@ SCH_SYMBOL::SCH_SYMBOL( const SCH_SYMBOL& aSymbol ) :
     m_convert     = aSymbol.m_convert;
     m_lib_id      = aSymbol.m_lib_id;
     m_isInNetlist = aSymbol.m_isInNetlist;
+    m_excludedFromSim = aSymbol.m_excludedFromSim;
     m_excludedFromBOM = aSymbol.m_excludedFromBOM;
     m_excludedFromBoard = aSymbol.m_excludedFromBoard;
     m_DNP         = aSymbol.m_DNP;
@@ -217,6 +218,7 @@ void SCH_SYMBOL::Init( const VECTOR2I& pos )
 
     m_prefix = wxString( wxT( "U" ) );
     m_isInNetlist = true;
+    m_excludedFromSim = false;
     m_excludedFromBOM = false;
     m_excludedFromBoard = false;
 }
@@ -493,30 +495,6 @@ void SCH_SYMBOL::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffse
                              3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ),
                              dnp_color );
     }
-}
-
-
-void SCH_SYMBOL::SetExcludeFromSim( bool aExclude )
-{
-    SCH_FIELD* enable = FindField( SIM_ENABLE_FIELD );
-
-    if( aExclude )
-    {
-        if( !enable )
-            enable = AddField( SCH_FIELD( VECTOR2I( 0, 0 ), -1, this, SIM_ENABLE_FIELD ) );
-
-        enable->SetText( wxS( "0" ) );
-    }
-    else
-    {
-        RemoveField( SIM_ENABLE_FIELD );
-    }
-}
-
-
-bool SCH_SYMBOL::GetExcludeFromSim() const
-{
-    return GetFieldText( SIM_ENABLE_FIELD ) == wxS( "0" );
 }
 
 
@@ -1159,6 +1137,7 @@ void SCH_SYMBOL::SwapData( SCH_ITEM* aItem )
     m_transform = symbol->m_transform;
     symbol->m_transform = tmp;
 
+    std::swap( m_excludedFromSim, symbol->m_excludedFromSim );
     std::swap( m_excludedFromBOM, symbol->m_excludedFromBOM );
     std::swap( m_DNP, symbol->m_DNP );
     std::swap( m_excludedFromBoard, symbol->m_excludedFromBoard );
@@ -1331,8 +1310,8 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
     }
     else if( token->IsSameAs( wxT( "EXCLUDE_FROM_SIM" ) ) )
     {
-        *token = this->GetExcludeFromSim() ? _( "Excluded from simulation" )
-                                              : wxString( wxT( "" ) );
+        *token = this->GetExcludedFromSim() ? _( "Excluded from simulation" )
+                                            : wxString( wxT( "" ) );
         return true;
     }
     else if( token->IsSameAs( wxT( "DNP" ) ) )
@@ -1720,7 +1699,7 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
     {
         wxArrayString msgs;
 
-        if( GetExcludeFromSim() )
+        if( GetExcludedFromSim() )
             msgs.Add( _( "Simulation" ) );
 
         if( GetExcludedFromBOM() )
@@ -2432,7 +2411,7 @@ static struct SCH_SYMBOL_DESC
                 &SCH_SYMBOL::SetExcludedFromBoard, &SCH_SYMBOL::GetExcludedFromBoard ),
                 groupAttributes );
         propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Exclude from simulation" ),
-                &SCH_SYMBOL::SetExcludeFromSim, &SCH_SYMBOL::GetExcludeFromSim ),
+                &SCH_SYMBOL::SetExcludedFromSim, &SCH_SYMBOL::GetExcludedFromSim ),
                 groupAttributes );
         propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Exclude from bill of materials" ),
                 &SCH_SYMBOL::SetExcludedFromBOM, &SCH_SYMBOL::GetExcludedFromBOM ),

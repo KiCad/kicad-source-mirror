@@ -294,7 +294,7 @@ public:
      * or NULL if not found.
      * @param aFieldName is the name of the field to find.
      * @param aCaseInsensitive ignore the filed name case if true.
-     * 
+     *
      * @return the field if found or NULL if the field was not found.
      */
     LIB_FIELD* FindField( const wxString& aFieldName, bool aCaseInsensitive = false );
@@ -654,6 +654,14 @@ public:
     bool ShowPinNumbers() const { return m_showPinNumbers; }
 
     /**
+     * Set or clear the exclude from simulation flag.
+     *
+     * @param aExcludeFromSim true to exclude symbol from simulation
+     */
+    void SetExcludedFromSim( bool aExcludeFromSim ) { m_excludedFromSim = aExcludeFromSim; }
+    bool GetExcludedFromSim() const { return m_excludedFromSim; }
+
+    /**
      * Set or clear the exclude from schematic bill of materials flag.
      *
      * @param aExcludeFromBOM true to exclude symbol from schematic bill of materials
@@ -759,6 +767,7 @@ private:
     bool                m_showPinNames;
     bool                m_showPinNumbers;
 
+    bool                m_excludedFromSim;
     bool                m_excludedFromBOM;
     bool                m_excludedFromBoard;
     LIBRENTRYOPTIONS    m_options;          ///< Special symbol features such as POWER or NORMAL.)

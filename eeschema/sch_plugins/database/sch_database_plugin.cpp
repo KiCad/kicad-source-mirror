@@ -331,6 +331,7 @@ void SCH_DATABASE_PLUGIN::connect()
             columns.insert( tableIter.properties.description );
             columns.insert( tableIter.properties.footprint_filters );
             columns.insert( tableIter.properties.keywords );
+            columns.insert( tableIter.properties.exclude_from_sim );
             columns.insert( tableIter.properties.exclude_from_bom );
             columns.insert( tableIter.properties.exclude_from_board );
 
@@ -481,6 +482,22 @@ LIB_SYMBOL* SCH_DATABASE_PLUGIN::loadSymbolFromRow( const wxString& aSymbolName,
         wxArrayString filters;
         filters.push_back( value );
         symbol->SetFPFilters( filters );
+    }
+
+    if( !aTable.properties.exclude_from_sim.empty()
+        && aRow.count( aTable.properties.exclude_from_sim ) )
+    {
+        std::optional<bool> val = boolFromAny( aRow.at( aTable.properties.exclude_from_sim ) );
+
+        if( val )
+        {
+            symbol->SetExcludedFromSim( *val );
+        }
+        else
+        {
+            wxLogTrace( traceDatabase, wxT( "loadSymbolFromRow: exclude_from_sim value for %s "
+                                            "could not be cast to a boolean" ), aSymbolName );
+        }
     }
 
     if( !aTable.properties.exclude_from_board.empty()

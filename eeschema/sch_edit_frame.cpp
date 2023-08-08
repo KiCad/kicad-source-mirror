@@ -1490,7 +1490,7 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
 
             // Power symbols and other symbols which have the reference starting with "#" are
             // not included in simulation
-            if( ref.StartsWith( '#' ) || symbol->GetExcludeFromSim() )
+            if( ref.StartsWith( '#' ) || symbol->GetExcludedFromSim() )
                 continue;
 
             for( SCH_PIN* pin : pins )
