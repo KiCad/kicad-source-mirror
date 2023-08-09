@@ -29,12 +29,12 @@
 #include <kiplatform/environment.h>
 
 /**
- * @brief schematic PLUGIN for Ltspice (*.asc) and (.asy) format.
+ * @brief schematic PLUGIN for LTspice (*.asc) and (.asy) format.
  */
 
 const wxString SCH_LTSPICE_PLUGIN::GetName() const
 {
-    return wxT( "Ltspice Schematic Importer" );
+    return wxT( "LTspice Schematic Importer" );
 }
 
 

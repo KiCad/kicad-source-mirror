@@ -310,7 +310,7 @@ wxString EagleSchematicFileWildcard()
 
 wxString LtspiceSchematicFileWildcard()
 {
-    return _( "Ltspice schematic files" ) + AddFileExtListToFilter( { "asc" } );
+    return _( "LTspice schematic files" ) + AddFileExtListToFilter( { "asc" } );
 }
 
 
