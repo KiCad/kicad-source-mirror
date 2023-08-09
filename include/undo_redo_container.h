@@ -65,8 +65,6 @@ enum class UNDO_REDO {
     LIBEDIT,            // Specific to the component editor (symbol_editor creates a full copy
                         // of the current component when changed)
     LIB_RENAME,         // As LIBEDIT, but old copy should be removed from library
-    EXCHANGE_T,         // Use for changing the schematic text type where swapping
-                        // data structure is insufficient to restore the change.
     DRILLORIGIN,        // origin changed (like CHANGED, contains the origin and a copy)
     GRIDORIGIN,         // origin changed (like CHANGED, contains the origin and a copy)
     PAGESETTINGS,       // page settings or title block changes

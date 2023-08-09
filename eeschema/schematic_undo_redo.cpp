@@ -234,7 +234,6 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
 
         case UNDO_REDO::NEWITEM:
         case UNDO_REDO::DELETED:
-        case UNDO_REDO::EXCHANGE_T:
         case UNDO_REDO::PAGESETTINGS:
             break;
 
@@ -357,12 +356,6 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                     }
                 }
 
-                break;
-
-            case UNDO_REDO::EXCHANGE_T:
-                aList->SetPickedItem( alt_item, ii );
-                aList->SetPickedItemLink( item, ii );
-                item = alt_item;
                 break;
 
             default:
