@@ -377,53 +377,10 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
     // With gEDA/pcb, value is meaningful after instantiation, only, so it's
     // often empty in bare footprints.
     if( footprint->Value().GetText().IsEmpty() )
-        footprint->Value().SetText( wxT( "Val**" ) );
+        footprint->Value().SetText( wxT( "VAL**" ) );
 
-
-    if( paramCnt == 14 )
-    {
-        textPos = VECTOR2I( parseInt( parameters[8], conv_unit ),
-                            parseInt( parameters[9], conv_unit ) );
-    }
-    else
-    {
-        textPos = VECTOR2I( parseInt( parameters[6], conv_unit ),
-                            parseInt( parameters[7], conv_unit ) );
-    }
-
-    int orientation = parseInt( parameters[paramCnt-4], 1.0 );
-    footprint->Reference().SetTextAngle( ( orientation % 2) ? ANGLE_VERTICAL : ANGLE_HORIZONTAL );
-
-    // Calculate size: default height is 40 mils, width 30 mil.
-    // real size is:  default * ibuf[idx+3] / 100 (size in gpcb is given in percent of default size
-    int thsize = parseInt( parameters[paramCnt-3], TEXT_DEFAULT_SIZE ) / 100;
-    thsize = std::max( (int)( 5 * pcbIUScale.IU_PER_MILS ), thsize ); // Ensure a minimal size = 5 mils
-    int twsize = thsize * 30 / 40;
-    int thickness = thsize / 8;
-
-    // gEDA/pcb aligns top/left, not pcbnew's default, center/center.
-    // Compensate for this by shifting the insertion point instead of the
-    // alignment, because alignment isn't changeable in the GUI.
-    textPos.x = textPos.x + twsize * footprint->GetReference().Len() / 2;
-    textPos.y += thsize / 2;
-
-    // gEDA/pcb draws a bit too low/left, while pcbnew draws a bit too
-    // high/right. Compensate for similar appearance.
-    textPos.x -= thsize / 10;
-    textPos.y += thsize / 2;
-
-    footprint->Reference().SetFPRelativePosition( textPos );
-    footprint->Reference().SetTextSize( VECTOR2I( twsize, thsize ) );
-    footprint->Reference().SetTextThickness( thickness );
-
-    // gEDA/pcb shows only one of value/reference/description at a time. Which
-    // one is selectable by a global menu setting. pcbnew needs reference as
-    // well as value visible, so place the value right below the reference.
-    footprint->Value().SetTextAngle( footprint->Reference().GetTextAngle() );
-    footprint->Value().SetTextSize( footprint->Reference().GetTextSize() );
-    footprint->Value().SetTextThickness( footprint->Reference().GetTextThickness() );
-    textPos.y += thsize * 13 / 10;  // 130% line height
-    footprint->Value().SetFPRelativePosition( textPos );
+    if( footprint->Reference().GetText().IsEmpty() )
+        footprint->Reference().SetText( wxT( "REF**" ) );
 
     while( aLineReader->ReadLine() )
     {
@@ -514,13 +471,13 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
             }
             else
             {
-            // Calculate start point coordinate of arc
-            VECTOR2I arcStart( radius, 0 );
-            RotatePoint( arcStart, -start_angle );
+                // Calculate start point coordinate of arc
+                VECTOR2I arcStart( radius, 0 );
+                RotatePoint( arcStart, -start_angle );
                 shape->SetCenter( centre );
-            shape->SetStart( arcStart + centre );
+                shape->SetStart( arcStart + centre );
 
-            // Angle value is clockwise in gpcb and Pcbnew.
+                // Angle value is clockwise in gpcb and Pcbnew.
                 shape->SetArcAngleAndEnd( sweep_angle, true );
             }
 
@@ -701,6 +658,8 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
             continue;
         }
     }
+
+    footprint->AutoPositionFields();
 
     return footprint.release();
 }
