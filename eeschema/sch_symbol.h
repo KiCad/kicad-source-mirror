@@ -147,8 +147,6 @@ public:
 
     void RemoveInstance( const SCH_SHEET_PATH& aInstancePath );
 
-    void RemoveAllInstances() { m_instanceReferences.clear(); }
-
     void SortInstances( bool ( *aSortFunction )( const SCH_SYMBOL_INSTANCE& aLhs,
                                                  const SCH_SYMBOL_INSTANCE& aRhs ) );
 
@@ -356,16 +354,6 @@ public:
      */
     bool AddSheetPathReferenceEntryIfMissing( const KIID_PATH& aSheetPath );
 
-    /**
-     * Replace \a aOldSheetPath with \a aNewSheetPath in the instance list.
-     *
-     * @param aOldSheetPath is a #KIID_PATH object of an existing path in the instance list.
-     * @param aNewSheetPath is a #KIID_PATH object of the path to replace the existing path.
-     *
-     * @return true if \a aOldSheetPath was found and replaced or false if \a aOldSheetPath was
-     *         not found in the instance list.
-     */
-    bool ReplaceInstanceSheetPath( const KIID_PATH& aOldSheetPath, const KIID_PATH& aNewSheetPath );
 
     const BOX2I GetBoundingBox() const override;
 

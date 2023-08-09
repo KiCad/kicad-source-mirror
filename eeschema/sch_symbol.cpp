@@ -1390,34 +1390,6 @@ bool SCH_SYMBOL::AddSheetPathReferenceEntryIfMissing( const KIID_PATH& aSheetPat
 }
 
 
-bool SCH_SYMBOL::ReplaceInstanceSheetPath( const KIID_PATH& aOldSheetPath,
-                                           const KIID_PATH& aNewSheetPath )
-{
-    auto it = std::find_if( m_instanceReferences.begin(), m_instanceReferences.end(),
-                [ aOldSheetPath ]( SCH_SYMBOL_INSTANCE& r )->bool
-                {
-                    return aOldSheetPath == r.m_Path;
-                }
-            );
-
-    if( it != m_instanceReferences.end() )
-    {
-        wxLogTrace( traceSchSheetPaths,
-                    "Replacing sheet path %s\n  with sheet path %s\n  for symbol %s.",
-                    aOldSheetPath.AsString(), aNewSheetPath.AsString(), m_Uuid.AsString() );
-
-        it->m_Path = aNewSheetPath;
-        return true;
-    }
-
-    wxLogTrace( traceSchSheetPaths,
-                "Could not find sheet path %s\n  to replace with sheet path %s\n  for symbol %s.",
-                aOldSheetPath.AsString(), aNewSheetPath.AsString(), m_Uuid.AsString() );
-
-    return false;
-}
-
-
 void SCH_SYMBOL::SetOrientation( int aOrientation )
 {
     TRANSFORM temp = TRANSFORM();
