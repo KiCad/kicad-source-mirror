@@ -30,12 +30,6 @@
 #include "search_handlers.h"
 
 
-SCH_SEARCH_HANDLER::SCH_SEARCH_HANDLER( wxString aName, SCH_EDIT_FRAME* aFrame ) :
-        SEARCH_HANDLER( aName ), m_frame( aFrame )
-{
-}
-
-
 void SCH_SEARCH_HANDLER::ActivateItem( long aItemRow )
 {
     std::vector<long> item = { aItemRow };
@@ -63,11 +57,24 @@ void SCH_SEARCH_HANDLER::FindAll( const std::function<bool( SCH_ITEM*, SCH_SHEET
         for( SCH_ITEM* item : sheet->LastScreen()->Items() )
         {
             if( aCollector( item, sheet ) )
-            {
                 m_hitlist.push_back( { item, sheet } );
-            }
         }
     }
+}
+
+
+void SCH_SEARCH_HANDLER::Sort( int aCol, bool aAscending )
+{
+    std::sort( m_hitlist.begin(), m_hitlist.end(),
+            [&]( const SCH_SEARCH_HIT& a, const SCH_SEARCH_HIT& b ) -> bool
+            {
+                // N.B. To meet the iterator sort conditions, we cannot simply invert the truth
+                // to get the opposite sort.  i.e. ~(a<b) != (a>b)
+                if( aAscending )
+                    return StrNumCmp( getResultCell( a, aCol ), getResultCell( b, aCol ), true ) < 0;
+                else
+                    return StrNumCmp( getResultCell( b, aCol ), getResultCell( a, aCol ), true ) < 0;
+            } );
 }
 
 
@@ -161,22 +168,21 @@ int SYMBOL_SEARCH_HANDLER::Search( const wxString& aQuery )
 }
 
 
-wxString SYMBOL_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
+wxString SYMBOL_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int aCol )
 {
-    SCH_SEARCH_HIT hit = m_hitlist[aRow];
-    SCH_SYMBOL*    sym = dynamic_cast<SCH_SYMBOL*>( hit.item );
+    SCH_SYMBOL*sym = dynamic_cast<SCH_SYMBOL*>( aHit.item );
 
     if( !sym )
         return wxEmptyString;
 
     if( aCol == 0 )
-        return sym->GetRef( hit.sheetPath, true );
+        return sym->GetRef( aHit.sheetPath, true );
     else if( aCol == 1 )
-        return sym->GetField( VALUE_FIELD )->GetShownText( hit.sheetPath, false );
+        return sym->GetField( VALUE_FIELD )->GetShownText( aHit.sheetPath, false );
     else if( aCol == 2 )
-        return sym->GetField( FOOTPRINT_FIELD )->GetShownText( hit.sheetPath, false );
+        return sym->GetField( FOOTPRINT_FIELD )->GetShownText( aHit.sheetPath, false );
     else if( aCol == 3 )
-        return hit.sheetPath->GetPageNumber();
+        return aHit.sheetPath->GetPageNumber();
     else if( aCol == 4 )
         return m_frame->MessageTextFromValue( sym->GetPosition().x );
     else if( aCol == 5 )
@@ -227,13 +233,11 @@ int TEXT_SEARCH_HANDLER::Search( const wxString& aQuery )
 }
 
 
-wxString TEXT_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
+wxString TEXT_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int aCol )
 {
-    SCH_SEARCH_HIT hit = m_hitlist[aRow];
-
-    if( hit.item->Type() == SCH_TEXT_T )
+    if( aHit.item->Type() == SCH_TEXT_T )
     {
-        SCH_TEXT* txt = dynamic_cast<SCH_TEXT*>( hit.item );
+        SCH_TEXT* txt = dynamic_cast<SCH_TEXT*>( aHit.item );
 
         if( !txt )
             return wxEmptyString;
@@ -243,15 +247,15 @@ wxString TEXT_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
         else if( aCol == 1 )
             return txt->GetShownText( false );
         else if( aCol == 2 )
-            return hit.sheetPath->GetPageNumber();
+            return aHit.sheetPath->GetPageNumber();
         else if( aCol == 3 )
             return m_frame->MessageTextFromValue( txt->GetPosition().x );
         else if( aCol == 4 )
             return m_frame->MessageTextFromValue( txt->GetPosition().y );
     }
-    else if( hit.item->Type() == SCH_TEXTBOX_T )
+    else if( aHit.item->Type() == SCH_TEXTBOX_T )
     {
-        SCH_TEXTBOX* txt = dynamic_cast<SCH_TEXTBOX*>( hit.item );
+        SCH_TEXTBOX* txt = dynamic_cast<SCH_TEXTBOX*>( aHit.item );
 
         if( !txt )
             return wxEmptyString;
@@ -261,7 +265,7 @@ wxString TEXT_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
         else if( aCol == 1 )
             return txt->GetShownText( false );
         else if( aCol == 2 )
-            return hit.sheetPath->GetPageNumber();
+            return aHit.sheetPath->GetPageNumber();
         else if( aCol == 3 )
             return m_frame->MessageTextFromValue( txt->GetPosition().x );
         else if( aCol == 4 )
@@ -317,11 +321,9 @@ int LABEL_SEARCH_HANDLER::Search( const wxString& aQuery )
 }
 
 
-wxString LABEL_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
+wxString LABEL_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int aCol )
 {
-    SCH_SEARCH_HIT hit = m_hitlist[aRow];
-
-    SCH_LABEL_BASE* lbl = dynamic_cast<SCH_LABEL_BASE*>( hit.item );
+    SCH_LABEL_BASE* lbl = dynamic_cast<SCH_LABEL_BASE*>( aHit.item );
 
     if( !lbl )
         return wxEmptyString;
@@ -338,7 +340,7 @@ wxString LABEL_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
     else if( aCol == 1 )
         return lbl->GetShownText( false );
     else if( aCol == 2 )
-        return hit.sheetPath->GetPageNumber();
+        return aHit.sheetPath->GetPageNumber();
     else if( aCol == 3 )
         return m_frame->MessageTextFromValue( lbl->GetPosition().x );
     else if( aCol == 4 )

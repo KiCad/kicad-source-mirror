@@ -21,12 +21,15 @@
 #include <widgets/search_pane.h>
 #include <kiway.h>
 #include <vector>
+#include <string_utils.h>
 
 SEARCH_PANE_LISTVIEW::SEARCH_PANE_LISTVIEW( SEARCH_HANDLER* handler, wxWindow* parent,
                                             wxWindowID winid, const wxPoint& pos,
                                             const wxSize& size ) :
         wxListView( parent, winid, pos, size, wxLC_REPORT | wxLC_VIRTUAL ),
-        m_handler( handler )
+        m_handler( handler ),
+        m_sortCol( -1 ),
+        m_sortAscending( true )
 {
     SetItemCount( 0 );
 
@@ -36,6 +39,7 @@ SEARCH_PANE_LISTVIEW::SEARCH_PANE_LISTVIEW( SEARCH_HANDLER* handler, wxWindow* p
     Bind( wxEVT_LIST_ITEM_ACTIVATED, &SEARCH_PANE_LISTVIEW::OnItemActivated, this );
     Bind( wxEVT_LIST_ITEM_FOCUSED, &SEARCH_PANE_LISTVIEW::OnItemSelected, this );
     Bind( wxEVT_LIST_ITEM_DESELECTED, &SEARCH_PANE_LISTVIEW::OnItemDeselected, this );
+    Bind( wxEVT_LIST_COL_CLICK, &SEARCH_PANE_LISTVIEW::OnColClicked, this );
 }
 
 
@@ -112,6 +116,29 @@ void SEARCH_PANE_LISTVIEW::OnItemDeselected( wxListEvent& aEvent )
 }
 
 
+void SEARCH_PANE_LISTVIEW::OnColClicked( wxListEvent& aEvent )
+{
+    if( aEvent.GetColumn() == m_sortCol )
+    {
+        m_sortAscending = !m_sortAscending;
+    }
+    else
+    {
+        m_sortAscending = true;
+        m_sortCol = aEvent.GetColumn();
+    }
+
+    Sort();
+    Refresh();
+}
+
+
+void SEARCH_PANE_LISTVIEW::Sort()
+{
+    m_handler->Sort( m_sortCol, m_sortAscending );
+}
+
+
 void SEARCH_PANE_LISTVIEW::RefreshColumnNames()
 {
     Freeze();
@@ -158,6 +185,7 @@ void SEARCH_PANE_TAB::Search( wxString& query )
 {
     int results = m_handler->Search( query );
     m_listView->SetItemCount( results );
+    m_listView->Sort();
     m_listView->Refresh();
 }
 

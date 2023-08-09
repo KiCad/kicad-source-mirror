@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -29,8 +29,9 @@ class SEARCH_PANE_TAB;
 class SEARCH_HANDLER
 {
 public:
-    SEARCH_HANDLER( wxString aName ) :
-            m_name( aName ) {}
+    SEARCH_HANDLER( const wxString& aName ) :
+            m_name( aName )
+    {}
 
     wxString GetName() const { return m_name; }
 
@@ -38,6 +39,7 @@ public:
 
     virtual int Search( const wxString& string ) = 0;
     virtual wxString GetResultCell( int row, int col ) = 0;
+    virtual void Sort( int aCol, bool aAscending ) = 0;
 
     virtual void SelectItems( std::vector<long>& aItemRows ) {}
     virtual void ActivateItem( long aItemRow ) {}

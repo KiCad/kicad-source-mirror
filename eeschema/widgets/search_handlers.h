@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,6 @@
 #include <widgets/search_pane.h>
 
 class SCH_ITEM;
-class SCH_TEXT;
 class SCH_EDIT_FRAME;
 
 struct SCH_SEARCH_HIT
@@ -40,11 +39,24 @@ struct SCH_SEARCH_HIT
 class SCH_SEARCH_HANDLER : public SEARCH_HANDLER
 {
 public:
-    SCH_SEARCH_HANDLER( wxString aName, SCH_EDIT_FRAME* aFrame );
+    SCH_SEARCH_HANDLER( const wxString& aName, SCH_EDIT_FRAME* aFrame ) :
+            SEARCH_HANDLER( aName ),
+            m_frame( aFrame )
+    {}
+
     void ActivateItem( long aItemRow ) override;
 
+    wxString GetResultCell( int aRow, int aCol ) override
+    {
+        return getResultCell( m_hitlist[aRow], aCol );
+    }
+
     void FindAll( const std::function<bool( SCH_ITEM*, SCH_SHEET_PATH* )>& aCollector );
+    void Sort( int aCol, bool aAscending ) override;
     void SelectItems( std::vector<long>& aItemRows ) override;
+
+protected:
+    virtual wxString getResultCell( const SCH_SEARCH_HIT& hit, int aCol ) = 0;
 
 protected:
     SCH_EDIT_FRAME*             m_frame;
@@ -57,8 +69,9 @@ public:
     SYMBOL_SEARCH_HANDLER( SCH_EDIT_FRAME* aFrame );
 
     int Search( const wxString& aQuery ) override;
-    wxString GetResultCell( int aRow, int aCol ) override;
 
+protected:
+    wxString getResultCell( const SCH_SEARCH_HIT& aHit, int aCol ) override;
 };
 
 class TEXT_SEARCH_HANDLER : public SCH_SEARCH_HANDLER
@@ -66,9 +79,10 @@ class TEXT_SEARCH_HANDLER : public SCH_SEARCH_HANDLER
 public:
     TEXT_SEARCH_HANDLER( SCH_EDIT_FRAME* aFrame );
 
-    int      Search( const wxString& aQuery ) override;
-    wxString GetResultCell( int aRow, int aCol ) override;
+    int Search( const wxString& aQuery ) override;
 
+protected:
+    wxString getResultCell( const SCH_SEARCH_HIT& hit, int aCol ) override;
 };
 
 class LABEL_SEARCH_HANDLER : public SCH_SEARCH_HANDLER
@@ -76,9 +90,10 @@ class LABEL_SEARCH_HANDLER : public SCH_SEARCH_HANDLER
 public:
     LABEL_SEARCH_HANDLER( SCH_EDIT_FRAME* aFrame );
 
-    int      Search( const wxString& aQuery ) override;
-    wxString GetResultCell( int aRow, int aCol ) override;
+    int Search( const wxString& aQuery ) override;
 
+protected:
+    wxString getResultCell( const SCH_SEARCH_HIT& hit, int aCol ) override;
 };
 
 #endif

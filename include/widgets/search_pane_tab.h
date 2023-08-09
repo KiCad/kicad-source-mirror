@@ -40,16 +40,21 @@ public:
 
     void RefreshColumnNames();
 
+    void Sort();
+
 protected:
     wxString OnGetItemText( long item, long column ) const override;
     void     OnItemSelected( wxListEvent& aEvent );
     void     OnItemActivated( wxListEvent& aEvent );
     void     OnItemDeselected( wxListEvent& aEvent );
+    void     OnColClicked( wxListEvent& aEvent );
 
     void GetSelectRowsList( std::vector<long>& aSelectedList );
 
 private:
     SEARCH_HANDLER*       m_handler;
+    int                   m_sortCol;
+    bool                  m_sortAscending;
 };
 
 

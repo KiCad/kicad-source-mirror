@@ -30,18 +30,46 @@
 #include "search_handlers.h"
 
 
-PCB_SEARCH_HANDLER::PCB_SEARCH_HANDLER( wxString aName, PCB_EDIT_FRAME* aFrame ) :
-        SEARCH_HANDLER( aName ), m_frame( aFrame )
-{
-}
-
-
 void PCB_SEARCH_HANDLER::ActivateItem( long aItemRow )
 {
     std::vector<long> item = { aItemRow };
     SelectItems( item );
 
     m_frame->GetToolManager()->RunAction( PCB_ACTIONS::properties );
+}
+
+
+void PCB_SEARCH_HANDLER::Sort( int aCol, bool aAscending )
+{
+    std::sort( m_hitlist.begin(), m_hitlist.end(),
+            [&]( BOARD_ITEM* a, BOARD_ITEM* b ) -> bool
+            {
+                // N.B. To meet the iterator sort conditions, we cannot simply invert the truth
+                // to get the opposite sort.  i.e. ~(a<b) != (a>b)
+                if( aAscending )
+                    return StrNumCmp( getResultCell( a, aCol ), getResultCell( b, aCol ), true ) < 0;
+                else
+                    return StrNumCmp( getResultCell( b, aCol ), getResultCell( a, aCol ), true ) < 0;
+            } );
+}
+
+
+void PCB_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
+{
+    std::vector<EDA_ITEM*> selectedItems;
+
+    for( long row : aItemRows )
+    {
+        if( row >= 0 && row < (long) m_hitlist.size() )
+            selectedItems.push_back( m_hitlist[row] );
+    }
+
+    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
+
+    if( selectedItems.size() )
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItems, &selectedItems );
+
+    m_frame->GetCanvas()->Refresh( false );
 }
 
 
@@ -81,9 +109,9 @@ int FOOTPRINT_SEARCH_HANDLER::Search( const wxString& aQuery )
 }
 
 
-wxString FOOTPRINT_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
+wxString FOOTPRINT_SEARCH_HANDLER::getResultCell( BOARD_ITEM* aItem, int aCol )
 {
-    FOOTPRINT* fp = m_hitlist[aRow];
+    FOOTPRINT* fp = static_cast<FOOTPRINT*>( aItem );
 
     if( aCol == 0 )
         return fp->GetReference();
@@ -97,31 +125,6 @@ wxString FOOTPRINT_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
         return m_frame->MessageTextFromValue( fp->GetY() );
 
     return wxEmptyString;
-}
-
-
-void FOOTPRINT_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
-{
-    std::vector<EDA_ITEM*> selectedItems;
-
-    for( long row : aItemRows )
-    {
-        if( row >= 0 && row < (long) m_hitlist.size() )
-        {
-            FOOTPRINT* fp = m_hitlist[row];
-            selectedItems.push_back( fp );
-        }
-    }
-
-    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
-
-    if( selectedItems.size() )
-    {
-        EDA_ITEMS selItems( selectedItems.begin(), selectedItems.end() );
-        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItems, &selItems );
-    }
-
-    m_frame->GetCanvas()->Refresh( false );
 }
 
 
@@ -160,9 +163,9 @@ int ZONE_SEARCH_HANDLER::Search( const wxString& aQuery )
 }
 
 
-wxString ZONE_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
+wxString ZONE_SEARCH_HANDLER::getResultCell( BOARD_ITEM* aItem, int aCol )
 {
-    ZONE* zone = m_hitlist[aRow];
+    ZONE* zone = static_cast<ZONE*>( aItem );
 
     if( aCol == 0 )
         return zone->GetZoneName();
@@ -186,31 +189,6 @@ wxString ZONE_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
         return m_frame->MessageTextFromValue( zone->GetY() );
 
     return wxEmptyString;
-}
-
-
-void ZONE_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
-{
-    std::vector<EDA_ITEM*> selectedItems;
-
-    for( long row : aItemRows )
-    {
-        if( row >= 0 && row < (long) m_hitlist.size() )
-        {
-            ZONE* zone = m_hitlist[row];
-            selectedItems.push_back( zone );
-        }
-    }
-
-    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
-
-    if( selectedItems.size() )
-    {
-        EDA_ITEMS selItems( selectedItems.begin(), selectedItems.end() );
-        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItems, &selItems );
-    }
-
-    m_frame->GetCanvas()->Refresh( false );
 }
 
 
@@ -251,57 +229,30 @@ int TEXT_SEARCH_HANDLER::Search( const wxString& aQuery )
 }
 
 
-wxString TEXT_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
+wxString TEXT_SEARCH_HANDLER::getResultCell( BOARD_ITEM* aItem, int aCol )
 {
-    BOARD_ITEM* text = m_hitlist[aRow];
-
     if( aCol == 0 )
     {
-        if( PCB_TEXT::ClassOf( text ) )
+        if( PCB_TEXT::ClassOf( aItem ) )
             return _( "Text" );
-        else if( PCB_TEXTBOX::ClassOf( text ) )
+        else if( PCB_TEXTBOX::ClassOf( aItem ) )
             return _( "Textbox" );
     }
     else if( aCol == 1 )
     {
-        if( PCB_TEXT::ClassOf( text ) )
-            return UnescapeString( static_cast<PCB_TEXT*>( text )->GetText() );
-        else if( PCB_TEXTBOX::ClassOf( text ) )
-            return UnescapeString( static_cast<PCB_TEXTBOX*>( text )->GetText() );
+        if( PCB_TEXT::ClassOf( aItem ) )
+            return UnescapeString( static_cast<PCB_TEXT*>( aItem )->GetText() );
+        else if( PCB_TEXTBOX::ClassOf( aItem ) )
+            return UnescapeString( static_cast<PCB_TEXTBOX*>( aItem )->GetText() );
     }
     if( aCol == 2 )
-        return text->GetLayerName();
+        return aItem->GetLayerName();
     else if( aCol == 3 )
-        return m_frame->MessageTextFromValue( text->GetX() );
+        return m_frame->MessageTextFromValue( aItem->GetX() );
     else if( aCol == 4 )
-        return m_frame->MessageTextFromValue( text->GetY() );
+        return m_frame->MessageTextFromValue( aItem->GetY() );
 
     return wxEmptyString;
-}
-
-
-void TEXT_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
-{
-    std::vector<EDA_ITEM*> selectedItems;
-
-    for( long row : aItemRows )
-    {
-        if( row >= 0 && row < (long) m_hitlist.size() )
-        {
-            BOARD_ITEM* text = m_hitlist[row];
-            selectedItems.push_back( text );
-        }
-    }
-
-    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear );
-
-    if( selectedItems.size() )
-    {
-        EDA_ITEMS selItems( selectedItems.begin(), selectedItems.end() );
-        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItems, &selItems );
-    }
-
-    m_frame->GetCanvas()->Refresh( false );
 }
 
 
@@ -335,9 +286,9 @@ int NETS_SEARCH_HANDLER::Search( const wxString& aQuery )
 }
 
 
-wxString NETS_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
+wxString NETS_SEARCH_HANDLER::getResultCell( BOARD_ITEM* aItem, int aCol )
 {
-    NETINFO_ITEM* net = m_hitlist[aRow];
+    NETINFO_ITEM* net = static_cast<NETINFO_ITEM*>( aItem );
 
     if( net->GetNetCode() == 0 )
     {
@@ -367,7 +318,7 @@ void NETS_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
     {
         if( row >= 0 && row < (long) m_hitlist.size() )
         {
-            NETINFO_ITEM* net = m_hitlist[row];
+            NETINFO_ITEM* net = static_cast<NETINFO_ITEM*>( m_hitlist[row] );
 
             ps->SetHighlight( true, net->GetNetCode(), true );
         }

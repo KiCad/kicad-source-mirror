@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,20 +26,33 @@
 
 #include <widgets/search_pane.h>
 
-class ZONE;
-class FOOTPRINT;
-class PCB_TEXT;
 class PCB_EDIT_FRAME;
 
 
 class PCB_SEARCH_HANDLER : public SEARCH_HANDLER
 {
 public:
-    PCB_SEARCH_HANDLER( wxString aName, PCB_EDIT_FRAME* aFrame );
+    PCB_SEARCH_HANDLER( const wxString& aName, PCB_EDIT_FRAME* aFrame ) :
+            SEARCH_HANDLER( aName ),
+            m_frame( aFrame )
+    {}
+
+    wxString GetResultCell( int aRow, int aCol ) override
+    {
+        return getResultCell( m_hitlist[aRow], aCol );
+    }
+
+    void Sort( int aCol, bool aAscending ) override;
+
+    void SelectItems( std::vector<long>& aItemRows ) override;
     void ActivateItem( long aItemRow ) override;
 
 protected:
-    PCB_EDIT_FRAME* m_frame;
+    virtual wxString getResultCell( BOARD_ITEM* aItem, int aCol ) = 0;
+
+protected:
+    PCB_EDIT_FRAME*          m_frame;
+    std::vector<BOARD_ITEM*> m_hitlist;
 };
 
 
@@ -49,11 +62,9 @@ public:
     FOOTPRINT_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame );
 
     int Search( const wxString& aQuery ) override;
-    wxString GetResultCell( int aRow, int aCol ) override;
-    void     SelectItems( std::vector<long>& aItemRows ) override;
 
 private:
-    std::vector<FOOTPRINT*> m_hitlist;
+    wxString getResultCell( BOARD_ITEM* aItem, int aCol ) override;
 };
 
 
@@ -62,12 +73,10 @@ class ZONE_SEARCH_HANDLER : public PCB_SEARCH_HANDLER
 public:
     ZONE_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame );
 
-    int      Search( const wxString& aQuery ) override;
-    wxString GetResultCell( int aRow, int aCol ) override;
-    void     SelectItems( std::vector<long>& aItemRows ) override;
+    int Search( const wxString& aQuery ) override;
 
 private:
-    std::vector<ZONE*> m_hitlist;
+    wxString getResultCell( BOARD_ITEM* aItem, int aCol ) override;
 };
 
 
@@ -76,12 +85,10 @@ class TEXT_SEARCH_HANDLER : public PCB_SEARCH_HANDLER
 public:
     TEXT_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame );
 
-    int      Search( const wxString& aQuery ) override;
-    wxString GetResultCell( int aRow, int aCol ) override;
-    void     SelectItems( std::vector<long>& aItemRows ) override;
+    int Search( const wxString& aQuery ) override;
 
 private:
-    std::vector<BOARD_ITEM*> m_hitlist;
+    wxString getResultCell( BOARD_ITEM* aItem, int aCol ) override;
 };
 
 
@@ -91,12 +98,11 @@ public:
     NETS_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame );
 
     int Search( const wxString& aQuery ) override;
-    wxString GetResultCell( int aRow, int aCol ) override;
-    void     SelectItems( std::vector<long>& aItemRows ) override;
-    void     ActivateItem( long aItemRow ) override;
+    void SelectItems( std::vector<long>& aItemRows ) override;
+    void ActivateItem( long aItemRow ) override;
 
 private:
-    std::vector<NETINFO_ITEM*> m_hitlist;
+    wxString getResultCell( BOARD_ITEM* aItem, int aCol ) override;
 };
 
 #endif
