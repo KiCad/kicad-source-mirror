@@ -275,11 +275,6 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         eda_item->ClearEditFlags();
         eda_item->ClearTempFlags();
 
-        if( status == UNDO_REDO::NOP )
-        {
-            continue;
-        }
-
         if( status == UNDO_REDO::NEWITEM )
         {
             // If we are removing the current sheet, get out first
@@ -384,8 +379,7 @@ void SCH_EDIT_FRAME::RollbackSchematicFromUndo()
     PICKED_ITEMS_LIST* undo = PopCommandFromUndoList();
 
     // Skip empty frames
-    while( undo && ( !undo->GetCount()
-            || ( undo->GetCount() == 1 && undo->GetPickedItemStatus( 0 ) == UNDO_REDO::NOP ) ) )
+    while( undo && !undo->GetCount() )
     {
         delete undo;
         undo = PopCommandFromUndoList();
