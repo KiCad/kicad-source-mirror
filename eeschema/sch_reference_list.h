@@ -598,6 +598,21 @@ public:
 
     friend class BACK_ANNOTATION;
 
+    typedef std::vector<SCH_REFERENCE>::iterator       iterator;
+    typedef std::vector<SCH_REFERENCE>::const_iterator const_iterator;
+
+    iterator begin() { return m_flatList.begin(); }
+
+    iterator end() { return m_flatList.end(); }
+
+    const_iterator begin() const { return m_flatList.begin(); }
+
+    const_iterator end() const { return m_flatList.end(); }
+
+    iterator erase( iterator position ) { return m_flatList.erase( position ); }
+
+    iterator erase( iterator first, iterator last ) { return m_flatList.erase( first, last ); }
+
 private:
     static bool sortByRefAndValue( const SCH_REFERENCE& item1, const SCH_REFERENCE& item2 );
 
