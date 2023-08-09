@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-03 11:31-0700\n"
-"PO-Revision-Date: 2023-08-06 10:11+0000\n"
+"PO-Revision-Date: 2023-08-09 07:55+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -1057,9 +1057,8 @@ msgid "Board thickness:"
 msgstr "基板厚:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:440
-#, fuzzy
 msgid "3D Preview Options"
-msgstr "Gerbview オプション"
+msgstr "3Dプレビューのオプション"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56 eeschema/sch_bitmap.cpp:223
