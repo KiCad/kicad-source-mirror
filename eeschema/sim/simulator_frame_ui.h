@@ -304,6 +304,8 @@ private:
     void onCursorsGridCellChanged( wxGridEvent& aEvent ) override;
     void onMeasurementsGridCellChanged( wxGridEvent& aEvent ) override;
 
+    void OnUpdateUI( wxUpdateUIEvent& event ) override;
+
     bool loadLegacyWorkbook( const wxString & aPath );
     bool loadJsonWorkbook( const wxString & aPath );
 

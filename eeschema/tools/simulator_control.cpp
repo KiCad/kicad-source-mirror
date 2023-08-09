@@ -82,6 +82,7 @@ int SIMULATOR_CONTROL::NewAnalysisTab( const TOOL_EVENT& aEvent )
     {
         SIM_TAB* tab = m_simulatorFrame->NewSimTab( dlg.GetSimCommand() );
         dlg.ApplySettings( tab );
+        m_simulatorFrame->OnModify();
     }
 
     return 0;

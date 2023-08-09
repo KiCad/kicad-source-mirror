@@ -783,6 +783,7 @@ void SIMULATOR_FRAME::OnModify()
 {
     KIWAY_PLAYER::OnModify();
     m_workbookModified = true;
+    UpdateTitle();
 }
 
 

@@ -306,6 +306,7 @@ public:
     {
         m_legend->Move( aPosition );
         m_legend->UpdateReference();
+        m_LastLegendPosition = aPosition;
     }
 
     /**
@@ -352,6 +353,9 @@ public:
     void DeleteTrace( TRACE* aTrace );
 
     std::vector<std::pair<wxString, wxString>>& Measurements() { return m_measurements; }
+
+public:
+    wxPoint m_LastLegendPosition;
 
 private:
     wxString getTraceId( const wxString& aVectorName, int aType ) const

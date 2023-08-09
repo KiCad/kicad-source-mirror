@@ -924,7 +924,6 @@ SIM_TAB* SIMULATOR_FRAME_UI::NewSimTab( const wxString& aSimCommand )
 
     m_plotNotebook->AddPage( simTab, pageTitle, true );
 
-    m_simulatorFrame->OnModify();
     return simTab;
 }
 
@@ -1194,6 +1193,16 @@ void SIMULATOR_FRAME_UI::onMeasurementsGridCellChanged( wxGridEvent& aEvent )
     else if( emptyRows == 0 )
     {
         m_measurementsGrid->AppendRows( 1 );
+    }
+}
+
+
+void SIMULATOR_FRAME_UI::OnUpdateUI( wxUpdateUIEvent& event )
+{
+    if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() ) )
+    {
+        if( plotTab->GetLegendPosition() != plotTab->m_LastLegendPosition )
+            m_simulatorFrame->OnModify();
     }
 }
 
@@ -2244,6 +2253,7 @@ void SIMULATOR_FRAME_UI::ToggleDarkModePlots()
 
 void SIMULATOR_FRAME_UI::onPlotClose( wxAuiNotebookEvent& event )
 {
+    m_simulatorFrame->OnModify();
 }
 
 

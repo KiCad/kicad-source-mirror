@@ -441,6 +441,7 @@ SIM_PLOT_TAB::SIM_PLOT_TAB( const wxString& aSimCommand, wxWindow* parent ) :
     m_legend = new mpInfoLegend( wxRect( 0, 0, 200, 40 ), wxTRANSPARENT_BRUSH );
     m_legend->SetVisible( false );
     m_plotWin->AddLayer( m_legend );
+    m_LastLegendPosition = m_legend->GetPosition();
 
     m_plotWin->EnableDoubleBuffer( true );
     m_plotWin->UpdateAll();
