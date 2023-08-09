@@ -24,9 +24,11 @@
 #include <jobs/job_dispatcher.h>
 #include <pcb_plot_params.h>
 
+class BOARD;
+class DS_PROXY_VIEW_ITEM;
+class FOOTPRINT;
 class JOB_EXPORT_PCB_GERBER;
 class JOB_FP_EXPORT_SVG;
-class FOOTPRINT;
 
 class PCBNEW_JOBS_HANDLER : public JOB_DISPATCHER
 {
@@ -42,11 +44,14 @@ public:
     int JobExportPos( JOB* aJob );
     int JobExportFpUpgrade( JOB* aJob );
     int JobExportFpSvg( JOB* aJob );
+    int JobExportDrc( JOB* aJob );
 
 private:
     void populateGerberPlotOptionsFromJob( PCB_PLOT_PARAMS&       aPlotOpts,
                                            JOB_EXPORT_PCB_GERBER* aJob );
     int  doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPRINT* aFootprint );
+
+    DS_PROXY_VIEW_ITEM* getDrawingSheetProxyView( BOARD* aBrd );
 };
 
 #endif

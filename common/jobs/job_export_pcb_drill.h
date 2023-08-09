@@ -37,7 +37,7 @@ public:
             m_excellonCombinePTHNPTH( true ),
             m_excellonOvalDrillRoute( false ),
             m_format( DRILL_FORMAT::EXCELLON ),
-            m_drillOrigin( DRILL_ORIGIN::ABSOLUTE ),
+            m_drillOrigin( DRILL_ORIGIN::ABS ),
             m_drillUnits( DRILL_UNITS::INCHES ),
             m_zeroFormat( ZEROS_FORMAT::DECIMAL ),
             m_mapFormat( MAP_FORMAT::PDF ),
@@ -64,7 +64,7 @@ public:
 
     enum class DRILL_ORIGIN
     {
-        ABSOLUTE,
+        ABS,
         PLOT
     };
 

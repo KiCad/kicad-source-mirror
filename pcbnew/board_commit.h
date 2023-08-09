@@ -47,7 +47,8 @@ class BOARD_COMMIT : public COMMIT
 {
 public:
     BOARD_COMMIT( EDA_DRAW_FRAME* aFrame );
-    BOARD_COMMIT( TOOL_BASE *aTool );
+    BOARD_COMMIT( TOOL_BASE* aTool );
+    BOARD_COMMIT( TOOL_MANAGER* aMgr );
 
     virtual ~BOARD_COMMIT() {}
 

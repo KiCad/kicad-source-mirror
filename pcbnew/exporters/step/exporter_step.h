@@ -26,7 +26,6 @@
 #ifndef EXPORTER_STEP_H
 #define EXPORTER_STEP_H
 
-#include "step_pcb_model.h"
 #include <geometry/shape_poly_set.h>
 #include <gal/color4d.h>
 
@@ -40,6 +39,7 @@ class BOARD_ITEM;
 class FOOTPRINT;
 class PCB_TRACK;
 class FILENAME_RESOLVER;
+class STEP_PCB_MODEL;
 
 class EXPORTER_STEP_PARAMS
 {

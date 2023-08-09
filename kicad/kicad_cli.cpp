@@ -48,6 +48,7 @@
 
 #include "cli/command_pcb.h"
 #include "cli/command_pcb_export.h"
+#include "cli/command_pcb_drc.h"
 #include "cli/command_export_pcb_drill.h"
 #include "cli/command_export_pcb_dxf.h"
 #include "cli/command_export_pcb_gerber.h"
@@ -124,7 +125,7 @@ struct COMMAND_ENTRY
             handler( aHandler ), subCommands( aSub ){};
 };
 
-
+static CLI::PCB_DRC_COMMAND       pcbDrcCmd{};
 static CLI::EXPORT_PCB_DRILL_COMMAND     exportPcbDrillCmd{};
 static CLI::EXPORT_PCB_DXF_COMMAND       exportPcbDxfCmd{};
 static CLI::EXPORT_PCB_STEP_COMMAND      exportPcbStepCmd{};
@@ -186,6 +187,9 @@ static std::vector<COMMAND_ENTRY> commandStack = {
                     &exportPcbStepCmd,
                     &exportPcbSvgCmd
                 }
+            },
+            {
+                &pcbDrcCmd
             }
         }
     },

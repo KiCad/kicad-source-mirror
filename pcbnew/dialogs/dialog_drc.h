@@ -72,14 +72,6 @@ public:
     void ExcludeMarker();
 
 private:
-    /**
-     * Function writeReport
-     * outputs the MARKER items with commentary to an open text file.
-     * @param aFullFileName The text filename to write the report to.
-     * @return true if OK, false on error
-     */
-    bool writeReport( const wxString& aFullFileName );
-
     void syncCheckboxes();
     void updateDisplayedCounts();
 

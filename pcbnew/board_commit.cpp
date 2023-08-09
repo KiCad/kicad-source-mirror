@@ -58,6 +58,14 @@ BOARD_COMMIT::BOARD_COMMIT( EDA_DRAW_FRAME* aFrame ) :
 }
 
 
+BOARD_COMMIT::BOARD_COMMIT( TOOL_MANAGER* aMgr ) :
+    m_toolMgr( aMgr ),
+    m_isBoardEditor( false )
+{
+
+}
+
+
 BOARD* BOARD_COMMIT::GetBoard() const
 {
     return static_cast<BOARD*>( m_toolMgr->GetModel() );

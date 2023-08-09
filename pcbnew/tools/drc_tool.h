@@ -95,6 +95,17 @@ public:
 
     int ExcludeMarker( const TOOL_EVENT& aEvent );
 
+    /**
+     * Function writeReport
+     * outputs the MARKER items with commentary to an open text file.
+     * @param aFullFileName The text filename to write the report to.
+     * @return true if OK, false on error
+     */
+    static bool WriteReport( const wxString& aFullFileName, BOARD* aBoard, EDA_UNITS aReportUnits,
+                             std::shared_ptr<RC_ITEMS_PROVIDER>  aMarkersProvider,
+                             std::shared_ptr<RC_ITEMS_PROVIDER>  aRatsnestProvider,
+                             std::shared_ptr<RC_ITEMS_PROVIDER> aFpWarningsProvider );
+
 private:
     ///< Set up handlers for various events.
     void setTransitions() override;

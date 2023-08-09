@@ -36,6 +36,7 @@ set( KICAD_SRCS
 set( KICAD_CLI_SRCS
     cli/command.cpp
     cli/command_export_pcb_base.cpp
+    cli/command_pcb_drc.cpp
     cli/command_export_pcb_drill.cpp
     cli/command_export_pcb_dxf.cpp
     cli/command_export_pcb_gerber.cpp

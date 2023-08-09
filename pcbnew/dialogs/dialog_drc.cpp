@@ -869,7 +869,7 @@ void DIALOG_DRC::OnSaveReport( wxCommandEvent& aEvent )
         fn.MakeAbsolute( prj_path );
     }
 
-    if( writeReport( fn.GetFullPath() ) )
+    if( DRC_TOOL::WriteReport( fn.GetFullPath(), m_frame->GetBoard(), GetUserUnits(), m_markersProvider, m_ratsnestProvider, m_fpWarningsProvider ) )
     {
         m_messages->Report( wxString::Format( _( "Report file '%s' created<br>" ),
                                               fn.GetFullPath() ) );
@@ -1021,74 +1021,6 @@ void DIALOG_DRC::deleteAllMarkers( bool aIncludeExclusions )
     m_fpWarningsTreeModel->DeleteItems( false, aIncludeExclusions, false );
 
     m_frame->GetBoard()->DeleteMARKERs( true, aIncludeExclusions );
-}
-
-
-bool DIALOG_DRC::writeReport( const wxString& aFullFileName )
-{
-    FILE* fp = wxFopen( aFullFileName, wxT( "w" ) );
-
-    if( fp == nullptr )
-        return false;
-
-    std::map<KIID, EDA_ITEM*> itemMap;
-    m_frame->GetBoard()->FillItemMap( itemMap );
-
-    BOARD_DESIGN_SETTINGS& bds = m_frame->GetBoard()->GetDesignSettings();
-    UNITS_PROVIDER         unitsProvider( pcbIUScale, GetUserUnits() );
-    int                    count;
-
-    fprintf( fp, "** Drc report for %s **\n", TO_UTF8( m_frame->GetBoard()->GetFileName() ) );
-
-    wxDateTime now = wxDateTime::Now();
-
-    fprintf( fp, "** Created on %s **\n", TO_UTF8( now.Format( wxT( "%F %T" ) ) ) );
-
-    count = m_markersProvider->GetCount();
-
-    fprintf( fp, "\n** Found %d DRC violations **\n", count );
-
-    for( int i = 0; i < count; ++i )
-    {
-        const std::shared_ptr<RC_ITEM>& item = m_markersProvider->GetItem( i );
-        SEVERITY severity = item->GetParent()->GetSeverity();
-
-        if( severity == RPT_SEVERITY_EXCLUSION )
-            severity = bds.GetSeverity( item->GetErrorCode() );
-
-        fprintf( fp, "%s", TO_UTF8( item->ShowReport( &unitsProvider, severity, itemMap ) ) );
-    }
-
-    count = m_ratsnestProvider->GetCount();
-
-    fprintf( fp, "\n** Found %d unconnected pads **\n", count );
-
-    for( int i = 0; i < count; ++i )
-    {
-        const std::shared_ptr<RC_ITEM>& item = m_ratsnestProvider->GetItem( i );
-        SEVERITY severity = bds.GetSeverity( item->GetErrorCode() );
-
-        fprintf( fp, "%s", TO_UTF8( item->ShowReport( &unitsProvider, severity, itemMap ) ) );
-    }
-
-    count = m_fpWarningsProvider->GetCount();
-
-    fprintf( fp, "\n** Found %d Footprint errors **\n", count );
-
-    for( int i = 0; i < count; ++i )
-    {
-        const std::shared_ptr<RC_ITEM>& item = m_fpWarningsProvider->GetItem( i );
-        SEVERITY severity = bds.GetSeverity( item->GetErrorCode() );
-
-        fprintf( fp, "%s", TO_UTF8( item->ShowReport( &unitsProvider, severity, itemMap ) ) );
-    }
-
-
-    fprintf( fp, "\n** End of Report **\n" );
-
-    fclose( fp );
-
-    return true;
 }
 
 

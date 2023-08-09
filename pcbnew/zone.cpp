@@ -846,7 +846,7 @@ wxString ZONE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
     }
     else if( layers.size() > 3 )
     {
-        layerDesc.Printf( _( "on %s, %s and %d more" ),
+        layerDesc.Printf( _( "on %s, %s and %zu more" ),
                           GetBoard()->GetLayerName( layers[0] ),
                           GetBoard()->GetLayerName( layers[1] ),
                           layers.size() - 2 );

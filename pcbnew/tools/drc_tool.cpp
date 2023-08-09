@@ -36,6 +36,7 @@
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <netlist_reader/pcb_netlist.h>
+#include <macros.h>
 
 DRC_TOOL::DRC_TOOL() :
         PCB_TOOL_BASE( "pcbnew.DRCTool" ),
@@ -296,3 +297,74 @@ void DRC_TOOL::setTransitions()
 }
 
 
+bool DRC_TOOL::WriteReport( const wxString&                     aFullFileName,
+                            BOARD* aBoard,
+                            EDA_UNITS aReportUnits,
+                            std::shared_ptr<RC_ITEMS_PROVIDER>  aMarkersProvider,
+                            std::shared_ptr<RC_ITEMS_PROVIDER>  aRatsnestProvider,
+                            std::shared_ptr<RC_ITEMS_PROVIDER> aFpWarningsProvider )
+{
+    FILE* fp = wxFopen( aFullFileName, wxT( "w" ) );
+
+    if( fp == nullptr )
+        return false;
+
+    std::map<KIID, EDA_ITEM*> itemMap;
+    aBoard->FillItemMap( itemMap );
+
+    BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
+    UNITS_PROVIDER         unitsProvider( pcbIUScale, aReportUnits );
+    int                    count;
+
+    fprintf( fp, "** Drc report for %s **\n", TO_UTF8( aBoard->GetFileName() ) );
+
+    wxDateTime now = wxDateTime::Now();
+
+    fprintf( fp, "** Created on %s **\n", TO_UTF8( now.Format( wxT( "%F %T" ) ) ) );
+
+    count = aMarkersProvider->GetCount();
+
+    fprintf( fp, "\n** Found %d DRC violations **\n", count );
+
+    for( int i = 0; i < count; ++i )
+    {
+        const std::shared_ptr<RC_ITEM>& item = aMarkersProvider->GetItem( i );
+        SEVERITY                        severity = item->GetParent()->GetSeverity();
+
+        if( severity == RPT_SEVERITY_EXCLUSION )
+            severity = bds.GetSeverity( item->GetErrorCode() );
+
+        fprintf( fp, "%s", TO_UTF8( item->ShowReport( &unitsProvider, severity, itemMap ) ) );
+    }
+
+    count = aRatsnestProvider->GetCount();
+
+    fprintf( fp, "\n** Found %d unconnected pads **\n", count );
+
+    for( int i = 0; i < count; ++i )
+    {
+        const std::shared_ptr<RC_ITEM>& item = aRatsnestProvider->GetItem( i );
+        SEVERITY                        severity = bds.GetSeverity( item->GetErrorCode() );
+
+        fprintf( fp, "%s", TO_UTF8( item->ShowReport( &unitsProvider, severity, itemMap ) ) );
+    }
+
+    count = aFpWarningsProvider->GetCount();
+
+    fprintf( fp, "\n** Found %d Footprint errors **\n", count );
+
+    for( int i = 0; i < count; ++i )
+    {
+        const std::shared_ptr<RC_ITEM>& item = aFpWarningsProvider->GetItem( i );
+        SEVERITY                        severity = bds.GetSeverity( item->GetErrorCode() );
+
+        fprintf( fp, "%s", TO_UTF8( item->ShowReport( &unitsProvider, severity, itemMap ) ) );
+    }
+
+
+    fprintf( fp, "\n** End of Report **\n" );
+
+    fclose( fp );
+
+    return true;
+}

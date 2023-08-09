@@ -18,7 +18,12 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <wx/dir.h>
 #include "pcbnew_jobs_handler.h"
+#include <board_commit.h>
+#include <board_design_settings.h>
+#include <drc/drc_item.h>
+#include <drawing_sheet/ds_proxy_view_item.h>
 #include <jobs/job_fp_export_svg.h>
 #include <jobs/job_fp_upgrade.h>
 #include <jobs/job_export_pcb_gerber.h>
@@ -29,26 +34,30 @@
 #include <jobs/job_export_pcb_pos.h>
 #include <jobs/job_export_pcb_svg.h>
 #include <jobs/job_export_pcb_step.h>
+#include <jobs/job_pcb_drc.h>
 #include <cli/exit_codes.h>
+#include <exporters/place_file_exporter.h>
+#include <exporters/step/exporter_step.h>
 #include <plotters/plotter_dxf.h>
 #include <plotters/plotter_gerber.h>
 #include <plotters/plotters_pslike.h>
-#include <exporters/place_file_exporter.h>
-#include <exporters/step/exporter_step.h>
+#include <tool/tool_manager.h>
+#include <tools/drc_tool.h>
+#include <gerber_jobfile_writer.h>
 #include "gerber_placefile_writer.h"
-#include <pgm_base.h>
-#include <pcbplot.h>
-#include <board_design_settings.h>
-#include <pad.h>
-#include <pcbnew_settings.h>
-#include <wx/dir.h>
-#include <pcb_plot_svg.h>
 #include <gendrill_Excellon_writer.h>
 #include <gendrill_gerber_writer.h>
-#include <wildcards_and_files_ext.h>
+#include <kiface_base.h>
+#include <macros.h>
+#include <pad.h>
+#include <pcb_marker.h>
+#include <pcb_plot_svg.h>
+#include <pcbnew_settings.h>
+#include <pcbplot.h>
+#include <pgm_base.h>
 #include <plugins/kicad/pcb_plugin.h>
-#include <gerber_jobfile_writer.h>
 #include <reporter.h>
+#include <wildcards_and_files_ext.h>
 
 #include "pcbnew_scripting_helpers.h"
 
@@ -71,6 +80,8 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER()
               std::bind( &PCBNEW_JOBS_HANDLER::JobExportFpUpgrade, this, std::placeholders::_1 ) );
     Register( "fpsvg",
               std::bind( &PCBNEW_JOBS_HANDLER::JobExportFpSvg, this, std::placeholders::_1 ) );
+    Register( "drc",
+              std::bind( &PCBNEW_JOBS_HANDLER::JobExportDrc, this, std::placeholders::_1 ) );
 }
 
 
@@ -481,7 +492,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
 
     VECTOR2I offset;
 
-    if( aDrillJob->m_drillOrigin == JOB_EXPORT_PCB_DRILL::DRILL_ORIGIN::ABSOLUTE )
+    if( aDrillJob->m_drillOrigin == JOB_EXPORT_PCB_DRILL::DRILL_ORIGIN::ABS )
         offset = VECTOR2I( 0, 0 );
     else
         offset = brd->GetDesignSettings().GetAuxOrigin();
@@ -838,3 +849,119 @@ int PCBNEW_JOBS_HANDLER::doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPR
     return CLI::EXIT_CODES::OK;
 }
 
+
+int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
+{
+    JOB_PCB_DRC* drcJob = dynamic_cast<JOB_PCB_DRC*>( aJob );
+
+    if( drcJob == nullptr )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    if( aJob->IsCli() )
+        m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
+
+    BOARD* brd = LoadBoard( drcJob->m_filename );
+
+    if( drcJob->m_outputFile.IsEmpty() )
+    {
+        wxFileName fn = brd->GetFileName();
+        fn.SetName( fn.GetName() );
+        fn.SetExt( ReportFileExtension );
+
+        drcJob->m_outputFile = fn.GetFullName();
+    }
+
+    EDA_UNITS units;
+    switch( drcJob->m_units )
+    {
+    case JOB_PCB_DRC::UNITS::INCHES:
+        units = EDA_UNITS::INCHES;
+        break;
+    case JOB_PCB_DRC::UNITS::MILS:
+        units = EDA_UNITS::MILS;
+        break;
+    case JOB_PCB_DRC::UNITS::MILLIMETERS:
+    default:
+        units = EDA_UNITS::MILLIMETRES; break;
+    }
+
+    std::shared_ptr<DRC_ENGINE> drcEngine = brd->GetDesignSettings().m_DRCEngine;
+
+    drcEngine->SetDrawingSheet( getDrawingSheetProxyView( brd ) );
+
+    // BOARD_COMMIT uses TOOL_MANAGER to grab the board internally so we must give it one
+    TOOL_MANAGER* toolManager = new TOOL_MANAGER;
+    toolManager->SetEnvironment( brd, nullptr, nullptr, Kiface().KifaceSettings(), nullptr );
+
+    BOARD_COMMIT commit( toolManager );
+
+    m_reporter->Report( _( "Running DRC...\n" ), RPT_SEVERITY_INFO );
+
+    drcEngine->SetProgressReporter( nullptr );
+    drcEngine->SetViolationHandler(
+            [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer )
+            {
+                PCB_MARKER* marker = new PCB_MARKER( aItem, aPos, aLayer );
+                commit.Add( marker );
+            } );
+
+    drcEngine->RunTests( units, drcJob->m_reportAllTrackErrors, false );
+
+    commit.Push( _( "DRC" ), SKIP_UNDO | SKIP_SET_DIRTY );
+
+    std::shared_ptr<DRC_ITEMS_PROVIDER> markersProvider = std::make_shared<DRC_ITEMS_PROVIDER>(
+            brd, MARKER_BASE::MARKER_DRC, MARKER_BASE::MARKER_DRAWING_SHEET );
+
+    std::shared_ptr<DRC_ITEMS_PROVIDER> ratsnestProvider =
+            std::make_shared<DRC_ITEMS_PROVIDER>( brd, MARKER_BASE::MARKER_RATSNEST );
+
+    std::shared_ptr<DRC_ITEMS_PROVIDER> fpWarningsProvider =
+            std::make_shared<DRC_ITEMS_PROVIDER>( brd, MARKER_BASE::MARKER_PARITY );
+
+    markersProvider->SetSeverities( drcJob->m_severity );
+    ratsnestProvider->SetSeverities( drcJob->m_severity );
+    fpWarningsProvider->SetSeverities( drcJob->m_severity );
+
+    bool wroteReport = DRC_TOOL::WriteReport( drcJob->m_outputFile, brd, units, markersProvider,
+                                   ratsnestProvider, fpWarningsProvider );
+
+    if( !wroteReport )
+    {
+        m_reporter->Report( wxString::Format( _( "Unable to save DRC report to %s\n" ), drcJob->m_outputFile ),
+                            RPT_SEVERITY_INFO );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
+    m_reporter->Report( wxString::Format( _( "Saved DRC Report to %s\n" ), drcJob->m_outputFile ),
+                        RPT_SEVERITY_INFO );
+
+    if( drcJob->m_exitCodeViolations )
+    {
+        if( markersProvider->GetCount() > 0 || ratsnestProvider->GetCount() > 0
+            || fpWarningsProvider->GetCount() > 0 )
+        {
+            return CLI::EXIT_CODES::ERR_DRC_VIOLATIONS;
+        }
+    }
+
+    return CLI::EXIT_CODES::SUCCESS;
+}
+
+
+DS_PROXY_VIEW_ITEM* PCBNEW_JOBS_HANDLER::getDrawingSheetProxyView( BOARD* aBrd )
+{
+    DS_PROXY_VIEW_ITEM* drawingSheet = new DS_PROXY_VIEW_ITEM( pcbIUScale,
+                                                               &aBrd->GetPageSettings(),
+                                                               aBrd->GetProject(),
+                                                               &aBrd->GetTitleBlock(),
+                                                               &aBrd->GetProperties() );
+
+    drawingSheet->SetSheetName( std::string() );
+    drawingSheet->SetSheetPath( std::string() );
+    drawingSheet->SetIsFirstPage( true );
+
+    if( BOARD* board = GetBoard() )
+        drawingSheet->SetFileName( TO_UTF8( board->GetFileName() ) );
+
+    return drawingSheet;
+}

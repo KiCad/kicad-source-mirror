@@ -18,22 +18,21 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CLI_EXIT_CODES_H
-#define CLI_EXIT_CODES_H
+#ifndef COMMAND_EXPORT_PCB_DRC_H
+#define COMMAND_EXPORT_PCB_DRC_H
+
+#include "command_export_pcb_base.h"
 
 namespace CLI
 {
-    namespace EXIT_CODES
-    {
-        static const int  AVOID_CLOSING = -1;
-        static const int  SUCCESS = 0;
-        static const int  OK = 0;
-        static const int  ERR_ARGS = 1;
-        static const int  ERR_UNKNOWN = 2;
-        static const int  ERR_INVALID_INPUT_FILE = 3;
-        static const int  ERR_INVALID_OUTPUT_CONFLICT = 4;
-        static const int  ERR_DRC_VIOLATIONS = 5;
-    };
-}
+class PCB_DRC_COMMAND : public EXPORT_PCB_BASE_COMMAND
+{
+public:
+    PCB_DRC_COMMAND();
+
+protected:
+    int doPerform( KIWAY& aKiway ) override;
+};
+} // namespace CLI
 
 #endif

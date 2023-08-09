@@ -192,7 +192,7 @@ int CLI::EXPORT_PCB_DRILL_COMMAND::doPerform( KIWAY& aKiway )
 
     if( origin == wxS( "absolute" ) )
     {
-        drillJob->m_drillOrigin = JOB_EXPORT_PCB_DRILL::DRILL_ORIGIN::ABSOLUTE;
+        drillJob->m_drillOrigin = JOB_EXPORT_PCB_DRILL::DRILL_ORIGIN::ABS;
     }
     else if( origin == wxS( "plot" ) )
     {
