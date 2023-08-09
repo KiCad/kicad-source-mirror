@@ -305,26 +305,36 @@ void BACKGROUND_JOBS_MONITOR::ShowList( wxWindow* aParent, wxPoint aPos )
 
 void BACKGROUND_JOBS_MONITOR::jobUpdated( BACKGROUND_JOB* aJob )
 {
-    //for now, we go and update the status bar if its the first job in the vector
+    // this method is called from the reporters from potentially other threads
+    // we have to guard ui calls with CallAfter
 
     if( m_jobs.size() > 0 )
     {
+        //for now, we go and update the status bar if its the first job in the vector
         if( m_jobs.front() == aJob )
         {
             // update all status bar entries
             for( KISTATUSBAR* statusBar : m_statusBars )
             {
-                statusBar->ShowBackgroundProgressBar();
-                statusBar->SetBackgroundProgress( aJob->m_currentProgress );
-                statusBar->SetBackgroundProgressMax( aJob->m_maxProgress );
-                statusBar->SetBackgroundStatusText( aJob->m_status );
+                statusBar->CallAfter(
+                        [=]()
+                        {
+                            statusBar->ShowBackgroundProgressBar();
+                            statusBar->SetBackgroundProgress( aJob->m_currentProgress );
+                            statusBar->SetBackgroundProgressMax( aJob->m_maxProgress );
+                            statusBar->SetBackgroundStatusText( aJob->m_status );
+                        } );
             }
         }
     }
 
     for( BACKGROUND_JOB_LIST* list : m_shownDialogs )
     {
-        list->UpdateJob( aJob );
+        list->CallAfter(
+                [=]()
+                {
+                    list->UpdateJob( aJob );
+                } );
     }
 }
 
