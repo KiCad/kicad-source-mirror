@@ -3,13 +3,13 @@
   "default-registry": {
     "kind": "git",
     "repository": "https://github.com/microsoft/vcpkg",
-    "baseline": "9cf4835a54ef1c78f12789859e2730ced29d23ce"
+    "baseline": "c6928dfb9eb7f333f988d2ce70d1e771b7606849"
   },
   "registries": [
     {
       "kind": "git",
       "repository": "https://gitlab.com/kicad/packaging/kicad-vcpkg-registry.git",
-      "baseline": "26ab49d089516202a4c7e591cb9328febd0fc755",
+      "baseline": "fa0646eb07954a4851a090d8e167bb5848b8095b",
       "packages": [
         "glew",
         "python3",
