@@ -260,6 +260,10 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
 
 void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 {
+    std::vector<SCH_ITEM*> bulkAddedItems;
+    std::vector<SCH_ITEM*> bulkRemovedItems;
+    std::vector<SCH_ITEM*> bulkChangedItems;
+
     // Undo in the reverse order of list creation: (this can allow stacked changes like the
     // same item can be changed and deleted in the same complex command).
     // After hitting 0, subtracting 1 will roll the value over to its max representation
@@ -291,6 +295,8 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
             RemoveFromScreen( eda_item, screen );
             aList->SetPickedItemStatus( UNDO_REDO::DELETED, ii );
+
+            bulkRemovedItems.emplace_back( schItem );
         }
         else if( status == UNDO_REDO::DELETED )
         {
@@ -302,6 +308,8 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             // deleted items are re-inserted on undo
             AddToScreen( eda_item, screen );
             aList->SetPickedItemStatus( UNDO_REDO::NEWITEM, ii );
+
+            bulkAddedItems.emplace_back( schItem );
         }
         else if( status == UNDO_REDO::PAGESETTINGS )
         {
@@ -336,6 +344,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             {
             case UNDO_REDO::CHANGED:
                 item->SwapData( alt_item );
+                bulkChangedItems.emplace_back( item );
 
                 // Special cases for items which have instance data
                 if( item->GetParent() && item->GetParent()->Type() == SCH_SYMBOL_T
@@ -349,6 +358,8 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                         symbol->SetRef( m_schematic->GetSheets().FindSheetForScreen( screen ),
                                         field->GetText() );
                     }
+
+                    bulkChangedItems.emplace_back( symbol );
                 }
 
                 break;
@@ -371,6 +382,16 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
     }
 
     GetCanvas()->GetView()->ClearHiddenFlags();
+
+    // Notify our listeners
+    if( bulkAddedItems.size() > 0 )
+        Schematic().OnItemsAdded( bulkAddedItems );
+
+    if( bulkRemovedItems.size() > 0 )
+        Schematic().OnItemsRemoved( bulkRemovedItems );
+
+    if( bulkChangedItems.size() > 0 )
+        Schematic().OnItemsChanged( bulkChangedItems );
 }
 
 
