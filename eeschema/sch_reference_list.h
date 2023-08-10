@@ -521,17 +521,6 @@ public:
     int FindRef( const wxString& aPath ) const;
 
     /**
-     * Search the sorted list of symbols for a another symbol with the same reference and a
-     * given part unit.  Use this method to manage symbols with multiple parts per package.
-     *
-     * @param aIndex is the index in aSymbolsList for of given #SCH_REFERENCE item to test.
-     * @param aUnit is the given unit number to search.
-     * @param aIncludeNew true to include references with the "new" flag in the search.
-     * @return index in aSymbolsList if found or -1 if not found.
-     */
-    int FindUnit( size_t aIndex, int aUnit, bool aIncludeNew = false ) const;
-
-    /**
      * Search the list for a symbol with the given KIID path (as string).
      *
      * @param aFullPath is the path of the symbol item to search.

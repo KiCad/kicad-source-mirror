@@ -155,26 +155,6 @@ bool SCH_REFERENCE_LIST::sortByTimeStamp( const SCH_REFERENCE& item1,
 }
 
 
-int SCH_REFERENCE_LIST::FindUnit( size_t aIndex, int aUnit, bool aIncludeNew ) const
-{
-    int NumRef = m_flatList[aIndex].m_numRef;
-
-    for( size_t ii = 0; ii < m_flatList.size(); ii++ )
-    {
-        if(  ( aIndex == ii )
-          || ( m_flatList[ii].m_isNew && !aIncludeNew )
-          || ( m_flatList[ii].m_numRef != NumRef )
-          || ( m_flatList[aIndex].CompareRef( m_flatList[ii] ) != 0 ) )
-            continue;
-
-        if( m_flatList[ii].m_unit == aUnit )
-            return (int) ii;
-    }
-
-    return -1;
-}
-
-
 int SCH_REFERENCE_LIST::FindRefByFullPath( const wxString& aFullPath ) const
 {
     for( size_t i = 0; i < m_flatList.size(); ++i )
