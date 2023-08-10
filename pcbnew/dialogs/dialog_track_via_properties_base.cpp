@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -349,7 +349,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	wxBoxSizer* bSizer42;
 	bSizer42 = new wxBoxSizer( wxVERTICAL );
 
-	m_staticText85 = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Board contains legacy teardrops. "), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText85 = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Board contains legacy teardrops."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText85->Wrap( -1 );
 	bSizer42->Add( m_staticText85, 0, wxRIGHT|wxLEFT, 5 );
 

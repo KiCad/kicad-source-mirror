@@ -593,7 +593,7 @@ void ROUTER_TOOL::saveRouterDebugLog()
     fname_settings.SetPath( cwd );
     fname_settings.SetName( "pns.settings" );
 
-    wxString msg = wxString::Format( _( "Path: %s\nEvent file: %s\nBoard dump: %s\nSettings dump: %s" ),
+    wxString msg = wxString::Format( wxT( "Path: %s\nEvent file: %s\nBoard dump: %s\nSettings dump: %s" ),
                                      fname_log.GetPath(),
                                      fname_log.GetFullName(),
                                      fname_dump.GetFullName(),
