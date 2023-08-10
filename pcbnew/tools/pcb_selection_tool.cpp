@@ -2904,14 +2904,22 @@ int PCB_SELECTION_TOOL::hitTestDistance( const VECTOR2I& aWhere, BOARD_ITEM* aIt
     case PCB_TEXT_T:
     {
         PCB_TEXT* text = static_cast<PCB_TEXT*>( aItem );
-        text->GetEffectiveTextShape()->Collide( loc, aMaxDistance, &distance );
+
+        // Add a bit of slop to text-shapes
+        if( text->GetEffectiveTextShape()->Collide( loc, aMaxDistance, &distance ) )
+            distance = std::clamp( distance - ( aMaxDistance / 2 ), 0, distance );
+
         break;
     }
 
     case PCB_TEXTBOX_T:
     {
         PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( aItem );
-        textbox->GetEffectiveTextShape()->Collide( loc, aMaxDistance, &distance );
+
+        // Add a bit of slop to text-shapes
+        if( textbox->GetEffectiveTextShape()->Collide( loc, aMaxDistance, &distance ) )
+            distance = std::clamp( distance - ( aMaxDistance / 2 ), 0, distance );
+
         break;
     }
 
