@@ -128,6 +128,8 @@ void SEARCH_PANE_LISTVIEW::OnColClicked( wxListEvent& aEvent )
         m_sortCol = aEvent.GetColumn();
     }
 
+    ShowSortIndicator( m_sortCol, m_sortAscending );
+
     Sort();
     Refresh();
 }
