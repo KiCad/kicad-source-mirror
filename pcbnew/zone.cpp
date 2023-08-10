@@ -625,10 +625,10 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
     }
     else if( layers.size() > 3 )
     {
-        layerDesc.Printf( _( "%s, %s and %zu more" ),
+        layerDesc.Printf( _( "%s, %s and %d more" ),
                           GetBoard()->GetLayerName( layers[0] ),
                           GetBoard()->GetLayerName( layers[1] ),
-                          layers.size() - 2 );
+                          static_cast<int>( layers.size() - 2 ) );
     }
 
     aList.emplace_back( _( "Layer" ), layerDesc );
