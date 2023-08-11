@@ -1,0 +1,80 @@
+Cmp-Mod V01 Genere par PcbNew le 11/12/2006-20:19:14
+
+BeginCmp
+TimeStamp = 4549F4BE;
+Reference = C1;
+ValeurCmp = 10uF;
+IdModule  = C2V10;
+EndCmp
+
+BeginCmp
+TimeStamp = 4549F3BE;
+Reference = C2;
+ValeurCmp = 680nF;
+IdModule  = CP8;
+EndCmp
+
+BeginCmp
+TimeStamp = 4549F464;
+Reference = P1;
+ValeurCmp = IN;
+IdModule  = BORNIER2;
+EndCmp
+
+BeginCmp
+TimeStamp = 4549F46C;
+Reference = P2;
+ValeurCmp = OUT;
+IdModule  = BORNIER2;
+EndCmp
+
+BeginCmp
+TimeStamp = 4549F4A5;
+Reference = P3;
+ValeurCmp = POWER;
+IdModule  = BORNIER2;
+EndCmp
+
+BeginCmp
+TimeStamp = 456A8ACC;
+Reference = P4;
+ValeurCmp = CONN_2;
+IdModule  = BORNIER2;
+EndCmp
+
+BeginCmp
+TimeStamp = 4549F38A;
+Reference = R1;
+ValeurCmp = 1.5K;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = 4549F39D;
+Reference = R2;
+ValeurCmp = 1.5K;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = 4549F3AD;
+Reference = R3;
+ValeurCmp = 100K;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = 4549F3A2;
+Reference = R4;
+ValeurCmp = 47K;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = 454A08DD;
+Reference = U1;
+ValeurCmp = ECC83;
+IdModule  = ECC-83-1;
+EndCmp
+
+EndListe

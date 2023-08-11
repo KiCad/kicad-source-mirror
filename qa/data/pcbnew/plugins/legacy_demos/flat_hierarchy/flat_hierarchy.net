@@ -1,0 +1,750 @@
+# EESchema Netlist Version 1.1 created  15/6/2008-16:12:17
+(
+ ( /48553E7C/4639BE2C $noname  C8 100nF {Lib=C}
+  (    1 /sockets/VCC_PIC )
+  (    2 GND )
+ )
+ ( /48553E7C/4436967E $noname  P2 SUPP28 {Lib=SUPP28}
+  (    1 /sockets/VPP-MCLR )
+  (    2  ? )
+  (    3  ? )
+  (    4  ? )
+  (    5  ? )
+  (    6  ? )
+  (    7  ? )
+  (    8 GND )
+  (    9  ? )
+  (   10  ? )
+  (   11  ? )
+  (   12  ? )
+  (   13  ? )
+  (   14  ? )
+  (   15  ? )
+  (   16  ? )
+  (   17  ? )
+  (   18  ? )
+  (   19 GND )
+  (   20 /sockets/VCC_PIC )
+  (   21  ? )
+  (   22  ? )
+  (   23  ? )
+  (   24  ? )
+  (   25  ? )
+  (   26  ? )
+  (   27 /sockets/CLOCK-RB6 )
+  (   28 /sockets/DATA-RB7 )
+ )
+ ( /48553E7C/442AA145 $noname  C7 100nF {Lib=C}
+  (    1 /sockets/VCC_PIC )
+  (    2 GND )
+ )
+ ( /48553E7C/442AA12B $noname  C6 100nF {Lib=C}
+  (    1 VCC )
+  (    2 GND )
+ )
+ ( /48553E7C/442A88ED $noname  P3 SUPP40 {Lib=SUPP40}
+  (    1 /sockets/VPP-MCLR )
+  (    2  ? )
+  (    3  ? )
+  (    4  ? )
+  (    5  ? )
+  (    6  ? )
+  (    7  ? )
+  (    8 GND )
+  (    9  ? )
+  (   10  ? )
+  (   11 /sockets/VCC_PIC )
+  (   12 GND )
+  (   13  ? )
+  (   14  ? )
+  (   15  ? )
+  (   16  ? )
+  (   17  ? )
+  (   18  ? )
+  (   19  ? )
+  (   20  ? )
+  (   21  ? )
+  (   22  ? )
+  (   23  ? )
+  (   24  ? )
+  (   25  ? )
+  (   26  ? )
+  (   27  ? )
+  (   28  ? )
+  (   29  ? )
+  (   30  ? )
+  (   31 GND )
+  (   32 /sockets/VCC_PIC )
+  (   33  ? )
+  (   34  ? )
+  (   35  ? )
+  (   36  ? )
+  (   37  ? )
+  (   38  ? )
+  (   39 /sockets/CLOCK-RB6 )
+  (   40 /sockets/DATA-RB7 )
+ )
+ ( /48553E7C/442A87F7 $noname  U1 24Cxx {Lib=24C16}
+  (    1 GND )
+  (    2 GND )
+  (    3 GND )
+  (    4 GND )
+  (    5 /sockets/DATA-RB7 )
+  (    6 /sockets/CLOCK-RB6 )
+  (    7  ? )
+  (    8 VCC )
+ )
+ ( /48553E7C/442A81A7 $noname  U5 PIC_18_PINS {Lib=PIC16F54}
+  (    1  ? )
+  (    2  ? )
+  (    3  ? )
+  (    4 /sockets/VPP-MCLR )
+  (    5 GND )
+  (    6  ? )
+  (    7  ? )
+  (    8  ? )
+  (    9  ? )
+  (   10  ? )
+  (   11  ? )
+  (   12 /sockets/CLOCK-RB6 )
+  (   13 /sockets/DATA-RB7 )
+  (   14 /sockets/VCC_PIC )
+  (   15  ? )
+  (   16  ? )
+  (   17  ? )
+  (   18  ? )
+ )
+ ( /48553E7C/442A81A5 $noname  U6 PIC_8_PINS {Lib=PIC12C508A}
+  (    1 /sockets/VCC_PIC )
+  (    2  ? )
+  (    3  ? )
+  (    4 /sockets/VPP-MCLR )
+  (    5  ? )
+  (    6 /sockets/CLOCK-RB6 )
+  (    7 /sockets/DATA-RB7 )
+  (    8 GND )
+ )
+ ( /48553E53/464AD280 $noname  C9 22OnF {Lib=C}
+  (    1 VPP )
+  (    2 N-000034 )
+ )
+ ( /48553E53/4639BAF8 $noname  JP1 JUMPER {Lib=JUMPER}
+  (    1 VCC )
+  (    2 /sockets/VCC_PIC )
+ )
+ ( /48553E53/4639BA28 $noname  D11 BAT43 {Lib=DIODESCH}
+  (    1 N-000028 )
+  (    2 N-000029 )
+ )
+ ( /48553E53/4639B9EA $noname  D12 YELLOW-LED {Lib=LED}
+  (    1 N-000027 )
+  (    2 GND )
+ )
+ ( /48553E53/4639B9E9 $noname  R21 470 {Lib=R}
+  (    1 N-000027 )
+  (    2 /sockets/VCC_PIC )
+ )
+ ( /48553E53/4639B9B3 $noname  R20 2.2K {Lib=R}
+  (    1 VCC )
+  (    2 N-000026 )
+ )
+ ( /48553E53/4639B9B0 $noname  R19 2.2K {Lib=R}
+  (    1 N-000028 )
+  (    2 N-000026 )
+ )
+ ( /48553E53/4639B996 $noname  Q3 BC307 {Lib=PNP}
+  (    1 VCC )
+  (    2 N-000026 )
+  (    3 /sockets/VCC_PIC )
+ )
+ ( /48553E53/443D0101 $noname  RV1 1K {Lib=POT}
+  (    1 N-000023 )
+  (    2 N-000025 )
+  (    3 N-000024 )
+ )
+ ( /48553E53/44369638 $noname  R18 220 {Lib=R}
+  (    1 N-000031 )
+  (    2 N-000030 )
+ )
+ ( /48553E53/442A6026 $noname  D10 SCHOTTKY {Lib=DIODESCH}
+  (    1 N-000022 )
+  (    2 VPP )
+ )
+ ( /48553E53/442A5F83 $noname  R10 5,1K {Lib=R}
+  (    1 N-000021 )
+  (    2 N-000018 )
+ )
+ ( /48553E53/442A5F61 $noname  C4 0 {Lib=C}
+  (    1 N-000021 )
+  (    2 GND )
+ )
+ ( /48553E53/442A5E20 $noname  U4 LT1373 {Lib=LT1373}
+  (    1 N-000021 )
+  (    2 N-000025 )
+  (    3  ? )
+  (    4  ? )
+  (    5 VCC )
+  (    6 GND )
+  (    7 GND )
+  (    8 N-000022 )
+ )
+ ( /48553E53/442A58DC $noname  R16 62K {Lib=R}
+  (    1 N-000024 )
+  (    2 VPP )
+ )
+ ( /48553E53/442A58D7 $noname  R15 6.2K {Lib=R}
+  (    1 N-000023 )
+  (    2 GND )
+ )
+ ( /48553E53/442A58B1 $noname  C5 10nF {Lib=C}
+  (    1 N-000018 )
+  (    2 GND )
+ )
+ ( /48553E53/442A584C $noname  C3 22uF/25V {Lib=CP}
+  (    1 VPP )
+  (    2 GND )
+ )
+ ( /48553E53/442A57BE $noname  L1 22uH {Lib=INDUCTOR}
+  (    1 N-000022 )
+  (    2 VCC )
+ )
+ ( /48553E53/442A50BF $noname  R17 22K {Lib=R}
+  (    1 N-000031 )
+  (    2 GND )
+ )
+ ( /48553E53/442A5084 $noname  D9 GREEN-LED {Lib=LED}
+  (    1 N-000017 )
+  (    2 GND )
+ )
+ ( /48553E53/442A5083 $noname  R14 470 {Lib=R}
+  (    1 VCC )
+  (    2 N-000017 )
+ )
+ ( /48553E53/442A5056 $noname  C1 100uF {Lib=CP}
+  (    1 VCC )
+  (    2 GND )
+ )
+ ( /48553E53/442A504A $noname  U3 7805 {Lib=7805}
+  (   VI N-000033 )
+  (  GND GND )
+  (   VO VCC )
+ )
+ ( /48553E53/442A501D $noname  C2 220uF {Lib=CP}
+  (    1 N-000033 )
+  (    2 GND )
+ )
+ ( /48553E53/442A500B $noname  D1 1N4004 {Lib=DIODE}
+  (    1 N-000016 )
+  (    2 N-000033 )
+ )
+ ( /48553E53/442A4FE7 $noname  P1 CONN_2 {Lib=CONN_2}
+  (    1 GND )
+  (    2 N-000016 )
+ )
+ ( /48553E53/442A4F5D $noname  D8 RED-LED {Lib=LED}
+  (    1 N-000015 )
+  (    2 GND )
+ )
+ ( /48553E53/442A4F52 $noname  R9 2.2K {Lib=R}
+  (    1 N-000031 )
+  (    2 N-000015 )
+ )
+ ( /48553E53/442A4F30 $noname  Q2 BC307 {Lib=PNP}
+  (    1 VPP )
+  (    2 N-000034 )
+  (    3 N-000031 )
+ )
+ ( /48553E53/442A4F2A $noname  R7 10K {Lib=R}
+  (    1 VPP )
+  (    2 N-000034 )
+ )
+ ( /48553E53/442A4F23 $noname  R11 22K {Lib=R}
+  (    1 N-000029 )
+  (    2 N-000034 )
+ )
+ ( /48553E53/442A4EB9 $noname  Q1 BC237 {Lib=NPN}
+  (    1 GND )
+  (    2 N-000013 )
+  (    3 N-000029 )
+ )
+ ( /48553E53/442A4D92 $noname  R8 1K {Lib=R}
+  (    1 N-000011 )
+  (    2 N-000013 )
+ )
+ ( /48553E53/442A4D8D $noname  R13 470 {Lib=R}
+  (    1 N-000010 )
+  (    2 /sockets/CLOCK-RB6 )
+ )
+ ( /48553E53/442A4D85 $noname  R12 470 {Lib=R}
+  (    1 N-000009 )
+  (    2 /sockets/DATA-RB7 )
+ )
+ ( /48553E53/442A4D6B $noname  U2 74HC125 {Lib=74LS125}
+  (    1 GND )
+  (    2 N-000032 )
+  (    3 N-000011 )
+  (    4 GND )
+  (    5 N-000038 )
+  (    6 N-000009 )
+  (    7 GND )
+  (    8 N-000010 )
+  (    9 N-000036 )
+  (   10 GND )
+  (   11 /pic_programmer/CTS )
+  (   12 /sockets/DATA-RB7 )
+  (   13 GND )
+  (   14 VCC )
+ )
+ ( /48553E53/442A4D65 $noname  D7 BAT43 {Lib=DIODESCH}
+  (    1 GND )
+  (    2 N-000036 )
+ )
+ ( /48553E53/442A4D64 $noname  D6 BAT43 {Lib=DIODESCH}
+  (    1 N-000036 )
+  (    2 VCC )
+ )
+ ( /48553E53/442A4D63 $noname  R6 10K {Lib=R}
+  (    1 /pic_programmer/RTS )
+  (    2 GND )
+ )
+ ( /48553E53/442A4D62 $noname  R5 10K {Lib=R}
+  (    1 /pic_programmer/RTS )
+  (    2 N-000036 )
+ )
+ ( /48553E53/442A4D5D $noname  D5 BAT43 {Lib=DIODESCH}
+  (    1 GND )
+  (    2 N-000038 )
+ )
+ ( /48553E53/442A4D5C $noname  D4 BAT43 {Lib=DIODESCH}
+  (    1 N-000038 )
+  (    2 VCC )
+ )
+ ( /48553E53/442A4D5B $noname  R4 10K {Lib=R}
+  (    1 /pic_programmer/PC-DATA-OUT )
+  (    2 GND )
+ )
+ ( /48553E53/442A4D5A $noname  R3 10K {Lib=R}
+  (    1 /pic_programmer/PC-DATA-OUT )
+  (    2 N-000038 )
+ )
+ ( /48553E53/442A4D25 $noname  D3 BAT43 {Lib=DIODESCH}
+  (    1 GND )
+  (    2 N-000032 )
+ )
+ ( /48553E53/442A4D1B $noname  D2 BAT43 {Lib=DIODESCH}
+  (    1 N-000032 )
+  (    2 VCC )
+ )
+ ( /48553E53/442A4CFB $noname  R2 10K {Lib=R}
+  (    1 /pic_programmer/TXD )
+  (    2 GND )
+ )
+ ( /48553E53/442A4CF4 $noname  R1 10K {Lib=R}
+  (    1 /pic_programmer/TXD )
+  (    2 N-000032 )
+ )
+ ( /48553E53/442A4C93 $noname  J1 DB9-FEMAL {Lib=DB9}
+  (    1  ? )
+  (    2  ? )
+  (    3 /pic_programmer/TXD )
+  (    4 /pic_programmer/PC-DATA-OUT )
+  (    5 GND )
+  (    6  ? )
+  (    7 /pic_programmer/RTS )
+  (    8 /pic_programmer/CTS )
+  (    9  ? )
+ )
+)
+*
+{ Allowed footprints by component:
+$component C8
+ SM*
+ C?
+ C1-1
+$endlist
+$component C7
+ SM*
+ C?
+ C1-1
+$endlist
+$component C6
+ SM*
+ C?
+ C1-1
+$endlist
+$component C9
+ SM*
+ C?
+ C1-1
+$endlist
+$component D11
+ D?
+ S*
+$endlist
+$component R21
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R20
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R19
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R18
+ R?
+ SM0603
+ SM0805
+$endlist
+$component D10
+ D?
+ S*
+$endlist
+$component R10
+ R?
+ SM0603
+ SM0805
+$endlist
+$component C4
+ SM*
+ C?
+ C1-1
+$endlist
+$component R16
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R15
+ R?
+ SM0603
+ SM0805
+$endlist
+$component C5
+ SM*
+ C?
+ C1-1
+$endlist
+$component C3
+ CP*
+ SM*
+$endlist
+$component R17
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R14
+ R?
+ SM0603
+ SM0805
+$endlist
+$component C1
+ CP*
+ SM*
+$endlist
+$component C2
+ CP*
+ SM*
+$endlist
+$component D1
+ D?
+ S*
+$endlist
+$component R9
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R7
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R11
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R8
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R13
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R12
+ R?
+ SM0603
+ SM0805
+$endlist
+$component D7
+ D?
+ S*
+$endlist
+$component D6
+ D?
+ S*
+$endlist
+$component R6
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R5
+ R?
+ SM0603
+ SM0805
+$endlist
+$component D5
+ D?
+ S*
+$endlist
+$component D4
+ D?
+ S*
+$endlist
+$component R4
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R3
+ R?
+ SM0603
+ SM0805
+$endlist
+$component D3
+ D?
+ S*
+$endlist
+$component D2
+ D?
+ S*
+$endlist
+$component R2
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R1
+ R?
+ SM0603
+ SM0805
+$endlist
+$component J1
+ DB9*
+$endlist
+$endfootprintlist
+}
+{ Pin List by Nets
+Net 6 "GND"
+ U2 1
+ U2 7
+ R2 2
+ D12 2
+ D3 1
+ C8 2
+ C4 2
+ U2 4
+ U2 7
+ U4 7
+ R4 2
+ U4 6
+ D5 1
+ U2 10
+ U2 7
+ P2 19
+ P2 8
+ R6 2
+ C7 2
+ R15 2
+ D7 1
+ U2 13
+ U2 7
+ C5 2
+ C6 2
+ P3 31
+ P3 12
+ P3 8
+ Q1 1
+ U1 3
+ U1 2
+ U1 1
+ U1 4
+ U5 5
+ U6 8
+ C3 2
+ D8 2
+ P1 1
+ C2 2
+ U3 GND
+ C1 2
+ J1 5
+ D9 2
+ R17 2
+Net 7 "VCC"
+ R14 1
+ C1 1
+ U3 VO
+ L1 2
+ U1 8
+ C6 1
+ U2 14
+ D6 2
+ U2 14
+ D4 2
+ U2 14
+ JP1 1
+ U4 5
+ D2 2
+ R20 1
+ Q3 1
+ U2 14
+/pic_programmer/Net 8 "TXD"
+ R2 1
+ R1 1
+ J1 3
+Net 9 ""
+ U2 6
+ R12 1
+Net 10 ""
+ R13 1
+ U2 8
+Net 11 ""
+ U2 3
+ R8 1
+/pic_programmer/Net 12 "CTS"
+ U2 11
+ J1 8
+Net 13 ""
+ Q1 2
+ R8 2
+Net 14 "VPP"
+ C9 1
+ Q2 1
+ R16 2
+ R7 1
+ C3 1
+ D10 2
+Net 15 ""
+ D8 1
+ R9 2
+Net 16 ""
+ D1 1
+ P1 2
+Net 17 ""
+ D9 1
+ R14 2
+Net 18 ""
+ C5 1
+ R10 2
+Net 21 ""
+ R10 1
+ U4 1
+ C4 1
+Net 22 ""
+ L1 1
+ D10 1
+ U4 8
+Net 23 ""
+ RV1 1
+ R15 1
+Net 24 ""
+ RV1 3
+ R16 1
+Net 25 ""
+ RV1 2
+ U4 2
+Net 26 ""
+ R19 2
+ R20 2
+ Q3 2
+Net 27 ""
+ R21 1
+ D12 1
+Net 28 ""
+ D11 1
+ R19 1
+Net 29 ""
+ Q1 3
+ R11 1
+ D11 2
+Net 31 ""
+ R9 1
+ R18 1
+ R17 1
+ Q2 3
+Net 32 ""
+ R1 2
+ U2 2
+ D3 2
+ D2 1
+Net 33 ""
+ C2 1
+ U3 VI
+ D1 2
+Net 34 ""
+ C9 2
+ R7 2
+ Q2 2
+ R11 2
+/pic_programmer/Net 35 "RTS"
+ R5 1
+ R6 1
+ J1 7
+Net 36 ""
+ R5 2
+ D7 2
+ D6 1
+ U2 9
+/pic_programmer/Net 37 "PC-DATA-OUT"
+ J1 4
+ R4 1
+ R3 1
+Net 38 ""
+ U2 5
+ D4 1
+ D5 2
+ R3 2
+/sockets/Net 42 "DATA-RB7"
+ U5 13
+ U2 12
+ R12 2
+ P3 40
+ P2 28
+ U1 5
+ U6 7
+/sockets/Net 43 "CLOCK-RB6"
+ R13 2
+ U1 6
+ U5 12
+ P3 39
+ P2 27
+ U6 6
+/sockets/Net 47 "VPP-MCLR"
+ U5 4
+ P2 1
+ P3 1
+ U6 4
+/sockets/Net 113 "VCC_PIC"
+ U6 1
+ C8 1
+ P3 11
+ JP1 2
+ P2 20
+ R21 2
+ C7 1
+ U5 14
+ Q3 3
+ P3 32
+}
+#End

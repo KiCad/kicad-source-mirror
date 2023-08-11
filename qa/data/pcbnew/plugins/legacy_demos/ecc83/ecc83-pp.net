@@ -1,0 +1,57 @@
+*PADS-PCB*
+*PART*
+P4 unknown
+U1 unknown
+C1 unknown
+P3 unknown
+P2 unknown
+P1 unknown
+C2 unknown
+R3 unknown
+R4 unknown
+R2 unknown
+R1 unknown
+
+*NET*
+*SIGNAL* GND
+ R2.2
+ R4.2
+ R3.2
+ P1.1
+ P2.2
+ P3.2
+ C1.2
+*SIGNAL* N-000002
+ U1.5
+ U1.4
+ P4.1
+*SIGNAL* N-000003
+ U1.9
+ P4.2
+*SIGNAL* N-000004
+ P2.1
+ C2.1
+ R3.1
+*SIGNAL* N-000005
+ U1.1
+ U1.1
+ R1.1
+ U1.7
+*SIGNAL* N-000006
+ U1.3
+ R2.1
+ U1.3
+*SIGNAL* N-000007
+ U1.2
+ U1.2
+ R4.1
+ P1.2
+*SIGNAL* N-000008
+ P3.1
+ U1.6
+ C1.1
+*SIGNAL* N-000009
+ C2.2
+ U1.8
+ R1.2
+*END*

@@ -1,0 +1,171 @@
+Cmp-Mod V01 Created by Cvpcb (20080313-r890) date = 22/3/2008-09:05:19
+
+BeginCmp
+TimeStamp = 322D3011;
+Reference = BUS1;
+ValeurCmp = BUSPC;
+IdModule  = BUS_PC;
+EndCmp
+
+BeginCmp
+TimeStamp = 32307DE2;
+Reference = C1;
+ValeurCmp = 47uF;
+IdModule  = CP6;
+EndCmp
+
+BeginCmp
+TimeStamp = 32307ECF;
+Reference = C2;
+ValeurCmp = 47pF;
+IdModule  = C1;
+EndCmp
+
+BeginCmp
+TimeStamp = 32307ED4;
+Reference = C3;
+ValeurCmp = 47pF;
+IdModule  = C1;
+EndCmp
+
+BeginCmp
+TimeStamp = 32307DCF;
+Reference = C4;
+ValeurCmp = 47uF;
+IdModule  = CP6;
+EndCmp
+
+BeginCmp
+TimeStamp = 32307DCA;
+Reference = C5;
+ValeurCmp = 47uF;
+IdModule  = CP6;
+EndCmp
+
+BeginCmp
+TimeStamp = 32307DC0;
+Reference = C6;
+ValeurCmp = 47uF;
+IdModule  = CP6;
+EndCmp
+
+BeginCmp
+TimeStamp = 322D32AC;
+Reference = D1;
+ValeurCmp = LED;
+IdModule  = LEDV;
+EndCmp
+
+BeginCmp
+TimeStamp = 322D32BE;
+Reference = D2;
+ValeurCmp = LED;
+IdModule  = LEDV;
+EndCmp
+
+BeginCmp
+TimeStamp = 32568D1E;
+Reference = JP1;
+ValeurCmp = CONN_8X2;
+IdModule  = pin_array_8x2;
+EndCmp
+
+BeginCmp
+TimeStamp = 3256759C;
+Reference = P1;
+ValeurCmp = DB25FEMELLE;
+IdModule  = DB25FC;
+EndCmp
+
+BeginCmp
+TimeStamp = 32307EA1;
+Reference = R1;
+ValeurCmp = 100K;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = 32307EAA;
+Reference = R2;
+ValeurCmp = 1K;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = 324002E6;
+Reference = R3;
+ValeurCmp = 10K;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = 322D3295;
+Reference = R4;
+ValeurCmp = 330;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = 322D32A0;
+Reference = R5;
+ValeurCmp = 330;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = 325679C1;
+Reference = RR1;
+ValeurCmp = 9x1K;
+IdModule  = r_pack9;
+EndCmp
+
+BeginCmp
+TimeStamp = 322D31F4;
+Reference = U1;
+ValeurCmp = 74LS245;
+IdModule  = 20dip300;
+EndCmp
+
+BeginCmp
+TimeStamp = 322D35B4;
+Reference = U2;
+ValeurCmp = 74LS688;
+IdModule  = 20dip300;
+EndCmp
+
+BeginCmp
+TimeStamp = 322D31CA;
+Reference = U3;
+ValeurCmp = 74LS541;
+IdModule  = 20dip300;
+EndCmp
+
+BeginCmp
+TimeStamp = 3240023F;
+Reference = U5;
+ValeurCmp = 628128;
+IdModule  = 32dip600;
+EndCmp
+
+BeginCmp
+TimeStamp = 322D321C;
+Reference = U8;
+ValeurCmp = EP600;
+IdModule  = 24dip300;
+EndCmp
+
+BeginCmp
+TimeStamp = 322D32FA;
+Reference = U9;
+ValeurCmp = 4003APG120;
+IdModule  = PGA120;
+EndCmp
+
+BeginCmp
+TimeStamp = 32307EC0;
+Reference = X1;
+ValeurCmp = 8MHz;
+IdModule  = HC-18UH;
+EndCmp
+
+EndListe
