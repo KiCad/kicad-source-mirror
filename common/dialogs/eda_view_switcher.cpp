@@ -53,7 +53,8 @@ EDA_VIEW_SWITCHER::EDA_VIEW_SWITCHER( wxWindow* aParent, const wxArrayString& aI
         height += extents.y + LIST_BOX_V_PADDING;
     }
 
-    m_listBox->SetMinSize( wxSize( width + LIST_BOX_H_PADDING, height ) );
+    m_listBox->SetMinSize( wxSize( width + LIST_BOX_H_PADDING,
+                                   height + ( LIST_BOX_V_PADDING * 2 ) ) );
     SetInitialFocus( m_listBox );
 
     // this line fixes an issue on Linux Ubuntu using Unity (dialog not shown),

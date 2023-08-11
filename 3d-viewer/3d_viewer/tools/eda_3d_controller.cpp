@@ -1,7 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023 CERN
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,8 +29,9 @@
 #include <id.h>
 #include <kiface_base.h>
 #include <tools/eda_3d_controller.h>
-#include "eda_3d_actions.h"
-#include "dialogs/panel_preview_3d_model.h"
+#include <tools/eda_3d_actions.h>
+#include <dialogs/panel_preview_3d_model.h>
+#include <dialogs/appearance_controls_3D.h>
 #include <3d_rendering/opengl/render_3d_opengl.h>
 
 
@@ -79,8 +81,7 @@ void EDA_3D_CONTROLLER::Reset( RESET_REASON aReason )
     {
         m_canvas = dynamic_cast<EDA_3D_CANVAS*>( holder->GetToolCanvas() );
 
-        EDA_3D_BOARD_HOLDER* holder3d =
-                dynamic_cast<EDA_3D_BOARD_HOLDER*>( holder );
+        EDA_3D_BOARD_HOLDER* holder3d = dynamic_cast<EDA_3D_BOARD_HOLDER*>( holder );
 
         wxASSERT( holder3d );
 
@@ -166,7 +167,7 @@ int EDA_3D_CONTROLLER::PanControl( const TOOL_EVENT& aEvent )
     case ACTIONS::CURSOR_DOWN:  m_canvas->SetView3D( VIEW3D_TYPE::VIEW3D_PAN_DOWN );  break;
     case ACTIONS::CURSOR_LEFT:  m_canvas->SetView3D( VIEW3D_TYPE::VIEW3D_PAN_LEFT );  break;
     case ACTIONS::CURSOR_RIGHT: m_canvas->SetView3D( VIEW3D_TYPE::VIEW3D_PAN_RIGHT ); break;
-    default:                    wxFAIL;                           break;
+    default:                    wxFAIL;                                               break;
     }
 
     return 0;
@@ -186,7 +187,7 @@ int EDA_3D_CONTROLLER::RotateView( const TOOL_EVENT& aEvent )
     case ROTATION_DIR::Y_CCW: m_camera->RotateY( -rotIncrement ); break;
     case ROTATION_DIR::Z_CW:  m_camera->RotateZ( -rotIncrement ); break;
     case ROTATION_DIR::Z_CCW: m_camera->RotateZ( rotIncrement );  break;
-    default:                wxFAIL;                               break;
+    default:                  wxFAIL;                             break;
     }
 
     if( m_boardAdapter->m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL )
@@ -225,100 +226,44 @@ int EDA_3D_CONTROLLER::ToggleOrtho( const TOOL_EVENT& aEvent )
 
 int EDA_3D_CONTROLLER::ToggleVisibility( const TOOL_EVENT& aEvent )
 {
-    bool reload = false;
+    std::bitset<LAYER_3D_END> visibilityFlags = m_boardAdapter->GetVisibleLayers();
+    APPEARANCE_CONTROLS_3D*   appearanceManager = nullptr;
 
-#define FLIP( x ) x = !x
+    auto flipLayer =
+            [&]( int layer )
+            {
+                appearanceManager->OnLayerVisibilityChanged( layer, !visibilityFlags.test( layer ) );
+            };
 
-    if( aEvent.IsAction( &EDA_3D_ACTIONS::showTHT ) )
+    if( auto viewer = dynamic_cast<EDA_3D_VIEWER_FRAME*>( m_toolMgr->GetToolHolder() ) )
+        appearanceManager = viewer->GetAppearanceManager();
+
+    if( appearanceManager )
     {
-        FLIP( m_boardAdapter->m_Cfg->m_Render.show_footprints_normal );
-        reload = true;
-    }
-    else if( aEvent.IsAction( &EDA_3D_ACTIONS::showSMD ) )
-    {
-        FLIP( m_boardAdapter->m_Cfg->m_Render.show_footprints_insert );
-        reload = true;
-    }
-    else if( aEvent.IsAction( &EDA_3D_ACTIONS::showVirtual ) )
-    {
-        FLIP( m_boardAdapter->m_Cfg->m_Render.show_footprints_virtual );
-        reload = true;
-    }
-    else if( aEvent.IsAction( &EDA_3D_ACTIONS::showNotInPosFile ) )
-    {
-        FLIP( m_boardAdapter->m_Cfg->m_Render.show_footprints_not_in_posfile );
-        reload = true;
-    }
-    else if( aEvent.IsAction( &EDA_3D_ACTIONS::showDNP ) )
-    {
-        FLIP( m_boardAdapter->m_Cfg->m_Render.show_footprints_dnp );
-        reload = true;
-    }
-    else if( aEvent.IsAction( &EDA_3D_ACTIONS::showBBoxes ) )
-    {
-        FLIP( m_boardAdapter->m_Cfg->m_Render.opengl_show_model_bbox );
-    }
-    else if( aEvent.IsAction( &EDA_3D_ACTIONS::toggleRealisticMode ) )
-    {
-        FLIP( m_boardAdapter->m_Cfg->m_Render.realistic );
-    }
-    else if( aEvent.IsAction( &EDA_3D_ACTIONS::toggleBoardBody ) )
-    {
-        FLIP( m_boardAdapter->m_Cfg->m_Render.show_board_body );
-    }
-    else if( aEvent.IsAction( &EDA_3D_ACTIONS::showAxis ) )
-    {
-        FLIP( m_boardAdapter->m_Cfg->m_Render.show_axis );
-    }
-    else if( aEvent.IsAction( &EDA_3D_ACTIONS::toggleZones ) )
-    {
-        FLIP( m_boardAdapter->m_Cfg->m_Render.show_zones );
-    }
-    else if( aEvent.IsAction( &EDA_3D_ACTIONS::toggleAdhesive ) )
-    {
-        FLIP( m_boardAdapter->m_Cfg->m_Render.show_adhesive );
-    }
-    else if( aEvent.IsAction( &EDA_3D_ACTIONS::toggleSilk ) )
-    {
-        FLIP( m_boardAdapter->m_Cfg->m_Render.show_silkscreen );
-    }
-    else if( aEvent.IsAction( &EDA_3D_ACTIONS::toggleSolderMask ) )
-    {
-        FLIP( m_boardAdapter->m_Cfg->m_Render.show_soldermask );
-    }
-    else if( aEvent.IsAction( &EDA_3D_ACTIONS::toggleSolderPaste ) )
-    {
-        FLIP( m_boardAdapter->m_Cfg->m_Render.show_solderpaste );
-    }
-    else if( aEvent.IsAction( &EDA_3D_ACTIONS::toggleComments ) )
-    {
-        FLIP( m_boardAdapter->m_Cfg->m_Render.show_comments );
-    }
-    else if( aEvent.IsAction( &EDA_3D_ACTIONS::toggleECO ) )
-    {
-        FLIP( m_boardAdapter->m_Cfg->m_Render.show_eco );
+        if( aEvent.IsAction( &EDA_3D_ACTIONS::showTHT ) )
+            flipLayer( LAYER_3D_TH_MODELS );
+        else if( aEvent.IsAction( &EDA_3D_ACTIONS::showSMD ) )
+            flipLayer( LAYER_3D_SMD_MODELS );
+        else if( aEvent.IsAction( &EDA_3D_ACTIONS::showVirtual ) )
+            flipLayer( LAYER_3D_VIRTUAL_MODELS );
+        else if( aEvent.IsAction( &EDA_3D_ACTIONS::showNotInPosFile ) )
+            flipLayer( LAYER_3D_MODELS_NOT_IN_POS );
+        else if( aEvent.IsAction( &EDA_3D_ACTIONS::showDNP ) )
+            flipLayer( LAYER_3D_MODELS_MARKED_DNP );
+        else if( aEvent.IsAction( &EDA_3D_ACTIONS::showAxis ) )
+            flipLayer( LAYER_3D_AXES );
+        else if( aEvent.IsAction( &EDA_3D_ACTIONS::showBBoxes ) )
+            flipLayer( LAYER_3D_BOUNDING_BOXES );
     }
 
-    if( reload )
-    {
-        if( m_boardAdapter->m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL )
-        {
-            auto* renderer = static_cast<RENDER_3D_OPENGL*>( m_canvas->GetCurrentRender() );
-            renderer->Load3dModelsIfNeeded();
-            m_canvas->Request_refresh();
-        }
-        else
-        {
-            m_canvas->RenderRaytracingRequest();
-        }
-    }
-    else
-    {
-        if( auto viewer = dynamic_cast<EDA_3D_VIEWER_FRAME*>( m_toolMgr->GetToolHolder() ) )
-            viewer->NewDisplay( true );
-        else
-            m_canvas->Request_refresh();
-    }
+    return 0;
+}
+
+
+int EDA_3D_CONTROLLER::ToggleLayersManager( const TOOL_EVENT& aEvent )
+{
+    if( auto* viewer = dynamic_cast<EDA_3D_VIEWER_FRAME*>( m_toolMgr->GetToolHolder() ) )
+        viewer->ToggleAppearanceManager();
 
     return 0;
 }
@@ -444,17 +389,7 @@ void EDA_3D_CONTROLLER::setTransitions()
     Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::showNotInPosFile.MakeEvent() );
     Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::showDNP.MakeEvent() );
     Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::showVirtual.MakeEvent() );
-    Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::showBBoxes.MakeEvent() );
-    Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::toggleRealisticMode.MakeEvent() );
-    Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::toggleBoardBody.MakeEvent() );
-    Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::showAxis.MakeEvent() );
-    Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::toggleZones.MakeEvent() );
-    Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::toggleAdhesive.MakeEvent() );
-    Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::toggleSilk.MakeEvent() );
-    Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::toggleSolderMask.MakeEvent() );
-    Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::toggleSolderPaste.MakeEvent() );
-    Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::toggleComments.MakeEvent() );
-    Go( &EDA_3D_CONTROLLER::ToggleVisibility,   EDA_3D_ACTIONS::toggleECO.MakeEvent() );
+    Go( &EDA_3D_CONTROLLER::ToggleLayersManager,EDA_3D_ACTIONS::showLayersManager.MakeEvent() );
 }
 
 

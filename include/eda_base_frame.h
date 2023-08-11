@@ -80,6 +80,7 @@ class FILE_HISTORY;
 class SETTINGS_MANAGER;
 class SEARCH_STACK;
 class APP_SETTINGS_BASE;
+class APPEARANCE_CONTROLS_3D;
 struct WINDOW_SETTINGS;
 struct WINDOW_STATE;
 
@@ -738,33 +739,31 @@ private:
     wxPoint         m_normalFramePos;
     wxSize          m_normalFrameSize;
 
-    wxString        m_aboutTitle;           // Name of program displayed in About.
+    wxString                m_aboutTitle;        // Name of program displayed in About.
 
-    wxAuiManager    m_auimgr;
-    wxString        m_perspective;          // wxAuiManager perspective.
+    wxAuiManager            m_auimgr;
+    wxString                m_perspective;       // wxAuiManager perspective.
+    WX_INFOBAR*             m_infoBar;           // Infobar for the frame
+    APPEARANCE_CONTROLS_3D* m_appearancePanel;
+    wxString                m_configName;        // Prefix used to identify some params (frame
+                                                 // size) and to name some config files (legacy
+                                                 // hotkey files)
+    SETTINGS_MANAGER*       m_settingsManager;
 
-    WX_INFOBAR*     m_infoBar;              // Infobar for the frame
+    FILE_HISTORY*           m_fileHistory;       // The frame's recently opened file list
+    bool                    m_supportsAutoSave;
+    bool                    m_autoSavePending;
+    bool                    m_autoSaveRequired;
+    wxTimer*                m_autoSaveTimer;
 
-    wxString        m_configName;           // Prefix used to identify some params (frame size...)
-                                            // and to name some config files (legacy hotkey files)
+    int                     m_undoRedoCountMax;  // undo/Redo command Max depth
 
-    SETTINGS_MANAGER* m_settingsManager;
+    UNDO_REDO_CONTAINER     m_undoList;          // Objects list for the undo command (old data)
+    UNDO_REDO_CONTAINER     m_redoList;          // Objects list for the redo command (old data)
 
-    FILE_HISTORY*   m_fileHistory;          // The frame's recently opened file list
+    wxString                m_mruPath;           // Most recently used path.
 
-    bool            m_supportsAutoSave;
-    bool            m_autoSavePending;
-    bool            m_autoSaveRequired;
-    wxTimer*        m_autoSaveTimer;
-
-    int                 m_undoRedoCountMax; // undo/Redo command Max depth
-
-    UNDO_REDO_CONTAINER m_undoList;         // Objects list for the undo command (old data)
-    UNDO_REDO_CONTAINER m_redoList;         // Objects list for the redo command (old data)
-
-    wxString            m_mruPath;          // Most recently used path.
-
-    ORIGIN_TRANSFORMS   m_originTransforms; // Default display origin transforms object.
+    ORIGIN_TRANSFORMS       m_originTransforms;  // Default display origin transforms object.
 
     ///< Map containing the UI update handlers registered with wx for each action.
     std::map<int, UIUpdateHandler> m_uiUpdateMap;

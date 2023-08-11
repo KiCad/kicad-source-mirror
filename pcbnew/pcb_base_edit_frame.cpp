@@ -26,6 +26,7 @@
 #include <kiface_base.h>
 #include <kiplatform/ui.h>
 #include <pcb_base_edit_frame.h>
+#include <3d_viewer/eda_3d_viewer_frame.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
@@ -285,6 +286,11 @@ void PCB_BASE_EDIT_FRAME::handleActivateEvent( wxActivateEvent& aEvent )
 void PCB_BASE_EDIT_FRAME::onDarkModeToggle()
 {
     m_appearancePanel->OnDarkModeToggle();
+
+    EDA_3D_VIEWER_FRAME* viewer = Get3DViewerFrame();
+
+    if( viewer )
+        viewer->OnDarkModeToggle();
 }
 
 

@@ -53,7 +53,7 @@ BITMAP_TOGGLE::BITMAP_TOGGLE( wxWindow *aParent, wxWindowID aId, const wxBitmap&
                     {
                         wxLongLong now = wxGetLocalTimeMillis();
 
-                        if( now - m_debounce < 50 )
+                        if( now - m_debounce < 200 )
                             return;
                         else
                             m_debounce = now;

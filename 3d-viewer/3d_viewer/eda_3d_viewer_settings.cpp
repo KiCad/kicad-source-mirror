@@ -2,7 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023 CERN
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -22,21 +23,172 @@
 #include <common_ogl/ogl_attr_list.h>
 #include <settings/parameters.h>
 #include <settings/json_settings_internals.h>
+#include <3d_canvas/board_adapter.h>
 #include <wx/config.h>
 
 #include "eda_3d_viewer_settings.h"
 
 using KIGFX::COLOR4D;
 
-///! Update the schema version whenever a migration is required
-const int viewer3dSchemaVersion = 2;
+using namespace std::placeholders;
 
 
-EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS()
-        : APP_SETTINGS_BASE( "3d_viewer", viewer3dSchemaVersion ),
-          m_Render(),
-          m_Camera()
+LAYER_PRESET_3D::LAYER_PRESET_3D( const wxString& aName ) :
+        name( aName )
 {
+    layers.set( LAYER_3D_BOARD );
+    layers.set( LAYER_3D_COPPER_TOP );
+    layers.set( LAYER_3D_COPPER_BOTTOM );
+    layers.set( LAYER_3D_SILKSCREEN_TOP );
+    layers.set( LAYER_3D_SILKSCREEN_BOTTOM );
+    layers.set( LAYER_3D_SOLDERMASK_TOP );
+    layers.set( LAYER_3D_SOLDERMASK_BOTTOM );
+    layers.set( LAYER_3D_SOLDERPASTE );
+    layers.set( LAYER_3D_ADHESIVE );
+
+    layers.set( LAYER_3D_TH_MODELS );
+    layers.set( LAYER_3D_SMD_MODELS );
+
+    layers.set( LAYER_FP_REFERENCES );
+    layers.set( LAYER_FP_TEXT );
+
+    layers.set( LAYER_GRID_AXES );
+
+    // Preload colors vector so we don't have to worry about exceptions using colors.at()
+    colors[ LAYER_3D_BACKGROUND_TOP ]    = BOARD_ADAPTER::g_DefaultBackgroundTop;
+    colors[ LAYER_3D_BACKGROUND_BOTTOM ] = BOARD_ADAPTER::g_DefaultBackgroundBot;
+    colors[ LAYER_3D_BOARD ]             = BOARD_ADAPTER::g_DefaultBoardBody;
+    colors[ LAYER_3D_COPPER_TOP ]        = BOARD_ADAPTER::g_DefaultSurfaceFinish;
+    colors[ LAYER_3D_COPPER_BOTTOM ]     = BOARD_ADAPTER::g_DefaultSurfaceFinish;
+    colors[ LAYER_3D_SILKSCREEN_TOP ]    = BOARD_ADAPTER::g_DefaultSilkscreen;
+    colors[ LAYER_3D_SILKSCREEN_BOTTOM ] = BOARD_ADAPTER::g_DefaultSilkscreen;
+    colors[ LAYER_3D_SOLDERMASK_TOP ]    = BOARD_ADAPTER::g_DefaultSolderMask;
+    colors[ LAYER_3D_SOLDERMASK_BOTTOM ] = BOARD_ADAPTER::g_DefaultSolderMask;
+    colors[ LAYER_3D_SOLDERPASTE ]       = BOARD_ADAPTER::g_DefaultSolderPaste;
+    colors[ LAYER_3D_USER_DRAWINGS ]     = BOARD_ADAPTER::g_DefaultComments;
+    colors[ LAYER_3D_USER_COMMENTS ]     = BOARD_ADAPTER::g_DefaultComments;
+    colors[ LAYER_3D_USER_ECO1 ]         = BOARD_ADAPTER::g_DefaultECOs;
+    colors[ LAYER_3D_USER_ECO2 ]         = BOARD_ADAPTER::g_DefaultECOs;
+}
+
+
+PARAM_LAYER_PRESET_3D::PARAM_LAYER_PRESET_3D( const std::string& aPath,
+                                              std::vector<LAYER_PRESET_3D>* aPresetList ) :
+        PARAM_LAMBDA<nlohmann::json>( aPath,
+                                      std::bind( &PARAM_LAYER_PRESET_3D::presetsToJson, this ),
+                                      std::bind( &PARAM_LAYER_PRESET_3D::jsonToPresets, this, _1 ),
+                                      {} ),
+        m_presets( aPresetList )
+{
+    wxASSERT( aPresetList );
+}
+
+
+nlohmann::json PARAM_LAYER_PRESET_3D::presetsToJson()
+{
+    nlohmann::json ret = nlohmann::json::array();
+
+    for( const LAYER_PRESET_3D& preset : *m_presets )
+    {
+        nlohmann::json js = {
+            { "name", preset.name }
+        };
+
+        nlohmann::json layers = nlohmann::json::array();
+
+        for( int layer = 0; layer < LAYER_3D_END; ++layer )
+        {
+            if( preset.layers.test( layer ) )
+                layers.push_back( layer );
+        }
+
+        js["layers"] = layers;
+
+        nlohmann::json colors = nlohmann::json::array();
+
+        for( const auto& [ layer, color ] : preset.colors )
+        {
+            nlohmann::json layerColor = {
+                { "layer", layer },
+                { "color", color.ToCSSString() }
+            };
+
+            colors.push_back( layerColor );
+        }
+
+        js["colors"] = colors;
+
+        ret.push_back( js );
+    }
+
+    return ret;
+}
+
+
+void PARAM_LAYER_PRESET_3D::jsonToPresets( const nlohmann::json& aJson )
+{
+    if( aJson.empty() || !aJson.is_array() )
+        return;
+
+    m_presets->clear();
+
+    for( const nlohmann::json& preset : aJson )
+    {
+        if( preset.contains( "name" ) )
+        {
+            LAYER_PRESET_3D p( preset.at( "name" ).get<wxString>() );
+
+            if( preset.contains( "layers" ) && preset.at( "layers" ).is_array() )
+            {
+                p.layers.reset();
+
+                for( const nlohmann::json& layer : preset.at( "layers" ) )
+                {
+                    if( layer.is_number_integer() )
+                    {
+                        int layerNum = layer.get<int>();
+
+                        if( layerNum >= 0 && layerNum < LAYER_3D_END )
+                            p.layers.set( layerNum );
+                    }
+                }
+            }
+
+            if( preset.contains( "colors" ) && preset.at( "colors" ).is_array() )
+            {
+                for( const nlohmann::json& layerColor : preset.at( "colors" ) )
+                {
+                    if( layerColor.contains( "layer" ) && layerColor.contains( "color" )
+                        && layerColor.at( "layer" ).is_number_integer() )
+                    {
+                        int layerNum = layerColor.at( "layer" ).get<int>();
+                        COLOR4D color = layerColor.at( "color" ).get<COLOR4D>();
+                        p.colors[ layerNum ] = color;
+                    }
+                }
+            }
+
+            m_presets->emplace_back( p );
+        }
+    }
+}
+
+
+///! Update the schema version whenever a migration is required
+const int viewer3dSchemaVersion = 3;
+
+
+EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS() :
+        APP_SETTINGS_BASE( "3d_viewer", viewer3dSchemaVersion ),
+        m_Render(),
+        m_Camera()
+{
+    m_params.emplace_back( new PARAM<bool>( "aui.show_layer_manager",
+                                            &m_AuiPanels.show_layer_manager, true ) );
+
+    m_params.emplace_back( new PARAM<int>( "aui.right_panel_width",
+                                           &m_AuiPanels.right_panel_width, -1 ) );
+
     m_params.emplace_back( new PARAM_ENUM<RENDER_ENGINE>( "render.engine", &m_Render.engine,
                                                           RENDER_ENGINE::OPENGL,
                                                           RENDER_ENGINE::OPENGL,
@@ -172,8 +324,12 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS()
                                             &m_Render.show_board_body, true ) );
     m_params.emplace_back( new PARAM<bool>( "render.show_comments",
                                             &m_Render.show_comments, true ) );
-    m_params.emplace_back( new PARAM<bool>( "render.show_eco",
-                                            &m_Render.show_eco, true ) );
+    m_params.emplace_back( new PARAM<bool>( "render.show_drawings",
+                                            &m_Render.show_drawings, true ) );
+    m_params.emplace_back( new PARAM<bool>( "render.show_eco1",
+                                            &m_Render.show_eco1, true ) );
+    m_params.emplace_back( new PARAM<bool>( "render.show_eco2",
+                                            &m_Render.show_eco2, true ) );
     m_params.emplace_back( new PARAM<bool>( "render.show_footprints_insert",
                                             &m_Render.show_footprints_insert, true ) );
     m_params.emplace_back( new PARAM<bool>( "render.show_footprints_normal",
@@ -184,14 +340,28 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS()
                                             &m_Render.show_footprints_not_in_posfile, true ) );
     m_params.emplace_back( new PARAM<bool>( "render.show_footprints_dnp",
                                             &m_Render.show_footprints_dnp, true ) );
-    m_params.emplace_back( new PARAM<bool>( "render.show_silkscreen",
-                                            &m_Render.show_silkscreen, true ) );
-    m_params.emplace_back( new PARAM<bool>( "render.show_soldermask",
-                                            &m_Render.show_soldermask, true ) );
+    m_params.emplace_back( new PARAM<bool>( "render.show_silkscreen_top",
+                                            &m_Render.show_silkscreen_top, true ) );
+    m_params.emplace_back( new PARAM<bool>( "render.show_silkscreen_bottom",
+                                            &m_Render.show_silkscreen_bottom, true ) );
+    m_params.emplace_back( new PARAM<bool>( "render.show_soldermask_top",
+                                            &m_Render.show_soldermask_top, true ) );
+    m_params.emplace_back( new PARAM<bool>( "render.show_soldermask_bottom",
+                                            &m_Render.show_soldermask_bottom, true ) );
     m_params.emplace_back( new PARAM<bool>( "render.show_solderpaste",
                                             &m_Render.show_solderpaste, true ) );
+    m_params.emplace_back( new PARAM<bool>( "render.show_copper_top",
+                                            &m_Render.show_copper_bottom, true ) );
+    m_params.emplace_back( new PARAM<bool>( "render.show_copper_bottom",
+                                            &m_Render.show_copper_top, true ) );
     m_params.emplace_back( new PARAM<bool>( "render.show_zones",
                                             &m_Render.show_zones, true ) );
+    m_params.emplace_back( new PARAM<bool>( "render.show_fp_references",
+                                            &m_Render.show_fp_references, true ) );
+    m_params.emplace_back( new PARAM<bool>( "render.show_fp_values",
+                                            &m_Render.show_fp_values, true ) );
+    m_params.emplace_back( new PARAM<bool>( "render.show_fp_text",
+                                            &m_Render.show_fp_text, true ) );
     m_params.emplace_back( new PARAM<bool>( "render.subtract_mask_from_silk",
                                             &m_Render.subtract_mask_from_silk, false ) );
     m_params.emplace_back( new PARAM<bool>( "render.clip_silk_on_via_annulus",
@@ -207,6 +377,11 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS()
     m_params.emplace_back( new PARAM<int>( "camera.projection_mode",
                                            &m_Camera.projection_mode, 1 ) );
 
+    m_params.emplace_back( new PARAM_LAYER_PRESET_3D( "layer_presets",
+                                                      &m_LayerPresets ) );
+    m_params.emplace_back( new PARAM<wxString>( "current_layer_preset",
+                                                &m_CurrentPreset, LEGACY_PRESET_FLAG ) );
+
     registerMigration( 0, 1, std::bind( &EDA_3D_VIEWER_SETTINGS::migrateSchema0to1, this ) );
 
     registerMigration( 1, 2,
@@ -215,6 +390,51 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS()
                 Set( "render.opengl_copper_thickness", false );
                 return true;
             } );
+
+    registerMigration( 2, 3,
+            [&]() -> bool
+            {
+                if( std::optional<bool> optval = Get<bool>( "render.show_copper" ) )
+                {
+                    Set( "render.show_copper_top", *optval );
+                    Set( "render.show_copper_bottom", *optval );
+                }
+
+                if( std::optional<bool> optval = Get<bool>( "render.show_silkscreen" ) )
+                {
+                    Set( "render.show_silkscreen_top", *optval );
+                    Set( "render.show_silkscreen_bottom", *optval );
+                }
+
+                if( std::optional<bool> optval = Get<bool>( "render.show_soldermask" ) )
+                {
+                    Set( "render.show_soldermask_top", *optval );
+                    Set( "render.show_soldermask_bottom", *optval );
+                }
+
+                if( std::optional<bool> optval = Get<bool>( "render.show_comments" ) )
+                    Set( "render.show_drawings", *optval );
+
+                if( std::optional<bool> optval = Get<bool>( "render.show_eco" ) )
+                {
+                    Set( "render.show_eco1", *optval );
+                    Set( "render.show_eco2", *optval );
+                }
+
+                return true;
+            } );
+}
+
+
+LAYER_PRESET_3D* EDA_3D_VIEWER_SETTINGS::FindPreset( const wxString& aName )
+{
+    for( LAYER_PRESET_3D& preset : m_LayerPresets )
+    {
+        if( preset.name == aName )
+            return &preset;
+    }
+
+    return nullptr;
 }
 
 

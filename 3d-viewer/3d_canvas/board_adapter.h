@@ -2,7 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023 CERN
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -85,7 +86,8 @@ public:
      *
      * @param aLayer layer ID to get status.
      */
-    bool Is3dLayerEnabled( PCB_LAYER_ID aLayer ) const;
+    bool Is3dLayerEnabled( PCB_LAYER_ID aLayer,
+                           const std::bitset<LAYER_3D_END>& aVisibilityFlags ) const;
 
     /**
      * Test if footprint should be displayed in relation to attributes and the flags.
@@ -101,6 +103,13 @@ public:
     const BOARD* GetBoard() const noexcept { return m_board; }
 
     void ReloadColorSettings() noexcept;
+
+    std::map<int, COLOR4D> GetLayerColors() const;
+    std::map<int, COLOR4D> GetDefaultColors() const;
+    void SetLayerColors( const std::map<int, COLOR4D>& aColors );
+
+    std::bitset<LAYER_3D_END> GetVisibleLayers() const;
+    void SetVisibleLayers( const std::bitset<LAYER_3D_END>& aLayers );
 
     /**
      * Function to be called by the render when it need to reload the settings for the board.
@@ -348,7 +357,8 @@ private:
                   PCB_LAYER_ID aLayerId, bool aSkipPlatedPads, bool aSkipNonPlatedPads );
 
     void addFootprintShapes( const FOOTPRINT* aFootprint, CONTAINER_2D_BASE* aDstContainer,
-                             PCB_LAYER_ID aLayerId );
+                             PCB_LAYER_ID aLayerId,
+                             const std::bitset<LAYER_3D_END>& aVisibilityFlags );
 
     void addText( const EDA_TEXT* aText, CONTAINER_2D_BASE* aDstContainer,
                   const BOARD_ITEM* aOwner );
@@ -375,7 +385,7 @@ private:
                                      SHAPE_POLY_SET& aBuffer ) const;
 
 public:
-    static CUSTOM_COLORS_LIST   g_SilkscreenColors;
+    static CUSTOM_COLORS_LIST   g_SilkColors;
     static CUSTOM_COLORS_LIST   g_MaskColors;
     static CUSTOM_COLORS_LIST   g_PasteColors;
     static CUSTOM_COLORS_LIST   g_FinishColors;
@@ -388,6 +398,8 @@ public:
     static KIGFX::COLOR4D       g_DefaultSolderPaste;
     static KIGFX::COLOR4D       g_DefaultSurfaceFinish;
     static KIGFX::COLOR4D       g_DefaultBoardBody;
+    static KIGFX::COLOR4D       g_DefaultComments;
+    static KIGFX::COLOR4D       g_DefaultECOs;
 
 public:
     EDA_3D_VIEWER_SETTINGS*     m_Cfg;
@@ -406,6 +418,10 @@ public:
     SFVEC4F           m_SilkScreenColorBot; ///< in realistic mode: SilkScreen color ( bot )
     SFVEC4F           m_SilkScreenColorTop; ///< in realistic mode: SilkScreen color ( top )
     SFVEC4F           m_CopperColor;        ///< in realistic mode: copper color
+    SFVEC4F           m_UserDrawingsColor;
+    SFVEC4F           m_UserCommentsColor;
+    SFVEC4F           m_ECO1Color;
+    SFVEC4F           m_ECO2Color;
 
 private:
     BOARD*            m_board;

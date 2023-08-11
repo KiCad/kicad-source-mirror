@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -32,7 +32,7 @@ PANEL_3D_DISPLAY_OPTIONS_BASE::PANEL_3D_DISPLAY_OPTIONS_BASE( wxWindow* parent, 
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_checkBoxSilkscreen = new wxCheckBox( this, wxID_ANY, _("Show silkscreen layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxSilkscreen = new wxCheckBox( this, wxID_ANY, _("Show silkscreen layers"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
 	fgSizer1->Add( m_checkBoxSilkscreen, 0, wxLEFT, 5 );
 
 	m_checkBoxSubtractMaskFromSilk = new wxCheckBox( this, wxID_ANY, _("Clip silkscreen at solder mask edges"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -41,7 +41,7 @@ PANEL_3D_DISPLAY_OPTIONS_BASE::PANEL_3D_DISPLAY_OPTIONS_BASE( wxWindow* parent, 
 	m_checkBoxClipSilkOnViaAnnulus = new wxCheckBox( this, wxID_ANY, _("Clip silkscreen at via annuli"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer1->Add( m_checkBoxClipSilkOnViaAnnulus, 0, wxLEFT, 25 );
 
-	m_checkBoxSolderMask = new wxCheckBox( this, wxID_ANY, _("Show solder mask layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxSolderMask = new wxCheckBox( this, wxID_ANY, _("Show solder mask layers"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
 	fgSizer1->Add( m_checkBoxSolderMask, 0, wxTOP|wxLEFT, 5 );
 
 	m_checkBoxSolderpaste = new wxCheckBox( this, wxID_ANY, _("Show solder paste layers"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -56,7 +56,7 @@ PANEL_3D_DISPLAY_OPTIONS_BASE::PANEL_3D_DISPLAY_OPTIONS_BASE( wxWindow* parent, 
 
 	bSizeLeft->Add( 0, 15, 0, wxEXPAND, 5 );
 
-	m_userLayersLabel = new wxStaticText( this, wxID_ANY, _("User Layers (not shown in realistic mode)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_userLayersLabel = new wxStaticText( this, wxID_ANY, _("User Layers"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_userLayersLabel->Wrap( -1 );
 	bSizeLeft->Add( m_userLayersLabel, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 13 );
 
@@ -66,13 +66,13 @@ PANEL_3D_DISPLAY_OPTIONS_BASE::PANEL_3D_DISPLAY_OPTIONS_BASE( wxWindow* parent, 
 
 	bSizeLeft->Add( 0, 5, 0, wxEXPAND, 5 );
 
-	m_checkBoxComments = new wxCheckBox( this, wxID_ANY, _("Show comment and drawing layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxComments = new wxCheckBox( this, wxID_ANY, _("Show comment and drawing layers"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
 	bSizeLeft->Add( m_checkBoxComments, 0, wxRIGHT|wxLEFT, 10 );
 
 
 	bSizeLeft->Add( 0, 4, 0, wxEXPAND, 5 );
 
-	m_checkBoxECO = new wxCheckBox( this, wxID_ANY, _("Show ECO layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxECO = new wxCheckBox( this, wxID_ANY, _("Show ECO layers"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
 	bSizeLeft->Add( m_checkBoxECO, 0, wxRIGHT|wxLEFT, 10 );
 
 

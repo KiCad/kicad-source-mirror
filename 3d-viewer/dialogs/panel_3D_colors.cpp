@@ -33,9 +33,9 @@ PANEL_3D_COLORS::PANEL_3D_COLORS( wxWindow* aParent ) :
     m_backgroundTop->SetDefaultColor( BOARD_ADAPTER::g_DefaultBackgroundTop );
     m_backgroundBottom->SetDefaultColor( BOARD_ADAPTER::g_DefaultBackgroundBot );
 
-    m_silkscreenTop->SetUserColors( &BOARD_ADAPTER::g_SilkscreenColors );
+    m_silkscreenTop->SetUserColors( &BOARD_ADAPTER::g_SilkColors );
     m_silkscreenTop->SetDefaultColor( BOARD_ADAPTER::g_DefaultSilkscreen );
-    m_silkscreenBottom->SetUserColors( &BOARD_ADAPTER::g_SilkscreenColors );
+    m_silkscreenBottom->SetUserColors( &BOARD_ADAPTER::g_SilkColors );
     m_silkscreenBottom->SetDefaultColor( BOARD_ADAPTER::g_DefaultSilkscreen );
 
     m_solderMaskTop->SetUserColors( &BOARD_ADAPTER::g_MaskColors );
@@ -75,7 +75,7 @@ bool PANEL_3D_COLORS::TransferDataToWindow()
     m_solderMaskTop->SetSwatchColor(    colors->GetColor( LAYER_3D_SOLDERMASK_TOP ),    false );
     m_solderMaskBottom->SetSwatchColor( colors->GetColor( LAYER_3D_SOLDERMASK_BOTTOM ), false );
     m_solderPaste->SetSwatchColor(      colors->GetColor( LAYER_3D_SOLDERPASTE ),       false );
-    m_surfaceFinish->SetSwatchColor(    colors->GetColor( LAYER_3D_COPPER ),            false );
+    m_surfaceFinish->SetSwatchColor(    colors->GetColor( LAYER_3D_COPPER_TOP ),        false );
     m_boardBody->SetSwatchColor(        colors->GetColor( LAYER_3D_BOARD ),             false );
 
     if( colors->GetUseBoardStackupColors() )
@@ -98,7 +98,8 @@ bool PANEL_3D_COLORS::TransferDataFromWindow()
     colors->SetColor( LAYER_3D_SOLDERMASK_TOP,    m_solderMaskTop->GetSwatchColor() );
     colors->SetColor( LAYER_3D_SOLDERMASK_BOTTOM, m_solderMaskBottom->GetSwatchColor() );
     colors->SetColor( LAYER_3D_SOLDERPASTE,       m_solderPaste->GetSwatchColor() );
-    colors->SetColor( LAYER_3D_COPPER,            m_surfaceFinish->GetSwatchColor() );
+    colors->SetColor( LAYER_3D_COPPER_TOP,        m_surfaceFinish->GetSwatchColor() );
+    colors->SetColor( LAYER_3D_COPPER_BOTTOM,     m_surfaceFinish->GetSwatchColor() );
     colors->SetColor( LAYER_3D_BOARD,             m_boardBody->GetSwatchColor() );
 
     colors->SetUseBoardStackupColors( m_boardStackupRB->GetValue() );
@@ -120,7 +121,7 @@ void PANEL_3D_COLORS::ResetPanel()
     m_solderMaskTop->SetSwatchColor(    colors->GetDefaultColor( LAYER_3D_SOLDERMASK_TOP ),    false );
     m_solderMaskBottom->SetSwatchColor( colors->GetDefaultColor( LAYER_3D_SOLDERMASK_BOTTOM ), false );
     m_solderPaste->SetSwatchColor(      colors->GetDefaultColor( LAYER_3D_SOLDERPASTE ),       false );
-    m_surfaceFinish->SetSwatchColor(    colors->GetDefaultColor( LAYER_3D_COPPER ),            false );
+    m_surfaceFinish->SetSwatchColor(    colors->GetDefaultColor( LAYER_3D_COPPER_TOP ),        false );
     m_boardBody->SetSwatchColor(        colors->GetDefaultColor( LAYER_3D_BOARD ),             false );
 
     m_boardStackupRB->SetValue( true );

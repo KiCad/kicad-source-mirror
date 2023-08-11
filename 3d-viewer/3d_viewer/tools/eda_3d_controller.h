@@ -1,7 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023 CERN
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -95,6 +96,7 @@ public:
 
     int ToggleOrtho( const TOOL_EVENT& aEvent );
     int ToggleVisibility( const TOOL_EVENT& aEvent );
+    int ToggleLayersManager( const TOOL_EVENT& aEvent );
 
 private:
     ///< Sets up handlers for various events.

@@ -203,7 +203,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) 
     CLR( "3d_viewer.background_bottom", LAYER_3D_BACKGROUND_BOTTOM );
     CLR( "3d_viewer.background_top",    LAYER_3D_BACKGROUND_TOP    );
     CLR( "3d_viewer.board",             LAYER_3D_BOARD             );
-    CLR( "3d_viewer.copper",            LAYER_3D_COPPER            );
+    CLR( "3d_viewer.copper",            LAYER_3D_COPPER_TOP        );
     CLR( "3d_viewer.silkscreen_bottom", LAYER_3D_SILKSCREEN_BOTTOM );
     CLR( "3d_viewer.silkscreen_top",    LAYER_3D_SILKSCREEN_TOP    );
     CLR( "3d_viewer.soldermask_bottom", LAYER_3D_SOLDERMASK_BOTTOM );

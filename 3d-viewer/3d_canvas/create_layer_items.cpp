@@ -2,7 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023 CERN
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -138,6 +139,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     PCB_LAYER_ID cu_seq[MAX_CU_LAYERS];
     LSET         cu_set = LSET::AllCuMask( m_copperLayersCount );
 
+    std::bitset<LAYER_3D_END> visibilityFlags = GetVisibleLayers();
+
     m_trackCount               = 0;
     m_averageTrackWidth        = 0;
     m_viaCount                 = 0;
@@ -157,7 +160,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
     for( PCB_TRACK* track : m_board->Tracks() )
     {
-        if( !Is3dLayerEnabled( track->GetLayer() ) ) // Skip non enabled layers
+        if( !Is3dLayerEnabled( track->GetLayer(), visibilityFlags ) ) // Skip non enabled layers
             continue;
 
         // Note: a PCB_TRACK holds normal segment tracks and also vias circles (that have also
@@ -196,7 +199,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     {
         const PCB_LAYER_ID layer = *cu;
 
-        if( !Is3dLayerEnabled( layer ) ) // Skip non enabled layers
+        if( !Is3dLayerEnabled( layer, visibilityFlags ) ) // Skip non enabled layers
             continue;
 
         layer_ids.push_back( layer );
@@ -530,7 +533,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             addPads( footprint, layerContainer, layer, renderPlatedPadsAsPlated, false );
 
             // Micro-wave footprints may have items on copper layers
-            addFootprintShapes( footprint, layerContainer, layer );
+            addFootprintShapes( footprint, layerContainer, layer, visibilityFlags );
         }
     }
 
@@ -889,14 +892,13 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             Margin
         };
 
-    // User layers are not drawn here, only technical layers
     for( LSEQ seq = LSET::AllNonCuMask().Seq( techLayerList, arrayDim( techLayerList ) );
          seq;
          ++seq )
     {
         const PCB_LAYER_ID layer = *seq;
 
-        if( !Is3dLayerEnabled( layer ) )
+        if( !Is3dLayerEnabled( layer, visibilityFlags ) )
             continue;
 
         if( aStatusReporter )
@@ -1027,7 +1029,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 addPads( footprint, layerContainer, layer, false, false );
             }
 
-            addFootprintShapes( footprint, layerContainer, layer );
+            addFootprintShapes( footprint, layerContainer, layer, visibilityFlags );
         }
 
 

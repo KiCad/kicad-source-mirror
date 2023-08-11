@@ -2,7 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023 CERN
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -305,8 +306,8 @@ TOOL_ACTION EDA_3D_ACTIONS::showTHT( TOOL_ACTION_ARGS()
         .Name( "3DViewer.Control.attributesTHT" )
         .Scope( AS_ACTIVE )
         .DefaultHotkey( 'T' )
-        .MenuText( _( "Toggle Through Hole 3D models" ) )
-        .Tooltip( _( "Toggle 3D models for 'Through hole' type components" ) )
+        .MenuText( _( "Show Through Hole 3D Models" ) )
+        .Tooltip( _( "Show 3D models for 'Through hole' type footprints" ) )
         .Icon( BITMAPS::show_tht )
         .Flags( AF_NONE ) );
 
@@ -314,8 +315,8 @@ TOOL_ACTION EDA_3D_ACTIONS::showSMD( TOOL_ACTION_ARGS()
         .Name( "3DViewer.Control.attributesSMD" )
         .Scope( AS_ACTIVE )
         .DefaultHotkey( 'S' )
-        .MenuText( _( "Toggle SMD 3D models" ) )
-        .Tooltip( _( "Toggle 3D models for 'Surface mount' type components" ) )
+        .MenuText( _( "Show SMD 3D Models" ) )
+        .Tooltip( _( "Show 3D models for 'Surface mount' type footprints" ) )
         .Icon( BITMAPS::show_smt )
         .Flags( AF_NONE ) );
 
@@ -323,8 +324,8 @@ TOOL_ACTION EDA_3D_ACTIONS::showVirtual( TOOL_ACTION_ARGS()
         .Name( "3DViewer.Control.attributesOther" )
         .Scope( AS_ACTIVE )
         .DefaultHotkey( 'V' )
-        .MenuText( _( "Toggle unspecified 3D models" ) )
-        .Tooltip( _( "Toggle 3D models for 'unspecified' type components" ) )
+        .MenuText( _( "Show Unspecified 3D Models" ) )
+        .Tooltip( _( "Show 3D models for 'unspecified' type footprints" ) )
         .Icon( BITMAPS::show_other )
         .Flags( AF_NONE ) );
 
@@ -332,8 +333,8 @@ TOOL_ACTION EDA_3D_ACTIONS::showNotInPosFile( TOOL_ACTION_ARGS()
         .Name( "3DViewer.Control.attribute_not_in_posfile" )
         .Scope( AS_ACTIVE )
         .DefaultHotkey( 'P' )
-        .MenuText( _( "Toggle 3D models not in pos file" ) )
-        .Tooltip( _( "Toggle 3D models not in pos file" ) )
+        .MenuText( _( "Show 3D Models not in POS File" ) )
+        .Tooltip( _( "Show 3D models even if not found in .pos file" ) )
         .Icon( BITMAPS::show_not_in_posfile )
         .Flags( AF_NONE ) );
 
@@ -341,8 +342,8 @@ TOOL_ACTION EDA_3D_ACTIONS::showDNP( TOOL_ACTION_ARGS()
         .Name( "3DViewer.Control.attribute_dnp" )
         .Scope( AS_ACTIVE )
         .DefaultHotkey( 'D' )
-        .MenuText( _( "Toggle 3D models marked DNP" ) )
-        .Tooltip( _( "Toggle 3D models for components marked 'Do Not Place'" ) )
+        .MenuText( _( "Show 3D Models marked DNP" ) )
+        .Tooltip( _( "Show 3D models even if marked 'Do Not Place'" ) )
         .Icon( BITMAPS::show_dnp )
         .Flags( AF_NONE ) );
 
@@ -350,21 +351,9 @@ TOOL_ACTION EDA_3D_ACTIONS::showBBoxes( TOOL_ACTION_ARGS()
         .Name( "3DViewer.Control.showBoundingBoxes" )
          .Scope( AS_GLOBAL )
          .MenuText( _( "Show Model Bounding Boxes" ) )
-         .Tooltip( _( "Show Model Bounding Boxes" ) )
+         .Tooltip( _( "Show 3D model bounding boxes" ) )
          .Icon( BITMAPS::ortho )
          .Flags( AF_NONE ) );
-
-TOOL_ACTION EDA_3D_ACTIONS::toggleRealisticMode( TOOL_ACTION_ARGS()
-        .Name( "3DViewer.Control.toggleRealisticMode" )
-        .Scope( AS_GLOBAL )
-        .MenuText( _( "Toggle realistic mode" ) )
-        .Tooltip( _( "Toggle realistic mode" ) ) );
-
-TOOL_ACTION EDA_3D_ACTIONS::toggleBoardBody( TOOL_ACTION_ARGS()
-        .Name( "3DViewer.Control.toggleBoardBody" )
-        .Scope( AS_GLOBAL )
-        .MenuText( _( "Toggle board body display" ) )
-        .Tooltip( _( "Toggle board body display" ) ) );
 
 TOOL_ACTION EDA_3D_ACTIONS::showAxis( TOOL_ACTION_ARGS()
         .Name( "3DViewer.Control.showAxis" )
@@ -374,45 +363,10 @@ TOOL_ACTION EDA_3D_ACTIONS::showAxis( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::axis3d_front )
         .Flags( AF_NONE ) );
 
-TOOL_ACTION EDA_3D_ACTIONS::toggleZones( TOOL_ACTION_ARGS()
-        .Name( "3DViewer.Control.toggleZones" )
+TOOL_ACTION EDA_3D_ACTIONS::showLayersManager( TOOL_ACTION_ARGS()
+        .Name( "3DViewer.Control.showLayersManager" )
         .Scope( AS_GLOBAL )
-        .MenuText( _( "Toggle zone display" ) )
-        .Tooltip( _( "Toggle zone display" ) ) );
-
-TOOL_ACTION EDA_3D_ACTIONS::toggleAdhesive( TOOL_ACTION_ARGS()
-        .Name( "3DViewer.Control.toggleAdhesive" )
-        .Scope( AS_GLOBAL )
-        .MenuText( _( "Toggle adhesive display" ) )
-        .Tooltip( _( "Toggle display of adhesive layers" ) ) );
-
-TOOL_ACTION EDA_3D_ACTIONS::toggleSilk( TOOL_ACTION_ARGS()
-        .Name( "3DViewer.Control.toggleSilk" )
-        .Scope( AS_GLOBAL )
-        .MenuText( _( "Toggle silkscreen display" ) )
-        .Tooltip( _( "Toggle display of silkscreen layers" ) ) );
-
-TOOL_ACTION EDA_3D_ACTIONS::toggleSolderMask( TOOL_ACTION_ARGS()
-        .Name( "3DViewer.Control.toggleSolderMask" )
-        .Scope( AS_GLOBAL )
-        .MenuText( _( "Toggle solder mask display" ) )
-        .Tooltip( _( "Toggle display of solder mask layers" ) ) );
-
-TOOL_ACTION EDA_3D_ACTIONS::toggleSolderPaste( TOOL_ACTION_ARGS()
-        .Name( "3DViewer.Control.toggleSolderPaste" )
-        .Scope( AS_GLOBAL )
-        .MenuText( _( "Toggle solder paste display" ) )
-        .Tooltip( _( "Toggle display of solder paste layers" ) ) );
-
-TOOL_ACTION EDA_3D_ACTIONS::toggleComments( TOOL_ACTION_ARGS()
-        .Name( "3DViewer.Control.toggleComments" )
-        .Scope( AS_GLOBAL )
-        .MenuText( _( "Toggle comments display" ) )
-        .Tooltip( _( "Toggle display of comments and drawings layers" ) ) );
-
-TOOL_ACTION EDA_3D_ACTIONS::toggleECO( TOOL_ACTION_ARGS()
-        .Name( "3DViewer.Control.toggleECO" )
-        .Scope( AS_GLOBAL )
-        .MenuText( _( "Toggle ECO display" ) )
-        .Tooltip( _( "Toggle display of ECO layers" ) ) );
+        .MenuText( _( "Show Appearance Manager" ) )
+        .Tooltip( _( "Show/hide the appearance manager" ) )
+        .Icon( BITMAPS::layers_manager ) );
 

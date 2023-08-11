@@ -16,7 +16,6 @@ include_directories(
     )
 
 # directories
-set( DIR_DLG dialogs )
 set( DIR_RAY 3d_rendering/raytracing )
 set( DIR_RAY_ACC ${DIR_RAY}/accelerators )
 set( DIR_RAY_2D ${DIR_RAY}/shapes2D )
@@ -28,11 +27,6 @@ set(3D-VIEWER_SRCS
     ${DIR_3D_PLUGINS}/3d/pluginldr3D.cpp
     3d_cache/3d_cache.cpp
     3d_cache/3d_plugin_manager.cpp
-    ${DIR_DLG}/3d_cache_dialogs.cpp
-    ${DIR_DLG}/dialog_select_3d_model_base.cpp
-    ${DIR_DLG}/dialog_select_3d_model.cpp
-    ${DIR_DLG}/panel_preview_3d_model_base.cpp
-    ${DIR_DLG}/panel_preview_3d_model.cpp
     3d_canvas/board_adapter.cpp
     3d_canvas/create_layer_items.cpp
     3d_canvas/create_3Dgraphic_brd_items.cpp
@@ -88,14 +82,6 @@ set(3D-VIEWER_SRCS
     3d_rendering/trackball.cpp
     3d_viewer/3d_menubar.cpp
     3d_viewer/3d_toolbar.cpp
-    dialogs/panel_3D_colors.cpp
-    dialogs/panel_3D_colors_base.cpp
-    dialogs/panel_3D_display_options.cpp
-    dialogs/panel_3D_display_options_base.cpp
-    dialogs/panel_3D_opengl_options.cpp
-    dialogs/panel_3D_opengl_options_base.cpp
-    dialogs/panel_3D_raytracing_options.cpp
-    dialogs/panel_3D_raytracing_options_base.cpp
     3d_viewer/tools/eda_3d_actions.cpp
     3d_viewer/tools/eda_3d_conditions.cpp
     3d_viewer/tools/eda_3d_controller.cpp
@@ -105,6 +91,21 @@ set(3D-VIEWER_SRCS
     common_ogl/ogl_utils.cpp
     3d_fastmath.cpp
     3d_math.cpp
+    dialogs/3d_cache_dialogs.cpp
+    dialogs/appearance_controls_3D.cpp
+    dialogs/appearance_controls_3D_base.cpp
+    dialogs/dialog_select_3d_model_base.cpp
+    dialogs/dialog_select_3d_model.cpp
+    dialogs/panel_preview_3d_model_base.cpp
+    dialogs/panel_preview_3d_model.cpp
+    dialogs/panel_3D_colors.cpp
+    dialogs/panel_3D_colors_base.cpp
+    dialogs/panel_3D_display_options.cpp
+    dialogs/panel_3D_display_options_base.cpp
+    dialogs/panel_3D_opengl_options.cpp
+    dialogs/panel_3D_opengl_options_base.cpp
+    dialogs/panel_3D_raytracing_options.cpp
+    dialogs/panel_3D_raytracing_options_base.cpp
     )
 
 add_library(3d-viewer STATIC ${3D-VIEWER_SRCS})

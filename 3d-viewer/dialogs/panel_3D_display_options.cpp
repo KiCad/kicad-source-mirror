@@ -48,12 +48,30 @@ void PANEL_3D_DISPLAY_OPTIONS::loadViewSettings( EDA_3D_VIEWER_SETTINGS* aCfg )
     m_checkBoxRealisticMode->SetValue( aCfg->m_Render.realistic );
     m_checkBoxBoardBody->SetValue( aCfg->m_Render.show_board_body );
     m_checkBoxAreas->SetValue( aCfg->m_Render.show_zones );
-    m_checkBoxSilkscreen->SetValue( aCfg->m_Render.show_silkscreen );
-    m_checkBoxSolderMask->SetValue( aCfg->m_Render.show_soldermask );
+
+    if( aCfg->m_Render.show_silkscreen_top == aCfg->m_Render.show_silkscreen_bottom )
+        m_checkBoxSilkscreen->SetValue( aCfg->m_Render.show_silkscreen_top );
+    else
+        m_checkBoxSilkscreen->Set3StateValue( wxCHK_UNDETERMINED );
+
+    if( aCfg->m_Render.show_soldermask_top == aCfg->m_Render.show_soldermask_bottom )
+        m_checkBoxSolderMask->SetValue( aCfg->m_Render.show_soldermask_top );
+    else
+        m_checkBoxSolderMask->Set3StateValue( wxCHK_UNDETERMINED );
+
     m_checkBoxSolderpaste->SetValue( aCfg->m_Render.show_solderpaste );
     m_checkBoxAdhesive->SetValue( aCfg->m_Render.show_adhesive );
-    m_checkBoxComments->SetValue( aCfg->m_Render.show_comments );
-    m_checkBoxECO->SetValue( aCfg->m_Render.show_eco );
+
+    if( aCfg->m_Render.show_comments == aCfg->m_Render.show_drawings )
+        m_checkBoxComments->SetValue( aCfg->m_Render.show_comments );
+    else
+        m_checkBoxComments->Set3StateValue( wxCHK_UNDETERMINED );
+
+    if( aCfg->m_Render.show_eco1 == aCfg->m_Render.show_eco2 )
+        m_checkBoxECO->SetValue( aCfg->m_Render.show_eco1 );
+    else
+        m_checkBoxECO->Set3StateValue( wxCHK_UNDETERMINED );
+
     m_checkBoxSubtractMaskFromSilk->SetValue( aCfg->m_Render.subtract_mask_from_silk );
     m_checkBoxClipSilkOnViaAnnulus->SetValue( aCfg->m_Render.clip_silk_on_via_annulus );
     m_checkBoxRenderPlatedPadsAsPlated->SetValue( aCfg->m_Render.renderPlatedPadsAsPlated );
@@ -96,12 +114,32 @@ bool PANEL_3D_DISPLAY_OPTIONS::TransferDataFromWindow()
     cfg->m_Render.material_mode = static_cast<MATERIAL_MODE>( m_materialProperties->GetSelection() );
 
     // Set Layer visibility
-    cfg->m_Render.show_silkscreen = m_checkBoxSilkscreen->GetValue();
-    cfg->m_Render.show_soldermask = m_checkBoxSolderMask->GetValue();
+    if( m_checkBoxSilkscreen->Get3StateValue() != wxCHK_UNDETERMINED )
+    {
+        cfg->m_Render.show_silkscreen_top = m_checkBoxSilkscreen->GetValue();
+        cfg->m_Render.show_silkscreen_bottom = m_checkBoxSilkscreen->GetValue();
+    }
+
+    if( m_checkBoxSolderMask->Get3StateValue() != wxCHK_UNDETERMINED )
+    {
+        cfg->m_Render.show_soldermask_top = m_checkBoxSolderMask->GetValue();
+        cfg->m_Render.show_soldermask_bottom = m_checkBoxSolderMask->GetValue();
+    }
+
     cfg->m_Render.show_solderpaste = m_checkBoxSolderpaste->GetValue();
     cfg->m_Render.show_adhesive = m_checkBoxAdhesive->GetValue();
-    cfg->m_Render.show_comments = m_checkBoxComments->GetValue();
-    cfg->m_Render.show_eco = m_checkBoxECO->GetValue( );
+
+    if( m_checkBoxComments->Get3StateValue() != wxCHK_UNDETERMINED )
+    {
+        cfg->m_Render.show_comments = m_checkBoxComments->GetValue();
+        cfg->m_Render.show_drawings = m_checkBoxComments->GetValue();
+    }
+
+    if( m_checkBoxECO->Get3StateValue() != wxCHK_UNDETERMINED )
+    {
+        cfg->m_Render.show_eco1 = m_checkBoxECO->GetValue( );
+        cfg->m_Render.show_eco2 = m_checkBoxECO->GetValue( );
+    }
 
     // Camera Options
     cfg->m_Camera.animation_enabled = m_checkBoxEnableAnimation->GetValue();

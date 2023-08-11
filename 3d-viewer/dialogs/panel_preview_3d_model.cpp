@@ -216,30 +216,6 @@ void PANEL_PREVIEW_3D_MODEL::loadSettings()
     // TODO(JE) use all control options
     m_boardAdapter.m_MousewheelPanning = settings->m_Input.scroll_modifier_zoom != 0;
 
-    COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
-
-    if( colors )
-    {
-        auto set =
-                [] ( const COLOR4D& aColor, SFVEC4F& aTarget )
-                {
-                    aTarget.r = aColor.r;
-                    aTarget.g = aColor.g;
-                    aTarget.b = aColor.b;
-                    aTarget.a = aColor.a;
-                };
-
-        set( colors->GetColor( LAYER_3D_BACKGROUND_BOTTOM ), m_boardAdapter.m_BgColorBot );
-        set( colors->GetColor( LAYER_3D_BACKGROUND_TOP ), m_boardAdapter.m_BgColorTop );
-        set( colors->GetColor( LAYER_3D_BOARD ), m_boardAdapter.m_BoardBodyColor );
-        set( colors->GetColor( LAYER_3D_COPPER ), m_boardAdapter.m_CopperColor );
-        set( colors->GetColor( LAYER_3D_SILKSCREEN_BOTTOM ), m_boardAdapter.m_SilkScreenColorBot );
-        set( colors->GetColor( LAYER_3D_SILKSCREEN_TOP ), m_boardAdapter.m_SilkScreenColorTop );
-        set( colors->GetColor( LAYER_3D_SOLDERMASK_BOTTOM ), m_boardAdapter.m_SolderMaskColorBot );
-        set( colors->GetColor( LAYER_3D_SOLDERMASK_TOP ), m_boardAdapter.m_SolderMaskColorTop );
-        set( colors->GetColor( LAYER_3D_SOLDERPASTE ), m_boardAdapter.m_SolderPasteColor );
-    }
-
     EDA_3D_VIEWER_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
 
     if( cfg )
@@ -254,7 +230,10 @@ void PANEL_PREVIEW_3D_MODEL::loadSettings()
         m_previewPane->SetProjectionMode( cfg->m_Camera.projection_mode );
 
         // Ensure the board body is always shown, and do not use the settings of the 3D viewer
-        cfg->m_Render.show_soldermask = m_bodyStyleShowAll;
+        cfg->m_Render.show_copper_top = m_bodyStyleShowAll;
+        cfg->m_Render.show_copper_bottom = m_bodyStyleShowAll;
+        cfg->m_Render.show_soldermask_top = m_bodyStyleShowAll;
+        cfg->m_Render.show_soldermask_bottom = m_bodyStyleShowAll;
         cfg->m_Render.show_solderpaste = m_bodyStyleShowAll;
         cfg->m_Render.show_zones = m_bodyStyleShowAll;
         cfg->m_Render.show_board_body = m_bodyStyleShowAll;
@@ -420,7 +399,8 @@ void PANEL_PREVIEW_3D_MODEL::setBodyStyleView( wxCommandEvent& event )
 
     m_bodyStyleShowAll = !m_bodyStyleShowAll;
 
-    cfg->m_Render.show_soldermask = m_bodyStyleShowAll;
+    cfg->m_Render.show_soldermask_top = m_bodyStyleShowAll;
+    cfg->m_Render.show_soldermask_bottom = m_bodyStyleShowAll;
     cfg->m_Render.show_solderpaste = m_bodyStyleShowAll;
     cfg->m_Render.show_zones = m_bodyStyleShowAll;
     cfg->m_Render.show_board_body = m_bodyStyleShowAll;

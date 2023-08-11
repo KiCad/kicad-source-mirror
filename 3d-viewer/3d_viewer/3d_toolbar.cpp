@@ -4,7 +4,8 @@
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023 CERN
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,32 +53,6 @@ void EDA_3D_VIEWER_FRAME::ReCreateMainToolbar()
         m_mainToolBar->SetAuiManager( &m_auimgr );
     }
 
-    // Show the hotkey to open the windows list selector:
-    wxString keyName = KeyNameFromKeyCode( VIEWPORT_SWITCH_KEY );
-
-    m_viewportsLabel = new wxStaticText( m_mainToolBar, wxID_ANY,
-                                         wxString::Format( _( "Viewports (%s+Tab):" ), keyName ) );
-   	m_viewportsLabel->Wrap( -1 );
-
-   	m_cbViewports = new wxChoice( m_mainToolBar, wxID_ANY );
-
-    for( std::pair<const wxString, VIEWPORT3D>& pair : m_viewports )
-        m_cbViewports->Append( pair.first, static_cast<void*>( &pair.second ) );
-
-    m_cbViewports->Append( wxT( "---" ) );
-    m_cbViewports->Append( _( "Save viewport..." ) );
-    m_cbViewports->Append( _( "Delete viewport..." ) );
-
-    m_cbViewports->SetToolTip( wxString::Format( _( "Save and restore view orientation and zoom.\n"
-                                                    "Use %s+Tab to activate selector.\n"
-                                                    "Successive Tabs while holding %s down will "
-                                                    "cycle through viewports in the popup." ),
-                                                 keyName, keyName ) );
-
-    m_cbViewports->SetSelection( m_cbViewports->GetCount() - 3 );
-
-    m_lastSelectedViewport = nullptr;
-
     // Set up toolbar
     m_mainToolBar->AddTool( ID_RELOAD3D_BOARD, wxEmptyString,
                             KiScaledBitmap( BITMAPS::import3d, this ), _( "Reload board" ) );
@@ -123,15 +98,7 @@ void EDA_3D_VIEWER_FRAME::ReCreateMainToolbar()
     m_mainToolBar->Add( EDA_3D_ACTIONS::toggleOrtho, ACTION_TOOLBAR::TOGGLE );
 
     m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->Add( EDA_3D_ACTIONS::showTHT, ACTION_TOOLBAR::TOGGLE );
-    m_mainToolBar->Add( EDA_3D_ACTIONS::showSMD, ACTION_TOOLBAR::TOGGLE );
-    m_mainToolBar->Add( EDA_3D_ACTIONS::showVirtual, ACTION_TOOLBAR::TOGGLE );
-    m_mainToolBar->Add( EDA_3D_ACTIONS::showNotInPosFile, ACTION_TOOLBAR::TOGGLE );
-    m_mainToolBar->Add( EDA_3D_ACTIONS::showDNP, ACTION_TOOLBAR::TOGGLE );
-
-    m_mainToolBar->AddScaledSeparator( this );
-    m_mainToolBar->AddControl( m_viewportsLabel );
-    m_mainToolBar->AddControl( m_cbViewports );
+    m_mainToolBar->Add( EDA_3D_ACTIONS::showLayersManager, ACTION_TOOLBAR::TOGGLE );
 
     m_mainToolBar->KiRealize();
 }

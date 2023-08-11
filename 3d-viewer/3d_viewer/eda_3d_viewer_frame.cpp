@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 2023 CERN
  * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -28,11 +29,9 @@
 #include <wx/wupdlock.h>
 #include <wx/clipbrd.h>
 #include <wx/filedlg.h>
-#include <wx/choice.h>
 #include <wx/dialog.h>
 #include "eda_3d_viewer_frame.h"
-#include "eda_list_dialog.h"
-#include "wx/generic/textdlgg.h"
+#include "dialogs/appearance_controls_3D.h"
 #include <dialogs/eda_view_switcher.h>
 #include <eda_3d_viewer_settings.h>
 #include <3d_viewer_id.h>
@@ -55,6 +54,7 @@
 #include <tool/tool_dispatcher.h>
 #include <tool/action_toolbar.h>
 #include <widgets/wx_infobar.h>
+#include <widgets/wx_aui_utils.h>
 #include <wildcards_and_files_ext.h>
 
 #include <3d_navlib/nl_3d_viewer_plugin.h>
@@ -89,10 +89,12 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
                                           const wxString& aTitle, long style ) :
         KIWAY_PLAYER( aKiway, aParent, FRAME_PCB_DISPLAY3D, aTitle, wxDefaultPosition,
                       wxDefaultSize, style, QUALIFIED_VIEWER3D_FRAMENAME( aParent ), unityScale ),
-        m_mainToolBar( nullptr ), m_canvas( nullptr ), m_currentCamera( m_trackBallCamera ),
-        m_viewportsLabel( nullptr ),
-        m_cbViewports( nullptr ),
-        m_trackBallCamera( 2 * RANGE_SCALE_3D ), m_spaceMouse( nullptr )
+        m_mainToolBar( nullptr ),
+        m_canvas( nullptr ),
+        m_currentCamera( m_trackBallCamera ),
+        m_trackBallCamera( 2 * RANGE_SCALE_3D ),
+        m_spaceMouse( nullptr ),
+        m_showAppearanceManager( true )
 {
     wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME %s" ), aTitle );
 
@@ -114,13 +116,15 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
     EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
     ANTIALIASING_MODE       aaMode = static_cast<ANTIALIASING_MODE>( cfg->m_Render.opengl_AA_mode );
 
-    m_canvas = new EDA_3D_CANVAS( this, OGL_ATT_LIST::GetAttributesList( aaMode ),
-                                  m_boardAdapter, m_currentCamera, Prj().Get3DCacheManager() );
+    m_canvas = new EDA_3D_CANVAS( this, OGL_ATT_LIST::GetAttributesList( aaMode ), m_boardAdapter,
+                                  m_currentCamera, Prj().Get3DCacheManager() );
+
+    m_appearancePanel = new APPEARANCE_CONTROLS_3D( this, GetCanvas() );
 
     LoadSettings( cfg );
     loadCommonSettings();
 
-    SetUserViewports( Prj().GetProjectFile().m_Viewports3D );
+    m_appearancePanel->SetUserViewports( Prj().GetProjectFile().m_Viewports3D );
 
     // Create the manager
     m_toolManager = new TOOL_MANAGER;
@@ -150,9 +154,23 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
 
     m_auimgr.SetManagedWindow( this );
 
-    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( wxS( "MainToolbar" ) ).Top().Layer( 6 ) );
-    m_auimgr.AddPane( m_infoBar, EDA_PANE().InfoBar().Name( wxS( "InfoBar" ) ).Top().Layer( 1 ) );
-    m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( wxS( "DrawFrame" ) ).Center() );
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( wxS( "MainToolbar" ) )
+                      .Top().Layer( 6 ) );
+    m_auimgr.AddPane( m_infoBar, EDA_PANE().InfoBar().Name( wxS( "InfoBar" ) )
+                      .Top().Layer( 1 ) );
+    m_auimgr.AddPane( m_appearancePanel, EDA_PANE().Name( "LayersManager" )
+                      .Right().Layer( 3 )
+                      .Caption( _( "Appearance" ) ).PaneBorder( false )
+                      .MinSize( 180, -1 ).BestSize( 190, -1 ) );
+    m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( wxS( "DrawFrame" ) )
+                      .Center() );
+
+    wxAuiPaneInfo& layersManager = m_auimgr.GetPane( "LayersManager" );
+
+    if( cfg->m_AuiPanels.right_panel_width > 0 )
+        SetAuiPaneSize( m_auimgr, layersManager, cfg->m_AuiPanels.right_panel_width, -1 );
+
+    layersManager.Show( m_showAppearanceManager );
 
     // Call Update() to fix all pane default sizes, especially the "InfoBar" pane before
     // hiding it.
@@ -178,13 +196,6 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
     // in order to receive mouse events.  Otherwise, the user has to click somewhere on
     // the canvas before it will respond to mouse wheel events.
     m_canvas->SetFocus();
-
-    m_cbViewports->Connect( wxEVT_COMMAND_CHOICE_SELECTED,
-                            wxCommandEventHandler( EDA_3D_VIEWER_FRAME::onViewportChanged ),
-                            nullptr, this );
-    m_cbViewports->Connect( wxEVT_UPDATE_UI,
-                            wxUpdateUIEventHandler( EDA_3D_VIEWER_FRAME::onUpdateViewportsCb ),
-                            nullptr, this );
 }
 
 
@@ -192,14 +203,7 @@ EDA_3D_VIEWER_FRAME::~EDA_3D_VIEWER_FRAME()
 {
     delete m_spaceMouse;
 
-    Prj().GetProjectFile().m_Viewports3D = GetUserViewports();
-
-    m_cbViewports->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED,
-                               wxCommandEventHandler( EDA_3D_VIEWER_FRAME::onViewportChanged ),
-                               nullptr, this );
-    m_cbViewports->Disconnect( wxEVT_UPDATE_UI,
-                               wxUpdateUIEventHandler( EDA_3D_VIEWER_FRAME::onUpdateViewportsCb ),
-                               nullptr, this );
+    Prj().GetProjectFile().m_Viewports3D = m_appearancePanel->GetUserViewports();
 
     m_canvas->SetEventDispatcher( nullptr );
 
@@ -288,6 +292,7 @@ void EDA_3D_VIEWER_FRAME::setupUIConditions()
 
 bool EDA_3D_VIEWER_FRAME::TryBefore( wxEvent& aEvent )
 {
+    static bool s_presetSwitcherShown = false;
     static bool s_viewportSwitcherShown = false;
 
     // wxWidgets generates no key events for the tab key when the ctrl key is held down.  One
@@ -301,13 +306,49 @@ bool EDA_3D_VIEWER_FRAME::TryBefore( wxEvent& aEvent )
             && static_cast<wxKeyEvent&>( aEvent ).GetKeyCode() == WXK_TAB )
 #endif
     {
-        if( !s_viewportSwitcherShown && wxGetKeyState( VIEWPORT_SWITCH_KEY ) )
+        if( !s_presetSwitcherShown && wxGetKeyState( PRESET_SWITCH_KEY ) )
+        {
+            if( m_appearancePanel && this->IsActive() )
+            {
+                wxArrayString mru = m_appearancePanel->GetLayerPresetsMRU();
+
+                if( mru.size() > 0 )
+                {
+                    for( wxString& str : mru )
+                    {
+                        if( str == FOLLOW_PCB )
+                            str = _( "Follow PCB Editor" );
+                        else if( str == FOLLOW_PLOT_SETTINGS )
+                            str = _( "Follow PCB Plot Settings" );
+                    }
+
+                    EDA_VIEW_SWITCHER switcher( this, mru, PRESET_SWITCH_KEY );
+
+                    s_presetSwitcherShown = true;
+                    switcher.ShowModal();
+                    s_presetSwitcherShown = false;
+
+                    int idx = switcher.GetSelection();
+
+                    if( idx >= 0 && idx < (int) mru.size() )
+                    {
+                        wxString internalName = m_appearancePanel->GetLayerPresetsMRU()[idx];
+                        m_appearancePanel->ApplyLayerPreset( internalName );
+                    }
+
+                    return true;
+                }
+            }
+        }
+        else if( !s_viewportSwitcherShown && wxGetKeyState( VIEWPORT_SWITCH_KEY ) )
         {
             if( this->IsActive() )
             {
-                if( m_viewportMRU.size() > 0 )
+                const wxArrayString& viewportMRU = m_appearancePanel->GetViewportsMRU();
+
+                if( viewportMRU.size() > 0 )
                 {
-                    EDA_VIEW_SWITCHER switcher( this, m_viewportMRU, VIEWPORT_SWITCH_KEY );
+                    EDA_VIEW_SWITCHER switcher( this, viewportMRU, VIEWPORT_SWITCH_KEY );
 
                     s_viewportSwitcherShown = true;
                     switcher.ShowModal();
@@ -315,8 +356,8 @@ bool EDA_3D_VIEWER_FRAME::TryBefore( wxEvent& aEvent )
 
                     int idx = switcher.GetSelection();
 
-                    if( idx >= 0 && idx < (int) m_viewportMRU.size() )
-                        applyViewport( m_viewportMRU[idx] );
+                    if( idx >= 0 && idx < (int) viewportMRU.size() )
+                        m_appearancePanel->ApplyViewport( viewportMRU[idx] );
 
                     return true;
                 }
@@ -339,6 +380,9 @@ void EDA_3D_VIEWER_FRAME::handleIconizeEvent( wxIconizeEvent& aEvent )
 
 void EDA_3D_VIEWER_FRAME::ReloadRequest()
 {
+    if( m_appearancePanel )
+        m_appearancePanel->UpdateLayerCtls();
+
     // This will schedule a request to load later
     if( m_canvas )
         m_canvas->ReloadRequest( GetBoard(), Prj().Get3DCacheManager() );
@@ -347,7 +391,8 @@ void EDA_3D_VIEWER_FRAME::ReloadRequest()
 
 void EDA_3D_VIEWER_FRAME::NewDisplay( bool aForceImmediateRedraw )
 {
-    ReloadRequest();
+    if( m_canvas )
+        m_canvas->ReloadRequest( GetBoard(), Prj().Get3DCacheManager() );
 
     // After the ReloadRequest call, the refresh often takes a bit of time,
     // and it is made here only on request.
@@ -384,6 +429,12 @@ void EDA_3D_VIEWER_FRAME::Exit3DFrame( wxCommandEvent &event )
 void EDA_3D_VIEWER_FRAME::OnCloseWindow( wxCloseEvent &event )
 {
     wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER_FRAME::OnCloseWindow" ) );
+
+    // Do not show the layer manager during closing to avoid flicker
+    // on some platforms (Windows) that generate useless redraw of items in
+    // the Layer Manager
+    if( m_showAppearanceManager )
+        m_auimgr.GetPane( wxS( "LayersManager" ) ).Show( false );
 
     if( m_canvas )
         m_canvas->Close();
@@ -434,174 +485,6 @@ void EDA_3D_VIEWER_FRAME::Process_Special_Functions( wxCommandEvent &event )
     default:
         wxFAIL_MSG( wxT( "Invalid event in EDA_3D_VIEWER_FRAME::Process_Special_Functions()" ) );
         return;
-    }
-}
-
-
-std::vector<VIEWPORT3D> EDA_3D_VIEWER_FRAME::GetUserViewports() const
-{
-    std::vector<VIEWPORT3D> ret;
-
-    for( const std::pair<const wxString, VIEWPORT3D>& pair : m_viewports )
-        ret.emplace_back( pair.second );
-
-    return ret;
-}
-
-
-void EDA_3D_VIEWER_FRAME::SetUserViewports( std::vector<VIEWPORT3D>& aViewportList )
-{
-    m_viewports.clear();
-
-    for( const VIEWPORT3D& viewport : aViewportList )
-    {
-        if( m_viewports.count( viewport.name ) )
-            continue;
-
-        m_viewports[viewport.name] = viewport;
-
-        m_viewportMRU.Add( viewport.name );
-    }
-}
-
-
-void EDA_3D_VIEWER_FRAME::applyViewport( const wxString& aViewportName )
-{
-    int idx = m_cbViewports->FindString( aViewportName );
-
-    if( idx >= 0 && idx < m_cbViewports->GetCount() - 3 /* separator */ )
-    {
-        m_cbViewports->SetSelection( idx );
-        m_lastSelectedViewport = static_cast<VIEWPORT3D*>( m_cbViewports->GetClientData( idx ) );
-
-        m_currentCamera.SetViewMatrix( m_lastSelectedViewport->matrix );
-
-        if( m_boardAdapter.m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL )
-            m_canvas->Request_refresh();
-        else
-            m_canvas->RenderRaytracingRequest();
-
-        if( !m_lastSelectedViewport->name.IsEmpty() )
-        {
-            m_viewportMRU.Remove( m_lastSelectedViewport->name );
-            m_viewportMRU.Insert( m_lastSelectedViewport->name, 0 );
-        }
-    }
-    else
-    {
-        m_cbViewports->SetSelection( -1 ); // separator
-        m_lastSelectedViewport = nullptr;
-    }
-}
-
-
-void EDA_3D_VIEWER_FRAME::onViewportChanged( wxCommandEvent& aEvent )
-{
-    int count = m_cbViewports->GetCount();
-    int index = m_cbViewports->GetSelection();
-
-    if( index >= 0 && index < count - 3 /* separator */ )
-    {
-        VIEWPORT3D* viewport = static_cast<VIEWPORT3D*>( m_cbViewports->GetClientData( index ) );
-
-        wxCHECK( viewport, /* void */ );
-
-        applyViewport( viewport->name );
-    }
-    else if( index == count - 2 )
-    {
-        // Save current state to new preset
-        wxString name;
-
-        wxTextEntryDialog dlg( this, _( "Viewport name:" ), _( "Save Viewport" ), name );
-
-        if( dlg.ShowModal() != wxID_OK )
-        {
-            if( m_lastSelectedViewport )
-                m_cbViewports->SetStringSelection( m_lastSelectedViewport->name );
-            else
-                m_cbViewports->SetSelection( -1 );
-
-            return;
-        }
-
-        name = dlg.GetValue();
-        bool exists = m_viewports.count( name );
-
-        if( !exists )
-        {
-            m_viewports[name] = VIEWPORT3D( name, m_currentCamera.GetViewMatrix() );
-
-            index = m_cbViewports->Insert( name, index-1, static_cast<void*>( &m_viewports[name] ) );
-        }
-        else
-        {
-            index = m_cbViewports->FindString( name );
-            m_viewports[name].matrix = m_currentCamera.GetViewMatrix();
-            m_viewportMRU.Remove( name );
-        }
-
-        m_cbViewports->SetSelection( index );
-        m_viewportMRU.Insert( name, 0 );
-
-        return;
-    }
-    else if( index == count - 1 )
-    {
-        // Delete an existing viewport
-        wxArrayString headers;
-        std::vector<wxArrayString> items;
-
-        headers.Add( _( "Viewports" ) );
-
-        for( std::pair<const wxString, VIEWPORT3D>& pair : m_viewports )
-        {
-            wxArrayString item;
-            item.Add( pair.first );
-            items.emplace_back( item );
-        }
-
-        EDA_LIST_DIALOG dlg( this, _( "Delete Viewport" ), headers, items );
-        dlg.SetListLabel( _( "Select viewport:" ) );
-
-        if( dlg.ShowModal() == wxID_OK )
-        {
-            wxString viewportName = dlg.GetTextSelection();
-            int idx = m_cbViewports->FindString( viewportName );
-
-            if( idx != wxNOT_FOUND )
-            {
-                m_viewports.erase( viewportName );
-                m_cbViewports->Delete( idx );
-                m_viewportMRU.Remove( viewportName );
-            }
-        }
-
-        if( m_lastSelectedViewport )
-            m_cbViewports->SetStringSelection( m_lastSelectedViewport->name );
-        else
-            m_cbViewports->SetSelection( -1 );
-
-        return;
-    }
-
-    passOnFocus();
-}
-
-
-void EDA_3D_VIEWER_FRAME::onUpdateViewportsCb( wxUpdateUIEvent& aEvent )
-{
-    int count = m_cbViewports->GetCount();
-    int index = m_cbViewports->GetSelection();
-
-    if( index >= 0 && index < count - 3 )
-    {
-        VIEWPORT3D* viewport = static_cast<VIEWPORT3D*>( m_cbViewports->GetClientData( index ) );
-
-        wxCHECK( viewport, /* void */ );
-
-        if( m_currentCamera.GetViewMatrix() != viewport->matrix )
-            m_cbViewports->SetSelection( -1 );
     }
 }
 
@@ -666,13 +549,6 @@ void EDA_3D_VIEWER_FRAME::OnSetFocus( wxFocusEvent& aEvent )
 }
 
 
-void EDA_3D_VIEWER_FRAME::passOnFocus()
-{
-    if( m_canvas )
-        m_canvas->SetFocus();
-}
-
-
 void EDA_3D_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE *aCfg )
 {
     EDA_BASE_FRAME::LoadSettings( aCfg );
@@ -685,6 +561,7 @@ void EDA_3D_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE *aCfg )
     if( cfg )
     {
         m_boardAdapter.m_Cfg = cfg;
+        m_boardAdapter.SetBoard( GetBoard() );
 
         // When opening the 3D viewer, we use the OpenGL mode, never the ray tracing engine
         // because the ray tracing is very time consuming, and can be seen as not working
@@ -694,6 +571,35 @@ void EDA_3D_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE *aCfg )
         m_canvas->SetAnimationEnabled( cfg->m_Camera.animation_enabled );
         m_canvas->SetMovingSpeedMultiplier( cfg->m_Camera.moving_speed_multiplier );
         m_canvas->SetProjectionMode( cfg->m_Camera.projection_mode );
+
+        if( cfg->m_CurrentPreset == LEGACY_PRESET_FLAG )
+        {
+            COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
+
+            if( colors->GetUseBoardStackupColors() )
+                cfg->m_CurrentPreset = FOLLOW_PCB;
+            else
+                cfg->m_CurrentPreset = wxEmptyString;
+
+            if( cfg->m_Render.realistic )
+            {
+                // These settings are no longer dependent on realistic mode in 8.0 (you can use
+                // view presets to design whatever combinations you want), but we should at least
+                // default them to the same values as 7.0.
+                cfg->m_Render.show_comments = false;
+                cfg->m_Render.show_drawings = false;
+                cfg->m_Render.show_eco1 = false;
+                cfg->m_Render.show_eco2 = false;
+                cfg->m_Render.show_board_body = false;
+            }
+        }
+
+        m_boardAdapter.InitSettings( nullptr, nullptr );
+
+        m_showAppearanceManager = cfg->m_AuiPanels.show_layer_manager;
+
+        if( m_appearancePanel )
+            m_appearancePanel->CommonSettingsChanged();
     }
 }
 
@@ -713,6 +619,9 @@ void EDA_3D_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE *aCfg )
 
     if( cfg )
     {
+        cfg->m_AuiPanels.show_layer_manager   = m_showAppearanceManager;
+        cfg->m_AuiPanels.right_panel_width    = m_appearancePanel->GetSize().x;
+
         cfg->m_Camera.animation_enabled       = m_canvas->GetAnimationEnabled();
         cfg->m_Camera.moving_speed_multiplier = m_canvas->GetMovingSpeedMultiplier();
         cfg->m_Camera.projection_mode         = m_canvas->GetProjectionMode();
@@ -736,7 +645,39 @@ void EDA_3D_VIEWER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTex
     loadCommonSettings();
     LoadSettings( Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>() );
 
+    m_appearancePanel->CommonSettingsChanged();
+
     NewDisplay( true );
+}
+
+
+void EDA_3D_VIEWER_FRAME::ToggleAppearanceManager()
+{
+    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
+    EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
+    wxAuiPaneInfo&          layersManager = m_auimgr.GetPane( "LayersManager" );
+
+    // show auxiliary Vertical layers and visibility manager toolbar
+    m_showAppearanceManager = !m_showAppearanceManager;
+
+    layersManager.Show( m_showAppearanceManager );
+
+    if( m_showAppearanceManager )
+    {
+        SetAuiPaneSize( m_auimgr, layersManager, cfg->m_AuiPanels.right_panel_width, -1 );
+    }
+    else
+    {
+        cfg->m_AuiPanels.right_panel_width = m_appearancePanel->GetSize().x;
+        m_auimgr.Update();
+    }
+}
+
+
+void EDA_3D_VIEWER_FRAME::OnDarkModeToggle()
+{
+    if( m_appearancePanel )
+        m_appearancePanel->OnDarkModeToggle();
 }
 
 

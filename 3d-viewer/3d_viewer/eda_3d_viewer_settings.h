@@ -2,7 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023 CERN
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -26,11 +27,55 @@
 #include <plugins/3dapi/xv3d_types.h>
 #include <settings/app_settings.h>
 #include <settings/parameters.h>
+#include <project/board_project_settings.h>
 #include "render_settings.h"
+
+#define FOLLOW_PCB           wxT( "follow_pcb_editor" )
+#define FOLLOW_PLOT_SETTINGS wxT( "follow_plot_settings" )
+#define LEGACY_PRESET_FLAG   wxT( "legacy_preset_flag" )
+
+
+struct LAYER_PRESET_3D
+{
+    LAYER_PRESET_3D( const wxString& aName = wxEmptyString );
+
+    LAYER_PRESET_3D( const wxString& aName, const std::bitset<LAYER_3D_END>& aLayers,
+                     const std::map<int, KIGFX::COLOR4D>& aColors ) :
+            name( aName ),
+            layers( aLayers ),
+            colors( aColors )
+    {
+    }
+
+    wxString                      name;          ///< A name for this layer set
+    std::bitset<LAYER_3D_END>     layers;
+    std::map<int, KIGFX::COLOR4D> colors;
+};
+
+
+class PARAM_LAYER_PRESET_3D : public PARAM_LAMBDA<nlohmann::json>
+{
+public:
+    PARAM_LAYER_PRESET_3D( const std::string& aPath, std::vector<LAYER_PRESET_3D>* aPresetList );
+
+private:
+    nlohmann::json presetsToJson();
+
+    void jsonToPresets( const nlohmann::json& aJson );
+
+    std::vector<LAYER_PRESET_3D>* m_presets;
+};
+
 
 class EDA_3D_VIEWER_SETTINGS : public APP_SETTINGS_BASE
 {
 public:
+    struct AUI_PANELS
+    {
+        int  right_panel_width;
+        bool show_layer_manager;
+    };
+
     struct RENDER_SETTINGS
     {
         RENDER_ENGINE     engine;
@@ -79,16 +124,25 @@ public:
         bool show_axis;
         bool show_board_body;
         bool show_comments;
-        bool show_eco;
+        bool show_drawings;
+        bool show_eco1;
+        bool show_eco2;
         bool show_footprints_insert;
         bool show_footprints_normal;
         bool show_footprints_virtual;
         bool show_footprints_not_in_posfile;
         bool show_footprints_dnp;
-        bool show_silkscreen;
-        bool show_soldermask;
+        bool show_silkscreen_top;
+        bool show_silkscreen_bottom;
+        bool show_soldermask_top;
+        bool show_soldermask_bottom;
         bool show_solderpaste;
+        bool show_copper_top;
+        bool show_copper_bottom;
         bool show_zones;
+        bool show_fp_references;
+        bool show_fp_values;
+        bool show_fp_text;
         bool subtract_mask_from_silk;
         bool clip_silk_on_via_annulus;
         bool renderPlatedPadsAsPlated;
@@ -106,10 +160,17 @@ public:
 
     virtual ~EDA_3D_VIEWER_SETTINGS() {}
 
+    LAYER_PRESET_3D* FindPreset( const wxString& aName );
+
     virtual bool MigrateFromLegacy( wxConfigBase* aLegacyConfig ) override;
 
+public:
+    AUI_PANELS      m_AuiPanels;
     RENDER_SETTINGS m_Render;
     CAMERA_SETTINGS m_Camera;
+
+    std::vector<LAYER_PRESET_3D> m_LayerPresets;
+    wxString                     m_CurrentPreset;
 
 protected:
     virtual std::string getLegacyFrameName() const override { return "Viewer3DFrameName"; }

@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2022 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 2023 CERN
  * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -49,7 +50,7 @@
 #define SOLDERPASTE_LAYER_THICKNESS pcbIUScale.mmToIU( 0.04 )
 
 
-CUSTOM_COLORS_LIST   BOARD_ADAPTER::g_SilkscreenColors;
+CUSTOM_COLORS_LIST   BOARD_ADAPTER::g_SilkColors;
 CUSTOM_COLORS_LIST   BOARD_ADAPTER::g_MaskColors;
 CUSTOM_COLORS_LIST   BOARD_ADAPTER::g_PasteColors;
 CUSTOM_COLORS_LIST   BOARD_ADAPTER::g_FinishColors;
@@ -62,6 +63,8 @@ KIGFX::COLOR4D       BOARD_ADAPTER::g_DefaultSolderMask;
 KIGFX::COLOR4D       BOARD_ADAPTER::g_DefaultSolderPaste;
 KIGFX::COLOR4D       BOARD_ADAPTER::g_DefaultSurfaceFinish;
 KIGFX::COLOR4D       BOARD_ADAPTER::g_DefaultBoardBody;
+KIGFX::COLOR4D       BOARD_ADAPTER::g_DefaultComments;
+KIGFX::COLOR4D       BOARD_ADAPTER::g_DefaultECOs;
 
 // To be used in Raytracing render to create bevels on layer items
 float                g_BevelThickness3DU = 0.0f;
@@ -130,6 +133,10 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
     m_SilkScreenColorTop = SFVEC4F( 0.9, 0.9, 0.9, 1.0 );
     m_SilkScreenColorBot = SFVEC4F( 0.9, 0.9, 0.9, 1.0 );
     m_CopperColor        = SFVEC4F( 0.75, 0.61, 0.23, 1.0 );
+    m_UserDrawingsColor  = SFVEC4F( 0.85, 0.85, 0.85,  1.0 );
+    m_UserCommentsColor  = SFVEC4F( 0.85, 0.85, 0.85,  1.0 );
+    m_ECO1Color          = SFVEC4F( 0.70, 0.10, 0.10,  1.0 );
+    m_ECO2Color          = SFVEC4F( 0.70, 0.10, 0.10,  1.0 );
 
     m_platedPadsFront = nullptr;
     m_platedPadsBack = nullptr;
@@ -142,14 +149,14 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
 #define ADD_COLOR( list, r, g, b, a, name ) \
     list.emplace_back( r/255.0, g/255.0, b/255.0, a, name )
 
-        ADD_COLOR( g_SilkscreenColors, 245, 245, 245, 1.0, NotSpecifiedPrm() ); // White
-        ADD_COLOR( g_SilkscreenColors,  20,  51,  36, 1.0, wxT( "Green" ) );
-        ADD_COLOR( g_SilkscreenColors, 181,  19,  21, 1.0, wxT( "Red" ) );
-        ADD_COLOR( g_SilkscreenColors,   2,  59, 162, 1.0, wxT( "Blue" ) );
-        ADD_COLOR( g_SilkscreenColors,  11,  11,  11, 1.0, wxT( "Black" ) );
-        ADD_COLOR( g_SilkscreenColors, 245, 245, 245, 1.0, wxT( "White" ) );
-        ADD_COLOR( g_SilkscreenColors,  32,   2,  53, 1.0, wxT( "Purple" ) );
-        ADD_COLOR( g_SilkscreenColors, 194,  195,  0, 1.0, wxT( "Yellow" ) );
+        ADD_COLOR( g_SilkColors, 245, 245, 245, 1.0, NotSpecifiedPrm() ); // White
+        ADD_COLOR( g_SilkColors,  20,  51,  36, 1.0, wxT( "Green" ) );
+        ADD_COLOR( g_SilkColors, 181,  19,  21, 1.0, wxT( "Red" ) );
+        ADD_COLOR( g_SilkColors,   2,  59, 162, 1.0, wxT( "Blue" ) );
+        ADD_COLOR( g_SilkColors,  11,  11,  11, 1.0, wxT( "Black" ) );
+        ADD_COLOR( g_SilkColors, 245, 245, 245, 1.0, wxT( "White" ) );
+        ADD_COLOR( g_SilkColors,  32,   2,  53, 1.0, wxT( "Purple" ) );
+        ADD_COLOR( g_SilkColors, 194,  195,  0, 1.0, wxT( "Yellow" ) );
 
         ADD_COLOR( g_MaskColors,  20,  51,  36, 0.83, NotSpecifiedPrm() ); // Green
         ADD_COLOR( g_MaskColors,  20,  51,  36, 0.83, wxT( "Green" ) );
@@ -196,6 +203,9 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
         g_DefaultSurfaceFinish = COLOR4D( 0.75, 0.61, 0.23,  1.0 );
         g_DefaultBoardBody =     COLOR4D( 0.43, 0.45, 0.30, 0.90 );
 
+        g_DefaultComments =      COLOR4D( 0.85, 0.85, 0.85,  1.0 );
+        g_DefaultECOs =          COLOR4D( 0.70, 0.10, 0.10,  1.0 );
+
         g_ColorsLoaded = true;
     }
 #undef ADD_COLOR
@@ -217,55 +227,33 @@ void BOARD_ADAPTER::ReloadColorSettings() noexcept
 }
 
 
-bool BOARD_ADAPTER::Is3dLayerEnabled( PCB_LAYER_ID aLayer ) const
+bool BOARD_ADAPTER::Is3dLayerEnabled( PCB_LAYER_ID aLayer,
+                                      const std::bitset<LAYER_3D_END>& aVisibilityFlags ) const
 {
     wxASSERT( aLayer < PCB_LAYER_ID_COUNT );
 
     if( m_board && !m_board->IsLayerEnabled( aLayer ) )
         return false;
 
-    // see if layer needs to be shown
-    // check the flags
     switch( aLayer )
     {
-    case B_Adhes:
-    case F_Adhes:
-        return m_Cfg->m_Render.show_adhesive;
-
-    case B_Paste:
-    case F_Paste:
-        return m_Cfg->m_Render.show_solderpaste;
-
-    case B_SilkS:
-    case F_SilkS:
-        return m_Cfg->m_Render.show_silkscreen;
-
-    case B_Mask:
-    case F_Mask:
-        return m_Cfg->m_Render.show_soldermask;
-
-    case Dwgs_User:
-    case Cmts_User:
-        return !m_Cfg->m_Render.realistic && m_Cfg->m_Render.show_comments;
-
-    case Eco1_User:
-    case Eco2_User:
-        return !m_Cfg->m_Render.realistic && m_Cfg->m_Render.show_eco;
-
-    case Edge_Cuts:
-        return !m_Cfg->m_Render.realistic && !m_Cfg->m_Render.show_board_body;
-
-    case Margin:
-        return !m_Cfg->m_Render.realistic;
-
-    case B_Cu:
-    case F_Cu:
-        return !m_board || m_board->IsLayerVisible( aLayer ) || m_Cfg->m_Render.realistic
-                || m_board->IsFootprintHolder();
-
-    default:
-        // the layer is an internal copper layer, used the visibility
-        return m_board && m_board->IsLayerVisible( aLayer );
+    case B_Cu:      return aVisibilityFlags.test( LAYER_3D_COPPER_BOTTOM );
+    case F_Cu:      return aVisibilityFlags.test( LAYER_3D_COPPER_TOP );
+    case B_Adhes:   return aVisibilityFlags.test( LAYER_3D_ADHESIVE );
+    case F_Adhes:   return aVisibilityFlags.test( LAYER_3D_ADHESIVE );
+    case B_Paste:   return aVisibilityFlags.test( LAYER_3D_SOLDERPASTE );
+    case F_Paste:   return aVisibilityFlags.test( LAYER_3D_SOLDERPASTE );
+    case B_SilkS:   return aVisibilityFlags.test( LAYER_3D_SILKSCREEN_BOTTOM );
+    case F_SilkS:   return aVisibilityFlags.test( LAYER_3D_SILKSCREEN_TOP );
+    case B_Mask:    return aVisibilityFlags.test( LAYER_3D_SOLDERMASK_BOTTOM );
+    case F_Mask:    return aVisibilityFlags.test( LAYER_3D_SOLDERMASK_TOP );
+    case Dwgs_User: return aVisibilityFlags.test( LAYER_3D_USER_DRAWINGS );
+    case Cmts_User: return aVisibilityFlags.test( LAYER_3D_USER_COMMENTS );
+    case Eco1_User: return aVisibilityFlags.test( LAYER_3D_USER_ECO1 );
+    case Eco2_User: return aVisibilityFlags.test( LAYER_3D_USER_ECO2 );
+    case Edge_Cuts: return !m_Cfg->m_Render.realistic && !m_Cfg->m_Render.show_board_body;
+    case Margin:    return !m_Cfg->m_Render.realistic;
+    default:        return m_board && m_board->IsLayerVisible( aLayer );
     }
 }
 
@@ -537,22 +525,66 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
 
     createLayers( aStatusReporter );
 
-    COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
-
     auto to_SFVEC4F =
             []( const COLOR4D& src )
             {
                 return SFVEC4F( src.r, src.g, src.b, src.a );
             };
 
-    m_BgColorTop = to_SFVEC4F( colors->GetColor( LAYER_3D_BACKGROUND_TOP ) );
-    m_BgColorBot = to_SFVEC4F( colors->GetColor( LAYER_3D_BACKGROUND_BOTTOM ) );
+    std::map<int, COLOR4D> colors = GetLayerColors();
 
-    m_SolderPasteColor = to_SFVEC4F( colors->GetColor( LAYER_3D_SOLDERPASTE ) );
+    m_BgColorTop         = to_SFVEC4F( colors[ LAYER_3D_BACKGROUND_TOP ] );
+    m_BgColorBot         = to_SFVEC4F( colors[ LAYER_3D_BACKGROUND_BOTTOM ] );
+    m_SolderPasteColor   = to_SFVEC4F( colors[ LAYER_3D_SOLDERPASTE ] );
+    m_SilkScreenColorBot = to_SFVEC4F( colors[ LAYER_3D_SILKSCREEN_BOTTOM ] );
+    m_SilkScreenColorTop = to_SFVEC4F( colors[ LAYER_3D_SILKSCREEN_TOP ] );
+    m_SolderMaskColorBot = to_SFVEC4F( colors[ LAYER_3D_SOLDERMASK_BOTTOM ] );
+    m_SolderMaskColorTop = to_SFVEC4F( colors[ LAYER_3D_SOLDERMASK_TOP ] );
+    m_CopperColor        = to_SFVEC4F( colors[ LAYER_3D_COPPER_TOP ] );
+    m_BoardBodyColor     = to_SFVEC4F( colors[ LAYER_3D_BOARD ] );
+    m_UserDrawingsColor  = to_SFVEC4F( colors[ LAYER_3D_USER_DRAWINGS ] );
+    m_UserCommentsColor  = to_SFVEC4F( colors[ LAYER_3D_USER_COMMENTS ] );
+    m_ECO1Color          = to_SFVEC4F( colors[ LAYER_3D_USER_ECO1 ] );
+    m_ECO2Color          = to_SFVEC4F( colors[ LAYER_3D_USER_ECO2 ] );
+}
 
-    if( m_board && colors->GetUseBoardStackupColors() )
+
+std::map<int, COLOR4D> BOARD_ADAPTER::GetDefaultColors() const
+{
+    std::map<int, COLOR4D> colors;
+
+    colors[ LAYER_3D_BACKGROUND_TOP ]    = BOARD_ADAPTER::g_DefaultBackgroundTop;
+    colors[ LAYER_3D_BACKGROUND_BOTTOM ] = BOARD_ADAPTER::g_DefaultBackgroundBot;
+    colors[ LAYER_3D_BOARD ]             = BOARD_ADAPTER::g_DefaultBoardBody;
+    colors[ LAYER_3D_COPPER_TOP ]        = BOARD_ADAPTER::g_DefaultSurfaceFinish;
+    colors[ LAYER_3D_COPPER_BOTTOM ]     = BOARD_ADAPTER::g_DefaultSurfaceFinish;
+    colors[ LAYER_3D_SILKSCREEN_TOP ]    = BOARD_ADAPTER::g_DefaultSilkscreen;
+    colors[ LAYER_3D_SILKSCREEN_BOTTOM ] = BOARD_ADAPTER::g_DefaultSilkscreen;
+    colors[ LAYER_3D_SOLDERMASK_TOP ]    = BOARD_ADAPTER::g_DefaultSolderMask;
+    colors[ LAYER_3D_SOLDERMASK_BOTTOM ] = BOARD_ADAPTER::g_DefaultSolderMask;
+    colors[ LAYER_3D_SOLDERPASTE ]       = BOARD_ADAPTER::g_DefaultSolderPaste;
+    colors[ LAYER_3D_USER_DRAWINGS ]     = BOARD_ADAPTER::g_DefaultComments;
+    colors[ LAYER_3D_USER_COMMENTS ]     = BOARD_ADAPTER::g_DefaultComments;
+    colors[ LAYER_3D_USER_ECO1 ]         = BOARD_ADAPTER::g_DefaultECOs;
+    colors[ LAYER_3D_USER_ECO2 ]         = BOARD_ADAPTER::g_DefaultECOs;
+
+    return colors;
+}
+
+
+std::map<int, COLOR4D> BOARD_ADAPTER::GetLayerColors() const
+{
+    std::map<int, COLOR4D> colors;
+
+    if( m_Cfg->m_CurrentPreset == FOLLOW_PCB || m_Cfg->m_CurrentPreset == FOLLOW_PLOT_SETTINGS )
     {
+        colors = GetDefaultColors();
+
+        if( !m_board )
+            return colors;
+
         const BOARD_STACKUP& stackup = m_board->GetDesignSettings().GetStackupDescriptor();
+        KIGFX::COLOR4D       bodyColor( 0, 0, 0, 0 );
 
         auto findColor =
                 []( const wxString& aColorName, const CUSTOM_COLORS_LIST& aColorSet )
@@ -573,13 +605,6 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
                     return KIGFX::COLOR4D();
                 };
 
-        m_SilkScreenColorTop = to_SFVEC4F( g_DefaultSilkscreen );
-        m_SilkScreenColorBot = to_SFVEC4F( g_DefaultSilkscreen );
-        m_SolderMaskColorTop = to_SFVEC4F( g_DefaultSolderMask );
-        m_SolderMaskColorBot = to_SFVEC4F( g_DefaultSolderMask );
-
-        KIGFX::COLOR4D bodyColor( 0, 0, 0, 0 );
-
         for( const BOARD_STACKUP_ITEM* stackupItem : stackup.GetList() )
         {
             wxString colorName = stackupItem->GetColor();
@@ -588,16 +613,17 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
             {
             case BS_ITEM_TYPE_SILKSCREEN:
                 if( stackupItem->GetBrdLayerId() == F_SilkS )
-                    m_SilkScreenColorTop = to_SFVEC4F( findColor( colorName, g_SilkscreenColors ) );
+                    colors[ LAYER_3D_SILKSCREEN_TOP ] = findColor( colorName, g_SilkColors );
                 else
-                    m_SilkScreenColorBot = to_SFVEC4F( findColor( colorName, g_SilkscreenColors ) );
+                    colors[ LAYER_3D_SILKSCREEN_BOTTOM ] = findColor( colorName, g_SilkColors );
+
                 break;
 
             case BS_ITEM_TYPE_SOLDERMASK:
                 if( stackupItem->GetBrdLayerId() == F_Mask )
-                    m_SolderMaskColorTop = to_SFVEC4F( findColor( colorName, g_MaskColors ) );
+                    colors[ LAYER_3D_SOLDERMASK_TOP ] = findColor( colorName, g_MaskColors );
                 else
-                    m_SolderMaskColorBot = to_SFVEC4F( findColor( colorName, g_MaskColors ) );
+                    colors[ LAYER_3D_SOLDERMASK_BOTTOM ] = findColor( colorName, g_MaskColors );
 
                 break;
 
@@ -620,46 +646,202 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
         }
 
         if( bodyColor != COLOR4D( 0, 0, 0, 0 ) )
-            m_BoardBodyColor = to_SFVEC4F( bodyColor );
-        else
-            m_BoardBodyColor = to_SFVEC4F( g_DefaultBoardBody );
+            colors[ LAYER_3D_BOARD ] = bodyColor;
 
         const wxString& finishName = stackup.m_FinishType;
 
         if( finishName.EndsWith( wxT( "OSP" ) ) )
         {
-            m_CopperColor = to_SFVEC4F( findColor( wxT( "Copper" ), g_FinishColors ) );
+            colors[ LAYER_3D_COPPER_TOP ] = findColor( wxT( "Copper" ), g_FinishColors );
         }
         else if( finishName.EndsWith( wxT( "IG" ) )
               || finishName.EndsWith( wxT( "gold" ) ) )
         {
-            m_CopperColor = to_SFVEC4F( findColor( wxT( "Gold" ), g_FinishColors ) );
+            colors[ LAYER_3D_COPPER_TOP ] = findColor( wxT( "Gold" ), g_FinishColors );
         }
         else if( finishName.StartsWith( wxT( "HAL" ) )
               || finishName.StartsWith( wxT( "HASL" ) )
               || finishName.EndsWith( wxT( "tin" ) )
               || finishName.EndsWith( wxT( "nickel" ) ) )
         {
-            m_CopperColor = to_SFVEC4F( findColor( wxT( "Tin" ), g_FinishColors ) );
+            colors[ LAYER_3D_COPPER_TOP ] = findColor( wxT( "Tin" ), g_FinishColors );
         }
         else if( finishName.EndsWith( wxT( "silver" ) ) )
         {
-            m_CopperColor = to_SFVEC4F( findColor( wxT( "Silver" ), g_FinishColors ) );
+            colors[ LAYER_3D_COPPER_TOP ] = findColor( wxT( "Silver" ), g_FinishColors );
         }
-        else
-        {
-            m_CopperColor = to_SFVEC4F( g_DefaultSurfaceFinish );
-        }
+
+        SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+        PCBNEW_SETTINGS*  pcbnewSettings = mgr.GetAppSettings<PCBNEW_SETTINGS>();
+        COLOR_SETTINGS*   pcbnewColors = mgr.GetColorSettings( pcbnewSettings->m_ColorTheme );
+
+        colors[ LAYER_3D_USER_DRAWINGS ] = pcbnewColors->GetColor( Dwgs_User );
+        colors[ LAYER_3D_USER_COMMENTS ] = pcbnewColors->GetColor( Cmts_User );
+        colors[ LAYER_3D_USER_ECO1 ]     = pcbnewColors->GetColor( Eco1_User );
+        colors[ LAYER_3D_USER_ECO2 ]     = pcbnewColors->GetColor( Eco2_User );
+    }
+    else if( LAYER_PRESET_3D* preset = m_Cfg->FindPreset( m_Cfg->m_CurrentPreset ) )
+    {
+        return preset->colors;
     }
     else
     {
-        m_SilkScreenColorBot = to_SFVEC4F( colors->GetColor( LAYER_3D_SILKSCREEN_BOTTOM ) );
-        m_SilkScreenColorTop = to_SFVEC4F( colors->GetColor( LAYER_3D_SILKSCREEN_TOP ) );
-        m_SolderMaskColorBot = to_SFVEC4F( colors->GetColor( LAYER_3D_SOLDERMASK_BOTTOM ) );
-        m_SolderMaskColorTop = to_SFVEC4F( colors->GetColor( LAYER_3D_SOLDERMASK_TOP ) );
-        m_CopperColor        = to_SFVEC4F( colors->GetColor( LAYER_3D_COPPER ) );
-        m_BoardBodyColor     = to_SFVEC4F( colors->GetColor( LAYER_3D_BOARD ) );
+        COLOR_SETTINGS* settings = Pgm().GetSettingsManager().GetColorSettings();
+
+        for( const auto& [ layer, color ] : GetDefaultColors() )
+            colors[ layer ] = settings->GetColor( layer );
     }
+
+    colors[ LAYER_3D_COPPER_BOTTOM ] = colors[ LAYER_3D_COPPER_TOP ];
+    return colors;
+}
+
+
+void BOARD_ADAPTER::SetLayerColors( const std::map<int, COLOR4D>& aColors )
+{
+    COLOR_SETTINGS* settings = Pgm().GetSettingsManager().GetColorSettings();
+
+    for( const auto& [ layer, color ] : aColors )
+        settings->SetColor( layer, color );
+}
+
+
+void BOARD_ADAPTER::SetVisibleLayers( const std::bitset<LAYER_3D_END>& aLayers )
+{
+    m_Cfg->m_Render.show_board_body                = aLayers.test( LAYER_3D_BOARD );
+    m_Cfg->m_Render.show_copper_top                = aLayers.test( LAYER_3D_COPPER_TOP );
+    m_Cfg->m_Render.show_copper_bottom             = aLayers.test( LAYER_3D_COPPER_BOTTOM );
+    m_Cfg->m_Render.show_silkscreen_top            = aLayers.test( LAYER_3D_SILKSCREEN_TOP );
+    m_Cfg->m_Render.show_silkscreen_bottom         = aLayers.test( LAYER_3D_SILKSCREEN_BOTTOM );
+    m_Cfg->m_Render.show_soldermask_top            = aLayers.test( LAYER_3D_SOLDERMASK_TOP );
+    m_Cfg->m_Render.show_soldermask_bottom         = aLayers.test( LAYER_3D_SOLDERMASK_BOTTOM );
+    m_Cfg->m_Render.show_solderpaste               = aLayers.test( LAYER_3D_SOLDERPASTE );
+    m_Cfg->m_Render.show_adhesive                  = aLayers.test( LAYER_3D_ADHESIVE );
+    m_Cfg->m_Render.show_comments                  = aLayers.test( LAYER_3D_USER_COMMENTS );
+    m_Cfg->m_Render.show_drawings                  = aLayers.test( LAYER_3D_USER_DRAWINGS );
+    m_Cfg->m_Render.show_eco1                      = aLayers.test( LAYER_3D_USER_ECO1 );
+    m_Cfg->m_Render.show_eco2                      = aLayers.test( LAYER_3D_USER_ECO2 );
+
+    m_Cfg->m_Render.show_footprints_normal         = aLayers.test( LAYER_3D_TH_MODELS );
+    m_Cfg->m_Render.show_footprints_insert         = aLayers.test( LAYER_3D_SMD_MODELS );
+    m_Cfg->m_Render.show_footprints_virtual        = aLayers.test( LAYER_3D_VIRTUAL_MODELS );
+    m_Cfg->m_Render.show_footprints_not_in_posfile = aLayers.test( LAYER_3D_MODELS_NOT_IN_POS );
+    m_Cfg->m_Render.show_footprints_dnp            = aLayers.test( LAYER_3D_MODELS_MARKED_DNP );
+
+    m_Cfg->m_Render.show_fp_references             = aLayers.test( LAYER_FP_REFERENCES );
+    m_Cfg->m_Render.show_fp_values                 = aLayers.test( LAYER_FP_VALUES );
+    m_Cfg->m_Render.show_fp_text                   = aLayers.test( LAYER_FP_TEXT );
+
+    m_Cfg->m_Render.opengl_show_model_bbox         = aLayers.test( LAYER_3D_BOUNDING_BOXES );
+    m_Cfg->m_Render.show_axis                      = aLayers.test( LAYER_3D_AXES );
+}
+
+
+std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetVisibleLayers() const
+{
+    std::bitset<LAYER_3D_END> ret;
+
+    ret.set( LAYER_3D_BOARD,             m_Cfg->m_Render.show_board_body );
+    ret.set( LAYER_3D_COPPER_TOP,        m_Cfg->m_Render.show_copper_top );
+    ret.set( LAYER_3D_COPPER_BOTTOM,     m_Cfg->m_Render.show_copper_bottom );
+    ret.set( LAYER_3D_SILKSCREEN_TOP,    m_Cfg->m_Render.show_silkscreen_top );
+    ret.set( LAYER_3D_SILKSCREEN_BOTTOM, m_Cfg->m_Render.show_silkscreen_bottom );
+    ret.set( LAYER_3D_SOLDERMASK_TOP,    m_Cfg->m_Render.show_soldermask_top );
+    ret.set( LAYER_3D_SOLDERMASK_BOTTOM, m_Cfg->m_Render.show_soldermask_bottom );
+    ret.set( LAYER_3D_SOLDERPASTE,       m_Cfg->m_Render.show_solderpaste );
+    ret.set( LAYER_3D_ADHESIVE,          m_Cfg->m_Render.show_adhesive );
+    ret.set( LAYER_3D_USER_COMMENTS,     m_Cfg->m_Render.show_comments );
+    ret.set( LAYER_3D_USER_DRAWINGS,     m_Cfg->m_Render.show_drawings );
+    ret.set( LAYER_3D_USER_ECO1,         m_Cfg->m_Render.show_eco1 );
+    ret.set( LAYER_3D_USER_ECO2,         m_Cfg->m_Render.show_eco2 );
+
+    ret.set( LAYER_FP_REFERENCES,        m_Cfg->m_Render.show_fp_references );
+    ret.set( LAYER_FP_VALUES,            m_Cfg->m_Render.show_fp_values );
+    ret.set( LAYER_FP_TEXT,              m_Cfg->m_Render.show_fp_text );
+
+    ret.set( LAYER_3D_TH_MODELS,         m_Cfg->m_Render.show_footprints_normal );
+    ret.set( LAYER_3D_SMD_MODELS,        m_Cfg->m_Render.show_footprints_insert );
+    ret.set( LAYER_3D_VIRTUAL_MODELS,    m_Cfg->m_Render.show_footprints_virtual );
+    ret.set( LAYER_3D_MODELS_NOT_IN_POS, m_Cfg->m_Render.show_footprints_not_in_posfile );
+    ret.set( LAYER_3D_MODELS_MARKED_DNP, m_Cfg->m_Render.show_footprints_dnp );
+
+    ret.set( LAYER_3D_BOUNDING_BOXES,    m_Cfg->m_Render.opengl_show_model_bbox );
+    ret.set( LAYER_3D_AXES,              m_Cfg->m_Render.show_axis );
+
+    if( m_Cfg->m_CurrentPreset == FOLLOW_PCB )
+    {
+        if( !m_board )
+            return ret;
+
+        ret.set( LAYER_3D_BOARD,             m_board->IsLayerVisible( Edge_Cuts ) );
+        ret.set( LAYER_3D_COPPER_TOP,        m_board->IsLayerVisible( F_Cu ) );
+        ret.set( LAYER_3D_COPPER_BOTTOM,     m_board->IsLayerVisible( B_Cu ) );
+        ret.set( LAYER_3D_SILKSCREEN_TOP,    m_board->IsLayerVisible( F_SilkS ) );
+        ret.set( LAYER_3D_SILKSCREEN_BOTTOM, m_board->IsLayerVisible( B_SilkS ) );
+        ret.set( LAYER_3D_SOLDERMASK_TOP,    m_board->IsLayerVisible( F_Mask ) );
+        ret.set( LAYER_3D_SOLDERMASK_BOTTOM, m_board->IsLayerVisible( B_Mask ) );
+        ret.set( LAYER_3D_SOLDERPASTE,       m_board->IsLayerVisible( F_Paste ) );
+        ret.set( LAYER_3D_ADHESIVE,          m_board->IsLayerVisible( F_Adhes ) );
+        ret.set( LAYER_3D_USER_COMMENTS,     m_board->IsLayerVisible( Cmts_User ) );
+        ret.set( LAYER_3D_USER_DRAWINGS,     m_board->IsLayerVisible( Dwgs_User ) );
+        ret.set( LAYER_3D_USER_ECO1,         m_board->IsLayerVisible( Eco1_User ) );
+        ret.set( LAYER_3D_USER_ECO2,         m_board->IsLayerVisible( Eco2_User ) );
+
+        for( GAL_LAYER_ID layer : { LAYER_FP_REFERENCES, LAYER_FP_VALUES, LAYER_FP_TEXT } )
+            ret.set( layer, m_board->IsElementVisible( layer ) );
+    }
+    else if( m_Cfg->m_CurrentPreset == FOLLOW_PLOT_SETTINGS )
+    {
+        if( !m_board )
+            return ret;
+
+        const PCB_PLOT_PARAMS& plotParams = m_board->GetPlotOptions();
+        LSET layers = plotParams.GetLayerSelection() | plotParams.GetPlotOnAllLayersSelection();
+
+        ret.set( LAYER_3D_BOARD,             true );
+        ret.set( LAYER_3D_COPPER_TOP,        layers.test( F_Cu ) );
+        ret.set( LAYER_3D_COPPER_BOTTOM,     layers.test( B_Cu ) );
+        ret.set( LAYER_3D_SILKSCREEN_TOP,    layers.test( F_SilkS ) );
+        ret.set( LAYER_3D_SILKSCREEN_BOTTOM, layers.test( B_SilkS ) );
+        ret.set( LAYER_3D_SOLDERMASK_TOP,    layers.test( F_Mask ) );
+        ret.set( LAYER_3D_SOLDERMASK_BOTTOM, layers.test( B_Mask ) );
+        ret.set( LAYER_3D_SOLDERPASTE,       layers.test( F_Paste ) );
+        ret.set( LAYER_3D_ADHESIVE,          layers.test( F_Adhes ) );
+        ret.set( LAYER_3D_USER_COMMENTS,     layers.test( Cmts_User ) );
+        ret.set( LAYER_3D_USER_DRAWINGS,     layers.test( Dwgs_User ) );
+        ret.set( LAYER_3D_USER_ECO1,         layers.test( Eco1_User ) );
+        ret.set( LAYER_3D_USER_ECO2,         layers.test( Eco2_User ) );
+
+        ret.set( LAYER_FP_REFERENCES, plotParams.GetPlotReference() );
+        ret.set( LAYER_FP_VALUES,     plotParams.GetPlotValue() );
+        ret.set( LAYER_FP_TEXT,       true );
+    }
+    else if( LAYER_PRESET_3D* preset = m_Cfg->FindPreset( m_Cfg->m_CurrentPreset ) )
+    {
+        ret = preset->layers;
+    }
+    else
+    {
+        ret.set( LAYER_3D_BOARD,             m_Cfg->m_Render.show_board_body );
+        ret.set( LAYER_3D_COPPER_TOP,        m_Cfg->m_Render.show_copper_top );
+        ret.set( LAYER_3D_COPPER_BOTTOM,     m_Cfg->m_Render.show_copper_bottom );
+        ret.set( LAYER_3D_SILKSCREEN_TOP,    m_Cfg->m_Render.show_silkscreen_top );
+        ret.set( LAYER_3D_SILKSCREEN_BOTTOM, m_Cfg->m_Render.show_silkscreen_bottom );
+        ret.set( LAYER_3D_SOLDERMASK_TOP,    m_Cfg->m_Render.show_soldermask_top );
+        ret.set( LAYER_3D_SOLDERMASK_BOTTOM, m_Cfg->m_Render.show_soldermask_bottom );
+        ret.set( LAYER_3D_SOLDERPASTE,       m_Cfg->m_Render.show_solderpaste );
+        ret.set( LAYER_3D_ADHESIVE,          m_Cfg->m_Render.show_adhesive );
+        ret.set( LAYER_3D_USER_COMMENTS,     m_Cfg->m_Render.show_comments );
+        ret.set( LAYER_3D_USER_DRAWINGS,     m_Cfg->m_Render.show_drawings );
+        ret.set( LAYER_3D_USER_ECO1,         m_Cfg->m_Render.show_eco1 );
+        ret.set( LAYER_3D_USER_ECO2,         m_Cfg->m_Render.show_eco2 );
+
+        ret.set( LAYER_FP_REFERENCES,        m_Cfg->m_Render.show_fp_references );
+        ret.set( LAYER_FP_VALUES,            m_Cfg->m_Render.show_fp_values );
+        ret.set( LAYER_FP_TEXT,              m_Cfg->m_Render.show_fp_text );
+    }
+
+    return ret;
 }
 
 

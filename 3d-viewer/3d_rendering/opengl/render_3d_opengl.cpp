@@ -2,7 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2020 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023 CERN
+ * Copyright (C) 2015-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -428,11 +429,22 @@ SFVEC4F RENDER_3D_OPENGL::getLayerColor( PCB_LAYER_ID aLayerID )
             break;
 
         case Dwgs_User:
+            layerColor = m_boardAdapter.m_UserDrawingsColor;
+            break;
         case Cmts_User:
+            layerColor = m_boardAdapter.m_UserCommentsColor;
+            break;
         case Eco1_User:
+            layerColor = m_boardAdapter.m_ECO1Color;
+            break;
         case Eco2_User:
+            layerColor = m_boardAdapter.m_ECO2Color;
+            break;
+
         case Edge_Cuts:
         case Margin:
+            layerColor = m_boardAdapter.m_UserDrawingsColor;
+            break;
             break;
 
         case B_CrtYd:
@@ -878,7 +890,8 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         renderBoardBody( skipRenderHoles );
 
     // Display transparent mask layers
-    if( m_boardAdapter.m_Cfg->m_Render.show_soldermask )
+    if( m_boardAdapter.m_Cfg->m_Render.show_soldermask_top
+            || m_boardAdapter.m_Cfg->m_Render.show_soldermask_bottom )
     {
         // add a depth buffer offset, it will help to hide some artifacts
         // on silkscreen where the SolderMask is removed
@@ -887,19 +900,31 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
         if( m_camera.GetPos().z > 0 )
         {
-            renderSolderMaskLayer( B_Mask, m_boardAdapter.GetLayerTopZPos( B_Mask ),
-                                   drawMiddleSegments, skipRenderHoles );
+            if( m_boardAdapter.m_Cfg->m_Render.show_soldermask_bottom )
+            {
+                renderSolderMaskLayer( B_Mask, m_boardAdapter.GetLayerTopZPos( B_Mask ),
+                                       drawMiddleSegments, skipRenderHoles );
+            }
 
-            renderSolderMaskLayer( F_Mask, m_boardAdapter.GetLayerBottomZPos( F_Mask ),
-                                   drawMiddleSegments, skipRenderHoles );
+            if( m_boardAdapter.m_Cfg->m_Render.show_soldermask_top )
+            {
+                renderSolderMaskLayer( F_Mask, m_boardAdapter.GetLayerBottomZPos( F_Mask ),
+                                       drawMiddleSegments, skipRenderHoles );
+            }
         }
         else
         {
-            renderSolderMaskLayer( F_Mask, m_boardAdapter.GetLayerBottomZPos( F_Mask ),
-                                   drawMiddleSegments, skipRenderHoles );
+            if( m_boardAdapter.m_Cfg->m_Render.show_soldermask_top )
+            {
+                renderSolderMaskLayer( F_Mask, m_boardAdapter.GetLayerBottomZPos( F_Mask ),
+                                       drawMiddleSegments, skipRenderHoles );
+            }
 
-            renderSolderMaskLayer( B_Mask, m_boardAdapter.GetLayerTopZPos( B_Mask ),
-                                   drawMiddleSegments, skipRenderHoles );
+            if( m_boardAdapter.m_Cfg->m_Render.show_soldermask_bottom )
+            {
+                renderSolderMaskLayer( B_Mask, m_boardAdapter.GetLayerTopZPos( B_Mask ),
+                                       drawMiddleSegments, skipRenderHoles );
+            }
         }
 
         glDisable( GL_POLYGON_OFFSET_FILL );

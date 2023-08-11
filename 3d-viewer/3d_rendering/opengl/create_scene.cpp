@@ -2,7 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2015-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023 CERN
+ * Copyright (C) 2015-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -565,13 +566,14 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
     if( aStatusReporter )
         aStatusReporter->Report( _( "Load OpenGL: layers" ) );
 
-    const MAP_POLY& map_poly = m_boardAdapter.GetPolyMap();
+    std::bitset<LAYER_3D_END> visibilityFlags = m_boardAdapter.GetVisibleLayers();
+    const MAP_POLY&           map_poly = m_boardAdapter.GetPolyMap();
 
     for( const std::pair<const PCB_LAYER_ID, BVH_CONTAINER_2D*>& ii : m_boardAdapter.GetLayerMap() )
     {
         const PCB_LAYER_ID layer_id = ii.first;
 
-        if( !m_boardAdapter.Is3dLayerEnabled( layer_id ) )
+        if( !m_boardAdapter.Is3dLayerEnabled( layer_id, visibilityFlags ) )
             continue;
 
         if( aStatusReporter )

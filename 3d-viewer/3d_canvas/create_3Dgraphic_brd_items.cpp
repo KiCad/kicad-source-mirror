@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 2023 CERN
  * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -162,14 +163,24 @@ void BOARD_ADAPTER::addShape( const PCB_DIMENSION_BASE* aDimension, CONTAINER_2D
 
 
 void BOARD_ADAPTER::addFootprintShapes( const FOOTPRINT* aFootprint, CONTAINER_2D_BASE* aContainer,
-                                        PCB_LAYER_ID aLayerId )
+                                        PCB_LAYER_ID aLayerId,
+                                        const std::bitset<LAYER_3D_END>& aVisibilityFlags )
 {
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
 
     for( PCB_FIELD* field : aFootprint->GetFields() )
     {
         if( field->GetLayer() == aLayerId && field->IsVisible() )
+        {
+            if( !aVisibilityFlags.test( LAYER_FP_TEXT ) )
+                continue;
+            else if( field->IsReference() && !aVisibilityFlags.test( LAYER_FP_REFERENCES ) )
+                continue;
+            else if( field->IsValue() && !aVisibilityFlags.test( LAYER_FP_VALUES ) )
+                continue;
+
             addText( field, aContainer, field );
+        }
     }
 
     for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
@@ -181,7 +192,16 @@ void BOARD_ADAPTER::addFootprintShapes( const FOOTPRINT* aFootprint, CONTAINER_2
             PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
 
             if( text->GetLayer() == aLayerId && text->IsVisible() )
+            {
+                if( !aVisibilityFlags.test( LAYER_FP_TEXT ) )
+                    continue;
+                else if( text->GetText() == wxT( "${REFERENCE}" ) && !aVisibilityFlags.test( LAYER_FP_REFERENCES ) )
+                    continue;
+                else if( text->GetText() == wxT( "${VALUE}" ) && !aVisibilityFlags.test( LAYER_FP_VALUES ) )
+                    continue;
+
                 addText( text, aContainer, text );
+            }
 
             break;
         }

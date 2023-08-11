@@ -1251,6 +1251,8 @@ void APPEARANCE_CONTROLS::SetObjectVisible( GAL_LAYER_ID aLayer, bool isVisible 
 
     m_frame->GetBoard()->SetElementVisibility( aLayer, isVisible );
 
+    m_frame->Update3DView( true, m_frame->GetPcbNewSettings()->m_Display.m_Live3DRefresh );
+
     m_frame->GetCanvas()->GetView()->SetLayerVisible( aLayer, isVisible );
     m_frame->GetCanvas()->Refresh();
 }
@@ -1279,6 +1281,8 @@ void APPEARANCE_CONTROLS::setVisibleLayers( LSET aLayers )
                     // might be the last layer the item is visible on).
                     return dynamic_cast<PCB_VIA*>( aItem ) || dynamic_cast<PAD*>( aItem );
                 } );
+
+        m_frame->Update3DView( true, m_frame->GetPcbNewSettings()->m_Display.m_Live3DRefresh );
     }
 }
 
@@ -1299,6 +1303,8 @@ void APPEARANCE_CONTROLS::setVisibleObjects( GAL_SET aLayers )
             aLayers.set( LAYER_RATSNEST, m_frame->GetPcbNewSettings()->m_Display.m_ShowGlobalRatsnest );
 
         m_frame->GetBoard()->SetVisibleElements( aLayers );
+
+        m_frame->Update3DView( true, m_frame->GetPcbNewSettings()->m_Display.m_Live3DRefresh );
     }
 }
 
@@ -2223,31 +2229,29 @@ void APPEARANCE_CONTROLS::rebuildObjects()
         if( m_isFpEditor && !s_allowedInFpEditor.count( s_setting.id ) )
             continue;
 
-        if( !s_setting.spacer )
+        m_objectSettings.emplace_back( std::make_unique<APPEARANCE_SETTING>( s_setting ) );
+
+        std::unique_ptr<APPEARANCE_SETTING>& setting = m_objectSettings.back();
+
+        // Because s_render_rows is created static, we must explicitly call wxGetTranslation
+        // for texts which are internationalized (tool tips and item names)
+        setting->tooltip = wxGetTranslation( s_setting.tooltip );
+        setting->label   = wxGetTranslation( s_setting.label );
+
+        if( setting->can_control_opacity )
         {
-            m_objectSettings.emplace_back( std::make_unique<APPEARANCE_SETTING>( s_setting ) );
-
-            std::unique_ptr<APPEARANCE_SETTING>& setting = m_objectSettings.back();
-
-            // Because s_render_rows is created static, we must explicitly call wxGetTranslation
-            // for texts which are internationalized (tool tips and item names)
-            setting->tooltip = wxGetTranslation( s_setting.tooltip );
-            setting->label   = wxGetTranslation( s_setting.label );
-
-            if( setting->can_control_opacity )
-            {
-                int width = m_windowObjects->GetTextExtent( setting->label ).x + 5;
-                labelWidth = std::max( labelWidth, width );
-            }
-
-            m_objectSettingsMap[ToGalLayer( setting->id )] = setting.get();
+            int width = m_windowObjects->GetTextExtent( setting->label ).x + 5;
+            labelWidth = std::max( labelWidth, width );
         }
+
+        if( !s_setting.spacer )
+            m_objectSettingsMap[ToGalLayer( setting->id )] = setting.get();
     }
 
     for( const std::unique_ptr<APPEARANCE_SETTING>& setting : m_objectSettings )
     {
         if( setting->spacer )
-            m_objectsOuterSizer->AddSpacer( m_pointSize );
+            m_objectsOuterSizer->AddSpacer( m_pointSize / 2 );
         else
             appendObject( setting );
     }
