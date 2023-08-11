@@ -135,7 +135,7 @@ class MicroMaTchWizard(FPWbase.FootprintWizard):
 
         # Use value to fill the modules description
         desc = self.GetValue()
-        self.module.SetDescription(desc)
+        self.module.SetLibDescription(desc)
         self.module.SetAttributes( pcbnew.FP_SMD )
 
         # add in the pads

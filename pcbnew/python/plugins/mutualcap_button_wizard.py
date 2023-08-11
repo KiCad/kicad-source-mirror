@@ -130,7 +130,7 @@ class MutualcapButtonWizard(FootprintWizardBase.FootprintWizard):
         self.draw.Reference(0, -h/2-textSize, textSize)
 
         # Add a extra text (${REFERENCE}) on the F_Fab layer
-        extra_text = pcbnew.PCB_TEXT( self.module, pcbnew.PCB_TEXT.TEXT_is_DIVERS )
+        extra_text = pcbnew.PCB_TEXT( self.module )
         extra_text.SetLayer( pcbnew.F_Fab )
         extra_text.SetPosition( pcbnew.VECTOR2I( 0, 0) )
         extra_text.SetTextSize( pcbnew.VECTOR2I( textSize, textSize ) )
