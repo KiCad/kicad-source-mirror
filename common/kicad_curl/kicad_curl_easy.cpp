@@ -235,7 +235,7 @@ bool KICAD_CURL_EASY::SetPostFields(
 {
     std::string postfields;
 
-    for( int i = 0; i < aFields.size(); i++ )
+    for( size_t i = 0; i < aFields.size(); i++ )
     {
         if( i > 0 )
             postfields += "&";

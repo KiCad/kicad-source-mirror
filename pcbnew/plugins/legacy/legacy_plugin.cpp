@@ -2320,7 +2320,6 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
     ZONE_BORDER_DISPLAY_STYLE outline_hatch = ZONE_BORDER_DISPLAY_STYLE::NO_HATCH;
     bool    endContour = false;
-    bool    segmentFill = false;
     int     holeIndex = -1;     // -1 is the main outline; holeIndex >= 0 = hole index
     char    buf[1024];
     char*   line;
@@ -2456,8 +2455,6 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
             if( fillmode)
             {
-                segmentFill = true;
-
                 if( m_showLegacySegmentZoneWarning )
                 {
                     wxLogWarning( _( "The legacy segment zone fill mode is no longer supported.\n"
@@ -2465,10 +2462,6 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
                     m_showLegacySegmentZoneWarning = false;
                 }
-            }
-            else
-            {
-                segmentFill = false;
             }
 
             zc->SetFillMode( ZONE_FILL_MODE::POLYGONS );

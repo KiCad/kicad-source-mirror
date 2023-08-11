@@ -222,10 +222,6 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
     {
     case SHAPE_T::ARC:
     {
-        // In some plotters (not all) the arc is approximated by segments, and
-        // a error max is needed. We try to approximate by 360/5 segments by 360 deg
-        int arc2segment_error = CircleToEndSegmentDeltaRadius( GetRadius(), 360/5 );
-
         VECTOR2I mid = aTransform.TransformCoordinate( GetArcMid() ) + aOffset;
         VECTOR2I center = CalcArcCenter( start, mid, end );
 
