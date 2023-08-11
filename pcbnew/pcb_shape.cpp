@@ -86,6 +86,13 @@ bool PCB_SHAPE::IsType( const std::vector<KICAD_T>& aScanTypes ) const
 }
 
 
+bool PCB_SHAPE::IsConnected() const
+{
+    // Only board-level copper shapes are connectable
+    return IsOnCopperLayer() && !GetParentFootprint();
+}
+
+
 void PCB_SHAPE::SetLayer( PCB_LAYER_ID aLayer )
 {
     BOARD_ITEM::SetLayer( aLayer );

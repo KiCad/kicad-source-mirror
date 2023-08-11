@@ -57,6 +57,8 @@ public:
         return wxT( "PCB_SHAPE" );
     }
 
+    bool IsConnected() const override;
+
     wxString GetFriendlyName() const override { return EDA_SHAPE::GetFriendlyName(); }
 
     bool IsType( const std::vector<KICAD_T>& aScanTypes ) const override;
