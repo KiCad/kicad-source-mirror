@@ -286,8 +286,10 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
     // see https://gitlab.com/kicad/code/kicad/-/issues/5638
     // see https://gitlab.com/kicad/code/kicad/-/issues/7125
     // see https://gitlab.com/kicad/code/kicad/-/issues/12303
-    int snapScale = KiROUND( snapSize / m_toolMgr->GetView()->GetGAL()->GetWorldScale() );
-    int snapRange = m_enableGrid ? std::min( snapScale, GetVisibleGrid().x ) : snapScale;
+    double snapScale = snapSize / m_toolMgr->GetView()->GetGAL()->GetWorldScale();
+    // warning: GetVisibleGrid().x sometimes returns a value > INT_MAX. Intermediate calculation
+    // needs double.
+    int snapRange = KiROUND( m_enableGrid ? std::min( snapScale, GetVisibleGrid().x ) : snapScale );
     int snapDist = snapRange;
 
     //Respect limits of coordinates representation
