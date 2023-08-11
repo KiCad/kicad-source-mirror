@@ -40,7 +40,7 @@ public:
     virtual ~GRID_HELPER();
 
     VECTOR2I GetGrid() const;
-    VECTOR2I GetVisibleGrid() const;
+    VECTOR2D GetVisibleGrid() const;
     VECTOR2I GetOrigin() const;
 
     void SetAuxAxes( bool aEnable, const VECTOR2I& aOrigin = VECTOR2I( 0, 0 ) );
