@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -90,6 +90,7 @@ class DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void onFilledCheckbox( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onLayerSelection( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

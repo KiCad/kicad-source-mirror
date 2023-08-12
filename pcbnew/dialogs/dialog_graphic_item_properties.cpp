@@ -63,7 +63,17 @@ private:
 
     void onFilledCheckbox( wxCommandEvent& event ) override;
 
+    void onLayerSelection( wxCommandEvent& event ) override;
+
     bool Validate() override;
+
+    // Show/hide the widgets used in net selection (shown only for copper layers)
+    void showHideNetInfo()
+    {
+        m_netSelector->Show( m_item->IsOnCopperLayer() );
+        m_netLabel->Show( m_item->IsOnCopperLayer() );
+    }
+
 
 private:
     PCB_BASE_EDIT_FRAME*  m_parent;
@@ -147,17 +157,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
         m_netSelector->SetIndeterminate();
     }
 
-    auto showHideNetInfo =
-            [&]()
-            {
-                m_netSelector->Show( aShape->IsOnCopperLayer() );
-                m_netLabel->Show( aShape->IsOnCopperLayer() );
-            };
-
     showHideNetInfo();
-    m_LayerSelectionCtrl->Bind( wxEVT_COMBOBOX,
-                                [&]( wxCommandEvent& aEvt ) { showHideNetInfo() ;} );
-
 
     SetInitialFocus( m_startXCtrl );
 
@@ -178,6 +178,16 @@ void PCB_BASE_EDIT_FRAME::ShowGraphicItemPropertiesDialog( PCB_SHAPE* aShape )
             DRAWING_TOOL* drawingTool = m_toolManager->GetTool<DRAWING_TOOL>();
             drawingTool->SetStroke( aShape->GetStroke(), GetActiveLayer() );
         }
+    }
+}
+
+
+void DIALOG_GRAPHIC_ITEM_PROPERTIES::onLayerSelection( wxCommandEvent& event )
+{
+    if( m_LayerSelectionCtrl->GetLayerSelection() >= 0 )
+    {
+        m_item->SetLayer(  ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() ) );
+        showHideNetInfo();
     }
 }
 
