@@ -41,7 +41,7 @@
 
 TUNER_SLIDER::TUNER_SLIDER( SIMULATOR_FRAME_UI* aFrame, wxWindow* aParent,
                             const SCH_SHEET_PATH& aSheetPath, SCH_SYMBOL* aSymbol ) :
-        TUNER_SLIDER_BASE( aFrame ),
+        TUNER_SLIDER_BASE( aParent ),
         m_symbol( aSymbol->m_Uuid ),
         m_sheetPath( aSheetPath ),
         m_ref( aSymbol->GetRef( &aSheetPath ) ),
