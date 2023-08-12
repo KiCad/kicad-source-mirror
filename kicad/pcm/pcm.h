@@ -401,7 +401,7 @@ private:
     std::function<void( int )>                 m_availableUpdateCallback;
     std::thread                                m_updateThread;
 
-    BACKGROUND_JOB*                       m_updateBackgroundJob;
+    std::shared_ptr<BACKGROUND_JOB>              m_updateBackgroundJob;
 };
 
 #endif // PCM_H_

@@ -28,6 +28,7 @@
 #include <widgets/progress_reporter_base.h>
 #include <functional>
 #include <memory>
+#include <shared_mutex>
 #include <vector>
 
 class PROGRESS_REPORTER;
@@ -43,7 +44,8 @@ class wxCloseEvent;
 class BACKGROUND_JOB_REPORTER : public PROGRESS_REPORTER_BASE
 {
 public:
-    BACKGROUND_JOB_REPORTER( BACKGROUND_JOBS_MONITOR* aMonitor, BACKGROUND_JOB* aJob );
+    BACKGROUND_JOB_REPORTER( BACKGROUND_JOBS_MONITOR*        aMonitor,
+                             std::shared_ptr<BACKGROUND_JOB> aJob );
 
     void SetTitle( const wxString& aTitle ) override
     {
@@ -61,7 +63,7 @@ private:
     bool updateUI() override;
 
     BACKGROUND_JOBS_MONITOR* m_monitor;
-    BACKGROUND_JOB*          m_job;
+    std::shared_ptr<BACKGROUND_JOB> m_job;
     wxString m_title;
     wxString m_report;
 };
@@ -92,12 +94,12 @@ public:
      *
      * @param aName is the displayed title for the event
      */
-    BACKGROUND_JOB* Create( const wxString& aName );
+    std::shared_ptr<BACKGROUND_JOB> Create( const wxString& aName );
 
     /**
      * Removes the given background job from any lists and frees it
      */
-    void Remove( BACKGROUND_JOB* job );
+    void Remove( std::shared_ptr<BACKGROUND_JOB> job );
 
     /**
      * Shows the background job list
@@ -123,14 +125,22 @@ private:
     /**
      * Handles job status updates, intended to be called by BACKGROUND_JOB_REPORTER only
      */
-    void jobUpdated( BACKGROUND_JOB* aJob );
+    void jobUpdated( std::shared_ptr<BACKGROUND_JOB> aJob );
 
     BACKGROUND_JOB_LIST* m_jobListDialog;
 
-    std::vector<BACKGROUND_JOB*> m_jobs;
+    /**
+     * Holds a reference to all active background jobs
+     * Access to this vector should be protected by locks since threads may Create or Remove at will
+     * to register their activity
+     */
+    std::vector<std::shared_ptr<BACKGROUND_JOB>> m_jobs;
     std::vector<BACKGROUND_JOB_LIST*> m_shownDialogs;
 
     std::vector<KISTATUSBAR*> m_statusBars;
+
+    /// Mutex to protect access to the m_jobs vector
+    mutable std::shared_mutex m_mutex;
 };
 
 #endif

@@ -40,7 +40,7 @@
 class BACKGROUND_JOB_PANEL : public wxPanel
 {
 public:
-    BACKGROUND_JOB_PANEL( wxWindow* aParent, BACKGROUND_JOB* aJob ) :
+    BACKGROUND_JOB_PANEL( wxWindow* aParent, std::shared_ptr<BACKGROUND_JOB> aJob ) :
             wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxSize( -1, 75 ),
                      wxBORDER_SIMPLE ),
             m_job( aJob )
@@ -86,7 +86,7 @@ private:
     wxGauge* m_progress;
     wxStaticText* m_stName;
     wxStaticText* m_stStatus;
-    BACKGROUND_JOB* m_job;
+    std::shared_ptr<BACKGROUND_JOB> m_job;
 };
 
 
@@ -127,7 +127,7 @@ public:
     }
 
 
-    void Add( BACKGROUND_JOB* aJob )
+    void Add( std::shared_ptr<BACKGROUND_JOB> aJob )
     {
         BACKGROUND_JOB_PANEL* panel = new BACKGROUND_JOB_PANEL( m_scrolledWindow, aJob );
         m_contentSizer->Add( panel, 0, wxEXPAND | wxALL, 2 );
@@ -141,7 +141,7 @@ public:
     }
 
 
-    void Remove( BACKGROUND_JOB* aJob )
+    void Remove( std::shared_ptr<BACKGROUND_JOB> aJob )
     {
         auto it = m_jobPanels.find( aJob );
         if( it != m_jobPanels.end() )
@@ -154,7 +154,7 @@ public:
         }
     }
 
-    void UpdateJob( BACKGROUND_JOB* aJob )
+    void UpdateJob( std::shared_ptr<BACKGROUND_JOB> aJob )
     {
         auto it = m_jobPanels.find( aJob );
         if( it != m_jobPanels.end() )
@@ -167,12 +167,12 @@ public:
 private:
     wxScrolledWindow* m_scrolledWindow;
     wxBoxSizer*       m_contentSizer;
-    std::unordered_map<BACKGROUND_JOB*, BACKGROUND_JOB_PANEL*> m_jobPanels;
+    std::unordered_map<std::shared_ptr<BACKGROUND_JOB>, BACKGROUND_JOB_PANEL*> m_jobPanels;
 };
 
 
 BACKGROUND_JOB_REPORTER::BACKGROUND_JOB_REPORTER( BACKGROUND_JOBS_MONITOR* aMonitor,
-                                                  BACKGROUND_JOB* aJob ) :
+                                                  std::shared_ptr<BACKGROUND_JOB> aJob ) :
         PROGRESS_REPORTER_BASE( 1 ),
         m_monitor( aMonitor ), m_job( aJob )
 {
@@ -215,13 +215,14 @@ BACKGROUND_JOBS_MONITOR::BACKGROUND_JOBS_MONITOR() : m_jobListDialog( nullptr )
 }
 
 
-BACKGROUND_JOB* BACKGROUND_JOBS_MONITOR::Create( const wxString& aName )
+std::shared_ptr<BACKGROUND_JOB> BACKGROUND_JOBS_MONITOR::Create( const wxString& aName )
 {
-    BACKGROUND_JOB* job = new BACKGROUND_JOB();
+    std::shared_ptr<BACKGROUND_JOB> job = std::make_shared<BACKGROUND_JOB>();
 
     job->m_name = aName;
     job->m_reporter = std::make_shared<BACKGROUND_JOB_REPORTER>( this, job );
 
+    std::lock_guard<std::shared_mutex> lock( m_mutex );
     m_jobs.push_back( job );
 
     if( m_shownDialogs.size() > 0 )
@@ -229,7 +230,11 @@ BACKGROUND_JOB* BACKGROUND_JOBS_MONITOR::Create( const wxString& aName )
         // update dialogs
         for( BACKGROUND_JOB_LIST* list : m_shownDialogs )
         {
-            list->Add( job );
+            list->CallAfter(
+                    [=]()
+                    {
+                        list->Add( job );
+                    } );
         }
     }
 
@@ -237,7 +242,7 @@ BACKGROUND_JOB* BACKGROUND_JOBS_MONITOR::Create( const wxString& aName )
 }
 
 
-void BACKGROUND_JOBS_MONITOR::Remove( BACKGROUND_JOB* aJob )
+void BACKGROUND_JOBS_MONITOR::Remove( std::shared_ptr<BACKGROUND_JOB> aJob )
 {
     if( m_shownDialogs.size() > 0 )
     {
@@ -245,12 +250,17 @@ void BACKGROUND_JOBS_MONITOR::Remove( BACKGROUND_JOB* aJob )
 
         for( BACKGROUND_JOB_LIST* list : m_shownDialogs )
         {
-            list->Remove( aJob );
+            list->CallAfter(
+                    [=]()
+                    {
+                        list->Remove( aJob );
+                    } );
         }
     }
 
+    std::lock_guard<std::shared_mutex> lock( m_mutex );
     m_jobs.erase( std::remove_if( m_jobs.begin(), m_jobs.end(),
-                                  [&]( BACKGROUND_JOB* job )
+                                  [&]( std::shared_ptr<BACKGROUND_JOB> job )
                                {
                                       return job == aJob;
                                } ) );
@@ -259,12 +269,14 @@ void BACKGROUND_JOBS_MONITOR::Remove( BACKGROUND_JOB* aJob )
     {
         for( KISTATUSBAR* statusBar : m_statusBars )
         {
-            statusBar->HideBackgroundProgressBar();
-            statusBar->SetBackgroundStatusText( wxT( "" ) );
+            statusBar->CallAfter(
+                    [=]()
+                    {
+                        statusBar->HideBackgroundProgressBar();
+                        statusBar->SetBackgroundStatusText( wxT( "" ) );
+                    } );
         }
     }
-
-    delete aJob;
 }
 
 
@@ -286,10 +298,14 @@ void BACKGROUND_JOBS_MONITOR::ShowList( wxWindow* aParent, wxPoint aPos )
 {
     BACKGROUND_JOB_LIST* list = new BACKGROUND_JOB_LIST( aParent, aPos );
 
-    for( BACKGROUND_JOB* job : m_jobs )
+    std::shared_lock<std::shared_mutex> lock( m_mutex, std::try_to_lock );
+
+    for( std::shared_ptr<BACKGROUND_JOB> job : m_jobs )
     {
         list->Add( job );
     }
+
+    lock.unlock();
 
     m_shownDialogs.push_back( list );
 
@@ -303,11 +319,12 @@ void BACKGROUND_JOBS_MONITOR::ShowList( wxWindow* aParent, wxPoint aPos )
 }
 
 
-void BACKGROUND_JOBS_MONITOR::jobUpdated( BACKGROUND_JOB* aJob )
+void BACKGROUND_JOBS_MONITOR::jobUpdated( std::shared_ptr<BACKGROUND_JOB> aJob )
 {
+    std::shared_lock<std::shared_mutex> lock( m_mutex, std::try_to_lock );
+
     // this method is called from the reporters from potentially other threads
     // we have to guard ui calls with CallAfter
-
     if( m_jobs.size() > 0 )
     {
         //for now, we go and update the status bar if its the first job in the vector
@@ -327,6 +344,7 @@ void BACKGROUND_JOBS_MONITOR::jobUpdated( BACKGROUND_JOB* aJob )
             }
         }
     }
+
 
     for( BACKGROUND_JOB_LIST* list : m_shownDialogs )
     {
