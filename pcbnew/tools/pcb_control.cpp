@@ -68,8 +68,6 @@ using namespace std::placeholders;
 // files.cpp
 extern bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, int aCtl = 0 );
 
-extern IO_MGR::PCB_FILE_T FindBoardPlugin( const wxString& aFileName, int aCtl = 0 );
-
 
 PCB_CONTROL::PCB_CONTROL() :
     PCB_TOOL_BASE( "pcbnew.Control" ),
@@ -1018,7 +1016,8 @@ int PCB_CONTROL::AppendBoardFromFile( const TOOL_EVENT& aEvent )
     if( !AskLoadBoardFileName( editFrame, &fileName, true ) )
         return 1;
 
-    IO_MGR::PCB_FILE_T pluginType = FindBoardPlugin( fileName, KICTL_KICAD_ONLY );
+    IO_MGR::PCB_FILE_T pluginType =
+            IO_MGR::FindPluginTypeFromBoardPath( fileName, KICTL_KICAD_ONLY );
     PLUGIN::RELEASER pi( IO_MGR::PluginFind( pluginType ) );
 
     return AppendBoard( *pi, fileName );
@@ -1559,7 +1558,7 @@ int PCB_CONTROL::DdAppendBoard( const TOOL_EVENT& aEvent )
         return 1;
 
     wxString filePath = fileName.GetFullPath();
-    IO_MGR::PCB_FILE_T pluginType = FindBoardPlugin( filePath );
+    IO_MGR::PCB_FILE_T pluginType = IO_MGR::FindPluginTypeFromBoardPath( filePath );
     PLUGIN::RELEASER pi( IO_MGR::PluginFind( pluginType ) );
 
     return AppendBoard( *pi, filePath );

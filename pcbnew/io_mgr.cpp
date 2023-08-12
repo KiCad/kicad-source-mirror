@@ -26,9 +26,12 @@
 #include <wx/uri.h>
 
 #include <config.h>
+#include <kiway_player.h>
+#include <io_mgr.h>
+#include <wildcards_and_files_ext.h>
+
 #include <plugins/eagle/eagle_plugin.h>
 #include <plugins/geda/gpcb_plugin.h>
-#include <io_mgr.h>
 #include <plugins/kicad/pcb_plugin.h>
 #include <plugins/legacy/legacy_plugin.h>
 #include <plugins/pcad/pcad_plugin.h>
@@ -38,7 +41,6 @@
 #include <plugins/altium/solidworks_pcb_plugin.h>
 #include <plugins/cadstar/cadstar_pcb_archive_plugin.h>
 #include <plugins/fabmaster/fabmaster_plugin.h>
-#include <wildcards_and_files_ext.h>
 
 #define FMT_UNIMPLEMENTED   _( "Plugin \"%s\" does not implement the \"%s\" function." )
 #define FMT_NOTFOUND        _( "Plugin type \"%s\" is not found." )
@@ -110,6 +112,32 @@ IO_MGR::PCB_FILE_T IO_MGR::EnumFromStr( const wxString& aType )
     }
 
     return PCB_FILE_T( -1 );
+}
+
+
+// The KIWAY_PLAYER::OpenProjectFiles() API knows nothing about plugins, so
+// determine how to load the BOARD here
+IO_MGR::PCB_FILE_T IO_MGR::FindPluginTypeFromBoardPath( const wxString& aFileName, int aCtl )
+{
+    const auto& plugins = IO_MGR::PLUGIN_REGISTRY::Instance()->AllPlugins();
+
+    for( const auto& plugin : plugins )
+    {
+        bool isKiCad = plugin.m_type == IO_MGR::KICAD_SEXP || plugin.m_type == IO_MGR::LEGACY;
+
+        if( ( aCtl & KICTL_KICAD_ONLY ) && !isKiCad )
+            continue;
+
+        if( ( aCtl & KICTL_NONKICAD_ONLY ) && isKiCad )
+            continue;
+
+        PLUGIN::RELEASER pi( plugin.m_createFunc() );
+
+        if( pi->CanReadBoard( aFileName ) )
+            return plugin.m_type;
+    }
+
+    return IO_MGR::FILE_TYPE_NONE;
 }
 
 

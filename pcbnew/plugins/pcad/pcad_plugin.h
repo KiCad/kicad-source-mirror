@@ -38,9 +38,14 @@ public:
     PCAD_PLUGIN();
     ~PCAD_PLUGIN();
 
-    const wxString  PluginName() const override;
+    const wxString PluginName() const { return wxT( "P-Cad" ); }
 
-    PLUGIN_FILE_DESC GetBoardFileDesc() const override;
+    PLUGIN_FILE_DESC GetBoardFileDesc() const
+    {
+        return PLUGIN_FILE_DESC( _HKI( "P-Cad 200x ASCII PCB files" ), { "pcb" } );
+    }
+
+    bool CanReadBoard( const wxString& aFileName ) const override;
 
     BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
                       const STRING_UTF8_MAP* aProperties = nullptr, PROJECT* aProject = nullptr,

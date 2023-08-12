@@ -151,7 +151,7 @@ protected:
      */
     EDA_ANGLE degParse( const char* aValue, const char** nptrptr = nullptr );
 
-    void checkVersion();
+    static int getVersion( LINE_READER* aReader );
 
     void loadAllSections( bool doAppend );
 

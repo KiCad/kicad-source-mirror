@@ -54,15 +54,12 @@ PCAD_PLUGIN::~PCAD_PLUGIN()
 }
 
 
-const wxString PCAD_PLUGIN::PluginName() const
+bool PCAD_PLUGIN::CanReadBoard( const wxString& aFileName ) const
 {
-    return wxT( "P-Cad" );
-}
+    if( !PLUGIN::CanReadBoard( aFileName ) )
+        return false;
 
-
-PLUGIN_FILE_DESC PCAD_PLUGIN::GetBoardFileDesc() const
-{
-    return PLUGIN_FILE_DESC( _HKI( "P-Cad 200x ASCII PCB files" ), { "pcb" } );
+    return fileStartsWithPrefix( aFileName, wxT( "ACCEL_ASCII" ), false );
 }
 
 

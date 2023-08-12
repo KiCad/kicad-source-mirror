@@ -113,6 +113,12 @@ public:
      */
     wxString GetRequiredVersion();
 
+    /**
+     * Partially parse the input and check if it matches expected header
+     * @return true if expected header matches
+     */
+    bool IsValidBoardHeader();
+
 private:
     ///< Convert net code using the mapping table if available,
     ///< otherwise returns unchanged net code if < 0 or if it's out of range

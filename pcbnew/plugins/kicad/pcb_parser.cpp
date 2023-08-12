@@ -740,6 +740,26 @@ FP_3DMODEL* PCB_PARSER::parse3DModel()
 }
 
 
+bool PCB_PARSER::IsValidBoardHeader()
+{
+    LOCALE_IO       toggle;
+
+    m_groupInfos.clear();
+
+    // See Parse() - FOOTPRINTS can be prefixed with an initial block of single line comments,
+    // eventually BOARD might be the same
+    ReadCommentLines();
+
+    if( CurTok() != T_LEFT  )
+        return false;
+
+    if( NextTok() != T_kicad_pcb)
+        return false;
+
+    return true;
+}
+
+
 BOARD_ITEM* PCB_PARSER::Parse()
 {
     T               token;

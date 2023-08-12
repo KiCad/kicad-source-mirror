@@ -34,6 +34,7 @@ set( QA_PCBNEW_SRCS
     test_array_pad_name_provider.cpp
     test_board_item.cpp
     test_graphics_import_mgr.cpp
+    test_io_mgr.cpp
     test_lset.cpp
     test_pns_basics.cpp
     test_pad_numbering.cpp

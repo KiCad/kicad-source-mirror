@@ -66,7 +66,6 @@
 
 #include <wx/stdpaths.h>
 #include <wx/filedlg.h>
-#include <wx/wfstream.h>
 #include <wx/txtstrm.h>
 
 #if wxCHECK_VERSION( 3, 1, 7 )
@@ -444,32 +443,6 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
 }
 
 
-// The KIWAY_PLAYER::OpenProjectFiles() API knows nothing about plugins, so
-// determine how to load the BOARD here
-IO_MGR::PCB_FILE_T FindBoardPlugin( const wxString& aFileName, int aCtl = 0 )
-{
-    const auto& plugins = IO_MGR::PLUGIN_REGISTRY::Instance()->AllPlugins();
-
-    for( const auto& plugin : plugins )
-    {
-        bool isKiCad = plugin.m_type == IO_MGR::KICAD_SEXP || plugin.m_type == IO_MGR::LEGACY;
-
-        if( ( aCtl & KICTL_KICAD_ONLY ) && !isKiCad )
-            continue;
-
-        if( ( aCtl & KICTL_NONKICAD_ONLY ) && isKiCad )
-            continue;
-
-        PLUGIN::RELEASER pi( plugin.m_createFunc() );
-
-        if( pi->CanReadBoard( aFileName ) )
-            return plugin.m_type;
-    }
-
-    return IO_MGR::FILE_TYPE_NONE;
-}
-
-
 int PCB_EDIT_FRAME::inferLegacyEdgeClearance( BOARD* aBoard )
 {
     PCB_LAYER_COLLECTOR collector;
@@ -592,7 +565,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // No save prompt (we already prompted above), and only reset to a new blank board if new
     Clear_Pcb( false, !is_new );
 
-    IO_MGR::PCB_FILE_T  pluginType = FindBoardPlugin( fullFileName, aCtl );
+    IO_MGR::PCB_FILE_T pluginType = IO_MGR::FindPluginTypeFromBoardPath( fullFileName, aCtl );
 
     bool converted =  pluginType != IO_MGR::LEGACY && pluginType != IO_MGR::KICAD_SEXP;
 

@@ -25,6 +25,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <config.h>
 #include <vector>
 #include <wx/arrstr.h>
 #include <i18n_utility.h>
@@ -174,6 +175,11 @@ public:
      * Return the #PCB_FILE_T from the corresponding plugin type name: "kicad", "legacy", etc.
      */
     static PCB_FILE_T EnumFromStr( const wxString& aFileType );
+
+    /**
+     * Return a plugin type given a path for a board file. FILE_TYPE_NONE if the file is not known.
+     */
+    static PCB_FILE_T FindPluginTypeFromBoardPath( const wxString& aFileName, int aCtl = 0 );
 
     /**
      * Return a plugin type given a footprint library's libPath.
@@ -669,6 +675,10 @@ public:
         }
     };
 #endif
+
+protected:
+    static bool fileStartsWithPrefix( const wxString& aFilePath, const wxString& aPrefix,
+                                      bool aIgnoreWhitespace );
 };
 
 #endif // IO_MGR_H_

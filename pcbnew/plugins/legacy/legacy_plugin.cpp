@@ -415,15 +415,18 @@ bool LEGACY_PLUGIN::CanReadBoard( const wxString& aFileName ) const
     if( !PLUGIN::CanReadBoard( aFileName ) )
         return false;
 
-    wxFileInputStream input( aFileName );
+    FILE_LINE_READER tempReader( aFileName );
 
-    if( !input.IsOk() || input.Eof() )
+    try
+    {
+        getVersion( &tempReader );
+    }
+    catch( const IO_ERROR& e )
+    {
         return false;
+    }
 
-    wxTextInputStream text( input );
-    wxString          line = text.ReadLine();
-
-    return line.StartsWith( wxS( "PCBNEW" ) );
+    return true;
 }
 
 
@@ -486,7 +489,8 @@ BOARD* LEGACY_PLUGIN::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
     m_reader = &reader;
     m_progressReporter = aProgressReporter;
 
-    checkVersion();
+    m_loading_format_version = getVersion( m_reader );
+    m_board->SetFileFormatVersionAtLoad( m_loading_format_version );
 
     if( m_progressReporter )
     {
@@ -618,35 +622,32 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
 }
 
 
-void LEGACY_PLUGIN::checkVersion()
+int LEGACY_PLUGIN::getVersion( LINE_READER* aReader )
 {
     // Read first line and TEST if it is a PCB file format header like this:
     // "PCBNEW-BOARD Version 1 ...."
 
-    m_reader->ReadLine();
+    aReader->ReadLine();
 
-    char* line = m_reader->Line();
+    char* line = aReader->Line();
 
     if( !TESTLINE( "PCBNEW-BOARD" ) )
     {
         THROW_IO_ERROR( wxT( "Unknown file type" ) );
     }
 
-    int ver = 1;    // if sccanf fails
+    int ver = 1; // if sccanf fails
     sscanf( line, "PCBNEW-BOARD Version %d", &ver );
 
-#if !defined(DEBUG)
+#if !defined( DEBUG )
     if( ver > LEGACY_BOARD_FILE_VERSION )
     {
-        m_error.Printf( _( "File '%s' has an unrecognized version: %d." ),
-                        m_reader->GetSource().GetData(),
-                        ver );
-        THROW_IO_ERROR( m_error );
+        THROW_IO_ERROR( wxString::Format( _( "File '%s' has an unrecognized version: %d." ),
+                                          aReader->GetSource().GetData(), ver ) );
     }
 #endif
 
-    m_loading_format_version = ver;
-    m_board->SetFileFormatVersionAtLoad( m_loading_format_version );
+    return ver;
 }
 
 
