@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://schemas.kicad.org/drc.v1.json",
   "title": "KiCad DRC Report Schema",
-  "description": "KiCad Plugin and Content Manager repository and package metadata schema",
+  "description": "KiCad Design Rules Check (DRC) Results Report generated from PCBs",
   "type": "object",
   "additionalProperties": false,
   "properties": {
