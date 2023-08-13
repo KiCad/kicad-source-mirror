@@ -479,100 +479,10 @@ void DIALOG_ERC::testErc()
     ERC_SETTINGS& settings = sch->ErcSettings();
     ERC_TESTER tester( sch );
 
-    // Test duplicate sheet names inside a given sheet.  While one can have multiple references
-    // to the same file, each must have a unique name.
-    if( settings.IsTestEnabled( ERCE_DUPLICATE_SHEET_NAME ) )
     {
-        AdvancePhase( _( "Checking sheet names..." ) );
-        tester.TestDuplicateSheetNames( true );
+        wxBusyCursor dummy;
+        tester.RunTests( sch, m_parent->GetCanvas()->GetView()->GetDrawingSheet(), m_parent, this );
     }
-
-    if( settings.IsTestEnabled( ERCE_BUS_ALIAS_CONFLICT ) )
-    {
-        AdvancePhase( _( "Checking bus conflicts..." ) );
-        tester.TestConflictingBusAliases();
-    }
-
-    // The connection graph has a whole set of ERC checks it can run
-    AdvancePhase( _( "Checking conflicts..." ) );
-
-    // If we are using the new connectivity, make sure that we do a full-rebuild
-    if( ADVANCED_CFG::GetCfg().m_IncrementalConnectivity )
-        m_parent->RecalculateConnections( nullptr, GLOBAL_CLEANUP );
-    else
-        m_parent->RecalculateConnections( nullptr, NO_CLEANUP );
-
-    sch->ConnectionGraph()->RunERC();
-
-    AdvancePhase( _( "Checking units..." ) );
-
-    // Test is all units of each multiunit symbol have the same footprint assigned.
-    if( settings.IsTestEnabled( ERCE_DIFFERENT_UNIT_FP ) )
-    {
-        AdvancePhase( _( "Checking footprints..." ) );
-        tester.TestMultiunitFootprints();
-    }
-
-    if( settings.IsTestEnabled( ERCE_MISSING_UNIT )
-            || settings.IsTestEnabled( ERCE_MISSING_INPUT_PIN )
-            || settings.IsTestEnabled( ERCE_MISSING_POWER_INPUT_PIN )
-            || settings.IsTestEnabled( ERCE_MISSING_BIDI_PIN ) )
-    {
-        tester.TestMissingUnits();
-    }
-
-    AdvancePhase( _( "Checking pins..." ) );
-
-    if( settings.IsTestEnabled( ERCE_DIFFERENT_UNIT_NET ) )
-        tester.TestMultUnitPinConflicts();
-
-    // Test pins on each net against the pin connection table
-    if( settings.IsTestEnabled( ERCE_PIN_TO_PIN_ERROR )
-      || settings.IsTestEnabled( ERCE_POWERPIN_NOT_DRIVEN )
-      || settings.IsTestEnabled( ERCE_PIN_NOT_DRIVEN ) )
-    {
-         tester.TestPinToPin();
-    }
-
-    // Test similar labels (i;e. labels which are identical when
-    // using case insensitive comparisons)
-    if( settings.IsTestEnabled( ERCE_SIMILAR_LABELS ) )
-    {
-        AdvancePhase( _( "Checking labels..." ) );
-        tester.TestSimilarLabels();
-    }
-
-    if( settings.IsTestEnabled( ERCE_UNRESOLVED_VARIABLE ) )
-    {
-        AdvancePhase( _( "Checking for unresolved variables..." ) );
-        tester.TestTextVars( m_parent->GetCanvas()->GetView()->GetDrawingSheet() );
-    }
-
-    if( settings.IsTestEnabled( ERCE_SIMULATION_MODEL ) )
-    {
-        AdvancePhase( _( "Checking SPICE models..." ) );
-        tester.TestSimModelIssues();
-    }
-
-    if( settings.IsTestEnabled( ERCE_NOCONNECT_CONNECTED ) )
-    {
-        AdvancePhase( _( "Checking no connect pins for connections..." ) );
-        tester.TestNoConnectPins();
-    }
-
-    if( settings.IsTestEnabled( ERCE_LIB_SYMBOL_ISSUES ) )
-    {
-        AdvancePhase( _( "Checking for library symbol issues..." ) );
-        tester.TestLibSymbolIssues();
-    }
-
-    if( settings.IsTestEnabled( ERCE_ENDPOINT_OFF_GRID ) )
-    {
-        AdvancePhase( _( "Checking for off grid pins and wires..." ) );
-        tester.TestOffGridEndpoints( m_parent->GetCanvas()->GetView()->GetGAL()->GetGridSize().x );
-    }
-
-    m_parent->ResolveERCExclusions();
 
     // Update marker list:
     m_markerTreeModel->Update( m_markerProvider, m_severities );

@@ -38,6 +38,8 @@ class NETLIST_OBJECT_LIST;
 class SCH_SHEET_LIST;
 class SCHEMATIC;
 class DS_PROXY_VIEW_ITEM;
+class SCH_EDIT_FRAME;
+class PROGRESS_REPORTER_BASE;
 
 
 extern const wxString CommentERC_H[];
@@ -143,6 +145,10 @@ public:
      * Test for uninstantiated units of multi unit symbols
      */
     int TestMissingUnits();
+
+    void RunTests( SCHEMATIC* aSch, DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aEditFrame,
+                   PROGRESS_REPORTER_BASE* aProgressReporter );
+
 private:
 
     SCHEMATIC* m_schematic;

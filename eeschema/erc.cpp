@@ -27,6 +27,7 @@
 #include <numeric>
 
 #include "connection_graph.h"
+#include <advanced_config.h>
 #include <common.h>     // for ExpandEnvVarSubstitutions
 #include <erc.h>
 #include <erc_sch_pin_context.h>
@@ -44,6 +45,7 @@
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <wx/ffile.h>
 #include <sim/sim_lib_mgr.h>
+#include <widgets/progress_reporter_base.h>
 
 
 /* ERC tests :
@@ -1062,4 +1064,117 @@ int ERC_TESTER::TestSimModelIssues()
     }
 
     return err_count;
+}
+
+
+void ERC_TESTER::RunTests( SCHEMATIC* aSch, DS_PROXY_VIEW_ITEM* aDrawingSheet,
+                           SCH_EDIT_FRAME* aEditFrame,
+                           PROGRESS_REPORTER_BASE* aProgressReporter )
+{
+    ERC_SETTINGS& settings = aSch->ErcSettings();
+
+    // Test duplicate sheet names inside a given sheet.  While one can have multiple references
+    // to the same file, each must have a unique name.
+    if( settings.IsTestEnabled( ERCE_DUPLICATE_SHEET_NAME ) )
+    {
+        if( aProgressReporter )
+            aProgressReporter->AdvancePhase( _( "Checking sheet names..." ) );
+        TestDuplicateSheetNames( true );
+    }
+
+    if( settings.IsTestEnabled( ERCE_BUS_ALIAS_CONFLICT ) )
+    {
+        if( aProgressReporter )
+            aProgressReporter->AdvancePhase( _( "Checking bus conflicts..." ) );
+        TestConflictingBusAliases();
+    }
+
+    // The connection graph has a whole set of ERC checks it can run
+    if( aProgressReporter )
+        aProgressReporter->AdvancePhase( _( "Checking conflicts..." ) );
+
+    // If we are using the new connectivity, make sure that we do a full-rebuild
+    if( aEditFrame )
+    {
+        if( ADVANCED_CFG::GetCfg().m_IncrementalConnectivity )
+            aEditFrame->RecalculateConnections( nullptr, GLOBAL_CLEANUP );
+        else
+            aEditFrame->RecalculateConnections( nullptr, NO_CLEANUP );
+    }
+
+    aSch->ConnectionGraph()->RunERC();
+
+    if( aProgressReporter )
+        aProgressReporter->AdvancePhase( _( "Checking units..." ) );
+
+    // Test is all units of each multiunit symbol have the same footprint assigned.
+    if( settings.IsTestEnabled( ERCE_DIFFERENT_UNIT_FP ) )
+    {
+        if( aProgressReporter )
+            aProgressReporter->AdvancePhase( _( "Checking footprints..." ) );
+        TestMultiunitFootprints();
+    }
+
+    if( settings.IsTestEnabled( ERCE_MISSING_UNIT )
+        || settings.IsTestEnabled( ERCE_MISSING_INPUT_PIN )
+        || settings.IsTestEnabled( ERCE_MISSING_POWER_INPUT_PIN )
+        || settings.IsTestEnabled( ERCE_MISSING_BIDI_PIN ) )
+    {
+        TestMissingUnits();
+    }
+
+    aProgressReporter->AdvancePhase( _( "Checking pins..." ) );
+
+    if( settings.IsTestEnabled( ERCE_DIFFERENT_UNIT_NET ) )
+        TestMultUnitPinConflicts();
+
+    // Test pins on each net against the pin connection table
+    if( settings.IsTestEnabled( ERCE_PIN_TO_PIN_ERROR )
+        || settings.IsTestEnabled( ERCE_POWERPIN_NOT_DRIVEN )
+        || settings.IsTestEnabled( ERCE_PIN_NOT_DRIVEN ) )
+    {
+        TestPinToPin();
+    }
+
+    // Test similar labels (i;e. labels which are identical when
+    // using case insensitive comparisons)
+    if( settings.IsTestEnabled( ERCE_SIMILAR_LABELS ) )
+    {
+        aProgressReporter->AdvancePhase( _( "Checking labels..." ) );
+        TestSimilarLabels();
+    }
+
+    if( settings.IsTestEnabled( ERCE_UNRESOLVED_VARIABLE ) )
+    {
+        aProgressReporter->AdvancePhase( _( "Checking for unresolved variables..." ) );
+        TestTextVars( aDrawingSheet );
+    }
+
+    if( settings.IsTestEnabled( ERCE_SIMULATION_MODEL ) )
+    {
+        aProgressReporter->AdvancePhase( _( "Checking SPICE models..." ) );
+        TestSimModelIssues();
+    }
+
+    if( settings.IsTestEnabled( ERCE_NOCONNECT_CONNECTED ) )
+    {
+        aProgressReporter->AdvancePhase( _( "Checking no connect pins for connections..." ) );
+        TestNoConnectPins();
+    }
+
+    if( settings.IsTestEnabled( ERCE_LIB_SYMBOL_ISSUES ) )
+    {
+        aProgressReporter->AdvancePhase( _( "Checking for library symbol issues..." ) );
+        TestLibSymbolIssues();
+    }
+
+    if( settings.IsTestEnabled( ERCE_ENDPOINT_OFF_GRID ) )
+    {
+        aProgressReporter->AdvancePhase( _( "Checking for off grid pins and wires..." ) );
+        if( aEditFrame )
+            TestOffGridEndpoints( aEditFrame->GetCanvas()->GetView()->GetGAL()->GetGridSize().x );
+    }
+
+    if( aEditFrame )
+        aEditFrame->ResolveERCExclusions();
 }
