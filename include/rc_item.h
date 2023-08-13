@@ -36,6 +36,10 @@ class RC_ITEM;
 class EDA_ITEM;
 class EDA_DRAW_FRAME;
 
+namespace RC_JSON
+{
+struct VIOLATION;
+}
 
 /**
  * Provide an abstract interface of a RC_ITEM* list manager.
@@ -132,6 +136,19 @@ public:
      */
     virtual wxString ShowReport( UNITS_PROVIDER* aUnitsProvider, SEVERITY aSeverity,
                                  const std::map<KIID, EDA_ITEM*>& aItemMap ) const;
+
+    /**
+     * Translate this object into an RC_JSON::VIOLATION object
+     *
+     * @param aViolation is the violation to be populated by info from this item
+     * @param aUnitsProvider is the units provider that will be used to output coordinates
+     * @param aSeverity is the severity of this item
+     * @param aItemMap is a map allowing the lookup of items from KIIDs
+     *
+     * @return None
+     */
+    virtual void GetJsonViolation( RC_JSON::VIOLATION& aViolation, UNITS_PROVIDER* aUnitsProvider,
+                                   SEVERITY aSeverity, const std::map<KIID, EDA_ITEM*>& aItemMap ) const;
 
     int GetErrorCode() const { return m_errorCode; }
     void SetErrorCode( int aCode ) { m_errorCode = aCode; }
@@ -272,8 +289,9 @@ public:
     void DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, bool aDeep );
 
 protected:
-    void rebuildModel( std::shared_ptr<RC_ITEMS_PROVIDER> aProvider, int aSeverities );
-    void onSizeView( wxSizeEvent& aEvent );
+    void     rebuildModel( std::shared_ptr<RC_ITEMS_PROVIDER> aProvider, int aSeverities );
+    void     onSizeView( wxSizeEvent& aEvent );
+    wxString getSeverityString( SEVERITY aSeverity );
 
     EDA_DRAW_FRAME*                    m_editFrame;
     wxDataViewCtrl*                    m_view;

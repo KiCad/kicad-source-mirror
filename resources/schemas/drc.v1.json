@@ -1,0 +1,144 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schemas.kicad.org/drc.v1.json",
+  "title": "KiCad DRC Report Schema",
+  "description": "KiCad Plugin and Content Manager repository and package metadata schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "source": {
+      "type": "string",
+      "description": "Source file path"
+    },
+    "date": {
+      "type": "string",
+      "description": "Time at generation of report",
+      "format": "date-time"
+    },
+    "kicad_version": {
+      "type": "string",
+      "description": "KiCad version used to generate the report",
+      "pattern": "^\\d{1,2}(\\.\\d{1,2}(\\.\\d{1,2})?)?$"
+    },
+    "violations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Violation"
+      }
+    },
+    "unconnected_items": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Violation"
+      }
+    },
+    "schematic_parity": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Violation"
+      }
+    },
+    "coordinate_units": {
+      "type": "string",
+      "description": "Units that all coordinates in this report are encoded in",
+      "enum": [
+        "mm",
+        "mils",
+        "in"
+      ]
+    }
+  },
+  "required": [
+    "source",
+    "date",
+    "kicad_version",
+    "violations",
+    "unconnected_items",
+    "schematic_parity",
+    "coordinate_units",
+  ],
+  "definitions": {
+    "Violation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "KiCad type name for the violation"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the violation"
+        },
+        "severity": {
+          "$ref": "#/definitions/Severity"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AffectedItem"
+          }
+        }
+      },
+      "required": [
+        "type",
+        "description",
+        "severity",
+        "items"
+      ]
+    },
+    "AffectedItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "uuid": {
+          "$ref": "#/definitions/Uuid"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the item"
+        },
+        "pos": {
+          "$ref": "#/definitions/Coordinate"
+        }
+      },
+      "required": [
+        "uuid",
+        "description",
+        "pos"
+      ]
+    },
+    "Uuid": {
+      "type": "string",
+      "description": "Unique identifier of the item",
+      "pattern": "^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$"
+    },
+    "Severity": {
+      "type": "string",
+      "description": "Severity of the violation",
+      "enum": [
+        "error",
+        "warning",
+        "ignore"
+      ]
+    },
+    "Coordinate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "type": "number",
+          "description": "x coordinate"
+        },
+        "y": {
+          "type": "number",
+          "description": "y coordinate"
+        }
+      },
+      "required": [
+        "x",
+        "y"
+      ]
+    }
+  }
+}

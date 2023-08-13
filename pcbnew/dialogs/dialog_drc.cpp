@@ -30,6 +30,7 @@
 #include <macros.h>
 #include <pad.h>
 #include <drc/drc_item.h>
+#include <drc/drc_report.h>
 #include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
@@ -869,7 +870,10 @@ void DIALOG_DRC::OnSaveReport( wxCommandEvent& aEvent )
         fn.MakeAbsolute( prj_path );
     }
 
-    if( DRC_TOOL::WriteReport( fn.GetFullPath(), m_frame->GetBoard(), GetUserUnits(), m_markersProvider, m_ratsnestProvider, m_fpWarningsProvider ) )
+    DRC_REPORT reportWriter( m_frame->GetBoard(), GetUserUnits(), m_markersProvider,
+                             m_ratsnestProvider, m_fpWarningsProvider );
+
+    if( reportWriter.WriteJsonReport( fn.GetFullPath() ) )
     {
         m_messages->Report( wxString::Format( _( "Report file '%s' created<br>" ),
                                               fn.GetFullPath() ) );

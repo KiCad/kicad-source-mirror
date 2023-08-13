@@ -29,6 +29,7 @@
 #include <marker_base.h>
 #include <eda_draw_frame.h>
 #include <rc_item.h>
+#include <rc_json_schema.h>
 #include <eda_item.h>
 #include <base_units.h>
 
@@ -76,21 +77,29 @@ void RC_ITEM::SetItems( const EDA_ITEM* aItem, const EDA_ITEM* bItem,
 }
 
 
-wxString RC_ITEM::ShowReport( UNITS_PROVIDER* aUnitsProvider, SEVERITY aSeverity,
-                              const std::map<KIID, EDA_ITEM*>& aItemMap ) const
+wxString getSeverityString( SEVERITY aSeverity )
 {
     wxString severity;
 
     switch( aSeverity )
     {
-    case RPT_SEVERITY_ERROR:     severity = wxT( "Severity: error" );     break;
-    case RPT_SEVERITY_WARNING:   severity = wxT( "Severity: warning" );   break;
-    case RPT_SEVERITY_ACTION:    severity = wxT( "Severity: action" );    break;
-    case RPT_SEVERITY_INFO:      severity = wxT( "Severity: info" );      break;
-    case RPT_SEVERITY_EXCLUSION: severity = wxT( "Severity: exclusion" ); break;
-    case RPT_SEVERITY_DEBUG:     severity = wxT( "Severity: debug" );     break;
-    default:                   ;
+    case RPT_SEVERITY_ERROR: severity = wxS( "error" ); break;
+    case RPT_SEVERITY_WARNING: severity = wxS( "warning" ); break;
+    case RPT_SEVERITY_ACTION: severity = wxS( "action" ); break;
+    case RPT_SEVERITY_INFO: severity = wxS( "info" ); break;
+    case RPT_SEVERITY_EXCLUSION: severity = wxS( "exclusion" ); break;
+    case RPT_SEVERITY_DEBUG: severity = wxS( "debug" ); break;
+    default:;
     };
+
+    return severity;
+}
+
+
+wxString RC_ITEM::ShowReport( UNITS_PROVIDER* aUnitsProvider, SEVERITY aSeverity,
+                              const std::map<KIID, EDA_ITEM*>& aItemMap ) const
+{
+    wxString severity = getSeverityString( aSeverity );
 
     if( m_parent && m_parent->IsExcluded() )
         severity += wxT( " (excluded)" );
@@ -142,6 +151,59 @@ wxString RC_ITEM::ShowReport( UNITS_PROVIDER* aUnitsProvider, SEVERITY aSeverity
                                  GetErrorMessage(),
                                  GetViolatingRuleDesc(),
                                  severity );
+    }
+}
+
+
+void RC_ITEM::GetJsonViolation( RC_JSON::VIOLATION& aViolation, UNITS_PROVIDER* aUnitsProvider,
+                                SEVERITY                         aSeverity,
+                                const std::map<KIID, EDA_ITEM*>& aItemMap ) const
+{
+    wxString severity = getSeverityString( aSeverity );
+
+    aViolation.severity = severity;
+    aViolation.description = GetViolatingRuleDesc();
+    aViolation.type = GetSettingsKey();
+
+    EDA_ITEM* mainItem = nullptr;
+    EDA_ITEM* auxItem = nullptr;
+
+    auto ii = aItemMap.find( GetMainItemID() );
+
+    if( ii != aItemMap.end() )
+        mainItem = ii->second;
+
+    ii = aItemMap.find( GetAuxItemID() );
+
+    if( ii != aItemMap.end() )
+        auxItem = ii->second;
+
+    if( mainItem )
+    {
+        RC_JSON::AFFECTED_ITEM item;
+        item.description = mainItem->GetItemDescription( aUnitsProvider );
+        item.uuid = mainItem->m_Uuid.AsString();
+        item.pos.x = EDA_UNIT_UTILS::UI::ToUserUnit( aUnitsProvider->GetIuScale(),
+                                                     aUnitsProvider->GetUserUnits(),
+                                                     mainItem->GetPosition().x );
+        item.pos.y = EDA_UNIT_UTILS::UI::ToUserUnit( aUnitsProvider->GetIuScale(),
+                                                     aUnitsProvider->GetUserUnits(),
+                                                     mainItem->GetPosition().y );
+        aViolation.items.emplace_back( item );
+    }
+
+    if( auxItem )
+    {
+        RC_JSON::AFFECTED_ITEM item;
+        item.description = auxItem->GetItemDescription( aUnitsProvider );
+        item.uuid = auxItem->m_Uuid.AsString();
+        item.pos.x = EDA_UNIT_UTILS::UI::ToUserUnit( aUnitsProvider->GetIuScale(),
+                                                     aUnitsProvider->GetUserUnits(),
+                                                     auxItem->GetPosition().x );
+        item.pos.y = EDA_UNIT_UTILS::UI::ToUserUnit( aUnitsProvider->GetIuScale(),
+                                                     aUnitsProvider->GetUserUnits(),
+                                                     auxItem->GetPosition().y );
+        aViolation.items.emplace_back( item );
     }
 }
 

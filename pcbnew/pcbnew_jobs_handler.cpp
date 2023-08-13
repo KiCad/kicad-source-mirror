@@ -23,6 +23,7 @@
 #include <board_commit.h>
 #include <board_design_settings.h>
 #include <drc/drc_item.h>
+#include <drc/drc_report.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <jobs/job_fp_export_svg.h>
 #include <jobs/job_fp_upgrade.h>
@@ -866,7 +867,11 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
     {
         wxFileName fn = brd->GetFileName();
         fn.SetName( fn.GetName() );
-        fn.SetExt( ReportFileExtension );
+
+        if( drcJob->m_format == JOB_PCB_DRC::OUTPUT_FORMAT::JSON )
+            fn.SetExt( JsonFileExtension );
+        else
+            fn.SetExt( ReportFileExtension );
 
         drcJob->m_outputFile = fn.GetFullName();
     }
@@ -922,8 +927,23 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
     ratsnestProvider->SetSeverities( drcJob->m_severity );
     fpWarningsProvider->SetSeverities( drcJob->m_severity );
 
-    bool wroteReport = DRC_TOOL::WriteReport( drcJob->m_outputFile, brd, units, markersProvider,
-                                   ratsnestProvider, fpWarningsProvider );
+    m_reporter->Report(
+            wxString::Format( _( "Found %d violations\n" ), markersProvider->GetCount() ),
+            RPT_SEVERITY_INFO );
+    m_reporter->Report(
+            wxString::Format( _( "Found %d unconnected items\n" ), ratsnestProvider->GetCount() ),
+            RPT_SEVERITY_INFO );
+    m_reporter->Report( wxString::Format( _( "Found %d schematic parity issues\n" ),
+                                          fpWarningsProvider->GetCount() ),
+                        RPT_SEVERITY_INFO );
+
+    DRC_REPORT reportWriter( brd, units, markersProvider, ratsnestProvider, fpWarningsProvider );
+
+    bool wroteReport = false;
+    if( drcJob->m_format == JOB_PCB_DRC::OUTPUT_FORMAT::JSON )
+        wroteReport = reportWriter.WriteJsonReport( drcJob->m_outputFile );
+    else
+        wroteReport = reportWriter.WriteTextReport( drcJob->m_outputFile );
 
     if( !wroteReport )
     {

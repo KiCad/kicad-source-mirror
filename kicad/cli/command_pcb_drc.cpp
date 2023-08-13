@@ -41,7 +41,7 @@ CLI::PCB_DRC_COMMAND::PCB_DRC_COMMAND() : EXPORT_PCB_BASE_COMMAND( "drc" )
 {
     m_argParser.add_argument( ARG_FORMAT )
             .default_value( std::string( "report" ) )
-            .help( UTF8STDSTR( _( "Output file format, options: report" ) ) );
+            .help( UTF8STDSTR( _( "Output file format, options: json, report" ) ) );
 
     m_argParser.add_argument( ARG_ALL_TRACK_ERRORS )
             .help( UTF8STDSTR( _( "Report all errors for each track" ) ) )
@@ -139,6 +139,10 @@ int CLI::PCB_DRC_COMMAND::doPerform( KIWAY& aKiway )
     if( format == "report" )
     {
         drcJob->m_format = JOB_PCB_DRC::OUTPUT_FORMAT::REPORT;
+    }
+    else if( format == "json" )
+    {
+        drcJob->m_format = JOB_PCB_DRC::OUTPUT_FORMAT::JSON;
     }
     else
     {

@@ -266,7 +266,7 @@ void NOTIFICATIONS_MANAGER::Load()
 {
     nlohmann::json saved_json;
 
-    std::ifstream saved_json_stream( m_destFileName.GetFullPath().ToUTF8() );
+    std::ifstream saved_json_stream( m_destFileName.GetFullPath().fn_str() );
 
     try
     {
@@ -289,7 +289,7 @@ void NOTIFICATIONS_MANAGER::Load()
 
 void NOTIFICATIONS_MANAGER::Save()
 {
-    std::ofstream jsonFileStream( m_destFileName.GetFullPath().ToUTF8() );
+    std::ofstream jsonFileStream( m_destFileName.GetFullPath().fn_str() );
 
     nlohmann::json saveJson = nlohmann::json( m_notifications );
     jsonFileStream << std::setw( 4 ) << saveJson << std::endl;
