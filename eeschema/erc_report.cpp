@@ -129,6 +129,7 @@ bool ERC_REPORT::WriteJsonReport( const wxString& aFullFileName )
     {
         RC_JSON::ERC_SHEET jsonSheet;
         jsonSheet.path = sheetList[i].PathHumanReadable();
+        jsonSheet.uuid = sheetList[i].Path().AsString();
 
         for( SCH_ITEM* aItem : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
         {

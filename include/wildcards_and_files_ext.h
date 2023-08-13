@@ -239,6 +239,7 @@ extern wxString PSFileWildcard();
 extern wxString MacrosFileWildcard();
 extern wxString DrillFileWildcard();
 extern wxString SVGFileWildcard();
+extern wxString JsonFileWildcard();
 extern wxString ReportFileWildcard();
 extern wxString FootprintPlaceFileWildcard();
 extern wxString Shapes3DFileWildcard();

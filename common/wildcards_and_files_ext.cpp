@@ -485,9 +485,15 @@ wxString PSFileWildcard()
 }
 
 
+wxString JsonFileWildcard()
+{
+    return _( "Json files" ) + AddFileExtListToFilter( { JsonFileExtension } );
+}
+
+
 wxString ReportFileWildcard()
 {
-    return _( "Report files" ) + AddFileExtListToFilter( { "rpt" } );
+    return _( "Report files" ) + AddFileExtListToFilter( { ReportFileExtension } );
 }
 
 

@@ -964,12 +964,16 @@ void DIALOG_ERC::OnSaveReport( wxCommandEvent& aEvent )
     wxFileName fn( wxS( "ERC." ) + ReportFileExtension );
 
     wxFileDialog dlg( this, _( "Save Report to File" ), Prj().GetProjectPath(), fn.GetFullName(),
-                      ReportFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                      ReportFileWildcard() + wxS( "|" ) + JsonFileWildcard(),
+                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() != wxID_OK )
         return;
 
-    fn = EnsureFileExtension( dlg.GetPath(), ReportFileExtension );
+    fn = dlg.GetPath();
+
+    if( fn.GetExt().IsEmpty() )
+        fn.SetExt( ReportFileExtension );
 
     if( !fn.IsAbsolute() )
     {
@@ -979,7 +983,13 @@ void DIALOG_ERC::OnSaveReport( wxCommandEvent& aEvent )
 
     ERC_REPORT reportWriter( &m_parent->Schematic(), m_parent->GetUserUnits() );
 
-    if( reportWriter.WriteTextReport( fn.GetFullPath() ) )
+    bool success = false;
+    if( fn.GetExt() == JsonFileExtension )
+        success = reportWriter.WriteJsonReport( fn.GetFullPath() );
+    else
+        success = reportWriter.WriteTextReport( fn.GetFullPath() );
+
+    if( success )
     {
         m_messages->Report( wxString::Format( _( "Report file '%s' created." ),
                                               fn.GetFullPath() ) );

@@ -854,7 +854,8 @@ void DIALOG_DRC::OnSaveReport( wxCommandEvent& aEvent )
     wxFileName fn( "DRC." + ReportFileExtension );
 
     wxFileDialog dlg( this, _( "Save Report to File" ), Prj().GetProjectPath(), fn.GetFullName(),
-                      ReportFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                      ReportFileWildcard() + wxS( "|" ) + JsonFileWildcard(),
+                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() != wxID_OK )
         return;
@@ -873,7 +874,13 @@ void DIALOG_DRC::OnSaveReport( wxCommandEvent& aEvent )
     DRC_REPORT reportWriter( m_frame->GetBoard(), GetUserUnits(), m_markersProvider,
                              m_ratsnestProvider, m_fpWarningsProvider );
 
-    if( reportWriter.WriteJsonReport( fn.GetFullPath() ) )
+    bool success = false;
+    if( fn.GetExt() == JsonFileExtension )
+        success = reportWriter.WriteJsonReport( fn.GetFullPath() );
+    else
+        success = reportWriter.WriteTextReport( fn.GetFullPath() );
+
+    if( success )
     {
         m_messages->Report( wxString::Format( _( "Report file '%s' created<br>" ),
                                               fn.GetFullPath() ) );
