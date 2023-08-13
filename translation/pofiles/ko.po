@@ -27,7 +27,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-03 11:24-0700\n"
+"POT-Creation-Date: 2023-08-13 14:56-0700\n"
 "PO-Revision-Date: 2023-04-25 20:50+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v7/ko/>\n"
@@ -174,7 +174,7 @@ msgstr "OpenGL 레이어 %d 불러오기"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:678
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:791
-#: pcbnew/plugins/altium/altium_pcb.cpp:1605
+#: pcbnew/plugins/altium/altium_pcb.cpp:1639
 msgid "Loading 3D models..."
 msgstr "3D 모델을 불러오는 중입니다..."
 
@@ -380,7 +380,7 @@ msgstr "3D 이미지 파일 이름"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:785
 #: common/eda_base_frame.cpp:1255 common/eda_base_frame.cpp:1259
-#: pcbnew/plugins/altium/altium_pcb.cpp:1674
+#: pcbnew/plugins/altium/altium_pcb.cpp:1708
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
 msgstr "파일 '%s'을(를) 저장할 수 있는 권한이 없습니다."
@@ -1015,14 +1015,14 @@ msgid "Light 8:"
 msgstr "광선 8:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:399
-#, fuzzy
-msgid "Board thickness:"
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:460
+msgid "Board Thickness: "
 msgstr "보드 두께: "
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:400
-#, fuzzy
-msgid "3D Preview Options"
-msgstr "GERBVIEW 설정"
+#: common/dialogs/dialog_page_settings.cpp:104
+msgid "Preview Settings"
+msgstr "미리보기 설정"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56 pcbnew/pcb_bitmap.cpp:261
@@ -1623,8 +1623,8 @@ msgstr "정보"
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:121
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:479
 #: pcbnew/footprint_libraries_utils.cpp:472
-#: pcbnew/footprint_libraries_utils.cpp:1190 pcbnew/router/router_tool.cpp:1824
-#: pcbnew/router/router_tool.cpp:2404 pcbnew/zone_filler.cpp:734
+#: pcbnew/footprint_libraries_utils.cpp:1190 pcbnew/router/router_tool.cpp:1826
+#: pcbnew/router/router_tool.cpp:2406 pcbnew/zone_filler.cpp:734
 msgid "Confirmation"
 msgstr "확인"
 
@@ -2415,10 +2415,6 @@ msgstr "USLedger 11x17in"
 #: common/dialogs/dialog_page_settings.cpp:72
 msgid "User (Custom)"
 msgstr "사용자 (사용자 정의)"
-
-#: common/dialogs/dialog_page_settings.cpp:104
-msgid "Preview Settings"
-msgstr "미리보기 설정"
 
 #: common/dialogs/dialog_page_settings.cpp:105
 msgid "Preview Paper"
@@ -5591,20 +5587,20 @@ msgstr "페이지 표시 %s"
 msgid "Open %s"
 msgstr "열기 %s"
 
-#: common/plugins/altium/altium_parser.cpp:55 common/richio.cpp:138
+#: common/plugins/altium/altium_parser.cpp:56 common/richio.cpp:138
 #, c-format
 msgid "Cannot open file '%s'."
 msgstr "'%s' 파일을 열 수 없습니다."
 
-#: common/plugins/altium/altium_parser.cpp:64
+#: common/plugins/altium/altium_parser.cpp:65
 msgid "Error reading file: cannot determine length."
 msgstr "파일을 읽는 중에 오류가 발생하였습니다: 길이를 측정할 수 없습니다."
 
-#: common/plugins/altium/altium_parser.cpp:77
+#: common/plugins/altium/altium_parser.cpp:78
 msgid "Error reading file."
 msgstr "파일을 읽는 중에 오류가 발생하였습니다."
 
-#: common/plugins/altium/altium_parser.cpp:192
+#: common/plugins/altium/altium_parser.cpp:270
 msgid ""
 "Missing null byte at end of property list. Imported data might be malformed "
 "or missing."
@@ -5612,12 +5608,12 @@ msgstr ""
 "속성 목록 끝에 null 바이트가 없습니다. 가져온 데이터의 형식이 잘못되었거나 누"
 "락되었을 수 있습니다."
 
-#: common/plugins/altium/altium_parser.cpp:313
+#: common/plugins/altium/altium_parser.cpp:394
 #, c-format
 msgid "Unit '%s' does not end with 'mil'."
 msgstr "단위 '%s'이(가) 'mil'로 끝나지 않습니다."
 
-#: common/plugins/altium/altium_parser.cpp:321
+#: common/plugins/altium/altium_parser.cpp:402
 #, c-format
 msgid "Cannot convert '%s' to double."
 msgstr "'%s'을(를) double로 변환할 수 없습니다."
@@ -7623,27 +7619,27 @@ msgstr "보고서 파일 '%s을 만들 수 없음"
 msgid "%d duplicate time stamps were found and replaced."
 msgstr "%d개의 중복되는 타임스탬프가 발견되었고 교체되었습니다."
 
-#: eeschema/annotate.cpp:378
+#: eeschema/annotate.cpp:385
 #, c-format
 msgid "Updated %s (unit %s) from %s to %s."
 msgstr "%s (단위 %s)을(를) %s에서 %s(으)로 업데이트했습니다."
 
-#: eeschema/annotate.cpp:386
+#: eeschema/annotate.cpp:393
 #, c-format
 msgid "Updated %s from %s to %s."
 msgstr "%s을(를) %s에서 %s(으)로 업데이트했습니다."
 
-#: eeschema/annotate.cpp:396
+#: eeschema/annotate.cpp:403
 #, c-format
 msgid "Annotated %s (unit %s) as %s."
 msgstr "%s (단위 %s)을(를) %s(으)로 주석 처리하였습니다."
 
-#: eeschema/annotate.cpp:403
+#: eeschema/annotate.cpp:410
 #, c-format
 msgid "Annotated %s as %s."
 msgstr "%s이(가) %s(으)로 주석 처리되었습니다."
 
-#: eeschema/annotate.cpp:420
+#: eeschema/annotate.cpp:427
 msgid "Annotation complete."
 msgstr "부품 참조번호 주석 처리가 완료되었습니다."
 
@@ -7658,14 +7654,14 @@ msgstr ""
 "%s\n"
 "찾지 못했습니다. 스크립트가 존재하지 않습니다."
 
-#: eeschema/connection_graph.cpp:2812 eeschema/connection_graph.cpp:2845
+#: eeschema/connection_graph.cpp:2814 eeschema/connection_graph.cpp:2847
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr ""
 "%s와 %s이(가) 같은 항목에 연결되어 있습니다; %s은(는) 네트리스트에 사용됩니다"
 
-#: eeschema/connection_graph.cpp:3114
+#: eeschema/connection_graph.cpp:3116
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
@@ -7673,12 +7669,12 @@ msgstr ""
 "네트 %s은(는) 버스 %s에 시각적으로 연결되어 있지만 해당 버스의 멤버가 아닙니"
 "다"
 
-#: eeschema/connection_graph.cpp:3596
+#: eeschema/connection_graph.cpp:3598
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "시트 핀 %s에는 시트 내부에 일치하는 계층 라벨이 없습니다"
 
-#: eeschema/connection_graph.cpp:3614
+#: eeschema/connection_graph.cpp:3616
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "계층 라벨 %s에는 상위 시트 내부에 일치하는 시트 핀이 없습니다"
@@ -26223,7 +26219,7 @@ msgid "Are you sure you want to overwrite the existing file?"
 msgstr "이미 존재하는 파일에 덮어쓰시겠습니까?"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:256
-#: pcbnew/plugins/altium/altium_pcb.cpp:1630
+#: pcbnew/plugins/altium/altium_pcb.cpp:1664
 #, c-format
 msgid "Failed to create folder '%s'."
 msgstr "폴더 '%s' 생성 실패."
@@ -34583,7 +34579,7 @@ msgid "Hole X / Y"
 msgstr "홀 X / Y"
 
 #: pcbnew/pad.cpp:1084 pcbnew/pcb_track.cpp:905 pcbnew/pcb_track.cpp:950
-#: pcbnew/router/router_tool.cpp:2548 pcbnew/router/router_tool.cpp:2565
+#: pcbnew/router/router_tool.cpp:2550 pcbnew/router/router_tool.cpp:2567
 #: pcbnew/zone.cpp:617
 #, c-format
 msgid "Min Clearance: %s"
@@ -34591,9 +34587,9 @@ msgstr "최소 클리어런스: %s"
 
 #: pcbnew/pad.cpp:1086 pcbnew/pcb_track.cpp:907 pcbnew/pcb_track.cpp:916
 #: pcbnew/pcb_track.cpp:922 pcbnew/pcb_track.cpp:952 pcbnew/pcb_track.cpp:958
-#: pcbnew/router/router_tool.cpp:2545 pcbnew/router/router_tool.cpp:2550
-#: pcbnew/router/router_tool.cpp:2555 pcbnew/router/router_tool.cpp:2562
-#: pcbnew/router/router_tool.cpp:2567 pcbnew/zone.cpp:619
+#: pcbnew/router/router_tool.cpp:2547 pcbnew/router/router_tool.cpp:2552
+#: pcbnew/router/router_tool.cpp:2557 pcbnew/router/router_tool.cpp:2564
+#: pcbnew/router/router_tool.cpp:2569 pcbnew/zone.cpp:619
 #, c-format
 msgid "(from %s)"
 msgstr "(%s (으)로부터)"
@@ -35130,35 +35126,35 @@ msgid ""
 "Enter the python module which implements the PLUGIN::Footprint*() functions."
 msgstr "PLUGIN::Footprint*() 함수를 구현하는 python 모듈을 입력하세요."
 
-#: pcbnew/plugins/altium/altium_designer_plugin.cpp:152
+#: pcbnew/plugins/altium/altium_designer_plugin.cpp:155
 #: pcbnew/plugins/altium/altium_pcb.cpp:555
-#: pcbnew/plugins/altium/altium_pcb.cpp:682
-#: pcbnew/plugins/altium/altium_pcb.cpp:711
+#: pcbnew/plugins/altium/altium_pcb.cpp:691
+#: pcbnew/plugins/altium/altium_pcb.cpp:720
 #, c-format
 msgid "File not found: '%s'."
 msgstr "파일을 찾지 못했습니다: '%s'."
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:134
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:135
 #, c-format
 msgid "Unknown mapping of the Altium layer '%s'."
 msgstr "Altium 레이어 '%s' 에 대하여 알 수 없는 매핑이 있습니다."
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:182
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:183
 #, c-format
 msgid "Unknown Mode string: '%s'."
 msgstr "알 수 없는 모드 문자열: '%s'."
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:209
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:210
 #, c-format
 msgid "Unknown Record name string: '%s'."
 msgstr "알 수 없는 레코드 이름 문자열: '%s'."
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:223
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:224
 #, c-format
 msgid "Unknown Extended Primitive Information type: '%s'."
 msgstr "알 수 없는 확장 기본 정보 유형: '%s'."
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:784
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:794
 #, c-format
 msgid "Pads6 stream has unexpected length for subrecord 6: %d."
 msgstr ""
@@ -35194,41 +35190,46 @@ msgstr "'%s'은(는) 제대로 파싱되지 않았습니다."
 msgid "'%s' was not fully parsed."
 msgstr "'%s'은(는) 완전히 파싱되지 않았습니다."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:784
+#: pcbnew/plugins/altium/altium_pcb.cpp:683
+#, fuzzy, c-format
+msgid "Footprint directory not found: '%s'."
+msgstr "풋프린트 라이브러리를 찾을 수 없습니다."
+
+#: pcbnew/plugins/altium/altium_pcb.cpp:802
 #, c-format
 msgid "Record of unknown type: '%d'."
 msgstr "알 수 없는 유형의 기록: '%d'."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:874
+#: pcbnew/plugins/altium/altium_pcb.cpp:908
 msgid "Loading extended primitive information data..."
 msgstr "확장된 기본 정보 데이터 로드 중..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:895
+#: pcbnew/plugins/altium/altium_pcb.cpp:929
 msgid "Loading board data..."
 msgstr "보드 데이터 로드 중..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1075
+#: pcbnew/plugins/altium/altium_pcb.cpp:1109
 msgid "Loading netclasses..."
 msgstr "네트클래스 로드 중..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1101
+#: pcbnew/plugins/altium/altium_pcb.cpp:1135
 #, c-format
 msgid "Duplicate netclass name '%s'."
 msgstr "중복된 네트클래스 이름 '%s'."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1120
+#: pcbnew/plugins/altium/altium_pcb.cpp:1154
 msgid "Loading components..."
 msgstr "컴포넌트 로드 중..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1181
+#: pcbnew/plugins/altium/altium_pcb.cpp:1215
 msgid "Loading component 3D models..."
 msgstr "컴포넌트 3D 모델을 불러오는 중..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1260
-#: pcbnew/plugins/altium/altium_pcb.cpp:1361
-#: pcbnew/plugins/altium/altium_pcb.cpp:1438
-#: pcbnew/plugins/altium/altium_pcb.cpp:1516
-#: pcbnew/plugins/altium/altium_pcb.cpp:1540
+#: pcbnew/plugins/altium/altium_pcb.cpp:1294
+#: pcbnew/plugins/altium/altium_pcb.cpp:1395
+#: pcbnew/plugins/altium/altium_pcb.cpp:1472
+#: pcbnew/plugins/altium/altium_pcb.cpp:1550
+#: pcbnew/plugins/altium/altium_pcb.cpp:1574
 #, c-format
 msgid ""
 "Dimension found on an Altium layer (%d) with no KiCad equivalent. It has "
@@ -35237,75 +35238,72 @@ msgstr ""
 "Altium 레이어 (%d) 에서 KiCad에 대응되지 않는 치수를 발견하였습니다. KiCad 레"
 "이어 Eco1_User로 이동되었습니다."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1562
+#: pcbnew/plugins/altium/altium_pcb.cpp:1596
 msgid "Loading dimension drawings..."
 msgstr "치수 도면 로드 중..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1583
-#: pcbnew/plugins/altium/altium_pcb.cpp:1590
+#: pcbnew/plugins/altium/altium_pcb.cpp:1617
+#: pcbnew/plugins/altium/altium_pcb.cpp:1624
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
 msgstr "%d 종류의 치수를 무시하였습니다 (아직 지원되지 않음)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1631
+#: pcbnew/plugins/altium/altium_pcb.cpp:1665
 msgid "No 3D-models will be imported."
 msgstr "3D 모델을 가져오지 않았습니다."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1660
+#: pcbnew/plugins/altium/altium_pcb.cpp:1694
 #, c-format
 msgid "File not found: '%s'. 3D-model not imported."
 msgstr "파일을 찾을 수 없음: '%s'. 3D 모델을 가져올 수 없습니다."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1698
+#: pcbnew/plugins/altium/altium_pcb.cpp:1732
 msgid "Loading nets..."
 msgstr "네트 불러오는 중..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1722
+#: pcbnew/plugins/altium/altium_pcb.cpp:1756
+#: pcbnew/plugins/altium/altium_pcb.cpp:1940
 msgid "Loading polygons..."
 msgstr "다각형을 불러오는 중..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1846
+#: pcbnew/plugins/altium/altium_pcb.cpp:1881
 msgid "Loading rules..."
 msgstr "규칙 불러오는 중..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1876
+#: pcbnew/plugins/altium/altium_pcb.cpp:1920
 msgid "Loading board regions..."
 msgstr "기판 영역 불러오는 중..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1896
-msgid "Loading zones..."
-msgstr "영역 불러오는 중..."
-
-#: pcbnew/plugins/altium/altium_pcb.cpp:1969
-#: pcbnew/plugins/altium/altium_pcb.cpp:2015
+#: pcbnew/plugins/altium/altium_pcb.cpp:2045
+#: pcbnew/plugins/altium/altium_pcb.cpp:2125
 #, c-format
 msgid "Ignored polygon shape of kind %d (not yet supported)."
 msgstr "%d 종류의 다각형 형상이 무시되었습니다 (아직 지원되지 않음)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2076
+#: pcbnew/plugins/altium/altium_pcb.cpp:2273
 msgid "Loading zone fills..."
 msgstr "영역 채우기 불러오는 중..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2157
+#: pcbnew/plugins/altium/altium_pcb.cpp:2354
 msgid "Loading arcs..."
 msgstr "호 불러오는 중..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2362
+#: pcbnew/plugins/altium/altium_pcb.cpp:2559
 msgid "Loading pads..."
 msgstr "패드 불러오는 중..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2447
+#: pcbnew/plugins/altium/altium_pcb.cpp:2644
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
 "풋프린트 %s 패드 %s은(는) 다중 레이어로 마크되지 않았으나, TH 패드입니다."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2468
+#: pcbnew/plugins/altium/altium_pcb.cpp:2665
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr "풋프린트 %s 패드 %s에 사각형 홀이 존재합니다 (아직 지원되지 않음)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2495
+#: pcbnew/plugins/altium/altium_pcb.cpp:2692
 #, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
@@ -35314,24 +35312,24 @@ msgstr ""
 "풋프린트 %s 패드 %s은(는) %f도로 회전된 홀이 존재합니다. KiCad는 90도 회전만"
 "을 지원합니다."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2507
+#: pcbnew/plugins/altium/altium_pcb.cpp:2704
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "풋프린트 %s 패드 %s은(는) 알 수 없는 종류 %d 홀을 사용합니다."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2524
+#: pcbnew/plugins/altium/altium_pcb.cpp:2721
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
 msgstr ""
 "풋프린트 %s 패드 %s은(는) 복잡한 패드 스택을 사용합니다 (아직 지원되지 않음)"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2561
+#: pcbnew/plugins/altium/altium_pcb.cpp:2758
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr "풋프린트 %s 패드 %s은(는) 알 수 없는 패드 형태를 사용합니다."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2619
-#: pcbnew/plugins/altium/altium_pcb.cpp:2640
+#: pcbnew/plugins/altium/altium_pcb.cpp:2816
+#: pcbnew/plugins/altium/altium_pcb.cpp:2837
 #, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -35340,32 +35338,32 @@ msgstr ""
 "KiCad에 대응되지 않는 비 구리 패드 %s을(를) Altium 레이어 (%d) 에서 발견하였"
 "습니다. KiCad 레이어 Eco1_User로 이동되었습니다."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2660
+#: pcbnew/plugins/altium/altium_pcb.cpp:2857
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr ""
 "비 구리 패드 %s이(가) 네트에 연결되었습니다. 이는 아직 지원되지 않습니다."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2666
+#: pcbnew/plugins/altium/altium_pcb.cpp:2863
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr "비 구리 패드 %s에 홀이 존재합니다. 이는 아직 지원되지 않습니다."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2671
+#: pcbnew/plugins/altium/altium_pcb.cpp:2868
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr "비 구리 패드 %s에 복잡한 패드 스택을 사용합니다 (아직 지원되지 않음)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2813
+#: pcbnew/plugins/altium/altium_pcb.cpp:3010
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr "비 구리 패드 %s은(는) 알 수 없는 패드 형태를 사용합니다."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2823
+#: pcbnew/plugins/altium/altium_pcb.cpp:3020
 msgid "Loading vias..."
 msgstr "비아 불러오는 중..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2864
+#: pcbnew/plugins/altium/altium_pcb.cpp:3061
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
@@ -35373,25 +35371,25 @@ msgstr ""
 "레이어 %d에서 %d에 해당하는 비아는 비 구리 레이어를 사용합니다. 이는 아직 지"
 "원되지 않습니다."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2883
+#: pcbnew/plugins/altium/altium_pcb.cpp:3080
 msgid "Loading tracks..."
 msgstr "배선 불러오는 중..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3053
+#: pcbnew/plugins/altium/altium_pcb.cpp:3250
 msgid "Loading unicode strings..."
 msgstr "유니코드 문자열 로드 중..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3067
+#: pcbnew/plugins/altium/altium_pcb.cpp:3264
 msgid "Loading text..."
 msgstr "텍스트 불러오는 중..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3096
-#: pcbnew/plugins/altium/altium_pcb.cpp:3109
+#: pcbnew/plugins/altium/altium_pcb.cpp:3293
+#: pcbnew/plugins/altium/altium_pcb.cpp:3306
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr "Altium 레이어 %d의 바코드를 무시하였습니다 (아직 지원되지 않음)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3212
+#: pcbnew/plugins/altium/altium_pcb.cpp:3409
 msgid "Loading rectangles..."
 msgstr "직사각형 불러오는 중..."
 
@@ -35851,7 +35849,7 @@ msgstr ""
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1948
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2420
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:616
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:1522
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:1523
 #, c-format
 msgid ""
 "Invalid zero-sized pad ignored in\n"
@@ -36068,7 +36066,7 @@ msgstr "예기치 못한 파일 '%s'이(가) 라이브러리 '%s'에서 발견�
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1038
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2789
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:3222
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:3223
 #, c-format
 msgid "Footprint library '%s' cannot be deleted."
 msgstr "풋프린트 라이브러리 '%s'을(를) 삭제할 수 없습니다."
@@ -36219,7 +36217,7 @@ msgstr ""
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5692
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6103
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2484
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2485
 msgid "Legacy Zone Warning"
 msgstr "레거시 영역 경고"
 
@@ -36336,42 +36334,42 @@ msgstr "파일 '%s'에 인식할 수 없는 버전이 있습니다: %d."
 msgid "Unknown sheet type '%s' on line: %d."
 msgstr "알 수 없는 시트 유형 '%s'이(가) 행 '%d'에서 발견되었습니다."
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:1297
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:1298
 #, c-format
 msgid "Missing '$EndMODULE' for MODULE '%s'."
 msgstr "MODULE '%s'에 대한 '$EndMODULE'이 누락되었습니다."
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:1347
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:1348
 #, c-format
 msgid "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'."
 msgstr ""
 "알 수 없는 패드 형상 '%c=0x%02x' 이(가) 행: %d 풋프린트: '%s' 에서 발견되었습"
 "니다."
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:1546
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:1547
 #, c-format
 msgid "Unknown FP_SHAPE type:'%c=0x%02x' on line %d of footprint '%s'."
 msgstr ""
 "알 수 없는 FP_SHAPE 유형:'%c=0x%02x'이(가) 행: %d 풋프린트: '%s' 에서 발견되"
 "었습니다."
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2320
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2321
 #, c-format
 msgid "Duplicate NETCLASS name '%s'."
 msgstr "네트클래스 이름 '%s'을(를) 복제합니다."
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2401
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2412
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2402
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2413
 #, c-format
 msgid "Bad ZAux for CZONE_CONTAINER \"%s\""
 msgstr "CZONE_CONTAINER \"%s\"에 대해 유효하지 않은 ZAux"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2427
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2428
 #, c-format
 msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr "CZONE_CONTAINER \"%s\"에 대해 유효하지 않은 ZSmoothing"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2482
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2483
 msgid ""
 "The legacy segment fill mode is no longer supported.\n"
 "Convert zones to smoothed polygon fills?"
@@ -36379,13 +36377,13 @@ msgstr ""
 "오래된 세그먼트 채우기 모드는 더 이상 지원되지 않습니다.\n"
 "영역을 부드러운 다각형 채우기로 변환할까요?"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2522
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2523
 #, c-format
 msgid "Bad ZClearance padoption for CZONE_CONTAINER \"%s\""
 msgstr "CZONE_CONTAINER \"%s\"에 대한 옳지 않은 Z 클리어런스 패드옵션"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2805
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2844
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2806
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2845
 #, c-format
 msgid ""
 "Invalid floating point number in file: '%s'\n"
@@ -36394,8 +36392,8 @@ msgstr ""
 "파일 '%s'에 잘못된 부동 소수점 값 있음:\n"
 "행: %d, 오프셋: %d"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2815
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2854
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2816
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2855
 #, c-format
 msgid ""
 "Missing floating point number in file: '%s'\n"
@@ -36404,12 +36402,12 @@ msgstr ""
 "파일 '%s'에 부동 소수점 숫자 누락됨:\n"
 "행: %d, 오프셋: %d"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2996
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2997
 #, c-format
 msgid "File '%s' is empty."
 msgstr "%s 파일을 찾을 수 없습니다."
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2999
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:3000
 #, c-format
 msgid "File '%s' is not a legacy library."
 msgstr "파일 '%s'은(는) 레거시 라이브러리가 아닙니다."
@@ -36565,16 +36563,16 @@ msgid "?"
 msgstr "?"
 
 #: pcbnew/router/pns_kicad_iface.cpp:606 pcbnew/router/pns_kicad_iface.cpp:687
-#: pcbnew/router/router_tool.cpp:768
+#: pcbnew/router/router_tool.cpp:770
 msgid "board minimum clearance"
 msgstr "보드 최소 클리어런스"
 
 #: pcbnew/router/pns_kicad_iface.cpp:620 pcbnew/router/pns_kicad_iface.cpp:686
-#: pcbnew/router/router_tool.cpp:733 pcbnew/router/router_tool.cpp:755
+#: pcbnew/router/router_tool.cpp:735 pcbnew/router/router_tool.cpp:757
 msgid "board minimum track width"
 msgstr "기판 최소 트랙 너비"
 
-#: pcbnew/router/pns_kicad_iface.cpp:627 pcbnew/router/router_tool.cpp:735
+#: pcbnew/router/pns_kicad_iface.cpp:627 pcbnew/router/router_tool.cpp:737
 msgid "existing track"
 msgstr "기존 배선"
 
@@ -36851,79 +36849,79 @@ msgstr ""
 "디버깅을 위한 라우팅 이벤트 로그를\n"
 "저장하시겠습니까?"
 
-#: pcbnew/router/router_tool.cpp:1107
+#: pcbnew/router/router_tool.cpp:1109
 msgid "Blind/buried via need 2 different layers."
 msgstr "블라인드/매몰 비아는 2개의 다른 레이어가 필요합니다."
 
-#: pcbnew/router/router_tool.cpp:1185
+#: pcbnew/router/router_tool.cpp:1187
 msgid "Tracks on Copper layers only."
 msgstr "구리 레이어에만 있는 배선입니다."
 
-#: pcbnew/router/router_tool.cpp:1824 pcbnew/router/router_tool.cpp:2404
+#: pcbnew/router/router_tool.cpp:1826 pcbnew/router/router_tool.cpp:2406
 msgid "The selected item is locked."
 msgstr "선택한 항목이 잠겨 있습니다."
 
-#: pcbnew/router/router_tool.cpp:1826
+#: pcbnew/router/router_tool.cpp:1828
 msgid "Drag Anyway"
 msgstr "강제 드래그"
 
-#: pcbnew/router/router_tool.cpp:2406 pcbnew/tools/pcb_actions.cpp:1539
+#: pcbnew/router/router_tool.cpp:2408 pcbnew/tools/pcb_actions.cpp:1539
 msgid "Break Track"
 msgstr "배선 끊기"
 
-#: pcbnew/router/router_tool.cpp:2485
+#: pcbnew/router/router_tool.cpp:2487
 #, c-format
 msgid "Routing Diff Pair: %s"
 msgstr "라우팅 차동 쌍: %s"
 
-#: pcbnew/router/router_tool.cpp:2497 pcbnew/router/router_tool.cpp:2508
+#: pcbnew/router/router_tool.cpp:2499 pcbnew/router/router_tool.cpp:2510
 #, c-format
 msgid "Resolved Netclass: %s"
 msgstr "해결된 네트클래스: %s"
 
-#: pcbnew/router/router_tool.cpp:2505
+#: pcbnew/router/router_tool.cpp:2507
 #, c-format
 msgid "Routing Track: %s"
 msgstr "라우팅 배선: %s"
 
-#: pcbnew/router/router_tool.cpp:2513
+#: pcbnew/router/router_tool.cpp:2515
 msgid "Routing Track"
 msgstr "라우팅 배선"
 
-#: pcbnew/router/router_tool.cpp:2514
+#: pcbnew/router/router_tool.cpp:2516
 msgid "(no net)"
 msgstr "(네트 없음)"
 
-#: pcbnew/router/router_tool.cpp:2523
+#: pcbnew/router/router_tool.cpp:2525
 msgid "Free-angle"
 msgstr "자유 각도"
 
-#: pcbnew/router/router_tool.cpp:2529
+#: pcbnew/router/router_tool.cpp:2531
 msgid "45-degree"
 msgstr "45 도"
 
-#: pcbnew/router/router_tool.cpp:2530
+#: pcbnew/router/router_tool.cpp:2532
 msgid "45-degree rounded"
 msgstr "45도 둥근"
 
-#: pcbnew/router/router_tool.cpp:2531
+#: pcbnew/router/router_tool.cpp:2533
 msgid "90-degree"
 msgstr "90 도"
 
-#: pcbnew/router/router_tool.cpp:2532
+#: pcbnew/router/router_tool.cpp:2534
 msgid "90-degree rounded"
 msgstr "90도 둥근"
 
-#: pcbnew/router/router_tool.cpp:2537
+#: pcbnew/router/router_tool.cpp:2539
 msgid "Corner Style"
 msgstr "모서리 스타일"
 
-#: pcbnew/router/router_tool.cpp:2543 pcbnew/router/router_tool.cpp:2560
+#: pcbnew/router/router_tool.cpp:2545 pcbnew/router/router_tool.cpp:2562
 #, c-format
 msgid "Track Width: %s"
 msgstr "배선 너비: %s"
 
-#: pcbnew/router/router_tool.cpp:2553
+#: pcbnew/router/router_tool.cpp:2555
 #, c-format
 msgid "Diff Pair Gap: %s"
 msgstr "차동 쌍 간격: %s"
@@ -37744,10 +37742,6 @@ msgstr "구리 마감: "
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:452
 msgid "Castellated pads: "
 msgstr "카스텔레이티드 패드: "
-
-#: pcbnew/tools/drawing_stackup_table_tool.cpp:460
-msgid "Board Thickness: "
-msgstr "보드 두께: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:474
 msgid "Min hole diameter: "
@@ -40847,6 +40841,17 @@ msgstr "KiCad 회로도"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad 인쇄 회로 기판"
+
+#, fuzzy
+#~ msgid "Board thickness:"
+#~ msgstr "보드 두께: "
+
+#, fuzzy
+#~ msgid "3D Preview Options"
+#~ msgstr "GERBVIEW 설정"
+
+#~ msgid "Loading zones..."
+#~ msgstr "영역 불러오는 중..."
 
 #~ msgid "Board Thickness"
 #~ msgstr "보드 두께"

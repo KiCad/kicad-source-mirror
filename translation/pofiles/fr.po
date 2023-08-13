@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-03 11:24-0700\n"
+"POT-Creation-Date: 2023-08-13 14:56-0700\n"
 "PO-Revision-Date: 2023-04-12 08:47+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
@@ -156,7 +156,7 @@ msgstr "Chargement OpenGL, couche %d"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:678
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:791
-#: pcbnew/plugins/altium/altium_pcb.cpp:1605
+#: pcbnew/plugins/altium/altium_pcb.cpp:1639
 msgid "Loading 3D models..."
 msgstr "Chargement modèles 3D..."
 
@@ -363,7 +363,7 @@ msgstr "Nom du fichier Image 3D"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:785
 #: common/eda_base_frame.cpp:1255 common/eda_base_frame.cpp:1259
-#: pcbnew/plugins/altium/altium_pcb.cpp:1674
+#: pcbnew/plugins/altium/altium_pcb.cpp:1708
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
 msgstr "Autorisations requises insuffisantes pour enregistrer le fichier '%s'."
@@ -1011,13 +1011,13 @@ msgid "Light 8:"
 msgstr "Lumière 8:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:399
-#, fuzzy
-msgid "Board thickness:"
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:460
+msgid "Board Thickness: "
 msgstr "Epaisseur du PCB: "
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:400
-#, fuzzy
-msgid "3D Preview Options"
+#: common/dialogs/dialog_page_settings.cpp:104
+msgid "Preview Settings"
 msgstr "Paramètres de Prévisualisation"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:21
@@ -1627,8 +1627,8 @@ msgstr "Information"
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:121
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:479
 #: pcbnew/footprint_libraries_utils.cpp:472
-#: pcbnew/footprint_libraries_utils.cpp:1190 pcbnew/router/router_tool.cpp:1824
-#: pcbnew/router/router_tool.cpp:2404 pcbnew/zone_filler.cpp:734
+#: pcbnew/footprint_libraries_utils.cpp:1190 pcbnew/router/router_tool.cpp:1826
+#: pcbnew/router/router_tool.cpp:2406 pcbnew/zone_filler.cpp:734
 msgid "Confirmation"
 msgstr "Confirmation"
 
@@ -2434,10 +2434,6 @@ msgstr "USLedger 11x17in"
 #: common/dialogs/dialog_page_settings.cpp:72
 msgid "User (Custom)"
 msgstr "Format Personnalisé"
-
-#: common/dialogs/dialog_page_settings.cpp:104
-msgid "Preview Settings"
-msgstr "Paramètres de Prévisualisation"
 
 #: common/dialogs/dialog_page_settings.cpp:105
 msgid "Preview Paper"
@@ -5667,21 +5663,21 @@ msgstr "Monter Page %s"
 msgid "Open %s"
 msgstr "Ouvrir %s"
 
-#: common/plugins/altium/altium_parser.cpp:55 common/richio.cpp:138
+#: common/plugins/altium/altium_parser.cpp:56 common/richio.cpp:138
 #, c-format
 msgid "Cannot open file '%s'."
 msgstr "Impossible d'ouvrir le  fichier '%s'."
 
-#: common/plugins/altium/altium_parser.cpp:64
+#: common/plugins/altium/altium_parser.cpp:65
 msgid "Error reading file: cannot determine length."
 msgstr ""
 "Erreur lors de la lecture du fichier : impossible de déterminer la longueur."
 
-#: common/plugins/altium/altium_parser.cpp:77
+#: common/plugins/altium/altium_parser.cpp:78
 msgid "Error reading file."
 msgstr "Erreur de lecture du fichier."
 
-#: common/plugins/altium/altium_parser.cpp:192
+#: common/plugins/altium/altium_parser.cpp:270
 msgid ""
 "Missing null byte at end of property list. Imported data might be malformed "
 "or missing."
@@ -5689,12 +5685,12 @@ msgstr ""
 "Pour l’importation Altium, un octet nul est attendu à la fin d’une liste de "
 "propriétés. Les données importées peuvent être mal formées ou manquantes."
 
-#: common/plugins/altium/altium_parser.cpp:313
+#: common/plugins/altium/altium_parser.cpp:394
 #, c-format
 msgid "Unit '%s' does not end with 'mil'."
 msgstr "L’unité '%s' ne se termine pas par 'mil'."
 
-#: common/plugins/altium/altium_parser.cpp:321
+#: common/plugins/altium/altium_parser.cpp:402
 #, c-format
 msgid "Cannot convert '%s' to double."
 msgstr "Impossible de convertir '%s' en double."
@@ -7722,27 +7718,27 @@ msgstr "Impossible de créer le fichier rapport '%s'"
 msgid "%d duplicate time stamps were found and replaced."
 msgstr "%d signatures temporelles dupliquées remplacées."
 
-#: eeschema/annotate.cpp:378
+#: eeschema/annotate.cpp:385
 #, c-format
 msgid "Updated %s (unit %s) from %s to %s."
 msgstr "Mise à jour %s (unité %s) de %s à %s."
 
-#: eeschema/annotate.cpp:386
+#: eeschema/annotate.cpp:393
 #, c-format
 msgid "Updated %s from %s to %s."
 msgstr "Mis à jour %s de %s à %s."
 
-#: eeschema/annotate.cpp:396
+#: eeschema/annotate.cpp:403
 #, c-format
 msgid "Annotated %s (unit %s) as %s."
 msgstr "Numérotation %s (unité %s) en %s."
 
-#: eeschema/annotate.cpp:403
+#: eeschema/annotate.cpp:410
 #, c-format
 msgid "Annotated %s as %s."
 msgstr "Numérotation %s en %s."
 
-#: eeschema/annotate.cpp:420
+#: eeschema/annotate.cpp:427
 msgid "Annotation complete."
 msgstr "Annotation terminée."
 
@@ -7757,7 +7753,7 @@ msgstr ""
 "%s\n"
 "introuvable. Script non disponible."
 
-#: eeschema/connection_graph.cpp:2812 eeschema/connection_graph.cpp:2845
+#: eeschema/connection_graph.cpp:2814 eeschema/connection_graph.cpp:2847
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
@@ -7765,7 +7761,7 @@ msgstr ""
 "%s et %s sont attachés aux mêmes éléments.  %s a été choisi comme label  en "
 "netliste"
 
-#: eeschema/connection_graph.cpp:3114
+#: eeschema/connection_graph.cpp:3116
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
@@ -7773,14 +7769,14 @@ msgstr ""
 "Le net %s est graphiquement connecté au bus %s, mais n’est pas un membre de "
 "ce bus"
 
-#: eeschema/connection_graph.cpp:3596
+#: eeschema/connection_graph.cpp:3598
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
 "La pin de feuille %s n’a pas de label hiérarchique correspondant à "
 "l’intérieur de la feuille"
 
-#: eeschema/connection_graph.cpp:3614
+#: eeschema/connection_graph.cpp:3616
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
@@ -26702,7 +26698,7 @@ msgid "Are you sure you want to overwrite the existing file?"
 msgstr "Êtes-vous certain de que vouloir écraser le ficher existant?"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:256
-#: pcbnew/plugins/altium/altium_pcb.cpp:1630
+#: pcbnew/plugins/altium/altium_pcb.cpp:1664
 #, c-format
 msgid "Failed to create folder '%s'."
 msgstr "Impossible de créer le répertoire '%s'."
@@ -35246,7 +35242,7 @@ msgid "Hole X / Y"
 msgstr "Trou X/Y"
 
 #: pcbnew/pad.cpp:1084 pcbnew/pcb_track.cpp:905 pcbnew/pcb_track.cpp:950
-#: pcbnew/router/router_tool.cpp:2548 pcbnew/router/router_tool.cpp:2565
+#: pcbnew/router/router_tool.cpp:2550 pcbnew/router/router_tool.cpp:2567
 #: pcbnew/zone.cpp:617
 #, c-format
 msgid "Min Clearance: %s"
@@ -35254,9 +35250,9 @@ msgstr "Isolation Minimum: %s"
 
 #: pcbnew/pad.cpp:1086 pcbnew/pcb_track.cpp:907 pcbnew/pcb_track.cpp:916
 #: pcbnew/pcb_track.cpp:922 pcbnew/pcb_track.cpp:952 pcbnew/pcb_track.cpp:958
-#: pcbnew/router/router_tool.cpp:2545 pcbnew/router/router_tool.cpp:2550
-#: pcbnew/router/router_tool.cpp:2555 pcbnew/router/router_tool.cpp:2562
-#: pcbnew/router/router_tool.cpp:2567 pcbnew/zone.cpp:619
+#: pcbnew/router/router_tool.cpp:2547 pcbnew/router/router_tool.cpp:2552
+#: pcbnew/router/router_tool.cpp:2557 pcbnew/router/router_tool.cpp:2564
+#: pcbnew/router/router_tool.cpp:2569 pcbnew/zone.cpp:619
 #, c-format
 msgid "(from %s)"
 msgstr "(de %s)"
@@ -35791,35 +35787,35 @@ msgid ""
 msgstr ""
 "Entrer le module python qui implémente les fonctions du PLUGIN::Footprint*()."
 
-#: pcbnew/plugins/altium/altium_designer_plugin.cpp:152
+#: pcbnew/plugins/altium/altium_designer_plugin.cpp:155
 #: pcbnew/plugins/altium/altium_pcb.cpp:555
-#: pcbnew/plugins/altium/altium_pcb.cpp:682
-#: pcbnew/plugins/altium/altium_pcb.cpp:711
+#: pcbnew/plugins/altium/altium_pcb.cpp:691
+#: pcbnew/plugins/altium/altium_pcb.cpp:720
 #, c-format
 msgid "File not found: '%s'."
 msgstr "Fichier non trouvé: '%s'."
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:134
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:135
 #, c-format
 msgid "Unknown mapping of the Altium layer '%s'."
 msgstr "Correspondance inconnue de la couche Altium '%s'."
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:182
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:183
 #, c-format
 msgid "Unknown Mode string: '%s'."
 msgstr "Nom de Mode inconnu : '%s'."
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:209
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:210
 #, c-format
 msgid "Unknown Record name string: '%s'."
 msgstr "Chaîne de nom d’enregistrement inconnu : '%s'."
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:223
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:224
 #, c-format
 msgid "Unknown Extended Primitive Information type: '%s'."
 msgstr "Type d’information primitive étendue inconnu : '%s'."
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:784
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:794
 #, c-format
 msgid "Pads6 stream has unexpected length for subrecord 6: %d."
 msgstr ""
@@ -35855,41 +35851,46 @@ msgstr "'%s' n’a pas été analysé correctement."
 msgid "'%s' was not fully parsed."
 msgstr "'%s' n'a pas été complètement  lu."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:784
+#: pcbnew/plugins/altium/altium_pcb.cpp:683
+#, fuzzy, c-format
+msgid "Footprint directory not found: '%s'."
+msgstr "Librairies d'empreintes non trouvée."
+
+#: pcbnew/plugins/altium/altium_pcb.cpp:802
 #, c-format
 msgid "Record of unknown type: '%d'."
 msgstr "Enregistrement de type inconnu: '%d'."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:874
+#: pcbnew/plugins/altium/altium_pcb.cpp:908
 msgid "Loading extended primitive information data..."
 msgstr "Chargement de données d’informations primitives étendues..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:895
+#: pcbnew/plugins/altium/altium_pcb.cpp:929
 msgid "Loading board data..."
 msgstr "Chargement données du PCB..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1075
+#: pcbnew/plugins/altium/altium_pcb.cpp:1109
 msgid "Loading netclasses..."
 msgstr "Chargement netclasses..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1101
+#: pcbnew/plugins/altium/altium_pcb.cpp:1135
 #, c-format
 msgid "Duplicate netclass name '%s'."
 msgstr "Nom de Netclasse '%s' dupliqué."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1120
+#: pcbnew/plugins/altium/altium_pcb.cpp:1154
 msgid "Loading components..."
 msgstr "Chargement composants..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1181
+#: pcbnew/plugins/altium/altium_pcb.cpp:1215
 msgid "Loading component 3D models..."
 msgstr "Chargement modèles 3D..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1260
-#: pcbnew/plugins/altium/altium_pcb.cpp:1361
-#: pcbnew/plugins/altium/altium_pcb.cpp:1438
-#: pcbnew/plugins/altium/altium_pcb.cpp:1516
-#: pcbnew/plugins/altium/altium_pcb.cpp:1540
+#: pcbnew/plugins/altium/altium_pcb.cpp:1294
+#: pcbnew/plugins/altium/altium_pcb.cpp:1395
+#: pcbnew/plugins/altium/altium_pcb.cpp:1472
+#: pcbnew/plugins/altium/altium_pcb.cpp:1550
+#: pcbnew/plugins/altium/altium_pcb.cpp:1574
 #, c-format
 msgid ""
 "Dimension found on an Altium layer (%d) with no KiCad equivalent. It has "
@@ -35898,76 +35899,73 @@ msgstr ""
 "Cote trouvée sur couche Altium (%d) qui n'a pas d'équivalent dans Kicad. "
 "Placée sur couche Eco1_User ."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1562
+#: pcbnew/plugins/altium/altium_pcb.cpp:1596
 msgid "Loading dimension drawings..."
 msgstr "Chargement de cotes..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1583
-#: pcbnew/plugins/altium/altium_pcb.cpp:1590
+#: pcbnew/plugins/altium/altium_pcb.cpp:1617
+#: pcbnew/plugins/altium/altium_pcb.cpp:1624
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
 msgstr "Dimension du type %d ignorée (non encore prise en charge)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1631
+#: pcbnew/plugins/altium/altium_pcb.cpp:1665
 msgid "No 3D-models will be imported."
 msgstr "Aucun modèle 3D ne sera importé."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1660
+#: pcbnew/plugins/altium/altium_pcb.cpp:1694
 #, c-format
 msgid "File not found: '%s'. 3D-model not imported."
 msgstr "Fichier non trouvé: '%s'. Modèle 3D non importé."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1698
+#: pcbnew/plugins/altium/altium_pcb.cpp:1732
 msgid "Loading nets..."
 msgstr "Chargement nets..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1722
+#: pcbnew/plugins/altium/altium_pcb.cpp:1756
+#: pcbnew/plugins/altium/altium_pcb.cpp:1940
 msgid "Loading polygons..."
 msgstr "Chargement polygones..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1846
+#: pcbnew/plugins/altium/altium_pcb.cpp:1881
 msgid "Loading rules..."
 msgstr "Chargement règles..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1876
+#: pcbnew/plugins/altium/altium_pcb.cpp:1920
 msgid "Loading board regions..."
 msgstr "Chargement régions..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1896
-msgid "Loading zones..."
-msgstr "Chargement zones..."
-
-#: pcbnew/plugins/altium/altium_pcb.cpp:1969
-#: pcbnew/plugins/altium/altium_pcb.cpp:2015
+#: pcbnew/plugins/altium/altium_pcb.cpp:2045
+#: pcbnew/plugins/altium/altium_pcb.cpp:2125
 #, c-format
 msgid "Ignored polygon shape of kind %d (not yet supported)."
 msgstr "Forme de polygone ignorée type %d (non encore prise en charge)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2076
+#: pcbnew/plugins/altium/altium_pcb.cpp:2273
 msgid "Loading zone fills..."
 msgstr "Chargement du remplissage de zones..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2157
+#: pcbnew/plugins/altium/altium_pcb.cpp:2354
 msgid "Loading arcs..."
 msgstr "Chargement arcs..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2362
+#: pcbnew/plugins/altium/altium_pcb.cpp:2559
 msgid "Loading pads..."
 msgstr "Chargement des pads..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2447
+#: pcbnew/plugins/altium/altium_pcb.cpp:2644
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
 "L’empreinte %s pad %s n’est pas marquée comme multicouche, mais est un pad "
 "traversant."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2468
+#: pcbnew/plugins/altium/altium_pcb.cpp:2665
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr "P’empreinte %s, pad '%s’a un trou carré. (non supporté)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2495
+#: pcbnew/plugins/altium/altium_pcb.cpp:2692
 #, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
@@ -35976,25 +35974,25 @@ msgstr ""
 "Le pad '%s’de l’empreinte %s a un trou avec rotation de %f degrés. KiCad ne "
 "supporte que des rotations de 90 degrés."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2507
+#: pcbnew/plugins/altium/altium_pcb.cpp:2704
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "L’empreinte %s, pad %s, utilise un trou de type %d inconnu."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2524
+#: pcbnew/plugins/altium/altium_pcb.cpp:2721
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
 msgstr ""
 "Le pad '%s’de l'empreinte %s utilise une pile de pads complexe, qui n’est "
 "pas encore pris en charge."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2561
+#: pcbnew/plugins/altium/altium_pcb.cpp:2758
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr "L’empreinte %s pad %s utilise une forme de pad inconnue."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2619
-#: pcbnew/plugins/altium/altium_pcb.cpp:2640
+#: pcbnew/plugins/altium/altium_pcb.cpp:2816
+#: pcbnew/plugins/altium/altium_pcb.cpp:2837
 #, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -36003,34 +36001,34 @@ msgstr ""
 "Le pad non cuivre %s sur la couche Altium %d n’a pas d’équivalent KiCad. Mis "
 "sur Eco1_User à la place."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2660
+#: pcbnew/plugins/altium/altium_pcb.cpp:2857
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr ""
 "Le pad non-cuivre %s est connecté à un net, ce qui n’est pas pris en charge."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2666
+#: pcbnew/plugins/altium/altium_pcb.cpp:2863
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr "Le pad non en cuivre %s a un trou, qui n’est pas pris en charge."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2671
+#: pcbnew/plugins/altium/altium_pcb.cpp:2868
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr ""
 "Le pad non-cuivre %s utilise une pile de pad complexe (non encore prise en "
 "charge)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2813
+#: pcbnew/plugins/altium/altium_pcb.cpp:3010
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr "Le pad %s non cuivre utilise une forme de pad inconnue."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2823
+#: pcbnew/plugins/altium/altium_pcb.cpp:3020
 msgid "Loading vias..."
 msgstr "Chargement des vias..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2864
+#: pcbnew/plugins/altium/altium_pcb.cpp:3061
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
@@ -36038,27 +36036,27 @@ msgstr ""
 "La via de la couche %d à %d utilise une couche non-cuivre, qui n’est pas "
 "prise en charge."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2883
+#: pcbnew/plugins/altium/altium_pcb.cpp:3080
 msgid "Loading tracks..."
 msgstr "Chargement des pistes..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3053
+#: pcbnew/plugins/altium/altium_pcb.cpp:3250
 msgid "Loading unicode strings..."
 msgstr "Chargement de chaînes unicode..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3067
+#: pcbnew/plugins/altium/altium_pcb.cpp:3264
 msgid "Loading text..."
 msgstr "Chargement des textes..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3096
-#: pcbnew/plugins/altium/altium_pcb.cpp:3109
+#: pcbnew/plugins/altium/altium_pcb.cpp:3293
+#: pcbnew/plugins/altium/altium_pcb.cpp:3306
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr ""
 "Ignore le code-barre sur la couche Altium %d (pas pris en charge "
 "actuellement)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3212
+#: pcbnew/plugins/altium/altium_pcb.cpp:3409
 msgid "Loading rectangles..."
 msgstr "Chargement rectangles..."
 
@@ -36538,7 +36536,7 @@ msgstr "Ignorer un fil puisque la couche Eagle '%s' (%d) n’a pas été associ�
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1948
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2420
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:616
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:1522
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:1523
 #, c-format
 msgid ""
 "Invalid zero-sized pad ignored in\n"
@@ -36750,7 +36748,7 @@ msgstr "Fichier inattendu '%s' trouvé en librairie '%s'."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1038
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2789
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:3222
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:3223
 #, c-format
 msgid "Footprint library '%s' cannot be deleted."
 msgstr "La librairie d'empreintes  '%s' ne peut pas être supprimée."
@@ -36900,7 +36898,7 @@ msgstr ""
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5692
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6103
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2484
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2485
 msgid "Legacy Zone Warning"
 msgstr "Avertissement d'Obsolescence"
 
@@ -37017,38 +37015,38 @@ msgstr "Le fichier '%s' a une version non reconnue: %d."
 msgid "Unknown sheet type '%s' on line: %d."
 msgstr "Type de feuille inconnue '%s' ligne: %d."
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:1297
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:1298
 #, c-format
 msgid "Missing '$EndMODULE' for MODULE '%s'."
 msgstr "Manque '$EndMODULE' pour le MODULE '%s'."
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:1347
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:1348
 #, c-format
 msgid "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'."
 msgstr "Forme de pad '%c=0x%02x' inconnue ligne: %d, empreinte:'%s'."
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:1546
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:1547
 #, c-format
 msgid "Unknown FP_SHAPE type:'%c=0x%02x' on line %d of footprint '%s'."
 msgstr "Type FP_SHAPE inconnu: '%c=0x%02x'  ligne:%d de l'empreinte:'%s'."
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2320
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2321
 #, c-format
 msgid "Duplicate NETCLASS name '%s'."
 msgstr "Nom NETCLASS '%s' dupliqué."
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2401
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2412
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2402
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2413
 #, c-format
 msgid "Bad ZAux for CZONE_CONTAINER \"%s\""
 msgstr "ZAux mauvais pour CZONE_CONTAINER '%s'"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2427
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2428
 #, c-format
 msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr "Mauvais ZSmoothing pour CZONE_CONTAINER '%s'"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2482
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2483
 msgid ""
 "The legacy segment fill mode is no longer supported.\n"
 "Convert zones to smoothed polygon fills?"
@@ -37056,13 +37054,13 @@ msgstr ""
 "Le mode de remplissage par segment  n'est plus supporté.\n"
 "Conversion de la zone en polygone lissés?"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2522
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2523
 #, c-format
 msgid "Bad ZClearance padoption for CZONE_CONTAINER \"%s\""
 msgstr "Mauvais ZClearance padoption pour CZONE_CONTAINER '%s'"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2805
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2844
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2806
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2845
 #, c-format
 msgid ""
 "Invalid floating point number in file: '%s'\n"
@@ -37071,8 +37069,8 @@ msgstr ""
 "Nombre flottant invalide dans le fichier: fichier '%s'\n"
 "ligne: %d, offset: %d"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2815
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2854
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2816
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2855
 #, c-format
 msgid ""
 "Missing floating point number in file: '%s'\n"
@@ -37081,12 +37079,12 @@ msgstr ""
 "Nombre flottant manquant dans fichier: '%s'\n"
 "ligne: %d, offset: %d"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2996
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2997
 #, c-format
 msgid "File '%s' is empty."
 msgstr "Le fichier '%s' est vide."
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2999
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:3000
 #, c-format
 msgid "File '%s' is not a legacy library."
 msgstr "Le fichier '%s'  n'est pas une librairie à l'ancien format."
@@ -37245,16 +37243,16 @@ msgid "?"
 msgstr "?"
 
 #: pcbnew/router/pns_kicad_iface.cpp:606 pcbnew/router/pns_kicad_iface.cpp:687
-#: pcbnew/router/router_tool.cpp:768
+#: pcbnew/router/router_tool.cpp:770
 msgid "board minimum clearance"
 msgstr "isolation minimum du PCB"
 
 #: pcbnew/router/pns_kicad_iface.cpp:620 pcbnew/router/pns_kicad_iface.cpp:686
-#: pcbnew/router/router_tool.cpp:733 pcbnew/router/router_tool.cpp:755
+#: pcbnew/router/router_tool.cpp:735 pcbnew/router/router_tool.cpp:757
 msgid "board minimum track width"
 msgstr "c.i. largeur minimum de piste"
 
-#: pcbnew/router/pns_kicad_iface.cpp:627 pcbnew/router/router_tool.cpp:735
+#: pcbnew/router/pns_kicad_iface.cpp:627 pcbnew/router/router_tool.cpp:737
 msgid "existing track"
 msgstr "piste existante"
 
@@ -37540,79 +37538,79 @@ msgstr ""
 "Souhaitez-vous sauver journal des événements\n"
 "du routeur à des fins de débogage?"
 
-#: pcbnew/router/router_tool.cpp:1107
+#: pcbnew/router/router_tool.cpp:1109
 msgid "Blind/buried via need 2 different layers."
 msgstr "Une via aveugle / enterré nécessite 2 couches différentes."
 
-#: pcbnew/router/router_tool.cpp:1185
+#: pcbnew/router/router_tool.cpp:1187
 msgid "Tracks on Copper layers only."
 msgstr "Pistes sur Couches Cuivre seulement."
 
-#: pcbnew/router/router_tool.cpp:1824 pcbnew/router/router_tool.cpp:2404
+#: pcbnew/router/router_tool.cpp:1826 pcbnew/router/router_tool.cpp:2406
 msgid "The selected item is locked."
 msgstr "L'élément sélectionné est verrouillé."
 
-#: pcbnew/router/router_tool.cpp:1826
+#: pcbnew/router/router_tool.cpp:1828
 msgid "Drag Anyway"
 msgstr "Dragger de Toute Façon"
 
-#: pcbnew/router/router_tool.cpp:2406 pcbnew/tools/pcb_actions.cpp:1539
+#: pcbnew/router/router_tool.cpp:2408 pcbnew/tools/pcb_actions.cpp:1539
 msgid "Break Track"
 msgstr "Briser Piste"
 
-#: pcbnew/router/router_tool.cpp:2485
+#: pcbnew/router/router_tool.cpp:2487
 #, c-format
 msgid "Routing Diff Pair: %s"
 msgstr "Routage Paire Différentielle: %s"
 
-#: pcbnew/router/router_tool.cpp:2497 pcbnew/router/router_tool.cpp:2508
+#: pcbnew/router/router_tool.cpp:2499 pcbnew/router/router_tool.cpp:2510
 #, c-format
 msgid "Resolved Netclass: %s"
 msgstr "Netclasse Résolue: %s"
 
-#: pcbnew/router/router_tool.cpp:2505
+#: pcbnew/router/router_tool.cpp:2507
 #, c-format
 msgid "Routing Track: %s"
 msgstr "Routage Piste: %s"
 
-#: pcbnew/router/router_tool.cpp:2513
+#: pcbnew/router/router_tool.cpp:2515
 msgid "Routing Track"
 msgstr "Routage Piste"
 
-#: pcbnew/router/router_tool.cpp:2514
+#: pcbnew/router/router_tool.cpp:2516
 msgid "(no net)"
 msgstr "(pas de net)"
 
-#: pcbnew/router/router_tool.cpp:2523
+#: pcbnew/router/router_tool.cpp:2525
 msgid "Free-angle"
 msgstr "Angle libre"
 
-#: pcbnew/router/router_tool.cpp:2529
+#: pcbnew/router/router_tool.cpp:2531
 msgid "45-degree"
 msgstr "45 degrés"
 
-#: pcbnew/router/router_tool.cpp:2530
+#: pcbnew/router/router_tool.cpp:2532
 msgid "45-degree rounded"
 msgstr "Arrondi à 45 degrés"
 
-#: pcbnew/router/router_tool.cpp:2531
+#: pcbnew/router/router_tool.cpp:2533
 msgid "90-degree"
 msgstr "90 degrés"
 
-#: pcbnew/router/router_tool.cpp:2532
+#: pcbnew/router/router_tool.cpp:2534
 msgid "90-degree rounded"
 msgstr "Arrondi à 90 degrés"
 
-#: pcbnew/router/router_tool.cpp:2537
+#: pcbnew/router/router_tool.cpp:2539
 msgid "Corner Style"
 msgstr "Style de coins"
 
-#: pcbnew/router/router_tool.cpp:2543 pcbnew/router/router_tool.cpp:2560
+#: pcbnew/router/router_tool.cpp:2545 pcbnew/router/router_tool.cpp:2562
 #, c-format
 msgid "Track Width: %s"
 msgstr "Largeur Piste: '%s'"
 
-#: pcbnew/router/router_tool.cpp:2553
+#: pcbnew/router/router_tool.cpp:2555
 #, c-format
 msgid "Diff Pair Gap: %s"
 msgstr "Ecart Paire Différentielle: %s"
@@ -38443,10 +38441,6 @@ msgstr "Finition Cuivre: "
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:452
 msgid "Castellated pads: "
 msgstr "Pads castellated: "
-
-#: pcbnew/tools/drawing_stackup_table_tool.cpp:460
-msgid "Board Thickness: "
-msgstr "Epaisseur du PCB: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:474
 msgid "Min hole diameter: "
@@ -41632,6 +41626,17 @@ msgstr "Schématique KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "Fichier Circuit Imprimé KiCad"
+
+#, fuzzy
+#~ msgid "Board thickness:"
+#~ msgstr "Epaisseur du PCB: "
+
+#, fuzzy
+#~ msgid "3D Preview Options"
+#~ msgstr "Paramètres de Prévisualisation"
+
+#~ msgid "Loading zones..."
+#~ msgstr "Chargement zones..."
 
 #~ msgid "Board Thickness"
 #~ msgstr "Epaisseur du PCB"

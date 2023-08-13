@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-03 11:24-0700\n"
+"POT-Creation-Date: 2023-08-13 14:56-0700\n"
 "PO-Revision-Date: 2023-08-06 10:11+0000\n"
 "Last-Translator: yangyangdaji <1504305527@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -162,7 +162,7 @@ msgstr "载入 OpenGL 层 %d"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:678
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:791
-#: pcbnew/plugins/altium/altium_pcb.cpp:1605
+#: pcbnew/plugins/altium/altium_pcb.cpp:1639
 msgid "Loading 3D models..."
 msgstr "正在载入 3D 模型…"
 
@@ -368,7 +368,7 @@ msgstr "3D 图像文件名称"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:785
 #: common/eda_base_frame.cpp:1255 common/eda_base_frame.cpp:1259
-#: pcbnew/plugins/altium/altium_pcb.cpp:1674
+#: pcbnew/plugins/altium/altium_pcb.cpp:1708
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
 msgstr "无足够权限保存文件 '%s'。"
@@ -1002,12 +1002,14 @@ msgid "Light 8:"
 msgstr "浅色 8："
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:399
-msgid "Board thickness:"
-msgstr "板厚："
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:460
+msgid "Board Thickness: "
+msgstr "板厚： "
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:400
-msgid "3D Preview Options"
-msgstr "3D 预览设置"
+#: common/dialogs/dialog_page_settings.cpp:104
+msgid "Preview Settings"
+msgstr "预览设置"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56 pcbnew/pcb_bitmap.cpp:261
@@ -1607,8 +1609,8 @@ msgstr "信息"
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:121
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:479
 #: pcbnew/footprint_libraries_utils.cpp:472
-#: pcbnew/footprint_libraries_utils.cpp:1190 pcbnew/router/router_tool.cpp:1824
-#: pcbnew/router/router_tool.cpp:2404 pcbnew/zone_filler.cpp:734
+#: pcbnew/footprint_libraries_utils.cpp:1190 pcbnew/router/router_tool.cpp:1826
+#: pcbnew/router/router_tool.cpp:2406 pcbnew/zone_filler.cpp:734
 msgid "Confirmation"
 msgstr "确认"
 
@@ -2392,10 +2394,6 @@ msgstr "美式法律专用纸 11x17in"
 #: common/dialogs/dialog_page_settings.cpp:72
 msgid "User (Custom)"
 msgstr "用户设置（自定义）"
-
-#: common/dialogs/dialog_page_settings.cpp:104
-msgid "Preview Settings"
-msgstr "预览设置"
 
 #: common/dialogs/dialog_page_settings.cpp:105
 msgid "Preview Paper"
@@ -5540,31 +5538,31 @@ msgstr "显示页面 %s"
 msgid "Open %s"
 msgstr "打开 %s"
 
-#: common/plugins/altium/altium_parser.cpp:55 common/richio.cpp:138
+#: common/plugins/altium/altium_parser.cpp:56 common/richio.cpp:138
 #, c-format
 msgid "Cannot open file '%s'."
 msgstr "无法打开文件 '%s'。"
 
-#: common/plugins/altium/altium_parser.cpp:64
+#: common/plugins/altium/altium_parser.cpp:65
 msgid "Error reading file: cannot determine length."
 msgstr "读取文件时出错：无法确定长度。"
 
-#: common/plugins/altium/altium_parser.cpp:77
+#: common/plugins/altium/altium_parser.cpp:78
 msgid "Error reading file."
 msgstr "读取文件时出错。"
 
-#: common/plugins/altium/altium_parser.cpp:192
+#: common/plugins/altium/altium_parser.cpp:270
 msgid ""
 "Missing null byte at end of property list. Imported data might be malformed "
 "or missing."
 msgstr "属性列表末尾缺少空字节。导入的数据可能格式不正确或缺失。"
 
-#: common/plugins/altium/altium_parser.cpp:313
+#: common/plugins/altium/altium_parser.cpp:394
 #, c-format
 msgid "Unit '%s' does not end with 'mil'."
 msgstr "单元 \"%s\" 未以 'mil' 结尾。"
 
-#: common/plugins/altium/altium_parser.cpp:321
+#: common/plugins/altium/altium_parser.cpp:402
 #, c-format
 msgid "Cannot convert '%s' to double."
 msgstr "无法转换 '%s' 到双位。"
@@ -7549,27 +7547,27 @@ msgstr "无法创建封装浏览框架"
 msgid "%d duplicate time stamps were found and replaced."
 msgstr "找到并替换 %d 个重复的时间戳。"
 
-#: eeschema/annotate.cpp:378
+#: eeschema/annotate.cpp:385
 #, c-format
 msgid "Updated %s (unit %s) from %s to %s."
 msgstr "将 %s (单元 %s) 从 %s 更新到了 %s。"
 
-#: eeschema/annotate.cpp:386
+#: eeschema/annotate.cpp:393
 #, c-format
 msgid "Updated %s from %s to %s."
 msgstr "已将 %s 从 %s 更新至 %s。"
 
-#: eeschema/annotate.cpp:396
+#: eeschema/annotate.cpp:403
 #, c-format
 msgid "Annotated %s (unit %s) as %s."
 msgstr "已将 %s (单元 %s) 批注为 %s。"
 
-#: eeschema/annotate.cpp:403
+#: eeschema/annotate.cpp:410
 #, c-format
 msgid "Annotated %s as %s."
 msgstr "已将 %s 批注为 %s。"
 
-#: eeschema/annotate.cpp:420
+#: eeschema/annotate.cpp:427
 msgid "Annotation complete."
 msgstr "批注完成。"
 
@@ -7584,24 +7582,24 @@ msgstr ""
 "%s\n"
 "没有找到。脚本不可用。"
 
-#: eeschema/connection_graph.cpp:2812 eeschema/connection_graph.cpp:2845
+#: eeschema/connection_graph.cpp:2814 eeschema/connection_graph.cpp:2847
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr "%s 和 %s 都连接到同一根导线上；选择 %s 作为用于网络列表的标签"
 
-#: eeschema/connection_graph.cpp:3114
+#: eeschema/connection_graph.cpp:3116
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr "网络 %s 以图形方式连接到总线 %s，但不是总线的成员"
 
-#: eeschema/connection_graph.cpp:3596
+#: eeschema/connection_graph.cpp:3598
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "层次原理图引脚 %s 在子原理图内没有匹配的层次标签"
 
-#: eeschema/connection_graph.cpp:3614
+#: eeschema/connection_graph.cpp:3616
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "层次标签 %s 在父原理图页中没有匹配的页面引脚"
@@ -25936,7 +25934,7 @@ msgid "Are you sure you want to overwrite the existing file?"
 msgstr "你确定要覆盖现有的文件吗？"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:256
-#: pcbnew/plugins/altium/altium_pcb.cpp:1630
+#: pcbnew/plugins/altium/altium_pcb.cpp:1664
 #, c-format
 msgid "Failed to create folder '%s'."
 msgstr "创建文件 \"%s\" 失败。"
@@ -34279,7 +34277,7 @@ msgid "Hole X / Y"
 msgstr "孔 X / Y"
 
 #: pcbnew/pad.cpp:1084 pcbnew/pcb_track.cpp:905 pcbnew/pcb_track.cpp:950
-#: pcbnew/router/router_tool.cpp:2548 pcbnew/router/router_tool.cpp:2565
+#: pcbnew/router/router_tool.cpp:2550 pcbnew/router/router_tool.cpp:2567
 #: pcbnew/zone.cpp:617
 #, c-format
 msgid "Min Clearance: %s"
@@ -34287,9 +34285,9 @@ msgstr "最小间距：%s"
 
 #: pcbnew/pad.cpp:1086 pcbnew/pcb_track.cpp:907 pcbnew/pcb_track.cpp:916
 #: pcbnew/pcb_track.cpp:922 pcbnew/pcb_track.cpp:952 pcbnew/pcb_track.cpp:958
-#: pcbnew/router/router_tool.cpp:2545 pcbnew/router/router_tool.cpp:2550
-#: pcbnew/router/router_tool.cpp:2555 pcbnew/router/router_tool.cpp:2562
-#: pcbnew/router/router_tool.cpp:2567 pcbnew/zone.cpp:619
+#: pcbnew/router/router_tool.cpp:2547 pcbnew/router/router_tool.cpp:2552
+#: pcbnew/router/router_tool.cpp:2557 pcbnew/router/router_tool.cpp:2564
+#: pcbnew/router/router_tool.cpp:2569 pcbnew/zone.cpp:619
 #, c-format
 msgid "(from %s)"
 msgstr "(从 %s)"
@@ -34814,35 +34812,35 @@ msgid ""
 "Enter the python module which implements the PLUGIN::Footprint*() functions."
 msgstr "PLUGIN::Footprint*() 输入已定义的 Python 函数模块。"
 
-#: pcbnew/plugins/altium/altium_designer_plugin.cpp:152
+#: pcbnew/plugins/altium/altium_designer_plugin.cpp:155
 #: pcbnew/plugins/altium/altium_pcb.cpp:555
-#: pcbnew/plugins/altium/altium_pcb.cpp:682
-#: pcbnew/plugins/altium/altium_pcb.cpp:711
+#: pcbnew/plugins/altium/altium_pcb.cpp:691
+#: pcbnew/plugins/altium/altium_pcb.cpp:720
 #, c-format
 msgid "File not found: '%s'."
 msgstr "没有找到文件：'%s'。"
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:134
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:135
 #, c-format
 msgid "Unknown mapping of the Altium layer '%s'."
 msgstr "Altium 层 \"%s\" 的未知映射。"
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:182
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:183
 #, c-format
 msgid "Unknown Mode string: '%s'."
 msgstr "未知模式字符串：“%s”。"
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:209
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:210
 #, c-format
 msgid "Unknown Record name string: '%s'."
 msgstr "未知的记录名字符串：“%s”。"
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:223
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:224
 #, c-format
 msgid "Unknown Extended Primitive Information type: '%s'."
 msgstr "未知得扩展基本元素信息类型：“%s”。"
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:784
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:794
 #, c-format
 msgid "Pads6 stream has unexpected length for subrecord 6: %d."
 msgstr "Pads6 流中的 subrecord6 数据的长度 %d 非法。"
@@ -34875,41 +34873,46 @@ msgstr "“%s”未正确解析。"
 msgid "'%s' was not fully parsed."
 msgstr "“%s”未完全解析。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:784
+#: pcbnew/plugins/altium/altium_pcb.cpp:683
+#, fuzzy, c-format
+msgid "Footprint directory not found: '%s'."
+msgstr "封装库没有找到。"
+
+#: pcbnew/plugins/altium/altium_pcb.cpp:802
 #, c-format
 msgid "Record of unknown type: '%d'."
 msgstr "未知类型的记录：\"%d\"。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:874
+#: pcbnew/plugins/altium/altium_pcb.cpp:908
 msgid "Loading extended primitive information data..."
 msgstr "正在加载扩展基本元素信息数据…"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:895
+#: pcbnew/plugins/altium/altium_pcb.cpp:929
 msgid "Loading board data..."
 msgstr "正加载板数据..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1075
+#: pcbnew/plugins/altium/altium_pcb.cpp:1109
 msgid "Loading netclasses..."
 msgstr "正加载网络类..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1101
+#: pcbnew/plugins/altium/altium_pcb.cpp:1135
 #, c-format
 msgid "Duplicate netclass name '%s'."
 msgstr "重复的网络类名 \"%s\"。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1120
+#: pcbnew/plugins/altium/altium_pcb.cpp:1154
 msgid "Loading components..."
 msgstr "正加载元件..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1181
+#: pcbnew/plugins/altium/altium_pcb.cpp:1215
 msgid "Loading component 3D models..."
 msgstr "正加载元件 3D 模型…"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1260
-#: pcbnew/plugins/altium/altium_pcb.cpp:1361
-#: pcbnew/plugins/altium/altium_pcb.cpp:1438
-#: pcbnew/plugins/altium/altium_pcb.cpp:1516
-#: pcbnew/plugins/altium/altium_pcb.cpp:1540
+#: pcbnew/plugins/altium/altium_pcb.cpp:1294
+#: pcbnew/plugins/altium/altium_pcb.cpp:1395
+#: pcbnew/plugins/altium/altium_pcb.cpp:1472
+#: pcbnew/plugins/altium/altium_pcb.cpp:1550
+#: pcbnew/plugins/altium/altium_pcb.cpp:1574
 #, c-format
 msgid ""
 "Dimension found on an Altium layer (%d) with no KiCad equivalent. It has "
@@ -34918,97 +34921,94 @@ msgstr ""
 "Altium 层( %d )上找到的标注没有任何 KiCad 等效项。它已被移动到 KiCad 层 "
 "Eco1_User。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1562
+#: pcbnew/plugins/altium/altium_pcb.cpp:1596
 msgid "Loading dimension drawings..."
 msgstr "正加载尺寸图形…"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1583
-#: pcbnew/plugins/altium/altium_pcb.cpp:1590
+#: pcbnew/plugins/altium/altium_pcb.cpp:1617
+#: pcbnew/plugins/altium/altium_pcb.cpp:1624
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
 msgstr "忽略了类型为 %d 的标注 （尚不支持）。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1631
+#: pcbnew/plugins/altium/altium_pcb.cpp:1665
 msgid "No 3D-models will be imported."
 msgstr "没有 3D 模型会被导入。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1660
+#: pcbnew/plugins/altium/altium_pcb.cpp:1694
 #, c-format
 msgid "File not found: '%s'. 3D-model not imported."
 msgstr "没有找到文件：'%s'。未导入 3D 模型。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1698
+#: pcbnew/plugins/altium/altium_pcb.cpp:1732
 msgid "Loading nets..."
 msgstr "载入网中..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1722
+#: pcbnew/plugins/altium/altium_pcb.cpp:1756
+#: pcbnew/plugins/altium/altium_pcb.cpp:1940
 msgid "Loading polygons..."
 msgstr "正加载多边形..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1846
+#: pcbnew/plugins/altium/altium_pcb.cpp:1881
 msgid "Loading rules..."
 msgstr "载入规则中..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1876
+#: pcbnew/plugins/altium/altium_pcb.cpp:1920
 msgid "Loading board regions..."
 msgstr "正载入板敷铜..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1896
-msgid "Loading zones..."
-msgstr "载入敷铜中..."
-
-#: pcbnew/plugins/altium/altium_pcb.cpp:1969
-#: pcbnew/plugins/altium/altium_pcb.cpp:2015
+#: pcbnew/plugins/altium/altium_pcb.cpp:2045
+#: pcbnew/plugins/altium/altium_pcb.cpp:2125
 #, c-format
 msgid "Ignored polygon shape of kind %d (not yet supported)."
 msgstr "忽略类型为 %d 的多边形，因为尚未实现。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2076
+#: pcbnew/plugins/altium/altium_pcb.cpp:2273
 msgid "Loading zone fills..."
 msgstr "载入敷铜文件中..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2157
+#: pcbnew/plugins/altium/altium_pcb.cpp:2354
 msgid "Loading arcs..."
 msgstr "载入弧中..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2362
+#: pcbnew/plugins/altium/altium_pcb.cpp:2559
 msgid "Loading pads..."
 msgstr "载入焊盘中..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2447
+#: pcbnew/plugins/altium/altium_pcb.cpp:2644
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr "封装 %s 焊盘 %s 未被标记为多层，但它是 TH 焊盘。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2468
+#: pcbnew/plugins/altium/altium_pcb.cpp:2665
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr "封装 %s 焊盘 %s 有一个方孔。(KiCad 目前还不支持此功能)。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2495
+#: pcbnew/plugins/altium/altium_pcb.cpp:2692
 #, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr "封装 %s 焊盘 %s 有 %f 度的孔旋转。KiCad 仅支持 90 度角旋转。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2507
+#: pcbnew/plugins/altium/altium_pcb.cpp:2704
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "封装 %s 焊盘 %s 有一个未知类型 %d 的孔。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2524
+#: pcbnew/plugins/altium/altium_pcb.cpp:2721
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
 msgstr "封装 %s 的焊盘 %s 使用了复杂的焊盘压层，尚不支持"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2561
+#: pcbnew/plugins/altium/altium_pcb.cpp:2758
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr "封装 %s 焊盘 %s 使用未知的焊盘形状。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2619
-#: pcbnew/plugins/altium/altium_pcb.cpp:2640
+#: pcbnew/plugins/altium/altium_pcb.cpp:2816
+#: pcbnew/plugins/altium/altium_pcb.cpp:2837
 #, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -35017,55 +35017,55 @@ msgstr ""
 "非铜焊盘 %s ，发现于Altium 层 (%d)，没有 KiCad 等效项。它已被移动至 Kicad "
 "Eco1_User 层。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2660
+#: pcbnew/plugins/altium/altium_pcb.cpp:2857
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr "非铜焊盘 %s 被连接到了某个网络，KiCad 不支持这种行为。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2666
+#: pcbnew/plugins/altium/altium_pcb.cpp:2863
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr "非铜焊盘 %s有一个孔，KiCad 不支持这种情况。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2671
+#: pcbnew/plugins/altium/altium_pcb.cpp:2868
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr "非铜焊盘“%s”使用复杂的焊盘压层，尚不支持。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2813
+#: pcbnew/plugins/altium/altium_pcb.cpp:3010
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr "非铜焊盘“%s”使用了未知的焊盘形状。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2823
+#: pcbnew/plugins/altium/altium_pcb.cpp:3020
 msgid "Loading vias..."
 msgstr "载入过孔中..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2864
+#: pcbnew/plugins/altium/altium_pcb.cpp:3061
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
 msgstr "来自层 %d <-> %d 的过孔使用非铜层，KiCad 不支持这种情况。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2883
+#: pcbnew/plugins/altium/altium_pcb.cpp:3080
 msgid "Loading tracks..."
 msgstr "载入布线中..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3053
+#: pcbnew/plugins/altium/altium_pcb.cpp:3250
 msgid "Loading unicode strings..."
 msgstr "正在加载 unicode 字符串……"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3067
+#: pcbnew/plugins/altium/altium_pcb.cpp:3264
 msgid "Loading text..."
 msgstr "载入文本中..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3096
-#: pcbnew/plugins/altium/altium_pcb.cpp:3109
+#: pcbnew/plugins/altium/altium_pcb.cpp:3293
+#: pcbnew/plugins/altium/altium_pcb.cpp:3306
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr "忽略了 Altium 层 %d 上的条形码 (尚不支持)。"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3212
+#: pcbnew/plugins/altium/altium_pcb.cpp:3409
 msgid "Loading rectangles..."
 msgstr "载入矩形中..."
 
@@ -35492,7 +35492,7 @@ msgstr "忽略导线，因为 Eagle 图层 '%s' (%d) 未映射"
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1948
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2420
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:616
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:1522
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:1523
 #, c-format
 msgid ""
 "Invalid zero-sized pad ignored in\n"
@@ -35690,7 +35690,7 @@ msgstr "在库\"%s\" 中找到了意想不到的文件 \"%s\"。"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1038
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2789
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:3222
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:3223
 #, c-format
 msgid "Footprint library '%s' cannot be deleted."
 msgstr "无法删除封装库 \"%s\" 。"
@@ -35839,7 +35839,7 @@ msgstr ""
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5692
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6103
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2484
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2485
 msgid "Legacy Zone Warning"
 msgstr "旧敷铜警告"
 
@@ -35955,38 +35955,38 @@ msgstr "文件 '%s' 有一个未被识别的版本: %d。"
 msgid "Unknown sheet type '%s' on line: %d."
 msgstr "未知图框类型 \"%s\"，位于行：%d。"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:1297
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:1298
 #, c-format
 msgid "Missing '$EndMODULE' for MODULE '%s'."
 msgstr "模块 \"%s\" 缺少 '$EndMODULE'。"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:1347
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:1348
 #, c-format
 msgid "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'."
 msgstr "未知焊盘形状 '%c=0x%02x'，在行：%d ，其位于封装：\"%s\"内。"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:1546
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:1547
 #, c-format
 msgid "Unknown FP_SHAPE type:'%c=0x%02x' on line %d of footprint '%s'."
 msgstr "未知 FP_SHAPE 类型：'%c=0x%02x' 在行：%d，其位于封装：\"%s\"内。"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2320
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2321
 #, c-format
 msgid "Duplicate NETCLASS name '%s'."
 msgstr "复制网络类名称 \"%s\"。"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2401
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2412
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2402
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2413
 #, c-format
 msgid "Bad ZAux for CZONE_CONTAINER \"%s\""
 msgstr "CZONE_CONTAINER \"%s\"的错误 ZAux"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2427
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2428
 #, c-format
 msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr "CZONE_CONTAINER \"%s\"是坏的 ZSmoothing"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2482
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2483
 msgid ""
 "The legacy segment fill mode is no longer supported.\n"
 "Convert zones to smoothed polygon fills?"
@@ -35994,13 +35994,13 @@ msgstr ""
 "不再支持旧的线段填充模式。\n"
 "是否将敷铜转换为光滑的多边形填充？"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2522
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2523
 #, c-format
 msgid "Bad ZClearance padoption for CZONE_CONTAINER \"%s\""
 msgstr "CZONE_CONTAINER \"%s\" 的 ZClearance 选项不正确"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2805
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2844
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2806
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2845
 #, c-format
 msgid ""
 "Invalid floating point number in file: '%s'\n"
@@ -36009,8 +36009,8 @@ msgstr ""
 "无效浮点数在文件：\"%s\"\n"
 "行：%d，位移：%d"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2815
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2854
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2816
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2855
 #, c-format
 msgid ""
 "Missing floating point number in file: '%s'\n"
@@ -36019,12 +36019,12 @@ msgstr ""
 "缺失的浮点数在文件：\"%s\"\n"
 "行：%d，偏移：%d"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2996
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2997
 #, c-format
 msgid "File '%s' is empty."
 msgstr "文件 \"%s\" 为空。"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2999
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:3000
 #, c-format
 msgid "File '%s' is not a legacy library."
 msgstr "文件 \"%s\" 不是一个旧库。"
@@ -36177,16 +36177,16 @@ msgid "?"
 msgstr "？"
 
 #: pcbnew/router/pns_kicad_iface.cpp:606 pcbnew/router/pns_kicad_iface.cpp:687
-#: pcbnew/router/router_tool.cpp:768
+#: pcbnew/router/router_tool.cpp:770
 msgid "board minimum clearance"
 msgstr "板最小间隙"
 
 #: pcbnew/router/pns_kicad_iface.cpp:620 pcbnew/router/pns_kicad_iface.cpp:686
-#: pcbnew/router/router_tool.cpp:733 pcbnew/router/router_tool.cpp:755
+#: pcbnew/router/router_tool.cpp:735 pcbnew/router/router_tool.cpp:757
 msgid "board minimum track width"
 msgstr "板最小走线宽度"
 
-#: pcbnew/router/pns_kicad_iface.cpp:627 pcbnew/router/router_tool.cpp:735
+#: pcbnew/router/pns_kicad_iface.cpp:627 pcbnew/router/router_tool.cpp:737
 msgid "existing track"
 msgstr "现存线路"
 
@@ -36460,79 +36460,79 @@ msgstr ""
 "是否要保存布线事件日志\n"
 "以进行调试？"
 
-#: pcbnew/router/router_tool.cpp:1107
+#: pcbnew/router/router_tool.cpp:1109
 msgid "Blind/buried via need 2 different layers."
 msgstr "盲孔/埋孔需要 2 个不同层。"
 
-#: pcbnew/router/router_tool.cpp:1185
+#: pcbnew/router/router_tool.cpp:1187
 msgid "Tracks on Copper layers only."
 msgstr "仅铜层上的布线。"
 
-#: pcbnew/router/router_tool.cpp:1824 pcbnew/router/router_tool.cpp:2404
+#: pcbnew/router/router_tool.cpp:1826 pcbnew/router/router_tool.cpp:2406
 msgid "The selected item is locked."
 msgstr "选择的项目被锁定。"
 
-#: pcbnew/router/router_tool.cpp:1826
+#: pcbnew/router/router_tool.cpp:1828
 msgid "Drag Anyway"
 msgstr "仍然拖动"
 
-#: pcbnew/router/router_tool.cpp:2406 pcbnew/tools/pcb_actions.cpp:1539
+#: pcbnew/router/router_tool.cpp:2408 pcbnew/tools/pcb_actions.cpp:1539
 msgid "Break Track"
 msgstr "分割布线"
 
-#: pcbnew/router/router_tool.cpp:2485
+#: pcbnew/router/router_tool.cpp:2487
 #, c-format
 msgid "Routing Diff Pair: %s"
 msgstr "给差分对布线：%s"
 
-#: pcbnew/router/router_tool.cpp:2497 pcbnew/router/router_tool.cpp:2508
+#: pcbnew/router/router_tool.cpp:2499 pcbnew/router/router_tool.cpp:2510
 #, c-format
 msgid "Resolved Netclass: %s"
 msgstr "已解析的网络类：%s"
 
-#: pcbnew/router/router_tool.cpp:2505
+#: pcbnew/router/router_tool.cpp:2507
 #, c-format
 msgid "Routing Track: %s"
 msgstr "布单根导线：%s"
 
-#: pcbnew/router/router_tool.cpp:2513
+#: pcbnew/router/router_tool.cpp:2515
 msgid "Routing Track"
 msgstr "布线"
 
-#: pcbnew/router/router_tool.cpp:2514
+#: pcbnew/router/router_tool.cpp:2516
 msgid "(no net)"
 msgstr "(无网络)"
 
-#: pcbnew/router/router_tool.cpp:2523
+#: pcbnew/router/router_tool.cpp:2525
 msgid "Free-angle"
 msgstr "自由角度"
 
-#: pcbnew/router/router_tool.cpp:2529
+#: pcbnew/router/router_tool.cpp:2531
 msgid "45-degree"
 msgstr "45 度"
 
-#: pcbnew/router/router_tool.cpp:2530
+#: pcbnew/router/router_tool.cpp:2532
 msgid "45-degree rounded"
 msgstr "45 度圆角"
 
-#: pcbnew/router/router_tool.cpp:2531
+#: pcbnew/router/router_tool.cpp:2533
 msgid "90-degree"
 msgstr "90 度"
 
-#: pcbnew/router/router_tool.cpp:2532
+#: pcbnew/router/router_tool.cpp:2534
 msgid "90-degree rounded"
 msgstr "90 度圆角"
 
-#: pcbnew/router/router_tool.cpp:2537
+#: pcbnew/router/router_tool.cpp:2539
 msgid "Corner Style"
 msgstr "角的样式"
 
-#: pcbnew/router/router_tool.cpp:2543 pcbnew/router/router_tool.cpp:2560
+#: pcbnew/router/router_tool.cpp:2545 pcbnew/router/router_tool.cpp:2562
 #, c-format
 msgid "Track Width: %s"
 msgstr "线路宽度：%s"
 
-#: pcbnew/router/router_tool.cpp:2553
+#: pcbnew/router/router_tool.cpp:2555
 #, c-format
 msgid "Diff Pair Gap: %s"
 msgstr "差分对间距：%s"
@@ -37348,10 +37348,6 @@ msgstr "铜表面处理（镀铜）： "
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:452
 msgid "Castellated pads: "
 msgstr "金属化半孔焊盘： "
-
-#: pcbnew/tools/drawing_stackup_table_tool.cpp:460
-msgid "Board Thickness: "
-msgstr "板厚： "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:474
 msgid "Min hole diameter: "
@@ -40437,6 +40433,15 @@ msgstr "KiCad 原理图"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad 印刷电路板"
+
+#~ msgid "Board thickness:"
+#~ msgstr "板厚："
+
+#~ msgid "3D Preview Options"
+#~ msgstr "3D 预览设置"
+
+#~ msgid "Loading zones..."
+#~ msgstr "载入敷铜中..."
 
 #~ msgid "Board Thickness"
 #~ msgstr "板厚"

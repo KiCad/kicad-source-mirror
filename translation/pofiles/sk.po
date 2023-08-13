@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-03 11:24-0700\n"
+"POT-Creation-Date: 2023-08-13 14:56-0700\n"
 "PO-Revision-Date: 2023-08-10 19:50+0000\n"
 "Last-Translator: Milan Šalka <salka.milan@googlemail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v7/sk/>\n"
@@ -152,7 +152,7 @@ msgstr "Načítanie OpenGL: vrstva %d"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:678
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:791
-#: pcbnew/plugins/altium/altium_pcb.cpp:1605
+#: pcbnew/plugins/altium/altium_pcb.cpp:1639
 msgid "Loading 3D models..."
 msgstr "Načítanie 3D modelov..."
 
@@ -362,7 +362,7 @@ msgstr "Názov súboru 3D obrázku"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:785
 #: common/eda_base_frame.cpp:1255 common/eda_base_frame.cpp:1259
-#: pcbnew/plugins/altium/altium_pcb.cpp:1674
+#: pcbnew/plugins/altium/altium_pcb.cpp:1708
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
 msgstr "Nedostatočné oprávnenia na uloženie súboru '%s'."
@@ -1026,14 +1026,14 @@ msgid "Light 8:"
 msgstr "Svetlo 8:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:399
-#, fuzzy
-msgid "Board thickness:"
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:460
+msgid "Board Thickness: "
 msgstr "Hrúbka dosky: "
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:400
-#, fuzzy
-msgid "3D Preview Options"
-msgstr "Voľby Gerbview"
+#: common/dialogs/dialog_page_settings.cpp:104
+msgid "Preview Settings"
+msgstr "Nastavenie náhľadu"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56 pcbnew/pcb_bitmap.cpp:261
@@ -1656,8 +1656,8 @@ msgstr "Potvrdenie"
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:121
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:479
 #: pcbnew/footprint_libraries_utils.cpp:472
-#: pcbnew/footprint_libraries_utils.cpp:1190 pcbnew/router/router_tool.cpp:1824
-#: pcbnew/router/router_tool.cpp:2404 pcbnew/zone_filler.cpp:734
+#: pcbnew/footprint_libraries_utils.cpp:1190 pcbnew/router/router_tool.cpp:1826
+#: pcbnew/router/router_tool.cpp:2406 pcbnew/zone_filler.cpp:734
 msgid "Confirmation"
 msgstr "Potvrdenie"
 
@@ -2460,10 +2460,6 @@ msgstr "USLedger 11x17in"
 #: common/dialogs/dialog_page_settings.cpp:72
 msgid "User (Custom)"
 msgstr "Používateľské (Vlastné)"
-
-#: common/dialogs/dialog_page_settings.cpp:104
-msgid "Preview Settings"
-msgstr "Nastavenie náhľadu"
 
 #: common/dialogs/dialog_page_settings.cpp:105
 msgid "Preview Paper"
@@ -5745,33 +5741,33 @@ msgstr "Zobraziť hranice strany"
 msgid "Open %s"
 msgstr "Otvoriť %s"
 
-#: common/plugins/altium/altium_parser.cpp:55 common/richio.cpp:138
+#: common/plugins/altium/altium_parser.cpp:56 common/richio.cpp:138
 #, fuzzy, c-format
 msgid "Cannot open file '%s'."
 msgstr "Nie je možné otvoriť súbor „%s“"
 
-#: common/plugins/altium/altium_parser.cpp:64
+#: common/plugins/altium/altium_parser.cpp:65
 #, fuzzy
 msgid "Error reading file: cannot determine length."
 msgstr "Chyba rozbalovania súboru!\n"
 
-#: common/plugins/altium/altium_parser.cpp:77
+#: common/plugins/altium/altium_parser.cpp:78
 #, fuzzy
 msgid "Error reading file."
 msgstr "Chyba rozbalovania súboru!\n"
 
-#: common/plugins/altium/altium_parser.cpp:192
+#: common/plugins/altium/altium_parser.cpp:270
 msgid ""
 "Missing null byte at end of property list. Imported data might be malformed "
 "or missing."
 msgstr ""
 
-#: common/plugins/altium/altium_parser.cpp:313
+#: common/plugins/altium/altium_parser.cpp:394
 #, c-format
 msgid "Unit '%s' does not end with 'mil'."
 msgstr ""
 
-#: common/plugins/altium/altium_parser.cpp:321
+#: common/plugins/altium/altium_parser.cpp:402
 #, fuzzy, c-format
 msgid "Cannot convert '%s' to double."
 msgstr "Nie je možné previesť „%s“ na celé číslo"
@@ -7812,27 +7808,27 @@ msgstr "Nie je možné vytvoriť súbor správy „%s“"
 msgid "%d duplicate time stamps were found and replaced."
 msgstr "Najdených a nahradených %d duplikovaných časových pečiatok."
 
-#: eeschema/annotate.cpp:378
+#: eeschema/annotate.cpp:385
 #, fuzzy, c-format
 msgid "Updated %s (unit %s) from %s to %s."
 msgstr "Aktualizované %s (jednotka %s) z %s na %s"
 
-#: eeschema/annotate.cpp:386
+#: eeschema/annotate.cpp:393
 #, fuzzy, c-format
 msgid "Updated %s from %s to %s."
 msgstr "Aktualizované %s z %s na %s"
 
-#: eeschema/annotate.cpp:396
+#: eeschema/annotate.cpp:403
 #, fuzzy, c-format
 msgid "Annotated %s (unit %s) as %s."
 msgstr "Komentované %s (jednotka %s) ako %s"
 
-#: eeschema/annotate.cpp:403
+#: eeschema/annotate.cpp:410
 #, fuzzy, c-format
 msgid "Annotated %s as %s."
 msgstr "Komentované %s ako %s"
 
-#: eeschema/annotate.cpp:420
+#: eeschema/annotate.cpp:427
 msgid "Annotation complete."
 msgstr "Anotácia dokončená."
 
@@ -7847,28 +7843,28 @@ msgstr ""
 "%s\n"
 "nebol nájdený. Skript nie je k dispozícii."
 
-#: eeschema/connection_graph.cpp:2812 eeschema/connection_graph.cpp:2845
+#: eeschema/connection_graph.cpp:2814 eeschema/connection_graph.cpp:2847
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr ""
 "%s aj %s sú pripojené k rovnakým položkám; %s sa použije v zozname netlistov"
 
-#: eeschema/connection_graph.cpp:3114
+#: eeschema/connection_graph.cpp:3116
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr ""
 "Sieť %s je graficky pripojená k zbernici %s, ale nie je členom tejto zbernice"
 
-#: eeschema/connection_graph.cpp:3596
+#: eeschema/connection_graph.cpp:3598
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
 "Vývod listu %s nemá vo vnútri listu žiadne zodpovedajúce hierarchické "
 "označenie"
 
-#: eeschema/connection_graph.cpp:3614
+#: eeschema/connection_graph.cpp:3616
 #, fuzzy, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
@@ -27185,7 +27181,7 @@ msgid "Are you sure you want to overwrite the existing file?"
 msgstr "Naozaj chcete prepísať existujúci súbor?"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:256
-#: pcbnew/plugins/altium/altium_pcb.cpp:1630
+#: pcbnew/plugins/altium/altium_pcb.cpp:1664
 #, fuzzy, c-format
 msgid "Failed to create folder '%s'."
 msgstr "Nepodarilo sa vytvoriť súbor „%s“"
@@ -35501,7 +35497,7 @@ msgid "Hole X / Y"
 msgstr "Vŕtanie X / Y"
 
 #: pcbnew/pad.cpp:1084 pcbnew/pcb_track.cpp:905 pcbnew/pcb_track.cpp:950
-#: pcbnew/router/router_tool.cpp:2548 pcbnew/router/router_tool.cpp:2565
+#: pcbnew/router/router_tool.cpp:2550 pcbnew/router/router_tool.cpp:2567
 #: pcbnew/zone.cpp:617
 #, c-format
 msgid "Min Clearance: %s"
@@ -35509,9 +35505,9 @@ msgstr "Minimálna vzdialenosť: %s"
 
 #: pcbnew/pad.cpp:1086 pcbnew/pcb_track.cpp:907 pcbnew/pcb_track.cpp:916
 #: pcbnew/pcb_track.cpp:922 pcbnew/pcb_track.cpp:952 pcbnew/pcb_track.cpp:958
-#: pcbnew/router/router_tool.cpp:2545 pcbnew/router/router_tool.cpp:2550
-#: pcbnew/router/router_tool.cpp:2555 pcbnew/router/router_tool.cpp:2562
-#: pcbnew/router/router_tool.cpp:2567 pcbnew/zone.cpp:619
+#: pcbnew/router/router_tool.cpp:2547 pcbnew/router/router_tool.cpp:2552
+#: pcbnew/router/router_tool.cpp:2557 pcbnew/router/router_tool.cpp:2564
+#: pcbnew/router/router_tool.cpp:2569 pcbnew/zone.cpp:619
 #, c-format
 msgid "(from %s)"
 msgstr "(od %s)"
@@ -36075,35 +36071,35 @@ msgid ""
 msgstr ""
 "Zadajte modul python, ktorý implementuje funkcie PLUGIN :: Footprint * ()."
 
-#: pcbnew/plugins/altium/altium_designer_plugin.cpp:152
+#: pcbnew/plugins/altium/altium_designer_plugin.cpp:155
 #: pcbnew/plugins/altium/altium_pcb.cpp:555
-#: pcbnew/plugins/altium/altium_pcb.cpp:682
-#: pcbnew/plugins/altium/altium_pcb.cpp:711
+#: pcbnew/plugins/altium/altium_pcb.cpp:691
+#: pcbnew/plugins/altium/altium_pcb.cpp:720
 #, fuzzy, c-format
 msgid "File not found: '%s'."
 msgstr "Súbor sa nenašiel: %s."
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:134
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:135
 #, c-format
 msgid "Unknown mapping of the Altium layer '%s'."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:182
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:183
 #, fuzzy, c-format
 msgid "Unknown Mode string: '%s'."
 msgstr "Neznámy uzol „%s“ v „%s“"
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:209
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:210
 #, fuzzy, c-format
 msgid "Unknown Record name string: '%s'."
 msgstr "neznámy tvar plôšky: %d"
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:223
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:224
 #, fuzzy, c-format
 msgid "Unknown Extended Primitive Information type: '%s'."
 msgstr "Neznámy typ MIME pre súbor doc „%s“"
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:784
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:794
 #, c-format
 msgid "Pads6 stream has unexpected length for subrecord 6: %d."
 msgstr ""
@@ -36139,46 +36135,51 @@ msgstr "Medená zóna (%s) nemá pripojené žiadne podložky."
 msgid "'%s' was not fully parsed."
 msgstr "Súbor „%s“ nebol úplne prečítaný"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:784
+#: pcbnew/plugins/altium/altium_pcb.cpp:683
+#, fuzzy, c-format
+msgid "Footprint directory not found: '%s'."
+msgstr "Knižnica stopy sa nenašla."
+
+#: pcbnew/plugins/altium/altium_pcb.cpp:802
 #, fuzzy, c-format
 msgid "Record of unknown type: '%d'."
 msgstr "neznámy tvar plôšky: %d"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:874
+#: pcbnew/plugins/altium/altium_pcb.cpp:908
 #, fuzzy
 msgid "Loading extended primitive information data..."
 msgstr "Neznámy typ MIME pre súbor doc „%s“"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:895
+#: pcbnew/plugins/altium/altium_pcb.cpp:929
 #, fuzzy
 msgid "Loading board data..."
 msgstr "Načítavajú sa súbory Gerber ..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1075
+#: pcbnew/plugins/altium/altium_pcb.cpp:1109
 #, fuzzy
 msgid "Loading netclasses..."
 msgstr "Načítavam..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1101
+#: pcbnew/plugins/altium/altium_pcb.cpp:1135
 #, fuzzy, c-format
 msgid "Duplicate netclass name '%s'."
 msgstr "Duplikovaný názov netclass „%s“"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1120
+#: pcbnew/plugins/altium/altium_pcb.cpp:1154
 #, fuzzy
 msgid "Loading components..."
 msgstr "Načítavam..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1181
+#: pcbnew/plugins/altium/altium_pcb.cpp:1215
 #, fuzzy
 msgid "Loading component 3D models..."
 msgstr "Načítanie 3D modelov"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1260
-#: pcbnew/plugins/altium/altium_pcb.cpp:1361
-#: pcbnew/plugins/altium/altium_pcb.cpp:1438
-#: pcbnew/plugins/altium/altium_pcb.cpp:1516
-#: pcbnew/plugins/altium/altium_pcb.cpp:1540
+#: pcbnew/plugins/altium/altium_pcb.cpp:1294
+#: pcbnew/plugins/altium/altium_pcb.cpp:1395
+#: pcbnew/plugins/altium/altium_pcb.cpp:1472
+#: pcbnew/plugins/altium/altium_pcb.cpp:1550
+#: pcbnew/plugins/altium/altium_pcb.cpp:1574
 #, fuzzy, c-format
 msgid ""
 "Dimension found on an Altium layer (%d) with no KiCad equivalent. It has "
@@ -36187,93 +36188,89 @@ msgstr ""
 "Rozmer na altiovej vrstve %d nemá ekvivalent KiCad. Namiesto toho ho vložte "
 "na server Eco1_User"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1562
+#: pcbnew/plugins/altium/altium_pcb.cpp:1596
 #, fuzzy
 msgid "Loading dimension drawings..."
 msgstr "Načítavam..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1583
-#: pcbnew/plugins/altium/altium_pcb.cpp:1590
+#: pcbnew/plugins/altium/altium_pcb.cpp:1617
+#: pcbnew/plugins/altium/altium_pcb.cpp:1624
 #, fuzzy, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
 msgstr ""
 "Čiarový kód na vrstve Altium %d ignorujte, pretože momentálne nie je "
 "podporovaný."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1631
+#: pcbnew/plugins/altium/altium_pcb.cpp:1665
 #, fuzzy
 msgid "No 3D-models will be imported."
 msgstr ""
 "Nie je možné vytvoriť adresár „%s“ -> nebudú importované žiadne 3D modely."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1660
+#: pcbnew/plugins/altium/altium_pcb.cpp:1694
 #, fuzzy, c-format
 msgid "File not found: '%s'. 3D-model not imported."
 msgstr "Súbor sa nenašiel: %s."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1698
+#: pcbnew/plugins/altium/altium_pcb.cpp:1732
 #, fuzzy
 msgid "Loading nets..."
 msgstr "Načítavam..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1722
+#: pcbnew/plugins/altium/altium_pcb.cpp:1756
+#: pcbnew/plugins/altium/altium_pcb.cpp:1940
 #, fuzzy
 msgid "Loading polygons..."
 msgstr "Prebiehajú polygónové výplne ..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1846
+#: pcbnew/plugins/altium/altium_pcb.cpp:1881
 #, fuzzy
 msgid "Loading rules..."
 msgstr "Načítavajú sa súbory Gerber ..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1876
+#: pcbnew/plugins/altium/altium_pcb.cpp:1920
 #, fuzzy
 msgid "Loading board regions..."
 msgstr "Načítavajú sa súbory Gerber ..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1896
-#, fuzzy
-msgid "Loading zones..."
-msgstr "Načítavam..."
-
-#: pcbnew/plugins/altium/altium_pcb.cpp:1969
-#: pcbnew/plugins/altium/altium_pcb.cpp:2015
+#: pcbnew/plugins/altium/altium_pcb.cpp:2045
+#: pcbnew/plugins/altium/altium_pcb.cpp:2125
 #, fuzzy, c-format
 msgid "Ignored polygon shape of kind %d (not yet supported)."
 msgstr ""
 "Čiarový kód na vrstve Altium %d ignorujte, pretože momentálne nie je "
 "podporovaný."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2076
+#: pcbnew/plugins/altium/altium_pcb.cpp:2273
 #, fuzzy
 msgid "Loading zone fills..."
 msgstr "Zostavovanie zón..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2157
+#: pcbnew/plugins/altium/altium_pcb.cpp:2354
 #, fuzzy
 msgid "Loading arcs..."
 msgstr "Načítavam..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2362
+#: pcbnew/plugins/altium/altium_pcb.cpp:2559
 #, fuzzy
 msgid "Loading pads..."
 msgstr "Načítavam..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2447
+#: pcbnew/plugins/altium/altium_pcb.cpp:2644
 #, fuzzy, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
 "Podložka „%s“ stopy Footprint %s má štvorcový otvor. KiCad to zatiaľ "
 "nepodporuje"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2468
+#: pcbnew/plugins/altium/altium_pcb.cpp:2665
 #, fuzzy, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
 "Podložka „%s“ stopy Footprint %s má štvorcový otvor. KiCad to zatiaľ "
 "nepodporuje"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2495
+#: pcbnew/plugins/altium/altium_pcb.cpp:2692
 #, fuzzy, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
@@ -36282,29 +36279,29 @@ msgstr ""
 "Podložka „%s“ stopy Footprint %s má rotáciu otvoru o %f stupňa. KiCad "
 "podporuje iba 90 stupňové uhly"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2507
+#: pcbnew/plugins/altium/altium_pcb.cpp:2704
 #, fuzzy, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr ""
 "Pad '%s' Footprint %s používa zložitý stack padov (druh %d), ktorý zatiaľ "
 "nie je podporovaný"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2524
+#: pcbnew/plugins/altium/altium_pcb.cpp:2721
 #, fuzzy, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
 msgstr ""
 "Pad '%s' Footprint %s používa zložitý stack padov (druh %d), ktorý zatiaľ "
 "nie je podporovaný"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2561
+#: pcbnew/plugins/altium/altium_pcb.cpp:2758
 #, fuzzy, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr ""
 "Pad '%s' Footprint %s používa zložitý stack padov (druh %d), ktorý zatiaľ "
 "nie je podporovaný"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2619
-#: pcbnew/plugins/altium/altium_pcb.cpp:2640
+#: pcbnew/plugins/altium/altium_pcb.cpp:2816
+#: pcbnew/plugins/altium/altium_pcb.cpp:2837
 #, fuzzy, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -36313,63 +36310,63 @@ msgstr ""
 "Nekovovaná podložka na vrstve altia %d nemá žiadny ekvivalent KiCad. "
 "Namiesto toho ho vložte na server Eco1_User"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2660
+#: pcbnew/plugins/altium/altium_pcb.cpp:2857
 #, fuzzy, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr "Nekovovaná podložka „%s“ má otvor. Toto by sa nemalo stávať"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2666
+#: pcbnew/plugins/altium/altium_pcb.cpp:2863
 #, fuzzy, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr "Nekovovaná podložka „%s“ má otvor. Toto by sa nemalo stávať"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2671
+#: pcbnew/plugins/altium/altium_pcb.cpp:2868
 #, fuzzy, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr ""
 "Non-Copper Pad '%s' používa komplexný stack padov (druh %d). Toto by sa "
 "nemalo stávať"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2813
+#: pcbnew/plugins/altium/altium_pcb.cpp:3010
 #, fuzzy, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr "Nekovovaná podložka „%s“ má otvor. Toto by sa nemalo stávať"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2823
+#: pcbnew/plugins/altium/altium_pcb.cpp:3020
 #, fuzzy
 msgid "Loading vias..."
 msgstr "Načítavam..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2864
+#: pcbnew/plugins/altium/altium_pcb.cpp:3061
 #, fuzzy, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
 msgstr "Nekovovaná podložka „%s“ má otvor. Toto by sa nemalo stávať"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2883
+#: pcbnew/plugins/altium/altium_pcb.cpp:3080
 #, fuzzy
 msgid "Loading tracks..."
 msgstr "Načítavam..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3053
+#: pcbnew/plugins/altium/altium_pcb.cpp:3250
 #, fuzzy
 msgid "Loading unicode strings..."
 msgstr "Načítavam..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3067
+#: pcbnew/plugins/altium/altium_pcb.cpp:3264
 #, fuzzy
 msgid "Loading text..."
 msgstr "Načítavam..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3096
-#: pcbnew/plugins/altium/altium_pcb.cpp:3109
+#: pcbnew/plugins/altium/altium_pcb.cpp:3293
+#: pcbnew/plugins/altium/altium_pcb.cpp:3306
 #, fuzzy, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr ""
 "Čiarový kód na vrstve Altium %d ignorujte, pretože momentálne nie je "
 "podporovaný."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3212
+#: pcbnew/plugins/altium/altium_pcb.cpp:3409
 #, fuzzy
 msgid "Loading rectangles..."
 msgstr "Načítavajú sa súbory Gerber ..."
@@ -36816,7 +36813,7 @@ msgstr "Ignorovanie drôtu, pretože vrstva Eagle „%s“ (%d) nebola mapovaná
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1948
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2420
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:616
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:1522
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:1523
 #, fuzzy, c-format
 msgid ""
 "Invalid zero-sized pad ignored in\n"
@@ -37019,7 +37016,7 @@ msgstr "V ceste ku knižnici „%s“ bol nájdený neočakávaný súbor „%s�
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1038
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2789
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:3222
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:3223
 #, fuzzy, c-format
 msgid "Footprint library '%s' cannot be deleted."
 msgstr "Knižnicu stopy „%s“ nie je možné vymazať."
@@ -37171,7 +37168,7 @@ msgstr ""
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5692
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6103
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2484
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2485
 msgid "Legacy Zone Warning"
 msgstr "Varovanie o starej zóne"
 
@@ -37293,38 +37290,38 @@ msgstr "Súbor „%s“ má nerozpoznanú verziu: %d."
 msgid "Unknown sheet type '%s' on line: %d."
 msgstr "Neznámy typ hárku „%s“ v riadku: %d"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:1297
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:1298
 #, fuzzy, c-format
 msgid "Missing '$EndMODULE' for MODULE '%s'."
 msgstr "Pre modul „%s“ chýba „$ EndMODULE“."
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:1347
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:1348
 #, fuzzy, c-format
 msgid "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'."
 msgstr "Neznámy tvar písmena „%c = 0x %02x“ v riadku: %d stopy: „%s“"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:1546
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:1547
 #, fuzzy, c-format
 msgid "Unknown FP_SHAPE type:'%c=0x%02x' on line %d of footprint '%s'."
 msgstr "Neznámy typ FP_SHAPE: '%c = 0x %02x' v riadku: %d stopy: „%s“"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2320
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2321
 #, fuzzy, c-format
 msgid "Duplicate NETCLASS name '%s'."
 msgstr "duplikát názvu NETCLASS \"%s\""
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2401
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2412
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2402
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2413
 #, c-format
 msgid "Bad ZAux for CZONE_CONTAINER \"%s\""
 msgstr "Zlý ZAux pre CZONE_CONTAINER „%s“"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2427
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2428
 #, c-format
 msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr "Zlé vyrovnanie pre CZONE_CONTAINER „%s“"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2482
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2483
 #, fuzzy
 msgid ""
 "The legacy segment fill mode is no longer supported.\n"
@@ -37333,13 +37330,13 @@ msgstr ""
 "Režim vyplnenia starého segmentu už nie je podporovaný.\n"
 "Premeniť zóny na polygónové výplne?"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2522
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2523
 #, c-format
 msgid "Bad ZClearance padoption for CZONE_CONTAINER \"%s\""
 msgstr "Zlý výpredaj pre CZONE_CONTAINER „%s“"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2805
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2844
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2806
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2845
 #, fuzzy, c-format
 msgid ""
 "Invalid floating point number in file: '%s'\n"
@@ -37350,8 +37347,8 @@ msgstr ""
 "riadok: %d\n"
 "offset: %d"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2815
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2854
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2816
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2855
 #, fuzzy, c-format
 msgid ""
 "Missing floating point number in file: '%s'\n"
@@ -37362,12 +37359,12 @@ msgstr ""
 "riadok: %d\n"
 "offset: %d"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2996
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2997
 #, c-format
 msgid "File '%s' is empty."
 msgstr "Súbor '%s' je prázdny."
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2999
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:3000
 #, c-format
 msgid "File '%s' is not a legacy library."
 msgstr "Súbor „%s“ nie je starou knižnicou."
@@ -37529,18 +37526,18 @@ msgid "?"
 msgstr "?"
 
 #: pcbnew/router/pns_kicad_iface.cpp:606 pcbnew/router/pns_kicad_iface.cpp:687
-#: pcbnew/router/router_tool.cpp:768
+#: pcbnew/router/router_tool.cpp:770
 #, fuzzy
 msgid "board minimum clearance"
 msgstr "Minimálna vzdialenosť:"
 
 #: pcbnew/router/pns_kicad_iface.cpp:620 pcbnew/router/pns_kicad_iface.cpp:686
-#: pcbnew/router/router_tool.cpp:733 pcbnew/router/router_tool.cpp:755
+#: pcbnew/router/router_tool.cpp:735 pcbnew/router/router_tool.cpp:757
 #, fuzzy
 msgid "board minimum track width"
 msgstr "Minimálna šírka:"
 
-#: pcbnew/router/pns_kicad_iface.cpp:627 pcbnew/router/router_tool.cpp:735
+#: pcbnew/router/pns_kicad_iface.cpp:627 pcbnew/router/router_tool.cpp:737
 #, fuzzy
 msgid "existing track"
 msgstr "Pri vytváraní spojov"
@@ -37825,89 +37822,89 @@ msgid ""
 "event log for debugging purposes?"
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:1107
+#: pcbnew/router/router_tool.cpp:1109
 #, fuzzy
 msgid "Blind/buried via need 2 different layers."
 msgstr "Neupravujte plôšky, ktoré majú rozdielne vrstvy"
 
-#: pcbnew/router/router_tool.cpp:1185
+#: pcbnew/router/router_tool.cpp:1187
 #, fuzzy
 msgid "Tracks on Copper layers only."
 msgstr "Stopy sa nachádzajú iba na medených vrstvách"
 
-#: pcbnew/router/router_tool.cpp:1824 pcbnew/router/router_tool.cpp:2404
+#: pcbnew/router/router_tool.cpp:1826 pcbnew/router/router_tool.cpp:2406
 msgid "The selected item is locked."
 msgstr "Vybratá položka je uzamknutá."
 
-#: pcbnew/router/router_tool.cpp:1826
+#: pcbnew/router/router_tool.cpp:1828
 msgid "Drag Anyway"
 msgstr "Presuňte aj tak"
 
-#: pcbnew/router/router_tool.cpp:2406 pcbnew/tools/pcb_actions.cpp:1539
+#: pcbnew/router/router_tool.cpp:2408 pcbnew/tools/pcb_actions.cpp:1539
 msgid "Break Track"
 msgstr "Prerušiť spoj"
 
-#: pcbnew/router/router_tool.cpp:2485
+#: pcbnew/router/router_tool.cpp:2487
 #, fuzzy, c-format
 msgid "Routing Diff Pair: %s"
 msgstr "Diferenciálny pár trasy"
 
-#: pcbnew/router/router_tool.cpp:2497 pcbnew/router/router_tool.cpp:2508
+#: pcbnew/router/router_tool.cpp:2499 pcbnew/router/router_tool.cpp:2510
 #, fuzzy, c-format
 msgid "Resolved Netclass: %s"
 msgstr "Vyriešená klírens: %s."
 
-#: pcbnew/router/router_tool.cpp:2505
+#: pcbnew/router/router_tool.cpp:2507
 #, fuzzy, c-format
 msgid "Routing Track: %s"
 msgstr "Trasa jednej trate"
 
-#: pcbnew/router/router_tool.cpp:2513
+#: pcbnew/router/router_tool.cpp:2515
 #, fuzzy
 msgid "Routing Track"
 msgstr "Trasa jednej trate"
 
-#: pcbnew/router/router_tool.cpp:2514
+#: pcbnew/router/router_tool.cpp:2516
 #, fuzzy
 msgid "(no net)"
 msgstr "<žiadna sieť>"
 
-#: pcbnew/router/router_tool.cpp:2523
+#: pcbnew/router/router_tool.cpp:2525
 #, fuzzy
 msgid "Free-angle"
 msgstr "uhol"
 
-#: pcbnew/router/router_tool.cpp:2529
+#: pcbnew/router/router_tool.cpp:2531
 #, fuzzy
 msgid "45-degree"
 msgstr "45 stupňov"
 
-#: pcbnew/router/router_tool.cpp:2530
+#: pcbnew/router/router_tool.cpp:2532
 #, fuzzy
 msgid "45-degree rounded"
 msgstr "Ťahanie (režim 45 stupňov)"
 
-#: pcbnew/router/router_tool.cpp:2531
+#: pcbnew/router/router_tool.cpp:2533
 #, fuzzy
 msgid "90-degree"
 msgstr "stupňa"
 
-#: pcbnew/router/router_tool.cpp:2532
+#: pcbnew/router/router_tool.cpp:2534
 #, fuzzy
 msgid "90-degree rounded"
 msgstr "Ťahanie (režim 45 stupňov)"
 
-#: pcbnew/router/router_tool.cpp:2537
+#: pcbnew/router/router_tool.cpp:2539
 #, fuzzy
 msgid "Corner Style"
 msgstr "Štýl čiary"
 
-#: pcbnew/router/router_tool.cpp:2543 pcbnew/router/router_tool.cpp:2560
+#: pcbnew/router/router_tool.cpp:2545 pcbnew/router/router_tool.cpp:2562
 #, fuzzy, c-format
 msgid "Track Width: %s"
 msgstr "Šírka spoja"
 
-#: pcbnew/router/router_tool.cpp:2553
+#: pcbnew/router/router_tool.cpp:2555
 #, fuzzy, c-format
 msgid "Diff Pair Gap: %s"
 msgstr "Diferenčné páry"
@@ -38788,10 +38785,6 @@ msgstr "Povrchová úprava medi: "
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:452
 msgid "Castellated pads: "
 msgstr "Prelamové plôšky: "
-
-#: pcbnew/tools/drawing_stackup_table_tool.cpp:460
-msgid "Board Thickness: "
-msgstr "Hrúbka dosky: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:474
 msgid "Min hole diameter: "
@@ -42076,6 +42069,18 @@ msgstr "Upraviť schému"
 #, fuzzy
 msgid "KiCad Printed Circuit Board"
 msgstr "&Navrhnúť dosku plošného spoja"
+
+#, fuzzy
+#~ msgid "Board thickness:"
+#~ msgstr "Hrúbka dosky: "
+
+#, fuzzy
+#~ msgid "3D Preview Options"
+#~ msgstr "Voľby Gerbview"
+
+#, fuzzy
+#~ msgid "Loading zones..."
+#~ msgstr "Načítavam..."
 
 #, fuzzy
 #~ msgid "Board Thickness"

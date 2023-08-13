@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-03 11:24-0700\n"
+"POT-Creation-Date: 2023-08-13 14:56-0700\n"
 "PO-Revision-Date: 2022-12-17 19:13+0000\n"
 "Last-Translator: Neko Nekowazarashi <kodra@nekoweb.my.id>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/master-"
@@ -147,7 +147,7 @@ msgstr "Muat lapisan OpenGL %d"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:678
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:791
-#: pcbnew/plugins/altium/altium_pcb.cpp:1605
+#: pcbnew/plugins/altium/altium_pcb.cpp:1639
 msgid "Loading 3D models..."
 msgstr "Memuat model 3D..."
 
@@ -358,7 +358,7 @@ msgstr "Nama Berkas Gambar 3D"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:785
 #: common/eda_base_frame.cpp:1255 common/eda_base_frame.cpp:1259
-#: pcbnew/plugins/altium/altium_pcb.cpp:1674
+#: pcbnew/plugins/altium/altium_pcb.cpp:1708
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
 msgstr "Izin tidak cukup untuk menyimpan file '%s'."
@@ -1027,13 +1027,14 @@ msgid "Light 8:"
 msgstr "Lampu 8:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:399
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:460
 #, fuzzy
-msgid "Board thickness:"
+msgid "Board Thickness: "
 msgstr "Ketebalan garis: "
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:400
-#, fuzzy
-msgid "3D Preview Options"
+#: common/dialogs/dialog_page_settings.cpp:104
+msgid "Preview Settings"
 msgstr "Pengaturan Tinjauan"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:21
@@ -1649,8 +1650,8 @@ msgstr "Informasi"
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:121
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:479
 #: pcbnew/footprint_libraries_utils.cpp:472
-#: pcbnew/footprint_libraries_utils.cpp:1190 pcbnew/router/router_tool.cpp:1824
-#: pcbnew/router/router_tool.cpp:2404 pcbnew/zone_filler.cpp:734
+#: pcbnew/footprint_libraries_utils.cpp:1190 pcbnew/router/router_tool.cpp:1826
+#: pcbnew/router/router_tool.cpp:2406 pcbnew/zone_filler.cpp:734
 msgid "Confirmation"
 msgstr "Konfirmasi"
 
@@ -2442,10 +2443,6 @@ msgstr ""
 #: common/dialogs/dialog_page_settings.cpp:72
 msgid "User (Custom)"
 msgstr "Pengguna (Kustom)"
-
-#: common/dialogs/dialog_page_settings.cpp:104
-msgid "Preview Settings"
-msgstr "Pengaturan Tinjauan"
 
 #: common/dialogs/dialog_page_settings.cpp:105
 msgid "Preview Paper"
@@ -5767,32 +5764,32 @@ msgstr "Tampilkan atau sembunyikan %s"
 msgid "Open %s"
 msgstr "Buka %s"
 
-#: common/plugins/altium/altium_parser.cpp:55 common/richio.cpp:138
+#: common/plugins/altium/altium_parser.cpp:56 common/richio.cpp:138
 #, fuzzy, c-format
 msgid "Cannot open file '%s'."
 msgstr "Tidak dapat membuka berkas '%s'."
 
-#: common/plugins/altium/altium_parser.cpp:64
+#: common/plugins/altium/altium_parser.cpp:65
 msgid "Error reading file: cannot determine length."
 msgstr "Gagal membaca berkas: tidak bisa menentukan panjang."
 
-#: common/plugins/altium/altium_parser.cpp:77
+#: common/plugins/altium/altium_parser.cpp:78
 #, fuzzy
 msgid "Error reading file."
 msgstr "Terjadi kesalahan saat mengekstrak berkas!\n"
 
-#: common/plugins/altium/altium_parser.cpp:192
+#: common/plugins/altium/altium_parser.cpp:270
 msgid ""
 "Missing null byte at end of property list. Imported data might be malformed "
 "or missing."
 msgstr ""
 
-#: common/plugins/altium/altium_parser.cpp:313
+#: common/plugins/altium/altium_parser.cpp:394
 #, c-format
 msgid "Unit '%s' does not end with 'mil'."
 msgstr ""
 
-#: common/plugins/altium/altium_parser.cpp:321
+#: common/plugins/altium/altium_parser.cpp:402
 #, fuzzy, c-format
 msgid "Cannot convert '%s' to double."
 msgstr "Tidak dapat membuka berkas '%s'."
@@ -7926,27 +7923,27 @@ msgstr "Tidak dapat membuat berkas laporan '%s'<br>"
 msgid "%d duplicate time stamps were found and replaced."
 msgstr ""
 
-#: eeschema/annotate.cpp:378
+#: eeschema/annotate.cpp:385
 #, fuzzy, c-format
 msgid "Updated %s (unit %s) from %s to %s."
 msgstr "Perbarui simbol %s dari '%s' ke '%s'"
 
-#: eeschema/annotate.cpp:386
+#: eeschema/annotate.cpp:393
 #, fuzzy, c-format
 msgid "Updated %s from %s to %s."
 msgstr "Perbarui simbol %s dari '%s' ke '%s'"
 
-#: eeschema/annotate.cpp:396
+#: eeschema/annotate.cpp:403
 #, fuzzy, c-format
 msgid "Annotated %s (unit %s) as %s."
 msgstr "Perbarui simbol %s dari '%s' ke '%s'"
 
-#: eeschema/annotate.cpp:403
+#: eeschema/annotate.cpp:410
 #, c-format
 msgid "Annotated %s as %s."
 msgstr ""
 
-#: eeschema/annotate.cpp:420
+#: eeschema/annotate.cpp:427
 #, fuzzy
 msgid "Annotation complete."
 msgstr "Anotasi"
@@ -7962,24 +7959,24 @@ msgstr ""
 "%s\n"
 "tidak ditemukan. Skrip tidak tersedia."
 
-#: eeschema/connection_graph.cpp:2812 eeschema/connection_graph.cpp:2845
+#: eeschema/connection_graph.cpp:2814 eeschema/connection_graph.cpp:2847
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr ""
 
-#: eeschema/connection_graph.cpp:3114
+#: eeschema/connection_graph.cpp:3116
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr ""
 
-#: eeschema/connection_graph.cpp:3596
+#: eeschema/connection_graph.cpp:3598
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
 
-#: eeschema/connection_graph.cpp:3614
+#: eeschema/connection_graph.cpp:3616
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
@@ -27299,7 +27296,7 @@ msgid "Are you sure you want to overwrite the existing file?"
 msgstr "Apakah Anda yakin ingin menimpa berkas yang sudah ada?"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:256
-#: pcbnew/plugins/altium/altium_pcb.cpp:1630
+#: pcbnew/plugins/altium/altium_pcb.cpp:1664
 #, fuzzy, c-format
 msgid "Failed to create folder '%s'."
 msgstr "Gagal membuat berkas \"%s\""
@@ -35752,7 +35749,7 @@ msgid "Hole X / Y"
 msgstr ""
 
 #: pcbnew/pad.cpp:1084 pcbnew/pcb_track.cpp:905 pcbnew/pcb_track.cpp:950
-#: pcbnew/router/router_tool.cpp:2548 pcbnew/router/router_tool.cpp:2565
+#: pcbnew/router/router_tool.cpp:2550 pcbnew/router/router_tool.cpp:2567
 #: pcbnew/zone.cpp:617
 #, fuzzy, c-format
 msgid "Min Clearance: %s"
@@ -35760,9 +35757,9 @@ msgstr "Buat trek dan via"
 
 #: pcbnew/pad.cpp:1086 pcbnew/pcb_track.cpp:907 pcbnew/pcb_track.cpp:916
 #: pcbnew/pcb_track.cpp:922 pcbnew/pcb_track.cpp:952 pcbnew/pcb_track.cpp:958
-#: pcbnew/router/router_tool.cpp:2545 pcbnew/router/router_tool.cpp:2550
-#: pcbnew/router/router_tool.cpp:2555 pcbnew/router/router_tool.cpp:2562
-#: pcbnew/router/router_tool.cpp:2567 pcbnew/zone.cpp:619
+#: pcbnew/router/router_tool.cpp:2547 pcbnew/router/router_tool.cpp:2552
+#: pcbnew/router/router_tool.cpp:2557 pcbnew/router/router_tool.cpp:2564
+#: pcbnew/router/router_tool.cpp:2569 pcbnew/zone.cpp:619
 #, fuzzy, c-format
 msgid "(from %s)"
 msgstr "dari"
@@ -36345,35 +36342,35 @@ msgid ""
 "Enter the python module which implements the PLUGIN::Footprint*() functions."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_designer_plugin.cpp:152
+#: pcbnew/plugins/altium/altium_designer_plugin.cpp:155
 #: pcbnew/plugins/altium/altium_pcb.cpp:555
-#: pcbnew/plugins/altium/altium_pcb.cpp:682
-#: pcbnew/plugins/altium/altium_pcb.cpp:711
+#: pcbnew/plugins/altium/altium_pcb.cpp:691
+#: pcbnew/plugins/altium/altium_pcb.cpp:720
 #, fuzzy, c-format
 msgid "File not found: '%s'."
 msgstr "Berkas tidak ditemukan: '%s'"
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:134
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:135
 #, c-format
 msgid "Unknown mapping of the Altium layer '%s'."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:182
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:183
 #, fuzzy, c-format
 msgid "Unknown Mode string: '%s'."
 msgstr "Tidak dapat membuka berkas '%s'"
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:209
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:210
 #, fuzzy, c-format
 msgid "Unknown Record name string: '%s'."
 msgstr "Tidak dapat membuka berkas '%s'"
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:223
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:224
 #, fuzzy, c-format
 msgid "Unknown Extended Primitive Information type: '%s'."
 msgstr "Tipe MIME tidak diketahui untuk berkas doc \"%s\""
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:784
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:794
 #, c-format
 msgid "Pads6 stream has unexpected length for subrecord 6: %d."
 msgstr ""
@@ -36406,212 +36403,213 @@ msgstr "Berkas \"%s\" tidak sepenuhnya terbaca"
 msgid "'%s' was not fully parsed."
 msgstr "Berkas \"%s\" tidak sepenuhnya terbaca"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:784
+#: pcbnew/plugins/altium/altium_pcb.cpp:683
+#, fuzzy, c-format
+msgid "Footprint directory not found: '%s'."
+msgstr "Berkas '%s' tidak ditemukan."
+
+#: pcbnew/plugins/altium/altium_pcb.cpp:802
 #, fuzzy, c-format
 msgid "Record of unknown type: '%d'."
 msgstr "Buat lapisan"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:874
+#: pcbnew/plugins/altium/altium_pcb.cpp:908
 #, fuzzy
 msgid "Loading extended primitive information data..."
 msgstr "Tipe MIME tidak diketahui untuk berkas doc \"%s\""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:895
+#: pcbnew/plugins/altium/altium_pcb.cpp:929
 #, fuzzy
 msgid "Loading board data..."
 msgstr "Memuat berkas Gerber..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1075
+#: pcbnew/plugins/altium/altium_pcb.cpp:1109
 #, fuzzy
 msgid "Loading netclasses..."
 msgstr "Memuat..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1101
+#: pcbnew/plugins/altium/altium_pcb.cpp:1135
 #, fuzzy, c-format
 msgid "Duplicate netclass name '%s'."
 msgstr "Duplikasikan Primitif"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1120
+#: pcbnew/plugins/altium/altium_pcb.cpp:1154
 #, fuzzy
 msgid "Loading components..."
 msgstr "Memuat..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1181
+#: pcbnew/plugins/altium/altium_pcb.cpp:1215
 #, fuzzy
 msgid "Loading component 3D models..."
 msgstr "Memuat model 3D..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1260
-#: pcbnew/plugins/altium/altium_pcb.cpp:1361
-#: pcbnew/plugins/altium/altium_pcb.cpp:1438
-#: pcbnew/plugins/altium/altium_pcb.cpp:1516
-#: pcbnew/plugins/altium/altium_pcb.cpp:1540
+#: pcbnew/plugins/altium/altium_pcb.cpp:1294
+#: pcbnew/plugins/altium/altium_pcb.cpp:1395
+#: pcbnew/plugins/altium/altium_pcb.cpp:1472
+#: pcbnew/plugins/altium/altium_pcb.cpp:1550
+#: pcbnew/plugins/altium/altium_pcb.cpp:1574
 #, c-format
 msgid ""
 "Dimension found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1562
+#: pcbnew/plugins/altium/altium_pcb.cpp:1596
 #, fuzzy
 msgid "Loading dimension drawings..."
 msgstr "Memuat..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1583
-#: pcbnew/plugins/altium/altium_pcb.cpp:1590
+#: pcbnew/plugins/altium/altium_pcb.cpp:1617
+#: pcbnew/plugins/altium/altium_pcb.cpp:1624
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1631
+#: pcbnew/plugins/altium/altium_pcb.cpp:1665
 #, fuzzy
 msgid "No 3D-models will be imported."
 msgstr " akan diabaikan"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1660
+#: pcbnew/plugins/altium/altium_pcb.cpp:1694
 #, fuzzy, c-format
 msgid "File not found: '%s'. 3D-model not imported."
 msgstr "Berkas tidak ditemukan: '%s'"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1698
+#: pcbnew/plugins/altium/altium_pcb.cpp:1732
 #, fuzzy
 msgid "Loading nets..."
 msgstr "Memuat..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1722
+#: pcbnew/plugins/altium/altium_pcb.cpp:1756
+#: pcbnew/plugins/altium/altium_pcb.cpp:1940
 #, fuzzy
 msgid "Loading polygons..."
 msgstr "Memuat..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1846
+#: pcbnew/plugins/altium/altium_pcb.cpp:1881
 #, fuzzy
 msgid "Loading rules..."
 msgstr "Memuat berkas Gerber..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1876
+#: pcbnew/plugins/altium/altium_pcb.cpp:1920
 #, fuzzy
 msgid "Loading board regions..."
 msgstr "Memuat berkas Gerber..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1896
-#, fuzzy
-msgid "Loading zones..."
-msgstr "Memuat..."
-
-#: pcbnew/plugins/altium/altium_pcb.cpp:1969
-#: pcbnew/plugins/altium/altium_pcb.cpp:2015
+#: pcbnew/plugins/altium/altium_pcb.cpp:2045
+#: pcbnew/plugins/altium/altium_pcb.cpp:2125
 #, c-format
 msgid "Ignored polygon shape of kind %d (not yet supported)."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2076
+#: pcbnew/plugins/altium/altium_pcb.cpp:2273
 #, fuzzy
 msgid "Loading zone fills..."
 msgstr "Memuat berkas Gerber..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2157
+#: pcbnew/plugins/altium/altium_pcb.cpp:2354
 #, fuzzy
 msgid "Loading arcs..."
 msgstr "Memuat..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2362
+#: pcbnew/plugins/altium/altium_pcb.cpp:2559
 #, fuzzy
 msgid "Loading pads..."
 msgstr "Memuat..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2447
+#: pcbnew/plugins/altium/altium_pcb.cpp:2644
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2468
+#: pcbnew/plugins/altium/altium_pcb.cpp:2665
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2495
+#: pcbnew/plugins/altium/altium_pcb.cpp:2692
 #, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2507
+#: pcbnew/plugins/altium/altium_pcb.cpp:2704
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2524
+#: pcbnew/plugins/altium/altium_pcb.cpp:2721
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2561
+#: pcbnew/plugins/altium/altium_pcb.cpp:2758
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2619
-#: pcbnew/plugins/altium/altium_pcb.cpp:2640
+#: pcbnew/plugins/altium/altium_pcb.cpp:2816
+#: pcbnew/plugins/altium/altium_pcb.cpp:2837
 #, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2660
+#: pcbnew/plugins/altium/altium_pcb.cpp:2857
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2666
+#: pcbnew/plugins/altium/altium_pcb.cpp:2863
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2671
+#: pcbnew/plugins/altium/altium_pcb.cpp:2868
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2813
+#: pcbnew/plugins/altium/altium_pcb.cpp:3010
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2823
+#: pcbnew/plugins/altium/altium_pcb.cpp:3020
 #, fuzzy
 msgid "Loading vias..."
 msgstr "Memuat..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2864
+#: pcbnew/plugins/altium/altium_pcb.cpp:3061
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2883
+#: pcbnew/plugins/altium/altium_pcb.cpp:3080
 #, fuzzy
 msgid "Loading tracks..."
 msgstr "Memuat..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3053
+#: pcbnew/plugins/altium/altium_pcb.cpp:3250
 #, fuzzy
 msgid "Loading unicode strings..."
 msgstr "Memuat..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3067
+#: pcbnew/plugins/altium/altium_pcb.cpp:3264
 #, fuzzy
 msgid "Loading text..."
 msgstr "Memuat..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3096
-#: pcbnew/plugins/altium/altium_pcb.cpp:3109
+#: pcbnew/plugins/altium/altium_pcb.cpp:3293
+#: pcbnew/plugins/altium/altium_pcb.cpp:3306
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3212
+#: pcbnew/plugins/altium/altium_pcb.cpp:3409
 #, fuzzy
 msgid "Loading rectangles..."
 msgstr "Memuat berkas Gerber..."
@@ -36983,7 +36981,7 @@ msgstr ""
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1948
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2420
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:616
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:1522
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:1523
 #, fuzzy, c-format
 msgid ""
 "Invalid zero-sized pad ignored in\n"
@@ -37187,7 +37185,7 @@ msgstr ""
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1038
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2789
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:3222
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:3223
 #, fuzzy, c-format
 msgid "Footprint library '%s' cannot be deleted."
 msgstr "Tidak ada simbol yang dipilih"
@@ -37341,7 +37339,7 @@ msgstr ""
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5692
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6103
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2484
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2485
 #, fuzzy
 msgid "Legacy Zone Warning"
 msgstr "Simpan Peringatan"
@@ -37458,52 +37456,52 @@ msgstr "Berkas '%s' memiliki versi yang tidak dikenal: %d."
 msgid "Unknown sheet type '%s' on line: %d."
 msgstr "Berkas lembar gambar '%s' tidak ditemukan."
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:1297
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:1298
 #, c-format
 msgid "Missing '$EndMODULE' for MODULE '%s'."
 msgstr ""
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:1347
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:1348
 #, c-format
 msgid "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'."
 msgstr ""
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:1546
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:1547
 #, c-format
 msgid "Unknown FP_SHAPE type:'%c=0x%02x' on line %d of footprint '%s'."
 msgstr ""
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2320
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2321
 #, fuzzy, c-format
 msgid "Duplicate NETCLASS name '%s'."
 msgstr ""
 "angka float tidak valid pada berkas: \"%s\"\n"
 "baris: %d, ofset: %d"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2401
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2412
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2402
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2413
 #, c-format
 msgid "Bad ZAux for CZONE_CONTAINER \"%s\""
 msgstr ""
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2427
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2428
 #, c-format
 msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr ""
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2482
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2483
 msgid ""
 "The legacy segment fill mode is no longer supported.\n"
 "Convert zones to smoothed polygon fills?"
 msgstr ""
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2522
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2523
 #, c-format
 msgid "Bad ZClearance padoption for CZONE_CONTAINER \"%s\""
 msgstr ""
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2805
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2844
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2806
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2845
 #, fuzzy, c-format
 msgid ""
 "Invalid floating point number in file: '%s'\n"
@@ -37514,8 +37512,8 @@ msgstr ""
 "baris: %d\n"
 "ofset: %d"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2815
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2854
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2816
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2855
 #, fuzzy, c-format
 msgid ""
 "Missing floating point number in file: '%s'\n"
@@ -37526,12 +37524,12 @@ msgstr ""
 "baris: %d\n"
 "ofset: %d"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2996
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2997
 #, c-format
 msgid "File '%s' is empty."
 msgstr "Berkas '%s' kosong."
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2999
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:3000
 #, c-format
 msgid "File '%s' is not a legacy library."
 msgstr "Berkas '%s' bukan pustaka versi lama."
@@ -37689,18 +37687,18 @@ msgid "?"
 msgstr "?"
 
 #: pcbnew/router/pns_kicad_iface.cpp:606 pcbnew/router/pns_kicad_iface.cpp:687
-#: pcbnew/router/router_tool.cpp:768
+#: pcbnew/router/router_tool.cpp:770
 #, fuzzy
 msgid "board minimum clearance"
 msgstr "Tampilkan lapisan solder mask"
 
 #: pcbnew/router/pns_kicad_iface.cpp:620 pcbnew/router/pns_kicad_iface.cpp:686
-#: pcbnew/router/router_tool.cpp:733 pcbnew/router/router_tool.cpp:755
+#: pcbnew/router/router_tool.cpp:735 pcbnew/router/router_tool.cpp:757
 #, fuzzy
 msgid "board minimum track width"
 msgstr "Tampilkan lapisan solder mask"
 
-#: pcbnew/router/pns_kicad_iface.cpp:627 pcbnew/router/router_tool.cpp:735
+#: pcbnew/router/pns_kicad_iface.cpp:627 pcbnew/router/router_tool.cpp:737
 #, fuzzy
 msgid "existing track"
 msgstr "Path wujud:"
@@ -37981,89 +37979,89 @@ msgid ""
 "event log for debugging purposes?"
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:1107
+#: pcbnew/router/router_tool.cpp:1109
 msgid "Blind/buried via need 2 different layers."
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:1185
+#: pcbnew/router/router_tool.cpp:1187
 #, fuzzy
 msgid "Tracks on Copper layers only."
 msgstr "Hanya lapisan terhubung"
 
-#: pcbnew/router/router_tool.cpp:1824 pcbnew/router/router_tool.cpp:2404
+#: pcbnew/router/router_tool.cpp:1826 pcbnew/router/router_tool.cpp:2406
 #, fuzzy
 msgid "The selected item is locked."
 msgstr "Rotasi item terpilih searah jarum jam"
 
-#: pcbnew/router/router_tool.cpp:1826
+#: pcbnew/router/router_tool.cpp:1828
 #, fuzzy
 msgid "Drag Anyway"
 msgstr "Simpan Saja"
 
-#: pcbnew/router/router_tool.cpp:2406 pcbnew/tools/pcb_actions.cpp:1539
+#: pcbnew/router/router_tool.cpp:2408 pcbnew/tools/pcb_actions.cpp:1539
 #, fuzzy
 msgid "Break Track"
 msgstr "Tidak ada trek"
 
-#: pcbnew/router/router_tool.cpp:2485
+#: pcbnew/router/router_tool.cpp:2487
 #, c-format
 msgid "Routing Diff Pair: %s"
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:2497 pcbnew/router/router_tool.cpp:2508
+#: pcbnew/router/router_tool.cpp:2499 pcbnew/router/router_tool.cpp:2510
 #, fuzzy, c-format
 msgid "Resolved Netclass: %s"
 msgstr "Tampilkan semua Netclasses"
 
-#: pcbnew/router/router_tool.cpp:2505
+#: pcbnew/router/router_tool.cpp:2507
 #, fuzzy, c-format
 msgid "Routing Track: %s"
 msgstr "Memuat..."
 
-#: pcbnew/router/router_tool.cpp:2513
+#: pcbnew/router/router_tool.cpp:2515
 #, fuzzy
 msgid "Routing Track"
 msgstr "Memuat..."
 
-#: pcbnew/router/router_tool.cpp:2514
+#: pcbnew/router/router_tool.cpp:2516
 #, fuzzy
 msgid "(no net)"
 msgstr "Urungkan Semua Perubahan"
 
-#: pcbnew/router/router_tool.cpp:2523
+#: pcbnew/router/router_tool.cpp:2525
 #, fuzzy
 msgid "Free-angle"
 msgstr "sudut"
 
-#: pcbnew/router/router_tool.cpp:2529
+#: pcbnew/router/router_tool.cpp:2531
 msgid "45-degree"
 msgstr "45-derajat"
 
-#: pcbnew/router/router_tool.cpp:2530
+#: pcbnew/router/router_tool.cpp:2532
 #, fuzzy
 msgid "45-degree rounded"
 msgstr "45-derajat"
 
-#: pcbnew/router/router_tool.cpp:2531
+#: pcbnew/router/router_tool.cpp:2533
 msgid "90-degree"
 msgstr "90-derajat"
 
-#: pcbnew/router/router_tool.cpp:2532
+#: pcbnew/router/router_tool.cpp:2534
 #, fuzzy
 msgid "90-degree rounded"
 msgstr "90-derajat"
 
-#: pcbnew/router/router_tool.cpp:2537
+#: pcbnew/router/router_tool.cpp:2539
 #, fuzzy
 msgid "Corner Style"
 msgstr "Ukuran sudut:"
 
-#: pcbnew/router/router_tool.cpp:2543 pcbnew/router/router_tool.cpp:2560
+#: pcbnew/router/router_tool.cpp:2545 pcbnew/router/router_tool.cpp:2562
 #, fuzzy, c-format
 msgid "Track Width: %s"
 msgstr "Lebar maksimum:"
 
-#: pcbnew/router/router_tool.cpp:2553
+#: pcbnew/router/router_tool.cpp:2555
 #, c-format
 msgid "Diff Pair Gap: %s"
 msgstr ""
@@ -38940,11 +38938,6 @@ msgstr "Zona Tembaga"
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:452
 msgid "Castellated pads: "
 msgstr ""
-
-#: pcbnew/tools/drawing_stackup_table_tool.cpp:460
-#, fuzzy
-msgid "Board Thickness: "
-msgstr "Ketebalan garis: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:474
 #, fuzzy
@@ -42386,6 +42379,18 @@ msgstr "Skematik KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "Papan Sirkuit KiCad"
+
+#, fuzzy
+#~ msgid "Board thickness:"
+#~ msgstr "Ketebalan garis: "
+
+#, fuzzy
+#~ msgid "3D Preview Options"
+#~ msgstr "Pengaturan Tinjauan"
+
+#, fuzzy
+#~ msgid "Loading zones..."
+#~ msgstr "Memuat..."
 
 #, fuzzy
 #~ msgid "Board Thickness"

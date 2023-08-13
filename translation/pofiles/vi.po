@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-03 11:24-0700\n"
+"POT-Creation-Date: 2023-08-13 14:56-0700\n"
 "PO-Revision-Date: 2023-03-29 06:03+0000\n"
 "Last-Translator: Nguyễn Ngọc Khánh <ngockhanhnguyen985@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v7/vi/"
@@ -154,7 +154,7 @@ msgstr "Tải OpenGL: các lớp%d"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:678
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:791
-#: pcbnew/plugins/altium/altium_pcb.cpp:1605
+#: pcbnew/plugins/altium/altium_pcb.cpp:1639
 msgid "Loading 3D models..."
 msgstr "Đang tải thư viện 3D"
 
@@ -376,7 +376,7 @@ msgstr "Tên File hình ảnh 3D"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:785
 #: common/eda_base_frame.cpp:1255 common/eda_base_frame.cpp:1259
-#: pcbnew/plugins/altium/altium_pcb.cpp:1674
+#: pcbnew/plugins/altium/altium_pcb.cpp:1708
 #, fuzzy, c-format
 msgid "Insufficient permissions to save file '%s'."
 msgstr ""
@@ -1093,13 +1093,14 @@ msgid "Light 8:"
 msgstr "Phải"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:399
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:460
 #, fuzzy
-msgid "Board thickness:"
+msgid "Board Thickness: "
 msgstr "Độ dày lưới:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:400
-#, fuzzy
-msgid "3D Preview Options"
+#: common/dialogs/dialog_page_settings.cpp:104
+msgid "Preview Settings"
 msgstr "Cài đặt Xem trước"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:21
@@ -1724,8 +1725,8 @@ msgstr "Xác nhận"
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:121
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:479
 #: pcbnew/footprint_libraries_utils.cpp:472
-#: pcbnew/footprint_libraries_utils.cpp:1190 pcbnew/router/router_tool.cpp:1824
-#: pcbnew/router/router_tool.cpp:2404 pcbnew/zone_filler.cpp:734
+#: pcbnew/footprint_libraries_utils.cpp:1190 pcbnew/router/router_tool.cpp:1826
+#: pcbnew/router/router_tool.cpp:2406 pcbnew/zone_filler.cpp:734
 msgid "Confirmation"
 msgstr "Xác nhận"
 
@@ -2534,10 +2535,6 @@ msgstr "USLedger 11x17in"
 #, fuzzy
 msgid "User (Custom)"
 msgstr "Người dùng (Tùy chỉnh)"
-
-#: common/dialogs/dialog_page_settings.cpp:104
-msgid "Preview Settings"
-msgstr "Cài đặt Xem trước"
 
 #: common/dialogs/dialog_page_settings.cpp:105
 msgid "Preview Paper"
@@ -6009,21 +6006,21 @@ msgstr "Hiển thị các lớp solder mask"
 msgid "Open %s"
 msgstr "OpenGL"
 
-#: common/plugins/altium/altium_parser.cpp:55 common/richio.cpp:138
+#: common/plugins/altium/altium_parser.cpp:56 common/richio.cpp:138
 #, fuzzy, c-format
 msgid "Cannot open file '%s'."
 msgstr "Không thể mở tệp '%s'"
 
-#: common/plugins/altium/altium_parser.cpp:64
+#: common/plugins/altium/altium_parser.cpp:65
 msgid "Error reading file: cannot determine length."
 msgstr "Lỗi khi đọc tệp: không xác định được độ dài."
 
-#: common/plugins/altium/altium_parser.cpp:77
+#: common/plugins/altium/altium_parser.cpp:78
 #, fuzzy
 msgid "Error reading file."
 msgstr "Lỗi giải nén tập tin!\n"
 
-#: common/plugins/altium/altium_parser.cpp:192
+#: common/plugins/altium/altium_parser.cpp:270
 msgid ""
 "Missing null byte at end of property list. Imported data might be malformed "
 "or missing."
@@ -6031,12 +6028,12 @@ msgstr ""
 "Thiếu byte rỗng ở cuối danh sách thuộc tính. Dữ liệu đã nhập có thể không "
 "đúng định dạng hoặc bị thiếu."
 
-#: common/plugins/altium/altium_parser.cpp:313
+#: common/plugins/altium/altium_parser.cpp:394
 #, c-format
 msgid "Unit '%s' does not end with 'mil'."
 msgstr "Đơn vị '%s' không kết thúc bằng 'mil'."
 
-#: common/plugins/altium/altium_parser.cpp:321
+#: common/plugins/altium/altium_parser.cpp:402
 #, fuzzy, c-format
 msgid "Cannot convert '%s' to double."
 msgstr "Không thể mở tệp '%s'"
@@ -8144,27 +8141,27 @@ msgstr ""
 msgid "%d duplicate time stamps were found and replaced."
 msgstr "%d dấu thời gian trùng lặp đã được tìm thấy và thay thế."
 
-#: eeschema/annotate.cpp:378
+#: eeschema/annotate.cpp:385
 #, fuzzy, c-format
 msgid "Updated %s (unit %s) from %s to %s."
 msgstr "Đã cập nhật %s (đơn vị %s) từ %s thành %s"
 
-#: eeschema/annotate.cpp:386
+#: eeschema/annotate.cpp:393
 #, fuzzy, c-format
 msgid "Updated %s from %s to %s."
 msgstr "Đã cập nhật %s từ %s thành %s"
 
-#: eeschema/annotate.cpp:396
+#: eeschema/annotate.cpp:403
 #, fuzzy, c-format
 msgid "Annotated %s (unit %s) as %s."
 msgstr "Chú thích %s (đơn vị %s) là %s"
 
-#: eeschema/annotate.cpp:403
+#: eeschema/annotate.cpp:410
 #, fuzzy, c-format
 msgid "Annotated %s as %s."
 msgstr "Chú thích %s là %s"
 
-#: eeschema/annotate.cpp:420
+#: eeschema/annotate.cpp:427
 #, fuzzy
 msgid "Annotation complete."
 msgstr "Gán Chú thích hoàn tất."
@@ -8180,7 +8177,7 @@ msgstr ""
 "%s\n"
 "không tìm thấy. Tập lệnh không có sẵn."
 
-#: eeschema/connection_graph.cpp:2812 eeschema/connection_graph.cpp:2845
+#: eeschema/connection_graph.cpp:2814 eeschema/connection_graph.cpp:2847
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
@@ -8188,7 +8185,7 @@ msgstr ""
 "Cả %s và %s đều được gắn vào các mục giống nhau; %s sẽ được sử dụng trong "
 "netlist"
 
-#: eeschema/connection_graph.cpp:3114
+#: eeschema/connection_graph.cpp:3116
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
@@ -8196,13 +8193,13 @@ msgstr ""
 "Net %s được kết nối bằng đồ thị với bus %s nhưng không phải là thành viên "
 "của bus đó"
 
-#: eeschema/connection_graph.cpp:3596
+#: eeschema/connection_graph.cpp:3598
 #, fuzzy, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
 "chân pin trang tính %s không có nhãn phân cấp phù hợp bên trong trang tính"
 
-#: eeschema/connection_graph.cpp:3614
+#: eeschema/connection_graph.cpp:3616
 #, fuzzy, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
@@ -27788,7 +27785,7 @@ msgid "Are you sure you want to overwrite the existing file?"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:256
-#: pcbnew/plugins/altium/altium_pcb.cpp:1630
+#: pcbnew/plugins/altium/altium_pcb.cpp:1664
 #, fuzzy, c-format
 msgid "Failed to create folder '%s'."
 msgstr "Không thể mở tệp '%s'"
@@ -36329,7 +36326,7 @@ msgid "Hole X / Y"
 msgstr ""
 
 #: pcbnew/pad.cpp:1084 pcbnew/pcb_track.cpp:905 pcbnew/pcb_track.cpp:950
-#: pcbnew/router/router_tool.cpp:2548 pcbnew/router/router_tool.cpp:2565
+#: pcbnew/router/router_tool.cpp:2550 pcbnew/router/router_tool.cpp:2567
 #: pcbnew/zone.cpp:617
 #, fuzzy, c-format
 msgid "Min Clearance: %s"
@@ -36337,9 +36334,9 @@ msgstr "Đang kiểm tra nhãn..."
 
 #: pcbnew/pad.cpp:1086 pcbnew/pcb_track.cpp:907 pcbnew/pcb_track.cpp:916
 #: pcbnew/pcb_track.cpp:922 pcbnew/pcb_track.cpp:952 pcbnew/pcb_track.cpp:958
-#: pcbnew/router/router_tool.cpp:2545 pcbnew/router/router_tool.cpp:2550
-#: pcbnew/router/router_tool.cpp:2555 pcbnew/router/router_tool.cpp:2562
-#: pcbnew/router/router_tool.cpp:2567 pcbnew/zone.cpp:619
+#: pcbnew/router/router_tool.cpp:2547 pcbnew/router/router_tool.cpp:2552
+#: pcbnew/router/router_tool.cpp:2557 pcbnew/router/router_tool.cpp:2564
+#: pcbnew/router/router_tool.cpp:2569 pcbnew/zone.cpp:619
 #, c-format
 msgid "(from %s)"
 msgstr ""
@@ -36918,35 +36915,35 @@ msgid ""
 "Enter the python module which implements the PLUGIN::Footprint*() functions."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_designer_plugin.cpp:152
+#: pcbnew/plugins/altium/altium_designer_plugin.cpp:155
 #: pcbnew/plugins/altium/altium_pcb.cpp:555
-#: pcbnew/plugins/altium/altium_pcb.cpp:682
-#: pcbnew/plugins/altium/altium_pcb.cpp:711
+#: pcbnew/plugins/altium/altium_pcb.cpp:691
+#: pcbnew/plugins/altium/altium_pcb.cpp:720
 #, fuzzy, c-format
 msgid "File not found: '%s'."
 msgstr "không tìm thấy tệp tin \"%s\"."
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:134
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:135
 #, c-format
 msgid "Unknown mapping of the Altium layer '%s'."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:182
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:183
 #, fuzzy, c-format
 msgid "Unknown Mode string: '%s'."
 msgstr "Nút không biết '%s' trong '%s'"
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:209
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:210
 #, fuzzy, c-format
 msgid "Unknown Record name string: '%s'."
 msgstr "Nút không biết '%s' trong '%s'"
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:223
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:224
 #, fuzzy, c-format
 msgid "Unknown Extended Primitive Information type: '%s'."
 msgstr "Loại MIME không xác định cho tệp doc \"%s\""
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:784
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:794
 #, c-format
 msgid "Pads6 stream has unexpected length for subrecord 6: %d."
 msgstr ""
@@ -36980,211 +36977,212 @@ msgstr "Tệp \"%s\" chưa được đọc đầy đủ"
 msgid "'%s' was not fully parsed."
 msgstr "Tệp \"%s\" chưa được đọc đầy đủ"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:784
+#: pcbnew/plugins/altium/altium_pcb.cpp:683
+#, fuzzy, c-format
+msgid "Footprint directory not found: '%s'."
+msgstr "Footprint \"%s\" không tìm thấy."
+
+#: pcbnew/plugins/altium/altium_pcb.cpp:802
 #, fuzzy, c-format
 msgid "Record of unknown type: '%d'."
 msgstr "Tạo các lớp"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:874
+#: pcbnew/plugins/altium/altium_pcb.cpp:908
 #, fuzzy
 msgid "Loading extended primitive information data..."
 msgstr "Loại MIME không xác định cho tệp doc \"%s\""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:895
+#: pcbnew/plugins/altium/altium_pcb.cpp:929
 #, fuzzy
 msgid "Loading board data..."
 msgstr "Đang tải..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1075
+#: pcbnew/plugins/altium/altium_pcb.cpp:1109
 #, fuzzy
 msgid "Loading netclasses..."
 msgstr "Đang tải..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1101
+#: pcbnew/plugins/altium/altium_pcb.cpp:1135
 #, fuzzy, c-format
 msgid "Duplicate netclass name '%s'."
 msgstr "Nhiều mục %s%s\n"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1120
+#: pcbnew/plugins/altium/altium_pcb.cpp:1154
 #, fuzzy
 msgid "Loading components..."
 msgstr "Đang tải..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1181
+#: pcbnew/plugins/altium/altium_pcb.cpp:1215
 #, fuzzy
 msgid "Loading component 3D models..."
 msgstr "Đang tải thư viện 3D"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1260
-#: pcbnew/plugins/altium/altium_pcb.cpp:1361
-#: pcbnew/plugins/altium/altium_pcb.cpp:1438
-#: pcbnew/plugins/altium/altium_pcb.cpp:1516
-#: pcbnew/plugins/altium/altium_pcb.cpp:1540
+#: pcbnew/plugins/altium/altium_pcb.cpp:1294
+#: pcbnew/plugins/altium/altium_pcb.cpp:1395
+#: pcbnew/plugins/altium/altium_pcb.cpp:1472
+#: pcbnew/plugins/altium/altium_pcb.cpp:1550
+#: pcbnew/plugins/altium/altium_pcb.cpp:1574
 #, c-format
 msgid ""
 "Dimension found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1562
+#: pcbnew/plugins/altium/altium_pcb.cpp:1596
 #, fuzzy
 msgid "Loading dimension drawings..."
 msgstr "Đang tải..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1583
-#: pcbnew/plugins/altium/altium_pcb.cpp:1590
+#: pcbnew/plugins/altium/altium_pcb.cpp:1617
+#: pcbnew/plugins/altium/altium_pcb.cpp:1624
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1631
+#: pcbnew/plugins/altium/altium_pcb.cpp:1665
 msgid "No 3D-models will be imported."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1660
+#: pcbnew/plugins/altium/altium_pcb.cpp:1694
 #, fuzzy, c-format
 msgid "File not found: '%s'. 3D-model not imported."
 msgstr "không tìm thấy tệp tin \"%s\"."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1698
+#: pcbnew/plugins/altium/altium_pcb.cpp:1732
 #, fuzzy
 msgid "Loading nets..."
 msgstr "Đang tải..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1722
+#: pcbnew/plugins/altium/altium_pcb.cpp:1756
+#: pcbnew/plugins/altium/altium_pcb.cpp:1940
 #, fuzzy
 msgid "Loading polygons..."
 msgstr "Đang tải..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1846
+#: pcbnew/plugins/altium/altium_pcb.cpp:1881
 #, fuzzy
 msgid "Loading rules..."
 msgstr "Đang tải..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1876
+#: pcbnew/plugins/altium/altium_pcb.cpp:1920
 #, fuzzy
 msgid "Loading board regions..."
 msgstr "Đang tải..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1896
-#, fuzzy
-msgid "Loading zones..."
-msgstr "Đang tải..."
-
-#: pcbnew/plugins/altium/altium_pcb.cpp:1969
-#: pcbnew/plugins/altium/altium_pcb.cpp:2015
+#: pcbnew/plugins/altium/altium_pcb.cpp:2045
+#: pcbnew/plugins/altium/altium_pcb.cpp:2125
 #, c-format
 msgid "Ignored polygon shape of kind %d (not yet supported)."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2076
+#: pcbnew/plugins/altium/altium_pcb.cpp:2273
 #, fuzzy
 msgid "Loading zone fills..."
 msgstr "Đang tải..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2157
+#: pcbnew/plugins/altium/altium_pcb.cpp:2354
 #, fuzzy
 msgid "Loading arcs..."
 msgstr "Đang tải..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2362
+#: pcbnew/plugins/altium/altium_pcb.cpp:2559
 #, fuzzy
 msgid "Loading pads..."
 msgstr "Đang tải..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2447
+#: pcbnew/plugins/altium/altium_pcb.cpp:2644
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2468
+#: pcbnew/plugins/altium/altium_pcb.cpp:2665
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2495
+#: pcbnew/plugins/altium/altium_pcb.cpp:2692
 #, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2507
+#: pcbnew/plugins/altium/altium_pcb.cpp:2704
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2524
+#: pcbnew/plugins/altium/altium_pcb.cpp:2721
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2561
+#: pcbnew/plugins/altium/altium_pcb.cpp:2758
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2619
-#: pcbnew/plugins/altium/altium_pcb.cpp:2640
+#: pcbnew/plugins/altium/altium_pcb.cpp:2816
+#: pcbnew/plugins/altium/altium_pcb.cpp:2837
 #, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2660
+#: pcbnew/plugins/altium/altium_pcb.cpp:2857
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2666
+#: pcbnew/plugins/altium/altium_pcb.cpp:2863
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2671
+#: pcbnew/plugins/altium/altium_pcb.cpp:2868
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2813
+#: pcbnew/plugins/altium/altium_pcb.cpp:3010
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2823
+#: pcbnew/plugins/altium/altium_pcb.cpp:3020
 #, fuzzy
 msgid "Loading vias..."
 msgstr "Đang tải..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2864
+#: pcbnew/plugins/altium/altium_pcb.cpp:3061
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2883
+#: pcbnew/plugins/altium/altium_pcb.cpp:3080
 #, fuzzy
 msgid "Loading tracks..."
 msgstr "Đang tải..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3053
+#: pcbnew/plugins/altium/altium_pcb.cpp:3250
 #, fuzzy
 msgid "Loading unicode strings..."
 msgstr "Đang tải..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3067
+#: pcbnew/plugins/altium/altium_pcb.cpp:3264
 #, fuzzy
 msgid "Loading text..."
 msgstr "Đang tải..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3096
-#: pcbnew/plugins/altium/altium_pcb.cpp:3109
+#: pcbnew/plugins/altium/altium_pcb.cpp:3293
+#: pcbnew/plugins/altium/altium_pcb.cpp:3306
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3212
+#: pcbnew/plugins/altium/altium_pcb.cpp:3409
 #, fuzzy
 msgid "Loading rectangles..."
 msgstr "Đang tải..."
@@ -37549,7 +37547,7 @@ msgstr ""
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1948
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2420
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:616
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:1522
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:1523
 #, fuzzy, c-format
 msgid ""
 "Invalid zero-sized pad ignored in\n"
@@ -37749,7 +37747,7 @@ msgstr "tệp fp-lib-table không chứa thư viện có biệt hiệu \"%s\""
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1038
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2789
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:3222
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:3223
 #, fuzzy, c-format
 msgid "Footprint library '%s' cannot be deleted."
 msgstr "Không có symbol nào được chọn"
@@ -37867,7 +37865,7 @@ msgstr "%s trong \"%s\", dòng %d, offset %d"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5692
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6103
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2484
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2485
 #, fuzzy
 msgid "Legacy Zone Warning"
 msgstr "Cảnh báo"
@@ -37979,50 +37977,50 @@ msgstr "không tìm thấy tệp tin \"%s\"."
 msgid "Unknown sheet type '%s' on line: %d."
 msgstr "Tham số Không biết '%s' trong '%s'"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:1297
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:1298
 #, c-format
 msgid "Missing '$EndMODULE' for MODULE '%s'."
 msgstr ""
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:1347
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:1348
 #, fuzzy, c-format
 msgid "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'."
 msgstr "Tham số Không biết '%s' trong '%s'"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:1546
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:1547
 #, c-format
 msgid "Unknown FP_SHAPE type:'%c=0x%02x' on line %d of footprint '%s'."
 msgstr ""
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2320
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2321
 #, fuzzy, c-format
 msgid "Duplicate NETCLASS name '%s'."
 msgstr "Nhiều mục %s%s\n"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2401
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2412
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2402
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2413
 #, c-format
 msgid "Bad ZAux for CZONE_CONTAINER \"%s\""
 msgstr ""
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2427
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2428
 #, c-format
 msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr ""
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2482
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2483
 msgid ""
 "The legacy segment fill mode is no longer supported.\n"
 "Convert zones to smoothed polygon fills?"
 msgstr ""
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2522
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2523
 #, c-format
 msgid "Bad ZClearance padoption for CZONE_CONTAINER \"%s\""
 msgstr ""
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2805
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2844
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2806
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2845
 #, fuzzy, c-format
 msgid ""
 "Invalid floating point number in file: '%s'\n"
@@ -38033,8 +38031,8 @@ msgstr ""
 "dòng: %d\n"
 "độ lệch: %d"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2815
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2854
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2816
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2855
 #, fuzzy, c-format
 msgid ""
 "Missing floating point number in file: '%s'\n"
@@ -38045,12 +38043,12 @@ msgstr ""
 "dòng: %d\n"
 "độ lệch: %d"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2996
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2997
 #, fuzzy, c-format
 msgid "File '%s' is empty."
 msgstr "không tìm thấy tệp tin \"%s\"."
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2999
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:3000
 #, fuzzy, c-format
 msgid "File '%s' is not a legacy library."
 msgstr "Thư viện Footprint"
@@ -38210,18 +38208,18 @@ msgid "?"
 msgstr ""
 
 #: pcbnew/router/pns_kicad_iface.cpp:606 pcbnew/router/pns_kicad_iface.cpp:687
-#: pcbnew/router/router_tool.cpp:768
+#: pcbnew/router/router_tool.cpp:770
 #, fuzzy
 msgid "board minimum clearance"
 msgstr "Clearance lớp đồng tối thiểu"
 
 #: pcbnew/router/pns_kicad_iface.cpp:620 pcbnew/router/pns_kicad_iface.cpp:686
-#: pcbnew/router/router_tool.cpp:733 pcbnew/router/router_tool.cpp:755
+#: pcbnew/router/router_tool.cpp:735 pcbnew/router/router_tool.cpp:757
 #, fuzzy
 msgid "board minimum track width"
 msgstr "Chiều rộng Track"
 
-#: pcbnew/router/pns_kicad_iface.cpp:627 pcbnew/router/router_tool.cpp:735
+#: pcbnew/router/pns_kicad_iface.cpp:627 pcbnew/router/router_tool.cpp:737
 #, fuzzy
 msgid "existing track"
 msgstr "Đường dẫn hiện tại:"
@@ -38505,86 +38503,86 @@ msgid ""
 "event log for debugging purposes?"
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:1107
+#: pcbnew/router/router_tool.cpp:1109
 msgid "Blind/buried via need 2 different layers."
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:1185
+#: pcbnew/router/router_tool.cpp:1187
 msgid "Tracks on Copper layers only."
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:1824 pcbnew/router/router_tool.cpp:2404
+#: pcbnew/router/router_tool.cpp:1826 pcbnew/router/router_tool.cpp:2406
 #, fuzzy
 msgid "The selected item is locked."
 msgstr "Vùng chọn chứa %d đối tượng bị khóa."
 
-#: pcbnew/router/router_tool.cpp:1826
+#: pcbnew/router/router_tool.cpp:1828
 #, fuzzy
 msgid "Drag Anyway"
 msgstr "Mở bằng mọi cách"
 
-#: pcbnew/router/router_tool.cpp:2406 pcbnew/tools/pcb_actions.cpp:1539
+#: pcbnew/router/router_tool.cpp:2408 pcbnew/tools/pcb_actions.cpp:1539
 #, fuzzy
 msgid "Break Track"
 msgstr "Track"
 
-#: pcbnew/router/router_tool.cpp:2485
+#: pcbnew/router/router_tool.cpp:2487
 #, fuzzy, c-format
 msgid "Routing Diff Pair: %s"
 msgstr "Khoảng cách cặp vi sai"
 
-#: pcbnew/router/router_tool.cpp:2497 pcbnew/router/router_tool.cpp:2508
+#: pcbnew/router/router_tool.cpp:2499 pcbnew/router/router_tool.cpp:2510
 #, fuzzy, c-format
 msgid "Resolved Netclass: %s"
 msgstr "Net %s NetClass %s"
 
-#: pcbnew/router/router_tool.cpp:2505
+#: pcbnew/router/router_tool.cpp:2507
 #, fuzzy, c-format
 msgid "Routing Track: %s"
 msgstr "Trình theo dõi lỗi"
 
-#: pcbnew/router/router_tool.cpp:2513
+#: pcbnew/router/router_tool.cpp:2515
 #, fuzzy
 msgid "Routing Track"
 msgstr "Trình theo dõi lỗi"
 
-#: pcbnew/router/router_tool.cpp:2514
+#: pcbnew/router/router_tool.cpp:2516
 #, fuzzy
 msgid "(no net)"
 msgstr "<no net>"
 
-#: pcbnew/router/router_tool.cpp:2523
+#: pcbnew/router/router_tool.cpp:2525
 #, fuzzy
 msgid "Free-angle"
 msgstr "Hình chữ nhật"
 
-#: pcbnew/router/router_tool.cpp:2529
+#: pcbnew/router/router_tool.cpp:2531
 msgid "45-degree"
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:2530
+#: pcbnew/router/router_tool.cpp:2532
 msgid "45-degree rounded"
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:2531
+#: pcbnew/router/router_tool.cpp:2533
 msgid "90-degree"
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:2532
+#: pcbnew/router/router_tool.cpp:2534
 msgid "90-degree rounded"
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:2537
+#: pcbnew/router/router_tool.cpp:2539
 #, fuzzy
 msgid "Corner Style"
 msgstr "Kiểu cách Đường thẳng"
 
-#: pcbnew/router/router_tool.cpp:2543 pcbnew/router/router_tool.cpp:2560
+#: pcbnew/router/router_tool.cpp:2545 pcbnew/router/router_tool.cpp:2562
 #, fuzzy, c-format
 msgid "Track Width: %s"
 msgstr "Chiều rộng Track"
 
-#: pcbnew/router/router_tool.cpp:2553
+#: pcbnew/router/router_tool.cpp:2555
 #, fuzzy, c-format
 msgid "Diff Pair Gap: %s"
 msgstr "Khoảng cách cặp vi sai"
@@ -39473,11 +39471,6 @@ msgstr "Màu sắc lớp đồng / bề mặt hoàn thiện ..."
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:452
 msgid "Castellated pads: "
 msgstr ""
-
-#: pcbnew/tools/drawing_stackup_table_tool.cpp:460
-#, fuzzy
-msgid "Board Thickness: "
-msgstr "Độ dày lưới:"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:474
 #, fuzzy
@@ -43039,6 +43032,18 @@ msgstr "Lưu vào Sơ đồ mạch"
 #, fuzzy
 msgid "KiCad Printed Circuit Board"
 msgstr "Tệp bảng mạch in KiCad"
+
+#, fuzzy
+#~ msgid "Board thickness:"
+#~ msgstr "Độ dày lưới:"
+
+#, fuzzy
+#~ msgid "3D Preview Options"
+#~ msgstr "Cài đặt Xem trước"
+
+#, fuzzy
+#~ msgid "Loading zones..."
+#~ msgstr "Đang tải..."
 
 #, fuzzy
 #~ msgid "Board Thickness"

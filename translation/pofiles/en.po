@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-03 11:24-0700\n"
+"POT-Creation-Date: 2023-08-13 14:56-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -689,11 +689,11 @@ msgstr "Light 4:"
 msgid "Light 8:"
 msgstr "Light 8:"
 
-msgid "Board thickness:"
-msgstr "Board thickness:"
+msgid "Board Thickness: "
+msgstr "Board Thickness: "
 
-msgid "3D Preview Options"
-msgstr "3D Preview Options"
+msgid "Preview Settings"
+msgstr "Preview Settings"
 
 msgid "Scale"
 msgstr "Scale"
@@ -1480,9 +1480,6 @@ msgstr "USLedger 11x17in"
 
 msgid "User (Custom)"
 msgstr "User (Custom)"
-
-msgid "Preview Settings"
-msgstr "Preview Settings"
 
 msgid "Preview Paper"
 msgstr "Preview Paper"
@@ -25130,6 +25127,10 @@ msgid "'%s' was not fully parsed."
 msgstr "'%s' was not fully parsed."
 
 #, c-format
+msgid "Footprint directory not found: '%s'."
+msgstr "Footprint directory not found: '%s'."
+
+#, c-format
 msgid "Record of unknown type: '%d'."
 msgstr "Record of unknown type: '%d'."
 
@@ -25185,9 +25186,6 @@ msgstr "Loading rules..."
 
 msgid "Loading board regions..."
 msgstr "Loading board regions..."
-
-msgid "Loading zones..."
-msgstr "Loading zones..."
 
 #, c-format
 msgid "Ignored polygon shape of kind %d (not yet supported)."
@@ -27096,9 +27094,6 @@ msgstr "Copper Finish: "
 
 msgid "Castellated pads: "
 msgstr "Castellated pads: "
-
-msgid "Board Thickness: "
-msgstr "Board Thickness: "
 
 msgid "Min hole diameter: "
 msgstr "Min hole diameter: "
@@ -29441,6 +29436,15 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Board thickness:"
+#~ msgstr "Board thickness:"
+
+#~ msgid "3D Preview Options"
+#~ msgstr "3D Preview Options"
+
+#~ msgid "Loading zones..."
+#~ msgstr "Loading zones..."
 
 #~ msgid "Board Thickness"
 #~ msgstr "Board Thickness"

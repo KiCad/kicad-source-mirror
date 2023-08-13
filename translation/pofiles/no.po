@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-03 11:24-0700\n"
+"POT-Creation-Date: 2023-08-13 14:56-0700\n"
 "PO-Revision-Date: 2023-06-21 11:26+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
@@ -149,7 +149,7 @@ msgstr "Last OpenGL lag %d"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:678
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:791
-#: pcbnew/plugins/altium/altium_pcb.cpp:1605
+#: pcbnew/plugins/altium/altium_pcb.cpp:1639
 #, fuzzy
 msgid "Loading 3D models..."
 msgstr "Laster 3D-modeller"
@@ -362,7 +362,7 @@ msgstr "3D-filfilnavn"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:785
 #: common/eda_base_frame.cpp:1255 common/eda_base_frame.cpp:1259
-#: pcbnew/plugins/altium/altium_pcb.cpp:1674
+#: pcbnew/plugins/altium/altium_pcb.cpp:1708
 #, fuzzy, c-format
 msgid "Insufficient permissions to save file '%s'."
 msgstr ""
@@ -1059,13 +1059,14 @@ msgid "Light 8:"
 msgstr "Høyre"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:399
+#: pcbnew/tools/drawing_stackup_table_tool.cpp:460
 #, fuzzy
-msgid "Board thickness:"
+msgid "Board Thickness: "
 msgstr "Bretttykkelse:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:400
-#, fuzzy
-msgid "3D Preview Options"
+#: common/dialogs/dialog_page_settings.cpp:104
+msgid "Preview Settings"
 msgstr "Innstillinger for forhåndsvisning"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:21
@@ -1689,8 +1690,8 @@ msgstr "Bekreftelse"
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:121
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:479
 #: pcbnew/footprint_libraries_utils.cpp:472
-#: pcbnew/footprint_libraries_utils.cpp:1190 pcbnew/router/router_tool.cpp:1824
-#: pcbnew/router/router_tool.cpp:2404 pcbnew/zone_filler.cpp:734
+#: pcbnew/footprint_libraries_utils.cpp:1190 pcbnew/router/router_tool.cpp:1826
+#: pcbnew/router/router_tool.cpp:2406 pcbnew/zone_filler.cpp:734
 msgid "Confirmation"
 msgstr "Bekreftelse"
 
@@ -2498,10 +2499,6 @@ msgstr "USLedger 11x17in"
 #: common/dialogs/dialog_page_settings.cpp:72
 msgid "User (Custom)"
 msgstr "Bruker (tilpasset)"
-
-#: common/dialogs/dialog_page_settings.cpp:104
-msgid "Preview Settings"
-msgstr "Innstillinger for forhåndsvisning"
 
 #: common/dialogs/dialog_page_settings.cpp:105
 msgid "Preview Paper"
@@ -5822,33 +5819,33 @@ msgstr "Vis sidegrenser"
 msgid "Open %s"
 msgstr "Åpne %s"
 
-#: common/plugins/altium/altium_parser.cpp:55 common/richio.cpp:138
+#: common/plugins/altium/altium_parser.cpp:56 common/richio.cpp:138
 #, fuzzy, c-format
 msgid "Cannot open file '%s'."
 msgstr "Kan ikke åpne filen '%s'"
 
-#: common/plugins/altium/altium_parser.cpp:64
+#: common/plugins/altium/altium_parser.cpp:65
 #, fuzzy
 msgid "Error reading file: cannot determine length."
 msgstr "Feil ved utpakking av fil!\n"
 
-#: common/plugins/altium/altium_parser.cpp:77
+#: common/plugins/altium/altium_parser.cpp:78
 #, fuzzy
 msgid "Error reading file."
 msgstr "Feil ved utpakking av fil!\n"
 
-#: common/plugins/altium/altium_parser.cpp:192
+#: common/plugins/altium/altium_parser.cpp:270
 msgid ""
 "Missing null byte at end of property list. Imported data might be malformed "
 "or missing."
 msgstr ""
 
-#: common/plugins/altium/altium_parser.cpp:313
+#: common/plugins/altium/altium_parser.cpp:394
 #, c-format
 msgid "Unit '%s' does not end with 'mil'."
 msgstr ""
 
-#: common/plugins/altium/altium_parser.cpp:321
+#: common/plugins/altium/altium_parser.cpp:402
 #, fuzzy, c-format
 msgid "Cannot convert '%s' to double."
 msgstr "Kan ikke konvertere \"%s\" til et helt tall"
@@ -7907,27 +7904,27 @@ msgstr "Kan ikke opprette rapportfil '%s'"
 msgid "%d duplicate time stamps were found and replaced."
 msgstr "%d duplikat tidsstempler ble funnet og erstattet."
 
-#: eeschema/annotate.cpp:378
+#: eeschema/annotate.cpp:385
 #, fuzzy, c-format
 msgid "Updated %s (unit %s) from %s to %s."
 msgstr "Oppdatert %s (enhet %s) fra %s til %s"
 
-#: eeschema/annotate.cpp:386
+#: eeschema/annotate.cpp:393
 #, fuzzy, c-format
 msgid "Updated %s from %s to %s."
 msgstr "Oppdatert %s fra %s til %s"
 
-#: eeschema/annotate.cpp:396
+#: eeschema/annotate.cpp:403
 #, fuzzy, c-format
 msgid "Annotated %s (unit %s) as %s."
 msgstr "Kommentert %s (enhet %s) som %s"
 
-#: eeschema/annotate.cpp:403
+#: eeschema/annotate.cpp:410
 #, fuzzy, c-format
 msgid "Annotated %s as %s."
 msgstr "Kommentert %s som %s"
 
-#: eeschema/annotate.cpp:420
+#: eeschema/annotate.cpp:427
 msgid "Annotation complete."
 msgstr "Kommentar fullført."
 
@@ -7942,7 +7939,7 @@ msgstr ""
 "%s\n"
 "ikke funnet. Skript ikke tilgjengelig."
 
-#: eeschema/connection_graph.cpp:2812 eeschema/connection_graph.cpp:2845
+#: eeschema/connection_graph.cpp:2814 eeschema/connection_graph.cpp:2847
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
@@ -7950,18 +7947,18 @@ msgstr ""
 "Både %s og %s er festet til de samme elementene; %s vil bli brukt i "
 "nettlisten"
 
-#: eeschema/connection_graph.cpp:3114
+#: eeschema/connection_graph.cpp:3116
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr "Net %s er grafisk koblet til buss %s, men er ikke medlem av den bussen"
 
-#: eeschema/connection_graph.cpp:3596
+#: eeschema/connection_graph.cpp:3598
 #, fuzzy, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "Arkport %s har ingen samsvarende hierarkisk etikett inne i arket"
 
-#: eeschema/connection_graph.cpp:3614
+#: eeschema/connection_graph.cpp:3616
 #, fuzzy, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "Arkport %s har ingen samsvarende hierarkisk etikett inne i arket"
@@ -27334,7 +27331,7 @@ msgid "Are you sure you want to overwrite the existing file?"
 msgstr "Er du sikker på at du vil overskrive den eksisterende filen?"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:256
-#: pcbnew/plugins/altium/altium_pcb.cpp:1630
+#: pcbnew/plugins/altium/altium_pcb.cpp:1664
 #, fuzzy, c-format
 msgid "Failed to create folder '%s'."
 msgstr "Kunne ikke opprette filen \"%s\""
@@ -35650,7 +35647,7 @@ msgid "Hole X / Y"
 msgstr "Bor X / Y"
 
 #: pcbnew/pad.cpp:1084 pcbnew/pcb_track.cpp:905 pcbnew/pcb_track.cpp:950
-#: pcbnew/router/router_tool.cpp:2548 pcbnew/router/router_tool.cpp:2565
+#: pcbnew/router/router_tool.cpp:2550 pcbnew/router/router_tool.cpp:2567
 #: pcbnew/zone.cpp:617
 #, c-format
 msgid "Min Clearance: %s"
@@ -35658,9 +35655,9 @@ msgstr "Min. Klarering: %s"
 
 #: pcbnew/pad.cpp:1086 pcbnew/pcb_track.cpp:907 pcbnew/pcb_track.cpp:916
 #: pcbnew/pcb_track.cpp:922 pcbnew/pcb_track.cpp:952 pcbnew/pcb_track.cpp:958
-#: pcbnew/router/router_tool.cpp:2545 pcbnew/router/router_tool.cpp:2550
-#: pcbnew/router/router_tool.cpp:2555 pcbnew/router/router_tool.cpp:2562
-#: pcbnew/router/router_tool.cpp:2567 pcbnew/zone.cpp:619
+#: pcbnew/router/router_tool.cpp:2547 pcbnew/router/router_tool.cpp:2552
+#: pcbnew/router/router_tool.cpp:2557 pcbnew/router/router_tool.cpp:2564
+#: pcbnew/router/router_tool.cpp:2569 pcbnew/zone.cpp:619
 #, c-format
 msgid "(from %s)"
 msgstr "(fra %s)"
@@ -36225,35 +36222,35 @@ msgstr ""
 "Skriv inn pythonmodulen som implementerer funksjonene PLUGIN :: Footprint * "
 "()."
 
-#: pcbnew/plugins/altium/altium_designer_plugin.cpp:152
+#: pcbnew/plugins/altium/altium_designer_plugin.cpp:155
 #: pcbnew/plugins/altium/altium_pcb.cpp:555
-#: pcbnew/plugins/altium/altium_pcb.cpp:682
-#: pcbnew/plugins/altium/altium_pcb.cpp:711
+#: pcbnew/plugins/altium/altium_pcb.cpp:691
+#: pcbnew/plugins/altium/altium_pcb.cpp:720
 #, fuzzy, c-format
 msgid "File not found: '%s'."
 msgstr "Fil ikke funnet: %s."
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:134
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:135
 #, c-format
 msgid "Unknown mapping of the Altium layer '%s'."
 msgstr ""
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:182
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:183
 #, fuzzy, c-format
 msgid "Unknown Mode string: '%s'."
 msgstr "Ukjent node '%s' i '%s'"
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:209
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:210
 #, fuzzy, c-format
 msgid "Unknown Record name string: '%s'."
 msgstr "ukjent putetype: %d"
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:223
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:224
 #, fuzzy, c-format
 msgid "Unknown Extended Primitive Information type: '%s'."
 msgstr "Ukjent MIME-type for doc-fil \"%s\""
 
-#: pcbnew/plugins/altium/altium_parser_pcb.cpp:784
+#: pcbnew/plugins/altium/altium_parser_pcb.cpp:794
 #, c-format
 msgid "Pads6 stream has unexpected length for subrecord 6: %d."
 msgstr ""
@@ -36289,46 +36286,51 @@ msgstr "Kobbersone (%s) har ingen puter tilkoblet."
 msgid "'%s' was not fully parsed."
 msgstr "Filen \"%s\" ble ikke lest fullstendig"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:784
+#: pcbnew/plugins/altium/altium_pcb.cpp:683
+#, fuzzy, c-format
+msgid "Footprint directory not found: '%s'."
+msgstr "Fotavtrykksbibliotek ble ikke funnet."
+
+#: pcbnew/plugins/altium/altium_pcb.cpp:802
 #, fuzzy, c-format
 msgid "Record of unknown type: '%d'."
 msgstr "ukjent putetype: %d"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:874
+#: pcbnew/plugins/altium/altium_pcb.cpp:908
 #, fuzzy
 msgid "Loading extended primitive information data..."
 msgstr "Ukjent MIME-type for doc-fil \"%s\""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:895
+#: pcbnew/plugins/altium/altium_pcb.cpp:929
 #, fuzzy
 msgid "Loading board data..."
 msgstr "Laster inn Gerber-filer ..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1075
+#: pcbnew/plugins/altium/altium_pcb.cpp:1109
 #, fuzzy
 msgid "Loading netclasses..."
 msgstr "Laster..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1101
+#: pcbnew/plugins/altium/altium_pcb.cpp:1135
 #, fuzzy, c-format
 msgid "Duplicate netclass name '%s'."
 msgstr "Duplisert nettklassnavn \"%s\""
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1120
+#: pcbnew/plugins/altium/altium_pcb.cpp:1154
 #, fuzzy
 msgid "Loading components..."
 msgstr "Laster..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1181
+#: pcbnew/plugins/altium/altium_pcb.cpp:1215
 #, fuzzy
 msgid "Loading component 3D models..."
 msgstr "Laster 3D-modeller"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1260
-#: pcbnew/plugins/altium/altium_pcb.cpp:1361
-#: pcbnew/plugins/altium/altium_pcb.cpp:1438
-#: pcbnew/plugins/altium/altium_pcb.cpp:1516
-#: pcbnew/plugins/altium/altium_pcb.cpp:1540
+#: pcbnew/plugins/altium/altium_pcb.cpp:1294
+#: pcbnew/plugins/altium/altium_pcb.cpp:1395
+#: pcbnew/plugins/altium/altium_pcb.cpp:1472
+#: pcbnew/plugins/altium/altium_pcb.cpp:1550
+#: pcbnew/plugins/altium/altium_pcb.cpp:1574
 #, fuzzy, c-format
 msgid ""
 "Dimension found on an Altium layer (%d) with no KiCad equivalent. It has "
@@ -36337,88 +36339,84 @@ msgstr ""
 "Dimensjon på Altium-laget %d har ingen KiCad-ekvivalent. Sett den på "
 "Eco1_User i stedet"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1562
+#: pcbnew/plugins/altium/altium_pcb.cpp:1596
 #, fuzzy
 msgid "Loading dimension drawings..."
 msgstr "Laster..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1583
-#: pcbnew/plugins/altium/altium_pcb.cpp:1590
+#: pcbnew/plugins/altium/altium_pcb.cpp:1617
+#: pcbnew/plugins/altium/altium_pcb.cpp:1624
 #, fuzzy, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
 msgstr ""
 "Ignorer strekkode på Altium-laget %d fordi det ikke støttes akkurat nå."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1631
+#: pcbnew/plugins/altium/altium_pcb.cpp:1665
 #, fuzzy
 msgid "No 3D-models will be imported."
 msgstr "Kan ikke opprette katalogen \"%s\" -> ingen 3D-modeller importeres."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1660
+#: pcbnew/plugins/altium/altium_pcb.cpp:1694
 #, fuzzy, c-format
 msgid "File not found: '%s'. 3D-model not imported."
 msgstr "Fil ikke funnet: %s."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1698
+#: pcbnew/plugins/altium/altium_pcb.cpp:1732
 #, fuzzy
 msgid "Loading nets..."
 msgstr "Laster..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1722
+#: pcbnew/plugins/altium/altium_pcb.cpp:1756
+#: pcbnew/plugins/altium/altium_pcb.cpp:1940
 #, fuzzy
 msgid "Loading polygons..."
 msgstr "Utføre polygonfyll ..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1846
+#: pcbnew/plugins/altium/altium_pcb.cpp:1881
 #, fuzzy
 msgid "Loading rules..."
 msgstr "Laster inn Gerber-filer ..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1876
+#: pcbnew/plugins/altium/altium_pcb.cpp:1920
 #, fuzzy
 msgid "Loading board regions..."
 msgstr "Laster inn Gerber-filer ..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1896
-#, fuzzy
-msgid "Loading zones..."
-msgstr "Laster..."
-
-#: pcbnew/plugins/altium/altium_pcb.cpp:1969
-#: pcbnew/plugins/altium/altium_pcb.cpp:2015
+#: pcbnew/plugins/altium/altium_pcb.cpp:2045
+#: pcbnew/plugins/altium/altium_pcb.cpp:2125
 #, fuzzy, c-format
 msgid "Ignored polygon shape of kind %d (not yet supported)."
 msgstr ""
 "Ignorer strekkode på Altium-laget %d fordi det ikke støttes akkurat nå."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2076
+#: pcbnew/plugins/altium/altium_pcb.cpp:2273
 #, fuzzy
 msgid "Loading zone fills..."
 msgstr "Byggesone fylles ..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2157
+#: pcbnew/plugins/altium/altium_pcb.cpp:2354
 #, fuzzy
 msgid "Loading arcs..."
 msgstr "Laster..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2362
+#: pcbnew/plugins/altium/altium_pcb.cpp:2559
 #, fuzzy
 msgid "Loading pads..."
 msgstr "Laster..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2447
+#: pcbnew/plugins/altium/altium_pcb.cpp:2644
 #, fuzzy, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
 "Pad '%s' av Footprint %s har et firkantet hull. KiCad støtter ikke dette ennå"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2468
+#: pcbnew/plugins/altium/altium_pcb.cpp:2665
 #, fuzzy, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
 "Pad '%s' av Footprint %s har et firkantet hull. KiCad støtter ikke dette ennå"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2495
+#: pcbnew/plugins/altium/altium_pcb.cpp:2692
 #, fuzzy, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
@@ -36427,29 +36425,29 @@ msgstr ""
 "Pad '%s' av Footprint %s har en hullrotasjon på %f grad. KiCad støtter bare "
 "90 graders vinkler"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2507
+#: pcbnew/plugins/altium/altium_pcb.cpp:2704
 #, fuzzy, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr ""
 "Pad '%s' av Footprint %s bruker en kompleks padstabel (type %d), som ikke "
 "støttes ennå"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2524
+#: pcbnew/plugins/altium/altium_pcb.cpp:2721
 #, fuzzy, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
 msgstr ""
 "Pad '%s' av Footprint %s bruker en kompleks padstabel (type %d), som ikke "
 "støttes ennå"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2561
+#: pcbnew/plugins/altium/altium_pcb.cpp:2758
 #, fuzzy, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr ""
 "Pad '%s' av Footprint %s bruker en kompleks padstabel (type %d), som ikke "
 "støttes ennå"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2619
-#: pcbnew/plugins/altium/altium_pcb.cpp:2640
+#: pcbnew/plugins/altium/altium_pcb.cpp:2816
+#: pcbnew/plugins/altium/altium_pcb.cpp:2837
 #, fuzzy, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -36458,62 +36456,62 @@ msgstr ""
 "Non-Copper Pad på Altium-laget %d har ingen KiCad-ekvivalent. Sett den på "
 "Eco1_User i stedet"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2660
+#: pcbnew/plugins/altium/altium_pcb.cpp:2857
 #, fuzzy, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr "Non-Copper Pad '%s' har et hull. Dette skal ikke skje"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2666
+#: pcbnew/plugins/altium/altium_pcb.cpp:2863
 #, fuzzy, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr "Non-Copper Pad '%s' har et hull. Dette skal ikke skje"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2671
+#: pcbnew/plugins/altium/altium_pcb.cpp:2868
 #, fuzzy, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr ""
 "Non-Copper Pad '%s' bruker en kompleks padstabel (type %d). Dette skal ikke "
 "skje"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2813
+#: pcbnew/plugins/altium/altium_pcb.cpp:3010
 #, fuzzy, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr "Non-Copper Pad '%s' har et hull. Dette skal ikke skje"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2823
+#: pcbnew/plugins/altium/altium_pcb.cpp:3020
 #, fuzzy
 msgid "Loading vias..."
 msgstr "Laster..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2864
+#: pcbnew/plugins/altium/altium_pcb.cpp:3061
 #, fuzzy, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
 msgstr "Non-Copper Pad '%s' har et hull. Dette skal ikke skje"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2883
+#: pcbnew/plugins/altium/altium_pcb.cpp:3080
 #, fuzzy
 msgid "Loading tracks..."
 msgstr "Laster..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3053
+#: pcbnew/plugins/altium/altium_pcb.cpp:3250
 #, fuzzy
 msgid "Loading unicode strings..."
 msgstr "Laster..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3067
+#: pcbnew/plugins/altium/altium_pcb.cpp:3264
 #, fuzzy
 msgid "Loading text..."
 msgstr "Laster..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3096
-#: pcbnew/plugins/altium/altium_pcb.cpp:3109
+#: pcbnew/plugins/altium/altium_pcb.cpp:3293
+#: pcbnew/plugins/altium/altium_pcb.cpp:3306
 #, fuzzy, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr ""
 "Ignorer strekkode på Altium-laget %d fordi det ikke støttes akkurat nå."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3212
+#: pcbnew/plugins/altium/altium_pcb.cpp:3409
 #, fuzzy
 msgid "Loading rectangles..."
 msgstr "Laster inn Gerber-filer ..."
@@ -36964,7 +36962,7 @@ msgstr "Ignorerer en ledning siden Eagle-laget «%s' (%d) ikke ble kartlagt"
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1948
 #: pcbnew/plugins/fabmaster/import_fabmaster.cpp:2420
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:616
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:1522
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:1523
 #, fuzzy, c-format
 msgid ""
 "Invalid zero-sized pad ignored in\n"
@@ -37168,7 +37166,7 @@ msgstr "Uventet fil \"%s\" ble funnet i biblioteksti \"%s\"."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:1038
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:2789
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:3222
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:3223
 #, fuzzy, c-format
 msgid "Footprint library '%s' cannot be deleted."
 msgstr "Fotavtrykksbiblioteket \"%s\" kan ikke slettes."
@@ -37320,7 +37318,7 @@ msgstr ""
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5692
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6103
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2484
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2485
 msgid "Legacy Zone Warning"
 msgstr "Legacy Zone Advarsel"
 
@@ -37444,39 +37442,39 @@ msgstr "Filen %s ble ikke funnet."
 msgid "Unknown sheet type '%s' on line: %d."
 msgstr "Ukjent arktype \"%s\" på linje: %d"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:1297
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:1298
 #, fuzzy, c-format
 msgid "Missing '$EndMODULE' for MODULE '%s'."
 msgstr "Mangler '$ EndMODULE' for MODULE \"%s\""
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:1347
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:1348
 #, fuzzy, c-format
 msgid "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'."
 msgstr "Ukjent padshape '%c = 0x %02x' på linje: %d av fotavtrykk: \"%s\""
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:1546
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:1547
 #, fuzzy, c-format
 msgid "Unknown FP_SHAPE type:'%c=0x%02x' on line %d of footprint '%s'."
 msgstr ""
 "Ukjent FP_SHAPE-type: '%c = 0x %02x' på linje: %d av fotavtrykk: \"%s\""
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2320
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2321
 #, fuzzy, c-format
 msgid "Duplicate NETCLASS name '%s'."
 msgstr "duplisere NETCLASS-navnet \"%s\""
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2401
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2412
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2402
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2413
 #, c-format
 msgid "Bad ZAux for CZONE_CONTAINER \"%s\""
 msgstr "Dårlig ZAux for CZONE_CONTAINER \"%s\""
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2427
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2428
 #, c-format
 msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr "Dårlig ZSmoothing for CZONE_CONTAINER \"%s\""
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2482
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2483
 #, fuzzy
 msgid ""
 "The legacy segment fill mode is no longer supported.\n"
@@ -37485,13 +37483,13 @@ msgstr ""
 "Den eldre segmentfyllingsmodus støttes ikke lenger.\n"
 "Konvertere soner til polygonfyll?"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2522
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2523
 #, c-format
 msgid "Bad ZClearance padoption for CZONE_CONTAINER \"%s\""
 msgstr "Dårlig valg for ZClearance for CZONE_CONTAINER \"%s\""
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2805
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2844
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2806
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2845
 #, fuzzy, c-format
 msgid ""
 "Invalid floating point number in file: '%s'\n"
@@ -37502,8 +37500,8 @@ msgstr ""
 "linje: %d\n"
 "forskyvning: %d"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2815
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2854
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2816
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2855
 #, fuzzy, c-format
 msgid ""
 "Missing floating point number in file: '%s'\n"
@@ -37514,12 +37512,12 @@ msgstr ""
 "linje: %d\n"
 "forskyvning: %d"
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2996
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:2997
 #, c-format
 msgid "File '%s' is empty."
 msgstr "Filen %s er tom."
 
-#: pcbnew/plugins/legacy/legacy_plugin.cpp:2999
+#: pcbnew/plugins/legacy/legacy_plugin.cpp:3000
 #, c-format
 msgid "File '%s' is not a legacy library."
 msgstr "Filen %s er ikke et eldre bibliotek."
@@ -37681,18 +37679,18 @@ msgid "?"
 msgstr "?"
 
 #: pcbnew/router/pns_kicad_iface.cpp:606 pcbnew/router/pns_kicad_iface.cpp:687
-#: pcbnew/router/router_tool.cpp:768
+#: pcbnew/router/router_tool.cpp:770
 #, fuzzy
 msgid "board minimum clearance"
 msgstr "Minimum klaring:"
 
 #: pcbnew/router/pns_kicad_iface.cpp:620 pcbnew/router/pns_kicad_iface.cpp:686
-#: pcbnew/router/router_tool.cpp:733 pcbnew/router/router_tool.cpp:755
+#: pcbnew/router/router_tool.cpp:735 pcbnew/router/router_tool.cpp:757
 #, fuzzy
 msgid "board minimum track width"
 msgstr "Minimum bredde:"
 
-#: pcbnew/router/pns_kicad_iface.cpp:627 pcbnew/router/router_tool.cpp:735
+#: pcbnew/router/pns_kicad_iface.cpp:627 pcbnew/router/router_tool.cpp:737
 #, fuzzy
 msgid "existing track"
 msgstr "Når du lager spor"
@@ -37980,89 +37978,89 @@ msgid ""
 "event log for debugging purposes?"
 msgstr ""
 
-#: pcbnew/router/router_tool.cpp:1107
+#: pcbnew/router/router_tool.cpp:1109
 #, fuzzy
 msgid "Blind/buried via need 2 different layers."
 msgstr "Ikke modifiser elektroder med forskjellige lag"
 
-#: pcbnew/router/router_tool.cpp:1185
+#: pcbnew/router/router_tool.cpp:1187
 #, fuzzy
 msgid "Tracks on Copper layers only."
 msgstr "Bare spor på kobberlag"
 
-#: pcbnew/router/router_tool.cpp:1824 pcbnew/router/router_tool.cpp:2404
+#: pcbnew/router/router_tool.cpp:1826 pcbnew/router/router_tool.cpp:2406
 msgid "The selected item is locked."
 msgstr "Det valgte elementet er låst."
 
-#: pcbnew/router/router_tool.cpp:1826
+#: pcbnew/router/router_tool.cpp:1828
 msgid "Drag Anyway"
 msgstr "Dra uansett"
 
-#: pcbnew/router/router_tool.cpp:2406 pcbnew/tools/pcb_actions.cpp:1539
+#: pcbnew/router/router_tool.cpp:2408 pcbnew/tools/pcb_actions.cpp:1539
 msgid "Break Track"
 msgstr "Break Track"
 
-#: pcbnew/router/router_tool.cpp:2485
+#: pcbnew/router/router_tool.cpp:2487
 #, fuzzy, c-format
 msgid "Routing Diff Pair: %s"
 msgstr "Rute Differensialpar"
 
-#: pcbnew/router/router_tool.cpp:2497 pcbnew/router/router_tool.cpp:2508
+#: pcbnew/router/router_tool.cpp:2499 pcbnew/router/router_tool.cpp:2510
 #, fuzzy, c-format
 msgid "Resolved Netclass: %s"
 msgstr "Løst klaring: %s."
 
-#: pcbnew/router/router_tool.cpp:2505
+#: pcbnew/router/router_tool.cpp:2507
 #, fuzzy, c-format
 msgid "Routing Track: %s"
 msgstr "Rute enkelt spor"
 
-#: pcbnew/router/router_tool.cpp:2513
+#: pcbnew/router/router_tool.cpp:2515
 #, fuzzy
 msgid "Routing Track"
 msgstr "Rute enkelt spor"
 
-#: pcbnew/router/router_tool.cpp:2514
+#: pcbnew/router/router_tool.cpp:2516
 #, fuzzy
 msgid "(no net)"
 msgstr "<ingen nett>"
 
-#: pcbnew/router/router_tool.cpp:2523
+#: pcbnew/router/router_tool.cpp:2525
 #, fuzzy
 msgid "Free-angle"
 msgstr "vinkel"
 
-#: pcbnew/router/router_tool.cpp:2529
+#: pcbnew/router/router_tool.cpp:2531
 #, fuzzy
 msgid "45-degree"
 msgstr "45 grader"
 
-#: pcbnew/router/router_tool.cpp:2530
+#: pcbnew/router/router_tool.cpp:2532
 #, fuzzy
 msgid "45-degree rounded"
 msgstr "Dra (45 graders modus)"
 
-#: pcbnew/router/router_tool.cpp:2531
+#: pcbnew/router/router_tool.cpp:2533
 #, fuzzy
 msgid "90-degree"
 msgstr "grad"
 
-#: pcbnew/router/router_tool.cpp:2532
+#: pcbnew/router/router_tool.cpp:2534
 #, fuzzy
 msgid "90-degree rounded"
 msgstr "Dra (45 graders modus)"
 
-#: pcbnew/router/router_tool.cpp:2537
+#: pcbnew/router/router_tool.cpp:2539
 #, fuzzy
 msgid "Corner Style"
 msgstr "Linjestil"
 
-#: pcbnew/router/router_tool.cpp:2543 pcbnew/router/router_tool.cpp:2560
+#: pcbnew/router/router_tool.cpp:2545 pcbnew/router/router_tool.cpp:2562
 #, fuzzy, c-format
 msgid "Track Width: %s"
 msgstr "Sporbredde"
 
-#: pcbnew/router/router_tool.cpp:2553
+#: pcbnew/router/router_tool.cpp:2555
 #, fuzzy, c-format
 msgid "Diff Pair Gap: %s"
 msgstr "Differensialpar"
@@ -38947,11 +38945,6 @@ msgstr "Kobberfinish:"
 #, fuzzy
 msgid "Castellated pads: "
 msgstr "Castellated pad"
-
-#: pcbnew/tools/drawing_stackup_table_tool.cpp:460
-#, fuzzy
-msgid "Board Thickness: "
-msgstr "Bretttykkelse:"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:474
 #, fuzzy
@@ -42244,6 +42237,18 @@ msgstr "Rediger skjematisk"
 #, fuzzy
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad kretskortfiler"
+
+#, fuzzy
+#~ msgid "Board thickness:"
+#~ msgstr "Bretttykkelse:"
+
+#, fuzzy
+#~ msgid "3D Preview Options"
+#~ msgstr "Innstillinger for forhåndsvisning"
+
+#, fuzzy
+#~ msgid "Loading zones..."
+#~ msgstr "Laster..."
 
 #, fuzzy
 #~ msgid "Board Thickness"
