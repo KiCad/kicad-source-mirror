@@ -162,7 +162,7 @@ void RC_ITEM::GetJsonViolation( RC_JSON::VIOLATION& aViolation, UNITS_PROVIDER* 
     wxString severity = getSeverityString( aSeverity );
 
     aViolation.severity = severity;
-    aViolation.description = GetViolatingRuleDesc();
+    aViolation.description = GetErrorMessage();
     aViolation.type = GetSettingsKey();
 
     EDA_ITEM* mainItem = nullptr;

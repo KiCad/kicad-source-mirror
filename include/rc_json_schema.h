@@ -81,12 +81,12 @@ NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE( DRC_REPORT, source, date, kicad_version, vio
 
 struct ERC_SHEET
 {
-    wxString               uuid;
+    wxString               uuid_path;
     wxString               path;
     std::vector<VIOLATION> violations;
 };
 
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE( ERC_SHEET, uuid, path, violations )
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE( ERC_SHEET, uuid_path, path, violations )
 
 struct ERC_REPORT : REPORT_BASE
 {
