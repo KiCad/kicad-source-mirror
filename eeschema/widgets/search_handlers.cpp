@@ -335,7 +335,9 @@ wxString LABEL_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int aC
         else if( lbl->Type() == SCH_GLOBAL_LABEL_T )
             return wxS( "Global" );
         else if( lbl->Type() == SCH_HIER_LABEL_T )
-            return wxS( "Hierarchal" );
+            return wxS( "Hierarchical" );
+        else if( lbl->Type() == SCH_DIRECTIVE_LABEL_T )
+            return wxS( "Directive" );
     }
     else if( aCol == 1 )
         return lbl->GetShownText( false );
