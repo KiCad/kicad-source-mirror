@@ -50,9 +50,9 @@ ALTIUM_DESIGNER_PLUGIN::~ALTIUM_DESIGNER_PLUGIN()
 }
 
 
-const wxString ALTIUM_DESIGNER_PLUGIN::PluginName() const
-{
-    return wxT( "Altium Designer" );
+BOARD* ALTIUM_DESIGNER_PLUGIN::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
+                                          const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
+                                          PROGRESS_REPORTER* aProgressReporter )
 }
 
 

@@ -46,6 +46,9 @@ public:
 
     const wxString GetFileExtension() const override;
 
+    BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
+                      const STRING_UTF8_MAP* aProperties = nullptr, PROJECT* aProject = nullptr,
+                      PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
 
     std::vector<FOOTPRINT*> GetImportedCachedLibraryFootprints() override;
 

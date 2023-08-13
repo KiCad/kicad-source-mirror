@@ -283,9 +283,9 @@ VECTOR2I inline EAGLE_PLUGIN::kicad_fontsize( const ECOORD& d, int aTextThicknes
 }
 
 
-BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
-                           const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
-                           PROGRESS_REPORTER* aProgressReporter )
+BOARD* EAGLE_PLUGIN::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
+                                const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
+                                PROGRESS_REPORTER* aProgressReporter )
 {
     LOCALE_IO       toggle;     // toggles on, then off, the C locale.
     wxXmlNode*      doc;

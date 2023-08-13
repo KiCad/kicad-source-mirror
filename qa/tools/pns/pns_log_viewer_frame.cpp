@@ -898,7 +898,7 @@ static BOARD* loadBoard( const std::string& filename )
 
     try
     {
-        brd = pi->Load( wxString( filename.c_str() ), nullptr, nullptr );
+        brd = pi->LoadBoard( wxString( filename.c_str() ), nullptr, nullptr );
     }
     catch( const IO_ERROR& )
     {

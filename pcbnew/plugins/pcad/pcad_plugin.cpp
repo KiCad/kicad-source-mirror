@@ -66,9 +66,9 @@ const wxString PCAD_PLUGIN::GetFileExtension() const
 }
 
 
-BOARD* PCAD_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
-                          const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
-                          PROGRESS_REPORTER* aProgressReporter )
+BOARD* PCAD_PLUGIN::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
+                               const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
+                               PROGRESS_REPORTER* aProgressReporter )
 {
     wxXmlDocument   xmlDoc;
 

@@ -35,8 +35,9 @@
 
 
 
-BOARD* PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, const STRING_UTF8_MAP* aProperties,
-                     PROJECT* aProject, PROGRESS_REPORTER* aProgressReporter )
+BOARD* PLUGIN::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
+                          const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
+                          PROGRESS_REPORTER* aProgressReporter )
 {
     NOT_IMPLEMENTED( __FUNCTION__ );
 }
@@ -47,7 +48,8 @@ std::vector<FOOTPRINT*> PLUGIN::GetImportedCachedLibraryFootprints()
     NOT_IMPLEMENTED( __FUNCTION__ );
 }
 
-void PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, const STRING_UTF8_MAP* aProperties )
+
+void PLUGIN::SaveBoard( const wxString& aFileName, BOARD* aBoard, const STRING_UTF8_MAP* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
     NOT_IMPLEMENTED( __FUNCTION__ );

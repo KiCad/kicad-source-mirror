@@ -405,9 +405,9 @@ static inline long hexParse( const char* next, const char** out = nullptr )
 }
 
 
-BOARD* LEGACY_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
-                            const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
-                            PROGRESS_REPORTER* aProgressReporter )
+BOARD* LEGACY_PLUGIN::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
+                                 const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
+                                 PROGRESS_REPORTER* aProgressReporter )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 

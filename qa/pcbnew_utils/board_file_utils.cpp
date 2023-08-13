@@ -65,7 +65,7 @@ std::string GetPcbnewTestDataDir()
 void DumpBoardToFile( BOARD& board, const std::string& aFilename )
 {
     PCB_PLUGIN io;
-    io.Save( aFilename, &board );
+    io.SaveBoard( aFilename, &board );
 }
 
 

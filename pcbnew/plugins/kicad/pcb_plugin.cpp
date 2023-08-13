@@ -267,7 +267,8 @@ long long FP_CACHE::GetTimestamp( const wxString& aLibPath )
 }
 
 
-void PCB_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, const STRING_UTF8_MAP* aProperties )
+void PCB_PLUGIN::SaveBoard( const wxString& aFileName, BOARD* aBoard,
+                            const STRING_UTF8_MAP* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -2255,9 +2256,9 @@ PCB_PLUGIN::~PCB_PLUGIN()
 }
 
 
-BOARD* PCB_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
-                         const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
-                         PROGRESS_REPORTER* aProgressReporter )
+BOARD* PCB_PLUGIN::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
+                              const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
+                              PROGRESS_REPORTER* aProgressReporter )
 {
     FILE_LINE_READER reader( aFileName );
 

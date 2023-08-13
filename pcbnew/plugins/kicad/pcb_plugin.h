@@ -282,12 +282,12 @@ public:
         m_queryUserCallback = std::move( aCallback );
     }
 
-    void Save( const wxString& aFileName, BOARD* aBoard,
-               const STRING_UTF8_MAP* aProperties = nullptr ) override;
+    void SaveBoard( const wxString& aFileName, BOARD* aBoard,
+                    const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
-    BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,
-                 const STRING_UTF8_MAP* aProperties = nullptr, PROJECT* aProject = nullptr,
-                 PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
+    BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
+                      const STRING_UTF8_MAP* aProperties = nullptr, PROJECT* aProject = nullptr,
+                      PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
 
     BOARD* DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, const STRING_UTF8_MAP* aProperties,
                      PROGRESS_REPORTER* aProgressReporter, unsigned aLineCount );

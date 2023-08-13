@@ -47,8 +47,8 @@ public:
     /*
      * Saves the entire board to the clipboard formatted using the PCB_PLUGIN formatting
      */
-    void Save( const wxString& aFileName, BOARD* aBoard,
-               const STRING_UTF8_MAP* aProperties = nullptr ) override;
+    void SaveBoard( const wxString& aFileName, BOARD* aBoard,
+                    const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     /*
      * Write all the settings of the BOARD* set by setBoard() and then adds all the
@@ -58,9 +58,9 @@ public:
 
     BOARD_ITEM* Parse();
 
-    BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,
-                 const STRING_UTF8_MAP* aProperties = nullptr, PROJECT* aProject = nullptr,
-                 PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
+    BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
+                      const STRING_UTF8_MAP* aProperties = nullptr, PROJECT* aProject = nullptr,
+                      PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
 
     void SetBoard( BOARD* aBoard );
 

@@ -73,9 +73,9 @@ public:
         return wxT( "brd" );
     }
 
-    BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,
-                 const STRING_UTF8_MAP* aProperties = nullptr, PROJECT* aProject = nullptr,
-                 PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
+    BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
+                      const STRING_UTF8_MAP* aProperties = nullptr, PROJECT* aProject = nullptr,
+                      PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
 
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
                              bool aBestEfforts,

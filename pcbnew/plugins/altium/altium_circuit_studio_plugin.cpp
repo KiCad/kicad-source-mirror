@@ -62,9 +62,10 @@ const wxString ALTIUM_CIRCUIT_STUDIO_PLUGIN::GetFileExtension() const
 }
 
 
-BOARD* ALTIUM_CIRCUIT_STUDIO_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
-                                           const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
-                                           PROGRESS_REPORTER* aProgressReporter )
+BOARD* ALTIUM_CIRCUIT_STUDIO_PLUGIN::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
+                                                const STRING_UTF8_MAP* aProperties,
+                                                PROJECT*               aProject,
+                                                PROGRESS_REPORTER*     aProgressReporter )
 {
     m_props = aProperties;
 

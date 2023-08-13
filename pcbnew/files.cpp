@@ -750,7 +750,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             unsigned startTime = GetRunningMicroSecs();
 #endif
 
-            loadedBoard = pi->Load( fullFileName, nullptr, &props, &Prj(), &progressReporter );
+            loadedBoard = pi->LoadBoard( fullFileName, nullptr, &props, &Prj(), &progressReporter );
 
 #if USE_INSTRUMENTATION
             unsigned stopTime = GetRunningMicroSecs();
@@ -1068,7 +1068,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
     {
         PLUGIN::RELEASER    pi( IO_MGR::PluginFind( IO_MGR::KICAD_SEXP ) );
 
-        pi->Save( tempFile, GetBoard(), nullptr );
+        pi->SaveBoard( tempFile, GetBoard(), nullptr );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -1170,7 +1170,7 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject
 
         wxASSERT( pcbFileName.IsAbsolute() );
 
-        pi->Save( pcbFileName.GetFullPath(), GetBoard(), nullptr );
+        pi->SaveBoard( pcbFileName.GetFullPath(), GetBoard(), nullptr );
     }
     catch( const IO_ERROR& ioe )
     {

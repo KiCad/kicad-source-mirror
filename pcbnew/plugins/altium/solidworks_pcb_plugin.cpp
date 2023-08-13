@@ -52,9 +52,9 @@ const wxString SOLIDWORKS_PCB_PLUGIN::GetFileExtension() const
 }
 
 
-BOARD* SOLIDWORKS_PCB_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
-                                    const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
-                                    PROGRESS_REPORTER* aProgressReporter )
+BOARD* SOLIDWORKS_PCB_PLUGIN::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
+                                         const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
+                                         PROGRESS_REPORTER* aProgressReporter )
 {
     m_props = aProperties;
 

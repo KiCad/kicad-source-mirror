@@ -616,7 +616,7 @@ void ROUTER_TOOL::saveRouterDebugLog()
 
     PCB_PLUGIN  pcb_io;
 
-    pcb_io.Save( fname_dump.GetFullPath(), m_iface->GetBoard(), nullptr );
+    pcb_io.SaveBoard( fname_dump.GetFullPath(), m_iface->GetBoard(), nullptr );
 
     PROJECT* prj = m_iface->GetBoard()->GetProject();
     prj->GetProjectFile().SaveAs( cwd, "pns" );

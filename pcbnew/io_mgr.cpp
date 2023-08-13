@@ -169,7 +169,7 @@ BOARD* IO_MGR::Load( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* aAp
 
     if( (PLUGIN*) pi )  // test pi->plugin
     {
-        return pi->Load( aFileName, aAppendToMe, aProperties, aProject, aProgressReporter );
+        return pi->LoadBoard( aFileName, aAppendToMe, aProperties, aProject, aProgressReporter );
     }
 
     THROW_IO_ERROR( wxString::Format( FMT_NOTFOUND, ShowType( aFileType ).GetData() ) );
@@ -184,7 +184,7 @@ void IO_MGR::Save( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* aBoar
 
     if( (PLUGIN*) pi )  // test pi->plugin
     {
-        pi->Save( aFileName, aBoard, aProperties );  // virtual
+        pi->SaveBoard( aFileName, aBoard, aProperties );  // virtual
         return;
     }
 

@@ -28,9 +28,9 @@ class SOLIDWORKS_PCB_PLUGIN : public PLUGIN
 public:
     const wxString PluginName() const override;
 
-    BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe, const STRING_UTF8_MAP* aProperties,
-                 PROJECT* aProject = nullptr,
-                 PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
+    BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
+                      const STRING_UTF8_MAP* aProperties, PROJECT* aProject = nullptr,
+                      PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
 
     const wxString GetFileExtension() const override;
 

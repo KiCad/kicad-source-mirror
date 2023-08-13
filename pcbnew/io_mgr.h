@@ -192,8 +192,8 @@ public:
     static PCB_FILE_T GuessPluginTypeFromLibPath( const wxString& aLibPath );
 
     /**
-     * Find the requested #PLUGIN and if found, calls the #PLUGIN::Load() function
-     * on it using the arguments passed to this function.  After the #PLUGIN::Load()
+     * Find the requested #PLUGIN and if found, calls the #PLUGIN::LoadBoard() function
+     * on it using the arguments passed to this function.  After the #PLUGIN::LoadBoard()
      * function returns, the #PLUGIN is Released() as part of this call.
      *
      * @param aFileType is the #PCB_FILE_T of file to load.
@@ -316,7 +316,7 @@ public:
      *                 wrong, using line number and character offsets of the input file if
      *                 possible.
      */
-    virtual BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,
+    virtual BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
                          const STRING_UTF8_MAP* aProperties = nullptr, PROJECT* aProject = nullptr,
                          PROGRESS_REPORTER* aProgressReporter = nullptr );
 
@@ -348,7 +348,7 @@ public:
      *
      * @throw IO_ERROR if there is a problem saving or exporting.
      */
-    virtual void Save( const wxString& aFileName, BOARD* aBoard,
+    virtual void SaveBoard( const wxString& aFileName, BOARD* aBoard,
                        const STRING_UTF8_MAP* aProperties = nullptr );
 
     /**
