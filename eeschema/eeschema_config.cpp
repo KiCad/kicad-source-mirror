@@ -132,7 +132,7 @@ void SCH_EDIT_FRAME::saveProjectSettings()
     if( !fn.HasName() || !IsWritable( fn, false ) )
         return;
 
-    RecordERCExclusions();
+    Schematic().RecordERCExclusions();
 
     if( Kiway().Player( FRAME_SIMULATOR, false ) )
         Prj().GetProjectFile().m_SchematicSettings->m_NgspiceSettings->SaveToFile();

@@ -1046,43 +1046,6 @@ void SCH_EDIT_FRAME::doCloseWindow()
 }
 
 
-void SCH_EDIT_FRAME::RecordERCExclusions()
-{
-    SCH_SHEET_LIST sheetList = Schematic().GetSheets();
-    ERC_SETTINGS&  ercSettings = Schematic().ErcSettings();
-
-    ercSettings.m_ErcExclusions.clear();
-
-    for( unsigned i = 0; i < sheetList.size(); i++ )
-    {
-        for( SCH_ITEM* item : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
-        {
-            SCH_MARKER* marker = static_cast<SCH_MARKER*>( item );
-
-            if( marker->IsExcluded() )
-                ercSettings.m_ErcExclusions.insert( marker->Serialize() );
-        }
-    }
-}
-
-
-void SCH_EDIT_FRAME::ResolveERCExclusions()
-{
-    SCH_SHEET_LIST sheetList = Schematic().GetSheets();
-
-    for( SCH_MARKER* marker : Schematic().ResolveERCExclusions() )
-    {
-        SCH_SHEET_PATH errorPath;
-        ignore_unused( sheetList.GetItem( marker->GetRCItem()->GetMainItemID(), &errorPath ) );
-
-        if( errorPath.LastScreen() )
-            errorPath.LastScreen()->Append( marker );
-        else
-            Schematic().RootScreen()->Append( marker );
-    }
-}
-
-
 SEVERITY SCH_EDIT_FRAME::GetSeverity( int aErrorCode ) const
 {
     return Schematic().ErcSettings().GetSeverity( aErrorCode );

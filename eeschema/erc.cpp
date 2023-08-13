@@ -1175,6 +1175,5 @@ void ERC_TESTER::RunTests( SCHEMATIC* aSch, DS_PROXY_VIEW_ITEM* aDrawingSheet,
             TestOffGridEndpoints( aEditFrame->GetCanvas()->GetView()->GetGAL()->GetGridSize().x );
     }
 
-    if( aEditFrame )
-        aEditFrame->ResolveERCExclusions();
+    aSch->ResolveERCExclusionsPostUpdate();
 }

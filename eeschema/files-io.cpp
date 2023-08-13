@@ -495,7 +495,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     }
 
     // Load any exclusions from the project file
-    ResolveERCExclusions();
+    Schematic().ResolveERCExclusionsPostUpdate();
 
     initScreenZoom();
     SetSheetNumberAndCount();

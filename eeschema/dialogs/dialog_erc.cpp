@@ -380,7 +380,7 @@ void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
 
     UpdateAnnotationWarning();
 
-    m_parent->RecordERCExclusions();
+    sch->RecordERCExclusions();
     deleteAllMarkers( true );
 
     std::vector<std::reference_wrapper<RC_ITEM>> violations = ERC_ITEM::GetItemsWithSeverities();

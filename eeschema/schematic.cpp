@@ -19,6 +19,7 @@
 
 #include <bus_alias.h>
 #include <connection_graph.h>
+#include <core/ignore.h>
 #include <core/kicad_algo.h>
 #include <erc_settings.h>
 #include <sch_marker.h>
@@ -715,4 +716,41 @@ void SCHEMATIC::RemoveAllListeners()
 void SCHEMATIC::OnItemsChanged( std::vector<SCH_ITEM*>& aItems )
 {
     InvokeListeners( &SCHEMATIC_LISTENER::OnSchItemsChanged, *this, aItems );
+}
+
+
+void SCHEMATIC::RecordERCExclusions()
+{
+    SCH_SHEET_LIST sheetList = GetSheets();
+    ERC_SETTINGS&  ercSettings = ErcSettings();
+
+    ercSettings.m_ErcExclusions.clear();
+
+    for( unsigned i = 0; i < sheetList.size(); i++ )
+    {
+        for( SCH_ITEM* item : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
+        {
+            SCH_MARKER* marker = static_cast<SCH_MARKER*>( item );
+
+            if( marker->IsExcluded() )
+                ercSettings.m_ErcExclusions.insert( marker->Serialize() );
+        }
+    }
+}
+
+
+void SCHEMATIC::ResolveERCExclusionsPostUpdate()
+{
+    SCH_SHEET_LIST sheetList = GetSheets();
+
+    for( SCH_MARKER* marker : ResolveERCExclusions() )
+    {
+        SCH_SHEET_PATH errorPath;
+        ignore_unused( sheetList.GetItem( marker->GetRCItem()->GetMainItemID(), &errorPath ) );
+
+        if( errorPath.LastScreen() )
+            errorPath.LastScreen()->Append( marker );
+        else
+            RootScreen()->Append( marker );
+    }
 }

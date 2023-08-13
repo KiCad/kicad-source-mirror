@@ -240,6 +240,16 @@ public:
     void FixupJunctions();
 
     /**
+     * Scan existing markers and record data from any that are Excluded.
+     */
+    void RecordERCExclusions();
+
+    /**
+     * Update markers to match recorded exclusions.
+     */
+    void ResolveERCExclusionsPostUpdate();
+
+    /**
      * Must be used if Add() is used using a BULK_x ADD_MODE to generate a change event for
      * listeners.
      */

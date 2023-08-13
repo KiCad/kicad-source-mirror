@@ -197,16 +197,6 @@ public:
      */
     void OnModify() override;
 
-    /**
-     * Scan existing markers and record data from any that are Excluded.
-     */
-    void RecordERCExclusions();
-
-    /**
-     * Update markers to match recorded exclusions.
-     */
-    void ResolveERCExclusions();
-
     SEVERITY GetSeverity( int aErrorCode ) const override;
 
     /**
