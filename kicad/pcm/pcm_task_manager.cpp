@@ -182,7 +182,7 @@ PCM_TASK_MANAGER::STATUS PCM_TASK_MANAGER::installDownloadedPackage( const PCM_P
 
     if( hash )
     {
-        std::ifstream stream( aFilePath.GetFullPath().ToUTF8(), std::ios::binary );
+        std::ifstream stream( aFilePath.GetFullPath().fn_str(), std::ios::binary );
         hash_match = m_pcm->VerifyHash( stream, *hash );
     }
 
@@ -636,7 +636,7 @@ void PCM_TASK_MANAGER::RunQueue( wxWindow* aParent )
                             count_success_tasks++;
                         else if( task_status != PCM_TASK_MANAGER::STATUS::INITIALIZED )
                             count_failed_tasks++;
-                        
+
                         m_reporter->AdvancePhase();
                     }
 

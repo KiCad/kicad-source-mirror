@@ -72,7 +72,7 @@ PLUGIN_CONTENT_MANAGER::PLUGIN_CONTENT_MANAGER(
     schema_file.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
     schema_file.AppendDir( wxS( "schemas" ) );
 
-    std::ifstream  schema_stream( schema_file.GetFullPath().ToUTF8() );
+    std::ifstream  schema_stream( schema_file.GetFullPath().fn_str() );
     nlohmann::json schema;
 
     try
@@ -98,7 +98,7 @@ PLUGIN_CONTENT_MANAGER::PLUGIN_CONTENT_MANAGER(
 
     if( f.FileExists() )
     {
-        std::ifstream  installed_stream( f.GetFullPath().ToUTF8() );
+        std::ifstream  installed_stream( f.GetFullPath().fn_str() );
         nlohmann::json installed;
 
         try
@@ -416,7 +416,7 @@ bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryId )
 
     if( repo_cache.FileExists() && packages_cache.FileExists() )
     {
-        std::ifstream  repo_stream( repo_cache.GetFullPath().ToUTF8() );
+        std::ifstream  repo_stream( repo_cache.GetFullPath().fn_str() );
         PCM_REPOSITORY saved_repo;
         try
         {
@@ -433,7 +433,7 @@ bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryId )
         {
             // Cached repo is up to date, use data on disk
             js.clear();
-            std::ifstream packages_cache_stream( packages_cache.GetFullPath().ToUTF8() );
+            std::ifstream packages_cache_stream( packages_cache.GetFullPath().fn_str() );
 
             try
             {
@@ -478,10 +478,10 @@ bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryId )
 
         repo_cache.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
 
-        std::ofstream repo_cache_stream( repo_cache.GetFullPath().ToUTF8() );
+        std::ofstream repo_cache_stream( repo_cache.GetFullPath().fn_str() );
         repo_cache_stream << std::setw( 4 ) << nlohmann::json( current_repo ) << std::endl;
 
-        std::ofstream packages_cache_stream( packages_cache.GetFullPath().ToUTF8() );
+        std::ofstream packages_cache_stream( packages_cache.GetFullPath().fn_str() );
         js.clear();
         js["packages"] = nlohmann::json( current_repo.package_list );
         packages_cache_stream << std::setw( 4 ) << js << std::endl;
@@ -504,7 +504,7 @@ bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryId )
 
         if( mtime + 600 < getCurrentTimestamp() && mtime < (time_t) resources.update_timestamp )
         {
-            std::ofstream resources_stream( resource_file.GetFullPath().ToUTF8(),
+            std::ofstream resources_stream( resource_file.GetFullPath().fn_str(),
                                             std::ios_base::binary );
 
             reporter->SetTitle( _( "Downloading resources" ) );
@@ -517,7 +517,7 @@ bool PLUGIN_CONTENT_MANAGER::CacheRepository( const wxString& aRepositoryId )
 
             if( success )
             {
-                std::ifstream read_stream( resource_file.GetFullPath().ToUTF8(),
+                std::ifstream read_stream( resource_file.GetFullPath().fn_str(),
                                            std::ios_base::binary );
 
 
@@ -886,7 +886,7 @@ void PLUGIN_CONTENT_MANAGER::SaveInstalledPackages()
         }
 
         wxFileName    f( SETTINGS_MANAGER::GetUserSettingsPath(), wxT( "installed_packages.json" ) );
-        std::ofstream stream( f.GetFullPath().ToUTF8() );
+        std::ofstream stream( f.GetFullPath().fn_str() );
 
         stream << std::setw( 4 ) << js << std::endl;
     }

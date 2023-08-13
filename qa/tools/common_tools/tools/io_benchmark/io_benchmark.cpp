@@ -78,7 +78,7 @@ static void bench_fstream( const wxFileName& aFile, int aReps, BENCH_REPORT& rep
 
     for( int i = 0; i < aReps; ++i)
     {
-        std::ifstream fstr( aFile.GetFullPath().ToUTF8() );
+        std::ifstream fstr( aFile.GetFullPath().fn_str() );
 
         while( getline( fstr, line ) )
         {
@@ -98,7 +98,7 @@ static void bench_fstream( const wxFileName& aFile, int aReps, BENCH_REPORT& rep
 static void bench_fstream_reuse( const wxFileName& aFile, int aReps, BENCH_REPORT& report )
 {
     std::string line;
-    std::ifstream fstr( aFile.GetFullPath().ToUTF8() );
+    std::ifstream fstr( aFile.GetFullPath().fn_str() );
 
     for( int i = 0; i < aReps; ++i)
     {

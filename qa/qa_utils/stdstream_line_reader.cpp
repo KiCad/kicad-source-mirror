@@ -68,7 +68,7 @@ void STDISTREAM_LINE_READER::SetStream( std::istream& aStream )
 
 
 IFSTREAM_LINE_READER::IFSTREAM_LINE_READER( const wxFileName& aFileName )  :
-        m_fStream( aFileName.GetFullPath().ToUTF8() )
+        m_fStream( aFileName.GetFullPath().fn_str() )
 {
     if( !m_fStream.is_open() )
     {
