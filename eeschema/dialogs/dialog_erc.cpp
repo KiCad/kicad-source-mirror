@@ -38,6 +38,7 @@
 #include <tools/ee_inspection_tool.h>
 #include <dialog_erc.h>
 #include <erc.h>
+#include <erc_report.h>
 #include <id.h>
 #include <confirm.h>
 #include <common.h>
@@ -976,7 +977,9 @@ void DIALOG_ERC::OnSaveReport( wxCommandEvent& aEvent )
         fn.MakeAbsolute( prj_path );
     }
 
-    if( writeReport( fn.GetFullPath() ) )
+    ERC_REPORT reportWriter( &m_parent->Schematic(), m_parent->GetUserUnits() );
+
+    if( reportWriter.WriteTextReport( fn.GetFullPath() ) )
     {
         m_messages->Report( wxString::Format( _( "Report file '%s' created." ),
                                               fn.GetFullPath() ) );
@@ -987,65 +990,3 @@ void DIALOG_ERC::OnSaveReport( wxCommandEvent& aEvent )
                                               fn.GetFullPath() ) );
     }
 }
-
-
-bool DIALOG_ERC::writeReport( const wxString& aFullFileName )
-{
-    wxFFile file( aFullFileName, wxT( "wt" ) );
-
-    if( !file.IsOpened() )
-        return false;
-
-    wxString msg = wxString::Format( _( "ERC report (%s, Encoding UTF8)\n" ), GetISO8601CurrentDateTime() );
-
-    std::map<KIID, EDA_ITEM*> itemMap;
-
-    int            err_count = 0;
-    int            warn_count = 0;
-    int            total_count = 0;
-    SCH_SHEET_LIST sheetList = m_parent->Schematic().GetSheets();
-
-    sheetList.FillItemMap( itemMap );
-
-    ERC_SETTINGS& settings = m_parent->Schematic().ErcSettings();
-
-    for( unsigned i = 0;  i < sheetList.size(); i++ )
-    {
-        msg << wxString::Format( _( "\n***** Sheet %s\n" ), sheetList[i].PathHumanReadable() );
-
-        for( SCH_ITEM* aItem : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
-        {
-            const SCH_MARKER* marker = static_cast<const SCH_MARKER*>( aItem );
-            RC_ITEM*          item = marker->GetRCItem().get();
-            SEVERITY          severity = settings.GetSeverity( item->GetErrorCode() );
-
-            if( marker->GetMarkerType() != MARKER_BASE::MARKER_ERC )
-                continue;
-
-            total_count++;
-
-            switch( severity )
-            {
-            case RPT_SEVERITY_ERROR:   err_count++;  break;
-            case RPT_SEVERITY_WARNING: warn_count++; break;
-            default:                                 break;
-            }
-
-            msg << marker->GetRCItem()->ShowReport( m_parent, severity, itemMap );
-        }
-    }
-
-    msg << wxString::Format( _( "\n ** ERC messages: %d  Errors %d  Warnings %d\n" ),
-                             total_count, err_count, warn_count );
-
-    // Currently: write report using UTF8 (as usual in Kicad).
-    // TODO: see if we can use the current encoding page (mainly for Windows users),
-    // Or other format (HTML?)
-    file.Write( msg );
-
-    // wxFFile dtor will close the file.
-
-    return true;
-}
-
-
