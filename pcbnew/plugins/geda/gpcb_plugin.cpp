@@ -46,6 +46,7 @@
 #include <wx/filename.h>
 #include <wx/wfstream.h>
 #include <boost/ptr_container/ptr_map.hpp>
+#include <filter_reader.h>
 
 
 static inline long parseInt( const wxString& aValue, double aScalar )
@@ -830,6 +831,31 @@ void GPCB_PLUGIN::validateCache( const wxString& aLibraryPath, bool checkModifie
         m_cache = new GPCB_FPL_CACHE( this, aLibraryPath );
         m_cache->Load();
     }
+}
+
+
+FOOTPRINT* GPCB_PLUGIN::ImportFootprint( const wxString&        aFootprintPath,
+                                         wxString&              aFootprintNameOut,
+                                         const STRING_UTF8_MAP* aProperties )
+{
+    wxFileName fn( aFootprintPath );
+
+    FILE_LINE_READER         freader( aFootprintPath );
+    WHITESPACE_FILTER_READER reader( freader );
+    IO_MGR::PCB_FILE_T       file_type;
+
+    reader.ReadLine();
+    char* line = reader.Line();
+
+    if( !line )
+        return nullptr;
+
+    if( strncasecmp( line, "Element", strlen( "Element" ) ) != 0 )
+        return nullptr;
+
+    aFootprintNameOut = fn.GetName();
+
+    return FootprintLoad( fn.GetPath(), aFootprintNameOut );
 }
 
 

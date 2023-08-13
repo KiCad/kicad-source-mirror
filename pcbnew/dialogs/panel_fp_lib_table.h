@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -22,6 +22,7 @@
 
 #include <panel_fp_lib_table_base.h>
 #include <widgets/wx_grid.h>
+#include <io_mgr.h>
 
 class FP_LIB_TABLE;
 class FP_LIB_TABLE_GRID;
@@ -63,6 +64,7 @@ private:
     /// Populate the readonly environment variable table with names and values
     /// by examining all the full_uri columns.
     void populateEnvironReadOnlyTable();
+    void populatePluginList();
 
     FP_LIB_TABLE_GRID* global_model() const
     {
@@ -91,6 +93,8 @@ private:
 
     //< Transient (unsaved) last browsed folder when adding a project level library.
     wxString         m_lastProjectLibDir;
+
+    std::map<IO_MGR::PCB_FILE_T, PLUGIN_FILE_DESC> m_supportedFpFiles;
 };
 
 #endif    // PANEL_FP_LIB_TABLE_H

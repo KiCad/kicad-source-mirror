@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -81,18 +81,6 @@ void CADSTAR_PCB_ARCHIVE_PLUGIN::clearLoadedFootprints()
 }
 
 
-const wxString CADSTAR_PCB_ARCHIVE_PLUGIN::PluginName() const
-{
-    return wxT( "CADSTAR PCB Archive" );
-}
-
-
-const wxString CADSTAR_PCB_ARCHIVE_PLUGIN::GetFileExtension() const
-{
-    return wxT( "cpa" );
-}
-
-
 std::vector<FOOTPRINT*> CADSTAR_PCB_ARCHIVE_PLUGIN::GetImportedCachedLibraryFootprints()
 {
     std::vector<FOOTPRINT*> retval;
@@ -146,6 +134,39 @@ BOARD* CADSTAR_PCB_ARCHIVE_PLUGIN::LoadBoard( const wxString& aFileName, BOARD* 
     m_loaded_footprints = tempPCB.GetLoadedLibraryFootpints();
 
     return m_board;
+}
+
+
+bool CADSTAR_PCB_ARCHIVE_PLUGIN::checkBoardHeader( const wxString& aFileName ) const
+{
+    return fileStartsWithPrefix( aFileName, wxT( "(CADSTARPCB" ), true );
+}
+
+
+bool CADSTAR_PCB_ARCHIVE_PLUGIN::CanReadBoard( const wxString& aFileName ) const
+{
+    if( !PLUGIN::CanReadBoard( aFileName ) )
+        return false;
+
+    return checkBoardHeader( aFileName );
+}
+
+
+bool CADSTAR_PCB_ARCHIVE_PLUGIN::CanReadFootprintLib( const wxString& aFileName ) const
+{
+    if( !PLUGIN::CanReadFootprintLib( aFileName ) )
+        return false;
+
+    return checkBoardHeader( aFileName );
+}
+
+
+bool CADSTAR_PCB_ARCHIVE_PLUGIN::CanReadFootprint( const wxString& aFileName ) const
+{
+    if( !PLUGIN::CanReadFootprint( aFileName ) )
+        return false;
+
+    return checkBoardHeader( aFileName );
 }
 
 

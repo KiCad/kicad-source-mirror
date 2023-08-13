@@ -38,7 +38,7 @@ static KEYWORD empty_keywords[1] = {};
 static const char ACCEL_ASCII_KEYWORD[] = "ACCEL_ASCII";
 
 
-    void LoadInputFile( const wxString& aFileName, wxXmlDocument* aXmlDoc )
+void LoadInputFile( const wxString& aFileName, wxXmlDocument* aXmlDoc )
 {
     char      line[sizeof( ACCEL_ASCII_KEYWORD )];
     int       tok;

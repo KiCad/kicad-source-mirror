@@ -51,21 +51,23 @@ public:
 
     /**
      * A set of file types that the #SCH_IO_MGR knows about, and for which there
-     * has been a plugin written.
+     * has been a plugin written, in alphabetical order.
      */
+    // clang-format off
     DEFINE_ENUM_VECTOR( SCH_FILE_T,
-            {
-                    SCH_LEGACY,           ///< Legacy Eeschema file formats prior to s-expression.
-                    SCH_KICAD,            ///< The s-expression version of the schematic.
-                    SCH_ALTIUM,           ///< Altium file format
-                    SCH_CADSTAR_ARCHIVE,  ///< CADSTAR Schematic Archive
-                    SCH_EAGLE,            ///< Autodesk Eagle file format
-                    SCH_DATABASE,         ///< KiCad database library
-                    SCH_LTSPICE,          /// LtSpice Schematic format
+    {
+        SCH_LEGACY,           ///< Legacy Eeschema file formats prior to s-expression.
+        SCH_KICAD,            ///< The s-expression version of the schematic.
+        SCH_ALTIUM,           ///< Altium file format
+        SCH_CADSTAR_ARCHIVE,  ///< CADSTAR Schematic Archive
+        SCH_DATABASE,         ///< KiCad database library
+        SCH_EAGLE,            ///< Autodesk Eagle file format
+        SCH_LTSPICE,          ///< LtSpice Schematic format
 
-                    // Add your schematic type here.
-                    SCH_FILE_UNKNOWN
-            } )
+        // Add your schematic type here.
+        SCH_FILE_UNKNOWN
+    } )
+    // clang-format on
 
     /**
      * Return a #SCH_PLUGIN which the caller can use to import, export, save, or load

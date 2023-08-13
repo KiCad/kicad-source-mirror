@@ -51,6 +51,7 @@
 #include <progress_reporter.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/dir.h>
+#include <wx/ffile.h>
 #include <wx/log.h>
 
 // For some reason wxWidgets is built with wxUSE_BASE64 unset so expose the wxWidgets
@@ -58,6 +59,7 @@
 #define wxUSE_BASE64 1
 #include <wx/base64.h>
 #include <wx/mstream.h>
+#include <filter_reader.h>
 
 
 using namespace PCB_KEYS_T;
@@ -264,6 +266,19 @@ long long FP_CACHE::GetTimestamp( const wxString& aLibPath )
     wxString fileSpec = wxT( "*." ) + KiCadFootprintFileExtension;
 
     return TimestampDir( aLibPath, fileSpec );
+}
+
+
+bool PCB_PLUGIN::CanReadBoard( const wxString& aFileName ) const
+{
+    if( !PLUGIN::CanReadBoard( aFileName ) )
+        return false;
+
+    FILE_LINE_READER reader( aFileName );
+
+    PCB_PARSER parser( &reader, nullptr, m_queryUserCallback );
+
+    return parser.IsValidBoardHeader();
 }
 
 
@@ -2421,6 +2436,23 @@ bool PCB_PLUGIN::FootprintExists( const wxString& aLibraryPath, const wxString& 
     wxFileName footprintFile( aLibraryPath, aFootprintName, KiCadFootprintFileExtension );
 
     return footprintFile.Exists();
+}
+
+
+FOOTPRINT* PCB_PLUGIN::ImportFootprint( const wxString& aFootprintPath, wxString& aFootprintNameOut,
+                                        const STRING_UTF8_MAP* aProperties )
+{
+    wxString fcontents;
+    wxFFile  f( aFootprintPath );
+
+    if( !f.IsOpened() )
+        return nullptr;
+
+    f.ReadAll( &fcontents );
+
+    aFootprintNameOut = wxFileName( aFootprintPath ).GetName();
+
+    return dynamic_cast<FOOTPRINT*>( Parse( fcontents ) );
 }
 
 

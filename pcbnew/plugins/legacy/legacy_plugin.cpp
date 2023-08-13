@@ -65,11 +65,16 @@
 #include <wx/ffile.h>
 #include <wx/log.h>
 #include <wx/string.h>
+#include <wx/filename.h>
+#include <wx/wfstream.h>
+#include <wx/txtstrm.h>
+#include <boost/ptr_container/ptr_map.hpp>
 
 #include <string_utils.h>
 #include <locale_io.h>
 #include <macros.h>
 #include <string_utf8_map.h>
+#include <filter_reader.h>
 #include <zones.h>
 
 #include <board.h>
@@ -402,6 +407,53 @@ static inline long hexParse( const char* next, const char** out = nullptr )
 {
     // please just compile this and be quiet, hide casting ugliness:
     return strtol( next, (char**) out, 16 );
+}
+
+
+bool LEGACY_PLUGIN::CanReadBoard( const wxString& aFileName ) const
+{
+    if( !PLUGIN::CanReadBoard( aFileName ) )
+        return false;
+
+    wxFileInputStream input( aFileName );
+
+    if( !input.IsOk() || input.Eof() )
+        return false;
+
+    wxTextInputStream text( input );
+    wxString          line = text.ReadLine();
+
+    return line.StartsWith( wxS( "PCBNEW" ) );
+}
+
+
+bool LEGACY_PLUGIN::CanReadFootprint( const wxString& aFileName ) const
+{
+    if( !PLUGIN::CanReadFootprint( aFileName ) )
+        return false;
+
+    FILE_LINE_READER         freader( aFileName );
+    WHITESPACE_FILTER_READER reader( freader );
+    IO_MGR::PCB_FILE_T       file_type;
+
+    reader.ReadLine();
+    char* line = reader.Line();
+
+    if( !line )
+        return false;
+
+    if( !strncasecmp( line, FOOTPRINT_LIBRARY_HEADER, FOOTPRINT_LIBRARY_HEADER_CNT ) )
+    {
+        while( reader.ReadLine() )
+        {
+            if( !strncasecmp( line, "$MODULE", strlen( "$MODULE" ) ) )
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 
@@ -2882,9 +2934,6 @@ void LEGACY_PLUGIN::init( const STRING_UTF8_MAP* aProperties )
 
 */
 
-
-#include <boost/ptr_container/ptr_map.hpp>
-#include <wx/filename.h>
 
 typedef boost::ptr_map< std::string, FOOTPRINT >   FOOTPRINT_MAP;
 

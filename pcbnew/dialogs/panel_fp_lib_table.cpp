@@ -81,75 +81,6 @@ struct SUPPORTED_FILE_TYPE
     IO_MGR::PCB_FILE_T m_Plugin;
 };
 
-/**
- * Event IDs for the menu items in the split button menu for add a library
- */
-enum {
-    ID_PANEL_FPLIB_ADD_KICADMOD = ID_PCBNEW_END_LIST,
-    ID_PANEL_FPLIB_ADD_ALTIUM,
-    ID_PANEL_FPLIB_ADD_CADSTAR,
-    ID_PANEL_FPLIB_ADD_EAGLE6,
-    ID_PANEL_FPLIB_ADD_KICADLEGACY,
-    ID_PANEL_FPLIB_ADD_GEDA,
-};
-
-/**
-* Map with event id as the key to supported file types that will be listed for the add a
-* library option.
-*
-*/
-static const std::map<int, SUPPORTED_FILE_TYPE>& fileTypes()
-{
-    /*
-     * TODO(C++20): Clean this up
-     * This is wrapped inside a function to prevent a static initialization order fiasco
-     * with the file extension  variables. Once C++20 is allowed in KiCad code, those file
-     * extensions can be made constexpr and this can be removed from a function call and
-     * placed in the file normally.
-     */
-    static const std::map<int, SUPPORTED_FILE_TYPE> fileTypes =
-    {
-        { ID_PANEL_FPLIB_ADD_KICADMOD,
-            {
-                wxT( "KiCad (folder with .kicad_mod files)" ), wxT( "" ),
-                KiCadFootprintFileExtension, false, IO_MGR::KICAD_SEXP
-            }
-        },
-        { ID_PANEL_FPLIB_ADD_ALTIUM,
-            {
-                "Altium (*.PcbLib)", AltiumFootprintLibPathWildcard(), "", true,  IO_MGR::ALTIUM_DESIGNER
-            }
-        },
-        { ID_PANEL_FPLIB_ADD_CADSTAR,
-            {
-                wxT( "CADSTAR (*.cpa)" ), CadstarPcbArchiveFileWildcard(), wxT( "" ),
-                true, IO_MGR::CADSTAR_PCB_ARCHIVE
-            }
-        },
-        { ID_PANEL_FPLIB_ADD_EAGLE6,
-            {
-                wxT( "Eagle 6.x (*.lbr)" ), EagleFootprintLibPathWildcard(), wxT( "" ),
-                true, IO_MGR::EAGLE
-            }
-        },
-        { ID_PANEL_FPLIB_ADD_KICADLEGACY,
-            {
-                wxT( "KiCad legacy (*.mod)" ), LegacyFootprintLibPathWildcard(), wxT( "" ),
-                true, IO_MGR::LEGACY
-            }
-        },
-        { ID_PANEL_FPLIB_ADD_GEDA,
-            {
-                wxT( "Geda (folder with *.fp files)" ), wxT( "" ),
-                GedaPcbFootprintLibFileExtension, false, IO_MGR::GEDA_PCB
-            }
-        },
-    };
-
-    return fileTypes;
-}
-// clang-format on
-
 
 /**
  * Traverser implementation that looks to find any and all "folder" libraries by looking for files
@@ -158,9 +89,8 @@ static const std::map<int, SUPPORTED_FILE_TYPE>& fileTypes()
 class LIBRARY_TRAVERSER : public wxDirTraverser
 {
 public:
-    LIBRARY_TRAVERSER( wxString aSearchExtension, wxString aInitialDir )
-        : m_searchExtension( aSearchExtension ),
-          m_currentDir( aInitialDir )
+    LIBRARY_TRAVERSER( std::vector<std::string> aSearchExtensions, wxString aInitialDir ) :
+            m_searchExtensions( aSearchExtensions ), m_currentDir( aInitialDir )
     {
     }
 
@@ -168,8 +98,11 @@ public:
     {
         wxFileName file( aFileName );
 
-        if( m_searchExtension.IsSameAs( file.GetExt(), false ) )
-            m_foundDirs.insert( { m_currentDir, 1 } );
+        for( const std::string& ext : m_searchExtensions )
+        {
+            if( file.GetExt().IsSameAs( ext, false ) )
+                m_foundDirs.insert( { m_currentDir, 1 } );
+        }
 
         return wxDIR_CONTINUE;
     }
@@ -204,7 +137,7 @@ public:
     }
 
 private:
-    wxString                          m_searchExtension;
+    std::vector<std::string>          m_searchExtensions;
     wxString                          m_currentDir;
     std::unordered_map<wxString, int> m_foundDirs;
     std::unordered_map<wxString, int> m_failedDirs;
@@ -354,18 +287,14 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     // add Cut, Copy, and Paste to wxGrids
     m_path_subs_grid->PushEventHandler( new GRID_TRICKS( m_path_subs_grid ) );
 
+    populatePluginList();
+
     wxArrayString choices;
 
-    choices.Add( IO_MGR::ShowType( IO_MGR::KICAD_SEXP ) );
-    choices.Add( IO_MGR::ShowType( IO_MGR::LEGACY ) );
-    choices.Add( IO_MGR::ShowType( IO_MGR::ALTIUM_DESIGNER ) );
-    choices.Add( IO_MGR::ShowType( IO_MGR::CADSTAR_PCB_ARCHIVE ) );
-    choices.Add( IO_MGR::ShowType( IO_MGR::EAGLE ) );
-    choices.Add( IO_MGR::ShowType( IO_MGR::GEDA_PCB ) );
+    for( auto& [fileType, desc] : m_supportedFpFiles )
+        choices.Add( IO_MGR::ShowType( fileType ) );
 
-    /* PCAD_PLUGIN does not support Footprint*() functions
-    choices.Add( IO_MGR::ShowType( IO_MGR::PCAD ) );
-    */
+
     PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
 
     if( cfg->m_lastFootprintLibDir.IsEmpty() )
@@ -473,12 +402,40 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     // Populate the browse library options
     wxMenu* browseMenu = m_browseButton->GetSplitButtonMenu();
 
-    for( const std::pair<const int, SUPPORTED_FILE_TYPE>& fileType : fileTypes() )
+    auto joinExts = []( const std::vector<std::string>& aExts )
     {
-        browseMenu->Append( fileType.first, fileType.second.m_Description );
+        wxString joined;
+        for( const std::string& ext : aExts )
+        {
+            if( !joined.empty() )
+                joined << wxS( ", " );
+
+            joined << wxS( "*." ) << ext;
+        }
+
+        return joined;
+    };
+
+    for( auto& [type, desc] : m_supportedFpFiles )
+    {
+        wxString entryStr = IO_MGR::ShowType( type );
+
+        if( desc.m_IsFile && !desc.m_FileExtensions.empty() )
+        {
+            entryStr << wxString::Format( wxS( " (%s)" ), joinExts( desc.m_FileExtensions ) );
+        }
+        else if( !desc.m_IsFile && !desc.m_ExtensionsInDir.empty() )
+        {
+            wxString midPart =
+                    wxString::Format( _( "folder with %s files" ), joinExts( desc.m_ExtensionsInDir ) );
+
+            entryStr << wxString::Format( wxS( " (%s)" ), midPart );
+        }
+
+        browseMenu->Append( type, entryStr );
 
         browseMenu->Bind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_FP_LIB_TABLE::browseLibrariesHandler,
-                          this, fileType.first );
+                          this, type );
     }
 
     Layout();
@@ -498,6 +455,21 @@ PANEL_FP_LIB_TABLE::~PANEL_FP_LIB_TABLE()
         m_project_grid->PopEventHandler( true );
 
     m_path_subs_grid->PopEventHandler( true );
+}
+
+
+void PANEL_FP_LIB_TABLE::populatePluginList()
+{
+    for( const auto& plugin : IO_MGR::PLUGIN_REGISTRY::Instance()->AllPlugins() )
+    {
+        PLUGIN::RELEASER pi( plugin.m_createFunc() );
+
+        if( !pi )
+            continue;
+
+        if( PLUGIN_FILE_DESC desc = pi->GetFootprintLibDesc() )
+            m_supportedFpFiles.emplace( plugin.m_type, desc );
+    }
 }
 
 
@@ -766,45 +738,41 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     if( !m_cur_grid->CommitPendingChanges() )
         return;
 
-    std::map<int, SUPPORTED_FILE_TYPE>::const_iterator fileTypeIt;
+    IO_MGR::PCB_FILE_T fileType = IO_MGR::FILE_TYPE_NONE;
 
     // We are bound both to the menu and button with this one handler
     // So we must set the file type based on it
     if( event.GetEventType() == wxEVT_BUTTON )
     {
         // Let's default to adding a kicad footprint file for just the footprint
-        fileTypeIt = fileTypes().find( ID_PANEL_FPLIB_ADD_KICADMOD );
+        fileType = IO_MGR::KICAD_SEXP;
     }
     else
     {
-        fileTypeIt = fileTypes().find( event.GetId() );
+        fileType = static_cast<IO_MGR::PCB_FILE_T>( event.GetId() );
     }
 
-    if( fileTypeIt == fileTypes().end() )
+    if( fileType == IO_MGR::FILE_TYPE_NONE )
     {
         wxLogWarning( wxT( "File type selection event received but could not find the file type "
                            "in the table" ) );
         return;
     }
 
-    SUPPORTED_FILE_TYPE fileType = fileTypeIt->second;
+    const PLUGIN_FILE_DESC& fileDesc = m_supportedFpFiles.at( fileType );
+    PCBNEW_SETTINGS*        cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
 
-    PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
-
-    wxArrayString files;
-
-    wxString title;
-
-    title.Printf( _( "Select %s Library" ), fileType.m_Description );
-
+    wxString title = wxString::Format( _( "Select %s Library" ), IO_MGR::ShowType( fileType ) );
     wxString openDir = cfg->m_lastFootprintLibDir;
 
     if( m_cur_grid == m_project_grid )
         openDir = m_lastProjectLibDir;
 
-    if( fileType.m_IsFile )
+    wxArrayString files;
+
+    if( fileDesc.m_IsFile )
     {
-        wxFileDialog dlg( this, title, openDir, wxEmptyString, fileType.m_FileFilter,
+        wxFileDialog dlg( this, title, openDir, wxEmptyString, fileDesc.FileFilter(),
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
 
         int result = dlg.ShowModal();
@@ -840,11 +808,11 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
             return;
 
         // is there a file extension configured to hunt out their containing folders?
-        if( fileType.m_FolderSearchExtension != "" )
+        if( !fileDesc.m_ExtensionsInDir.empty() )
         {
             wxDir rootDir( dlg.GetPath() );
 
-            LIBRARY_TRAVERSER traverser( fileType.m_FolderSearchExtension, rootDir.GetName() );
+            LIBRARY_TRAVERSER traverser( fileDesc.m_ExtensionsInDir, rootDir.GetName() );
             rootDir.Traverse( traverser );
 
             traverser.GetPaths( files );
@@ -897,7 +865,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
         wxString   nickname = LIB_ID::FixIllegalChars( fn.GetName(), true );
         bool       doAdd    = true;
 
-        if( fileType.m_Plugin == IO_MGR::KICAD_SEXP && fn.GetExt() != KiCadFootprintLibPathExtension )
+        if( fileType == IO_MGR::KICAD_SEXP && fn.GetExt() != KiCadFootprintLibPathExtension )
             nickname = LIB_ID::FixIllegalChars( fn.GetFullName(), true );
 
         if( cur_model()->ContainsNickname( nickname ) )
@@ -919,7 +887,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
             m_cur_grid->SetCellValue( last_row, COL_NICKNAME, nickname );
 
-            m_cur_grid->SetCellValue( last_row, COL_TYPE, IO_MGR::ShowType( fileType.m_Plugin ) );
+            m_cur_grid->SetCellValue( last_row, COL_TYPE, IO_MGR::ShowType( fileType ) );
 
             // try to use path normalized to an environmental variable or project path
             wxString path = NormalizePath( filePath, &envVars, m_projectBasePath );

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012-2020 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2012-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,13 +48,22 @@ class GPCB_PLUGIN : public PLUGIN
 public:
     const wxString PluginName() const override
     {
-        return wxT( "Geda PCB" );
+        return wxT( "gEDA PCB" );
     }
 
-    const wxString GetFileExtension() const override
+    PLUGIN_FILE_DESC GetFootprintFileDesc() const override
     {
-        return wxT( "fp" );
+        return PLUGIN_FILE_DESC( _HKI( "gEDA PCB footprint file" ), { "fp" } );
     }
+
+    PLUGIN_FILE_DESC GetFootprintLibDesc() const override
+    {
+        return PLUGIN_FILE_DESC( _HKI( "gEDA PCB footprint library directory" ), {}, { "fp" },
+                                 false );
+    }
+
+    FOOTPRINT* ImportFootprint( const wxString& aFootprintPath, wxString& aFootprintNameOut,
+                                const STRING_UTF8_MAP* aProperties ) override;
 
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
                              bool aBestEfforts,

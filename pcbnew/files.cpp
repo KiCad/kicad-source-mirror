@@ -88,99 +88,68 @@
  * @param aKicadFilesOnly true to list KiCad pcb files plugins only, false to list import plugins.
  * @return  true if chosen, else false if user aborted.
  */
-bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, int* aCtl, wxString* aFileName,
-                           bool aKicadFilesOnly )
+bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, int aCtl = 0 )
 {
-    // This is a subset of all PLUGINs which are trusted to be able to
-    // load a BOARD. User may occasionally use the wrong plugin to load a
-    // *.brd file (since both legacy and eagle use *.brd extension),
-    // but eventually *.kicad_pcb will be more common than legacy *.brd files.
+    std::vector<PLUGIN_FILE_DESC> descriptions;
 
-    // clang-format off
-    static const struct
+    for( const auto& plugin : IO_MGR::PLUGIN_REGISTRY::Instance()->AllPlugins() )
     {
-        const wxString&     filter;
-        IO_MGR::PCB_FILE_T  pluginType;
-    } loaders[] =
+        bool isKiCad = plugin.m_type == IO_MGR::KICAD_SEXP || plugin.m_type == IO_MGR::LEGACY;
+
+        if( ( aCtl & KICTL_KICAD_ONLY ) && !isKiCad )
+            continue;
+
+        if( ( aCtl & KICTL_NONKICAD_ONLY ) && isKiCad )
+            continue;
+
+        // release the PLUGIN even if an exception is thrown.
+        PLUGIN::RELEASER pi( plugin.m_createFunc() );
+        wxCHECK( pi, false );
+
+        const PLUGIN_FILE_DESC& desc = pi->GetBoardFileDesc();
+
+        if( desc.m_FileExtensions.empty() )
+            continue;
+
+        descriptions.emplace_back( desc );
+    }
+
+    wxString                 fileFiltersStr;
+    std::vector<std::string> allExtensions;
+    std::set<wxString>       allWildcardsSet;
+
+    for( const PLUGIN_FILE_DESC desc : descriptions )
     {
-        // Current Kicad board files.
-        { PcbFileWildcard(),                    IO_MGR::KICAD_SEXP },
+        if( !fileFiltersStr.IsEmpty() )
+            fileFiltersStr += wxChar( '|' );
 
-        // Old Kicad board files.
-        { LegacyPcbFileWildcard(),              IO_MGR::LEGACY },
+        fileFiltersStr += desc.FileFilter();
 
-        // Import Altium Circuit Maker board files.
-        { AltiumCircuitMakerPcbFileWildcard(),  IO_MGR::ALTIUM_CIRCUIT_MAKER },
-
-        // Import Altium Circuit Studio board files.
-        { AltiumCircuitStudioPcbFileWildcard(), IO_MGR::ALTIUM_CIRCUIT_STUDIO },
-
-        // Import Altium Designer board files.
-        { AltiumDesignerPcbFileWildcard(),      IO_MGR::ALTIUM_DESIGNER },
-
-        // Import Solidworks PCB (based on Altium) board files.
-        { SolidworksPcbFileWildcard(),          IO_MGR::SOLIDWORKS_PCB },
-
-        // Import Cadstar PCB Archive board files.
-        { CadstarPcbArchiveFileWildcard(),      IO_MGR::CADSTAR_PCB_ARCHIVE },
-
-        // Import Eagle board files.
-        { EaglePcbFileWildcard(),               IO_MGR::EAGLE },
-
-        // Import PCAD board files.
-        { PCadPcbFileWildcard(),                IO_MGR::PCAD },
-
-        // Import Fabmaster board files.
-        { FabmasterPcbFileWildcard(),           IO_MGR::FABMASTER },
-    };
-    // clang-format on
-
-    wxFileName  fileName( *aFileName );
-    wxString    fileFilters;
-
-    if( aKicadFilesOnly )
-    {
-        std::vector<std::string> fileExtensions;
-
-        for( unsigned ii = 0; ii < 2; ++ii )
+        for( const std::string& ext : desc.m_FileExtensions )
         {
-            if( !fileFilters.IsEmpty() )
-                fileFilters += wxChar( '|' );
-
-            fileFilters += wxGetTranslation( loaders[ii].filter );
-
-            PLUGIN::RELEASER plugin( IO_MGR::PluginFind( loaders[ii].pluginType ) );
-            wxCHECK( plugin, false );
-            fileExtensions.push_back( plugin->GetFileExtension().ToStdString() );
+            allExtensions.emplace_back( ext );
+            allWildcardsSet.insert( wxT( "*." ) + formatWildcardExt( ext ) + wxT( ";" ) );
         }
+    }
 
-        fileFilters = _( "All KiCad Board Files" ) + AddFileExtListToFilter( fileExtensions )
-                        + wxT( "|" ) + fileFilters;
+    wxString allWildcardsStr;
+    for( const wxString& wildcard : allWildcardsSet )
+        allWildcardsStr << wildcard;
+
+    if( aCtl & KICTL_KICAD_ONLY )
+    {
+        fileFiltersStr = _( "All KiCad Board Files" ) + AddFileExtListToFilter( allExtensions )
+                         + wxT( "|" ) + allWildcardsStr;
     }
     else
     {
-        wxString allWildcards;
-
-        for( unsigned ii = 2; ii < arrayDim( loaders ); ++ii )
-        {
-            if( !fileFilters.IsEmpty() )
-                fileFilters += wxChar( '|' );
-
-            fileFilters += wxGetTranslation( loaders[ii].filter );
-
-            PLUGIN::RELEASER plugin( IO_MGR::PluginFind( loaders[ii].pluginType ) );
-            wxCHECK( plugin, false );
-            allWildcards += wxT( "*." ) + formatWildcardExt( plugin->GetFileExtension() ) +
-                            wxT( ";" );
-        }
-
-        fileFilters = _( "All supported formats" ) + wxT( "|" ) + allWildcards + wxT( "|" ) +
-                      fileFilters;
+        fileFiltersStr = _( "All supported formats" ) + wxT( "|" ) + allWildcardsStr + wxT( "|" )
+                         + fileFiltersStr;
     }
 
-
-    wxString    path;
-    wxString    name;
+    wxFileName fileName( *aFileName );
+    wxString   path;
+    wxString   name;
 
     if( fileName.FileExists() )
     {
@@ -197,15 +166,12 @@ bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, int* aCtl, wxString* aFileNa
     }
 
     wxFileDialog dlg( aParent,
-                      aKicadFilesOnly ? _( "Open Board File" ) : _( "Import Non KiCad Board File" ),
-                      path, name, fileFilters, wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+                      ( aCtl & KICTL_KICAD_ONLY ) ? _( "Open Board File" )
+                                                  : _( "Import Non KiCad Board File" ),
+                      path, name, fileFiltersStr, wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_OK )
     {
-        // For import option, if Eagle (*.brd files), tell OpenProjectFiles() to use Eagle plugin.
-        // It's the only special case because of the duplicate use of the *.brd file extension.
-        // Other cases are clear because of unique file extensions.
-        *aCtl = aKicadFilesOnly ? 0 : KICTL_EAGLE_BRD;
         *aFileName = dlg.GetPath();
         aParent->SetMruPath( wxFileName( dlg.GetPath() ).GetPath() );
         return true;
@@ -276,15 +242,13 @@ void PCB_EDIT_FRAME::OnFileHistory( wxCommandEvent& event )
 
     if( !!fn )
     {
-        int open_ctl = 0;
-
         if( !wxFileName::IsFileReadable( fn ) )
         {
-            if( !AskLoadBoardFileName( this, &open_ctl, &fn, true ) )
+            if( !AskLoadBoardFileName( this, &fn, KICTL_KICAD_ONLY ) )
                 return;
         }
 
-        OpenProjectFiles( std::vector<wxString>( 1, fn ), open_ctl );
+        OpenProjectFiles( std::vector<wxString>( 1, fn ), KICTL_KICAD_ONLY );
     }
 }
 
@@ -310,20 +274,20 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
     {
     case ID_LOAD_FILE:
     {
-        int         open_ctl = 0;
-        wxString    fileName = Prj().AbsolutePath( GetBoard()->GetFileName() );
+        int      open_ctl = KICTL_KICAD_ONLY;
+        wxString fileName = Prj().AbsolutePath( GetBoard()->GetFileName() );
 
-        return AskLoadBoardFileName( this, &open_ctl, &fileName, true )
-                   && OpenProjectFiles( std::vector<wxString>( 1, fileName ), open_ctl );
+        return AskLoadBoardFileName( this, &fileName, open_ctl )
+               && OpenProjectFiles( std::vector<wxString>( 1, fileName ), open_ctl );
     }
 
     case ID_IMPORT_NON_KICAD_BOARD:
     {
-        int         open_ctl = 1;
-        wxString    fileName; // = Prj().AbsolutePath( GetBoard()->GetFileName() );
+        int      open_ctl = KICTL_NONKICAD_ONLY;
+        wxString fileName; // = Prj().AbsolutePath( GetBoard()->GetFileName() );
 
-        return AskLoadBoardFileName( this, &open_ctl, &fileName, false )
-                   && OpenProjectFiles( std::vector<wxString>( 1, fileName ), open_ctl );
+        return AskLoadBoardFileName( this, &fileName, open_ctl )
+               && OpenProjectFiles( std::vector<wxString>( 1, fileName ), open_ctl );
     }
 
     case ID_MENU_RECOVER_BOARD_AUTOSAVE:
@@ -481,65 +445,28 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
 
 
 // The KIWAY_PLAYER::OpenProjectFiles() API knows nothing about plugins, so
-// determine how to load the BOARD here, with minor assistance from KICTL_EAGLE_BRD
-// bit flag.
-IO_MGR::PCB_FILE_T plugin_type( const wxString& aFileName, int aCtl )
+// determine how to load the BOARD here
+IO_MGR::PCB_FILE_T FindBoardPlugin( const wxString& aFileName, int aCtl = 0 )
 {
-    IO_MGR::PCB_FILE_T  pluginType;
+    const auto& plugins = IO_MGR::PLUGIN_REGISTRY::Instance()->AllPlugins();
 
-    wxFileName fn = aFileName;
+    for( const auto& plugin : plugins )
+    {
+        bool isKiCad = plugin.m_type == IO_MGR::KICAD_SEXP || plugin.m_type == IO_MGR::LEGACY;
 
-    // Note: file extensions are expected to be in lower case.
-    // This is not always true, especially when importing files, so the string
-    // comparisons are case insensitive to try to find the suitable plugin.
+        if( ( aCtl & KICTL_KICAD_ONLY ) && !isKiCad )
+            continue;
 
-    if( fn.GetExt().CmpNoCase( IO_MGR::GetFileExtension( IO_MGR::LEGACY ) ) == 0 )
-    {
-        wxFileInputStream input( aFileName );
-        bool is_legacy = true;
+        if( ( aCtl & KICTL_NONKICAD_ONLY ) && isKiCad )
+            continue;
 
-        if(input.IsOk() && !input.Eof() )
-        {
-            wxTextInputStream text( input );
-            wxString line = text.ReadLine();
+        PLUGIN::RELEASER pi( plugin.m_createFunc() );
 
-            if( !line.StartsWith( wxT( "PCBNEW" ) ) )
-                is_legacy = false;
-        }
-
-        // both legacy and eagle share a common file extension.
-        pluginType = ( aCtl & KICTL_EAGLE_BRD ) || !is_legacy ? IO_MGR::EAGLE : IO_MGR::LEGACY;
-    }
-    else if( fn.GetExt().CmpNoCase( IO_MGR::GetFileExtension( IO_MGR::PCAD ) ) == 0 )
-    {
-        pluginType = IO_MGR::PCAD;
-    }
-    else if( fn.GetExt().CmpNoCase( IO_MGR::GetFileExtension( IO_MGR::ALTIUM_DESIGNER ) ) == 0 )
-    {
-        pluginType = IO_MGR::ALTIUM_DESIGNER;
-    }
-    else if( fn.GetExt().CmpNoCase( IO_MGR::GetFileExtension( IO_MGR::ALTIUM_CIRCUIT_STUDIO ) ) == 0 )
-    {
-        pluginType = IO_MGR::ALTIUM_CIRCUIT_STUDIO;
-    }
-    else if( fn.GetExt().CmpNoCase( IO_MGR::GetFileExtension( IO_MGR::ALTIUM_CIRCUIT_MAKER ) ) == 0 )
-    {
-        pluginType = IO_MGR::ALTIUM_CIRCUIT_MAKER;
-    }
-    else if( fn.GetExt().CmpNoCase( IO_MGR::GetFileExtension( IO_MGR::CADSTAR_PCB_ARCHIVE ) ) == 0 )
-    {
-        pluginType = IO_MGR::CADSTAR_PCB_ARCHIVE;
-    }
-    else if( fn.GetExt().CmpNoCase( IO_MGR::GetFileExtension( IO_MGR::FABMASTER ) ) == 0 )
-    {
-        pluginType = IO_MGR::FABMASTER;
-    }
-    else
-    {
-        pluginType = IO_MGR::KICAD_SEXP;
+        if( pi->CanReadBoard( aFileName ) )
+            return plugin.m_type;
     }
 
-    return pluginType;
+    return IO_MGR::FILE_TYPE_NONE;
 }
 
 
@@ -665,7 +592,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // No save prompt (we already prompted above), and only reset to a new blank board if new
     Clear_Pcb( false, !is_new );
 
-    IO_MGR::PCB_FILE_T  pluginType = plugin_type( fullFileName, aCtl );
+    IO_MGR::PCB_FILE_T  pluginType = FindBoardPlugin( fullFileName, aCtl );
 
     bool converted =  pluginType != IO_MGR::LEGACY && pluginType != IO_MGR::KICAD_SEXP;
 
@@ -1285,10 +1212,9 @@ bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
     case IO_MGR::CADSTAR_PCB_ARCHIVE:
     case IO_MGR::EAGLE:
         return OpenProjectFiles( std::vector<wxString>( 1, aFileName ),
-                                 KICTL_EAGLE_BRD | KICTL_IMPORT_LIB );
+                                 KICTL_NONKICAD_ONLY | KICTL_IMPORT_LIB );
 
-    default:
-        break;
+    default: break;
     }
 
     return false;

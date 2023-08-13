@@ -57,6 +57,7 @@ Load() TODO's
 #include <wx/filename.h>
 #include <wx/log.h>
 #include <wx/wfstream.h>
+#include <wx/txtstrm.h>
 
 #include <convert_basic_shapes_to_polygon.h>
 #include <string_utils.h>
@@ -243,15 +244,49 @@ EAGLE_PLUGIN::~EAGLE_PLUGIN()
 }
 
 
-const wxString EAGLE_PLUGIN::PluginName() const
+bool EAGLE_PLUGIN::CanReadBoard( const wxString& aFileName ) const
 {
-    return wxT( "Eagle" );
+    if( !PLUGIN::CanReadBoard( aFileName ) )
+        return false;
+
+    return checkHeader( aFileName );
 }
 
 
-const wxString EAGLE_PLUGIN::GetFileExtension() const
+bool EAGLE_PLUGIN::CanReadFootprintLib( const wxString& aFileName ) const
 {
-    return wxT( "brd" );
+    if( !PLUGIN::CanReadFootprintLib( aFileName ) )
+        return false;
+
+    return checkHeader( aFileName );
+}
+
+
+bool EAGLE_PLUGIN::CanReadFootprint( const wxString& aFileName ) const
+{
+    return CanReadFootprintLib( aFileName );
+}
+
+
+bool EAGLE_PLUGIN::checkHeader(const wxString& aFileName) const
+{
+    wxFileInputStream input( aFileName );
+
+    if( !input.IsOk() )
+        return false;
+
+    wxTextInputStream text( input );
+
+    for( int i = 0; i < 3; i++ )
+    {
+        if( input.Eof() )
+            return false;
+
+        if( text.ReadLine().Lower().Contains( "eagle" ) )
+            return true;
+    }
+
+    return false;
 }
 
 

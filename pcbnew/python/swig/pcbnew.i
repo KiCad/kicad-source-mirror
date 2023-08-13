@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 NBEE Embedded Systems, Miguel Angel Ajo <miguelangel@nbee.es>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -99,8 +99,9 @@ Therefore please help gather the subset of C++ functions for this class that do
 throw and add them here, before the class declarations.
 
 */
-HANDLE_EXCEPTIONS(PLUGIN::Load)
-HANDLE_EXCEPTIONS(PLUGIN::Save)
+HANDLE_EXCEPTIONS(PLUGIN::LoadBoard)
+HANDLE_EXCEPTIONS(PLUGIN::SaveBoard)
+HANDLE_EXCEPTIONS(PLUGIN::ImportFootprint)
 HANDLE_EXCEPTIONS(PLUGIN::FootprintEnumerate)
 HANDLE_EXCEPTIONS(PLUGIN::FootprintLoad)
 HANDLE_EXCEPTIONS(PLUGIN::FootprintSave)

@@ -33,13 +33,21 @@ class ALTIUM_DESIGNER_PLUGIN : public PLUGIN
 public:
     // -----<PUBLIC PLUGIN API>--------------------------------------------------
 
-    const wxString PluginName() const override;
+    const wxString PluginName() const override { return wxT( "Altium Designer" ); }
+
+    PLUGIN_FILE_DESC GetBoardFileDesc() const override
+    {
+        return PLUGIN_FILE_DESC( _HKI( "Altium Designer PCB files" ), { "PcbDoc" } );
+    }
+
+    PLUGIN_FILE_DESC GetFootprintLibDesc() const override
+    {
+        return PLUGIN_FILE_DESC( _HKI( "Altium PCB footprint library files" ), { "PcbLib" } );
+    }
 
     BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
                       const STRING_UTF8_MAP* aProperties, PROJECT* aProject = nullptr,
                       PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
-
-    const wxString GetFileExtension() const override;
 
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override;
 

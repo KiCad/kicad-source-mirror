@@ -53,18 +53,6 @@ ALTIUM_DESIGNER_PLUGIN::~ALTIUM_DESIGNER_PLUGIN()
 BOARD* ALTIUM_DESIGNER_PLUGIN::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
                                           const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
                                           PROGRESS_REPORTER* aProgressReporter )
-}
-
-
-const wxString ALTIUM_DESIGNER_PLUGIN::GetFileExtension() const
-{
-    return wxT( "PcbDoc" );
-}
-
-
-BOARD* ALTIUM_DESIGNER_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
-                                     const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
-                                     PROGRESS_REPORTER* aProgressReporter )
 {
     m_props = aProperties;
 

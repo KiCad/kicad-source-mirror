@@ -66,9 +66,9 @@ using namespace std::placeholders;
 
 
 // files.cpp
-extern bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, int* aCtl, wxString* aFileName,
-                                  bool aKicadFilesOnly = false );
-extern IO_MGR::PCB_FILE_T plugin_type( const wxString& aFileName, int aCtl );
+extern bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, int aCtl = 0 );
+
+extern IO_MGR::PCB_FILE_T FindBoardPlugin( const wxString& aFileName, int aCtl = 0 );
 
 
 PCB_CONTROL::PCB_CONTROL() :
@@ -1007,7 +1007,6 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
 int PCB_CONTROL::AppendBoardFromFile( const TOOL_EVENT& aEvent )
 {
-    int open_ctl;
     wxString fileName;
 
     PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
@@ -1016,10 +1015,10 @@ int PCB_CONTROL::AppendBoardFromFile( const TOOL_EVENT& aEvent )
         return 1;
 
     // Pick a file to append
-    if( !AskLoadBoardFileName( editFrame, &open_ctl, &fileName, true ) )
+    if( !AskLoadBoardFileName( editFrame, &fileName, true ) )
         return 1;
 
-    IO_MGR::PCB_FILE_T pluginType = plugin_type( fileName, open_ctl );
+    IO_MGR::PCB_FILE_T pluginType = FindBoardPlugin( fileName, KICTL_KICAD_ONLY );
     PLUGIN::RELEASER pi( IO_MGR::PluginFind( pluginType ) );
 
     return AppendBoard( *pi, fileName );
@@ -1554,15 +1553,13 @@ int PCB_CONTROL::DdAppendBoard( const TOOL_EVENT& aEvent )
 {
     wxFileName fileName = wxFileName( *aEvent.Parameter<wxString*>() );
 
-    int open_ctl = fileName.GetExt() == KiCadPcbFileExtension ? 0 : KICTL_EAGLE_BRD;
-
     PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
 
     if( !editFrame )
         return 1;
 
     wxString filePath = fileName.GetFullPath();
-    IO_MGR::PCB_FILE_T pluginType = plugin_type( filePath, open_ctl );
+    IO_MGR::PCB_FILE_T pluginType = FindBoardPlugin( filePath );
     PLUGIN::RELEASER pi( IO_MGR::PluginFind( pluginType ) );
 
     return AppendBoard( *pi, filePath );

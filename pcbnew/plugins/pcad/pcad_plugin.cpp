@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,9 +60,9 @@ const wxString PCAD_PLUGIN::PluginName() const
 }
 
 
-const wxString PCAD_PLUGIN::GetFileExtension() const
+PLUGIN_FILE_DESC PCAD_PLUGIN::GetBoardFileDesc() const
 {
-    return wxT( "pcb" );
+    return PLUGIN_FILE_DESC( _HKI( "P-Cad 200x ASCII PCB files" ), { "pcb" } );
 }
 
 

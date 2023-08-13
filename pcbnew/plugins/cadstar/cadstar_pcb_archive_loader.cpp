@@ -820,6 +820,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponentLibrary()
         footprint->SetPosition( { 0, 0 } ); // KiCad expects library footprints at 0,0
         footprint->SetReference( wxT( "REF**" ) );
         footprint->SetValue( libID.GetLibItemName() );
+        footprint->AutoPositionFields();
         m_libraryMap.insert( std::make_pair( key, footprint ) );
     }
 }

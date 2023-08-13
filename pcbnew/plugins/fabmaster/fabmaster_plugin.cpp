@@ -51,9 +51,9 @@ const wxString FABMASTER_PLUGIN::PluginName() const
 }
 
 
-const wxString FABMASTER_PLUGIN::GetFileExtension() const
+PLUGIN_FILE_DESC FABMASTER_PLUGIN::GetBoardFileDesc() const
 {
-    return wxT( "txt" );
+    return PLUGIN_FILE_DESC( _HKI( "Fabmaster PCB files" ), { "txt", "fab" } );
 }
 
 

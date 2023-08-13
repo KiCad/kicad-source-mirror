@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Thomas Pointhuber <thomas.pointhuber@gmx.at>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,9 +56,9 @@ const wxString ALTIUM_CIRCUIT_MAKER_PLUGIN::PluginName() const
 }
 
 
-const wxString ALTIUM_CIRCUIT_MAKER_PLUGIN::GetFileExtension() const
+PLUGIN_FILE_DESC ALTIUM_CIRCUIT_MAKER_PLUGIN::GetBoardFileDesc() const
 {
-    return wxT( "CMPcbDoc" );
+    return PLUGIN_FILE_DESC( _HKI( "Altium Circuit Maker PCB files" ), { "CMPcbDoc" } );
 }
 
 

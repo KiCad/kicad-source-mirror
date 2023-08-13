@@ -274,7 +274,7 @@ void DIALOG_BOARD_SETUP::onAuxiliaryAction( wxCommandEvent& aEvent )
     {
         WX_PROGRESS_REPORTER progressReporter( this, _( "Loading PCB" ), 1 );
 
-        otherBoard = pi->Load( boardFn.GetFullPath(), nullptr, nullptr, nullptr,
+        otherBoard = pi->LoadBoard( boardFn.GetFullPath(), nullptr, nullptr, nullptr,
                                &progressReporter );
 
         if( importDlg.m_LayersOpt->GetValue() )

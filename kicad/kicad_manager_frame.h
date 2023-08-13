@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN (www.cern.ch)
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,15 +77,15 @@ public:
      * @param aWindowTitle to display to the user when opening the files
      * @param aFilesWildcard that includes both PCB and Schematic files (from
      * wildcards_and_files_ext.h)
-     * @param aSchFileExtension e.g. "sch" or "csa"
-     * @param aPcbFileExtension e.g. "brd" or "cpa"
+     * @param aSchFileExtensions e.g. { "sch" } or { "csa" }. Specify { "INPUT" } to copy input file.
+     * @param aPcbFileExtensions e.g. { "brd" } or { "cpa" }. Specify { "INPUT" } to copy input file.
      * @param aSchFileType Type of Schematic File to import (from SCH_IO_MGR::SCH_FILE_T)
      * @param aPcbFileType Type of PCB File to import (from IO_MGR::PCB_FILE_T)
     */
     void ImportNonKiCadProject( const wxString& aWindowTitle, const wxString& aFilesWildcard,
-                                const wxString& aSchFileExtension,
-                                const wxString& aPcbFileExtension, int aSchFileType,
-                                int aPcbFileType );
+                                const std::vector<std::string>& aSchFileExtensions,
+                                const std::vector<std::string>& aPcbFileExtensions,
+                                int aSchFileType, int aPcbFileType );
 
     /**
      *  Open dialog to import CADSTAR Schematic and PCB Archive files.

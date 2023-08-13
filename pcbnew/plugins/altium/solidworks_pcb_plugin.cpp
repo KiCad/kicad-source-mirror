@@ -46,9 +46,9 @@ const wxString SOLIDWORKS_PCB_PLUGIN::PluginName() const
 }
 
 
-const wxString SOLIDWORKS_PCB_PLUGIN::GetFileExtension() const
+PLUGIN_FILE_DESC SOLIDWORKS_PCB_PLUGIN::GetBoardFileDesc() const
 {
-    return wxT( "SWPcbDoc" );
+    return PLUGIN_FILE_DESC( _HKI( "Solidworks PCB files" ), { "SWPcbDoc" } );
 }
 
 

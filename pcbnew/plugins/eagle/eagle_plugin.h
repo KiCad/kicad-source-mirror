@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -129,15 +129,29 @@ struct ERULES
 class EAGLE_PLUGIN : public PLUGIN, public LAYER_REMAPPABLE_PLUGIN
 {
 public:
-    const wxString PluginName() const override;
+    const wxString PluginName() const { return wxT( "Eagle" ); }
+
+    PLUGIN_FILE_DESC GetBoardFileDesc() const override
+    {
+        return PLUGIN_FILE_DESC( _HKI( "Eagle ver. 6.x XML PCB files" ), { "brd" } );
+    }
+
+    PLUGIN_FILE_DESC GetFootprintLibDesc() const override
+    {
+        return PLUGIN_FILE_DESC( _HKI( "Eagle ver. 6.x XML library files" ), { "lbr" } );
+    }
+
+    PLUGIN_FILE_DESC GetFootprintFileDesc() const override { return GetFootprintLibDesc(); }
+
+    bool CanReadBoard( const wxString& aFileName ) const override;
+    bool CanReadFootprintLib( const wxString& aFileName ) const override;
+    bool CanReadFootprint( const wxString& aFileName ) const override;
 
     BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
                       const STRING_UTF8_MAP* aProperties = nullptr, PROJECT* aProject = nullptr,
                       PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
 
     std::vector<FOOTPRINT*> GetImportedCachedLibraryFootprints() override;
-
-    const wxString GetFileExtension() const override;
 
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
                              bool aBestEfforts, const STRING_UTF8_MAP* aProperties = nullptr) override;
@@ -179,6 +193,8 @@ public:
 private:
     /// initialize PLUGIN like a constructor would, and futz with fresh BOARD if needed.
     void init( const STRING_UTF8_MAP* aProperties );
+
+    bool checkHeader( const wxString& aFileName ) const;
 
     void checkpoint();
 

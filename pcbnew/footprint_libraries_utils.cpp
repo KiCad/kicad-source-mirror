@@ -70,176 +70,66 @@ static const wxString INFO_LEGACY_LIB_WARN_DELETE(
             "before deleting a footprint" ) );
 
 
-/**
- * Prompt the user for a footprint file to open.
- * @param aParent - parent window for the dialog
- * @param aLastPath - last opened path
- */
-static wxFileName getFootprintFilenameFromUser( wxWindow* aParent, const wxString& aLastPath )
-{
-    static int lastFilterIndex = 0;     // To store the last choice during a session.
-    wxString wildCard;
-
-    wildCard << KiCadFootprintLibFileWildcard() << wxChar( '|' )
-             << ModLegacyExportFileWildcard() << wxChar( '|' )
-             << GedaPcbFootprintLibFileWildcard() << wxChar( '|' )
-             << AllFilesWildcard();
-
-    wxFileDialog dlg( aParent, _( "Import Footprint" ), aLastPath, wxEmptyString, wildCard,
-            wxFD_OPEN | wxFD_FILE_MUST_EXIST );
-
-    dlg.SetFilterIndex( lastFilterIndex );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return wxFileName();
-
-    lastFilterIndex = dlg.GetFilterIndex();
-
-    return wxFileName( dlg.GetPath() );
-}
-
-
-/**
- * Read a file to detect the type.
- * @param aFile - open file to be read. File pointer will be closed.
- * @param aFileName - file name to be read
- * @param aName - wxString to receive the footprint name if type is LEGACY
- */
-static IO_MGR::PCB_FILE_T detect_file_type( FILE* aFile, const wxFileName& aFileName,
-                                            wxString* aName )
-{
-    FILE_LINE_READER freader( aFile, aFileName.GetFullPath() );
-    WHITESPACE_FILTER_READER reader( freader );
-    IO_MGR::PCB_FILE_T file_type;
-
-    wxASSERT( aName );
-
-    reader.ReadLine();
-    char* line = reader.Line();
-
-    if( !line )
-    {
-        return IO_MGR::FILE_TYPE_NONE;
-    }
-
-    // first .kicad_mod file versions starts by "(module"
-    // recent .kicad_mod file versions starts by "(footprint"
-    if( strncasecmp( line, "(module", strlen( "(module" ) ) == 0
-        || strncasecmp( line, "(footprint", strlen( "(footprint" ) ) == 0 )
-    {
-        file_type = IO_MGR::KICAD_SEXP;
-        *aName = aFileName.GetName();
-    }
-    else if( !strncasecmp( line, FOOTPRINT_LIBRARY_HEADER, FOOTPRINT_LIBRARY_HEADER_CNT ) )
-    {
-        file_type = IO_MGR::LEGACY;
-
-        while( reader.ReadLine() )
-        {
-            if( !strncasecmp( line, "$MODULE", strlen( "$MODULE" ) ) )
-            {
-                *aName = FROM_UTF8( StrPurge( line + strlen( "$MODULE" ) ) );
-                break;
-            }
-        }
-    }
-    else if( !strncasecmp( line, "Element", strlen( "Element" ) ) )
-    {
-        file_type = IO_MGR::GEDA_PCB;
-        *aName = aFileName.GetName();
-    }
-    else
-    {
-        file_type = IO_MGR::FILE_TYPE_NONE;
-    }
-
-    return file_type;
-}
-
-
-/**
- * Parse a footprint using a PLUGIN.
- * @param aFileName - file name to parse
- * @param aFileType - type of the file
- * @param aName - name of the footprint
- */
-static FOOTPRINT* parse_footprint_with_plugin( const wxFileName& aFileName,
-                                               IO_MGR::PCB_FILE_T aFileType,
-                                               const wxString& aName )
-{
-    wxString path;
-
-    switch( aFileType )
-    {
-    case IO_MGR::GEDA_PCB: path = aFileName.GetPath();             break;
-    case IO_MGR::LEGACY:   path = aFileName.GetFullPath();         break;
-    default: wxFAIL_MSG( wxT( "unexpected IO_MGR::PCB_FILE_T" ) ); break;
-    }
-
-    PLUGIN::RELEASER pi( IO_MGR::PluginFind( aFileType ) );
-
-    return pi->FootprintLoad( path, aName );
-}
-
-
-/**
- * Parse a KICAD footprint.
- * @param aFileName - file name to parse
- */
-static FOOTPRINT* parse_footprint_kicad( const wxFileName& aFileName )
-{
-    wxString   fcontents;
-    PCB_PLUGIN pcb_io;
-    wxFFile    f( aFileName.GetFullPath() );
-
-    if( !f.IsOpened() )
-        return nullptr;
-
-    f.ReadAll( &fcontents );
-
-    return dynamic_cast<FOOTPRINT*>( pcb_io.Parse( fcontents ) );
-}
-
-
-/**
- * Try to load a footprint, returning nullptr if the file couldn't be accessed.
- * @param aFileName - file name to load
- * @param aFileType - type of the file to load
- * @param aName - footprint name
- */
-FOOTPRINT* try_load_footprint( const wxFileName& aFileName, IO_MGR::PCB_FILE_T aFileType,
-                               const wxString& aName )
-{
-    FOOTPRINT* footprint;
-
-    switch( aFileType )
-    {
-    case IO_MGR::GEDA_PCB:
-    case IO_MGR::LEGACY:
-        footprint = parse_footprint_with_plugin( aFileName, aFileType, aName );
-        break;
-
-    case IO_MGR::KICAD_SEXP:
-        footprint = parse_footprint_kicad( aFileName );
-        break;
-
-    default:
-        wxFAIL_MSG( wxT( "unexpected IO_MGR::PCB_FILE_T" ) );
-        footprint = nullptr;
-    }
-
-    return footprint;
-}
-
-
 FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
 {
     wxFileName fn;
 
-    if( aName != wxT("") )
+    if( !aName.empty() )
+    {
         fn = aName;
+    }
     else
-        fn = getFootprintFilenameFromUser( this, m_mruPath );
+    {
+        // Prompt the user for a footprint file to open.
+        static int               lastFilterIndex = 0; // To store the last choice during a session.
+        wxString                 fileFiltersStr;
+        std::vector<std::string> allExtensions;
+        std::set<wxString>       allWildcardsSet;
+
+        //for( const PLUGIN_FILE_DESC desc : descriptions )
+        for( const auto& plugin : IO_MGR::PLUGIN_REGISTRY::Instance()->AllPlugins() )
+        {
+            PLUGIN::RELEASER pi( plugin.m_createFunc() );
+
+            if( !pi )
+                continue;
+
+            PLUGIN_FILE_DESC desc = pi->GetFootprintFileDesc();
+
+            if( !desc )
+                continue;
+
+            if( !fileFiltersStr.IsEmpty() )
+                fileFiltersStr += wxChar( '|' );
+
+            fileFiltersStr += desc.FileFilter();
+
+            for( const std::string& ext : desc.m_FileExtensions )
+            {
+                allExtensions.emplace_back( ext );
+                allWildcardsSet.insert( wxT( "*." ) + formatWildcardExt( ext ) + wxT( ";" ) );
+            }
+        }
+
+        wxString allWildcardsStr;
+        for( const wxString& wildcard : allWildcardsSet )
+            allWildcardsStr << wildcard;
+
+        fileFiltersStr = _( "All supported formats" ) + wxT( "|" ) + allWildcardsStr + wxT( "|" )
+                         + fileFiltersStr;
+
+        wxFileDialog dlg( this, _( "Import Footprint" ), m_mruPath, wxEmptyString, fileFiltersStr,
+                          wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
+        dlg.SetFilterIndex( lastFilterIndex );
+
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return nullptr;
+
+        lastFilterIndex = dlg.GetFilterIndex();
+
+        fn = dlg.GetPath();
+    }
 
     if( !fn.IsOk() )
         return nullptr;
@@ -255,8 +145,24 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
 
     m_mruPath = fn.GetPath();
 
-    wxString footprintName;
-    IO_MGR::PCB_FILE_T fileType = detect_file_type( fp, fn.GetFullPath(), &footprintName );
+    IO_MGR::PCB_FILE_T fileType = IO_MGR::FILE_TYPE_NONE;
+
+    for( const auto& plugin : IO_MGR::PLUGIN_REGISTRY::Instance()->AllPlugins() )
+    {
+        PLUGIN::RELEASER pi( plugin.m_createFunc() );
+
+        if( !pi )
+            continue;
+
+        if( pi->GetFootprintFileDesc().m_FileExtensions.empty() )
+            continue;
+
+        if( pi->CanReadFootprint( fn.GetFullPath() ) )
+        {
+            fileType = plugin.m_type;
+            break;
+        }
+    }
 
     if( fileType == IO_MGR::FILE_TYPE_NONE )
     {
@@ -265,16 +171,18 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
     }
 
     FOOTPRINT* footprint = nullptr;
+    wxString   footprintName;
 
     try
     {
-        footprint = try_load_footprint( fn, fileType, footprintName );
+        PLUGIN::RELEASER pi( IO_MGR::PluginFind( fileType ) );
+
+        footprint = pi->ImportFootprint( fn.GetFullPath(), footprintName);
 
         if( !footprint )
         {
             wxString msg = wxString::Format( _( "Unable to load footprint '%s' from '%s'" ),
-                                             footprintName,
-                                             fn.GetFullPath() );
+                                             footprintName, fn.GetFullPath() );
             DisplayError( this, msg );
             return nullptr;
         }

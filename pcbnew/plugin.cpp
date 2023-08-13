@@ -1,8 +1,9 @@
+#include "io_mgr.h"
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,9 +23,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <unordered_set>
 #include <io_mgr.h>
+#include <ki_exception.h>
 #include <string_utf8_map.h>
+#include <wx/log.h>
+#include <wx/filename.h>
 #include <wx/translation.h>
+#include <wx/filename.h>
+#include <wx/dir.h>
 
 
 #define FMT_UNIMPLEMENTED wxT( "Plugin \"%s\" does not implement the \"%s\" function." )
@@ -33,6 +40,106 @@
                                       PluginName(),                         \
                                       wxString::FromUTF8( aCaller ) ) );
 
+
+PLUGIN_FILE_DESC PLUGIN::GetBoardFileDesc() const
+{
+    return PLUGIN_FILE_DESC( wxEmptyString, {} );
+}
+
+
+PLUGIN_FILE_DESC PLUGIN::GetFootprintFileDesc() const
+{
+    return PLUGIN_FILE_DESC( wxEmptyString, {} );
+}
+
+
+PLUGIN_FILE_DESC PLUGIN::GetFootprintLibDesc() const
+{
+    return PLUGIN_FILE_DESC( wxEmptyString, {} );
+}
+
+
+bool PLUGIN::CanReadBoard( const wxString& aFileName ) const
+{
+    const std::vector<std::string>& exts = GetBoardFileDesc().m_FileExtensions;
+
+    wxString fileExt = wxFileName( aFileName ).GetExt().MakeLower();
+
+    for( const wxString& ext : exts )
+    {
+        if( fileExt == ext.Lower() )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool PLUGIN::CanReadFootprint( const wxString& aFileName ) const
+{
+    const std::vector<std::string>& exts = GetFootprintFileDesc().m_FileExtensions;
+
+    wxString fileExt = wxFileName( aFileName ).GetExt().MakeLower();
+
+    for( const wxString& ext : exts )
+    {
+        if( fileExt == ext.Lower() )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool PLUGIN::CanReadFootprintLib( const wxString& aFileName ) const
+{
+    const PLUGIN_FILE_DESC& desc = GetFootprintLibDesc();
+
+    if( desc.m_IsFile )
+    {
+        const std::vector<std::string>& exts = desc.m_FileExtensions;
+
+        wxString fileExt = wxFileName( aFileName ).GetExt().MakeLower();
+
+        for( const wxString& ext : exts )
+        {
+            if( fileExt == ext.Lower() )
+                return true;
+        }
+    }
+    else
+    {
+        wxDir dir( aFileName );
+
+        if( !dir.IsOpened() )
+            return false;
+
+        std::vector<std::string>     exts = desc.m_ExtensionsInDir;
+        std::unordered_set<wxString> lowerExts;
+
+        for( const std::string& ext : exts )
+            lowerExts.emplace( wxString( ext ).MakeLower() );
+
+        wxString filenameStr;
+
+        bool cont = dir.GetFirst( &filenameStr, wxEmptyString, wxDIR_FILES | wxDIR_HIDDEN );
+        while( cont )
+        {
+            wxString ext = wxS( "" );
+
+            int idx = filenameStr.Find( '.', true );
+            if( idx != -1 )
+                ext = filenameStr.Mid( idx + 1 ).MakeLower();
+
+            if( lowerExts.count( ext ) )
+                return true;
+
+            cont = dir.GetNext( &filenameStr );
+        }
+    }
+
+    return false;
+}
 
 
 BOARD* PLUGIN::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
@@ -66,6 +173,28 @@ void PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString&
 
 void PLUGIN::PrefetchLib( const wxString&, const STRING_UTF8_MAP* )
 {
+}
+
+
+FOOTPRINT* PLUGIN::ImportFootprint( const wxString& aFootprintPath, wxString& aFootprintNameOut,
+                                    const STRING_UTF8_MAP* aProperties )
+{
+    wxArrayString footprintNames;
+
+    FootprintEnumerate( footprintNames, aFootprintPath, true, aProperties );
+
+    if( footprintNames.empty() )
+        return nullptr;
+
+    if( footprintNames.size() > 1 )
+    {
+        wxLogWarning( _( "Selected file contains multiple footprints. Only the first one will be "
+                         "imported." ) );
+    }
+
+    aFootprintNameOut = footprintNames.front();
+
+    return FootprintLoad( aFootprintPath, aFootprintNameOut, false, aProperties );
 }
 
 

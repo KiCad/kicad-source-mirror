@@ -232,16 +232,6 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     m_acceptedExts.emplace( GerberJobFileExtension, &KICAD_MANAGER_ACTIONS::viewDroppedGerbers );
     m_acceptedExts.emplace( DrillFileExtension, &KICAD_MANAGER_ACTIONS::viewDroppedGerbers );
 
-    // Eagle files import
-    m_acceptedExts.emplace( EagleSchematicFileExtension,
-                            &KICAD_MANAGER_ACTIONS::importNonKicadProj );
-    m_acceptedExts.emplace( EaglePcbFileExtension, &KICAD_MANAGER_ACTIONS::importNonKicadProj );
-
-    // Cadstar files import
-    m_acceptedExts.emplace( CadstarSchematicFileExtension,
-                            &KICAD_MANAGER_ACTIONS::importNonKicadProj );
-    m_acceptedExts.emplace( CadstarPcbFileExtension, &KICAD_MANAGER_ACTIONS::importNonKicadProj );
-
     DragAcceptFiles( true );
 
     // Ensure the window is on top

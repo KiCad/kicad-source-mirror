@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -19,6 +19,7 @@
  */
 
 #include "import_proj.h"
+#include <kicad_manager_frame.h>
 #include <kiway.h>
 #include <kiway_player.h>
 #include <wildcards_and_files_ext.h>
@@ -28,119 +29,32 @@
 #include <wx/msgdlg.h>
 
 
-IMPORT_PROJ_HELPER::IMPORT_PROJ_HELPER( KICAD_MANAGER_FRAME* aFrame,
-                                        const wxString& aFile,
-                                        const wxString& aSchFileExtension,
-                                        const wxString& aPcbFileExtension ) :
+IMPORT_PROJ_HELPER::IMPORT_PROJ_HELPER( KICAD_MANAGER_FRAME*         aFrame,
+                                        const std::vector<wxString>& aSchFileExtensions,
+                                        const std::vector<wxString>& aPcbFileExtensions ) :
         m_frame( aFrame ),
-        m_sch( aFile ), m_pcb( m_sch ), m_pro( m_sch )
+        m_schExtenstions( aSchFileExtensions ), m_pcbExtenstions( aPcbFileExtensions )
 {
-    m_sch.SetExt( aSchFileExtension );
-    m_pcb.SetExt( aPcbFileExtension );
-    m_pro.SetExt( ProjectFileExtension );
 }
 
 
-const wxFileName& IMPORT_PROJ_HELPER::GetProj()
-{
-    return m_pro;
-}
-
-
-wxString IMPORT_PROJ_HELPER::GetProjPath()
-{
-    return m_pro.GetPath();
-}
-
-
-void IMPORT_PROJ_HELPER::SetProjPath( const wxString aPath )
-{
-    m_pro.SetPath( aPath );
-}
-
-
-wxString IMPORT_PROJ_HELPER::GetProjFullPath()
-{
-    return m_pro.GetFullPath();
-}
-
-
-wxString IMPORT_PROJ_HELPER::GetProjName()
-{
-    return m_pro.GetName();
-}
-
-
-void IMPORT_PROJ_HELPER::CreateEmptyDirForProject()
+void IMPORT_PROJ_HELPER::FindEmptyTargetDir()
 {
     // Append a new directory with the same name of the project file
     // Keep iterating until we find an empty directory
-    wxString newDir = m_pro.GetName();
+    wxString newDir = m_TargetProj.GetName();
     int      attempt = 0;
 
-    m_pro.AppendDir( newDir );
+    m_TargetProj.AppendDir( newDir );
 
-    while( m_pro.DirExists() )
+    while( m_TargetProj.DirExists() )
     {
-        m_pro.RemoveLastDir();
+        m_TargetProj.RemoveLastDir();
         wxString suffix = wxString::Format( "_%d", ++attempt );
-        m_pro.AppendDir( newDir + suffix );
+        m_TargetProj.AppendDir( newDir + suffix );
     }
 }
 
-
-void IMPORT_PROJ_HELPER::SetProjAbsolutePath()
-{
-    m_pro.SetExt( ProjectFileExtension );
-    if( !m_pro.IsAbsolute() )
-        m_pro.MakeAbsolute();
-}
-
-
-bool IMPORT_PROJ_HELPER::CopyImportedFile( KICAD_T aFT, bool displayError )
-{
-    wxASSERT( m_pro.GetExt() == ProjectFileExtension );
-
-    wxFileName fileCopy( m_pro );
-
-    wxFileName src, dest;
-    switch( aFT )
-    {
-    case SCHEMATIC_T: src = m_sch; break;
-
-    case PCB_T: src = m_pcb; break;
-
-    default: break;
-    }
-
-    fileCopy.SetExt( src.GetExt() );
-
-    if( src.Exists() && !fileCopy.SameAs( src ) )
-    {
-        if( !wxCopyFile( src.GetFullPath(), fileCopy.GetFullPath(), true ) )
-        {
-            if( displayError )
-                OutputCopyError( src, fileCopy );
-            return false;
-        }
-    }
-
-    switch( aFT )
-    {
-    case SCHEMATIC_T: m_shCopy = fileCopy; break;
-
-    case PCB_T: m_pcbCopy = fileCopy; break;
-
-    default: break;
-    }
-
-    return true;
-}
-
-bool IMPORT_PROJ_HELPER::CopyImportedFiles( bool displayError )
-{
-    return CopyImportedFile( SCHEMATIC_T, displayError ) && CopyImportedFile( PCB_T, displayError );
-}
 
 void IMPORT_PROJ_HELPER::OutputCopyError( const wxFileName& aSrc, const wxFileName& aFileCopy )
 {
@@ -155,53 +69,89 @@ void IMPORT_PROJ_HELPER::OutputCopyError( const wxFileName& aSrc, const wxFileNa
 }
 
 
-void IMPORT_PROJ_HELPER::AssociateFileWithProj( KICAD_T aFT, int aImportedFileType )
+class SCOPED_FILE_REMOVER
 {
-    wxFileName fileCopy, importedFile;
-    FRAME_T    frame_type;
+    wxString m_file;
+
+public:
+    SCOPED_FILE_REMOVER( const wxString& aFile ) : m_file( aFile ) {}
+    ~SCOPED_FILE_REMOVER() { wxRemoveFile( m_file ); }
+};
+
+
+void IMPORT_PROJ_HELPER::ImportIndividualFile( KICAD_T aFT, int aImportedFileType )
+{
+    FRAME_T               frame_type;
+    wxString              appImportFile;
+    std::vector<wxString> neededExts;
+
     switch( aFT )
     {
     case SCHEMATIC_T:
-        importedFile = m_sch;
-        fileCopy = m_shCopy;
+        neededExts = m_schExtenstions;
         frame_type = FRAME_SCH;
         break;
 
     case PCB_T:
-        importedFile = m_pcb;
-        fileCopy = m_pcbCopy;
+        neededExts = m_pcbExtenstions;
         frame_type = FRAME_PCB_EDITOR;
         break;
 
     default: return;
     }
 
-    if( fileCopy.FileExists() )
+    std::vector<SCOPED_FILE_REMOVER> copiedFiles;
+
+    for( wxString ext : neededExts )
     {
-        KIWAY_PLAYER* frame = m_frame->Kiway().Player( frame_type, true );
+        if( ext == wxS( "INPUT" ) )
+            ext = m_InputFile.GetExt();
 
-        std::string packet =
-                StrPrintf( "%d\n%s", aImportedFileType, TO_UTF8( fileCopy.GetFullPath() ) );
-        frame->Kiway().ExpressMail( frame_type, MAIL_IMPORT_FILE, packet, m_frame );
+        wxFileName candidate = m_InputFile;
+        candidate.SetExt( ext );
 
-        if( !frame->IsShown() )
-            frame->Show( true );
+        if( !candidate.FileExists() )
+            continue;
 
-        // On Windows, Raise() does not bring the window on screen, when iconized
-        if( frame->IsIconized() )
-            frame->Iconize( false );
+        wxFileName targetFile( m_TargetProj.GetPath(), candidate.GetName(), candidate.GetExt() );
 
-        frame->Raise();
+        if( !targetFile.FileExists() )
+        {
+            bool copied = wxCopyFile( candidate.GetFullPath(), targetFile.GetFullPath(), false );
 
-        if( !fileCopy.SameAs( importedFile ) ) // Do not delete the original file!
-            wxRemoveFile( fileCopy.GetFullPath() );
+            if( copied )
+            {
+                // Will be auto-removed
+                copiedFiles.emplace_back( targetFile.GetFullPath() );
+            }
+        }
+
+        // Pick the first file to pass to application
+        if( appImportFile.empty() && targetFile.FileExists() )
+            appImportFile = targetFile.GetFullPath();
     }
+
+    if( appImportFile.empty() )
+        return;
+
+    KIWAY_PLAYER* frame = m_frame->Kiway().Player( frame_type, true );
+
+    std::string packet = StrPrintf( "%d\n%s", aImportedFileType, TO_UTF8( appImportFile ) );
+    frame->Kiway().ExpressMail( frame_type, MAIL_IMPORT_FILE, packet, m_frame );
+
+    if( !frame->IsShown() )
+        frame->Show( true );
+
+    // On Windows, Raise() does not bring the window on screen, when iconized
+    if( frame->IsIconized() )
+        frame->Iconize( false );
+
+    frame->Raise();
 }
 
 
-void IMPORT_PROJ_HELPER::AssociateFilesWithProj( int aImportedSchFileType,
-                                                 int aImportedPcbFileType )
+void IMPORT_PROJ_HELPER::ImportFiles( int aImportedSchFileType, int aImportedPcbFileType )
 {
-    AssociateFileWithProj( SCHEMATIC_T, aImportedSchFileType );
-    AssociateFileWithProj( PCB_T, aImportedPcbFileType );
+    ImportIndividualFile( SCHEMATIC_T, aImportedSchFileType );
+    ImportIndividualFile( PCB_T, aImportedPcbFileType );
 }

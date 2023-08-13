@@ -83,11 +83,6 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::loadProject( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .Parameter<wxString*>( nullptr ) );      // Default to no filename
 
-TOOL_ACTION KICAD_MANAGER_ACTIONS::importNonKicadProj( TOOL_ACTION_ARGS()
-        .Name( "kicad.Control.importNonKicadProj" )
-        .Scope( AS_GLOBAL )
-        .Parameter<wxString*>( nullptr ) );      // Default to no filename
-
 TOOL_ACTION KICAD_MANAGER_ACTIONS::viewDroppedGerbers( TOOL_ACTION_ARGS()
         .Name( "kicad.Control.viewDroppedGerbers" )
         .Scope( AS_GLOBAL )

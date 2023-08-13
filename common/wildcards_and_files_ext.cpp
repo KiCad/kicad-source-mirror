@@ -341,63 +341,16 @@ wxString AllegroNetlistFileWildcard()
 }
 
 
-wxString LegacyPcbFileWildcard()
-{
-    return _( "KiCad printed circuit board files" ) + AddFileExtListToFilter( { "brd" } );
-}
-
-
-wxString EaglePcbFileWildcard()
-{
-    return _( "Eagle ver. 6.x XML PCB files" ) + AddFileExtListToFilter( { "brd" } );
-}
-
-wxString CadstarPcbArchiveFileWildcard()
-{
-    return _( "CADSTAR PCB Archive files" ) + AddFileExtListToFilter( { "cpa" } );
-}
-
-wxString PCadPcbFileWildcard()
-{
-    return _( "P-Cad 200x ASCII PCB files" ) + AddFileExtListToFilter( { "pcb" } );
-}
-
-wxString AltiumDesignerPcbFileWildcard()
-{
-    return _( "Altium Designer PCB files" ) + AddFileExtListToFilter( { "PcbDoc" } );
-}
-
-wxString AltiumCircuitStudioPcbFileWildcard()
-{
-    return _( "Altium Circuit Studio PCB files" ) + AddFileExtListToFilter( { "CSPcbDoc" } );
-}
-
-wxString AltiumCircuitMakerPcbFileWildcard()
-{
-    return _( "Altium Circuit Maker PCB files" ) + AddFileExtListToFilter( { "CMPcbDoc" } );
-}
-
-wxString SolidworksPcbFileWildcard()
-{
-    return _( "Solidworks PCB files" ) + AddFileExtListToFilter( { "SWPcbDoc" } );
-}
-
-wxString FabmasterPcbFileWildcard()
-{
-    return _( "Fabmaster PCB files" ) + AddFileExtListToFilter( { "txt", "fab" } );
-}
-
 wxString PcbFileWildcard()
 {
-    return _( "KiCad printed circuit board files" ) +
-           AddFileExtListToFilter( { KiCadPcbFileExtension } );
+    return _( "KiCad printed circuit board files" )
+           + AddFileExtListToFilter( { KiCadPcbFileExtension } );
 }
 
 
 wxString KiCadFootprintLibFileWildcard()
 {
-    return _( "KiCad footprint files" )
-            + AddFileExtListToFilter( { KiCadFootprintFileExtension } );
+    return _( "KiCad footprint files" ) + AddFileExtListToFilter( { KiCadFootprintFileExtension } );
 }
 
 
@@ -405,30 +358,6 @@ wxString KiCadFootprintLibPathWildcard()
 {
     return _( "KiCad footprint library paths" )
             + AddFileExtListToFilter( { KiCadFootprintLibPathExtension } );
-}
-
-
-wxString LegacyFootprintLibPathWildcard()
-{
-    return _( "Legacy footprint library files" ) + AddFileExtListToFilter( { "mod" } );
-}
-
-
-wxString AltiumFootprintLibPathWildcard()
-{
-    return _( "Altium PCB footprint library files" ) + AddFileExtListToFilter( { "PcbLib" } );
-}
-
-
-wxString EagleFootprintLibPathWildcard()
-{
-    return _( "Eagle ver. 6.x XML library files" ) + AddFileExtListToFilter( { "lbr" } );
-}
-
-
-wxString GedaPcbFootprintLibFileWildcard()
-{
-    return _( "Geda PCB footprint library files" ) + AddFileExtListToFilter( { "fp" } );
 }
 
 

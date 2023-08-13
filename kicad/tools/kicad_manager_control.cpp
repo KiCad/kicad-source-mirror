@@ -343,80 +343,6 @@ int KICAD_MANAGER_CONTROL::CloseProject( const TOOL_EVENT& aEvent )
 }
 
 
-int KICAD_MANAGER_CONTROL::ImportNonKicadProj( const TOOL_EVENT& aEvent )
-{
-    if( !aEvent.Parameter<wxString*>() )
-        return -1;
-
-    wxFileName droppedFileName( *aEvent.Parameter<wxString*>() );
-
-    wxString schFileExtension, pcbFileExtension;
-    int      schFileType, pcbFileType;
-
-    // Define extensions to use according to dropped file.
-    // Eagle project.
-    if( droppedFileName.GetExt() == EagleSchematicFileExtension
-        || droppedFileName.GetExt() == EaglePcbFileExtension )
-    {
-        // Check if droppedFile is an eagle file.
-        // If not, return and do not import files.
-        if( !IsFileFromEDATool( droppedFileName, EDA_TOOLS::EAGLE ) )
-            return -1;
-
-        schFileExtension = EagleSchematicFileExtension;
-        pcbFileExtension = EaglePcbFileExtension;
-        schFileType = SCH_IO_MGR::SCH_EAGLE;
-        pcbFileType = IO_MGR::EAGLE;
-    }
-    // Cadstar project.
-    else if( droppedFileName.GetExt() == CadstarSchematicFileExtension
-             || droppedFileName.GetExt() == CadstarPcbFileExtension )
-    {
-        schFileExtension = CadstarSchematicFileExtension;
-        pcbFileExtension = CadstarPcbFileExtension;
-        schFileType = SCH_IO_MGR::SCH_CADSTAR_ARCHIVE;
-        pcbFileType = IO_MGR::CADSTAR_PCB_ARCHIVE;
-    }
-    else
-    {
-        return -1;
-    }
-
-    IMPORT_PROJ_HELPER importProj( m_frame, droppedFileName.GetFullPath(), schFileExtension,
-                                   pcbFileExtension );
-
-    // Check if the project directory is empty
-    wxDir directory( importProj.GetProjPath() );
-
-    if( directory.HasFiles() )
-    {
-        // Append a new directory with the same name of the project file
-        // Keep iterating until we find an empty directory
-        importProj.CreateEmptyDirForProject();
-
-        if( !wxMkdir( importProj.GetProjPath() ) )
-            return -1;
-    }
-
-    importProj.SetProjAbsolutePath();
-
-    if( !importProj.CopyImportedFiles( false ) )
-    {
-        wxRmdir( importProj.GetProjPath() ); // Remove the previous created directory, before leaving.
-        return -1;
-    }
-
-    m_frame->CloseProject( true );
-
-    m_frame->CreateNewProject( importProj.GetProjFullPath(), false /* Don't create stub files */ );
-    m_frame->LoadProject( importProj.GetProj() );
-
-    importProj.AssociateFilesWithProj( schFileType, pcbFileType );
-    m_frame->ReCreateTreePrj();
-    m_frame->LoadProject( importProj.GetProj() );
-    return 0;
-}
-
 int KICAD_MANAGER_CONTROL::LoadProject( const TOOL_EVENT& aEvent )
 {
     if( aEvent.Parameter<wxString*>() )
@@ -958,7 +884,6 @@ void KICAD_MANAGER_CONTROL::setTransitions()
     Go( &KICAD_MANAGER_CONTROL::CloseProject,       KICAD_MANAGER_ACTIONS::closeProject.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::SaveProjectAs,      ACTIONS::saveAs.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::LoadProject,        KICAD_MANAGER_ACTIONS::loadProject.MakeEvent() );
-    Go( &KICAD_MANAGER_CONTROL::ImportNonKicadProj, KICAD_MANAGER_ACTIONS::importNonKicadProj.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::ViewDroppedViewers, KICAD_MANAGER_ACTIONS::viewDroppedGerbers.MakeEvent() );
 
     Go( &KICAD_MANAGER_CONTROL::Refresh,         ACTIONS::zoomRedraw.MakeEvent() );

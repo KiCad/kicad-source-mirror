@@ -25,12 +25,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <richio.h>
-#include <map>
-#include <functional>
-#include <wx/time.h>
-
-#include <config.h>
+#include <vector>
+#include <wx/arrstr.h>
+#include <i18n_utility.h>
 
 class BOARD;
 class PLUGIN;
@@ -48,21 +45,21 @@ public:
 
     /**
      * The set of file types that the IO_MGR knows about, and for which there has been a
-     * plugin written.
+     * plugin written, in alphabetical order.
      */
     enum PCB_FILE_T
     {
-        LEGACY,     ///< Legacy Pcbnew file formats prior to s-expression.
         KICAD_SEXP, ///< S-expression Pcbnew file format.
-        EAGLE,
-        PCAD,
-        FABMASTER,
-        ALTIUM_DESIGNER,
-        ALTIUM_CIRCUIT_STUDIO,
+        LEGACY,     ///< Legacy Pcbnew file formats prior to s-expression.
         ALTIUM_CIRCUIT_MAKER,
-        SOLIDWORKS_PCB,
+        ALTIUM_CIRCUIT_STUDIO,
+        ALTIUM_DESIGNER,
         CADSTAR_PCB_ARCHIVE,
+        EAGLE,
+        FABMASTER,
         GEDA_PCB, ///< Geda PCB file formats.
+        PCAD,
+        SOLIDWORKS_PCB,
         // add your type here.
 
         // etc.
@@ -179,14 +176,6 @@ public:
     static PCB_FILE_T EnumFromStr( const wxString& aFileType );
 
     /**
-     * Return the file extension for \a aFileType.
-     *
-     * @param aFileType The #PCB_FILE_T type.
-     * @return the file extension for \a aFileType or an empty string if \a aFileType is invalid.
-     */
-    static const wxString GetFileExtension( PCB_FILE_T aFileType );
-
-    /**
      * Return a plugin type given a footprint library's libPath.
      */
     static PCB_FILE_T GuessPluginTypeFromLibPath( const wxString& aLibPath );
@@ -240,6 +229,33 @@ public:
 
 
 /**
+* Container that describes file type info
+*/
+struct PLUGIN_FILE_DESC
+{
+    wxString                 m_Description;    ///< Description shown in the file picker dialog
+    std::vector<std::string> m_FileExtensions; ///< Filter used for file pickers if m_IsFile is true
+    std::vector<std::string> m_ExtensionsInDir; ///< In case of folders: extensions of files inside
+    bool                     m_IsFile;          ///< Whether the library is a folder or a file
+
+    PLUGIN_FILE_DESC( const wxString& aDescription, const std::vector<std::string>& aFileExtensions,
+                      const std::vector<std::string>& aExtsInFolder = {}, bool aIsFile = true ) :
+            m_Description( aDescription ),
+            m_FileExtensions( aFileExtensions ), m_ExtensionsInDir( aExtsInFolder ),
+            m_IsFile( aIsFile )
+    {
+    }
+
+    /**
+     * @return translated description + wildcards string for file dialogs.
+     */
+    wxString FileFilter() const;
+
+    operator bool() const { return !m_Description.empty(); }
+};
+
+
+/**
  * A base class that #BOARD loading and saving plugins should derive from.
  *
  * Implementations can provide either Load() or Save() functions, or both.  PLUGINs throw
@@ -276,9 +292,37 @@ public:
     virtual const wxString PluginName() const = 0;
 
     /**
-     * Returns the file extension for the PLUGIN.
+     * Returns board file description for the PLUGIN.
      */
-    virtual const wxString GetFileExtension() const = 0;
+    virtual PLUGIN_FILE_DESC GetBoardFileDesc() const;
+
+    /**
+     * Returns footprint file description for the PLUGIN.
+     */
+    virtual PLUGIN_FILE_DESC GetFootprintFileDesc() const;
+
+    /**
+     * Returns footprint library description for the PLUGIN.
+     */
+    virtual PLUGIN_FILE_DESC GetFootprintLibDesc() const;
+
+    /**
+     * Checks if this PLUGIN can read the specified board file.
+     * If not overriden, extension check is used.
+     */
+    virtual bool CanReadBoard( const wxString& aFileName ) const;
+
+    /**
+     * Checks if this PLUGIN can read a footprint from specified file or directory.
+     * If not overriden, extension check is used.
+     */
+    virtual bool CanReadFootprint( const wxString& aFileName ) const;
+
+    /**
+     * Checks if this PLUGIN can read footprint library from specified file or directory.
+     * If not overriden, extension check is used.
+     */
+    virtual bool CanReadFootprintLib( const wxString& aFileName ) const;
 
     /**
      * Registers a KIDIALOG callback for collecting info from the user.
@@ -397,6 +441,26 @@ public:
                               const STRING_UTF8_MAP* aProperties = nullptr );
 
     /**
+     * Load a single footprint from @a aFootprintPath and put its name in @a aFootprintNameOut.
+     * If this is a footprint library, the first footprint should be loaded.
+     * The default implementation uses FootprintEnumerate and FootprintLoad to load first footprint.
+     *
+     * @param aLibraryPath is a path of the footprint file.
+     * @param aFootprintNameOut is the name output of the loaded footprint.
+     * @param aProperties is an associative array that can be used to tell the loader
+     *                    implementation to do something special, because it can take
+     *                    any number of  additional named tuning arguments that the plugin
+     *                    is known to support.  The caller continues to own this object
+     *                    (plugin may not delete it), and plugins should expect it to be
+     *                    optionally NULL.
+     * @return the #FOOTPRINT object if found, caller owns it, else NULL if not found.
+     *
+     * @throw   IO_ERROR if the footprint cannot be found or read.
+     */
+    virtual FOOTPRINT* ImportFootprint( const wxString& aFootprintPath, wxString& aFootprintNameOut,
+                                        const STRING_UTF8_MAP* aProperties = nullptr );
+
+    /**
      * Load a footprint having @a aFootprintName from the @a aLibraryPath containing a library
      * format that this PLUGIN knows about.
      *
@@ -412,7 +476,7 @@ public:
      * @param aKeepUUID = true to keep initial items UUID, false to set new UUID
      *                   normally true if loaded in the footprint editor, false
      *                   if loaded in the board editor. Make sense only in kicad_plugin
-     * @return the #FOOTPRINT object if found caller owns it, else NULL if not found.
+     * @return the #FOOTPRINT object if found, caller owns it, else NULL if not found.
      *
      * @throw   IO_ERROR if the library cannot be found or read.  No exception is thrown in
      *                   the case where \a aFootprintName cannot be found.

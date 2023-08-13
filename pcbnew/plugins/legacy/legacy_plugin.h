@@ -26,6 +26,7 @@
  */
 
 #include <io_mgr.h>
+#include <richio.h>
 #include <string>
 #include <layer_ids.h>
 #include <memory>
@@ -68,10 +69,20 @@ public:
         return wxT( "KiCad-Legacy" );
     }
 
-    const wxString GetFileExtension() const override
+    PLUGIN_FILE_DESC GetBoardFileDesc() const override
     {
-        return wxT( "brd" );
+        return PLUGIN_FILE_DESC( _HKI( "Eagle ver. 6.x XML PCB files" ), { "brd" } );
     }
+
+    PLUGIN_FILE_DESC GetFootprintLibDesc() const override
+    {
+        return PLUGIN_FILE_DESC( _HKI( "Legacy footprint library files" ), { "mod" } );
+    }
+
+    PLUGIN_FILE_DESC GetFootprintFileDesc() const override { return GetFootprintLibDesc(); }
+
+    bool CanReadBoard( const wxString& aFileName ) const override;
+    bool CanReadFootprint( const wxString& aFileName ) const override;
 
     BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
                       const STRING_UTF8_MAP* aProperties = nullptr, PROJECT* aProject = nullptr,
@@ -200,7 +211,7 @@ protected:
                                     ///< with this scale factor
 
     double  diskToBiu;              ///< convert from disk engineering units to BIUs
-                                    ///< with this scale factor
+    ///< with this scale factor
 };
 
 #endif  // LEGACY_PLUGIN_H_

@@ -33,11 +33,11 @@ class ALTIUM_CIRCUIT_MAKER_PLUGIN : public PLUGIN
 public:
     const wxString PluginName() const override;
 
+    PLUGIN_FILE_DESC GetBoardFileDesc() const override;
+
     BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
                       const STRING_UTF8_MAP* aProperties, PROJECT* aProject = nullptr,
                       PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
-
-    const wxString GetFileExtension() const override;
 
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override
     {

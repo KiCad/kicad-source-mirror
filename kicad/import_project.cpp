@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Russell Oliver <roliver8143@gmail.com>
  *
@@ -44,17 +44,17 @@
 
 void KICAD_MANAGER_FRAME::ImportNonKiCadProject( const wxString& aWindowTitle,
                                                  const wxString& aFilesWildcard,
-                                                 const wxString& aSchFileExtension,
-                                                 const wxString& aPcbFileExtension,
+                                                 const std::vector<std::string>& aSchFileExtensions,
+                                                 const std::vector<std::string>& aPcbFileExtensions,
                                                  int aSchFileType, int aPcbFileType )
 {
     wxString msg;
     wxString default_dir = GetMruPath();
-    int      style       = wxFD_OPEN | wxFD_FILE_MUST_EXIST;
+    int      style = wxFD_OPEN | wxFD_FILE_MUST_EXIST;
 
-    wxFileDialog schdlg( this, aWindowTitle, default_dir, wxEmptyString, aFilesWildcard, style );
+    wxFileDialog inputdlg( this, aWindowTitle, default_dir, wxEmptyString, aFilesWildcard, style );
 
-    if( schdlg.ShowModal() == wxID_CANCEL )
+    if( inputdlg.ShowModal() == wxID_CANCEL )
         return;
 
     // OK, we got a new project to open.  Time to close any existing project before we go on
@@ -63,23 +63,29 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( const wxString& aWindowTitle,
     if( !CloseProject( true ) )
         return;
 
-    IMPORT_PROJ_HELPER importProj( this, schdlg.GetPath(), aSchFileExtension, aPcbFileExtension );
+    std::vector<wxString> schFileExts( aSchFileExtensions.begin(), aSchFileExtensions.end() );
+    std::vector<wxString> pcbFileExts( aPcbFileExtensions.begin(), aPcbFileExtensions.end() );
 
-    wxString protitle = _( "KiCad Project Destination" );
+    IMPORT_PROJ_HELPER importProj( this, schFileExts, pcbFileExts );
+    importProj.m_InputFile = inputdlg.GetPath();
 
     // Don't use wxFileDialog here.  On GTK builds, the default path is returned unless a
     // file is actually selected.
-    wxDirDialog prodlg( this, protitle, importProj.GetProjPath(), wxDD_DEFAULT_STYLE );
+    wxDirDialog prodlg( this, _( "KiCad Project Destination" ), importProj.m_InputFile.GetPath(),
+                        wxDD_DEFAULT_STYLE );
 
     if( prodlg.ShowModal() == wxID_CANCEL )
         return;
 
-    importProj.SetProjPath( prodlg.GetPath() );
+    wxString targetDir = prodlg.GetPath();
+
+    importProj.m_TargetProj.SetPath( targetDir );
+    importProj.m_TargetProj.SetName( importProj.m_InputFile.GetName() );
+    importProj.m_TargetProj.SetExt( ProjectFileExtension );
+    importProj.m_TargetProj.MakeAbsolute();
 
     // Check if the project directory is empty
-    wxDir directory( importProj.GetProjPath() );
-
-    if( directory.HasFiles() )
+    if( wxDir( targetDir ).HasFiles() )
     {
         msg = _( "The selected directory is not empty.  We recommend you "
                  "create projects in their own clean directory.\n\nDo you "
@@ -92,9 +98,9 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( const wxString& aWindowTitle,
         {
             // Append a new directory with the same name of the project file
             // Keep iterating until we find an empty directory
-            importProj.CreateEmptyDirForProject();
+            importProj.FindEmptyTargetDir();
 
-            if( !wxMkdir( importProj.GetProjPath() ) )
+            if( !wxMkdir( importProj.m_TargetProj.GetPath() ) )
             {
                 msg = _( "Error creating new directory. Please try a different path. The "
                          "project cannot be imported." );
@@ -106,17 +112,10 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( const wxString& aWindowTitle,
         }
     }
 
-    std::string packet;
+    CreateNewProject( importProj.m_TargetProj.GetFullPath(), false /* Don't create stub files */ );
+    LoadProject( importProj.m_TargetProj );
 
-    importProj.SetProjAbsolutePath();
-
-    if( !importProj.CopyImportedFiles() )
-        return;
-
-    CreateNewProject( importProj.GetProjFullPath(), false /* Don't create stub files */ );
-    LoadProject( importProj.GetProj() );
-
-    importProj.AssociateFilesWithProj( aSchFileType, aPcbFileType );
+    importProj.ImportFiles( aSchFileType, aPcbFileType );
 
     ReCreateTreePrj();
     m_active_project = true;
@@ -126,14 +125,13 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( const wxString& aWindowTitle,
 void KICAD_MANAGER_FRAME::OnImportCadstarArchiveFiles( wxCommandEvent& event )
 {
     ImportNonKiCadProject( _( "Import CADSTAR Archive Project Files" ),
-            CadstarArchiveFilesWildcard(), "csa", "cpa", SCH_IO_MGR::SCH_CADSTAR_ARCHIVE,
-            IO_MGR::CADSTAR_PCB_ARCHIVE );
+                           CadstarArchiveFilesWildcard(), { "csa" }, { "cpa" },
+                           SCH_IO_MGR::SCH_CADSTAR_ARCHIVE, IO_MGR::CADSTAR_PCB_ARCHIVE );
 }
 
 
 void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
 {
-    ImportNonKiCadProject( _( "Import Eagle Project Files" ), EagleFilesWildcard(),
-            LegacySchematicFileExtension, LegacyPcbFileExtension,
-            SCH_IO_MGR::SCH_EAGLE, IO_MGR::EAGLE );
+    ImportNonKiCadProject( _( "Import Eagle Project Files" ), EagleFilesWildcard(), { "sch" },
+                           { "brd" }, SCH_IO_MGR::SCH_EAGLE, IO_MGR::EAGLE );
 }
