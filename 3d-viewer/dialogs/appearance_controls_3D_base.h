@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -12,6 +12,7 @@
 #include <wx/intl.h>
 #include "widgets/wx_panel.h"
 #include <wx/scrolwin.h>
+#include <wx/grid.h> // needed for MSVC to see wxScrolledCanvas indirectly exported
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
