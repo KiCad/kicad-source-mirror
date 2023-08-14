@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-13 14:56-0700\n"
-"PO-Revision-Date: 2023-08-03 15:45+0000\n"
-"Last-Translator: turkce <turkceceviri@protonmail.com>\n"
+"PO-Revision-Date: 2023-08-15 10:51+0000\n"
+"Last-Translator: temizinsan <temizinsan@protonmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v7/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -1484,7 +1484,7 @@ msgstr "Çıktı dizini \"%s\" oluşturuldu."
 #: common/common.cpp:368
 #, c-format
 msgid "Cannot create output directory '%s'."
-msgstr "Çıktı dizini '%s' oluşturulamıyor."
+msgstr "Çıktı dizini oluşturulamıyor. '%s'"
 
 #: common/common.cpp:640
 msgid "This operating system is not supported by KiCad and its dependencies."
@@ -3085,9 +3085,8 @@ msgid "Show icons in menus"
 msgstr "Menülerde simgeleri göster"
 
 #: common/dialogs/panel_common_settings_base.cpp:146
-#, fuzzy
 msgid "Show scrollbars in editors"
-msgstr "Menülerde simgeleri göster"
+msgstr "Düzenleyicilerde kaydırma çubuklarını göster"
 
 #: common/dialogs/panel_common_settings_base.cpp:148
 msgid "This change takes effect when relaunching the editor."
@@ -3206,13 +3205,12 @@ msgid "Remember open files for next project launch"
 msgstr "Sonraki oturum için açık proje dosyalarını hatırla"
 
 #: common/dialogs/panel_common_settings_base.cpp:277
-#, fuzzy
 msgid ""
 "If checked, launching a project will also launch tools such as the schematic "
 "and board editors with previously open files"
 msgstr ""
-"İşaretlenirse, bir proje başlatıldığında daha önce açık olan dosyalarla "
-"eeschema ve pcbnew gibi araçları da başlatacaktır"
+"İİşaretlenirse, bir projeyi başlatmak, önceden açık dosyalara sahip şematik "
+"ve pano editörleri gibi araçları da başlatır."
 
 #: common/dialogs/panel_common_settings_base.cpp:290
 msgid "&Auto save:"
