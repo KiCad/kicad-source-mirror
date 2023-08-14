@@ -32,6 +32,7 @@ class SCH_RENDER_SETTINGS;
 class SCHEMATIC;
 class JOB_SYM_EXPORT_SVG;
 class LIB_SYMBOL;
+class DS_PROXY_VIEW_ITEM;
 
 /**
  * Handles eeschema job dispatches
@@ -44,6 +45,7 @@ public:
     int JobExportPythonBom( JOB* aJob );
     int JobExportNetlist( JOB* aJob );
     int JobExportPlot( JOB* aJob );
+    int JobSchErc( JOB* aJob );
     int JobSymUpgrade( JOB* aJob );
     int JobSymExportSvg( JOB* aJob );
 
@@ -63,6 +65,7 @@ private:
     int doSymExportSvg( JOB_SYM_EXPORT_SVG* aSvgJob, KIGFX::SCH_RENDER_SETTINGS* aRenderSettings,
                         LIB_SYMBOL* symbol );
 
+    DS_PROXY_VIEW_ITEM* getDrawingSheetProxyView( SCHEMATIC* aSch );
 };
 
 #endif

@@ -39,7 +39,7 @@ class SCH_SHEET_LIST;
 class SCHEMATIC;
 class DS_PROXY_VIEW_ITEM;
 class SCH_EDIT_FRAME;
-class PROGRESS_REPORTER_BASE;
+class PROGRESS_REPORTER;
 
 
 extern const wxString CommentERC_H[];
@@ -146,8 +146,8 @@ public:
      */
     int TestMissingUnits();
 
-    void RunTests( SCHEMATIC* aSch, DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aEditFrame,
-                   PROGRESS_REPORTER_BASE* aProgressReporter );
+    void RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aEditFrame,
+                   PROGRESS_REPORTER* aProgressReporter );
 
 private:
 

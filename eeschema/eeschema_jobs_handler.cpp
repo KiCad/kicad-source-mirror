@@ -23,10 +23,12 @@
 #include <pgm_base.h>
 #include <cli/exit_codes.h>
 #include <sch_plotter.h>
+#include <drawing_sheet/ds_proxy_view_item.h>
 #include <jobs/job_export_sch_bom.h>
 #include <jobs/job_export_sch_pythonbom.h>
 #include <jobs/job_export_sch_netlist.h>
 #include <jobs/job_export_sch_plot.h>
+#include <jobs/job_sch_erc.h>
 #include <jobs/job_sym_export_svg.h>
 #include <jobs/job_sym_upgrade.h>
 #include <schematic.h>
@@ -38,6 +40,7 @@
 #include <sch_painter.h>
 #include <locale_io.h>
 #include <erc.h>
+#include <erc_report.h>
 #include <wildcards_and_files_ext.h>
 #include <plotters/plotters_pslike.h>
 #include <drawing_sheet/ds_data_model.h>
@@ -74,6 +77,8 @@ EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER()
               std::bind( &EESCHEMA_JOBS_HANDLER::JobSymUpgrade, this, std::placeholders::_1 ) );
     Register( "symsvg",
               std::bind( &EESCHEMA_JOBS_HANDLER::JobSymExportSvg, this, std::placeholders::_1 ) );
+    Register( "erc",
+              std::bind( &EESCHEMA_JOBS_HANDLER::JobSchErc, this, std::placeholders::_1 ) );
 }
 
 
@@ -699,4 +704,115 @@ int EESCHEMA_JOBS_HANDLER::JobSymUpgrade( JOB* aJob )
     }
 
     return CLI::EXIT_CODES::OK;
+}
+
+
+
+int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
+{
+    JOB_SCH_ERC* ercJob = dynamic_cast<JOB_SCH_ERC*>( aJob );
+
+    if( !ercJob )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( ercJob->m_filename, SCH_IO_MGR::SCH_KICAD );
+
+    if( sch == nullptr )
+    {
+        m_reporter->Report( _( "Failed to load schematic file\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+    }
+
+    if( ercJob->m_outputFile.IsEmpty() )
+    {
+        wxFileName fn = sch->GetFileName();
+        fn.SetName( fn.GetName() );
+
+        if( ercJob->m_format == JOB_SCH_ERC::OUTPUT_FORMAT::JSON )
+            fn.SetExt( JsonFileExtension );
+        else
+            fn.SetExt( ReportFileExtension );
+
+        ercJob->m_outputFile = fn.GetFullName();
+    }
+
+    EDA_UNITS units;
+    switch( ercJob->m_units )
+    {
+    case JOB_SCH_ERC::UNITS::INCHES:
+        units = EDA_UNITS::INCHES;
+        break;
+    case JOB_SCH_ERC::UNITS::MILS:
+        units = EDA_UNITS::MILS;
+        break;
+    case JOB_SCH_ERC::UNITS::MILLIMETERS:
+    default:
+        units = EDA_UNITS::MILLIMETRES; break;
+    }
+
+    std::shared_ptr<SHEETLIST_ERC_ITEMS_PROVIDER> markersProvider =
+            std::make_shared<SHEETLIST_ERC_ITEMS_PROVIDER>( sch );
+
+    ERC_TESTER ercTester( sch );
+
+    m_reporter->Report( _( "Running ERC...\n" ), RPT_SEVERITY_INFO );
+
+    DS_PROXY_VIEW_ITEM* drawingSheet = getDrawingSheetProxyView( sch );
+    ercTester.RunTests( drawingSheet, nullptr, m_progressReporter );
+
+    markersProvider->SetSeverities( ercJob->m_severity );
+
+    m_reporter->Report(
+            wxString::Format( _( "Found %d violations\n" ), markersProvider->GetCount() ),
+            RPT_SEVERITY_INFO );
+
+    ERC_REPORT reportWriter( sch, units );
+
+    bool wroteReport = false;
+    if( ercJob->m_format == JOB_SCH_ERC::OUTPUT_FORMAT::JSON )
+        wroteReport = reportWriter.WriteJsonReport( ercJob->m_outputFile );
+    else
+        wroteReport = reportWriter.WriteTextReport( ercJob->m_outputFile );
+
+    if( !wroteReport )
+    {
+        m_reporter->Report(
+                wxString::Format( _( "Unable to save ERC report to %s\n" ), ercJob->m_outputFile ),
+                RPT_SEVERITY_INFO );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
+    m_reporter->Report( wxString::Format( _( "Saved ERC Report to %s\n" ), ercJob->m_outputFile ),
+                        RPT_SEVERITY_INFO );
+
+
+    if( ercJob->m_exitCodeViolations )
+    {
+        if( markersProvider->GetCount() > 0 )
+        {
+            return CLI::EXIT_CODES::ERR_RC_VIOLATIONS;
+        }
+    }
+
+    return CLI::EXIT_CODES::SUCCESS;
+}
+
+
+DS_PROXY_VIEW_ITEM* EESCHEMA_JOBS_HANDLER::getDrawingSheetProxyView( SCHEMATIC* aSch )
+{
+    DS_PROXY_VIEW_ITEM* drawingSheet =
+            new DS_PROXY_VIEW_ITEM( schIUScale, &aSch->RootScreen()->GetPageSettings(), &aSch->Prj(),
+                                    &aSch->RootScreen()->GetTitleBlock(), aSch->GetProperties() );
+
+    drawingSheet->SetPageNumber( TO_UTF8( aSch->RootScreen()->GetPageNumber() ) );
+    drawingSheet->SetSheetCount( aSch->RootScreen()->GetPageCount() );
+    drawingSheet->SetFileName( TO_UTF8( aSch->RootScreen()->GetFileName() ) );
+    drawingSheet->SetColorLayer( LAYER_SCHEMATIC_DRAWINGSHEET );
+    drawingSheet->SetPageBorderColorLayer( LAYER_SCHEMATIC_PAGE_LIMITS );
+    drawingSheet->SetIsFirstPage( aSch->RootScreen()->GetVirtualPageNumber() == 1 );
+
+    drawingSheet->SetSheetName( "" );
+    drawingSheet->SetSheetPath( "" );
+
+    return drawingSheet;
 }

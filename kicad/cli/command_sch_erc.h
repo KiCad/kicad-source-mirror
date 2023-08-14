@@ -18,23 +18,21 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CLI_EXIT_CODES_H
-#define CLI_EXIT_CODES_H
+#ifndef COMMAND_SCH_ERC_H
+#define COMMAND_SCH_ERC_H
+
+#include "command_export_pcb_base.h"
 
 namespace CLI
 {
-    namespace EXIT_CODES
-    {
-        static const int  AVOID_CLOSING = -1;
-        static const int  SUCCESS = 0;
-        static const int  OK = 0;
-        static const int  ERR_ARGS = 1;
-        static const int  ERR_UNKNOWN = 2;
-        static const int  ERR_INVALID_INPUT_FILE = 3;
-        static const int  ERR_INVALID_OUTPUT_CONFLICT = 4;
-        ///< Rules check violation count was greater than 0
-        static const int  ERR_RC_VIOLATIONS = 5;
-    };
-}
+class SCH_ERC_COMMAND : public EXPORT_PCB_BASE_COMMAND
+{
+public:
+    SCH_ERC_COMMAND();
+
+protected:
+    int doPerform( KIWAY& aKiway ) override;
+};
+} // namespace CLI
 
 #endif

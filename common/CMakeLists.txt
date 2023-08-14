@@ -311,6 +311,7 @@ set( COMMON_SRCS
     bitmap_store.cpp
     board_printout.cpp
     build_version.cpp
+    cli_progress_reporter.cpp
     commit.cpp
     common.cpp
     config_params.cpp

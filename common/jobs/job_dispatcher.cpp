@@ -53,3 +53,10 @@ void JOB_DISPATCHER::SetReporter( REPORTER* aReporter )
     wxCHECK( aReporter != nullptr, /*void*/ );
     m_reporter = aReporter;
 }
+
+
+void JOB_DISPATCHER::SetProgressReporter( PROGRESS_REPORTER* aReporter )
+{
+    wxCHECK( aReporter != nullptr, /*void*/ );
+    m_progressReporter = aReporter;
+}

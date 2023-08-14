@@ -51,6 +51,7 @@ set( KICAD_CLI_SRCS
     cli/command_export_sch_pythonbom.cpp
     cli/command_export_sch_netlist.cpp
     cli/command_export_sch_plot.cpp
+    cli/command_sch_erc.cpp
     cli/command_sym_export_svg.cpp
     cli/command_sym_upgrade.cpp
     cli/command_version.cpp

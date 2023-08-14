@@ -25,6 +25,7 @@
 
 #include <pgm_base.h>
 #include <kiface_base.h>
+#include <cli_progress_reporter.h>
 #include <confirm.h>
 #include <gestfich.h>
 #include <eda_dde.h>
@@ -350,7 +351,10 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
     m_jobHandler = std::make_unique<EESCHEMA_JOBS_HANDLER>();
 
     if( m_start_flags & KFCTL_CLI )
+    {
         m_jobHandler->SetReporter( &CLI_REPORTER::GetInstance() );
+        m_jobHandler->SetProgressReporter( &CLI_PROGRESS_REPORTER::GetInstance() );
+    }
 
     return true;
 }

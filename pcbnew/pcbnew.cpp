@@ -25,9 +25,10 @@
 
 #include <pcbnew_scripting_helpers.h>
 #include <pgm_base.h>
+#include <cli_progress_reporter.h>
+#include <confirm.h>
 #include <kiface_base.h>
 #include <kiface_ids.h>
-#include <confirm.h>
 #include <pcb_edit_frame.h>
 #include <eda_dde.h>
 #include <macros.h>
@@ -365,7 +366,10 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
     m_jobHandler = std::make_unique<PCBNEW_JOBS_HANDLER>();
 
     if( m_start_flags & KFCTL_CLI )
+    {
         m_jobHandler->SetReporter( &CLI_REPORTER::GetInstance() );
+        m_jobHandler->SetProgressReporter( &CLI_PROGRESS_REPORTER::GetInstance() );
+    }
 
     return true;
 }

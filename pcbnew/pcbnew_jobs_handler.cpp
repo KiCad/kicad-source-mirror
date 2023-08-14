@@ -960,7 +960,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
         if( markersProvider->GetCount() > 0 || ratsnestProvider->GetCount() > 0
             || fpWarningsProvider->GetCount() > 0 )
         {
-            return CLI::EXIT_CODES::ERR_DRC_VIOLATIONS;
+            return CLI::EXIT_CODES::ERR_RC_VIOLATIONS;
         }
     }
 
@@ -980,8 +980,7 @@ DS_PROXY_VIEW_ITEM* PCBNEW_JOBS_HANDLER::getDrawingSheetProxyView( BOARD* aBrd )
     drawingSheet->SetSheetPath( std::string() );
     drawingSheet->SetIsFirstPage( true );
 
-    if( BOARD* board = GetBoard() )
-        drawingSheet->SetFileName( TO_UTF8( board->GetFileName() ) );
+    drawingSheet->SetFileName( TO_UTF8( aBrd->GetFileName() ) );
 
     return drawingSheet;
 }

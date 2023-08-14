@@ -481,7 +481,7 @@ void DIALOG_ERC::testErc()
 
     {
         wxBusyCursor dummy;
-        tester.RunTests( sch, m_parent->GetCanvas()->GetView()->GetDrawingSheet(), m_parent, this );
+        tester.RunTests( m_parent->GetCanvas()->GetView()->GetDrawingSheet(), m_parent, this );
     }
 
     // Update marker list:

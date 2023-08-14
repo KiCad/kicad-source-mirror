@@ -28,6 +28,7 @@
 
 
 class REPORTER;
+class PROGRESS_REPORTER;
 
 class JOB_DISPATCHER
 {
@@ -36,9 +37,11 @@ public:
     void Register( const std::string& aJobTypeName, std::function<int( JOB* job )> aHandler );
     int  RunJob( JOB* job );
     void SetReporter( REPORTER* aReporter );
+    void SetProgressReporter( PROGRESS_REPORTER* aReporter );
 
 protected:
     REPORTER* m_reporter; // non-owning
+    PROGRESS_REPORTER* m_progressReporter; // non-owning
 
 private:
     std::map<std::string, std::function<int( JOB* job )>> m_jobHandlers;

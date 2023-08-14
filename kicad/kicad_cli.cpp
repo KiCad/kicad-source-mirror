@@ -66,6 +66,7 @@
 #include "cli/command_fp_export_svg.h"
 #include "cli/command_fp_upgrade.h"
 #include "cli/command_sch.h"
+#include "cli/command_sch_erc.h"
 #include "cli/command_sch_export.h"
 #include "cli/command_sym.h"
 #include "cli/command_sym_export.h"
@@ -125,7 +126,8 @@ struct COMMAND_ENTRY
             handler( aHandler ), subCommands( aSub ){};
 };
 
-static CLI::PCB_DRC_COMMAND       pcbDrcCmd{};
+static CLI::PCB_COMMAND                  pcbCmd{};
+static CLI::PCB_DRC_COMMAND              pcbDrcCmd{};
 static CLI::EXPORT_PCB_DRILL_COMMAND     exportPcbDrillCmd{};
 static CLI::EXPORT_PCB_DXF_COMMAND       exportPcbDxfCmd{};
 static CLI::EXPORT_PCB_STEP_COMMAND      exportPcbStepCmd{};
@@ -135,9 +137,9 @@ static CLI::EXPORT_PCB_POS_COMMAND       exportPcbPosCmd{};
 static CLI::EXPORT_PCB_GERBER_COMMAND    exportPcbGerberCmd{};
 static CLI::EXPORT_PCB_GERBERS_COMMAND   exportPcbGerbersCmd{};
 static CLI::EXPORT_PCB_COMMAND           exportPcbCmd{};
-static CLI::PCB_COMMAND                  pcbCmd{};
 static CLI::EXPORT_SCH_COMMAND           exportSchCmd{};
 static CLI::SCH_COMMAND                  schCmd{};
+static CLI::SCH_ERC_COMMAND              schErcCmd{};
 static CLI::EXPORT_SCH_BOM_COMMAND       exportSchBomCmd{};
 static CLI::EXPORT_SCH_PYTHONBOM_COMMAND exportSchPythonBomCmd{};
 static CLI::EXPORT_SCH_NETLIST_COMMAND   exportSchNetlistCmd{};
@@ -176,6 +178,9 @@ static std::vector<COMMAND_ENTRY> commandStack = {
         &pcbCmd,
         {
             {
+                &pcbDrcCmd
+            },
+            {
                 &exportPcbCmd,
                 {
                     &exportPcbDrillCmd,
@@ -187,15 +192,15 @@ static std::vector<COMMAND_ENTRY> commandStack = {
                     &exportPcbStepCmd,
                     &exportPcbSvgCmd
                 }
-            },
-            {
-                &pcbDrcCmd
             }
         }
     },
     {
         &schCmd,
         {
+            {
+                &schErcCmd
+            },
             {
                 &exportSchCmd,
                 {
