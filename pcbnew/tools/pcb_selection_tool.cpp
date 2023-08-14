@@ -1348,6 +1348,8 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks(
 
             for( const auto& point : shape->GetConnectionPoints() )
                 activePts.push_back( { point, startItem->GetLayerSet() } );
+
+            break;
         }
 
         default:
