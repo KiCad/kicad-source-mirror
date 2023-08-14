@@ -141,9 +141,11 @@ long long int EDA_SHAPE::GetRectangleHeight() const
 {
     switch( m_shape )
     {
-    case SHAPE_T::RECT: return GetEndY() - GetStartY();
+    case SHAPE_T::RECTANGLE: return GetEndY() - GetStartY();
 
-    default: UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+    default: 
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+        return 0;
     }
 }
 
@@ -151,9 +153,11 @@ long long int EDA_SHAPE::GetRectangleWidth() const
 {
     switch( m_shape )
     {
-    case SHAPE_T::RECT: return GetEndX() - GetStartX();
+    case SHAPE_T::RECTANGLE: return GetEndX() - GetStartX();
 
-    default: UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+    default: 
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+        return 0;
     }
 }
 
@@ -163,15 +167,16 @@ void EDA_SHAPE::SetLength( const double& aLength )
     {
     case SHAPE_T::SEGMENT: m_segmentLength = aLength; break;
 
-    default: UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+    default: 
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
     }
 }
 
-void EDA_SHAPE::SetRectangle(const long long int& aHeight, const long long int& aWidth)
+void EDA_SHAPE::SetRectangle( const long long int& aHeight, const long long int& aWidth )
 {
     switch ( m_shape )
     {
-    case SHAPE_T::RECT:
+    case SHAPE_T::RECTANGLE:
         m_rectangleHeight = aHeight;
         m_rectangleWidth = aWidth;
         break;
@@ -181,7 +186,7 @@ void EDA_SHAPE::SetRectangle(const long long int& aHeight, const long long int& 
 }
 
 
-void EDA_SHAPE::SetAngle( const EDA_ANGLE& aAngle )
+void EDA_SHAPE::SetSegmentAngle( const EDA_ANGLE& aAngle )
 {
     switch( m_shape )
     {
@@ -631,8 +636,8 @@ void EDA_SHAPE::SetArcGeometry( const VECTOR2I& aStart, const VECTOR2I& aMid, co
 
 EDA_ANGLE EDA_SHAPE::GetSegmentAngle() const
 {
-    EDA_ANGLE angle( atan2( (double)( GetStart().y - GetEnd().y ),
-                            (double)( GetEnd().x - GetStart().x ) ), RADIANS_T );
+    EDA_ANGLE angle( atan2( static_cast<double>( GetStart().y - GetEnd().y ),
+                            static_cast<double>( GetEnd().x - GetStart().x ) ), RADIANS_T );
 
     return angle;
 }

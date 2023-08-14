@@ -303,7 +303,7 @@ public:
 
     void SetRectangle( const long long int& aHeight, const long long int& aWidth );
 
-    void SetAngle( const EDA_ANGLE& aLength );
+    void SetSegmentAngle( const EDA_ANGLE& aAngle );
 
     /**
      * Return the length of the track using the hypotenuse calculation.

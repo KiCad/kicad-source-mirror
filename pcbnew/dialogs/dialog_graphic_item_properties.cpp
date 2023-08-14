@@ -242,7 +242,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
         m_segmentAngle.Show( false );
     }
 
-    if( m_item->GetShape() != SHAPE_T::RECT )
+    if( m_item->GetShape() != SHAPE_T::RECTANGLE )
     {
         m_rectangleHeight.Show( false );
         m_rectangleWidth.Show( false );
@@ -405,7 +405,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
         segment_angle = m_item->GetSegmentAngle().Round( 3 );
     }
 
-    if( m_item->GetShape() == SHAPE_T::RECT )
+    if( m_item->GetShape() == SHAPE_T::RECTANGLE )
     {
         rectangle_height = m_item->GetRectangleHeight();
         rectangle_width = m_item->GetRectangleWidth();
@@ -477,13 +477,13 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
             m_item->SetLength( m_item->GetLength() );
         
         if( change_angle )
-            m_item->SetAngle( m_segmentAngle.GetAngleValue().Round( 3 ) );
+            m_item->SetSegmentAngle( m_segmentAngle.GetAngleValue().Round( 3 ) );
         else
-            m_item->SetAngle( m_item->GetSegmentAngle().Round( 3 ) );
+            m_item->SetSegmentAngle( m_item->GetSegmentAngle().Round( 3 ) );
      
      }
 
-    if( m_item->GetShape() == SHAPE_T::RECT )
+    if( m_item->GetShape() == SHAPE_T::RECTANGLE )
     {
         bool change_begin = ( begin_point != m_item->GetStart() );
         bool change_end = ( end_point != m_item->GetEnd() );

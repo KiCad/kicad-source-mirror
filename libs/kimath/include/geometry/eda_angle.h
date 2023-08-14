@@ -309,7 +309,7 @@ public:
 
     EDA_ANGLE KeepUpright() const;
 
-    EDA_ANGLE& Round( int digits ) const
+    EDA_ANGLE Round( int digits ) const
     {
         EDA_ANGLE angle( *this );
         double rounded = KiROUND( angle.AsDegrees() * pow( 10.0, digits ) ) / pow( 10.0, digits );
