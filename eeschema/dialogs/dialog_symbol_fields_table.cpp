@@ -2034,7 +2034,24 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsAdded( SCHEMATIC&              aSch,
             for( SCH_FIELD& field : symbol->GetFields() )
                 AddField( field.GetCanonicalName(), field.GetName(), true, false, true );
 
-            m_dataModel->AddReferences( *symbol, getSymbolReferences( symbol ) );
+            m_dataModel->AddReferences( getSymbolReferences( symbol ) );
+        }
+        else if( item->Type() == SCH_SHEET_T )
+        {
+            std::set<SCH_SYMBOL*> symbols;
+            SCH_REFERENCE_LIST refs = getSheetSymbolReferences( *static_cast<SCH_SHEET*>( item ) );
+
+            for( SCH_REFERENCE& ref : refs )
+                symbols.insert( ref.GetSymbol() );
+
+            for( SCH_SYMBOL* symbol : symbols )
+            {
+                // Add all fields again in case this symbol has a new one
+                for( SCH_FIELD& field : symbol->GetFields() )
+                    AddField( field.GetCanonicalName(), field.GetName(), true, false, true );
+            }
+
+            m_dataModel->AddReferences( refs );
         }
     }
 
@@ -2046,8 +2063,13 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsRemoved( SCHEMATIC&              aSch
                                                     std::vector<SCH_ITEM*>& aSchItem )
 {
     for( SCH_ITEM* item : aSchItem )
+    {
         if( item->Type() == SCH_SYMBOL_T )
             m_dataModel->RemoveSymbol( *static_cast<SCH_SYMBOL*>( item ) );
+        else if( item->Type() == SCH_SHEET_T )
+            m_dataModel->RemoveReferences(
+                    getSheetSymbolReferences( *static_cast<SCH_SHEET*>( item ) ) );
+    }
 
     m_dataModel->RebuildRows();
 }
@@ -2066,7 +2088,24 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsChanged( SCHEMATIC&              aSch
             for( SCH_FIELD& field : symbol->GetFields() )
                 AddField( field.GetCanonicalName(), field.GetName(), true, false, true );
 
-            m_dataModel->UpdateReferences( *symbol, getSymbolReferences( symbol ) );
+            m_dataModel->UpdateReferences( getSymbolReferences( symbol ) );
+        }
+        else if( item->Type() == SCH_SHEET_T )
+        {
+            std::set<SCH_SYMBOL*> symbols;
+            SCH_REFERENCE_LIST refs = getSheetSymbolReferences( *static_cast<SCH_SHEET*>( item ) );
+
+            for( SCH_REFERENCE& ref : refs )
+                symbols.insert( ref.GetSymbol() );
+
+            for( SCH_SYMBOL* symbol : symbols )
+            {
+                // Add all fields again in case this symbol has a new one
+                for( SCH_FIELD& field : symbol->GetFields() )
+                    AddField( field.GetCanonicalName(), field.GetName(), true, false, true );
+            }
+
+            m_dataModel->UpdateReferences( refs );
         }
     }
 
@@ -2076,11 +2115,11 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsChanged( SCHEMATIC&              aSch
 
 SCH_REFERENCE_LIST DIALOG_SYMBOL_FIELDS_TABLE::getSymbolReferences( SCH_SYMBOL* aSymbol )
 {
-    SCH_SHEET_LIST     sheets = m_parent->Schematic().GetSheets();
+    SCH_SHEET_LIST     allSheets = m_parent->Schematic().GetSheets();
     SCH_REFERENCE_LIST allRefs;
     SCH_REFERENCE_LIST symbolRefs;
 
-    sheets.GetSymbols( allRefs );
+    allSheets.GetSymbols( allRefs );
 
     for( size_t i = 0; i < allRefs.GetCount(); i++ )
     {
@@ -2094,4 +2133,40 @@ SCH_REFERENCE_LIST DIALOG_SYMBOL_FIELDS_TABLE::getSymbolReferences( SCH_SYMBOL* 
     }
 
     return symbolRefs;
+}
+
+
+SCH_REFERENCE_LIST DIALOG_SYMBOL_FIELDS_TABLE::getSheetSymbolReferences( SCH_SHEET& aSheet )
+{
+    SCH_SHEET_LIST     allSheets = m_parent->Schematic().GetSheets();
+    SCH_REFERENCE_LIST sheetRefs;
+
+    // We need to operate on all instances of the sheet
+    for( const SCH_SHEET_INSTANCE& instance : aSheet.GetInstances() )
+    {
+        // For every sheet instance we need to get the current schematic sheet
+        // instance that matches that particular sheet path from the root
+        for( SCH_SHEET_PATH& basePath : allSheets )
+        {
+            if( basePath.Path() == instance.m_Path )
+            {
+                SCH_SHEET_PATH sheetPath = basePath;
+                sheetPath.push_back( &aSheet );
+
+                // Create a list of all sheets in this path, starting with the path
+                // of the sheet that we just deleted, then all of its subsheets
+                SCH_SHEET_LIST subSheets;
+                subSheets.push_back( sheetPath );
+                allSheets.GetSheetsWithinPath( subSheets, sheetPath );
+
+                subSheets.GetSymbolsWithinPath( sheetRefs, sheetPath, false, false );
+                break;
+            }
+        }
+    }
+
+    for( SCH_REFERENCE& ref : sheetRefs )
+        ref.Split();
+
+    return sheetRefs;
 }

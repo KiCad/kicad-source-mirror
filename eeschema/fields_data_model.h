@@ -210,9 +210,10 @@ public:
     BOM_PRESET GetBomSettings();
     wxString Export( const BOM_FMT_PRESET& settings );
 
-    void AddReferences( const SCH_SYMBOL& aSymbol, const SCH_REFERENCE_LIST& aRefs );
+    void AddReferences( const SCH_REFERENCE_LIST& aRefs );
+    void RemoveReferences( const SCH_REFERENCE_LIST& aRefs );
     void RemoveSymbol( const SCH_SYMBOL& aSymbol );
-    void UpdateReferences( const SCH_SYMBOL& aSymbol, const SCH_REFERENCE_LIST& aRefs );
+    void UpdateReferences( const SCH_REFERENCE_LIST& aRefs );
 
 
 private:

@@ -111,6 +111,7 @@ private:
 
 private:
     SCH_REFERENCE_LIST getSymbolReferences( SCH_SYMBOL* aSymbol );
+    SCH_REFERENCE_LIST getSheetSymbolReferences( SCH_SHEET& aSheet );
 
     void syncBomPresetSelection();
     void rebuildBomPresetsWidget();

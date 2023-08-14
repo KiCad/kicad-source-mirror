@@ -882,22 +882,25 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::Export( const BOM_FMT_PRESET& settings )
 }
 
 
-void FIELDS_EDITOR_GRID_DATA_MODEL::AddReferences( const SCH_SYMBOL&         aSymbol,
-                                                   const SCH_REFERENCE_LIST& aRefs )
+void FIELDS_EDITOR_GRID_DATA_MODEL::AddReferences( const SCH_REFERENCE_LIST& aRefs )
 {
-    // Update the fields of every reference
-    for( const SCH_FIELD& field : aSymbol.GetFields() )
-        m_dataStore[aSymbol.m_Uuid][field.GetCanonicalName()] = field.GetText();
-
     for( const SCH_REFERENCE& ref : aRefs )
+    {
         if( !m_symbolsList.Contains( ref ) )
+        {
             m_symbolsList.AddItem( ref );
+
+            // Update the fields of every reference
+            for( const SCH_FIELD& field : ref.GetSymbol()->GetFields() )
+                m_dataStore[ref.GetSymbol()->m_Uuid][field.GetCanonicalName()] = field.GetText();
+        }
+    }
 }
 
 
 void FIELDS_EDITOR_GRID_DATA_MODEL::RemoveSymbol( const SCH_SYMBOL& aSymbol )
 {
-    // The schematic event listener passes us the item after it has been removed,
+    // The schematic event listener passes us the symbol after it has been removed,
     // so we can't just work with a SCH_REFERENCE_LIST like the other handlers as the
     // references are already gone. Instead we need to prune our list.
     m_dataStore[aSymbol.m_Uuid].clear();
@@ -912,19 +915,35 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RemoveSymbol( const SCH_SYMBOL& aSymbol )
 }
 
 
-void FIELDS_EDITOR_GRID_DATA_MODEL::UpdateReferences( const SCH_SYMBOL&         aSymbol,
-                                                      const SCH_REFERENCE_LIST& aRefs )
+void FIELDS_EDITOR_GRID_DATA_MODEL::RemoveReferences( const SCH_REFERENCE_LIST& aRefs )
 {
-    wxCHECK_RET( m_dataStore.count( aSymbol.m_Uuid ) == 1,
-                 "Trying to update a symbol that doesn't exist" );
-
-    // Update the fields of every reference. Do this by iterating through the data model
-    // colums; we must have all fields in the symbol added to the data model at this point,
-    // and some of the data model columns may be variables that are not present in the symbol
-    for( const DATA_MODEL_COL& col : m_cols )
-        updateDataStoreSymbolField( aSymbol, col.m_fieldName );
-
     for( const SCH_REFERENCE& ref : aRefs )
+    {
+        int index = m_symbolsList.FindRefByFullPath( ref.GetFullPath() );
+
+        if( index != -1 )
+        {
+            m_symbolsList.RemoveItem( index );
+
+            // If we're out of instances then remove the symbol, too
+            if( ref.GetSymbol()->GetInstanceReferences().empty() )
+                m_dataStore.erase( ref.GetSymbol()->m_Uuid );
+        }
+    }
+}
+
+
+void FIELDS_EDITOR_GRID_DATA_MODEL::UpdateReferences( const SCH_REFERENCE_LIST& aRefs )
+{
+    for( const SCH_REFERENCE& ref : aRefs )
+    {
+        // Update the fields of every reference. Do this by iterating through the data model
+        // colums; we must have all fields in the symbol added to the data model at this point,
+        // and some of the data model columns may be variables that are not present in the symbol
+        for( const DATA_MODEL_COL& col : m_cols )
+            updateDataStoreSymbolField( *ref.GetSymbol(), col.m_fieldName );
+
         if( !m_symbolsList.Contains( ref ) )
             m_symbolsList.AddItem( ref );
+    }
 }

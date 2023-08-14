@@ -137,7 +137,7 @@ public:
      */
     bool IsMissingLibSymbol() const;
 
-    const std::vector<SCH_SYMBOL_INSTANCE>& GetInstanceReferences()
+    const std::vector<SCH_SYMBOL_INSTANCE>& GetInstanceReferences() const
     {
         return m_instanceReferences;
     }
