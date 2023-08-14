@@ -882,6 +882,18 @@ SCH_FIELD* SCH_SYMBOL::GetFieldByName( const wxString& aFieldName )
 }
 
 
+const SCH_FIELD* SCH_SYMBOL::GetFieldByName( const wxString& aFieldName ) const
+{
+    for( size_t ii = 0; ii < m_fields.size(); ++ii )
+    {
+        if( m_fields[ii].GetName() == aFieldName )
+            return &m_fields[ii];
+    }
+
+    return nullptr;
+}
+
+
 wxString SCH_SYMBOL::GetFieldText( const wxString& aFieldName ) const
 {
     for( const SCH_FIELD& field : m_fields )

@@ -22,22 +22,24 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName, const
     m_cols.push_back( { aFieldName, aLabel, aAddedByUser, false, false } );
 
     for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
-    {
         if( SCH_SYMBOL* symbol = m_symbolsList[i].GetSymbol() )
-        {
-            if( SCH_FIELD* field = symbol->GetFieldByName( aFieldName ) )
-                m_dataStore[symbol->m_Uuid][aFieldName] = field->GetText();
-            else if( isAttribute( aFieldName ) )
-                m_dataStore[symbol->m_Uuid][aFieldName] =
-                        getAttributeValue( m_symbolsList[i], aFieldName );
-            // Handle fields with variables as names that are not present in the symbol
-            // by giving them the correct value
-            else if( IsTextVar( aFieldName ) )
-                m_dataStore[symbol->m_Uuid][aFieldName] = aFieldName;
-            else
-                m_dataStore[symbol->m_Uuid][aFieldName] = wxEmptyString;
-        }
-    }
+            updateDataStoreSymbolField( *symbol, aFieldName );
+}
+
+
+void FIELDS_EDITOR_GRID_DATA_MODEL::updateDataStoreSymbolField( const SCH_SYMBOL& aSymbol,
+                                                                const wxString&   aFieldName )
+{
+    if( const SCH_FIELD* field = aSymbol.GetFieldByName( aFieldName ) )
+        m_dataStore[aSymbol.m_Uuid][aFieldName] = field->GetText();
+    else if( isAttribute( aFieldName ) )
+        m_dataStore[aSymbol.m_Uuid][aFieldName] = getAttributeValue( aSymbol, aFieldName );
+    // Handle fields with variables as names that are not present in the symbol
+    // by giving them the correct value
+    else if( IsTextVar( aFieldName ) )
+        m_dataStore[aSymbol.m_Uuid][aFieldName] = aFieldName;
+    else
+        m_dataStore[aSymbol.m_Uuid][aFieldName] = wxEmptyString;
 }
 
 
@@ -417,36 +419,36 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::isAttribute( const wxString& aFieldName )
 }
 
 
-wxString FIELDS_EDITOR_GRID_DATA_MODEL::getAttributeValue( const SCH_REFERENCE& aRef,
-                                                           const wxString&      aAttributeName )
+wxString FIELDS_EDITOR_GRID_DATA_MODEL::getAttributeValue( const SCH_SYMBOL& aSymbol,
+                                                           const wxString&   aAttributeName )
 {
     if( aAttributeName == wxS( "${DNP}" ) )
-        return aRef.GetSymbol()->GetDNP() ? wxS( "1" ) : wxS( "0" );
+        return aSymbol.GetDNP() ? wxS( "1" ) : wxS( "0" );
 
     if( aAttributeName == wxS( "${EXCLUDE_FROM_BOARD}" ) )
-        return aRef.GetSymbol()->GetExcludedFromBoard() ? wxS( "1" ) : wxS( "0" );
+        return aSymbol.GetExcludedFromBoard() ? wxS( "1" ) : wxS( "0" );
 
     if( aAttributeName == wxS( "${EXCLUDE_FROM_BOM}" ) )
-        return aRef.GetSymbol()->GetExcludedFromBOM() ? wxS( "1" ) : wxS( "0" );
+        return aSymbol.GetExcludedFromBOM() ? wxS( "1" ) : wxS( "0" );
 
     if( aAttributeName == wxS( "${EXCLUDE_FROM_SIM}" ) )
-        return aRef.GetSymbol()->GetExcludedFromSim() ? wxS( "1" ) : wxS( "0" );
+        return aSymbol.GetExcludedFromSim() ? wxS( "1" ) : wxS( "0" );
 
     return wxS( "0" );
 }
 
-void FIELDS_EDITOR_GRID_DATA_MODEL::setAttributeValue( const SCH_REFERENCE& aRef,
-                                                       const wxString&      aAttributeName,
-                                                       const wxString&      aValue )
+void FIELDS_EDITOR_GRID_DATA_MODEL::setAttributeValue( SCH_SYMBOL&     aSymbol,
+                                                       const wxString& aAttributeName,
+                                                       const wxString& aValue )
 {
     if( aAttributeName == wxS( "${DNP}" ) )
-        aRef.GetSymbol()->SetDNP( aValue == wxS( "1" ) );
+        aSymbol.SetDNP( aValue == wxS( "1" ) );
     else if( aAttributeName == wxS( "${EXCLUDE_FROM_BOARD}" ) )
-        aRef.GetSymbol()->SetExcludedFromBoard( aValue == wxS( "1" ) );
+        aSymbol.SetExcludedFromBoard( aValue == wxS( "1" ) );
     else if( aAttributeName == wxS( "${EXCLUDE_FROM_BOM}" ) )
-        aRef.GetSymbol()->SetExcludedFromBOM( aValue == wxS( "1" ) );
+        aSymbol.SetExcludedFromBOM( aValue == wxS( "1" ) );
     else if( aAttributeName == wxS( "${EXCLUDE_FROM_SIM}" ) )
-        aRef.GetSymbol()->SetExcludedFromSim( aValue == wxS( "1" ) );
+        aSymbol.SetExcludedFromSim( aValue == wxS( "1" ) );
 }
 
 
@@ -658,7 +660,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData(
             // Attributes bypass the field logic, so handle them first
             if( isAttribute( srcName ) )
             {
-                setAttributeValue( m_symbolsList[i], srcName, srcValue );
+                setAttributeValue( *m_symbolsList[i].GetSymbol(), srcName, srcValue );
                 continue;
             }
 

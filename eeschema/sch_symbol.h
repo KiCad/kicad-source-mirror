@@ -399,6 +399,8 @@ public:
      */
     SCH_FIELD* GetFieldByName( const wxString& aFieldName );
 
+    const SCH_FIELD* GetFieldByName( const wxString& aFieldName ) const;
+
     /**
      * Search for a field named \a aFieldName and returns text associated with this field.
      *

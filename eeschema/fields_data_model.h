@@ -219,8 +219,8 @@ private:
     // Helper functions to deal with translating wxGrid values to and from
     // named field values like ${DNP}
     bool     isAttribute( const wxString& aFieldName );
-    wxString getAttributeValue( const SCH_REFERENCE& aRef, const wxString& aAttributeName );
-    void     setAttributeValue( const SCH_REFERENCE& aRef, const wxString& aAttributeName,
+    wxString getAttributeValue( const SCH_SYMBOL&, const wxString& aAttributeName );
+    void     setAttributeValue( SCH_SYMBOL& aSymbol, const wxString& aAttributeName,
                                 const wxString& aValue );
 
     /* Helper function to get the resolved field value.
@@ -230,6 +230,8 @@ private:
     wxString getFieldShownText( const SCH_REFERENCE& aRef, const wxString& aFieldName );
 
     void Sort();
+
+    void updateDataStoreSymbolField( const SCH_SYMBOL& aSymbol, const wxString& aFieldName );
 
 
 protected:
