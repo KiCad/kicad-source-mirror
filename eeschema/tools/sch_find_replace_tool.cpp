@@ -95,11 +95,18 @@ int SCH_FIND_REPLACE_TOOL::UpdateFind( const TOOL_EVENT& aEvent )
              || aEvent.Matches( EVENTS::UnselectedEvent )
              || aEvent.Matches( EVENTS::ClearedEvent ) )
     {
-        // Normal find modifies the selection, but selection-based find does
-        // not so we want to start over in the items we are searching through when
-        // the selection changes
-        if( selectedOnly )
+        if( !m_frame->m_findReplaceDialog )
         {
+            if( m_foundItemHighlighted )
+            {
+                m_foundItemHighlighted = false;
+                visitAll();
+            }
+        }
+        else if( selectedOnly )
+        {
+            // Normal find modifies the selection, but selection-based find does not, so we want
+            // to start over in the items we are searching through when the selection changes
             m_afterItem = nullptr;
             visitAll();
         }
@@ -239,8 +246,10 @@ int SCH_FIND_REPLACE_TOOL::FindNext( const TOOL_EVENT& aEvent )
     }
 
     if( afterSheet || !searchAllSheets )
+    {
         item = nextMatch( m_frame->GetScreen(), &m_frame->GetCurrentSheet(), m_afterItem, data,
                           isReversed );
+    }
 
     if( !item && searchAllSheets )
     {
