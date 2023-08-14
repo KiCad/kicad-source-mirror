@@ -1265,13 +1265,15 @@ void SCH_SHEET_LIST::AddNewSheetInstances( const SCH_SHEET_PATH& aPrefixSheetPat
 
         SCH_SHEET_INSTANCE instance;
 
-        if( sheet->getInstance( instance, tmp.Path(), true )
-          && !instance.m_PageNumber.IsEmpty() )
+        // Add the instance if it doesn't already exist
+        if( !sheet->getInstance( instance, tmp.Path(), true ) )
         {
-            newSheetPath.SetPageNumber( instance.m_PageNumber );
-            usedPageNumbers.push_back( instance.m_PageNumber );
+            sheet->addInstance( tmp );
+            sheet->getInstance( instance, tmp.Path(), true );
         }
-        else
+
+        // Get a new page number if we don't have one
+        if( instance.m_PageNumber.IsEmpty() )
         {
             // Generate the next available page number.
             do
@@ -1281,10 +1283,12 @@ void SCH_SHEET_LIST::AddNewSheetInstances( const SCH_SHEET_PATH& aPrefixSheetPat
             } while( std::find( usedPageNumbers.begin(), usedPageNumbers.end(), pageNumber ) !=
                      usedPageNumbers.end() );
 
+            instance.m_PageNumber = pageNumber;
             newSheetPath.SetVirtualPageNumber( nextVirtualPageNumber );
-            newSheetPath.SetPageNumber( pageNumber );
-            usedPageNumbers.push_back( pageNumber );
         }
+
+        newSheetPath.SetPageNumber( instance.m_PageNumber );
+        usedPageNumbers.push_back( instance.m_PageNumber );
     }
 }
 
