@@ -30,6 +30,7 @@
 #include <dialogs/dialog_erc.h>
 #include <dialogs/dialog_schematic_find.h>
 #include <dialogs/dialog_book_reporter.h>
+#include <dialogs/dialog_symbol_fields_table.h>
 #include <eeschema_id.h>
 #include <executable_names.h>
 #include <gestfich.h>
@@ -125,6 +126,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                         wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, SCH_EDIT_FRAME_NAME ),
     m_ercDialog( nullptr ),
     m_diffSymbolDialog( nullptr ),
+    m_symbolFieldsTableDialog( nullptr ),
     m_netNavigator( nullptr ),
     m_highlightedConnChanged( false )
 {
@@ -378,6 +380,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     Bind( EDA_EVT_CLOSE_DIALOG_BOOK_REPORTER, &SCH_EDIT_FRAME::onCloseSymbolDiffDialog, this );
     Bind( EDA_EVT_CLOSE_ERC_DIALOG, &SCH_EDIT_FRAME::onCloseErcDialog, this );
+    Bind( EDA_EVT_CLOSE_DIALOG_SYMBOL_FIELDS_TABLE, &SCH_EDIT_FRAME::onCloseSymbolFieldsTableDialog,
+          this );
 }
 
 
@@ -918,6 +922,12 @@ bool SCH_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
     if( !Kiway().PlayerClose( FRAME_SIMULATOR, false ) )   // Can close the simulator?
         return false;
 
+    if( m_symbolFieldsTableDialog
+        && !m_symbolFieldsTableDialog->Close( false ) ) // Can close the symbol fields table?
+    {
+        return false;
+    }
+
     // We may have gotten multiple events; don't clean up twice
     if( !Schematic().IsValid() )
         return false;
@@ -954,6 +964,8 @@ void SCH_EDIT_FRAME::doCloseWindow()
     // Close modeless dialogs.  They're trouble when they get destroyed after the frame.
     Unbind( EDA_EVT_CLOSE_DIALOG_BOOK_REPORTER, &SCH_EDIT_FRAME::onCloseSymbolDiffDialog, this );
     Unbind( EDA_EVT_CLOSE_ERC_DIALOG, &SCH_EDIT_FRAME::onCloseErcDialog, this );
+    Unbind( EDA_EVT_CLOSE_DIALOG_SYMBOL_FIELDS_TABLE,
+            &SCH_EDIT_FRAME::onCloseSymbolFieldsTableDialog, this );
     m_netNavigator->Unbind( wxEVT_TREE_SEL_CHANGING, &SCH_EDIT_FRAME::onNetNavigatorSelChanging,
                             this );
     m_netNavigator->Unbind( wxEVT_TREE_SEL_CHANGED, &SCH_EDIT_FRAME::onNetNavigatorSelection,
@@ -979,6 +991,12 @@ void SCH_EDIT_FRAME::doCloseWindow()
     {
         m_ercDialog->Destroy();
         m_ercDialog = nullptr;
+    }
+
+    if( m_symbolFieldsTableDialog )
+    {
+        m_symbolFieldsTableDialog->Destroy();
+        m_symbolFieldsTableDialog = nullptr;
     }
 
     // Shutdown all running tools
@@ -2211,6 +2229,25 @@ void SCH_EDIT_FRAME::onCloseErcDialog( wxCommandEvent& aEvent )
     {
         m_ercDialog->Destroy();
         m_ercDialog = nullptr;
+    }
+}
+
+
+DIALOG_SYMBOL_FIELDS_TABLE* SCH_EDIT_FRAME::GetSymbolFieldsTableDialog()
+{
+    if( !m_symbolFieldsTableDialog )
+        m_symbolFieldsTableDialog = new DIALOG_SYMBOL_FIELDS_TABLE( this );
+
+    return m_symbolFieldsTableDialog;
+}
+
+
+void SCH_EDIT_FRAME::onCloseSymbolFieldsTableDialog( wxCommandEvent& aEvent )
+{
+    if( m_symbolFieldsTableDialog )
+    {
+        m_symbolFieldsTableDialog->Destroy();
+        m_symbolFieldsTableDialog = nullptr;
     }
 }
 

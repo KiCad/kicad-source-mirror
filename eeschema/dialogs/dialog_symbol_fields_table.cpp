@@ -54,6 +54,8 @@
 #include <fields_data_model.h>
 #include "eda_list_dialog.h"
 
+wxDEFINE_EVENT( EDA_EVT_CLOSE_DIALOG_SYMBOL_FIELDS_TABLE, wxCommandEvent );
+
 #ifdef __WXMAC__
 #define COLUMN_MARGIN 5
 #else
@@ -298,6 +300,9 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     m_cbBomFmtPresets->Bind( wxEVT_CHOICE, &DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged, this );
     m_fieldsCtrl->Bind( wxEVT_DATAVIEW_ITEM_VALUE_CHANGED,
                         &DIALOG_SYMBOL_FIELDS_TABLE::OnColLabelChange, this );
+
+    // Start listening for schematic changes
+    m_parent->Schematic().AddListener( this );
 }
 
 
@@ -415,26 +420,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupAllColumnProperties()
 
 DIALOG_SYMBOL_FIELDS_TABLE::~DIALOG_SYMBOL_FIELDS_TABLE()
 {
-    savePresetsToSchematic();
-    EESCHEMA_SETTINGS* cfg = m_parent->eeconfig();
-
-    cfg->m_FieldEditorPanel.width = GetSize().x;
-    cfg->m_FieldEditorPanel.height = GetSize().y;
-    cfg->m_FieldEditorPanel.page = m_nbPages->GetSelection();
-    cfg->m_FieldEditorPanel.export_filename = m_outputFileName->GetValue();
-    cfg->m_FieldEditorPanel.selection_mode = m_radioSelect->GetSelection();
-    cfg->m_FieldEditorPanel.scope = m_radioScope->GetSelection();
-
-
-    for( int i = 0; i < m_grid->GetNumberCols(); i++ )
-    {
-        if( m_grid->IsColShown( i ) )
-        {
-            std::string fieldName( m_dataModel->GetColFieldName( i ).ToUTF8() );
-            cfg->m_FieldEditorPanel.field_widths[fieldName] = m_grid->GetColSize( i );
-        }
-    }
-
     // Disconnect Events
     m_grid->Disconnect( wxEVT_GRID_COL_SORT,
                         wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColSort ), nullptr,
@@ -1250,7 +1235,37 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnClose( wxCloseEvent& event )
         }
     }
 
-    event.Skip();
+    // Stop listening to schematic events
+    m_parent->Schematic().RemoveListener( this );
+
+    // Save all our settings since we're really closing
+    savePresetsToSchematic();
+    EESCHEMA_SETTINGS* cfg = m_parent->eeconfig();
+
+    cfg->m_FieldEditorPanel.width = GetSize().x;
+    cfg->m_FieldEditorPanel.height = GetSize().y;
+    cfg->m_FieldEditorPanel.page = m_nbPages->GetSelection();
+    cfg->m_FieldEditorPanel.export_filename = m_outputFileName->GetValue();
+    cfg->m_FieldEditorPanel.selection_mode = m_radioSelect->GetSelection();
+    cfg->m_FieldEditorPanel.scope = m_radioScope->GetSelection();
+
+    for( int i = 0; i < m_grid->GetNumberCols(); i++ )
+    {
+        if( m_grid->IsColShown( i ) )
+        {
+            std::string fieldName( m_dataModel->GetColFieldName( i ).ToUTF8() );
+            cfg->m_FieldEditorPanel.field_widths[fieldName] = m_grid->GetColSize( i );
+        }
+    }
+
+    m_parent->FocusOnItem( nullptr );
+
+    wxCommandEvent* evt = new wxCommandEvent( EDA_EVT_CLOSE_DIALOG_SYMBOL_FIELDS_TABLE, wxID_ANY );
+
+    wxWindow* parent = GetParent();
+
+    if( parent )
+        wxQueueEvent( parent, evt );
 }
 
 
@@ -2003,4 +2018,80 @@ void DIALOG_SYMBOL_FIELDS_TABLE::savePresetsToSchematic()
 
     m_schSettings.m_BomFmtPresets = fmts;
     m_schSettings.m_BomFmtSettings = GetCurrentBomFmtSettings();
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsAdded( SCHEMATIC&              aSch,
+                                                  std::vector<SCH_ITEM*>& aSchItem )
+{
+    for( SCH_ITEM* item : aSchItem )
+    {
+        if( item->Type() == SCH_SYMBOL_T )
+        {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+            // Add all fields again in case this symbol has a new one
+            for( SCH_FIELD& field : symbol->GetFields() )
+                AddField( field.GetCanonicalName(), field.GetName(), true, false, true );
+
+            m_dataModel->AddReferences( *symbol, getSymbolReferences( symbol ) );
+        }
+    }
+
+    m_dataModel->RebuildRows();
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsRemoved( SCHEMATIC&              aSch,
+                                                    std::vector<SCH_ITEM*>& aSchItem )
+{
+    for( SCH_ITEM* item : aSchItem )
+        if( item->Type() == SCH_SYMBOL_T )
+            m_dataModel->RemoveSymbol( *static_cast<SCH_SYMBOL*>( item ) );
+
+    m_dataModel->RebuildRows();
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsChanged( SCHEMATIC&              aSch,
+                                                    std::vector<SCH_ITEM*>& aSchItem )
+{
+    for( SCH_ITEM* item : aSchItem )
+    {
+        if( item->Type() == SCH_SYMBOL_T )
+        {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+            // Add all fields again in case this symbol has a new one
+            for( SCH_FIELD& field : symbol->GetFields() )
+                AddField( field.GetCanonicalName(), field.GetName(), true, false, true );
+
+            m_dataModel->UpdateReferences( *symbol, getSymbolReferences( symbol ) );
+        }
+    }
+
+    m_dataModel->RebuildRows();
+}
+
+
+SCH_REFERENCE_LIST DIALOG_SYMBOL_FIELDS_TABLE::getSymbolReferences( SCH_SYMBOL* aSymbol )
+{
+    SCH_SHEET_LIST     sheets = m_parent->Schematic().GetSheets();
+    SCH_REFERENCE_LIST allRefs;
+    SCH_REFERENCE_LIST symbolRefs;
+
+    sheets.GetSymbols( allRefs );
+
+    for( size_t i = 0; i < allRefs.GetCount(); i++ )
+    {
+        SCH_REFERENCE& ref = allRefs[i];
+
+        if( ref.GetSymbol() == aSymbol )
+        {
+            ref.Split(); // Figures out if we are annotated or not
+            symbolRefs.AddItem( ref );
+        }
+    }
+
+    return symbolRefs;
 }

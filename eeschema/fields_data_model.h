@@ -210,6 +210,11 @@ public:
     BOM_PRESET GetBomSettings();
     wxString Export( const BOM_FMT_PRESET& settings );
 
+    void AddReferences( const SCH_SYMBOL& aSymbol, const SCH_REFERENCE_LIST& aRefs );
+    void RemoveSymbol( const SCH_SYMBOL& aSymbol );
+    void UpdateReferences( const SCH_SYMBOL& aSymbol, const SCH_REFERENCE_LIST& aRefs );
+
+
 private:
     static bool cmp( const DATA_MODEL_ROW& lhGroup, const DATA_MODEL_ROW& rhGroup,
                      FIELDS_EDITOR_GRID_DATA_MODEL* dataModel, int sortCol, bool ascending );
@@ -231,6 +236,8 @@ private:
 
     void Sort();
 
+    SCH_REFERENCE_LIST getSymbolReferences( SCH_SYMBOL* aSymbol );
+    void               storeReferenceFields( SCH_REFERENCE& aRef );
     void updateDataStoreSymbolField( const SCH_SYMBOL& aSymbol, const wxString& aFieldName );
 
 

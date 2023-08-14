@@ -28,7 +28,9 @@
 
 #include <dialog_symbol_fields_table_base.h>
 #include <sch_reference_list.h>
+#include <schematic.h>
 
+wxDECLARE_EVENT( EDA_EVT_CLOSE_DIALOG_SYMBOL_FIELDS_TABLE, wxCommandEvent );
 
 class SCHEMATIC_SETTINGS;
 struct BOM_PRESET;
@@ -37,7 +39,7 @@ class SCH_EDIT_FRAME;
 class FIELDS_EDITOR_GRID_DATA_MODEL;
 
 
-class DIALOG_SYMBOL_FIELDS_TABLE : public DIALOG_SYMBOL_FIELDS_TABLE_BASE
+class DIALOG_SYMBOL_FIELDS_TABLE : public DIALOG_SYMBOL_FIELDS_TABLE_BASE, public SCHEMATIC_LISTENER
 {
 public:
     DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent );
@@ -103,7 +105,13 @@ private:
     void                        ApplyBomFmtPreset( const wxString& aPresetName );
     void                        ApplyBomFmtPreset( const BOM_FMT_PRESET& aPreset );
 
+    void OnSchItemsAdded( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem ) override;
+    void OnSchItemsRemoved( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem ) override;
+    void OnSchItemsChanged( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem ) override;
+
 private:
+    SCH_REFERENCE_LIST getSymbolReferences( SCH_SYMBOL* aSymbol );
+
     void syncBomPresetSelection();
     void rebuildBomPresetsWidget();
     void updateBomPresetSelection( const wxString& aName );

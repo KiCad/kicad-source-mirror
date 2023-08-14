@@ -2052,8 +2052,16 @@ int SCH_EDITOR_CONTROL::ShowCvpcb( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::EditSymbolFields( const TOOL_EVENT& aEvent )
 {
-    DIALOG_SYMBOL_FIELDS_TABLE dlg( m_frame );
-    dlg.ShowQuasiModal();
+    DIALOG_SYMBOL_FIELDS_TABLE* dlg = m_frame->GetSymbolFieldsTableDialog();
+
+    wxCHECK( dlg, 0 );
+
+    // Needed at least on Windows. Raise() is not enough
+    dlg->Show( true );
+
+    // Bring it to the top if already open.  Dual monitor users need this.
+    dlg->Raise();
+
     return 0;
 }
 

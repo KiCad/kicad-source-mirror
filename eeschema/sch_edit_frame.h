@@ -58,6 +58,7 @@ class SCHEMATIC;
 class SCH_COMMIT;
 class DIALOG_BOOK_REPORTER;
 class DIALOG_ERC;
+class DIALOG_SYMBOL_FIELDS_TABLE;
 class DIALOG_SCH_FIND;
 class RESCUER;
 class HIERARCHY_PANE;
@@ -824,6 +825,8 @@ public:
 
     DIALOG_ERC* GetErcDialog();
 
+    DIALOG_SYMBOL_FIELDS_TABLE* GetSymbolFieldsTableDialog();
+
     wxTreeCtrl* GetNetNavigator() { return m_netNavigator; }
 
     const SCH_ITEM* GetSelectedNetNavigatorItem() const;
@@ -895,6 +898,8 @@ protected:
     void onCloseSymbolDiffDialog( wxCommandEvent& aEvent );
 
     void onCloseErcDialog( wxCommandEvent& aEvent );
+
+    void onCloseSymbolFieldsTableDialog( wxCommandEvent& aEvent );
 
     void unitsChangeRefresh() override;
 
@@ -998,6 +1003,8 @@ private:
     DIALOG_ERC*             m_ercDialog;
     DIALOG_BOOK_REPORTER*   m_diffSymbolDialog;
     HIERARCHY_PANE*         m_hierarchy;
+    DIALOG_SYMBOL_FIELDS_TABLE* m_symbolFieldsTableDialog;
+
 
     wxTreeCtrl*             m_netNavigator;
 
