@@ -612,7 +612,10 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
     if( aProjectFileName.IsDirWritable() )
         SetMruPath( Prj().GetProjectPath() ); // Only set MRU path if we have write access. Why?
 
-    UpdateFileHistory( Prj().GetProjectFullName() );
+    // Save history & window state to disk now.  Don't wait around for a crash.
+    KICAD_SETTINGS* settings = kicadSettings();
+    SaveSettings( settings );
+    settings->SaveToFile( Pgm().GetSettingsManager().GetPathForSettingsFile( settings ) );
 
     m_leftWin->ReCreateTreePrj();
 
@@ -713,7 +716,10 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName,
         }
     }
 
-    UpdateFileHistory( aProjectFileName.GetFullPath() );
+    // Save history & window state to disk now.  Don't wait around for a crash.
+    KICAD_SETTINGS* settings = kicadSettings();
+    SaveSettings( settings );
+    settings->SaveToFile( Pgm().GetSettingsManager().GetPathForSettingsFile( settings ) );
 
     m_openSavedWindows = true;
 }
@@ -832,6 +838,9 @@ void KICAD_MANAGER_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     wxCHECK( settings, /*void*/);
 
     settings->m_LeftWinWidth = m_leftWin->GetSize().x;
+
+    if( !m_isClosing )
+        settings->m_OpenProjects = GetSettingsManager()->GetOpenProjects();
 }
 
 

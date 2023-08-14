@@ -743,6 +743,20 @@ int KICAD_MANAGER_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
     if( wxWindow::FindFocus() != player )
         player->SetFocus();
 
+    // Save window state to disk now.  Don't wait around for a crash.
+    if( Pgm().GetCommonSettings()->m_Session.remember_open_files
+            && !player->GetCurrentFileName().IsEmpty() )
+    {
+        wxFileName rfn( player->GetCurrentFileName() );
+        rfn.MakeRelativeTo( Prj().GetProjectPath() );
+
+        WINDOW_SETTINGS windowSettings;
+        player->SaveWindowSettings( &windowSettings );
+
+        Prj().GetLocalSettings().SaveFileState( rfn.GetFullPath(), &windowSettings, true );
+        Prj().GetLocalSettings().SaveToFile( Prj().GetProjectPath() );
+    }
+
     return 0;
 }
 
