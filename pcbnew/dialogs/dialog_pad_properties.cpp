@@ -592,6 +592,10 @@ void DIALOG_PAD_PROPERTIES::initValues()
         m_trapAxisCtrl->SetSelection( 1 );
     }
 
+    // Store the initial thermal spoke angle to restore it, because some initializations
+    // can change this value (mainly after m_PadShapeSelector initializations)
+    EDA_ANGLE spokeInitialAngle = m_previewPad->GetThermalSpokeAngle();
+
     m_padToDieOpt->SetValue( m_previewPad->GetPadToDieLength() != 0 );
     m_padToDie.ChangeValue( m_previewPad->GetPadToDieLength() );
 
@@ -720,6 +724,11 @@ void DIALOG_PAD_PROPERTIES::initValues()
     wxCommandEvent cmd_event;
     OnPadShapeSelection( cmd_event );
     OnOffsetCheckbox( cmd_event );
+
+    // Restore thermal spoke angle to its initial value, because it can be modified
+    // by the call to OnPadShapeSelection()
+    m_previewPad->SetThermalSpokeAngle( spokeInitialAngle );
+    m_spokeAngle.SetAngleValue( m_previewPad->GetThermalSpokeAngle() );
 
     // Update basic shapes list
     displayPrimitivesList();
