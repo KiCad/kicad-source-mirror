@@ -687,8 +687,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRemoveField( wxCommandEvent& event )
          m_renameFieldButton->Enable( false );
     }
 
-    wxGridTableMessage msg( m_dataModel, wxGRIDTABLE_NOTIFY_COLS_DELETED,
-                                m_fieldsCtrl->GetItemCount(), 1 );
+    wxGridTableMessage msg( m_dataModel, wxGRIDTABLE_NOTIFY_COLS_DELETED, col, 1 );
 
     m_grid->ProcessTableMessage( msg );
 
