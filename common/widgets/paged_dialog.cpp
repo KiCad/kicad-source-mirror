@@ -51,7 +51,6 @@ PAGED_DIALOG::PAGED_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSho
         m_auxiliaryButton( nullptr ),
         m_resetButton( nullptr ),
         m_openPrefsDirButton( nullptr ),
-        m_cancelButton( nullptr ),
         m_title( aTitle )
 {
     wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );

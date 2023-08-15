@@ -69,7 +69,6 @@ protected:
     wxButton*    m_auxiliaryButton;
     wxButton*    m_resetButton;
     wxButton*    m_openPrefsDirButton;
-    wxButton*    m_cancelButton;
     WX_INFOBAR*  m_infoBar;
 
 private:
