@@ -107,6 +107,14 @@ public:
     TEARDROP_MANAGER( BOARD* aBoard, TOOL_MANAGER* aToolManager );
 
     /**
+     * Remove teardrops connected to any dirty pads, vias or tracks.  They need to be removed
+     * before being rebuilt.
+     *
+     * NB: this must be called BEFORE the connectivity is updated for the change in question.
+     */
+    void RemoveTeardrops( BOARD_COMMIT& aCommit, const std::vector<BOARD_ITEM*>* dirtyPadsAndVias,
+                          const std::set<PCB_TRACK*>* dirtyTracks );
+    /**
      * Update teardrops on a list of items.
      */
     void UpdateTeardrops( BOARD_COMMIT& aCommit, const std::vector<BOARD_ITEM*>* dirtyPadsAndVias,

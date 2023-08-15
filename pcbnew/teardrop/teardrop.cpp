@@ -96,6 +96,58 @@ ZONE* TEARDROP_MANAGER::createTeardrop( TEARDROP_VARIANT aTeardropVariant,
 }
 
 
+void TEARDROP_MANAGER::RemoveTeardrops( BOARD_COMMIT& aCommit,
+                                        const std::vector<BOARD_ITEM*>* dirtyPadsAndVias,
+                                        const std::set<PCB_TRACK*>* dirtyTracks )
+{
+    std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_board->GetConnectivity();
+    std::vector<ZONE*>                 stale_teardrops;
+
+    for( ZONE* zone : m_board->Zones() )
+    {
+        if( zone->IsTeardropArea() )
+        {
+            bool stale = false;
+
+            std::vector<PAD*>     connectedPads;
+            std::vector<PCB_VIA*> connectedVias;
+
+            connectivity->GetConnectedPadsAndVias( zone, &connectedPads, &connectedVias );
+
+            for( PAD* pad : connectedPads )
+            {
+                if( alg::contains( *dirtyPadsAndVias, pad ) )
+                {
+                    stale = true;
+                    break;
+                }
+            }
+
+            if( !stale )
+            {
+                for( PCB_VIA* via : connectedVias )
+                {
+                    if( alg::contains( *dirtyPadsAndVias, via ) )
+                    {
+                        stale = true;
+                        break;
+                    }
+                }
+            }
+
+            if( stale )
+                stale_teardrops.push_back( zone );
+        }
+    }
+
+    for( ZONE* td : stale_teardrops )
+    {
+        m_board->Remove( td, REMOVE_MODE::BULK );
+        aCommit.Removed( td );
+    }
+}
+
+
 void TEARDROP_MANAGER::UpdateTeardrops( BOARD_COMMIT& aCommit,
                                         const std::vector<BOARD_ITEM*>* dirtyPadsAndVias,
                                         const std::set<PCB_TRACK*>* dirtyTracks,
@@ -109,41 +161,25 @@ void TEARDROP_MANAGER::UpdateTeardrops( BOARD_COMMIT& aCommit,
 
     buildTrackCaches();
 
-    std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_board->GetConnectivity();
-
     // Old teardrops must be removed, to ensure a clean teardrop rebuild
-    std::vector<ZONE*> stale_teardrops;
-
-    for( ZONE* zone : m_board->Zones() )
+    if( aForceFullUpdate )
     {
-        if( zone->IsTeardropArea() )
+        std::vector<ZONE*> teardrops;
+
+        for( ZONE* zone : m_board->Zones() )
         {
-            bool stale = aForceFullUpdate;
+            if( zone->IsTeardropArea() )
+                teardrops.push_back( zone );
+        }
 
-            if( !stale )
-            {
-                std::vector<PAD*>     connectedPads;
-                std::vector<PCB_VIA*> connectedVias;
-
-                connectivity->GetConnectedPadsAndVias( zone, &connectedPads, &connectedVias );
-
-                for( PAD* pad : connectedPads )
-                    stale = stale || alg::contains( *dirtyPadsAndVias, pad );
-
-                for( PCB_VIA* via : connectedVias )
-                    stale = stale || alg::contains( *dirtyPadsAndVias, via );
-            }
-
-            if( stale )
-                stale_teardrops.push_back( zone );
+        for( ZONE* td : teardrops )
+        {
+            m_board->Remove( td, REMOVE_MODE::BULK );
+            aCommit.Removed( td );
         }
     }
 
-    for( ZONE* td : stale_teardrops )
-    {
-        m_board->Remove( td, REMOVE_MODE::BULK );
-        aCommit.Removed( td );
-    }
+    std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_board->GetConnectivity();
 
     for( PCB_TRACK* track : m_board->Tracks() )
     {

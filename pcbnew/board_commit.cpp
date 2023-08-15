@@ -174,6 +174,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
     undoList.SetDescription( aMessage );
 
+    TEARDROP_MANAGER                   teardropMgr( board, m_toolMgr );
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = board->GetConnectivity();
 
     // Note: frame == nullptr happens in QA tests
@@ -194,14 +195,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
     for( COMMIT_LINE& ent : m_changes )
     {
-        int changeType = ent.m_type & CHT_TYPE;
-        int changeFlags = ent.m_type & CHT_FLAGS;
         BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( ent.m_item );
 
-        wxASSERT( ent.m_item );
-        wxCHECK2( boardItem, continue );
-
-        if( m_isBoardEditor )
+        if( m_isBoardEditor && boardItem )
         {
             if( boardItem->Type() == PCB_VIA_T || boardItem->Type() == PCB_FOOTPRINT_T
                     || boardItem->IsOnLayer( F_Mask ) || boardItem->IsOnLayer( B_Mask ) )
@@ -211,7 +207,12 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
             if( !( aCommitFlags & SKIP_TEARDROPS ) )
             {
-                if( boardItem->Type() == PCB_PAD_T || boardItem->Type() == PCB_VIA_T )
+                if( boardItem->Type() == PCB_FOOTPRINT_T )
+                {
+                    for( PAD* pad : static_cast<FOOTPRINT*>( boardItem )->Pads() )
+                        staleTeardropPadsAndVias.push_back( pad );
+                }
+                else if( boardItem->Type() == PCB_PAD_T || boardItem->Type() == PCB_VIA_T )
                 {
                     staleTeardropPadsAndVias.push_back( boardItem );
                 }
@@ -235,8 +236,22 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             }
         }
 
-        if( boardItem->IsSelected() )
+        if( boardItem && boardItem->IsSelected() )
             selectedModified = true;
+    }
+
+    // Old teardrops must be removed before connectivity is rebuilt
+    if( !staleTeardropPadsAndVias.empty() || !staleTeardropTracks.empty() )
+        teardropMgr.RemoveTeardrops( *this, &staleTeardropPadsAndVias, &staleTeardropTracks );
+
+    for( COMMIT_LINE& ent : m_changes )
+    {
+        int changeType = ent.m_type & CHT_TYPE;
+        int changeFlags = ent.m_type & CHT_FLAGS;
+        BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( ent.m_item );
+
+        wxASSERT( ent.m_item );
+        wxCHECK2( boardItem, continue );
 
         switch( changeType )
         {
@@ -448,10 +463,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         }
 
         if( !staleTeardropPadsAndVias.empty() || !staleTeardropTracks.empty() )
-        {
-            TEARDROP_MANAGER teardropMgr( board, m_toolMgr );
             teardropMgr.UpdateTeardrops( *this, &staleTeardropPadsAndVias, &staleTeardropTracks );
-        }
 
         // Log undo items for any connectivity or teardrop changes
         for( size_t i = num_changes; i < m_changes.size(); ++i )
@@ -465,7 +477,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             if( !( aCommitFlags & SKIP_UNDO ) )
             {
                 ITEM_PICKER itemWrapper( nullptr, boardItem, convert( ent.m_type & CHT_TYPE ) );
-                wxASSERT( boardItemCopy );
                 itemWrapper.SetLink( boardItemCopy );
                 undoList.PushItem( itemWrapper );
             }
