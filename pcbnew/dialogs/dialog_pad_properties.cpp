@@ -4,7 +4,7 @@
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -552,6 +552,10 @@ void DIALOG_PAD_PROPERTIES::initValues()
         m_trapAxisCtrl->SetSelection( 1 );
     }
 
+    // Store the initial thermal spoke angle to restore it, because some initializations
+    // can change this value (mainly after m_PadShapeSelector initializations)
+    EDA_ANGLE spokeInitialAngle = m_dummyPad->GetThermalSpokeAngle();
+
     m_padToDieOpt->SetValue( m_dummyPad->GetPadToDieLength() != 0 );
     m_padToDie.ChangeValue( m_dummyPad->GetPadToDieLength() );
 
@@ -663,6 +667,11 @@ void DIALOG_PAD_PROPERTIES::initValues()
     wxCommandEvent cmd_event;
     OnPadShapeSelection( cmd_event );
     OnOffsetCheckbox( cmd_event );
+
+    // Restore thermal spoke angle to its initial value, because it can be modified
+    // by the call to OnPadShapeSelection()
+    m_dummyPad->SetThermalSpokeAngle( spokeInitialAngle );
+    m_spokeAngle.SetAngleValue( m_dummyPad->GetThermalSpokeAngle() );
 
     // Update basic shapes list
     displayPrimitivesList();
