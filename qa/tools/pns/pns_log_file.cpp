@@ -393,7 +393,7 @@ bool PNS_LOG_FILE::Load( const wxFileName& logFileName, REPORTER* aRpt )
         PCB_PLUGIN io;
         aRpt->Report( wxString::Format( wxT("Loading board snapshot from '%s'"), fname_dump.GetFullPath() ) );
 
-        m_board.reset( io.Load( fname_dump.GetFullPath(), nullptr, nullptr ) );
+        m_board.reset( io.LoadBoard( fname_dump.GetFullPath(), nullptr, nullptr ) );
         m_board->SetProject( project );
 
         std::shared_ptr<DRC_ENGINE> drcEngine( new DRC_ENGINE );
