@@ -217,7 +217,13 @@ bool DATABASE_CONNECTION::CacheTableInfo( const std::string& aTable,
         nanodbc::catalog catalog( *m_conn );
         nanodbc::catalog::tables tables = catalog.find_tables( fromUTF8( aTable ) );
 
-        tables.next();
+        if( !tables.next() )
+        {
+            wxLogTrace( traceDatabase, wxT( "CacheTableInfo: table '%s' not found in catalog" ),
+                        aTable );
+            return false;
+        }
+
         std::string key = toUTF8( tables.table_name() );
         m_tables[key] = toUTF8( tables.table_type() );
 
@@ -238,7 +244,7 @@ bool DATABASE_CONNECTION::CacheTableInfo( const std::string& aTable,
         catch( nanodbc::database_error& e )
         {
             m_lastError = e.what();
-            wxLogTrace( traceDatabase, wxT( "Exception while syncing columns for table %s: %s" ),
+            wxLogTrace( traceDatabase, wxT( "Exception while syncing columns for table '%s': %s" ),
                         key, m_lastError );
             return false;
         }
