@@ -20,6 +20,7 @@
 #ifndef VECTOR3_H_
 #define VECTOR3_H_
 
+#include <stdint.h>
 #include <limits>
 #include <wx/debug.h>
 

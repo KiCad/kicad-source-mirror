@@ -380,6 +380,7 @@ set( PCBNEW_SCRIPTING_PYTHON_HELPERS
     python/scripting/pcbnew_footprint_wizards.cpp
     python/scripting/pcbnew_scripting_helpers.cpp
     python/scripting/pcbnew_scripting.cpp
+    python/scripting/pcbnew_utils_3d.cpp
     python/scripting/pcb_scripting_tool.cpp
     )
 

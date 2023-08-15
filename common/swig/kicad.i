@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 NBEE Embedded Systems, Miguel Angel Ajo <miguelangel@nbee.es>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -104,6 +104,7 @@ principle should be easily implemented by adapting the current STL containers.
     #include <build_version.h>
     #include <layer_ids.h>
     #include <settings/settings_manager.h>
+    #include <pcbnew_utils_3d.h>
 %}
 
 // all the wx wrappers for wxString, wxPoint, wxRect, wxChar ..
@@ -135,6 +136,7 @@ principle should be easily implemented by adapting the current STL containers.
 %include build_version.h
 %include layer_ids.h
 %include settings/settings_manager.h
+%include pcbnew_utils_3d.h
 
 // Cast time_t to known type for Python
 typedef long time_t;
