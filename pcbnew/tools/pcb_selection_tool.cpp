@@ -2690,6 +2690,23 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
         break;
 
+    case PCB_DIM_ALIGNED_T:
+    case PCB_DIM_LEADER_T:
+    case PCB_DIM_CENTER_T:
+    case PCB_DIM_RADIAL_T:
+    case PCB_DIM_ORTHOGONAL_T:
+        if( aItem->GetParentFootprint() )
+        {
+            // Footprint dimension selections are only allowed in footprint editor mode.
+            if( !checkVisibilityOnly )
+                return false;
+
+            if( !board()->IsLayerVisible( aItem->GetLayer() ) )
+                return false;
+        }
+
+        break;
+
     case PCB_PAD_T:
         pad = static_cast<const PAD*>( aItem );
 
