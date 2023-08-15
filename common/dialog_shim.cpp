@@ -261,7 +261,10 @@ bool DIALOG_SHIM::Show( bool show )
             }
         }
         else if( m_initialSize != wxDefaultSize )
+        {
             SetSize( m_initialSize );
+            Centre();
+        }
 
         // Be sure that the dialog appears in a visible area
         // (the dialog position might have been stored at the time when it was
