@@ -115,8 +115,6 @@ EXPORTER_STEP::EXPORTER_STEP( BOARD* aBoard, const EXPORTER_STEP_PARAMS& aParams
     m_error( false ),
     m_fail( false ),
     m_warn( false ),
-    m_hasDrillOrigin( false ),
-    m_hasGridOrigin( false ),
     m_board( aBoard ),
     m_pcbModel( nullptr ),
     m_boardThickness( DEFAULT_BOARD_THICKNESS_MM )

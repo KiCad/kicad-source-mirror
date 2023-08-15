@@ -99,12 +99,11 @@ private:
     EXPORTER_STEP_PARAMS m_params;
     std::unique_ptr<FILENAME_RESOLVER> m_resolver;
 
-    bool m_error;
-    bool m_fail;
-    bool m_warn;
+private:
+    bool            m_error;
+    bool            m_fail;
+    bool            m_warn;
 
-    bool            m_hasDrillOrigin;
-    bool            m_hasGridOrigin;
     BOARD*          m_board;
     std::unique_ptr<STEP_PCB_MODEL> m_pcbModel;
 
@@ -112,13 +111,13 @@ private:
     /// used to identify items in step file
     wxString        m_pcbBaseName;
 
-    double m_boardThickness;
+    double          m_boardThickness;
 
-    SHAPE_POLY_SET m_top_copper_shapes;
-    SHAPE_POLY_SET m_bottom_copper_shapes;
+    SHAPE_POLY_SET  m_top_copper_shapes;
+    SHAPE_POLY_SET  m_bottom_copper_shapes;
 
-    KIGFX::COLOR4D m_solderMaskColor;
-    KIGFX::COLOR4D m_copperColor;
+    KIGFX::COLOR4D  m_solderMaskColor;
+    KIGFX::COLOR4D  m_copperColor;
 };
 
 #endif
