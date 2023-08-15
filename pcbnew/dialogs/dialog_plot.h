@@ -60,6 +60,10 @@ private:
     void        onPlotAllListMoveUp( wxCommandEvent& aEvent );
     void        onPlotAllListMoveDown( wxCommandEvent& aEvent );
 
+    void        onPlotFPValues( wxCommandEvent& aEvent ) override;
+    void        onPlotFPRefs( wxCommandEvent& aEvent ) override;
+    void        onPlotFPText( wxCommandEvent& aEvent ) override;
+
     // other functions
     void        init_Dialog();      // main initialization
     void        reInitDialog();     // initialization after calling drill dialog

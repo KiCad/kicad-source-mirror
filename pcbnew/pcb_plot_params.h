@@ -107,6 +107,8 @@ public:
     bool        GetPlotValue() const { return m_plotValue; }
     void        SetPlotReference( bool aFlag ) { m_plotReference = aFlag; }
     bool        GetPlotReference() const { return m_plotReference; }
+    void        SetPlotFPText( bool aFlag ) { m_plotFPText = aFlag; }
+    bool        GetPlotFPText() const { return m_plotFPText; }
 
     void        SetNegative( bool aFlag ) { m_negative = aFlag; }
     bool        GetNegative() const { return m_negative; }
@@ -260,6 +262,7 @@ private:
 
     bool       m_plotReference;         ///< Enable plotting of part references
     bool       m_plotValue;             ///< Enable plotting of part values
+    bool       m_plotFPText;
     bool       m_plotInvisibleText;     ///< Force plotting of fields marked invisible
 
     bool       m_sketchPadsOnFabLayers; ///< Plots pads outlines on fab layers

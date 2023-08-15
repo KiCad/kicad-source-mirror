@@ -114,6 +114,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_A4Output                   = false;
     m_plotReference              = true;
     m_plotValue                  = true;
+    m_plotFPText                 = true;
     m_plotInvisibleText          = false;
     m_sketchPadsOnFabLayers      = false;
     m_subtractMaskFromSilk       = false;
@@ -240,6 +241,7 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
                        printBool( m_A4Output ) );
     aFormatter->Print( aNestLevel+1, "(plotreference %s)\n", printBool( m_plotReference ) );
     aFormatter->Print( aNestLevel+1, "(plotvalue %s)\n", printBool( m_plotValue ) );
+    aFormatter->Print( aNestLevel+1, "(plotfptext %s)\n", printBool( m_plotFPText ) );
     aFormatter->Print( aNestLevel+1, "(plotinvisibletext %s)\n", printBool( m_plotInvisibleText ) );
     aFormatter->Print( aNestLevel+1, "(sketchpadsonfab %s)\n",
                        printBool( m_sketchPadsOnFabLayers ) );
@@ -340,6 +342,9 @@ bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
         return false;
 
     if( m_plotValue != aPcbPlotParams.m_plotValue )
+        return false;
+
+    if( m_plotFPText != aPcbPlotParams.m_plotFPText )
         return false;
 
     if( m_plotInvisibleText != aPcbPlotParams.m_plotInvisibleText )
@@ -597,6 +602,10 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
 
         case T_plotreference:
             aPcbPlotParams->m_plotReference = parseBool();
+            break;
+
+        case T_plotfptext:
+            aPcbPlotParams->m_plotFPText = parseBool();
             break;
 
         case T_plotvalue:

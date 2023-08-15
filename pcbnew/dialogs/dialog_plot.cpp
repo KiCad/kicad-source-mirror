@@ -306,8 +306,9 @@ void DIALOG_PLOT::init_Dialog()
     m_plotSheetRef->SetValue( m_plotOpts.GetPlotFrameRef() );
 
     // Options to plot texts on footprints
-    m_plotModuleValueOpt->SetValue( m_plotOpts.GetPlotValue() );
-    m_plotModuleRefOpt->SetValue( m_plotOpts.GetPlotReference() );
+    m_plotFootprintValues->SetValue( m_plotOpts.GetPlotValue() );
+    m_plotFootprintRefs->SetValue( m_plotOpts.GetPlotReference() );
+    m_plotFootprintText->SetValue( m_plotOpts.GetPlotFPText() );
     m_plotInvisibleText->SetValue( m_plotOpts.GetPlotInvisibleText() );
 
     // Options to plot pads and vias holes
@@ -777,8 +778,9 @@ void DIALOG_PLOT::applyPlotSettings()
     tempOptions.SetPlotFrameRef( m_plotSheetRef->GetValue() );
     tempOptions.SetSketchPadsOnFabLayers( m_sketchPadsOnFabLayers->GetValue() );
     tempOptions.SetUseAuxOrigin( m_useAuxOriginCheckBox->GetValue() );
-    tempOptions.SetPlotValue( m_plotModuleValueOpt->GetValue() );
-    tempOptions.SetPlotReference( m_plotModuleRefOpt->GetValue() );
+    tempOptions.SetPlotValue( m_plotFootprintValues->GetValue() );
+    tempOptions.SetPlotReference( m_plotFootprintRefs->GetValue() );
+    tempOptions.SetPlotFPText( m_plotFootprintText->GetValue() );
     tempOptions.SetPlotInvisibleText( m_plotInvisibleText->GetValue() );
     tempOptions.SetScaleSelection( m_scaleOpt->GetSelection() );
 
@@ -1198,3 +1200,26 @@ void DIALOG_PLOT::onPlotAllListMoveDown( wxCommandEvent& aEvent )
         m_plotAllLayersList->MoveCurrentDown();
 }
 
+
+void DIALOG_PLOT::onPlotFPRefs( wxCommandEvent& aEvent )
+{
+    if( aEvent.IsChecked() )
+        m_plotFootprintText->SetValue( true );
+}
+
+
+void DIALOG_PLOT::onPlotFPValues( wxCommandEvent& aEvent )
+{
+    if( aEvent.IsChecked() )
+        m_plotFootprintText->SetValue( true );
+}
+
+
+void DIALOG_PLOT::onPlotFPText( wxCommandEvent& aEvent )
+{
+    if( !aEvent.IsChecked() )
+    {
+        m_plotFootprintRefs->SetValue( false );
+        m_plotFootprintValues->SetValue( false );
+    }
+}

@@ -275,6 +275,9 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_
 
 void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
 {
+    if( !GetPlotFPText() )
+        return;
+
     const PCB_TEXT* textItem = &aFootprint->Reference();
     PCB_LAYER_ID    textLayer = textItem->GetLayer();
 
@@ -293,7 +296,6 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
     {
         PlotText( textItem, textLayer, textItem->IsKnockout(), textItem->GetFontMetrics() );
     }
-
 
     std::vector<PCB_TEXT*> texts;
 

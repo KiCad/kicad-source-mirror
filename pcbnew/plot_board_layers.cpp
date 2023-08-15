@@ -842,6 +842,9 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     auto plotFPTextItem =
             [&]( const PCB_TEXT& aText )
             {
+                if( !itemplotter.GetPlotFPText() )
+                    return;
+
                 if( !aText.IsVisible() && !itemplotter.GetPlotInvisibleText()  )
                     return;
 

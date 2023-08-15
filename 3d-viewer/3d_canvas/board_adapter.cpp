@@ -814,7 +814,7 @@ std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetVisibleLayers() const
 
         ret.set( LAYER_FP_REFERENCES, plotParams.GetPlotReference() );
         ret.set( LAYER_FP_VALUES,     plotParams.GetPlotValue() );
-        ret.set( LAYER_FP_TEXT,       true );
+        ret.set( LAYER_FP_TEXT,       plotParams.GetPlotFPText() );
     }
     else if( LAYER_PRESET_3D* preset = m_Cfg->FindPreset( m_Cfg->m_CurrentPreset ) )
     {

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -72,21 +72,22 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxCheckListBox* m_layerCheckListBox;
 		wxBoxSizer* m_PlotOptionsSizer;
 		wxCheckBox* m_plotSheetRef;
-		wxCheckBox* m_plotModuleValueOpt;
-		wxCheckBox* m_plotModuleRefOpt;
+		wxCheckBox* m_plotFootprintValues;
+		wxCheckBox* m_plotFootprintRefs;
+		wxCheckBox* m_plotFootprintText;
 		wxCheckBox* m_plotInvisibleText;
 		wxCheckBox* m_sketchPadsOnFabLayers;
+		wxCheckBox* m_zoneFillCheck;
 		wxCheckBox* m_tentVias;
-		wxCheckBox* m_useAuxOriginCheckBox;
 		wxStaticText* drillMarksLabel;
 		wxChoice* m_drillShapeOpt;
 		wxStaticText* scalingLabel;
 		wxChoice* m_scaleOpt;
 		wxStaticText* plotModeLabel;
 		wxChoice* m_plotModeOpt;
+		wxCheckBox* m_useAuxOriginCheckBox;
 		wxCheckBox* m_plotMirrorOpt;
 		wxCheckBox* m_plotPSNegativeOpt;
-		wxCheckBox* m_zoneFillCheck;
 		wxBoxSizer* m_SizerSolderMaskAlert;
 		wxStaticBitmap* m_bitmapAlert;
 		wxStaticText* m_staticTextAlert;
@@ -144,6 +145,9 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		virtual void OnRightClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void SetPlotFormat( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onPlotFPValues( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onPlotFPRefs( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onPlotFPText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSetScaleOpt( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBoardSetup( wxHyperlinkEvent& event ) { event.Skip(); }
 		virtual void OnGerberX2Checked( wxCommandEvent& event ) { event.Skip(); }
