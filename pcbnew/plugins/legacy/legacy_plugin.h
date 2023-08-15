@@ -76,7 +76,7 @@ public:
 
     PLUGIN_FILE_DESC GetFootprintLibDesc() const override
     {
-        return PLUGIN_FILE_DESC( _HKI( "Legacy footprint library files" ), { "mod" } );
+        return PLUGIN_FILE_DESC( _HKI( "Legacy footprint library files" ), { "mod", "emp" } );
     }
 
     PLUGIN_FILE_DESC GetFootprintFileDesc() const override { return GetFootprintLibDesc(); }
