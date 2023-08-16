@@ -1939,6 +1939,9 @@ void EAGLE_PLUGIN::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
     if( e.rot )
         pad->SetOrientation( EDA_ANGLE( e.rot->degrees, DEGREES_T ) );
 
+    // Eagle spokes are always NSEW in board coordinates
+    pad->SetThermalSpokeAngle( - ( aFootprint->GetOrientation() + pad->GetOrientation() ) );
+
     if( pad->GetSizeX() > 0 && pad->GetSizeY() > 0 )
     {
         aFootprint->Add( pad.release() );
@@ -2429,6 +2432,9 @@ void EAGLE_PLUGIN::packageSMD( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
 
     if( e.rot )
         pad->SetOrientation( EDA_ANGLE( e.rot->degrees, DEGREES_T ) );
+
+    // Eagle spokes are always NSEW in board coordinates
+    pad->SetThermalSpokeAngle( - ( aFootprint->GetOrientation() + pad->GetOrientation() ) );
 
     pad->SetLocalSolderPasteMargin( -eagleClamp( m_rules->mlMinCreamFrame,
                                                  (int) ( m_rules->mvCreamFrame * minPadSize ),
