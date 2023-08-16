@@ -828,16 +828,16 @@ void SVG_PLOTTER::Text( const VECTOR2I&        aPos,
 
     if( !aOrient.IsZero() )
     {
-        fprintf( m_outputFile,
-                 "<g transform=\"rotate(%f %.*f %.*f)\">\n",
-                 - aOrient.AsDegrees(), m_precision, anchor_pos_dev.x, m_precision, anchor_pos_dev.y );
+        fprintf( m_outputFile, "<g transform=\"rotate(%f %.*f %.*f)\">\n",
+                 m_plotMirror ? aOrient.AsDegrees() : -aOrient.AsDegrees(), m_precision,
+                 anchor_pos_dev.x, m_precision, anchor_pos_dev.y );
     }
 
     fprintf( m_outputFile, "<text x=\"%.*f\" y=\"%.*f\"\n",
                             m_precision, text_pos_dev.x, m_precision, text_pos_dev.y );
 
     /// If the text is mirrored, we should also mirror the hidden text to match
-    if( aSize.x < 0 )
+    if( m_plotMirror != ( aSize.x < 0 ) )
         fprintf( m_outputFile, "transform=\"scale(-1 1) translate(%f 0)\"\n", -2 * text_pos_dev.x );
 
     fprintf( m_outputFile,
