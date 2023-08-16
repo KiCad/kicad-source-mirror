@@ -810,7 +810,7 @@ void SIMULATOR_FRAME_UI::rebuildSignalsList()
     }
 
     if( ( options & NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_CURRENTS )
-            && ( simType == ST_TRAN || simType == ST_DC ) )
+            && ( simType == ST_TRAN || simType == ST_DC || simType == ST_AC ) )
     {
         for( const SPICE_ITEM& item : circuitModel()->GetItems() )
         {
