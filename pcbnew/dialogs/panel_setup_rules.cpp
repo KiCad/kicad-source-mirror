@@ -62,6 +62,7 @@ PANEL_SETUP_RULES::PANEL_SETUP_RULES( wxWindow* aParentWindow, PCB_EDIT_FRAME* a
     m_pinTypeRegex.Compile( "^Pin_Type\\s*[!=]=\\s*$", wxRE_ADVANCED );
     m_fabPropRegex.Compile( "^Fabrication_Property\\s*[!=]=\\s*$", wxRE_ADVANCED );
     m_shapeRegex.Compile( "^Shape\\s*[!=]=\\s*$", wxRE_ADVANCED );
+    m_zoneConnStyleRegex.Compile( "^Zone_Connection_Style\\s*[!=]=\\s*$", wxRE_ADVANCED );
 
     m_compileButton->SetBitmap( KiBitmap( BITMAPS::drc ) );
 
@@ -543,6 +544,13 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                               "Circle|"
                               "Polygon|"
                               "Bezier" );
+            }
+            else if( m_zoneConnStyleRegex.Matches( last ) )
+            {
+                tokens = wxT( "Inherited|"
+                              "None|"
+                              "Solid|"
+                              "Thermal reliefs" );
             }
         }
     }
