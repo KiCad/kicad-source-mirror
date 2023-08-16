@@ -30,11 +30,13 @@
 #include <vector>
 #include <geometry/seg.h>
 #include <geometry/eda_angle.h>
+#include <geometry/geometry_utils.h>
 #include <math/vector2d.h>
 #include <math/box2.h>
 #include <wx/string.h>
 
 class SHAPE_LINE_CHAIN;
+class SHAPE_POLY_SET;
 
 /**
  * Lists all supported shapes.
@@ -233,6 +235,39 @@ public:
     }
 
     /**
+     * Returns the minimum distance from a given point to this shape.
+     * Always returns zero if the point is inside a closed shape and aOutlineOnly is false.
+     *
+     * @param aP is the point to test
+     * @param aOutlineOnly can be set to true to measure the distance to the outline of the shape
+     * @return the distance from the shape to aP
+     */
+    virtual int Distance( const VECTOR2I& aP, bool aOutlineOnly = false ) const;
+
+    /**
+     * @see SHAPE::Distance
+     */
+    virtual SEG::ecoord SquaredDistance( const VECTOR2I& aP, bool aOutlineOnly = false ) const;
+
+    /**
+     * Check if point \a aP lies inside a closed shape.  Always returns false if this shape is not closed.
+     *
+     * @param aPt point to check
+     * @param aUseBBoxCache gives better performance if the bounding box caches have been
+     *                      generated.
+     * @return true if the point is inside the shape (edge is not treated as being inside).
+     */
+    virtual bool PointInside( const VECTOR2I& aPt, int aAccuracy = 0, bool aUseBBoxCache = false ) const;
+
+    /**
+     * Fills a SHAPE_POLY_SET with a polygon representation of this shape.
+     * @param aBuffer [out] will be filled with the polygonal representation of this shape.
+     * @param aError controls the maximum allowed deviation when converting rounded shapes to segments
+     * @param aErrorLoc controls where the error is placed when approximating rounded shapes
+     */
+    virtual void TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError, ERROR_LOC aErrorLoc ) const = 0;
+
+    /**
      * @param aCenter is the rotation center.
      * @param aAngle rotation angle.
      */
@@ -288,18 +323,9 @@ public:
     virtual bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr,
                           VECTOR2I* aLocation = nullptr ) const override;
 
-    SEG::ecoord SquaredDistance( const VECTOR2I& aP, bool aOutlineOnly = false ) const;
+    SEG::ecoord SquaredDistance( const VECTOR2I& aP, bool aOutlineOnly = false ) const override;
 
-    /**
-     * Check if point \a aP lies inside a polygon (any type) defined by the line chain.
-     * For closed shapes only.
-     *
-     * @param aPt point to check
-     * @param aUseBBoxCache gives better performance if the bounding box caches have been
-     *                      generated.
-     * @return true if the point is inside the shape (edge is not treated as being inside).
-     */
-    bool PointInside( const VECTOR2I& aPt, int aAccuracy = 0, bool aUseBBoxCache = false ) const;
+    bool PointInside( const VECTOR2I& aPt, int aAccuracy = 0, bool aUseBBoxCache = false ) const override;
 
     /**
      * Check if point \a aP lies on an edge or vertex of the line chain.
@@ -324,6 +350,10 @@ public:
     virtual bool IsClosed() const = 0;
 
     virtual BOX2I* GetCachedBBox() const { return nullptr; }
+
+    void TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError,
+                             ERROR_LOC aErrorLoc ) const override
+    {}
 };
 
 #endif // __SHAPE_H

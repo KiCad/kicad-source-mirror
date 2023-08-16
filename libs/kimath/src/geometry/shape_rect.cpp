@@ -25,6 +25,7 @@
 
 
 #include <geometry/shape_rect.h>
+#include <convert_basic_shapes_to_polygon.h>
 
 bool SHAPE_RECT::Collide( const SEG& aSeg, int aClearance, int* aActual, VECTOR2I* aLocation ) const
 {
@@ -106,4 +107,18 @@ const std::string SHAPE_RECT::Format( bool aCplusPlus ) const
     ss << ");";
 
     return ss.str();
+}
+
+
+void SHAPE_RECT::TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError,
+                                     ERROR_LOC aErrorLoc ) const
+{
+    int idx = aBuffer.NewOutline();
+    SHAPE_LINE_CHAIN& outline = aBuffer.Outline( idx );
+
+    outline.Append( m_p0 );
+    outline.Append( { m_p0.x + m_w, m_p0.y } );
+    outline.Append( { m_p0.x + m_w, m_p0.y + m_h } );
+    outline.Append( { m_p0.x, m_p0.y + m_h } );
+    outline.SetClosed( true );
 }

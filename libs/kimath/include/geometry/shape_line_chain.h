@@ -457,14 +457,6 @@ public:
     }
 
     /**
-     * Compute the minimum distance between the line chain and a point \a aP.
-     *
-     * @param aP the point.
-     * @return minimum distance.
-     */
-    int Distance( const VECTOR2I& aP, bool aOutlineOnly = false ) const;
-
-    /**
      * Reverse point order in the line chain.
      *
      * @return line chain with reversed point order (original A-B-C-D: returned D-C-B-A).
@@ -874,6 +866,9 @@ public:
     virtual const SEG GetSegment( int aIndex ) const override { return CSegment(aIndex); }
     virtual size_t GetPointCount() const override { return PointCount(); }
     virtual size_t GetSegmentCount() const override { return SegmentCount(); }
+
+    void TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError,
+                             ERROR_LOC aErrorLoc ) const override;
 
 protected:
     friend class SHAPE_POLY_SET;

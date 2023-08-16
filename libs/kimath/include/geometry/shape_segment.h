@@ -161,6 +161,9 @@ public:
 
     virtual const std::string Format( bool aCplusPlus = true ) const override;
 
+    void TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError,
+                             ERROR_LOC aErrorLoc ) const override;
+
 private:
     SEG m_seg;
     int m_width;

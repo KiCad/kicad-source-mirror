@@ -30,6 +30,11 @@
 #include <geometry/shape_rect.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_compound.h>
+#include <geometry/shape_poly_set.h>
+#include <geometry/shape_simple.h>
+
+#include <convert_basic_shapes_to_polygon.h>
+
 
 bool SHAPE::Parse( std::stringstream& aStream )
 {
@@ -74,4 +79,41 @@ int SHAPE::GetClearance( const SHAPE* aOther ) const
     }
 
     return actual_clearance;
+}
+
+
+int SHAPE::Distance( const VECTOR2I& aP, bool aOutlineOnly ) const
+{
+    return sqrt( SquaredDistance( aP, aOutlineOnly ) );
+}
+
+
+SEG::ecoord SHAPE::SquaredDistance( const VECTOR2I& aP, bool aOutlineOnly ) const
+{
+    SHAPE_POLY_SET buffer;
+    TransformToPolygon( buffer, 0, ERROR_INSIDE );
+
+    if( buffer.OutlineCount() < 1 )
+        return VECTOR2I::ECOORD_MAX;
+
+    return buffer.COutline( 0 ).SquaredDistance( aP, aOutlineOnly );
+}
+
+
+bool SHAPE::PointInside( const VECTOR2I& aPt, int aAccuracy, bool aUseBBoxCache ) const
+{
+    SHAPE_POLY_SET buffer;
+    TransformToPolygon( buffer, aAccuracy, ERROR_INSIDE );
+
+    if( buffer.OutlineCount() < 1 )
+        return false;
+
+    return buffer.COutline( 0 ).PointInside( aPt, aAccuracy, aUseBBoxCache );
+}
+
+
+void SHAPE_SIMPLE::TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError,
+                                       ERROR_LOC aErrorLoc ) const
+{
+    aBuffer.AddOutline( m_points );
 }

@@ -26,6 +26,7 @@
 
 #include <geometry/shape_segment.h>
 #include <geometry/shape_circle.h>
+#include <convert_basic_shapes_to_polygon.h>
 
 const std::string SHAPE_SEGMENT::Format( bool aCplusPlus ) const
 {
@@ -87,6 +88,14 @@ const std::string SHAPE_CIRCLE::Format( bool aCplusPlus ) const
     return ss.str();
 }
 
+
+void SHAPE_CIRCLE::TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError,
+                                       ERROR_LOC aErrorLoc ) const
+{
+    TransformCircleToPolygon( aBuffer, m_circle.Center, m_circle.Radius, aError, aErrorLoc );
+}
+
+
 bool SHAPE_SEGMENT::Is45Degree( EDA_ANGLE aTollerance ) const
 {
     EDA_ANGLE mag = EDA_ANGLE( m_seg.A - m_seg.B ).Normalize180();
@@ -102,3 +111,9 @@ bool SHAPE_SEGMENT::Is45Degree( EDA_ANGLE aTollerance ) const
     return false;
 }
 
+
+void SHAPE_SEGMENT::TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError,
+                                        ERROR_LOC aErrorLoc ) const
+{
+    TransformOvalToPolygon( aBuffer, m_seg.A, m_seg.B, m_width, aError, aErrorLoc );
+}

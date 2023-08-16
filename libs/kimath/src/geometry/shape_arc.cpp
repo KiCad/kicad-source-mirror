@@ -29,6 +29,7 @@
 #include <geometry/seg.h>               // for SEG
 #include <geometry/shape_arc.h>
 #include <geometry/shape_line_chain.h>
+#include <convert_basic_shapes_to_polygon.h>
 #include <trigo.h>
 
 
@@ -609,4 +610,10 @@ bool SHAPE_ARC::sliceContainsPoint( const VECTOR2I& p ) const
     }
 
     return alg::within_wrapped_range( phi.AsDegrees(), sa.AsDegrees(), ea.AsDegrees(), 360.0 );
+}
+
+
+void SHAPE_ARC::TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError, ERROR_LOC aErrorLoc ) const
+{
+    TransformArcToPolygon( aBuffer, m_start, m_mid, m_end, m_width, aError, aErrorLoc );
 }

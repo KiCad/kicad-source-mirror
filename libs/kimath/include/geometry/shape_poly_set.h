@@ -1203,6 +1203,9 @@ public:
     bool CollideEdge( const VECTOR2I& aPoint, VERTEX_INDEX* aClosestVertex = nullptr,
                       int aClearance = 0 ) const;
 
+    bool PointInside( const VECTOR2I& aPt, int aAccuracy = 0,
+                      bool aUseBBoxCache = false ) const override;
+
     /**
      * Construct BBoxCaches for Contains(), below.
      *
@@ -1402,6 +1405,12 @@ public:
      * @return the constructed poly set
      */
     static const SHAPE_POLY_SET BuildPolysetFromOrientedPaths( const std::vector<SHAPE_LINE_CHAIN>& aPaths, bool aReverseOrientation = false, bool aEvenOdd = false );
+
+    void TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError,
+                             ERROR_LOC aErrorLoc ) const override
+    {
+        aBuffer.Append( *this );
+    }
 
 private:
     enum DROP_TRIANGULATION_FLAG { SINGLETON };

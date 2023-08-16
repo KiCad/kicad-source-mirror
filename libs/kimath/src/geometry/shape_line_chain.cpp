@@ -34,6 +34,7 @@
 #include <core/kicad_algo.h> // for alg::run_on_pair
 #include <geometry/seg.h>    // for SEG, OPT_VECTOR2I
 #include <geometry/shape_line_chain.h>
+#include <geometry/shape_poly_set.h>
 #include <math/box2.h>       // for BOX2I
 #include <math/util.h>       // for rescale
 #include <math/vector2d.h>   // for VECTOR2, VECTOR2I
@@ -872,12 +873,6 @@ void SHAPE_LINE_CHAIN::Remove( int aStartIndex, int aEndIndex )
     m_shapes.erase( m_shapes.begin() + aStartIndex, m_shapes.begin() + aEndIndex + 1 );
     m_points.erase( m_points.begin() + aStartIndex, m_points.begin() + aEndIndex + 1 );
     assert( m_shapes.size() == m_points.size() );
-}
-
-
-int SHAPE_LINE_CHAIN::Distance( const VECTOR2I& aP, bool aOutlineOnly ) const
-{
-    return sqrt( SquaredDistance( aP, aOutlineOnly ) );
 }
 
 
@@ -2130,6 +2125,13 @@ double SHAPE_LINE_CHAIN::Area( bool aAbsolute ) const
         return std::fabs( area * 0.5 ); // The result would be negative if points are anti-clockwise
     else
         return -area * 0.5; // The result would be negative if points are anti-clockwise
+}
+
+
+void SHAPE_LINE_CHAIN::TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError,
+                                           ERROR_LOC aErrorLoc ) const
+{
+    aBuffer.AddOutline( *this );
 }
 
 

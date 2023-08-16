@@ -75,6 +75,9 @@ public:
     {
         return false;
     }
+
+    void TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError,
+                             ERROR_LOC aErrorLoc ) const override {}
 };
 
 #endif

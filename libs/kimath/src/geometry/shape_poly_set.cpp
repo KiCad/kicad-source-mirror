@@ -3065,3 +3065,15 @@ SHAPE_POLY_SET::BuildPolysetFromOrientedPaths( const std::vector<SHAPE_LINE_CHAI
 
     return result;
 }
+
+
+bool SHAPE_POLY_SET::PointInside( const VECTOR2I& aPt, int aAccuracy, bool aUseBBoxCache ) const
+{
+    for( int idx = 0; idx < OutlineCount(); idx++ )
+    {
+        if( COutline( idx ).PointInside( aPt, aAccuracy, aUseBBoxCache ) )
+            return true;
+    }
+
+    return false;
+}

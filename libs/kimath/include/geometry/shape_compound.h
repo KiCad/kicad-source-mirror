@@ -154,7 +154,8 @@ public:
         std::copy( m_shapes.begin(), m_shapes.end(), std::back_inserter( aSubshapes ) );
     }
 
-    bool ConvertToSimplePolygon( SHAPE_SIMPLE* aOut ) const;
+    void TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError,
+                             ERROR_LOC aErrorLoc ) const override;
 
 private:
     BOX2I               m_cachedBBox;

@@ -244,6 +244,9 @@ public:
                && ( aArc.m_width == m_width );
     }
 
+    void TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError,
+                             ERROR_LOC aErrorLoc ) const override;
+
 private:
     bool ccw( const VECTOR2I& aA, const VECTOR2I& aB, const VECTOR2I& aC ) const
     {

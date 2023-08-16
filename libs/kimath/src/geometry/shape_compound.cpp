@@ -155,7 +155,9 @@ bool SHAPE_COMPOUND::Collide( const SEG& aSeg, int aClearance, int* aActual,
 }
 
 
-bool SHAPE_COMPOUND::ConvertToSimplePolygon( SHAPE_SIMPLE* aOut ) const
+void SHAPE_COMPOUND::TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aError,
+                                         ERROR_LOC aErrorLoc ) const
 {
-    return false;
+    for( SHAPE* item : m_shapes )
+        item->TransformToPolygon( aBuffer, aError, aErrorLoc );
 }
