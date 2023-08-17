@@ -39,7 +39,7 @@ public:
             m_outputFile(),
             m_xOrigin( 0.0 ),
             m_yOrigin( 0.0 ),
-            m_minDistance( 0.01 ) // 0.01 mm is a good value to connect 2 items of the board outlines
+            m_boardOutlinesChainingEpsilon( 0.01 ) // 0.01 mm is a good value to connect 2 items of the board outlines
     {
     }
 
@@ -53,7 +53,7 @@ public:
     wxString m_outputFile;
     double   m_xOrigin;
     double   m_yOrigin;
-    double   m_minDistance;
+    double   m_boardOutlinesChainingEpsilon;
 };
 
 #endif

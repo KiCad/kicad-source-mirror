@@ -42,9 +42,24 @@
 #include <math/vector3.h>
 #include <geometry/shape_poly_set.h>
 
-///< Default minimum distance between points to treat them as separate ones (mm)
-static constexpr double STEPEXPORT_MIN_DISTANCE = 0.01;
-static constexpr double STEPEXPORT_MIN_ACCEPTABLE_DISTANCE = 0.001;
+/**
+ * Default distance between points to treat them as separate ones (mm)
+ * 0.001 mm is a reasonable value. A too large value creates issues by
+ * merging points that should be different.
+ * Remember we are a 3D space, so a thin line can be broken if 2 points
+ * are merged (in X, Y, Z coords) when they should not.
+ * round shapes converted to polygon can also be not good with a to large value
+ */
+static constexpr double OCC_MAX_DISTANCE_TO_MERGE_POINTS = 0.001;
+
+// default PCB thickness in mm
+static constexpr double BOARD_THICKNESS_DEFAULT_MM = 1.6;
+
+// minimum PCB thickness in mm (10 microns assumes a very thin polyimide film)
+static constexpr double BOARD_THICKNESS_MIN_MM = 0.01;
+
+// Max error to approximate an arc by segments (in mm)
+static constexpr double ARC_TO_SEGMENT_MAX_ERROR_MM = 0.005;
 
 class PAD;
 
@@ -75,8 +90,9 @@ public:
     // aThickness > THICKNESS_MIN == use aThickness
     void SetPCBThickness( double aThickness );
 
-    // Set the minimum distance (in mm) to consider 2 points have the same coordinates
-    void SetMinDistance( double aDistance );
+    // Set the max distance (in mm) to consider 2 points have the same coordinates
+    // and can be merged
+    void OCCSetMergeMaxDistance( double aDistance = OCC_MAX_DISTANCE_TO_MERGE_POINTS );
 
     void SetMaxError( int aMaxError ) { m_maxError = aMaxError; }
 
@@ -163,10 +179,11 @@ private:
     double                          m_precision;    // model (length unit) numeric precision
     double                          m_angleprec;    // angle numeric precision
     double                          m_boardColor[3];// RGB values
-    double                          m_thickness;    // PCB thickness, mm
+    double                          m_boardThickness;  // PCB thickness, mm
 
-    double                          m_minx;         // leftmost curve point
-    double                          m_minDistance2; // minimum squared distance between items (mm)
+    double                          m_minx;             // leftmost curve point
+    double                          m_mergeOCCMaxDist;  // minimum distance (mm) below which two
+                                                        // points are considered coincident by OCC
 
     std::vector<TopoDS_Shape>       m_cutouts;
 

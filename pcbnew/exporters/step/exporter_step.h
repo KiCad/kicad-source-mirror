@@ -30,6 +30,10 @@
 #include <geometry/shape_poly_set.h>
 #include <gal/color4d.h>
 
+// Default value to chain 2 shapes when creating the board outlines
+// from shapes on Edges.Cut layer
+#define BOARD_DEFAULT_CHAINING_EPSILON 0.01
+
 class PCBMODEL;
 class BOARD;
 class FOOTPRINT;
@@ -45,7 +49,7 @@ public:
             m_useDrillOrigin( false ),
             m_includeExcludedBom( true ),
             m_substModels( true ),
-            m_minDistance( STEPEXPORT_MIN_DISTANCE ),
+            m_boardOutlinesChainingEpsilon( BOARD_DEFAULT_CHAINING_EPSILON ),
             m_boardOnly( false ) {};
 
     wxString m_outputFile;
@@ -57,7 +61,7 @@ public:
     bool     m_useDrillOrigin;
     bool     m_includeExcludedBom;
     bool     m_substModels;
-    double   m_minDistance;
+    double   m_boardOutlinesChainingEpsilon;
     bool     m_boardOnly;
 };
 

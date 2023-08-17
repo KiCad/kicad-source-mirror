@@ -154,7 +154,7 @@ int CLI::EXPORT_PCB_STEP_COMMAND::doPerform( KIWAY& aKiway )
         std::smatch sm;
         std::string str( minDistance.ToUTF8() );
         std::regex_search( str, sm, re_pattern );
-        step->m_minDistance = atof( sm.str( 1 ).c_str() );
+        step->m_boardOutlinesChainingEpsilon = atof( sm.str( 1 ).c_str() );
 
         std::string tunit( sm[2] );
 
@@ -162,7 +162,7 @@ int CLI::EXPORT_PCB_STEP_COMMAND::doPerform( KIWAY& aKiway )
         {
             if( !tunit.compare( "in" ) || !tunit.compare( "inch" ) )
             {
-                step->m_minDistance *= 25.4;
+                step->m_boardOutlinesChainingEpsilon *= 25.4;
             }
             else if( tunit.compare( "mm" ) )
             {

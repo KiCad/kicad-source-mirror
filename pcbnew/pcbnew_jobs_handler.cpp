@@ -97,7 +97,7 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
 
     EXPORTER_STEP_PARAMS params;
     params.m_includeExcludedBom = aStepJob->m_includeExcludedBom;
-    params.m_minDistance = aStepJob->m_minDistance;
+    params.m_boardOutlinesChainingEpsilon = aStepJob->m_boardOutlinesChainingEpsilon;
     params.m_overwrite = aStepJob->m_overwrite;
     params.m_substModels = aStepJob->m_substModels;
     params.m_origin = VECTOR2D( aStepJob->m_xOrigin, aStepJob->m_yOrigin );

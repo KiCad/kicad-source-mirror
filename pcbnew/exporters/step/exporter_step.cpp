@@ -115,8 +115,7 @@ EXPORTER_STEP::EXPORTER_STEP( BOARD* aBoard, const EXPORTER_STEP_PARAMS& aParams
     m_hasGridOrigin( false ),
     m_board( aBoard ),
     m_pcbModel( nullptr ),
-    m_minDistance( STEPEXPORT_MIN_DISTANCE ),
-    m_boardThickness( DEFAULT_BOARD_THICKNESS )
+    m_boardThickness( DEFAULT_BOARD_THICKNESS_MM )
 {
     m_solderMaskColor = COLOR4D( 0.08, 0.20, 0.14, 0.83 );
 
@@ -270,9 +269,14 @@ bool EXPORTER_STEP::composePCB()
 
     m_pcbModel->SetPCBThickness( m_boardThickness );
 
-    // Set the min distance betewenn 2 points for OCC to see these 2 points as merged
-    double minDistmm = std::max( m_params.m_minDistance, STEPEXPORT_MIN_ACCEPTABLE_DISTANCE );
-    m_pcbModel->SetMinDistance( minDistmm );
+    // Note: m_params.m_BoardOutlinesChainingEpsilon is used only to build the board outlines,
+    // not to set OCC chaining epsilon (much smaller)
+    //
+    // Set the min distance between 2 points for OCC to see these 2 points as merged
+    // OCC_MAX_DISTANCE_TO_MERGE_POINTS is acceptable for OCC, otherwise there are issues
+    // to handle the shapes chaining on copper layers, because the Z dist is 0.035 mm and the
+    // min dist must be much smaller (we use 0.001 mm giving good results)
+    m_pcbModel->OCCSetMergeMaxDistance( OCC_MAX_DISTANCE_TO_MERGE_POINTS );
 
     m_pcbModel->SetMaxError( m_board->GetDesignSettings().m_MaxError );
 

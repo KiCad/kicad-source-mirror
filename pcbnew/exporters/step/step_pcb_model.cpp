@@ -94,18 +94,8 @@
 static constexpr double USER_PREC = 1e-4;
 static constexpr double USER_ANGLE_PREC = 1e-6;
 
-// minimum PCB thickness in mm (2 microns assumes a very thin polyimide film)
-static constexpr double THICKNESS_MIN = 0.002;
-
-// default PCB thickness in mm
-static constexpr double THICKNESS_DEFAULT = 1.6;
-
 // nominal offset from the board
 static constexpr double BOARD_OFFSET = 0.05;
-
-// min. length**2 below which 2 points are considered coincident
-static constexpr double MIN_LENGTH2 = STEPEXPORT_MIN_DISTANCE * STEPEXPORT_MIN_DISTANCE;
-
 
 // supported file types
 enum FormatType
@@ -195,12 +185,12 @@ STEP_PCB_MODEL::STEP_PCB_MODEL( const wxString& aPcbName )
     m_components = 0;
     m_precision = USER_PREC;
     m_angleprec = USER_ANGLE_PREC;
-    m_thickness = THICKNESS_DEFAULT;
-    m_minDistance2 = MIN_LENGTH2;
+    m_boardThickness = BOARD_THICKNESS_DEFAULT_MM;
+    m_mergeOCCMaxDist = OCC_MAX_DISTANCE_TO_MERGE_POINTS;
     m_minx = 1.0e10;    // absurdly large number; any valid PCB X value will be smaller
     m_pcbName = aPcbName;
-    BRepBuilderAPI::Precision( STEPEXPORT_MIN_DISTANCE );
-    m_maxError = 5000;      // 5 microns
+    BRepBuilderAPI::Precision( m_mergeOCCMaxDist );
+    m_maxError = pcbIUScale.mmToIU( ARC_TO_SEGMENT_MAX_ERROR_MM );
 }
 
 
@@ -215,16 +205,21 @@ bool STEP_PCB_MODEL::AddPadHole( const PAD* aPad, const VECTOR2D& aOrigin )
     if( NULL == aPad || !aPad->GetDrillSize().x )
         return false;
 
-    VECTOR2I pos = aPad->GetPosition();
+    VECTOR2I     pos = aPad->GetPosition();
+    const double margin = 0.01; // a small margin on the Z axix to be sure the hole
+                                // is bigget than the board with copper
+                                // must be > OCC_MAX_DISTANCE_TO_MERGE_POINTS
+    double holeZsize = m_boardThickness + ( margin * 2 );
 
     if( aPad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
     {
         TopoDS_Shape s =
-                BRepPrimAPI_MakeCylinder( pcbIUScale.IUTomm( aPad->GetDrillSize().x ) * 0.5, m_thickness * 2.0 ).Shape();
+                BRepPrimAPI_MakeCylinder( pcbIUScale.IUTomm( aPad->GetDrillSize().x ) * 0.5, holeZsize )
+                        .Shape();
         gp_Trsf shift;
         shift.SetTranslation( gp_Vec( pcbIUScale.IUTomm( pos.x - aOrigin.x ),
                                           -pcbIUScale.IUTomm( pos.y - aOrigin.y ),
-                                          -m_thickness * 0.5 ) );
+                                      -m_boardThickness * 0.5 ) );
         BRepBuilderAPI_Transform hole( s, shift );
         m_cutouts.push_back( hole.Shape() );
         return true;
@@ -241,7 +236,7 @@ bool STEP_PCB_MODEL::AddPadHole( const PAD* aPad, const VECTOR2D& aOrigin )
 
     if( holeOutlines.OutlineCount() > 0 )
     {
-        if( MakeShape( hole, holeOutlines.COutline( 0 ), m_thickness, 0.0, aOrigin ) )
+        if( MakeShape( hole, holeOutlines.COutline( 0 ), holeZsize, 0.0, aOrigin ) )
         {
             m_cutouts.push_back( hole );
         }
@@ -313,11 +308,11 @@ bool STEP_PCB_MODEL::AddComponent( const std::string& aFileNameUTF8, const std::
 void STEP_PCB_MODEL::SetPCBThickness( double aThickness )
 {
     if( aThickness < 0.0 )
-        m_thickness = THICKNESS_DEFAULT;
-    else if( aThickness < THICKNESS_MIN )
-        m_thickness = THICKNESS_MIN;
+        m_boardThickness = BOARD_THICKNESS_DEFAULT_MM;
+    else if( aThickness < BOARD_THICKNESS_MIN_MM )
+        m_boardThickness = BOARD_THICKNESS_MIN_MM;
     else
-        m_thickness = aThickness;
+        m_boardThickness = aThickness;
 }
 
 
@@ -329,20 +324,19 @@ void STEP_PCB_MODEL::SetBoardColor( double r, double g, double b )
 }
 
 
-void STEP_PCB_MODEL::SetMinDistance( double aDistance )
+void STEP_PCB_MODEL::OCCSetMergeMaxDistance( double aDistance )
 {
     // Ensure a minimal value (in mm)
-    aDistance = std::max( aDistance, STEPEXPORT_MIN_ACCEPTABLE_DISTANCE );
-
-    // m_minDistance2 keeps a squared distance value
-    m_minDistance2 = aDistance * aDistance;
-    BRepBuilderAPI::Precision( aDistance );
+    m_mergeOCCMaxDist = aDistance;
+    BRepBuilderAPI::Precision( m_mergeOCCMaxDist );
 }
+
 
 bool STEP_PCB_MODEL::isBoardOutlineValid()
 {
     return m_pcb_labels.size() > 0;
 }
+
 
 // A helper function to know if a SHAPE_LINE_CHAIN is encoding a circle
 static bool IsChainCircle( const SHAPE_LINE_CHAIN& aChain )
@@ -434,9 +428,8 @@ bool STEP_PCB_MODEL::MakeShape( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& aC
 
         // Do not export very small segments: they can create broken outlines
         double seg_len = std::abs( end.X() - start.X()) + std::abs(start.Y() - end.Y() );
-        double min_len = 0.0001;    // In mm, i.e. 0.1 micron
 
-        if( seg_len < min_len )
+        if( seg_len <= m_mergeOCCMaxDist )
             continue;
 
         try
@@ -515,7 +508,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
 
         TopoDS_Shape curr_brd;
 
-        if( !MakeShape( curr_brd, outline, m_thickness, 0.0, aOrigin ) )
+        if( !MakeShape( curr_brd, outline, m_boardThickness, 0.0, aOrigin ) )
         {
             // Error
             ReportMessage( wxString::Format(
@@ -537,7 +530,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
             const SHAPE_LINE_CHAIN& holeOutline = aOutline.Hole( cnt, ii );
             TopoDS_Shape hole;
 
-            if( MakeShape( hole, holeOutline, m_thickness, 0.0, aOrigin ) )
+            if( MakeShape( hole, holeOutline, m_boardThickness, 0.0, aOrigin ) )
             {
                 m_cutouts.push_back( hole );
             }
@@ -1006,7 +999,7 @@ bool STEP_PCB_MODEL::getModelLocation( bool aBottom, VECTOR2D aPosition, double 
     }
     else
     {
-        aOffset.z += m_thickness;
+        aOffset.z += m_boardThickness;
         lRot.SetRotation( gp_Ax1( gp_Pnt( 0.0, 0.0, 0.0 ), gp_Dir( 0.0, 0.0, 1.0 ) ), aRotation );
         lPos.Multiply( lRot );
     }
