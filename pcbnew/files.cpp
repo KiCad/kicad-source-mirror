@@ -132,13 +132,13 @@ bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, int aCt
     }
 
     wxString allWildcardsStr;
+
     for( const wxString& wildcard : allWildcardsSet )
         allWildcardsStr << wildcard;
 
     if( aCtl & KICTL_KICAD_ONLY )
     {
-        fileFiltersStr = _( "All KiCad Board Files" ) + AddFileExtListToFilter( allExtensions )
-                         + wxT( "|" ) + allWildcardsStr;
+        fileFiltersStr = _( "All KiCad Board Files" ) + AddFileExtListToFilter( allExtensions );
     }
     else
     {
