@@ -23,6 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <settings/common_settings.h>
+#include <pgm_base.h>
 #include <gal/hidpi_gl_3D_canvas.h>
 
 const float HIDPI_GL_3D_CANVAS::m_delta_move_step_factor = 0.7f;
@@ -71,6 +73,11 @@ void HIDPI_GL_3D_CANVAS::OnMouseWheelCamera( wxMouseEvent& event, bool aPan )
     if( m_camera_is_moving )
         return;
 
+    // Pick the modifier, if any.  Shift beats control beats alt, we don't support more than one.
+    int modifiers = event.ShiftDown() ? WXK_SHIFT
+                                      : ( event.ControlDown() ? WXK_CONTROL
+                                                              : ( event.AltDown() ? WXK_ALT : 0 ) );
+
     float delta_move = m_delta_move_step_factor * m_camera.GetZoom();
 
     if( aPan )
@@ -87,21 +94,22 @@ void HIDPI_GL_3D_CANVAS::OnMouseWheelCamera( wxMouseEvent& event, bool aPan )
     //      wheel + ctrl    -> horizontal scrolling;
     //      wheel           -> zooming.
 
-    if( aPan && !event.ControlDown() )
+    if( aPan && modifiers != m_settings.m_scrollModifierZoom )
     {
-        if( event.GetWheelAxis() == wxMOUSE_WHEEL_HORIZONTAL || event.ShiftDown() )
+        if( event.GetWheelAxis() == wxMOUSE_WHEEL_HORIZONTAL
+            || modifiers == m_settings.m_scrollModifierPanH )
             m_camera.Pan( SFVEC3F( -delta_move, 0.0f, 0.0f ) );
         else
             m_camera.Pan( SFVEC3F( 0.0f, -delta_move, 0.0f ) );
 
         mouseActivity = true;
     }
-    else if( event.ShiftDown() && !aPan )
+    else if( modifiers == m_settings.m_scrollModifierPanV && !aPan )
     {
         m_camera.Pan( SFVEC3F( 0.0f, -delta_move, 0.0f ) );
         mouseActivity = true;
     }
-    else if( event.ControlDown() && !aPan )
+    else if( modifiers == m_settings.m_scrollModifierPanH && !aPan )
     {
         m_camera.Pan( SFVEC3F( delta_move, 0.0f, 0.0f ) );
         mouseActivity = true;

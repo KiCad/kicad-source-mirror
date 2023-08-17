@@ -395,7 +395,7 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
         double scrollY = 0.0;
 
         if( axis == wxMOUSE_WHEEL_HORIZONTAL || modifiers == m_settings.m_scrollModifierPanH )
-            scrollX = scrollVec.x;
+            scrollX = ( axis == wxMOUSE_WHEEL_HORIZONTAL ) ? scrollVec.x : -scrollVec.x;
         else
             scrollY = -scrollVec.y;
 

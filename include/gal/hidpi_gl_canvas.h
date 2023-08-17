@@ -27,6 +27,9 @@
 #ifndef HIDPI_GL_CANVAS_H
 #define HIDPI_GL_CANVAS_H
 
+#include <pgm_base.h>
+#include <settings/common_settings.h>
+#include <view/view_controls.h>
 #include <wx/glcanvas.h>
 
 
@@ -60,6 +63,15 @@ public:
      * Get the current scale factor
      */
     double GetScaleFactor() const;
+
+    /**
+     * Loads or updates the current settings
+     */
+    void LoadSettings();
+
+protected:
+    ///< Current VIEW_CONTROLS settings.
+    KIGFX::VC_SETTINGS m_settings;
 
 private:
     /**

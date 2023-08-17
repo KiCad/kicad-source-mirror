@@ -35,8 +35,28 @@ HIDPI_GL_CANVAS::HIDPI_GL_CANVAS( wxWindow* parent, wxWindowID id, const int* at
         wxGLCanvas( parent, id, attribList, pos, size, style, name, palette ),
         m_scale_factor( DPI_SCALING::GetDefaultScaleFactor() )
 {
+    this->LoadSettings();
 }
 
+void HIDPI_GL_CANVAS::LoadSettings()
+{
+    COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
+
+    m_settings.m_warpCursor            = cfg->m_Input.center_on_zoom;
+    m_settings.m_focusFollowSchPcb     = cfg->m_Input.focus_follow_sch_pcb;
+    m_settings.m_autoPanSettingEnabled = cfg->m_Input.auto_pan;
+    m_settings.m_autoPanAcceleration   = cfg->m_Input.auto_pan_acceleration;
+    m_settings.m_horizontalPan         = cfg->m_Input.horizontal_pan;
+    m_settings.m_zoomAcceleration      = cfg->m_Input.zoom_acceleration;
+    m_settings.m_zoomSpeed             = cfg->m_Input.zoom_speed;
+    m_settings.m_zoomSpeedAuto         = cfg->m_Input.zoom_speed_auto;
+    m_settings.m_scrollModifierZoom    = cfg->m_Input.scroll_modifier_zoom;
+    m_settings.m_scrollModifierPanH    = cfg->m_Input.scroll_modifier_pan_h;
+    m_settings.m_scrollModifierPanV    = cfg->m_Input.scroll_modifier_pan_v;
+    m_settings.m_dragLeft              = cfg->m_Input.drag_left;
+    m_settings.m_dragMiddle            = cfg->m_Input.drag_middle;
+    m_settings.m_dragRight             = cfg->m_Input.drag_right;
+}
 
 wxSize HIDPI_GL_CANVAS::GetNativePixelSize() const
 {
