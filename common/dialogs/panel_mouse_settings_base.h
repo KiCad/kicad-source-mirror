@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -70,21 +70,25 @@ class PANEL_MOUSE_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxStaticText* m_lblCtrl;
 		wxStaticText* m_staticText8;
 		wxStaticText* m_lblAlt;
+		wxStaticText* m_staticText18;
 		wxStaticText* m_staticText10;
 		wxRadioButton* m_rbZoomNone;
 		wxRadioButton* m_rbZoomCtrl;
 		wxRadioButton* m_rbZoomShift;
 		wxRadioButton* m_rbZoomAlt;
+		wxStaticText* m_staticText201;
 		wxStaticText* m_staticText11;
 		wxRadioButton* m_rbPanVNone;
 		wxRadioButton* m_rbPanVCtrl;
 		wxRadioButton* m_rbPanVShift;
 		wxRadioButton* m_rbPanVAlt;
+		wxStaticText* m_staticText211;
 		wxStaticText* m_staticText20;
 		wxRadioButton* m_rbPanHNone;
 		wxRadioButton* m_rbPanHCtrl;
 		wxRadioButton* m_rbPanHShift;
 		wxRadioButton* m_rbPanHAlt;
+		wxCheckBox* m_checkPanHReverse;
 		wxCheckBox* m_checkEnablePanH;
 		wxButton* m_mouseDefaults;
 		wxButton* m_trackpadDefaults;

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -196,7 +196,7 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 	bSizerLeft->Add( bSizer4, 0, wxEXPAND, 5 );
 
 	wxFlexGridSizer* fgSizer2;
-	fgSizer2 = new wxFlexGridSizer( 0, 5, 8, 0 );
+	fgSizer2 = new wxFlexGridSizer( 0, 6, 8, 0 );
 	fgSizer2->AddGrowableCol( 0 );
 	fgSizer2->SetFlexibleDirection( wxBOTH );
 	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -221,6 +221,10 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 	m_lblAlt->Wrap( -1 );
 	fgSizer2->Add( m_lblAlt, 0, wxALIGN_CENTER_HORIZONTAL|wxTOP|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
+	m_staticText18 = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText18->Wrap( -1 );
+	fgSizer2->Add( m_staticText18, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
 	m_staticText10 = new wxStaticText( this, wxID_ANY, _("Zoom:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText10->Wrap( -1 );
 	fgSizer2->Add( m_staticText10, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
@@ -236,6 +240,10 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 
 	m_rbZoomAlt = new wxRadioButton( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_rbZoomAlt, 0, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_staticText201 = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText201->Wrap( -1 );
+	fgSizer2->Add( m_staticText201, 0, wxALL, 5 );
 
 	m_staticText11 = new wxStaticText( this, wxID_ANY, _("Pan up/down:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText11->Wrap( -1 );
@@ -253,6 +261,10 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 	m_rbPanVAlt = new wxRadioButton( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_rbPanVAlt, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
+	m_staticText211 = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText211->Wrap( -1 );
+	fgSizer2->Add( m_staticText211, 0, wxALL, 5 );
+
 	m_staticText20 = new wxStaticText( this, wxID_ANY, _("Pan left/right:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText20->Wrap( -1 );
 	fgSizer2->Add( m_staticText20, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
@@ -268,6 +280,9 @@ PANEL_MOUSE_SETTINGS_BASE::PANEL_MOUSE_SETTINGS_BASE( wxWindow* parent, wxWindow
 
 	m_rbPanHAlt = new wxRadioButton( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_rbPanHAlt, 0, wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_checkPanHReverse = new wxCheckBox( this, wxID_ANY, _("Reverse"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer2->Add( m_checkPanHReverse, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
 	fgSizer2->Add( 0, 10, 1, wxEXPAND, 5 );

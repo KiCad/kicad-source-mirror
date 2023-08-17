@@ -78,7 +78,8 @@ void HIDPI_GL_3D_CANVAS::OnMouseWheelCamera( wxMouseEvent& event, bool aPan )
                                       : ( event.ControlDown() ? WXK_CONTROL
                                                               : ( event.AltDown() ? WXK_ALT : 0 ) );
 
-    float delta_move = m_delta_move_step_factor * m_camera.GetZoom();
+    float delta_move     = m_delta_move_step_factor * m_camera.GetZoom();
+    float horizontalSign = m_settings.m_scrollReversePanH ? -1 : 1;
 
     if( aPan )
         delta_move *= 0.01f * event.GetWheelRotation();
@@ -111,7 +112,7 @@ void HIDPI_GL_3D_CANVAS::OnMouseWheelCamera( wxMouseEvent& event, bool aPan )
     }
     else if( modifiers == m_settings.m_scrollModifierPanH && !aPan )
     {
-        m_camera.Pan( SFVEC3F( delta_move, 0.0f, 0.0f ) );
+        m_camera.Pan( SFVEC3F( delta_move * horizontalSign, 0.0f, 0.0f ) );
         mouseActivity = true;
     }
     else

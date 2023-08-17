@@ -56,6 +56,7 @@ void HIDPI_GL_CANVAS::LoadSettings()
     m_settings.m_dragLeft              = cfg->m_Input.drag_left;
     m_settings.m_dragMiddle            = cfg->m_Input.drag_middle;
     m_settings.m_dragRight             = cfg->m_Input.drag_right;
+    m_settings.m_scrollReversePanH     = cfg->m_Input.reverse_scroll_pan_h;
 }
 
 wxSize HIDPI_GL_CANVAS::GetNativePixelSize() const

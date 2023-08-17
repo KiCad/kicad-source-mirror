@@ -98,6 +98,8 @@ public:
         MOUSE_DRAG_ACTION drag_left;
         MOUSE_DRAG_ACTION drag_middle;
         MOUSE_DRAG_ACTION drag_right;
+
+        bool reverse_scroll_pan_h;
     };
 
     struct GRAPHICS

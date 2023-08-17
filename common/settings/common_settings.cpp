@@ -275,6 +275,9 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "input.scroll_modifier_pan_v",
             &m_Input.scroll_modifier_pan_v, WXK_SHIFT ) );
 
+    m_params.emplace_back( new PARAM<bool>( "input.reverse_scroll_pan_h",
+            &m_Input.reverse_scroll_pan_h, false ) );
+
     m_params.emplace_back( new PARAM_ENUM<MOUSE_DRAG_ACTION>( "input.mouse_left",
             &m_Input.drag_left, MOUSE_DRAG_ACTION::DRAG_SELECTED, MOUSE_DRAG_ACTION::DRAG_ANY,
             MOUSE_DRAG_ACTION::SELECT ) );

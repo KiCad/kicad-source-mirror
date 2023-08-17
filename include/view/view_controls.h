@@ -120,6 +120,9 @@ struct VC_SETTINGS
 
     ///< Position of the above event.
     VECTOR2D m_lastKeyboardCursorPosition;
+
+    ///< Wether to invert the scroll wheel movement for horizontal pan
+    bool m_scrollReversePanH;
 };
 
 

@@ -171,6 +171,7 @@ void WX_VIEW_CONTROLS::LoadSettings()
     m_settings.m_dragLeft              = cfg->m_Input.drag_left;
     m_settings.m_dragMiddle            = cfg->m_Input.drag_middle;
     m_settings.m_dragRight             = cfg->m_Input.drag_right;
+    m_settings.m_scrollReversePanH     = cfg->m_Input.reverse_scroll_pan_h;
 
     m_zoomController.reset();
 
@@ -391,13 +392,24 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
         // Scrolling
         VECTOR2D scrollVec = m_view->ToWorld( m_view->GetScreenPixelSize(), false ) *
                              ( (double) aEvent.GetWheelRotation() * wheelPanSpeed );
-        double scrollX = 0.0;
-        double scrollY = 0.0;
+        double scrollX  = 0.0;
+        double scrollY  = 0.0;
+        bool   hReverse = false;
+
+        if( axis != wxMOUSE_WHEEL_HORIZONTAL )
+            hReverse = m_settings.m_scrollReversePanH;
 
         if( axis == wxMOUSE_WHEEL_HORIZONTAL || modifiers == m_settings.m_scrollModifierPanH )
-            scrollX = ( axis == wxMOUSE_WHEEL_HORIZONTAL ) ? scrollVec.x : -scrollVec.x;
+        {
+            if( hReverse )
+                scrollX = scrollVec.x;
+            else
+                scrollX = ( axis == wxMOUSE_WHEEL_HORIZONTAL ) ? scrollVec.x : -scrollVec.x;
+        }
         else
+        {
             scrollY = -scrollVec.y;
+        }
 
         VECTOR2D delta( scrollX, scrollY );
 
