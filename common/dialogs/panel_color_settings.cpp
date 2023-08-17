@@ -159,6 +159,7 @@ void PANEL_COLOR_SETTINGS::OnThemeChanged( wxCommandEvent& event )
         m_cbTheme->SetSelection( idx );
 
         m_optOverrideColors->SetValue( newSettings->GetOverrideSchItemColors() );
+        m_optOverrideColors->Enable( !newSettings->IsReadOnly() );
 
         *m_currentSettings = *newSettings;
         updateSwatches();
@@ -174,6 +175,7 @@ void PANEL_COLOR_SETTINGS::OnThemeChanged( wxCommandEvent& event )
                 return;
 
             m_optOverrideColors->SetValue( selected->GetOverrideSchItemColors() );
+            m_optOverrideColors->Enable( !selected->IsReadOnly() );
 
             *m_currentSettings = *selected;
             onNewThemeSelected();
