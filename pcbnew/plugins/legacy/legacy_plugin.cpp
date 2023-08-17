@@ -437,7 +437,6 @@ bool LEGACY_PLUGIN::CanReadFootprint( const wxString& aFileName ) const
 
     FILE_LINE_READER         freader( aFileName );
     WHITESPACE_FILTER_READER reader( freader );
-    IO_MGR::PCB_FILE_T       file_type;
 
     reader.ReadLine();
     char* line = reader.Line();

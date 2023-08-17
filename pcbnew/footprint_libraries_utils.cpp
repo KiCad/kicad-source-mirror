@@ -133,9 +133,7 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
     if( !fn.IsOk() )
         return nullptr;
 
-    FILE* fp = wxFopen( fn.GetFullPath(), wxT( "rt" ) );
-
-    if( !fp )
+    if( !wxFileExists( fn.GetFullPath() ) )
     {
         wxString msg = wxString::Format( _( "File '%s' not found." ), fn.GetFullPath() );
         DisplayError( this, msg );

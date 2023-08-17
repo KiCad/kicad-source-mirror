@@ -476,7 +476,6 @@ void DIALOG_ERC::testErc()
     SCHEMATIC* sch = &m_parent->Schematic();
 
     SCH_SCREENS screens( sch->Root() );
-    ERC_SETTINGS& settings = sch->ErcSettings();
     ERC_TESTER tester( sch );
 
     {

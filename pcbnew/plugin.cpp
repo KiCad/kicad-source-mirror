@@ -67,9 +67,9 @@ bool PLUGIN::CanReadBoard( const wxString& aFileName ) const
 
     wxString fileExt = wxFileName( aFileName ).GetExt().MakeLower();
 
-    for( const wxString& ext : exts )
+    for( const std::string& ext : exts )
     {
-        if( fileExt == ext.Lower() )
+        if( fileExt == wxString( ext ).Lower() )
             return true;
     }
 
@@ -83,9 +83,9 @@ bool PLUGIN::CanReadFootprint( const wxString& aFileName ) const
 
     wxString fileExt = wxFileName( aFileName ).GetExt().MakeLower();
 
-    for( const wxString& ext : exts )
+    for( const std::string& ext : exts )
     {
-        if( fileExt == ext.Lower() )
+        if( fileExt == wxString( ext ).Lower() )
             return true;
     }
 
@@ -103,9 +103,9 @@ bool PLUGIN::CanReadFootprintLib( const wxString& aFileName ) const
 
         wxString fileExt = wxFileName( aFileName ).GetExt().MakeLower();
 
-        for( const wxString& ext : exts )
+        for( const std::string& ext : exts )
         {
-            if( fileExt == ext.Lower() )
+            if( fileExt == wxString( ext ).Lower() )
                 return true;
         }
     }
