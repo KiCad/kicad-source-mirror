@@ -146,8 +146,18 @@ void SIGNALS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
                 menu.Append( MYID_MEASURE_AVG, _( "Measure Average" ) );
                 menu.Append( MYID_MEASURE_RMS, _( "Measure RMS" ) );
                 menu.Append( MYID_MEASURE_PP, _( "Measure Peak-to-peak" ) );
-                menu.Append( MYID_MEASURE_MIN_AT, _( "Measure Time of Min" ) );
-                menu.Append( MYID_MEASURE_MAX_AT, _( "Measure Time of Max" ) );
+
+                if( panel->GetSimType() == ST_AC || panel->GetSimType() == ST_SP )
+                {
+                    menu.Append( MYID_MEASURE_MIN_AT, _( "Measure Frequency of Min" ) );
+                    menu.Append( MYID_MEASURE_MAX_AT, _( "Measure Frequency of Max" ) );
+                }
+                else
+                {
+                    menu.Append( MYID_MEASURE_MIN_AT, _( "Measure Time of Min" ) );
+                    menu.Append( MYID_MEASURE_MAX_AT, _( "Measure Time of Max" ) );
+                }
+
                 menu.Append( MYID_MEASURE_INTEGRAL, _( "Measure Integral" ) );
 
                 if( panel->GetSimType() == ST_TRAN )
@@ -1266,7 +1276,12 @@ void SIMULATOR_FRAME_UI::UpdateMeasurement( int aRow )
             units = wxS( "V" );
 
         if( func.EndsWith( wxS( "_AT" ) ) )
-            units = wxS( "s" );
+        {
+            if( plotTab->GetSimType() == ST_AC || plotTab->GetSimType() == ST_SP )
+                units = wxS( "Hz" );
+            else
+                units = wxS( "s" );
+        }
         else if( func.StartsWith( wxS( "INTEG" ) ) )
         {
             switch( plotTab->GetSimType() )
