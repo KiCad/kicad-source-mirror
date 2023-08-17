@@ -63,11 +63,13 @@ struct MAGNETIC_SETTINGS
     MAGNETIC_OPTIONS pads;
     MAGNETIC_OPTIONS tracks;
     bool             graphics;
+    bool             allLayers;
 
     MAGNETIC_SETTINGS() :
             pads( MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL ),
             tracks( MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL ),
-            graphics( false )
+            graphics( false ),
+            allLayers( false )
     { }
 };
 

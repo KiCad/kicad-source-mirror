@@ -1340,6 +1340,47 @@ int PCB_CONTROL::Redo( const TOOL_EVENT& aEvent )
 }
 
 
+int PCB_CONTROL::SnapMode( const TOOL_EVENT& aEvent )
+{
+    bool& snapMode = m_frame->GetPcbNewSettings()->m_MagneticItems.allLayers;
+
+    if( aEvent.IsAction( &PCB_ACTIONS::magneticSnapActiveLayer ) )
+        snapMode = false;
+    else if( aEvent.IsAction( &PCB_ACTIONS::magneticSnapAllLayers ) )
+        snapMode = true;
+    else
+        snapMode = !snapMode;
+
+    m_toolMgr->PostEvent( PCB_EVENTS::SnappingModeChangedByKeyEvent );
+
+    return 0;
+}
+
+
+int PCB_CONTROL::SnapModeFeedback( const TOOL_EVENT& aEvent )
+{
+    if( !Pgm().GetCommonSettings()->m_Input.hotkey_feedback )
+        return 0;
+
+    wxArrayString labels;
+    labels.Add( _( "Active Layer" ) );
+    labels.Add( _( "All Layers" ) );
+
+    if( !m_frame->GetHotkeyPopup() )
+        m_frame->CreateHotkeyPopup();
+
+    HOTKEY_CYCLE_POPUP* popup = m_frame->GetHotkeyPopup();
+
+    if( popup )
+    {
+        popup->Popup( _( "Object Snapping" ), labels,
+                      static_cast<int>( m_frame->GetPcbNewSettings()->m_MagneticItems.allLayers ) );
+    }
+
+    return 0;
+}
+
+
 int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 {
     PCB_SELECTION_TOOL*         selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
@@ -1644,6 +1685,12 @@ void PCB_CONTROL::setTransitions()
 
     Go( &PCB_CONTROL::Undo,                 ACTIONS::undo.MakeEvent() );
     Go( &PCB_CONTROL::Redo,                 ACTIONS::redo.MakeEvent() );
+
+    // Snapping control
+    Go( &PCB_CONTROL::SnapMode,             PCB_ACTIONS::magneticSnapActiveLayer.MakeEvent() );
+    Go( &PCB_CONTROL::SnapMode,             PCB_ACTIONS::magneticSnapAllLayers.MakeEvent() );
+    Go( &PCB_CONTROL::SnapMode,             PCB_ACTIONS::magneticSnapToggle.MakeEvent() );
+    Go( &PCB_CONTROL::SnapModeFeedback,     PCB_EVENTS::SnappingModeChangedByKeyEvent );
 
     // Miscellaneous
     Go( &PCB_CONTROL::DeleteItemCursor,     ACTIONS::deleteTool.MakeEvent() );

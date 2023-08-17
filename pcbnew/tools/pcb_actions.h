@@ -217,6 +217,11 @@ public:
     /// Switch posture when drawing arc
     static TOOL_ACTION arcPosture;
 
+    /// Snapping controls
+    static TOOL_ACTION magneticSnapActiveLayer;
+    static TOOL_ACTION magneticSnapAllLayers;
+    static TOOL_ACTION magneticSnapToggle;
+
     // Push and Shove Router Tool
 
     /// Activation of the Push and Shove router
@@ -547,6 +552,15 @@ public:
     /// Drag and drop
     static TOOL_ACTION ddAppendBoard;
     static TOOL_ACTION ddImportFootprint;
+
+
+};
+
+class PCB_EVENTS
+{
+public:
+    /// Hotkey feedback
+    const static TOOL_EVENT SnappingModeChangedByKeyEvent;
 };
 
 #endif

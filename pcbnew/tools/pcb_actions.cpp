@@ -255,6 +255,26 @@ TOOL_ACTION PCB_ACTIONS::arcPosture( "pcbnew.InteractiveDrawing.arcPosture",
         '/', LEGACY_HK_NAME( "Switch Track Posture" ),
         _( "Switch Arc Posture" ), _( "Switch the arc posture" ) );
 
+
+TOOL_ACTION PCB_ACTIONS::magneticSnapActiveLayer( TOOL_ACTION_ARGS()
+        .Name( "common.Control.magneticSnapActiveLayer" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Snap to objects on the active layer only" ) )
+        .Tooltip( _( "Enables snapping to objects on the active layer only" ) ) );
+
+TOOL_ACTION PCB_ACTIONS::magneticSnapAllLayers( TOOL_ACTION_ARGS()
+        .Name( "common.Control.magneticSnapAllLayers" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Snap to objects on all layers" ) )
+        .Tooltip( _( "Enables snapping to objects on all visible layers" ) ) );
+
+TOOL_ACTION PCB_ACTIONS::magneticSnapToggle( TOOL_ACTION_ARGS()
+        .Name( "common.Control.magneticSnapToggle" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + 'S' )
+        .MenuText( _( "Toggle snapping between active and all layers" ) )
+        .Tooltip( _( "Toggles between snapping on all visible layers and only the active area" ) ) );
+
 TOOL_ACTION PCB_ACTIONS::deleteLastPoint( "pcbnew.InteractiveDrawing.deleteLastPoint",
         AS_CONTEXT,
         WXK_BACK, "",
@@ -1889,3 +1909,7 @@ TOOL_ACTION PCB_ACTIONS::ddAppendBoard( "pcbnew.Control.DdAppendBoard",
 
 
 TOOL_ACTION PCB_ACTIONS::ddImportFootprint( "pcbnew.Control.ddImportFootprint", AS_GLOBAL );
+
+
+const TOOL_EVENT PCB_EVENTS::SnappingModeChangedByKeyEvent( TC_MESSAGE, TA_ACTION,
+                                                "common.Interactive.snappingModeChangedByKey" );

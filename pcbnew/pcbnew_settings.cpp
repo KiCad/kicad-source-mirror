@@ -86,9 +86,10 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
           m_FootprintViewerLibListWidth( 200 ),
           m_FootprintViewerFPListWidth( 300 )
 {
-    m_MagneticItems.pads     = MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL;
-    m_MagneticItems.tracks   = MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL;
-    m_MagneticItems.graphics = false;
+    m_MagneticItems.pads      = MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL;
+    m_MagneticItems.tracks    = MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL;
+    m_MagneticItems.graphics  = false;
+    m_MagneticItems.allLayers = false;
 
     m_params.emplace_back( new PARAM<bool>( "aui.show_layer_manager",
             &m_AuiPanels.show_layer_manager, true ) );
@@ -160,6 +161,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<int>( "editing.magnetic_tracks",
             reinterpret_cast<int*>( &m_MagneticItems.tracks ),
             static_cast<int>( MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL ) ) );
+
+    m_params.emplace_back( new PARAM<bool>( "editing.magnetic_all_layers",
+            &m_MagneticItems.allLayers, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "editing.polar_coords",
             &m_PolarCoords, false ) );

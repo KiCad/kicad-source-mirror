@@ -91,6 +91,10 @@ public:
     int Undo( const TOOL_EVENT& aEvent );
     int Redo( const TOOL_EVENT& aEvent );
 
+    // Snapping control
+    int SnapMode( const TOOL_EVENT& aEvent );
+    int SnapModeFeedback( const TOOL_EVENT& aEvent );
+
     // Miscellaneous
     int DeleteItemCursor( const TOOL_EVENT& aEvent );
     int Paste( const TOOL_EVENT& aEvent );
