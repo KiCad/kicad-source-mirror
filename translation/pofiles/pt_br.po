@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-13 14:56-0700\n"
-"PO-Revision-Date: 2023-08-06 10:10+0000\n"
+"PO-Revision-Date: 2023-08-18 10:50+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/v7/pt_BR/>\n"
@@ -35779,9 +35779,9 @@ msgid "'%s' was not fully parsed."
 msgstr "'%s' não foi totalmente analisado."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:683
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint directory not found: '%s'."
-msgstr "A biblioteca do footprint não foi encontrado."
+msgstr "O diretório do footprint não foi encontrado: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:802
 #, c-format
