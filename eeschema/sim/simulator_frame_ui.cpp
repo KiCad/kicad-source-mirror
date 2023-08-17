@@ -209,8 +209,16 @@ void SIGNALS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
             {
                 if( signal.EndsWith( _( " (phase)" ) ) )
                     return;
-                else if( signal.EndsWith( _( " (gain)" ) ) )
+
+                if( signal.EndsWith( _( " (gain)" ) ) || signal.EndsWith( _( " (amplitude)" ) ) )
+                {
                     signal = signal.Left( signal.length() - 7 );
+
+                    if( signal.Upper().StartsWith( wxS( "V(" ) ) )
+                        signal = wxS( "vdb" ) + signal.Mid( 1 );
+                    else if( signal.Upper().StartsWith( wxS( "I(" ) ) )
+                        signal = wxS( "idb" ) + signal.Mid( 1 );
+                }
 
                 m_parent->AddMeasurement( cmd + wxS( " " ) + signal );
             };
@@ -1237,7 +1245,7 @@ void SIMULATOR_FRAME_UI::UpdateMeasurement( int aRow )
                                             " *"
                                             "([a-zA-Z_]+)"
                                             " +"
-                                            "([a-zA-Z])\\(([^\\)]+)\\)" ) );
+                                            "([a-zA-Z]*)\\(([^\\)]+)\\)" ) );
 
     SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
 
@@ -1259,21 +1267,29 @@ void SIMULATOR_FRAME_UI::UpdateMeasurement( int aRow )
     if( measureParamsRegEx.Matches( text ) )
     {
         wxString           func = measureParamsRegEx.GetMatch( text, 1 ).Upper();
-        wxUniChar          signalType = measureParamsRegEx.GetMatch( text, 2 ).Upper()[0];
+        wxString           signalType = measureParamsRegEx.GetMatch( text, 2 ).Upper();
         wxString           deviceName = measureParamsRegEx.GetMatch( text, 3 );
         wxString           units;
         SPICE_VALUE_FORMAT fmt = GetMeasureFormat( aRow );
 
-        if( signalType == 'I' )
+        if( signalType.EndsWith( wxS( "DB" ) ) )
+        {
+            units = wxS( "dB" );
+        }
+        else if( signalType.StartsWith( 'I' ) )
+        {
             units = wxS( "A" );
-        else if( signalType == 'P' )
+        }
+        else if( signalType.StartsWith( 'P' ) )
         {
             units = wxS( "W" );
             // Our syntax is different from ngspice for power signals
             text = func + " " + deviceName + ":power";
         }
         else
+        {
             units = wxS( "V" );
+        }
 
         if( func.EndsWith( wxS( "_AT" ) ) )
         {
@@ -1287,7 +1303,7 @@ void SIMULATOR_FRAME_UI::UpdateMeasurement( int aRow )
             switch( plotTab->GetSimType() )
             {
                 case SIM_TYPE::ST_TRAN:
-                    if ( signalType == 'P' )
+                    if ( signalType.StartsWith( 'P' ) )
                         units = wxS( "J" );
                     else
                         units += wxS( ".s" );
