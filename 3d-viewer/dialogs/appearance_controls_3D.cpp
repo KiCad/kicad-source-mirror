@@ -81,7 +81,8 @@ APPEARANCE_CONTROLS_3D::APPEARANCE_CONTROLS_3D( EDA_3D_VIEWER_FRAME* aParent,
                                                 wxWindow* aFocusOwner ) :
         APPEARANCE_CONTROLS_3D_BASE( aParent ),
         m_frame( aParent ),
-        m_focusOwner( aFocusOwner )
+        m_focusOwner( aFocusOwner ),
+        m_lastSelectedViewport( nullptr )
 {
     DPI_SCALING dpi( nullptr, m_frame );
 

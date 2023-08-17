@@ -38,9 +38,9 @@ public:
     PCAD_PLUGIN();
     ~PCAD_PLUGIN();
 
-    const wxString PluginName() const { return wxT( "P-Cad" ); }
+    const wxString PluginName() const override { return wxT( "P-Cad" ); }
 
-    PLUGIN_FILE_DESC GetBoardFileDesc() const
+    PLUGIN_FILE_DESC GetBoardFileDesc() const override
     {
         return PLUGIN_FILE_DESC( _HKI( "P-Cad 200x ASCII PCB files" ), { "pcb" } );
     }

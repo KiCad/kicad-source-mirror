@@ -28,6 +28,7 @@ struct DATA_MODEL_ROW
 {
     DATA_MODEL_ROW( const SCH_REFERENCE& aFirstReference, GROUP_TYPE aType )
     {
+        m_ItemNumber = 0;
         m_Refs.push_back( aFirstReference );
         m_Flag = aType;
     }

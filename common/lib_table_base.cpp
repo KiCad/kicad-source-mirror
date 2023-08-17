@@ -344,7 +344,7 @@ bool LIB_TABLE::RemoveRow( const LIB_TABLE_ROW* aRow )
     if( !found )
     {
         // Bookkeeping got messed up...
-        for( size_t i = m_rows.size() - 1; i >= 0; --i )
+        for( int i = (int)m_rows.size() - 1; i >= 0; --i )
         {
             if( &m_rows[i] == aRow )
             {

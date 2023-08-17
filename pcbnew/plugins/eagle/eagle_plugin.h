@@ -129,7 +129,7 @@ struct ERULES
 class EAGLE_PLUGIN : public PLUGIN, public LAYER_REMAPPABLE_PLUGIN
 {
 public:
-    const wxString PluginName() const { return wxT( "Eagle" ); }
+    const wxString PluginName() const override { return wxT( "Eagle" ); }
 
     PLUGIN_FILE_DESC GetBoardFileDesc() const override
     {

@@ -370,11 +370,12 @@ void DIALOG_CHANGE_SYMBOLS::checkAll( bool aCheck )
 
 void DIALOG_CHANGE_SYMBOLS::onOkButtonClicked( wxCommandEvent& aEvent )
 {
-    wxBusyCursor    dummy;
     SCH_EDIT_FRAME* parent = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
-    SCH_COMMIT      commit( parent );
 
     wxCHECK( parent, /* void */ );
+
+    wxBusyCursor    dummy;
+    SCH_COMMIT      commit( parent );
 
     m_messagePanel->Clear();
     m_messagePanel->Flush( false );

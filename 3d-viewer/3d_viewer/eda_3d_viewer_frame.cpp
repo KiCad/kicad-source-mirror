@@ -396,7 +396,7 @@ void EDA_3D_VIEWER_FRAME::NewDisplay( bool aForceImmediateRedraw )
 
     // After the ReloadRequest call, the refresh often takes a bit of time,
     // and it is made here only on request.
-    if( aForceImmediateRedraw )
+    if( m_canvas && aForceImmediateRedraw )
         m_canvas->Refresh();
 }
 

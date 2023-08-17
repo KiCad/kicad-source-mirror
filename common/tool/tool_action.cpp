@@ -73,6 +73,7 @@ TOOL_ACTION::TOOL_ACTION( const TOOL_ACTION_ARGS& aArgs ) :
         m_defaultHotKey( aArgs.m_defaultHotKey.value_or( 0 ) ),
         m_defaultHotKeyAlt( aArgs.m_defaultHotKeyAlt.value_or( 0 ) ),
         m_hotKey( aArgs.m_defaultHotKey.value_or( 0 ) ),
+        m_hotKeyAlt( 0 ),
         m_legacyName( aArgs.m_legacyName.value_or( "" ) ),
         m_label( TowxString( aArgs.m_menuText.value_or( "" ) ) ),
         m_tooltip( TowxString( aArgs.m_tooltip.value_or( "" ) ) ),

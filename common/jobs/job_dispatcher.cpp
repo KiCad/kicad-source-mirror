@@ -27,6 +27,7 @@
 JOB_DISPATCHER::JOB_DISPATCHER()
 {
     m_reporter = &NULL_REPORTER::GetInstance();
+    m_progressReporter = nullptr;
 }
 
 
