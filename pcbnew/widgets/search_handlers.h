@@ -105,4 +105,18 @@ private:
     wxString getResultCell( BOARD_ITEM* aItem, int aCol ) override;
 };
 
+
+class RATSNEST_SEARCH_HANDLER : public PCB_SEARCH_HANDLER
+{
+public:
+    RATSNEST_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame );
+
+    int  Search( const wxString& aQuery ) override;
+    void SelectItems( std::vector<long>& aItemRows ) override;
+    void ActivateItem( long aItemRow ) override;
+
+private:
+    wxString getResultCell( BOARD_ITEM* aItem, int aCol ) override;
+};
+
 #endif

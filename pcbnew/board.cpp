@@ -2165,6 +2165,12 @@ void BOARD::OnItemsChanged( std::vector<BOARD_ITEM*>& aItems )
 }
 
 
+void BOARD::OnRatsnestChanged()
+{
+    InvokeListeners( &BOARD_LISTENER::OnBoardRatsnestChanged, *this );
+}
+
+
 void BOARD::ResetNetHighLight()
 {
     m_highLight.Clear();

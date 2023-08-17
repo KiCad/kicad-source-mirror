@@ -454,6 +454,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
             if( frame )
                 frame->GetCanvas()->RedrawRatsnest();
+
+            board->OnRatsnestChanged();
         }
 
         if( solderMaskDirty )
@@ -665,6 +667,7 @@ void BOARD_COMMIT::Revert()
     {
         connectivity->RecalculateRatsnest();
         board->UpdateRatsnestExclusions();
+        board->OnRatsnestChanged();
     }
 
     PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();

@@ -23,6 +23,8 @@
 #include <pcb_painter.h>
 #include <pcb_textbox.h>
 #include <pcb_text.h>
+#include <connectivity/connectivity_data.h>
+#include <ratsnest/ratsnest_data.h>
 #include <string_utils.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
@@ -330,6 +332,90 @@ void NETS_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
 
 
 void NETS_SEARCH_HANDLER::ActivateItem( long aItemRow )
+{
+    m_frame->ShowBoardSetupDialog( _( "Net Classes" ) );
+}
+
+
+RATSNEST_SEARCH_HANDLER::RATSNEST_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame ) :
+        PCB_SEARCH_HANDLER( wxT( "Ratsnest" ), aFrame )
+{
+    m_columns.emplace_back( wxT( "Name" ), 2 );
+    m_columns.emplace_back( wxT( "Class" ), 2 );
+}
+
+
+int RATSNEST_SEARCH_HANDLER::Search( const wxString& aQuery )
+{
+    m_hitlist.clear();
+
+    EDA_SEARCH_DATA frp;
+    frp.findString = aQuery;
+
+    // Try to handle whatever the user throws at us (substring, wildcards, regex, etc.)
+    frp.matchMode = EDA_SEARCH_MATCH_MODE::PERMISSIVE;
+
+    BOARD* board = m_frame->GetBoard();
+
+    for( NETINFO_ITEM* net : board->GetNetInfo() )
+    {
+        if( net == nullptr || !net->Matches( frp, nullptr ) )
+            continue;
+
+        RN_NET* rn = board->GetConnectivity()->GetRatsnestForNet( net->GetNetCode() );
+
+        if( rn && !rn->GetEdges().empty() )
+            m_hitlist.push_back( net );
+    }
+
+    return (int) m_hitlist.size();
+}
+
+
+wxString RATSNEST_SEARCH_HANDLER::getResultCell( BOARD_ITEM* aItem, int aCol )
+{
+    NETINFO_ITEM* net = static_cast<NETINFO_ITEM*>( aItem );
+
+    if( net->GetNetCode() == 0 )
+    {
+        if( aCol == 0 )
+            return _( "No Net" );
+        else if( aCol == 1 )
+            return wxT( "" );
+    }
+
+    if( aCol == 0 )
+        return UnescapeString( net->GetNetname() );
+    else if( aCol == 1 )
+        return net->GetNetClass()->GetName();
+
+    return wxEmptyString;
+}
+
+
+void RATSNEST_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
+{
+    RENDER_SETTINGS* ps = m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings();
+    ps->SetHighlight( false );
+
+    std::vector<NETINFO_ITEM*> selectedItems;
+
+    for( long row : aItemRows )
+    {
+        if( row >= 0 && row < (long) m_hitlist.size() )
+        {
+            NETINFO_ITEM* net = static_cast<NETINFO_ITEM*>( m_hitlist[row] );
+
+            ps->SetHighlight( true, net->GetNetCode(), true );
+        }
+    }
+
+    m_frame->GetCanvas()->GetView()->UpdateAllLayersColor();
+    m_frame->GetCanvas()->Refresh();
+}
+
+
+void RATSNEST_SEARCH_HANDLER::ActivateItem( long aItemRow )
 {
     m_frame->ShowBoardSetupDialog( _( "Net Classes" ) );
 }

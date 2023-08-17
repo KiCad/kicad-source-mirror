@@ -45,6 +45,7 @@ PCB_SEARCH_PANE::PCB_SEARCH_PANE( PCB_EDIT_FRAME* aFrame ) :
     AddSearcher( new FOOTPRINT_SEARCH_HANDLER( aFrame ) );
     AddSearcher( new ZONE_SEARCH_HANDLER( aFrame ) );
     AddSearcher( new NETS_SEARCH_HANDLER( aFrame ) );
+    AddSearcher( new RATSNEST_SEARCH_HANDLER( aFrame ) );
     AddSearcher( new TEXT_SEARCH_HANDLER( aFrame ) );
 }
 
@@ -141,4 +142,13 @@ void PCB_SEARCH_PANE::OnBoardItemsChanged( BOARD& aBoard, std::vector<BOARD_ITEM
 
 void PCB_SEARCH_PANE::OnBoardHighlightNetChanged( BOARD& aBoard )
 {
+}
+
+
+void PCB_SEARCH_PANE::OnBoardRatsnestChanged( BOARD& aBoard )
+{
+    if( !IsShown() )
+        return;
+
+    RefreshSearch();
 }

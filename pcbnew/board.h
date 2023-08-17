@@ -250,6 +250,7 @@ public:
     virtual void OnBoardItemChanged( BOARD& aBoard, BOARD_ITEM* aBoardItem ) { }
     virtual void OnBoardItemsChanged( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItem ) { }
     virtual void OnBoardHighlightNetChanged( BOARD& aBoard ) { }
+    virtual void OnBoardRatsnestChanged( BOARD& aBoard ) { }
 };
 
 
@@ -1136,6 +1137,11 @@ public:
       * been modified in some way.
       */
     void OnItemsChanged( std::vector<BOARD_ITEM*>& aItems );
+
+    /**
+     * Notify the board and its listeners that the ratsnest has been recomputed.
+     */
+    void OnRatsnestChanged();
 
     /**
      * Consistency check of internal m_groups structure.

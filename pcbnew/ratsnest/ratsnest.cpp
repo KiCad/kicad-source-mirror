@@ -36,6 +36,7 @@ void PCB_BASE_FRAME::Compile_Ratsnest( bool aDisplayStatus )
 {
     GetBoard()->GetConnectivity()->RecalculateRatsnest();
     GetBoard()->UpdateRatsnestExclusions();
+    GetBoard()->OnRatsnestChanged();
 
     if( aDisplayStatus )
         SetMsgPanel( m_pcb );
