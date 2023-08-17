@@ -86,7 +86,6 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
         std::vector<std::string> allExtensions;
         std::set<wxString>       allWildcardsSet;
 
-        //for( const PLUGIN_FILE_DESC desc : descriptions )
         for( const auto& plugin : IO_MGR::PLUGIN_REGISTRY::Instance()->AllPlugins() )
         {
             PLUGIN::RELEASER pi( plugin.m_createFunc() );

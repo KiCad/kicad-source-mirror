@@ -117,7 +117,7 @@ bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, int aCt
     std::vector<std::string> allExtensions;
     std::set<wxString>       allWildcardsSet;
 
-    for( const PLUGIN_FILE_DESC desc : descriptions )
+    for( const PLUGIN_FILE_DESC& desc : descriptions )
     {
         if( !fileFiltersStr.IsEmpty() )
             fileFiltersStr += wxChar( '|' );
