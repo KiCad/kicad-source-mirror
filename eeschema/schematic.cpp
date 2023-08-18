@@ -56,15 +56,16 @@ SCHEMATIC::~SCHEMATIC()
 
 void SCHEMATIC::Reset()
 {
-    // Assume project already saved
     if( m_project )
     {
         PROJECT_FILE& project = m_project->GetProjectFile();
 
+        // d'tor will save settings to file
         delete project.m_ErcSettings;
-        delete project.m_SchematicSettings;
+        project.m_ErcSettings = nullptr;
 
-        project.m_ErcSettings       = nullptr;
+        // d'tor will save settings to file
+        delete project.m_SchematicSettings;
         project.m_SchematicSettings = nullptr;
 
         m_project = nullptr; // clear the project, so we don't do this again when setting a new one
@@ -85,10 +86,12 @@ void SCHEMATIC::SetProject( PROJECT* aPrj )
     {
         PROJECT_FILE& project = m_project->GetProjectFile();
 
+        // d'tor will save settings to file
         delete project.m_ErcSettings;
-        delete project.m_SchematicSettings;
+        project.m_ErcSettings = nullptr;
 
-        project.m_ErcSettings       = nullptr;
+        // d'tor will save settings to file
+        delete project.m_SchematicSettings;
         project.m_SchematicSettings = nullptr;
     }
 
