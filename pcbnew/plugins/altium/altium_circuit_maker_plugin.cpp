@@ -30,6 +30,7 @@
 #include <wx/string.h>
 
 #include <altium_circuit_maker_plugin.h>
+#include <altium_designer_plugin.h>
 #include <altium_pcb.h>
 #include "plugins/altium/altium_parser.h"
 
@@ -59,6 +60,15 @@ const wxString ALTIUM_CIRCUIT_MAKER_PLUGIN::PluginName() const
 PLUGIN_FILE_DESC ALTIUM_CIRCUIT_MAKER_PLUGIN::GetBoardFileDesc() const
 {
     return PLUGIN_FILE_DESC( _HKI( "Altium Circuit Maker PCB files" ), { "CMPcbDoc" } );
+}
+
+
+bool ALTIUM_CIRCUIT_MAKER_PLUGIN::CanReadBoard( const wxString& aFileName ) const
+{
+    if( !PLUGIN::CanReadBoard( aFileName ) )
+        return false;
+
+    return ALTIUM_DESIGNER_PLUGIN::checkFileHeader( aFileName );
 }
 
 

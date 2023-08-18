@@ -20,6 +20,7 @@
 #include <wx/string.h>
 
 #include <solidworks_pcb_plugin.h>
+#include <altium_designer_plugin.h>
 #include <altium_pcb.h>
 #include "plugins/altium/altium_parser.h"
 
@@ -49,6 +50,15 @@ const wxString SOLIDWORKS_PCB_PLUGIN::PluginName() const
 PLUGIN_FILE_DESC SOLIDWORKS_PCB_PLUGIN::GetBoardFileDesc() const
 {
     return PLUGIN_FILE_DESC( _HKI( "Solidworks PCB files" ), { "SWPcbDoc" } );
+}
+
+
+bool SOLIDWORKS_PCB_PLUGIN::CanReadBoard( const wxString& aFileName ) const
+{
+    if( !PLUGIN::CanReadBoard( aFileName ) )
+        return false;
+
+    return ALTIUM_DESIGNER_PLUGIN::checkFileHeader( aFileName );
 }
 
 

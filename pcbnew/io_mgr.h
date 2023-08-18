@@ -679,6 +679,7 @@ public:
 protected:
     static bool fileStartsWithPrefix( const wxString& aFilePath, const wxString& aPrefix,
                                       bool aIgnoreWhitespace );
+    static bool fileStartsWithBinaryHeader( const wxString& aFilePath, const std::vector<uint8_t>& aHeader );
 };
 
 #endif // IO_MGR_H_

@@ -45,6 +45,9 @@ public:
         return PLUGIN_FILE_DESC( _HKI( "Altium PCB footprint library files" ), { "PcbLib" } );
     }
 
+    bool CanReadBoard( const wxString& aFileName ) const override;
+    bool CanReadFootprintLib( const wxString& aFileName ) const override;
+
     BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
                       const STRING_UTF8_MAP* aProperties, PROJECT* aProject = nullptr,
                       PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
@@ -66,6 +69,8 @@ public:
 
     ALTIUM_DESIGNER_PLUGIN();
     ~ALTIUM_DESIGNER_PLUGIN();
+
+    static bool checkFileHeader( const wxString& aFileName );
 
 private:
     const STRING_UTF8_MAP* m_props;

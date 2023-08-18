@@ -50,6 +50,31 @@ ALTIUM_DESIGNER_PLUGIN::~ALTIUM_DESIGNER_PLUGIN()
 }
 
 
+bool ALTIUM_DESIGNER_PLUGIN::checkFileHeader( const wxString& aFileName )
+{
+    // Compound File Binary Format header
+    return fileStartsWithBinaryHeader( aFileName, { 0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1} );
+}
+
+
+bool ALTIUM_DESIGNER_PLUGIN::CanReadBoard( const wxString& aFileName ) const
+{
+    if( !PLUGIN::CanReadBoard( aFileName ) )
+        return false;
+
+    return checkFileHeader( aFileName );
+}
+
+
+bool ALTIUM_DESIGNER_PLUGIN::CanReadFootprintLib( const wxString& aFileName ) const
+{
+    if( !PLUGIN::CanReadFootprintLib( aFileName ) )
+        return false;
+
+    return checkFileHeader( aFileName );
+}
+
+
 BOARD* ALTIUM_DESIGNER_PLUGIN::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
                                           const STRING_UTF8_MAP* aProperties, PROJECT* aProject,
                                           PROGRESS_REPORTER* aProgressReporter )

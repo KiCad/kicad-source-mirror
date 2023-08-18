@@ -63,6 +63,27 @@ static const std::vector<BOARD_PLUGIN_CASE> BoardPluginCases = {
         "plugins/fakeboard.cpa",
         IO_MGR::FILE_TYPE_NONE
     },
+    {
+        "Fake Board file (Altium Circuit Studio file ext)",
+        "plugins/fakeboard.CSPcbDoc",
+        IO_MGR::FILE_TYPE_NONE
+    },
+    {
+        "Fake Board file (Altium Circuit Maker file ext)",
+        "plugins/fakeboard.CMPcbDoc",
+        IO_MGR::FILE_TYPE_NONE
+    },
+    {
+        "Fake Board file (Altium Designer file ext)",
+        "plugins/fakeboard.PcbDoc",
+        IO_MGR::FILE_TYPE_NONE
+    },
+
+    {
+        "Fake Board file (Solid Works PCB file ext)",
+        "plugins/fakeboard.SWPcbDoc",
+        IO_MGR::FILE_TYPE_NONE
+    },
 
     //
     // REAL Boards:
@@ -92,8 +113,13 @@ static const std::vector<BOARD_PLUGIN_CASE> BoardPluginCases = {
         "Basic CADSTAR board file",
         "plugins/cadstar/route_offset/minimal_route_offset_curved_track.cpa",
         IO_MGR::CADSTAR_PCB_ARCHIVE
+    },
+    {
+        "Basic Altium Designer board file",
+        "plugins/altium/eDP_adapter_dvt1_source/eDP_adapter_dvt1.PcbDoc",
+        IO_MGR::ALTIUM_DESIGNER
     }
-    // Todo: Add Altium (+derivatives) and Fabmaster tests
+    // Todo: Add Altium derivatives and Fabmaster tests
 };
 
 

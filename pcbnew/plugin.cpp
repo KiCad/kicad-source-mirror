@@ -318,3 +318,22 @@ bool PLUGIN::fileStartsWithPrefix( const wxString& aFilePath, const wxString& aP
     return false;
 }
 
+bool PLUGIN::fileStartsWithBinaryHeader( const wxString& aFilePath, const std::vector<uint8_t>& aHeader )
+{
+    wxFileInputStream input( aFilePath );
+
+    if( input.IsOk() && !input.Eof() )
+    {
+        if (input.GetLength() < aHeader.size())
+            return false;
+
+        std::vector<uint8_t> parsedHeader(aHeader.size());
+        if (!input.ReadAll(parsedHeader.data(), parsedHeader.size()))
+            return false;
+
+        return parsedHeader == aHeader;
+    }
+
+    return false;
+}
+
