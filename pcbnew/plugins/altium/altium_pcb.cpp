@@ -81,32 +81,6 @@ FOOTPRINT* ALTIUM_PCB::HelperGetFootprint( uint16_t aComponent ) const
     return m_components.at( aComponent );
 }
 
-PCB_SHAPE* ALTIUM_PCB::HelperCreateAndAddShape( uint16_t aComponent )
-{
-    if( aComponent == ALTIUM_COMPONENT_NONE )
-    {
-        PCB_SHAPE* shape = new PCB_SHAPE( m_board );
-        m_board->Add( shape, ADD_MODE::APPEND );
-        return shape;
-    }
-    else
-    {
-        if( m_components.size() <= aComponent )
-        {
-            THROW_IO_ERROR( wxString::Format( wxT( "Component creator tries to access component "
-                                                   "id %d of %d existing components" ),
-                                              aComponent,
-                                              m_components.size() ) );
-        }
-
-        FOOTPRINT* footprint = m_components.at( aComponent );
-        PCB_SHAPE* fpShape = new PCB_SHAPE( footprint );
-
-        footprint->Add( fpShape, ADD_MODE::APPEND );
-        return fpShape;
-    }
-}
-
 
 void HelperShapeLineChainFromAltiumVertices( SHAPE_LINE_CHAIN& aLine,
                                              const std::vector<ALTIUM_VERTICE>& aVertices )
@@ -2115,6 +2089,10 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItemOnLayer( const AREGION6& aE
     shape->SetLayer( aLayer );
     shape->SetStroke( STROKE_PARAMS( 0 ) );
 
+    if( IsCopperLayer( aLayer ) && aElem.net != ALTIUM_NET_UNCONNECTED ) {
+        shape->SetNetCode( GetNetCode( aElem.net ) );
+    }
+
     m_board->Add( shape, ADD_MODE::APPEND );
 }
 
@@ -3383,10 +3361,22 @@ void ALTIUM_PCB::ParseFills6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile
 
 void ALTIUM_PCB::ConvertFills6ToBoardItem( const AFILL6& aElem )
 {
-    if( aElem.is_keepout || aElem.layer == ALTIUM_LAYER::KEEP_OUT_LAYER
-        || aElem.net != ALTIUM_NET_UNCONNECTED )
+    if( aElem.is_keepout || aElem.layer == ALTIUM_LAYER::KEEP_OUT_LAYER )
     {
-        ConvertFills6ToBoardItemWithNet( aElem );
+        // This is not the actual board item. We can use it to create the polygon for the region
+        PCB_SHAPE shape( nullptr, SHAPE_T::RECTANGLE );
+        shape.SetStart( aElem.pos1 );
+        shape.SetEnd( aElem.pos2 );
+        shape.SetStroke( STROKE_PARAMS( 0, PLOT_DASH_TYPE::SOLID ) );
+
+        if( aElem.rotation != 0. )
+        {
+            VECTOR2I center( ( aElem.pos1.x + aElem.pos2.x ) / 2,
+                             ( aElem.pos1.y + aElem.pos2.y ) / 2 );
+            shape.Rotate( center, EDA_ANGLE( aElem.rotation, DEGREES_T ) );
+        }
+
+        HelperPcpShapeAsBoardKeepoutRegion( shape, aElem.layer, aElem.keepoutrestrictions );
     }
     else
     {
@@ -3422,57 +3412,14 @@ void ALTIUM_PCB::ConvertFills6ToFootprintItem( FOOTPRINT* aFootprint, const AFIL
              && aElem.net != ALTIUM_NET_UNCONNECTED )
     {
         // Special case: do to not lose net connections in footprints
-        ConvertFills6ToBoardItemWithNet( aElem );
+        for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aElem.layer ) )
+            ConvertFills6ToBoardItemOnLayer( aElem, klayer );
     }
     else
     {
         for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aElem.layer ) )
             ConvertFills6ToFootprintItemOnLayer( aFootprint, aElem, klayer );
     }
-}
-
-
-void ALTIUM_PCB::ConvertFills6ToBoardItemWithNet( const AFILL6& aElem )
-{
-    ZONE* zone = new ZONE( m_board );
-    m_board->Add( zone, ADD_MODE::APPEND );
-
-    zone->SetNetCode( GetNetCode( aElem.net ) );
-
-    zone->SetPosition( aElem.pos1 );
-    zone->SetAssignedPriority( 1000 );
-
-    HelperSetZoneLayers( zone, aElem.layer );
-
-    VECTOR2I p11( aElem.pos1.x, aElem.pos1.y );
-    VECTOR2I p12( aElem.pos1.x, aElem.pos2.y );
-    VECTOR2I p22( aElem.pos2.x, aElem.pos2.y );
-    VECTOR2I p21( aElem.pos2.x, aElem.pos1.y );
-
-    VECTOR2I center( ( aElem.pos1.x + aElem.pos2.x ) / 2, ( aElem.pos1.y + aElem.pos2.y ) / 2 );
-
-    const int outlineIdx = -1; // this is the id of the copper zone main outline
-    zone->AppendCorner( p11, outlineIdx );
-    zone->AppendCorner( p12, outlineIdx );
-    zone->AppendCorner( p22, outlineIdx );
-    zone->AppendCorner( p21, outlineIdx );
-
-    // should be correct?
-    zone->SetLocalClearance( 0 );
-    zone->SetPadConnection( ZONE_CONNECTION::FULL );
-
-    if( aElem.is_keepout || aElem.layer == ALTIUM_LAYER::KEEP_OUT_LAYER )
-    {
-        zone->SetIsRuleArea( true );
-
-        HelperSetZoneKeepoutRestrictions( zone, aElem.keepoutrestrictions );
-    }
-
-    if( aElem.rotation != 0. )
-        zone->Rotate( center, EDA_ANGLE( aElem.rotation, DEGREES_T ) );
-
-    zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
-                                 ZONE::GetDefaultHatchPitch(), true );
 }
 
 
@@ -3486,6 +3433,10 @@ void ALTIUM_PCB::ConvertFills6ToBoardItemOnLayer( const AFILL6& aElem, PCB_LAYER
 
     fill->SetStart( aElem.pos1 );
     fill->SetEnd( aElem.pos2 );
+
+    if( IsCopperLayer( aLayer ) && aElem.net != ALTIUM_NET_UNCONNECTED ) {
+        fill->SetNetCode( GetNetCode( aElem.net ) );
+    }
 
     if( aElem.rotation != 0. )
     {

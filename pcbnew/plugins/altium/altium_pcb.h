@@ -188,7 +188,6 @@ private:
     void ConvertFills6ToBoardItem( const AFILL6& aElem );
     void ConvertFills6ToFootprintItem( FOOTPRINT* aFootprint, const AFILL6& aElem,
                                        const bool aIsBoardImport );
-    void ConvertFills6ToBoardItemWithNet( const AFILL6& aElem );
     void ConvertFills6ToBoardItemOnLayer( const AFILL6& aElem, PCB_LAYER_ID aLayer );
     void ConvertFills6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, const AFILL6& aElem,
                                               PCB_LAYER_ID aLayer );
@@ -236,7 +235,6 @@ private:
                                            const ALTIUM_LAYER aAltiumLayer );
 
     FOOTPRINT* HelperGetFootprint( uint16_t aComponent ) const;
-    PCB_SHAPE* HelperCreateAndAddShape( uint16_t aComponent );
 
     BOARD*                               m_board;
     std::vector<FOOTPRINT*>              m_components;
