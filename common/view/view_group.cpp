@@ -35,6 +35,7 @@
 #include <core/kicad_algo.h>
 #include <view/view_group.h>
 #include <view/view.h>
+#include <view/view_item.h>
 #include <painter.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <layer_ids.h>
@@ -111,6 +112,7 @@ void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
     bool        isSelection = m_layer == LAYER_SELECT_OVERLAY;
 
     const std::vector<VIEW_ITEM*> drawList = updateDrawList();
+    constexpr double              HIDE = std::numeric_limits<double>::max();
 
     std::map<int, std::vector<VIEW_ITEM*>> layer_item_map;
 
@@ -170,6 +172,11 @@ void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
 
             for( VIEW_ITEM* item : layer_item_map[ layers[i] ] )
             {
+                // Ignore LOD scale for selected items, but don't ignore things explicitly
+                // hidden.
+                if( item->ViewGetLOD( layer, aView ) == HIDE )
+                    continue;
+
                 if( !painter->Draw( item, layers[i] ) )
                     item->ViewDraw( layers[i], aView ); // Alternative drawing method
             }
