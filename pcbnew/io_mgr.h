@@ -5,7 +5,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2011-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2016-2020 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -680,7 +680,9 @@ public:
 protected:
     static bool fileStartsWithPrefix( const wxString& aFilePath, const wxString& aPrefix,
                                       bool aIgnoreWhitespace );
-    static bool fileStartsWithBinaryHeader( const wxString& aFilePath, const std::vector<uint8_t>& aHeader );
+
+    static bool fileStartsWithBinaryHeader( const wxString&             aFilePath,
+                                            const std::vector<uint8_t>& aHeader );
 };
 
 #endif // IO_MGR_H_
