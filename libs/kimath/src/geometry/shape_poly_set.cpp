@@ -1842,7 +1842,7 @@ bool SHAPE_POLY_SET::Collide( const SEG& aSeg, int aClearance, int* aActual,
                               VECTOR2I* aLocation ) const
 {
     VECTOR2I nearest;
-    ecoord dist_sq = SquaredDistance( aSeg, aLocation ? &nearest : nullptr );
+    ecoord dist_sq = SquaredDistanceToSeg( aSeg, aLocation ? &nearest : nullptr );
 
     if( dist_sq == 0 || dist_sq < SEG::Square( aClearance ) )
     {
@@ -1866,7 +1866,7 @@ bool SHAPE_POLY_SET::Collide( const VECTOR2I& aP, int aClearance, int* aActual,
         return false;
 
     VECTOR2I nearest;
-    ecoord dist_sq = SquaredDistance( aP, aLocation ? &nearest : nullptr );
+    ecoord dist_sq = SquaredDistance( aP, false, aLocation ? &nearest : nullptr );
 
     if( dist_sq == 0 || dist_sq < SEG::Square( aClearance ) )
     {
@@ -2394,8 +2394,12 @@ SEG::ecoord SHAPE_POLY_SET::SquaredDistanceToPolygon( const SEG& aSegment, int a
 }
 
 
-SEG::ecoord SHAPE_POLY_SET::SquaredDistance( VECTOR2I aPoint, VECTOR2I* aNearest ) const
+SEG::ecoord SHAPE_POLY_SET::SquaredDistance( const VECTOR2I& aPoint, bool aOutlineOnly,
+                                             VECTOR2I* aNearest ) const
 {
+    wxASSERT_MSG( !aOutlineOnly, wxT( "Warning: SHAPE_POLY_SET::SquaredDistance does not yet "
+                                      "support aOutlineOnly==true" ) );
+
     SEG::ecoord currentDistance_sq;
     SEG::ecoord minDistance_sq = VECTOR2I::ECOORD_MAX;
     VECTOR2I    nearest;
@@ -2419,7 +2423,7 @@ SEG::ecoord SHAPE_POLY_SET::SquaredDistance( VECTOR2I aPoint, VECTOR2I* aNearest
 }
 
 
-SEG::ecoord SHAPE_POLY_SET::SquaredDistance( const SEG& aSegment, VECTOR2I* aNearest ) const
+SEG::ecoord SHAPE_POLY_SET::SquaredDistanceToSeg( const SEG& aSegment, VECTOR2I* aNearest ) const
 {
     SEG::ecoord currentDistance_sq;
     SEG::ecoord minDistance_sq = VECTOR2I::ECOORD_MAX;
@@ -3077,3 +3081,4 @@ bool SHAPE_POLY_SET::PointInside( const VECTOR2I& aPt, int aAccuracy, bool aUseB
 
     return false;
 }
+

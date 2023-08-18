@@ -203,7 +203,7 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                             // Disable is-inside test in SquaredDistance
                             padOutline.Outline( 0 ).SetClosed( false );
 
-                            SEG::ecoord dist_sq = padOutline.SquaredDistance( slot->GetSeg() );
+                            SEG::ecoord dist_sq = padOutline.SquaredDistanceToSeg( slot->GetSeg() );
                             annularWidth = sqrt( dist_sq ) -  slot->GetWidth() / 2;
                         }
                     }

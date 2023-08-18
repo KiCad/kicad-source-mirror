@@ -1373,7 +1373,13 @@ public:
      * @return The minimum distance squared between aPoint and all the polygons in the set.
      *         If the point is contained in any of the polygons, the distance is zero.
      */
-    SEG::ecoord SquaredDistance( VECTOR2I aPoint, VECTOR2I* aNearest = nullptr ) const;
+    SEG::ecoord SquaredDistance( const VECTOR2I& aPoint, bool aOutlineOnly,
+                                 VECTOR2I* aNearest ) const;
+
+    SEG::ecoord SquaredDistance( const VECTOR2I& aPoint, bool aOutlineOnly = false ) const override
+    {
+        return SquaredDistance( aPoint, aOutlineOnly, nullptr );
+    }
 
     /**
      * Compute the minimum distance squared between aSegment and all the polygons in the set.
@@ -1386,7 +1392,7 @@ public:
      * @return  The minimum distance squared between aSegment and all the polygons in the set.
      *          If the point is contained in the polygon, the distance is zero.
      */
-    SEG::ecoord SquaredDistance( const SEG& aSegment, VECTOR2I* aNearest = nullptr ) const;
+    SEG::ecoord SquaredDistanceToSeg( const SEG& aSegment, VECTOR2I* aNearest = nullptr ) const;
 
     /**
      * Check whether the \a aGlobalIndex-th vertex belongs to a hole.
