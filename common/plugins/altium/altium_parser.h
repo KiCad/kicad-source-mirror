@@ -65,9 +65,11 @@ public:
 
     std::map<wxString, wxString> ListLibFootprints() const;
 
-    wxString FindLibFootprintDirName( const wxString& aFpUnicodeName ) const;
+    std::tuple<wxString, const CFB::COMPOUND_FILE_ENTRY*> FindLibFootprintDirName( const wxString& aFpUnicodeName ) const;
 
     const CFB::COMPOUND_FILE_ENTRY* FindStream( const std::vector<std::string>& aStreamPath ) const;
+
+    const CFB::COMPOUND_FILE_ENTRY* FindStream( const CFB::COMPOUND_FILE_ENTRY* aStart, const std::vector<std::string>& aStreamPath ) const;
 
     const CFB::COMPOUND_FILE_ENTRY* FindStreamSingleLevel( const CFB::COMPOUND_FILE_ENTRY* aEntry,
                                                            const std::string               aName,

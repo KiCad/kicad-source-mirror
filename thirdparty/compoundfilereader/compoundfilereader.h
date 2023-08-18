@@ -1,23 +1,23 @@
 /**
     Microsoft Compound File (and Property Set) Reader
     http://en.wikipedia.org/wiki/Compound_File_Binary_Format
-    
+
     Format specification:
         MS-CFB: https://msdn.microsoft.com/en-us/library/dd942138.aspx
         MS-OLEPS: https://msdn.microsoft.com/en-us/library/dd942421.aspx
 
-    Note: 
+    Note:
     1. For simplification, the code assumes that the target system is little-endian.
-       
+
     2. The reader operates the passed buffer in-place.
        You must keep the input buffer valid when you are using the reader.
-       
+
     3. Single thread usage.
 
     Example 1: print all streams in a compound file
     \code
         CFB::CompoundFileReader reader(buffer, len);
-        reader.EnumFiles(reader.GetRootEntry(), -1, 
+        reader.EnumFiles(reader.GetRootEntry(), -1,
             [&](const CFB::COMPOUND_FILE_ENTRY* entry, const CFB::utf16string& dir, int level)->void
         {
             bool isDirectory = !reader.IsStream(entry);
@@ -99,7 +99,7 @@ struct PROPERTY_SET_STREAM_HDR
     uint32_t systemIdentifier;
     unsigned char clsid[16];
     uint32_t numPropertySets;
-    struct 
+    struct
     {
         char fmtid[16];
         uint32_t offset;
@@ -130,7 +130,7 @@ struct helper
 };
 
 typedef std::basic_string<uint16_t> utf16string;
-typedef std::function<void(const COMPOUND_FILE_ENTRY*, const utf16string& dir, int level)> 
+typedef std::function<int(const COMPOUND_FILE_ENTRY*, const utf16string& dir, int level)>
     EnumFilesCallback;
 
 class CompoundFileReader
@@ -163,7 +163,7 @@ public:
         m_miniStreamStartSector = root->startSectorLocation;
     }
 
-    /// Get entry (directory or file) by its ID. 
+    /// Get entry (directory or file) by its ID.
     /// Pass "0" to get the root directory entry. -- This is the start point to navigate the compound file.
     /// Use the returned object to access child entries.
     const COMPOUND_FILE_ENTRY* GetEntry(size_t entryID) const
@@ -230,7 +230,7 @@ public:
 private:
 
     // Enum entries with same level, including 'entry' itself
-    void EnumNodes(const COMPOUND_FILE_ENTRY* entry, int currentLevel, int maxLevel, 
+    void EnumNodes(const COMPOUND_FILE_ENTRY* entry, int currentLevel, int maxLevel,
         const utf16string& dir, EnumFilesCallback callback) const
     {
         if (maxLevel > 0 && currentLevel >= maxLevel)
@@ -238,7 +238,8 @@ private:
         if (entry == nullptr)
             return;
 
-        callback(entry, dir, currentLevel + 1);
+        if( callback(entry, dir, currentLevel + 1) != 0 )
+            return;
 
         const COMPOUND_FILE_ENTRY* child = GetEntry(entry->childID);
         if (child != nullptr)
@@ -332,8 +333,8 @@ private:
         {
             throw FileCorrupted();
         }
-        
-        
+
+
         LocateFinalSector(m_miniStreamStartSector, sector * m_minisectorSize + offset, &sector, &offset);
         return SectorOffsetToAddress(sector, offset);
     }

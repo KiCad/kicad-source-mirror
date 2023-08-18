@@ -162,6 +162,7 @@ void ALTIUM_DESIGNER_PLUGIN::FootprintEnumerate( wxArrayString&  aFootprintNames
 
         const std::vector<std::string>  streamName = { "Library", "Data" };
         const CFB::COMPOUND_FILE_ENTRY* libraryData = altiumLibFile.FindStream( streamName );
+
         if( libraryData == nullptr )
         {
             THROW_IO_ERROR(
@@ -174,6 +175,7 @@ void ALTIUM_DESIGNER_PLUGIN::FootprintEnumerate( wxArrayString&  aFootprintNames
 
         uint32_t numberOfFootprints = parser.Read<uint32_t>();
         aFootprintNames.Alloc( numberOfFootprints );
+
         for( size_t i = 0; i < numberOfFootprints; i++ )
         {
             parser.ReadAndSetSubrecordLength();

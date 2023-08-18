@@ -34,6 +34,7 @@
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <pcb_track.h>
+#include <profile.h>
 #include <string_utils.h>
 #include <zone.h>
 
@@ -606,7 +607,10 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
     //        ParseWideStrings6Data( altiumLibFile, unicodeStringsData );
     //    }
 
-    wxString fpDirName = altiumLibFile.FindLibFootprintDirName(aFootprintName);
+    std::tuple<wxString, const CFB::COMPOUND_FILE_ENTRY*> ret = altiumLibFile.FindLibFootprintDirName(aFootprintName);
+
+    wxString fpDirName = std::get<0>( ret );
+    const CFB::COMPOUND_FILE_ENTRY* footprintStream = std::get<1>( ret );
 
     if( fpDirName.IsEmpty() )
     {
@@ -615,7 +619,7 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
     }
 
     const std::vector<std::string>  streamName{ fpDirName.ToStdString(), "Data" };
-    const CFB::COMPOUND_FILE_ENTRY* footprintData = altiumLibFile.FindStream( streamName );
+    const CFB::COMPOUND_FILE_ENTRY* footprintData = altiumLibFile.FindStream( footprintStream, { "Data" } );
 
     if( footprintData == nullptr )
     {
@@ -635,7 +639,7 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
     const std::vector<std::string>  parametersStreamName{ fpDirName.ToStdString(),
                                                          "Parameters" };
     const CFB::COMPOUND_FILE_ENTRY* parametersData =
-            altiumLibFile.FindStream( parametersStreamName );
+            altiumLibFile.FindStream( footprintStream, { "Parameters" } );
 
     if( parametersData != nullptr )
     {
@@ -653,10 +657,10 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile
     }
 
     const std::vector<std::string> extendedPrimitiveInformationStreamName{
-        fpDirName.ToStdString(), "ExtendedPrimitiveInformation", "Data"
+        "ExtendedPrimitiveInformation", "Data"
     };
     const CFB::COMPOUND_FILE_ENTRY* extendedPrimitiveInformationData =
-            altiumLibFile.FindStream( extendedPrimitiveInformationStreamName );
+            altiumLibFile.FindStream( footprintStream, extendedPrimitiveInformationStreamName );
 
     if( extendedPrimitiveInformationData != nullptr )
         ParseExtendedPrimitiveInformationData( altiumLibFile, extendedPrimitiveInformationData );

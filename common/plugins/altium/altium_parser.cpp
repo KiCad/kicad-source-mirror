@@ -103,7 +103,7 @@ std::map<wxString, wxString> ALTIUM_COMPOUND_FILE::ListLibFootprints() const
 
     m_reader->EnumFiles( root, 2,
                          [&]( const CFB::COMPOUND_FILE_ENTRY* entry, const CFB::utf16string& dir,
-                              int level ) -> void
+                              int level ) -> int
                          {
                              std::wstring dirName = UTF16ToWstring( dir.data(), dir.size() );
                              std::wstring fileName = UTF16ToWstring( entry->name, entry->nameLen );
@@ -122,48 +122,126 @@ std::map<wxString, wxString> ALTIUM_COMPOUND_FILE::ListLibFootprints() const
 
                                  patternMap.emplace( key, fpName );
                              }
+
+                             return 0;
                          } );
 
     return patternMap;
 }
 
 
-wxString ALTIUM_COMPOUND_FILE::FindLibFootprintDirName( const wxString& aFpUnicodeName ) const
+std::tuple<wxString, const CFB::COMPOUND_FILE_ENTRY*>
+ALTIUM_COMPOUND_FILE::FindLibFootprintDirName( const wxString& aFpUnicodeName ) const
 {
     if( !m_reader )
-        return wxEmptyString;
+        return std::tuple<wxString, const CFB::COMPOUND_FILE_ENTRY*>( wxEmptyString, nullptr );
 
     const CFB::COMPOUND_FILE_ENTRY* root = m_reader->GetRootEntry();
 
     if( !root )
-        return wxEmptyString;
+        return std::tuple<wxString, const CFB::COMPOUND_FILE_ENTRY*>( wxEmptyString, nullptr );
 
-    wxString ret;
+    wxString retStr;
+    const CFB::COMPOUND_FILE_ENTRY* retEntry = nullptr;
 
-    m_reader->EnumFiles( root, 2,
-                         [&]( const CFB::COMPOUND_FILE_ENTRY* entry, const CFB::utf16string& dir,
-                              int level ) -> void
-                         {
-                             std::wstring dirName = UTF16ToWstring( dir.data(), dir.size() );
-                             std::wstring fileName = UTF16ToWstring( entry->name, entry->nameLen );
+    // Cheap and easy check first as most ASCII-coded libs are under the same dir name
+    m_reader->EnumFiles( root, 1,
+                        [&]( const CFB::COMPOUND_FILE_ENTRY* tentry, const CFB::utf16string&, int ) -> int
+                        {
+                            // We are only looking for one string, so if we found it, break the loop
+                            if( retStr != wxEmptyString )
+                                return 1;
 
-                             if( m_reader->IsStream( entry ) && fileName == L"Parameters" )
-                             {
-                                 ALTIUM_PARSER                parametersReader( *this, entry );
-                                 std::map<wxString, wxString> parameterProperties =
-                                         parametersReader.ReadProperties();
+                            std::wstring dirName = UTF16ToWstring( tentry->name, tentry->nameLen );
 
-                                 wxString fpName = ALTIUM_PARSER::ReadUnicodeString(
-                                         parameterProperties, wxT( "PATTERN" ), wxT( "" ) );
+                            if( aFpUnicodeName.ToStdWstring().compare( 0, 10, dirName, 0, 10 ) )
+                                return 0;
 
-                                 if( fpName == aFpUnicodeName )
-                                 {
-                                     ret = dirName;
-                                 }
-                             }
+                            m_reader->EnumFiles( tentry, 1,
+                                        [&]( const CFB::COMPOUND_FILE_ENTRY* entry, const CFB::utf16string&, int ) -> int
+                                        {
+                                            std::wstring fileName = UTF16ToWstring( entry->name, entry->nameLen );
+
+                                            if( m_reader->IsStream( entry ) && fileName == L"Parameters" )
+                                            {
+                                                ALTIUM_PARSER                parametersReader( *this, entry );
+                                                std::map<wxString, wxString> parameterProperties =
+                                                        parametersReader.ReadProperties();
+
+                                                wxString fpName = ALTIUM_PARSER::ReadUnicodeString(
+                                                        parameterProperties, wxT( "PATTERN" ), wxT( "" ) );
+
+                                                if( fpName == aFpUnicodeName )
+                                                {
+                                                    retStr = dirName;
+                                                    return 1;
+                                                }
+                                            }
+
+                                            return 0;
+
+                                        } );
+
+                            if( retStr != wxEmptyString )
+                            {
+                                retEntry = tentry;
+                                return 1;
+                            }
+
+                            return 0;
                          } );
 
-    return ret;
+    if( retStr != wxEmptyString )
+        return std::make_tuple( retStr, retEntry );
+
+    // Now do the expensive check, iterating through each directory in the library and reading the files
+    m_reader->EnumFiles( root, 1,
+                        [&]( const CFB::COMPOUND_FILE_ENTRY* tentry, const CFB::utf16string& dir,
+                            int level ) -> int
+                        {
+                            if( retStr != wxEmptyString )
+                                return 1;
+
+                            std::wstring dirName = UTF16ToWstring( tentry->name, tentry->nameLen );
+
+                            m_reader->EnumFiles( tentry, 1,
+                                        [&]( const CFB::COMPOUND_FILE_ENTRY* entry, const CFB::utf16string&, int ) -> int
+                                        {
+                                            std::wstring fileName = UTF16ToWstring( entry->name, entry->nameLen );
+
+                                            if( m_reader->IsStream( entry ) && fileName == L"Parameters" )
+                                            {
+                                                ALTIUM_PARSER                parametersReader( *this, entry );
+                                                std::map<wxString, wxString> parameterProperties =
+                                                        parametersReader.ReadProperties();
+
+                                                wxString fpName = ALTIUM_PARSER::ReadUnicodeString(
+                                                        parameterProperties, wxT( "PATTERN" ), wxT( "" ) );
+
+                                                if( fpName == aFpUnicodeName )
+                                                {
+                                                    retStr = dirName;
+                                                    return 1;
+                                                }
+                                            }
+
+                                            return 0;
+
+                                        } );
+
+                            if( retStr != wxEmptyString )
+                            {
+                                retEntry = tentry;
+                                return 1;
+                            }
+
+                            return 0;
+                         } );
+
+    if( retStr != wxEmptyString )
+        return std::make_tuple( retStr, retEntry );
+
+    return std::tuple<wxString, const CFB::COMPOUND_FILE_ENTRY*>( wxEmptyString, nullptr );
 }
 
 
@@ -178,45 +256,63 @@ ALTIUM_COMPOUND_FILE::FindStreamSingleLevel( const CFB::COMPOUND_FILE_ENTRY* aEn
 
     m_reader->EnumFiles( aEntry, 1,
                          [&]( const CFB::COMPOUND_FILE_ENTRY* entry, const CFB::utf16string& dir,
-                              int level ) -> void
+                              int level ) -> int
                          {
+                            if( ret != nullptr )
+                                return 1;
+
                              if( m_reader->IsStream( entry ) == aIsStream )
                              {
                                  std::string name = UTF16ToUTF8( entry->name );
                                  if( name == aName.c_str() )
                                  {
                                      ret = entry;
+                                     return 1;
                                  }
                              }
+
+                             return 0;
                          } );
     return ret;
 }
 
 
 const CFB::COMPOUND_FILE_ENTRY*
-ALTIUM_COMPOUND_FILE::FindStream( const std::vector<std::string>& aStreamPath ) const
+ALTIUM_COMPOUND_FILE::FindStream( const CFB::COMPOUND_FILE_ENTRY* aStart,
+                                  const std::vector<std::string>& aStreamPath ) const
 {
     if( !m_reader )
         return nullptr;
 
-    const CFB::COMPOUND_FILE_ENTRY* currentDirEntry = m_reader->GetRootEntry();
+    if( !aStart )
+        aStart = m_reader->GetRootEntry();
 
     auto it = aStreamPath.cbegin();
-    while( currentDirEntry != nullptr )
+
+    while( aStart != nullptr )
     {
         const std::string& name = *it;
 
         if( ++it == aStreamPath.cend() )
         {
-            return FindStreamSingleLevel( currentDirEntry, name, true );
+            const CFB::COMPOUND_FILE_ENTRY* ret = FindStreamSingleLevel( aStart, name, true );
+            return ret;
         }
         else
         {
-            currentDirEntry = FindStreamSingleLevel( currentDirEntry, name, false );
+            const CFB::COMPOUND_FILE_ENTRY* ret = FindStreamSingleLevel( aStart, name, false );
+            aStart = ret;
         }
     }
 
     return nullptr;
+}
+
+
+const CFB::COMPOUND_FILE_ENTRY*
+ALTIUM_COMPOUND_FILE::FindStream( const std::vector<std::string>& aStreamPath ) const
+{
+    return FindStream( nullptr, aStreamPath );
 }
 
 
