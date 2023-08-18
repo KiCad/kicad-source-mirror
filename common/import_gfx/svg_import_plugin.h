@@ -28,7 +28,6 @@
 
 #include "graphics_import_plugin.h"
 #include "graphics_importer_buffer.h"
-#include <math/vector2d.h>
 #include <wildcards_and_files_ext.h>
 
 #include <vector>
@@ -68,18 +67,21 @@ public:
 
     virtual double GetImageHeight() const override;
     virtual double GetImageWidth() const override;
+    virtual BOX2D GetImageBBox() const override;
 
 private:
-    void DrawPath( const float* aPoints, int aNumPoints, bool aClosedPath, bool aFilled, double aLineWidth );
+    void DrawPath( const float* aPoints, int aNumPoints, bool aClosedPath, bool aFilled,
+                   double aLineWidth, const COLOR4D& aColor );
 
     void DrawCubicBezierPath( const float* aPoints, int aNumPoints,
-            std::vector< VECTOR2D >& aGeneratedPoints );
+                              std::vector<VECTOR2D>& aGeneratedPoints );
 
-    void DrawCubicBezierCurve( const float* aPoints,
-            std::vector< VECTOR2D >& aGeneratedPoints );
+    void DrawCubicBezierCurve( const float* aPoints, std::vector<VECTOR2D>& aGeneratedPoints );
 
-    void DrawPolygon( const std::vector< VECTOR2D >& aPoints, double aWidth );
-    void DrawLineSegments( const std::vector< VECTOR2D >& aPoints, double aWidth );
+    void DrawPolygon( const std::vector<VECTOR2D>& aPoints, double aWidth, const COLOR4D& aColor );
+
+    void DrawLineSegments( const std::vector<VECTOR2D>& aPoints, double aWidth,
+                           const COLOR4D& aColor );
 
     struct NSVGimage* m_parsedImage;
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Janito Vaqueiro Ferreira Filho <janito.vff@gmail.com>
  *
@@ -53,16 +53,16 @@ protected:
 class IMPORTED_LINE : public IMPORTED_SHAPE
 {
 public:
-    IMPORTED_LINE( const VECTOR2D& aStart, const VECTOR2D& aEnd, double aWidth ) :
+    IMPORTED_LINE( const VECTOR2D& aStart, const VECTOR2D& aEnd, double aWidth,
+                   const COLOR4D& aColor ) :
             m_start( aStart ),
-            m_end( aEnd ),
-            m_width( aWidth )
+            m_end( aEnd ), m_width( aWidth ), m_color( aColor )
     {
     }
 
     void ImportTo( GRAPHICS_IMPORTER& aImporter ) const override
     {
-        aImporter.AddLine( m_start, m_end, m_width );
+        aImporter.AddLine( m_start, m_end, m_width, m_color );
     }
 
     virtual std::unique_ptr<IMPORTED_SHAPE> clone() const override
@@ -80,23 +80,23 @@ private:
     VECTOR2D m_start;
     VECTOR2D m_end;
     double   m_width;
+    COLOR4D  m_color;
 };
 
 
 class IMPORTED_CIRCLE : public IMPORTED_SHAPE
 {
 public:
-    IMPORTED_CIRCLE( const VECTOR2D& aCenter, double aRadius, double aWidth, bool aFilled ) :
+    IMPORTED_CIRCLE( const VECTOR2D& aCenter, double aRadius, double aWidth, bool aFilled,
+                     const COLOR4D& aColor ) :
             m_center( aCenter ),
-            m_radius( aRadius ),
-            m_width( aWidth ),
-            m_filled( aFilled )
+            m_radius( aRadius ), m_width( aWidth ), m_filled( aFilled ), m_color( aColor )
     {
     }
 
     void ImportTo( GRAPHICS_IMPORTER& aImporter ) const override
     {
-        aImporter.AddCircle( m_center, m_radius, m_width, m_filled );
+        aImporter.AddCircle( m_center, m_radius, m_width, m_filled, m_color );
     }
 
     virtual std::unique_ptr<IMPORTED_SHAPE> clone() const override
@@ -120,6 +120,7 @@ private:
     double   m_radius;
     double   m_width;
     bool     m_filled;
+    COLOR4D  m_color;
 };
 
 
@@ -127,17 +128,15 @@ class IMPORTED_ARC : public IMPORTED_SHAPE
 {
 public:
     IMPORTED_ARC( const VECTOR2D& aCenter, const VECTOR2D& aStart, const EDA_ANGLE& aAngle,
-                  double aWidth )  :
+                  double aWidth, const COLOR4D& aColor ) :
             m_center( aCenter ),
-            m_start( aStart ),
-            m_angle( aAngle ),
-            m_width( aWidth )
+            m_start( aStart ), m_angle( aAngle ), m_width( aWidth ), m_color( aColor )
     {
     }
 
     void ImportTo( GRAPHICS_IMPORTER& aImporter ) const override
     {
-        aImporter.AddArc( m_center, m_start, m_angle, m_width );
+        aImporter.AddArc( m_center, m_start, m_angle, m_width, m_color );
     }
 
     virtual std::unique_ptr<IMPORTED_SHAPE> clone() const override
@@ -156,21 +155,23 @@ private:
     VECTOR2D  m_start;
     EDA_ANGLE m_angle;
     double    m_width;
+    COLOR4D   m_color;
 };
 
 
 class IMPORTED_POLYGON : public IMPORTED_SHAPE
 {
 public:
-    IMPORTED_POLYGON( const std::vector< VECTOR2D >& aVertices, double aWidth ) :
+    IMPORTED_POLYGON( const std::vector<VECTOR2D>& aVertices, double aWidth,
+                      const COLOR4D& aColor ) :
             m_vertices( aVertices ),
-            m_width( aWidth )
+            m_width( aWidth ), m_color( aColor )
     {
     }
 
     void ImportTo( GRAPHICS_IMPORTER& aImporter ) const override
     {
-        aImporter.AddPolygon( m_vertices, m_width );
+        aImporter.AddPolygon( m_vertices, m_width, m_color );
     }
 
     virtual std::unique_ptr<IMPORTED_SHAPE> clone() const override
@@ -190,9 +191,12 @@ public:
 
     double GetWidth() const { return m_width; }
 
+    const COLOR4D& GetColor() const { return m_color; }
+
 private:
     std::vector<VECTOR2D> m_vertices;
     double                m_width;
+    COLOR4D               m_color;
 };
 
 
@@ -201,22 +205,18 @@ class IMPORTED_TEXT : public IMPORTED_SHAPE
 public:
     IMPORTED_TEXT( const VECTOR2D& aOrigin, const wxString& aText, double aHeight, double aWidth,
                    double aThickness, double aOrientation, GR_TEXT_H_ALIGN_T aHJustify,
-                   GR_TEXT_V_ALIGN_T aVJustify ) :
-        m_origin( aOrigin ),
-        m_text( aText ),
-        m_height( aHeight ),
-        m_width( aWidth ),
-        m_thickness( aThickness ),
-        m_orientation( aOrientation ),
-        m_hJustify( aHJustify ),
-        m_vJustify( aVJustify )
+                   GR_TEXT_V_ALIGN_T aVJustify, const COLOR4D& aColor ) :
+            m_origin( aOrigin ),
+            m_text( aText ), m_height( aHeight ), m_width( aWidth ), m_thickness( aThickness ),
+            m_orientation( aOrientation ), m_hJustify( aHJustify ), m_vJustify( aVJustify ),
+            m_color( aColor )
     {
     }
 
     void ImportTo( GRAPHICS_IMPORTER& aImporter ) const override
     {
-        aImporter.AddText( m_origin, m_text, m_height, m_width,
-                    m_thickness, m_orientation, m_hJustify, m_vJustify );
+        aImporter.AddText( m_origin, m_text, m_height, m_width, m_thickness, m_orientation,
+                           m_hJustify, m_vJustify, m_color );
     }
 
     virtual std::unique_ptr<IMPORTED_SHAPE> clone() const override
@@ -238,6 +238,7 @@ private:
     double              m_orientation;
     GR_TEXT_H_ALIGN_T   m_hJustify;
     GR_TEXT_V_ALIGN_T   m_vJustify;
+    COLOR4D             m_color;
 };
 
 
@@ -245,18 +246,17 @@ class IMPORTED_SPLINE : public IMPORTED_SHAPE
 {
 public:
     IMPORTED_SPLINE( const VECTOR2D& aStart, const VECTOR2D& aBezierControl1,
-                     const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd, double aWidth ) :
-        m_start( aStart ),
-        m_bezierControl1( aBezierControl1 ),
-        m_bezierControl2( aBezierControl2 ),
-        m_end( aEnd ),
-        m_width( aWidth )
+                     const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd, double aWidth,
+                     const COLOR4D& aColor ) :
+            m_start( aStart ),
+            m_bezierControl1( aBezierControl1 ), m_bezierControl2( aBezierControl2 ), m_end( aEnd ),
+            m_width( aWidth ), m_color( aColor )
     {
     }
 
     void ImportTo( GRAPHICS_IMPORTER& aImporter ) const override
     {
-        aImporter.AddSpline( m_start, m_bezierControl1, m_bezierControl2, m_end, m_width );
+        aImporter.AddSpline( m_start, m_bezierControl1, m_bezierControl2, m_end, m_width, m_color );
     }
 
     virtual std::unique_ptr<IMPORTED_SHAPE> clone() const override
@@ -278,27 +278,33 @@ private:
     VECTOR2D m_bezierControl2;
     VECTOR2D m_end;
     double   m_width;
+    COLOR4D  m_color;
 };
 
 
 class GRAPHICS_IMPORTER_BUFFER : public GRAPHICS_IMPORTER
 {
 public:
-    void AddLine( const VECTOR2D& aStart, const VECTOR2D& aEnd, double aWidth ) override;
+    void AddLine( const VECTOR2D& aStart, const VECTOR2D& aEnd, double aWidth,
+                  const COLOR4D& aColor = COLOR4D::UNSPECIFIED ) override;
 
-    void AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth, bool aFilled ) override;
+    void AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth, bool aFilled,
+                    const COLOR4D& aColor = COLOR4D::UNSPECIFIED ) override;
 
     void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, const EDA_ANGLE& aAngle,
-                 double aWidth ) override;
+                 double aWidth, const COLOR4D& aColor = COLOR4D::UNSPECIFIED ) override;
 
-    void AddPolygon( const std::vector< VECTOR2D >& aVertices, double aWidth ) override;
+    void AddPolygon( const std::vector<VECTOR2D>& aVertices, double aWidth,
+                     const COLOR4D& aColor = COLOR4D::UNSPECIFIED ) override;
 
     void AddText( const VECTOR2D& aOrigin, const wxString& aText, double aHeight, double aWidth,
                   double aThickness, double aOrientation, GR_TEXT_H_ALIGN_T aHJustify,
-                  GR_TEXT_V_ALIGN_T aVJustify ) override;
+                  GR_TEXT_V_ALIGN_T aVJustify,
+                  const COLOR4D&    aColor = COLOR4D::UNSPECIFIED ) override;
 
     void AddSpline( const VECTOR2D& aStart, const VECTOR2D& BezierControl1,
-                    const VECTOR2D& BezierControl2, const VECTOR2D& aEnd , double aWidth ) override;
+                    const VECTOR2D& BezierControl2, const VECTOR2D& aEnd, double aWidth,
+                    const COLOR4D& aColor = COLOR4D::UNSPECIFIED ) override;
 
     void ImportTo( GRAPHICS_IMPORTER& aImporter );
     void AddShape( std::unique_ptr<IMPORTED_SHAPE>& aShape );

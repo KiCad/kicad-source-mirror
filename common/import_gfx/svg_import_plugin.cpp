@@ -29,8 +29,6 @@
 #include <algorithm>
 #include <cmath>
 
-#include <math/vector2d.h>
-
 #include <eda_item.h>
 #include "graphics_importer.h"
 
@@ -101,8 +99,23 @@ bool SVG_IMPORT_PLUGIN::Import()
 
     for( NSVGshape* shape = m_parsedImage->shapes; shape != nullptr; shape = shape->next )
     {
-        double lineWidth = shape->strokeWidth;
+        double lineWidth = shape->stroke.type != NSVG_PAINT_NONE ? shape->strokeWidth : -1;
         bool   filled = shape->fill.type != NSVG_PAINT_NONE && alpha( shape->fill.color ) > 0;
+
+        COLOR4D color = COLOR4D::UNSPECIFIED;
+
+        if( shape->fill.type == NSVG_PAINT_COLOR )
+        {
+            unsigned int icolor = shape->fill.color;
+
+            color.r = std::clamp( ( icolor >> 0 ) & 0xFF, 0u, 255u ) / 255.0;
+            color.g = std::clamp( ( icolor >> 8 ) & 0xFF, 0u, 255u ) / 255.0;
+            color.b = std::clamp( ( icolor >> 16 ) & 0xFF, 0u, 255u ) / 255.0;
+            color.a = std::clamp( ( icolor >> 24 ) & 0xFF, 0u, 255u ) / 255.0;
+
+            if( color == COLOR4D::BLACK ) // nanosvg probably didn't read it properly, use default
+                color = COLOR4D::UNSPECIFIED;
+        }
 
         GRAPHICS_IMPORTER::POLY_FILL_RULE rule = GRAPHICS_IMPORTER::PF_NONZERO;
 
@@ -119,7 +132,7 @@ bool SVG_IMPORT_PLUGIN::Import()
         {
             bool closed = path->closed || filled || rule == GRAPHICS_IMPORTER::PF_EVEN_ODD;
 
-            DrawPath( path->pts, path->npts, closed, filled, lineWidth );
+            DrawPath( path->pts, path->npts, closed, filled, lineWidth, color );
         }
     }
 
@@ -139,7 +152,7 @@ double SVG_IMPORT_PLUGIN::GetImageHeight() const
         return 0.0;
     }
 
-    return m_parsedImage->height;
+    return m_parsedImage->height / SVG_DPI * inches2mm;
 }
 
 
@@ -151,12 +164,37 @@ double SVG_IMPORT_PLUGIN::GetImageWidth() const
         return 0.0;
     }
 
-    return m_parsedImage->width;
+    return m_parsedImage->width / SVG_DPI * inches2mm;
+}
+
+
+BOX2D SVG_IMPORT_PLUGIN::GetImageBBox() const
+{
+    BOX2D bbox;
+
+    if( !m_parsedImage || !m_parsedImage->shapes )
+    {
+        wxASSERT_MSG( false, wxT( "Image must have been loaded before getting bbox" ) );
+        return bbox;
+    }
+
+    for( NSVGshape* shape = m_parsedImage->shapes; shape != nullptr; shape = shape->next )
+    {
+        BOX2D shapeBbox;
+        float( &bounds )[4] = shape->bounds;
+
+        shapeBbox.SetOrigin( bounds[0], bounds[1] );
+        shapeBbox.SetEnd( bounds[2], bounds[3] );
+
+        bbox.Merge( shapeBbox );
+    }
+
+    return bbox;
 }
 
 
 void SVG_IMPORT_PLUGIN::DrawPath( const float* aPoints, int aNumPoints, bool aPoly, bool aFilled,
-                                  double aLineWidth )
+                                  double aLineWidth, const COLOR4D& aColor )
 {
     std::vector< VECTOR2D > collectedPathPoints;
 
@@ -164,9 +202,9 @@ void SVG_IMPORT_PLUGIN::DrawPath( const float* aPoints, int aNumPoints, bool aPo
         DrawCubicBezierPath( aPoints, aNumPoints, collectedPathPoints );
 
     if( aPoly && aFilled )
-        DrawPolygon( collectedPathPoints, aLineWidth );
+        DrawPolygon( collectedPathPoints, aLineWidth, aColor );
     else
-        DrawLineSegments( collectedPathPoints, aLineWidth );
+        DrawLineSegments( collectedPathPoints, aLineWidth, aColor );
 }
 
 
@@ -201,18 +239,20 @@ void SVG_IMPORT_PLUGIN::DrawCubicBezierCurve( const float* aPoints,
 }
 
 
-void SVG_IMPORT_PLUGIN::DrawPolygon( const std::vector< VECTOR2D >& aPoints, double aWidth )
+void SVG_IMPORT_PLUGIN::DrawPolygon( const std::vector<VECTOR2D>& aPoints, double aWidth,
+                                     const COLOR4D& aColor )
 {
-    m_internalImporter.AddPolygon( aPoints, aWidth );
+    m_internalImporter.AddPolygon( aPoints, aWidth, aColor );
 }
 
 
-void SVG_IMPORT_PLUGIN::DrawLineSegments( const std::vector< VECTOR2D >& aPoints, double aWidth )
+void SVG_IMPORT_PLUGIN::DrawLineSegments( const std::vector<VECTOR2D>& aPoints, double aWidth,
+                                          const COLOR4D& aColor )
 {
     unsigned int numLineStartPoints = aPoints.size() - 1;
 
     for( unsigned int pointIndex = 0; pointIndex < numLineStartPoints; ++pointIndex )
-        m_internalImporter.AddLine( aPoints[ pointIndex ], aPoints[ pointIndex + 1 ], aWidth );
+        m_internalImporter.AddLine( aPoints[ pointIndex ], aPoints[ pointIndex + 1 ], aWidth, aColor );
 }
 
 

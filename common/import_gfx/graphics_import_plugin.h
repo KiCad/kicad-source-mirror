@@ -27,6 +27,7 @@
 #ifndef GRAPHICS_IMPORT_PLUGIN_H
 #define GRAPHICS_IMPORT_PLUGIN_H
 
+#include <math/box2.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/arrstr.h>
 
@@ -111,6 +112,13 @@ public:
      * @return Original Image width in mm.
      */
     virtual double GetImageWidth() const = 0;
+
+    /**
+     * Return image bounding box from original imported file.
+     *
+     * @return Image bounding box.
+     */
+    virtual BOX2D GetImageBBox() const = 0;
 
     /**
      * Actually imports the file.

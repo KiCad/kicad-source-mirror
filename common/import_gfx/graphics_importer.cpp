@@ -2,6 +2,8 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
+ * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -30,13 +32,13 @@ GRAPHICS_IMPORTER::GRAPHICS_IMPORTER()
 {
     m_millimeterToIu = 1.0;
     m_lineWidth = DEFAULT_LINE_WIDTH_DFX;
-    m_scale = 1.0;
+    m_scale = VECTOR2D( 1.0, 1.0 );
     m_originalWidth = 0.0;
     m_originalHeight = 0.0;
 }
 
 
-bool GRAPHICS_IMPORTER::Load( const wxString &aFileName )
+bool GRAPHICS_IMPORTER::Load( const wxString& aFileName )
 {
     m_items.clear();
 
@@ -48,10 +50,19 @@ bool GRAPHICS_IMPORTER::Load( const wxString &aFileName )
 
     m_plugin->SetImporter( this );
 
-    return m_plugin->Load( aFileName );
+    bool ret = m_plugin->Load( aFileName );
+
+    if( ret )
+    {
+        m_originalWidth = m_plugin->GetImageWidth();
+        m_originalHeight = m_plugin->GetImageHeight();
+    }
+
+    return ret;
 }
 
-bool GRAPHICS_IMPORTER::Import( double aScale )
+
+bool GRAPHICS_IMPORTER::Import( const VECTOR2D& aScale )
 {
     if( !m_plugin )
     {

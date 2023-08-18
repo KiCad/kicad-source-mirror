@@ -24,40 +24,21 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef GRAPHICS_IMPORTER_PCBNEW_H
-#define GRAPHICS_IMPORTER_PCBNEW_H
+#ifndef GRAPHICS_IMPORTER_EESCHEMA_H
+#define GRAPHICS_IMPORTER_EESCHEMA_H
 
 #include <import_gfx/graphics_importer.h>
 
 #include <layer_ids.h>
 
-class BOARD;
-class FOOTPRINT;
-class PCB_SHAPE;
-class PCB_TEXT;
+class LIB_SYMBOL;
+class LIB_SHAPE;
+class LIB_TEXT;
 
-class GRAPHICS_IMPORTER_PCBNEW : public GRAPHICS_IMPORTER
+class GRAPHICS_IMPORTER_LIB_SYMBOL : public GRAPHICS_IMPORTER
 {
 public:
-    GRAPHICS_IMPORTER_PCBNEW();
-
-    /**
-     * Set the target layer for the imported shapes.
-     *
-     * @param aLayer is the layer to be used by the imported shapes.
-     */
-    void SetLayer( PCB_LAYER_ID aLayer )
-    {
-        m_layer = aLayer;
-    }
-
-    /**
-     * Return the target layer for the imported shapes.
-     */
-    PCB_LAYER_ID GetLayer() const
-    {
-        return m_layer;
-    }
+    GRAPHICS_IMPORTER_LIB_SYMBOL( LIB_SYMBOL* aSymbol, int aUnit );
 
     void AddLine( const VECTOR2D& aOrigin, const VECTOR2D& aEnd, double aWidth,
                   const COLOR4D& aColor ) override;
@@ -95,47 +76,8 @@ public:
      */
     int MapLineWidth( double aLineWidth );
 
-protected:
-    ///< Create an object representing a graphical shape.
-    virtual std::unique_ptr<PCB_SHAPE> createDrawing() = 0;
-
-    ///< Create an object representing a text.
-    virtual std::unique_ptr<PCB_TEXT> createText() = 0;
-
-    ///< Target layer for the imported shapes.
-    PCB_LAYER_ID m_layer;
+    LIB_SYMBOL* m_symbol;
+    int         m_unit;
 };
 
-
-class GRAPHICS_IMPORTER_BOARD : public GRAPHICS_IMPORTER_PCBNEW
-{
-public:
-    GRAPHICS_IMPORTER_BOARD( BOARD* aBoard )
-        : m_board( aBoard )
-    {
-    }
-
-protected:
-    std::unique_ptr<PCB_SHAPE> createDrawing() override;
-    std::unique_ptr<PCB_TEXT> createText() override;
-
-    BOARD* m_board;
-};
-
-
-class GRAPHICS_IMPORTER_FOOTPRINT : public GRAPHICS_IMPORTER_PCBNEW
-{
-public:
-    GRAPHICS_IMPORTER_FOOTPRINT( FOOTPRINT* aFootprint )
-        : m_footprint( aFootprint )
-    {
-    }
-
-protected:
-    std::unique_ptr<PCB_SHAPE> createDrawing() override;
-    std::unique_ptr<PCB_TEXT> createText() override;
-
-    FOOTPRINT* m_footprint;
-};
-
-#endif /* GRAPHICS_IMPORTER_PCBNEW */
+#endif /* GRAPHICS_IMPORTER_EESCHEMA */

@@ -236,6 +236,7 @@ public:
 
     double GetImageWidth() const override;
     double GetImageHeight() const override;
+    BOX2D GetImageBBox() const override;
 
     void updateImageLimits( const VECTOR2D& aPoint );
 

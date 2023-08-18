@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -32,6 +32,7 @@
 
 #include <eda_text.h>
 #include <math/vector2d.h>
+#include <gal/color4d.h>
 
 #include <list>
 #include <memory>
@@ -81,9 +82,9 @@ public:
      * It is important to have the file loaded before importing.
      *
      * @param aScale allow import graphic items with a non 1:1 import ratio
-     * aScale = 1.0 to import graphics with their actual size.
+     * VECTOR2D( 1.0, 1.0 ) to import graphics with their actual size.
      */
-    bool Import( double aScale = 1.0 );
+    bool Import( const VECTOR2D& aScale = VECTOR2D( 1.0, 1.0 ) );
 
     /**
      * Collect warning and error messages after loading/importing.
@@ -134,7 +135,7 @@ public:
     /**
      * @return the scale factor affecting the imported shapes.
      */
-    double GetScale() const
+    VECTOR2D GetScale() const
     {
         return m_scale;
     }
@@ -160,7 +161,7 @@ public:
      *
      * This allows conversion between imported shapes units and millimeters.
      */
-    void SetScale( double aScale )
+    void SetScale( const VECTOR2D& aScale )
     {
         m_scale = aScale;
     }
@@ -176,7 +177,7 @@ public:
     /**
      * @return the overall scale factor to convert the imported shapes dimension to mm.
      */
-    double ImportScalingFactor() const
+    VECTOR2D ImportScalingFactor() const
     {
         return m_scale * m_millimeterToIu;
     }
@@ -208,8 +209,10 @@ public:
      * @param aOrigin is the segment origin point expressed in mm.
      * @param aEnd is the segment end point expressed in mm.
      * @param aWidth is the segment thickness in mm. Use -1 for default line thickness
+     * @param aColor is the shape color
      */
-    virtual void AddLine( const VECTOR2D& aOrigin, const VECTOR2D& aEnd, double aWidth ) = 0;
+    virtual void AddLine( const VECTOR2D& aOrigin, const VECTOR2D& aEnd, double aWidth,
+                          const COLOR4D& aColor ) = 0;
 
     /**
      * Create an object representing a circle.
@@ -217,9 +220,10 @@ public:
      * @param aCenter is the circle center point expressed in mm.
      * @param aRadius is the circle radius expressed in mm.
      * @param aWidth is the segment thickness in mm. Use -1 for default line thickness
+     * @param aColor is the shape color
      */
-    virtual void AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth,
-                            bool aFilled ) = 0;
+    virtual void AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth, bool aFilled,
+                            const COLOR4D& aColor ) = 0;
 
     /**
      * Create an object representing an arc.
@@ -229,11 +233,13 @@ public:
      * Its length is the arc radius.
      * @param aAngle is the arc angle.
      * @param aWidth is the segment thickness in mm. Use -1 for default line thickness
+     * @param aColor is the shape color
      */
     virtual void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, const EDA_ANGLE& aAngle,
-                         double aWidth ) = 0;
+                         double aWidth, const COLOR4D& aColor ) = 0;
 
-    virtual void AddPolygon( const std::vector< VECTOR2D >& aVertices, double aWidth ) = 0;
+    virtual void AddPolygon( const std::vector<VECTOR2D>& aVertices, double aWidth,
+                             const COLOR4D& aColor ) = 0;
 
     /**
      * Create an object representing a text.
@@ -246,10 +252,12 @@ public:
      * @param aHJustify is the text horizontal justification.
      * @param aVJustify is the text vertical justification.
      * @param aWidth is the segment thickness in mm. Use -1 for default line thickness
+     * @param aColor is the shape color
      */
     virtual void AddText( const VECTOR2D& aOrigin, const wxString& aText, double aHeight,
                           double aWidth, double aThickness, double aOrientation,
-                          GR_TEXT_H_ALIGN_T aHJustify, GR_TEXT_V_ALIGN_T aVJustify ) = 0;
+                          GR_TEXT_H_ALIGN_T aHJustify, GR_TEXT_V_ALIGN_T aVJustify,
+                          const COLOR4D& aColor ) = 0;
 
     /**
      * Create an object representing an arc.
@@ -259,10 +267,11 @@ public:
      * @param aBezierControl2 is the second Bezier control point expressed in mm.
      * @param aEnd is the curve end point expressed in mm.
      * @param aWidth is the segment thickness in mm. Use -1 for default line thickness
+     * @param aColor is the shape color
      */
     virtual void AddSpline( const VECTOR2D& aStart, const VECTOR2D& aBezierControl1,
-                            const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd,
-                            double aWidth ) = 0;
+                            const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd, double aWidth,
+                            const COLOR4D& aColor ) = 0;
 
 protected:
     ///< Add an item to the imported shapes list.
@@ -297,7 +306,7 @@ private:
      * 1.0 does not change the size of imported items
      * scale < 1.0 reduce the size of imported items
      */
-    double m_scale;
+    VECTOR2D m_scale;
 
     ///< Default line thickness for the imported graphics
     double m_lineWidth;

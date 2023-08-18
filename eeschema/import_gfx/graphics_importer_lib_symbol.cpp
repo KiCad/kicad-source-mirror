@@ -23,24 +23,23 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "graphics_importer_pcbnew.h"
+#include "graphics_importer_lib_symbol.h"
 
-#include <board.h>
-#include <footprint.h>
-#include <pcb_shape.h>
-#include <pcb_text.h>
+#include <lib_symbol.h>
+#include <lib_shape.h>
+#include <lib_text.h>
 #include <memory>
 #include <tuple>
 
 
-GRAPHICS_IMPORTER_PCBNEW::GRAPHICS_IMPORTER_PCBNEW()
+GRAPHICS_IMPORTER_LIB_SYMBOL::GRAPHICS_IMPORTER_LIB_SYMBOL( LIB_SYMBOL* aSymbol, int aUnit ) :
+        m_symbol( aSymbol ), m_unit( aUnit )
 {
-    m_layer = Dwgs_User;
-    m_millimeterToIu = pcbIUScale.mmToIU( 1.0 );
+    m_millimeterToIu = schIUScale.mmToIU( 1.0 );
 }
 
 
-VECTOR2I GRAPHICS_IMPORTER_PCBNEW::MapCoordinate( const VECTOR2D& aCoordinate )
+VECTOR2I GRAPHICS_IMPORTER_LIB_SYMBOL::MapCoordinate( const VECTOR2D& aCoordinate )
 {
     VECTOR2D coord = aCoordinate;
     coord *= GetScale();
@@ -51,7 +50,7 @@ VECTOR2I GRAPHICS_IMPORTER_PCBNEW::MapCoordinate( const VECTOR2D& aCoordinate )
 }
 
 
-int GRAPHICS_IMPORTER_PCBNEW::MapLineWidth( double aLineWidth )
+int GRAPHICS_IMPORTER_LIB_SYMBOL::MapLineWidth( double aLineWidth )
 {
     VECTOR2D factor = ImportScalingFactor();
     double   scale = ( factor.x + factor.y ) * 0.5;
@@ -64,12 +63,12 @@ int GRAPHICS_IMPORTER_PCBNEW::MapLineWidth( double aLineWidth )
 }
 
 
-void GRAPHICS_IMPORTER_PCBNEW::AddLine( const VECTOR2D& aOrigin, const VECTOR2D& aEnd,
-                                        double aWidth, const COLOR4D& aColor )
+void GRAPHICS_IMPORTER_LIB_SYMBOL::AddLine( const VECTOR2D& aOrigin, const VECTOR2D& aEnd,
+                                         double aWidth, const COLOR4D& aColor )
 {
-    std::unique_ptr<PCB_SHAPE> line( createDrawing() );
-    line->SetShape( SHAPE_T::SEGMENT );
-    line->SetLayer( GetLayer() );
+    std::unique_ptr<LIB_SHAPE> line = std::make_unique<LIB_SHAPE>( m_symbol, SHAPE_T::SEGMENT );
+    line->SetUnit( m_unit );
+    line->SetFillColor( aColor );
     line->SetStroke( STROKE_PARAMS( MapLineWidth( aWidth ), PLOT_DASH_TYPE::SOLID ) );
     line->SetStart( MapCoordinate( aOrigin ) );
     line->SetEnd( MapCoordinate( aEnd ) );
@@ -82,13 +81,13 @@ void GRAPHICS_IMPORTER_PCBNEW::AddLine( const VECTOR2D& aOrigin, const VECTOR2D&
 }
 
 
-void GRAPHICS_IMPORTER_PCBNEW::AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth,
-                                          bool aFilled, const COLOR4D& aColor )
+void GRAPHICS_IMPORTER_LIB_SYMBOL::AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth,
+                                           bool aFilled, const COLOR4D& aColor )
 {
-    std::unique_ptr<PCB_SHAPE> circle( createDrawing() );
-    circle->SetShape( SHAPE_T::CIRCLE );
+    std::unique_ptr<LIB_SHAPE> circle = std::make_unique<LIB_SHAPE>( m_symbol, SHAPE_T::CIRCLE );
+    circle->SetUnit( m_unit );
+    circle->SetFillColor( aColor );
     circle->SetFilled( aFilled );
-    circle->SetLayer( GetLayer() );
     circle->SetStroke( STROKE_PARAMS( MapLineWidth( aWidth ), PLOT_DASH_TYPE::SOLID ) );
     circle->SetStart( MapCoordinate( aCenter ));
     circle->SetEnd( MapCoordinate( VECTOR2D( aCenter.x + aRadius, aCenter.y ) ) );
@@ -97,17 +96,17 @@ void GRAPHICS_IMPORTER_PCBNEW::AddCircle( const VECTOR2D& aCenter, double aRadiu
 }
 
 
-void GRAPHICS_IMPORTER_PCBNEW::AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart,
-                                       const EDA_ANGLE& aAngle, double aWidth,
-                                       const COLOR4D& aColor )
+void GRAPHICS_IMPORTER_LIB_SYMBOL::AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart,
+                                        const EDA_ANGLE& aAngle, double aWidth,
+                                        const COLOR4D& aColor )
 {
-    std::unique_ptr<PCB_SHAPE> arc( createDrawing() );
-    arc->SetShape( SHAPE_T::ARC );
-    arc->SetLayer( GetLayer() );
+    std::unique_ptr<LIB_SHAPE> arc = std::make_unique<LIB_SHAPE>( m_symbol, SHAPE_T::ARC );
+    arc->SetUnit( m_unit );
+    arc->SetFillColor( aColor );
 
     /**
      * We need to perform the rotation/conversion here while still using floating point values
-     * to avoid rounding errors when operating in integer space in pcbnew
+     * to avoid rounding errors when operating in integer space in KiCad
      */
     VECTOR2D end = aStart;
     VECTOR2D mid = aStart;
@@ -117,13 +116,13 @@ void GRAPHICS_IMPORTER_PCBNEW::AddArc( const VECTOR2D& aCenter, const VECTOR2D& 
 
     arc->SetArcGeometry( MapCoordinate( aStart ), MapCoordinate( mid ), MapCoordinate( end ) );
 
-    // Ensure the arc can be handled by Pcbnew. Arcs with a too big radius cannot.
+    // Ensure the arc can be handled by KiCad. Arcs with a too big radius cannot.
     // The criteria used here is radius < MAX_INT / 2.
     // this is not perfect, but we do not know the exact final position of the arc, so
     // we cannot test the coordinate values, because the arc can be moved before being placed.
     VECTOR2D center = CalcArcCenter( arc->GetStart(), arc->GetEnd(), aAngle );
     double radius = ( center - arc->GetStart() ).EuclideanNorm();
-    double rd_max_value = std::numeric_limits<VECTOR2I::coord_type>::max() / 2.0;
+    constexpr double rd_max_value = std::numeric_limits<VECTOR2I::coord_type>::max() / 2.0;
 
     if( radius >= rd_max_value )
     {
@@ -138,8 +137,8 @@ void GRAPHICS_IMPORTER_PCBNEW::AddArc( const VECTOR2D& aCenter, const VECTOR2D& 
 }
 
 
-void GRAPHICS_IMPORTER_PCBNEW::AddPolygon( const std::vector<VECTOR2D>& aVertices, double aWidth,
-                                           const COLOR4D& aColor )
+void GRAPHICS_IMPORTER_LIB_SYMBOL::AddPolygon( const std::vector<VECTOR2D>& aVertices, double aWidth,
+                                            const COLOR4D& aColor )
 {
     std::vector<VECTOR2I> convertedPoints;
     convertedPoints.reserve( aVertices.size() );
@@ -147,30 +146,33 @@ void GRAPHICS_IMPORTER_PCBNEW::AddPolygon( const std::vector<VECTOR2D>& aVertice
     for( const VECTOR2D& precisePoint : aVertices )
         convertedPoints.emplace_back( MapCoordinate( precisePoint ) );
 
-    std::unique_ptr<PCB_SHAPE> polygon( createDrawing() );
-    polygon->SetShape( SHAPE_T::POLY );
-    polygon->SetFilled( GetLayer() != Edge_Cuts );
-    polygon->SetLayer( GetLayer() );
+    if( convertedPoints.empty() )
+        return;
+
+    std::unique_ptr<LIB_SHAPE> polygon = std::make_unique<LIB_SHAPE>( m_symbol, SHAPE_T::POLY );
+    polygon->SetUnit( m_unit );
+    polygon->SetFilled( true );
+    polygon->SetFillMode( aColor != COLOR4D::UNSPECIFIED ? FILL_T::FILLED_WITH_COLOR
+                                                         : FILL_T::FILLED_SHAPE );
+    polygon->SetFillColor( aColor );
     polygon->SetPolyPoints( convertedPoints );
+    polygon->AddPoint( convertedPoints[0] ); // Need to close last point for libedit
 
-    if( FOOTPRINT* parentFP = polygon->GetParentFootprint() )
-    {
-        polygon->Rotate( { 0, 0 }, parentFP->GetOrientation() );
-        polygon->Move( parentFP->GetPosition() );
-    }
+    polygon->SetStroke(
+            STROKE_PARAMS( aWidth != -1 ? MapLineWidth( aWidth ) : -1, PLOT_DASH_TYPE::SOLID ) );
 
-    polygon->SetStroke( STROKE_PARAMS( MapLineWidth( aWidth ), PLOT_DASH_TYPE::SOLID ) );
     addItem( std::move( polygon ) );
 }
 
 
-void GRAPHICS_IMPORTER_PCBNEW::AddText( const VECTOR2D& aOrigin, const wxString& aText,
+void GRAPHICS_IMPORTER_LIB_SYMBOL::AddText( const VECTOR2D& aOrigin, const wxString& aText,
                                         double aHeight, double aWidth, double aThickness,
                                         double aOrientation, GR_TEXT_H_ALIGN_T aHJustify,
-                                        GR_TEXT_V_ALIGN_T aVJustify, const COLOR4D& aColor )
+                                         GR_TEXT_V_ALIGN_T aVJustify, const COLOR4D& aColor )
 {
-    std::unique_ptr<PCB_TEXT> textItem = createText();
-    textItem->SetLayer( GetLayer() );
+    std::unique_ptr<LIB_TEXT> textItem = std::make_unique<LIB_TEXT>( m_symbol );
+    textItem->SetUnit( m_unit );
+    textItem->SetTextColor( aColor );
     textItem->SetTextThickness( MapLineWidth( aThickness ) );
     textItem->SetTextPos( MapCoordinate( aOrigin ) );
     textItem->SetTextAngle( EDA_ANGLE( aOrientation, DEGREES_T ) );
@@ -184,13 +186,13 @@ void GRAPHICS_IMPORTER_PCBNEW::AddText( const VECTOR2D& aOrigin, const wxString&
 }
 
 
-void GRAPHICS_IMPORTER_PCBNEW::AddSpline( const VECTOR2D& aStart, const VECTOR2D& BezierControl1,
+void GRAPHICS_IMPORTER_LIB_SYMBOL::AddSpline( const VECTOR2D& aStart, const VECTOR2D& BezierControl1,
                                           const VECTOR2D& BezierControl2, const VECTOR2D& aEnd,
-                                          double aWidth, const COLOR4D& aColor )
+                                           double aWidth, const COLOR4D& aColor )
 {
-    std::unique_ptr<PCB_SHAPE> spline( createDrawing() );
-    spline->SetShape( SHAPE_T::BEZIER );
-    spline->SetLayer( GetLayer() );
+    std::unique_ptr<LIB_SHAPE> spline = std::make_unique<LIB_SHAPE>( m_symbol, SHAPE_T::BEZIER );
+    spline->SetUnit( m_unit );
+    spline->SetFillColor( aColor );
     spline->SetStroke( STROKE_PARAMS( MapLineWidth( aWidth ), PLOT_DASH_TYPE::SOLID ) );
     spline->SetStart( MapCoordinate( aStart ) );
     spline->SetBezierC1( MapCoordinate( BezierControl1 ));
@@ -212,28 +214,4 @@ void GRAPHICS_IMPORTER_PCBNEW::AddSpline( const VECTOR2D& aStart, const VECTOR2D
     }
 
     addItem( std::move( spline ) );
-}
-
-
-std::unique_ptr<PCB_SHAPE> GRAPHICS_IMPORTER_BOARD::createDrawing()
-{
-    return std::make_unique<PCB_SHAPE>( m_board );
-}
-
-
-std::unique_ptr<PCB_TEXT> GRAPHICS_IMPORTER_BOARD::createText()
-{
-    return std::make_unique<PCB_TEXT>( m_board );
-}
-
-
-std::unique_ptr<PCB_SHAPE> GRAPHICS_IMPORTER_FOOTPRINT::createDrawing()
-{
-    return std::make_unique<PCB_SHAPE>( m_footprint );
-}
-
-
-std::unique_ptr<PCB_TEXT> GRAPHICS_IMPORTER_FOOTPRINT::createText()
-{
-    return std::make_unique<PCB_TEXT>( m_footprint );
 }

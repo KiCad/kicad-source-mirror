@@ -178,6 +178,16 @@ double DXF_IMPORT_PLUGIN::GetImageHeight() const
 }
 
 
+BOX2D DXF_IMPORT_PLUGIN::GetImageBBox() const
+{
+    BOX2D bbox;
+    bbox.SetOrigin( m_minX, m_minY );
+    bbox.SetEnd( m_maxX, m_maxY );
+
+    return bbox;
+}
+
+
 void DXF_IMPORT_PLUGIN::SetImporter( GRAPHICS_IMPORTER* aImporter )
 {
     GRAPHICS_IMPORT_PLUGIN::SetImporter( aImporter );

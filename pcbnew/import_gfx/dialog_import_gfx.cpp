@@ -259,7 +259,7 @@ bool DIALOG_IMPORT_GFX::TransferDataFromWindow()
         LOCALE_IO dummy;    // Ensure floats can be read.
 
         if( m_importer->Load( m_textCtrlFileName->GetValue() ) )
-            m_importer->Import( scale );
+            m_importer->Import( VECTOR2D( scale, scale ) );
 
         // Get warning messages:
         wxString warnings = m_importer->GetMessages();

@@ -268,6 +268,10 @@ set ( EESCHEMA_LIBEDIT_SRCS
     symbol_editor/toolbars_symbol_editor.cpp
     )
 
+set( EESCHEMA_IMPORT_GFX
+    import_gfx/graphics_importer_lib_symbol.cpp
+    )
+
 set( EESCHEMA_SRCS
     ${EESCHEMA_DLGS}
     ${EESCHEMA_LIBEDIT_SRCS}
@@ -276,6 +280,7 @@ set( EESCHEMA_SRCS
     ${EESCHEMA_SCH_PLUGINS_LTSPICE}
     ${EESCHEMA_SIM_SRCS}
     ${EESCHEMA_WIDGETS}
+    ${EESCHEMA_IMPORT_GFX}
     annotate.cpp
     autoplace_fields.cpp
     bom_plugins.cpp

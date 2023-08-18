@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Janito Vaqueiro Ferreira Filho <janito.vff@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -38,28 +38,32 @@ static std::unique_ptr<T> make_shape( const Args&... aArguments )
     return std::make_unique<T>( aArguments... );
 }
 
-void GRAPHICS_IMPORTER_BUFFER::AddLine( const VECTOR2D& aStart, const VECTOR2D& aEnd, double aWidth )
+void GRAPHICS_IMPORTER_BUFFER::AddLine( const VECTOR2D& aStart, const VECTOR2D& aEnd, double aWidth,
+                                        const COLOR4D& aColor )
 {
-    m_shapes.push_back( make_shape< IMPORTED_LINE >( aStart, aEnd, aWidth ) );
+    m_shapes.push_back( make_shape< IMPORTED_LINE >( aStart, aEnd, aWidth, aColor ) );
 }
 
 
-void GRAPHICS_IMPORTER_BUFFER::AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth, bool aFilled )
+void GRAPHICS_IMPORTER_BUFFER::AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth,
+                                          bool aFilled, const COLOR4D& aColor )
 {
-    m_shapes.push_back( make_shape<IMPORTED_CIRCLE>( aCenter, aRadius, aWidth, aFilled ) );
+    m_shapes.push_back( make_shape<IMPORTED_CIRCLE>( aCenter, aRadius, aWidth, aFilled, aColor ) );
 }
 
 
 void GRAPHICS_IMPORTER_BUFFER::AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart,
-                                       const EDA_ANGLE& aAngle, double aWidth )
+                                       const EDA_ANGLE& aAngle, double aWidth,
+                                       const COLOR4D& aColor )
 {
-    m_shapes.push_back( make_shape<IMPORTED_ARC>( aCenter, aStart, aAngle, aWidth ) );
+    m_shapes.push_back( make_shape<IMPORTED_ARC>( aCenter, aStart, aAngle, aWidth, aColor ) );
 }
 
 
-void GRAPHICS_IMPORTER_BUFFER::AddPolygon( const std::vector< VECTOR2D >& aVertices, double aWidth )
+void GRAPHICS_IMPORTER_BUFFER::AddPolygon( const std::vector<VECTOR2D>& aVertices, double aWidth,
+                                           const COLOR4D& aColor )
 {
-    m_shapes.push_back( make_shape<IMPORTED_POLYGON>( aVertices, aWidth ) );
+    m_shapes.push_back( make_shape<IMPORTED_POLYGON>( aVertices, aWidth, aColor ) );
     m_shapes.back()->SetParentShapeIndex( m_shapeFillRules.size() - 1 );
 }
 
@@ -67,17 +71,18 @@ void GRAPHICS_IMPORTER_BUFFER::AddPolygon( const std::vector< VECTOR2D >& aVerti
 void GRAPHICS_IMPORTER_BUFFER::AddText( const VECTOR2D& aOrigin, const wxString& aText,
                                         double aHeight, double aWidth, double aThickness,
                                         double aOrientation, GR_TEXT_H_ALIGN_T aHJustify,
-                                        GR_TEXT_V_ALIGN_T aVJustify )
+                                        GR_TEXT_V_ALIGN_T aVJustify, const COLOR4D& aColor )
 {
     m_shapes.push_back( make_shape< IMPORTED_TEXT >( aOrigin, aText, aHeight, aWidth,
-                        aThickness, aOrientation, aHJustify, aVJustify ) );
+                        aThickness, aOrientation, aHJustify, aVJustify, aColor ) );
 }
 
 
 void GRAPHICS_IMPORTER_BUFFER::AddSpline( const VECTOR2D& aStart, const VECTOR2D& aBezierControl1,
-                const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd , double aWidth )
+                                          const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd,
+                                          double aWidth, const COLOR4D& aColor )
 {
-    m_shapes.push_back( make_shape<IMPORTED_SPLINE>( aStart, aBezierControl1, aBezierControl2, aEnd, aWidth ) );
+    m_shapes.push_back( make_shape<IMPORTED_SPLINE>( aStart, aBezierControl1, aBezierControl2, aEnd, aWidth, aColor ) );
 }
 
 
@@ -96,8 +101,8 @@ void GRAPHICS_IMPORTER_BUFFER::ImportTo( GRAPHICS_IMPORTER& aImporter )
 // converts a single SVG-style polygon (multiple outlines, hole detection based on orientation, custom fill rule) to a format that can be digested by KiCad (single outline, fractured)
 static void convertPolygon( std::list<std::unique_ptr<IMPORTED_SHAPE>>& aShapes,
                             std::vector<IMPORTED_POLYGON*>&             aPaths,
-                            GRAPHICS_IMPORTER::POLY_FILL_RULE           aFillRule,
-                            double aWidth )
+                            GRAPHICS_IMPORTER::POLY_FILL_RULE aFillRule, double aWidth,
+                            const COLOR4D& aColor )
 {
     double minX = std::numeric_limits<double>::max();
     double minY = minX;
@@ -165,15 +170,16 @@ static void convertPolygon( std::list<std::unique_ptr<IMPORTED_SHAPE>>& aShapes,
             pts.emplace_back( VECTOR2D( xp, yp ) );
         }
 
-        aShapes.push_back( std::make_unique<IMPORTED_POLYGON>( pts, aWidth ) );
+        aShapes.push_back( std::make_unique<IMPORTED_POLYGON>( pts, aWidth, aColor ) );
     }
 }
 
 
 void GRAPHICS_IMPORTER_BUFFER::PostprocessNestedPolygons()
 {
-    int curShapeIdx = -1;
-    double lastWidth = 0;
+    int     curShapeIdx = -1;
+    double  lastWidth = 0;
+    COLOR4D lastColor = COLOR4D::UNSPECIFIED;
 
     std::list<std::unique_ptr<IMPORTED_SHAPE>> newShapes;
     std::vector<IMPORTED_POLYGON*>             polypaths;
@@ -192,17 +198,19 @@ void GRAPHICS_IMPORTER_BUFFER::PostprocessNestedPolygons()
 
         if( index != curShapeIdx && curShapeIdx >= 0 )
         {
-            convertPolygon( newShapes, polypaths, m_shapeFillRules[curShapeIdx], lastWidth );
+            convertPolygon( newShapes, polypaths, m_shapeFillRules[curShapeIdx], lastWidth,
+                            lastColor );
             polypaths.clear();
         }
 
         curShapeIdx = index;
         lastWidth = poly->GetWidth();
+        lastColor = poly->GetColor();
         polypaths.push_back( poly );
     }
 
     if( curShapeIdx >= 0 )
-        convertPolygon( newShapes, polypaths, m_shapeFillRules[curShapeIdx], lastWidth );
+        convertPolygon( newShapes, polypaths, m_shapeFillRules[curShapeIdx], lastWidth, lastColor );
 
     m_shapes.swap( newShapes );
 }
