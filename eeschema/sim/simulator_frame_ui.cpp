@@ -216,8 +216,6 @@ void SIGNALS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 
                     if( signal.Upper().StartsWith( wxS( "V(" ) ) )
                         signal = wxS( "vdb" ) + signal.Mid( 1 );
-                    else if( signal.Upper().StartsWith( wxS( "I(" ) ) )
-                        signal = wxS( "idb" ) + signal.Mid( 1 );
                 }
 
                 m_parent->AddMeasurement( cmd + wxS( " " ) + signal );
