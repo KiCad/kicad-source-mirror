@@ -154,8 +154,13 @@ void DIALOG_SCHEMATIC_SETUP::onAuxiliaryAction( wxCommandEvent& event )
         return;
 
     wxFileName projectFn( importDlg.GetFilePath() );
+    bool       alreadyLoaded = false;
 
-    if( !m_frame->GetSettingsManager()->LoadProject( projectFn.GetFullPath(), false ) )
+    if( m_frame->GetSettingsManager()->GetProject( projectFn.GetFullPath() ) )
+    {
+        alreadyLoaded = true;
+    }
+    else if( !m_frame->GetSettingsManager()->LoadProject( projectFn.GetFullPath(), false ) )
     {
         wxString msg = wxString::Format( _( "Error importing settings from project:\n"
                                             "Project file %s could not be loaded." ),
@@ -203,5 +208,6 @@ void DIALOG_SCHEMATIC_SETUP::onAuxiliaryAction( wxCommandEvent& event )
                 ->ImportSettingsFrom( file.m_NetSettings );
     }
 
-    m_frame->GetSettingsManager()->UnloadProject( otherPrj, false );
+    if( !alreadyLoaded )
+        m_frame->GetSettingsManager()->UnloadProject( otherPrj, false );
 }
