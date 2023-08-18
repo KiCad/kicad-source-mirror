@@ -52,7 +52,7 @@
 #include <macros.h>
 #include <pad.h>
 #include <pcb_marker.h>
-#include <pcb_plot_svg.h>
+#include <exporters/export_svg.h>
 #include <pcbnew_settings.h>
 #include <pcbplot.h>
 #include <pgm_base.h>
@@ -156,7 +156,7 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
 
     if( aJob->IsCli() )
     {
-        if( PCB_PLOT_SVG::Plot( brd, svgPlotOptions ) )
+        if( EXPORT_SVG::Plot( brd, svgPlotOptions ) )
             m_reporter->Report( _( "Successfully created svg file" ), RPT_SEVERITY_INFO );
         else
             m_reporter->Report( _( "Error creating svg file" ), RPT_SEVERITY_ERROR );
@@ -843,7 +843,7 @@ int PCBNEW_JOBS_HANDLER::doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPR
     svgPlotOptions.m_printMaskLayer = aSvgJob->m_printMaskLayer;
     svgPlotOptions.m_plotFrame = false;
 
-    if( !PCB_PLOT_SVG::Plot( brd.get(), svgPlotOptions ) )
+    if( !EXPORT_SVG::Plot( brd.get(), svgPlotOptions ) )
         m_reporter->Report( _( "Error creating svg file" ), RPT_SEVERITY_ERROR );
 
 

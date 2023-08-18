@@ -18,18 +18,16 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <board.h>
-#include <board_design_settings.h>
-#include <locale_io.h>
-#include <pcbnew_settings.h>
-#include <pcb_plot_params.h>
-#include <pcb_plot_svg.h>
-#include <pcbplot.h>
-#include <pgm_base.h>
-#include <plotters/plotters_pslike.h>
+#include "board.h"
+#include "locale_io.h"
+#include "pcb_plot_params.h"
+#include "export_svg.h"
+#include "pcbplot.h"
+#include "pgm_base.h"
+#include "plotters/plotters_pslike.h"
 
 
-bool PCB_PLOT_SVG::Plot( BOARD* aBoard, const PCB_PLOT_SVG_OPTIONS& aSvgPlotOptions )
+bool EXPORT_SVG::Plot( BOARD* aBoard, const PCB_PLOT_SVG_OPTIONS& aSvgPlotOptions )
 {
     PCB_PLOT_PARAMS plot_opts;
     wxString        outputFile = aSvgPlotOptions.m_outputFile;
@@ -42,21 +40,15 @@ bool PCB_PLOT_SVG::Plot( BOARD* aBoard, const PCB_PLOT_SVG_OPTIONS& aSvgPlotOpti
         switch( aSvgPlotOptions.m_drillShapeOption )
         {
             default:
-            case 0:
-                plot_opts.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );
-                break;
-
-            case 1:
-                plot_opts.SetDrillMarksType( DRILL_MARKS::SMALL_DRILL_SHAPE );
-                break;
-
-            case 2:
-                plot_opts.SetDrillMarksType( DRILL_MARKS::FULL_DRILL_SHAPE );
-                break;
+            case 0:  plot_opts.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );    break;
+            case 1:  plot_opts.SetDrillMarksType( DRILL_MARKS::SMALL_DRILL_SHAPE ); break;
+            case 2:  plot_opts.SetDrillMarksType( DRILL_MARKS::FULL_DRILL_SHAPE );  break;
         }
     }
     else
+    {
         plot_opts.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );
+    }
 
     plot_opts.SetSkipPlotNPTH_Pads( false );
 

@@ -41,7 +41,7 @@ struct PCB_PLOT_SVG_OPTIONS
     int m_drillShapeOption;
 };
 
-class PCB_PLOT_SVG
+class EXPORT_SVG
 {
 public:
     static bool Plot( BOARD* aBoard, const PCB_PLOT_SVG_OPTIONS& aSvgPlotOptions );

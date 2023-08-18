@@ -39,7 +39,7 @@
 #include <wx/dirdlg.h>
 #include <pgm_base.h>
 #include <project/project_file.h>
-#include <pcb_plot_svg.h>
+#include <exporters/export_svg.h>
 
 class DIALOG_EXPORT_SVG : public DIALOG_EXPORT_SVG_BASE
 {
@@ -310,7 +310,7 @@ void DIALOG_EXPORT_SVG::ExportSVGFile( bool aOnlyOneFile )
         svgPlotOptions.m_outputFile = svgPath;
         svgPlotOptions.m_printMaskLayer = m_printMaskLayer;
 
-        if( PCB_PLOT_SVG::Plot(m_board, svgPlotOptions ) )
+        if( EXPORT_SVG::Plot(m_board, svgPlotOptions ) )
         {
             reporter.Report( wxString::Format( _( "Exported '%s'." ), svgPath ),
                              RPT_SEVERITY_ACTION );

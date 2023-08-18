@@ -52,8 +52,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_drc_base.cpp
     dialogs/dialog_footprint_checker.cpp
     dialogs/dialog_footprint_checker_base.cpp
-        dialogs/dialog_footprint_associations.cpp
-        dialogs/dialog_footprint_associations_base.cpp
+    dialogs/dialog_footprint_associations.cpp
+    dialogs/dialog_footprint_associations_base.cpp
     dialogs/dialog_footprint_properties.cpp
     dialogs/dialog_footprint_properties_base.cpp
     dialogs/dialog_footprint_properties_fp_editor.cpp
@@ -207,6 +207,7 @@ set( PCBNEW_EXPORTERS
     exporters/export_footprint_associations.cpp
     exporters/export_gencad.cpp
     exporters/export_idf.cpp
+    exporters/export_svg.cpp
     exporters/step/exporter_step.cpp
     exporters/step/step_pcb_model.cpp
     exporters/exporter_vrml.cpp
