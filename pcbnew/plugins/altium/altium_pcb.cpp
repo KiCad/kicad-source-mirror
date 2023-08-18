@@ -2089,7 +2089,8 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItemOnLayer( const AREGION6& aE
     shape->SetLayer( aLayer );
     shape->SetStroke( STROKE_PARAMS( 0 ) );
 
-    if( IsCopperLayer( aLayer ) && aElem.net != ALTIUM_NET_UNCONNECTED ) {
+    if( IsCopperLayer( aLayer ) && aElem.net != ALTIUM_NET_UNCONNECTED )
+    {
         shape->SetNetCode( GetNetCode( aElem.net ) );
     }
 
@@ -3434,7 +3435,8 @@ void ALTIUM_PCB::ConvertFills6ToBoardItemOnLayer( const AFILL6& aElem, PCB_LAYER
     fill->SetStart( aElem.pos1 );
     fill->SetEnd( aElem.pos2 );
 
-    if( IsCopperLayer( aLayer ) && aElem.net != ALTIUM_NET_UNCONNECTED ) {
+    if( IsCopperLayer( aLayer ) && aElem.net != ALTIUM_NET_UNCONNECTED )
+    {
         fill->SetNetCode( GetNetCode( aElem.net ) );
     }
 
