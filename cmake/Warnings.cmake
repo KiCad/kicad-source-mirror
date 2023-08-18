@@ -223,6 +223,10 @@ if( MSVC )
     string( APPEND WARN_FLAGS_CXX " /wd4245 /wd4365" )
     # disable "conversion from 'type1' to 'type2', possible loss of data"
     string( APPEND WARN_FLAGS_CXX " /wd4242 /wd5219" )
+    # disable "member function does not override any base class virtual member function"
+    string( APPEND WARN_FLAGS_CXX " /wd4263" )
+    # disable "no override available for virtual member function from base 'class'; function is hidden"
+    string( APPEND WARN_FLAGS_CXX " /wd4264" )
     # disable "no override available for virtual member function, function is hidden"
     string( APPEND WARN_FLAGS_CXX " /wd4266" )
     # disable "class has virtual functions, but its (non)trivial destructor is not virtual"
