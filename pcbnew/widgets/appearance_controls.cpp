@@ -36,6 +36,7 @@
 #include <project.h>
 #include <project/project_local_settings.h>
 #include <settings/color_settings.h>
+#include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <widgets/bitmap_button.h>
@@ -2913,7 +2914,9 @@ void APPEARANCE_CONTROLS::OnColorSwatchChanged( wxCommandEvent& aEvent )
     int           layer    = swatch->GetId();
 
     COLOR_SETTINGS* cs = m_frame->GetColorSettings();
+
     cs->SetColor( layer, newColor );
+    m_frame->GetSettingsManager()->SaveColorSettings( cs, "board" );
 
     m_frame->GetCanvas()->UpdateColors();
 
