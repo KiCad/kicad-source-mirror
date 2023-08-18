@@ -35,6 +35,30 @@
 #include <werapi.h>     // issues on msys2
 #endif
 
+#ifdef _WIN32
+extern "C"
+{
+    // So there exists this malware called Nahimic by A-Volute, which is marketed as an audio enhancement
+    // software. In reality it's an aggressive form of malware that injects itself wildly into every process
+    // on the system for god knows what reason. It even includes a tracking/analytics package, <insert tinfoil hat>
+    // Our problem is this garbage basically bugs out OpenGL (why an audio driver does that, who knows, its made by morons)
+    // And then we get issues reported both in our issue tracker and sentry reports as a result
+    // At least these malware authors were nice to include a dumb "disable" trick where it checks if the exe is exporting
+    // a symbol called NoHotPatch, so here we are.
+    // Hopefully this works and stops the bug reports. Apparently the worst part is this malware aggressively gets reinstalled
+    // by awful low-tier motherboard vendors like MSI, Alienware and others who bundled it into their driver packages
+    // and distributed it over Windows Update
+    // Did I mention they clearly had issues with other apps so instead of fixing their malware, they blacklisted a hundred common
+    // apps and even some games in their own config? Obviously kicad isn't on that blacklist :(
+    // This malware seems to no longer be distributed as Nahimic and replaced with "Sonar" by SteelSeries.
+    // Time will tell if it's the same garbage, I'm not volunteering to install it.
+    __declspec(dllexport) void NoHotPatch()
+    {
+        // this is a intentionally empty function
+        return;
+    }
+}
+#endif
 
 bool KIPLATFORM::APP::Init()
 {
