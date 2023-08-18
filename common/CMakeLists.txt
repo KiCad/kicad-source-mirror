@@ -284,6 +284,14 @@ set( FONT_SRCS
     font/text_attributes.cpp
 	)
 
+set( COMMON_IMPORT_GFX_SRCS
+    import_gfx/graphics_import_mgr.cpp
+    import_gfx/graphics_importer.cpp
+    import_gfx/graphics_importer_buffer.cpp
+    import_gfx/dxf_import_plugin.cpp
+    import_gfx/svg_import_plugin.cpp
+    )
+
 set( COMMON_SRCS
     ${LIB_KICAD_SRCS}
     ${COMMON_ABOUT_DLG_SRCS}
@@ -296,6 +304,7 @@ set( COMMON_SRCS
     ${PLUGINS_CADSTAR_SRCS}
     ${PLUGINS_EAGLE_SRCS}
 	${FONT_SRCS}
+    ${COMMON_IMPORT_GFX_SRCS}
     jobs/job_dispatcher.cpp
     advanced_config.cpp
     array_axis.cpp
@@ -496,6 +505,9 @@ target_link_libraries( common
     core
     fmt::fmt
     gal
+    nanosvg
+    dxflib_qcad
+    tinyspline_lib
     scripting
     threadpool
     nlohmann_json

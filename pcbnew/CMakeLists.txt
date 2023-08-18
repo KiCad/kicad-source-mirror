@@ -197,12 +197,7 @@ set( PCBNEW_BRDSTACKUP_MGR
 set( PCBNEW_IMPORT_GFX
     import_gfx/dialog_import_gfx_base.cpp
     import_gfx/dialog_import_gfx.cpp
-    import_gfx/graphics_import_mgr.cpp
-    import_gfx/graphics_importer.cpp
     import_gfx/graphics_importer_pcbnew.cpp
-    import_gfx/graphics_importer_buffer.cpp
-    import_gfx/dxf_import_plugin.cpp
-    import_gfx/svg_import_plugin.cpp
     )
 
 
@@ -628,9 +623,6 @@ target_link_libraries( pcbnew_kiface_objects
     PRIVATE
         common
         core
-        dxflib_qcad
-        nanosvg
-        tinyspline_lib
         nlohmann_json
         rectpack2d
         gzip-hpp
@@ -676,10 +668,7 @@ set( PCBNEW_KIFACE_LIBRARIES
     gal
     scripting
     core
-    dxflib_qcad
-    tinyspline_lib
     idf3
-    nanosvg
     markdown_lib
     ${PCBNEW_IO_LIBRARIES}
     ${wxWidgets_LIBRARIES}

@@ -27,7 +27,7 @@
 #ifndef GRAPHICS_IMPORTER_PCBNEW_H
 #define GRAPHICS_IMPORTER_PCBNEW_H
 
-#include "graphics_importer.h"
+#include <import_gfx/graphics_importer.h>
 
 #include <layer_ids.h>
 

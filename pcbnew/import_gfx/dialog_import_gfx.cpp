@@ -25,6 +25,7 @@
 #include <dialogs/html_message_box.h>
 
 #include "dialog_import_gfx.h"
+#include <import_gfx/dxf_import_plugin.h>
 #include <base_units.h>
 #include <kiface_base.h>
 #include <locale_io.h>
@@ -33,7 +34,6 @@
 #include <bitmaps.h>
 #include <widgets/std_bitmap_button.h>
 #include <map>
-#include "dxf_import_plugin.h"
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
 
