@@ -25,6 +25,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <cstdint>
 #include <config.h>
 #include <vector>
 #include <wx/arrstr.h>
