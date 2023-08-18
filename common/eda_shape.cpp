@@ -1562,18 +1562,22 @@ void EDA_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance
 
         if( IsFilled() )
         {
-            aBuffer.NewOutline();
-
             for( int ii = 0; ii < m_poly.OutlineCount(); ++ii )
             {
                 const SHAPE_LINE_CHAIN& poly = m_poly.Outline( ii );
+                SHAPE_POLY_SET tmp;
+                tmp.NewOutline();
 
                 for( int jj = 0; jj < (int) poly.GetPointCount(); ++jj )
-                    aBuffer.Append( poly.GetPoint( jj ) );
+                    tmp.Append( poly.GetPoint( jj ) );
+
+                if( width > 0 )
+                    tmp.Inflate( width/2, SHAPE_POLY_SET::ROUND_ALL_CORNERS, aError, false);
+
+                aBuffer.Append( tmp );
             }
         }
-
-        if( width > 0 || !IsFilled() )
+        else
         {
             for( int ii = 0; ii < m_poly.OutlineCount(); ++ii )
             {
