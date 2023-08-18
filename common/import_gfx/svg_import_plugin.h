@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 CERN
  * @author Janito V. Ferreira Filho <janito.vff@gmail.com>
- * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,8 +25,6 @@
 
 #ifndef SVG_IMPORT_PLUGIN_H
 #define SVG_IMPORT_PLUGIN_H
-
-#include "nanosvg.h"
 
 #include "graphics_import_plugin.h"
 #include "graphics_importer_buffer.h"
@@ -66,6 +64,7 @@ public:
 
     bool Import() override;
     bool Load( const wxString& aFileName ) override;
+    bool LoadFromMemory( const wxMemoryBuffer& aMemBuffer ) override;
 
     virtual double GetImageHeight() const override;
     virtual double GetImageWidth() const override;

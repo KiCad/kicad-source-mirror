@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2019-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -90,6 +90,13 @@ public:
      * It is necessary to have the GRAPHICS_IMPORTER object set before.
      */
     virtual bool Load( const wxString& aFileName ) = 0;
+
+    /**
+     * Set memory buffer with content for import.
+     *
+     * It is necessary to have the GRAPHICS_IMPORTER object set before.
+     */
+    virtual bool LoadFromMemory( const wxMemoryBuffer& aMemBuffer ) = 0;
 
     /**
      * Return image height from original imported file.

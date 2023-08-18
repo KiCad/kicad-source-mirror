@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -231,6 +231,7 @@ public:
     }
 
     bool Load( const wxString& aFileName ) override;
+    bool LoadFromMemory( const wxMemoryBuffer& aMemBuffer ) override;
     bool Import() override;
 
     double GetImageWidth() const override;
@@ -306,6 +307,13 @@ public:
      * @param aFile is the full filename.
      */
     bool ImportDxfFile( const wxString& aFile );
+
+    /**
+     * Implementation of the method used for communicate with this filter.
+     *
+     * @param aMemBuffer is the memory bufferr.
+     */
+    bool ImportDxfFile( const wxMemoryBuffer& aMemBuffer );
 
     /**
      * @return the list of messages in one string. Each message ends by '\n'

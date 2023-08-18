@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Janito V. Ferreira Filho
  *
  * This program is free software; you can redistribute it and/or
@@ -25,6 +25,7 @@
 
 #include "svg_import_plugin.h"
 
+#include <nanosvg.h>
 #include <algorithm>
 #include <cmath>
 
@@ -32,6 +33,8 @@
 
 #include <eda_item.h>
 #include "graphics_importer.h"
+
+static const int SVG_DPI = 96;
 
 static VECTOR2D calculateBezierBoundingBoxExtremity( const float* aCurvePoints,
         std::function< const float&( const float&, const float& ) > comparator );
@@ -64,12 +67,29 @@ bool SVG_IMPORT_PLUGIN::Load( const wxString& aFileName )
         return false;
 
     // nsvgParseFromFile will close the file after reading
-    m_parsedImage = nsvgParseFromFile( fp, "mm", 96 );
+    m_parsedImage = nsvgParseFromFile( fp, "mm", SVG_DPI );
 
     wxCHECK( m_parsedImage, false );
 
     return true;
 }
+
+
+bool SVG_IMPORT_PLUGIN::LoadFromMemory( const wxMemoryBuffer& aMemBuffer )
+{
+    wxCHECK( m_importer, false );
+
+    std::string str( reinterpret_cast<char*>( aMemBuffer.GetData() ), aMemBuffer.GetDataLen() );
+    wxCHECK( str.data()[aMemBuffer.GetDataLen()] == '\0', false );
+
+    // nsvgParse will modify the string data
+    m_parsedImage = nsvgParse( str.data(), "mm", SVG_DPI );
+
+    wxCHECK( m_parsedImage, false );
+
+    return true;
+}
+
 
 bool SVG_IMPORT_PLUGIN::Import()
 {

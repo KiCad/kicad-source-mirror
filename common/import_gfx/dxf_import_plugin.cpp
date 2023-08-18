@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -137,6 +137,26 @@ bool DXF_IMPORT_PLUGIN::Load( const wxString& aFileName )
 }
 
 
+bool DXF_IMPORT_PLUGIN::LoadFromMemory( const wxMemoryBuffer& aMemBuffer )
+{
+    try
+    {
+        return ImportDxfFile( aMemBuffer );
+    }
+    catch( const std::bad_alloc& )
+    {
+        m_layers.clear();
+        m_blocks.clear();
+        m_styles.clear();
+
+        m_internalImporter.ClearShapes();
+
+        reportMsg( _( "Memory was exhausted trying to load the DXF, it may be too large." ) );
+        return false;
+    }
+}
+
+
 bool DXF_IMPORT_PLUGIN::Import()
 {
     wxCHECK( m_importer, false );
@@ -198,6 +218,20 @@ bool DXF_IMPORT_PLUGIN::ImportDxfFile( const wxString& aFile )
     // Note the dxf reader takes care of switching to "C" locale before reading the file
     // and will close the file after reading
     bool success = dxf_reader.in( fp, this );
+
+    return success;
+}
+
+
+bool DXF_IMPORT_PLUGIN::ImportDxfFile( const wxMemoryBuffer& aMemBuffer )
+{
+    DL_Dxf dxf_reader;
+
+    std::string str( reinterpret_cast<char*>( aMemBuffer.GetData() ), aMemBuffer.GetDataLen() );
+
+    // Note the dxf reader takes care of switching to "C" locale before reading the file
+    // and will close the file after reading
+    bool success = dxf_reader.in( str, this );
 
     return success;
 }
