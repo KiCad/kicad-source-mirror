@@ -626,6 +626,11 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         try
         {
+            if (pi == nullptr) {
+                // There was no plugin found, e.g. due to invalid file extension, file header,...
+                THROW_IO_ERROR( _( "File format is not supported" ) );
+            }
+
             STRING_UTF8_MAP props;
 
             // EAGLE_PLUGIN can use this info to center the BOARD, but it does not yet.
