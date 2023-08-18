@@ -421,7 +421,7 @@ bool LEGACY_PLUGIN::CanReadBoard( const wxString& aFileName ) const
     {
         getVersion( &tempReader );
     }
-    catch( const IO_ERROR& e )
+    catch( const IO_ERROR& )
     {
         return false;
     }
