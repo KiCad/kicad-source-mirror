@@ -513,10 +513,10 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
                     {
                         (*aErrorHandler)( _( "(multiple board outlines not supported)" ), a, b,
                                           contours[ contourIndex ].GetPoint( 0 ) );
+
+                        return false;
                     }
                 }
-
-                return false;
             }
 
             aPolygons.AddOutline( contours[ contourIndex ] );
@@ -563,9 +563,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
                 {
                     BOARD_ITEM* a = fetchOwner( *seg1 );
                     BOARD_ITEM* b = fetchOwner( *seg2 );
-
-                    if( a && b )
-                        (*aErrorHandler)( _( "(self-intersecting)" ), a, b, ( *seg1 ).A );
+                    (*aErrorHandler)( _( "(self-intersecting)" ), a, b, ( *seg1 ).A );
                 }
 
                 selfIntersecting = true;
@@ -577,9 +575,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
                 {
                     BOARD_ITEM* a = fetchOwner( *seg1 );
                     BOARD_ITEM* b = fetchOwner( *seg2 );
-
-                    if( a && b )
-                        (*aErrorHandler)( _( "(self-intersecting)" ), a, b, *pt );
+                    (*aErrorHandler)( _( "(self-intersecting)" ), a, b, *pt );
                 }
 
                 selfIntersecting = true;

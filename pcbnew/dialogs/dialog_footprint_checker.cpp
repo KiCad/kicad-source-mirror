@@ -136,6 +136,9 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
     OUTLINE_ERROR_HANDLER outlineErrorHandler =
             [&]( const wxString& aMsg, BOARD_ITEM* aItemA, BOARD_ITEM* aItemB, const VECTOR2I& aPt )
             {
+                if( !aItemA )        // If we only have a single item, make sure it's A
+                    std::swap( aItemA, aItemB );
+
                 errorHandler( aItemA, aItemB, nullptr, DRCE_MALFORMED_COURTYARD, aMsg, aPt );
             };
 
