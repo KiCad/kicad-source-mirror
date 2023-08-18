@@ -1665,15 +1665,6 @@ void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
 }
 
 
-wxString PAD::GetParentAsString() const
-{
-    if( FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( m_parent ) )
-        return fp->GetReference();
-
-    return m_parent->m_Uuid.AsString();
-}
-
-
 static struct PAD_DESC
 {
     PAD_DESC()
@@ -1759,10 +1750,6 @@ static struct PAD_DESC
         auto shape = new PROPERTY_ENUM<PAD, PAD_SHAPE>( _HKI( "Shape" ),
                     &PAD::SetShape, &PAD::GetShape );
         propMgr.AddProperty( shape, groupPad );
-
-        propMgr.AddProperty( new PROPERTY<PAD, wxString>( _HKI( "Parent" ),
-                     NO_SETTER( PAD, wxString ), &PAD::GetParentAsString ), groupPad )
-                .SetIsHiddenFromLibraryEditors();
 
         auto padNumber = new PROPERTY<PAD, wxString>( _HKI( "Pad Number" ),
                                                       &PAD::SetNumber, &PAD::GetNumber );

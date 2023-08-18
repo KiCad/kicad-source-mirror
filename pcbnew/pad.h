@@ -108,8 +108,6 @@ public:
         return GetDrillSizeX() > 0 && GetDrillSizeY() > 0;
     }
 
-    wxString GetParentAsString() const;
-
     bool IsLocked() const override;
 
     /**

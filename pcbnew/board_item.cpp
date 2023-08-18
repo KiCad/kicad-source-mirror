@@ -297,6 +297,15 @@ void BOARD_ITEM::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 }
 
 
+wxString BOARD_ITEM::GetParentAsString() const
+{
+    if( FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( m_parent ) )
+        return fp->GetReference();
+
+    return m_parent->m_Uuid.AsString();
+}
+
+
 static struct BOARD_ITEM_DESC
 {
     BOARD_ITEM_DESC()
@@ -314,6 +323,10 @@ static struct BOARD_ITEM_DESC
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( BOARD_ITEM );
         propMgr.InheritsAfter( TYPE_HASH( BOARD_ITEM ), TYPE_HASH( EDA_ITEM ) );
+
+        propMgr.AddProperty( new PROPERTY<BOARD_ITEM, wxString>( _HKI( "Parent" ),
+                     NO_SETTER( BOARD_ITEM, wxString ), &BOARD_ITEM::GetParentAsString ) )
+                .SetIsHiddenFromLibraryEditors();
 
         propMgr.AddProperty( new PROPERTY<BOARD_ITEM, int>( _HKI( "Position X" ),
                     &BOARD_ITEM::SetX, &BOARD_ITEM::GetX, PROPERTY_DISPLAY::PT_COORD,

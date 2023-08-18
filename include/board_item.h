@@ -316,6 +316,12 @@ public:
     virtual BOARD* GetBoard();
 
     /**
+     * For "parent" property.
+     * @return the parent footprint's ref or the parent item's UUID.
+     */
+    wxString GetParentAsString() const;
+
+    /**
      * Return the name of the PCB layer on which the item resides.
      *
      * @return the layer name associated with this item.
