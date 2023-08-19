@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -214,7 +214,7 @@ public:
 
     /**
      * Generic fallback: arc rendered as a polyline.
-     * Winding direction: clockwise in increasing X -> right, increasing Y -> down system.
+     * Winding direction: clockwise in right-down coordinate system.
      */
     virtual void Arc( const VECTOR2I& aCenter, const VECTOR2I& aStart, const VECTOR2I& aEnd,
                       FILL_T aFill, int aWidth, int aMaxError );
@@ -227,7 +227,7 @@ public:
      * In some plotters (i.e. dxf) whe need a good precision when calculating an arc
      * without error introduced by rounding, to avoid moving the end points,
      * usually important in outlines when plotting an arc given by center, radius and angles.
-     * Winding direction: counter-clockwise in increasing X -> right, increasing Y -> down system.
+     * Winding direction: counter-clockwise in right-down coordinate system.
      */
     virtual void Arc( const VECTOR2D& aCentre, const EDA_ANGLE& aStartAngle,
                       const EDA_ANGLE& aEndAngle, double aRadius, FILL_T aFill,

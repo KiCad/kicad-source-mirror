@@ -339,7 +339,7 @@ bool GERBER_PLOTTER::EndPlot()
         if( substr && strcmp( substr, "G04 APERTURE LIST*" ) == 0 )
         {
             // Add aperture list macro:
-            if( m_hasApertureRoundRect | m_hasApertureRotOval ||
+            if( m_hasApertureRoundRect || m_hasApertureRotOval ||
                 m_hasApertureOutline4P || m_hasApertureRotRect ||
                 m_hasApertureChamferedRect || m_am_freepoly_list.AmCount() )
             {
@@ -822,8 +822,13 @@ void GERBER_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
 {
     SetCurrentLineWidth( aWidth );
 
+    EDA_ANGLE endAngle( aEndAngle );
+
+    while( endAngle < aStartAngle )
+        endAngle += ANGLE_360;
+
     // aFill is not used here.
-    plotArc( aCenter, aStartAngle, aEndAngle, aRadius, false );
+    plotArc( aCenter, aStartAngle, endAngle, aRadius, false );
 }
 
 
@@ -884,7 +889,11 @@ void GERBER_PLOTTER::plotArc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAn
     VECTOR2D devRelCenter = userToDeviceCoordinates( aCenter ) - userToDeviceCoordinates( start );
 
     fprintf( m_outputFile, "G75*\n" ); // Multiquadrant (360 degrees) mode
-    fprintf( m_outputFile, "G03*\n" ); // Active circular interpolation, CCW
+
+    if( aStartAngle < aEndAngle )
+        fprintf( m_outputFile, "G03*\n" ); // Active circular interpolation, CCW
+    else
+        fprintf( m_outputFile, "G02*\n" ); // Active circular interpolation, CW
 
     fprintf( m_outputFile, "X%dY%dI%dJ%dD01*\n",
              KiROUND( devEnd.x ), KiROUND( devEnd.y ),
