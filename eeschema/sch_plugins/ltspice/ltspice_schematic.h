@@ -26,9 +26,9 @@
 #include <sch_sheet_path.h>
 #include <pin_type.h>
 #include <layer_ids.h>
+#include <math/box2.h>
 #include <wx/filename.h>
 #include <wx/dir.h>
-#include <plotters/plotter.h>
 
 
 struct LTSPICE_FILE
