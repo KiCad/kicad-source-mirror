@@ -391,7 +391,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
             m_dummyArcs[1].SetNetCode( aItemB->Net(), true );
             m_dummyArcs[1].SetStart( aItemB->Anchor( 0 ) );
             m_dummyArcs[1].SetEnd( aItemB->Anchor( 1 ) );
-            parentA = &m_dummyArcs[1];
+            parentB = &m_dummyArcs[1];
             break;
 
         case PNS::ITEM::VIA_T:
@@ -399,7 +399,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
             m_dummyVias[1].SetLayer( ToLAYER_ID( aLayer ) );
             m_dummyVias[1].SetNetCode( aItemB->Net(), true );
             m_dummyVias[1].SetStart( aItemB->Anchor( 0 ) );
-            parentA = &m_dummyVias[1];
+            parentB = &m_dummyVias[1];
             break;
 
         case PNS::ITEM::SEGMENT_T:
@@ -408,7 +408,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
             m_dummyTracks[1].SetNetCode( aItemB->Net(), true );
             m_dummyTracks[1].SetStart( aItemB->Anchor( 0 ) );
             m_dummyTracks[1].SetEnd( aItemB->Anchor( 1 ) );
-            parentA = &m_dummyTracks[1];
+            parentB = &m_dummyTracks[1];
             break;
 
         default:
