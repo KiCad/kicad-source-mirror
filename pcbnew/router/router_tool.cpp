@@ -708,11 +708,11 @@ void ROUTER_TOOL::switchLayerOnViaPlacement()
     m_router->SwitchLayer( *newLayer );
     m_lastTargetLayer = *newLayer;
 
-    updateSizesAfterLayerSwitch( ToLAYER_ID( *newLayer ) );
+    updateSizesAfterLayerSwitch( ToLAYER_ID( *newLayer ), m_endSnapPoint );
 }
 
 
-void ROUTER_TOOL::updateSizesAfterLayerSwitch( PCB_LAYER_ID targetLayer )
+void ROUTER_TOOL::updateSizesAfterLayerSwitch( PCB_LAYER_ID targetLayer, const VECTOR2I& aPos )
 {
     std::vector<int> nets = m_router->GetCurrentNets();
 
@@ -722,8 +722,11 @@ void ROUTER_TOOL::updateSizesAfterLayerSwitch( PCB_LAYER_ID targetLayer )
     DRC_CONSTRAINT               constraint;
 
     PCB_TRACK dummyTrack( board() );
+    dummyTrack.SetFlags( ROUTER_TRANSIENT );
     dummyTrack.SetLayer( targetLayer );
     dummyTrack.SetNetCode( nets.empty() ? 0 : nets[0] );
+    dummyTrack.SetStart( aPos );
+    dummyTrack.SetEnd( dummyTrack.GetStart() );
 
     if( bds.UseNetClassTrack() || !sizes.TrackWidthIsExplicit() )
     {
@@ -757,8 +760,11 @@ void ROUTER_TOOL::updateSizesAfterLayerSwitch( PCB_LAYER_ID targetLayer )
     if( nets.size() >= 2 && ( bds.UseNetClassDiffPair() || !sizes.TrackWidthIsExplicit() ) )
     {
         PCB_TRACK dummyTrackB( board() );
+        dummyTrackB.SetFlags( ROUTER_TRANSIENT );
         dummyTrackB.SetLayer( targetLayer );
         dummyTrackB.SetNetCode( nets[1] );
+        dummyTrackB.SetStart( aPos );
+        dummyTrackB.SetEnd( dummyTrackB.GetStart() );
 
         constraint = drcEngine->EvalRules( TRACK_WIDTH_CONSTRAINT, &dummyTrack, &dummyTrackB,
                                            targetLayer );
@@ -1010,8 +1016,8 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
 
         if( !aForceVia && m_router && m_router->SwitchLayer( targetLayer ) )
         {
-            updateSizesAfterLayerSwitch( targetLayer );
             updateEndItem( aEvent );
+            updateSizesAfterLayerSwitch( targetLayer, m_endSnapPoint );
             m_router->Move( m_endSnapPoint, m_endItem );        // refresh
             return 0;
         }
@@ -1851,8 +1857,8 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
         else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
         {
             m_router->SwitchLayer( frame->GetActiveLayer() );
-            updateSizesAfterLayerSwitch( frame->GetActiveLayer() );
             updateStartItem( *evt );
+            updateSizesAfterLayerSwitch( frame->GetActiveLayer(), m_startSnapPoint );
         }
         else if( evt->IsKeyPressed() )
         {

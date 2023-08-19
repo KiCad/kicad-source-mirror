@@ -352,18 +352,33 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
     {
         switch( aItemA->Kind() )
         {
-        case PNS::ITEM::ARC_T:     parentA = &m_dummyArcs[0];   break;
-        case PNS::ITEM::VIA_T:     parentA = &m_dummyVias[0];   break;
-        case PNS::ITEM::SEGMENT_T: parentA = &m_dummyTracks[0]; break;
-        case PNS::ITEM::LINE_T:    parentA = &m_dummyTracks[0]; break;
-        case PNS::ITEM::HOLE_T:    parentA = &m_dummyVias[0];   break;
-        default: break;
-        }
+        case PNS::ITEM::ARC_T:
+            m_dummyArcs[0].SetLayer( ToLAYER_ID( aLayer ) );
+            m_dummyArcs[0].SetNetCode( aItemA->Net(), true );
+            m_dummyArcs[0].SetStart( aItemA->Anchor( 0 ) );
+            m_dummyArcs[0].SetEnd( aItemA->Anchor( 1 ) );
+            parentA = &m_dummyArcs[0];
+            break;
 
-        if( parentA )
-        {
-            parentA->SetLayer( ToLAYER_ID( aLayer ) );
-            static_cast<BOARD_CONNECTED_ITEM*>( parentA )->SetNetCode( aItemA->Net(), true );
+        case PNS::ITEM::VIA_T:
+        case PNS::ITEM::HOLE_T:
+            m_dummyVias[0].SetLayer( ToLAYER_ID( aLayer ) );
+            m_dummyVias[0].SetNetCode( aItemA->Net(), true );
+            m_dummyVias[0].SetStart( aItemA->Anchor( 0 ) );
+            parentA = &m_dummyVias[0];
+            break;
+
+        case PNS::ITEM::SEGMENT_T:
+        case PNS::ITEM::LINE_T:
+            m_dummyTracks[0].SetLayer( ToLAYER_ID( aLayer ) );
+            m_dummyTracks[0].SetNetCode( aItemA->Net(), true );
+            m_dummyTracks[0].SetStart( aItemA->Anchor( 0 ) );
+            m_dummyTracks[0].SetEnd( aItemA->Anchor( 1 ) );
+            parentA = &m_dummyTracks[0];
+            break;
+
+        default:
+            break;
         }
     }
 
@@ -371,18 +386,33 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
     {
         switch( aItemB->Kind() )
         {
-        case PNS::ITEM::ARC_T:     parentB = &m_dummyArcs[1];   break;
-        case PNS::ITEM::VIA_T:     parentB = &m_dummyVias[1];   break;
-        case PNS::ITEM::SEGMENT_T: parentB = &m_dummyTracks[1]; break;
-        case PNS::ITEM::LINE_T:    parentB = &m_dummyTracks[1]; break;
-        case PNS::ITEM::HOLE_T:    parentB = &m_dummyVias[1];   break;
-        default: break;
-        }
+        case PNS::ITEM::ARC_T:
+            m_dummyArcs[1].SetLayer( ToLAYER_ID( aLayer ) );
+            m_dummyArcs[1].SetNetCode( aItemB->Net(), true );
+            m_dummyArcs[1].SetStart( aItemB->Anchor( 0 ) );
+            m_dummyArcs[1].SetEnd( aItemB->Anchor( 1 ) );
+            parentA = &m_dummyArcs[1];
+            break;
 
-        if( parentB )
-        {
-            parentB->SetLayer( ToLAYER_ID( aLayer ) );
-            static_cast<BOARD_CONNECTED_ITEM*>( parentB )->SetNetCode( aItemB->Net(), true );
+        case PNS::ITEM::VIA_T:
+        case PNS::ITEM::HOLE_T:
+            m_dummyVias[1].SetLayer( ToLAYER_ID( aLayer ) );
+            m_dummyVias[1].SetNetCode( aItemB->Net(), true );
+            m_dummyVias[1].SetStart( aItemB->Anchor( 0 ) );
+            parentA = &m_dummyVias[1];
+            break;
+
+        case PNS::ITEM::SEGMENT_T:
+        case PNS::ITEM::LINE_T:
+            m_dummyTracks[1].SetLayer( ToLAYER_ID( aLayer ) );
+            m_dummyTracks[1].SetNetCode( aItemB->Net(), true );
+            m_dummyTracks[1].SetStart( aItemB->Anchor( 0 ) );
+            m_dummyTracks[1].SetEnd( aItemB->Anchor( 1 ) );
+            parentA = &m_dummyTracks[1];
+            break;
+
+        default:
+            break;
         }
     }
 
