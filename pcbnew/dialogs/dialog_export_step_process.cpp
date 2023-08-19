@@ -169,12 +169,20 @@ void DIALOG_EXPORT_STEP_LOG::onProcessTerminate( wxProcessEvent& aEvent )
         delete m_stdioThread;
         m_stdioThread = nullptr;
         m_sdbSizerOK->Enable( true );
+
+        // set the progress bar to complete/incomplete base don status
+        m_activityGauge->SetRange( 1 );
+        if( aEvent.GetExitCode() )
+            m_activityGauge->SetValue( 0 );
+        else
+            m_activityGauge->SetValue( 1 );
     }
 }
 
 void DIALOG_EXPORT_STEP_LOG::onThreadInput( wxThreadEvent& aEvent )
 {
     m_textCtrlLog->AppendText( aEvent.GetString() );
+    m_activityGauge->Pulse();
 }
 
 
@@ -214,6 +222,8 @@ DIALOG_EXPORT_STEP_LOG::DIALOG_EXPORT_STEP_LOG( wxWindow* aParent, wxString aSte
         delete m_stdioThread;
         return;
     }
+
+    m_activityGauge->Pulse();
 
     wxExecute( aStepCmd, wxEXEC_ASYNC, m_process );
 }

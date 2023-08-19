@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,6 +20,10 @@ DIALOG_EXPORT_STEP_PROCESS_BASE::DIALOG_EXPORT_STEP_PROCESS_BASE( wxWindow* pare
 	m_textCtrlLog->SetMinSize( wxSize( 450,250 ) );
 
 	bMainSizer->Add( m_textCtrlLog, 1, wxALL|wxEXPAND, 5 );
+
+	m_activityGauge = new wxGauge( this, wxID_ANY, 100, wxDefaultPosition, wxDefaultSize, wxGA_HORIZONTAL );
+	m_activityGauge->SetValue( 0 );
+	bMainSizer->Add( m_activityGauge, 0, wxALL|wxEXPAND, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
