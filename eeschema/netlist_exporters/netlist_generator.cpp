@@ -150,6 +150,7 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
             if( diag != 0 )
             {
                 msg.Printf( _( "Command error. Return code %d." ), diag );
+                res = false;
                 aReporter->ReportTail( msg, RPT_SEVERITY_ERROR );
             }
             else
@@ -171,7 +172,9 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
         }
         else
         {
-            wxExecute( commandLine, m_exec_flags );
+            int diag = wxExecute( commandLine, m_exec_flags );
+            if( diag != 0 )
+                res = false;
         }
 
         DefaultExecFlags(); // Reset flags to default after executing

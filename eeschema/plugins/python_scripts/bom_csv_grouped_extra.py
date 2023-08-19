@@ -71,12 +71,14 @@ net = kicad_netlist_reader.netlist(sys.argv[1])
 
 # Open a file to write to, if the file cannot be opened output to stdout
 # instead
+canOpenFile = True
 try:
     f = kicad_utils.open_file_writeUTF8(sys.argv[2], 'w')
 except IOError:
     e = "Can't open output file for writing: " + sys.argv[2]
     print(__file__, ":", e, sys.stderr)
     f = sys.stdout
+    canOpenFile = False
 
 # Create a new csv writer object to use as the output formatter
 out = csv.writer(f, lineterminator='\n', delimiter=',', quotechar='\"', quoting=csv.QUOTE_ALL)
@@ -115,3 +117,6 @@ for group in grouped:
     out.writerow(row)
 
     index += 1
+
+if not canOpenFile:
+    sys.exit(1)

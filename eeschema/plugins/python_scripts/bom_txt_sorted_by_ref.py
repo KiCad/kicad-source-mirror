@@ -33,12 +33,14 @@ net = kicad_netlist_reader.netlist(sys.argv[1])
 
 # Open a file to write to, if the file cannot be opened output to stdout
 # instead
+canOpenFile = True
 try:
     f = kicad_utils.open_file_writeUTF8(sys.argv[2], 'w' )
 except IOError:
     e = "Can't open output file for writing: " + sys.argv[2]
     print(__file__, ":", e, sys.stderr)
     f = sys.stdout
+    canOpenFile = False
 
 # Create a new csv writer object to use as the output formatter, although we
 # are created a tab delimited list instead!
@@ -65,3 +67,6 @@ writerow( out, ['Ref', 'Value', 'Part', 'Footprint', 'Description', 'Vendor', 'D
 for c in components:
     writerow( out, [c.getRef(), c.getValue(), c.getLibName() + ":" + c.getPartName(),
         c.getFootprint(), c.getDescription(), c.getField("Vendor"), c.getDNPString()])
+
+if not canOpenFile:
+    sys.exit(1)

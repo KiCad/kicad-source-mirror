@@ -342,8 +342,13 @@ void DIALOG_BOM::OnRunGenerator( wxCommandEvent& event )
         m_parent->SetExecFlags( wxEXEC_SHOW_CONSOLE );
 #endif
 
+    bool status = false;
+
     if( m_parent->ReadyToNetlist( _( "Generating BOM requires a fully annotated schematic." ) ) )
-        m_parent->WriteNetListFile( NET_TYPE_BOM, fullfilename, GNL_OPT_BOM|GNL_ALL, &reporter );
+        status = m_parent->WriteNetListFile( NET_TYPE_BOM, fullfilename, GNL_OPT_BOM|GNL_ALL, &reporter );
+
+    if( !status )
+        DisplayError( this, _( "Failed to create file." ) );
 
     m_Messages->SetValue( reportmsg );
 

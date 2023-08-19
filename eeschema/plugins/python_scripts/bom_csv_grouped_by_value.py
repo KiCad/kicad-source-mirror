@@ -66,12 +66,14 @@ net = kicad_netlist_reader.netlist(sys.argv[1])
 
 # Open a file to write to, if the file cannot be opened output to stdout
 # instead
+canOpenFile = True
 try:
     f = kicad_utils.open_file_writeUTF8(sys.argv[2], 'w')
 except IOError:
     e = "Can't open output file for writing: " + sys.argv[2]
     print( __file__, ":", e, sys.stderr )
     f = sys.stdout
+    canOpenFile = False
 
 # subset the components to those wanted in the BOM, controlled
 # by <configure> block in kicad_netlist_reader.py
@@ -151,3 +153,6 @@ for group in grouped:
     writerow( out, row  )
 
 f.close()
+
+if not canOpenFile:
+    sys.exit(1)
