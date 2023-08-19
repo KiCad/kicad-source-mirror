@@ -25,10 +25,10 @@
 
 namespace CLI
 {
-class EXPORT_PCB_GERBERS_COMMAND : public EXPORT_PCB_GERBER_COMMAND
+class PCB_EXPORT_GERBERS_COMMAND : public PCB_EXPORT_GERBER_COMMAND
 {
 public:
-    EXPORT_PCB_GERBERS_COMMAND();
+    PCB_EXPORT_GERBERS_COMMAND();
 
 protected:
     int doPerform( KIWAY& aKiway ) override;

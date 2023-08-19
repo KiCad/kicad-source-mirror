@@ -31,7 +31,7 @@
 
 #define ARG_FOOTPRINT "--footprint"
 
-CLI::FP_EXPORT_SVG_COMMAND::FP_EXPORT_SVG_COMMAND() : EXPORT_PCB_BASE_COMMAND( "svg" )
+CLI::FP_EXPORT_SVG_COMMAND::FP_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND( "svg" )
 {
     addLayerArg( false );
 
@@ -52,7 +52,7 @@ CLI::FP_EXPORT_SVG_COMMAND::FP_EXPORT_SVG_COMMAND() : EXPORT_PCB_BASE_COMMAND( "
 
 int CLI::FP_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
 {
-    int baseExit = EXPORT_PCB_BASE_COMMAND::doPerform( aKiway );
+    int baseExit = PCB_EXPORT_BASE_COMMAND::doPerform( aKiway );
     if( baseExit != EXIT_CODES::OK )
         return baseExit;
 

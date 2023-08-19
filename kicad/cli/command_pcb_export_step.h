@@ -25,9 +25,9 @@
 
 namespace CLI
 {
-struct EXPORT_PCB_STEP_COMMAND : public COMMAND
+struct PCB_EXPORT_STEP_COMMAND : public COMMAND
 {
-    EXPORT_PCB_STEP_COMMAND();
+    PCB_EXPORT_STEP_COMMAND();
 
 protected:
     int doPerform( KIWAY& aKiway ) override;

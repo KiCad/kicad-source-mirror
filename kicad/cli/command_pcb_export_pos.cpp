@@ -40,7 +40,7 @@
 #define ARG_GERBER_BOARD_EDGE "--gerber-board-edge"
 
 
-CLI::EXPORT_PCB_POS_COMMAND::EXPORT_PCB_POS_COMMAND() : EXPORT_PCB_BASE_COMMAND( "pos" )
+CLI::PCB_EXPORT_POS_COMMAND::PCB_EXPORT_POS_COMMAND() : PCB_EXPORT_BASE_COMMAND( "pos" )
 {
     m_argParser.add_description( UTF8STDSTR( _( "Generate Position File" ) ) );
 
@@ -92,9 +92,9 @@ CLI::EXPORT_PCB_POS_COMMAND::EXPORT_PCB_POS_COMMAND() : EXPORT_PCB_BASE_COMMAND(
 }
 
 
-int CLI::EXPORT_PCB_POS_COMMAND::doPerform( KIWAY& aKiway )
+int CLI::PCB_EXPORT_POS_COMMAND::doPerform( KIWAY& aKiway )
 {
-    int baseExit = EXPORT_PCB_BASE_COMMAND::doPerform( aKiway );
+    int baseExit = PCB_EXPORT_BASE_COMMAND::doPerform( aKiway );
     if( baseExit != EXIT_CODES::OK )
         return baseExit;
 

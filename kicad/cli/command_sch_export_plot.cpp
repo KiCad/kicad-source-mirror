@@ -40,10 +40,10 @@ const HPGL_PLOT_ORIGIN_AND_UNITS hpgl_origin_ops[4] = {
     HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE, HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_CONTENT
 };
 
-CLI::EXPORT_SCH_PLOT_COMMAND::EXPORT_SCH_PLOT_COMMAND( const std::string& aName,
+CLI::SCH_EXPORT_PLOT_COMMAND::SCH_EXPORT_PLOT_COMMAND( const std::string& aName,
                                                        PLOT_FORMAT        aPlotFormat,
                                                        bool               aOutputIsDir ) :
-        EXPORT_PCB_BASE_COMMAND( aName, aOutputIsDir ),
+        PCB_EXPORT_BASE_COMMAND( aName, aOutputIsDir ),
         m_plotFormat( aPlotFormat ), m_useDir( aOutputIsDir )
 {
     m_argParser.add_argument( "-t", ARG_THEME )
@@ -86,7 +86,7 @@ CLI::EXPORT_SCH_PLOT_COMMAND::EXPORT_SCH_PLOT_COMMAND( const std::string& aName,
 }
 
 
-int CLI::EXPORT_SCH_PLOT_COMMAND::doPerform( KIWAY& aKiway )
+int CLI::SCH_EXPORT_PLOT_COMMAND::doPerform( KIWAY& aKiway )
 {
     wxString filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
     if( !wxFile::Exists( filename ) )

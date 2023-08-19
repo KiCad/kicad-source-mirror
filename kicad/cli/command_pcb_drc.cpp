@@ -37,7 +37,7 @@
 #define ARG_SEVERITY_EXCLUSIONS "--severity-exclusions"
 #define ARG_EXIT_CODE_VIOLATIONS "--exit-code-violations"
 
-CLI::PCB_DRC_COMMAND::PCB_DRC_COMMAND() : EXPORT_PCB_BASE_COMMAND( "drc" )
+CLI::PCB_DRC_COMMAND::PCB_DRC_COMMAND() : PCB_EXPORT_BASE_COMMAND( "drc" )
 {
     m_argParser.add_argument( ARG_FORMAT )
             .default_value( std::string( "report" ) )

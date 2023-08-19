@@ -26,10 +26,10 @@
 
 namespace CLI
 {
-class EXPORT_SCH_PLOT_COMMAND : public EXPORT_PCB_BASE_COMMAND
+class SCH_EXPORT_PLOT_COMMAND : public PCB_EXPORT_BASE_COMMAND
 {
 public:
-    EXPORT_SCH_PLOT_COMMAND( const std::string& aName, PLOT_FORMAT aPlotFormat,
+    SCH_EXPORT_PLOT_COMMAND( const std::string& aName, PLOT_FORMAT aPlotFormat,
                              bool aOutputIsDir = true );
 
     PLOT_FORMAT m_plotFormat;

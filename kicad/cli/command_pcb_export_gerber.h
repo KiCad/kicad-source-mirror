@@ -35,11 +35,11 @@ namespace CLI
 #define ARG_PRECISION "--precision"
 #define ARG_NO_PROTEL_EXTENSION "--no-protel-ext"
 
-class EXPORT_PCB_GERBER_COMMAND : public EXPORT_PCB_BASE_COMMAND
+class PCB_EXPORT_GERBER_COMMAND : public PCB_EXPORT_BASE_COMMAND
 {
 public:
-    EXPORT_PCB_GERBER_COMMAND( const std::string& aName );
-    EXPORT_PCB_GERBER_COMMAND();
+    PCB_EXPORT_GERBER_COMMAND( const std::string& aName );
+    PCB_EXPORT_GERBER_COMMAND();
 
 protected:
     int doPerform( KIWAY& aKiway ) override;

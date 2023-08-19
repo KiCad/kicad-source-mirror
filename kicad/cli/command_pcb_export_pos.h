@@ -25,10 +25,10 @@
 
 namespace CLI
 {
-class EXPORT_PCB_POS_COMMAND : public EXPORT_PCB_BASE_COMMAND
+class PCB_EXPORT_POS_COMMAND : public PCB_EXPORT_BASE_COMMAND
 {
 public:
-    EXPORT_PCB_POS_COMMAND();
+    PCB_EXPORT_POS_COMMAND();
 
 protected:
     int doPerform( KIWAY& aKiway ) override;

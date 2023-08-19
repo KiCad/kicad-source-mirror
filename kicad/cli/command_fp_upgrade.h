@@ -25,7 +25,7 @@
 
 namespace CLI
 {
-class FP_UPGRADE_COMMAND : public EXPORT_PCB_BASE_COMMAND
+class FP_UPGRADE_COMMAND : public PCB_EXPORT_BASE_COMMAND
 {
 public:
     FP_UPGRADE_COMMAND();

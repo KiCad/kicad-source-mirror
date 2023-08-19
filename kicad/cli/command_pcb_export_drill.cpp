@@ -39,7 +39,7 @@
 #define ARG_MAP_FORMAT "--map-format"
 #define ARG_DRILL_ORIGIN "--drill-origin"
 
-CLI::EXPORT_PCB_DRILL_COMMAND::EXPORT_PCB_DRILL_COMMAND() : EXPORT_PCB_BASE_COMMAND( "drill" )
+CLI::PCB_EXPORT_DRILL_COMMAND::PCB_EXPORT_DRILL_COMMAND() : PCB_EXPORT_BASE_COMMAND( "drill" )
 {
     m_argParser.add_argument( ARG_FORMAT )
             .default_value( std::string( "excellon" ) )
@@ -88,7 +88,7 @@ CLI::EXPORT_PCB_DRILL_COMMAND::EXPORT_PCB_DRILL_COMMAND() : EXPORT_PCB_BASE_COMM
 }
 
 
-int CLI::EXPORT_PCB_DRILL_COMMAND::doPerform( KIWAY& aKiway )
+int CLI::PCB_EXPORT_DRILL_COMMAND::doPerform( KIWAY& aKiway )
 {
     std::unique_ptr<JOB_EXPORT_PCB_DRILL> drillJob( new JOB_EXPORT_PCB_DRILL( true ) );
 

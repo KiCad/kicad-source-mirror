@@ -43,9 +43,9 @@ namespace CLI
 #define ARG_INCLUDE_BORDER_TITLE "--include-border-title"
 #define ARG_MIRROR "--mirror"
 
-struct EXPORT_PCB_BASE_COMMAND : public COMMAND
+struct PCB_EXPORT_BASE_COMMAND : public COMMAND
 {
-    EXPORT_PCB_BASE_COMMAND( const std::string& aName, bool aOutputIsDir = false );
+    PCB_EXPORT_BASE_COMMAND( const std::string& aName, bool aOutputIsDir = false );
 
 protected:
     int  doPerform( KIWAY& aKiway ) override;

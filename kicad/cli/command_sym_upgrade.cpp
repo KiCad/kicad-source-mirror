@@ -30,7 +30,7 @@
 
 #define ARG_FORCE "--force"
 
-CLI::SYM_UPGRADE_COMMAND::SYM_UPGRADE_COMMAND() : EXPORT_PCB_BASE_COMMAND( "upgrade" )
+CLI::SYM_UPGRADE_COMMAND::SYM_UPGRADE_COMMAND() : PCB_EXPORT_BASE_COMMAND( "upgrade" )
 {
     m_argParser.add_argument( ARG_FORCE )
             .help( UTF8STDSTR(

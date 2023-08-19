@@ -28,7 +28,7 @@
 #include <wx/tokenzr.h>
 #include <wx/crt.h>
 
-CLI::EXPORT_PCB_BASE_COMMAND::EXPORT_PCB_BASE_COMMAND( const std::string& aName,
+CLI::PCB_EXPORT_BASE_COMMAND::PCB_EXPORT_BASE_COMMAND( const std::string& aName,
                                                        bool               aOutputIsDir ) :
         COMMAND( aName )
 {
@@ -83,7 +83,7 @@ CLI::EXPORT_PCB_BASE_COMMAND::EXPORT_PCB_BASE_COMMAND( const std::string& aName,
 }
 
 
-LSET CLI::EXPORT_PCB_BASE_COMMAND::convertLayerStringList( wxString& aLayerString, bool& aLayerArgSet ) const
+LSET CLI::PCB_EXPORT_BASE_COMMAND::convertLayerStringList( wxString& aLayerString, bool& aLayerArgSet ) const
 {
     LSET layerMask;
 
@@ -119,7 +119,7 @@ LSET CLI::EXPORT_PCB_BASE_COMMAND::convertLayerStringList( wxString& aLayerStrin
 }
 
 
-void CLI::EXPORT_PCB_BASE_COMMAND::addLayerArg( bool aRequire )
+void CLI::PCB_EXPORT_BASE_COMMAND::addLayerArg( bool aRequire )
 {
     m_argParser.add_argument( "-l", ARG_LAYERS )
             .default_value( std::string() )
@@ -132,7 +132,7 @@ void CLI::EXPORT_PCB_BASE_COMMAND::addLayerArg( bool aRequire )
 }
 
 
-int CLI::EXPORT_PCB_BASE_COMMAND::doPerform( KIWAY& aKiway )
+int CLI::PCB_EXPORT_BASE_COMMAND::doPerform( KIWAY& aKiway )
 {
     if( m_hasLayerArg )
     {

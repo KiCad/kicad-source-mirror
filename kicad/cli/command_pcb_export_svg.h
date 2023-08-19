@@ -25,9 +25,9 @@
 
 namespace CLI
 {
-struct EXPORT_PCB_SVG_COMMAND : public EXPORT_PCB_BASE_COMMAND
+struct PCB_EXPORT_SVG_COMMAND : public PCB_EXPORT_BASE_COMMAND
 {
-    EXPORT_PCB_SVG_COMMAND();
+    PCB_EXPORT_SVG_COMMAND();
 
 protected:
     int doPerform( KIWAY& aKiway ) override;

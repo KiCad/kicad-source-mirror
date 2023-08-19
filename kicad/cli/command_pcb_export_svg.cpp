@@ -36,7 +36,7 @@
 #define ARG_DRILL_SHAPE_OPTION "--drill-shape-opt"
 
 
-CLI::EXPORT_PCB_SVG_COMMAND::EXPORT_PCB_SVG_COMMAND() : EXPORT_PCB_BASE_COMMAND( "svg" )
+CLI::PCB_EXPORT_SVG_COMMAND::PCB_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND( "svg" )
 {
     addLayerArg( true );
 
@@ -78,9 +78,9 @@ CLI::EXPORT_PCB_SVG_COMMAND::EXPORT_PCB_SVG_COMMAND() : EXPORT_PCB_BASE_COMMAND(
 }
 
 
-int CLI::EXPORT_PCB_SVG_COMMAND::doPerform( KIWAY& aKiway )
+int CLI::PCB_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
 {
-    int baseExit = EXPORT_PCB_BASE_COMMAND::doPerform( aKiway );
+    int baseExit = PCB_EXPORT_BASE_COMMAND::doPerform( aKiway );
     if( baseExit != EXIT_CODES::OK )
         return baseExit;
 

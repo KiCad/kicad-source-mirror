@@ -25,9 +25,9 @@
 
 namespace CLI
 {
-struct EXPORT_SCH_COMMAND : public COMMAND
+struct SCH_EXPORT_COMMAND : public COMMAND
 {
-    EXPORT_SCH_COMMAND() : COMMAND( "export" ) {}
+    SCH_EXPORT_COMMAND() : COMMAND( "export" ) {}
 };
 }
 

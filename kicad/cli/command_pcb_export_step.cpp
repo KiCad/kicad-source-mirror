@@ -44,7 +44,7 @@
 #define REGEX_DELIMITER "(?:[\\s]*x)"
 #define REGEX_UNIT "([m]{2}|(?:in))"
 
-CLI::EXPORT_PCB_STEP_COMMAND::EXPORT_PCB_STEP_COMMAND() : COMMAND( "step" )
+CLI::PCB_EXPORT_STEP_COMMAND::PCB_EXPORT_STEP_COMMAND() : COMMAND( "step" )
 {
     m_argParser.add_argument( ARG_DRILL_ORIGIN )
             .help( UTF8STDSTR( _( "Use Drill Origin for output origin" ) ) )
@@ -101,7 +101,7 @@ CLI::EXPORT_PCB_STEP_COMMAND::EXPORT_PCB_STEP_COMMAND() : COMMAND( "step" )
     m_argParser.add_argument( ARG_INPUT ).help( UTF8STDSTR( _( "Input file" ) ) );
 }
 
-int CLI::EXPORT_PCB_STEP_COMMAND::doPerform( KIWAY& aKiway )
+int CLI::PCB_EXPORT_STEP_COMMAND::doPerform( KIWAY& aKiway )
 {
     std::unique_ptr<JOB_EXPORT_PCB_STEP> step( new JOB_EXPORT_PCB_STEP( true ) );
 

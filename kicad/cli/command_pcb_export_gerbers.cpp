@@ -34,8 +34,8 @@
 #define ARG_USE_BOARD_PLOT_PARAMS "--board-plot-params"
 
 
-CLI::EXPORT_PCB_GERBERS_COMMAND::EXPORT_PCB_GERBERS_COMMAND() :
-        EXPORT_PCB_GERBER_COMMAND( "gerbers" )
+CLI::PCB_EXPORT_GERBERS_COMMAND::PCB_EXPORT_GERBERS_COMMAND() :
+        PCB_EXPORT_GERBER_COMMAND( "gerbers" )
 {
     m_requireLayers = false;
 
@@ -52,9 +52,9 @@ CLI::EXPORT_PCB_GERBERS_COMMAND::EXPORT_PCB_GERBERS_COMMAND() :
 }
 
 
-int CLI::EXPORT_PCB_GERBERS_COMMAND::doPerform( KIWAY& aKiway )
+int CLI::PCB_EXPORT_GERBERS_COMMAND::doPerform( KIWAY& aKiway )
 {
-    int exitCode = EXPORT_PCB_BASE_COMMAND::doPerform( aKiway );
+    int exitCode = PCB_EXPORT_BASE_COMMAND::doPerform( aKiway );
 
     if( exitCode != EXIT_CODES::OK )
         return exitCode;

@@ -29,7 +29,7 @@
 
 #define ARG_FORMAT "--format"
 
-CLI::EXPORT_SCH_NETLIST_COMMAND::EXPORT_SCH_NETLIST_COMMAND() : EXPORT_PCB_BASE_COMMAND( "netlist" )
+CLI::SCH_EXPORT_NETLIST_COMMAND::SCH_EXPORT_NETLIST_COMMAND() : PCB_EXPORT_BASE_COMMAND( "netlist" )
 {
     m_argParser.add_argument( ARG_FORMAT )
             .default_value( std::string( "kicadsexpr" ) )
@@ -37,7 +37,7 @@ CLI::EXPORT_SCH_NETLIST_COMMAND::EXPORT_SCH_NETLIST_COMMAND() : EXPORT_PCB_BASE_
 }
 
 
-int CLI::EXPORT_SCH_NETLIST_COMMAND::doPerform( KIWAY& aKiway )
+int CLI::SCH_EXPORT_NETLIST_COMMAND::doPerform( KIWAY& aKiway )
 {
     std::unique_ptr<JOB_EXPORT_SCH_NETLIST> netJob =
             std::make_unique<JOB_EXPORT_SCH_NETLIST>( true );

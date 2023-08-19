@@ -36,7 +36,7 @@
 #define ARG_SEVERITY_EXCLUSIONS "--severity-exclusions"
 #define ARG_EXIT_CODE_VIOLATIONS "--exit-code-violations"
 
-CLI::SCH_ERC_COMMAND::SCH_ERC_COMMAND() : EXPORT_PCB_BASE_COMMAND( "erc" )
+CLI::SCH_ERC_COMMAND::SCH_ERC_COMMAND() : PCB_EXPORT_BASE_COMMAND( "erc" )
 {
     m_argParser.add_argument( ARG_FORMAT )
             .default_value( std::string( "report" ) )

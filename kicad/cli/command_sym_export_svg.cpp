@@ -33,7 +33,7 @@
 #define ARG_INC_HIDDEN_PINS "--include-hidden-pins"
 #define ARG_INC_HIDDEN_FIELDS "--include-hidden-fields"
 
-CLI::SYM_EXPORT_SVG_COMMAND::SYM_EXPORT_SVG_COMMAND() : EXPORT_PCB_BASE_COMMAND( "svg" )
+CLI::SYM_EXPORT_SVG_COMMAND::SYM_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND( "svg" )
 {
     m_argParser.add_argument( "-t", ARG_THEME )
             .default_value( std::string() )

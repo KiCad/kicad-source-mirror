@@ -25,10 +25,10 @@
 
 namespace CLI
 {
-class EXPORT_SCH_PYTHONBOM_COMMAND : public EXPORT_PCB_BASE_COMMAND
+class SCH_EXPORT_PYTHONBOM_COMMAND : public PCB_EXPORT_BASE_COMMAND
 {
 public:
-    EXPORT_SCH_PYTHONBOM_COMMAND();
+    SCH_EXPORT_PYTHONBOM_COMMAND();
 
 protected:
     int doPerform( KIWAY& aKiway ) override;

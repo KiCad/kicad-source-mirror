@@ -31,8 +31,8 @@
 #include <locale_io.h>
 
 
-CLI::EXPORT_PCB_GERBER_COMMAND::EXPORT_PCB_GERBER_COMMAND( const std::string& aName ) :
-        EXPORT_PCB_BASE_COMMAND( aName )
+CLI::PCB_EXPORT_GERBER_COMMAND::PCB_EXPORT_GERBER_COMMAND( const std::string& aName ) :
+        PCB_EXPORT_BASE_COMMAND( aName )
 {
     addLayerArg( true );
 
@@ -88,12 +88,12 @@ CLI::EXPORT_PCB_GERBER_COMMAND::EXPORT_PCB_GERBER_COMMAND( const std::string& aN
 }
 
 
-CLI::EXPORT_PCB_GERBER_COMMAND::EXPORT_PCB_GERBER_COMMAND() : EXPORT_PCB_GERBER_COMMAND( "gerber" )
+CLI::PCB_EXPORT_GERBER_COMMAND::PCB_EXPORT_GERBER_COMMAND() : PCB_EXPORT_GERBER_COMMAND( "gerber" )
 {
 }
 
 
-int CLI::EXPORT_PCB_GERBER_COMMAND::populateJob( JOB_EXPORT_PCB_GERBER* aJob )
+int CLI::PCB_EXPORT_GERBER_COMMAND::populateJob( JOB_EXPORT_PCB_GERBER* aJob )
 {
     aJob->m_filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
     aJob->m_outputFile = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
@@ -126,9 +126,9 @@ int CLI::EXPORT_PCB_GERBER_COMMAND::populateJob( JOB_EXPORT_PCB_GERBER* aJob )
 }
 
 
-int CLI::EXPORT_PCB_GERBER_COMMAND::doPerform( KIWAY& aKiway )
+int CLI::PCB_EXPORT_GERBER_COMMAND::doPerform( KIWAY& aKiway )
 {
-    int exitCode = EXPORT_PCB_BASE_COMMAND::doPerform( aKiway );
+    int exitCode = PCB_EXPORT_BASE_COMMAND::doPerform( aKiway );
 
     if( exitCode != EXIT_CODES::OK )
         return exitCode;

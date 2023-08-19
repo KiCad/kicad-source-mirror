@@ -33,7 +33,7 @@
 #define ARG_USE_CONTOURS "--use-contours"
 #define ARG_OUTPUT_UNITS "--output-units"
 
-CLI::EXPORT_PCB_DXF_COMMAND::EXPORT_PCB_DXF_COMMAND() : EXPORT_PCB_BASE_COMMAND( "dxf" )
+CLI::PCB_EXPORT_DXF_COMMAND::PCB_EXPORT_DXF_COMMAND() : PCB_EXPORT_BASE_COMMAND( "dxf" )
 {
     addLayerArg( true );
 
@@ -58,9 +58,9 @@ CLI::EXPORT_PCB_DXF_COMMAND::EXPORT_PCB_DXF_COMMAND() : EXPORT_PCB_BASE_COMMAND(
 }
 
 
-int CLI::EXPORT_PCB_DXF_COMMAND::doPerform( KIWAY& aKiway )
+int CLI::PCB_EXPORT_DXF_COMMAND::doPerform( KIWAY& aKiway )
 {
-    int baseExit = EXPORT_PCB_BASE_COMMAND::doPerform( aKiway );
+    int baseExit = PCB_EXPORT_BASE_COMMAND::doPerform( aKiway );
     if( baseExit != EXIT_CODES::OK )
         return baseExit;
 

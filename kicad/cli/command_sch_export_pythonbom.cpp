@@ -28,13 +28,13 @@
 #include <macros.h>
 
 
-CLI::EXPORT_SCH_PYTHONBOM_COMMAND::EXPORT_SCH_PYTHONBOM_COMMAND() :
-        EXPORT_PCB_BASE_COMMAND( "python-bom" )
+CLI::SCH_EXPORT_PYTHONBOM_COMMAND::SCH_EXPORT_PYTHONBOM_COMMAND() :
+        PCB_EXPORT_BASE_COMMAND( "python-bom" )
 {
 }
 
 
-int CLI::EXPORT_SCH_PYTHONBOM_COMMAND::doPerform( KIWAY& aKiway )
+int CLI::SCH_EXPORT_PYTHONBOM_COMMAND::doPerform( KIWAY& aKiway )
 {
     std::unique_ptr<JOB_EXPORT_SCH_PYTHONBOM> bomJob =
             std::make_unique<JOB_EXPORT_SCH_PYTHONBOM>( true );

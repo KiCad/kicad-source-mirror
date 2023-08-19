@@ -29,7 +29,7 @@
 #include <macros.h>
 
 
-CLI::EXPORT_SCH_BOM_COMMAND::EXPORT_SCH_BOM_COMMAND() : EXPORT_PCB_BASE_COMMAND( "bom" )
+CLI::SCH_EXPORT_BOM_COMMAND::SCH_EXPORT_BOM_COMMAND() : PCB_EXPORT_BASE_COMMAND( "bom" )
 {
     // Field output options
     m_argParser.add_argument( ARG_FIELDS )
@@ -91,7 +91,7 @@ CLI::EXPORT_SCH_BOM_COMMAND::EXPORT_SCH_BOM_COMMAND() : EXPORT_PCB_BASE_COMMAND(
 }
 
 
-std::vector<wxString> CLI::EXPORT_SCH_BOM_COMMAND::convertStringList( const wxString& aList )
+std::vector<wxString> CLI::SCH_EXPORT_BOM_COMMAND::convertStringList( const wxString& aList )
 {
     std::vector<wxString> v;
 
@@ -106,7 +106,7 @@ std::vector<wxString> CLI::EXPORT_SCH_BOM_COMMAND::convertStringList( const wxSt
     return v;
 }
 
-int CLI::EXPORT_SCH_BOM_COMMAND::doPerform( KIWAY& aKiway )
+int CLI::SCH_EXPORT_BOM_COMMAND::doPerform( KIWAY& aKiway )
 {
     std::unique_ptr<JOB_EXPORT_SCH_BOM> bomJob = std::make_unique<JOB_EXPORT_SCH_BOM>( true );
 

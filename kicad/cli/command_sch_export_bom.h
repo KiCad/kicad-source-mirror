@@ -67,10 +67,10 @@ namespace CLI
 #define ARG_EXCLUDE_DNP "--exclude-dnp"
 #define ARG_EXCLUDE_DNP_DESC "Exclude symbols marked Do-Not-Populate."
 
-class EXPORT_SCH_BOM_COMMAND : public EXPORT_PCB_BASE_COMMAND
+class SCH_EXPORT_BOM_COMMAND : public PCB_EXPORT_BASE_COMMAND
 {
 public:
-    EXPORT_SCH_BOM_COMMAND();
+    SCH_EXPORT_BOM_COMMAND();
 
 protected:
     int doPerform( KIWAY& aKiway ) override;

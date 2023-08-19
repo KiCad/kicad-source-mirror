@@ -25,9 +25,9 @@
 
 namespace CLI
 {
-struct EXPORT_PCB_COMMAND : public COMMAND
+struct PCB_EXPORT_COMMAND : public COMMAND
 {
-    EXPORT_PCB_COMMAND() : COMMAND( "export" ) {}
+    PCB_EXPORT_COMMAND() : COMMAND( "export" ) {}
 };
 }
 
