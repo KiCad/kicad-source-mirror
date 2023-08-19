@@ -198,15 +198,18 @@ LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName, bool aCheckIfEnabl
 
     do
     {
-        std::shared_lock<std::shared_mutex> lock( cur->m_mutex, std::try_to_lock );
+        std::shared_lock<std::shared_mutex> lock( cur->m_mutex );
 
-        if( !cur->m_rowsMap.count( aNickName ) )
-            continue;
+        if( cur->m_rowsMap.count( aNickName ) )
+            row = &*cur->m_rowsMap.at( aNickName );
 
-        row = &*cur->m_rowsMap.at( aNickName );
-
-        if( !aCheckIfEnabled || row->GetIsEnabled() )
-            return row;
+        if( row )
+        {
+            if( !aCheckIfEnabled || row->GetIsEnabled() )
+                return row;
+            else
+                return nullptr; // We found it, but it's disabled
+        }
 
         // Repeat, this time looking for names that were "fixed" by legacy versions because
         // the old eeschema file format didn't support spaces in tokens.
