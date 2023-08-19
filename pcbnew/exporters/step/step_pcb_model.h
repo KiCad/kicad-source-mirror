@@ -31,6 +31,7 @@
 #include <utility>
 #include <vector>
 
+#include <Standard_Version.hxx>
 #include <BRepBuilderAPI_MakeWire.hxx>
 #include <TDocStd_Document.hxx>
 #include <XCAFApp_Application.hxx>
@@ -142,6 +143,22 @@ public:
 
     // write the assembly model in STEP format
     bool WriteSTEP( const wxString& aFileName );
+
+    /**
+     * Write the assembly in binary GLTF Format
+     *
+     * We only support binary GLTF because GLTF is weird
+     * Officially, binary GLTF is actually json+binary in one file
+     * If we elected non-binary output with opecascade, it will generate
+     * that one file as two separate files, one containing json that references the binary
+     * Which is actually more annoying to deal with (to do the temp file rename, since we dont
+     * control the binary name) and silly when you can just have the one file.
+     *
+     * @param aFileName Output file path
+     *
+     * @return true if the write succeeded without error
+     */
+    bool WriteGLTF( const wxString& aFileName );
 
 private:
     /**

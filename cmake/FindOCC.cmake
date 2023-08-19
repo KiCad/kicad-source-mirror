@@ -53,6 +53,7 @@ set( OCC_LIBS
     TKOffset
     TKOpenGl
     TKPrim
+    TKRWMesh
     TKService
     TKShHealing
     TKSTEP209
@@ -92,12 +93,12 @@ if(WIN32)
       /opt/opencascade/lib
     )
   elseif(VCPKG_TOOLCHAIN)
-    FIND_PATH(OCC_INCLUDE_DIR 
+    FIND_PATH(OCC_INCLUDE_DIR
       NAMES Standard_Version.hxx
       PATH_SUFFIXES
         include/opencascade
     )
-    FIND_LIBRARY(OCC_LIBRARY 
+    FIND_LIBRARY(OCC_LIBRARY
       NAMES TKernel
       HINTS
       ${OCC_LIBRARY_DIR}

@@ -50,7 +50,8 @@ public:
     enum class FORMAT
     {
         UNKNOWN, // defefer to arg
-        STEP
+        STEP,
+        GLB
     };
 
     bool                      m_overwrite;

@@ -54,7 +54,7 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&   aName,
     {
         m_argParser.add_argument( ARG_FORMAT )
                 .default_value( std::string( "step" ) )
-                .help( UTF8STDSTR( _( "Output file format, options: step" ) ) );
+                .help( UTF8STDSTR( _( "Output file format, options: step, glb (binary glTF)" ) ) );
     }
 
     m_argParser.add_argument( ARG_DRILL_ORIGIN )
@@ -133,9 +133,9 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
         wxString format = FROM_UTF8( m_argParser.get<std::string>( ARG_FORMAT ).c_str() );
 
         if( format == wxS( "step" ) )
-        {
             step->m_format = JOB_EXPORT_PCB_3D::FORMAT::STEP;
-        }
+        else if( format == wxS( "glb" ) )
+            step->m_format = JOB_EXPORT_PCB_3D::FORMAT::GLB;
         else
         {
             wxFprintf( stderr, _( "Invalid format specified\n" ) );

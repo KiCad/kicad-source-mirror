@@ -96,15 +96,6 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
 
     BOARD* brd = LoadBoard( aStepJob->m_filename );
 
-    if( aStepJob->m_outputFile.IsEmpty() )
-    {
-        wxFileName fn = brd->GetFileName();
-        fn.SetName( fn.GetName() );
-        fn.SetExt( wxS( "step" ) );
-
-        aStepJob->m_outputFile = fn.GetFullName();
-    }
-
     EXPORTER_STEP_PARAMS params;
     params.m_exportTracks = aStepJob->m_exportTracks;
     params.m_includeUnspecified = aStepJob->m_includeUnspecified;
@@ -116,6 +107,17 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
     params.m_useDrillOrigin = aStepJob->m_useDrillOrigin;
     params.m_useGridOrigin = aStepJob->m_useGridOrigin;
     params.m_boardOnly = aStepJob->m_boardOnly;
+
+    switch( aStepJob->m_format )
+    {
+    case JOB_EXPORT_PCB_3D::FORMAT::STEP:
+        params.m_format = EXPORTER_STEP_PARAMS::FORMAT::STEP;
+        break;
+    case JOB_EXPORT_PCB_3D::FORMAT::GLB:
+        params.m_format = EXPORTER_STEP_PARAMS::FORMAT::GLB;
+        break;
+    default: return CLI::EXIT_CODES::ERR_UNKNOWN; // should have gotten here
+    }
 
     EXPORTER_STEP stepExporter( brd, params );
     stepExporter.m_outputFile = aStepJob->m_outputFile;

@@ -184,6 +184,7 @@ static std::vector<COMMAND_ENTRY> commandStack = {
             {
                 &exportPcbCmd,
                 {
+                    &exportPcb3dCmd,
                     &exportPcbDrillCmd,
                     &exportPcbDxfCmd,
                     &exportPcbGerberCmd,

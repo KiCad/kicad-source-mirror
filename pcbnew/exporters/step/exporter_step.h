@@ -54,8 +54,15 @@ public:
             m_substModels( true ),
             m_BoardOutlinesChainingEpsilon( BOARD_DEFAULT_CHAINING_EPSILON ),
             m_boardOnly( false ),
-            m_exportTracks( false )
+            m_exportTracks( false ),
+            m_format( FORMAT::STEP )
     {};
+
+    enum class FORMAT
+    {
+        STEP,
+        GLB
+    };
 
     wxString m_outputFile;
 
@@ -70,6 +77,10 @@ public:
     double   m_BoardOutlinesChainingEpsilon;
     bool     m_boardOnly;
     bool     m_exportTracks;
+    FORMAT   m_format;
+
+    wxString GetDefaultExportExtension();
+    wxString GetFormatName();
 };
 
 class EXPORTER_STEP

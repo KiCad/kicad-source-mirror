@@ -110,6 +110,28 @@ private:
 };
 
 
+wxString EXPORTER_STEP_PARAMS::GetDefaultExportExtension()
+{
+    switch( m_format )
+    {
+    case EXPORTER_STEP_PARAMS::FORMAT::STEP: return wxS( "step" ); break;
+    case EXPORTER_STEP_PARAMS::FORMAT::GLB: return wxS( "glb" ); break;
+    default: return wxEmptyString; // shouldn't happen
+    }
+}
+
+wxString EXPORTER_STEP_PARAMS::GetFormatName()
+{
+    switch( m_format )
+    {
+    // honestly these names shouldn't be translated since they are mostly industry standard acronyms
+    case EXPORTER_STEP_PARAMS::FORMAT::STEP: return wxS( "STEP" ); break;
+    case EXPORTER_STEP_PARAMS::FORMAT::GLB: return wxS("Binary GLTF" ); break;
+    default: return wxEmptyString; // shouldn't happen
+    }
+}
+
+
 EXPORTER_STEP::EXPORTER_STEP( BOARD* aBoard, const EXPORTER_STEP_PARAMS& aParams ) :
     m_params( aParams ),
     m_error( false ),
@@ -458,9 +480,18 @@ bool EXPORTER_STEP::Export()
     msg.Printf( _( "Board Thickness from stackup: %.3f mm\n" ), m_boardThickness );
     ReportMessage( msg );
 
+    if( m_params.m_outputFile.IsEmpty() )
+    {
+        wxFileName fn = m_board->GetFileName();
+        fn.SetName( fn.GetName() );
+        fn.SetExt( m_params.GetDefaultExportExtension() );
+
+        m_params.m_outputFile = fn.GetFullName();
+    }
+
     try
     {
-        ReportMessage( _( "Build STEP data\n" ) );
+        ReportMessage( wxString::Format( _( "Build %s data\n" ), m_params.GetFormatName() ) );
 
         if( !buildBoard3DShapes() )
         {
@@ -468,27 +499,37 @@ bool EXPORTER_STEP::Export()
             return false;
         }
 
-        ReportMessage( _( "Writing STEP file\n" ) );
+        ReportMessage( wxString::Format( _( "Writing %s file\n" ), m_params.GetFormatName() ) );
 
-        if( !m_pcbModel->WriteSTEP( m_outputFile ) )
+        bool success = true;
+        if( m_params.m_format == EXPORTER_STEP_PARAMS::FORMAT::STEP )
+            success = m_pcbModel->WriteSTEP( m_outputFile );
+        else if( m_params.m_format == EXPORTER_STEP_PARAMS::FORMAT::GLB )
+            success = m_pcbModel->WriteGLTF( m_outputFile );
+
+        if( !success )
         {
-            ReportMessage( _( "\n** Error writing STEP file. **\n" ) );
+            ReportMessage( wxString::Format( _( "\n** Error writing %s file. **\n" ),
+                                             m_params.GetFormatName() ) );
             return false;
         }
         else
         {
-            ReportMessage( wxString::Format( _( "\nSTEP file '%s' created.\n" ), m_outputFile ) );
+            ReportMessage( wxString::Format( _( "\%s file '%s' created.\n" ),
+                                             m_params.GetFormatName(), m_outputFile ) );
         }
     }
     catch( const Standard_Failure& e )
     {
         ReportMessage( e.GetMessageString() );
-        ReportMessage( _( "\n** Error exporting STEP file. Export aborted. **\n" ) );
+        ReportMessage( wxString::Format( _( "\n** Error exporting %s file. Export aborted. **\n" ),
+                                         m_params.GetFormatName() ) );
         return false;
     }
     catch( ... )
     {
-        ReportMessage( _( "\n** Error exporting STEP file. Export aborted. **\n" ) );
+        ReportMessage( wxString::Format( _( "\n** Error exporting %s file. Export aborted. **\n" ),
+                                         m_params.GetFormatName() ) );
         return false;
     }
 
@@ -496,12 +537,14 @@ bool EXPORTER_STEP::Export()
     {
         if( m_fail )
         {
-            msg = _( "Unable to create STEP file.\n"
-                     "Check that the board has a valid outline and models." );
+            msg =  wxString::Format( _( "Unable to create %s file.\n"
+                                       "Check that the board has a valid outline and models." ),
+                                    m_params.GetFormatName() );
         }
         else if( m_error || m_warn )
         {
-            msg = _( "STEP file has been created, but there are warnings." );
+            msg = wxString::Format( _( "%s file has been created, but there are warnings." ),
+                                    m_params.GetFormatName() );
         }
 
         ReportMessage( msg );

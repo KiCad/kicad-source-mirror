@@ -39,6 +39,8 @@
 #include <footprint.h>
 #include <pad.h>
 #include <kiplatform/io.h>
+#include <string_utils.h>
+#include <build_version.h>
 
 #include "step_pcb_model.h"
 #include "streamwrapper.h"
@@ -88,6 +90,8 @@
 #include <gp_Dir.hxx>
 #include <gp_Pnt.hxx>
 #include <Geom_BezierCurve.hxx>
+
+#include <RWGltf_CafWriter.hxx>
 
 #include <macros.h>
 
@@ -1038,7 +1042,7 @@ bool STEP_PCB_MODEL::getModelLabel( const std::string& aFileNameUTF8, VECTOR3D a
         else // Substitution is not allowed
         {
             if( aErrorMessage )
-                aErrorMessage->Printf( wxT( "Cannot add a VRML model to a STEP file.\n" ) );
+                aErrorMessage->Printf( wxT( "Cannot load any VRML model for this export.\n" ) );
 
             return false;
         }
@@ -1329,4 +1333,89 @@ TDF_Label STEP_PCB_MODEL::transferModel( Handle( TDocStd_Document )& source,
     };
 
     return component;
+}
+
+
+bool STEP_PCB_MODEL::WriteGLTF( const wxString& aFileName )
+{
+    if( !isBoardOutlineValid() )
+    {
+        ReportMessage( wxString::Format( wxT( "No valid PCB assembly; cannot create output file "
+                                              "'%s'.\n" ),
+                                         aFileName ) );
+        return false;
+    }
+
+    TDF_LabelSequence freeShapes;
+    m_assy->GetFreeShapes( freeShapes );
+
+    ReportMessage( wxT( "Meshing model\n" ) );
+
+    // GLTF is a mesh format, we have to trigger opencascade to mesh the shapes we composited into the asesmbly
+    // To mesh models, lets just grab the free shape root and execute on them
+    for( Standard_Integer i = 1; i <= freeShapes.Length(); ++i )
+    {
+        TDF_Label    label = freeShapes.Value( i );
+        TopoDS_Shape shape;
+        m_assy->GetShape( label, shape );
+
+        // These deflection values basically affect the accuracy of the mesh generated, a tighter
+        // deflection will result in larger meshes
+        // We could make this a tunable parameter, but for now fix it
+        const Standard_Real      linearDeflection = 0.01;
+        const Standard_Real      angularDeflection = 0.5;
+        BRepMesh_IncrementalMesh mesh( shape, linearDeflection, Standard_False, angularDeflection,
+                                       Standard_True );
+    }
+
+    wxFileName fn( aFileName );
+
+    const char* tmpGltfname = "$tempfile$.glb";
+    RWGltf_CafWriter cafWriter( tmpGltfname, true );
+
+    cafWriter.SetTransformationFormat( RWGltf_WriterTrsfFormat_Compact );
+    cafWriter.ChangeCoordinateSystemConverter().SetInputLengthUnit( 0.001 );
+    cafWriter.ChangeCoordinateSystemConverter().SetInputCoordinateSystem(
+            RWMesh_CoordinateSystem_Zup );
+#if OCC_VERSION_HEX >= 0x070700
+    cafWriter.SetParallel( true );
+#endif
+    TColStd_IndexedDataMapOfStringString metadata;
+
+    metadata.Add( TCollection_AsciiString( "pcb_name" ),
+                  TCollection_ExtendedString( fn.GetName().wc_str() ) );
+    metadata.Add( TCollection_AsciiString( "source_pcb_file" ),
+                  TCollection_ExtendedString( fn.GetFullName().wc_str() ) );
+    metadata.Add( TCollection_AsciiString( "generator" ),
+                  TCollection_AsciiString( wxString::Format( wxS( "KiCad %s" ), GetSemanticVersion() ).ToAscii() ) );
+    metadata.Add( TCollection_AsciiString( "generated_at" ),
+                  TCollection_AsciiString( GetISO8601CurrentDateTime().ToAscii() ) );
+
+    bool success = true;
+
+    // Creates a temporary file with a ascii7 name, because writer does not know unicode filenames.
+    wxString currCWD = wxGetCwd();
+    wxString workCWD = fn.GetPath();
+
+    if( !workCWD.IsEmpty() )
+        wxSetWorkingDirectory( workCWD );
+
+    success = cafWriter.Perform( m_doc, metadata, Message_ProgressRange() );
+
+    if( success )
+    {
+        // Preserve the permissions of the current file
+        KIPLATFORM::IO::DuplicatePermissions( fn.GetFullPath(), tmpGltfname );
+
+        if( !wxRenameFile( tmpGltfname, fn.GetFullName(), true ) )
+        {
+            ReportMessage( wxString::Format( wxT( "Cannot rename temporary file '%s' to '%s'.\n" ),
+                                             tmpGltfname, fn.GetFullName() ) );
+            success = false;
+        }
+    }
+
+    wxSetWorkingDirectory( currCWD );
+
+    return success;
 }
