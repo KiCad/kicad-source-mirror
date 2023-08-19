@@ -18,17 +18,17 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMAND_EXPORT_SCH_NETLIST_H
-#define COMMAND_EXPORT_SCH_NETLIST_H
+#ifndef COMMAND_EXPORT_SCH_PYTHONBOM_H
+#define COMMAND_EXPORT_SCH_PYTHONBOM_H
 
-#include "command_export_pcb_base.h"
+#include "command_pcb_export_base.h"
 
 namespace CLI
 {
-class EXPORT_SCH_NETLIST_COMMAND : public EXPORT_PCB_BASE_COMMAND
+class EXPORT_SCH_PYTHONBOM_COMMAND : public EXPORT_PCB_BASE_COMMAND
 {
 public:
-    EXPORT_SCH_NETLIST_COMMAND();
+    EXPORT_SCH_PYTHONBOM_COMMAND();
 
 protected:
     int doPerform( KIWAY& aKiway ) override;

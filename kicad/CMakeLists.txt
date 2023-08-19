@@ -35,22 +35,22 @@ set( KICAD_SRCS
 
 set( KICAD_CLI_SRCS
     cli/command.cpp
-    cli/command_export_pcb_base.cpp
+    cli/command_pcb_export_base.cpp
     cli/command_pcb_drc.cpp
-    cli/command_export_pcb_drill.cpp
-    cli/command_export_pcb_dxf.cpp
-    cli/command_export_pcb_gerber.cpp
-    cli/command_export_pcb_gerbers.cpp
-    cli/command_export_pcb_pdf.cpp
-    cli/command_export_pcb_pos.cpp
-    cli/command_export_pcb_step.cpp
-    cli/command_export_pcb_svg.cpp
+    cli/command_pcb_export_drill.cpp
+    cli/command_pcb_export_dxf.cpp
+    cli/command_pcb_export_gerber.cpp
+    cli/command_pcb_export_gerbers.cpp
+    cli/command_pcb_export_pdf.cpp
+    cli/command_pcb_export_pos.cpp
+    cli/command_pcb_export_step.cpp
+    cli/command_pcb_export_svg.cpp
     cli/command_fp_export_svg.cpp
     cli/command_fp_upgrade.cpp
-    cli/command_export_sch_bom.cpp
-    cli/command_export_sch_pythonbom.cpp
-    cli/command_export_sch_netlist.cpp
-    cli/command_export_sch_plot.cpp
+    cli/command_sch_export_bom.cpp
+    cli/command_sch_export_pythonbom.cpp
+    cli/command_sch_export_netlist.cpp
+    cli/command_sch_export_plot.cpp
     cli/command_sch_erc.cpp
     cli/command_sym_export_svg.cpp
     cli/command_sym_upgrade.cpp

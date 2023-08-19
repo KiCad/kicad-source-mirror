@@ -20,7 +20,7 @@
 
 #include <kiface_base.h>
 #include <sch_plotter.h>
-#include "command_export_sch_plot.h"
+#include "command_sch_export_plot.h"
 #include <cli/exit_codes.h>
 #include "jobs/job_export_sch_plot.h"
 #include <layer_ids.h>

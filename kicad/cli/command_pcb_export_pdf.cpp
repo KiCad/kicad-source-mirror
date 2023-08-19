@@ -18,7 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "command_export_pcb_pdf.h"
+#include "command_pcb_export_pdf.h"
 #include <cli/exit_codes.h>
 #include "jobs/job_export_pcb_pdf.h"
 #include <kiface_base.h>

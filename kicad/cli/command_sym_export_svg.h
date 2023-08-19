@@ -21,7 +21,7 @@
 #ifndef COMMAND_SYM_EXPORT_SVG_H
 #define COMMAND_SYM_EXPORT_SVG_H
 
-#include "command_export_pcb_base.h"
+#include "command_pcb_export_base.h"
 
 namespace CLI
 {

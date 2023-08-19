@@ -21,7 +21,7 @@
 #ifndef COMMAND_EXPORT_SCH_BOM_H
 #define COMMAND_EXPORT_SCH_BOM_H
 
-#include "command_export_pcb_base.h"
+#include "command_pcb_export_base.h"
 
 namespace CLI
 {

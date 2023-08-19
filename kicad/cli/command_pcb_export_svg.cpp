@@ -19,9 +19,9 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "command_export_pcb_svg.h"
+#include "command_pcb_export_svg.h"
 #include <cli/exit_codes.h>
-#include "command_export_pcb_base.h"
+#include "command_pcb_export_base.h"
 #include "jobs/job_export_pcb_svg.h"
 #include <kiface_base.h>
 #include <layer_ids.h>

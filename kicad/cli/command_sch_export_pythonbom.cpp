@@ -18,7 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "command_export_sch_pythonbom.h"
+#include "command_sch_export_pythonbom.h"
 #include <cli/exit_codes.h>
 #include "jobs/job_export_sch_pythonbom.h"
 #include <kiface_base.h>

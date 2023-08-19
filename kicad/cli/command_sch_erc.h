@@ -21,7 +21,7 @@
 #ifndef COMMAND_SCH_ERC_H
 #define COMMAND_SCH_ERC_H
 
-#include "command_export_pcb_base.h"
+#include "command_pcb_export_base.h"
 
 namespace CLI
 {

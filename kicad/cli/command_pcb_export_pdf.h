@@ -18,16 +18,17 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMAND_EXPORT_PCB_SVG_H
-#define COMMAND_EXPORT_PCB_SVG_H
+#ifndef COMMAND_EXPORT_PCB_PDF_H
+#define COMMAND_EXPORT_PCB_PDF_H
 
-#include "command_export_pcb_base.h"
+#include "command_pcb_export_base.h"
 
 namespace CLI
 {
-struct EXPORT_PCB_SVG_COMMAND : public EXPORT_PCB_BASE_COMMAND
+class EXPORT_PCB_PDF_COMMAND : public EXPORT_PCB_BASE_COMMAND
 {
-    EXPORT_PCB_SVG_COMMAND();
+public:
+    EXPORT_PCB_PDF_COMMAND();
 
 protected:
     int doPerform( KIWAY& aKiway ) override;

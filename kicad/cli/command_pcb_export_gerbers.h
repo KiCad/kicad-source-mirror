@@ -18,17 +18,17 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMAND_EXPORT_PCB_POS_H
-#define COMMAND_EXPORT_PCB_POS_H
+#ifndef COMMAND_EXPORT_PCB_GERBERS_H
+#define COMMAND_EXPORT_PCB_GERBERS_H
 
-#include "command_export_pcb_base.h"
+#include "command_pcb_export_gerber.h"
 
 namespace CLI
 {
-class EXPORT_PCB_POS_COMMAND : public EXPORT_PCB_BASE_COMMAND
+class EXPORT_PCB_GERBERS_COMMAND : public EXPORT_PCB_GERBER_COMMAND
 {
 public:
-    EXPORT_PCB_POS_COMMAND();
+    EXPORT_PCB_GERBERS_COMMAND();
 
 protected:
     int doPerform( KIWAY& aKiway ) override;

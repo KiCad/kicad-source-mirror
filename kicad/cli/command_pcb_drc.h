@@ -21,7 +21,7 @@
 #ifndef COMMAND_EXPORT_PCB_DRC_H
 #define COMMAND_EXPORT_PCB_DRC_H
 
-#include "command_export_pcb_base.h"
+#include "command_pcb_export_base.h"
 
 namespace CLI
 {
