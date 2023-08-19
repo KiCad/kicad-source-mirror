@@ -18,12 +18,12 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "command_pcb_export_step.h"
+#include "command_pcb_export_3d.h"
 #include <cli/exit_codes.h>
-#include "jobs/job_export_pcb_step.h"
 #include <kiface_base.h>
 #include <regex>
 #include <locale_io.h>
+#include <wx/crt.h>
 
 #include <macros.h>
 
@@ -39,13 +39,24 @@
 #define ARG_USER_ORIGIN "--user-origin"
 #define ARG_BOARD_ONLY "--board-only"
 #define ARG_EXPORT_TRACKS "--export-tracks"
+#define ARG_FORMAT "--format"
 
 #define REGEX_QUANTITY "([\\s]*[+-]?[\\d]*[.]?[\\d]*)"
 #define REGEX_DELIMITER "(?:[\\s]*x)"
 #define REGEX_UNIT "([m]{2}|(?:in))"
 
-CLI::PCB_EXPORT_STEP_COMMAND::PCB_EXPORT_STEP_COMMAND() : COMMAND( "step" )
+CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&   aName,
+                                                   JOB_EXPORT_PCB_3D::FORMAT aFormat ) :
+        COMMAND( aName ),
+        m_format( aFormat )
 {
+    if( m_format == JOB_EXPORT_PCB_3D::FORMAT::UNKNOWN )
+    {
+        m_argParser.add_argument( ARG_FORMAT )
+                .default_value( std::string( "step" ) )
+                .help( UTF8STDSTR( _( "Output file format, options: step" ) ) );
+    }
+
     m_argParser.add_argument( ARG_DRILL_ORIGIN )
             .help( UTF8STDSTR( _( "Use Drill Origin for output origin" ) ) )
             .implicit_value( true )
@@ -101,9 +112,9 @@ CLI::PCB_EXPORT_STEP_COMMAND::PCB_EXPORT_STEP_COMMAND() : COMMAND( "step" )
     m_argParser.add_argument( ARG_INPUT ).help( UTF8STDSTR( _( "Input file" ) ) );
 }
 
-int CLI::PCB_EXPORT_STEP_COMMAND::doPerform( KIWAY& aKiway )
+int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
 {
-    std::unique_ptr<JOB_EXPORT_PCB_STEP> step( new JOB_EXPORT_PCB_STEP( true ) );
+    std::unique_ptr<JOB_EXPORT_PCB_3D> step( new JOB_EXPORT_PCB_3D( true ) );
 
     step->m_useDrillOrigin = m_argParser.get<bool>( ARG_DRILL_ORIGIN );
     step->m_useGridOrigin = m_argParser.get<bool>( ARG_GRID_ORIGIN );
@@ -115,6 +126,22 @@ int CLI::PCB_EXPORT_STEP_COMMAND::doPerform( KIWAY& aKiway )
     step->m_outputFile = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
     step->m_boardOnly = m_argParser.get<bool>( ARG_BOARD_ONLY );
     step->m_exportTracks = m_argParser.get<bool>( ARG_EXPORT_TRACKS );
+    step->m_format = m_format;
+
+    if( step->m_format == JOB_EXPORT_PCB_3D::FORMAT::UNKNOWN )
+    {
+        wxString format = FROM_UTF8( m_argParser.get<std::string>( ARG_FORMAT ).c_str() );
+
+        if( format == wxS( "step" ) )
+        {
+            step->m_format = JOB_EXPORT_PCB_3D::FORMAT::STEP;
+        }
+        else
+        {
+            wxFprintf( stderr, _( "Invalid format specified\n" ) );
+            return EXIT_CODES::ERR_ARGS;
+        }
+    }
 
     wxString userOrigin = FROM_UTF8( m_argParser.get<std::string>( ARG_USER_ORIGIN ).c_str() );
 

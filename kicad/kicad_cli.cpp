@@ -49,6 +49,7 @@
 #include "cli/command_pcb.h"
 #include "cli/command_pcb_export.h"
 #include "cli/command_pcb_drc.h"
+#include "cli/command_pcb_export_3d.h"
 #include "cli/command_pcb_export_drill.h"
 #include "cli/command_pcb_export_dxf.h"
 #include "cli/command_pcb_export_gerber.h"
@@ -56,7 +57,6 @@
 #include "cli/command_pcb_export_pdf.h"
 #include "cli/command_pcb_export_pos.h"
 #include "cli/command_pcb_export_svg.h"
-#include "cli/command_pcb_export_step.h"
 #include "cli/command_sch_export_bom.h"
 #include "cli/command_sch_export_pythonbom.h"
 #include "cli/command_sch_export_netlist.h"
@@ -128,9 +128,10 @@ struct COMMAND_ENTRY
 
 static CLI::PCB_COMMAND                  pcbCmd{};
 static CLI::PCB_DRC_COMMAND              pcbDrcCmd{};
+static CLI::PCB_EXPORT_3D_COMMAND        exportPcb3dCmd{ "3d" };
 static CLI::PCB_EXPORT_DRILL_COMMAND     exportPcbDrillCmd{};
 static CLI::PCB_EXPORT_DXF_COMMAND       exportPcbDxfCmd{};
-static CLI::PCB_EXPORT_STEP_COMMAND      exportPcbStepCmd{};
+static CLI::PCB_EXPORT_3D_COMMAND        exportPcbStepCmd{ "step", JOB_EXPORT_PCB_3D::FORMAT::STEP };
 static CLI::PCB_EXPORT_SVG_COMMAND       exportPcbSvgCmd{};
 static CLI::PCB_EXPORT_PDF_COMMAND       exportPcbPdfCmd{};
 static CLI::PCB_EXPORT_POS_COMMAND       exportPcbPosCmd{};

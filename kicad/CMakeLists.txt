@@ -37,13 +37,13 @@ set( KICAD_CLI_SRCS
     cli/command.cpp
     cli/command_pcb_export_base.cpp
     cli/command_pcb_drc.cpp
+    cli/command_pcb_export_3d.cpp
     cli/command_pcb_export_drill.cpp
     cli/command_pcb_export_dxf.cpp
     cli/command_pcb_export_gerber.cpp
     cli/command_pcb_export_gerbers.cpp
     cli/command_pcb_export_pdf.cpp
     cli/command_pcb_export_pos.cpp
-    cli/command_pcb_export_step.cpp
     cli/command_pcb_export_svg.cpp
     cli/command_fp_export_svg.cpp
     cli/command_fp_upgrade.cpp

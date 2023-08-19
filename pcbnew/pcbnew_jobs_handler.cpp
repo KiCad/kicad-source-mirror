@@ -34,7 +34,7 @@
 #include <jobs/job_export_pcb_pdf.h>
 #include <jobs/job_export_pcb_pos.h>
 #include <jobs/job_export_pcb_svg.h>
-#include <jobs/job_export_pcb_step.h>
+#include <jobs/job_export_pcb_3d.h>
 #include <jobs/job_pcb_drc.h>
 #include <cli/exit_codes.h>
 #include <exporters/place_file_exporter.h>
@@ -65,8 +65,7 @@
 
 PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER()
 {
-    Register( "step",
-              std::bind( &PCBNEW_JOBS_HANDLER::JobExportStep, this, std::placeholders::_1 ) );
+    Register( "3d", std::bind( &PCBNEW_JOBS_HANDLER::JobExportStep, this, std::placeholders::_1 ) );
     Register( "svg", std::bind( &PCBNEW_JOBS_HANDLER::JobExportSvg, this, std::placeholders::_1 ) );
     Register( "dxf", std::bind( &PCBNEW_JOBS_HANDLER::JobExportDxf, this, std::placeholders::_1 ) );
     Register( "pdf", std::bind( &PCBNEW_JOBS_HANDLER::JobExportPdf, this, std::placeholders::_1 ) );
@@ -81,14 +80,13 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER()
               std::bind( &PCBNEW_JOBS_HANDLER::JobExportFpUpgrade, this, std::placeholders::_1 ) );
     Register( "fpsvg",
               std::bind( &PCBNEW_JOBS_HANDLER::JobExportFpSvg, this, std::placeholders::_1 ) );
-    Register( "drc",
-              std::bind( &PCBNEW_JOBS_HANDLER::JobExportDrc, this, std::placeholders::_1 ) );
+    Register( "drc", std::bind( &PCBNEW_JOBS_HANDLER::JobExportDrc, this, std::placeholders::_1 ) );
 }
 
 
 int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
 {
-    JOB_EXPORT_PCB_STEP* aStepJob = dynamic_cast<JOB_EXPORT_PCB_STEP*>( aJob );
+    JOB_EXPORT_PCB_3D* aStepJob = dynamic_cast<JOB_EXPORT_PCB_3D*>( aJob );
 
     if( aStepJob == nullptr )
         return CLI::EXIT_CODES::ERR_UNKNOWN;

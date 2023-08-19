@@ -24,11 +24,11 @@
 #include <wx/string.h>
 #include "job.h"
 
-class JOB_EXPORT_PCB_STEP : public JOB
+class JOB_EXPORT_PCB_3D : public JOB
 {
 public:
-    JOB_EXPORT_PCB_STEP( bool aIsCli ) :
-            JOB( "step", aIsCli ),
+    JOB_EXPORT_PCB_3D( bool aIsCli ) :
+            JOB( "3d", aIsCli ),
             m_overwrite( false ),
             m_useGridOrigin( false ),
             m_useDrillOrigin( false ),
@@ -42,23 +42,31 @@ public:
             m_yOrigin( 0.0 ),
             // max dist to chain 2 items (lines or curves) to build the board outlines
             m_BoardOutlinesChainingEpsilon( 0.01 ),     // 0.01 mm is a good value
-            m_exportTracks( false )     // Extremely time consuming if true
+            m_exportTracks( false ),     // Extremely time consuming if true
+            m_format( JOB_EXPORT_PCB_3D::FORMAT::UNKNOWN )
     {
     }
 
-    bool     m_overwrite;
-    bool     m_useGridOrigin;
-    bool     m_useDrillOrigin;
-    bool     m_boardOnly;
-    bool     m_includeUnspecified;
-    bool     m_includeDNP;
-    bool     m_substModels;
-    wxString m_filename;
-    wxString m_outputFile;
-    double   m_xOrigin;
-    double   m_yOrigin;
-    double   m_BoardOutlinesChainingEpsilon;
-    bool     m_exportTracks;
+    enum class FORMAT
+    {
+        UNKNOWN, // defefer to arg
+        STEP
+    };
+
+    bool                      m_overwrite;
+    bool                      m_useGridOrigin;
+    bool                      m_useDrillOrigin;
+    bool                      m_boardOnly;
+    bool                      m_includeUnspecified;
+    bool                      m_includeDNP;
+    bool                      m_substModels;
+    wxString                  m_filename;
+    wxString                  m_outputFile;
+    double                    m_xOrigin;
+    double                    m_yOrigin;
+    double                    m_BoardOutlinesChainingEpsilon;
+    bool                      m_exportTracks;
+    JOB_EXPORT_PCB_3D::FORMAT m_format;
 };
 
 #endif

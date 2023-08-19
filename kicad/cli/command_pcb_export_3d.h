@@ -18,19 +18,22 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMAND_EXPORT_PCB_STEP_H
-#define COMMAND_EXPORT_PCB_STEP_H
+#ifndef COMMAND_EXPORT_PCB_3D_H
+#define COMMAND_EXPORT_PCB_3D_H
 
 #include "command.h"
+#include "jobs/job_export_pcb_3d.h"
 
 namespace CLI
 {
-struct PCB_EXPORT_STEP_COMMAND : public COMMAND
+struct PCB_EXPORT_3D_COMMAND : public COMMAND
 {
-    PCB_EXPORT_STEP_COMMAND();
+    PCB_EXPORT_3D_COMMAND( const std::string&   aName,
+                           JOB_EXPORT_PCB_3D::FORMAT aFormat = JOB_EXPORT_PCB_3D::FORMAT::UNKNOWN );
 
 protected:
     int doPerform( KIWAY& aKiway ) override;
+    JOB_EXPORT_PCB_3D::FORMAT m_format;
 };
 }
 
