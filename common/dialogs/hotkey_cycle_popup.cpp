@@ -87,7 +87,8 @@ void HOTKEY_CYCLE_POPUP::Popup( const wxString& aTitle, const wxArrayString& aIt
         height += extents.y + LIST_BOX_V_PADDING;
     }
 
-    m_listBox->SetMinSize( wxSize( width + LIST_BOX_H_PADDING, height ) );
+    m_listBox->SetMinSize( wxSize( width + LIST_BOX_H_PADDING,
+                                   height + ( LIST_BOX_V_PADDING * 2 ) ) );
 
     // this line fixes an issue on Linux Ubuntu using Unity (dialog not shown),
     // and works fine on all systems

@@ -381,6 +381,7 @@ std::set<BOARD_ITEM*> PCB_GRID_HELPER::queryVisible( const BOX2I& aArea,
     std::set<BOARD_ITEM*> items;
     std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
 
+    PCB_TOOL_BASE*       currentTool = static_cast<PCB_TOOL_BASE*>( m_toolMgr->GetCurrentTool() );
     KIGFX::VIEW*         view = m_toolMgr->GetView();
     RENDER_SETTINGS*     settings = view->GetPainter()->GetSettings();
     const std::set<int>& activeLayers = settings->GetHighContrastLayers();
@@ -388,23 +389,32 @@ std::set<BOARD_ITEM*> PCB_GRID_HELPER::queryVisible( const BOX2I& aArea,
 
     view->Query( aArea, selectedItems );
 
-    for( const KIGFX::VIEW::LAYER_ITEM_PAIR& it : selectedItems )
+    for( const auto& [ viewItem, layer ] : selectedItems )
     {
-        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it.first );
+        BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( viewItem );
 
-        // If we are in the footprint editor, don't use the footprint itself
-        if( static_cast<PCB_TOOL_BASE*>( m_toolMgr->GetCurrentTool() )->IsFootprintEditor()
-                && item->Type() == PCB_FOOTPRINT_T )
+        if( currentTool->IsFootprintEditor() )
         {
-            continue;
+            // If we are in the footprint editor, don't use the footprint itself
+            if( boardItem->Type() == PCB_FOOTPRINT_T )
+                continue;
+        }
+        else
+        {
+            // If we are not in the footprint editor, don't use footprint-editor-private items
+            if( FOOTPRINT* parentFP = boardItem->GetParentFootprint() )
+            {
+                if( IsPcbLayer( layer ) && parentFP->GetPrivateLayers().test( layer ) )
+                    continue;
+            }
         }
 
-        // The item must be visible and on an active layer
-        if( view->IsVisible( item )
-                && ( !isHighContrast || activeLayers.count( it.second ) )
-                && item->ViewGetLOD( it.second, view ) < view->GetScale() )
+        // The boardItem must be visible and on an active layer
+        if( view->IsVisible( boardItem )
+                && ( !isHighContrast || activeLayers.count( layer ) )
+                && boardItem->ViewGetLOD( layer, view ) < view->GetScale() )
         {
-            items.insert ( item );
+            items.insert ( boardItem );
         }
     }
 
