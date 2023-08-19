@@ -178,6 +178,10 @@ extern const std::string CsvFileExtension;
 extern const std::string XmlFileExtension;
 extern const std::string JsonFileExtension;
 
+extern const std::string StepFileExtension;
+extern const std::string StepFileAbrvExtension;
+extern const std::string GltfBinaryFileExtension;
+
 extern const wxString GerberFileExtensionsRegex;
 
 bool IsGerberFileExtension( const wxString& ext );

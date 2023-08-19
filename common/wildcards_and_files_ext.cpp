@@ -192,6 +192,10 @@ const std::string CsvFileExtension( "csv" );
 const std::string XmlFileExtension( "xml" );
 const std::string JsonFileExtension( "json" );
 
+const std::string StepFileExtension( "step" );
+const std::string StepFileAbrvExtension( "stp" );
+const std::string GltfBinaryFileExtension( "glb" );
+
 const wxString GerberFileExtensionsRegex( "(gbr|gko|pho|(g[tb][alops])|(gm?\\d\\d*)|(gp[tb]))" );
 
 

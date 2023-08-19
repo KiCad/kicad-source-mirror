@@ -148,9 +148,14 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
     bSizerTop->Hide( widget );
     widget->Destroy();
 
+    wxString filter = _( "STEP files" )
+                      + AddFileExtListToFilter( { StepFileExtension, StepFileAbrvExtension } ) + "|"
+                      + _( "Binary GTLF files" )
+                      + AddFileExtListToFilter( { GltfBinaryFileExtension } );
+
     m_filePickerSTEP = new wxFilePickerCtrl( this, wxID_ANY, wxEmptyString,
                                              _( "Select a STEP export filename" ),
-                                             _( "STEP files" ) + AddFileExtListToFilter( { "STEP", "STP" } ),
+                                             filter,
                                              wxDefaultPosition,
                                              wxSize( -1, -1 ), wxFLP_SAVE | wxFLP_USE_TEXTCTRL );
     bSizerTop->Add( m_filePickerSTEP, 1, wxTOP | wxRIGHT | wxLEFT | wxALIGN_CENTER_VERTICAL, 5 );
@@ -368,7 +373,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
         msg.Printf( _( "File '%s' already exists. Do you want overwrite this file?" ),
                     fn.GetFullPath() );
 
-        if( wxMessageBox( msg, _( "STEP Export" ), wxYES_NO | wxICON_QUESTION, this ) == wxNO )
+        if( wxMessageBox( msg, _( "STEP/GLTF Export" ), wxYES_NO | wxICON_QUESTION, this ) == wxNO )
             return;
     }
 
@@ -400,7 +405,14 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
     cmdK2S.Append( wxT( " pcb" ) );
     cmdK2S.Append( wxT( " export" ) );
-    cmdK2S.Append( wxT( " step" ) );
+    cmdK2S.Append( wxT( " 3d" ) );
+
+    cmdK2S.Append( wxT( " --format" ) );
+
+    if( fn.GetExt() == GltfBinaryFileExtension )
+        cmdK2S.Append( wxT( " glb" ) );
+    else
+        cmdK2S.Append( wxT( " step" ) );
 
     if( GetNoUnspecifiedOption() )
         cmdK2S.Append( wxT( " --no-unspecified" ) );
