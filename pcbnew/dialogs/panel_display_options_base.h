@@ -20,8 +20,9 @@
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/statline.h>
-#include <wx/radiobox.h>
+#include <wx/choice.h>
 #include <wx/checkbox.h>
+#include <wx/gbsizer.h>
 #include <wx/simplebook.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -34,21 +35,21 @@ class PANEL_DISPLAY_OPTIONS_BASE : public RESETTABLE_PANEL
 	private:
 
 	protected:
-		enum
-		{
-			ID_SHOW_CLEARANCE = 1000
-		};
-
 		wxBoxSizer* m_galOptionsSizer;
 		wxSimplebook* m_optionsBook;
 		wxStaticText* m_annotationsLabel;
 		wxStaticLine* m_staticline1;
-		wxRadioBox* m_ShowNetNamesOption;
+		wxStaticText* m_netNamesLabel;
+		wxChoice* m_ShowNetNamesOption;
 		wxCheckBox* m_OptDisplayPadNumber;
 		wxStaticText* m_clearanceLabel;
 		wxStaticLine* m_staticline2;
-		wxRadioBox* m_OptDisplayTracksClearance;
+		wxStaticText* m_trackClearancesLabel;
+		wxChoice* m_OptDisplayTracksClearance;
 		wxCheckBox* m_OptDisplayPadClearence;
+		wxStaticText* m_staticText4;
+		wxStaticLine* m_staticline4;
+		wxCheckBox* m_checkForceShowFieldsWhenFPSelected;
 		wxStaticText* m_crossProbingLabel;
 		wxStaticLine* m_staticline3;
 		wxCheckBox* m_checkCrossProbeOnSelection;

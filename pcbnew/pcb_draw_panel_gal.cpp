@@ -564,9 +564,12 @@ void PCB_DRAW_PANEL_GAL::OnShow()
     if( frame )
     {
         SetTopLayer( frame->GetActiveLayer() );
-        KIGFX::PAINTER* painter = m_view->GetPainter();
-        auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
+
+        KIGFX::PCB_PAINTER* painter = static_cast<KIGFX::PCB_PAINTER*>( m_view->GetPainter() );
+        KIGFX::PCB_RENDER_SETTINGS* settings = painter->GetSettings();
+
         settings->LoadDisplayOptions( frame->GetDisplayOptions() );
+        settings->m_ForceShowFieldsWhenFPSelected = frame->GetPcbNewSettings()->m_Display.m_ForceShowFieldsWhenFPSelected;
     }
 }
 

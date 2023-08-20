@@ -117,6 +117,8 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
     SetDashLengthRatio( 12 );       // From ISO 128-2
     SetGapLengthRatio( 3 );         // From ISO 128-2
 
+    m_ForceShowFieldsWhenFPSelected = true;
+
     update();
 }
 

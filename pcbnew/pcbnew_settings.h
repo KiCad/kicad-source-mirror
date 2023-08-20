@@ -332,6 +332,7 @@ public:
         bool                 m_DisplayInvertXAxis;
         bool                 m_DisplayInvertYAxis;
 
+        bool                 m_ForceShowFieldsWhenFPSelected;
         bool                 m_Live3DRefresh;
     };
 

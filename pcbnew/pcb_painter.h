@@ -124,6 +124,7 @@ public:
 
 public:
     bool               m_ForcePadSketchModeOn;
+    bool               m_ForceShowFieldsWhenFPSelected;
 
     ZONE_DISPLAY_MODE  m_ZoneDisplayMode;
     HIGH_CONTRAST_MODE m_ContrastModeDisplay;

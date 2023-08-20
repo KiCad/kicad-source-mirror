@@ -26,6 +26,7 @@
 #include <footprint.h>
 #include <board_design_settings.h>
 #include <i18n_utility.h>
+#include <pcb_painter.h>
 
 PCB_FIELD::PCB_FIELD( FOOTPRINT* aParent, int aFieldId, const wxString& aName ) :
         PCB_TEXT( aParent, PCB_FIELD_T ),
@@ -130,6 +131,15 @@ double PCB_FIELD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
     if( !aView )
         return 0.0;
+
+    KIGFX::PCB_PAINTER*         painter = static_cast<KIGFX::PCB_PAINTER*>( aView->GetPainter() );
+    KIGFX::PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
+
+    if( GetParentFootprint() && GetParentFootprint()->IsSelected()
+            && renderSettings->m_ForceShowFieldsWhenFPSelected )
+    {
+        return 0.0;
+    }
 
     // Handle Render tab switches
     if( IsValue() && !aView->IsLayerVisible( LAYER_FP_VALUES ) )

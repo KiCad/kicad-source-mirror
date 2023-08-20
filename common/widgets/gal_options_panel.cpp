@@ -157,7 +157,7 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, APP_SETTINGS_BASE* aApp
         l_gridMinSpacingUnits->Wrap( -1 );
         sGridSettingsGrid->Add( l_gridMinSpacingUnits, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxLEFT | wxTOP, 5 );
 
-        l_gridSnapOptions = new wxStaticText( this, wxID_ANY, _( "Snap to Grid:" ) );
+        l_gridSnapOptions = new wxStaticText( this, wxID_ANY, _( "Snap to grid:" ) );
         l_gridSnapOptions->Wrap( -1 );
         sGridSettingsGrid->Add( l_gridSnapOptions, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxTOP, 5 );
 

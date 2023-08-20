@@ -2350,12 +2350,6 @@ void PCB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 
     GetAppearancePanel()->OnColorThemeChanged();
 
-    KIGFX::PCB_VIEW*            view = GetCanvas()->GetView();
-    KIGFX::PCB_PAINTER*         painter = static_cast<KIGFX::PCB_PAINTER*>( view->GetPainter() );
-    KIGFX::PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
-
-    renderSettings->LoadDisplayOptions( GetDisplayOptions() );
-
     SetElementVisibility( LAYER_RATSNEST, GetPcbNewSettings()->m_Display.m_ShowGlobalRatsnest );
 
     GetGalDisplayOptions().ReadWindowSettings( GetPcbNewSettings()->m_Window );

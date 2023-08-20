@@ -41,23 +41,27 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 	m_staticline1 = new wxStaticLine( pcbPage, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bMargins->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM, 5 );
 
-	wxBoxSizer* bSizer6;
-	bSizer6 = new wxBoxSizer( wxVERTICAL );
+	wxGridBagSizer* gbSizer1;
+	gbSizer1 = new wxGridBagSizer( 2, 0 );
+	gbSizer1->SetFlexibleDirection( wxBOTH );
+	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	wxString m_ShowNetNamesOptionChoices[] = { _("Do not show"), _("Show on pads"), _("Show on tracks"), _("Show on pads and tracks") };
+	m_netNamesLabel = new wxStaticText( pcbPage, wxID_ANY, _("Net names:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_netNamesLabel->Wrap( -1 );
+	gbSizer1->Add( m_netNamesLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	wxString m_ShowNetNamesOptionChoices[] = { _("Do not show"), _("Show on pads"), _("Show on tracks"), _("Show on pads & tracks") };
 	int m_ShowNetNamesOptionNChoices = sizeof( m_ShowNetNamesOptionChoices ) / sizeof( wxString );
-	m_ShowNetNamesOption = new wxRadioBox( pcbPage, wxID_ANY, _("Net Names"), wxDefaultPosition, wxDefaultSize, m_ShowNetNamesOptionNChoices, m_ShowNetNamesOptionChoices, 1, wxRA_SPECIFY_COLS );
+	m_ShowNetNamesOption = new wxChoice( pcbPage, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_ShowNetNamesOptionNChoices, m_ShowNetNamesOptionChoices, 0 );
 	m_ShowNetNamesOption->SetSelection( 0 );
-	m_ShowNetNamesOption->SetToolTip( _("Show or hide net names on pads and/or tracks.") );
-
-	bSizer6->Add( m_ShowNetNamesOption, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	gbSizer1->Add( m_ShowNetNamesOption, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_OptDisplayPadNumber = new wxCheckBox( pcbPage, wxID_ANY, _("Show pad numbers"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_OptDisplayPadNumber->SetValue(true);
-	bSizer6->Add( m_OptDisplayPadNumber, 0, wxALL, 6 );
+	gbSizer1->Add( m_OptDisplayPadNumber, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxALL, 5 );
 
 
-	bMargins->Add( bSizer6, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bMargins->Add( gbSizer1, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	bMargins->Add( 0, 10, 0, wxEXPAND, 5 );
@@ -69,22 +73,46 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 	m_staticline2 = new wxStaticLine( pcbPage, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bMargins->Add( m_staticline2, 0, wxEXPAND|wxBOTTOM, 5 );
 
-	wxBoxSizer* bSizer7;
-	bSizer7 = new wxBoxSizer( wxVERTICAL );
+	wxGridBagSizer* gbSizer2;
+	gbSizer2 = new wxGridBagSizer( 2, 0 );
+	gbSizer2->SetFlexibleDirection( wxBOTH );
+	gbSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	wxString m_OptDisplayTracksClearanceChoices[] = { _("Do not show"), _("Show when routing"), _("Show when routing w/ via clearance at end"), _("Show when routing and editing"), _("Show always") };
+	m_trackClearancesLabel = new wxStaticText( pcbPage, wxID_ANY, _("Tracks:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_trackClearancesLabel->Wrap( -1 );
+	gbSizer2->Add( m_trackClearancesLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	wxString m_OptDisplayTracksClearanceChoices[] = { _("Do not show clearances"), _("Show when routing"), _("Show when routing w/ via clearance at end"), _("Show when routing and editing"), _("Show always") };
 	int m_OptDisplayTracksClearanceNChoices = sizeof( m_OptDisplayTracksClearanceChoices ) / sizeof( wxString );
-	m_OptDisplayTracksClearance = new wxRadioBox( pcbPage, ID_SHOW_CLEARANCE, _("Track && Via Clearances"), wxDefaultPosition, wxDefaultSize, m_OptDisplayTracksClearanceNChoices, m_OptDisplayTracksClearanceChoices, 1, wxRA_SPECIFY_COLS );
-	m_OptDisplayTracksClearance->SetSelection( 3 );
-	m_OptDisplayTracksClearance->SetToolTip( _("Show clearance outlines around tracks, and optionally the via clearance around the end of the track while routing.") );
-
-	bSizer7->Add( m_OptDisplayTracksClearance, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_OptDisplayTracksClearance = new wxChoice( pcbPage, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_OptDisplayTracksClearanceNChoices, m_OptDisplayTracksClearanceChoices, 0 );
+	m_OptDisplayTracksClearance->SetSelection( 0 );
+	gbSizer2->Add( m_OptDisplayTracksClearance, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_OptDisplayPadClearence = new wxCheckBox( pcbPage, wxID_ANY, _("Show pad clearance"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer7->Add( m_OptDisplayPadClearence, 0, wxALL, 6 );
+	gbSizer2->Add( m_OptDisplayPadClearence, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxALL, 5 );
 
 
-	bMargins->Add( bSizer7, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bMargins->Add( gbSizer2, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	bMargins->Add( 0, 10, 0, wxEXPAND, 5 );
+
+	m_staticText4 = new wxStaticText( pcbPage, wxID_ANY, _("Selection && Highlighting"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText4->Wrap( -1 );
+	bMargins->Add( m_staticText4, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
+
+	m_staticline4 = new wxStaticLine( pcbPage, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bMargins->Add( m_staticline4, 0, wxEXPAND|wxBOTTOM, 5 );
+
+	wxBoxSizer* bSizer9;
+	bSizer9 = new wxBoxSizer( wxVERTICAL );
+
+	m_checkForceShowFieldsWhenFPSelected = new wxCheckBox( pcbPage, wxID_ANY, _("Show all fields when parent footprint is selected"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkForceShowFieldsWhenFPSelected->SetValue(true);
+	bSizer9->Add( m_checkForceShowFieldsWhenFPSelected, 0, wxALL, 5 );
+
+
+	bMargins->Add( bSizer9, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
 	bMargins->Add( 0, 10, 0, wxEXPAND, 5 );
@@ -103,7 +131,7 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 	m_checkCrossProbeOnSelection->SetValue(true);
 	m_checkCrossProbeOnSelection->SetToolTip( _("Highlight footprints corresponding to selected symbols") );
 
-	bSizer8->Add( m_checkCrossProbeOnSelection, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizer8->Add( m_checkCrossProbeOnSelection, 0, wxALL, 5 );
 
 	m_checkCrossProbeCenter = new wxCheckBox( pcbPage, wxID_ANY, _("Center view on cross-probed items"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkCrossProbeCenter->SetValue(true);
@@ -127,7 +155,7 @@ PANEL_DISPLAY_OPTIONS_BASE::PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWind
 	bSizer8->Add( m_live3Drefresh, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
-	bMargins->Add( bSizer8, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bMargins->Add( bSizer8, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
 	pcbOptionsSizer->Add( bMargins, 1, wxEXPAND, 5 );

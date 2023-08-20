@@ -55,6 +55,7 @@ void PANEL_DISPLAY_OPTIONS::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
     m_OptDisplayPadClearence->SetValue( aCfg->m_Display.m_PadClearance );
     m_OptDisplayPadNumber->SetValue( aCfg->m_ViewersDisplay.m_DisplayPadNumbers );
     m_ShowNetNamesOption->SetSelection( aCfg->m_Display.m_NetNames );
+    m_checkForceShowFieldsWhenFPSelected->SetValue( aCfg->m_Display.m_ForceShowFieldsWhenFPSelected );
     m_live3Drefresh->SetValue( aCfg->m_Display.m_Live3DRefresh );
     m_checkCrossProbeOnSelection->SetValue( aCfg->m_CrossProbing.on_selection );
     m_checkCrossProbeCenter->SetValue( aCfg->m_CrossProbing.center_on_items );
@@ -96,6 +97,7 @@ bool PANEL_DISPLAY_OPTIONS::TransferDataFromWindow()
         cfg->m_Display.m_PadClearance = m_OptDisplayPadClearence->GetValue();
         cfg->m_ViewersDisplay.m_DisplayPadNumbers = m_OptDisplayPadNumber->GetValue();
         cfg->m_Display.m_NetNames = m_ShowNetNamesOption->GetSelection();
+        cfg->m_Display.m_ForceShowFieldsWhenFPSelected = m_checkForceShowFieldsWhenFPSelected->GetValue();
         cfg->m_Display.m_Live3DRefresh = m_live3Drefresh->GetValue();
         cfg->m_CrossProbing.on_selection = m_checkCrossProbeOnSelection->GetValue();
         cfg->m_CrossProbing.center_on_items = m_checkCrossProbeCenter->GetValue();

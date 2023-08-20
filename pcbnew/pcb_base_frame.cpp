@@ -989,11 +989,13 @@ void PCB_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 {
     EDA_DRAW_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
-    RENDER_SETTINGS*     settings = GetCanvas()->GetView()->GetPainter()->GetSettings();
-    PCB_RENDER_SETTINGS* renderSettings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( settings );
+    KIGFX::VIEW*         view = GetCanvas()->GetView();
+    KIGFX::PCB_PAINTER*  painter = static_cast<KIGFX::PCB_PAINTER*>( view->GetPainter() );
+    PCB_RENDER_SETTINGS* settings = painter->GetSettings();
 
-    renderSettings->LoadColors( GetColorSettings( true ) );
-    renderSettings->LoadDisplayOptions( GetDisplayOptions() );
+    settings->LoadColors( GetColorSettings( true ) );
+    settings->LoadDisplayOptions( GetDisplayOptions() );
+    settings->m_ForceShowFieldsWhenFPSelected = GetPcbNewSettings()->m_Display.m_ForceShowFieldsWhenFPSelected;
 
     // Note: KIGFX::REPAINT isn't enough for things that go from invisible to visible as
     // they won't be found in the view layer's itemset for re-painting.
@@ -1016,7 +1018,7 @@ void PCB_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
                 return 0;
             } );
 
-    GetCanvas()->GetView()->UpdateAllItems( KIGFX::COLOR );
+    view->UpdateAllItems( KIGFX::COLOR );
 
     RecreateToolbars();
 
@@ -1076,6 +1078,7 @@ void PCB_BASE_FRAME::ActivateGalCanvas()
 
     settings->LoadDisplayOptions( displ_opts );
     settings->LoadColors( GetColorSettings() );
+    settings->m_ForceShowFieldsWhenFPSelected = GetPcbNewSettings()->m_Display.m_ForceShowFieldsWhenFPSelected;
 
     view->RecacheAllItems();
     canvas->SetEventDispatcher( m_toolDispatcher );
