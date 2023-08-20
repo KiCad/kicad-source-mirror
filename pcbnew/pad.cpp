@@ -805,7 +805,7 @@ int PAD::GetLocalClearanceOverrides( wxString* aSource ) const
         return GetLocalClearance( aSource );
 
     // A footprint can have a specific clearance value
-    if( GetParent() && GetParentFootprint()->GetLocalClearance() )
+    if( GetParentFootprint() && GetParentFootprint()->GetLocalClearance() )
         return GetParentFootprint()->GetLocalClearance( aSource );
 
     return 0;
