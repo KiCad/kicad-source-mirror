@@ -132,6 +132,8 @@ public:
 
     double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 
+    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+
     EDA_ITEM* Clone() const override;
 
 protected:

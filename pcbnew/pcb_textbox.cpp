@@ -248,6 +248,16 @@ double PCB_TEXTBOX::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 }
 
 
+void PCB_TEXTBOX::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    aLayers[0] = GetLayer();
+    aCount = 1;
+
+    if( IsLocked() )
+        aLayers[ aCount++ ] = LAYER_LOCKED_ITEM_SHADOW;
+}
+
+
 wxString PCB_TEXTBOX::GetShownText( bool aAllowExtraText, int aDepth ) const
 {
     BOARD* board = dynamic_cast<BOARD*>( GetParent() );

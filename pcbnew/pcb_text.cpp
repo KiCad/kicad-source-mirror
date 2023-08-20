@@ -152,6 +152,9 @@ void PCB_TEXT::ViewGetLayers( int aLayers[], int& aCount ) const
         aLayers[0] = LAYER_HIDDEN_TEXT;
 
     aCount = 1;
+
+    if( IsLocked() )
+        aLayers[ aCount++ ] = LAYER_LOCKED_ITEM_SHADOW;
 }
 
 
@@ -383,7 +386,7 @@ wxString PCB_TEXT::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
         return wxString::Format( _( "Footprint Text '%s' of %s" ),
                                  KIUI::EllipsizeMenuText( GetText() ), parentFP->GetReference() );
     }
-    
+
     return wxString::Format( _( "PCB Text '%s' on %s" ),
                              KIUI::EllipsizeMenuText( GetText() ),
                              GetLayerName() );

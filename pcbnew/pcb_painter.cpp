@@ -192,6 +192,11 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
     int                         netCode = -1;
     int                         originalLayer = aLayer;
 
+    // Some graphic objects are BOARD_CONNECTED_ITEM, but they are seen here as
+    // actually board connected objects only if on a copper layer
+    if( conItem && !conItem->IsOnCopperLayer() )
+        conItem = nullptr;
+
     // Marker shadows
     if( aLayer == LAYER_MARKER_SHADOWS )
         return m_backgroundColor.WithAlpha( 0.6 );
@@ -2126,8 +2131,16 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
         std::vector<VECTOR2I> pts = aTextBox->GetCorners();
         int line_thickness = std::max( thickness*3, pcbIUScale.mmToIU( 0.2 ) );
 
+        std::deque<VECTOR2D> dpts;
+
         for( size_t ii = 0; ii < pts.size(); ++ii )
-            m_gal->DrawSegment( pts[ ii ], pts[ (ii + 1) % pts.size() ], line_thickness );
+            dpts.push_back( VECTOR2D( pts[ii] ) );
+
+        dpts.push_back( VECTOR2D( pts[0] ) );
+
+        m_gal->SetIsStroke( true );
+        m_gal->SetLineWidth( line_thickness );
+        m_gal->DrawPolygon( dpts );
     }
 
     m_gal->SetFillColor( color );
@@ -2176,10 +2189,18 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
 
     if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
     {
+        // For now, the textbox is a filled shape.
+        // so the text drawn on LAYER_LOCKED_ITEM_SHADOW with a thick width is disabled
+        // If enabled, the thick text position must be offsetted to be exactly on the
+        // initial text, which is not easy, depending on its rotation and justification.
+        #if 0
         const COLOR4D sh_color = m_pcbSettings.GetColor( aTextBox, aLayer );
         m_gal->SetFillColor( sh_color );
         m_gal->SetStrokeColor( sh_color );
         attrs.m_StrokeWidth += m_lockedShadowMargin;
+        #else
+        return;
+        #endif
     }
 
     std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
