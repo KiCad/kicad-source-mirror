@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -39,7 +39,7 @@
 #include <progress_reporter.h>
 #include <list>
 #include <locale_io.h>
-#include <wx/log.h>
+#include <confirm.h>
 #include <string_utils.h>
 #include "lib_logger.h"
 
@@ -156,8 +156,10 @@ SYMBOL_LIB_TABLE_ROW* SYMBOL_LIBRARY_MANAGER::GetLibrary( const wxString& aLibra
     }
     catch( const IO_ERROR& e )
     {
-        wxLogMessage( _( "Library '%s' not found in the Symbol Library Table." ) + e.What(),
-                      aLibrary );
+        wxString msg;
+
+        msg.Printf( _( "Library '%s' not found in the Symbol Library Table." ),  aLibrary );
+        DisplayErrorMessage( &m_frame, msg, e.What() );
     }
 
     return row;
@@ -223,7 +225,8 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
                     std::shared_ptr< LIB_SYMBOL > oldParent = symbol->GetParent().lock();
 
                     wxCHECK_MSG( oldParent, false,
-                                 wxString::Format( wxT( "Derived symbol '%s' found with undefined parent." ),
+                                 wxString::Format( wxT( "Derived symbol '%s' found with "
+                                                        "undefined parent." ),
                                                    symbol->GetName() ) );
 
                     LIB_SYMBOL* libParent = pi->LoadSymbol( aLibrary, oldParent->GetName(),
@@ -438,8 +441,10 @@ LIB_SYMBOL* SYMBOL_LIBRARY_MANAGER::GetBufferedSymbol( const wxString& aAlias,
         }
         catch( const IO_ERROR& e )
         {
-            wxLogMessage( _( "Error loading symbol %s from library '%s'. (%s)" ),
-                          aAlias, aLibrary, e.What() );
+            wxString msg;
+
+            msg.Printf( _( "Error loading symbol %s from library '%s'." ), aAlias, aLibrary );
+            DisplayErrorMessage( &m_frame, msg, e.What() );
             bufferedSymbol = nullptr;
         }
     }
@@ -625,9 +630,10 @@ LIB_SYMBOL* SYMBOL_LIBRARY_MANAGER::GetAlias( const wxString& aAlias,
     }
     catch( const IO_ERROR& e )
     {
-        wxLogMessage( _( "Cannot load symbol '%s' from library '%s'." ) + e.What(),
-                      aAlias,
-                      aLibrary );
+        wxString msg;
+
+        msg.Printf( _( "Cannot load symbol '%s' from library '%s'." ), aAlias, aLibrary );
+        DisplayErrorMessage( &m_frame, msg, e.What() );
     }
 
     return alias;
@@ -687,12 +693,13 @@ wxString SYMBOL_LIBRARY_MANAGER::GetUniqueLibraryName() const
 }
 
 
-void SYMBOL_LIBRARY_MANAGER::GetRootSymbolNames( const wxString& aLibraryName,
-                                                 wxArrayString& aRootSymbolNames )
+void SYMBOL_LIBRARY_MANAGER::GetSymbolNames( const wxString& aLibraryName,
+                                             wxArrayString& aSymbolNames,
+                                             SYMBOL_NAME_FILTER aFilter )
 {
     LIB_BUFFER& libBuf = getLibraryBuffer( aLibraryName );
 
-    libBuf.GetRootSymbolNames( aRootSymbolNames );
+    libBuf.GetSymbolNames( aSymbolNames, aFilter );
 }
 
 
@@ -778,7 +785,10 @@ std::set<LIB_SYMBOL*> SYMBOL_LIBRARY_MANAGER::getOriginalSymbols( const wxString
     }
     catch( const IO_ERROR& e )
     {
-        wxLogMessage( _( "Cannot enumerate library '%s'." ) + e.What(), aLibrary );
+        wxString msg;
+
+        msg.Printf( _( "Cannot enumerate library '%s'." ), aLibrary );
+        DisplayErrorMessage( &m_frame, msg, e.What() );
     }
 
     return symbols;
@@ -972,8 +982,8 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::DeleteBuffer( std::shared_ptr<SYMBOL_BU
     bool retv = true;
 
     // Remove all derived symbols to prevent broken inheritance.
-    if( aSymbolBuf->GetSymbol()->IsRoot() && HasDerivedSymbols( aSymbolBuf->GetSymbol()->GetName() )
-      && removeChildSymbols( aSymbolBuf ) == 0 )
+    if( HasDerivedSymbols( aSymbolBuf->GetSymbol()->GetName() )
+      && ( removeChildSymbols( aSymbolBuf ) == 0 ) )
     {
         retv = false;
     }
@@ -1294,14 +1304,16 @@ bool SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::HasDerivedSymbols( const wxString& aPar
 }
 
 
-void SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::GetRootSymbolNames( wxArrayString& aRootSymbolNames )
+void SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::GetSymbolNames( wxArrayString& aSymbolNames,
+                                                         SYMBOL_NAME_FILTER aFilter )
 {
     for( auto& entry : m_symbols )
     {
-        if( entry->GetSymbol()->IsAlias() )
+        if( ( entry->GetSymbol()->IsAlias() && ( aFilter == SYMBOL_NAME_FILTER::ROOT_ONLY ) )
+          || ( entry->GetSymbol()->IsRoot() && ( aFilter == SYMBOL_NAME_FILTER::DERIVED_ONLY ) ) )
             continue;
 
-        aRootSymbolNames.Add( UnescapeString( entry->GetSymbol()->GetName() ) );
+        aSymbolNames.Add( UnescapeString( entry->GetSymbol()->GetName() ) );
     }
 }
 
@@ -1329,27 +1341,33 @@ size_t SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::GetDerivedSymbolNames( const wxString
 }
 
 
-int SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::removeChildSymbols( std::shared_ptr<SYMBOL_BUFFER> aSymbolBuf )
+int SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::removeChildSymbols( std::shared_ptr<SYMBOL_BUFFER>& aSymbolBuf )
 {
-    wxCHECK( aSymbolBuf && aSymbolBuf->GetSymbol()->IsRoot(), 0 );
+    wxCHECK( aSymbolBuf, 0 );
 
     int cnt = 0;
     std::deque< std::shared_ptr<SYMBOL_BUFFER> >::iterator it = m_symbols.begin();
 
     while( it != m_symbols.end() )
     {
+        LIB_SYMBOL_SPTR parent = (*it)->GetSymbol()->GetParent().lock();
 
-        if( (*it)->GetSymbol()->IsRoot() )
+        if( !parent )
         {
             ++it;
         }
         else
         {
-            LIB_SYMBOL_SPTR parent = (*it)->GetSymbol()->GetParent().lock();
+            if( HasDerivedSymbols( parent->GetName() ) )
+            {
+                std::shared_ptr<SYMBOL_BUFFER> symbolBuf = GetBuffer( parent->GetName() );
 
-            wxCHECK2( parent, ++it; continue );
+                wxCHECK2( symbolBuf, ++it; continue );
 
-            if( parent->GetName() == aSymbolBuf->GetSymbol()->GetName() )
+                cnt += removeChildSymbols( symbolBuf );
+                it = m_symbols.begin();
+            }
+            else if( parent->GetName() == aSymbolBuf->GetSymbol()->GetName() )
             {
                 wxCHECK2( parent == aSymbolBuf->GetSymbol()->SharedPtr(), ++it; continue );
 

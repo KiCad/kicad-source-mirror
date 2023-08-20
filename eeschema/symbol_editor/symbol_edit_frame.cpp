@@ -808,28 +808,27 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
     }
     else if( IsSymbolAlias() )
     {
-        std::shared_ptr<LIB_SYMBOL> parent = m_symbol->GetParent().lock();
+        std::shared_ptr<LIB_SYMBOL> rootSymbol = m_symbol->GetRootSymbol().lock();
 
         // Don't assume the parent symbol shared pointer is still valid.
-        wxCHECK( parent, /* void */ );
+        wxCHECK( rootSymbol, /* void */ );
 
-        wxString parentSymbolName = parent->GetName();
+        wxString rootSymbolName = rootSymbol->GetName();
         int      unit = GetUnit();
         int      convert = GetConvert();
         wxString msg;
         wxString link;
 
-        msg.Printf( _( "Symbol %s is derived from %s.  Symbol graphics will not be editable." ),
-                    UnescapeString( symbolName ),
-                    UnescapeString( parentSymbolName ) );
+        msg.Printf( _( "Symbol %s is a derived symbol.  Symbol graphics will not be editable." ),
+                    UnescapeString( symbolName ) );
 
-        link.Printf( _( "Open %s" ), UnescapeString( parentSymbolName ) );
+        link.Printf( _( "Open %s" ), UnescapeString( rootSymbolName ) );
 
         wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, link, wxEmptyString );
         button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
                 [=]( wxHyperlinkEvent& aEvent )
                 {
-                    LoadSymbolFromCurrentLib( parentSymbolName, unit, convert );
+                    LoadSymbolFromCurrentLib( rootSymbolName, unit, convert );
                 } ) );
 
         infobar->RemoveAllButtons();

@@ -329,11 +329,11 @@ void SYMBOL_EDIT_FRAME::SaveAll()
 }
 
 
-void SYMBOL_EDIT_FRAME::CreateNewSymbol( const wxString& inheritFromSymbolName )
+void SYMBOL_EDIT_FRAME::CreateNewSymbol( const wxString& aInheritFrom )
 {
     m_toolManager->RunAction( ACTIONS::cancelInteractive );
 
-    wxArrayString rootSymbols;
+    wxArrayString symbolNames;
     wxString lib = getTargetLib();
 
     if( !m_libMgr->LibraryExists( lib ) )
@@ -344,35 +344,32 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol( const wxString& inheritFromSymbolName )
             return;
     }
 
-    m_libMgr->GetRootSymbolNames( lib, rootSymbols );
+    m_libMgr->GetSymbolNames( lib, symbolNames );
 
-    rootSymbols.Sort();
+    symbolNames.Sort();
 
     wxString _inheritSymbolName;
     wxString _infoMessage;
 
     // if the symbol being inherited from isn't a root symbol, find its root symbol
     // and use that symbol instead
-    if( !inheritFromSymbolName.IsEmpty() )
+    if( !aInheritFrom.IsEmpty() )
     {
-        LIB_SYMBOL* inheritFromSymbol = m_libMgr->GetBufferedSymbol( inheritFromSymbolName, lib );
+        LIB_SYMBOL* inheritFromSymbol = m_libMgr->GetBufferedSymbol( aInheritFrom, lib );
 
-        if( inheritFromSymbol && !inheritFromSymbol->IsRoot() )
+        if( inheritFromSymbol )
         {
-            std::shared_ptr<LIB_SYMBOL> parent = inheritFromSymbol->GetParent().lock();
-            wxString rootSymbolName = parent->GetName();
-            _inheritSymbolName = rootSymbolName;
-            _infoMessage = wxString::Format( _( "Deriving from '%s', the root symbol of '%s'." ),
-                                            _inheritSymbolName,
-                                            inheritFromSymbolName);
+            _inheritSymbolName = aInheritFrom;
+            _infoMessage = wxString::Format( _( "Deriving from symbol '%s'." ),
+                                             _inheritSymbolName );
         }
         else
         {
-            _inheritSymbolName = inheritFromSymbolName;
+            _inheritSymbolName = aInheritFrom;
         }
     }
 
-    DIALOG_LIB_NEW_SYMBOL dlg( this, _infoMessage, &rootSymbols, _inheritSymbolName );
+    DIALOG_LIB_NEW_SYMBOL dlg( this, _infoMessage, &symbolNames, _inheritSymbolName );
     dlg.SetMinSize( dlg.GetSize() );
 
     if( dlg.ShowModal() == wxID_CANCEL )
@@ -1006,6 +1003,7 @@ void SYMBOL_EDIT_FRAME::LoadSymbol( const wxString& aAlias, const wxString& aLib
         DisplayError( this, wxString::Format( _( "Symbol %s not found in library '%s'." ),
                                               aAlias,
                                               aLibrary ) );
+        m_treePane->GetLibTree()->RefreshLibTree();
         return;
     }
 

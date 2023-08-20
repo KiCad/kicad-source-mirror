@@ -236,6 +236,22 @@ const LIB_SYMBOL& LIB_SYMBOL::operator=( const LIB_SYMBOL& aSymbol )
 }
 
 
+unsigned LIB_SYMBOL::GetInheritanceDepth() const
+{
+    unsigned depth = 0;
+
+    LIB_SYMBOL_SPTR parent = GetParent().lock();
+
+    while( parent )
+    {
+        depth += 1;
+        parent = parent->GetParent().lock();
+    }
+
+    return depth;
+}
+
+
 #define REPORT( msg ) { if( aReporter ) aReporter->Report( msg ); }
 #define ITEM_DESC( item ) ( item )->GetItemDescription( &unitsProvider )
 
@@ -515,6 +531,18 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
     }
 
     return retv;
+}
+
+
+LIB_SYMBOL_REF LIB_SYMBOL::GetRootSymbol() const
+{
+    const LIB_SYMBOL_SPTR sp = m_parent.lock();
+
+    // Recurse until the parent symbol is empty.
+    if( sp )
+        return sp->GetRootSymbol();
+
+    return m_me;
 }
 
 

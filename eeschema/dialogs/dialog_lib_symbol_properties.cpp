@@ -197,14 +197,17 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     // Populate the list of root parts for inherited objects.
     if( m_libEntry->IsAlias() )
     {
-        wxArrayString rootSymbolNames;
+        wxArrayString symbolNames;
         wxString libName = m_Parent->GetCurLib();
 
         // Someone forgot to set the current library in the editor frame window.
         wxCHECK( !libName.empty(), false );
 
-        m_Parent->GetLibManager().GetRootSymbolNames( libName, rootSymbolNames );
-        m_inheritanceSelectCombo->Append( rootSymbolNames );
+        m_Parent->GetLibManager().GetSymbolNames( libName, symbolNames );
+
+        // Do allow an inherited symbol to be derived from itself.
+        symbolNames.Remove( m_libEntry->GetName() );
+        m_inheritanceSelectCombo->Append( symbolNames );
 
         LIB_SYMBOL_SPTR rootSymbol = m_libEntry->GetParent().lock();
 
@@ -370,9 +373,6 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
         // Verify that the requested parent exists
         wxCHECK( newParent, false );
-
-        // Verify that the new parent is not an alias.
-        wxCHECK( !newParent->IsAlias(), false );
 
         m_libEntry->SetParent( newParent );
     }

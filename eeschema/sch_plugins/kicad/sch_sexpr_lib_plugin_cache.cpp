@@ -35,6 +35,39 @@
 #include <trace_helpers.h>
 
 
+/**
+ * Symbol library file sorting algorithm.
+ *
+ * The sort order of symbol library files is a twofold process based on the inheritance
+ * depth of a given symbol.  The following criteria is used to sort the symbols in the
+ * library file:
+ *
+ * 1. The inheritance depth from 0 to N.
+ * 2. The alphabetical order using our #ValueStringCompare natural sorting.
+ *
+ * @note It is imperative that symbols with an inheritance depth of 0 are stored in the
+ *       file before symbols with an inheritance depth of 1 and so on and so forth.  This
+ *       is necessary because the symbol library file parser expects parent symbols to be
+ *       defined before child symbols to ensure they can be parented on load.
+ *
+ * @param aLhs is the left hand side to compare.
+ * @parem aRhs is the right hand side to compare.
+ * @return true if @a aLhs is less than @a aRhs otherwise false.
+ */
+struct LibSymbolFileSort
+{
+    bool operator() ( const LIB_SYMBOL* aLhs, const LIB_SYMBOL* aRhs ) const
+    {
+        wxCHECK( aLhs && aRhs, false );
+
+        if( aLhs->GetInheritanceDepth() < aRhs->GetInheritanceDepth() )
+            return true;
+
+        return ( ValueStringCompare( aLhs->GetName(), aRhs->GetName() ) < 0 );
+    }
+};
+
+
 SCH_SEXPR_PLUGIN_CACHE::SCH_SEXPR_PLUGIN_CACHE( const wxString& aFullPathAndFileName ) :
     SCH_LIB_PLUGIN_CACHE( aFullPathAndFileName )
 {
@@ -95,28 +128,13 @@ void SCH_SEXPR_PLUGIN_CACHE::Save( const std::optional<bool>& aOpt )
     formatter->Print( 0, "(kicad_symbol_lib (version %d) (generator kicad_symbol_editor)\n",
                       SEXPR_SYMBOL_LIB_FILE_VERSION );
 
+    std::set<LIB_SYMBOL*, LibSymbolFileSort> orderedSymbols;
+
     for( const std::pair<const wxString, LIB_SYMBOL*>& parent : m_symbols )
-    {
-        // Save the root symbol first so alias can inherit from them.
-        if( parent.second->IsRoot() )
-        {
-            SaveSymbol( parent.second, *formatter.get(), 1 );
+        orderedSymbols.emplace( parent.second );
 
-            // Save all of the aliases associated with the current root symbol.
-            for( const std::pair<const wxString, LIB_SYMBOL*>& alias : m_symbols )
-            {
-                if( !alias.second->IsAlias() )
-                    continue;
-
-                std::shared_ptr<LIB_SYMBOL> aliasParent = alias.second->GetParent().lock();
-
-                if( aliasParent.get() != parent.second )
-                    continue;
-
-                SaveSymbol( alias.second, *formatter.get(), 1 );
-            }
-        }
-    }
+    for( LIB_SYMBOL* symbol : orderedSymbols )
+        SaveSymbol( symbol, *formatter.get(), 1 );
 
     formatter->Print( 0, ")\n" );
 

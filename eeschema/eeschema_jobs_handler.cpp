@@ -457,10 +457,10 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
 
     LIB_SYMBOL* symbolToPlot = symbol;
 
-    // if the symbol is an alias, then the draw items are stored in the parent
+    // if the symbol is an alias, then the draw items are stored in the root symbol
     if( symbol->IsAlias() )
     {
-        LIB_SYMBOL_SPTR parent = symbol->GetParent().lock();
+        LIB_SYMBOL_SPTR parent = symbol->GetRootSymbol().lock();
         symbolToPlot = parent.get();
     }
 

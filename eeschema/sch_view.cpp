@@ -159,7 +159,7 @@ void SCH_VIEW::DisplaySymbol( LIB_SYMBOL* aSymbol )
     // Draw the parent items if the symbol is inherited from another symbol.
     if( aSymbol->IsAlias() )
     {
-        std::shared_ptr< LIB_SYMBOL > parent = aSymbol->GetParent().lock();
+        std::shared_ptr< LIB_SYMBOL > parent = aSymbol->GetRootSymbol().lock();
 
         wxCHECK( parent, /* void */ );
 

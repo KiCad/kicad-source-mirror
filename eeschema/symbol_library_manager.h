@@ -2,7 +2,7 @@
  * This program source code file is symbol of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -44,6 +44,14 @@ class SCH_BASE_FRAME;
 class SYMBOL_LIB_TABLE;
 class SYMBOL_LIB_TABLE_ROW;
 class LIB_LOGGER;
+
+
+enum class SYMBOL_NAME_FILTER
+{
+    ALL,
+    ROOT_ONLY,
+    DERIVED_ONLY
+};
 
 
 /**
@@ -238,7 +246,8 @@ public:
      */
     wxString GetUniqueLibraryName() const;
 
-    void GetRootSymbolNames( const wxString& aLibName, wxArrayString& aRootSymbolNames );
+    void GetSymbolNames( const wxString& aLibName, wxArrayString& aSymbolNames,
+                         SYMBOL_NAME_FILTER aFilter = SYMBOL_NAME_FILTER::ALL );
 
     /**
      * Check if symbol \a aSymbolName in library \a aLibraryName is a root symbol that
@@ -370,8 +379,10 @@ protected:
          * Fetch a list of root symbols names from the library buffer.
          *
          * @param aRootSymbolNames is a reference to a list to populate with root symbol names.
+         * @param aFilter is the symbol derivation type.
          */
-        void GetRootSymbolNames( wxArrayString& aRootSymbolNames );
+        void GetSymbolNames( wxArrayString& aSymbolNames,
+                             SYMBOL_NAME_FILTER aFilter = SYMBOL_NAME_FILTER::ALL );
 
         /**
          * Fetch all of the symbols derived from a \a aSymbolName into \a aList.
@@ -390,7 +401,7 @@ protected:
          * @param aParent is the #SYMBOL_BUFFER to check against.
          * @return the count of #SYMBOL_BUFFER objects removed from the library.
          */
-        int removeChildSymbols( std::shared_ptr<SYMBOL_BUFFER> aSymbolBuf );
+        int removeChildSymbols( std::shared_ptr<SYMBOL_BUFFER>& aSymbolBuf );
 
         std::deque< std::shared_ptr<SYMBOL_BUFFER> > m_symbols;
 

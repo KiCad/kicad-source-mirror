@@ -133,8 +133,11 @@ public:
 
     /**
      * Create a new symbol in the selected library.
+     *
+     * @param aInheritFrom is the name of the symbol to derive the new symbol from or empty
+     *                     to create a new root symbol.
      */
-    void CreateNewSymbol( const wxString& inheritFromSymbolName = wxEmptyString );
+    void CreateNewSymbol( const wxString& aInheritFrom = wxEmptyString );
 
     void ImportSymbol();
     void ExportSymbol();

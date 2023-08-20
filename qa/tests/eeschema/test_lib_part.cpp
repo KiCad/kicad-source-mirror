@@ -594,15 +594,22 @@ BOOST_AUTO_TEST_CASE( Inheritance )
 {
     std::unique_ptr<LIB_SYMBOL> parent = std::make_unique<LIB_SYMBOL>( "parent" );
     BOOST_CHECK( parent->IsRoot() );
+    BOOST_CHECK_EQUAL( parent->GetInheritanceDepth(), 0 );
 
     std::unique_ptr<LIB_SYMBOL> ref = std::make_unique<LIB_SYMBOL>( *parent );
 
     std::unique_ptr<LIB_SYMBOL> child = std::make_unique<LIB_SYMBOL>( "child", parent.get() );
     BOOST_CHECK( child->IsAlias() );
+    BOOST_CHECK_EQUAL( child->GetInheritanceDepth(), 1 );
 
     std::unique_ptr<LIB_SYMBOL> grandChild = std::make_unique<LIB_SYMBOL>( "grandchild",
                                                                            child.get() );
     BOOST_CHECK( grandChild->IsAlias() );
+    BOOST_CHECK_EQUAL( grandChild->GetInheritanceDepth(), 2 );
+
+    BOOST_CHECK( parent->GetRootSymbol().lock().get() == parent.get() );
+    BOOST_CHECK( child->GetRootSymbol().lock().get() == parent.get() );
+    BOOST_CHECK( grandChild->GetRootSymbol().lock().get() == parent.get() );
 
     LIB_SYMBOL_SPTR parentRef = child->GetParent().lock();
     BOOST_CHECK( parentRef );
@@ -654,6 +661,39 @@ BOOST_AUTO_TEST_CASE( CopyConstructor )
 {
     std::shared_ptr<LIB_SYMBOL> copy = std::make_shared<LIB_SYMBOL>( m_part_no_data );
     BOOST_CHECK( m_part_no_data == *copy.get() );
+}
+
+
+/**
+ * Check the power and legacy power symbol tests.
+ */
+BOOST_AUTO_TEST_CASE( IsPowerTest )
+{
+    std::unique_ptr<LIB_SYMBOL> symbol = std::make_unique<LIB_SYMBOL>( "power" );
+    LIB_PIN* pin = new LIB_PIN( symbol.get() );
+    pin->SetNumber( "1" );
+    pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
+    pin->SetVisible( false );
+    symbol->AddDrawItem( pin );
+
+    BOOST_CHECK( !symbol->IsPower() );
+    BOOST_CHECK( symbol->IsNormal() );
+
+    symbol->SetPower();
+    BOOST_CHECK( symbol->IsPower() );
+    BOOST_CHECK( !symbol->IsNormal() );
+
+    // symbol->SetNormal();
+    // symbol->GetReferenceField().SetText( wxS( "#PWR" ) );
+    // BOOST_CHECK( symbol->IsPower() );
+
+    // Legacy power symbols are limited to a single pin.
+    // pin = new LIB_PIN( symbol.get() );
+    // pin->SetNumber( "2" );
+    // pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
+    // pin->SetVisible( false );
+    // symbol->AddDrawItem( pin );
+    // BOOST_CHECK( !symbol->IsPower() );
 }
 
 

@@ -127,6 +127,23 @@ public:
     LIB_SYMBOL_REF& GetParent() { return m_parent; }
     const LIB_SYMBOL_REF& GetParent() const { return m_parent; }
 
+    /**
+     * Get the number of parents for this symbol.
+     *
+     * @return the inhertance depth for this symbol.
+     */
+    unsigned GetInheritanceDepth() const;
+
+    /**
+     * Get the parent symbol that does not have another parent.
+     *
+     * Now that derived symbols can be derived from other derived symbols, this method provides
+     * way to get to the base symbol in the derivation change.
+     *
+     * @return the weak_ptr to the root symbol of this symbol.
+     */
+    LIB_SYMBOL_REF GetRootSymbol() const;
+
     void ClearCaches();
 
     virtual wxString GetClass() const override

@@ -99,4 +99,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20230221  // Modern power symbols (editable value = net)
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20230409  // Add exclude_from_sim markup
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20230620  // ki_description -> Description Field
-#define   SEXPR_SCHEMATIC_FILE_VERSION 20230808  // Move Sim.Enable field to exclude_from_sim attr
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20230808  // Move Sim.Enable field to exclude_from_sim attr
+#define   SEXPR_SCHEMATIC_FILE_VERSION 20230819  // Allow multiple library symbol inheritance depth.
