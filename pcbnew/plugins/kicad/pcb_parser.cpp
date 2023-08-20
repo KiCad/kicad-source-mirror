@@ -3226,7 +3226,9 @@ PCB_TEXTBOX* PCB_PARSER::parsePCB_TEXTBOX( BOARD_ITEM* aParent )
         switch( token )
         {
         case T_angle:
-            textbox->SetTextAngle( EDA_ANGLE( parseDouble( "text box angle" ), DEGREES_T ) );
+            // Set the angle of the text only, the coordinates of the box (a polygon) are
+            // already at the right position, and must not be rotated
+            textbox->EDA_TEXT::SetTextAngle( EDA_ANGLE( parseDouble( "text box angle" ), DEGREES_T ) );
             NeedRIGHT();
             break;
 

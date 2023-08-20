@@ -1845,8 +1845,8 @@ void PCB_PLUGIN::format( const PCB_TEXTBOX* aTextBox, int aNestLevel ) const
 {
     FOOTPRINT*  parentFP = aTextBox->GetParentFootprint();
 
-    m_out->Print( aNestLevel, "(%s_text_box%s %s\n",
-                  parentFP ? "fp" : "gr",
+    m_out->Print( aNestLevel, "(%s%s %s\n",
+                  parentFP ? "fp_text_box" : "gr_text_box",
                   aTextBox->IsLocked() ? " locked" : "",
                   m_out->Quotew( aTextBox->GetText() ).c_str() );
 
