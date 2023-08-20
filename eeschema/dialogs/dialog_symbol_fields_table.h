@@ -105,9 +105,11 @@ private:
     void                        ApplyBomFmtPreset( const wxString& aPresetName );
     void                        ApplyBomFmtPreset( const BOM_FMT_PRESET& aPreset );
 
+    // Schematic listener event handlers
     void OnSchItemsAdded( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem ) override;
     void OnSchItemsRemoved( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem ) override;
     void OnSchItemsChanged( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem ) override;
+    void OnSchSheetChanged( SCHEMATIC& aSch ) override;
 
 private:
     SCH_REFERENCE_LIST getSymbolReferences( SCH_SYMBOL* aSymbol );

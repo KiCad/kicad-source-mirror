@@ -2191,6 +2191,8 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     editTool->UpdateNetHighlighting( dummy );
 
     m_hierarchy->UpdateHierarchySelection();
+
+    m_schematic->OnSchSheetChanged();
 }
 
 

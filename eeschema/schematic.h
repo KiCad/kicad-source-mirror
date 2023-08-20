@@ -59,6 +59,9 @@ public:
     virtual void OnSchItemsAdded( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem ) {}
     virtual void OnSchItemsRemoved( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem ) {}
     virtual void OnSchItemsChanged( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem ) {}
+    // This is called when the user changes to a new sheet, not when a sheet is altered.
+    // Sheet alteration events will call OnSchItems*
+    virtual void OnSchSheetChanged( SCHEMATIC& aSch ) {}
 };
 
 /**
@@ -262,6 +265,19 @@ public:
     void OnItemsRemoved( std::vector<SCH_ITEM*>& aRemovedItems );
 
     /**
+      * Notify the schematic and its listeners that an item on the schematic has
+      * been modified in some way.
+      */
+    void OnItemsChanged( std::vector<SCH_ITEM*>& aItems );
+
+    /**
+      * Notify the schematic and its listeners that the current sheet has been changed.
+      * This is called when the user navigates to a different sheet, not when the sheet is
+      * altered.
+      */
+    void OnSchSheetChanged();
+
+    /**
      * Add a listener to the schematic to receive calls whenever something on the
      * schematic has been modified.  The schematic does not take ownership of the
      * listener object.  Make sure to call RemoveListener before deleting the
@@ -281,12 +297,6 @@ public:
      * Remove all listeners
      */
     void RemoveAllListeners();
-
-    /**
-      * Notify the schematic and its listeners that an item on the schematic has
-      * been modified in some way.
-      */
-    void OnItemsChanged( std::vector<SCH_ITEM*>& aItems );
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override {}

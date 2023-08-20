@@ -2113,6 +2113,15 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsChanged( SCHEMATIC&              aSch
 }
 
 
+void DIALOG_SYMBOL_FIELDS_TABLE::OnSchSheetChanged( SCHEMATIC& aSch )
+{
+    m_dataModel->SetPath( aSch.CurrentSheet() );
+
+    if( m_dataModel->GetScope() != FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE::SCOPE_ALL )
+        m_dataModel->RebuildRows();
+}
+
+
 SCH_REFERENCE_LIST DIALOG_SYMBOL_FIELDS_TABLE::getSymbolReferences( SCH_SYMBOL* aSymbol )
 {
     SCH_SHEET_LIST     allSheets = m_parent->Schematic().GetSheets();

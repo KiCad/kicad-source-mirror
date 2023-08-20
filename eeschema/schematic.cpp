@@ -691,6 +691,18 @@ void SCHEMATIC::OnItemsRemoved( std::vector<SCH_ITEM*>& aRemovedItems )
 }
 
 
+void SCHEMATIC::OnItemsChanged( std::vector<SCH_ITEM*>& aItems )
+{
+    InvokeListeners( &SCHEMATIC_LISTENER::OnSchItemsChanged, *this, aItems );
+}
+
+
+void SCHEMATIC::OnSchSheetChanged()
+{
+    InvokeListeners( &SCHEMATIC_LISTENER::OnSchSheetChanged, *this );
+}
+
+
 void SCHEMATIC::AddListener( SCHEMATIC_LISTENER* aListener )
 {
     if( !alg::contains( m_listeners, aListener ) )
@@ -713,12 +725,6 @@ void SCHEMATIC::RemoveListener( SCHEMATIC_LISTENER* aListener )
 void SCHEMATIC::RemoveAllListeners()
 {
     m_listeners.clear();
-}
-
-
-void SCHEMATIC::OnItemsChanged( std::vector<SCH_ITEM*>& aItems )
-{
-    InvokeListeners( &SCHEMATIC_LISTENER::OnSchItemsChanged, *this, aItems );
 }
 
 
