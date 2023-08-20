@@ -1221,18 +1221,20 @@ std::vector<SHAPE*> EDA_SHAPE::makeEffectiveShapes( bool aEdgeOnly, bool aLineCh
 
         for( int ii = 0; ii < GetPolyShape().OutlineCount(); ++ii )
         {
-            SHAPE_LINE_CHAIN l = GetPolyShape().COutline( ii );
-
-            if( aLineChainOnly )
-                l.SetClosed( false );
+            const SHAPE_LINE_CHAIN& l = GetPolyShape().COutline( ii );
 
             if( IsFilled() && !aEdgeOnly )
                 effectiveShapes.emplace_back( new SHAPE_SIMPLE( l ) );
 
             if( width > 0 || !IsFilled() || aEdgeOnly )
             {
-                for( int jj = 0; jj < l.SegmentCount(); jj++ )
-                    effectiveShapes.emplace_back( new SHAPE_SEGMENT( l.Segment( jj ), width ) );
+                int segCount = l.SegmentCount();
+
+                if( aLineChainOnly && l.IsClosed() )
+                    segCount--; // Treat closed chain as open
+
+                for( int jj = 0; jj < segCount; jj++ )
+                    effectiveShapes.emplace_back( new SHAPE_SEGMENT( l.CSegment( jj ), width ) );
             }
         }
     }
