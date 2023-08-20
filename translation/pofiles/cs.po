@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-13 14:56-0700\n"
-"PO-Revision-Date: 2023-07-18 08:04+0000\n"
+"PO-Revision-Date: 2023-08-21 05:12+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v7/cs/>\n"
 "Language: cs\n"
@@ -15929,7 +15929,7 @@ msgstr "Kreslit%u - "
 #: eeschema/sim/sim_plot_frame.cpp:613 eeschema/sim/sim_plot_frame.cpp:625
 #: eeschema/sim/sim_plot_frame.cpp:949
 msgid "Could not apply tuned value(s):"
-msgstr ""
+msgstr "Nelze použít laděné hodnotu(y):"
 
 #: eeschema/sim/sim_plot_frame.cpp:626 eeschema/sim/sim_plot_frame.cpp:938
 #, c-format
@@ -34481,9 +34481,8 @@ msgid "Export netlist used to update schematics"
 msgstr "Exportování netlistu používaný k aktualizaci schématu"
 
 #: pcbnew/pcb_edit_frame.cpp:309
-#, fuzzy
 msgid "Search"
-msgstr "Hledat text"
+msgstr "Hledat"
 
 #: pcbnew/pcb_edit_frame.cpp:405
 msgid "New PCB file is unsaved"
@@ -38778,9 +38777,8 @@ msgid "Show/hide the appearance manager"
 msgstr "Zobrazit/skrýt správce vzhledu"
 
 #: pcbnew/tools/pcb_actions.cpp:865
-#, fuzzy
 msgid "Show Properties Manager"
-msgstr "Vlastnosti listu"
+msgstr "Zobrazit správce vlastností"
 
 #: pcbnew/tools/pcb_actions.cpp:865
 #, fuzzy
