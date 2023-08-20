@@ -93,8 +93,7 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
         m_canvas( nullptr ),
         m_currentCamera( m_trackBallCamera ),
         m_trackBallCamera( 2 * RANGE_SCALE_3D ),
-        m_spaceMouse( nullptr ),
-        m_showAppearanceManager( true )
+        m_spaceMouse( nullptr )
 {
     wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME %s" ), aTitle );
 
@@ -170,7 +169,7 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
     if( cfg->m_AuiPanels.right_panel_width > 0 )
         SetAuiPaneSize( m_auimgr, layersManager, cfg->m_AuiPanels.right_panel_width, -1 );
 
-    layersManager.Show( m_showAppearanceManager );
+    layersManager.Show( cfg->m_AuiPanels.show_layer_manager );
 
     // Call Update() to fix all pane default sizes, especially the "InfoBar" pane before
     // hiding it.
@@ -267,24 +266,31 @@ void EDA_3D_VIEWER_FRAME::setupUIConditions()
                 return m_currentCamera.GetProjection() == PROJECTION_TYPE::ORTHO;
             };
 
-    RegisterUIUpdateHandler( ID_RENDER_CURRENT_VIEW,   ACTION_CONDITIONS().Check( raytracing ) );
+    auto appearances =
+            [this]( const SELECTION& aSel )
+            {
+                return m_boardAdapter.m_Cfg->m_AuiPanels.show_layer_manager;
+            };
 
-    mgr->SetConditions( EDA_3D_ACTIONS::showTHT,       ACTION_CONDITIONS().Check( showTH ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::showSMD,       ACTION_CONDITIONS().Check( showSMD ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::showVirtual,   ACTION_CONDITIONS().Check( showVirtual ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::showNotInPosFile,   ACTION_CONDITIONS().Check( show_NotInPosfile ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::showDNP,       ACTION_CONDITIONS().Check( show_DNP ) );
+    RegisterUIUpdateHandler( ID_RENDER_CURRENT_VIEW,       ACTION_CONDITIONS().Check( raytracing ) );
 
+    mgr->SetConditions( EDA_3D_ACTIONS::showTHT,           ACTION_CONDITIONS().Check( showTH ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::showSMD,           ACTION_CONDITIONS().Check( showSMD ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::showVirtual,       ACTION_CONDITIONS().Check( showVirtual ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::showNotInPosFile,  ACTION_CONDITIONS().Check( show_NotInPosfile ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::showDNP,           ACTION_CONDITIONS().Check( show_DNP ) );
 
-    mgr->SetConditions( EDA_3D_ACTIONS::showBBoxes,    ACTION_CONDITIONS().Check( showBBoxes ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::showAxis,      ACTION_CONDITIONS().Check( showAxes ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::showBBoxes,        ACTION_CONDITIONS().Check( showBBoxes ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::showAxis,          ACTION_CONDITIONS().Check( showAxes ) );
 
-    mgr->SetConditions( EDA_3D_ACTIONS::noGrid,        GridSizeCheck( GRID3D_TYPE::NONE ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::show10mmGrid,  GridSizeCheck( GRID3D_TYPE::GRID_10MM ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::show5mmGrid,   GridSizeCheck( GRID3D_TYPE::GRID_5MM ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::show2_5mmGrid, GridSizeCheck( GRID3D_TYPE::GRID_2P5MM ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::show1mmGrid,   GridSizeCheck( GRID3D_TYPE::GRID_1MM ) );
-    mgr->SetConditions( EDA_3D_ACTIONS::toggleOrtho,   ACTION_CONDITIONS().Check( ortho ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::noGrid,            GridSizeCheck( GRID3D_TYPE::NONE ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::show10mmGrid,      GridSizeCheck( GRID3D_TYPE::GRID_10MM ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::show5mmGrid,       GridSizeCheck( GRID3D_TYPE::GRID_5MM ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::show2_5mmGrid,     GridSizeCheck( GRID3D_TYPE::GRID_2P5MM ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::show1mmGrid,       GridSizeCheck( GRID3D_TYPE::GRID_1MM ) );
+    mgr->SetConditions( EDA_3D_ACTIONS::toggleOrtho,       ACTION_CONDITIONS().Check( ortho ) );
+
+    mgr->SetConditions( EDA_3D_ACTIONS::showLayersManager, ACTION_CONDITIONS().Check( appearances ) );
 
 #undef GridSizeCheck
 }
@@ -433,7 +439,7 @@ void EDA_3D_VIEWER_FRAME::OnCloseWindow( wxCloseEvent &event )
     // Do not show the layer manager during closing to avoid flicker
     // on some platforms (Windows) that generate useless redraw of items in
     // the Layer Manager
-    if( m_showAppearanceManager )
+    if( m_auimgr.GetPane( wxS( "LayersManager" ) ).IsShown() )
         m_auimgr.GetPane( wxS( "LayersManager" ) ).Show( false );
 
     if( m_canvas )
@@ -597,8 +603,6 @@ void EDA_3D_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE *aCfg )
 
         m_boardAdapter.InitSettings( nullptr, nullptr );
 
-        m_showAppearanceManager = cfg->m_AuiPanels.show_layer_manager;
-
         if( m_appearancePanel )
             m_appearancePanel->CommonSettingsChanged();
     }
@@ -620,7 +624,6 @@ void EDA_3D_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE *aCfg )
 
     if( cfg )
     {
-        cfg->m_AuiPanels.show_layer_manager   = m_showAppearanceManager;
         cfg->m_AuiPanels.right_panel_width    = m_appearancePanel->GetSize().x;
 
         cfg->m_Camera.animation_enabled       = m_canvas->GetAnimationEnabled();
@@ -659,11 +662,11 @@ void EDA_3D_VIEWER_FRAME::ToggleAppearanceManager()
     wxAuiPaneInfo&          layersManager = m_auimgr.GetPane( "LayersManager" );
 
     // show auxiliary Vertical layers and visibility manager toolbar
-    m_showAppearanceManager = !m_showAppearanceManager;
+    cfg->m_AuiPanels.show_layer_manager = !cfg->m_AuiPanels.show_layer_manager;
 
-    layersManager.Show( m_showAppearanceManager );
+    layersManager.Show( cfg->m_AuiPanels.show_layer_manager );
 
-    if( m_showAppearanceManager )
+    if( cfg->m_AuiPanels.show_layer_manager )
     {
         SetAuiPaneSize( m_auimgr, layersManager, cfg->m_AuiPanels.right_panel_width, -1 );
     }

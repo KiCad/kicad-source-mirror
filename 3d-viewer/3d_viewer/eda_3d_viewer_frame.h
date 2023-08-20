@@ -180,7 +180,6 @@ private:
     TRACK_BALL                     m_trackBallCamera;
 
     bool                           m_disable_ray_tracing;
-    bool                           m_showAppearanceManager;
 
     NL_3D_VIEWER_PLUGIN*           m_spaceMouse;
 
