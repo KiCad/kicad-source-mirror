@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2010-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2012-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -277,7 +277,16 @@ long long FP_LIB_TABLE::GenerateTimestamp( const wxString* aNickname )
 
     for( const wxString& nickname : GetLogicalLibs() )
     {
-        const FP_LIB_TABLE_ROW* row = FindRow( nickname, true );
+        const FP_LIB_TABLE_ROW* row = nullptr;
+
+        try
+        {
+            row = FindRow( nickname, true );
+        }
+        catch( ... )
+        {
+            // Do nothing if not found: just skip.
+        }
 
         wxCHECK2( row && row->plugin, continue );
 
@@ -318,7 +327,6 @@ const FP_LIB_TABLE_ROW* FP_LIB_TABLE::FindRow( const wxString& aNickname, bool a
     {
         wxString msg = wxString::Format( _( "fp-lib-table files contain no library named '%s'." ),
                                          aNickname );
-
         THROW_IO_ERROR( msg );
     }
 
