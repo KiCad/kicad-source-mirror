@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -27,6 +27,7 @@ class TEXT_CTRL_EVAL;
 #include <wx/textctrl.h>
 #include <wx/valtext.h>
 #include <wx/checkbox.h>
+#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -58,6 +59,7 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbRemoveUnspecified;
 		wxCheckBox* m_cbSubstModels;
 		wxCheckBox* m_cbOverwriteFile;
+		wxStaticLine* m_staticline1;
 		wxCheckBox* m_cbExportTracks;
 		wxCheckBox* m_cbExportZones;
 		wxStaticText* m_staticTextTolerance;

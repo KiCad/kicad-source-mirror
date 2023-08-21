@@ -275,6 +275,7 @@ DIALOG_EXPORT_STEP::~DIALOG_EXPORT_STEP()
 
     m_toleranceLastChoice = m_choiceTolerance->GetSelection();
     m_exportTracks = m_cbExportTracks->GetValue();
+    m_exportZones = m_cbExportZones->GetValue();
 }
 
 
@@ -342,6 +343,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     double tolerance;   // default value in mm
     m_toleranceLastChoice = m_choiceTolerance->GetSelection();
     m_exportTracks = m_cbExportTracks->GetValue();
+    m_exportZones = m_cbExportZones->GetValue();
 
     switch( m_choiceTolerance->GetSelection() )
     {

@@ -642,6 +642,10 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
             int cnt = 0;
             for( TopoDS_Shape& shape : aShapesList )
             {
+                if( cnt ==  0 )
+                    ReportMessage( wxString::Format( _( "Build holes for %s\n" ), aWhat ) );
+
+
                 cnt++;
 
                 if( cnt % 10 == 0 )
