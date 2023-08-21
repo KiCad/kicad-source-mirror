@@ -162,6 +162,11 @@ bool GRID_TRICKS::showEditor( int aRow, int aCol )
     {
         m_grid->ClearSelection();
 
+        m_sel_row_start = aRow;
+        m_sel_col_start = aCol;
+        m_sel_row_count = 1;
+        m_sel_col_count = 1;
+
         if( m_grid->GetSelectionMode() == wxGrid::wxGridSelectRows )
         {
             wxArrayInt rows = m_grid->GetSelectedRows();
