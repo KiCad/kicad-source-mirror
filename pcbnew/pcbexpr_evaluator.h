@@ -22,8 +22,8 @@
  */
 
 
-#ifndef __PCB_EXPR_EVALUATOR_H
-#define __PCB_EXPR_EVALUATOR_H
+#ifndef PCBEXPR_EVALUATOR_H
+#define PCBEXPR_EVALUATOR_H
 
 #include <unordered_map>
 
@@ -35,13 +35,13 @@
 class BOARD;
 class BOARD_ITEM;
 
-class PCB_EXPR_VAR_REF;
+class PCBEXPR_VAR_REF;
 
-class PCB_EXPR_UCODE final : public LIBEVAL::UCODE
+class PCBEXPR_UCODE final : public LIBEVAL::UCODE
 {
 public:
-    PCB_EXPR_UCODE() {};
-    virtual ~PCB_EXPR_UCODE() {};
+    PCBEXPR_UCODE() {};
+    virtual ~PCBEXPR_UCODE() {};
 
     virtual std::unique_ptr<LIBEVAL::VAR_REF> CreateVarRef( const wxString& aVar,
                                                             const wxString& aField ) override;
@@ -49,10 +49,10 @@ public:
 };
 
 
-class PCB_EXPR_CONTEXT : public LIBEVAL::CONTEXT
+class PCBEXPR_CONTEXT : public LIBEVAL::CONTEXT
 {
 public:
-    PCB_EXPR_CONTEXT( int aConstraint, PCB_LAYER_ID aLayer ) :
+    PCBEXPR_CONTEXT( int aConstraint, PCB_LAYER_ID aLayer ) :
             m_constraint( aConstraint ),
             m_layer( aLayer )
     {
@@ -79,16 +79,16 @@ private:
 };
 
 
-class PCB_EXPR_VAR_REF : public LIBEVAL::VAR_REF
+class PCBEXPR_VAR_REF : public LIBEVAL::VAR_REF
 {
 public:
-    PCB_EXPR_VAR_REF( int aItemIndex ) :
-        m_itemIndex( aItemIndex ),
-        m_type( LIBEVAL::VT_UNDEFINED ),
-        m_isEnum( false )
+    PCBEXPR_VAR_REF( int aItemIndex ) :
+            m_itemIndex( aItemIndex ),
+            m_type( LIBEVAL::VT_UNDEFINED ),
+            m_isEnum( false )
     {}
 
-    ~PCB_EXPR_VAR_REF() {};
+    ~PCBEXPR_VAR_REF() {};
 
     void SetIsEnum( bool s ) { m_isEnum = s; }
     bool IsEnum() const { return m_isEnum; }
@@ -114,11 +114,11 @@ private:
 
 
 // "Object code" version of a netclass reference (for performance).
-class PCB_EXPR_NETCLASS_REF : public PCB_EXPR_VAR_REF
+class PCBEXPR_NETCLASS_REF : public PCBEXPR_VAR_REF
 {
 public:
-    PCB_EXPR_NETCLASS_REF( int aItemIndex ) :
-        PCB_EXPR_VAR_REF( aItemIndex )
+    PCBEXPR_NETCLASS_REF( int aItemIndex ) :
+            PCBEXPR_VAR_REF( aItemIndex )
     {
         SetType( LIBEVAL::VT_STRING );
     }
@@ -128,11 +128,11 @@ public:
 
 
 // "Object code" version of a netname reference (for performance).
-class PCB_EXPR_NETNAME_REF : public PCB_EXPR_VAR_REF
+class PCBEXPR_NETNAME_REF : public PCBEXPR_VAR_REF
 {
 public:
-    PCB_EXPR_NETNAME_REF( int aItemIndex ) :
-        PCB_EXPR_VAR_REF( aItemIndex )
+    PCBEXPR_NETNAME_REF( int aItemIndex ) :
+            PCBEXPR_VAR_REF( aItemIndex )
     {
         SetType( LIBEVAL::VT_STRING );
     }
@@ -141,11 +141,11 @@ public:
 };
 
 
-class PCB_EXPR_TYPE_REF : public PCB_EXPR_VAR_REF
+class PCBEXPR_TYPE_REF : public PCBEXPR_VAR_REF
 {
 public:
-    PCB_EXPR_TYPE_REF( int aItemIndex ) :
-        PCB_EXPR_VAR_REF( aItemIndex )
+    PCBEXPR_TYPE_REF( int aItemIndex ) :
+            PCBEXPR_VAR_REF( aItemIndex )
     {
         SetType( LIBEVAL::VT_STRING );
     }
@@ -154,14 +154,14 @@ public:
 };
 
 
-class PCB_EXPR_BUILTIN_FUNCTIONS
+class PCBEXPR_BUILTIN_FUNCTIONS
 {
 public:
-    PCB_EXPR_BUILTIN_FUNCTIONS();
+    PCBEXPR_BUILTIN_FUNCTIONS();
 
-    static PCB_EXPR_BUILTIN_FUNCTIONS& Instance()
+    static PCBEXPR_BUILTIN_FUNCTIONS& Instance()
     {
-        static PCB_EXPR_BUILTIN_FUNCTIONS self;
+        static PCBEXPR_BUILTIN_FUNCTIONS self;
         return self;
     }
 
@@ -191,7 +191,7 @@ private:
 };
 
 
-class PCB_UNIT_RESOLVER : public LIBEVAL::UNIT_RESOLVER
+class PCBEXPR_UNIT_RESOLVER : public LIBEVAL::UNIT_RESOLVER
 {
 public:
     const std::vector<wxString>& GetSupportedUnits() const override;
@@ -202,7 +202,7 @@ public:
 };
 
 
-class PCB_UNITLESS_RESOLVER : public LIBEVAL::UNIT_RESOLVER
+class PCBEXPR_UNITLESS_RESOLVER : public LIBEVAL::UNIT_RESOLVER
 {
 public:
     const std::vector<wxString>& GetSupportedUnits() const override;
@@ -211,18 +211,18 @@ public:
 };
 
 
-class PCB_EXPR_COMPILER : public LIBEVAL::COMPILER
+class PCBEXPR_COMPILER : public LIBEVAL::COMPILER
 {
 public:
-    PCB_EXPR_COMPILER( LIBEVAL::UNIT_RESOLVER* aUnitResolver );
+    PCBEXPR_COMPILER( LIBEVAL::UNIT_RESOLVER* aUnitResolver );
 };
 
 
-class PCB_EXPR_EVALUATOR
+class PCBEXPR_EVALUATOR
 {
 public:
-    PCB_EXPR_EVALUATOR( LIBEVAL::UNIT_RESOLVER* aUnitResolver );
-    ~PCB_EXPR_EVALUATOR();
+    PCBEXPR_EVALUATOR( LIBEVAL::UNIT_RESOLVER* aUnitResolver );
+    ~PCBEXPR_EVALUATOR();
 
     bool Evaluate( const wxString& aExpr );
     int  Result() const { return m_result; }
@@ -238,8 +238,8 @@ public:
 private:
     int  m_result;
 
-    PCB_EXPR_COMPILER     m_compiler;
-    PCB_EXPR_UCODE        m_ucode;
+    PCBEXPR_COMPILER      m_compiler;
+    PCBEXPR_UCODE         m_ucode;
     LIBEVAL::ERROR_STATUS m_errorStatus;
 };
 

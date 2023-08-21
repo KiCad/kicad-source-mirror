@@ -25,7 +25,7 @@
 #include <board_item.h>
 #include <reporter.h>
 #include <drc/drc_rule_condition.h>
-#include <pcb_expr_evaluator.h>
+#include <pcbexpr_evaluator.h>
 
 
 DRC_RULE_CONDITION::DRC_RULE_CONDITION( const wxString& aExpression ) :
@@ -54,7 +54,7 @@ bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM
         return false;
     }
 
-    PCB_EXPR_CONTEXT ctx( aConstraint, aLayer );
+    PCBEXPR_CONTEXT ctx( aConstraint, aLayer );
 
     if( aReporter )
     {
@@ -88,7 +88,7 @@ bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM
 
 bool DRC_RULE_CONDITION::Compile( REPORTER* aReporter, int aSourceLine, int aSourceOffset )
 {
-    PCB_EXPR_COMPILER compiler( new PCB_UNIT_RESOLVER() );
+    PCBEXPR_COMPILER compiler( new PCBEXPR_UNIT_RESOLVER() );
 
     if( aReporter )
     {
@@ -107,9 +107,9 @@ bool DRC_RULE_CONDITION::Compile( REPORTER* aReporter, int aSourceLine, int aSou
                 } );
     }
 
-    m_ucode = std::make_unique<PCB_EXPR_UCODE>();
+    m_ucode = std::make_unique<PCBEXPR_UCODE>();
 
-    PCB_EXPR_CONTEXT preflightContext( 0, F_Cu );
+    PCBEXPR_CONTEXT preflightContext( 0, F_Cu );
 
     bool ok = compiler.Compile( GetExpression().ToUTF8().data(), m_ucode.get(), &preflightContext );
     return ok;

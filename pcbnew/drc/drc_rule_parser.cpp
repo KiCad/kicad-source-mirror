@@ -27,7 +27,7 @@
 #include <drc/drc_rule_parser.h>
 #include <drc/drc_rule_condition.h>
 #include <drc_rules_lexer.h>
-#include <pcb_expr_evaluator.h>
+#include <pcbexpr_evaluator.h>
 #include <reporter.h>
 
 using namespace DRCRULE_T;
@@ -584,8 +584,8 @@ void DRC_RULES_PARSER::parseValueWithUnits( const wxString& aExpr, int& aResult,
         }
     };
 
-    PCB_EXPR_EVALUATOR evaluator( aUnitless ? (LIBEVAL::UNIT_RESOLVER*) new PCB_UNITLESS_RESOLVER()
-                                            : (LIBEVAL::UNIT_RESOLVER*) new PCB_UNIT_RESOLVER() );
+    PCBEXPR_EVALUATOR evaluator( aUnitless ? (LIBEVAL::UNIT_RESOLVER*) new PCBEXPR_UNITLESS_RESOLVER()
+                                            : (LIBEVAL::UNIT_RESOLVER*) new PCBEXPR_UNIT_RESOLVER() );
     evaluator.SetErrorCallback( errorHandler );
 
     evaluator.Evaluate( aExpr );

@@ -559,8 +559,8 @@ set( PCB_COMMON_SRCS
     fp_lib_table.cpp
     hash_eda.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_base_frame.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_expr_evaluator.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_expr_functions.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcbexpr_evaluator.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcbexpr_functions.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/board_commit.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/board_connected_item.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/board_design_settings.cpp

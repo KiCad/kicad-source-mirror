@@ -36,7 +36,7 @@
 #include <widgets/report_severity.h>
 
 class BOARD_ITEM;
-class PCB_EXPR_UCODE;
+class PCBEXPR_UCODE;
 class DRC_CONSTRAINT;
 class DRC_RULE_CONDITION;
 

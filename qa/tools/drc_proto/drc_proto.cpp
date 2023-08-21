@@ -35,7 +35,7 @@
 #include <pcbnew/board.h>
 #include <pcbnew/drc/drc_rule_parser.h>
 #include <pcbnew/drc/drc_test_provider.h>
-#include <pcbnew/pcb_expr_evaluator.h>
+#include <pcbnew/pcbexpr_evaluator.h>
 #include <board_design_settings.h>
 
 #include <string_utils.h>

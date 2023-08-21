@@ -4,7 +4,7 @@
 #include "board.h"
 #include "pcb_track.h"
 
-#include <pcb_expr_evaluator.h>
+#include <pcbexpr_evaluator.h>
 
 #include <io_mgr.h>
 #include <plugins/kicad/pcb_plugin.h>
@@ -16,11 +16,11 @@
 bool testEvalExpr( const std::string expr, LIBEVAL::VALUE expectedResult, bool expectError = false,
                    BOARD_ITEM* itemA = nullptr, BOARD_ITEM* itemB = nullptr )
 {
-    PCB_EXPR_COMPILER compiler( new PCB_UNIT_RESOLVER() );
-    PCB_EXPR_UCODE ucode;
+    PCBEXPR_COMPILER compiler( new PCB_UNIT_RESOLVER() );
+    PCBEXPR_UCODE ucode;
     bool ok = true;
 
-    PCB_EXPR_CONTEXT  context, preflightContext;
+    PCBEXPR_CONTEXT  context, preflightContext;
 
     context.SetItems( itemA, itemB );
 

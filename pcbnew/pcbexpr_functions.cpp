@@ -32,7 +32,7 @@
 #include <pcb_track.h>
 #include <pcb_group.h>
 #include <geometry/shape_segment.h>
-#include <pcb_expr_evaluator.h>
+#include <pcbexpr_evaluator.h>
 #include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>
 #include <connectivity/from_to_cache.h>
@@ -40,7 +40,7 @@
 
 bool fromToFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 {
-    PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+    PCBEXPR_VAR_REF* vref = static_cast<PCBEXPR_VAR_REF*>( self );
     BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
     LIBEVAL::VALUE*   result = aCtx->AllocValue();
 
@@ -75,7 +75,7 @@ bool fromToFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 
 static void existsOnLayerFunc( LIBEVAL::CONTEXT* aCtx, void *self )
 {
-    PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+    PCBEXPR_VAR_REF* vref = static_cast<PCBEXPR_VAR_REF*>( self );
     BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
 
     LIBEVAL::VALUE*   arg = aCtx->Pop();
@@ -172,7 +172,7 @@ static void isPlatedFunc( LIBEVAL::CONTEXT* aCtx, void* self )
     result->Set( 0.0 );
     aCtx->Push( result );
 
-    PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+    PCBEXPR_VAR_REF* vref = static_cast<PCBEXPR_VAR_REF*>( self );
     BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
 
     if( !item )
@@ -186,7 +186,7 @@ static void isPlatedFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 
 
 bool collidesWithCourtyard( BOARD_ITEM* aItem, std::shared_ptr<SHAPE>& aItemShape,
-                            PCB_EXPR_CONTEXT* aCtx, FOOTPRINT* aFootprint, PCB_LAYER_ID aSide )
+                            PCBEXPR_CONTEXT* aCtx, FOOTPRINT* aFootprint, PCB_LAYER_ID aSide )
 {
     SHAPE_POLY_SET footprintCourtyard;
 
@@ -206,7 +206,7 @@ bool collidesWithCourtyard( BOARD_ITEM* aItem, std::shared_ptr<SHAPE>& aItemShap
 };
 
 
-static bool searchFootprints( BOARD* aBoard, const wxString& aArg, PCB_EXPR_CONTEXT* aCtx,
+static bool searchFootprints( BOARD* aBoard, const wxString& aArg, PCBEXPR_CONTEXT* aCtx,
                               const std::function<bool( FOOTPRINT* )>& aFunc )
 {
     if( aArg == wxT( "A" ) )
@@ -241,7 +241,7 @@ static bool searchFootprints( BOARD* aBoard, const wxString& aArg, PCB_EXPR_CONT
 
 static void intersectsCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 {
-    PCB_EXPR_CONTEXT* context = static_cast<PCB_EXPR_CONTEXT*>( aCtx );
+    PCBEXPR_CONTEXT* context = static_cast<PCBEXPR_CONTEXT*>( aCtx );
     LIBEVAL::VALUE*   arg = context->Pop();
     LIBEVAL::VALUE*   result = context->AllocValue();
 
@@ -256,7 +256,7 @@ static void intersectsCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
         return;
     }
 
-    PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+    PCBEXPR_VAR_REF* vref = static_cast<PCBEXPR_VAR_REF*>( self );
     BOARD_ITEM*       item = vref ? vref->GetObject( context ) : nullptr;
 
     if( !item )
@@ -301,7 +301,7 @@ static void intersectsCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 
 static void intersectsFrontCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 {
-    PCB_EXPR_CONTEXT* context = static_cast<PCB_EXPR_CONTEXT*>( aCtx );
+    PCBEXPR_CONTEXT* context = static_cast<PCBEXPR_CONTEXT*>( aCtx );
     LIBEVAL::VALUE*   arg = context->Pop();
     LIBEVAL::VALUE*   result = context->AllocValue();
 
@@ -316,7 +316,7 @@ static void intersectsFrontCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
         return;
     }
 
-    PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+    PCBEXPR_VAR_REF* vref = static_cast<PCBEXPR_VAR_REF*>( self );
     BOARD_ITEM*       item = vref ? vref->GetObject( context ) : nullptr;
 
     if( !item )
@@ -360,7 +360,7 @@ static void intersectsFrontCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 
 static void intersectsBackCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 {
-    PCB_EXPR_CONTEXT* context = static_cast<PCB_EXPR_CONTEXT*>( aCtx );
+    PCBEXPR_CONTEXT* context = static_cast<PCBEXPR_CONTEXT*>( aCtx );
     LIBEVAL::VALUE*   arg = context->Pop();
     LIBEVAL::VALUE*   result = context->AllocValue();
 
@@ -375,7 +375,7 @@ static void intersectsBackCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
         return;
     }
 
-    PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+    PCBEXPR_VAR_REF* vref = static_cast<PCBEXPR_VAR_REF*>( self );
     BOARD_ITEM*       item = vref ? vref->GetObject( context ) : nullptr;
 
     if( !item )
@@ -417,7 +417,7 @@ static void intersectsBackCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 }
 
 
-bool collidesWithArea( BOARD_ITEM* aItem, PCB_EXPR_CONTEXT* aCtx, ZONE* aArea )
+bool collidesWithArea( BOARD_ITEM* aItem, PCBEXPR_CONTEXT* aCtx, ZONE* aArea )
 {
     BOARD*                 board = aArea->GetBoard();
     BOX2I                  areaBBox = aArea->GetBoundingBox();
@@ -535,7 +535,7 @@ bool collidesWithArea( BOARD_ITEM* aItem, PCB_EXPR_CONTEXT* aCtx, ZONE* aArea )
 }
 
 
-bool searchAreas( BOARD* aBoard, const wxString& aArg, PCB_EXPR_CONTEXT* aCtx,
+bool searchAreas( BOARD* aBoard, const wxString& aArg, PCBEXPR_CONTEXT* aCtx,
                   const std::function<bool( ZONE* )>& aFunc )
 {
     if( aArg == wxT( "A" ) )
@@ -606,7 +606,7 @@ bool searchAreas( BOARD* aBoard, const wxString& aArg, PCB_EXPR_CONTEXT* aCtx,
 
 static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 {
-    PCB_EXPR_CONTEXT* context = static_cast<PCB_EXPR_CONTEXT*>( aCtx );
+    PCBEXPR_CONTEXT* context = static_cast<PCBEXPR_CONTEXT*>( aCtx );
     LIBEVAL::VALUE*   arg = aCtx->Pop();
     LIBEVAL::VALUE*   result = aCtx->AllocValue();
 
@@ -621,7 +621,7 @@ static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
         return;
     }
 
-    PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+    PCBEXPR_VAR_REF* vref = static_cast<PCBEXPR_VAR_REF*>( self );
     BOARD_ITEM*       item = vref ? vref->GetObject( context ) : nullptr;
 
     if( !item )
@@ -691,7 +691,7 @@ static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 
 static void enclosedByAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 {
-    PCB_EXPR_CONTEXT* context = static_cast<PCB_EXPR_CONTEXT*>( aCtx );
+    PCBEXPR_CONTEXT* context = static_cast<PCBEXPR_CONTEXT*>( aCtx );
     LIBEVAL::VALUE*   arg = aCtx->Pop();
     LIBEVAL::VALUE*   result = aCtx->AllocValue();
 
@@ -706,7 +706,7 @@ static void enclosedByAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
         return;
     }
 
-    PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+    PCBEXPR_VAR_REF* vref = static_cast<PCBEXPR_VAR_REF*>( self );
     BOARD_ITEM*       item = vref ? vref->GetObject( context ) : nullptr;
 
     if( !item )
@@ -795,7 +795,7 @@ static void memberOfGroupFunc( LIBEVAL::CONTEXT* aCtx, void* self )
         return;
     }
 
-    PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+    PCBEXPR_VAR_REF* vref = static_cast<PCBEXPR_VAR_REF*>( self );
     BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
 
     if( !item )
@@ -841,7 +841,7 @@ static void memberOfFootprintFunc( LIBEVAL::CONTEXT* aCtx, void* self )
         return;
     }
 
-    PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+    PCBEXPR_VAR_REF* vref = static_cast<PCBEXPR_VAR_REF*>( self );
     BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
 
     if( !item )
@@ -865,7 +865,7 @@ static void memberOfFootprintFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 
 static void isMicroVia( LIBEVAL::CONTEXT* aCtx, void* self )
 {
-    PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+    PCBEXPR_VAR_REF* vref = static_cast<PCBEXPR_VAR_REF*>( self );
     BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
     LIBEVAL::VALUE*   result = aCtx->AllocValue();
 
@@ -882,7 +882,7 @@ static void isMicroVia( LIBEVAL::CONTEXT* aCtx, void* self )
 
 static void isBlindBuriedViaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 {
-    PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
+    PCBEXPR_VAR_REF* vref = static_cast<PCBEXPR_VAR_REF*>( self );
     BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
     LIBEVAL::VALUE*   result = aCtx->AllocValue();
 
@@ -899,7 +899,7 @@ static void isBlindBuriedViaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 
 static void isCoupledDiffPairFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 {
-    PCB_EXPR_CONTEXT*     context = static_cast<PCB_EXPR_CONTEXT*>( aCtx );
+    PCBEXPR_CONTEXT*     context = static_cast<PCBEXPR_CONTEXT*>( aCtx );
     BOARD_CONNECTED_ITEM* a = dynamic_cast<BOARD_CONNECTED_ITEM*>( context->GetItem( 0 ) );
     BOARD_CONNECTED_ITEM* b = dynamic_cast<BOARD_CONNECTED_ITEM*>( context->GetItem( 1 ) );
     LIBEVAL::VALUE*       result = aCtx->AllocValue();
@@ -939,7 +939,7 @@ static void isCoupledDiffPairFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 static void inDiffPairFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 {
     LIBEVAL::VALUE*   argv   = aCtx->Pop();
-    PCB_EXPR_VAR_REF* vref   = static_cast<PCB_EXPR_VAR_REF*>( self );
+    PCBEXPR_VAR_REF* vref   = static_cast<PCBEXPR_VAR_REF*>( self );
     BOARD_ITEM*       item   = vref ? vref->GetObject( aCtx ) : nullptr;
     LIBEVAL::VALUE*   result = aCtx->AllocValue();
 
@@ -990,7 +990,7 @@ static void inDiffPairFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 static void getFieldFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 {
     LIBEVAL::VALUE*   arg    = aCtx->Pop();
-    PCB_EXPR_VAR_REF* vref   = static_cast<PCB_EXPR_VAR_REF*>( self );
+    PCBEXPR_VAR_REF* vref   = static_cast<PCBEXPR_VAR_REF*>( self );
     BOARD_ITEM*       item   = vref ? vref->GetObject( aCtx ) : nullptr;
     LIBEVAL::VALUE*   result = aCtx->AllocValue();
 
@@ -1029,13 +1029,13 @@ static void getFieldFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 }
 
 
-PCB_EXPR_BUILTIN_FUNCTIONS::PCB_EXPR_BUILTIN_FUNCTIONS()
+PCBEXPR_BUILTIN_FUNCTIONS::PCBEXPR_BUILTIN_FUNCTIONS()
 {
     RegisterAllFunctions();
 }
 
 
-void PCB_EXPR_BUILTIN_FUNCTIONS::RegisterAllFunctions()
+void PCBEXPR_BUILTIN_FUNCTIONS::RegisterAllFunctions()
 {
     m_funcs.clear();
 

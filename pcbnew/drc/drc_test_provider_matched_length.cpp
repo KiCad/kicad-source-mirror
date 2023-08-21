@@ -31,7 +31,7 @@
 #include <connectivity/connectivity_data.h>
 #include <connectivity/from_to_cache.h>
 
-#include <pcb_expr_evaluator.h>
+#include <pcbexpr_evaluator.h>
 
 /*
     Single-ended matched length + skew + via count test.

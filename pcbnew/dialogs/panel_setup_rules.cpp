@@ -25,7 +25,7 @@
 #include <confirm.h>
 #include <widgets/paged_dialog.h>
 #include <pcb_edit_frame.h>
-#include <pcb_expr_evaluator.h>
+#include <pcbexpr_evaluator.h>
 #include <board.h>
 #include <board_design_settings.h>
 #include <project.h>
@@ -457,7 +457,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
             for( const wxString& propName : propNames )
                 tokens += wxT( "|" ) + propName;
 
-            PCB_EXPR_BUILTIN_FUNCTIONS& functions = PCB_EXPR_BUILTIN_FUNCTIONS::Instance();
+            PCBEXPR_BUILTIN_FUNCTIONS& functions = PCBEXPR_BUILTIN_FUNCTIONS::Instance();
 
             for( const wxString& funcSig : functions.GetSignatures() )
             {

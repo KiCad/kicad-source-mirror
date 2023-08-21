@@ -23,7 +23,7 @@
 #include <board.h>
 #include <string_utils.h>
 
-#include <pcb_expr_evaluator.h>
+#include <pcbexpr_evaluator.h>
 
 #include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>

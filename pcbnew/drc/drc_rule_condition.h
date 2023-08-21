@@ -28,7 +28,7 @@
 #include <layer_ids.h>
 
 class BOARD_ITEM;
-class PCB_EXPR_UCODE;
+class PCBEXPR_UCODE;
 class REPORTER;
 
 
@@ -47,8 +47,8 @@ public:
     wxString GetExpression() const { return m_expression; }
 
 private:
-    wxString                        m_expression;
-    std::unique_ptr<PCB_EXPR_UCODE> m_ucode;
+    wxString                       m_expression;
+    std::unique_ptr<PCBEXPR_UCODE> m_ucode;
 };
 
 
