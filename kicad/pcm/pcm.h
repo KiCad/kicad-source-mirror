@@ -44,6 +44,8 @@ const std::unordered_set<wxString> PCM_PACKAGE_DIRECTORIES( {
         "symbols",
         "resources",
         "colors",
+        "templates",
+        "scripts"
 } );
 
 
