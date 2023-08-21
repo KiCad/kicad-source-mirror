@@ -427,7 +427,7 @@ wxString LIB_FIELD::GetShownText( bool aAllowExtraText, int aDepth ) const
 {
     wxString text = EDA_TEXT::GetShownText( aAllowExtraText, aDepth );
 
-    if( IsNameShown() )
+    if( IsNameShown() && aAllowExtraText )
         text = GetName() << wxT( ": " ) << text;
 
     return text;
