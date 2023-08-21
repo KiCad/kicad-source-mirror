@@ -1330,10 +1330,14 @@ size_t SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::GetDerivedSymbolNames( const wxString
             LIB_SYMBOL_SPTR parent = entry->GetSymbol()->GetParent().lock();
 
             // Check for inherited symbol without a valid parent.
-            wxCHECK( parent, false );
+            wxCHECK2( parent, continue );
 
             if( parent->GetName() == aSymbolName )
+            {
                 aList.Add( entry->GetSymbol()->GetName() );
+
+                GetDerivedSymbolNames( entry->GetSymbol()->GetName(), aList );
+            }
         }
     }
 
@@ -1346,39 +1350,24 @@ int SYMBOL_LIBRARY_MANAGER::LIB_BUFFER::removeChildSymbols( std::shared_ptr<SYMB
     wxCHECK( aSymbolBuf, 0 );
 
     int cnt = 0;
-    std::deque< std::shared_ptr<SYMBOL_BUFFER> >::iterator it = m_symbols.begin();
+    wxArrayString derivedSymbolNames;
+    std::deque< std::shared_ptr<SYMBOL_BUFFER> >::iterator it;
 
-    while( it != m_symbols.end() )
+    if( GetDerivedSymbolNames( aSymbolBuf->GetSymbol()->GetName(), derivedSymbolNames ) )
     {
-        LIB_SYMBOL_SPTR parent = (*it)->GetSymbol()->GetParent().lock();
-
-        if( !parent )
+        for( const wxString& symbolName : derivedSymbolNames )
         {
-            ++it;
-        }
-        else
-        {
-            if( HasDerivedSymbols( parent->GetName() ) )
-            {
-                std::shared_ptr<SYMBOL_BUFFER> symbolBuf = GetBuffer( parent->GetName() );
+            it = std::find_if( m_symbols.begin(), m_symbols.end(),
+                               [symbolName]( std::shared_ptr<SYMBOL_BUFFER>& buf )
+                               {
+                                   return buf->GetSymbol()->GetName() == symbolName;
+                               } );
 
-                wxCHECK2( symbolBuf, ++it; continue );
+            wxCHECK2( it != m_symbols.end(), continue );
 
-                cnt += removeChildSymbols( symbolBuf );
-                it = m_symbols.begin();
-            }
-            else if( parent->GetName() == aSymbolBuf->GetSymbol()->GetName() )
-            {
-                wxCHECK2( parent == aSymbolBuf->GetSymbol()->SharedPtr(), ++it; continue );
-
-                m_deleted.emplace_back( *it );
-                it = m_symbols.erase( it );
-                cnt++;
-            }
-            else
-            {
-                ++it;
-            }
+            m_deleted.emplace_back( *it );
+            m_symbols.erase( it );
+            cnt += 1;
         }
     }
 
