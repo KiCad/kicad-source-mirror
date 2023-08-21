@@ -293,9 +293,6 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
                      wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColSort ), nullptr, this );
     m_grid->Connect( wxEVT_GRID_COL_MOVE,
                      wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnColMove ), nullptr, this );
-    m_grid->Connect( wxEVT_GRID_RANGE_SELECTED,
-                     wxGridRangeSelectEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected ),
-                     nullptr, this );
     m_cbBomPresets->Bind( wxEVT_CHOICE, &DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged, this );
     m_cbBomFmtPresets->Bind( wxEVT_CHOICE, &DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged, this );
     m_fieldsCtrl->Bind( wxEVT_DATAVIEW_ITEM_VALUE_CHANGED,
@@ -480,6 +477,11 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataToWindow()
     }
 
     UpdateScope();
+
+    // We don't want table range selection events to happen until we've loaded the data or we
+    // we'll clear our selection as the grid is built before the code above can get the
+    // user's current selection.
+    EnableSelectionEvents();
 
     return true;
 }
@@ -2055,7 +2057,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsAdded( SCHEMATIC&              aSch,
         }
     }
 
+    DisableSelectionEvents();
     m_dataModel->RebuildRows();
+    EnableSelectionEvents();
 }
 
 
@@ -2071,7 +2075,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsRemoved( SCHEMATIC&              aSch
                     getSheetSymbolReferences( *static_cast<SCH_SHEET*>( item ) ) );
     }
 
+    DisableSelectionEvents();
     m_dataModel->RebuildRows();
+    EnableSelectionEvents();
 }
 
 
@@ -2109,7 +2115,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsChanged( SCHEMATIC&              aSch
         }
     }
 
+    DisableSelectionEvents();
     m_dataModel->RebuildRows();
+    EnableSelectionEvents();
 }
 
 
@@ -2118,7 +2126,29 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchSheetChanged( SCHEMATIC& aSch )
     m_dataModel->SetPath( aSch.CurrentSheet() );
 
     if( m_dataModel->GetScope() != FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE::SCOPE_ALL )
+    {
+        DisableSelectionEvents();
         m_dataModel->RebuildRows();
+        EnableSelectionEvents();
+    }
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::EnableSelectionEvents()
+{
+    m_grid->Connect(
+            wxEVT_GRID_RANGE_SELECTED,
+            wxGridRangeSelectEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected ),
+            nullptr, this );
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::DisableSelectionEvents()
+{
+    m_grid->Disconnect(
+            wxEVT_GRID_RANGE_SELECTED,
+            wxGridRangeSelectEventHandler( DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected ),
+            nullptr, this );
 }
 
 

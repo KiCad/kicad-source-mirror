@@ -111,6 +111,9 @@ private:
     void OnSchItemsChanged( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem ) override;
     void OnSchSheetChanged( SCHEMATIC& aSch ) override;
 
+    void EnableSelectionEvents();
+    void DisableSelectionEvents();
+
 private:
     SCH_REFERENCE_LIST getSymbolReferences( SCH_SYMBOL* aSymbol );
     SCH_REFERENCE_LIST getSheetSymbolReferences( SCH_SHEET& aSheet );
