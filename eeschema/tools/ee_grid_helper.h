@@ -70,7 +70,7 @@ public:
     using GRID_HELPER::GetGrid;
 
     GRID_HELPER_GRIDS GetSelectionGrid( const EE_SELECTION& aItem );
-    GRID_HELPER_GRIDS GetItemGrid( const SCH_ITEM* aItem );
+    GRID_HELPER_GRIDS GetItemGrid( const SCH_ITEM* aItem ) const;
 
     VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, GRID_HELPER_GRIDS aGrid,
                              const EE_SELECTION& aItems );

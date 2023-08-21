@@ -351,7 +351,7 @@ GRID_HELPER_GRIDS EE_GRID_HELPER::GetSelectionGrid( const EE_SELECTION& aSelecti
 }
 
 
-GRID_HELPER_GRIDS EE_GRID_HELPER::GetItemGrid( const SCH_ITEM* aItem )
+GRID_HELPER_GRIDS EE_GRID_HELPER::GetItemGrid( const SCH_ITEM* aItem ) const
 {
     if( !aItem )
         return GRID_CURRENT;

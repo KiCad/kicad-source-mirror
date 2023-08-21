@@ -279,6 +279,8 @@ void SCH_MOVE_TOOL::orthoLineDrag( SCH_COMMIT* aCommit, SCH_LINE* line, const VE
         // put wires between it and its original endpoint.
         else if( foundAttachment && line->IsOrthogonal() )
         {
+            VECTOR2D lineGrid = grid.GetGridSize( grid.GetItemGrid( line ) );
+
             // The bend counter handles a group of wires all needing their offset one grid movement
             // further out from each other to not overlap.  The absolute value stuff finds the
             // direction of the line and hence the the bend increment on that axis
@@ -286,9 +288,9 @@ void SCH_MOVE_TOOL::orthoLineDrag( SCH_COMMIT* aCommit, SCH_LINE* line, const VE
             unsigned int yMoveBit = splitDelta.y != 0;
             int          xLength = abs( unselectedEnd.x - selectedEnd.x );
             int          yLength = abs( unselectedEnd.y - selectedEnd.y );
-            int          xMove = ( xLength - ( xBendCount * grid.GetGrid().x ) )
+            int          xMove = ( xLength - ( xBendCount * lineGrid.x ) )
                                     * sign( selectedEnd.x - unselectedEnd.x );
-            int          yMove = ( yLength - ( yBendCount * grid.GetGrid().y ) )
+            int          yMove = ( yLength - ( yBendCount * lineGrid.y ) )
                                     * sign( selectedEnd.y - unselectedEnd.y );
 
             // Create a new wire ending at the unselected end, we'll move the new wire's start
