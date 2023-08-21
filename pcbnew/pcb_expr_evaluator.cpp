@@ -89,6 +89,76 @@ protected:
 };
 
 
+class PCB_NETCLASS_VALUE : public LIBEVAL::VALUE
+{
+public:
+    PCB_NETCLASS_VALUE( BOARD_CONNECTED_ITEM* aItem ) :
+            LIBEVAL::VALUE( wxEmptyString ),
+            m_item( aItem )
+    {};
+
+    const wxString& AsString() const override
+    {
+        const_cast<PCB_NETCLASS_VALUE*>( this )->Set( m_item->GetEffectiveNetClass()->GetName() );
+        return LIBEVAL::VALUE::AsString();
+    }
+
+    bool EqualTo( LIBEVAL::CONTEXT* aCtx, const VALUE* b ) const override
+    {
+        if( const PCB_NETCLASS_VALUE* bValue = dynamic_cast<const PCB_NETCLASS_VALUE*>( b ) )
+            return m_item->GetEffectiveNetClass() == bValue->m_item->GetEffectiveNetClass();
+        else
+            return LIBEVAL::VALUE::EqualTo( aCtx, b );
+    }
+
+    bool NotEqualTo( LIBEVAL::CONTEXT* aCtx, const LIBEVAL::VALUE* b ) const override
+    {
+        if( const PCB_NETCLASS_VALUE* bValue = dynamic_cast<const PCB_NETCLASS_VALUE*>( b ) )
+            return m_item->GetEffectiveNetClass() != bValue->m_item->GetEffectiveNetClass();
+        else
+            return LIBEVAL::VALUE::NotEqualTo( aCtx, b );
+    }
+
+protected:
+    BOARD_CONNECTED_ITEM* m_item;
+};
+
+
+class PCB_NET_VALUE : public LIBEVAL::VALUE
+{
+public:
+    PCB_NET_VALUE( BOARD_CONNECTED_ITEM* aItem ) :
+            LIBEVAL::VALUE( wxEmptyString ),
+            m_item( aItem )
+    {};
+
+    const wxString& AsString() const override
+    {
+        const_cast<PCB_NET_VALUE*>( this )->Set( m_item->GetNetname() );
+        return LIBEVAL::VALUE::AsString();
+    }
+
+    bool EqualTo( LIBEVAL::CONTEXT* aCtx, const VALUE* b ) const override
+    {
+        if( const PCB_NET_VALUE* bValue = dynamic_cast<const PCB_NET_VALUE*>( b ) )
+            return m_item->GetNetCode() == bValue->m_item->GetNetCode();
+        else
+            return LIBEVAL::VALUE::EqualTo( aCtx, b );
+    }
+
+    bool NotEqualTo( LIBEVAL::CONTEXT* aCtx, const LIBEVAL::VALUE* b ) const override
+    {
+        if( const PCB_NET_VALUE* bValue = dynamic_cast<const PCB_NET_VALUE*>( b ) )
+            return m_item->GetNetCode() != bValue->m_item->GetNetCode();
+        else
+            return LIBEVAL::VALUE::NotEqualTo( aCtx, b );
+    }
+
+protected:
+    BOARD_CONNECTED_ITEM* m_item;
+};
+
+
 LIBEVAL::VALUE* PCB_EXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
 {
     PCB_EXPR_CONTEXT* context = static_cast<PCB_EXPR_CONTEXT*>( aCtx );
@@ -156,7 +226,7 @@ LIBEVAL::VALUE* PCB_EXPR_NETCLASS_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
     if( !item )
         return new LIBEVAL::VALUE();
 
-    return new LIBEVAL::VALUE( item->GetEffectiveNetClass()->GetName() );
+    return new PCB_NETCLASS_VALUE( item );
 }
 
 
@@ -167,7 +237,7 @@ LIBEVAL::VALUE* PCB_EXPR_NETNAME_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
     if( !item )
         return new LIBEVAL::VALUE();
 
-    return new LIBEVAL::VALUE( item->GetNetname() );
+    return new PCB_NET_VALUE( item );
 }
 
 

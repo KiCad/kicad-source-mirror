@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -116,21 +116,21 @@ static bool testEvalExpr( const wxString& expr, const LIBEVAL::VALUE& expectedRe
     if( error )
         return true;
 
-    LIBEVAL::VALUE result;
+    LIBEVAL::VALUE* result;
 
     if( ok )
     {
-        result = *ucode.Run( &context );
-        ok     = ( result.EqualTo( &context, &expectedResult ) );
+        result = ucode.Run( &context );
+        ok     = ( result->EqualTo( &context, &expectedResult ) );
     }
 
     if( expectedResult.GetType() == LIBEVAL::VT_NUMERIC )
     {
-        BOOST_CHECK_EQUAL( result.AsDouble(), expectedResult.AsDouble() );
+        BOOST_CHECK_EQUAL( result->AsDouble(), expectedResult.AsDouble() );
     }
     else
     {
-        BOOST_CHECK_EQUAL( result.AsString(), expectedResult.AsString() );
+        BOOST_CHECK_EQUAL( result->AsString(), expectedResult.AsString() );
     }
 
     return ok;
