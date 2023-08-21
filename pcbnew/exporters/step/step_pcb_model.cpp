@@ -207,7 +207,7 @@ bool STEP_PCB_MODEL::AddPadHole( const PAD* aPad, const VECTOR2D& aOrigin )
 
     VECTOR2I     pos = aPad->GetPosition();
     const double margin = 0.01; // a small margin on the Z axix to be sure the hole
-                                // is bigget than the board with copper
+                                // is bigger than the board with copper
                                 // must be > OCC_MAX_DISTANCE_TO_MERGE_POINTS
     double holeZsize = m_boardThickness + ( margin * 2 );
 
@@ -218,8 +218,8 @@ bool STEP_PCB_MODEL::AddPadHole( const PAD* aPad, const VECTOR2D& aOrigin )
                         .Shape();
         gp_Trsf shift;
         shift.SetTranslation( gp_Vec( pcbIUScale.IUTomm( pos.x - aOrigin.x ),
-                                          -pcbIUScale.IUTomm( pos.y - aOrigin.y ),
-                                      -m_boardThickness * 0.5 ) );
+                                      -pcbIUScale.IUTomm( pos.y - aOrigin.y ),
+                                      -margin ) );
         BRepBuilderAPI_Transform hole( s, shift );
         m_cutouts.push_back( hole.Shape() );
         return true;
