@@ -19,8 +19,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-13 14:56-0700\n"
-"PO-Revision-Date: 2023-07-23 21:07+0000\n"
-"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
+"PO-Revision-Date: 2023-08-22 20:51+0000\n"
+"Last-Translator: ulikoehler <weblate@techoverflow.net>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v7/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -2671,7 +2671,7 @@ msgstr "<<<"
 
 #: common/dialogs/dialog_page_settings_base.cpp:228
 msgid "Revision:"
-msgstr "Überarbeitung:"
+msgstr "Revision:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:240
 #: eeschema/dialogs/dialog_export_netlist.cpp:436
