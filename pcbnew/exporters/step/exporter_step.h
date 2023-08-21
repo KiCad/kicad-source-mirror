@@ -55,6 +55,7 @@ public:
             m_BoardOutlinesChainingEpsilon( BOARD_DEFAULT_CHAINING_EPSILON ),
             m_boardOnly( false ),
             m_exportTracks( false ),
+            m_exportZones( false ),
             m_format( FORMAT::STEP )
     {};
 
@@ -77,6 +78,7 @@ public:
     double   m_BoardOutlinesChainingEpsilon;
     bool     m_boardOnly;
     bool     m_exportTracks;
+    bool     m_exportZones;
     FORMAT   m_format;
 
     wxString GetDefaultExportExtension();
@@ -104,6 +106,7 @@ private:
     bool buildBoard3DShapes();
     bool buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOrigin );
     bool buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin );
+    void buildZones3DShape( VECTOR2D aOrigin );
     bool buildGraphic3DShape( BOARD_ITEM* aItem, VECTOR2D aOrigin );
     void calculatePcbThickness();
 

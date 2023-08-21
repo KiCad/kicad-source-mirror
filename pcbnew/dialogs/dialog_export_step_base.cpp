@@ -130,6 +130,11 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 
 	sbOtherOptions->Add( m_cbExportTracks, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
+	m_cbExportZones = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Export zones (time consuming)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbExportZones->SetToolTip( _("Export tracks and vias on external copper layers.\nWarning: this is *extremely* time consuming.") );
+
+	sbOtherOptions->Add( m_cbExportZones, 0, wxBOTTOM|wxRIGHT|wxTOP, 5 );
+
 	m_staticTextTolerance = new wxStaticText( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Board outline chaining tolerance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextTolerance->Wrap( -1 );
 	sbOtherOptions->Add( m_staticTextTolerance, 0, wxLEFT|wxRIGHT|wxTOP, 5 );

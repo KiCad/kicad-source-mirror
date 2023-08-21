@@ -87,7 +87,8 @@ public:
     bool AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin );
 
     // add a set of polygons (must be in final position) on top or bottom of the board as copper
-    bool AddCopperPolygonShapes( const SHAPE_POLY_SET* aPolyShapes, bool aOnTop, const VECTOR2D& aOrigin );
+    bool AddCopperPolygonShapes( const SHAPE_POLY_SET* aPolyShapes, bool aOnTop,
+                                 const VECTOR2D& aOrigin, bool aTrack );
 
     // add a component at the given position and orientation
     bool AddComponent( const std::string& aFileName, const std::string& aRefDes, bool aBottom,
@@ -220,7 +221,10 @@ private:
     std::vector<TopoDS_Shape>       m_cutouts;
 
     // Main outlines (more than one board)
-    std::vector<TopoDS_Shape>       m_board_outlines;
+    std::vector<TopoDS_Shape> m_board_outlines;
+    std::vector<TopoDS_Shape> m_board_copper_zones;
+    std::vector<TopoDS_Shape> m_board_copper_tracks;
+    std::vector<TopoDS_Shape> m_board_copper_pads;
 
     /// Name of the PCB, which will most likely be the file name of the path.
     wxString                        m_pcbName;

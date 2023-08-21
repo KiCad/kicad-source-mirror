@@ -228,14 +228,14 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin )
                                               -pcbIUScale.IUTomm( pos.y - aOrigin.y ),
                                               Zpos ) );
                 BRepBuilderAPI_Transform round_shape( curr_shape, shift );
-                m_board_outlines.push_back( round_shape.Shape() );
+                m_board_copper_pads.push_back( round_shape.Shape() );
             }
             else
             {
                 success = MakeShape( curr_shape, pad_shape.get()->COutline(0), m_copperThickness, Zpos, aOrigin );
 
                 if( success )
-                    m_board_outlines.push_back( curr_shape );
+                    m_board_copper_pads.push_back( curr_shape );
             }
         }
 
@@ -250,7 +250,8 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin )
 }
 
 
-bool STEP_PCB_MODEL::AddCopperPolygonShapes( const SHAPE_POLY_SET* aPolyShapes, bool aOnTop, const VECTOR2D& aOrigin )
+bool STEP_PCB_MODEL::AddCopperPolygonShapes( const SHAPE_POLY_SET* aPolyShapes, bool aOnTop,
+                                             const VECTOR2D& aOrigin, bool aTrack )
 {
     bool success = true;
 
@@ -261,7 +262,10 @@ bool STEP_PCB_MODEL::AddCopperPolygonShapes( const SHAPE_POLY_SET* aPolyShapes, 
 
         if( MakeShape( copper_shape, aPolyShapes->COutline( ii ), m_copperThickness, z_pos, aOrigin ) )
         {
-            m_board_outlines.push_back( copper_shape );
+            if( aTrack )
+                m_board_copper_tracks.push_back( copper_shape );
+            else
+                m_board_copper_zones.push_back( copper_shape );
         }
         else
         {
@@ -576,10 +580,9 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
         return true;
     }
 
+    Handle( XCAFDoc_ColorTool ) colorTool = XCAFDoc_DocumentTool::ColorTool( m_doc->Main() );
     m_hasPCB = true; // whether or not operations fail we note that CreatePCB has been invoked
 
-    // Number of items having the copper color
-    int copper_item_count = m_board_outlines.size();
 
     // Support for more than one main outline (more than one board)
     for( int cnt = 0; cnt < aOutline.OutlineCount(); cnt++ )
@@ -632,41 +635,83 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
         for( TopoDS_Shape& hole : m_cutouts )
             holelist.Append( hole );
 
-        // Remove holes for each item (board body or bodies, one can have more than one board)
-        // and copper items (copper_item_count items)
-        int cnt = 0;
-        for( TopoDS_Shape& board: m_board_outlines )
+        auto subtractShapes = [&]( const wxString& aWhat, std::vector<TopoDS_Shape>& aShapesList,
+                             TopTools_ListOfShape& aSubtrahend )
         {
-            cnt++;
+            // Remove holes for each item (board body or bodies, one can have more than one board)
+            int cnt = 0;
+            for( TopoDS_Shape& shape : aShapesList )
+            {
+                cnt++;
 
-            if( cnt % 10 == 0 )
-                ReportMessage( wxString::Format( wxT( "added %d/%d shapes\n" ),
-                                                 cnt, (int)m_board_outlines.size() ) );
+                if( cnt % 10 == 0 )
+                    ReportMessage( wxString::Format( _( "Cutting %d/%d %s\n" ), cnt,
+                                                     (int) aShapesList.size(), aWhat ) );
 
-            TopTools_ListOfShape mainbrd;
-            mainbrd.Append( board );
+                TopTools_ListOfShape mainbrd;
+                mainbrd.Append( shape );
 
-            BRepAlgoAPI_Cut      Cut;
-            Cut.SetArguments( mainbrd );
+                BRepAlgoAPI_Cut Cut;
+                Cut.SetArguments( mainbrd );
 
-            Cut.SetTools( holelist );
-            Cut.Build();
+                Cut.SetTools( aSubtrahend );
+                Cut.Build();
 
-            board = Cut.Shape();
-        }
+                shape = Cut.Shape();
+            }
+        };
+
+        subtractShapes( _( "pads" ), m_board_copper_pads, holelist );
+        subtractShapes( _( "shapes" ), m_board_outlines, holelist );
+        subtractShapes( _( "tracks" ), m_board_copper_tracks, holelist );
+        subtractShapes( _( "zones" ), m_board_copper_zones, holelist );
     }
 
     // push the board to the data structure
     ReportMessage( wxT( "\nGenerate board full shape.\n" ) );
 
-    // Dont expand the component or else coloring it gets hard
-    for( TopoDS_Shape& board: m_board_outlines )
-    {
-        m_pcb_labels.push_back( m_assy->AddComponent( m_assy_label, board, false ) );
+    auto pushToAssembly = [&]( std::vector<TopoDS_Shape>& aShapesList, Quantity_Color aColor, const wxString& aShapeName )
+                            {
+                                int i = 1;
+                                for( TopoDS_Shape& shape : aShapesList )
+                                {
+                                    Handle( TDataStd_TreeNode ) node;
 
-        if( m_pcb_labels.back().IsNull() )
-            return false;
-    }
+                                    // Dont expand the component or else coloring it gets hard
+                                    TDF_Label lbl =
+                                            m_assy->AddComponent( m_assy_label, shape, false );
+                                    m_pcb_labels.push_back( lbl );
+
+                                    if( m_pcb_labels.back().IsNull() )
+                                        break;
+
+                                    lbl.FindAttribute( XCAFDoc::ShapeRefGUID(), node );
+                                    TDF_Label shpLbl = node->Father()->Label();
+                                    if( !shpLbl.IsNull() )
+                                    {
+                                        colorTool->SetColor( shpLbl, aColor, XCAFDoc_ColorSurf );
+                                        wxString shapeName;
+
+                                        if( aShapesList.size() > 1 )
+                                        {
+                                            shapeName = wxString::Format(
+                                                    wxT( "%s_%s_%d" ), m_pcbName, aShapeName, i );
+                                        }
+                                        else
+                                        {
+                                            shapeName = wxString::Format(
+                                                    wxT( "%s_%s" ), m_pcbName, aShapeName );
+                                        }
+
+
+                                        TCollection_ExtendedString partname(
+                                                shapeName.ToUTF8().data() );
+                                        TDataStd_Name::Set( shpLbl, partname );
+                                    }
+
+                                    i++;
+                                }
+                            };
 
     // AddComponent adds a label that has a reference (not a parent/child relation) to the real
     // label.  We need to extract that real label to name it for the STEP output cleanly
@@ -676,68 +721,15 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
     // to "Component" or "Assembly".
 
     // Init colors  for the board body and the copper items (if any)
-    Handle( XCAFDoc_ColorTool ) colorTool = XCAFDoc_DocumentTool::ColorTool( m_doc->Main() );
     Quantity_Color board_color( m_boardColor[0], m_boardColor[1], m_boardColor[2],
                                 Quantity_TOC_RGB );
     Quantity_Color copper_color( m_copperColor[0], m_copperColor[1], m_copperColor[2],
                                  Quantity_TOC_RGB );
 
-    int pcbIdx = 1;
-    int copper_objects_cnt = 0;
-
-    for( TDF_Label& pcb_label : m_pcb_labels )
-    {
-        Handle( TDataStd_TreeNode ) node;
-
-        if( pcb_label.FindAttribute( XCAFDoc::ShapeRefGUID(), node ) )
-        {
-            // Gives a name to each board object
-            TDF_Label label = node->Father()->Label();
-
-            if( !label.IsNull() )
-            {
-                wxString pcbName;
-
-                // Note, we include the pcb/project name as a prefix
-                // because several STEP importing CAD software like SolidWorks
-                // will deduplicate anything imported by it's STEP name
-
-                if( copper_objects_cnt < copper_item_count )
-                {
-                    pcbName = wxString::Format( wxT( "%s_Copper_Item%d" ),
-                                                m_pcbName, copper_objects_cnt+1 );
-                }
-                else
-                {
-                    if( m_pcb_labels.size() == 1 )
-                        pcbName = wxString::Format( wxT( "%s_PCB" ), m_pcbName );
-                    else
-                        pcbName = wxString::Format( wxT( "%s_PCB%d" ), m_pcbName, pcbIdx++ );
-                }
-
-                std::string                pcbNameStdString( pcbName.ToUTF8() );
-                TCollection_ExtendedString partname( pcbNameStdString.c_str() );
-                TDataStd_Name::Set( label, partname );
-            }
-        }
-
-        // color the PCB
-        TopExp_Explorer topex;
-        topex.Init( m_assy->GetShape( pcb_label ), TopAbs_SOLID );
-
-        while( topex.More() )
-        {
-            // First objects are copper objects, last(s) is the board body
-            if( copper_objects_cnt < copper_item_count )
-                colorTool->SetColor( topex.Current(), copper_color, XCAFDoc_ColorSurf );
-            else
-                colorTool->SetColor( topex.Current(), board_color, XCAFDoc_ColorSurf );
-
-            topex.Next();
-        }
-
-        copper_objects_cnt++;
-    }
+    pushToAssembly( m_board_copper_tracks, copper_color, "track" );
+    pushToAssembly( m_board_copper_zones, copper_color, "zone" );
+    pushToAssembly( m_board_copper_pads, copper_color, "pad" );
+    pushToAssembly( m_board_outlines, board_color, "PCB" );
 
 #if( defined OCC_VERSION_HEX ) && ( OCC_VERSION_HEX > 0x070101 )
     m_assy->UpdateAssemblies();

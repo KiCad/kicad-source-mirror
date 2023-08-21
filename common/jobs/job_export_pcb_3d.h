@@ -43,6 +43,7 @@ public:
             // max dist to chain 2 items (lines or curves) to build the board outlines
             m_BoardOutlinesChainingEpsilon( 0.01 ),     // 0.01 mm is a good value
             m_exportTracks( false ),     // Extremely time consuming if true
+            m_exportZones( false ),      // Extremely time consuming if true
             m_format( JOB_EXPORT_PCB_3D::FORMAT::UNKNOWN )
     {
     }
@@ -67,6 +68,7 @@ public:
     double                    m_yOrigin;
     double                    m_BoardOutlinesChainingEpsilon;
     bool                      m_exportTracks;
+    bool                      m_exportZones;
     JOB_EXPORT_PCB_3D::FORMAT m_format;
 };
 

@@ -30,6 +30,7 @@
 #include <pcb_track.h>
 #include <pcb_shape.h>
 #include <pad.h>
+#include <zone.h>
 #include <fp_lib_table.h>
 #include "step_pcb_model.h"
 
@@ -322,6 +323,25 @@ bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin )
 }
 
 
+void EXPORTER_STEP::buildZones3DShape( VECTOR2D aOrigin )
+{
+    for( ZONE* zone : m_board->Zones() )
+    {
+        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+        {
+            if( layer == F_Cu || layer == B_Cu )
+            {
+                SHAPE_POLY_SET copper_shape;
+                zone->TransformSolidAreasShapesToPolygon( layer, copper_shape );
+                copper_shape.Fracture( SHAPE_POLY_SET::PM_FAST );
+
+                m_pcbModel->AddCopperPolygonShapes( &copper_shape, layer == F_Cu, aOrigin, false );
+            }
+        }
+    }
+}
+
+
 bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, VECTOR2D aOrigin )
 {
     PCB_SHAPE* graphic = dynamic_cast<PCB_SHAPE*>( aItem );
@@ -410,8 +430,13 @@ bool EXPORTER_STEP::buildBoard3DShapes()
     m_top_copper_shapes.Fracture( SHAPE_POLY_SET::PM_FAST );
     m_bottom_copper_shapes.Fracture( SHAPE_POLY_SET::PM_FAST );
 
-    m_pcbModel->AddCopperPolygonShapes( &m_top_copper_shapes, true, origin );
-    m_pcbModel->AddCopperPolygonShapes( &m_bottom_copper_shapes, false, origin );
+    m_pcbModel->AddCopperPolygonShapes( &m_top_copper_shapes, true, origin, true );
+    m_pcbModel->AddCopperPolygonShapes( &m_bottom_copper_shapes, false, origin, true );
+
+    if( m_params.m_exportZones )
+    {
+        buildZones3DShape( origin );
+    }
 
     ReportMessage( wxT( "Create PCB solid model\n" ) );
 

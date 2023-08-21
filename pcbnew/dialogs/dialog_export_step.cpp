@@ -115,6 +115,8 @@ private:
     bool               m_noDNP;          // remember last preference for No DNP Component
     static bool        m_exportTracks;   // remember last preference to export tracks
                                          // (stored only for the session)
+    static bool        m_exportZones;    // remember last preference to export tracks
+                                         // (stored only for the session)
     wxString           m_boardPath;      // path to the exported board file
     static int         m_toleranceLastChoice;  // Store m_tolerance option during a session
 };
@@ -122,6 +124,7 @@ private:
 
 int  DIALOG_EXPORT_STEP::m_toleranceLastChoice = -1;     // Use default
 bool DIALOG_EXPORT_STEP::m_exportTracks = false;
+bool DIALOG_EXPORT_STEP::m_exportZones = false;
 
 DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString& aBoardPath ) :
     DIALOG_EXPORT_STEP_BASE( aParent )
@@ -187,6 +190,7 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
     m_noDNP       = cfg->m_ExportStep.no_dnp;
 
     m_cbExportTracks->SetValue( m_exportTracks );
+    m_cbExportZones->SetValue( m_exportZones );
     m_cbRemoveUnspecified->SetValue( m_noUnspecified );
     m_cbRemoveDNP->SetValue( m_noDNP );
     m_cbSubstModels->SetValue( cfg->m_ExportStep.replace_models );
@@ -424,7 +428,10 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
         cmdK2S.Append( wxT( " --subst-models" ) );
 
     if( m_exportTracks )
-        cmdK2S.Append( wxT( " --export-tracks" ) );
+        cmdK2S.Append( wxT( " --include-tracks" ) );
+
+    if( m_exportZones )
+        cmdK2S.Append( wxT( " --include-zones" ) );
 
     // Note: for some reason, using \" to insert a quote in a format string, under MacOS
     // wxString::Format does not work. So use a %c format in string

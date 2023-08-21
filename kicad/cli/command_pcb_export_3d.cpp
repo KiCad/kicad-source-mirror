@@ -38,7 +38,8 @@
 #define ARG_MIN_DISTANCE "--min-distance"
 #define ARG_USER_ORIGIN "--user-origin"
 #define ARG_BOARD_ONLY "--board-only"
-#define ARG_EXPORT_TRACKS "--export-tracks"
+#define ARG_INCLUDE_TRACKS "--include-tracks"
+#define ARG_INCLUDE_ZONES "--include-zones"
 #define ARG_FORMAT "--format"
 
 #define REGEX_QUANTITY "([\\s]*[+-]?[\\d]*[.]?[\\d]*)"
@@ -92,8 +93,13 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&   aName,
             .implicit_value( true )
             .default_value( false );
 
-    m_argParser.add_argument( ARG_EXPORT_TRACKS )
+    m_argParser.add_argument( ARG_INCLUDE_TRACKS )
             .help( UTF8STDSTR( _( "Export tracks (extremely time consuming)" ) ) )
+            .implicit_value( true )
+            .default_value( false );
+
+    m_argParser.add_argument( ARG_INCLUDE_ZONES )
+            .help( UTF8STDSTR( _( "Export zones (extremely time consuming)" ) ) )
             .implicit_value( true )
             .default_value( false );
 
@@ -125,7 +131,8 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
     step->m_filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
     step->m_outputFile = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
     step->m_boardOnly = m_argParser.get<bool>( ARG_BOARD_ONLY );
-    step->m_exportTracks = m_argParser.get<bool>( ARG_EXPORT_TRACKS );
+    step->m_exportTracks = m_argParser.get<bool>( ARG_INCLUDE_TRACKS );
+    step->m_exportZones = m_argParser.get<bool>( ARG_INCLUDE_ZONES );
     step->m_format = m_format;
 
     if( step->m_format == JOB_EXPORT_PCB_3D::FORMAT::UNKNOWN )

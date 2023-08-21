@@ -59,6 +59,7 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbSubstModels;
 		wxCheckBox* m_cbOverwriteFile;
 		wxCheckBox* m_cbExportTracks;
+		wxCheckBox* m_cbExportZones;
 		wxStaticText* m_staticTextTolerance;
 		wxChoice* m_choiceTolerance;
 		wxStdDialogButtonSizer* m_sdbSizer;
