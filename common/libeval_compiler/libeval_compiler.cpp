@@ -1126,12 +1126,12 @@ void UOP::Exec( CONTEXT* ctx )
         break;
     }
 
+#define AS_DOUBLE( arg ) ( arg ? arg->AsDouble() : 0.0 )
+
     if( m_op & TR_OP_BINARY_MASK )
     {
         LIBEVAL::VALUE* arg2 = ctx->Pop();
         LIBEVAL::VALUE* arg1 = ctx->Pop();
-        double          arg2Value = arg2 ? arg2->AsDouble() : 0.0;
-        double          arg1Value = arg1 ? arg1->AsDouble() : 0.0;
         double          result;
 
         if( ctx->HasErrorCallback() )
@@ -1153,28 +1153,28 @@ void UOP::Exec( CONTEXT* ctx )
         switch( m_op )
         {
         case TR_OP_ADD:
-            result = arg1Value + arg2Value;
+            result = AS_DOUBLE( arg1 ) + AS_DOUBLE( arg2 );
             break;
         case TR_OP_SUB:
-            result = arg1Value - arg2Value;
+            result = AS_DOUBLE( arg1 ) - AS_DOUBLE( arg2 );
             break;
         case TR_OP_MUL:
-            result = arg1Value * arg2Value;
+            result = AS_DOUBLE( arg1 ) * AS_DOUBLE( arg2 );
             break;
         case TR_OP_DIV:
-            result = arg1Value / arg2Value;
+            result = AS_DOUBLE( arg1 ) / AS_DOUBLE( arg2 );
             break;
         case TR_OP_LESS_EQUAL:
-            result = arg1Value <= arg2Value ? 1 : 0;
+            result = AS_DOUBLE( arg1 ) <= AS_DOUBLE( arg2 ) ? 1 : 0;
             break;
         case TR_OP_GREATER_EQUAL:
-            result = arg1Value >= arg2Value ? 1 : 0;
+            result = AS_DOUBLE( arg1 ) >= AS_DOUBLE( arg2 ) ? 1 : 0;
             break;
         case TR_OP_LESS:
-            result = arg1Value < arg2Value ? 1 : 0;
+            result = AS_DOUBLE( arg1 ) < AS_DOUBLE( arg2 ) ? 1 : 0;
             break;
         case TR_OP_GREATER:
-            result = arg1Value > arg2Value ? 1 : 0;
+            result = AS_DOUBLE( arg1 ) > AS_DOUBLE( arg2 ) ? 1 : 0;
             break;
         case TR_OP_EQUAL:
             if( !arg1 || !arg2 )
@@ -1193,10 +1193,10 @@ void UOP::Exec( CONTEXT* ctx )
                 result = arg1->NotEqualTo( ctx, arg2 ) ? 1 : 0;
             break;
         case TR_OP_BOOL_AND:
-            result = arg1Value != 0.0 && arg2Value != 0.0 ? 1 : 0;
+            result = AS_DOUBLE( arg1 ) != 0.0 && AS_DOUBLE( arg2 ) != 0.0 ? 1 : 0;
             break;
         case TR_OP_BOOL_OR:
-            result = arg1Value != 0.0 || arg2Value != 0.0 ? 1 : 0;
+            result = AS_DOUBLE( arg1 ) != 0.0 || AS_DOUBLE( arg2 ) != 0.0 ? 1 : 0;
             break;
         default:
             result = 0.0;
@@ -1211,16 +1211,16 @@ void UOP::Exec( CONTEXT* ctx )
     else if( m_op & TR_OP_UNARY_MASK )
     {
         LIBEVAL::VALUE* arg1 = ctx->Pop();
-        double          arg1Value = arg1 ? arg1->AsDouble() : 0.0;
+        double          ARG1VALUE = arg1 ? arg1->AsDouble() : 0.0;
         double          result;
 
         switch( m_op )
         {
         case TR_OP_BOOL_NOT:
-            result = arg1Value != 0.0 ? 0 : 1;
+            result = ARG1VALUE != 0.0 ? 0 : 1;
             break;
         default:
-            result = arg1Value != 0.0 ? 1 : 0;
+            result = ARG1VALUE != 0.0 ? 1 : 0;
             break;
         }
 
