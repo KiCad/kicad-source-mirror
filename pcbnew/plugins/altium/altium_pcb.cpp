@@ -450,6 +450,23 @@ void ALTIUM_PCB::Parse( const ALTIUM_COMPOUND_FILE&                  altiumPcbFi
         }
     }
 
+    const auto& boardDirectory = aFileMapping.find( ALTIUM_PCB_DIR::BOARD6 );
+
+    if( boardDirectory != aFileMapping.end() )
+    {
+        std::vector<std::string> mappedFile{ boardDirectory->second, "Data" };
+
+        const CFB::COMPOUND_FILE_ENTRY* file = altiumPcbFile.FindStream( mappedFile );
+
+        if( !file )
+        {
+            THROW_IO_ERROR( _(
+                    "This file does not appear to be in a valid PCB Binary Version 6.0 format. In "
+                    "Altium Designer, "
+                    "make sure to save as \"PCB Binary Files (*.PcbDoc)\"." ) );
+        }
+    }
+
     // Parse data in specified order
     for( const std::tuple<bool, ALTIUM_PCB_DIR, PARSE_FUNCTION_POINTER_fp>& cur : parserOrder )
     {
