@@ -822,6 +822,53 @@ static void memberOfGroupFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 }
 
 
+#define MISSING_SHEET_ARG( f ) \
+    wxString::Format( _( "Missing sheet name argument to %s." ), f )
+
+static void memberOfSheetFunc( LIBEVAL::CONTEXT* aCtx, void* self )
+{
+    LIBEVAL::VALUE* arg = aCtx->Pop();
+    LIBEVAL::VALUE* result = aCtx->AllocValue();
+
+    result->Set( 0.0 );
+    aCtx->Push( result );
+
+    if( !arg || arg->AsString().IsEmpty() )
+    {
+        if( aCtx->HasErrorCallback() )
+            aCtx->ReportError( MISSING_SHEET_ARG( wxT( "memberOfSheet()" ) ) );
+
+        return;
+    }
+
+    PCBEXPR_VAR_REF* vref = static_cast<PCBEXPR_VAR_REF*>( self );
+    BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
+
+    if( !item )
+        return;
+
+    result->SetDeferredEval(
+            [item, arg]() -> double
+            {
+                FOOTPRINT* fp = item->GetParentFootprint();
+
+                if( !fp )
+                    return 0.0;
+
+                if( fp->GetSheetname().Matches( arg->AsString() ) )
+                    return 1.0;
+
+                if( ( arg->AsString().Matches( wxT( "/" ) ) || arg->AsString().IsEmpty() )
+                    && fp->GetSheetname().IsEmpty() )
+                {
+                    return 1.0;
+                }
+
+                return 0.0;
+            } );
+}
+
+
 #define MISSING_REF_ARG( f ) \
     wxString::Format( _( "Missing footprint argument (reference designator) to %s." ), f )
 
@@ -1060,6 +1107,7 @@ void PCBEXPR_BUILTIN_FUNCTIONS::RegisterAllFunctions()
     RegisterFunc( wxT( "memberOf('x') DEPRECATED" ), memberOfGroupFunc );
     RegisterFunc( wxT( "memberOfGroup('x')" ), memberOfGroupFunc );
     RegisterFunc( wxT( "memberOfFootprint('x')" ), memberOfFootprintFunc );
+    RegisterFunc( wxT( "memberOfSheet('x')" ), memberOfSheetFunc );
 
     RegisterFunc( wxT( "fromTo('x','y')" ), fromToFunc );
     RegisterFunc( wxT( "isCoupledDiffPair()" ), isCoupledDiffPairFunc );
