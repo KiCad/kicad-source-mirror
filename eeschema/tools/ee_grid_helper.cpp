@@ -78,14 +78,22 @@ VECTOR2I EE_GRID_HELPER::BestDragOrigin( const VECTOR2I& aMousePos, GRID_HELPER_
 {
     clearAnchors();
 
-    // Text anchors are often off the connectivity grid.  For now, this means
-    // we can only consider anchors from text objects if they are the only thing
-    // selected.
-    bool includeText = ( aItems.Size() == 1
-                         || aItems.OnlyContains( { SCH_TEXT_T, SCH_TEXTBOX_T, SCH_FIELD_T } ) );
+    // If we're working with any connectable objects, skip non-connectable objects
+    // since they are often off-grid, e.g. text anchors
+    bool hasConnectables = false;
 
     for( EDA_ITEM* item : aItems )
-        computeAnchors( static_cast<SCH_ITEM*>( item ), aMousePos, true, includeText );
+    {
+        GRID_HELPER_GRIDS grid = GetItemGrid( static_cast<SCH_ITEM*>( item ) );
+        if( grid == GRID_CONNECTABLE || grid == GRID_WIRES )
+        {
+            hasConnectables = true;
+            break;
+        }
+    }
+
+    for( EDA_ITEM* item : aItems )
+        computeAnchors( static_cast<SCH_ITEM*>( item ), aMousePos, true, !hasConnectables );
 
     double worldScale = m_toolMgr->GetView()->GetGAL()->GetWorldScale();
     double lineSnapMinCornerDistance = 50.0 / worldScale;
@@ -392,6 +400,9 @@ GRID_HELPER_GRIDS EE_GRID_HELPER::GetItemGrid( const SCH_ITEM* aItem )
 void EE_GRID_HELPER::computeAnchors( SCH_ITEM *aItem, const VECTOR2I &aRefPos, bool aFrom,
                                      bool aIncludeText )
 {
+    bool isGraphicLine =
+            aItem->Type() == SCH_LINE_T && static_cast<SCH_LINE*>( aItem )->IsGraphicLine();
+
     switch( aItem->Type() )
     {
     case SCH_TEXT_T:
@@ -412,6 +423,12 @@ void EE_GRID_HELPER::computeAnchors( SCH_ITEM *aItem, const VECTOR2I &aRefPos, b
     case SCH_JUNCTION_T:
     case SCH_NO_CONNECT_T:
     case SCH_LINE_T:
+        // Don't add anchors for graphic lines unless we're including text,
+        // they may be on a non-connectable grid
+        if( isGraphicLine && !aIncludeText )
+            break;
+
+        KI_FALLTHROUGH;
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIER_LABEL_T:
     case SCH_LABEL_T:
@@ -431,7 +448,9 @@ void EE_GRID_HELPER::computeAnchors( SCH_ITEM *aItem, const VECTOR2I &aRefPos, b
         break;
     }
 
-    if( aItem->Type() == SCH_LINE_T )
+    // Don't add anchors for graphic lines unless we're including text,
+    // they may be on a non-connectable grid
+    if( aItem->Type() == SCH_LINE_T && ( aIncludeText || !isGraphicLine ) )
     {
         SCH_LINE* line = static_cast<SCH_LINE*>( aItem );
         VECTOR2I  pt = Align( aRefPos );
