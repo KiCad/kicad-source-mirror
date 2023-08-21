@@ -40,6 +40,8 @@ public:
     bool TransferDataToWindow() override;
 
 private:
+    void OnAddGrid( wxCommandEvent& event ) override;
+    void OnRemoveGrid( wxCommandEvent& event ) override;
     void OnResetGridOriginClick( wxCommandEvent& event ) override;
 
     void RebuildGridSizes();

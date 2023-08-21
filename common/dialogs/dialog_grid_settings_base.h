@@ -12,22 +12,21 @@
 #include <wx/intl.h>
 #include "dialog_shim.h"
 #include <wx/string.h>
-#include <wx/stattext.h>
+#include <wx/choice.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/textctrl.h>
-#include <wx/sizer.h>
-#include <wx/statbox.h>
-#include <wx/panel.h>
-#include <wx/choice.h>
-#include <wx/simplebook.h>
-#include <wx/checkbox.h>
-#include <wx/button.h>
+#include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/button.h>
+#include <wx/sizer.h>
+#include <wx/statbox.h>
+#include <wx/stattext.h>
+#include <wx/textctrl.h>
+#include <wx/checkbox.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -41,20 +40,22 @@ class DIALOG_GRID_SETTINGS_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		wxSimplebook* m_book;
-		wxStaticText* m_staticTextGridPosX;
-		wxTextCtrl* m_GridOriginXCtrl;
-		wxStaticText* m_TextPosXUnits;
-		wxStaticText* m_staticTextGridPosY;
-		wxTextCtrl* m_GridOriginYCtrl;
-		wxStaticText* m_TextPosYUnits;
 		wxChoice* m_currentGridCtrl;
+		wxBitmapButton* m_addGridButton;
+		wxBitmapButton* m_removeGridButton;
 		wxStaticText* m_staticTextSizeX;
 		wxTextCtrl* m_OptGridSizeX;
 		wxStaticText* m_TextSizeXUnits;
 		wxStaticText* m_staticTextSizeY;
 		wxTextCtrl* m_OptGridSizeY;
 		wxStaticText* m_TextSizeYUnits;
+		wxStaticBoxSizer* sbGridOriginSizer;
+		wxStaticText* m_staticTextGridPosX;
+		wxTextCtrl* m_GridOriginXCtrl;
+		wxStaticText* m_TextPosXUnits;
+		wxStaticText* m_staticTextGridPosY;
+		wxTextCtrl* m_GridOriginYCtrl;
+		wxStaticText* m_TextPosYUnits;
 		wxStaticText* m_staticTextGrid1;
 		wxChoice* m_grid1Ctrl;
 		wxStaticText* m_grid1HotKey;
@@ -86,6 +87,8 @@ class DIALOG_GRID_SETTINGS_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
+		virtual void OnAddGrid( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRemoveGrid( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnResetGridOriginClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }

@@ -21,6 +21,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <bitmaps.h>
+#include <confirm.h>
+#include <wx/textdlg.h>
 #include <dialogs/dialog_grid_settings.h>
 #include <common.h>
 #include <settings/app_settings.h>
@@ -59,12 +62,12 @@ DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( EDA_DRAW_FRAME* aParent ) :
         || m_parent->IsType( FRAME_SCH_VIEWER_MODAL )
         || m_parent->IsType( FRAME_SIMULATOR ) )
     {
-        m_book->SetSelection( 1 );
-        m_buttonResetOrigin->Hide();              // Eeschema and friends don't use grid origin
+        // Eeschema and friends don't use grid origin
+        m_buttonResetOrigin->Hide();
+        sbGridOriginSizer->ShowItems( false );
     }
     else
     {
-        m_book->SetSelection( 0 );
         sbGridOverridesSizer->ShowItems( false );
     }
 
@@ -72,6 +75,9 @@ DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( EDA_DRAW_FRAME* aParent ) :
     int hk2 = ACTIONS::gridFast2.GetHotKey();
     m_grid1HotKey->SetLabel( wxString::Format( wxT( "(%s)" ), KeyNameFromKeyCode( hk1 ) ) );
     m_grid2HotKey->SetLabel( wxString::Format( wxT( "(%s)" ), KeyNameFromKeyCode( hk2 ) ) );
+
+    m_addGridButton->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
+    m_removeGridButton->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
 
     SetupStandardButtons();
     SetInitialFocus( m_GridOriginXCtrl );
@@ -107,9 +113,14 @@ void DIALOG_GRID_SETTINGS::RebuildGridSizes()
     m_grid1Ctrl->Set( grids );
     m_grid2Ctrl->Set( grids );
 
-    m_currentGridCtrl->SetStringSelection( savedCurrentGrid );
-    m_grid1Ctrl->SetStringSelection( savedGrid1 );
-    m_grid2Ctrl->SetStringSelection( savedGrid2 );
+    if( !m_currentGridCtrl->SetStringSelection( savedCurrentGrid ) )
+        m_currentGridCtrl->SetStringSelection( grids.front() );
+
+    if( !m_grid1Ctrl->SetStringSelection( savedGrid1 ) )
+        m_grid1Ctrl->SetStringSelection( grids.front() );
+
+    if( !m_grid2Ctrl->SetStringSelection( savedGrid2 ) )
+        m_grid2Ctrl->SetStringSelection( grids.back() );
 }
 
 
@@ -166,7 +177,6 @@ bool DIALOG_GRID_SETTINGS::TransferDataToWindow()
 
     GRID_SETTINGS& gridCfg = settings->m_Window.grid;
 
-    m_buttonResetSizes->Show( gridCfg.sizes != settings->DefaultGridSizeList() );
     Layout();
 
     m_currentGridCtrl->SetSelection( settings->m_Window.grid.last_size_idx );
@@ -192,6 +202,70 @@ bool DIALOG_GRID_SETTINGS::TransferDataToWindow()
     m_grid2Ctrl->SetSelection( gridCfg.fast_grid_2 );
 
     return wxDialog::TransferDataToWindow();
+}
+
+
+void DIALOG_GRID_SETTINGS::OnAddGrid( wxCommandEvent& event )
+{
+    wxTextEntryDialog dlg( this, _( "New grid:" ), _( "Add Grid" ) );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return;
+
+    int            row = m_currentGridCtrl->GetSelection();
+    GRID_SETTINGS& gridCfg = m_parent->config()->m_Window.grid;
+    EDA_IU_SCALE   scale = m_parent->GetIuScale();
+    EDA_UNITS      units = m_parent->GetUserUnits();
+    double         gridSize = EDA_UNIT_UTILS::UI::DoubleValueFromString( scale, units, dlg.GetValue() );
+
+
+    if( gridSize == 0.0f )
+    {
+        DisplayError( this, _( "Grid must have a valid size." ) );
+        return;
+    }
+
+    wxString gridSizeStr =
+            EDA_UNIT_UTILS::UI::StringFromValue( scale, EDA_UNITS::MILLIMETRES, gridSize );
+
+    for( const wxString& size : gridCfg.sizes )
+    {
+        if( gridSizeStr == size )
+        {
+            DisplayError( this,
+                          wxString::Format( _( "Grid size '%s' already exists." ), gridSizeStr ) );
+            return;
+        }
+    }
+
+    gridCfg.sizes.insert( gridCfg.sizes.begin() + row, gridSizeStr );
+    RebuildGridSizes();
+    m_currentGridCtrl->SetSelection( row );
+}
+
+
+void DIALOG_GRID_SETTINGS::OnRemoveGrid( wxCommandEvent& event )
+{
+    GRID_SETTINGS& gridCfg = m_parent->config()->m_Window.grid;
+    int            row = m_currentGridCtrl->GetSelection();
+
+    if( row == (int) ( m_currentGridCtrl->GetCount() - 1 ) )
+    {
+        DisplayError( this, wxString::Format( _( "Cannot remove the user grid." ) ) );
+        return;
+    }
+
+    if( gridCfg.sizes.size() <= 1 )
+    {
+        DisplayError( this, wxString::Format( _( "At least one grid size is required." ) ) );
+        return;
+    }
+
+    gridCfg.sizes.erase( gridCfg.sizes.begin() + row );
+    RebuildGridSizes();
+
+    if( row != 0 )
+        m_currentGridCtrl->SetSelection( row - 1 );
 }
 
 

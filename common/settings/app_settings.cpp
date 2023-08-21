@@ -318,26 +318,16 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
 
     int defaultGridIdx;
 
-    if( m_filename == wxS( "pl_editor" ) )
+    if( m_filename == wxS( "pl_editor" )
+        || ( m_filename == wxS( "eeschema" ) || m_filename == wxS( "symbol_editor" ) ) )
     {
         defaultGridIdx = 1;
-
-        m_params.emplace_back( new PARAM_LIST<wxString>( aJsonPath + ".grid.sizes",
-                &aWindow->grid.sizes, DefaultGridSizeList() ) );
-    }
-    else if( m_filename == wxS( "eeschema" ) || m_filename == wxS( "symbol_editor" ) )
-    {
-        defaultGridIdx = 1;
-
-        // Eeschema's grids are fixed to keep wires/pins connected
     }
     else
-    {
         defaultGridIdx = 4;
 
-        m_params.emplace_back( new PARAM_LIST<wxString>( aJsonPath + ".grid.sizes",
-                &aWindow->grid.sizes, DefaultGridSizeList() ) );
-    }
+    m_params.emplace_back( new PARAM_LIST<wxString>( aJsonPath + ".grid.sizes",
+            &aWindow->grid.sizes, DefaultGridSizeList() ) );
 
     m_params.emplace_back( new PARAM<int>( aJsonPath + ".grid.last_size",
             &aWindow->grid.last_size_idx, defaultGridIdx ) );
@@ -437,10 +427,7 @@ const std::vector<wxString> APP_SETTINGS_BASE::DefaultGridSizeList() const
         return { wxS( "100 mil" ),
                  wxS( "50 mil" ),
                  wxS( "25 mil" ),
-                 wxS( "10 mil" ),
-                 wxS( "5 mil" ),
-                 wxS( "2 mil" ),
-                 wxS( "1 mil" ) };
+                 wxS( "10 mil" ) };
     }
     else
     {
