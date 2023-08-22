@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2015 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -38,8 +38,8 @@ DIFF_PAIR_PLACER::DIFF_PAIR_PLACER( ROUTER* aRouter ) :
     m_initialDiagonal = false;
     m_startDiagonal = false;
     m_fitOk = false;
-    m_netP = 0;
-    m_netN = 0;
+    m_netP = nullptr;
+    m_netN = nullptr;
     m_iteration = 0;
     m_world = nullptr;
     m_shove = nullptr;
@@ -49,7 +49,6 @@ DIFF_PAIR_PLACER::DIFF_PAIR_PLACER( ROUTER* aRouter ) :
     m_viaDiameter = 0;
     m_viaDrill = 0;
     m_currentWidth = 0;
-    m_currentNet = 0;
     m_currentLayer = 0;
     m_startsOnVia = false;
     m_orthoMode = false;
@@ -69,12 +68,11 @@ void DIFF_PAIR_PLACER::setWorld( NODE* aWorld )
 }
 
 
-const VIA DIFF_PAIR_PLACER::makeVia( const VECTOR2I& aP, int aNet )
+const VIA DIFF_PAIR_PLACER::makeVia( const VECTOR2I& aP, NET_HANDLE aNet )
 {
     const LAYER_RANGE layers( m_sizes.GetLayerTop(), m_sizes.GetLayerBottom() );
 
-    VIA v( aP, layers, m_sizes.ViaDiameter(), m_sizes.ViaDrill(), -1, m_sizes.ViaType() );
-    v.SetNet( aNet );
+    VIA v( aP, layers, m_sizes.ViaDiameter(), m_sizes.ViaDrill(), aNet, m_sizes.ViaType() );
 
     return v;
 }
@@ -116,7 +114,7 @@ bool DIFF_PAIR_PLACER::rhMarkObstacles( const VECTOR2I& aP )
 
 bool DIFF_PAIR_PLACER::propagateDpHeadForces ( const VECTOR2I& aP, VECTOR2I& aNewP )
 {
-    VIA virtHead = makeVia( aP, -1 );
+    VIA virtHead = makeVia( aP, nullptr );
 
     if( m_placingVia )
     {
@@ -487,7 +485,7 @@ OPT_VECTOR2I getDanglingAnchor( NODE* aNode, ITEM* aItem )
 bool DIFF_PAIR_PLACER::FindDpPrimitivePair( NODE* aWorld, const VECTOR2I& aP, ITEM* aItem,
                                             DP_PRIMITIVE_PAIR& aPair, wxString* aErrorMsg )
 {
-    int netP, netN;
+    NET_HANDLE netP, netN;
 
     bool result = aWorld->GetRuleResolver()->DpNetPair( aItem, netP, netN );
 
@@ -502,8 +500,8 @@ bool DIFF_PAIR_PLACER::FindDpPrimitivePair( NODE* aWorld, const VECTOR2I& aP, IT
         return false;
     }
 
-    int refNet = aItem->Net();
-    int coupledNet = ( refNet == netP ) ? netN : netP;
+    NET_HANDLE refNet = aItem->Net();
+    NET_HANDLE coupledNet = ( refNet == netP ) ? netN : netP;
 
     OPT_VECTOR2I refAnchor = getDanglingAnchor( aWorld, aItem );
     ITEM* primRef = aItem;
@@ -858,7 +856,7 @@ bool DIFF_PAIR_PLACER::CommitPlacement()
 }
 
 
-void DIFF_PAIR_PLACER::GetModifiedNets( std::vector<int> &aNets ) const
+void DIFF_PAIR_PLACER::GetModifiedNets( std::vector<NET_HANDLE> &aNets ) const
 {
     aNets.push_back( m_netP );
     aNets.push_back( m_netN );
@@ -878,9 +876,9 @@ void DIFF_PAIR_PLACER::updateLeadingRatLine()
 }
 
 
-const std::vector<int> DIFF_PAIR_PLACER::CurrentNets() const
+const std::vector<NET_HANDLE> DIFF_PAIR_PLACER::CurrentNets() const
 {
-    std::vector<int> rv;
+    std::vector<NET_HANDLE> rv;
     rv.push_back( m_netP );
     rv.push_back( m_netN );
     return rv;

@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -47,7 +47,7 @@ public:
     struct HASH_TAG
     {
         VECTOR2I pos;
-        int net;
+        NET_HANDLE net;
     };
 
     struct JOINT_TAG_HASH
@@ -60,14 +60,14 @@ public:
 
             return ( (hash<int>()( aP.pos.x )
                       ^ (hash<int>()( aP.pos.y ) << 1) ) >> 1 )
-                   ^ (hash<int>()( aP.net ) << 1);
+                   ^ (hash<void*>()( aP.net ) << 1);
         }
     };
 
     JOINT() :
         ITEM( JOINT_T ), m_tag(), m_locked( false ) {}
 
-    JOINT( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, int aNet = -1 ) :
+    JOINT( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, NET_HANDLE aNet = nullptr ) :
         ITEM( JOINT_T )
     {
         m_tag.pos = aPos;
@@ -231,7 +231,7 @@ public:
         return m_tag.pos;
     }
 
-    int Net() const override
+    NET_HANDLE Net() const override
     {
         return m_tag.net;
     }

@@ -89,7 +89,7 @@ public:
 
     ITEM_SET& FilterLayers( int aStart, int aEnd = -1, bool aInvert = false );
     ITEM_SET& FilterKinds( int aKindMask, bool aInvert = false );
-    ITEM_SET& FilterNet( int aNet, bool aInvert = false );
+    ITEM_SET& FilterNet( NET_HANDLE aNet, bool aInvert = false );
     ITEM_SET& FilterMarker( int aMarker, bool aInvert = false );
 
     ITEM_SET& ExcludeLayers( int aStart, int aEnd = -1 )
@@ -102,7 +102,7 @@ public:
         return FilterKinds( aKindMask, true );
     }
 
-    ITEM_SET& ExcludeNet( int aNet )
+    ITEM_SET& ExcludeNet( NET_HANDLE aNet )
     {
         return FilterNet( aNet, true );
     }

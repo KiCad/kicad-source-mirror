@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -42,7 +42,7 @@ public:
         LINKED_ITEM( SEGMENT_T )
     {}
 
-    SEGMENT( const SEG& aSeg, int aNet ) :
+    SEGMENT( const SEG& aSeg, NET_HANDLE aNet ) :
         LINKED_ITEM( SEGMENT_T ),
         m_seg( aSeg, 0 )
     {

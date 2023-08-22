@@ -157,7 +157,7 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
     if( Kind() == HOLE_T && aHead->Kind() == HOLE_T )
         differentNetsOnly = false;
 
-    if( differentNetsOnly && Net() == aHead->Net() && aHead->Net() >= 0 )
+    if( differentNetsOnly && Net() == aHead->Net() && aHead->Net() )
     {
         // same nets? no clearance!
         clearance = -1;

@@ -53,7 +53,7 @@ public:
      */
     virtual HOLE* Clone() const override;
 
-    virtual int Net() const override
+    virtual NET_HANDLE Net() const override
     {
         if( m_parentPadVia )
             return m_parentPadVia->Net();

@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -36,9 +36,9 @@ void INDEX::Add( ITEM* aItem )
         m_subIndices[i].Add( aItem );
 
     m_allItems.insert( aItem );
-    int net = aItem->Net();
+    NET_HANDLE net = aItem->Net();
 
-    if( net >= 0 )
+    if( net )
         m_netMap[net].push_back( aItem );
 }
 
@@ -54,9 +54,9 @@ void INDEX::Remove( ITEM* aItem )
         m_subIndices[i].Remove( aItem );
 
     m_allItems.erase( aItem );
-    int net = aItem->Net();
+    NET_HANDLE net = aItem->Net();
 
-    if( net >= 0 && m_netMap.find( net ) != m_netMap.end() )
+    if( net && m_netMap.find( net ) != m_netMap.end() )
         m_netMap[net].remove( aItem );
 }
 
@@ -68,7 +68,7 @@ void INDEX::Replace( ITEM* aOldItem, ITEM* aNewItem )
 }
 
 
-INDEX::NET_ITEMS_LIST* INDEX::GetItemsForNet( int aNet )
+INDEX::NET_ITEMS_LIST* INDEX::GetItemsForNet( NET_HANDLE aNet )
 {
     if( m_netMap.find( aNet ) == m_netMap.end() )
         return nullptr;

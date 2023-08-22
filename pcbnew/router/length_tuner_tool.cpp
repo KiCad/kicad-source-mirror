@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -145,7 +145,7 @@ void LENGTH_TUNER_TOOL::performTuning()
     {
         frame()->SetActiveLayer( ToLAYER_ID ( m_startItem->Layers().Start() ) );
 
-        if( m_startItem->Net() >= 0 )
+        if( m_startItem->Net() )
             highlightNets( true, { m_startItem->Net() } );
     }
 

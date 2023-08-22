@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -195,7 +195,7 @@ private:
 
     int smartPadsSingle( LINE* aLine, ITEM* aPad, bool aEnd, int aEndVertex );
 
-    ITEM* findPadOrVia( int aLayer, int aNet, const VECTOR2I& aP ) const;
+    ITEM* findPadOrVia( int aLayer, NET_HANDLE aNet, const VECTOR2I& aP ) const;
 
 private:
     SHAPE_INDEX_LIST<ITEM*>                m_cache;

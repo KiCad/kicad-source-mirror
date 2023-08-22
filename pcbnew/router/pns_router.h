@@ -99,13 +99,15 @@ enum DRAG_MODE
     virtual bool IsFlashedOnLayer( const PNS::ITEM* aItem, const LAYER_RANGE& aLayer ) const = 0;
     virtual void DisplayItem( const ITEM* aItem, int aClearance, bool aEdit = false, bool aIsHeadTrace = false ) = 0;
     virtual void DisplayPathLine( const SHAPE_LINE_CHAIN& aLine, int aImportance ) = 0;
-    virtual void DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, int aNetCode ) = 0;
+    virtual void DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, NET_HANDLE aNetCode ) = 0;
     virtual void HideItem( ITEM* aItem ) = 0;
     virtual void Commit() = 0;
-    virtual bool ImportSizes( SIZES_SETTINGS& aSizes, ITEM* aStartItem, int aNet ) = 0;
+    virtual bool ImportSizes( SIZES_SETTINGS& aSizes, ITEM* aStartItem, NET_HANDLE aNet ) = 0;
     virtual int  StackupHeight( int aFirstLayer, int aSecondLayer ) const = 0;
     virtual void EraseView() = 0;
-    virtual void UpdateNet( int aNetCode ) = 0;
+    virtual int GetNetCode( NET_HANDLE aNet ) const = 0;
+    virtual wxString GetNetName( PNS::NET_HANDLE aNet ) const = 0;
+    virtual void UpdateNet( NET_HANDLE aNet ) = 0;
 
     virtual PNS::NODE* GetWorld() const = 0;
 
@@ -170,7 +172,7 @@ public:
     void ToggleCornerMode();
 
     int GetCurrentLayer() const;
-    const std::vector<int> GetCurrentNets() const;
+    const std::vector<NET_HANDLE> GetCurrentNets() const;
 
     LOGGER* Logger();
 

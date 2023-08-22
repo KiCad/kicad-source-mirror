@@ -146,7 +146,7 @@ const ITEM_SET ROUTER::QueryHoverItems( const VECTOR2I& aP, bool aUseClearance )
     if( aUseClearance )
     {
         NODE::OBSTACLES          obs;
-        SEGMENT                  test( SEG( aP, aP ), -1 );
+        SEGMENT                  test( SEG( aP, aP ), nullptr );
         COLLISION_SEARCH_OPTIONS opts;
 
         test.SetWidth( 1 );
@@ -922,11 +922,11 @@ void ROUTER::StopRouting()
 
     if( m_placer )
     {
-        std::vector<int> nets;
+        std::vector<NET_HANDLE> nets;
         m_placer->GetModifiedNets( nets );
 
         // Update the ratsnest with new changes
-        for( int n : nets )
+        for( NET_HANDLE n : nets )
             m_iface->UpdateNet( n );
     }
 
@@ -981,14 +981,14 @@ void ROUTER::ToggleViaPlacement()
 }
 
 
-const std::vector<int> ROUTER::GetCurrentNets() const
+const std::vector<NET_HANDLE> ROUTER::GetCurrentNets() const
 {
     if( m_placer )
         return m_placer->CurrentNets();
     else if( m_dragger )
         return m_dragger->CurrentNets();
 
-    return std::vector<int>();
+    return std::vector<NET_HANDLE>();
 }
 
 

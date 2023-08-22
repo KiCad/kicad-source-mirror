@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -98,7 +98,7 @@ public:
     const VECTOR2I& CurrentEnd() const override;
 
     /// @copydoc PLACEMENT_ALGO::CurrentNets()
-    const std::vector<int> CurrentNets() const override;
+    const std::vector<NET_HANDLE> CurrentNets() const override;
 
     int CurrentLayer() const override;
 

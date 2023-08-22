@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -57,11 +57,11 @@ protected:
 
     const VECTOR2I snapToItem( ITEM* aSnapToItem, const VECTOR2I& aP);
 
-    virtual ITEM* pickSingleItem( const VECTOR2I& aWhere, int aNet = -1, int aLayer = -1,
-                                  bool aIgnorePads = false,
+    virtual ITEM* pickSingleItem( const VECTOR2I& aWhere, NET_HANDLE aNet = nullptr,
+                                  int aLayer = -1, bool aIgnorePads = false,
                                   const std::vector<ITEM*> aAvoidItems = {} );
 
-    virtual void highlightNets( bool aEnabled, std::set<int> aNetcodes = {} );
+    virtual void highlightNets( bool aEnabled, std::set<NET_HANDLE> aNetcodes = {} );
 
     virtual void updateStartItem( const TOOL_EVENT& aEvent, bool aIgnorePads = false );
     virtual void updateEndItem( const TOOL_EVENT& aEvent );

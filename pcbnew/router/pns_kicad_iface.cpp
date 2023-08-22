@@ -22,6 +22,7 @@
 #include <board.h>
 #include <board_connected_item.h>
 #include <board_design_settings.h>
+#include <netinfo.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_track.h>
@@ -105,9 +106,13 @@ public:
     virtual int Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB,
                            bool aUseClearanceEpsilon = true ) override;
 
-    virtual int DpCoupledNet( int aNet ) override;
-    virtual int DpNetPolarity( int aNet ) override;
-    virtual bool DpNetPair( const PNS::ITEM* aItem, int& aNetP, int& aNetN ) override;
+    virtual PNS::NET_HANDLE DpCoupledNet( PNS::NET_HANDLE aNet ) override;
+    virtual int DpNetPolarity( PNS::NET_HANDLE aNet ) override;
+    virtual bool DpNetPair( const PNS::ITEM* aItem, PNS::NET_HANDLE& aNetP,
+                            PNS::NET_HANDLE& aNetN ) override;
+
+    virtual int NetCode( PNS::NET_HANDLE aNet ) override;
+    virtual wxString NetName( PNS::NET_HANDLE aNet ) override;
 
     virtual bool IsInNetTie( const PNS::ITEM* aA ) override;
     virtual bool IsNetTieExclusion( const PNS::ITEM* aItem, const VECTOR2I& aCollisionPos,
@@ -118,7 +123,6 @@ public:
     virtual bool QueryConstraint( PNS::CONSTRAINT_TYPE aType, const PNS::ITEM* aItemA,
                                   const PNS::ITEM* aItemB, int aLayer,
                                   PNS::CONSTRAINT* aConstraint ) override;
-    virtual wxString NetName( int aNet ) override;
 
     int ClearanceEpsilon() const override { return m_clearanceEpsilon; }
 
@@ -207,7 +211,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::IsNetTieExclusion( const PNS::ITEM* aItem,
 
     if( drcEngine )
     {
-        return drcEngine->IsNetTieExclusion( aItem->Net(), ToLAYER_ID( aItem->Layer() ),
+        return drcEngine->IsNetTieExclusion( NetCode( aItem->Net() ), ToLAYER_ID( aItem->Layer() ),
                                              aCollisionPos, collidingItem );
     }
 
@@ -354,7 +358,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
         {
         case PNS::ITEM::ARC_T:
             m_dummyArcs[0].SetLayer( ToLAYER_ID( aLayer ) );
-            m_dummyArcs[0].SetNetCode( aItemA->Net(), true );
+            m_dummyArcs[0].SetNet( static_cast<NETINFO_ITEM*>( aItemA->Net() ) );
             m_dummyArcs[0].SetStart( aItemA->Anchor( 0 ) );
             m_dummyArcs[0].SetEnd( aItemA->Anchor( 1 ) );
             parentA = &m_dummyArcs[0];
@@ -363,7 +367,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
         case PNS::ITEM::VIA_T:
         case PNS::ITEM::HOLE_T:
             m_dummyVias[0].SetLayer( ToLAYER_ID( aLayer ) );
-            m_dummyVias[0].SetNetCode( aItemA->Net(), true );
+            m_dummyVias[0].SetNet( static_cast<NETINFO_ITEM*>( aItemA->Net() ) );
             m_dummyVias[0].SetStart( aItemA->Anchor( 0 ) );
             parentA = &m_dummyVias[0];
             break;
@@ -371,7 +375,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
         case PNS::ITEM::SEGMENT_T:
         case PNS::ITEM::LINE_T:
             m_dummyTracks[0].SetLayer( ToLAYER_ID( aLayer ) );
-            m_dummyTracks[0].SetNetCode( aItemA->Net(), true );
+            m_dummyTracks[0].SetNet( static_cast<NETINFO_ITEM*>( aItemA->Net() ) );
             m_dummyTracks[0].SetStart( aItemA->Anchor( 0 ) );
             m_dummyTracks[0].SetEnd( aItemA->Anchor( 1 ) );
             parentA = &m_dummyTracks[0];
@@ -388,7 +392,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
         {
         case PNS::ITEM::ARC_T:
             m_dummyArcs[1].SetLayer( ToLAYER_ID( aLayer ) );
-            m_dummyArcs[1].SetNetCode( aItemB->Net(), true );
+            m_dummyArcs[1].SetNet( static_cast<NETINFO_ITEM*>( aItemB->Net() ) );
             m_dummyArcs[1].SetStart( aItemB->Anchor( 0 ) );
             m_dummyArcs[1].SetEnd( aItemB->Anchor( 1 ) );
             parentB = &m_dummyArcs[1];
@@ -397,7 +401,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
         case PNS::ITEM::VIA_T:
         case PNS::ITEM::HOLE_T:
             m_dummyVias[1].SetLayer( ToLAYER_ID( aLayer ) );
-            m_dummyVias[1].SetNetCode( aItemB->Net(), true );
+            m_dummyVias[1].SetNet( static_cast<NETINFO_ITEM*>( aItemB->Net() ) );
             m_dummyVias[1].SetStart( aItemB->Anchor( 0 ) );
             parentB = &m_dummyVias[1];
             break;
@@ -405,7 +409,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
         case PNS::ITEM::SEGMENT_T:
         case PNS::ITEM::LINE_T:
             m_dummyTracks[1].SetLayer( ToLAYER_ID( aLayer ) );
-            m_dummyTracks[1].SetNetCode( aItemB->Net(), true );
+            m_dummyTracks[1].SetNet( static_cast<NETINFO_ITEM*>( aItemB->Net() ) );
             m_dummyTracks[1].SetStart( aItemB->Anchor( 0 ) );
             m_dummyTracks[1].SetEnd( aItemB->Anchor( 1 ) );
             parentB = &m_dummyTracks[1];
@@ -627,7 +631,7 @@ bool PNS_KICAD_IFACE_BASE::inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedW
 
 
 bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* aStartItem,
-                                        int aNet )
+                                        PNS::NET_HANDLE aNet )
 {
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
     PNS::CONSTRAINT        constraint;
@@ -854,59 +858,53 @@ int PNS_PCBNEW_RULE_RESOLVER::matchDpSuffix( const wxString& aNetName, wxString&
 }
 
 
-int PNS_PCBNEW_RULE_RESOLVER::DpCoupledNet( int aNet )
+PNS::NET_HANDLE PNS_PCBNEW_RULE_RESOLVER::DpCoupledNet( PNS::NET_HANDLE aNet )
 {
-    wxString refName = m_board->FindNet( aNet )->GetNetname();
-    wxString coupledNetName;
-
-    if( matchDpSuffix( refName, coupledNetName ) )
+    if( NETINFO_ITEM* net = static_cast<NETINFO_ITEM*>( aNet ) )
     {
-        NETINFO_ITEM* net = m_board->FindNet( coupledNetName );
+        wxString refName = net->GetNetname();
+        wxString coupledNetName;
 
-        if( !net )
-            return -1;
-
-        return net->GetNetCode();
+        if( matchDpSuffix( refName, coupledNetName ) )
+            return m_board->FindNet( coupledNetName );
     }
 
-    return -1;
+    return nullptr;
 }
 
 
-wxString PNS_PCBNEW_RULE_RESOLVER::NetName( int aNet )
+int PNS_PCBNEW_RULE_RESOLVER::NetCode( PNS::NET_HANDLE aNet )
 {
-    return m_board->FindNet( aNet )->GetNetname();
+    return m_routerIface->GetNetCode( aNet );
 }
 
 
-int PNS_PCBNEW_RULE_RESOLVER::DpNetPolarity( int aNet )
+wxString PNS_PCBNEW_RULE_RESOLVER::NetName( PNS::NET_HANDLE aNet )
 {
-    wxString refName = m_board->FindNet( aNet )->GetNetname();
+    return m_routerIface->GetNetName( aNet );
+}
+
+
+int PNS_PCBNEW_RULE_RESOLVER::DpNetPolarity( PNS::NET_HANDLE aNet )
+{
+    wxString refName;
+
+    if( NETINFO_ITEM* net = static_cast<NETINFO_ITEM*>( aNet ) )
+        refName = net->GetNetname();
+
     wxString dummy1;
 
     return matchDpSuffix( refName, dummy1 );
 }
 
 
-bool PNS_PCBNEW_RULE_RESOLVER::DpNetPair( const PNS::ITEM* aItem, int& aNetP, int& aNetN )
+bool PNS_PCBNEW_RULE_RESOLVER::DpNetPair( const PNS::ITEM* aItem, PNS::NET_HANDLE& aNetP,
+                                          PNS::NET_HANDLE& aNetN )
 {
-    if( !aItem )
+    if( !aItem || !aItem->Net() )
         return false;
 
-    NETINFO_ITEM* netInfo = nullptr;
-
-    if( aItem->Parent() && aItem->Parent()->IsConnected() )
-    {
-        BOARD_CONNECTED_ITEM* cItem = static_cast<BOARD_CONNECTED_ITEM*>( aItem->Parent() );
-        netInfo = cItem->GetNet();
-    }
-    else
-        netInfo = m_board->FindNet( aItem->Net() );
-
-    if( !netInfo )
-        return false;
-
-    wxString netNameP = netInfo->GetNetname();
+    wxString netNameP = static_cast<NETINFO_ITEM*>( aItem->Net() )->GetNetname();
     wxString netNameN, netNameCoupled;
 
     int r = matchDpSuffix( netNameP, netNameCoupled );
@@ -925,14 +923,14 @@ bool PNS_PCBNEW_RULE_RESOLVER::DpNetPair( const PNS::ITEM* aItem, int& aNetP, in
         netNameP = netNameCoupled;
     }
 
-    NETINFO_ITEM* netInfoP = m_board->FindNet( netNameP );
-    NETINFO_ITEM* netInfoN = m_board->FindNet( netNameN );
+    PNS::NET_HANDLE netInfoP = m_board->FindNet( netNameP );
+    PNS::NET_HANDLE netInfoN = m_board->FindNet( netNameN );
 
     if( !netInfoP || !netInfoN )
         return false;
 
-    aNetP = netInfoP->GetNetCode();
-    aNetN = netInfoN->GetNetCode();
+    aNetP = netInfoP;
+    aNetN = netInfoN;
 
     return true;
 }
@@ -1170,7 +1168,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
         solid->SetRoutable( false );
 
     solid->SetLayers( layers );
-    solid->SetNet( aPad->GetNetCode() );
+    solid->SetNet( aPad->GetNet() );
     solid->SetParent( aPad );
     solid->SetPadToDie( aPad->GetPadToDieLength() );
     solid->SetOrientation( aPad->GetOrientation() );
@@ -1215,7 +1213,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
 std::unique_ptr<PNS::SEGMENT> PNS_KICAD_IFACE_BASE::syncTrack( PCB_TRACK* aTrack )
 {
     auto segment = std::make_unique<PNS::SEGMENT>( SEG( aTrack->GetStart(), aTrack->GetEnd() ),
-                                                   aTrack->GetNetCode() );
+                                                   aTrack->GetNet() );
 
     segment->SetWidth( aTrack->GetWidth() );
     segment->SetLayers( LAYER_RANGE( aTrack->GetLayer() ) );
@@ -1230,9 +1228,9 @@ std::unique_ptr<PNS::SEGMENT> PNS_KICAD_IFACE_BASE::syncTrack( PCB_TRACK* aTrack
 
 std::unique_ptr<PNS::ARC> PNS_KICAD_IFACE_BASE::syncArc( PCB_ARC* aArc )
 {
-    auto arc = std::make_unique<PNS::ARC>(
-            SHAPE_ARC( aArc->GetStart(), aArc->GetMid(), aArc->GetEnd(), aArc->GetWidth() ),
-            aArc->GetNetCode() );
+    auto arc = std::make_unique<PNS::ARC>( SHAPE_ARC( aArc->GetStart(), aArc->GetMid(),
+                                                      aArc->GetEnd(), aArc->GetWidth() ),
+                                           aArc->GetNet() );
 
     arc->SetLayers( LAYER_RANGE( aArc->GetLayer() ) );
     arc->SetParent( aArc );
@@ -1253,7 +1251,7 @@ std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE_BASE::syncVia( PCB_VIA* aVia )
                                            LAYER_RANGE( aVia->TopLayer(), aVia->BottomLayer() ),
                                            aVia->GetWidth(),
                                            aVia->GetDrillValue(),
-                                           aVia->GetNetCode(),
+                                           aVia->GetNet(),
                                            aVia->GetViaType() );
 
     via->SetParent( aVia );
@@ -1319,7 +1317,7 @@ bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE* aZone, SHAPE_POLY_
                 std::unique_ptr<PNS::SOLID> solid = std::make_unique<PNS::SOLID>();
 
                 solid->SetLayer( layer );
-                solid->SetNet( -1 );
+                solid->SetNet( nullptr );
                 solid->SetParent( aZone );
                 solid->SetShape( triShape );
                 solid->SetIsCompoundShapePrimitive();
@@ -1343,7 +1341,7 @@ bool PNS_KICAD_IFACE_BASE::syncTextItem( PNS::NODE* aWorld, PCB_TEXT* aText, PCB
     SHAPE_SIMPLE*               shape = new SHAPE_SIMPLE;
 
     solid->SetLayer( aLayer );
-    solid->SetNet( -1 );
+    solid->SetNet( nullptr );
     solid->SetParent( aText );
     solid->SetShape( shape );   // takes ownership
     solid->SetRoutable( false );
@@ -1394,7 +1392,7 @@ bool PNS_KICAD_IFACE_BASE::syncGraphicalItem( PNS::NODE* aWorld, PCB_SHAPE* aIte
             }
 
             solid->SetAnchorPoints( aItem->GetConnectionPoints() );
-            solid->SetNet( aItem->GetNetCode() );
+            solid->SetNet( aItem->GetNet() );
             solid->SetParent( aItem );
             solid->SetShape( shape );       // takes ownership
 
@@ -1738,7 +1736,7 @@ void PNS_KICAD_IFACE::DisplayPathLine( const SHAPE_LINE_CHAIN& aLine, int aImpor
 }
 
 
-void PNS_KICAD_IFACE::DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, int aNetCode )
+void PNS_KICAD_IFACE::DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, PNS::NET_HANDLE aNet )
 {
     ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( aRatline, m_view );
 
@@ -1753,11 +1751,15 @@ void PNS_KICAD_IFACE::DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, int aNet
     std::map<int, KIGFX::COLOR4D>&      netColors = rs->GetNetColorMap();
     std::map<wxString, KIGFX::COLOR4D>& ncColors = rs->GetNetclassColorMap();
     const std::map<int, wxString>&      ncMap = connectivity->GetNetclassMap();
+    int                                 netCode = -1;
 
-    if( colorByNet && netColors.count( aNetCode ) )
-        color = netColors.at( aNetCode );
-    else if( colorByNet && ncMap.count( aNetCode ) && ncColors.count( ncMap.at( aNetCode ) ) )
-        color = ncColors.at( ncMap.at( aNetCode ) );
+    if( NETINFO_ITEM* net = static_cast<NETINFO_ITEM*>( aNet ) )
+        netCode = net->GetNetCode();
+
+    if( colorByNet && netColors.count( netCode ) )
+        color = netColors.at( netCode );
+    else if( colorByNet && ncMap.count( netCode ) && ncColors.count( ncMap.at( netCode ) ) )
+        color = ncColors.at( ncMap.at( netCode ) );
     else
         color = defaultColor;
 
@@ -1865,7 +1867,7 @@ void PNS_KICAD_IFACE::UpdateItem( PNS::ITEM* aItem )
         via_board->SetPosition( VECTOR2I( via->Pos().x, via->Pos().y ) );
         via_board->SetWidth( via->Diameter() );
         via_board->SetDrill( via->Drill() );
-        via_board->SetNetCode( via->Net() > 0 ? via->Net() : 0 );
+        via_board->SetNet( static_cast<NETINFO_ITEM*>( via->Net() ) );
         via_board->SetViaType( via->ViaType() ); // MUST be before SetLayerPair()
         via_board->SetIsFree( via->IsFree() );
         via_board->SetLayerPair( ToLAYER_ID( via->Layers().Start() ),
@@ -1906,7 +1908,7 @@ void PNS_KICAD_IFACE::AddItem( PNS::ITEM* aItem )
         PCB_ARC*  new_arc = new PCB_ARC( m_board, static_cast<const SHAPE_ARC*>( arc->Shape() ) );
         new_arc->SetWidth( arc->Width() );
         new_arc->SetLayer( ToLAYER_ID( arc->Layers().Start() ) );
-        new_arc->SetNetCode( std::max<int>( 0, arc->Net() ) );
+        new_arc->SetNet( static_cast<NETINFO_ITEM*>( arc->Net() ) );
         newBI = new_arc;
         break;
     }
@@ -1920,7 +1922,7 @@ void PNS_KICAD_IFACE::AddItem( PNS::ITEM* aItem )
         track->SetEnd( VECTOR2I( s.B.x, s.B.y ) );
         track->SetWidth( seg->Width() );
         track->SetLayer( ToLAYER_ID( seg->Layers().Start() ) );
-        track->SetNetCode( seg->Net() > 0 ? seg->Net() : 0 );
+        track->SetNet( static_cast<NETINFO_ITEM*>( seg->Net() ) );
         newBI = track;
         break;
     }
@@ -1932,7 +1934,7 @@ void PNS_KICAD_IFACE::AddItem( PNS::ITEM* aItem )
         via_board->SetPosition( VECTOR2I( via->Pos().x, via->Pos().y ) );
         via_board->SetWidth( via->Diameter() );
         via_board->SetDrill( via->Drill() );
-        via_board->SetNetCode( via->Net() > 0 ? via->Net() : 0 );
+        via_board->SetNet( static_cast<NETINFO_ITEM*>( via->Net() ) );
         via_board->SetViaType( via->ViaType() ); // MUST be before SetLayerPair()
         via_board->SetIsFree( via->IsFree() );
         via_board->SetLayerPair( ToLAYER_ID( via->Layers().Start() ),
@@ -2028,9 +2030,27 @@ void PNS_KICAD_IFACE::SetView( KIGFX::VIEW* aView )
 }
 
 
-void PNS_KICAD_IFACE::UpdateNet( int aNetCode )
+int PNS_KICAD_IFACE::GetNetCode( PNS::NET_HANDLE aNet ) const
 {
-    wxLogTrace( wxT( "PNS" ), wxT( "Update-net %d" ), aNetCode );
+    if( aNet )
+        return static_cast<NETINFO_ITEM*>( aNet )->GetNetCode();
+    else
+        return -1;
+}
+
+
+wxString PNS_KICAD_IFACE::GetNetName( PNS::NET_HANDLE aNet ) const
+{
+    if( aNet )
+        return static_cast<NETINFO_ITEM*>( aNet )->GetNetname();
+    else
+        return wxEmptyString;
+}
+
+
+void PNS_KICAD_IFACE::UpdateNet( PNS::NET_HANDLE aNet )
+{
+    wxLogTrace( wxT( "PNS" ), wxT( "Update-net %s" ), GetNetName( aNet ) );
 }
 
 

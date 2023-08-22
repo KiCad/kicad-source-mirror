@@ -65,15 +65,18 @@ public:
     void DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit = false,
                       bool aIsHeadTrace = false ) override {}
     void DisplayPathLine( const SHAPE_LINE_CHAIN& aLine, int aImportance ) override {}
-    void DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, int aNetCode ) override {}
+    void DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, PNS::NET_HANDLE aNet ) override {}
     void AddItem( PNS::ITEM* aItem ) override;
     void UpdateItem( PNS::ITEM* aItem ) override;
     void RemoveItem( PNS::ITEM* aItem ) override;
     void Commit() override {}
-    bool ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* aStartItem, int aNet ) override;
+    bool ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* aStartItem,
+                      PNS::NET_HANDLE aNet ) override;
     int StackupHeight( int aFirstLayer, int aSecondLayer ) const override;
 
-    void UpdateNet( int aNetCode ) override {}
+    int GetNetCode( PNS::NET_HANDLE aNet ) const override { return -1; }
+    wxString GetNetName( PNS::NET_HANDLE aNet ) const override { return wxEmptyString; }
+    void UpdateNet( PNS::NET_HANDLE aNet ) override {}
 
     void SetDebugDecorator( PNS::DEBUG_DECORATOR* aDec );
 
@@ -122,13 +125,15 @@ public:
     void HideItem( PNS::ITEM* aItem ) override;
     void DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit = false, bool aIsHeadTrace = false ) override;
     void DisplayPathLine( const SHAPE_LINE_CHAIN& aLine, int aImportance ) override;
-    void DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, int aNetCode ) override;
+    void DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, PNS::NET_HANDLE aNet ) override;
     void Commit() override;
     void AddItem( PNS::ITEM* aItem ) override;
     void UpdateItem( PNS::ITEM* aItem ) override;
     void RemoveItem( PNS::ITEM* aItem ) override;
 
-    void UpdateNet( int aNetCode ) override;
+    int GetNetCode( PNS::NET_HANDLE aNet ) const override;
+    wxString GetNetName( PNS::NET_HANDLE aNet ) const override;
+    void UpdateNet( PNS::NET_HANDLE aNet ) override;
 
     EDA_UNITS GetUnits() const override;
 

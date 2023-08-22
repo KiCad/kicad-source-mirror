@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2015 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -107,7 +107,7 @@ bool TOPOLOGY::NearestUnconnectedAnchorPoint( const LINE* aTrack, VECTOR2I& aPoi
 
     const JOINT* jt = tmpNode->FindJoint( track.CPoint( -1 ), &track );
 
-    if( !jt || jt->Net() <= 0 )
+    if( !jt || m_world->GetRuleResolver()->NetCode( jt->Net() ) <= 0 )
        return false;
 
     if( ( !track.EndsWithVia() && jt->LinkCount() >= 2 )
@@ -465,10 +465,10 @@ bool commonParallelProjection( SEG p, SEG n, SEG &pClip, SEG& nClip );
 
 bool TOPOLOGY::AssembleDiffPair( ITEM* aStart, DIFF_PAIR& aPair )
 {
-    int refNet = aStart->Net();
-    int coupledNet = m_world->GetRuleResolver()->DpCoupledNet( refNet );
+    NET_HANDLE refNet = aStart->Net();
+    NET_HANDLE coupledNet = m_world->GetRuleResolver()->DpCoupledNet( refNet );
 
-    if( coupledNet < 0 )
+    if( !coupledNet )
         return false;
 
     std::set<ITEM*> coupledItems;

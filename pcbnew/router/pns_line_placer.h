@@ -166,11 +166,11 @@ public:
     }
 
     /**
-     * Return the net code of currently routed track.
+     * Return the net of currently routed track.
      */
-    const std::vector<int> CurrentNets() const override
+    const std::vector<NET_HANDLE> CurrentNets() const override
     {
-        return std::vector<int>( 1, m_currentNet );
+        return std::vector<NET_HANDLE>( 1, m_currentNet );
     }
 
     /**
@@ -203,7 +203,7 @@ public:
 
     bool IsPlacingVia() const override { return m_placingVia; }
 
-    void GetModifiedNets( std::vector<int>& aNets ) const override;
+    void GetModifiedNets( std::vector<NET_HANDLE>& aNets ) const override;
 
     /**
      * Check if point \a aP lies on segment \a aSeg. If so, splits the segment in two, forming a
@@ -362,7 +362,7 @@ private:
 
     bool           m_placingVia;
 
-    int            m_currentNet;
+    NET_HANDLE     m_currentNet;
     int            m_currentLayer;
 
     VECTOR2I       m_currentEnd;

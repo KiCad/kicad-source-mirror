@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -927,7 +927,7 @@ OPTIMIZER::BREAKOUT_LIST OPTIMIZER::computeBreakouts( int aWidth, const ITEM* aI
 }
 
 
-ITEM* OPTIMIZER::findPadOrVia( int aLayer, int aNet, const VECTOR2I& aP ) const
+ITEM* OPTIMIZER::findPadOrVia( int aLayer, NET_HANDLE aNet, const VECTOR2I& aP ) const
 {
     const JOINT* jt = m_world->FindJoint( aP, aLayer, aNet );
 

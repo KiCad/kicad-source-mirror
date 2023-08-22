@@ -761,7 +761,7 @@ void NODE::rebuildJoint( const JOINT* aJoint, const ITEM* aItem )
 
     std::vector<ITEM*> links( aJoint->LinkList() );
     JOINT::HASH_TAG    tag;
-    int                net = aItem->Net();
+    NET_HANDLE         net = aItem->Net();
 
     tag.net = net;
     tag.pos = aJoint->Pos();
@@ -1186,7 +1186,7 @@ void NODE::FixupVirtualVias()
 }
 
 
-const JOINT* NODE::FindJoint( const VECTOR2I& aPos, int aLayer, int aNet ) const
+const JOINT* NODE::FindJoint( const VECTOR2I& aPos, int aLayer, NET_HANDLE aNet ) const
 {
     JOINT::HASH_TAG tag;
 
@@ -1223,7 +1223,7 @@ void NODE::LockJoint( const VECTOR2I& aPos, const ITEM* aItem, bool aLock )
 }
 
 
-JOINT& NODE::touchJoint( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, int aNet )
+JOINT& NODE::touchJoint( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, NET_HANDLE aNet )
 {
     JOINT::HASH_TAG tag;
 
@@ -1284,7 +1284,8 @@ void JOINT::Dump() const
 }
 
 
-void NODE::linkJoint( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, int aNet, ITEM* aWhere )
+void NODE::linkJoint( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, NET_HANDLE aNet,
+                      ITEM* aWhere )
 {
     JOINT& jt = touchJoint( aPos, aLayers, aNet );
 
@@ -1292,7 +1293,8 @@ void NODE::linkJoint( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, int aNet
 }
 
 
-void NODE::unlinkJoint( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, int aNet, ITEM* aWhere )
+void NODE::unlinkJoint( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, NET_HANDLE aNet,
+                        ITEM* aWhere )
 {
     // fixme: remove dangling joints
     JOINT& jt = touchJoint( aPos, aLayers, aNet );
@@ -1474,7 +1476,7 @@ void NODE::KillChildren()
 }
 
 
-void NODE::AllItemsInNet( int aNet, std::set<ITEM*>& aItems, int aKindMask )
+void NODE::AllItemsInNet( NET_HANDLE aNet, std::set<ITEM*>& aItems, int aKindMask )
 {
     INDEX::NET_ITEMS_LIST* l_cur = m_index->GetItemsForNet( aNet );
 
@@ -1529,7 +1531,7 @@ void NODE::RemoveByMarker( int aMarker )
 
 
 SEGMENT* NODE::findRedundantSegment( const VECTOR2I& A, const VECTOR2I& B, const LAYER_RANGE& lr,
-                                     int aNet )
+                                     NET_HANDLE aNet )
 {
     const JOINT* jtStart = FindJoint( A, lr.Start(), aNet );
 
@@ -1564,7 +1566,7 @@ SEGMENT* NODE::findRedundantSegment( SEGMENT* aSeg )
 
 
 ARC* NODE::findRedundantArc( const VECTOR2I& A, const VECTOR2I& B, const LAYER_RANGE& lr,
-                             int aNet )
+                             NET_HANDLE aNet )
 {
     const JOINT* jtStart = FindJoint( A, lr.Start(), aNet );
 
@@ -1641,7 +1643,7 @@ ITEM *NODE::FindItemByParent( const BOARD_ITEM* aParent )
     if( aParent->IsConnected() )
     {
         const BOARD_CONNECTED_ITEM* cItem = static_cast<const BOARD_CONNECTED_ITEM*>( aParent );
-        INDEX::NET_ITEMS_LIST*      l_cur = m_index->GetItemsForNet( cItem->GetNetCode() );
+        INDEX::NET_ITEMS_LIST*      l_cur = m_index->GetItemsForNet( cItem->GetNet() );
 
         if( l_cur )
         {

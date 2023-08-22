@@ -139,23 +139,23 @@ public:
 
     virtual int Clearance( const ITEM* aA, const ITEM* aB, bool aUseClearanceEpsilon = true ) = 0;
 
-    virtual int DpCoupledNet( int aNet ) = 0;
-    virtual int DpNetPolarity( int aNet ) = 0;
-    virtual bool DpNetPair( const ITEM* aItem, int& aNetP, int& aNetN ) = 0;
+    virtual NET_HANDLE DpCoupledNet( NET_HANDLE aNet ) = 0;
+    virtual int DpNetPolarity( NET_HANDLE aNet ) = 0;
+    virtual bool DpNetPair( const ITEM* aItem, NET_HANDLE& aNetP, NET_HANDLE& aNetN ) = 0;
+
+    virtual int NetCode( NET_HANDLE aNet ) = 0;
+    virtual wxString NetName( NET_HANDLE aNet ) = 0;
 
     virtual bool IsInNetTie( const ITEM* aA ) = 0;
-    virtual bool IsNetTieExclusion( const PNS::ITEM* aItem, const VECTOR2I& aCollisionPos,
-                                    const PNS::ITEM* aCollidingItem )= 0;
+    virtual bool IsNetTieExclusion( const ITEM* aItem, const VECTOR2I& aCollisionPos,
+                                    const ITEM* aCollidingItem )= 0;
 
     virtual bool IsKeepout( const ITEM* aA, const ITEM* aB ) = 0;
 
-    virtual bool QueryConstraint( CONSTRAINT_TYPE aType, const PNS::ITEM* aItemA,
-                                  const PNS::ITEM* aItemB, int aLayer,
-                                  PNS::CONSTRAINT* aConstraint ) = 0;
+    virtual bool QueryConstraint( CONSTRAINT_TYPE aType, const ITEM* aItemA, const ITEM* aItemB,
+                                  int aLayer, CONSTRAINT* aConstraint ) = 0;
 
-    virtual wxString NetName( int aNet ) = 0;
-
-    virtual void ClearCacheForItems( std::vector<const PNS::ITEM*>& aItems ) {}
+    virtual void ClearCacheForItems( std::vector<const ITEM*>& aItems ) {}
     virtual void ClearCaches() {}
 
     virtual int ClearanceEpsilon() const { return 0; }
@@ -400,7 +400,7 @@ public:
      *
      * @return the joint, if found, otherwise empty.
      */
-    const JOINT* FindJoint( const VECTOR2I& aPos, int aLayer, int aNet ) const;
+    const JOINT* FindJoint( const VECTOR2I& aPos, int aLayer, NET_HANDLE aNet ) const;
 
     void LockJoint( const VECTOR2I& aPos, const ITEM* aItem, bool aLock );
 
@@ -423,7 +423,7 @@ public:
     ///< Destroy all child nodes. Applicable only to the root node.
     void KillChildren();
 
-    void AllItemsInNet( int aNet, std::set<ITEM*>& aItems, int aKindMask = -1 );
+    void AllItemsInNet( NET_HANDLE aNet, std::set<ITEM*>& aItems, int aKindMask = -1 );
 
     void ClearRanks( int aMarkerMask = MK_HEAD | MK_VIOLATION );
 
@@ -464,13 +464,15 @@ private:
     NODE& operator=( const NODE& aB );
 
     ///< Try to find matching joint and creates a new one if not found.
-    JOINT& touchJoint( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, int aNet );
+    JOINT& touchJoint( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, NET_HANDLE aNet );
 
     ///< Touch a joint and links it to an m_item.
-    void linkJoint( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, int aNet, ITEM* aWhere );
+    void linkJoint( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, NET_HANDLE aNet,
+                    ITEM* aWhere );
 
     ///< Unlink an item from a joint.
-    void unlinkJoint( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, int aNet, ITEM* aWhere );
+    void unlinkJoint( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, NET_HANDLE aNet,
+                      ITEM* aWhere );
 
     ///< Helpers for adding/removing items.
     void addSolid( SOLID* aSeg );
@@ -496,10 +498,11 @@ private:
     }
 
     SEGMENT* findRedundantSegment( const VECTOR2I& A, const VECTOR2I& B, const LAYER_RANGE& lr,
-                                   int aNet );
+                                   NET_HANDLE aNet );
     SEGMENT* findRedundantSegment( SEGMENT* aSeg );
 
-    ARC* findRedundantArc( const VECTOR2I& A, const VECTOR2I& B, const LAYER_RANGE& lr, int aNet );
+    ARC* findRedundantArc( const VECTOR2I& A, const VECTOR2I& B, const LAYER_RANGE& lr,
+                           NET_HANDLE aNet );
     ARC* findRedundantArc( ARC* aSeg );
 
     ///< Scan the joint map, forming a line starting from segment (current).

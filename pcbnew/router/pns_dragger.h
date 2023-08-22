@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -86,9 +86,9 @@ public:
     /**
      * Function CurrentNets()
      *
-     * Returns the net code(s) of currently routed track(s).
+     * Returns the net(s) of currently routed track(s).
      */
-    const std::vector<int> CurrentNets() const override;
+    const std::vector<NET_HANDLE> CurrentNets() const override;
 
     /**
      * Function CurrentLayer()

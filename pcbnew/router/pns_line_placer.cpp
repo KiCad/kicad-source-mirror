@@ -49,7 +49,7 @@ LINE_PLACER::LINE_PLACER( ROUTER* aRouter ) :
     // Init temporary variables (do not leave uninitialized members)
     m_lastNode = nullptr;
     m_placingVia = false;
-    m_currentNet = 0;
+    m_currentNet = nullptr;
     m_currentLayer = 0;
     m_startItem = nullptr;
     m_endItem = nullptr;
@@ -75,7 +75,7 @@ const VIA LINE_PLACER::makeVia( const VECTOR2I& aP )
     const LAYER_RANGE layers( m_sizes.ViaType() == VIATYPE::THROUGH ? F_Cu : m_sizes.GetLayerTop(),
                               m_sizes.ViaType() == VIATYPE::THROUGH ? B_Cu : m_sizes.GetLayerBottom() );
 
-    return VIA( aP, layers, m_sizes.ViaDiameter(), m_sizes.ViaDrill(), -1, m_sizes.ViaType() );
+    return VIA( aP, layers, m_sizes.ViaDiameter(), m_sizes.ViaDrill(), nullptr, m_sizes.ViaType() );
 }
 
 
@@ -1325,7 +1325,7 @@ bool LINE_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     m_currentStart = VECTOR2I( aP );
     m_fixStart =  VECTOR2I( aP );
     m_currentEnd = VECTOR2I( aP );
-    m_currentNet = std::max( 0, aStartItem ? aStartItem->Net() : 0 );
+    m_currentNet = aStartItem ? aStartItem->Net() : nullptr;
     m_startItem = aStartItem;
     m_placingVia = false;
     m_chainedPlacement = false;
@@ -1482,12 +1482,12 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
         {
             // The user has indicated a connection should be made.  If either the trace or
             // endItem is net-less, then allow the connection by adopting the net of the other.
-            if( m_currentNet <= 0 )
+            if( m_router->GetInterface()->GetNetCode( m_currentNet ) <= 0 )
             {
                 m_currentNet = aEndItem->Net();
                 pl.SetNet( m_currentNet );
             }
-            else if (aEndItem->Net() <= 0 )
+            else if( m_router->GetInterface()->GetNetCode( aEndItem->Net() ) <= 0 )
             {
                 aEndItem->SetNet( m_currentNet );
             }
@@ -1551,7 +1551,7 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
     if( l.PointCount() > 2 )
         p_pre_last = l.CPoint( -2 );
 
-    if( aEndItem && m_currentNet >= 0 && m_currentNet == aEndItem->Net() )
+    if( aEndItem && m_currentNet && m_currentNet == aEndItem->Net() )
         realEnd = true;
 
     if( aForceFinish )
@@ -2004,7 +2004,7 @@ bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead, bool aForce
 }
 
 
-void LINE_PLACER::GetModifiedNets( std::vector<int>& aNets ) const
+void LINE_PLACER::GetModifiedNets( std::vector<NET_HANDLE>& aNets ) const
 {
     aNets.push_back( m_currentNet );
 }

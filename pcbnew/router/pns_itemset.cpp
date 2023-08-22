@@ -99,7 +99,7 @@ ITEM_SET& ITEM_SET::FilterMarker( int aMarker, bool aInvert )
 }
 
 
-ITEM_SET& ITEM_SET::FilterNet( int aNet, bool aInvert )
+ITEM_SET& ITEM_SET::FilterNet( NET_HANDLE aNet, bool aInvert )
 {
     std::vector<ITEM*> newItems;
 

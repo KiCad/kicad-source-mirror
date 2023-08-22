@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -488,9 +488,9 @@ DP_MEANDER_PLACER::TUNING_STATUS DP_MEANDER_PLACER::TuningStatus() const
 }
 
 
-const std::vector<int> DP_MEANDER_PLACER::CurrentNets() const
+const std::vector<NET_HANDLE> DP_MEANDER_PLACER::CurrentNets() const
 {
-    std::vector<int> rv;
+    std::vector<NET_HANDLE> rv;
     rv.push_back( m_originPair.NetP() );
     rv.push_back( m_originPair.NetN() );
     return rv;

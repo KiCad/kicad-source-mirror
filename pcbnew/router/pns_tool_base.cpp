@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013  CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -95,8 +95,8 @@ void TOOL_BASE::Reset( RESET_REASON aReason )
 }
 
 
-ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer, bool aIgnorePads,
-								 const std::vector<ITEM*> aAvoidItems )
+ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, NET_HANDLE aNet, int aLayer,
+                                 bool aIgnorePads, const std::vector<ITEM*> aAvoidItems )
 {
     int tl = aLayer > 0 ? aLayer : getView()->GetTopLayer();
 
@@ -148,7 +148,7 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer, b
             {
                 continue;
             }
-            else if( aNet <= 0 || item->Net() == aNet )
+            else if( m_router->GetInterface()->GetNetCode( aNet) <= 0 || item->Net() == aNet )
             {
                 if( item->OfKind( ITEM::VIA_T | ITEM::SOLID_T ) )
                 {
@@ -234,11 +234,15 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer, b
 }
 
 
-void TOOL_BASE::highlightNets( bool aEnabled, std::set<int> aNetcodes )
+void TOOL_BASE::highlightNets( bool aEnabled, std::set<NET_HANDLE> aNets )
 {
     RENDER_SETTINGS* rs = getView()->GetPainter()->GetSettings();
+    std::set<int>    netcodes;
 
-    if( aNetcodes.size() > 0 && aEnabled )
+    for( const NET_HANDLE& net : aNets )
+        netcodes.insert( m_router->GetInterface()->GetNetCode( net ) );
+
+    if( netcodes.size() > 0 && aEnabled )
     {
         // If the user has previously set some of the routed nets to be highlighted,
         // we assume they want to keep them highlighted after routing
@@ -246,7 +250,7 @@ void TOOL_BASE::highlightNets( bool aEnabled, std::set<int> aNetcodes )
         const std::set<int>& currentNetCodes = rs->GetHighlightNetCodes();
         bool                 keep = false;
 
-        for( const int& netcode : aNetcodes )
+        for( const int& netcode : netcodes )
         {
             if( currentNetCodes.find( netcode ) != currentNetCodes.end() )
             {
@@ -260,7 +264,7 @@ void TOOL_BASE::highlightNets( bool aEnabled, std::set<int> aNetcodes )
         else
             m_startHighlightNetcodes.clear();
 
-        rs->SetHighlight( aNetcodes, true );
+        rs->SetHighlight( netcodes, true );
     }
     else
     {
@@ -328,7 +332,7 @@ void TOOL_BASE::updateStartItem( const TOOL_EVENT& aEvent, bool aIgnorePads )
     else
         p = cp;
 
-    m_startItem = pickSingleItem( aEvent.IsClick() ? cp : p, -1, -1, aIgnorePads );
+    m_startItem = pickSingleItem( aEvent.IsClick() ? cp : p, nullptr, -1, aIgnorePads );
 
     if( !m_gridHelper->GetUseGrid() && m_startItem && !m_startItem->Layers().Overlaps( tl ) )
         m_startItem = nullptr;
@@ -359,7 +363,7 @@ void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
     }
 
     if( m_router->Settings().Mode() != RM_MarkObstacles &&
-        ( m_router->GetCurrentNets().empty() || m_router->GetCurrentNets().front() < 0 ) )
+        ( m_router->GetCurrentNets().empty() || m_router->GetCurrentNets().front() == nullptr ) )
     {
         m_endSnapPoint = snapToItem( nullptr, mousePos );
         controls()->ForceCursorPosition( true, m_endSnapPoint );
@@ -375,9 +379,9 @@ void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
 
     ITEM* endItem = nullptr;
 
-    std::vector<int> nets = m_router->GetCurrentNets();
+    std::vector<NET_HANDLE> nets = m_router->GetCurrentNets();
 
-    for( int net : nets )
+    for( NET_HANDLE net : nets )
     {
         endItem = pickSingleItem( mousePos, net, layer, false, { m_startItem } );
 

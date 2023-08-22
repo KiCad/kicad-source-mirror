@@ -50,6 +50,9 @@ class ITEM;
 class HOLE;
 struct COLLISION_SEARCH_CONTEXT;
 
+// An opaque net identifier.  The internal workings are owned by the ROUTER_IFACE.
+typedef void* NET_HANDLE;
+
 class ITEM_OWNER {
 public:
     virtual ~ITEM_OWNER() {};
@@ -93,8 +96,6 @@ protected:
 class ITEM : public OWNABLE_ITEM, public ITEM_OWNER
 {
 public:
-    static const int UnusedNet = INT_MAX;
-
     ///< Supported item types
     enum PnsKind
     {
@@ -111,7 +112,7 @@ public:
 
     ITEM( PnsKind aKind )
     {
-        m_net = UnusedNet;
+        m_net = nullptr;
         m_movable = true;
         m_kind = aKind;
         m_parent = nullptr;
@@ -188,8 +189,8 @@ public:
      */
     virtual BOARD_ITEM* BoardItem() const { return m_parent; }
 
-    void SetNet( int aNet ) { m_net = aNet; }
-    virtual int Net() const { return m_net;  }
+    void SetNet( NET_HANDLE aNet ) { m_net = aNet; }
+    virtual NET_HANDLE Net() const { return m_net;  }
 
     const LAYER_RANGE& Layers() const { return m_layers; }
     void SetLayers( const LAYER_RANGE& aLayers ) { m_layers = aLayers; }
@@ -286,7 +287,7 @@ protected:
     LAYER_RANGE   m_layers;
 
     bool          m_movable;
-    int           m_net;
+    NET_HANDLE    m_net;
     mutable int   m_marker;
     int           m_rank;
     bool          m_routable;

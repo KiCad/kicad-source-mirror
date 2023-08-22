@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -121,9 +121,9 @@ public:
     }
 
     /**
-     * Return the net code of currently routed track.
+     * Return the net of currently routed track.
      */
-    const std::vector<int> CurrentNets() const override;
+    const std::vector<NET_HANDLE> CurrentNets() const override;
 
     /**
      * Return the layer of currently routed track.
@@ -154,7 +154,7 @@ public:
 
     void SetOrthoMode( bool aOrthoMode ) override;
 
-    void GetModifiedNets( std::vector<int>& aNets ) const override;
+    void GetModifiedNets( std::vector<NET_HANDLE>& aNets ) const override;
 
 private:
     int viaGap() const;
@@ -208,7 +208,7 @@ private:
     ///< route step, mark obstacles mode
     bool rhMarkObstacles( const VECTOR2I& aP );
 
-    const VIA makeVia ( const VECTOR2I& aP, int aNet );
+    const VIA makeVia ( const VECTOR2I& aP, NET_HANDLE aNet );
 
     bool attemptWalk( NODE* aNode, DIFF_PAIR* aCurrent, DIFF_PAIR& aWalk, bool aPFirst,
                       bool aWindCw, bool aSolidsOnly );
@@ -227,7 +227,7 @@ private:
     bool m_startDiagonal;
     bool m_fitOk;
 
-    int m_netP, m_netN;
+    NET_HANDLE m_netP, m_netN;
 
     DP_PRIMITIVE_PAIR m_start;
     std::optional<DP_PRIMITIVE_PAIR> m_prevPair;
@@ -264,7 +264,6 @@ private:
     ///< current track width
     int m_currentWidth;
 
-    int m_currentNet;
     int m_currentLayer;
 
     bool m_startsOnVia;

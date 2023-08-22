@@ -153,12 +153,23 @@ public:
         return rv;
     }
 
-    virtual int DpCoupledNet( int aNet ) override { return -1; }
-    virtual int DpNetPolarity( int aNet ) override { return -1; }
+    virtual PNS::NET_HANDLE DpCoupledNet( PNS::NET_HANDLE aNet ) override { return nullptr; }
+    virtual int DpNetPolarity( PNS::NET_HANDLE aNet ) override { return -1; }
 
-    virtual bool DpNetPair( const PNS::ITEM* aItem, int& aNetP, int& aNetN ) override
+    virtual bool DpNetPair( const PNS::ITEM* aItem, PNS::NET_HANDLE& aNetP,
+                            PNS::NET_HANDLE& aNetN ) override
     {
         return false;
+    }
+
+    virtual int NetCode( PNS::NET_HANDLE aNet ) override
+    {
+        return -1;
+    }
+
+    virtual wxString NetName( PNS::NET_HANDLE aNet ) override
+    {
+        return wxEmptyString;
     }
 
     virtual bool QueryConstraint( PNS::CONSTRAINT_TYPE aType, const PNS::ITEM* aItemA,
@@ -198,8 +209,6 @@ public:
 
         return true;
     }
-
-    virtual wxString NetName( int aNet ) override { return wxT( "noname" ); }
 
     int ClearanceEpsilon() const override { return m_clearanceEpsilon; }
 

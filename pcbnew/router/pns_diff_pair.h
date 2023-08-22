@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2015 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -364,7 +364,7 @@ public:
         m_n = aPair.m_n;
     }
 
-    void SetNets( int aP, int aN )
+    void SetNets( NET_HANDLE aP, NET_HANDLE aN )
     {
         m_net_p = aP;
         m_net_n = aN;
@@ -423,12 +423,12 @@ public:
         m_via_n.SetDrill( aDrill );
     }
 
-    int NetP() const
+    NET_HANDLE NetP() const
     {
         return m_net_p;
     }
 
-    int NetN() const
+    NET_HANDLE NetN() const
     {
         return m_net_n;
     }
@@ -490,7 +490,7 @@ public:
     }
 
 private:
-    void updateLine( LINE &aLine, const SHAPE_LINE_CHAIN& aShape, int aNet, const VIA& aVia )
+    void updateLine( LINE &aLine, const SHAPE_LINE_CHAIN& aShape, NET_HANDLE aNet, const VIA& aVia )
     {
         aLine.SetShape( aShape );
         aLine.SetWidth( m_width );
@@ -506,7 +506,7 @@ private:
     VIA m_via_p, m_via_n;
 
     bool m_hasVias;
-    int m_net_p, m_net_n;
+    NET_HANDLE m_net_p, m_net_n;
     int m_width;
     int m_gap;
     int m_viaGap;

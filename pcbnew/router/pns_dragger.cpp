@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -266,12 +266,12 @@ PNS::DRAG_MODE DRAGGER::Mode() const
 }
 
 
-const std::vector<int> DRAGGER::CurrentNets() const
+const std::vector<NET_HANDLE> DRAGGER::CurrentNets() const
 {
     if( m_mode == PNS::DM_VIA )
-        return std::vector<int>( 1, m_draggedVia.net );
+        return std::vector<NET_HANDLE>( 1, m_draggedVia.net );
     else
-        return std::vector<int>( 1, m_draggedLine.Net() );
+        return std::vector<NET_HANDLE>( 1, m_draggedLine.Net() );
 }
 
 

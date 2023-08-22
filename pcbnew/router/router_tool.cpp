@@ -504,10 +504,11 @@ bool ROUTER_TOOL::Init()
     auto hasOtherEnd =
             [&]( const SELECTION& )
             {
-                std::vector<int> currentNets = m_router->GetCurrentNets();
+                std::vector<PNS::NET_HANDLE> currentNets = m_router->GetCurrentNets();
+                NETINFO_ITEM*                netInfo = static_cast<NETINFO_ITEM*>( currentNets[0] );
 
                 // Need to have something unconnected to finish to
-                int     currentNet = currentNets.empty() ? -1 : currentNets[0];
+                int     currentNet = netInfo ? netInfo->GetNetCode() : -1;
                 BOARD*  board = getEditFrame<PCB_EDIT_FRAME>()->GetBoard();
                 RN_NET* ratsnest = board->GetConnectivity()->GetRatsnestForNet( currentNet );
 
@@ -714,7 +715,7 @@ void ROUTER_TOOL::switchLayerOnViaPlacement()
 
 void ROUTER_TOOL::updateSizesAfterLayerSwitch( PCB_LAYER_ID targetLayer, const VECTOR2I& aPos )
 {
-    std::vector<int> nets = m_router->GetCurrentNets();
+    std::vector<PNS::NET_HANDLE> nets = m_router->GetCurrentNets();
 
     PNS::SIZES_SETTINGS          sizes     = m_router->Sizes();
     BOARD_DESIGN_SETTINGS&       bds       = board()->GetDesignSettings();
@@ -724,7 +725,7 @@ void ROUTER_TOOL::updateSizesAfterLayerSwitch( PCB_LAYER_ID targetLayer, const V
     PCB_TRACK dummyTrack( board() );
     dummyTrack.SetFlags( ROUTER_TRANSIENT );
     dummyTrack.SetLayer( targetLayer );
-    dummyTrack.SetNetCode( nets.empty() ? 0 : nets[0] );
+    dummyTrack.SetNet( nets.empty() ? nullptr: static_cast<NETINFO_ITEM*>( nets[0] ) );
     dummyTrack.SetStart( aPos );
     dummyTrack.SetEnd( dummyTrack.GetStart() );
 
@@ -762,7 +763,7 @@ void ROUTER_TOOL::updateSizesAfterLayerSwitch( PCB_LAYER_ID targetLayer, const V
         PCB_TRACK dummyTrackB( board() );
         dummyTrackB.SetFlags( ROUTER_TRANSIENT );
         dummyTrackB.SetLayer( targetLayer );
-        dummyTrackB.SetNetCode( nets[1] );
+        dummyTrackB.SetNet( static_cast<NETINFO_ITEM*>( nets[1] ) );
         dummyTrackB.SetStart( aPos );
         dummyTrackB.SetEnd( dummyTrackB.GetStart() );
 
@@ -1196,7 +1197,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
         dummyVia.SetLayerPair( currentLayer, targetLayer );
 
         if( !m_router->GetCurrentNets().empty() )
-            dummyVia.SetNetCode( m_router->GetCurrentNets()[0] );
+            dummyVia.SetNet( static_cast<NETINFO_ITEM*>( m_router->GetCurrentNets()[0] ) );
 
         DRC_CONSTRAINT constraint;
 
@@ -1267,17 +1268,17 @@ bool ROUTER_TOOL::prepareInteractive()
     m_iface->SetStartLayer( routingLayer );
 
     frame()->GetBoard()->GetDesignSettings().m_TempOverrideTrackWidth = false;
-    m_iface->ImportSizes( sizes, m_startItem, -1 );
+    m_iface->ImportSizes( sizes, m_startItem, nullptr );
     sizes.AddLayerPair( frame()->GetScreen()->m_Route_Layer_TOP,
                         frame()->GetScreen()->m_Route_Layer_BOTTOM );
 
     m_router->UpdateSizes( sizes );
 
-    if( m_startItem && m_startItem->Net() > 0 )
+    if( m_startItem && m_startItem->Net() )
     {
         if( m_router->Mode() == PNS::PNS_MODE_ROUTE_DIFF_PAIR )
         {
-            if( int coupledNet = m_router->GetRuleResolver()->DpCoupledNet( m_startItem->Net() ) )
+            if( PNS::NET_HANDLE coupledNet = m_router->GetRuleResolver()->DpCoupledNet( m_startItem->Net() ) )
                 highlightNets( true, { m_startItem->Net(), coupledNet } );
         }
         else
@@ -1932,7 +1933,7 @@ void ROUTER_TOOL::performDragging( int aMode )
     if( !dragStarted )
         return;
 
-    if( m_startItem && m_startItem->Net() > 0 )
+    if( m_startItem && m_startItem->Net() )
         highlightNets( true, { m_startItem->Net() } );
 
     ctls->SetAutoPan( true );
@@ -2229,7 +2230,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         p = snapToItem( startItem, p0 );
         m_startItem = startItem;
 
-        if( m_startItem && m_startItem->Net() > 0 )
+        if( m_startItem->Net() )
             highlightNets( true, { m_startItem->Net() } );
     }
     else if( footprint )
@@ -2554,18 +2555,18 @@ void ROUTER_TOOL::UpdateMessagePanel()
 
     if( m_router->GetState() == PNS::ROUTER::ROUTE_TRACK )
     {
-        PNS::SIZES_SETTINGS sizes( m_router->Sizes() );
-        PNS::RULE_RESOLVER* resolver   = m_iface->GetRuleResolver();
-        std::vector<int>    nets = m_router->GetCurrentNets();
-        wxString            description;
-        wxString            secondary;
+        PNS::SIZES_SETTINGS          sizes( m_router->Sizes() );
+        PNS::RULE_RESOLVER*          resolver   = m_iface->GetRuleResolver();
+        std::vector<PNS::NET_HANDLE> nets = m_router->GetCurrentNets();
+        wxString                     description;
+        wxString                     secondary;
 
         if( m_router->Mode() == PNS::ROUTER_MODE::PNS_MODE_ROUTE_DIFF_PAIR )
         {
             wxASSERT( nets.size() >= 2 );
 
-            NETINFO_ITEM* netA = board()->FindNet( nets[0] );
-            NETINFO_ITEM* netB = board()->FindNet( nets[1] );
+            NETINFO_ITEM* netA = static_cast<NETINFO_ITEM*>( nets[0] );
+            NETINFO_ITEM* netB = static_cast<NETINFO_ITEM*>( nets[1] );
             wxASSERT( netA );
             wxASSERT( netB );
 
@@ -2584,10 +2585,9 @@ void ROUTER_TOOL::UpdateMessagePanel()
             secondary = wxString::Format( _( "Resolved Netclass: %s" ),
                                           UnescapeString( netclass ) );
         }
-        else if( !nets.empty() )
+        else if( !nets.empty() && nets[0] )
         {
-            NETINFO_ITEM* net = board()->FindNet( nets[0] );
-            wxASSERT( net );
+            NETINFO_ITEM* net = static_cast<NETINFO_ITEM*>( nets[0] );
 
             description = wxString::Format( _( "Routing Track: %s" ),
                                             net->GetNetname() );

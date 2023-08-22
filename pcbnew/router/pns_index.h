@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -97,7 +97,7 @@ public:
     /**
      * Returns list of all items in a given net.
      */
-    NET_ITEMS_LIST* GetItemsForNet( int aNet );
+    NET_ITEMS_LIST* GetItemsForNet( NET_HANDLE aNet );
 
     /**
      * Function Contains()
@@ -122,9 +122,9 @@ private:
     int querySingle( std::size_t aIndex, const SHAPE* aShape, int aMinDistance, Visitor& aVisitor ) const;
 
 private:
-    std::deque<ITEM_SHAPE_INDEX>  m_subIndices;
-    std::map<int, NET_ITEMS_LIST> m_netMap;
-    ITEM_SET                      m_allItems;
+    std::deque<ITEM_SHAPE_INDEX>         m_subIndices;
+    std::map<NET_HANDLE, NET_ITEMS_LIST> m_netMap;
+    ITEM_SET                             m_allItems;
 };
 
 
