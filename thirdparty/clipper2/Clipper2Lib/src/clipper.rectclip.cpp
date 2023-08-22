@@ -1,6 +1,6 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Date      :  30 May 2023                                                     *
+* Date      :  6 August 2023                                                   *
 * Website   :  http://www.angusj.com                                           *
 * Copyright :  Angus Johnson 2010-2023                                         *
 * Purpose   :  FAST rectangular clipping                                       *
@@ -474,7 +474,7 @@ namespace Clipper2Lib {
         // intersect pt but we'll also need the first intersect pt (ip2)
         loc = prev;
         GetIntersection(rect_as_path_, prev_pt, path[i], loc, ip2);
-        if (crossing_prev != Location::Inside)
+        if (crossing_prev != Location::Inside && crossing_prev != loc) //579
           AddCorner(crossing_prev, loc);
 
         if (first_cross_ == Location::Inside)
@@ -847,7 +847,7 @@ namespace Clipper2Lib {
       //clean up after every loop
       op_container_ = std::deque<OutPt2>();
       results_.clear();
-      for (OutPt2List edge : edges_) edge.clear();
+      for (OutPt2List &edge : edges_) edge.clear();
       start_locs_.clear();
     }
     return result;

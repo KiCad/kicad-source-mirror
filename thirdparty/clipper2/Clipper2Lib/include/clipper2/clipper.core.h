@@ -1,6 +1,6 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Date      :  8 April 2023                                                    *
+* Date      :  26 July 2023                                                    *
 * Website   :  http://www.angusj.com                                           *
 * Copyright :  Angus Johnson 2010-2023                                         *
 * Purpose   :  Core Clipper Library structures and functions                   *
@@ -53,6 +53,7 @@ namespace Clipper2Lib
 #ifndef PI
   static const double PI = 3.141592653589793238;
 #endif
+  static const int MAX_DECIMAL_PRECISION = 8; // see https://github.com/AngusJohnson/Clipper2/discussions/564
   static const int64_t MAX_COORD = INT64_MAX >> 2;
   static const int64_t MIN_COORD = -MAX_COORD;
   static const int64_t INVALID = INT64_MAX;
@@ -132,6 +133,7 @@ namespace Clipper2Lib
       return Point(x * scale, y * scale, z);
     }
 
+    void SetZ(const int64_t z_value) { z = z_value; }
 
     friend std::ostream& operator<<(std::ostream& os, const Point& point)
     {
@@ -255,8 +257,8 @@ namespace Clipper2Lib
       }
       else
       {
-        left = top = std::numeric_limits<T>::max();
-        right = bottom = -std::numeric_limits<int64_t>::max();
+        left = top = (std::numeric_limits<T>::max)();
+        right = bottom = -(std::numeric_limits<int64_t>::max)();
       }
     }
 
@@ -346,8 +348,8 @@ namespace Clipper2Lib
   template <typename T>
   Rect<T> GetBounds(const Path<T>& path)
   {
-    auto xmin = std::numeric_limits<T>::max();
-    auto ymin = std::numeric_limits<T>::max();
+    auto xmin = (std::numeric_limits<T>::max)();
+    auto ymin = (std::numeric_limits<T>::max)();
     auto xmax = std::numeric_limits<T>::lowest();
     auto ymax = std::numeric_limits<T>::lowest();
     for (const auto& p : path)
@@ -363,8 +365,8 @@ namespace Clipper2Lib
   template <typename T>
   Rect<T> GetBounds(const Paths<T>& paths)
   {
-    auto xmin = std::numeric_limits<T>::max();
-    auto ymin = std::numeric_limits<T>::max();
+    auto xmin = (std::numeric_limits<T>::max)();
+    auto ymin = (std::numeric_limits<T>::max)();
     auto xmax = std::numeric_limits<T>::lowest();
     auto ymax = std::numeric_limits<T>::lowest();
     for (const Path<T>& path : paths)
@@ -582,10 +584,10 @@ namespace Clipper2Lib
 
   inline void CheckPrecision(int& precision, int& error_code)
   {
-    if (precision >= -8 && precision <= 8) return;
+    if (precision >= -MAX_DECIMAL_PRECISION && precision <= MAX_DECIMAL_PRECISION) return;
     error_code |= precision_error_i; // non-fatal error
-    DoError(precision_error_i);      // unless exceptions enabled
-    precision = precision > 8 ? 8 : -8;
+    DoError(precision_error_i);      // does nothing unless exceptions enabled
+    precision = precision > 0 ? MAX_DECIMAL_PRECISION : -MAX_DECIMAL_PRECISION;
   }
 
   inline void CheckPrecision(int& precision)
@@ -677,29 +679,27 @@ namespace Clipper2Lib
     //nb: This statement is premised on using Cartesian coordinates
     return Area<T>(poly) >= 0;
   }
-
-  inline int64_t CheckCastInt64(double val)
-  {
-    if ((val >= max_coord) || (val <= min_coord)) return INVALID;
-    else return static_cast<int64_t>(val);
-  }
-
+  
   inline bool GetIntersectPoint(const Point64& ln1a, const Point64& ln1b,
     const Point64& ln2a, const Point64& ln2b, Point64& ip)
   {  
     // https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection
-
     double dx1 = static_cast<double>(ln1b.x - ln1a.x);
     double dy1 = static_cast<double>(ln1b.y - ln1a.y);
     double dx2 = static_cast<double>(ln2b.x - ln2a.x);
     double dy2 = static_cast<double>(ln2b.y - ln2a.y);
+
     double det = dy1 * dx2 - dy2 * dx1;
-    if (det == 0.0) return 0;
-    double qx = dx1 * ln1a.y - dy1 * ln1a.x;
-    double qy = dx2 * ln2a.y - dy2 * ln2a.x;
-    ip.x = CheckCastInt64((dx1 * qy - dx2 * qx) / det);
-    ip.y = CheckCastInt64((dy1 * qy - dy2 * qx) / det);
-    return (ip.x != INVALID && ip.y != INVALID);
+    if (det == 0.0) return false;
+    double t = ((ln1a.x - ln2a.x) * dy2 - (ln1a.y - ln2a.y) * dx2) / det;
+    if (t <= 0.0) ip = ln1a;        // ?? check further (see also #568)
+    else if (t >= 1.0) ip = ln1b;   // ?? check further
+    else
+    {
+      ip.x = static_cast<int64_t>(ln1a.x + t * dx1);
+      ip.y = static_cast<int64_t>(ln1a.y + t * dy1);
+    }
+    return true;
   }
 
   inline bool SegmentsIntersect(const Point64& seg1a, const Point64& seg1b,
