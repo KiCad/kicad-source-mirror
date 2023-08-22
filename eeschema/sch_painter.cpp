@@ -900,7 +900,7 @@ void SCH_PAINTER::draw( const LIB_SHAPE* aShape, int aLayer, bool aDimmed )
 
                     std::swap( startAngle, endAngle );
 
-                    m_gal->DrawArc( center, shape->GetRadius(), startAngle, endAngle );
+                    m_gal->DrawArc( center, shape->GetRadius(), startAngle, endAngle - startAngle );
                 }
                     break;
 
@@ -1988,7 +1988,7 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer )
                     aShape->CalcArcAngles( startAngle, endAngle );
 
                     m_gal->DrawArc( aShape->GetCenter(), aShape->GetRadius(), startAngle,
-                                    endAngle );
+                                    endAngle - startAngle );
                     break;
                 }
 

@@ -239,7 +239,7 @@ void ROUTER_PREVIEW_ITEM::drawLineChain( const SHAPE_LINE_CHAIN_BASE* aL, KIGFX:
         EDA_ANGLE        start_angle = arc.GetStartAngle();
         EDA_ANGLE        angle = arc.GetCentralAngle();
 
-        gal->DrawArc( arc.GetCenter(), arc.GetRadius(), start_angle, start_angle + angle);
+        gal->DrawArc( arc.GetCenter(), arc.GetRadius(), start_angle, angle);
     }
 
     if( aL->IsClosed() )
@@ -414,14 +414,14 @@ void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) cons
         if( m_showClearance && m_clearance > 0 )
         {
             gal->SetLineWidth( w + 2 * m_clearance );
-            gal->DrawArc( arc->GetCenter(), arc->GetRadius(), start_angle, start_angle + angle );
+            gal->DrawArc( arc->GetCenter(), arc->GetRadius(), start_angle, angle );
         }
 
         gal->SetLayerDepth( m_depth );
         gal->SetStrokeColor( m_color );
         gal->SetFillColor( m_color );
         gal->SetLineWidth( w );
-        gal->DrawArc( arc->GetCenter(), arc->GetRadius(), start_angle, start_angle + angle );
+        gal->DrawArc( arc->GetCenter(), arc->GetRadius(), start_angle, angle );
         break;
     }
 

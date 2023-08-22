@@ -844,8 +844,7 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
         if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
             width = width + m_lockedShadowMargin;
 
-        m_gal->DrawArcSegment( center, radius, start_angle, start_angle + angle, width,
-                               m_maxError );
+        m_gal->DrawArcSegment( center, radius, start_angle, angle, width, m_maxError );
     }
 
     // Clearance lines
@@ -859,8 +858,8 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
         m_gal->SetIsStroke( true );
         m_gal->SetStrokeColor( color );
 
-        m_gal->DrawArcSegment( center, radius, start_angle, start_angle + angle,
-                               width + clearance * 2, m_maxError );
+        m_gal->DrawArcSegment( center, radius, start_angle, angle, width + clearance * 2,
+                               m_maxError );
     }
 
 // Debug only: enable this code only to test the TransformArcToPolygon function
@@ -1074,11 +1073,11 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
 
         m_gal->SetStrokeColor( m_pcbSettings.GetColor( aVia, layerTop ) );
         m_gal->SetFillColor( m_pcbSettings.GetColor( aVia, layerTop ) );
-        m_gal->DrawArc( center, radius, EDA_ANGLE( 240, DEGREES_T ), EDA_ANGLE( 300, DEGREES_T ) );
+        m_gal->DrawArc( center, radius, EDA_ANGLE( 240, DEGREES_T ), EDA_ANGLE( 60, DEGREES_T ) );
 
         m_gal->SetStrokeColor( m_pcbSettings.GetColor( aVia, layerBottom ) );
         m_gal->SetFillColor( m_pcbSettings.GetColor( aVia, layerBottom ) );
-        m_gal->DrawArc( center, radius, EDA_ANGLE( 60, DEGREES_T ), EDA_ANGLE( 120, DEGREES_T ) );
+        m_gal->DrawArc( center, radius, EDA_ANGLE( 60, DEGREES_T ), EDA_ANGLE( 60, DEGREES_T ) );
 
         m_gal->SetStrokeColor( color );
         m_gal->SetFillColor( color );
@@ -1806,7 +1805,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
             if( outline_mode )
             {
                 m_gal->DrawArcSegment( aShape->GetCenter(), aShape->GetRadius(), startAngle,
-                                       endAngle, thickness, m_maxError );
+                                       endAngle - startAngle, thickness, m_maxError );
             }
             else
             {
@@ -1814,7 +1813,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
                 m_gal->SetIsStroke( false );
 
                 m_gal->DrawArcSegment( aShape->GetCenter(), aShape->GetRadius(), startAngle,
-                                       endAngle, thickness, m_maxError );
+                                       endAngle - startAngle, thickness, m_maxError );
             }
             break;
         }

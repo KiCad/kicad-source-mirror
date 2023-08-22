@@ -104,7 +104,7 @@ struct VIEW_OVERLAY::COMMAND_ARC : public VIEW_OVERLAY::COMMAND
 
     virtual void Execute( VIEW* aView ) const override
     {
-        aView->GetGAL()->DrawArc( m_center, m_radius, m_startAngle, m_endAngle );
+        aView->GetGAL()->DrawArc( m_center, m_radius, m_startAngle, m_endAngle - m_startAngle );
     }
 
     VECTOR2D  m_center;

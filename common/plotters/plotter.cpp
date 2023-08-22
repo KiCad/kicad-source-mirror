@@ -146,58 +146,53 @@ double PLOTTER::GetDashGapLenIU( int aLineWidth ) const
 }
 
 #include <wx/log.h>
-void PLOTTER::Arc( const VECTOR2I& aCenter, const VECTOR2I& aStart, const VECTOR2I& aEnd,
-                   FILL_T aFill, int aWidth, int aMaxError )
+void PLOTTER::Arc( const VECTOR2D& aStart, const VECTOR2D& aMid, const VECTOR2D& aEnd, FILL_T aFill,
+                   int aWidth )
 {
-    // Recalculate aCenter using double to be sure we will use a exact value, from aStart and aEnd
-    // it must be on the line passing by the middle of segment {aStart, aEnd}
-    // To simplify calculations, use aStart as origin in intermediate calculations
-    VECTOR2D  center = aCenter - aStart;
-    VECTOR2D  end = aEnd - aStart;
-    EDA_ANGLE segAngle( end );
+    VECTOR2D aCenter = CalcArcCenter( aStart, aMid, aEnd );   
 
-    // Rotate end and center, to make segment {aStart, aEnd} horizontal
-    RotatePoint( end, segAngle );
-    RotatePoint( center, segAngle );
+    EDA_ANGLE startAngle( aStart - aCenter );
+    EDA_ANGLE endAngle( aEnd - aCenter );
 
-    // center.x must be at end.x/2 coordinate
-    center.x = end.x / 2;
+    // < 0: left, 0 : on the line, > 0 : right
+    double det = ( aEnd - aStart ).Cross( aMid - aStart );
 
-    // Now calculate the right center position
-    RotatePoint( center, -segAngle );
-    center += aStart;
+    int       cw = det <= 0;
+    EDA_ANGLE angle = endAngle - startAngle;
 
-    EDA_ANGLE startAngle( VECTOR2D( aStart ) - center );
-    EDA_ANGLE endAngle( VECTOR2D( aEnd ) - center );
-    double    radius = ( VECTOR2D( aStart ) - center ).EuclideanNorm();
+    if( cw )
+        angle.Normalize();
+    else
+        angle.NormalizeNegative();
 
-    // In old Kicad code, calls to Arc() using angles calls this function after
-    // swapping angles and negate them (to compensate the inverted Y axis).
-    // So to be compatible with Arc() calls with angles, do the same thing
-    std::swap( startAngle, endAngle );
-    startAngle = -startAngle;
-    endAngle = -endAngle;
-
-    Arc( aCenter, startAngle, endAngle, radius, aFill, aWidth );
+    double radius = ( aStart - aCenter ).EuclideanNorm();
+    Arc( aCenter, startAngle, angle, radius, aFill, aWidth );
 }
 
 
-void PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
-                   const EDA_ANGLE& aEndAngle, double aRadius, FILL_T aFill, int aWidth )
+void PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aAngle,
+                   double aRadius, FILL_T aFill, int aWidth )
 {
-    EDA_ANGLE       startAngle( aStartAngle );
-    EDA_ANGLE       endAngle( aEndAngle );
+    polyArc( aCenter, aStartAngle, aAngle, aRadius, aFill, aWidth );
+}
+
+
+void PLOTTER::polyArc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
+                       const EDA_ANGLE& aAngle, double aRadius, FILL_T aFill, int aWidth )
+{
+    EDA_ANGLE       startAngle = aStartAngle;
+    EDA_ANGLE       endAngle = startAngle + aAngle;
     const EDA_ANGLE delta( 5.0, DEGREES_T ); // increment to draw arc
     VECTOR2I        start, end;
-    const int       sign = -1;
+    const int       sign = 1;
 
-    while( endAngle < startAngle )
-        endAngle += ANGLE_360;
+    if( aAngle < ANGLE_0 )
+        std::swap( startAngle, endAngle );
 
     SetCurrentLineWidth( aWidth );
 
     start.x = aCenter.x + KiROUND( aRadius * startAngle.Cos() );
-    start.y = aCenter.y + sign*KiROUND( aRadius * startAngle.Sin() );
+    start.y = aCenter.y + sign * KiROUND( aRadius * startAngle.Sin() );
 
     if( aFill != FILL_T::NO_FILL )
     {
@@ -212,12 +207,12 @@ void PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
     for( EDA_ANGLE ii = startAngle + delta; ii < endAngle; ii += delta )
     {
         end.x = aCenter.x + KiROUND( aRadius * ii.Cos() );
-        end.y = aCenter.y + sign*KiROUND( aRadius * ii.Sin() );
+        end.y = aCenter.y + sign * KiROUND( aRadius * ii.Sin() );
         LineTo( end );
     }
 
     end.x = aCenter.x + KiROUND( aRadius * endAngle.Cos() );
-    end.y = aCenter.y + sign*KiROUND( aRadius * endAngle.Sin() );
+    end.y = aCenter.y + sign * KiROUND( aRadius * endAngle.Sin() );
 
     if( aFill != FILL_T::NO_FILL )
     {
@@ -581,48 +576,20 @@ void PLOTTER::ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int widt
 
 
 void PLOTTER::ThickArc( const VECTOR2D& centre, const EDA_ANGLE& aStartAngle,
-                        const EDA_ANGLE& aEndAngle, double aRadius, int aWidth,
+                        const EDA_ANGLE& aAngle, double aRadius, int aWidth,
                         OUTLINE_MODE aTraceMode, void* aData )
 {
     if( aTraceMode == FILLED )
     {
-        Arc( centre, aStartAngle, aEndAngle, aRadius, FILL_T::NO_FILL, aWidth );
+        Arc( centre, aStartAngle, aAngle, aRadius, FILL_T::NO_FILL, aWidth );
     }
     else
     {
         SetCurrentLineWidth( -1 );
-        Arc( centre, aStartAngle, aEndAngle, aRadius - ( aWidth - m_currentPenWidth ) / 2,
+        Arc( centre, aStartAngle, aAngle, aRadius - ( aWidth - m_currentPenWidth ) / 2,
              FILL_T::NO_FILL, -1 );
-        Arc( centre, aStartAngle, aEndAngle, aRadius + ( aWidth - m_currentPenWidth ) / 2,
+        Arc( centre, aStartAngle, aAngle, aRadius + ( aWidth - m_currentPenWidth ) / 2,
              FILL_T::NO_FILL, -1 );
-    }
-}
-
-
-void PLOTTER::ThickArc( const VECTOR2I& aCentre, const VECTOR2I& aStart,
-                        const VECTOR2I& aEnd, int aWidth,
-                        OUTLINE_MODE aTraceMode, void* aData )
-{
-    if( aTraceMode == FILLED )
-    {
-        Arc( aCentre, aStart, aEnd, FILL_T::NO_FILL, aWidth, GetPlotterArcHighDef() );
-    }
-    else
-    {
-        SetCurrentLineWidth( -1 );
-        int radius = ( aStart - aCentre ).EuclideanNorm();
-
-        int new_radius = radius - ( aWidth - m_currentPenWidth ) / 2;
-        VECTOR2I start = ( aStart - aCentre ).Resize( new_radius ) + aCentre;
-        VECTOR2I end = ( aEnd - aCentre ).Resize( new_radius ) + aCentre;
-
-        Arc( aCentre, start, end, FILL_T::NO_FILL, -1, GetPlotterArcHighDef() );
-
-        new_radius = radius + ( aWidth - m_currentPenWidth ) / 2;
-        start = ( aStart - aCentre ).Resize( new_radius ) + aCentre;
-        end = ( aEnd - aCentre ).Resize( new_radius ) + aCentre;
-
-        Arc( aCentre, start, end, FILL_T::NO_FILL, -1, GetPlotterArcHighDef() );
     }
 }
 
@@ -630,8 +597,26 @@ void PLOTTER::ThickArc( const VECTOR2I& aCentre, const VECTOR2I& aStart,
 void PLOTTER::ThickArc( const EDA_SHAPE& aArcShape,
                            OUTLINE_MODE aTraceMode, void* aData )
 {
-    ThickArc( aArcShape.getCenter(),aArcShape.GetStart(), aArcShape.GetEnd(),
-              aArcShape.GetWidth(), aTraceMode, aData );
+    VECTOR2D center = aArcShape.getCenter();
+    VECTOR2D mid = aArcShape.GetArcMid();
+    VECTOR2D start = aArcShape.GetStart();
+    VECTOR2D end = aArcShape.GetEnd();
+
+    EDA_ANGLE startAngle( start - center );
+    EDA_ANGLE endAngle( end - center );
+    EDA_ANGLE angle = endAngle - startAngle;
+
+    // < 0: left, 0 : on the line, > 0 : right
+    double det = ( end - start ).Cross( mid - start );
+
+    if( det <= 0 ) // cw
+        angle.Normalize();
+    else
+        angle.NormalizeNegative();
+
+    double radius = ( start - center ).EuclideanNorm();
+
+    ThickArc( center, startAngle, angle, radius, aArcShape.GetWidth(), aTraceMode, aData );
 }
 
 

@@ -339,12 +339,12 @@ void CAIRO_GAL_BASE::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
 
 
 void CAIRO_GAL_BASE::DrawArc( const VECTOR2D& aCenterPoint, double aRadius,
-                              const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aEndAngle )
+                              const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aAngle )
 {
     syncLineWidth();
 
     double startAngle = aStartAngle.AsRadians();
-    double endAngle = aEndAngle.AsRadians();
+    double endAngle = startAngle + aAngle.AsRadians();
 
     // calculate start and end arc angles according to the rotation transform matrix
     // and normalize:
@@ -378,7 +378,7 @@ void CAIRO_GAL_BASE::DrawArc( const VECTOR2D& aCenterPoint, double aRadius,
 
 
 void CAIRO_GAL_BASE::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius,
-                                     const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aEndAngle,
+                                     const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aAngle,
                                      double aWidth, double aMaxError )
 {
     // Note: aMaxError is not used because Cairo can draw true arcs
@@ -387,7 +387,7 @@ void CAIRO_GAL_BASE::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadiu
         m_lineWidth = aWidth;
         m_isStrokeEnabled = true;
         m_isFillEnabled = false;
-        DrawArc( aCenterPoint, aRadius, aStartAngle, aEndAngle );
+        DrawArc( aCenterPoint, aRadius, aStartAngle, aAngle );
         m_isFillEnabled = true;
         m_isStrokeEnabled = false;
         return;
@@ -398,7 +398,7 @@ void CAIRO_GAL_BASE::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadiu
     // calculate start and end arc angles according to the rotation transform matrix
     // and normalize:
     double startAngleS = aStartAngle.AsRadians();
-    double endAngleS = aEndAngle.AsRadians();
+    double endAngleS = startAngleS + aAngle.AsRadians();
     arc_angles_xform_and_normalize( startAngleS, endAngleS );
 
     double r = xform( aRadius );

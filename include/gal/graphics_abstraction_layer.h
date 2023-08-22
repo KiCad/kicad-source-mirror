@@ -148,10 +148,10 @@ public:
      * @param aCenterPoint  is the center point of the arc.
      * @param aRadius       is the arc radius.
      * @param aStartAngle   is the start angle of the arc.
-     * @param aEndAngle     is the end angle of the arc.
+     * @param aAngle        is the angle of the arc.
      */
     virtual void DrawArc( const VECTOR2D& aCenterPoint, double aRadius,
-                          const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aEndAngle ) {};
+                          const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aAngle ){};
 
     /**
      * Draw an arc segment.
@@ -166,14 +166,14 @@ public:
      * @param aCenterPoint  is the center point of the arc.
      * @param aRadius       is the arc radius.
      * @param aStartAngle   is the start angle of the arc.
-     * @param aEndAngle     is the end angle of the arc.
+     * @param aAngle        is the angle of the arc.
      * @param aWidth        is the thickness of the arc (pen size).
      * @param aMaxError     is the max allowed error to create segments to approximate a circle.
      *  It has meaning only for back ends that can't draw a true arc, and use segments to approximate.
      */
     virtual void DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius,
-                                 const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aEndAngle,
-                                 double aWidth, double aMaxError ) {};
+                                 const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aAngle,
+                                 double aWidth, double aMaxError ){};
 
     /**
      * Draw a rectangle.

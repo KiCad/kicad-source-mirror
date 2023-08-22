@@ -64,17 +64,13 @@ public:
                        int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void Circle( const VECTOR2I& pos, int diametre, FILL_T fill,
                          int width = USE_DEFAULT_LINE_WIDTH ) override;
+    virtual void Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
+                      const EDA_ANGLE& aAngle, double aRadius, FILL_T aFill,
+                      int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
 
     // These functions plot an item and manage X2 gerber attributes
     virtual void ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int width,
                                OUTLINE_MODE tracemode, void* aData ) override;
-
-    virtual void ThickArc( const VECTOR2I& aCentre, const VECTOR2I& aStart,
-                           const VECTOR2I& aEnd, int aWidth,
-                           OUTLINE_MODE aTraceMode, void* aData ) override;
-
-    virtual void ThickArc( const EDA_SHAPE& aArcShape,
-                           OUTLINE_MODE aTraceMode, void* aData ) override;
 
     virtual void ThickRect( const VECTOR2I& p1, const VECTOR2I& p2, int width,
                             OUTLINE_MODE tracemode, void* aData ) override;
@@ -268,12 +264,8 @@ public:
                              APERTURE::APERTURE_TYPE aType, int aApertureAttribute );
 
 protected:
-    virtual void Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
-                      const EDA_ANGLE& aEndAngle, double aRadius, FILL_T aFill,
-                      int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
-
     virtual void ThickArc( const VECTOR2D& aCentre, const EDA_ANGLE& aStartAngle,
-                           const EDA_ANGLE& aEndAngle, double aRadius, int aWidth,
+                           const EDA_ANGLE& aAngle, double aRadius, int aWidth,
                            OUTLINE_MODE aTraceMode, void* aData ) override;
 
     /**

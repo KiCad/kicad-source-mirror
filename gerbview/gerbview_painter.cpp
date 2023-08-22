@@ -337,7 +337,8 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
 
         // Adjust the allowed approx error to convert arcs to segments:
         int arc_to_seg_error = gerbIUScale.mmToIU( 0.005 );    // Allow 5 microns
-        m_gal->DrawArcSegment( center, radius, startAngle, endAngle, width, arc_to_seg_error );
+        m_gal->DrawArcSegment( center, radius, startAngle, endAngle - startAngle, width,
+                               arc_to_seg_error );
 
 #if 0   // Arc Debugging only
         m_gal->SetIsFill( false );

@@ -568,7 +568,7 @@ void HPGL_PLOTTER::ThickSegment( const VECTOR2I& start, const VECTOR2I& end,
 
 
 void HPGL_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
-                        const EDA_ANGLE& aEndAngle, double aRadius, FILL_T aFill, int aWidth )
+                        const EDA_ANGLE& aAngle, double aRadius, FILL_T aFill, int aWidth )
 {
     if( aRadius <= 0 )
         return;
@@ -581,23 +581,16 @@ void HPGL_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
     chord_angle = std::max( m_arcMinChordDegrees, std::min( chord_angle, ANGLE_45 ) );
 
     VECTOR2D  centre_device = userToDeviceCoordinates( aCenter );
+    EDA_ANGLE angle = aAngle;
 
-    EDA_ANGLE startAngle( aStartAngle );
-    EDA_ANGLE endAngle( aEndAngle );
+    if( !m_plotMirror )
+        angle = -angle;
 
-    while( endAngle < startAngle )
-        endAngle += ANGLE_360;
-
-    EDA_ANGLE angle;
-
-    if( m_plotMirror )
-        angle = startAngle - endAngle;
-    else
-        angle = endAngle - startAngle;
+    EDA_ANGLE startAngle = -aStartAngle;
 
     // Calculate arc start point:
-    VECTOR2I cmap( aCenter.x + KiROUND( aRadius * aStartAngle.Cos() ),
-                   aCenter.y - KiROUND( aRadius * aStartAngle.Sin() ) );
+    VECTOR2I cmap( aCenter.x + KiROUND( aRadius * startAngle.Cos() ),
+                   aCenter.y - KiROUND( aRadius * startAngle.Sin() ) );
     VECTOR2D cmap_dev = userToDeviceCoordinates( cmap );
 
     startOrAppendItem( cmap_dev, wxString::Format( "AA %.0f,%.0f,%.0f,%g",

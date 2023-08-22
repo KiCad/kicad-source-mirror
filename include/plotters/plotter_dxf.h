@@ -95,6 +95,9 @@ public:
     virtual void Circle( const VECTOR2I& pos, int diametre, FILL_T fill,
                          int width = USE_DEFAULT_LINE_WIDTH ) override;
 
+    virtual void Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
+                      const EDA_ANGLE& aAngle, double aRadius, FILL_T aFill, int aWidth ) override;
+
     /**
      * DXF polygon: doesn't fill it but at least it close the filled ones
      * DXF does not know thick outline.
@@ -208,10 +211,6 @@ public:
     }
 
 protected:
-    virtual void Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
-                      const EDA_ANGLE& aEndAngle, double aRadius, FILL_T aFill,
-                      int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
-
     void plotOneLineOfText( const VECTOR2I& aPos, const COLOR4D& aColor, const wxString& aText,
                             const TEXT_ATTRIBUTES& aAttrs );
 

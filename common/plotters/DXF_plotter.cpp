@@ -657,20 +657,20 @@ void DXF_PLOTTER::ThickSegment( const VECTOR2I& aStart, const VECTOR2I& aEnd, in
 
 
 void DXF_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
-                       const EDA_ANGLE& aEndAngle, double aRadius, FILL_T aFill, int aWidth )
+                       const EDA_ANGLE& aAngle, double aRadius, FILL_T aFill, int aWidth )
 {
     wxASSERT( m_outputFile );
 
     if( aRadius <= 0 )
         return;
 
-    EDA_ANGLE startAngle( aStartAngle );
-    EDA_ANGLE endAngle( aEndAngle );
+    EDA_ANGLE startAngle = -aStartAngle;
+    EDA_ANGLE endAngle = startAngle - aAngle;
 
     // In DXF, arcs are drawn CCW.
     // If startAngle > endAngle, it is CW. So transform it to CCW
-    while( endAngle < startAngle )
-        endAngle += ANGLE_360;
+    if( endAngle < startAngle )
+        std::swap( startAngle, endAngle );
 
     VECTOR2D centre_device = userToDeviceCoordinates( aCenter );
     double   radius_device = userToDeviceSize( aRadius );

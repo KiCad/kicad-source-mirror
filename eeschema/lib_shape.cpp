@@ -223,12 +223,8 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
     case SHAPE_T::ARC:
     {
         VECTOR2I mid = aTransform.TransformCoordinate( GetArcMid() ) + aOffset;
-        VECTOR2I center = CalcArcCenter( start, mid, end );
 
-        EDA_ANGLE startAngle = EDA_ANGLE( start - center );
-        EDA_ANGLE endAngle = EDA_ANGLE( end - center );
-
-        aPlotter->Arc( center, -startAngle, -endAngle, GetRadius(), fill, penWidth );
+        aPlotter->Arc( start, mid, end, fill, penWidth );
         break;
     }
 

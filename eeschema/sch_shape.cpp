@@ -140,13 +140,7 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground ) const
             switch( GetShape() )
             {
             case SHAPE_T::ARC:
-            {
-                // In some plotters (not all) the arc is approximated by segments, and
-                // a error max is needed. We try to approximate by 360/5 segments by 360 deg
-                int arc2segment_error = CircleToEndSegmentDeltaRadius( GetRadius(), 360/5 );
-                aPlotter->Arc( getCenter(), GetStart(), GetEnd(), m_fill, 0, arc2segment_error );
-            }
-
+                aPlotter->Arc( GetStart(), GetArcMid(), GetEnd(), m_fill, 0 );
                 break;
 
             case SHAPE_T::CIRCLE:
@@ -183,13 +177,7 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground ) const
         switch( GetShape() )
         {
         case SHAPE_T::ARC:
-        {
-            // In some plotters (not all) the arc is approximated by segments, and
-            // a error max is needed. We try to approximate by 360/5 segments by 360 deg
-            int arc2segment_error = CircleToEndSegmentDeltaRadius( GetRadius(), 360/5 );
-            aPlotter->Arc( getCenter(), GetStart(), GetEnd(), FILL_T::NO_FILL, pen_size, arc2segment_error );
-        }
-
+            aPlotter->Arc( GetStart(), GetArcMid(), GetEnd(), m_fill, pen_size );
             break;
 
         case SHAPE_T::CIRCLE:

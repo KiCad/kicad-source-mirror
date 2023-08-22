@@ -284,59 +284,8 @@ void PDF_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T aFill, int w
 }
 
 
-void PDF_PLOTTER::Arc( const VECTOR2I& aCenter, const VECTOR2I& aStart, const VECTOR2I& aEnd,
-                       FILL_T aFill, int aWidth, int aMaxError )
-{
-    wxASSERT( m_workFile );
-
-    /*
-     * Arcs are not so easily approximated by beziers (in the general case), so we approximate
-     * them in the old way
-     */
-    EDA_ANGLE startAngle( aStart - aCenter );
-    EDA_ANGLE endAngle( aEnd - aCenter );
-    int       radius = ( aStart - aCenter ).EuclideanNorm();
-    int       numSegs = GetArcToSegmentCount( radius, aMaxError, FULL_CIRCLE );
-    EDA_ANGLE delta = ANGLE_360 / std::max( 8, numSegs );
-    VECTOR2I  start( aStart );
-    VECTOR2I  end( aEnd );
-    VECTOR2I  pt;
-
-    while( endAngle < startAngle )
-        endAngle += ANGLE_360;
-
-    SetCurrentLineWidth( aWidth );
-    VECTOR2D pos_dev = userToDeviceCoordinates( start );
-    fprintf( m_workFile, "%g %g m ", pos_dev.x, pos_dev.y );
-
-    for( EDA_ANGLE ii = delta; startAngle + ii < endAngle; ii += delta )
-    {
-        pt = start;
-        RotatePoint( pt, aCenter, -ii );
-
-        pos_dev = userToDeviceCoordinates( pt );
-        fprintf( m_workFile, "%g %g l ", pos_dev.x, pos_dev.y );
-    }
-
-    pos_dev = userToDeviceCoordinates( end );
-    fprintf( m_workFile, "%g %g l ", pos_dev.x, pos_dev.y );
-
-    // The arc is drawn... if not filled we stroke it, otherwise we finish
-    // closing the pie at the center
-    if( aFill == FILL_T::NO_FILL )
-    {
-        fputs( "S\n", m_workFile );
-    }
-    else
-    {
-        pos_dev = userToDeviceCoordinates( aCenter );
-        fprintf( m_workFile, "%g %g l b\n", pos_dev.x, pos_dev.y );
-    }
-}
-
-
 void PDF_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
-                       const EDA_ANGLE& aEndAngle, double aRadius, FILL_T aFill, int aWidth )
+                       const EDA_ANGLE& aAngle, double aRadius, FILL_T aFill, int aWidth )
 {
     wxASSERT( m_workFile );
 
@@ -350,14 +299,14 @@ void PDF_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
      * Arcs are not so easily approximated by beziers (in the general case), so we approximate
      * them in the old way
      */
-    EDA_ANGLE       startAngle( aStartAngle );
-    EDA_ANGLE       endAngle( aEndAngle );
+    EDA_ANGLE       startAngle = -aStartAngle;
+    EDA_ANGLE       endAngle = startAngle - aAngle;
     VECTOR2I        start;
     VECTOR2I        end;
     const EDA_ANGLE delta( 5, DEGREES_T );   // increment to draw circles
 
-    while( endAngle < startAngle )
-        endAngle += ANGLE_360;
+    if( startAngle > endAngle )
+        std::swap( startAngle, endAngle );
 
     SetCurrentLineWidth( aWidth );
 

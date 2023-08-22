@@ -892,16 +892,16 @@ void OPENGL_GAL::drawCircle( const VECTOR2D& aCenterPoint, double aRadius, bool 
 
 
 void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius,
-                          const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aEndAngle )
+                          const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aAngle )
 {
     if( aRadius <= 0 )
         return;
 
     double startAngle = aStartAngle.AsRadians();
-    double endAngle = aEndAngle.AsRadians();
+    double endAngle = startAngle + aAngle.AsRadians();
 
-    while( endAngle < startAngle )
-        endAngle += M_PI * 2;
+    // Normalize arc angles
+    SWAP( startAngle, >, endAngle );
 
     const double alphaIncrement = calcAngleStep( aRadius );
 
@@ -964,7 +964,7 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius,
 
 
 void OPENGL_GAL::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius,
-                                 const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aEndAngle,
+                                 const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aAngle,
                                  double aWidth, double aMaxError )
 {
     if( aRadius <= 0 )
@@ -977,7 +977,7 @@ void OPENGL_GAL::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius,
     }
 
     double startAngle = aStartAngle.AsRadians();
-    double endAngle = aEndAngle.AsRadians();
+    double endAngle = startAngle + aAngle.AsRadians();
 
     // Swap the angles, if start angle is greater than end angle
     SWAP( startAngle, >, endAngle );

@@ -818,14 +818,11 @@ void GERBER_PLOTTER::Circle( const VECTOR2I& aCenter, int aDiameter, FILL_T aFil
 
 
 void GERBER_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
-                          const EDA_ANGLE& aEndAngle, double aRadius, FILL_T aFill, int aWidth )
+                          const EDA_ANGLE& aAngle, double aRadius, FILL_T aFill, int aWidth )
 {
     SetCurrentLineWidth( aWidth );
 
-    EDA_ANGLE endAngle( aEndAngle );
-
-    while( endAngle < aStartAngle )
-        endAngle += ANGLE_360;
+    EDA_ANGLE endAngle = aStartAngle + aAngle;
 
     // aFill is not used here.
     plotArc( aCenter, aStartAngle, endAngle, aRadius, false );
@@ -875,7 +872,7 @@ void GERBER_PLOTTER::plotArc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAn
 {
     VECTOR2I start, end;
     start.x = aCenter.x + KiROUND( aRadius * aStartAngle.Cos() );
-    start.y = aCenter.y - KiROUND( aRadius * aStartAngle.Sin() );
+    start.y = aCenter.y + KiROUND( aRadius * aStartAngle.Sin() );
 
     if( !aPlotInRegion )
         MoveTo( start );
@@ -883,14 +880,14 @@ void GERBER_PLOTTER::plotArc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAn
         LineTo( start );
 
     end.x = aCenter.x + KiROUND( aRadius * aEndAngle.Cos() );
-    end.y = aCenter.y - KiROUND( aRadius * aEndAngle.Sin() );
+    end.y = aCenter.y + KiROUND( aRadius * aEndAngle.Sin() );
     VECTOR2D devEnd = userToDeviceCoordinates( end );
     // devRelCenter is the position on arc center relative to the arc start, in Gerber coord.
     VECTOR2D devRelCenter = userToDeviceCoordinates( aCenter ) - userToDeviceCoordinates( start );
 
     fprintf( m_outputFile, "G75*\n" ); // Multiquadrant (360 degrees) mode
 
-    if( aStartAngle < aEndAngle )
+    if( aStartAngle > aEndAngle )
         fprintf( m_outputFile, "G03*\n" ); // Active circular interpolation, CCW
     else
         fprintf( m_outputFile, "G02*\n" ); // Active circular interpolation, CW
@@ -1145,11 +1142,12 @@ void GERBER_PLOTTER::ThickSegment( const VECTOR2I& start, const VECTOR2I& end, i
     }
 }
 
+
 void GERBER_PLOTTER::ThickArc( const VECTOR2D& aCentre, const EDA_ANGLE& aStartAngle,
-                               const EDA_ANGLE& aEndAngle, double aRadius, int aWidth,
+                               const EDA_ANGLE& aAngle, double aRadius, int aWidth,
                                OUTLINE_MODE aTraceMode, void* aData )
 {
-    GBR_METADATA *gbr_metadata = static_cast<GBR_METADATA*>( aData );
+    GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
     SetCurrentLineWidth( aWidth, gbr_metadata );
 
     if( gbr_metadata )
@@ -1157,54 +1155,16 @@ void GERBER_PLOTTER::ThickArc( const VECTOR2D& aCentre, const EDA_ANGLE& aStartA
 
     if( aTraceMode == FILLED )
     {
-        Arc( aCentre, aStartAngle, aEndAngle, aRadius, FILL_T::NO_FILL, DO_NOT_SET_LINE_WIDTH );
+        Arc( aCentre, aStartAngle, aAngle, aRadius, FILL_T::NO_FILL, DO_NOT_SET_LINE_WIDTH );
     }
     else
     {
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-        Arc( aCentre, aStartAngle, aEndAngle, aRadius - ( aWidth - m_currentPenWidth ) / 2,
+        Arc( aCentre, aStartAngle, aAngle, aRadius - ( aWidth - m_currentPenWidth ) / 2,
              FILL_T::NO_FILL, DO_NOT_SET_LINE_WIDTH );
-        Arc( aCentre, aStartAngle, aEndAngle, aRadius + ( aWidth - m_currentPenWidth ) / 2,
+        Arc( aCentre, aStartAngle, aAngle, aRadius + ( aWidth - m_currentPenWidth ) / 2,
              FILL_T::NO_FILL, DO_NOT_SET_LINE_WIDTH );
     }
-}
-
-
-void GERBER_PLOTTER::ThickArc( const VECTOR2I& aCentre, const VECTOR2I& aStart,
-                               const VECTOR2I& aEnd, int aWidth,
-                               OUTLINE_MODE aTraceMode, void* aData )
-{
-    EDA_ANGLE start_angle( aStart - aCentre );
-    EDA_ANGLE end_angle( aEnd - aCentre );
-
-    if( start_angle > end_angle )
-    {
-        if( end_angle < ANGLE_0 )
-            end_angle.Normalize();
-        else
-            start_angle = start_angle.Normalize() - ANGLE_360;
-    }
-
-    int radius = (aStart - aCentre).EuclideanNorm();
-
-    if( !m_yaxisReversed )   // should be always the case
-    {
-        std::swap( end_angle, start_angle );
-        end_angle = -end_angle;
-        start_angle = -start_angle;
-    }
-
-    ThickArc( aCentre, start_angle, end_angle, radius, aWidth, aTraceMode, aData );
-}
-
-
-void GERBER_PLOTTER::ThickArc( const EDA_SHAPE& aArcShape,
-                           OUTLINE_MODE aTraceMode, void* aData )
-{
-    wxASSERT( aArcShape.GetShape() == SHAPE_T::ARC );
-
-    ThickArc( aArcShape.getCenter(), aArcShape.GetStart(), aArcShape.GetEnd(),
-              aArcShape.GetWidth(), aTraceMode, aData );
 }
 
 

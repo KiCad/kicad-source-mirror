@@ -643,20 +643,10 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
         if( track->Type() == PCB_ARC_T )
         {
-            const     PCB_ARC* arc = static_cast<const PCB_ARC*>( track );
+            const PCB_ARC* arc = static_cast<const PCB_ARC*>( track );
 
-            // ThickArc expects only positive angle arcs, so flip start/end if
-            // we are negative
-            if( arc->GetAngle() < ANGLE_0 )
-            {
-                aPlotter->ThickArc( arc->GetCenter(), arc->GetEnd(), arc->GetStart(),
-                                    width, plotMode, &gbr_metadata );
-            }
-            else
-            {
-                aPlotter->ThickArc( arc->GetCenter(), arc->GetStart(), arc->GetEnd(),
-                                    width, plotMode, &gbr_metadata );
-            }
+            aPlotter->ThickArc( arc->GetCenter(), arc->GetArcAngleStart(), arc->GetAngle(),
+                                arc->GetRadius(), width, plotMode, &gbr_metadata );
         }
         else
         {

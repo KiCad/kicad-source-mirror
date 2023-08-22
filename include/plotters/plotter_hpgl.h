@@ -139,11 +139,11 @@ protected:
      *
      * center is the center of the arc.
      * StAngled is the start angle of the arc.
-     * aEndAngle is end angle the arc.
+     * aAngle is angle the arc.
      * Radius is the radius of the arc.
      */
     virtual void Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
-                      const EDA_ANGLE& aEndAngle, double aRadius, FILL_T aFill,
+                      const EDA_ANGLE& aAngle, double aRadius, FILL_T aFill,
                       int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
 
     /**

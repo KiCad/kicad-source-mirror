@@ -212,25 +212,11 @@ public:
     virtual void Circle( const VECTOR2I& pos, int diametre, FILL_T fill,
                          int width = USE_DEFAULT_LINE_WIDTH ) = 0;
 
-    /**
-     * Generic fallback: arc rendered as a polyline.
-     * Winding direction: clockwise in right-down coordinate system.
-     */
-    virtual void Arc( const VECTOR2I& aCenter, const VECTOR2I& aStart, const VECTOR2I& aEnd,
-                      FILL_T aFill, int aWidth, int aMaxError );
+    virtual void Arc( const VECTOR2D& aStart, const VECTOR2D& aMid, const VECTOR2D& aEnd,
+                      FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH );
 
-    /**
-     * Generic fallback: arc rendered as a polyline.
-     * Note also aCentre and aRadius are double to avoid creating rounding issues due
-     * to the fact a arc is defined in Kicad by a start point, a end point and third point
-     * not angles and radius.
-     * In some plotters (i.e. dxf) whe need a good precision when calculating an arc
-     * without error introduced by rounding, to avoid moving the end points,
-     * usually important in outlines when plotting an arc given by center, radius and angles.
-     * Winding direction: counter-clockwise in right-down coordinate system.
-     */
-    virtual void Arc( const VECTOR2D& aCentre, const EDA_ANGLE& aStartAngle,
-                      const EDA_ANGLE& aEndAngle, double aRadius, FILL_T aFill,
+    virtual void Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
+                      const EDA_ANGLE& aAngle, double aRadius, FILL_T aFill,
                       int aWidth = USE_DEFAULT_LINE_WIDTH );
 
     /**
@@ -313,11 +299,11 @@ public:
     virtual void ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int width,
                                OUTLINE_MODE tracemode, void* aData );
 
-    virtual void ThickArc( const VECTOR2I& aCentre, const VECTOR2I& aStart,
-                           const VECTOR2I& aEnd, int aWidth,
+    virtual void ThickArc( const EDA_SHAPE& aArcShape,
                            OUTLINE_MODE aTraceMode, void* aData );
 
-    virtual void ThickArc( const EDA_SHAPE& aArcShape,
+    virtual void ThickArc( const VECTOR2D& aCentre, const EDA_ANGLE& aStAngle,
+                           const EDA_ANGLE& aAngle, double aRadius, int aWidth,
                            OUTLINE_MODE aTraceMode, void* aData );
 
     virtual void ThickRect( const VECTOR2I& p1, const VECTOR2I& p2, int width, OUTLINE_MODE tracemode,
@@ -559,9 +545,19 @@ public:
 
 
 protected:
-    virtual void ThickArc( const VECTOR2D& aCentre, const EDA_ANGLE& StAngle,
-                           const EDA_ANGLE& EndAngle, double aRadius, int aWidth,
-                           OUTLINE_MODE aTraceMode, void* aData );
+    /**
+     * Generic fallback: arc rendered as a polyline.
+     * Note also aCentre and aRadius are double to avoid creating rounding issues due
+     * to the fact a arc is defined in Kicad by a start point, a end point and third point
+     * not angles and radius.
+     * In some plotters (i.e. dxf) whe need a good precision when calculating an arc
+     * without error introduced by rounding, to avoid moving the end points,
+     * usually important in outlines when plotting an arc given by center, radius and angles.
+     * Winding direction: counter-clockwise in right-down coordinate system.
+     */
+    virtual void polyArc( const VECTOR2D& aCentre, const EDA_ANGLE& aStartAngle,
+                          const EDA_ANGLE& aAngle, double aRadius, FILL_T aFill,
+                          int aWidth = USE_DEFAULT_LINE_WIDTH );
 
     // These are marker subcomponents
     /**

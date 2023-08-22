@@ -521,31 +521,34 @@ VECTOR2D mapCoords( const VECTOR2D& aSource )
 }
 
 
-void PS_PLOTTER::Arc( const VECTOR2I& aCenter, const VECTOR2I& aStart, const VECTOR2I& aEnd,
-                      FILL_T aFill, int aWidth, int aMaxError )
+void PS_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
+                      const EDA_ANGLE& aAngle, double aRadius, FILL_T aFill, int aWidth )
 {
     wxASSERT( m_outputFile );
 
-    VECTOR2D  center_device = userToDeviceCoordinates( aCenter );
-    VECTOR2D  start_device = userToDeviceCoordinates( aStart );
-    VECTOR2D  end_device = userToDeviceCoordinates( aEnd );
-    double    radius_device = ( start_device - center_device ).EuclideanNorm();
+    VECTOR2D center_device = userToDeviceCoordinates( aCenter );
+    double   radius_device = userToDeviceSize( aRadius );
+
+    EDA_ANGLE endA = aStartAngle + aAngle;
+    VECTOR2D  start( aRadius * aStartAngle.Cos(), aRadius * aStartAngle.Sin() );
+    VECTOR2D  end( aRadius * endA.Cos(), aRadius * endA.Sin() );
+
+    start += aCenter;
+    end += aCenter;
+
+    VECTOR2D  start_device = userToDeviceCoordinates( start );
+    VECTOR2D  end_device = userToDeviceCoordinates( end );
     EDA_ANGLE startAngle( mapCoords( start_device - center_device ) );
     EDA_ANGLE endAngle( mapCoords( end_device - center_device ) );
 
     // userToDeviceCoordinates gets our start/ends out of order
-    if( !m_plotMirror )
+    if( !m_plotMirror ^ ( aAngle < ANGLE_0 ) )
         std::swap( startAngle, endAngle );
 
     SetCurrentLineWidth( aWidth );
 
-    fprintf( m_outputFile, "%g %g %g %g %g arc%d\n",
-             center_device.x,
-             center_device.y,
-             radius_device,
-             startAngle.AsDegrees(),
-             endAngle.AsDegrees(),
-             getFillId( aFill ) );
+    fprintf( m_outputFile, "%g %g %g %g %g arc%d\n", center_device.x, center_device.y,
+             radius_device, startAngle.AsDegrees(), endAngle.AsDegrees(), getFillId( aFill ) );
 }
 
 void PS_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill, int aWidth,
