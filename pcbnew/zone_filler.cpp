@@ -1425,10 +1425,6 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
      */
 
     buildCopperItemClearances( aZone, aLayer, noConnectionPads, clearanceHoles );
-
-    for( PAD* pad : thermalConnectionPads )
-        addHoleKnockout( pad, 0, clearanceHoles );
-
     DUMP_POLYS_TO_COPPER_LAYER( clearanceHoles, In3_Cu, wxT( "clearance-holes" ) );
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
@@ -1578,6 +1574,9 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
      * outside the zone boundary, inside the clearance holes, or between otherwise isolated
      * islands
      */
+
+    for( PAD* pad : thermalConnectionPads )
+        addHoleKnockout( pad, 0, clearanceHoles );
 
     aFillPolys.BooleanIntersection( aMaxExtents, SHAPE_POLY_SET::PM_FAST );
     DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In16_Cu, wxT( "after-trim-to-outline" ) );
