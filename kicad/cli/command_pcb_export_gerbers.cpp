@@ -39,6 +39,9 @@ CLI::PCB_EXPORT_GERBERS_COMMAND::PCB_EXPORT_GERBERS_COMMAND() :
 {
     m_requireLayers = false;
 
+    m_argParser.add_description( UTF8STDSTR( _( "Plot multiple gerbers for a PCB, including the "
+                                                "ability to use stored board plot settings" ) ) );
+
     m_argParser.add_argument( "--cl", ARG_COMMON_LAYERS )
             .default_value( std::string() )
             .help( UTF8STDSTR(
