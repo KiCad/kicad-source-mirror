@@ -82,9 +82,9 @@ int SHAPE::GetClearance( const SHAPE* aOther ) const
 }
 
 
-int SHAPE::Distance( const VECTOR2I& aP, bool aOutlineOnly ) const
+int SHAPE::Distance( const VECTOR2I& aP ) const
 {
-    return sqrt( SquaredDistance( aP, aOutlineOnly ) );
+    return sqrt( SquaredDistance( aP, false ) );
 }
 
 

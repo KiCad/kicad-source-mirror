@@ -862,6 +862,13 @@ public:
         return ( IsSharedPt( aIndex ) || ( IsPtOnArc( aIndex ) && !IsArcSegment( aIndex ) ) );
     }
 
+    using SHAPE::Distance;
+
+    int Distance( const VECTOR2I& aP, bool aOutlineOnly ) const
+    {
+        return sqrt( SquaredDistance( aP, aOutlineOnly ) );
+    }
+
     virtual const VECTOR2I GetPoint( int aIndex ) const override { return CPoint(aIndex); }
     virtual const SEG GetSegment( int aIndex ) const override { return CSegment(aIndex); }
     virtual size_t GetPointCount() const override { return PointCount(); }

@@ -239,10 +239,9 @@ public:
      * Always returns zero if the point is inside a closed shape and aOutlineOnly is false.
      *
      * @param aP is the point to test
-     * @param aOutlineOnly can be set to true to measure the distance to the outline of the shape
      * @return the distance from the shape to aP
      */
-    virtual int Distance( const VECTOR2I& aP, bool aOutlineOnly = false ) const;
+    virtual int Distance( const VECTOR2I& aP ) const;
 
     /**
      * @see SHAPE::Distance

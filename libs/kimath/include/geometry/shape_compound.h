@@ -74,6 +74,8 @@ public:
 
     const BOX2I BBox( int aClearance = 0 ) const override;
 
+    using SHAPE::Distance;
+
     int Distance( const SEG& aSeg ) const;
 
     void Move( const VECTOR2I& aVector ) override;
