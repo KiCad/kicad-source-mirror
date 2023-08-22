@@ -71,10 +71,7 @@ BEGIN_EVENT_TABLE( EDA_3D_CANVAS, HIDPI_GL_3D_CANVAS )
     EVT_MIDDLE_DOWN( EDA_3D_CANVAS::OnMiddleDown)
     EVT_MOUSEWHEEL( EDA_3D_CANVAS::OnMouseWheel )
     EVT_MOTION( EDA_3D_CANVAS::OnMouseMove )
-
-#if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
     EVT_MAGNIFY( EDA_3D_CANVAS::OnMagnify )
-#endif
 
     // other events
     EVT_ERASE_BACKGROUND( EDA_3D_CANVAS::OnEraseBackground )
@@ -156,9 +153,7 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList,
         wxEVT_RIGHT_UP, wxEVT_RIGHT_DOWN, wxEVT_RIGHT_DCLICK,
         wxEVT_MIDDLE_UP, wxEVT_MIDDLE_DOWN, wxEVT_MIDDLE_DCLICK,
         wxEVT_MOTION, wxEVT_MOUSEWHEEL, wxEVT_CHAR, wxEVT_CHAR_HOOK,
-#if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
         wxEVT_MAGNIFY,
-#endif
         wxEVT_MENU_OPEN, wxEVT_MENU_CLOSE, wxEVT_MENU_HIGHLIGHT
     };
 
@@ -613,7 +608,6 @@ void EDA_3D_CANVAS::OnMouseWheel( wxMouseEvent& event )
 }
 
 
-#if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
 void EDA_3D_CANVAS::OnMagnify( wxMouseEvent& event )
 {
     SetFocus();
@@ -631,7 +625,6 @@ void EDA_3D_CANVAS::OnMagnify( wxMouseEvent& event )
     DisplayStatus();
     Request_refresh();
 }
-#endif
 
 
 void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )

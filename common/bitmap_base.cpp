@@ -310,10 +310,6 @@ void BITMAP_BASE::DrawBitmap( wxDC* aDC, const VECTOR2I& aPos,
     // Be carefull before changing the code.
     bool useTransform = aDC->CanUseTransformMatrix();
 
-    #if wxCHECK_VERSION( 3, 1, 6 ) && !wxCHECK_VERSION( 3, 1, 7 )
-    useTransform = false;
-    #endif
-
     wxAffineMatrix2D init_matrix = aDC->GetTransformMatrix();
 
     // Note: clipping bitmap area was made to fix a minor issue in old versions of

@@ -102,12 +102,7 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     /*
      * Font scaling hacks are only needed on GTK under wxWidgets 3.0.
      */
-#if defined( __WXGTK__ ) && !wxCHECK_VERSION( 3, 1, 0 )
-    m_params.emplace_back( new PARAM<bool>( "appearance.apply_icon_scale_to_fonts",
-            &m_Appearance.apply_icon_scale_to_fonts, false ) );
-#else
     m_Appearance.apply_icon_scale_to_fonts = false;
-#endif
 
     m_params.emplace_back( new PARAM<bool>( "appearance.show_scrollbars",
             &m_Appearance.show_scrollbars, false ) );

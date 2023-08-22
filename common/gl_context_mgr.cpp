@@ -40,13 +40,11 @@ wxGLContext* GL_CONTEXT_MANAGER::CreateCtx( wxGLCanvas* aCanvas, const wxGLConte
     wxGLContext* context = new wxGLContext( aCanvas, aOther );
     wxCHECK( context, nullptr );
 
-#if wxCHECK_VERSION( 3, 1, 0 )
     if( !context->IsOK() )
     {
         delete context;
         return nullptr;
     }
-#endif /* wxCHECK_VERSION( 3, 1, 0 ) */
 
     m_glContexts.insert( std::make_pair( context, aCanvas ) );
 

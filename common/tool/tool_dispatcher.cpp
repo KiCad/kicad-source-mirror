@@ -463,9 +463,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     // Mouse handling
     // Note: wxEVT_LEFT_DOWN event must always be skipped.
     if( type == wxEVT_MOTION || type == wxEVT_MOUSEWHEEL ||
-#if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
         type == wxEVT_MAGNIFY ||
-#endif
         isMouseClick( type ) ||
         // Event issued when mouse retains position in screen coordinates,
         // but changes in world coordinates (e.g. autopanning)

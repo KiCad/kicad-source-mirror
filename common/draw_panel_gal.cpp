@@ -142,9 +142,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
         wxEVT_MOUSEWHEEL,
         wxEVT_CHAR,
         wxEVT_CHAR_HOOK,
-#if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
         wxEVT_MAGNIFY,
-#endif
         KIGFX::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE
     };
 

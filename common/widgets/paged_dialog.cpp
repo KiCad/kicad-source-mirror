@@ -221,18 +221,6 @@ bool PAGED_DIALOG::TransferDataToWindow()
     if( !DIALOG_SHIM::TransferDataToWindow() )
         return false;
 
-    // On wxWidgets 3.0, TransferDataFromWindow() is not called recursively
-    // so we have to call it for each page
-#if !wxCHECK_VERSION( 3, 1, 0 )
-    for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
-    {
-        wxWindow* page = m_treebook->GetPage( i );
-
-        if( !page->TransferDataToWindow() )
-            return false;
-    }
-#endif
-
     // Search for a page matching the lastParentPageTitle/lastPageTitle hierarchy
     wxString lastPage = g_lastPage[ m_title ];
     wxString lastParentPage = g_lastParentPage[ m_title ];
@@ -273,22 +261,6 @@ bool PAGED_DIALOG::TransferDataFromWindow()
     // this is enough on wxWidgets 3.1
     if( !DIALOG_SHIM::TransferDataFromWindow() )
         ret = false;
-
-    // On wxWidgets 3.0, TransferDataFromWindow() is not called recursively
-    // so we have to call it for each page
-#if !wxCHECK_VERSION( 3, 1, 0 )
-    for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
-    {
-        wxWindow* page = m_treebook->GetPage( i );
-
-        if( !page->TransferDataFromWindow() )
-        {
-            m_treebook->ChangeSelection( i );
-            ret = false;
-            break;
-        }
-    }
-#endif
 
     return ret;
 }

@@ -53,16 +53,7 @@ extern std::string GetCurlLibVersion();
 wxString GetPlatformGetBitnessName()
 {
     wxPlatformInfo platform;
-// TODO (ISM): Read conditional once our wx fork and flatpaks are running released 3.1.5
-// On Windows, use GetBitnessName if exists
-// I (J-PC) hope 3.1.6 has no problem
-#if defined( __WINDOWS__ ) && wxCHECK_VERSION( 3, 1, 5 )
     return platform.GetBitnessName();
-#elif wxCHECK_VERSION( 3, 1, 6 )
-    return platform.GetBitnessName();
-#else
-    return platform.GetArchName();
-#endif
 }
 
 
@@ -146,17 +137,7 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
 
     wxPlatformInfo platform;
     aMsg << "Application: " << aTitle;
-    #if wxCHECK_VERSION( 3, 1, 6 )
     aMsg << " " << wxGetCpuArchitectureName() << " on " << wxGetNativeCpuArchitectureName();
-    #elif defined( KICAD_BUILD_ARCH_X64 )
-    aMsg << " (64-bit)";
-    #elif defined( KICAD_BUILD_ARCH_X86 )
-    aMsg << " (32-bit)";
-    #elif defined( KICAD_BUILD_ARCH_ARM )
-    aMsg << " (ARM 32-bit)";
-    #elif defined( KICAD_BUILD_ARCH_ARM64 )
-    aMsg << " (ARM 64-bit)";
-    #endif
 
     aMsg << eol << eol;
 

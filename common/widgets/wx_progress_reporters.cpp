@@ -40,17 +40,13 @@ WX_PROGRESS_REPORTER::WX_PROGRESS_REPORTER( wxWindow* aParent, const wxString& a
                                                 // up another event loop on completion which
                                                 // causes all sorts of grief
                           ( aCanAbort ? wxPD_CAN_ABORT : 0 ) | wxPD_ELAPSED_TIME ),
-#if wxCHECK_VERSION( 3, 1, 0 )
         m_appProgressIndicator( aParent ),
-#endif
         m_messageWidth( 0 )
 {
-#if wxCHECK_VERSION( 3, 1, 0 )
     // wxAppProgressIndicator doesn't like value > max, ever. However there are some risks
     // with multithreaded setting of those values making a mess
     // the cop out is just to set the progress to "indeterminate"
     m_appProgressIndicator.Pulse();
-#endif
 }
 
 

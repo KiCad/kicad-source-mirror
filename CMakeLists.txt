@@ -960,6 +960,9 @@ find_package( wxWidgets ${wxWidgets_REQ_VERSION} COMPONENTS gl aui adv html core
 # Include wxWidgets macros.
 include( ${wxWidgets_USE_FILE} )
 
+if( ${wxWidgets_VERSION_STRING} VERSION_LESS 3.2 )
+    message( FATAL_ERROR "wxWidgets 3.2.0 or greater is required" )
+
 if( MINGW )
     # This needs to be on a separate line to protect against a broken FindWxWidgets.cmake in vcpkg
     if( ${wxWidgets_VERSION_STRING} VERSION_LESS 3.1 )

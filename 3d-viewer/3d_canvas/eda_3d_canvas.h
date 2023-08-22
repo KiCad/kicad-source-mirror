@@ -228,10 +228,7 @@ private:
 
     void OnMouseWheel( wxMouseEvent& event );
 
-#if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
     void   OnMagnify( wxMouseEvent& event );
-#endif
-
     void OnMouseMove( wxMouseEvent& event );
     void OnLeftDown( wxMouseEvent& event );
     void OnLeftUp( wxMouseEvent& event );

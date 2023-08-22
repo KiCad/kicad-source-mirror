@@ -26,9 +26,7 @@
 #include "reporter.h"
 #include <atomic>
 #include <widgets/progress_reporter_base.h>
-#if wxCHECK_VERSION( 3, 1, 0 )
 #include <wx/appprogress.h>
-#endif
 
 
 /**
@@ -81,9 +79,7 @@ private:
 
     wxWindowDisabler m_disabler;
 
-#if wxCHECK_VERSION( 3, 1, 0 )
     wxAppProgressIndicator m_appProgressIndicator;
-#endif
 };
 
 #endif // DIALOG_PCM_PROGRESS_H_

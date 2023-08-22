@@ -40,12 +40,7 @@ STD_BITMAP_BUTTON::STD_BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId,
 {
     if( aSize == wxDefaultSize )
     {
-        #if wxCHECK_VERSION( 3, 1, 3 )
-            wxSize defaultSize = wxButton::GetDefaultSize( aParent );
-        #else
-            wxSize defaultSize = wxButton::GetDefaultSize();
-        #endif
-
+        wxSize defaultSize = wxButton::GetDefaultSize( aParent );
         SetMinSize( wxSize( defaultSize.GetWidth() + 1, defaultSize.GetHeight() + 1 ) );
     }
 

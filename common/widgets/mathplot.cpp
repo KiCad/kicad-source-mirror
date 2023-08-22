@@ -1285,9 +1285,7 @@ EVT_SIZE( mpWindow::OnSize )
 EVT_MIDDLE_DOWN( mpWindow::OnMouseMiddleDown )  // JLB
 EVT_RIGHT_UP( mpWindow::OnShowPopupMenu )
 EVT_MOUSEWHEEL( mpWindow::OnMouseWheel )        // JLB
-#if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
 EVT_MAGNIFY( mpWindow::OnMagnify )
-#endif
 EVT_MOTION( mpWindow::OnMouseMove )             // JLB
 EVT_LEFT_DOWN( mpWindow::OnMouseLeftDown )
 EVT_LEFT_UP( mpWindow::OnMouseLeftRelease )
@@ -1412,7 +1410,6 @@ void mpWindow::OnMouseMiddleDown( wxMouseEvent& event )
 }
 
 
-#if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
 void mpWindow::OnMagnify( wxMouseEvent& event )
 {
     if( !m_enableMouseNavigation )
@@ -1429,7 +1426,6 @@ void mpWindow::OnMagnify( wxMouseEvent& event )
     else if( zoom < 1.0f )
         ZoomOut( pos, 1.0f / zoom );
 }
-#endif
 
 
 // Process mouse wheel events

@@ -314,9 +314,7 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
     Connect( wxEVT_AUX2_UP, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
     Connect( wxEVT_AUX2_DCLICK, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
     Connect( wxEVT_MOUSEWHEEL, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
-#if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
     Connect( wxEVT_MAGNIFY, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
-#endif
 #if defined _WIN32 || defined _WIN64
     Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
 #endif
@@ -2555,15 +2553,6 @@ void OPENGL_GAL::init()
     wxASSERT( IsShownOnScreen() );
 
     wxASSERT_MSG( m_isContextLocked, "This should only be called from within a locked context." );
-
-// IsDisplayAttr() handles WX_GL_{MAJOR,MINOR}_VERSION correctly only in 3.0.4
-// starting with 3.1.0 one should use wxGLContext::IsOk() (done by GL_CONTEXT_MANAGER)
-#if wxCHECK_VERSION( 3, 0, 3 ) and !wxCHECK_VERSION( 3, 1, 0 )
-    const int attr[] = { WX_GL_MAJOR_VERSION, 2, WX_GL_MINOR_VERSION, 1, 0 };
-
-    if( !IsDisplaySupported( attr ) )
-        throw std::runtime_error( "OpenGL 2.1 or higher is required!" );
-#endif /* wxCHECK_VERSION( 3, 0, 3 ) */
 
     // Check correct initialization from the constructor
     if( m_tesselator == nullptr )

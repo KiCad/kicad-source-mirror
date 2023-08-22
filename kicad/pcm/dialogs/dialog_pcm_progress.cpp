@@ -32,15 +32,10 @@ DIALOG_PCM_PROGRESS::DIALOG_PCM_PROGRESS( wxWindow* parent, bool aShowDownloadSe
         m_currentProgress( 0 ),
         m_currentProgressTotal( 0 ),
         m_finished( false ),
-        m_disabler( this )
-#if wxCHECK_VERSION( 3, 1, 0 )
-        ,
+        m_disabler( this ),
         m_appProgressIndicator( parent->GetParent(), GAUGE_RANGE )
-#endif
 {
-#if wxCHECK_VERSION( 3, 1, 0 )
     m_appProgressIndicator.Pulse();
-#endif
 
     m_reporter->SetImmediateMode();
     m_downloadGauge->SetRange( GAUGE_RANGE );
@@ -124,9 +119,7 @@ bool DIALOG_PCM_PROGRESS::updateUI()
         current = 1.0;
 
     m_overallGauge->SetValue( current * GAUGE_RANGE );
-#if wxCHECK_VERSION( 3, 1, 0 )
     m_appProgressIndicator.SetValue( current * GAUGE_RANGE );
-#endif
 
     if( m_downloadTotal.load() == 0 )
     {

@@ -89,10 +89,8 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, EDA_DRAW_PANEL_GAL* aParentPane
 
     m_parentPanel->Connect( wxEVT_MOTION,
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onMotion ), nullptr, this );
-#if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
     m_parentPanel->Connect( wxEVT_MAGNIFY,
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onMagnify ), nullptr, this );
-#endif
     m_parentPanel->Connect( wxEVT_MOUSEWHEEL,
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onWheel ), nullptr, this );
     m_parentPanel->Connect( wxEVT_MIDDLE_UP,
@@ -423,7 +421,6 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
 }
 
 
-#if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
 void WX_VIEW_CONTROLS::onMagnify( wxMouseEvent& aEvent )
 {
     // Scale based on the magnification from our underlying magnification event.
@@ -432,7 +429,6 @@ void WX_VIEW_CONTROLS::onMagnify( wxMouseEvent& aEvent )
 
     aEvent.Skip();
 }
-#endif
 
 
 void WX_VIEW_CONTROLS::setState( STATE aNewState )

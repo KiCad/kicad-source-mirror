@@ -25,10 +25,7 @@
 #define __APP_PROGRESS_REPORTER
 
 #include <wx/progdlg.h>
-
-#if wxCHECK_VERSION( 3, 1, 0 )
 #include <wx/appprogress.h>
-#endif
 
 /**
  * wxProgressDialog with the option to also update the application progress on the taskbar
@@ -45,10 +42,8 @@ public:
 
 
 private:
-#if wxCHECK_VERSION( 3, 1, 0 )
     wxAppProgressIndicator m_appProgressIndicator;
     bool m_indeterminateTaskBarStatus;
-#endif
 };
 
 #endif

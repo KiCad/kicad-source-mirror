@@ -68,11 +68,7 @@
 #include <wx/filedlg.h>
 #include <wx/txtstrm.h>
 
-#if wxCHECK_VERSION( 3, 1, 7 )
 #include "widgets/filedlg_hook_save_project.h"
-#else
-#include "widgets/legacyfiledlg_save_project.h"
-#endif
 
 //#define     USE_INSTRUMENTATION     1
 #define     USE_INSTRUMENTATION     0
@@ -202,16 +198,10 @@ bool AskSaveBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, bool* a
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
 // Add a "Create a project" checkbox in standalone mode and one isn't loaded
-#if wxCHECK_VERSION( 3, 1, 7 )
     FILEDLG_HOOK_SAVE_PROJECT newProjectHook;
 
     if( Kiface().IsSingle() && aParent->Prj().IsNullProject() )
         dlg.SetCustomizeHook( newProjectHook );
-#else
-    if( Kiface().IsSingle() && aParent->Prj().IsNullProject() )
-        dlg.SetExtraControlCreator( &LEGACYFILEDLG_SAVE_PROJECT::Create );
-#endif
-
 
     if( dlg.ShowModal() != wxID_OK )
         return false;
@@ -219,17 +209,10 @@ bool AskSaveBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, bool* a
     *aFileName = dlg.GetPath();
     *aFileName = EnsureFileExtension( *aFileName, KiCadPcbFileExtension );
 
-#if wxCHECK_VERSION( 3, 1, 7 )
     if( newProjectHook.IsAttachedToDialog() )
         *aCreateProject = newProjectHook.GetCreateNewProject();
     else if( !aParent->Prj().IsNullProject() )
         *aCreateProject = true;
-#else
-    if( wxWindow* ec = dlg.GetExtraControl() )
-        *aCreateProject = static_cast<LEGACYFILEDLG_SAVE_PROJECT*>( ec )->GetValue();
-    else if( !aParent->Prj().IsNullProject() )
-        *aCreateProject = true;
-#endif
 
     return true;
 }

@@ -73,11 +73,7 @@
 
 #include <kiplatform/io.h>
 
-#if wxCHECK_VERSION( 3, 1, 7 )
 #include "widgets/filedlg_hook_save_project.h"
-#else
-#include "widgets/legacyfiledlg_save_project.h"
-#endif
 
 bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
 {
@@ -860,18 +856,12 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
                           savePath.GetFullName(), KiCadSchematicFileWildcard(),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
-#if wxCHECK_VERSION( 3, 1, 7 )
         FILEDLG_HOOK_SAVE_PROJECT newProjectHook;
-#endif
 
         // Add a "Create a project" checkbox in standalone mode and one isn't loaded
         if( Kiface().IsSingle() || aSaveAs )
         {
-#if wxCHECK_VERSION( 3, 1, 7 )
             dlg.SetCustomizeHook( newProjectHook );
-#else
-            dlg.SetExtraControlCreator( &LEGACYFILEDLG_SAVE_PROJECT::Create );
-#endif
         }
 
         if( dlg.ShowModal() == wxID_CANCEL )
@@ -893,13 +883,8 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
             return false;
         }
 
-#if wxCHECK_VERSION( 3, 1, 7 )
         if( newProjectHook.IsAttachedToDialog() )
             createNewProject = newProjectHook.GetCreateNewProject();
-#else
-        if( wxWindow* ec = dlg.GetExtraControl() )
-            createNewProject = static_cast<LEGACYFILEDLG_SAVE_PROJECT*>( ec )->GetValue();
-#endif
 
         if( !saveCopy )
         {

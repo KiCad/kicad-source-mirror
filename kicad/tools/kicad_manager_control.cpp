@@ -47,11 +47,7 @@
 #include <io_mgr.h>
 #include <import_proj.h>
 
-#if wxCHECK_VERSION( 3, 1, 7 )
 #include "widgets/filedlg_new_project.h"
-#else
-#include "widgets/legacyfiledlg_new_project.h"
-#endif
 
 KICAD_MANAGER_CONTROL::KICAD_MANAGER_CONTROL() :
         TOOL_INTERACTIVE( "kicad.Control" ),
@@ -73,12 +69,8 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
                          ProjectFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     // Add a "Create a new directory" checkbox
-#if wxCHECK_VERSION( 3, 1, 7 )
     FILEDLG_NEW_PROJECT newProjectHook;
     dlg.SetCustomizeHook( newProjectHook );
-#else
-    dlg.SetExtraControlCreator( &LEGACYFILEDLG_NEW_PROJECT::Create );
-#endif
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return -1;
@@ -98,11 +90,7 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
     // Append a new directory with the same name of the project file.
     bool createNewDir = false;
 
-#if wxCHECK_VERSION( 3, 1, 7 )
     createNewDir = newProjectHook.GetCreateNewDir();
-#else
-    createNewDir = static_cast<LEGACYFILEDLG_NEW_PROJECT*>( dlg.GetExtraControl() )->CreateNewDir();
-#endif
 
     if( createNewDir )
         pro.AppendDir( pro.GetName() );
@@ -182,13 +170,8 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     // Add a "Create a new directory" checkbox
-#if wxCHECK_VERSION( 3, 1, 7 )
     FILEDLG_NEW_PROJECT newProjectHook;
     dlg.SetCustomizeHook( newProjectHook );
-#else
-    dlg.SetExtraControlCreator( &LEGACYFILEDLG_NEW_PROJECT::Create );
-#endif
-
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return -1;
@@ -206,11 +189,7 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
         fn.MakeAbsolute();
 
     bool createNewDir = false;
-#if wxCHECK_VERSION( 3, 1, 7 )
     createNewDir = newProjectHook.GetCreateNewDir();
-#else
-    createNewDir = static_cast<LEGACYFILEDLG_NEW_PROJECT*>( dlg.GetExtraControl() )->CreateNewDir();
-#endif
 
     // Append a new directory with the same name of the project file.
     if( createNewDir )

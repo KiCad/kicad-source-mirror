@@ -892,11 +892,7 @@ wxPGProperty* DIALOG_SIM_MODEL<T_symbol, T_field>::newParamProperty( SIM_MODEL* 
     prop->SetAttribute( wxPG_ATTR_UNITS, wxString::FromUTF8( param.info.unit.c_str() ) );
 
     // Legacy due to the way we extracted the parameters from Ngspice.
-    #if wxCHECK_VERSION( 3, 1, 0 )
-        prop->SetCell( 3, wxString::FromUTF8( param.info.defaultValue ) );
-    #else
-        prop->SetCell( 3, wxString::FromUTF8( param.info.defaultValue.c_str() ) );
-    #endif
+    prop->SetCell( 3, wxString::FromUTF8( param.info.defaultValue ) );
 
     wxString typeStr;
 

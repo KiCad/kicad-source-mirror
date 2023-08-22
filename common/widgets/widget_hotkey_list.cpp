@@ -587,33 +587,17 @@ void WIDGET_HOTKEY_LIST::updateColumnWidths()
     col->SetWidth( wxCOL_WIDTH_AUTOSIZE );
     col->SetWidth( col->GetWidth() );
 
-#if defined( __WXGTK__ ) && !wxCHECK_VERSION( 3, 1, 0 )
-    col->SetResizeable( true );
-#endif
-
     col = GetDataView()->GetColumn( 1 );
     col->SetWidth( wxCOL_WIDTH_AUTOSIZE );
     col->SetWidth( col->GetWidth() );
-
-#if defined( __WXGTK__ ) && !wxCHECK_VERSION( 3, 1, 0 )
-    col->SetResizeable( true );
-#endif
 
     col = GetDataView()->GetColumn( 2 );
     col->SetWidth( wxCOL_WIDTH_AUTOSIZE );
     col->SetWidth( col->GetWidth() );
 
-#if defined( __WXGTK__ ) && !wxCHECK_VERSION( 3, 1, 0 )
-    col->SetResizeable( true );
-#endif
-
     col = GetDataView()->GetColumn( 3 );
     col->SetWidth( wxCOL_WIDTH_AUTOSIZE );
     col->SetWidth( col->GetWidth() );
-
-#if defined( __WXGTK__ ) && !wxCHECK_VERSION( 3, 1, 0 )
-    col->SetResizeable( true );
-#endif
 }
 
 

@@ -29,9 +29,7 @@
 
 #include <wx/progdlg.h>
 #include <wx/gauge.h>
-#if wxCHECK_VERSION( 3, 1, 0 )
 #include <wx/appprogress.h>
-#endif
 
 #include <widgets/progress_reporter_base.h>
 
@@ -75,10 +73,7 @@ private:
     bool updateUI() override;
 
 private:
-#if wxCHECK_VERSION( 3, 1, 0 )
     wxAppProgressIndicator m_appProgressIndicator;
-#endif
-
     int                    m_messageWidth;
 };
 

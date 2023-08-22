@@ -29,27 +29,6 @@ bool LaunchExternal( const wxString& aPath )
     const wchar_t* args[] = { L"open", aPath.wc_str(), nullptr };
     return wxExecute( const_cast<wchar_t**>( args ) ) != -1;
 
-#elif defined( __WXGTK__ ) && !wxCHECK_VERSION( 3, 1, 1 )
-    // On Unix systems `wxLaunchDefaultApplication()` before wxWidgets 3.1.1 mistakenly uses
-    // `wxExecute(xdg_open + " " + document)`, thereby failing for filenames with spaces. Below is
-    // a backport of the fixed `wxLaunchDefaultApplication()`, to be used until we switch to a
-    // newer version of wxWidgets.
-
-    wxString PATH, xdg_open;
-
-    if( wxGetEnv( "PATH", &PATH ) && wxFindFileInPath( &xdg_open, PATH, "xdg-open" ) )
-    {
-        const char* argv[3];
-        argv[0] = xdg_open.fn_str();
-        argv[1] = aPath.fn_str();
-        argv[2] = nullptr;
-
-        if( wxExecute( const_cast<char**>( argv ) ) )
-            return true;
-    }
-
-    return false;
-
 #else
 
     wxString path( aPath );

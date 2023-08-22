@@ -445,22 +445,8 @@ void EDA_BASE_FRAME::HandleUpdateUIEvent( wxUpdateUIEvent& aEvent, EDA_BASE_FRAM
     aEvent.Enable( enableRes );
     aEvent.Show( showRes );
 
-    // wxWidgets 3.1.5+ includes a field in the event that says if the event supports being
-    // checked, since wxMenuItems don't want to be checked unless they actually are checkable
-#if wxCHECK_VERSION( 3, 1, 5 )
     if( aEvent.IsCheckable() )
         aEvent.Check( checkRes );
-#else
-    bool canCheck = true;
-
-    // wxMenuItems don't want to be checked unless they actually are checkable, so we have to
-    // check to see if they can be and can't just universally apply a check in this event.
-    if( wxMenu* menu = dynamic_cast<wxMenu*>( aEvent.GetEventObject() ) )
-        canCheck = menu->FindItem( aEvent.GetId() )->IsCheckable();
-
-    if( canCheck )
-        aEvent.Check( checkRes );
-#endif
 }
 
 

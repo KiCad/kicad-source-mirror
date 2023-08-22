@@ -30,31 +30,24 @@ APP_PROGRESS_DIALOG::APP_PROGRESS_DIALOG( const wxString& aTitle, const wxString
                                           bool aIndeterminateTaskBarStatus, int aStyle )
         : wxProgressDialog( aTitle,
                             aMessage == wxEmptyString ? wxString( wxT( " " ) ) : aMessage,
-                            aMaximum, aParent, aStyle )
-#if wxCHECK_VERSION( 3, 1, 0 )
-          ,
+                            aMaximum, aParent, aStyle ),
           m_appProgressIndicator( aParent, aMaximum ),
           m_indeterminateTaskBarStatus( aIndeterminateTaskBarStatus )
-#endif
 
 {
-#if wxCHECK_VERSION( 3, 1, 0 )
     if( m_indeterminateTaskBarStatus )
     {
         m_appProgressIndicator.Pulse();
     }
-#endif
 }
 
 
 bool APP_PROGRESS_DIALOG::Update( int aValue, const wxString& aNewMsg, bool* aSkip )
 {
-#if wxCHECK_VERSION( 3, 1, 0 )
     if( !m_indeterminateTaskBarStatus )
     {
         m_appProgressIndicator.SetValue( aValue );
     }
-#endif
 
     return wxProgressDialog::Update( aValue, aNewMsg, aSkip );
 }

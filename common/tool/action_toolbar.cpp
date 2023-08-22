@@ -191,12 +191,6 @@ ACTION_TOOLBAR::ACTION_TOOLBAR( EDA_BASE_FRAME* parent, wxWindowID id, const wxP
 {
     m_paletteTimer = new wxTimer( this );
 
-#if !wxCHECK_VERSION( 3, 1, 0 )
-    // Custom art provider makes dark mode work on wx < 3.1
-    WX_AUI_TOOLBAR_ART* newArt = new WX_AUI_TOOLBAR_ART();
-    SetArtProvider( newArt );
-#endif
-
     Connect( wxEVT_COMMAND_TOOL_CLICKED, wxAuiToolBarEventHandler( ACTION_TOOLBAR::onToolEvent ),
              nullptr, this );
     Connect( wxEVT_AUITOOLBAR_RIGHT_CLICK,
@@ -335,12 +329,8 @@ void ACTION_TOOLBAR::doSelectAction( ACTION_GROUP* aGroup, const TOOL_ACTION& aA
     // Update the item information
     item->SetShortHelp( aAction.GetTooltip() );
     item->SetBitmap( KiScaledBitmap( aAction.GetIcon(), GetParent() ) );
-#if wxCHECK_VERSION( 3, 1, 6 )
     item->SetDisabledBitmap(
             MakeDisabledBitmap( item->GetBitmapBundle().GetBitmapFor( GetParent() ) ) );
-#else
-    item->SetDisabledBitmap( MakeDisabledBitmap( item->GetBitmap() ) );
-#endif
 
     // Register a new handler with the new UI conditions
     if( m_toolManager )

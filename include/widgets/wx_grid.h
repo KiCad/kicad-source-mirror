@@ -172,10 +172,7 @@ protected:
     void onCellEditorShown( wxGridEvent& aEvent );
     void onCellEditorHidden( wxGridEvent& aEvent );
 
-
-#if wxCHECK_VERSION( 3, 1, 3 )
     void onDPIChanged(wxDPIChangedEvent& event);
-#endif
 
 protected:
     bool                               m_weOwnTable;

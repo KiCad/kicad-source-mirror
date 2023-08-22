@@ -124,13 +124,11 @@ void WX_AUI_TOOLBAR_ART::DrawButton( wxDC& aDc, wxWindow* aWindow, const wxAuiTo
 WX_AUI_DOCK_ART::WX_AUI_DOCK_ART() : wxAuiDefaultDockArt()
 {
 #if defined( _WIN32 )
-    #if wxCHECK_VERSION( 3, 1, 0 )
     // Use normal control font, wx likes to use "small"
     m_captionFont = *wxNORMAL_FONT;
 
     // Increase the box the caption rests in size a bit
     m_captionSize = wxWindow::FromDIP( 20, nullptr );
-#endif
 #endif
 
     SetColour( wxAUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR,

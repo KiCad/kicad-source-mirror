@@ -108,10 +108,7 @@ WX_GRID::WX_GRID( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxS
     if( GetColLabelSize() > 0 )
         SetColLabelSize( GetColLabelSize() + 4 );
 
-#if wxCHECK_VERSION( 3, 1, 3 )
     Connect( wxEVT_DPI_CHANGED, wxDPIChangedEventHandler( WX_GRID::onDPIChanged ), nullptr, this );
-#endif
-
     Connect( wxEVT_GRID_EDITOR_SHOWN, wxGridEventHandler( WX_GRID::onCellEditorShown ), nullptr, this );
     Connect( wxEVT_GRID_EDITOR_HIDDEN, wxGridEventHandler( WX_GRID::onCellEditorHidden ), nullptr, this );
 }
@@ -122,14 +119,11 @@ WX_GRID::~WX_GRID()
     if( m_weOwnTable )
         DestroyTable( GetTable() );
 
-#if wxCHECK_VERSION( 3, 1, 3 )
     Disconnect( wxEVT_DPI_CHANGED, wxDPIChangedEventHandler( WX_GRID::onDPIChanged ), nullptr, this );
-#endif
 
 }
 
 
-#if wxCHECK_VERSION( 3, 1, 3 )
 void WX_GRID::onDPIChanged(wxDPIChangedEvent& aEvt)
 {
     /// This terrible hack is a way to avoid the incredibly disruptive resizing of grids that happens on Macs
@@ -138,7 +132,6 @@ void WX_GRID::onDPIChanged(wxDPIChangedEvent& aEvt)
     aEvt.Skip();
 #endif
 }
-#endif
 
 
 void WX_GRID::SetColLabelSize( int aHeight )
@@ -345,14 +338,8 @@ void WX_GRID::DrawCornerLabel( wxDC& dc )
     // It is reported that we need to erase the background to avoid display
     // artifacts, see #12055.
     {
-        // wxWidgets renamed this variable between 3.1.2 and 3.1.3 ...
-#if wxCHECK_VERSION( 3, 1, 3 )
         wxDCBrushChanger setBrush( dc, m_colLabelWin->GetBackgroundColour() );
         wxDCPenChanger   setPen( dc, m_colLabelWin->GetBackgroundColour() );
-#else
-        wxDCBrushChanger setBrush( dc, m_colWindow->GetBackgroundColour() );
-        wxDCPenChanger   setPen( dc, m_colWindow->GetBackgroundColour() );
-#endif
         dc.DrawRectangle( rect.Inflate( 1 ) );
     }
 
@@ -375,14 +362,8 @@ void WX_GRID::DrawColLabel( wxDC& dc, int col )
     // It is reported that we need to erase the background to avoid display
     // artifacts, see #12055.
     {
-        // wxWidgets renamed this variable between 3.1.2 and 3.1.3 ...
-#if wxCHECK_VERSION( 3, 1, 3 )
         wxDCBrushChanger setBrush( dc, m_colLabelWin->GetBackgroundColour() );
         wxDCPenChanger   setPen( dc, m_colLabelWin->GetBackgroundColour() );
-#else
-        wxDCBrushChanger setBrush( dc, m_colWindow->GetBackgroundColour() );
-        wxDCPenChanger   setPen( dc, m_colWindow->GetBackgroundColour() );
-#endif
         dc.DrawRectangle( rect.Inflate( 1 ) );
     }
 
@@ -417,14 +398,8 @@ void WX_GRID::DrawRowLabel( wxDC& dc, int row )
     // It is reported that we need to erase the background to avoid display
     // artifacts, see #12055.
     {
-        // wxWidgets renamed this variable between 3.1.2 and 3.1.3 ...
-#if wxCHECK_VERSION( 3, 1, 3 )
         wxDCBrushChanger setBrush( dc, m_colLabelWin->GetBackgroundColour() );
         wxDCPenChanger   setPen( dc, m_colLabelWin->GetBackgroundColour() );
-#else
-        wxDCBrushChanger setBrush( dc, m_colWindow->GetBackgroundColour() );
-        wxDCPenChanger   setPen( dc, m_colWindow->GetBackgroundColour() );
-#endif
         dc.DrawRectangle( rect.Inflate( 1 ) );
     }
 

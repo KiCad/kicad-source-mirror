@@ -48,12 +48,7 @@
 #include <string_utils.h>
 #include "symbol_saveas_type.h"
 
-#if wxCHECK_VERSION( 3, 1, 7 )
 #include <widgets/symbol_filedlg_save_as.h>
-#else
-#include <widgets/symbol_legacyfiledlg_save_as.h>
-SYMBOL_SAVEAS_TYPE SYMBOL_LEGACYFILEDLG_SAVE_AS::m_option = SYMBOL_SAVEAS_TYPE::NORMAL_SAVE_AS;
-#endif
 
 
 void SYMBOL_EDIT_FRAME::updateTitle()
@@ -1059,12 +1054,8 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
                           default_path, fn.GetFullName(), wildcards,
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
-#if wxCHECK_VERSION( 3, 1, 7 )
         SYMBOL_FILEDLG_SAVE_AS saveAsHook( type );
         dlg.SetCustomizeHook( saveAsHook );
-#else
-        dlg.SetExtraControlCreator( &SYMBOL_LEGACYFILEDLG_SAVE_AS::Create );
-#endif
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return false;
@@ -1076,15 +1067,7 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
         if( fn.GetExt().IsEmpty() )
             fn.SetExt( KiCadSymbolLibFileExtension );
 
-#if wxCHECK_VERSION( 3, 1, 7 )
         type = saveAsHook.GetOption();
-#else
-        const SYMBOL_LEGACYFILEDLG_SAVE_AS* sah =
-                dynamic_cast<const SYMBOL_LEGACYFILEDLG_SAVE_AS*>( dlg.GetExtraControl() );
-        wxCHECK( sah, false );
-
-        type = sah->GetOption();
-#endif
     }
     else
     {

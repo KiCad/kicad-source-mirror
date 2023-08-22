@@ -789,7 +789,6 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     }
     else
     {
-#if wxCHECK_VERSION( 3, 1, 4 )     // 3.1.4 required for wxDD_MULTIPLE
         wxDirDialog dlg( nullptr, title, openDir,
                          wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST | wxDD_MULTIPLE );
 
@@ -799,42 +798,6 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
             return;
 
         dlg.GetPaths( files );
-#else
-        wxDirDialog dlg( nullptr, title, openDir, wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
-
-        int result = dlg.ShowModal();
-
-        if( result == wxID_CANCEL )
-            return;
-
-        // is there a file extension configured to hunt out their containing folders?
-        if( !fileDesc.m_ExtensionsInDir.empty() )
-        {
-            wxDir rootDir( dlg.GetPath() );
-
-            LIBRARY_TRAVERSER traverser( fileDesc.m_ExtensionsInDir, rootDir.GetName() );
-            rootDir.Traverse( traverser );
-
-            traverser.GetPaths( files );
-
-            if( traverser.HasDirectoryOpenFailures() )
-            {
-                wxArrayString failedDirs;
-                traverser.GetPaths( failedDirs );
-                wxString detailedMsg = _( "The following directories could not be opened: \n" );
-
-                for( const wxString& path : failedDirs )
-                    detailedMsg << path << wxT( "\n" );
-
-                DisplayErrorMessage( this, _( "Failed to open directories to look for libraries" ),
-                                     detailedMsg );
-            }
-        }
-        else
-        {
-            files.Add( dlg.GetPath() );
-        }
-#endif
 
         if( !files.IsEmpty() )
         {

@@ -138,15 +138,8 @@ PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( wxWindow* aParent )
     // Hide the option of icons in menus for platforms that do not support them
     m_checkBoxIconsInMenus->Show( KIPLATFORM::UI::AllowIconsInMenus() );
 
-    /*
-     * Font scaling hacks are only needed on GTK under wxWidgets 3.0.
-     */
-#if defined( __WXGTK__ ) && !wxCHECK_VERSION( 3, 1, 0 )
-    m_fontScalingHelp->SetFont( KIUI::GetInfoFont( this ).Italic() );
-#else
     m_scaleFonts->Show( false );
     m_fontScalingHelp->Show( false );
-#endif
 
     if( m_iconScaleSlider )
     {

@@ -115,11 +115,7 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
 
         m_query_ctrl->Bind( wxEVT_TEXT, &LIB_TREE::onQueryText, this );
 
-#if wxCHECK_VERSION( 3, 1, 1 )
         m_query_ctrl->Bind( wxEVT_SEARCH_CANCEL, &LIB_TREE::onQueryText, this );
-#else
-        m_query_ctrl->Bind( wxEVT_SEARCHCTRL_CANCEL_BTN, &LIB_TREE::onQueryText, this );
-#endif
         m_query_ctrl->Bind( wxEVT_CHAR_HOOK, &LIB_TREE::onQueryCharHook, this );
         m_query_ctrl->Bind( wxEVT_MOTION, &LIB_TREE::onQueryMouseMoved, this );
         m_query_ctrl->Bind( wxEVT_LEAVE_WINDOW,
@@ -748,11 +744,6 @@ void LIB_TREE::onHeaderContextMenu( wxDataViewEvent& aEvent )
         if( dlg.ShowModal() == wxID_OK )
             m_adapter->SetShownColumns( dlg.EnabledList() );
     }
-
-#if !wxCHECK_VERSION( 3, 1, 0 )
-    // wxGTK 3.0 sends item right click events for header right clicks
-    m_skipNextRightClick = true;
-#endif
 }
 
 

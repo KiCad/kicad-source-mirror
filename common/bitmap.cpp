@@ -122,7 +122,7 @@ wxBitmap KiBitmap( const BITMAP_OPAQUE* aBitmap )
 
 int KiIconScale( wxWindow* aWindow )
 {
-    #if defined( __WXMSW__) && wxCHECK_VERSION( 3, 1, 6 )
+    #if defined( __WXMSW__)
     // Basically don't try and scale within kicad and let wx do its thing
     // with wx introducing bitmap bundles, it will auto scale automatically with dpi
     // the issue is, none of the scaling factors have any tie to system scaling

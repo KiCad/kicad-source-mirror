@@ -492,16 +492,7 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
                 FindItem( m_selected, &menu );
 
                 // This conditional compilation is probably not needed.
-                // It will be removed later, for the Kicad V 6.x version.
-                // But in "old" 3.0 version, the "&& menu != this" contition was added to avoid
-                // hang.  This hang is no longer encountered in wxWidgets 3.0.4 version, and this
-                // condition is no longer needed.  And in 3.1.2, we have to remove it, as
-                // "menu != this" never happens ("menu != this" always happens in 3.1.1 and older!).
-#if wxCHECK_VERSION( 3, 1, 2 )
                 if( menu )
-#else
-                if( menu && menu != this )
-#endif
                 {
                     ACTION_MENU* cxmenu = static_cast<ACTION_MENU*>( menu );
                     evt = cxmenu->eventHandler( aEvent );
