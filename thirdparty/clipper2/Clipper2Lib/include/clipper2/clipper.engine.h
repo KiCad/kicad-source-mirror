@@ -23,6 +23,10 @@ constexpr auto CLIPPER2_VERSION = "1.2.2";
 
 #include "clipper.core.h"
 
+#ifdef None
+#undef None
+#endif
+
 namespace Clipper2Lib {
 
 	struct Scanline;
@@ -35,7 +39,7 @@ namespace Clipper2Lib {
 
 	//Note: all clipping operations except for Difference are commutative.
 	enum class ClipType { None, Intersection, Union, Difference, Xor };
-	
+
 	enum class PathType { Subject, Clip };
 	enum class JoinWith { None, Left, Right };
 
@@ -43,7 +47,7 @@ namespace Clipper2Lib {
 		None = 0, OpenStart = 1, OpenEnd = 2, LocalMax = 4, LocalMin = 8
 	};
 
-	constexpr enum VertexFlags operator &(enum VertexFlags a, enum VertexFlags b) 
+	constexpr enum VertexFlags operator &(enum VertexFlags a, enum VertexFlags b)
 	{
 		return (enum VertexFlags)(uint32_t(a) & uint32_t(b));
 	}
@@ -97,7 +101,7 @@ namespace Clipper2Lib {
 		Path64 path;
 		bool is_open = false;
 
-		~OutRec() { 
+		~OutRec() {
 			if (splits) delete splits;
 			// nb: don't delete the split pointers
 			// as these are owned by ClipperBase's outrec_list_
@@ -108,7 +112,7 @@ namespace Clipper2Lib {
 	//Important: UP and DOWN here are premised on Y-axis positive down
 	//displays, which is the orientation used in Clipper's development.
 	///////////////////////////////////////////////////////////////////
-	
+
 	struct Active {
 		Point64 bot;
 		Point64 top;
@@ -242,7 +246,7 @@ namespace Clipper2Lib {
 		void SwapPositionsInAEL(Active& edge1, Active& edge2);
 		OutRec* NewOutRec();
 		OutPt* AddOutPt(const Active &e, const Point64& pt);
-		OutPt* AddLocalMinPoly(Active &e1, Active &e2, 
+		OutPt* AddLocalMinPoly(Active &e1, Active &e2,
 			const Point64& pt, bool is_new = false);
 		OutPt* AddLocalMaxPoly(Active &e1, Active &e2, const Point64& pt);
 		void DoHorizontal(Active &horz);
@@ -253,13 +257,13 @@ namespace Clipper2Lib {
 		void JoinOutrecPaths(Active &e1, Active &e2);
 		void FixSelfIntersects(OutRec* outrec);
 		void DoSplitOp(OutRec* outRec, OutPt* splitOp);
-		
+
 		inline void AddTrialHorzJoin(OutPt* op);
 		void ConvertHorzSegsToJoins();
 		void ProcessHorzJoins();
 
 		void Split(Active& e, const Point64& pt);
-		inline void CheckJoinLeft(Active& e, 
+		inline void CheckJoinLeft(Active& e,
 			const Point64& pt, bool check_curr_x = false);
 		inline void CheckJoinRight(Active& e,
 			const Point64& pt, bool check_curr_x = false);
@@ -324,12 +328,12 @@ namespace Clipper2Lib {
 
 		const PolyPath* Parent() const { return parent_; }
 
-		bool IsHole() const 
+		bool IsHole() const
 		{
 			unsigned lvl = Level();
 			//Even levels except level 0
 			return lvl && !(lvl & 1);
-		}		
+		}
 	};
 
 	typedef typename std::vector<std::unique_ptr<PolyPath64>> PolyPath64List;
@@ -347,9 +351,9 @@ namespace Clipper2Lib {
 		}
 
 		const PolyPath64* operator [] (size_t index) const
-		{ 
+		{
 			return childs_[index].get(); //std::unique_ptr
-		} 
+		}
 
 		const PolyPath64* Child(size_t index) const
 		{
@@ -404,7 +408,7 @@ namespace Clipper2Lib {
 		}
 
 		const PolyPathD* operator [] (size_t index) const
-		{ 
+		{
 			return childs_[index].get();
 		}
 
@@ -477,7 +481,7 @@ namespace Clipper2Lib {
 			return Execute(clip_type, fill_rule, closed_paths, dummy);
 		}
 
-		bool Execute(ClipType clip_type, FillRule fill_rule, 
+		bool Execute(ClipType clip_type, FillRule fill_rule,
 			Paths64& closed_paths, Paths64& open_paths)
 		{
 			closed_paths.clear();
@@ -549,12 +553,12 @@ namespace Clipper2Lib {
 		void CheckCallback()
 		{
 			if(zCallbackD_)
-				// if the user defined float point callback has been assigned 
+				// if the user defined float point callback has been assigned
 				// then assign the proxy callback function
-				ClipperBase::zCallback_ = 
+				ClipperBase::zCallback_ =
 					std::bind(&ClipperD::ZCB, this, std::placeholders::_1,
 					std::placeholders::_2, std::placeholders::_3,
-					std::placeholders::_4, std::placeholders::_5); 
+					std::placeholders::_4, std::placeholders::_5);
 			else
 				ClipperBase::zCallback_ = nullptr;
 		}
@@ -621,6 +625,6 @@ namespace Clipper2Lib {
 
 	};
 
-}  // namespace 
+}  // namespace
 
 #endif  // CLIPPER_ENGINE_H
