@@ -142,7 +142,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
-        cursorPos = grid.Align( controls->GetMousePosition() );
+        cursorPos = grid.Align( controls->GetMousePosition(), grid.GetItemGrid( item ) );
         controls->ForceCursorPosition( true, cursorPos );
 
         // The tool hotkey is interpreted as a click when drawing
@@ -246,7 +246,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 // boundaries.
                 if( evt->IsPrime() && !ignorePrimePosition )
                 {
-                    cursorPos = grid.Align( evt->Position() );
+                    cursorPos = grid.Align( evt->Position(), grid.GetItemGrid( item ) );
                     getViewControls()->WarpMouseCursor( cursorPos, true );
                 }
                 else
@@ -350,8 +350,11 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::doDrawShape( const TOOL_EVENT& aEvent, std::opt
     bool    isTextBox = !aDrawingShape.has_value();
     SHAPE_T toolType  = aDrawingShape.value_or( SHAPE_T::SEGMENT );
 
+    KIGFX::VIEW_CONTROLS*   controls = getViewControls();
     SETTINGS_MANAGER&       settingsMgr = Pgm().GetSettingsManager();
     SYMBOL_EDITOR_SETTINGS* settings = settingsMgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+    EE_GRID_HELPER          grid( m_toolMgr );
+    VECTOR2I                cursorPos;
     SHAPE_T                 shapeType = toolType == SHAPE_T::SEGMENT ? SHAPE_T::POLY : toolType;
     LIB_SYMBOL*             symbol = m_frame->GetCurSymbol();
     LIB_SHAPE*              item = nullptr;
@@ -387,7 +390,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::doDrawShape( const TOOL_EVENT& aEvent, std::opt
 
     Activate();
     // Must be done after Activate() so that it gets set into the correct context
-    getViewControls()->ShowCursor( true );
+    controls->ShowCursor( true );
     // Set initial cursor
     setCursor();
 
@@ -398,8 +401,11 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::doDrawShape( const TOOL_EVENT& aEvent, std::opt
     while( TOOL_EVENT* evt = Wait() )
     {
         setCursor();
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
-        VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
+        cursorPos = grid.Align( controls->GetMousePosition(), grid.GetItemGrid( item ) );
+        controls->ForceCursorPosition( true, cursorPos );
 
         // The tool hotkey is interpreted as a click when drawing
         bool isSyntheticClick = item && evt->IsActivate() && evt->HasPosition()
@@ -567,12 +573,12 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::doDrawShape( const TOOL_EVENT& aEvent, std::opt
         }
 
         // Enable autopanning and cursor capture only when there is a shape being drawn
-        getViewControls()->SetAutoPan( item != nullptr );
-        getViewControls()->CaptureCursor( item != nullptr );
+        controls->SetAutoPan( item != nullptr );
+        controls->CaptureCursor( item != nullptr );
     }
 
-    getViewControls()->SetAutoPan( false );
-    getViewControls()->CaptureCursor( false );
+    controls->SetAutoPan( false );
+    controls->CaptureCursor( false );
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     return 0;
 }

@@ -32,6 +32,7 @@
 #include <ee_selection.h>
 
 class SCH_ITEM;
+class LIB_ITEM;
 
 
 enum GRID_HELPER_GRIDS : int
@@ -69,14 +70,20 @@ public:
     VECTOR2D GetGridSize( GRID_HELPER_GRIDS aGrid ) const;
     using GRID_HELPER::GetGrid;
 
+    /**
+     * Gets the coarsest grid that applies to a selecion of items.
+     */
     GRID_HELPER_GRIDS GetSelectionGrid( const EE_SELECTION& aItem );
-    GRID_HELPER_GRIDS GetItemGrid( const SCH_ITEM* aItem ) const;
+
+    /**
+     * Gets the coarsest grid that applies to an item.
+     */
+    GRID_HELPER_GRIDS GetItemGrid( const EDA_ITEM* aItem ) const;
 
     VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, GRID_HELPER_GRIDS aGrid,
                              const EE_SELECTION& aItems );
 
-    VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, GRID_HELPER_GRIDS aGrid,
-                             SCH_ITEM* aDraggedItem );
+    VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, GRID_HELPER_GRIDS aGrid, SCH_ITEM* aSkip );
     VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, GRID_HELPER_GRIDS aGrid,
                              const EE_SELECTION& aSkip = {} );
 

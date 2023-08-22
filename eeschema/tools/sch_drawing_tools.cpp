@@ -317,13 +317,14 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                 // boundaries.
                 if( evt->IsPrime() && !ignorePrimePosition )
                 {
-                    cursorPos = grid.Align( evt->Position() );
+                    cursorPos = grid.Align( evt->Position(), GRID_HELPER_GRIDS::GRID_CONNECTABLE );
                     getViewControls()->WarpMouseCursor( cursorPos, true );
                 }
                 else
                 {
                     getViewControls()->PinCursorInsideNonAutoscrollArea( true );
-                    cursorPos = getViewControls()->GetMousePosition();
+                    cursorPos = grid.Align( getViewControls()->GetMousePosition(),
+                                            GRID_HELPER_GRIDS::GRID_CONNECTABLE );
                 }
 
                 symbol = new SCH_SYMBOL( *libSymbol, &m_frame->GetCurrentSheet(), sel, cursorPos,

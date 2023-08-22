@@ -336,12 +336,12 @@ std::set<SCH_ITEM*> EE_GRID_HELPER::queryVisible( const BOX2I& aArea,
 
 GRID_HELPER_GRIDS EE_GRID_HELPER::GetSelectionGrid( const EE_SELECTION& aSelection )
 {
-    GRID_HELPER_GRIDS grid = GetItemGrid( static_cast<const SCH_ITEM*>( aSelection.Front() ) );
+    GRID_HELPER_GRIDS grid = GetItemGrid( aSelection.Front() );
 
     // Find the largest grid of all the items and use that
     for( EDA_ITEM* item : aSelection )
     {
-        GRID_HELPER_GRIDS itemGrid = GetItemGrid( static_cast<SCH_ITEM*>( item ) );
+        GRID_HELPER_GRIDS itemGrid = GetItemGrid( item );
 
         if( GetGridSize( itemGrid ) > GetGridSize( grid ) )
             grid = itemGrid;
@@ -351,13 +351,15 @@ GRID_HELPER_GRIDS EE_GRID_HELPER::GetSelectionGrid( const EE_SELECTION& aSelecti
 }
 
 
-GRID_HELPER_GRIDS EE_GRID_HELPER::GetItemGrid( const SCH_ITEM* aItem ) const
+GRID_HELPER_GRIDS EE_GRID_HELPER::GetItemGrid( const EDA_ITEM* aItem ) const
 {
     if( !aItem )
         return GRID_CURRENT;
 
     switch( aItem->Type() )
     {
+    case LIB_SYMBOL_T:
+    case LIB_PIN_T:
     case SCH_SYMBOL_T:
     case SCH_PIN_T:
     case SCH_SHEET_PIN_T:
@@ -369,21 +371,25 @@ GRID_HELPER_GRIDS EE_GRID_HELPER::GetItemGrid( const SCH_ITEM* aItem ) const
     case SCH_DIRECTIVE_LABEL_T:
         return GRID_CONNECTABLE;
 
-    case SCH_TEXT_T:
+    case LIB_FIELD_T:
     case SCH_FIELD_T:
+    case LIB_TEXT_T:
+    case SCH_TEXT_T:
         return GRID_TEXT;
 
+    case LIB_SHAPE_T:
     case SCH_SHAPE_T:
-    case SCH_BITMAP_T:
     // The text box's border lines are what need to be on the graphic grid
+    case LIB_TEXTBOX_T:
     case SCH_TEXTBOX_T:
+    case SCH_BITMAP_T:
         return GRID_GRAPHICS;
 
     case SCH_JUNCTION_T:
         return GRID_WIRES;
 
     case SCH_LINE_T:
-        if( aItem->IsConnectable() )
+        if( static_cast<const SCH_LINE*>( aItem )->IsConnectable() )
             return GRID_WIRES;
         else
             return GRID_GRAPHICS;

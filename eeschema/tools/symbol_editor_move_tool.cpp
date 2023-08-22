@@ -25,6 +25,7 @@
 #include <tool/tool_manager.h>
 #include <tools/ee_selection_tool.h>
 #include <ee_actions.h>
+#include <ee_grid_helper.h>
 #include <eda_item.h>
 #include <sch_commit.h>
 #include <wx/log.h>
@@ -113,6 +114,7 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aCommit )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    EE_GRID_HELPER        grid( m_toolMgr );
 
     m_anchorPos = { 0, 0 };
 
@@ -155,6 +157,8 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
     do
     {
         m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
         if( evt->IsAction( &EE_ACTIONS::move )
                 || evt->IsMotion()
@@ -234,7 +238,8 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
                 else if( m_frame->GetMoveWarpsCursor() )
                 {
                     VECTOR2I itemPos = selection.GetTopLeftItem()->GetPosition();
-                    m_anchorPos = VECTOR2I( itemPos.x, -itemPos.y );
+                    m_anchorPos = grid.AlignGrid( VECTOR2I( itemPos.x, -itemPos.y ),
+                                                  grid.GetSelectionGrid( selection ) );
 
                     getViewControls()->WarpMouseCursor( m_anchorPos, true, true );
                     m_cursor = m_anchorPos;
@@ -255,7 +260,8 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
             //------------------------------------------------------------------------
             // Follow the mouse
             //
-            m_cursor = controls->GetCursorPosition( !evt->DisableGridSnapping() );
+            m_cursor = grid.BestSnapAnchor( controls->GetCursorPosition( false ),
+                                            grid.GetSelectionGrid( selection ), selection );
             VECTOR2I delta( m_cursor - prevPos );
             m_anchorPos = m_cursor;
 
