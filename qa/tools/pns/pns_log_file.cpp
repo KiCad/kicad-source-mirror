@@ -108,7 +108,7 @@ bool parseCommonPnsProps( PNS::ITEM* aItem, const wxString& cmd, wxStringTokeniz
     {
         if( aItem->Parent() && aItem->Parent()->GetBoard() )
         {
-            aItem->Parent()->GetBoard()->FindNet( aTokens.GetNextToken() );
+            aItem->SetNet( aItem->Parent()->GetBoard()->FindNet( aTokens.GetNextToken() ) );
             return true;
         }
 
