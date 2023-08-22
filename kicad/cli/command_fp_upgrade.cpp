@@ -32,6 +32,8 @@
 
 CLI::FP_UPGRADE_COMMAND::FP_UPGRADE_COMMAND() : PCB_EXPORT_BASE_COMMAND( "upgrade" )
 {
+    m_argParser.add_description( UTF8STDSTR( _( "Upgrades the footprint library to the current kicad version format" ) ) );
+
     m_argParser.add_argument( ARG_FORCE )
             .help( UTF8STDSTR(
                     _( "Forces the footprint library to be resaved regardless of versioning" ) ) )
@@ -50,7 +52,7 @@ int CLI::FP_UPGRADE_COMMAND::doPerform( KIWAY& aKiway )
 
     if( !wxDir::Exists( fpJob->m_libraryPath ) )
     {
-        wxFprintf( stderr, _( "Footprint path does not exist or is not accessible\n" ) );
+        wxFprintf( stderr, _( "Footprint library path does not exist or is not accessible\n" ) );
         return EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
 

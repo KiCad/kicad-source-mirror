@@ -39,6 +39,8 @@
 
 CLI::PCB_DRC_COMMAND::PCB_DRC_COMMAND() : PCB_EXPORT_BASE_COMMAND( "drc" )
 {
+    m_argParser.add_description( UTF8STDSTR( _( "Runs the Design Rules Check (DRC) on the PCB and creates a report" ) ) );
+
     m_argParser.add_argument( ARG_FORMAT )
             .default_value( std::string( "report" ) )
             .help( UTF8STDSTR( _( "Output file format, options: json, report" ) ) );

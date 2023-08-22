@@ -27,7 +27,9 @@ namespace CLI
 {
 struct SCH_COMMAND : public COMMAND
 {
-    SCH_COMMAND() : COMMAND( "sch" ) { }
+    SCH_COMMAND() : COMMAND( "sch" ) {
+        m_argParser.add_description( UTF8STDSTR( _( "Schematics" ) ) );
+    }
 };
 }
 

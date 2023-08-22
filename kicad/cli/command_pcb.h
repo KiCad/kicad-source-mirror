@@ -27,7 +27,9 @@ namespace CLI
 {
 struct PCB_COMMAND : public COMMAND
 {
-    PCB_COMMAND() : COMMAND( "pcb" ) {}
+    PCB_COMMAND() : COMMAND( "pcb" ) {
+        m_argParser.add_description( UTF8STDSTR( _( "PCB" ) ) );
+    }
 };
 }
 

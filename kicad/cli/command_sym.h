@@ -27,7 +27,9 @@ namespace CLI
 {
 struct SYM_COMMAND : public COMMAND
 {
-    SYM_COMMAND() : COMMAND( "sym" ) {}
+    SYM_COMMAND() : COMMAND( "sym" ) {
+        m_argParser.add_description( UTF8STDSTR( _( "Symbol and Symbol Libraries" ) ) );
+    }
 };
 }
 

@@ -30,6 +30,8 @@
 
 CLI::VERSION_COMMAND::VERSION_COMMAND() : COMMAND( "version" )
 {
+    m_argParser.add_description( UTF8STDSTR( _( "Reports the version info in various formats" ) ) );
+
     m_argParser.add_argument( ARG_FORMAT )
             .default_value( std::string( "plain" ) )
             .help( UTF8STDSTR( _( "version info format (plain, commit, about)" ) ) );

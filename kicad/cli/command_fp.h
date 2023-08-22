@@ -27,7 +27,9 @@ namespace CLI
 {
 struct FP_COMMAND : public COMMAND
 {
-    FP_COMMAND() : COMMAND( "fp" ) {}
+    FP_COMMAND() : COMMAND( "fp" ) {
+        m_argParser.add_description( UTF8STDSTR( _( "Footprint and Footprint Libraries" ) ) );
+    }
 };
 }
 

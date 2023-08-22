@@ -38,6 +38,8 @@
 
 CLI::SCH_ERC_COMMAND::SCH_ERC_COMMAND() : PCB_EXPORT_BASE_COMMAND( "erc" )
 {
+    m_argParser.add_description( UTF8STDSTR( _( "Runs the Electrical Rules Check (ERC) on the schematic and creates a report" ) ) );
+
     m_argParser.add_argument( ARG_FORMAT )
             .default_value( std::string( "report" ) )
             .help( UTF8STDSTR( _( "Output file format, options: json, report" ) ) );
@@ -48,22 +50,22 @@ CLI::SCH_ERC_COMMAND::SCH_ERC_COMMAND() : PCB_EXPORT_BASE_COMMAND( "erc" )
                     _( "Report units; valid options: in, mm, mils" ) ) );
 
     m_argParser.add_argument( ARG_SEVERITY_ALL )
-            .help( UTF8STDSTR( _( "Report all DRC violations, this is equivalent to including all the other severity arguments" ) ) )
+            .help( UTF8STDSTR( _( "Report all ERC violations, this is equivalent to including all the other severity arguments" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_SEVERITY_ERROR )
-            .help( UTF8STDSTR( _( "Report all DRC error level violations, this can be combined with the other severity arguments" ) ) )
+            .help( UTF8STDSTR( _( "Report all ERC error level violations, this can be combined with the other severity arguments" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_SEVERITY_WARNING )
-            .help( UTF8STDSTR( _( "Report all DRC warning level violations, this can be combined with the other severity arguments" ) ) )
+            .help( UTF8STDSTR( _( "Report all ERC warning level violations, this can be combined with the other severity arguments" ) ) )
             .implicit_value( true )
             .default_value( false );
 
     m_argParser.add_argument( ARG_SEVERITY_EXCLUSIONS )
-            .help( UTF8STDSTR( _( "Report all excluded DRC violations, this can be combined with the other severity arguments" ) ) )
+            .help( UTF8STDSTR( _( "Report all excluded ERC violations, this can be combined with the other severity arguments" ) ) )
             .implicit_value( true )
             .default_value( false );
 

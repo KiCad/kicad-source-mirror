@@ -32,6 +32,8 @@
 
 CLI::SYM_UPGRADE_COMMAND::SYM_UPGRADE_COMMAND() : PCB_EXPORT_BASE_COMMAND( "upgrade" )
 {
+    m_argParser.add_description( UTF8STDSTR( _( "Upgrades the symbol library to the current kicad version format" ) ) );
+
     m_argParser.add_argument( ARG_FORCE )
             .help( UTF8STDSTR(
                     _( "Forces the symbol library to be resaved regardless of versioning" ) ) )
@@ -50,7 +52,7 @@ int CLI::SYM_UPGRADE_COMMAND::doPerform( KIWAY& aKiway )
 
     if( !wxFile::Exists( symJob->m_libraryPath ) )
     {
-        wxFprintf( stderr, _( "Symbol file does not exist or is not accessible\n" ) );
+        wxFprintf( stderr, _( "Symbol library does not exist or is not accessible\n" ) );
         return EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
 

@@ -33,6 +33,8 @@
 
 CLI::FP_EXPORT_SVG_COMMAND::FP_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND( "svg" )
 {
+    m_argParser.add_description( UTF8STDSTR( _( "Exports the footprint or entire footprint library to SVG" ) ) );
+
     addLayerArg( false );
 
     m_argParser.add_argument( "-t", ARG_THEME )
