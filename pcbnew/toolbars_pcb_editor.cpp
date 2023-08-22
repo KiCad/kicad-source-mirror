@@ -400,8 +400,8 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     if( !originGroup )
     {
         originGroup = new ACTION_GROUP( "group.pcbOrigins",
-                                        { &PCB_ACTIONS::drillOrigin,
-                                          &PCB_ACTIONS::gridSetOrigin } );
+                                        { &PCB_ACTIONS::gridSetOrigin,
+                                          &PCB_ACTIONS::drillOrigin } );
     }
 
     if( !routingGroup )
