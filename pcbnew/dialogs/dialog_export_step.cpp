@@ -411,9 +411,6 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
     cmdK2S.Append( wxT( " pcb" ) );
     cmdK2S.Append( wxT( " export" ) );
-    cmdK2S.Append( wxT( " 3d" ) );
-
-    cmdK2S.Append( wxT( " --format" ) );
 
     if( fn.GetExt() == GltfBinaryFileExtension )
         cmdK2S.Append( wxT( " glb" ) );
