@@ -57,7 +57,6 @@
 #include <panel_3D_display_options.h>
 #include <panel_3D_opengl_options.h>
 #include <panel_3D_raytracing_options.h>
-#include <panel_3D_colors.h>
 #include <python_scripting.h>
 
 #include "invoke_pcb_dialog.h"
@@ -235,9 +234,6 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
         case PANEL_3DV_RAYTRACING:
             return new PANEL_3D_RAYTRACING_OPTIONS( aParent );
-
-        case PANEL_3DV_COLORS:
-            return new PANEL_3D_COLORS( aParent );
 
         default:
             return nullptr;

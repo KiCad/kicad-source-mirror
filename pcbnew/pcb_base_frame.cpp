@@ -703,6 +703,11 @@ void PCB_BASE_FRAME::ShowChangedLanguage()
 
     // tooltips in toolbars
     RecreateToolbars();
+
+    EDA_3D_VIEWER_FRAME* viewer3D = Get3DViewerFrame();
+
+    if( viewer3D )
+        viewer3D->ShowChangedLanguage();
 }
 
 

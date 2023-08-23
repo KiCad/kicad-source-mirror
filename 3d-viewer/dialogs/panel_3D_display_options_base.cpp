@@ -15,68 +15,10 @@ PANEL_3D_DISPLAY_OPTIONS_BASE::PANEL_3D_DISPLAY_OPTIONS_BASE( wxWindow* parent, 
 	bSizerMain = new wxBoxSizer( wxHORIZONTAL );
 
 	wxBoxSizer* bSizer7;
-	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
+	bSizer7 = new wxBoxSizer( wxVERTICAL );
 
 	wxBoxSizer* bSizeLeft;
 	bSizeLeft = new wxBoxSizer( wxVERTICAL );
-
-	m_boardLayersLabel = new wxStaticText( this, wxID_ANY, _("Board Layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_boardLayersLabel->Wrap( -1 );
-	bSizeLeft->Add( m_boardLayersLabel, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 13 );
-
-	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizeLeft->Add( m_staticline2, 0, wxEXPAND|wxBOTTOM, 5 );
-
-	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 0, 1, 4, 0 );
-	fgSizer1->SetFlexibleDirection( wxBOTH );
-	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	m_checkBoxSilkscreen = new wxCheckBox( this, wxID_ANY, _("Show silkscreen layers"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
-	fgSizer1->Add( m_checkBoxSilkscreen, 0, wxLEFT, 5 );
-
-	m_checkBoxSubtractMaskFromSilk = new wxCheckBox( this, wxID_ANY, _("Clip silkscreen at solder mask edges"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_checkBoxSubtractMaskFromSilk, 0, wxLEFT, 25 );
-
-	m_checkBoxClipSilkOnViaAnnulus = new wxCheckBox( this, wxID_ANY, _("Clip silkscreen at via annuli"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_checkBoxClipSilkOnViaAnnulus, 0, wxLEFT, 25 );
-
-	m_checkBoxSolderMask = new wxCheckBox( this, wxID_ANY, _("Show solder mask layers"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
-	fgSizer1->Add( m_checkBoxSolderMask, 0, wxTOP|wxLEFT, 5 );
-
-	m_checkBoxSolderpaste = new wxCheckBox( this, wxID_ANY, _("Show solder paste layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_checkBoxSolderpaste, 0, wxLEFT, 5 );
-
-	m_checkBoxAdhesive = new wxCheckBox( this, wxID_ANY, _("Show adhesive layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_checkBoxAdhesive, 0, wxLEFT, 5 );
-
-
-	bSizeLeft->Add( fgSizer1, 0, wxEXPAND|wxALL, 5 );
-
-
-	bSizeLeft->Add( 0, 15, 0, wxEXPAND, 5 );
-
-	m_userLayersLabel = new wxStaticText( this, wxID_ANY, _("User Layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_userLayersLabel->Wrap( -1 );
-	bSizeLeft->Add( m_userLayersLabel, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 13 );
-
-	m_staticline31 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizeLeft->Add( m_staticline31, 0, wxEXPAND|wxBOTTOM, 5 );
-
-
-	bSizeLeft->Add( 0, 5, 0, wxEXPAND, 5 );
-
-	m_checkBoxComments = new wxCheckBox( this, wxID_ANY, _("Show comment and drawing layers"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
-	bSizeLeft->Add( m_checkBoxComments, 0, wxRIGHT|wxLEFT, 10 );
-
-
-	bSizeLeft->Add( 0, 4, 0, wxEXPAND, 5 );
-
-	m_checkBoxECO = new wxCheckBox( this, wxID_ANY, _("Show ECO layers"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
-	bSizeLeft->Add( m_checkBoxECO, 0, wxRIGHT|wxLEFT, 10 );
-
-
-	bSizeLeft->Add( 0, 15, 0, wxEXPAND, 5 );
 
 	m_renderOptionsLabel = new wxStaticText( this, wxID_ANY, _("Render Options"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_renderOptionsLabel->Wrap( -1 );
@@ -90,11 +32,11 @@ PANEL_3D_DISPLAY_OPTIONS_BASE::PANEL_3D_DISPLAY_OPTIONS_BASE( wxWindow* parent, 
 	fgSizer2->SetFlexibleDirection( wxBOTH );
 	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_checkBoxBoardBody = new wxCheckBox( this, wxID_ANY, _("Show board body"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_checkBoxBoardBody, 0, wxRIGHT|wxLEFT, 5 );
+	m_checkBoxClipSilkOnViaAnnulus = new wxCheckBox( this, wxID_ANY, _("Clip silkscreen at via annuli"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer2->Add( m_checkBoxClipSilkOnViaAnnulus, 0, wxLEFT, 5 );
 
-	m_checkBoxRealisticMode = new wxCheckBox( this, wxID_ANY, _("Realistic mode"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_checkBoxRealisticMode, 0, wxRIGHT|wxLEFT, 5 );
+	m_checkBoxSubtractMaskFromSilk = new wxCheckBox( this, wxID_ANY, _("Clip silkscreen at solder mask edges"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer2->Add( m_checkBoxSubtractMaskFromSilk, 0, wxLEFT, 5 );
 
 	m_checkBoxAreas = new wxCheckBox( this, wxID_ANY, _("Show filled areas in zones"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_checkBoxAreas, 0, wxRIGHT|wxLEFT, 5 );
@@ -180,7 +122,7 @@ PANEL_3D_DISPLAY_OPTIONS_BASE::PANEL_3D_DISPLAY_OPTIONS_BASE( wxWindow* parent, 
 	bSizerRight->Add( bSizerSlider, 0, wxEXPAND|wxLEFT, 5 );
 
 
-	bSizer7->Add( bSizerRight, 0, wxEXPAND, 15 );
+	bSizer7->Add( bSizerRight, 0, wxEXPAND|wxTOP, 15 );
 
 
 	bSizerMain->Add( bSizer7, 1, 0, 5 );
@@ -191,14 +133,12 @@ PANEL_3D_DISPLAY_OPTIONS_BASE::PANEL_3D_DISPLAY_OPTIONS_BASE( wxWindow* parent, 
 	bSizerMain->Fit( this );
 
 	// Connect Events
-	m_checkBoxRealisticMode->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_3D_DISPLAY_OPTIONS_BASE::OnCheckRealisticMode ), NULL, this );
 	m_checkBoxEnableAnimation->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_3D_DISPLAY_OPTIONS_BASE::OnCheckEnableAnimation ), NULL, this );
 }
 
 PANEL_3D_DISPLAY_OPTIONS_BASE::~PANEL_3D_DISPLAY_OPTIONS_BASE()
 {
 	// Disconnect Events
-	m_checkBoxRealisticMode->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_3D_DISPLAY_OPTIONS_BASE::OnCheckRealisticMode ), NULL, this );
 	m_checkBoxEnableAnimation->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_3D_DISPLAY_OPTIONS_BASE::OnCheckEnableAnimation ), NULL, this );
 
 }

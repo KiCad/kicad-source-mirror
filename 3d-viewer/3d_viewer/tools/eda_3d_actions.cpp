@@ -351,7 +351,7 @@ TOOL_ACTION EDA_3D_ACTIONS::showBBoxes( TOOL_ACTION_ARGS()
         .Name( "3DViewer.Control.showBoundingBoxes" )
          .Scope( AS_GLOBAL )
          .MenuText( _( "Show Model Bounding Boxes" ) )
-         .Tooltip( _( "Show 3D model bounding boxes" ) )
+         .Tooltip( _( "Show 3D model bounding boxes in realtime renderer" ) )
          .Icon( BITMAPS::ortho )
          .Flags( AF_NONE ) );
 

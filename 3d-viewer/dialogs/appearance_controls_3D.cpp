@@ -31,6 +31,7 @@
 #include <settings/color_settings.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
+#include <tools/eda_3d_actions.h>
 #include <widgets/bitmap_toggle.h>
 #include <widgets/color_swatch.h>
 #include <widgets/grid_bitmap_toggle.h>
@@ -60,18 +61,18 @@ const APPEARANCE_CONTROLS_3D::APPEARANCE_SETTING_3D APPEARANCE_CONTROLS_3D::s_la
     RR( _HKI( "User.Eco1" ),              LAYER_3D_USER_ECO1,         _HKI( "Show user ECO1 layer" ) ),
     RR( _HKI( "User.Eco2" ),              LAYER_3D_USER_ECO2,         _HKI( "Show user ECO2 layer" ) ),
     RR(),
-    RR( _HKI( "Through-hole Models" ),    LAYER_3D_TH_MODELS,         _HKI( "Show models for 'Through hole' footprints" )       ),
-    RR( _HKI( "SMD Models" ),             LAYER_3D_SMD_MODELS,        _HKI( "Show models for 'SMD' footprints" )     ),
-    RR( _HKI( "Virtual Models" ),         LAYER_3D_VIRTUAL_MODELS,    _HKI( "Show models for 'Unspecified' footprints" )     ),
-    RR( _HKI( "Models not in POS File" ), LAYER_3D_MODELS_NOT_IN_POS, _HKI( "Show models even if not in POS file" ) ),
-    RR( _HKI( "Models marked DNP" ),      LAYER_3D_MODELS_MARKED_DNP, _HKI( "Show models even if marked as DNP" )  ),
-    RR( _HKI( "Model Bounding Boxes" ),   LAYER_3D_BOUNDING_BOXES,    _HKI( "Show model bounding boxes in realtime renderer" ) ),
+    RR( _HKI( "Through-hole Models" ),    LAYER_3D_TH_MODELS,         EDA_3D_ACTIONS::showTHT ),
+    RR( _HKI( "SMD Models" ),             LAYER_3D_SMD_MODELS,        EDA_3D_ACTIONS::showSMD ),
+    RR( _HKI( "Virtual Models" ),         LAYER_3D_VIRTUAL_MODELS,    EDA_3D_ACTIONS::showVirtual ),
+    RR( _HKI( "Models not in POS File" ), LAYER_3D_MODELS_NOT_IN_POS, EDA_3D_ACTIONS::showNotInPosFile ),
+    RR( _HKI( "Models marked DNP" ),      LAYER_3D_MODELS_MARKED_DNP, EDA_3D_ACTIONS::showDNP  ),
+    RR( _HKI( "Model Bounding Boxes" ),   LAYER_3D_BOUNDING_BOXES,    EDA_3D_ACTIONS::showBBoxes ),
     RR(),
     RR( _HKI( "Values" ),                 LAYER_FP_VALUES,            _HKI( "Show footprint values" ) ),
     RR( _HKI( "References" ),             LAYER_FP_REFERENCES,        _HKI( "Show footprint references" ) ),
     RR( _HKI( "Footprint Text" ),         LAYER_FP_TEXT,              _HKI( "Show all footprint text" ) ),
     RR(),
-    RR( _HKI( "3D Axis" ),                LAYER_3D_AXES,              _HKI( "Show 3D axes indicator" ) ),
+    RR( _HKI( "3D Axis" ),                LAYER_3D_AXES,              EDA_3D_ACTIONS::showAxis ),
     RR( _HKI( "Background Start" ),       LAYER_3D_BACKGROUND_TOP,    _HKI( "Background gradient start color" ) ),
     RR( _HKI( "Background End" ),         LAYER_3D_BACKGROUND_BOTTOM, _HKI( "Background gradient end color" ) ),
 };
@@ -299,8 +300,12 @@ void APPEARANCE_CONTROLS_3D::OnLayerVisibilityChanged( int aLayer, bool isVisibl
     case LAYER_FP_TEXT:
         // Because Footprint Text is a meta-control that also can disable values/references,
         // drag them along here so that the user is less likely to be confused.
-        visibleLayers.set( LAYER_FP_REFERENCES, isVisible );
-        visibleLayers.set( LAYER_FP_VALUES, isVisible );
+        if( !isVisible )
+        {
+            visibleLayers.set( LAYER_FP_REFERENCES, false );
+            visibleLayers.set( LAYER_FP_VALUES, false );
+        }
+
         visibleLayers.set( LAYER_FP_TEXT, isVisible );
         killFollow = true;
         break;
@@ -310,7 +315,7 @@ void APPEARANCE_CONTROLS_3D::OnLayerVisibilityChanged( int aLayer, bool isVisibl
         // In case that user changes Footprint Value/References when the Footprint Text
         // meta-control is disabled, we should put it back on.
         if( isVisible )
-            OnLayerVisibilityChanged( LAYER_FP_TEXT, isVisible );
+            visibleLayers.set( LAYER_FP_TEXT, true );
 
         visibleLayers.set( aLayer, isVisible );
         killFollow = true;
@@ -403,8 +408,7 @@ void APPEARANCE_CONTROLS_3D::rebuildLayers()
                     COLOR_SWATCH* swatch = new COLOR_SWATCH( m_windowLayers, colors[ layer ], layer,
                                                              COLOR4D::WHITE, defaultColors[ layer ],
                                                              SWATCH_SMALL );
-                    swatch->SetToolTip( _( "Left double click or middle click for color change, "
-                                           "right click for menu" ) );
+                    swatch->SetToolTip( _( "Left double click or middle click to change color" ) );
 
                     sizer->Add( swatch, 0,  wxALIGN_CENTER_VERTICAL, 0 );
                     aSetting->ctl_color = swatch;

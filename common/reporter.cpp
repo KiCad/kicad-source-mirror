@@ -222,7 +222,7 @@ REPORTER& STATUSBAR_REPORTER::Report( const wxString& aText, SEVERITY aSeverity 
 bool STATUSBAR_REPORTER::HasMessage() const
 {
     if( m_statusBar )
-        return m_statusBar->GetStatusText().IsEmpty();
+        return !m_statusBar->GetStatusText( m_position ).IsEmpty();
 
     return false;
 }

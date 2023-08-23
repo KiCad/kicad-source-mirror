@@ -251,8 +251,6 @@ bool BOARD_ADAPTER::Is3dLayerEnabled( PCB_LAYER_ID aLayer,
     case Cmts_User: return aVisibilityFlags.test( LAYER_3D_USER_COMMENTS );
     case Eco1_User: return aVisibilityFlags.test( LAYER_3D_USER_ECO1 );
     case Eco2_User: return aVisibilityFlags.test( LAYER_3D_USER_ECO2 );
-    case Edge_Cuts: return !m_Cfg->m_Render.realistic && !m_Cfg->m_Render.show_board_body;
-    case Margin:    return !m_Cfg->m_Render.realistic;
     default:        return m_board && m_board->IsLayerVisible( aLayer );
     }
 }
@@ -330,11 +328,7 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
     BOX2I bbbox;
 
     if( m_board )
-    {
-        bbbox = m_board->ComputeBoundingBox( !m_board->IsFootprintHolder()
-                                                 && m_Cfg->m_Render.realistic
-                                                 && haveOutline );
-    }
+        bbbox = m_board->ComputeBoundingBox( !m_board->IsFootprintHolder() && haveOutline );
 
     // Gives a non null size to avoid issues in zoom / scale calculations
     if( ( bbbox.GetWidth() == 0 ) && ( bbbox.GetHeight() == 0 ) )

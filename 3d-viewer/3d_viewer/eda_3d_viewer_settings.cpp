@@ -314,8 +314,6 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS() :
                                                 &m_Render.raytrace_lightAzimuth,
                                                 default_azimuth ) );
 
-    m_params.emplace_back( new PARAM<bool>( "render.realistic",
-                                            &m_Render.realistic, true ) );
     m_params.emplace_back( new PARAM<bool>( "render.show_adhesive",
                                             &m_Render.show_adhesive, true ) );
     m_params.emplace_back( new PARAM<bool>( "render.show_axis",

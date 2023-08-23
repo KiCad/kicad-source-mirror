@@ -175,148 +175,90 @@ void RENDER_3D_OPENGL::setupMaterials()
 {
     m_materials = {};
 
-    if( m_boardAdapter.m_Cfg->m_Render.realistic )
-    {
-        // http://devernay.free.fr/cours/opengl/materials.html
+    // http://devernay.free.fr/cours/opengl/materials.html
 
-        // Plated copper
-        // Copper material mixed with the copper color
-        m_materials.m_Copper.m_Ambient  = SFVEC3F( m_boardAdapter.m_CopperColor.r * 0.1f,
-                                                   m_boardAdapter.m_CopperColor.g * 0.1f,
-                                                   m_boardAdapter.m_CopperColor.b * 0.1f);
+    // Plated copper
+    // Copper material mixed with the copper color
+    m_materials.m_Copper.m_Ambient  = SFVEC3F( m_boardAdapter.m_CopperColor.r * 0.1f,
+                                               m_boardAdapter.m_CopperColor.g * 0.1f,
+                                               m_boardAdapter.m_CopperColor.b * 0.1f);
 
-        m_materials.m_Copper.m_Specular = SFVEC3F( m_boardAdapter.m_CopperColor.r * 0.75f + 0.25f,
-                                                   m_boardAdapter.m_CopperColor.g * 0.75f + 0.25f,
-                                                   m_boardAdapter.m_CopperColor.b * 0.75f + 0.25f );
+    m_materials.m_Copper.m_Specular = SFVEC3F( m_boardAdapter.m_CopperColor.r * 0.75f + 0.25f,
+                                               m_boardAdapter.m_CopperColor.g * 0.75f + 0.25f,
+                                               m_boardAdapter.m_CopperColor.b * 0.75f + 0.25f );
 
-        // This guess the material type(ex: copper vs gold) to determine the
-        // shininess factor between 0.1 and 0.4
-        float shininessfactor = 0.40f - mapf( fabs( m_boardAdapter.m_CopperColor.r -
-                                                    m_boardAdapter.m_CopperColor.g ),
-                                              0.15f, 1.00f,
-                                              0.00f, 0.30f );
+    // This guess the material type(ex: copper vs gold) to determine the
+    // shininess factor between 0.1 and 0.4
+    float shininessfactor = 0.40f - mapf( fabs( m_boardAdapter.m_CopperColor.r -
+                                                m_boardAdapter.m_CopperColor.g ),
+                                          0.15f, 1.00f,
+                                          0.00f, 0.30f );
 
-        m_materials.m_Copper.m_Shininess = shininessfactor * 128.0f;
-        m_materials.m_Copper.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
+    m_materials.m_Copper.m_Shininess = shininessfactor * 128.0f;
+    m_materials.m_Copper.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
 
 
-        // Non plated copper (raw copper)
-        m_materials.m_NonPlatedCopper.m_Ambient = SFVEC3F( 0.191f, 0.073f, 0.022f );
-        m_materials.m_NonPlatedCopper.m_Diffuse = SFVEC3F( 184.0f / 255.0f, 115.0f / 255.0f,
-                                                           50.0f / 255.0f );
-        m_materials.m_NonPlatedCopper.m_Specular = SFVEC3F( 0.256f, 0.137f, 0.086f );
-        m_materials.m_NonPlatedCopper.m_Shininess = 0.1f * 128.0f;
-        m_materials.m_NonPlatedCopper.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
+    // Non plated copper (raw copper)
+    m_materials.m_NonPlatedCopper.m_Ambient = SFVEC3F( 0.191f, 0.073f, 0.022f );
+    m_materials.m_NonPlatedCopper.m_Diffuse = SFVEC3F( 184.0f / 255.0f, 115.0f / 255.0f,
+                                                       50.0f / 255.0f );
+    m_materials.m_NonPlatedCopper.m_Specular = SFVEC3F( 0.256f, 0.137f, 0.086f );
+    m_materials.m_NonPlatedCopper.m_Shininess = 0.1f * 128.0f;
+    m_materials.m_NonPlatedCopper.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
 
-        // Paste material mixed with paste color
-        m_materials.m_Paste.m_Ambient = SFVEC3F( m_boardAdapter.m_SolderPasteColor.r,
-                                                 m_boardAdapter.m_SolderPasteColor.g,
-                                                 m_boardAdapter.m_SolderPasteColor.b );
+    // Paste material mixed with paste color
+    m_materials.m_Paste.m_Ambient = SFVEC3F( m_boardAdapter.m_SolderPasteColor.r,
+                                             m_boardAdapter.m_SolderPasteColor.g,
+                                             m_boardAdapter.m_SolderPasteColor.b );
 
-        m_materials.m_Paste.m_Specular = SFVEC3F( m_boardAdapter.m_SolderPasteColor.r *
-                                                  m_boardAdapter.m_SolderPasteColor.r,
-                                                  m_boardAdapter.m_SolderPasteColor.g *
-                                                  m_boardAdapter.m_SolderPasteColor.g,
-                                                  m_boardAdapter.m_SolderPasteColor.b *
-                                                  m_boardAdapter.m_SolderPasteColor.b );
+    m_materials.m_Paste.m_Specular = SFVEC3F( m_boardAdapter.m_SolderPasteColor.r *
+                                              m_boardAdapter.m_SolderPasteColor.r,
+                                              m_boardAdapter.m_SolderPasteColor.g *
+                                              m_boardAdapter.m_SolderPasteColor.g,
+                                              m_boardAdapter.m_SolderPasteColor.b *
+                                              m_boardAdapter.m_SolderPasteColor.b );
 
-        m_materials.m_Paste.m_Shininess = 0.1f * 128.0f;
-        m_materials.m_Paste.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
+    m_materials.m_Paste.m_Shininess = 0.1f * 128.0f;
+    m_materials.m_Paste.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
 
-        // Silk screen material mixed with silk screen color
-        m_materials.m_SilkSTop.m_Ambient = SFVEC3F( m_boardAdapter.m_SilkScreenColorTop.r,
-                                                    m_boardAdapter.m_SilkScreenColorTop.g,
-                                                    m_boardAdapter.m_SilkScreenColorTop.b );
+    // Silk screen material mixed with silk screen color
+    m_materials.m_SilkSTop.m_Ambient = SFVEC3F( m_boardAdapter.m_SilkScreenColorTop.r,
+                                                m_boardAdapter.m_SilkScreenColorTop.g,
+                                                m_boardAdapter.m_SilkScreenColorTop.b );
 
-        m_materials.m_SilkSTop.m_Specular = SFVEC3F(
-                m_boardAdapter.m_SilkScreenColorTop.r * m_boardAdapter.m_SilkScreenColorTop.r +
-                0.10f,
-                m_boardAdapter.m_SilkScreenColorTop.g * m_boardAdapter.m_SilkScreenColorTop.g +
-                0.10f,
-                m_boardAdapter.m_SilkScreenColorTop.b * m_boardAdapter.m_SilkScreenColorTop.b +
-                0.10f );
+    m_materials.m_SilkSTop.m_Specular = SFVEC3F(
+            m_boardAdapter.m_SilkScreenColorTop.r * m_boardAdapter.m_SilkScreenColorTop.r + 0.10f,
+            m_boardAdapter.m_SilkScreenColorTop.g * m_boardAdapter.m_SilkScreenColorTop.g + 0.10f,
+            m_boardAdapter.m_SilkScreenColorTop.b * m_boardAdapter.m_SilkScreenColorTop.b + 0.10f );
 
-        m_materials.m_SilkSTop.m_Shininess = 0.078125f * 128.0f;
-        m_materials.m_SilkSTop.m_Emissive  = SFVEC3F( 0.0f, 0.0f, 0.0f );
+    m_materials.m_SilkSTop.m_Shininess = 0.078125f * 128.0f;
+    m_materials.m_SilkSTop.m_Emissive  = SFVEC3F( 0.0f, 0.0f, 0.0f );
 
-        // Silk screen material mixed with silk screen color
-        m_materials.m_SilkSBot.m_Ambient = SFVEC3F( m_boardAdapter.m_SilkScreenColorBot.r,
-                                                    m_boardAdapter.m_SilkScreenColorBot.g,
-                                                    m_boardAdapter.m_SilkScreenColorBot.b );
+    // Silk screen material mixed with silk screen color
+    m_materials.m_SilkSBot.m_Ambient = SFVEC3F( m_boardAdapter.m_SilkScreenColorBot.r,
+                                                m_boardAdapter.m_SilkScreenColorBot.g,
+                                                m_boardAdapter.m_SilkScreenColorBot.b );
 
-        m_materials.m_SilkSBot.m_Specular = SFVEC3F(
-                m_boardAdapter.m_SilkScreenColorBot.r * m_boardAdapter.m_SilkScreenColorBot.r +
-                0.10f,
-                m_boardAdapter.m_SilkScreenColorBot.g * m_boardAdapter.m_SilkScreenColorBot.g +
-                0.10f,
-                m_boardAdapter.m_SilkScreenColorBot.b * m_boardAdapter.m_SilkScreenColorBot.b +
-                0.10f );
+    m_materials.m_SilkSBot.m_Specular = SFVEC3F(
+            m_boardAdapter.m_SilkScreenColorBot.r * m_boardAdapter.m_SilkScreenColorBot.r + 0.10f,
+            m_boardAdapter.m_SilkScreenColorBot.g * m_boardAdapter.m_SilkScreenColorBot.g + 0.10f,
+            m_boardAdapter.m_SilkScreenColorBot.b * m_boardAdapter.m_SilkScreenColorBot.b + 0.10f );
 
-        m_materials.m_SilkSBot.m_Shininess = 0.078125f * 128.0f;
-        m_materials.m_SilkSBot.m_Emissive  = SFVEC3F( 0.0f, 0.0f, 0.0f );
+    m_materials.m_SilkSBot.m_Shininess = 0.078125f * 128.0f;
+    m_materials.m_SilkSBot.m_Emissive  = SFVEC3F( 0.0f, 0.0f, 0.0f );
 
-        m_materials.m_SolderMask.m_Shininess    = 0.8f * 128.0f;
-        m_materials.m_SolderMask.m_Emissive     = SFVEC3F( 0.0f, 0.0f, 0.0f );
+    m_materials.m_SolderMask.m_Shininess    = 0.8f * 128.0f;
+    m_materials.m_SolderMask.m_Emissive     = SFVEC3F( 0.0f, 0.0f, 0.0f );
 
-        // Epoxy material
-        m_materials.m_EpoxyBoard.m_Ambient   = SFVEC3F( 117.0f / 255.0f, 97.0f / 255.0f,
-                                                         47.0f / 255.0f );
+    // Epoxy material
+    m_materials.m_EpoxyBoard.m_Ambient   = SFVEC3F( 117.0f / 255.0f, 97.0f / 255.0f,
+                                                     47.0f / 255.0f );
 
-        m_materials.m_EpoxyBoard.m_Specular  = SFVEC3F( 18.0f / 255.0f, 3.0f / 255.0f,
-                                                        20.0f / 255.0f );
+    m_materials.m_EpoxyBoard.m_Specular  = SFVEC3F( 18.0f / 255.0f, 3.0f / 255.0f,
+                                                    20.0f / 255.0f );
 
-        m_materials.m_EpoxyBoard.m_Shininess = 0.1f * 128.0f;
-        m_materials.m_EpoxyBoard.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
-    }
-    else    // Technical Mode
-    {
-        const SFVEC3F matAmbientColor  = SFVEC3F( 0.10f );
-        const SFVEC3F matSpecularColor = SFVEC3F( 0.10f );
-        const float matShininess = 0.1f * 128.0f;
-
-        // Copper material
-        m_materials.m_Copper.m_Ambient   = matAmbientColor;
-        m_materials.m_Copper.m_Specular  = matSpecularColor;
-        m_materials.m_Copper.m_Shininess = matShininess;
-        m_materials.m_Copper.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
-
-        // Paste material
-        m_materials.m_Paste.m_Ambient   = matAmbientColor;
-        m_materials.m_Paste.m_Specular  = matSpecularColor;
-        m_materials.m_Paste.m_Shininess = matShininess;
-        m_materials.m_Paste.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
-
-        // Silk screen material
-        m_materials.m_SilkSTop.m_Ambient   = matAmbientColor;
-        m_materials.m_SilkSTop.m_Specular  = matSpecularColor;
-        m_materials.m_SilkSTop.m_Shininess = matShininess;
-        m_materials.m_SilkSTop.m_Emissive  = SFVEC3F( 0.0f, 0.0f, 0.0f );
-
-        // Silk screen material
-        m_materials.m_SilkSBot.m_Ambient   = matAmbientColor;
-        m_materials.m_SilkSBot.m_Specular  = matSpecularColor;
-        m_materials.m_SilkSBot.m_Shininess = matShininess;
-        m_materials.m_SilkSBot.m_Emissive  = SFVEC3F( 0.0f, 0.0f, 0.0f );
-
-        // Solder mask material
-        m_materials.m_SolderMask.m_Ambient      = matAmbientColor;
-        m_materials.m_SolderMask.m_Specular     = matSpecularColor;
-        m_materials.m_SolderMask.m_Shininess    = matShininess;
-        m_materials.m_SolderMask.m_Emissive     = SFVEC3F( 0.0f, 0.0f, 0.0f );
-
-        // Epoxy material
-        m_materials.m_EpoxyBoard.m_Ambient   = matAmbientColor;
-        m_materials.m_EpoxyBoard.m_Specular  = matSpecularColor;
-        m_materials.m_EpoxyBoard.m_Shininess = matShininess;
-        m_materials.m_EpoxyBoard.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
-
-        // Gray material (used for example in technical vias and pad holes)
-        m_materials.m_GrayMaterial.m_Ambient    = SFVEC3F( 0.8f, 0.8f, 0.8f );
-        m_materials.m_GrayMaterial.m_Diffuse    = SFVEC3F( 0.3f, 0.3f, 0.3f );
-        m_materials.m_GrayMaterial.m_Specular   = SFVEC3F( 0.4f, 0.4f, 0.4f );
-        m_materials.m_GrayMaterial.m_Shininess  = 0.01f * 128.0f;
-        m_materials.m_GrayMaterial.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
-    }
+    m_materials.m_EpoxyBoard.m_Shininess = 0.1f * 128.0f;
+    m_materials.m_EpoxyBoard.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
 }
 
 
@@ -327,20 +269,18 @@ void RENDER_3D_OPENGL::setLayerMaterial( PCB_LAYER_ID aLayerID )
     case F_Mask:
     case B_Mask:
     {
-        const SFVEC4F layerColor = getLayerColor( aLayerID );
+        const SFVEC4F layerColor = aLayerID == F_Mask ? m_boardAdapter.m_SolderMaskColorTop
+                                                      : m_boardAdapter.m_SolderMaskColorBot;
 
         m_materials.m_SolderMask.m_Diffuse = layerColor;
 
         // Convert Opacity to Transparency
         m_materials.m_SolderMask.m_Transparency = 1.0f - layerColor.a;
 
-        if( m_boardAdapter.m_Cfg->m_Render.realistic )
-        {
-            m_materials.m_SolderMask.m_Ambient = m_materials.m_SolderMask.m_Diffuse * 0.3f;
+        m_materials.m_SolderMask.m_Ambient = m_materials.m_SolderMask.m_Diffuse * 0.3f;
 
-            m_materials.m_SolderMask.m_Specular =
-                    m_materials.m_SolderMask.m_Diffuse * m_materials.m_SolderMask.m_Diffuse;
-        }
+        m_materials.m_SolderMask.m_Specular = m_materials.m_SolderMask.m_Diffuse
+                                                * m_materials.m_SolderMask.m_Diffuse;
 
         OglSetMaterial( m_materials.m_SolderMask, 1.0f );
         break;
@@ -348,17 +288,17 @@ void RENDER_3D_OPENGL::setLayerMaterial( PCB_LAYER_ID aLayerID )
 
     case B_Paste:
     case F_Paste:
-        m_materials.m_Paste.m_Diffuse = getLayerColor( aLayerID );
+        m_materials.m_Paste.m_Diffuse = m_boardAdapter.m_SolderPasteColor;
         OglSetMaterial( m_materials.m_Paste, 1.0f );
         break;
 
     case B_SilkS:
-        m_materials.m_SilkSBot.m_Diffuse = getLayerColor( aLayerID );
+        m_materials.m_SilkSBot.m_Diffuse = m_boardAdapter.m_SilkScreenColorBot;
         OglSetMaterial( m_materials.m_SilkSBot, 1.0f );
         break;
 
     case F_SilkS:
-        m_materials.m_SilkSTop.m_Diffuse = getLayerColor( aLayerID );
+        m_materials.m_SilkSTop.m_Diffuse = m_boardAdapter.m_SilkScreenColorTop;
         OglSetMaterial( m_materials.m_SilkSTop, 1.0f );
         break;
 
@@ -374,7 +314,18 @@ void RENDER_3D_OPENGL::setLayerMaterial( PCB_LAYER_ID aLayerID )
     case F_CrtYd:
     case B_Fab:
     case F_Fab:
-        m_materials.m_Plastic.m_Diffuse = getLayerColor( aLayerID );
+        switch( aLayerID )
+        {
+        case Dwgs_User: m_materials.m_Plastic.m_Diffuse = m_boardAdapter.m_UserDrawingsColor; break;
+        case Cmts_User: m_materials.m_Plastic.m_Diffuse = m_boardAdapter.m_UserCommentsColor; break;
+        case Eco1_User: m_materials.m_Plastic.m_Diffuse = m_boardAdapter.m_ECO1Color;         break;
+        case Eco2_User: m_materials.m_Plastic.m_Diffuse = m_boardAdapter.m_ECO2Color;         break;
+        case Edge_Cuts: m_materials.m_Plastic.m_Diffuse = m_boardAdapter.m_UserDrawingsColor; break;
+        case Margin:    m_materials.m_Plastic.m_Diffuse = m_boardAdapter.m_UserDrawingsColor; break;
+        default:
+            m_materials.m_Plastic.m_Diffuse = m_boardAdapter.GetLayerColor( aLayerID );
+            break;
+        }
 
         m_materials.m_Plastic.m_Ambient = SFVEC3F( m_materials.m_Plastic.m_Diffuse.r * 0.05f,
                                                    m_materials.m_Plastic.m_Diffuse.g * 0.05f,
@@ -390,82 +341,14 @@ void RENDER_3D_OPENGL::setLayerMaterial( PCB_LAYER_ID aLayerID )
         break;
 
     default:
-        m_materials.m_Copper.m_Diffuse = getLayerColor( aLayerID );
+        m_materials.m_Copper.m_Diffuse = m_boardAdapter.m_CopperColor;
         OglSetMaterial( m_materials.m_Copper, 1.0f );
         break;
     }
 }
 
 
-SFVEC4F RENDER_3D_OPENGL::getLayerColor( PCB_LAYER_ID aLayerID )
-{
-    SFVEC4F layerColor = m_boardAdapter.GetLayerColor( aLayerID );
-
-    if( m_boardAdapter.m_Cfg->m_Render.realistic )
-    {
-        switch( aLayerID )
-        {
-        case B_Adhes:
-        case F_Adhes:
-            break;
-
-        case B_Mask:
-            layerColor = m_boardAdapter.m_SolderMaskColorBot;
-            break;
-        case F_Mask:
-            layerColor = m_boardAdapter.m_SolderMaskColorTop;
-            break;
-
-        case B_Paste:
-        case F_Paste:
-            layerColor = m_boardAdapter.m_SolderPasteColor;
-            break;
-
-        case B_SilkS:
-            layerColor = m_boardAdapter.m_SilkScreenColorBot;
-            break;
-        case F_SilkS:
-            layerColor = m_boardAdapter.m_SilkScreenColorTop;
-            break;
-
-        case Dwgs_User:
-            layerColor = m_boardAdapter.m_UserDrawingsColor;
-            break;
-        case Cmts_User:
-            layerColor = m_boardAdapter.m_UserCommentsColor;
-            break;
-        case Eco1_User:
-            layerColor = m_boardAdapter.m_ECO1Color;
-            break;
-        case Eco2_User:
-            layerColor = m_boardAdapter.m_ECO2Color;
-            break;
-
-        case Edge_Cuts:
-        case Margin:
-            layerColor = m_boardAdapter.m_UserDrawingsColor;
-            break;
-            break;
-
-        case B_CrtYd:
-        case F_CrtYd:
-            break;
-
-        case B_Fab:
-        case F_Fab:
-            break;
-
-        default:
-            layerColor = m_boardAdapter.m_CopperColor;
-            break;
-        }
-    }
-
-    return layerColor;
-}
-
-
-void init_lights( void )
+void init_lights()
 {
     // Setup light
     // https://www.opengl.org/sdk/docs/man2/xhtml/glLight.xml
@@ -660,15 +543,7 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
     bool drawMiddleSegments = !skipThickness;
 
-    if( m_boardAdapter.m_Cfg->m_Render.realistic )
-    {
-        // Draw vias and pad holes with copper material
-        setLayerMaterial( B_Cu );
-    }
-    else
-    {
-        OglSetMaterial( m_materials.m_GrayMaterial, 1.0f );
-    }
+    setLayerMaterial( B_Cu );
 
     if( !( skipRenderVias || skipRenderHoles ) && m_vias )
         m_vias->DrawAll();
@@ -703,15 +578,10 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
         if( ( layer_id >= F_Cu ) && ( layer_id <= B_Cu ) )
         {
-            if( m_boardAdapter.m_Cfg->m_Render.renderPlatedPadsAsPlated
-                    && m_boardAdapter.m_Cfg->m_Render.realistic )
-            {
+            if( m_boardAdapter.m_Cfg->m_Render.renderPlatedPadsAsPlated )
                 setCopperMaterial();
-            }
             else
-            {
                 setLayerMaterial( layer_id );
-            }
 
             if( skipRenderHoles )
             {
@@ -817,7 +687,6 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
             OPENGL_RENDER_LIST* throughHolesOuter = m_outerThroughHoles;
 
             if( m_boardAdapter.m_Cfg->m_Render.clip_silk_on_via_annulus
-                    && m_boardAdapter.m_Cfg->m_Render.realistic
                     && ( layer_id == B_SilkS || layer_id == F_SilkS ) )
             {
                 throughHolesOuter = m_outerThroughHoleRings;
@@ -850,7 +719,6 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
                 }
             }
             else if( m_boardAdapter.m_Cfg->m_Render.subtract_mask_from_silk
-                  && m_boardAdapter.m_Cfg->m_Render.realistic
                   && (   ( layer_id == B_SilkS && m_layers.find( B_Mask ) != m_layers.end() )
                       || ( layer_id == F_SilkS && m_layers.find( F_Mask ) != m_layers.end() ) ) )
             {
@@ -865,13 +733,11 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
             else if( throughHolesOuter )
             {
                 pLayerDispList->DrawAllCameraCulledSubtractLayer( drawMiddleSegments, nullptr,
-                                                                  throughHolesOuter,
-                                                                  anti_board );
+                                                                  throughHolesOuter, anti_board );
             }
             else
             {
-                pLayerDispList->DrawAllCameraCulledSubtractLayer( drawMiddleSegments,
-                                                                  anti_board );
+                pLayerDispList->DrawAllCameraCulledSubtractLayer( drawMiddleSegments, anti_board );
             }
         }
 
@@ -1348,9 +1214,7 @@ void RENDER_3D_OPENGL::renderOpaqueModels( const glm::mat4 &aCameraViewMatrix )
             MODEL_3D::BeginDrawMulti( false );
 
             for( const MODELTORENDER& mtr : renderList )
-            {
                 renderModel( aCameraViewMatrix, mtr, selColor, nullptr );
-            }
 
             MODEL_3D::EndDrawMulti();
         }
@@ -1364,9 +1228,7 @@ void RENDER_3D_OPENGL::renderOpaqueModels( const glm::mat4 &aCameraViewMatrix )
         MODEL_3D::BeginDrawMulti( true );
 
         for( const MODELTORENDER& mtr : renderList )
-        {
             renderModel( aCameraViewMatrix, mtr, selColor, nullptr );
-        }
 
         MODEL_3D::EndDrawMulti();
     }
@@ -1413,10 +1275,11 @@ void RENDER_3D_OPENGL::renderTransparentModels( const glm::mat4 &aCameraViewMatr
 
     // Sort from back to front
     std::sort( transparentModelList.begin(), transparentModelList.end(),
-        [&]( std::pair<const MODELTORENDER *, float>& a,
-             std::pair<const MODELTORENDER *, float>& b ) {
-            return a.second > b.second;
-        } );
+            [&]( std::pair<const MODELTORENDER *, float>& a,
+                 std::pair<const MODELTORENDER *, float>& b )
+            {
+                return a.second > b.second;
+            } );
 
     // Start rendering calls
     glPushMatrix();
@@ -1472,12 +1335,9 @@ void RENDER_3D_OPENGL::renderModel( const glm::mat4 &aCameraViewMatrix,
 
     glLoadMatrixf( glm::value_ptr( modelviewMatrix ) );
 
-    aModelToRender.m_model->Draw( aModelToRender.m_isTransparent,
-                                  aModelToRender.m_opacity,
-                                  aModelToRender.m_isSelected,
-                                  aSelColor,
-                                  &aModelToRender.m_modelWorldMat,
-                                  aCameraWorldPos );
+    aModelToRender.m_model->Draw( aModelToRender.m_isTransparent, aModelToRender.m_opacity,
+                                  aModelToRender.m_isSelected, aSelColor,
+                                  &aModelToRender.m_modelWorldMat, aCameraWorldPos );
 
     if( m_boardAdapter.m_Cfg->m_Render.opengl_show_model_bbox )
     {
@@ -1500,9 +1360,7 @@ void RENDER_3D_OPENGL::renderModel( const glm::mat4 &aCameraViewMatrix,
         glEnable( GL_LIGHTING );
         
         if( !wasBlendEnabled )
-        {
             glDisable( GL_BLEND );
-        }
     }
 }
 
@@ -1541,21 +1399,13 @@ void RENDER_3D_OPENGL::generate3dGrid( GRID3D_TYPE aGridType )
 
     switch( aGridType )
     {
+    case GRID3D_TYPE::GRID_1MM:   griSizeMM = 1.0;  break;
+    case GRID3D_TYPE::GRID_2P5MM: griSizeMM = 2.5;  break;
+    case GRID3D_TYPE::GRID_5MM:   griSizeMM = 5.0;  break;
+    case GRID3D_TYPE::GRID_10MM:  griSizeMM = 10.0; break;
+
     default:
-    case GRID3D_TYPE::NONE:
-        return;
-    case GRID3D_TYPE::GRID_1MM:
-        griSizeMM = 1.0;
-        break;
-    case GRID3D_TYPE::GRID_2P5MM:
-        griSizeMM = 2.5;
-        break;
-    case GRID3D_TYPE::GRID_5MM:
-        griSizeMM = 5.0;
-        break;
-    case GRID3D_TYPE::GRID_10MM:
-        griSizeMM = 10.0;
-        break;
+    case GRID3D_TYPE::NONE:       return;
     }
 
     glNormal3f( 0.0, 0.0, 1.0 );

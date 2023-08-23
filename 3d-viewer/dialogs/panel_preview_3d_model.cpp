@@ -237,7 +237,6 @@ void PANEL_PREVIEW_3D_MODEL::loadSettings()
         cfg->m_Render.show_solderpaste = m_bodyStyleShowAll;
         cfg->m_Render.show_zones = m_bodyStyleShowAll;
         cfg->m_Render.show_board_body = m_bodyStyleShowAll;
-        cfg->m_Render.realistic = m_bodyStyleShowAll;
     }
 }
 
@@ -404,7 +403,6 @@ void PANEL_PREVIEW_3D_MODEL::setBodyStyleView( wxCommandEvent& event )
     cfg->m_Render.show_solderpaste = m_bodyStyleShowAll;
     cfg->m_Render.show_zones = m_bodyStyleShowAll;
     cfg->m_Render.show_board_body = m_bodyStyleShowAll;
-    cfg->m_Render.realistic = m_bodyStyleShowAll;
 
     m_previewPane->ReloadRequest();
     m_previewPane->Refresh();

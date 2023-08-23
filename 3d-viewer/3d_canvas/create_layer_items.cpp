@@ -215,7 +215,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         }
     }
 
-    if( m_Cfg->m_Render.renderPlatedPadsAsPlated && m_Cfg->m_Render.realistic )
+    if( m_Cfg->m_Render.renderPlatedPadsAsPlated )
     {
         m_frontPlatedPadPolys = new SHAPE_POLY_SET;
         m_backPlatedPadPolys = new SHAPE_POLY_SET;
@@ -314,9 +314,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                                                                    hole_inner_radius + thickness,
                                                                    *track ) );
 
-                    if( m_Cfg->m_Render.clip_silk_on_via_annulus
-                            && m_Cfg->m_Render.realistic
-                            && ring_radius > 0.0 )
+                    if( m_Cfg->m_Render.clip_silk_on_via_annulus && ring_radius > 0.0 )
                     {
                         m_throughHoleAnnularRings.Add( new FILLED_CIRCLE_2D( via_center,
                                                                              ring_radius,
@@ -406,7 +404,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     TransformCircleToPolygon( m_throughHoleViaOdPolys, via->GetStart(),
                                               hole_outer_radius, maxError, ERROR_INSIDE );
 
-                    if( m_Cfg->m_Render.clip_silk_on_via_annulus && m_Cfg->m_Render.realistic )
+                    if( m_Cfg->m_Render.clip_silk_on_via_annulus )
                     {
                         TransformCircleToPolygon( m_throughHoleAnnularRingPolys, via->GetStart(),
                                                   hole_outer_ring_radius, maxError, ERROR_INSIDE );
@@ -468,7 +466,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
             m_throughHoleOds.Add( createPadWithDrill( pad, inflate ) );
 
-            if( m_Cfg->m_Render.clip_silk_on_via_annulus && m_Cfg->m_Render.realistic )
+            if( m_Cfg->m_Render.clip_silk_on_via_annulus )
                 m_throughHoleAnnularRings.Add( createPadWithDrill( pad, inflate ) );
 
             m_throughHoleIds.Add( createPadWithDrill( pad, 0 ) );
@@ -493,7 +491,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
             if( pad->GetAttribute () != PAD_ATTRIB::NPTH )
             {
-                if( m_Cfg->m_Render.clip_silk_on_via_annulus && m_Cfg->m_Render.realistic )
+                if( m_Cfg->m_Render.clip_silk_on_via_annulus )
                 {
                     pad->TransformHoleToPolygon( m_throughHoleAnnularRingPolys, inflate, maxError,
                                                  ERROR_INSIDE );
@@ -505,7 +503,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             else
             {
                 // If not plated, no copper.
-                if( m_Cfg->m_Render.clip_silk_on_via_annulus && m_Cfg->m_Render.realistic )
+                if( m_Cfg->m_Render.clip_silk_on_via_annulus )
                 {
                     pad->TransformHoleToPolygon( m_throughHoleAnnularRingPolys, 0, maxError,
                                                  ERROR_INSIDE );
@@ -517,9 +515,6 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         }
     }
 
-    const bool renderPlatedPadsAsPlated = m_Cfg->m_Render.renderPlatedPadsAsPlated
-                                                && m_Cfg->m_Render.realistic;
-
     // Add footprints PADs objects to containers
     for( PCB_LAYER_ID layer : layer_ids )
     {
@@ -530,14 +525,15 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         // ADD PADS
         for( FOOTPRINT* footprint : m_board->Footprints() )
         {
-            addPads( footprint, layerContainer, layer, renderPlatedPadsAsPlated, false );
+            addPads( footprint, layerContainer, layer, m_Cfg->m_Render.renderPlatedPadsAsPlated,
+                     false );
 
             // Micro-wave footprints may have items on copper layers
             addFootprintShapes( footprint, layerContainer, layer, visibilityFlags );
         }
     }
 
-    if( renderPlatedPadsAsPlated )
+    if( m_Cfg->m_Render.renderPlatedPadsAsPlated )
     {
         // ADD PLATED PADS
         for( FOOTPRINT* footprint : m_board->Footprints() )
@@ -565,13 +561,14 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 // Note: NPTH pads are not drawn on copper layers when the pad has same shape as
                 // its hole
                 footprint->TransformPadsToPolySet( *layerPoly, layer, 0, maxError, ERROR_INSIDE,
-                                                   true, renderPlatedPadsAsPlated, false );
+                                                   true, m_Cfg->m_Render.renderPlatedPadsAsPlated,
+                                                   false );
 
                 transformFPShapesToPolySet( footprint, layer, *layerPoly );
             }
         }
 
-        if( renderPlatedPadsAsPlated )
+        if( m_Cfg->m_Render.renderPlatedPadsAsPlated )
         {
             // ADD PLATED PADS contours
             for( FOOTPRINT* footprint : m_board->Footprints() )
@@ -749,7 +746,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
     if( m_Cfg->m_Render.opengl_copper_thickness && m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL )
     {
-        if( renderPlatedPadsAsPlated )
+        if( m_Cfg->m_Render.renderPlatedPadsAsPlated )
         {
             if( m_frontPlatedPadPolys && ( m_layers_poly.find( F_Cu ) != m_layers_poly.end() ) )
             {
@@ -777,7 +774,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         std::vector<PCB_LAYER_ID> &selected_layer_id = layer_ids;
         std::vector<PCB_LAYER_ID> layer_id_without_F_and_B;
 
-        if( renderPlatedPadsAsPlated )
+        if( m_Cfg->m_Render.renderPlatedPadsAsPlated )
         {
             layer_id_without_F_and_B.clear();
             layer_id_without_F_and_B.reserve( layer_ids.size() );
@@ -887,9 +884,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             Dwgs_User,
             Cmts_User,
             Eco1_User,
-            Eco2_User,
-            Edge_Cuts,
-            Margin
+            Eco2_User
         };
 
     for( LSEQ seq = LSET::AllNonCuMask().Seq( techLayerList, arrayDim( techLayerList ) );

@@ -547,16 +547,13 @@ void EDA_3D_CANVAS::DoRePaint()
 
     GL_CONTEXT_MANAGER::Get().UnlockCtx( m_glRC );
 
-    if( !activityReporter.HasMessage() )
+    if( m_mouse_was_moved || m_camera_is_moving )
     {
-        if( m_mouse_was_moved || m_camera_is_moving )
-        {
-            // Calculation time in milliseconds
-            const double calculation_time = (double)( GetRunningMicroSecs() - strtime) / 1e3;
+        // Calculation time in milliseconds
+        const double calculation_time = (double)( GetRunningMicroSecs() - strtime) / 1e3;
 
-            activityReporter.Report( wxString::Format( _( "Last render time %.0f ms" ),
-                                     calculation_time ) );
-        }
+        activityReporter.Report( wxString::Format( _( "Last render time %.0f ms" ),
+                                 calculation_time ) );
     }
 
     // This will reset the flag of camera parameters changed

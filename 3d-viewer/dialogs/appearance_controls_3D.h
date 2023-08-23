@@ -27,6 +27,7 @@
 #include <layer_ids.h>
 #include <3d_canvas/board_adapter.h>
 #include <dialogs/appearance_controls_3D_base.h>
+#include <tool/tool_action.h>
 
 
 class BITMAP_TOGGLE;
@@ -60,6 +61,17 @@ public:
                 id( aId ),
                 label( aLabel ),
                 tooltip( aTooltip ),
+                visible( true ),
+                spacer( false ),
+                ctl_visibility( nullptr ),
+                ctl_color( nullptr )
+        {
+        }
+
+        APPEARANCE_SETTING_3D( const wxString& aLabel, int aId, const TOOL_ACTION& aAction ) :
+                id( aId ),
+                label( aLabel ),
+                tooltip( aAction.GetTooltip( true ) ),
                 visible( true ),
                 spacer( false ),
                 ctl_visibility( nullptr ),

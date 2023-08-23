@@ -36,11 +36,12 @@
 #include <widgets/wx_menubar.h>
 
 
-void EDA_3D_VIEWER_FRAME::CreateMenuBar()
+void EDA_3D_VIEWER_FRAME::doReCreateMenuBar()
 {
     wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER_FRAME::CreateMenuBar" ) );
 
     COMMON_CONTROL* tool    = m_toolManager->GetTool<COMMON_CONTROL>();
+    wxMenuBar*      oldMenuBar = GetMenuBar();
     WX_MENUBAR*     menuBar = new WX_MENUBAR();
 
 
@@ -82,6 +83,20 @@ void EDA_3D_VIEWER_FRAME::CreateMenuBar()
     viewMenu->Add( ACTIONS::zoomFitScreen );
     viewMenu->Add( ACTIONS::zoomRedraw );
 
+    // Grid submenu
+    ACTION_MENU* gridSubmenu = new ACTION_MENU( false, tool );
+    gridSubmenu->SetTitle( _( "3D Grid" ) );
+    gridSubmenu->SetIcon( BITMAPS::grid );
+
+    gridSubmenu->Add( EDA_3D_ACTIONS::noGrid,        ACTION_MENU::CHECK);
+    gridSubmenu->Add( EDA_3D_ACTIONS::show10mmGrid,  ACTION_MENU::CHECK);
+    gridSubmenu->Add( EDA_3D_ACTIONS::show5mmGrid,   ACTION_MENU::CHECK);
+    gridSubmenu->Add( EDA_3D_ACTIONS::show2_5mmGrid, ACTION_MENU::CHECK);
+    gridSubmenu->Add( EDA_3D_ACTIONS::show1mmGrid,   ACTION_MENU::CHECK);
+
+    viewMenu->AppendSeparator();
+    viewMenu->Add( gridSubmenu );
+
     viewMenu->AppendSeparator();
     viewMenu->Add( EDA_3D_ACTIONS::rotateXCW );
     viewMenu->Add( EDA_3D_ACTIONS::rotateXCCW );
@@ -118,30 +133,7 @@ void EDA_3D_VIEWER_FRAME::CreateMenuBar()
     prefsMenu->Add( _( "Reset to Default Settings" ), ID_MENU3D_RESET_DEFAULTS, BITMAPS::tools );
 
     prefsMenu->AppendSeparator();
-
-    prefsMenu->Add( EDA_3D_ACTIONS::showTHT,          ACTION_MENU::CHECK );
-    prefsMenu->Add( EDA_3D_ACTIONS::showSMD,          ACTION_MENU::CHECK );
-    prefsMenu->Add( EDA_3D_ACTIONS::showVirtual,      ACTION_MENU::CHECK );
-    prefsMenu->Add( EDA_3D_ACTIONS::showNotInPosFile, ACTION_MENU::CHECK );
-    prefsMenu->Add( EDA_3D_ACTIONS::showDNP,          ACTION_MENU::CHECK );
-
-    prefsMenu->AppendSeparator();
-
-    prefsMenu->Add( EDA_3D_ACTIONS::showAxis,         ACTION_MENU::CHECK );
-    prefsMenu->Add( EDA_3D_ACTIONS::showBBoxes,       ACTION_MENU::CHECK );
-
-    // Grid submenu
-    ACTION_MENU* gridSubmenu = new ACTION_MENU( false, tool );
-    gridSubmenu->SetTitle( _( "3D Grid" ) );
-    gridSubmenu->SetIcon( BITMAPS::grid );
-
-    gridSubmenu->Add( EDA_3D_ACTIONS::noGrid,        ACTION_MENU::CHECK);
-    gridSubmenu->Add( EDA_3D_ACTIONS::show10mmGrid,  ACTION_MENU::CHECK);
-    gridSubmenu->Add( EDA_3D_ACTIONS::show5mmGrid,   ACTION_MENU::CHECK);
-    gridSubmenu->Add( EDA_3D_ACTIONS::show2_5mmGrid, ACTION_MENU::CHECK);
-    gridSubmenu->Add( EDA_3D_ACTIONS::show1mmGrid,   ACTION_MENU::CHECK);
-
-    prefsMenu->Add( gridSubmenu );
+    AddMenuLanguageList( prefsMenu, tool );
 
     //-- Menubar -------------------------------------------------------------
     //
@@ -152,4 +144,5 @@ void EDA_3D_VIEWER_FRAME::CreateMenuBar()
     AddStandardHelpMenu( menuBar );
 
     SetMenuBar( menuBar );
+    delete oldMenuBar;
 }

@@ -146,7 +146,7 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
     // Run the viewer control tool, it is supposed to be always active
     m_toolManager->InvokeTool( "3DViewer.Control" );
 
-    CreateMenuBar();
+    ReCreateMenuBar();
     ReCreateMainToolbar();
 
     m_infoBar = new WX_INFOBAR( this, &m_auimgr );
@@ -581,24 +581,19 @@ void EDA_3D_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE *aCfg )
 
         if( cfg->m_CurrentPreset == LEGACY_PRESET_FLAG )
         {
-            COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
+            wxString legacyColorsPresetName = _( "legacy colors" );
 
-            if( colors->GetUseBoardStackupColors() )
+            if( !cfg->FindPreset( legacyColorsPresetName ) )
+            {
+                cfg->m_LayerPresets.emplace_back( legacyColorsPresetName,
+                                                  GetAdapter().GetVisibleLayers(),
+                                                  GetAdapter().GetLayerColors() );
+            }
+
+            if( Pgm().GetSettingsManager().GetColorSettings()->GetUseBoardStackupColors() )
                 cfg->m_CurrentPreset = FOLLOW_PCB;
             else
-                cfg->m_CurrentPreset = wxEmptyString;
-
-            if( cfg->m_Render.realistic )
-            {
-                // These settings are no longer dependent on realistic mode in 8.0 (you can use
-                // view presets to design whatever combinations you want), but we should at least
-                // default them to the same values as 7.0.
-                cfg->m_Render.show_comments = false;
-                cfg->m_Render.show_drawings = false;
-                cfg->m_Render.show_eco1 = false;
-                cfg->m_Render.show_eco2 = false;
-                cfg->m_Render.show_board_body = false;
-            }
+                cfg->m_CurrentPreset = legacyColorsPresetName;
         }
 
         m_boardAdapter.InitSettings( nullptr, nullptr );
@@ -652,6 +647,26 @@ void EDA_3D_VIEWER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTex
     m_appearancePanel->CommonSettingsChanged();
 
     NewDisplay( true );
+}
+
+
+void EDA_3D_VIEWER_FRAME::ShowChangedLanguage()
+{
+    EDA_BASE_FRAME::ShowChangedLanguage();
+
+    SetTitle( _( "3D Viewer" ) );
+    ReCreateMainToolbar();
+
+    if( m_appearancePanel )
+    {
+        wxAuiPaneInfo& lm_pane_info = m_auimgr.GetPane( m_appearancePanel );
+        lm_pane_info.Caption( _( "Appearance" ) );
+
+        m_appearancePanel->OnLanguageChanged();
+    }
+
+    SetStatusText( wxEmptyString, ACTIVITY );
+    SetStatusText( wxEmptyString, HOVERED_ITEM );
 }
 
 

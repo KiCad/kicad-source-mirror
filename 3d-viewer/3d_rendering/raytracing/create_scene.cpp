@@ -275,7 +275,6 @@ void RENDER_3D_RAYTRACE::createItemsFromContainer( const BVH_CONTAINER_2D* aCont
             // rather than the at the outer edge of the copper plating.
             const BVH_CONTAINER_2D& throughHoleOuter =
                     m_boardAdapter.m_Cfg->m_Render.clip_silk_on_via_annulus
-                        && m_boardAdapter.m_Cfg->m_Render.realistic
                         && ( aLayer_id == B_SilkS || aLayer_id == F_SilkS ) ?
                                                     m_boardAdapter.GetThroughHoleAnnularRings() :
                                                     m_boardAdapter.GetThroughHoleOds();
@@ -305,7 +304,6 @@ void RENDER_3D_RAYTRACE::createItemsFromContainer( const BVH_CONTAINER_2D* aCont
         const MAP_CONTAINER_2D_BASE& mapLayers = m_boardAdapter.GetLayerMap();
 
         if( m_boardAdapter.m_Cfg->m_Render.subtract_mask_from_silk
-            && m_boardAdapter.m_Cfg->m_Render.realistic
             && (    ( aLayer_id == B_SilkS && mapLayers.find( B_Mask ) != mapLayers.end() )
                  || ( aLayer_id == F_SilkS && mapLayers.find( F_Mask ) != mapLayers.end() ) ) )
         {
@@ -587,32 +585,17 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
         case B_Paste:
         case F_Paste:
             materialLayer = &m_materials.m_Paste;
-
-            if( m_boardAdapter.m_Cfg->m_Render.realistic )
-                layerColor = m_boardAdapter.m_SolderPasteColor;
-            else
-                layerColor = m_boardAdapter.GetLayerColor( layer_id );
-
+            layerColor = m_boardAdapter.m_SolderPasteColor;
             break;
 
         case B_SilkS:
             materialLayer = &m_materials.m_SilkS;
-
-            if( m_boardAdapter.m_Cfg->m_Render.realistic )
-                layerColor = m_boardAdapter.m_SilkScreenColorBot;
-            else
-                layerColor = m_boardAdapter.GetLayerColor( layer_id );
-
+            layerColor = m_boardAdapter.m_SilkScreenColorBot;
             break;
 
         case F_SilkS:
             materialLayer = &m_materials.m_SilkS;
-
-            if( m_boardAdapter.m_Cfg->m_Render.realistic )
-                layerColor = m_boardAdapter.m_SilkScreenColorTop;
-            else
-                layerColor = m_boardAdapter.GetLayerColor( layer_id );
-
+            layerColor = m_boardAdapter.m_SilkScreenColorTop;
             break;
 
         case Dwgs_User:
@@ -631,11 +614,6 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
             layerColor = m_boardAdapter.m_ECO2Color;
             break;
 
-        case Edge_Cuts:
-        case Margin:
-            layerColor = m_boardAdapter.m_UserDrawingsColor;
-            break;
-
         case B_CrtYd:
         case F_CrtYd:
             break;
@@ -645,22 +623,15 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
             break;
 
         default:
-            if( m_boardAdapter.m_Cfg->m_Render.realistic )
+            if( m_boardAdapter.m_Cfg->m_Render.renderPlatedPadsAsPlated )
             {
-                if( m_boardAdapter.m_Cfg->m_Render.renderPlatedPadsAsPlated )
-                {
-                    layerColor = SFVEC3F( 184.0f / 255.0f, 115.0f / 255.0f, 50.0f / 255.0f );
-                    materialLayer = &m_materials.m_NonPlatedCopper;
-                }
-                else
-                {
-                    layerColor = m_boardAdapter.m_CopperColor;
-                    materialLayer = &m_materials.m_Copper;
-                }
+                layerColor = SFVEC3F( 184.0f / 255.0f, 115.0f / 255.0f, 50.0f / 255.0f );
+                materialLayer = &m_materials.m_NonPlatedCopper;
             }
             else
             {
-                layerColor = m_boardAdapter.GetLayerColor( layer_id );
+                layerColor = m_boardAdapter.m_CopperColor;
+                materialLayer = &m_materials.m_Copper;
             }
 
             break;
@@ -670,8 +641,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
     } // for each layer on map
 
     // Create plated copper
-    if( m_boardAdapter.m_Cfg->m_Render.renderPlatedPadsAsPlated
-            && m_boardAdapter.m_Cfg->m_Render.realistic )
+    if( m_boardAdapter.m_Cfg->m_Render.renderPlatedPadsAsPlated )
     {
         createItemsFromContainer( m_boardAdapter.GetPlatedPadsFront(), F_Cu, &m_materials.m_Copper,
                                   m_boardAdapter.m_CopperColor,
@@ -724,17 +694,10 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
 
                 SFVEC3F layerColor;
 
-                if( m_boardAdapter.m_Cfg->m_Render.realistic )
-                {
-                    if( layer_id == B_Mask )
-                        layerColor = m_boardAdapter.m_SolderMaskColorBot;
-                    else
-                        layerColor = m_boardAdapter.m_SolderMaskColorTop;
-                }
+                if( layer_id == B_Mask )
+                    layerColor = m_boardAdapter.m_SolderMaskColorBot;
                 else
-                {
-                    layerColor = m_boardAdapter.GetLayerColor( layer_id );
-                }
+                    layerColor = m_boardAdapter.m_SolderMaskColorTop;
 
                 const float zLayerMin = m_boardAdapter.GetLayerBottomZPos( layer_id );
                 const float zLayerMax = m_boardAdapter.GetLayerTopZPos( layer_id );
@@ -1029,15 +992,7 @@ void RENDER_3D_RAYTRACE::insertHole( const PCB_VIA* aVia )
     LAYER_ITEM* objPtr = new LAYER_ITEM( ring, topZ, botZ );
 
     objPtr->SetMaterial( &m_materials.m_Copper );
-
-    if( m_boardAdapter.m_Cfg->m_Render.realistic )
-        objPtr->SetColor( ConvertSRGBToLinear( m_boardAdapter.m_CopperColor ) );
-    else if( aVia->GetViaType() == VIATYPE::MICROVIA )
-        objPtr->SetColor( ConvertSRGBToLinear( m_boardAdapter.GetItemColor( LAYER_VIA_MICROVIA ) ) );
-    else if( aVia->GetViaType() == VIATYPE::BLIND_BURIED )
-        objPtr->SetColor( ConvertSRGBToLinear( m_boardAdapter.GetItemColor( LAYER_VIA_BBLIND ) ) );
-    else
-        objPtr->SetColor( ConvertSRGBToLinear( m_boardAdapter.GetItemColor( LAYER_VIAS ) ) );
+    objPtr->SetColor( ConvertSRGBToLinear( m_boardAdapter.m_CopperColor ) );
 
     m_objectContainer.Add( objPtr );
 }
@@ -1047,13 +1002,7 @@ void RENDER_3D_RAYTRACE::insertHole( const PAD* aPad )
 {
     const OBJECT_2D* object2d_A = nullptr;
 
-    SFVEC3F objColor;
-
-    if( m_boardAdapter.m_Cfg->m_Render.realistic )
-        objColor = m_boardAdapter.m_CopperColor;
-    else
-        objColor = m_boardAdapter.GetItemColor( LAYER_PADS_TH );
-
+    SFVEC3F        objColor = m_boardAdapter.m_CopperColor;
     const VECTOR2I drillsize = aPad->GetDrillSize();
     const bool     hasHole = drillsize.x && drillsize.y;
 

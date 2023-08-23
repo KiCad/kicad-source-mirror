@@ -98,8 +98,6 @@ set(3D-VIEWER_SRCS
     dialogs/dialog_select_3d_model.cpp
     dialogs/panel_preview_3d_model_base.cpp
     dialogs/panel_preview_3d_model.cpp
-    dialogs/panel_3D_colors.cpp
-    dialogs/panel_3D_colors_base.cpp
     dialogs/panel_3D_display_options.cpp
     dialogs/panel_3D_display_options_base.cpp
     dialogs/panel_3D_opengl_options.cpp

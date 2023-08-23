@@ -189,7 +189,6 @@ private:
     void unsetDepthOffset();
 
     void setLayerMaterial( PCB_LAYER_ID aLayerID );
-    SFVEC4F getLayerColor( PCB_LAYER_ID aLayerID );
 
     bool initializeOpenGL();
     OPENGL_RENDER_LIST* createBoard( const SHAPE_POLY_SET& aBoardPoly,

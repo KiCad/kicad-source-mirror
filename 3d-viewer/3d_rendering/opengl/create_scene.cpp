@@ -24,7 +24,6 @@
  */
 
 #include "render_3d_opengl.h"
-#include "opengl_utils.h"
 #include <board.h>
 #include <footprint.h>
 #include "../../3d_math.h"
@@ -33,7 +32,6 @@
 #include <project.h>
 #include <profile.h>        // To use GetRunningMicroSecs or another profiling utility
 #include <fp_lib_table.h>
-#include <eda_3d_canvas.h>
 #include <eda_3d_viewer_frame.h>
 
 
@@ -468,20 +466,17 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
     // Create Board
     m_board = createBoard( m_boardAdapter.GetBoardPoly(), &m_boardAdapter.GetThroughHoleIds() );
 
-    if( m_boardAdapter.m_Cfg->m_Render.realistic )
-    {
-        m_antiBoardPolys.RemoveAllContours();
-        m_antiBoardPolys.NewOutline();
-        m_antiBoardPolys.Append( VECTOR2I( -INT_MAX/2, -INT_MAX/2 ) );
-        m_antiBoardPolys.Append( VECTOR2I(  INT_MAX/2, -INT_MAX/2 ) );
-        m_antiBoardPolys.Append( VECTOR2I(  INT_MAX/2,  INT_MAX/2 ) );
-        m_antiBoardPolys.Append( VECTOR2I( -INT_MAX/2,  INT_MAX/2 ) );
-        m_antiBoardPolys.Outline( 0 ).SetClosed( true );
+    m_antiBoardPolys.RemoveAllContours();
+    m_antiBoardPolys.NewOutline();
+    m_antiBoardPolys.Append( VECTOR2I( -INT_MAX/2, -INT_MAX/2 ) );
+    m_antiBoardPolys.Append( VECTOR2I(  INT_MAX/2, -INT_MAX/2 ) );
+    m_antiBoardPolys.Append( VECTOR2I(  INT_MAX/2,  INT_MAX/2 ) );
+    m_antiBoardPolys.Append( VECTOR2I( -INT_MAX/2,  INT_MAX/2 ) );
+    m_antiBoardPolys.Outline( 0 ).SetClosed( true );
 
-        m_antiBoardPolys.BooleanSubtract( m_boardAdapter.GetBoardPoly(),
-                                          SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-        m_antiBoard = createBoard( m_antiBoardPolys );
-    }
+    m_antiBoardPolys.BooleanSubtract( m_boardAdapter.GetBoardPoly(),
+                                      SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    m_antiBoard = createBoard( m_antiBoardPolys );
 
     SHAPE_POLY_SET board_poly_with_holes = m_boardAdapter.GetBoardPoly().CloneDropTriangulation();
     board_poly_with_holes.BooleanSubtract( m_boardAdapter.GetThroughHoleOdPolys(),
@@ -500,11 +495,8 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
 
     SHAPE_POLY_SET outerPolyTHT = m_boardAdapter.GetThroughHoleOdPolys().CloneDropTriangulation();
 
-    if( m_boardAdapter.m_Cfg->m_Render.realistic )
-    {
-        outerPolyTHT.BooleanIntersection( m_boardAdapter.GetBoardPoly(),
-                                          SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-    }
+    outerPolyTHT.BooleanIntersection( m_boardAdapter.GetBoardPoly(),
+                                      SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
     m_outerThroughHoles = generateHoles( m_boardAdapter.GetThroughHoleOds().GetList(),
                                          outerPolyTHT, 1.0f, 0.0f, false,
@@ -514,8 +506,7 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
             m_boardAdapter.GetThroughHoleViaOds().GetList(),
             m_boardAdapter.GetThroughHoleViaOdPolys(), 1.0f, 0.0f, false );
 
-    if( m_boardAdapter.m_Cfg->m_Render.clip_silk_on_via_annulus &&
-        m_boardAdapter.m_Cfg->m_Render.realistic )
+    if( m_boardAdapter.m_Cfg->m_Render.clip_silk_on_via_annulus )
     {
         m_outerThroughHoleRings = generateHoles(
                 m_boardAdapter.GetThroughHoleAnnularRings().GetList(),
@@ -593,31 +584,28 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
         {
             polyListSubtracted = *map_poly.at( layer_id );;
 
-            if( m_boardAdapter.m_Cfg->m_Render.realistic )
-            {
-                polyListSubtracted.BooleanIntersection( m_boardAdapter.GetBoardPoly(),
-                                                        SHAPE_POLY_SET::PM_FAST );
+            polyListSubtracted.BooleanIntersection( m_boardAdapter.GetBoardPoly(),
+                                                    SHAPE_POLY_SET::PM_FAST );
 
-                if( layer_id != B_Mask && layer_id != F_Mask )
+            if( layer_id != B_Mask && layer_id != F_Mask )
+            {
+                polyListSubtracted.BooleanSubtract( m_boardAdapter.GetThroughHoleOdPolys(),
+                                                    SHAPE_POLY_SET::PM_FAST );
+                polyListSubtracted.BooleanSubtract( m_boardAdapter.GetOuterNonPlatedThroughHolePoly(),
+                                                    SHAPE_POLY_SET::PM_FAST );
+            }
+
+            if( m_boardAdapter.m_Cfg->m_Render.subtract_mask_from_silk )
+            {
+                if( layer_id == B_SilkS && map_poly.find( B_Mask ) != map_poly.end() )
                 {
-                    polyListSubtracted.BooleanSubtract( m_boardAdapter.GetThroughHoleOdPolys(),
-                                                        SHAPE_POLY_SET::PM_FAST );
-                    polyListSubtracted.BooleanSubtract( m_boardAdapter.GetOuterNonPlatedThroughHolePoly(),
+                    polyListSubtracted.BooleanSubtract( *map_poly.at( B_Mask ),
                                                         SHAPE_POLY_SET::PM_FAST );
                 }
-
-                if( m_boardAdapter.m_Cfg->m_Render.subtract_mask_from_silk )
+                else if( layer_id == F_SilkS && map_poly.find( F_Mask ) != map_poly.end() )
                 {
-                    if( layer_id == B_SilkS && map_poly.find( B_Mask ) != map_poly.end() )
-                    {
-                        polyListSubtracted.BooleanSubtract( *map_poly.at( B_Mask ),
-                                                            SHAPE_POLY_SET::PM_FAST );
-                    }
-                    else if( layer_id == F_SilkS && map_poly.find( F_Mask ) != map_poly.end() )
-                    {
-                        polyListSubtracted.BooleanSubtract( *map_poly.at( F_Mask ),
-                                                            SHAPE_POLY_SET::PM_FAST );
-                    }
+                    polyListSubtracted.BooleanSubtract( *map_poly.at( F_Mask ),
+                                                        SHAPE_POLY_SET::PM_FAST );
                 }
             }
 
@@ -632,8 +620,7 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
 
     }
 
-    if( m_boardAdapter.m_Cfg->m_Render.renderPlatedPadsAsPlated
-            && m_boardAdapter.m_Cfg->m_Render.realistic )
+    if( m_boardAdapter.m_Cfg->m_Render.renderPlatedPadsAsPlated )
     {
         const SHAPE_POLY_SET* frontPlatedPadPolys = m_boardAdapter.GetFrontPlatedPadPolys();
         const SHAPE_POLY_SET* backPlatedPadPolys = m_boardAdapter.GetBackPlatedPadPolys();
@@ -861,8 +848,7 @@ void RENDER_3D_OPENGL::generateViasAndPads()
         // Subtract the holes
         tht_outer_holes_poly.BooleanSubtract( tht_inner_holes_poly, SHAPE_POLY_SET::PM_FAST );
 
-        if( m_boardAdapter.m_Cfg->m_Render.realistic )
-            tht_outer_holes_poly.BooleanSubtract( m_antiBoardPolys, SHAPE_POLY_SET::PM_FAST );
+        tht_outer_holes_poly.BooleanSubtract( m_antiBoardPolys, SHAPE_POLY_SET::PM_FAST );
 
         CONTAINER_2D holesContainer;
 

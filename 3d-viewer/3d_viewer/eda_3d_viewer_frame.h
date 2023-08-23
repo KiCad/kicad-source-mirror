@@ -119,6 +119,7 @@ public:
      * from the PCB frame because the 3D viewer isn't updated via the #KIWAY.
      */
     void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
+    void ShowChangedLanguage() override;
 
     APPEARANCE_CONTROLS_3D* GetAppearanceManager() { return m_appearancePanel; }
 
@@ -147,7 +148,7 @@ private:
     void OnActivate( wxActivateEvent& event );
     void OnSetFocus( wxFocusEvent& event );
 
-    void CreateMenuBar();
+    void doReCreateMenuBar() override;
     void ReCreateMainToolbar();
 
     /**
