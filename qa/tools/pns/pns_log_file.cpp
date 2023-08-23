@@ -104,17 +104,23 @@ static std::shared_ptr<SHAPE> parseShape( SHAPE_TYPE expectedType, wxStringToken
 
 bool parseCommonPnsProps( PNS::ITEM* aItem, const wxString& cmd, wxStringTokenizer& aTokens )
 {
-        if( cmd == "net" )
+    if( cmd == "net" )
+    {
+        if( aItem->Parent() && aItem->Parent()->GetBoard() )
         {
-                aItem->SetNet( m_board->FindNet( aTokens.GetNextToken() ) );
-                return true;
-        } else if ( cmd == "layers" )
-            {
-                int start = wxAtoi( aTokens.GetNextToken() );
-                int end = wxAtoi( aTokens.GetNextToken() );
-                aItem->SetLayers( LAYER_RANGE( start, end ));
-                return true;
-            }
+            aItem->SetNet( aItem->Parent()->GetBoard()->FindNet( aTokens.GetNextToken() ) );
+            return true;
+        }
+
+        return false;
+    }
+    else if( cmd == "layers" )
+    {
+        int start = wxAtoi( aTokens.GetNextToken() );
+        int end = wxAtoi( aTokens.GetNextToken() );
+        aItem->SetLayers( LAYER_RANGE( start, end ) );
+        return true;
+    }
     return false;
 }
 
