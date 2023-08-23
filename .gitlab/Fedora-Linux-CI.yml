@@ -27,6 +27,7 @@
       -DKICAD_STDLIB_LIGHT_DEBUG=ON
       -DKICAD_BUILD_I18N=ON
       -DKICAD_TEST_XML_OUTPUT=ON
+      -DKICAD_BUILD_PNS_DEBUG_TOOL=ON
       ../../
     - ninja 2>&1 | tee compilation_log.txt
     - cd ../../
