@@ -399,9 +399,9 @@ void APPEARANCE_CONTROLS_3D::rebuildLayers()
             [&]( const std::unique_ptr<APPEARANCE_SETTING_3D>& aSetting )
             {
                 wxBoxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
-                int         layer = aSetting->id;
+                int         layer = aSetting->m_Id;
 
-                aSetting->visible = visibleLayers.test( layer );
+                aSetting->m_Visible = visibleLayers.test( layer );
 
                 if( colors.count( layer ) )
                 {
@@ -411,7 +411,7 @@ void APPEARANCE_CONTROLS_3D::rebuildLayers()
                     swatch->SetToolTip( _( "Left double click or middle click to change color" ) );
 
                     sizer->Add( swatch, 0,  wxALIGN_CENTER_VERTICAL, 0 );
-                    aSetting->ctl_color = swatch;
+                    aSetting->m_Ctl_color = swatch;
 
                     swatch->Bind( COLOR_SWATCH_CHANGED,
                             [this]( wxCommandEvent& event )
@@ -429,9 +429,9 @@ void APPEARANCE_CONTROLS_3D::rebuildLayers()
 
                 sizer->AddSpacer( 5 );
 
-                wxStaticText* label = new wxStaticText( m_windowLayers, layer, aSetting->label );
+                wxStaticText* label = new wxStaticText( m_windowLayers, layer, aSetting->GetLabel() );
                 label->Wrap( -1 );
-                label->SetToolTip( aSetting->tooltip );
+                label->SetToolTip( aSetting->GetTooltip() );
 
                 if( layer == LAYER_3D_BACKGROUND_TOP || layer == LAYER_3D_BACKGROUND_BOTTOM )
                 {
@@ -442,7 +442,7 @@ void APPEARANCE_CONTROLS_3D::rebuildLayers()
                     BITMAP_TOGGLE* btn_visible = new BITMAP_TOGGLE( m_windowLayers, layer,
                                                                     KiBitmap( BITMAPS::visibility ),
                                                                     KiBitmap( BITMAPS::visibility_off ),
-                                                                    aSetting->visible );
+                                                                    aSetting->m_Visible );
 
                     btn_visible->Bind( TOGGLE_CHANGED,
                             [this]( wxCommandEvent& aEvent )
@@ -455,10 +455,10 @@ void APPEARANCE_CONTROLS_3D::rebuildLayers()
                             } );
 
                     wxString tip;
-                    tip.Printf( _( "Show or hide %s" ), aSetting->label.Lower() );
+                    tip.Printf( _( "Show or hide %s" ), aSetting->GetLabel().Lower() );
                     btn_visible->SetToolTip( tip );
 
-                    aSetting->ctl_visibility = btn_visible;
+                    aSetting->m_Ctl_visibility = btn_visible;
                     sizer->Add( btn_visible, 0, wxALIGN_CENTER_VERTICAL, 0 );
                 }
 
@@ -474,17 +474,12 @@ void APPEARANCE_CONTROLS_3D::rebuildLayers()
         m_layerSettings.emplace_back( std::make_unique<APPEARANCE_SETTING_3D>( s_setting ) );
         std::unique_ptr<APPEARANCE_SETTING_3D>& setting = m_layerSettings.back();
 
-        // Because s_render_rows is created static, we must explicitly call wxGetTranslation
-        // for texts which are internationalized (tool tips and item names)
-        setting->tooltip = wxGetTranslation( s_setting.tooltip );
-        setting->label   = wxGetTranslation( s_setting.label );
-
-        if( setting->spacer )
+        if( setting->m_Spacer )
             m_layersOuterSizer->AddSpacer( m_pointSize );
         else
             appendLayer( setting );
 
-        m_layerSettingsMap[setting->id] = setting.get();
+        m_layerSettingsMap[setting->m_Id] = setting.get();
     }
 
     m_sizerOuter->Layout();
@@ -498,14 +493,14 @@ void APPEARANCE_CONTROLS_3D::UpdateLayerCtls()
 
     for( std::unique_ptr<APPEARANCE_SETTING_3D>& setting : m_layerSettings )
     {
-        if( setting->spacer )
+        if( setting->m_Spacer )
             continue;
 
-        if( setting->ctl_visibility )
-            setting->ctl_visibility->SetValue( visibleLayers.test( setting->id ) );
+        if( setting->m_Ctl_visibility )
+            setting->m_Ctl_visibility->SetValue( visibleLayers.test( setting->m_Id ) );
 
-        if( setting->ctl_color )
-            setting->ctl_color->SetSwatchColor( colors[ setting->id ], false );
+        if( setting->m_Ctl_color )
+            setting->m_Ctl_color->SetSwatchColor( colors[ setting->m_Id ], false );
     }
 }
 

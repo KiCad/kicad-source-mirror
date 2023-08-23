@@ -28,6 +28,7 @@
 #include <3d_canvas/board_adapter.h>
 #include <dialogs/appearance_controls_3D_base.h>
 #include <tool/tool_action.h>
+#include <wx/intl.h>
 
 
 class BITMAP_TOGGLE;
@@ -46,47 +47,67 @@ public:
     /**
      * Container for an appearance setting (can control a layer class, object type, etc.)
      */
-    struct APPEARANCE_SETTING_3D
+    class APPEARANCE_SETTING_3D
     {
-        int      id;
-        wxString label;
-        wxString tooltip;
-        bool     visible;
-        bool     spacer;
+    public:
+        int  m_Id;
+        bool m_Visible;
+        bool m_Spacer;
 
-        BITMAP_TOGGLE*  ctl_visibility;
-        COLOR_SWATCH*   ctl_color;
+        BITMAP_TOGGLE* m_Ctl_visibility;
+        COLOR_SWATCH*  m_Ctl_color;
 
         APPEARANCE_SETTING_3D( const wxString& aLabel, int aId, const wxString& aTooltip ) :
-                id( aId ),
-                label( aLabel ),
-                tooltip( aTooltip ),
-                visible( true ),
-                spacer( false ),
-                ctl_visibility( nullptr ),
-                ctl_color( nullptr )
+                m_Id( aId ),
+                m_Visible( true ),
+                m_Spacer( false ),
+                m_Ctl_visibility( nullptr ),
+                m_Ctl_color( nullptr ),
+                m_tooltip( aTooltip ),
+                m_label( aLabel )
         {
         }
 
         APPEARANCE_SETTING_3D( const wxString& aLabel, int aId, const TOOL_ACTION& aAction ) :
-                id( aId ),
-                label( aLabel ),
-                tooltip( aAction.GetTooltip( true ) ),
-                visible( true ),
-                spacer( false ),
-                ctl_visibility( nullptr ),
-                ctl_color( nullptr )
+                m_Id( aId ),
+                m_Visible( true ),
+                m_Spacer( false ),
+                m_Ctl_visibility( nullptr ),
+                m_Ctl_color( nullptr ),
+                m_label( aLabel ),
+                m_action( &aAction )
         {
         }
 
         APPEARANCE_SETTING_3D() :
-                id( -1 ),
-                visible( false ),
-                spacer( true ),
-                ctl_visibility( nullptr ),
-                ctl_color( nullptr )
+                m_Id( -1 ),
+                m_Visible( false ),
+                m_Spacer( true ),
+                m_Ctl_visibility( nullptr ),
+                m_Ctl_color( nullptr )
         {
         }
+
+        wxString GetTooltip() const
+        {
+            if( m_tooltip.has_value() )
+                return wxGetTranslation( m_tooltip.value() );
+            else if( m_action.has_value() )
+                return m_action.value()->GetTooltip( true );
+            else
+                return wxEmptyString;
+        }
+
+        wxString GetLabel() const
+        {
+            return wxGetTranslation( m_label );
+        }
+
+    private:
+        wxString m_label;
+
+        std::optional<wxString>           m_tooltip;
+        std::optional<const TOOL_ACTION*> m_action;
     };
 
     APPEARANCE_CONTROLS_3D( EDA_3D_VIEWER_FRAME* aParent, wxWindow* aFocusOwner );
