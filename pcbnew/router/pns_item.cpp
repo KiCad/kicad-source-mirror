@@ -289,7 +289,10 @@ const std::string ITEM::Format() const
 {
     std::stringstream ss;
     ss << KindStr() << " ";
-    ss << "net " << Net() << " ";
+
+    if( Parent()->IsConnected() )
+        ss << "net " << static_cast<BOARD_CONNECTED_ITEM*>( Parent() )->GetNetCode() << " ";
+
     ss << "layers " << m_layers.Start() << " " << m_layers.End();
     return ss.str();
 }
