@@ -41,6 +41,7 @@
 #include <kiplatform/io.h>
 #include <string_utils.h>
 #include <build_version.h>
+#include <geometry/shape_segment.h>
 
 #include "step_pcb_model.h"
 #include "streamwrapper.h"
@@ -82,7 +83,7 @@
 #include <TopoDS_Face.hxx>
 #include <TopoDS_Compound.hxx>
 #include <TopoDS_Builder.hxx>
-
+#include <Geom_TrimmedCurve.hxx>
 #include <Standard_Failure.hxx>
 
 #include <gp_Ax2.hxx>
@@ -90,6 +91,7 @@
 #include <gp_Dir.hxx>
 #include <gp_Pnt.hxx>
 #include <Geom_BezierCurve.hxx>
+#include <GC_MakeArcOfCircle.hxx>
 
 #include <RWGltf_CafWriter.hxx>
 
@@ -305,6 +307,9 @@ bool STEP_PCB_MODEL::AddPadHole( const PAD* aPad, const VECTOR2D& aOrigin )
     }
 
     // slotted hole
+    TopoDS_Shape hole;
+
+    #if 0   // set to 1 to export oblong hole as polygon
     SHAPE_POLY_SET holeOutlines;
 
     if( !aPad->TransformHoleToPolygon( holeOutlines, 0, m_maxError, ERROR_INSIDE ) )
@@ -312,7 +317,6 @@ bool STEP_PCB_MODEL::AddPadHole( const PAD* aPad, const VECTOR2D& aOrigin )
         return false;
     }
 
-    TopoDS_Shape hole;
 
     if( holeOutlines.OutlineCount() > 0 )
     {
@@ -325,6 +329,22 @@ bool STEP_PCB_MODEL::AddPadHole( const PAD* aPad, const VECTOR2D& aOrigin )
     {
         return false;
     }
+    #else
+    std::shared_ptr<SHAPE_SEGMENT> seg_hole = aPad->GetEffectiveHoleShape();
+    double width = std::min( aPad->GetDrillSize().x,  aPad->GetDrillSize().y );
+
+    if( MakeShapeAsThickSegment( hole,
+                                 seg_hole->GetSeg().A, seg_hole->GetSeg().B,
+                                 width, holeZsize, -m_copperThickness - margin,
+                                 aOrigin ) )
+    {
+        m_cutouts.push_back( hole );
+    }
+    else
+    {
+        return false;
+    }
+    #endif
 
     return true;
 }
@@ -474,6 +494,117 @@ bool STEP_PCB_MODEL::MakeShapeAsCylinder( TopoDS_Shape& aShape,
 
     return true;
 }
+
+
+bool STEP_PCB_MODEL::MakeShapeAsThickSegment( TopoDS_Shape& aShape,
+                                              VECTOR2D aStartPoint, VECTOR2D aEndPoint,
+                                              double aWidth, double aThickness,
+                                              double aZposition, const VECTOR2D& aOrigin )
+{
+    // make a wide segment from 2 lines and 2 180 deg arcs
+    // We need 6 points (3 per arcs)
+    VECTOR2D coords[6];
+
+    // We build a horizontal segment, and after rotate it
+    double len = ( aEndPoint - aStartPoint ).EuclideanNorm();
+    double h_width = aWidth/2.0;
+    // First is end point of first arc, and also start point of first line
+    coords[0] = VECTOR2D{ 0.0, h_width };
+
+    // end  point of first line and start point of second arc
+    coords[1] = VECTOR2D{ len, h_width };
+
+    // middle point of second arc
+    coords[2] = VECTOR2D{ len + h_width, 0.0 };
+
+    // start point of second line and end point of second arc
+    coords[3] = VECTOR2D{ len, -h_width };
+
+    // end point of second line and start point of first arc
+    coords[4] = VECTOR2D{ 0, -h_width };
+
+    // middle point of first arc
+    coords[5] = VECTOR2D{ -h_width, 0.0 };
+
+    // Rotate and move to segment position
+    EDA_ANGLE seg_angle( aEndPoint - aStartPoint );
+
+    for( int ii = 0; ii < 6; ii++ )
+    {
+        RotatePoint( coords[ii], VECTOR2D{ 0, 0 }, -seg_angle ),
+        coords[ii] += aStartPoint;
+    }
+
+
+    // Convert to 3D points
+    gp_Pnt coords3D[ 6 ];
+
+    for( int ii = 0; ii < 6; ii++ )
+    {
+        coords3D[ii] = gp_Pnt( pcbIUScale.IUTomm( coords[ii].x - aOrigin.x ),
+                               -pcbIUScale.IUTomm( coords[ii].y - aOrigin.y ), aZposition );
+    }
+
+    // Build OpenCascade shape outlines
+    BRepBuilderAPI_MakeWire wire;
+    bool success = true;
+
+    try
+    {
+        TopoDS_Edge edge;
+        edge = BRepBuilderAPI_MakeEdge( coords3D[0], coords3D[1] );
+        wire.Add( edge );
+
+        Handle(Geom_TrimmedCurve) arcOfCircle = GC_MakeArcOfCircle( coords3D[1], // start point
+                                                                    coords3D[2], // aux point
+                                                                    coords3D[3]  // end point
+                                                                  );
+        edge = BRepBuilderAPI_MakeEdge( arcOfCircle );
+        wire.Add( edge );
+
+        edge = BRepBuilderAPI_MakeEdge( coords3D[3], coords3D[4] );
+        wire.Add( edge );
+
+        Handle(Geom_TrimmedCurve) arcOfCircle2 = GC_MakeArcOfCircle( coords3D[4], // start point
+                                                                     coords3D[5], // aux point
+                                                                     coords3D[0]  // end point
+                                                                    );
+        edge = BRepBuilderAPI_MakeEdge( arcOfCircle2 );
+        wire.Add( edge );
+    }
+    catch( const Standard_Failure& e )
+    {
+        ReportMessage( wxString::Format( wxT( "build shape segment: OCC exception: %s\n" ),
+                                         e.GetMessageString() ) );
+        return false;
+    }
+
+
+    BRepBuilderAPI_MakeFace face;
+
+    try
+    {
+        face = BRepBuilderAPI_MakeFace( wire );
+    }
+    catch(  const Standard_Failure& e )
+    {
+        ReportMessage(
+                wxString::Format( wxT( "MakeShapeThickSegment: OCC exception: %s\n" ),
+                                  e.GetMessageString() ) );
+        return false;
+    }
+
+    aShape = BRepPrimAPI_MakePrism( face, gp_Vec( 0, 0, aThickness ) );
+
+    if( aShape.IsNull() )
+    {
+        ReportMessage( wxT( "failed to create a prismatic shape\n" ) );
+        return false;
+    }
+
+    return success;
+}
+
 
 bool STEP_PCB_MODEL::MakeShape( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& aChain,
                                 double aThickness, double aZposition, const VECTOR2D& aOrigin )

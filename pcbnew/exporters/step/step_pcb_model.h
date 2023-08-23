@@ -137,6 +137,23 @@ public:
     bool MakeShapeAsCylinder( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& aChain,
                               double aThickness, double aZposition, const VECTOR2D& aOrigin );
 
+    /**
+     * Convert a SHAPE_LINE_CHAIN containing only one 360 deg arc to a TopoDS_Shape
+     * ( vertical cylinder)
+     * it is a specialized version of MakeShape()
+     * @param aShape is the TopoDS_Shape to initialize (must be empty)
+     * @param aStartPoint is the start point of the segment
+     * @param aEndPoint is the end point of the segment
+     * @param aWidth is the width of the segment
+     * @param aThickness is the height of the created cylinder
+     * @param aOrigin is the origin of the coordinates
+     * @return true if success
+     */
+    bool MakeShapeAsThickSegment( TopoDS_Shape& aShape,
+                                  VECTOR2D aStartPoint, VECTOR2D aEndPoint,
+                                  double aWidth, double aThickness, double aZposition,
+                                  const VECTOR2D& aOrigin );
+
 #ifdef SUPPORTS_IGES
     // write the assembly model in IGES format
     bool WriteIGES( const wxString& aFileName );
