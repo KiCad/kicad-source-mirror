@@ -24,6 +24,7 @@
 #ifndef GRID_HELPER_H
 #define GRID_HELPER_H
 
+#include "tool/selection.h"
 #include <tool/tool_manager.h>
 #include <vector>
 #include <math/vector2d.h>
@@ -32,6 +33,16 @@
 class TOOL_MANAGER;
 class EDA_ITEM;
 
+enum GRID_HELPER_GRIDS : int
+{
+    // When the item doesn't match an override, use the current user grid
+    GRID_CURRENT,
+
+    GRID_CONNECTABLE,
+    GRID_WIRES,
+    GRID_TEXT,
+    GRID_GRAPHICS
+};
 
 class GRID_HELPER
 {
@@ -45,6 +56,16 @@ public:
 
     void SetAuxAxes( bool aEnable, const VECTOR2I& aOrigin = VECTOR2I( 0, 0 ) );
 
+    virtual VECTOR2I Align( const VECTOR2I& aPoint, GRID_HELPER_GRIDS aGrid ) const
+    {
+        return Align( aPoint, GetGridSize( aGrid ), GetOrigin() );
+    }
+
+    virtual VECTOR2I AlignGrid( const VECTOR2I& aPoint, GRID_HELPER_GRIDS aGrid ) const
+    {
+        return AlignGrid( aPoint, GetGridSize( aGrid ), GetOrigin() );
+    }
+
     virtual VECTOR2I Align( const VECTOR2I& aPoint ) const;
     virtual VECTOR2I Align( const VECTOR2I& aPoint, const VECTOR2D& aGrid,
                             const VECTOR2D& aOffset ) const;
@@ -52,6 +73,21 @@ public:
     VECTOR2I AlignGrid( const VECTOR2I& aPoint ) const;
     VECTOR2I AlignGrid( const VECTOR2I& aPoint, const VECTOR2D& aGrid,
                         const VECTOR2D& aOffset ) const;
+
+    /**
+     * Gets the coarsest grid that applies to a selecion of items.
+     */
+    virtual GRID_HELPER_GRIDS GetSelectionGrid( const SELECTION& aSelection ) const;
+
+    /**
+     * Gets the coarsest grid that applies to an item.
+     */
+    virtual GRID_HELPER_GRIDS GetItemGrid( const EDA_ITEM* aItem ) const { return GRID_CURRENT; }
+
+    /**
+     * Return the size of the specified grid
+     */
+    virtual VECTOR2D GetGridSize( GRID_HELPER_GRIDS aGrid ) const;
 
     void SetSkipPoint( const VECTOR2I& aPoint )
     {

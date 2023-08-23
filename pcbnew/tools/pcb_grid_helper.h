@@ -31,6 +31,8 @@
 #include <tool/grid_helper.h>
 
 class TOOL_MANAGER;
+struct MAGNETIC_SETTINGS;
+struct SELECTION_FILTER_OPTIONS;
 
 class PCB_GRID_HELPER : public GRID_HELPER
 {
@@ -46,6 +48,9 @@ public:
      * @return NULL if not snapped.  Pointer to snapped item otherwise
      */
     BOARD_ITEM* GetSnapped() const;
+
+    using GRID_HELPER::Align;
+    using GRID_HELPER::AlignGrid;
 
     VECTOR2I AlignToSegment ( const VECTOR2I& aPoint, const SEG& aSeg );
 

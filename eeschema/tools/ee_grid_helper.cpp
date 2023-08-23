@@ -61,18 +61,6 @@ EE_GRID_HELPER::EE_GRID_HELPER( TOOL_MANAGER* aToolMgr ) :
 }
 
 
-VECTOR2I EE_GRID_HELPER::AlignGrid( const VECTOR2I& aPoint, GRID_HELPER_GRIDS aGrid ) const
-{
-    return AlignGrid( aPoint, GetGridSize( aGrid ), GetOrigin() );
-}
-
-
-VECTOR2I EE_GRID_HELPER::Align( const VECTOR2I& aPoint, GRID_HELPER_GRIDS aGrid ) const
-{
-    return Align( aPoint, GetGridSize( aGrid ), GetOrigin() );
-}
-
-
 VECTOR2I EE_GRID_HELPER::BestDragOrigin( const VECTOR2I& aMousePos, GRID_HELPER_GRIDS aGrid,
                                          const EE_SELECTION& aItems )
 {
@@ -334,7 +322,7 @@ std::set<SCH_ITEM*> EE_GRID_HELPER::queryVisible( const BOX2I& aArea,
 }
 
 
-GRID_HELPER_GRIDS EE_GRID_HELPER::GetSelectionGrid( const EE_SELECTION& aSelection )
+GRID_HELPER_GRIDS EE_GRID_HELPER::GetSelectionGrid( const SELECTION& aSelection ) const
 {
     GRID_HELPER_GRIDS grid = GetItemGrid( aSelection.Front() );
 
@@ -402,6 +390,7 @@ GRID_HELPER_GRIDS EE_GRID_HELPER::GetItemGrid( const EDA_ITEM* aItem ) const
         return GRID_CURRENT;
     }
 }
+
 
 void EE_GRID_HELPER::computeAnchors( SCH_ITEM *aItem, const VECTOR2I &aRefPos, bool aFrom,
                                      bool aIncludeText )
@@ -480,7 +469,7 @@ void EE_GRID_HELPER::computeAnchors( SCH_ITEM *aItem, const VECTOR2I &aRefPos, b
 
 
 EE_GRID_HELPER::ANCHOR* EE_GRID_HELPER::nearestAnchor( const VECTOR2I& aPos, int aFlags,
-                                                       int aMatchLayer )
+                                                       GRID_HELPER_GRIDS aGrid )
 {
     double  minDist = std::numeric_limits<double>::max();
     ANCHOR* best = nullptr;
@@ -492,9 +481,9 @@ EE_GRID_HELPER::ANCHOR* EE_GRID_HELPER::nearestAnchor( const VECTOR2I& aPos, int
         if( ( aFlags & a.flags ) != aFlags )
             continue;
 
-        if( aMatchLayer == LAYER_NOCONNECT && !item->IsConnectable() )
+        if( aGrid == GRID_CONNECTABLE && !item->IsConnectable() )
             continue;
-        else if( aMatchLayer == GRID_GRAPHICS && item->IsConnectable() )
+        else if( aGrid == GRID_GRAPHICS && item->IsConnectable() )
             continue;
 
         double dist = a.Distance( aPos );

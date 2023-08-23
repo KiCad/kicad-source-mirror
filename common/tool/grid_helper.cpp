@@ -30,6 +30,7 @@ using namespace std::placeholders;
 #include <tool/tool_manager.h>
 #include <view/view.h>
 #include <tool/grid_helper.h>
+#include <settings/app_settings.h>
 
 
 GRID_HELPER::GRID_HELPER( TOOL_MANAGER* aToolMgr ) :
@@ -67,6 +68,29 @@ VECTOR2I GRID_HELPER::GetOrigin() const
     VECTOR2D origin = m_toolMgr->GetView()->GetGAL()->GetGridOrigin();
 
     return VECTOR2I( origin );
+}
+
+
+GRID_HELPER_GRIDS GRID_HELPER::GetSelectionGrid( const SELECTION& aSelection ) const
+{
+    GRID_HELPER_GRIDS grid = GetItemGrid( aSelection.Front() );
+
+    // Find the largest grid of all the items and use that
+    for( EDA_ITEM* item : aSelection )
+    {
+        GRID_HELPER_GRIDS itemGrid = GetItemGrid( item );
+
+        if( GetGridSize( itemGrid ) > GetGridSize( grid ) )
+            grid = itemGrid;
+    }
+
+    return grid;
+}
+
+
+VECTOR2D GRID_HELPER::GetGridSize( GRID_HELPER_GRIDS aGrid ) const
+{
+    return m_toolMgr->GetView()->GetGAL()->GetGridSize();
 }
 
 

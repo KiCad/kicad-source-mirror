@@ -35,28 +35,11 @@ class SCH_ITEM;
 class LIB_ITEM;
 
 
-enum GRID_HELPER_GRIDS : int
-{
-    // When the item doesn't match an override, use the current user grid
-    GRID_CURRENT,
-
-    GRID_CONNECTABLE,
-    GRID_WIRES,
-    GRID_TEXT,
-    GRID_GRAPHICS
-};
-
-
 class EE_GRID_HELPER : public GRID_HELPER
 {
 public:
 
     EE_GRID_HELPER( TOOL_MANAGER* aToolMgr );
-
-    using GRID_HELPER::Align;
-    using GRID_HELPER::AlignGrid;
-    VECTOR2I Align( const VECTOR2I& aPoint, GRID_HELPER_GRIDS aGrid ) const;
-    VECTOR2I AlignGrid( const VECTOR2I& aPoint, GRID_HELPER_GRIDS aGrid ) const;
 
     /**
      * Function GetSnapped
@@ -67,18 +50,11 @@ public:
      */
     SCH_ITEM* GetSnapped() const;
 
-    VECTOR2D GetGridSize( GRID_HELPER_GRIDS aGrid ) const;
+    VECTOR2D GetGridSize( GRID_HELPER_GRIDS aGrid ) const override;
     using GRID_HELPER::GetGrid;
 
-    /**
-     * Gets the coarsest grid that applies to a selecion of items.
-     */
-    GRID_HELPER_GRIDS GetSelectionGrid( const EE_SELECTION& aItem );
-
-    /**
-     * Gets the coarsest grid that applies to an item.
-     */
-    GRID_HELPER_GRIDS GetItemGrid( const EDA_ITEM* aItem ) const;
+    GRID_HELPER_GRIDS GetSelectionGrid( const SELECTION& aItem ) const override;
+    GRID_HELPER_GRIDS GetItemGrid( const EDA_ITEM* aItem ) const override;
 
     VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, GRID_HELPER_GRIDS aGrid,
                              const EE_SELECTION& aItems );
@@ -90,7 +66,7 @@ public:
 private:
     std::set<SCH_ITEM*> queryVisible( const BOX2I& aArea, const EE_SELECTION& aSkipList ) const;
 
-    ANCHOR* nearestAnchor( const VECTOR2I& aPos, int aFlags, int aMatchLayer );
+    ANCHOR* nearestAnchor( const VECTOR2I& aPos, int aFlags, GRID_HELPER_GRIDS aGrid );
 
     /**
      * Insert the local anchor points in to the grid helper for the specified
