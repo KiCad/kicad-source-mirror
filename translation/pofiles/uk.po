@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-13 14:56-0700\n"
-"PO-Revision-Date: 2023-07-03 07:51+0000\n"
+"PO-Revision-Date: 2023-08-23 18:38+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/v7/uk/>\n"
 "Language: uk\n"
@@ -4264,9 +4264,9 @@ msgid "Zoom %.2f"
 msgstr "Масштаб %.2f"
 
 #: common/eda_draw_frame.cpp:624
-#, fuzzy, c-format
+#, c-format
 msgid "grid %s"
-msgstr "Вісі сітки"
+msgstr "сітка %s"
 
 #: common/eda_draw_frame.cpp:637 pagelayout_editor/pl_editor_frame.cpp:752
 msgid "inches"
@@ -7640,9 +7640,8 @@ msgid "Delete all associations?"
 msgstr "Видалити всі відповідності?"
 
 #: cvpcb/tools/cvpcb_control.cpp:183
-#, fuzzy
 msgid "Unable to create the footprint viewer frame"
-msgstr "Не вдалося завантажити посадкового місця '%s' з '%s'"
+msgstr "Не вдалося творити вікно перегляду посадкового місця"
 
 #: eeschema/annotate.cpp:265
 #, c-format
@@ -10610,9 +10609,8 @@ msgid "Replace matches in reference designators"
 msgstr "Замінити збіги в позначеннях"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:120
-#, fuzzy
 msgid "Replace"
-msgstr "&Замінити"
+msgstr "Замінити"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:40
 msgid "Schematic Setup"
@@ -12639,12 +12637,12 @@ msgid "Unknown netlist format.\n"
 msgstr "Невідомий формат списку зв'язків.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:347
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
-msgstr "Створення символу '%s' елементу %d в '%s'\n"
+msgstr "Креслення символу '%s' елементу %d в '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:358
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
 msgstr "Креслення символу '%s' в '%s'\n"
 
@@ -13191,9 +13189,9 @@ msgid "Abort Project Save"
 msgstr "Скасувати збереження проекту"
 
 #: eeschema/files-io.cpp:1220
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' is already open by '%s' at '%s'."
-msgstr "Схема '%s' вже відкрита."
+msgstr "Схема '%s' вже відкрита '%s' на '%s'."
 
 #: eeschema/files-io.cpp:1233
 msgid "Importing Schematic"
@@ -16215,9 +16213,9 @@ msgid "Voltage (measured)"
 msgstr "Напруга (вимірювання)"
 
 #: eeschema/sim/spice_library_parser.cpp:89
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create sim model from %s"
-msgstr "Не вдалося створити теку '%s'."
+msgstr "Не вдалося створити модель симуляції з %s."
 
 #: eeschema/sim/spice_model_parser.cpp:84
 #: eeschema/sim/spice_model_parser.cpp:186
@@ -19625,14 +19623,12 @@ msgid "Malformed expression"
 msgstr "Неправильний вираз"
 
 #: include/lockfile.h:105
-#, fuzzy
 msgid "Lock file already exists"
-msgstr "Файл %s вже існує."
+msgstr "Файл блокування вже існує"
 
 #: include/lockfile.h:124
-#, fuzzy
 msgid "Failed to access lock file"
-msgstr "Помилка завантаження файлу схеми\n"
+msgstr "Помилка завантаження файлу блокування"
 
 #: include/panel_hotkeys_editor.h:55
 msgid "Reset all hotkeys to the built-in KiCad defaults"
@@ -19823,9 +19819,8 @@ msgid "Precision of gerber coordinates, valid options: 5 or 6"
 msgstr "Точність координат gerber, допустимі варіанти: 5 або 6"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:85
-#, fuzzy
 msgid "Use KiCad gerber file extension"
-msgstr "Використовувати розширення імен файлів Protel"
+msgstr "Використовувати KiCad розширення файлу герберів"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:45
 msgid ""
@@ -32986,9 +32981,8 @@ msgid "Checking pads..."
 msgstr "Перевірка контактних площадок..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:172
-#, fuzzy
 msgid "Checking copper graphic clearances..."
-msgstr "Перевірка зазорів між мідними зонами..."
+msgstr "Перевірка зазорів між мідними графіками..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:180
 msgid "Checking copper zone clearances..."
@@ -33512,9 +33506,9 @@ msgstr ""
 "використовували товщину лінії межі дошки на шарі Edge Cuts."
 
 #: pcbnew/files.cpp:616
-#, fuzzy, c-format
+#, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
-msgstr "PCB '%s' вже відкрито."
+msgstr "PCB '%s' вже відкрито '%s' на '%s'."
 
 #: pcbnew/files.cpp:627
 msgid "The current PCB has been modified.  Save changes?"
@@ -35057,49 +35051,40 @@ msgid "Dimension '%s' on %s"
 msgstr "Розміри '%s' на %s"
 
 #: pcbnew/pcb_dimension.cpp:1319
-#, fuzzy
 msgid "1234.0"
-msgstr "1234"
+msgstr "1234.0"
 
 #: pcbnew/pcb_dimension.cpp:1320
-#, fuzzy
 msgid "1234.0 mm"
-msgstr "1234 mm"
+msgstr "1234.0 mm"
 
 #: pcbnew/pcb_dimension.cpp:1321
-#, fuzzy
 msgid "1234.0 (mm)"
-msgstr "1234 (mm)"
+msgstr "1234.0 (mm)"
 
 #: pcbnew/pcb_dimension.cpp:1374
-#, fuzzy
 msgid "Units Format"
-msgstr "Формат одиниць вимірювання:"
+msgstr "Формат одиниць вимірювання"
 
 #: pcbnew/pcb_dimension.cpp:1382
-#, fuzzy
 msgid "Suppress Trailing Zeroes"
-msgstr "Приховувати нулі в кінці"
+msgstr "Прибирати нулі в кінці"
 
 #: pcbnew/pcb_dimension.cpp:1411
-#, fuzzy
 msgid "Crossbar Height"
-msgstr "Курсор правіше"
+msgstr "Висота планки"
 
 #: pcbnew/pcb_dimension.cpp:1415
-#, fuzzy
 msgid "Extension Line Overshoot"
-msgstr "Зміщення лінії вимірювання:"
+msgstr "Розширення допоміжної лінії"
 
 #: pcbnew/pcb_dimension.cpp:1498
-#, fuzzy
 msgid "Leader Length"
-msgstr "Довжина перехідного отвору"
+msgstr "Довжина лінії виноски"
 
 #: pcbnew/pcb_dimension.cpp:1547
-#, fuzzy
 msgid "Text Frame"
-msgstr "Рамка тексту:"
+msgstr "Рамка тексту"
 
 #: pcbnew/pcb_edit_frame.cpp:203
 msgid "KiCad PCB Editor"
@@ -35398,9 +35383,9 @@ msgid "Error creating svg file"
 msgstr "Помилка створення svg файла"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:343 pcbnew/pcbnew_jobs_handler.cpp:422
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to plot to '%s'.\n"
-msgstr "Не вдалося завантажити '%s."
+msgstr "Не вдалося накреслити '%s.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:632 pcbnew/pcbnew_jobs_handler.cpp:703
 msgid "Loading footprint library\n"
@@ -35505,9 +35490,9 @@ msgid "'%s' was not fully parsed."
 msgstr "'%s' не було повністю розібрано."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:683
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint directory not found: '%s'."
-msgstr "Бібліотека посадкових місць не знайдена."
+msgstr "Тека посадкових місць не знайдена: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:802
 #, c-format
@@ -38273,12 +38258,12 @@ msgid "Pack footprints"
 msgstr "Пакувати посадкові місця"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:354
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Click to place %s (item %zu of %zu)\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"Натиснути на місце %s (елемент %ld з %ld)\n"
+"Натиснути на місце %s (елемент %zu з %zu)\n"
 "Натисніть <esc> для відміни всього; подвійне натискання для завершення"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:367
@@ -38795,14 +38780,12 @@ msgid "Import footprint from file"
 msgstr "Імпортувати посадкове місце з файлу"
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export Footprint..."
-msgstr "Експорт посадкового місця"
+msgstr "Експорт посадкового місця..."
 
 #: pcbnew/tools/pcb_actions.cpp:448
-#, fuzzy
 msgid "Export footprint to file"
-msgstr "Експортувати посадкове місце в файл"
+msgstr "Експортувати посадкове місце до файлу"
 
 #: pcbnew/tools/pcb_actions.cpp:453
 msgid "Footprint Properties..."
