@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -31,8 +31,9 @@ class WX_GRID;
 #include <wx/panel.h>
 #include <wx/srchctrl.h>
 #include <wx/checkbox.h>
-#include <wx/radiobox.h>
 #include <wx/grid.h>
+#include <wx/radiobut.h>
+#include <wx/statbox.h>
 #include <wx/splitter.h>
 #include <wx/textctrl.h>
 #include <wx/gbsizer.h>
@@ -69,9 +70,13 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		wxCheckBox* m_groupSymbolsBox;
 		BITMAP_BUTTON* m_separator3;
 		wxBitmapButton* m_bRefresh;
-		wxRadioBox* m_radioSelect;
-		wxRadioBox* m_radioScope;
 		WX_GRID* m_grid;
+		wxRadioButton* m_radioProject;
+		wxRadioButton* m_radioCurrentSheet;
+		wxRadioButton* m_radioRecursive;
+		wxRadioButton* m_radioHighlight;
+		wxRadioButton* m_radioSelect;
+		wxRadioButton* m_radioOff;
 		wxPanel* m_panelExport;
 		wxStaticText* m_labelBomExportPresets;
 		wxChoice* m_cbBomFmtPresets;
@@ -113,11 +118,11 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		virtual void OnExcludeDNPToggled( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnGroupSymbolsToggled( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRegroupSymbols( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnScopeChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTableValueChanged( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnTableCellClick( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnTableItemContextMenu( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnTableColSize( wxGridSizeEvent& event ) { event.Skip(); }
+		virtual void OnScopeChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPreviewRefresh( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOutputFileBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnExport( wxCommandEvent& event ) { event.Skip(); }

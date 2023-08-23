@@ -62,6 +62,9 @@ wxDEFINE_EVENT( EDA_EVT_CLOSE_DIALOG_SYMBOL_FIELDS_TABLE, wxCommandEvent );
 #define COLUMN_MARGIN 15
 #endif
 
+using SCOPE = FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE;
+
+
 enum
 {
     MYID_SELECT_FOOTPRINT = GRIDTRICKS_FIRST_CLIENT_ID,
@@ -281,8 +284,20 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     SetSize( dlgSize );
 
     m_nbPages->SetSelection( cfg->m_FieldEditorPanel.page );
-    m_radioSelect->SetSelection( cfg->m_FieldEditorPanel.selection_mode );
-    m_radioScope->SetSelection( cfg->m_FieldEditorPanel.scope );
+
+    switch( cfg->m_FieldEditorPanel.selection_mode )
+    {
+    case 0: m_radioHighlight->SetValue( true ); break;
+    case 1: m_radioSelect->SetValue( true );    break;
+    case 2: m_radioOff->SetValue( true );       break;
+    }
+
+    switch( cfg->m_FieldEditorPanel.scope )
+    {
+    case SCOPE::SCOPE_ALL:             m_radioProject->SetValue( true );      break;
+    case SCOPE::SCOPE_SHEET:           m_radioCurrentSheet->SetValue( true ); break;
+    case SCOPE::SCOPE_SHEET_RECURSIVE: m_radioRecursive->SetValue( true );    break;
+    }
 
     m_outputFileName->SetValue( cfg->m_FieldEditorPanel.export_filename );
 
@@ -958,7 +973,14 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnScopeChanged( wxCommandEvent& aEvent )
 void DIALOG_SYMBOL_FIELDS_TABLE::UpdateScope()
 {
     m_dataModel->SetPath( m_parent->GetCurrentSheet() );
-    m_dataModel->SetScope( (FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE) m_radioScope->GetSelection() );
+
+    if( m_radioProject->GetValue() )
+        m_dataModel->SetScope( FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE::SCOPE_ALL );
+    else if( m_radioCurrentSheet->GetValue() )
+        m_dataModel->SetScope( FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE::SCOPE_SHEET );
+    else if( m_radioRecursive->GetValue() )
+        m_dataModel->SetScope( FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE::SCOPE_SHEET_RECURSIVE );
+
     m_dataModel->RebuildRows();
 }
 
@@ -988,16 +1010,16 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent& a
     if( aEvent.Selecting() )
     {
         for( int i = aEvent.GetTopRow(); i <= aEvent.GetBottomRow(); i++ )
-            for( SCH_REFERENCE ref : m_dataModel->GetRowReferences( i ) )
+        {
+            for( const SCH_REFERENCE& ref : m_dataModel->GetRowReferences( i ) )
                 refs.insert( ref );
+        }
 
         for( const SCH_REFERENCE& ref : refs )
             symbols.insert( ref.GetSymbol() );
     }
 
-    switch( m_radioSelect->GetSelection() )
-    {
-    case 0:
+    if( m_radioHighlight->GetValue() )
     {
         SCH_EDITOR_CONTROL* editor = m_parent->GetToolManager()->GetTool<SCH_EDITOR_CONTROL>();
 
@@ -1011,11 +1033,11 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent& a
                                        wxEmptyString );
         }
         else
+        {
             m_parent->FocusOnItem( nullptr );
-
-        break;
+        }
     }
-    case 1:
+    else if( m_radioSelect->GetValue() )
     {
         EE_SELECTION_TOOL* selTool = m_parent->GetToolManager()->GetTool<EE_SELECTION_TOOL>();
 
@@ -1025,12 +1047,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent& a
             selTool->SyncSelection( refs.begin()->GetSheetPath(), nullptr, items );
         else
             selTool->ClearSelection();
-
-        break;
-    }
-    default: break;
     }
 }
+
+
 void DIALOG_SYMBOL_FIELDS_TABLE::OnTableItemContextMenu( wxGridEvent& event )
 {
     // TODO: Option to select footprint if FOOTPRINT column selected
@@ -1248,8 +1268,20 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnClose( wxCloseEvent& event )
     cfg->m_FieldEditorPanel.height = GetSize().y;
     cfg->m_FieldEditorPanel.page = m_nbPages->GetSelection();
     cfg->m_FieldEditorPanel.export_filename = m_outputFileName->GetValue();
-    cfg->m_FieldEditorPanel.selection_mode = m_radioSelect->GetSelection();
-    cfg->m_FieldEditorPanel.scope = m_radioScope->GetSelection();
+
+    if( m_radioHighlight->GetValue() )
+        cfg->m_FieldEditorPanel.selection_mode = 0;
+    else if( m_radioHighlight->GetValue() )
+        cfg->m_FieldEditorPanel.selection_mode = 1;
+    else if( m_radioOff->GetValue() )
+        cfg->m_FieldEditorPanel.selection_mode = 2;
+
+    if( m_radioProject->GetValue() )
+        cfg->m_FieldEditorPanel.scope = SCOPE::SCOPE_ALL;
+    else if( m_radioCurrentSheet->GetValue() )
+        cfg->m_FieldEditorPanel.scope = SCOPE::SCOPE_SHEET;
+    else if( m_radioRecursive->GetValue() )
+        cfg->m_FieldEditorPanel.scope = SCOPE::SCOPE_SHEET_RECURSIVE;
 
     for( int i = 0; i < m_grid->GetNumberCols(); i++ )
     {

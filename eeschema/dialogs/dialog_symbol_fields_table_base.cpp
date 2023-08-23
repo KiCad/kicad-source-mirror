@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -119,24 +119,6 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 
 	bRightSizer->Add( bControls, 0, wxEXPAND|wxLEFT, 5 );
 
-	wxBoxSizer* bControls1;
-	bControls1 = new wxBoxSizer( wxHORIZONTAL );
-
-	wxString m_radioSelectChoices[] = { _("Highlight"), _("Select"), _("Off") };
-	int m_radioSelectNChoices = sizeof( m_radioSelectChoices ) / sizeof( wxString );
-	m_radioSelect = new wxRadioBox( m_rightPanel, wxID_ANY, _("Selection Control"), wxDefaultPosition, wxDefaultSize, m_radioSelectNChoices, m_radioSelectChoices, 3, wxRA_SPECIFY_COLS );
-	m_radioSelect->SetSelection( 0 );
-	bControls1->Add( m_radioSelect, 0, wxALL, 5 );
-
-	wxString m_radioScopeChoices[] = { _("Entire Project"), _("Current sheet only"), _("Recursive") };
-	int m_radioScopeNChoices = sizeof( m_radioScopeChoices ) / sizeof( wxString );
-	m_radioScope = new wxRadioBox( m_rightPanel, wxID_ANY, _("Scope"), wxDefaultPosition, wxDefaultSize, m_radioScopeNChoices, m_radioScopeChoices, 3, wxRA_SPECIFY_COLS );
-	m_radioScope->SetSelection( 0 );
-	bControls1->Add( m_radioScope, 0, wxALL, 5 );
-
-
-	bRightSizer->Add( bControls1, 0, wxEXPAND|wxLEFT, 5 );
-
 	m_grid = new WX_GRID( m_rightPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
@@ -163,7 +145,46 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_grid->SetMinSize( wxSize( 600,240 ) );
 
-	bRightSizer->Add( m_grid, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	bRightSizer->Add( m_grid, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	wxBoxSizer* bSizer12;
+	bSizer12 = new wxBoxSizer( wxHORIZONTAL );
+
+	wxStaticBoxSizer* sbSizer2;
+	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( m_rightPanel, wxID_ANY, _("Scope") ), wxHORIZONTAL );
+
+	m_radioProject = new wxRadioButton( sbSizer2->GetStaticBox(), wxID_ANY, _("Entire project"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	sbSizer2->Add( m_radioProject, 0, 0, 6 );
+
+	m_radioCurrentSheet = new wxRadioButton( sbSizer2->GetStaticBox(), wxID_ANY, _("Current sheet only"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer2->Add( m_radioCurrentSheet, 0, wxRIGHT|wxLEFT, 12 );
+
+	m_radioRecursive = new wxRadioButton( sbSizer2->GetStaticBox(), wxID_ANY, _("Recursive"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer2->Add( m_radioRecursive, 0, 0, 6 );
+
+
+	bSizer12->Add( sbSizer2, 0, wxEXPAND, 5 );
+
+
+	bSizer12->Add( 12, 0, 1, wxEXPAND, 5 );
+
+	wxStaticBoxSizer* sbSizer1;
+	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( m_rightPanel, wxID_ANY, _("Cross Probe Action") ), wxHORIZONTAL );
+
+	m_radioHighlight = new wxRadioButton( sbSizer1->GetStaticBox(), wxID_ANY, _("Highlight"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	sbSizer1->Add( m_radioHighlight, 0, 0, 8 );
+
+	m_radioSelect = new wxRadioButton( sbSizer1->GetStaticBox(), wxID_ANY, _("Select"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer1->Add( m_radioSelect, 0, wxRIGHT|wxLEFT, 12 );
+
+	m_radioOff = new wxRadioButton( sbSizer1->GetStaticBox(), wxID_ANY, _("Off"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer1->Add( m_radioOff, 0, 0, 8 );
+
+
+	bSizer12->Add( sbSizer1, 0, wxEXPAND, 5 );
+
+
+	bRightSizer->Add( bSizer12, 0, wxEXPAND|wxTOP, 5 );
 
 
 	m_rightPanel->SetSizer( bRightSizer );
@@ -342,12 +363,14 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_checkExcludeDNP->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnExcludeDNPToggled ), NULL, this );
 	m_groupSymbolsBox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnGroupSymbolsToggled ), NULL, this );
 	m_bRefresh->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnRegroupSymbols ), NULL, this );
-	m_radioScope->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnScopeChanged ), NULL, this );
 	m_grid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnTableValueChanged ), NULL, this );
 	m_grid->Connect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnTableCellClick ), NULL, this );
 	m_grid->Connect( wxEVT_GRID_CELL_LEFT_DCLICK, wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnTableCellClick ), NULL, this );
 	m_grid->Connect( wxEVT_GRID_CELL_RIGHT_CLICK, wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnTableItemContextMenu ), NULL, this );
 	m_grid->Connect( wxEVT_GRID_COL_SIZE, wxGridSizeEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnTableColSize ), NULL, this );
+	m_radioProject->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnScopeChanged ), NULL, this );
+	m_radioCurrentSheet->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnScopeChanged ), NULL, this );
+	m_radioRecursive->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnScopeChanged ), NULL, this );
 	m_textFieldDelimiter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
 	m_textStringDelimiter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
 	m_textRefDelimiter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
@@ -377,12 +400,14 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::~DIALOG_SYMBOL_FIELDS_TABLE_BASE()
 	m_checkExcludeDNP->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnExcludeDNPToggled ), NULL, this );
 	m_groupSymbolsBox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnGroupSymbolsToggled ), NULL, this );
 	m_bRefresh->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnRegroupSymbols ), NULL, this );
-	m_radioScope->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnScopeChanged ), NULL, this );
 	m_grid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnTableValueChanged ), NULL, this );
 	m_grid->Disconnect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnTableCellClick ), NULL, this );
 	m_grid->Disconnect( wxEVT_GRID_CELL_LEFT_DCLICK, wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnTableCellClick ), NULL, this );
 	m_grid->Disconnect( wxEVT_GRID_CELL_RIGHT_CLICK, wxGridEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnTableItemContextMenu ), NULL, this );
 	m_grid->Disconnect( wxEVT_GRID_COL_SIZE, wxGridSizeEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnTableColSize ), NULL, this );
+	m_radioProject->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnScopeChanged ), NULL, this );
+	m_radioCurrentSheet->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnScopeChanged ), NULL, this );
+	m_radioRecursive->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnScopeChanged ), NULL, this );
 	m_textFieldDelimiter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
 	m_textStringDelimiter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
 	m_textRefDelimiter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
