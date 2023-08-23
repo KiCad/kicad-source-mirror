@@ -447,10 +447,19 @@ LIB_SYMBOL* SCH_DATABASE_PLUGIN::loadSymbolFromRow( const wxString& aSymbolName,
 
     if( aRow.count( aTable.footprints_col ) )
     {
-        // TODO: Support multiple footprint choices
         std::string footprints = std::any_cast<std::string>( aRow.at( aTable.footprints_col ) );
-        wxString footprint = wxString( footprints.c_str(), wxConvUTF8 ).BeforeFirst( ';' );
-        symbol->GetFootprintField().SetText( footprint );
+
+        wxString footprintsStr = wxString( footprints.c_str(), wxConvUTF8 );
+        wxArrayString footprintsList;
+        wxStringTokenizer tokenizer( footprintsStr, ';' );
+
+        while( tokenizer.HasMoreTokens() )
+            footprintsList.Add( tokenizer.GetNextToken() );
+
+        if( footprintsList.size() > 0 )
+            symbol->GetFootprintField().SetText( footprintsList[0] );
+
+        symbol->SetFPFilters( footprintsList );
     }
     else
     {
