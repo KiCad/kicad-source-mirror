@@ -111,13 +111,16 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     std::vector<PICKED_SYMBOL>* historyList = nullptr;
     bool                        ignorePrimePosition = false;
     COMMON_SETTINGS*            common_settings = Pgm().GetCommonSettings();
-    EE_GRID_HELPER              grid( m_toolMgr );
     SCH_SCREEN*                 screen = m_frame->GetScreen();
 
     if( m_inPlaceSymbol )
         return 0;
 
     REENTRANCY_GUARD guard( &m_inPlaceSymbol );
+
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    EE_GRID_HELPER        grid( m_toolMgr );
+    VECTOR2I              cursorPos;
 
     // First we need to get all instances of this sheet so we can annotate
     // whatever symbols we place on all copies
@@ -248,7 +251,8 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
-        VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
+        cursorPos = grid.Align( controls->GetMousePosition(), GRID_HELPER_GRIDS::GRID_GRAPHICS );
+        controls->ForceCursorPosition( true, cursorPos );
 
         // The tool hotkey is interpreted as a click when drawing
         bool isSyntheticClick = symbol && evt->IsActivate() && evt->HasPosition()
@@ -478,7 +482,6 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
 {
     SCH_BITMAP*      image = aEvent.Parameter<SCH_BITMAP*>();
     bool             immediateMode = image != nullptr;
-    EE_GRID_HELPER   grid( m_toolMgr );
     bool             ignorePrimePosition = false;
     COMMON_SETTINGS* common_settings = Pgm().GetCommonSettings();
 
@@ -486,6 +489,10 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
         return 0;
 
     REENTRANCY_GUARD guard( &m_inPlaceImage );
+
+    EE_GRID_HELPER        grid( m_toolMgr );
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    VECTOR2I              cursorPos;
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
@@ -545,7 +552,11 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
     while( TOOL_EVENT* evt = Wait() )
     {
         setCursor();
-        VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
+
+        cursorPos = grid.Align( controls->GetMousePosition(), GRID_HELPER_GRIDS::GRID_GRAPHICS );
+        controls->ForceCursorPosition( true, cursorPos );
 
         // The tool hotkey is interpreted as a click when drawing
         bool isSyntheticClick = image && evt->IsActivate() && evt->HasPosition()
@@ -1505,6 +1516,10 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
     REENTRANCY_GUARD guard( &m_inDrawShape );
 
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    EE_GRID_HELPER        grid( m_toolMgr );
+    VECTOR2I              cursorPos;
+
     // We might be running as the same shape in another co-routine.  Make sure that one
     // gets whacked.
     m_toolMgr->DeactivateTool();
@@ -1543,8 +1558,11 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     while( TOOL_EVENT* evt = Wait() )
     {
         setCursor();
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
-        VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
+        cursorPos = grid.Align( controls->GetMousePosition(), GRID_HELPER_GRIDS::GRID_GRAPHICS );
+        controls->ForceCursorPosition( true, cursorPos );
 
         // The tool hotkey is interpreted as a click when drawing
         bool isSyntheticClick = item && evt->IsActivate() && evt->HasPosition()
@@ -1729,6 +1747,10 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 
     REENTRANCY_GUARD guard( &m_inDrawSheet );
 
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    EE_GRID_HELPER        grid( m_toolMgr );
+    VECTOR2I              cursorPos;
+
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
     m_frame->PushTool( aEvent );
@@ -1763,8 +1785,11 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
     while( TOOL_EVENT* evt = Wait() )
     {
         setCursor();
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
-        VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
+        cursorPos = grid.Align( controls->GetMousePosition(), GRID_HELPER_GRIDS::GRID_GRAPHICS );
+        controls->ForceCursorPosition( true, cursorPos );
 
         // The tool hotkey is interpreted as a click when drawing
         bool isSyntheticClick = sheet && evt->IsActivate() && evt->HasPosition()

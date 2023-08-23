@@ -436,6 +436,8 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
     Activate();
 
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    EE_GRID_HELPER        grid( m_toolMgr );
+    VECTOR2I              cursorPos;
     KIGFX::VIEW*          view = getView();
     EDA_ITEM*             item = selection.Front();
     SCH_COMMIT            commit( m_toolMgr );
@@ -451,6 +453,12 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
+
+        cursorPos = grid.Align( controls->GetMousePosition(), GRID_HELPER_GRIDS::GRID_GRAPHICS );
+        controls->ForceCursorPosition( true, cursorPos );
+
         if( !m_editPoints || evt->IsSelectionEvent() )
             break;
 
@@ -476,7 +484,6 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
                         commit.Modify( connected.first, m_frame->GetScreen() );
                 }
 
-                controls->ForceCursorPosition( false );
                 inDrag = true;
             }
 
@@ -560,7 +567,7 @@ void EE_POINT_EDITOR::pinEditedCorner( int minWidth, int minHeight, VECTOR2I& to
         topLeft.y = std::min( topLeft.y, botRight.y - minHeight );
 
         if( aGrid->GetSnap() )
-            topLeft = aGrid->AlignGrid( topLeft );
+            topLeft = aGrid->AlignGrid( topLeft, GRID_HELPER_GRIDS::GRID_GRAPHICS );
 
         // push edited point edges to adjacent corners
         topRight.y = topLeft.y;
@@ -573,7 +580,7 @@ void EE_POINT_EDITOR::pinEditedCorner( int minWidth, int minHeight, VECTOR2I& to
         topRight.y = std::min( topRight.y, botLeft.y - minHeight );
 
         if( aGrid->GetSnap() )
-            topRight = aGrid->AlignGrid( topRight );
+            topRight = aGrid->AlignGrid( topRight, GRID_HELPER_GRIDS::GRID_GRAPHICS );
 
         // push edited point edges to adjacent corners
         topLeft.y = topRight.y;
@@ -586,7 +593,7 @@ void EE_POINT_EDITOR::pinEditedCorner( int minWidth, int minHeight, VECTOR2I& to
         botLeft.y = std::max( botLeft.y, topRight.y + minHeight );
 
         if( aGrid->GetSnap() )
-            botLeft = aGrid->AlignGrid( botLeft );
+            botLeft = aGrid->AlignGrid( botLeft, GRID_HELPER_GRIDS::GRID_GRAPHICS );
 
         // push edited point edges to adjacent corners
         botRight.y = botLeft.y;
@@ -599,7 +606,7 @@ void EE_POINT_EDITOR::pinEditedCorner( int minWidth, int minHeight, VECTOR2I& to
         botRight.y = std::max( botRight.y, topLeft.y + minHeight );
 
         if( aGrid->GetSnap() )
-            botRight = aGrid->AlignGrid( botRight );
+            botRight = aGrid->AlignGrid( botRight, GRID_HELPER_GRIDS::GRID_GRAPHICS );
 
         // push edited point edges to adjacent corners
         botLeft.y = botRight.y;
@@ -610,28 +617,28 @@ void EE_POINT_EDITOR::pinEditedCorner( int minWidth, int minHeight, VECTOR2I& to
         topLeft.y = std::min( topLeft.y, botRight.y - minHeight );
 
         if( aGrid->GetSnap() )
-            topLeft = aGrid->AlignGrid( topLeft );
+            topLeft = aGrid->AlignGrid( topLeft, GRID_HELPER_GRIDS::GRID_GRAPHICS );
     }
     else if( isModified( m_editPoints->Line( RECT_LEFT ) ) )
     {
         topLeft.x = std::min( topLeft.x, botRight.x - minWidth );
 
         if( aGrid->GetSnap() )
-            topLeft = aGrid->AlignGrid( topLeft );
+            topLeft = aGrid->AlignGrid( topLeft, GRID_HELPER_GRIDS::GRID_GRAPHICS );
     }
     else if( isModified( m_editPoints->Line( RECT_BOT ) ) )
     {
         botRight.y = std::max( botRight.y, topLeft.y + minHeight );
 
         if( aGrid->GetSnap() )
-            botRight = aGrid->AlignGrid( botRight );
+            botRight = aGrid->AlignGrid( botRight, GRID_HELPER_GRIDS::GRID_GRAPHICS );
     }
     else if( isModified( m_editPoints->Line( RECT_RIGHT ) ) )
     {
         botRight.x = std::max( botRight.x, topLeft.x + minWidth );
 
         if( aGrid->GetSnap() )
-            botRight = aGrid->AlignGrid( botRight );
+            botRight = aGrid->AlignGrid( botRight, GRID_HELPER_GRIDS::GRID_GRAPHICS );
     }
 }
 
