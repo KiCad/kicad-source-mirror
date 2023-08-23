@@ -65,6 +65,9 @@
 #include <wx/srchctrl.h>
 #include <wx/tokenzr.h>
 #include <wx/choice.h>
+#include <wx/hyperlink.h>
+
+#include "invoke_pcb_dialog.h"
 
 using namespace std::placeholders;
 
@@ -1059,21 +1062,52 @@ bool FOOTPRINT_VIEWER_FRAME::ShowModal( wxString* aFootprint, wxWindow* aParent 
 
         if( fpid.IsValid() )
         {
-            wxString libraryName = fpid.GetLibNickname();
+            wxString         libraryName = fpid.GetLibNickname();
+            WX_INFOBAR*      infobar;
+            wxHyperlinkCtrl* button;
+            bool             hasInfobar = false;
+
+            if( !fpTable->HasLibrary( fpid.GetLibNickname(), false )
+                || !fpTable->HasLibrary( fpid.GetLibNickname(), true ) )
+            {
+                CreateInfoBar();
+                if( infobar = GetInfoBar() )
+                {
+                    hasInfobar = true;
+                    button = new wxHyperlinkCtrl( infobar, wxID_ANY, 
+                                                                    _( "Manage symol libraries" ), 
+                                                                    wxEmptyString );
+                    button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent & aEvent )>(
+                            [=]( wxHyperlinkEvent& aEvent )
+                            {
+                                InvokePcbLibTableEditor( &Kiway(), this );          
+                            } ) );
+                }
+            }
 
             if( !fpTable->HasLibrary( fpid.GetLibNickname(), false ) )
             {
-                msg.sprintf( _( "The current configuration does not include library '%s'.  Use "
-                                "Manage Footprint Libraries to edit the configuration." ),
-                             libraryName );
-                DisplayErrorMessage( aParent, _( "Footprint library not found." ), msg );
+                if( hasInfobar )
+                {
+                    msg.Printf( _( "Footprint library not found. The current configuration does "
+                                   "not include library '%s'." ), libraryName );
+                    infobar->RemoveAllButtons();
+                    infobar->AddButton( button );
+                    infobar->AddCloseButton();
+                    infobar->ShowMessage( msg, wxICON_INFORMATION );
+                }
             }
             else if ( !fpTable->HasLibrary( fpid.GetLibNickname(), true ) )
             {
-                msg.sprintf( _( "Library '%s' is not enabled in the current configuration.  Use "
-                                "Manage Footprint Libraries to edit the configuration." ),
-                             libraryName );
-                DisplayErrorMessage( aParent, _( "Footprint library not enabled." ), msg );
+                if( hasInfobar )
+                {
+                    msg.Printf( _( "Footprint library not enabled. Library '%s' is not enabled "
+                                   "in the current configuration." ), libraryName );
+                    infobar->RemoveAllButtons();
+                    infobar->AddButton( button );
+                    infobar->AddCloseButton();
+                    infobar->ShowMessage( msg, wxICON_INFORMATION );
+                }
             }
             else
             {
