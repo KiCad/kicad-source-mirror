@@ -795,9 +795,6 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
 
                 const TColStd_ListOfInteger& indices = bsb.Compare( shapeBbox );
 
-                if( indices.IsEmpty() )
-                    continue;
-
                 TopTools_ListOfShape holelist;
 
                 for( const Standard_Integer& index : indices )
@@ -812,16 +809,19 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
                     ReportMessage( wxString::Format( _( "Cutting %d/%d %s\n" ), cnt,
                                                      (int) aShapesList.size(), aWhat ) );
 
-                TopTools_ListOfShape mainbrd;
-                mainbrd.Append( shape );
+                if( holelist.IsEmpty() )
+                    continue;
 
-                BRepAlgoAPI_Cut Cut;
-                Cut.SetArguments( mainbrd );
+                TopTools_ListOfShape cutArgs;
+                cutArgs.Append( shape );
 
-                Cut.SetTools( holelist );
-                Cut.Build();
+                BRepAlgoAPI_Cut cut;
+                cut.SetArguments( cutArgs );
 
-                shape = Cut.Shape();
+                cut.SetTools( holelist );
+                cut.Build();
+
+                shape = cut.Shape();
             }
         };
 
