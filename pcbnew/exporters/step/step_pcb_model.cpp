@@ -86,15 +86,18 @@
 #include <TopoDS_Face.hxx>
 #include <TopoDS_Compound.hxx>
 #include <TopoDS_Builder.hxx>
-#include <Geom_TrimmedCurve.hxx>
 #include <Standard_Failure.hxx>
+
+#include <Geom_Curve.hxx>
+#include <Geom_BezierCurve.hxx>
+#include <Geom_TrimmedCurve.hxx>
 
 #include <gp_Ax2.hxx>
 #include <gp_Circ.hxx>
 #include <gp_Dir.hxx>
 #include <gp_Pnt.hxx>
-#include <Geom_BezierCurve.hxx>
 #include <GC_MakeArcOfCircle.hxx>
+#include <GC_MakeCircle.hxx>
 
 #include <RWGltf_CafWriter.hxx>
 
@@ -604,6 +607,12 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
     SHAPE_POLY_SET simplified = aPolySet;
     simplified.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
+    auto toPoint = [&]( const VECTOR2D& aKiCoords ) -> gp_Pnt
+    {
+        return gp_Pnt( pcbIUScale.IUTomm( aKiCoords.x - aOrigin.x ),
+                       -pcbIUScale.IUTomm( aKiCoords.y - aOrigin.y ), aZposition );
+    };
+
     for( const SHAPE_POLY_SET::POLYGON& polygon : simplified.CPolygons() )
     {
         auto makeWireFromChain = [&]( BRepLib_MakeWire&       aMkWire,
@@ -616,45 +625,43 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
                 {
                     const SHAPE_ARC& arc = aChain.Arc( 0 );
 
-                    std::vector<VECTOR2D> coords = { arc.GetP0(), arc.GetArcMid(), arc.GetP1() };
-                    std::vector<gp_Pnt>   coords3D( coords.size() );
+                    Handle( Geom_Curve ) curve;
 
-                    // Convert to 3D points
-                    for( size_t ii = 0; ii < coords.size(); ii++ )
+                    if( arc.GetCentralAngle() == ANGLE_360 )
                     {
-                        coords3D[ii] = gp_Pnt( pcbIUScale.IUTomm( coords[ii].x - aOrigin.x ),
-                                               -pcbIUScale.IUTomm( coords[ii].y - aOrigin.y ),
-                                               aZposition );
+                        gp_Ax2 axis = gp::XOY();
+                        axis.SetLocation( toPoint( arc.GetCenter() ) );
+
+                        curve = GC_MakeCircle( axis, pcbIUScale.IUTomm( arc.GetRadius() ) ).Value();
+                    }
+                    else
+                    {
+                        curve = GC_MakeArcOfCircle( toPoint( arc.GetP0() ),
+                                                    toPoint( arc.GetArcMid() ),
+                                                    toPoint( arc.GetP1() ) )
+                                        .Value();
                     }
 
-                    Handle( Geom_TrimmedCurve ) arcOfCircle =
-                            GC_MakeArcOfCircle( coords3D[0], // start point
-                                                coords3D[1], // mid point
-                                                coords3D[2]  // end point
-                            );
-
-                    aMkWire.Add( BRepBuilderAPI_MakeEdge( arcOfCircle ) );
-
-                    if( aMkWire.Error() != BRepLib_WireDone  )
+                    if( !curve.IsNull() )
                     {
-                        ReportMessage( wxT( "failed to add curve\n" ) );
-                        return false;
-                    }
+                        aMkWire.Add( BRepBuilderAPI_MakeEdge( curve ) );
 
-                    return true;
+                        if( aMkWire.Error() != BRepLib_WireDone )
+                        {
+                            ReportMessage( wxT( "failed to add curve\n" ) );
+                            return false;
+                        }
+
+                        return true;
+                    }
                 }
 
-                gp_Pnt start = gp_Pnt( pcbIUScale.IUTomm( aChain.CPoint( 0 ).x - aOrigin.x ),
-                                       -pcbIUScale.IUTomm( aChain.CPoint( 0 ).y - aOrigin.y ),
-                                       aZposition );
+                gp_Pnt start = toPoint( aChain.CPoint( 0 ) );
 
                 for( int j = 0; j < aChain.PointCount(); j++ )
                 {
-                    int next = ( j + 1 ) % aChain.PointCount();
-
-                    gp_Pnt end = gp_Pnt( pcbIUScale.IUTomm( aChain.CPoint( next ).x - aOrigin.x ),
-                                         -pcbIUScale.IUTomm( aChain.CPoint( next ).y - aOrigin.y ),
-                                         aZposition );
+                    int    next = ( j + 1 ) % aChain.PointCount();
+                    gp_Pnt end = toPoint( aChain.CPoint( next ) );
 
                     // Do not export too short segments: they create broken shape because OCC thinks
                     // start point and end point are at the same place
