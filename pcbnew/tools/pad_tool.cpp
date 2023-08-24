@@ -840,8 +840,6 @@ std::vector<FP_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun, BOARD_
                 if( aPad->GetSizeX() > aPad->GetSizeY() )
                     aPad->SetSizeX( aPad->GetSizeY() );
 
-                aPad->SetOffset( VECTOR2I( 0, 0 ) );
-
                 PCB_SHAPE* shape = new PCB_SHAPE( nullptr, SHAPE_T::POLY );
                 shape->SetFilled( true );
                 shape->SetStroke( STROKE_PARAMS( 0, PLOT_DASH_TYPE::SOLID ) );
@@ -891,6 +889,7 @@ std::vector<FP_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun, BOARD_
 
             case SHAPE_T::POLY:
                 pcbShape->SetPolyShape( fpShape->GetPolyShape() );
+                pcbShape->Move( VECTOR2I( 0, 0 ) - aPad->GetOffset() );
                 break;
 
             default:
