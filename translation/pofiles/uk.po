@@ -3752,7 +3752,7 @@ msgstr "Масштаб зображення:"
 
 #: common/dialogs/panel_image_editor_base.cpp:47
 msgid "PPI:"
-msgstr ""
+msgstr "PPI:"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: pcbnew/dialogs/panel_edit_options_base.cpp:225
@@ -4192,9 +4192,8 @@ msgstr ""
 "Не вдалося використовувати OpenGL, перемикання до програмної візуалізації"
 
 #: common/draw_panel_gal.cpp:326
-#, fuzzy
 msgid "Graphics error"
-msgstr "Шар графіки"
+msgstr "Помилка графіки"
 
 #: common/draw_panel_gal.cpp:487
 msgid "Could not use OpenGL"
@@ -5766,10 +5765,9 @@ msgstr "Виводи листів"
 msgid "No-connect symbols"
 msgstr "Символи \"без підключення\""
 
-#: common/layer_id.cpp:138 common/layer_id.cpp:135
-#, fuzzy
+#: common/layer_id.cpp:135
 msgid "DNP markers"
-msgstr "Маркери"
+msgstr "Маркери \"Не монтувати\""
 
 #: common/layer_id.cpp:139 common/layer_id.cpp:136
 msgid "ERC warnings"
@@ -5984,9 +5982,8 @@ msgid "Illegal character found in logical library name"
 msgstr "Знайдено неприпустимий символ у логічному імені бібліотеки"
 
 #: common/lib_table_grid_tricks.cpp:32
-#, fuzzy
 msgid "Edit options..."
-msgstr "Редагувати параметри"
+msgstr "Редагувати параметри..."
 
 #: common/lib_table_grid_tricks.cpp:33
 msgid "Edit options for this library entry"
@@ -6359,9 +6356,8 @@ msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
 msgstr "Помилка запису OUTPUTSTREAM_OUTPUTFORMATTER"
 
 #: common/settings/bom_settings.cpp:132
-#, fuzzy
 msgid "Grouped By Value"
-msgstr "Групувати за ім'ям"
+msgstr "Групувати за значенням"
 
 #: common/settings/bom_settings.cpp:132 common/settings/bom_settings.cpp:150
 #: common/settings/bom_settings.cpp:169
@@ -6374,9 +6370,8 @@ msgid "Reference"
 msgstr "Налаштування"
 
 #: common/settings/bom_settings.cpp:150
-#, fuzzy
 msgid "Grouped By Value and Footprint"
-msgstr "Найти і перемістити посадкове місце"
+msgstr "Групувати за значенням та посадковим місцем"
 
 #: common/settings/bom_settings.cpp:169
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:268
@@ -6397,9 +6392,8 @@ msgid "CSV"
 msgstr "CSV"
 
 #: common/settings/bom_settings.cpp:240
-#, fuzzy
 msgid "TSV"
-msgstr "TV"
+msgstr "TSV"
 
 #: common/settings/bom_settings.cpp:246
 #, fuzzy
