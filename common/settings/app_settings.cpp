@@ -355,6 +355,8 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
                                                 &aWindow->grid.override_connectables, true ) );
         m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.override_wires",
                                                 &aWindow->grid.override_wires, true ) );
+        m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.override_vias",
+                                                &aWindow->grid.override_vias, false ) );
         m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.override_text",
                                                 &aWindow->grid.override_text, false ) );
         m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.override_graphics",
@@ -365,6 +367,9 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
                                                     "50 mil" ) );
         m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.override_wires_size",
                                                     &aWindow->grid.override_wires_size,
+                                                    "50 mil" ) );
+        m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.override_vias_size",
+                                                    &aWindow->grid.override_vias_size,
                                                     "50 mil" ) );
         m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.override_text_size",
                                                     &aWindow->grid.override_text_size, "10 mil" ) );
@@ -379,6 +384,8 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
         m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.override_connectables",
                                                 &aWindow->grid.override_connectables, false ) );
         m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.override_wires",
+                                                &aWindow->grid.override_wires, false ) );
+        m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.override_vias",
                                                 &aWindow->grid.override_wires, false ) );
         m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.override_text",
                                                 &aWindow->grid.override_text, false ) );

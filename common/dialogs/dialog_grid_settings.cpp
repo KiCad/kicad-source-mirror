@@ -67,6 +67,7 @@ DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( EDA_DRAW_FRAME* aParent ) :
         sbGridOriginSizer->ShowItems( false );
 
         // No vias in the schematics
+        m_GridOverrideViasSize->SetValue( wxT( "50 mil" ) );
         m_checkGridOverrideVias->Hide();
         m_staticTextVias->Hide();
         m_GridOverrideViasSize->Hide();
