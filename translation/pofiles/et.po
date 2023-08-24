@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-13 14:56-0700\n"
-"PO-Revision-Date: 2023-08-23 18:38+0000\n"
+"PO-Revision-Date: 2023-08-25 10:50+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/kicad/v7/et/>\n"
 "Language: et\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.0.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -3298,7 +3298,7 @@ msgstr ""
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: pcbnew/dialogs/panel_edit_options_base.cpp:224
 msgid "Cmd"
-msgstr ""
+msgstr "Cmd"
 
 #: common/dialogs/panel_mouse_settings.cpp:47
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:228
