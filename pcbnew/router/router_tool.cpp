@@ -1682,6 +1682,10 @@ int ROUTER_TOOL::RouteSelected( const TOOL_EVENT& aEvent )
         // the side of the connectivity on this pad. It also checks for ratsnest points
         // inside the pad (like a trace end) and counts them.
         RN_NET* net = connectivity->GetRatsnestForNet( item->GetNetCode() );
+
+        if( !net )
+            continue;
+
         std::vector<std::shared_ptr<const CN_ANCHOR>> anchors;
 
         for( const CN_EDGE& edge : net->GetEdges() )

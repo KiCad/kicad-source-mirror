@@ -967,6 +967,9 @@ CONNECTIVITY_DATA::GetRatsnestForItems( const std::vector<BOARD_ITEM*>& aItems )
     {
         RN_NET* net = GetRatsnestForNet( netcode );
 
+        if( !net )
+            continue;
+
         for( const CN_EDGE& edge : net->GetEdges() )
         {
             std::shared_ptr<const CN_ANCHOR> srcNode = edge.GetSourceNode();
@@ -991,6 +994,9 @@ const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForPad( const PAD* aPad
 {
     std::vector<CN_EDGE> edges;
     RN_NET* net = GetRatsnestForNet( aPad->GetNetCode() );
+
+    if( !net )
+        return edges;
 
     for( const CN_EDGE& edge : net->GetEdges() )
     {
@@ -1017,7 +1023,12 @@ const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForComponent( FOOTPRINT
 
     for( int netcode : nets )
     {
-        for( const CN_EDGE& edge : GetRatsnestForNet( netcode )->GetEdges() )
+        RN_NET* net = GetRatsnestForNet( netcode );
+
+        if( !net )
+            continue;
+
+        for( const CN_EDGE& edge : net->GetEdges() )
         {
             const std::shared_ptr<const CN_ANCHOR>& srcNode = edge.GetSourceNode();
             const std::shared_ptr<const CN_ANCHOR>& dstNode = edge.GetTargetNode();
