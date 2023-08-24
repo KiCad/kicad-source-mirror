@@ -898,6 +898,14 @@ void PCB_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     if( aCfg->m_Window.grid.sizes.empty() )
         aCfg->m_Window.grid.sizes = aCfg->DefaultGridSizeList();
 
+    // Move legacy user grids to grid list
+    if( !aCfg->m_Window.grid.user_grid_x.empty() )
+    {
+        aCfg->m_Window.grid.sizes.emplace_back( aCfg->m_Window.grid.user_grid_x );
+        aCfg->m_Window.grid.user_grid_x = wxEmptyString;
+        aCfg->m_Window.grid.user_grid_y = wxEmptyString;
+    }
+
     // Currently values read from config file are not used because the user cannot
     // change this config
     // if( aCfg->m_Window.zoom_factors.empty() )

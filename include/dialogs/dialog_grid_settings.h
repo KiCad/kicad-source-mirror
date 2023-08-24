@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,14 +42,11 @@ public:
 private:
     void OnAddGrid( wxCommandEvent& event ) override;
     void OnRemoveGrid( wxCommandEvent& event ) override;
-    void OnResetGridOriginClick( wxCommandEvent& event ) override;
 
     void RebuildGridSizes();
 
     UNIT_BINDER m_gridOriginX;
     UNIT_BINDER m_gridOriginY;
-    UNIT_BINDER m_userGridX;
-    UNIT_BINDER m_userGridY;
     UNIT_BINDER m_gridOverrideConnectables;
     UNIT_BINDER m_gridOverrideWires;
     UNIT_BINDER m_gridOverrideVias;

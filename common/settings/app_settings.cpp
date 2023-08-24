@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -324,7 +324,9 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
         defaultGridIdx = 1;
     }
     else
+    {
         defaultGridIdx = 4;
+    }
 
     m_params.emplace_back( new PARAM_LIST<wxString>( aJsonPath + ".grid.sizes",
             &aWindow->grid.sizes, DefaultGridSizeList() ) );
@@ -340,9 +342,9 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
 
     // for grid user, use a default value compatible with eeschema and pcbnew (10 mils)
     m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.user_grid_x",
-            &aWindow->grid.user_grid_x, "10 mil" ) );
+            &aWindow->grid.user_grid_x, wxEmptyString ) );
     m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.user_grid_y",
-            &aWindow->grid.user_grid_y, "10 mil" ) );
+            &aWindow->grid.user_grid_y, wxEmptyString ) );
 
     // for grid overrides, give just the schematic and symbol editors sane values
     if( m_filename == wxS( "eeschema" ) || m_filename == wxS( "symbol_editor" ) )

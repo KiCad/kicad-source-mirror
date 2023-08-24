@@ -97,19 +97,7 @@ void GRID_MENU::BuildChoiceList( wxArrayString* aGridsList, APP_SETTINGS_BASE* a
         double val = EDA_UNIT_UTILS::UI::DoubleValueFromString( scale, EDA_UNITS::MILLIMETRES,
                                                                 gridSize );
 
-        msg.Printf( _( "Grid: %s (%s)" ),
-                    EDA_UNIT_UTILS::UI::MessageTextFromValue( scale, primaryUnit, val ),
-                    EDA_UNIT_UTILS::UI::MessageTextFromValue( scale, secondaryUnit, val ) );
-
-        aGridsList->Add( msg );
-    }
-
-    if( !aCfg->m_Window.grid.user_grid_x.empty() )
-    {
-        double val = EDA_UNIT_UTILS::UI::DoubleValueFromString( scale, EDA_UNITS::INCHES,
-                                                                aCfg->m_Window.grid.user_grid_x );
-
-        msg.Printf( _( "User grid: %s (%s)" ),
+        msg.Printf( _( "%s (%s)" ),
                     EDA_UNIT_UTILS::UI::MessageTextFromValue( scale, primaryUnit, val ),
                     EDA_UNIT_UTILS::UI::MessageTextFromValue( scale, secondaryUnit, val ) );
 

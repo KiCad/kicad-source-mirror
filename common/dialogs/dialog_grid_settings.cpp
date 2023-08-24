@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@
 #include <confirm.h>
 #include <wx/textdlg.h>
 #include <dialogs/dialog_grid_settings.h>
+#include <widgets/std_bitmap_button.h>
 #include <common.h>
 #include <settings/app_settings.h>
 #include <eda_draw_frame.h>
@@ -39,8 +40,6 @@ DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( EDA_DRAW_FRAME* aParent ) :
         DIALOG_GRID_SETTINGS_BASE( aParent ), m_parent( aParent ),
         m_gridOriginX( aParent, m_staticTextGridPosX, m_GridOriginXCtrl, m_TextPosXUnits ),
         m_gridOriginY( aParent, m_staticTextGridPosY, m_GridOriginYCtrl, m_TextPosYUnits ),
-        m_userGridX( aParent, m_staticTextSizeX, m_OptGridSizeX, m_TextSizeXUnits ),
-        m_userGridY( aParent, m_staticTextSizeY, m_OptGridSizeY, m_TextSizeYUnits ),
         m_gridOverrideConnectables( aParent, m_staticTextConnectables,
                                     m_GridOverrideConnectablesSize, m_staticTextConnectablesUnits ),
         m_gridOverrideWires( aParent, m_staticTextWires, m_GridOverrideWiresSize,
@@ -65,7 +64,6 @@ DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( EDA_DRAW_FRAME* aParent ) :
         || m_parent->IsType( FRAME_SIMULATOR ) )
     {
         // Eeschema and friends don't use grid origin
-        m_buttonResetOrigin->Hide();
         sbGridOriginSizer->ShowItems( false );
 
         // No vias in the schematics
@@ -76,7 +74,7 @@ DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( EDA_DRAW_FRAME* aParent ) :
     }
     else
     {
-        m_staticTextConnectables->SetLabel( wxT( "Footprints/Pads:" ) );
+        m_staticTextConnectables->SetLabel( wxT( "Footprints/pads:" ) );
         m_staticTextWires->SetLabel( wxT( "Tracks:" ) );
     }
 
@@ -136,9 +134,8 @@ void DIALOG_GRID_SETTINGS::RebuildGridSizes()
 bool DIALOG_GRID_SETTINGS::TransferDataFromWindow()
 {
     // Validate new settings
-    for( UNIT_BINDER* entry :
-         { &m_userGridX, &m_userGridY, &m_gridOverrideConnectables, &m_gridOverrideWires,
-           &m_gridOverrideVias, &m_gridOverrideText, &m_gridOverrideGraphics } )
+    for( UNIT_BINDER* entry : { &m_gridOverrideConnectables, &m_gridOverrideWires,
+                                &m_gridOverrideVias, &m_gridOverrideText, &m_gridOverrideGraphics } )
     {
         if( !entry->Validate( 0.001, 1000.0, EDA_UNITS::MILLIMETRES ) )
             return false;
@@ -150,8 +147,6 @@ bool DIALOG_GRID_SETTINGS::TransferDataFromWindow()
 
     gridCfg.last_size_idx = m_currentGridCtrl->GetSelection();
     m_parent->SetGridOrigin( VECTOR2I( m_gridOriginX.GetValue(), m_gridOriginY.GetValue() ) );
-    gridCfg.user_grid_x = m_parent->StringFromValue( m_userGridX.GetValue(), true );
-    gridCfg.user_grid_y = m_parent->StringFromValue( m_userGridY.GetValue(), true );
     gridCfg.fast_grid_1 = m_grid1Ctrl->GetSelection();
     gridCfg.fast_grid_2 = m_grid2Ctrl->GetSelection();
 
@@ -191,9 +186,6 @@ bool DIALOG_GRID_SETTINGS::TransferDataToWindow()
     Layout();
 
     m_currentGridCtrl->SetSelection( settings->m_Window.grid.last_size_idx );
-
-    m_userGridX.SetValue( m_parent->ValueFromString( gridCfg.user_grid_x ) );
-    m_userGridY.SetValue( m_parent->ValueFromString( gridCfg.user_grid_y ) );
 
     m_gridOverrideConnectables.SetValue(
             m_parent->ValueFromString( gridCfg.override_connectables_size ) );
@@ -262,12 +254,6 @@ void DIALOG_GRID_SETTINGS::OnRemoveGrid( wxCommandEvent& event )
     GRID_SETTINGS& gridCfg = m_parent->config()->m_Window.grid;
     int            row = m_currentGridCtrl->GetSelection();
 
-    if( row == (int) ( m_currentGridCtrl->GetCount() - 1 ) )
-    {
-        DisplayError( this, wxString::Format( _( "Cannot remove the user grid." ) ) );
-        return;
-    }
-
     if( gridCfg.sizes.size() <= 1 )
     {
         DisplayError( this, wxString::Format( _( "At least one grid size is required." ) ) );
@@ -279,13 +265,6 @@ void DIALOG_GRID_SETTINGS::OnRemoveGrid( wxCommandEvent& event )
 
     if( row != 0 )
         m_currentGridCtrl->SetSelection( row - 1 );
-}
-
-
-void DIALOG_GRID_SETTINGS::OnResetGridOriginClick( wxCommandEvent& event )
-{
-    m_gridOriginX.SetValue( 0 );
-    m_gridOriginY.SetValue( 0 );
 }
 
 
