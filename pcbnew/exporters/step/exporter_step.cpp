@@ -333,7 +333,7 @@ void EXPORTER_STEP::buildZones3DShape( VECTOR2D aOrigin )
             {
                 SHAPE_POLY_SET copper_shape;
                 zone->TransformSolidAreasShapesToPolygon( layer, copper_shape );
-                copper_shape.Fracture( SHAPE_POLY_SET::PM_FAST );
+                copper_shape.Unfracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
                 m_pcbModel->AddCopperPolygonShapes( &copper_shape, layer == F_Cu, aOrigin, false );
             }
@@ -426,9 +426,6 @@ bool EXPORTER_STEP::buildBoard3DShapes()
         for( BOARD_ITEM* item : m_board->Drawings() )
             buildGraphic3DShape( item, origin );
     }
-
-    m_top_copper_shapes.Fracture( SHAPE_POLY_SET::PM_FAST );
-    m_bottom_copper_shapes.Fracture( SHAPE_POLY_SET::PM_FAST );
 
     m_pcbModel->AddCopperPolygonShapes( &m_top_copper_shapes, true, origin, true );
     m_pcbModel->AddCopperPolygonShapes( &m_bottom_copper_shapes, false, origin, true );

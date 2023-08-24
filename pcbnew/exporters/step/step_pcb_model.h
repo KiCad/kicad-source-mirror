@@ -114,15 +114,15 @@ public:
     bool CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin );
 
     /**
-     * Convert a SHAPE_LINE_CHAIN (closed) to a TopoDS_Shape (polygonal vertical prism)
-     * @param aShape is the TopoDS_Shape to initialize (must be empty)
-     * @param aChain is a closed SHAPE_LINE_CHAIN (a polygon)
+     * Convert a SHAPE_POLY_SET to TopoDS_Shape's (polygonal vertical prisms)
+     * @param aShapes is the TopoDS_Shape list to append to
+     * @param aPolySet is a polygon set
      * @param aThickness is the height of the created prism
      * @param aOrigin is the origin of the coordinates
      * @return true if success
      */
-    bool MakeShape( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& aChain, double aThickness,
-                    double aZposition, const VECTOR2D& aOrigin );
+    bool MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE_POLY_SET& aPolySet,
+                     double aThickness, double aZposition, const VECTOR2D& aOrigin );
 
     /**
      * Convert a SHAPE_LINE_CHAIN containing only one 360 deg arc to a TopoDS_Shape

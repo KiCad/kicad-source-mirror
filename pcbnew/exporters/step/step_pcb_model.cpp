@@ -234,10 +234,8 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin )
             }
             else
             {
-                success = MakeShape( curr_shape, pad_shape.get()->COutline(0), m_copperThickness, Zpos, aOrigin );
-
-                if( success )
-                    m_board_copper_pads.push_back( curr_shape );
+                success = MakeShapes( m_board_copper_pads, *pad_shape, m_copperThickness, Zpos,
+                                      aOrigin );
             }
         }
 
@@ -257,25 +255,16 @@ bool STEP_PCB_MODEL::AddCopperPolygonShapes( const SHAPE_POLY_SET* aPolyShapes, 
 {
     bool success = true;
 
-    for( int ii = 0; ii < aPolyShapes->OutlineCount(); ii++ )
-    {
-        TopoDS_Shape copper_shape;
-        double z_pos = aOnTop ? m_boardThickness : -m_copperThickness;
+    double z_pos = aOnTop ? m_boardThickness : -m_copperThickness;
 
-        if( MakeShape( copper_shape, aPolyShapes->COutline( ii ), m_copperThickness, z_pos, aOrigin ) )
-        {
-            if( aTrack )
-                m_board_copper_tracks.push_back( copper_shape );
-            else
-                m_board_copper_zones.push_back( copper_shape );
-        }
-        else
-        {
-            ReportMessage( wxString::Format( wxT( "Could not add shape (%d points) to copper layer on %s.\n" ),
-                           aPolyShapes->COutline( ii ).PointCount(),
-                           aOnTop ? wxT( "top" ) : wxT( "bottom" ) ) );
-            success = false;
-        }
+    if( !MakeShapes( aTrack ? m_board_copper_tracks : m_board_copper_zones, *aPolyShapes,
+                     m_copperThickness, z_pos, aOrigin ) )
+    {
+        ReportMessage( wxString::Format(
+                wxT( "Could not add shape (%d points) to copper layer on %s.\n" ),
+                aPolyShapes->FullPointCount(), aOnTop ? wxT( "top" ) : wxT( "bottom" ) ) );
+
+        success = false;
     }
 
     return success;
@@ -606,95 +595,136 @@ bool STEP_PCB_MODEL::MakeShapeAsThickSegment( TopoDS_Shape& aShape,
 }
 
 
-bool STEP_PCB_MODEL::MakeShape( TopoDS_Shape& aShape, const SHAPE_LINE_CHAIN& aChain,
-                                double aThickness, double aZposition, const VECTOR2D& aOrigin )
+bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE_POLY_SET& aPolySet,
+                                 double aThickness, double aZposition, const VECTOR2D& aOrigin )
 {
-    if( !aShape.IsNull() )
-        return false; // there is already data in the shape object
+    SHAPE_POLY_SET simplified = aPolySet;
+    simplified.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
-    if( !aChain.IsClosed() )
-        return false; // the loop is not closed
-
-    // a SHAPE_LINE_CHAIN that is in fact a circle (one 360deg arc) is exported as cylinder
-    if( IsChainCircle( aChain ) )
-        return MakeShapeAsCylinder( aShape, aChain, aThickness, aZposition, aOrigin );
-
-    BRepBuilderAPI_MakeWire wire;
-    bool success = true;
-
-    gp_Pnt start = gp_Pnt( pcbIUScale.IUTomm( aChain.CPoint( 0 ).x - aOrigin.x ),
-                           -pcbIUScale.IUTomm( aChain.CPoint( 0 ).y - aOrigin.y ), aZposition );
-
-    int items_count = 0;
-
-    for( int j = 0; j < aChain.PointCount(); j++ )
+    for( const SHAPE_POLY_SET::POLYGON& polygon : simplified.CPolygons() )
     {
-        int next = j+1;
-
-        gp_Pnt end;
-
-        if( next >= aChain.PointCount() )
-            next = 0;
-
-        end = gp_Pnt( pcbIUScale.IUTomm( aChain.CPoint( next ).x - aOrigin.x ),
-                      -pcbIUScale.IUTomm( aChain.CPoint( next ).y - aOrigin.y ), aZposition );
-
-        // Do not export too short segments: they create broken shape because OCC thinks
-        // start point and end point are at the same place
-        double seg_len = std::hypot( end.X() - start.X(), end.Y() - start.Y() );
-
-        if( seg_len <= m_mergeOCCMaxDist )
-            continue;
-        try
+        auto makeWireFromChain = [&]( BRepLib_MakeWire&       aMkWire,
+                                      const SHAPE_LINE_CHAIN& aChain ) -> bool
         {
-            TopoDS_Edge edge;
-            edge = BRepBuilderAPI_MakeEdge( start, end );
-            wire.Add( edge );
-
-            if( wire.Error() != BRepBuilderAPI_WireDone )
+            try
             {
-                ReportMessage( wxT( "failed to add curve\n" ) );
+                // a SHAPE_LINE_CHAIN that is in fact a circle (one 360deg arc) is exported as cylinder
+                if( IsChainCircle( aChain ) )
+                {
+                    const SHAPE_ARC& arc = aChain.Arc( 0 );
+
+                    std::vector<VECTOR2D> coords = { arc.GetP0(), arc.GetArcMid(), arc.GetP1() };
+                    std::vector<gp_Pnt>   coords3D( coords.size() );
+
+                    // Convert to 3D points
+                    for( int ii = 0; ii < coords.size(); ii++ )
+                    {
+                        coords3D[ii] = gp_Pnt( pcbIUScale.IUTomm( coords[ii].x - aOrigin.x ),
+                                               -pcbIUScale.IUTomm( coords[ii].y - aOrigin.y ),
+                                               aZposition );
+                    }
+
+                    Handle( Geom_TrimmedCurve ) arcOfCircle =
+                            GC_MakeArcOfCircle( coords3D[0], // start point
+                                                coords3D[1], // mid point
+                                                coords3D[2]  // end point
+                            );
+
+                    aMkWire.Add( BRepBuilderAPI_MakeEdge( arcOfCircle ) );
+
+                    if( aMkWire.Error() != BRepBuilderAPI_WireDone )
+                    {
+                        ReportMessage( wxT( "failed to add curve\n" ) );
+                        return false;
+                    }
+
+                    return true;
+                }
+
+                gp_Pnt start = gp_Pnt( pcbIUScale.IUTomm( aChain.CPoint( 0 ).x - aOrigin.x ),
+                                       -pcbIUScale.IUTomm( aChain.CPoint( 0 ).y - aOrigin.y ),
+                                       aZposition );
+
+                for( int j = 0; j < aChain.PointCount(); j++ )
+                {
+                    int next = ( j + 1 ) % aChain.PointCount();
+
+                    gp_Pnt end = gp_Pnt( pcbIUScale.IUTomm( aChain.CPoint( next ).x - aOrigin.x ),
+                                         -pcbIUScale.IUTomm( aChain.CPoint( next ).y - aOrigin.y ),
+                                         aZposition );
+
+                    // Do not export too short segments: they create broken shape because OCC thinks
+                    // start point and end point are at the same place
+                    double seg_len = std::hypot( end.X() - start.X(), end.Y() - start.Y() );
+
+                    if( seg_len <= m_mergeOCCMaxDist )
+                        continue;
+
+                    BRepBuilderAPI_MakeEdge mkEdge( start, end );
+                    aMkWire.Add( mkEdge );
+
+                    if( aMkWire.Error() != BRepBuilderAPI_WireDone )
+                    {
+                        ReportMessage( wxT( "failed to add curve\n" ) );
+                        return false;
+                    }
+
+                    start = end;
+                }
+            }
+            catch( const Standard_Failure& e )
+            {
+                ReportMessage( wxString::Format( wxT( "makeWireFromChain: OCC exception: %s\n" ),
+                                                 e.GetMessageString() ) );
                 return false;
             }
 
-            items_count++;
-        }
-        catch( const Standard_Failure& e )
+            return true;
+        };
+
+        BRepBuilderAPI_MakeFace mkFace;
+
+        for( int contId = 0; contId < polygon.size(); contId++ )
         {
-            ReportMessage( wxString::Format( wxT( "MakeShape1: OCC exception: %s\n" ),
-                                             e.GetMessageString() ) );
-            success = false;
+            const SHAPE_LINE_CHAIN& contour = polygon[contId];
+            BRepLib_MakeWire        mkWire;
+
+            try
+            {
+                if( !makeWireFromChain( mkWire, contour ) )
+                    continue;
+
+                wxASSERT( mkWire.IsDone() );
+
+                if( contId == 0 ) // Outline
+                    mkFace = BRepBuilderAPI_MakeFace( mkWire.Wire() );
+                else // Hole
+                    mkFace.Add( mkWire );
+            }
+            catch( const Standard_Failure& e )
+            {
+                ReportMessage(
+                        wxString::Format( wxT( "MakeShapes (contour %d): OCC exception: %s\n" ),
+                                          contId, e.GetMessageString() ) );
+                return false;
+            }
         }
 
-        if( !success )
+        if( mkFace.IsDone() )
         {
-            ReportMessage( wxS( "failed to add edge\n" ) );
-            return false;
+            TopoDS_Shape prism = BRepPrimAPI_MakePrism( mkFace, gp_Vec( 0, 0, aThickness ) );
+            aShapes.push_back( prism );
+
+            if( prism.IsNull() )
+            {
+                ReportMessage( wxT( "Failed to create a prismatic shape\n" ) );
+                return false;
+            }
         }
-
-        start = end;
-    }
-
-    BRepBuilderAPI_MakeFace face;
-
-    try
-    {
-        face = BRepBuilderAPI_MakeFace( wire );
-    }
-    catch(  const Standard_Failure& e )
-    {
-        ReportMessage(
-                wxString::Format( wxT( "MakeShape2 (items_count %d): OCC exception: %s\n" ),
-                                  items_count, e.GetMessageString() ) );
-        return false;
-    }
-
-    aShape = BRepPrimAPI_MakePrism( face, gp_Vec( 0, 0, aThickness ) );
-
-    if( aShape.IsNull() )
-    {
-        ReportMessage( wxT( "failed to create a prismatic shape\n" ) );
-        return false;
+        else
+        {
+            wxASSERT( false );
+        }
     }
 
     return true;
@@ -721,37 +751,14 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
         const SHAPE_LINE_CHAIN& outline = aOutline.COutline( cnt );
 
         ReportMessage( wxString::Format( wxT( "Build board main outline %d with %d points.\n" ),
-                                         cnt+1, outline.PointCount() ) );
+                                         cnt + 1, outline.PointCount() ) );
 
-        TopoDS_Shape curr_brd;
-
-        if( !MakeShape( curr_brd, outline, m_boardThickness, 0.0, aOrigin ) )
+        if( !MakeShapes( m_board_outlines, aOutline, m_boardThickness, 0.0, aOrigin ) )
         {
             // Error
             ReportMessage( wxString::Format(
-                           wxT( "OCC error adding main outline polygon %d with %d points.\n" ),
-                           cnt+1, outline.PointCount() ) );
-        }
-        else
-            m_board_outlines.push_back( curr_brd );
-
-        // Generate board cutouts in current main outline:
-        if( aOutline.HoleCount( cnt ) > 0 )
-        {
-            ReportMessage( wxString::Format( wxT( "Add cutouts in outline %d (%d cutout(s)).\n" ),
-                                             cnt+1, aOutline.HoleCount( cnt ) ) );
-        }
-
-        for( int ii = 0; ii < aOutline.HoleCount( cnt ); ii++ )
-        {
-            const SHAPE_LINE_CHAIN& holeOutline = aOutline.Hole( cnt, ii );
-            TopoDS_Shape hole;
-
-            if( MakeShape( hole, holeOutline, m_boardThickness + (m_copperThickness*4),
-                           -m_copperThickness*2, aOrigin ) )
-            {
-                m_cutouts.push_back( hole );
-            }
+                    wxT( "OCC error adding main outline polygon %d with %d points.\n" ), cnt + 1,
+                    outline.PointCount() ) );
         }
     }
 
@@ -805,48 +812,45 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
     // push the board to the data structure
     ReportMessage( wxT( "\nGenerate board full shape.\n" ) );
 
-    auto pushToAssembly = [&]( std::vector<TopoDS_Shape>& aShapesList, Quantity_Color aColor, const wxString& aShapeName )
-                            {
-                                int i = 1;
-                                for( TopoDS_Shape& shape : aShapesList )
-                                {
-                                    Handle( TDataStd_TreeNode ) node;
+    auto pushToAssembly = [&]( std::vector<TopoDS_Shape>& aShapesList, Quantity_Color aColor,
+                               const wxString& aShapeName )
+    {
+        int i = 1;
+        for( TopoDS_Shape& shape : aShapesList )
+        {
+            Handle( TDataStd_TreeNode ) node;
 
-                                    // Dont expand the component or else coloring it gets hard
-                                    TDF_Label lbl =
-                                            m_assy->AddComponent( m_assy_label, shape, false );
-                                    m_pcb_labels.push_back( lbl );
+            // Dont expand the component or else coloring it gets hard
+            TDF_Label lbl = m_assy->AddComponent( m_assy_label, shape, false );
+            m_pcb_labels.push_back( lbl );
 
-                                    if( m_pcb_labels.back().IsNull() )
-                                        break;
+            if( m_pcb_labels.back().IsNull() )
+                break;
 
-                                    lbl.FindAttribute( XCAFDoc::ShapeRefGUID(), node );
-                                    TDF_Label shpLbl = node->Father()->Label();
-                                    if( !shpLbl.IsNull() )
-                                    {
-                                        colorTool->SetColor( shpLbl, aColor, XCAFDoc_ColorSurf );
-                                        wxString shapeName;
+            lbl.FindAttribute( XCAFDoc::ShapeRefGUID(), node );
+            TDF_Label shpLbl = node->Father()->Label();
+            if( !shpLbl.IsNull() )
+            {
+                colorTool->SetColor( shpLbl, aColor, XCAFDoc_ColorSurf );
+                wxString shapeName;
 
-                                        if( aShapesList.size() > 1 )
-                                        {
-                                            shapeName = wxString::Format(
-                                                    wxT( "%s_%s_%d" ), m_pcbName, aShapeName, i );
-                                        }
-                                        else
-                                        {
-                                            shapeName = wxString::Format(
-                                                    wxT( "%s_%s" ), m_pcbName, aShapeName );
-                                        }
+                if( aShapesList.size() > 1 )
+                {
+                    shapeName = wxString::Format( wxT( "%s_%s_%d" ), m_pcbName, aShapeName, i );
+                }
+                else
+                {
+                    shapeName = wxString::Format( wxT( "%s_%s" ), m_pcbName, aShapeName );
+                }
 
 
-                                        TCollection_ExtendedString partname(
-                                                shapeName.ToUTF8().data() );
-                                        TDataStd_Name::Set( shpLbl, partname );
-                                    }
+                TCollection_ExtendedString partname( shapeName.ToUTF8().data() );
+                TDataStd_Name::Set( shpLbl, partname );
+            }
 
-                                    i++;
-                                }
-                            };
+            i++;
+        }
+    };
 
     // AddComponent adds a label that has a reference (not a parent/child relation) to the real
     // label.  We need to extract that real label to name it for the STEP output cleanly
