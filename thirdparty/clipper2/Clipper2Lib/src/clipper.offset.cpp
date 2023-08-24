@@ -1,6 +1,6 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Date      :  26 May 2023                                                     *
+* Date      :  7 August 2023                                                   *
 * Website   :  http://www.angusj.com                                           *
 * Copyright :  Angus Johnson 2010-2023                                         *
 * Purpose   :  Path Offset (Inflate/Shrink)                                    *
@@ -78,8 +78,7 @@ inline double Hypot(double x, double y)
 }
 
 inline PointD NormalizeVector(const PointD& vec)
-{
-	
+{	
 	double h = Hypot(vec.x, vec.y);
 	if (AlmostZero(h)) return PointD(0,0);
 	double inverseHypot = 1 / h;
@@ -318,7 +317,10 @@ void ClipperOffset::OffsetPoint(Group& group, Path64& path, size_t j, size_t k)
 	if (sin_a > 1.0) sin_a = 1.0;
 	else if (sin_a < -1.0) sin_a = -1.0;
 
-	if (deltaCallback64_) group_delta_ = deltaCallback64_(path, norms, j, k);
+	if (deltaCallback64_) {
+		group_delta_ = deltaCallback64_(path, norms, j, k);
+		if (group.is_reversed) group_delta_ = -group_delta_;
+	}
 	if (std::fabs(group_delta_) <= floating_point_tolerance)
 	{
 		group.path.push_back(path[j]);
@@ -352,6 +354,17 @@ void ClipperOffset::OffsetPoint(Group& group, Path64& path, size_t j, size_t k)
 
 void ClipperOffset::OffsetPolygon(Group& group, Path64& path)
 {
+	// when the path is contracting, make sure 
+	// there is sufficient space to do so.                //#593
+	// nb: this will have a small impact on performance
+	double a = Area(path);
+	// contracting when orientation is opposite offset direction
+	if ((a < 0) != (group_delta_ < 0)) 
+	{
+		Rect64 rec = GetBounds(path);
+		if (std::fabs(group_delta_) * 2 > rec.Width()) return;
+	}
+
 	for (Path64::size_type j = 0, k = path.size() -1; j < path.size(); k = j, ++j)
 		OffsetPoint(group, path, j, k);
 	group.paths_out.push_back(group.path);
@@ -602,7 +615,6 @@ void ClipperOffset::Execute(double delta, Paths64& paths)
 	if (!solution.size()) return;
 
 	paths = solution;
-	/**/
 	//clean up self-intersections ...
 	Clipper64 c;
 	c.PreserveCollinear = false;
@@ -618,7 +630,6 @@ void ClipperOffset::Execute(double delta, Paths64& paths)
 		c.Execute(ClipType::Union, FillRule::Negative, paths);
 	else
 		c.Execute(ClipType::Union, FillRule::Positive, paths);
-	/**/
 }
 
 

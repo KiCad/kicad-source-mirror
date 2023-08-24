@@ -1,6 +1,6 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Date      :  15 May 2023                                                     *
+* Date      :  26 July 2023                                                    *
 * Website   :  http://www.angusj.com                                           *
 * Copyright :  Angus Johnson 2010-2023                                         *
 * Purpose   :  This is the main polygon clipping module                        *
@@ -13,7 +13,7 @@
 constexpr auto CLIPPER2_VERSION = "1.2.2";
 
 #include <cstdlib>
-#include <stdint.h>
+#include <stdint.h> //#541
 #include <iostream>
 #include <queue>
 #include <vector>
@@ -26,6 +26,7 @@ constexpr auto CLIPPER2_VERSION = "1.2.2";
 #ifdef None
 #undef None
 #endif
+
 namespace Clipper2Lib {
 
 	struct Scanline;
@@ -95,10 +96,11 @@ namespace Clipper2Lib {
 		OutPt* pts = nullptr;
 		PolyPath* polypath = nullptr;
 		OutRecList* splits = nullptr;
+		OutRec* recursive_split = nullptr;
 		Rect64 bounds = {};
 		Path64 path;
 		bool is_open = false;
-		bool horz_done = false;
+
 		~OutRec() {
 			if (splits) delete splits;
 			// nb: don't delete the split pointers
@@ -253,7 +255,6 @@ namespace Clipper2Lib {
 		void DoTopOfScanbeam(const int64_t top_y);
 		Active *DoMaxima(Active &e);
 		void JoinOutrecPaths(Active &e1, Active &e2);
-		void CompleteSplit(OutPt* op1, OutPt* op2, OutRec& outrec);
 		void FixSelfIntersects(OutRec* outrec);
 		void DoSplitOp(OutRec* outRec, OutPt* splitOp);
 

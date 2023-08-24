@@ -159,9 +159,9 @@ EXTERN_DLL_EXPORT CPathsD InflatePathsD(const CPathsD paths,
 
 // RectClip & RectClipLines:
 EXTERN_DLL_EXPORT CPaths64 RectClip64(const CRect64& rect,
-  const CPaths64 paths, bool convex_only = false);
+  const CPaths64 paths);
 EXTERN_DLL_EXPORT CPathsD RectClipD(const CRectD& rect,
-  const CPathsD paths, int precision = 2, bool convex_only = false);
+  const CPathsD paths, int precision = 2);
 EXTERN_DLL_EXPORT CPaths64 RectClipLines64(const CRect64& rect,
   const CPaths64 paths);
 EXTERN_DLL_EXPORT CPathsD RectClipLinesD(const CRectD& rect,

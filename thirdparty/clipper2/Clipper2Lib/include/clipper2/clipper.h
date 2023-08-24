@@ -1,6 +1,6 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Date      :  26 May 2023                                                     *
+* Date      :  16 July 2023                                                    *
 * Website   :  http://www.angusj.com                                           *
 * Copyright :  Angus Johnson 2010-2023                                         *
 * Purpose   :  This module provides a simple interface to the Clipper Library  *
@@ -312,75 +312,55 @@ namespace Clipper2Lib {
     }
 
     static void OutlinePolyPath(std::ostream& os, 
-      bool isHole, size_t count, const std::string& preamble)
+      size_t idx, bool isHole, size_t count, const std::string& preamble)
     {
       std::string plural = (count == 1) ? "." : "s.";
       if (isHole)
-      {
-        if (count)
-          os << preamble << "+- Hole with " << count <<
-          " nested polygon" << plural << std::endl;
-        else
-          os << preamble << "+- Hole" << std::endl;
-      }
+        os << preamble << "+- Hole (" << idx << ") contains " << count <<
+        " nested polygon" << plural << std::endl;
       else
-      {
-        if (count)
-          os << preamble << "+- Polygon with " << count <<
+        os << preamble << "+- Polygon (" << idx << ") contains " << count <<
           " hole" << plural << std::endl;
-        else
-          os << preamble << "+- Polygon" << std::endl;
-      }
     }
 
     static void OutlinePolyPath64(std::ostream& os, const PolyPath64& pp,
-      std::string preamble, bool last_child)
+      size_t idx, std::string preamble)
     {
-      OutlinePolyPath(os, pp.IsHole(), pp.Count(), preamble);
-      preamble += (!last_child) ? "|  " : "   ";
-      if (pp.Count())
-      {
-        PolyPath64List::const_iterator it = pp.begin();
-        for (; it < pp.end() - 1; ++it)
-          OutlinePolyPath64(os, **it, preamble, false);
-        OutlinePolyPath64(os, **it, preamble, true);
-      }
+      OutlinePolyPath(os, idx, pp.IsHole(), pp.Count(), preamble);
+      for (size_t i = 0; i < pp.Count(); ++i)
+        if (pp.Child(i)->Count())
+          details::OutlinePolyPath64(os, *pp.Child(i), i, preamble + "  ");
     }
 
     static void OutlinePolyPathD(std::ostream& os, const PolyPathD& pp,
-      std::string preamble, bool last_child)
+      size_t idx, std::string preamble)
     {
-      OutlinePolyPath(os, pp.IsHole(), pp.Count(), preamble);
-      preamble += (!last_child) ? "|  " : "   ";
-      if (pp.Count())
-      {
-        PolyPathDList::const_iterator it = pp.begin();
-        for (; it < pp.end() - 1; ++it)
-          OutlinePolyPathD(os, **it, preamble, false);
-        OutlinePolyPathD(os, **it, preamble, true);
-      }
+      OutlinePolyPath(os, idx, pp.IsHole(), pp.Count(), preamble);
+      for (size_t i = 0; i < pp.Count(); ++i)
+        if (pp.Child(i)->Count())
+          details::OutlinePolyPathD(os, *pp.Child(i), i, preamble + "  ");
     }
 
   } // end details namespace 
 
   inline std::ostream& operator<< (std::ostream& os, const PolyTree64& pp)
   {
-    os << std::endl << "Polytree root" << std::endl;
-    PolyPath64List::const_iterator it = pp.begin();
-    for (; it < pp.end() - 1; ++it)
-      details::OutlinePolyPath64(os, **it, "   ", false);
-    details::OutlinePolyPath64(os, **it, "   ", true);
+    std::string plural = (pp.Count() == 1) ? " polygon." : " polygons.";
+    os << std::endl << "Polytree with " << pp.Count() << plural << std::endl;
+      for (size_t i = 0; i < pp.Count(); ++i)
+        if (pp.Child(i)->Count())
+          details::OutlinePolyPath64(os, *pp.Child(i), i, "  ");
     os << std::endl << std::endl;
-    if (!pp.Level()) os << std::endl;
     return os;
   }
 
   inline std::ostream& operator<< (std::ostream& os, const PolyTreeD& pp)
   {
-    PolyPathDList::const_iterator it = pp.begin();
-    for (; it < pp.end() - 1; ++it)
-      details::OutlinePolyPathD(os, **it, "   ", false);
-    details::OutlinePolyPathD(os, **it, "   ", true);
+    std::string plural = (pp.Count() == 1) ? " polygon." : " polygons.";
+    os << std::endl << "Polytree with " << pp.Count() << plural << std::endl;
+    for (size_t i = 0; i < pp.Count(); ++i)
+      if (pp.Child(i)->Count())
+        details::OutlinePolyPathD(os, *pp.Child(i), i, "  ");
     os << std::endl << std::endl;
     if (!pp.Level()) os << std::endl;
     return os;
