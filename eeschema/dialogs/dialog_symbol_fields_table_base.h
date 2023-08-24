@@ -71,7 +71,7 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		BITMAP_BUTTON* m_separator2;
 		wxCheckBox* m_groupSymbolsBox;
 		BITMAP_BUTTON* m_separator3;
-		wxBitmapButton* m_bRefresh;
+		STD_BITMAP_BUTTON* m_bRefresh;
 		WX_GRID* m_grid;
 		wxStaticText* m_scopeLabel;
 		wxRadioButton* m_radioProject;
@@ -83,8 +83,6 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		wxRadioButton* m_radioSelect;
 		wxRadioButton* m_radioOff;
 		wxPanel* m_panelExport;
-		wxStaticText* m_labelBomExportPresets;
-		wxChoice* m_cbBomFmtPresets;
 		wxStaticText* m_labelFieldDelimiter;
 		wxTextCtrl* m_textFieldDelimiter;
 		wxStaticText* m_labelStringDelimiter;
@@ -93,15 +91,16 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_textRefDelimiter;
 		wxStaticText* m_labelRefRangeDelimiter;
 		wxTextCtrl* m_textRefRangeDelimiter;
-		wxStaticText* m_labelKeepTabs;
 		wxCheckBox* m_checkKeepTabs;
-		wxStaticText* m_labelKeepLineBreaks;
 		wxCheckBox* m_checkKeepLineBreaks;
+		wxStaticLine* m_staticline2;
+		wxStaticText* m_labelBomExportPresets;
+		wxChoice* m_cbBomFmtPresets;
 		wxStaticText* m_labelOutputDirectory;
 		wxTextCtrl* m_outputFileName;
-		wxBitmapButton* m_browseButton;
+		STD_BITMAP_BUTTON* m_browseButton;
 		wxStaticText* m_labelPreview;
-		wxBitmapButton* m_bRefreshPreview;
+		STD_BITMAP_BUTTON* m_bRefreshPreview;
 		wxTextCtrl* m_textOutput;
 		wxButton* m_buttonExport;
 		wxButton* m_buttonApply;

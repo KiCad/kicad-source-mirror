@@ -61,7 +61,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_staticline1 = new wxStaticLine( m_leftPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bPresets->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM, 5 );
 
-	m_bomPresetsLabel = new wxStaticText( m_leftPanel, wxID_ANY, _("View Preset:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_bomPresetsLabel = new wxStaticText( m_leftPanel, wxID_ANY, _("View presets:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_bomPresetsLabel->Wrap( -1 );
 	bPresets->Add( m_bomPresetsLabel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
@@ -69,7 +69,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	int m_cbBomPresetsNChoices = sizeof( m_cbBomPresetsChoices ) / sizeof( wxString );
 	m_cbBomPresets = new wxChoice( m_leftPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbBomPresetsNChoices, m_cbBomPresetsChoices, 0 );
 	m_cbBomPresets->SetSelection( 1 );
-	bPresets->Add( m_cbBomPresets, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
+	bPresets->Add( m_cbBomPresets, 0, wxEXPAND|wxTOP|wxLEFT, 4 );
 
 
 	bLeftSizer->Add( bPresets, 0, wxEXPAND|wxTOP, 5 );
@@ -118,7 +118,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 
 	bControls->Add( m_separator3, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_bRefresh = new wxBitmapButton( m_rightPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bRefresh = new STD_BITMAP_BUTTON( m_rightPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bRefresh->SetMinSize( wxSize( 30,30 ) );
 
 	bControls->Add( m_bRefresh, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
@@ -205,74 +205,76 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_panelEdit->SetSizer( bEditSizer );
 	m_panelEdit->Layout();
 	bEditSizer->Fit( m_panelEdit );
-	m_nbPages->AddPage( m_panelEdit, _("Edit"), true );
+	m_nbPages->AddPage( m_panelEdit, _("Edit"), false );
 	m_panelExport = new wxPanel( m_nbPages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxGridBagSizer* gbExport;
-	gbExport = new wxGridBagSizer( 0, 0 );
+	gbExport = new wxGridBagSizer( 0, 5 );
 	gbExport->SetFlexibleDirection( wxBOTH );
 	gbExport->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	wxFlexGridSizer* fgExportOptions;
-	fgExportOptions = new wxFlexGridSizer( 7, 2, 0, 0 );
-	fgExportOptions->SetFlexibleDirection( wxBOTH );
-	fgExportOptions->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxGridBagSizer* gbExportOptions;
+	gbExportOptions = new wxGridBagSizer( 4, 5 );
+	gbExportOptions->SetFlexibleDirection( wxBOTH );
+	gbExportOptions->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_labelBomExportPresets = new wxStaticText( m_panelExport, wxID_ANY, _("Format Preset:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelFieldDelimiter = new wxStaticText( m_panelExport, wxID_ANY, _("Field delimeter:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelFieldDelimiter->Wrap( -1 );
+	gbExportOptions->Add( m_labelFieldDelimiter, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	m_textFieldDelimiter = new wxTextCtrl( m_panelExport, wxID_ANY, _(","), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_TAB );
+	m_textFieldDelimiter->SetMinSize( wxSize( 60,-1 ) );
+
+	gbExportOptions->Add( m_textFieldDelimiter, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_labelStringDelimiter = new wxStaticText( m_panelExport, wxID_ANY, _("String delimeter:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelStringDelimiter->Wrap( -1 );
+	gbExportOptions->Add( m_labelStringDelimiter, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_textStringDelimiter = new wxTextCtrl( m_panelExport, wxID_ANY, _("\""), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_TAB );
+	m_textStringDelimiter->SetMinSize( wxSize( 60,-1 ) );
+
+	gbExportOptions->Add( m_textStringDelimiter, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_labelRefDelimiter = new wxStaticText( m_panelExport, wxID_ANY, _("Reference delimiter:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelRefDelimiter->Wrap( -1 );
+	gbExportOptions->Add( m_labelRefDelimiter, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_textRefDelimiter = new wxTextCtrl( m_panelExport, wxID_ANY, _(","), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_TAB );
+	m_textRefDelimiter->SetMinSize( wxSize( 60,-1 ) );
+
+	gbExportOptions->Add( m_textRefDelimiter, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_labelRefRangeDelimiter = new wxStaticText( m_panelExport, wxID_ANY, _("Range delimiter:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelRefRangeDelimiter->Wrap( -1 );
+	gbExportOptions->Add( m_labelRefRangeDelimiter, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_textRefRangeDelimiter = new wxTextCtrl( m_panelExport, wxID_ANY, _("-"), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_TAB );
+	m_textRefRangeDelimiter->SetToolTip( _("Leave blank to disable ranges.") );
+	m_textRefRangeDelimiter->SetMinSize( wxSize( 60,-1 ) );
+
+	gbExportOptions->Add( m_textRefRangeDelimiter, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_checkKeepTabs = new wxCheckBox( m_panelExport, wxID_ANY, _("Keep tabs"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbExportOptions->Add( m_checkKeepTabs, wxGBPosition( 4, 0 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_checkKeepLineBreaks = new wxCheckBox( m_panelExport, wxID_ANY, _("Keep line breaks"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbExportOptions->Add( m_checkKeepLineBreaks, wxGBPosition( 5, 0 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_staticline2 = new wxStaticLine( m_panelExport, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	gbExportOptions->Add( m_staticline2, wxGBPosition( 7, 0 ), wxGBSpan( 1, 2 ), wxEXPAND|wxTOP|wxBOTTOM, 5 );
+
+	m_labelBomExportPresets = new wxStaticText( m_panelExport, wxID_ANY, _("Format presets:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelBomExportPresets->Wrap( -1 );
-	fgExportOptions->Add( m_labelBomExportPresets, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	gbExportOptions->Add( m_labelBomExportPresets, wxGBPosition( 8, 0 ), wxGBSpan( 1, 2 ), 0, 5 );
 
 	wxString m_cbBomFmtPresetsChoices[] = { _("Default"), _("(unsaved)") };
 	int m_cbBomFmtPresetsNChoices = sizeof( m_cbBomFmtPresetsChoices ) / sizeof( wxString );
 	m_cbBomFmtPresets = new wxChoice( m_panelExport, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbBomFmtPresetsNChoices, m_cbBomFmtPresetsChoices, 0 );
 	m_cbBomFmtPresets->SetSelection( 0 );
-	fgExportOptions->Add( m_cbBomFmtPresets, 0, wxALL|wxEXPAND, 5 );
-
-	m_labelFieldDelimiter = new wxStaticText( m_panelExport, wxID_ANY, _("Field Delimeter:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_labelFieldDelimiter->Wrap( -1 );
-	fgExportOptions->Add( m_labelFieldDelimiter, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
-
-	m_textFieldDelimiter = new wxTextCtrl( m_panelExport, wxID_ANY, _(","), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_TAB );
-	fgExportOptions->Add( m_textFieldDelimiter, 0, wxALL|wxEXPAND, 5 );
-
-	m_labelStringDelimiter = new wxStaticText( m_panelExport, wxID_ANY, _("String Delimeter:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_labelStringDelimiter->Wrap( -1 );
-	fgExportOptions->Add( m_labelStringDelimiter, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
-
-	m_textStringDelimiter = new wxTextCtrl( m_panelExport, wxID_ANY, _("\""), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_TAB );
-	fgExportOptions->Add( m_textStringDelimiter, 0, wxALL|wxEXPAND, 5 );
-
-	m_labelRefDelimiter = new wxStaticText( m_panelExport, wxID_ANY, _("Reference Delimiter:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_labelRefDelimiter->Wrap( -1 );
-	fgExportOptions->Add( m_labelRefDelimiter, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
-
-	m_textRefDelimiter = new wxTextCtrl( m_panelExport, wxID_ANY, _(","), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_TAB );
-	fgExportOptions->Add( m_textRefDelimiter, 0, wxALL, 5 );
-
-	m_labelRefRangeDelimiter = new wxStaticText( m_panelExport, wxID_ANY, _("Range Delimiter:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_labelRefRangeDelimiter->Wrap( -1 );
-	fgExportOptions->Add( m_labelRefRangeDelimiter, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
-
-	m_textRefRangeDelimiter = new wxTextCtrl( m_panelExport, wxID_ANY, _("-"), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_TAB );
-	m_textRefRangeDelimiter->SetToolTip( _("Leave blank to disable ranges.") );
-
-	fgExportOptions->Add( m_textRefRangeDelimiter, 0, wxALL, 5 );
-
-	m_labelKeepTabs = new wxStaticText( m_panelExport, wxID_ANY, _("Keep Tabs:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_labelKeepTabs->Wrap( -1 );
-	fgExportOptions->Add( m_labelKeepTabs, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
-
-	m_checkKeepTabs = new wxCheckBox( m_panelExport, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgExportOptions->Add( m_checkKeepTabs, 0, wxALL, 5 );
-
-	m_labelKeepLineBreaks = new wxStaticText( m_panelExport, wxID_ANY, _("Keep Line Breaks:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_labelKeepLineBreaks->Wrap( -1 );
-	fgExportOptions->Add( m_labelKeepLineBreaks, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
-
-	m_checkKeepLineBreaks = new wxCheckBox( m_panelExport, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgExportOptions->Add( m_checkKeepLineBreaks, 0, wxALL, 5 );
+	gbExportOptions->Add( m_cbBomFmtPresets, wxGBPosition( 9, 0 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
 
 
-	gbExport->Add( fgExportOptions, wxGBPosition( 0, 0 ), wxGBSpan( 3, 1 ), wxEXPAND, 5 );
+	gbExport->Add( gbExportOptions, wxGBPosition( 0, 0 ), wxGBSpan( 3, 1 ), wxEXPAND|wxALL, 5 );
 
 	wxBoxSizer* bOutputDirectory;
 	bOutputDirectory = new wxBoxSizer( wxHORIZONTAL );
@@ -282,38 +284,38 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	bOutputDirectory->Add( m_labelOutputDirectory, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_outputFileName = new wxTextCtrl( m_panelExport, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bOutputDirectory->Add( m_outputFileName, 1, wxALL|wxEXPAND, 5 );
+	bOutputDirectory->Add( m_outputFileName, 1, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_browseButton = new wxBitmapButton( m_panelExport, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_browseButton = new STD_BITMAP_BUTTON( m_panelExport, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_browseButton->SetMinSize( wxSize( 30,30 ) );
 
-	bOutputDirectory->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bOutputDirectory->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	gbExport->Add( bOutputDirectory, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	gbExport->Add( bOutputDirectory, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxBOTTOM, 10 );
 
 	wxBoxSizer* bPreview;
 	bPreview = new wxBoxSizer( wxHORIZONTAL );
 
 	m_labelPreview = new wxStaticText( m_panelExport, wxID_ANY, _("Preview:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelPreview->Wrap( -1 );
-	bPreview->Add( m_labelPreview, 0, wxALIGN_BOTTOM|wxALL, 5 );
+	bPreview->Add( m_labelPreview, 0, wxALIGN_BOTTOM|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	bPreview->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_bRefreshPreview = new wxBitmapButton( m_panelExport, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bRefreshPreview = new STD_BITMAP_BUTTON( m_panelExport, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bRefreshPreview->SetMinSize( wxSize( 30,30 ) );
 
-	bPreview->Add( m_bRefreshPreview, 0, wxALL, 5 );
+	bPreview->Add( m_bRefreshPreview, 0, wxTOP|wxRIGHT, 5 );
 
 
-	gbExport->Add( bPreview, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	gbExport->Add( bPreview, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxTOP|wxBOTTOM, 3 );
 
 	m_textOutput = new wxTextCtrl( m_panelExport, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxTE_MULTILINE|wxTE_READONLY );
 	m_textOutput->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	gbExport->Add( m_textOutput, wxGBPosition( 2, 1 ), wxGBSpan( 2, 1 ), wxALL|wxEXPAND, 5 );
+	gbExport->Add( m_textOutput, wxGBPosition( 2, 1 ), wxGBSpan( 2, 1 ), wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	gbExport->AddGrowableCol( 1 );
@@ -322,7 +324,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_panelExport->SetSizer( gbExport );
 	m_panelExport->Layout();
 	gbExport->Fit( m_panelExport );
-	m_nbPages->AddPage( m_panelExport, _("Export"), false );
+	m_nbPages->AddPage( m_panelExport, _("Export"), true );
 
 	bMainSizer->Add( m_nbPages, 1, wxEXPAND | wxALL, 5 );
 

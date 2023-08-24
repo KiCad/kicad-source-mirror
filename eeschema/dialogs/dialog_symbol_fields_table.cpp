@@ -182,7 +182,8 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     m_removeFieldButton->Enable( false );
     m_renameFieldButton->Enable( false );
 
-    m_bomPresetsLabel->SetFont( KIUI::GetStatusFont( this ) );
+    m_bomPresetsLabel->SetFont( KIUI::GetInfoFont( this ) );
+    m_labelBomExportPresets->SetFont( KIUI::GetInfoFont( this ) );
     m_separator11->SetIsSeparator();
 
     m_fieldsCtrl->AppendTextColumn( _( "Field" ), wxDATAVIEW_CELL_INERT, 0, wxALIGN_LEFT, 0 );
@@ -1066,7 +1067,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSizeFieldList( wxSizeEvent& event )
     // TODO: something in wxWidgets 3.1.x pads checkbox columns with extra space.  (It used to
     // also be that the width of the column would get set too wide (to 30), but that's patched in
     // our local wxWidgets fork.)
-    m_labelColWidth -= 30;
+    m_labelColWidth -= 50;
 #endif
 
     // GTK loses its head and messes these up when resizing the splitter bar:
