@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 NBEE Embedded Systems, Miguel Angel Ajo <miguelangel@nbee.es>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,6 +74,13 @@ BOARD* GetBoard()
 void ScriptingSetPcbEditFrame( PCB_EDIT_FRAME* aPcbEditFrame )
 {
     s_PcbEditFrame = aPcbEditFrame;
+}
+
+
+void ScriptingOnDestructPcbEditFrame( PCB_EDIT_FRAME* aPcbEditFrame )
+{
+    if( s_PcbEditFrame == aPcbEditFrame )
+        s_PcbEditFrame = nullptr;
 }
 
 

@@ -108,6 +108,7 @@
 #include <footprint_viewer_frame.h>
 
 #include <action_plugin.h>
+#include <pcbnew_scripting_helpers.h>
 #include "../scripting/python_scripting.h"
 
 #include <wx/filedlg.h>
@@ -486,6 +487,8 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 {
+    ScriptingOnDestructPcbEditFrame( this );
+
     if( ADVANCED_CFG::GetCfg().m_ShowEventCounters )
     {
         // Stop the timer during destruction early to avoid potential event race conditions (that
