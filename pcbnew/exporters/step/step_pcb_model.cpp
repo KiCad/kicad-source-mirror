@@ -78,6 +78,9 @@
 #include <BRepPrimAPI_MakeCylinder.hxx>
 #include <BRepAlgoAPI_Cut.hxx>
 
+#include <BRepBndLib.hxx>
+#include <Bnd_BoundSortBox.hxx>
+
 #include <TopoDS.hxx>
 #include <TopoDS_Wire.hxx>
 #include <TopoDS_Face.hxx>
@@ -768,21 +771,40 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
         ReportMessage( wxString::Format( wxT( "Build board cutouts and holes (%d hole(s)).\n" ),
                                          (int) m_cutouts.size() ) );
 
-        TopTools_ListOfShape holelist;
+        Bnd_BoundSortBox bsb;
 
-        for( TopoDS_Shape& hole : m_cutouts )
-            holelist.Append( hole );
+        Handle( Bnd_HArray1OfBox ) holeBoxSet = new Bnd_HArray1OfBox( 0, m_cutouts.size() - 1 );
 
-        auto subtractShapes = [&]( const wxString& aWhat, std::vector<TopoDS_Shape>& aShapesList,
-                             TopTools_ListOfShape& aSubtrahend )
+        for( int i = 0; i < m_cutouts.size(); i++ )
+        {
+            Bnd_Box bbox;
+            BRepBndLib::Add( m_cutouts[i], bbox );
+            ( *holeBoxSet )[i] = bbox;
+        }
+
+        bsb.Initialize( holeBoxSet );
+
+        auto subtractShapes = [&]( const wxString& aWhat, std::vector<TopoDS_Shape>& aShapesList )
         {
             // Remove holes for each item (board body or bodies, one can have more than one board)
             int cnt = 0;
             for( TopoDS_Shape& shape : aShapesList )
             {
-                if( cnt ==  0 )
-                    ReportMessage( wxString::Format( _( "Build holes for %s\n" ), aWhat ) );
+                Bnd_Box shapeBbox;
+                BRepBndLib::Add( shape, shapeBbox );
 
+                const TColStd_ListOfInteger& indices = bsb.Compare( shapeBbox );
+
+                if( indices.IsEmpty() )
+                    continue;
+
+                TopTools_ListOfShape holelist;
+
+                for( const Standard_Integer& index : indices )
+                    holelist.Append( m_cutouts[index] );
+
+                if( cnt == 0 )
+                    ReportMessage( wxString::Format( _( "Build holes for %s\n" ), aWhat ) );
 
                 cnt++;
 
@@ -796,17 +818,17 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
                 BRepAlgoAPI_Cut Cut;
                 Cut.SetArguments( mainbrd );
 
-                Cut.SetTools( aSubtrahend );
+                Cut.SetTools( holelist );
                 Cut.Build();
 
                 shape = Cut.Shape();
             }
         };
 
-        subtractShapes( _( "pads" ), m_board_copper_pads, holelist );
-        subtractShapes( _( "shapes" ), m_board_outlines, holelist );
-        subtractShapes( _( "tracks" ), m_board_copper_tracks, holelist );
-        subtractShapes( _( "zones" ), m_board_copper_zones, holelist );
+        subtractShapes( _( "pads" ), m_board_copper_pads );
+        subtractShapes( _( "shapes" ), m_board_outlines );
+        subtractShapes( _( "tracks" ), m_board_copper_tracks );
+        subtractShapes( _( "zones" ), m_board_copper_zones );
     }
 
     // push the board to the data structure
