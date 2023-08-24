@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -40,10 +40,10 @@ DIALOG_GRID_SETTINGS_BASE::DIALOG_GRID_SETTINGS_BASE( wxWindow* parent, wxWindow
 	bSizer4->Add( m_removeGridButton, 0, 0, 5 );
 
 
-	sbCurrentGrid->Add( bSizer4, 0, wxEXPAND, 5 );
+	sbCurrentGrid->Add( bSizer4, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
-	bSizerColumns->Add( sbCurrentGrid, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+	bSizerColumns->Add( sbCurrentGrid, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	wxBoxSizer* bSizerRightCol;
 	bSizerRightCol = new wxBoxSizer( wxVERTICAL );
@@ -79,10 +79,10 @@ DIALOG_GRID_SETTINGS_BASE::DIALOG_GRID_SETTINGS_BASE( wxWindow* parent, wxWindow
 	fgSizerGridOrigin->Add( m_TextPosYUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 5 );
 
 
-	sbGridOriginSizer->Add( fgSizerGridOrigin, 0, wxEXPAND|wxBOTTOM, 5 );
+	sbGridOriginSizer->Add( fgSizerGridOrigin, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
-	bSizerRightCol->Add( sbGridOriginSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+	bSizerRightCol->Add( sbGridOriginSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxStaticBoxSizer* sbFastSwitchSizer;
 	sbFastSwitchSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Fast Switching") ), wxVERTICAL );
@@ -120,10 +120,10 @@ DIALOG_GRID_SETTINGS_BASE::DIALOG_GRID_SETTINGS_BASE( wxWindow* parent, wxWindow
 	fgSizer3->Add( m_grid2HotKey, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	sbFastSwitchSizer->Add( fgSizer3, 0, wxEXPAND|wxBOTTOM, 5 );
+	sbFastSwitchSizer->Add( fgSizer3, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
-	bSizerRightCol->Add( sbFastSwitchSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+	bSizerRightCol->Add( sbFastSwitchSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	sbGridOverridesSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Grid Overrides") ), wxVERTICAL );
 
@@ -204,10 +204,10 @@ DIALOG_GRID_SETTINGS_BASE::DIALOG_GRID_SETTINGS_BASE( wxWindow* parent, wxWindow
 	fgGridOverrides->Add( m_staticTextGraphicsUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	sbGridOverridesSizer->Add( fgGridOverrides, 0, wxEXPAND|wxBOTTOM, 5 );
+	sbGridOverridesSizer->Add( fgGridOverrides, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
-	bSizerRightCol->Add( sbGridOverridesSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+	bSizerRightCol->Add( sbGridOverridesSizer, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 
 	bSizerColumns->Add( bSizerRightCol, 1, wxEXPAND, 5 );
