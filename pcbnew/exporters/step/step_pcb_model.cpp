@@ -620,7 +620,7 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
                     std::vector<gp_Pnt>   coords3D( coords.size() );
 
                     // Convert to 3D points
-                    for( int ii = 0; ii < coords.size(); ii++ )
+                    for( size_t ii = 0; ii < coords.size(); ii++ )
                     {
                         coords3D[ii] = gp_Pnt( pcbIUScale.IUTomm( coords[ii].x - aOrigin.x ),
                                                -pcbIUScale.IUTomm( coords[ii].y - aOrigin.y ),
@@ -635,7 +635,7 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
 
                     aMkWire.Add( BRepBuilderAPI_MakeEdge( arcOfCircle ) );
 
-                    if( aMkWire.Error() != BRepBuilderAPI_WireDone )
+                    if( aMkWire.Error() != BRepLib_WireDone  )
                     {
                         ReportMessage( wxT( "failed to add curve\n" ) );
                         return false;
@@ -666,7 +666,7 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
                     BRepBuilderAPI_MakeEdge mkEdge( start, end );
                     aMkWire.Add( mkEdge );
 
-                    if( aMkWire.Error() != BRepBuilderAPI_WireDone )
+                    if( aMkWire.Error() != BRepLib_WireDone  )
                     {
                         ReportMessage( wxT( "failed to add curve\n" ) );
                         return false;
@@ -687,7 +687,7 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
 
         BRepBuilderAPI_MakeFace mkFace;
 
-        for( int contId = 0; contId < polygon.size(); contId++ )
+        for( size_t contId = 0; contId < polygon.size(); contId++ )
         {
             const SHAPE_LINE_CHAIN& contour = polygon[contId];
             BRepLib_MakeWire        mkWire;
@@ -775,7 +775,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
 
         Handle( Bnd_HArray1OfBox ) holeBoxSet = new Bnd_HArray1OfBox( 0, m_cutouts.size() - 1 );
 
-        for( int i = 0; i < m_cutouts.size(); i++ )
+        for( size_t i = 0; i < m_cutouts.size(); i++ )
         {
             Bnd_Box bbox;
             BRepBndLib::Add( m_cutouts[i], bbox );

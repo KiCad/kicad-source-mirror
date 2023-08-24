@@ -47,6 +47,7 @@
 
 #include <wx/crt.h>
 #include <wx/log.h>
+#include <profile.h>        // To use GetRunningMicroSecs or another profiling utility
 
 #define OCC_VERSION_MIN 0x070500
 
@@ -492,6 +493,9 @@ void EXPORTER_STEP::calculatePcbThickness()
 
 bool EXPORTER_STEP::Export()
 {
+    // Display the export time, for statistics
+    unsigned stats_startExportTime = GetRunningMicroSecs();
+
     // setup opencascade message log
     Message::DefaultMessenger()->RemovePrinters( STANDARD_TYPE( Message_PrinterOStream ) );
     Message::DefaultMessenger()->AddPrinter( new KiCadPrinter( this ) );
@@ -571,6 +575,10 @@ bool EXPORTER_STEP::Export()
 
         ReportMessage( msg );
     }
+
+    // Display calculation time in seconds
+    double calculation_time = (double)( GetRunningMicroSecs() - stats_startExportTime) / 1e6;
+    ReportMessage( wxString::Format( _( "\nExport time %.3f s\n" ), calculation_time ) );
 
     return true;
 }
