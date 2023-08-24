@@ -6,6 +6,7 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #include "widgets/bitmap_button.h"
+#include "widgets/std_bitmap_button.h"
 #include "widgets/wx_grid.h"
 
 #include "dialog_symbol_fields_table_base.h"
@@ -31,41 +32,47 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	wxBoxSizer* bLeftSizer;
 	bLeftSizer = new wxBoxSizer( wxVERTICAL );
 
+	m_fieldsCtrl = new wxDataViewListCtrl( m_leftPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_fieldsCtrl->SetMinSize( wxSize( -1,320 ) );
+
+	bLeftSizer->Add( m_fieldsCtrl, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+
+	wxBoxSizer* bFieldsButtons;
+	bFieldsButtons = new wxBoxSizer( wxHORIZONTAL );
+
+	m_addFieldButton = new STD_BITMAP_BUTTON( m_leftPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bFieldsButtons->Add( m_addFieldButton, 0, wxBOTTOM|wxLEFT, 5 );
+
+	m_renameFieldButton = new STD_BITMAP_BUTTON( m_leftPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bFieldsButtons->Add( m_renameFieldButton, 0, wxBOTTOM|wxLEFT, 5 );
+
+
+	bFieldsButtons->Add( 15, 0, 0, wxEXPAND, 5 );
+
+	m_removeFieldButton = new STD_BITMAP_BUTTON( m_leftPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bFieldsButtons->Add( m_removeFieldButton, 0, wxBOTTOM|wxLEFT, 5 );
+
+
+	bLeftSizer->Add( bFieldsButtons, 0, wxEXPAND, 5 );
+
 	wxBoxSizer* bPresets;
 	bPresets = new wxBoxSizer( wxVERTICAL );
 
+	m_staticline1 = new wxStaticLine( m_leftPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bPresets->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM, 5 );
+
 	m_bomPresetsLabel = new wxStaticText( m_leftPanel, wxID_ANY, _("View Preset:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_bomPresetsLabel->Wrap( -1 );
-	bPresets->Add( m_bomPresetsLabel, 0, wxLEFT|wxRIGHT, 2 );
+	bPresets->Add( m_bomPresetsLabel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxString m_cbBomPresetsChoices[] = { _("Default"), _("(unsaved)") };
 	int m_cbBomPresetsNChoices = sizeof( m_cbBomPresetsChoices ) / sizeof( wxString );
 	m_cbBomPresets = new wxChoice( m_leftPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbBomPresetsNChoices, m_cbBomPresetsChoices, 0 );
 	m_cbBomPresets->SetSelection( 1 );
-	bPresets->Add( m_cbBomPresets, 0, wxALL|wxEXPAND, 5 );
+	bPresets->Add( m_cbBomPresets, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
 
 
-	bLeftSizer->Add( bPresets, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
-
-	m_fieldsCtrl = new wxDataViewListCtrl( m_leftPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_fieldsCtrl->SetMinSize( wxSize( -1,320 ) );
-
-	bLeftSizer->Add( m_fieldsCtrl, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
-
-	wxBoxSizer* bFieldsButtons;
-	bFieldsButtons = new wxBoxSizer( wxHORIZONTAL );
-
-	m_addFieldButton = new wxBitmapButton( m_leftPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bFieldsButtons->Add( m_addFieldButton, 0, wxALL, 5 );
-
-	m_removeFieldButton = new wxBitmapButton( m_leftPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bFieldsButtons->Add( m_removeFieldButton, 0, wxALL, 5 );
-
-	m_renameFieldButton = new wxBitmapButton( m_leftPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bFieldsButtons->Add( m_renameFieldButton, 0, wxALL, 5 );
-
-
-	bLeftSizer->Add( bFieldsButtons, 0, wxEXPAND, 5 );
+	bLeftSizer->Add( bPresets, 0, wxEXPAND|wxTOP, 5 );
 
 
 	m_leftPanel->SetSizer( bLeftSizer );
@@ -117,7 +124,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	bControls->Add( m_bRefresh, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bRightSizer->Add( bControls, 0, wxEXPAND|wxLEFT, 5 );
+	bRightSizer->Add( bControls, 0, wxEXPAND, 5 );
 
 	m_grid = new WX_GRID( m_rightPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
@@ -145,53 +152,54 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_grid->SetMinSize( wxSize( 600,240 ) );
 
-	bRightSizer->Add( m_grid, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bRightSizer->Add( m_grid, 1, wxEXPAND|wxRIGHT, 5 );
+
+
+	bRightSizer->Add( 0, 4, 0, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer12;
 	bSizer12 = new wxBoxSizer( wxHORIZONTAL );
 
-	wxStaticBoxSizer* sbSizer2;
-	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( m_rightPanel, wxID_ANY, _("Scope") ), wxHORIZONTAL );
+	m_scopeLabel = new wxStaticText( m_rightPanel, wxID_ANY, _("Scope:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_scopeLabel->Wrap( -1 );
+	bSizer12->Add( m_scopeLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 10 );
 
-	m_radioProject = new wxRadioButton( sbSizer2->GetStaticBox(), wxID_ANY, _("Entire project"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
-	sbSizer2->Add( m_radioProject, 0, 0, 6 );
+	m_radioProject = new wxRadioButton( m_rightPanel, wxID_ANY, _("Entire project"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	bSizer12->Add( m_radioProject, 0, wxALIGN_CENTER_VERTICAL, 6 );
 
-	m_radioCurrentSheet = new wxRadioButton( sbSizer2->GetStaticBox(), wxID_ANY, _("Current sheet only"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer2->Add( m_radioCurrentSheet, 0, wxRIGHT|wxLEFT, 12 );
+	m_radioCurrentSheet = new wxRadioButton( m_rightPanel, wxID_ANY, _("Current sheet only"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer12->Add( m_radioCurrentSheet, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 12 );
 
-	m_radioRecursive = new wxRadioButton( sbSizer2->GetStaticBox(), wxID_ANY, _("Recursive"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer2->Add( m_radioRecursive, 0, 0, 6 );
+	m_radioRecursive = new wxRadioButton( m_rightPanel, wxID_ANY, _("Recursive"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer12->Add( m_radioRecursive, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
+	m_separator11 = new BITMAP_BUTTON( m_rightPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 21,21 ), wxBU_AUTODRAW|wxBORDER_NONE );
+	m_separator11->Enable( false );
 
-	bSizer12->Add( sbSizer2, 0, wxEXPAND, 5 );
+	bSizer12->Add( m_separator11, 0, wxLEFT, 5 );
 
+	m_crossProbeLabel = new wxStaticText( m_rightPanel, wxID_ANY, _("Cross-probe action:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_crossProbeLabel->Wrap( -1 );
+	bSizer12->Add( m_crossProbeLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 10 );
 
-	bSizer12->Add( 12, 0, 1, wxEXPAND, 5 );
+	m_radioHighlight = new wxRadioButton( m_rightPanel, wxID_ANY, _("Highlight"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	bSizer12->Add( m_radioHighlight, 0, wxALIGN_CENTER_VERTICAL, 8 );
 
-	wxStaticBoxSizer* sbSizer1;
-	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( m_rightPanel, wxID_ANY, _("Cross Probe Action") ), wxHORIZONTAL );
+	m_radioSelect = new wxRadioButton( m_rightPanel, wxID_ANY, _("Select"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer12->Add( m_radioSelect, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 12 );
 
-	m_radioHighlight = new wxRadioButton( sbSizer1->GetStaticBox(), wxID_ANY, _("Highlight"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
-	sbSizer1->Add( m_radioHighlight, 0, 0, 8 );
-
-	m_radioSelect = new wxRadioButton( sbSizer1->GetStaticBox(), wxID_ANY, _("Select"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer1->Add( m_radioSelect, 0, wxRIGHT|wxLEFT, 12 );
-
-	m_radioOff = new wxRadioButton( sbSizer1->GetStaticBox(), wxID_ANY, _("Off"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer1->Add( m_radioOff, 0, 0, 8 );
-
-
-	bSizer12->Add( sbSizer1, 0, wxEXPAND, 5 );
+	m_radioOff = new wxRadioButton( m_rightPanel, wxID_ANY, _("None"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer12->Add( m_radioOff, 0, wxALIGN_CENTER_VERTICAL, 8 );
 
 
-	bRightSizer->Add( bSizer12, 0, wxEXPAND|wxTOP, 5 );
+	bRightSizer->Add( bSizer12, 0, wxEXPAND|wxRIGHT, 5 );
 
 
 	m_rightPanel->SetSizer( bRightSizer );
 	m_rightPanel->Layout();
 	bRightSizer->Fit( m_rightPanel );
 	m_splitterMainWindow->SplitVertically( m_leftPanel, m_rightPanel, -1 );
-	bEditSizer->Add( m_splitterMainWindow, 1, wxALL|wxEXPAND, 5 );
+	bEditSizer->Add( m_splitterMainWindow, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
 	m_panelEdit->SetSizer( bEditSizer );
@@ -356,8 +364,8 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	m_fieldsCtrl->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnFieldsCtrlSelectionChanged ), NULL, this );
 	m_fieldsCtrl->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnSizeFieldList ), NULL, this );
 	m_addFieldButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnAddField ), NULL, this );
-	m_removeFieldButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnRemoveField ), NULL, this );
 	m_renameFieldButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnRenameField ), NULL, this );
+	m_removeFieldButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnRemoveField ), NULL, this );
 	m_filter->Connect( wxEVT_MOTION, wxMouseEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnFilterMouseMoved ), NULL, this );
 	m_filter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnFilterText ), NULL, this );
 	m_checkExcludeDNP->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnExcludeDNPToggled ), NULL, this );
@@ -393,8 +401,8 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::~DIALOG_SYMBOL_FIELDS_TABLE_BASE()
 	m_fieldsCtrl->Disconnect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnFieldsCtrlSelectionChanged ), NULL, this );
 	m_fieldsCtrl->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnSizeFieldList ), NULL, this );
 	m_addFieldButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnAddField ), NULL, this );
-	m_removeFieldButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnRemoveField ), NULL, this );
 	m_renameFieldButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnRenameField ), NULL, this );
+	m_removeFieldButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnRemoveField ), NULL, this );
 	m_filter->Disconnect( wxEVT_MOTION, wxMouseEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnFilterMouseMoved ), NULL, this );
 	m_filter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnFilterText ), NULL, this );
 	m_checkExcludeDNP->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_FIELDS_TABLE_BASE::OnExcludeDNPToggled ), NULL, this );

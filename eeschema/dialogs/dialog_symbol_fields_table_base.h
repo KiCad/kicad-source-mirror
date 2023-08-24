@@ -11,29 +11,30 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class BITMAP_BUTTON;
+class STD_BITMAP_BUTTON;
 class WX_GRID;
 
 #include "dialog_shim.h"
-#include <wx/string.h>
-#include <wx/stattext.h>
+#include <wx/dataview.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/choice.h>
-#include <wx/sizer.h>
-#include <wx/dataview.h>
+#include <wx/string.h>
 #include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
+#include <wx/sizer.h>
+#include <wx/statline.h>
+#include <wx/stattext.h>
+#include <wx/choice.h>
 #include <wx/panel.h>
 #include <wx/srchctrl.h>
 #include <wx/checkbox.h>
 #include <wx/grid.h>
 #include <wx/radiobut.h>
-#include <wx/statbox.h>
 #include <wx/splitter.h>
 #include <wx/textctrl.h>
 #include <wx/gbsizer.h>
@@ -56,12 +57,13 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		wxPanel* m_panelEdit;
 		wxSplitterWindow* m_splitterMainWindow;
 		wxPanel* m_leftPanel;
+		wxDataViewListCtrl* m_fieldsCtrl;
+		STD_BITMAP_BUTTON* m_addFieldButton;
+		STD_BITMAP_BUTTON* m_renameFieldButton;
+		STD_BITMAP_BUTTON* m_removeFieldButton;
+		wxStaticLine* m_staticline1;
 		wxStaticText* m_bomPresetsLabel;
 		wxChoice* m_cbBomPresets;
-		wxDataViewListCtrl* m_fieldsCtrl;
-		wxBitmapButton* m_addFieldButton;
-		wxBitmapButton* m_removeFieldButton;
-		wxBitmapButton* m_renameFieldButton;
 		wxPanel* m_rightPanel;
 		wxSearchCtrl* m_filter;
 		BITMAP_BUTTON* m_separator1;
@@ -71,9 +73,12 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		BITMAP_BUTTON* m_separator3;
 		wxBitmapButton* m_bRefresh;
 		WX_GRID* m_grid;
+		wxStaticText* m_scopeLabel;
 		wxRadioButton* m_radioProject;
 		wxRadioButton* m_radioCurrentSheet;
 		wxRadioButton* m_radioRecursive;
+		BITMAP_BUTTON* m_separator11;
+		wxStaticText* m_crossProbeLabel;
 		wxRadioButton* m_radioHighlight;
 		wxRadioButton* m_radioSelect;
 		wxRadioButton* m_radioOff;
@@ -111,8 +116,8 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		virtual void OnFieldsCtrlSelectionChanged( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnSizeFieldList( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAddField( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRemoveField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRenameField( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRemoveField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnFilterMouseMoved( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnFilterText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnExcludeDNPToggled( wxCommandEvent& event ) { event.Skip(); }

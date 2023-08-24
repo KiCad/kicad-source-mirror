@@ -43,6 +43,7 @@
 #include <kiplatform/ui.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <widgets/bitmap_button.h>
+#include <widgets/std_bitmap_button.h>
 #include <widgets/wx_grid.h>
 #include <wx/debug.h>
 #include <wx/ffile.h>
@@ -52,12 +53,12 @@
 #include <dialogs/eda_view_switcher.h>
 #include "dialog_symbol_fields_table.h"
 #include <fields_data_model.h>
-#include "eda_list_dialog.h"
+#include <eda_list_dialog.h>
 
 wxDEFINE_EVENT( EDA_EVT_CLOSE_DIALOG_SYMBOL_FIELDS_TABLE, wxCommandEvent );
 
 #ifdef __WXMAC__
-#define COLUMN_MARGIN 5
+#define COLUMN_MARGIN 3
 #else
 #define COLUMN_MARGIN 15
 #endif
@@ -165,8 +166,6 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
         m_lastSelectedBomPreset( nullptr ), m_parent( parent ),
         m_schSettings( parent->Schematic().Settings() )
 {
-    int    nameColWidthMargin = 44;
-
     // Get all symbols from the list of schematic sheets
     m_parent->Schematic().GetSheets().GetSymbols( m_symbolsList, false );
 
@@ -182,6 +181,9 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
 
     m_removeFieldButton->Enable( false );
     m_renameFieldButton->Enable( false );
+
+    m_bomPresetsLabel->SetFont( KIUI::GetStatusFont( this ) );
+    m_separator11->SetIsSeparator();
 
     m_fieldsCtrl->AppendTextColumn( _( "Field" ), wxDATAVIEW_CELL_INERT, 0, wxALIGN_LEFT, 0 );
     m_fieldsCtrl->AppendTextColumn( _( "Label" ), wxDATAVIEW_CELL_EDITABLE, 0, wxALIGN_LEFT, 0 );
@@ -231,9 +233,6 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
         const wxString& label = m_fieldsCtrl->GetTextValue( row, LABEL_COLUMN );
         m_labelColWidth = std::max( m_labelColWidth, KIUI::GetTextSize( label, m_fieldsCtrl ).x );
     }
-
-    m_fieldNameColWidth += nameColWidthMargin;
-    m_labelColWidth += nameColWidthMargin;
 
     int fieldsMinWidth = m_fieldNameColWidth + m_labelColWidth + m_groupByColWidth + m_showColWidth;
 
