@@ -42,6 +42,8 @@ public:
 private:
     void OnAddGrid( wxCommandEvent& event ) override;
     void OnRemoveGrid( wxCommandEvent& event ) override;
+    void OnMoveGridUp( wxCommandEvent& event ) override;
+    void OnMoveGridDown( wxCommandEvent& event ) override;
 
     void RebuildGridSizes();
 

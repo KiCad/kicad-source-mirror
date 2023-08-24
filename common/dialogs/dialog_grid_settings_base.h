@@ -46,6 +46,8 @@ class DIALOG_GRID_SETTINGS_BASE : public DIALOG_SHIM
 		wxListBox* m_currentGridCtrl;
 		STD_BITMAP_BUTTON* m_addGridButton;
 		STD_BITMAP_BUTTON* m_removeGridButton;
+		STD_BITMAP_BUTTON* m_moveUpButton;
+		STD_BITMAP_BUTTON* m_moveDownButton;
 		wxStaticBoxSizer* sbGridOriginSizer;
 		wxStaticText* m_staticTextGridPosX;
 		wxTextCtrl* m_GridOriginXCtrl;
@@ -89,6 +91,8 @@ class DIALOG_GRID_SETTINGS_BASE : public DIALOG_SHIM
 		virtual void OnInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void OnAddGrid( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemoveGrid( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnMoveGridUp( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnMoveGridDown( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 

@@ -385,7 +385,7 @@ void EDA_DRAW_FRAME::UpdateGridSelectBox()
         m_gridSelectBox->Append( grid );
 
     m_gridSelectBox->Append( wxT( "---" ) );
-    m_gridSelectBox->Append( _( "Edit User Grid..." ) );
+    m_gridSelectBox->Append( _( "Edit Grids..." ) );
 
     m_gridSelectBox->SetSelection( config()->m_Window.grid.last_size_idx );
 }

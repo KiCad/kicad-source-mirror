@@ -86,6 +86,8 @@ DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( EDA_DRAW_FRAME* aParent ) :
 
     m_addGridButton->SetBitmap( KiBitmap( BITMAPS::small_plus ) );
     m_removeGridButton->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
+    m_moveUpButton->SetBitmap( KiBitmap( BITMAPS::small_up ) );
+    m_moveDownButton->SetBitmap( KiBitmap( BITMAPS::small_down ) );
 
     SetupStandardButtons();
     SetInitialFocus( m_GridOriginXCtrl );
@@ -269,3 +271,33 @@ void DIALOG_GRID_SETTINGS::OnRemoveGrid( wxCommandEvent& event )
 }
 
 
+void DIALOG_GRID_SETTINGS::OnMoveGridUp( wxCommandEvent& event )
+{
+    GRID_SETTINGS& gridCfg = m_parent->config()->m_Window.grid;
+    int            row = m_currentGridCtrl->GetSelection();
+
+    if( gridCfg.sizes.size() <= 1 || row == 0 )
+        return;
+
+    std::swap( gridCfg.sizes[row], gridCfg.sizes[row - 1] );
+    RebuildGridSizes();
+
+    if( row != 0 )
+        m_currentGridCtrl->SetSelection( row - 1 );
+}
+
+
+void DIALOG_GRID_SETTINGS::OnMoveGridDown( wxCommandEvent& event )
+{
+    GRID_SETTINGS& gridCfg = m_parent->config()->m_Window.grid;
+    int            row = m_currentGridCtrl->GetSelection();
+
+    if( gridCfg.sizes.size() <= 1 || row == ( (int) gridCfg.sizes.size() - 1 ) )
+        return;
+
+    std::swap( gridCfg.sizes[row], gridCfg.sizes[row + 1] );
+    RebuildGridSizes();
+
+    if( row != 0 )
+        m_currentGridCtrl->SetSelection( row + 1 );
+}

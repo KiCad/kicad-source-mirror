@@ -386,7 +386,7 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
         m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.override_wires",
                                                 &aWindow->grid.override_wires, false ) );
         m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.override_vias",
-                                                &aWindow->grid.override_wires, false ) );
+                                                &aWindow->grid.override_vias, false ) );
         m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.override_text",
                                                 &aWindow->grid.override_text, false ) );
         m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.override_graphics",
