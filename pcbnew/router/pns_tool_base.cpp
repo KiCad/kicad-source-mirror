@@ -397,7 +397,8 @@ void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
     else
     {
         m_endItem = nullptr;
-        m_endSnapPoint = m_gridHelper->Align( mousePos );
+        m_endSnapPoint =
+                m_gridHelper->Align( mousePos, m_router->IsPlacingVia() ? GRID_VIAS : GRID_WIRES );
     }
 
     controls()->ForceCursorPosition( true, m_endSnapPoint );
@@ -421,7 +422,7 @@ const VECTOR2I TOOL_BASE::snapToItem( ITEM* aItem, const VECTOR2I& aP )
 {
     if( !aItem || !m_iface->IsItemVisible( aItem ) )
     {
-        return m_gridHelper->Align( aP );
+        return m_gridHelper->Align( aP, m_router->IsPlacingVia() ? GRID_VIAS : GRID_WIRES );
     }
 
     switch( aItem->Kind() )
@@ -486,7 +487,7 @@ const VECTOR2I TOOL_BASE::snapToItem( ITEM* aItem, const VECTOR2I& aP )
         break;
     }
 
-    return m_gridHelper->Align( aP );
+    return m_gridHelper->Align( aP, m_router->IsPlacingVia() ? GRID_VIAS : GRID_WIRES );
 }
 
 }
