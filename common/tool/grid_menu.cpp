@@ -70,15 +70,17 @@ void GRID_MENU::update()
     APP_SETTINGS_BASE* settings = m_parent->config();
     unsigned int       current = settings->m_Window.grid.last_size_idx;
     wxArrayString      gridsList;
+    int                i = 0;
 
     GRID_MENU::BuildChoiceList( &gridsList, settings, m_parent );
 
-    for( unsigned int i = 0; i < GetMenuItemCount(); ++i )
-    {
-        wxMenuItem* menuItem = FindItemByPosition( i );
+    while( GetMenuItemCount() > 0 )
+        Delete( FindItemByPosition( 0 ) );
 
-        menuItem->SetItemLabel( gridsList[ i ] );  // Refresh label in case units have changed
-        menuItem->Check( i == current );           // Refresh checkmark
+    for( const wxString& grid : gridsList )
+    {
+        Append( i, grid, wxEmptyString, wxITEM_CHECK )->Check( i == (int) current );
+        i++;
     }
 }
 
