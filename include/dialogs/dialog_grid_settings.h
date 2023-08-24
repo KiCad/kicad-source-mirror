@@ -52,6 +52,7 @@ private:
     UNIT_BINDER m_userGridY;
     UNIT_BINDER m_gridOverrideConnectables;
     UNIT_BINDER m_gridOverrideWires;
+    UNIT_BINDER m_gridOverrideVias;
     UNIT_BINDER m_gridOverrideText;
     UNIT_BINDER m_gridOverrideGraphics;
 };

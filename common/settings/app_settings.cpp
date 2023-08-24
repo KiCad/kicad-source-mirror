@@ -385,15 +385,18 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
 
         m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.override_connectables_size",
                                                     &aWindow->grid.override_connectables_size,
-                                                    "100 mil" ) );
+                                                    "0.25 mm" ) );
         m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.override_text_size",
-                                                    &aWindow->grid.override_text_size, "10 mil" ) );
+                                                    &aWindow->grid.override_text_size, ".05 mm" ) );
         m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.override_wires_size",
                                                     &aWindow->grid.override_wires_size,
-                                                    "10 mil" ) );
+                                                    "0.05 mm" ) );
+        m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.override_vias_size",
+                                                    &aWindow->grid.override_vias_size,
+                                                    "0.1 mm" ) );
         m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.override_graphics_size",
                                                     &aWindow->grid.override_graphics_size,
-                                                    "10 mil" ) );
+                                                    "1 mm" ) );
     }
 
 

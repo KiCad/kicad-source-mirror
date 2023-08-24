@@ -45,6 +45,8 @@ DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( EDA_DRAW_FRAME* aParent ) :
                                     m_GridOverrideConnectablesSize, m_staticTextConnectablesUnits ),
         m_gridOverrideWires( aParent, m_staticTextWires, m_GridOverrideWiresSize,
                              m_staticTextWiresUnits ),
+        m_gridOverrideVias( aParent, m_staticTextVias, m_GridOverrideViasSize,
+                            m_staticTextViasUnits ),
         m_gridOverrideText( aParent, m_staticTextText, m_GridOverrideTextSize,
                             m_staticTextTextUnits ),
         m_gridOverrideGraphics( aParent, m_staticTextGraphics, m_GridOverrideGraphicsSize,
@@ -65,10 +67,17 @@ DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( EDA_DRAW_FRAME* aParent ) :
         // Eeschema and friends don't use grid origin
         m_buttonResetOrigin->Hide();
         sbGridOriginSizer->ShowItems( false );
+
+        // No vias in the schematics
+        m_checkGridOverrideVias->Hide();
+        m_staticTextVias->Hide();
+        m_GridOverrideViasSize->Hide();
+        m_staticTextViasUnits->Hide();
     }
     else
     {
-        sbGridOverridesSizer->ShowItems( false );
+        m_staticTextConnectables->SetLabel( wxT( "Footprints/Pads:" ) );
+        m_staticTextWires->SetLabel( wxT( "Tracks:" ) );
     }
 
     int hk1 = ACTIONS::gridFast1.GetHotKey();
@@ -129,7 +138,7 @@ bool DIALOG_GRID_SETTINGS::TransferDataFromWindow()
     // Validate new settings
     for( UNIT_BINDER* entry :
          { &m_userGridX, &m_userGridY, &m_gridOverrideConnectables, &m_gridOverrideWires,
-           &m_gridOverrideText, &m_gridOverrideGraphics } )
+           &m_gridOverrideVias, &m_gridOverrideText, &m_gridOverrideGraphics } )
     {
         if( !entry->Validate( 0.001, 1000.0, EDA_UNITS::MILLIMETRES ) )
             return false;
@@ -151,6 +160,8 @@ bool DIALOG_GRID_SETTINGS::TransferDataFromWindow()
             m_parent->StringFromValue( m_gridOverrideConnectables.GetValue(), true );
     gridCfg.override_wires = m_checkGridOverrideWires->GetValue();
     gridCfg.override_wires_size = m_parent->StringFromValue( m_gridOverrideWires.GetValue(), true );
+    gridCfg.override_vias = m_checkGridOverrideVias->GetValue();
+    gridCfg.override_vias_size = m_parent->StringFromValue( m_gridOverrideVias.GetValue(), true );
     gridCfg.override_text = m_checkGridOverrideText->GetValue();
     gridCfg.override_text_size = m_parent->StringFromValue( m_gridOverrideText.GetValue(), true );
     gridCfg.override_graphics = m_checkGridOverrideGraphics->GetValue();
@@ -187,11 +198,13 @@ bool DIALOG_GRID_SETTINGS::TransferDataToWindow()
     m_gridOverrideConnectables.SetValue(
             m_parent->ValueFromString( gridCfg.override_connectables_size ) );
     m_gridOverrideWires.SetValue( m_parent->ValueFromString( gridCfg.override_wires_size ) );
+    m_gridOverrideVias.SetValue( m_parent->ValueFromString( gridCfg.override_vias_size ) );
     m_gridOverrideText.SetValue( m_parent->ValueFromString( gridCfg.override_text_size ) );
     m_gridOverrideGraphics.SetValue( m_parent->ValueFromString( gridCfg.override_graphics_size ) );
 
     m_checkGridOverrideConnectables->SetValue( gridCfg.override_connectables );
     m_checkGridOverrideWires->SetValue( gridCfg.override_wires );
+    m_checkGridOverrideVias->SetValue( gridCfg.override_vias );
     m_checkGridOverrideText->SetValue( gridCfg.override_text );
     m_checkGridOverrideGraphics->SetValue( gridCfg.override_graphics );
 

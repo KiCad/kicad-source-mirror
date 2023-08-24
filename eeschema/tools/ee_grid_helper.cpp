@@ -279,7 +279,7 @@ VECTOR2D EE_GRID_HELPER::GetGridSize( GRID_HELPER_GRIDS aGrid ) const
                                                                    grid.override_graphics_size );
 
         break;
-    case GRID_CURRENT:
+    default:
         break;
     }
 

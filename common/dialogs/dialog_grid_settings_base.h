@@ -71,6 +71,10 @@ class DIALOG_GRID_SETTINGS_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextWires;
 		wxTextCtrl* m_GridOverrideWiresSize;
 		wxStaticText* m_staticTextWiresUnits;
+		wxCheckBox* m_checkGridOverrideVias;
+		wxStaticText* m_staticTextVias;
+		wxTextCtrl* m_GridOverrideViasSize;
+		wxStaticText* m_staticTextViasUnits;
 		wxCheckBox* m_checkGridOverrideText;
 		wxStaticText* m_staticTextText;
 		wxTextCtrl* m_GridOverrideTextSize;

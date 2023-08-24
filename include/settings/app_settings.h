@@ -67,6 +67,8 @@ struct GRID_SETTINGS
     wxString override_connectables_size;
     bool     override_wires;
     wxString override_wires_size;
+    bool     override_vias;
+    wxString override_vias_size;
     bool     override_text;
     wxString override_text_size;
     bool     override_graphics;

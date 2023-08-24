@@ -211,6 +211,7 @@ VECTOR2I PCB_GRID_HELPER::AlignToNearestPad( const VECTOR2I& aMousePos, PADS& aP
 
 VECTOR2I PCB_GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos,
                                           std::vector<BOARD_ITEM*>& aItems,
+                                          GRID_HELPER_GRIDS aGrid,
                                           const SELECTION_FILTER_OPTIONS* aSelectionFilter )
 {
     clearAnchors();
@@ -256,7 +257,8 @@ VECTOR2I PCB_GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos,
 }
 
 
-VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aReferenceItem )
+VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aReferenceItem,
+                                          GRID_HELPER_GRIDS aGrid )
 {
     LSET layers;
     std::vector<BOARD_ITEM*> item;
@@ -271,11 +273,12 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* a
         layers = LSET::AllLayersMask();
     }
 
-    return BestSnapAnchor( aOrigin, layers, item );
+    return BestSnapAnchor( aOrigin, layers, aGrid, item );
 }
 
 
 VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLayers,
+                                          GRID_HELPER_GRIDS               aGrid,
                                           const std::vector<BOARD_ITEM*>& aSkip )
 {
     // Tuning constant: snap radius in screen space
@@ -303,7 +306,7 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
         computeAnchors( item, aOrigin );
 
     ANCHOR*  nearest = nearestAnchor( aOrigin, SNAPPABLE, aLayers );
-    VECTOR2I nearestGrid = Align( aOrigin );
+    VECTOR2I nearestGrid = Align( aOrigin, aGrid );
 
     if( nearest )
         snapDist = nearest->Distance( aOrigin );
@@ -372,6 +375,88 @@ BOARD_ITEM* PCB_GRID_HELPER::GetSnapped() const
         return nullptr;
 
     return static_cast<BOARD_ITEM*>( m_snapItem->item );
+}
+
+
+GRID_HELPER_GRIDS PCB_GRID_HELPER::GetItemGrid( const EDA_ITEM* aItem ) const
+{
+    if( !aItem )
+        return GRID_CURRENT;
+
+    switch( aItem->Type() )
+    {
+    case PCB_FOOTPRINT_T:
+    case PCB_PAD_T:
+        return GRID_CONNECTABLE;
+
+    case PCB_TEXT_T:
+    case PCB_FIELD_T:
+        return GRID_TEXT;
+
+    case PCB_SHAPE_T:
+    case PCB_DIMENSION_T:
+    case PCB_BITMAP_T:
+    case PCB_TEXTBOX_T:
+        return GRID_GRAPHICS;
+
+    case PCB_TRACE_T:
+    case PCB_ARC_T:
+        return GRID_WIRES;
+
+    case PCB_VIA_T:
+        return GRID_VIAS;
+
+    default:
+        return GRID_CURRENT;
+    }
+}
+
+
+VECTOR2D PCB_GRID_HELPER::GetGridSize( GRID_HELPER_GRIDS aGrid ) const
+{
+    const GRID_SETTINGS& grid = m_toolMgr->GetSettings()->m_Window.grid;
+
+    VECTOR2D g = m_toolMgr->GetView()->GetGAL()->GetGridSize();
+
+    if( !grid.overrides_enabled )
+        return g;
+
+    switch( aGrid )
+    {
+    case GRID_CONNECTABLE:
+        if( grid.override_connectables )
+            g.x = g.y = EDA_UNIT_UTILS::UI::DoubleValueFromString(
+                    pcbIUScale, EDA_UNITS::MILLIMETRES, grid.override_connectables_size );
+
+        break;
+    case GRID_WIRES:
+        if( grid.override_wires )
+            g.x = g.y = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::MILLIMETRES,
+                                                                   grid.override_wires_size );
+        break;
+    case GRID_VIAS:
+        if( grid.override_vias )
+            g.x = g.y = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::MILLIMETRES,
+                                                                   grid.override_vias_size );
+
+        break;
+    case GRID_TEXT:
+        if( grid.override_text )
+            g.x = g.y = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::MILLIMETRES,
+                                                                   grid.override_text_size );
+
+        break;
+    case GRID_GRAPHICS:
+        if( grid.override_graphics )
+            g.x = g.y = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::MILLIMETRES,
+                                                                   grid.override_graphics_size );
+
+        break;
+    default:
+        break;
+    }
+
+    return g;
 }
 
 

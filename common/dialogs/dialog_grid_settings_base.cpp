@@ -156,7 +156,7 @@ DIALOG_GRID_SETTINGS_BASE::DIALOG_GRID_SETTINGS_BASE( wxWindow* parent, wxWindow
 	sbGridOverridesSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Grid Overrides") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgGridOverrides;
-	fgGridOverrides = new wxFlexGridSizer( 4, 4, 0, 0 );
+	fgGridOverrides = new wxFlexGridSizer( 0, 4, 0, 0 );
 	fgGridOverrides->AddGrowableCol( 2 );
 	fgGridOverrides->SetFlexibleDirection( wxBOTH );
 	fgGridOverrides->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -188,6 +188,20 @@ DIALOG_GRID_SETTINGS_BASE::DIALOG_GRID_SETTINGS_BASE( wxWindow* parent, wxWindow
 	m_staticTextWiresUnits = new wxStaticText( sbGridOverridesSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextWiresUnits->Wrap( -1 );
 	fgGridOverrides->Add( m_staticTextWiresUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxRIGHT, 5 );
+
+	m_checkGridOverrideVias = new wxCheckBox( sbGridOverridesSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgGridOverrides->Add( m_checkGridOverrideVias, 0, wxALIGN_CENTER|wxALIGN_CENTER_HORIZONTAL|wxALL|wxLEFT|wxRIGHT, 5 );
+
+	m_staticTextVias = new wxStaticText( sbGridOverridesSizer->GetStaticBox(), wxID_ANY, _("Vias:"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
+	m_staticTextVias->Wrap( -1 );
+	fgGridOverrides->Add( m_staticTextVias, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_GridOverrideViasSize = new wxTextCtrl( sbGridOverridesSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgGridOverrides->Add( m_GridOverrideViasSize, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+
+	m_staticTextViasUnits = new wxStaticText( sbGridOverridesSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextViasUnits->Wrap( -1 );
+	fgGridOverrides->Add( m_staticTextViasUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxRIGHT, 5 );
 
 	m_checkGridOverrideText = new wxCheckBox( sbGridOverridesSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgGridOverrides->Add( m_checkGridOverrideText, 0, wxALIGN_CENTER|wxALL|wxLEFT|wxRIGHT, 5 );

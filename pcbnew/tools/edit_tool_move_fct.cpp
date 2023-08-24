@@ -475,7 +475,8 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
                 VECTOR2I mousePos( controls->GetMousePosition() );
 
-                m_cursor = grid.BestSnapAnchor( mousePos, item_layers, sel_items );
+                m_cursor = grid.BestSnapAnchor( mousePos, item_layers,
+                                                grid.GetSelectionGrid( selection ), sel_items );
 
                 if( controls->GetSettings().m_lastKeyboardCursorPositionValid )
                 {
@@ -620,6 +621,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                     }
 
                     m_cursor = grid.BestDragOrigin( originalCursorPos, sel_items,
+                                                    grid.GetSelectionGrid( selection ),
                                                     &m_selectionTool->GetFilter() );
 
                     // Set the current cursor position to the first dragged item origin, so the

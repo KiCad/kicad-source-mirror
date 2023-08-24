@@ -558,11 +558,11 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             {
                 if( grid.GetUseGrid() )
                 {
-                    VECTOR2I gridPt = grid.BestSnapAnchor( pos, {}, { item } );
+                    VECTOR2I gridPt = grid.BestSnapAnchor( pos, {}, grid.GetItemGrid( item ), { item } );
 
                     VECTOR2I last = m_editedPoint->GetPosition();
                     VECTOR2I delta = pos - last;
-                    VECTOR2I deltaGrid = gridPt - grid.BestSnapAnchor( last, {}, { item } );
+                    VECTOR2I deltaGrid = gridPt - grid.BestSnapAnchor( last, {}, grid.GetItemGrid( item ), { item } );
 
                     if( abs( delta.x ) > grid.GetGrid().x / 2 )
                         pos.x = last.x + deltaGrid.x;
@@ -589,8 +589,9 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             }
             else if( m_editedPoint->GetGridConstraint() == SNAP_TO_GRID )
             {
-                m_editedPoint->SetPosition( grid.BestSnapAnchor( m_editedPoint->GetPosition(),
-                                                                 snapLayers, { item } ) );
+                m_editedPoint->SetPosition(
+                        grid.BestSnapAnchor( m_editedPoint->GetPosition(), snapLayers,
+                                             grid.GetItemGrid( item ), { item } ) );
             }
 
             updateItem();

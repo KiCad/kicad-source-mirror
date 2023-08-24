@@ -55,6 +55,7 @@ public:
     VECTOR2I AlignToSegment ( const VECTOR2I& aPoint, const SEG& aSeg );
 
     VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, std::vector<BOARD_ITEM*>& aItem,
+                             GRID_HELPER_GRIDS aGrid = GRID_HELPER_GRIDS::GRID_CURRENT,
                              const SELECTION_FILTER_OPTIONS* aSelectionFilter = nullptr );
 
     VECTOR2I AlignToArc ( const VECTOR2I& aPoint, const SHAPE_ARC& aSeg );
@@ -69,9 +70,16 @@ public:
      * @param aReferenceItem Reference item for layer/type special casing
      * @return snapped screen point
      */
-    VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aReferenceItem );
+    VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aReferenceItem,
+                             GRID_HELPER_GRIDS aGrid = GRID_HELPER_GRIDS::GRID_CURRENT );
     VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLayers,
+                             GRID_HELPER_GRIDS aGrid = GRID_HELPER_GRIDS::GRID_CURRENT,
                              const std::vector<BOARD_ITEM*>& aSkip = {} );
+
+    GRID_HELPER_GRIDS GetItemGrid( const EDA_ITEM* aItem ) const override;
+
+    VECTOR2D GetGridSize( GRID_HELPER_GRIDS aGrid ) const override;
+
 
 private:
     std::set<BOARD_ITEM*> queryVisible( const BOX2I& aArea,
