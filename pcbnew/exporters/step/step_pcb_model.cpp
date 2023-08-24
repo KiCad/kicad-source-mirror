@@ -620,67 +620,140 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
         {
             try
             {
-                // a SHAPE_LINE_CHAIN that is in fact a circle (one 360deg arc) is exported as cylinder
-                if( IsChainCircle( aChain ) )
+                auto addSegment = [&]( const VECTOR2D& aPt0, const VECTOR2D& aPt1 ) -> bool
                 {
-                    const SHAPE_ARC& arc = aChain.Arc( 0 );
-
-                    Handle( Geom_Curve ) curve;
-
-                    if( arc.GetCentralAngle() == ANGLE_360 )
-                    {
-                        gp_Ax2 axis = gp::XOY();
-                        axis.SetLocation( toPoint( arc.GetCenter() ) );
-
-                        curve = GC_MakeCircle( axis, pcbIUScale.IUTomm( arc.GetRadius() ) ).Value();
-                    }
-                    else
-                    {
-                        curve = GC_MakeArcOfCircle( toPoint( arc.GetP0() ),
-                                                    toPoint( arc.GetArcMid() ),
-                                                    toPoint( arc.GetP1() ) )
-                                        .Value();
-                    }
-
-                    if( !curve.IsNull() )
-                    {
-                        aMkWire.Add( BRepBuilderAPI_MakeEdge( curve ) );
-
-                        if( aMkWire.Error() != BRepLib_WireDone )
-                        {
-                            ReportMessage( wxT( "failed to add curve\n" ) );
-                            return false;
-                        }
-
-                        return true;
-                    }
-                }
-
-                gp_Pnt start = toPoint( aChain.CPoint( 0 ) );
-
-                for( int j = 0; j < aChain.PointCount(); j++ )
-                {
-                    int    next = ( j + 1 ) % aChain.PointCount();
-                    gp_Pnt end = toPoint( aChain.CPoint( next ) );
+                    gp_Pnt start = toPoint( aPt0 );
+                    gp_Pnt end = toPoint( aPt1 );
 
                     // Do not export too short segments: they create broken shape because OCC thinks
                     // start point and end point are at the same place
                     double seg_len = std::hypot( end.X() - start.X(), end.Y() - start.Y() );
 
                     if( seg_len <= m_mergeOCCMaxDist )
-                        continue;
+                        return false;
 
                     BRepBuilderAPI_MakeEdge mkEdge( start, end );
-                    aMkWire.Add( mkEdge );
 
-                    if( aMkWire.Error() != BRepLib_WireDone  )
+                    if( !mkEdge.IsDone() || mkEdge.Edge().IsNull() )
+                    {
+                        ReportMessage( wxT( "failed to make edge, skipping\n" ) );
+                    }
+                    else
+                    {
+                        aMkWire.Add( mkEdge.Edge() );
+
+                        if( aMkWire.Error() != BRepLib_WireDone )
+                        {
+                            ReportMessage( wxT( "failed to add edge to wire\n" ) );
+                            return false;
+                        }
+                    }
+
+                    return true;
+                };
+
+                auto addArc = [&]( const SHAPE_ARC& aArc ) -> bool
+                {
+                    // Do not export too short segments: they create broken shape because OCC thinks
+                    Handle( Geom_Curve ) curve;
+
+                    if( aArc.GetCentralAngle() == ANGLE_360 )
+                    {
+                        gp_Ax2 axis = gp::XOY();
+                        axis.SetLocation( toPoint( aArc.GetCenter() ) );
+
+                        curve = GC_MakeCircle( axis, pcbIUScale.IUTomm( aArc.GetRadius() ) )
+                                        .Value();
+                    }
+                    else
+                    {
+                        curve = GC_MakeArcOfCircle( toPoint( aArc.GetP0() ),
+                                                    toPoint( aArc.GetArcMid() ),
+                                                    toPoint( aArc.GetP1() ) )
+                                        .Value();
+                    }
+
+                    if( curve.IsNull() )
+                        return false;
+
+                    aMkWire.Add( BRepBuilderAPI_MakeEdge( curve ) );
+
+                    if( !aMkWire.IsDone() )
                     {
                         ReportMessage( wxT( "failed to add curve\n" ) );
                         return false;
                     }
 
-                    start = end;
+                    return true;
+                };
+
+                VECTOR2I firstPt;
+                VECTOR2I lastPt;
+                bool     isFirstShape = true;
+
+                for( int i = 0; i <= aChain.PointCount() && i != -1; i = aChain.NextShape( i ) )
+                {
+                    if( i == 0 )
+                    {
+                        if( aChain.IsArcSegment( 0 )
+                            && aChain.IsArcSegment( aChain.PointCount() - 1 )
+                            && aChain.ArcIndex( 0 ) == aChain.ArcIndex( aChain.PointCount() - 1 ) )
+                        {
+                            std::cout << "Skip looping arc" << std::endl;
+
+                            // Skip first arc (we should encounter it later)
+                            int nextShape = aChain.NextShape( i );
+
+                            // If nextShape points to the end, then we have a circle.
+                            if( nextShape != aChain.PointCount() - 1 )
+                                i = nextShape;
+                        }
+                    }
+
+                    if( isFirstShape )
+                        lastPt = aChain.CPoint( i );
+
+                    bool isArc = aChain.IsArcSegment( i );
+                    int  arcindex = isArc ? aChain.ArcIndex( i ) : -1;
+
+                    if( aChain.IsArcStart( i ) )
+                    {
+                        const SHAPE_ARC& currentArc = aChain.Arc( aChain.ArcIndex( i ) );
+                        int              nextShape = aChain.NextShape( i );
+                        bool             isLastShape = nextShape < 0;
+
+                        if( isFirstShape )
+                        {
+                            firstPt = currentArc.GetP0();
+                            lastPt = firstPt;
+                        }
+
+                        if( lastPt != currentArc.GetP0() )
+                            addSegment( lastPt, currentArc.GetP0() );
+
+                        addArc( currentArc );
+
+                        lastPt = currentArc.GetP1();
+                    }
+                    else if( !isArc )
+                    {
+                        const SEG& seg = aChain.CSegment( i );
+
+                        if( isFirstShape )
+                        {
+                            firstPt = seg.A;
+                            lastPt = firstPt;
+                        }
+
+                        if( addSegment( lastPt, seg.B ) )
+                            lastPt = seg.B;
+                    }
+
+                    isFirstShape = false;
                 }
+
+                if( lastPt != firstPt )
+                    addSegment( lastPt, firstPt );
             }
             catch( const Standard_Failure& e )
             {

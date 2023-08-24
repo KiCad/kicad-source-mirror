@@ -326,40 +326,36 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
                     break;
 
                 case SHAPE_T::ARC:
-                    // We do not support arcs in polygons, so approximate an arc with a series of
-                    // short lines and put those line segments into the !same! PATH.
                     {
-                        VECTOR2I  pstart  = graphic->GetStart();
-                        VECTOR2I  pend    = graphic->GetEnd();
+                        VECTOR2I  pstart = graphic->GetStart();
+                        VECTOR2I  pmid = graphic->GetArcMid();
+                        VECTOR2I  pend = graphic->GetEnd();
                         VECTOR2I  pcenter = graphic->GetCenter();
-                        EDA_ANGLE angle   = -graphic->GetArcAngle();
-                        int       radius  = graphic->GetRadius();
-                        int       steps   = GetArcToSegmentCount( radius, aErrorMax, angle );
 
                         if( !close_enough( prevPt, pstart, aChainingEpsilon ) )
                         {
                             wxASSERT( close_enough( prevPt, graphic->GetEnd(), aChainingEpsilon ) );
 
-                            angle = -angle;
                             std::swap( pstart, pend );
                         }
 
-                        // Create intermediate points between start and end:
-                        for( int step = 1; step < steps; ++step )
+                        SHAPE_ARC sarc( pstart, pmid, pend, 0 );
+
+                        SHAPE_LINE_CHAIN arcChain;
+                        arcChain.Append( sarc, aErrorMax );
+
+                        if( !aAllowUseArcsInPolygons )
+                            arcChain.ClearArcs();
+
+                        // set shapeOwners for arcChain points created by appending the sarc:
+                        for( int ii = 1; ii < arcChain.PointCount(); ++ii )
                         {
-                            EDA_ANGLE rotation = ( angle * step ) / steps;
-                            VECTOR2I  pt = pstart;
-
-                            RotatePoint( pt, pcenter, rotation );
-
-                            currContour.Append( pt );
-                            shapeOwners[ std::make_pair( prevPt, pt ) ] = graphic;
-                            prevPt = pt;
+                            shapeOwners[std::make_pair( arcChain.CPoint( ii - 1 ),
+                                                        arcChain.CPoint( ii ) )] = graphic;
                         }
 
-                        // Append the last arc end point
-                        currContour.Append( pend );
-                        shapeOwners[ std::make_pair( prevPt, pend ) ] = graphic;
+                        currContour.Append( arcChain );
+
                         prevPt = pend;
                     }
                     break;
