@@ -1063,18 +1063,16 @@ bool FOOTPRINT_VIEWER_FRAME::ShowModal( wxString* aFootprint, wxWindow* aParent 
         if( fpid.IsValid() )
         {
             wxString         libraryName = fpid.GetLibNickname();
-            WX_INFOBAR*      infobar;
             wxHyperlinkCtrl* button;
-            bool             hasInfobar = false;
 
             if( !fpTable->HasLibrary( fpid.GetLibNickname(), false )
                 || !fpTable->HasLibrary( fpid.GetLibNickname(), true ) )
             {
                 CreateInfoBar();
-                if( infobar = GetInfoBar() )
+
+                if( WX_INFOBAR* infobar = GetInfoBar() )
                 {
-                    hasInfobar = true;
-                    button = new wxHyperlinkCtrl( infobar, wxID_ANY, 
+                    button = new wxHyperlinkCtrl( infobar, wxID_ANY,
                                                                     _( "Manage symol libraries" ), 
                                                                     wxEmptyString );
                     button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent & aEvent )>(
@@ -1087,7 +1085,7 @@ bool FOOTPRINT_VIEWER_FRAME::ShowModal( wxString* aFootprint, wxWindow* aParent 
 
             if( !fpTable->HasLibrary( fpid.GetLibNickname(), false ) )
             {
-                if( hasInfobar )
+                if( WX_INFOBAR* infobar = GetInfoBar() )
                 {
                     msg.Printf( _( "Footprint library not found. The current configuration does "
                                    "not include library '%s'." ), libraryName );
@@ -1099,7 +1097,7 @@ bool FOOTPRINT_VIEWER_FRAME::ShowModal( wxString* aFootprint, wxWindow* aParent 
             }
             else if ( !fpTable->HasLibrary( fpid.GetLibNickname(), true ) )
             {
-                if( hasInfobar )
+                if( WX_INFOBAR* infobar = GetInfoBar() )
                 {
                     msg.Printf( _( "Footprint library not enabled. Library '%s' is not enabled "
                                    "in the current configuration." ), libraryName );
