@@ -198,7 +198,7 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataToWindow()
     STROKE_PARAMS stroke = m_textBox->GetStroke();
     m_borderCheckbox->SetValue( m_textBox->IsBorderEnabled() );
 
-    if( stroke.GetWidth() >= 0 )
+    if( m_textBox->IsBorderEnabled() )
         m_borderWidth.SetValue( stroke.GetWidth() );
 
     PLOT_DASH_TYPE style = stroke.GetPlotStyle();
@@ -209,9 +209,9 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataToWindow()
     if( (int) style < (int) lineTypeNames.size() )
         m_borderStyleCombo->SetSelection( (int) style );
 
-    m_borderWidth.Enable( stroke.GetWidth() >= 0 );
-    m_borderStyleLabel->Enable( stroke.GetWidth() >= 0 );
-    m_borderStyleCombo->Enable( stroke.GetWidth() >= 0 );
+    m_borderWidth.Enable( m_textBox->IsBorderEnabled() );
+    m_borderStyleLabel->Enable( m_textBox->IsBorderEnabled() );
+    m_borderStyleCombo->Enable( m_textBox->IsBorderEnabled() );
 
     return DIALOG_TEXTBOX_PROPERTIES_BASE::TransferDataToWindow();
 }

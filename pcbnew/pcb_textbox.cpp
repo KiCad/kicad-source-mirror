@@ -554,7 +554,7 @@ void PCB_TEXTBOX::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID
 
 bool PCB_TEXTBOX::IsBorderEnabled() const
 {
-    return m_stroke.GetWidth() != -1;
+    return m_stroke.GetWidth() >= 0;
 }
 
 
