@@ -2382,7 +2382,6 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer,
     {
         footprint->TransformPadsToPolySet( aOutlines, aLayer, 0, maxError, ERROR_INSIDE );
 
-        // Microwave footprints may have items on copper layers
         footprint->TransformFPShapesToPolySet( aOutlines, aLayer, 0, maxError, ERROR_INSIDE,
                                                true, /* include text */
                                                true, /* include shapes */
@@ -2434,6 +2433,19 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer,
                                                          ERROR_INSIDE );
             // plot text
             textbox->TransformTextToPolySet( aOutlines, 0, maxError, ERROR_INSIDE );
+            break;
+        }
+
+        case PCB_DIM_ALIGNED_T:
+        case PCB_DIM_CENTER_T:
+        case PCB_DIM_RADIAL_T:
+        case PCB_DIM_ORTHOGONAL_T:
+        case PCB_DIM_LEADER_T:
+        {
+            const PCB_DIMENSION_BASE* dim = static_cast<const PCB_DIMENSION_BASE*>( item );
+
+            dim->TransformShapeToPolygon( aOutlines, aLayer, 0, maxError, ERROR_INSIDE );
+            dim->TransformTextToPolySet( aOutlines, 0, maxError, ERROR_INSIDE );
             break;
         }
 
