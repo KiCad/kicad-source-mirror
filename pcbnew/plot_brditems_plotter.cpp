@@ -357,10 +357,15 @@ void BRDITEMS_PLOTTER::PlotBoardGraphicItem( const BOARD_ITEM* item )
 
     case PCB_TEXTBOX_T:
     {
+        m_plotter->SetTextMode( PLOT_TEXT_MODE::STROKE );
+
         const PCB_TEXTBOX* textbox = static_cast<const PCB_TEXTBOX*>( item );
         PlotText( textbox, textbox->GetLayer(), textbox->IsKnockout(), textbox->GetFontMetrics() );
+
         if( textbox->IsBorderEnabled() )
             PlotShape( textbox );
+
+        m_plotter->SetTextMode( GetTextMode() );
         break;
     }
 
@@ -369,7 +374,11 @@ void BRDITEMS_PLOTTER::PlotBoardGraphicItem( const BOARD_ITEM* item )
     case PCB_DIM_RADIAL_T:
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_DIM_LEADER_T:
+        m_plotter->SetTextMode( PLOT_TEXT_MODE::STROKE );
+
         PlotDimension( static_cast<const PCB_DIMENSION_BASE*>( item ) );
+
+        m_plotter->SetTextMode( GetTextMode() );
         break;
 
     case PCB_TARGET_T:
@@ -498,30 +507,28 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
         if( aFootprint->GetPrivateLayers().test( item->GetLayer() ) )
             continue;
 
+        if( !m_layerMask[ item->GetLayer() ] )
+            continue;
+
         switch( item->Type() )
         {
         case PCB_SHAPE_T:
-        {
-            const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( item );
-
-            if( m_layerMask[ shape->GetLayer() ] )
-                PlotShape( shape );
-
+            PlotShape( static_cast<const PCB_SHAPE*>( item ) );
             break;
-        }
 
         case PCB_TEXTBOX_T:
         {
             const PCB_TEXTBOX* textbox = static_cast<const PCB_TEXTBOX*>( item );
 
-            if( m_layerMask[ textbox->GetLayer() ] )
-            {
-                PlotText( textbox, textbox->GetLayer(), textbox->IsKnockout(),
-                          textbox->GetFontMetrics() );
-                if( textbox->IsBorderEnabled() )
-                    PlotShape( textbox );
-            }
+            m_plotter->SetTextMode( PLOT_TEXT_MODE::STROKE );
 
+            PlotText( textbox, textbox->GetLayer(), textbox->IsKnockout(),
+                      textbox->GetFontMetrics() );
+
+            if( textbox->IsBorderEnabled() )
+                PlotShape( textbox );
+
+            m_plotter->SetTextMode( GetTextMode() );
             break;
         }
 
@@ -530,14 +537,8 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
         case PCB_DIM_RADIAL_T:
         case PCB_DIM_ORTHOGONAL_T:
         case PCB_DIM_LEADER_T:
-        {
-            const PCB_DIMENSION_BASE* dimension = static_cast<const PCB_DIMENSION_BASE*>( item );
-
-            if( m_layerMask[ dimension->GetLayer() ] )
-                PlotDimension( dimension );
-
+            PlotDimension( static_cast<const PCB_DIMENSION_BASE*>( item ) );
             break;
-        }
 
         case PCB_TEXT_T:
             // Plotted in PlotFootprintTextItems()
