@@ -62,6 +62,8 @@ public:
         return false;
     }
 
+    wxString GetFriendlyName() const override { return _( "Text Box" ); }
+
     VECTOR2I GetTopLeft() const override;
     VECTOR2I GetBotRight() const override;
 
