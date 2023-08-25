@@ -32,6 +32,7 @@ public:
             m_overwrite( false ),
             m_useGridOrigin( false ),
             m_useDrillOrigin( false ),
+            m_hasUserOrigin( false ),
             m_boardOnly( false ),
             m_includeUnspecified( false ),
             m_includeDNP( false ),
@@ -44,7 +45,10 @@ public:
             m_BoardOutlinesChainingEpsilon( 0.01 ),     // 0.01 mm is a good value
             m_exportTracks( false ),     // Extremely time consuming if true
             m_exportZones( false ),      // Extremely time consuming if true
-            m_format( JOB_EXPORT_PCB_3D::FORMAT::UNKNOWN )
+            m_format( JOB_EXPORT_PCB_3D::FORMAT::UNKNOWN ),
+            m_vrmlUnits( JOB_EXPORT_PCB_3D::VRML_UNITS::METERS ),
+            m_vrmlModelDir( wxEmptyString ),
+            m_vrmlRelativePaths( false )
     {
     }
 
@@ -52,12 +56,22 @@ public:
     {
         UNKNOWN, // defefer to arg
         STEP,
-        GLB
+        GLB,
+        VRML
+    };
+
+    enum class VRML_UNITS
+    {
+        INCHES,
+        MILLIMETERS,
+        METERS,
+        TENTHS // inches
     };
 
     bool                      m_overwrite;
     bool                      m_useGridOrigin;
     bool                      m_useDrillOrigin;
+    bool                      m_hasUserOrigin;
     bool                      m_boardOnly;
     bool                      m_includeUnspecified;
     bool                      m_includeDNP;
@@ -70,6 +84,10 @@ public:
     bool                      m_exportTracks;
     bool                      m_exportZones;
     JOB_EXPORT_PCB_3D::FORMAT m_format;
+
+    VRML_UNITS m_vrmlUnits;
+    wxString   m_vrmlModelDir;
+    bool       m_vrmlRelativePaths;
 };
 
 #endif

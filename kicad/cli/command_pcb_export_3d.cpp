@@ -41,6 +41,9 @@
 #define ARG_INCLUDE_TRACKS "--include-tracks"
 #define ARG_INCLUDE_ZONES "--include-zones"
 #define ARG_FORMAT "--format"
+#define ARG_VRML_UNITS "--units"
+#define ARG_VRML_MODELS_DIR "--models-dir"
+#define ARG_VRML_MODELS_RELATIVE "--models-relative"
 
 #define REGEX_QUANTITY "([\\s]*[+-]?[\\d]*[.]?[\\d]*)"
 #define REGEX_DELIMITER "(?:[\\s]*x)"
@@ -58,58 +61,84 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&   aName,
                 .help( UTF8STDSTR( _( "Output file format, options: step, glb (binary glTF)" ) ) );
     }
 
-    m_argParser.add_argument( ARG_DRILL_ORIGIN )
-            .help( UTF8STDSTR( _( "Use Drill Origin for output origin" ) ) )
-            .implicit_value( true )
-            .default_value( false );
-
-    m_argParser.add_argument( ARG_GRID_ORIGIN )
-            .help( UTF8STDSTR( _( "Use Grid Origin for output origin" ) ) )
-            .implicit_value( true )
-            .default_value( false );
-
-    m_argParser.add_argument( ARG_NO_UNSPECIFIED )
-            .help( UTF8STDSTR( _( "Exclude 3D models for components with 'Unspecified' footprint type" ) ) )
-            .implicit_value( true )
-            .default_value( false );
-
-    m_argParser.add_argument( ARG_NO_DNP )
-            .help( UTF8STDSTR( _( "Exclude 3D models for components with 'Do not populate' attribute" ) ) )
-            .implicit_value( true )
-            .default_value( false );
-
-    m_argParser.add_argument( "--subst-models" )
-            .help( UTF8STDSTR( _( "Substitute STEP or IGS models with the same name in place of VRML models" ) ) )
-            .implicit_value( true )
-            .default_value( false );
-
     m_argParser.add_argument( ARG_FORCE, "-f" )
             .help( UTF8STDSTR( _( "Overwrite output file" ) ) )
             .implicit_value( true )
             .default_value( false );
 
-    m_argParser.add_argument( ARG_BOARD_ONLY )
-            .help( UTF8STDSTR( _( "Only generate a board with no components" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+    if( m_format == JOB_EXPORT_PCB_3D::FORMAT::STEP || m_format == JOB_EXPORT_PCB_3D::FORMAT::GLB )
+    {
+        m_argParser.add_argument( ARG_GRID_ORIGIN )
+                .help( UTF8STDSTR( _( "Use Grid Origin for output origin" ) ) )
+                .implicit_value( true )
+                .default_value( false );
 
-    m_argParser.add_argument( ARG_INCLUDE_TRACKS )
-            .help( UTF8STDSTR( _( "Export tracks (extremely time consuming)" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+        m_argParser.add_argument( ARG_DRILL_ORIGIN )
+                .help( UTF8STDSTR( _( "Use Drill Origin for output origin" ) ) )
+                .implicit_value( true )
+                .default_value( false );
 
-    m_argParser.add_argument( ARG_INCLUDE_ZONES )
-            .help( UTF8STDSTR( _( "Export zones (extremely time consuming)" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+        m_argParser.add_argument( ARG_NO_UNSPECIFIED )
+                .help( UTF8STDSTR( _(
+                        "Exclude 3D models for components with 'Unspecified' footprint type" ) ) )
+                .implicit_value( true )
+                .default_value( false );
 
-    m_argParser.add_argument( ARG_MIN_DISTANCE )
-            .default_value( std::string( "0.01mm" ) )
-            .help( UTF8STDSTR( _( "Minimum distance between points to treat them as separate ones" ) ) );
+        m_argParser.add_argument( ARG_NO_DNP )
+                .help( UTF8STDSTR(
+                        _( "Exclude 3D models for components with 'Do not populate' attribute" ) ) )
+                .implicit_value( true )
+                .default_value( false );
+
+        m_argParser.add_argument( "--subst-models" )
+                .help( UTF8STDSTR( _( "Substitute STEP or IGS models with the same name in place "
+                                      "of VRML models" ) ) )
+                .implicit_value( true )
+                .default_value( false );
+
+        m_argParser.add_argument( ARG_BOARD_ONLY )
+                .help( UTF8STDSTR( _( "Only generate a board with no components" ) ) )
+                .implicit_value( true )
+                .default_value( false );
+
+        m_argParser.add_argument( ARG_INCLUDE_TRACKS )
+                .help( UTF8STDSTR( _( "Export tracks (extremely time consuming)" ) ) )
+                .implicit_value( true )
+                .default_value( false );
+
+        m_argParser.add_argument( ARG_INCLUDE_ZONES )
+                .help( UTF8STDSTR( _( "Export zones (extremely time consuming)" ) ) )
+                .implicit_value( true )
+                .default_value( false );
+
+        m_argParser.add_argument( ARG_MIN_DISTANCE )
+                .default_value( std::string( "0.01mm" ) )
+                .help( UTF8STDSTR(
+                        _( "Minimum distance between points to treat them as separate ones" ) ) );
+    }
 
     m_argParser.add_argument( ARG_USER_ORIGIN )
             .default_value( std::string() )
             .help( UTF8STDSTR( _( "User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default unit mm)" ) ) );
+
+    if( m_format == JOB_EXPORT_PCB_3D::FORMAT::VRML )
+    {
+        m_argParser.add_argument( ARG_VRML_UNITS )
+                .default_value( std::string( "in" ) )
+                .help( UTF8STDSTR(
+                        _( "Output units; ascii or csv format only; valid options: mm, m, in, tenths" ) ) );
+
+        m_argParser.add_argument( ARG_VRML_MODELS_DIR )
+                .default_value( std::string( "" ) )
+                .help( UTF8STDSTR(
+                        _( "Name of folder to create and store 3d models in, if not specified or "
+                           "empty, the models will be embedded in main exported vrml file" ) ) );
+
+        m_argParser.add_argument( ARG_VRML_MODELS_RELATIVE )
+                .help( UTF8STDSTR( _( "Used with --models-dir to output relative paths in the resulting file" ) ) )
+                .implicit_value( true )
+                .default_value( false );
+    }
 
     m_argParser.add_argument( "-o", ARG_OUTPUT )
             .default_value( std::string() )
@@ -122,17 +151,21 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
 {
     std::unique_ptr<JOB_EXPORT_PCB_3D> step( new JOB_EXPORT_PCB_3D( true ) );
 
-    step->m_useDrillOrigin = m_argParser.get<bool>( ARG_DRILL_ORIGIN );
-    step->m_useGridOrigin = m_argParser.get<bool>( ARG_GRID_ORIGIN );
-    step->m_includeUnspecified = !m_argParser.get<bool>( ARG_NO_UNSPECIFIED );
-    step->m_includeDNP = !m_argParser.get<bool>( ARG_NO_DNP );
-    step->m_substModels = m_argParser.get<bool>( ARG_SUBST_MODELS );
+    if( m_format == JOB_EXPORT_PCB_3D::FORMAT::STEP || m_format == JOB_EXPORT_PCB_3D::FORMAT::GLB )
+    {
+        step->m_useDrillOrigin = m_argParser.get<bool>( ARG_DRILL_ORIGIN );
+        step->m_useGridOrigin = m_argParser.get<bool>( ARG_GRID_ORIGIN );
+        step->m_includeUnspecified = !m_argParser.get<bool>( ARG_NO_UNSPECIFIED );
+        step->m_includeDNP = !m_argParser.get<bool>( ARG_NO_DNP );
+        step->m_substModels = m_argParser.get<bool>( ARG_SUBST_MODELS );
+        step->m_exportTracks = m_argParser.get<bool>( ARG_INCLUDE_TRACKS );
+        step->m_exportZones = m_argParser.get<bool>( ARG_INCLUDE_ZONES );
+        step->m_boardOnly = m_argParser.get<bool>( ARG_BOARD_ONLY );
+    }
+
     step->m_overwrite = m_argParser.get<bool>( ARG_FORCE );
     step->m_filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
     step->m_outputFile = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
-    step->m_boardOnly = m_argParser.get<bool>( ARG_BOARD_ONLY );
-    step->m_exportTracks = m_argParser.get<bool>( ARG_INCLUDE_TRACKS );
-    step->m_exportZones = m_argParser.get<bool>( ARG_INCLUDE_ZONES );
     step->m_format = m_format;
 
     if( step->m_format == JOB_EXPORT_PCB_3D::FORMAT::UNKNOWN )
@@ -148,6 +181,29 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
             wxFprintf( stderr, _( "Invalid format specified\n" ) );
             return EXIT_CODES::ERR_ARGS;
         }
+    }
+
+    if( step->m_format == JOB_EXPORT_PCB_3D::FORMAT::VRML )
+    {
+        wxString units = FROM_UTF8( m_argParser.get<std::string>( ARG_VRML_UNITS ).c_str() );
+
+        if( units == wxS( "in" ) )
+            step->m_vrmlUnits = JOB_EXPORT_PCB_3D::VRML_UNITS::INCHES;
+        else if( units == wxS( "mm" ) )
+            step->m_vrmlUnits = JOB_EXPORT_PCB_3D::VRML_UNITS::MILLIMETERS;
+        else if( units == wxS( "m" ) )
+            step->m_vrmlUnits = JOB_EXPORT_PCB_3D::VRML_UNITS::METERS;
+        else if( units == wxS( "tenths" ) )
+            step->m_vrmlUnits = JOB_EXPORT_PCB_3D::VRML_UNITS::TENTHS;
+        else
+        {
+            wxFprintf( stderr, _( "Invalid units specified\n" ) );
+            return EXIT_CODES::ERR_ARGS;
+        }
+
+        step->m_vrmlModelDir = FROM_UTF8( m_argParser.get<std::string>( ARG_VRML_MODELS_DIR ).c_str() );
+
+        step->m_vrmlRelativePaths = m_argParser.get<bool>( ARG_VRML_MODELS_RELATIVE );
     }
 
     wxString userOrigin = FROM_UTF8( m_argParser.get<std::string>( ARG_USER_ORIGIN ).c_str() );
@@ -192,31 +248,36 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
                 return CLI::EXIT_CODES::ERR_ARGS;
             }
         }
+
+        step->m_hasUserOrigin = true;
     }
 
-    wxString minDistance = FROM_UTF8( m_argParser.get<std::string>( ARG_MIN_DISTANCE ).c_str() );
-
-    if( !minDistance.IsEmpty() )
+    if( m_format == JOB_EXPORT_PCB_3D::FORMAT::STEP || m_format == JOB_EXPORT_PCB_3D::FORMAT::GLB )
     {
-        std::regex  re_pattern( REGEX_QUANTITY REGEX_UNIT,
-                                std::regex_constants::icase );
-        std::smatch sm;
-        std::string str( minDistance.ToUTF8() );
-        std::regex_search( str, sm, re_pattern );
-        step->m_BoardOutlinesChainingEpsilon = atof( sm.str( 1 ).c_str() );
+        wxString minDistance =
+                FROM_UTF8( m_argParser.get<std::string>( ARG_MIN_DISTANCE ).c_str() );
 
-        std::string tunit( sm[2] );
-
-        if( tunit.size() > 0 ) // No unit accepted ( default = mm )
+        if( !minDistance.IsEmpty() )
         {
-            if( !tunit.compare( "in" ) || !tunit.compare( "inch" ) )
+            std::regex  re_pattern( REGEX_QUANTITY REGEX_UNIT, std::regex_constants::icase );
+            std::smatch sm;
+            std::string str( minDistance.ToUTF8() );
+            std::regex_search( str, sm, re_pattern );
+            step->m_BoardOutlinesChainingEpsilon = atof( sm.str( 1 ).c_str() );
+
+            std::string tunit( sm[2] );
+
+            if( tunit.size() > 0 ) // No unit accepted ( default = mm )
             {
-                step->m_BoardOutlinesChainingEpsilon *= 25.4;
-            }
-            else if( tunit.compare( "mm" ) )
-            {
-                std::cout << m_argParser;
-                return CLI::EXIT_CODES::ERR_ARGS;
+                if( !tunit.compare( "in" ) || !tunit.compare( "inch" ) )
+                {
+                    step->m_BoardOutlinesChainingEpsilon *= 25.4;
+                }
+                else if( tunit.compare( "mm" ) )
+                {
+                    std::cout << m_argParser;
+                    return CLI::EXIT_CODES::ERR_ARGS;
+                }
             }
         }
     }

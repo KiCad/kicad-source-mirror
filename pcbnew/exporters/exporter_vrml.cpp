@@ -1025,7 +1025,6 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
     auto sM = aFootprint->Models().begin();
     auto eM = aFootprint->Models().end();
 
-    wxFileName subdir( m_Subdir3DFpModels, wxT( "" ) );
 
     while( sM != eM )
     {
@@ -1245,7 +1244,11 @@ bool EXPORTER_PCB_VRML::ExportVRML_File( PROJECT* aProject, wxString *aMessages,
 
     SetScale( aMMtoWRMLunit );
     m_UseInlineModelsInBrdfile = aExport3DFiles;
-    m_Subdir3DFpModels = a3D_Subdir;
+
+    wxFileName subdir( a3D_Subdir, wxT( "" ) );
+    // convert the subdir path to a absolute full one with the output file as the cwd
+    m_Subdir3DFpModels = subdir.GetAbsolutePath( wxFileName( aFullFileName ).GetPath() );
+
     m_UseRelPathIn3DModelFilename = aUseRelativePaths;
     m_Cache3Dmodels = aProject->Get3DCacheManager();
 
@@ -1329,11 +1332,9 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
 void EXPORTER_PCB_VRML::ExportFp3DModelsAsLinkedFile( const wxString& aFullFileName )
 {
     // check if the 3D Subdir exists - create if not
-    wxFileName subdir( m_Subdir3DFpModels, wxT( "" ) );
-
-    if( ! subdir.DirExists() )
+    if( !wxDir::Exists( m_Subdir3DFpModels ) )
     {
-        if( !wxDir::Make( subdir.GetFullPath() ) )
+        if( !wxDir::Make( m_Subdir3DFpModels ) )
             throw( std::runtime_error( "Could not create 3D model subdirectory" ) );
     }
 

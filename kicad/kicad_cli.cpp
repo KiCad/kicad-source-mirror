@@ -132,6 +132,7 @@ static CLI::PCB_EXPORT_DRILL_COMMAND     exportPcbDrillCmd{};
 static CLI::PCB_EXPORT_DXF_COMMAND       exportPcbDxfCmd{};
 static CLI::PCB_EXPORT_3D_COMMAND        exportPcbGlbCmd{ "glb", JOB_EXPORT_PCB_3D::FORMAT::GLB };
 static CLI::PCB_EXPORT_3D_COMMAND        exportPcbStepCmd{ "step", JOB_EXPORT_PCB_3D::FORMAT::STEP };
+static CLI::PCB_EXPORT_3D_COMMAND        exportPcbVrmlCmd{ "vrml", JOB_EXPORT_PCB_3D::FORMAT::VRML };
 static CLI::PCB_EXPORT_SVG_COMMAND       exportPcbSvgCmd{};
 static CLI::PCB_EXPORT_PDF_COMMAND       exportPcbPdfCmd{};
 static CLI::PCB_EXPORT_POS_COMMAND       exportPcbPosCmd{};
@@ -192,7 +193,8 @@ static std::vector<COMMAND_ENTRY> commandStack = {
                     &exportPcbPdfCmd,
                     &exportPcbPosCmd,
                     &exportPcbStepCmd,
-                    &exportPcbSvgCmd
+                    &exportPcbSvgCmd,
+                    &exportPcbVrmlCmd
                 }
             }
         }

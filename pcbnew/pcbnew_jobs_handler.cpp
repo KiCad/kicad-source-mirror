@@ -59,6 +59,7 @@
 #include <plugins/kicad/pcb_plugin.h>
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>
+#include <export_vrml.h>
 
 #include "pcbnew_scripting_helpers.h"
 
@@ -96,36 +97,79 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
 
     BOARD* brd = LoadBoard( aStepJob->m_filename );
 
-    EXPORTER_STEP_PARAMS params;
-    params.m_exportTracks = aStepJob->m_exportTracks;
-    params.m_exportZones = aStepJob->m_exportZones;
-    params.m_includeUnspecified = aStepJob->m_includeUnspecified;
-    params.m_includeDNP = aStepJob->m_includeDNP;
-    params.m_BoardOutlinesChainingEpsilon = aStepJob->m_BoardOutlinesChainingEpsilon;
-    params.m_overwrite = aStepJob->m_overwrite;
-    params.m_substModels = aStepJob->m_substModels;
-    params.m_origin = VECTOR2D( aStepJob->m_xOrigin, aStepJob->m_yOrigin );
-    params.m_useDrillOrigin = aStepJob->m_useDrillOrigin;
-    params.m_useGridOrigin = aStepJob->m_useGridOrigin;
-    params.m_boardOnly = aStepJob->m_boardOnly;
-
-    switch( aStepJob->m_format )
+    if( aStepJob->m_format == JOB_EXPORT_PCB_3D::FORMAT::VRML )
     {
-    case JOB_EXPORT_PCB_3D::FORMAT::STEP:
-        params.m_format = EXPORTER_STEP_PARAMS::FORMAT::STEP;
-        break;
-    case JOB_EXPORT_PCB_3D::FORMAT::GLB:
-        params.m_format = EXPORTER_STEP_PARAMS::FORMAT::GLB;
-        break;
-    default: return CLI::EXIT_CODES::ERR_UNKNOWN; // should have gotten here
+        double scale = 0.0;
+        switch ( aStepJob->m_vrmlUnits )
+        {
+        case JOB_EXPORT_PCB_3D::VRML_UNITS::MILLIMETERS: scale = 1.0; break;
+        case JOB_EXPORT_PCB_3D::VRML_UNITS::METERS: scale = 0.001; break;
+        case JOB_EXPORT_PCB_3D::VRML_UNITS::TENTHS: scale = 10.0 / 25.4; break;
+        case JOB_EXPORT_PCB_3D::VRML_UNITS::INCHES: scale = 1.0 / 25.4; break;
+        }
+
+        EXPORTER_VRML vrmlExporter( brd );
+        wxString      messages;
+
+        double originX = pcbIUScale.IUTomm( aStepJob->m_xOrigin );
+        double originY = pcbIUScale.IUTomm( aStepJob->m_yOrigin );
+
+        if( !aStepJob->m_hasUserOrigin )
+        {
+            BOX2I bbox = brd->ComputeBoundingBox( true );
+            originX = pcbIUScale.IUTomm( bbox.GetCenter().x );
+            originY = pcbIUScale.IUTomm( bbox.GetCenter().y );
+        }
+
+        bool success = vrmlExporter.ExportVRML_File(
+                brd->GetProject(), &messages, aStepJob->m_outputFile, scale,
+                !aStepJob->m_vrmlModelDir.IsEmpty(), aStepJob->m_vrmlRelativePaths,
+                aStepJob->m_vrmlModelDir, originX, originY );
+
+        if ( success )
+        {
+            m_reporter->Report( wxString::Format( _( "Successfully exported VRML to %s" ), aStepJob->m_outputFile ),
+                                RPT_SEVERITY_INFO );
+        }
+        else
+        {
+            m_reporter->Report( _( "Error exporting VRML" ), RPT_SEVERITY_ERROR );
+            return CLI::EXIT_CODES::ERR_UNKNOWN;
+        }
     }
-
-    EXPORTER_STEP stepExporter( brd, params );
-    stepExporter.m_outputFile = aStepJob->m_outputFile;
-
-    if( !stepExporter.Export() )
+    else
     {
-        return CLI::EXIT_CODES::ERR_UNKNOWN;
+        EXPORTER_STEP_PARAMS params;
+        params.m_exportTracks = aStepJob->m_exportTracks;
+        params.m_exportZones = aStepJob->m_exportZones;
+        params.m_includeUnspecified = aStepJob->m_includeUnspecified;
+        params.m_includeDNP = aStepJob->m_includeDNP;
+        params.m_BoardOutlinesChainingEpsilon = aStepJob->m_BoardOutlinesChainingEpsilon;
+        params.m_overwrite = aStepJob->m_overwrite;
+        params.m_substModels = aStepJob->m_substModels;
+        params.m_origin = VECTOR2D( aStepJob->m_xOrigin, aStepJob->m_yOrigin );
+        params.m_useDrillOrigin = aStepJob->m_useDrillOrigin;
+        params.m_useGridOrigin = aStepJob->m_useGridOrigin;
+        params.m_boardOnly = aStepJob->m_boardOnly;
+
+        switch( aStepJob->m_format )
+        {
+        case JOB_EXPORT_PCB_3D::FORMAT::STEP:
+            params.m_format = EXPORTER_STEP_PARAMS::FORMAT::STEP;
+            break;
+        case JOB_EXPORT_PCB_3D::FORMAT::GLB:
+            params.m_format = EXPORTER_STEP_PARAMS::FORMAT::GLB;
+            break;
+        default: return CLI::EXIT_CODES::ERR_UNKNOWN; // should have gotten here
+        }
+
+        EXPORTER_STEP stepExporter( brd, params );
+        stepExporter.m_outputFile = aStepJob->m_outputFile;
+
+        if( !stepExporter.Export() )
+        {
+            return CLI::EXIT_CODES::ERR_UNKNOWN;
+        }
     }
 
     return CLI::EXIT_CODES::OK;
