@@ -2875,7 +2875,12 @@ void FOOTPRINT::TransformFPShapesToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_I
             FP_TEXTBOX* textbox = static_cast<FP_TEXTBOX*>( item );
 
             if( aLayer != UNDEFINED_LAYER && textbox->GetLayer() == aLayer && textbox->IsVisible() )
-                textbox->TransformShapeToPolygon( aBuffer, aLayer, 0, aError, aErrorLoc );
+            {
+                // border
+                textbox->PCB_SHAPE::TransformShapeToPolygon( aBuffer, aLayer, 0, aError, aErrorLoc );
+                // text
+                textbox->TransformTextToPolySet( aBuffer, 0, aError, aErrorLoc );
+            }
         }
 
         if( item->Type() == PCB_FP_SHAPE_T && aIncludeShapes )
