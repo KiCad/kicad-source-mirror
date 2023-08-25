@@ -2628,6 +2628,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                           netclassIt->second->GetName() } );
 
                 netInfo->SetNetClass( netclassIt->second );
+                netclass = netclassIt->second;
             }
         }
 
