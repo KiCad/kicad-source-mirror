@@ -719,8 +719,13 @@ PCB_LAYER_ID PAD_TOOL::explodePad( PAD* aPad )
             }
 
             shape->SetLocalCoord();
-            shape->Move( aPad->GetPosition() );
-            shape->Rotate( aPad->GetPosition(), aPad->GetOrientation() );
+
+            if( shape->GetShape() != SHAPE_T::POLY )    // Poly's are board-relative
+            {
+                shape->Move( aPad->GetPosition() );
+                shape->Rotate( aPad->GetPosition(), aPad->GetOrientation() );
+            }
+
             shape->SetLayer( layer );
 
             commit.Add( shape );
@@ -812,49 +817,38 @@ std::vector<FP_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun, BOARD_
     else
         layer = *aPad->GetLayerSet().UIOrder();
 
+    // If there are intersecting items to combine, we need to first make sure the pad is a
+    // custom-shape pad.
+    if( !aIsDryRun && findNext( layer ) && aPad->GetShape() != PAD_SHAPE::CUSTOM )
+    {
+        aCommit.Modify( aPad );
+
+        // Create a new minimally-sized circular anchor and convert existing pad
+        // to a polygon primitive
+        SHAPE_POLY_SET existingOutline;
+        aPad->TransformShapeToPolygon( existingOutline, layer, 0, maxError, ERROR_INSIDE );
+
+        aPad->SetAnchorPadShape( PAD_SHAPE::CIRCLE );
+        // We're going to remove the offset, so shrink the anchor pad so that it's
+        // entirely inside the hole (since it won't be offset anymore)
+        aPad->SetSize( aPad->GetDrillSize() );
+
+        PCB_SHAPE* shape = new PCB_SHAPE( nullptr, SHAPE_T::POLY );
+        shape->SetFilled( true );
+        shape->SetStroke( STROKE_PARAMS( 0, PLOT_DASH_TYPE::SOLID ) );
+        shape->SetPolyShape( existingOutline );
+        shape->Move( - aPad->GetPosition() );
+        shape->Rotate( VECTOR2I( 0, 0 ), - aPad->GetOrientation() );
+
+        aPad->AddPrimitive( shape );
+        aPad->SetShape( PAD_SHAPE::CUSTOM );
+        aPad->SetOffset( VECTOR2I( 0, 0 ) );
+    }
+
     while( FP_SHAPE* fpShape = findNext( layer ) )
     {
-        // We've found an intersecting item to combine.
-        //
         fpShape->SetFlags( SKIP_STRUCT );
 
-        // First convert the pad to a custom-shape pad (if it isn't already)
-        //
-        if( !aIsDryRun )
-        {
-            aCommit.Modify( aPad );
-
-            if( aPad->GetShape() == PAD_SHAPE::RECT || aPad->GetShape() == PAD_SHAPE::CIRCLE )
-            {
-                aPad->SetAnchorPadShape( aPad->GetShape() );
-            }
-            else if( aPad->GetShape() != PAD_SHAPE::CUSTOM )
-            {
-                // Create a new minimally-sized circular anchor and convert existing pad
-                // to a polygon primitive
-                SHAPE_POLY_SET existingOutline;
-                aPad->TransformShapeToPolygon( existingOutline, layer, 0, maxError, ERROR_INSIDE );
-
-                aPad->SetAnchorPadShape( PAD_SHAPE::CIRCLE );
-
-                if( aPad->GetSizeX() > aPad->GetSizeY() )
-                    aPad->SetSizeX( aPad->GetSizeY() );
-
-                PCB_SHAPE* shape = new PCB_SHAPE( nullptr, SHAPE_T::POLY );
-                shape->SetFilled( true );
-                shape->SetStroke( STROKE_PARAMS( 0, PLOT_DASH_TYPE::SOLID ) );
-                shape->SetPolyShape( existingOutline );
-                shape->Move( - aPad->GetPosition() );
-                shape->Rotate( VECTOR2I( 0, 0 ), - aPad->GetOrientation() );
-
-                aPad->AddPrimitive( shape );
-            }
-
-            aPad->SetShape( PAD_SHAPE::CUSTOM );
-        }
-
-        // Now add the new shape to the primitives list
-        //
         mergedShapes.push_back( fpShape );
 
         if( !aIsDryRun )
@@ -889,15 +883,18 @@ std::vector<FP_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun, BOARD_
 
             case SHAPE_T::POLY:
                 pcbShape->SetPolyShape( fpShape->GetPolyShape() );
-                pcbShape->Move( VECTOR2I( 0, 0 ) - aPad->GetOffset() );
                 break;
 
             default:
                 UNIMPLEMENTED_FOR( pcbShape->SHAPE_T_asString() );
             }
 
-            pcbShape->Move( - aPad->GetPosition() );
-            pcbShape->Rotate( VECTOR2I( 0, 0 ), - aPad->GetOrientation() );
+            if( pcbShape->GetShape() != SHAPE_T::POLY )    // Poly's are board-relative
+            {
+                pcbShape->Move( - aPad->GetPosition() );
+                pcbShape->Rotate( VECTOR2I( 0, 0 ), - aPad->GetOrientation() );
+            }
+
             pcbShape->SetIsAnnotationProxy( fpShape->IsAnnotationProxy());
             aPad->AddPrimitive( pcbShape );
 
