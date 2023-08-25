@@ -2619,15 +2619,16 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
 
         if( net->HasAttribute( "class" ) )
         {
-            netclass = m_classMap[ net->GetAttribute( "class" ) ];
+            auto netclassIt = m_classMap.find( net->GetAttribute( "class" ) );
 
-            m_board->GetDesignSettings().m_NetSettings->m_NetClassPatternAssignments.push_back(
-                    {
-                        std::make_unique<EDA_COMBINED_MATCHER>( netName, CTX_NETCLASS ),
-                        netclass->GetName()
-                    } );
+            if( netclassIt != m_classMap.end() )
+            {
+                m_board->GetDesignSettings().m_NetSettings->m_NetClassPatternAssignments.push_back(
+                        { std::make_unique<EDA_COMBINED_MATCHER>( netName, CTX_NETCLASS ),
+                          netclassIt->second->GetName() } );
 
-            netInfo->SetNetClass( netclass );
+                netInfo->SetNetClass( netclassIt->second );
+            }
         }
 
         m_board->Add( netInfo );
