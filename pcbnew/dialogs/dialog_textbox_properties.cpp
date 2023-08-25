@@ -270,14 +270,29 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataToWindow()
     STROKE_PARAMS stroke;
 
     if( m_fpTextBox )
+    {
         stroke = m_fpTextBox->GetStroke();
+        m_borderCheckbox->SetValue( m_fpTextBox->IsBorderEnabled() );
+
+        if( m_fpTextBox->IsBorderEnabled() )
+            m_borderWidth.SetValue( stroke.GetWidth() );
+
+        m_borderWidth.Enable( m_fpTextBox->IsBorderEnabled() );
+        m_borderStyleLabel->Enable( m_fpTextBox->IsBorderEnabled() );
+        m_borderStyleCombo->Enable( m_fpTextBox->IsBorderEnabled() );
+    }
     else if( m_pcbTextBox )
+    {
         stroke = m_pcbTextBox->GetStroke();
+        m_borderCheckbox->SetValue( m_pcbTextBox->IsBorderEnabled() );
 
-    m_borderCheckbox->SetValue( stroke.GetWidth() >= 0 );
+        if( m_pcbTextBox->IsBorderEnabled() )
+            m_borderWidth.SetValue( stroke.GetWidth() );
 
-    if( stroke.GetWidth() >= 0 )
-        m_borderWidth.SetValue( stroke.GetWidth() );
+        m_borderWidth.Enable( m_pcbTextBox->IsBorderEnabled() );
+        m_borderStyleLabel->Enable( m_pcbTextBox->IsBorderEnabled() );
+        m_borderStyleCombo->Enable( m_pcbTextBox->IsBorderEnabled() );
+    }
 
     PLOT_DASH_TYPE style = stroke.GetPlotStyle();
 
@@ -286,10 +301,6 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataToWindow()
 
     if( (int) style < (int) lineTypeNames.size() )
         m_borderStyleCombo->SetSelection( (int) style );
-
-    m_borderWidth.Enable( stroke.GetWidth() >= 0 );
-    m_borderStyleLabel->Enable( stroke.GetWidth() >= 0 );
-    m_borderStyleCombo->Enable( stroke.GetWidth() >= 0 );
 
     return DIALOG_TEXTBOX_PROPERTIES_BASE::TransferDataToWindow();
 }
@@ -448,35 +459,38 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataFromWindow()
 
     m_edaText->SetMirrored( m_mirrored->IsChecked() );
 
-    STROKE_PARAMS stroke;
-
-    if( m_fpTextBox )
-        stroke = m_fpTextBox->GetStroke();
-    else if( m_pcbTextBox )
-        stroke = m_pcbTextBox->GetStroke();
-
     if( m_borderCheckbox->GetValue() )
     {
+        STROKE_PARAMS stroke;
+
+        if( m_fpTextBox )
+            stroke = m_fpTextBox->GetStroke();
+        else if( m_pcbTextBox )
+            stroke = m_pcbTextBox->GetStroke();
+
         if( !m_borderWidth.IsIndeterminate() )
             stroke.SetWidth( m_borderWidth.GetValue() );
+
+        auto it = lineTypeNames.begin();
+        std::advance( it, m_borderStyleCombo->GetSelection() );
+
+        if( it == lineTypeNames.end() )
+            stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
+        else
+            stroke.SetPlotStyle( it->first );
+
+        if( m_fpTextBox )
+            m_fpTextBox->SetStroke( stroke );
+        else if( m_pcbTextBox )
+            m_pcbTextBox->SetStroke( stroke );
     }
     else
     {
-        stroke.SetWidth( -1 );
+        if( m_fpTextBox )
+            m_fpTextBox->DisableBorder();
+        else if( m_pcbTextBox )
+            m_pcbTextBox->DisableBorder();
     }
-
-    auto it = lineTypeNames.begin();
-    std::advance( it, m_borderStyleCombo->GetSelection() );
-
-    if( it == lineTypeNames.end() )
-        stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
-    else
-        stroke.SetPlotStyle( it->first );
-
-    if( m_fpTextBox )
-        m_fpTextBox->SetStroke( stroke );
-    else if( m_pcbTextBox )
-        m_pcbTextBox->SetStroke( stroke );
 
     m_edaText->ClearBoundingBoxCache();
     m_edaText->ClearRenderCache();

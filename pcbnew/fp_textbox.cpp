@@ -575,6 +575,18 @@ wxString FP_TEXTBOX::GetParentAsString() const
 }
 
 
+bool FP_TEXTBOX::IsBorderEnabled() const
+{
+    return m_stroke.GetWidth() != -1;
+}
+
+
+void FP_TEXTBOX::DisableBorder()
+{
+    m_stroke.SetWidth( -1 );
+}
+
+
 static struct FP_TEXTBOX_DESC
 {
     FP_TEXTBOX_DESC()

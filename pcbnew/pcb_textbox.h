@@ -132,6 +132,12 @@ public:
 
     EDA_ITEM* Clone() const override;
 
+    ///< Tests whether the border is disabled, as configured by the stroke
+    bool IsBorderEnabled() const;
+
+    ///< Disables the border, this is done by changing the stroke internally
+    void DisableBorder();
+
 protected:
     virtual void swapData( BOARD_ITEM* aImage ) override;
 };

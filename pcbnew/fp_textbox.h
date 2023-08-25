@@ -131,6 +131,12 @@ public:
 
     double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 
+    ///< Tests whether the border is disabled, as configured by the stroke
+    bool IsBorderEnabled() const;
+
+    ///< Disables the border, this is done by changing the stroke internally
+    void DisableBorder();
+
 #if defined(DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
