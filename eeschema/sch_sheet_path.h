@@ -672,6 +672,8 @@ public:
 
     void RemoveSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPath );
 
+    bool HasPath( const KIID_PATH& aPath ) const;
+
 private:
     SCH_SHEET_PATH  m_currentSheetPath;
 };

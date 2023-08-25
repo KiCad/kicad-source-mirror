@@ -723,8 +723,18 @@ wxString DIALOG_CHANGE_SYMBOLS::getSymbolReferences( SCH_SYMBOL& aSymbol, const 
     wxString references;
     LIB_ID oldId = aSymbol.GetLibId();
 
+    SCH_EDIT_FRAME* parent = dynamic_cast< SCH_EDIT_FRAME* >( GetParent() );
+
+    wxCHECK( parent, msg );
+
+    SCH_SHEET_LIST sheets = parent->Schematic().GetSheets();
+
     for( const SCH_SYMBOL_INSTANCE& instance : aSymbol.GetInstanceReferences() )
     {
+        // Only include the symbol instances for the current project.
+        if( !sheets.HasPath( instance.m_Path ) )
+            continue;
+
         if( references.IsEmpty() )
             references = instance.m_Reference;
         else

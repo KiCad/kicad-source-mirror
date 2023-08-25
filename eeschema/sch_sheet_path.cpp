@@ -1306,3 +1306,14 @@ int SCH_SHEET_LIST::GetLastVirtualPageNumber() const
     return lastVirtualPageNumber;
 }
 
+
+bool SCH_SHEET_LIST::HasPath( const KIID_PATH& aPath ) const
+{
+    for( const SCH_SHEET_PATH& path : *this )
+    {
+        if( path.Path() == aPath )
+            return true;
+    }
+
+    return false;
+}
