@@ -81,7 +81,13 @@ int FOOTPRINT_SEARCH_HANDLER::Search( const wxString& aQuery )
 
 wxString FOOTPRINT_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
 {
+    if( aRow >= m_hitlist.size() )
+        return wxEmptyString;
+
     FOOTPRINT* fp = m_hitlist[aRow];
+
+    if( !fp )
+        return wxEmptyString;
 
     if( aCol == 0 )
         return fp->GetReference();
@@ -155,7 +161,13 @@ int ZONE_SEARCH_HANDLER::Search( const wxString& aQuery )
 
 wxString ZONE_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
 {
+    if( aRow >= m_hitlist.size() )
+        return wxEmptyString;
+
     ZONE* zone = m_hitlist[aRow];
+
+    if( !zone )
+        return wxEmptyString;
 
     if( aCol == 0 )
         return zone->GetZoneName();
@@ -241,7 +253,13 @@ int TEXT_SEARCH_HANDLER::Search( const wxString& aQuery )
 
 wxString TEXT_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
 {
+    if( aRow >= m_hitlist.size() )
+        return wxEmptyString;
+
     BOARD_ITEM* text = m_hitlist[aRow];
+
+    if( !text )
+        return wxEmptyString;
 
     if( aCol == 0 )
     {
@@ -320,7 +338,13 @@ int NETS_SEARCH_HANDLER::Search( const wxString& aQuery )
 
 wxString NETS_SEARCH_HANDLER::GetResultCell( int aRow, int aCol )
 {
+    if( aRow >= m_hitlist.size() )
+        return wxEmptyString;
+
     NETINFO_ITEM* net = m_hitlist[aRow];
+
+    if( !net )
+        return wxEmptyString;
 
     if( net->GetNetCode() == 0 )
     {
