@@ -230,10 +230,9 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
     if( dlg.GetOriginChoice() == 1 )
     {
         // Origin = board center:
-        BOARD* pcb = GetBoard();
-        VECTOR2I center = pcb->GetBoundingBox().GetCenter();
-        aXRef = pcbIUScale.IUTomm( center.x );
-        aYRef = pcbIUScale.IUTomm( center.y );
+        BOX2I  bbox = GetBoard()->GetBoardEdgesBoundingBox();
+        aXRef = pcbIUScale.IUTomm( bbox.GetCenter().x );
+        aYRef = pcbIUScale.IUTomm( bbox.GetCenter().y );
     }
 
     double scale = scaleList[dlg.GetUnits()];     // final scale export
