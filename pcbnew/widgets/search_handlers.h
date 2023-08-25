@@ -39,7 +39,15 @@ public:
 
     wxString GetResultCell( int aRow, int aCol ) override
     {
-        return getResultCell( m_hitlist[aRow], aCol );
+        if( aRow >= m_hitlist.size() )
+            return wxEmptyString;
+
+        BOARD_ITEM* item = m_hitlist[aRow];
+
+        if( !item )
+            return wxEmptyString;
+
+        return getResultCell( item, aCol );
     }
 
     void Sort( int aCol, bool aAscending ) override;

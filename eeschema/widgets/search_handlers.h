@@ -48,7 +48,15 @@ public:
 
     wxString GetResultCell( int aRow, int aCol ) override
     {
-        return getResultCell( m_hitlist[aRow], aCol );
+        if( aRow >= m_hitlist.size() )
+            return wxEmptyString;
+
+        const SCH_SEARCH_HIT& hit = m_hitlist[aRow];
+
+        if( !hit.item )
+            return wxEmptyString;
+
+        return getResultCell( hit, aCol );
     }
 
     void FindAll( const std::function<bool( SCH_ITEM*, SCH_SHEET_PATH* )>& aCollector );
