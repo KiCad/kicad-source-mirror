@@ -1614,6 +1614,21 @@ void EDA_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance
 }
 
 
+void EDA_SHAPE::SetLineStyle( const PLOT_DASH_TYPE aStyle )
+{
+    m_stroke.SetPlotStyle( aStyle );
+}
+
+
+PLOT_DASH_TYPE EDA_SHAPE::GetLineStyle() const
+{
+    if( m_stroke.GetPlotStyle() != PLOT_DASH_TYPE::DEFAULT )
+        return m_stroke.GetPlotStyle();
+
+    return PLOT_DASH_TYPE::SOLID;
+}
+
+
 IMPLEMENT_ENUM_TO_WXANY( SHAPE_T )
 IMPLEMENT_ENUM_TO_WXANY( PLOT_DASH_TYPE )
 
@@ -1677,6 +1692,10 @@ static struct EDA_SHAPE_DESC
         // TODO: m_arcCenter, m_bezierC1, m_bezierC2, m_poly
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Line Width" ),
                     &EDA_SHAPE::SetWidth, &EDA_SHAPE::GetWidth, PROPERTY_DISPLAY::PT_SIZE ) );
+
+        void ( EDA_SHAPE::*lineStyleSetter )( PLOT_DASH_TYPE ) = &EDA_SHAPE::SetLineStyle;
+        propMgr.AddProperty( new PROPERTY_ENUM<EDA_SHAPE, PLOT_DASH_TYPE>(
+                _HKI( "Line Style" ), lineStyleSetter, &EDA_SHAPE::GetLineStyle ) );
 
         auto angle = new PROPERTY<EDA_SHAPE, EDA_ANGLE>( _HKI( "Angle" ),
                     NO_SETTER( EDA_SHAPE, EDA_ANGLE ), &EDA_SHAPE::GetArcAngle,

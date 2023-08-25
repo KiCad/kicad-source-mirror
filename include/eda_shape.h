@@ -110,6 +110,9 @@ public:
     int GetWidth() const                       { return m_stroke.GetWidth(); }
     virtual int GetEffectiveWidth() const      { return GetWidth(); }
 
+    void           SetLineStyle( const PLOT_DASH_TYPE aStyle );
+    PLOT_DASH_TYPE GetLineStyle() const;
+
     void SetShape( SHAPE_T aShape )            { m_shape = aShape; }
     SHAPE_T GetShape() const                   { return m_shape; }
 

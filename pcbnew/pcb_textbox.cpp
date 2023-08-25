@@ -581,5 +581,6 @@ static struct PCB_TEXTBOX_DESC
         propMgr.Mask( TYPE_HASH( PCB_TEXTBOX ), TYPE_HASH( EDA_SHAPE ), _HKI( "End X" ) );
         propMgr.Mask( TYPE_HASH( PCB_TEXTBOX ), TYPE_HASH( EDA_SHAPE ), _HKI( "End Y" ) );
         propMgr.Mask( TYPE_HASH( PCB_TEXTBOX ), TYPE_HASH( EDA_SHAPE ), _HKI( "Line Width" ) );
+        propMgr.Mask( TYPE_HASH( PCB_TEXTBOX ), TYPE_HASH( EDA_SHAPE ), _HKI( "Line Style" ) );
     }
 } _PCB_TEXTBOX_DESC;
