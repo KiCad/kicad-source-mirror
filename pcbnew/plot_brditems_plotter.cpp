@@ -359,7 +359,8 @@ void BRDITEMS_PLOTTER::PlotBoardGraphicItem( const BOARD_ITEM* item )
     {
         const PCB_TEXTBOX* textbox = static_cast<const PCB_TEXTBOX*>( item );
         PlotText( textbox, textbox->GetLayer(), textbox->IsKnockout(), textbox->GetFontMetrics() );
-        PlotShape( textbox );
+        if( textbox->IsBorderEnabled() )
+            PlotShape( textbox );
         break;
     }
 
@@ -517,7 +518,8 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
             {
                 PlotText( textbox, textbox->GetLayer(), textbox->IsKnockout(),
                           textbox->GetFontMetrics() );
-                PlotShape( textbox );
+                if( textbox->IsBorderEnabled() )
+                    PlotShape( textbox );
             }
 
             break;

@@ -196,7 +196,7 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataToWindow()
     m_orientation.SetAngleValue( orientation.Normalize180() );
 
     STROKE_PARAMS stroke = m_textBox->GetStroke();
-    m_borderCheckbox->SetValue( stroke.GetWidth() >= 0 );
+    m_borderCheckbox->SetValue( m_textBox->IsBorderEnabled() );
 
     if( stroke.GetWidth() >= 0 )
         m_borderWidth.SetValue( stroke.GetWidth() );
@@ -357,27 +357,28 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataFromWindow()
 
     m_textBox->SetMirrored( m_mirrored->IsChecked() );
 
-    STROKE_PARAMS stroke = m_textBox->GetStroke();
 
     if( m_borderCheckbox->GetValue() )
     {
+        STROKE_PARAMS stroke = m_textBox->GetStroke();
         if( !m_borderWidth.IsIndeterminate() )
             stroke.SetWidth( m_borderWidth.GetValue() );
+
+
+        auto it = lineTypeNames.begin();
+        std::advance( it, m_borderStyleCombo->GetSelection() );
+
+        if( it == lineTypeNames.end() )
+            stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
+        else
+            stroke.SetPlotStyle( it->first );
+
+        m_textBox->SetStroke( stroke );
     }
     else
     {
-        stroke.SetWidth( -1 );
+        m_textBox->DisableBorder();
     }
-
-    auto it = lineTypeNames.begin();
-    std::advance( it, m_borderStyleCombo->GetSelection() );
-
-    if( it == lineTypeNames.end() )
-        stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
-    else
-        stroke.SetPlotStyle( it->first );
-
-    m_textBox->SetStroke( stroke );
 
     m_textBox->ClearBoundingBoxCache();
     m_textBox->ClearRenderCache();
