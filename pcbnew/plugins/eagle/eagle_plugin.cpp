@@ -1408,7 +1408,6 @@ ZONE* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
 {
     EPOLYGON     p( aPolyNode );
     PCB_LAYER_ID layer = kicad_layer( p.layer );
-    ZONE*        zone = nullptr;
     bool         keepout = ( p.layer == EAGLE_LAYER::TRESTRICT
                           || p.layer == EAGLE_LAYER::BRESTRICT
                           || p.layer == EAGLE_LAYER::VRESTRICT );
@@ -1425,13 +1424,12 @@ ZONE* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
         return nullptr;
 
     // use a "netcode = 0" type ZONE:
-    zone = new ZONE( m_board );
-    m_board->Add( zone, ADD_MODE::APPEND );
+    std::unique_ptr<ZONE> zone = std::make_unique<ZONE>( m_board );
 
     if( !keepout )
         zone->SetLayer( layer );
     else
-        setKeepoutSettingsToZone( zone, p.layer );
+        setKeepoutSettingsToZone( zone.get(), p.layer );
 
     // Get the first vertex and iterate
     wxXmlNode* vertex = aPolyNode->GetChildren();
@@ -1496,8 +1494,16 @@ ZONE* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
     // We trace the zone such that the copper is completely inside.
     if( p.width.ToPcbUnits() > 0 )
     {
-        polygon.Inflate( p.width.ToPcbUnits() / 2, 32, SHAPE_POLY_SET::ALLOW_ACUTE_CORNERS );
-        polygon.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+		polygon.Inflate( p.width.ToPcbUnits() / 2, 32, SHAPE_POLY_SET::ALLOW_ACUTE_CORNERS, true );
+    }
+
+    if( polygon.OutlineCount() != 1 )
+    {
+        wxLogMessage( wxString::Format(
+                _( "Skipping a polygon on layer '%s' (%d): outline count is not 1" ),
+                eagle_layer_name( p.layer ), p.layer ) );
+
+        return nullptr;
     }
 
     zone->AddPolygon( polygon.COutline( 0 ) );
@@ -1550,7 +1556,7 @@ ZONE* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
     int rank = p.rank ? (p.max_priority - *p.rank) : p.max_priority;
     zone->SetAssignedPriority( rank );
 
-    return zone;
+    return zone.release();
 }
 
 
