@@ -89,7 +89,11 @@ public:
     bool CanConnect( const SCH_ITEM* aItem ) const override
     {
         return aItem->IsConnectable() && ( aItem->Type() == SCH_LINE_T
-                                        || aItem->Type() == SCH_SYMBOL_T );
+                                        || aItem->Type() == SCH_SYMBOL_T
+                                        || aItem->Type() == SCH_LABEL_T
+                                        || aItem->Type() == SCH_GLOBAL_LABEL_T
+                                        || aItem->Type() == SCH_HIER_LABEL_T
+                                        || aItem->Type() == SCH_DIRECTIVE_LABEL_T );
     }
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override
