@@ -150,7 +150,10 @@ FONT* FONT::GetFont( const wxString& aFontName, bool aBold, bool aItalic )
 
     std::tuple<wxString, bool, bool> key = { aFontName, aBold, aItalic };
 
-    FONT* font = s_fontMap[key];
+    FONT* font = nullptr;
+
+    if( s_fontMap.find( key ) != s_fontMap.end() )
+        font = s_fontMap[key];
 
     if( !font )
         font = OUTLINE_FONT::LoadFont( aFontName, aBold, aItalic );
