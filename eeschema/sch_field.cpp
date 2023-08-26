@@ -94,8 +94,10 @@ SCH_FIELD::SCH_FIELD( const SCH_FIELD& aField ) :
 
     for( const std::unique_ptr<KIFONT::GLYPH>& glyph : aField.m_renderCache )
     {
-        KIFONT::OUTLINE_GLYPH* outline_glyph = static_cast<KIFONT::OUTLINE_GLYPH*>( glyph.get() );
-        m_renderCache.emplace_back( std::make_unique<KIFONT::OUTLINE_GLYPH>( *outline_glyph ) );
+        if( KIFONT::OUTLINE_GLYPH* outline = dynamic_cast<KIFONT::OUTLINE_GLYPH*>( glyph.get() ) )
+            m_renderCache.emplace_back( std::make_unique<KIFONT::OUTLINE_GLYPH>( *outline ) );
+        else if( KIFONT::STROKE_GLYPH* stroke = dynamic_cast<KIFONT::STROKE_GLYPH*>( glyph.get() ) )
+            m_renderCache.emplace_back( std::make_unique<KIFONT::STROKE_GLYPH>( *stroke ) );
     }
 
     m_renderCacheValid = aField.m_renderCacheValid;
@@ -119,8 +121,10 @@ SCH_FIELD& SCH_FIELD::operator=( const SCH_FIELD& aField )
 
     for( const std::unique_ptr<KIFONT::GLYPH>& glyph : aField.m_renderCache )
     {
-        KIFONT::OUTLINE_GLYPH* outline_glyph = static_cast<KIFONT::OUTLINE_GLYPH*>( glyph.get() );
-        m_renderCache.emplace_back( std::make_unique<KIFONT::OUTLINE_GLYPH>( *outline_glyph ) );
+        if( KIFONT::OUTLINE_GLYPH* outline = dynamic_cast<KIFONT::OUTLINE_GLYPH*>( glyph.get() ) )
+            m_renderCache.emplace_back( std::make_unique<KIFONT::OUTLINE_GLYPH>( *outline ) );
+        else if( KIFONT::STROKE_GLYPH* stroke = dynamic_cast<KIFONT::STROKE_GLYPH*>( glyph.get() ) )
+            m_renderCache.emplace_back( std::make_unique<KIFONT::STROKE_GLYPH>( *stroke ) );
     }
 
     m_renderCacheValid = aField.m_renderCacheValid;
