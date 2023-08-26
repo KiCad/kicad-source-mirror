@@ -207,13 +207,6 @@ void SCH_DATABASE_PLUGIN::GetDefaultSymbolFields( std::vector<wxString>& aNames 
 }
 
 
-bool SCH_DATABASE_PLUGIN::CheckHeader( const wxString& aFileName )
-{
-    // TODO: Implement this sometime; but CheckHeader isn't even called...
-    return true;
-}
-
-
 bool SCH_DATABASE_PLUGIN::TestConnection( wxString* aErrorMsg )
 {
     if( m_conn && m_conn->IsConnected() )

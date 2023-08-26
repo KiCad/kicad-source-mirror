@@ -53,17 +53,21 @@ public:
         m_progressReporter = aReporter;
     }
 
-    const wxString GetFileExtension() const override;
+    const PLUGIN_FILE_DESC GetSchematicFileDesc() const override
+    {
+        return PLUGIN_FILE_DESC( _HKI( "LTspice schematic files" ), { "asc" } );
+    }
 
-    const wxString GetLibraryFileExtension() const override;
+    /*const PLUGIN_FILE_DESC GetLibraryFileDesc() const override
+    {
+        return PLUGIN_FILE_DESC( _HKI( "LTspice library files" ), { "lib" } );
+    }*/
 
     int GetModifyHash() const override;
 
-    SCH_SHEET* Load( const wxString& aFileName, SCHEMATIC* aSchematic,
-                     SCH_SHEET* aAppendToMe = nullptr,
-                     const STRING_UTF8_MAP* aProperties = nullptr ) override;
-
-    bool CheckHeader( const wxString& aFileName ) override;
+    SCH_SHEET* LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
+                                  SCH_SHEET*             aAppendToMe = nullptr,
+                                  const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
 private:
     REPORTER*          m_reporter;          // current reporter for warnings/errors

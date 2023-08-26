@@ -1,6 +1,3 @@
-#ifndef _SCH_SEXPR_PLUGIN_H_
-#define _SCH_SEXPR_PLUGIN_H_
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -23,11 +20,15 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _SCH_SEXPR_PLUGIN_H_
+#define _SCH_SEXPR_PLUGIN_H_
+
 #include <memory>
 #include <sch_io_mgr.h>
 #include <sch_file_versions.h>
 #include <sch_sheet_path.h>
 #include <stack>
+#include <wildcards_and_files_ext.h>
 
 
 class KIWAY;
@@ -71,14 +72,16 @@ public:
         return wxT( "Eeschema s-expression" );
     }
 
-    const wxString GetFileExtension() const override
+    const PLUGIN_FILE_DESC GetSchematicFileDesc() const override
     {
-        return wxT( "kicad_sch" );
+        return PLUGIN_FILE_DESC( _HKI( "KiCad s-expression schematic files" ),
+                                 { KiCadSchematicFileExtension } );
     }
 
-    const wxString GetLibraryFileExtension() const override
+    const PLUGIN_FILE_DESC GetLibraryFileDesc() const override
     {
-        return wxT( "kicad_sym" );
+        return PLUGIN_FILE_DESC( _HKI( "KiCad symbol library files" ),
+                                 { KiCadSymbolLibFileExtension } );
     }
 
     void SetProgressReporter( PROGRESS_REPORTER* aReporter ) override
@@ -95,15 +98,15 @@ public:
 
     int GetModifyHash() const override;
 
-    SCH_SHEET* Load( const wxString& aFileName, SCHEMATIC* aSchematic,
-                     SCH_SHEET* aAppendToMe = nullptr,
-                     const STRING_UTF8_MAP* aProperties = nullptr ) override;
+    SCH_SHEET* LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
+                                  SCH_SHEET*             aAppendToMe = nullptr,
+                                  const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     void LoadContent( LINE_READER& aReader, SCH_SHEET* aSheet,
                       int aVersion = SEXPR_SCHEMATIC_FILE_VERSION );
 
-    void Save( const wxString& aFileName, SCH_SHEET* aSheet, SCHEMATIC* aSchematic,
-               const STRING_UTF8_MAP* aProperties = nullptr ) override;
+    void SaveSchematicFile( const wxString& aFileName, SCH_SHEET* aSheet, SCHEMATIC* aSchematic,
+                            const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     void Format( SCH_SHEET* aSheet );
 
@@ -129,7 +132,6 @@ public:
     void SaveLibrary( const wxString& aLibraryPath,
                       const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
-    bool CheckHeader( const wxString& aFileName ) override;
     bool IsSymbolLibWritable( const wxString& aLibraryPath ) override;
 
     void GetAvailableSymbolFields( std::vector<wxString>& aNames ) override;

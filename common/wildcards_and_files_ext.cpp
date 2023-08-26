@@ -130,7 +130,6 @@ const std::string KiCadSymbolLibFileExtension( "kicad_sym" );
 const std::string SchematicSymbolFileExtension( "sym" );
 const std::string LegacySymbolLibFileExtension( "lib" );
 const std::string LegacySymbolDocumentFileExtension( "dcm" );
-const std::string LtspiceSymbolExtension( "asy" );
 
 const std::string VrmlFileExtension( "wrl" );
 
@@ -138,12 +137,10 @@ const std::string ProjectFileExtension( "kicad_pro" );
 const std::string LegacyProjectFileExtension( "pro" );
 const std::string ProjectLocalSettingsFileExtension( "kicad_prl" );
 const std::string LegacySchematicFileExtension( "sch" );
-const std::string EagleSchematicFileExtension( "sch" );
 const std::string CadstarSchematicFileExtension( "csa" );
 const std::string CadstarPartsLibraryFileExtension( "lib" );
 const std::string KiCadSchematicFileExtension( "kicad_sch" );
 const std::string SpiceFileExtension( "cir" );
-const std::string LtspiceSchematicExtension( "asc" );
 const std::string CadstarNetlistFileExtension( "frp" );
 const std::string OrCadPcb2NetlistFileExtension( "net" );
 const std::string NetlistFileExtension( "net" );
@@ -214,38 +211,10 @@ wxString AllFilesWildcard()
 }
 
 
-wxString SchematicSymbolFileWildcard()
-{
-    return _( "KiCad drawing symbol files" ) + AddFileExtListToFilter( { "sym" } );
-}
-
-
 wxString KiCadSymbolLibFileWildcard()
 {
     return _( "KiCad symbol library files" )
             + AddFileExtListToFilter( { KiCadSymbolLibFileExtension } );
-}
-
-
-wxString LegacySymbolLibFileWildcard()
-{
-    return _( "KiCad legacy symbol library files" ) + AddFileExtListToFilter( { "lib" } );
-}
-
-
-wxString DatabaseLibFileWildcard()
-{
-    return _( "KiCad database library files" )
-           + AddFileExtListToFilter( { DatabaseLibraryFileExtension } );
-}
-
-
-wxString AllSymbolLibFilesWildcard()
-{
-    return _( "All symbol library files" )
-            + AddFileExtListToFilter( { KiCadSymbolLibFileExtension,
-                                        DatabaseLibraryFileExtension,
-                                        "lib" } );
 }
 
 
@@ -290,40 +259,9 @@ wxString KiCadSchematicFileWildcard()
 }
 
 
-wxString AltiumSchematicFileWildcard()
-{
-    return _( "Altium schematic files" ) + AddFileExtListToFilter( { "SchDoc" } );
-}
-
-
-wxString CadstarPartsLibraryFileWildcard()
-{
-    return _( "CADSTAR Parts Library files" )
-            + AddFileExtListToFilter( { CadstarPartsLibraryFileExtension } );
-}
-
-
-wxString CadstarSchematicArchiveFileWildcard()
-{
-    return _( "CADSTAR Schematic Archive files" ) + AddFileExtListToFilter( { "csa" } );
-}
-
-
 wxString CadstarArchiveFilesWildcard()
 {
     return _( "CADSTAR Archive files" ) + AddFileExtListToFilter( { "csa", "cpa" } );
-}
-
-
-wxString EagleSchematicFileWildcard()
-{
-    return _( "Eagle XML schematic files" ) + AddFileExtListToFilter( { "sch" } );
-}
-
-
-wxString LtspiceSchematicFileWildcard()
-{
-    return _( "LTspice schematic files" ) + AddFileExtListToFilter( { "asc" } );
 }
 
 

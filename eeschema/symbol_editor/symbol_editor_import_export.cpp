@@ -48,12 +48,38 @@ void SYMBOL_EDIT_FRAME::ImportSymbol()
             return;
     }
 
-    wxString wildcards = AllSymbolLibFilesWildcard()
-                         + "|" + KiCadSymbolLibFileWildcard()
-                         + "|" + LegacySymbolLibFileWildcard();
+    wxString fileFiltersStr;
+    wxString allWildcardsStr;
 
-    wxFileDialog dlg( this, _( "Import Symbol" ), m_mruPath, wxEmptyString,
-                      wildcards, wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+    for( const SCH_IO_MGR::SCH_FILE_T& fileType : SCH_IO_MGR::SCH_FILE_T_vector )
+    {
+        if( fileType == SCH_IO_MGR::SCH_KICAD || fileType == SCH_IO_MGR::SCH_LEGACY )
+            continue; // this is "Import non-KiCad schematic"
+
+        SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( fileType ) );
+
+        if( !pi )
+            continue;
+
+        const PLUGIN_FILE_DESC& desc = pi->GetLibraryFileDesc();
+
+        if( desc.m_FileExtensions.empty() )
+            continue;
+
+        if( !fileFiltersStr.IsEmpty() )
+            fileFiltersStr += wxChar( '|' );
+
+        fileFiltersStr += desc.FileFilter();
+
+        for( const std::string& ext : desc.m_FileExtensions )
+            allWildcardsStr << wxT( "*." ) << formatWildcardExt( ext ) << wxT( ";" );
+    }
+
+    fileFiltersStr = _( "All supported formats" ) + wxT( "|" ) + allWildcardsStr + wxT( "|" )
+                     + fileFiltersStr;
+
+    wxFileDialog dlg( this, _( "Import Symbol" ), m_mruPath, wxEmptyString, fileFiltersStr,
+                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
@@ -69,6 +95,14 @@ void SYMBOL_EDIT_FRAME::ImportSymbol()
 
     wxArrayString symbols;
     SCH_IO_MGR::SCH_FILE_T piType = SCH_IO_MGR::GuessPluginTypeFromLibPath( fn.GetFullPath() );
+
+    if( piType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
+    {
+        msg.Printf( _( "Unable to find a reader for '%s'." ), fn.GetFullPath() );
+        DisplayError( this, msg );
+        return;
+    }
+
     SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( piType ) );
 
     // TODO dialog to select the symbol to be imported if there is more than one
@@ -140,6 +174,10 @@ void SYMBOL_EDIT_FRAME::ExportSymbol()
 
     LIB_SYMBOL* old_symbol = nullptr;
     SCH_IO_MGR::SCH_FILE_T pluginType = SCH_IO_MGR::GuessPluginTypeFromLibPath( fn.GetFullPath() );
+
+    if( pluginType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
+        pluginType = SCH_IO_MGR::SCH_KICAD;
+
     SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( pluginType ) );
 
     if( fn.FileExists() )

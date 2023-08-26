@@ -1,11 +1,8 @@
-#ifndef _SCH_LEGACY_PLUGIN_H_
-#define _SCH_LEGACY_PLUGIN_H_
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2016-2022 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see change_log.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -23,10 +20,14 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _SCH_LEGACY_PLUGIN_H_
+#define _SCH_LEGACY_PLUGIN_H_
+
 #include <memory>
 #include <sch_io_mgr.h>
 #include <stack>
 #include <general.h>        // for EESCHEMA_VERSION definition
+#include <wildcards_and_files_ext.h>
 
 
 class KIWAY;
@@ -72,15 +73,21 @@ public:
         return wxT( "Eeschema-Legacy" );
     }
 
-    const wxString GetFileExtension() const override
+    const PLUGIN_FILE_DESC GetSchematicFileDesc() const override
     {
-        return wxT( "sch" );
+        return PLUGIN_FILE_DESC( _HKI( "KiCad legacy schematic files" ),
+                                 { LegacySchematicFileExtension } );
     }
 
-    const wxString GetLibraryFileExtension() const override
+    const PLUGIN_FILE_DESC GetLibraryFileDesc() const override
     {
-        return wxT( "lib" );
+        return PLUGIN_FILE_DESC( _HKI( "KiCad legacy symbol library files" ),
+                                 { LegacySymbolLibFileExtension } );
     }
+
+    bool CanReadSchematicFile( const wxString& aFileName ) const override;
+
+    bool CanReadLibrary( const wxString& aFileName ) const override;
 
     void SetProgressReporter( PROGRESS_REPORTER* aReporter ) override
     {
@@ -102,15 +109,15 @@ public:
 
     int GetModifyHash() const override;
 
-    SCH_SHEET* Load( const wxString& aFileName, SCHEMATIC* aSchematic,
-                     SCH_SHEET* aAppendToMe = nullptr,
-                     const STRING_UTF8_MAP* aProperties = nullptr ) override;
+    SCH_SHEET* LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
+                                  SCH_SHEET*             aAppendToMe = nullptr,
+                                  const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     void LoadContent( LINE_READER& aReader, SCH_SCREEN* aScreen,
                       int version = EESCHEMA_VERSION );
 
-    void Save( const wxString& aFileName, SCH_SHEET* aScreen, SCHEMATIC* aSchematic,
-               const STRING_UTF8_MAP* aProperties = nullptr ) override;
+    void SaveSchematicFile( const wxString& aFileName, SCH_SHEET* aScreen, SCHEMATIC* aSchematic,
+                            const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     void Format( SCH_SHEET* aSheet );
 
@@ -134,8 +141,7 @@ public:
                           const STRING_UTF8_MAP* aProperties = nullptr ) override;
     void SaveLibrary( const wxString& aLibraryPath,
                       const STRING_UTF8_MAP* aProperties = nullptr ) override;
-
-    bool CheckHeader( const wxString& aFileName ) override;
+    
     bool IsSymbolLibWritable( const wxString& aLibraryPath ) override;
 
     const wxString& GetError() const override { return m_error; }

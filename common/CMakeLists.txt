@@ -382,6 +382,7 @@ set( COMMON_SRCS
     origin_transforms.cpp
     page_info.cpp
     paths.cpp
+    plugin_file_desc.cpp
     printout.cpp
     project.cpp
     ptree.cpp

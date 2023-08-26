@@ -160,29 +160,9 @@ const wxString SCH_ALTIUM_PLUGIN::GetName() const
 }
 
 
-const wxString SCH_ALTIUM_PLUGIN::GetFileExtension() const
-{
-    return "SchDoc";
-}
-
-
-const wxString SCH_ALTIUM_PLUGIN::GetLibraryFileExtension() const
-{
-    return "SchLib";
-}
-
-
 int SCH_ALTIUM_PLUGIN::GetModifyHash() const
 {
     return 0;
-}
-
-
-bool SCH_ALTIUM_PLUGIN::CheckHeader( const wxString& aFileName )
-{
-    // TODO
-
-    return true;
 }
 
 
@@ -218,8 +198,9 @@ wxFileName SCH_ALTIUM_PLUGIN::getLibFileName()
 }
 
 
-SCH_SHEET* SCH_ALTIUM_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchematic,
-                                    SCH_SHEET* aAppendToMe, const STRING_UTF8_MAP* aProperties )
+SCH_SHEET* SCH_ALTIUM_PLUGIN::LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
+                                                 SCH_SHEET*             aAppendToMe,
+                                                 const STRING_UTF8_MAP* aProperties )
 {
     wxCHECK( !aFileName.IsEmpty() && aSchematic, nullptr );
 

@@ -318,6 +318,7 @@ bool PLUGIN::fileStartsWithPrefix( const wxString& aFilePath, const wxString& aP
     return false;
 }
 
+
 bool PLUGIN::fileStartsWithBinaryHeader( const wxString& aFilePath, const std::vector<uint8_t>& aHeader )
 {
     wxFileInputStream input( aFilePath );

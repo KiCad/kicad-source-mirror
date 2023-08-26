@@ -1,6 +1,3 @@
-#ifndef IO_MGR_H_
-#define IO_MGR_H_
-
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
@@ -25,11 +22,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#ifndef IO_MGR_H_
+#define IO_MGR_H_
+
 #include <cstdint>
 #include <config.h>
 #include <vector>
 #include <wx/arrstr.h>
 #include <i18n_utility.h>
+#include <plugin_file_desc.h>
 
 class BOARD;
 class PLUGIN;
@@ -185,7 +186,7 @@ public:
     /**
      * Return a plugin type given a footprint library's libPath.
      */
-    static PCB_FILE_T GuessPluginTypeFromLibPath( const wxString& aLibPath );
+    static PCB_FILE_T GuessPluginTypeFromLibPath( const wxString& aLibPath, int aCtl = 0 );
 
     /**
      * Find the requested #PLUGIN and if found, calls the #PLUGIN::LoadBoard() function
@@ -232,33 +233,6 @@ public:
      */
     static void Save( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* aBoard,
                       const STRING_UTF8_MAP* aProperties = nullptr );
-};
-
-
-/**
-* Container that describes file type info
-*/
-struct PLUGIN_FILE_DESC
-{
-    wxString                 m_Description;    ///< Description shown in the file picker dialog
-    std::vector<std::string> m_FileExtensions; ///< Filter used for file pickers if m_IsFile is true
-    std::vector<std::string> m_ExtensionsInDir; ///< In case of folders: extensions of files inside
-    bool                     m_IsFile;          ///< Whether the library is a folder or a file
-
-    PLUGIN_FILE_DESC( const wxString& aDescription, const std::vector<std::string>& aFileExtensions,
-                      const std::vector<std::string>& aExtsInFolder = {}, bool aIsFile = true ) :
-            m_Description( aDescription ),
-            m_FileExtensions( aFileExtensions ), m_ExtensionsInDir( aExtsInFolder ),
-            m_IsFile( aIsFile )
-    {
-    }
-
-    /**
-     * @return translated description + wildcards string for file dialogs.
-     */
-    wxString FileFilter() const;
-
-    operator bool() const { return !m_Description.empty(); }
 };
 
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Thomas Pointhuber <thomas.pointhuber@gmx.at>
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,17 +55,21 @@ public:
 
     void SetReporter( REPORTER* aReporter ) override { m_reporter = aReporter; }
 
-    const wxString GetFileExtension() const override;
+    const PLUGIN_FILE_DESC GetSchematicFileDesc() const override
+    {
+        return PLUGIN_FILE_DESC( _HKI( "Altium schematic files" ), { "SchDoc" } );
+    }
 
-    const wxString GetLibraryFileExtension() const override;
+    /*const PLUGIN_FILE_DESC GetLibraryFileDesc() const override
+    {
+        return PLUGIN_FILE_DESC( _HKI( "Altium schematic library files" ), { "SchLib" } );
+    }*/
 
     int GetModifyHash() const override;
 
-    SCH_SHEET* Load( const wxString& aFileName, SCHEMATIC* aSchematic,
-                     SCH_SHEET* aAppendToMe = nullptr,
-                     const STRING_UTF8_MAP* aProperties = nullptr ) override;
-
-    bool CheckHeader( const wxString& aFileName ) override;
+    SCH_SHEET* LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
+                                  SCH_SHEET*             aAppendToMe = nullptr,
+                                  const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     // unimplemented functions. Will trigger a not_implemented IO error.
     //void SaveLibrary( const wxString& aFileName, const PROPERTIES* aProperties = NULL ) override;

@@ -425,13 +425,30 @@ bool FOOTPRINT_EDIT_FRAME::SaveLibraryAs( const wxString& aLibraryPath )
     wxBusyCursor dummy;
     wxString msg;
 
-    IO_MGR::PCB_FILE_T  dstType = IO_MGR::GuessPluginTypeFromLibPath( dstLibPath );
-    IO_MGR::PCB_FILE_T  curType = IO_MGR::GuessPluginTypeFromLibPath( curLibPath );
+    IO_MGR::PCB_FILE_T dstType = IO_MGR::GuessPluginTypeFromLibPath( dstLibPath );
+    IO_MGR::PCB_FILE_T curType = IO_MGR::GuessPluginTypeFromLibPath( curLibPath );
+
+    if( dstType == IO_MGR::FILE_TYPE_NONE )
+        dstType = IO_MGR::KICAD_SEXP;
 
     try
     {
         PLUGIN::RELEASER cur( IO_MGR::PluginFind( curType ) );
         PLUGIN::RELEASER dst( IO_MGR::PluginFind( dstType ) );
+
+        if( !cur )
+        {
+            msg = wxString::Format( _( "Unable to find a reader for '%s." ), curLibPath );
+            DisplayError( this, msg );
+            return false;
+        }
+
+        if( !dst )
+        {
+            msg = wxString::Format( _( "Unable to find a writer for '%s." ), dstLibPath );
+            DisplayError( this, msg );
+            return false;
+        }
 
         wxArrayString footprints;
 

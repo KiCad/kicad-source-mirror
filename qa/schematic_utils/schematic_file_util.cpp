@@ -41,7 +41,7 @@ namespace KI_TEST
 void DumpSchematicToFile( SCHEMATIC& aSchematic, SCH_SHEET& aSheet, const std::string& aFilename )
 {
     SCH_SEXPR_PLUGIN io;
-    io.Save( aFilename, &aSheet, &aSchematic );
+    io.SaveSchematicFile( aFilename, &aSheet, &aSchematic );
 }
 
 void LoadSheetSchematicContents( const std::string& fileName, SCH_SHEET* sheet )

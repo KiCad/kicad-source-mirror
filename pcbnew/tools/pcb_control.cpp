@@ -1020,6 +1020,9 @@ int PCB_CONTROL::AppendBoardFromFile( const TOOL_EVENT& aEvent )
             IO_MGR::FindPluginTypeFromBoardPath( fileName, KICTL_KICAD_ONLY );
     PLUGIN::RELEASER pi( IO_MGR::PluginFind( pluginType ) );
 
+    if( !pi )
+        return 1;
+
     return AppendBoard( *pi, fileName );
 }
 
@@ -1601,6 +1604,9 @@ int PCB_CONTROL::DdAppendBoard( const TOOL_EVENT& aEvent )
     wxString filePath = fileName.GetFullPath();
     IO_MGR::PCB_FILE_T pluginType = IO_MGR::FindPluginTypeFromBoardPath( filePath );
     PLUGIN::RELEASER pi( IO_MGR::PluginFind( pluginType ) );
+
+    if( !pi )
+        return 1;
 
     return AppendBoard( *pi, filePath );
 }

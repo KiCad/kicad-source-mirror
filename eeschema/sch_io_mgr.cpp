@@ -32,8 +32,10 @@
 #include <sch_plugins/cadstar/cadstar_sch_archive_plugin.h>
 #include <sch_plugins/database/sch_database_plugin.h>
 #include <sch_plugins/ltspice/ltspice_sch_plugin.h>
-#include <wildcards_and_files_ext.h>
 #include <common.h>     // for ExpandEnvVarSubstitutions
+
+#include <wildcards_and_files_ext.h>
+#include <kiway_player.h>
 
 #define FMT_UNIMPLEMENTED   _( "Plugin \"%s\" does not implement the \"%s\" function." )
 #define FMT_NOTFOUND        _( "Plugin type \"%s\" is not found." )
@@ -59,12 +61,12 @@ SCH_PLUGIN* SCH_IO_MGR::FindPlugin( SCH_FILE_T aFileType )
 
     switch( aFileType )
     {
-    case SCH_LEGACY:          return new SCH_LEGACY_PLUGIN();
     case SCH_KICAD:           return new SCH_SEXPR_PLUGIN();
+    case SCH_LEGACY:          return new SCH_LEGACY_PLUGIN();
     case SCH_ALTIUM:          return new SCH_ALTIUM_PLUGIN();
     case SCH_CADSTAR_ARCHIVE: return new CADSTAR_SCH_ARCHIVE_PLUGIN();
-    case SCH_EAGLE:           return new SCH_EAGLE_PLUGIN();
     case SCH_DATABASE:        return new SCH_DATABASE_PLUGIN();
+    case SCH_EAGLE:           return new SCH_EAGLE_PLUGIN();
     case SCH_LTSPICE:         return new SCH_LTSPICE_PLUGIN();
     default:                  return nullptr;
     }
@@ -89,12 +91,12 @@ const wxString SCH_IO_MGR::ShowType( SCH_FILE_T aType )
 
     switch( aType )
     {
-    case SCH_LEGACY:          return wxString( wxT( "Legacy" ) );
     case SCH_KICAD:           return wxString( wxT( "KiCad" ) );
+    case SCH_LEGACY:          return wxString( wxT( "Legacy" ) );
     case SCH_ALTIUM:          return wxString( wxT( "Altium" ) );
     case SCH_CADSTAR_ARCHIVE: return wxString( wxT( "CADSTAR Schematic Archive" ) );
-    case SCH_EAGLE:           return wxString( wxT( "EAGLE" ) );
     case SCH_DATABASE:        return wxString( wxT( "Database" ) );
+    case SCH_EAGLE:           return wxString( wxT( "EAGLE" ) );
     case SCH_LTSPICE:         return wxString( wxT( "LTspice" ) );
     default:                  return wxString::Format( _( "Unknown SCH_FILE_T value: %d" ),
                                                        aType );
@@ -108,114 +110,73 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::EnumFromStr( const wxString& aType )
     // text spellings.  If you change the spellings, you will obsolete
     // library tables, so don't do change, only additions are ok.
 
-    if( aType == wxT( "Legacy" ) )
-        return SCH_LEGACY;
-    else if( aType == wxT( "KiCad" ) )
+    if( aType == wxT( "KiCad" ) )
         return SCH_KICAD;
+    else if( aType == wxT( "Legacy" ) )
+        return SCH_LEGACY;
     else if( aType == wxT( "Altium" ) )
         return SCH_ALTIUM;
     else if( aType == wxT( "CADSTAR Schematic Archive" ) )
         return SCH_CADSTAR_ARCHIVE;
-    else if( aType == wxT( "EAGLE" ) )
-        return SCH_EAGLE;
     else if( aType == wxT( "Database" ) )
         return SCH_DATABASE;
+    else if( aType == wxT( "EAGLE" ) )
+        return SCH_EAGLE;
     else if( aType == wxT( "LTspice" ) )
         return SCH_LTSPICE;
 
     // wxASSERT( blow up here )
 
-    return SCH_FILE_T( -1 );
+    return SCH_FILE_UNKNOWN;
 }
 
 
-const wxString SCH_IO_MGR::GetFileExtension( SCH_FILE_T aFileType )
+SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::GuessPluginTypeFromLibPath( const wxString& aLibPath, int aCtl )
 {
-    wxString ext = wxEmptyString;
-    SCH_PLUGIN* plugin = FindPlugin( aFileType );
-
-    if( plugin != nullptr )
+    for( const SCH_IO_MGR::SCH_FILE_T& fileType : SCH_IO_MGR::SCH_FILE_T_vector )
     {
-        ext = plugin->GetFileExtension();
-        ReleasePlugin( plugin );
+        bool isKiCad = fileType == SCH_IO_MGR::SCH_KICAD || fileType == SCH_IO_MGR::SCH_LEGACY;
+
+        if( ( aCtl & KICTL_KICAD_ONLY ) && !isKiCad )
+            continue;
+
+        if( ( aCtl & KICTL_NONKICAD_ONLY ) && isKiCad )
+            continue;
+
+        SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( fileType ) );
+
+        if( !pi )
+            continue;
+
+        if( pi->CanReadLibrary( aLibPath ) )
+            return fileType;
     }
 
-    return ext;
+    return SCH_IO_MGR::SCH_FILE_UNKNOWN;
 }
 
 
-const wxString SCH_IO_MGR::GetLibraryFileExtension( SCH_FILE_T aFileType )
+SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::GuessPluginTypeFromSchPath( const wxString& aSchematicPath,
+                                                               int             aCtl )
 {
-    wxString ext = wxEmptyString;
-    SCH_PLUGIN* plugin = FindPlugin( aFileType );
-
-    if( plugin != nullptr )
+    for( const SCH_IO_MGR::SCH_FILE_T& fileType : SCH_IO_MGR::SCH_FILE_T_vector )
     {
-        ext = plugin->GetLibraryFileExtension();
-        ReleasePlugin( plugin );
+        bool isKiCad = fileType == SCH_IO_MGR::SCH_KICAD || fileType == SCH_IO_MGR::SCH_LEGACY;
+
+        if( ( aCtl & KICTL_KICAD_ONLY ) && !isKiCad )
+            continue;
+
+        if( ( aCtl & KICTL_NONKICAD_ONLY ) && isKiCad )
+            continue;
+
+        SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( fileType ) );
+
+        if( !pi )
+            continue;
+
+        if( pi->CanReadSchematicFile( aSchematicPath ) )
+            return fileType;
     }
 
-    return ext;
-}
-
-
-SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::GuessPluginTypeFromLibPath( const wxString& aLibPath )
-{
-    SCH_FILE_T  ret = SCH_KICAD;        // default guess, unless detected otherwise.
-    wxFileName fn( aLibPath );
-    wxString   ext = fn.GetExt().Lower();
-
-    // .lib is shared between CADSTAR and Legacy KiCad file formats. Let's read the header
-    if( ext == LegacySymbolLibFileExtension )
-    {
-        wxString fullName = ExpandEnvVarSubstitutions( aLibPath, nullptr );
-
-        // Of course the file should exist to be read. If not, use the SCH_LEGACY
-        // format: it is more usual than SCH_CADSTAR_ARCHIVE
-        if( !wxFileExists( fullName ) )
-            return SCH_LEGACY;
-
-        for( SCH_FILE_T pluginType : { SCH_LEGACY, SCH_CADSTAR_ARCHIVE } )
-        {
-            SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( pluginType ) );
-
-            if( pi )
-            {
-                if( pi->CheckHeader( fullName ) )
-                    return pluginType;
-            }
-        }
-
-        // If not found, use the SCH_LEGACY.
-        return SCH_LEGACY;
-    }
-
-    for( SCH_IO_MGR::SCH_FILE_T piType : SCH_IO_MGR::SCH_FILE_T_vector )
-    {
-        if( SCH_IO_MGR::GetLibraryFileExtension( piType ).Lower() == ext )
-        {
-            ret = piType;
-            break;
-        }
-    }
-
-    return ret;
-}
-
-
-SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::GuessPluginTypeFromSchPath( const wxString& aSchematicPath )
-{
-    SCH_FILE_T  ret = SCH_KICAD;        // default guess, unless detected otherwise.
-    wxFileName  fn( aSchematicPath );
-
-    if( fn.GetExt() == LegacySchematicFileExtension )
-    {
-        ret = SCH_LEGACY;
-    }
-    else if( fn.GetExt() == KiCadSchematicFileExtension )
-    {
-        ret = SCH_KICAD;
-    }
-
-    return ret;
+    return SCH_IO_MGR::SCH_FILE_UNKNOWN;
 }

@@ -572,7 +572,7 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
 
             try
             {
-                pi->Save( newAbsoluteFilename, m_sheet, &schematic );
+                pi->SaveSchematicFile( newAbsoluteFilename, m_sheet, &schematic );
             }
             catch( const IO_ERROR& ioe )
             {

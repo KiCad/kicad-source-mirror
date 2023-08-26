@@ -97,8 +97,9 @@ void SCH_SEXPR_PLUGIN::init( SCHEMATIC* aSchematic, const STRING_UTF8_MAP* aProp
 }
 
 
-SCH_SHEET* SCH_SEXPR_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchematic,
-                                   SCH_SHEET* aAppendToMe, const STRING_UTF8_MAP* aProperties )
+SCH_SHEET* SCH_SEXPR_PLUGIN::LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
+                                                SCH_SHEET*             aAppendToMe,
+                                                const STRING_UTF8_MAP* aProperties )
 {
     wxASSERT( !aFileName || aSchematic != nullptr );
 
@@ -328,8 +329,9 @@ void SCH_SEXPR_PLUGIN::LoadContent( LINE_READER& aReader, SCH_SHEET* aSheet, int
 }
 
 
-void SCH_SEXPR_PLUGIN::Save( const wxString& aFileName, SCH_SHEET* aSheet, SCHEMATIC* aSchematic,
-                             const STRING_UTF8_MAP* aProperties )
+void SCH_SEXPR_PLUGIN::SaveSchematicFile( const wxString& aFileName, SCH_SHEET* aSheet,
+                                          SCHEMATIC*             aSchematic,
+                                          const STRING_UTF8_MAP* aProperties )
 {
     wxCHECK_RET( aSheet != nullptr, "NULL SCH_SHEET object." );
     wxCHECK_RET( !aFileName.IsEmpty(), "No schematic file name defined." );
@@ -1610,21 +1612,6 @@ void SCH_SEXPR_PLUGIN::SaveLibrary( const wxString& aLibraryPath, const STRING_U
     m_cache->SetModified();
     m_cache->Save();
     m_cache->SetFileName( oldFileName );
-}
-
-
-bool SCH_SEXPR_PLUGIN::CheckHeader( const wxString& aFileName )
-{
-    // Open file and check first line
-    wxTextFile tempFile;
-
-    tempFile.Open( aFileName );
-    wxString firstline;
-    // read the first line
-    firstline = tempFile.GetFirstLine();
-    tempFile.Close();
-
-    return firstline.StartsWith( wxS( "EESchema" ) );
 }
 
 

@@ -50,7 +50,7 @@ void KI_TEST::SCHEMATIC_TEST_FIXTURE::LoadSchematic( const wxString& aBaseName )
     m_manager.Prj().SetElem( PROJECT::ELEM_SCH_SYMBOL_LIBS, nullptr );
 
     m_schematic.SetProject( &m_manager.Prj() );
-    m_schematic.SetRoot( m_pi->Load( fn.GetFullPath(), &m_schematic ) );
+    m_schematic.SetRoot( m_pi->LoadSchematicFile( fn.GetFullPath(), &m_schematic ) );
 
     BOOST_REQUIRE_EQUAL( m_pi->GetError().IsEmpty(), true );
 

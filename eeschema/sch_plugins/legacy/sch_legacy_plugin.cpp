@@ -121,8 +121,9 @@ void SCH_LEGACY_PLUGIN::checkpoint()
 }
 
 
-SCH_SHEET* SCH_LEGACY_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchematic,
-                                    SCH_SHEET* aAppendToMe, const STRING_UTF8_MAP* aProperties )
+SCH_SHEET* SCH_LEGACY_PLUGIN::LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
+                                                 SCH_SHEET*             aAppendToMe,
+                                                 const STRING_UTF8_MAP* aProperties )
 {
     wxASSERT( !aFileName || aSchematic != nullptr );
 
@@ -1450,8 +1451,9 @@ std::shared_ptr<BUS_ALIAS> SCH_LEGACY_PLUGIN::loadBusAlias( LINE_READER& aReader
 }
 
 
-void SCH_LEGACY_PLUGIN::Save( const wxString& aFileName, SCH_SHEET* aSheet, SCHEMATIC* aSchematic,
-                              const STRING_UTF8_MAP* aProperties )
+void SCH_LEGACY_PLUGIN::SaveSchematicFile( const wxString& aFileName, SCH_SHEET* aSheet,
+                                           SCHEMATIC*             aSchematic,
+                                           const STRING_UTF8_MAP* aProperties )
 {
     wxCHECK_RET( aSheet != nullptr, "NULL SCH_SHEET object." );
     wxCHECK_RET( !aFileName.IsEmpty(), "No schematic file name defined." );
@@ -2231,18 +2233,21 @@ void SCH_LEGACY_PLUGIN::SaveLibrary( const wxString& aLibraryPath, const STRING_
 }
 
 
-bool SCH_LEGACY_PLUGIN::CheckHeader( const wxString& aFileName )
+bool SCH_LEGACY_PLUGIN::CanReadSchematicFile( const wxString& aFileName ) const
 {
-    // Open file and check first line
-    wxTextFile tempFile;
+    if( !SCH_PLUGIN::CanReadSchematicFile( aFileName ) )
+        return false;
 
-    tempFile.Open( aFileName );
-    wxString firstline;
-    // read the first line
-    firstline = tempFile.GetFirstLine();
-    tempFile.Close();
+    return fileStartsWithPrefix( aFileName, wxT( "EESchema" ), true );
+}
 
-    return firstline.StartsWith( wxS( "EESchema" ) );
+
+bool SCH_LEGACY_PLUGIN::CanReadLibrary( const wxString& aFileName ) const
+{
+    if( !SCH_PLUGIN::CanReadLibrary( aFileName ) )
+        return false;
+
+    return fileStartsWithPrefix( aFileName, wxT( "EESchema" ), true );
 }
 
 

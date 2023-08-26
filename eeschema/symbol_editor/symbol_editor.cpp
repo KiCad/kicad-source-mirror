@@ -1071,6 +1071,9 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
     {
         fn = prj.SchSymbolLibTable()->GetFullURI( aLibrary );
         fileType = SCH_IO_MGR::GuessPluginTypeFromLibPath( fn.GetFullPath() );
+
+        if( fileType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
+            fileType = SCH_IO_MGR::SCH_KICAD;
     }
 
     // Verify the user has write privileges before attempting to save the library file.

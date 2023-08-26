@@ -1,6 +1,3 @@
-#ifndef _SCH_IO_MGR_H_
-#define _SCH_IO_MGR_H_
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -23,11 +20,16 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _SCH_IO_MGR_H_
+#define _SCH_IO_MGR_H_
+
 #include <richio.h>
 #include <import_export.h>
 #include <map>
 #include <enum_vector.h>
 #include <reporter.h>
+#include <i18n_utility.h>
+#include <plugin_file_desc.h>
 
 
 class SCH_SHEET;
@@ -56,8 +58,8 @@ public:
     // clang-format off
     DEFINE_ENUM_VECTOR( SCH_FILE_T,
     {
-        SCH_LEGACY,           ///< Legacy Eeschema file formats prior to s-expression.
         SCH_KICAD,            ///< The s-expression version of the schematic.
+        SCH_LEGACY,           ///< Legacy Eeschema file formats prior to s-expression.
         SCH_ALTIUM,           ///< Altium file format
         SCH_CADSTAR_ARCHIVE,  ///< CADSTAR Schematic Archive
         SCH_DATABASE,         ///< KiCad database library
@@ -104,39 +106,21 @@ public:
     static SCH_FILE_T EnumFromStr( const wxString& aFileType );
 
     /**
-     * Return the schematic file extension for \a aFileType.
-     *
-     * @param aFileType is the #SCH_FILE_T type.
-     *
-     * @return the file extension for \a aFileType or an empty string if \a aFileType is invalid.
-     */
-    static const wxString GetFileExtension( SCH_FILE_T aFileType );
-
-    /**
-     * Return the symbol library file extension (if any) for \a aFileType.
-     *
-     * @param aFileType is the #SCH_FILE_T type.
-     *
-     * @return the file extension for \a aFileType or an empty string if \a aFileType is invalid.
-     */
-    static const wxString GetLibraryFileExtension( SCH_FILE_T aFileType );
-
-    /**
      * Return a plugin type given a symbol library using the file extension of \a aLibPath.
      */
-    static SCH_FILE_T GuessPluginTypeFromLibPath( const wxString& aLibPath );
+    static SCH_FILE_T GuessPluginTypeFromLibPath( const wxString& aLibPath, int aCtl = 0 );
 
     /**
      * Return a plugin type given a schematic using the file extension of \a aSchematicPath.
      */
-    static SCH_FILE_T GuessPluginTypeFromSchPath( const wxString& aSchematicPath );
+    static SCH_FILE_T GuessPluginTypeFromSchPath( const wxString& aSchematicPath, int aCtl = 0 );
 };
 
 
 /**
  * Base class that schematic file and library loading and saving plugins should derive from.
- * Implementations can provide either Load() or Save() functions, or both.
- * SCH_PLUGINs throw exceptions, so it is best that you wrap your calls to these
+ * Implementations can provide either LoadSchematicFile() or SaveSchematicFile() functions, 
+ * or both. SCH_PLUGINs throw exceptions, so it is best that you wrap your calls to these
  * functions in a try catch block.  Plugins throw exceptions because it is illegal
  * for them to have any user interface calls in them whatsoever, i.e. no windowing
  * or screen printing at all.
@@ -144,9 +128,9 @@ public:
  * <pre>
  *   try
  *   {
- *        SCH_IO_MGR::Load(...);
+ *        SCH_IO_MGR::LoadSchematicFile(...);
  *   or
- *        SCH_IO_MGR::Save(...);
+ *        SCH_IO_MGR::SaveSchematicFile(...);
  *   }
  *   catch( const IO_ERROR& ioe )
  *   {
@@ -176,14 +160,26 @@ public:
     virtual void SetProgressReporter( PROGRESS_REPORTER* aReporter ) {}
 
     /**
-     * Return the file extension for the #SCH_PLUGIN.
+     * Returns schematic file description for the #SCH_PLUGIN.
      */
-    virtual const wxString GetFileExtension() const = 0;
+    virtual const PLUGIN_FILE_DESC GetSchematicFileDesc() const;
 
     /**
-     * Return the library file extension for the #SCH_PLUGIN object.
+     * Returns symbol library description for the #SCH_PLUGIN.
      */
-    virtual const wxString GetLibraryFileExtension() const = 0;
+    virtual const PLUGIN_FILE_DESC GetLibraryFileDesc() const;
+
+    /**
+     * Checks if this SCH_PLUGIN can read the specified schematic file.
+     * If not overriden, extension check is used.
+     */
+    virtual bool CanReadSchematicFile( const wxString& aFileName ) const;
+
+    /**
+     * Checks if this SCH_PLUGIN can read the specified symbol library file.
+     * If not overriden, extension check is used.
+     */
+    virtual bool CanReadLibrary( const wxString& aFileName ) const;
 
     /**
      * Return the modification hash from the library cache.
@@ -226,9 +222,9 @@ public:
      *                 wrong, using line number and character offsets of the input file if
      *                 possible.
      */
-    virtual SCH_SHEET* Load( const wxString& aFileName, SCHEMATIC* aSchematic,
-                             SCH_SHEET* aAppendToMe = nullptr,
-                             const STRING_UTF8_MAP* aProperties = nullptr );
+    virtual SCH_SHEET* LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
+                                          SCH_SHEET*             aAppendToMe = nullptr,
+                                          const STRING_UTF8_MAP* aProperties = nullptr );
 
     /**
      * Write \a aSchematic to a storage file in a format that this #SCH_PLUGIN implementation
@@ -255,8 +251,9 @@ public:
      *
      * @throw IO_ERROR if there is a problem saving or exporting.
      */
-    virtual void Save( const wxString& aFileName, SCH_SHEET* aSheet, SCHEMATIC* aSchematic,
-                       const STRING_UTF8_MAP* aProperties = nullptr );
+    virtual void SaveSchematicFile( const wxString& aFileName, SCH_SHEET* aSheet,
+                                    SCHEMATIC*             aSchematic,
+                                    const STRING_UTF8_MAP* aProperties = nullptr );
 
     /**
      * Populate a list of #LIB_SYMBOL alias names contained within the library \a aLibraryPath.
@@ -494,14 +491,6 @@ public:
     }
 
     /**
-     * Return true if the first line in @a aFileName begins with the expected header.
-     *
-     * @param aFileName is the name of the file to use as input
-     *
-     */
-    virtual bool CheckHeader( const wxString& aFileName );
-
-    /**
      * Return an error string to the caller.
      *
      * This is useful for schematic loaders that can load partial schematics where throwing
@@ -579,6 +568,13 @@ public:
             return plugin;
         }
     };
+
+    protected:
+    static bool fileStartsWithPrefix( const wxString& aFilePath, const wxString& aPrefix,
+                                      bool aIgnoreWhitespace );
+
+    static bool fileStartsWithBinaryHeader( const wxString&             aFilePath,
+                                            const std::vector<uint8_t>& aHeader );
 };
 
 #endif // _SCH_IO_MGR_H_

@@ -58,12 +58,6 @@
 // plugins coexisting.
 
 
-wxString PLUGIN_FILE_DESC::FileFilter() const
-{
-    return wxGetTranslation( m_Description ) + AddFileExtListToFilter( m_FileExtensions );
-}
-
-
 PLUGIN* IO_MGR::PluginFind( PCB_FILE_T aFileType )
 {
     // This implementation is subject to change, any magic is allowed here.
@@ -141,45 +135,27 @@ IO_MGR::PCB_FILE_T IO_MGR::FindPluginTypeFromBoardPath( const wxString& aFileNam
 }
 
 
-IO_MGR::PCB_FILE_T IO_MGR::GuessPluginTypeFromLibPath( const wxString& aLibPath )
+IO_MGR::PCB_FILE_T IO_MGR::GuessPluginTypeFromLibPath( const wxString& aLibPath, int aCtl )
 {
-    PCB_FILE_T  ret = KICAD_SEXP;        // default guess, unless detected otherwise.
-    wxFileName  fn( aLibPath );
+    const auto& plugins = IO_MGR::PLUGIN_REGISTRY::Instance()->AllPlugins();
 
-    if( fn.GetExt() == LegacyFootprintLibPathExtension )
+    for( const auto& plugin : plugins )
     {
-        ret = LEGACY;
-    }
-    else if( fn.GetExt() == GedaPcbFootprintLibFileExtension )
-    {
-        ret = GEDA_PCB;
-    }
-    else if( fn.GetExt() == EagleFootprintLibPathExtension )
-    {
-        ret = EAGLE;
-    }
-    else if( fn.GetExt() == AltiumFootprintLibPathExtension )
-    {
-        ret = ALTIUM_DESIGNER;
-    }
-    else if( fn.GetExt() == CadstarFootprintLibPathExtension )
-    {
-        ret = CADSTAR_PCB_ARCHIVE;
+        bool isKiCad = plugin.m_type == IO_MGR::KICAD_SEXP || plugin.m_type == IO_MGR::LEGACY;
+
+        if( ( aCtl & KICTL_KICAD_ONLY ) && !isKiCad )
+            continue;
+
+        if( ( aCtl & KICTL_NONKICAD_ONLY ) && isKiCad )
+            continue;
+
+        PLUGIN::RELEASER pi( plugin.m_createFunc() );
+
+        if( pi->CanReadFootprintLib( aLibPath ) )
+            return plugin.m_type;
     }
 
-    // Test this one anyways, even though it's the default guess, to avoid
-    // the wxURI instantiation below.
-    // We default ret to KICAD above, because somebody might have
-    // mistakenly put a pretty library into a directory other than
-    // *.pretty/ with *.kicad_mod in there., and I don't want to return -1,
-    // since we only claimed to be guessing.
-    //
-    else if( fn.GetExt() == KiCadFootprintLibPathExtension )
-    {
-        ret = KICAD_SEXP;
-    }
-
-    return ret;
+    return IO_MGR::FILE_TYPE_NONE;
 }
 
 

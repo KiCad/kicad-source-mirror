@@ -68,8 +68,8 @@ void SYMBOL_LIB_TABLE_ROW::SetType( const wxString& aType )
 {
     type = SCH_IO_MGR::EnumFromStr( aType );
 
-    if( SCH_IO_MGR::SCH_FILE_T( -1 ) == type )
-        type = SCH_IO_MGR::SCH_LEGACY;
+    if( type == SCH_IO_MGR::SCH_FILE_UNKNOWN )
+        type = SCH_IO_MGR::SCH_KICAD;
 
     plugin.release();
 }

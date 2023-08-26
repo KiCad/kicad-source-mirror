@@ -375,18 +375,6 @@ const wxString SCH_EAGLE_PLUGIN::GetName() const
 }
 
 
-const wxString SCH_EAGLE_PLUGIN::GetFileExtension() const
-{
-    return wxT( "sch" );
-}
-
-
-const wxString SCH_EAGLE_PLUGIN::GetLibraryFileExtension() const
-{
-    return wxT( "lbr" );
-}
-
-
 int SCH_EAGLE_PLUGIN::GetModifyHash() const
 {
     return 0;
@@ -413,8 +401,9 @@ void SCH_EAGLE_PLUGIN::checkpoint()
 }
 
 
-SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchematic,
-                                   SCH_SHEET* aAppendToMe, const STRING_UTF8_MAP* aProperties )
+SCH_SHEET* SCH_EAGLE_PLUGIN::LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
+                                                SCH_SHEET*             aAppendToMe,
+                                                const STRING_UTF8_MAP* aProperties )
 {
     wxASSERT( !aFileName || aSchematic != nullptr );
     LOCALE_IO toggle; // toggles on, then off, the C locale.
@@ -2724,23 +2713,43 @@ void SCH_EAGLE_PLUGIN::adjustNetLabels()
 }
 
 
-bool SCH_EAGLE_PLUGIN::CheckHeader( const wxString& aFileName )
+bool SCH_EAGLE_PLUGIN::CanReadSchematicFile( const wxString& aFileName ) const
 {
-    // Open file and check first line
-    wxTextFile tempFile;
+    if( !SCH_PLUGIN::CanReadSchematicFile( aFileName ) )
+        return false;
 
-    tempFile.Open( aFileName );
-    wxString firstline;
+    return checkHeader( aFileName );
+}
 
-    // read the first line
-    firstline           = tempFile.GetFirstLine();
-    wxString secondline = tempFile.GetNextLine();
-    wxString thirdline  = tempFile.GetNextLine();
-    tempFile.Close();
 
-    return firstline.StartsWith( wxT( "<?xml" ) )
-            && secondline.StartsWith( wxT( "<!DOCTYPE eagle SYSTEM" ) )
-            && thirdline.StartsWith( wxT( "<eagle version" ) );
+bool SCH_EAGLE_PLUGIN::CanReadLibrary( const wxString& aFileName ) const
+{
+    if( !SCH_PLUGIN::CanReadLibrary( aFileName ) )
+        return false;
+
+    return checkHeader( aFileName );
+}
+
+
+bool SCH_EAGLE_PLUGIN::checkHeader( const wxString& aFileName ) const
+{
+    wxFileInputStream input( aFileName );
+
+    if( !input.IsOk() )
+        return false;
+
+    wxTextInputStream text( input );
+
+    for( int i = 0; i < 3; i++ )
+    {
+        if( input.Eof() )
+            return false;
+
+        if( text.ReadLine().Contains( wxS( "<!DOCTYPE eagle" ) ) )
+            return true;
+    }
+
+    return false;
 }
 
 

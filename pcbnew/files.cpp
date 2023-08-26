@@ -550,6 +550,9 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     IO_MGR::PCB_FILE_T pluginType = IO_MGR::FindPluginTypeFromBoardPath( fullFileName, aCtl );
 
+    if( pluginType == IO_MGR::FILE_TYPE_NONE )
+        return false;
+
     bool converted =  pluginType != IO_MGR::LEGACY && pluginType != IO_MGR::KICAD_SEXP;
 
     // Loading a project should only be done under carefully considered circumstances.

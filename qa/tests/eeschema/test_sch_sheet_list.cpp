@@ -115,17 +115,17 @@ BOOST_AUTO_TEST_CASE( TestEditPageNumbersInSharedDesign )
         newPrjFn.SetExt( ProjectFileExtension );
         BOOST_CHECK( wxCopyFile( prjFn.GetFullPath(), newPrjFn.GetFullPath() ) );
 
-        m_pi->Save( rootFn.GetFullPath(), &m_schematic.Root(), &m_schematic );
+        m_pi->SaveSchematicFile( rootFn.GetFullPath(), &m_schematic.Root(), &m_schematic );
 
         wxFileName subSheetFn = rootFn;
         BOOST_CHECK( subSheetFn.AppendDir( "ampli_ht" ) );
         BOOST_CHECK( subSheetFn.Mkdir() );
 
         subSheetFn.SetName( "ampli_ht" );
-        m_pi->Save( subSheetFn.GetFullPath(), sheets.at( 1 ).Last(), &m_schematic );
+        m_pi->SaveSchematicFile( subSheetFn.GetFullPath(), sheets.at( 1 ).Last(), &m_schematic );
 
         subSheetFn.SetName( "filter" );
-        m_pi->Save( subSheetFn.GetFullPath(), sheets.at( 2 ).Last(), &m_schematic );
+        m_pi->SaveSchematicFile( subSheetFn.GetFullPath(), sheets.at( 2 ).Last(), &m_schematic );
 
         LoadSchematic( "complex_hierarchy_shared/temp/complex_hierarchy" );
 

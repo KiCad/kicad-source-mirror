@@ -111,7 +111,12 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
     wxString    msg;
     wxFileName  currentSheetFileName;
     bool        libTableChanged = false;
+
     SCH_IO_MGR::SCH_FILE_T schFileType = SCH_IO_MGR::GuessPluginTypeFromSchPath( aFileName );
+
+    if( schFileType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
+        schFileType = SCH_IO_MGR::SCH_KICAD;
+
     SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( schFileType ) );
     std::unique_ptr< SCH_SHEET> tmpSheet = std::make_unique<SCH_SHEET>( &Schematic() );
 
@@ -134,12 +139,12 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
     {
         if( aSheet->GetScreen() != nullptr )
         {
-            tmpSheet.reset( pi->Load( fullFilename, &Schematic() ) );
+            tmpSheet.reset( pi->LoadSchematicFile( fullFilename, &Schematic() ) );
         }
         else
         {
             tmpSheet->SetFileName( fullFilename );
-            pi->Load( fullFilename, &Schematic(), tmpSheet.get() );
+            pi->LoadSchematicFile( fullFilename, &Schematic(), tmpSheet.get() );
         }
 
         if( !pi->GetError().IsEmpty() )

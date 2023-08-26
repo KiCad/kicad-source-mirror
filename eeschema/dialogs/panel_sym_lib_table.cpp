@@ -116,6 +116,10 @@ public:
         if( aCol == COL_URI )
         {
             SCH_IO_MGR::SCH_FILE_T pluginType = SCH_IO_MGR::GuessPluginTypeFromLibPath( aValue );
+
+            if( pluginType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
+                pluginType = SCH_IO_MGR::SCH_KICAD;
+
             SetValue( aRow, COL_TYPE, SCH_IO_MGR::ShowType( pluginType ) );
         }
     }
@@ -270,11 +274,38 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
 
                 attr = new wxGridCellAttr;
 
-                wxString wildcards = AllSymbolLibFilesWildcard()
-                                     + "|" + KiCadSymbolLibFileWildcard()
-                                     + "|" + LegacySymbolLibFileWildcard();
+                wxString fileFiltersStr;
+                wxString allWildcardsStr;
+
+                for( const SCH_IO_MGR::SCH_FILE_T& fileType : SCH_IO_MGR::SCH_FILE_T_vector )
+                {
+                    if( fileType == SCH_IO_MGR::SCH_KICAD || fileType == SCH_IO_MGR::SCH_LEGACY )
+                        continue; // this is "Import non-KiCad schematic"
+
+                    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( fileType ) );
+
+                    if( !pi )
+                        continue;
+
+                    const PLUGIN_FILE_DESC& desc = pi->GetLibraryFileDesc();
+
+                    if( desc.m_FileExtensions.empty() )
+                        continue;
+
+                    if( !fileFiltersStr.IsEmpty() )
+                        fileFiltersStr += wxChar( '|' );
+
+                    fileFiltersStr += desc.FileFilter();
+
+                    for( const std::string& ext : desc.m_FileExtensions )
+                        allWildcardsStr << wxT( "*." ) << formatWildcardExt( ext ) << wxT( ";" );
+                }
+
+                fileFiltersStr = _( "All supported formats" ) + wxT( "|" ) + allWildcardsStr + wxT( "|" )
+                                 + fileFiltersStr;
+                
                 attr->SetEditor( new GRID_CELL_PATH_EDITOR( m_parent, aGrid,
-                                                            &cfg->m_lastSymbolLibDir, wildcards,
+                                                            &cfg->m_lastSymbolLibDir, fileFiltersStr,
                                                             true, m_project->GetProjectPath() ) );
                 aGrid->SetColAttr( COL_URI, attr );
 
@@ -533,11 +564,32 @@ void PANEL_SYM_LIB_TABLE::OnUpdateUI( wxUpdateUIEvent& event )
 
 void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 {
-    wxString wildcards = AllSymbolLibFilesWildcard()
-                            + "|" + KiCadSymbolLibFileWildcard()
-                            + "|" + LegacySymbolLibFileWildcard()
-                            + "|" + DatabaseLibFileWildcard()
-                            + "|" + CadstarPartsLibraryFileWildcard();
+    wxString fileFiltersStr;
+    wxString allWildcardsStr;
+
+    for( const SCH_IO_MGR::SCH_FILE_T& fileType : SCH_IO_MGR::SCH_FILE_T_vector )
+    {
+        SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( fileType ) );
+
+        if( !pi )
+            continue;
+
+        const PLUGIN_FILE_DESC& desc = pi->GetLibraryFileDesc();
+
+        if( desc.m_FileExtensions.empty() )
+            continue;
+
+        if( !fileFiltersStr.IsEmpty() )
+            fileFiltersStr += wxChar( '|' );
+
+        fileFiltersStr += desc.FileFilter();
+
+        for( const std::string& ext : desc.m_FileExtensions )
+            allWildcardsStr << wxT( "*." ) << formatWildcardExt( ext ) << wxT( ";" );
+    }
+
+    fileFiltersStr = _( "All supported formats" ) + wxT( "|" ) + allWildcardsStr + wxT( "|" )
+                     + fileFiltersStr;
 
     EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
 
@@ -546,7 +598,7 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     if( m_cur_grid == m_project_grid )
         openDir = m_lastProjectLibDir;
 
-    wxFileDialog dlg( this, _( "Select Library" ), openDir, wxEmptyString, wildcards,
+    wxFileDialog dlg( this, _( "Select Library" ), openDir, wxEmptyString, fileFiltersStr,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
 
     if( dlg.ShowModal() == wxID_CANCEL )
@@ -595,6 +647,10 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
             // attempt to auto-detect the plugin type
             SCH_IO_MGR::SCH_FILE_T pluginType = SCH_IO_MGR::GuessPluginTypeFromLibPath( filePath );
+
+            if( pluginType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
+                pluginType = SCH_IO_MGR::SCH_KICAD;
+
             m_cur_grid->SetCellValue( last_row, COL_TYPE, SCH_IO_MGR::ShowType( pluginType ) );
 
             // try to use path normalized to an environmental variable or project path

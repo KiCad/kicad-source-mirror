@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -44,26 +44,16 @@ const wxString CADSTAR_SCH_ARCHIVE_PLUGIN::GetName() const
 }
 
 
-const wxString CADSTAR_SCH_ARCHIVE_PLUGIN::GetFileExtension() const
-{
-    return CadstarSchematicFileExtension;
-}
-
-
-const wxString CADSTAR_SCH_ARCHIVE_PLUGIN::GetLibraryFileExtension() const
-{
-    return CadstarPartsLibraryFileExtension;
-}
-
-
 int CADSTAR_SCH_ARCHIVE_PLUGIN::GetModifyHash() const
 {
     return 0;
 }
 
 
-SCH_SHEET* CADSTAR_SCH_ARCHIVE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchematic,
-        SCH_SHEET* aAppendToMe, const STRING_UTF8_MAP* aProperties )
+SCH_SHEET* CADSTAR_SCH_ARCHIVE_PLUGIN::LoadSchematicFile( const wxString&        aFileName,
+                                                          SCHEMATIC*             aSchematic,
+                                                          SCH_SHEET*             aAppendToMe,
+                                                          const STRING_UTF8_MAP* aProperties )
 {
     wxCHECK( !aFileName.IsEmpty() && aSchematic, nullptr );
 
@@ -171,14 +161,6 @@ SCH_SHEET* CADSTAR_SCH_ARCHIVE_PLUGIN::Load( const wxString& aFileName, SCHEMATI
     aSchematic->FixupJunctions();
 
     return rootSheet;
-}
-
-
-bool CADSTAR_SCH_ARCHIVE_PLUGIN::CheckHeader( const wxString& aFileName )
-{
-    // TODO: write a parser for the cpa header. For now assume it is valid
-    // and throw exceptions when parsing
-    return true;
 }
 
 

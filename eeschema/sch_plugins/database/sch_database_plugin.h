@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -49,15 +49,10 @@ public:
         return wxT( "Database library" );
     }
 
-    const wxString GetLibraryFileExtension() const override
+    const PLUGIN_FILE_DESC GetLibraryFileDesc() const override
     {
-        return DatabaseLibraryFileExtension;
-    }
-
-    const wxString GetFileExtension() const override
-    {
-        wxFAIL_MSG( "Database libraries are not schematic files!  Fix call site." );
-        return DatabaseLibraryFileExtension;
+        return PLUGIN_FILE_DESC( _HKI( "KiCad database library files" ),
+                                 { DatabaseLibraryFileExtension } );
     }
 
     int GetModifyHash() const override { return 0; }
@@ -80,8 +75,6 @@ public:
     void GetAvailableSymbolFields( std::vector<wxString>& aNames ) override;
 
     void GetDefaultSymbolFields( std::vector<wxString>& aNames ) override;
-
-    bool CheckHeader( const wxString& aFileName ) override;
 
     // Database libraries can never be written using the symbol editing API
     bool IsSymbolLibWritable( const wxString& aLibraryPath ) override

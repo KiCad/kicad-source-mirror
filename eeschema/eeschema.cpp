@@ -82,7 +82,7 @@ static std::unique_ptr<SCHEMATIC> readSchematicFromFile( const std::string& aFil
     manager.LoadProject( "" );
     schematic->Reset();
     schematic->SetProject( &manager.Prj() );
-    schematic->SetRoot( pi->Load( aFilename, schematic.get() ) );
+    schematic->SetRoot( pi->LoadSchematicFile( aFilename, schematic.get() ) );
     schematic->CurrentSheet().push_back( &schematic->Root() );
 
     SCH_SCREENS screens( schematic->Root() );

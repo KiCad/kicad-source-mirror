@@ -31,6 +31,7 @@
 #include <sch_io_mgr.h>
 #include <reporter.h>
 #include <lib_symbol.h>
+#include <wildcards_and_files_ext.h>
 
 
 class SCH_SHEET;
@@ -57,17 +58,23 @@ public:
         m_progressReporter = aReporter;
     }
 
-    const wxString GetFileExtension() const override;
+    const PLUGIN_FILE_DESC GetSchematicFileDesc() const override
+    {
+        return PLUGIN_FILE_DESC( _HKI( "CADSTAR Schematic Archive files" ),
+                                 { CadstarSchematicFileExtension } );
+    }
 
-    const wxString GetLibraryFileExtension() const override;
+    const PLUGIN_FILE_DESC GetLibraryFileDesc() const override
+    {
+        return PLUGIN_FILE_DESC( _HKI( "CADSTAR Parts Library files" ),
+                                 { CadstarPartsLibraryFileExtension } );
+    }
 
     int GetModifyHash() const override;
 
-    SCH_SHEET* Load( const wxString& aFileName, SCHEMATIC* aSchematic,
-                     SCH_SHEET* aAppendToMe = nullptr,
-                     const STRING_UTF8_MAP* aProperties = nullptr ) override;
-
-    bool CheckHeader( const wxString& aFileName ) override;
+    SCH_SHEET* LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
+                                  SCH_SHEET*             aAppendToMe = nullptr,
+                                  const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     void EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
                              const wxString&   aLibraryPath,

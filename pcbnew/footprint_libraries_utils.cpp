@@ -467,7 +467,11 @@ bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aFilename, FP_LIB_TABLE* a
 
     if( libName.IsEmpty() )
         return false;
+
     IO_MGR::PCB_FILE_T lib_type = IO_MGR::GuessPluginTypeFromLibPath( libPath );
+
+    if( lib_type == IO_MGR::FILE_TYPE_NONE )
+        lib_type = IO_MGR::LEGACY;
 
     wxString type = IO_MGR::ShowType( lib_type );
 

@@ -38,26 +38,15 @@ const wxString SCH_LTSPICE_PLUGIN::GetName() const
 }
 
 
-const wxString SCH_LTSPICE_PLUGIN::GetFileExtension() const
-{
-    return wxT( "asc" );
-}
-
-
-const wxString SCH_LTSPICE_PLUGIN::GetLibraryFileExtension() const
-{
-    return wxT( "lib" );
-}
-
-
 int SCH_LTSPICE_PLUGIN::GetModifyHash() const
 {
     return 0;
 }
 
 
-SCH_SHEET* SCH_LTSPICE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchematic,
-                                     SCH_SHEET* aAppendToMe, const STRING_UTF8_MAP* aProperties )
+SCH_SHEET* SCH_LTSPICE_PLUGIN::LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
+                                                  SCH_SHEET*             aAppendToMe,
+                                                  const STRING_UTF8_MAP* aProperties )
 {
     wxASSERT( !aFileName || aSchematic );
 
@@ -124,10 +113,4 @@ SCH_SHEET* SCH_LTSPICE_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSche
     aSchematic->CurrentSheet().UpdateAllScreenReferences();
 
     return rootSheet;
-}
-
-
-bool SCH_LTSPICE_PLUGIN::CheckHeader( const wxString& aFileName )
-{
-    return true;
 }

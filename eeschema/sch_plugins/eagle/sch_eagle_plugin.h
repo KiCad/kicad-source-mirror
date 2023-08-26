@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -95,20 +95,29 @@ public:
         m_progressReporter = aReporter;
     }
 
-    const wxString GetFileExtension() const override;
+    const PLUGIN_FILE_DESC GetSchematicFileDesc() const override
+    {
+        return PLUGIN_FILE_DESC( _HKI( "Eagle XML schematic files" ), { "sch" } );
+    }
 
-    const wxString GetLibraryFileExtension() const override;
+    /*const PLUGIN_FILE_DESC GetLibraryFileDesc() const override
+    {
+        return PLUGIN_FILE_DESC( _HKI( "Eagle XML library files" ), { "lbr" } );
+    }*/
+
+    bool CanReadSchematicFile( const wxString& aFileName ) const override;
+    bool CanReadLibrary( const wxString& aFileName ) const override;
 
     int GetModifyHash() const override;
 
-    SCH_SHEET* Load( const wxString& aFileName, SCHEMATIC* aSchematic,
-                     SCH_SHEET* aAppendToMe = nullptr,
-                     const STRING_UTF8_MAP* aProperties = nullptr ) override;
-
-    bool CheckHeader( const wxString& aFileName ) override;
+    SCH_SHEET* LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
+                                  SCH_SHEET*             aAppendToMe = nullptr,
+                                  const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
 private:
     void checkpoint();
+
+    bool checkHeader( const wxString& aFileName ) const;
 
     void loadDrawing( wxXmlNode* aDrawingNode );
     void loadLayerDefs( wxXmlNode* aLayers );

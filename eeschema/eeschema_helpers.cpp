@@ -128,7 +128,7 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( wxString& aFileName, SCH_IO_MGR::SCH
 
     try
     {
-        schematic->SetRoot( pi->Load( aFileName, schematic ) );
+        schematic->SetRoot( pi->LoadSchematicFile( aFileName, schematic ) );
     }
     catch( ... )
     {

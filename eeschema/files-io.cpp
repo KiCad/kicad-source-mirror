@@ -240,7 +240,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         {
             {
                 wxBusyCursor busy;
-                Schematic().SetRoot( pi->Load( fullFileName, &Schematic() ) );
+                Schematic().SetRoot( pi->LoadSchematicFile( fullFileName, &Schematic() ) );
             }
 
             if( !pi->GetError().IsEmpty() )
@@ -620,39 +620,37 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
     bool     setProject = Prj().GetProjectFullName().IsEmpty() || Kiface().IsSingle();
     wxString path = wxPathOnly( Prj().GetProjectFullName() );
 
-    std::list<std::pair<const wxString, const SCH_IO_MGR::SCH_FILE_T>> loaders;
+    wxString fileFiltersStr;
+    wxString allWildcardsStr;
 
-    // Import Altium schematic files.
-    loaders.emplace_back( AltiumSchematicFileWildcard(), SCH_IO_MGR::SCH_ALTIUM );
-
-    // Import CADSTAR Schematic Archive files.
-    loaders.emplace_back( CadstarSchematicArchiveFileWildcard(), SCH_IO_MGR::SCH_CADSTAR_ARCHIVE );
-
-    // Import Eagle schematic files.
-    loaders.emplace_back( EagleSchematicFileWildcard(),  SCH_IO_MGR::SCH_EAGLE );
-
-    // Import LTspice schematic files.
-    loaders.emplace_back( LtspiceSchematicFileWildcard(), SCH_IO_MGR::SCH_LTSPICE );
-
-    wxString fileFilters;
-    wxString allWildcards;
-
-    for( std::pair<const wxString, const SCH_IO_MGR::SCH_FILE_T>& loader : loaders )
+    for( const SCH_IO_MGR::SCH_FILE_T& fileType : SCH_IO_MGR::SCH_FILE_T_vector )
     {
-        if( !fileFilters.IsEmpty() )
-            fileFilters += wxChar( '|' );
+        if( fileType == SCH_IO_MGR::SCH_KICAD || fileType == SCH_IO_MGR::SCH_LEGACY )
+            continue; // this is "Import non-KiCad schematic"
 
-        fileFilters += wxGetTranslation( loader.first );
+        SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( fileType ) );
 
-        SCH_PLUGIN::SCH_PLUGIN_RELEASER plugin( SCH_IO_MGR::FindPlugin( loader.second ) );
-        wxCHECK( plugin, /*void*/ );
-        allWildcards += wxS( "*." ) + formatWildcardExt( plugin->GetFileExtension() ) + wxS( ";" );
+        if( !pi )
+            continue;
+
+        const PLUGIN_FILE_DESC& desc = pi->GetSchematicFileDesc();
+
+        if( desc.m_FileExtensions.empty() )
+            continue;
+
+        if( !fileFiltersStr.IsEmpty() )
+            fileFiltersStr += wxChar( '|' );
+
+        fileFiltersStr += desc.FileFilter();
+
+        for( const std::string& ext : desc.m_FileExtensions )
+            allWildcardsStr << wxT( "*." ) << formatWildcardExt( ext ) << wxT( ";" );
     }
 
-    fileFilters = _( "All supported formats" ) + wxS( "|" ) + allWildcards + wxS( "|" ) +
-                  fileFilters;
+    fileFiltersStr = _( "All supported formats" ) + wxT( "|" ) + allWildcardsStr + wxT( "|" )
+                     + fileFiltersStr;
 
-    wxFileDialog dlg( this, _( "Import Schematic" ), path, wxEmptyString, fileFilters,
+    wxFileDialog dlg( this, _( "Import Schematic" ), path, wxEmptyString, fileFiltersStr,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST ); // TODO
 
     if( dlg.ShowModal() == wxID_CANCEL )
@@ -683,18 +681,23 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
 
     SCH_IO_MGR::SCH_FILE_T pluginType = SCH_IO_MGR::SCH_FILE_T::SCH_FILE_UNKNOWN;
 
-    for( std::pair<const wxString, const SCH_IO_MGR::SCH_FILE_T>& loader : loaders )
+    for( const SCH_IO_MGR::SCH_FILE_T& fileType : SCH_IO_MGR::SCH_FILE_T_vector )
     {
-        if( fn.GetExt().CmpNoCase( SCH_IO_MGR::GetFileExtension( loader.second ) ) == 0 )
+        SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( fileType ) );
+
+        if( !pi )
+            continue;
+
+        if( pi->CanReadSchematicFile( fn.GetFullPath() ) )
         {
-            pluginType = loader.second;
+            pluginType = fileType;
             break;
         }
     }
 
     if( pluginType == SCH_IO_MGR::SCH_FILE_T::SCH_FILE_UNKNOWN )
     {
-        wxLogError( _( "Unexpected file extension: '%s'." ), fn.GetExt() );
+        wxLogError( _( "No loader can read the specified file: '%s'." ), fn.GetFullPath() );
         return;
     }
 
@@ -749,11 +752,15 @@ bool SCH_EDIT_FRAME::saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSave
 
     SCH_IO_MGR::SCH_FILE_T pluginType = SCH_IO_MGR::GuessPluginTypeFromSchPath(
             schematicFileName.GetFullPath() );
+
+    if( pluginType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
+        pluginType = SCH_IO_MGR::SCH_KICAD;
+
     SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( pluginType ) );
 
     try
     {
-        pi->Save( tempFile, aSheet, &Schematic() );
+        pi->SaveSchematicFile( tempFile, aSheet, &Schematic() );
         success = true;
     }
     catch( const IO_ERROR& ioe )
@@ -1255,7 +1262,7 @@ void SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 
             pi->SetReporter( errorReporter.m_Reporter );
             pi->SetProgressReporter( &progressReporter );
-            Schematic().SetRoot( pi->Load( aFileName, &Schematic() ) );
+            Schematic().SetRoot( pi->LoadSchematicFile( aFileName, &Schematic() ) );
 
             if( errorReporter.m_Reporter->HasMessage() )
             {
