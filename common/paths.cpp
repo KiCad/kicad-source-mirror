@@ -443,6 +443,17 @@ wxString PATHS::GetOSXKicadDataDir()
 
 
 #ifdef __WXWINDOWS__
+wxString PATHS::GetWindowsFontConfigDir()
+{
+    wxFileName fn;
+    fn.AssignDir( getWindowsKiCadRoot() );
+    fn.AppendDir( wxS( "etc" ) );
+    fn.AppendDir( wxS( "fonts" ) );
+
+    return fn.GetPathWithSep();
+}
+
+
 wxString PATHS::getWindowsKiCadRoot()
 {
     wxFileName root( Pgm().GetExecutablePath() +  wxT( "/../" ) );

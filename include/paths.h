@@ -170,6 +170,13 @@ public:
     static wxString GetOSXKicadDataDir();
 #endif
 
+#ifdef __WXWINDOWS__
+    /**
+     * @return The macOS specific bundle data directory for KiCad
+     */
+    static wxString GetWindowsFontConfigDir();
+#endif
+
 private:
     // we are a static helper
     PATHS() {}
