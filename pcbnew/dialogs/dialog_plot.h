@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,8 +96,8 @@ private:
     PCB_PLOT_PARAMS     m_plotOpts;
 
     wxRearrangeList*    m_plotAllLayersList;
-    wxBitmapButton*     m_bpMoveUp;
-    wxBitmapButton*     m_bpMoveDown;
+    STD_BITMAP_BUTTON*  m_bpMoveUp;
+    STD_BITMAP_BUTTON*  m_bpMoveDown;
 
     /// The plot layer set that last time the dialog was opened.
     static LSET         m_lastLayerSet;

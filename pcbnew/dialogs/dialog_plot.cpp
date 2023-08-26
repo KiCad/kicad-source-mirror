@@ -154,15 +154,15 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
 	wxBoxSizer* bButtonSizer;
 	bButtonSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_bpMoveUp = new wxBitmapButton( sbSizer->GetStaticBox(), wxID_ANY, wxNullBitmap,
-                                     wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW | 0 );
+	m_bpMoveUp = new STD_BITMAP_BUTTON( sbSizer->GetStaticBox(), wxID_ANY, wxNullBitmap,
+                                        wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW | 0 );
 	m_bpMoveUp->SetToolTip( _( "Move current selection up" ) );
     m_bpMoveUp->SetBitmap( KiBitmap( BITMAPS::small_up ) );
 
 	bButtonSizer->Add( m_bpMoveUp, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5 );
 
-	m_bpMoveDown = new wxBitmapButton( sbSizer->GetStaticBox(), wxID_ANY, wxNullBitmap,
-                                       wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW | 0 );
+	m_bpMoveDown = new STD_BITMAP_BUTTON( sbSizer->GetStaticBox(), wxID_ANY, wxNullBitmap,
+                                          wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW | 0 );
 	m_bpMoveDown->SetToolTip( _( "Move current selection down" ) );
     m_bpMoveDown->SetBitmap( KiBitmap( BITMAPS::small_down ) );
 
