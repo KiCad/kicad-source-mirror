@@ -95,7 +95,7 @@ const wxString SCH_IO_MGR::ShowType( SCH_FILE_T aType )
     case SCH_CADSTAR_ARCHIVE: return wxString( wxT( "CADSTAR Schematic Archive" ) );
     case SCH_EAGLE:           return wxString( wxT( "EAGLE" ) );
     case SCH_DATABASE:        return wxString( wxT( "Database" ) );
-    case SCH_LTSPICE:         return wxString( wxT( "LTSpice Schematic" ) );
+    case SCH_LTSPICE:         return wxString( wxT( "LTspice" ) );
     default:                  return wxString::Format( _( "Unknown SCH_FILE_T value: %d" ),
                                                        aType );
     }
@@ -120,6 +120,8 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::EnumFromStr( const wxString& aType )
         return SCH_EAGLE;
     else if( aType == wxT( "Database" ) )
         return SCH_DATABASE;
+    else if( aType == wxT( "LTspice" ) )
+        return SCH_LTSPICE;
 
     // wxASSERT( blow up here )
 
