@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -250,8 +250,8 @@ void PANEL_SETUP_PINMAP::changeErrorLevel( wxCommandEvent& event )
 {
     int id = event.GetId();
     int ii = id - ID_MATRIX_0;
-    int x = ii / ELECTRICAL_PINTYPES_TOTAL;
-    int y = ii % ELECTRICAL_PINTYPES_TOTAL;
+    ELECTRICAL_PINTYPE x = static_cast<ELECTRICAL_PINTYPE>( ii / ELECTRICAL_PINTYPES_TOTAL );
+    ELECTRICAL_PINTYPE y = static_cast<ELECTRICAL_PINTYPE>( ii % ELECTRICAL_PINTYPES_TOTAL );
     wxWindow* butt = static_cast<wxWindow*>( event.GetEventObject() );
 
     int level = static_cast<int>( m_schematic->ErcSettings().GetPinMapValue( y, x ) );

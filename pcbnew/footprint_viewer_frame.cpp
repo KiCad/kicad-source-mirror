@@ -1063,7 +1063,7 @@ bool FOOTPRINT_VIEWER_FRAME::ShowModal( wxString* aFootprint, wxWindow* aParent 
         if( fpid.IsValid() )
         {
             wxString         libraryName = fpid.GetLibNickname();
-            wxHyperlinkCtrl* button;
+            wxHyperlinkCtrl* button = nullptr;
 
             if( !fpTable->HasLibrary( fpid.GetLibNickname(), false )
                 || !fpTable->HasLibrary( fpid.GetLibNickname(), true ) )
@@ -1073,12 +1073,12 @@ bool FOOTPRINT_VIEWER_FRAME::ShowModal( wxString* aFootprint, wxWindow* aParent 
                 if( WX_INFOBAR* infobar = GetInfoBar() )
                 {
                     button = new wxHyperlinkCtrl( infobar, wxID_ANY,
-                                                                    _( "Manage symol libraries" ), 
+                                                                    _( "Manage symol libraries" ),
                                                                     wxEmptyString );
                     button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent & aEvent )>(
                             [=]( wxHyperlinkEvent& aEvent )
                             {
-                                InvokePcbLibTableEditor( &Kiway(), this );          
+                                InvokePcbLibTableEditor( &Kiway(), this );
                             } ) );
                 }
             }

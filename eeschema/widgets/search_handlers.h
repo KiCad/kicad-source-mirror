@@ -48,7 +48,7 @@ public:
 
     wxString GetResultCell( int aRow, int aCol ) override
     {
-        if( aRow >= m_hitlist.size() )
+        if( aRow >= static_cast<int>( m_hitlist.size() ) )
             return wxEmptyString;
 
         const SCH_SEARCH_HIT& hit = m_hitlist[aRow];
