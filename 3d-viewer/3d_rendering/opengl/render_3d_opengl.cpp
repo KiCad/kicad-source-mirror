@@ -543,6 +543,8 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
     bool drawMiddleSegments = !skipThickness;
 
+    std::bitset<LAYER_3D_END> layerFlags = m_boardAdapter.GetVisibleLayers();
+
     setLayerMaterial( B_Cu );
 
     if( !( skipRenderVias || skipRenderHoles ) && m_vias )
@@ -565,8 +567,7 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         // So avoid creating them is they are not very visible
         const double opacity_min = 0.8;
 
-        if( m_boardAdapter.m_Cfg->m_Render.show_board_body
-                && m_boardAdapter.m_BoardBodyColor.a > opacity_min )
+        if( layerFlags.test( LAYER_3D_BOARD ) && m_boardAdapter.m_BoardBodyColor.a > opacity_min )
         {
             if( ( layer_id > F_Cu ) && ( layer_id < B_Cu ) )
                 continue;
@@ -752,12 +753,11 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
     renderOpaqueModels( cameraViewMatrix );
 
     // Display board body
-    if( m_boardAdapter.m_Cfg->m_Render.show_board_body )
+    if( layerFlags.test( LAYER_3D_BOARD ) )
         renderBoardBody( skipRenderHoles );
 
     // Display transparent mask layers
-    if( m_boardAdapter.m_Cfg->m_Render.show_soldermask_top
-            || m_boardAdapter.m_Cfg->m_Render.show_soldermask_bottom )
+    if( layerFlags.test( LAYER_3D_SOLDERMASK_TOP ) || layerFlags.test( LAYER_3D_SOLDERMASK_BOTTOM ) )
     {
         // add a depth buffer offset, it will help to hide some artifacts
         // on silkscreen where the SolderMask is removed
@@ -766,13 +766,13 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
         if( m_camera.GetPos().z > 0 )
         {
-            if( m_boardAdapter.m_Cfg->m_Render.show_soldermask_bottom )
+            if( layerFlags.test( LAYER_3D_SOLDERMASK_BOTTOM ) )
             {
                 renderSolderMaskLayer( B_Mask, m_boardAdapter.GetLayerTopZPos( B_Mask ),
                                        drawMiddleSegments, skipRenderHoles );
             }
 
-            if( m_boardAdapter.m_Cfg->m_Render.show_soldermask_top )
+            if( layerFlags.test( LAYER_3D_SOLDERMASK_TOP ) )
             {
                 renderSolderMaskLayer( F_Mask, m_boardAdapter.GetLayerBottomZPos( F_Mask ),
                                        drawMiddleSegments, skipRenderHoles );
@@ -780,13 +780,13 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         }
         else
         {
-            if( m_boardAdapter.m_Cfg->m_Render.show_soldermask_top )
+            if( layerFlags.test( LAYER_3D_SOLDERMASK_TOP ) )
             {
                 renderSolderMaskLayer( F_Mask, m_boardAdapter.GetLayerBottomZPos( F_Mask ),
                                        drawMiddleSegments, skipRenderHoles );
             }
 
-            if( m_boardAdapter.m_Cfg->m_Render.show_soldermask_bottom )
+            if( layerFlags.test( LAYER_3D_SOLDERMASK_BOTTOM ) )
             {
                 renderSolderMaskLayer( B_Mask, m_boardAdapter.GetLayerTopZPos( B_Mask ),
                                        drawMiddleSegments, skipRenderHoles );

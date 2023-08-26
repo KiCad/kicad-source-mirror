@@ -321,6 +321,7 @@ void APPEARANCE_CONTROLS_3D::OnLayerVisibilityChanged( int aLayer, bool isVisibl
         killFollow = true;
         break;
 
+    case LAYER_3D_BOARD:
     case LAYER_3D_COPPER_TOP:
     case LAYER_3D_COPPER_BOTTOM:
     case LAYER_3D_SILKSCREEN_BOTTOM:

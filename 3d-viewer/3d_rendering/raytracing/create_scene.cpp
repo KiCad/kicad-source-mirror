@@ -392,6 +392,8 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
     m_outlineBoard2dObjects     = new CONTAINER_2D;
     m_antioutlineBoard2dObjects = new BVH_CONTAINER_2D;
 
+    std::bitset<LAYER_3D_END> layerFlags = m_boardAdapter.GetVisibleLayers();
+
     if( !aOnlyLoadCopperAndShapes )
     {
         const int outlineCount = m_boardAdapter.GetBoardPoly().OutlineCount();
@@ -433,7 +435,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                                         *m_boardAdapter.GetBoard(), ii );
             }
 
-            if( m_boardAdapter.m_Cfg->m_Render.show_board_body )
+            if( layerFlags.test( LAYER_3D_BOARD ) )
             {
                 const LIST_OBJECT2D& listObjects = m_outlineBoard2dObjects->GetList();
 
@@ -658,8 +660,8 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
         // Solder mask layers are "negative" layers so the elements that we have in the container
         // should remove the board outline. We will check for all objects in the outline if it
         // intersects any object in the layer container and also any hole.
-        if( ( m_boardAdapter.m_Cfg->m_Render.show_soldermask_top
-                || m_boardAdapter.m_Cfg->m_Render.show_soldermask_bottom )
+        if( ( layerFlags.test( LAYER_3D_SOLDERMASK_TOP )
+                || layerFlags.test( LAYER_3D_SOLDERMASK_BOTTOM ) )
             && !m_outlineBoard2dObjects->GetList().empty() )
         {
             const MATERIAL* materialLayer = &m_materials.m_SolderMask;
@@ -674,23 +676,11 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                     continue;
 
                 // Only get the Solder mask layers (and only if the board has them)
-                switch( layer_id )
-                {
-                case F_Mask:
-                    if( !m_boardAdapter.m_Cfg->m_Render.show_soldermask_top )
-                        continue;
-
-                    break;
-
-                case B_Mask:
-                    if( !m_boardAdapter.m_Cfg->m_Render.show_soldermask_bottom )
-                        continue;
-
-                    break;
-
-                default:
+                if( layer_id == F_Mask && !layerFlags.test( LAYER_3D_SOLDERMASK_TOP ) )
                     continue;
-                }
+
+                if( layer_id == B_Mask && !layerFlags.test( LAYER_3D_SOLDERMASK_BOTTOM ) )
+                    continue;
 
                 SFVEC3F layerColor;
 

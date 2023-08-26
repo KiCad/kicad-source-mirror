@@ -767,7 +767,7 @@ std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetVisibleLayers() const
         if( !m_board )
             return ret;
 
-        ret.set( LAYER_3D_BOARD,             m_board->IsLayerVisible( Edge_Cuts ) );
+        ret.set( LAYER_3D_BOARD,             true );
         ret.set( LAYER_3D_COPPER_TOP,        m_board->IsLayerVisible( F_Cu ) );
         ret.set( LAYER_3D_COPPER_BOTTOM,     m_board->IsLayerVisible( B_Cu ) );
         ret.set( LAYER_3D_SILKSCREEN_TOP,    m_board->IsLayerVisible( F_SilkS ) );
@@ -889,19 +889,9 @@ bool BOARD_ADAPTER::createBoardPolygon( wxString* aErrorMsg )
 float BOARD_ADAPTER::GetFootprintZPos( bool aIsFlipped ) const
 {
     if( aIsFlipped )
-    {
-        if( m_Cfg->m_Render.show_solderpaste )
-            return m_layerZcoordBottom[B_SilkS];
-        else
-            return m_layerZcoordBottom[B_Paste];
-    }
+        return m_layerZcoordBottom[B_Paste];
     else
-    {
-        if( m_Cfg->m_Render.show_solderpaste )
-            return m_layerZcoordTop[F_SilkS];
-        else
-            return m_layerZcoordTop[F_Paste];
-    }
+        return m_layerZcoordTop[F_Paste];
 }
 
 
