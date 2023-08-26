@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -48,14 +48,11 @@ public:
     void     SetWorkbookFilename( const wxString& aFilename ) { m_workbookFilename = aFilename; }
 
     bool GetFixIncludePaths() const { return m_fixIncludePaths; }
-    void SetFixIncludePaths( bool aFixIncludePaths )
-    {
-        m_fixIncludePaths = aFixIncludePaths;
-    }
+    void SetFixIncludePaths( bool aFixIncludePaths ) { m_fixIncludePaths = aFixIncludePaths; }
 
 private:
     wxString m_workbookFilename;
-    bool m_fixIncludePaths;
+    bool     m_fixIncludePaths;
 };
 
 /**
