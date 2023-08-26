@@ -47,7 +47,6 @@ wxString FONTCONFIG::Version()
 
 FONTCONFIG::FONTCONFIG()
 {
-    (void) FcInitLoadConfigAndFonts();
 };
 
 
