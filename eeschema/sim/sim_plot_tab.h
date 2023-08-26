@@ -282,7 +282,6 @@ public:
         if( !m_axis_x || !m_axis_y1 )
             return false;
 
-        assert( m_axis_x->GetTicks() == m_axis_y1->GetTicks() );
         return !m_axis_x->GetTicks();
     }
 
