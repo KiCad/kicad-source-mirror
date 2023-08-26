@@ -507,8 +507,8 @@ void APPEARANCE_CONTROLS_3D::UpdateLayerCtls()
 
 void APPEARANCE_CONTROLS_3D::rebuildLayerPresetsWidget()
 {
-    m_viewportsLabel->SetLabel( wxString::Format( _( "Presets (%s+Tab):" ),
-                                                  KeyNameFromKeyCode( PRESET_SWITCH_KEY ) ) );
+    m_presetsLabel->SetLabel( wxString::Format( _( "Presets (%s+Tab):" ),
+                                                KeyNameFromKeyCode( PRESET_SWITCH_KEY ) ) );
 
     m_cbLayerPresets->Clear();
 
