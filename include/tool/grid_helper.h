@@ -170,23 +170,23 @@ protected:
                              const VECTOR2I& aOffset ) const;
 
 protected:
-    std::vector<ANCHOR>    m_anchors;
+    std::vector<ANCHOR>     m_anchors;
 
-    TOOL_MANAGER*          m_toolMgr;
-    std::optional<VECTOR2I>          m_auxAxis;
+    TOOL_MANAGER*           m_toolMgr;
+    std::optional<VECTOR2I> m_auxAxis;
 
-    int                    m_maskTypes;      // Mask of allowed snap types
+    int                     m_maskTypes;      // Mask of allowed snap types
 
-    bool                   m_enableSnap;     // Allow snapping to other items on the layers
-    bool                   m_enableGrid;     // If true, allow snapping to grid
-    bool                   m_enableSnapLine; // Allow drawing lines from snap points
-    ANCHOR*                m_snapItem;       // Pointer to the currently snapped item in m_anchors
-                                             //   (NULL if not snapped)
-    VECTOR2I               m_skipPoint;      // When drawing a line, we avoid snapping to the source
-                                             //   point
-    KIGFX::ORIGIN_VIEWITEM m_viewSnapPoint;
-    KIGFX::ORIGIN_VIEWITEM m_viewSnapLine;
-    KIGFX::ORIGIN_VIEWITEM m_viewAxis;
+    bool                    m_enableSnap;     // Allow snapping to other items on the layers
+    bool                    m_enableGrid;     // If true, allow snapping to grid
+    bool                    m_enableSnapLine; // Allow drawing lines from snap points
+    ANCHOR*                 m_snapItem;       // Pointer to the currently snapped item in m_anchors
+                                              //   (NULL if not snapped)
+    VECTOR2I                m_skipPoint;      // When drawing a line, we avoid snapping to the
+                                              //   source point
+    KIGFX::ORIGIN_VIEWITEM  m_viewSnapPoint;
+    KIGFX::ORIGIN_VIEWITEM  m_viewSnapLine;
+    KIGFX::ORIGIN_VIEWITEM  m_viewAxis;
 };
 
 #endif

@@ -114,8 +114,6 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_edit_library_tables.cpp
     dialogs/dialog_global_lib_table_config.cpp
     dialogs/dialog_global_lib_table_config_base.cpp
-    dialogs/dialog_grid_settings.cpp
-    dialogs/dialog_grid_settings_base.cpp
     dialogs/dialog_hotkey_list.cpp
     dialogs/dialog_HTML_reporter_base.cpp
     dialogs/dialog_locked_items_query.cpp
@@ -150,6 +148,8 @@ set( COMMON_DLG_SRCS
     dialogs/panel_hotkeys_editor.cpp
     dialogs/panel_image_editor.cpp
     dialogs/panel_image_editor_base.cpp
+    dialogs/panel_grid_settings.cpp
+    dialogs/panel_grid_settings_base.cpp
     dialogs/panel_mouse_settings.cpp
     dialogs/panel_mouse_settings_base.cpp
     dialogs/panel_setup_netclasses.cpp

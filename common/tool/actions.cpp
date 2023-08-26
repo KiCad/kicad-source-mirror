@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -542,7 +542,7 @@ TOOL_ACTION ACTIONS::gridSetOrigin( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .LegacyHotkeyName( "Set Grid Origin" )
         .MenuText( _( "Grid Origin" ) )
-        .Tooltip( _( "Set the grid origin point" ) )
+        .Tooltip( _( "Place the grid origin point" ) )
         .Icon( BITMAPS::grid_select_axis )
         .Parameter<VECTOR2D*>( nullptr ) );
 
@@ -557,24 +557,32 @@ TOOL_ACTION ACTIONS::gridPreset( TOOL_ACTION_ARGS()
         .Parameter<int>( 0 ) );          // Default to the 1st element of the list
 
 TOOL_ACTION ACTIONS::toggleGrid( TOOL_ACTION_ARGS()
-        .Name("common.Control.toggleGrid")
+        .Name( "common.Control.toggleGrid" )
         .Scope( AS_GLOBAL)
         .MenuText( _( "Show Grid" ) )
         .Tooltip( _( "Display background grid in the edit window" ) )
         .Icon( BITMAPS::grid ) );
 
 TOOL_ACTION ACTIONS::toggleGridOverrides( TOOL_ACTION_ARGS()
-        .Name("common.Control.toggleGridOverrides")
+        .Name( "common.Control.toggleGridOverrides" )
         .DefaultHotkey( MD_CTRL + MD_SHIFT + 'G' )
         .Scope( AS_GLOBAL)
         .MenuText( _( "Grid Overrides" ) )
         .Tooltip( _( "Enables item-specific grids that override the current grid" ) )
         .Icon( BITMAPS::grid_override ) );
 
-TOOL_ACTION ACTIONS::gridProperties( "common.Control.gridProperties",
-        AS_GLOBAL, 0, "",
-        _( "Grid Properties..." ), _( "Set grid dimensions" ),
-        BITMAPS::grid_select );
+TOOL_ACTION ACTIONS::gridProperties( TOOL_ACTION_ARGS()
+        .Name( "common.Control.editGrids" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Edit Grids..." ) )
+        .Tooltip( _( "Edit grid definitions" ) )
+        .Icon( BITMAPS::grid_select ) );
+
+TOOL_ACTION ACTIONS::gridOrigin(  TOOL_ACTION_ARGS()
+        .Name( "common.Control.editGridOrigin" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Grid Origin..." ) )
+        .Tooltip( _( "Set the grid origin point" ) ) );
 
 TOOL_ACTION ACTIONS::inchesUnits( TOOL_ACTION_ARGS()
         .Name( "common.Control.imperialUnits" )

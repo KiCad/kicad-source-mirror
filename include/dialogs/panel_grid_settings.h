@@ -21,23 +21,27 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_GRID_SETTINGS_H
-#define DIALOG_GRID_SETTINGS_H
+#ifndef PANEL_GRID_SETTINGS_H
+#define PANEL_GRID_SETTINGS_H
 
-#include <dialog_grid_settings_base.h>
+#include <panel_grid_settings_base.h>
 #include <widgets/unit_binder.h>
+#include <frame_type.h>
+
+class APP_SETTINGS_BASE;
 
 
-class DIALOG_GRID_SETTINGS : public DIALOG_GRID_SETTINGS_BASE
+class PANEL_GRID_SETTINGS : public PANEL_GRID_SETTINGS_BASE
 {
-    EDA_DRAW_FRAME* m_parent;
-
 public:
     /// This has no dependencies on calling wxFrame derivative, such as PCB_BASE_FRAME.
-    DIALOG_GRID_SETTINGS( EDA_DRAW_FRAME* aParent );
+    PANEL_GRID_SETTINGS( wxWindow* aParent, UNITS_PROVIDER* aUnitsProvider, wxWindow* aEventSource,
+                         APP_SETTINGS_BASE* aCfg, FRAME_T aFrameType );
 
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
+
+    void ResetPanel() override;
 
 private:
     void OnAddGrid( wxCommandEvent& event ) override;
@@ -47,13 +51,16 @@ private:
 
     void RebuildGridSizes();
 
-    UNIT_BINDER m_gridOriginX;
-    UNIT_BINDER m_gridOriginY;
-    UNIT_BINDER m_gridOverrideConnectables;
-    UNIT_BINDER m_gridOverrideWires;
-    UNIT_BINDER m_gridOverrideVias;
-    UNIT_BINDER m_gridOverrideText;
-    UNIT_BINDER m_gridOverrideGraphics;
+private:
+    UNITS_PROVIDER*    m_unitsProvider;
+    APP_SETTINGS_BASE* m_cfg;
+    FRAME_T            m_frameType;
+
+    UNIT_BINDER        m_gridOverrideConnected;
+    UNIT_BINDER        m_gridOverrideWires;
+    UNIT_BINDER        m_gridOverrideVias;
+    UNIT_BINDER        m_gridOverrideText;
+    UNIT_BINDER        m_gridOverrideGraphics;
 };
 
-#endif // DIALOG_GRID_SETTINGS_H
+#endif // PANEL_GRID_SETTINGS_H

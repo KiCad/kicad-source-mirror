@@ -86,7 +86,6 @@ BEGIN_EVENT_TABLE( SYMBOL_EDIT_FRAME, SCH_BASE_FRAME )
     // menubar commands
     EVT_MENU( wxID_EXIT, SYMBOL_EDIT_FRAME::OnExitKiCad )
     EVT_MENU( wxID_CLOSE, SYMBOL_EDIT_FRAME::CloseWindow )
-    EVT_MENU( ID_GRID_SETTINGS, SCH_BASE_FRAME::OnGridSettings )
 
     // Update user interface elements.
     EVT_UPDATE_UI( ID_LIBEDIT_SELECT_UNIT_NUMBER, SYMBOL_EDIT_FRAME::OnUpdateUnitNumber )

@@ -143,7 +143,6 @@ enum main_id
     ID_ON_ZOOM_SELECT,
 
     ID_ON_GRID_SELECT,
-    ID_GRID_SETTINGS,
 
     // Popup Menu (mouse Right button) (id consecutifs)
 

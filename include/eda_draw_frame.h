@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -131,7 +131,7 @@ public:
      * The primary unit is the main unit of the frame, and the secondary unit is the unit
      * of the other system that was used most recently.
      */
-    void GetUnitPair( EDA_UNITS& aPrimaryUnit, EDA_UNITS& aSecondaryUnits );
+    void GetUnitPair( EDA_UNITS& aPrimaryUnit, EDA_UNITS& aSecondaryUnits ) override;
 
     /**
      * Return the absolute coordinates of the origin of the snap grid.
@@ -233,8 +233,6 @@ public:
      * @param event Command event from the grid size combobox on the toolbar.
      */
     void OnSelectGrid( wxCommandEvent& event );
-
-    void OnGridSettings( wxCommandEvent& event );
 
     /**
      * Rebuild the grid combobox to respond to any changes in the GUI (units, user

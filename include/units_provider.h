@@ -42,6 +42,17 @@ public:
     EDA_UNITS GetUserUnits() const { return m_userUnits; }
     void SetUserUnits( EDA_UNITS aUnits ) { m_userUnits = aUnits; }
 
+    virtual void GetUnitPair( EDA_UNITS& aPrimaryUnit, EDA_UNITS& aSecondaryUnits )
+    {
+        aPrimaryUnit    = GetUserUnits();
+        aSecondaryUnits = EDA_UNITS::MILS;
+
+        if( EDA_UNIT_UTILS::IsImperialUnit( aPrimaryUnit ) )
+            aSecondaryUnits = EDA_UNITS::MILLIMETRES;
+        else
+            aSecondaryUnits = EDA_UNITS::MILS;
+    }
+
     const EDA_IU_SCALE& GetIuScale() const { return m_iuScale; }
     // No SetIuScale(); scale is invariant
 

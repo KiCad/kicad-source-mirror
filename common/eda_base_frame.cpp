@@ -1095,18 +1095,20 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
         kiface->GetActions( hotkeysPanel->ActionsList() );
 
         if( GetFrameType() == FRAME_SCH_SYMBOL_EDITOR )
-            expand.push_back( book->GetPageCount() );
+            expand.push_back( (int) book->GetPageCount() );
 
         book->AddPage( new wxPanel( book ), _( "Symbol Editor" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_DISP_OPTIONS ), _( "Display Options" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_EDIT_GRIDS ), _( "Grids" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_EDIT_OPTIONS ), _( "Editing Options" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_COLORS ), _( "Colors" ) );
 
         if( GetFrameType() == FRAME_SCH )
-            expand.push_back( book->GetPageCount() );
+            expand.push_back( (int) book->GetPageCount() );
 
         book->AddPage( new wxPanel( book ), _( "Schematic Editor" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_DISP_OPTIONS ), _( "Display Options" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_GRIDS ), _( "Grids" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_EDIT_OPTIONS ), _( "Editing Options" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_ANNO_OPTIONS ), _( "Annotation Options" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_COLORS ), _( "Colors" ) );
@@ -1123,26 +1125,28 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
         kiface->GetActions( hotkeysPanel->ActionsList() );
 
         if( GetFrameType() == FRAME_FOOTPRINT_EDITOR )
-            expand.push_back( book->GetPageCount() );
+            expand.push_back( (int) book->GetPageCount() );
 
         book->AddPage( new wxPanel( book ), _( "Footprint Editor" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_FP_DISPLAY_OPTIONS ), _( "Display Options" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_FP_GRIDS ), _( "Grids" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_FP_EDIT_OPTIONS ), _( "Editing Options" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_FP_COLORS ), _( "Colors" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_FP_DEFAULT_VALUES ), _( "Default Values" ) );
 
         if( GetFrameType() ==  FRAME_PCB_EDITOR )
-            expand.push_back( book->GetPageCount() );
+            expand.push_back( (int) book->GetPageCount() );
 
         book->AddPage( new wxPanel( book ), _( "PCB Editor" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_DISPLAY_OPTIONS ), _( "Display Options" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_GRIDS ), _( "Grids" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_EDIT_OPTIONS ), _( "Editing Options" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_COLORS ), _( "Colors" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_ACTION_PLUGINS ), _( "Action Plugins" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_ORIGINS_AXES ), _( "Origins & Axes" ) );
 
         if( GetFrameType() == FRAME_PCB_DISPLAY3D )
-            expand.push_back( book->GetPageCount() );
+            expand.push_back( (int) book->GetPageCount() );
 
         book->AddPage( new wxPanel( book ), _( "3D Viewer" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_3DV_DISPLAY_OPTIONS ), _( "General" ) );
@@ -1160,7 +1164,7 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
         kiface->GetActions( hotkeysPanel->ActionsList() );
 
         if( GetFrameType() == FRAME_GERBER )
-            expand.push_back( book->GetPageCount() );
+            expand.push_back( (int) book->GetPageCount() );
 
         book->AddPage( new wxPanel( book ), _( "Gerber Viewer" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_DISPLAY_OPTIONS ), _( "Display Options" ) );
@@ -1177,10 +1181,11 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
         kiface->GetActions( hotkeysPanel->ActionsList() );
 
         if( GetFrameType() == FRAME_PL_EDITOR )
-            expand.push_back( book->GetPageCount() );
+            expand.push_back( (int) book->GetPageCount() );
 
         book->AddPage( new wxPanel( book ), _( "Drawing Sheet Editor" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_DS_DISPLAY_OPTIONS ), _( "Display Options" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_DS_GRIDS ), _( "Grids" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_DS_COLORS ), _( "Colors" ) );
 
         book->AddLazyPage(

@@ -198,21 +198,6 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     viewMenu->Add( ACTIONS::zoomRedraw );
 
     viewMenu->AppendSeparator();
-    viewMenu->Add( ACTIONS::toggleGrid,               ACTION_MENU::CHECK );
-    viewMenu->Add( ACTIONS::gridProperties );
-
-    // Units submenu
-    ACTION_MENU* unitsSubMenu = new ACTION_MENU( false, selTool );
-    unitsSubMenu->SetTitle( _( "&Units" ) );
-    unitsSubMenu->SetIcon( BITMAPS::unit_mm );
-    unitsSubMenu->Add( ACTIONS::inchesUnits,          ACTION_MENU::CHECK );
-    unitsSubMenu->Add( ACTIONS::milsUnits,            ACTION_MENU::CHECK );
-    unitsSubMenu->Add( ACTIONS::millimetersUnits,     ACTION_MENU::CHECK );
-    viewMenu->Add( unitsSubMenu );
-
-    viewMenu->Add( ACTIONS::toggleCursorStyle,        ACTION_MENU::CHECK );
-
-    viewMenu->AppendSeparator();
     viewMenu->Add( EE_ACTIONS::toggleHiddenPins,      ACTION_MENU::CHECK );
     viewMenu->Add( EE_ACTIONS::toggleHiddenFields,    ACTION_MENU::CHECK );
     viewMenu->Add( EE_ACTIONS::toggleDirectiveLabels, ACTION_MENU::CHECK );

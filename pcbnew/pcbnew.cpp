@@ -46,6 +46,7 @@
 #include <footprint_preview_panel.h>
 #include <footprint_info_impl.h>
 #include <dialogs/dialog_configure_paths.h>
+#include <dialogs/panel_grid_settings.h>
 #include <dialog_global_fp_lib_table_config.h>
 #include <panel_display_options.h>
 #include <panel_edit_options.h>
@@ -150,6 +151,24 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             return new PANEL_DISPLAY_OPTIONS( aParent, cfg );
         }
 
+        case PANEL_FP_GRIDS:
+        {
+            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+            EDA_BASE_FRAME*    frame = aKiway->Player( FRAME_FOOTPRINT_EDITOR, false );
+
+            if( !frame )
+                frame = aKiway->Player( FRAME_FOOTPRINT_VIEWER, false );
+
+            if( !frame )
+                frame = aKiway->Player( FRAME_PCB_EDITOR, false );
+
+            if( frame )
+                SetUserUnits( frame->GetUserUnits() );
+
+            return new PANEL_GRID_SETTINGS( aParent, this, frame, cfg, FRAME_FOOTPRINT_EDITOR );
+        }
+
         case PANEL_FP_EDIT_OPTIONS:
         {
             EDA_BASE_FRAME* frame = aKiway->Player( FRAME_FOOTPRINT_EDITOR, false );
@@ -191,6 +210,24 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
 
             return new PANEL_DISPLAY_OPTIONS( aParent, cfg );
+        }
+
+        case PANEL_PCB_GRIDS:
+        {
+            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
+            EDA_BASE_FRAME*    frame = aKiway->Player( FRAME_PCB_EDITOR, false );
+
+            if( !frame )
+                frame = aKiway->Player( FRAME_FOOTPRINT_EDITOR, false );
+
+            if( !frame )
+                frame = aKiway->Player( FRAME_FOOTPRINT_VIEWER, false );
+
+            if( frame )
+                SetUserUnits( frame->GetUserUnits() );
+
+            return new PANEL_GRID_SETTINGS( aParent, this, frame, cfg, FRAME_PCB_EDITOR );
         }
 
         case PANEL_PCB_EDIT_OPTIONS:

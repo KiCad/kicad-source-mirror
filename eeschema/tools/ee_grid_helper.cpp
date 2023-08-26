@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -256,29 +256,41 @@ VECTOR2D EE_GRID_HELPER::GetGridSize( GRID_HELPER_GRIDS aGrid ) const
     switch( aGrid )
     {
     case GRID_CONNECTABLE:
-        if( grid.override_connectables )
-            g.x = g.y = EDA_UNIT_UTILS::UI::DoubleValueFromString(
-                    schIUScale, EDA_UNITS::MILS, grid.override_connectables_size );
+        if( grid.override_connected )
+        {
+            g.x = g.y = EDA_UNIT_UTILS::UI::DoubleValueFromString( schIUScale, EDA_UNITS::MILS,
+                                                                   grid.override_connected_size );
+        }
 
         break;
+
     case GRID_WIRES:
         if( grid.override_wires )
+        {
             g.x = g.y = EDA_UNIT_UTILS::UI::DoubleValueFromString( schIUScale, EDA_UNITS::MILS,
                                                                    grid.override_wires_size );
+        }
 
         break;
+
     case GRID_TEXT:
         if( grid.override_text )
+        {
             g.x = g.y = EDA_UNIT_UTILS::UI::DoubleValueFromString( schIUScale, EDA_UNITS::MILS,
                                                                    grid.override_text_size );
+        }
 
         break;
+
     case GRID_GRAPHICS:
         if( grid.override_graphics )
+        {
             g.x = g.y = EDA_UNIT_UTILS::UI::DoubleValueFromString( schIUScale, EDA_UNITS::MILS,
                                                                    grid.override_graphics_size );
+        }
 
         break;
+
     default:
         break;
     }

@@ -61,7 +61,6 @@
 #include <widgets/properties_panel.h>
 #include <wx/event.h>
 #include <wx/snglinst.h>
-#include <dialogs/dialog_grid_settings.h>
 #include <widgets/ui_common.h>
 #include <widgets/search_pane.h>
 #include <wx/dirdlg.h>
@@ -334,6 +333,9 @@ void EDA_DRAW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 
     m_galDisplayOptions.ReadCommonConfig( *settings, this );
 
+    GetToolManager()->RunAction( ACTIONS::gridPreset, config()->m_Window.grid.last_size_idx );
+    UpdateGridSelectBox();
+
 #ifndef __WXMAC__
     resolveCanvasType();
 
@@ -484,18 +486,6 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
     // Needed on Windows because clicking on m_gridSelectBox remove the focus from m_canvas
     // (Windows specific
     m_canvas->SetFocus();
-}
-
-
-void EDA_DRAW_FRAME::OnGridSettings( wxCommandEvent& aEvent )
-{
-    DIALOG_GRID_SETTINGS dlg( this );
-
-    if( dlg.ShowModal() == wxID_OK )
-    {
-        UpdateStatusBar();
-        GetCanvas()->Refresh();
-    }
 }
 
 

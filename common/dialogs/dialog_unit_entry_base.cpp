@@ -24,8 +24,6 @@ WX_UNIT_ENTRY_DIALOG_BASE::WX_UNIT_ENTRY_DIALOG_BASE( wxWindow* parent, wxWindow
 	bSizerContent->Add( m_label, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	m_textCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_textCtrl->SetMinSize( wxSize( 300,-1 ) );
-
 	bSizerContent->Add( m_textCtrl, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_unit_label = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -35,6 +33,12 @@ WX_UNIT_ENTRY_DIALOG_BASE::WX_UNIT_ENTRY_DIALOG_BASE( wxWindow* parent, wxWindow
 
 	bSizerMain->Add( bSizerContent, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
+	wxBoxSizer* bSizerButtons;
+	bSizerButtons = new wxBoxSizer( wxHORIZONTAL );
+
+
+	bSizerButtons->Add( 100, 0, 1, 0, 5 );
+
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
 	m_sdbSizer1->AddButton( m_sdbSizer1OK );
@@ -42,7 +46,10 @@ WX_UNIT_ENTRY_DIALOG_BASE::WX_UNIT_ENTRY_DIALOG_BASE( wxWindow* parent, wxWindow
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 
-	bSizerMain->Add( m_sdbSizer1, 0, wxALL|wxALIGN_RIGHT, 5 );
+	bSizerButtons->Add( m_sdbSizer1, 0, wxALL, 5 );
+
+
+	bSizerMain->Add( bSizerButtons, 1, wxEXPAND, 5 );
 
 
 	this->SetSizer( bSizerMain );
@@ -65,6 +72,7 @@ WX_PT_ENTRY_DIALOG_BASE::WX_PT_ENTRY_DIALOG_BASE( wxWindow* parent, wxWindowID i
 
 	wxFlexGridSizer* fgSizer;
 	fgSizer = new wxFlexGridSizer( 0, 3, 5, 0 );
+	fgSizer->AddGrowableCol( 1 );
 	fgSizer->SetFlexibleDirection( wxBOTH );
 	fgSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -73,9 +81,7 @@ WX_PT_ENTRY_DIALOG_BASE::WX_PT_ENTRY_DIALOG_BASE( wxWindow* parent, wxWindowID i
 	fgSizer->Add( m_labelX, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_textCtrlX = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_textCtrlX->SetMinSize( wxSize( 300,-1 ) );
-
-	fgSizer->Add( m_textCtrlX, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizer->Add( m_textCtrlX, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_unitsX = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_unitsX->Wrap( -1 );
@@ -86,16 +92,20 @@ WX_PT_ENTRY_DIALOG_BASE::WX_PT_ENTRY_DIALOG_BASE( wxWindow* parent, wxWindowID i
 	fgSizer->Add( m_labelY, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_textCtrlY = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_textCtrlY->SetMinSize( wxSize( 300,-1 ) );
-
-	fgSizer->Add( m_textCtrlY, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizer->Add( m_textCtrlY, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_unitsY = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_unitsY->Wrap( -1 );
 	fgSizer->Add( m_unitsY, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bSizerMain->Add( fgSizer, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bSizerMain->Add( fgSizer, 1, wxEXPAND|wxALL, 5 );
+
+	wxBoxSizer* bSizerButtons;
+	bSizerButtons = new wxBoxSizer( wxHORIZONTAL );
+
+
+	bSizerButtons->Add( 100, 0, 1, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
@@ -104,7 +114,10 @@ WX_PT_ENTRY_DIALOG_BASE::WX_PT_ENTRY_DIALOG_BASE( wxWindow* parent, wxWindowID i
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 
-	bSizerMain->Add( m_sdbSizer1, 0, wxALL|wxALIGN_RIGHT, 5 );
+	bSizerButtons->Add( m_sdbSizer1, 0, wxALL, 5 );
+
+
+	bSizerMain->Add( bSizerButtons, 0, wxEXPAND, 5 );
 
 
 	this->SetSizer( bSizerMain );

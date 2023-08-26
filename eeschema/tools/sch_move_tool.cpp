@@ -1564,10 +1564,10 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
 
 int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
 {
-    EE_GRID_HELPER grid( m_toolMgr);
-    EE_SELECTION&  selection = m_selectionTool->RequestSelection( EE_COLLECTOR::MovableItems );
+    EE_GRID_HELPER    grid( m_toolMgr);
+    EE_SELECTION&     selection = m_selectionTool->RequestSelection( EE_COLLECTOR::MovableItems );
     GRID_HELPER_GRIDS selectionGrid = grid.GetSelectionGrid( selection );
-    SCH_COMMIT     commit( m_toolMgr );
+    SCH_COMMIT        commit( m_toolMgr );
 
     auto doMoveItem =
             [&]( EDA_ITEM* item, const VECTOR2I& delta )

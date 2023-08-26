@@ -29,6 +29,7 @@
 #include <bitmaps.h>
 #include <class_draw_panel_gal.h>
 #include <dialogs/dialog_configure_paths.h>
+#include <dialogs/dialog_unit_entry.h>
 #include <eda_draw_frame.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <id.h>
@@ -524,7 +525,6 @@ int COMMON_TOOLS::GridFastCycle( const TOOL_EVENT& aEvent )
 int COMMON_TOOLS::ToggleGrid( const TOOL_EVENT& aEvent )
 {
     m_frame->SetGridVisibility( !m_frame->IsGridVisible() );
-
     return 0;
 }
 
@@ -532,17 +532,40 @@ int COMMON_TOOLS::ToggleGrid( const TOOL_EVENT& aEvent )
 int COMMON_TOOLS::ToggleGridOverrides( const TOOL_EVENT& aEvent )
 {
     m_frame->SetGridOverrides( !m_frame->IsGridOverridden() );
-
     return 0;
 }
 
 
 int COMMON_TOOLS::GridProperties( const TOOL_EVENT& aEvent )
 {
-    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
+#define SHOW_GRID_PREFS( parentName ) m_frame->ShowPreferences( _( "Grids" ), parentName )
 
-    cmd.SetId( ID_GRID_SETTINGS );
-    m_frame->ProcessEvent( cmd );
+    switch( m_frame->GetFrameType() )
+    {
+    case FRAME_SCH:               SHOW_GRID_PREFS( _( "Schematic Editor" ) );     break;
+    case FRAME_SCH_SYMBOL_EDITOR: SHOW_GRID_PREFS( _( "Symbol Editor" ) );        break;
+    case FRAME_PCB_EDITOR:        SHOW_GRID_PREFS( _( "PCB Editor" ) );           break;
+    case FRAME_FOOTPRINT_EDITOR:  SHOW_GRID_PREFS( _( "Footprint Editor" ) );     break;
+    case FRAME_PL_EDITOR:         SHOW_GRID_PREFS( _( "Drawing Sheet Editor" ) ); break;
+    default:                      wxFAIL_MSG( "Unknown frame: " + GetName() );    break;
+    }
+    return 0;
+}
+
+
+int COMMON_TOOLS::GridOrigin( const TOOL_EVENT& aEvent )
+{
+    VECTOR2I           origin = m_frame->GetGridOrigin();
+    WX_PT_ENTRY_DIALOG dlg( m_frame, _( "Grid Origin" ), _( "X:" ), _( "Y:" ), origin );
+
+    if( dlg.ShowModal() == wxID_OK )
+    {
+        m_frame->SetGridOrigin( dlg.GetValue() );
+
+        m_toolMgr->ResetTools( TOOL_BASE::REDRAW );
+        m_toolMgr->RunAction( ACTIONS::gridSetOrigin, new VECTOR2D( m_frame->GetGridOrigin() ) );
+        m_frame->GetCanvas()->ForceRefresh();
+    }
 
     return 0;
 }
@@ -687,6 +710,7 @@ void COMMON_TOOLS::setTransitions()
     Go( &COMMON_TOOLS::ToggleGrid,          ACTIONS::toggleGrid.MakeEvent() );
     Go( &COMMON_TOOLS::ToggleGridOverrides, ACTIONS::toggleGridOverrides.MakeEvent() );
     Go( &COMMON_TOOLS::GridProperties,      ACTIONS::gridProperties.MakeEvent() );
+    Go( &COMMON_TOOLS::GridOrigin,          ACTIONS::gridOrigin.MakeEvent() );
 
     // Units and coordinates
     Go( &COMMON_TOOLS::SwitchUnits,         ACTIONS::inchesUnits.MakeEvent() );

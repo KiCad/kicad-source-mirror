@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2007-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2007-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,7 +54,6 @@
 #include <tools/pcb_editor_conditions.h>  // Shared conditions with other Pcbnew frames
 #include <tools/pcb_viewer_tools.h>       // shared tools with other Pcbnew frames
 #include <tools/cvpcb_fpviewer_selection_tool.h>
-#include <widgets/wx_infobar.h>
 #include <wx/choice.h>
 #include <wx/debug.h>
 #include <cvpcb_id.h>
@@ -64,7 +63,6 @@ BEGIN_EVENT_TABLE( DISPLAY_FOOTPRINTS_FRAME, PCB_BASE_FRAME )
     EVT_CLOSE( DISPLAY_FOOTPRINTS_FRAME::OnCloseWindow )
     EVT_CHOICE( ID_ON_ZOOM_SELECT, DISPLAY_FOOTPRINTS_FRAME::OnSelectZoom )
     EVT_CHOICE( ID_ON_GRID_SELECT, DISPLAY_FOOTPRINTS_FRAME::OnSelectGrid )
-    EVT_MENU( ID_GRID_SETTINGS, DISPLAY_FOOTPRINTS_FRAME::OnGridSettings )
 END_EVENT_TABLE()
 
 

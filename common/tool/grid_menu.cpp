@@ -70,7 +70,7 @@ void GRID_MENU::update()
     APP_SETTINGS_BASE* settings = m_parent->config();
     unsigned int       current = settings->m_Window.grid.last_size_idx;
     wxArrayString      gridsList;
-    int                i = 0;
+    int                i = ID_POPUP_GRID_START;
 
     GRID_MENU::BuildChoiceList( &gridsList, settings, m_parent );
 
@@ -78,10 +78,7 @@ void GRID_MENU::update()
         Delete( FindItemByPosition( 0 ) );
 
     for( const wxString& grid : gridsList )
-    {
-        Append( i, grid, wxEmptyString, wxITEM_CHECK )->Check( i == (int) current );
-        i++;
-    }
+        Append( i++, grid, wxEmptyString, wxITEM_CHECK )->Check( i == (int) current );
 }
 
 void GRID_MENU::BuildChoiceList( wxArrayString* aGridsList, APP_SETTINGS_BASE* aCfg,

@@ -238,26 +238,6 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     viewMenu->Add( ACTIONS::zoomRedraw );
 
     viewMenu->AppendSeparator();
-    viewMenu->Add( ACTIONS::toggleGrid,               ACTION_MENU::CHECK );
-    viewMenu->Add( ACTIONS::gridProperties );
-    viewMenu->Add( PCB_ACTIONS::togglePolarCoords,    ACTION_MENU::CHECK );
-
-    // Units submenu
-    ACTION_MENU* unitsSubMenu = new ACTION_MENU( false, selTool );
-    unitsSubMenu->SetTitle( _( "&Units" ) );
-    unitsSubMenu->SetIcon( BITMAPS::unit_mm );
-    unitsSubMenu->Add( ACTIONS::inchesUnits,          ACTION_MENU::CHECK );
-    unitsSubMenu->Add( ACTIONS::milsUnits,            ACTION_MENU::CHECK );
-    unitsSubMenu->Add( ACTIONS::millimetersUnits,     ACTION_MENU::CHECK );
-    viewMenu->Add( unitsSubMenu );
-
-    viewMenu->Add( ACTIONS::toggleCursorStyle,        ACTION_MENU::CHECK );
-
-    viewMenu->AppendSeparator();
-    viewMenu->Add( PCB_ACTIONS::showRatsnest,         ACTION_MENU::CHECK );
-    viewMenu->Add( PCB_ACTIONS::ratsnestLineMode,     ACTION_MENU::CHECK );
-
-    viewMenu->AppendSeparator();
     // Drawing Mode Submenu
     ACTION_MENU* drawingModeSubMenu = new ACTION_MENU( false, selTool );
     drawingModeSubMenu->SetTitle( _( "&Drawing Mode" ) );

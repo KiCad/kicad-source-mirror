@@ -541,7 +541,7 @@ void PCB_CONTROL::DoSetGridOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
 }
 
 
-int PCB_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
+int PCB_CONTROL::GridPlaceOrigin( const TOOL_EVENT& aEvent )
 {
     VECTOR2D* origin = aEvent.Parameter<VECTOR2D*>();
 
@@ -1680,7 +1680,7 @@ void PCB_CONTROL::setTransitions()
     Go( &PCB_CONTROL::LayerAlphaDec,        PCB_ACTIONS::layerAlphaDec.MakeEvent() );
 
     // Grid control
-    Go( &PCB_CONTROL::GridSetOrigin,        ACTIONS::gridSetOrigin.MakeEvent() );
+    Go( &PCB_CONTROL::GridPlaceOrigin,      ACTIONS::gridSetOrigin.MakeEvent() );
     Go( &PCB_CONTROL::GridResetOrigin,      ACTIONS::gridResetOrigin.MakeEvent() );
 
     Go( &PCB_CONTROL::Undo,                 ACTIONS::undo.MakeEvent() );

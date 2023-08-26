@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -66,21 +66,25 @@ enum FRAME_T
     FRAME_T_COUNT,
 
     PANEL_SYM_DISP_OPTIONS = FRAME_T_COUNT,
+    PANEL_SYM_EDIT_GRIDS,
     PANEL_SYM_EDIT_OPTIONS,
     PANEL_SYM_COLORS,
 
     PANEL_SCH_DISP_OPTIONS,
+    PANEL_SCH_GRIDS,
     PANEL_SCH_EDIT_OPTIONS,
     PANEL_SCH_ANNO_OPTIONS,
     PANEL_SCH_COLORS,
     PANEL_SCH_FIELD_NAME_TEMPLATES,
 
     PANEL_FP_DISPLAY_OPTIONS,
+    PANEL_FP_GRIDS,
     PANEL_FP_EDIT_OPTIONS,
     PANEL_FP_COLORS,
     PANEL_FP_DEFAULT_VALUES,
 
     PANEL_PCB_DISPLAY_OPTIONS,
+    PANEL_PCB_GRIDS,
     PANEL_PCB_EDIT_OPTIONS,
     PANEL_PCB_COLORS,
     PANEL_PCB_ACTION_PLUGINS,
@@ -96,6 +100,7 @@ enum FRAME_T
     PANEL_GBR_COLORS,
 
     PANEL_DS_DISPLAY_OPTIONS,
+    PANEL_DS_GRIDS,
     PANEL_DS_COLORS,
 
     // Library table dialogs are transient and are never returned

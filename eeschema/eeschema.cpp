@@ -38,6 +38,7 @@
 #include <transform.h>
 #include <symbol_lib_table.h>
 #include <dialogs/dialog_global_sym_lib_table_config.h>
+#include <dialogs/panel_grid_settings.h>
 #include <dialogs/panel_sym_lib_table.h>
 #include <kiway.h>
 #include <settings/settings_manager.h>
@@ -197,6 +198,24 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             return new PANEL_SYM_DISPLAY_OPTIONS( aParent, cfg );
         }
 
+        case PANEL_SYM_EDIT_GRIDS:
+        {
+            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+            EDA_BASE_FRAME*    frame = aKiway->Player( FRAME_SCH_SYMBOL_EDITOR, false );
+
+            if( !frame )
+                frame = aKiway->Player( FRAME_SCH_VIEWER, false );
+
+            if( !frame )
+                frame = aKiway->Player( FRAME_SCH, false );
+
+            if( frame )
+                SetUserUnits( frame->GetUserUnits() );
+
+            return new PANEL_GRID_SETTINGS( aParent, this, frame, cfg, FRAME_SCH_SYMBOL_EDITOR );
+        }
+
         case PANEL_SYM_EDIT_OPTIONS:
         {
             EDA_BASE_FRAME* frame = aKiway->Player( FRAME_SCH_SYMBOL_EDITOR, false );
@@ -222,6 +241,24 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>();
 
             return new PANEL_EESCHEMA_DISPLAY_OPTIONS( aParent, cfg );
+        }
+
+        case PANEL_SCH_GRIDS:
+        {
+            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<EESCHEMA_SETTINGS>();
+            EDA_BASE_FRAME*    frame = aKiway->Player( FRAME_SCH, false );
+
+            if( !frame )
+                frame = aKiway->Player( FRAME_SCH_SYMBOL_EDITOR, false );
+
+            if( !frame )
+                frame = aKiway->Player( FRAME_SCH_VIEWER, false );
+
+            if( frame )
+                SetUserUnits( frame->GetUserUnits() );
+
+            return new PANEL_GRID_SETTINGS( aParent, this, frame, cfg, FRAME_SCH );
         }
 
         case PANEL_SCH_EDIT_OPTIONS:

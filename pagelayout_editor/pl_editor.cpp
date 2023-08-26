@@ -33,6 +33,7 @@
 #include <settings/settings_manager.h>
 #include <dialogs/panel_pl_editor_display_options.h>
 #include <dialogs/panel_pl_editor_color_settings.h>
+#include <dialogs/panel_grid_settings.h>
 
 #include "pl_editor_frame.h"
 #include "pl_editor_settings.h"
@@ -40,12 +41,13 @@
 
 namespace PGE {
 
-static struct IFACE : public KIFACE_BASE
+static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 {
     // Of course all are virtual overloads, implementations of the KIFACE.
 
     IFACE( const char* aName, KIWAY::FACE_T aType ) :
-            KIFACE_BASE( aName, aType )
+            KIFACE_BASE( aName, aType ),
+            UNITS_PROVIDER( drawSheetIUScale, EDA_UNITS::MILLIMETRES )
     {}
 
     bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits ) override;
@@ -66,6 +68,18 @@ static struct IFACE : public KIFACE_BASE
             APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<PL_EDITOR_SETTINGS>();
 
             return new PANEL_PL_EDITOR_DISPLAY_OPTIONS( aParent, cfg );
+        }
+
+        case PANEL_DS_GRIDS:
+        {
+            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<PL_EDITOR_SETTINGS>();
+            EDA_BASE_FRAME*    frame = aKiway->Player( FRAME_PL_EDITOR, false );
+
+            if( frame )
+                SetUserUnits( frame->GetUserUnits() );
+
+            return new PANEL_GRID_SETTINGS( aParent, this, frame, cfg, FRAME_PL_EDITOR );
         }
 
         case PANEL_DS_COLORS:

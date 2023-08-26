@@ -424,34 +424,50 @@ VECTOR2D PCB_GRID_HELPER::GetGridSize( GRID_HELPER_GRIDS aGrid ) const
     switch( aGrid )
     {
     case GRID_CONNECTABLE:
-        if( grid.override_connectables )
+        if( grid.override_connected )
+        {
             g.x = g.y = EDA_UNIT_UTILS::UI::DoubleValueFromString(
-                    pcbIUScale, EDA_UNITS::MILLIMETRES, grid.override_connectables_size );
+                    pcbIUScale, EDA_UNITS::MILLIMETRES, grid.override_connected_size );
+        }
 
         break;
+
     case GRID_WIRES:
         if( grid.override_wires )
+        {
             g.x = g.y = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::MILLIMETRES,
                                                                    grid.override_wires_size );
+        }
+
         break;
+
     case GRID_VIAS:
         if( grid.override_vias )
+        {
             g.x = g.y = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::MILLIMETRES,
                                                                    grid.override_vias_size );
+        }
 
         break;
+
     case GRID_TEXT:
         if( grid.override_text )
+        {
             g.x = g.y = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::MILLIMETRES,
                                                                    grid.override_text_size );
+        }
 
         break;
+
     case GRID_GRAPHICS:
         if( grid.override_graphics )
+        {
             g.x = g.y = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::MILLIMETRES,
                                                                    grid.override_graphics_size );
+        }
 
         break;
+
     default:
         break;
     }

@@ -153,9 +153,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( wxID_EXIT, PCB_EDIT_FRAME::OnQuit )
     EVT_MENU( wxID_CLOSE, PCB_EDIT_FRAME::OnQuit )
 
-    // menu Config
-    EVT_MENU( ID_GRID_SETTINGS, PCB_EDIT_FRAME::OnGridSettings )
-
     // menu Postprocess
     EVT_MENU( ID_PCB_GEN_CMP_FILE, PCB_EDIT_FRAME::RecreateCmpFileFromBoard )
 

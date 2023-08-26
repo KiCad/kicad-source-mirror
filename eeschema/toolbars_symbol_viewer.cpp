@@ -122,8 +122,6 @@ void SYMBOL_VIEWER_FRAME::doReCreateMenuBar()
     viewMenu->Add( ACTIONS::zoomRedraw );
 
     viewMenu->AppendSeparator();
-    viewMenu->Add( ACTIONS::toggleGrid,             ACTION_MENU::CHECK );
-    viewMenu->Add( ACTIONS::gridProperties );
 
     viewMenu->AppendSeparator();
     viewMenu->Add( EE_ACTIONS::showElectricalTypes, ACTION_MENU::CHECK );

@@ -81,7 +81,7 @@ public:
     int LayerAlphaDec( const TOOL_EVENT& aEvent );
 
     // Grid control
-    int GridSetOrigin( const TOOL_EVENT& aEvent );
+    int GridPlaceOrigin( const TOOL_EVENT& aEvent );
     int GridResetOrigin( const TOOL_EVENT& aEvent );
 
     // Low-level access (below undo) to setting the grid origin
