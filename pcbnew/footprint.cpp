@@ -1008,9 +1008,18 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisible
             continue;
         }
 
-        // Treat dimension objects as text
-        if( !aIncludeText && BaseType( item->Type() ) == PCB_DIMENSION_T )
-            continue;
+        // If we're not including text then drop annotations as well
+        if( !aIncludeText )
+        {
+            if( BaseType( item->Type() ) == PCB_DIMENSION_T )
+                continue;
+
+            if( item->GetLayer() == Cmts_User || item->GetLayer() == Dwgs_User
+                || item->GetLayer() == Eco1_User || item->GetLayer() == Eco2_User )
+            {
+                continue;
+            }
+        }
 
         bbox.Merge( item->GetBoundingBox() );
     }
