@@ -479,6 +479,13 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
     SetLanguagePath();
     SetDefaultLanguage( tmp );
 
+#ifdef _MSC_VER
+    // We need to set this because the internal fontconfig logic
+    // seems to search relative to the dll rather the other logic it
+    // has to look for the /etc folder above the dll
+    wxSetEnv( "FONTCONFIG_PATH", PATHS::GetWindowsFontConfigDir() );
+#endif
+
     m_settings_manager = std::make_unique<SETTINGS_MANAGER>( aHeadless );
 
     // Our unit test mocks break if we continue
