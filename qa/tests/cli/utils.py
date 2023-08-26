@@ -63,11 +63,20 @@ def textdiff_files( golden_filepath: str, new_filepath: str, skip: int = 0 ) -> 
     return diff_text == ""
 
 
+def image_is_blank( image_path: str ) -> bool:
+    # Increase limit to ~2GB uncompressed
+    Image.MAX_IMAGE_PIXELS=4 * 1024 * 1024 * 1024 // 4 // 3
+    img = Image.open( image_path )
+    sum = np.sum( np.asarray( img ) )
+
+    return sum == 0
+
+
 def images_are_equal( image1_path: str, image2_path: str, alpha_colour = (50, 100, 50) ) -> bool:
     # Note: if modifying this function - please add new tests for it in test_utils.py
 
-    # Increase limit to ~500MB uncompressed
-    Image.MAX_IMAGE_PIXELS=2 * 1024 * 1024 * 1024 // 4 // 3
+    # Increase limit to ~2GB uncompressed
+    Image.MAX_IMAGE_PIXELS=4 * 1024 * 1024 * 1024 // 4 // 3
 
     image1 = Image.open( image1_path )
     image2 = Image.open( image2_path )
@@ -115,21 +124,66 @@ def images_are_equal( image1_path: str, image2_path: str, alpha_colour = (50, 10
     return retval
 
 
-def svgs_are_equivalent( svg_generated_path : str, svg_source_path : str, comparison_dpi : int ) -> bool:
+def get_png_paths( generated_path: str, source_path : str ) -> Tuple[str, str]:
+    generated_png_path = Path( generated_path ).with_suffix( ".png" )
 
-    png_generated_path = Path( svg_generated_path ).with_suffix( ".png" )
+    if generated_png_path.exists():
+        generated_png_path.unlink()  # Delete file
 
     # store source png in same folder as generated, easier to compare
-    source_stem = Path( svg_source_path ).stem
-    png_source_path = Path( svg_generated_path ).with_stem( source_stem + "-source").with_suffix( ".png" )
+    source_stem = Path( source_path ).stem
+    source_png_path = Path( generated_path ).with_stem( source_stem + "-source").with_suffix( ".png" )
+
+    if source_png_path.exists():
+        source_png_path.unlink()  # Delete file
+
+    return str( generated_png_path ), str( source_png_path )
+
+
+def svgs_are_equivalent( svg_generated_path: str, svg_source_path: str, comparison_dpi: int ) -> bool:
+    png_generated, png_source = get_png_paths( svg_generated_path, svg_source_path )
 
     cairosvg.svg2png( url=svg_generated_path,
-                      write_to=str( png_generated_path ),
+                      write_to=png_generated,
                       dpi=comparison_dpi )
 
     cairosvg.svg2png( url=svg_source_path,
-                     write_to=str( png_source_path ),
+                      write_to=png_source,
                       dpi=comparison_dpi )
 
-    return images_are_equal( str( png_generated_path ), str( png_source_path ) )
+    return images_are_equal( png_generated , png_source )
 
+
+def gerbers_are_equivalent( gerber_generated_path : str, gerber_source_path : str, comparison_dpi : int,
+                            originInches :  Tuple[float, float],
+                            windowsizeInches :  Tuple[float, float] ) -> bool:
+    png_generated, png_source = get_png_paths( gerber_generated_path, gerber_source_path )
+
+    convert_gerber_to_png( gerber_generated_path, png_generated, comparison_dpi, originInches, windowsizeInches )
+    convert_gerber_to_png( gerber_source_path,    png_source,    comparison_dpi, originInches, windowsizeInches )
+
+    assert( not image_is_blank( png_generated ) )
+    assert( not image_is_blank( png_source ) )    # make sure test case is generated correctly
+
+    return images_are_equal( png_generated, png_source )
+
+
+def convert_gerber_to_png( gerber_path : str, png_path : str, dpi : int,
+                           originInches :  Tuple[float, float],
+                           windowsizeInches :  Tuple[float, float] ):
+    stdout, stderr, exitcode = run_and_capture(["gerbv", "--export=png", f"--dpi={dpi}",
+                                                f"--origin={originInches[0]}x{originInches[1]}",
+                                                f"--window_inch={windowsizeInches[0]}x{windowsizeInches[1]}",
+                                                f"--output={png_path}",
+                                                "--foreground=#FFFFFF", "--background=#000000",
+                                                gerber_path
+                                                ])
+
+
+def is_gerbv_installed() -> bool:
+    try:
+        stdout, stderr, exitcode = run_and_capture(["gerbv", "--version"])
+    except:
+        return False
+
+    return exitcode == 0 and stdout is not None and stdout.startswith("gerbv version")

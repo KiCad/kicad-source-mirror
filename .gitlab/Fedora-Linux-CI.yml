@@ -145,6 +145,7 @@ fedora_report_metrics_public:
     - .only_code
   before_script: 
     - if [ "$TEST" == "cli" ] || [ "$TEST" == "python" ]; then python3 -m pip install -r qa/tests/requirements.txt; fi
+    - if [ "$TEST" == "cli" ]; then sudo dnf -y install gerbv; fi
   parallel:
     matrix:
       # The name of the test without the qa_ prefix
