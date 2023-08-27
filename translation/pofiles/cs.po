@@ -8440,9 +8440,8 @@ msgid "Delete all associations?"
 msgstr "Smazat všechna přidružení?"
 
 #: cvpcb/tools/cvpcb_control.cpp:181
-#, fuzzy
 msgid "Unable to create the footprint viewer frame"
-msgstr "Nelze vytvořit soubor hlášení '%s'"
+msgstr "Nelze vytvořit rámeček prohlížeče pouzder"
 
 #: eeschema/annotate.cpp:155
 msgid "Delete Annotation"
@@ -13435,9 +13434,8 @@ msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:157
 #: pcbnew/dialogs/panel_display_options_base.cpp:114
-#, fuzzy
 msgid "Zoom to fit cross-probed items"
-msgstr "Zvětšit na velikost pouzdra"
+msgstr "Zvětší vybrané položky"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:161
 #: pcbnew/dialogs/panel_display_options_base.cpp:118
@@ -18388,9 +18386,9 @@ msgid "Format"
 msgstr "Formát"
 
 #: eeschema/sim/spice_library_parser.cpp:166
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create sim model from %s"
-msgstr "Nelze vytvořit složku '%s'."
+msgstr "Simulační model nelze vytvořit z '%s'"
 
 #: eeschema/sim/spice_model_parser.cpp:85
 #: eeschema/sim/spice_model_parser.cpp:187
@@ -22440,14 +22438,12 @@ msgid "Malformed expression"
 msgstr "Poškozený výraz"
 
 #: include/lockfile.h:106
-#, fuzzy
 msgid "Lock file already exists"
-msgstr "Soubor %s již existuje."
+msgstr "Soubor zámku již existuje"
 
 #: include/lockfile.h:125
-#, fuzzy
 msgid "Failed to access lock file"
-msgstr "Nelze načíst soubor schématu\n"
+msgstr "K souboru zámku se nepodařilo získat přístup"
 
 #: include/panel_hotkeys_editor.h:55
 msgid "Reset all hotkeys to the built-in KiCad defaults"
@@ -22650,9 +22646,8 @@ msgid "Precision of gerber coordinates, valid options: 5 or 6"
 msgstr "Přesnost souřadnic gerber, platné možnosti: 5 nebo 6"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:85
-#, fuzzy
 msgid "Use KiCad gerber file extension"
-msgstr "Použít PROTEL přípony souboru"
+msgstr "Použít přípony souborů KiCad"
 
 #: kicad/cli/command_export_pcb_gerbers.cpp:45
 msgid ""
@@ -30124,8 +30119,8 @@ msgid ""
 "clearance value.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"Tato poměr v procentech lokální mezery mezi ploškami a pastou pro toto "
-"pouzdro.\n"
+"Tato poměr v procentech lokální izolační mezery mezi ploškami a pastou pro "
+"toto pouzdro.\n"
 "Hodnota 10 znamená, že hodnota mezera je 10% velikosti plošky\n"
 "Tuto hodnotu lze nahradit lokální hodnotou plošky.\n"
 "Konečná hodnota mezery je součtem této hodnoty a velikosti mezery\n"
@@ -32409,7 +32404,6 @@ msgid "Duplicate Primitive"
 msgstr "Duplikovat položku"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1052
-#, fuzzy
 msgid "Transform Primitive"
 msgstr "Transformovat základní tvar"
 
@@ -35372,9 +35366,8 @@ msgstr "Oblouk"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:109
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:242
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:375
-#, fuzzy
 msgid "Curve points:"
-msgstr "Bezierova křivka, %d bodů"
+msgstr "Body křivky:"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:139
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:272
@@ -35791,9 +35784,8 @@ msgid "Unconditional rule applied."
 msgstr "Použito bezpodmínečné pravidlo."
 
 #: pcbnew/drc/drc_engine.cpp:1231
-#, fuzzy
 msgid "Unconditional rule applied; overrides previous constraints."
-msgstr "Použito bezpodmínečné pravidlo."
+msgstr "Platí bezpodmínečné pravidlo; přepíše předchozí omezení."
 
 #: pcbnew/drc/drc_engine.cpp:1245 pcbnew/drc/drc_engine.cpp:1531
 #, c-format
@@ -35801,19 +35793,16 @@ msgid "Checking rule condition \"%s\"."
 msgstr "Kontrola podmínky pravidla \"%s\"."
 
 #: pcbnew/drc/drc_engine.cpp:1255
-#, fuzzy
 msgid "Constraint applied."
-msgstr "Platí omezení."
+msgstr "Omezení použito."
 
 #: pcbnew/drc/drc_engine.cpp:1259 pcbnew/drc/drc_engine.cpp:1537
-#, fuzzy
 msgid "Rule applied."
-msgstr "Použito bezpodmínečné pravidlo."
+msgstr "Uplatněno pravidlo."
 
 #: pcbnew/drc/drc_engine.cpp:1264
-#, fuzzy
 msgid "Rule applied; overrides previous constraints."
-msgstr "Použito bezpodmínečné pravidlo."
+msgstr "Pravidlo použito; přepíše předchozí omezení."
 
 #: pcbnew/drc/drc_engine.cpp:1272
 msgid "Membership not satisfied; constraint ignored."
@@ -35868,9 +35857,8 @@ msgid "Design for Manufacturing"
 msgstr "Design pro výrobu"
 
 #: pcbnew/drc/drc_item.cpp:47
-#, fuzzy
 msgid "Schematic Parity"
-msgstr "Pole schématu"
+msgstr "Schématická parita"
 
 #: pcbnew/drc/drc_item.cpp:48
 msgid "Signal Integrity"
@@ -35881,9 +35869,8 @@ msgid "Readability"
 msgstr "Čitelnost"
 
 #: pcbnew/drc/drc_item.cpp:53
-#, fuzzy
 msgid "Missing connection between items"
-msgstr "Neplatné spojení mezi sběrnicí a položkami sítě"
+msgstr "Chybějící spojení mezi položkami"
 
 #: pcbnew/drc/drc_item.cpp:57
 msgid "Items shorting two nets"
@@ -35911,23 +35898,20 @@ msgid "Board edge clearance violation"
 msgstr "Porušení izolační mezery okraje desky"
 
 #: pcbnew/drc/drc_item.cpp:81
-#, fuzzy
 msgid "Copper zones intersect"
-msgstr "Plochy mědi se překrývají"
+msgstr "Zóny mědi se protínají"
 
 #: pcbnew/drc/drc_item.cpp:85
-#, fuzzy
 msgid "Isolated copper fill"
-msgstr "Bez vyplněné mědi"
+msgstr "Izolovaná měděná výplň"
 
 #: pcbnew/drc/drc_item.cpp:89
 msgid "Thermal relief connection to zone incomplete"
 msgstr ""
 
 #: pcbnew/drc/drc_item.cpp:93
-#, fuzzy
 msgid "Via is not connected or connected on only one layer"
-msgstr "Odstranit prokovy připojené pouze na jedné vrstvě"
+msgstr "Prokov není připojen nebo připojen pouze na jedné vrstvě"
 
 #: pcbnew/drc/drc_item.cpp:97
 msgid "Track has unconnected end"
@@ -35946,9 +35930,8 @@ msgid "Drilled holes co-located"
 msgstr "Vyvrtané otvory příliš blízko u sebe"
 
 #: pcbnew/drc/drc_item.cpp:113
-#, fuzzy
 msgid "Copper connection too narrow"
-msgstr "Připojení mědi"
+msgstr "Příliš úzké připojení mědi"
 
 #: pcbnew/drc/drc_item.cpp:117
 msgid "Track width"
@@ -38772,9 +38755,8 @@ msgid "Leader Length"
 msgstr "Délka prokovu"
 
 #: pcbnew/pcb_dimension.cpp:1538
-#, fuzzy
 msgid "Text Frame"
-msgstr "Textový rámeček:"
+msgstr "Textový rámeček"
 
 #: pcbnew/pcb_edit_frame.cpp:212
 msgid "KiCad PCB Editor"
@@ -41426,11 +41408,9 @@ msgstr "Neúplná zpráva: Vlastní pravidla návrhu nemohla být sestavena."
 msgid "Uncoupled Length"
 msgstr "Délka desky"
 
-#: pcbnew/tools/board_inspection_tool.cpp:311
 #: pcbnew/tools/board_inspection_tool.cpp:282
-#, fuzzy
 msgid "Diff pair uncoupled length resolution for:"
-msgstr "Doladění délky diferenciálního páru"
+msgstr "Rozlišení nespojené délky diferenciálního páru pro:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:319
 #: pcbnew/tools/board_inspection_tool.cpp:920
@@ -41454,13 +41434,10 @@ msgstr "Rozlišení zakázané zóny pro:"
 msgid "Resolved height constraints: min %s; max %s."
 msgstr "Omezení šířky: min %s; opt %s; max %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:341
-#: pcbnew/tools/board_inspection_tool.cpp:1348
 #: pcbnew/tools/board_inspection_tool.cpp:312
 #: pcbnew/tools/board_inspection_tool.cpp:1319
-#, fuzzy
 msgid "Text thickness resolution for:"
-msgstr "Ladění délky spoje"
+msgstr "Rozlišení tloušťky textu pro:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:349
 #: pcbnew/tools/board_inspection_tool.cpp:320
@@ -41481,11 +41458,9 @@ msgstr "Rozlišení šířky spoje pro:"
 msgid "Resolved width constraints: min %s; max %s."
 msgstr "Omezení šířky: min %s; opt %s; max %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:370
 #: pcbnew/tools/board_inspection_tool.cpp:341
-#, fuzzy
 msgid "Connection Width"
-msgstr "Typ spojení:"
+msgstr "Šířka připojení"
 
 #: pcbnew/tools/board_inspection_tool.cpp:371
 #: pcbnew/tools/board_inspection_tool.cpp:342
@@ -41734,11 +41709,10 @@ msgstr "Tepelný reliéf zóny: %s."
 msgid "Spoke width resolution for:"
 msgstr "Rozlišení šířky spoje pro:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:753
 #: pcbnew/tools/board_inspection_tool.cpp:724
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved thermal relief spoke width: %s."
-msgstr "Teplotní profil šířka:"
+msgstr "Vyřešená šířka paprsku tepelného reliéfu: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:758
 #: pcbnew/tools/board_inspection_tool.cpp:729
@@ -41746,11 +41720,10 @@ msgstr "Teplotní profil šířka:"
 msgid "Spoke count resolution for:"
 msgstr "Rozlišení zakázané zóny pro:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:767
 #: pcbnew/tools/board_inspection_tool.cpp:738
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved min thermal relief spoke count: %d."
-msgstr "Šířka paprsku tepelného reliéfu:"
+msgstr "Vyřešeno min počet paprsků termálního reliéfu: %d."
 
 #: pcbnew/tools/board_inspection_tool.cpp:776
 #: pcbnew/tools/board_inspection_tool.cpp:824
@@ -42134,10 +42107,9 @@ msgstr "Znova vyplnění všech zón..."
 msgid "Schematic parity tests require a fully annotated schematic."
 msgstr "Exportování netlistu vyžaduje kompletně očíslované schéma."
 
-#: pcbnew/tools/edit_tool.cpp:95 pcbnew/tools/edit_tool.cpp:93
-#, fuzzy
+#: pcbnew/tools/edit_tool.cpp:93
 msgid "Positioning Tools"
-msgstr "Posunutí polohy:"
+msgstr "Polohovací nástroje"
 
 #: pcbnew/tools/edit_tool.cpp:116 pcbnew/tools/edit_tool.cpp:113
 #, fuzzy
@@ -43804,7 +43776,7 @@ msgstr "Filtrovat pouzdra podle klíčových slov"
 
 #: pcbnew/tools/pcb_actions.cpp:1444 pcbnew/tools/pcb_actions.cpp:1430
 msgid "Geographical Reannotate..."
-msgstr "Geografická reanotace..."
+msgstr "Geografické přečíslování..."
 
 #: pcbnew/tools/pcb_actions.cpp:1444 pcbnew/tools/pcb_actions.cpp:1430
 msgid "Reannotate PCB in geographical order"
