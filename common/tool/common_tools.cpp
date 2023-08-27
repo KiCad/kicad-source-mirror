@@ -538,17 +538,26 @@ int COMMON_TOOLS::ToggleGridOverrides( const TOOL_EVENT& aEvent )
 
 int COMMON_TOOLS::GridProperties( const TOOL_EVENT& aEvent )
 {
-#define SHOW_GRID_PREFS( parentName ) m_frame->ShowPreferences( _( "Grids" ), parentName )
+    auto showGridPrefs =
+            [this]( wxString aParentName )
+            {
+                m_frame->CallAfter(
+                        [this, aParentName]()
+                        {
+                            m_frame->ShowPreferences( _( "Grids" ), aParentName );
+                        } );
+            };
 
     switch( m_frame->GetFrameType() )
     {
-    case FRAME_SCH:               SHOW_GRID_PREFS( _( "Schematic Editor" ) );     break;
-    case FRAME_SCH_SYMBOL_EDITOR: SHOW_GRID_PREFS( _( "Symbol Editor" ) );        break;
-    case FRAME_PCB_EDITOR:        SHOW_GRID_PREFS( _( "PCB Editor" ) );           break;
-    case FRAME_FOOTPRINT_EDITOR:  SHOW_GRID_PREFS( _( "Footprint Editor" ) );     break;
-    case FRAME_PL_EDITOR:         SHOW_GRID_PREFS( _( "Drawing Sheet Editor" ) ); break;
-    default:                      wxFAIL_MSG( "Unknown frame: " + GetName() );    break;
+    case FRAME_SCH:               showGridPrefs( _( "Schematic Editor" ) );     break;
+    case FRAME_SCH_SYMBOL_EDITOR: showGridPrefs( _( "Symbol Editor" ) );        break;
+    case FRAME_PCB_EDITOR:        showGridPrefs( _( "PCB Editor" ) );           break;
+    case FRAME_FOOTPRINT_EDITOR:  showGridPrefs( _( "Footprint Editor" ) );     break;
+    case FRAME_PL_EDITOR:         showGridPrefs( _( "Drawing Sheet Editor" ) ); break;
+    default:                      wxFAIL_MSG( "Unknown frame: " + GetName() );  break;
     }
+
     return 0;
 }
 
