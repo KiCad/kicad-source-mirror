@@ -60,6 +60,7 @@ class PCB_PLUGIN;   // forward decl
 //#define SEXPR_BOARD_FILE_VERSION    3         // first s-expression format, used legacy cu stack
 //#define SEXPR_BOARD_FILE_VERSION    4         // reversed cu stack, changed Inner* to In* in reverse order
 //                                              // went to 32 Cu layers from 16.
+//----------------- Start of 5.0 development -----------------
 //#define SEXPR_BOARD_FILE_VERSION    20160815  // differential pair settings per net class
 //#define SEXPR_BOARD_FILE_VERSION    20170123  // EDA_TEXT refactor, moved 'hide'
 //#define SEXPR_BOARD_FILE_VERSION    20170920  // long pad names and custom pad shape
@@ -67,6 +68,7 @@ class PCB_PLUGIN;   // forward decl
 //#define SEXPR_BOARD_FILE_VERSION    20171114  // Save 3D model offset in mm, instead of inches
 //#define SEXPR_BOARD_FILE_VERSION    20171125  // Locked/unlocked FP_TEXT
 //#define SEXPR_BOARD_FILE_VERSION    20171130  // 3D model offset written using "offset" parameter
+//----------------- Start of 6.0 development -----------------
 //#define SEXPR_BOARD_FILE_VERSION    20190331  // hatched zones and chamfered round rect pads
 //#define SEXPR_BOARD_FILE_VERSION    20190421  // curves in custom pads
 //#define SEXPR_BOARD_FILE_VERSION    20190516  // Remove segment count from zones
@@ -111,6 +113,7 @@ class PCB_PLUGIN;   // forward decl
 //#define SEXPR_BOARD_FILE_VERSION    20210824  // Opacity in 3D colors
 //#define SEXPR_BOARD_FILE_VERSION    20210925  // Locked flag for fp_text
 //#define SEXPR_BOARD_FILE_VERSION    20211014  // Arc formatting
+//----------------- Start of 7.0 development -----------------
 //#define SEXPR_BOARD_FILE_VERSION    20211226  // Add radial dimension
 //#define SEXPR_BOARD_FILE_VERSION    20211227  // Add thermal relief spoke angle overrides
 //#define SEXPR_BOARD_FILE_VERSION    20211228  // Add allow_soldermask_bridges footprint attribute

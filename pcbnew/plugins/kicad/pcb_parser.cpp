@@ -4642,11 +4642,20 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
     }
 
     if( pad->GetShape() == PAD_SHAPE::CIRCLE )
+    {
         pad->SetThermalSpokeAngle( ANGLE_45 );
+    }
     else if( pad->GetShape() == PAD_SHAPE::CUSTOM && pad->GetAnchorPadShape() == PAD_SHAPE::CIRCLE )
-        pad->SetThermalSpokeAngle( ANGLE_45 );
+    {
+        if( m_requiredVersion < 20211226 )
+            pad->SetThermalSpokeAngle( ANGLE_90 );
+        else
+            pad->SetThermalSpokeAngle( ANGLE_45 );
+    }
     else
+    {
         pad->SetThermalSpokeAngle( ANGLE_90 );
+    }
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
