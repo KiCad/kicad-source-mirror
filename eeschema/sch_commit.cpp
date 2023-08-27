@@ -490,8 +490,8 @@ void SCH_COMMIT::Revert()
 
                 if( field->GetId() == REFERENCE_FIELD )
                 {
-                    symbol->SetRef( schematic->GetSheets().FindSheetForScreen( screen ),
-                                    field->GetText() );
+                    SCH_SHEET_PATH sheet = schematic->GetSheets().FindSheetForScreen( screen );
+                    symbol->SetRef( &sheet, field->GetText() );
                 }
             }
 
