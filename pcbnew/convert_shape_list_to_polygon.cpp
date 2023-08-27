@@ -330,7 +330,6 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
                         VECTOR2I  pstart = graphic->GetStart();
                         VECTOR2I  pmid = graphic->GetArcMid();
                         VECTOR2I  pend = graphic->GetEnd();
-                        VECTOR2I  pcenter = graphic->GetCenter();
 
                         if( !close_enough( prevPt, pstart, aChainingEpsilon ) )
                         {

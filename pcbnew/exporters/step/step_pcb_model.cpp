@@ -434,12 +434,15 @@ void STEP_PCB_MODEL::OCCSetMergeMaxDistance( double aDistance )
     BRepBuilderAPI::Precision( m_mergeOCCMaxDist );
 }
 
+
 bool STEP_PCB_MODEL::isBoardOutlineValid()
 {
     return m_pcb_labels.size() > 0;
 }
 
-// A helper function to know if a SHAPE_LINE_CHAIN is encoding a circle
+
+// A helper function to know if a SHAPE_LINE_CHAIN is encoding a circle (now unused)
+#if 0
 static bool IsChainCircle( const SHAPE_LINE_CHAIN& aChain )
 {
     // If aChain is a circle it
@@ -457,6 +460,8 @@ static bool IsChainCircle( const SHAPE_LINE_CHAIN& aChain )
 
     return false;
 }
+#endif
+
 
 bool STEP_PCB_MODEL::MakeShapeAsCylinder( TopoDS_Shape& aShape,
                                           const SHAPE_LINE_CHAIN& aChain, double aThickness,
@@ -714,13 +719,10 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
                         lastPt = aChain.CPoint( i );
 
                     bool isArc = aChain.IsArcSegment( i );
-                    int  arcindex = isArc ? aChain.ArcIndex( i ) : -1;
 
                     if( aChain.IsArcStart( i ) )
                     {
                         const SHAPE_ARC& currentArc = aChain.Arc( aChain.ArcIndex( i ) );
-                        int              nextShape = aChain.NextShape( i );
-                        bool             isLastShape = nextShape < 0;
 
                         if( isFirstShape )
                         {

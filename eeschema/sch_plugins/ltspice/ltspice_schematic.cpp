@@ -756,6 +756,8 @@ std::vector<LTSPICE_SCHEMATIC::LT_ASC> LTSPICE_SCHEMATIC::StructureBuilder()
 
         ascFile.SheetSize = VECTOR2I( 0, 0 );
         ascFile.Symbols = symbolArray;
+        ascFile.Version = 0;
+        ascFile.SheetNumber = 0;
 
         int lineNumber = 1;
 
