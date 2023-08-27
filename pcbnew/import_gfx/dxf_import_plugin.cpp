@@ -543,6 +543,13 @@ void DXF_IMPORT_PLUGIN::addArc( const DL_ArcData& aData )
     EDA_ANGLE  startangle( aData.angle1, DEGREES_T );
     EDA_ANGLE  endangle( aData.angle2, DEGREES_T );
 
+    if( ( arbAxis.GetScale().x < 0 ) != ( arbAxis.GetScale().y < 0 ) )
+    {
+        startangle = ANGLE_180 - startangle;
+        endangle = ANGLE_180 - endangle;
+        std::swap( startangle, endangle );
+    }
+
     // Init arc start point
     VECTOR2D startPoint( aData.radius, 0.0 );
     RotatePoint( startPoint, -startangle );
