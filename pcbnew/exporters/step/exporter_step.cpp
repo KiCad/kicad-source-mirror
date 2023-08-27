@@ -293,19 +293,7 @@ bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin )
 {
     if( aTrack->Type() == PCB_VIA_T )
     {
-        PAD dummy( nullptr );
-        int hole = static_cast<PCB_VIA*>( aTrack )->GetDrillValue();
-        dummy.SetDrillSize( VECTOR2I( hole, hole ) );
-        dummy.SetPosition( aTrack->GetStart() );
-        dummy.SetSize( VECTOR2I( aTrack->GetWidth(), aTrack->GetWidth() ) );
-
-        if( m_pcbModel->AddPadHole( &dummy, aOrigin ) )
-        {
-            if( m_pcbModel->AddPadShape( &dummy, aOrigin ) )
-                return false;
-        }
-
-        return true;
+        return m_pcbModel->AddViaShape( static_cast<const PCB_VIA*>( aTrack ), aOrigin );
     }
 
     PCB_LAYER_ID pcblayer = aTrack->GetLayer();
@@ -313,12 +301,17 @@ bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin )
     if( pcblayer != F_Cu && pcblayer != B_Cu )
         return false;
 
-    int maxError = m_board->GetDesignSettings().m_MaxError;
+    if( aTrack->Type() == PCB_ARC_T )
+    {
+        int maxError = m_board->GetDesignSettings().m_MaxError;
 
-    if( pcblayer == F_Cu )
-        aTrack->TransformShapeToPolygon( m_top_copper_shapes, pcblayer, 0, maxError, ERROR_INSIDE );
+        if( pcblayer == F_Cu )
+            aTrack->TransformShapeToPolygon( m_top_copper_shapes, pcblayer, 0, maxError, ERROR_INSIDE );
+        else
+            aTrack->TransformShapeToPolygon( m_bottom_copper_shapes, pcblayer, 0, maxError, ERROR_INSIDE );
+    }
     else
-        aTrack->TransformShapeToPolygon( m_bottom_copper_shapes, pcblayer, 0, maxError, ERROR_INSIDE );
+        m_pcbModel->AddTrackSegment( aTrack, aOrigin );
 
     return true;
 }

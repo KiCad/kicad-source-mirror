@@ -83,8 +83,14 @@ public:
     // add a pad hole or slot (must be in final position)
     bool AddPadHole( const PAD* aPad, const VECTOR2D& aOrigin );
 
-    // add a pad/via shape (must be in final position)
+    // add a pad shape (must be in final position)
     bool AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin );
+
+    // add a via shape
+    bool AddViaShape( const PCB_VIA* aVia, const VECTOR2D& aOrigin );
+
+    // add a track segment shape (do not use it for track arcs)
+    bool AddTrackSegment( const PCB_TRACK* aTrack, const VECTOR2D& aOrigin );
 
     // add a set of polygons (must be in final position) on top or bottom of the board as copper
     bool AddCopperPolygonShapes( const SHAPE_POLY_SET* aPolyShapes, bool aOnTop,

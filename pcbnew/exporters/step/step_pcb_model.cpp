@@ -38,6 +38,7 @@
 
 #include <footprint.h>
 #include <pad.h>
+#include <pcb_track.h>
 #include <kiplatform/io.h>
 #include <string_utils.h>
 #include <build_version.h>
@@ -251,6 +252,47 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin )
 
     if( !success )  // Error
         ReportMessage( wxT( "OCC error adding pad/via polygon.\n" ) );
+
+    return success;
+}
+
+
+bool STEP_PCB_MODEL::AddViaShape( const PCB_VIA* aVia, const VECTOR2D& aOrigin )
+{
+    // A via is very similar to a round pad. So, for now, used AddPadHole() to
+    // create a via+hole shape
+    PAD dummy( nullptr );
+    int hole = aVia->GetDrillValue();
+    dummy.SetDrillSize( VECTOR2I( hole, hole ) );
+    dummy.SetPosition( aVia->GetStart() );
+    dummy.SetSize( VECTOR2I( aVia->GetWidth(), aVia->GetWidth() ) );
+
+    if( AddPadHole( &dummy, aOrigin ) )
+    {
+        if( !AddPadShape( &dummy, aOrigin ) )
+            return false;
+    }
+
+    return true;
+}
+
+
+bool STEP_PCB_MODEL::AddTrackSegment( const PCB_TRACK* aTrack, const VECTOR2D& aOrigin )
+{
+    PCB_LAYER_ID pcblayer = aTrack->GetLayer();
+
+    if( pcblayer != F_Cu && pcblayer != B_Cu )
+        return false;
+
+    TopoDS_Shape shape;
+    double zposition = pcblayer == F_Cu ? m_boardThickness : -m_copperThickness;
+
+    bool success = MakeShapeAsThickSegment( shape, aTrack->GetStart(), aTrack->GetEnd(),
+                                            aTrack->GetWidth(), m_copperThickness,
+                                            zposition, aOrigin );
+
+    if( success )
+        m_board_copper_tracks.push_back( shape );
 
     return success;
 }
@@ -549,11 +591,20 @@ bool STEP_PCB_MODEL::MakeShapeAsThickSegment( TopoDS_Shape& aShape,
     BRepBuilderAPI_MakeWire wire;
     bool success = true;
 
+    // Short segments (distance between end points < m_mergeOCCMaxDist(in mm)) must be
+    // skipped because OCC merge end points, and a null shape is created
+    bool short_seg = pcbIUScale.IUTomm( len ) <= m_mergeOCCMaxDist;
+
     try
     {
         TopoDS_Edge edge;
-        edge = BRepBuilderAPI_MakeEdge( coords3D[0], coords3D[1] );
-        wire.Add( edge );
+
+
+        if( !short_seg ) // Do not export a too short segment
+        {
+            edge = BRepBuilderAPI_MakeEdge( coords3D[0], coords3D[1] );
+            wire.Add( edge );
+        }
 
         Handle(Geom_TrimmedCurve) arcOfCircle = GC_MakeArcOfCircle( coords3D[1], // start point
                                                                     coords3D[2], // aux point
@@ -562,8 +613,11 @@ bool STEP_PCB_MODEL::MakeShapeAsThickSegment( TopoDS_Shape& aShape,
         edge = BRepBuilderAPI_MakeEdge( arcOfCircle );
         wire.Add( edge );
 
-        edge = BRepBuilderAPI_MakeEdge( coords3D[3], coords3D[4] );
-        wire.Add( edge );
+        if( !short_seg ) // Do not export a too short segment
+        {
+            edge = BRepBuilderAPI_MakeEdge( coords3D[3], coords3D[4] );
+            wire.Add( edge );
+        }
 
         Handle(Geom_TrimmedCurve) arcOfCircle2 = GC_MakeArcOfCircle( coords3D[4], // start point
                                                                      coords3D[5], // aux point
