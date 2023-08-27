@@ -762,19 +762,22 @@ void PANEL_SYM_LIB_TABLE::onConvertLegacyLibraries( wxCommandEvent& event )
         selectedRows.push_back( m_cur_grid->GetGridCursorRow() );
 
     wxArrayInt legacyRows;
-    wxString   legacyType = SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_LEGACY );
+    wxString   databaseType = SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_DATABASE );
     wxString   kicadType = SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_KICAD );
     wxString   msg;
 
     for( int row : selectedRows )
     {
-        if( m_cur_grid->GetCellValue( row, COL_TYPE ) == legacyType )
+        if( m_cur_grid->GetCellValue( row, COL_TYPE ) != databaseType && 
+            m_cur_grid->GetCellValue( row, COL_TYPE ) != kicadType )
+        {
             legacyRows.push_back( row );
+        }
     }
 
     if( legacyRows.size() <= 0 )
     {
-        wxMessageBox( _( "Select one or more rows containing libraries in Legacy format (*.lib) "
+        wxMessageBox( _( "Select one or more rows containing libraries "
                          "to save as current KiCad format (*.kicad_sym)." ) );
         return;
     }
@@ -788,7 +791,7 @@ void PANEL_SYM_LIB_TABLE::onConvertLegacyLibraries( wxCommandEvent& event )
         }
         else
         {
-            msg.Printf( _( "Save %d Legacy format libraries as current KiCad format (*.kicad_sym) "
+            msg.Printf( _( "Save %d libraries as current KiCad format (*.kicad_sym) "
                            "and replace legacy entries in table?" ),
                         (int) legacyRows.size() );
         }
@@ -828,7 +831,10 @@ void PANEL_SYM_LIB_TABLE::onConvertLegacyLibraries( wxCommandEvent& event )
             }
         }
 
-        if( convertLibrary( libName, legacyLib.GetFullPath(), newLib.GetFullPath() ) )
+        wxString options = m_cur_grid->GetCellValue( row, COL_OPTIONS );
+        std::unique_ptr<STRING_UTF8_MAP> props( LIB_TABLE::ParseOptions( options.ToStdString() ) );
+
+        if( convertLibrary( props.get(), legacyLib.GetFullPath(), newLib.GetFullPath() ) )
         {
             relPath = NormalizePath( newLib.GetFullPath(), &Pgm().GetLocalEnvVariables(),
                                      m_project );
@@ -850,10 +856,15 @@ void PANEL_SYM_LIB_TABLE::onConvertLegacyLibraries( wxCommandEvent& event )
 }
 
 
-bool PANEL_SYM_LIB_TABLE::convertLibrary( const wxString& aLibrary, const wxString& legacyFilepath,
-                                          const wxString& newFilepath )
+bool PANEL_SYM_LIB_TABLE::convertLibrary( STRING_UTF8_MAP* aOldFileProps, const wxString& aOldFilePath,
+                                          const wxString& aNewFilepath )
 {
-    SCH_PLUGIN::SCH_PLUGIN_RELEASER    legacyPI( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
+    SCH_IO_MGR::SCH_FILE_T oldFileType = SCH_IO_MGR::GuessPluginTypeFromLibPath( aOldFilePath );
+
+    if( oldFileType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
+        return false;
+
+    SCH_PLUGIN::SCH_PLUGIN_RELEASER    oldFilePI( SCH_IO_MGR::FindPlugin( oldFileType ) );
     SCH_PLUGIN::SCH_PLUGIN_RELEASER    kicadPI( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
     std::vector<LIB_SYMBOL*>           symbols;
     std::vector<LIB_SYMBOL*>           newSymbols;
@@ -862,7 +873,7 @@ bool PANEL_SYM_LIB_TABLE::convertLibrary( const wxString& aLibrary, const wxStri
     try
     {
         // Write a stub file; SaveSymbol() expects something to be there already.
-        FILE_OUTPUTFORMATTER* formatter = new FILE_OUTPUTFORMATTER( newFilepath );
+        FILE_OUTPUTFORMATTER* formatter = new FILE_OUTPUTFORMATTER( aNewFilepath );
 
         formatter->Print( 0, "(kicad_symbol_lib (version %d) (generator kicad_converter))",
                           SEXPR_SYMBOL_LIB_FILE_VERSION );
@@ -870,7 +881,7 @@ bool PANEL_SYM_LIB_TABLE::convertLibrary( const wxString& aLibrary, const wxStri
         // This will write the file
         delete formatter;
 
-        legacyPI->EnumerateSymbolLib( symbols, legacyFilepath );
+        oldFilePI->EnumerateSymbolLib( symbols, aOldFilePath, aOldFileProps );
 
         // Copy non-aliases first so we can build a map from symbols to newSymbols
         for( LIB_SYMBOL* symbol : symbols )
@@ -899,7 +910,7 @@ bool PANEL_SYM_LIB_TABLE::convertLibrary( const wxString& aLibrary, const wxStri
         // Finally write out newSymbols
         for( LIB_SYMBOL* symbol : newSymbols )
         {
-            kicadPI->SaveSymbol( newFilepath, symbol );
+            kicadPI->SaveSymbol( aNewFilepath, symbol );
         }
     }
     catch( ... )
