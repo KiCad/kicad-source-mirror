@@ -884,14 +884,8 @@ void FOOTPRINT_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     wxAuiToolBarItem* toolOpt = m_mainToolBar->FindTool( ID_FPVIEWER_AUTOZOOM_TOOL );
     cfg->m_FootprintViewerAutoZoomOnSelect = ( toolOpt->GetState() & wxAUI_BUTTON_STATE_CHECKED );
-
-    if( m_libListWidth && m_libList )
-        m_libListWidth = m_libList->GetSize().x;
-
-    m_fpListWidth = m_fpList->GetSize().x;
-
-    cfg->m_FootprintViewerLibListWidth = m_libListWidth;
-    cfg->m_FootprintViewerFPListWidth = m_fpListWidth;
+    cfg->m_FootprintViewerLibListWidth = m_libList->GetSize().x;
+    cfg->m_FootprintViewerFPListWidth = m_fpList->GetSize().x;
 
 }
 
