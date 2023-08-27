@@ -241,7 +241,7 @@ wxString DatabaseLibFileWildcard()
 
 wxString AllSymbolLibFilesWildcard()
 {
-    return _( "All KiCad symbol library files" )
+    return _( "All symbol library files" )
             + AddFileExtListToFilter( { KiCadSymbolLibFileExtension,
                                         DatabaseLibraryFileExtension,
                                         "lib" } );
@@ -292,6 +292,13 @@ wxString KiCadSchematicFileWildcard()
 wxString AltiumSchematicFileWildcard()
 {
     return _( "Altium schematic files" ) + AddFileExtListToFilter( { "SchDoc" } );
+}
+
+
+wxString CadstarPartsLibraryFileWildcard()
+{
+    return _( "CADSTAR Parts Library files" )
+            + AddFileExtListToFilter( { CadstarPartsLibraryFileExtension } );
 }
 
 

@@ -536,7 +536,8 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     wxString wildcards = AllSymbolLibFilesWildcard()
                             + "|" + KiCadSymbolLibFileWildcard()
                             + "|" + LegacySymbolLibFileWildcard()
-                            + "|" + DatabaseLibFileWildcard();
+                            + "|" + DatabaseLibFileWildcard()
+                            + "|" + CadstarPartsLibraryFileWildcard();
 
     EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
 

@@ -224,6 +224,7 @@ extern wxString HtmlFileWildcard();
 extern wxString CsvFileWildcard();
 extern wxString PcbFileWildcard();
 extern wxString AltiumSchematicFileWildcard();
+extern wxString CadstarPartsLibraryFileWildcard();
 extern wxString CadstarSchematicArchiveFileWildcard();
 extern wxString CadstarArchiveFilesWildcard();
 extern wxString EagleSchematicFileWildcard();
