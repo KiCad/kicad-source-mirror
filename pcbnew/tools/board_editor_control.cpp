@@ -293,6 +293,7 @@ int BOARD_EDITOR_CONTROL::PageSettings( const TOOL_EVENT& aEvent )
     ITEM_PICKER         wrapper( nullptr, undoItem, UNDO_REDO::PAGESETTINGS );
 
     undoCmd.PushItem( wrapper );
+    undoCmd.SetDescription( _( "Page Settings" ) );
     m_frame->SaveCopyInUndoList( undoCmd, UNDO_REDO::PAGESETTINGS );
 
     DIALOG_PAGES_SETTINGS dlg( m_frame, pcbIUScale.IU_PER_MILS, VECTOR2I( MAX_PAGE_SIZE_PCBNEW_MILS,

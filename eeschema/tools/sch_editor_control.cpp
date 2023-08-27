@@ -179,6 +179,7 @@ int SCH_EDITOR_CONTROL::PageSetup( const TOOL_EVENT& aEvent )
     ITEM_PICKER         wrapper( m_frame->GetScreen(), undoItem, UNDO_REDO::PAGESETTINGS );
 
     undoCmd.PushItem( wrapper );
+    undoCmd.SetDescription( _( "Page Settings" ) );
     m_frame->SaveCopyInUndoList( undoCmd, UNDO_REDO::PAGESETTINGS, false, false );
 
     DIALOG_EESCHEMA_PAGE_SETTINGS dlg( m_frame, VECTOR2I( MAX_PAGE_SIZE_EESCHEMA_MILS,
