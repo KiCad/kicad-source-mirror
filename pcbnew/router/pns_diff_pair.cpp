@@ -424,8 +424,8 @@ void DP_GATEWAYS::BuildFromPrimitivePair( const DP_PRIMITIVE_PAIR& aPair, bool a
 {
     VECTOR2I majorDirection;
     VECTOR2I p0_p, p0_n;
-    int orthoFanDistance;
-    int diagFanDistance;
+    int orthoFanDistance = 0;
+    int diagFanDistance = 0;
     const SHAPE* shP = nullptr;
 
     if( aPair.PrimP() == nullptr )

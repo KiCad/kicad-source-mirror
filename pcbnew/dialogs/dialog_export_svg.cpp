@@ -292,6 +292,7 @@ void DIALOG_EXPORT_SVG::ExportSVGFile( bool aOnlyOneFile )
     svgPlotOptions.m_colorTheme = "";   // will use default
     svgPlotOptions.m_mirror = m_printMirror;
     svgPlotOptions.m_plotFrame = svgPlotOptions.m_pageSizeMode == 0;
+    svgPlotOptions.m_drillShapeOption = 2;  // actual size hole.
 
     for( LSEQ seq = all_selected.Seq();  seq;  ++seq )
     {

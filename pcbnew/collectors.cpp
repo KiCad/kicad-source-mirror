@@ -431,6 +431,8 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
         }
         else if( aTestItem->Type() == PCB_FOOTPRINT_T )
         {
+            wxCHECK( footprint, INSPECT_RESULT::CONTINUE );
+
             if( footprint->HitTest( m_refPos, accuracy )
                     && footprint->HitTestAccurate( m_refPos, accuracy ) )
             {

@@ -41,7 +41,7 @@ public:
         if( aInitialItem )
             m_items.emplace_back( aInitialItem );
 
-        if( aBecomeOwner )
+        if( aBecomeOwner && aInitialItem )
             aInitialItem->SetOwner( this );
     }
 

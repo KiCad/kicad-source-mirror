@@ -124,8 +124,8 @@ bool ROUTER::RoutingInProgress() const
 
 const ITEM_SET ROUTER::QueryHoverItems( const VECTOR2I& aP, bool aUseClearance )
 {
-    NODE* node;
-    int   clearance;
+    NODE* node = nullptr;
+    int   clearance = 0;
 
     if( m_state == IDLE || m_placer == nullptr )
     {
@@ -154,12 +154,15 @@ const ITEM_SET ROUTER::QueryHoverItems( const VECTOR2I& aP, bool aUseClearance )
 
         opts.m_differentNetsOnly = false;
         opts.m_overrideClearance = clearance;
-        node->QueryColliding( &test, obs, opts );
 
         PNS::ITEM_SET ret;
 
-            for( const OBSTACLE& obstacle : obs )
-                ret.Add( obstacle.m_item, false );
+        wxCHECK( node, ret );
+
+        node->QueryColliding( &test, obs, opts );
+
+        for( const OBSTACLE& obstacle : obs )
+            ret.Add( obstacle.m_item, false );
 
         return ret;
     }
