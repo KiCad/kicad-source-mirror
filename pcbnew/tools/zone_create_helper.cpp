@@ -117,8 +117,6 @@ std::unique_ptr<ZONE> ZONE_CREATE_HELPER::createNewZone( bool aKeepout )
 
     if( m_params.m_mode != ZONE_MODE::GRAPHIC_POLYGON )
     {
-        // Get the current default settings for zones
-
         // Show options dialog
         int dialogResult;
 
@@ -177,16 +175,15 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE& aZone, const ZONE& aCutout )
     SHAPE_POLY_SET originalOutline( *aZone.Outline() );
     originalOutline.BooleanSubtract( *aCutout.Outline(), SHAPE_POLY_SET::PM_FAST );
 
-    // After substracting the hole, originalOutline can have more than one
-    // main outline.
-    // But a zone can have only one main outline, so create as many zones as
-    // originalOutline contains main outlines:
+    // After substracting the hole, originalOutline can have more than one main outline.
+    // But a zone can have only one main outline, so create as many zones as originalOutline
+    // contains main outlines:
     for( int outline = 0; outline < originalOutline.OutlineCount(); outline++ )
     {
         auto newZoneOutline = new SHAPE_POLY_SET;
         newZoneOutline->AddOutline( originalOutline.Outline( outline ) );
 
-        // Add holes (if any) to thez new zone outline:
+        // Add holes (if any) to the new zone outline:
         for (int hole = 0; hole < originalOutline.HoleCount( outline ) ; hole++ )
             newZoneOutline->AddHole( originalOutline.CHole( outline, hole ) );
 
@@ -200,9 +197,6 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE& aZone, const ZONE& aCutout )
     }
 
     commit.Remove( &aZone );
-
-    // TODO Refill zones when KiCad supports auto re-fill
-
     commit.Push( _( "Add Zone Cutout" ) );
 
     // Select the new zone and set it as the source for the next cutout
@@ -249,11 +243,7 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE> aZone )
             PCB_SHAPE*    poly = new PCB_SHAPE( m_tool.m_frame->GetModel() );
 
             poly->SetShape( SHAPE_T::POLY );
-
-            if( layer == Edge_Cuts || layer == F_CrtYd || layer == B_CrtYd )
-                poly->SetFilled( false );
-            else
-                poly->SetFilled( true );
+            poly->SetFilled( layer != Edge_Cuts && layer != F_CrtYd && layer != B_CrtYd );
 
             poly->SetStroke( STROKE_PARAMS( board->GetDesignSettings().GetLineThickness( layer ),
                                             PLOT_DASH_TYPE::SOLID ) );
@@ -261,9 +251,9 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE> aZone )
             poly->SetPolyShape( *aZone->Outline() );
 
             commit.Add( poly );
-            m_tool.GetManager()->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, poly );
-
             commit.Push( _( "Add Polygon" ) );
+
+            m_tool.GetManager()->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, poly );
             break;
         }
     }
@@ -273,7 +263,6 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE> aZone )
 bool ZONE_CREATE_HELPER::OnFirstPoint( POLYGON_GEOM_MANAGER& aMgr )
 {
     // if we don't have a zone, create one
-    // the user's choice here can affect things like the colour of the preview
     if( !m_zone )
     {
         if( m_params.m_sourceZone )
@@ -323,17 +312,16 @@ void ZONE_CREATE_HELPER::OnComplete( const POLYGON_GEOM_MANAGER& aMgr )
     }
     else
     {
-        // if m_params.m_mode == DRAWING_TOOL::ZONE_MODE::CUTOUT, m_zone
-        // will be merged to the existing zone as a new hole.
+        // if m_params.m_mode == DRAWING_TOOL::ZONE_MODE::CUTOUT, m_zone will be merged to the
+        // existing zone as a new hole.
         m_zone->Outline()->NewOutline();
         auto* outline = m_zone->Outline();
 
         for( int i = 0; i < finalPoints.PointCount(); ++i )
             outline->Append( finalPoints.CPoint( i ) );
 
-        // In DEG45 mode, we may have intermediate points in the leader that should be
-        // included as they are shown in the preview.  These typically maintain the
-        // 45 constraint
+        // In DEG45 mode, we may have intermediate points in the leader that should be included
+        // as they are shown in the preview.  These typically maintain the 45 constraint
         if( aMgr.GetLeaderMode() == POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45 )
         {
             const SHAPE_LINE_CHAIN leaderPts = aMgr.GetLeaderLinePoints();
