@@ -261,6 +261,14 @@ void CADSTAR_SCH_ARCHIVE_PLUGIN::ensureLoadedLibrary( const wxString& aLibraryPa
     if( aProperties->count( "csa" ) )
     {
         csafn = wxFileName( aProperties->at( "csa" ) );
+
+        if( !csafn.IsAbsolute() )
+        {
+            wxFileName libDir( aLibraryPath );
+            libDir.ClearExt();
+            libDir.SetName( "" );
+            csafn.Normalize( wxPATH_NORM_ALL, libDir.GetAbsolutePath() );
+        }
     }
     else
     {
