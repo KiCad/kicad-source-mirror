@@ -122,19 +122,16 @@ std::unique_ptr<ZONE> ZONE_CREATE_HELPER::createNewZone( bool aKeepout )
 
         if( m_params.m_keepout )
             dialogResult = InvokeRuleAreaEditor( frame, &zoneInfo );
+        else if( ( zoneInfo.m_Layers & LSET::AllCuMask() ).any() )
+            dialogResult = InvokeCopperZonesEditor( frame, &zoneInfo );
         else
-        {
-            // TODO(JE) combine these dialogs?
-            if( ( zoneInfo.m_Layers & LSET::AllCuMask() ).any() )
-                dialogResult = InvokeCopperZonesEditor( frame, &zoneInfo );
-            else
-                dialogResult = InvokeNonCopperZonesEditor( frame, &zoneInfo );
-        }
+            dialogResult = InvokeNonCopperZonesEditor( frame, &zoneInfo );
 
         if( dialogResult == wxID_CANCEL )
             return nullptr;
 
         controls->WarpMouseCursor( controls->GetCursorPosition(), true );
+        frame->GetCanvas()->SetFocus();
     }
 
     wxASSERT( !m_tool.m_isFootprintEditor || ( parent->Type() == PCB_FOOTPRINT_T ) );
@@ -294,6 +291,14 @@ bool ZONE_CREATE_HELPER::OnFirstPoint( POLYGON_GEOM_MANAGER& aMgr )
 
 void ZONE_CREATE_HELPER::OnGeometryChange( const POLYGON_GEOM_MANAGER& aMgr )
 {
+    // Handle a cancel-interactive
+    if( m_zone && !aMgr.IsPolygonInProgress() )
+    {
+        m_zone = nullptr;
+        m_parentView.SetVisible( &m_previewItem, false );
+        return;
+    }
+
     // send the points to the preview item
     m_previewItem.SetPoints( aMgr.GetLockedInPoints(), aMgr.GetLeaderLinePoints(),
                              aMgr.GetLoopLinePoints() );

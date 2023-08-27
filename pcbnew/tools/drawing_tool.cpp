@@ -2582,9 +2582,10 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
             }
             else
             {
+                m_frame->PopTool( aEvent );
+
                 // We've handled the cancel event.  Don't cancel other tools
                 evt->SetPassEvent( false );
-                m_frame->PopTool( aEvent );
                 break;
             }
         }
