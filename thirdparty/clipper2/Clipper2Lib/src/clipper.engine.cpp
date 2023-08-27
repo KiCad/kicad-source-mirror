@@ -1,6 +1,6 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Date      :  5 August 2023                                                   *
+* Date      :  27 August 2023                                                  *
 * Website   :  http://www.angusj.com                                           *
 * Copyright :  Angus Johnson 2010-2023                                         *
 * Purpose   :  This is the main polygon clipping module                        *
@@ -2183,6 +2183,16 @@ namespace Clipper2Lib {
     } 
   }
 
+  void MoveSplits(OutRec* fromOr, OutRec* toOr)
+  {
+    if (!fromOr->splits) return;
+    if (!toOr->splits) toOr->splits = new OutRecList();
+    OutRecList::iterator orIter = fromOr->splits->begin();
+    for (; orIter != fromOr->splits->end(); ++orIter)
+      toOr->splits->push_back(*orIter);
+    fromOr->splits->clear();
+  }
+
 
   void ClipperBase::ProcessHorzJoins()
   {
@@ -2203,25 +2213,36 @@ namespace Clipper2Lib {
         or2 = NewOutRec();
         or2->pts = op1b;
         FixOutRecPts(or2);
+
+        //if or1->pts has moved to or2 then update or1->pts!!
         if (or1->pts->outrec == or2)
         {
           or1->pts = j.op1;
           or1->pts->outrec = or1;
         }
 
-        if (using_polytree_) //#498, #520, #584, D#576
+        if (using_polytree_) //#498, #520, #584, D#576, #618
         {
           if (Path1InsidePath2(or1->pts, or2->pts))
           {
-            or2->owner = or1->owner;
-            SetOwner(or1, or2);
+            //swap or1's & or2's pts
+            OutPt* tmp = or1->pts;
+            or1->pts = or2->pts;
+            or2->pts = tmp;
+            FixOutRecPts(or1);
+            FixOutRecPts(or2);
+            //or2 is now inside or1
+            or2->owner = or1;
+          }
+          else if (Path1InsidePath2(or2->pts, or1->pts))
+          {
+            or2->owner = or1;
           }
           else
-          {
-            SetOwner(or2, or1);
-            if (!or1->splits) or1->splits = new OutRecList();
-            or1->splits->push_back(or2);
-          }
+            or2->owner = or1->owner;
+
+          if (!or1->splits) or1->splits = new OutRecList();
+          or1->splits->push_back(or2);
         }
         else
           or2->owner = or1;
@@ -2230,7 +2251,10 @@ namespace Clipper2Lib {
       {
         or2->pts = nullptr;
         if (using_polytree_)
+        {
           SetOwner(or2, or1);
+          MoveSplits(or2, or1); //#618
+        }
         else
           or2->owner = or1;
       }
@@ -2859,7 +2883,7 @@ namespace Clipper2Lib {
     for (auto split : *splits)
     {
       split = GetRealOutRec(split);
-      if(!split || split->recursive_split == outrec) continue;
+      if(!split || split == outrec || split->recursive_split == outrec) continue;
       split->recursive_split = outrec; // prevent infinite loops
 
       if (split->splits && CheckSplitOwner(outrec, split->splits)) 
