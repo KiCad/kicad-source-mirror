@@ -601,7 +601,9 @@ void DXF_IMPORT_PLUGIN::addEllipse( const DL_EllipseData& aData )
     if( startAngle > endAngle )
         endAngle += ANGLE_360;
 
-    // TODO: testcases for negative extrusion vector; handle it here
+    // Angles are relative to major axis
+    startAngle -= EDA_ANGLE( major );
+    endAngle -= EDA_ANGLE( major );
 
     if( aData.ratio == 1.0 )
     {
@@ -621,6 +623,8 @@ void DXF_IMPORT_PLUGIN::addEllipse( const DL_EllipseData& aData )
             return;
         }
     }
+
+    // TODO: testcases for negative extrusion vector; handle it here
 
     std::vector<BEZIER<double>> splines;
     ELLIPSE<double> ellipse( center, major, aData.ratio, startAngle, endAngle );
