@@ -301,7 +301,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         }
         else if( status == UNDO_REDO::PAGESETTINGS )
         {
-            SCH_SHEET_PATH& undoSheet = *m_schematic->GetSheets().FindSheetForScreen( screen );
+            SCH_SHEET_PATH undoSheet = m_schematic->GetSheets().FindSheetForScreen( screen );
 
             if( GetCurrentSheet() != undoSheet )
             {
@@ -339,8 +339,8 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
                     if( field->GetId() == REFERENCE_FIELD )
                     {
-                        symbol->SetRef( m_schematic->GetSheets().FindSheetForScreen( screen ),
-                                        field->GetText() );
+                        SCH_SHEET_PATH sheet = m_schematic->GetSheets().FindSheetForScreen( screen );
+                        symbol->SetRef( &sheet, field->GetText() );
                     }
                 }
 

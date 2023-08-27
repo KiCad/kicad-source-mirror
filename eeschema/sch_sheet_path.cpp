@@ -1045,15 +1045,15 @@ SCH_SHEET_PATH* SCH_SHEET_LIST::FindSheetForPath( const SCH_SHEET_PATH* aPath )
 }
 
 
-SCH_SHEET_PATH* SCH_SHEET_LIST::FindSheetForScreen( const SCH_SCREEN* aScreen )
+SCH_SHEET_PATH SCH_SHEET_LIST::FindSheetForScreen( const SCH_SCREEN* aScreen )
 {
     for( SCH_SHEET_PATH& sheetpath : *this )
     {
         if( sheetpath.LastScreen() == aScreen )
-            return &sheetpath;
+            return sheetpath;
     }
 
-    return nullptr;
+    return SCH_SHEET_PATH();
 }
 
 

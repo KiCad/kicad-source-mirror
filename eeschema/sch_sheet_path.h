@@ -573,10 +573,10 @@ public:
     SCH_SHEET_PATH* FindSheetForPath( const SCH_SHEET_PATH* aPath );
 
     /**
-     * Return a pointer to the first #SCH_SHEET_PATH object (not necessarily the only one) using
-     * a particular screen.
+     * Return the first #SCH_SHEET_PATH object (not necessarily the only one) using a particular
+     * screen.
      */
-    SCH_SHEET_PATH* FindSheetForScreen( const SCH_SCREEN* aScreen );
+    SCH_SHEET_PATH FindSheetForScreen( const SCH_SCREEN* aScreen );
 
     /**
      * Return a #SCH_SHEET_LIST with a copy of all the #SCH_SHEET_PATH using a particular screen.
