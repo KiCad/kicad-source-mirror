@@ -1216,6 +1216,8 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
 
     if( dlg.ShowModal() == wxID_OK )
     {
+        // Update our grids that are cached in the tool
+        m_toolManager->ResetTools( TOOL_BASE::REDRAW );
         Pgm().GetSettingsManager().Save();
         dlg.Kiway().CommonSettingsChanged( false, false );
     }
