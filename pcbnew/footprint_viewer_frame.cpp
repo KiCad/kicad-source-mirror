@@ -1066,7 +1066,7 @@ bool FOOTPRINT_VIEWER_FRAME::ShowModal( wxString* aFootprint, wxWindow* aParent 
                 if( WX_INFOBAR* infobar = GetInfoBar() )
                 {
                     button = new wxHyperlinkCtrl( infobar, wxID_ANY,
-                                                                    _( "Manage symol libraries" ),
+                                                                    _( "Manage symbol libraries" ),
                                                                     wxEmptyString );
                     button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent & aEvent )>(
                             [=]( wxHyperlinkEvent& aEvent )

@@ -35,6 +35,7 @@
 #include <schematic.h>
 #include <sch_plugins/kicad/sch_sexpr_plugin.h>
 #include <wildcards_and_files_ext.h>
+#include <wx_filename.h>
 
 
 const wxString CADSTAR_SCH_ARCHIVE_PLUGIN::GetName() const
@@ -267,7 +268,8 @@ void CADSTAR_SCH_ARCHIVE_PLUGIN::ensureLoadedLibrary( const wxString& aLibraryPa
             wxFileName libDir( aLibraryPath );
             libDir.ClearExt();
             libDir.SetName( "" );
-            csafn.Normalize( wxPATH_NORM_ALL, libDir.GetAbsolutePath() );
+            // wxPATH_NORM_ALL is deprecated in wxWidgets 3.1, so use our flags
+            csafn.Normalize( FN_NORMALIZE_FLAGS, libDir.GetAbsolutePath() );
         }
     }
     else
