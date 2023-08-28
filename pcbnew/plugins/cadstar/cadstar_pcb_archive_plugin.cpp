@@ -185,23 +185,6 @@ void CADSTAR_PCB_ARCHIVE_PLUGIN::FootprintEnumerate( wxArrayString&         aFoo
 }
 
 
-const FOOTPRINT*
-CADSTAR_PCB_ARCHIVE_PLUGIN::GetEnumeratedFootprint( const wxString&        aLibraryPath,
-                                                    const wxString&        aFootprintName,
-                                                    const STRING_UTF8_MAP* aProperties )
-{
-    ensureLoadedLibrary( aLibraryPath );
-
-    if( !m_cache.count( aLibraryPath ) )
-        return nullptr;
-
-    if( !m_cache.at( aLibraryPath ).count( aFootprintName ) )
-        return nullptr;
-
-    return m_cache.at( aLibraryPath ).at( aFootprintName ).get();
-}
-
-
 bool CADSTAR_PCB_ARCHIVE_PLUGIN::FootprintExists( const wxString&        aLibraryPath,
                                                   const wxString&        aFootprintName,
                                                   const STRING_UTF8_MAP* aProperties )
@@ -229,6 +212,9 @@ FOOTPRINT* CADSTAR_PCB_ARCHIVE_PLUGIN::FootprintLoad( const wxString&        aLi
         return nullptr;
 
     if( !m_cache.at( aLibraryPath ).count( aFootprintName ) )
+        return nullptr;
+
+    if( !m_cache.at( aLibraryPath ).at( aFootprintName ) )
         return nullptr;
 
     return static_cast<FOOTPRINT*>( m_cache.at( aLibraryPath ).at( aFootprintName )->Duplicate() );

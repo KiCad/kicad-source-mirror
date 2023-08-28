@@ -78,9 +78,7 @@ public:
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
                              bool aBestEfforts, const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
-    const FOOTPRINT* GetEnumeratedFootprint( const wxString& aLibraryPath,
-                                             const wxString& aFootprintName,
-                                             const STRING_UTF8_MAP* aProperties = nullptr ) override;
+    // default implementation of GetEnumeratedFootprint is fine (call FootprintLoad)
 
     bool FootprintExists( const wxString& aLibraryPath, const wxString& aFootprintName,
                           const STRING_UTF8_MAP* aProperties = nullptr ) override;
