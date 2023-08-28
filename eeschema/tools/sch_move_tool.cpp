@@ -1619,68 +1619,69 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
                 getConnectedDragItems( &commit, line, pts[ii], drag_items );
                 std::set<EDA_ITEM*> unique_items( drag_items.begin(), drag_items.end() );
 
-                VECTOR2I gridpt = grid.AlignGrid( pts[ii], selectionGrid ) - pts[ii];
+                VECTOR2I delta = grid.AlignGrid( pts[ii], selectionGrid ) - pts[ii];
 
-                if( gridpt != VECTOR2I( 0, 0 ) )
+                if( delta != VECTOR2I( 0, 0 ) )
                 {
                     for( EDA_ITEM* dragItem : unique_items )
                     {
                         if( dragItem->GetParent() && dragItem->GetParent()->IsSelected() )
                             continue;
 
-                        doMoveItem( dragItem, gridpt );
+                        doMoveItem( dragItem, delta );
                     }
                 }
             }
         }
         else if( item->Type() == SCH_FIELD_T || item->Type() == SCH_TEXT_T )
         {
-            VECTOR2I gridpt =
-                    grid.AlignGrid( item->GetPosition(), selectionGrid ) - item->GetPosition();
+            VECTOR2I delta = grid.AlignGrid( item->GetPosition(), selectionGrid ) - item->GetPosition();
 
-            if( gridpt != VECTOR2I( 0, 0 ) )
-                doMoveItem( item, gridpt );
+            if( delta != VECTOR2I( 0, 0 ) )
+                doMoveItem( item, delta );
         }
         else if( item->Type() == SCH_SHEET_T )
         {
             SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
             VECTOR2I   topLeft = sheet->GetPosition();
             VECTOR2I   bottomRight = topLeft + sheet->GetSize();
-            VECTOR2I   tl_gridpt = grid.AlignGrid( topLeft, selectionGrid ) - topLeft;
-            VECTOR2I   br_gridpt = grid.AlignGrid( bottomRight, selectionGrid ) - bottomRight;
+            VECTOR2I   tl_delta = grid.AlignGrid( topLeft, selectionGrid ) - topLeft;
+            VECTOR2I   br_delta = grid.AlignGrid( bottomRight, selectionGrid ) - bottomRight;
 
-            if( tl_gridpt != VECTOR2I( 0, 0 ) || br_gridpt != VECTOR2I( 0, 0 ) )
+            if( tl_delta != VECTOR2I( 0, 0 ) || br_delta != VECTOR2I( 0, 0 ) )
             {
-                doMoveItem( sheet, tl_gridpt );
+                doMoveItem( sheet, tl_delta );
 
-                VECTOR2I newSize = (VECTOR2I) sheet->GetSize() - tl_gridpt + br_gridpt;
+                VECTOR2I newSize = (VECTOR2I) sheet->GetSize() - tl_delta + br_delta;
                 sheet->SetSize( VECTOR2I( newSize.x, newSize.y ) );
                 updateItem( sheet, true );
+            }
 
-                for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+            for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+            {
+                VECTOR2I newPos;
+
+                if( pin->GetSide() == SHEET_SIDE::TOP || pin->GetSide() == SHEET_SIDE::LEFT )
+                    newPos = pin->GetPosition() + tl_delta;
+                else
+                    newPos = pin->GetPosition() + br_delta;
+
+                VECTOR2I delta = grid.AlignGrid( newPos, selectionGrid ) - pin->GetPosition();
+
+                if( delta != VECTOR2I( 0, 0 ) )
                 {
-                    VECTOR2I gridpt;
+                    EDA_ITEMS drag_items;
+                    getConnectedDragItems( &commit, pin, pin->GetConnectionPoints()[0],
+                                           drag_items );
 
-                    if( pin->GetSide() == SHEET_SIDE::TOP || pin->GetSide() == SHEET_SIDE::LEFT )
-                        gridpt = tl_gridpt;
-                    else
-                        gridpt = br_gridpt;
+                    doMoveItem( pin, delta );
 
-                    if( gridpt != VECTOR2I( 0, 0 ) )
+                    for( EDA_ITEM* dragItem : drag_items )
                     {
-                        EDA_ITEMS drag_items;
-                        getConnectedDragItems( &commit, pin, pin->GetConnectionPoints()[0],
-                                               drag_items );
+                        if( dragItem->GetParent() && dragItem->GetParent()->IsSelected() )
+                            continue;
 
-                        doMoveItem( pin, gridpt );
-
-                        for( EDA_ITEM* dragItem : drag_items )
-                        {
-                            if( dragItem->GetParent() && dragItem->GetParent()->IsSelected() )
-                                continue;
-
-                            doMoveItem( dragItem, gridpt );
-                        }
+                        doMoveItem( dragItem, delta );
                     }
                 }
             }
