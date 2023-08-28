@@ -259,7 +259,7 @@ void CADSTAR_SCH_ARCHIVE_PLUGIN::ensureLoadedLibrary( const wxString& aLibraryPa
     wxFileName csafn;
     wxString   fplibname = "cadstarpcblib";
 
-    if( aProperties->count( "csa" ) )
+    if( aProperties && aProperties->count( "csa" ) )
     {
         csafn = wxFileName( aProperties->at( "csa" ) );
 
@@ -281,7 +281,7 @@ void CADSTAR_SCH_ARCHIVE_PLUGIN::ensureLoadedLibrary( const wxString& aLibraryPa
         csafn.SetExt( "csa" );
     }
 
-    if( aProperties->count( "fplib" ) )
+    if( aProperties && aProperties->count( "fplib" ) )
     {
         fplibname = aProperties->at( "fplib" );
     }
