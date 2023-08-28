@@ -177,10 +177,6 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
         m_fields.back().SetText( pinMap );
 
         storeInValue = true;
-
-        // In case the storeInValue checkbox is turned off (if it's left on then we'll overwrite
-        // this field with the actual value):
-        m_fields[ VALUE_FIELD ].SetText( wxT( "${SIM.PARAMS}" ) );
     }
 
     std::string libraryFilename = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::LIBRARY_FIELD );
@@ -306,7 +302,13 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
     }
 
     if( storeInValue )
+    {
         curModel().SetIsStoredInValue( true );
+
+        // In case the storeInValue checkbox is turned off (if it's left on then we'll overwrite
+        // this field with the actual value):
+        m_fields[ VALUE_FIELD ].SetText( wxT( "${SIM.PARAMS}" ) );
+    }
 
     m_saveInValueCheckbox->SetValue( curModel().IsStoredInValue() );
 
