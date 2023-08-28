@@ -69,13 +69,6 @@ void COMMON_TOOLS::Reset( RESET_REASON aReason )
         m_grids.emplace_back( KiROUND<double, int>( gridSize ), KiROUND<double, int>( gridSize ) );
     }
 
-    double userGridX = EDA_UNIT_UTILS::UI::DoubleValueFromString( scale, EDA_UNITS::MILLIMETRES,
-                                                                  settings.user_grid_x );
-    double userGridY = EDA_UNIT_UTILS::UI::DoubleValueFromString( scale, EDA_UNITS::MILLIMETRES,
-                                                                  settings.user_grid_y );
-
-    m_grids.emplace_back( KiROUND<double, int>( userGridX ), KiROUND<double, int>( userGridY ) );
-
     OnGridChanged( false );
 }
 

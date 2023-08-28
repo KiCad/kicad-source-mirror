@@ -403,19 +403,9 @@ void DIALOG_BOARD_REANNOTATE::GetParameters()
     // Get the chosen sort grid for rounding
     m_gridIndex = m_GridChoice->GetSelection();
 
-    if( m_gridIndex >= ( int ) m_settings->m_Window.grid.sizes.size() )
-    {
-        m_sortGridx = EDA_UNIT_UTILS::UI::DoubleValueFromString(
-                pcbIUScale, EDA_UNITS::MILS, m_settings->m_Window.grid.user_grid_x );
-        m_sortGridy = EDA_UNIT_UTILS::UI::DoubleValueFromString(
-                pcbIUScale, EDA_UNITS::MILS, m_settings->m_Window.grid.user_grid_y );
-    }
-    else
-    {
-        m_sortGridx = EDA_UNIT_UTILS::UI::DoubleValueFromString(
-                pcbIUScale, EDA_UNITS::MILS, m_settings->m_Window.grid.sizes[m_gridIndex] );
-        m_sortGridy = m_sortGridx;
-    }
+    m_sortGridx = EDA_UNIT_UTILS::UI::DoubleValueFromString(
+            pcbIUScale, EDA_UNITS::MILS, m_settings->m_Window.grid.sizes[m_gridIndex] );
+    m_sortGridy = m_sortGridx;
 
     m_annotationScope = ANNOTATE_ALL;
 
