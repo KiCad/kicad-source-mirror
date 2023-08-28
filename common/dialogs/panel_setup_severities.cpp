@@ -161,16 +161,18 @@ void PANEL_SETUP_SEVERITIES::ImportSettingsFrom( std::map<int, SEVERITY>& aSetti
     {
         int errorCode = item.GetErrorCode();
 
-        if(! m_buttonMap[ errorCode ][0] )  // this entry does not actually exist
-            continue;
+        wxRadioButton* button = nullptr;
 
         switch( aSettings[ errorCode ] )
         {
-        case RPT_SEVERITY_ERROR:   m_buttonMap[ errorCode ][0]->SetValue( true ); break;
-        case RPT_SEVERITY_WARNING: m_buttonMap[ errorCode ][1]->SetValue( true ); break;
-        case RPT_SEVERITY_IGNORE:  m_buttonMap[ errorCode ][2]->SetValue( true ); break;
-        default:                                                                  break;
+        case RPT_SEVERITY_ERROR:   button = m_buttonMap[ errorCode ][0]; break;
+        case RPT_SEVERITY_WARNING: button = m_buttonMap[ errorCode ][1]; break;
+        case RPT_SEVERITY_IGNORE:  button = m_buttonMap[ errorCode ][2]; break;
+        default: break;
         }
+
+        if( button )    // this entry must actually exist
+            button->SetValue( true );
     }
 
     if( m_pinMapSpecialCase )
