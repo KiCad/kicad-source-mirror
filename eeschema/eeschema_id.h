@@ -35,6 +35,8 @@
  */
 #define MAX_UNIT_COUNT_PER_PACKAGE 676
 
+#define MAX_ALT_PIN_FUNCTION_ITEMS 1024
+
 /**
  * While it would seem that an unfold-from-bus menu with over 100 items would be
  * hard to deal with, we've already had one user who wants 256.
@@ -78,11 +80,14 @@ enum id_eeschema_frm
     ID_POPUP_SCH_UNFOLD_BUS_END = ID_POPUP_SCH_UNFOLD_BUS + MAX_BUS_UNFOLD_MENU_ITEMS,
 
     // Unit select context menus command IDs.
-    ID_POPUP_SCH_SELECT_UNIT_CMP,
+    ID_POPUP_SCH_SELECT_UNIT,
     ID_POPUP_SCH_SELECT_UNIT1,
     // ... leave room for MAX_UNIT_COUNT_PER_PACKAGE IDs ,
     // to select one unit among MAX_UNIT_COUNT_PER_PACKAGE in popup menu
-    ID_POPUP_SCH_SELECT_UNIT_SYM_MAX = ID_POPUP_SCH_SELECT_UNIT1 + MAX_UNIT_COUNT_PER_PACKAGE
+    ID_POPUP_SCH_SELECT_UNIT_END = ID_POPUP_SCH_SELECT_UNIT1 + MAX_UNIT_COUNT_PER_PACKAGE,
+
+    ID_POPUP_SCH_ALT_PIN_FUNCTION,
+    ID_POPUP_SCH_ALT_PIN_FUNCTION_END = ID_POPUP_SCH_ALT_PIN_FUNCTION + MAX_ALT_PIN_FUNCTION_ITEMS
 };
 
 

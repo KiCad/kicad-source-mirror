@@ -419,10 +419,10 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
         }
         else if( evt->Category() == TC_COMMAND && evt->Action() == TA_CHOICE_MENU_CHOICE )
         {
-            if( *evt->GetCommandId() >= ID_POPUP_SCH_SELECT_UNIT_CMP
-                && *evt->GetCommandId() <= ID_POPUP_SCH_SELECT_UNIT_SYM_MAX )
+            if( *evt->GetCommandId() >= ID_POPUP_SCH_SELECT_UNIT
+                && *evt->GetCommandId() <= ID_POPUP_SCH_SELECT_UNIT_END )
             {
-                int unit = *evt->GetCommandId() - ID_POPUP_SCH_SELECT_UNIT_CMP;
+                int unit = *evt->GetCommandId() - ID_POPUP_SCH_SELECT_UNIT;
 
                 if( symbol )
                 {

@@ -110,6 +110,20 @@ SELECTION_CONDITION EE_CONDITIONS::SingleMultiUnitSymbol = []( const SELECTION& 
 };
 
 
+SELECTION_CONDITION EE_CONDITIONS::SingleMultiFunctionPin = []( const SELECTION& aSel )
+{
+    if( aSel.GetSize() == 1 )
+    {
+        SCH_PIN* pin = dynamic_cast<SCH_PIN*>( aSel.Front() );
+
+        if( pin && pin->GetLibPin() )
+            return !pin->GetLibPin()->GetAlternates().empty();
+    }
+
+    return false;
+};
+
+
 SELECTION_CONDITION EE_CONDITIONS::SingleNonExcludedMarker = []( const SELECTION& aSel )
 {
     if( aSel.CountType( SCH_MARKER_T ) != 1 )
@@ -573,14 +587,23 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             m_disambiguateTimer.Stop();
 
             // context sub-menu selection?  Handle unit selection or bus unfolding
-            if( *evt->GetCommandId() >= ID_POPUP_SCH_SELECT_UNIT_CMP
-                && *evt->GetCommandId() <= ID_POPUP_SCH_SELECT_UNIT_SYM_MAX )
+            if( *evt->GetCommandId() >= ID_POPUP_SCH_SELECT_UNIT
+                && *evt->GetCommandId() <= ID_POPUP_SCH_SELECT_UNIT_END )
             {
                 SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( m_selection.Front() );
-                int unit = *evt->GetCommandId() - ID_POPUP_SCH_SELECT_UNIT_CMP;
+                int unit = *evt->GetCommandId() - ID_POPUP_SCH_SELECT_UNIT;
 
                 if( symbol )
                     static_cast<SCH_EDIT_FRAME*>( m_frame )->SelectUnit( symbol, unit );
+            }
+            else if( *evt->GetCommandId() >= ID_POPUP_SCH_ALT_PIN_FUNCTION
+                     && *evt->GetCommandId() <= ID_POPUP_SCH_ALT_PIN_FUNCTION_END )
+            {
+                SCH_PIN* pin = dynamic_cast<SCH_PIN*>( m_selection.Front() );
+                wxString alt = *evt->Parameter<wxString*>();
+
+                if( pin )
+                    static_cast<SCH_EDIT_FRAME*>( m_frame )->SetAltPinFunction( pin, alt );
             }
             else if( *evt->GetCommandId() >= ID_POPUP_SCH_UNFOLD_BUS
                      && *evt->GetCommandId() <= ID_POPUP_SCH_UNFOLD_BUS_END )

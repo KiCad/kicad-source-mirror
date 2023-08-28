@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -185,7 +185,7 @@ DIALOG_PIN_PROPERTIES_BASE::DIALOG_PIN_PROPERTIES_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bLowerSizer;
 	bLowerSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_alternatesTurndown = new wxCollapsiblePane( this, wxID_ANY, _("Alternate pin definitions"), wxDefaultPosition, wxDefaultSize, wxCP_DEFAULT_STYLE|wxCP_NO_TLW_RESIZE );
+	m_alternatesTurndown = new wxCollapsiblePane( this, wxID_ANY, _("Alternate pin function definitions"), wxDefaultPosition, wxDefaultSize, wxCP_DEFAULT_STYLE|wxCP_NO_TLW_RESIZE );
 	m_alternatesTurndown->Collapse( true );
 
 	wxBoxSizer* bAlternatesSizer;
@@ -313,4 +313,3 @@ DIALOG_PIN_PROPERTIES_BASE::~DIALOG_PIN_PROPERTIES_BASE()
 	m_deleteAlternate->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnDeleteAlternate ), NULL, this );
 
 }
-

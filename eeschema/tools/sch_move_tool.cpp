@@ -825,11 +825,11 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
         }
         else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
         {
-            if( *evt->GetCommandId() >= ID_POPUP_SCH_SELECT_UNIT_CMP
-                && *evt->GetCommandId() <= ID_POPUP_SCH_SELECT_UNIT_SYM_MAX )
+            if( *evt->GetCommandId() >= ID_POPUP_SCH_SELECT_UNIT
+                && *evt->GetCommandId() <= ID_POPUP_SCH_SELECT_UNIT_END )
             {
                 SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( selection.Front() );
-                int unit = *evt->GetCommandId() - ID_POPUP_SCH_SELECT_UNIT_CMP;
+                int unit = *evt->GetCommandId() - ID_POPUP_SCH_SELECT_UNIT;
 
                 if( symbol )
                 {

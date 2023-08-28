@@ -308,3 +308,20 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_SYMBOL* aSymbol )
 
     commit.Push( _( "Convert Symbol" ) );
 }
+
+
+void SCH_EDIT_FRAME::SetAltPinFunction( SCH_PIN* aPin, const wxString& aFunction )
+{
+    if( !aPin )
+        return;
+
+    SCH_COMMIT commit( m_toolManager );
+    commit.Modify( aPin, GetScreen() );
+
+    if( aFunction == aPin->GetName() )
+        aPin->SetAlt( wxEmptyString );
+    else
+        aPin->SetAlt( aFunction );
+
+    commit.Push( _( "Set Alternate Pin Function" ) );
+}

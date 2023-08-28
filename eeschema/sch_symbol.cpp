@@ -175,7 +175,7 @@ SCH_SYMBOL::SCH_SYMBOL( const SCH_SYMBOL& aSymbol ) :
     m_DNP         = aSymbol.m_DNP;
 
     if( aSymbol.m_part )
-        SetLibSymbol( new LIB_SYMBOL( *aSymbol.m_part.get() ) );
+        SetLibSymbol( new LIB_SYMBOL( *aSymbol.m_part ) );
 
     const_cast<KIID&>( m_Uuid ) = aSymbol.m_Uuid;
 
@@ -187,6 +187,11 @@ SCH_SYMBOL::SCH_SYMBOL( const SCH_SYMBOL& aSymbol ) :
     // Re-parent the fields, which before this had aSymbol as parent
     for( SCH_FIELD& field : m_fields )
         field.SetParent( this );
+
+    m_pins.clear();
+
+    for( const std::unique_ptr<SCH_PIN>& pin : aSymbol.m_pins )
+        m_pins.emplace_back( std::make_unique<SCH_PIN>( this, pin->GetNumber(), pin->GetAlt() ) );
 
     m_fieldsAutoplaced = aSymbol.m_fieldsAutoplaced;
     m_schLibSymbolName = aSymbol.m_schLibSymbolName;

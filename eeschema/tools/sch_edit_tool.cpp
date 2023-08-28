@@ -94,8 +94,8 @@ private:
 
         if( !symbol )
         {
-            Append( ID_POPUP_SCH_SELECT_UNIT_CMP, _( "no symbol selected" ), wxEmptyString );
-            Enable( ID_POPUP_SCH_SELECT_UNIT_CMP, false );
+            Append( ID_POPUP_SCH_SELECT_UNIT, _( "no symbol selected" ), wxEmptyString );
+            Enable( ID_POPUP_SCH_SELECT_UNIT, false );
             return;
         }
 
@@ -103,8 +103,8 @@ private:
 
         if( !symbol->GetLibSymbolRef() || symbol->GetLibSymbolRef()->GetUnitCount() < 2 )
         {
-            Append( ID_POPUP_SCH_SELECT_UNIT_CMP, _( "symbol is not multi-unit" ), wxEmptyString );
-            Enable( ID_POPUP_SCH_SELECT_UNIT_CMP, false );
+            Append( ID_POPUP_SCH_SELECT_UNIT, _( "symbol is not multi-unit" ), wxEmptyString );
+            Enable( ID_POPUP_SCH_SELECT_UNIT, false );
             return;
         }
 
@@ -113,14 +113,78 @@ private:
             wxString num_unit;
             num_unit.Printf( _( "Unit %s" ), LIB_SYMBOL::SubReference( ii + 1, false ) );
 
-            wxMenuItem * item = Append( ID_POPUP_SCH_SELECT_UNIT1 + ii, num_unit, wxEmptyString,
-                                        wxITEM_CHECK );
-            if( unit == ii + 1 )
-                item->Check(true);
+            wxMenuItem* item = Append( ID_POPUP_SCH_SELECT_UNIT1 + ii, num_unit, wxEmptyString,
+                                       wxITEM_CHECK );
 
-            // The ID max for these submenus is ID_POPUP_SCH_SELECT_UNIT_SYM_MAX
+            if( unit == ii + 1 )
+                item->Check( true );
+
+            // The ID max for these submenus is ID_POPUP_SCH_SELECT_UNIT_END
             // See eeschema_id to modify this value.
-            if( ii >= (ID_POPUP_SCH_SELECT_UNIT_SYM_MAX - ID_POPUP_SCH_SELECT_UNIT1) )
+            if( ii >= ( ID_POPUP_SCH_SELECT_UNIT_END - ID_POPUP_SCH_SELECT_UNIT1) )
+                break;      // We have used all IDs for these submenus
+        }
+    }
+};
+
+
+class ALT_PIN_FUNCTION_MENU : public ACTION_MENU
+{
+public:
+    ALT_PIN_FUNCTION_MENU() :
+        ACTION_MENU( true )
+    {
+        SetIcon( BITMAPS::component_select_unit );
+        SetTitle( _( "Alternate Pin Functions" ) );
+    }
+
+protected:
+    ACTION_MENU* create() const override
+    {
+        return new ALT_PIN_FUNCTION_MENU();
+    }
+
+private:
+    void update() override
+    {
+        EE_SELECTION_TOOL* selTool = getToolManager()->GetTool<EE_SELECTION_TOOL>();
+        EE_SELECTION&      selection = selTool->GetSelection();
+        SCH_PIN*           pin = dynamic_cast<SCH_PIN*>( selection.Front() );
+
+        Clear();
+
+        if( !pin )
+        {
+            Append( ID_POPUP_SCH_SELECT_UNIT, _( "no pin selected" ), wxEmptyString );
+            Enable( ID_POPUP_SCH_SELECT_UNIT, false );
+            return;
+        }
+
+        if( !pin->GetLibPin() || pin->GetLibPin()->GetAlternates().empty() )
+        {
+            Append( ID_POPUP_SCH_SELECT_UNIT, _( "no alternate pin functions defined" ), wxEmptyString );
+            Enable( ID_POPUP_SCH_SELECT_UNIT, false );
+            return;
+        }
+
+        wxMenuItem* item = Append( ID_POPUP_SCH_ALT_PIN_FUNCTION, pin->GetName(), wxEmptyString,
+                                   wxITEM_CHECK );
+
+        if( pin->GetAlt().IsEmpty() )
+            item->Check( true );
+
+        int ii = 1;
+
+        for( const auto& [ name, definition ] : pin->GetLibPin()->GetAlternates() )
+        {
+            item = Append( ID_POPUP_SCH_ALT_PIN_FUNCTION + ii, name, wxEmptyString, wxITEM_CHECK );
+
+            if( name == pin->GetAlt() )
+                item->Check( true );
+
+            // The ID max for these submenus is ID_POPUP_SCH_ALT_PIN_FUNCTION_END
+            // See eeschema_id to modify this value.
+            if( ++ii >= ( ID_POPUP_SCH_ALT_PIN_FUNCTION_END - ID_POPUP_SCH_SELECT_UNIT ) )
                 break;      // We have used all IDs for these submenus
         }
     }
@@ -605,6 +669,11 @@ bool SCH_EDIT_TOOL::Init()
     symUnitMenu3->SetTool( m_selectionTool );
     m_selectionTool->GetToolMenu().RegisterSubMenu( symUnitMenu3 );
     selToolMenu.AddMenu( symUnitMenu3.get(), E_C::SingleMultiUnitSymbol, 1 );
+
+    std::shared_ptr<ALT_PIN_FUNCTION_MENU> altPinMenu = std::make_shared<ALT_PIN_FUNCTION_MENU>();
+    altPinMenu->SetTool( m_selectionTool );
+    m_selectionTool->GetToolMenu().RegisterSubMenu( altPinMenu );
+    selToolMenu.AddMenu( altPinMenu.get(), E_C::SingleMultiFunctionPin, 1 );
 
     selToolMenu.AddItem( EE_ACTIONS::editWithLibEdit,  E_C::SingleSymbolOrPower && E_C::Idle, 200 );
     selToolMenu.AddItem( EE_ACTIONS::changeSymbol,     E_C::SingleSymbolOrPower, 200 );

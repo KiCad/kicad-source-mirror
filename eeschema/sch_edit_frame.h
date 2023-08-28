@@ -646,6 +646,8 @@ public:
 
     void SelectUnit( SCH_SYMBOL* aSymbol, int aUnit );
 
+    void SetAltPinFunction( SCH_PIN* aPin, const wxString& aFunction );
+
     /* Undo - redo */
 
     /**

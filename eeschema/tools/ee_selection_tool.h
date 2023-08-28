@@ -50,6 +50,7 @@ public:
     static SELECTION_CONDITION SingleSymbolOrPower;
     static SELECTION_CONDITION SingleDeMorganSymbol;
     static SELECTION_CONDITION SingleMultiUnitSymbol;
+    static SELECTION_CONDITION SingleMultiFunctionPin;
     static SELECTION_CONDITION SingleNonExcludedMarker;
     static SELECTION_CONDITION MultipleSymbolsOrPower;
 };
