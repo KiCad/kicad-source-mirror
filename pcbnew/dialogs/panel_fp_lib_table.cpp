@@ -838,8 +838,8 @@ void PANEL_FP_LIB_TABLE::onMigrateLibraries( wxCommandEvent& event )
 }
 
 
-bool PANEL_FP_LIB_TABLE::convertLibrary( STRING_UTF8_MAP* aOldFileProps, 
-                                         const wxString& aOldFilePath, 
+bool PANEL_FP_LIB_TABLE::convertLibrary( STRING_UTF8_MAP* aOldFileProps,
+                                         const wxString& aOldFilePath,
                                          const wxString& aNewFilePath)
 {
     IO_MGR::PCB_FILE_T oldFileType = IO_MGR::GuessPluginTypeFromLibPath( aOldFilePath );
@@ -847,7 +847,7 @@ bool PANEL_FP_LIB_TABLE::convertLibrary( STRING_UTF8_MAP* aOldFileProps,
     if( oldFileType == IO_MGR::FILE_TYPE_NONE )
         return false;
 
-    
+
     PLUGIN::RELEASER oldFilePI( IO_MGR::PluginFind( oldFileType ) );
     PLUGIN::RELEASER kicadPI( IO_MGR::PluginFind( IO_MGR::KICAD_SEXP ) );
     wxArrayString fpNames;
@@ -856,13 +856,13 @@ bool PANEL_FP_LIB_TABLE::convertLibrary( STRING_UTF8_MAP* aOldFileProps,
     try
     {
         if( !newFileName.DirExists() )
-            wxMkDir( aNewFilePath );
+            wxMkDir( aNewFilePath, wxS_DIR_DEFAULT );
 
         bool bestEfforts = false; // throw on first error
         oldFilePI->FootprintEnumerate( fpNames, aOldFilePath, bestEfforts, aOldFileProps );
 
-        for ( const wxString& fpName : fpNames ) 
-        { 
+        for ( const wxString& fpName : fpNames )
+        {
             std::unique_ptr<const FOOTPRINT> fp( oldFilePI->GetEnumeratedFootprint( aOldFilePath, fpName, aOldFileProps ) );
             kicadPI->FootprintSave( aNewFilePath, fp.get() );
         }
