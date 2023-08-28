@@ -277,6 +277,41 @@ ALTIUM_COMPOUND_FILE::FindStreamSingleLevel( const CFB::COMPOUND_FILE_ENTRY* aEn
 }
 
 
+std::map<wxString, const CFB::COMPOUND_FILE_ENTRY*>
+ALTIUM_COMPOUND_FILE::GetLibSymbols( const CFB::COMPOUND_FILE_ENTRY* aStart ) const
+{
+    const CFB::COMPOUND_FILE_ENTRY* root = aStart ? aStart : m_reader->GetRootEntry();
+
+    if( !root )
+        return {};
+
+    std::map<wxString, const CFB::COMPOUND_FILE_ENTRY*> folders;
+
+    m_reader->EnumFiles( root, 1, [&]( const CFB::COMPOUND_FILE_ENTRY* tentry, const CFB::utf16string&, int ) -> int
+    {
+        wxString dirName = UTF16ToWstring( tentry->name, tentry->nameLen );
+
+        if( m_reader->IsStream( tentry ) )
+            return 0;
+
+        m_reader->EnumFiles( tentry, 1,
+                    [&]( const CFB::COMPOUND_FILE_ENTRY* entry, const CFB::utf16string&, int ) -> int
+                    {
+                        std::wstring fileName = UTF16ToWstring( entry->name, entry->nameLen );
+
+                        if( m_reader->IsStream( entry ) && fileName == L"Data" )
+                            folders[dirName] = entry;
+
+                        return 0;
+                    } );
+
+        return 0;
+    } );
+
+    return folders;
+}
+
+
 const CFB::COMPOUND_FILE_ENTRY*
 ALTIUM_COMPOUND_FILE::FindStream( const CFB::COMPOUND_FILE_ENTRY* aStart,
                                   const std::vector<std::string>& aStreamPath ) const
@@ -340,11 +375,16 @@ ALTIUM_PARSER::ALTIUM_PARSER( std::unique_ptr<char[]>& aContent, size_t aSize )
 }
 
 
-std::map<wxString, wxString> ALTIUM_PARSER::ReadProperties()
+std::map<wxString, wxString> ALTIUM_PARSER::ReadProperties(
+        std::function<std::map<wxString, wxString>( const std::string& )> handleBinaryData )
 {
+
     std::map<wxString, wxString> kv;
 
     uint32_t length = Read<uint32_t>();
+    bool isBinary = ( length & 0xff000000 ) != 0;
+
+    length &= 0x00ffffff;
 
     if( length > GetRemainingBytes() )
     {
@@ -371,6 +411,11 @@ std::map<wxString, wxString> ALTIUM_PARSER::ReadProperties()
     // wxString would end the string at the first NULL-byte
     std::string str = std::string( m_pos, length - ( hasNullByte ? 1 : 0 ) );
     m_pos += length;
+
+    if( isBinary )
+    {
+        return handleBinaryData( str );
+    }
 
     std::size_t token_end = 0;
 

@@ -60,10 +60,10 @@ public:
         return PLUGIN_FILE_DESC( _HKI( "Altium schematic files" ), { "SchDoc" } );
     }
 
-    /*const PLUGIN_FILE_DESC GetLibraryFileDesc() const override
+    const PLUGIN_FILE_DESC GetLibraryFileDesc() const override
     {
         return PLUGIN_FILE_DESC( _HKI( "Altium schematic library files" ), { "SchLib" } );
-    }*/
+    }
 
     int GetModifyHash() const override;
 
@@ -77,11 +77,17 @@ public:
     //void Save( const wxString& aFileName, SCH_SCREEN* aSchematic, KIWAY* aKiway,
     //           const PROPERTIES* aProperties = NULL ) override;
 
-    //void EnumerateSymbolLib( wxArrayString& aAliasNameList, const wxString& aLibraryPath,
-    //                         const PROPERTIES* aProperties = NULL ) override;
 
-    //LIB_SYMBOL* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
-    //                      const PROPERTIES* aProperties = NULL ) override;
+    void EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
+                             const wxString&   aLibraryPath,
+                             const STRING_UTF8_MAP* aProperties = nullptr ) override;
+
+    void EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
+                             const wxString&           aLibraryPath,
+                             const STRING_UTF8_MAP*         aProperties = nullptr ) override;
+
+    LIB_SYMBOL* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
+                            const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     //void SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
     //                 const PROPERTIES* aProperties = NULL ) override;
@@ -98,7 +104,10 @@ public:
     // bool DeleteSymbolLib( const wxString& aLibraryPath,
     //                      const PROPERTIES* aProperties = NULL ) override;
 
-    //bool IsSymbolLibWritable( const wxString& aLibraryPath ) override;
+    bool IsSymbolLibWritable( const wxString& aLibraryPath ) override
+    {
+        return false;
+    }
 
     //void SymbolLibOptions( PROPERTIES* aListToAppendTo ) const override;
 
@@ -117,25 +126,27 @@ private:
     bool IsComponentPartVisible( int aOwnerindex, int aOwnerpartdisplaymode ) const;
     const ASCH_STORAGE_FILE* GetFileFromStorage( const wxString& aFilename ) const;
     void AddTextBox( const ASCH_TEXT_FRAME* aElem );
+    void AddLibTextBox( const ASCH_TEXT_FRAME* aElem, LIB_SYMBOL* aLibSymbol = nullptr );
 
     void ParseComponent( int aIndex, const std::map<wxString, wxString>& aProperties );
-    void ParsePin( const std::map<wxString, wxString>& aProperties );
-    void ParseLabel( const std::map<wxString, wxString>& aProperties );
-    void ParseTextFrame( const std::map<wxString, wxString>& aProperties );
+    void ParsePin( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
+    void ParseLabel( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
+    void ParseTextFrame( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
     void ParseNote( const std::map<wxString, wxString>& aProperties );
-    void ParseBezier( const std::map<wxString, wxString>& aProperties );
-    void ParsePolyline( const std::map<wxString, wxString>& aProperties );
-    void ParsePolygon( const std::map<wxString, wxString>& aProperties );
-    void ParseRoundRectangle( const std::map<wxString, wxString>& aProperties );
-    void ParseArc( const std::map<wxString, wxString>& aProperties );
-    void ParseEllipse( const std::map<wxString, wxString>& aProperties );
-    void ParseLine( const std::map<wxString, wxString>& aProperties );
+    void ParseBezier( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
+    void ParsePolyline( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
+    void ParsePolygon( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
+    void ParseRoundRectangle( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
+    void ParseArc( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
+    void ParseEllipse( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
+    void ParseLine( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
     void ParseSignalHarness( const std::map<wxString, wxString>& aProperties );
     void ParseHarnessConnector( int aIndex, const std::map<wxString, wxString>& aProperties );
     void ParseHarnessEntry( const std::map<wxString, wxString>& aProperties );
     void ParseHarnessType( const std::map<wxString, wxString>& aProperties );
     void ParseHarnessPort( const ASCH_PORT& aElem );
-    void ParseRectangle( const std::map<wxString, wxString>& aProperties );
+    void ParseHyperlink( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
+    void ParseRectangle( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
     void ParseSheetSymbol( int aIndex, const std::map<wxString, wxString>& aProperties );
     void ParseSheetEntry( const std::map<wxString, wxString>& aProperties );
     void ParsePowerPort( const std::map<wxString, wxString>& aProperties );
@@ -149,11 +160,15 @@ private:
     void ParseSheet( const std::map<wxString, wxString>& aProperties );
     void ParseSheetName( const std::map<wxString, wxString>& aProperties );
     void ParseFileName( const std::map<wxString, wxString>& aProperties );
-    void ParseDesignator( const std::map<wxString, wxString>& aProperties );
+    void ParseDesignator( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
     void ParseBusEntry( const std::map<wxString, wxString>& aProperties );
-    void ParseParameter( const std::map<wxString, wxString>& aProperties );
+    void ParseParameter( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
     void ParseImplementationList( int aIndex, const std::map<wxString, wxString>& aProperties );
     void ParseImplementation( const std::map<wxString, wxString>& aProperties );
+
+    void ParseLibHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile, wxArrayString& aLibNames );
+    std::map<wxString,LIB_SYMBOL*> ParseLibFile( const ALTIUM_COMPOUND_FILE& aAltiumSchFile );
+    LIB_SYMBOL* ParseLibComponent( const std::map<wxString, wxString>& aProperties );
 
 private:
     REPORTER*                       m_reporter;          // current reporter for warnings/errors
@@ -189,6 +204,13 @@ private:
     // Add offset to all harness ownerIndex'es after parsing FileHeader.
     int m_harnessOwnerIndexOffset;
     int m_harnessEntryParent; // used to identify harness connector for harness entry element
+
+    // Symbol caching
+    void ensureLoadedLibrary( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties );
+    long long getLibraryTimestamp( const wxString& aLibraryPath ) const;
+
+    std::map<wxString, long long> m_timestamps;
+    std::map<wxString, std::map<wxString, LIB_SYMBOL*>> m_libCache;
 };
 
 #endif // _SCH_ALTIUM_PLUGIN_H_

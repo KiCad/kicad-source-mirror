@@ -30,9 +30,13 @@
 #include <numeric>
 
 #include <wx/gdicmn.h>
+#include <wx/mstream.h>
+#include <wx/zstream.h>
 #include <math/vector2d.h>
 #include <vector>
 
+#include <string>
+#include <stdexcept>
 
 namespace CFB
 {
@@ -74,6 +78,8 @@ public:
     const CFB::COMPOUND_FILE_ENTRY* FindStreamSingleLevel( const CFB::COMPOUND_FILE_ENTRY* aEntry,
                                                            const std::string               aName,
                                                            const bool aIsStream ) const;
+
+    std::map<wxString, const CFB::COMPOUND_FILE_ENTRY*> GetLibSymbols( const CFB::COMPOUND_FILE_ENTRY* aStart ) const;
 
 private:
     std::unique_ptr<CFB::CompoundFileReader> m_reader;
@@ -238,7 +244,12 @@ public:
         return length;
     }
 
-    std::map<wxString, wxString> ReadProperties();
+    std::map<wxString, wxString> ReadProperties(
+            std::function<std::map<wxString, wxString>( const std::string& )> handleBinaryData =
+                    []( const std::string& )
+            {
+                return std::map<wxString, wxString>();
+            } );
 
     static int32_t ConvertToKicadUnit( const double aValue );
 
@@ -310,5 +321,111 @@ private:
     bool  m_error;
 };
 
+
+class ALTIUM_BINARY_READER
+{
+public:
+    ALTIUM_BINARY_READER( const std::string& binaryData ) : m_data( binaryData ), m_position( 0 ) {}
+
+    int32_t ReadInt32()
+    {
+        if( m_position + sizeof( int32_t ) > m_data.size() )
+            throw std::out_of_range( "ALTIUM_BINARY_READER: out of range" );
+
+        int32_t value = *reinterpret_cast<const int32_t*>( &m_data[m_position] );
+        m_position += sizeof( int32_t );
+        return value;
+    }
+
+    int16_t ReadInt16()
+    {
+        if( m_position + sizeof( int16_t ) > m_data.size() )
+            throw std::out_of_range( "ALTIUM_BINARY_READER: out of range" );
+
+        int16_t value = *reinterpret_cast<const int16_t*>( &m_data[m_position] );
+        m_position += sizeof( int16_t );
+        return value;
+    }
+
+    uint8_t ReadByte()
+    {
+        if( m_position + sizeof( uint8_t ) > m_data.size() )
+            throw std::out_of_range( "ALTIUM_BINARY_READER: out of range" );
+
+        uint8_t value = *reinterpret_cast<const uint8_t*>( &m_data[m_position] );
+        m_position += sizeof( uint8_t );
+        return value;
+    }
+
+    std::string ReadPascalString()
+    {
+        uint8_t length = ReadByte();
+
+        if( m_position + length > m_data.size() )
+            throw std::out_of_range( "ALTIUM_BINARY_READER: out of range" );
+
+        std::string pascalString( &m_data[m_position], &m_data[m_position + length] );
+        m_position += length;
+        return pascalString;
+    }
+
+private:
+    const std::string& m_data;
+    size_t             m_position;
+};
+
+class ALTIUM_COMPRESSED_READER : public ALTIUM_BINARY_READER
+{
+public:
+    ALTIUM_COMPRESSED_READER( const std::string& aData ) : ALTIUM_BINARY_READER( aData )
+    {}
+
+    std::pair<int, std::string> ReadCompressedString()
+    {
+        std::string result;
+        int id = -1;
+
+        while( true )
+        {
+            uint8_t byte = ReadByte();
+            if( byte != 0xD0 )
+                throw std::runtime_error( "ALTIUM_COMPRESSED_READER: invalid compressed string" );
+
+            std::string str = ReadPascalString();
+
+            id = std::stoi( str );
+
+            std::string data = ReadPascalString();
+
+            result = decompressData( data );
+        }
+
+        return std::make_pair( id, result );
+    }
+
+private:
+    std::string decompressData( std::string& aData )
+    {
+        // Create a memory input stream with the buffer
+        wxMemoryInputStream memStream( (void*) aData.data(), aData.length() );
+
+        // Create a zlib input stream with the memory input stream
+        wxZlibInputStream zStream( memStream );
+
+        // Prepare a string to hold decompressed data
+        std::string decompressedData;
+
+        // Read decompressed data from the zlib input stream
+        while( !zStream.Eof() )
+        {
+            char buffer[1024];
+            zStream.Read( buffer, sizeof( buffer ) );
+            size_t bytesRead = zStream.LastRead();
+            decompressedData.append( buffer, bytesRead );
+        }
+
+        return decompressedData;
+    }
+};
 
 #endif //ALTIUM_PARSER_H

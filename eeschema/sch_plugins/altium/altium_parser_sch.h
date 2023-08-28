@@ -104,7 +104,7 @@ enum class ALTIUM_SCH_RECORD
     HARNESS_TYPE        = 217,
     SIGNAL_HARNESS      = 218,
     BLANKET             = 225,
-    RECORD_226          = 226,
+    HYPERLINK           = 226,
 };
 
 
@@ -122,12 +122,26 @@ struct ASCH_SHAPE_INTERFACE
     int OwnerIndex;
     int OwnerPartID;
     int OwnerPartDisplayMode;
+    int IndexInSheet;
 
-    int  LineWidth;
-    bool IsSolid;
+    explicit ASCH_SHAPE_INTERFACE( const std::map<wxString, wxString>& aProps );
+};
 
-    int Color;
+struct ASCH_FILL_INTERFACE
+{
     int AreaColor;
+    bool IsSolid;
+    bool IsTransparent;
+
+    explicit ASCH_FILL_INTERFACE( const std::map<wxString, wxString>& aProps );
+};
+
+struct ASCH_BORDER_INTERFACE
+{
+    int LineWidth;
+    int Color;
+
+    explicit ASCH_BORDER_INTERFACE( const std::map<wxString, wxString>& aProps );
 };
 
 
@@ -151,52 +165,125 @@ struct ASCH_SYMBOL
 };
 
 
-enum class ASCH_PIN_SYMBOL_OUTER
+enum class ASCH_PIN_SYMBOL_EDGE
 {
     UNKNOWN                = -1,
     NO_SYMBOL              = 0,
-    RIGHT_LEFT_SIGNAL_FLOW = 2,
-    ANALOG_SIGNAL_IN       = 5,
-    NOT_LOGIC_CONNECTION   = 6,
-    DIGITAL_SIGNAL_IN      = 25,
-    LEFT_RIGHT_SIGNAL_FLOW = 33,
-    BIDI_SIGNAL_FLOW       = 34
-};
-
-
-enum class ASCH_PIN_SYMBOL_INNER
-{
-    UNKNOWN                = -1,
-    NO_SYMBOL              = 0,
-    POSPONED_OUTPUT        = 8,
+    NEGATED                = 1,
+    RIGHTLEFT              = 2,
+    CLOCK                  = 3,
+    LOW_INPUT              = 4,
+    ANALOG_IN              = 5,
+    NOLOGICCONNECT         = 6,
+    // 7 is missing
+    POSTPONE_OUTPUT        = 8,
     OPEN_COLLECTOR         = 9,
     HIZ                    = 10,
     HIGH_CURRENT           = 11,
     PULSE                  = 12,
     SCHMITT                = 13,
+    // 14-16 missing
+    LOW_OUTPUT             = 17,
+    // 18-21 missing
     OPEN_COLLECTOR_PULL_UP = 22,
     OPEN_EMITTER           = 23,
     OPEN_EMITTER_PULL_UP   = 24,
+    DIGITAL_IN             = 25,
+    // 26-29 missing
     SHIFT_LEFT             = 30,
-    OPEN_OUTPUT            = 32
+    // 31 is missing
+    OPEN_OUTPUT            = 32,
+    LEFTRIGHT              = 33,
+    BIDI                   = 34
 };
 
-
-enum class ASCH_PIN_SYMBOL_OUTEREDGE
+class ASCH_PIN_SYMBOL
 {
-    UNKNOWN    = -1,
-    NO_SYMBOL  = 0,
-    NEGATED    = 1,
-    LOW_INPUT  = 4,
-    LOW_OUTPUT = 17
-};
+public:
+    enum PTYPE
+    {
+        UNKNOWN                = -1,
+        NO_SYMBOL              = 0,
+        NEGATED                = 1,
+        RIGHTLEFT              = 2,
+        CLOCK                  = 3,
+        LOW_INPUT              = 4,
+        ANALOG_IN              = 5,
+        NOLOGICCONNECT         = 6,
+        // 7 is missing
+        POSTPONE_OUTPUT        = 8,
+        OPEN_COLLECTOR         = 9,
+        HIZ                    = 10,
+        HIGH_CURRENT           = 11,
+        PULSE                  = 12,
+        SCHMITT                = 13,
+        // 14-16 missing
+        LOW_OUTPUT             = 17,
+        // 18-21 missing
+        OPEN_COLLECTOR_PULL_UP = 22,
+        OPEN_EMITTER           = 23,
+        OPEN_EMITTER_PULL_UP   = 24,
+        DIGITAL_IN             = 25,
+        // 26-29 missing
+        SHIFT_LEFT             = 30,
+        // 31 is missing
+        OPEN_OUTPUT            = 32,
+        LEFTRIGHT              = 33,
+        BIDI                   = 34
+    };
 
-
-enum class ASCH_PIN_SYMBOL_INNEREDGE
-{
-    UNKNOWN   = -1,
-    NO_SYMBOL = 0,
-    CLOCK     = 3,
+    static PTYPE FromInt( int aInt )
+    {
+        switch( aInt )
+        {
+        case 0:
+            return NO_SYMBOL;
+        case 1:
+            return NEGATED;
+        case 2:
+            return RIGHTLEFT;
+        case 3:
+            return CLOCK;
+        case 4:
+            return LOW_INPUT;
+        case 5:
+            return ANALOG_IN;
+        case 6:
+            return NOLOGICCONNECT;
+        case 8:
+            return POSTPONE_OUTPUT;
+        case 9:
+            return OPEN_COLLECTOR;
+        case 10:
+            return HIZ;
+        case 11:
+            return HIGH_CURRENT;
+        case 12:
+            return PULSE;
+        case 13:
+            return SCHMITT;
+        case 17:
+            return LOW_OUTPUT;
+        case 22:
+            return OPEN_COLLECTOR_PULL_UP;
+        case 23:
+            return OPEN_EMITTER;
+        case 24:
+            return OPEN_EMITTER_PULL_UP;
+        case 25:
+            return DIGITAL_IN;
+        case 30:
+            return SHIFT_LEFT;
+        case 32:
+            return OPEN_OUTPUT;
+        case 33:
+            return LEFTRIGHT;
+        case 34:
+            return BIDI;
+        default:
+            return UNKNOWN;
+        }
+    }
 };
 
 
@@ -225,11 +312,11 @@ struct ASCH_PIN
     wxString text;
     wxString designator;
 
-    ASCH_PIN_SYMBOL_OUTER symbolOuter;
-    ASCH_PIN_SYMBOL_INNER symbolInner;
+    ASCH_PIN_SYMBOL::PTYPE symbolOuter;
+    ASCH_PIN_SYMBOL::PTYPE symbolInner;
 
-    ASCH_PIN_SYMBOL_OUTEREDGE symbolOuterEdge;
-    ASCH_PIN_SYMBOL_INNEREDGE symbolInnerEdge;
+    ASCH_PIN_SYMBOL::PTYPE symbolOuterEdge;
+    ASCH_PIN_SYMBOL::PTYPE symbolInnerEdge;
 
     ASCH_PIN_ELECTRICAL     electrical;
     ASCH_RECORD_ORIENTATION orientation;
@@ -241,6 +328,9 @@ struct ASCH_PIN
 
     bool showPinName;
     bool showDesignator;
+    bool hidden;
+
+    bool isKiCadLibPin;  // Tracking variable to handle LibEdit nuance
 
     explicit ASCH_PIN( const std::map<wxString, wxString>& aProps );
 };
@@ -278,6 +368,7 @@ struct ASCH_LABEL
     VECTOR2I location;
 
     wxString text;
+    int      textColor;
 
     int  fontId;
     bool isMirrored;
@@ -286,6 +377,13 @@ struct ASCH_LABEL
     ASCH_RECORD_ORIENTATION  orientation;
 
     explicit ASCH_LABEL( const std::map<wxString, wxString>& aProps );
+};
+
+struct ASCH_HYPERLINK : ASCH_LABEL
+{
+    wxString url;
+
+    explicit ASCH_HYPERLINK( const std::map<wxString, wxString>& aProps );
 };
 
 
@@ -302,12 +400,14 @@ struct ASCH_TEXT_FRAME
 
     bool IsWordWrapped; // to do when kicad supports this
     bool ShowBorder;
-    bool IsSolid;
 
     int  FontID;
     int  TextMargin; // to do when kicad supports this
     int  AreaColor;
+    int  TextColor;
     int  BorderColor;
+    int  BorderWidth;
+    bool isSolid;
 
     ASCH_TEXT_FRAME_ALIGNMENT Alignment;
 
@@ -323,15 +423,9 @@ struct ASCH_NOTE : ASCH_TEXT_FRAME
 };
 
 
-struct ASCH_BEZIER
+struct ASCH_BEZIER : ASCH_SHAPE_INTERFACE, ASCH_BORDER_INTERFACE
 {
-    int ownerindex;
-    int ownerpartid;
-    int ownerpartdisplaymode;
-
     std::vector<VECTOR2I> points;
-
-    int lineWidth;
 
     explicit ASCH_BEZIER( const std::map<wxString, wxString>& aProps );
 };
@@ -355,16 +449,9 @@ enum class ASCH_SHEET_ENTRY_SIDE
 };
 
 
-struct ASCH_POLYLINE
+struct ASCH_POLYLINE : ASCH_SHAPE_INTERFACE, ASCH_BORDER_INTERFACE
 {
-    int OwnerIndex;
-    int OwnerPartID;
-    int OwnerPartDisplayMode;
-
     std::vector<VECTOR2I> Points;
-
-    int LineWidth;
-    int Color;
 
     ASCH_POLYLINE_LINESTYLE LineStyle;
 
@@ -372,7 +459,7 @@ struct ASCH_POLYLINE
 };
 
 
-struct ASCH_POLYGON : ASCH_SHAPE_INTERFACE
+struct ASCH_POLYGON : ASCH_SHAPE_INTERFACE, ASCH_FILL_INTERFACE, ASCH_BORDER_INTERFACE
 {
     std::vector<VECTOR2I> points;
 
@@ -380,7 +467,7 @@ struct ASCH_POLYGON : ASCH_SHAPE_INTERFACE
 };
 
 
-struct ASCH_ROUND_RECTANGLE : ASCH_SHAPE_INTERFACE
+struct ASCH_ROUND_RECTANGLE : ASCH_SHAPE_INTERFACE, ASCH_FILL_INTERFACE, ASCH_BORDER_INTERFACE
 {
     VECTOR2I BottomLeft;
     VECTOR2I TopRight;
@@ -393,12 +480,8 @@ struct ASCH_ROUND_RECTANGLE : ASCH_SHAPE_INTERFACE
 };
 
 
-struct ASCH_ARC
+struct ASCH_ARC : ASCH_SHAPE_INTERFACE, ASCH_BORDER_INTERFACE
 {
-    int ownerindex;
-    int ownerpartid;
-    int ownerpartdisplaymode;
-
     bool     m_IsElliptical;
     VECTOR2I m_Center;
     int      m_Radius;
@@ -406,39 +489,26 @@ struct ASCH_ARC
     double   m_StartAngle;
     double   m_EndAngle;
 
-    int      m_LineWidth;
-
     explicit ASCH_ARC( const std::map<wxString, wxString>& aProps );
 };
 
 
-struct ASCH_ELLIPSE
+struct ASCH_ELLIPSE : ASCH_SHAPE_INTERFACE, ASCH_FILL_INTERFACE, ASCH_BORDER_INTERFACE
 {
-    int OwnerIndex;
-    int OwnerPartID;
-
     VECTOR2I Center;
     int      Radius;
     double   SecondaryRadius;
 
-    int  AreaColor;
-    bool IsSolid;
     bool IsNotAccesible;
 
     explicit ASCH_ELLIPSE( const std::map<wxString, wxString>& aProps );
 };
 
 
-struct ASCH_LINE
+struct ASCH_LINE : ASCH_SHAPE_INTERFACE, ASCH_BORDER_INTERFACE
 {
-    int ownerindex;
-    int ownerpartid;
-    int ownerpartdisplaymode;
-
     VECTOR2I point1;
     VECTOR2I point2;
-
-    int lineWidth;
 
     explicit ASCH_LINE( const std::map<wxString, wxString>& aProps );
 };
@@ -526,7 +596,7 @@ struct ASCH_HARNESS_TYPE
 };
 
 
-struct ASCH_RECTANGLE : ASCH_SHAPE_INTERFACE
+struct ASCH_RECTANGLE : ASCH_SHAPE_INTERFACE, ASCH_FILL_INTERFACE, ASCH_BORDER_INTERFACE
 {
     VECTOR2I BottomLeft;
     VECTOR2I TopRight;
@@ -703,12 +773,8 @@ struct ASCH_JUNCTION
 };
 
 
-struct ASCH_IMAGE
+struct ASCH_IMAGE : ASCH_SHAPE_INTERFACE, ASCH_BORDER_INTERFACE
 {
-    int indexinsheet;
-    int ownerindex;
-    int ownerpartid;
-
     wxString filename;
     VECTOR2I location;
     VECTOR2I corner;

@@ -310,7 +310,7 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
 
                 fileFiltersStr = _( "All supported formats" ) + wxT( "|" ) + allWildcardsStr + wxT( "|" )
                                  + fileFiltersStr;
-                
+
                 attr->SetEditor( new GRID_CELL_PATH_EDITOR( m_parent, aGrid,
                                                             &cfg->m_lastSymbolLibDir, fileFiltersStr,
                                                             true, m_project->GetProjectPath() ) );
@@ -831,7 +831,7 @@ void PANEL_SYM_LIB_TABLE::onConvertLegacyLibraries( wxCommandEvent& event )
 
     for( int row : selectedRows )
     {
-        if( m_cur_grid->GetCellValue( row, COL_TYPE ) != databaseType && 
+        if( m_cur_grid->GetCellValue( row, COL_TYPE ) != databaseType &&
             m_cur_grid->GetCellValue( row, COL_TYPE ) != kicadType )
         {
             legacyRows.push_back( row );
