@@ -23,7 +23,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	bMargins = new wxBoxSizer( wxVERTICAL );
 
 	m_splitter = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE|wxSP_NO_XP_THEME );
-	m_splitter->SetMinimumPaneSize( 100 );
+	m_splitter->SetMinimumPaneSize( 160 );
 
 	m_netclassesPane = new WX_PANEL( m_splitter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bUpperSizer;
@@ -89,7 +89,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	buttonBoxSizer->Add( m_removeButton, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
-	buttonBoxSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	buttonBoxSizer->Add( 60, 0, 1, wxEXPAND, 5 );
 
 	m_colorDefaultHelpText = new wxStaticText( m_netclassesPane, wxID_ANY, _("Set color to transparent to use KiCad default color."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_colorDefaultHelpText->Wrap( -1 );
@@ -186,6 +186,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 
 	this->SetSizer( bpanelNetClassesSizer );
 	this->Layout();
+	bpanelNetClassesSizer->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnUpdateUI ) );
