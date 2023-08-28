@@ -175,6 +175,7 @@ const std::string FootprintPlaceFileExtension( "pos" );
 const std::string KiCadFootprintLibPathExtension( "pretty" );   // this is a directory
 const std::string LegacyFootprintLibPathExtension( "mod" );     // this is a file
 const std::string AltiumFootprintLibPathExtension( "PcbLib" );  // this is a file
+const std::string CadstarFootprintLibPathExtension( "cpa" );    // this is a file
 const std::string EagleFootprintLibPathExtension( "lbr" );      // this is a file
 const std::string GedaPcbFootprintLibFileExtension( "fp" );     // this is a file
 

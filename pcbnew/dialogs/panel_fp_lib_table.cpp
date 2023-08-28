@@ -272,17 +272,18 @@ protected:
 };
 
 
-PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
-                                        FP_LIB_TABLE* aGlobal, const wxString& aGlobalTblPath,
-                                        FP_LIB_TABLE* aProject, const wxString& aProjectTblPath,
+PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PROJECT* aProject,
+                                        FP_LIB_TABLE* aGlobalTable, const wxString& aGlobalTblPath,
+                                        FP_LIB_TABLE* aProjectTable, const wxString& aProjectTblPath,
                                         const wxString& aProjectBasePath ) :
     PANEL_FP_LIB_TABLE_BASE( aParent ),
-    m_global( aGlobal ),
+    m_globalTable( aGlobalTable ),
+    m_projectTable( aProjectTable ),
     m_project( aProject ),
     m_projectBasePath( aProjectBasePath ),
     m_parent( aParent )
 {
-    m_global_grid->SetTable( new FP_LIB_TABLE_GRID( *aGlobal ), true );
+    m_global_grid->SetTable( new FP_LIB_TABLE_GRID( *aGlobalTable ), true );
 
     // add Cut, Copy, and Paste to wxGrids
     m_path_subs_grid->PushEventHandler( new GRID_TRICKS( m_path_subs_grid ) );
@@ -361,9 +362,9 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
 
     populateEnvironReadOnlyTable();
 
-    if( aProject )
+    if( aProjectTable )
     {
-        m_project_grid->SetTable( new FP_LIB_TABLE_GRID( *aProject ), true );
+        m_project_grid->SetTable( new FP_LIB_TABLE_GRID( *aProjectTable ), true );
         setupGrid( m_project_grid );
     }
     else
@@ -733,6 +734,149 @@ void PANEL_FP_LIB_TABLE::moveDownHandler( wxCommandEvent& event )
 }
 
 
+// @todo refactor this function into single location shared with PANEL_SYM_LIB_TABLE
+void PANEL_FP_LIB_TABLE::onMigrateLibraries( wxCommandEvent& event )
+{
+    if( !m_cur_grid->CommitPendingChanges() )
+        return;
+
+    wxArrayInt selectedRows = m_cur_grid->GetSelectedRows();
+
+    if( selectedRows.empty() && m_cur_grid->GetGridCursorRow() >= 0 )
+        selectedRows.push_back( m_cur_grid->GetGridCursorRow() );
+
+    wxArrayInt rowsToMigrate;
+    wxString   kicadType = IO_MGR::ShowType( IO_MGR::KICAD_SEXP );
+    wxString   msg;
+
+    for( int row : selectedRows )
+    {
+        if( m_cur_grid->GetCellValue( row, COL_TYPE ) != kicadType )
+            rowsToMigrate.push_back( row );
+    }
+
+    if( rowsToMigrate.size() <= 0 )
+    {
+        wxMessageBox( wxString::Format( _( "Select one or more rows containing libraries "
+                                           "to save as current KiCad format." ) ) );
+        return;
+    }
+    else
+    {
+        if( rowsToMigrate.size() == 1 )
+        {
+            msg.Printf( _( "Save '%s' as current KiCad format "
+                           "and replace entry in table?" ),
+                        m_cur_grid->GetCellValue( rowsToMigrate[0], COL_NICKNAME ) );
+        }
+        else
+        {
+            msg.Printf( _( "Save %d libraries as current KiCad format "
+                           "and replace entries in table?" ),
+                        (int) rowsToMigrate.size() );
+        }
+
+        if( !IsOK( m_parent, msg ) )
+            return;
+    }
+
+    for( int row : rowsToMigrate )
+    {
+        wxString   libName = m_cur_grid->GetCellValue( row, COL_NICKNAME );
+        wxString   relPath = m_cur_grid->GetCellValue( row, COL_URI );
+        wxString   resolvedPath = ExpandEnvVarSubstitutions( relPath, m_project );
+        wxFileName legacyLib( resolvedPath );
+
+        if( !legacyLib.Exists() )
+        {
+            msg.Printf( _( "Library '%s' not found." ), relPath );
+            DisplayErrorMessage( this, msg );
+            continue;
+        }
+
+        wxFileName newLib( resolvedPath );
+        newLib.AppendDir( newLib.GetName() + "." + KiCadFootprintLibPathExtension );
+        newLib.SetName( "" );
+        newLib.ClearExt();
+
+        if( newLib.DirExists() )
+        {
+            msg.Printf( _( "Folder '%s' already exists. Do you want overwrite any existing footprints?" ),
+                        newLib.GetFullPath() );
+
+            switch( wxMessageBox( msg, _( "Migrate Library" ),
+                                  wxYES_NO | wxCANCEL | wxICON_QUESTION, m_parent ) )
+            {
+            case wxYES:    break;
+            case wxNO:     continue;
+            case wxCANCEL: return;
+            }
+        }
+
+        wxString options = m_cur_grid->GetCellValue( row, COL_OPTIONS );
+        std::unique_ptr<STRING_UTF8_MAP> props( LIB_TABLE::ParseOptions( options.ToStdString() ) );
+
+        if( convertLibrary( props.get(), legacyLib.GetFullPath(), newLib.GetFullPath() ) )
+        {
+            relPath = NormalizePath( newLib.GetFullPath(), &Pgm().GetLocalEnvVariables(),
+                                     m_project );
+
+            // Do not use the project path in the global library table.  This will almost
+            // assuredly be wrong for a different project.
+            if( m_cur_grid == m_global_grid && relPath.Contains( "${KIPRJMOD}" ) )
+                relPath = newLib.GetFullPath();
+
+            m_cur_grid->SetCellValue( row, COL_URI, relPath );
+            m_cur_grid->SetCellValue( row, COL_TYPE, kicadType );
+        }
+        else
+        {
+            msg.Printf( _( "Failed to save footprint library file '%s'." ), newLib.GetFullPath() );
+            DisplayErrorMessage( this, msg );
+        }
+    }
+}
+
+
+bool PANEL_FP_LIB_TABLE::convertLibrary( STRING_UTF8_MAP* aOldFileProps, 
+                                         const wxString& aOldFilePath, 
+                                         const wxString& aNewFilePath)
+{
+    IO_MGR::PCB_FILE_T oldFileType = IO_MGR::GuessPluginTypeFromLibPath( aOldFilePath );
+
+    if( oldFileType == IO_MGR::FILE_TYPE_NONE )
+        return false;
+
+    
+    PLUGIN::RELEASER oldFilePI( IO_MGR::PluginFind( oldFileType ) );
+    PLUGIN::RELEASER kicadPI( IO_MGR::PluginFind( IO_MGR::KICAD_SEXP ) );
+    wxArrayString fpNames;
+    wxFileName newFileName( aNewFilePath );
+
+    try
+    {
+        if( !newFileName.DirExists() )
+            wxMkDir( aNewFilePath );
+
+        bool bestEfforts = false; // throw on first error
+        oldFilePI->FootprintEnumerate( fpNames, aOldFilePath, bestEfforts, aOldFileProps );
+
+        for ( const wxString& fpName : fpNames ) 
+        { 
+            std::unique_ptr<const FOOTPRINT> fp( oldFilePI->GetEnumeratedFootprint( aOldFilePath, fpName, aOldFileProps ) );
+            kicadPI->FootprintSave( aNewFilePath, fp.get() );
+        }
+
+    }
+    catch( ... )
+    {
+        return false;
+    }
+
+    return true;
+}
+
+
 void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 {
     if( !m_cur_grid->CommitPendingChanges() )
@@ -899,20 +1043,20 @@ bool PANEL_FP_LIB_TABLE::TransferDataFromWindow()
 
     if( verifyTables() )
     {
-        if( *global_model() != *m_global )
+        if( *global_model() != *m_globalTable )
         {
             m_parent->m_GlobalTableChanged = true;
 
-            m_global->Clear();
-            m_global->TransferRows( global_model()->m_rows );
+            m_globalTable->Clear();
+            m_globalTable->TransferRows( global_model()->m_rows );
         }
 
-        if( project_model() && *project_model() != *m_project )
+        if( project_model() && *project_model() != *m_projectTable )
         {
             m_parent->m_ProjectTableChanged = true;
 
-            m_project->Clear();
-            m_project->TransferRows( project_model()->m_rows );
+            m_projectTable->Clear();
+            m_projectTable->TransferRows( project_model()->m_rows );
         }
 
         return true;
@@ -1010,7 +1154,7 @@ void InvokePcbLibTableEditor( KIWAY* aKiway, wxWindow* aCaller )
     if( aKiway->Prj().IsNullProject() )
         projectTable = nullptr;
 
-    dlg.InstallPanel( new PANEL_FP_LIB_TABLE( &dlg, globalTable, globalTablePath,
+    dlg.InstallPanel( new PANEL_FP_LIB_TABLE( &dlg, &aKiway->Prj(), globalTable, globalTablePath,
                                               projectTable, projectTablePath,
                                               aKiway->Prj().GetProjectPath() ) );
 

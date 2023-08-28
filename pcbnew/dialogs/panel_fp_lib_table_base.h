@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -51,6 +51,7 @@ class PANEL_FP_LIB_TABLE_BASE : public wxPanel
 		STD_BITMAP_BUTTON* m_move_up_button;
 		STD_BITMAP_BUTTON* m_move_down_button;
 		STD_BITMAP_BUTTON* m_delete_button;
+		wxButton* m_migrate_libs_button;
 		WX_GRID* m_path_subs_grid;
 
 		// Virtual event handlers, override them in your derived class
@@ -59,6 +60,7 @@ class PANEL_FP_LIB_TABLE_BASE : public wxPanel
 		virtual void moveUpHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void moveDownHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void deleteRowHandler( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onMigrateLibraries( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSizeGrid( wxSizeEvent& event ) { event.Skip(); }
 
 

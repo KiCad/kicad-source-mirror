@@ -160,6 +160,7 @@ extern const std::string FootprintPlaceFileExtension;
 extern const std::string KiCadFootprintFileExtension;
 extern const std::string KiCadFootprintLibPathExtension;
 extern const std::string AltiumFootprintLibPathExtension;
+extern const std::string CadstarFootprintLibPathExtension;
 extern const std::string LtspiceSchematicExtension;
 extern const std::string LtspiceSymbolExtension;
 extern const std::string GedaPcbFootprintLibFileExtension;

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -151,6 +151,12 @@ PANEL_FP_LIB_TABLE_BASE::PANEL_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID i
 	bButtonsSizer->Add( m_delete_button, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
+	bButtonsSizer->Add( 20, 0, 1, wxEXPAND, 5 );
+
+	m_migrate_libs_button = new wxButton( this, wxID_ANY, _("Migrate Libraries"), wxDefaultPosition, wxDefaultSize, 0 );
+	bButtonsSizer->Add( m_migrate_libs_button, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+
 	bMainSizer->Add( bButtonsSizer, 0, wxEXPAND|wxALL, 8 );
 
 	wxStaticText* stPathsLabel;
@@ -203,6 +209,7 @@ PANEL_FP_LIB_TABLE_BASE::PANEL_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID i
 	m_move_up_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_LIB_TABLE_BASE::moveUpHandler ), NULL, this );
 	m_move_down_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_LIB_TABLE_BASE::moveDownHandler ), NULL, this );
 	m_delete_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_LIB_TABLE_BASE::deleteRowHandler ), NULL, this );
+	m_migrate_libs_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_LIB_TABLE_BASE::onMigrateLibraries ), NULL, this );
 	m_path_subs_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_FP_LIB_TABLE_BASE::onSizeGrid ), NULL, this );
 }
 
@@ -214,6 +221,7 @@ PANEL_FP_LIB_TABLE_BASE::~PANEL_FP_LIB_TABLE_BASE()
 	m_move_up_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_LIB_TABLE_BASE::moveUpHandler ), NULL, this );
 	m_move_down_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_LIB_TABLE_BASE::moveDownHandler ), NULL, this );
 	m_delete_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_LIB_TABLE_BASE::deleteRowHandler ), NULL, this );
+	m_migrate_libs_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_LIB_TABLE_BASE::onMigrateLibraries ), NULL, this );
 	m_path_subs_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_FP_LIB_TABLE_BASE::onSizeGrid ), NULL, this );
 
 }
