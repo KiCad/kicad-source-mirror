@@ -696,6 +696,17 @@ bool SCH_EDIT_FRAME::saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSave
     if( !IsWritable( schematicFileName ) )
         return false;
 
+    wxFileName projectFile( schematicFileName );
+
+    projectFile.SetExt( ProjectFileExtension );
+
+    if( projectFile.FileExists() )
+    {
+        // Save various ERC settings, such as violation severities (which may have been edited
+        // via the ERC dialog as well as the Schematic Setup dialog), ERC exclusions, etc.
+        saveProjectSettings();
+    }
+
     wxString tempFile = wxFileName::CreateTempFileName( wxS( "eeschema" ) );
 
     // Save
