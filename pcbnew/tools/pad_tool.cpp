@@ -829,9 +829,24 @@ std::vector<FP_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun, BOARD_
         aPad->TransformShapeToPolygon( existingOutline, layer, 0, maxError, ERROR_INSIDE );
 
         aPad->SetAnchorPadShape( PAD_SHAPE::CIRCLE );
-        // We're going to remove the offset, so shrink the anchor pad so that it's
-        // entirely inside the hole (since it won't be offset anymore)
-        aPad->SetSize( aPad->GetDrillSize() );
+        // The actual pad shape may be offset from the pad anchor, so we don't want the anchor
+        // shape to be overly large (and stick out from under the actual pad shape).  Normally
+        // this means we want the anchor pad to be entirely inside the hole, but offsets are
+        // also used with SMD pads to control the anchor point for track routing.
+        if( aPad->GetDrillSizeX() > 0 )
+        {
+            // For a pad with a hole, just make sure the anchor shape is entirely inside the
+            // hole.
+            aPad->SetSize( aPad->GetDrillSize() / 2 );
+        }
+        else
+        {
+            // For a SMD pad, an offset is usually used to control the anchor point for routing.
+            // In this case it will usually be at least 1/2 the minimum track width inside the
+            // pad.  We halve that value again just to be safe.
+            aPad->SetSize( VECTOR2I( board()->GetDesignSettings().m_TrackMinWidth / 2,
+                                     board()->GetDesignSettings().m_TrackMinWidth / 2 ) );
+        }
 
         PCB_SHAPE* shape = new PCB_SHAPE( nullptr, SHAPE_T::POLY );
         shape->SetFilled( true );
