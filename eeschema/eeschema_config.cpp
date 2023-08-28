@@ -166,7 +166,8 @@ void SCH_EDIT_FRAME::saveProjectSettings()
 
 void SCH_EDIT_FRAME::SaveProjectLocalSettings()
 {
-    // No schematic local settings yet
+    if( m_schematic )
+        m_schematic->RecordERCExclusions();
 }
 
 
