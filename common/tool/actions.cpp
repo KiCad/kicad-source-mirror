@@ -37,89 +37,115 @@
 #undef _
 #define _(s) s
 
-TOOL_ACTION ACTIONS::doNew( "common.Control.new",
-        AS_GLOBAL,
-        MD_CTRL + 'N', LEGACY_HK_NAME( "New" ),
-        _( "New..." ), _( "Create a new document in the editor" ),
-        BITMAPS::new_generic );
+TOOL_ACTION ACTIONS::doNew( TOOL_ACTION_ARGS()
+        .Name( "common.Control.new" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'N' )
+        .LegacyHotkeyName( "New" )
+        .MenuText( _( "New..." ) )
+        .Tooltip( _( "Create a new document in the editor" ) )
+        .Icon( BITMAPS::new_generic ) );
 
-TOOL_ACTION ACTIONS::newLibrary( "common.Control.newLibrary",
-        AS_GLOBAL,
-        0, "",
-        _( "New Library..." ), _( "Create a new library folder" ),
-        BITMAPS::new_library );
+TOOL_ACTION ACTIONS::newLibrary( TOOL_ACTION_ARGS()
+        .Name( "common.Control.newLibrary" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "New Library..." ) )
+        .Tooltip( _( "Create a new library folder" ) )
+        .Icon( BITMAPS::new_library ) );
 
-TOOL_ACTION ACTIONS::addLibrary( "common.Control.addLibrary",
-        AS_GLOBAL,
-        0, "",
-        _( "Add Library..." ), _( "Add an existing library folder" ),
-        BITMAPS::add_library );
+TOOL_ACTION ACTIONS::addLibrary( TOOL_ACTION_ARGS()
+        .Name( "common.Control.addLibrary" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Add Library..." ) )
+        .Tooltip( _( "Add an existing library folder" ) )
+        .Icon( BITMAPS::add_library ) );
 
-TOOL_ACTION ACTIONS::open( "common.Control.open",
-        AS_GLOBAL,
-        MD_CTRL + 'O', LEGACY_HK_NAME( "Open" ),
-        _( "Open..." ), _( "Open existing document" ),
-        BITMAPS::directory_open );
+TOOL_ACTION ACTIONS::open( TOOL_ACTION_ARGS()
+        .Name( "common.Control.open" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'O' )
+        .LegacyHotkeyName( "Open" )
+        .MenuText( _( "Open..." ) )
+        .Tooltip( _( "Open existing document" ) )
+        .Icon( BITMAPS::directory_open ) );
 
-TOOL_ACTION ACTIONS::save( "common.Control.save",
-        AS_GLOBAL,
-        MD_CTRL + 'S', LEGACY_HK_NAME( "Save" ),
-        _( "Save" ), _( "Save changes" ),
-        BITMAPS::save );
+TOOL_ACTION ACTIONS::save( TOOL_ACTION_ARGS()
+        .Name( "common.Control.save" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'S' )
+        .LegacyHotkeyName( "Save" )
+        .MenuText( _( "Save" ) )
+        .Tooltip( _( "Save changes" ) )
+        .Icon( BITMAPS::save ) );
 
-TOOL_ACTION ACTIONS::saveAs( "common.Control.saveAs",
-        AS_GLOBAL,
-        MD_SHIFT + MD_CTRL + 'S', LEGACY_HK_NAME( "Save As" ),
-        _( "Save As..." ), _( "Save current document to another location" ),
-        BITMAPS::save_as );
+TOOL_ACTION ACTIONS::saveAs( TOOL_ACTION_ARGS()
+        .Name( "common.Control.saveAs" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + MD_CTRL + 'S' )
+        .LegacyHotkeyName( "Save As" )
+        .MenuText( _( "Save As..." ) )
+        .Tooltip( _( "Save current document to another location" ) )
+        .Icon( BITMAPS::save_as ) );
 
-TOOL_ACTION ACTIONS::saveCopy( "common.Control.saveCopy",
-        AS_GLOBAL,
-        0, "",
-        _( "Save a Copy..." ), _( "Save a copy of the current document to another location" ),
-        BITMAPS::save_as );
+TOOL_ACTION ACTIONS::saveCopy( TOOL_ACTION_ARGS()
+        .Name( "common.Control.saveCopy" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Save a Copy..." ) )
+        .Tooltip( _( "Save a copy of the current document to another location" ) )
+        .Icon( BITMAPS::save_as ) );
 
-TOOL_ACTION ACTIONS::saveAll( "common.Control.saveAll",
-        AS_GLOBAL,
-        0, "",
-        _( "Save All" ), _( "Save all changes" ),
-        BITMAPS::save );
+TOOL_ACTION ACTIONS::saveAll( TOOL_ACTION_ARGS()
+        .Name( "common.Control.saveAll" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Save All" ) )
+        .Tooltip( _( "Save all changes" ) )
+        .Icon( BITMAPS::save ) );
 
-TOOL_ACTION ACTIONS::revert( "common.Control.revert",
-        AS_GLOBAL,
-        0, "",
-        _( "Revert" ), _( "Throw away changes" ) );
+TOOL_ACTION ACTIONS::revert( TOOL_ACTION_ARGS()
+        .Name( "common.Control.revert" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Revert" ) )
+        .Tooltip( _( "Throw away changes" ) ) );
 
-TOOL_ACTION ACTIONS::pageSettings( "common.Control.pageSettings",
-        AS_GLOBAL,
-        0, "",
-        _( "Page Settings..." ), _( "Settings for paper size and title block info" ),
-        BITMAPS::sheetset );
+TOOL_ACTION ACTIONS::pageSettings( TOOL_ACTION_ARGS()
+        .Name( "common.Control.pageSettings" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Page Settings..." ) )
+        .Tooltip( _( "Settings for paper size and title block info" ) )
+        .Icon( BITMAPS::sheetset ) );
 
-TOOL_ACTION ACTIONS::print( "common.Control.print",
-        AS_GLOBAL,
-        MD_CTRL + 'P', LEGACY_HK_NAME( "Print" ),
-        _( "Print..." ), _( "Print" ),
-        BITMAPS::print_button );
+TOOL_ACTION ACTIONS::print( TOOL_ACTION_ARGS()
+        .Name( "common.Control.print" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'P' )
+        .LegacyHotkeyName( "Print" )
+        .MenuText( _( "Print..." ) )
+        .Tooltip( _( "Print" ) )
+        .Icon( BITMAPS::print_button ) );
 
-TOOL_ACTION ACTIONS::plot( "common.Control.plot",
-        AS_GLOBAL,
-        0, "",
-        _( "Plot..." ), _( "Plot" ),
-        BITMAPS::plot );
+TOOL_ACTION ACTIONS::plot( TOOL_ACTION_ARGS()
+        .Name( "common.Control.plot" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Plot..." ) )
+        .Tooltip( _( "Plot" ) )
+        .Icon( BITMAPS::plot ) );
 
-TOOL_ACTION ACTIONS::quit( "common.Control.quit",
-        AS_GLOBAL,
-        0, "",   // Not currently in use due to wxWidgets crankiness
-        _( "Quit" ), _( "Close the current editor" ),
-        BITMAPS::exit );
+TOOL_ACTION ACTIONS::quit( TOOL_ACTION_ARGS()
+        .Name( "common.Control.quit" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Quit" ) )
+        .Tooltip( _( "Close the current editor" ) )
+        .Icon( BITMAPS::exit ) );
 
 // Generic Edit Actions
-TOOL_ACTION ACTIONS::cancelInteractive( "common.Interactive.cancel",
-        AS_GLOBAL,
-        0, "",   // ESC key is handled in the dispatcher
-        _( "Cancel" ), _( "Cancel current tool" ),
-        BITMAPS::cancel, AF_NONE );
+TOOL_ACTION ACTIONS::cancelInteractive( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.cancel" )
+        .Scope( AS_GLOBAL )
+        // ESC key is handled in the dispatcher
+        .MenuText( _( "Cancel" ) )
+        .Tooltip( _( "Cancel current tool" ) )
+        .Icon( BITMAPS::cancel )
+        .Flags( AF_NONE ) );
 
 TOOL_ACTION ACTIONS::showContextMenu( TOOL_ACTION_ARGS()
         .Name( "common.Control.showContextMenu" )
@@ -129,25 +155,31 @@ TOOL_ACTION ACTIONS::showContextMenu( TOOL_ACTION_ARGS()
         .Flags( AF_NONE )
         .Parameter( CURSOR_RIGHT_CLICK ) );
 
-TOOL_ACTION ACTIONS::updateMenu( "common.Interactive.updateMenu",
-        AS_GLOBAL );
+TOOL_ACTION ACTIONS::updateMenu( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.updateMenu" )
+        .Scope( AS_GLOBAL ) );
 
-TOOL_ACTION ACTIONS::undo( "common.Interactive.undo",
-        AS_GLOBAL,
-        MD_CTRL + 'Z', LEGACY_HK_NAME( "Undo" ),
-        _( "Undo" ), _( "Undo last edit" ),
-        BITMAPS::undo );
+TOOL_ACTION ACTIONS::undo( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.undo" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'Z' )
+        .LegacyHotkeyName( "Undo" )
+        .MenuText( _( "Undo" ) )
+        .Tooltip( _( "Undo last edit" ) )
+        .Icon( BITMAPS::undo ) );
 
-TOOL_ACTION ACTIONS::redo( "common.Interactive.redo",
-        AS_GLOBAL,
+TOOL_ACTION ACTIONS::redo( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.redo" )
+        .Scope( AS_GLOBAL )
 #if defined( __WXMAC__ )
-        MD_SHIFT + MD_CTRL + 'Z',
+        .DefaultHotkey( MD_SHIFT + MD_CTRL + 'Z' )
 #else
-        MD_CTRL + 'Y',
+        .DefaultHotkey( MD_CTRL + 'Y' )
 #endif
-        LEGACY_HK_NAME( "Redo" ),
-        _( "Redo" ), _( "Redo last edit" ),
-        BITMAPS::redo );
+        .LegacyHotkeyName( "Redo" )
+        .MenuText( _( "Redo" ) )
+        .Tooltip( _( "Redo last edit" ) )
+        .Icon( BITMAPS::redo ) );
 
 // The following actions need to have a hard-coded UI ID using a wx-specific ID
 // to fix things like search controls in standard file dialogs. If wxWidgets
@@ -186,21 +218,28 @@ TOOL_ACTION ACTIONS::paste( TOOL_ACTION_ARGS()
         .Flags( AF_NONE )
         .UIId( wxID_PASTE ) );
 
-TOOL_ACTION ACTIONS::selectAll( "common.Interactive.selectAll",
-        AS_GLOBAL,
-        MD_CTRL + 'A', "",
-        _( "Select All" ), _( "Select all items on screen" ) );
+TOOL_ACTION ACTIONS::selectAll( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.selectAll" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'A' )
+        .MenuText( _( "Select All" ) )
+        .Tooltip( _( "Select all items on screen" ) ) );
 
-TOOL_ACTION ACTIONS::pasteSpecial( "common.Interactive.pasteSpecial",
-        AS_GLOBAL, 0, "",
-        _( "Paste Special..." ), _( "Paste item(s) from clipboard with annotation options" ),
-        BITMAPS::paste_special );
+TOOL_ACTION ACTIONS::pasteSpecial( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.pasteSpecial" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Paste Special..." ) )
+        .Tooltip( _( "Paste item(s) from clipboard with annotation options" ) )
+        .Icon( BITMAPS::paste_special ) );
 
-TOOL_ACTION ACTIONS::duplicate( "common.Interactive.duplicate",
-        AS_GLOBAL,
-        MD_CTRL + 'D', LEGACY_HK_NAME( "Duplicate" ),
-        _( "Duplicate" ), _( "Duplicates the selected item(s)" ),
-        BITMAPS::duplicate );
+TOOL_ACTION ACTIONS::duplicate( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.duplicate" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'D' )
+        .LegacyHotkeyName( "Duplicate" )
+        .MenuText( _( "Duplicate" ) )
+        .Tooltip( _( "Duplicates the selected item(s)" ) )
+        .Icon( BITMAPS::duplicate ) );
 
 TOOL_ACTION ACTIONS::doDelete( TOOL_ACTION_ARGS()
         .Name( "common.Interactive.delete" )
@@ -216,170 +255,221 @@ TOOL_ACTION ACTIONS::doDelete( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::trash )
         .Parameter( ACTIONS::REMOVE_FLAGS::NORMAL ) );
 
-TOOL_ACTION ACTIONS::deleteTool( "common.Interactive.deleteTool",
-        AS_GLOBAL, 0, "",
-        _( "Interactive Delete Tool" ), _( "Delete clicked items" ),
-        BITMAPS::delete_cursor, AF_ACTIVATE );
+TOOL_ACTION ACTIONS::deleteTool( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.deleteTool" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Interactive Delete Tool" ) )
+        .Tooltip( _( "Delete clicked items" ) )
+        .Icon( BITMAPS::delete_cursor )
+        .Flags( AF_ACTIVATE ) );
 
-TOOL_ACTION ACTIONS::activatePointEditor( "common.Control.activatePointEditor",
-        AS_GLOBAL );
+TOOL_ACTION ACTIONS::activatePointEditor( TOOL_ACTION_ARGS()
+        .Name( "common.Control.activatePointEditor" )
+        .Scope( AS_GLOBAL ) );
 
-TOOL_ACTION ACTIONS::cycleArcEditMode( "common.Interactive.cycleArcEditMode", AS_GLOBAL,
-        MD_CTRL + ' ', "", _( "Cycle arc editing mode" ),
-        _( "Switch to a different method of editing arcs" ) );
+TOOL_ACTION ACTIONS::cycleArcEditMode( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.cycleArcEditMode" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + ' ' )
+        .MenuText( _( "Cycle arc editing mode" ) )
+        .Tooltip( _( "Switch to a different method of editing arcs" ) ) );
 
-TOOL_ACTION ACTIONS::showSearch( "common.Interactive.search",
-        AS_GLOBAL,
-        MD_CTRL + 'G', LEGACY_HK_NAME( "Search" ),
-        _( "Show Search Panel" ), _( "Show/hide the search panel" ),
-        BITMAPS::find );
+TOOL_ACTION ACTIONS::showSearch( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.search" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'G' )
+        .LegacyHotkeyName( "Search" )
+        .MenuText( _( "Show Search Panel" ) )
+        .Tooltip( _( "Show/hide the search panel" ) )
+        .Icon( BITMAPS::find ) );
 
-TOOL_ACTION ACTIONS::find( "common.Interactive.find",
-        AS_GLOBAL,
-        MD_CTRL + 'F', LEGACY_HK_NAME( "Find" ),
-        _( "Find" ), _( "Find text" ),
-        BITMAPS::find );
+TOOL_ACTION ACTIONS::find( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.find" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'F' )
+        .LegacyHotkeyName( "Find" )
+        .MenuText( _( "Find" ) )
+        .Tooltip( _( "Find text" ) )
+        .Icon( BITMAPS::find ) );
 
-TOOL_ACTION ACTIONS::findAndReplace( "common.Interactive.findAndReplace",
-        AS_GLOBAL,
-        MD_CTRL + MD_ALT + 'F', LEGACY_HK_NAME( "Find and Replace" ),
-        _( "Find and Replace" ), _( "Find and replace text" ),
-        BITMAPS::find_replace );
+TOOL_ACTION ACTIONS::findAndReplace( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.findAndReplace" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + MD_ALT + 'F' )
+        .LegacyHotkeyName( "Find and Replace" )
+        .MenuText( _( "Find and Replace" ) )
+        .Tooltip( _( "Find and replace text" ) )
+        .Icon( BITMAPS::find_replace ) );
 
-TOOL_ACTION ACTIONS::findNext( "common.Interactive.findNext",
-        AS_GLOBAL,
-        WXK_F3, LEGACY_HK_NAME( "Find Next" ),
-        _( "Find Next" ), _( "Find next match" ),
-        BITMAPS::find );
+TOOL_ACTION ACTIONS::findNext( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.findNext" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( WXK_F3 )
+        .LegacyHotkeyName( "Find Next" )
+        .MenuText( _( "Find Next" ) )
+        .Tooltip( _( "Find next match" ) )
+        .Icon( BITMAPS::find ) );
 
-TOOL_ACTION ACTIONS::findPrevious( "common.Interactive.findPrevious",
-        AS_GLOBAL,
-        MD_SHIFT + WXK_F3, LEGACY_HK_NAME( "Find Previous" ),
-        _( "Find Previous" ), _( "Find previous match" ),
-        BITMAPS::find );
+TOOL_ACTION ACTIONS::findPrevious( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.findPrevious" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + WXK_F3 )
+        .LegacyHotkeyName( "Find Previous" )
+        .MenuText( _( "Find Previous" ) )
+        .Tooltip( _( "Find previous match" ) )
+        .Icon( BITMAPS::find ) );
 
-TOOL_ACTION ACTIONS::findNextMarker( "common.Interactive.findNextMarker",
-        AS_GLOBAL,
-        MD_CTRL + MD_SHIFT + WXK_F3, LEGACY_HK_NAME( "Find Next Marker" ),
-        _( "Find Next Marker" ), "",
-        BITMAPS::find );
+TOOL_ACTION ACTIONS::findNextMarker( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.findNextMarker" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + MD_SHIFT + WXK_F3 )
+        .LegacyHotkeyName( "Find Next Marker" )
+        .MenuText( _( "Find Next Marker" ) )
+        .Icon( BITMAPS::find ) );
 
-TOOL_ACTION ACTIONS::replaceAndFindNext( "common.Interactive.replaceAndFindNext",
-        AS_GLOBAL,
-        0, "",
-        _( "Replace and Find Next" ), _( "Replace current match and find next" ),
-        BITMAPS::find_replace );
+TOOL_ACTION ACTIONS::replaceAndFindNext( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.replaceAndFindNext" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Replace and Find Next" ) )
+        .Tooltip( _( "Replace current match and find next" ) )
+        .Icon( BITMAPS::find_replace ) );
 
-TOOL_ACTION ACTIONS::replaceAll( "common.Interactive.replaceAll",
-        AS_GLOBAL,
-        0, "",
-        _( "Replace All" ), _( "Replace all matches" ),
-        BITMAPS::find_replace );
+TOOL_ACTION ACTIONS::replaceAll( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.replaceAll" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Replace All" ) )
+        .Tooltip( _( "Replace all matches" ) )
+        .Icon( BITMAPS::find_replace ) );
 
-TOOL_ACTION ACTIONS::updateFind( "common.Control.updateFind",
-        AS_GLOBAL );
+TOOL_ACTION ACTIONS::updateFind( TOOL_ACTION_ARGS()
+        .Name( "common.Control.updateFind" )
+        .Scope( AS_GLOBAL ) );
 
 
 // Marker Controls
-TOOL_ACTION ACTIONS::prevMarker( "common.Checker.prevMarker",
-        AS_GLOBAL,
-        0, "",
-        _( "Previous Marker" ), _( "Go to previous marker in Checker window" ),
-        BITMAPS::marker_previous );
+TOOL_ACTION ACTIONS::prevMarker( TOOL_ACTION_ARGS()
+        .Name( "common.Checker.prevMarker" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Previous Marker" ) )
+        .Tooltip( _( "Go to previous marker in Checker window" ) )
+        .Icon( BITMAPS::marker_previous ) );
 
-TOOL_ACTION ACTIONS::nextMarker( "common.Checker.nextMarker",
-        AS_GLOBAL,
-        0, "",
-        _( "Next Marker" ), _( "Go to next marker in Checker window" ),
-        BITMAPS::marker_next );
+TOOL_ACTION ACTIONS::nextMarker( TOOL_ACTION_ARGS()
+        .Name( "common.Checker.nextMarker" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Next Marker" ) )
+        .Tooltip( _( "Go to next marker in Checker window" ) )
+        .Icon( BITMAPS::marker_next ) );
 
-TOOL_ACTION ACTIONS::excludeMarker( "common.Checker.excludeMarker",
-        AS_GLOBAL,
-        0, "",
-        _( "Exclude Marker" ), _( "Mark current violation in Checker window as an exclusion" ),
-        BITMAPS::marker_exclude );
+TOOL_ACTION ACTIONS::excludeMarker( TOOL_ACTION_ARGS()
+        .Name( "common.Checker.excludeMarker" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Exclude Marker" ) )
+        .Tooltip( _( "Mark current violation in Checker window as an exclusion" ) )
+        .Icon( BITMAPS::marker_exclude ) );
 
 // View Controls
-TOOL_ACTION ACTIONS::zoomRedraw( "common.Control.zoomRedraw",
-        AS_GLOBAL,
+TOOL_ACTION ACTIONS::zoomRedraw( TOOL_ACTION_ARGS()
+        .Name( "common.Control.zoomRedraw" )
+        .Scope( AS_GLOBAL )
 #if defined( __WXMAC__ )
-        MD_CTRL + 'R',
+        .DefaultHotkey( MD_CTRL + 'R' )
 #else
-        WXK_F5,
+        .DefaultHotkey( WXK_F5 )
 #endif
-        LEGACY_HK_NAME( "Zoom Redraw" ),
-        _( "Refresh" ), _( "Refresh" ),
-        BITMAPS::refresh );
+        .LegacyHotkeyName( "Zoom Redraw" )
+        .MenuText( _( "Refresh" ) )
+        .Tooltip( _( "Refresh" ) )
+        .Icon( BITMAPS::refresh ) );
 
-TOOL_ACTION ACTIONS::zoomFitScreen( "common.Control.zoomFitScreen",
-        AS_GLOBAL,
+TOOL_ACTION ACTIONS::zoomFitScreen( TOOL_ACTION_ARGS()
+        .Name( "common.Control.zoomFitScreen" )
+        .Scope( AS_GLOBAL )
 #if defined( __WXMAC__ )
-        MD_CTRL + '0',
+        .DefaultHotkey( MD_CTRL + '0' )
 #else
-        WXK_HOME,
+        .DefaultHotkey( WXK_HOME )
 #endif
-        LEGACY_HK_NAME( "Zoom Auto" ),
-        _( "Zoom to Fit" ), _( "Zoom to Fit" ),
-        BITMAPS::zoom_fit_in_page );
+        .LegacyHotkeyName( "Zoom Auto" )
+        .MenuText( _( "Zoom to Fit" ) )
+        .Tooltip( _( "Zoom to Fit" ) )
+        .Icon( BITMAPS::zoom_fit_in_page ) );
 
-TOOL_ACTION ACTIONS::zoomFitObjects( "common.Control.zoomFitObjects",
-        AS_GLOBAL, MD_CTRL + WXK_HOME, "",
-        _( "Zoom to Objects" ), _( "Zoom to Objects" ),
-        BITMAPS::zoom_fit_to_objects );
+TOOL_ACTION ACTIONS::zoomFitObjects( TOOL_ACTION_ARGS()
+        .Name( "common.Control.zoomFitObjects" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + WXK_HOME )
+        .MenuText( _( "Zoom to Objects" ) )
+        .Tooltip( _( "Zoom to Objects" ) )
+        .Icon( BITMAPS::zoom_fit_to_objects ) );
 
-TOOL_ACTION ACTIONS::zoomIn( "common.Control.zoomIn",
-        AS_GLOBAL,
+TOOL_ACTION ACTIONS::zoomIn( TOOL_ACTION_ARGS()
+        .Name( "common.Control.zoomIn" )
+        .Scope( AS_GLOBAL )
 #if defined( __WXMAC__ )
-        MD_CTRL + '+',
+        .DefaultHotkey( MD_CTRL + '+' )
 #else
-        WXK_F1,
+        .DefaultHotkey( WXK_F1 )
 #endif
-        LEGACY_HK_NAME( "Zoom In" ),
-        _( "Zoom In at Cursor" ), _( "Zoom In at Cursor" ),
-        BITMAPS::zoom_in );
+        .LegacyHotkeyName( "Zoom In" )
+        .MenuText( _( "Zoom In at Cursor" ) )
+        .Tooltip( _( "Zoom In at Cursor" ) )
+        .Icon( BITMAPS::zoom_in ) );
 
-TOOL_ACTION ACTIONS::zoomOut( "common.Control.zoomOut",
-        AS_GLOBAL,
+TOOL_ACTION ACTIONS::zoomOut( TOOL_ACTION_ARGS()
+        .Name( "common.Control.zoomOut" )
+        .Scope( AS_GLOBAL )
 #if defined( __WXMAC__ )
-        MD_CTRL + '-',
+        .DefaultHotkey( MD_CTRL + '-' )
 #else
-        WXK_F2,
+        .DefaultHotkey( WXK_F2 )
 #endif
-        LEGACY_HK_NAME( "Zoom Out" ),
-        _( "Zoom Out at Cursor" ), _( "Zoom Out at Cursor" ),
-        BITMAPS::zoom_out );
+        .LegacyHotkeyName( "Zoom Out" )
+        .MenuText( _( "Zoom Out at Cursor" ) )
+        .Tooltip( _( "Zoom Out at Cursor" ) )
+        .Icon( BITMAPS::zoom_out ) );
 
-TOOL_ACTION ACTIONS::zoomInCenter( "common.Control.zoomInCenter",
-        AS_GLOBAL,
-        0, "",
-        _( "Zoom In" ), _( "Zoom In" ),
-        BITMAPS::zoom_in );
+TOOL_ACTION ACTIONS::zoomInCenter( TOOL_ACTION_ARGS()
+        .Name( "common.Control.zoomInCenter" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Zoom In" ) )
+        .Tooltip( _( "Zoom In" ) )
+        .Icon( BITMAPS::zoom_in ) );
 
-TOOL_ACTION ACTIONS::zoomOutCenter( "common.Control.zoomOutCenter",
-        AS_GLOBAL,
-        0, "",
-        _( "Zoom Out" ), _( "Zoom Out" ),
-        BITMAPS::zoom_out );
+TOOL_ACTION ACTIONS::zoomOutCenter( TOOL_ACTION_ARGS()
+        .Name( "common.Control.zoomOutCenter" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Zoom Out" ) )
+        .Tooltip( _( "Zoom Out" ) )
+        .Icon( BITMAPS::zoom_out ) );
 
-TOOL_ACTION ACTIONS::zoomCenter( "common.Control.zoomCenter",
-        AS_GLOBAL,
-        WXK_F4, LEGACY_HK_NAME( "Zoom Center" ),
-        _( "Center on Cursor" ), _( "Center on Cursor" ),
-        BITMAPS::zoom_center_on_screen );
+TOOL_ACTION ACTIONS::zoomCenter( TOOL_ACTION_ARGS()
+        .Name( "common.Control.zoomCenter" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( WXK_F4 )
+        .LegacyHotkeyName( "Zoom Center" )
+        .MenuText( _( "Center on Cursor" ) )
+        .Tooltip( _( "Center on Cursor" ) )
+        .Icon( BITMAPS::zoom_center_on_screen ) );
 
-TOOL_ACTION ACTIONS::zoomTool( "common.Control.zoomTool",
-        AS_GLOBAL,
-        MD_CTRL + WXK_F5, LEGACY_HK_NAME( "Zoom to Selection" ),
-        _( "Zoom to Selection" ), _( "Zoom to Selection" ),
-        BITMAPS::zoom_area, AF_ACTIVATE );
+TOOL_ACTION ACTIONS::zoomTool( TOOL_ACTION_ARGS()
+        .Name( "common.Control.zoomTool" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + WXK_F5 )
+        .LegacyHotkeyName( "Zoom to Selection" )
+        .MenuText( _( "Zoom to Selection" ) )
+        .Tooltip( _( "Zoom to Selection" ) )
+        .Icon( BITMAPS::zoom_area )
+        .Flags( AF_ACTIVATE ) );
 
 TOOL_ACTION ACTIONS::zoomPreset( TOOL_ACTION_ARGS()
         .Name( "common.Control.zoomPreset" )
         .Scope( AS_GLOBAL )
         .Parameter<int>( 0 ) );      // Default parameter is the 0th item in the list
 
-TOOL_ACTION ACTIONS::centerContents( "common.Control.centerContents",
-        AS_GLOBAL );
+TOOL_ACTION ACTIONS::centerContents( TOOL_ACTION_ARGS()
+        .Name( "common.Control.centerContents" )
+        .Scope( AS_GLOBAL ) );
 
 // Cursor control
 TOOL_ACTION ACTIONS::cursorUp( TOOL_ACTION_ARGS()
@@ -467,18 +557,21 @@ TOOL_ACTION ACTIONS::cursorDblClick( TOOL_ACTION_ARGS()
         .Flags( AF_NONE )
         .Parameter( CURSOR_DBL_CLICK ) );
 
-TOOL_ACTION ACTIONS::refreshPreview( "common.Control.refreshPreview",
-        AS_GLOBAL );
+TOOL_ACTION ACTIONS::refreshPreview( TOOL_ACTION_ARGS()
+        .Name( "common.Control.refreshPreview" )
+        .Scope( AS_GLOBAL ) );
 
-TOOL_ACTION ACTIONS::pinLibrary( "common.Control.pinLibrary",
-        AS_GLOBAL, 0, "",
-        _( "Pin Library" ),
-        _( "Keep the library at the top of the list" ) );
+TOOL_ACTION ACTIONS::pinLibrary( TOOL_ACTION_ARGS()
+        .Name( "common.Control.pinLibrary" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Pin Library" ) )
+        .Tooltip( _( "Keep the library at the top of the list" ) ) );
 
-TOOL_ACTION ACTIONS::unpinLibrary( "common.Control.unpinLibrary",
-        AS_GLOBAL, 0, "",
-        _( "Unpin Library" ),
-        _( "No longer keep the library at the top of the list" ) );
+TOOL_ACTION ACTIONS::unpinLibrary( TOOL_ACTION_ARGS()
+        .Name( "common.Control.unpinLibrary" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Unpin Library" ) )
+        .Tooltip( _( "No longer keep the library at the top of the list" ) ) );
 
 TOOL_ACTION ACTIONS::panUp( TOOL_ACTION_ARGS()
         .Name( "common.Control.panUp" )
@@ -513,29 +606,40 @@ TOOL_ACTION ACTIONS::panRight( TOOL_ACTION_ARGS()
         .Parameter( CURSOR_RIGHT ) );
 
 // Grid control
-TOOL_ACTION ACTIONS::gridFast1( "common.Control.gridFast1",
-        AS_GLOBAL,
-        MD_ALT + '1', LEGACY_HK_NAME( "Switch Grid To Fast Grid1" ),
-        _( "Switch to Fast Grid 1" ), "" );
+TOOL_ACTION ACTIONS::gridFast1( TOOL_ACTION_ARGS()
+        .Name( "common.Control.gridFast1" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_ALT + '1' )
+        .LegacyHotkeyName( "Switch Grid To Fast Grid1" )
+        .MenuText( _( "Switch to Fast Grid 1" ) ) );
 
-TOOL_ACTION ACTIONS::gridFast2( "common.Control.gridFast2",
-        AS_GLOBAL,
-        MD_ALT + '2', LEGACY_HK_NAME( "Switch Grid To Fast Grid2" ),
-        _( "Switch to Fast Grid 2" ), "" );
+TOOL_ACTION ACTIONS::gridFast2( TOOL_ACTION_ARGS()
+        .Name( "common.Control.gridFast2" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_ALT + '2' )
+        .LegacyHotkeyName( "Switch Grid To Fast Grid2" )
+        .MenuText( _( "Switch to Fast Grid 2" ) ) );
 
-TOOL_ACTION ACTIONS::gridFastCycle( "common.Control.gridFastCycle",
-        AS_GLOBAL,
-        MD_ALT + '4', LEGACY_HK_NAME( "Switch Grid To Next Fast Grid" ),
-        _( "Cycle Fast Grid"  ), "" );
+TOOL_ACTION ACTIONS::gridFastCycle( TOOL_ACTION_ARGS()
+        .Name( "common.Control.gridFastCycle" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_ALT + '4' )
+        .LegacyHotkeyName( "Switch Grid To Next Fast Grid" )
+        .MenuText( _( "Cycle Fast Grid"  ) ) );
 
-TOOL_ACTION ACTIONS::gridNext( "common.Control.gridNext",
-        AS_GLOBAL,
-        'N', LEGACY_HK_NAME( "Switch Grid To Next" ),
-        _("Switch to Next Grid" ), "" );
+TOOL_ACTION ACTIONS::gridNext( TOOL_ACTION_ARGS()
+        .Name( "common.Control.gridNext" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'N' )
+        .LegacyHotkeyName( "Switch Grid To Next" )
+        .MenuText( _("Switch to Next Grid" ) ) );
 
-TOOL_ACTION ACTIONS::gridPrev( "common.Control.gridPrev",
-        AS_GLOBAL, MD_SHIFT + 'N', LEGACY_HK_NAME( "Switch Grid To Previous" ),
-        _( "Switch to Previous Grid" ), "" );
+TOOL_ACTION ACTIONS::gridPrev( TOOL_ACTION_ARGS()
+        .Name( "common.Control.gridPrev" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + 'N' )
+        .LegacyHotkeyName( "Switch Grid To Previous" )
+        .MenuText( _( "Switch to Previous Grid" ) ) );
 
 TOOL_ACTION ACTIONS::gridSetOrigin( TOOL_ACTION_ARGS()
         .Name( "common.Control.gridSetOrigin" )
@@ -546,10 +650,11 @@ TOOL_ACTION ACTIONS::gridSetOrigin( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::grid_select_axis )
         .Parameter<VECTOR2D*>( nullptr ) );
 
-TOOL_ACTION ACTIONS::gridResetOrigin( "common.Control.gridResetOrigin",
-        AS_GLOBAL,
-        0, LEGACY_HK_NAME( "Reset Grid Origin" ),
-        _( "Reset Grid Origin" ), "" );
+TOOL_ACTION ACTIONS::gridResetOrigin( TOOL_ACTION_ARGS()
+        .Name( "common.Control.gridResetOrigin" )
+        .Scope( AS_GLOBAL )
+        .LegacyHotkeyName( "Reset Grid Origin" )
+        .MenuText( _( "Reset Grid Origin" ) ) );
 
 TOOL_ACTION ACTIONS::gridPreset( TOOL_ACTION_ARGS()
         .Name( "common.Control.gridPreset" )
@@ -611,88 +716,118 @@ TOOL_ACTION ACTIONS::millimetersUnits( TOOL_ACTION_ARGS()
         .Flags( AF_NONE )
         .Parameter( EDA_UNITS::MILLIMETRES ) );
 
-TOOL_ACTION ACTIONS::updateUnits( "common.Control.updateUnits",
-        AS_GLOBAL );
+TOOL_ACTION ACTIONS::updateUnits( TOOL_ACTION_ARGS()
+        .Name( "common.Control.updateUnits" )
+        .Scope( AS_GLOBAL ) );
 
-TOOL_ACTION ACTIONS::updatePreferences( "common.Control.updatePreferences",
-        AS_GLOBAL );
+TOOL_ACTION ACTIONS::updatePreferences( TOOL_ACTION_ARGS()
+        .Name( "common.Control.updatePreferences" )
+        .Scope( AS_GLOBAL ) );
 
-TOOL_ACTION ACTIONS::selectColumns( "common.Control.selectColumns",
-                                    AS_GLOBAL, 0, "",
-                                    _( "Select Columns" ) );
+TOOL_ACTION ACTIONS::selectColumns( TOOL_ACTION_ARGS()
+        .Name( "common.Control.selectColumns" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Select Columns" ) ) );
 
-TOOL_ACTION ACTIONS::toggleUnits( "common.Control.toggleUnits",
-        AS_GLOBAL,
-        MD_CTRL + 'U', LEGACY_HK_NAME( "Switch Units" ),
-        _( "Switch units" ), _( "Switch between imperial and metric units" ),
-        BITMAPS::unit_mm );
+TOOL_ACTION ACTIONS::toggleUnits( TOOL_ACTION_ARGS()
+        .Name( "common.Control.toggleUnits" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + 'U' )
+        .LegacyHotkeyName( "Switch Units" )
+        .MenuText( _( "Switch units" ) )
+        .Tooltip( _( "Switch between imperial and metric units" ) )
+        .Icon( BITMAPS::unit_mm ) );
 
-TOOL_ACTION ACTIONS::togglePolarCoords( "common.Control.togglePolarCoords",
-        AS_GLOBAL, 0, "",
-        _( "Polar Coordinates" ), _( "Switch between polar and cartesian coordinate systems" ),
-        BITMAPS::polar_coord );
+TOOL_ACTION ACTIONS::togglePolarCoords( TOOL_ACTION_ARGS()
+        .Name( "common.Control.togglePolarCoords" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Polar Coordinates" ) )
+        .Tooltip( _( "Switch between polar and cartesian coordinate systems" ) )
+        .Icon( BITMAPS::polar_coord ) );
 
-TOOL_ACTION ACTIONS::resetLocalCoords( "common.Control.resetLocalCoords",
-        AS_GLOBAL,
-        ' ', LEGACY_HK_NAME( "Reset Local Coordinates" ),
-        _( "Reset Local Coordinates" ), "" );
+TOOL_ACTION ACTIONS::resetLocalCoords( TOOL_ACTION_ARGS()
+        .Name( "common.Control.resetLocalCoords" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( ' ' )
+        .LegacyHotkeyName( "Reset Local Coordinates" )
+        .MenuText( _( "Reset Local Coordinates" ) ) );
 
-TOOL_ACTION ACTIONS::toggleCursor( "common.Control.toggleCursor",
-        AS_GLOBAL,
+TOOL_ACTION ACTIONS::toggleCursor( TOOL_ACTION_ARGS()
+        .Name( "common.Control.toggleCursor" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + MD_SHIFT + 'X' )
         // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
-        MD_CTRL + MD_SHIFT + 'X', LEGACY_HK_NAME( "Toggle Cursor Display (Modern Toolset only)" ),
-        _( "Always Show Cursor" ), _( "Display crosshairs even in selection tool" ),
-        BITMAPS::cursor );
+        .LegacyHotkeyName( "Toggle Cursor Display (Modern Toolset only)" )
+        .MenuText( _( "Always Show Cursor" ) )
+        .Tooltip( _( "Display crosshairs even in selection tool" ) )
+        .Icon( BITMAPS::cursor ) );
 
-TOOL_ACTION ACTIONS::toggleCursorStyle( "common.Control.toggleCursorStyle",
-        AS_GLOBAL, 0, "",
-        _( "Full-Window Crosshairs" ), _( "Switch display of full-window crosshairs" ),
-        BITMAPS::cursor_shape );
+TOOL_ACTION ACTIONS::toggleCursorStyle( TOOL_ACTION_ARGS()
+        .Name( "common.Control.toggleCursorStyle" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Full-Window Crosshairs" ) )
+        .Tooltip( _( "Switch display of full-window crosshairs" ) )
+        .Icon( BITMAPS::cursor_shape ) );
 
-TOOL_ACTION ACTIONS::highContrastMode( "common.Control.highContrastMode",
-        AS_GLOBAL,
-        0, LEGACY_HK_NAME( "Toggle High Contrast Mode" ),
-        _( "Inactive Layer View Mode" ),
-        _( "Toggle inactive layers between normal and dimmed" ),
-        BITMAPS::contrast_mode );
+TOOL_ACTION ACTIONS::highContrastMode( TOOL_ACTION_ARGS()
+        .Name( "common.Control.highContrastMode" )
+        .Scope( AS_GLOBAL )
+        .LegacyHotkeyName( "Toggle High Contrast Mode" )
+        .MenuText( _( "Inactive Layer View Mode" ) )
+        .Tooltip( _( "Toggle inactive layers between normal and dimmed" ) )
+        .Icon( BITMAPS::contrast_mode ) );
 
-TOOL_ACTION ACTIONS::highContrastModeCycle( "common.Control.highContrastModeCycle",
-        AS_GLOBAL,
-        'H', "",
-        _( "Inactive Layer View Mode (3-state)" ),
-        _( "Cycle inactive layers between normal, dimmed, and hidden" ),
-        BITMAPS::contrast_mode );
+TOOL_ACTION ACTIONS::highContrastModeCycle( TOOL_ACTION_ARGS()
+        .Name( "common.Control.highContrastModeCycle" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( 'H' )
+        .MenuText( _( "Inactive Layer View Mode (3-state)" ) )
+        .Tooltip( _( "Cycle inactive layers between normal, dimmed, and hidden" ) )
+        .Icon( BITMAPS::contrast_mode ) );
 
-TOOL_ACTION ACTIONS::toggleBoundingBoxes( "common.Control.toggleBoundingBoxes",
-        AS_GLOBAL, 0, "",
-        _( "Draw Bounding Boxes" ), _( "Draw Bounding Boxes" ),
-        BITMAPS::gerbview_show_negative_objects );
+TOOL_ACTION ACTIONS::toggleBoundingBoxes( TOOL_ACTION_ARGS()
+        .Name( "common.Control.toggleBoundingBoxes" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Draw Bounding Boxes" ) )
+        .Tooltip( _( "Draw Bounding Boxes" ) )
+        .Icon( BITMAPS::gerbview_show_negative_objects ) );
 
-TOOL_ACTION ACTIONS::selectionTool( "common.InteractiveSelection.selectionTool",
-        AS_GLOBAL, 0, "",
-        _( "Select item(s)" ), _( "Select item(s)" ),
-        BITMAPS::cursor, AF_ACTIVATE );
+TOOL_ACTION ACTIONS::selectionTool( TOOL_ACTION_ARGS()
+        .Name( "common.InteractiveSelection.selectionTool" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Select item(s)" ) )
+        .Tooltip( _( "Select item(s)" ) )
+        .Icon( BITMAPS::cursor )
+        .Flags( AF_ACTIVATE ) );
 
-TOOL_ACTION ACTIONS::measureTool( "common.InteractiveEdit.measureTool",
-        AS_GLOBAL,
+TOOL_ACTION ACTIONS::measureTool( TOOL_ACTION_ARGS()
+        .Name( "common.InteractiveEdit.measureTool" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + MD_SHIFT + 'M' )
         // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
-        MD_CTRL + MD_SHIFT + 'M', LEGACY_HK_NAME( "Measure Distance (Modern Toolset only)" ),
-        _( "Measure Tool" ), _( "Interactively measure distance between points" ),
-        BITMAPS::measurement, AF_ACTIVATE );
+        .LegacyHotkeyName( "Measure Distance (Modern Toolset only)" )
+        .MenuText( _( "Measure Tool" ) )
+        .Tooltip( _( "Interactively measure distance between points" ) )
+        .Icon( BITMAPS::measurement )
+        .Flags( AF_ACTIVATE ) );
 
-TOOL_ACTION ACTIONS::pickerTool( "common.InteractivePicker.pickerTool",
-        AS_GLOBAL, 0, "",
-        "", "",
-        BITMAPS::INVALID_BITMAP, AF_ACTIVATE );
+TOOL_ACTION ACTIONS::pickerTool( TOOL_ACTION_ARGS()
+        .Name( "common.InteractivePicker.pickerTool" )
+        .Scope( AS_GLOBAL )
+        .Flags( AF_ACTIVATE ) );
 
-TOOL_ACTION ACTIONS::pickerSubTool( "common.InteractivePicker.pickerSubTool",
-        AS_GLOBAL );
+TOOL_ACTION ACTIONS::pickerSubTool( TOOL_ACTION_ARGS()
+        .Name( "common.InteractivePicker.pickerSubTool" )
+        .Scope( AS_GLOBAL ) );
 
-TOOL_ACTION ACTIONS::show3DViewer( "common.Control.show3DViewer",
-        AS_GLOBAL,
-        MD_ALT + '3', LEGACY_HK_NAME( "3D Viewer" ),
-        _( "3D Viewer" ), _( "Show 3D viewer window" ),
-        BITMAPS::three_d );
+TOOL_ACTION ACTIONS::show3DViewer( TOOL_ACTION_ARGS()
+        .Name( "common.Control.show3DViewer" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_ALT + '3' )
+        .LegacyHotkeyName( "3D Viewer" )
+        .MenuText( _( "3D Viewer" ) )
+        .Tooltip( _( "Show 3D viewer window" ) )
+        .Icon( BITMAPS::three_d ) );
 
 TOOL_ACTION ACTIONS::showSymbolBrowser( TOOL_ACTION_ARGS()
         .Name( "common.Control.showSymbolBrowser" )
@@ -730,21 +865,28 @@ TOOL_ACTION ACTIONS::showFootprintEditor( TOOL_ACTION_ARGS()
         .Flags( AF_NONE )
         .Parameter( FRAME_FOOTPRINT_EDITOR ) );
 
-TOOL_ACTION ACTIONS::showProperties( "common.Control.showProperties",
-        AS_GLOBAL, 0, "",
-        _( "Show Properties Manager" ), _( "Show/hide the properties manager" ),
-        BITMAPS::tools );
+TOOL_ACTION ACTIONS::showProperties( TOOL_ACTION_ARGS()
+        .Name( "common.Control.showProperties" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Show Properties Manager" ) )
+        .Tooltip( _( "Show/hide the properties manager" ) )
+        .Icon( BITMAPS::tools ) );
 
-TOOL_ACTION ACTIONS::updatePcbFromSchematic( "common.Control.updatePcbFromSchematic",
-        AS_GLOBAL,
-        WXK_F8, LEGACY_HK_NAME( "Update PCB from Schematic" ),
-        _( "Update PCB from Schematic..." ), _( "Update PCB with changes made to schematic" ),
-        BITMAPS::update_pcb_from_sch );
+TOOL_ACTION ACTIONS::updatePcbFromSchematic( TOOL_ACTION_ARGS()
+        .Name( "common.Control.updatePcbFromSchematic" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( WXK_F8 )
+        .LegacyHotkeyName( "Update PCB from Schematic" )
+        .MenuText( _( "Update PCB from Schematic..." ) )
+        .Tooltip( _( "Update PCB with changes made to schematic" ) )
+        .Icon( BITMAPS::update_pcb_from_sch ) );
 
-TOOL_ACTION ACTIONS::updateSchematicFromPcb( "common.Control.updateSchematicFromPCB",
-        AS_GLOBAL, 0, "",
-        _( "Update Schematic from PCB..." ), _( "Update schematic with changes made to PCB" ),
-        BITMAPS::update_sch_from_pcb );
+TOOL_ACTION ACTIONS::updateSchematicFromPcb( TOOL_ACTION_ARGS()
+        .Name( "common.Control.updateSchematicFromPCB" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Update Schematic from PCB..." ) )
+        .Tooltip( _( "Update schematic with changes made to PCB" ) )
+        .Icon( BITMAPS::update_sch_from_pcb ) );
 
 TOOL_ACTION ACTIONS::openPreferences( TOOL_ACTION_ARGS()
         .Name( "common.SuiteControl.openPreferences" )
@@ -755,61 +897,73 @@ TOOL_ACTION ACTIONS::openPreferences( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::preference )
         .UIId( wxID_PREFERENCES ) );
 
-TOOL_ACTION ACTIONS::configurePaths( "common.SuiteControl.configurePaths",
-        AS_GLOBAL, 0, "",
-        _( "Configure Paths..." ), _( "Edit path configuration environment variables" ),
-        BITMAPS::path );
+TOOL_ACTION ACTIONS::configurePaths( TOOL_ACTION_ARGS()
+        .Name( "common.SuiteControl.configurePaths" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Configure Paths..." ) )
+        .Tooltip( _( "Edit path configuration environment variables" ) )
+        .Icon( BITMAPS::path ) );
 
-TOOL_ACTION ACTIONS::showSymbolLibTable( "common.SuiteControl.showSymbolLibTable",
-        AS_GLOBAL, 0, "",
-        _( "Manage Symbol Libraries..." ),
-        _( "Edit the global and project symbol library lists" ),
-        BITMAPS::library_table );
+TOOL_ACTION ACTIONS::showSymbolLibTable( TOOL_ACTION_ARGS()
+        .Name( "common.SuiteControl.showSymbolLibTable" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Manage Symbol Libraries..." ) )
+        .Tooltip( _( "Edit the global and project symbol library lists" ) )
+        .Icon( BITMAPS::library_table ) );
 
-TOOL_ACTION ACTIONS::showFootprintLibTable( "common.SuiteControl.showFootprintLibTable",
-        AS_GLOBAL, 0, "",
-        _( "Manage Footprint Libraries..." ),
-        _( "Edit the global and project footprint library lists" ),
-        BITMAPS::library_table );
+TOOL_ACTION ACTIONS::showFootprintLibTable( TOOL_ACTION_ARGS()
+        .Name( "common.SuiteControl.showFootprintLibTable" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Manage Footprint Libraries..." ) )
+        .Tooltip( _( "Edit the global and project footprint library lists" ) )
+        .Icon( BITMAPS::library_table ) );
 
-TOOL_ACTION ACTIONS::gettingStarted( "common.SuiteControl.gettingStarted",
-        AS_GLOBAL, 0, "",
-        _( "Getting Started with KiCad" ),
-        _( "Open \"Getting Started in KiCad\" guide for beginners" ),
-        BITMAPS::help );
+TOOL_ACTION ACTIONS::gettingStarted( TOOL_ACTION_ARGS()
+        .Name( "common.SuiteControl.gettingStarted" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Getting Started with KiCad" ) )
+        .Tooltip( _( "Open \"Getting Started in KiCad\" guide for beginners" ) )
+        .Icon( BITMAPS::help ) );
 
-TOOL_ACTION ACTIONS::help( "common.SuiteControl.help",
-        AS_GLOBAL, 0, "",
-        _( "Help" ),
-        _( "Open product documentation in a web browser" ),
-        BITMAPS::help_online );
+TOOL_ACTION ACTIONS::help( TOOL_ACTION_ARGS()
+        .Name( "common.SuiteControl.help" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Help" ) )
+        .Tooltip( _( "Open product documentation in a web browser" ) )
+        .Icon( BITMAPS::help_online ) );
 
-TOOL_ACTION ACTIONS::listHotKeys( "common.SuiteControl.listHotKeys",
-        AS_GLOBAL,
-        MD_CTRL + WXK_F1, LEGACY_HK_NAME( "List Hotkeys" ),
-        _( "List Hotkeys..." ),
-        _( "Displays current hotkeys table and corresponding commands" ),
-        BITMAPS::hotkeys );
+TOOL_ACTION ACTIONS::listHotKeys( TOOL_ACTION_ARGS()
+        .Name( "common.SuiteControl.listHotKeys" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + WXK_F1 )
+        .LegacyHotkeyName( "List Hotkeys" )
+        .MenuText( _( "List Hotkeys..." ) )
+        .Tooltip( _( "Displays current hotkeys table and corresponding commands" ) )
+        .Icon( BITMAPS::hotkeys ) );
 
-TOOL_ACTION ACTIONS::getInvolved( "common.SuiteControl.getInvolved",
-        AS_GLOBAL, 0, "",
-        _( "Get Involved" ),
-        _( "Open \"Contribute to KiCad\" in a web browser" ),
-        BITMAPS::info );
+TOOL_ACTION ACTIONS::getInvolved( TOOL_ACTION_ARGS()
+        .Name( "common.SuiteControl.getInvolved" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Get Involved" ) )
+        .Tooltip( _( "Open \"Contribute to KiCad\" in a web browser" ) )
+        .Icon( BITMAPS::info ) );
 
-TOOL_ACTION ACTIONS::donate( "common.SuiteControl.donate",
-        AS_GLOBAL, 0, "",
-        _( "Donate" ),
-        _( "Open \"Donate to KiCad\" in a web browser" ) );
+TOOL_ACTION ACTIONS::donate( TOOL_ACTION_ARGS()
+        .Name( "common.SuiteControl.donate" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Donate" ) )
+        .Tooltip( _( "Open \"Donate to KiCad\" in a web browser" ) ) );
 
-TOOL_ACTION ACTIONS::reportBug( "common.SuiteControl.reportBug",
-        AS_GLOBAL, 0, "",
-        _( "Report Bug" ),
-        _( "Report a problem with KiCad" ),
-        BITMAPS::bug );
+TOOL_ACTION ACTIONS::reportBug( TOOL_ACTION_ARGS()
+        .Name( "common.SuiteControl.reportBug" )
+        .Scope( AS_GLOBAL )
+        .MenuText( _( "Report Bug" ) )
+        .Tooltip( _( "Report a problem with KiCad" ) )
+        .Icon( BITMAPS::bug ) );
 
-TOOL_ACTION ACTIONS::ddAddLibrary( "common.Control.ddaddLibrary",
-        AS_GLOBAL );
+TOOL_ACTION ACTIONS::ddAddLibrary( TOOL_ACTION_ARGS()
+        .Name( "common.Control.ddaddLibrary" )
+        .Scope( AS_GLOBAL ) );
 
 // System-wide selection Events
 
