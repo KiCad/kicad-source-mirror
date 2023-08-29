@@ -43,8 +43,9 @@ PCB_VIEW::PCB_VIEW( bool aIsDynamic ) :
     // However, ensure this area has the right size (max size allowed by integer coordinates) in
     // case of the default value is changed. Could be a size depending on the drawing-sheet size.
     typedef std::numeric_limits<int> coord_limits;
-    double pos = coord_limits::lowest() / 2 + coord_limits::epsilon();
-    double size = coord_limits::max() - coord_limits::epsilon();
+    double pos = coord_limits::lowest() + coord_limits::epsilon();
+    double size = static_cast<double>( coord_limits::max() - coord_limits::epsilon() )
+                  - static_cast<double>( coord_limits::min() + coord_limits::epsilon() );
     m_boundary.SetOrigin( pos, pos );
     m_boundary.SetSize( size, size );
 }
