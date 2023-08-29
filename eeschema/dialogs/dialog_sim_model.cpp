@@ -157,26 +157,40 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
     wxString           msg;
     WX_STRING_REPORTER reporter( &msg );
 
+    auto setFieldValue =
+            [&]( const wxString& aFieldName, const wxString& aValue )
+            {
+                for( T_field& field : m_fields )
+                {
+                    if( field.GetName() == aFieldName )
+                    {
+                        field.SetText( aValue );
+                        return;
+                    }
+                }
+
+                m_fields.emplace_back( &m_symbol, -1, aFieldName );
+                m_fields.back().SetText( aValue );
+            };
+
     // Infer RLC and VI models if they aren't specified
     if( SIM_MODEL::InferSimModel( m_symbol, &m_fields, false, SIM_VALUE_GRAMMAR::NOTATION::SI,
                                   &deviceType, &modelType, &modelParams, &pinMap ) )
     {
-        m_fields.emplace_back( &m_symbol, -1, SIM_DEVICE_TYPE_FIELD );
-        m_fields.back().SetText( deviceType );
+        setFieldValue( SIM_DEVICE_TYPE_FIELD, deviceType );
 
         if( !modelType.IsEmpty() )
-        {
-            m_fields.emplace_back( &m_symbol, -1, SIM_TYPE_FIELD );
-            m_fields.back().SetText( modelType );
-        }
+            setFieldValue(  SIM_TYPE_FIELD, modelType );
 
-        m_fields.emplace_back( &m_symbol, -1, SIM_PARAMS_FIELD );
-        m_fields.back().SetText( modelParams );
+        setFieldValue( SIM_PARAMS_FIELD, modelParams );
 
-        m_fields.emplace_back( &m_symbol, -1, SIM_PINS_FIELD );
-        m_fields.back().SetText( pinMap );
+        setFieldValue( SIM_PINS_FIELD, pinMap );
 
         storeInValue = true;
+
+        // In case the storeInValue checkbox is turned off (if it's left on then we'll overwrite
+        // this field with the actual value):
+        m_fields[ VALUE_FIELD ].SetText( wxT( "${SIM.PARAMS}" ) );
     }
 
     std::string libraryFilename = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::LIBRARY_FIELD );
@@ -302,13 +316,7 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
     }
 
     if( storeInValue )
-    {
         curModel().SetIsStoredInValue( true );
-
-        // In case the storeInValue checkbox is turned off (if it's left on then we'll overwrite
-        // this field with the actual value):
-        m_fields[ VALUE_FIELD ].SetText( wxT( "${SIM.PARAMS}" ) );
-    }
 
     m_saveInValueCheckbox->SetValue( curModel().IsStoredInValue() );
 

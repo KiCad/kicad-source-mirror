@@ -1385,7 +1385,7 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, std::vector<T_field>* aFields,
             && !value.IsEmpty()
             && ( prefix.StartsWith( "V" ) || prefix.StartsWith( "I" ) ) )  )
     {
-        if( aModelParams->IsEmpty() && !value.IsEmpty() )
+        if( !value.IsEmpty() )
         {
             wxString param = "dc";
 
@@ -1418,23 +1418,28 @@ bool SIM_MODEL::InferSimModel( T_symbol& aSymbol, std::vector<T_field>* aFields,
 
                 if( valueMantissa.Contains( wxT( "." ) ) || valueFraction.IsEmpty() )
                 {
-                    aModelParams->Printf( wxT( "%s=\"%s%s\"" ),
+                    aModelParams->Printf( wxT( "%s=\"%s%s\" %s" ),
                                           param,
                                           valueMantissa,
-                                          convertNotation( valueExponent ) );
+                                          convertNotation( valueExponent ),
+                                          *aModelParams );
                 }
                 else
                 {
-                    aModelParams->Printf( wxT( "%s=\"%s.%s%s\"" ),
+                    aModelParams->Printf( wxT( "%s=\"%s.%s%s\" %s" ),
                                           param,
                                           valueMantissa,
                                           valueFraction,
-                                          convertNotation( valueExponent ) );
+                                          convertNotation( valueExponent ),
+                                          *aModelParams );
                 }
             }
             else
             {
-                aModelParams->Printf( wxT( "%s=\"%s\"" ), param, value );
+                aModelParams->Printf( wxT( "%s=\"%s\" %s" ),
+                                      param,
+                                      value,
+                                      *aModelParams );
             }
         }
 
