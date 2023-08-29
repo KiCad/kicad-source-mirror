@@ -634,8 +634,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
     }
 
     // Remove aAdditionalRefs references
-    for( size_t i = originalSize; i < ( aAdditionalRefs.GetCount() + originalSize ); i++ )
-        RemoveItem( originalSize );
+    m_flatList.erase( m_flatList.begin() + originalSize, m_flatList.end() );
 
     wxASSERT( originalSize == GetCount() ); // Make sure we didn't make a mistake
 }
