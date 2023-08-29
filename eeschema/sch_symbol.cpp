@@ -190,8 +190,12 @@ SCH_SYMBOL::SCH_SYMBOL( const SCH_SYMBOL& aSymbol ) :
 
     m_pins.clear();
 
+    // Copy (and re-parent) the pins
     for( const std::unique_ptr<SCH_PIN>& pin : aSymbol.m_pins )
-        m_pins.emplace_back( std::make_unique<SCH_PIN>( this, pin->GetNumber(), pin->GetAlt() ) );
+    {
+        m_pins.emplace_back( std::make_unique<SCH_PIN>( *pin ) );
+        m_pins.back()->SetParent( this );
+    }
 
     m_fieldsAutoplaced = aSymbol.m_fieldsAutoplaced;
     m_schLibSymbolName = aSymbol.m_schLibSymbolName;
