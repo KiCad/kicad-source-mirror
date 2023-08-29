@@ -238,8 +238,7 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
                 else if( m_frame->GetMoveWarpsCursor() )
                 {
                     VECTOR2I itemPos = selection.GetTopLeftItem()->GetPosition();
-                    m_anchorPos = grid.AlignGrid( VECTOR2I( itemPos.x, -itemPos.y ),
-                                                  grid.GetSelectionGrid( selection ) );
+                    m_anchorPos = VECTOR2I( itemPos.x, -itemPos.y );
 
                     getViewControls()->WarpMouseCursor( m_anchorPos, true, true );
                     m_cursor = m_anchorPos;
