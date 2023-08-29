@@ -135,7 +135,7 @@ public:
         ACTION_MENU( true )
     {
         SetIcon( BITMAPS::component_select_unit );
-        SetTitle( _( "Alternate Pin Functions" ) );
+        SetTitle( _( "Pin Function" ) );
     }
 
 protected:

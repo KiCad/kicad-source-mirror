@@ -1877,7 +1877,7 @@
                         </object>
                         <object class="notebookpage" expanded="0">
                             <property name="bitmap"></property>
-                            <property name="label">Alternate Pin Assignments</property>
+                            <property name="label">Pin Functions</property>
                             <property name="select">0</property>
                             <object class="wxPanel" expanded="0">
                                 <property name="BottomDockable">1</property>

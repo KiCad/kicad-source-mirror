@@ -323,5 +323,5 @@ void SCH_EDIT_FRAME::SetAltPinFunction( SCH_PIN* aPin, const wxString& aFunction
     else
         aPin->SetAlt( aFunction );
 
-    commit.Push( _( "Set Alternate Pin Function" ) );
+    commit.Push( _( "Set Pin Function" ) );
 }

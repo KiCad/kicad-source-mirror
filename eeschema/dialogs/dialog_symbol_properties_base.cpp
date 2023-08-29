@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -302,7 +302,7 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	m_pinTablePage->SetSizer( pinTableSizer );
 	m_pinTablePage->Layout();
 	pinTableSizer->Fit( m_pinTablePage );
-	m_notebook1->AddPage( m_pinTablePage, _("Alternate Pin Assignments"), false );
+	m_notebook1->AddPage( m_pinTablePage, _("Pin Functions"), false );
 
 	mainSizer->Add( m_notebook1, 1, wxEXPAND|wxALL, 10 );
 
