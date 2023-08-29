@@ -908,33 +908,49 @@ void LIB_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
             || ( aPinOrient == PIN_ORIENTATION::PIN_RIGHT ) )
         {
             /* Its an horizontal line. */
-            if( aDrawPinName )
+            x = ( x1 + aPinPos.x) / 2;
+
+            if( aDrawPinName && aDrawPinNum )
             {
-                x = ( x1 + aPinPos.x) / 2;
                 plotText( x, y1 - name_offset, nameColor, name, ANGLE_HORIZONTAL, m_nameTextSize,
                           GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, namePenWidth );
-            }
 
-            if( aDrawPinNum )
-            {
-                x = ( x1 + aPinPos.x ) / 2;
                 plotText( x, y1 + num_offset, numColor, number, ANGLE_HORIZONTAL, m_numTextSize,
                           GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_TOP, numPenWidth );
             }
-        }
-        else     /* Its a vertical line. */
-        {
-            if( aDrawPinName )
+            else if( aDrawPinName )
             {
-                y = ( y1 + aPinPos.y ) / 2;
+                plotText( x, y1 - name_offset, nameColor, name, ANGLE_HORIZONTAL, m_nameTextSize,
+                          GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, namePenWidth );
+            }
+            else if( aDrawPinNum )
+            {
+                plotText( x, y1 - name_offset, numColor, number, ANGLE_HORIZONTAL, m_numTextSize,
+                          GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, numPenWidth );
+            }
+        }
+        else
+        {
+            /* Its a vertical line. */
+            y = ( y1 + aPinPos.y ) / 2;
+
+            if( aDrawPinName && aDrawPinNum )
+            {
+                plotText( x1 - name_offset, y, nameColor, name, ANGLE_VERTICAL, m_nameTextSize,
+                          GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, namePenWidth );
+
+                plotText( x1 + num_offset, y, numColor, number, ANGLE_VERTICAL, m_numTextSize,
+                          GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_TOP, numPenWidth );
+            }
+            else if( aDrawPinName )
+            {
                 plotText( x1 - name_offset, y, nameColor, name, ANGLE_VERTICAL, m_nameTextSize,
                           GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, namePenWidth );
             }
-
-            if( aDrawPinNum )
+            else if( aDrawPinNum )
             {
-                plotText( x1 + num_offset, ( y1 + aPinPos.y ) / 2, numColor, number, ANGLE_VERTICAL,
-                          m_numTextSize, GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_TOP, numPenWidth );
+                plotText( x1 - num_offset, y, numColor, number, ANGLE_VERTICAL, m_numTextSize,
+                          GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_BOTTOM, numPenWidth );
             }
         }
     }
