@@ -177,7 +177,6 @@ void SYMBOL_EDIT_FRAME::ReCreateOptToolbar()
     EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
     std::unique_ptr<ACTION_MENU> gridMenu = std::make_unique<ACTION_MENU>( false, selTool );
     gridMenu->Add( ACTIONS::gridProperties );
-    gridMenu->Add( ACTIONS::gridOrigin );
     m_optionsToolBar->AddToolContextMenu( ACTIONS::toggleGrid, std::move( gridMenu ) );
 
     m_optionsToolBar->Realize();

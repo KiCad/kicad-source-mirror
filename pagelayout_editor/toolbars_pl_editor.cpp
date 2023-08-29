@@ -174,7 +174,6 @@ void PL_EDITOR_FRAME::ReCreateOptToolbar()
     PL_SELECTION_TOOL*           selTool = m_toolManager->GetTool<PL_SELECTION_TOOL>();
     std::unique_ptr<ACTION_MENU> gridMenu = std::make_unique<ACTION_MENU>( false, selTool );
     gridMenu->Add( ACTIONS::gridProperties );
-    gridMenu->Add( ACTIONS::gridOrigin );
     m_optionsToolBar->AddToolContextMenu( ACTIONS::toggleGrid, std::move( gridMenu ) );
 
     m_optionsToolBar->Add( ACTIONS::toggleGrid, ACTION_TOOLBAR::TOGGLE );
