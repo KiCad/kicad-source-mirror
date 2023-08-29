@@ -408,8 +408,32 @@ std::set<BOARD_ITEM*> PCB_GRID_HELPER::queryVisible( const BOX2I& aArea,
         }
     }
 
-    for( BOARD_ITEM* skipItem : aSkip )
-        items.erase( skipItem );
+    std::function<void( BOARD_ITEM* )> skipItem =
+            [&]( BOARD_ITEM* aItem )
+            {
+                items.erase( aItem );
+
+                if( FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( aItem ) )
+                {
+                    footprint->RunOnChildren(
+                            [&]( BOARD_ITEM* aChild )
+                            {
+                                skipItem( aChild );
+                            } );
+                }
+
+                if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( aItem ) )
+                {
+                    group->RunOnChildren(
+                            [&]( BOARD_ITEM* aChild )
+                            {
+                                skipItem( aChild );
+                            } );
+                }
+            };
+
+    for( BOARD_ITEM* item : aSkip )
+        skipItem( item );
 
     return items;
 }
