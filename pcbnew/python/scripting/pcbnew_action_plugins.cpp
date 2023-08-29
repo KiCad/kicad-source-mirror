@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,6 +41,8 @@
 #include <tools/pcb_selection_tool.h>
 #include <pcb_painter.h>
 #include <wx/msgdlg.h>
+#include <wx/app.h>
+#include <kiplatform/app.h>
 #include "../../scripting/python_scripting.h"
 
 PYTHON_ACTION_PLUGIN::PYTHON_ACTION_PLUGIN( PyObject* aAction )
@@ -73,11 +75,57 @@ PyObject* PYTHON_ACTION_PLUGIN::CallMethod( const char* aMethod, PyObject* aArgl
     {
         PyObject* result = PyObject_CallObject( pFunc, aArglist );
 
+        if( !wxTheApp )
+            KIPLATFORM::APP::AttachConsole( true );
+
         if( PyErr_Occurred() )
         {
-            wxMessageBox( PyErrStringWithTraceback(),
-                          _( "Exception on python action plugin code" ),
-                          wxICON_ERROR | wxOK );
+            wxString message = _HKI( "Exception on python action plugin code" );
+            wxString traceback = PyErrStringWithTraceback();
+
+            std::cerr << message << std::endl << std::endl;
+            std::cerr << traceback << std::endl;
+
+            if( wxTheApp )
+                wxSafeShowMessage( wxGetTranslation( message ), traceback );
+        }
+
+        if( !wxTheApp )
+        {
+            wxArrayString messages;
+            messages.Add( "Fatal error");
+            messages.Add( wxString::Format(
+                    "The application handle was destroyed after running Python plugin '%s'.",
+                    m_cachedName ) );
+
+            // Poor man's ASCII message box
+            {
+                int maxLen = 0;
+
+                for( const wxString& msg : messages )
+                    if( msg.length() > maxLen )
+                        maxLen = msg.length();
+
+                wxChar   ch = '*';
+                wxString border( ch, 3 );
+
+                std::cerr << wxString( ch, maxLen + 2 + border.length() * 2 ) << std::endl;
+                std::cerr << border << ' ' << wxString( ' ', maxLen ) << ' ' << border << std::endl;
+
+                for( wxString msg : messages )
+                    std::cerr << border << ' ' << msg.Pad( maxLen - msg.length() ) << ' ' << border
+                              << std::endl;
+
+                std::cerr << border << ' ' << wxString( ' ', maxLen ) << ' ' << border << std::endl;
+                std::cerr << wxString( ch, maxLen + 2 + border.length() * 2 ) << std::endl;
+            }
+
+#ifdef _WIN32
+            std::cerr << std::endl << "Press any key to abort..." << std::endl;
+            (void) std::getchar();
+#endif
+
+            abort();
         }
 
         if( result )
@@ -127,7 +175,10 @@ wxString PYTHON_ACTION_PLUGIN::GetName()
 {
     PyLOCK lock;
 
-    return CallRetStrMethod( "GetName" );
+    wxString name = CallRetStrMethod( "GetName" );
+    m_cachedName = name;
+
+    return name;
 }
 
 

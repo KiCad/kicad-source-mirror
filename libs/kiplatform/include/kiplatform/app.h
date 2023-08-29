@@ -37,6 +37,14 @@ namespace KIPLATFORM
         bool Init();
 
         /**
+         * Tries to attach a console window with stdout, stderr and stdin.
+         * 
+         * @param aTryAlloc try to allocate the console if cannot attach to it.
+         * @return true if attach successful, false if unsuccessful
+         */
+        bool AttachConsole( bool aTryAlloc );
+
+        /**
          * Checks if the Operating System is explicitly unsupported and we want to prevent
          * users from sending bug reports and show them a disclaimer on startup.
          *
