@@ -415,10 +415,9 @@ bool LEGACY_PLUGIN::CanReadBoard( const wxString& aFileName ) const
     if( !PLUGIN::CanReadBoard( aFileName ) )
         return false;
 
-    FILE_LINE_READER tempReader( aFileName );
-
     try
     {
+        FILE_LINE_READER tempReader( aFileName );
         getVersion( &tempReader );
     }
     catch( const IO_ERROR& )
@@ -435,24 +434,31 @@ bool LEGACY_PLUGIN::CanReadFootprint( const wxString& aFileName ) const
     if( !PLUGIN::CanReadFootprint( aFileName ) )
         return false;
 
-    FILE_LINE_READER         freader( aFileName );
-    WHITESPACE_FILTER_READER reader( freader );
-
-    reader.ReadLine();
-    char* line = reader.Line();
-
-    if( !line )
-        return false;
-
-    if( !strncasecmp( line, FOOTPRINT_LIBRARY_HEADER, FOOTPRINT_LIBRARY_HEADER_CNT ) )
+    try
     {
-        while( reader.ReadLine() )
+        FILE_LINE_READER         freader( aFileName );
+        WHITESPACE_FILTER_READER reader( freader );
+
+        reader.ReadLine();
+        char* line = reader.Line();
+
+        if( !line )
+            return false;
+
+        if( !strncasecmp( line, FOOTPRINT_LIBRARY_HEADER, FOOTPRINT_LIBRARY_HEADER_CNT ) )
         {
-            if( !strncasecmp( line, "$MODULE", strlen( "$MODULE" ) ) )
+            while( reader.ReadLine() )
             {
-                return true;
+                if( !strncasecmp( line, "$MODULE", strlen( "$MODULE" ) ) )
+                {
+                    return true;
+                }
             }
         }
+    }
+    catch( const IO_ERROR& )
+    {
+        return false;
     }
 
     return false;

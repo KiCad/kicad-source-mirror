@@ -274,11 +274,19 @@ bool PCB_PLUGIN::CanReadBoard( const wxString& aFileName ) const
     if( !PLUGIN::CanReadBoard( aFileName ) )
         return false;
 
-    FILE_LINE_READER reader( aFileName );
+    try
+    {
+        FILE_LINE_READER reader( aFileName );
+        PCB_PARSER       parser( &reader, nullptr, m_queryUserCallback );
 
-    PCB_PARSER parser( &reader, nullptr, m_queryUserCallback );
+        return parser.IsValidBoardHeader();
+    }
+    catch( const IO_ERROR& )
+    {
+        return false;
+    }
 
-    return parser.IsValidBoardHeader();
+    return false;
 }
 
 
