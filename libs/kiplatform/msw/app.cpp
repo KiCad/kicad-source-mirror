@@ -84,43 +84,7 @@ bool KIPLATFORM::APP::Init()
 
     // In order to support GUI and CLI
     // Let's attach to console when it's possible, or allocate if requested.
-    bool tryAlloc = wxGetEnv( wxS( "KICAD_ALLOC_CONSOLE" ), nullptr );
-
-    HANDLE handle;
-    if( AttachConsole( ATTACH_PARENT_PROCESS ) || ( tryAlloc && AllocConsole() ) )
-    {
-        #if !defined( __MINGW32__ ) // These redirections create problems on mingw:
-                                    // Nothing is printed to the console
-
-
-        if( GetStdHandle( STD_INPUT_HANDLE ) != INVALID_HANDLE_VALUE )
-        {
-            freopen( "CONIN$", "r", stdin );
-            setvbuf( stdin, NULL, _IONBF, 0 );
-        }
-
-        if( GetStdHandle( STD_OUTPUT_HANDLE ) != INVALID_HANDLE_VALUE )
-        {
-            freopen( "CONOUT$", "w", stdout );
-            setvbuf( stdout, NULL, _IONBF, 0 );
-        }
-
-        if( GetStdHandle( STD_ERROR_HANDLE ) != INVALID_HANDLE_VALUE )
-        {
-            freopen( "CONOUT$", "w", stderr );
-            setvbuf( stderr, NULL, _IONBF, 0 );
-        }
-        #endif
-
-        std::ios::sync_with_stdio( true );
-
-        std::wcout.clear();
-        std::cout.clear();
-        std::wcerr.clear();
-        std::cerr.clear();
-        std::wcin.clear();
-        std::cin.clear();
-    }
+    AttachConsole( wxGetEnv( wxS( "KICAD_ALLOC_CONSOLE" ), nullptr ) );
 
     // It may be useful to log up to traces in a console, but in Release builds the log level changes to Info
     // Also we have to force the active target to stderr or else it goes to the void
@@ -135,6 +99,48 @@ bool KIPLATFORM::APP::Init()
     }
 
     return true;
+}
+
+
+bool KIPLATFORM::APP::AttachConsole( bool aTryAlloc )
+{
+    if( ::AttachConsole( ATTACH_PARENT_PROCESS ) || ( aTryAlloc && ::AllocConsole() ) )
+    {
+        #if !defined( __MINGW32__ ) // These redirections create problems on mingw:
+                                    // Nothing is printed to the console
+
+        if( ::GetStdHandle( STD_INPUT_HANDLE ) != INVALID_HANDLE_VALUE )
+        {
+            freopen( "CONIN$", "r", stdin );
+            setvbuf( stdin, NULL, _IONBF, 0 );
+        }
+
+        if( ::GetStdHandle( STD_OUTPUT_HANDLE ) != INVALID_HANDLE_VALUE )
+        {
+            freopen( "CONOUT$", "w", stdout );
+            setvbuf( stdout, NULL, _IONBF, 0 );
+        }
+
+        if( ::GetStdHandle( STD_ERROR_HANDLE ) != INVALID_HANDLE_VALUE )
+        {
+            freopen( "CONOUT$", "w", stderr );
+            setvbuf( stderr, NULL, _IONBF, 0 );
+        }
+        #endif
+
+        std::ios::sync_with_stdio( true );
+
+        std::wcout.clear();
+        std::cout.clear();
+        std::wcerr.clear();
+        std::cerr.clear();
+        std::wcin.clear();
+        std::cin.clear();
+
+        return true;
+    }
+
+    return false;
 }
 
 

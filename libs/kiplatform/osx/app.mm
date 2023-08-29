@@ -32,6 +32,13 @@ bool KIPLATFORM::APP::Init()
 }
 
 
+bool KIPLATFORM::APP::AttachConsole( bool aTryAlloc )
+{
+    // Not implemented on this platform
+    return true;
+}
+
+
 bool KIPLATFORM::APP::IsOperatingSystemUnsupported()
 {
     // Not implemented on this platform
