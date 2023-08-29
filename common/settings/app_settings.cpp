@@ -138,14 +138,23 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
     m_params.emplace_back( new PARAM_LIST<wxString>( "system.file_history",
             &m_System.file_history, {} ) );
 
-    m_params.emplace_back( new PARAM<int>( "system.units",
-            &m_System.units, static_cast<int>( EDA_UNITS::MILLIMETRES ) ) );
+    if( m_filename == wxS( "pl_editor" )
+        || ( m_filename == wxS( "eeschema" ) || m_filename == wxS( "symbol_editor" ) ) )
+    {
+        m_params.emplace_back( new PARAM<int>( "system.units",
+                &m_System.units, static_cast<int>( EDA_UNITS::MILS ) ) );
+    }
+    else
+    {
+        m_params.emplace_back( new PARAM<int>( "system.units",
+                &m_System.units, static_cast<int>( EDA_UNITS::MILLIMETRES ) ) );
+    }
 
     m_params.emplace_back( new PARAM<int>( "system.last_metric_units",
             &m_System.last_metric_units, static_cast<int>( EDA_UNITS::MILLIMETRES ) ) );
 
     m_params.emplace_back( new PARAM<int>( "system.last_imperial_units",
-            &m_System.last_imperial_units, static_cast<int>( EDA_UNITS::INCHES ) ) );
+            &m_System.last_imperial_units, static_cast<int>( EDA_UNITS::MILS ) ) );
 
     m_params.emplace_back( new PARAM<wxString>( "appearance.color_theme",
             &m_ColorTheme, COLOR_SETTINGS::COLOR_BUILTIN_DEFAULT ) );
