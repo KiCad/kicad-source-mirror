@@ -1495,6 +1495,13 @@ LIB_SYMBOL* SCH_SEXPR_PLUGIN::LoadSymbol( const wxString& aLibraryPath, const wx
     if( it == m_cache->m_symbols.end() && aSymbolName.Contains( '/' ) )
         it = m_cache->m_symbols.find( EscapeString( aSymbolName, CTX_LEGACY_LIBID ) );
 
+    if( it == m_cache->m_symbols.end() && aSymbolName.Contains( wxT( "{slash}" ) ) )
+    {
+        wxString unescaped = aSymbolName;
+        unescaped.Replace( wxT( "{slash}" ), wxT( "/" ) );
+        it = m_cache->m_symbols.find( unescaped );
+    }
+
     if( it == m_cache->m_symbols.end() )
         return nullptr;
 
