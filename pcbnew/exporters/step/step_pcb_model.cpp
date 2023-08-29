@@ -599,32 +599,40 @@ bool STEP_PCB_MODEL::MakeShapeAsThickSegment( TopoDS_Shape& aShape,
     {
         TopoDS_Edge edge;
 
+        if( short_seg )
+        {
+            Handle( Geom_Circle ) circle = GC_MakeCircle( coords3D[1], // arc1 start point
+                                                          coords3D[2], // arc1 mid point
+                                                          coords3D[5]  // arc2 mid point
+            );
 
-        if( !short_seg ) // Do not export a too short segment
+            edge = BRepBuilderAPI_MakeEdge( circle );
+            wire.Add( edge );
+        }
+        else
         {
             edge = BRepBuilderAPI_MakeEdge( coords3D[0], coords3D[1] );
             wire.Add( edge );
-        }
 
-        Handle(Geom_TrimmedCurve) arcOfCircle = GC_MakeArcOfCircle( coords3D[1], // start point
-                                                                    coords3D[2], // aux point
-                                                                    coords3D[3]  // end point
-                                                                  );
-        edge = BRepBuilderAPI_MakeEdge( arcOfCircle );
-        wire.Add( edge );
+            Handle( Geom_TrimmedCurve ) arcOfCircle =
+                    GC_MakeArcOfCircle( coords3D[1], // start point
+                                        coords3D[2], // mid point
+                                        coords3D[3]  // end point
+                    );
+            edge = BRepBuilderAPI_MakeEdge( arcOfCircle );
+            wire.Add( edge );
 
-        if( !short_seg ) // Do not export a too short segment
-        {
             edge = BRepBuilderAPI_MakeEdge( coords3D[3], coords3D[4] );
             wire.Add( edge );
-        }
 
-        Handle(Geom_TrimmedCurve) arcOfCircle2 = GC_MakeArcOfCircle( coords3D[4], // start point
-                                                                     coords3D[5], // aux point
-                                                                     coords3D[0]  // end point
-                                                                    );
-        edge = BRepBuilderAPI_MakeEdge( arcOfCircle2 );
-        wire.Add( edge );
+            Handle( Geom_TrimmedCurve ) arcOfCircle2 =
+                    GC_MakeArcOfCircle( coords3D[4], // start point
+                                        coords3D[5], // mid point
+                                        coords3D[0]  // end point
+                    );
+            edge = BRepBuilderAPI_MakeEdge( arcOfCircle2 );
+            wire.Add( edge );
+        }
     }
     catch( const Standard_Failure& e )
     {
@@ -638,7 +646,8 @@ bool STEP_PCB_MODEL::MakeShapeAsThickSegment( TopoDS_Shape& aShape,
 
     try
     {
-        face = BRepBuilderAPI_MakeFace( wire );
+        gp_Pln plane( coords3D[0], gp::DZ() );
+        face = BRepBuilderAPI_MakeFace( plane, wire );
     }
     catch(  const Standard_Failure& e )
     {
@@ -787,9 +796,8 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
                         if( lastPt != currentArc.GetP0() )
                             addSegment( lastPt, currentArc.GetP0() );
 
-                        addArc( currentArc );
-
-                        lastPt = currentArc.GetP1();
+                        if( addArc( currentArc ) )
+                            lastPt = currentArc.GetP1();
                     }
                     else if( !isArc )
                     {
