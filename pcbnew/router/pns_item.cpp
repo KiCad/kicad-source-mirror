@@ -288,9 +288,15 @@ ITEM::~ITEM()
 
 const std::string ITEM::Format() const
 {
+    ROUTER*       router = ROUTER::GetInstance();
+    ROUTER_IFACE* iface = router ? router->GetInterface() : nullptr;
+
     std::stringstream ss;
     ss << KindStr() << " ";
-    ss << "net " << OwningNode()->GetRuleResolver()->NetCode( Net() ) << " ";
+
+    if( iface )
+        ss << "net " << iface->GetNetCode( Net() ) << " ";
+
     ss << "layers " << m_layers.Start() << " " << m_layers.End();
     return ss.str();
 }

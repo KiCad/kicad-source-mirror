@@ -69,7 +69,7 @@ PNS_LOG_FILE::PNS_LOG_FILE() :
     m_routerSettings.reset( new PNS::ROUTING_SETTINGS( nullptr, "" ) );
 }
 
-static std::shared_ptr<SHAPE> parseShape( SHAPE_TYPE expectedType, wxStringTokenizer& aTokens )
+std::shared_ptr<SHAPE> parseShape( SHAPE_TYPE expectedType, wxStringTokenizer& aTokens )
 {
     SHAPE_TYPE type = static_cast<SHAPE_TYPE> ( wxAtoi( aTokens.GetNextToken() ) );
 
@@ -102,13 +102,14 @@ static std::shared_ptr<SHAPE> parseShape( SHAPE_TYPE expectedType, wxStringToken
     return nullptr;
 }
 
-bool parseCommonPnsProps( PNS::ITEM* aItem, const wxString& cmd, wxStringTokenizer& aTokens )
+bool PNS_LOG_FILE::parseCommonPnsProps( PNS::ITEM* aItem, const wxString& cmd,
+                                        wxStringTokenizer& aTokens )
 {
     if( cmd == "net" )
     {
         if( aItem->Parent() && aItem->Parent()->GetBoard() )
         {
-            aItem->SetNet( aItem->Parent()->GetBoard()->FindNet( aTokens.GetNextToken() ) );
+            aItem->SetNet( m_board->FindNet( aTokens.GetNextToken() ) );
             return true;
         }
 
@@ -124,7 +125,8 @@ bool parseCommonPnsProps( PNS::ITEM* aItem, const wxString& cmd, wxStringTokeniz
     return false;
 }
 
-static PNS::SEGMENT* parsePnsSegmentFromString( PNS::SEGMENT* aSeg, wxStringTokenizer& aTokens )
+PNS::SEGMENT* PNS_LOG_FILE::parsePnsSegmentFromString( PNS::SEGMENT* aSeg,
+                                                       wxStringTokenizer& aTokens )
 {
     PNS::SEGMENT* seg = new ( PNS::SEGMENT );
 
@@ -149,7 +151,7 @@ static PNS::SEGMENT* parsePnsSegmentFromString( PNS::SEGMENT* aSeg, wxStringToke
     return seg;
 }
 
-static PNS::VIA* parsePnsViaFromString( PNS::VIA* aSeg, wxStringTokenizer& aTokens )
+PNS::VIA* PNS_LOG_FILE::parsePnsViaFromString( PNS::VIA* aSeg, wxStringTokenizer& aTokens )
 {
     PNS::VIA* via = new ( PNS::VIA );
 
@@ -181,7 +183,7 @@ static PNS::VIA* parsePnsViaFromString( PNS::VIA* aSeg, wxStringTokenizer& aToke
 }
 
 
-static PNS::ITEM* parseItemFromString( wxStringTokenizer& aTokens )
+PNS::ITEM* PNS_LOG_FILE::parseItemFromString( wxStringTokenizer& aTokens )
 {
     wxString type = aTokens.GetNextToken();
 
@@ -335,48 +337,6 @@ bool PNS_LOG_FILE::Load( const wxFileName& logFileName, REPORTER* aRpt )
     wxFileName fname_settings( logFileName );
     fname_settings.SetExt( wxT( "settings" ) );
 
-
-    FILE* f = fopen( fname_log.GetFullPath().c_str(), "rb" );
-
-    aRpt->Report( wxString::Format( "Loading log from '%s'", fname_log.GetFullPath() ) );
-
-    if( !f )
-    {
-        aRpt->Report( wxT( "Failed to load log" ), RPT_SEVERITY_ERROR );
-        return false;
-    }
-
-    while( !feof( f ) )
-    {
-        wxString line = readLine( f );
-        wxStringTokenizer tokens( line );
-
-        if( !tokens.CountTokens() )
-            continue;
-
-        wxString cmd = tokens.GetNextToken();
-
-        if( cmd == wxT("mode") )
-        {
-            m_mode = static_cast<PNS::ROUTER_MODE>( wxAtoi( tokens.GetNextToken() ) );
-        }
-        else if( cmd == wxT("event") )
-        {
-            m_events.push_back( PNS::LOGGER::ParseEvent( line ) );
-        }
-        else if ( cmd == wxT("added") )
-        {
-            auto item = parseItemFromString( tokens );
-            m_commitState.m_addedItems.push_back( item );
-        }
-        else if ( cmd == wxT("removed") )
-        {
-            m_commitState.m_removedIds.insert( KIID( tokens.GetNextToken() ) );
-        }
-    }
-
-    fclose( f );
-
     aRpt->Report( wxString::Format( wxT("Loading router settings from '%s'"), fname_settings.GetFullPath() ) );
 
     bool ok = m_routerSettings->LoadFromRawFile( fname_settings.GetFullPath() );
@@ -423,6 +383,47 @@ bool PNS_LOG_FILE::Load( const wxFileName& logFileName, REPORTER* aRpt )
 
         return false;
     }
+
+    FILE* f = fopen( fname_log.GetFullPath().c_str(), "rb" );
+
+    aRpt->Report( wxString::Format( "Loading log from '%s'", fname_log.GetFullPath() ) );
+
+    if( !f )
+    {
+        aRpt->Report( wxT( "Failed to load log" ), RPT_SEVERITY_ERROR );
+        return false;
+    }
+
+    while( !feof( f ) )
+    {
+        wxString line = readLine( f );
+        wxStringTokenizer tokens( line );
+
+        if( !tokens.CountTokens() )
+            continue;
+
+        wxString cmd = tokens.GetNextToken();
+
+        if( cmd == wxT("mode") )
+        {
+            m_mode = static_cast<PNS::ROUTER_MODE>( wxAtoi( tokens.GetNextToken() ) );
+        }
+        else if( cmd == wxT("event") )
+        {
+            m_events.push_back( PNS::LOGGER::ParseEvent( line ) );
+        }
+        else if ( cmd == wxT("added") )
+        {
+            auto item = parseItemFromString( tokens );
+            m_commitState.m_addedItems.push_back( item );
+        }
+        else if ( cmd == wxT("removed") )
+        {
+            m_commitState.m_removedIds.insert( KIID( tokens.GetNextToken() ) );
+        }
+    }
+
+    fclose( f );
 
     return true;
 }

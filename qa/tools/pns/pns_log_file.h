@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2022 KiCad Developers.
+ * Copyright (C) 2020-2023 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -87,6 +87,15 @@ public:
     const COMMIT_STATE& GetExpectedResult() const { return m_commitState; }
 
     PNS::ROUTER_MODE GetMode() const { return m_mode; }
+
+private:
+    bool parseCommonPnsProps( PNS::ITEM* aItem, const wxString& cmd, wxStringTokenizer& aTokens );
+
+    PNS::SEGMENT* parsePnsSegmentFromString( PNS::SEGMENT* aSeg, wxStringTokenizer& aTokens );
+
+    PNS::VIA* parsePnsViaFromString( PNS::VIA* aSeg, wxStringTokenizer& aTokens );
+
+    PNS::ITEM* parseItemFromString( wxStringTokenizer& aTokens );
 
 private:
     std::shared_ptr<SETTINGS_MANAGER>      m_settingsMgr;
