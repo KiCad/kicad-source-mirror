@@ -55,7 +55,7 @@
  * Flag to enable connectivity profiling
  * @ingroup trace_env_vars
  */
-static const wxChar ConnProfileMask[] = wxT( "CONN_PROFILE" );
+static const wxChar DanglingProfileMask[] = wxT( "CONN_PROFILE" );
 
 /*
  * Flag to enable connectivity tracing
@@ -637,19 +637,19 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
         }
     }
 
-    if( wxLog::IsAllowedTraceMask( ConnProfileMask ) )
+    if( wxLog::IsAllowedTraceMask( DanglingProfileMask ) )
         update_items.Show();
 
     PROF_TIMER build_graph( "buildConnectionGraph" );
 
     buildConnectionGraph( aChangedItemHandler );
 
-    if( wxLog::IsAllowedTraceMask( ConnProfileMask ) )
+    if( wxLog::IsAllowedTraceMask( DanglingProfileMask ) )
         build_graph.Show();
 
     recalc_time.Stop();
 
-    if( wxLog::IsAllowedTraceMask( ConnProfileMask ) )
+    if( wxLog::IsAllowedTraceMask( DanglingProfileMask ) )
         recalc_time.Show();
 }
 
@@ -1796,7 +1796,7 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
     PROF_TIMER sub_graph( "buildItemSubGraphs" );
     buildItemSubGraphs();
 
-    if( wxLog::IsAllowedTraceMask( ConnProfileMask ) )
+    if( wxLog::IsAllowedTraceMask( DanglingProfileMask ) )
         sub_graph.Show();
 
 
@@ -1816,7 +1816,7 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
     PROF_TIMER proc_sub_graph( "ProcessSubGraphs" );
     processSubGraphs();
 
-    if( wxLog::IsAllowedTraceMask( ConnProfileMask ) )
+    if( wxLog::IsAllowedTraceMask( DanglingProfileMask ) )
         proc_sub_graph.Show();
 
     // Absorbed subgraphs should no longer be considered

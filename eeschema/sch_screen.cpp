@@ -62,6 +62,12 @@
 #include "sch_bus_entry.h"
 #include "sim/sim_model_ideal.h"
 
+/*
+ * Flag to enable profiling of the TestDanglingEnds() function.
+ * @ingroup trace_env_vars
+ */
+static const wxChar DanglingProfileMask[] = wxT( "DANGLING_PROFILE" );
+
 SCH_SCREEN::SCH_SCREEN( EDA_ITEM* aParent ) :
     BASE_SCREEN( aParent, SCH_SCREEN_T ),
     m_fileFormatVersionAtLoad( 0 ),
@@ -1367,31 +1373,40 @@ void SCH_SCREEN::GetSheets( std::vector<SCH_ITEM*>* aItems ) const
 void SCH_SCREEN::TestDanglingEnds( const SCH_SHEET_PATH* aPath,
                                    std::function<void( SCH_ITEM* )>* aChangedHandler ) const
 {
+    PROF_TIMER timer( __FUNCTION__ );
+
     std::vector<DANGLING_END_ITEM> endPoints;
 
-    auto testDanglingEnds =
+    auto getends =
             [&]( SCH_ITEM* item )
             {
                 if( item->IsConnectable() )
+                    item->GetEndPoints( endPoints );
+            };
+    auto update_state =
+            [&]( SCH_ITEM* item )
+            {
+                if( item->UpdateDanglingState( endPoints, aPath ) )
                 {
-                    endPoints.clear();
-
-                    for( SCH_ITEM* overlapping : Items().Overlapping( item->GetBoundingBox() ) )
-                        overlapping->GetEndPoints( endPoints );
-
-                    if( item->UpdateDanglingState( endPoints, aPath ) )
-                    {
-                        if( aChangedHandler )
-                            (*aChangedHandler)( item );
-                    }
+                    if( aChangedHandler )
+                        (*aChangedHandler)( item );
                 }
             };
 
     for( SCH_ITEM* item : Items() )
     {
-        testDanglingEnds( item );
-        item->RunOnChildren( testDanglingEnds );
+
+        getends( item );
+        item->RunOnChildren( getends );
     }
+
+    for( SCH_ITEM* item : Items() )
+    {
+        update_state( item );
+        item->RunOnChildren( update_state );
+    }
+    if( wxLog::IsAllowedTraceMask( DanglingProfileMask ) )
+        timer.Show();
 }
 
 

@@ -305,12 +305,6 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
         schItem->ClearEditFlags();
     }
 
-    if( frame )
-    {
-        frame->RecalculateConnections( this, NO_CLEANUP );
-        frame->TestDanglingEnds();
-    }
-
     if( schematic )
     {
         if( bulkAddedItems.size() > 0 )
@@ -326,7 +320,10 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
     if( !( aCommitFlags & SKIP_UNDO ) )
     {
         if( frame )
+        {
             frame->SaveCopyInUndoList( undoList, UNDO_REDO::UNSPECIFIED, false, dirtyConnectivity );
+            frame->RecalculateConnections( this, NO_CLEANUP );
+        }
     }
 
     m_toolMgr->PostEvent( { TC_MESSAGE, TA_MODEL_CHANGE, AS_GLOBAL } );
@@ -528,7 +525,6 @@ void SCH_COMMIT::Revert()
     if( frame )
     {
         frame->RecalculateConnections( nullptr, NO_CLEANUP );
-        frame->TestDanglingEnds();
     }
 
     clear();
