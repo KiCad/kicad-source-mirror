@@ -1188,6 +1188,10 @@ void SCH_SYMBOL::GetContextualTextVars( wxArrayString* aVars ) const
     aVars->push_back( wxT( "EXCLUDE_FROM_BOARD" ) );
     aVars->push_back( wxT( "EXCLUDE_FROM_SIM" ) );
     aVars->push_back( wxT( "DNP" ) );
+    aVars->push_back( wxT( "SHORT_NET_NAME(<pin_number>)" ) );
+    aVars->push_back( wxT( "NET_NAME(<pin_number>)" ) );
+    aVars->push_back( wxT( "NET_CLASS(<pin_number>)" ) );
+    aVars->push_back( wxT( "PIN_NAME(<pin_number>)" ) );
 }
 
 
@@ -1339,6 +1343,39 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
     {
         *token = this->GetDNP() ? _( "DNP" ) : wxString( wxT( "" ) );
         return true;
+    }
+    else if( token->StartsWith( wxT( "SHORT_NET_NAME(" ) )
+                 || token->StartsWith( wxT( "NET_NAME(" ) )
+                 || token->StartsWith( wxT( "NET_CLASS(" ) )
+                 || token->StartsWith( wxT( "PIN_NAME(" ) ) )
+    {
+        wxString pinNumber = token->AfterFirst( '(' );
+        pinNumber = pinNumber.BeforeLast( ')' );
+
+        for( SCH_PIN* pin : GetPins( aPath ) )
+        {
+            if( pin->GetNumber() == pinNumber )
+            {
+                if( token->StartsWith( wxT( "PIN_NAME" ) ) )
+                {
+                    *token = pin->GetAlt().IsEmpty() ? pin->GetName() : pin->GetAlt();
+                    return true;
+                }
+
+                SCH_CONNECTION* conn = pin->Connection( aPath );
+
+                if( !conn )
+                    *token = wxEmptyString;
+                else if( token->StartsWith( wxT( "SHORT_NET_NAME" ) ) )
+                    *token = conn->LocalName();
+                else if( token->StartsWith( wxT( "NET_NAME" ) ) )
+                    *token = conn->Name();
+                else if( token->StartsWith( wxT( "NET_CLASS" ) ) )
+                    *token = pin->GetEffectiveNetClass( aPath )->GetName();
+
+                return true;
+            }
+        }
     }
 
     // See if parent can resolve it (this will recurse to ancestors)
