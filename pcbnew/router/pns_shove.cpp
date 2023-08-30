@@ -425,8 +425,10 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveObstacleLine( const LINE& aCurLine, const LINE& 
 
         hulls.reserve( currentLineSegmentCount + 1 );
 
-        PNS_DBG( Dbg(), Message, wxString::Format( wxT( "shove process-single: cur net %d obs %d cl %d" ),
-                                          aCurLine.Net(), aObstacleLine.Net(), clearance ) );
+        PNS_DBG( Dbg(), Message, wxString::Format( wxT( "shove process-single: cur net %s obs %s cl %d" ),
+                                                   m_router->GetInterface()->GetNetName( aCurLine.Net() ),
+                                                   m_router->GetInterface()->GetNetName( aObstacleLine.Net() ),
+                                                   clearance ) );
 
         for( int i = 0; i < currentLineSegmentCount; i++ )
         {
@@ -435,7 +437,8 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveObstacleLine( const LINE& aCurLine, const LINE& 
             // Arcs need additional clearance to ensure the hulls are always bigger than the arc
             if( aCurLine.CLine().IsArcSegment( i ) )
             {
-                PNS_DBG( Dbg(), Message, wxString::Format( wxT( "shove add-extra-clearance %d" ), SHAPE_ARC::DefaultAccuracyForPCB() ) );
+                PNS_DBG( Dbg(), Message, wxString::Format( wxT( "shove add-extra-clearance %d" ),
+                                                           SHAPE_ARC::DefaultAccuracyForPCB() ) );
                 clearance += KiROUND( SHAPE_ARC::DefaultAccuracyForPCB() );
             }
 
