@@ -199,7 +199,7 @@ int playground_main_func( int argc, char* argv[] )
             overlay->Line( closestDist.A, closestDist.B );
             overlay->SetLineWidth( 10000 );
             overlay->SetGlyphSize( { 100000, 100000 } );
-            overlay->BitmapText( wxString::Format( "dist=%d, l=%d", closestDist.Length() ),
+            overlay->BitmapText( wxString::Format( "dist=%d", closestDist.Length() ),
                                  closestDist.A + VECTOR2I( 0, -arcs[i].GetWidth() ),
                                  ANGLE_HORIZONTAL );
         }
