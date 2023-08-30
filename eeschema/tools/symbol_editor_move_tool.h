@@ -49,6 +49,14 @@ public:
      */
     int Main( const TOOL_EVENT& aEvent );
 
+    /**
+     * Align selected elements to the grid.
+     *
+     * @param aEvent current event that activated the tool
+     * @return 0
+     */
+    int AlignElements( const TOOL_EVENT& aEvent );
+
 private:
     bool doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aCommit );
 

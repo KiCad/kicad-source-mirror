@@ -27,6 +27,7 @@
 #include <ee_actions.h>
 #include <ee_grid_helper.h>
 #include <eda_item.h>
+#include <lib_shape.h>
 #include <sch_commit.h>
 #include <wx/log.h>
 #include "symbol_editor_move_tool.h"
@@ -70,7 +71,8 @@ bool SYMBOL_EDITOR_MOVE_TOOL::Init()
                 return true;
             };
 
-    selToolMenu.AddItem( EE_ACTIONS::move, canMove && EE_CONDITIONS::IdleSelection, 150 );
+    selToolMenu.AddItem( EE_ACTIONS::move,        canMove && EE_CONDITIONS::IdleSelection, 150 );
+    selToolMenu.AddItem( EE_ACTIONS::alignToGrid, canMove && EE_CONDITIONS::IdleSelection, 150 );
 
     return true;
 }
@@ -368,6 +370,140 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
 }
 
 
+int SYMBOL_EDITOR_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
+{
+    EE_GRID_HELPER    grid( m_toolMgr);
+    EE_SELECTION&     selection = m_selectionTool->RequestSelection();
+    SCH_COMMIT        commit( m_toolMgr );
+
+    auto doMoveItem =
+            [&]( EDA_ITEM* item, const VECTOR2I& delta )
+            {
+                commit.Modify( item, m_frame->GetScreen() );
+                static_cast<LIB_ITEM*>( item )->Offset( mapCoords( delta ) );
+                updateItem( item, true );
+            };
+
+    for( EDA_ITEM* item : selection )
+    {
+        if( LIB_SHAPE* shape = dynamic_cast<LIB_SHAPE*>( item ) )
+        {
+            VECTOR2I newStart = grid.AlignGrid( shape->GetStart(), grid.GetItemGrid( shape ) );
+            VECTOR2I newEnd = grid.AlignGrid( shape->GetEnd(), grid.GetItemGrid( shape ) );
+
+            switch( shape->GetShape() )
+            {
+            case SHAPE_T::SEGMENT:
+            case SHAPE_T::RECTANGLE:
+            case SHAPE_T::CIRCLE:
+            case SHAPE_T::ARC:
+                if( newStart == newEnd )
+                {
+                    // Don't collapse shape; just snap its position
+                    if( newStart != shape->GetStart() )
+                        doMoveItem( shape, newStart - shape->GetStart() );
+                }
+                else if( newStart != shape->GetStart() || newEnd != shape->GetEnd() )
+                {
+                    // Snap both ends
+                    commit.Modify( shape, m_frame->GetScreen() );
+
+                    shape->SetStart( newStart );
+                    shape->SetEnd( newEnd );
+
+                    updateItem( item, true );
+                }
+
+                break;
+
+                break;
+
+            case SHAPE_T::POLY:
+                if( shape->GetPointCount() > 0 )
+                {
+                    std::vector<VECTOR2I> newPts;
+
+                    for( const VECTOR2I& pt : shape->GetPolyShape().Outline( 0 ).CPoints() )
+                        newPts.push_back( grid.AlignGrid( pt, grid.GetItemGrid( shape ) ) );
+
+                    bool collapsed = false;
+
+                    for( int ii = 0; ii < (int) newPts.size() - 1; ++ii )
+                    {
+                        if( newPts[ii] == newPts[ii + 1] )
+                            collapsed = true;
+                    }
+
+                    if( collapsed )
+                    {
+                        // Don't collapse shape; just snap its position
+                        if( newStart != shape->GetStart() )
+                            doMoveItem( shape, newStart - shape->GetStart() );
+                    }
+                    else
+                    {
+                        commit.Modify( shape, m_frame->GetScreen() );
+
+                        for( int ii = 0; ii < (int) newPts.size(); ++ii )
+                            shape->GetPolyShape().Outline( 0 ).SetPoint( ii, newPts[ii] );
+
+                        updateItem( item, true );
+                    }
+                }
+
+                break;
+
+            case SHAPE_T::BEZIER:
+                // Snapping bezier control points is unlikely to be useful.  Just snap its
+                // position.
+                if( newStart != shape->GetStart() )
+                    doMoveItem( shape, newStart - shape->GetStart() );
+
+                break;
+
+            case SHAPE_T::LAST:
+                // Not a real shape
+                break;
+            }
+        }
+        else
+        {
+            VECTOR2I newPos = grid.AlignGrid( item->GetPosition(), grid.GetItemGrid( item ) );
+            VECTOR2I delta = newPos - item->GetPosition();
+
+            if( delta != VECTOR2I( 0, 0 ) )
+                doMoveItem( item, delta );
+
+            if( LIB_PIN* pin = dynamic_cast<LIB_PIN*>( item ) )
+            {
+                int length = pin->GetLength();
+                int pinGrid;
+
+                if( pin->GetOrientation() == PIN_ORIENTATION::PIN_LEFT
+                        || pin->GetOrientation() == PIN_ORIENTATION::PIN_RIGHT )
+                {
+                    pinGrid = KiROUND( grid.GetGridSize( grid.GetItemGrid( item ) ).x );
+                }
+                else
+                {
+                    pinGrid = KiROUND( grid.GetGridSize( grid.GetItemGrid( item ) ).y );
+                }
+
+                int newLength = KiROUND( (double) length / pinGrid ) * pinGrid;
+
+                if( newLength > 0 )
+                    pin->SetLength( newLength );
+            }
+        }
+    }
+
+    m_toolMgr->PostEvent( EVENTS::SelectedItemsMoved );
+
+    commit.Push( _( "Align" ) );
+    return 0;
+}
+
+
 void SYMBOL_EDITOR_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
 {
     static_cast<LIB_ITEM*>( aItem )->Offset( mapCoords( aDelta ) );
@@ -378,4 +514,5 @@ void SYMBOL_EDITOR_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta 
 void SYMBOL_EDITOR_MOVE_TOOL::setTransitions()
 {
     Go( &SYMBOL_EDITOR_MOVE_TOOL::Main,               EE_ACTIONS::move.MakeEvent() );
+    Go( &SYMBOL_EDITOR_MOVE_TOOL::AlignElements,      EE_ACTIONS::alignToGrid.MakeEvent() );
 }
