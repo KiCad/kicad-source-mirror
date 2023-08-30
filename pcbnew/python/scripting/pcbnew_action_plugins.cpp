@@ -102,7 +102,7 @@ PyObject* PYTHON_ACTION_PLUGIN::CallMethod( const char* aMethod, PyObject* aArgl
                 int maxLen = 0;
 
                 for( const wxString& msg : messages )
-                    if( msg.length() > maxLen )
+                    if( (int)msg.length() > maxLen )
                         maxLen = msg.length();
 
                 wxChar   ch = '*';

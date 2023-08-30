@@ -81,10 +81,10 @@ private:
 
     UNIT_BINDER           m_startX, m_startY;
     UNIT_BINDER           m_endX, m_endY;
-    UNIT_BINDER           m_angle;
     UNIT_BINDER           m_thickness;
     UNIT_BINDER           m_segmentLength;
     UNIT_BINDER           m_segmentAngle;
+    UNIT_BINDER           m_angle;
     UNIT_BINDER           m_rectangleHeight;
     UNIT_BINDER           m_rectangleWidth;
     UNIT_BINDER           m_bezierCtrl1X, m_bezierCtrl1Y;
@@ -102,18 +102,18 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
     m_startY( aParent, m_startYLabel, m_startYCtrl, m_startYUnits ),
     m_endX( aParent, m_endXLabel, m_endXCtrl, m_endXUnits ),
     m_endY( aParent, m_endYLabel, m_endYCtrl, m_endYUnits ),
+    m_thickness( aParent, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits ),
     m_segmentLength( aParent, m_segmentLengthLabel, m_segmentLengthCtrl, m_segmentLengthUnits ),
     m_segmentAngle( aParent, m_segmentAngleLabel, m_segmentAngleCtrl, m_segmentAngleUnits ),
+    m_angle( aParent, m_angleLabel, m_angleCtrl, m_angleUnits ),
     m_rectangleHeight( aParent, m_rectangleHeightLabel, m_rectangleHeightCtrl, m_rectangleHeightUnits ),
     m_rectangleWidth( aParent, m_rectangleWidthLabel, m_rectangleWidthCtrl, m_rectangleWidthUnits ),
-    m_angle( aParent, m_angleLabel, m_angleCtrl, m_angleUnits ),
-    m_thickness( aParent, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits ),
     m_bezierCtrl1X( aParent, m_BezierPointC1XLabel, m_BezierC1X_Ctrl, m_BezierPointC1XUnit ),
     m_bezierCtrl1Y( aParent, m_BezierPointC1YLabel, m_BezierC1Y_Ctrl, m_BezierPointC1YUnit ),
     m_bezierCtrl2X( aParent, m_BezierPointC2XLabel, m_BezierC2X_Ctrl, m_BezierPointC2XUnit ),
     m_bezierCtrl2Y( aParent, m_BezierPointC2YLabel, m_BezierC2Y_Ctrl, m_BezierPointC2YUnit ),
     m_flipStartEnd( false )
-{   
+{
     // Configure display origin transforms
     m_startX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
     m_startY.SetCoordType( ORIGIN_TRANSFORMS::ABS_Y_COORD );
@@ -443,7 +443,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
         bool change_end = ( end_point != m_item->GetEnd() );
         bool change_length = ( segment_length != m_segmentLength.GetValue() );
         EDA_ANGLE difference = std::abs( segment_angle - m_segmentAngle.GetAngleValue() );
-        
+
         bool change_angle =
                 ( difference >= EDA_ANGLE( 0.00049, DEGREES_T ) );
 
@@ -467,7 +467,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
                                      + segment_length * segment_angle.Cos() );
                     m_item->SetEndY( m_item->GetStartY()
                                      - segment_length * segment_angle.Sin() );
-                }   
+                }
             }
         }
 
@@ -475,12 +475,12 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
             m_item->SetLength( m_segmentLength.GetValue() );
         else
             m_item->SetLength( m_item->GetLength() );
-        
+
         if( change_angle )
             m_item->SetSegmentAngle( m_segmentAngle.GetAngleValue().Round( 3 ) );
         else
             m_item->SetSegmentAngle( m_item->GetSegmentAngle().Round( 3 ) );
-     
+
      }
 
     if( m_item->GetShape() == SHAPE_T::RECTANGLE )
@@ -514,7 +514,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
         m_item->SetRectangle( m_rectangleHeight.GetValue(), m_rectangleWidth.GetValue() );
     }
 
-     
+
      // For Bezier curve: Set the two control points
     if( m_item->GetShape() == SHAPE_T::BEZIER )
     {
