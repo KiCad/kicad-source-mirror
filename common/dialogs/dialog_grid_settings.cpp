@@ -55,14 +55,21 @@ DIALOG_GRID_SETTINGS::DIALOG_GRID_SETTINGS( wxWindow* aParent, wxWindow* aEventS
 bool DIALOG_GRID_SETTINGS::TransferDataFromWindow()
 {
     double gridX = m_gridSizeX.GetDoubleValue();
-    double gridY = m_checkLinked->IsChecked() ? gridX : m_gridSizeY.GetDoubleValue();
 
-    if( gridX <= 0.0f || gridY <= 0.0f )
+    if( !m_gridSizeX.Validate( 0.001, 1000.0, EDA_UNITS::MILLIMETRES ) )
     {
-        wxMessageBox( _( "Grid size must be greater than zero." ), _( "Error" ),
-                      wxOK | wxICON_ERROR );
+        wxMessageBox( _( "Grid size X out of range." ), _( "Error" ), wxOK | wxICON_ERROR );
         return false;
     }
+
+    if( !m_checkLinked->IsChecked()
+        && !m_gridSizeY.Validate( 0.001, 1000.0, EDA_UNITS::MILLIMETRES ) )
+    {
+        wxMessageBox( _( "Grid size Y out of range." ), _( "Error" ), wxOK | wxICON_ERROR );
+        return false;
+    }
+
+    double gridY = m_checkLinked->IsChecked() ? gridX : m_gridSizeY.GetDoubleValue();
 
     m_grid.name = m_textName->GetValue();
     // Grid X/Y are always stored in millimeters so we can compare them easily

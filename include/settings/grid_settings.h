@@ -46,6 +46,8 @@ struct GRID
      */
     wxString UserUnitsMessageText( UNITS_PROVIDER* aProvider, bool aDisplayUnits = true ) const;
 
+    VECTOR2D ToDouble( EDA_IU_SCALE aScale ) const;
+
     wxString name;
     wxString x;
     wxString y;
@@ -75,15 +77,15 @@ struct GRID_SETTINGS
     bool              force_component_snap;
     bool              overrides_enabled;
     bool              override_connected;
-    wxString          override_connected_size;
+    int               override_connected_idx;
     bool              override_wires;
-    wxString          override_wires_size;
+    int               override_wires_idx;
     bool              override_vias;
-    wxString          override_vias_size;
+    int               override_vias_idx;
     bool              override_text;
-    wxString          override_text_size;
+    int               override_text_idx;
     bool              override_graphics;
-    wxString          override_graphics_size;
+    int               override_graphics_idx;
 };
 
 #endif

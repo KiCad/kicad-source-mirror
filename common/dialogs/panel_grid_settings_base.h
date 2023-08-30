@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -29,7 +29,6 @@ class STD_BITMAP_BUTTON;
 #include <wx/statline.h>
 #include <wx/choice.h>
 #include <wx/checkbox.h>
-#include <wx/textctrl.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -60,25 +59,15 @@ class PANEL_GRID_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxStaticText* m_overridesLabel;
 		wxStaticLine* m_staticline3;
 		wxCheckBox* m_checkGridOverrideConnected;
-		wxStaticText* m_staticTextConnected;
-		wxTextCtrl* m_GridOverrideConnectedSize;
-		wxStaticText* m_staticTextConnectedUnits;
+		wxChoice* m_gridOverrideConnectedChoice;
 		wxCheckBox* m_checkGridOverrideWires;
-		wxStaticText* m_staticTextWires;
-		wxTextCtrl* m_GridOverrideWiresSize;
-		wxStaticText* m_staticTextWiresUnits;
+		wxChoice* m_gridOverrideWiresChoice;
 		wxCheckBox* m_checkGridOverrideVias;
-		wxStaticText* m_staticTextVias;
-		wxTextCtrl* m_GridOverrideViasSize;
-		wxStaticText* m_staticTextViasUnits;
+		wxChoice* m_gridOverrideViasChoice;
 		wxCheckBox* m_checkGridOverrideText;
-		wxStaticText* m_staticTextText;
-		wxTextCtrl* m_GridOverrideTextSize;
-		wxStaticText* m_staticTextTextUnits;
+		wxChoice* m_gridOverrideTextChoice;
 		wxCheckBox* m_checkGridOverrideGraphics;
-		wxStaticText* m_staticTextGraphics;
-		wxTextCtrl* m_GridOverrideGraphicsSize;
-		wxStaticText* m_staticTextGraphicsUnits;
+		wxChoice* m_gridOverrideGraphicsChoice;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnAddGrid( wxCommandEvent& event ) { event.Skip(); }

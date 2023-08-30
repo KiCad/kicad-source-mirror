@@ -247,6 +247,7 @@ VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, GRID_HELPER_GR
 VECTOR2D EE_GRID_HELPER::GetGridSize( GRID_HELPER_GRIDS aGrid ) const
 {
     const GRID_SETTINGS& grid = m_toolMgr->GetSettings()->m_Window.grid;
+    int                  idx = -1;
 
     VECTOR2D g = m_toolMgr->GetView()->GetGAL()->GetGridSize();
 
@@ -257,43 +258,34 @@ VECTOR2D EE_GRID_HELPER::GetGridSize( GRID_HELPER_GRIDS aGrid ) const
     {
     case GRID_CONNECTABLE:
         if( grid.override_connected )
-        {
-            g.x = g.y = EDA_UNIT_UTILS::UI::DoubleValueFromString( schIUScale, EDA_UNITS::MILS,
-                                                                   grid.override_connected_size );
-        }
+            idx = grid.override_connected_idx;
 
         break;
 
     case GRID_WIRES:
         if( grid.override_wires )
-        {
-            g.x = g.y = EDA_UNIT_UTILS::UI::DoubleValueFromString( schIUScale, EDA_UNITS::MILS,
-                                                                   grid.override_wires_size );
-        }
+            idx = grid.override_wires_idx;
 
         break;
 
     case GRID_TEXT:
         if( grid.override_text )
-        {
-            g.x = g.y = EDA_UNIT_UTILS::UI::DoubleValueFromString( schIUScale, EDA_UNITS::MILS,
-                                                                   grid.override_text_size );
-        }
+            idx = grid.override_text_idx;
 
         break;
 
     case GRID_GRAPHICS:
         if( grid.override_graphics )
-        {
-            g.x = g.y = EDA_UNIT_UTILS::UI::DoubleValueFromString( schIUScale, EDA_UNITS::MILS,
-                                                                   grid.override_graphics_size );
-        }
+            idx = grid.override_graphics_idx;
 
         break;
 
     default:
         break;
     }
+
+    if( idx >= 0 && idx < (int) grid.grids.size() )
+        g = grid.grids[idx].ToDouble( schIUScale );
 
     return g;
 }

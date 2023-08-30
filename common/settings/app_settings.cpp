@@ -368,24 +368,20 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
         m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.override_vias",
                                                 &aWindow->grid.override_vias, false ) );
         m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.override_text",
-                                                &aWindow->grid.override_text, false ) );
+                                                &aWindow->grid.override_text, true ) );
         m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.override_graphics",
                                                 &aWindow->grid.override_graphics, false ) );
 
-        m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.override_connected_size",
-                                                    &aWindow->grid.override_connected_size,
-                                                    "50 mil" ) );
-        m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.override_wires_size",
-                                                    &aWindow->grid.override_wires_size,
-                                                    "50 mil" ) );
-        m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.override_vias_size",
-                                                    &aWindow->grid.override_vias_size,
-                                                    "50 mil" ) );
-        m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.override_text_size",
-                                                    &aWindow->grid.override_text_size, "10 mil" ) );
-        m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.override_graphics_size",
-                                                    &aWindow->grid.override_graphics_size,
-                                                    "25 mil" ) );
+        m_params.emplace_back( new PARAM<int>( aJsonPath + ".grid.override_connected_idx",
+                                               &aWindow->grid.override_connected_idx, 1 ) );
+        m_params.emplace_back( new PARAM<int>( aJsonPath + ".grid.override_wires_idx",
+                                               &aWindow->grid.override_wires_idx, 1 ) );
+        m_params.emplace_back( new PARAM<int>( aJsonPath + ".grid.override_vias_idx",
+                                               &aWindow->grid.override_vias_idx, 0 ) );
+        m_params.emplace_back( new PARAM<int>( aJsonPath + ".grid.override_text_idx",
+                                               &aWindow->grid.override_text_idx, 3 ) );
+        m_params.emplace_back( new PARAM<int>( aJsonPath + ".grid.override_graphics_idx",
+                                               &aWindow->grid.override_graphics_idx, 2 ) );
     }
     else
     {
@@ -402,20 +398,16 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
         m_params.emplace_back( new PARAM<bool>( aJsonPath + ".grid.override_graphics",
                                                 &aWindow->grid.override_graphics, false ) );
 
-        m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.override_connected_size",
-                                                    &aWindow->grid.override_connected_size,
-                                                    "0.25 mm" ) );
-        m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.override_text_size",
-                                                    &aWindow->grid.override_text_size, ".05 mm" ) );
-        m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.override_wires_size",
-                                                    &aWindow->grid.override_wires_size,
-                                                    "0.05 mm" ) );
-        m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.override_vias_size",
-                                                    &aWindow->grid.override_vias_size,
-                                                    "0.1 mm" ) );
-        m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.override_graphics_size",
-                                                    &aWindow->grid.override_graphics_size,
-                                                    "1 mm" ) );
+        m_params.emplace_back( new PARAM<int>( aJsonPath + ".grid.override_connected_idx",
+                                               &aWindow->grid.override_connected_idx, 16 ) );
+        m_params.emplace_back( new PARAM<int>( aJsonPath + ".grid.override_text_idx",
+                                               &aWindow->grid.override_text_idx, 18 ) );
+        m_params.emplace_back( new PARAM<int>( aJsonPath + ".grid.override_wires_idx",
+                                               &aWindow->grid.override_wires_idx, 19 ) );
+        m_params.emplace_back( new PARAM<int>( aJsonPath + ".grid.override_vias_idx",
+                                               &aWindow->grid.override_vias_idx, 18 ) );
+        m_params.emplace_back( new PARAM<int>( aJsonPath + ".grid.override_graphics_idx",
+                                               &aWindow->grid.override_graphics_idx, 15 ) );
     }
 
 

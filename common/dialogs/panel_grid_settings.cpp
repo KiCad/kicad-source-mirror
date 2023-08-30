@@ -42,30 +42,20 @@ PANEL_GRID_SETTINGS::PANEL_GRID_SETTINGS( wxWindow* aParent, UNITS_PROVIDER* aUn
                                           FRAME_T aFrameType ) :
         PANEL_GRID_SETTINGS_BASE( aParent ),
         m_unitsProvider( aUnitsProvider ), m_cfg( aCfg ), m_frameType( aFrameType ),
-        m_eventSource( aEventSource ),
-        m_gridOverrideConnected( aUnitsProvider, aEventSource, m_staticTextConnected,
-                                 m_GridOverrideConnectedSize, m_staticTextConnectedUnits ),
-        m_gridOverrideWires( aUnitsProvider, aEventSource, m_staticTextWires,
-                             m_GridOverrideWiresSize, m_staticTextWiresUnits ),
-        m_gridOverrideVias( aUnitsProvider, aEventSource, m_staticTextVias, m_GridOverrideViasSize,
-                            m_staticTextViasUnits ),
-        m_gridOverrideText( aUnitsProvider, aEventSource, m_staticTextText, m_GridOverrideTextSize,
-                            m_staticTextTextUnits ),
-        m_gridOverrideGraphics( aUnitsProvider, aEventSource, m_staticTextGraphics,
-                                m_GridOverrideGraphicsSize, m_staticTextGraphicsUnits )
+        m_eventSource( aEventSource )
 {
     RebuildGridSizes();
 
     if( m_frameType == FRAME_PCB_EDITOR || m_frameType == FRAME_FOOTPRINT_EDITOR )
     {
-        m_staticTextConnected->SetLabel( wxT( "Footprints/pads:" ) );
-        m_staticTextWires->SetLabel( wxT( "Tracks:" ) );
+        m_checkGridOverrideConnected->SetLabel( wxT( "Footprints/pads:" ) );
+        m_checkGridOverrideWires->SetLabel( wxT( "Tracks:" ) );
     }
     else
     {
-        m_GridOverrideViasSize->SetValue( wxT( "50 mil" ) );
+        m_gridOverrideViasChoice->SetSelection( 0 );
+        m_gridOverrideViasChoice->Show( false );
         m_checkGridOverrideVias->Show( false );
-        m_gridOverrideVias.Show( false );
 
         if( m_frameType != FRAME_SCH
             && m_frameType != FRAME_SCH_SYMBOL_EDITOR
@@ -74,10 +64,10 @@ PANEL_GRID_SETTINGS::PANEL_GRID_SETTINGS( wxWindow* aParent, UNITS_PROVIDER* aUn
             && m_frameType != FRAME_SIMULATOR )
         {
             m_checkGridOverrideConnected->Show( false );
-            m_gridOverrideConnected.Show( false );
+            m_gridOverrideConnectedChoice->Show( false );
 
             m_checkGridOverrideWires->Show( false );
-            m_gridOverrideWires.Show( false );
+            m_gridOverrideWiresChoice->Show( false );
         }
     }
 
@@ -106,8 +96,15 @@ void PANEL_GRID_SETTINGS::ResetPanel()
 void PANEL_GRID_SETTINGS::RebuildGridSizes()
 {
     wxString savedCurrentGrid = m_currentGridCtrl->GetStringSelection();
+
     wxString savedGrid1       = m_grid1Ctrl->GetStringSelection();
     wxString savedGrid2       = m_grid2Ctrl->GetStringSelection();
+
+    wxString savedConnectables = m_gridOverrideConnectedChoice->GetStringSelection();
+    wxString savedWires        = m_gridOverrideWiresChoice->GetStringSelection();
+    wxString savedVias         = m_gridOverrideViasChoice->GetStringSelection();
+    wxString savedText         = m_gridOverrideTextChoice->GetStringSelection();
+    wxString savedGraphics     = m_gridOverrideGraphicsChoice->GetStringSelection();
 
     wxArrayString grids;
     wxString      msg;
@@ -131,8 +128,15 @@ void PANEL_GRID_SETTINGS::RebuildGridSizes()
     }
 
     m_currentGridCtrl->Set( grids );
+
     m_grid1Ctrl->Set( grids );
     m_grid2Ctrl->Set( grids );
+
+    m_gridOverrideConnectedChoice->Set( grids );
+    m_gridOverrideWiresChoice->Set( grids );
+    m_gridOverrideViasChoice->Set( grids );
+    m_gridOverrideTextChoice->Set( grids );
+    m_gridOverrideGraphicsChoice->Set( grids );
 
     if( !m_currentGridCtrl->SetStringSelection( savedCurrentGrid ) )
         m_currentGridCtrl->SetStringSelection( grids.front() );
@@ -142,36 +146,44 @@ void PANEL_GRID_SETTINGS::RebuildGridSizes()
 
     if( !m_grid2Ctrl->SetStringSelection( savedGrid2 ) )
         m_grid2Ctrl->SetStringSelection( grids.back() );
+
+    if( !m_gridOverrideConnectedChoice->SetStringSelection( savedConnectables ) )
+        m_gridOverrideConnectedChoice->SetStringSelection( grids.front() );
+
+    if( !m_gridOverrideWiresChoice->SetStringSelection( savedWires ) )
+        m_gridOverrideWiresChoice->SetStringSelection( grids.front() );
+
+    if( !m_gridOverrideViasChoice->SetStringSelection( savedVias ) )
+        m_gridOverrideViasChoice->SetStringSelection( grids.front() );
+
+    if( !m_gridOverrideTextChoice->SetStringSelection( savedText ) )
+        m_gridOverrideTextChoice->SetStringSelection( grids.front() );
+
+    if( !m_gridOverrideGraphicsChoice->SetStringSelection( savedGraphics ) )
+        m_gridOverrideGraphicsChoice->SetStringSelection( grids.front() );
 }
 
 
 bool PANEL_GRID_SETTINGS::TransferDataFromWindow()
 {
-    // Validate new settings
-    for( UNIT_BINDER* entry : { &m_gridOverrideConnected, &m_gridOverrideWires,
-                                &m_gridOverrideVias, &m_gridOverrideText, &m_gridOverrideGraphics } )
-    {
-        if( !entry->Validate( 0.001, 1000.0, EDA_UNITS::MILLIMETRES ) )
-            return false;
-    }
-
     // Apply the new settings
     GRID_SETTINGS& gridCfg = m_cfg->m_Window.grid;
 
     gridCfg.last_size_idx = m_currentGridCtrl->GetSelection();
+
     gridCfg.fast_grid_1 = m_grid1Ctrl->GetSelection();
     gridCfg.fast_grid_2 = m_grid2Ctrl->GetSelection();
 
     gridCfg.override_connected      = m_checkGridOverrideConnected->GetValue();
-    gridCfg.override_connected_size = m_unitsProvider->StringFromValue( m_gridOverrideConnected.GetValue(), true );
+    gridCfg.override_connected_idx  = m_gridOverrideConnectedChoice->GetSelection();
     gridCfg.override_wires          = m_checkGridOverrideWires->GetValue();
-    gridCfg.override_wires_size     = m_unitsProvider->StringFromValue( m_gridOverrideWires.GetValue(), true );
+    gridCfg.override_wires_idx      = m_gridOverrideWiresChoice->GetSelection();
     gridCfg.override_vias           = m_checkGridOverrideVias->GetValue();
-    gridCfg.override_vias_size      = m_unitsProvider->StringFromValue( m_gridOverrideVias.GetValue(), true );
+    gridCfg.override_vias_idx       = m_gridOverrideViasChoice->GetSelection();
     gridCfg.override_text           = m_checkGridOverrideText->GetValue();
-    gridCfg.override_text_size      = m_unitsProvider->StringFromValue( m_gridOverrideText.GetValue(), true );
+    gridCfg.override_text_idx       = m_gridOverrideTextChoice->GetSelection();
     gridCfg.override_graphics       = m_checkGridOverrideGraphics->GetValue();
-    gridCfg.override_graphics_size  = m_unitsProvider->StringFromValue( m_gridOverrideGraphics.GetValue(), true );
+    gridCfg.override_graphics_idx   = m_gridOverrideGraphicsChoice->GetSelection();
 
     return RESETTABLE_PANEL::TransferDataFromWindow();
 }
@@ -181,24 +193,33 @@ bool PANEL_GRID_SETTINGS::TransferDataToWindow()
 {
     GRID_SETTINGS& gridCfg = m_cfg->m_Window.grid;
 
+    // lambda that gives us a safe index into grids regardless of config idx
+    auto safeGrid = [&gridCfg]( int idx ) -> int
+    {
+        if( idx < 0 || idx >= (int) gridCfg.grids.size() )
+            return 0;
+
+        return idx;
+    };
+
     Layout();
 
-    m_currentGridCtrl->SetSelection( gridCfg.last_size_idx );
+    m_currentGridCtrl->SetSelection( safeGrid( gridCfg.last_size_idx ) );
 
-    m_gridOverrideConnected.SetValue( m_unitsProvider->ValueFromString( gridCfg.override_connected_size ) );
-    m_gridOverrideWires.SetValue( m_unitsProvider->ValueFromString( gridCfg.override_wires_size ) );
-    m_gridOverrideVias.SetValue( m_unitsProvider->ValueFromString( gridCfg.override_vias_size ) );
-    m_gridOverrideText.SetValue( m_unitsProvider->ValueFromString( gridCfg.override_text_size ) );
-    m_gridOverrideGraphics.SetValue( m_unitsProvider->ValueFromString( gridCfg.override_graphics_size ) );
+    m_grid1Ctrl->SetSelection( safeGrid( gridCfg.fast_grid_1 ) );
+    m_grid2Ctrl->SetSelection( safeGrid( gridCfg.fast_grid_2 ) );
 
-    m_checkGridOverrideConnected->SetValue( gridCfg.override_connected );
-    m_checkGridOverrideWires->SetValue( gridCfg.override_wires );
-    m_checkGridOverrideVias->SetValue( gridCfg.override_vias );
-    m_checkGridOverrideText->SetValue( gridCfg.override_text );
-    m_checkGridOverrideGraphics->SetValue( gridCfg.override_graphics );
+    m_gridOverrideConnectedChoice->SetSelection( safeGrid( gridCfg.override_connected_idx ) );
+    m_gridOverrideWiresChoice->SetSelection( safeGrid( gridCfg.override_wires_idx ) );
+    m_gridOverrideViasChoice->SetSelection( safeGrid( gridCfg.override_vias_idx ) );
+    m_gridOverrideTextChoice->SetSelection( safeGrid( gridCfg.override_text_idx ) );
+    m_gridOverrideGraphicsChoice->SetSelection( safeGrid( gridCfg.override_graphics_idx ) );
 
-    m_grid1Ctrl->SetSelection( gridCfg.fast_grid_1 );
-    m_grid2Ctrl->SetSelection( gridCfg.fast_grid_2 );
+    m_checkGridOverrideConnected->SetValue( safeGrid( gridCfg.override_connected ) );
+    m_checkGridOverrideWires->SetValue( safeGrid( gridCfg.override_wires ) );
+    m_checkGridOverrideVias->SetValue( safeGrid( gridCfg.override_vias ) );
+    m_checkGridOverrideText->SetValue( safeGrid( gridCfg.override_text ) );
+    m_checkGridOverrideGraphics->SetValue( safeGrid( gridCfg.override_graphics ) );
 
     return RESETTABLE_PANEL::TransferDataToWindow();
 }

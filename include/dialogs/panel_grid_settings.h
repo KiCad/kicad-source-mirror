@@ -56,12 +56,6 @@ private:
     APP_SETTINGS_BASE* m_cfg;
     FRAME_T            m_frameType;
     wxWindow*          m_eventSource;
-
-    UNIT_BINDER        m_gridOverrideConnected;
-    UNIT_BINDER        m_gridOverrideWires;
-    UNIT_BINDER        m_gridOverrideVias;
-    UNIT_BINDER        m_gridOverrideText;
-    UNIT_BINDER        m_gridOverrideGraphics;
 };
 
 #endif // PANEL_GRID_SETTINGS_H

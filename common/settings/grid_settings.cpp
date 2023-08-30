@@ -63,6 +63,15 @@ wxString GRID::UserUnitsMessageText( UNITS_PROVIDER* aProvider, bool aDisplayUni
 }
 
 
+VECTOR2D GRID::ToDouble( EDA_IU_SCALE aScale ) const
+{
+    return VECTOR2D{
+        EDA_UNIT_UTILS::UI::DoubleValueFromString( aScale, EDA_UNITS::MILLIMETRES, x ),
+        EDA_UNIT_UTILS::UI::DoubleValueFromString( aScale, EDA_UNITS::MILLIMETRES, y ),
+    };
+}
+
+
 bool GRID::operator==( const GRID& aOther ) const
 {
     return x == aOther.x && y == aOther.y;
