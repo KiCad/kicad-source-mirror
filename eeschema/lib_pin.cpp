@@ -817,38 +817,34 @@ void LIB_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
     case PIN_ORIENTATION::PIN_RIGHT:  x1 += m_length;  break;
     }
 
-    auto plotText =
-            [&]( int px, int py, const COLOR4D& color, const wxString& text, const EDA_ANGLE& angle,
-                 int size, GR_TEXT_H_ALIGN_T hJustify, GR_TEXT_V_ALIGN_T vJustify, int penWidth )
-
+    auto plotName =
+            [&]( int x, int y, const EDA_ANGLE& angle, GR_TEXT_H_ALIGN_T hJustify,
+                 GR_TEXT_V_ALIGN_T vJustify )
             {
                 TEXT_ATTRIBUTES attrs;
-                attrs.m_StrokeWidth = std::min( penWidth, size / 5 );  // Keep text readable
+                attrs.m_StrokeWidth = namePenWidth;
                 attrs.m_Angle = angle;
-                attrs.m_Size = VECTOR2I( size, size );
+                attrs.m_Size = VECTOR2I( m_nameTextSize, m_nameTextSize );
                 attrs.m_Halign = hJustify;
                 attrs.m_Valign = vJustify;
                 attrs.m_Multiline = false;
 
-                aPlotter->PlotText( VECTOR2I( px, py ), color, text, attrs, font, GetFontMetrics() );
-            };
-
-    auto plotName =
-            [&]( int px, int py, const EDA_ANGLE& angle, GR_TEXT_H_ALIGN_T hJustify,
-                 GR_TEXT_V_ALIGN_T vJustify )
-
-            {
-                plotText( px, py, nameColor, name, angle, m_nameTextSize, hJustify, vJustify,
-                          namePenWidth );
+                aPlotter->PlotText( VECTOR2I( x, y ), nameColor, name, attrs, font, GetFontMetrics() );
             };
 
     auto plotNum =
-            [&]( int px, int py, const EDA_ANGLE& angle, GR_TEXT_H_ALIGN_T hJustify,
+            [&]( int x, int y, const EDA_ANGLE& angle, GR_TEXT_H_ALIGN_T hJustify,
                  GR_TEXT_V_ALIGN_T vJustify )
-
             {
-                plotText( px, py, numColor, number, angle, m_numTextSize, hJustify, vJustify,
-                          numPenWidth );
+                TEXT_ATTRIBUTES attrs;
+                attrs.m_StrokeWidth = numPenWidth;
+                attrs.m_Angle = angle;
+                attrs.m_Size = VECTOR2I( m_numTextSize, m_numTextSize );
+                attrs.m_Halign = hJustify;
+                attrs.m_Valign = vJustify;
+                attrs.m_Multiline = false;
+
+                aPlotter->PlotText( VECTOR2I( x, y ), numColor, number, attrs, font, GetFontMetrics() );
             };
 
     /* Draw the text inside, but the pin numbers outside. */
