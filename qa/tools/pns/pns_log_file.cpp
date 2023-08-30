@@ -142,7 +142,7 @@ PNS::SEGMENT* PNS_LOG_FILE::parsePnsSegmentFromString( PNS::SEGMENT* aSeg,
                 if( !sh )
                     return nullptr;
 
-                seg->SetShape( *static_cast<SHAPE_SEGMENT*>(sh.get()) );
+                seg->SetShape( *static_cast<SHAPE_SEGMENT*>( sh.get() ) );
 
             }
         }
@@ -342,7 +342,7 @@ bool PNS_LOG_FILE::Load( const wxFileName& logFileName, REPORTER* aRpt )
 
     if( !ok )
     {
-        aRpt->Report( wxString::Format( wxT( "Failed to load routing settings. Usign defaults." ) ) ,
+        aRpt->Report( wxT( "Failed to load routing settings. Using defaults." ),
                       RPT_SEVERITY_WARNING );
     }
 
@@ -357,7 +357,8 @@ bool PNS_LOG_FILE::Load( const wxFileName& logFileName, REPORTER* aRpt )
     try
     {
         PCB_PLUGIN io;
-        aRpt->Report( wxString::Format( wxT("Loading board snapshot from '%s'"), fname_dump.GetFullPath() ) );
+        aRpt->Report( wxString::Format( wxT("Loading board snapshot from '%s'"),
+                                        fname_dump.GetFullPath() ) );
 
         m_board.reset( io.LoadBoard( fname_dump.GetFullPath(), nullptr, nullptr ) );
         m_board->SetProject( project );
@@ -379,8 +380,10 @@ bool PNS_LOG_FILE::Load( const wxFileName& logFileName, REPORTER* aRpt )
     }
     catch( const PARSE_ERROR& parse_error )
     {
-        aRpt->Report( wxString::Format( "parse error : %s (%s)\n", parse_error.Problem(),
-                      parse_error.What() ), RPT_SEVERITY_ERROR );
+        aRpt->Report( wxString::Format( "parse error : %s (%s)\n",
+                                        parse_error.Problem(),
+                                        parse_error.What() ),
+                      RPT_SEVERITY_ERROR );
 
         return false;
     }
