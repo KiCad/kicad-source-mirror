@@ -121,7 +121,16 @@ bool PARAM_LIST<ValueType>::MatchesFile( JSON_SETTINGS* aSettings ) const
             std::vector<ValueType> val;
 
             for( const auto& el : js->items() )
-                val.emplace_back( el.value().get<ValueType>() );
+            {
+                try
+                {
+                    val.emplace_back( el.value().get<ValueType>() );
+                }
+                catch( ... )
+                {
+                    // Probably typecast didn't work; skip this element
+                }
+            }
 
             return val == *m_ptr;
         }
