@@ -3669,7 +3669,6 @@ msgid "MB"
 msgstr "MB"
 
 #: common/dialogs/panel_data_collection_base.cpp:20
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs across the user base more effectively "
@@ -3695,11 +3694,11 @@ msgstr ""
 "som endast används för kraschrapporteringsändamål. Ingen personligt "
 "identifierbar information (PII) inklusive IP-adress lagras eller kopplas "
 "till denna identifikation. Du kan nollställa denna identifikation "
-"närsomhelst med knappen som finns tillgänglig för det.\n"
+"närsomhelst med knappen som finns tillgänglig för ändamålet.\n"
 "\n"
 "Om du väljer att delta frivilligt, kommer KiCad automatiskt att ta hand om "
 "sändning av dessa rapporter när krascher eller särskilda händelser "
-"inträffar. Dina designfiler såsom kretscchema och mönsterkort delas inte i "
+"inträffar. Dina designfiler såsom kretscchema och mönsterkort delas aldrig i "
 "denna process."
 
 #: common/dialogs/panel_data_collection_base.cpp:24
@@ -7492,9 +7491,8 @@ msgid "Reveal Preferences in Finder"
 msgstr "Visa teman i Finder"
 
 #: common/widgets/paged_dialog.cpp:93
-#, fuzzy
 msgid "Open Preferences Directory"
-msgstr "Öppna inställningar"
+msgstr "Öppna mapp för inställningar"
 
 #: common/widgets/paged_dialog.cpp:367
 #, c-format
@@ -7553,7 +7551,7 @@ msgstr "Redigera..."
 #: common/widgets/widget_hotkey_list.cpp:421
 #, fuzzy
 msgid "Edit Alternate..."
-msgstr "Redigera fotavtryck ..."
+msgstr "Redigera alternativ..."
 
 #: common/widgets/widget_hotkey_list.cpp:422
 msgid "Undo Changes"
@@ -7564,9 +7562,8 @@ msgid "Clear Assigned Hotkey"
 msgstr "Rensa tilldelad snabbtangent"
 
 #: common/widgets/widget_hotkey_list.cpp:424
-#, fuzzy
 msgid "Clear Assigned Alternate"
-msgstr "Rensa tilldelad snabbtangent"
+msgstr "Rensa tilldelad alternativ snabbtangent"
 
 #: common/widgets/widget_hotkey_list.cpp:425
 msgid "Restore Defaults"
@@ -11972,9 +11969,8 @@ msgid "New Simulation Tab"
 msgstr "Ny simuleringsflik"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:21
-#, fuzzy
 msgid "Analysis type:"
-msgstr "Analystyp"
+msgstr "Analystyp:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "AC"
@@ -12278,9 +12274,8 @@ msgid "HSpice"
 msgstr "HSpice"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:672
-#, fuzzy
 msgid "SPICE Command"
-msgstr "Simulationskommando"
+msgstr "SPICE-kommando"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:679
 #: eeschema/dialogs/dialog_sim_command_base.cpp:718
@@ -12624,10 +12619,9 @@ msgstr "Gruppera efter"
 msgid "Qty"
 msgstr "Antal"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:592
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:586
 msgid "#"
-msgstr ""
+msgstr "nr."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:621
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:713
@@ -19325,7 +19319,7 @@ msgstr "Lägg till fält '%s' med värde '%s'."
 #: eeschema/tools/backannotate.cpp:563
 #, c-format
 msgid "Delete field '%s.'"
-msgstr "Ta bort fält '%s'."
+msgstr "Ta bort fält '%s.'"
 
 #: eeschema/tools/backannotate.cpp:703
 #, c-format
@@ -20883,9 +20877,8 @@ msgstr "symbolen innehåller inte flera enheter"
 
 #: eeschema/tools/sch_edit_tool.cpp:361 eeschema/tools/sch_edit_tool.cpp:453
 #: eeschema/tools/sch_edit_tool.cpp:538
-#, fuzzy
 msgid "Transform Selection"
-msgstr "Skapa från markering"
+msgstr "Transformera valda objekt"
 
 #: eeschema/tools/sch_edit_tool.cpp:421 eeschema/tools/sch_edit_tool.cpp:508
 #: eeschema/tools/sch_edit_tool.cpp:594
@@ -21072,9 +21065,8 @@ msgid "Press <ESC> to cancel move."
 msgstr "Tryck på <ESC> för att avbryta flytt."
 
 #: eeschema/tools/sch_move_tool.cpp:1734
-#, fuzzy
 msgid "Align"
-msgstr "Hor. justering"
+msgstr "Justera"
 
 #: eeschema/tools/sch_navigate_tool.cpp:81
 #, c-format
@@ -23225,16 +23217,16 @@ msgstr "Öppna projektkatalogen i filutforskaren"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:53
 msgid "Add Default Repository"
-msgstr "Lägg till förvald programvarukälla"
+msgstr "Lägg till förvalt mjukvaruförråd"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:96
 msgid "Please enter fully qualified repository url"
-msgstr "Ange en fullt kvalificerad repository-länk"
+msgstr "Ange en fullt kvalificerad länk till mjukvaruförråd"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:97
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:59
 msgid "Add repository"
-msgstr "Lägg till repository"
+msgstr "Lägg till mjukvaruförråd"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:58
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:130
@@ -23243,13 +23235,12 @@ msgid "Add Existing"
 msgstr "Lägg till befintlig"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:77
-#, fuzzy
 msgid "Remove repository"
-msgstr "Repository"
+msgstr "Ta bort mjukvaruförråd"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:62
 msgid "Manage Repositories"
-msgstr "Hantera repository"
+msgstr "Hantera mjukvaruförråd"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:50
 #, c-format
@@ -23296,7 +23287,7 @@ msgstr "Avinstallera"
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:53
 #, c-format
 msgid "Repository (%d)"
-msgstr "Repository (%d)"
+msgstr "Mjukvaruförråd (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:162
 msgid "Apply Pending Changes"
@@ -23347,7 +23338,7 @@ msgstr "Paket"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:88
 msgid "Repository"
-msgstr "Repository"
+msgstr "Mjukvaruförråd"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:107
 msgid "Discard action"
@@ -23561,36 +23552,36 @@ msgstr "Nedladdningen är för stor."
 
 #: kicad/pcm/pcm.cpp:263 kicad/pcm/pcm.cpp:299
 msgid "Fetching repository"
-msgstr "Hämtar repository"
+msgstr "Hämtar mjukvaruförråd"
 
 #: kicad/pcm/pcm.cpp:268 kicad/pcm/pcm.cpp:304
 msgid "Unable to load repository url"
-msgstr "Kunde inte läsa repositoryts url"
+msgstr "Kunde inte läsa mjukvaruförrådets webadress"
 
 #: kicad/pcm/pcm.cpp:287 kicad/pcm/pcm.cpp:323
 #, c-format
 msgid "Unable to parse repository: %s"
-msgstr "Kan inte tolka repository: %s"
+msgstr "Kan inte tolka mjukvaruförråd: %s"
 
 #: kicad/pcm/pcm.cpp:288 kicad/pcm/pcm.cpp:324
 msgid ""
 "The given repository URL does not look like a valid KiCad package "
 "repository. Please double check the URL."
 msgstr ""
-"Den angivna URL:en till repository ser inte ut som ett giltigt KiCad "
-"paketrepository. Vänligen kontrollera URL:en."
+"Mjukvaruförrådet på den angivna URL-adressen ser inte ut som ett giltigt "
+"KiCad paketförråd. Vänligen kontrollera adressen."
 
 #: kicad/pcm/pcm.cpp:314 kicad/pcm/pcm.cpp:350
 msgid "Fetching repository packages"
-msgstr "Hämtar repositoryts paket"
+msgstr "Hämtar paket från mjukvaruförråd"
 
 #: kicad/pcm/pcm.cpp:319 kicad/pcm/pcm.cpp:355
 msgid "Unable to load repository packages url."
-msgstr "Kunde inte läsa repositoryts paket-url."
+msgstr "Kunde inte läsa mjukvaruförrådets paket-url."
 
 #: kicad/pcm/pcm.cpp:329 kicad/pcm/pcm.cpp:365
 msgid "Packages hash doesn't match. Repository may be corrupted."
-msgstr "Paketets hash stämmer inte överens. Repositoryt kan vara korrupt."
+msgstr "Paketets hash stämmer inte överens. Mjukvaruförrådet kan vara korrupt."
 
 #: kicad/pcm/pcm.cpp:345 kicad/pcm/pcm.cpp:381
 #, c-format
@@ -23611,8 +23602,8 @@ msgstr "Kan inte tolka lokalt lagrad repository.json."
 msgid ""
 "Packages cache for current repository is corrupted, it will be redownloaded."
 msgstr ""
-"Paket-cachen för aktuellt repository är korrupt. Det kommer laddas ned på "
-"nytt."
+"Paket-cachen för aktuellt mjukvaruförråd är felaktig. Den kommer att laddas "
+"ned på nytt."
 
 #: kicad/pcm/pcm.cpp:510 kicad/pcm/pcm.cpp:546
 msgid "Downloading resources"
@@ -23624,7 +23615,7 @@ msgid ""
 "corrupted."
 msgstr ""
 "Resurs-filens hash stämmer inte överens och kommer inte användas. "
-"Repositoryt kan vara korrupt."
+"Mjukvaruförrådet kan vara korrupt."
 
 #: kicad/pcm/pcm.cpp:775 kicad/pcm/pcm.cpp:811
 msgid "Local file"
@@ -23680,9 +23671,9 @@ msgid ""
 "may indicate a problem with the package, if the issue persists report this "
 "to repository maintainers."
 msgstr ""
-"Det nedladdade arkivets hash för paket %s matchar inte repositoryts. Detta "
-"kan tyda på ett problem med paketet. Rapportera problemet till repositoryts "
-"underhållare om det kvarstår."
+"Den nedladdade arkiv-hashen för paket %s matchar inte mjukvaruförrådets "
+"post. Detta kan tyda på ett problem med paketet. Rapportera problemet till "
+"mjukvaruförrådets underhållare om det kvarstår."
 
 #: kicad/pcm/pcm_task_manager.cpp:206 kicad/pcm/pcm_task_manager.cpp:416
 #, c-format
@@ -30019,19 +30010,16 @@ msgid "Sheet: "
 msgstr "Ark: "
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.cpp:21
-#, fuzzy
 msgid "Library Association"
-msgstr "Biblioteksbeskrivning"
+msgstr "Biblioteksanknytning"
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.cpp:62
-#, fuzzy
 msgid "Schematic Association"
-msgstr "Kretsschemaredigerare"
+msgstr "Kretsschemaanknytning"
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.h:52
-#, fuzzy
 msgid "Footprint Associations"
-msgstr "Fotavtryckstilldelningsfil"
+msgstr "Fotavtrycksanknytningar"
 
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:61
 msgid "Run Checks"
@@ -33932,7 +33920,7 @@ msgstr "Behåll ändpunkter eller riktning för startpunkt"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:70
 #, fuzzy
 msgid "Track mouse-drag mode:"
-msgstr "Spåra musens dragbeteende:"
+msgstr "Läge för att flytta ledare genom att dra med musen:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:77
 #: pcbnew/tools/pcb_actions.cpp:1865 pcbnew/tools/pcb_actions.cpp:1851
@@ -42616,27 +42604,23 @@ msgstr "Vissa av ledarsegmenten kunde inte rundas av."
 msgid "Fillet Lines"
 msgstr "Avrundningslinjer"
 
-#: pcbnew/tools/edit_tool.cpp:1110
+#: pcbnew/tools/edit_tool.cpp:1088
 #: pcbnew/tools/item_modification_routine.cpp:168
-#: pcbnew/tools/pcb_actions.cpp:430 pcbnew/tools/edit_tool.cpp:1088
 #: pcbnew/tools/pcb_actions.cpp:416
-#, fuzzy
 msgid "Chamfer Lines"
-msgstr "Fasstorlek:"
+msgstr "Fasa av linjer"
 
-#: pcbnew/tools/edit_tool.cpp:1110 pcbnew/tools/edit_tool.cpp:1088
-#, fuzzy
+#: pcbnew/tools/edit_tool.cpp:1088
 msgid "Enter chamfer setback:"
-msgstr "Fasavstånd:"
+msgstr "Ange avfasningens storlek:"
 
-#: pcbnew/tools/edit_tool.cpp:1124 pcbnew/tools/edit_tool.cpp:1102
-#, fuzzy
+#: pcbnew/tools/edit_tool.cpp:1102
 msgid ""
 "A setback of zero was entered.\n"
 "The chamfer operation was not performed."
 msgstr ""
-"En radie på noll angavs.\n"
-"Avrundningsoperationen utfördes inte."
+"En storlek lika med noll angavs.\n"
+"Avfasningsoperationen utfördes inte."
 
 #: pcbnew/tools/edit_tool.cpp:1216 pcbnew/tools/edit_tool.cpp:1194
 msgid "A shape with least two lines must be selected."
@@ -44589,10 +44573,9 @@ msgstr ""
 "Fel vid inläsning av kort.\n"
 "%s"
 
-#: pcbnew/tools/pcb_control.cpp:1313 pcbnew/tools/pcb_control.cpp:1307
-#, fuzzy
+#: pcbnew/tools/pcb_control.cpp:1307
 msgid "Append Board"
-msgstr "Lägg till kort..."
+msgstr "Lägg till mönsterkort"
 
 #: pcbnew/tools/pcb_control.cpp:1415 pcbnew/tools/pcb_control.cpp:1409
 msgid "Resolved clearance"
