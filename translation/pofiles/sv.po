@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-13 14:56-0700\n"
-"PO-Revision-Date: 2023-08-06 10:11+0000\n"
+"PO-Revision-Date: 2023-08-31 12:51+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v7/sv/>\n"
 "Language: sv\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.0.1-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -20309,15 +20309,15 @@ msgstr "Öppna projektkatalogen i filutforskaren"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:53
 msgid "Add Default Repository"
-msgstr "Lägg till förvald programvarukälla"
+msgstr "Lägg till förvalt mjukvaruförråd"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:96
 msgid "Please enter fully qualified repository url"
-msgstr "Ange en fullt kvalificerad repository-länk"
+msgstr "Ange en fullt kvalificerad länk till mjukvaruförråd"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:97
 msgid "Add repository"
-msgstr "Lägg till repository"
+msgstr "Lägg till mjukvaruförråd"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:58
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:130
@@ -20327,7 +20327,7 @@ msgstr "Lägg till befintlig"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:62
 msgid "Manage Repositories"
-msgstr "Hantera repository"
+msgstr "Hantera mjukvaruförråd"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:50
 #, c-format
@@ -20374,7 +20374,7 @@ msgstr "Avinstallera"
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:53
 #, c-format
 msgid "Repository (%d)"
-msgstr "Repository (%d)"
+msgstr "Mjukvaruförråd (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:162
 msgid "Apply Pending Changes"
@@ -20427,7 +20427,7 @@ msgstr "Paket"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:88
 msgid "Repository"
-msgstr "Repository"
+msgstr "Mjukvaruförråd"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:107
 msgid "Discard action"
@@ -20641,36 +20641,36 @@ msgstr "Nedladdningen är för stor."
 
 #: kicad/pcm/pcm.cpp:299
 msgid "Fetching repository"
-msgstr "Hämtar repository"
+msgstr "Hämtar mjukvaruförråd"
 
 #: kicad/pcm/pcm.cpp:304
 msgid "Unable to load repository url"
-msgstr "Kunde inte läsa repositoryts url"
+msgstr "Kunde inte läsa mjukvaruförrådets webadress"
 
 #: kicad/pcm/pcm.cpp:323
 #, c-format
 msgid "Unable to parse repository: %s"
-msgstr "Kan inte tolka repository: %s"
+msgstr "Kan inte tolka mjukvaruförråd: %s"
 
 #: kicad/pcm/pcm.cpp:324
 msgid ""
 "The given repository URL does not look like a valid KiCad package "
 "repository. Please double check the URL."
 msgstr ""
-"Den angivna URL:en till repository ser inte ut som ett giltigt KiCad "
-"paketrepository. Vänligen kontrollera URL:en."
+"Mjukvaruförrådet på den angivna URL-adressen ser inte ut som ett giltigt "
+"KiCad paketförråd. Vänligen kontrollera adressen."
 
 #: kicad/pcm/pcm.cpp:350
 msgid "Fetching repository packages"
-msgstr "Hämtar repositoryts paket"
+msgstr "Hämtar paket från mjukvaruförråd"
 
 #: kicad/pcm/pcm.cpp:355
 msgid "Unable to load repository packages url."
-msgstr "Kunde inte läsa repositoryts paket-url."
+msgstr "Kunde inte läsa mjukvaruförrådets paket-url."
 
 #: kicad/pcm/pcm.cpp:365
 msgid "Packages hash doesn't match. Repository may be corrupted."
-msgstr "Paketets hash stämmer inte överens. Repositoryt kan vara korrupt."
+msgstr "Paketets hash stämmer inte överens. Mjukvaruförrådet kan vara korrupt."
 
 #: kicad/pcm/pcm.cpp:381
 #, c-format
@@ -20691,8 +20691,8 @@ msgstr "Kan inte tolka lokalt lagrad repository.json."
 msgid ""
 "Packages cache for current repository is corrupted, it will be redownloaded."
 msgstr ""
-"Paket-cachen för aktuellt repository är korrupt. Det kommer laddas ned på "
-"nytt."
+"Paket-cachen för aktuellt mjukvaruförråd är felaktig. Den kommer att laddas "
+"ned på nytt."
 
 #: kicad/pcm/pcm.cpp:544
 msgid "Downloading resources"
@@ -20704,7 +20704,7 @@ msgid ""
 "corrupted."
 msgstr ""
 "Resurs-filens hash stämmer inte överens och kommer inte användas. "
-"Repositoryt kan vara korrupt."
+"Mjukvaruförrådet kan vara korrupt."
 
 #: kicad/pcm/pcm.cpp:809
 msgid "Local file"
@@ -20748,9 +20748,9 @@ msgid ""
 "may indicate a problem with the package, if the issue persists report this "
 "to repository maintainers."
 msgstr ""
-"Det nedladdade arkivets hash för paket %s matchar inte repositoryts. Detta "
-"kan tyda på ett problem med paketet. Rapportera problemet till repositoryts "
-"underhållare om det kvarstår."
+"Den nedladdade arkiv-hashen för paket %s matchar inte mjukvaruförrådets "
+"post. Detta kan tyda på ett problem med paketet. Rapportera problemet till "
+"mjukvaruförrådets underhållare om det kvarstår."
 
 #: kicad/pcm/pcm_task_manager.cpp:201 kicad/pcm/pcm_task_manager.cpp:416
 #, c-format
