@@ -66,8 +66,11 @@ UNIT_BINDER::UNIT_BINDER( UNITS_PROVIDER* aUnitsProvider, wxWindow* aEventSource
     if( textEntry )
     {
         wxClientDC dc( m_valueCtrl );
+
+        // Gives enough room to display a value in inches i )n textEntry
+        // 4 digits + '.' + 10 digits + 2 chars (units) look enough.
         wxSize     minSize = m_valueCtrl->GetMinSize();
-        int        minWidth = dc.GetTextExtent( wxT( "XXX.XXXXXXX" ) ).GetWidth();
+        int        minWidth = dc.GetTextExtent( wxT( "XXXX.XXXXXXXXXXUU" ) ).GetWidth();
 
         if( minSize.GetWidth() < minWidth )
             m_valueCtrl->SetMinSize( wxSize( minWidth, minSize.GetHeight() ) );
