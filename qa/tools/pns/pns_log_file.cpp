@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2022 KiCad Developers.
+ * Copyright (C) 2020-2023 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,7 +43,7 @@ BOARD_CONNECTED_ITEM* PNS_LOG_FILE::ItemById( const PNS::LOGGER::EVENT_ENTRY& ev
 {
     BOARD_CONNECTED_ITEM* parent = nullptr;
 
-    for( auto item : m_board->AllConnectedItems() )
+    for( BOARD_CONNECTED_ITEM* item : m_board->AllConnectedItems() )
     {
         if( item->m_Uuid == evt.uuid )
         {
@@ -75,8 +75,8 @@ std::shared_ptr<SHAPE> parseShape( SHAPE_TYPE expectedType, wxStringTokenizer& a
 
     if( type == SHAPE_TYPE::SH_SEGMENT )
     {
-        std::shared_ptr<SHAPE_SEGMENT> sh(  new SHAPE_SEGMENT );
-        VECTOR2I a,b;
+        std::shared_ptr<SHAPE_SEGMENT> sh( new SHAPE_SEGMENT );
+        VECTOR2I a, b;
         a.x = wxAtoi( aTokens.GetNextToken() );
         a.y = wxAtoi( aTokens.GetNextToken() );
         b.x = wxAtoi( aTokens.GetNextToken() );
@@ -86,10 +86,9 @@ std::shared_ptr<SHAPE> parseShape( SHAPE_TYPE expectedType, wxStringTokenizer& a
         sh->SetWidth( width );
         return sh;
     }
-    else if ( type == SHAPE_TYPE::SH_CIRCLE )
+    else if( type == SHAPE_TYPE::SH_CIRCLE )
     {
-
-            std::shared_ptr<SHAPE_CIRCLE> sh(  new SHAPE_CIRCLE );
+        std::shared_ptr<SHAPE_CIRCLE> sh(  new SHAPE_CIRCLE );
         VECTOR2I a;
         a.x = wxAtoi( aTokens.GetNextToken() );
         a.y = wxAtoi( aTokens.GetNextToken() );
@@ -105,7 +104,7 @@ std::shared_ptr<SHAPE> parseShape( SHAPE_TYPE expectedType, wxStringTokenizer& a
 bool PNS_LOG_FILE::parseCommonPnsProps( PNS::ITEM* aItem, const wxString& cmd,
                                         wxStringTokenizer& aTokens )
 {
-    if( cmd == "net" )
+    if( cmd == wxS( "net" ) )
     {
         if( aItem->Parent() && aItem->Parent()->GetBoard() )
         {
@@ -115,7 +114,7 @@ bool PNS_LOG_FILE::parseCommonPnsProps( PNS::ITEM* aItem, const wxString& cmd,
 
         return false;
     }
-    else if( cmd == "layers" )
+    else if( cmd == wxS( "layers" ) )
     {
         int start = wxAtoi( aTokens.GetNextToken() );
         int end = wxAtoi( aTokens.GetNextToken() );
@@ -128,24 +127,25 @@ bool PNS_LOG_FILE::parseCommonPnsProps( PNS::ITEM* aItem, const wxString& cmd,
 PNS::SEGMENT* PNS_LOG_FILE::parsePnsSegmentFromString( PNS::SEGMENT* aSeg,
                                                        wxStringTokenizer& aTokens )
 {
-    PNS::SEGMENT* seg = new ( PNS::SEGMENT );
+    PNS::SEGMENT* seg = new PNS::SEGMENT();
 
     while( aTokens.CountTokens() )
     {
-           wxString cmd = aTokens.GetNextToken();
-            if( !parseCommonPnsProps( seg, cmd, aTokens ) )
+        wxString cmd = aTokens.GetNextToken();
+
+        if( !parseCommonPnsProps( seg, cmd, aTokens ) )
+        {
+            if( cmd == wxS( "shape" ) )
             {
-                if ( cmd == "shape" )
-                {
-                    auto sh = parseShape( SH_SEGMENT, aTokens );
+                std::shared_ptr<SHAPE> sh = parseShape( SH_SEGMENT, aTokens );
 
-                    if(!sh)
-                        return nullptr;
+                if( !sh )
+                    return nullptr;
 
-                    seg->SetShape( *static_cast<SHAPE_SEGMENT*>(sh.get()) );
+                seg->SetShape( *static_cast<SHAPE_SEGMENT*>(sh.get()) );
 
-                }
             }
+        }
     }
 
     return seg;
@@ -153,30 +153,31 @@ PNS::SEGMENT* PNS_LOG_FILE::parsePnsSegmentFromString( PNS::SEGMENT* aSeg,
 
 PNS::VIA* PNS_LOG_FILE::parsePnsViaFromString( PNS::VIA* aSeg, wxStringTokenizer& aTokens )
 {
-    PNS::VIA* via = new ( PNS::VIA );
+    PNS::VIA* via = new PNS::VIA();
 
     while( aTokens.CountTokens() )
     {
-           wxString cmd = aTokens.GetNextToken();
-            if( !parseCommonPnsProps( via, cmd, aTokens ) )
+        wxString cmd = aTokens.GetNextToken();
+
+        if( !parseCommonPnsProps( via, cmd, aTokens ) )
+        {
+            if( cmd == wxS( "shape" ) )
             {
-                if ( cmd == "shape" )
-                {
-                    auto sh = parseShape( SH_CIRCLE, aTokens );
+                std::shared_ptr<SHAPE> sh = parseShape( SH_CIRCLE, aTokens );
 
-                    if(!sh)
-                        return nullptr;
+                if( !sh )
+                    return nullptr;
 
-                    auto *sc = static_cast<SHAPE_CIRCLE*>( sh.get() );
+                SHAPE_CIRCLE* sc = static_cast<SHAPE_CIRCLE*>( sh.get() );
 
-                    via->SetPos( sc->GetCenter() );
-                    via->SetDiameter( 2 * sc->GetRadius() );
-                }
-                else if ( cmd == "drill" )
-                {
-                    via->SetDrill( wxAtoi( aTokens.GetNextToken() ) );
-                }
+                via->SetPos( sc->GetCenter() );
+                via->SetDiameter( 2 * sc->GetRadius() );
             }
+            else if( cmd == wxS( "drill" ) )
+            {
+                via->SetDrill( wxAtoi( aTokens.GetNextToken() ) );
+            }
+        }
     }
 
     return via;
@@ -187,21 +188,21 @@ PNS::ITEM* PNS_LOG_FILE::parseItemFromString( wxStringTokenizer& aTokens )
 {
     wxString type = aTokens.GetNextToken();
 
-    if( type == "segment" )
+    if( type == wxS( "segment" ) )
     {
-        auto seg = new PNS::SEGMENT();
+        PNS::SEGMENT* seg = new PNS::SEGMENT();
         return parsePnsSegmentFromString( seg, aTokens );
     }
-    else if( type == "via" )
+    else if( type == wxS( "via" ) )
     {
-        auto seg = new PNS::VIA();
+        PNS::VIA* seg = new PNS::VIA();
         return parsePnsViaFromString( seg, aTokens );
     }
 
     return nullptr;
 }
 
-bool comparePnsItems( const PNS::ITEM*a , const PNS::ITEM* b )
+bool comparePnsItems( const PNS::ITEM* a , const PNS::ITEM* b )
 {
     if( a->Kind() != b->Kind() )
         return false;
@@ -214,8 +215,8 @@ bool comparePnsItems( const PNS::ITEM*a , const PNS::ITEM* b )
 
     if( a->Kind() == PNS::ITEM::VIA_T )
     {
-        auto va = static_cast<const PNS::VIA*>(a);
-        auto vb = static_cast<const PNS::VIA*>(b);
+        const PNS::VIA* va = static_cast<const PNS::VIA*>(a);
+        const PNS::VIA* vb = static_cast<const PNS::VIA*>(b);
 
         if( va->Diameter() != vb->Diameter() )
             return false;
@@ -229,8 +230,8 @@ bool comparePnsItems( const PNS::ITEM*a , const PNS::ITEM* b )
     }
     else if ( a->Kind() == PNS::ITEM::SEGMENT_T )
     {
-        auto sa = static_cast<const PNS::SEGMENT*>(a);
-        auto sb = static_cast<const PNS::SEGMENT*>(b);
+        const PNS::SEGMENT* sa = static_cast<const PNS::SEGMENT*>(a);
+        const PNS::SEGMENT* sb = static_cast<const PNS::SEGMENT*>(b);
 
         if( sa->Seg() != sb->Seg() )
             return false;
@@ -247,10 +248,11 @@ const std::set<PNS::ITEM*> deduplicate( const std::vector<PNS::ITEM*>& items )
 {
     std::set<PNS::ITEM*> rv;
 
-    for( auto item : items )
+    for( PNS::ITEM* item : items )
     {
         bool isDuplicate = false;
-        for (auto ritem : rv )
+
+        for( PNS::ITEM* ritem : rv )
         {
             if( comparePnsItems( ritem, item) )
             {
@@ -277,21 +279,17 @@ bool PNS_LOG_FILE::COMMIT_STATE::Compare( const PNS_LOG_FILE::COMMIT_STATE& aOth
     for( const KIID& uuid : m_removedIds )
     {
         if( check.m_removedIds.find( uuid ) != check.m_removedIds.end() )
-        {
             check.m_removedIds.erase( uuid );
-        }
         else
-        {
             return false; // removed twice? wtf
-        }
     }
 
-    auto addedItems = deduplicate( m_addedItems );
-    auto chkAddedItems = deduplicate( check.m_addedItems );
+    std::set<PNS::ITEM*> addedItems = deduplicate( m_addedItems );
+    std::set<PNS::ITEM*> chkAddedItems = deduplicate( check.m_addedItems );
 
-    for( auto item : addedItems )
+    for( PNS::ITEM* item : addedItems )
     {
-        for( auto chk : chkAddedItems )
+        for( PNS::ITEM* chk : chkAddedItems )
         {
             if( comparePnsItems( item, chk ) )
             {
@@ -337,16 +335,19 @@ bool PNS_LOG_FILE::Load( const wxFileName& logFileName, REPORTER* aRpt )
     wxFileName fname_settings( logFileName );
     fname_settings.SetExt( wxT( "settings" ) );
 
-    aRpt->Report( wxString::Format( wxT("Loading router settings from '%s'"), fname_settings.GetFullPath() ) );
+    aRpt->Report( wxString::Format( wxT( "Loading router settings from '%s'" ),
+                                    fname_settings.GetFullPath() ) );
 
     bool ok = m_routerSettings->LoadFromRawFile( fname_settings.GetFullPath() );
 
     if( !ok )
     {
-        aRpt->Report( wxString::Format( wxT("Failed to load routing settings. Usign defaults.")) , RPT_SEVERITY_WARNING );
+        aRpt->Report( wxString::Format( wxT( "Failed to load routing settings. Usign defaults." ) ) ,
+                      RPT_SEVERITY_WARNING );
     }
 
-    aRpt->Report( wxString::Format( wxT("Loading project settings from '%s'"), fname_settings.GetFullPath() ) );
+    aRpt->Report( wxString::Format( wxT( "Loading project settings from '%s'" ),
+                                    fname_settings.GetFullPath() ) );
 
     m_settingsMgr.reset( new SETTINGS_MANAGER ( true ) );
     m_settingsMgr->LoadProject( fname_project.GetFullPath() );
@@ -379,7 +380,7 @@ bool PNS_LOG_FILE::Load( const wxFileName& logFileName, REPORTER* aRpt )
     catch( const PARSE_ERROR& parse_error )
     {
         aRpt->Report( wxString::Format( "parse error : %s (%s)\n", parse_error.Problem(),
-                parse_error.What() ), RPT_SEVERITY_ERROR );
+                      parse_error.What() ), RPT_SEVERITY_ERROR );
 
         return false;
     }
@@ -404,20 +405,20 @@ bool PNS_LOG_FILE::Load( const wxFileName& logFileName, REPORTER* aRpt )
 
         wxString cmd = tokens.GetNextToken();
 
-        if( cmd == wxT("mode") )
+        if( cmd == wxT( "mode" ) )
         {
             m_mode = static_cast<PNS::ROUTER_MODE>( wxAtoi( tokens.GetNextToken() ) );
         }
-        else if( cmd == wxT("event") )
+        else if( cmd == wxT( "event" ) )
         {
             m_events.push_back( PNS::LOGGER::ParseEvent( line ) );
         }
-        else if ( cmd == wxT("added") )
+        else if ( cmd == wxT( "added" ) )
         {
-            auto item = parseItemFromString( tokens );
+            PNS::ITEM* item = parseItemFromString( tokens );
             m_commitState.m_addedItems.push_back( item );
         }
-        else if ( cmd == wxT("removed") )
+        else if ( cmd == wxT( "removed" ) )
         {
             m_commitState.m_removedIds.insert( KIID( tokens.GetNextToken() ) );
         }
