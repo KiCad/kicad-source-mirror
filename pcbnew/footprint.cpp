@@ -525,7 +525,7 @@ bool FOOTPRINT::ResolveTextVar( wxString* token, int aDepth ) const
     else if( token->StartsWith( wxT( "SHORT_NET_NAME(" ) )
                  || token->StartsWith( wxT( "NET_NAME(" ) )
                  || token->StartsWith( wxT( "NET_CLASS(" ) )
-                || token->StartsWith( wxT( "PIN_NAME(" ) ) )
+                 || token->StartsWith( wxT( "PIN_NAME(" ) ) )
     {
         wxString padNumber = token->AfterFirst( '(' );
         padNumber = padNumber.BeforeLast( ')' );
