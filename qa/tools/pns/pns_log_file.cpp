@@ -301,7 +301,10 @@ bool PNS_LOG_FILE::COMMIT_STATE::Compare( const PNS_LOG_FILE::COMMIT_STATE& aOth
 
     //printf("post-compare: %d/%d\n", chkAddedItems.size(), check.m_removedIds.size() );
 
-    return chkAddedItems.empty() && check.m_removedIds.empty();
+    if( chkAddedItems.empty() && check.m_removedIds.empty() )
+        return true;
+    else
+        return false;   // Set breakpoint here to trap failing tests
 }
 
 
