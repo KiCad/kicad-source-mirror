@@ -631,8 +631,11 @@ void EDA_DRAW_FRAME::DisplayGridMsg()
 {
     wxString msg;
 
-    msg.Printf( _( "grid %s" ), MessageTextFromValue( GetCanvas()->GetGAL()->GetGridSize().x,
-                                                      false ) );
+    GRID_SETTINGS& gridSettings = m_toolManager->GetSettings()->m_Window.grid;
+    int            currentIdx = m_toolManager->GetSettings()->m_Window.grid.last_size_idx;
+
+    msg.Printf( _( "grid %s" ),
+                gridSettings.grids[currentIdx].UserUnitsMessageText( this, false ) );
 
     SetStatusText( msg, 4 );
 }

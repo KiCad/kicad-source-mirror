@@ -249,8 +249,8 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* 
 {
     PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
 
-    if( cfg->m_Window.grid.sizes.empty() )
-        cfg->m_Window.grid.sizes = cfg->DefaultGridSizeList();
+    if( cfg->m_Window.grid.grids.empty() )
+        cfg->m_Window.grid.grids = cfg->DefaultGridSizeList();
 
     // Currently values read from config file are not used because the user cannot
     // change this config
@@ -277,10 +277,12 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* 
     panel->GetGAL()->SetGridVisibility( gridCfg.show );
 
     //Bounds checking cannot include number of elements as an index!
-    int    gridIdx = alg::clamp( 0, gridCfg.last_size_idx, (int) gridCfg.sizes.size() - 1 );
-    double gridSize = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::MILS,
-                                                                 gridCfg.sizes[ gridIdx ] );
-    panel->GetGAL()->SetGridSize( VECTOR2D( gridSize, gridSize ) );
+    int    gridIdx = alg::clamp( 0, gridCfg.last_size_idx, (int) gridCfg.grids.size() - 1 );
+    double gridSizeX = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::MILS,
+                                                                  gridCfg.grids[gridIdx].x );
+    double gridSizeY = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::MILS,
+                                                                  gridCfg.grids[gridIdx].y );
+    panel->GetGAL()->SetGridSize( VECTOR2D( gridSizeX, gridSizeY ) );
 
     auto painter = static_cast<KIGFX::PCB_PAINTER*>( panel->GetView()->GetPainter() );
     auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );

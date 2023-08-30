@@ -379,11 +379,6 @@ public:
 
     void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
 
-    /**
-     * Display the current grid pane on the status bar.
-     */
-    void DisplayGridMsg() override;
-
     PCB_DRAW_PANEL_GAL* GetCanvas() const override;
 
     virtual void ActivateGalCanvas() override;

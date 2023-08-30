@@ -114,6 +114,8 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_edit_library_tables.cpp
     dialogs/dialog_global_lib_table_config.cpp
     dialogs/dialog_global_lib_table_config_base.cpp
+    dialogs/dialog_grid_settings.cpp
+    dialogs/dialog_grid_settings_base.cpp
     dialogs/dialog_hotkey_list.cpp
     dialogs/dialog_HTML_reporter_base.cpp
     dialogs/dialog_locked_items_query.cpp
@@ -468,6 +470,7 @@ set( COMMON_SRCS
     settings/color_settings.cpp
     settings/cvpcb_settings.cpp
     settings/common_settings.cpp
+    settings/grid_settings.cpp
     settings/json_settings.cpp
     settings/nested_settings.cpp
     settings/parameters.cpp

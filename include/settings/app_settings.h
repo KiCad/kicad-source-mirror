@@ -23,6 +23,7 @@
 
 #include <gal/color4d.h>
 #include <settings/json_settings.h>
+#include <settings/grid_settings.h>
 
 /**
  * Cross-probing behavior
@@ -42,37 +43,6 @@ struct CURSOR_SETTINGS
 {
     bool always_show_cursor;
     bool fullscreen_cursor;
-};
-
-/**
- * Common grid settings, available to every frame
- */
-struct GRID_SETTINGS
-{
-    bool axes_enabled;
-    std::vector<wxString> sizes;
-    wxString user_grid_x;
-    wxString user_grid_y;
-    int last_size_idx;
-    int fast_grid_1;
-    int fast_grid_2;
-    double line_width;
-    double min_spacing;
-    bool show;
-    int style;
-    int snap;
-    bool force_component_snap;
-    bool     overrides_enabled;
-    bool     override_connected;
-    wxString override_connected_size;
-    bool     override_wires;
-    wxString override_wires_size;
-    bool     override_vias;
-    wxString override_vias_size;
-    bool     override_text;
-    wxString override_text_size;
-    bool     override_graphics;
-    wxString override_graphics_size;
 };
 
 /**
@@ -179,7 +149,7 @@ public:
 
     virtual bool MigrateFromLegacy( wxConfigBase* aCfg ) override;
 
-    const std::vector<wxString> DefaultGridSizeList() const;
+    const std::vector<GRID> DefaultGridSizeList() const;
 
 public:
     CROSS_PROBING_SETTINGS m_CrossProbing;

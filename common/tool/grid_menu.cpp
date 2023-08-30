@@ -84,6 +84,7 @@ void GRID_MENU::update()
     }
 }
 
+
 void GRID_MENU::BuildChoiceList( wxArrayString* aGridsList, APP_SETTINGS_BASE* aCfg,
                                  EDA_DRAW_FRAME* aParent )
 {
@@ -94,14 +95,15 @@ void GRID_MENU::BuildChoiceList( wxArrayString* aGridsList, APP_SETTINGS_BASE* a
 
     aParent->GetUnitPair( primaryUnit, secondaryUnit );
 
-    for( const wxString& gridSize : aCfg->m_Window.grid.sizes )
+    for( GRID& gridSize : aCfg->m_Window.grid.grids )
     {
-        double val = EDA_UNIT_UTILS::UI::DoubleValueFromString( scale, EDA_UNITS::MILLIMETRES,
-                                                                gridSize );
+        wxString name;
 
-        msg.Printf( _( "%s (%s)" ),
-                    EDA_UNIT_UTILS::UI::MessageTextFromValue( scale, primaryUnit, val ),
-                    EDA_UNIT_UTILS::UI::MessageTextFromValue( scale, secondaryUnit, val ) );
+        if( !gridSize.name.IsEmpty() )
+            name = gridSize.name + ": ";
+
+        msg.Printf( _( "%s%s (%s)" ), name, gridSize.MessageText( scale, primaryUnit, true ),
+                    gridSize.MessageText( scale, secondaryUnit, true ) );
 
         aGridsList->Add( msg );
     }

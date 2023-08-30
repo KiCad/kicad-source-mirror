@@ -810,19 +810,6 @@ GENERAL_COLLECTORS_GUIDE PCB_BASE_FRAME::GetCollectorsGuide()
 }
 
 
-void PCB_BASE_FRAME::DisplayGridMsg()
-{
-    VECTOR2D gridSize = GetCanvas()->GetGAL()->GetGridSize();
-    wxString line;
-
-    line.Printf( wxT( "grid X %s  Y %s" ),
-                 MessageTextFromValue( gridSize.x, false ),
-                 MessageTextFromValue( gridSize.y, false ) );
-
-    SetStatusText( line, 4 );
-}
-
-
 void PCB_BASE_FRAME::UpdateStatusBar()
 {
     EDA_DRAW_FRAME::UpdateStatusBar();
@@ -895,13 +882,14 @@ void PCB_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
-    if( aCfg->m_Window.grid.sizes.empty() )
-        aCfg->m_Window.grid.sizes = aCfg->DefaultGridSizeList();
+    if( aCfg->m_Window.grid.grids.empty() )
+        aCfg->m_Window.grid.grids = aCfg->DefaultGridSizeList();
 
     // Move legacy user grids to grid list
     if( !aCfg->m_Window.grid.user_grid_x.empty() )
     {
-        aCfg->m_Window.grid.sizes.emplace_back( aCfg->m_Window.grid.user_grid_x );
+        aCfg->m_Window.grid.grids.emplace_back( GRID{ "User Grid", aCfg->m_Window.grid.user_grid_x,
+                                                      aCfg->m_Window.grid.user_grid_y } );
         aCfg->m_Window.grid.user_grid_x = wxEmptyString;
         aCfg->m_Window.grid.user_grid_y = wxEmptyString;
     }

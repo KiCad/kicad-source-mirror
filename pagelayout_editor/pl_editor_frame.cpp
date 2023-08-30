@@ -495,16 +495,16 @@ void PL_EDITOR_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
-    if( aCfg->m_Window.grid.sizes.empty() )
+    if( aCfg->m_Window.grid.grids.empty() )
     {
-        aCfg->m_Window.grid.sizes = { "5.00 mm",
-                                      "2.50 mm",
-                                      "2.00 mm",
-                                      "1.00 mm",
-                                      "0.50 mm",
-                                      "0.25 mm",
-                                      "0.20 mm",
-                                      "0.10 mm" };
+        aCfg->m_Window.grid.grids = { GRID{ wxEmptyString, wxS( "5.00 mm" ), wxS( "5.00 mm" ) },
+                                      GRID{ wxEmptyString, wxS( "2.50 mm" ), wxS( "2.50 mm" ) },
+                                      GRID{ wxEmptyString, wxS( "2.00 mm" ), wxS( "2.00 mm" ) },
+                                      GRID{ wxEmptyString, wxS( "1.00 mm" ), wxS( "1.00 mm" ) },
+                                      GRID{ wxEmptyString, wxS( "0.50 mm" ), wxS( "0.50 mm" ) },
+                                      GRID{ wxEmptyString, wxS( "0.25 mm" ), wxS( "0.25 mm" ) },
+                                      GRID{ wxEmptyString, wxS( "0.20 mm" ), wxS( "0.20 mm" ) },
+                                      GRID{ wxEmptyString, wxS( "0.10 mm" ), wxS( "0.10 mm" ) } };
     }
 
     // Currently values read from config file are not used because the user cannot

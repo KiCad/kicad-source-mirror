@@ -2387,13 +2387,13 @@ int SCH_EDITOR_CONTROL::GridFeedback( const TOOL_EVENT& aEvent )
     if( !Pgm().GetCommonSettings()->m_Input.hotkey_feedback )
         return 0;
 
-    const std::vector<VECTOR2I>& grids = m_toolMgr->GetTool<COMMON_TOOLS>()->Grids();
+    GRID_SETTINGS& gridSettings = m_toolMgr->GetSettings()->m_Window.grid;
     int currentIdx = m_toolMgr->GetSettings()->m_Window.grid.last_size_idx;
 
     wxArrayString gridsLabels;
 
-    for( const VECTOR2I& grid : grids )
-        gridsLabels.Add( m_frame->StringFromValue( grid.x, true ) );
+    for( const GRID& grid : gridSettings.grids )
+        gridsLabels.Add( grid.UserUnitsMessageText( m_frame ) );
 
     if( !m_frame->GetHotkeyPopup() )
         m_frame->CreateHotkeyPopup();

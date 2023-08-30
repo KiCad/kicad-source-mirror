@@ -27,6 +27,7 @@
 #include <settings/json_settings_internals.h>
 #include <settings/color_settings.h>
 #include <settings/common_settings.h>
+#include <settings/grid_settings.h>
 #include <settings/parameters.h>
 
 
@@ -337,8 +338,8 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
         defaultGridIdx = 4;
     }
 
-    m_params.emplace_back( new PARAM_LIST<wxString>( aJsonPath + ".grid.sizes",
-            &aWindow->grid.sizes, DefaultGridSizeList() ) );
+    m_params.emplace_back( new PARAM_LIST<GRID>( aJsonPath + ".grid.sizes", &aWindow->grid.grids,
+                                                 DefaultGridSizeList() ) );
 
     m_params.emplace_back( new PARAM<int>( aJsonPath + ".grid.last_size",
             &aWindow->grid.last_size_idx, defaultGridIdx ) );
@@ -349,7 +350,7 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
     m_params.emplace_back( new PARAM<int>( aJsonPath + ".grid.fast_grid_2",
             &aWindow->grid.fast_grid_2, defaultGridIdx + 1 ) );
 
-    // for grid user, use a default value compatible with eeschema and pcbnew (10 mils)
+    // legacy values, leave blank by default so we don't convert them
     m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.user_grid_x",
             &aWindow->grid.user_grid_x, wxEmptyString ) );
     m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".grid.user_grid_y",
@@ -441,39 +442,39 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
 }
 
 
-const std::vector<wxString> APP_SETTINGS_BASE::DefaultGridSizeList() const
+const std::vector<GRID> APP_SETTINGS_BASE::DefaultGridSizeList() const
 {
     if( m_filename == wxS( "eeschema" ) || m_filename == wxS( "symbol_editor" ) )
     {
-        return { wxS( "100 mil" ),
-                 wxS( "50 mil" ),
-                 wxS( "25 mil" ),
-                 wxS( "10 mil" ) };
+        return { GRID{ wxEmptyString, wxS( "100 mil" ), wxS( "100 mil" ) },
+                 GRID{ wxEmptyString, wxS( "50 mil" ), wxS( "50 mil" ) },
+                 GRID{ wxEmptyString, wxS( "25 mil" ), wxS( "25 mil" ) },
+                 GRID{ wxEmptyString, wxS( "10 mil" ), wxS( "10 mil" ) } };
     }
     else
     {
-        return { wxS( "1000 mil" ),
-                 wxS( "500 mil" ),
-                 wxS( "250 mil" ),
-                 wxS( "200 mil" ),
-                 wxS( "100 mil" ),
-                 wxS( "50 mil" ),
-                 wxS( "25 mil" ),
-                 wxS( "20 mil" ),
-                 wxS( "10 mil" ),
-                 wxS( "5 mil" ),
-                 wxS( "2 mil" ),
-                 wxS( "1 mil" ),
-                 wxS( "5.0 mm" ),
-                 wxS( "2.5 mm" ),
-                 wxS( "1.0 mm" ),
-                 wxS( "0.5 mm" ),
-                 wxS( "0.25 mm" ),
-                 wxS( "0.2 mm" ),
-                 wxS( "0.1 mm" ),
-                 wxS( "0.05 mm" ),
-                 wxS( "0.025 mm" ),
-                 wxS( "0.01 mm" ) };
+        return { GRID{ wxEmptyString, wxS( "1000 mil" ), wxS( "1000 mil" ) },
+                 GRID{ wxEmptyString, wxS( "500 mil" ), wxS( "500 mil" ) },
+                 GRID{ wxEmptyString, wxS( "250 mil" ), wxS( "250 mil" ) },
+                 GRID{ wxEmptyString, wxS( "200 mil" ), wxS( "200 mil" ) },
+                 GRID{ wxEmptyString, wxS( "100 mil" ), wxS( "100 mil" ) },
+                 GRID{ wxEmptyString, wxS( "50 mil" ), wxS( "50 mil" ) },
+                 GRID{ wxEmptyString, wxS( "25 mil" ), wxS( "25 mil" ) },
+                 GRID{ wxEmptyString, wxS( "20 mil" ), wxS( "20 mil" ) },
+                 GRID{ wxEmptyString, wxS( "10 mil" ), wxS( "10 mil" ) },
+                 GRID{ wxEmptyString, wxS( "5 mil" ), wxS( "5 mil" ) },
+                 GRID{ wxEmptyString, wxS( "2 mil" ), wxS( "2 mil" ) },
+                 GRID{ wxEmptyString, wxS( "1 mil" ), wxS( "1 mil" ) },
+                 GRID{ wxEmptyString, wxS( "5.0 mm" ), wxS( "5.0 mm" ) },
+                 GRID{ wxEmptyString, wxS( "2.5 mm" ), wxS( "2.5 mm" ) },
+                 GRID{ wxEmptyString, wxS( "1.0 mm" ), wxS( "1.0 mm" ) },
+                 GRID{ wxEmptyString, wxS( "0.5 mm" ), wxS( "0.5 mm" ) },
+                 GRID{ wxEmptyString, wxS( "0.25 mm" ), wxS( "0.25 mm" ) },
+                 GRID{ wxEmptyString, wxS( "0.2 mm" ), wxS( "0.2 mm" ) },
+                 GRID{ wxEmptyString, wxS( "0.1 mm" ), wxS( "0.1 mm" ) },
+                 GRID{ wxEmptyString, wxS( "0.05 mm" ), wxS( "0.05 mm" ) },
+                 GRID{ wxEmptyString, wxS( "0.025 mm" ), wxS( "0.025 mm" ) },
+                 GRID{ wxEmptyString, wxS( "0.01 mm" ), wxS( "0.01 mm" ) } };
     }
 }
 

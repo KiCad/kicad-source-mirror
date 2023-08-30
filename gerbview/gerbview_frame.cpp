@@ -310,30 +310,30 @@ void GERBVIEW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
-    if( aCfg->m_Window.grid.sizes.empty() )
+    if( aCfg->m_Window.grid.grids.empty() )
     {
-        aCfg->m_Window.grid.sizes = { wxT( "100 mil" ),
-                                      wxT( "50 mil" ),
-                                      wxT( "25 mil" ),
-                                      wxT( "20 mil" ),
-                                      wxT( "10 mil" ),
-                                      wxT( "5 mil" ),
-                                      wxT( "2.5 mil" ),
-                                      wxT( "2 mil" ),
-                                      wxT( "1 mil" ),
-                                      wxT( "0.5 mil" ),
-                                      wxT( "0.2 mil" ),
-                                      wxT( "0.1 mil" ),
-                                      wxT( "5.0 mm" ),
-                                      wxT( "2.5 mm" ),
-                                      wxT( "1.0 mm" ),
-                                      wxT( "0.5 mm" ),
-                                      wxT( "0.25 mm" ),
-                                      wxT( "0.2 mm" ),
-                                      wxT( "0.1 mm" ),
-                                      wxT( "0.05 mm" ),
-                                      wxT( "0.025 mm" ),
-                                      wxT( "0.01 mm" ) };
+        aCfg->m_Window.grid.grids = { GRID{ wxEmptyString, wxS( "100 mil" ), wxS( "100 mil" ) },
+                                      GRID{ wxEmptyString, wxS( "50 mil" ), wxS( "50 mil" ) },
+                                      GRID{ wxEmptyString, wxS( "25 mil" ), wxS( "25 mil" ) },
+                                      GRID{ wxEmptyString, wxS( "20 mil" ), wxS( "20 mil" ) },
+                                      GRID{ wxEmptyString, wxS( "10 mil" ), wxS( "10 mil" ) },
+                                      GRID{ wxEmptyString, wxS( "5 mil" ), wxS( "5 mil" ) },
+                                      GRID{ wxEmptyString, wxS( "2.5 mil" ), wxS( "2.5 mil" ) },
+                                      GRID{ wxEmptyString, wxS( "2 mil" ), wxS( "2 mil" ) },
+                                      GRID{ wxEmptyString, wxS( "1 mil" ), wxS( "1 mil" ) },
+                                      GRID{ wxEmptyString, wxS( "0.5 mil" ), wxS( "0.5 mil" ) },
+                                      GRID{ wxEmptyString, wxS( "0.2 mil" ), wxS( "0.2 mil" ) },
+                                      GRID{ wxEmptyString, wxS( "0.1 mil" ), wxS( "0.1 mil" ) },
+                                      GRID{ wxEmptyString, wxS( "5.0 mm" ), wxS( "5.0 mm" ) },
+                                      GRID{ wxEmptyString, wxS( "1.5 mm" ), wxS( "2.5 mm" ) },
+                                      GRID{ wxEmptyString, wxS( "1.0 mm" ), wxS( "1.0 mm" ) },
+                                      GRID{ wxEmptyString, wxS( "0.5 mm" ), wxS( "0.5 mm" ) },
+                                      GRID{ wxEmptyString, wxS( "0.25 mm" ), wxS( "0.25 mm" ) },
+                                      GRID{ wxEmptyString, wxS( "0.2 mm" ), wxS( "0.2 mm" ) },
+                                      GRID{ wxEmptyString, wxS( "0.1 mm" ), wxS( "0.1 mm" ) },
+                                      GRID{ wxEmptyString, wxS( "0.05 mm" ), wxS( "0.0 mm" ) },
+                                      GRID{ wxEmptyString, wxS( "0.025 mm" ), wxS( "0.0 mm" ) },
+                                      GRID{ wxEmptyString, wxS( "0.01 mm" ), wxS( "0.0 mm" ) } };
     }
 
     if( aCfg->m_Window.zoom_factors.empty() )

@@ -404,8 +404,9 @@ void DIALOG_BOARD_REANNOTATE::GetParameters()
     m_gridIndex = m_GridChoice->GetSelection();
 
     m_sortGridx = EDA_UNIT_UTILS::UI::DoubleValueFromString(
-            pcbIUScale, EDA_UNITS::MILS, m_settings->m_Window.grid.sizes[m_gridIndex] );
-    m_sortGridy = m_sortGridx;
+            pcbIUScale, EDA_UNITS::MILS, m_settings->m_Window.grid.grids[m_gridIndex].x );
+    m_sortGridy = EDA_UNIT_UTILS::UI::DoubleValueFromString(
+            pcbIUScale, EDA_UNITS::MILS, m_settings->m_Window.grid.grids[m_gridIndex].y );
 
     m_annotationScope = ANNOTATE_ALL;
 

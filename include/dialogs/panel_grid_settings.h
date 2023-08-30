@@ -55,6 +55,7 @@ private:
     UNITS_PROVIDER*    m_unitsProvider;
     APP_SETTINGS_BASE* m_cfg;
     FRAME_T            m_frameType;
+    wxWindow*          m_eventSource;
 
     UNIT_BINDER        m_gridOverrideConnected;
     UNIT_BINDER        m_gridOverrideWires;

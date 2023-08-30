@@ -25,6 +25,7 @@
 #include <confirm.h>
 #include <wx/textdlg.h>
 #include <dialogs/panel_grid_settings.h>
+#include <dialogs/dialog_grid_settings.h>
 #include <widgets/std_bitmap_button.h>
 #include <common.h>
 #include <settings/app_settings.h>
@@ -40,17 +41,16 @@ PANEL_GRID_SETTINGS::PANEL_GRID_SETTINGS( wxWindow* aParent, UNITS_PROVIDER* aUn
                                           wxWindow* aEventSource, APP_SETTINGS_BASE* aCfg,
                                           FRAME_T aFrameType ) :
         PANEL_GRID_SETTINGS_BASE( aParent ),
-        m_unitsProvider( aUnitsProvider ),
-        m_cfg( aCfg ),
-        m_frameType( aFrameType ),
+        m_unitsProvider( aUnitsProvider ), m_cfg( aCfg ), m_frameType( aFrameType ),
+        m_eventSource( aEventSource ),
         m_gridOverrideConnected( aUnitsProvider, aEventSource, m_staticTextConnected,
                                  m_GridOverrideConnectedSize, m_staticTextConnectedUnits ),
         m_gridOverrideWires( aUnitsProvider, aEventSource, m_staticTextWires,
                              m_GridOverrideWiresSize, m_staticTextWiresUnits ),
-        m_gridOverrideVias( aUnitsProvider, aEventSource, m_staticTextVias,
-                            m_GridOverrideViasSize, m_staticTextViasUnits ),
-        m_gridOverrideText( aUnitsProvider, aEventSource, m_staticTextText,
-                            m_GridOverrideTextSize, m_staticTextTextUnits ),
+        m_gridOverrideVias( aUnitsProvider, aEventSource, m_staticTextVias, m_GridOverrideViasSize,
+                            m_staticTextViasUnits ),
+        m_gridOverrideText( aUnitsProvider, aEventSource, m_staticTextText, m_GridOverrideTextSize,
+                            m_staticTextTextUnits ),
         m_gridOverrideGraphics( aUnitsProvider, aEventSource, m_staticTextGraphics,
                                 m_GridOverrideGraphicsSize, m_staticTextGraphicsUnits )
 {
@@ -97,7 +97,7 @@ PANEL_GRID_SETTINGS::PANEL_GRID_SETTINGS( wxWindow* aParent, UNITS_PROVIDER* aUn
 
 void PANEL_GRID_SETTINGS::ResetPanel()
 {
-    m_cfg->m_Window.grid.sizes = m_cfg->DefaultGridSizeList();
+    m_cfg->m_Window.grid.grids = m_cfg->DefaultGridSizeList();
     RebuildGridSizes();
     m_cfg->m_Window.grid.last_size_idx = m_currentGridCtrl->GetSelection();
 }
@@ -117,14 +117,15 @@ void PANEL_GRID_SETTINGS::RebuildGridSizes()
 
     m_unitsProvider->GetUnitPair( primaryUnit, secondaryUnit );
 
-    for( const wxString& gridSize : m_cfg->m_Window.grid.sizes )
+    for( const struct GRID& grid : m_cfg->m_Window.grid.grids )
     {
-        double val = EDA_UNIT_UTILS::UI::DoubleValueFromString( scale, EDA_UNITS::MILLIMETRES,
-                                                                gridSize );
+        wxString name = grid.name;
 
-        msg.Printf( _( "%s (%s)" ),
-                    EDA_UNIT_UTILS::UI::MessageTextFromValue( scale, primaryUnit, val ),
-                    EDA_UNIT_UTILS::UI::MessageTextFromValue( scale, secondaryUnit, val ) );
+        if( !name.IsEmpty() )
+            name += wxT( ": " );
+
+        msg.Printf( _( "%s%s (%s)" ), name, grid.MessageText( scale, primaryUnit, true ),
+                    grid.MessageText( scale, secondaryUnit, true ) );
 
         grids.Add( msg );
     }
@@ -205,38 +206,26 @@ bool PANEL_GRID_SETTINGS::TransferDataToWindow()
 
 void PANEL_GRID_SETTINGS::OnAddGrid( wxCommandEvent& event )
 {
-    wxTextEntryDialog dlg( this, _( "New grid:" ), _( "Add Grid" ) );
+    GRID                 newGrid = GRID{ wxEmptyString, "", "" };
+    DIALOG_GRID_SETTINGS dlg( this->GetParent(), m_eventSource, m_unitsProvider, newGrid );
 
     if( dlg.ShowModal() != wxID_OK )
         return;
 
     int            row = m_currentGridCtrl->GetSelection();
     GRID_SETTINGS& gridCfg = m_cfg->m_Window.grid;
-    EDA_IU_SCALE   scale = m_unitsProvider->GetIuScale();
-    EDA_UNITS      units = m_unitsProvider->GetUserUnits();
-    double         gridSize = EDA_UNIT_UTILS::UI::DoubleValueFromString( scale, units, dlg.GetValue() );
 
-
-    if( gridSize == 0.0f )
+    for( GRID& g : gridCfg.grids )
     {
-        DisplayError( this, _( "Grid must have a valid size." ) );
-        return;
-    }
-
-    wxString gridSizeStr =
-            EDA_UNIT_UTILS::UI::StringFromValue( scale, EDA_UNITS::MILLIMETRES, gridSize );
-
-    for( const wxString& size : gridCfg.sizes )
-    {
-        if( gridSizeStr == size )
+        if( newGrid == g )
         {
-            DisplayError( this,
-                          wxString::Format( _( "Grid size '%s' already exists." ), gridSizeStr ) );
+            DisplayError( this, wxString::Format( _( "Grid size '%s' already exists." ),
+                                                  g.UserUnitsMessageText( m_unitsProvider ) ) );
             return;
         }
     }
 
-    gridCfg.sizes.insert( gridCfg.sizes.begin() + row, gridSizeStr );
+    gridCfg.grids.insert( gridCfg.grids.begin() + row, newGrid );
     RebuildGridSizes();
     m_currentGridCtrl->SetSelection( row );
 }
@@ -247,13 +236,13 @@ void PANEL_GRID_SETTINGS::OnRemoveGrid( wxCommandEvent& event )
     GRID_SETTINGS& gridCfg = m_cfg->m_Window.grid;
     int            row = m_currentGridCtrl->GetSelection();
 
-    if( gridCfg.sizes.size() <= 1 )
+    if( gridCfg.grids.size() <= 1 )
     {
         DisplayError( this, wxString::Format( _( "At least one grid size is required." ) ) );
         return;
     }
 
-    gridCfg.sizes.erase( gridCfg.sizes.begin() + row );
+    gridCfg.grids.erase( gridCfg.grids.begin() + row );
     RebuildGridSizes();
 
     if( row != 0 )
@@ -266,10 +255,10 @@ void PANEL_GRID_SETTINGS::OnMoveGridUp( wxCommandEvent& event )
     GRID_SETTINGS& gridCfg = m_cfg->m_Window.grid;
     int            row = m_currentGridCtrl->GetSelection();
 
-    if( gridCfg.sizes.size() <= 1 || row == 0 )
+    if( gridCfg.grids.size() <= 1 || row == 0 )
         return;
 
-    std::swap( gridCfg.sizes[row], gridCfg.sizes[row - 1] );
+    std::swap( gridCfg.grids[row], gridCfg.grids[row - 1] );
     RebuildGridSizes();
 
     if( row != 0 )
@@ -282,10 +271,10 @@ void PANEL_GRID_SETTINGS::OnMoveGridDown( wxCommandEvent& event )
     GRID_SETTINGS& gridCfg = m_cfg->m_Window.grid;
     int            row = m_currentGridCtrl->GetSelection();
 
-    if( gridCfg.sizes.size() <= 1 || row == ( (int) gridCfg.sizes.size() - 1 ) )
+    if( gridCfg.grids.size() <= 1 || row == ( (int) gridCfg.grids.size() - 1 ) )
         return;
 
-    std::swap( gridCfg.sizes[row], gridCfg.sizes[row + 1] );
+    std::swap( gridCfg.grids[row], gridCfg.grids[row + 1] );
     RebuildGridSizes();
 
     if( row != 0 )
