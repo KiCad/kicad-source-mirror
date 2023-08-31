@@ -40,16 +40,13 @@ PNS_DEBUG_SHAPE::PNS_DEBUG_SHAPE( PNS_DEBUG_SHAPE* aParent )
 
 PNS_DEBUG_SHAPE::~PNS_DEBUG_SHAPE()
 {
-    for( auto s : m_shapes )
-    {
-        delete s;
-    }
+    for( SHAPE* shape : m_shapes )
+        delete shape;
 
-    for( auto ch : m_children )
-    {
-        delete ch;
-    }
+    for( PNS_DEBUG_SHAPE* child : m_children )
+        delete child;
 }
+
 
 PNS_DEBUG_SHAPE* PNS_DEBUG_SHAPE::NewChild()
 {
@@ -59,18 +56,20 @@ PNS_DEBUG_SHAPE* PNS_DEBUG_SHAPE::NewChild()
     return ent;
 }
 
+
 void PNS_DEBUG_SHAPE::AddChild( PNS_DEBUG_SHAPE* ent )
 {
     ent->m_parent = this;
     m_children.push_back( ent );
 }
 
+
 bool PNS_DEBUG_SHAPE::IsVisible() const
 {
     if( m_visible )
         return true;
 
-    auto parent = m_parent;
+    PNS_DEBUG_SHAPE* parent = m_parent;
 
     while( parent )
     {
@@ -83,18 +82,16 @@ bool PNS_DEBUG_SHAPE::IsVisible() const
     return false;
 }
 
-void PNS_DEBUG_SHAPE::IterateTree(
-        std::function<bool( PNS_DEBUG_SHAPE* )> visitor, int depth )
+void PNS_DEBUG_SHAPE::IterateTree( std::function<bool( PNS_DEBUG_SHAPE* )> visitor, int depth )
 {
     if( !visitor( this ) )
         return;
 
 
-    for( auto child : m_children )
-    {
+    for( PNS_DEBUG_SHAPE* child : m_children )
         child->IterateTree( visitor, depth + 1 );
-    }
 }
+
 
 PNS_DEBUG_STAGE::PNS_DEBUG_STAGE()
 {
@@ -109,20 +106,19 @@ PNS_DEBUG_STAGE::~PNS_DEBUG_STAGE()
 }
 
 
- PNS_TEST_DEBUG_DECORATOR::PNS_TEST_DEBUG_DECORATOR()
-    {
-        m_iter = 0;
-        m_grouping = false;
-        m_activeEntry = nullptr;
-        SetDebugEnabled( true );
-    }
+PNS_TEST_DEBUG_DECORATOR::PNS_TEST_DEBUG_DECORATOR()
+{
+    m_iter = 0;
+    m_grouping = false;
+    m_activeEntry = nullptr;
+    SetDebugEnabled( true );
+}
 
-    PNS_TEST_DEBUG_DECORATOR::~PNS_TEST_DEBUG_DECORATOR()
-    {
-        // fixme: I know it's a hacky tool but it should clean after itself at some point...
 
-    }
-
+PNS_TEST_DEBUG_DECORATOR::~PNS_TEST_DEBUG_DECORATOR()
+{
+    // fixme: I know it's a hacky tool but it should clean after itself at some point...
+}
 
 
 PNS_DEBUG_STAGE* PNS_TEST_DEBUG_DECORATOR::currentStage()
@@ -145,9 +141,7 @@ void PNS_TEST_DEBUG_DECORATOR::BeginGroup( const wxString& name, int aLevel,
     ent->m_level = aLevel;
 
     if( m_activeEntry )
-    {
         m_activeEntry->AddChild( ent );
-    }
 
     m_activeEntry = ent;
     m_grouping = true;
@@ -165,17 +159,19 @@ void PNS_TEST_DEBUG_DECORATOR::EndGroup( const SRC_LOCATION_INFO& aSrcLoc )
         m_grouping = false;
 }
 
+
 void PNS_TEST_DEBUG_DECORATOR::addEntry( PNS_DEBUG_SHAPE* ent )
 {
     auto st = currentStage();
     m_activeEntry->AddChild( ent );
 }
 
+
 void PNS_TEST_DEBUG_DECORATOR::AddPoint( const VECTOR2I& aP, const KIGFX::COLOR4D& aColor,
                                          int aSize, const wxString& aName,
                                          const SRC_LOCATION_INFO& aSrcLoc )
 {
-    auto sh = new SHAPE_LINE_CHAIN;
+    SHAPE_LINE_CHAIN* sh = new SHAPE_LINE_CHAIN;
 
     sh->Append( aP.x - aSize, aP.y - aSize );
     sh->Append( aP.x + aSize, aP.y + aSize );
@@ -201,7 +197,7 @@ void PNS_TEST_DEBUG_DECORATOR::AddItem( const PNS::ITEM* aItem, const KIGFX::COL
                                         int aOverrideWidth, const wxString& aName,
                                         const SRC_LOCATION_INFO& aSrcLoc )
 {
-    auto       sh = aItem->Shape()->Clone();
+    SHAPE*           sh = aItem->Shape()->Clone();
     PNS_DEBUG_SHAPE* ent = new PNS_DEBUG_SHAPE();
 
     ent->m_shapes.push_back( sh );
@@ -219,7 +215,7 @@ void PNS_TEST_DEBUG_DECORATOR::AddShape( const SHAPE* aShape, const KIGFX::COLOR
                                          int aOverrideWidth, const wxString& aName,
                                          const SRC_LOCATION_INFO& aSrcLoc )
 {
-    auto       sh = aShape->Clone();
+    SHAPE*           sh = aShape->Clone();
     PNS_DEBUG_SHAPE* ent = new PNS_DEBUG_SHAPE();
 
     ent->m_shapes.push_back( sh );
@@ -261,25 +257,28 @@ void PNS_TEST_DEBUG_DECORATOR::SetCurrentStageStatus( bool stat )
     m_stages.back()->m_status = stat;
 }
 
+
 BOX2I PNS_TEST_DEBUG_DECORATOR::GetStageExtents( int stage ) const
 {
     PNS_DEBUG_STAGE* st = m_stages[stage];
     BOX2I  bb;
     bool   first = true;
 
-    auto visitor = [&]( PNS_DEBUG_SHAPE* ent ) -> bool {
-        for( auto sh : ent->m_shapes )
-        {
-            if( first )
-                bb = sh->BBox();
-            else
-                bb.Merge( sh->BBox() );
+    auto visitor =
+            [&]( PNS_DEBUG_SHAPE* ent ) -> bool
+            {
+                for( SHAPE* sh : ent->m_shapes )
+                {
+                    if( first )
+                        bb = sh->BBox();
+                    else
+                        bb.Merge( sh->BBox() );
 
-            first = false;
-        }
+                    first = false;
+                }
 
-        return true;
-    };
+                return true;
+            };
 
     return bb;
 }

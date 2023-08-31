@@ -850,8 +850,9 @@ int PNS_PCBNEW_RULE_RESOLVER::matchDpSuffix( const wxString& aNetName, wxString&
 
     if( rv != 0 && count >= 1 )
     {
-        aComplementNet = aNetName.Left( aNetName.length() - count ) + aComplementNet
-                + aNetName.Right( count - 1 );
+        aComplementNet = aNetName.Left( aNetName.length() - count )
+                            + aComplementNet
+                            + aNetName.Right( count - 1 );
     }
 
     return rv;
@@ -973,7 +974,7 @@ public:
     }
 
     void AddPoint( const VECTOR2I& aP, const KIGFX::COLOR4D& aColor, int aSize,
-                   const wxString&          aName = wxT( "" ),
+                   const wxString& aName = wxT( "" ),
                    const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override
 
     {
@@ -991,7 +992,7 @@ public:
     }
 
     void AddItem( const PNS::ITEM* aItem, const KIGFX::COLOR4D& aColor, int aOverrideWidth = 0,
-                  const wxString&          aName = wxT( "" ),
+                  const wxString& aName = wxT( "" ),
                   const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override
     {
         if( !m_view || !aItem )
@@ -1008,7 +1009,7 @@ public:
     }
 
     void AddShape( const BOX2I& aBox, const KIGFX::COLOR4D& aColor, int aOverrideWidth = 0,
-                   const wxString&          aName = wxT( "" ),
+                   const wxString& aName = wxT( "" ),
                    const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override
     {
         SHAPE_LINE_CHAIN l;
@@ -1027,7 +1028,7 @@ public:
     }
 
     void AddShape( const SHAPE* aShape, const KIGFX::COLOR4D& aColor, int aOverrideWidth = 0,
-                   const wxString&          aName = wxT( "" ),
+                   const wxString& aName = wxT( "" ),
                    const SRC_LOCATION_INFO& aSrcLoc = SRC_LOCATION_INFO() ) override
     {
         if( !m_view || !aShape )
@@ -1110,7 +1111,7 @@ PNS_KICAD_IFACE::~PNS_KICAD_IFACE()
     delete m_ruleResolver;
     delete m_debugDecorator;
 
-     if( m_previewItems )
+    if( m_previewItems )
     {
         m_previewItems->FreeItems();
         delete m_previewItems;

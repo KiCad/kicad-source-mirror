@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2021 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Christian Gagneraud <chgans@gna.org>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -37,7 +37,9 @@ class ITEM;
 class DEBUG_DECORATOR
 {
 public:
-    DEBUG_DECORATOR() : m_debugEnabled( false ) {}
+    DEBUG_DECORATOR() :
+            m_debugEnabled( false )
+    {}
 
     struct SRC_LOCATION_INFO
     {
