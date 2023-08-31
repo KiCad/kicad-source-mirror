@@ -36,6 +36,7 @@
 CLI::PCB_EXPORT_DXF_COMMAND::PCB_EXPORT_DXF_COMMAND() : PCB_EXPORT_BASE_COMMAND( "dxf" )
 {
     addLayerArg( true );
+    addDrawingSheetArg();
 
     m_argParser.add_argument( "--erd", ARG_EXCLUDE_REFDES )
             .help( UTF8STDSTR( _( "Exclude the reference designator text" ) ) )
@@ -49,6 +50,11 @@ CLI::PCB_EXPORT_DXF_COMMAND::PCB_EXPORT_DXF_COMMAND() : PCB_EXPORT_BASE_COMMAND(
 
     m_argParser.add_argument( "--uc", ARG_USE_CONTOURS )
             .help( UTF8STDSTR( _( "Plot graphic items using their contours" ) ) )
+            .implicit_value( true )
+            .default_value( false );
+
+    m_argParser.add_argument( "--ibt", ARG_INCLUDE_BORDER_TITLE )
+            .help( UTF8STDSTR( _( "Include the border and title block" ) ) )
             .implicit_value( true )
             .default_value( false );
 
@@ -68,6 +74,7 @@ int CLI::PCB_EXPORT_DXF_COMMAND::doPerform( KIWAY& aKiway )
 
     dxfJob->m_filename = m_argInput;
     dxfJob->m_outputFile = m_argOutput;
+    dxfJob->m_drawingSheet = m_argDrawingSheet;
 
     if( !wxFile::Exists( dxfJob->m_filename ) )
     {
@@ -78,6 +85,7 @@ int CLI::PCB_EXPORT_DXF_COMMAND::doPerform( KIWAY& aKiway )
     dxfJob->m_plotFootprintValues = m_argParser.get<bool>( ARG_EXCLUDE_VALUE );
     dxfJob->m_plotRefDes = !m_argParser.get<bool>( ARG_EXCLUDE_REFDES );
     dxfJob->m_plotGraphicItemsUsingContours = m_argParser.get<bool>( ARG_USE_CONTOURS );
+    dxfJob->m_plotBorderTitleBlocks = m_argParser.get<bool>( ARG_INCLUDE_BORDER_TITLE );
 
     wxString units = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT_UNITS ).c_str() );
 

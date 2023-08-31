@@ -39,6 +39,7 @@
 CLI::PCB_EXPORT_SVG_COMMAND::PCB_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND( "svg" )
 {
     addLayerArg( true );
+    addDrawingSheetArg();
 
     m_argParser.add_argument( "-m", ARG_MIRROR )
             .help( UTF8STDSTR( _( "Mirror the board (useful for trying to show bottom layers)" ) ) )
@@ -91,6 +92,7 @@ int CLI::PCB_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
     svgJob->m_pageSizeMode = m_argParser.get<int>( ARG_PAGE_SIZE );
     svgJob->m_negative = m_argParser.get<bool>( ARG_NEGATIVE );
     svgJob->m_drillShapeOption = m_argParser.get<int>( ARG_DRILL_SHAPE_OPTION );
+    svgJob->m_drawingSheet = m_argDrawingSheet;
 
     svgJob->m_filename = m_argInput;
     svgJob->m_outputFile = m_argOutput;

@@ -32,6 +32,7 @@ public:
             JOB( "dxf", aIsCli ),
             m_filename(),
             m_outputFile(),
+            m_drawingSheet(),
             m_plotFootprintValues( true ),
             m_plotRefDes( true ),
             m_plotGraphicItemsUsingContours( true ),
@@ -49,6 +50,7 @@ public:
 
     wxString m_filename;
     wxString m_outputFile;
+    wxString m_drawingSheet;
 
     bool m_plotFootprintValues;
     bool m_plotRefDes;

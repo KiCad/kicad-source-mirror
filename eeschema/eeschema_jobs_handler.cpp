@@ -83,7 +83,8 @@ EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER()
 
 
 void EESCHEMA_JOBS_HANDLER::InitRenderSettings( KIGFX::SCH_RENDER_SETTINGS* aRenderSettings,
-                                                const wxString& aTheme, SCHEMATIC* aSch )
+                                                const wxString& aTheme, SCHEMATIC* aSch,
+                                                const wxString& aDrawingSheetOverride )
 {
     COLOR_SETTINGS* cs = Pgm().GetSettingsManager().GetColorSettings( aTheme );
     aRenderSettings->LoadColors( cs );
@@ -98,11 +99,30 @@ void EESCHEMA_JOBS_HANDLER::InitRenderSettings( KIGFX::SCH_RENDER_SETTINGS* aRen
 
     // Load the drawing sheet from the filename stored in BASE_SCREEN::m_DrawingSheetFileName.
     // If empty, or not existing, the default drawing sheet is loaded.
-    wxString filename = DS_DATA_MODEL::ResolvePath( aSch->Settings().m_SchDrawingSheetFileName,
-                                                    aSch->Prj().GetProjectPath() );
 
-    if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename ) )
-        m_reporter->Report( _( "Error loading drawing sheet." ), RPT_SEVERITY_ERROR );
+    auto loadSheet = [&]( const wxString& path ) -> bool
+    {
+        wxString resolvedSheetPath =
+                DS_DATA_MODEL::ResolvePath( path, aSch->Prj().GetProjectPath() );
+
+        if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( resolvedSheetPath ) )
+        {
+            m_reporter->Report( wxString::Format( _( "Error loading drawing sheet '%s'." ), path ),
+                                RPT_SEVERITY_ERROR );
+            return false;
+        }
+
+        return true;
+    };
+
+    // try to load the override first
+    if( !aDrawingSheetOverride.IsEmpty() && loadSheet( aDrawingSheetOverride ) )
+    {
+        return;
+    }
+
+    // no override or failed override continues here
+    loadSheet( aSch->Settings().m_SchDrawingSheetFileName );
 }
 
 
@@ -123,7 +143,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
 
     std::unique_ptr<KIGFX::SCH_RENDER_SETTINGS> renderSettings =
             std::make_unique<KIGFX::SCH_RENDER_SETTINGS>();
-    InitRenderSettings( renderSettings.get(), aPlotJob->settings.m_theme, sch );
+    InitRenderSettings( renderSettings.get(), aPlotJob->settings.m_theme, sch, aPlotJob->m_drawingSheet );
 
     std::unique_ptr<SCH_PLOTTER> schPlotter = std::make_unique<SCH_PLOTTER>( sch );
     schPlotter->Plot( aPlotJob->m_plotFormat, aPlotJob->settings, renderSettings.get(), m_reporter );

@@ -65,6 +65,11 @@ int CLI::COMMAND::Perform( KIWAY& aKiway )
         m_argOutput = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
     }
 
+    if( m_hasDrawingSheetArg )
+    {
+        m_argDrawingSheet = FROM_UTF8( m_argParser.get<std::string>( ARG_DRAWING_SHEET ).c_str() );
+    }
+
     return doPerform( aKiway );
 }
 
@@ -104,4 +109,14 @@ void CLI::COMMAND::addCommonArgs( bool aInput, bool aOutput, bool aOutputIsDir )
                     .help( UTF8STDSTR( _( "Output file name" ) ) );
         }
     }
+}
+
+
+void CLI::COMMAND::addDrawingSheetArg()
+{
+    m_hasDrawingSheetArg = true;
+
+    m_argParser.add_argument( ARG_DRAWING_SHEET )
+            .default_value( std::string() )
+            .help( UTF8STDSTR( _( "Path to drawing sheet, this overrides any existing project defined sheet when used" ) ) );
 }

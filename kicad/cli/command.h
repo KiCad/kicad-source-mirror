@@ -32,6 +32,7 @@
 #define ARG_HELP_DESC _( "shows help message and exits" )
 #define ARG_OUTPUT "--output"
 #define ARG_INPUT "input"
+#define ARG_DRAWING_SHEET "--drawing-sheet"
 
 namespace CLI
 {
@@ -69,6 +70,11 @@ protected:
     void addCommonArgs( bool aInput, bool aOutput, bool aOutputIsDir );
 
     /**
+     * Sets up the drawing sheet arg used by many of the export commands
+     */
+    void addDrawingSheetArg();
+
+    /**
      * The internal handler that should be overloaded to implement command specific
      * processing and work.
      *
@@ -94,6 +100,11 @@ protected:
     bool                     m_hasOutputArg;
 
     /**
+     * Whether or not the input arg was added for parsing
+     */
+    bool                     m_hasDrawingSheetArg;
+
+    /**
      * Whether or not the output arg is expecting a directory
      */
     bool                     m_outputArgExpectsDir;
@@ -107,6 +118,11 @@ protected:
      * Value of the output arg if configured
      */
     wxString                 m_argOutput;
+
+    /**
+     * Value of the drawing sheet arg if configured
+     */
+    wxString                 m_argDrawingSheet;
 };
 
 }

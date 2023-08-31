@@ -47,6 +47,7 @@ CLI::SCH_EXPORT_PLOT_COMMAND::SCH_EXPORT_PLOT_COMMAND( const std::string& aName,
         m_plotFormat( aPlotFormat )
 {
     addCommonArgs( true, true, aOutputIsDir );
+    addDrawingSheetArg();
 
     m_argParser.add_argument( "-t", ARG_THEME )
             .default_value( std::string() )
@@ -111,6 +112,9 @@ int CLI::SCH_EXPORT_PLOT_COMMAND::doPerform( KIWAY& aKiway )
         settings.m_outputDirectory = m_argOutput;
     else
         settings.m_outputFile = m_argOutput;
+
+    plotJob->m_drawingSheet = m_argDrawingSheet;
+
     // HPGL local options
     if( m_plotFormat == PLOT_FORMAT::HPGL )
     {

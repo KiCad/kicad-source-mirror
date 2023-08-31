@@ -33,6 +33,7 @@ public:
             m_filename(),
             m_outputFile(),
             m_colorTheme(),
+            m_drawingSheet(),
             m_mirror( false ),
             m_blackAndWhite( false ),
             m_negative( false ),
@@ -47,6 +48,7 @@ public:
     wxString m_filename;
     wxString m_outputFile;
     wxString m_colorTheme;
+    wxString m_drawingSheet;
 
     bool m_mirror;
     bool m_blackAndWhite;

@@ -59,7 +59,7 @@ public:
      * @param aSch The schematic to further copy settings from to be put into aRenderSettings
      */
     void InitRenderSettings( KIGFX::SCH_RENDER_SETTINGS* aRenderSettings, const wxString& aTheme,
-                             SCHEMATIC* aSch );
+                             SCHEMATIC* aSch, const wxString& aDrawingSheetOverride = wxEmptyString );
 
 private:
     int doSymExportSvg( JOB_SYM_EXPORT_SVG* aSvgJob, KIGFX::SCH_RENDER_SETTINGS* aRenderSettings,

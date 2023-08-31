@@ -38,6 +38,7 @@ CLI::PCB_EXPORT_GERBERS_COMMAND::PCB_EXPORT_GERBERS_COMMAND() :
         PCB_EXPORT_GERBER_COMMAND( "gerbers" )
 {
     m_requireLayers = false;
+    addDrawingSheetArg();
 
     m_argParser.add_description( UTF8STDSTR( _( "Plot multiple gerbers for a PCB, including the "
                                                 "ability to use stored board plot settings" ) ) );

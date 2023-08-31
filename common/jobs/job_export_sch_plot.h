@@ -29,13 +29,18 @@ class JOB_EXPORT_SCH_PLOT : public JOB
 {
 public:
     JOB_EXPORT_SCH_PLOT( bool aIsCli, PLOT_FORMAT aPlotFormat, wxString aFilename ) :
-            JOB( "plot", aIsCli ), m_plotFormat( aPlotFormat ), m_filename( aFilename )
+            JOB( "plot", aIsCli ),
+            m_plotFormat( aPlotFormat ),
+            m_filename( aFilename ),
+            settings(),
+            m_drawingSheet()
     {
     }
 
     PLOT_FORMAT       m_plotFormat;
     wxString          m_filename;
     SCH_PLOT_SETTINGS settings;
+    wxString          m_drawingSheet;
 };
 
 #endif

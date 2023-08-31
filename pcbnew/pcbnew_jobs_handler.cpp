@@ -24,6 +24,7 @@
 #include <board_design_settings.h>
 #include <drc/drc_item.h>
 #include <drc/drc_report.h>
+#include <drawing_sheet/ds_data_model.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <jobs/job_fp_export_svg.h>
 #include <jobs/job_fp_upgrade.h>
@@ -52,6 +53,7 @@
 #include <macros.h>
 #include <pad.h>
 #include <pcb_marker.h>
+#include <project/project_file.h>
 #include <exporters/export_svg.h>
 #include <pcbnew_settings.h>
 #include <pcbplot.h>
@@ -198,6 +200,7 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
         m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
 
     BOARD* brd = LoadBoard( aSvgJob->m_filename );
+    loadOverrideDrawingSheet( brd, aSvgJob->m_drawingSheet );
 
     if( aJob->IsCli() )
     {
@@ -222,6 +225,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
         m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
 
     BOARD* brd = LoadBoard( aDxfJob->m_filename );
+    loadOverrideDrawingSheet( brd, aDxfJob->m_drawingSheet );
 
     if( aDxfJob->m_outputFile.IsEmpty() )
     {
@@ -277,6 +281,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
         m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
 
     BOARD* brd = LoadBoard( aPdfJob->m_filename );
+    loadOverrideDrawingSheet( brd, aPdfJob->m_drawingSheet );
 
     if( aPdfJob->m_outputFile.IsEmpty() )
     {
@@ -345,7 +350,9 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
     if( aJob->IsCli() )
         m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
 
-    BOARD*          brd = LoadBoard( aGerberJob->m_filename );
+    BOARD* brd = LoadBoard( aGerberJob->m_filename );
+    loadOverrideDrawingSheet( brd, aGerberJob->m_drawingSheet );
+
     PCB_PLOT_PARAMS boardPlotOptions = brd->GetPlotOptions();
     LSET                  plotOnAllLayersSelection = boardPlotOptions.GetPlotOnAllLayersSelection();
     GERBER_JOBFILE_WRITER jobfile_writer( brd );
@@ -1028,4 +1035,33 @@ DS_PROXY_VIEW_ITEM* PCBNEW_JOBS_HANDLER::getDrawingSheetProxyView( BOARD* aBrd )
     drawingSheet->SetFileName( TO_UTF8( aBrd->GetFileName() ) );
 
     return drawingSheet;
+}
+
+
+void PCBNEW_JOBS_HANDLER::loadOverrideDrawingSheet( BOARD* aBrd, const wxString& aSheetPath )
+{
+    // dont bother attempting to load a empty path, if there was one
+    if( aSheetPath.IsEmpty() )
+        return;
+
+    auto loadSheet = [&]( const wxString& path ) -> bool
+    {
+        BASE_SCREEN::m_DrawingSheetFileName = path;
+        wxString filename = DS_DATA_MODEL::ResolvePath( BASE_SCREEN::m_DrawingSheetFileName,
+                                                        aBrd->GetProject()->GetProjectPath() );
+        if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( path ) )
+        {
+            m_reporter->Report( wxString::Format( _( "Error loading drawing sheet '%s'." ), path ),
+                                RPT_SEVERITY_ERROR );
+            return false;
+        }
+
+        return true;
+    };
+
+    if( loadSheet( aSheetPath ) )
+        return;
+
+    // failed loading custom path, revert back to default
+    loadSheet( aBrd->GetProject()->GetProjectFile().m_BoardDrawingSheetFile );
 }

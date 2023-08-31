@@ -35,6 +35,7 @@ CLI::PCB_EXPORT_GERBER_COMMAND::PCB_EXPORT_GERBER_COMMAND( const std::string& aN
         PCB_EXPORT_BASE_COMMAND( aName )
 {
     addLayerArg( true );
+    addDrawingSheetArg();
 
     m_argParser.add_description( UTF8STDSTR( _( "Plot given layers to a single gerber file" ) ) );
 
@@ -99,6 +100,7 @@ int CLI::PCB_EXPORT_GERBER_COMMAND::populateJob( JOB_EXPORT_PCB_GERBER* aJob )
 {
     aJob->m_filename = m_argInput;
     aJob->m_outputFile = m_argOutput;
+    aJob->m_drawingSheet = m_argDrawingSheet;
 
     aJob->m_plotFootprintValues = !m_argParser.get<bool>( ARG_EXCLUDE_VALUE );
     aJob->m_plotRefDes = !m_argParser.get<bool>( ARG_EXCLUDE_REFDES );
