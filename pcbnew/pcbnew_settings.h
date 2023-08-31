@@ -197,6 +197,9 @@ public:
         int              page_size;
         wxString         output_dir;        // legacy; now in project settings
         std::vector<int> layers;
+        bool             use_selected_theme;// color theme option to use for export
+                                            // false = board theme, true = selected theme
+        wxString         color_theme;       // color theme used for export
     };
 
     struct DIALOG_EXPORT_VRML

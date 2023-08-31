@@ -375,6 +375,12 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "export_svg.black_and_white",
             &m_ExportSvg.black_and_white, false ) );
 
+    m_params.emplace_back( new PARAM<bool>( "export_svg.use_theme",
+            &m_ExportSvg.use_selected_theme, true ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "export_svg.color_theme",
+            &m_ExportSvg.color_theme, "" ) );
+
     m_params.emplace_back( new PARAM<bool>( "export_svg.mirror",
             &m_ExportSvg.mirror, false ) );
 

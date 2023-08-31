@@ -71,9 +71,8 @@ private:
 };
 
 
-/*
- * DIALOG_EXPORT_SVG functions
- */
+/* DIALOG_EXPORT_SVG functions
+*/
 DIALOG_EXPORT_SVG::DIALOG_EXPORT_SVG( PCB_EDIT_FRAME* aParent, BOARD* aBoard ) :
         DIALOG_EXPORT_SVG_BASE( aParent ),
         m_board( aBoard ),
@@ -90,6 +89,20 @@ DIALOG_EXPORT_SVG::DIALOG_EXPORT_SVG( PCB_EDIT_FRAME* aParent, BOARD* aBoard ) :
 
     SetupStandardButtons( { { wxID_OK,     _( "Export" ) },
                             { wxID_CANCEL, _( "Close" )  } } );
+
+    PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
+    m_cbUsedBoardTheme->SetValue( !cfg->m_ExportSvg.use_selected_theme );
+
+    // Build color theme list, and select the previoulsy selected theme
+    wxString theme_old_selection = cfg->m_ExportSvg.color_theme;
+
+    for( COLOR_SETTINGS* settings : m_parent->GetSettingsManager()->GetColorSettingsList() )
+    {
+        int pos = m_colorTheme->Append( settings->GetName(), static_cast<void*>( settings ) );
+
+        if( settings->GetName() == theme_old_selection )
+            m_colorTheme->SetSelection( pos );
+    }
 
     finishDialogSettings();
 }
@@ -111,6 +124,9 @@ DIALOG_EXPORT_SVG::~DIALOG_EXPORT_SVG()
     cfg->m_ExportSvg.one_file         = m_oneFileOnly;
     cfg->m_ExportSvg.page_size        = m_rbSvgPageSizeOpt->GetSelection();
     cfg->m_ExportSvg.output_dir       = m_outputDirectory.ToStdString();
+
+    cfg->m_ExportSvg.use_selected_theme = !m_cbUsedBoardTheme->GetValue();
+    cfg->m_ExportSvg.color_theme      = m_colorTheme->GetStringSelection();
 
     if( m_checkboxPagePerLayer->GetValue() )
     {
@@ -289,7 +305,14 @@ void DIALOG_EXPORT_SVG::ExportSVGFile( bool aOnlyOneFile )
     svgPlotOptions.m_blackAndWhite = m_printBW;
     svgPlotOptions.m_printMaskLayer = m_printMaskLayer;
     svgPlotOptions.m_pageSizeMode = m_rbSvgPageSizeOpt->GetSelection();
-    svgPlotOptions.m_colorTheme = "";   // will use default
+
+    PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
+    wxString export_theme = m_cbUsedBoardTheme->GetValue()
+                            ? cfg->m_ColorTheme
+                            : m_colorTheme->GetStringSelection();
+
+    svgPlotOptions.m_colorTheme = export_theme;
+
     svgPlotOptions.m_mirror = m_printMirror;
     svgPlotOptions.m_plotFrame = svgPlotOptions.m_pageSizeMode == 0;
     svgPlotOptions.m_drillShapeOption = 2;  // actual size hole.

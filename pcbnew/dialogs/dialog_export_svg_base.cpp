@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -86,6 +86,31 @@ DIALOG_EXPORT_SVG_BASE::DIALOG_EXPORT_SVG_BASE( wxWindow* parent, wxWindowID id,
 
 	sbOptionsSizer->Add( m_ModeColorOption, 0, wxEXPAND|wxALL, 5 );
 
+	m_cbUsedBoardTheme = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Use current board theme"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbUsedBoardTheme->SetValue(true);
+	sbOptionsSizer->Add( m_cbUsedBoardTheme, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+	wxBoxSizer* bSizerTheme;
+	bSizerTheme = new wxBoxSizer( wxHORIZONTAL );
+
+	m_stColorTheme = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Color theme:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stColorTheme->Wrap( -1 );
+	bSizerTheme->Add( m_stColorTheme, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxArrayString m_colorThemeChoices;
+	m_colorTheme = new wxChoice( sbOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_colorThemeChoices, 0 );
+	m_colorTheme->SetSelection( 0 );
+	bSizerTheme->Add( m_colorTheme, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+
+
+	sbOptionsSizer->Add( bSizerTheme, 0, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer8;
+	bSizer8 = new wxBoxSizer( wxVERTICAL );
+
+
+	sbOptionsSizer->Add( bSizer8, 1, wxEXPAND, 5 );
+
 	wxString m_rbSvgPageSizeOptChoices[] = { _("Page with frame and title block"), _("Current page size"), _("Board area only") };
 	int m_rbSvgPageSizeOptNChoices = sizeof( m_rbSvgPageSizeOptChoices ) / sizeof( wxString );
 	m_rbSvgPageSizeOpt = new wxRadioBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("SVG Page Size"), wxDefaultPosition, wxDefaultSize, m_rbSvgPageSizeOptNChoices, m_rbSvgPageSizeOptChoices, 1, wxRA_SPECIFY_COLS );
@@ -98,16 +123,19 @@ DIALOG_EXPORT_SVG_BASE::DIALOG_EXPORT_SVG_BASE( wxWindow* parent, wxWindowID id,
 	sbOptionsSizer->Add( m_printMirrorOpt, 0, wxALL, 5 );
 
 	m_checkboxPagePerLayer = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Print one page per layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbOptionsSizer->Add( m_checkboxPagePerLayer, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	sbOptionsSizer->Add( m_checkboxPagePerLayer, 0, wxALL, 5 );
+
+	wxBoxSizer* bSizerBrdEdges;
+	bSizerBrdEdges = new wxBoxSizer( wxHORIZONTAL );
 
 
-	sbOptionsSizer->Add( 0, 3, 0, wxEXPAND, 5 );
+	bSizerBrdEdges->Add( 20, 0, 0, wxEXPAND, 5 );
 
 	m_checkboxEdgesOnAllPages = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Print board edges on all pages"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbOptionsSizer->Add( m_checkboxEdgesOnAllPages, 0, wxRIGHT|wxLEFT, 28 );
+	bSizerBrdEdges->Add( m_checkboxEdgesOnAllPages, 0, wxBOTTOM|wxLEFT, 5 );
 
 
-	sbOptionsSizer->Add( 0, 0, 0, wxEXPAND|wxBOTTOM, 5 );
+	sbOptionsSizer->Add( bSizerBrdEdges, 0, wxEXPAND, 5 );
 
 
 	bUpperSizer->Add( sbOptionsSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );

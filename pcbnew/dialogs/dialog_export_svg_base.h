@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -31,6 +31,7 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/statbox.h>
 #include <wx/radiobox.h>
 #include <wx/checkbox.h>
+#include <wx/choice.h>
 #include <wx/panel.h>
 #include <wx/dialog.h>
 
@@ -52,6 +53,9 @@ class DIALOG_EXPORT_SVG_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextTechLayers;
 		wxCheckListBox* m_TechnicalLayersList;
 		wxRadioBox* m_ModeColorOption;
+		wxCheckBox* m_cbUsedBoardTheme;
+		wxStaticText* m_stColorTheme;
+		wxChoice* m_colorTheme;
 		wxRadioBox* m_rbSvgPageSizeOpt;
 		wxCheckBox* m_printMirrorOpt;
 		wxCheckBox* m_checkboxPagePerLayer;
