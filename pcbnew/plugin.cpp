@@ -325,10 +325,11 @@ bool PLUGIN::fileStartsWithBinaryHeader( const wxString& aFilePath, const std::v
 
     if( input.IsOk() && !input.Eof() )
     {
-        if (input.GetLength() < aHeader.size())
+        if( input.GetLength() < aHeader.size() )
             return false;
 
         std::vector<uint8_t> parsedHeader(aHeader.size());
+
         if (!input.ReadAll(parsedHeader.data(), parsedHeader.size()))
             return false;
 

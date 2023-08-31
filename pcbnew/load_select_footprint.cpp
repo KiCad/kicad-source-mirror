@@ -438,14 +438,14 @@ bool FOOTPRINT_EDIT_FRAME::SaveLibraryAs( const wxString& aLibraryPath )
 
         if( !cur )
         {
-            msg = wxString::Format( _( "Unable to find a reader for '%s." ), curLibPath );
+            msg = wxString::Format( _( "Unable to find a reader for '%s'." ), curLibPath );
             DisplayError( this, msg );
             return false;
         }
 
         if( !dst )
         {
-            msg = wxString::Format( _( "Unable to find a writer for '%s." ), dstLibPath );
+            msg = wxString::Format( _( "Unable to find a writer for '%s'." ), dstLibPath );
             DisplayError( this, msg );
             return false;
         }
