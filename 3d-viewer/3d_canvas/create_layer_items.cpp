@@ -607,7 +607,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
             case PCB_TEXTBOX_T:
                 addText( static_cast<PCB_TEXTBOX*>( item ), layerContainer, item );
-                addShape( static_cast<PCB_TEXTBOX*>( item ), layerContainer, item );
+                    addShape( static_cast<PCB_TEXTBOX*>( item ), layerContainer, item );
                 break;
 
             case PCB_DIM_ALIGNED_T:

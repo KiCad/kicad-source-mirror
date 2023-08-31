@@ -3053,7 +3053,8 @@ void FOOTPRINT::TransformFPShapesToPolySet( SHAPE_POLY_SET& aBuffer, PCB_LAYER_I
             if( aLayer != UNDEFINED_LAYER && textbox->GetLayer() == aLayer && textbox->IsVisible() )
             {
                 // border
-                textbox->PCB_SHAPE::TransformShapeToPolygon( aBuffer, aLayer, 0, aError, aErrorLoc );
+                if( textbox->IsBorderEnabled() )
+                    textbox->PCB_SHAPE::TransformShapeToPolygon( aBuffer, aLayer, 0, aError, aErrorLoc );
                 // text
                 textbox->TransformTextToPolySet( aBuffer, 0, aError, aErrorLoc );
             }
