@@ -34,6 +34,7 @@
 #include <schematic.h>
 #include <template_fieldnames.h>
 #include <widgets/wx_html_report_panel.h>
+#include <widgets/std_bitmap_button.h>
 #include <sch_commit.h>
 
 bool g_selectRefDes = false;
