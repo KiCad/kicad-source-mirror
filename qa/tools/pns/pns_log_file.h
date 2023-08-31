@@ -91,9 +91,9 @@ public:
 private:
     bool parseCommonPnsProps( PNS::ITEM* aItem, const wxString& cmd, wxStringTokenizer& aTokens );
 
-    PNS::SEGMENT* parsePnsSegmentFromString( PNS::SEGMENT* aSeg, wxStringTokenizer& aTokens );
+    PNS::SEGMENT* parsePnsSegmentFromString( wxStringTokenizer& aTokens );
 
-    PNS::VIA* parsePnsViaFromString( PNS::VIA* aSeg, wxStringTokenizer& aTokens );
+    PNS::VIA* parsePnsViaFromString( wxStringTokenizer& aTokens );
 
     PNS::ITEM* parseItemFromString( wxStringTokenizer& aTokens );
 

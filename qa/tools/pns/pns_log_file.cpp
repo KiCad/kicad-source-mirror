@@ -124,8 +124,7 @@ bool PNS_LOG_FILE::parseCommonPnsProps( PNS::ITEM* aItem, const wxString& cmd,
     return false;
 }
 
-PNS::SEGMENT* PNS_LOG_FILE::parsePnsSegmentFromString( PNS::SEGMENT* aSeg,
-                                                       wxStringTokenizer& aTokens )
+PNS::SEGMENT* PNS_LOG_FILE::parsePnsSegmentFromString( wxStringTokenizer& aTokens )
 {
     PNS::SEGMENT* seg = new PNS::SEGMENT();
 
@@ -151,7 +150,7 @@ PNS::SEGMENT* PNS_LOG_FILE::parsePnsSegmentFromString( PNS::SEGMENT* aSeg,
     return seg;
 }
 
-PNS::VIA* PNS_LOG_FILE::parsePnsViaFromString( PNS::VIA* aSeg, wxStringTokenizer& aTokens )
+PNS::VIA* PNS_LOG_FILE::parsePnsViaFromString( wxStringTokenizer& aTokens )
 {
     PNS::VIA* via = new PNS::VIA();
 
@@ -189,15 +188,9 @@ PNS::ITEM* PNS_LOG_FILE::parseItemFromString( wxStringTokenizer& aTokens )
     wxString type = aTokens.GetNextToken();
 
     if( type == wxS( "segment" ) )
-    {
-        PNS::SEGMENT* seg = new PNS::SEGMENT();
-        return parsePnsSegmentFromString( seg, aTokens );
-    }
+        return parsePnsSegmentFromString( aTokens );
     else if( type == wxS( "via" ) )
-    {
-        PNS::VIA* seg = new PNS::VIA();
-        return parsePnsViaFromString( seg, aTokens );
-    }
+        return parsePnsViaFromString( aTokens );
 
     return nullptr;
 }
