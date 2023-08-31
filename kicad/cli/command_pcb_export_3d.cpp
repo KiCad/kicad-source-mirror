@@ -33,8 +33,6 @@
 #define ARG_NO_DNP "--no-dnp"
 #define ARG_SUBST_MODELS "--subst-models"
 #define ARG_FORCE "--force"
-#define ARG_OUTPUT "--output"
-#define ARG_INPUT "input"
 #define ARG_MIN_DISTANCE "--min-distance"
 #define ARG_USER_ORIGIN "--user-origin"
 #define ARG_BOARD_ONLY "--board-only"
@@ -54,6 +52,8 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&   aName,
         COMMAND( aName ),
         m_format( aFormat )
 {
+    addCommonArgs( true, true, false );
+
     if( m_format == JOB_EXPORT_PCB_3D::FORMAT::UNKNOWN )
     {
         m_argParser.add_argument( ARG_FORMAT )
@@ -139,12 +139,6 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&   aName,
                 .implicit_value( true )
                 .default_value( false );
     }
-
-    m_argParser.add_argument( "-o", ARG_OUTPUT )
-            .default_value( std::string() )
-            .help( UTF8STDSTR( _( "Output file name" ) ) );
-
-    m_argParser.add_argument( ARG_INPUT ).help( UTF8STDSTR( _( "Input file" ) ) );
 }
 
 int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
