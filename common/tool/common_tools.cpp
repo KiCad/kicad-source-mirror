@@ -434,7 +434,7 @@ int COMMON_TOOLS::GridNext( const TOOL_EVENT& aEvent )
     if( currentGrid >= int( m_grids.size() ) )
         currentGrid = 0;
 
-    return OnGridChanged();
+    return OnGridChanged( true );
 }
 
 
@@ -447,23 +447,23 @@ int COMMON_TOOLS::GridPrev( const TOOL_EVENT& aEvent )
     if( currentGrid < 0 )
         currentGrid = (int) m_grids.size() - 1;
 
-    return OnGridChanged();
+    return OnGridChanged( true );
 }
 
 
 int COMMON_TOOLS::GridPreset( const TOOL_EVENT& aEvent )
 {
-    return GridPreset( aEvent.Parameter<int>() );
+    return GridPreset( aEvent.Parameter<int>(), false );
 }
 
 
-int COMMON_TOOLS::GridPreset( int idx )
+int COMMON_TOOLS::GridPreset( int idx, bool aFromHotkey )
 {
     int& currentGrid = m_toolMgr->GetSettings()->m_Window.grid.last_size_idx;
 
     currentGrid = alg::clamp( 0, idx, (int) m_grids.size() - 1 );
 
-    return OnGridChanged();
+    return OnGridChanged( aFromHotkey );
 }
 
 
@@ -496,13 +496,13 @@ int COMMON_TOOLS::OnGridChanged( bool aFromHotkey )
 
 int COMMON_TOOLS::GridFast1( const TOOL_EVENT& aEvent )
 {
-    return GridPreset( m_frame->config()->m_Window.grid.fast_grid_1 );
+    return GridPreset( m_frame->config()->m_Window.grid.fast_grid_1, true );
 }
 
 
 int COMMON_TOOLS::GridFast2( const TOOL_EVENT& aEvent )
 {
-    return GridPreset( m_frame->config()->m_Window.grid.fast_grid_2 );
+    return GridPreset( m_frame->config()->m_Window.grid.fast_grid_2, true );
 }
 
 
@@ -511,10 +511,10 @@ int COMMON_TOOLS::GridFastCycle( const TOOL_EVENT& aEvent )
     if( m_toolMgr->GetSettings()->m_Window.grid.last_size_idx
         == m_frame->config()->m_Window.grid.fast_grid_1 )
     {
-        return GridPreset( m_frame->config()->m_Window.grid.fast_grid_2 );
+        return GridPreset( m_frame->config()->m_Window.grid.fast_grid_2, true );
     }
 
-    return GridPreset( m_frame->config()->m_Window.grid.fast_grid_1 );
+    return GridPreset( m_frame->config()->m_Window.grid.fast_grid_1, true );
 }
 
 
