@@ -2149,31 +2149,34 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
     m_gal->SetIsFill( true );
     m_gal->SetIsStroke( false );
 
-    if( lineStyle <= PLOT_DASH_TYPE::FIRST_TYPE )
+    if( aTextBox->IsBorderEnabled() )
     {
-        if( aTextBox->IsBorderEnabled() && thickness > 0 )
+        if( lineStyle <= PLOT_DASH_TYPE::FIRST_TYPE )
         {
-            std::vector<VECTOR2I> pts = aTextBox->GetCorners();
+            if( thickness > 0 )
+            {
+                std::vector<VECTOR2I> pts = aTextBox->GetCorners();
 
-            for( size_t ii = 0; ii < pts.size(); ++ii )
-                m_gal->DrawSegment( pts[ ii ], pts[ (ii + 1) % pts.size() ], thickness );
+                for( size_t ii = 0; ii < pts.size(); ++ii )
+                    m_gal->DrawSegment( pts[ii], pts[( ii + 1 ) % pts.size()], thickness );
+            }
         }
-    }
-    else
-    {
-        std::vector<SHAPE*> shapes = aTextBox->MakeEffectiveShapes( true );
-
-        for( SHAPE* shape : shapes )
+        else
         {
-            STROKE_PARAMS::Stroke( shape, lineStyle, thickness, &m_pcbSettings,
-                                   [&]( const VECTOR2I& a, const VECTOR2I& b )
-                                   {
-                                       m_gal->DrawSegment( a, b, thickness );
-                                   } );
-        }
+            std::vector<SHAPE*> shapes = aTextBox->MakeEffectiveShapes( true );
 
-        for( SHAPE* shape : shapes )
-            delete shape;
+            for( SHAPE* shape : shapes )
+            {
+                STROKE_PARAMS::Stroke( shape, lineStyle, thickness, &m_pcbSettings,
+                                       [&]( const VECTOR2I& a, const VECTOR2I& b )
+                                       {
+                                           m_gal->DrawSegment( a, b, thickness );
+                                       } );
+            }
+
+            for( SHAPE* shape : shapes )
+                delete shape;
+        }
     }
 
     if( resolvedText.Length() == 0 )
