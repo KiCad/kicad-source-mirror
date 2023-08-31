@@ -139,6 +139,7 @@ private:
     void ParseRoundRectangle( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
     void ParseArc( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
     void ParseEllipse( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
+    void ParseCircle( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
     void ParseLine( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
     void ParseSignalHarness( const std::map<wxString, wxString>& aProperties );
     void ParseHarnessConnector( int aIndex, const std::map<wxString, wxString>& aProperties );

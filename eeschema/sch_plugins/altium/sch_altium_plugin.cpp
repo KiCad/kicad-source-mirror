@@ -1912,16 +1912,114 @@ void SCH_ALTIUM_PLUGIN::ParseEllipse( const std::map<wxString, wxString>& aPrope
 {
     ASCH_ELLIPSE elem( aProperties );
 
-    // To do: Import true ellipses when KiCad supports them
-    if( elem.Radius != elem.SecondaryRadius )
+    VECTOR2I   start( elem.Center.x + elem.Radius, elem.Center.y );
+    VECTOR2I   end( elem.Center.x - elem.Radius, elem.Center.y );
+    VECTOR2I   mid( elem.Center.x, elem.Center.y + elem.SecondaryRadius );
+    VECTOR2I   mid2( elem.Center.x, elem.Center.y - elem.SecondaryRadius );
+
+
+    if( elem.Radius == elem.SecondaryRadius )
     {
-        m_reporter->Report( wxString::Format( _( "Unsupported ellipse was not imported at "
-                                                 "(X = %d; Y = %d)." ),
-                                              ( elem.Center + m_sheetOffset ).x,
-                                              ( elem.Center + m_sheetOffset ).y ),
-                            RPT_SEVERITY_ERROR );
+        ParseCircle( aProperties, aSymbol );
         return;
     }
+
+    if( !aSymbol && elem.OwnerPartID == ALTIUM_COMPONENT_NONE )
+    {
+        SCH_SCREEN* screen = getCurrentScreen();
+        wxCHECK( screen, /* void */ );
+
+        SCH_SHAPE* arc1 = new SCH_SHAPE( SHAPE_T::ARC );
+        SCH_SHAPE* arc2 = new SCH_SHAPE( SHAPE_T::ARC );
+
+        arc1->SetArcGeometry( start + m_sheetOffset, mid + m_sheetOffset, end + m_sheetOffset );
+        arc2->SetArcGeometry( start + m_sheetOffset, mid2 + m_sheetOffset, end + m_sheetOffset );
+
+        arc1->SetStroke( STROKE_PARAMS( 1, PLOT_DASH_TYPE::SOLID ) );
+        arc2->SetStroke( STROKE_PARAMS( 1, PLOT_DASH_TYPE::SOLID ) );
+
+        arc1->SetFillColor( GetColorFromInt( elem.AreaColor ) );
+        arc2->SetFillColor( GetColorFromInt( elem.AreaColor ) );
+
+        if( elem.IsSolid )
+        {
+            arc1->SetFillMode( FILL_T::FILLED_WITH_COLOR );
+            arc2->SetFillMode( FILL_T::FILLED_WITH_COLOR );
+        }
+        else
+        {
+            arc1->SetFilled( false );
+            arc2->SetFilled( false );
+        }
+
+        screen->Append( arc1 );
+        screen->Append( arc2 );
+    }
+    else
+    {
+        LIB_SYMBOL* symbol = aSymbol;
+        SCH_SYMBOL* schsym = nullptr;
+
+        if( !aSymbol )
+        {
+            const auto& libSymbolIt = m_libSymbols.find( elem.OwnerIndex );
+
+            if( libSymbolIt == m_libSymbols.end() )
+            {
+                // TODO: e.g. can depend on Template (RECORD=39
+                m_reporter->Report( wxString::Format( wxT( "Ellipse's owner (%d) not found." ),
+                                                      elem.OwnerIndex ),
+                                    RPT_SEVERITY_DEBUG );
+                return;
+            }
+
+            symbol = libSymbolIt->second;
+            schsym = m_symbols.at( libSymbolIt->first );
+        }
+
+        LIB_SHAPE* arc1 = new LIB_SHAPE( symbol, SHAPE_T::ARC );
+        LIB_SHAPE* arc2 = new LIB_SHAPE( symbol, SHAPE_T::ARC );
+
+        symbol->AddDrawItem( arc1, false );
+        symbol->AddDrawItem( arc2, false );
+
+        arc1->SetUnit( elem.OwnerPartID );
+        arc2->SetUnit( elem.OwnerPartID );
+
+        if( !schsym )
+        {
+            arc1->SetArcGeometry( GetLibEditPosition( start ),
+                                  GetLibEditPosition( mid ),
+                                  GetLibEditPosition( end ) );
+            arc2->SetArcGeometry( GetLibEditPosition( start ),
+                                  GetLibEditPosition( mid2 ),
+                                  GetLibEditPosition( end ) );
+        }
+        else
+        {
+            arc1->SetArcGeometry( GetRelativePosition( start + m_sheetOffset, schsym ),
+                                  GetRelativePosition( mid + m_sheetOffset, schsym ),
+                                  GetRelativePosition( end + m_sheetOffset, schsym ) );
+            arc2->SetArcGeometry( GetRelativePosition( start + m_sheetOffset, schsym ),
+                                  GetRelativePosition( mid2 + m_sheetOffset, schsym ),
+                                  GetRelativePosition( end + m_sheetOffset, schsym ) );
+        }
+
+        arc1->SetEnd( arc1->GetPosition() + VECTOR2I( elem.Radius, 0 ) );
+
+        SetLibShapeLine( elem, arc1, ALTIUM_SCH_RECORD::ELLIPSE );
+        SetLibShapeFillAndColor( elem, arc1, ALTIUM_SCH_RECORD::ELLIPSE, elem.Color );
+
+        SetLibShapeLine( elem, arc2, ALTIUM_SCH_RECORD::ELLIPSE );
+        SetLibShapeFillAndColor( elem, arc2, ALTIUM_SCH_RECORD::ELLIPSE, elem.Color );
+    }
+
+}
+
+
+void SCH_ALTIUM_PLUGIN::ParseCircle( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aSymbol )
+{
+    ASCH_ELLIPSE elem( aProperties );
 
     if( !aSymbol && elem.OwnerPartID == ALTIUM_COMPONENT_NONE )
     {
