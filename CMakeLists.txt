@@ -996,6 +996,11 @@ endif()
 
 
 if( KICAD_USE_SENTRY )
+    set( KICAD_SENTRY_DSN "" CACHE string "The sentry DSN used with sentry integration" )
+    if ( KICAD_SENTRY_DSN STREQUAL "")
+        message( FATAL_ERROR "Sentry DSN must be configured with KICAD_USE_SENTRY" )
+    endif()
+
     set( CRASHPAD_WER_ENABLED ON )
     add_subdirectory( thirdparty/sentry-native )
     add_compile_definitions( KICAD_USE_SENTRY )

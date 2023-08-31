@@ -417,6 +417,9 @@ if( TRUE OR NOT USE_KIWAY_DLLS )
     # We DO NOT want pgm_base.cpp linked into the KIFACE, only into the KIWAY.
     # Check the map files to verify eda_pgm.o not being linked in.
     list( APPEND COMMON_SRCS pgm_base.cpp )
+    if( KICAD_USE_SENTRY )
+        set_property(SOURCE pgm_base.cpp APPEND PROPERTY COMPILE_DEFINITIONS KICAD_SENTRY_DSN="${KICAD_SENTRY_DSN}")
+    endif()
 endif()
 
 if( NOT HAVE_STRTOKR )
