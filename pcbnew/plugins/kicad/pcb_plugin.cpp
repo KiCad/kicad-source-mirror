@@ -1860,7 +1860,7 @@ void PCB_PLUGIN::format( const PCB_TEXTBOX* aTextBox, int aNestLevel ) const
 
     if( aTextBox->GetShape() == SHAPE_T::RECTANGLE )
     {
-        m_out->Print( aNestLevel + 1, "(start %s) (end %s)\n",
+        m_out->Print( aNestLevel + 1, "(start %s) (end %s)",
                       formatInternalUnits( aTextBox->GetStart(), parentFP ).c_str(),
                       formatInternalUnits( aTextBox->GetEnd(), parentFP ).c_str() );
     }
@@ -1888,8 +1888,9 @@ void PCB_PLUGIN::format( const PCB_TEXTBOX* aTextBox, int aNestLevel ) const
         m_out->Print( aNestLevel + 1, "(angle %s)", EDA_UNIT_UTILS::FormatAngle( angle ).c_str() );
 
     formatLayer( aTextBox->GetLayer() );
+    m_out->Print( 0, "\n" );
 
-    m_out->Print( 0, " (tstamp %s)", TO_UTF8( aTextBox->m_Uuid.AsString() ) );
+    m_out->Print( aNestLevel + 1, "(tstamp %s)", TO_UTF8( aTextBox->m_Uuid.AsString() ) );
 
     m_out->Print( 0, "\n" );
 
