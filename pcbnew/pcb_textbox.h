@@ -144,6 +144,9 @@ public:
     ///< Disables the border, this is done by changing the stroke internally
     void SetBorderEnabled( bool enabled );
 
+    void SetBorderWidth( const int aSize );
+    int  GetBorderWidth() const { return m_stroke.GetWidth(); }
+
 protected:
     bool m_borderEnabled; ///< Controls drawing the border (as defined by the stroke members)
 

@@ -565,6 +565,12 @@ void PCB_TEXTBOX::SetBorderEnabled( bool enabled )
 }
 
 
+void PCB_TEXTBOX::SetBorderWidth( const int aSize )
+{
+    m_stroke.SetWidth( aSize );
+}
+
+
 static struct PCB_TEXTBOX_DESC
 {
     PCB_TEXTBOX_DESC()
@@ -586,9 +592,22 @@ static struct PCB_TEXTBOX_DESC
 
         const wxString textBoxProps = _( "Text Box" );
 
+        void ( PCB_TEXTBOX::*lineStyleSetter )( PLOT_DASH_TYPE ) = &PCB_TEXTBOX::SetLineStyle;
+
         propMgr.AddProperty( new PROPERTY<PCB_TEXTBOX, bool>( _HKI( "Border" ),
                                                               &PCB_TEXTBOX::SetBorderEnabled,
                                                               &PCB_TEXTBOX::IsBorderEnabled ),
+                             textBoxProps );
+
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_TEXTBOX, PLOT_DASH_TYPE>( _HKI( "Border Style" ),
+                                                                             lineStyleSetter,
+                                                                             &PCB_TEXTBOX::GetLineStyle ),
+                             textBoxProps );
+
+        propMgr.AddProperty( new PROPERTY<PCB_TEXTBOX, int>( _HKI( "Border Width" ),
+                                                             &PCB_TEXTBOX::SetBorderWidth,
+                                                             &PCB_TEXTBOX::GetBorderWidth,
+                                                             PROPERTY_DISPLAY::PT_SIZE ),
                              textBoxProps );
     }
 } _PCB_TEXTBOX_DESC;
