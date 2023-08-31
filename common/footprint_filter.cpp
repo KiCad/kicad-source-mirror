@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -25,19 +25,23 @@
 using FOOTPRINT_FILTER_IT = FOOTPRINT_FILTER::ITERATOR;
 
 
-FOOTPRINT_FILTER::ITERATOR::ITERATOR() : m_pos( 0 ), m_filter( nullptr )
+FOOTPRINT_FILTER::ITERATOR::ITERATOR() :
+        m_pos( 0 ),
+        m_filter( nullptr )
 {
 }
 
 
-FOOTPRINT_FILTER::ITERATOR::ITERATOR( FOOTPRINT_FILTER_IT const& aOther )
-        : m_pos( aOther.m_pos ), m_filter( aOther.m_filter )
+FOOTPRINT_FILTER::ITERATOR::ITERATOR( FOOTPRINT_FILTER_IT const& aOther ) :
+        m_pos( aOther.m_pos ),
+        m_filter( aOther.m_filter )
 {
 }
 
 
-FOOTPRINT_FILTER::ITERATOR::ITERATOR( FOOTPRINT_FILTER& aFilter )
-        : m_pos( (size_t) -1 ), m_filter( &aFilter )
+FOOTPRINT_FILTER::ITERATOR::ITERATOR( FOOTPRINT_FILTER& aFilter ) :
+        m_pos( (size_t) -1 ),
+        m_filter( &aFilter )
 {
     increment();
 }
@@ -135,16 +139,12 @@ bool FOOTPRINT_FILTER_IT::FootprintFilterMatch( FOOTPRINT_INFO& aItem )
 
         // If the filter contains a ':' character, include the library name in the pattern
         if( each_filter->GetPattern().Contains( wxS( ":" ) ) )
-        {
             name = aItem.GetLibNickname().Lower() + wxS( ":" );
-        }
 
         name += aItem.GetFootprintName().Lower();
 
         if( each_filter->Find( name ) )
-        {
             return true;
-        }
     }
 
     return false;
@@ -153,19 +153,22 @@ bool FOOTPRINT_FILTER_IT::FootprintFilterMatch( FOOTPRINT_INFO& aItem )
 
 bool FOOTPRINT_FILTER_IT::PinCountMatch( FOOTPRINT_INFO& aItem )
 {
-    return m_filter->m_pin_count >= 0 &&
-        (unsigned) m_filter->m_pin_count == aItem.GetUniquePadCount();
+    return m_filter->m_pin_count >= 0
+            && (unsigned) m_filter->m_pin_count == aItem.GetUniquePadCount();
 }
 
 
-FOOTPRINT_FILTER::FOOTPRINT_FILTER( FOOTPRINT_LIST& aList ) : FOOTPRINT_FILTER()
+FOOTPRINT_FILTER::FOOTPRINT_FILTER( FOOTPRINT_LIST& aList ) :
+        FOOTPRINT_FILTER()
 {
     SetList( aList );
 }
 
 
-FOOTPRINT_FILTER::FOOTPRINT_FILTER()
-        : m_list( nullptr ), m_pin_count( -1 ), m_filter_type( UNFILTERED_FP_LIST )
+FOOTPRINT_FILTER::FOOTPRINT_FILTER() :
+        m_list( nullptr ),
+        m_pin_count( -1 ),
+        m_filter_type( UNFILTERED_FP_LIST )
 {
 }
 
