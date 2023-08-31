@@ -425,9 +425,9 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveObstacleLine( const LINE& aCurLine, const LINE& 
 
         hulls.reserve( currentLineSegmentCount + 1 );
 
-        PNS_DBG( Dbg(), Message, wxString::Format( wxT( "shove process-single: cur net %s obs %s cl %d" ),
-                                                   m_router->GetInterface()->GetNetName( aCurLine.Net() ),
-                                                   m_router->GetInterface()->GetNetName( aObstacleLine.Net() ),
+        PNS_DBG( Dbg(), Message, wxString::Format( wxT( "shove process-single: cur net %d obs %d cl %d" ),
+                                                   m_router->GetInterface()->GetNetCode( aCurLine.Net() ),
+                                                   m_router->GetInterface()->GetNetCode( aObstacleLine.Net() ),
                                                    clearance ) );
 
         for( int i = 0; i < currentLineSegmentCount; i++ )
