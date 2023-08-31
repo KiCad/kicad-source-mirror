@@ -25,8 +25,12 @@
 #ifndef ALTIUM_DESIGNER_PLUGIN_H_
 #define ALTIUM_DESIGNER_PLUGIN_H_
 
-
 #include <io_mgr.h>
+
+#include <map>
+#include <memory>
+
+class ALTIUM_COMPOUND_FILE;
 
 class ALTIUM_DESIGNER_PLUGIN : public PLUGIN
 {
@@ -74,7 +78,9 @@ public:
 
 private:
     const STRING_UTF8_MAP* m_props;
-    BOARD*            m_board;
+    BOARD*                 m_board;
+
+    std::map<wxString, std::unique_ptr<ALTIUM_COMPOUND_FILE>> m_fplibFiles;
 };
 
 #endif // ALTIUM_DESIGNER_PLUGIN_H_

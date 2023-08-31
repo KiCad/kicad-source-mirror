@@ -153,15 +153,26 @@ void ALTIUM_DESIGNER_PLUGIN::FootprintEnumerate( wxArrayString&  aFootprintNames
                                                  const wxString& aLibraryPath, bool aBestEfforts,
                                                  const STRING_UTF8_MAP* aProperties )
 {
-    ALTIUM_COMPOUND_FILE altiumLibFile( aLibraryPath );
+    ALTIUM_COMPOUND_FILE* altiumLibFile = nullptr;
+    auto it = m_fplibFiles.find( aLibraryPath );
+
+    if( it == m_fplibFiles.end() )
+    {
+        auto new_it = m_fplibFiles.emplace( aLibraryPath, std::make_unique<ALTIUM_COMPOUND_FILE>( aLibraryPath ) );
+        altiumLibFile = new_it.first->second.get();
+    }
+    else
+    {
+        altiumLibFile = it->second.get();
+    }
 
     try
     {
         // Map code-page-dependent names to unicode names
-        std::map<wxString, wxString> patternMap = altiumLibFile.ListLibFootprints();
+        std::map<wxString, wxString> patternMap = altiumLibFile->ListLibFootprints();
 
         const std::vector<std::string>  streamName = { "Library", "Data" };
-        const CFB::COMPOUND_FILE_ENTRY* libraryData = altiumLibFile.FindStream( streamName );
+        const CFB::COMPOUND_FILE_ENTRY* libraryData = altiumLibFile->FindStream( streamName );
 
         if( libraryData == nullptr )
         {
@@ -169,7 +180,7 @@ void ALTIUM_DESIGNER_PLUGIN::FootprintEnumerate( wxArrayString&  aFootprintNames
                     wxString::Format( _( "File not found: '%s'." ), FormatPath( streamName ) ) );
         }
 
-        ALTIUM_PARSER parser( altiumLibFile, libraryData );
+        ALTIUM_PARSER parser( *altiumLibFile, libraryData );
 
         std::map<wxString, wxString> properties = parser.ReadProperties();
 
@@ -218,13 +229,24 @@ FOOTPRINT* ALTIUM_DESIGNER_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
                                                   const wxString& aFootprintName, bool aKeepUUID,
                                                   const STRING_UTF8_MAP* aProperties )
 {
-    ALTIUM_COMPOUND_FILE altiumLibFile( aLibraryPath );
+    ALTIUM_COMPOUND_FILE* altiumLibFile = nullptr;
+    auto it = m_fplibFiles.find( aLibraryPath );
+
+    if( it == m_fplibFiles.end() )
+    {
+        auto new_it = m_fplibFiles.emplace( aLibraryPath, std::make_unique<ALTIUM_COMPOUND_FILE>( aLibraryPath ) );
+        altiumLibFile = new_it.first->second.get();
+    }
+    else
+    {
+        altiumLibFile = it->second.get();
+    }
 
     try
     {
         // Parse File
         ALTIUM_PCB pcb( m_board, nullptr );
-        return pcb.ParseFootprint( altiumLibFile, aFootprintName );
+        return pcb.ParseFootprint( *altiumLibFile, aFootprintName );
     }
     catch( CFB::CFBException& exception )
     {
