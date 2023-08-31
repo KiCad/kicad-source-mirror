@@ -30,7 +30,7 @@
 BOOST_AUTO_TEST_SUITE( IOMGR )
 
 
-struct BOARD_PLUGIN_CASE
+struct PCB_IO_PLUGIN_CASE
 {
     std::string        m_case_name;
     std::string        m_file_rel_path;
@@ -38,7 +38,8 @@ struct BOARD_PLUGIN_CASE
 };
 
 
-static const std::vector<BOARD_PLUGIN_CASE> BoardPluginCases = {
+// clang-format off
+static const std::vector<PCB_IO_PLUGIN_CASE> BoardPluginCases = {
 
     //
     // FAKE Boards (should return FILE_TYPE_NONE):
@@ -123,6 +124,87 @@ static const std::vector<BOARD_PLUGIN_CASE> BoardPluginCases = {
 };
 
 
+static const std::vector<PCB_IO_PLUGIN_CASE> LibraryPluginCases = {
+
+    //
+    // NOT libraries (should return FILE_TYPE_NONE):
+    //
+    {
+        "Non-Library file (KiCad *Legacy* / EAGLE file ext)",
+        "plugins/fakeboard.brd",
+        IO_MGR::FILE_TYPE_NONE
+    },
+    {
+        "Non-Library file (KiCad file ext)",
+        "plugins/fakeboard.kicad_pcb",
+        IO_MGR::FILE_TYPE_NONE
+    },
+    {
+        "Non-Library file (PCAD file ext)",
+        "plugins/fakeboard.pcb",
+        IO_MGR::FILE_TYPE_NONE
+    },
+    {
+        "Non-Library file (CADSTAR file ext)",
+        "plugins/fakeboard.cpa",
+        IO_MGR::FILE_TYPE_NONE
+    },
+    {
+        "Non-Library file (Altium Circuit Studio file ext)",
+        "plugins/fakeboard.CSPcbDoc",
+        IO_MGR::FILE_TYPE_NONE
+    },
+    {
+        "Non-Library file (Altium Circuit Maker file ext)",
+        "plugins/fakeboard.CMPcbDoc",
+        IO_MGR::FILE_TYPE_NONE
+    },
+    {
+        "Non-Library file (Altium Designer file ext)",
+        "plugins/fakeboard.PcbDoc",
+        IO_MGR::FILE_TYPE_NONE
+    },
+
+    {
+        "Non-Library file (Solid Works PCB file ext)",
+        "plugins/fakeboard.SWPcbDoc",
+        IO_MGR::FILE_TYPE_NONE
+    },
+
+    //
+    // REAL Libraries:
+    //
+
+    {
+        "Basic KiCad footprint .pretty library",
+        "plugins/eagle/lbr/SparkFun-GPS.pretty",
+        IO_MGR::KICAD_SEXP
+    },
+    {
+        "Basic Eagle library file",
+        "plugins/eagle/lbr/SparkFun-GPS.lbr",
+        IO_MGR::EAGLE
+    },
+    {
+        "Basic CADSTAR PCB Archive library file",
+        "plugins/cadstar/lib/footprint-with-thermal-pad.cpa",
+        IO_MGR::CADSTAR_PCB_ARCHIVE
+    },
+    {
+        "Altium Designer 'Espressif ESP32-WROOM-32.PcbLib' library file",
+        "plugins/altium/pcblib/Espressif ESP32-WROOM-32.PcbLib",
+        IO_MGR::ALTIUM_DESIGNER
+    },
+    {
+        "Altium Designer 'Tracks.v6.PcbLib' library file",
+        "plugins/altium/pcblib/Tracks.v6.PcbLib",
+        IO_MGR::ALTIUM_DESIGNER
+    }
+    // Todo: Add Altium derivatives and Fabmaster tests
+};
+// clang-format on
+
+
 BOOST_AUTO_TEST_CASE( FindBoardPluginType )
 {
     for( auto& c : BoardPluginCases )
@@ -136,6 +218,23 @@ BOOST_AUTO_TEST_CASE( FindBoardPluginType )
 
             // Todo add tests to check if it still works with upper/lower case ext.
             // ( FindPluginTypeFromBoardPath should be case insensitive)
+        }
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( GuessLibraryPluginType )
+{
+    for( auto& c : LibraryPluginCases )
+    {
+        BOOST_TEST_CONTEXT( c.m_case_name )
+        {
+            std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + c.m_file_rel_path;
+
+            BOOST_CHECK_EQUAL( IO_MGR::GuessPluginTypeFromLibPath( dataPath ), c.m_expected_type );
+
+            // Todo add tests to check if it still works with upper/lower case ext.
+            // ( GuessPluginTypeFromLibPath should be case insensitive)
         }
     }
 }
