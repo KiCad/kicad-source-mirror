@@ -674,6 +674,7 @@ void mpScaleX::recalculateTicks( wxDC& dc, mpWindow& w )
 
     double  minErr = 1000000000000.0;
     double  bestStep = 1.0;
+    int     m_scrX = w.GetXScreen();
 
     for( int i = 10; i <= 20; i += 2 )
     {
@@ -687,6 +688,17 @@ void mpScaleX::recalculateTicks( wxDC& dc, mpWindow& w )
             minErr = err;
             bestStep = stepInt;
         }
+    }
+
+    double numberSteps = floor( ( maxVvis - minVvis ) / bestStep );
+    
+    // Half the number of ticks according to window size.
+    // The value 96 is used to have only 4 ticks when m_scrX is 268.
+    // For each 96 device context units, is possible to add a new tick.
+    while( numberSteps - 2 >= m_scrX/96 )
+    {
+        bestStep *= 2;
+        numberSteps = floor( ( maxVvis - minVvis ) / bestStep );
     }
 
     double v = floor( minVvis / bestStep ) * bestStep;
@@ -851,6 +863,7 @@ void mpScaleY::recalculateTicks( wxDC& dc, mpWindow& w )
 
     double  minErr = 1000000000000.0;
     double  bestStep = 1.0;
+    int     m_scrY = w.GetYScreen();
 
     for( int i = 10; i <= 20; i += 2 )
     {
@@ -864,6 +877,16 @@ void mpScaleY::recalculateTicks( wxDC& dc, mpWindow& w )
             minErr = err;
             bestStep = stepInt;
         }
+    }
+
+    double numberSteps = floor( ( maxVvis - minVvis ) / bestStep );
+
+    // Half the number of ticks according to window size.
+    // For each 32 device context units, is possible to add a new tick.
+    while( numberSteps >= m_scrY/32 )
+    {
+        bestStep *= 2;
+        numberSteps = floor( ( maxVvis - minVvis ) / bestStep );
     }
 
     double v = floor( minVvis / bestStep ) * bestStep;
@@ -922,6 +945,8 @@ void mpScaleXLog::recalculateTicks( wxDC& dc, mpWindow& w )
     double  minDecade   = pow( 10, floor( log10( minV ) ) );
     double  maxDecade   = pow( 10, ceil( log10( maxV ) ) );
     double visibleDecades = log( maxVvis / minVvis ) / log( 10 );
+    double  step = 10.0;
+    int     m_scrX = w.GetXScreen();
 
     double d;
 
@@ -931,12 +956,20 @@ void mpScaleXLog::recalculateTicks( wxDC& dc, mpWindow& w )
     if( minDecade == 0.0 )
         return;
 
+    // Half the number of ticks according to window size.
+    // The value 96 is used to have only 4 ticks when m_scrX is 268.
+    // For each 96 device context units, is possible to add a new tick.
+    while( visibleDecades - 2 >= m_scrX / 96 )
+    {
+        step *= 10.0;
+        visibleDecades = log( maxVvis / minVvis ) / log( step );
+    }
 
-    for( d = minDecade; d<=maxDecade; d *= 10.0 )
+    for( d = minDecade; d<=maxDecade; d *= step )
     {
         m_tickLabels.emplace_back( d );
 
-        for( double dd = d; dd < d * 10; dd += d )
+        for( double dd = d; dd < d * step; dd += d )
         {
             if( visibleDecades < 2 )
                 m_tickLabels.emplace_back( dd );
