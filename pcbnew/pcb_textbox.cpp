@@ -40,7 +40,8 @@
 
 PCB_TEXTBOX::PCB_TEXTBOX( BOARD_ITEM* parent ) :
     PCB_SHAPE( parent, PCB_TEXTBOX_T, SHAPE_T::RECTANGLE ),
-    EDA_TEXT( pcbIUScale )
+    EDA_TEXT( pcbIUScale ),
+    m_borderEnabled( true )
 {
     SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
     SetVertJustify( GR_TEXT_V_ALIGN_TOP );
@@ -522,7 +523,7 @@ void PCB_TEXTBOX::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID
         for( const VECTOR2I& pt : pts )
             aBuffer.Append( pt );
 
-        if( width > 0 )
+        if( m_borderEnabled && width > 0 )
         {
             // Add in segments
             TransformOvalToPolygon( aBuffer, pts[0], pts[1], width, aMaxError, aErrorLoc );
@@ -540,7 +541,7 @@ void PCB_TEXTBOX::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID
         for( int ii = 0; ii < poly.PointCount(); ++ii )
             aBuffer.Append( poly.GetPoint( ii ) );
 
-        if( width > 0 )
+        if( m_borderEnabled && width > 0 )
         {
             for( int ii = 0; ii < poly.SegmentCount(); ++ii )
             {
@@ -554,13 +555,13 @@ void PCB_TEXTBOX::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID
 
 bool PCB_TEXTBOX::IsBorderEnabled() const
 {
-    return m_stroke.GetWidth() >= 0;
+    return m_borderEnabled;
 }
 
 
-void PCB_TEXTBOX::DisableBorder()
+void PCB_TEXTBOX::SetBorderEnabled( bool enabled )
 {
-    m_stroke.SetWidth( -1 );
+    m_borderEnabled = enabled;
 }
 
 
@@ -582,5 +583,12 @@ static struct PCB_TEXTBOX_DESC
         propMgr.Mask( TYPE_HASH( PCB_TEXTBOX ), TYPE_HASH( EDA_SHAPE ), _HKI( "End Y" ) );
         propMgr.Mask( TYPE_HASH( PCB_TEXTBOX ), TYPE_HASH( EDA_SHAPE ), _HKI( "Line Width" ) );
         propMgr.Mask( TYPE_HASH( PCB_TEXTBOX ), TYPE_HASH( EDA_SHAPE ), _HKI( "Line Style" ) );
+
+        const wxString textBoxProps = _( "Text Box" );
+
+        propMgr.AddProperty( new PROPERTY<PCB_TEXTBOX, bool>( _HKI( "Border" ),
+                                                              &PCB_TEXTBOX::SetBorderEnabled,
+                                                              &PCB_TEXTBOX::IsBorderEnabled ),
+                             textBoxProps );
     }
 } _PCB_TEXTBOX_DESC;

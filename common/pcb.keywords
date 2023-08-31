@@ -54,6 +54,7 @@ blind
 blind_buried_vias_allowed
 board_only
 bold
+border
 bottom
 bottom_left
 bottom_right

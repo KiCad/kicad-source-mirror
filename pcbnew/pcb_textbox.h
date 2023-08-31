@@ -142,9 +142,11 @@ public:
     bool IsBorderEnabled() const;
 
     ///< Disables the border, this is done by changing the stroke internally
-    void DisableBorder();
+    void SetBorderEnabled( bool enabled );
 
 protected:
+    bool m_borderEnabled; ///< Controls drawing the border (as defined by the stroke members)
+
     virtual void swapData( BOARD_ITEM* aImage ) override;
 
     const KIFONT::METRICS& getFontMetrics() const override { return GetFontMetrics(); }

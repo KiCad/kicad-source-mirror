@@ -1896,8 +1896,14 @@ void PCB_PLUGIN::format( const PCB_TEXTBOX* aTextBox, int aNestLevel ) const
     // PCB_TEXTBOXes are never hidden, so always omit "hide" attribute
     aTextBox->EDA_TEXT::Format( m_out, aNestLevel, m_ctl | CTL_OMIT_HIDE );
 
-    if( aTextBox->GetStroke().GetWidth() > 0 )
-        aTextBox->GetStroke().Format( m_out, pcbIUScale, aNestLevel + 1 );
+    m_out->Print( aNestLevel + 1, "(border" );
+
+    if( aTextBox->IsBorderEnabled() )
+        m_out->Print( 0, " yes)" );
+    else
+        m_out->Print( 0, " no)" );
+
+    aTextBox->GetStroke().Format( m_out, pcbIUScale, aNestLevel + 1 );
 
     if( aTextBox->GetFont() && aTextBox->GetFont()->IsOutline() )
         formatRenderCache( aTextBox, aNestLevel + 1 );

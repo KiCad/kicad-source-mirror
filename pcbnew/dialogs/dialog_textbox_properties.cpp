@@ -357,28 +357,21 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataFromWindow()
 
     m_textBox->SetMirrored( m_mirrored->IsChecked() );
 
-
-    if( m_borderCheckbox->GetValue() )
-    {
-        STROKE_PARAMS stroke = m_textBox->GetStroke();
-        if( !m_borderWidth.IsIndeterminate() )
-            stroke.SetWidth( m_borderWidth.GetValue() );
+    m_textBox->SetBorderEnabled( m_borderCheckbox->GetValue() );
+    STROKE_PARAMS stroke = m_textBox->GetStroke();
+    if( !m_borderWidth.IsIndeterminate() )
+        stroke.SetWidth( m_borderWidth.GetValue() );
 
 
-        auto it = lineTypeNames.begin();
-        std::advance( it, m_borderStyleCombo->GetSelection() );
+    auto it = lineTypeNames.begin();
+    std::advance( it, m_borderStyleCombo->GetSelection() );
 
-        if( it == lineTypeNames.end() )
-            stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
-        else
-            stroke.SetPlotStyle( it->first );
-
-        m_textBox->SetStroke( stroke );
-    }
+    if( it == lineTypeNames.end() )
+        stroke.SetPlotStyle( PLOT_DASH_TYPE::DEFAULT );
     else
-    {
-        m_textBox->DisableBorder();
-    }
+        stroke.SetPlotStyle( it->first );
+
+    m_textBox->SetStroke( stroke );
 
     m_textBox->ClearBoundingBoxCache();
     m_textBox->ClearRenderCache();

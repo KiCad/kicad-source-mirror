@@ -2151,7 +2151,7 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
 
     if( lineStyle <= PLOT_DASH_TYPE::FIRST_TYPE )
     {
-        if( thickness > 0 )
+        if( aTextBox->IsBorderEnabled() && thickness > 0 )
         {
             std::vector<VECTOR2I> pts = aTextBox->GetCorners();
 

@@ -3242,6 +3242,11 @@ PCB_TEXTBOX* PCB_PARSER::parsePCB_TEXTBOX( BOARD_ITEM* aParent )
             break;
         }
 
+        case T_border:
+            textbox->SetBorderEnabled( parseBool() );
+            NeedRIGHT();
+            break;
+
         case T_layer:
             textbox->SetLayer( parseBoardItemLayer() );
             NeedRIGHT();
@@ -3267,6 +3272,10 @@ PCB_TEXTBOX* PCB_PARSER::parsePCB_TEXTBOX( BOARD_ITEM* aParent )
     }
 
     textbox->SetStroke( stroke );
+
+    if( m_requiredVersion < 20230825 ) // compat, we move to an explicit flag
+        textbox->SetBorderEnabled( stroke.GetWidth() >= 0 );
+
 
     if( FOOTPRINT* parentFP = dynamic_cast<FOOTPRINT*>( aParent ) )
     {
