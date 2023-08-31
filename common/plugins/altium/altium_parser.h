@@ -67,9 +67,9 @@ public:
 
     const CFB::CompoundFileReader& GetCompoundFileReader() const { return *m_reader; }
 
-    std::map<wxString, wxString> ListLibFootprints() const;
+    std::map<wxString, wxString> ListLibFootprints();
 
-    std::tuple<wxString, const CFB::COMPOUND_FILE_ENTRY*> FindLibFootprintDirName( const wxString& aFpUnicodeName ) const;
+    std::tuple<wxString, const CFB::COMPOUND_FILE_ENTRY*> FindLibFootprintDirName( const wxString& aFpUnicodeName );
 
     const CFB::COMPOUND_FILE_ENTRY* FindStream( const std::vector<std::string>& aStreamPath ) const;
 
@@ -82,8 +82,14 @@ public:
     std::map<wxString, const CFB::COMPOUND_FILE_ENTRY*> GetLibSymbols( const CFB::COMPOUND_FILE_ENTRY* aStart ) const;
 
 private:
+
+    void cacheLibFootprintNames();
+
     std::unique_ptr<CFB::CompoundFileReader> m_reader;
     std::vector<char>                        m_buffer;
+
+    std::map<wxString, const CFB::COMPOUND_FILE_ENTRY*> m_libFootprintNameCache;
+    std::map<wxString, wxString>                        m_libFootprintDirNameCache;
 };
 
 

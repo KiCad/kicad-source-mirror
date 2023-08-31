@@ -603,7 +603,7 @@ void ALTIUM_PCB::Parse( const ALTIUM_COMPOUND_FILE&                  altiumPcbFi
 }
 
 
-FOOTPRINT* ALTIUM_PCB::ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile,
+FOOTPRINT* ALTIUM_PCB::ParseFootprint( ALTIUM_COMPOUND_FILE& altiumLibFile,
                                        const wxString&             aFootprintName )
 {
     std::unique_ptr<FOOTPRINT> footprint = std::make_unique<FOOTPRINT>( m_board );

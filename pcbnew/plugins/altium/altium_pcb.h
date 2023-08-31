@@ -112,7 +112,7 @@ public:
     void Parse( const ALTIUM_COMPOUND_FILE&                  aAltiumPcbFile,
                 const std::map<ALTIUM_PCB_DIR, std::string>& aFileMapping );
 
-    FOOTPRINT* ParseFootprint( const ALTIUM_COMPOUND_FILE& altiumLibFile,
+    FOOTPRINT* ParseFootprint( ALTIUM_COMPOUND_FILE& altiumLibFile,
                                const wxString&             aFootprintName );
 
 private:
