@@ -201,7 +201,8 @@ void BOARD_ADAPTER::addFootprintShapes( const FOOTPRINT* aFootprint, CONTAINER_2
 
             if( textbox->GetLayer() == aLayerId )
             {
-                addShape( textbox, aContainer, aFootprint );
+                if( textbox->IsBorderEnabled() )
+                    addShape( textbox, aContainer, aFootprint );
                 addText( textbox, aContainer, aFootprint );
             }
 
