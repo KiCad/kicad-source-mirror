@@ -702,6 +702,10 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( const std::map<SCH_SYMBOL*,
 
         symbol->SetSchSymbolLibraryName( wxEmptyString );
         screen->Append( symbol );
+
+        if( resetPositions )
+            symbol->AutoAutoplaceFields( screen );
+
         frame->GetCanvas()->GetView()->Update( symbol );
 
         msg = getSymbolReferences( *symbol, symbol_change_info.m_LibId );

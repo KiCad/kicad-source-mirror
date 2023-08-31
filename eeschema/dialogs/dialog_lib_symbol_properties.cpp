@@ -592,6 +592,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnDeleteField( wxCommandEvent& event )
     }
 
     m_grid->CommitPendingChanges( true /* quiet mode */ );
+    m_grid->ClearSelection();
 
     // Reverse sort so deleting a row doesn't change the indexes of the other rows.
     selectedRows.Sort( []( int* first, int* second ) { return *second - *first; } );
