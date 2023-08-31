@@ -1995,6 +1995,10 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItem( const AREGION6& aElem )
             }
         }
     }
+    else if( aElem.kind == ALTIUM_REGION_KIND::BOARD_CUTOUT )
+    {
+        ConvertShapeBasedRegions6ToBoardItemOnLayer( aElem, Edge_Cuts );
+    }
     else
     {
         wxLogError( _( "Ignored polygon shape of kind %d (not yet supported)." ), aElem.kind );
@@ -2055,9 +2059,12 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItem( FOOTPRINT*      aFoot
                                                                  aPrimitiveIndex );
         }
     }
-    else if( aElem.kind == ALTIUM_REGION_KIND::DASHED_OUTLINE )
+    else if( aElem.kind == ALTIUM_REGION_KIND::DASHED_OUTLINE
+             || aElem.kind == ALTIUM_REGION_KIND::BOARD_CUTOUT )
     {
-        PCB_LAYER_ID klayer = GetKicadLayer( aElem.layer );
+        PCB_LAYER_ID klayer = aElem.kind == ALTIUM_REGION_KIND::BOARD_CUTOUT
+                                      ? Edge_Cuts
+                                      : GetKicadLayer( aElem.layer );
 
         if( klayer == UNDEFINED_LAYER )
         {
@@ -2085,7 +2092,11 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItem( FOOTPRINT*      aFoot
         shape->SetPolyShape( linechain );
         shape->SetFilled( false );
         shape->SetLayer( klayer );
-        shape->SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( 0.1 ), PLOT_DASH_TYPE::DASH ) );
+
+        if( aElem.kind == ALTIUM_REGION_KIND::DASHED_OUTLINE )
+            shape->SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( 0.1 ), PLOT_DASH_TYPE::DASH ) );
+        else
+            shape->SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( 0.1 ), PLOT_DASH_TYPE::SOLID ) );
 
         aFootprint->Add( shape, ADD_MODE::APPEND );
     }
