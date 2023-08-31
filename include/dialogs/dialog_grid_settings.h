@@ -42,10 +42,13 @@ private:
 
     void RebuildGridSizes();
 
-    UNIT_BINDER m_gridOriginX;
-    UNIT_BINDER m_gridOriginY;
-    UNIT_BINDER m_userGridX;
-    UNIT_BINDER m_userGridY;
+private:
+    EDA_DRAW_FRAME* m_parent;
+
+    UNIT_BINDER     m_gridOriginX;
+    UNIT_BINDER     m_gridOriginY;
+    UNIT_BINDER     m_userGridX;
+    UNIT_BINDER     m_userGridY;
 };
 
 #endif // DIALOG_GRID_SETTINGS_H
