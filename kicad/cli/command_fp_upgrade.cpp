@@ -46,8 +46,8 @@ int CLI::FP_UPGRADE_COMMAND::doPerform( KIWAY& aKiway )
 {
     std::unique_ptr<JOB_FP_UPGRADE> fpJob = std::make_unique<JOB_FP_UPGRADE>( true );
 
-    fpJob->m_libraryPath = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
-    fpJob->m_outputLibraryPath = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
+    fpJob->m_libraryPath = m_argInput;
+    fpJob->m_outputLibraryPath = m_argOutput;
     fpJob->m_force = m_argParser.get<bool>( ARG_FORCE );
 
     if( !wxDir::Exists( fpJob->m_libraryPath ) )

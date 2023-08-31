@@ -36,20 +36,7 @@ CLI::PCB_EXPORT_BASE_COMMAND::PCB_EXPORT_BASE_COMMAND( const std::string& aName,
     m_requireLayers = false;
     m_hasLayerArg = false;
 
-    if( aOutputIsDir )
-    {
-        m_argParser.add_argument( "-o", ARG_OUTPUT )
-                .default_value( std::string() )
-                .help( UTF8STDSTR( _( "Output directory:" ) ) ); // todo fix after string freeze in v8
-    }
-    else
-    {
-        m_argParser.add_argument( "-o", ARG_OUTPUT )
-                .default_value( std::string() )
-                .help( UTF8STDSTR( _( "Output file name" ) ) );
-    }
-
-    m_argParser.add_argument( ARG_INPUT ).help( UTF8STDSTR( _( "Input file" ) ) );
+    addCommonArgs( true, true, aOutputIsDir );
 
     // Build list of layer names and their layer mask:
     for( int layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )

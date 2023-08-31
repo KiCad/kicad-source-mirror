@@ -36,8 +36,10 @@
 #define ARG_SEVERITY_EXCLUSIONS "--severity-exclusions"
 #define ARG_EXIT_CODE_VIOLATIONS "--exit-code-violations"
 
-CLI::SCH_ERC_COMMAND::SCH_ERC_COMMAND() : PCB_EXPORT_BASE_COMMAND( "erc" )
+CLI::SCH_ERC_COMMAND::SCH_ERC_COMMAND() : COMMAND( "erc" )
 {
+    addCommonArgs( true, true, false );
+
     m_argParser.add_description( UTF8STDSTR( _( "Runs the Electrical Rules Check (ERC) on the schematic and creates a report" ) ) );
 
     m_argParser.add_argument( ARG_FORMAT )
@@ -84,8 +86,8 @@ int CLI::SCH_ERC_COMMAND::doPerform( KIWAY& aKiway )
 {
     std::unique_ptr<JOB_SCH_ERC> ercJob( new JOB_SCH_ERC( true ) );
 
-    ercJob->m_outputFile = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
-    ercJob->m_filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
+    ercJob->m_outputFile = m_argOutput;
+    ercJob->m_filename = m_argInput;
     ercJob->m_exitCodeViolations = m_argParser.get<bool>( ARG_EXIT_CODE_VIOLATIONS );
 
     if( m_argParser.get<bool>( ARG_SEVERITY_ALL ) )

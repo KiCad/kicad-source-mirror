@@ -30,6 +30,8 @@
 #define ARG_HELP "--help"
 #define ARG_HELP_SHORT "-h"
 #define ARG_HELP_DESC _( "shows help message and exits" )
+#define ARG_OUTPUT "--output"
+#define ARG_INPUT "input"
 
 namespace CLI
 {
@@ -55,7 +57,17 @@ public:
     const std::string&        GetName() const { return m_name; }
 
     void PrintHelp();
+
 protected:
+    /**
+     * Sets up the most common of args used across cli
+     *
+     * @param aInput Configures the input arg
+     * @param aOutput Configures the output arg
+     * @param aOutputIsDir Configures whether the output arg description will be for a file or directory
+     */
+    void addCommonArgs( bool aInput, bool aOutput, bool aOutputIsDir );
+
     /**
      * The internal handler that should be overloaded to implement command specific
      * processing and work.
@@ -64,8 +76,37 @@ protected:
      */
     virtual int              doPerform( KIWAY& aKiway );
 
+    /**
+     * Name of this command that is exported and used in the cli
+     */
     std::string              m_name;
+
     argparse::ArgumentParser m_argParser;
+
+    /**
+     * Whether or not the input arg was added for parsing
+     */
+    bool                     m_hasInputArg;
+
+    /**
+     * Whether or not the output arg was added for parsing
+     */
+    bool                     m_hasOutputArg;
+
+    /**
+     * Whether or not the output arg is expecting a directory
+     */
+    bool                     m_outputArgExpectsDir;
+
+    /**
+     * Value of the common input arg if configured
+     */
+    wxString                 m_argInput;
+
+    /**
+     * Value of the output arg if configured
+     */
+    wxString                 m_argOutput;
 };
 
 }

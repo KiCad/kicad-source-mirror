@@ -97,8 +97,8 @@ CLI::PCB_EXPORT_GERBER_COMMAND::PCB_EXPORT_GERBER_COMMAND() : PCB_EXPORT_GERBER_
 
 int CLI::PCB_EXPORT_GERBER_COMMAND::populateJob( JOB_EXPORT_PCB_GERBER* aJob )
 {
-    aJob->m_filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
-    aJob->m_outputFile = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
+    aJob->m_filename = m_argInput;
+    aJob->m_outputFile = m_argOutput;
 
     aJob->m_plotFootprintValues = !m_argParser.get<bool>( ARG_EXCLUDE_VALUE );
     aJob->m_plotRefDes = !m_argParser.get<bool>( ARG_EXCLUDE_REFDES );

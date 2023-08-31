@@ -25,7 +25,7 @@
 
 namespace CLI
 {
-class SYM_EXPORT_SVG_COMMAND : public PCB_EXPORT_BASE_COMMAND
+class SYM_EXPORT_SVG_COMMAND : public COMMAND
 {
 public:
     SYM_EXPORT_SVG_COMMAND();

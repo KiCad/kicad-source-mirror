@@ -48,11 +48,21 @@ void CLI::COMMAND::PrintHelp()
 
 int CLI::COMMAND::Perform( KIWAY& aKiway )
 {
-    if( m_argParser[ARG_HELP] == true )
+    if( m_argParser[ ARG_HELP ] == true )
     {
         PrintHelp();
 
         return 0;
+    }
+
+    if ( m_hasInputArg )
+    {
+        m_argInput = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
+    }
+
+    if( m_hasOutputArg )
+    {
+        m_argOutput = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
     }
 
     return doPerform( aKiway );
@@ -65,4 +75,33 @@ int CLI::COMMAND::doPerform( KIWAY& aKiway )
     PrintHelp();
 
     return EXIT_CODES::OK;
+}
+
+
+void CLI::COMMAND::addCommonArgs( bool aInput, bool aOutput, bool aOutputIsDir )
+{
+    m_hasInputArg = aInput;
+    m_hasOutputArg = aOutput;
+    m_outputArgExpectsDir = aOutputIsDir;
+
+    if( aInput )
+    {
+        m_argParser.add_argument( ARG_INPUT ).help( UTF8STDSTR( _( "Input file" ) ) );
+    }
+
+    if( aOutput )
+    {
+        if( aOutputIsDir )
+        {
+            m_argParser.add_argument( "-o", ARG_OUTPUT )
+                    .default_value( std::string() )
+                    .help( UTF8STDSTR( _( "Output directory" ) ) );
+        }
+        else
+        {
+            m_argParser.add_argument( "-o", ARG_OUTPUT )
+                    .default_value( std::string() )
+                    .help( UTF8STDSTR( _( "Output file name" ) ) );
+        }
+    }
 }

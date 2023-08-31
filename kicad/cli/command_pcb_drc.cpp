@@ -37,8 +37,10 @@
 #define ARG_SEVERITY_EXCLUSIONS "--severity-exclusions"
 #define ARG_EXIT_CODE_VIOLATIONS "--exit-code-violations"
 
-CLI::PCB_DRC_COMMAND::PCB_DRC_COMMAND() : PCB_EXPORT_BASE_COMMAND( "drc" )
+CLI::PCB_DRC_COMMAND::PCB_DRC_COMMAND() : COMMAND( "drc" )
 {
+    addCommonArgs( true, true, false );
+
     m_argParser.add_description( UTF8STDSTR( _( "Runs the Design Rules Check (DRC) on the PCB and creates a report" ) ) );
 
     m_argParser.add_argument( ARG_FORMAT )
@@ -90,8 +92,8 @@ int CLI::PCB_DRC_COMMAND::doPerform( KIWAY& aKiway )
 {
     std::unique_ptr<JOB_PCB_DRC> drcJob( new JOB_PCB_DRC( true ) );
 
-    drcJob->m_outputFile = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
-    drcJob->m_filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
+    drcJob->m_outputFile = m_argOutput;
+    drcJob->m_filename = m_argInput;
     drcJob->m_reportAllTrackErrors = m_argParser.get<bool>( ARG_ALL_TRACK_ERRORS );
     drcJob->m_exitCodeViolations = m_argParser.get<bool>( ARG_EXIT_CODE_VIOLATIONS );
 

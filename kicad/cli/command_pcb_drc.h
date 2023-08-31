@@ -25,7 +25,7 @@
 
 namespace CLI
 {
-class PCB_DRC_COMMAND : public PCB_EXPORT_BASE_COMMAND
+class PCB_DRC_COMMAND : public COMMAND
 {
 public:
     PCB_DRC_COMMAND();

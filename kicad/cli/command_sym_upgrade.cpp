@@ -30,8 +30,10 @@
 
 #define ARG_FORCE "--force"
 
-CLI::SYM_UPGRADE_COMMAND::SYM_UPGRADE_COMMAND() : PCB_EXPORT_BASE_COMMAND( "upgrade" )
+CLI::SYM_UPGRADE_COMMAND::SYM_UPGRADE_COMMAND() : COMMAND( "upgrade" )
 {
+    addCommonArgs( true, true, false );
+
     m_argParser.add_description( UTF8STDSTR( _( "Upgrades the symbol library to the current kicad version format" ) ) );
 
     m_argParser.add_argument( ARG_FORCE )
@@ -46,8 +48,8 @@ int CLI::SYM_UPGRADE_COMMAND::doPerform( KIWAY& aKiway )
 {
     std::unique_ptr<JOB_SYM_UPGRADE> symJob = std::make_unique<JOB_SYM_UPGRADE>( true );
 
-    symJob->m_libraryPath = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
-    symJob->m_outputLibraryPath = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
+    symJob->m_libraryPath = m_argInput;
+    symJob->m_outputLibraryPath = m_argOutput;
     symJob->m_force = m_argParser.get<bool>( ARG_FORCE );
 
     if( !wxFile::Exists( symJob->m_libraryPath ) )

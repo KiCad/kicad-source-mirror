@@ -97,8 +97,8 @@ int CLI::PCB_EXPORT_DRILL_COMMAND::doPerform( KIWAY& aKiway )
 {
     std::unique_ptr<JOB_EXPORT_PCB_DRILL> drillJob( new JOB_EXPORT_PCB_DRILL( true ) );
 
-    drillJob->m_filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
-    drillJob->m_outputDir = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
+    drillJob->m_filename = m_argInput;
+    drillJob->m_outputDir = m_argOutput;
 
     if( !drillJob->m_outputDir.IsEmpty() )
     {

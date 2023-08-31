@@ -25,7 +25,7 @@
 
 namespace CLI
 {
-class SYM_UPGRADE_COMMAND : public PCB_EXPORT_BASE_COMMAND
+class SYM_UPGRADE_COMMAND : public COMMAND
 {
 public:
     SYM_UPGRADE_COMMAND();

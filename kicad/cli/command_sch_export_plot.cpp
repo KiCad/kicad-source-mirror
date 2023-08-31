@@ -43,9 +43,11 @@ const HPGL_PLOT_ORIGIN_AND_UNITS hpgl_origin_ops[4] = {
 CLI::SCH_EXPORT_PLOT_COMMAND::SCH_EXPORT_PLOT_COMMAND( const std::string& aName,
                                                        PLOT_FORMAT        aPlotFormat,
                                                        bool               aOutputIsDir ) :
-        PCB_EXPORT_BASE_COMMAND( aName, aOutputIsDir ),
-        m_plotFormat( aPlotFormat ), m_useDir( aOutputIsDir )
+        COMMAND( aName ),
+        m_plotFormat( aPlotFormat )
 {
+    addCommonArgs( true, true, aOutputIsDir );
+
     m_argParser.add_argument( "-t", ARG_THEME )
             .default_value( std::string() )
             .help( UTF8STDSTR( _( "Color theme to use (will default to schematic settings)" ) ) );
@@ -88,7 +90,7 @@ CLI::SCH_EXPORT_PLOT_COMMAND::SCH_EXPORT_PLOT_COMMAND( const std::string& aName,
 
 int CLI::SCH_EXPORT_PLOT_COMMAND::doPerform( KIWAY& aKiway )
 {
-    wxString filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
+    wxString filename = m_argInput;
     if( !wxFile::Exists( filename ) )
     {
         wxFprintf( stderr, _( "Schematic file does not exist or is not accessible\n" ) );
@@ -105,11 +107,10 @@ int CLI::SCH_EXPORT_PLOT_COMMAND::doPerform( KIWAY& aKiway )
     settings.m_pageSizeSelect = PAGE_SIZE_AUTO;
     settings.m_useBackgroundColor = !m_argParser.get<bool>( ARG_NO_BACKGROUND_COLOR );
     settings.m_theme = FROM_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
-    if( m_useDir )
-        settings.m_outputDirectory =
-                FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
+    if( m_outputArgExpectsDir )
+        settings.m_outputDirectory = m_argOutput;
     else
-        settings.m_outputFile = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
+        settings.m_outputFile = m_argOutput;
     // HPGL local options
     if( m_plotFormat == PLOT_FORMAT::HPGL )
     {

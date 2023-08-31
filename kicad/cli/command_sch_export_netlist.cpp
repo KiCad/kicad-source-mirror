@@ -29,8 +29,10 @@
 
 #define ARG_FORMAT "--format"
 
-CLI::SCH_EXPORT_NETLIST_COMMAND::SCH_EXPORT_NETLIST_COMMAND() : PCB_EXPORT_BASE_COMMAND( "netlist" )
+CLI::SCH_EXPORT_NETLIST_COMMAND::SCH_EXPORT_NETLIST_COMMAND() : COMMAND( "netlist" )
 {
+    addCommonArgs( true, true, false );
+
     m_argParser.add_argument( ARG_FORMAT )
             .default_value( std::string( "kicadsexpr" ) )
             .help( UTF8STDSTR( _( "Netlist output format, valid options: kicadsexpr, kicadxml, cadstar, orcadpcb2, spice, spicemodel" ) ) );
@@ -42,8 +44,8 @@ int CLI::SCH_EXPORT_NETLIST_COMMAND::doPerform( KIWAY& aKiway )
     std::unique_ptr<JOB_EXPORT_SCH_NETLIST> netJob =
             std::make_unique<JOB_EXPORT_SCH_NETLIST>( true );
 
-    netJob->m_filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
-    netJob->m_outputFile = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
+    netJob->m_filename = m_argInput;
+    netJob->m_outputFile = m_argOutput;
 
     if( !wxFile::Exists( netJob->m_filename ) )
     {

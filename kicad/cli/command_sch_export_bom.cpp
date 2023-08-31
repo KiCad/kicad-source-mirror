@@ -29,8 +29,10 @@
 #include <macros.h>
 
 
-CLI::SCH_EXPORT_BOM_COMMAND::SCH_EXPORT_BOM_COMMAND() : PCB_EXPORT_BASE_COMMAND( "bom" )
+CLI::SCH_EXPORT_BOM_COMMAND::SCH_EXPORT_BOM_COMMAND() : COMMAND( "bom" )
 {
+    addCommonArgs( true, true, false );
+
     // Field output options
     m_argParser.add_argument( ARG_FIELDS )
             .help( UTF8STDSTR( _( ARG_FIELDS_DESC ) ) )
@@ -111,8 +113,8 @@ int CLI::SCH_EXPORT_BOM_COMMAND::doPerform( KIWAY& aKiway )
     std::unique_ptr<JOB_EXPORT_SCH_BOM> bomJob = std::make_unique<JOB_EXPORT_SCH_BOM>( true );
 
     // Basic options
-    bomJob->m_filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
-    bomJob->m_outputFile = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
+    bomJob->m_filename = m_argInput;
+    bomJob->m_outputFile = m_argOutput;
 
     // Format options
     bomJob->m_fieldDelimiter =

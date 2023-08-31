@@ -67,7 +67,7 @@ namespace CLI
 #define ARG_EXCLUDE_DNP "--exclude-dnp"
 #define ARG_EXCLUDE_DNP_DESC "Exclude symbols marked Do-Not-Populate."
 
-class SCH_EXPORT_BOM_COMMAND : public PCB_EXPORT_BASE_COMMAND
+class SCH_EXPORT_BOM_COMMAND : public COMMAND
 {
 public:
     SCH_EXPORT_BOM_COMMAND();

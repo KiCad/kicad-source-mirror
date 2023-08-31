@@ -26,9 +26,6 @@
 
 namespace CLI
 {
-#define ARG_OUTPUT "--output"
-#define ARG_INPUT "input"
-
 #define ARG_BLACKANDWHITE "--black-and-white"
 #define ARG_BLACKANDWHITE_DESC "Black and white only"
 

@@ -60,8 +60,8 @@ int CLI::FP_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
 
     std::unique_ptr<JOB_FP_EXPORT_SVG> svgJob = std::make_unique<JOB_FP_EXPORT_SVG>( true );
 
-    svgJob->m_libraryPath = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
-    svgJob->m_outputDirectory = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
+    svgJob->m_libraryPath = m_argInput;
+    svgJob->m_outputDirectory = m_argOutput;
     svgJob->m_blackAndWhite = m_argParser.get<bool>( ARG_BLACKANDWHITE );
     svgJob->m_footprint = FROM_UTF8( m_argParser.get<std::string>( ARG_FOOTPRINT ).c_str() );
 

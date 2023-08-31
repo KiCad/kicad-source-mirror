@@ -33,8 +33,10 @@
 #define ARG_INC_HIDDEN_PINS "--include-hidden-pins"
 #define ARG_INC_HIDDEN_FIELDS "--include-hidden-fields"
 
-CLI::SYM_EXPORT_SVG_COMMAND::SYM_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND( "svg" )
+CLI::SYM_EXPORT_SVG_COMMAND::SYM_EXPORT_SVG_COMMAND() : COMMAND( "svg" )
 {
+    addCommonArgs( true, true, false );
+
     m_argParser.add_description( UTF8STDSTR( _( "Exports the symbol or entire symbol library to SVG" ) ) );
 
     m_argParser.add_argument( "-t", ARG_THEME )
@@ -66,8 +68,8 @@ int CLI::SYM_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
 {
     std::unique_ptr<JOB_SYM_EXPORT_SVG> svgJob = std::make_unique<JOB_SYM_EXPORT_SVG>( true );
 
-    svgJob->m_libraryPath = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
-    svgJob->m_outputDirectory = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
+    svgJob->m_libraryPath = m_argInput;
+    svgJob->m_outputDirectory = m_argOutput;
     svgJob->m_blackAndWhite = m_argParser.get<bool>( ARG_BLACKANDWHITE );
     svgJob->m_symbol = FROM_UTF8( m_argParser.get<std::string>( ARG_SYMBOL ).c_str() );
     svgJob->m_includeHiddenFields = m_argParser.get<bool>( ARG_INC_HIDDEN_FIELDS );

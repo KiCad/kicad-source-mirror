@@ -29,8 +29,10 @@
 
 
 CLI::SCH_EXPORT_PYTHONBOM_COMMAND::SCH_EXPORT_PYTHONBOM_COMMAND() :
-        PCB_EXPORT_BASE_COMMAND( "python-bom" )
-{    
+        COMMAND( "python-bom" )
+{
+    addCommonArgs( true, true, false );
+
     m_argParser.add_description( UTF8STDSTR( _( "Export the legacy bom xml format used in the "
                                                 "schematic editor with python scripts" ) ) );
 }
@@ -41,8 +43,8 @@ int CLI::SCH_EXPORT_PYTHONBOM_COMMAND::doPerform( KIWAY& aKiway )
     std::unique_ptr<JOB_EXPORT_SCH_PYTHONBOM> bomJob =
             std::make_unique<JOB_EXPORT_SCH_PYTHONBOM>( true );
 
-    bomJob->m_filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
-    bomJob->m_outputFile = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
+    bomJob->m_filename = m_argInput;
+    bomJob->m_outputFile = m_argOutput;
 
     if( !wxFile::Exists( bomJob->m_filename ) )
     {

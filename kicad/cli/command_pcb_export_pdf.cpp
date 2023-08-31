@@ -88,8 +88,8 @@ int CLI::PCB_EXPORT_PDF_COMMAND::doPerform( KIWAY& aKiway )
 
     std::unique_ptr<JOB_EXPORT_PCB_PDF> pdfJob( new JOB_EXPORT_PCB_PDF( true ) );
 
-    pdfJob->m_filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
-    pdfJob->m_outputFile = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
+    pdfJob->m_filename = m_argInput;
+    pdfJob->m_outputFile = m_argOutput;
 
     if( !wxFile::Exists( pdfJob->m_filename ) )
     {

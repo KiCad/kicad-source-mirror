@@ -66,8 +66,8 @@ int CLI::PCB_EXPORT_DXF_COMMAND::doPerform( KIWAY& aKiway )
 
     std::unique_ptr<JOB_EXPORT_PCB_DXF> dxfJob( new JOB_EXPORT_PCB_DXF( true ) );
 
-    dxfJob->m_filename = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
-    dxfJob->m_outputFile = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
+    dxfJob->m_filename = m_argInput;
+    dxfJob->m_outputFile = m_argOutput;
 
     if( !wxFile::Exists( dxfJob->m_filename ) )
     {

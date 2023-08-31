@@ -25,7 +25,7 @@
 
 namespace CLI
 {
-class SCH_ERC_COMMAND : public PCB_EXPORT_BASE_COMMAND
+class SCH_ERC_COMMAND : public COMMAND
 {
 public:
     SCH_ERC_COMMAND();
