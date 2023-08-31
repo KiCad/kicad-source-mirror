@@ -1298,11 +1298,10 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
     SHOVE_STATUS st = SH_NULL;
 
     if( Dbg() )
-    {
-    Dbg()->SetIteration( aIter );
-    }
+        Dbg()->SetIteration( aIter );
 
-    PNS_DBG( Dbg(), AddItem, &currentLine, RED, currentLine.Width(), wxString::Format( wxT( "current-coll-chk rank %d" ), currentLine.Rank() ) );
+    PNS_DBG( Dbg(), AddItem, &currentLine, RED, currentLine.Width(),
+             wxString::Format( wxT( "current-coll-chk rank %d" ), currentLine.Rank() ) );
 
     for( ITEM::PnsKind search_order : { ITEM::HOLE_T, ITEM::SOLID_T, ITEM::VIA_T, ITEM::SEGMENT_T } )
     {
@@ -1340,10 +1339,10 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
     ITEM* ni = nearest->m_item;
 
     UNITS_PROVIDER up( pcbIUScale, EDA_UNITS::MILLIMETRES );
-    PNS_DBG( Dbg(), Message,
-             wxString::Format( wxT( "NI: %s (%s)" ), ni->Format(), ni->Parent()
-                                                ? ni->Parent()->GetItemDescription( &up )
-                                                : wxString( wxT( "null" ) ) ) );
+    PNS_DBG( Dbg(), Message, wxString::Format( wxT( "NI: %s (%s)" ),
+                                               ni->Format(),
+                                               ni->Parent() ? ni->Parent()->GetItemDescription( &up )
+                                                            : wxString( wxT( "null" ) ) ) );
 
     unwindLineStack( ni );
 

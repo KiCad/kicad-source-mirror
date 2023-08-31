@@ -56,7 +56,7 @@ void PNS_LOG_PLAYER::createRouter()
     m_router->Settings().SetMode( PNS::RM_Walkaround );
     m_router->Sizes().SetTrackWidth( 250000 );
 
-    m_debugDecorator = new PNS_TEST_DEBUG_DECORATOR;
+    m_debugDecorator = new PNS_TEST_DEBUG_DECORATOR( m_reporter );
     m_debugDecorator->Clear();
     m_iface->SetDebugDecorator( m_debugDecorator );
 }

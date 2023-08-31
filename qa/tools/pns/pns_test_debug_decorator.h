@@ -28,6 +28,8 @@
 
 #include <router/pns_debug_decorator.h>
 
+class REPORTER;
+
 class PNS_DEBUG_SHAPE
 {
 public:
@@ -70,7 +72,7 @@ struct PNS_DEBUG_STAGE
 class PNS_TEST_DEBUG_DECORATOR : public PNS::DEBUG_DECORATOR
 {
 public:
-    PNS_TEST_DEBUG_DECORATOR();
+    PNS_TEST_DEBUG_DECORATOR( REPORTER* aReporter );
     virtual ~PNS_TEST_DEBUG_DECORATOR();
 
     virtual void SetIteration( int iter ) override { m_iter = iter; }
@@ -113,6 +115,8 @@ private:
     PNS_DEBUG_SHAPE*              m_activeEntry;
     int                           m_iter;
     std::vector<PNS_DEBUG_STAGE*> m_stages;
+
+    REPORTER*                     m_reporter;
 };
 
 #endif

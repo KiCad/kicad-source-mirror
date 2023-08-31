@@ -24,7 +24,12 @@
 
 #include "pns_test_debug_decorator.h"
 
+#include <reporter.h>
 #include <router/pns_item.h>
+
+
+#define VERBOSE     // Sends PSN_DBG message output to the console
+
 
 PNS_DEBUG_SHAPE::PNS_DEBUG_SHAPE( PNS_DEBUG_SHAPE* aParent )
 {
@@ -106,7 +111,8 @@ PNS_DEBUG_STAGE::~PNS_DEBUG_STAGE()
 }
 
 
-PNS_TEST_DEBUG_DECORATOR::PNS_TEST_DEBUG_DECORATOR()
+PNS_TEST_DEBUG_DECORATOR::PNS_TEST_DEBUG_DECORATOR( REPORTER* aReporter ) :
+    m_reporter( aReporter )
 {
     m_iter = 0;
     m_grouping = false;
@@ -235,6 +241,16 @@ void PNS_TEST_DEBUG_DECORATOR::Message( const wxString& msg, const SRC_LOCATION_
     ent->m_msg = msg.c_str();
     ent->m_srcLoc = aSrcLoc;
     addEntry( ent );
+
+#ifdef VERBOSE
+    static wxString lastMsg;
+
+    if( msg != lastMsg )
+    {
+        m_reporter->Report( msg );
+        lastMsg = msg;
+    }
+#endif
 }
 
 
