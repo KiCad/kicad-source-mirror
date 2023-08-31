@@ -332,9 +332,7 @@ void PGM_BASE::sentryInit()
         #   error "Project configuration error, missing KICAD_SENTRY_DSN"
         #endif
 
-        sentry_options_set_dsn(
-                options,
-                "https://463925e689c34632b5172436ffb76de5@sentry-relay.kicad.org/6266565" );
+        sentry_options_set_dsn( options, KICAD_SENTRY_DSN );
 
         wxFileName tmp;
         tmp.AssignDir( PATHS::GetUserCachePath() );
