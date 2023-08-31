@@ -30,8 +30,6 @@
 
 class DIALOG_GRID_SETTINGS : public DIALOG_GRID_SETTINGS_BASE
 {
-    EDA_DRAW_FRAME* m_parent;
-
 public:
     /// This has no dependencies on calling wxFrame derivative, such as PCB_BASE_FRAME.
     DIALOG_GRID_SETTINGS( EDA_DRAW_FRAME* aParent );
