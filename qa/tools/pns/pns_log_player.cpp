@@ -285,6 +285,24 @@ void PNS_LOG_PLAYER_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aClear
 }
 
 
+int PNS_LOG_PLAYER_KICAD_IFACE::GetNetCode( PNS::NET_HANDLE aNet ) const
+{
+    if( aNet )
+        return static_cast<NETINFO_ITEM*>( aNet )->GetNetCode();
+    else
+        return -1;
+}
+
+
+wxString PNS_LOG_PLAYER_KICAD_IFACE::GetNetName( PNS::NET_HANDLE aNet ) const
+{
+    if( aNet )
+        return static_cast<NETINFO_ITEM*>( aNet )->GetNetname();
+    else
+        return wxEmptyString;
+}
+
+
 PNS_LOG_VIEW_TRACKER::PNS_LOG_VIEW_TRACKER()
 {
 }

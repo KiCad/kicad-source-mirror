@@ -71,6 +71,9 @@ public:
     void HideItem( PNS::ITEM* aItem ) override;
     void DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit = false, bool aIsHeadTrace = false ) override;
 
+    int GetNetCode( PNS::NET_HANDLE aNet ) const override;
+    wxString GetNetName( PNS::NET_HANDLE aNet ) const override;
+
 private:
     PNS_LOG_VIEW_TRACKER *m_viewTracker;
 };
