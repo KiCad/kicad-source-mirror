@@ -486,7 +486,11 @@ void DIALOG_CHOOSE_SYMBOL::PopulateFootprintSelector( LIB_ID const& aLibId )
         LIB_FIELD* fp_field = symbol->GetFieldById( FOOTPRINT_FIELD );
         wxString   fp_name = fp_field ? fp_field->GetFullText() : wxString( "" );
 
-        symbol->GetPins( temp_pins );
+        // All units, but only a single De Morgan variant.
+        if( symbol->HasConversion() )
+            symbol->GetPins( temp_pins, 0, 1 );
+        else
+            symbol->GetPins( temp_pins );
 
         m_fp_sel_ctrl->FilterByPinCount( temp_pins.size() );
         m_fp_sel_ctrl->FilterByFootprintFilters( symbol->GetFPFilters(), true );

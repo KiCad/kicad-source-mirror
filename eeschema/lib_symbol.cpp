@@ -1006,7 +1006,7 @@ void LIB_SYMBOL::GetPins( LIB_PINS& aList, int aUnit, int aConvert ) const
      * when m_convert == 0, the body item is common to shapes
      */
 
-    LIB_SYMBOL_SPTR                  parent = m_parent.lock();
+    LIB_SYMBOL_SPTR            parent = m_parent.lock();
     const LIB_ITEMS_CONTAINER& drawItems = parent ? parent->m_drawings : m_drawings;
 
     for( const LIB_ITEM& item : drawItems[LIB_PIN_T] )
@@ -1015,7 +1015,7 @@ void LIB_SYMBOL::GetPins( LIB_PINS& aList, int aUnit, int aConvert ) const
         if( aUnit && item.m_unit && ( item.m_unit != aUnit ) )
             continue;
 
-        // Shape filtering:
+        // De Morgan variant filtering:
         if( aConvert && item.m_convert && ( item.m_convert != aConvert ) )
             continue;
 
@@ -1469,6 +1469,7 @@ bool LIB_SYMBOL::HasConversion() const
 
     return false;
 }
+
 
 int LIB_SYMBOL::GetMaxPinNumber() const
 {

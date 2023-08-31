@@ -32,8 +32,6 @@ struct GRID;
 
 class DIALOG_GRID_SETTINGS : public DIALOG_GRID_SETTINGS_BASE
 {
-    EDA_DRAW_FRAME* m_parent;
-
 public:
     DIALOG_GRID_SETTINGS( wxWindow* aParent, wxWindow* aEventSource, UNITS_PROVIDER* aProvider,
                           GRID& aGrid );
