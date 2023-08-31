@@ -33,6 +33,7 @@
 #define ARG_EXCELLON_MINIMALHEAD "--excellon-min-header"
 #define ARG_EXCELLON_SEPARATE_TH "--excellon-separate-th"
 #define ARG_EXCELLON_ZEROS_FORMAT "--excellon-zeros-format"
+#define ARG_EXCELLON_OVAL_FORMAT "--excellon-oval-format"
 #define ARG_GERBER_PRECISION "--gerber-precision"
 #define ARG_EXCELLON_UNITS "--excellon-units"
 #define ARG_GENERATE_MAP "--generate-map"
@@ -53,6 +54,10 @@ CLI::EXPORT_PCB_DRILL_COMMAND::EXPORT_PCB_DRILL_COMMAND() : EXPORT_PCB_BASE_COMM
             .default_value( std::string( "decimal" ) )
             .help( UTF8STDSTR(
                     _( "Valid options are: decimal,suppressleading,suppresstrailing,keep." ) ) );
+
+    m_argParser.add_argument( ARG_EXCELLON_OVAL_FORMAT )
+            .default_value( std::string( "alternate" ) )
+            .help( UTF8STDSTR( _( "Valid options are: route,alternate." ) ) );
 
     m_argParser.add_argument( "-u", ARG_EXCELLON_UNITS )
             .default_value( std::string( "mm" ) )
@@ -157,6 +162,22 @@ int CLI::EXPORT_PCB_DRILL_COMMAND::doPerform( KIWAY& aKiway )
     else
     {
         wxFprintf( stderr, _( "Invalid zeros format specified\n" ) );
+        return EXIT_CODES::ERR_ARGS;
+    }
+
+    wxString drillFormat =
+            FROM_UTF8( m_argParser.get<std::string>( ARG_EXCELLON_OVAL_FORMAT ).c_str() );
+    if( drillFormat == wxS( "route" ) )
+    {
+        drillJob->m_excellonOvalDrillRoute = true;
+    }
+    else if( drillFormat == wxS( "alternate" ) )
+    {
+        drillJob->m_excellonOvalDrillRoute = false;
+    }
+    else
+    {
+        wxFprintf( stderr, _( "Invalid oval drill format specified\n" ) );
         return EXIT_CODES::ERR_ARGS;
     }
 
