@@ -106,13 +106,8 @@ bool PNS_LOG_FILE::parseCommonPnsProps( PNS::ITEM* aItem, const wxString& cmd,
 {
     if( cmd == wxS( "net" ) )
     {
-        if( aItem->Parent() && aItem->Parent()->GetBoard() )
-        {
-            aItem->SetNet( m_board->FindNet( aTokens.GetNextToken() ) );
-            return true;
-        }
-
-        return false;
+        aItem->SetNet( m_board->FindNet( aTokens.GetNextToken() ) );
+        return true;
     }
     else if( cmd == wxS( "layers" ) )
     {
