@@ -35,7 +35,9 @@ CLI::SCH_EXPORT_NETLIST_COMMAND::SCH_EXPORT_NETLIST_COMMAND() : COMMAND( "netlis
 
     m_argParser.add_argument( ARG_FORMAT )
             .default_value( std::string( "kicadsexpr" ) )
-            .help( UTF8STDSTR( _( "Netlist output format, valid options: kicadsexpr, kicadxml, cadstar, orcadpcb2, spice, spicemodel" ) ) );
+            .help( UTF8STDSTR( _( "Netlist output format, valid options: kicadsexpr, kicadxml, "
+                                  "cadstar, orcadpcb2, spice, spicemodel" ) ) )
+            .metavar( "FORMAT" );
 }
 
 

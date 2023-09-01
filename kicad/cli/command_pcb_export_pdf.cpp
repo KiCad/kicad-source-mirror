@@ -35,6 +35,8 @@
 
 CLI::PCB_EXPORT_PDF_COMMAND::PCB_EXPORT_PDF_COMMAND() : PCB_EXPORT_BASE_COMMAND( "pdf" )
 {
+    m_argParser.add_description( UTF8STDSTR( _( "Generate PDF from a list of layers" ) ) );
+
     addLayerArg( true );
     addDrawingSheetArg();
     addDefineArg();
@@ -71,7 +73,8 @@ CLI::PCB_EXPORT_PDF_COMMAND::PCB_EXPORT_PDF_COMMAND() : PCB_EXPORT_BASE_COMMAND(
 
     m_argParser.add_argument( "-t", ARG_THEME )
             .default_value( std::string() )
-            .help( UTF8STDSTR( _( "Color theme to use (will default to PCB Editor settings)" ) ) );
+            .help( UTF8STDSTR( _( "Color theme to use (will default to PCB Editor settings)" ) ) )
+            .metavar( "THEME_NAME" );
 
     m_argParser.add_argument( ARG_DRILL_SHAPE_OPTION )
             .help( UTF8STDSTR( _( "Set pad/via drill shape option (0 = no shape, 1 = "

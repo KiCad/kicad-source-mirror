@@ -46,7 +46,8 @@ CLI::PCB_DRC_COMMAND::PCB_DRC_COMMAND() : COMMAND( "drc" )
 
     m_argParser.add_argument( ARG_FORMAT )
             .default_value( std::string( "report" ) )
-            .help( UTF8STDSTR( _( "Output file format, options: json, report" ) ) );
+            .help( UTF8STDSTR( _( "Output file format, options: json, report" ) ) )
+            .metavar( "FORMAT" );
 
     m_argParser.add_argument( ARG_ALL_TRACK_ERRORS )
             .help( UTF8STDSTR( _( "Report all errors for each track" ) ) )
@@ -55,8 +56,8 @@ CLI::PCB_DRC_COMMAND::PCB_DRC_COMMAND() : COMMAND( "drc" )
 
     m_argParser.add_argument( ARG_UNITS )
             .default_value( std::string( "mm" ) )
-            .help( UTF8STDSTR(
-                    _( "Report units; valid options: in, mm, mils" ) ) );
+            .help( UTF8STDSTR( _( "Report units; valid options: in, mm, mils" ) ) )
+            .metavar( "UNITS" );
 
     m_argParser.add_argument( ARG_SEVERITY_ALL )
             .help( UTF8STDSTR( _( "Report all DRC violations, this is equivalent to including all the other severity arguments" ) ) )

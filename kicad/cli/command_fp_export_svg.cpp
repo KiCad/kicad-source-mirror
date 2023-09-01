@@ -44,7 +44,8 @@ CLI::FP_EXPORT_SVG_COMMAND::FP_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND( "
 
     m_argParser.add_argument( "--fp", ARG_FOOTPRINT )
             .default_value( std::string() )
-            .help( UTF8STDSTR( _( "Specific symbol to export within the library" ) ) );
+            .help( UTF8STDSTR( _( "Specific footprint to export within the library" ) ) )
+            .metavar( "FOOTPRINT_NAME" );
 
     m_argParser.add_argument( ARG_BLACKANDWHITE )
             .help( UTF8STDSTR( _( ARG_BLACKANDWHITE_DESC ) ) )

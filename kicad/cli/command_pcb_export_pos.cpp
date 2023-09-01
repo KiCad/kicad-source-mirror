@@ -51,11 +51,14 @@ CLI::PCB_EXPORT_POS_COMMAND::PCB_EXPORT_POS_COMMAND() : PCB_EXPORT_BASE_COMMAND(
 
     m_argParser.add_argument( ARG_FORMAT )
             .default_value( std::string( "ascii" ) )
-            .help( UTF8STDSTR( _( "Valid options: ascii,csv,gerber" ) ) );
+            .help( UTF8STDSTR( _( "Valid options: ascii,csv,gerber" ) ) )
+            .metavar( "FORMAT" );
 
     m_argParser.add_argument( ARG_UNITS )
             .default_value( std::string( "in" ) )
-            .help( UTF8STDSTR( _( "Output units; ascii or csv format only; valid options: in,mm" ) ) );
+            .help( UTF8STDSTR(
+                    _( "Output units; ascii or csv format only; valid options: in,mm" ) ) )
+            .metavar( "UNITS" );
 
     m_argParser.add_argument( ARG_NEGATE_BOTTOM_X )
             .help( UTF8STDSTR( _( "Use negative X coordinates for footprints on bottom layer "

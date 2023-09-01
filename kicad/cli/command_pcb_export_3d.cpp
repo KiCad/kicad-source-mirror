@@ -115,7 +115,8 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&   aName,
         m_argParser.add_argument( ARG_MIN_DISTANCE )
                 .default_value( std::string( "0.01mm" ) )
                 .help( UTF8STDSTR(
-                        _( "Minimum distance between points to treat them as separate ones" ) ) );
+                        _( "Minimum distance between points to treat them as separate ones" ) ) )
+                .metavar( "MIN_DIST" );
     }
 
     m_argParser.add_argument( ARG_USER_ORIGIN )

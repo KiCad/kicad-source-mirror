@@ -36,19 +36,23 @@ CLI::SCH_EXPORT_BOM_COMMAND::SCH_EXPORT_BOM_COMMAND() : COMMAND( "bom" )
     // Field output options
     m_argParser.add_argument( ARG_FIELDS )
             .help( UTF8STDSTR( _( ARG_FIELDS_DESC ) ) )
-            .default_value( std::string( "Reference,Value,Footprint,${QUANTITY},${DNP}" ) );
+            .default_value( std::string( "Reference,Value,Footprint,${QUANTITY},${DNP}" ) )
+            .metavar( "FIELDS" );
 
     m_argParser.add_argument( ARG_LABELS )
             .help( UTF8STDSTR( _( ARG_LABELS_DESC ) ) )
-            .default_value( std::string( "Refs,Value,Footprint,Qty,DNP" ) );
+            .default_value( std::string( "Refs,Value,Footprint,Qty,DNP" ) )
+            .metavar( "LABELS" );
 
     m_argParser.add_argument( ARG_GROUP_BY )
             .help( UTF8STDSTR( _( ARG_GROUP_BY_DESC ) ) )
-            .default_value( std::string( "" ) );
+            .default_value( std::string( "" ) )
+            .metavar( "GROUP_BY" );
 
     m_argParser.add_argument( ARG_SORT_FIELD )
             .help( UTF8STDSTR( _( ARG_SORT_FIELD_DESC ) ) )
-            .default_value( std::string( "Reference" ) );
+            .default_value( std::string( "Reference" ) )
+            .metavar( "SORT_BY" );
 
     m_argParser.add_argument( ARG_SORT_ASC )
             .help( UTF8STDSTR( _( ARG_SORT_ASC_DESC ) ) )
@@ -57,7 +61,8 @@ CLI::SCH_EXPORT_BOM_COMMAND::SCH_EXPORT_BOM_COMMAND() : COMMAND( "bom" )
 
     m_argParser.add_argument( ARG_FILTER )
             .help( UTF8STDSTR( _( ARG_FILTER_DESC ) ) )
-            .default_value( std::string( "" ) );
+            .default_value( std::string( "" ) )
+            .metavar( "FILTER" );
 
     m_argParser.add_argument( ARG_EXCLUDE_DNP )
             .help( UTF8STDSTR( _( ARG_EXCLUDE_DNP_DESC ) ) )
@@ -67,19 +72,23 @@ CLI::SCH_EXPORT_BOM_COMMAND::SCH_EXPORT_BOM_COMMAND() : COMMAND( "bom" )
     // Output formatting options
     m_argParser.add_argument( ARG_FIELD_DELIMITER )
             .help( UTF8STDSTR( _( ARG_FIELD_DELIMITER_DESC ) ) )
-            .default_value( std::string( "," ) );
+            .default_value( std::string( "," ) )
+            .metavar( "FIELD_DELIM" );
 
     m_argParser.add_argument( ARG_STRING_DELIMITER )
             .help( UTF8STDSTR( _( ARG_STRING_DELIMITER_DESC ) ) )
-            .default_value( std::string( "\"" ) );
+            .default_value( std::string( "\"" ) )
+            .metavar( "STR_DELIM" );
 
     m_argParser.add_argument( ARG_REF_DELIMITER )
             .help( UTF8STDSTR( _( ARG_REF_DELIMITER_DESC ) ) )
-            .default_value( std::string( "," ) );
+            .default_value( std::string( "," ) )
+            .metavar( "REF_DELIM" );
 
     m_argParser.add_argument( ARG_REF_RANGE_DELIMITER )
             .help( UTF8STDSTR( _( ARG_REF_RANGE_DELIMITER_DESC ) ) )
-            .default_value( std::string( "-" ) );
+            .default_value( std::string( "-" ) )
+            .metavar( "REF_RANGE_DELIM" );
 
     m_argParser.add_argument( ARG_KEEP_TABS )
             .help( UTF8STDSTR( _( ARG_KEEP_TABS_DESC ) ) )

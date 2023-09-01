@@ -29,7 +29,7 @@
 #define ARG_VERSION "--version"
 #define ARG_HELP "--help"
 #define ARG_HELP_SHORT "-h"
-#define ARG_HELP_DESC _( "shows help message and exits" )
+#define ARG_HELP_DESC _( "Shows help message and exits" )
 #define ARG_OUTPUT "--output"
 #define ARG_INPUT "input"
 #define ARG_DRAWING_SHEET "--drawing-sheet"

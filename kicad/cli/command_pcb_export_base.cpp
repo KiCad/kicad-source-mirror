@@ -112,7 +112,8 @@ void CLI::PCB_EXPORT_BASE_COMMAND::addLayerArg( bool aRequire )
             .default_value( std::string() )
             .help( UTF8STDSTR(
                     _( "Comma separated list of untranslated layer names to include such as "
-                       "F.Cu,B.Cu" ) ) );
+                       "F.Cu,B.Cu" ) ) )
+            .metavar( "LAYER_LIST" );
 
     m_hasLayerArg = true;
     m_requireLayers = aRequire;

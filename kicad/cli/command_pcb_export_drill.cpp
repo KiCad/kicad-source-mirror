@@ -42,26 +42,33 @@
 
 CLI::PCB_EXPORT_DRILL_COMMAND::PCB_EXPORT_DRILL_COMMAND() : PCB_EXPORT_BASE_COMMAND( "drill" )
 {
+    m_argParser.add_description( UTF8STDSTR( _( "Generate Drill Files" ) ) );
+
     m_argParser.add_argument( ARG_FORMAT )
             .default_value( std::string( "excellon" ) )
-            .help( UTF8STDSTR( _( "Valid options excellon, gerber." ) ) );
+            .help( UTF8STDSTR( _( "Valid options excellon, gerber." ) ) )
+            .metavar( "FORMAT" );
 
     m_argParser.add_argument( ARG_DRILL_ORIGIN )
             .default_value( std::string( "absolute" ) )
-            .help( UTF8STDSTR( _( "Valid options are: absolute,plot" ) ) );
+            .help( UTF8STDSTR( _( "Valid options are: absolute,plot" ) ) )
+            .metavar( "DRILL_ORIGIN" );
 
     m_argParser.add_argument( ARG_EXCELLON_ZEROS_FORMAT )
             .default_value( std::string( "decimal" ) )
             .help( UTF8STDSTR(
-                    _( "Valid options are: decimal,suppressleading,suppresstrailing,keep." ) ) );
+                    _( "Valid options are: decimal,suppressleading,suppresstrailing,keep." ) ) )
+            .metavar( "ZEROS_FORMAT" );
 
     m_argParser.add_argument( ARG_EXCELLON_OVAL_FORMAT )
             .default_value( std::string( "alternate" ) )
-            .help( UTF8STDSTR( _( "Valid options are: route,alternate." ) ) );
+            .help( UTF8STDSTR( _( "Valid options are: route,alternate." ) ) )
+            .metavar( "OVAL_FORMAT" );
 
     m_argParser.add_argument( "-u", ARG_EXCELLON_UNITS )
             .default_value( std::string( "mm" ) )
-            .help( UTF8STDSTR( _( "Output units, valid options:in,mm" ) ) );
+            .help( UTF8STDSTR( _( "Output units, valid options:in,mm" ) ) )
+            .metavar( "UNITS" );
 
     m_argParser.add_argument( ARG_EXCELLON_MIRRORY )
             .help( UTF8STDSTR( _( "Mirror Y axis" ) ) )
@@ -85,7 +92,8 @@ CLI::PCB_EXPORT_DRILL_COMMAND::PCB_EXPORT_DRILL_COMMAND() : PCB_EXPORT_BASE_COMM
 
     m_argParser.add_argument( ARG_MAP_FORMAT )
             .default_value( std::string( "pdf" ) )
-            .help( UTF8STDSTR( _( "Valid options: pdf,gerberx2,ps,dxf,svg" ) ) );
+            .help( UTF8STDSTR( _( "Valid options: pdf,gerberx2,ps,dxf,svg" ) ) )
+            .metavar( "MAP_FORMAT" );
 
     m_argParser.add_argument( ARG_GERBER_PRECISION )
             .help( UTF8STDSTR( _( "Precision of gerber coordinates (5 or 6)" ) ) )

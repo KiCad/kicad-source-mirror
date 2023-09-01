@@ -35,6 +35,8 @@
 
 CLI::PCB_EXPORT_DXF_COMMAND::PCB_EXPORT_DXF_COMMAND() : PCB_EXPORT_BASE_COMMAND( "dxf" )
 {
+    m_argParser.add_description( UTF8STDSTR( _( "Generate a DXF from a list of layers" ) ) );
+
     addLayerArg( true );
     addDrawingSheetArg();
     addDefineArg();
@@ -61,7 +63,8 @@ CLI::PCB_EXPORT_DXF_COMMAND::PCB_EXPORT_DXF_COMMAND() : PCB_EXPORT_BASE_COMMAND(
 
     m_argParser.add_argument( "--ou", ARG_OUTPUT_UNITS )
             .default_value( std::string( "in" ) )
-            .help( UTF8STDSTR( _( "Output units, valid options: mm, in" ) ) );
+            .help( UTF8STDSTR( _( "Output units, valid options: mm, in" ) ) )
+            .metavar( "UNITS" );
 }
 
 

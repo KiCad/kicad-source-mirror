@@ -38,6 +38,8 @@
 
 CLI::PCB_EXPORT_SVG_COMMAND::PCB_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND( "svg" )
 {
+    m_argParser.add_description( UTF8STDSTR( _( "Generate SVG outputs of a given layer list" ) ) );
+
     addLayerArg( true );
     addDrawingSheetArg();
     addDefineArg();
@@ -49,7 +51,8 @@ CLI::PCB_EXPORT_SVG_COMMAND::PCB_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND(
 
     m_argParser.add_argument( "-t", ARG_THEME )
             .default_value( std::string() )
-            .help( UTF8STDSTR( _( "Color theme to use (will default to pcbnew settings)" ) ) );
+            .help( UTF8STDSTR( _( "Color theme to use (will default to pcbnew settings)" ) ) )
+            .metavar( "THEME_NAME" );
 
     m_argParser.add_argument( ARG_NEGATIVE_SHORT, ARG_NEGATIVE )
             .help( UTF8STDSTR( _( ARG_NEGATIVE_DESC ) ) )
@@ -65,7 +68,8 @@ CLI::PCB_EXPORT_SVG_COMMAND::PCB_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND(
             .help( UTF8STDSTR( _( "Set page sizing mode (0 = page with frame and title block, 1 = "
                                 "current page size, 2 = board area only)" ) ) )
             .scan<'i', int>()
-            .default_value( 0 );
+            .default_value( 0 )
+            .metavar( "MODE" );
 
     m_argParser.add_argument( ARG_EXCLUDE_DRAWING_SHEET )
             .help( UTF8STDSTR( _( "No drawing sheet" ) ) )
@@ -76,7 +80,8 @@ CLI::PCB_EXPORT_SVG_COMMAND::PCB_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND(
             .help( UTF8STDSTR( _( "Set pad/via drill shape option (0 = no shape, 1 = "
                                   "small shape, 2 = actual shape)" ) ) )
             .scan<'i', int>()
-            .default_value( 2 );
+            .default_value( 2 )
+            .metavar( "SHAPE_OPTION" );
 }
 
 

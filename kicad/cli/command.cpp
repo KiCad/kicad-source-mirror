@@ -114,7 +114,9 @@ void CLI::COMMAND::addCommonArgs( bool aInput, bool aOutput, bool aOutputIsDir )
 
     if( aInput )
     {
-        m_argParser.add_argument( ARG_INPUT ).help( UTF8STDSTR( _( "Input file" ) ) );
+        m_argParser.add_argument( ARG_INPUT )
+                    .help( UTF8STDSTR( _( "Input file" ) ) )
+                    .metavar( "INPUT_FILE" );
     }
 
     if( aOutput )
@@ -123,13 +125,15 @@ void CLI::COMMAND::addCommonArgs( bool aInput, bool aOutput, bool aOutputIsDir )
         {
             m_argParser.add_argument( "-o", ARG_OUTPUT )
                     .default_value( std::string() )
-                    .help( UTF8STDSTR( _( "Output directory" ) ) );
+                    .help( UTF8STDSTR( _( "Output directory" ) ) )
+                    .metavar( "OUTPUT_DIR" );
         }
         else
         {
             m_argParser.add_argument( "-o", ARG_OUTPUT )
                     .default_value( std::string() )
-                    .help( UTF8STDSTR( _( "Output file name" ) ) );
+                    .help( UTF8STDSTR( _( "Output file name" ) ) )
+                    .metavar( "OUTPUT_FILE" );
         }
     }
 }
@@ -141,7 +145,8 @@ void CLI::COMMAND::addDrawingSheetArg()
 
     m_argParser.add_argument( ARG_DRAWING_SHEET )
             .default_value( std::string() )
-            .help( UTF8STDSTR( _( "Path to drawing sheet, this overrides any existing project defined sheet when used" ) ) );
+            .help( UTF8STDSTR( _( "Path to drawing sheet, this overrides any existing project defined sheet when used" ) ) )
+            .metavar( "SHEET_PATH" );
 }
 
 
@@ -153,5 +158,6 @@ void CLI::COMMAND::addDefineArg()
             .default_value( std::vector<std::string>() )
             .help( UTF8STDSTR(
                     _( "Overrides or adds project variables, can be used multiple times to declare "
-                       "multiple variables. Use in the format of '--define-var key=value'" ) ) );
+                       "multiple variables. Use in the format of '--define-var key=value' or '-D key=value'" ) ) )
+            .metavar( "KEY=VALUE" );
 }

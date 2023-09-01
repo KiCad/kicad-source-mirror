@@ -52,7 +52,8 @@ CLI::SCH_EXPORT_PLOT_COMMAND::SCH_EXPORT_PLOT_COMMAND( const std::string& aName,
 
     m_argParser.add_argument( "-t", ARG_THEME )
             .default_value( std::string() )
-            .help( UTF8STDSTR( _( "Color theme to use (will default to schematic settings)" ) ) );
+            .help( UTF8STDSTR( _( "Color theme to use (will default to schematic settings)" ) ) )
+            .metavar( "THEME_NAME" );
 
     m_argParser.add_argument( "-b", ARG_BLACKANDWHITE )
             .help( UTF8STDSTR( _( ARG_BLACKANDWHITE_DESC ) ) )
@@ -79,13 +80,15 @@ CLI::SCH_EXPORT_PLOT_COMMAND::SCH_EXPORT_PLOT_COMMAND( const std::string& aName,
         m_argParser.add_argument( "-p", ARG_HPGL_PEN_SIZE )
                 .help( UTF8STDSTR( _( "Pen size [mm]" ) ) )
                 .scan<'g', double>()
-                .default_value( 0.5 );
+                .default_value( 0.5 )
+                .metavar( "PEN_SIZE" );
 
         m_argParser.add_argument( "-r", ARG_HPGL_ORIGIN )
                 .help( UTF8STDSTR( _( "Origin and scale: 0 bottom left, 1 centered, 2 page fit, 3 "
                                       "content fit" ) ) )
                 .scan<'d', int>()
-                .default_value( 1 );
+                .default_value( 1 )
+                .metavar( "ORIGIN" );
     }
 }
 

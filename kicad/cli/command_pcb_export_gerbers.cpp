@@ -48,7 +48,8 @@ CLI::PCB_EXPORT_GERBERS_COMMAND::PCB_EXPORT_GERBERS_COMMAND() :
             .default_value( std::string() )
             .help( UTF8STDSTR(
                     _( "Layers to include on each plot, comma separated list of untranslated layer names to include such as "
-                       "F.Cu,B.Cu" ) ) );
+                                  "F.Cu,B.Cu" ) ) )
+            .metavar( "COMMON_LAYER_LIST" );
 
     m_argParser.add_argument( ARG_USE_BOARD_PLOT_PARAMS )
             .help( UTF8STDSTR( _( "Use the gerber plot settings already configured in the board file" ) ) )
