@@ -221,6 +221,10 @@ public:
 
     ///< Used to inform tool that it should display the disambiguation menu
     const static TOOL_EVENT DisambiguatePoint;
+
+    const static TOOL_EVENT UndoRedoPreEvent;
+    const static TOOL_EVENT UndoRedoPostEvent;
+
 };
 
 #endif // __ACTIONS_H
