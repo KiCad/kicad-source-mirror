@@ -1633,8 +1633,8 @@ void GERBER_PLOTTER::plotRoundRectAsRegion( const VECTOR2I& aRectCenter, const V
         if( aCornerRadius )     // Guard: ensure we do not create arcs with radius = 0
         {
             // LineTo( rr_edge.m_end ); // made in plotArc()
-            plotArc( rr_edge.m_center, rr_edge.m_arc_angle_start,
-                     rr_edge.m_arc_angle_start - ANGLE_90, aCornerRadius, true );
+            plotArc( rr_edge.m_center, -rr_edge.m_arc_angle_start,
+                     -rr_edge.m_arc_angle_start + ANGLE_90, aCornerRadius, true );
         }
         else
         {
