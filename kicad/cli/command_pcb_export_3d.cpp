@@ -47,11 +47,13 @@
 #define REGEX_DELIMITER "(?:[\\s]*x)"
 #define REGEX_UNIT "([m]{2}|(?:in))"
 
-CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&   aName,
+CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aName,
+                                                   const std::string&        aDescription,
                                                    JOB_EXPORT_PCB_3D::FORMAT aFormat ) :
         COMMAND( aName ),
         m_format( aFormat )
 {
+    m_argParser.add_description( aDescription );
     addCommonArgs( true, true, false );
     addDefineArg();
 

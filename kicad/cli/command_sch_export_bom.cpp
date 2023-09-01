@@ -31,6 +31,7 @@
 
 CLI::SCH_EXPORT_BOM_COMMAND::SCH_EXPORT_BOM_COMMAND() : COMMAND( "bom" )
 {
+    m_argParser.add_description( UTF8STDSTR( _( "Generate a Bill of Material (BOM)" ) ) );
     addCommonArgs( true, true, false );
 
     // Field output options

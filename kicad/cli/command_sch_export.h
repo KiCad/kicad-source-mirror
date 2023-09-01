@@ -27,7 +27,11 @@ namespace CLI
 {
 struct SCH_EXPORT_COMMAND : public COMMAND
 {
-    SCH_EXPORT_COMMAND() : COMMAND( "export" ) {}
+    SCH_EXPORT_COMMAND() : COMMAND( "export" )
+    {
+        m_argParser.add_description(
+                UTF8STDSTR( _( "Export utilities (netlist, pdf, bom, etc)" ) ) );
+    }
 };
 }
 

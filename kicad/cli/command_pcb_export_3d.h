@@ -28,7 +28,8 @@ namespace CLI
 {
 struct PCB_EXPORT_3D_COMMAND : public COMMAND
 {
-    PCB_EXPORT_3D_COMMAND( const std::string&   aName,
+    PCB_EXPORT_3D_COMMAND( const std::string& aName,
+                           const std::string& aDescription,
                            JOB_EXPORT_PCB_3D::FORMAT aFormat = JOB_EXPORT_PCB_3D::FORMAT::UNKNOWN );
 
 protected:

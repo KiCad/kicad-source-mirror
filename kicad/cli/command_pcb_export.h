@@ -27,7 +27,11 @@ namespace CLI
 {
 struct PCB_EXPORT_COMMAND : public COMMAND
 {
-    PCB_EXPORT_COMMAND() : COMMAND( "export" ) {}
+    PCB_EXPORT_COMMAND() : COMMAND( "export" )
+    {
+        m_argParser.add_description(
+                UTF8STDSTR( _( "Export utilities (gerbers, drill, position files, etc)" ) ) );
+    }
 };
 }
 

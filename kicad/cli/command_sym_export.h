@@ -27,7 +27,11 @@ namespace CLI
 {
 struct SYM_EXPORT_COMMAND : public COMMAND
 {
-    SYM_EXPORT_COMMAND() : COMMAND( "export" ) {}
+    SYM_EXPORT_COMMAND() : COMMAND( "export" )
+    {
+        m_argParser.add_description(
+                UTF8STDSTR( _( "Export utilities (svg)" ) ) );
+    }
 };
 }
 

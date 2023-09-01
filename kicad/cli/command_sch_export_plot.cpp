@@ -41,11 +41,14 @@ const HPGL_PLOT_ORIGIN_AND_UNITS hpgl_origin_ops[4] = {
 };
 
 CLI::SCH_EXPORT_PLOT_COMMAND::SCH_EXPORT_PLOT_COMMAND( const std::string& aName,
+                                                       const std::string& aDescription,
                                                        PLOT_FORMAT        aPlotFormat,
                                                        bool               aOutputIsDir ) :
         COMMAND( aName ),
         m_plotFormat( aPlotFormat )
 {
+    m_argParser.add_description( aDescription );
+
     addCommonArgs( true, true, aOutputIsDir );
     addDrawingSheetArg();
     addDefineArg();

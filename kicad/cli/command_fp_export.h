@@ -27,7 +27,10 @@ namespace CLI
 {
 struct FP_EXPORT_COMMAND : public COMMAND
 {
-    FP_EXPORT_COMMAND() : COMMAND( "export" ) {}
+    FP_EXPORT_COMMAND() : COMMAND( "export" )
+    {
+        m_argParser.add_description( UTF8STDSTR( _( "Export utilities (svg)" ) ) );
+    }
 };
 }
 

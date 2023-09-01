@@ -29,7 +29,9 @@ namespace CLI
 class SCH_EXPORT_PLOT_COMMAND : public COMMAND
 {
 public:
-    SCH_EXPORT_PLOT_COMMAND( const std::string& aName, PLOT_FORMAT aPlotFormat,
+    SCH_EXPORT_PLOT_COMMAND( const std::string& aName,
+                             const std::string& aDescription,
+                             PLOT_FORMAT aPlotFormat,
                              bool aOutputIsDir = true );
 
     PLOT_FORMAT m_plotFormat;
