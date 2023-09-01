@@ -3,7 +3,6 @@
 </p>
 
 <p align="center">
-  <img src="https://travis-ci.org/p-ranav/argparse.svg?branch=master" alt="travis"/>
   <a href="https://github.com/p-ranav/argparse/blob/master/LICENSE">
     <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="license"/>
   </a>
@@ -68,6 +67,8 @@ argparse::ArgumentParser program("program_name");
 
 **NOTE:** There is an optional second argument to the `ArgumentParser` which is the program version. Example: `argparse::ArgumentParser program("libfoo", "1.9.0");`
 
+**NOTE:** There are optional third and fourth arguments to the `ArgumentParser` which control default arguments. Example: `argparse::ArgumentParser program("libfoo", "1.9.0", default_arguments::help, false);` See [Default Arguments](#default-arguments), below.
+
 To add a new argument, simply call ```.add_argument(...)```. You can provide a variadic list of argument names that you want to group together, e.g., ```-v``` and ```--verbose```
 
 ```cpp
@@ -97,7 +98,7 @@ int main(int argc, char *argv[]) {
   catch (const std::runtime_error& err) {
     std::cerr << err.what() << std::endl;
     std::cerr << program;
-    std::exit(1);
+    return 1;
   }
 
   auto input = program.get<int>("square");
@@ -557,7 +558,9 @@ The grammar follows `std::from_chars`, but does not exactly duplicate it. For ex
 
 ### Default Arguments
 
-`argparse` provides predefined arguments and actions for `-h`/`--help` and `-v`/`--version`. These default actions exit the program after displaying a help or version message, respectively. These defaults arguments can be disabled during `ArgumentParser` creation so that you can handle these arguments in your own way. (Note that a program name and version must be included when choosing default arguments.)
+`argparse` provides predefined arguments and actions for `-h`/`--help` and `-v`/`--version`. By default, these actions will **exit** the program after displaying a help or version message, respectively. This exit does not call destructors, skipping clean-up of taken resources.
+
+These default arguments can be disabled during `ArgumentParser` creation so that you can handle these arguments in your own way. (Note that a program name and version must be included when choosing default arguments.)
 
 ```cpp
 argparse::ArgumentParser program("test", "1.0", default_arguments::none);
@@ -575,6 +578,12 @@ program.add_argument("-h", "--help")
 The above code snippet outputs a help message and continues to run. It does not support a `--version` argument.
 
 The default is `default_arguments::all` for included arguments. No default arguments will be added with `default_arguments::none`. `default_arguments::help` and `default_arguments::version` will individually add `--help` and `--version`.
+
+The default arguments can be used while disabling the default exit with these arguments. This forth argument to `ArgumentParser` (`exit_on_default_arguments`) is a bool flag with a default **true** value. The following call will retain `--help` and `--version`, but will not exit when those arguments are used.
+
+```cpp
+argparse::ArgumentParser program("test", "1.0", default_arguments::all, false)
+```
 
 ### Gathering Remaining Arguments
 
@@ -685,25 +694,30 @@ main
 
 ### Parent Parsers
 
-Sometimes, several parsers share a common set of arguments. Rather than repeating the definitions of these arguments, a single parser with all the common arguments can be added as a parent to another ArgumentParser instance. The ```.add_parents``` method takes a list of ArgumentParser objects, collects all the positional and optional actions from them, and adds these actions to the ArgumentParser object being constructed:
+A parser may use arguments that could be used by other parsers.
+
+These shared arguments can be added to a parser which is then used as a "parent" for parsers which also need those arguments. One or more parent parsers may be added to a parser with `.add_parents`. The positional and optional arguments in each parent is added to the child parser.
 
 ```cpp
-argparse::ArgumentParser parent_parser("main");
-parent_parser.add_argument("--parent")
+argparse::ArgumentParser surface_parser("surface", 1.0, argparse::default_arguments::none);
+parent_parser.add_argument("--area")
   .default_value(0)
   .scan<'i', int>();
 
-argparse::ArgumentParser foo_parser("foo");
-foo_parser.add_argument("foo");
-foo_parser.add_parents(parent_parser);
-foo_parser.parse_args({ "./main", "--parent", "2", "XXX" });   // parent = 2, foo = XXX
+argparse::ArgumentParser floor_parser("floor");
+floor_parser.add_argument("tile_size").scan<'i', int>();
+floor_parser.add_parents(surface_parser);
+floor_parser.parse_args({ "./main", "--area", "200", "12" });  // --area = 200, tile_size = 12
 
-argparse::ArgumentParser bar_parser("bar");
-bar_parser.add_argument("--bar");
-bar_parser.parse_args({ "./main", "--bar", "YYY" });           // bar = YYY
+argparse::ArgumentParser ceiling_parser("ceiling");
+ceiling_parser.add_argument("--color");
+ceiling_parser.add_parents(surface_parser);
+ceiling_parser.parse_args({ "./main", "--color", "gray" });  // --area = 0, --color = "gray"
 ```
 
-Note You must fully initialize the parsers before passing them via ```.add_parents```. If you change the parent parsers after the child parser, those changes will not be reflected in the child.
+Changes made to parents after they are added to a parser are not reflected in any child parsers. Completely initialize parent parsers before adding them to a parser.
+
+Each parser will have the standard set of default arguments. Disable the default arguments in parent parsers to avoid duplicate help output.
 
 ### Subcommands
 
@@ -766,7 +780,7 @@ int main(int argc, char *argv[]) {
   catch (const std::runtime_error& err) {
     std::cerr << err.what() << std::endl;
     std::cerr << program;
-    std::exit(1);
+    return 1;
   }
 
   // Use arguments
@@ -827,6 +841,20 @@ When a help message is requested from a subparser, only the help for that partic
 
 Additionally, every parser has the `.is_subcommand_used("<command_name>")` and `.is_subcommand_used(subparser)` member functions to check if a subcommand was used. 
 
+### Getting Argument and Subparser Instances
+
+```Argument``` and ```ArgumentParser``` instances added to an ```ArgumentParser``` can be retrieved with ```.at<T>()```. The default return type is ```Argument```.
+
+```cpp
+argparse::ArgumentParser program("test");
+
+program.add_argument("--dir");
+program.at("--dir").default_value(std::string("/home/user"));
+
+program.add_subparser(argparse::ArgumentParser{"walk"});
+program.at<argparse::ArgumentParser>("walk").add_argument("depth");
+```
+
 ### Parse Known Args
 
 Sometimes a program may only parse a few of the command-line arguments, passing the remaining arguments on to another script or program. In these cases, the `parse_known_args()` function can be useful. It works much like `parse_args()` except that it does not produce an error when extra arguments are present. Instead, it returns a list of remaining argument strings.
@@ -879,7 +907,7 @@ int main(int argc, char *argv[]) {
   catch (const std::runtime_error& err) {
     std::cerr << err.what() << std::endl;
     std::cerr << program;
-    std::exit(1);
+    return 1;
   }
 
   if (program.is_used("+f")) {
@@ -927,7 +955,7 @@ int main(int argc, char *argv[]) {
   catch (const std::runtime_error& err) {
     std::cerr << err.what() << std::endl;
     std::cerr << program;
-    std::exit(1);
+    return 1;
   }
 
   if (program.is_used("--foo")) {
@@ -1075,7 +1103,7 @@ int main(int argc, char *argv[]) {
   catch (const std::runtime_error& err) {
     std::cerr << err.what() << std::endl;
     std::cerr << program;
-    std::exit(1);
+    return 1;
   }
 
   if (program.is_used("--foo")) {
@@ -1141,7 +1169,7 @@ sudo make install
 | :------------------- | :--------------- | :----------------- |
 | GCC >= 8.3.0         | libstdc++        | Ubuntu 18.04       |
 | Clang >= 7.0.0       | libc++           | Xcode 10.2         |
-| MSVC >= 14.16        | Microsoft STL    | Visual Studio 2017 |
+| MSVC >= 16.8         | Microsoft STL    | Visual Studio 2019 |
 
 ## Contributing
 Contributions are welcome, have a look at the [CONTRIBUTING.md](CONTRIBUTING.md) document for more information.

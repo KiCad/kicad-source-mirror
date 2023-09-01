@@ -7,22 +7,14 @@ project(argparse
         LANGUAGES CXX
 )
 
-option(ARGPARSE_INSTALL ON)
-option(ARGPARSE_BUILD_TESTS OFF)
-option(ARGPARSE_LONG_VERSION_ARG_ONLY OFF)
+option(ARGPARSE_INSTALL "Include an install target" ON)
+option(ARGPARSE_BUILD_TESTS "Build tests" OFF)
 
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
-string(REPLACE "/${CMAKE_LIBRARY_ARCHITECTURE}" "" CMAKE_INSTALL_LIBDIR_ARCHIND "${CMAKE_INSTALL_LIBDIR}")
-
 
 add_library(argparse INTERFACE)
 add_library(argparse::argparse ALIAS argparse)
-
-
-if (ARGPARSE_LONG_VERSION_ARG_ONLY)
-	target_compile_definitions(argparse INTERFACE ARGPARSE_LONG_VERSION_ARG_ONLY=true)
-endif ()
 
 target_compile_features(argparse INTERFACE cxx_std_17)
 target_include_directories(argparse INTERFACE
@@ -41,7 +33,7 @@ if(ARGPARSE_INSTALL)
   install(TARGETS argparse EXPORT argparseConfig)
   install(EXPORT argparseConfig
           NAMESPACE argparse::
-          DESTINATION ${CMAKE_INSTALL_LIBDIR_ARCHIND}/cmake/${PROJECT_NAME})
+          DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
   install(FILES ${CMAKE_CURRENT_LIST_DIR}/include/argparse/argparse.hpp
           DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/argparse)
 
@@ -64,7 +56,7 @@ if(ARGPARSE_INSTALL)
          NAMESPACE argparse::)
 
   install(FILES "${CMAKE_CONFIG_VERSION_FILE_NAME}"
-         DESTINATION "${CMAKE_INSTALL_LIBDIR_ARCHIND}/cmake/${PROJECT_NAME}")
+         DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}")
 
   set(PackagingTemplatesDir "${CMAKE_CURRENT_SOURCE_DIR}/packaging")
 
@@ -94,6 +86,8 @@ if(ARGPARSE_INSTALL)
   set(PKG_CONFIG_FILE_NAME "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc")
   configure_file("${PackagingTemplatesDir}/pkgconfig.pc.in" "${PKG_CONFIG_FILE_NAME}" @ONLY)
   install(FILES "${PKG_CONFIG_FILE_NAME}"
-        DESTINATION "${CMAKE_INSTALL_LIBDIR_ARCHIND}/pkgconfig"
+        DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig"
   )
 endif()
+
+include(CPack)

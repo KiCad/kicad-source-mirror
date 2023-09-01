@@ -27,11 +27,13 @@ file(GLOB ARGPARSE_TEST_SOURCES
     main.cpp
     test_actions.cpp
     test_append.cpp
+    test_as_container.cpp
     test_bool_operator.cpp
     test_compound_arguments.cpp
     test_container_arguments.cpp
     test_const_correct.cpp
     test_default_args.cpp
+    test_default_value.cpp
     test_get.cpp
     test_help.cpp
     test_invalid_arguments.cpp
