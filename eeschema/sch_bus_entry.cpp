@@ -590,7 +590,7 @@ static struct SCH_BUS_ENTRY_DESC
         propMgr.InheritsAfter( TYPE_HASH( SCH_BUS_WIRE_ENTRY ), TYPE_HASH( SCH_BUS_ENTRY_BASE ) );
         propMgr.InheritsAfter( TYPE_HASH( SCH_BUS_BUS_ENTRY ), TYPE_HASH( SCH_BUS_ENTRY_BASE ) );
 
-        auto& plotDashTypeEnum = ENUM_MAP<PLOT_DASH_TYPE>::Instance();
+        ENUM_MAP<PLOT_DASH_TYPE>& plotDashTypeEnum = ENUM_MAP<PLOT_DASH_TYPE>::Instance();
 
         if( plotDashTypeEnum.Choices().GetCount() == 0 )
         {

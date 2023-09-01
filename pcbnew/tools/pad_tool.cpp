@@ -752,11 +752,8 @@ PCB_LAYER_ID PAD_TOOL::explodePad( PAD* aPad )
                 UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
             }
 
-            if( shape->GetShape() != SHAPE_T::POLY )    // Poly's are board-relative
-            {
-                shape->Move( aPad->GetPosition() );
-                shape->Rotate( aPad->GetPosition(), aPad->GetOrientation() );
-            }
+            shape->Rotate( VECTOR2I( 0, 0 ), aPad->GetOrientation() );
+            shape->Move( aPad->ShapePos() );
 
             shape->SetLayer( layer );
 
@@ -780,8 +777,7 @@ std::vector<PCB_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun, BOARD
     int        maxError = board()->GetDesignSettings().m_MaxError;
     FOOTPRINT* footprint = aPad->GetParentFootprint();
 
-    // Don't leave an object in the point editor that might no longer exist after
-    // recombining the pad.
+    // Don't leave an object in the point editor that might no longer exist after recombining.
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
     for( BOARD_ITEM* item : footprint->GraphicalItems() )
@@ -855,41 +851,31 @@ std::vector<PCB_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun, BOARD
     {
         aCommit.Modify( aPad );
 
-        // Create a new minimally-sized circular anchor and convert existing pad
-        // to a polygon primitive
-        SHAPE_POLY_SET existingOutline;
-        aPad->TransformShapeToPolygon( existingOutline, layer, 0, maxError, ERROR_INSIDE );
-
-        aPad->SetAnchorPadShape( PAD_SHAPE::CIRCLE );
-        // The actual pad shape may be offset from the pad anchor, so we don't want the anchor
-        // shape to be overly large (and stick out from under the actual pad shape).  Normally
-        // this means we want the anchor pad to be entirely inside the hole, but offsets are
-        // also used with SMD pads to control the anchor point for track routing.
-        if( aPad->GetDrillSizeX() > 0 )
+        if( aPad->GetShape() == PAD_SHAPE::CIRCLE || aPad->GetShape() == PAD_SHAPE::RECTANGLE )
         {
-            // For a pad with a hole, just make sure the anchor shape is entirely inside the
-            // hole.
-            aPad->SetSize( aPad->GetDrillSize() / 2 );
+            // Use the existing pad as an anchor
+            aPad->SetAnchorPadShape( aPad->GetShape() );
+            aPad->SetShape( PAD_SHAPE::CUSTOM );
         }
         else
         {
-            // For a SMD pad, an offset is usually used to control the anchor point for routing.
-            // In this case it will usually be at least 1/2 the minimum track width inside the
-            // pad.  We halve that value again just to be safe.
-            aPad->SetSize( VECTOR2I( board()->GetDesignSettings().m_TrackMinWidth / 2,
-                                     board()->GetDesignSettings().m_TrackMinWidth / 2 ) );
+            // Create a new circular anchor and convert existing pad to a polygon primitive
+            SHAPE_POLY_SET existingOutline;
+            aPad->TransformShapeToPolygon( existingOutline, layer, 0, maxError, ERROR_INSIDE );
+
+            int minExtent = std::min( aPad->GetSize().x, aPad->GetSize().y );
+            aPad->SetAnchorPadShape( PAD_SHAPE::CIRCLE );
+            aPad->SetSize( VECTOR2I( minExtent, minExtent ) );
+            aPad->SetShape( PAD_SHAPE::CUSTOM );
+
+            PCB_SHAPE* shape = new PCB_SHAPE( nullptr, SHAPE_T::POLY );
+            shape->SetFilled( true );
+            shape->SetStroke( STROKE_PARAMS( 0, PLOT_DASH_TYPE::SOLID ) );
+            shape->SetPolyShape( existingOutline );
+            shape->Rotate( VECTOR2I( 0, 0 ), - aPad->GetOrientation() );
+            shape->Move( - aPad->ShapePos() );
+            aPad->AddPrimitive( shape );
         }
-
-        PCB_SHAPE* shape = new PCB_SHAPE( nullptr, SHAPE_T::POLY );
-        shape->SetFilled( true );
-        shape->SetStroke( STROKE_PARAMS( 0, PLOT_DASH_TYPE::SOLID ) );
-        shape->SetPolyShape( existingOutline );
-        shape->Move( - aPad->GetPosition() );
-        shape->Rotate( VECTOR2I( 0, 0 ), - aPad->GetOrientation() );
-
-        aPad->AddPrimitive( shape );
-        aPad->SetShape( PAD_SHAPE::CUSTOM );
-        aPad->SetOffset( VECTOR2I( 0, 0 ) );
     }
 
     while( PCB_SHAPE* fpShape = findNext( layer ) )
@@ -936,13 +922,10 @@ std::vector<PCB_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun, BOARD
                 UNIMPLEMENTED_FOR( primitive->SHAPE_T_asString() );
             }
 
-            if( primitive->GetShape() != SHAPE_T::POLY )    // Poly's are board-relative
-            {
-                primitive->Move( - aPad->GetPosition() );
-                primitive->Rotate( VECTOR2I( 0, 0 ), - aPad->GetOrientation() );
-            }
+            primitive->Move( - aPad->ShapePos() );
+            primitive->Rotate( VECTOR2I( 0, 0 ), - aPad->GetOrientation() );
 
-            primitive->SetIsAnnotationProxy( fpShape->IsAnnotationProxy());
+            primitive->SetIsAnnotationProxy( fpShape->IsAnnotationProxy() );
             aPad->AddPrimitive( primitive );
 
             aCommit.Remove( fpShape );

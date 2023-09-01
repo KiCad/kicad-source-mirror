@@ -1642,7 +1642,7 @@ void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
         SHAPE_POLY_SET outline;
         MergePrimitivesAsPolygon( &outline, aErrorLoc );
         outline.Rotate( m_orient );
-        outline.Move( VECTOR2I( m_pos ) );
+        outline.Move( VECTOR2I( padShapePos ) );
 
         if( aClearance > 0 || aErrorLoc == ERROR_OUTSIDE )
         {
