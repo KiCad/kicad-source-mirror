@@ -1307,7 +1307,7 @@ void PCB_POINT_EDITOR::updateItem() const
         {
             for( PAD* pad : shape->GetParentFootprint()->Pads() )
             {
-                if( pad->GetFlags() & ENTERED )
+                if( pad->IsEntered() )
                     view()->Update( pad );
             }
         }

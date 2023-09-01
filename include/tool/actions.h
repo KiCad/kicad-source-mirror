@@ -230,6 +230,10 @@ public:
     ///< Used for hotkey feedback
     const static TOOL_EVENT GridChangedByKeyEvent;
     const static TOOL_EVENT ContrastModeChangedByKeyEvent;
+
+    const static TOOL_EVENT UndoRedoPreEvent;
+    const static TOOL_EVENT UndoRedoPostEvent;
+
 };
 
 #endif // __ACTIONS_H

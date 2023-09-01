@@ -615,10 +615,9 @@ int PAD_TOOL::EditPad( const TOOL_EVENT& aEvent )
     Activate();
 
     PCB_DISPLAY_OPTIONS  opts = frame()->GetDisplayOptions();
-    PCB_RENDER_SETTINGS* settings = static_cast<PCB_RENDER_SETTINGS*>( view()->GetPainter()->GetSettings() );
-    WX_INFOBAR*          infoBar = frame()->GetInfoBar();
+    KIGFX::PCB_PAINTER*  painter = static_cast<KIGFX::PCB_PAINTER*>( view()->GetPainter() );
+    PCB_RENDER_SETTINGS* settings = painter->GetSettings();
     PCB_SELECTION&       selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
-    wxString             msg;
 
     if( m_editPad != niluuid )
     {
@@ -638,62 +637,114 @@ int PAD_TOOL::EditPad( const TOOL_EVENT& aEvent )
         PAD*         pad = static_cast<PAD*>( selection[0] );
         PCB_LAYER_ID layer = explodePad( pad );
 
+        m_editPad = pad->m_Uuid;
+
         m_wasHighContrast = ( opts.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL );
         frame()->SetActiveLayer( layer );
 
         settings->m_PadEditModePad = pad;
-
-        canvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
-                [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
-                {
-                    return dynamic_cast<PAD*>( aItem ) != nullptr;
-                } );
-
-        if( !m_wasHighContrast )
-            m_toolMgr->RunAction( ACTIONS::highContrastMode );
-
-        if( PCB_ACTIONS::explodePad.GetHotKey() == PCB_ACTIONS::recombinePad.GetHotKey() )
-        {
-            msg.Printf( _( "Pad Edit Mode.  Press %s again to exit." ),
-                        KeyNameFromKeyCode( PCB_ACTIONS::recombinePad.GetHotKey() ) );
-        }
-        else
-        {
-            msg.Printf( _( "Pad Edit Mode.  Press %s to exit." ),
-                        KeyNameFromKeyCode( PCB_ACTIONS::recombinePad.GetHotKey() ) );
-        }
-
-        infoBar->RemoveAllButtons();
-        infoBar->ShowMessage( msg, wxICON_INFORMATION );
-
-        m_editPad = pad->m_Uuid;
+        enterPadEditMode();
     }
 
     if( m_editPad == niluuid )
     {
-        bool highContrast = ( opts.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL );
-
-        if( m_wasHighContrast != highContrast )
-            m_toolMgr->RunAction( ACTIONS::highContrastMode );
-
         settings->m_PadEditModePad = nullptr;
-
-        // Note: KIGFX::REPAINT isn't enough for things that go from invisible to visible as
-        // they won't be found in the view layer's itemset for re-painting.
-        canvas()->GetView()->UpdateAllItemsConditionally( KIGFX::ALL,
-                [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
-                {
-                    return dynamic_cast<PAD*>( aItem ) != nullptr;
-                } );
-
-        // Refresh now (otherwise there's an uncomfortably long pause while the infoBar
-        // closes before refresh).
-        canvas()->ForceRefresh();
-
-        infoBar->Dismiss();
+        exitPadEditMode();
     }
 
     return 0;
+}
+
+
+int PAD_TOOL::OnUndoRedo( const TOOL_EVENT& aEvent )
+{
+    PAD* flaggedPad = nullptr;
+    KIID flaggedPadId = niluuid;
+
+    for( FOOTPRINT* fp : board()->Footprints() )
+    {
+        for( PAD* pad : fp->Pads() )
+        {
+            if( pad->IsEntered() )
+            {
+                flaggedPad = pad;
+                flaggedPadId = pad->m_Uuid;
+                break;
+            }
+        }
+    }
+
+    if( flaggedPadId != m_editPad )
+    {
+        KIGFX::PCB_PAINTER*  painter = static_cast<KIGFX::PCB_PAINTER*>( view()->GetPainter() );
+        PCB_RENDER_SETTINGS* settings = painter->GetSettings();
+
+        m_editPad = flaggedPadId;
+        settings->m_PadEditModePad = flaggedPad;
+
+        if( flaggedPad )
+            enterPadEditMode();
+        else
+            exitPadEditMode();
+    }
+
+    return 0;
+}
+
+
+void PAD_TOOL::enterPadEditMode()
+{
+    PCB_DISPLAY_OPTIONS opts = frame()->GetDisplayOptions();
+    bool                highContrast = opts.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL;
+    WX_INFOBAR*         infoBar = frame()->GetInfoBar();
+    wxString            msg;
+
+    canvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
+            [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
+            {
+                return dynamic_cast<PAD*>( aItem ) != nullptr;
+            } );
+
+    if( !highContrast )
+        m_toolMgr->RunAction( ACTIONS::highContrastMode );
+
+    if( PCB_ACTIONS::explodePad.GetHotKey() == PCB_ACTIONS::recombinePad.GetHotKey() )
+    {
+        msg.Printf( _( "Pad Edit Mode.  Press %s again to exit." ),
+                    KeyNameFromKeyCode( PCB_ACTIONS::recombinePad.GetHotKey() ) );
+    }
+    else
+    {
+        msg.Printf( _( "Pad Edit Mode.  Press %s to exit." ),
+                    KeyNameFromKeyCode( PCB_ACTIONS::recombinePad.GetHotKey() ) );
+    }
+
+    infoBar->RemoveAllButtons();
+    infoBar->ShowMessage( msg, wxICON_INFORMATION );
+}
+
+
+void PAD_TOOL::exitPadEditMode()
+{
+    PCB_DISPLAY_OPTIONS opts = frame()->GetDisplayOptions();
+    bool                highContrast = opts.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL;
+
+    if( m_wasHighContrast != highContrast )
+        m_toolMgr->RunAction( ACTIONS::highContrastMode );
+
+    // Note: KIGFX::REPAINT isn't enough for things that go from invisible to visible as
+    // they won't be found in the view layer's itemset for re-painting.
+    canvas()->GetView()->UpdateAllItemsConditionally( KIGFX::ALL,
+            [&]( KIGFX::VIEW_ITEM* aItem ) -> bool
+            {
+                return dynamic_cast<PAD*>( aItem ) != nullptr;
+            } );
+
+    // Refresh now (otherwise there's an uncomfortably long pause while the infoBar
+    // closes before refresh).
+    canvas()->ForceRefresh();
+
+    frame()->GetInfoBar()->Dismiss();
 }
 
 
@@ -964,4 +1015,6 @@ void PAD_TOOL::setTransitions()
 
     Go( &PAD_TOOL::EditPad,                 PCB_ACTIONS::explodePad.MakeEvent() );
     Go( &PAD_TOOL::EditPad,                 PCB_ACTIONS::recombinePad.MakeEvent() );
+
+    Go( &PAD_TOOL::OnUndoRedo,              EVENTS::UndoRedoPostEvent );
 }

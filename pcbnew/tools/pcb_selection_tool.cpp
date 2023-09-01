@@ -2442,14 +2442,17 @@ void PCB_SELECTION_TOOL::RebuildSelection()
                     highlight( item, SELECTED, &m_selection );
                 }
 
-                if( item == m_enteredGroup )
+                if( item->Type() == PCB_GROUP_T )
                 {
-                    item->SetFlags( ENTERED );
-                    enteredGroupFound = true;
-                }
-                else
-                {
-                    item->ClearFlags( ENTERED );
+                    if( item == m_enteredGroup )
+                    {
+                        item->SetFlags( ENTERED );
+                        enteredGroupFound = true;
+                    }
+                    else
+                    {
+                        item->ClearFlags( ENTERED );
+                    }
                 }
 
                 return INSPECT_RESULT::CONTINUE;

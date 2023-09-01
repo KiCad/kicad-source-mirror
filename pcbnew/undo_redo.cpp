@@ -241,7 +241,7 @@ void PCB_BASE_EDIT_FRAME::RestoreCopyFromRedoList( wxCommandEvent& aEvent )
         return;
 
     // Inform tools that redo command was issued
-    m_toolManager->ProcessEvent( { TC_MESSAGE, TA_UNDO_REDO_PRE, AS_GLOBAL } );
+    m_toolManager->ProcessEvent( EVENTS::UndoRedoPreEvent );
 
     // Get the old list
     PICKED_ITEMS_LIST* list = PopCommandFromRedoList();
@@ -255,7 +255,7 @@ void PCB_BASE_EDIT_FRAME::RestoreCopyFromRedoList( wxCommandEvent& aEvent )
 
     OnModify();
 
-    m_toolManager->ProcessEvent( { TC_MESSAGE, TA_UNDO_REDO_POST, AS_GLOBAL } );
+    m_toolManager->ProcessEvent( EVENTS::UndoRedoPostEvent );
     m_toolManager->PostEvent( EVENTS::SelectedItemsModified );
 
     GetCanvas()->Refresh();

@@ -1158,7 +1158,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         VECTOR2D position = padBBox.Centre();
         VECTOR2D padsize = VECTOR2D( padBBox.GetSize() );
 
-        if( aPad->GetFlags() & ENTERED )
+        if( aPad->IsEntered() )
         {
             FOOTPRINT* fp = aPad->GetParentFootprint();
 

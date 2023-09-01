@@ -60,6 +60,8 @@ public:
      */
     int EditPad( const TOOL_EVENT& aEvent );
 
+    int OnUndoRedo( const TOOL_EVENT& aEvent );
+
     bool InPadEditMode() { return m_editPad != niluuid; }
 
     wxString GetLastPadNumber() const { return m_lastPadNumber; }
@@ -88,6 +90,9 @@ private:
     int pushPadSettings( const TOOL_EVENT& aEvent );
 
     PCB_LAYER_ID explodePad( PAD* aPad );
+
+    void enterPadEditMode();
+    void exitPadEditMode();
 
 private:
     wxString       m_lastPadNumber;

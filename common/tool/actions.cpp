@@ -986,3 +986,8 @@ const TOOL_EVENT EVENTS::GridChangedByKeyEvent( TC_MESSAGE, TA_ACTION,
 
 const TOOL_EVENT EVENTS::ContrastModeChangedByKeyEvent( TC_MESSAGE, TA_ACTION,
                                                         "common.Interactive.contrastModeChangedByKeyEvent" );
+
+// System-wide undo/redo Events
+
+const TOOL_EVENT EVENTS::UndoRedoPreEvent( TC_MESSAGE, TA_UNDO_REDO_POST, AS_GLOBAL );
+const TOOL_EVENT EVENTS::UndoRedoPostEvent( TC_MESSAGE, TA_UNDO_REDO_POST, AS_GLOBAL );
