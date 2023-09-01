@@ -106,7 +106,7 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
     SetIcon( icon );
 
     // Create the status line
-    static const int status_dims[4] = { -1, 170, 130, 130 };
+    static const int status_dims[5] = { -1, 170, 130, 130, 130 };
 
     wxStatusBar *status_bar = CreateStatusBar( arrayDim( status_dims ) );
     SetStatusWidths( arrayDim( status_dims ), status_dims );

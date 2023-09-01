@@ -330,6 +330,9 @@ void EDA_3D_CANVAS::DisplayStatus()
 
         msg.Printf( wxT( "dy %3.2f" ), m_camera.GetCameraPos().y );
         m_parentStatusBar->SetStatusText( msg, static_cast<int>( EDA_3D_VIEWER_STATUSBAR::Y_POS ) );
+
+        msg.Printf( wxT( "zoom %3.2f" ), 1 / m_camera.GetZoom() );
+        m_parentStatusBar->SetStatusText( msg, static_cast<int>( EDA_3D_VIEWER_STATUSBAR::ZOOM_LEVEL ) );
     }
 }
 

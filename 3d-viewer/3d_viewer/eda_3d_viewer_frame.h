@@ -59,6 +59,7 @@ enum EDA_3D_VIEWER_STATUSBAR
     HOVERED_ITEM,
     X_POS,
     Y_POS,
+    ZOOM_LEVEL,
 };
 
 /**
