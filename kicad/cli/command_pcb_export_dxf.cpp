@@ -37,6 +37,7 @@ CLI::PCB_EXPORT_DXF_COMMAND::PCB_EXPORT_DXF_COMMAND() : PCB_EXPORT_BASE_COMMAND(
 {
     addLayerArg( true );
     addDrawingSheetArg();
+    addDefineArg();
 
     m_argParser.add_argument( "--erd", ARG_EXCLUDE_REFDES )
             .help( UTF8STDSTR( _( "Exclude the reference designator text" ) ) )
@@ -75,6 +76,7 @@ int CLI::PCB_EXPORT_DXF_COMMAND::doPerform( KIWAY& aKiway )
     dxfJob->m_filename = m_argInput;
     dxfJob->m_outputFile = m_argOutput;
     dxfJob->m_drawingSheet = m_argDrawingSheet;
+    dxfJob->SetVarOverrides( m_argDefineVars );
 
     if( !wxFile::Exists( dxfJob->m_filename ) )
     {

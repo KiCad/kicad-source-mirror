@@ -85,6 +85,21 @@ std::map<wxString, wxString>& PROJECT::GetTextVars() const
 }
 
 
+void PROJECT::ApplyTextVars( const std::map<wxString, wxString>& aVarsMap )
+{
+    if( aVarsMap.size() == 0 )
+        return;
+
+    std::map<wxString, wxString>& existingVarsMap = GetTextVars();
+
+    for( const auto& var : aVarsMap )
+    {
+        // create or update the existing vars
+        existingVarsMap[var.first] = var.second;
+    }
+}
+
+
 void PROJECT::setProjectFullName( const wxString& aFullPathAndName )
 {
     // Compare paths, rather than inodes, to be less surprising to the user.

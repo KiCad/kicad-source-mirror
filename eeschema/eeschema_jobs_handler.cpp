@@ -134,6 +134,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
     SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( aPlotJob->m_filename, SCH_IO_MGR::SCH_KICAD );
+    sch->Prj().ApplyTextVars( aJob->GetVarOverrides() );
 
     if( sch == nullptr )
     {
@@ -266,6 +267,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
     SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( aBomJob->m_filename, SCH_IO_MGR::SCH_KICAD );
+    sch->Prj().ApplyTextVars( aJob->GetVarOverrides() );
 
     if( sch == nullptr )
     {
@@ -739,6 +741,7 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
     SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( ercJob->m_filename, SCH_IO_MGR::SCH_KICAD );
+    sch->Prj().ApplyTextVars( aJob->GetVarOverrides() );
 
     if( sch == nullptr )
     {

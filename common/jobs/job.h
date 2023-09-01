@@ -21,22 +21,38 @@
 #ifndef JOB_H
 #define JOB_H
 
+#include <map>
+#include <wx/string.h>
+
 /**
  * An simple container class that lets us dispatch output jobs to kifaces
  */
 class JOB
 {
 public:
-    JOB( const std::string& aType, bool aIsCli ) : m_type( aType ), m_isCli( aIsCli ) {}
+    JOB( const std::string& aType, bool aIsCli ) :
+            m_type( aType ),
+            m_isCli( aIsCli ),
+            m_varOverrides()
+    {
+    }
 
     virtual ~JOB() {}
 
     const std::string& GetType() const { return m_type; };
     bool IsCli() const { return m_isCli; };
 
-private:
+    const std::map<wxString, wxString>& GetVarOverrides() const { return m_varOverrides; }
+
+    void SetVarOverrides( const std::map<wxString, wxString>& aVarOverrides )
+    {
+        m_varOverrides = aVarOverrides;
+    }
+
+protected:
     std::string m_type;
     bool m_isCli;
+    std::map<wxString, wxString> m_varOverrides;
 };
 
 #endif

@@ -62,6 +62,7 @@ public:
                              SCHEMATIC* aSch, const wxString& aDrawingSheetOverride = wxEmptyString );
 
 private:
+
     int doSymExportSvg( JOB_SYM_EXPORT_SVG* aSvgJob, KIGFX::SCH_RENDER_SETTINGS* aRenderSettings,
                         LIB_SYMBOL* symbol );
 

@@ -40,6 +40,7 @@ CLI::PCB_EXPORT_SVG_COMMAND::PCB_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND(
 {
     addLayerArg( true );
     addDrawingSheetArg();
+    addDefineArg();
 
     m_argParser.add_argument( "-m", ARG_MIRROR )
             .help( UTF8STDSTR( _( "Mirror the board (useful for trying to show bottom layers)" ) ) )
@@ -98,6 +99,7 @@ int CLI::PCB_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
     svgJob->m_outputFile = m_argOutput;
     svgJob->m_colorTheme = FROM_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
     svgJob->m_plotDrawingSheet = !m_argParser.get<bool>( ARG_EXCLUDE_DRAWING_SHEET );
+    svgJob->SetVarOverrides( m_argDefineVars );
 
     if( !wxFile::Exists( svgJob->m_filename ) )
     {

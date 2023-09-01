@@ -22,6 +22,7 @@
 #include <cli/exit_codes.h>
 #include <wx/crt.h>
 #include <macros.h>
+#include <string_utils.h>
 
 #include <sstream>
 
@@ -68,6 +69,28 @@ int CLI::COMMAND::Perform( KIWAY& aKiway )
     if( m_hasDrawingSheetArg )
     {
         m_argDrawingSheet = FROM_UTF8( m_argParser.get<std::string>( ARG_DRAWING_SHEET ).c_str() );
+    }
+
+
+    if( m_hasDefineArg )
+    {
+        auto defines = m_argParser.get<std::vector<std::string>>( ARG_DEFINE_VAR_LONG );
+
+        for( const std::string& def : defines )
+        {
+            wxString      str = FROM_UTF8( def.c_str() );
+            wxArrayString bits;
+            wxStringSplit( str, bits, wxS( '=' ) );
+
+            if( bits.Count() == 2 )
+            {
+                m_argDefineVars[bits[0]] = bits[1];
+            }
+            else
+            {
+                return EXIT_CODES::ERR_ARGS;
+            }
+        }
     }
 
     return doPerform( aKiway );
@@ -119,4 +142,16 @@ void CLI::COMMAND::addDrawingSheetArg()
     m_argParser.add_argument( ARG_DRAWING_SHEET )
             .default_value( std::string() )
             .help( UTF8STDSTR( _( "Path to drawing sheet, this overrides any existing project defined sheet when used" ) ) );
+}
+
+
+void CLI::COMMAND::addDefineArg()
+{
+    m_hasDefineArg = true;
+
+    m_argParser.add_argument( ARG_DEFINE_VAR_LONG, ARG_DEFINE_VAR_SHORT )
+            .default_value( std::vector<std::string>() )
+            .help( UTF8STDSTR(
+                    _( "Overrides or adds project variables, can be used multiple times to declare "
+                       "multiple variables. Use in the format of '--define-var key=value'" ) ) );
 }

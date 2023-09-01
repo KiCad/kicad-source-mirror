@@ -98,6 +98,7 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
         m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
 
     BOARD* brd = LoadBoard( aStepJob->m_filename );
+    brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
 
     if( aStepJob->m_format == JOB_EXPORT_PCB_3D::FORMAT::VRML )
     {
@@ -201,6 +202,7 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
 
     BOARD* brd = LoadBoard( aSvgJob->m_filename );
     loadOverrideDrawingSheet( brd, aSvgJob->m_drawingSheet );
+    brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
 
     if( aJob->IsCli() )
     {
@@ -226,6 +228,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
 
     BOARD* brd = LoadBoard( aDxfJob->m_filename );
     loadOverrideDrawingSheet( brd, aDxfJob->m_drawingSheet );
+    brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
 
     if( aDxfJob->m_outputFile.IsEmpty() )
     {
@@ -282,6 +285,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
 
     BOARD* brd = LoadBoard( aPdfJob->m_filename );
     loadOverrideDrawingSheet( brd, aPdfJob->m_drawingSheet );
+    brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
 
     if( aPdfJob->m_outputFile.IsEmpty() )
     {
@@ -478,6 +482,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
         m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
 
     BOARD* brd = LoadBoard( aGerberJob->m_filename );
+    brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
 
     if( aGerberJob->m_outputFile.IsEmpty() )
     {
@@ -854,6 +859,7 @@ int PCBNEW_JOBS_HANDLER::doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPR
     // until we refactor better plot api later
     std::unique_ptr<BOARD> brd;
     brd.reset( CreateEmptyBoard() );
+    brd->GetProject()->ApplyTextVars( aSvgJob->GetVarOverrides() );
 
     FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aFootprint->Clone() );
 
@@ -914,6 +920,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
         m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
 
     BOARD* brd = LoadBoard( drcJob->m_filename );
+    brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
 
     if( drcJob->m_outputFile.IsEmpty() )
     {

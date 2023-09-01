@@ -39,6 +39,7 @@
 CLI::SCH_ERC_COMMAND::SCH_ERC_COMMAND() : COMMAND( "erc" )
 {
     addCommonArgs( true, true, false );
+    addDefineArg();
 
     m_argParser.add_description( UTF8STDSTR( _( "Runs the Electrical Rules Check (ERC) on the schematic and creates a report" ) ) );
 
@@ -75,10 +76,6 @@ CLI::SCH_ERC_COMMAND::SCH_ERC_COMMAND() : COMMAND( "erc" )
             .help( UTF8STDSTR( _( "Return a exit code depending on whether or not violations exist" ) ) )
             .implicit_value( true )
             .default_value( false );
-
-    m_argParser.add_argument( "-o", ARG_OUTPUT )
-            .default_value( std::string() )
-            .help( UTF8STDSTR( _( "Output file name" ) ) );
 }
 
 
@@ -89,6 +86,7 @@ int CLI::SCH_ERC_COMMAND::doPerform( KIWAY& aKiway )
     ercJob->m_outputFile = m_argOutput;
     ercJob->m_filename = m_argInput;
     ercJob->m_exitCodeViolations = m_argParser.get<bool>( ARG_EXIT_CODE_VIOLATIONS );
+    ercJob->SetVarOverrides( m_argDefineVars );
 
     if( m_argParser.get<bool>( ARG_SEVERITY_ALL ) )
     {

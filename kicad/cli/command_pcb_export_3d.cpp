@@ -53,6 +53,7 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&   aName,
         m_format( aFormat )
 {
     addCommonArgs( true, true, false );
+    addDefineArg();
 
     if( m_format == JOB_EXPORT_PCB_3D::FORMAT::UNKNOWN )
     {
@@ -161,6 +162,7 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
     step->m_filename = m_argInput;
     step->m_outputFile = m_argOutput;
     step->m_format = m_format;
+    step->SetVarOverrides( m_argDefineVars );
 
     if( step->m_format == JOB_EXPORT_PCB_3D::FORMAT::UNKNOWN )
     {

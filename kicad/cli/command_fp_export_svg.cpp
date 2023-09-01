@@ -36,6 +36,7 @@ CLI::FP_EXPORT_SVG_COMMAND::FP_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND( "
     m_argParser.add_description( UTF8STDSTR( _( "Exports the footprint or entire footprint library to SVG" ) ) );
 
     addLayerArg( false );
+    addDefineArg();
 
     m_argParser.add_argument( "-t", ARG_THEME )
             .default_value( std::string() )
@@ -64,6 +65,7 @@ int CLI::FP_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
     svgJob->m_outputDirectory = m_argOutput;
     svgJob->m_blackAndWhite = m_argParser.get<bool>( ARG_BLACKANDWHITE );
     svgJob->m_footprint = FROM_UTF8( m_argParser.get<std::string>( ARG_FOOTPRINT ).c_str() );
+    svgJob->SetVarOverrides( m_argDefineVars );
 
     if( !wxDir::Exists( svgJob->m_libraryPath ) )
     {

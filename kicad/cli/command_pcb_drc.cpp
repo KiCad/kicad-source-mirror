@@ -40,6 +40,7 @@
 CLI::PCB_DRC_COMMAND::PCB_DRC_COMMAND() : COMMAND( "drc" )
 {
     addCommonArgs( true, true, false );
+    addDefineArg();
 
     m_argParser.add_description( UTF8STDSTR( _( "Runs the Design Rules Check (DRC) on the PCB and creates a report" ) ) );
 
@@ -81,10 +82,6 @@ CLI::PCB_DRC_COMMAND::PCB_DRC_COMMAND() : COMMAND( "drc" )
             .help( UTF8STDSTR( _( "Return a exit code depending on whether or not violations exist" ) ) )
             .implicit_value( true )
             .default_value( false );
-
-    m_argParser.add_argument( "-o", ARG_OUTPUT )
-            .default_value( std::string() )
-            .help( UTF8STDSTR( _( "Output file name" ) ) );
 }
 
 
@@ -94,6 +91,7 @@ int CLI::PCB_DRC_COMMAND::doPerform( KIWAY& aKiway )
 
     drcJob->m_outputFile = m_argOutput;
     drcJob->m_filename = m_argInput;
+    drcJob->SetVarOverrides( m_argDefineVars );
     drcJob->m_reportAllTrackErrors = m_argParser.get<bool>( ARG_ALL_TRACK_ERRORS );
     drcJob->m_exitCodeViolations = m_argParser.get<bool>( ARG_EXIT_CODE_VIOLATIONS );
 

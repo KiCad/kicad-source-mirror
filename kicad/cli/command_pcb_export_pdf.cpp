@@ -37,6 +37,7 @@ CLI::PCB_EXPORT_PDF_COMMAND::PCB_EXPORT_PDF_COMMAND() : PCB_EXPORT_BASE_COMMAND(
 {
     addLayerArg( true );
     addDrawingSheetArg();
+    addDefineArg();
 
     m_argParser.add_argument( "-m", ARG_MIRROR )
             .help( UTF8STDSTR( _( "Mirror the board (useful for trying to show bottom layers)" ) ) )
@@ -92,6 +93,7 @@ int CLI::PCB_EXPORT_PDF_COMMAND::doPerform( KIWAY& aKiway )
     pdfJob->m_filename = m_argInput;
     pdfJob->m_outputFile = m_argOutput;
     pdfJob->m_drawingSheet = m_argDrawingSheet;
+    pdfJob->SetVarOverrides( m_argDefineVars );
 
     if( !wxFile::Exists( pdfJob->m_filename ) )
     {

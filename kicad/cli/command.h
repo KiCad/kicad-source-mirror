@@ -33,6 +33,8 @@
 #define ARG_OUTPUT "--output"
 #define ARG_INPUT "input"
 #define ARG_DRAWING_SHEET "--drawing-sheet"
+#define ARG_DEFINE_VAR_SHORT "-D"
+#define ARG_DEFINE_VAR_LONG "--define-var"
 
 namespace CLI
 {
@@ -75,6 +77,11 @@ protected:
     void addDrawingSheetArg();
 
     /**
+     * Sets up the drawing sheet arg used by many of the export commands
+     */
+    void addDefineArg();
+
+    /**
      * The internal handler that should be overloaded to implement command specific
      * processing and work.
      *
@@ -105,6 +112,11 @@ protected:
     bool                     m_hasDrawingSheetArg;
 
     /**
+     * Whether or not the input arg was added for parsing
+     */
+    bool                     m_hasDefineArg;
+
+    /**
      * Whether or not the output arg is expecting a directory
      */
     bool                     m_outputArgExpectsDir;
@@ -123,6 +135,11 @@ protected:
      * Value of the drawing sheet arg if configured
      */
     wxString                 m_argDrawingSheet;
+
+    /**
+     * Value of the drawing sheet arg if configured
+     */
+    std::map<wxString, wxString>    m_argDefineVars;
 };
 
 }

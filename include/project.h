@@ -89,6 +89,11 @@ public:
     virtual std::map<wxString, wxString>& GetTextVars() const;
 
     /**
+     * Applies the given var map, it will create or update existing vars
+     */
+    virtual void ApplyTextVars( const std::map<wxString, wxString>& aVarsMap );
+
+    /**
      * Return the full path and name of the project.
      *
      * This is the same as the name of the project file (.pro prior to version 6 and .kicad_prj
