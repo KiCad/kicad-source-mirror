@@ -157,7 +157,7 @@ void CLI::COMMAND::addDefineArg()
     m_argParser.add_argument( ARG_DEFINE_VAR_LONG, ARG_DEFINE_VAR_SHORT )
             .default_value( std::vector<std::string>() )
             .help( UTF8STDSTR(
-                    _( "Overrides or adds project variables, can be used multiple times to declare "
-                       "multiple variables. Use in the format of '--define-var key=value' or '-D key=value'" ) ) )
+                    _( "Overrides or adds project variables, can be used multiple times to declare multiple variables."
+                       "\nUse in the format of '--define-var key=value' or '-D key=value'" ) ) )
             .metavar( "KEY=VALUE" );
 }
