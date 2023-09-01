@@ -411,13 +411,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             if( view )
                 view->Update( boardItem );
 
-            if( boardItem->Type() == PCB_FOOTPRINT_T )
-            {
-                PAD* pad1 = static_cast<FOOTPRINT*>( boardItem )->Pads()[0];
-                bool padEntered = pad1->IsEntered();
-                wxString padNumber = pad1->GetNumber();
-            }
-
             itemsChanged.push_back( boardItem );
 
             // if no undo entry is needed, the copy would create a memory leak

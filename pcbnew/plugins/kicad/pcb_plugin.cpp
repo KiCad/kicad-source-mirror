@@ -1581,7 +1581,7 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
     {
         StrPrintf( &output, " (net %d %s)", m_mapping->Translate( aPad->GetNetCode() ),
                    m_out->Quotew( aPad->GetNetname() ).c_str() );
-        }
+    }
 
     // Pin functions and types are closely related to nets, so if CTL_OMIT_NETS is set, omit
     // them as well (for instance when saved from library editor).
