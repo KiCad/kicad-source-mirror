@@ -682,6 +682,10 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                 if( layer_id == B_Mask && !layerFlags.test( LAYER_3D_SOLDERMASK_BOTTOM ) )
                     continue;
 
+                // Only Mask layers are processed here because they are negative layers
+                if( layer_id != F_Mask && layer_id != B_Mask )
+                    continue;
+
                 SFVEC3F layerColor;
 
                 if( layer_id == B_Mask )
