@@ -4189,6 +4189,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
 
     VECTOR2I sz;
     VECTOR2I pt;
+    bool     foundNet = false;
 
     std::unique_ptr<PAD> pad = std::make_unique<PAD>( aParent );
 
@@ -4395,6 +4396,8 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
         }
 
         case T_net:
+            foundNet = true;
+
             if( ! pad->SetNetCode( getNetCode( parseInt( "net number" ) ), /* aNoAssert */ true ) )
             {
                 wxLogError( _( "Invalid net ID in\nfile: %s\nline: %d offset: %d" ),
@@ -4692,6 +4695,12 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
                        "pinfunction, pintype, zone_connect, thermal_width, thermal_gap or "
                        "teardrops" );
         }
+    }
+
+    if( !foundNet )
+    {
+        // Make sure default netclass is correctly assigned to pads that don't define a net.
+        pad->SetNetCode( 0, /* aNoAssert */ true );
     }
 
     if( !pad->CanHaveNumber() )
