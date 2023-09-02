@@ -505,12 +505,15 @@ bool ROUTER_TOOL::Init()
             [&]( const SELECTION& )
             {
                 std::vector<PNS::NET_HANDLE> currentNets = m_router->GetCurrentNets();
-                NETINFO_ITEM*                netInfo = static_cast<NETINFO_ITEM*>( currentNets[0] );
+
+                if( currentNets.empty() || currentNets[0] == nullptr )
+                    return false;
 
                 // Need to have something unconnected to finish to
-                int     currentNet = netInfo ? netInfo->GetNetCode() : -1;
-                BOARD*  board = getEditFrame<PCB_EDIT_FRAME>()->GetBoard();
-                RN_NET* ratsnest = board->GetConnectivity()->GetRatsnestForNet( currentNet );
+                NETINFO_ITEM* netInfo = static_cast<NETINFO_ITEM*>( currentNets[0] );
+                int           currentNet = netInfo->GetNetCode();
+                BOARD*        board = getEditFrame<PCB_EDIT_FRAME>()->GetBoard();
+                RN_NET*       ratsnest = board->GetConnectivity()->GetRatsnestForNet( currentNet );
 
                 return ratsnest && !ratsnest->GetEdges().empty();
             };
