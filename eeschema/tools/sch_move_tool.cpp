@@ -916,6 +916,9 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
                 sch_item->SetConnectivityDirty( true );
         }
 
+        if( selection.GetSize() == 1 && selection.Front()->IsNew() )
+            m_frame->SaveCopyForRepeatItem( static_cast<SCH_ITEM*>( selection.Front() ) );
+
         m_selectionTool->RemoveItemsFromSel( &m_dragAdditions, QUIET_MODE );
 
         // If we move items away from a junction, we _may_ want to add a junction there

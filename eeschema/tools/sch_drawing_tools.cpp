@@ -154,8 +154,6 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     auto addSymbol =
             [this]( SCH_SYMBOL* aSymbol )
             {
-                m_frame->SaveCopyForRepeatItem( aSymbol );
-
                 m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
                 m_selectionTool->AddItemToSel( aSymbol );
 
@@ -355,6 +353,8 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 
                 if( m_frame->eeconfig()->m_AutoplaceFields.enable )
                     symbol->AutoplaceFields( screen, false /* aManual */ );
+
+                m_frame->SaveCopyForRepeatItem( symbol );
 
                 SCH_COMMIT commit( m_toolMgr );
                 commit.Added( symbol, screen );
