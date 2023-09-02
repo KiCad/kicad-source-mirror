@@ -15,6 +15,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program; if not, you may find one here:
+
 #  http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 #  or you may search the http://www.gnu.org website for the version 2 license,
 #  or you may write to the Free Software Foundation, Inc.,
@@ -996,7 +997,7 @@ endif()
 
 
 if( KICAD_USE_SENTRY )
-    set( KICAD_SENTRY_DSN "" CACHE string "The sentry DSN used with sentry integration" )
+    set( KICAD_SENTRY_DSN "" CACHE STRING "The sentry DSN used with sentry integration" )
     if ( KICAD_SENTRY_DSN STREQUAL "")
         message( FATAL_ERROR "Sentry DSN must be configured with KICAD_USE_SENTRY" )
     endif()
