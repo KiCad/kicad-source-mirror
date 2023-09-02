@@ -35,11 +35,11 @@
 #define NSVG_PI             (3.14159265358979323846264338327f)
 #define NSVG_KAPPA90        (0.5522847493f) // Length proportional to radius of a cubic bezier handle for 90deg arcs.
 
-#define NSVG_ALIGN_MIN      0
-#define NSVG_ALIGN_MID      1
+#define NSVG_ALIGN_MID      0 // preserveAspectRatio default
+#define NSVG_ALIGN_MIN      1
 #define NSVG_ALIGN_MAX      2
-#define NSVG_ALIGN_NONE     0
-#define NSVG_ALIGN_MEET     1
+#define NSVG_ALIGN_MEET     0 // preserveAspectRatio default
+#define NSVG_ALIGN_NONE     1
 #define NSVG_ALIGN_SLICE    2
 
 #define NSVG_NOTUSED( v )   do { (void) ( 1 ? (void) 0 : ( (void) (v) ) ); } \
