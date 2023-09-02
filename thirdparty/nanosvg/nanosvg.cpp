@@ -352,6 +352,13 @@ typedef struct NSVGattrib
     char    visible;
 } NSVGattrib;
 
+typedef struct NSVGstyles
+{
+	char*	name;
+	char*   description;
+	struct NSVGstyles* next;
+} NSVGstyles;
+
 typedef struct NSVGparser
 {
     NSVGattrib attr[NSVG_MAX_ATTR];
@@ -361,6 +368,7 @@ typedef struct NSVGparser
     int cpts;
     NSVGpath* plist;
     NSVGimage* image;
+    NSVGstyles* styles;
     NSVGgradientData* gradients;
     NSVGshape* shapesTail;
     float   viewMinx, viewMiny, viewWidth, viewHeight;
@@ -368,6 +376,7 @@ typedef struct NSVGparser
     float   dpi;
     char    pathFlag;
     char    defsFlag;
+    char    styleFlag;
 } NSVGparser;
 
 static void nsvg__xformIdentity( float* t )
@@ -612,6 +621,21 @@ error:
 }
 
 
+static void nsvg__deleteStyles( NSVGstyles* style )
+{
+    while( style )
+    {
+        NSVGstyles* next = style->next;
+        if( style->name != NULL )
+            free( style->name );
+        if( style->description != NULL )
+            free( style->description );
+        free( style );
+        style = next;
+    }
+}
+
+
 static void nsvg__deletePaths( NSVGpath* path )
 {
     while( path )
@@ -652,6 +676,7 @@ static void nsvg__deleteParser( NSVGparser* p )
 {
     if( p != NULL )
     {
+        nsvg__deleteStyles( p->styles );
         nsvg__deletePaths( p->plist );
         nsvg__deleteGradientData( p->gradients );
         nsvgDelete( p->image );
@@ -2108,6 +2133,18 @@ static int nsvg__parseAttr( NSVGparser* p, const char* name, const char* value )
         strncpy( attr->id, value, 63 );
         attr->id[63] = '\0';
     }
+    else if( strcmp( name, "class" ) == 0 )
+    {
+        NSVGstyles* style = p->styles;
+        while( style )
+        {
+            if( strcmp( style->name + 1, value ) == 0 )
+            {
+                nsvg__parseStyle( p, style->description );
+            }
+            style = style->next;
+        }
+    }
     else
     {
         return 0;
@@ -3352,7 +3389,7 @@ static void nsvg__startElement( void* ud, const char* el, const char** attr )
 
     if( p->defsFlag )
     {
-        // Skip everything but gradients in defs
+        // Skip everything but gradients and styles in defs
         if( strcmp( el, "linearGradient" ) == 0 )
         {
             nsvg__parseGradient( p, attr, NSVG_PAINT_LINEAR_GRADIENT );
@@ -3365,6 +3402,10 @@ static void nsvg__startElement( void* ud, const char* el, const char** attr )
         {
             nsvg__parseGradientStop( p, attr );
         }
+        else if( strcmp( el, "style" ) == 0 )
+        {
+            p->styleFlag = 1;
+        }
 
         return;
     }
@@ -3376,7 +3417,7 @@ static void nsvg__startElement( void* ud, const char* el, const char** attr )
     }
     else if( strcmp( el, "path" ) == 0 )
     {
-        if( p->pathFlag )    // Do not allow nested paths.
+        if( p->pathFlag ) // Do not allow nested paths.
             return;
 
         nsvg__pushAttr( p );
@@ -3439,6 +3480,10 @@ static void nsvg__startElement( void* ud, const char* el, const char** attr )
     {
         nsvg__parseSVG( p, attr );
     }
+    else if( strcmp( el, "style" ) == 0 )
+    {
+        p->styleFlag = 1;
+    }
 }
 
 
@@ -3458,14 +3503,84 @@ static void nsvg__endElement( void* ud, const char* el )
     {
         p->defsFlag = 0;
     }
+    else if( strcmp( el, "style" ) == 0 )
+    {
+        p->styleFlag = 0;
+    }
+}
+
+
+static char* nsvg__strndup( const char* s, size_t n )
+{
+    char*  result;
+    size_t len = strlen( s );
+
+    if( n < len )
+        len = n;
+
+    result = (char*) malloc( len + 1 );
+    if( !result )
+        return 0;
+
+    result[len] = '\0';
+    return (char*) memcpy( result, s, len );
 }
 
 
 static void nsvg__content( void* ud, const char* s )
 {
-    NSVG_NOTUSED( ud );
-    NSVG_NOTUSED( s );
-    // empty
+    NSVGparser* p = (NSVGparser*) ud;
+    if( p->styleFlag )
+    {
+        int         state = 0;
+        int         class_count = 0;
+        const char* start = s;
+        while( *s )
+        {
+            char c = *s;
+            if( state == 2 )
+            {
+                if( c == '{' )
+                {
+                    start = s + 1;
+                }
+                else if( c == '}' )
+                {
+                    NSVGstyles* style = p->styles;
+                    while( class_count > 0 )
+                    {
+                        style->description = nsvg__strndup( start, (size_t) ( s - start ) );
+                        style = style->next;
+                        --class_count;
+                    }
+                    state = 0;
+                }
+            }
+            else if( nsvg__isspace( c ) || c == '{' || c == ',' )
+            {
+                if( state == 1 )
+                {
+                    if( *start == '.' )
+                    {
+                        NSVGstyles* next = p->styles;
+                        p->styles = (NSVGstyles*) malloc( sizeof( NSVGstyles ) );
+                        p->styles->description = NULL;
+                        p->styles->next = next;
+                        p->styles->name = nsvg__strndup( start, (size_t) ( s - start ) );
+                        ++class_count;
+                    }
+                    start = s + 1;
+                    state = c == ',' ? 0 : 2;
+                }
+            }
+            else if( state == 0 )
+            {
+                start = s;
+                state = 1;
+            }
+            s++;
+        }
+    }
 }
 
 
