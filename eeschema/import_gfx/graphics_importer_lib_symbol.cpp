@@ -66,12 +66,12 @@ int GRAPHICS_IMPORTER_LIB_SYMBOL::MapLineWidth( double aLineWidth )
 void GRAPHICS_IMPORTER_LIB_SYMBOL::AddLine( const VECTOR2D& aOrigin, const VECTOR2D& aEnd,
                                          double aWidth, const COLOR4D& aColor )
 {
-    std::unique_ptr<LIB_SHAPE> line = std::make_unique<LIB_SHAPE>( m_symbol, SHAPE_T::SEGMENT );
+    std::unique_ptr<LIB_SHAPE> line = std::make_unique<LIB_SHAPE>( m_symbol, SHAPE_T::POLY );
     line->SetUnit( m_unit );
     line->SetFillColor( aColor );
     line->SetStroke( STROKE_PARAMS( MapLineWidth( aWidth ), PLOT_DASH_TYPE::SOLID ) );
-    line->SetStart( MapCoordinate( aOrigin ) );
-    line->SetEnd( MapCoordinate( aEnd ) );
+    line->AddPoint( MapCoordinate( aOrigin ) );
+    line->AddPoint( MapCoordinate( aEnd ) );
 
     // Skip 0 len lines:
     if( line->GetStart() == line->GetEnd() )
