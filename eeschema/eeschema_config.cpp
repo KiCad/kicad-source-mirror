@@ -164,8 +164,7 @@ void SCH_EDIT_FRAME::saveProjectSettings()
 
 void SCH_EDIT_FRAME::SaveProjectLocalSettings()
 {
-    if( m_schematic )
-        m_schematic->RecordERCExclusions();
+    RecordERCExclusions();
 }
 
 

@@ -870,7 +870,7 @@ std::vector<FP_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun, BOARD_
     {
         aCommit.Modify( aPad );
 
-        if( aPad->GetShape() == PAD_SHAPE::CIRCLE || aPad->GetShape() == PAD_SHAPE::RECTANGLE )
+        if( aPad->GetShape() == PAD_SHAPE::CIRCLE || aPad->GetShape() == PAD_SHAPE::RECT )
         {
             // Use the existing pad as an anchor
             aPad->SetAnchorPadShape( aPad->GetShape() );
