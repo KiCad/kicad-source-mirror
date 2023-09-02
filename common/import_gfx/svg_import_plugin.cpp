@@ -28,6 +28,7 @@
 #include <nanosvg.h>
 #include <algorithm>
 #include <cmath>
+#include <locale_io.h>
 
 #include <eda_item.h>
 #include "graphics_importer.h"
@@ -55,6 +56,8 @@ bool SVG_IMPORT_PLUGIN::Load( const wxString& aFileName )
 {
     wxCHECK( m_importer, false );
 
+    LOCALE_IO toggle; // switch on/off the locale "C" notation
+
     // 1- wxFopen takes care of unicode filenames across platforms
     // 2 - nanosvg (exactly nsvgParseFromFile) expects a binary file (exactly the CRLF eof must
     // not be replaced by LF and changes the byte count) in one validity test,
@@ -76,6 +79,8 @@ bool SVG_IMPORT_PLUGIN::Load( const wxString& aFileName )
 bool SVG_IMPORT_PLUGIN::LoadFromMemory( const wxMemoryBuffer& aMemBuffer )
 {
     wxCHECK( m_importer, false );
+
+    LOCALE_IO toggle; // switch on/off the locale "C" notation
 
     std::string str( reinterpret_cast<char*>( aMemBuffer.GetData() ), aMemBuffer.GetDataLen() );
     wxCHECK( str.data()[aMemBuffer.GetDataLen()] == '\0', false );
