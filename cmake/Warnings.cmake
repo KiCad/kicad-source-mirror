@@ -245,4 +245,6 @@ if( MSVC )
     string( APPEND WARN_FLAGS_CXX " /wd4868 /wd4866" )
     # disable "XXX is not defined as a preprocessor macro, replacing with '0'"
     string( APPEND WARN_FLAGS_CXX " /wd4668" )
+    # disable "definition of implicit copy constructor for 'X' is deprecated because it has a user-provided destructor"
+    string( APPEND WARN_FLAGS_CXX " /wd5267" )
 endif()
