@@ -30,6 +30,8 @@
 #include <symbol_lib_table.h>
 #include <tools/symbol_editor_control.h>
 #include <string_utils.h>
+#include <symbol_preview_widget.h>
+#include <widgets/wx_panel.h>
 
 
 wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>
@@ -356,4 +358,41 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, un
     }
 
     return true;
+}
+
+
+bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::HasPreview( const wxDataViewItem& aItem )
+{
+    LIB_TREE_NODE* node = ToNode( aItem );
+    wxCHECK( node, false );
+
+    return node->m_Type == LIB_TREE_NODE::LIBID;
+}
+
+
+void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::ShowPreview( wxWindow* aParent, const wxDataViewItem& aItem )
+{
+    LIB_TREE_NODE* node = ToNode( aItem );
+    wxCHECK( node, /* void */ );
+
+    wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
+    aParent->SetSizer( mainSizer );
+
+    WX_PANEL* panel = new WX_PANEL( aParent );
+    panel->SetBorders( true, true, true, true );
+    panel->SetBorderColor( KIGFX::COLOR4D::BLACK );
+
+    wxBoxSizer* panelSizer = new wxBoxSizer( wxVERTICAL );
+    panel->SetSizer( panelSizer );
+
+    EDA_DRAW_PANEL_GAL::GAL_TYPE backend = m_frame->GetCanvas()->GetBackend();
+    SYMBOL_PREVIEW_WIDGET*       preview = new SYMBOL_PREVIEW_WIDGET( panel, &m_frame->Kiway(),
+                                                                      false, backend );
+    preview->SetLayoutDirection( wxLayout_LeftToRight );
+
+    panelSizer->Add( preview, 1, wxEXPAND|wxALL, 1 );
+    mainSizer->Add( panel, 1, wxEXPAND, 0 );
+    aParent->Layout();
+
+    preview->DisplaySymbol( node->m_LibId, node->m_Unit );
 }

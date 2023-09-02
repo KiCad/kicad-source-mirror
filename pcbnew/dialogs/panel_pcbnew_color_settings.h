@@ -22,13 +22,14 @@
 #define PANEL_PCBNEW_COLOR_SETTINGS_H_
 
 #include <dialogs/panel_color_settings.h>
+#include <units_provider.h>
 
 class PAGE_INFO;
 class FOOTPRINT_PREVIEW_PANEL;
 class TITLE_BLOCK;
 
 
-class PANEL_PCBNEW_COLOR_SETTINGS : public PANEL_COLOR_SETTINGS
+class PANEL_PCBNEW_COLOR_SETTINGS : public PANEL_COLOR_SETTINGS, public UNITS_PROVIDER
 {
 public:
     PANEL_PCBNEW_COLOR_SETTINGS( wxWindow* aParent, BOARD* aBoard );

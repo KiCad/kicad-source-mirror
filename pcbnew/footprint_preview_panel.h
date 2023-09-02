@@ -66,7 +66,8 @@ public:
 
     virtual void RefreshAll() override;
 
-    static FOOTPRINT_PREVIEW_PANEL* New( KIWAY* aKiway, wxWindow* aParent );
+    static FOOTPRINT_PREVIEW_PANEL* New( KIWAY* aKiway, wxWindow* aParent,
+                                         UNITS_PROVIDER* aUnitsProvider );
 
 private:
     /**
@@ -77,9 +78,8 @@ private:
      * @param aOpts the GAL options (ownership is assumed)
      * @param aGalType the displayed GAL type
      */
-    FOOTPRINT_PREVIEW_PANEL( KIWAY* aKiway, wxWindow* aParent,
-                             std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> aOpts,
-                             GAL_TYPE aGalType );
+    FOOTPRINT_PREVIEW_PANEL( KIWAY* aKiway, wxWindow* aParent, UNITS_PROVIDER* aUnitsProvider,
+                             std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> aOpts, GAL_TYPE aGalType );
 
     void renderFootprint( std::shared_ptr<FOOTPRINT> aFootprint );
 

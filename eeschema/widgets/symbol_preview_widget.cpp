@@ -32,12 +32,13 @@
 #include <wx/stattext.h>
 
 
-SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY* aKiway,
+SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY* aKiway, bool aIncludeStatus,
                                               EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType ) :
         wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 ),
         m_kiway( aKiway ),
         m_preview( nullptr ),
         m_status( nullptr ),
+        m_statusPanel( nullptr ),
         m_statusSizer( nullptr ),
         m_previewItem( nullptr )
 {
@@ -84,30 +85,38 @@ SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY* aKiway,
     settings->m_ShowPinsElectricalType = app_settings->m_LibViewPanel.show_pin_electrical_type;
     settings->m_ShowPinNumbers = app_settings->m_LibViewPanel.show_pin_numbers;
 
-    m_statusPanel = new wxPanel( this );
-    m_statusPanel->SetBackgroundColour( backgroundColor.ToColour() );
-    m_status = new wxStaticText( m_statusPanel, wxID_ANY, wxEmptyString );
-    m_status->SetForegroundColour( settings->GetLayerColor( LAYER_REFERENCEPART ).ToColour() );
-    m_statusSizer = new wxBoxSizer( wxVERTICAL );
-    m_statusSizer->Add( 0, 0, 1 );  // add a spacer
-    m_statusSizer->Add( m_status, 0, wxALIGN_CENTER );
-    m_statusSizer->Add( 0, 0, 1 );  // add a spacer
-    m_statusPanel->SetSizer( m_statusSizer );
-
-    // Give the status panel the same color scheme as the canvas so it isn't jarring when
-    // switched to.
-    m_statusPanel->SetBackgroundColour( backgroundColor.ToColour() );
-    m_statusPanel->SetForegroundColour( foregroundColor.ToColour() );
-
-    // Give the preview panel a small top border to align its top with the status panel,
-    // and give the status panel a small bottom border to align its bottom with the preview
-    // panel.
     m_outerSizer = new wxBoxSizer( wxVERTICAL );
-    m_outerSizer->Add( m_preview, 1, wxTOP | wxEXPAND, 5 );
-    m_outerSizer->Add( m_statusPanel, 1, wxBOTTOM | wxEXPAND, 5 );
 
-    // Hide the status panel to start
-    m_statusPanel->Hide();
+    if( aIncludeStatus )
+    {
+        m_statusPanel = new wxPanel( this );
+        m_statusPanel->SetBackgroundColour( backgroundColor.ToColour() );
+        m_status = new wxStaticText( m_statusPanel, wxID_ANY, wxEmptyString );
+        m_status->SetForegroundColour( settings->GetLayerColor( LAYER_REFERENCEPART ).ToColour() );
+        m_statusSizer = new wxBoxSizer( wxVERTICAL );
+        m_statusSizer->Add( 0, 0, 1 );  // add a spacer
+        m_statusSizer->Add( m_status, 0, wxALIGN_CENTER );
+        m_statusSizer->Add( 0, 0, 1 );  // add a spacer
+        m_statusPanel->SetSizer( m_statusSizer );
+
+        // Give the status panel the same color scheme as the canvas so it isn't jarring when
+        // switched to.
+        m_statusPanel->SetBackgroundColour( backgroundColor.ToColour() );
+        m_statusPanel->SetForegroundColour( foregroundColor.ToColour() );
+
+        // Give the preview panel a small top border to align its top with the status panel,
+        // and give the status panel a small bottom border to align its bottom with the preview
+        // panel.
+        m_outerSizer->Add( m_preview, 1, wxTOP | wxEXPAND, 5 );
+        m_outerSizer->Add( m_statusPanel, 1, wxBOTTOM | wxEXPAND, 5 );
+
+        // Hide the status panel to start
+        m_statusPanel->Hide();
+    }
+    else
+    {
+        m_outerSizer->Add( m_preview, 1, wxEXPAND, 0 );
+    }
 
     SetSizer( m_outerSizer );
     Layout();
@@ -127,6 +136,8 @@ SYMBOL_PREVIEW_WIDGET::~SYMBOL_PREVIEW_WIDGET()
 
 void SYMBOL_PREVIEW_WIDGET::SetStatusText( wxString const& aText )
 {
+    wxCHECK( m_statusPanel, /* void */ );
+
     m_status->SetLabel( aText );
     m_preview->Hide();
     m_statusPanel->Show();
@@ -232,7 +243,10 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit, i
         if( !m_preview->IsShown() )
         {
             m_preview->Show();
-            m_statusPanel->Hide();
+
+            if( m_statusPanel )
+                m_statusPanel->Hide();
+
             Layout();   // Ensure panel size is up to date.
         }
 
@@ -281,6 +295,9 @@ void SYMBOL_PREVIEW_WIDGET::DisplayPart( LIB_SYMBOL* aSymbol, int aUnit, int aCo
 
     m_preview->ForceRefresh();
     m_preview->Show();
-    m_statusPanel->Hide();
+
+    if( m_statusPanel )
+        m_statusPanel->Hide();
+
     Layout();
 }

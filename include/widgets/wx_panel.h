@@ -25,6 +25,7 @@
 #define WX_PANEL_H
 
 #include <wx/panel.h>
+#include <gal/color4d.h>
 
 class WX_PANEL : public wxPanel
 {
@@ -43,6 +44,11 @@ public:
         m_bottomBorder = aBottom;
     }
 
+    void SetBorderColor( const KIGFX::COLOR4D& aColor )
+    {
+        m_borderColor = aColor;
+    }
+
 private:
     void OnPaint( wxPaintEvent& event );
 
@@ -51,6 +57,8 @@ private:
     bool   m_rightBorder;
     bool   m_topBorder;
     bool   m_bottomBorder;
+
+    KIGFX::COLOR4D m_borderColor;
 };
 
 

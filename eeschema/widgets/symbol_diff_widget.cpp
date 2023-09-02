@@ -29,7 +29,7 @@
 
 SYMBOL_DIFF_WIDGET::SYMBOL_DIFF_WIDGET( wxWindow* aParent,
                                         EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType ) :
-        SYMBOL_PREVIEW_WIDGET( aParent, nullptr, aCanvasType ),
+        SYMBOL_PREVIEW_WIDGET( aParent, nullptr, false, aCanvasType ),
         m_libraryItem( nullptr ),
         m_slider( nullptr )
 {

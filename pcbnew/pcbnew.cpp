@@ -119,7 +119,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             return new FOOTPRINT_WIZARD_FRAME( aKiway, aParent, FRAME_T( aClassId ) );
 
         case FRAME_FOOTPRINT_PREVIEW:
-            return dynamic_cast< wxWindow* >( FOOTPRINT_PREVIEW_PANEL::New( aKiway, aParent ) );
+            return FOOTPRINT_PREVIEW_PANEL::New( aKiway, aParent, this );
 
         case DIALOG_CONFIGUREPATHS:
         {

@@ -36,7 +36,7 @@
 #include <wx/settings.h>
 #include <wx/sizer.h>
 #include <wx/srchctrl.h>
-#include <wx/timer.h>
+#include <wx/popupwin.h>
 
 constexpr int RECENT_SEARCHES_MAX = 10;
 
@@ -54,9 +54,13 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
         m_details_ctrl( nullptr ),
         m_inTimerEvent( false ),
         m_recentSearchesKey( aRecentSearchesKey ),
-        m_skipNextRightClick( false )
+        m_skipNextRightClick( false ),
+        m_previewWindow( nullptr )
 {
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+
+    m_hoverTimer.SetOwner( this );
+    Bind( wxEVT_TIMER, &LIB_TREE::onHoverTimer, this, m_hoverTimer.GetId() );
 
     // Search text control
     if( aFlags & SEARCH )
@@ -177,6 +181,10 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
     m_tree_ctrl->Bind( wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, &LIB_TREE::onHeaderContextMenu,
                        this );
 
+    // wxDataViewCtrl eats its mouseMoved events, so we're forced to use idle events to track
+    // the hover state
+    Bind( wxEVT_IDLE, &LIB_TREE::onIdle, this );
+
     // Process hotkeys when the tree control has focus:
     m_tree_ctrl->Bind( wxEVT_CHAR_HOOK, &LIB_TREE::onTreeCharHook, this );
 
@@ -215,6 +223,9 @@ LIB_TREE::~LIB_TREE()
 {
     // Stop the timer during destruction early to avoid potential race conditions (that do happen)
     m_debounceTimer->Stop();
+
+    m_hoverTimer.Stop();
+    hidePreview();
 }
 
 
@@ -590,6 +601,111 @@ void LIB_TREE::onQueryMouseMoved( wxMouseEvent& aEvent )
 }
 
 
+#define PREVIEW_SIZE wxSize( 240, 200 )
+
+
+void LIB_TREE::showPreview( wxDataViewItem aItem )
+{
+    if( aItem.IsOk() && m_adapter->HasPreview( aItem ) )
+    {
+        m_hoverItem = aItem;
+
+        wxWindow* topLevelParent = m_parent;
+
+        while( topLevelParent && !topLevelParent->IsTopLevel() )
+            topLevelParent = topLevelParent->GetParent();
+
+        m_previewWindow = new wxPopupWindow( topLevelParent );
+        m_previewWindow->SetPosition( wxPoint( m_tree_ctrl->GetScreenRect().GetRight() - 10,
+                                               wxGetMousePosition().y - PREVIEW_SIZE.y / 2 ) );
+        m_previewWindow->SetSize( PREVIEW_SIZE );
+
+        m_previewWindow->Freeze();
+        m_previewWindow->Show();
+
+        m_adapter->ShowPreview( m_previewWindow, aItem );
+        m_previewWindow->Thaw();
+    }
+}
+
+
+void LIB_TREE::hidePreview()
+{
+    m_hoverItem = wxDataViewItem();
+
+    if( m_previewWindow )
+    {
+        m_previewWindow->Hide();
+        m_previewWindow->Destroy();
+        m_previewWindow = nullptr;
+    }
+}
+
+
+void LIB_TREE::onIdle( wxIdleEvent& aEvent )
+{
+    // The wxDataViewCtrl won't give us its mouseMoved events so we're forced to use idle
+    // events to track the hover state
+
+    wxWindow* topLevelParent = m_parent;
+
+    while( topLevelParent && !topLevelParent->IsTopLevel() )
+        topLevelParent = topLevelParent->GetParent();
+
+    wxWindow* topLevelFocus = FindFocus();
+
+    while( topLevelFocus && !topLevelFocus->IsTopLevel() )
+        topLevelFocus = topLevelFocus->GetParent();
+
+    wxPoint screenPos = wxGetMousePosition();
+    wxRect  screenRect = m_tree_ctrl->GetScreenRect();
+
+    if( topLevelFocus != topLevelParent || !screenRect.Contains( screenPos ) )
+    {
+        m_hoverTimer.Stop();
+        hidePreview();
+        return;
+    }
+
+    wxPoint clientPos = m_tree_ctrl->ScreenToClient( screenPos );
+
+    if( m_hoverItem.IsOk() )
+    {
+        wxDataViewItem    item;
+        wxDataViewColumn* col = nullptr;
+        m_tree_ctrl->HitTest( clientPos, item, col );
+
+        if( item != m_hoverItem )
+        {
+            hidePreview();
+            m_hoverPos = clientPos;
+            showPreview( item );
+        }
+
+        return;
+    }
+
+    if( m_hoverPos != clientPos )
+    {
+        m_hoverPos = clientPos;
+        m_hoverTimer.Start( 400, wxTIMER_ONE_SHOT );
+    }
+}
+
+
+void LIB_TREE::onHoverTimer( wxTimerEvent& aEvent )
+{
+    hidePreview();
+
+    wxDataViewItem    item;
+    wxDataViewColumn* col = nullptr;
+    m_tree_ctrl->HitTest( m_hoverPos, item, col );
+
+    if( item != m_tree_ctrl->GetSelection() )
+        showPreview( item );
+}
+
+
 void LIB_TREE::onTreeCharHook( wxKeyEvent& aKeyStroke )
 {
     onQueryCharHook( aKeyStroke );
@@ -628,6 +744,8 @@ void LIB_TREE::onTreeSelect( wxDataViewEvent& aEvent )
 
 void LIB_TREE::onTreeActivate( wxDataViewEvent& aEvent )
 {
+    hidePreview();
+
     if( !GetSelectedLibId().IsValid() )
         toggleExpand( m_tree_ctrl->GetSelection() );    // Expand library/part units subtree
     else
@@ -644,6 +762,8 @@ void LIB_TREE::onDetailsLink( wxHtmlLinkEvent& aEvent )
 
 void LIB_TREE::onPreselect( wxCommandEvent& aEvent )
 {
+    hidePreview();
+
     if( m_details_ctrl )
     {
         int unit = 0;
@@ -661,6 +781,8 @@ void LIB_TREE::onPreselect( wxCommandEvent& aEvent )
 
 void LIB_TREE::onItemContextMenu( wxDataViewEvent& aEvent )
 {
+    hidePreview();
+
     if( m_skipNextRightClick )
     {
         m_skipNextRightClick = false;
@@ -731,6 +853,8 @@ void LIB_TREE::onItemContextMenu( wxDataViewEvent& aEvent )
 
 void LIB_TREE::onHeaderContextMenu( wxDataViewEvent& aEvent )
 {
+    hidePreview();
+
     ACTION_MENU menu( true, nullptr );
 
     menu.Add( ACTIONS::selectColumns );

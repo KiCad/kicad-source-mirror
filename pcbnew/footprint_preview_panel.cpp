@@ -44,6 +44,7 @@
 #include <dialog_shim.h>
 
 FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL( KIWAY* aKiway, wxWindow* aParent,
+                                                  UNITS_PROVIDER* aUnitsProvider,
                                                   std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> aOpts,
                                                   GAL_TYPE aGalType ) :
         PCB_DRAW_PANEL_GAL( aParent, -1, wxPoint( 0, 0 ), wxSize( 200, 200 ), *aOpts, aGalType ),
@@ -55,18 +56,7 @@ FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL( KIWAY* aKiway, wxWindow* aPare
     ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_NEVER );
     EnableScrolling( false, false );    // otherwise Zoom Auto disables GAL canvas
 
-    wxWindow* topLevelParent = aParent;
-
-    while( topLevelParent && !topLevelParent->IsTopLevel() )
-        topLevelParent = topLevelParent->GetParent();
-
-    if( topLevelParent )
-    {
-        if( DIALOG_SHIM* parentDlg = dynamic_cast<DIALOG_SHIM*>( topLevelParent ) )
-            m_userUnits = parentDlg->GetUserUnits();
-        else if( UNITS_PROVIDER* parentFrame = dynamic_cast<UNITS_PROVIDER*>( topLevelParent ) )
-            m_userUnits = parentFrame->GetUserUnits();
-    }
+    m_userUnits = aUnitsProvider->GetUserUnits();
 
     m_dummyBoard = std::make_unique<BOARD>();
     m_dummyBoard->SetUserUnits( m_userUnits );
@@ -245,7 +235,8 @@ wxWindow* FOOTPRINT_PREVIEW_PANEL::GetWindow()
 }
 
 
-FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* aParent )
+FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* aParent,
+                                                       UNITS_PROVIDER* aUnitsProvider )
 {
     PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
 
@@ -267,8 +258,9 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* 
     gal_opts = std::make_unique<KIGFX::GAL_DISPLAY_OPTIONS>();
     gal_opts->ReadConfig( *Pgm().GetCommonSettings(), cfg->m_Window, aParent );
 
-    auto canvasType = static_cast<EDA_DRAW_PANEL_GAL::GAL_TYPE>( cfg->m_Graphics.canvas_type );
-    auto panel = new FOOTPRINT_PREVIEW_PANEL( aKiway, aParent, std::move( gal_opts ), canvasType );
+    auto galType = static_cast<EDA_DRAW_PANEL_GAL::GAL_TYPE>( cfg->m_Graphics.canvas_type );
+    FOOTPRINT_PREVIEW_PANEL* panel = new FOOTPRINT_PREVIEW_PANEL( aKiway, aParent, aUnitsProvider,
+                                                                  std::move( gal_opts ), galType );
 
     panel->UpdateColors();
 

@@ -26,6 +26,7 @@
 #define LIB_TREE_H
 
 #include <wx/panel.h>
+#include <wx/timer.h>
 #include <lib_tree_model_adapter.h>
 #include <html_window.h>
 #include <widgets/wx_dataviewctrl.h>
@@ -35,6 +36,7 @@ class wxHtmlLinkEvent;
 class wxSearchCtrl;
 class wxTimer;
 class wxTimerEvent;
+class wxPopupWindow;
 class STD_BITMAP_BUTTON;
 class ACTION_MENU;
 class LIB_ID;
@@ -204,6 +206,9 @@ protected:
 
     void updateRecentSearchMenu();
 
+    void showPreview( wxDataViewItem aItem );
+    void hidePreview();
+
     void onQueryText( wxCommandEvent& aEvent );
     void onQueryCharHook( wxKeyEvent& aEvent );
     void onQueryMouseMoved( wxMouseEvent& aEvent );
@@ -211,6 +216,9 @@ protected:
     void onTreeSelect( wxDataViewEvent& aEvent );
     void onTreeActivate( wxDataViewEvent& aEvent );
     void onTreeCharHook( wxKeyEvent& aEvent );
+
+    void onIdle( wxIdleEvent& aEvent );
+    void onHoverTimer( wxTimerEvent& aEvent );
 
     void onDetailsLink( wxHtmlLinkEvent& aEvent );
     void onPreselect( wxCommandEvent& aEvent );
@@ -232,6 +240,11 @@ protected:
     wxString           m_recentSearchesKey;
 
     bool               m_skipNextRightClick;
+
+    wxPoint            m_hoverPos;
+    wxDataViewItem     m_hoverItem;
+    wxTimer            m_hoverTimer;
+    wxPopupWindow*     m_previewWindow;
 };
 
 ///< Custom event sent when a new symbol is preselected

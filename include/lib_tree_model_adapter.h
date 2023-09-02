@@ -259,7 +259,10 @@ public:
 
     LIB_TREE_NODE* GetTreeNodeFor( const wxDataViewItem& aSelection ) const;
 
-    virtual wxString GenerateInfo( const LIB_ID& aLibId, int aUnit ) { return wxEmptyString; };
+    virtual wxString GenerateInfo( const LIB_ID& aLibId, int aUnit ) { return wxEmptyString; }
+
+    virtual bool HasPreview( const wxDataViewItem& aItem ) { return false; }
+    virtual void ShowPreview( wxWindow* aParent, const wxDataViewItem& aItem ) {}
 
     /**
      * Return the number of symbols loaded in the tree.

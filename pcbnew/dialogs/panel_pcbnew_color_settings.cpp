@@ -673,12 +673,13 @@ std::set<int> g_excludedLayers =
         };
 
 
-PANEL_PCBNEW_COLOR_SETTINGS::PANEL_PCBNEW_COLOR_SETTINGS( wxWindow* aParent, BOARD* aBoard )
-        : PANEL_COLOR_SETTINGS( aParent ),
-          m_preview( nullptr ),
-          m_page( nullptr ),
-          m_titleBlock( nullptr ),
-          m_board( aBoard )
+PANEL_PCBNEW_COLOR_SETTINGS::PANEL_PCBNEW_COLOR_SETTINGS( wxWindow* aParent, BOARD* aBoard ) :
+        PANEL_COLOR_SETTINGS( aParent ),
+        UNITS_PROVIDER( pcbIUScale, EDA_UNITS::MILLIMETRES ),
+        m_preview( nullptr ),
+        m_page( nullptr ),
+        m_titleBlock( nullptr ),
+        m_board( aBoard )
 {
     m_colorNamespace = "board";
 
@@ -762,7 +763,7 @@ void PANEL_PCBNEW_COLOR_SETTINGS::createSwatches()
         createSwatch( layer, name );
     }
 
-    m_preview = FOOTPRINT_PREVIEW_PANEL::New( nullptr, m_panel1 );
+    m_preview = FOOTPRINT_PREVIEW_PANEL::New( nullptr, m_panel1, this );
     m_preview->GetGAL()->SetAxesEnabled( false );
 
     m_previewPanelSizer->Add( m_preview, 1, wxEXPAND, 5 );

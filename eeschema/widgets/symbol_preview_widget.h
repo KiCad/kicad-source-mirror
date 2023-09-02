@@ -43,7 +43,7 @@ public:
      * @param aKiway - an active Kiway instance
      * @param aCanvasType = the type of canvas (GAL_TYPE_OPENGL or GAL_TYPE_CAIRO only)
      */
-    SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY* aKiway,
+    SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY* aKiway, bool aIncludeStatus,
                            EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );
 
     ~SYMBOL_PREVIEW_WIDGET() override;

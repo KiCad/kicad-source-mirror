@@ -24,7 +24,6 @@
 #include <widgets/wx_panel.h>
 #include <wx/dcclient.h>
 #include <wx/settings.h>
-#include "gal/color4d.h"
 
 WX_PANEL::WX_PANEL( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
                     long style, const wxString& name ) :
@@ -32,7 +31,8 @@ WX_PANEL::WX_PANEL( wxWindow* parent, wxWindowID id, const wxPoint& pos, const w
         m_leftBorder( false ),
         m_rightBorder( false ),
         m_topBorder( false ),
-        m_bottomBorder( false )
+        m_bottomBorder( false ),
+        m_borderColor( KIGFX::COLOR4D::UNSPECIFIED )
 {
     this->Connect( wxEVT_PAINT, wxPaintEventHandler( WX_PANEL::OnPaint ) );
 }
@@ -49,9 +49,15 @@ void WX_PANEL::OnPaint( wxPaintEvent& event )
     wxRect    rect( wxPoint( 0, 0 ), GetClientSize() );
     wxPaintDC dc( this );
 
-    KIGFX::COLOR4D bg = wxSystemSettings::GetColour( wxSYS_COLOUR_FRAMEBK );
-    KIGFX::COLOR4D fg = wxSystemSettings::GetColour( wxSYS_COLOUR_ACTIVEBORDER );
-    KIGFX::COLOR4D border = fg.Mix( bg, 0.18 );
+    KIGFX::COLOR4D border = m_borderColor;
+
+    if( border == KIGFX::COLOR4D::UNSPECIFIED )
+    {
+        KIGFX::COLOR4D bg = wxSystemSettings::GetColour( wxSYS_COLOUR_FRAMEBK );
+        KIGFX::COLOR4D fg = wxSystemSettings::GetColour( wxSYS_COLOUR_ACTIVEBORDER );
+        border = fg.Mix( bg, 0.18 );
+    }
+
     dc.SetPen( wxPen( border.ToColour(), 1 ) );
 
     if( m_leftBorder )

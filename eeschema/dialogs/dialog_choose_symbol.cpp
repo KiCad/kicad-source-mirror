@@ -294,7 +294,7 @@ wxPanel* DIALOG_CHOOSE_SYMBOL::ConstructRightPanel( wxWindow* aParent )
     wxBoxSizer*                  sizer = new wxBoxSizer( wxVERTICAL );
     EDA_DRAW_PANEL_GAL::GAL_TYPE backend = m_parent->GetCanvas()->GetBackend();
 
-    m_symbol_preview = new SYMBOL_PREVIEW_WIDGET( panel, &Kiway(), backend );
+    m_symbol_preview = new SYMBOL_PREVIEW_WIDGET( panel, &Kiway(), true, backend );
     m_symbol_preview->SetLayoutDirection( wxLayout_LeftToRight );
 
     if( m_show_footprints )

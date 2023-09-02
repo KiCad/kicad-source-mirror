@@ -27,6 +27,7 @@
 #include <project/project_file.h>
 #include <fp_tree_synchronizing_adapter.h>
 #include <footprint_edit_frame.h>
+#include <footprint_preview_panel.h>
 #include <fp_lib_table.h>
 #include <footprint_info_impl.h>
 #include <string_utils.h>
@@ -304,3 +305,29 @@ bool FP_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsign
 }
 
 
+bool FP_TREE_SYNCHRONIZING_ADAPTER::HasPreview( const wxDataViewItem& aItem )
+{
+    LIB_TREE_NODE* node = ToNode( aItem );
+    wxCHECK( node, false );
+
+    return node->m_Type == LIB_TREE_NODE::LIBID;
+}
+
+
+void FP_TREE_SYNCHRONIZING_ADAPTER::ShowPreview( wxWindow* aParent, const wxDataViewItem& aItem )
+{
+    LIB_TREE_NODE* node = ToNode( aItem );
+    wxCHECK( node, /* void */ );
+
+    wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
+    aParent->SetSizer( mainSizer );
+
+    FOOTPRINT_PREVIEW_PANEL* preview = FOOTPRINT_PREVIEW_PANEL::New( &m_frame->Kiway(), aParent,
+                                                                     m_frame );
+    preview->GetGAL()->SetAxesEnabled( false );
+
+    mainSizer->Add( preview, 1, wxEXPAND|wxALL, 1 );
+    aParent->Layout();
+
+    preview->DisplayFootprint( node->m_LibId );
+}

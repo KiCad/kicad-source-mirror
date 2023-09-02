@@ -391,6 +391,25 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool aEraseBackground, const wxRect* aRect )
 
 void EDA_DRAW_PANEL_GAL::ForceRefresh()
 {
+    if( !m_drawingEnabled )
+    {
+        if( m_gal && m_gal->IsInitialized() )
+        {
+            Connect( wxEVT_PAINT, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), nullptr,
+                     this );
+
+            Connect( wxEVT_IDLE, wxIdleEventHandler( EDA_DRAW_PANEL_GAL::onIdle ), nullptr, this );
+
+            m_drawingEnabled = true;
+        }
+        else
+        {
+            // Try again soon
+            m_refreshTimer.StartOnce( 100 );
+            return;
+        }
+    }
+
     DoRePaint();
 }
 
@@ -613,26 +632,7 @@ void EDA_DRAW_PANEL_GAL::onIdle( wxIdleEvent& aEvent )
 
 void EDA_DRAW_PANEL_GAL::onRefreshTimer( wxTimerEvent& aEvent )
 {
-    if( !m_drawingEnabled )
-    {
-        if( m_gal && m_gal->IsInitialized() )
-        {
-            Connect( wxEVT_PAINT, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), nullptr,
-                     this );
-
-            Connect( wxEVT_IDLE, wxIdleEventHandler( EDA_DRAW_PANEL_GAL::onIdle ), nullptr, this );
-
-            m_drawingEnabled = true;
-        }
-        else
-        {
-            // Try again soon
-            m_refreshTimer.StartOnce( 100 );
-            return;
-        }
-    }
-
-    DoRePaint();
+    ForceRefresh();
 }
 
 

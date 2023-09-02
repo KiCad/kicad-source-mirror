@@ -89,10 +89,12 @@ DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( wxWindow* aParent,
 {
     wxASSERT( aCurrentSheet );
 
-    m_previewOldWidget = new SYMBOL_PREVIEW_WIDGET( m_previewOldPanel,  &Kiway(), aGalBackEndType );
+    m_previewOldWidget = new SYMBOL_PREVIEW_WIDGET( m_previewOldPanel, &Kiway(), false,
+                                                    aGalBackEndType );
 	m_SizerOldPanel->Add( m_previewOldWidget, 1, wxEXPAND | wxALL, 5 );
 
-    m_previewNewWidget = new SYMBOL_PREVIEW_WIDGET( m_previewNewPanel,  &Kiway(), aGalBackEndType );
+    m_previewNewWidget = new SYMBOL_PREVIEW_WIDGET( m_previewNewPanel,  &Kiway(), false,
+                                                    aGalBackEndType );
 	m_SizerNewPanel->Add( m_previewNewWidget, 1, wxEXPAND | wxALL, 5 );
 
     // Set the info message, customized to include the proper suffix.
