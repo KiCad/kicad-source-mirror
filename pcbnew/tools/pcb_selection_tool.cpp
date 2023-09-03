@@ -3161,7 +3161,8 @@ void PCB_SELECTION_TOOL::FilterCollectorForHierarchy( GENERAL_COLLECTOR& aCollec
 }
 
 
-void PCB_SELECTION_TOOL::FilterCollectorForFreePads( GENERAL_COLLECTOR& aCollector ) const
+void PCB_SELECTION_TOOL::FilterCollectorForFreePads( GENERAL_COLLECTOR& aCollector,
+                                                     bool aForcePromotion ) const
 {
     std::set<BOARD_ITEM*> to_add;
 
@@ -3171,7 +3172,7 @@ void PCB_SELECTION_TOOL::FilterCollectorForFreePads( GENERAL_COLLECTOR& aCollect
         BOARD_ITEM* item = aCollector[i];
 
         if( !m_isFootprintEditor && item->Type() == PCB_PAD_T
-            && !frame()->GetPcbNewSettings()->m_AllowFreePads )
+            && ( !frame()->GetPcbNewSettings()->m_AllowFreePads || aForcePromotion ) )
         {
             if( !aCollector.HasItem( item->GetParent() ) )
                 to_add.insert( item->GetParent() );

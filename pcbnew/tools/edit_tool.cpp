@@ -2217,6 +2217,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     const PCB_SELECTION& selection = m_selectionTool->RequestSelection(
                 []( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
                 {
+                    sTool->FilterCollectorForFreePads( aCollector, true );
                     sTool->FilterCollectorForMarkers( aCollector );
                     sTool->FilterCollectorForHierarchy( aCollector, true );
                 } );
@@ -2257,10 +2258,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         }
         else if( orig_item->GetParent() && orig_item->GetParent()->Type() == PCB_FOOTPRINT_T )
         {
-            FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( orig_item->GetParent() );
-
-            m_commit->Modify( parentFootprint );
-            dupe_item = parentFootprint->DuplicateItem( orig_item, true /* add to parent */ );
+            // No sub-footprint modifications allowed outside of footprint editor
         }
         else
         {
