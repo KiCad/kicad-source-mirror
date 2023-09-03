@@ -305,9 +305,15 @@ int COMMON_TOOLS::doZoomFit( ZOOM_FIT_TYPE_T aFitType )
     // Currently "Zoom to Objects" is only supported in Eeschema & Pcbnew.  Support for other
     // programs in the suite can be added as needed.
 
+    if( aFitType == ZOOM_FIT_ALL )
+    {
+        if( frame->IsType( FRAME_PCB_EDITOR ) )
+            bBox = m_frame->GetDocumentExtents( false );
+    }
+
     if( aFitType == ZOOM_FIT_OBJECTS )
     {
-        if( frame->IsType( FRAME_SCH ) || frame->IsType( FRAME_PCB_EDITOR ) )
+        if( frame->IsType( FRAME_SCH ) )
             bBox = m_frame->GetDocumentExtents( false );
         else
             aFitType = ZOOM_FIT_ALL; // Just do a "Zoom to Fit" for unsupported editors
