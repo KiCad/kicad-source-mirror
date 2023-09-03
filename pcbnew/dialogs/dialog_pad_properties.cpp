@@ -1322,7 +1322,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
 
     if( m_previewPad->GetShape() == PAD_SHAPE::CUSTOM )
     {
-        // allow 0-sized anchor pads
+        pad_size = m_previewPad->GetBoundingBox().GetSize();
     }
     else if( m_previewPad->GetShape() == PAD_SHAPE::CIRCLE )
     {
