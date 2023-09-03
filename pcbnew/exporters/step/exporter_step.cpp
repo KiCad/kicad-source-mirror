@@ -534,7 +534,7 @@ bool EXPORTER_STEP::Export()
         }
         else
         {
-            ReportMessage( wxString::Format( _( "\%s file '%s' created.\n" ),
+            ReportMessage( wxString::Format( _( "%s file '%s' created.\n" ),
                                              m_params.GetFormatName(), m_outputFile ) );
         }
     }
