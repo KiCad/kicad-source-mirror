@@ -942,11 +942,14 @@ VECTOR2I PAD::GetSolderPasteMargin() const
     pad_margin.y = margin + KiROUND( m_size.y * mratio );
 
     // ensure mask have a size always >= 0
-    if( pad_margin.x < -m_size.x / 2 )
-        pad_margin.x = -m_size.x / 2;
+    if( m_padShape != PAD_SHAPE::CUSTOM )
+    {
+        if( pad_margin.x < -m_size.x / 2 )
+            pad_margin.x = -m_size.x / 2;
 
-    if( pad_margin.y < -m_size.y / 2 )
-        pad_margin.y = -m_size.y / 2;
+        if( pad_margin.y < -m_size.y / 2 )
+            pad_margin.y = -m_size.y / 2;
+    }
 
     return pad_margin;
 }
@@ -1683,7 +1686,7 @@ void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
         outline.Rotate( m_orient );
         outline.Move( VECTOR2I( padShapePos ) );
 
-        if( aClearance )
+        if( aClearance > 0 )
         {
             int numSegs = std::max( GetArcToSegmentCount( aClearance, aError, FULL_CIRCLE ),
                                                           pad_min_seg_per_circle_count );
@@ -1696,6 +1699,19 @@ void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
             }
 
             outline.Inflate( clearance, numSegs );
+            outline.Simplify( SHAPE_POLY_SET::PM_FAST );
+            outline.Fracture( SHAPE_POLY_SET::PM_FAST );
+        }
+        else if( aClearance < 0 )
+        {
+            // Negative clearances are primarily for drawing solder paste layer, so we don't
+            // worry ourselves overly about which side the error is on.
+
+            int numSegs = std::max( GetArcToSegmentCount( aClearance, aError, FULL_CIRCLE ),
+                                                          pad_min_seg_per_circle_count );
+
+            // aClearance is negative so this is actually a deflate
+            outline.Inflate( aClearance, numSegs );
             outline.Simplify( SHAPE_POLY_SET::PM_FAST );
             outline.Fracture( SHAPE_POLY_SET::PM_FAST );
         }

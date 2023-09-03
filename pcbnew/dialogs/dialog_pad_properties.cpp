@@ -1250,7 +1250,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
 
     if( m_dummyPad->GetShape() == PAD_SHAPE::CUSTOM )
     {
-        // allow 0-sized anchor pads
+        pad_size = m_dummyPad->GetBoundingBox().GetSize();
     }
     else if( m_dummyPad->GetShape() == PAD_SHAPE::CIRCLE )
     {
