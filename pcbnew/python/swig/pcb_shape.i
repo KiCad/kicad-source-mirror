@@ -1,4 +1,5 @@
 %ignore EDA_SHAPE::getCenter;
+%ignore std::abs;
 #pragma SWIG nowarn=503
 
 %{
@@ -33,6 +34,9 @@
 
     def __truediv__(self, other):
         return EDA_ANGLE(self.AsDegrees() / other, DEGREES_T)
+
+    def __abs__(self):
+        return EDA_ANGLE(abs(self.AsDegrees()), DEGREES_T)
     %}
 }
 
