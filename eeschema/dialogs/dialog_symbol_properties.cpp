@@ -113,7 +113,7 @@ public:
             {
                 attr = new wxGridCellAttr;
                 attr->SetReadOnly( true );
-                attr->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
+                attr->SetBackgroundColour( KIPLATFORM::UI::GetDialogBGColour() );
             }
             else
             {
@@ -175,11 +175,20 @@ public:
 
     static wxString GetValue( const SCH_PIN& aPin, int aCol )
     {
+        if( aCol == COL_ALT_NAME )
+        {
+            if( aPin.GetLibPin()->GetAlternates().empty() )
+                return wxEmptyString;
+            else if( aPin.GetAlt().IsEmpty() )
+                return aPin.GetName();
+            else
+                return aPin.GetAlt();
+        }
+
         switch( aCol )
         {
         case COL_NUMBER:    return aPin.GetNumber();
         case COL_BASE_NAME: return aPin.GetLibPin()->GetName();
-        case COL_ALT_NAME:  return aPin.GetAlt();
         case COL_TYPE:      return PinTypeNames()[static_cast<int>( aPin.GetType() )];
         case COL_SHAPE:     return PinShapeNames()[static_cast<int>( aPin.GetShape() )];
         default:   wxFAIL;  return wxEmptyString;
