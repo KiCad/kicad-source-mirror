@@ -111,7 +111,7 @@ def test_sch_export_netlist( kitest,
 @pytest.mark.parametrize("test_file,output_fn,cli_args",
                             [("cli/basic_test/basic_test.kicad_sch", "basic_test.pdf", []),
                              ("cli/basic_test/basic_test.kicad_sch", "basic_test.bnw.nods.nobg.pdf", ["--black-and-white","--exclude-drawing-sheet","--no-background-color"]),
-                             ("cli/basic_test/basic_test.kicad_sch", "basic_test.pone.pdf", ["--plot-one"])
+                             ("cli/basic_test/basic_test.kicad_sch", "basic_test.pone.pdf", ["--pages", "1"])
                              ])
 def test_sch_export_pdf( kitest,
                          test_file: str,
