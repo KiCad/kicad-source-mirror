@@ -2906,6 +2906,11 @@ void APPEARANCE_CONTROLS::onViewportChanged( wxCommandEvent& aEvent )
 void APPEARANCE_CONTROLS::doApplyViewport( const VIEWPORT& aViewport )
 {
     m_frame->GetCanvas()->GetView()->SetViewport( aViewport.rect );
+    if( m_cbFlipBoard->GetValue() )
+    {
+        m_frame->GetCanvas()->GetView()->SetMirror( true, false );
+        m_frame->GetCanvas()->GetView()->RecacheAllItems();
+    }
     m_frame->GetCanvas()->Refresh();
 }
 

@@ -521,7 +521,7 @@ void VIEW::SetViewport( const BOX2D& aViewport )
 {
     VECTOR2D ssize = ToWorld( m_gal->GetScreenPixelSize(), false );
 
-    wxCHECK( ssize.x > 0 && ssize.y > 0, /*void*/ );
+    wxCHECK( fabs(ssize.x) > 0 && fabs(ssize.y) > 0, /*void*/ );
 
     VECTOR2D centre = aViewport.Centre();
     VECTOR2D vsize  = aViewport.GetSize();
