@@ -1155,22 +1155,10 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
     if( aPad->GetDrillSize().x > 0 )
         solid->SetHole( new PNS::HOLE( aPad->GetEffectiveHoleShape()->Clone() ) );
 
-    // We generate a single SOLID for a pad, so we have to treat it as ALWAYS_FLASHED and then
-    // perform layer-specific flashing tests internally.
-    std::shared_ptr<SHAPE> shape = aPad->GetEffectiveShape( UNDEFINED_LAYER,
-                                                            FLASHING::ALWAYS_FLASHED );
+    std::shared_ptr<SHAPE_POLY_SET> shape = aPad->GetEffectivePolygon();
 
-    if( shape->HasIndexableSubshapes() && shape->GetIndexableSubshapeCount() == 1 )
-    {
-        std::vector<const SHAPE*> subshapes;
-        shape->GetIndexableSubshapes( subshapes );
-
-        solid->SetShape( subshapes[0]->Clone() );
-    }
-    else
-    {
-        solid->SetShape( shape->Clone() );
-    }
+    if( shape->OutlineCount() )
+        solid->SetShape( new SHAPE_SIMPLE( shape->Outline( 0 ) ) );
 
     return solid;
 }
