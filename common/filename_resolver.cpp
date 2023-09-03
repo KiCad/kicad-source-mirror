@@ -619,9 +619,9 @@ wxString FILENAME_RESOLVER::ShortenPath( const wxString& aFullPathName )
             else
             {
                 // new style alias
-                tname = ":";
+                tname = "${";
                 tname.append( sL->m_Alias );
-                tname.append( wxS( ":" ) );
+                tname.append( wxS( "}/" ) );
                 tname.append( fname );
             }
 
