@@ -120,6 +120,11 @@ public:
     }
 
     /**
+     * Create a copy of this #LIB_ITEM (with a new Uuid).
+     */
+    LIB_ITEM* Duplicate() const;
+
+    /**
      * Begin drawing a symbol library draw item at \a aPosition.
      *
      * It typically would be called on a left click when a draw tool is selected in

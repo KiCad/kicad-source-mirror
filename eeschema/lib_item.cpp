@@ -112,6 +112,15 @@ bool LIB_ITEM::operator<( const LIB_ITEM& aOther ) const
 }
 
 
+LIB_ITEM* LIB_ITEM::Duplicate() const
+{
+    LIB_ITEM* dupe = static_cast<LIB_ITEM*>( Clone() );
+    const_cast<KIID&>( dupe->m_Uuid ) = KIID();
+
+    return dupe;
+}
+
+
 bool LIB_ITEM::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
     if( m_flags & (STRUCT_DELETED | SKIP_STRUCT ) )

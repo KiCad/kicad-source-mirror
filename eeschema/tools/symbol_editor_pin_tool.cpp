@@ -339,7 +339,7 @@ void SYMBOL_EDITOR_PIN_TOOL::CreateImagePins( LIB_PIN* aPin )
         if( ii == aPin->GetUnit() )
             continue;
 
-        newPin = (LIB_PIN*) aPin->Clone();
+        newPin = (LIB_PIN*) aPin->Duplicate();
 
         // To avoid mistakes, gives this pin a new pin number because
         // it does no have the save pin number as the master pin
@@ -409,7 +409,7 @@ int SYMBOL_EDITOR_PIN_TOOL::PushPinProperties( const TOOL_EVENT& aEvent )
 // Create a new pin based on the previous pin with an incremented pin number.
 LIB_PIN* SYMBOL_EDITOR_PIN_TOOL::RepeatPin( const LIB_PIN* aSourcePin )
 {
-    LIB_PIN* pin = (LIB_PIN*) aSourcePin->Clone();
+    LIB_PIN* pin = (LIB_PIN*) aSourcePin->Duplicate();
     VECTOR2I step;
 
     pin->ClearFlags();

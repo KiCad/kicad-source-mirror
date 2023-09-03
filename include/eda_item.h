@@ -266,7 +266,7 @@ public:
      *
      * @return A clone of the item.
      */
-    virtual EDA_ITEM* Clone() const; // should not be inline, to save the ~ 6 bytes per call site.
+    virtual EDA_ITEM* Clone() const;
 
     /**
      * May be re-implemented for each derived class in order to handle all the types given

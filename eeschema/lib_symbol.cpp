@@ -1481,12 +1481,9 @@ int LIB_SYMBOL::GetMaxPinNumber() const
     {
         const LIB_PIN* pin = static_cast<const LIB_PIN*>( &item );
         long           currentPinNumber = 0;
-        bool           isNum = pin->GetNumber().ToLong( &currentPinNumber );
 
-        if( isNum && currentPinNumber > maxPinNumber )
-        {
-            maxPinNumber = currentPinNumber;
-        }
+        if( pin->GetNumber().ToLong( &currentPinNumber ) )
+            maxPinNumber = std::max( maxPinNumber, (int) currentPinNumber );
     }
 
     return maxPinNumber;
@@ -1598,7 +1595,7 @@ void LIB_SYMBOL::SetUnitCount( int aCount, bool aDuplicateDrawItems )
 
             for( int j = prevCount + 1; j <= aCount; j++ )
             {
-                LIB_ITEM* newItem = (LIB_ITEM*) item.Clone();
+                LIB_ITEM* newItem = (LIB_ITEM*) item.Duplicate();
                 newItem->m_unit = j;
                 tmp.push_back( newItem );
             }
@@ -1642,7 +1639,7 @@ void LIB_SYMBOL::SetConversion( bool aSetConvert, bool aDuplicatePins )
 
                 if( item.m_convert == 1 )
                 {
-                    LIB_ITEM* newItem = (LIB_ITEM*) item.Clone();
+                    LIB_ITEM* newItem = (LIB_ITEM*) item.Duplicate();
                     newItem->m_convert = 2;
                     tmp.push_back( newItem );
                 }

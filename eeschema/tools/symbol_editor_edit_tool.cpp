@@ -795,7 +795,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
         if( item.Type() == LIB_FIELD_T )
             continue;
 
-        LIB_ITEM* newItem = (LIB_ITEM*) item.Clone();
+        LIB_ITEM* newItem = (LIB_ITEM*) item.Duplicate();
         newItem->SetParent( symbol );
         newItem->SetFlags( IS_NEW | IS_PASTED | SELECTED );
 
@@ -835,31 +835,21 @@ int SYMBOL_EDITOR_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     if( selection.GetSize() == 0 )
         return 0;
 
-    // Doing a duplicate of a new object doesn't really make any sense; we'd just end
-    // up dragging around a stack of objects...
-    if( selection.Front()->IsNew() )
-        return 0;
-
-    if( !selection.Front()->IsMoving() )
-        commit.Modify( symbol, m_frame->GetScreen() );
+    commit.Modify( symbol, m_frame->GetScreen() );
 
     EDA_ITEMS newItems;
-    int       symbolLastPinNumber = -1;
 
     for( unsigned ii = 0; ii < selection.GetSize(); ++ii )
     {
         LIB_ITEM* oldItem = static_cast<LIB_ITEM*>( selection.GetItem( ii ) );
-        LIB_ITEM* newItem = (LIB_ITEM*) oldItem->Clone();
+        LIB_ITEM* newItem = static_cast<LIB_ITEM*>( oldItem->Duplicate() );
 
-        if( oldItem->Type() == LIB_PIN_T )
+        if( newItem->Type() == LIB_PIN_T )
         {
-            if( symbolLastPinNumber == -1 )
-            {
-                symbolLastPinNumber = symbol->GetMaxPinNumber();
-            }
+            LIB_PIN* newPin = static_cast<LIB_PIN*>( newItem );
 
-            handlePinDuplication( static_cast<LIB_PIN*>( oldItem ),
-                                  static_cast<LIB_PIN*>( newItem ), symbolLastPinNumber );
+            if( !newPin->GetNumber().IsEmpty() )
+                newPin->SetNumber( wxString::Format( wxT( "%i" ), symbol->GetMaxPinNumber() + 1 ) );
         }
 
         oldItem->ClearFlags( IS_NEW | IS_PASTED | SELECTED );

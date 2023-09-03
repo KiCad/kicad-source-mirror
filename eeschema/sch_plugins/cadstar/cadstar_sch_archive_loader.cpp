@@ -1726,7 +1726,7 @@ const LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSymdef( const SYMDEF_ID& aSymd
 
                 RotatePoint( linePos, libtext->GetTextPos(), -libtext->GetTextAngle() );
 
-                LIB_TEXT* textLine = static_cast<LIB_TEXT*>( libtext->Clone() );
+                LIB_TEXT* textLine = static_cast<LIB_TEXT*>( libtext->Duplicate() );
                 textLine->SetText( strings[ii] );
                 textLine->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
                 textLine->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );

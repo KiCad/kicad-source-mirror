@@ -752,7 +752,7 @@ void SCH_EDIT_FRAME::AddCopyForRepeatItem( const SCH_ITEM* aItem )
 
     if( aItem )
     {
-        std::unique_ptr<SCH_ITEM> repeatItem( static_cast<SCH_ITEM*>( aItem->Clone() ) );
+        std::unique_ptr<SCH_ITEM> repeatItem( static_cast<SCH_ITEM*>( aItem->Duplicate() ) );
 
         // Clone() preserves the flags, we want 'em cleared.
         repeatItem->ClearFlags();
