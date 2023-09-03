@@ -113,6 +113,7 @@ public:
             {
                 attr = new wxGridCellAttr;
                 attr->SetReadOnly( true );
+                attr->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
             }
             else
             {
