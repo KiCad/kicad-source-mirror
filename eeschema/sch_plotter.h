@@ -78,8 +78,10 @@ enum class HPGL_PAGE_SIZE
 
 struct SCH_PLOT_SETTINGS
 {
-    bool         m_plotAll;
-    bool         m_plotDrawingSheet;
+    bool                  m_plotAll;
+    bool                  m_plotDrawingSheet;
+    std::vector<wxString> m_plotPages;
+
     bool         m_blackAndWhite;
     int          m_pageSizeSelect;
     bool         m_useBackgroundColor;

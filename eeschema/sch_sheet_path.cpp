@@ -767,6 +767,20 @@ bool SCH_SHEET_LIST::PageNumberExists( const wxString& aPageNumber ) const
 }
 
 
+void SCH_SHEET_LIST::TrimToPageNumbers( const std::vector<wxString>& aPageInclusions )
+{
+    auto it = std::remove_if( begin(), end(),
+                              [&]( SCH_SHEET_PATH sheet )
+                              {
+                                  return std::find( aPageInclusions.begin(), aPageInclusions.end(),
+                                                    sheet.GetPageNumber() )
+                                         == aPageInclusions.end();
+                              } );
+
+    erase( it, end() );
+}
+
+
 bool SCH_SHEET_LIST::IsModified() const
 {
     for( const SCH_SHEET_PATH& sheet : *this )

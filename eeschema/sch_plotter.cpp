@@ -117,13 +117,20 @@ void SCH_PLOTTER::createPDFFile( const SCH_PLOT_SETTINGS& aPlotSettings,
      */
     SCH_SHEET_LIST sheetList;
 
-    if( aPlotSettings.m_plotAll )
+    if( aPlotSettings.m_plotAll || aPlotSettings.m_plotPages.size() > 0 )
     {
         sheetList.BuildSheetList( &m_schematic->Root(), true );
         sheetList.SortByPageNumbers();
+
+        // remove the non-selected pages if we are in plot pages mode
+        if( aPlotSettings.m_plotPages.size() > 0 )
+        {
+            sheetList.TrimToPageNumbers( aPlotSettings.m_plotPages );
+        }
     }
     else
     {
+        // in eeschema, this prints the current page
         sheetList.push_back( m_schematic->CurrentSheet() );
     }
 
@@ -302,6 +309,12 @@ void SCH_PLOTTER::createPSFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
     {
         sheetList.BuildSheetList( &m_schematic->Root(), true );
         sheetList.SortByPageNumbers();
+
+        // remove the non-selected pages if we are in plot pages mode
+        if( aPlotSettings.m_plotPages.size() > 0 )
+        {
+            sheetList.TrimToPageNumbers( aPlotSettings.m_plotPages );
+        }
     }
     else
     {
@@ -462,9 +475,16 @@ void SCH_PLOTTER::createSVGFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
     {
         sheetList.BuildSheetList( &m_schematic->Root(), true );
         sheetList.SortByPageNumbers();
+
+        // remove the non-selected pages if we are in plot pages mode
+        if( aPlotSettings.m_plotPages.size() > 0 )
+        {
+            sheetList.TrimToPageNumbers( aPlotSettings.m_plotPages );
+        }
     }
     else
     {
+        // in eeschema, this prints the current page
         sheetList.push_back( m_schematic->CurrentSheet() );
     }
 
@@ -636,9 +656,16 @@ void SCH_PLOTTER::createHPGLFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
     {
         sheetList.BuildSheetList( &m_schematic->Root(), true );
         sheetList.SortByPageNumbers();
+
+        // remove the non-selected pages if we are in plot pages mode
+        if( aPlotSettings.m_plotPages.size() > 0 )
+        {
+            sheetList.TrimToPageNumbers( aPlotSettings.m_plotPages );
+        }
     }
     else
     {
+        // in eeschema, this prints the current page
         sheetList.push_back( m_schematic->CurrentSheet() );
     }
 
@@ -818,9 +845,16 @@ void SCH_PLOTTER::createDXFFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
     {
         sheetList.BuildSheetList( &m_schematic->Root(), true );
         sheetList.SortByPageNumbers();
+
+        // remove the non-selected pages if we are in plot pages mode
+        if( aPlotSettings.m_plotPages.size() > 0 )
+        {
+            sheetList.TrimToPageNumbers( aPlotSettings.m_plotPages );
+        }
     }
     else
     {
+        // in eeschema, this prints the current page
         sheetList.push_back( m_schematic->CurrentSheet() );
     }
 

@@ -25,15 +25,16 @@
 #include "jobs/job_export_sch_plot.h"
 #include <layer_ids.h>
 #include <wx/crt.h>
+#include <string_utils.h>
 
 #include <macros.h>
 #include <wx/tokenzr.h>
 
 #define ARG_EXCLUDE_DRAWING_SHEET "--exclude-drawing-sheet"
 #define ARG_NO_BACKGROUND_COLOR "--no-background-color"
-#define ARG_PLOT_ONE "--plot-one"
 #define ARG_HPGL_PEN_SIZE "--pen-size"
 #define ARG_HPGL_ORIGIN "--origin"
+#define ARG_PAGES "--pages"
 
 const HPGL_PLOT_ORIGIN_AND_UNITS hpgl_origin_ops[4] = {
     HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT, HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER,
@@ -73,10 +74,10 @@ CLI::SCH_EXPORT_PLOT_COMMAND::SCH_EXPORT_PLOT_COMMAND( const std::string& aName,
             .implicit_value( true )
             .default_value( false );
 
-    m_argParser.add_argument( "-O", ARG_PLOT_ONE )
-            .help( UTF8STDSTR( _( "Plot only the first page (no sub-sheets)" ) ) )
-            .implicit_value( true )
-            .default_value( false );
+    m_argParser.add_argument( "-p", ARG_PAGES )
+            .default_value( std::string() )
+            .help( UTF8STDSTR( _( "List of page numbers separated by comma to print, blank or unspecified is equivalent to all pages" ) ) )
+            .metavar( "PAGE_LIST" );
 
     if( aPlotFormat == PLOT_FORMAT::HPGL )
     {
@@ -105,11 +106,19 @@ int CLI::SCH_EXPORT_PLOT_COMMAND::doPerform( KIWAY& aKiway )
         return EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
 
+    std::vector<wxString> pages;
+    wxString              pagesStr = FROM_UTF8( m_argParser.get<std::string>( ARG_PAGES ).c_str() );
+    wxStringTokenizer     tokenizer( pagesStr, "," );
+    while( tokenizer.HasMoreTokens() )
+    {
+        pages.push_back( tokenizer.GetNextToken().Trim() );
+    }
+
     std::unique_ptr<JOB_EXPORT_SCH_PLOT> plotJob =
             std::make_unique<JOB_EXPORT_SCH_PLOT>( true, m_plotFormat, filename );
 
     SCH_PLOT_SETTINGS& settings = plotJob->settings;
-    settings.m_plotAll = !m_argParser.get<bool>( ARG_PLOT_ONE );
+    settings.m_plotPages = pages;
     settings.m_plotDrawingSheet = !m_argParser.get<bool>( ARG_EXCLUDE_DRAWING_SHEET );
     settings.m_blackAndWhite = m_argParser.get<bool>( ARG_BLACKANDWHITE );
     settings.m_pageSizeSelect = PAGE_SIZE_AUTO;
@@ -119,6 +128,8 @@ int CLI::SCH_EXPORT_PLOT_COMMAND::doPerform( KIWAY& aKiway )
         settings.m_outputDirectory = m_argOutput;
     else
         settings.m_outputFile = m_argOutput;
+
+    settings.m_plotAll = settings.m_plotPages.size() == 0;
 
     plotJob->m_drawingSheet = m_argDrawingSheet;
     plotJob->SetVarOverrides( m_argDefineVars );

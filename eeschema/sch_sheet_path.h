@@ -615,6 +615,13 @@ public:
     bool PageNumberExists( const wxString& aPageNumber ) const;
 
     /**
+     * Truncates the list by removing sheet's with page numbers not in the given list
+     *
+     * @param aPageInclusions List of Page Numbers (non-virtual) to keep
+     */
+    void TrimToPageNumbers( const std::vector<wxString>& aPageInclusions );
+
+    /**
      * Update all of the symbol instance information using \a aSymbolInstances.
      * WARNING: Do not call this on anything other than the full hierarchy.
      * @param aSymbolInstances is the symbol path information loaded from the root schematic.
