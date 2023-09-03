@@ -199,7 +199,8 @@ public:
      * Check the "allow free pads" setting and if disabled, replace any pads in the collector
      * with their parent footprints.
      */
-    void FilterCollectorForFreePads( GENERAL_COLLECTOR& aCollector ) const;
+    void FilterCollectorForFreePads( GENERAL_COLLECTOR& aCollector,
+                                     bool aForcePromotion = false ) const;
 
     /**
      * Drop any PCB_MARKERs from the collector.

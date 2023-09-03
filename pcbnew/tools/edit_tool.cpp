@@ -2207,6 +2207,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     const PCB_SELECTION& selection = m_selectionTool->RequestSelection(
                 []( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
                 {
+                    sTool->FilterCollectorForFreePads( aCollector, true );
                     sTool->FilterCollectorForMarkers( aCollector );
                     sTool->FilterCollectorForHierarchy( aCollector, true );
                 } );
@@ -2250,18 +2251,12 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         }
         else if( FOOTPRINT* parentFootprint = orig_item->GetParentFootprint() )
         {
-            commit.Modify( parentFootprint );
-            dupe_item = parentFootprint->DuplicateItem( orig_item, true /* add to parent */ );
+            // No sub-footprint modifications allowed outside of footprint editor
         }
         else
         {
             switch( orig_item->Type() )
             {
-            case PCB_FIELD_T:
-                // Todo: these should probably be duplicated into new text items that
-                // have variables that reference the field values
-
-                break;
             case PCB_FOOTPRINT_T:
             case PCB_TEXT_T:
             case PCB_TEXTBOX_T:
