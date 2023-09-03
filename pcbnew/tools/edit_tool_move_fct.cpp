@@ -190,6 +190,12 @@ int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::PackAndMoveFootprints( const TOOL_EVENT& aEvent )
 {
+    if( isRouterActive() || m_dragging )
+    {
+        wxBell();
+        return 0;
+    }
+
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
