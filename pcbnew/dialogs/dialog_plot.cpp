@@ -154,6 +154,7 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
 
 	sbSizer->Add( m_plotAllLayersList, 1, wxALL | wxEXPAND, 5 );
 
+#if 0   // re-enable once layer ordering is implemented
 	wxBoxSizer* bButtonSizer;
 	bButtonSizer = new wxBoxSizer( wxHORIZONTAL );
 
@@ -172,6 +173,8 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
 	bButtonSizer->Add( m_bpMoveDown, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5 );
 
     sbSizer->Add( bButtonSizer, 0, wxALL | wxEXPAND, 5 );
+#endif
+
 	bmiddleSizer->Insert( 1, sbSizer, 1, wxALL | wxEXPAND, 3 );
 
     init_Dialog();
@@ -183,15 +186,19 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
 
+#if 0   // re-enable once layer ordering is implemented
     m_bpMoveUp->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_PLOT::onPlotAllListMoveUp, this );
     m_bpMoveDown->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_PLOT::onPlotAllListMoveDown, this );
+#endif
 }
 
 
 DIALOG_PLOT::~DIALOG_PLOT()
 {
+#if 0   // re-enable once layer ordering is implemented
     m_bpMoveDown->Unbind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_PLOT::onPlotAllListMoveDown, this );
     m_bpMoveUp->Unbind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_PLOT::onPlotAllListMoveUp, this );
+#endif
 }
 
 
