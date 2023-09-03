@@ -366,7 +366,7 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::HasPreview( const wxDataViewItem& aItem 
     LIB_TREE_NODE* node = ToNode( aItem );
     wxCHECK( node, false );
 
-    return node->m_Type == LIB_TREE_NODE::LIBID;
+    return node->m_Type == LIB_TREE_NODE::LIBID && node->m_LibId != m_frame->GetTargetLibId();
 }
 
 
