@@ -225,8 +225,6 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     ACTION_MENU* viewMenu = new ACTION_MENU( false, selTool );
 
     viewMenu->Add( ACTIONS::showFootprintBrowser );
-    viewMenu->Add( ACTIONS::showProperties, ACTION_MENU::CHECK );
-    viewMenu->Add( PCB_ACTIONS::showSearch, ACTION_MENU::CHECK );
     viewMenu->Add( ACTIONS::show3DViewer );
 
     viewMenu->AppendSeparator();
@@ -276,6 +274,8 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     viewMenu->Add( PCB_ACTIONS::flipBoard,                  ACTION_MENU::CHECK );
 
     viewMenu->AppendSeparator();
+    viewMenu->Add( ACTIONS::showProperties,                 ACTION_MENU::CHECK );
+    viewMenu->Add( PCB_ACTIONS::showSearch,                 ACTION_MENU::CHECK );
     viewMenu->Add( PCB_ACTIONS::showLayersManager,          ACTION_MENU::CHECK );
 
 #ifdef __APPLE__
