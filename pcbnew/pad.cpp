@@ -566,11 +566,14 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
     {
         for( const std::shared_ptr<PCB_SHAPE>& primitive : m_editPrimitives )
         {
-            for( SHAPE* shape : primitive->MakeEffectiveShapes() )
+            if( !primitive->IsAnnotationProxy() )
             {
-                shape->Rotate( m_orient );
-                shape->Move( shapePos );
-                add( shape );
+                for( SHAPE* shape : primitive->MakeEffectiveShapes() )
+                {
+                    shape->Rotate( m_orient );
+                    shape->Move( shapePos );
+                    add( shape );
+                }
             }
         }
     }

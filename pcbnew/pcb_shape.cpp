@@ -30,6 +30,7 @@
 #include <pcb_edit_frame.h>
 #include <board_design_settings.h>
 #include <footprint.h>
+#include <pad.h>
 #include <base_units.h>
 #include <geometry/shape_compound.h>
 #include <pcb_shape.h>
@@ -577,5 +578,33 @@ static struct PCB_SHAPE_DESC
 
         propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( BOARD_CONNECTED_ITEM ),
                                       _HKI( "Net" ), isCopper );
+
+        auto isPadEditMode =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aItem ) )
+                    {
+                        if( shape->GetBoard() && shape->GetBoard()->IsFootprintHolder() )
+                        {
+                            for( FOOTPRINT* fp : shape->GetBoard()->Footprints() )
+                            {
+                                for( PAD* pad : fp->Pads() )
+                                {
+                                    if( pad->IsEntered() )
+                                        return true;
+                                }
+                            }
+                        }
+                    }
+
+                    return false;
+                };
+
+        const wxString groupPadPrimitives = _HKI( "Pad Primitives" );
+
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, bool>( _HKI( "Number Box" ),
+                             &EDA_SHAPE::SetIsAnnotationProxy, &EDA_SHAPE::IsAnnotationProxy ),
+                             groupPadPrimitives )
+                .SetAvailableFunc( isPadEditMode );
     }
 } _PCB_SHAPE_DESC;

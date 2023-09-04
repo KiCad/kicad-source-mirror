@@ -1752,12 +1752,13 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
 
             if( aShape->IsAnnotationProxy() )
             {
-                m_gal->DrawSegment( pts[0], pts[1], thickness );
-                m_gal->DrawSegment( pts[1], pts[2], thickness );
-                m_gal->DrawSegment( pts[2], pts[3], thickness );
-                m_gal->DrawSegment( pts[3], pts[0], thickness );
-                m_gal->DrawSegment( pts[0], pts[2], thickness );
-                m_gal->DrawSegment( pts[1], pts[3], thickness );
+                m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+                m_gal->DrawLine( pts[0], pts[1] );
+                m_gal->DrawLine( pts[1], pts[2] );
+                m_gal->DrawLine( pts[2], pts[3] );
+                m_gal->DrawLine( pts[3], pts[0] );
+                m_gal->DrawLine( pts[0], pts[2] );
+                m_gal->DrawLine( pts[1], pts[3] );
             }
             else if( outline_mode )
             {
