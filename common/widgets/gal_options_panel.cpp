@@ -21,17 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
-#include <wx/sizer.h>
-#include <wx/checkbox.h>
-#include <wx/choice.h>
-#include <wx/radiobox.h>
-#include <wx/spinctrl.h>
-#include <wx/stattext.h>
-#include <wx/statbox.h>
-#include <wx/statline.h>
-
-#include <ignore.h>
 #include <widgets/gal_options_panel.h>
 #include <settings/app_settings.h>
 #include <eda_draw_frame.h>
@@ -45,9 +34,9 @@ static const double gridThicknessMin = 1.0;
 static const double gridThicknessMax = 10.0;
 static const double gridThicknessStep = 0.5;
 
-static const double gridMinSpacingMin = 5;
-static const double gridMinSpacingMax = 200;
-static const double gridMinSpacingStep = 5;
+static const int gridMinSpacingMin = 5;
+static const int gridMinSpacingMax = 200;
+static const int gridMinSpacingStep = 5;
 
 
 ///TODO: These are duplicated in gal_display_options - Unify!
@@ -68,153 +57,35 @@ static const UTIL::CFG_MAP<KIGFX::GRID_SNAPPING> gridSnapConfigVals =
 
 
 GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, APP_SETTINGS_BASE* aAppSettings ) :
-    wxPanel( aParent, wxID_ANY ),
+    GAL_OPTIONS_PANEL_BASE( aParent ),
     m_cfg( aAppSettings )
 {
-    // the main sizer that holds "columns" of settings
-    m_mainSizer = new wxBoxSizer( wxHORIZONTAL );
-    SetSizer( m_mainSizer );
-
-    // second-level sizers that are one "column" of settings each
-    wxBoxSizer* sLeftSizer = new wxBoxSizer( wxVERTICAL );
-    m_mainSizer->Add( sLeftSizer, 1, wxRIGHT | wxBOTTOM | wxEXPAND, 5 );
-
-    /*
-     * Rendering engine
-     */
-#ifndef __WXMAC__
-    {
-        wxString engineChoices[] = { _( "Accelerated graphics" ), _( "Fallback graphics" ) };
-       	m_renderingEngine = new wxRadioBox( this, wxID_ANY, _( "Rendering Engine" ),
-                                            wxDefaultPosition, wxDefaultSize,
-                                            sizeof( engineChoices ) / sizeof( wxString ),
-                                            engineChoices, 1, wxRA_SPECIFY_COLS );
-        m_renderingEngine->SetItemToolTip( 0, _( "Hardware-accelerated graphics (recommended)" ) );
-        m_renderingEngine->SetItemToolTip( 1, _( "Software graphics (for computers which do not "
-                                                 "support KiCad's hardware acceleration "
-                                                 "requirements)" ) );
-
-        sLeftSizer->Add( m_renderingEngine, 0, wxTOP | wxBOTTOM | wxRIGHT | wxEXPAND, 5 );
-    }
+    // Rendering engine
+#ifdef __WXMAC__
+    // On MAC, Cairo render does not work.
+    m_renderingEngine->Hide();
 #endif
+    m_renderingEngine->SetItemToolTip( 0, _( "Hardware-accelerated graphics (recommended)" ) );
+    m_renderingEngine->SetItemToolTip( 1, _( "Software graphics (for computers which do not "
+                                             "support KiCad's hardware acceleration "
+                                             "requirements)" ) );
 
-    /*
-     * Grid settings subpanel
-     */
+    // Grid settings subpanel
+    int selection = 0;  // default selection
+
+    for( double size = gridThicknessMin; size <= gridThicknessMax; size += gridThicknessStep )
     {
-        wxStaticText* gridLabel = new wxStaticText( this, wxID_ANY, _( "Grid Options" ) );
-        sLeftSizer->Add( gridLabel, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 13 );
+        m_gridThicknessList.push_back( size );
+        m_gridLineWidth->Append( wxString::Format( wxT( "%.1f" ), size ) );
 
-        wxStaticLine* staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition,
-                                                      wxDefaultSize, wxLI_HORIZONTAL );
-        sLeftSizer->Add( staticline1, 0, wxEXPAND|wxBOTTOM, 5 );
-
-        wxBoxSizer* sGridSettings = new wxBoxSizer( wxVERTICAL );
-
-        wxString m_gridStyleChoices[] = {
-            _( "Dots" ),
-            _( "Lines" ),
-            _( "Small crosses" )
-        };
-
-        int m_gridStyleNChoices = sizeof( m_gridStyleChoices ) / sizeof( wxString );
-        m_gridStyle = new wxRadioBox( this, wxID_ANY, _( "Grid Style" ), wxDefaultPosition,
-                                      wxDefaultSize, m_gridStyleNChoices, m_gridStyleChoices, 1,
-                                      wxRA_SPECIFY_COLS );
-        sGridSettings->Add( m_gridStyle, 0, wxALL | wxEXPAND, 5 );
-
-        wxFlexGridSizer* sGridSettingsGrid;
-        sGridSettingsGrid = new wxFlexGridSizer( 0, 3, 0, 0 );
-        sGridSettingsGrid->AddGrowableCol( 1 );
-        sGridSettingsGrid->SetFlexibleDirection( wxBOTH );
-        sGridSettingsGrid->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-        l_gridLineWidth = new wxStaticText( this, wxID_ANY, _( "Grid thickness:" ) );
-        l_gridLineWidth->Wrap( -1 );
-        sGridSettingsGrid->Add( l_gridLineWidth, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxTOP, 5 );
-
-        m_gridLineWidth = new wxSpinCtrlDouble( this, wxID_ANY );
-        m_gridLineWidth->SetRange( gridThicknessMin, gridThicknessMax );
-        m_gridLineWidth->SetIncrement( gridThicknessStep );
-        m_gridLineWidth->SetDigits( 1 );
-        sGridSettingsGrid->Add( m_gridLineWidth, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND | wxTOP, 5 );
-
-        l_gridLineWidthUnits = new wxStaticText( this, wxID_ANY, _( "px" ) );
-        l_gridLineWidthUnits->Wrap( -1 );
-        sGridSettingsGrid->Add( l_gridLineWidthUnits, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxLEFT | wxTOP, 5 );
-
-        l_gridMinSpacing = new wxStaticText( this, wxID_ANY, _( "Min grid spacing:" ) );
-        l_gridMinSpacing->Wrap( -1 );
-        sGridSettingsGrid->Add( l_gridMinSpacing, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxTOP, 5 );
-
-        m_gridMinSpacing = new wxSpinCtrlDouble( this, wxID_ANY);
-        m_gridMinSpacing->SetRange( gridMinSpacingMin, gridMinSpacingMax );
-        m_gridMinSpacing->SetIncrement( gridMinSpacingStep );
-        m_gridMinSpacing->SetDigits( 0 );
-        sGridSettingsGrid->Add( m_gridMinSpacing, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND | wxTOP, 5 );
-
-        l_gridMinSpacingUnits = new wxStaticText( this, wxID_ANY, _( "px" ) );
-        l_gridMinSpacingUnits->Wrap( -1 );
-        sGridSettingsGrid->Add( l_gridMinSpacingUnits, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxLEFT | wxTOP, 5 );
-
-        l_gridSnapOptions = new wxStaticText( this, wxID_ANY, _( "Snap to Grid:" ) );
-        l_gridSnapOptions->Wrap( -1 );
-        sGridSettingsGrid->Add( l_gridSnapOptions, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxTOP, 5 );
-
-        wxString gridSnapChoices[] = { _( "Always" ), _( "When grid shown" ), _( "Never" ) };
-        int gridSnapNChoices = sizeof( gridSnapChoices ) / sizeof( wxString );
-        m_gridSnapOptions = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                          gridSnapNChoices, gridSnapChoices );
-        m_gridSnapOptions->Select( 0 );
-        sGridSettingsGrid->Add( m_gridSnapOptions, 0,
-                                wxALIGN_CENTER_VERTICAL | wxEXPAND | wxTOP | wxBOTTOM, 5 );
-
-        l_gridSnapSpace = new wxStaticText( this, wxID_ANY, _( "px" ) );
-        l_gridSnapSpace->Wrap( -1 );
-        l_gridSnapSpace->Hide();
-        sGridSettingsGrid->Add( l_gridSnapSpace, 0,
-                                wxALIGN_CENTER_VERTICAL | wxALL | wxRESERVE_SPACE_EVEN_IF_HIDDEN,
-                                5 );
-
-
-        sGridSettings->Add( sGridSettingsGrid, 1, wxLEFT | wxRIGHT | wxBOTTOM | wxEXPAND, 5 );
-
-        sLeftSizer->Add( sGridSettings, 0, wxEXPAND|wxLEFT, 5 );
+        if( m_cfg->m_Window.grid.line_width == size )
+            selection = m_gridLineWidth->GetCount() - 1;
     }
 
-    /*
-     * Cursor settings subpanel
-     */
-    {
-        sLeftSizer->Add( 0, 15, 0, wxEXPAND, 5 );
+    m_gridLineWidth->SetSelection( selection );
 
-        wxStaticText* gridLabel = new wxStaticText( this, wxID_ANY, _( "Cursor Options" ) );
-        sLeftSizer->Add( gridLabel, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 13 );
-
-        wxStaticLine* staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition,
-                                                      wxDefaultSize, wxLI_HORIZONTAL );
-        sLeftSizer->Add( staticline2, 0, wxEXPAND|wxBOTTOM, 5 );
-
-        wxBoxSizer* sCursorSettings = new wxBoxSizer( wxVERTICAL );
-        sLeftSizer->Add( sCursorSettings, 0, wxEXPAND|wxLEFT, 5 );
-
-        wxString m_CursorShapeChoices[] = {
-            _( "Small crosshair" ),
-            _( "Full window crosshair" )
-        };
-
-        int m_CursorShapeNChoices = sizeof( m_CursorShapeChoices ) / sizeof( wxString );
-        m_cursorShape = new wxRadioBox( this, wxID_ANY, _( "Cursor Shape" ), wxDefaultPosition,
-                                        wxDefaultSize, m_CursorShapeNChoices, m_CursorShapeChoices,
-                                        1, wxRA_SPECIFY_COLS );
-
-        m_cursorShape->SetSelection( 0 );
-        m_cursorShape->SetToolTip( _( "Cursor shape for drawing, placement and movement tools" ) );
-        sCursorSettings->Add( m_cursorShape, 0, wxALL | wxEXPAND, 5 );
-
-        m_forceCursorDisplay = new wxCheckBox( this, wxID_ANY, _( "Always show crosshairs" ) );
-        sCursorSettings->Add( m_forceCursorDisplay, 0, wxALL | wxEXPAND, 5 );
-    }
+    m_gridMinSpacing->SetRange( gridMinSpacingMin, gridMinSpacingMax );
+    m_gridMinSpacing->SetIncrement( gridMinSpacingStep );
 }
 
 
@@ -231,7 +102,7 @@ bool GAL_OPTIONS_PANEL::TransferDataToWindow()
 
     m_gridSnapOptions->SetSelection( m_cfg->m_Window.grid.snap );
     m_gridStyle->SetSelection( m_cfg->m_Window.grid.style );
-    m_gridLineWidth->SetValue( m_cfg->m_Window.grid.line_width );
+
     m_gridMinSpacing->SetValue( m_cfg->m_Window.grid.min_spacing );
 
     m_cursorShape->SetSelection( m_cfg->m_Window.cursor.fullscreen_cursor );
@@ -245,7 +116,10 @@ bool GAL_OPTIONS_PANEL::TransferDataFromWindow()
 {
     m_cfg->m_Window.grid.snap = m_gridSnapOptions->GetSelection();
     m_cfg->m_Window.grid.style = m_gridStyle->GetSelection();
-    m_cfg->m_Window.grid.line_width = m_gridLineWidth->GetValue();
+
+    if( m_gridLineWidth->GetSelection() >= 0 )
+        m_cfg->m_Window.grid.line_width = m_gridThicknessList[ m_gridLineWidth->GetSelection() ];
+
     m_cfg->m_Window.grid.min_spacing = m_gridMinSpacing->GetValue();
 
     m_cfg->m_Window.cursor.fullscreen_cursor = m_cursorShape->GetSelection();
