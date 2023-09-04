@@ -1670,8 +1670,6 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             }
             else if( aPad->GetEffectiveHoleShape() && clearance > 0 )
             {
-                clearance += m_holePlatingThickness;
-
                 std::shared_ptr<SHAPE_SEGMENT> slot = aPad->GetEffectiveHoleShape();
                 m_gal->DrawSegment( slot->GetSeg().A, slot->GetSeg().B,
                                     slot->GetWidth() + 2 * clearance );
