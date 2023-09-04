@@ -246,6 +246,7 @@ bool PGM_KICAD::OnPgmInit()
 
     wxString projToLoad;
 
+    HideSplash();
 
     if( playerFrame && parser.GetParamCount() )
     {
@@ -352,8 +353,6 @@ bool PGM_KICAD::OnPgmInit()
 
     frame->Show( true );
     frame->Raise();
-
-    HideSplash();
 
     return true;
 }
