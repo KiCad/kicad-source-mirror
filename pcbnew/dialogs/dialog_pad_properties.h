@@ -55,12 +55,9 @@ public:
 private:
     void prepareCanvas();       // Initialize the canvases (legacy or gal) to display the pad
     void initValues();
-    void displayPrimitivesList();
     bool padValuesOK();         ///< test if all values are acceptable for the pad
     void redraw();
-    void editPrimitive();
     void updateRoundRectCornerValues();
-    void enablePrimitivePage( bool aEnable );   ///< enable (or disable) the primitive page editor
 
     /**
      * Updates the CheckBox states in pad layers list, based on the layer_mask (if non-empty)
@@ -109,18 +106,6 @@ private:
 
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
-
-    /// Event handlers of basic shapes list panel
-    void onDeletePrimitive( wxCommandEvent& event ) override;
-    void onEditPrimitive( wxCommandEvent& event ) override;
-    void onAddPrimitive( wxCommandEvent& event ) override;
-    void onGeometryTransform( wxCommandEvent& event ) override;
-    void onDuplicatePrimitive( wxCommandEvent& event ) override;
-
-    /// Called on a double click on the basic shapes list
-    void onPrimitiveDClick( wxMouseEvent& event ) override;
-    /// Called on selection/deselection of a basic shape
-	void OnPrimitiveSelection( wxListEvent& event ) override;
 
     /// Return the pad property currently selected
     PAD_PROP getSelectedProperty();

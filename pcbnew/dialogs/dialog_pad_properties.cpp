@@ -50,7 +50,6 @@
 #include <advanced_config.h>    // for pad property feature management
 #include <wx/choicdlg.h>
 
-#include <dialog_pad_primitives_properties.h>
 
 // list of pad shapes, ordered like the pad shape wxChoice in dialog.
 static PAD_SHAPE code_shape[] =
@@ -258,7 +257,6 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
     infoFont.SetStyle( wxFONTSTYLE_ITALIC );
     m_nonCopperNote->SetFont( infoFont );
     m_staticTextInfoPaste->SetFont( infoFont );
-    m_staticTextPrimitiveListWarning->SetFont( infoFont );
     m_minTrackWidthHint->SetFont( infoFont );
 
     updateHoleControls();
@@ -331,18 +329,6 @@ void DIALOG_PAD_PROPERTIES::OnCancel( wxCommandEvent& event )
 
     // Now call default handler for wxID_CANCEL command event
     event.Skip();
-}
-
-
-void DIALOG_PAD_PROPERTIES::enablePrimitivePage( bool aEnable )
-{
-    // Enable or disable the widgets in page managing custom shape primitives
-	m_listCtrlPrimitives->Enable( aEnable );
-	m_buttonDel->Enable( aEnable );
-	m_buttonEditShape->Enable( aEnable );
-	m_buttonAddShape->Enable( aEnable );
-	m_buttonDup->Enable( aEnable );
-	m_buttonGeometry->Enable( aEnable );
 }
 
 
@@ -673,8 +659,6 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
     updateRoundRectCornerValues();
 
-    enablePrimitivePage( PAD_SHAPE::CUSTOM == m_previewPad->GetShape() );
-
     // Type of pad selection
     bool aperture =
             m_previewPad->GetAttribute() == PAD_ATTRIB::SMD && m_previewPad->IsAperturePad();
@@ -729,9 +713,6 @@ void DIALOG_PAD_PROPERTIES::initValues()
     // by the call to OnPadShapeSelection()
     m_previewPad->SetThermalSpokeAngle( spokeInitialAngle );
     m_spokeAngle.SetAngleValue( m_previewPad->GetThermalSpokeAngle() );
-
-    // Update basic shapes list
-    displayPrimitivesList();
 }
 
 
@@ -741,94 +722,6 @@ static wxString formatCoord( EDA_UNITS aUnits, const VECTOR2I& aCoord )
     return wxString::Format( wxT( "(X:%s Y:%s)" ),
                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aUnits, aCoord.x ),
                              EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aUnits, aCoord.y ) );
-}
-
-
-void DIALOG_PAD_PROPERTIES::displayPrimitivesList()
-{
-    m_listCtrlPrimitives->ClearAll();
-
-    wxListItem itemCol;
-    itemCol.SetImage(-1);
-
-    for( int ii = 0; ii < 5; ++ii )
-        m_listCtrlPrimitives->InsertColumn(ii, itemCol);
-
-    wxString bs_info[5];
-
-    for( unsigned ii = 0; ii < m_primitives.size(); ++ii )
-    {
-        const std::shared_ptr<PCB_SHAPE>& primitive = m_primitives[ii];
-
-        for( wxString& s : bs_info )
-            s.Empty();
-
-        bs_info[4] = _( "width" ) + wxS( " " )+ EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, m_units,
-                                                                      primitive->GetWidth() );
-
-        switch( primitive->GetShape() )
-        {
-        case SHAPE_T::SEGMENT:
-            bs_info[0] = _( "Segment" );
-            bs_info[1] = _( "from" ) + wxS( " " ) + formatCoord( m_units, primitive->GetStart() );
-            bs_info[2] = _( "to" ) + wxS( " " ) +  formatCoord( m_units, primitive->GetEnd() );
-            break;
-
-        case SHAPE_T::BEZIER:
-            bs_info[0] = _( "Bezier" );
-            bs_info[1] = _( "from" ) + wxS( " " ) + formatCoord( m_units, primitive->GetStart() );
-            bs_info[2] = _( "to" ) + wxS( " " ) +  formatCoord( m_units, primitive->GetEnd() );
-            break;
-
-        case SHAPE_T::ARC:
-            bs_info[0] = _( "Arc" );
-            bs_info[1] = _( "center" ) + wxS( " " ) + formatCoord( m_units, primitive->GetCenter() );
-            bs_info[2] = _( "start" ) + wxS( " " ) + formatCoord( m_units, primitive->GetStart() );
-            bs_info[3] = _( "angle" ) + wxS( " " ) + EDA_UNIT_UTILS::FormatAngle( primitive->GetArcAngle() );
-            break;
-
-        case SHAPE_T::CIRCLE:
-            if( primitive->GetWidth() )
-                bs_info[0] = _( "Ring" );
-            else
-                bs_info[0] = _( "Circle" );
-
-            bs_info[1] = _( "at" ) + wxS( " " ) + formatCoord( m_units, primitive->GetStart() );
-            bs_info[2] = _( "radius" ) + wxS( " " ) + EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, m_units,
-                                                                            primitive->GetRadius() );
-            break;
-
-        case SHAPE_T::POLY:
-            bs_info[0] = _( "Polygon" );
-            bs_info[1] = wxString::Format( _( "corners count %d" ),
-                                           primitive->GetPolyShape().Outline( 0 ).PointCount() );
-            break;
-
-        case SHAPE_T::RECTANGLE:
-            if( primitive->IsAnnotationProxy() )
-                bs_info[0] = _( "Number box" );
-            else
-                bs_info[0] = _( "Rectangle" );
-
-            bs_info[1] = _( "from" ) + wxS( " " ) + formatCoord( m_units, primitive->GetStart() );
-            bs_info[2] = _( "to" ) + wxS( " " ) +  formatCoord( m_units, primitive->GetEnd() );
-            break;
-
-        default:
-            bs_info[0] = _( "Unknown primitive" );
-            break;
-        }
-
-        long tmp = m_listCtrlPrimitives->InsertItem( ii, bs_info[0] );
-        m_listCtrlPrimitives->SetItemData( tmp, ii );
-
-        for( int jj = 0, col = 0; jj < 5; ++jj )
-            m_listCtrlPrimitives->SetItem( tmp, col++, bs_info[jj] );
-    }
-
-    // Now columns are filled, ensure correct width of columns
-    for( unsigned ii = 0; ii < 5; ++ii )
-        m_listCtrlPrimitives->SetColumnWidth( ii, wxLIST_AUTOSIZE );
 }
 
 
@@ -958,8 +851,6 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
 
     bool is_custom = m_PadShapeSelector->GetSelection() == CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR
                   || m_PadShapeSelector->GetSelection() == CHOICE_SHAPE_CUSTOM_RECT_ANCHOR;
-
-    enablePrimitivePage( is_custom );
 
     if( transferDataToPad( m_previewPad ) )
         updateRoundRectCornerValues();
@@ -1562,22 +1453,6 @@ void DIALOG_PAD_PROPERTIES::redraw()
         m_highlight.pop_back();
     }
 
-    // highlight selected primitives:
-    long select = m_listCtrlPrimitives->GetFirstSelected();
-
-    while( select >= 0 )
-    {
-        PCB_SHAPE* dummyShape = static_cast<PCB_SHAPE*>( m_primitives[select]->Clone() );
-        dummyShape->SetLayer( SELECTED_ITEMS_LAYER );
-        dummyShape->Rotate( { 0, 0 }, m_previewPad->GetOrientation() );
-        dummyShape->Move( m_previewPad->GetPosition() );
-
-        view->Add( dummyShape );
-        m_highlight.push_back( dummyShape );
-
-        select = m_listCtrlPrimitives->GetNextSelected( select );
-    }
-
     BOX2I bbox = m_previewPad->ViewBBox();
 
     if( bbox.GetSize().x > 0 && bbox.GetSize().y > 0 )
@@ -2171,208 +2046,3 @@ void DIALOG_PAD_PROPERTIES::OnValuesChanged( wxCommandEvent& event )
     }
 }
 
-void DIALOG_PAD_PROPERTIES::editPrimitive()
-{
-    long select = m_listCtrlPrimitives->GetFirstSelected();
-
-    if( select < 0 )
-    {
-        wxMessageBox( _( "No shape selected" ) );
-        return;
-    }
-
-    std::shared_ptr<PCB_SHAPE>& shape = m_primitives[select];
-
-    if( shape->GetShape() == SHAPE_T::POLY )
-    {
-        DIALOG_PAD_PRIMITIVE_POLY_PROPS dlg( this, m_parent, shape.get() );
-
-        if( dlg.ShowModal() != wxID_OK )
-            return;
-
-        dlg.TransferDataFromWindow();
-    }
-
-    else
-    {
-        DIALOG_PAD_PRIMITIVES_PROPERTIES dlg( this, m_parent, shape.get() );
-
-        if( dlg.ShowModal() != wxID_OK )
-            return;
-
-        dlg.TransferDataFromWindow();
-    }
-
-    displayPrimitivesList();
-
-    if( m_canUpdate && transferDataToPad( m_previewPad ) )
-        redraw();
-}
-
-
-void DIALOG_PAD_PROPERTIES::OnPrimitiveSelection( wxListEvent& event )
-{
-    // Called on a double click on the basic shapes list
-    // To Do: highlight the primitive(s) currently selected.
-    redraw();
-}
-
-
-void DIALOG_PAD_PROPERTIES::onPrimitiveDClick( wxMouseEvent& event )
-{
-    editPrimitive();
-}
-
-
-void DIALOG_PAD_PROPERTIES::onEditPrimitive( wxCommandEvent& event )
-{
-    editPrimitive();
-}
-
-
-void DIALOG_PAD_PROPERTIES::onDeletePrimitive( wxCommandEvent& event )
-{
-    long select = m_listCtrlPrimitives->GetFirstSelected();
-
-    if( select < 0 )
-        return;
-
-    // Multiple selections are allowed. get them and remove corresponding shapes
-    std::vector<long> indexes;
-    indexes.push_back( select );
-
-    while( ( select = m_listCtrlPrimitives->GetNextSelected( select ) ) >= 0 )
-        indexes.push_back( select );
-
-    // Erase all select shapes
-    for( unsigned ii = indexes.size(); ii > 0; --ii )
-        m_primitives.erase( m_primitives.begin() + indexes[ii-1] );
-
-    displayPrimitivesList();
-
-    if( m_canUpdate && transferDataToPad( m_previewPad ) )
-        redraw();
-}
-
-
-void DIALOG_PAD_PROPERTIES::onAddPrimitive( wxCommandEvent& event )
-{
-    // Ask user for shape type
-    wxString shapelist[] = {
-            _( "Segment" ),
-            _( "Arc" ),
-            _( "Bezier" ),
-            _( "Ring/Circle" ),
-            _( "Polygon" ),
-            _( "Number box" ),
-    };
-
-    int type = wxGetSingleChoiceIndex( _( "Shape type:" ), _( "Add Primitive" ),
-                                       arrayDim( shapelist ), shapelist, 0, this );
-
-    // User pressed cancel
-    if( type == -1 )
-        return;
-
-    SHAPE_T listtype[] = { SHAPE_T::SEGMENT, SHAPE_T::ARC, SHAPE_T::BEZIER, SHAPE_T::CIRCLE,
-                           SHAPE_T::POLY, SHAPE_T::RECTANGLE };
-
-    PCB_SHAPE* primitive = new PCB_SHAPE();
-    primitive->SetShape( listtype[type] );
-
-    if( type == static_cast<int>( arrayDim( shapelist ) ) - 1 )
-        primitive->SetIsAnnotationProxy();
-
-    primitive->SetStroke( STROKE_PARAMS( m_board->GetDesignSettings().GetLineThickness( F_Cu ),
-                                         PLOT_DASH_TYPE::SOLID ) );
-    primitive->SetFilled( true );
-
-    if( listtype[type] == SHAPE_T::POLY )
-    {
-        DIALOG_PAD_PRIMITIVE_POLY_PROPS dlg( this, m_parent, primitive );
-
-        if( dlg.ShowModal() != wxID_OK )
-            return;
-    }
-    else
-    {
-        DIALOG_PAD_PRIMITIVES_PROPERTIES dlg( this, m_parent, primitive );
-
-        if( dlg.ShowModal() != wxID_OK )
-            return;
-    }
-
-    m_primitives.emplace_back( primitive );
-
-    displayPrimitivesList();
-
-    if( m_canUpdate && transferDataToPad( m_previewPad ) )
-        redraw();
-}
-
-
-void DIALOG_PAD_PROPERTIES::onGeometryTransform( wxCommandEvent& event )
-{
-    long select = m_listCtrlPrimitives->GetFirstSelected();
-
-    if( select < 0 )
-    {
-        wxMessageBox( _( "No shape selected" ) );
-        return;
-    }
-
-    // Multiple selections are allowed. Build selected shapes list
-    std::vector<std::shared_ptr<PCB_SHAPE>> shapeList;
-    shapeList.emplace_back( m_primitives[select] );
-
-    while( ( select = m_listCtrlPrimitives->GetNextSelected( select ) ) >= 0 )
-        shapeList.emplace_back( m_primitives[select] );
-
-    DIALOG_PAD_PRIMITIVES_TRANSFORM dlg( this, m_parent, shapeList, false );
-
-    if( dlg.ShowModal() != wxID_OK )
-        return;
-
-    dlg.Transform();
-
-    displayPrimitivesList();
-
-    if( m_canUpdate && transferDataToPad( m_previewPad ) )
-        redraw();
-}
-
-
-void DIALOG_PAD_PROPERTIES::onDuplicatePrimitive( wxCommandEvent& event )
-{
-    long select = m_listCtrlPrimitives->GetFirstSelected();
-
-    if( select < 0 )
-    {
-        wxMessageBox( _( "No shape selected" ) );
-        return;
-    }
-
-    // Multiple selections are allowed. Build selected shapes list
-    std::vector<std::shared_ptr<PCB_SHAPE>> shapeList;
-    shapeList.emplace_back( m_primitives[select] );
-
-    while( ( select = m_listCtrlPrimitives->GetNextSelected( select ) ) >= 0 )
-        shapeList.emplace_back( m_primitives[select] );
-
-    DIALOG_PAD_PRIMITIVES_TRANSFORM dlg( this, m_parent, shapeList, true );
-
-    if( dlg.ShowModal() != wxID_OK )
-        return;
-
-    // Transfer new settings
-    // save duplicates to a separate vector to avoid m_primitives reallocation,
-    // as shapeList contains pointers to its elements
-    std::vector<std::shared_ptr<PCB_SHAPE>> duplicates;
-    dlg.Transform( &duplicates, dlg.GetDuplicateCount() );
-    std::move( duplicates.begin(), duplicates.end(), std::back_inserter( m_primitives ) );
-
-    displayPrimitivesList();
-
-    if( m_canUpdate && transferDataToPad( m_previewPad ) )
-        redraw();
-}

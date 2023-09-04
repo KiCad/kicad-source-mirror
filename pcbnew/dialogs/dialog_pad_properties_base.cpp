@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -1014,61 +1014,6 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_localSettingsPanel->Layout();
 	bSizerPanelClearance->Fit( m_localSettingsPanel );
 	m_notebook->AddPage( m_localSettingsPanel, _("Clearance Overrides"), false );
-	m_panelCustomShapePrimitives = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_bSizerPanelPrimitives = new wxBoxSizer( wxVERTICAL );
-
-	wxBoxSizer* bSizerAboveList;
-	bSizerAboveList = new wxBoxSizer( wxHORIZONTAL );
-
-	m_staticTextPrimitivesList = new wxStaticText( m_panelCustomShapePrimitives, wxID_ANY, _("Primitives list:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextPrimitivesList->Wrap( -1 );
-	bSizerAboveList->Add( m_staticTextPrimitivesList, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
-
-	m_staticTextPrimitiveListWarning = new wxStaticText( m_panelCustomShapePrimitives, wxID_ANY, _("Note: coordinates are relative to anchor pad, orientation 0."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextPrimitiveListWarning->Wrap( -1 );
-	bSizerAboveList->Add( m_staticTextPrimitiveListWarning, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 7 );
-
-
-	m_bSizerPanelPrimitives->Add( bSizerAboveList, 0, wxEXPAND|wxBOTTOM, 3 );
-
-	m_listCtrlPrimitives = new wxListView( m_panelCustomShapePrimitives, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_NO_HEADER|wxLC_REPORT );
-	m_bSizerPanelPrimitives->Add( m_listCtrlPrimitives, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-	wxBoxSizer* bSizerButtons;
-	bSizerButtons = new wxBoxSizer( wxVERTICAL );
-
-	wxBoxSizer* bSizerButtonsUpper;
-	bSizerButtonsUpper = new wxBoxSizer( wxHORIZONTAL );
-
-	m_buttonAddShape = new wxButton( m_panelCustomShapePrimitives, wxID_ANY, _("Add Primitive"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButtonsUpper->Add( m_buttonAddShape, 0, wxALL, 5 );
-
-	m_buttonEditShape = new wxButton( m_panelCustomShapePrimitives, wxID_ANY, _("Edit Primitive"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButtonsUpper->Add( m_buttonEditShape, 0, wxALL, 5 );
-
-	m_buttonDup = new wxButton( m_panelCustomShapePrimitives, wxID_ANY, _("Duplicate Primitive"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButtonsUpper->Add( m_buttonDup, 0, wxALL, 5 );
-
-	m_buttonGeometry = new wxButton( m_panelCustomShapePrimitives, wxID_ANY, _("Transform Primitive"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButtonsUpper->Add( m_buttonGeometry, 0, wxALL, 5 );
-
-
-	bSizerButtonsUpper->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_buttonDel = new wxButton( m_panelCustomShapePrimitives, wxID_ANY, _("Delete Primitive"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButtonsUpper->Add( m_buttonDel, 0, wxALL, 5 );
-
-
-	bSizerButtons->Add( bSizerButtonsUpper, 0, wxEXPAND, 5 );
-
-
-	m_bSizerPanelPrimitives->Add( bSizerButtons, 0, wxEXPAND, 5 );
-
-
-	m_panelCustomShapePrimitives->SetSizer( m_bSizerPanelPrimitives );
-	m_panelCustomShapePrimitives->Layout();
-	m_bSizerPanelPrimitives->Fit( m_panelCustomShapePrimitives );
-	m_notebook->AddPage( m_panelCustomShapePrimitives, _("Custom Shape Primitives"), false );
 
 	bSizerUpper->Add( m_notebook, 0, wxEXPAND|wxTOP|wxBOTTOM, 12 );
 
@@ -1299,14 +1244,6 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_curvePointsCtrl->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropCurvePointsUpdateUi ), NULL, this );
 	m_clearanceCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_nonCopperWarningBook->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnUpdateUINonCopperWarning ), NULL, this );
-	m_listCtrlPrimitives->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_PAD_PROPERTIES_BASE::onPrimitiveDClick ), NULL, this );
-	m_listCtrlPrimitives->Connect( wxEVT_COMMAND_LIST_ITEM_DESELECTED, wxListEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnPrimitiveSelection ), NULL, this );
-	m_listCtrlPrimitives->Connect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnPrimitiveSelection ), NULL, this );
-	m_buttonAddShape->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onAddPrimitive ), NULL, this );
-	m_buttonEditShape->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onEditPrimitive ), NULL, this );
-	m_buttonDup->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onDuplicatePrimitive ), NULL, this );
-	m_buttonGeometry->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onGeometryTransform ), NULL, this );
-	m_buttonDel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onDeletePrimitive ), NULL, this );
 	m_cbShowPadOutline->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onChangePadMode ), NULL, this );
 	m_sdbSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnCancel ), NULL, this );
 }
@@ -1382,14 +1319,6 @@ DIALOG_PAD_PROPERTIES_BASE::~DIALOG_PAD_PROPERTIES_BASE()
 	m_curvePointsCtrl->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::onTeardropCurvePointsUpdateUi ), NULL, this );
 	m_clearanceCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnValuesChanged ), NULL, this );
 	m_nonCopperWarningBook->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnUpdateUINonCopperWarning ), NULL, this );
-	m_listCtrlPrimitives->Disconnect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_PAD_PROPERTIES_BASE::onPrimitiveDClick ), NULL, this );
-	m_listCtrlPrimitives->Disconnect( wxEVT_COMMAND_LIST_ITEM_DESELECTED, wxListEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnPrimitiveSelection ), NULL, this );
-	m_listCtrlPrimitives->Disconnect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnPrimitiveSelection ), NULL, this );
-	m_buttonAddShape->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onAddPrimitive ), NULL, this );
-	m_buttonEditShape->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onEditPrimitive ), NULL, this );
-	m_buttonDup->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onDuplicatePrimitive ), NULL, this );
-	m_buttonGeometry->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onGeometryTransform ), NULL, this );
-	m_buttonDel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onDeletePrimitive ), NULL, this );
 	m_cbShowPadOutline->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::onChangePadMode ), NULL, this );
 	m_sdbSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAD_PROPERTIES_BASE::OnCancel ), NULL, this );
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -11,7 +11,6 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class TEXT_CTRL_EVAL;
-class wxListView;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -36,9 +35,8 @@ class wxListView;
 #include <wx/statbmp.h>
 #include <wx/statbox.h>
 #include <wx/spinctrl.h>
-#include <wx/listctrl.h>
-#include <wx/button.h>
 #include <wx/notebook.h>
+#include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -232,16 +230,6 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextInfoPaste;
 		wxStaticBitmap* m_nonCopperWarningIcon;
 		wxStaticText* m_nonCopperWarningText;
-		wxPanel* m_panelCustomShapePrimitives;
-		wxBoxSizer* m_bSizerPanelPrimitives;
-		wxStaticText* m_staticTextPrimitivesList;
-		wxStaticText* m_staticTextPrimitiveListWarning;
-		wxListView* m_listCtrlPrimitives;
-		wxButton* m_buttonAddShape;
-		wxButton* m_buttonEditShape;
-		wxButton* m_buttonDup;
-		wxButton* m_buttonGeometry;
-		wxButton* m_buttonDel;
 		wxSimplebook* m_stackupImagesBook;
 		wxPanel* page0;
 		wxStaticBitmap* m_stackupImage0;
@@ -283,13 +271,6 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void onTeardropsUpdateUi( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onTeardropCurvePointsUpdateUi( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUINonCopperWarning( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void onPrimitiveDClick( wxMouseEvent& event ) { event.Skip(); }
-		virtual void OnPrimitiveSelection( wxListEvent& event ) { event.Skip(); }
-		virtual void onAddPrimitive( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onEditPrimitive( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onDuplicatePrimitive( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onGeometryTransform( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onDeletePrimitive( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onChangePadMode( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancel( wxCommandEvent& event ) { event.Skip(); }
 
