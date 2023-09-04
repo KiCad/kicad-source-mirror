@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2022 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023 Kicad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2020 New Pagodi(https://stackoverflow.com/users/6846682/new-pagodi)
  *                    from https://stackoverflow.com/a/63289812/1522001
  *
@@ -212,6 +212,12 @@ DIALOG_EXPORT_STEP_LOG::DIALOG_EXPORT_STEP_LOG( wxWindow* aParent, wxString aSte
     Bind( wxEVT_THREAD_STDIN, &DIALOG_EXPORT_STEP_LOG::onThreadInput, this );
     Bind( wxEVT_THREAD_STDERR, &DIALOG_EXPORT_STEP_LOG::onThreadInput, this );
     Bind( wxEVT_CLOSE_WINDOW, &DIALOG_EXPORT_STEP_LOG::onClose, this );
+
+    // Print the command line used to run kicad-cli.
+    // it can be useful if kicad-cli as a problem.
+    m_textCtrlLog->AppendText( _( "Command line:\n" ) );
+    m_textCtrlLog->AppendText( aStepCmd );
+    m_textCtrlLog->AppendText( wxT( "\n\n" ) );
 
     m_stdioThread = new STDSTREAM_THREAD( this, m_process, m_msgQueue );
     m_stdioThread->Run();
