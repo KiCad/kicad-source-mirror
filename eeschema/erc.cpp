@@ -552,7 +552,14 @@ int ERC_TESTER::TestNoConnectPins()
 
     for( const SCH_SHEET_PATH& sheet : m_schematic->GetSheets() )
     {
-        std::map<VECTOR2I, std::vector<SCH_PIN*>> pinMap;
+        std::map<VECTOR2I, std::vector<SCH_ITEM*>> pinMap;
+
+        auto addOther =
+                [&]( const VECTOR2I& pt, SCH_ITEM* aOther )
+                {
+                    if( pinMap.count( pt ) )
+                        pinMap[pt].emplace_back( aOther );
+                };
 
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
@@ -565,7 +572,26 @@ int ERC_TESTER::TestNoConnectPins()
             }
         }
 
-        for( const std::pair<const VECTOR2I, std::vector<SCH_PIN*>>& pair : pinMap )
+        for( SCH_ITEM* item : sheet.LastScreen()->Items() )
+        {
+            if( item->Type() == SCH_SYMBOL_T )
+            {
+                SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+                for( SCH_PIN* pin : symbol->GetPins( &sheet ) )
+                {
+                    if( pin->GetLibPin()->GetType() != ELECTRICAL_PINTYPE::PT_NC )
+                        addOther( pin->GetPosition(), pin );
+                }
+            }
+            else if( item->IsConnectable() )
+            {
+                for( const VECTOR2I& pt : item->GetConnectionPoints() )
+                    addOther( pt, item );
+            }
+        }
+
+        for( const std::pair<const VECTOR2I, std::vector<SCH_ITEM*>>& pair : pinMap )
         {
             if( pair.second.size() > 1 )
             {
@@ -576,7 +602,7 @@ int ERC_TESTER::TestNoConnectPins()
                 ercItem->SetItems( pair.second[0], pair.second[1],
                                    pair.second.size() > 2 ? pair.second[2] : nullptr,
                                    pair.second.size() > 3 ? pair.second[3] : nullptr );
-                ercItem->SetErrorMessage( _( "Pins with 'no connection' type are connected" ) );
+                ercItem->SetErrorMessage( _( "Pin with 'no connection' type is connected" ) );
 
                 SCH_MARKER* marker = new SCH_MARKER( ercItem, pair.first );
                 sheet.LastScreen()->Append( marker );

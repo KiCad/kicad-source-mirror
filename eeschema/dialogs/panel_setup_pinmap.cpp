@@ -42,9 +42,12 @@
 #define ID_MATRIX_0 1800
 
 
+// NC is not included in the pin map as it generates errors separately
+#define PINMAP_TYPE_COUNT ( ELECTRICAL_PINTYPES_TOTAL - 1 )
+
+
 BEGIN_EVENT_TABLE( PANEL_SETUP_PINMAP, PANEL_SETUP_PINMAP_BASE )
-    EVT_COMMAND_RANGE( ID_MATRIX_0,
-                       ID_MATRIX_0 + ( ELECTRICAL_PINTYPES_TOTAL * ELECTRICAL_PINTYPES_TOTAL ) - 1,
+    EVT_COMMAND_RANGE( ID_MATRIX_0, ID_MATRIX_0 + ( PINMAP_TYPE_COUNT * PINMAP_TYPE_COUNT ) - 1,
                        wxEVT_COMMAND_BUTTON_CLICKED, PANEL_SETUP_PINMAP::changeErrorLevel )
 END_EVENT_TABLE()
 
@@ -66,7 +69,7 @@ PANEL_SETUP_PINMAP::~PANEL_SETUP_PINMAP()
 #ifndef __WXMAC__
     if( m_initialized )
     {
-        for( int ii = 0; ii < ELECTRICAL_PINTYPES_TOTAL; ii++ )
+        for( int ii = 0; ii < PINMAP_TYPE_COUNT; ii++ )
         {
             for( int jj = 0; jj <= ii; jj++ )
             {
@@ -129,7 +132,7 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
         std::vector<wxStaticText*> labels;
 
         // Print row labels
-        for( int ii = 0; ii < ELECTRICAL_PINTYPES_TOTAL; ii++ )
+        for( int ii = 0; ii < PINMAP_TYPE_COUNT; ii++ )
         {
             int y = pos.y + ( ii * ( bitmapSize.y + text_padding.y ) );
             text = new wxStaticText( m_matrixPanel, - 1, CommentERC_H[ii],
@@ -141,7 +144,7 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
         }
 
         // Right-align
-        for( int ii = 0; ii < ELECTRICAL_PINTYPES_TOTAL; ii++ )
+        for( int ii = 0; ii < PINMAP_TYPE_COUNT; ii++ )
         {
             wxPoint labelPos = labels[ ii ]->GetPosition();
             labelPos.x = pos.x - labels[ ii ]->GetRect().GetWidth();
@@ -156,7 +159,7 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
         pos = m_buttonList[0][0]->GetPosition();
     }
 
-    for( int ii = 0; ii < ELECTRICAL_PINTYPES_TOTAL; ii++ )
+    for( int ii = 0; ii < PINMAP_TYPE_COUNT; ii++ )
     {
         int y = pos.y + (ii * ( bitmapSize.y + text_padding.y ) );
 
@@ -178,7 +181,7 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
                 new wxStaticText( m_matrixPanel, wxID_ANY, "|", calloutPos );
             }
 
-            int id = ID_MATRIX_0 + ii + ( jj * ELECTRICAL_PINTYPES_TOTAL );
+            int id = ID_MATRIX_0 + ii + ( jj * PINMAP_TYPE_COUNT );
             BITMAPS bitmap_butt = BITMAPS::erc_green;
 
 #ifdef __WXMAC__
@@ -250,8 +253,8 @@ void PANEL_SETUP_PINMAP::changeErrorLevel( wxCommandEvent& event )
 {
     int id = event.GetId();
     int ii = id - ID_MATRIX_0;
-    ELECTRICAL_PINTYPE x = static_cast<ELECTRICAL_PINTYPE>( ii / ELECTRICAL_PINTYPES_TOTAL );
-    ELECTRICAL_PINTYPE y = static_cast<ELECTRICAL_PINTYPE>( ii % ELECTRICAL_PINTYPES_TOTAL );
+    ELECTRICAL_PINTYPE x = static_cast<ELECTRICAL_PINTYPE>( ii / PINMAP_TYPE_COUNT );
+    ELECTRICAL_PINTYPE y = static_cast<ELECTRICAL_PINTYPE>( ii % PINMAP_TYPE_COUNT );
     wxWindow* butt = static_cast<wxWindow*>( event.GetEventObject() );
 
     int level = static_cast<int>( m_schematic->ErcSettings().GetPinMapValue( y, x ) );
@@ -266,7 +269,7 @@ void PANEL_SETUP_PINMAP::changeErrorLevel( wxCommandEvent& event )
 
 void PANEL_SETUP_PINMAP::ImportSettingsFrom( PIN_ERROR aPinMap[][ELECTRICAL_PINTYPES_TOTAL] )
 {
-    for( int ii = 0; ii < ELECTRICAL_PINTYPES_TOTAL; ii++ )
+    for( int ii = 0; ii < PINMAP_TYPE_COUNT; ii++ )
     {
         for( int jj = 0; jj <= ii; jj++ )
             setDRCMatrixButtonState( m_buttonList[ii][jj], aPinMap[ii][jj] );

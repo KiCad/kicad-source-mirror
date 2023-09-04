@@ -58,8 +58,8 @@
                 <property name="orient">wxHORIZONTAL</property>
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="1">
-                    <property name="border">10</property>
-                    <property name="flag">wxEXPAND</property>
+                    <property name="border">5</property>
+                    <property name="flag">wxEXPAND|wxTOP</property>
                     <property name="proportion">1</property>
                     <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
@@ -103,7 +103,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">500,444</property>
+                                <property name="minimum_size">500,424</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_matrixPanel</property>
                                 <property name="pane_border">1</property>
