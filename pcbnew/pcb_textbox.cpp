@@ -602,7 +602,7 @@ static struct PCB_TEXTBOX_DESC
         propMgr.Mask( TYPE_HASH( PCB_TEXTBOX ), TYPE_HASH( EDA_SHAPE ), _HKI( "Line Width" ) );
         propMgr.Mask( TYPE_HASH( PCB_TEXTBOX ), TYPE_HASH( EDA_SHAPE ), _HKI( "Line Style" ) );
 
-        const wxString textBoxProps = _( "Text Box" );
+        const wxString borderProps = _( "Border Properties" );
 
         void ( PCB_TEXTBOX::*lineStyleSetter )( PLOT_DASH_TYPE ) = &PCB_TEXTBOX::SetLineStyle;
         PLOT_DASH_TYPE ( PCB_TEXTBOX::*lineStyleGetter )() const = &PCB_TEXTBOX::GetLineStyle;
@@ -610,17 +610,17 @@ static struct PCB_TEXTBOX_DESC
         propMgr.AddProperty( new PROPERTY<PCB_TEXTBOX, bool>( _HKI( "Border" ),
                                                               &PCB_TEXTBOX::SetBorderEnabled,
                                                               &PCB_TEXTBOX::IsBorderEnabled ),
-                             textBoxProps );
+                             borderProps );
 
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_TEXTBOX, PLOT_DASH_TYPE>( _HKI( "Border Style" ),
                                                                              lineStyleSetter,
                                                                              lineStyleGetter ),
-                             textBoxProps );
+                             borderProps );
 
         propMgr.AddProperty( new PROPERTY<PCB_TEXTBOX, int>( _HKI( "Border Width" ),
                                                              &PCB_TEXTBOX::SetBorderWidth,
                                                              &PCB_TEXTBOX::GetBorderWidth,
                                                              PROPERTY_DISPLAY::PT_SIZE ),
-                             textBoxProps );
+                             borderProps );
     }
 } _PCB_TEXTBOX_DESC;
