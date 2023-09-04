@@ -69,7 +69,7 @@
 #include <thread_pool.h>
 #include <trace_helpers.h>
 
-#include <wx/splash.h>
+#include <widgets/wx_splash.h>
 
 #ifdef KICAD_USE_SENTRY
 #include <boost/uuid/uuid_io.hpp>
@@ -415,7 +415,7 @@ void PGM_BASE::ShowSplash()
     if( m_splash )
         return;
 
-    m_splash = new wxSplashScreen( KiBitmap( BITMAPS::splash ), wxSPLASH_CENTRE_ON_SCREEN, 0,
+    m_splash = new WX_SPLASH( KiBitmap( BITMAPS::splash ), wxSPLASH_CENTRE_ON_SCREEN, 0,
                                     NULL, -1, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE | wxSTAY_ON_TOP );
     wxYield();
 }
