@@ -754,7 +754,11 @@ bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer, bool aDimm
         {
             COLOR4D fillColour = shape->GetFillColor();
 
-            if( aDimmed )
+            if( m_schSettings.m_OverrideItemColors )
+            {
+                fillColour = getRenderColor( aItem, LAYER_DEVICE_BACKGROUND, false, aDimmed );
+            }
+            else if( aDimmed )
             {
                 fillColour = fillColour.Mix(
                         m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ), 0.5f );
