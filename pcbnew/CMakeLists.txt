@@ -284,7 +284,6 @@ set( PCBNEW_CLASS_SRCS
     edit.cpp
     edit_track_width.cpp
     files.cpp
-    fix_board_shape.cpp
     footprint_info_impl.cpp
     footprint_wizard.cpp
     footprint_editor_utils.cpp
