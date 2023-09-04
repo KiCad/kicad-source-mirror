@@ -203,8 +203,6 @@ void ConnectBoardShapes( std::vector<PCB_SHAPE*>&                 aShapeList,
         }
     }
 
-    PCB_SHAPE* prevGraphic = nullptr;
-
     while( startCandidates.size() )
     {
         graphic = *startCandidates.begin();
