@@ -118,10 +118,7 @@ int EDA_3D_CONTROLLER::Main( const TOOL_EVENT& aEvent )
         if( evt->IsCancelInteractive() )
         {
             wxWindow* canvas = m_toolMgr->GetToolHolder()->GetToolCanvas();
-            wxWindow* topLevelParent = canvas->GetParent();
-
-            while( topLevelParent && !topLevelParent->IsTopLevel() )
-                topLevelParent = topLevelParent->GetParent();
+            wxWindow* topLevelParent = wxGetTopLevelParent( canvas->GetParent() );
 
             if( topLevelParent && dynamic_cast<DIALOG_SHIM*>( topLevelParent ) )
             {

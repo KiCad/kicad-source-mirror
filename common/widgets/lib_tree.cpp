@@ -37,6 +37,7 @@
 #include <wx/sizer.h>
 #include <wx/srchctrl.h>
 #include <wx/popupwin.h>
+#include "wx/app.h"
 
 constexpr int RECENT_SEARCHES_MAX = 10;
 
@@ -610,10 +611,7 @@ void LIB_TREE::showPreview( wxDataViewItem aItem )
     {
         m_hoverItem = aItem;
 
-        wxWindow* topLevelParent = m_parent;
-
-        while( topLevelParent && !topLevelParent->IsTopLevel() )
-            topLevelParent = topLevelParent->GetParent();
+        wxWindow* topLevelParent = wxGetTopLevelParent( m_parent );
 
         m_previewWindow = new wxPopupWindow( topLevelParent );
         m_previewWindow->SetPosition( wxPoint( m_tree_ctrl->GetScreenRect().GetRight() - 10,
@@ -647,15 +645,8 @@ void LIB_TREE::onIdle( wxIdleEvent& aEvent )
     // The wxDataViewCtrl won't give us its mouseMoved events so we're forced to use idle
     // events to track the hover state
 
-    wxWindow* topLevelParent = m_parent;
-
-    while( topLevelParent && !topLevelParent->IsTopLevel() )
-        topLevelParent = topLevelParent->GetParent();
-
-    wxWindow* topLevelFocus = FindFocus();
-
-    while( topLevelFocus && !topLevelFocus->IsTopLevel() )
-        topLevelFocus = topLevelFocus->GetParent();
+    wxWindow* topLevelParent = wxGetTopLevelParent( m_parent );
+    wxWindow* topLevelFocus = wxGetTopLevelParent( wxWindow::FindFocus() );
 
     wxPoint screenPos = wxGetMousePosition();
     wxRect  screenRect = m_tree_ctrl->GetScreenRect();

@@ -200,10 +200,7 @@ COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, wxWindowID aID, const wxPoint& aP
 
 void COLOR_SWATCH::setupEvents( bool aTriggerWithSingleClick )
 {
-    wxWindow* topLevelParent = GetParent();
-
-    while( topLevelParent && !topLevelParent->IsTopLevel() )
-        topLevelParent = topLevelParent->GetParent();
+    wxWindow* topLevelParent = wxGetTopLevelParent( GetParent() );
 
     if( topLevelParent && dynamic_cast<DIALOG_SHIM*>( topLevelParent ) )
     {
