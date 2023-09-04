@@ -649,7 +649,7 @@ void LIB_TREE::onIdle( wxIdleEvent& aEvent )
     wxWindow* topLevelFocus = wxGetTopLevelParent( wxWindow::FindFocus() );
 
     wxPoint screenPos = wxGetMousePosition();
-    wxRect  screenRect = m_tree_ctrl->GetScreenRect();
+    wxRect  screenRect = m_tree_ctrl->IsShown() ? m_tree_ctrl->GetScreenRect() : wxRect();
 
     if( topLevelFocus != topLevelParent || !screenRect.Contains( screenPos ) )
     {
