@@ -24,8 +24,7 @@
 #ifndef WIDGETS_GAL_OPTIONS_PANEL__H_
 #define WIDGETS_GAL_OPTIONS_PANEL__H_
 
-#include <wx/panel.h>
-
+#include <../../common/widgets/gal_options_panel_base.h>
 #include <gal/gal_display_options.h>
 
 class wxBoxSizer;
@@ -37,7 +36,8 @@ class wxStaticText;
 class EDA_DRAW_FRAME;
 class APP_SETTINGS_BASE;
 
-class GAL_OPTIONS_PANEL: public wxPanel
+
+class GAL_OPTIONS_PANEL: public GAL_OPTIONS_PANEL_BASE
 {
 public:
 
@@ -56,28 +56,7 @@ public:
     bool ResetPanel( APP_SETTINGS_BASE* aAppSettings );
 
 private:
-    wxBoxSizer*        m_mainSizer;
-
-#ifndef __WXMAC__
-    wxRadioBox*        m_renderingEngine;
-#endif
-
-    wxRadioBox*        m_gridStyle;
-    wxStaticText*      l_gridLineWidth;
-    wxSpinCtrlDouble*  m_gridLineWidth;
-    wxStaticText*      l_gridLineWidthUnits;
-
-    wxStaticText*      l_gridMinSpacing;
-    wxSpinCtrlDouble*  m_gridMinSpacing;
-    wxStaticText*      l_gridMinSpacingUnits;
-
-    wxStaticText*      l_gridSnapOptions;
-    wxChoice*          m_gridSnapOptions;
-    wxStaticText*      l_gridSnapSpace;
-
-    wxRadioBox*        m_cursorShape;
-    wxCheckBox*        m_forceCursorDisplay;
-
+    std::vector<double> m_gridThicknessList;    // List of available grid thickness
     APP_SETTINGS_BASE* m_cfg;
 };
 
