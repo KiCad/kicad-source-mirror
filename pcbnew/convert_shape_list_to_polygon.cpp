@@ -57,7 +57,7 @@ const wxChar* traceBoardOutline = wxT( "KICAD_BOARD_OUTLINE" );
  * @param aLimit is a measure of proximity that the caller knows about.
  * @return bool - true if the two points are close enough, else false.
  */
-bool close_enough( VECTOR2I aLeft, VECTOR2I aRight, unsigned aLimit )
+static bool close_enough( VECTOR2I aLeft, VECTOR2I aRight, unsigned aLimit )
 {
     return ( aLeft - aRight ).SquaredEuclideanNorm() <= SEG::Square( aLimit );
 }
@@ -71,7 +71,7 @@ bool close_enough( VECTOR2I aLeft, VECTOR2I aRight, unsigned aLimit )
  * @param aSecond is the second point
  * @return bool - true if the first point is closest to the reference, otherwise false.
  */
-bool closer_to_first( VECTOR2I aRef, VECTOR2I aFirst, VECTOR2I aSecond )
+static bool closer_to_first( VECTOR2I aRef, VECTOR2I aFirst, VECTOR2I aSecond )
 {
     return ( aRef - aFirst ).SquaredEuclideanNorm() < ( aRef - aSecond ).SquaredEuclideanNorm();
 }
@@ -132,7 +132,7 @@ static PCB_SHAPE* findNext( PCB_SHAPE* aShape, const VECTOR2I& aPoint,
 }
 
 
-bool isCopperOutside( const FOOTPRINT* aFootprint, SHAPE_POLY_SET& aShape )
+static bool isCopperOutside( const FOOTPRINT* aFootprint, SHAPE_POLY_SET& aShape )
 {
     bool padOutside = false;
 
