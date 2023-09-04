@@ -426,7 +426,7 @@ void PGM_BASE::HideSplash()
     if( !m_splash )
         return;
 
-    m_splash->Close();
+    m_splash->Close( true );
     m_splash->Destroy();
     m_splash = nullptr;
 }
