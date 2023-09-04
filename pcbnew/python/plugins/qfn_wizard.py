@@ -31,9 +31,8 @@ class QFNWizard(FootprintWizardBase.FootprintWizard):
 
     def GenerateParameterList(self):
 
-        #TODO - Allow different number of pads in x and y directions
-
-        self.AddParam("Pads", "n", self.uInteger, 100, multiple=4, min_value=4)
+        self.AddParam("Pads", "nx", self.uInteger, 25)
+        self.AddParam("Pads", "ny", self.uInteger, 25, min_value=1)
         self.AddParam("Pads", "pitch", self.uMM, 0.4, designator='e')
         self.AddParam("Pads", "width", self.uMM, 0.2, designator='X1')
         self.AddParam("Pads", "length", self.uMM, 0.75, designator='Y1')
@@ -71,7 +70,7 @@ class QFNWizard(FootprintWizardBase.FootprintWizard):
     def GetValue(self):
 
         return "QFN-{n}_{ep}{x:g}x{y:g}_Pitch{p:g}mm".format(
-                n = self.pads['n'],
+                n = (self.pads['nx'] + self.pads['ny']) * 2,
                 ep = "EP_" if self.epad['epad'] else '',
                 x = pcbnew.ToMM(self.package['width']),
                 y = pcbnew.ToMM(self.package['height']),
@@ -89,9 +88,11 @@ class QFNWizard(FootprintWizardBase.FootprintWizard):
         v_pitch = self.package["height"]
         h_pitch = self.package["width"]
 
-        pads_per_row = int(self.pads["n"] // 4)
+        v_pads_per_row = int(self.pads["ny"])
+        h_pads_per_row = int(self.pads["nx"])
 
-        row_len = (pads_per_row - 1) * pad_pitch
+        v_row_len = (v_pads_per_row - 1) * pad_pitch
+        h_row_len = (h_pads_per_row - 1) * pad_pitch
 
         pad_shape = pcbnew.PAD_SHAPE_OVAL if self.pads["oval"] else pcbnew.PAD_SHAPE_RECT
 
@@ -100,37 +101,36 @@ class QFNWizard(FootprintWizardBase.FootprintWizard):
         v_pad = PA.PadMaker(self.module).SMDPad( pad_length, pad_width, shape=pad_shape)
 
         h_pitch = (int)(h_pitch / 2 - pad_length + pad_offset + pad_length/2)
-        v_pitch = (int)(v_pitch / 2 - pad_length +pad_offset + pad_length/2)
+        v_pitch = (int)(v_pitch / 2 - pad_length + pad_offset + pad_length/2)
 
         #left row
         pin1Pos = pcbnew.VECTOR2I( -h_pitch, 0)
-        array = PA.PadLineArray(h_pad, pads_per_row, pad_pitch, True, pin1Pos)
+        array = PA.PadLineArray(h_pad, v_pads_per_row, pad_pitch, True, pin1Pos)
         array.SetFirstPadInArray(1)
         array.AddPadsToModule(self.draw)
 
         #bottom row
         pin1Pos = pcbnew.VECTOR2I(0, v_pitch)
-        array = PA.PadLineArray(v_pad, pads_per_row, pad_pitch, False, pin1Pos)
-        array.SetFirstPadInArray(pads_per_row + 1)
+        array = PA.PadLineArray(v_pad, h_pads_per_row, pad_pitch, False, pin1Pos)
+        array.SetFirstPadInArray(v_pads_per_row + 1)
         array.AddPadsToModule(self.draw)
 
         #right row
         pin1Pos = pcbnew.VECTOR2I(h_pitch, 0)
-        array = PA.PadLineArray(h_pad, pads_per_row, -pad_pitch, True,
+        array = PA.PadLineArray(h_pad, v_pads_per_row, -pad_pitch, True,
                                 pin1Pos)
-        array.SetFirstPadInArray(2*pads_per_row + 1)
+        array.SetFirstPadInArray(v_pads_per_row + h_pads_per_row + 1)
         array.AddPadsToModule(self.draw)
 
         #top row
         pin1Pos = pcbnew.VECTOR2I(0, -v_pitch)
-        array = PA.PadLineArray(v_pad, pads_per_row, -pad_pitch, False,
+        array = PA.PadLineArray(v_pad, h_pads_per_row, -pad_pitch, False,
                                 pin1Pos)
-        array.SetFirstPadInArray(3*pads_per_row + 1)
+        array.SetFirstPadInArray(2*v_pads_per_row + h_pads_per_row + 1)
         array.AddPadsToModule(self.draw)
 
         lim_x = self.package["width"] / 2
         lim_y = self.package["height"] / 2
-        inner = (row_len / 2) + pad_pitch
 
         # epad
         epad_width   = self.epad["width"]
@@ -144,7 +144,7 @@ class QFNWizard(FootprintWizardBase.FootprintWizard):
         # Create a central exposed pad?
         if self.epad['epad'] == True:
 
-            epad_num = self.pads['n'] + 1
+            epad_num = (self.pads['nx'] + self.pads['ny']) * 2 + 1
 
             aper_pad_w = epad_length / aper_pad_nx
             aper_pad_l = epad_width / aper_pad_ny
@@ -204,15 +204,28 @@ class QFNWizard(FootprintWizardBase.FootprintWizard):
         self.draw.SetLayer( pcbnew.F_SilkS )
 
         offset = self.draw.GetLineThickness()
-        clip = row_len / 2 + self.pads['pitch']
+        h_clip = h_row_len / 2 + self.pads['pitch']
+        v_clip = v_row_len / 2 + self.pads['pitch']
 
         self.draw.SetLineThickness( pcbnew.FromMM( 0.12 ) ) #Default per KLC F5.1 as of 12/2018
-        self.draw.Polyline( [ [ clip, -h/2-offset], [ w/2+offset,-h/2-offset], [ w/2+offset, -clip] ] ) # top right
-        self.draw.Polyline( [ [ clip,  h/2+offset], [ w/2+offset, h/2+offset], [ w/2+offset,  clip] ] ) # bottom right
-        self.draw.Polyline( [ [-clip,  h/2+offset], [-w/2-offset, h/2+offset], [-w/2-offset,  clip] ] ) # bottom left
 
-        # Add pin-1 indication as per IPC-7351C
-        self.draw.Line( -clip, -h/2-offset, -w/2-pad_length/2, -h/2-offset )
+        if h_pads_per_row > 0:
+
+            self.draw.Polyline( [ [ h_clip, -h/2-offset], [ w/2+offset,-h/2-offset], [ w/2+offset, -v_clip] ] ) # top right
+            self.draw.Polyline( [ [ h_clip,  h/2+offset], [ w/2+offset, h/2+offset], [ w/2+offset,  v_clip] ] ) # bottom right
+            self.draw.Polyline( [ [-h_clip,  h/2+offset], [-w/2-offset, h/2+offset], [-w/2-offset,  v_clip] ] ) # bottom left
+
+            # Add pin-1 indication as per IPC-7351C
+            self.draw.Line( -h_clip, -h/2-offset, -w/2-pad_length/2, -h/2-offset )
+
+        else:
+
+            self.draw.Polyline( [ [-w/2-offset,  v_clip], [-w/2-offset, h/2+offset], [ w/2+offset, h/2+offset],
+                [ w/2+offset,  v_clip] ] ) # bottom
+
+            # Add pin-1 indication as per IPC-7351C
+            self.draw.Polyline( [ [-h/2-offset, -h/2-offset], [ w/2+offset,-h/2-offset], [ w/2+offset, -v_clip] ] )
+
         self.draw.SetLineThickness( offset ) #Restore default
 
         # Courtyard
