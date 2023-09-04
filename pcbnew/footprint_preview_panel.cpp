@@ -183,7 +183,7 @@ bool FOOTPRINT_PREVIEW_PANEL::DisplayFootprint( const LIB_ID& aFPID )
         fitToCurrentFootprint();
     }
 
-    Refresh();
+    ForceRefresh();
 
     return m_currentFootprint != nullptr;
 }
