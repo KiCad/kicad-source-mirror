@@ -354,6 +354,17 @@ void PCB_SHAPE::Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis )
 }
 
 
+void PCB_SHAPE::SetIsAnnotationProxy( bool aIsProxy )
+{
+    if( aIsProxy && !m_annotationProxy )
+        SetStroke( STROKE_PARAMS( 1 ) );
+    else if( m_annotationProxy && !aIsProxy )
+        SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH ) ) );
+
+    m_annotationProxy = aIsProxy;
+}
+
+
 double PCB_SHAPE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     constexpr double HIDE = std::numeric_limits<double>::max();
@@ -602,8 +613,8 @@ static struct PCB_SHAPE_DESC
 
         const wxString groupPadPrimitives = _HKI( "Pad Primitives" );
 
-        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, bool>( _HKI( "Number Box" ),
-                             &EDA_SHAPE::SetIsAnnotationProxy, &EDA_SHAPE::IsAnnotationProxy ),
+        propMgr.AddProperty( new PROPERTY<PCB_SHAPE, bool>( _HKI( "Number Box" ),
+                             &PCB_SHAPE::SetIsAnnotationProxy, &PCB_SHAPE::IsAnnotationProxy ),
                              groupPadPrimitives )
                 .SetAvailableFunc( isPadEditMode );
     }

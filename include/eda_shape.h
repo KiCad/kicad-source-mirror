@@ -85,8 +85,8 @@ public:
 
     wxString SHAPE_T_asString() const;
 
-    bool IsAnnotationProxy() const { return m_annotationProxy; }
-    void SetIsAnnotationProxy( bool aIsProxy = true ) { m_annotationProxy = aIsProxy; }
+    virtual bool IsAnnotationProxy() const { return m_annotationProxy; }
+    virtual void SetIsAnnotationProxy( bool aIsProxy = true ) { m_annotationProxy = aIsProxy; }
 
     bool IsFilled() const
     {

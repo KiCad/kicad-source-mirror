@@ -119,7 +119,7 @@ void ConnectBoardShapes( std::vector<PCB_SHAPE*>&                 aShapeList,
             }
         }
         else if( ( shape0 == SHAPE_T::ARC && shape1 == SHAPE_T::SEGMENT )
-                 || shape0 == SHAPE_T::SEGMENT && shape1 == SHAPE_T::ARC )
+                 || ( shape0 == SHAPE_T::SEGMENT && shape1 == SHAPE_T::ARC ) )
         {
             PCB_SHAPE* arcShape = shape0 == SHAPE_T::ARC ? aPrevShape : aShape;
             PCB_SHAPE* segShape = shape0 == SHAPE_T::SEGMENT ? aPrevShape : aShape;
