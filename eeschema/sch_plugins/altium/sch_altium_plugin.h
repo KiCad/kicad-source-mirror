@@ -26,6 +26,7 @@
 #define _SCH_ALTIUM_PLUGIN_H_
 
 #include <memory>
+#include <vector>
 #include <sch_io_mgr.h>
 #include <wx/filename.h>
 #include <wx/gdicmn.h>
@@ -45,6 +46,9 @@ class ALTIUM_COMPOUND_FILE;
  *
  * As with all SCH_PLUGINs there is no UI dependencies i.e. windowing calls allowed.
  */
+
+static std::vector<LIB_SYMBOL*> nullsym;
+
 class SCH_ALTIUM_PLUGIN : public SCH_PLUGIN
 {
 public:
@@ -126,28 +130,28 @@ private:
     bool IsComponentPartVisible( int aOwnerindex, int aOwnerpartdisplaymode ) const;
     const ASCH_STORAGE_FILE* GetFileFromStorage( const wxString& aFilename ) const;
     void AddTextBox( const ASCH_TEXT_FRAME* aElem );
-    void AddLibTextBox( const ASCH_TEXT_FRAME* aElem, LIB_SYMBOL* aLibSymbol = nullptr );
+    void AddLibTextBox( const ASCH_TEXT_FRAME* aElem, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
 
     void ParseComponent( int aIndex, const std::map<wxString, wxString>& aProperties );
-    void ParsePin( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
-    void ParseLabel( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
-    void ParseTextFrame( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
+    void ParsePin( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
+    void ParseLabel( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
+    void ParseTextFrame( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
     void ParseNote( const std::map<wxString, wxString>& aProperties );
-    void ParseBezier( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
-    void ParsePolyline( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
-    void ParsePolygon( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
-    void ParseRoundRectangle( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
-    void ParseArc( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
-    void ParseEllipse( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
-    void ParseCircle( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
-    void ParseLine( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
+    void ParseBezier( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
+    void ParsePolyline( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
+    void ParsePolygon( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
+    void ParseRoundRectangle( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
+    void ParseArc( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
+    void ParseEllipse( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
+    void ParseCircle( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
+    void ParseLine( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
     void ParseSignalHarness( const std::map<wxString, wxString>& aProperties );
     void ParseHarnessConnector( int aIndex, const std::map<wxString, wxString>& aProperties );
     void ParseHarnessEntry( const std::map<wxString, wxString>& aProperties );
     void ParseHarnessType( const std::map<wxString, wxString>& aProperties );
     void ParseHarnessPort( const ASCH_PORT& aElem );
-    void ParseHyperlink( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
-    void ParseRectangle( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
+    void ParseHyperlink( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
+    void ParseRectangle( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
     void ParseSheetSymbol( int aIndex, const std::map<wxString, wxString>& aProperties );
     void ParseSheetEntry( const std::map<wxString, wxString>& aProperties );
     void ParsePowerPort( const std::map<wxString, wxString>& aProperties );
@@ -161,15 +165,15 @@ private:
     void ParseSheet( const std::map<wxString, wxString>& aProperties );
     void ParseSheetName( const std::map<wxString, wxString>& aProperties );
     void ParseFileName( const std::map<wxString, wxString>& aProperties );
-    void ParseDesignator( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
+    void ParseDesignator( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
     void ParseBusEntry( const std::map<wxString, wxString>& aProperties );
-    void ParseParameter( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aLibSymbol = nullptr );
+    void ParseParameter( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
     void ParseImplementationList( int aIndex, const std::map<wxString, wxString>& aProperties );
     void ParseImplementation( const std::map<wxString, wxString>& aProperties );
 
     void ParseLibHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile, wxArrayString& aLibNames );
     std::map<wxString,LIB_SYMBOL*> ParseLibFile( const ALTIUM_COMPOUND_FILE& aAltiumSchFile );
-    LIB_SYMBOL* ParseLibComponent( const std::map<wxString, wxString>& aProperties );
+    std::vector<LIB_SYMBOL*> ParseLibComponent( const std::map<wxString, wxString>& aProperties );
 
 private:
     REPORTER*                       m_reporter;          // current reporter for warnings/errors
@@ -212,6 +216,9 @@ private:
 
     std::map<wxString, long long> m_timestamps;
     std::map<wxString, std::map<wxString, LIB_SYMBOL*>> m_libCache;
+
+    // List of available fonts with font name and font size in pt
+    std::vector<std::pair<wxString, int>> m_fonts;
 };
 
 #endif // _SCH_ALTIUM_PLUGIN_H_

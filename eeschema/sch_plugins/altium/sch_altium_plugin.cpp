@@ -134,6 +134,7 @@ static void SetLibShapeLine( const ASCH_BORDER_INTERFACE& elem, LIB_SHAPE* shape
 {
     COLOR4D color = GetColorFromInt( elem.Color );
     COLOR4D default_color;
+    COLOR4D alt_default_color;
     STROKE_PARAMS stroke;
 
     switch( aType )
@@ -155,6 +156,9 @@ static void SetLibShapeLine( const ASCH_BORDER_INTERFACE& elem, LIB_SHAPE* shape
         break;
     case ALTIUM_SCH_RECORD::POLYLINE:
         default_color = COLOR4D( BLACK );
+        alt_default_color = COLOR4D( PUREBLUE ); // POLYLINEs get two default colors because they are
+                                                 // often used for drawing wires in polygons, so we will
+                                                 // want them the same color
         break;
     case ALTIUM_SCH_RECORD::RECTANGLE:
         default_color = COLOR4D( 0.5, 0, 0, 1.0 );
@@ -167,7 +171,7 @@ static void SetLibShapeLine( const ASCH_BORDER_INTERFACE& elem, LIB_SHAPE* shape
         break;
     }
 
-    if( color == default_color )
+    if( color == default_color || color == alt_default_color )
         color = COLOR4D::UNSPECIFIED;
 
     shape->SetStroke( STROKE_PARAMS( elem.LineWidth, PLOT_DASH_TYPE::SOLID, color ) );
@@ -765,13 +769,13 @@ void SCH_ALTIUM_PLUGIN::ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchF
             ParseImplementation( properties );
             break;
 
-        case ALTIUM_SCH_RECORD::RECORD_46:
+        case ALTIUM_SCH_RECORD::MAP_DEFINER_LIST:
             break;
 
-        case ALTIUM_SCH_RECORD::RECORD_47:
+        case ALTIUM_SCH_RECORD::MAP_DEFINER:
             break;
 
-        case ALTIUM_SCH_RECORD::RECORD_48:
+        case ALTIUM_SCH_RECORD::IMPL_PARAMS:
             break;
 
         case ALTIUM_SCH_RECORD::NOTE:
@@ -933,14 +937,16 @@ void SCH_ALTIUM_PLUGIN::ParseComponent( int aIndex,
 
 
 
-void SCH_ALTIUM_PLUGIN::ParsePin( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aSymbol )
+void SCH_ALTIUM_PLUGIN::ParsePin( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol )
 {
     ASCH_PIN elem( aProperties );
 
-    LIB_SYMBOL* symbol = aSymbol;
+    LIB_SYMBOL* symbol = static_cast<int>( aSymbol.size() ) <= elem.ownerpartdisplaymode
+                                 ? nullptr
+                                 : aSymbol[elem.ownerpartdisplaymode];
     SCH_SYMBOL* schSymbol = nullptr;
 
-    if( !aSymbol )
+    if( !symbol )
     {
         const auto& libSymbolIt = m_libSymbols.find( elem.ownerindex );
 
@@ -961,11 +967,17 @@ void SCH_ALTIUM_PLUGIN::ParsePin( const std::map<wxString, wxString>& aPropertie
     }
 
     LIB_PIN*    pin = new LIB_PIN( symbol );
+
+    // Make sure that these are visible when initializing the symbol
+    // This may be overriden by the file data but not by the pin defaults
+    pin->SetNameTextSize( schIUScale.MilsToIU( DEFAULT_PINNAME_SIZE ) );
+    pin->SetNumberTextSize( schIUScale.MilsToIU( DEFAULT_PINNUM_SIZE ) );
+
     symbol->AddDrawItem( pin, false );
 
     pin->SetUnit( std::max( 0, elem.ownerpartid ) );
 
-    pin->SetName( elem.name );
+    pin->SetName( AltiumPinNamesToKiCad( elem.name ) );
     pin->SetNumber( elem.designator );
     pin->SetLength( elem.pinlength );
 
@@ -1184,11 +1196,11 @@ void SetTextPositioning( EDA_TEXT* text, ASCH_LABEL_JUSTIFICATION justification,
 }
 
 
-void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aSymbol )
+void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol )
 {
     ASCH_LABEL elem( aProperties );
 
-    if( !aSymbol && elem.ownerpartid == ALTIUM_COMPONENT_NONE )
+    if( aSymbol.empty() && elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
         std::map<wxString, wxString> variableMap = {
             { "APPLICATION_BUILDNUMBER", "KICAD_VERSION" },
@@ -1227,7 +1239,9 @@ void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aPropert
     }
     else
     {
-        LIB_SYMBOL* symbol = aSymbol;
+        LIB_SYMBOL* symbol = static_cast<int>( aSymbol.size() ) <= elem.ownerpartdisplaymode
+                                ? nullptr
+                                : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
         if( !symbol )
@@ -1251,7 +1265,7 @@ void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aPropert
         symbol->AddDrawItem( textItem, false );
 
         /// Handle labels that are in a library symbol, not on schematic
-        if( aSymbol )
+        if( !schsym )
             textItem->SetPosition( GetLibEditPosition(elem.location ) );
         else
             textItem->SetPosition( GetRelativePosition( elem.location + m_sheetOffset, schsym ) );
@@ -1273,14 +1287,14 @@ void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aPropert
 }
 
 
-void SCH_ALTIUM_PLUGIN::ParseTextFrame( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aSymbol )
+void SCH_ALTIUM_PLUGIN::ParseTextFrame( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol )
 {
     ASCH_TEXT_FRAME elem( aProperties );
 
-    if( aSymbol )
-        AddLibTextBox( &elem, aSymbol );
-    else
+    if( aSymbol.empty() )
         AddTextBox( &elem );
+    else
+        AddLibTextBox( &elem, aSymbol );
 }
 
 
@@ -1356,9 +1370,13 @@ void SCH_ALTIUM_PLUGIN::AddTextBox(const ASCH_TEXT_FRAME *aElem )
 }
 
 
-void SCH_ALTIUM_PLUGIN::AddLibTextBox(const ASCH_TEXT_FRAME *aElem, LIB_SYMBOL *aSymbol )
+void SCH_ALTIUM_PLUGIN::AddLibTextBox(const ASCH_TEXT_FRAME *aElem, std::vector<LIB_SYMBOL*>& aSymbol )
 {
-    LIB_TEXTBOX* textBox = new LIB_TEXTBOX( aSymbol );
+    if( aElem->ownerpartdisplaymode >= static_cast<int>( aSymbol.size() ) )
+        return;
+
+    LIB_SYMBOL* symbol = aSymbol[aElem->ownerpartdisplaymode];
+    LIB_TEXTBOX* textBox = new LIB_TEXTBOX( symbol );
 
     VECTOR2I sheetTopRight = GetLibEditPosition( aElem->TopRight );
     VECTOR2I sheetBottomLeft = GetLibEditPosition( aElem->BottomLeft );
@@ -1395,13 +1413,13 @@ void SCH_ALTIUM_PLUGIN::AddLibTextBox(const ASCH_TEXT_FRAME *aElem, LIB_SYMBOL *
         break;
     }
 
-    aSymbol->AddDrawItem( textBox, false );
+    symbol->AddDrawItem( textBox, false );
 
 }
 
 
 void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProperties,
-                                     LIB_SYMBOL*                         aSymbol )
+                                     std::vector<LIB_SYMBOL*>&           aSymbol )
 {
     ASCH_BEZIER elem( aProperties );
 
@@ -1414,7 +1432,7 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
         return;
     }
 
-    if( !aSymbol && elem.OwnerPartID == ALTIUM_COMPONENT_NONE )
+    if( aSymbol.empty() && elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
         SCH_SCREEN* currentScreen = getCurrentScreen();
         wxCHECK( currentScreen, /* void */ );
@@ -1462,18 +1480,20 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
     }
     else
     {
-        LIB_SYMBOL* symbol = aSymbol;
+        LIB_SYMBOL* symbol = static_cast<int>( aSymbol.size() ) <= elem.ownerpartdisplaymode
+                                ? nullptr
+                                : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
         if( !symbol )
         {
-            const auto& libSymbolIt = m_libSymbols.find( elem.OwnerIndex );
+            const auto& libSymbolIt = m_libSymbols.find( elem.ownerindex );
 
             if( libSymbolIt == m_libSymbols.end() )
             {
                 // TODO: e.g. can depend on Template (RECORD=39
                 m_reporter->Report( wxString::Format( wxT( "Bezier's owner (%d) not found." ),
-                                                    elem.OwnerIndex ),
+                                                    elem.ownerindex ),
                         RPT_SEVERITY_DEBUG );
                 return;
             }
@@ -1482,7 +1502,7 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
             schsym = m_symbols.at( libSymbolIt->first );
         }
 
-        if( !aSymbol && !IsComponentPartVisible( elem.OwnerIndex, elem.OwnerPartDisplayMode ) )
+        if( !symbol && !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
             return;
 
         for( size_t i = 0; i + 1 < elem.points.size(); i += 3 )
@@ -1493,7 +1513,7 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
                 LIB_SHAPE* line = new LIB_SHAPE( symbol, SHAPE_T::POLY );
                 symbol->AddDrawItem( line, false );
 
-                line->SetUnit( std::max( 0, elem.OwnerPartID ) );
+                line->SetUnit( std::max( 0, elem.ownerpartid ) );
 
                 for( size_t j = i; j < elem.points.size() && j < i + 2; j++ )
                 {
@@ -1515,7 +1535,7 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
                 LIB_SHAPE* line = new LIB_SHAPE( symbol, SHAPE_T::POLY );
                 symbol->AddDrawItem( line, false );
 
-                line->SetUnit( std::max( 0, elem.OwnerPartID ) );
+                line->SetUnit( std::max( 0, elem.ownerpartid ) );
 
                 for( size_t j = i; j < elem.points.size() && j < i + 2; j++ )
                 {
@@ -1534,7 +1554,7 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
                 LIB_SHAPE* bezier = new LIB_SHAPE( symbol, SHAPE_T::BEZIER );
                 symbol->AddDrawItem( bezier, false );
 
-                bezier->SetUnit( std::max( 0, elem.OwnerPartID ) );
+                bezier->SetUnit( std::max( 0, elem.ownerpartid ) );
 
                 for( size_t j = i; j < elem.points.size() && j < i + 4; j++ )
                 {
@@ -1563,11 +1583,11 @@ void SCH_ALTIUM_PLUGIN::ParseBezier( const std::map<wxString, wxString>& aProper
 
 
 void SCH_ALTIUM_PLUGIN::ParsePolyline( const std::map<wxString, wxString>& aProperties,
-                                       LIB_SYMBOL*                         aSymbol )
+                                       std::vector<LIB_SYMBOL*>&           aSymbol )
 {
     ASCH_POLYLINE elem( aProperties );
 
-    if( !aSymbol && elem.OwnerPartID == ALTIUM_COMPONENT_NONE )
+    if( aSymbol.empty() && elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
         SCH_SCREEN* screen = getCurrentScreen();
         wxCHECK( screen, /* void */ );
@@ -1585,18 +1605,20 @@ void SCH_ALTIUM_PLUGIN::ParsePolyline( const std::map<wxString, wxString>& aProp
     }
     else
     {
-        LIB_SYMBOL* symbol = aSymbol;
+        LIB_SYMBOL* symbol = static_cast<int>( aSymbol.size() ) <= elem.ownerpartdisplaymode
+                                     ? nullptr
+                                     : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
-        if( !aSymbol )
+        if( !symbol )
         {
-            const auto& libSymbolIt = m_libSymbols.find( elem.OwnerIndex );
+            const auto& libSymbolIt = m_libSymbols.find( elem.ownerindex );
 
             if( libSymbolIt == m_libSymbols.end() )
             {
                 // TODO: e.g. can depend on Template (RECORD=39
                 m_reporter->Report( wxString::Format( wxT( "Polyline's owner (%d) not found." ),
-                                                    elem.OwnerIndex ),
+                                                    elem.ownerindex ),
                                     RPT_SEVERITY_DEBUG );
                 return;
             }
@@ -1605,13 +1627,13 @@ void SCH_ALTIUM_PLUGIN::ParsePolyline( const std::map<wxString, wxString>& aProp
             schsym = m_symbols.at( libSymbolIt->first );
         }
 
-        if( !aSymbol && !IsComponentPartVisible( elem.OwnerIndex, elem.OwnerPartDisplayMode ) )
+        if( !symbol && !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
             return;
 
         LIB_SHAPE*  line = new LIB_SHAPE( symbol, SHAPE_T::POLY );
         symbol->AddDrawItem( line, false );
 
-        line->SetUnit( elem.OwnerPartID );
+        line->SetUnit( elem.ownerpartid );
 
         for( VECTOR2I& point : elem.Points )
         {
@@ -1631,11 +1653,11 @@ void SCH_ALTIUM_PLUGIN::ParsePolyline( const std::map<wxString, wxString>& aProp
 
 
 void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aProperties,
-                                      LIB_SYMBOL* aSymbol )
+                                      std::vector<LIB_SYMBOL*>& aSymbol )
 {
     ASCH_POLYGON elem( aProperties );
 
-    if( !aSymbol && elem.OwnerPartID == ALTIUM_COMPONENT_NONE )
+    if( aSymbol.empty() && elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
         SCH_SCREEN* screen = getCurrentScreen();
         wxCHECK( screen, /* void */ );
@@ -1654,18 +1676,20 @@ void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aPrope
     }
     else
     {
-        LIB_SYMBOL* symbol = aSymbol;
+        LIB_SYMBOL* symbol = static_cast<int>( aSymbol.size() ) <= elem.ownerpartdisplaymode
+                                ? nullptr
+                                : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
-        if( !aSymbol )
+        if( !symbol )
         {
-            const auto& libSymbolIt = m_libSymbols.find( elem.OwnerIndex );
+            const auto& libSymbolIt = m_libSymbols.find( elem.ownerindex );
 
             if( libSymbolIt == m_libSymbols.end() )
             {
                 // TODO: e.g. can depend on Template (RECORD=39
                 m_reporter->Report( wxString::Format( wxT( "Polygon's owner (%d) not found." ),
-                                                    elem.OwnerIndex ),
+                                                    elem.ownerindex ),
                         RPT_SEVERITY_DEBUG );
                 return;
             }
@@ -1674,13 +1698,13 @@ void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aPrope
             schsym = m_symbols.at( libSymbolIt->first );
         }
 
-        if( !aSymbol && !IsComponentPartVisible( elem.OwnerIndex, elem.OwnerPartDisplayMode ) )
+        if( !symbol && !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
             return;
 
         LIB_SHAPE* line = new LIB_SHAPE( symbol, SHAPE_T::POLY );
 
         symbol->AddDrawItem( line, false );
-        line->SetUnit( elem.OwnerPartID );
+        line->SetUnit( elem.ownerpartid );
 
         for( VECTOR2I& point : elem.points )
         {
@@ -1709,14 +1733,14 @@ void SCH_ALTIUM_PLUGIN::ParsePolygon( const std::map<wxString, wxString>& aPrope
 
 
 void SCH_ALTIUM_PLUGIN::ParseRoundRectangle( const std::map<wxString, wxString>& aProperties,
-                                             LIB_SYMBOL* aSymbol )
+                                             std::vector<LIB_SYMBOL*>& aSymbol )
 {
     ASCH_ROUND_RECTANGLE elem( aProperties );
 
     VECTOR2I sheetTopRight = elem.TopRight + m_sheetOffset;
     VECTOR2I sheetBottomLeft = elem.BottomLeft + m_sheetOffset;
 
-    if( !aSymbol && elem.OwnerPartID == ALTIUM_COMPONENT_NONE )
+    if( aSymbol.empty() && elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
         SCH_SCREEN* screen = getCurrentScreen();
         wxCHECK( screen, /* void */ );
@@ -1734,19 +1758,21 @@ void SCH_ALTIUM_PLUGIN::ParseRoundRectangle( const std::map<wxString, wxString>&
     }
     else
     {
-        LIB_SYMBOL* symbol = aSymbol;
+        LIB_SYMBOL* symbol = static_cast<int>( aSymbol.size() ) <= elem.ownerpartdisplaymode
+                                ? nullptr
+                                : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
-        if( !aSymbol )
+        if( !symbol )
         {
-            const auto& libSymbolIt = m_libSymbols.find( elem.OwnerIndex );
+            const auto& libSymbolIt = m_libSymbols.find( elem.ownerindex );
 
             if( libSymbolIt == m_libSymbols.end() )
             {
                 // TODO: e.g. can depend on Template (RECORD=39
                 m_reporter->Report( wxString::Format( wxT( "Rounded rectangle's owner (%d) not "
                                                         "found." ),
-                                                    elem.OwnerIndex ),
+                                                    elem.ownerindex ),
                                     RPT_SEVERITY_DEBUG );
                 return;
             }
@@ -1755,17 +1781,22 @@ void SCH_ALTIUM_PLUGIN::ParseRoundRectangle( const std::map<wxString, wxString>&
             schsym = m_symbols.at( libSymbolIt->first );
         }
 
-        if( !aSymbol && !IsComponentPartVisible( elem.OwnerIndex, elem.OwnerPartDisplayMode ) )
+        if( !symbol && !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
             return;
 
         LIB_SHAPE* rect = nullptr;
 
         // If it is a circle, make it a circle
-        if( elem.CornerRadius.GetX() >= std::abs( elem.TopRight.x - elem.BottomLeft.x ) / 2
-            && elem.CornerRadius.GetY() >= std::abs( elem.TopRight.y - elem.BottomLeft.y ) / 2 )
+        if( std::abs( elem.CornerRadius.GetX() )
+                    >= std::abs( elem.TopRight.x - elem.BottomLeft.x ) / 2
+            && std::abs( elem.CornerRadius.GetY() )
+                       >= std::abs( elem.TopRight.y - elem.BottomLeft.y ) / 2 )
         {
             rect = new LIB_SHAPE( symbol, SHAPE_T::CIRCLE );
             rect->SetPosition( GetLibEditPosition( ( sheetTopRight + sheetBottomLeft ) / 2  ) );
+            rect->SetEnd( VECTOR2I( rect->GetPosition().x + std::abs( elem.CornerRadius.GetX() ),
+                          rect->GetPosition().y ) );
+
         }
         else
         {
@@ -1789,12 +1820,12 @@ void SCH_ALTIUM_PLUGIN::ParseRoundRectangle( const std::map<wxString, wxString>&
         SetLibShapeFillAndColor( elem, rect, ALTIUM_SCH_RECORD::ROUND_RECTANGLE, elem.Color );
 
         symbol->AddDrawItem( rect, false );
-        rect->SetUnit( elem.OwnerPartID );
+        rect->SetUnit( elem.ownerpartid );
     }
 }
 
 
-void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aSymbol )
+void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol )
 {
     // The Arc can be ALTIUM_SCH_RECORD::ELLIPTICAL_ARC or ALTIUM_SCH_RECORD::ARC
     // Elliptical arcs are not handled in KiCad. So use an arc instead
@@ -1809,7 +1840,7 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
     if( elem.m_IsElliptical )
         arc_radius = std::max( elem.m_Radius, elem.m_SecondaryRadius );
 
-    if( !aSymbol && elem.OwnerPartID == ALTIUM_COMPONENT_NONE )
+    if( aSymbol.empty() && elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
         SCH_SCREEN* currentScreen = getCurrentScreen();
         wxCHECK( currentScreen, /* void */ );
@@ -1843,18 +1874,20 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
     }
     else
     {
-        LIB_SYMBOL* symbol = aSymbol;
+        LIB_SYMBOL* symbol = static_cast<int>( aSymbol.size() ) <= elem.ownerpartdisplaymode
+                                     ? nullptr
+                                     : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
-        if( !aSymbol )
+        if( !symbol )
         {
-            const auto& libSymbolIt = m_libSymbols.find( elem.OwnerIndex );
+            const auto& libSymbolIt = m_libSymbols.find( elem.ownerindex );
 
             if( libSymbolIt == m_libSymbols.end() )
             {
                 // TODO: e.g. can depend on Template (RECORD=39
                 m_reporter->Report( wxString::Format( wxT( "Arc's owner (%d) not found." ),
-                                                    elem.OwnerIndex ),
+                                                    elem.ownerindex ),
                         RPT_SEVERITY_DEBUG );
                 return;
             }
@@ -1863,7 +1896,7 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
             schsym = m_symbols.at( libSymbolIt->first );
         }
 
-        if( !aSymbol && !IsComponentPartVisible( elem.OwnerIndex, elem.OwnerPartDisplayMode ) )
+        if( !symbol && !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
             return;
 
         if( elem.m_StartAngle == 0 && ( elem.m_EndAngle == 0 || elem.m_EndAngle == 360 ) )
@@ -1871,7 +1904,7 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
             LIB_SHAPE* circle = new LIB_SHAPE( symbol, SHAPE_T::CIRCLE );
             symbol->AddDrawItem( circle, false );
 
-            circle->SetUnit( std::max( 0, elem.OwnerPartID ) );
+            circle->SetUnit( std::max( 0, elem.ownerpartid ) );
 
             if( !schsym )
                 circle->SetPosition( GetLibEditPosition( elem.m_Center ) );
@@ -1885,22 +1918,35 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
         {
             LIB_SHAPE* arc = new LIB_SHAPE( symbol, SHAPE_T::ARC );
             symbol->AddDrawItem( arc, false );
-            arc->SetUnit( std::max( 0, elem.OwnerPartID ) );
+            arc->SetUnit( std::max( 0, elem.ownerpartid ) );
 
             if( !schsym )
                 arc->SetCenter( GetLibEditPosition( elem.m_Center ) );
             else
                 arc->SetCenter( GetRelativePosition( elem.m_Center + m_sheetOffset, schsym ) );
 
-            VECTOR2I arcStart( arc_radius, 0 );
-            RotatePoint( arcStart, -EDA_ANGLE( elem.m_StartAngle, DEGREES_T ) );
+            VECTOR2I arcStart = AltiumGetEllipticalPos(
+                    elem.m_Radius, elem.m_SecondaryRadius,
+                    -EDA_ANGLE( elem.m_StartAngle, DEGREES_T ).AsRadians() );
             arcStart += arc->GetCenter();
-            arc->SetStart( arcStart );
 
-            VECTOR2I arcEnd( arc_radius, 0 );
-            RotatePoint( arcEnd, -EDA_ANGLE( elem.m_EndAngle, DEGREES_T ) );
+            VECTOR2I arcEnd = AltiumGetEllipticalPos(
+                    elem.m_Radius, elem.m_SecondaryRadius,
+                    -EDA_ANGLE( elem.m_EndAngle, DEGREES_T ).AsRadians() );
             arcEnd += arc->GetCenter();
-            arc->SetEnd( arcEnd );
+
+            double end_angle = elem.m_EndAngle;
+
+            if( elem.m_EndAngle < elem.m_StartAngle )
+                end_angle += 360;
+
+            double mid_angle = std::fmod( ( elem.m_StartAngle + end_angle ) / 2, 360 );
+            VECTOR2I arcMid = AltiumGetEllipticalPos(
+                    elem.m_Radius, elem.m_SecondaryRadius,
+                    -EDA_ANGLE( mid_angle, DEGREES_T ).AsRadians() );
+            arcMid += arc->GetCenter();
+
+            arc->SetArcGeometry( arcStart, arcMid, arcEnd );
 
             SetLibShapeLine( elem, arc, ALTIUM_SCH_RECORD::ARC );
         }
@@ -1908,7 +1954,7 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
 }
 
 
-void SCH_ALTIUM_PLUGIN::ParseEllipse( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aSymbol )
+void SCH_ALTIUM_PLUGIN::ParseEllipse( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol )
 {
     ASCH_ELLIPSE elem( aProperties );
 
@@ -1924,7 +1970,7 @@ void SCH_ALTIUM_PLUGIN::ParseEllipse( const std::map<wxString, wxString>& aPrope
         return;
     }
 
-    if( !aSymbol && elem.OwnerPartID == ALTIUM_COMPONENT_NONE )
+    if( aSymbol.empty() && elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
         SCH_SCREEN* screen = getCurrentScreen();
         wxCHECK( screen, /* void */ );
@@ -1957,18 +2003,20 @@ void SCH_ALTIUM_PLUGIN::ParseEllipse( const std::map<wxString, wxString>& aPrope
     }
     else
     {
-        LIB_SYMBOL* symbol = aSymbol;
+        LIB_SYMBOL* symbol = static_cast<int>( aSymbol.size() ) <= elem.ownerpartdisplaymode
+                                     ? nullptr
+                                     : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
-        if( !aSymbol )
+        if( !symbol )
         {
-            const auto& libSymbolIt = m_libSymbols.find( elem.OwnerIndex );
+            const auto& libSymbolIt = m_libSymbols.find( elem.ownerindex );
 
             if( libSymbolIt == m_libSymbols.end() )
             {
                 // TODO: e.g. can depend on Template (RECORD=39
                 m_reporter->Report( wxString::Format( wxT( "Ellipse's owner (%d) not found." ),
-                                                      elem.OwnerIndex ),
+                                                      elem.ownerindex ),
                                     RPT_SEVERITY_DEBUG );
                 return;
             }
@@ -1983,8 +2031,8 @@ void SCH_ALTIUM_PLUGIN::ParseEllipse( const std::map<wxString, wxString>& aPrope
         symbol->AddDrawItem( arc1, false );
         symbol->AddDrawItem( arc2, false );
 
-        arc1->SetUnit( elem.OwnerPartID );
-        arc2->SetUnit( elem.OwnerPartID );
+        arc1->SetUnit( elem.ownerpartid );
+        arc2->SetUnit( elem.ownerpartid );
 
         if( !schsym )
         {
@@ -2017,11 +2065,11 @@ void SCH_ALTIUM_PLUGIN::ParseEllipse( const std::map<wxString, wxString>& aPrope
 }
 
 
-void SCH_ALTIUM_PLUGIN::ParseCircle( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aSymbol )
+void SCH_ALTIUM_PLUGIN::ParseCircle( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol )
 {
     ASCH_ELLIPSE elem( aProperties );
 
-    if( !aSymbol && elem.OwnerPartID == ALTIUM_COMPONENT_NONE )
+    if( aSymbol.empty() && elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
         SCH_SCREEN* screen = getCurrentScreen();
         wxCHECK( screen, /* void */ );
@@ -2043,18 +2091,20 @@ void SCH_ALTIUM_PLUGIN::ParseCircle( const std::map<wxString, wxString>& aProper
     }
     else
     {
-        LIB_SYMBOL* symbol = aSymbol;
+        LIB_SYMBOL* symbol = static_cast<int>( aSymbol.size() ) <= elem.ownerpartdisplaymode
+                                     ? nullptr
+                                     : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
-        if( !aSymbol )
+        if( !symbol )
         {
-            const auto& libSymbolIt = m_libSymbols.find( elem.OwnerIndex );
+            const auto& libSymbolIt = m_libSymbols.find( elem.ownerindex );
 
             if( libSymbolIt == m_libSymbols.end() )
             {
                 // TODO: e.g. can depend on Template (RECORD=39
                 m_reporter->Report( wxString::Format( wxT( "Ellipse's owner (%d) not found." ),
-                                                      elem.OwnerIndex ),
+                                                      elem.ownerindex ),
                                     RPT_SEVERITY_DEBUG );
                 return;
             }
@@ -2066,7 +2116,7 @@ void SCH_ALTIUM_PLUGIN::ParseCircle( const std::map<wxString, wxString>& aProper
         LIB_SHAPE* circle = new LIB_SHAPE( symbol, SHAPE_T::CIRCLE );
         symbol->AddDrawItem( circle, false );
 
-        circle->SetUnit( elem.OwnerPartID );
+        circle->SetUnit( elem.ownerpartid );
 
         if( !schsym )
             circle->SetPosition( GetLibEditPosition( elem.Center ) );
@@ -2081,11 +2131,11 @@ void SCH_ALTIUM_PLUGIN::ParseCircle( const std::map<wxString, wxString>& aProper
 }
 
 
-void SCH_ALTIUM_PLUGIN::ParseLine( const std::map<wxString, wxString>& aProperties, LIB_SYMBOL* aSymbol )
+void SCH_ALTIUM_PLUGIN::ParseLine( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol )
 {
     ASCH_LINE elem( aProperties );
 
-    if( !aSymbol && elem.OwnerPartID == ALTIUM_COMPONENT_NONE )
+    if( aSymbol.empty() && elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
 
         SCH_SCREEN* screen = getCurrentScreen();
@@ -2101,18 +2151,20 @@ void SCH_ALTIUM_PLUGIN::ParseLine( const std::map<wxString, wxString>& aProperti
     }
     else
     {
-        LIB_SYMBOL* symbol = aSymbol;
+        LIB_SYMBOL* symbol = static_cast<int>( aSymbol.size() ) <= elem.ownerpartdisplaymode
+                                     ? nullptr
+                                     : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
-        if( !aSymbol )
+        if( !symbol )
         {
-            const auto& libSymbolIt = m_libSymbols.find( elem.OwnerIndex );
+            const auto& libSymbolIt = m_libSymbols.find( elem.ownerindex );
 
             if( libSymbolIt == m_libSymbols.end() )
             {
                 // TODO: e.g. can depend on Template (RECORD=39
                 m_reporter->Report( wxString::Format( wxT( "Line's owner (%d) not found." ),
-                                                    elem.OwnerIndex ),
+                                                    elem.ownerindex ),
                                     RPT_SEVERITY_DEBUG );
                 return;
             }
@@ -2121,13 +2173,13 @@ void SCH_ALTIUM_PLUGIN::ParseLine( const std::map<wxString, wxString>& aProperti
             schsym = m_symbols.at( libSymbolIt->first );
         }
 
-        if( !aSymbol && !IsComponentPartVisible( elem.OwnerIndex, elem.OwnerPartDisplayMode ) )
+        if( !symbol && !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
             return;
 
         LIB_SHAPE*  line = new LIB_SHAPE( symbol, SHAPE_T::POLY );
         symbol->AddDrawItem( line, false );
 
-        line->SetUnit( std::max( 0, elem.OwnerPartID ) );
+        line->SetUnit( std::max( 0, elem.ownerpartid ) );
 
         if( !schsym )
         {
@@ -2149,7 +2201,7 @@ void SCH_ALTIUM_PLUGIN::ParseSignalHarness( const std::map<wxString, wxString>& 
 {
     ASCH_SIGNAL_HARNESS elem( aProperties );
 
-    if( elem.OwnerPartID == ALTIUM_COMPONENT_NONE )
+    if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
         SCH_SCREEN* screen = getCurrentScreen();
         wxCHECK( screen, /* void */ );
@@ -2179,7 +2231,7 @@ void SCH_ALTIUM_PLUGIN::ParseHarnessConnector( int aIndex, const std::map<wxStri
 {
     ASCH_HARNESS_CONNECTOR elem( aProperties );
 
-    if( elem.OwnerPartID == ALTIUM_COMPONENT_NONE )
+    if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
         SCH_SCREEN* currentScreen = getCurrentScreen();
         wxCHECK( currentScreen, /* void */ );
@@ -2308,14 +2360,14 @@ void SCH_ALTIUM_PLUGIN::ParseHarnessType( const std::map<wxString, wxString>& aP
 
 
 void SCH_ALTIUM_PLUGIN::ParseRectangle( const std::map<wxString, wxString>& aProperties,
-                                        LIB_SYMBOL* aSymbol )
+                                        std::vector<LIB_SYMBOL*>& aSymbol )
 {
     ASCH_RECTANGLE elem( aProperties );
 
     VECTOR2I sheetTopRight = elem.TopRight + m_sheetOffset;
     VECTOR2I sheetBottomLeft = elem.BottomLeft + m_sheetOffset;
 
-    if( elem.OwnerPartID == ALTIUM_COMPONENT_NONE )
+    if( elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
         SCH_SCREEN* screen = getCurrentScreen();
         wxCHECK( screen, /* void */ );
@@ -2332,18 +2384,20 @@ void SCH_ALTIUM_PLUGIN::ParseRectangle( const std::map<wxString, wxString>& aPro
     }
     else
     {
-        LIB_SYMBOL* symbol = aSymbol;
+        LIB_SYMBOL* symbol = static_cast<int>( aSymbol.size() ) <= elem.ownerpartdisplaymode
+                                     ? nullptr
+                                     : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
-        if( !aSymbol )
+        if( !symbol )
         {
-            const auto& libSymbolIt = m_libSymbols.find( elem.OwnerIndex );
+            const auto& libSymbolIt = m_libSymbols.find( elem.ownerindex );
 
             if( libSymbolIt == m_libSymbols.end() )
             {
                 // TODO: e.g. can depend on Template (RECORD=39
                 m_reporter->Report( wxString::Format( wxT( "Rectangle's owner (%d) not found." ),
-                                                    elem.OwnerIndex ),
+                                                    elem.ownerindex ),
                                     RPT_SEVERITY_DEBUG );
                 return;
             }
@@ -2352,13 +2406,13 @@ void SCH_ALTIUM_PLUGIN::ParseRectangle( const std::map<wxString, wxString>& aPro
             schsym = m_symbols.at( libSymbolIt->first );
         }
 
-        if( !aSymbol && !IsComponentPartVisible( elem.OwnerIndex, elem.OwnerPartDisplayMode ) )
+        if( !symbol && !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
             return;
 
         LIB_SHAPE*  rect = new LIB_SHAPE( symbol, SHAPE_T::RECTANGLE );
         symbol->AddDrawItem( rect, false );
 
-        rect->SetUnit( elem.OwnerPartID );
+        rect->SetUnit( elem.ownerpartid );
 
         if( !schsym )
         {
@@ -3088,11 +3142,11 @@ void SCH_ALTIUM_PLUGIN::ParseImage( const std::map<wxString, wxString>& aPropert
 {
     ASCH_IMAGE elem( aProperties );
 
-    const auto& component = m_altiumComponents.find( elem.OwnerIndex );
+    const auto& component = m_altiumComponents.find( elem.ownerindex );
 
     //Hide the image if it is owned by a component but the part id do not match
     if( component != m_altiumComponents.end()
-        && component->second.currentpartid != elem.OwnerPartID )
+        && component->second.currentpartid != elem.ownerpartid )
         return;
 
     VECTOR2I                    center = ( elem.location + elem.corner ) / 2 + m_sheetOffset;
@@ -3250,14 +3304,18 @@ void SCH_ALTIUM_PLUGIN::ParseFileName( const std::map<wxString, wxString>& aProp
 
 
 void SCH_ALTIUM_PLUGIN::ParseDesignator( const std::map<wxString, wxString>& aProperties,
-                                         LIB_SYMBOL*                         aSymbol )
+                                         std::vector<LIB_SYMBOL*>&           aSymbol )
 {
     ASCH_DESIGNATOR elem( aProperties );
 
-    if( aSymbol )
+    if( !aSymbol.empty() )
     {
+        wxCHECK_RET( static_cast<int>( aSymbol.size() ) > elem.ownerpartdisplaymode, wxT( "Invalid ownerpartdisplaymode" ) );
+
+        LIB_SYMBOL* symbol = aSymbol[elem.ownerpartdisplaymode];
+
         bool emptyRef = elem.text.IsEmpty();
-        LIB_FIELD& refField = aSymbol->GetReferenceField();
+        LIB_FIELD& refField = symbol->GetReferenceField();
 
         if( emptyRef )
             refField.SetText( wxT( "X?" ) );
@@ -3323,7 +3381,7 @@ void SCH_ALTIUM_PLUGIN::ParseBusEntry( const std::map<wxString, wxString>& aProp
 
 
 void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aProperties,
-                                        LIB_SYMBOL*                         aSymbol )
+                                        std::vector<LIB_SYMBOL*>&           aSymbol )
 {
     ASCH_PARAMETER elem( aProperties );
 
@@ -3333,7 +3391,7 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
         { "VALUE",   "ALTIUM_VALUE" },
     };
 
-    if( !aSymbol && elem.ownerindex <= 0 && elem.ownerpartid == ALTIUM_COMPONENT_NONE )
+    if( aSymbol.empty() && elem.ownerindex <= 0 && elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
         // This is some sheet parameter
         if( elem.text == "*" )
@@ -3368,10 +3426,12 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
     }
     else
     {
-        LIB_SYMBOL* libSymbol = aSymbol;
+        wxCHECK_RET( static_cast<int>( aSymbol.size() ) > elem.ownerpartdisplaymode, wxT( "Invalid ownerpartdisplaymode" ) );
+
+        LIB_SYMBOL* libSymbol = aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* symbol = nullptr;
 
-        if( !aSymbol )
+        if( !symbol )
         {
             const auto& libSymbolIt = m_libSymbols.find( elem.ownerindex );
 
@@ -3511,33 +3571,45 @@ void SCH_ALTIUM_PLUGIN::ParseImplementation( const std::map<wxString, wxString>&
 
 
 
-LIB_SYMBOL* SCH_ALTIUM_PLUGIN::ParseLibComponent( const std::map<wxString, wxString>& aProperties )
+std::vector<LIB_SYMBOL*> SCH_ALTIUM_PLUGIN::ParseLibComponent( const std::map<wxString, wxString>& aProperties )
 {
     ASCH_SYMBOL elem( aProperties );
 
-    LIB_ID libId = AltiumToKiCadLibID( getLibName(), elem.libreference );
+    std::vector<LIB_SYMBOL*> symbols;
 
-    LIB_SYMBOL* ksymbol = new LIB_SYMBOL( wxEmptyString );
-    ksymbol->SetName( elem.libreference );
-    ksymbol->SetDescription( elem.componentdescription );
-    ksymbol->SetLibId( libId );
-    ksymbol->SetUnitCount( elem.partcount - 1 );
+    symbols.reserve( elem.displaymodecount );
 
-    return ksymbol;
+    for( int i = 0; i < elem.displaymodecount; i++ )
+    {
+        LIB_SYMBOL* symbol = new LIB_SYMBOL( wxEmptyString );
+
+        if( elem.displaymodecount > 1 )
+            symbol->SetName( wxString::Format( "%s (Altium Display %d)", elem.libreference, i + 1 ) );
+        else
+            symbol->SetName( elem.libreference );
+
+        LIB_ID libId = AltiumToKiCadLibID( getLibName(), symbol->GetName() );
+        symbol->SetDescription( elem.componentdescription );
+        symbol->SetLibId( libId );
+        symbol->SetUnitCount( elem.partcount - 1 );
+        symbols.push_back( symbol );
+    }
+
+    return symbols;
 }
 
 
-std::map<wxString,LIB_SYMBOL*> SCH_ALTIUM_PLUGIN::ParseLibFile( const ALTIUM_COMPOUND_FILE& aAltiumSchFile )
+std::map<wxString,LIB_SYMBOL*> SCH_ALTIUM_PLUGIN::ParseLibFile( const ALTIUM_COMPOUND_FILE& aAltiumLibFile )
 {
     std::map<wxString,LIB_SYMBOL*> ret;
 
     {
-        const CFB::COMPOUND_FILE_ENTRY* file = aAltiumSchFile.FindStream( { "FileHeader" } );
+        const CFB::COMPOUND_FILE_ENTRY* file = aAltiumLibFile.FindStream( { "FileHeader" } );
 
         if( file == nullptr )
             THROW_IO_ERROR( "FileHeader not found" );
 
-        ALTIUM_PARSER reader( aAltiumSchFile, file );
+        ALTIUM_PARSER reader( aAltiumLibFile, file );
 
         if( reader.GetRemainingBytes() <= 0 )
         {
@@ -3545,12 +3617,12 @@ std::map<wxString,LIB_SYMBOL*> SCH_ALTIUM_PLUGIN::ParseLibFile( const ALTIUM_COM
         }
     }
 
-    std::map<wxString, const CFB::COMPOUND_FILE_ENTRY*> syms = aAltiumSchFile.GetLibSymbols( nullptr );
+    std::map<wxString, const CFB::COMPOUND_FILE_ENTRY*> syms = aAltiumLibFile.GetLibSymbols( nullptr );
 
     for( auto& [name, entry] : syms )
     {
-        ALTIUM_PARSER reader( aAltiumSchFile, entry );
-        LIB_SYMBOL* symbol = nullptr;
+        ALTIUM_PARSER reader( aAltiumLibFile, entry );
+        std::vector<LIB_SYMBOL*> symbols;
 
         if( reader.GetRemainingBytes() <= 0 )
         {
@@ -3565,7 +3637,7 @@ std::map<wxString,LIB_SYMBOL*> SCH_ALTIUM_PLUGIN::ParseLibFile( const ALTIUM_COM
             if( record != ALTIUM_SCH_RECORD::COMPONENT )
                 THROW_IO_ERROR( "LibSymbol does not start with COMPONENT record" );
 
-            symbol = ParseLibComponent( properties );
+            symbols = ParseLibComponent( properties );
         }
 
         auto handleBinaryDataLambda =
@@ -3601,6 +3673,7 @@ std::map<wxString,LIB_SYMBOL*> SCH_ALTIUM_PLUGIN::ParseLibFile( const ALTIUM_COM
             result["DESIGNATOR"] = binreader.ReadPascalString();
             result["SWAPIDGROUP"] = binreader.ReadPascalString();
 
+
             std::string partSeq = binreader.ReadPascalString(); // This is 'part|&|seq'
             std::vector<std::string> partSeqSplit = split( partSeq, "|" );
 
@@ -3628,40 +3701,51 @@ std::map<wxString,LIB_SYMBOL*> SCH_ALTIUM_PLUGIN::ParseLibFile( const ALTIUM_COM
 
             switch( record )
             {
-            case ALTIUM_SCH_RECORD::PIN: ParsePin( properties, symbol ); break;
+            case ALTIUM_SCH_RECORD::PIN: ParsePin( properties, symbols ); break;
 
-            case ALTIUM_SCH_RECORD::LABEL: ParseLabel( properties, symbol ); break;
+            case ALTIUM_SCH_RECORD::LABEL: ParseLabel( properties, symbols ); break;
 
-            case ALTIUM_SCH_RECORD::BEZIER: ParseBezier( properties, symbol ); break;
+            case ALTIUM_SCH_RECORD::BEZIER: ParseBezier( properties, symbols ); break;
 
-            case ALTIUM_SCH_RECORD::POLYLINE: ParsePolyline( properties, symbol ); break;
+            case ALTIUM_SCH_RECORD::POLYLINE: ParsePolyline( properties, symbols ); break;
 
-            case ALTIUM_SCH_RECORD::POLYGON: ParsePolygon( properties, symbol ); break;
+            case ALTIUM_SCH_RECORD::POLYGON: ParsePolygon( properties, symbols ); break;
 
-            case ALTIUM_SCH_RECORD::ELLIPSE: ParseEllipse( properties, symbol ); break;
+            case ALTIUM_SCH_RECORD::ELLIPSE: ParseEllipse( properties, symbols ); break;
 
-            case ALTIUM_SCH_RECORD::ROUND_RECTANGLE: ParseRoundRectangle( properties, symbol ); break;
+            case ALTIUM_SCH_RECORD::ROUND_RECTANGLE: ParseRoundRectangle( properties, symbols ); break;
 
             case ALTIUM_SCH_RECORD::ELLIPTICAL_ARC:
-            case ALTIUM_SCH_RECORD::ARC: ParseArc( properties, symbol ); break;
+            case ALTIUM_SCH_RECORD::ARC: ParseArc( properties, symbols ); break;
 
-            case ALTIUM_SCH_RECORD::LINE: ParseLine( properties, symbol ); break;
+            case ALTIUM_SCH_RECORD::LINE: ParseLine( properties, symbols ); break;
 
-            case ALTIUM_SCH_RECORD::RECTANGLE: ParseRectangle( properties, symbol ); break;
+            case ALTIUM_SCH_RECORD::RECTANGLE: ParseRectangle( properties, symbols ); break;
 
-            case ALTIUM_SCH_RECORD::DESIGNATOR: ParseDesignator( properties, symbol ); break;
+            case ALTIUM_SCH_RECORD::DESIGNATOR: ParseDesignator( properties, symbols ); break;
 
-            case ALTIUM_SCH_RECORD::PARAMETER: ParseParameter( properties, symbol ); break;
+            case ALTIUM_SCH_RECORD::PARAMETER: ParseParameter( properties, symbols ); break;
 
-            case ALTIUM_SCH_RECORD::TEXT_FRAME: ParseTextFrame( properties, symbol ); break;
+            case ALTIUM_SCH_RECORD::TEXT_FRAME: ParseTextFrame( properties, symbols ); break;
 
             // Nothing for now.  TODO: Figure out how implementation lists are generted in libs
             case ALTIUM_SCH_RECORD::IMPLEMENTATION_LIST: break;
+            case ALTIUM_SCH_RECORD::IMPLEMENTATION: break;
+            case ALTIUM_SCH_RECORD::IMPL_PARAMS: break;
+
+            case ALTIUM_SCH_RECORD::MAP_DEFINER_LIST: break;
+            case ALTIUM_SCH_RECORD::MAP_DEFINER: break;
+
+            // TODO: add support for these.  They are just drawn symbols, so we can probably hardcode
+            case ALTIUM_SCH_RECORD::IEEE_SYMBOL: break;
+
+            // TODO: Hanlde images once libedit supports them
+            case ALTIUM_SCH_RECORD::IMAGE: break;
 
             default:
                 m_reporter->Report( wxString::Format( _( "Unknown or unexpected record id %d found "
-                                                         "inside \"Data\" section." ),
-                                                      recordId ),
+                                                         "in %s." ),
+                                                      recordId, symbols[0]->GetName() ),
                                     RPT_SEVERITY_ERROR );
                 break;
             }
@@ -3673,7 +3757,15 @@ std::map<wxString,LIB_SYMBOL*> SCH_ALTIUM_PLUGIN::ParseLibFile( const ALTIUM_COM
         if( reader.GetRemainingBytes() != 0 )
             THROW_IO_ERROR( "stream is not fully parsed" );
 
-        ret[name] = symbol;
+        for( size_t ii = 0; ii < symbols.size(); ii++ )
+        {
+            LIB_SYMBOL* symbol = symbols[ii];
+
+            if( symbols.size() == 1 )
+                ret[name] = symbol;
+            else
+                ret[wxString::Format( "%s (Altium Display %zd)", name, ii + 1 )] = symbol;
+        }
     }
 
     return ret;
@@ -3739,23 +3831,49 @@ void SCH_ALTIUM_PLUGIN::ParseLibHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFi
     {
         THROW_IO_ERROR( "FileHeader does not contain any data" );
     }
-    else
+
+    std::map<wxString, wxString> properties = reader.ReadProperties();
+
+    wxString libtype = ALTIUM_PARSER::ReadString( properties, "HEADER", "" );
+
+    if( libtype.CmpNoCase( "Protel for Windows - Schematic Library Editor Binary File Version 5.0" ) )
+        THROW_IO_ERROR( _( "Expected Altium Schematic Library file version 5.0" ) );
+
+    for( auto& [key, value] : properties )
     {
-        std::map<wxString, wxString> properties = reader.ReadProperties();
+        wxString upperKey = key.Upper();
+        wxString* remaining = nullptr;
 
-        wxString libtype = ALTIUM_PARSER::ReadString( properties, "HEADER", "" );
-
-        if( libtype != "Protel for Windows - Schematic Library Editor Binary File Version 5.0" )
-            THROW_IO_ERROR( _( "Expected Altium Schematic Library file version 5.0" ) );
-
-        for( auto& [key, value] : properties )
+        if( upperKey.StartsWith( "LIBREF" ) )
         {
-            if( key.StartsWith( "LibRef" ) )
+            aSymbolNameList.Add( value );
+        }
+        else if( upperKey.StartsWith( "SIZE", remaining ) )
+        {
+            if( remaining )
             {
-                aSymbolNameList.Add( value );
+                int ind = wxAtoi( *remaining );
+
+                if( static_cast<int>( m_fonts.size() ) <= ind )
+                    m_fonts.resize( ind + 1 );
+
+                m_fonts[ind].second = wxAtoi( value );
+            }
+        }
+        else if( upperKey.StartsWith( "FONTNAME", remaining ) )
+        {
+            if( remaining )
+            {
+                int ind = wxAtoi( *remaining );
+
+                if( static_cast<int>( m_fonts.size() ) <= ind )
+                    m_fonts.resize( ind + 1 );
+
+                m_fonts[ind].first = value;
             }
         }
     }
+
 }
 
 
@@ -3763,7 +3881,16 @@ void SCH_ALTIUM_PLUGIN::EnumerateSymbolLib( wxArrayString&         aSymbolNameLi
                                             const wxString&        aLibraryPath,
                                             const STRING_UTF8_MAP* aProperties )
 {
-    ParseLibHeader( aLibraryPath, aSymbolNameList );
+    ensureLoadedLibrary( aLibraryPath, aProperties );
+
+    auto it = m_libCache.find( aLibraryPath );
+
+    if( it != m_libCache.end() )
+    {
+        for( auto& [libnameStr, libSymbol] : it->second )
+            aSymbolNameList.Add( libnameStr );
+    }
+
 }
 
 

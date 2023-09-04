@@ -26,7 +26,8 @@
 
 #include <string_utils.h>
 #include <lib_id.h>
-
+#include <trigo.h>
+#include <math/util.h>
 
 LIB_ID AltiumToKiCadLibID( const wxString& aLibName, const wxString& aLibReference )
 {
@@ -140,4 +141,77 @@ wxString AltiumSpecialStringsToKiCadVariables( const wxString&                  
     } while( delimiter != wxString::npos );
 
     return result;
+}
+
+wxString AltiumPinNamesToKiCad( wxString& aString )
+{
+    wxString  output;
+    wxString  tempString;
+    bool      hasPrev = false;
+    wxUniChar prev;
+
+
+    for( wxString::const_iterator it = aString.begin(); it != aString.end(); ++it )
+    {
+        char ch = 0;
+
+        if( (*it).GetAsChar( &ch ) )
+        {
+            if( ch == '\\' )
+            {
+                if( hasPrev )
+                {
+                    tempString += prev;
+                    hasPrev = false;
+                }
+
+                continue; // Backslash is ignored and not added to the output
+            }
+        }
+
+        if( hasPrev ) // Two letters in a row with no backslash
+        {
+            if( !tempString.empty() )
+            {
+                output += "~{" + tempString + "}";
+                tempString.Clear();
+            }
+
+            output += prev;
+        }
+
+        prev = *it;
+        hasPrev = true;
+    }
+
+    // Append any leftover escaped string
+    if( !tempString.IsEmpty() )
+    {
+        output += "~{" + tempString + "}";
+    }
+
+    if( hasPrev )
+    {
+        output += prev;
+    }
+
+    return output;
+}
+
+VECTOR2I AltiumGetEllipticalPos( double aMajor, double aMinor, double aAngleRadians )
+{
+    if( aMajor == 0 || aMinor == 0 )
+        return VECTOR2I( 0, 0 );
+
+    double numerator = aMajor * aMinor;
+    double majorTerm = aMajor * sin( aAngleRadians );
+    double minorTerm = aMinor * cos( aAngleRadians );
+    double denominator = sqrt( majorTerm * majorTerm + minorTerm * minorTerm );
+
+    double radius = numerator / denominator;
+
+    VECTOR2I retval( KiROUND( radius * cos( aAngleRadians ) ), KiROUND( radius * sin( aAngleRadians ) ) );
+
+    return retval;
+
 }

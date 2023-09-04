@@ -94,9 +94,9 @@ enum class ALTIUM_SCH_RECORD
     PARAMETER_SET       = 43,
     IMPLEMENTATION_LIST = 44,
     IMPLEMENTATION      = 45,
-    RECORD_46           = 46,
-    RECORD_47           = 47,
-    RECORD_48           = 48,
+    MAP_DEFINER_LIST    = 46,
+    MAP_DEFINER         = 47,
+    IMPL_PARAMS         = 48,
     NOTE                = 209,
     COMPILE_MASK        = 211,
     HARNESS_CONNECTOR   = 215,
@@ -117,14 +117,14 @@ enum class ASCH_RECORD_ORIENTATION
 };
 
 
-struct ASCH_SHAPE_INTERFACE
+struct ASCH_OWNER_INTERFACE
 {
-    int OwnerIndex;
-    int OwnerPartID;
-    int OwnerPartDisplayMode;
-    int IndexInSheet;
+    int ownerindex;
+    int ownerpartid;
+    int ownerpartdisplaymode;
+    int indexinsheet;
 
-    explicit ASCH_SHAPE_INTERFACE( const std::map<wxString, wxString>& aProps );
+    explicit ASCH_OWNER_INTERFACE( const std::map<wxString, wxString>& aProps );
 };
 
 struct ASCH_FILL_INTERFACE
@@ -302,12 +302,8 @@ enum class ASCH_PIN_ELECTRICAL
 };
 
 
-struct ASCH_PIN
+struct ASCH_PIN : ASCH_OWNER_INTERFACE
 {
-    int ownerindex;
-    int ownerpartid;
-    int ownerpartdisplaymode;
-
     wxString name;
     wxString text;
     wxString designator;
@@ -329,6 +325,7 @@ struct ASCH_PIN
     bool showPinName;
     bool showDesignator;
     bool hidden;
+    bool locked;
 
     bool isKiCadLibPin;  // Tracking variable to handle LibEdit nuance
 
@@ -360,11 +357,8 @@ enum class ASCH_TEXT_FRAME_ALIGNMENT
 };
 
 
-struct ASCH_LABEL
+struct ASCH_LABEL : ASCH_OWNER_INTERFACE
 {
-    int ownerindex;
-    int ownerpartid;
-
     VECTOR2I location;
 
     wxString text;
@@ -387,7 +381,7 @@ struct ASCH_HYPERLINK : ASCH_LABEL
 };
 
 
-struct ASCH_TEXT_FRAME
+struct ASCH_TEXT_FRAME : ASCH_OWNER_INTERFACE
 {
     VECTOR2I Location;
     wxSize   Size;
@@ -423,7 +417,7 @@ struct ASCH_NOTE : ASCH_TEXT_FRAME
 };
 
 
-struct ASCH_BEZIER : ASCH_SHAPE_INTERFACE, ASCH_BORDER_INTERFACE
+struct ASCH_BEZIER : ASCH_OWNER_INTERFACE, ASCH_BORDER_INTERFACE
 {
     std::vector<VECTOR2I> points;
 
@@ -449,7 +443,7 @@ enum class ASCH_SHEET_ENTRY_SIDE
 };
 
 
-struct ASCH_POLYLINE : ASCH_SHAPE_INTERFACE, ASCH_BORDER_INTERFACE
+struct ASCH_POLYLINE : ASCH_OWNER_INTERFACE, ASCH_BORDER_INTERFACE
 {
     std::vector<VECTOR2I> Points;
 
@@ -459,7 +453,7 @@ struct ASCH_POLYLINE : ASCH_SHAPE_INTERFACE, ASCH_BORDER_INTERFACE
 };
 
 
-struct ASCH_POLYGON : ASCH_SHAPE_INTERFACE, ASCH_FILL_INTERFACE, ASCH_BORDER_INTERFACE
+struct ASCH_POLYGON : ASCH_OWNER_INTERFACE, ASCH_FILL_INTERFACE, ASCH_BORDER_INTERFACE
 {
     std::vector<VECTOR2I> points;
 
@@ -467,7 +461,7 @@ struct ASCH_POLYGON : ASCH_SHAPE_INTERFACE, ASCH_FILL_INTERFACE, ASCH_BORDER_INT
 };
 
 
-struct ASCH_ROUND_RECTANGLE : ASCH_SHAPE_INTERFACE, ASCH_FILL_INTERFACE, ASCH_BORDER_INTERFACE
+struct ASCH_ROUND_RECTANGLE : ASCH_OWNER_INTERFACE, ASCH_FILL_INTERFACE, ASCH_BORDER_INTERFACE
 {
     VECTOR2I BottomLeft;
     VECTOR2I TopRight;
@@ -480,7 +474,7 @@ struct ASCH_ROUND_RECTANGLE : ASCH_SHAPE_INTERFACE, ASCH_FILL_INTERFACE, ASCH_BO
 };
 
 
-struct ASCH_ARC : ASCH_SHAPE_INTERFACE, ASCH_BORDER_INTERFACE
+struct ASCH_ARC : ASCH_OWNER_INTERFACE, ASCH_BORDER_INTERFACE
 {
     bool     m_IsElliptical;
     VECTOR2I m_Center;
@@ -493,7 +487,7 @@ struct ASCH_ARC : ASCH_SHAPE_INTERFACE, ASCH_BORDER_INTERFACE
 };
 
 
-struct ASCH_ELLIPSE : ASCH_SHAPE_INTERFACE, ASCH_FILL_INTERFACE, ASCH_BORDER_INTERFACE
+struct ASCH_ELLIPSE : ASCH_OWNER_INTERFACE, ASCH_FILL_INTERFACE, ASCH_BORDER_INTERFACE
 {
     VECTOR2I Center;
     int      Radius;
@@ -505,7 +499,7 @@ struct ASCH_ELLIPSE : ASCH_SHAPE_INTERFACE, ASCH_FILL_INTERFACE, ASCH_BORDER_INT
 };
 
 
-struct ASCH_LINE : ASCH_SHAPE_INTERFACE, ASCH_BORDER_INTERFACE
+struct ASCH_LINE : ASCH_OWNER_INTERFACE, ASCH_BORDER_INTERFACE
 {
     VECTOR2I point1;
     VECTOR2I point2;
@@ -514,33 +508,28 @@ struct ASCH_LINE : ASCH_SHAPE_INTERFACE, ASCH_BORDER_INTERFACE
 };
 
 
-struct ASCH_SIGNAL_HARNESS
+struct ASCH_SIGNAL_HARNESS : ASCH_OWNER_INTERFACE
 {
-    int OwnerPartID;  // always -1, can be safely ignored I think
-
     VECTOR2I Point1;
     VECTOR2I Point2;
 
     std::vector<VECTOR2I> Points;
 
     int Color;
-    int IndexInSheet;
+    int indexinsheet;
     int LineWidth;
 
     explicit ASCH_SIGNAL_HARNESS( const std::map<wxString, wxString>& aProps );
 };
 
 
-struct ASCH_HARNESS_CONNECTOR
+struct ASCH_HARNESS_CONNECTOR : ASCH_OWNER_INTERFACE
 {
-    int OwnerPartID; // always -1, can be safely ignored I think
-
     VECTOR2I Location;
     VECTOR2I Size;
 
     int AreaColor;
     int Color;
-    int IndexInSheet; // Keeps increasing nicely
     int LineWidth;
     //int locationX; // keep just in case
     //int locationY;
@@ -552,17 +541,12 @@ struct ASCH_HARNESS_CONNECTOR
 };
 
 
-struct ASCH_HARNESS_ENTRY
+struct ASCH_HARNESS_ENTRY : ASCH_OWNER_INTERFACE
 {
-    // Completely random, mostly this entry exists, but not always, should not be used!
-    // int ownerindex;
-
-    int OwnerPartID; // always -1, can be safely ignored I think
-
     int AreaColor;
     int Color;
     int DistanceFromTop;
-    int IndexInSheet;
+    int indexinsheet;
     int TextColor;
     int TextFontID;
     int TextStyle;
@@ -576,13 +560,10 @@ struct ASCH_HARNESS_ENTRY
 };
 
 
-struct ASCH_HARNESS_TYPE
+struct ASCH_HARNESS_TYPE : ASCH_OWNER_INTERFACE
 {
-    //int ownerindex; // use SCH_ALTIUM_PLUGIN::m_harnessEntryParent instead!
-    int OwnerPartID; // Always -1, presumably safe to remuve
-
     int Color;
-    int IndexInSheet;
+    int indexinsheet;
     int FontID;
 
     bool IsHidden;
@@ -596,7 +577,7 @@ struct ASCH_HARNESS_TYPE
 };
 
 
-struct ASCH_RECTANGLE : ASCH_SHAPE_INTERFACE, ASCH_FILL_INTERFACE, ASCH_BORDER_INTERFACE
+struct ASCH_RECTANGLE : ASCH_OWNER_INTERFACE, ASCH_FILL_INTERFACE, ASCH_BORDER_INTERFACE
 {
     VECTOR2I BottomLeft;
     VECTOR2I TopRight;
@@ -607,7 +588,7 @@ struct ASCH_RECTANGLE : ASCH_SHAPE_INTERFACE, ASCH_FILL_INTERFACE, ASCH_BORDER_I
 };
 
 
-struct ASCH_SHEET_SYMBOL
+struct ASCH_SHEET_SYMBOL : ASCH_OWNER_INTERFACE
 {
     VECTOR2I location;
     VECTOR2I size;
@@ -643,11 +624,8 @@ enum class ASCH_PORT_STYLE
 };
 
 
-struct ASCH_SHEET_ENTRY
+struct ASCH_SHEET_ENTRY : ASCH_OWNER_INTERFACE
 {
-    int ownerindex;
-    int ownerpartid;
-
     int distanceFromTop;
 
     ASCH_SHEET_ENTRY_SIDE side;
@@ -678,10 +656,8 @@ enum class ASCH_POWER_PORT_STYLE
 };
 
 
-struct ASCH_POWER_PORT
+struct ASCH_POWER_PORT : ASCH_OWNER_INTERFACE
 {
-    int ownerpartid;
-
     wxString text;
     bool     showNetName;
 
@@ -693,10 +669,8 @@ struct ASCH_POWER_PORT
 };
 
 
-struct ASCH_PORT
+struct ASCH_PORT : ASCH_OWNER_INTERFACE
 {
-    int OwnerPartID;
-
     wxString Name;
     wxString HarnessType;
 
@@ -728,7 +702,7 @@ struct ASCH_NO_ERC
 };
 
 
-struct ASCH_NET_LABEL
+struct ASCH_NET_LABEL : ASCH_OWNER_INTERFACE
 {
     wxString text;
 
@@ -741,9 +715,8 @@ struct ASCH_NET_LABEL
 };
 
 
-struct ASCH_BUS
+struct ASCH_BUS : ASCH_OWNER_INTERFACE
 {
-    int indexinsheet;
     int lineWidth;
 
     std::vector<VECTOR2I> points;
@@ -752,9 +725,8 @@ struct ASCH_BUS
 };
 
 
-struct ASCH_WIRE
+struct ASCH_WIRE : ASCH_OWNER_INTERFACE
 {
-    int indexinsheet;
     int lineWidth;
 
     std::vector<VECTOR2I> points;
@@ -763,17 +735,15 @@ struct ASCH_WIRE
 };
 
 
-struct ASCH_JUNCTION
+struct ASCH_JUNCTION : ASCH_OWNER_INTERFACE
 {
-    int ownerpartid;
-
     VECTOR2I location;
 
     explicit ASCH_JUNCTION( const std::map<wxString, wxString>& aProps );
 };
 
 
-struct ASCH_IMAGE : ASCH_SHAPE_INTERFACE, ASCH_BORDER_INTERFACE
+struct ASCH_IMAGE : ASCH_OWNER_INTERFACE, ASCH_BORDER_INTERFACE
 {
     wxString filename;
     VECTOR2I location;
@@ -786,7 +756,7 @@ struct ASCH_IMAGE : ASCH_SHAPE_INTERFACE, ASCH_BORDER_INTERFACE
 };
 
 
-struct ASCH_SHEET_FONT
+struct ASCH_SHEET_FONT : ASCH_OWNER_INTERFACE
 {
     wxString FontName;
 
@@ -836,7 +806,7 @@ enum class ASCH_SHEET_WORKSPACEORIENTATION
 };
 
 
-struct ASCH_SHEET
+struct ASCH_SHEET : ASCH_OWNER_INTERFACE
 {
     std::vector<ASCH_SHEET_FONT> fonts;
 
@@ -847,11 +817,8 @@ struct ASCH_SHEET
 };
 
 
-struct ASCH_SHEET_NAME
+struct ASCH_SHEET_NAME : ASCH_OWNER_INTERFACE
 {
-    int ownerindex;
-    int ownerpartid;
-
     wxString text;
 
     ASCH_RECORD_ORIENTATION orientation;
@@ -863,11 +830,8 @@ struct ASCH_SHEET_NAME
 };
 
 
-struct ASCH_FILE_NAME
+struct ASCH_FILE_NAME : ASCH_OWNER_INTERFACE
 {
-    int ownerindex;
-    int ownerpartid;
-
     wxString text;
 
     ASCH_RECORD_ORIENTATION orientation;
@@ -879,11 +843,8 @@ struct ASCH_FILE_NAME
 };
 
 
-struct ASCH_DESIGNATOR
+struct ASCH_DESIGNATOR : ASCH_OWNER_INTERFACE
 {
-    int ownerindex;
-    int ownerpartid;
-
     wxString name;
     wxString text;
 
@@ -895,10 +856,8 @@ struct ASCH_DESIGNATOR
 };
 
 
-struct ASCH_IMPLEMENTATION
+struct ASCH_IMPLEMENTATION : ASCH_OWNER_INTERFACE
 {
-    int ownerindex;
-
     wxString name;
     wxString type;
     wxString libname;
@@ -909,14 +868,13 @@ struct ASCH_IMPLEMENTATION
 };
 
 
-struct ASCH_IMPLEMENTATION_LIST
+struct ASCH_IMPLEMENTATION_LIST : ASCH_OWNER_INTERFACE
 {
-    int ownerindex;
     explicit ASCH_IMPLEMENTATION_LIST( const std::map<wxString, wxString>& aProps );
 };
 
 
-struct ASCH_BUS_ENTRY
+struct ASCH_BUS_ENTRY : ASCH_OWNER_INTERFACE
 {
     VECTOR2I location;
     VECTOR2I corner;
@@ -925,11 +883,8 @@ struct ASCH_BUS_ENTRY
 };
 
 
-struct ASCH_PARAMETER
+struct ASCH_PARAMETER : ASCH_OWNER_INTERFACE
 {
-    int ownerindex;
-    int ownerpartid;
-
     VECTOR2I                 location;
     ASCH_LABEL_JUSTIFICATION justification;
     ASCH_RECORD_ORIENTATION  orientation;

@@ -31,6 +31,7 @@
 #include <lib_id.h>
 
 #include <iostream>
+#include <math/vector2d.h>
 
 LIB_ID AltiumToKiCadLibID( const wxString& aLibName, const wxString& aLibReference );
 
@@ -39,4 +40,6 @@ wxString AltiumPropertyToKiCadString( const wxString& aString );
 wxString AltiumSpecialStringsToKiCadVariables( const wxString&                     aString,
                                                const std::map<wxString, wxString>& aOverrides );
 
+wxString AltiumPinNamesToKiCad( wxString& aString );
+VECTOR2I AltiumGetEllipticalPos( double aMajor, double aMinor, double aAngleRadians );
 #endif //ALTIUM_PARSER_UTILS_H
