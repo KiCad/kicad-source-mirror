@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -19,8 +19,10 @@
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/statline.h>
+#include <wx/radiobut.h>
 #include <wx/choice.h>
 #include <wx/spinctrl.h>
+#include <wx/gbsizer.h>
 #include <wx/checkbox.h>
 #include <wx/panel.h>
 
@@ -38,7 +40,10 @@ class GAL_OPTIONS_PANEL_BASE : public wxPanel
 		wxRadioBox* m_renderingEngine;
 		wxStaticText* m_staticText1;
 		wxStaticLine* m_staticline1;
-		wxRadioBox* m_gridStyle;
+		wxStaticText* m_gridStyleLabel;
+		wxRadioButton* m_rbDots;
+		wxRadioButton* m_rbLines;
+		wxRadioButton* m_rbCrosses;
 		wxStaticText* l_gridLineWidth;
 		wxChoice* m_gridLineWidth;
 		wxStaticText* l_gridLineWidthUnits;
@@ -49,12 +54,13 @@ class GAL_OPTIONS_PANEL_BASE : public wxPanel
 		wxChoice* m_gridSnapOptions;
 		wxStaticText* m_stGridLabel;
 		wxStaticLine* m_staticline2;
-		wxRadioBox* m_cursorShape;
+		wxRadioButton* m_rbSmallCrosshairs;
+		wxRadioButton* m_rbFullWindowCrosshairs;
 		wxCheckBox* m_forceCursorDisplay;
 
 	public:
 
-		GAL_OPTIONS_PANEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 387,523 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		GAL_OPTIONS_PANEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~GAL_OPTIONS_PANEL_BASE();
 

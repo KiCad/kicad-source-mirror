@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@ PANEL_SYM_DISPLAY_OPTIONS::PANEL_SYM_DISPLAY_OPTIONS( wxWindow* aParent,
     wxBoxSizer* bLeftCol = new wxBoxSizer( wxVERTICAL );
 
     m_galOptsPanel = new GAL_OPTIONS_PANEL( this, aAppSettings );
-    bLeftCol->Add( m_galOptsPanel, 1, wxEXPAND, 0 );
+    bLeftCol->Add( m_galOptsPanel, 1, wxEXPAND|wxRIGHT, 15 );
 
     bPanelSizer->Add( bLeftCol, 0, wxLEFT, 5 );
 

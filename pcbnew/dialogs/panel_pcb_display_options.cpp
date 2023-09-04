@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -22,7 +22,7 @@
 #include <settings/settings_manager.h>
 #include <pcbnew_settings.h>
 #include <config_map.h>
-#include <panel_display_options.h>
+#include <panel_pcb_display_options.h>
 #include <widgets/gal_options_panel.h>
 
 
@@ -36,18 +36,18 @@ static const UTIL::CFG_MAP<TRACK_CLEARANCE_MODE> clearanceModeMap =
 };
 
 
-PANEL_DISPLAY_OPTIONS::PANEL_DISPLAY_OPTIONS( wxWindow* aParent, APP_SETTINGS_BASE* aAppSettings ) :
-    PANEL_DISPLAY_OPTIONS_BASE( aParent ),
+PANEL_PCB_DISPLAY_OPTIONS::PANEL_PCB_DISPLAY_OPTIONS( wxWindow* aParent, APP_SETTINGS_BASE* aAppSettings ) :
+    PANEL_PCB_DISPLAY_OPTIONS_BASE( aParent ),
     m_isPCBEdit( dynamic_cast<PCBNEW_SETTINGS*>( aAppSettings ) != nullptr )
 {
     m_galOptsPanel = new GAL_OPTIONS_PANEL( this, aAppSettings );
-    m_galOptionsSizer->Add( m_galOptsPanel, 1, wxEXPAND, 0 );
+    m_galOptionsSizer->Add( m_galOptsPanel, 1, wxEXPAND|wxRIGHT, 15 );
 
     m_optionsBook->SetSelection( m_isPCBEdit ? 1 : 0 );
 }
 
 
-void PANEL_DISPLAY_OPTIONS::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
+void PANEL_PCB_DISPLAY_OPTIONS::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
 {
     int i = UTIL::GetConfigForVal( clearanceModeMap, aCfg->m_Display.m_TrackClearance );
     m_OptDisplayTracksClearance->SetSelection( i );
@@ -64,7 +64,7 @@ void PANEL_DISPLAY_OPTIONS::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
 }
 
 
-bool PANEL_DISPLAY_OPTIONS::TransferDataToWindow()
+bool PANEL_PCB_DISPLAY_OPTIONS::TransferDataToWindow()
 {
     if( m_isPCBEdit )
     {
@@ -83,7 +83,7 @@ bool PANEL_DISPLAY_OPTIONS::TransferDataToWindow()
 /*
  * Update variables with new options
  */
-bool PANEL_DISPLAY_OPTIONS::TransferDataFromWindow()
+bool PANEL_PCB_DISPLAY_OPTIONS::TransferDataFromWindow()
 {
     m_galOptsPanel->TransferDataFromWindow();
 
@@ -109,7 +109,7 @@ bool PANEL_DISPLAY_OPTIONS::TransferDataFromWindow()
 }
 
 
-void PANEL_DISPLAY_OPTIONS::ResetPanel()
+void PANEL_PCB_DISPLAY_OPTIONS::ResetPanel()
 {
     PCBNEW_SETTINGS cfg;
     cfg.Load();             // Loading without a file will init to defaults

@@ -37,7 +37,7 @@ PANEL_PL_EDITOR_DISPLAY_OPTIONS::PANEL_PL_EDITOR_DISPLAY_OPTIONS( wxWindow* aPar
     wxBoxSizer* bLeftCol = new wxBoxSizer( wxVERTICAL );
 
     m_galOptsPanel = new GAL_OPTIONS_PANEL( this, aAppSettings );
-    bLeftCol->Add( m_galOptsPanel, 1, wxLEFT|wxBOTTOM|wxEXPAND, 5 );
+    bLeftCol->Add( m_galOptsPanel, 1, wxEXPAND|wxRIGHT, 15 );
 
     bPanelSizer->Add( bLeftCol, 0, wxEXPAND, 0 );
 

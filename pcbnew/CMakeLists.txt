@@ -145,8 +145,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_unused_pad_layers_base.cpp
     dialogs/dialog_update_pcb.cpp
     dialogs/dialog_update_pcb_base.cpp
-    dialogs/panel_display_options.cpp
-    dialogs/panel_display_options_base.cpp
+        dialogs/panel_pcb_display_options.cpp
+        dialogs/panel_pcb_display_options_base.cpp
     dialogs/panel_edit_options.cpp
     dialogs/panel_edit_options_base.cpp
     dialogs/panel_fp_lib_table.cpp

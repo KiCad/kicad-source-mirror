@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2014 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -18,17 +18,17 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "panel_display_options_base.h"
+#include "panel_pcb_display_options_base.h"
 
 class PCBNEW_SETTINGS;
 class APP_SETTINGS_BASE;
 class GAL_OPTIONS_PANEL;
 
 
-class PANEL_DISPLAY_OPTIONS : public PANEL_DISPLAY_OPTIONS_BASE
+class PANEL_PCB_DISPLAY_OPTIONS : public PANEL_PCB_DISPLAY_OPTIONS_BASE
 {
 public:
-    PANEL_DISPLAY_OPTIONS( wxWindow* aParent, APP_SETTINGS_BASE* aAppSettings );
+    PANEL_PCB_DISPLAY_OPTIONS( wxWindow* aParent, APP_SETTINGS_BASE* aAppSettings );
 
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;

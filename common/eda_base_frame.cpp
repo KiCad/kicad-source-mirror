@@ -1138,7 +1138,7 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
             expand.push_back( (int) book->GetPageCount() );
 
         book->AddPage( new wxPanel( book ), _( "PCB Editor" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_DISPLAY_OPTIONS ), _( "Display Options" ) );
+        book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_DISPLAY_OPTS ), _( "Display Options" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_GRIDS ), _( "Grids" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_EDIT_OPTIONS ), _( "Editing Options" ) );
         book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_COLORS ), _( "Colors" ) );

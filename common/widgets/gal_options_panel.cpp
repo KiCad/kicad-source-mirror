@@ -117,11 +117,21 @@ bool GAL_OPTIONS_PANEL::TransferDataToWindow()
 #endif
 
     m_gridSnapOptions->SetSelection( m_cfg->m_Window.grid.snap );
-    m_gridStyle->SetSelection( m_cfg->m_Window.grid.style );
+
+    if( m_cfg->m_Window.grid.style == 0 )
+        m_rbDots->SetValue( true );
+    else if( m_cfg->m_Window.grid.style == 1 )
+        m_rbLines->SetValue( true );
+    else
+        m_rbCrosses->SetValue( true );
 
     m_gridMinSpacing->SetValue( m_cfg->m_Window.grid.min_spacing );
 
-    m_cursorShape->SetSelection( m_cfg->m_Window.cursor.fullscreen_cursor );
+    if( m_cfg->m_Window.cursor.fullscreen_cursor )
+        m_rbFullWindowCrosshairs->SetValue( true );
+    else
+        m_rbSmallCrosshairs->SetValue( true );
+
     m_forceCursorDisplay->SetValue( m_cfg->m_Window.cursor.always_show_cursor );
 
     return true;
@@ -131,14 +141,20 @@ bool GAL_OPTIONS_PANEL::TransferDataToWindow()
 bool GAL_OPTIONS_PANEL::TransferDataFromWindow()
 {
     m_cfg->m_Window.grid.snap = m_gridSnapOptions->GetSelection();
-    m_cfg->m_Window.grid.style = m_gridStyle->GetSelection();
+
+    if( m_rbDots->GetValue() )
+        m_cfg->m_Window.grid.style = 0;
+    else if( m_rbLines->GetValue() )
+        m_cfg->m_Window.grid.style = 1;
+    else
+        m_cfg->m_Window.grid.style = 2;
 
     if( m_gridLineWidth->GetSelection() >= 0 )
         m_cfg->m_Window.grid.line_width = m_gridThicknessList[ m_gridLineWidth->GetSelection() ];
 
     m_cfg->m_Window.grid.min_spacing = m_gridMinSpacing->GetValue();
 
-    m_cfg->m_Window.cursor.fullscreen_cursor = m_cursorShape->GetSelection();
+    m_cfg->m_Window.cursor.fullscreen_cursor = m_rbFullWindowCrosshairs->GetValue();
     m_cfg->m_Window.cursor.always_show_cursor = m_forceCursorDisplay->GetValue();
 
 #ifndef __WXMAC__

@@ -28,9 +28,9 @@
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class PANEL_DISPLAY_OPTIONS_BASE
+/// Class PANEL_PCB_DISPLAY_OPTIONS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_DISPLAY_OPTIONS_BASE : public RESETTABLE_PANEL
+class PANEL_PCB_DISPLAY_OPTIONS_BASE : public RESETTABLE_PANEL
 {
 	private:
 
@@ -60,9 +60,9 @@ class PANEL_DISPLAY_OPTIONS_BASE : public RESETTABLE_PANEL
 
 	public:
 
-		PANEL_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_PCB_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
-		~PANEL_DISPLAY_OPTIONS_BASE();
+		~PANEL_PCB_DISPLAY_OPTIONS_BASE();
 
 };
 
