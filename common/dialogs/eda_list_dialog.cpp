@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,12 +41,11 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle,
                                   const std::vector<wxArrayString>& aItemList,
                                   const wxString& aPreselectText, bool aSortList ) :
     EDA_LIST_DIALOG_BASE( aParent, wxID_ANY, aTitle ),
-    m_itemsList( aItemList ),
     m_sortList( aSortList )
 {
     m_filterBox->SetHint( _( "Filter" ) );
 
-    initDialog( aItemHeaders, aPreselectText );
+    initDialog( aItemHeaders, aItemList, aPreselectText );
 
     // DIALOG_SHIM needs a unique hash_key because classname is not sufficient
     // because so many dialogs share this same class, with different numbers of
@@ -59,6 +58,14 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle,
     GetSizer()->Fit( this );
 
     Centre();
+}
+
+
+EDA_LIST_DIALOG::EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSortList ) :
+    EDA_LIST_DIALOG_BASE( aParent, wxID_ANY, aTitle ),
+    m_sortList( aSortList )
+{
+    m_filterBox->SetHint( _( "Filter" ) );
 }
 
 
@@ -76,7 +83,9 @@ bool EDA_LIST_DIALOG::Show( bool show )
 }
 
 
-void EDA_LIST_DIALOG::initDialog( const wxArrayString& aItemHeaders, const wxString& aSelection )
+void EDA_LIST_DIALOG::initDialog( const wxArrayString& aItemHeaders,
+                                  const std::vector<wxArrayString>& aItemList,
+                                  const wxString&                   aPreselectText )
 {
     if( aItemHeaders.Count() == 1 )
     {
@@ -98,11 +107,12 @@ void EDA_LIST_DIALOG::initDialog( const wxArrayString& aItemHeaders, const wxStr
         SetMinClientSize( wxSize( DEFAULT_COL_WIDTHS[0] * 2, 220 ) );
     }
 
+    m_itemsList = aItemList;
     InsertItems( m_itemsList, 0 );
 
-    if( !aSelection.IsEmpty() )
+    if( !aPreselectText.IsEmpty() )
     {
-        long sel = m_listBox->FindItem( -1, aSelection );
+        long sel = m_listBox->FindItem( -1, aPreselectText );
 
         if( sel != wxNOT_FOUND )
         {

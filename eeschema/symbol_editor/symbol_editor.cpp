@@ -350,6 +350,7 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol( const wxString& aInheritFrom )
 
     wxString _inheritSymbolName;
     wxString _infoMessage;
+    wxString msg;
 
     // if the symbol being inherited from isn't a root symbol, find its root symbol
     // and use that symbol instead
@@ -369,37 +370,37 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol( const wxString& aInheritFrom )
         }
     }
 
-    DIALOG_LIB_NEW_SYMBOL dlg( this, _infoMessage, &symbolNames, _inheritSymbolName );
+    DIALOG_LIB_NEW_SYMBOL dlg( this, _infoMessage, &symbolNames, _inheritSymbolName,
+            [&]( wxString newName )
+            {
+                if( newName.IsEmpty() )
+                {
+                    wxMessageBox( _( "Symbol must have a newName." ) );
+                    return false;
+                }
+
+                if( !lib.empty() && m_libMgr->SymbolExists( newName, lib ) )
+                {
+                    msg = wxString::Format( _( "Symbol '%s' already exists in library '%s'." ),
+                                            newName,
+                                            lib );
+
+                    KIDIALOG errorDlg( this, msg, _( "Confirmation" ),
+                                       wxOK | wxCANCEL | wxICON_WARNING );
+                    errorDlg.SetOKLabel( _( "Overwrite" ) );
+
+                    return errorDlg.ShowModal() == wxID_OK;
+                }
+
+                return true;
+            } );
+
     dlg.SetMinSize( dlg.GetSize() );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    if( dlg.GetName().IsEmpty() )
-    {
-        wxMessageBox( _( "This new symbol has no name and cannot be created." ) );
-        return;
-    }
-
     wxString name = dlg.GetName();
-
-    // Currently, symbol names cannot include a space, that breaks libraries:
-    name.Replace( " ", "_" );
-
-    // Test if there is a symbol with this name already.
-    if( !lib.empty() && m_libMgr->SymbolExists( name, lib ) )
-    {
-        wxString msg = wxString::Format( _( "Symbol '%s' already exists in library '%s'." ),
-                                         name,
-                                         lib );
-
-        KIDIALOG errorDlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
-        errorDlg.SetOKLabel( _( "Overwrite" ) );
-        errorDlg.DoNotShowCheckbox( __FILE__, __LINE__ );
-
-        if( errorDlg.ShowModal() == wxID_CANCEL )
-            return;
-    }
 
     LIB_SYMBOL new_symbol( name );  // do not create symbol on the heap, it will be buffered soon
 
@@ -546,172 +547,193 @@ void SYMBOL_EDIT_FRAME::SaveSymbolAs()
 }
 
 
-static int ID_SAVE_AS_NAME     = 4172;
 static int ID_MAKE_NEW_LIBRARY = 4173;
 
 
-EDA_LIST_DIALOG* SYMBOL_EDIT_FRAME::buildSaveAsDialog( const wxString& aSymbolName,
-                                                       const wxString& aLibraryPreselect )
+class SAVE_AS_DIALOG : public EDA_LIST_DIALOG
 {
-    COMMON_SETTINGS*           cfg = Pgm().GetCommonSettings();
-    PROJECT_FILE&              project = Kiway().Prj().GetProjectFile();
-    SYMBOL_LIB_TABLE*          tbl = Prj().SchSymbolLibTable();
-    std::vector<wxString>      libNicknames = tbl->GetLogicalLibs();
-    wxArrayString              headers;
-    std::vector<wxArrayString> itemsToDisplay;
-
-    headers.Add( _( "Nickname" ) );
-    headers.Add( _( "Description" ) );
-
-    for( const wxString& nickname : libNicknames )
+public:
+    SAVE_AS_DIALOG( SYMBOL_EDIT_FRAME* aParent, const wxString& aSymbolName,
+                    const wxString& aLibraryPreselect,
+                    std::function<bool( wxString libName, wxString symbolName )> aValidator ) :
+            EDA_LIST_DIALOG( aParent, _( "Save Symbol As" ), false ),
+            m_validator( std::move( aValidator ) )
     {
-        if( alg::contains( project.m_PinnedSymbolLibs, nickname )
-                || alg::contains( cfg->m_Session.pinned_symbol_libs, nickname ) )
+        COMMON_SETTINGS*           cfg = Pgm().GetCommonSettings();
+        PROJECT_FILE&              project = aParent->Prj().GetProjectFile();
+        SYMBOL_LIB_TABLE*          tbl = aParent->Prj().SchSymbolLibTable();
+        std::vector<wxString>      libNicknames = tbl->GetLogicalLibs();
+        wxArrayString              headers;
+        std::vector<wxArrayString> itemsToDisplay;
+
+        headers.Add( _( "Nickname" ) );
+        headers.Add( _( "Description" ) );
+
+        for( const wxString& nickname : libNicknames )
         {
-            wxArrayString item;
-            item.Add( LIB_TREE_MODEL_ADAPTER::GetPinningSymbol() + nickname );
-            item.Add( tbl->GetDescription( nickname ) );
-            itemsToDisplay.push_back( item );
-        }
-    }
-
-    for( const wxString& nickname : libNicknames )
-    {
-        if( !alg::contains( project.m_PinnedSymbolLibs, nickname )
-                && !alg::contains( cfg->m_Session.pinned_symbol_libs, nickname ) )
-        {
-            wxArrayString item;
-            item.Add( nickname );
-            item.Add( tbl->GetDescription( nickname ) );
-            itemsToDisplay.push_back( item );
-        }
-    }
-
-    EDA_LIST_DIALOG* dlg = new EDA_LIST_DIALOG( this, _( "Save Symbol As" ), headers,
-                                                itemsToDisplay, aLibraryPreselect, false );
-
-    dlg->SetListLabel( _( "Save in library:" ) );
-    dlg->SetOKLabel( _( "Save" ) );
-
-    wxBoxSizer* bNameSizer = new wxBoxSizer( wxHORIZONTAL );
-
-    wxStaticText* label = new wxStaticText( dlg, wxID_ANY, _( "Name:" ) );
-    bNameSizer->Add( label, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
-
-    wxTextCtrl* nameTextCtrl = new wxTextCtrl( dlg, ID_SAVE_AS_NAME, aSymbolName );
-    bNameSizer->Add( nameTextCtrl, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-
-    wxButton* newLibraryButton = new wxButton( dlg, ID_MAKE_NEW_LIBRARY, _( "New Library..." ) );
-    dlg->m_ButtonsSizer->Prepend( 80, 20 );
-    dlg->m_ButtonsSizer->Prepend( newLibraryButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 10 );
-
-    dlg->GetSizer()->Prepend( bNameSizer, 0, wxEXPAND|wxTOP|wxLEFT|wxRIGHT, 5 );
-
-    dlg->Bind( wxEVT_BUTTON,
-            [dlg]( wxCommandEvent& )
+            if( alg::contains( project.m_PinnedSymbolLibs, nickname )
+                    || alg::contains( cfg->m_Session.pinned_symbol_libs, nickname ) )
             {
-                dlg->EndModal( ID_MAKE_NEW_LIBRARY );
-            }, ID_MAKE_NEW_LIBRARY );
+                wxArrayString item;
+                item.Add( LIB_TREE_MODEL_ADAPTER::GetPinningSymbol() + nickname );
+                item.Add( tbl->GetDescription( nickname ) );
+                itemsToDisplay.push_back( item );
+            }
+        }
 
-    // Move nameTextCtrl to the head of the tab-order
-    if( dlg->GetChildren().DeleteObject( nameTextCtrl ) )
-        dlg->GetChildren().Insert( nameTextCtrl );
+        for( const wxString& nickname : libNicknames )
+        {
+            if( !alg::contains( project.m_PinnedSymbolLibs, nickname )
+                    && !alg::contains( cfg->m_Session.pinned_symbol_libs, nickname ) )
+            {
+                wxArrayString item;
+                item.Add( nickname );
+                item.Add( tbl->GetDescription( nickname ) );
+                itemsToDisplay.push_back( item );
+            }
+        }
 
-    dlg->SetInitialFocus( nameTextCtrl );
+        initDialog( headers, itemsToDisplay, aLibraryPreselect );
 
-    dlg->Layout();
-    dlg->GetSizer()->Fit( dlg );
+        SetListLabel( _( "Save in library:" ) );
+        SetOKLabel( _( "Save" ) );
 
-    return dlg;
-}
+        wxBoxSizer* bNameSizer = new wxBoxSizer( wxHORIZONTAL );
+
+        wxStaticText* label = new wxStaticText( this, wxID_ANY, _( "Name:" ) );
+        bNameSizer->Add( label, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
+
+        m_symbolNameCtrl = new wxTextCtrl( this, wxID_ANY, aSymbolName );
+        bNameSizer->Add( m_symbolNameCtrl, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+        wxButton* newLibraryButton = new wxButton( this, ID_MAKE_NEW_LIBRARY, _( "New Library..." ) );
+        m_ButtonsSizer->Prepend( 80, 20 );
+        m_ButtonsSizer->Prepend( newLibraryButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 10 );
+
+        GetSizer()->Prepend( bNameSizer, 0, wxEXPAND|wxTOP|wxLEFT|wxRIGHT, 5 );
+
+        Bind( wxEVT_BUTTON,
+                [this]( wxCommandEvent& )
+                {
+                    EndModal( ID_MAKE_NEW_LIBRARY );
+                }, ID_MAKE_NEW_LIBRARY );
+
+        // Move nameTextCtrl to the head of the tab-order
+        if( GetChildren().DeleteObject( m_symbolNameCtrl ) )
+            GetChildren().Insert( m_symbolNameCtrl );
+
+        SetInitialFocus( m_symbolNameCtrl );
+
+        SetupStandardButtons();
+
+        Layout();
+        GetSizer()->Fit( this );
+
+        Centre();
+    }
+
+    wxString GetSymbolName()
+    {
+        wxString symbolName = m_symbolNameCtrl->GetValue();
+        symbolName.Trim( true );
+        symbolName.Trim( false );
+        symbolName.Replace( " ", "_" );
+        return symbolName;
+    }
+
+protected:
+    bool TransferDataFromWindow() override
+    {
+        return m_validator( GetTextSelection(), GetSymbolName() );
+    }
+
+private:
+    wxTextCtrl*                                                  m_symbolNameCtrl;
+    std::function<bool( wxString libName, wxString symbolName )> m_validator;
+};
 
 
 void SYMBOL_EDIT_FRAME::saveSymbolAs()
 {
     LIB_SYMBOL* symbol = getTargetSymbol();
 
-    if( symbol )
+    if( !symbol )
+        return;
+
+    LIB_ID   old_lib_id = symbol->GetLibId();
+    wxString symbolName = old_lib_id.GetLibItemName();
+    wxString libraryName = old_lib_id.GetLibNickname();
+    wxString msg;
+    bool     done = false;
+
+    while( !done )
     {
-        LIB_ID   old_lib_id = symbol->GetLibId();
-        wxString symbolName = old_lib_id.GetLibItemName();
-        wxString libraryName = old_lib_id.GetLibNickname();
-        bool     done = false;
+        SAVE_AS_DIALOG dlg( this, symbolName, libraryName,
+                [&]( const wxString& newLib, const wxString& newName )
+                {
+                    if( newLib.IsEmpty() )
+                    {
+                        wxMessageBox( _( "A library must be specified." ) );
+                        return false;
+                    }
 
-        std::unique_ptr<EDA_LIST_DIALOG> dlg;
+                    if( newName.IsEmpty() )
+                    {
+                        wxMessageBox( _( "Symbol must have a name." ) );
+                        return false;
+                    }
 
-        while( !done )
+                    if( m_libMgr->SymbolExists( newName, newLib ) )
+                    {
+                        msg = wxString::Format( _( "Symbol '%s' already exists in library '%s'." ),
+                                                newName, newLib );
+
+                        KIDIALOG errorDlg( this, msg, _( "Confirmation" ),
+                                           wxOK | wxCANCEL | wxICON_WARNING );
+                        errorDlg.SetOKLabel( _( "Overwrite" ) );
+
+                        return errorDlg.ShowModal() == wxID_OK;
+                    }
+
+                    // @todo Either check the selecteced library to see if the parent symbol name
+                    //       is in the new library and/or copy the parent symbol as well.  This is
+                    //       the lazy solution to ensure derived symbols do not get orphaned.
+                    if( symbol->IsAlias() && newLib != old_lib_id.GetLibNickname() )
+                    {
+                        DisplayError( this, _( "Derived symbols must be saved in the same library "
+                                               "as their parent symbol." ) );
+                        return false;
+                    }
+
+                    return true;
+                } );
+
+        int ret = dlg.ShowModal();
+
+        if( ret == wxID_CANCEL )
         {
-            dlg.reset( buildSaveAsDialog( symbolName, libraryName ) );
-
-            int ret = dlg->ShowModal();
-
-            if( ret == wxID_CANCEL )
-            {
-                return;
-            }
-            else if( ret == wxID_OK )
-            {
-                done = true;
-            }
-            else if( ret == ID_MAKE_NEW_LIBRARY )
-            {
-                wxFileName newLibrary( AddLibraryFile( true ) );
-                libraryName = newLibrary.GetName();
-            }
-        }
-
-        libraryName = dlg->GetTextSelection();
-
-        if( libraryName.IsEmpty() )
-        {
-            DisplayError( this, _( "No library specified.  Symbol could not be saved." ) );
             return;
         }
-
-        // @todo Either check the selecteced library to see if the parent symbol name is in
-        //       the new library and/or copy the parent symbol as well.  This is the lazy
-        //       solution to ensure derived symbols do not get orphaned.
-        if( symbol->IsAlias() && libraryName != old_lib_id.GetLibNickname() )
+        else if( ret == wxID_OK )
         {
-            DisplayError( this, _( "Derived symbols must be saved in the same library as their "
-                                   "parent symbol." ) );
-            return;
+            symbolName = dlg.GetSymbolName();
+            libraryName = dlg.GetTextSelection();
+            done = true;
         }
-
-        symbolName = static_cast<wxTextCtrl*>( dlg->FindWindow( ID_SAVE_AS_NAME ) )->GetValue();
-        symbolName.Trim( true );
-        symbolName.Trim( false );
-        symbolName.Replace( " ", "_" );
-
-        if( symbolName.IsEmpty() )
+        else if( ret == ID_MAKE_NEW_LIBRARY )
         {
-            // This is effectively a cancel.  No need to nag the user about it.
-            return;
+            wxFileName newLibrary( AddLibraryFile( true ) );
+            libraryName = newLibrary.GetName();
         }
-
-        // Test if there is a symbol with this name already.
-        if( m_libMgr->SymbolExists( symbolName, libraryName ) )
-        {
-            wxString msg = wxString::Format( _( "Symbol '%s' already exists in library '%s'" ),
-                                             symbolName,
-                                             libraryName );
-
-            KIDIALOG errorDlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
-            errorDlg.SetOKLabel( _( "Overwrite" ) );
-            errorDlg.DoNotShowCheckbox( __FILE__, __LINE__ );
-
-            if( errorDlg.ShowModal() == wxID_CANCEL )
-                return;
-        }
-
-        LIB_SYMBOL new_symbol( *symbol );
-        new_symbol.SetName( symbolName );
-
-        m_libMgr->UpdateSymbol( &new_symbol, libraryName );
-        SyncLibraries( false );
-        m_treePane->GetLibTree()->SelectLibId( LIB_ID( libraryName, new_symbol.GetName() ) );
-        LoadSymbol( symbolName, libraryName, m_unit );
     }
+
+    LIB_SYMBOL new_symbol( *symbol );
+    new_symbol.SetName( symbolName );
+
+    m_libMgr->UpdateSymbol( &new_symbol, libraryName );
+    SyncLibraries( false );
+    m_treePane->GetLibTree()->SelectLibId( LIB_ID( libraryName, new_symbol.GetName() ) );
+    LoadSymbol( symbolName, libraryName, m_unit );
 }
 
 

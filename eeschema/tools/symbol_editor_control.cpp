@@ -319,6 +319,33 @@ int SYMBOL_EDITOR_CONTROL::DuplicateSymbol( const TOOL_EVENT& aEvent )
 }
 
 
+class RENAME_DIALOG : public wxTextEntryDialog
+{
+public:
+    RENAME_DIALOG( wxWindow* aParent, const wxString& aName,
+                   std::function<bool( wxString newName )> aValidator ) :
+            wxTextEntryDialog( aParent, _( "New name:" ), _( "Change Symbol Name" ), aName ),
+            m_validator( std::move( aValidator ) )
+    { }
+
+    wxString GetSymbolName()
+    {
+        wxString name = EscapeString( m_textctrl->GetValue(), CTX_LIBID );
+        name.Trim( true ).Trim( false );
+        return name;
+    }
+
+protected:
+    bool TransferDataFromWindow() override
+    {
+        return m_validator( GetSymbolName() );
+    }
+
+private:
+    std::function<bool( wxString newName )> m_validator;
+};
+
+
 int SYMBOL_EDITOR_CONTROL::RenameSymbol( const TOOL_EVENT& aEvent )
 {
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
@@ -329,40 +356,39 @@ int SYMBOL_EDITOR_CONTROL::RenameSymbol( const TOOL_EVENT& aEvent )
         LIB_ID   libId = editFrame->GetTreeLIBID();
         wxString libName = libId.GetLibNickname();
         wxString symbolName = libId.GetLibItemName();
-        wxString newName = symbolName;
-        bool     done = false;
+        wxString msg;
 
         if( !libMgr.LibraryExists( libName ) )
             return 0;
 
-        while( !done )
-        {
-            wxTextEntryDialog dlg( m_frame, _( "New name:" ), _( "Change Symbol Name" ), newName );
+        RENAME_DIALOG dlg( m_frame, symbolName,
+                [&]( wxString newName )
+                {
+                    if( newName.IsEmpty() )
+                    {
+                        wxMessageBox( _( "Symbol must have a name." ) );
+                        return false;
+                    }
 
-            if( dlg.ShowModal() != wxID_OK )
-                return 0;   // canceled by user
+                    if( libMgr.SymbolExists( newName, libName ) )
+                    {
+                        msg = wxString::Format( _( "Symbol '%s' already exists in library '%s'." ),
+                                                newName, libName );
 
-            newName = EscapeString( dlg.GetValue(), CTX_LIBID );
-            newName.Trim( true ).Trim( false );
+                        KIDIALOG errorDlg( m_frame, msg, _( "Confirmation" ),
+                                           wxOK | wxCANCEL | wxICON_WARNING );
+                        errorDlg.SetOKLabel( _( "Overwrite" ) );
 
-            if( newName.IsEmpty() )
-            {
-                DisplayErrorMessage( editFrame, _( "Symbol name cannot be empty." ) );
-            }
-            else if( libMgr.SymbolExists( newName, libName ) )
-            {
-                DisplayErrorMessage( editFrame, wxString::Format( _( "Symbol name '%s' already "
-                                                                     "in use in library '%s'." ),
-                                                                  UnescapeString( newName ),
-                                                                  libName ) );
-                newName = symbolName;
-            }
-            else
-            {
-                done = true;
-            }
-        }
+                        return errorDlg.ShowModal() == wxID_OK;
+                    }
 
+                    return true;
+                } );
+
+        if( dlg.ShowModal() != wxID_OK )
+            return 0;   // canceled by user
+
+        wxString    newName = dlg.GetSymbolName();
         wxString    oldName = symbolName;
         LIB_SYMBOL* libSymbol = nullptr;
 

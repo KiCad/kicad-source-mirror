@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,6 +54,8 @@ public:
                      const wxString& aPreselectText = wxEmptyString,
                      bool aSortList = true );
 
+    EDA_LIST_DIALOG( wxWindow* aParent, const wxString& aTitle, bool aSortList = true );
+
     void SetListLabel( const wxString& aLabel );
     void SetOKLabel( const wxString& aLabel );
     void HideFilter();
@@ -73,12 +75,15 @@ public:
 
     bool Show( bool show ) override;
 
+protected:
+    void initDialog( const wxArrayString& aItemHeaders, const std::vector<wxArrayString>& aItemList,
+                     const wxString& aPreselectText);
+
 private:
     virtual void onSize( wxSizeEvent& event ) override;
     void onListItemActivated( wxListEvent& event ) override;
     void textChangeInFilterBox(wxCommandEvent& event) override;
 
-    void initDialog( const wxArrayString& aItemHeaders, const wxString& aSelection);
     void sortList();
 
 private:

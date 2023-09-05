@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,13 +28,14 @@
 #include <sch_validators.h>
 #include <template_fieldnames.h>
 
-DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME* aParent,
-                                              const wxString& message,
+DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME* aParent, const wxString& aMessage,
                                               const wxArrayString* aRootSymbolNames,
-                                              const wxString& inheritFromSymbolName ) :
-    DIALOG_LIB_NEW_SYMBOL_BASE( dynamic_cast<wxWindow*>( aParent ) ),
-    m_pinTextPosition( aParent, m_staticPinTextPositionLabel, m_textPinTextPosition,
-                       m_staticPinTextPositionUnits, true )
+                                              const wxString& aInheritFromSymbolName,
+                                              std::function<bool( wxString newName )> aValidator ) :
+        DIALOG_LIB_NEW_SYMBOL_BASE( dynamic_cast<wxWindow*>( aParent ) ),
+        m_pinTextPosition( aParent, m_staticPinTextPositionLabel, m_textPinTextPosition,
+                           m_staticPinTextPositionUnits, true ),
+        m_validator( std::move( aValidator ) )
 {
     if( aRootSymbolNames && aRootSymbolNames->GetCount() )
     {
@@ -45,17 +46,17 @@ DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME* aParent,
 
         m_comboInheritanceSelect->Append( escapedNames );
 
-        if( !inheritFromSymbolName.IsEmpty() )
+        if( !aInheritFromSymbolName.IsEmpty() )
         {
-            m_comboInheritanceSelect->SetStringSelection( inheritFromSymbolName );
+            m_comboInheritanceSelect->SetStringSelection( aInheritFromSymbolName );
             syncControls( !m_comboInheritanceSelect->GetValue().IsEmpty() );
         }
     }
 
-    if( !message.IsEmpty() )
+    if( !aMessage.IsEmpty() )
     {
         m_infoBar->RemoveAllButtons();
-        m_infoBar->ShowMessage( message );
+        m_infoBar->ShowMessage( aMessage );
     }
 
     m_textName->SetValidator( FIELD_VALIDATOR( VALUE_FIELD ) );
@@ -70,6 +71,12 @@ DIALOG_LIB_NEW_SYMBOL::DIALOG_LIB_NEW_SYMBOL( EDA_DRAW_FRAME* aParent,
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
+}
+
+
+bool DIALOG_LIB_NEW_SYMBOL::TransferDataFromWindow()
+{
+    return m_validator( GetName() );
 }
 
 
