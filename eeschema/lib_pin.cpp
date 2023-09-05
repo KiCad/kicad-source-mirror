@@ -1220,13 +1220,15 @@ const BOX2I LIB_PIN::ViewBBox() const
 
 void LIB_PIN::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aCount     = 4;
+    aCount     = 6;
     aLayers[0] = LAYER_DANGLING;    // We don't really show dangling vs non-dangling (since there
                                     // are no connections in the symbol editor), but it's still
                                     // a good visual indication of which end of the pin is which.
     aLayers[1] = LAYER_DEVICE;
     aLayers[2] = LAYER_SELECTION_SHADOWS;
     aLayers[3] = LAYER_OP_CURRENTS;
+    aLayers[4] = LAYER_PINNAM;
+    aLayers[5] = LAYER_PINNUM;
 }
 
 
