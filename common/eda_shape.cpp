@@ -1769,7 +1769,10 @@ static struct EDA_SHAPE_DESC
         angle->SetAvailableFunc(
                 [=]( INSPECTABLE* aItem ) -> bool
                 {
-                    return aItem->Get<SHAPE_T>( shape ) == SHAPE_T::ARC;
+                    if( EDA_SHAPE* shape = dynamic_cast<EDA_SHAPE*>( aItem ) )
+                        return shape->GetShape() == SHAPE_T::ARC;
+
+                    return false;
                 } );
         propMgr.AddProperty( angle );
 
