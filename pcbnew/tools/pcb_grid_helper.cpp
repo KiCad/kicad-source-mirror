@@ -652,6 +652,36 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                     break;
                 }
                 }
+
+                if (aPad->HasHole()) {
+
+                    // Holes are at the pad centre (it's the shape that may be offset)
+                    const VECTOR2I hole_pos = aPad->GetPosition();
+                    const VECTOR2I hole_size = aPad->GetDrillSize();
+
+                    std::vector<VECTOR2I> snap_pts;
+
+                    if ( hole_size.x == hole_size.y )
+                    {
+                        // Circle
+                        snap_pts = getCircleKeyPoints( hole_size.x / 2 );
+                    }
+                    else
+                    {
+                        // Oval
+
+                        // For now there's no way to have an off-angle hole, so this is the
+                        // same as the pad. In future, this may not be true:
+                        // https://gitlab.com/kicad/code/kicad/-/issues/4124
+                        const EDA_ANGLE hole_orientation = aPad->GetOrientation();
+                        snap_pts = GetOvalKeyPoints( hole_size, hole_orientation, ovalKeyPointFlags );
+                    }
+
+                    for (const auto& snap_pt : snap_pts)
+                    {
+                        addAnchor( hole_pos + snap_pt, OUTLINE | SNAPPABLE, aPad );
+                    }
+                }
             };
 
     auto handleShape =
