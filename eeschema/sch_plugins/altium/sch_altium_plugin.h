@@ -82,15 +82,16 @@ public:
     //           const PROPERTIES* aProperties = NULL ) override;
 
 
-    void EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
-                             const wxString&   aLibraryPath,
+    void EnumerateSymbolLib( wxArrayString&         aSymbolNameList,
+                             const wxString&        aLibraryPath,
                              const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     void EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
                              const wxString&           aLibraryPath,
-                             const STRING_UTF8_MAP*         aProperties = nullptr ) override;
+                             const STRING_UTF8_MAP*    aProperties = nullptr ) override;
 
-    LIB_SYMBOL* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
+    LIB_SYMBOL* LoadSymbol( const wxString&        aLibraryPath,
+                            const wxString&        aAliasName,
                             const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     //void SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
@@ -142,6 +143,7 @@ private:
     void ParsePolygon( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
     void ParseRoundRectangle( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
     void ParseArc( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
+    void ParseEllipticalArc( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
     void ParseEllipse( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
     void ParseCircle( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
     void ParseLine( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
@@ -169,7 +171,7 @@ private:
     void ParseBusEntry( const std::map<wxString, wxString>& aProperties );
     void ParseParameter( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
     void ParseImplementationList( int aIndex, const std::map<wxString, wxString>& aProperties );
-    void ParseImplementation( const std::map<wxString, wxString>& aProperties );
+    void ParseImplementation( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym );
 
     void ParseLibHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile, wxArrayString& aLibNames );
     std::map<wxString,LIB_SYMBOL*> ParseLibFile( const ALTIUM_COMPOUND_FILE& aAltiumSchFile );

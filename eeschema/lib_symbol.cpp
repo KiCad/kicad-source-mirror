@@ -961,6 +961,49 @@ void LIB_SYMBOL::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert, bool
 }
 
 
+void LIB_SYMBOL::FixupDrawItems()
+{
+    std::vector<LIB_SHAPE*> potential_top_items;
+    std::vector<LIB_ITEM*> bottom_items;
+
+    for( LIB_ITEM& item : m_drawings )
+    {
+        if( item.Type() == LIB_SHAPE_T )
+        {
+            LIB_SHAPE& shape = static_cast<LIB_SHAPE&>( item );
+
+            if( shape.GetFillMode() == FILL_T::FILLED_WITH_COLOR )
+                potential_top_items.push_back( &shape );
+            else
+                bottom_items.push_back( &item );
+        }
+        else
+        {
+            bottom_items.push_back( &item );
+        }
+    }
+
+    std::sort( potential_top_items.begin(), potential_top_items.end(),
+               []( LIB_ITEM* a, LIB_ITEM* b )
+               {
+                   return a->GetBoundingBox().GetArea() > b->GetBoundingBox().GetArea();
+               } );
+
+
+    for( LIB_SHAPE* item : potential_top_items )
+    {
+        for( LIB_ITEM* bottom_item : bottom_items )
+        {
+            if( item->GetBoundingBox().Contains( bottom_item->GetBoundingBox() ) )
+            {
+                item->SetFillMode( FILL_T::FILLED_WITH_BG_BODYCOLOR );
+                break;
+            }
+        }
+    }
+}
+
+
 void LIB_SYMBOL::RemoveDrawItem( LIB_ITEM* aItem )
 {
     wxASSERT( aItem != nullptr );

@@ -861,7 +861,7 @@ struct ASCH_IMPLEMENTATION : ASCH_OWNER_INTERFACE
     wxString name;
     wxString type;
     wxString libname;
-
+    wxString description;
     bool isCurrent;
 
     explicit ASCH_IMPLEMENTATION( const std::map<wxString, wxString>& aProps );

@@ -546,6 +546,12 @@ public:
     LIB_ITEMS_CONTAINER& GetDrawItems() { return m_drawings; }
     const LIB_ITEMS_CONTAINER& GetDrawItems() const { return m_drawings; }
 
+    /**
+     * This function finds the filled draw items that are covering up smaller draw items
+     * and replaces their body fill color with the background fill color.
+    */
+    void FixupDrawItems();
+
     INSPECT_RESULT Visit( INSPECTOR inspector, void* testData,
                           const std::vector<KICAD_T>& aScanTypes ) override;
 

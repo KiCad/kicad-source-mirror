@@ -52,6 +52,7 @@
 
 #include <bezier_curves.h>
 #include <compoundfilereader.h>
+#include <geometry/ellipse.h>
 #include <string_utils.h>
 #include <sch_edit_frame.h>
 #include <trigo.h>
@@ -134,7 +135,8 @@ static void SetLibShapeLine( const ASCH_BORDER_INTERFACE& elem, LIB_SHAPE* shape
 {
     COLOR4D color = GetColorFromInt( elem.Color );
     COLOR4D default_color;
-    COLOR4D alt_default_color;
+    COLOR4D alt_default_color = COLOR4D( PUREBLUE ); // PUREBLUE is used for many objects, so if it is used,
+                                                     // we will assume that it should blend with the others
     STROKE_PARAMS stroke;
 
     switch( aType )
@@ -156,9 +158,6 @@ static void SetLibShapeLine( const ASCH_BORDER_INTERFACE& elem, LIB_SHAPE* shape
         break;
     case ALTIUM_SCH_RECORD::POLYLINE:
         default_color = COLOR4D( BLACK );
-        alt_default_color = COLOR4D( PUREBLUE ); // POLYLINEs get two default colors because they are
-                                                 // often used for drawing wires in polygons, so we will
-                                                 // want them the same color
         break;
     case ALTIUM_SCH_RECORD::RECTANGLE:
         default_color = COLOR4D( 0.5, 0, 0, 1.0 );
@@ -198,7 +197,11 @@ static void SetLibShapeFillAndColor( const ASCH_FILL_INTERFACE& elem, LIB_SHAPE*
     if( !elem.IsSolid )
         shape->SetFillMode( FILL_T::NO_FILL );
     else if( elem.AreaColor == aStrokeColor )
+    {
+        bgcolor = shape->GetStroke().GetColor();
+
         shape->SetFillMode( FILL_T::FILLED_SHAPE );
+    }
     else if( bgcolor == default_bgcolor )
         shape->SetFillMode( FILL_T::FILLED_WITH_BG_BODYCOLOR );
     else
@@ -206,7 +209,7 @@ static void SetLibShapeFillAndColor( const ASCH_FILL_INTERFACE& elem, LIB_SHAPE*
 
     shape->SetFillColor( bgcolor );
 
-    if( elem.AreaColor == aStrokeColor && shape->GetStroke().GetWidth() == 1 )
+    if( elem.AreaColor == aStrokeColor && shape->GetStroke().GetWidth() == schIUScale.MilsToIU( 1 ) )
     {
         STROKE_PARAMS stroke = shape->GetStroke();
         stroke.SetWidth( -1 );
@@ -980,6 +983,9 @@ void SCH_ALTIUM_PLUGIN::ParsePin( const std::map<wxString, wxString>& aPropertie
     pin->SetName( AltiumPinNamesToKiCad( elem.name ) );
     pin->SetNumber( elem.designator );
     pin->SetLength( elem.pinlength );
+
+    if( elem.hidden )
+        pin->SetVisible( false );
 
     if( !elem.showDesignator )
         pin->SetNumberTextSize( 0 );
@@ -1827,18 +1833,11 @@ void SCH_ALTIUM_PLUGIN::ParseRoundRectangle( const std::map<wxString, wxString>&
 
 void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol )
 {
-    // The Arc can be ALTIUM_SCH_RECORD::ELLIPTICAL_ARC or ALTIUM_SCH_RECORD::ARC
-    // Elliptical arcs are not handled in KiCad. So use an arc instead
-    // TODO: handle elliptical arc better.
-
     ASCH_ARC elem( aProperties );
 
     int arc_radius = elem.m_Radius;
 
-    // Try to approximate this ellipse by an arc. use the biggest of radius and secondary radius
-    // One can of course use another recipe
-    if( elem.m_IsElliptical )
-        arc_radius = std::max( elem.m_Radius, elem.m_SecondaryRadius );
+    // Try to approximate this ellipse by a series of beziers
 
     if( aSymbol.empty() && elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
@@ -1920,35 +1919,120 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
             symbol->AddDrawItem( arc, false );
             arc->SetUnit( std::max( 0, elem.ownerpartid ) );
 
-            if( !schsym )
-                arc->SetCenter( GetLibEditPosition( elem.m_Center ) );
-            else
+            EDA_ANGLE  includedAngle( elem.m_EndAngle - elem.m_StartAngle, DEGREES_T );
+            EDA_ANGLE  startAngle( elem.m_EndAngle, DEGREES_T );
+            VECTOR2I   startOffset( KiROUND( arc_radius * startAngle.Cos() ),
+                                   -KiROUND( arc_radius * startAngle.Sin() ) );
+
+            if( schsym )
+            {
                 arc->SetCenter( GetRelativePosition( elem.m_Center + m_sheetOffset, schsym ) );
+                arc->SetStart( GetRelativePosition( elem.m_Center + startOffset + m_sheetOffset,
+                                                     schsym ) );
+            }
+            else
+            {
+                arc->SetCenter( GetLibEditPosition( elem.m_Center ) );
+                arc->SetStart( elem.m_Center + startOffset + m_sheetOffset );
+            }
 
-            VECTOR2I arcStart = AltiumGetEllipticalPos(
-                    elem.m_Radius, elem.m_SecondaryRadius,
-                    -EDA_ANGLE( elem.m_StartAngle, DEGREES_T ).AsRadians() );
-            arcStart += arc->GetCenter();
-
-            VECTOR2I arcEnd = AltiumGetEllipticalPos(
-                    elem.m_Radius, elem.m_SecondaryRadius,
-                    -EDA_ANGLE( elem.m_EndAngle, DEGREES_T ).AsRadians() );
-            arcEnd += arc->GetCenter();
-
-            double end_angle = elem.m_EndAngle;
-
-            if( elem.m_EndAngle < elem.m_StartAngle )
-                end_angle += 360;
-
-            double mid_angle = std::fmod( ( elem.m_StartAngle + end_angle ) / 2, 360 );
-            VECTOR2I arcMid = AltiumGetEllipticalPos(
-                    elem.m_Radius, elem.m_SecondaryRadius,
-                    -EDA_ANGLE( mid_angle, DEGREES_T ).AsRadians() );
-            arcMid += arc->GetCenter();
-
-            arc->SetArcGeometry( arcStart, arcMid, arcEnd );
+            arc->SetArcAngleAndEnd( includedAngle.Normalize(), true );
 
             SetLibShapeLine( elem, arc, ALTIUM_SCH_RECORD::ARC );
+        }
+    }
+}
+
+
+void SCH_ALTIUM_PLUGIN::ParseEllipticalArc( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol )
+{
+    ASCH_ARC elem( aProperties );
+
+    if( aSymbol.empty() && elem.ownerpartid == ALTIUM_COMPONENT_NONE )
+    {
+        SCH_SCREEN* currentScreen = getCurrentScreen();
+        wxCHECK( currentScreen, /* void */ );
+
+        ELLIPSE<int>             ellipse( elem.m_Center + m_sheetOffset, elem.m_Radius,
+                                          KiROUND( elem.m_SecondaryRadius ), EDA_ANGLE::m_Angle0,
+                                          EDA_ANGLE( elem.m_StartAngle, DEGREES_T ),
+                                          EDA_ANGLE( elem.m_EndAngle, DEGREES_T ) );
+        std::vector<BEZIER<int>> beziers;
+
+        TransformEllipseToBeziers( ellipse, beziers );
+
+        for( const BEZIER<int>& bezier : beziers )
+        {
+            SCH_SHAPE* schbezier = new SCH_SHAPE( SHAPE_T::BEZIER );
+            schbezier->SetStart( bezier.Start );
+            schbezier->SetBezierC1( bezier.C1 );
+            schbezier->SetBezierC2( bezier.C2 );
+            schbezier->SetEnd( bezier.End );
+            schbezier->SetStroke( STROKE_PARAMS( elem.LineWidth, PLOT_DASH_TYPE::SOLID ) );
+            schbezier->RebuildBezierToSegmentsPointsList( elem.LineWidth );
+
+            currentScreen->Append( schbezier );
+        }
+    }
+    else
+    {
+        LIB_SYMBOL* symbol = static_cast<int>( aSymbol.size() ) <= elem.ownerpartdisplaymode
+                                     ? nullptr
+                                     : aSymbol[elem.ownerpartdisplaymode];
+        SCH_SYMBOL* schsym = nullptr;
+
+        if( !symbol )
+        {
+            const auto& libSymbolIt = m_libSymbols.find( elem.ownerindex );
+
+            if( libSymbolIt == m_libSymbols.end() )
+            {
+                // TODO: e.g. can depend on Template (RECORD=39
+                m_reporter->Report( wxString::Format( wxT( "Elliptical Arc's owner (%d) not found." ),
+                                                    elem.ownerindex ),
+                        RPT_SEVERITY_DEBUG );
+                return;
+            }
+
+            symbol = libSymbolIt->second;
+            schsym = m_symbols.at( libSymbolIt->first );
+        }
+
+        if( !symbol && !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
+            return;
+
+        ELLIPSE<int>             ellipse( elem.m_Center, elem.m_Radius,
+                                          KiROUND( elem.m_SecondaryRadius ), EDA_ANGLE::m_Angle0,
+                                          EDA_ANGLE( elem.m_StartAngle, DEGREES_T ),
+                                          EDA_ANGLE( elem.m_EndAngle, DEGREES_T ) );
+        std::vector<BEZIER<int>> beziers;
+
+        TransformEllipseToBeziers( ellipse, beziers );
+
+        for( const BEZIER<int>& bezier : beziers )
+        {
+            LIB_SHAPE* schbezier = new LIB_SHAPE( symbol, SHAPE_T::BEZIER );
+            symbol->AddDrawItem( schbezier, false );
+
+            schbezier->SetUnit( std::max( 0, elem.ownerpartid ) );
+
+            if( schsym )
+            {
+                schbezier->SetStart( GetRelativePosition( bezier.Start + m_sheetOffset, schsym ) );
+                schbezier->SetBezierC1( GetRelativePosition( bezier.C1 + m_sheetOffset, schsym ) );
+                schbezier->SetBezierC2( GetRelativePosition( bezier.C2 + m_sheetOffset, schsym ) );
+                schbezier->SetEnd( GetRelativePosition( bezier.End + m_sheetOffset, schsym ) );
+            }
+            else
+            {
+                schbezier->SetStart( GetLibEditPosition( bezier.Start ) );
+                schbezier->SetBezierC1( GetLibEditPosition( bezier.C1 ) );
+                schbezier->SetBezierC2( GetLibEditPosition( bezier.C2 ) );
+                schbezier->SetEnd( GetLibEditPosition( bezier.End ) );
+            }
+
+            SetLibShapeLine( elem, schbezier, ALTIUM_SCH_RECORD::ELLIPTICAL_ARC );
+            schbezier->RebuildBezierToSegmentsPointsList( elem.LineWidth );
         }
     }
 }
@@ -1957,12 +2041,6 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
 void SCH_ALTIUM_PLUGIN::ParseEllipse( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol )
 {
     ASCH_ELLIPSE elem( aProperties );
-
-    VECTOR2I   start( elem.Center.x + elem.Radius, elem.Center.y );
-    VECTOR2I   end( elem.Center.x - elem.Radius, elem.Center.y );
-    VECTOR2I   mid( elem.Center.x, elem.Center.y + elem.SecondaryRadius );
-    VECTOR2I   mid2( elem.Center.x, elem.Center.y - elem.SecondaryRadius );
-
 
     if( elem.Radius == elem.SecondaryRadius )
     {
@@ -1975,31 +2053,29 @@ void SCH_ALTIUM_PLUGIN::ParseEllipse( const std::map<wxString, wxString>& aPrope
         SCH_SCREEN* screen = getCurrentScreen();
         wxCHECK( screen, /* void */ );
 
-        SCH_SHAPE* arc1 = new SCH_SHAPE( SHAPE_T::ARC );
-        SCH_SHAPE* arc2 = new SCH_SHAPE( SHAPE_T::ARC );
+        ELLIPSE<int> ellipse( elem.Center + m_sheetOffset, elem.Radius, KiROUND(elem.SecondaryRadius ), EDA_ANGLE::m_Angle0 );
+        std::vector<BEZIER<int>> beziers;
 
-        arc1->SetArcGeometry( start + m_sheetOffset, mid + m_sheetOffset, end + m_sheetOffset );
-        arc2->SetArcGeometry( start + m_sheetOffset, mid2 + m_sheetOffset, end + m_sheetOffset );
+        TransformEllipseToBeziers( ellipse, beziers );
 
-        arc1->SetStroke( STROKE_PARAMS( 1, PLOT_DASH_TYPE::SOLID ) );
-        arc2->SetStroke( STROKE_PARAMS( 1, PLOT_DASH_TYPE::SOLID ) );
-
-        arc1->SetFillColor( GetColorFromInt( elem.AreaColor ) );
-        arc2->SetFillColor( GetColorFromInt( elem.AreaColor ) );
-
-        if( elem.IsSolid )
+        for( const BEZIER<int>& bezier : beziers )
         {
-            arc1->SetFillMode( FILL_T::FILLED_WITH_COLOR );
-            arc2->SetFillMode( FILL_T::FILLED_WITH_COLOR );
-        }
-        else
-        {
-            arc1->SetFilled( false );
-            arc2->SetFilled( false );
-        }
+            SCH_SHAPE* schbezier = new SCH_SHAPE( SHAPE_T::BEZIER );
+            schbezier->SetStart( bezier.Start );
+            schbezier->SetBezierC1( bezier.C1 );
+            schbezier->SetBezierC2( bezier.C2 );
+            schbezier->SetEnd( bezier.End );
+            schbezier->SetStroke( STROKE_PARAMS( elem.LineWidth, PLOT_DASH_TYPE::SOLID ) );
+            schbezier->SetFillColor( GetColorFromInt( elem.AreaColor ) );
 
-        screen->Append( arc1 );
-        screen->Append( arc2 );
+            if( elem.IsSolid )
+                schbezier->SetFillMode( FILL_T::FILLED_WITH_COLOR );
+            else
+                schbezier->SetFilled( false );
+
+            schbezier->RebuildBezierToSegmentsPointsList( schbezier->GetWidth() / 2 );
+            screen->Append( schbezier );
+        }
     }
     else
     {
@@ -2025,41 +2101,66 @@ void SCH_ALTIUM_PLUGIN::ParseEllipse( const std::map<wxString, wxString>& aPrope
             schsym = m_symbols.at( libSymbolIt->first );
         }
 
-        LIB_SHAPE* arc1 = new LIB_SHAPE( symbol, SHAPE_T::ARC );
-        LIB_SHAPE* arc2 = new LIB_SHAPE( symbol, SHAPE_T::ARC );
+        ELLIPSE<int> ellipse( elem.Center, elem.Radius, KiROUND(elem.SecondaryRadius ), EDA_ANGLE::m_Angle0 );
+        std::vector<BEZIER<int>> beziers;
 
-        symbol->AddDrawItem( arc1, false );
-        symbol->AddDrawItem( arc2, false );
+        TransformEllipseToBeziers( ellipse, beziers );
 
-        arc1->SetUnit( elem.ownerpartid );
-        arc2->SetUnit( elem.ownerpartid );
-
-        if( !schsym )
+        for( const BEZIER<int>& bezier : beziers )
         {
-            arc1->SetArcGeometry( GetLibEditPosition( start ),
-                                  GetLibEditPosition( mid ),
-                                  GetLibEditPosition( end ) );
-            arc2->SetArcGeometry( GetLibEditPosition( start ),
-                                  GetLibEditPosition( mid2 ),
-                                  GetLibEditPosition( end ) );
+            LIB_SHAPE* libbezier = new LIB_SHAPE( symbol, SHAPE_T::BEZIER );
+            symbol->AddDrawItem( libbezier, false );
+            libbezier->SetUnit( elem.ownerpartid );
+
+            if( !schsym )
+            {
+                libbezier->SetStart( GetLibEditPosition( bezier.Start ) );
+                libbezier->SetBezierC1( GetLibEditPosition( bezier.C1 ) );
+                libbezier->SetBezierC2( GetLibEditPosition( bezier.C2 ) );
+                libbezier->SetEnd( GetLibEditPosition( bezier.End ) );
+            }
+            else
+            {
+                libbezier->SetStart( GetRelativePosition( bezier.Start + m_sheetOffset, schsym ) );
+                libbezier->SetBezierC1( GetRelativePosition( bezier.C1 + m_sheetOffset, schsym ) );
+                libbezier->SetBezierC2( GetRelativePosition( bezier.C2 + m_sheetOffset, schsym ) );
+                libbezier->SetEnd( GetRelativePosition( bezier.End + m_sheetOffset, schsym ) );
+            }
+
+            SetLibShapeLine( elem, libbezier, ALTIUM_SCH_RECORD::ELLIPSE );
+            SetLibShapeFillAndColor( elem, libbezier, ALTIUM_SCH_RECORD::ELLIPSE, elem.Color );
+            libbezier->RebuildBezierToSegmentsPointsList( libbezier->GetWidth() / 2 );
         }
-        else
+
+        // A series of beziers won't fill the center, so if this is meant to be fully filled,
+        // Add a polygon to fill the center
+        if( elem.IsSolid)
         {
-            arc1->SetArcGeometry( GetRelativePosition( start + m_sheetOffset, schsym ),
-                                  GetRelativePosition( mid + m_sheetOffset, schsym ),
-                                  GetRelativePosition( end + m_sheetOffset, schsym ) );
-            arc2->SetArcGeometry( GetRelativePosition( start + m_sheetOffset, schsym ),
-                                  GetRelativePosition( mid2 + m_sheetOffset, schsym ),
-                                  GetRelativePosition( end + m_sheetOffset, schsym ) );
+
+            LIB_SHAPE* libline = new LIB_SHAPE( symbol, SHAPE_T::POLY );
+            symbol->AddDrawItem( libline, false );
+            libline->SetUnit( elem.ownerpartid );
+
+            if( !schsym )
+            {
+                libline->AddPoint( GetLibEditPosition( elem.Center + VECTOR2I( elem.Radius, 0 ) ) );
+                libline->AddPoint( GetLibEditPosition( elem.Center + VECTOR2I( 0, elem.SecondaryRadius ) ) );
+                libline->AddPoint( GetLibEditPosition( elem.Center + VECTOR2I( -elem.Radius, 0 ) ) );
+                libline->AddPoint( GetLibEditPosition( elem.Center + VECTOR2I( 0, -elem.SecondaryRadius ) ) );
+                libline->AddPoint( GetLibEditPosition( elem.Center + VECTOR2I( elem.Radius, 0 ) ) );
+            }
+            else
+            {
+                libline->AddPoint( GetRelativePosition( elem.Center + VECTOR2I( elem.Radius, 0 ) + m_sheetOffset, schsym ) );
+                libline->AddPoint( GetRelativePosition( elem.Center + VECTOR2I( 0, elem.SecondaryRadius ) + m_sheetOffset, schsym ) );
+                libline->AddPoint( GetRelativePosition( elem.Center + VECTOR2I( -elem.Radius, 0 ) + m_sheetOffset, schsym ) );
+                libline->AddPoint( GetRelativePosition( elem.Center + VECTOR2I( 0, -elem.SecondaryRadius ) + m_sheetOffset, schsym ) );
+                libline->AddPoint( GetRelativePosition( elem.Center + VECTOR2I( elem.Radius, 0 ) + m_sheetOffset, schsym ) );
+            }
+
+            SetLibShapeLine( elem, libline, ALTIUM_SCH_RECORD::ELLIPSE );
+            SetLibShapeFillAndColor( elem, libline, ALTIUM_SCH_RECORD::ELLIPSE, elem.Color );
         }
-
-        arc1->SetEnd( arc1->GetPosition() + VECTOR2I( elem.Radius, 0 ) );
-
-        SetLibShapeLine( elem, arc1, ALTIUM_SCH_RECORD::ELLIPSE );
-        SetLibShapeFillAndColor( elem, arc1, ALTIUM_SCH_RECORD::ELLIPSE, elem.Color );
-
-        SetLibShapeLine( elem, arc2, ALTIUM_SCH_RECORD::ELLIPSE );
-        SetLibShapeFillAndColor( elem, arc2, ALTIUM_SCH_RECORD::ELLIPSE, elem.Color );
     }
 
 }
@@ -3530,13 +3631,31 @@ void SCH_ALTIUM_PLUGIN::ParseImplementationList( int aIndex,
 }
 
 
-void SCH_ALTIUM_PLUGIN::ParseImplementation( const std::map<wxString, wxString>& aProperties )
+void SCH_ALTIUM_PLUGIN::ParseImplementation( const std::map<wxString, wxString>& aProperties,
+                                             std::vector<LIB_SYMBOL*>&           aSymbol  )
 {
     ASCH_IMPLEMENTATION elem( aProperties );
 
     // Only get footprint, currently assigned only
     if( ( elem.type == "PCBLIB" ) && ( elem.isCurrent ) )
     {
+        // Parse the footprint fields for the library symbol
+        if( !aSymbol.empty() )
+        {
+            for( LIB_SYMBOL* symbol : aSymbol )
+            {
+                LIB_ID fpLibId = AltiumToKiCadLibID( elem.libname, elem.name );
+                wxArrayString fpFilters;
+                fpFilters.Add( fpLibId.Format() );
+
+                symbol->SetFPFilters( wxArrayString( 1, wxString::Format( "*%s*", elem.name ) ));
+                LIB_FIELD& footprintField = symbol->GetFootprintField();
+                footprintField.SetText( fpLibId.Format() );
+            }
+
+            return;
+        }
+
         const auto& implementationOwnerIt = m_altiumImplementationList.find( elem.ownerindex );
 
         if( implementationOwnerIt == m_altiumImplementationList.end() )
@@ -3715,7 +3834,8 @@ std::map<wxString,LIB_SYMBOL*> SCH_ALTIUM_PLUGIN::ParseLibFile( const ALTIUM_COM
 
             case ALTIUM_SCH_RECORD::ROUND_RECTANGLE: ParseRoundRectangle( properties, symbols ); break;
 
-            case ALTIUM_SCH_RECORD::ELLIPTICAL_ARC:
+            case ALTIUM_SCH_RECORD::ELLIPTICAL_ARC: ParseEllipticalArc( properties, symbols ); break;
+
             case ALTIUM_SCH_RECORD::ARC: ParseArc( properties, symbols ); break;
 
             case ALTIUM_SCH_RECORD::LINE: ParseLine( properties, symbols ); break;
@@ -3730,7 +3850,9 @@ std::map<wxString,LIB_SYMBOL*> SCH_ALTIUM_PLUGIN::ParseLibFile( const ALTIUM_COM
 
             // Nothing for now.  TODO: Figure out how implementation lists are generted in libs
             case ALTIUM_SCH_RECORD::IMPLEMENTATION_LIST: break;
-            case ALTIUM_SCH_RECORD::IMPLEMENTATION: break;
+
+            case ALTIUM_SCH_RECORD::IMPLEMENTATION: ParseImplementation( properties, symbols ); break;
+
             case ALTIUM_SCH_RECORD::IMPL_PARAMS: break;
 
             case ALTIUM_SCH_RECORD::MAP_DEFINER_LIST: break;
@@ -3760,6 +3882,7 @@ std::map<wxString,LIB_SYMBOL*> SCH_ALTIUM_PLUGIN::ParseLibFile( const ALTIUM_COM
         for( size_t ii = 0; ii < symbols.size(); ii++ )
         {
             LIB_SYMBOL* symbol = symbols[ii];
+            symbol->FixupDrawItems();
 
             if( symbols.size() == 1 )
                 ret[name] = symbol;

@@ -259,7 +259,7 @@ ASCH_BORDER_INTERFACE::ASCH_BORDER_INTERFACE( const std::map<wxString, wxString>
     // Altium line width 0 means hairline.  Since KiCad doesn't have a hairline, we
     // represent it as a 1 mil line.
     if( LineWidth == 0 )
-        LineWidth = 1;
+        LineWidth = schIUScale.MilsToIU( 1 );
 
     Color = ALTIUM_PARSER::ReadInt( aProps, "COLOR", 0 );
 }
@@ -872,6 +872,7 @@ ASCH_IMPLEMENTATION::ASCH_IMPLEMENTATION( const std::map<wxString, wxString>& aP
     name = ALTIUM_PARSER::ReadString( aProps, "MODELNAME", "" );
     type = ALTIUM_PARSER::ReadString( aProps, "MODELTYPE", "" );
     libname = ALTIUM_PARSER::ReadString( aProps, "MODELDATAFILE0", "" );
+    description = ALTIUM_PARSER::ReadString( aProps, "DESCRIPTION", "" );
     isCurrent = ALTIUM_PARSER::ReadBool( aProps, "ISCURRENT", false );
 }
 
