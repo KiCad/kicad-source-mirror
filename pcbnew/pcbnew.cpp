@@ -382,13 +382,18 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
     // This is process-level-initialization, not project-level-initialization of the DSO.
     // Do nothing in here pertinent to a project!
     InitSettings( new PCBNEW_SETTINGS );
+    aProgram->GetSettingsManager().RegisterSettings( new FOOTPRINT_EDITOR_SETTINGS );
+    aProgram->GetSettingsManager().RegisterSettings( new EDA_3D_VIEWER_SETTINGS );
+
+    // We intentionally register KifaceSettings after FOOTPRINT_EDITOR_SETTINGS and EDA_3D_VIEWER_SETTINGS
+    // In legacy configs, many settings were in a single editor config and the migration routine
+    // for the main editor file will try and call into the now separate settings stores
+    // to move the settings into them
     aProgram->GetSettingsManager().RegisterSettings( KifaceSettings() );
 
     // Register the footprint editor settings as well because they share a KiFACE and need to be
     // loaded prior to use to avoid threading deadlocks
-    aProgram->GetSettingsManager().RegisterSettings( new FOOTPRINT_EDITOR_SETTINGS );
     aProgram->GetSettingsManager().RegisterSettings( new CVPCB_SETTINGS );
-    aProgram->GetSettingsManager().RegisterSettings( new EDA_3D_VIEWER_SETTINGS );
 
     start_common( aCtlBits );
 
