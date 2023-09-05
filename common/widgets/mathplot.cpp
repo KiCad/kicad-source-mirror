@@ -691,11 +691,11 @@ void mpScaleX::recalculateTicks( wxDC& dc, mpWindow& w )
     }
 
     double numberSteps = floor( ( maxVvis - minVvis ) / bestStep );
-    
+
     // Half the number of ticks according to window size.
     // The value 96 is used to have only 4 ticks when m_scrX is 268.
     // For each 96 device context units, is possible to add a new tick.
-    while( numberSteps - 2 >= m_scrX/96 )
+    while( numberSteps - 2.0 >= m_scrX/96.0 )
     {
         bestStep *= 2;
         numberSteps = floor( ( maxVvis - minVvis ) / bestStep );
@@ -883,7 +883,7 @@ void mpScaleY::recalculateTicks( wxDC& dc, mpWindow& w )
 
     // Half the number of ticks according to window size.
     // For each 32 device context units, is possible to add a new tick.
-    while( numberSteps >= m_scrY/32 )
+    while( numberSteps >= m_scrY/32.0 )
     {
         bestStep *= 2;
         numberSteps = floor( ( maxVvis - minVvis ) / bestStep );

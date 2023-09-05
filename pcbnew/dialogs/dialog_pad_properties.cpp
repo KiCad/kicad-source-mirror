@@ -716,15 +716,6 @@ void DIALOG_PAD_PROPERTIES::initValues()
 }
 
 
-// A small helper function, to display coordinates:
-static wxString formatCoord( EDA_UNITS aUnits, const VECTOR2I& aCoord )
-{
-    return wxString::Format( wxT( "(X:%s Y:%s)" ),
-                             EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aUnits, aCoord.x ),
-                             EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, aUnits, aCoord.y ) );
-}
-
-
 void DIALOG_PAD_PROPERTIES::OnResize( wxSizeEvent& event )
 {
     redraw();
@@ -848,9 +839,6 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
     // Show/hide controls depending on m_offsetShapeOpt being enabled
     m_offsetCtrls->Show( m_offsetShapeOpt->GetValue() );
     m_offsetShapeOptLabel->Show( m_offsetShapeOpt->GetValue() );
-
-    bool is_custom = m_PadShapeSelector->GetSelection() == CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR
-                  || m_PadShapeSelector->GetSelection() == CHOICE_SHAPE_CUSTOM_RECT_ANCHOR;
 
     if( transferDataToPad( m_previewPad ) )
         updateRoundRectCornerValues();

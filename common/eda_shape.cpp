@@ -43,6 +43,9 @@ EDA_SHAPE::EDA_SHAPE( SHAPE_T aType, int aLineWidth, FILL_T aFill ) :
         m_stroke( aLineWidth, PLOT_DASH_TYPE::DEFAULT, COLOR4D::UNSPECIFIED ),
         m_fill( aFill ),
         m_fillColor( COLOR4D::UNSPECIFIED ),
+        m_rectangleHeight( 0 ),
+        m_rectangleWidth( 0 ),
+        m_segmentLength( 0 ),
         m_editState( 0 ),
         m_annotationProxy( false )
 {
@@ -143,7 +146,7 @@ long long int EDA_SHAPE::GetRectangleHeight() const
     {
     case SHAPE_T::RECTANGLE: return GetEndY() - GetStartY();
 
-    default: 
+    default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
         return 0;
     }
@@ -155,7 +158,7 @@ long long int EDA_SHAPE::GetRectangleWidth() const
     {
     case SHAPE_T::RECTANGLE: return GetEndX() - GetStartX();
 
-    default: 
+    default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
         return 0;
     }
@@ -167,7 +170,7 @@ void EDA_SHAPE::SetLength( const double& aLength )
     {
     case SHAPE_T::SEGMENT: m_segmentLength = aLength; break;
 
-    default: 
+    default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
     }
 }
@@ -1769,8 +1772,8 @@ static struct EDA_SHAPE_DESC
         angle->SetAvailableFunc(
                 [=]( INSPECTABLE* aItem ) -> bool
                 {
-                    if( EDA_SHAPE* shape = dynamic_cast<EDA_SHAPE*>( aItem ) )
-                        return shape->GetShape() == SHAPE_T::ARC;
+                    if( EDA_SHAPE* curr_shape = dynamic_cast<EDA_SHAPE*>( aItem ) )
+                        return curr_shape->GetShape() == SHAPE_T::ARC;
 
                     return false;
                 } );

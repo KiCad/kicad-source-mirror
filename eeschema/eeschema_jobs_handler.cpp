@@ -134,13 +134,14 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
     SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( aPlotJob->m_filename, SCH_IO_MGR::SCH_KICAD );
-    sch->Prj().ApplyTextVars( aJob->GetVarOverrides() );
 
     if( sch == nullptr )
     {
         m_reporter->Report( _( "Failed to load schematic file\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
+
+    sch->Prj().ApplyTextVars( aJob->GetVarOverrides() );
 
     std::unique_ptr<KIGFX::SCH_RENDER_SETTINGS> renderSettings =
             std::make_unique<KIGFX::SCH_RENDER_SETTINGS>();
@@ -267,13 +268,14 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
     SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( aBomJob->m_filename, SCH_IO_MGR::SCH_KICAD );
-    sch->Prj().ApplyTextVars( aJob->GetVarOverrides() );
 
     if( sch == nullptr )
     {
         m_reporter->Report( _( "Failed to load schematic file\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
+
+    sch->Prj().ApplyTextVars( aJob->GetVarOverrides() );
 
     // Annotation warning check
     SCH_REFERENCE_LIST referenceList;
@@ -741,13 +743,14 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
     SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( ercJob->m_filename, SCH_IO_MGR::SCH_KICAD );
-    sch->Prj().ApplyTextVars( aJob->GetVarOverrides() );
 
     if( sch == nullptr )
     {
         m_reporter->Report( _( "Failed to load schematic file\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
+
+    sch->Prj().ApplyTextVars( aJob->GetVarOverrides() );
 
     if( ercJob->m_outputFile.IsEmpty() )
     {

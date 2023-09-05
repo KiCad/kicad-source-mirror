@@ -29,7 +29,13 @@
 
 CLI::COMMAND::COMMAND( const std::string& aName ) :
         m_name( aName ),
-        m_argParser( aName, "", argparse::default_arguments::none )
+        m_argParser( aName, "", argparse::default_arguments::none ),
+        m_hasInputArg( false ),
+        m_hasOutputArg( false ),
+        m_hasDrawingSheetArg( false ),
+        m_hasDefineArg( false ),
+        m_outputArgExpectsDir( false )
+
 {
     m_argParser.add_argument( ARG_HELP_SHORT, ARG_HELP )
                 .default_value( false )
