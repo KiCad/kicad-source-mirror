@@ -910,7 +910,7 @@ void SCH_PAINTER::draw( const LIB_SHAPE* aShape, int aLayer, bool aDimmed )
 
                     EDA_ANGLE angle = angle1.Normalize180() + angle2.Normalize180();
 
-                    m_gal->DrawArc( center, shape->GetRadius(), startAngle, angle );
+                    m_gal->DrawArc( center, ( start - center ).EuclideanNorm(), startAngle, angle );
                 }
                     break;
 
