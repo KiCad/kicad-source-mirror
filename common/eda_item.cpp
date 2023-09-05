@@ -114,6 +114,12 @@ wxString EDA_ITEM::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 }
 
 
+bool isWordChar( const wxUniChar& c )
+{
+    return wxIsalnum( c ) || c == '_';
+}
+
+
 bool EDA_ITEM::Matches( const wxString& aText, const EDA_SEARCH_DATA& aSearchData ) const
 {
     wxString text = aText;
@@ -128,6 +134,12 @@ bool EDA_ITEM::Matches( const wxString& aText, const EDA_SEARCH_DATA& aSearchDat
         text.MakeUpper();
         searchText.MakeUpper();
     }
+
+    auto isWordChar =
+            []( const wxUniChar& c )
+            {
+                return wxIsalnum( c ) || c == '_';
+            };
 
     if( aSearchData.matchMode == EDA_SEARCH_MATCH_MODE::PERMISSIVE )
     {
@@ -149,8 +161,8 @@ bool EDA_ITEM::Matches( const wxString& aText, const EDA_SEARCH_DATA& aSearchDat
             ii = next;
             next += searchText.length();
 
-            bool startOK = ( ii == 0 || !wxIsalnum( text.GetChar( ii - 1 ) ) );
-            bool endOK = ( next == (int) text.length() || !wxIsalnum( text.GetChar( next ) ) );
+            bool startOK = ( ii == 0 || !isWordChar( text.GetChar( ii - 1 ) ) );
+            bool endOK = ( next == (int) text.length() || !isWordChar( text.GetChar( next ) ) );
 
             if( startOK && endOK )
                 return true;
@@ -207,8 +219,8 @@ bool EDA_ITEM::Replace( const EDA_SEARCH_DATA& aSearchData, wxString& aText )
 
         if( aSearchData.matchMode == EDA_SEARCH_MATCH_MODE::WHOLEWORD )
         {
-            startOK = ( ii == 0 || !wxIsalnum( text.GetChar( ii - 1 ) ) );
-            endOK = ( next == (int) text.length() || !wxIsalnum( text.GetChar( next ) ) );
+            startOK = ( ii == 0 || !isWordChar( text.GetChar( ii - 1 ) ) );
+            endOK = ( next == (int) text.length() || !isWordChar( text.GetChar( next ) ) );
         }
         else
         {
