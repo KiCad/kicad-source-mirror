@@ -332,11 +332,15 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
     // This is process-level-initialization, not project-level-initialization of the DSO.
     // Do nothing in here pertinent to a project!
     InitSettings( new EESCHEMA_SETTINGS );
-    aProgram->GetSettingsManager().RegisterSettings( KifaceSettings() );
-
     // Register the symbol editor settings as well because they share a KiFACE and need to be
     // loaded prior to use to avoid threading deadlocks
     aProgram->GetSettingsManager().RegisterSettings( new SYMBOL_EDITOR_SETTINGS );
+
+    // We intentionally register KifaceSettings after SYMBOL_EDITOR_SETTINGS
+    // In legacy configs, many settings were in a single editor config nd the migration routine
+    // for the main editor file will try and call into the now separate settings stores
+    // to move the settings into them
+    aProgram->GetSettingsManager().RegisterSettings( KifaceSettings() );
 
     start_common( aCtlBits );
 
