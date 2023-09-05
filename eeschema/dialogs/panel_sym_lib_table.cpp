@@ -75,6 +75,7 @@ enum {
     ID_PANEL_SYM_LIB_LEGACY,
 };
 
+// clang-format on
 
 /**
  * Build a wxGridTableBase by wrapping an #SYMBOL_LIB_TABLE object.
@@ -237,10 +238,16 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
 
     wxArrayString pluginChoices;
 
-    pluginChoices.Add( SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_KICAD ) );
-    pluginChoices.Add( SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_LEGACY ) );
-    pluginChoices.Add( SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_DATABASE ) );
-    pluginChoices.Add( SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_CADSTAR_ARCHIVE ) );
+    for( const SCH_IO_MGR::SCH_FILE_T& type : SCH_IO_MGR::SCH_FILE_T_vector )
+    {
+        SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( type ) );
+
+        if( !pi )
+            continue;
+
+        if( PLUGIN_FILE_DESC desc = pi->GetLibraryFileDesc() )
+            pluginChoices.Add( SCH_IO_MGR::ShowType( type ) );
+    }
 
     EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
 

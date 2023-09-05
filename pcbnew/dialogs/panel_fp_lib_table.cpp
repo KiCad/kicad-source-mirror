@@ -67,6 +67,7 @@
 #include <settings/settings_manager.h>
 #include <paths.h>
 #include <macros.h>
+
 // clang-format off
 
 /**
@@ -81,6 +82,7 @@ struct SUPPORTED_FILE_TYPE
     IO_MGR::PCB_FILE_T m_Plugin;
 };
 
+// clang-format on
 
 /**
  * Traverser implementation that looks to find any and all "folder" libraries by looking for files
