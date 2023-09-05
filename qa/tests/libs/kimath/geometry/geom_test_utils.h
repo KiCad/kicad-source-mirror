@@ -343,6 +343,7 @@ struct print_log_value<SHAPE_LINE_CHAIN>
         os << "]";
     }
 };
+
 }
 BOOST_TEST_PRINT_NAMESPACE_CLOSE
 

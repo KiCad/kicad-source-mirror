@@ -23,7 +23,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "pcb_grid_helper.h"
+
 #include <functional>
+
 #include <pcb_dimension.h>
 #include <pcb_shape.h>
 #include <footprint.h>
@@ -31,6 +34,7 @@
 #include <pcb_group.h>
 #include <pcb_track.h>
 #include <zone.h>
+#include <geometry/oval.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_rect.h>
@@ -43,8 +47,6 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_tool_base.h>
 #include <view/view.h>
-#include "pcb_grid_helper.h"
-
 
 PCB_GRID_HELPER::PCB_GRID_HELPER( TOOL_MANAGER* aToolMgr, MAGNETIC_SETTINGS* aMagneticSettings ) :
     GRID_HELPER( aToolMgr ),
@@ -547,6 +549,22 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
     const std::set<int>& activeLayers = settings->GetHighContrastLayers();
     bool                 isHighContrast = settings->GetHighContrast();
 
+    // As defaults, these are probably reasonable to avoid spamming key points
+    const OVAL_KEY_POINT_FLAGS ovalKeyPointFlags =
+            OVAL_CENTER | OVAL_CAP_TIPS | OVAL_SIDE_MIDPOINTS | OVAL_CARDINAL_EXTREMES;
+
+    // The key points of a circle centred around (0, 0) with the given radius
+    const auto getCircleKeyPoints = [] ( int radius )
+    {
+        return std::vector<VECTOR2I>{
+            {0, 0},
+            { -radius, 0 },
+            { radius, 0 },
+            { 0, -radius },
+            { 0, radius }
+        };
+    };
+
     auto handlePadShape =
             [&]( PAD* aPad )
             {
@@ -563,39 +581,26 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                     int      r      = aPad->GetSizeX() / 2;
                     VECTOR2I center = aPad->ShapePos();
 
-                    addAnchor( center + VECTOR2I( -r, 0 ), OUTLINE | SNAPPABLE, aPad );
-                    addAnchor( center + VECTOR2I( r, 0 ), OUTLINE | SNAPPABLE, aPad );
-                    addAnchor( center + VECTOR2I( 0, -r ), OUTLINE | SNAPPABLE, aPad );
-                    addAnchor( center + VECTOR2I( 0, r ), OUTLINE | SNAPPABLE, aPad );
+                    const std::vector<VECTOR2I> circle_pts = getCircleKeyPoints( r );
+
+                    for ( const VECTOR2I& pt: circle_pts ) {
+                        // Transform to the pad positon
+                        addAnchor( center + pt, OUTLINE | SNAPPABLE, aPad );
+                    }
                     break;
                 }
 
                 case PAD_SHAPE::OVAL:
                 {
-                    VECTOR2I pos = aPad->ShapePos();
-                    VECTOR2I half_size = aPad->GetSize() / 2;
-                    int      half_width = std::min( half_size.x, half_size.y );
-                    VECTOR2I half_len( half_size.x - half_width, half_size.y - half_width );
+                    const VECTOR2I pos = aPad->ShapePos();
 
-                    RotatePoint( half_len, aPad->GetOrientation() );
+                    const std::vector<VECTOR2I> oval_pts = GetOvalKeyPoints(
+                            aPad->GetSize(), aPad->GetOrientation(), ovalKeyPointFlags );
 
-                    VECTOR2I a( pos - half_len );
-                    VECTOR2I b( pos + half_len );
-                    VECTOR2I normal = b - a;
-                    normal.Resize( half_width );
-                    RotatePoint( normal, ANGLE_90 );
-
-                    addAnchor( a + normal, OUTLINE | SNAPPABLE, aPad );
-                    addAnchor( a - normal, OUTLINE | SNAPPABLE, aPad );
-                    addAnchor( b + normal, OUTLINE | SNAPPABLE, aPad );
-                    addAnchor( b - normal, OUTLINE | SNAPPABLE, aPad );
-                    addAnchor( pos + normal, OUTLINE | SNAPPABLE, aPad );
-                    addAnchor( pos - normal, OUTLINE | SNAPPABLE, aPad );
-
-                    RotatePoint( normal, -ANGLE_90 );
-
-                    addAnchor( a - normal, OUTLINE | SNAPPABLE, aPad );
-                    addAnchor( b + normal, OUTLINE | SNAPPABLE, aPad );
+                    for ( const VECTOR2I& pt: oval_pts ) {
+                        // Transform to the pad positon
+                        addAnchor( pos + pt, OUTLINE | SNAPPABLE, aPad );
+                    }
                     break;
                 }
 

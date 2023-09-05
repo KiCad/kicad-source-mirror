@@ -32,6 +32,7 @@ set( QA_KIMATH_SRCS
     geometry/test_ellipse_to_bezier.cpp
     geometry/test_fillet.cpp
     geometry/test_circle.cpp
+    geometry/test_oval.cpp
     geometry/test_segment.cpp
     geometry/test_shape_compound_collision.cpp
     geometry/test_shape_arc.cpp
