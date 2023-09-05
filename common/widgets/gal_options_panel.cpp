@@ -21,17 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
-#include <wx/sizer.h>
-#include <wx/checkbox.h>
-#include <wx/choice.h>
-#include <wx/radiobox.h>
-#include <wx/spinctrl.h>
-#include <wx/stattext.h>
-#include <wx/statbox.h>
-#include <wx/statline.h>
-
-#include <core/ignore.h>
 #include <widgets/gal_options_panel.h>
 #include <settings/app_settings.h>
 #include <eda_draw_frame.h>
@@ -82,10 +71,6 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, APP_SETTINGS_BASE* aApp
                                              "requirements)" ) );
 
     // Grid settings subpanel
-#if 0
-    m_gridLineWidth->SetRange( gridThicknessMin, gridThicknessMax );
-    m_gridLineWidth->SetIncrement( gridThicknessStep );
-#else
     int selection = 0;  // default selection
 
     for( double size = gridThicknessMin; size <= gridThicknessMax; size += gridThicknessStep )
@@ -98,7 +83,6 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, APP_SETTINGS_BASE* aApp
     }
 
     m_gridLineWidth->SetSelection( selection );
-#endif
 
     m_gridMinSpacing->SetRange( gridMinSpacingMin, gridMinSpacingMax );
     m_gridMinSpacing->SetIncrement( gridMinSpacingStep );
