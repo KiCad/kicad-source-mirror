@@ -24,7 +24,6 @@
  */
 
 #include <settings/common_settings.h>
-#include <pgm_base.h>
 #include <gal/hidpi_gl_3D_canvas.h>
 
 const float HIDPI_GL_3D_CANVAS::m_delta_move_step_factor = 0.7f;
