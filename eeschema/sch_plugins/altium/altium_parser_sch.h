@@ -31,8 +31,6 @@
 #include <vector>
 
 #include <math/vector2d.h>
-
-#include <wx/gdicmn.h>
 #include <wx/string.h>
 
 // this constant specifies a item which is not inside an component

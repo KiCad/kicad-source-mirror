@@ -25,7 +25,6 @@
 #ifndef SCH_LINE_WIRE_BUS_TOOL_H
 #define SCH_LINE_WIRE_BUS_TOOL_H
 
-#include <wx/gdicmn.h>
 #include <wx/string.h>
 #include <string>
 #include <vector>

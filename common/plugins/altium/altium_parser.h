@@ -29,7 +29,6 @@
 #include <memory>
 #include <numeric>
 
-#include <wx/gdicmn.h>
 #include <wx/mstream.h>
 #include <wx/zstream.h>
 #include <math/vector2d.h>
