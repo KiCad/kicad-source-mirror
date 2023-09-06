@@ -847,6 +847,7 @@ struct ASCH_DESIGNATOR : ASCH_OWNER_INTERFACE
 {
     wxString name;
     wxString text;
+    int      fontId;
 
     ASCH_RECORD_ORIENTATION  orientation;
     ASCH_LABEL_JUSTIFICATION justification;
@@ -895,6 +896,7 @@ struct ASCH_PARAMETER : ASCH_OWNER_INTERFACE
     bool isHidden;
     bool isMirrored;
     bool isShowName;
+    int  fontId;
 
     explicit ASCH_PARAMETER( const std::map<wxString, wxString>& aProps );
 };

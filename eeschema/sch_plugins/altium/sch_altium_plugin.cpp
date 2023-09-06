@@ -1202,7 +1202,7 @@ void SetTextPositioning( EDA_TEXT* text, ASCH_LABEL_JUSTIFICATION justification,
 }
 
 
-void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol )
+void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol, std::vector<int>& aFontSizes )
 {
     ASCH_LABEL elem( aProperties );
 
@@ -1289,18 +1289,23 @@ void SCH_ALTIUM_PLUGIN::ParseLabel( const std::map<wxString, wxString>& aPropert
             textItem->SetBold( font.Bold );
             textItem->SetTextSize( { font.Size / 2, font.Size / 2 } );
         }
+        else if( fontId > 0 && fontId <= aFontSizes.size() )
+        {
+            int size = aFontSizes[fontId - 1];
+            textItem->SetTextSize( { size, size } );
+        }
     }
 }
 
 
-void SCH_ALTIUM_PLUGIN::ParseTextFrame( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol )
+void SCH_ALTIUM_PLUGIN::ParseTextFrame( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol, std::vector<int>& aFontSizes )
 {
     ASCH_TEXT_FRAME elem( aProperties );
 
     if( aSymbol.empty() )
         AddTextBox( &elem );
     else
-        AddLibTextBox( &elem, aSymbol );
+        AddLibTextBox( &elem, aSymbol, aFontSizes );
 }
 
 
@@ -1376,7 +1381,7 @@ void SCH_ALTIUM_PLUGIN::AddTextBox(const ASCH_TEXT_FRAME *aElem )
 }
 
 
-void SCH_ALTIUM_PLUGIN::AddLibTextBox(const ASCH_TEXT_FRAME *aElem, std::vector<LIB_SYMBOL*>& aSymbol )
+void SCH_ALTIUM_PLUGIN::AddLibTextBox(const ASCH_TEXT_FRAME *aElem, std::vector<LIB_SYMBOL*>& aSymbol, std::vector<int>& aFontSizes )
 {
     if( aElem->ownerpartdisplaymode >= static_cast<int>( aSymbol.size() ) )
         return;
@@ -1417,6 +1422,12 @@ void SCH_ALTIUM_PLUGIN::AddLibTextBox(const ASCH_TEXT_FRAME *aElem, std::vector<
     case ASCH_TEXT_FRAME_ALIGNMENT::RIGHT:
         textBox->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
         break;
+    }
+
+    if( aElem->FontID > 0 && aElem->FontID <= static_cast<int>( aFontSizes.size() ) )
+    {
+        int size = aFontSizes[aElem->FontID - 1];
+        textBox->SetTextSize( { size, size } );
     }
 
     symbol->AddDrawItem( textBox, false );
@@ -3405,7 +3416,8 @@ void SCH_ALTIUM_PLUGIN::ParseFileName( const std::map<wxString, wxString>& aProp
 
 
 void SCH_ALTIUM_PLUGIN::ParseDesignator( const std::map<wxString, wxString>& aProperties,
-                                         std::vector<LIB_SYMBOL*>&           aSymbol )
+                                         std::vector<LIB_SYMBOL*>&           aSymbol,
+                                         std::vector<int>&                   aFontSizes )
 {
     ASCH_DESIGNATOR elem( aProperties );
 
@@ -3419,11 +3431,17 @@ void SCH_ALTIUM_PLUGIN::ParseDesignator( const std::map<wxString, wxString>& aPr
         LIB_FIELD& refField = symbol->GetReferenceField();
 
         if( emptyRef )
-            refField.SetText( wxT( "X?" ) );
+            refField.SetText( wxT( "X" ) );
         else
-            refField.SetText( elem.text );
+            refField.SetText( elem.text.BeforeLast( '?' ) ); // remove the '?' at the end for KiCad-style
 
-        refField.SetPosition( elem.location );
+        refField.SetPosition( GetLibEditPosition( elem.location ) );
+
+        if( elem.fontId > 0 && elem.fontId <= static_cast<int>( aFontSizes.size() ) )
+        {
+            int size = aFontSizes[elem.fontId - 1];
+            refField.SetTextSize( { size, size } );
+        }
 
         return;
     }
@@ -3482,7 +3500,8 @@ void SCH_ALTIUM_PLUGIN::ParseBusEntry( const std::map<wxString, wxString>& aProp
 
 
 void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aProperties,
-                                        std::vector<LIB_SYMBOL*>&           aSymbol )
+                                        std::vector<LIB_SYMBOL*>&           aSymbol,
+                                        std::vector<int>&                   aFontSizes )
 {
     ASCH_PARAMETER elem( aProperties );
 
@@ -3618,6 +3637,12 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
 
         field->SetVisible( !elem.isHidden );
         SetTextPositioning( field, elem.justification, elem.orientation );
+
+        if( elem.fontId > 0 && elem.fontId <= static_cast<int>( aFontSizes.size() ) )
+        {
+            int size = aFontSizes[elem.fontId - 1];
+            field->SetTextSize( { size, size } );
+        }
     }
 }
 
@@ -3721,20 +3746,9 @@ std::vector<LIB_SYMBOL*> SCH_ALTIUM_PLUGIN::ParseLibComponent( const std::map<wx
 std::map<wxString,LIB_SYMBOL*> SCH_ALTIUM_PLUGIN::ParseLibFile( const ALTIUM_COMPOUND_FILE& aAltiumLibFile )
 {
     std::map<wxString,LIB_SYMBOL*> ret;
+    std::vector<int> fontSizes;
 
-    {
-        const CFB::COMPOUND_FILE_ENTRY* file = aAltiumLibFile.FindStream( { "FileHeader" } );
-
-        if( file == nullptr )
-            THROW_IO_ERROR( "FileHeader not found" );
-
-        ALTIUM_PARSER reader( aAltiumLibFile, file );
-
-        if( reader.GetRemainingBytes() <= 0 )
-        {
-            THROW_IO_ERROR( "FileHeader does not contain any data" );
-        }
-    }
+    ParseLibHeader( aAltiumLibFile, fontSizes );
 
     std::map<wxString, const CFB::COMPOUND_FILE_ENTRY*> syms = aAltiumLibFile.GetLibSymbols( nullptr );
 
@@ -3822,7 +3836,7 @@ std::map<wxString,LIB_SYMBOL*> SCH_ALTIUM_PLUGIN::ParseLibFile( const ALTIUM_COM
             {
             case ALTIUM_SCH_RECORD::PIN: ParsePin( properties, symbols ); break;
 
-            case ALTIUM_SCH_RECORD::LABEL: ParseLabel( properties, symbols ); break;
+            case ALTIUM_SCH_RECORD::LABEL: ParseLabel( properties, symbols, fontSizes ); break;
 
             case ALTIUM_SCH_RECORD::BEZIER: ParseBezier( properties, symbols ); break;
 
@@ -3842,11 +3856,11 @@ std::map<wxString,LIB_SYMBOL*> SCH_ALTIUM_PLUGIN::ParseLibFile( const ALTIUM_COM
 
             case ALTIUM_SCH_RECORD::RECTANGLE: ParseRectangle( properties, symbols ); break;
 
-            case ALTIUM_SCH_RECORD::DESIGNATOR: ParseDesignator( properties, symbols ); break;
+            case ALTIUM_SCH_RECORD::DESIGNATOR: ParseDesignator( properties, symbols, fontSizes ); break;
 
-            case ALTIUM_SCH_RECORD::PARAMETER: ParseParameter( properties, symbols ); break;
+            case ALTIUM_SCH_RECORD::PARAMETER: ParseParameter( properties, symbols, fontSizes ); break;
 
-            case ALTIUM_SCH_RECORD::TEXT_FRAME: ParseTextFrame( properties, symbols ); break;
+            case ALTIUM_SCH_RECORD::TEXT_FRAME: ParseTextFrame( properties, symbols, fontSizes ); break;
 
             // Nothing for now.  TODO: Figure out how implementation lists are generted in libs
             case ALTIUM_SCH_RECORD::IMPLEMENTATION_LIST: break;
@@ -3883,6 +3897,11 @@ std::map<wxString,LIB_SYMBOL*> SCH_ALTIUM_PLUGIN::ParseLibFile( const ALTIUM_COM
         {
             LIB_SYMBOL* symbol = symbols[ii];
             symbol->FixupDrawItems();
+
+            LIB_FIELD& valField = symbol->GetValueField();
+
+            if( valField.GetText().IsEmpty() )
+                valField.SetText( name );
 
             if( symbols.size() == 1 )
                 ret[name] = symbol;
@@ -3940,8 +3959,7 @@ void SCH_ALTIUM_PLUGIN::ensureLoadedLibrary( const wxString& aLibraryPath,
 }
 
 
-void SCH_ALTIUM_PLUGIN::ParseLibHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile,
-                                        wxArrayString&              aSymbolNameList )
+void SCH_ALTIUM_PLUGIN::ParseLibHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile, std::vector<int>& aFontSizes )
 {
     const CFB::COMPOUND_FILE_ENTRY* file = aAltiumSchFile.FindStream( { "FileHeader" } );
 
@@ -3965,34 +3983,20 @@ void SCH_ALTIUM_PLUGIN::ParseLibHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFi
     for( auto& [key, value] : properties )
     {
         wxString upperKey = key.Upper();
-        wxString* remaining = nullptr;
+        wxString remaining;
 
-        if( upperKey.StartsWith( "LIBREF" ) )
+        if( upperKey.StartsWith( "SIZE", &remaining ) )
         {
-            aSymbolNameList.Add( value );
-        }
-        else if( upperKey.StartsWith( "SIZE", remaining ) )
-        {
-            if( remaining )
+            if( !remaining.empty() )
             {
-                int ind = wxAtoi( *remaining );
+                int ind = wxAtoi( remaining );
 
-                if( static_cast<int>( m_fonts.size() ) <= ind )
-                    m_fonts.resize( ind + 1 );
+                if( static_cast<int>( aFontSizes.size() ) < ind )
+                    aFontSizes.resize( ind );
 
-                m_fonts[ind].second = wxAtoi( value );
-            }
-        }
-        else if( upperKey.StartsWith( "FONTNAME", remaining ) )
-        {
-            if( remaining )
-            {
-                int ind = wxAtoi( *remaining );
-
-                if( static_cast<int>( m_fonts.size() ) <= ind )
-                    m_fonts.resize( ind + 1 );
-
-                m_fonts[ind].first = value;
+                // Altium stores in pt.  1 pt = 1/72 inch.  1 mil = 1/1000 inch.
+                int scaled = schIUScale.MilsToIU( wxAtoi( value ) * 72.0 / 10.0 );
+                aFontSizes[ind - 1] = scaled;
             }
         }
     }

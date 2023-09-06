@@ -851,6 +851,7 @@ ASCH_DESIGNATOR::ASCH_DESIGNATOR( const std::map<wxString, wxString>& aProps ) :
 
     name = ALTIUM_PARSER::ReadString( aProps, "NAME", "" );
     text = ALTIUM_PARSER::ReadString( aProps, "TEXT", "" );
+    fontId = ALTIUM_PARSER::ReadInt( aProps, "FONTID", 0 );
 
     justification = ReadEnum<ASCH_LABEL_JUSTIFICATION>( aProps, "JUSTIFICATION", 0, 8,
                                                         ASCH_LABEL_JUSTIFICATION::BOTTOM_LEFT );
@@ -916,6 +917,8 @@ ASCH_PARAMETER::ASCH_PARAMETER( const std::map<wxString, wxString>& aProps ) :
     isHidden   = ALTIUM_PARSER::ReadBool( aProps, "ISHIDDEN", false );
     isMirrored = ALTIUM_PARSER::ReadBool( aProps, "ISMIRRORED", false );
     isShowName = ALTIUM_PARSER::ReadBool( aProps, "SHOWNAME", false );
+
+    fontId = ALTIUM_PARSER::ReadInt( aProps, "FONTID", 0 );
 }
 
 
