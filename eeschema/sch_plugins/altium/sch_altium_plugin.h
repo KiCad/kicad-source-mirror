@@ -131,12 +131,12 @@ private:
     bool IsComponentPartVisible( int aOwnerindex, int aOwnerpartdisplaymode ) const;
     const ASCH_STORAGE_FILE* GetFileFromStorage( const wxString& aFilename ) const;
     void AddTextBox( const ASCH_TEXT_FRAME* aElem );
-    void AddLibTextBox( const ASCH_TEXT_FRAME* aElem, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym, std::vector<int>& aSymbolIndex = nullint );
+    void AddLibTextBox( const ASCH_TEXT_FRAME* aElem, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym, std::vector<int>& aFontSize = nullint );
 
     void ParseComponent( int aIndex, const std::map<wxString, wxString>& aProperties );
     void ParsePin( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
-    void ParseLabel( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym, std::vector<int>& aSymbolIndex = nullint );
-    void ParseTextFrame( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym, std::vector<int>& aSymbolIndex = nullint );
+    void ParseLabel( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym, std::vector<int>& aFontSize = nullint );
+    void ParseTextFrame( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym, std::vector<int>& aFontSize = nullint );
     void ParseNote( const std::map<wxString, wxString>& aProperties );
     void ParseBezier( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
     void ParsePolyline( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
@@ -167,9 +167,11 @@ private:
     void ParseSheet( const std::map<wxString, wxString>& aProperties );
     void ParseSheetName( const std::map<wxString, wxString>& aProperties );
     void ParseFileName( const std::map<wxString, wxString>& aProperties );
-    void ParseDesignator( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym, std::vector<int>& aSymbolIndex = nullint );
+    void ParseDesignator( const std::map<wxString, wxString>& aProperties );
+    void ParseLibDesignator( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym, std::vector<int>& aFontSize = nullint );
     void ParseBusEntry( const std::map<wxString, wxString>& aProperties );
-    void ParseParameter( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym, std::vector<int>& aSymbolIndex = nullint );
+    void ParseParameter( const std::map<wxString, wxString>& aProperties );
+    void ParseLibParameter( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym, std::vector<int>& aFontSize = nullint );
     void ParseImplementationList( int aIndex, const std::map<wxString, wxString>& aProperties );
     void ParseImplementation( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym );
 

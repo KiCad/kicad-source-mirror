@@ -3415,37 +3415,9 @@ void SCH_ALTIUM_PLUGIN::ParseFileName( const std::map<wxString, wxString>& aProp
 }
 
 
-void SCH_ALTIUM_PLUGIN::ParseDesignator( const std::map<wxString, wxString>& aProperties,
-                                         std::vector<LIB_SYMBOL*>&           aSymbol,
-                                         std::vector<int>&                   aFontSizes )
+void SCH_ALTIUM_PLUGIN::ParseDesignator( const std::map<wxString, wxString>& aProperties )
 {
     ASCH_DESIGNATOR elem( aProperties );
-
-    if( !aSymbol.empty() )
-    {
-        wxCHECK_RET( static_cast<int>( aSymbol.size() ) > elem.ownerpartdisplaymode, wxT( "Invalid ownerpartdisplaymode" ) );
-
-        LIB_SYMBOL* symbol = aSymbol[elem.ownerpartdisplaymode];
-
-        bool emptyRef = elem.text.IsEmpty();
-        LIB_FIELD& refField = symbol->GetReferenceField();
-
-        if( emptyRef )
-            refField.SetText( wxT( "X" ) );
-        else
-            refField.SetText( elem.text.BeforeLast( '?' ) ); // remove the '?' at the end for KiCad-style
-
-        refField.SetPosition( GetLibEditPosition( elem.location ) );
-
-        if( elem.fontId > 0 && elem.fontId <= static_cast<int>( aFontSizes.size() ) )
-        {
-            int size = aFontSizes[elem.fontId - 1];
-            refField.SetTextSize( { size, size } );
-        }
-
-        return;
-    }
-
 
     const auto& libSymbolIt = m_libSymbols.find( elem.ownerindex );
 
@@ -3482,6 +3454,34 @@ void SCH_ALTIUM_PLUGIN::ParseDesignator( const std::map<wxString, wxString>& aPr
 }
 
 
+void SCH_ALTIUM_PLUGIN::ParseLibDesignator( const std::map<wxString, wxString>& aProperties,
+                                            std::vector<LIB_SYMBOL*>&           aSymbol,
+                                            std::vector<int>&                   aFontSizes )
+{
+    ASCH_DESIGNATOR elem( aProperties );
+
+    // Designators are shared by everyone
+    for( LIB_SYMBOL* symbol : aSymbol )
+    {
+        bool emptyRef = elem.text.IsEmpty();
+        LIB_FIELD& refField = symbol->GetReferenceField();
+
+        if( emptyRef )
+            refField.SetText( wxT( "X" ) );
+        else
+            refField.SetText( elem.text.BeforeLast( '?' ) ); // remove the '?' at the end for KiCad-style
+
+        refField.SetPosition( GetLibEditPosition( elem.location ) );
+
+        if( elem.fontId > 0 && elem.fontId <= static_cast<int>( aFontSizes.size() ) )
+        {
+            int size = aFontSizes[elem.fontId - 1];
+            refField.SetTextSize( { size, size } );
+        }
+    }
+}
+
+
 void SCH_ALTIUM_PLUGIN::ParseBusEntry( const std::map<wxString, wxString>& aProperties )
 {
     ASCH_BUS_ENTRY elem( aProperties );
@@ -3499,9 +3499,7 @@ void SCH_ALTIUM_PLUGIN::ParseBusEntry( const std::map<wxString, wxString>& aProp
 }
 
 
-void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aProperties,
-                                        std::vector<LIB_SYMBOL*>&           aSymbol,
-                                        std::vector<int>&                   aFontSizes )
+void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aProperties )
 {
     ASCH_PARAMETER elem( aProperties );
 
@@ -3511,7 +3509,7 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
         { "VALUE",   "ALTIUM_VALUE" },
     };
 
-    if( aSymbol.empty() && elem.ownerindex <= 0 && elem.ownerpartid == ALTIUM_COMPONENT_NONE )
+    if( elem.ownerindex <= 0 && elem.ownerpartid == ALTIUM_COMPONENT_NONE )
     {
         // This is some sheet parameter
         if( elem.text == "*" )
@@ -3546,44 +3544,28 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
     }
     else
     {
-        wxCHECK_RET( static_cast<int>( aSymbol.size() ) > elem.ownerpartdisplaymode, wxT( "Invalid ownerpartdisplaymode" ) );
+        const auto& libSymbolIt = m_libSymbols.find( elem.ownerindex );
 
-        LIB_SYMBOL* libSymbol = aSymbol[elem.ownerpartdisplaymode];
-        SCH_SYMBOL* symbol = nullptr;
-
-        if( !symbol )
+        if( libSymbolIt == m_libSymbols.end() )
         {
-            const auto& libSymbolIt = m_libSymbols.find( elem.ownerindex );
-
-            if( libSymbolIt == m_libSymbols.end() )
-            {
-                // TODO: e.g. can depend on Template (RECORD=39
-                return;
-            }
-
-            libSymbol = libSymbolIt->second;
-            symbol = m_symbols.at( libSymbolIt->first );
+            // TODO: e.g. can depend on Template (RECORD=39
+            return;
         }
 
-        EDA_TEXT*   field = nullptr;
+        SCH_SYMBOL* symbol = m_symbols.at( libSymbolIt->first );
+        SCH_FIELD*  field = nullptr;
         wxString    upperName = elem.name.Upper();
 
         if( upperName == "COMMENT" )
         {
-            if( !symbol )
-                field = &libSymbol->GetValueField();
-            else
-                field = symbol->GetField( VALUE_FIELD );
+            field = symbol->GetField( VALUE_FIELD );
         }
         else
         {
             int      fieldIdx = 0;
             wxString fieldName = elem.name.Upper();
 
-            if( !symbol )
-                fieldIdx = libSymbol->GetFieldCount();
-            else
-                fieldIdx = symbol->GetFieldCount();
+            fieldIdx = symbol->GetFieldCount();
 
             if( fieldName.IsEmpty() )
             {
@@ -3593,16 +3575,9 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
                 {
                     fieldName = wxString::Format( "ALTIUM_UNNAMED_%d", disambiguate++ );
 
-                    if( symbol )
-                    {
-                        if( !symbol->FindField( fieldName ) )
-                            break;
-                    }
-                    else
-                    {
-                        if( !libSymbol->FindField( fieldName ) )
-                            break;
-                    }
+                    if( !symbol->FindField( fieldName ) )
+                        break;
+
                 }
             }
             else if( fieldName == "VALUE" )
@@ -3610,31 +3585,73 @@ void SCH_ALTIUM_PLUGIN::ParseParameter( const std::map<wxString, wxString>& aPro
                 fieldName = "ALTIUM_VALUE";
             }
 
-            if( !symbol )
+            field = symbol->AddField( SCH_FIELD( VECTOR2I(), fieldIdx, symbol, fieldName ) );
+        }
+
+        wxString kicadText = AltiumSpecialStringsToKiCadVariables( elem.text, variableMap );
+        field->SetText( kicadText );
+        field->SetPosition( elem.location + m_sheetOffset );
+        field->SetVisible( !elem.isHidden );
+        SetTextPositioning( field, elem.justification, elem.orientation );
+    }
+}
+
+
+void SCH_ALTIUM_PLUGIN::ParseLibParameter( const std::map<wxString, wxString>& aProperties,
+                                           std::vector<LIB_SYMBOL*>&           aSymbol,
+                                           std::vector<int>&                   aFontSizes )
+{
+    ASCH_PARAMETER elem( aProperties );
+
+    // TODO: fill in replacements from variant, sheet and project
+    // N.B. We do not keep the Altium "VALUE" variable here because
+    // we don't have a way to assign variables to specific symbols
+    std::map<wxString, wxString> variableMap = {
+        { "COMMENT", "VALUE" },
+    };
+
+    for( LIB_SYMBOL* libSymbol : aSymbol )
+    {
+        LIB_FIELD*  field = nullptr;
+        wxString    upperName = elem.name.Upper();
+
+        if( upperName == "COMMENT" )
+        {
+            field = &libSymbol->GetValueField();
+        }
+        else
+        {
+            int      fieldIdx = libSymbol->GetFieldCount();
+            wxString fieldName = elem.name.Upper();
+
+            if( fieldName.IsEmpty() )
             {
-                LIB_FIELD* new_field = new LIB_FIELD( fieldIdx, fieldName );
-                libSymbol->AddField( new_field );
-                field = new_field;
+                int disambiguate = 1;
+
+                while( 1 )
+                {
+                    fieldName = wxString::Format( "ALTIUM_UNNAMED_%d", disambiguate++ );
+
+                    if( !libSymbol->FindField( fieldName ) )
+                        break;
+                }
             }
-            else
+            else if( fieldName == "VALUE" )
             {
-                field = symbol->AddField( SCH_FIELD( VECTOR2I(), fieldIdx, symbol, fieldName ) );
+                fieldName = "ALTIUM_VALUE";
             }
+
+            LIB_FIELD* new_field = new LIB_FIELD( fieldIdx, fieldName );
+            libSymbol->AddField( new_field );
+            field = new_field;
         }
 
         wxString kicadText = AltiumSpecialStringsToKiCadVariables( elem.text, variableMap );
         field->SetText( kicadText );
 
-        if( !symbol )
-        {
-            field->SetTextPos( elem.location );
-            SetTextPositioning( field, elem.justification, elem.orientation );
-        }
-        else
-        {
-            static_cast<SCH_FIELD*>( field )->SetPosition( elem.location + m_sheetOffset );
-        }
 
+        field->SetTextPos( GetLibEditPosition( elem.location ) );
+        SetTextPositioning( field, elem.justification, elem.orientation );
         field->SetVisible( !elem.isHidden );
         SetTextPositioning( field, elem.justification, elem.orientation );
 
@@ -3856,9 +3873,9 @@ std::map<wxString,LIB_SYMBOL*> SCH_ALTIUM_PLUGIN::ParseLibFile( const ALTIUM_COM
 
             case ALTIUM_SCH_RECORD::RECTANGLE: ParseRectangle( properties, symbols ); break;
 
-            case ALTIUM_SCH_RECORD::DESIGNATOR: ParseDesignator( properties, symbols, fontSizes ); break;
+            case ALTIUM_SCH_RECORD::DESIGNATOR: ParseLibDesignator( properties, symbols, fontSizes ); break;
 
-            case ALTIUM_SCH_RECORD::PARAMETER: ParseParameter( properties, symbols, fontSizes ); break;
+            case ALTIUM_SCH_RECORD::PARAMETER: ParseLibParameter( properties, symbols, fontSizes ); break;
 
             case ALTIUM_SCH_RECORD::TEXT_FRAME: ParseTextFrame( properties, symbols, fontSizes ); break;
 
