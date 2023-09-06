@@ -39,9 +39,8 @@
 using namespace std::placeholders;
 
 
-SIM_LIB_MGR::SIM_LIB_MGR( const PROJECT* aPrj, REPORTER* aReporter ) :
+SIM_LIB_MGR::SIM_LIB_MGR( const PROJECT* aPrj ) :
         m_project( aPrj ),
-        m_reporter( aReporter ),
         m_forceFullParse( false )
 {
 }
@@ -128,7 +127,7 @@ wxString SIM_LIB_MGR::ResolveEmbeddedLibraryPath( const wxString& aLibPath,
 }
 
 
-void SIM_LIB_MGR::SetLibrary( const wxString& aLibraryPath )
+void SIM_LIB_MGR::SetLibrary( const wxString& aLibraryPath, REPORTER& aReporter )
 {
     try
     {
@@ -138,29 +137,30 @@ void SIM_LIB_MGR::SetLibrary( const wxString& aLibraryPath )
                 std::bind( &SIM_LIB_MGR::ResolveEmbeddedLibraryPath, this, _1, _2 );
 
         std::unique_ptr<SIM_LIBRARY> library = SIM_LIBRARY::Create( path, m_forceFullParse,
-                                                                    m_reporter, &f2 );
+                                                                    aReporter, &f2 );
 
         Clear();
         m_libraries[path] = std::move( library );
     }
     catch( const IO_ERROR& e )
     {
-        m_reporter->Report( e.What() );
+        aReporter.Report( e.What() );
     }
 }
 
 
-SIM_MODEL& SIM_LIB_MGR::CreateModel( SIM_MODEL::TYPE aType, const std::vector<LIB_PIN*>& aPins )
+SIM_MODEL& SIM_LIB_MGR::CreateModel( SIM_MODEL::TYPE aType, const std::vector<LIB_PIN*>& aPins,
+                                     REPORTER& aReporter )
 {
-    m_models.push_back( SIM_MODEL::Create( aType, aPins, m_reporter ) );
+    m_models.push_back( SIM_MODEL::Create( aType, aPins, aReporter ) );
     return *m_models.back();
 }
 
 
 SIM_MODEL& SIM_LIB_MGR::CreateModel( const SIM_MODEL* aBaseModel,
-                                     const std::vector<LIB_PIN*>& aPins )
+                                     const std::vector<LIB_PIN*>& aPins, REPORTER& aReporter )
 {
-    m_models.push_back( SIM_MODEL::Create( aBaseModel, aPins, m_reporter ) );
+    m_models.push_back( SIM_MODEL::Create( aBaseModel, aPins, aReporter ) );
     return *m_models.back();
 }
 
@@ -168,21 +168,24 @@ SIM_MODEL& SIM_LIB_MGR::CreateModel( const SIM_MODEL* aBaseModel,
 template <typename T>
 SIM_MODEL& SIM_LIB_MGR::CreateModel( const SIM_MODEL* aBaseModel,
                                      const std::vector<LIB_PIN*>& aPins,
-                                     const std::vector<T>& aFields )
+                                     const std::vector<T>& aFields, REPORTER& aReporter )
 {
-    m_models.push_back( SIM_MODEL::Create( aBaseModel, aPins, aFields, m_reporter ) );
+    m_models.push_back( SIM_MODEL::Create( aBaseModel, aPins, aFields, aReporter ) );
     return *m_models.back();
 }
 
 template SIM_MODEL& SIM_LIB_MGR::CreateModel( const SIM_MODEL* aBaseModel,
                                               const std::vector<LIB_PIN*>& aPins,
-                                              const std::vector<SCH_FIELD>& aFields );
+                                              const std::vector<SCH_FIELD>& aFields,
+                                              REPORTER& aReporter );
 template SIM_MODEL& SIM_LIB_MGR::CreateModel( const SIM_MODEL* aBaseModel,
                                               const std::vector<LIB_PIN*>& aPins,
-                                              const std::vector<LIB_FIELD>& aFields );
+                                              const std::vector<LIB_FIELD>& aFields,
+                                              REPORTER& aReporter );
 
 
-SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, SCH_SYMBOL& aSymbol )
+SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, SCH_SYMBOL& aSymbol,
+                                             REPORTER& aReporter )
 {
     // Note: currently this creates a resolved model (all Kicad variables references are resolved
     // before building the model).
@@ -239,7 +242,7 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, S
                    return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), true ) < 0;
                } );
 
-    SIM_LIBRARY::MODEL model = CreateModel( fields, sourcePins, true );
+    SIM_LIBRARY::MODEL model = CreateModel( fields, sourcePins, true, aReporter );
 
     model.model.SetIsStoredInValue( storeInValue );
 
@@ -249,35 +252,37 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, S
 
 template <typename T>
 SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const std::vector<T>& aFields,
-                                             const std::vector<LIB_PIN*>& aPins, bool aResolved )
+                                             const std::vector<LIB_PIN*>& aPins, bool aResolved,
+                                             REPORTER& aReporter )
 {
     std::string libraryPath = SIM_MODEL::GetFieldValue( &aFields, SIM_LIBRARY::LIBRARY_FIELD );
     std::string baseModelName = SIM_MODEL::GetFieldValue( &aFields, SIM_LIBRARY::NAME_FIELD );
 
     if( libraryPath != "" )
     {
-        return CreateModel( libraryPath, baseModelName, aFields, aPins );
+        return CreateModel( libraryPath, baseModelName, aFields, aPins, aReporter );
     }
     else
     {
-        m_models.push_back( SIM_MODEL::Create( aFields, aPins, aResolved, m_reporter ) );
+        m_models.push_back( SIM_MODEL::Create( aFields, aPins, aResolved, aReporter ) );
         return { baseModelName, *m_models.back() };
     }
 }
 
 template SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const std::vector<SCH_FIELD>& aFields,
                                                       const std::vector<LIB_PIN*>& aPins,
-                                                      bool aResolved );
+                                                      bool aResolved, REPORTER& aReporter );
 template SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const std::vector<LIB_FIELD>& aFields,
                                                       const std::vector<LIB_PIN*>& aPins,
-                                                      bool aResolved );
+                                                      bool aResolved, REPORTER& aReporter );
 
 
 template <typename T>
 SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const wxString& aLibraryPath,
                                              const std::string& aBaseModelName,
                                              const std::vector<T>& aFields,
-                                             const std::vector<LIB_PIN*>& aPins )
+                                             const std::vector<LIB_PIN*>& aPins,
+                                             REPORTER& aReporter )
 {
     wxString     path;
     wxString     msg;
@@ -297,32 +302,26 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const wxString& aLibraryPath,
                     std::bind( &SIM_LIB_MGR::ResolveEmbeddedLibraryPath, this, _1, _2 );
 
             it = m_libraries.emplace( path, SIM_LIBRARY::Create( path, m_forceFullParse,
-                                                                 m_reporter, &f2 ) ).first;
+                                                                 aReporter, &f2 ) ).first;
         }
 
         library = &*it->second;
     }
     catch( const IO_ERROR& e )
     {
-        if( m_reporter )
-        {
-            msg.Printf( _( "Error loading simulation model library '%s': %s" ),
-                        path,
-                        e.What() );
+        msg.Printf( _( "Error loading simulation model library '%s': %s" ),
+                    path,
+                    e.What() );
 
-            m_reporter->Report( msg, RPT_SEVERITY_ERROR );
-        }
+        aReporter.Report( msg, RPT_SEVERITY_ERROR );
     }
 
     if( aBaseModelName == "" )
     {
-        if( m_reporter )
-        {
-            msg.Printf( _( "Error loading simulation model: no '%s' field" ),
-                        SIM_LIBRARY::NAME_FIELD );
+        msg.Printf( _( "Error loading simulation model: no '%s' field" ),
+                    SIM_LIBRARY::NAME_FIELD );
 
-            m_reporter->Report( msg, RPT_SEVERITY_ERROR );
-        }
+        aReporter.Report( msg, RPT_SEVERITY_ERROR );
 
         modelName = _( "unknown" ).ToStdString();
     }
@@ -333,19 +332,16 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const wxString& aLibraryPath,
 
         if( !baseModel )
         {
-            if( m_reporter )
-            {
-                msg.Printf( _( "Error loading simulation model: could not find base model '%s' "
-                               "in library '%s'" ),
-                            aBaseModelName,
-                            path );
+            msg.Printf( _( "Error loading simulation model: could not find base model '%s' "
+                           "in library '%s'" ),
+                        aBaseModelName,
+                        path );
 
-                m_reporter->Report( msg, RPT_SEVERITY_ERROR );
-            }
+            aReporter.Report( msg, RPT_SEVERITY_ERROR );
         }
     }
 
-    m_models.push_back( SIM_MODEL::Create( baseModel, aPins, aFields, m_reporter ) );
+    m_models.push_back( SIM_MODEL::Create( baseModel, aPins, aFields, aReporter ) );
 
     return { modelName, *m_models.back() };
 }

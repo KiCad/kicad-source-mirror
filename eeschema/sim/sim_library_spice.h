@@ -37,7 +37,7 @@ public:
     SIM_LIBRARY_SPICE( bool aForceFullParse );
 
     // @copydoc SIM_LIBRARY::ReadFile()
-    void ReadFile( const wxString& aFilePath, REPORTER* aReporter ) override;
+    void ReadFile( const wxString& aFilePath, REPORTER& aReporter ) override;
 
 private:
     std::unique_ptr<SPICE_LIBRARY_PARSER> m_spiceLibraryParser;

@@ -33,7 +33,7 @@ SIM_LIBRARY_SPICE::SIM_LIBRARY_SPICE( bool aForceFullParse ) :
 }
 
 
-void SIM_LIBRARY_SPICE::ReadFile( const wxString& aFilePath, REPORTER* aReporter )
+void SIM_LIBRARY_SPICE::ReadFile( const wxString& aFilePath, REPORTER& aReporter )
 {
     SIM_LIBRARY::ReadFile( aFilePath, aReporter );
     m_spiceLibraryParser->ReadFile( aFilePath, aReporter );

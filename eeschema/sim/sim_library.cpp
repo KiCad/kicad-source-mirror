@@ -30,7 +30,7 @@
 
 
 std::unique_ptr<SIM_LIBRARY>
-SIM_LIBRARY::Create( const wxString& aFilePath, bool aForceFullParse, REPORTER* aReporter,
+SIM_LIBRARY::Create( const wxString& aFilePath, bool aForceFullParse, REPORTER& aReporter,
                      std::function<wxString( const wxString&, const wxString& )>* aResolver )
 {
     std::unique_ptr<SIM_LIBRARY> library;
@@ -40,7 +40,6 @@ SIM_LIBRARY::Create( const wxString& aFilePath, bool aForceFullParse, REPORTER* 
     else
         library = std::make_unique<SIM_LIBRARY_SPICE>( aForceFullParse );
 
-    library->m_reporter = aReporter;
     library->m_pathResolver = aResolver;
     library->ReadFile( aFilePath, aReporter );
 
@@ -48,7 +47,7 @@ SIM_LIBRARY::Create( const wxString& aFilePath, bool aForceFullParse, REPORTER* 
 }
 
 
-void SIM_LIBRARY::ReadFile( const wxString& aFilePath, REPORTER* aReporter )
+void SIM_LIBRARY::ReadFile( const wxString& aFilePath, REPORTER& aReporter )
 {
     m_filePath = aFilePath;
 }

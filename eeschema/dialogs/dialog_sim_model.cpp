@@ -203,11 +203,10 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
         if( !loadLibrary( libraryFilename ) )
         {
             m_libraryPathText->ChangeValue( libraryFilename );
-            m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields, &reporter );
+            m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields, reporter );
 
             // load library will mangle the set reporter
-            m_libraryModelsMgr.SetReporter( &reporter );
-            m_libraryModelsMgr.CreateModel( nullptr, m_sortedPartPins, m_fields );
+            m_libraryModelsMgr.CreateModel( nullptr, m_sortedPartPins, m_fields, reporter );
 
             m_modelNameChoice->Append( _( "<unknown>" ) );
             m_modelNameChoice->SetSelection( 0 );
@@ -285,20 +284,18 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
         m_rbBuiltinModel->SetValue( true );
 
         msg.clear();
-        m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields, &reporter );
+        m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields, reporter );
 
         if( reporter.HasMessage() )
             DisplayErrorMessage( this, msg );
     }
-
-    m_builtinModelsMgr.SetReporter( &reporter );
 
     for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
     {
         if( m_rbBuiltinModel->GetValue() && type == m_curModelType )
         {
             msg.clear();
-            m_builtinModelsMgr.CreateModel( m_fields, m_sortedPartPins, false );
+            m_builtinModelsMgr.CreateModel( m_fields, m_sortedPartPins, false, reporter );
 
             if( reporter.HasMessage() )
             {
@@ -308,7 +305,7 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
         }
         else
         {
-            m_builtinModelsMgr.CreateModel( type, m_sortedPartPins );
+            m_builtinModelsMgr.CreateModel( type, m_sortedPartPins, reporter );
         }
 
         SIM_MODEL::DEVICE_T deviceTypeT = SIM_MODEL::TypeInfo( type ).deviceType;
@@ -723,9 +720,8 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::loadLibrary( const wxString& aLibraryP
     wxString           msg;
     WX_STRING_REPORTER reporter( &msg );
 
-    m_libraryModelsMgr.SetReporter( &reporter );
     m_libraryModelsMgr.SetForceFullParse();
-    m_libraryModelsMgr.SetLibrary( aLibraryPath );
+    m_libraryModelsMgr.SetLibrary( aLibraryPath, reporter );
 
     if( reporter.HasMessage() )
     {
@@ -738,9 +734,9 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::loadLibrary( const wxString& aLibraryP
     for( const auto& [baseModelName, baseModel] : library()->GetModels() )
     {
         if( baseModelName == modelName )
-            m_libraryModelsMgr.CreateModel( &baseModel, m_sortedPartPins, m_fields );
+            m_libraryModelsMgr.CreateModel( &baseModel, m_sortedPartPins, m_fields, reporter );
         else
-            m_libraryModelsMgr.CreateModel( &baseModel, m_sortedPartPins );
+            m_libraryModelsMgr.CreateModel( &baseModel, m_sortedPartPins, reporter );
     }
 
     if( reporter.HasMessage() )

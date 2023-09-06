@@ -146,7 +146,8 @@ protected:
 private:
     void readRefName( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem,
                       std::set<std::string>& aRefNames );
-    void readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem );
+    void readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem,
+                    REPORTER& aReporter );
     void readPinNumbers( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem,
                          const std::vector<PIN_INFO>& aPins );
     void readPinNetNames( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem,

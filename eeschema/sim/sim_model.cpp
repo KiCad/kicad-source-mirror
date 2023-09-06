@@ -373,12 +373,12 @@ SIM_MODEL::SPICE_INFO SIM_MODEL::SpiceInfo( TYPE aType )
 
 
 template TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<SCH_FIELD>& aFields,
-                                             REPORTER* aReporter );
+                                             REPORTER& aReporter );
 template TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<LIB_FIELD>& aFields,
-                                             REPORTER* aReporter );
+                                             REPORTER& aReporter );
 
 template <typename T>
-TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<T>& aFields, REPORTER* aReporter )
+TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<T>& aFields, REPORTER& aReporter )
 {
     std::string deviceTypeFieldValue = GetFieldValue( &aFields, SIM_DEVICE_TYPE_FIELD );
     std::string typeFieldValue = GetFieldValue( &aFields, SIM_TYPE_FIELD );
@@ -398,20 +398,17 @@ TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<T>& aFields, REPORTER* aRe
     if( typeFieldValue != "" )
         return TYPE::NONE;
 
-    if( aReporter )
+    if( aFields.size() > REFERENCE_FIELD )
     {
-        if( aFields.size() > REFERENCE_FIELD )
-        {
-            aReporter->Report( wxString::Format( _( "No simulation model definition found for "
-                                                    "symbol '%s'." ),
-                               aFields[REFERENCE_FIELD].GetText() ),
-                               RPT_SEVERITY_ERROR );
-        }
-        else
-        {
-            aReporter->Report( _( "No simulation model definition found." ),
-                               RPT_SEVERITY_ERROR );
-        }
+        aReporter.Report( wxString::Format( _( "No simulation model definition found for "
+                                               "symbol '%s'." ),
+                          aFields[REFERENCE_FIELD].GetText() ),
+                          RPT_SEVERITY_ERROR );
+    }
+    else
+    {
+        aReporter.Report( _( "No simulation model definition found." ),
+                          RPT_SEVERITY_ERROR );
     }
 
     return TYPE::NONE;
@@ -449,7 +446,7 @@ void SIM_MODEL::WriteFields( std::vector<LIB_FIELD>& aFields ) const
 
 
 std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, const std::vector<LIB_PIN*>& aPins,
-                                              REPORTER* aReporter )
+                                              REPORTER& aReporter )
 {
     std::unique_ptr<SIM_MODEL> model = Create( aType );
 
@@ -469,7 +466,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, const std::vector<LIB_
 
 std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
                                               const std::vector<LIB_PIN*>& aPins,
-                                              REPORTER* aReporter )
+                                              REPORTER& aReporter )
 {
     std::unique_ptr<SIM_MODEL> model;
 
@@ -508,17 +505,18 @@ template <typename T>
 std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
                                               const std::vector<LIB_PIN*>& aPins,
                                               const std::vector<T>& aFields,
-                                              REPORTER* aReporter )
+                                              REPORTER& aReporter )
 {
     std::unique_ptr<SIM_MODEL> model;
 
     if( aBaseModel )
     {
-        TYPE type = aBaseModel->GetType();
+        NULL_REPORTER devnull;
+        TYPE          type = aBaseModel->GetType();
 
         // No REPORTER here; we're just checking to see if we have an override
-        if( ReadTypeFromFields( aFields, nullptr ) != TYPE::NONE )
-            type = ReadTypeFromFields( aFields, nullptr );
+        if( ReadTypeFromFields( aFields, devnull ) != TYPE::NONE )
+            type = ReadTypeFromFields( aFields, devnull );
 
         if( dynamic_cast<const SIM_MODEL_SPICE_FALLBACK*>( aBaseModel ) )
             model = std::make_unique<SIM_MODEL_SPICE_FALLBACK>( type );
@@ -541,14 +539,11 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
     }
     catch( IO_ERROR& err )
     {
-        if( aReporter )
-        {
-            aReporter->Report( wxString::Format( _( "Error reading simulation model from "
-                                                    "symbol '%s':\n%s" ),
-                                                 aFields[REFERENCE_FIELD].GetText(),
-                                                 err.Problem() ),
-                               RPT_SEVERITY_ERROR );
-        }
+        aReporter.Report( wxString::Format( _( "Error reading simulation model from "
+                                               "symbol '%s':\n%s" ),
+                                            aFields[REFERENCE_FIELD].GetText(),
+                                            err.Problem() ),
+                          RPT_SEVERITY_ERROR );
     }
 
     return model;
@@ -557,18 +552,18 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
 template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
                                                        const std::vector<LIB_PIN*>& aPins,
                                                        const std::vector<SCH_FIELD>& aFields,
-                                                       REPORTER* aReporter );
+                                                       REPORTER& aReporter );
 
 template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
                                                        const std::vector<LIB_PIN*>& aPins,
                                                        const std::vector<LIB_FIELD>& aFields,
-                                                       REPORTER* aReporter );
+                                                       REPORTER& aReporter );
 
 
 template <typename T>
 std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<T>& aFields,
                                               const std::vector<LIB_PIN*>& aPins,
-                                              bool aResolved, REPORTER* aReporter )
+                                              bool aResolved, REPORTER& aReporter )
 {
     TYPE type = ReadTypeFromFields( aFields, aReporter );
     std::unique_ptr<SIM_MODEL> model = SIM_MODEL::Create( type );
@@ -581,7 +576,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<T>& aFields,
     {
         if( !aResolved )
         {
-            aReporter->Report( parse_err.What(), RPT_SEVERITY_ERROR );
+            aReporter.Report( parse_err.What(), RPT_SEVERITY_ERROR );
             return model;
         }
 
@@ -603,14 +598,11 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<T>& aFields,
         catch( const IO_ERROR& err )
         {
             // We own the pin syntax, so if we can't parse it then there's an error.
-            if( aReporter )
-            {
-                aReporter->Report( wxString::Format( _( "Error reading simulation model from "
-                                                        "symbol '%s':\n%s" ),
-                                                     aFields[REFERENCE_FIELD].GetText(),
-                                                     err.Problem() ),
-                                   RPT_SEVERITY_ERROR );
-            }
+            aReporter.Report( wxString::Format( _( "Error reading simulation model from "
+                                                   "symbol '%s':\n%s" ),
+                                                aFields[REFERENCE_FIELD].GetText(),
+                                                err.Problem() ),
+                              RPT_SEVERITY_ERROR );
         }
     }
 
@@ -619,10 +611,10 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<T>& aFields,
 
 template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<SCH_FIELD>& aFields,
                                                        const std::vector<LIB_PIN*>& aPins,
-                                                       bool aResolved, REPORTER* aReporter  );
+                                                       bool aResolved, REPORTER& aReporter  );
 template std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<LIB_FIELD>& aFields,
                                                        const std::vector<LIB_PIN*>& aPins,
-                                                       bool aResolved, REPORTER* aReporter );
+                                                       bool aResolved, REPORTER& aReporter );
 
 
 template <typename T>
@@ -1729,7 +1721,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
     {
         wxString             msg;
         WX_STRING_REPORTER   reporter( &msg );
-        SIM_LIB_MGR          libMgr( aProject, &reporter );
+        SIM_LIB_MGR          libMgr( aProject );
         std::vector<T_field> emptyFields;
 
         // Pull out any following parameters from model name
@@ -1737,7 +1729,7 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
         spiceModelInfo.m_Text = spiceModel;
 
         SIM_LIBRARY::MODEL model = libMgr.CreateModel( spiceLib, spiceModel.ToStdString(),
-                                                       emptyFields, sourcePins );
+                                                       emptyFields, sourcePins, reporter );
 
         if( reporter.HasMessage() )
             libraryModel = false;    // Fall back to raw spice model

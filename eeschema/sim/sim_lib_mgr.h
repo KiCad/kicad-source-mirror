@@ -40,36 +40,39 @@ class SCH_SYMBOL;
 class SIM_LIB_MGR
 {
 public:
-    SIM_LIB_MGR( const PROJECT* aPrj, REPORTER* aReporter = nullptr );
+    SIM_LIB_MGR( const PROJECT* aPrj );
     virtual ~SIM_LIB_MGR() = default;
 
-    void SetReporter( REPORTER* aReporter ) { m_reporter = aReporter; }
     void SetForceFullParse() { m_forceFullParse = true; }
 
     void Clear();
 
-    void SetLibrary( const wxString& aLibraryPath );
+    void SetLibrary( const wxString& aLibraryPath, REPORTER& aReporter );
 
-    SIM_MODEL& CreateModel( SIM_MODEL::TYPE aType, const std::vector<LIB_PIN*>& aPins );
+    SIM_MODEL& CreateModel( SIM_MODEL::TYPE aType, const std::vector<LIB_PIN*>& aPins,
+                            REPORTER& aReporter );
 
-    SIM_MODEL& CreateModel( const SIM_MODEL* aBaseModel, const std::vector<LIB_PIN*>& aPins );
+    SIM_MODEL& CreateModel( const SIM_MODEL* aBaseModel, const std::vector<LIB_PIN*>& aPins,
+                            REPORTER& aReporter );
 
     template <typename T>
     SIM_MODEL& CreateModel( const SIM_MODEL* aBaseModel, const std::vector<LIB_PIN*>& aPins,
-                            const std::vector<T>& aFields );
+                            const std::vector<T>& aFields, REPORTER& aReporter );
 
     // TODO: The argument can be made const.
-    SIM_LIBRARY::MODEL CreateModel( const SCH_SHEET_PATH* aSheetPath, SCH_SYMBOL& aSymbol );
+    SIM_LIBRARY::MODEL CreateModel( const SCH_SHEET_PATH* aSheetPath, SCH_SYMBOL& aSymbol,
+                                    REPORTER& aReporter );
 
     template <typename T>
     SIM_LIBRARY::MODEL CreateModel( const std::vector<T>& aFields,
-                                    const std::vector<LIB_PIN*>& aPins, bool aResolved );
+                                    const std::vector<LIB_PIN*>& aPins, bool aResolved,
+                                    REPORTER& aReporter );
 
     template <typename T>
     SIM_LIBRARY::MODEL CreateModel( const wxString& aLibraryPath,
                                     const std::string& aBaseModelName,
                                     const std::vector<T>& aFields,
-                                    const std::vector<LIB_PIN*>& aPins );
+                                    const std::vector<LIB_PIN*>& aPins, REPORTER& aReporter );
 
     void SetModel( int aIndex, std::unique_ptr<SIM_MODEL> aModel );
 
@@ -81,7 +84,6 @@ public:
 
 private:
     const PROJECT*                                   m_project;
-    REPORTER*                                        m_reporter;
     bool                                             m_forceFullParse;
     std::map<wxString, std::unique_ptr<SIM_LIBRARY>> m_libraries;
     std::vector<std::unique_ptr<SIM_MODEL>>          m_models;

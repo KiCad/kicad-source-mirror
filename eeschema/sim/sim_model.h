@@ -408,25 +408,25 @@ public:
 
 
     template <typename T>
-    static TYPE ReadTypeFromFields( const std::vector<T>& aFields, REPORTER* aReporter );
+    static TYPE ReadTypeFromFields( const std::vector<T>& aFields, REPORTER& aReporter );
 
     static std::unique_ptr<SIM_MODEL> Create( TYPE aType, const std::vector<LIB_PIN*>& aPins,
-                                              REPORTER* aReporter );
+                                              REPORTER& aReporter );
 
     static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL* aBaseModel,
                                               const std::vector<LIB_PIN*>& aPins,
-                                              REPORTER* aReporter );
+                                              REPORTER& aReporter );
 
     template <typename T>
     static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL* aBaseModel,
                                               const std::vector<LIB_PIN*>& aPins,
                                               const std::vector<T>& aFields,
-                                              REPORTER* aReporter );
+                                              REPORTER& aReporter );
 
     template <typename T>
     static std::unique_ptr<SIM_MODEL> Create( const std::vector<T>& aFields,
                                               const std::vector<LIB_PIN*>& aPins,
-                                              bool aResolved, REPORTER* aReporter );
+                                              bool aResolved, REPORTER& aReporter );
 
     template <typename T>
     static std::string GetFieldValue( const std::vector<T>* aFields, const wxString& aFieldName,

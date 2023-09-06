@@ -41,7 +41,7 @@ public:
     virtual ~SPICE_LIBRARY_PARSER()
     {};
 
-    virtual void ReadFile( const wxString& aFilePath, REPORTER* aReporter );
+    virtual void ReadFile( const wxString& aFilePath, REPORTER& aReporter );
 
 protected:
     void readFallbacks( const wxString& aFilePath, REPORTER& aReporter );

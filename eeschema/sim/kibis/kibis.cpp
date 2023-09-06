@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Fabien Corona f.corona<at>laposte.net
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -85,7 +86,7 @@ IBIS_CORNER ReverseLogic( IBIS_CORNER aIn )
     return out;
 }
 
-KIBIS::KIBIS( std::string aFileName, IBIS_REPORTER* aReporter ) :
+KIBIS::KIBIS( std::string aFileName, REPORTER* aReporter ) :
         KIBIS_ANY( this ),
         m_reporter( aReporter ),
         m_file( this )

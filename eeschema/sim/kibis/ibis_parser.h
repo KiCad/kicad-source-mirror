@@ -49,13 +49,11 @@
 #include <cstring>
 
 
-#define IBIS_REPORTER REPORTER
-
 class IBIS_ANY
 {
 public:
-    IBIS_ANY( IBIS_REPORTER* aReporter ) { m_reporter = aReporter; };
-    IBIS_REPORTER* m_reporter;
+    IBIS_ANY( REPORTER* aReporter ) { m_reporter = aReporter; };
+    REPORTER* m_reporter;
 
     /** @brief Print a message
      *
@@ -64,11 +62,12 @@ public:
      * @param aMsg Message
      * @param aSeverity Message sevirity
      */
-    void           Report( std::string aMsg, SEVERITY aSeverity = RPT_SEVERITY_INFO )
+    void Report( std::string aMsg, SEVERITY aSeverity = RPT_SEVERITY_INFO )
     {
         if( m_reporter )
             m_reporter->Report( aMsg, aSeverity );
     };
+
 protected:
     /** @brief Convert a double to string using scientific notation
      *
@@ -82,7 +81,7 @@ protected:
 class IBIS_INPUT : public IBIS_ANY
 {
 public:
-    IBIS_INPUT( IBIS_REPORTER* aReporter ) : IBIS_ANY( aReporter ){};
+    IBIS_INPUT( REPORTER* aReporter ) : IBIS_ANY( aReporter ){};
     /** @brief Check if the data held by the object is valid.
      *
      * @return true in case of success
@@ -111,7 +110,7 @@ enum class IBIS_MATRIX_TYPE
 class IBIS_MATRIX : public IBIS_INPUT
 {
 public:
-    IBIS_MATRIX( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter ){};
+    IBIS_MATRIX( REPORTER* aReporter ) : IBIS_INPUT( aReporter ){};
     virtual ~IBIS_MATRIX(){};
 
     IBIS_MATRIX_TYPE m_type = IBIS_MATRIX_TYPE::UNDEFINED;
@@ -122,7 +121,7 @@ public:
 class IBIS_MATRIX_BANDED : public IBIS_MATRIX
 {
 public:
-    IBIS_MATRIX_BANDED( IBIS_REPORTER* aReporter ) : IBIS_MATRIX( aReporter ){};
+    IBIS_MATRIX_BANDED( REPORTER* aReporter ) : IBIS_MATRIX( aReporter ){};
     IBIS_MATRIX_TYPE m_type = IBIS_MATRIX_TYPE::BANDED;
     int              m_dim = -2;
     int              m_bandwidth = 0;
@@ -134,7 +133,7 @@ public:
 class IBIS_MATRIX_SPARSE : public IBIS_MATRIX
 {
 public:
-    IBIS_MATRIX_SPARSE( IBIS_REPORTER* aReporter ) : IBIS_MATRIX( aReporter ){};
+    IBIS_MATRIX_SPARSE( REPORTER* aReporter ) : IBIS_MATRIX( aReporter ){};
     IBIS_MATRIX_TYPE m_type = IBIS_MATRIX_TYPE::BANDED;
     int              m_dim = -3;
     std::vector<double> m_data;
@@ -146,7 +145,7 @@ public:
 class IBIS_MATRIX_FULL : public IBIS_MATRIX
 {
 public:
-    IBIS_MATRIX_FULL( IBIS_REPORTER* aReporter ) : IBIS_MATRIX( aReporter ){};
+    IBIS_MATRIX_FULL( REPORTER* aReporter ) : IBIS_MATRIX( aReporter ){};
     IBIS_MATRIX_TYPE m_type = IBIS_MATRIX_TYPE::FULL;
     int              m_dim = -4;
     std::vector<double> m_data;
@@ -158,14 +157,14 @@ public:
 class IBIS_SECTION : public IBIS_INPUT
 {
 public:
-    IBIS_SECTION( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter ){};
+    IBIS_SECTION( REPORTER* aReporter ) : IBIS_INPUT( aReporter ){};
 };
 
 
 class IbisHeader : IBIS_SECTION
 {
 public:
-    IbisHeader( IBIS_REPORTER* aReporter ) : IBIS_SECTION( aReporter ){};
+    IbisHeader( REPORTER* aReporter ) : IBIS_SECTION( aReporter ){};
     double   m_ibisVersion = -1;
     double   m_fileRevision = -1;
     std::string m_fileName;
@@ -182,7 +181,7 @@ public:
 class TypMinMaxValue : public IBIS_INPUT
 {
 public:
-    TypMinMaxValue( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter ){};
+    TypMinMaxValue( REPORTER* aReporter ) : IBIS_INPUT( aReporter ){};
     double value[3] = { -1, -1, -1 };
 
     bool Check() override;
@@ -192,7 +191,7 @@ public:
 class IbisComponentPackage : public IBIS_INPUT
 {
 public:
-    IbisComponentPackage( IBIS_REPORTER* aReporter ) :
+    IbisComponentPackage( REPORTER* aReporter ) :
         IBIS_INPUT( aReporter ),
         m_Rpkg( aReporter ),
         m_Lpkg( aReporter ),
@@ -210,7 +209,7 @@ public:
 class IbisComponentPin : public IBIS_INPUT
 {
 public:
-    IbisComponentPin( IBIS_REPORTER* aReporter ) :
+    IbisComponentPin( REPORTER* aReporter ) :
             IBIS_INPUT( aReporter )
     {};
 
@@ -237,7 +236,7 @@ public:
 class IbisComponentPinMapping : public IBIS_INPUT
 {
 public:
-    IbisComponentPinMapping( IBIS_REPORTER* aReporter ) :
+    IbisComponentPinMapping( REPORTER* aReporter ) :
             IBIS_INPUT( aReporter )
     {};
 
@@ -258,7 +257,7 @@ public:
 class IbisDiffPinEntry : public IBIS_INPUT
 {
 public:
-    IbisDiffPinEntry( IBIS_REPORTER* aReporter ) :
+    IbisDiffPinEntry( REPORTER* aReporter ) :
             IBIS_INPUT( aReporter ),
             tdelay( aReporter )
     {};
@@ -276,7 +275,7 @@ public:
 class IbisDiffPin : IBIS_INPUT
 {
 public:
-    IbisDiffPin( IBIS_REPORTER* aReporter ) :
+    IbisDiffPin( REPORTER* aReporter ) :
             IBIS_INPUT( aReporter )
     {};
 
@@ -286,7 +285,7 @@ public:
 class IbisComponent : public IBIS_INPUT
 {
 public:
-    IbisComponent( IBIS_REPORTER* aReporter ) :
+    IbisComponent( REPORTER* aReporter ) :
             IBIS_INPUT( aReporter ),
             m_package( aReporter ),
             m_diffPin( aReporter )
@@ -320,7 +319,7 @@ public:
 class IbisModelSelector : public IBIS_INPUT
 {
 public:
-    IbisModelSelector( IBIS_REPORTER* aReporter ) :
+    IbisModelSelector( REPORTER* aReporter ) :
             IBIS_INPUT( aReporter )
     {};
 
@@ -337,7 +336,7 @@ public:
 class IVtableEntry : public IBIS_INPUT
 {
 public:
-    IVtableEntry( IBIS_REPORTER* aReporter ) :
+    IVtableEntry( REPORTER* aReporter ) :
             IBIS_INPUT( aReporter ),
             I( aReporter )
     {};
@@ -353,7 +352,7 @@ public:
 class IVtable : public IBIS_INPUT
 {
 public:
-    IVtable( IBIS_REPORTER* aReporter ) :
+    IVtable( REPORTER* aReporter ) :
             IBIS_INPUT( aReporter )
     {};
 
@@ -392,7 +391,7 @@ private:
 class VTtableEntry : public IBIS_INPUT
 {
 public:
-    VTtableEntry( IBIS_REPORTER* aReporter ) :
+    VTtableEntry( REPORTER* aReporter ) :
             IBIS_INPUT( aReporter ),
             V( aReporter )
     {};
@@ -407,7 +406,7 @@ public:
 class VTtable : public IBIS_INPUT
 {
 public:
-    VTtable( IBIS_REPORTER* aReporter ) :
+    VTtable( REPORTER* aReporter ) :
             IBIS_INPUT( aReporter )
     {};
 
@@ -460,7 +459,7 @@ public:
 class dvdtTypMinMax : public IBIS_INPUT
 {
 public:
-    dvdtTypMinMax( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter ){};
+    dvdtTypMinMax( REPORTER* aReporter ) : IBIS_INPUT( aReporter ){};
     dvdt value[3];
 
     bool Check() override;
@@ -470,7 +469,7 @@ public:
 class IbisRamp : public IBIS_INPUT
 {
 public:
-    IbisRamp( IBIS_REPORTER* aReporter ) :
+    IbisRamp( REPORTER* aReporter ) :
         IBIS_INPUT( aReporter ),
         m_falling( aReporter ),
         m_rising( aReporter )
@@ -492,7 +491,7 @@ enum class IBIS_WAVEFORM_TYPE
 class IbisWaveform : public IBIS_INPUT
 {
 public:
-    IbisWaveform( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter ), m_table( aReporter ){};
+    IbisWaveform( REPORTER* aReporter ) : IBIS_INPUT( aReporter ), m_table( aReporter ){};
 
     VTtable            m_table;
     IBIS_WAVEFORM_TYPE m_type = IBIS_WAVEFORM_TYPE::RISING;
@@ -517,7 +516,7 @@ enum class IBIS_MODEL_POLARITY
 class IbisModel : IBIS_INPUT
 {
 public:
-    IbisModel( IBIS_REPORTER* aReporter ) :
+    IbisModel( REPORTER* aReporter ) :
             IBIS_INPUT( aReporter ),
             m_C_comp( aReporter ),
             m_voltageRange( aReporter ),
@@ -580,7 +579,7 @@ public:
 class IbisPackageModel : public IBIS_INPUT
 {
 public:
-    IbisPackageModel( IBIS_REPORTER* aReporter ) :
+    IbisPackageModel( REPORTER* aReporter ) :
             IBIS_INPUT( aReporter )
     {};
 
@@ -604,7 +603,7 @@ public:
 class IbisFile : public IBIS_INPUT
 {
 public:
-    IbisFile( IBIS_REPORTER* aReporter ) :
+    IbisFile( REPORTER* aReporter ) :
             IBIS_INPUT( aReporter ),
             m_header( aReporter )
     {};
@@ -653,7 +652,7 @@ enum class IBIS_PARSER_CONTEXT
 class IbisParser : public IBIS_INPUT
 {
 public:
-    IbisParser( IBIS_REPORTER* aReporter ) : IBIS_INPUT( aReporter ), m_ibisFile( aReporter ){};
+    IbisParser( REPORTER* aReporter ) : IBIS_INPUT( aReporter ), m_ibisFile( aReporter ){};
 
     bool m_parrot = true; // Write back all lines.
 

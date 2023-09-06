@@ -1406,8 +1406,6 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
     SIM_LIB_MGR         simLibMgr( &Prj() );
     NULL_REPORTER       devnull;
 
-    simLibMgr.SetReporter( &devnull );
-
     // Patch for bug early in V7.99 dev
     if( settings.m_OPO_VRange.EndsWith( 'A' ) )
         settings.m_OPO_VRange[ settings.m_OPO_VRange.Length() - 1 ] = 'V';
@@ -1493,7 +1491,7 @@ void SCH_EDIT_FRAME::RefreshOperatingPointDisplay()
             }
             else
             {
-                SIM_MODEL& model = simLibMgr.CreateModel( &GetCurrentSheet(), *symbol ).model;
+                SIM_MODEL& model = simLibMgr.CreateModel( &GetCurrentSheet(), *symbol, devnull ).model;
 
                 SPICE_ITEM spiceItem;
                 spiceItem.refName = ref;

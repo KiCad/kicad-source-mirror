@@ -46,9 +46,11 @@ public:
 
     void LoadLibrary( const std::string& aBaseName )
     {
-        std::string path = GetLibraryPath( aBaseName );
+        NULL_REPORTER devnull;
+        std::string   path = GetLibraryPath( aBaseName );
+
         m_library = std::make_unique<SIM_LIBRARY_SPICE>( true );
-        m_library->ReadFile( path, nullptr );
+        m_library->ReadFile( path, devnull );
     }
 
     void CompareToUsualDiodeModel( const SIM_MODEL& aModel, const std::string& aModelName, int aModelIndex )

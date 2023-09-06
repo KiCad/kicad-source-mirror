@@ -55,7 +55,7 @@ public:
      * @return The library loaded in a newly constructed object.
      */
     static std::unique_ptr<SIM_LIBRARY>
-    Create( const wxString& aFilePath, bool aForceFullParse, REPORTER* aReporter,
+    Create( const wxString& aFilePath, bool aForceFullParse, REPORTER& aReporter,
             std::function<wxString( const wxString&, const wxString& )>* aResolver );
 
     /**
@@ -65,7 +65,7 @@ public:
      * @param aFilePath Path to the file.
      * @throw IO_ERROR on read or parsing error.
      */
-    virtual void ReadFile( const wxString& aFilePath, REPORTER* aReporter ) = 0;
+    virtual void ReadFile( const wxString& aFilePath, REPORTER& aReporter ) = 0;
 
     SIM_MODEL* FindModel( const std::string& aModelName ) const;
 
@@ -80,8 +80,6 @@ protected:
     std::function<wxString( const wxString&, const wxString& )>* m_pathResolver;
 
     std::string m_filePath;
-
-    REPORTER* m_reporter = nullptr;
 };
 
 

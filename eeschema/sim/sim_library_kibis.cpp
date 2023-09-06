@@ -29,15 +29,15 @@
 #include <lib_pin.h>
 
 
-void SIM_LIBRARY_KIBIS::ReadFile( const wxString& aFilePath, REPORTER* aReporter )
+void SIM_LIBRARY_KIBIS::ReadFile( const wxString& aFilePath, REPORTER& aReporter )
 {
     SIM_LIBRARY::ReadFile( aFilePath, aReporter );
-    m_kibis = KIBIS( aFilePath.ToStdString(), m_reporter );
+    m_kibis = KIBIS( aFilePath.ToStdString(), &aReporter );
 
     if( !m_kibis.m_valid )
     {
-        aReporter->Report( wxString::Format( _( "Invalid IBIS file '%s'" ), aFilePath ),
-                           RPT_SEVERITY_ERROR );
+        aReporter.Report( wxString::Format( _( "Invalid IBIS file '%s'" ), aFilePath ),
+                          RPT_SEVERITY_ERROR );
         return;
     }
 

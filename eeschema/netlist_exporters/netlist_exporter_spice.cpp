@@ -104,7 +104,6 @@ NETLIST_EXPORTER_SPICE::NETLIST_EXPORTER_SPICE( SCHEMATIC_IFACE* aSchematic,
 bool NETLIST_EXPORTER_SPICE::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions,
                                            REPORTER& aReporter )
 {
-    m_libMgr.SetReporter( &aReporter );
     FILE_OUTPUTFORMATTER formatter( aOutFileName, wxT( "wt" ), '\'' );
     return DoWriteNetlist( wxEmptyString, aNetlistOptions, formatter, aReporter );
 }
@@ -155,8 +154,6 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
     wxString              msg;
     std::set<std::string> refNames; // Set of reference names to check for duplication.
     int                   ncCounter = 1;
-
-    m_libMgr.SetReporter( &aReporter );
 
     ReadDirectives( aNetlistOptions );
 
@@ -227,7 +224,7 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
             }
 
             readRefName( sheet, *symbol, spiceItem, refNames );
-            readModel( sheet, *symbol, spiceItem );
+            readModel( sheet, *symbol, spiceItem, aReporter );
             readPinNumbers( *symbol, spiceItem, pins );
             readPinNetNames( *symbol, spiceItem, pins, ncCounter );
 
@@ -236,8 +233,6 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
             m_items.push_back( std::move( spiceItem ) );
         }
     }
-
-    m_libMgr.SetReporter( nullptr );
 
     return !aReporter.HasMessage();
 }
@@ -446,9 +441,9 @@ void NETLIST_EXPORTER_SPICE::readRefName( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aS
 
 
 void NETLIST_EXPORTER_SPICE::readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSymbol,
-                                        SPICE_ITEM& aItem )
+                                        SPICE_ITEM& aItem, REPORTER& aReporter )
 {
-    SIM_LIBRARY::MODEL libModel = m_libMgr.CreateModel( &aSheet, aSymbol );
+    SIM_LIBRARY::MODEL libModel = m_libMgr.CreateModel( &aSheet, aSymbol, aReporter );
 
     aItem.baseModelName = libModel.name;
     aItem.model = &libModel.model;

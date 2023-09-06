@@ -715,9 +715,10 @@ void SCH_FIELD::OnScintillaCharAdded( SCINTILLA_TRICKS* aScintillaTricks,
                 // SPICE operating points use ':' syntax for ports
                 if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( parent ) )
                 {
+                    NULL_REPORTER   devnull;
                     SCH_SHEET_PATH& sheet = schematic->CurrentSheet();
                     SIM_LIB_MGR     mgr( &schematic->Prj() );
-                    SIM_MODEL&      model = mgr.CreateModel( &sheet, *symbol ).model;
+                    SIM_MODEL&      model = mgr.CreateModel( &sheet, *symbol, devnull ).model;
 
                     for( wxString pin : model.GetPinNames() )
                     {

@@ -205,7 +205,7 @@ void SPICE_LIBRARY_PARSER::parseFile( const wxString &aFilePath, REPORTER& aRepo
 }
 
 
-void SPICE_LIBRARY_PARSER::ReadFile( const wxString& aFilePath, REPORTER* aReporter )
+void SPICE_LIBRARY_PARSER::ReadFile( const wxString& aFilePath, REPORTER& aReporter )
 {
     m_library.m_models.clear();
     m_library.m_modelNames.clear();
@@ -215,7 +215,7 @@ void SPICE_LIBRARY_PARSER::ReadFile( const wxString& aFilePath, REPORTER* aRepor
     // (cmp/standard.bjt, cmp/standard.mos, etc.) have copious error which trip up our parser,
     // and our parser is *really* slow on such large files (nearly 5 seconds on my dev machine).
     if( !m_forceFullParse && aFilePath.Contains( wxS( "/LTspiceXVII/lib/cmp/standard" ) ) )
-        readFallbacks( aFilePath, *aReporter );
+        readFallbacks( aFilePath, aReporter );
     else
-        parseFile( aFilePath, *aReporter );
+        parseFile( aFilePath, aReporter );
 }

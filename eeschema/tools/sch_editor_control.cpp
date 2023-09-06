@@ -545,9 +545,9 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 
                         wxString           msg;
                         WX_STRING_REPORTER reporter( &msg );
-                        SIM_LIB_MGR        mgr( &m_frame->Prj(), &reporter );
+                        SIM_LIB_MGR        mgr( &m_frame->Prj() );
 
-                        SIM_MODEL&  model = mgr.CreateModel( &sheet, *symbol ).model;
+                        SIM_MODEL&  model = mgr.CreateModel( &sheet, *symbol, reporter ).model;
 
                         if( reporter.HasMessage() )
                             THROW_IO_ERROR( msg );

@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Fabien Corona f.corona<at>laposte.net
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -218,9 +219,10 @@ public:
     {
         m_valid = false;
     }; // Constructor for unitialized KIBIS members
-    KIBIS( std::string aFileName, IBIS_REPORTER* aReporter = nullptr );
 
-    IBIS_REPORTER*               m_reporter;
+    KIBIS( std::string aFileName, REPORTER* aReporter = nullptr );
+
+    REPORTER*                    m_reporter;
     std::vector<KIBIS_COMPONENT> m_components;
     std::vector<KIBIS_MODEL>     m_models;
     KIBIS_FILE                   m_file;
