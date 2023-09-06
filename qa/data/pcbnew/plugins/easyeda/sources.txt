@@ -1,0 +1,18 @@
+Project: 支持PD3.1/米PPS与Emarker读取的USB电压电流
+
+File: PCB_USBMETER-PD QC修改版_2023-09-02.json
+
+License: CC-BY-NC-SA 3.0
+Link: https://oshwhub.com/qaxslk/dai-PD-QCyou-pian-jian-ce-yi-ji-
+---------------------------------------------------------------------
+
+
+Project: ESP32-PICO-D4 smart watch
+
+Files:
+BackupProjects_ESP32-PICO-D4_smart_watch.zip
+PCB_PCB_ESP32-PICO-D4 smart watch_2023-09-02.json
+SCH_ESP32-PICO-D4 smart watch_2023-09-02.json
+
+License: CC-BY-NC-SA 3.0
+Link: https://oshwlab.com/oshwlab/ESP32-PICO-D4-smart-watch
