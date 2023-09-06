@@ -43,27 +43,12 @@
 #include <fstream>
 #include <map>
 #include <nlohmann/json.hpp>
+#include <core/json_serializers.h>
 #include <optional>
 #include <string>
 #include <tuple>
 #include <vector>
 #include <wx/string.h>
-
-
-// Teaching json en/decoder to understand wxStrings
-namespace nlohmann
-{
-template <>
-struct adl_serializer<wxString>
-{
-    static void to_json( json& j, const wxString& s ) { j = s.ToUTF8(); }
-
-    static void from_json( const json& j, wxString& s )
-    {
-        s = wxString::FromUTF8( j.get<std::string>().c_str() );
-    }
-};
-} // namespace nlohmann
 
 
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE( NOTIFICATION, title, description, href, key, date )

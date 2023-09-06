@@ -25,6 +25,7 @@
 
 #include <map>
 #include <nlohmann/json.hpp>
+#include <core/json_serializers.h>
 #include <optional>
 #include <string>
 #include <tuple>
@@ -146,22 +147,6 @@ struct PCM_INSTALLATION_ENTRY
     // Not serialized fields
     bool update_available;
 };
-
-
-// Teaching json en/decoder to understand wxStrings
-namespace nlohmann
-{
-template <>
-struct adl_serializer<wxString>
-{
-    static void to_json( json& j, const wxString& s ) { j = s.ToUTF8(); }
-
-    static void from_json( const json& j, wxString& s )
-    {
-        s = wxString::FromUTF8( j.get<std::string>().c_str() );
-    }
-};
-} // namespace nlohmann
 
 
 NLOHMANN_JSON_SERIALIZE_ENUM( PCM_PACKAGE_TYPE, {

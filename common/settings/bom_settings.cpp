@@ -20,21 +20,8 @@
 
 #include <settings/bom_settings.h>
 #include <nlohmann/json.hpp>
+#include <core/json_serializers.h>
 #include <wx/translation.h>
-
-namespace nlohmann
-{
-template <>
-struct adl_serializer<wxString>
-{
-    static void to_json( json& j, const wxString& s ) { j = s.ToUTF8(); }
-
-    static void from_json( const json& j, wxString& s )
-    {
-        s = wxString::FromUTF8( j.get<std::string>().c_str() );
-    }
-};
-}
 
 
 // Implementations for BOM_FMT_PRESET
