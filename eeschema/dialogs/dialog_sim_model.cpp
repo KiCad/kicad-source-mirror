@@ -205,6 +205,9 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
         {
             m_libraryPathText->ChangeValue( libraryFilename );
             m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields, &reporter );
+
+            // load library will mangle the set reporter
+            m_libraryModelsMgr.SetReporter( &reporter );
             m_libraryModelsMgr.CreateModel( nullptr, m_sortedPartPins, m_fields );
 
             m_modelNameChoice->Append( _( "<unknown>" ) );
