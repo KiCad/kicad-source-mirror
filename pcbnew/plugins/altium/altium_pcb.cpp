@@ -1990,7 +1990,18 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItem( const AREGION6& aElem )
 
         zone->SetIsRuleArea( true );
 
-        HelperSetZoneKeepoutRestrictions( zone, aElem.keepoutrestrictions );
+        if( aElem.is_keepout )
+        {
+            HelperSetZoneKeepoutRestrictions( zone, aElem.keepoutrestrictions );
+        }
+        else if( aElem.kind == ALTIUM_REGION_KIND::POLYGON_CUTOUT )
+        {
+            zone->SetDoNotAllowCopperPour( true );
+            zone->SetDoNotAllowVias( false );
+            zone->SetDoNotAllowTracks( false );
+            zone->SetDoNotAllowPads( false );
+            zone->SetDoNotAllowFootprints( false );
+        }
 
         zone->SetPosition( aElem.outline.at( 0 ).position );
         zone->Outline()->AddOutline( linechain );
@@ -2070,7 +2081,18 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItem( FOOTPRINT*      aFoot
 
         zone->SetIsRuleArea( true );
 
-        HelperSetZoneKeepoutRestrictions( zone, aElem.keepoutrestrictions );
+        if( aElem.is_keepout )
+        {
+            HelperSetZoneKeepoutRestrictions( zone, aElem.keepoutrestrictions );
+        }
+        else if( aElem.kind == ALTIUM_REGION_KIND::POLYGON_CUTOUT )
+        {
+            zone->SetDoNotAllowCopperPour( true );
+            zone->SetDoNotAllowVias( false );
+            zone->SetDoNotAllowTracks( false );
+            zone->SetDoNotAllowPads( false );
+            zone->SetDoNotAllowFootprints( false );
+        }
 
         zone->SetPosition( aElem.outline.at( 0 ).position );
         zone->Outline()->AddOutline( linechain );
