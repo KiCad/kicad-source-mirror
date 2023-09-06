@@ -3603,6 +3603,13 @@ void SCH_ALTIUM_PLUGIN::ParseLibParameter( const std::map<wxString, wxString>& a
 {
     ASCH_PARAMETER elem( aProperties );
 
+    // Part ID 1 is the current library part.  Part ID -1 means all parts
+    // If a parameter is assigned to a specific element such as a pin,
+    // we will need to handle it here.
+    // TODO: Handle HIDDENNETNAME property (others?)
+    if( elem.ownerpartid != 1 && elem.ownerpartid != -1 )
+        return;
+
     // TODO: fill in replacements from variant, sheet and project
     // N.B. We do not keep the Altium "VALUE" variable here because
     // we don't have a way to assign variables to specific symbols
