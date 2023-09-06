@@ -243,8 +243,12 @@ protected:
 
     wxPoint            m_hoverPos;
     wxDataViewItem     m_hoverItem;
+    wxRect             m_hoverItemRect;
     wxTimer            m_hoverTimer;
+    wxDataViewItem     m_previewItem;
+    wxRect             m_previewItemRect;
     wxPopupWindow*     m_previewWindow;
+    bool               m_previewDisabled;
 };
 
 ///< Custom event sent when a new symbol is preselected

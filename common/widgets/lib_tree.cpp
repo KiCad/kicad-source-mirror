@@ -56,7 +56,8 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
         m_inTimerEvent( false ),
         m_recentSearchesKey( aRecentSearchesKey ),
         m_skipNextRightClick( false ),
-        m_previewWindow( nullptr )
+        m_previewWindow( nullptr ),
+        m_previewDisabled( false )
 {
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
 
@@ -603,13 +604,15 @@ void LIB_TREE::onQueryMouseMoved( wxMouseEvent& aEvent )
 
 
 #define PREVIEW_SIZE wxSize( 240, 200 )
+#define HOVER_TIMER_MILLIS 400
 
 
 void LIB_TREE::showPreview( wxDataViewItem aItem )
 {
     if( aItem.IsOk() && m_adapter->HasPreview( aItem ) )
     {
-        m_hoverItem = aItem;
+        m_previewItem = aItem;
+        m_previewItemRect = m_tree_ctrl->GetItemRect( m_previewItem );
 
         wxWindow* topLevelParent = wxGetTopLevelParent( m_parent );
 
@@ -629,7 +632,7 @@ void LIB_TREE::showPreview( wxDataViewItem aItem )
 
 void LIB_TREE::hidePreview()
 {
-    m_hoverItem = wxDataViewItem();
+    m_previewItem = wxDataViewItem();
 
     if( m_previewWindow )
     {
@@ -645,31 +648,47 @@ void LIB_TREE::onIdle( wxIdleEvent& aEvent )
     // The wxDataViewCtrl won't give us its mouseMoved events so we're forced to use idle
     // events to track the hover state
 
+    // The dang thing won't give us scroll events either, so we implement a poor-man's
+    // scroll-checker using the last-known positions of the preview or hover items.
+
     wxWindow* topLevelParent = wxGetTopLevelParent( m_parent );
     wxWindow* topLevelFocus = wxGetTopLevelParent( wxWindow::FindFocus() );
 
     wxPoint screenPos = wxGetMousePosition();
-    wxRect  screenRect = m_tree_ctrl->IsShown() ? m_tree_ctrl->GetScreenRect() : wxRect();
+    wxRect  screenRect = m_tree_ctrl->GetScreenRect();
 
-    if( topLevelFocus != topLevelParent || !screenRect.Contains( screenPos ) )
+    if( !m_tree_ctrl->IsShown() || m_previewDisabled
+            || topLevelFocus != topLevelParent
+            || !screenRect.Contains( screenPos ) )
     {
         m_hoverTimer.Stop();
         hidePreview();
         return;
     }
 
-    wxPoint clientPos = m_tree_ctrl->ScreenToClient( screenPos );
+    wxPoint           clientPos = m_tree_ctrl->ScreenToClient( screenPos );
+    wxDataViewItem    item;
+    wxDataViewColumn* col = nullptr;
 
-    if( m_hoverItem.IsOk() )
+    m_tree_ctrl->HitTest( clientPos, item, col );
+
+    if( m_previewItem.IsOk() )
     {
-        wxDataViewItem    item;
-        wxDataViewColumn* col = nullptr;
-        m_tree_ctrl->HitTest( clientPos, item, col );
-
-        if( item != m_hoverItem )
+        // Scroll checker
+        if( m_tree_ctrl->GetItemRect( m_previewItem ) != m_previewItemRect )
         {
             hidePreview();
+
             m_hoverPos = clientPos;
+            m_hoverItem = item;
+            m_hoverItemRect = m_tree_ctrl->GetItemRect( m_hoverItem );
+            m_hoverTimer.StartOnce( HOVER_TIMER_MILLIS );
+            return;
+        }
+
+        if( item != m_previewItem )
+        {
+            hidePreview();
             showPreview( item );
         }
 
@@ -679,7 +698,9 @@ void LIB_TREE::onIdle( wxIdleEvent& aEvent )
     if( m_hoverPos != clientPos )
     {
         m_hoverPos = clientPos;
-        m_hoverTimer.Start( 400, wxTIMER_ONE_SHOT );
+        m_hoverItem = item;
+        m_hoverItemRect = m_tree_ctrl->GetItemRect( m_hoverItem );
+        m_hoverTimer.StartOnce( HOVER_TIMER_MILLIS );
     }
 }
 
@@ -687,13 +708,25 @@ void LIB_TREE::onIdle( wxIdleEvent& aEvent )
 void LIB_TREE::onHoverTimer( wxTimerEvent& aEvent )
 {
     hidePreview();
+    
+    if( !m_tree_ctrl->IsShown() || m_previewDisabled )
+        return;
 
     wxDataViewItem    item;
     wxDataViewColumn* col = nullptr;
     m_tree_ctrl->HitTest( m_hoverPos, item, col );
 
-    if( item != m_tree_ctrl->GetSelection() )
-        showPreview( item );
+    if( item == m_hoverItem && m_tree_ctrl->GetItemRect( item ) == m_hoverItemRect )
+    {
+        if( item != m_tree_ctrl->GetSelection() )
+            showPreview( item );
+    }
+    else // view must have been scrolled
+    {
+        m_hoverItem = item;
+        m_hoverItemRect = m_tree_ctrl->GetItemRect( m_hoverItem );
+        m_hoverTimer.StartOnce( HOVER_TIMER_MILLIS );
+    }
 }
 
 
@@ -780,6 +813,8 @@ void LIB_TREE::onItemContextMenu( wxDataViewEvent& aEvent )
         return;
     }
 
+    m_previewDisabled = true;
+
     if( TOOL_INTERACTIVE* tool = m_adapter->GetContextMenuTool() )
     {
         if( !GetCurrentTreeNode() )
@@ -839,12 +874,15 @@ void LIB_TREE::onItemContextMenu( wxDataViewEvent& aEvent )
             }
         }
     }
+    
+    m_previewDisabled = false;
 }
 
 
 void LIB_TREE::onHeaderContextMenu( wxDataViewEvent& aEvent )
 {
     hidePreview();
+    m_previewDisabled = true;
 
     ACTION_MENU menu( true, nullptr );
 
@@ -859,6 +897,8 @@ void LIB_TREE::onHeaderContextMenu( wxDataViewEvent& aEvent )
         if( dlg.ShowModal() == wxID_OK )
             m_adapter->SetShownColumns( dlg.EnabledList() );
     }
+
+    m_previewDisabled = false;
 }
 
 
