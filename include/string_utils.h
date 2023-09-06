@@ -124,6 +124,11 @@ std::string EscapedUTF8( const wxString& aString );
 wxString EscapeHTML( const wxString& aString );
 
 /**
+ * Return a new wxString unescaped from HTML format.
+ */
+wxString UnescapeHTML( const wxString& aString );
+
+/**
  * Read one line line from \a aFile.
  *
  * @return a pointer the first useful line read by eliminating blank lines and comments.

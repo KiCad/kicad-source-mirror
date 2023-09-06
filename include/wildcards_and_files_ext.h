@@ -218,6 +218,8 @@ extern wxString CsvFileWildcard();
 extern wxString PcbFileWildcard();
 extern wxString CadstarArchiveFilesWildcard();
 extern wxString EagleFilesWildcard();
+extern wxString EasyEdaArchiveWildcard();
+extern wxString EasyEdaProFileWildcard();
 extern wxString PdfFileWildcard();
 extern wxString PSFileWildcard();
 extern wxString MacrosFileWildcard();

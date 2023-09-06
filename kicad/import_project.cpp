@@ -135,3 +135,17 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
     ImportNonKiCadProject( _( "Import Eagle Project Files" ), EagleFilesWildcard(), { "sch" },
                            { "brd" }, SCH_IO_MGR::SCH_EAGLE, IO_MGR::EAGLE );
 }
+
+
+void KICAD_MANAGER_FRAME::OnImportEasyEdaFiles( wxCommandEvent& event )
+{
+    ImportNonKiCadProject( _( "Import EasyEDA Std Backup" ), EasyEdaArchiveWildcard(), { "INPUT" },
+                           { "INPUT" }, SCH_IO_MGR::SCH_EASYEDA, IO_MGR::EASYEDA );
+}
+
+
+void KICAD_MANAGER_FRAME::OnImportEasyEdaProFiles( wxCommandEvent& event )
+{
+    ImportNonKiCadProject( _( "Import EasyEDA Pro Project" ), EasyEdaProFileWildcard(), { "INPUT" },
+                           { "INPUT" }, SCH_IO_MGR::SCH_EASYEDAPRO, IO_MGR::EASYEDAPRO );
+}

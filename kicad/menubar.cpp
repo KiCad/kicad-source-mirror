@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2019 CERN
  *
  * This program is free software; you can redistribute it and/or
@@ -112,6 +112,15 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
                      _( "Import EAGLE CAD XML schematic and board" ),
                      ID_IMPORT_EAGLE_PROJECT,
                      BITMAPS::import_project );
+
+    importMenu->Add( _( "EasyEDA (JLCEDA) Std Backup..." ),
+                     _( "Import EasyEDA (JLCEDA) Standard schematic and board" ),
+                     ID_IMPORT_EASYEDA_PROJECT,
+                     BITMAPS::import_project );
+
+    importMenu->Add( _( "EasyEDA (JLCEDA) Pro Project..." ),
+                     _( "Import EasyEDA (JLCEDA) Professional schematic and board" ),
+                     ID_IMPORT_EASYEDAPRO_PROJECT, BITMAPS::import_project );
 
     fileMenu->Add( importMenu );
 

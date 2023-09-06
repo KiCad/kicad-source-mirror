@@ -291,6 +291,18 @@ wxString AllegroNetlistFileWildcard()
 }
 
 
+wxString EasyEdaArchiveWildcard()
+{
+    return _( "EasyEDA (JLCEDA) Std backup archive" ) + AddFileExtListToFilter( { "zip" } );
+}
+
+
+wxString EasyEdaProFileWildcard()
+{
+    return _( "EasyEDA (JLCEDA) Pro files" ) + AddFileExtListToFilter( { "epro", "zip" } );
+}
+
+
 wxString PcbFileWildcard()
 {
     return _( "KiCad printed circuit board files" )

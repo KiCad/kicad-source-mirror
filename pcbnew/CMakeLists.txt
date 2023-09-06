@@ -573,9 +573,11 @@ endif()
 add_subdirectory( plugins/pcad )
 add_subdirectory( plugins/altium )
 add_subdirectory( plugins/cadstar )
+add_subdirectory( plugins/easyeda )
+add_subdirectory( plugins/easyedapro )
 add_subdirectory( plugins/fabmaster )
 
-set( PCBNEW_IO_LIBRARIES pcad2kicadpcb altium2pcbnew cadstar2pcbnew fabmaster CACHE INTERNAL "")
+set( PCBNEW_IO_LIBRARIES pcad2kicadpcb altium2pcbnew cadstar2pcbnew easyeda easyedapro fabmaster CACHE INTERNAL "")
 
 # a very small program launcher for pcbnew_kiface
 add_executable( pcbnew WIN32 MACOSX_BUNDLE

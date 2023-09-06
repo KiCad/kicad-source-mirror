@@ -534,6 +534,20 @@ wxString EscapeHTML( const wxString& aString )
 }
 
 
+wxString UnescapeHTML( const wxString& aString )
+{
+    wxString converted = aString;
+
+    converted.Replace( wxS( "&quot;" ), wxS( "\"" ) );
+    converted.Replace( wxS( "&apos;" ), wxS( "'" ) );
+    converted.Replace( wxS( "&amp;" ), wxS( "&" ) );
+    converted.Replace( wxS( "&lt;" ), wxS( "<" ) );
+    converted.Replace( wxS( "&gt;" ), wxS( ">" ) );
+
+    return converted;
+}
+
+
 bool NoPrintableChars( const wxString& aString )
 {
     wxString tmp = aString;

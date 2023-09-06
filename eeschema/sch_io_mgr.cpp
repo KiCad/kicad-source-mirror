@@ -30,6 +30,8 @@
 
 #include <sch_plugins/altium/sch_altium_plugin.h>
 #include <sch_plugins/cadstar/cadstar_sch_archive_plugin.h>
+#include <sch_plugins/easyeda/sch_easyeda_plugin.h>
+#include <sch_plugins/easyedapro/sch_easyedapro_plugin.h>
 #include <sch_plugins/database/sch_database_plugin.h>
 #include <sch_plugins/ltspice/ltspice_sch_plugin.h>
 #include <common.h>     // for ExpandEnvVarSubstitutions
@@ -67,6 +69,8 @@ SCH_PLUGIN* SCH_IO_MGR::FindPlugin( SCH_FILE_T aFileType )
     case SCH_CADSTAR_ARCHIVE: return new CADSTAR_SCH_ARCHIVE_PLUGIN();
     case SCH_DATABASE:        return new SCH_DATABASE_PLUGIN();
     case SCH_EAGLE:           return new SCH_EAGLE_PLUGIN();
+    case SCH_EASYEDA:         return new SCH_EASYEDA_PLUGIN();
+    case SCH_EASYEDAPRO:      return new SCH_EASYEDAPRO_PLUGIN();
     case SCH_LTSPICE:         return new SCH_LTSPICE_PLUGIN();
     default:                  return nullptr;
     }
@@ -97,6 +101,8 @@ const wxString SCH_IO_MGR::ShowType( SCH_FILE_T aType )
     case SCH_CADSTAR_ARCHIVE: return wxString( wxT( "CADSTAR Schematic Archive" ) );
     case SCH_DATABASE:        return wxString( wxT( "Database" ) );
     case SCH_EAGLE:           return wxString( wxT( "EAGLE" ) );
+    case SCH_EASYEDA:         return wxString( wxT( "EasyEDA (JLCEDA) Std" ) );
+    case SCH_EASYEDAPRO:      return wxString( wxT( "EasyEDA (JLCEDA) Pro" ) );
     case SCH_LTSPICE:         return wxString( wxT( "LTspice" ) );
     default:                  return wxString::Format( _( "Unknown SCH_FILE_T value: %d" ),
                                                        aType );
@@ -122,6 +128,10 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::EnumFromStr( const wxString& aType )
         return SCH_DATABASE;
     else if( aType == wxT( "EAGLE" ) )
         return SCH_EAGLE;
+    else if( aType == wxT( "EasyEDA (JLCEDA) Std" ) )
+        return SCH_EASYEDA;
+    else if( aType == wxT( "EasyEDA (JLCEDA) Pro" ) )
+        return SCH_EASYEDAPRO;
     else if( aType == wxT( "LTspice" ) )
         return SCH_LTSPICE;
 

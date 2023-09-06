@@ -1002,6 +1002,12 @@ public:
     void BooleanXor( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b,
                               POLYGON_MODE aFastMode );
 
+    /**
+    * Extract all contours from this polygon set, then recreate polygons with holes.
+    * Essentially XOR'ing, but faster. Self-intersecting polygons are not supported.
+    */
+    void RebuildHolesFromContours();
+
     /// define how inflate transform build inflated polygon
     enum CORNER_STRATEGY
     {

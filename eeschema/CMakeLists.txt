@@ -60,6 +60,16 @@ set( EESCHEMA_SCH_PLUGINS_LTSPICE
     sch_plugins/ltspice/ltspice_sch_plugin.cpp
     )
 
+set( EESCHEMA_SCH_PLUGINS_EASYEDA
+    sch_plugins/easyeda/sch_easyeda_parser.cpp
+    sch_plugins/easyeda/sch_easyeda_plugin.cpp
+    )
+
+set( EESCHEMA_SCH_PLUGINS_EASYEDAPRO
+    sch_plugins/easyedapro/sch_easyedapro_parser.cpp
+    sch_plugins/easyedapro/sch_easyedapro_plugin.cpp
+    )
+
 set( EESCHEMA_DLGS
     dialogs/dialog_annotate.cpp
     dialogs/dialog_annotate_base.cpp
@@ -278,6 +288,8 @@ set( EESCHEMA_SRCS
     ${EESCHEMA_SCH_PLUGINS_ALTIUM}
     ${EESCHEMA_SCH_PLUGINS_CADSTAR}
     ${EESCHEMA_SCH_PLUGINS_LTSPICE}
+    ${EESCHEMA_SCH_PLUGINS_EASYEDA}
+    ${EESCHEMA_SCH_PLUGINS_EASYEDAPRO}
     ${EESCHEMA_SIM_SRCS}
     ${EESCHEMA_WIDGETS}
     ${EESCHEMA_IMPORT_GFX}
@@ -301,6 +313,7 @@ set( EESCHEMA_SRCS
     fields_grid_table.cpp
     files-io.cpp
     generate_alias_info.cpp
+    gfx_import_utils.cpp
     picksymbol.cpp
     lib_field.cpp
     lib_item.cpp

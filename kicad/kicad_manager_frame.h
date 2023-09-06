@@ -98,6 +98,16 @@ public:
     void OnImportEagleFiles( wxCommandEvent& event );
 
     /**
+     *  Open dialog to import EasyEDA Std schematic and board files.
+     */
+    void OnImportEasyEdaFiles( wxCommandEvent& event );
+
+    /**
+     *  Open dialog to import EasyEDA Pro schematic and board files.
+     */
+    void OnImportEasyEdaProFiles( wxCommandEvent& event );
+
+    /**
      * Prints the current working directory name and the project name on the text panel.
      */
     void PrintPrjInfo();

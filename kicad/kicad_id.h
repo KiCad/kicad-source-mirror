@@ -68,8 +68,10 @@ enum id_kicad_frm {
     ID_SAVE_AND_ZIP_FILES,
     ID_READ_ZIP_ARCHIVE,
     ID_INIT_WATCHED_PATHS,
-    ID_IMPORT_EAGLE_PROJECT,
     ID_IMPORT_CADSTAR_ARCHIVE_PROJECT,
+    ID_IMPORT_EAGLE_PROJECT,
+    ID_IMPORT_EASYEDA_PROJECT,
+    ID_IMPORT_EASYEDAPRO_PROJECT,
 
     // Please, verify: the number of items in this list should be
     // less than ROOM_FOR_KICADMANAGER (see id.h)

@@ -41,6 +41,8 @@
 #include <plugins/altium/solidworks_pcb_plugin.h>
 #include <plugins/cadstar/cadstar_pcb_archive_plugin.h>
 #include <plugins/fabmaster/fabmaster_plugin.h>
+#include <plugins/easyeda/pcb_easyeda_plugin.h>
+#include <plugins/easyedapro/pcb_easyedapro_plugin.h>
 
 #define FMT_UNIMPLEMENTED   _( "Plugin \"%s\" does not implement the \"%s\" function." )
 #define FMT_NOTFOUND        _( "Plugin type \"%s\" is not found." )
@@ -230,6 +232,16 @@ static IO_MGR::REGISTER_PLUGIN registerEaglePlugin(
         IO_MGR::EAGLE,
         wxT( "Eagle" ),
         []() -> PLUGIN* { return new EAGLE_PLUGIN; } );
+
+static IO_MGR::REGISTER_PLUGIN registerEasyEDAPlugin(
+        IO_MGR::EASYEDA,
+        wxT( "EasyEDA / JLCEDA Std" ),
+	    []() -> PLUGIN* { return new EASYEDA_PLUGIN; });
+
+static IO_MGR::REGISTER_PLUGIN registerEasyEDAProPlugin(
+        IO_MGR::EASYEDAPRO,
+        wxT( "EasyEDA / JLCEDA Pro" ),
+        []() -> PLUGIN* { return new EASYEDAPRO_PLUGIN; });
 
 static IO_MGR::REGISTER_PLUGIN registerFabmasterPlugin(
         IO_MGR::FABMASTER,

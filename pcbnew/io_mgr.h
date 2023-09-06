@@ -59,6 +59,8 @@ public:
         ALTIUM_DESIGNER,
         CADSTAR_PCB_ARCHIVE,
         EAGLE,
+        EASYEDA,
+        EASYEDAPRO,
         FABMASTER,
         GEDA_PCB, ///< Geda PCB file formats.
         PCAD,

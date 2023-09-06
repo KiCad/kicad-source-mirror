@@ -266,6 +266,16 @@ set( PLUGINS_EAGLE_SRCS
     plugins/eagle/eagle_parser.cpp
     )
 
+set( PLUGINS_EASYEDA_SRCS
+    plugins/easyeda/easyeda_parser_base.cpp
+    plugins/easyeda/easyeda_parser_structs.cpp
+    )
+
+set( PLUGINS_EASYEDAPRO_SRCS
+    plugins/easyedapro/easyedapro_parser.cpp
+    plugins/easyedapro/easyedapro_import_utils.cpp
+    )
+
 set( FONT_SRCS
     font/font.cpp
     font/glyph.cpp
@@ -295,6 +305,8 @@ set( COMMON_SRCS
     ${PLUGINS_ALTIUM_SRCS}
     ${PLUGINS_CADSTAR_SRCS}
     ${PLUGINS_EAGLE_SRCS}
+    ${PLUGINS_EASYEDA_SRCS}
+    ${PLUGINS_EASYEDAPRO_SRCS}
 	${FONT_SRCS}
     ${COMMON_IMPORT_GFX_SRCS}
     jobs/job_dispatcher.cpp

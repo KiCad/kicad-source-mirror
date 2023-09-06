@@ -624,6 +624,111 @@ void SHAPE_POLY_SET::ClearArcs()
 }
 
 
+void SHAPE_POLY_SET::RebuildHolesFromContours()
+{
+    std::vector<SHAPE_LINE_CHAIN> contours;
+
+    for( const POLYGON& poly : m_polys )
+        contours.insert( contours.end(), poly.begin(), poly.end() );
+
+    std::map<int, std::set<int>> parentToChildren;
+    std::map<int, std::set<int>> childToParents;
+
+    for( SHAPE_LINE_CHAIN& contour : contours )
+        contour.GenerateBBoxCache();
+
+    for( int i = 0; i < contours.size(); i++ )
+    {
+        const SHAPE_LINE_CHAIN& outline = contours[i];
+
+        for( int j = 0; j < contours.size(); j++ )
+        {
+            if( i == j )
+                continue;
+
+            const SHAPE_LINE_CHAIN& candidate = contours[j];
+            const VECTOR2I&         pt0 = candidate.CPoint( 0 );
+
+            if( outline.PointInside( pt0, 0, true ) )
+            {
+                parentToChildren[i].emplace( j );
+                childToParents[j].emplace( i );
+            }
+        }
+    }
+
+    std::set<int> topLevelParents;
+
+    for( int i = 0; i < contours.size(); i++ )
+    {
+        if( childToParents[i].size() == 0 )
+        {
+            topLevelParents.emplace( i );
+        }
+    }
+
+    SHAPE_POLY_SET result;
+
+    std::function<void( int, int, std::vector<int> )> process;
+
+    process = [&]( int myId, int parentOutlineId, std::vector<int> path )
+    {
+        std::set<int> relParents = childToParents[myId];
+
+        for( int pathId : path )
+        {
+            int erased = relParents.erase( pathId );
+            wxASSERT( erased > 0 );
+        }
+
+        wxASSERT( relParents.size() == 0 );
+
+        int myOutline = -1;
+
+        bool isOutline = path.size() % 2 == 0;
+
+        if( isOutline )
+        {
+            int outlineId = result.AddOutline( contours[myId] );
+            myOutline = outlineId;
+        }
+        else
+        {
+            wxASSERT( parentOutlineId != -1 );
+            int holeId = result.AddHole( contours[myId], parentOutlineId );
+        }
+
+        auto it = parentToChildren.find( myId );
+        if( it != parentToChildren.end() )
+        {
+            std::vector<int> thisPath = path;
+            thisPath.emplace_back( myId );
+
+            std::set<int> thisPathSet;
+            thisPathSet.insert( thisPath.begin(), thisPath.end() );
+
+            for( int childId : it->second )
+            {
+                const std::set<int>& childPathSet = childToParents[childId];
+
+                if( thisPathSet != childPathSet )
+                    continue; // Only interested in immediate children
+
+                process( childId, myOutline, thisPath );
+            }
+        }
+    };
+
+    for( int topParentId : topLevelParents )
+    {
+        std::vector<int> path;
+        process( topParentId, -1, path );
+    }
+
+    *this = result;
+}
+
+
 void SHAPE_POLY_SET::booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET& aOtherShape,
                                 POLYGON_MODE aFastMode )
 {

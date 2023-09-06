@@ -64,6 +64,8 @@ public:
         SCH_CADSTAR_ARCHIVE,  ///< CADSTAR Schematic Archive
         SCH_DATABASE,         ///< KiCad database library
         SCH_EAGLE,            ///< Autodesk Eagle file format
+        SCH_EASYEDA,          ///< EasyEDA Std schematic file
+        SCH_EASYEDAPRO,       ///< EasyEDA Pro archive
         SCH_LTSPICE,          ///< LtSpice Schematic format
 
         // Add your schematic type here.
