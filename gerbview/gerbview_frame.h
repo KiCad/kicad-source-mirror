@@ -351,6 +351,9 @@ public:
     void SortLayersByFileExtension();
     void SortLayersByX2Attributes();
 
+    // Adjust draw params: draw offset and draw rotation for a gerber file image
+    void SetLayerDrawPrms();
+
     /**
      * Takes a layer remapping and reorders the layers.
      *

@@ -53,6 +53,7 @@
 #include "widgets/gbr_layer_box_selector.h"
 #include "widgets/gerbview_layer_widget.h"
 #include "widgets/dcode_selection_box.h"
+#include <dialog_draw_layers_settings.h>
 #include <zoom_defines.h>
 
 
@@ -556,6 +557,29 @@ void GERBVIEW_FRAME::RemapLayers( std::unordered_map<int, int> remapping )
     }
 
     GetCanvas()->GetView()->ReorderLayerData( view_remapping );
+    GetCanvas()->Refresh();
+}
+
+
+void GERBVIEW_FRAME::SetLayerDrawPrms()
+{
+    // Adjust draw params: draw offset and draw rotation for a gerber file image
+    GERBER_FILE_IMAGE* gerber = GetGbrImage( GetActiveLayer() );
+
+    if( !gerber )
+        return;
+
+    DIALOG_DRAW_LAYERS_SETTINGS dlg( this );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return;
+
+    KIGFX::VIEW* view = GetCanvas()->GetView();
+
+    view->RecacheAllItems();
+    view->MarkDirty();
+    view->UpdateAllItems( KIGFX::ALL );
+
     GetCanvas()->Refresh();
 }
 

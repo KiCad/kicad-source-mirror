@@ -138,6 +138,9 @@ VECTOR2I GERBER_DRAW_ITEM::GetABPosition( const VECTOR2I& aXYPosition ) const
      */
     VECTOR2I abPos = aXYPosition + m_GerberImageFile->m_ImageJustifyOffset;
 
+    // We have also a draw transform (rotation and offset)
+    // order is rotation and after offset
+
     if( m_swapAxis )
         std::swap( abPos.x, abPos.y );
 
@@ -157,6 +160,13 @@ VECTOR2I GERBER_DRAW_ITEM::GetABPosition( const VECTOR2I& aXYPosition ) const
     if( !m_mirrorB )
         abPos.y = -abPos.y;
 
+    // Now generate the draw transform
+    if( !m_GerberImageFile->m_DrawRotation.IsZero() )
+        RotatePoint( abPos, m_GerberImageFile->m_DrawRotation );
+
+    abPos.x += KiROUND( m_GerberImageFile->m_DrawOffset.x * m_drawScale.x );
+    abPos.y += KiROUND( m_GerberImageFile->m_DrawOffset.y * m_drawScale.y );
+
     return abPos;
 }
 
@@ -165,6 +175,13 @@ VECTOR2I GERBER_DRAW_ITEM::GetXYPosition( const VECTOR2I& aABPosition ) const
 {
     // do the inverse transform made by GetABPosition
     VECTOR2I xyPos = aABPosition;
+
+    // First, undo the draw transform
+    xyPos.x -= KiROUND( m_GerberImageFile->m_DrawOffset.x * m_drawScale.x );
+    xyPos.y -= KiROUND( m_GerberImageFile->m_DrawOffset.y * m_drawScale.y );
+
+    if( !m_GerberImageFile->m_DrawRotation.IsZero() )
+        RotatePoint( xyPos, -m_GerberImageFile->m_DrawRotation );
 
     if( m_mirrorA )
         xyPos.x = -xyPos.x;

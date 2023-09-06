@@ -182,6 +182,11 @@ void GERBER_LAYER_WIDGET::AddRightClickMenuItems( wxMenu* aMenu )
 
     aMenu->AppendSeparator();
 
+    AddMenuItem( aMenu, ID_SET_GBR_LAYERS_DRAW_PRMS, _( "Active Layer Draw Params: Set Offset and Rotation" ),
+                 KiBitmap( BITMAPS::tools ) );
+
+    aMenu->AppendSeparator();
+
     AddMenuItem( aMenu, ID_LAYER_MOVE_UP, _( "Move Current Layer Up" ), KiBitmap( BITMAPS::up ) );
 
     AddMenuItem( aMenu, ID_LAYER_MOVE_DOWN, _( "Move Current Layer Down" ),
@@ -249,6 +254,10 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
 
     case ID_SORT_GBR_LAYERS_FILE_EXT:
         m_frame->SortLayersByFileExtension();
+        break;
+
+    case ID_SET_GBR_LAYERS_DRAW_PRMS:
+        m_frame->SetLayerDrawPrms();
         break;
 
     case ID_LAYER_MOVE_UP:
