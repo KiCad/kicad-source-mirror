@@ -180,7 +180,6 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
     {
         // The model is sourced from a library, optionally with instance overrides.
         m_useLibraryModelRadioButton->SetValue( true );
-        m_libraryModelsMgr.SetReporter( &reporter );
 
         if( !loadLibrary( libraryFilename ) )
         {
