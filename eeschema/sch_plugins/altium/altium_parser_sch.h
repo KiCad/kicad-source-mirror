@@ -382,7 +382,7 @@ struct ASCH_HYPERLINK : ASCH_LABEL
 struct ASCH_TEXT_FRAME : ASCH_OWNER_INTERFACE
 {
     VECTOR2I Location;
-    wxSize   Size;
+    VECTOR2I Size;
 
     // have both coordinates, for convenience
     VECTOR2I BottomLeft;
@@ -464,7 +464,7 @@ struct ASCH_ROUND_RECTANGLE : ASCH_OWNER_INTERFACE, ASCH_FILL_INTERFACE, ASCH_BO
     VECTOR2I BottomLeft;
     VECTOR2I TopRight;
 
-    wxSize CornerRadius;
+    VECTOR2I CornerRadius;
 
     bool IsTransparent;
 

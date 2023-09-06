@@ -1804,14 +1804,14 @@ void SCH_ALTIUM_PLUGIN::ParseRoundRectangle( const std::map<wxString, wxString>&
         LIB_SHAPE* rect = nullptr;
 
         // If it is a circle, make it a circle
-        if( std::abs( elem.CornerRadius.GetX() )
+        if( std::abs( elem.CornerRadius.x )
                     >= std::abs( elem.TopRight.x - elem.BottomLeft.x ) / 2
-            && std::abs( elem.CornerRadius.GetY() )
+            && std::abs( elem.CornerRadius.y )
                        >= std::abs( elem.TopRight.y - elem.BottomLeft.y ) / 2 )
         {
             rect = new LIB_SHAPE( symbol, SHAPE_T::CIRCLE );
             rect->SetPosition( GetLibEditPosition( ( sheetTopRight + sheetBottomLeft ) / 2  ) );
-            rect->SetEnd( VECTOR2I( rect->GetPosition().x + std::abs( elem.CornerRadius.GetX() ),
+            rect->SetEnd( VECTOR2I( rect->GetPosition().x + std::abs( elem.CornerRadius.x ),
                           rect->GetPosition().y ) );
 
         }

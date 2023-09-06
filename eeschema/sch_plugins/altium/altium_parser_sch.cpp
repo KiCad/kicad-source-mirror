@@ -299,8 +299,8 @@ ASCH_TEXT_FRAME::ASCH_TEXT_FRAME( const std::map<wxString, wxString>& aProps ) :
 
     Location = VECTOR2I( ReadKiCadUnitFrac( aProps, "LOCATION.X" ),
                          -ReadKiCadUnitFrac( aProps, "LOCATION.Y" ) );
-    Size = wxSize( ReadKiCadUnitFrac( aProps, "CORNER.X" ) - Location.x,
-                   -ReadKiCadUnitFrac( aProps, "CORNER.Y" ) - Location.y );
+    Size = VECTOR2I( ReadKiCadUnitFrac( aProps, "CORNER.X" ) - Location.x,
+                    -ReadKiCadUnitFrac( aProps, "CORNER.Y" ) - Location.y );
 
     Text = ALTIUM_PARSER::ReadString( aProps, "TEXT", "" );
     Text.Replace( "~1", "\n", true );
@@ -405,7 +405,7 @@ ASCH_ROUND_RECTANGLE::ASCH_ROUND_RECTANGLE( const std::map<wxString, wxString>& 
     TopRight = VECTOR2I( ReadKiCadUnitFrac( aProps, "CORNER.X" ),
                            -ReadKiCadUnitFrac( aProps, "CORNER.Y" ) );
 
-    CornerRadius = wxSize( ReadKiCadUnitFrac( aProps, "CORNERXRADIUS" ),
+    CornerRadius = VECTOR2I( ReadKiCadUnitFrac( aProps, "CORNERXRADIUS" ),
                            -ReadKiCadUnitFrac( aProps, "CORNERYRADIUS" ) );
 }
 
