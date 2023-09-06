@@ -3409,8 +3409,10 @@ void ALTIUM_PCB::ConvertFills6ToBoardItem( const AFILL6& aElem )
     {
         // This is not the actual board item. We can use it to create the polygon for the region
         PCB_SHAPE shape( nullptr, SHAPE_T::RECTANGLE );
+
         shape.SetStart( aElem.pos1 );
         shape.SetEnd( aElem.pos2 );
+        shape.SetFilled( true );
         shape.SetStroke( STROKE_PARAMS( 0, PLOT_DASH_TYPE::SOLID ) );
 
         if( aElem.rotation != 0. )
@@ -3438,8 +3440,10 @@ void ALTIUM_PCB::ConvertFills6ToFootprintItem( FOOTPRINT* aFootprint, const AFIL
     {
         // This is not the actual board item. We can use it to create the polygon for the region
         PCB_SHAPE shape( nullptr, SHAPE_T::RECTANGLE );
+
         shape.SetStart( aElem.pos1 );
         shape.SetEnd( aElem.pos2 );
+        shape.SetFilled( true );
         shape.SetStroke( STROKE_PARAMS( 0, PLOT_DASH_TYPE::SOLID ) );
 
         if( aElem.rotation != 0. )
