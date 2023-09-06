@@ -1112,6 +1112,36 @@ int PCB_SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+int PCB_SELECTION_TOOL::UnselectAll( const TOOL_EVENT& aEvent )
+{
+    KIGFX::VIEW* view = getView();
+
+    // hold all visible items
+    std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
+
+    // Filter the view items based on the selection box
+    BOX2I selectionBox;
+
+    selectionBox.SetMaximum();
+    view->Query( selectionBox, selectedItems ); // Get the list of selected items
+
+    for( const KIGFX::VIEW::LAYER_ITEM_PAIR& item_pair : selectedItems )
+    {
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( item_pair.first );
+
+        if( !item || !Selectable( item ) )
+            continue;
+
+        unselect( item );
+    }
+
+    m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
+
+    m_frame->GetCanvas()->ForceRefresh();
+
+    return 0;
+}
+
 
 void connectedItemFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector,
                           PCB_SELECTION_TOOL* sTool )
@@ -3497,6 +3527,7 @@ void PCB_SELECTION_TOOL::setTransitions()
     Go( &PCB_SELECTION_TOOL::updateSelection,     EVENTS::SelectedItemsMoved );
 
     Go( &PCB_SELECTION_TOOL::SelectAll,           ACTIONS::selectAll.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::UnselectAll,         ACTIONS::unselectAll.MakeEvent() );
 
     Go( &PCB_SELECTION_TOOL::disambiguateCursor,  EVENTS::DisambiguatePoint );
 }

@@ -310,6 +310,7 @@ bool EDIT_TOOL::Init()
 
     menu.AddSeparator( 150 );
     menu.AddItem( ACTIONS::selectAll,             noItemsCondition, 150 );
+    menu.AddItem( ACTIONS::unselectAll,           noItemsCondition, 150 );
     // clang-format on
 
     return true;

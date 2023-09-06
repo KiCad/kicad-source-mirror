@@ -1093,6 +1093,50 @@ int EE_SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+int EE_SELECTION_TOOL::UnselectAll( const TOOL_EVENT& aEvent )
+{
+    m_multiple = true;          // Multiple selection mode is active
+    KIGFX::VIEW* view = getView();
+
+    // hold all visible items
+    std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
+
+    // Filter the view items based on the selection box
+    BOX2I selectionBox;
+
+    selectionBox.SetMaximum();
+    view->Query( selectionBox, selectedItems );         // Get the list of selected items
+
+    for( KIGFX::VIEW::LAYER_ITEM_PAIR& pair : selectedItems )
+    {
+        SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( pair.first );
+
+        if( sheet )
+        {
+            int layer = pair.second;
+
+            for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+            {
+                EDA_ITEM* item = dynamic_cast<EDA_ITEM*>( pin );
+                if( Selectable( item ) )
+                    unselect( item );
+            }
+        }
+
+        if( EDA_ITEM* item = dynamic_cast<EDA_ITEM*>( pair.first ) )
+        {
+            if( Selectable( item ) )
+                unselect( item );
+        }
+    }
+
+    m_multiple = false;
+
+    m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
+
+    return 0;
+}
+
 
 void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const VECTOR2I& aPos )
 {
@@ -2069,6 +2113,7 @@ void EE_SELECTION_TOOL::setTransitions()
     Go( &EE_SELECTION_TOOL::SelectionMenu,       EE_ACTIONS::selectionMenu.MakeEvent() );
 
     Go( &EE_SELECTION_TOOL::SelectAll,           EE_ACTIONS::selectAll.MakeEvent() );
+    Go( &EE_SELECTION_TOOL::UnselectAll,         EE_ACTIONS::unselectAll.MakeEvent() );
 
     Go( &EE_SELECTION_TOOL::disambiguateCursor,  EVENTS::DisambiguatePoint );
 }

@@ -1170,6 +1170,7 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::doDelete,               ENABLE( cond.HasItems() ) );
     mgr->SetConditions( ACTIONS::duplicate,              ENABLE( cond.HasItems() ) );
     mgr->SetConditions( ACTIONS::selectAll,              ENABLE( cond.HasItems() ) );
+    mgr->SetConditions( ACTIONS::unselectAll,            ENABLE( cond.HasItems() ) );
 
     mgr->SetConditions( PCB_ACTIONS::rotateCw,           ENABLE( cond.HasItems() ) );
     mgr->SetConditions( PCB_ACTIONS::rotateCcw,          ENABLE( cond.HasItems() ) );

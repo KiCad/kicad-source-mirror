@@ -565,6 +565,7 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::doDelete,            ENABLE( hasElements ) );
     mgr->SetConditions( ACTIONS::duplicate,           ENABLE( hasElements ) );
     mgr->SetConditions( ACTIONS::selectAll,           ENABLE( hasElements ) );
+    mgr->SetConditions( ACTIONS::unselectAll,           ENABLE( hasElements ) );
 
     mgr->SetConditions( EE_ACTIONS::rotateCW,         ENABLE( hasElements ) );
     mgr->SetConditions( EE_ACTIONS::rotateCCW,        ENABLE( hasElements ) );

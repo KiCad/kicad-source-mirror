@@ -158,6 +158,7 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
 
     editMenu->AppendSeparator();
     editMenu->Add( ACTIONS::selectAll );
+    editMenu->Add( ACTIONS::unselectAll );
 
     editMenu->AppendSeparator();
     editMenu->Add( ACTIONS::find );

@@ -110,6 +110,7 @@ bool SYMBOL_EDITOR_EDIT_TOOL::Init()
 
         moveMenu.AddSeparator( 400 );
         moveMenu.AddItem( ACTIONS::selectAll,       haveSymbolCondition, 400 );
+        moveMenu.AddItem( ACTIONS::unselectAll,     haveSymbolCondition, 400 );
     }
 
     // Add editing actions to the drawing tool menu
@@ -142,6 +143,7 @@ bool SYMBOL_EDITOR_EDIT_TOOL::Init()
 
     selToolMenu.AddSeparator( 400 );
     selToolMenu.AddItem( ACTIONS::selectAll,        haveSymbolCondition, 400 );
+    selToolMenu.AddItem( ACTIONS::unselectAll,      haveSymbolCondition, 400 );
 
     return true;
 }

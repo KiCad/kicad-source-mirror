@@ -705,6 +705,7 @@ bool SCH_EDIT_TOOL::Init()
 
     selToolMenu.AddSeparator( 400 );
     selToolMenu.AddItem( ACTIONS::selectAll,           hasElements, 400 );
+    selToolMenu.AddItem( ACTIONS::unselectAll,         hasElements, 400 );
 
     return true;
 }

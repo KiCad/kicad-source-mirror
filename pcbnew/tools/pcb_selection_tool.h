@@ -112,6 +112,9 @@ public:
     ///< Select all items on the board
     int SelectAll( const TOOL_EVENT& aEvent );
 
+    ///< Unselect all items on the board
+    int UnselectAll( const TOOL_EVENT& aEvent );
+
     /**
      * Take necessary actions to mark an item as found.
      *

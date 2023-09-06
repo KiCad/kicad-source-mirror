@@ -140,6 +140,9 @@ public:
     ///< Select all visible items in sheet
     int SelectAll( const TOOL_EVENT& aEvent );
 
+    ///< Unselect all visible items in sheet
+    int UnselectAll( const TOOL_EVENT& aEvent );
+
     void ClearSelection( bool aQuietMode = false );
 
     /**

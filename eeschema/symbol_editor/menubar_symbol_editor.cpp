@@ -95,6 +95,7 @@ void SYMBOL_EDIT_FRAME::doReCreateMenuBar()
 
     editMenu->AppendSeparator();
     editMenu->Add( ACTIONS::selectAll );
+    editMenu->Add( ACTIONS::unselectAll );
 
     editMenu->AppendSeparator();
     editMenu->Add( EE_ACTIONS::pinTable );

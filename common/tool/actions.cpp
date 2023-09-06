@@ -225,6 +225,13 @@ TOOL_ACTION ACTIONS::selectAll( TOOL_ACTION_ARGS()
         .MenuText( _( "Select All" ) )
         .Tooltip( _( "Select all items on screen" ) ) );
 
+TOOL_ACTION ACTIONS::unselectAll( TOOL_ACTION_ARGS()
+        .Name( "common.Interactive.unselectAll" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_CTRL + MD_SHIFT + 'A' )
+        .MenuText( _( "Unselect All" ) )
+        .Tooltip( _( "Unselect all items on screen" ) ) );
+
 TOOL_ACTION ACTIONS::pasteSpecial( TOOL_ACTION_ARGS()
         .Name( "common.Interactive.pasteSpecial" )
         .Scope( AS_GLOBAL )

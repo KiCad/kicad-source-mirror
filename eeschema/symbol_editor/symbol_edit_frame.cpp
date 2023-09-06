@@ -436,6 +436,7 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::doDelete,          ENABLE( isEditableCond ) );
     mgr->SetConditions( ACTIONS::duplicate,         ENABLE( isEditableCond ) );
     mgr->SetConditions( ACTIONS::selectAll,         ENABLE( haveSymbolCond ) );
+    mgr->SetConditions( ACTIONS::unselectAll,         ENABLE( haveSymbolCond ) );
 
     mgr->SetConditions( EE_ACTIONS::rotateCW,       ENABLE( isEditableCond ) );
     mgr->SetConditions( EE_ACTIONS::rotateCCW,      ENABLE( isEditableCond ) );
