@@ -192,7 +192,7 @@ FOOTPRINT* MICROWAVE_TOOL::createBaseFootprint( const wxString& aValue,
 {
     PCB_EDIT_FRAME& editFrame = *getEditFrame<PCB_EDIT_FRAME>();
 
-    FOOTPRINT* footprint = editFrame.CreateNewFootprint( aValue, true );
+    FOOTPRINT* footprint = editFrame.CreateNewFootprint( aValue, wxEmptyString, true );
 
     footprint->SetAttributes( FP_EXCLUDE_FROM_POS_FILES | FP_EXCLUDE_FROM_BOM );
 

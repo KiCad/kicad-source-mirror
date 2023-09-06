@@ -151,7 +151,8 @@ bool FOOTPRINT_EDITOR_CONTROL::Init()
 int FOOTPRINT_EDITOR_CONTROL::NewFootprint( const TOOL_EVENT& aEvent )
 {
     LIB_ID     selected = m_frame->GetTreeFPID();
-    FOOTPRINT* newFootprint = m_frame->CreateNewFootprint( wxEmptyString );
+    wxString   libraryName = selected.GetUniStringLibNickname();
+    FOOTPRINT* newFootprint = m_frame->CreateNewFootprint( wxEmptyString, libraryName, false );
 
     if( !newFootprint )
         return 0;
@@ -396,43 +397,69 @@ int FOOTPRINT_EDITOR_CONTROL::DuplicateFootprint( const TOOL_EVENT& aEvent )
 }
 
 
+class RENAME_DIALOG : public wxTextEntryDialog
+{
+public:
+    RENAME_DIALOG( wxWindow* aParent, const wxString& aName,
+                   std::function<bool( wxString newName )> aValidator ) :
+            wxTextEntryDialog( aParent, _( "New name:" ), _( "Change Footprint Name" ), aName ),
+            m_validator( std::move( aValidator ) )
+    { }
+
+    wxString GetFPName()
+    {
+        wxString name = m_textctrl->GetValue();
+        name.Trim( true ).Trim( false );
+        return name;
+    }
+
+protected:
+    bool TransferDataFromWindow() override
+    {
+        return m_validator( GetFPName() );
+    }
+
+private:
+    std::function<bool( wxString newName )> m_validator;
+};
+
+
 int FOOTPRINT_EDITOR_CONTROL::RenameFootprint( const TOOL_EVENT& aEvent )
 {
     FP_LIB_TABLE* tbl = m_frame->Prj().PcbFootprintLibs();
     LIB_ID        fpID = m_frame->GetTreeFPID();
     wxString      libraryName = fpID.GetLibNickname();
     wxString      oldName = fpID.GetLibItemName();
-    wxString      newName = oldName;
-    bool          done = false;
+    wxString      msg;
 
-    while( !done )
-    {
-        wxTextEntryDialog dlg( m_frame, _( "New name:" ), _( "Change Footprint Name" ), newName );
+    RENAME_DIALOG dlg( m_frame, oldName,
+            [&]( wxString newName )
+            {
+                if( newName.IsEmpty() )
+                {
+                    wxMessageBox( _( "Footprint must have a name." ) );
+                    return false;
+                }
 
-        if( dlg.ShowModal() != wxID_OK )
-            return 0;   // canceled by user
+                if( tbl->FootprintExists( libraryName, newName ) )
+                {
+                    msg = wxString::Format( _( "Footprint '%s' already exists in library '%s'." ),
+                                            newName, libraryName );
 
-        newName = dlg.GetValue();
-        newName.Trim( true ).Trim( false );
+                    KIDIALOG errorDlg( m_frame, msg, _( "Confirmation" ),
+                                       wxOK | wxCANCEL | wxICON_WARNING );
+                    errorDlg.SetOKLabel( _( "Overwrite" ) );
 
-        if( newName.IsEmpty() )
-        {
-            DisplayErrorMessage( m_frame, _( "Footprint name cannot be empty." ) );
-        }
-        else if( tbl->FootprintExists( libraryName, newName ) )
-        {
-            DisplayErrorMessage( m_frame, wxString::Format( _( "Footprint name '%s' already "
-                                                               "in use in library '%s'." ),
-                                                            UnescapeString( newName ),
-                                                            libraryName ) );
-            newName = oldName;
-        }
-        else
-        {
-            done = true;
-        }
-    }
+                    return errorDlg.ShowModal() == wxID_OK;
+                }
 
+                return true;
+            } );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return 0;   // canceled by user
+
+    wxString   newName = dlg.GetFPName();
     FOOTPRINT* footprint = nullptr;
 
     if( fpID == m_frame->GetLoadedFPID() )

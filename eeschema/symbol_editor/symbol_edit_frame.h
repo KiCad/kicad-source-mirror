@@ -415,9 +415,6 @@ private:
     // Set up the tool framework
     void setupTools();
 
-    EDA_LIST_DIALOG* buildSaveAsDialog( const wxString& aSymbolName,
-                                        const wxString& aLibraryPreselect );
-
     void saveSymbolAs();
 
     /**

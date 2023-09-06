@@ -332,9 +332,6 @@ protected:
     /// protected so only friend PCB::IFACE::CreateWindow() can act as sole factory.
     FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
 
-    EDA_LIST_DIALOG* buildSaveAsDialog( const wxString& aFootprintName,
-                                        const wxString& aLibraryPreselect );
-
     /**
      * Make sure the footprint info list is loaded (with a progress dialog) and then initialize
      * the footprint library tree.
