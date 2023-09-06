@@ -40,7 +40,7 @@
 #include <geometry/shape_circle.h>
 #include <ratsnest/ratsnest_data.h>
 #include <progress_reporter.h>
-#include <thread_pool.h>
+#include <core/thread_pool.h>
 #include <trigo.h>
 #include <drc/drc_rtree.h>
 

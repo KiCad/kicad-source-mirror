@@ -43,7 +43,7 @@
 #include <geometry/convex_hull.h>
 #include <geometry/geometry_utils.h>
 #include <confirm.h>
-#include <thread_pool.h>
+#include <core/thread_pool.h>
 #include <math/util.h>      // for KiROUND
 #include "zone_filler.h"
 

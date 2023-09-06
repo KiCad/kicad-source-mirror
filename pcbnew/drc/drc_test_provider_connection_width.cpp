@@ -44,7 +44,7 @@
 #include <math/vector2d.h>
 #include <pcb_shape.h>
 #include <progress_reporter.h>
-#include <thread_pool.h>
+#include <core/thread_pool.h>
 #include <pcb_track.h>
 #include <pad.h>
 #include <zone.h>

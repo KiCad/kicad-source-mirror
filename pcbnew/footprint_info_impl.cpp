@@ -31,7 +31,7 @@
 #include <lib_id.h>
 #include <progress_reporter.h>
 #include <string_utils.h>
-#include <thread_pool.h>
+#include <core/thread_pool.h>
 #include <wildcards_and_files_ext.h>
 
 #include <kiplatform/io.h>

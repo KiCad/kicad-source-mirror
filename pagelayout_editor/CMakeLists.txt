@@ -117,10 +117,6 @@ set_target_properties( pl_editor_kiface PROPERTIES
     SUFFIX          ${KIFACE_SUFFIX}
     )
 
-target_include_directories( pl_editor_kiface PRIVATE
-    $<TARGET_PROPERTY:thread-pool,INTERFACE_INCLUDE_DIRECTORIES>
-    )
-
 set_source_files_properties( pl_editor.cpp PROPERTIES
     # The KIFACE is in pcbnew.cpp, export it:
     COMPILE_DEFINITIONS     "BUILD_KIWAY_DLL;COMPILING_DLL"

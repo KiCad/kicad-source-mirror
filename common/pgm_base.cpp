@@ -66,7 +66,7 @@
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <systemdirsappend.h>
-#include <thread_pool.h>
+#include <core/thread_pool.h>
 #include <trace_helpers.h>
 
 #include <widgets/wx_splash.h>

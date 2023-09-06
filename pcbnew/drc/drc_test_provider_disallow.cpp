@@ -31,7 +31,7 @@
 #include <drc/drc_test_provider.h>
 #include <pad.h>
 #include <progress_reporter.h>
-#include <thread_pool.h>
+#include <core/thread_pool.h>
 #include <zone.h>
 
 

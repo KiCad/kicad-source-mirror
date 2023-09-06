@@ -22,7 +22,7 @@
  */
 
 
-#include <thread_pool.h>
+#include <core/thread_pool.h>
 
 // Under mingw, there is a problem with the destructor when creating a static instance
 // of a thread_pool: probably the DTOR is called too late, and the application hangs.

@@ -24,7 +24,7 @@
 #include <common.h>
 #include <board_design_settings.h>
 #include <footprint.h>
-#include <thread_pool.h>
+#include <core/thread_pool.h>
 #include <zone.h>
 #include <connectivity/connectivity_data.h>
 #include <drc/drc_engine.h>

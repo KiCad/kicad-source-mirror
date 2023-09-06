@@ -124,10 +124,6 @@ target_link_libraries( gerbview
     ${wxWidgets_LIBRARIES}
     )
 
-target_include_directories( gerbview PRIVATE
-    $<TARGET_PROPERTY:thread-pool,INTERFACE_INCLUDE_DIRECTORIES>
-    )
-
 target_link_options( gerbview PRIVATE
     $<$<BOOL:${KICAD_MAKE_LINK_MAPS}>:-Wl,--cref,-Map=gerbview.map>
     )

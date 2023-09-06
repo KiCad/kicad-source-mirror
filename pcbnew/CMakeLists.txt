@@ -630,10 +630,6 @@ target_link_libraries( pcbnew_kiface_objects
         ${OCC_LIBRARIES}
     )
 
-target_include_directories( pcbnew_kiface_objects PRIVATE
-    $<TARGET_PROPERTY:thread-pool,INTERFACE_INCLUDE_DIRECTORIES>
-    )
-
 add_library( pcbnew_kiface MODULE )
 
 set_target_properties( pcbnew_kiface PROPERTIES

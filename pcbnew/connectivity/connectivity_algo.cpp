@@ -33,7 +33,7 @@
 #include <progress_reporter.h>
 #include <geometry/geometry_utils.h>
 #include <board_commit.h>
-#include <thread_pool.h>
+#include <core/thread_pool.h>
 #include <pcb_shape.h>
 
 #include <wx/log.h>

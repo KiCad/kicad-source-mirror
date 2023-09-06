@@ -513,7 +513,6 @@ target_include_directories( eeschema_kiface_objects
     PUBLIC
         .
         netlist_exporters
-        $<TARGET_PROPERTY:thread-pool,INTERFACE_INCLUDE_DIRECTORIES>
      )
 
 target_link_libraries( eeschema_kiface_objects

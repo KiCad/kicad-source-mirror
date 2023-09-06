@@ -78,10 +78,6 @@ target_link_libraries( cvpcb_kiface
     ${wxWidgets_LIBRARIES}
     )
 
-target_include_directories( cvpcb_kiface PRIVATE
-    $<TARGET_PROPERTY:thread-pool,INTERFACE_INCLUDE_DIRECTORIES>
-    )
-
 # -lrt must follow Boost on Linux platforms
 target_link_libraries( cvpcb_kiface $<$<BOOL:${UNIX_NOT_APPLE}>:rt> )
 

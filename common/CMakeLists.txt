@@ -61,17 +61,6 @@ install( TARGETS lib_kicad
     )
 endif()
 
-# Build a single library for the thread pool that we can link around
-
-add_library( threadpool STATIC
-    thread_pool.cpp
-    )
-
-target_include_directories( threadpool PRIVATE
-    $<TARGET_PROPERTY:thread-pool,INTERFACE_INCLUDE_DIRECTORIES>
-    )
-
-
 # The build version string defaults to the value in the KiCadVersion.cmake file.
 # If being built inside a git repository, the git tag and commit hash are used to create
 # a new version string instead. The user can supply an additional string to be appended
@@ -517,7 +506,6 @@ target_link_libraries( common
     dxflib_qcad
     tinyspline_lib
     scripting
-    threadpool
     nlohmann_json
     pybind11::embed
     compoundfilereader
@@ -544,7 +532,6 @@ target_include_directories( common
     PUBLIC
         .
         ${CMAKE_BINARY_DIR}
-        $<TARGET_PROPERTY:thread-pool,INTERFACE_INCLUDE_DIRECTORIES>
         $<TARGET_PROPERTY:argparse::argparse,INTERFACE_INCLUDE_DIRECTORIES>
     )
 
@@ -650,16 +637,14 @@ set_source_files_properties( ${PCB_COMMON_SRCS} PROPERTIES
 add_library( pcbcommon STATIC ${PCB_COMMON_SRCS} )
 
 target_include_directories( pcbcommon PRIVATE
-    $<TARGET_PROPERTY:thread-pool,INTERFACE_INCLUDE_DIRECTORIES>
     )
 
 target_link_libraries( pcbcommon PUBLIC
+    core
     common
     delaunator
     kimath
     kiplatform
-    core
-    threadpool
 )
 
 message( STATUS "Including 3Dconnexion SpaceMouse navigation support in pcbcommon" )

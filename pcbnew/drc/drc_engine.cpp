@@ -39,7 +39,7 @@
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_track.h>
-#include <thread_pool.h>
+#include <core/thread_pool.h>
 #include <zone.h>
 
 

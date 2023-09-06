@@ -4,7 +4,6 @@ include_directories(
     ./
     ../
     ../../include
-    $<TARGET_PROPERTY:thread-pool,INTERFACE_INCLUDE_DIRECTORIES>
     ${INC_AFTER}
 )
 
@@ -19,5 +18,4 @@ add_library( connectivity STATIC ${PCBNEW_CONN_SRCS} )
 
 target_link_libraries( connectivity PRIVATE
     common
-    threadpool    
 )

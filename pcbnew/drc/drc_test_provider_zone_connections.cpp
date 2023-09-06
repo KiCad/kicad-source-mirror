@@ -28,7 +28,7 @@
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_track.h>
-#include <thread_pool.h>
+#include <core/thread_pool.h>
 
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_poly_set.h>

@@ -45,7 +45,7 @@
 #include <project/net_settings.h>
 #include <widgets/ui_common.h>
 #include <string_utils.h>
-#include <thread_pool.h>
+#include <core/thread_pool.h>
 #include <wx/log.h>
 
 #include <advanced_config.h> // for realtime connectivity switch in release builds

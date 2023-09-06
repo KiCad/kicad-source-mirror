@@ -33,7 +33,7 @@
 #include <drc/drc_test_provider.h>
 #include <advanced_config.h>
 #include <progress_reporter.h>
-#include <thread_pool.h>
+#include <core/thread_pool.h>
 
 /*
     Checks for slivers in copper layers
