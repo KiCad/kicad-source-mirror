@@ -207,14 +207,14 @@ void ConnectBoardShapes( std::vector<PCB_SHAPE*>&                 aShapeList,
     {
         graphic = *startCandidates.begin();
 
-        auto walkFrom = [&]( PCB_SHAPE* graphic, VECTOR2I startPt )
+        auto walkFrom = [&]( PCB_SHAPE* curr_graphic, VECTOR2I startPt )
         {
             VECTOR2I prevPt = startPt;
 
             for( ;; )
             {
                 // Get next closest segment.
-                PCB_SHAPE* nextGraphic = findNext( graphic, prevPt, aShapeList, aChainingEpsilon );
+                PCB_SHAPE* nextGraphic = findNext( curr_graphic, prevPt, aShapeList, aChainingEpsilon );
 
                 if( !nextGraphic )
                     break;
@@ -225,8 +225,8 @@ void ConnectBoardShapes( std::vector<PCB_SHAPE*>&                 aShapeList,
                 if( !closer_to_first( prevPt, nstart, nend ) )
                     std::swap( nstart, nend );
 
-                if( !connectPair( graphic, nextGraphic ) )
-                    addSegment( prevPt, nstart, graphic->GetWidth(), graphic->GetLayer() );
+                if( !connectPair( curr_graphic, nextGraphic ) )
+                    addSegment( prevPt, nstart, curr_graphic->GetWidth(), curr_graphic->GetLayer() );
 
                 // Shape might've changed
                 nstart = nextGraphic->GetStart();
@@ -236,9 +236,9 @@ void ConnectBoardShapes( std::vector<PCB_SHAPE*>&                 aShapeList,
                     std::swap( nstart, nend );
 
                 prevPt = nend;
-                graphic = nextGraphic;
-                graphic->SetFlags( SKIP_STRUCT );
-                startCandidates.erase( graphic );
+                curr_graphic = nextGraphic;
+                curr_graphic->SetFlags( SKIP_STRUCT );
+                startCandidates.erase( curr_graphic );
             }
         };
 

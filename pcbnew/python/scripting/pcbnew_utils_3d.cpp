@@ -215,7 +215,7 @@ UTILS_STEP_MODEL* UTILS_STEP_MODEL::LoadSTEP( const wxString& aFileName )
     m_app->NewDocument( "MDTV-XCAF", data->m_backDoc );
 
     STEPCAFControl_Reader reader;
-    IFSelect_ReturnStatus stat = reader.ReadFile( aFileName );
+    IFSelect_ReturnStatus stat = reader.ReadFile( aFileName.ToStdString().c_str() );
 
     if( stat != IFSelect_RetDone )
         return nullptr;
@@ -314,7 +314,7 @@ void UTILS_STEP_MODEL::Scale( double aScale )
     std::swap( m_data->m_frontDoc, m_data->m_backDoc );
 
     Handle( XCAFApp_Application ) m_app = XCAFApp_Application::GetApplication();
-    
+
     m_data->m_backDoc->Main().ForgetAllAttributes();
     m_app->Close( m_data->m_backDoc );
     m_app->NewDocument( "MDTV-XCAF", m_data->m_backDoc );
@@ -334,7 +334,7 @@ bool UTILS_STEP_MODEL::SaveSTEP( const wxString& aFileName )
     if( !writer.Transfer( m_data->m_frontDoc, STEPControl_AsIs ) )
         return false;
 
-    if( writer.Write( aFileName ) != IFSelect_RetDone )
+    if( writer.Write( aFileName.ToStdString().c_str() ) != IFSelect_RetDone )
         return false;
 
     Handle( XCAFApp_Application ) m_app = XCAFApp_Application::GetApplication();

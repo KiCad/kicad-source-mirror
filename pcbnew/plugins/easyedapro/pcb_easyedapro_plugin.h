@@ -64,7 +64,7 @@ public:
                              bool                   aBestEfforts,
                              const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
-    std::vector<FOOTPRINT*> GetImportedCachedLibraryFootprints();
+    std::vector<FOOTPRINT*> GetImportedCachedLibraryFootprints() override;
 
     FOOTPRINT* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
                               bool                   aKeepUUID = false,

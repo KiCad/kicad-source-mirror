@@ -66,13 +66,6 @@ double EASYEDA_PARSER_BASE::RelPosY( const wxString& aValue )
 }
 
 
-template <typename T>
-VECTOR2<T> EASYEDA_PARSER_BASE::RelPos( const VECTOR2<T>& aVec )
-{
-    return ScalePos( aVec - m_relOrigin );
-}
-
-
 SHAPE_POLY_SET EASYEDA_PARSER_BASE::ParsePolygons( const wxString& data, int aArcMinSegLen )
 {
     SHAPE_POLY_SET result;

@@ -637,11 +637,11 @@ void SHAPE_POLY_SET::RebuildHolesFromContours()
     for( SHAPE_LINE_CHAIN& contour : contours )
         contour.GenerateBBoxCache();
 
-    for( int i = 0; i < contours.size(); i++ )
+    for( size_t i = 0; i < contours.size(); i++ )
     {
         const SHAPE_LINE_CHAIN& outline = contours[i];
 
-        for( int j = 0; j < contours.size(); j++ )
+        for( size_t j = 0; j < contours.size(); j++ )
         {
             if( i == j )
                 continue;
@@ -659,7 +659,7 @@ void SHAPE_POLY_SET::RebuildHolesFromContours()
 
     std::set<int> topLevelParents;
 
-    for( int i = 0; i < contours.size(); i++ )
+    for( size_t i = 0; i < contours.size(); i++ )
     {
         if( childToParents[i].size() == 0 )
         {

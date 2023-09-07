@@ -53,7 +53,10 @@ public:
     double RelPosY( const wxString& aValue );
 
     template <typename T>
-    VECTOR2<T> RelPos( const VECTOR2<T>& aVec );
+    VECTOR2<T> RelPos( const VECTOR2<T>& aVec )
+    {
+        return ScalePos( aVec - m_relOrigin );
+    }
 
     SHAPE_POLY_SET ParsePolygons( const wxString& aData, int aArcMinSegLen );
 
