@@ -3697,7 +3697,10 @@ void SCH_ALTIUM_PLUGIN::ParseImplementation( const std::map<wxString, wxString>&
                 wxArrayString fpFilters;
                 fpFilters.Add( fpLibId.Format() );
 
-                symbol->SetFPFilters( wxArrayString( 1, wxString::Format( "*%s*", elem.name ) ));
+                wxString txt;
+                txt.Printf( "*%s*", elem.name );
+
+                symbol->SetFPFilters( wxArrayString( 1, &txt ));
                 LIB_FIELD& footprintField = symbol->GetFootprintField();
                 footprintField.SetText( fpLibId.Format() );
             }
