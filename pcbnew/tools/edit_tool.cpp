@@ -210,6 +210,9 @@ bool EDIT_TOOL::Init()
     auto singleFootprintCondition = SELECTION_CONDITIONS::OnlyTypes( { PCB_FOOTPRINT_T } )
                                         && SELECTION_CONDITIONS::Count( 1 );
 
+    auto multipleFootprintsCondition = SELECTION_CONDITIONS::OnlyTypes( { PCB_FOOTPRINT_T } )
+                                        && SELECTION_CONDITIONS::MoreThan( 1 );
+
     auto noActiveToolCondition =
             [ this ]( const SELECTION& aSelection )
             {
@@ -290,7 +293,9 @@ bool EDIT_TOOL::Init()
     menu.AddSeparator();
     menu.AddItem( PCB_ACTIONS::editFpInFpEditor,  singleFootprintCondition );
     menu.AddItem( PCB_ACTIONS::updateFootprint,   singleFootprintCondition );
+    menu.AddItem( PCB_ACTIONS::updateFootprints,  multipleFootprintsCondition );
     menu.AddItem( PCB_ACTIONS::changeFootprint,   singleFootprintCondition );
+    menu.AddItem( PCB_ACTIONS::changeFootprints,  multipleFootprintsCondition );
 
     // Add the submenu for the special tools: modfiers and positioning tools
     menu.AddSeparator( 100 );
