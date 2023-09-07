@@ -401,7 +401,6 @@ set( COMMON_SRCS
     textentry_tricks.cpp
     title_block.cpp
     trace_helpers.cpp
-    transform.cpp
     undo_redo_container.cpp
     utf8.cpp
     validators.cpp

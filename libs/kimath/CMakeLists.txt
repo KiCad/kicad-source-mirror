@@ -8,6 +8,7 @@ set( KIMATH_SRCS
     src/bezier_curves.cpp
     src/convert_basic_shapes_to_polygon.cpp
     src/md5_hash.cpp
+    src/transform.cpp
     src/trigo.cpp
 
 	src/geometry/chamfer.cpp
