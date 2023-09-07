@@ -9,6 +9,7 @@ include_directories(
 
 set( PCB_CALCULATOR_SRCS
     common_data.cpp
+    eseries.cpp
     params_read_write.cpp
     pcb_calculator_control.cpp
     pcb_calculator_frame.cpp
