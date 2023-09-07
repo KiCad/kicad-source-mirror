@@ -18,7 +18,7 @@ DIALOG_DRAW_LAYERS_SETTINGS_BASE::DIALOG_DRAW_LAYERS_SETTINGS_BASE( wxWindow* pa
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_stLayerNameTitle = new wxStaticText( this, wxID_ANY, _("Layer name:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stLayerNameTitle = new wxStaticText( this, wxID_ANY, _("Active layer name:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stLayerNameTitle->Wrap( -1 );
 	bSizer3->Add( m_stLayerNameTitle, 0, wxALL, 5 );
 
@@ -37,7 +37,7 @@ DIALOG_DRAW_LAYERS_SETTINGS_BASE::DIALOG_DRAW_LAYERS_SETTINGS_BASE( wxWindow* pa
 
 	m_stOffsetX = new wxStaticText( this, wxID_ANY, _("Offset X"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stOffsetX->Wrap( -1 );
-	fgSizer->Add( m_stOffsetX, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer->Add( m_stOffsetX, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_tcOffsetX = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer->Add( m_tcOffsetX, 0, wxALL|wxEXPAND, 5 );
@@ -48,7 +48,7 @@ DIALOG_DRAW_LAYERS_SETTINGS_BASE::DIALOG_DRAW_LAYERS_SETTINGS_BASE( wxWindow* pa
 
 	m_stOffsetY = new wxStaticText( this, wxID_ANY, _("Offset Y"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stOffsetY->Wrap( -1 );
-	fgSizer->Add( m_stOffsetY, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer->Add( m_stOffsetY, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_tcOffsetY = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer->Add( m_tcOffsetY, 0, wxALL|wxEXPAND, 5 );
@@ -57,9 +57,9 @@ DIALOG_DRAW_LAYERS_SETTINGS_BASE::DIALOG_DRAW_LAYERS_SETTINGS_BASE( wxWindow* pa
 	m_stUnitY->Wrap( -1 );
 	fgSizer->Add( m_stUnitY, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_stLayerRot = new wxStaticText( this, wxID_ANY, _("Rotation"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stLayerRot = new wxStaticText( this, wxID_ANY, _("Rotation CCW"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stLayerRot->Wrap( -1 );
-	fgSizer->Add( m_stLayerRot, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer->Add( m_stLayerRot, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_tcRotation = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer->Add( m_tcRotation, 0, wxALL|wxEXPAND, 5 );
@@ -69,7 +69,19 @@ DIALOG_DRAW_LAYERS_SETTINGS_BASE::DIALOG_DRAW_LAYERS_SETTINGS_BASE( wxWindow* pa
 	fgSizer->Add( m_stUnitRot, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	m_namiSizer->Add( fgSizer, 1, wxEXPAND, 5 );
+	m_namiSizer->Add( fgSizer, 0, wxEXPAND, 5 );
+
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	m_namiSizer->Add( m_staticline1, 0, wxALL|wxEXPAND, 5 );
+
+	wxString m_rbScopeChoices[] = { _("Active layer"), _("All layers"), _("All visible layers") };
+	int m_rbScopeNChoices = sizeof( m_rbScopeChoices ) / sizeof( wxString );
+	m_rbScope = new wxRadioBox( this, wxID_ANY, _("Scope"), wxDefaultPosition, wxDefaultSize, m_rbScopeNChoices, m_rbScopeChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbScope->SetSelection( 0 );
+	m_namiSizer->Add( m_rbScope, 0, wxALL, 5 );
+
+	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	m_namiSizer->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
 
 	wxBoxSizer* bottomButtonsSizer;
 	bottomButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -81,10 +93,10 @@ DIALOG_DRAW_LAYERS_SETTINGS_BASE::DIALOG_DRAW_LAYERS_SETTINGS_BASE( wxWindow* pa
 	m_sdbSizerStdButtons->AddButton( m_sdbSizerStdButtonsCancel );
 	m_sdbSizerStdButtons->Realize();
 
-	bottomButtonsSizer->Add( m_sdbSizerStdButtons, 1, wxEXPAND|wxALL, 5 );
+	bottomButtonsSizer->Add( m_sdbSizerStdButtons, 1, wxALL|wxEXPAND, 5 );
 
 
-	m_namiSizer->Add( bottomButtonsSizer, 0, wxEXPAND|wxLEFT, 5 );
+	m_namiSizer->Add( bottomButtonsSizer, 0, wxLEFT|wxEXPAND, 5 );
 
 
 	this->SetSizer( m_namiSizer );

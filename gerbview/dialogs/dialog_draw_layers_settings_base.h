@@ -19,6 +19,8 @@
 #include <wx/settings.h>
 #include <wx/sizer.h>
 #include <wx/textctrl.h>
+#include <wx/statline.h>
+#include <wx/radiobox.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -45,6 +47,9 @@ class DIALOG_DRAW_LAYERS_SETTINGS_BASE : public DIALOG_SHIM
 		wxStaticText* m_stLayerRot;
 		wxTextCtrl* m_tcRotation;
 		wxStaticText* m_stUnitRot;
+		wxStaticLine* m_staticline1;
+		wxRadioBox* m_rbScope;
+		wxStaticLine* m_staticline2;
 		wxStdDialogButtonSizer* m_sdbSizerStdButtons;
 		wxButton* m_sdbSizerStdButtonsOK;
 		wxButton* m_sdbSizerStdButtonsCancel;
@@ -56,7 +61,7 @@ class DIALOG_DRAW_LAYERS_SETTINGS_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_DRAW_LAYERS_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 311,203 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_DRAW_LAYERS_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Layers Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 317,332 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_DRAW_LAYERS_SETTINGS_BASE();
 

@@ -63,17 +63,52 @@ bool DIALOG_DRAW_LAYERS_SETTINGS::TransferDataToWindow()
 
 bool DIALOG_DRAW_LAYERS_SETTINGS::TransferDataFromWindow()
 {
-    GERBER_FILE_IMAGE* gbrImage = m_parent->GetGbrImage( m_parent->GetActiveLayer() );
+    std::vector <GERBER_FILE_IMAGE*> gbrCandidates;
+    GERBER_FILE_IMAGE* gbrImage;
+    GERBER_FILE_IMAGE_LIST* images = m_parent->GetGerberLayout()->GetImagesList();
 
-    if( !gbrImage )
-        return true;
+    switch( m_rbScope->GetSelection() )
+    {
+    case 0:     // candidate = active layer
+        gbrImage = m_parent->GetGbrImage( m_parent->GetActiveLayer() );
 
-    double offsetX = m_offsetX.GetValue();
-    double offsetY = m_offsetY.GetValue();
-    EDA_ANGLE rot = m_rotation.GetAngleValue();
+        if( gbrImage )
+            gbrCandidates.push_back( gbrImage );
 
-    gbrImage->SetDrawOffetAndRotation( VECTOR2D( offsetX/gerbIUScale.IU_PER_MM,
-                                                 offsetY/gerbIUScale.IU_PER_MM ), rot );
+        break;
+
+    case 1:     // All layers
+        for( unsigned layer = 0; layer < images->ImagesMaxCount(); ++layer )
+        {
+            gbrImage = images->GetGbrImage( layer );
+
+            if( gbrImage )
+                gbrCandidates.push_back( gbrImage );
+        }
+        break;
+
+    case 2:     // All active layers
+        for( unsigned layer = 0; layer < images->ImagesMaxCount(); ++layer )
+        {
+            gbrImage = images->GetGbrImage( layer );
+
+            if( gbrImage && m_parent->IsLayerVisible( layer ) )
+                gbrCandidates.push_back( gbrImage );
+        }
+        break;
+    }
+
+    // Now update all candidates
+    for( unsigned ii = 0; ii < gbrCandidates.size(); ++ii )
+    {
+        gbrImage = gbrCandidates[ii];
+        double offsetX = m_offsetX.GetValue();
+        double offsetY = m_offsetY.GetValue();
+        EDA_ANGLE rot = m_rotation.GetAngleValue();
+
+        gbrImage->SetDrawOffetAndRotation( VECTOR2D( offsetX/gerbIUScale.IU_PER_MM,
+                                                     offsetY/gerbIUScale.IU_PER_MM ), rot );
+    }
 
     return true;
 }

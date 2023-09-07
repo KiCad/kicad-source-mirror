@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2010 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -182,7 +182,7 @@ void GERBER_LAYER_WIDGET::AddRightClickMenuItems( wxMenu* aMenu )
 
     aMenu->AppendSeparator();
 
-    AddMenuItem( aMenu, ID_SET_GBR_LAYERS_DRAW_PRMS, _( "Active Layer Draw Params: Set Offset and Rotation" ),
+    AddMenuItem( aMenu, ID_SET_GBR_LAYERS_DRAW_PRMS, _( "Layers Display Parameters: Offset and Rotation" ),
                  KiBitmap( BITMAPS::tools ) );
 
     aMenu->AppendSeparator();
