@@ -3694,8 +3694,6 @@ void SCH_ALTIUM_PLUGIN::ParseImplementation( const std::map<wxString, wxString>&
             for( LIB_SYMBOL* symbol : aSymbol )
             {
                 LIB_ID fpLibId = AltiumToKiCadLibID( elem.libname, elem.name );
-                wxArrayString fpFilters;
-                fpFilters.Add( fpLibId.Format() );
 
                 wxString txt;
                 txt.Printf( "*%s*", elem.name );
