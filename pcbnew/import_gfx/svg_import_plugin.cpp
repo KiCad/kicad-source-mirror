@@ -81,7 +81,10 @@ bool SVG_IMPORT_PLUGIN::Import()
 
     for( NSVGshape* shape = m_parsedImage->shapes; shape != nullptr; shape = shape->next )
     {
-        double lineWidth = shape->strokeWidth;
+        if( !( shape->flags & NSVG_FLAGS_VISIBLE ) )
+            continue;
+
+        double lineWidth = shape->stroke.type != NSVG_PAINT_NONE ? shape->strokeWidth : -1;
         bool   filled = shape->fill.type != NSVG_PAINT_NONE && alpha( shape->fill.color ) > 0;
 
         GRAPHICS_IMPORTER::POLY_FILL_RULE rule = GRAPHICS_IMPORTER::PF_NONZERO;
