@@ -7,7 +7,15 @@
 
 #cmakedefine HAVE_STRNCASECMP
 
+#cmakedefine HAVE_STRTOKS
+#ifdef HAVE_STRTOKS
+// strtok_s is the actual C11 standard rather than posix strtok_r
+// but its also an optional standard, MSVC supports it, so alias it
+#define HAVE_STRTOKR
+#define strtok_r strtok_s
+#else
 #cmakedefine HAVE_STRTOKR       // spelled oddly to differ from wx's similar test
+#endif
 
 // Handle platform differences in math.h
 #cmakedefine HAVE_MATH_H

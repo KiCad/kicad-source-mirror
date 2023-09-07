@@ -412,10 +412,6 @@ if( TRUE OR NOT USE_KIWAY_DLLS )
     endif()
 endif()
 
-if( NOT HAVE_STRTOKR )
-    list( APPEND COMMON_SRCS strtok_r.c )
-endif()
-
 list( APPEND COMMON_SRCS
     kicad_curl/kicad_curl.cpp
     kicad_curl/kicad_curl_easy.cpp

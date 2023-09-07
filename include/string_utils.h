@@ -24,8 +24,6 @@
 #ifndef STRING_UTILS_H
 #define STRING_UTILS_H
 
-#include "config.h"
-
 #include <string>
 #include <vector>
 #include <wx/string.h>
@@ -229,11 +227,6 @@ wxString GetIllegalFileNameWxChars();
  */
 bool ReplaceIllegalFileNameChars( std::string* aName, int aReplaceChar = 0 );
 bool ReplaceIllegalFileNameChars( wxString& aName, int aReplaceChar = 0 );
-
-#ifndef HAVE_STRTOKR
-// common/strtok_r.c optionally:
-extern "C" char* strtok_r( char* str, const char* delim, char** nextp );
-#endif
 
 
 /**
