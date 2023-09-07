@@ -23,13 +23,10 @@
  */
 
 #include <limits>
-#include <pgm_base.h>
-#include <settings/settings_manager.h>
 #include <harfbuzz/hb.h>
 #include <harfbuzz/hb-ft.h>
 #include <bezier_curves.h>
 #include <geometry/shape_poly_set.h>
-#include <eda_text.h>
 #include <font/fontconfig.h>
 #include <font/outline_font.h>
 #include FT_GLYPH_H
