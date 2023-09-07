@@ -39,6 +39,7 @@
 #include <settings/common_settings.h>
 #include <pgm_base.h>
 #include <gal/dpi_scaling.h>
+#include <class_draw_panel_gal.h>
 #include <macros.h>
 
 /**
@@ -86,7 +87,8 @@ END_EVENT_TABLE()
 
 EDA_3D_MODEL_VIEWER::EDA_3D_MODEL_VIEWER( wxWindow* aParent, const int* aAttribList,
                                           S3D_CACHE* aCacheManager ) :
-        HIDPI_GL_CANVAS( aParent, wxID_ANY, aAttribList, wxDefaultPosition, wxDefaultSize,
+        HIDPI_GL_CANVAS( EDA_DRAW_PANEL_GAL::GetVcSettings(), aParent, wxID_ANY, aAttribList,
+                         wxDefaultPosition, wxDefaultSize,
                          wxFULL_REPAINT_ON_RESIZE ),
         m_trackBallCamera( RANGE_SCALE_3D * 4.0f ),
         m_cacheManager( aCacheManager )

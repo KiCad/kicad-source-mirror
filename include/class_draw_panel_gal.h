@@ -53,6 +53,7 @@ class VIEW_CONTROLS;
 class PAINTER;
 class GAL_DISPLAY_OPTIONS;
 class VIEW_OVERLAY;
+struct VC_SETTINGS;
 }
 
 
@@ -224,7 +225,7 @@ public:
      * Usually called by a OnPaint event.
      *
      * Because it does not use a wxPaintDC, it can be called outside a wxPaintEvent.
-     * 
+     *
      * @return true if the repaint attempt was successful.
      */
     bool DoRePaint();
@@ -239,6 +240,12 @@ public:
      * Clear the contents of the debug overlay and removes it from the VIEW.
      */
     void ClearDebugOverlay();
+
+
+    /**
+     * Gets a populated View Controls settings object dervived from our program settings
+     */
+    static KIGFX::VC_SETTINGS GetVcSettings();
 
     /**
      * used on wxMSW: true after a wxEVT_MOUSE_CAPTURE_LOST was received

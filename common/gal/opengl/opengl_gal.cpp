@@ -238,11 +238,13 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
     return textureID;
 }
 
-OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
+OPENGL_GAL::OPENGL_GAL( const KIGFX::VC_SETTINGS& aVcSettings, GAL_DISPLAY_OPTIONS& aDisplayOptions,
+                        wxWindow* aParent,
                         wxEvtHandler* aMouseListener, wxEvtHandler* aPaintListener,
                         const wxString& aName ) :
         GAL( aDisplayOptions ),
-        HIDPI_GL_CANVAS( aParent, wxID_ANY, (int*) glAttributes, wxDefaultPosition, wxDefaultSize,
+        HIDPI_GL_CANVAS( aVcSettings, aParent, wxID_ANY, (int*) glAttributes, wxDefaultPosition,
+                         wxDefaultSize,
                          wxEXPAND, aName ),
         m_mouseListener( aMouseListener ),
         m_paintListener( aPaintListener ),
@@ -400,7 +402,8 @@ wxString OPENGL_GAL::CheckFeatures( GAL_DISPLAY_OPTIONS& aOptions )
 
     try
     {
-        opengl_gal = new KIGFX::OPENGL_GAL( aOptions, testFrame );
+        KIGFX::VC_SETTINGS dummy;
+        opengl_gal = new KIGFX::OPENGL_GAL( dummy, aOptions, testFrame );
 
         testFrame->Raise();
         testFrame->Show();

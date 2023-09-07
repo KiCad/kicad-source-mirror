@@ -42,10 +42,11 @@ class HIDPI_GL_CANVAS : public wxGLCanvas
 {
 public:
     // wxGLCanvas constructor
-    HIDPI_GL_CANVAS( wxWindow *parent, wxWindowID id = wxID_ANY, const int* attribList = nullptr,
-                     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-                     long style = 0, const wxString& name = wxGLCanvasName,
-                     const wxPalette& palette = wxNullPalette );
+    HIDPI_GL_CANVAS( const KIGFX::VC_SETTINGS& aSettings, wxWindow* aParent,
+                     wxWindowID aId = wxID_ANY, const int* aAttribList = nullptr,
+                     const wxPoint& aPos = wxDefaultPosition, const wxSize& aSize = wxDefaultSize,
+                     long aStyle = 0, const wxString& aName = wxGLCanvasName,
+                     const wxPalette& aPalette = wxNullPalette );
 
     virtual wxSize GetNativePixelSize() const;
 
@@ -64,10 +65,7 @@ public:
      */
     double GetScaleFactor() const;
 
-    /**
-     * Loads or updates the current settings
-     */
-    void LoadSettings();
+    void SetVcSettings( const KIGFX::VC_SETTINGS& aVcSettings ) { m_settings = aVcSettings; }
 
 protected:
     ///< Current VIEW_CONTROLS settings.

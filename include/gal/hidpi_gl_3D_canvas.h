@@ -39,14 +39,15 @@ class RENDER_3D_OPENGL;
 
 /**
  *  Provides basic 3D controls ( zoom, rotate, translate, ... )
- *  
+ *
  */
 class HIDPI_GL_3D_CANVAS : public HIDPI_GL_CANVAS
 {
 public:
     // wxGLCanvas constructor
 
-    HIDPI_GL_3D_CANVAS( CAMERA& aCamera, wxWindow* parent, wxWindowID id = wxID_ANY,
+    HIDPI_GL_3D_CANVAS( const KIGFX::VC_SETTINGS& aVcSettings, CAMERA& aCamera, wxWindow* parent,
+                        wxWindowID id = wxID_ANY,
                         const int* attribList = nullptr, const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize, long style = 0,
                         const wxString&  name = wxGLCanvasName,

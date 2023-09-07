@@ -82,7 +82,8 @@ public:
      *
      * @param aName is the name of this window for use by wxWindow::FindWindowByName()
      */
-    OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
+    OPENGL_GAL( const KIGFX::VC_SETTINGS& aVcSettings, GAL_DISPLAY_OPTIONS& aDisplayOptions,
+                wxWindow* aParent,
                 wxEvtHandler* aMouseListener = nullptr, wxEvtHandler* aPaintListener = nullptr,
                 const wxString& aName = wxT( "GLCanvas" ) );
 

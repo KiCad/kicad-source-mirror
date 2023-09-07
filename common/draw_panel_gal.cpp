@@ -485,7 +485,7 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 
             if( errormsg.empty() )
             {
-                new_gal = new KIGFX::OPENGL_GAL( m_options, this, this, this );
+                new_gal = new KIGFX::OPENGL_GAL( GetVcSettings(), m_options, this, this, this );
             }
             else
             {
@@ -672,4 +672,29 @@ void EDA_DRAW_PANEL_GAL::ClearDebugOverlay()
         m_view->Remove( m_debugOverlay.get() );
         m_debugOverlay = nullptr;
     }
+}
+
+
+KIGFX::VC_SETTINGS EDA_DRAW_PANEL_GAL::GetVcSettings()
+{
+    COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
+
+    KIGFX::VC_SETTINGS vcSettings;
+    vcSettings.m_warpCursor = cfg->m_Input.center_on_zoom;
+    vcSettings.m_focusFollowSchPcb = cfg->m_Input.focus_follow_sch_pcb;
+    vcSettings.m_autoPanSettingEnabled = cfg->m_Input.auto_pan;
+    vcSettings.m_autoPanAcceleration = cfg->m_Input.auto_pan_acceleration;
+    vcSettings.m_horizontalPan = cfg->m_Input.horizontal_pan;
+    vcSettings.m_zoomAcceleration = cfg->m_Input.zoom_acceleration;
+    vcSettings.m_zoomSpeed = cfg->m_Input.zoom_speed;
+    vcSettings.m_zoomSpeedAuto = cfg->m_Input.zoom_speed_auto;
+    vcSettings.m_scrollModifierZoom = cfg->m_Input.scroll_modifier_zoom;
+    vcSettings.m_scrollModifierPanH = cfg->m_Input.scroll_modifier_pan_h;
+    vcSettings.m_scrollModifierPanV = cfg->m_Input.scroll_modifier_pan_v;
+    vcSettings.m_dragLeft = cfg->m_Input.drag_left;
+    vcSettings.m_dragMiddle = cfg->m_Input.drag_middle;
+    vcSettings.m_dragRight = cfg->m_Input.drag_right;
+    vcSettings.m_scrollReversePanH = cfg->m_Input.reverse_scroll_pan_h;
+
+    return vcSettings;
 }

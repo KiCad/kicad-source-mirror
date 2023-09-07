@@ -318,6 +318,7 @@ set( COMMON_SRCS
     config_params.cpp
     confirm.cpp
     dialog_shim.cpp
+    draw_panel_gal.cpp
     gr_text.cpp
     dsnlexer.cpp
     eda_base_frame.cpp

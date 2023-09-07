@@ -577,7 +577,9 @@ void EDA_3D_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE *aCfg )
         m_canvas->SetAnimationEnabled( cfg->m_Camera.animation_enabled );
         m_canvas->SetMovingSpeedMultiplier( cfg->m_Camera.moving_speed_multiplier );
         m_canvas->SetProjectionMode( cfg->m_Camera.projection_mode );
-        m_canvas->LoadSettings();
+
+
+        m_canvas->SetVcSettings( EDA_DRAW_PANEL_GAL::GetVcSettings() );
 
         if( cfg->m_CurrentPreset == LEGACY_PRESET_FLAG )
         {

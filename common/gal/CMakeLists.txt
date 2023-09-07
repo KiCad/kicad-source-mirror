@@ -2,7 +2,6 @@
 set( GAL_SRCS
     # Common part
     ../callback_gal.cpp
-    ../draw_panel_gal.cpp
     ../gl_context_mgr.cpp
     ../newstroke_font.cpp
     ../painter.cpp
