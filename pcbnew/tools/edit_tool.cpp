@@ -2255,9 +2255,10 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
                 static_cast<PAD*>( dupe_item )->SetNumber( padNumber );
             }
         }
-        else if( FOOTPRINT* parentFootprint = orig_item->GetParentFootprint() )
+        else if( /*FOOTPRINT* parentFootprint =*/ orig_item->GetParentFootprint() )
         {
             // No sub-footprint modifications allowed outside of footprint editor
+            // and parentFootprint is not (yet?) used
         }
         else
         {

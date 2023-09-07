@@ -607,7 +607,7 @@ EASYEDAPRO::SYM_INFO SCH_EASYEDAPRO_PARSER::ParseSymbol( const std::vector<nlohm
             if( !globalNetname.empty() )
             {
                 ksymbol->SetDescription( wxString::Format(
-                        _( "Power symbol creates a global " wxS( "label with name '%s'" ) ),
+                        _( "Power symbol creates a global label with name '%s'" ),
                         globalNetname ) );
             }
         }
