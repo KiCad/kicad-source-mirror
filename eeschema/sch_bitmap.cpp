@@ -96,8 +96,7 @@ bool SCH_BITMAP::ReadImageFile( wxMemoryBuffer& aBuffer )
 {
     if( m_bitmapBase->ReadImageFile( aBuffer ) )
     {
-        m_bitmapBase->SetPixelSizeIu( (float) pcbIUScale.MilsToIU( 1000 )
-                                      / m_bitmapBase->GetPPI() );
+        m_bitmapBase->SetPixelSizeIu( 254000.0 / m_bitmapBase->GetPPI() );
         return true;
     }
 
