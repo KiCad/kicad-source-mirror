@@ -38,7 +38,7 @@
 
 #include <gal/definitions.h>
 #include <gal/graphics_abstraction_layer.h>
-#include <painter.h>
+#include <gal/painter.h>
 
 #include <profile.h>
 

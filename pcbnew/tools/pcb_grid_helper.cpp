@@ -42,7 +42,7 @@
 #include <geometry/shape_simple.h>
 #include <macros.h>
 #include <math/util.h> // for KiROUND
-#include <painter.h>
+#include <gal/painter.h>
 #include <pcbnew_settings.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_tool_base.h>

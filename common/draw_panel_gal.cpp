@@ -35,7 +35,7 @@
 #include <class_draw_panel_gal.h>
 #include <view/view.h>
 #include <view/wx_view_controls.h>
-#include <painter.h>
+#include <gal/painter.h>
 #include <base_screen.h>
 #include <gal/cursors.h>
 #include <gal/graphics_abstraction_layer.h>

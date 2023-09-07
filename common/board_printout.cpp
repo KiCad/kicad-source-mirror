@@ -28,7 +28,7 @@
 
 #include <view/view.h>
 #include <gal/gal_print.h>
-#include <painter.h>
+#include <gal/painter.h>
 #include <pcbplot.h>
 #include <settings/app_settings.h>
 

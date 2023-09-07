@@ -24,7 +24,7 @@
 
 
 #include <view/view.h>
-#include <painter.h>
+#include <gal/painter.h>
 #include <class_draw_panel_gal.h>
 #include <eda_base_frame.h>
 #include <eda_draw_frame.h>

@@ -58,7 +58,7 @@
 #include <confirm.h>
 #include <footprint.h>
 #include <macros.h>
-#include <painter.h>
+#include <gal/painter.h>
 #include <pcb_edit_frame.h>
 #include <pcb_group.h>
 #include <pcb_bitmap.h>

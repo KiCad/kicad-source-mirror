@@ -29,7 +29,7 @@ using namespace std::placeholders;
 #include <string_utils.h>
 #include <view/view.h>
 #include <view/view_group.h>
-#include <painter.h>
+#include <gal/painter.h>
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
 #include "gerbview_selection_tool.h"

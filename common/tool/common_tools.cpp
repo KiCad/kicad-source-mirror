@@ -25,7 +25,7 @@
 
 #include <base_screen.h>
 #include <base_units.h>
-#include <painter.h>
+#include <gal/painter.h>
 #include <bitmaps.h>
 #include <class_draw_panel_gal.h>
 #include <dialogs/dialog_configure_paths.h>

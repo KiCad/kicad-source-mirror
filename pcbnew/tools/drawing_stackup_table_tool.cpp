@@ -29,7 +29,7 @@
 #include <tool/tool_manager.h>
 #include <board_commit.h>
 #include <scoped_set_reset.h>
-#include <painter.h>
+#include <gal/painter.h>
 #include <tools/zone_filler_tool.h>
 #include <board_design_settings.h>
 #include <footprint.h>

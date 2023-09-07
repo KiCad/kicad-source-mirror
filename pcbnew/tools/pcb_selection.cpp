@@ -35,7 +35,7 @@ using namespace std::placeholders;
 #include <class_draw_panel_gal.h>
 #include <view/view_controls.h>
 #include <view/view_group.h>
-#include <painter.h>
+#include <gal/painter.h>
 #include <bitmaps.h>
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>

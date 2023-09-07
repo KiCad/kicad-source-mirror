@@ -4,7 +4,7 @@ set( GAL_SRCS
     ../callback_gal.cpp
     ../gl_context_mgr.cpp
     ../newstroke_font.cpp
-    ../painter.cpp
+    painter.cpp
     color4d.cpp
     cursors.cpp
     dpi_scaling.cpp

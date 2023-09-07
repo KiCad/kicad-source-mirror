@@ -25,7 +25,7 @@
 #include <preview_items/preview_utils.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <layer_ids.h>
-#include <painter.h>
+#include <gal/painter.h>
 #include <view/view.h>
 #include <trigo.h>
 

@@ -29,7 +29,7 @@
 #define PCB_PAINTER_H
 
 #include <frame_type.h>
-#include <painter.h>
+#include <gal/painter.h>
 #include <pcb_display_options.h>
 #include <math/vector2d.h>
 #include <memory>

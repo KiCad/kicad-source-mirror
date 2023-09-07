@@ -22,7 +22,7 @@
  */
 
 #include <preview_items/polygon_item.h>
-#include <painter.h>
+#include <gal/painter.h>
 #include <view/view.h>
 
 using namespace KIGFX::PREVIEW;

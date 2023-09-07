@@ -22,7 +22,7 @@
 #define __GERBVIEW_PAINTER_H
 
 #include <layer_ids.h>
-#include <painter.h>
+#include <gal/painter.h>
 
 #include <dcode.h>
 #include <gbr_display_options.h>

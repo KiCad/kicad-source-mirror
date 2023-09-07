@@ -51,7 +51,7 @@ using namespace std::placeholders;
 #include <class_draw_panel_gal.h>
 #include <view/view_controls.h>
 #include <preview_items/selection_area.h>
-#include <painter.h>
+#include <gal/painter.h>
 #include <router/router_tool.h>
 #include <pcbnew_settings.h>
 #include <tool/tool_event.h>

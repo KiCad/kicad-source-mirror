@@ -49,7 +49,7 @@ using namespace std::placeholders;
 #include <confirm.h>
 #include <bitmaps.h>
 #include <string_utils.h>
-#include <painter.h>
+#include <gal/painter.h>
 #include <tool/action_menu.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_menu.h>

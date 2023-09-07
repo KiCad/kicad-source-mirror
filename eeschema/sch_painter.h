@@ -29,7 +29,7 @@
 
 #include <sch_symbol.h>
 
-#include <painter.h>
+#include <gal/painter.h>
 
 
 class LIB_PIN;

@@ -24,7 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <painter.h>
+#include <gal/painter.h>
 #include <gal/graphics_abstraction_layer.h>
 
 using namespace KIGFX;

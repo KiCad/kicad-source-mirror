@@ -25,7 +25,7 @@
 #include <preview_items/selection_area.h>
 
 #include <gal/graphics_abstraction_layer.h>
-#include <painter.h>
+#include <gal/painter.h>
 #include <view/view.h>
 
 using namespace KIGFX::PREVIEW;

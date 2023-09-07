@@ -20,7 +20,7 @@
 #include <preview_items/preview_utils.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <base_units.h>
-#include <painter.h>
+#include <gal/painter.h>
 #include <view/view.h>
 #include <gal/hidpi_gl_canvas.h>
 

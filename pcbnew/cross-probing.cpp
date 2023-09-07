@@ -45,7 +45,7 @@
 #include <string_utils.h>
 #include <netlist_reader/pcb_netlist.h>
 #include <netlist_reader/board_netlist_updater.h>
-#include <painter.h>
+#include <gal/painter.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <render_settings.h>

@@ -32,7 +32,7 @@
 #include <panel_hotkeys_editor.h>
 #include <confirm.h>
 #include <kiplatform/app.h>
-#include <painter.h>
+#include <gal/painter.h>
 #include <wildcards_and_files_ext.h>
 #include <tool/selection.h>
 #include <tool/action_toolbar.h>

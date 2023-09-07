@@ -28,7 +28,7 @@
 #include <view/view_item.h>
 #include <view/view_overlay.h>
 #include <gal/graphics_abstraction_layer.h>
-#include <painter.h>
+#include <gal/painter.h>
 
 #include <layer_ids.h>
 #include <geometry/seg.h>

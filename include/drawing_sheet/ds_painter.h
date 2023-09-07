@@ -27,7 +27,7 @@
 #define DS_PAINTER_H
 
 #include <gal/color4d.h>
-#include <painter.h>
+#include <gal/painter.h>
 #include <page_info.h>
 #include <drawing_sheet/ds_draw_item.h>
 

@@ -36,7 +36,7 @@
 #include <view/view_group.h>
 #include <view/view.h>
 #include <view/view_item.h>
-#include <painter.h>
+#include <gal/painter.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <layer_ids.h>
 
