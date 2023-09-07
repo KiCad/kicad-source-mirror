@@ -2196,12 +2196,20 @@ void FOOTPRINT::AutoPositionFields()
 
     if( Reference().GetPosition() == VECTOR2I( 0, 0 ) )
     {
+        Reference().SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+        Reference().SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+        Reference().SetTextAngle( ANGLE_0 );
+
         Reference().SetX( bbox.GetCenter().x );
         Reference().SetY( bbox.GetTop() - Reference().GetTextSize().y / 2 );
     }
 
     if( Value().GetPosition() == VECTOR2I( 0, 0 ) )
     {
+        Value().SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+        Value().SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+        Value().SetTextAngle( ANGLE_0 );
+
         Value().SetX( bbox.GetCenter().x );
         Value().SetY( bbox.GetBottom() + Value().GetTextSize().y / 2 );
     }
