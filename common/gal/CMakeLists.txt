@@ -49,6 +49,7 @@ if( WIN32 )
 endif()
 
 target_link_libraries( gal
+    common
     kimath
     kiplatform
     nlohmann_json
