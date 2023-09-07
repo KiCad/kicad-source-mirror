@@ -904,13 +904,13 @@ SCH_LABEL_BASE* LTSPICE_SCH_PARSER::CreateSCH_LABEL( KICAD_T aType, const VECTOR
 
         label->SetText( aValue );
         label->SetTextSize( ToKicadFontSize( aFontSize ) );
-        label->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );
+        label->SetSpinStyle( SPIN_STYLE::RIGHT );
     }
     else if( aType == SCH_DIRECTIVE_LABEL_T )
     {
         label = new SCH_DIRECTIVE_LABEL();
 
-        label->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );
+        label->SetSpinStyle( SPIN_STYLE::RIGHT );
 
         SCH_FIELD field( { 0, 0 }, -1, label, wxS( "DATAFLAG" ) );
         field.SetText( aValue );

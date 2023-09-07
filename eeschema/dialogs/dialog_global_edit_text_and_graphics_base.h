@@ -74,9 +74,10 @@ class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_textSizeCtrl;
 		wxStaticText* m_textSizeUnits;
 		wxCheckBox* m_bold;
+		wxCheckBox* m_italic;
 		wxStaticText* orientationLabel;
 		wxChoice* m_orientation;
-		wxCheckBox* m_italic;
+		wxStaticText* m_staticText16;
 		wxStaticText* hAlignLabel;
 		wxChoice* m_hAlign;
 		wxStaticText* m_staticText14;

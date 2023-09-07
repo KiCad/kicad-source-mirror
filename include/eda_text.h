@@ -168,7 +168,7 @@ public:
     /**
      * Set the text attributes from another instance.
      */
-    void SetAttributes( const EDA_TEXT& aSrc );
+    void SetAttributes( const EDA_TEXT& aSrc, bool aSetPosition = true );
 
     /**
      * Swap the text attributes of the two involved instances.

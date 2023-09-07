@@ -49,7 +49,7 @@
 #include <sch_reference_list.h>
 #include <sch_rtree.h>
 #include <sch_sheet.h>
-#include <sch_text.h>
+#include <sch_label.h>
 #include <sch_sheet_path.h>
 
 class BUS_ALIAS;
@@ -340,9 +340,9 @@ public:
      */
     bool IsExplicitJunctionNeeded( const VECTOR2I& aPosition ) const;
 
-    TEXT_SPIN_STYLE GetLabelOrientationForPoint( const VECTOR2I&       aPosition,
-                                                 TEXT_SPIN_STYLE       aDefaultOrientation,
-                                                 const SCH_SHEET_PATH* aSheet ) const;
+    SPIN_STYLE GetLabelOrientationForPoint( const VECTOR2I&       aPosition,
+                                            SPIN_STYLE            aDefaultOrientation,
+                                            const SCH_SHEET_PATH* aSheet ) const;
     /**
      * Indicates that a juction dot may be placed at the given location.  See IsJunctionNeeded
      * for more info.

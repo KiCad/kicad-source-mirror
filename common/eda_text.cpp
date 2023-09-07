@@ -270,10 +270,13 @@ void EDA_TEXT::SetKeepUpright( bool aKeepUpright )
 }
 
 
-void EDA_TEXT::SetAttributes( const EDA_TEXT& aSrc )
+void EDA_TEXT::SetAttributes( const EDA_TEXT& aSrc, bool aSetPosition )
 {
     m_attributes = aSrc.m_attributes;
-    m_pos = aSrc.m_pos;
+
+    if( aSetPosition )
+        m_pos = aSrc.m_pos;
+
     ClearRenderCache();
     m_bounding_box_cache_valid = false;
 }

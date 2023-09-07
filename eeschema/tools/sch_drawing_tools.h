@@ -77,7 +77,7 @@ private:
     LABEL_FLAG_SHAPE           m_lastSheetPinType;
     LABEL_FLAG_SHAPE           m_lastGlobalLabelShape;
     LABEL_FLAG_SHAPE           m_lastNetClassFlagShape;
-    TEXT_SPIN_STYLE            m_lastTextOrientation;
+    SPIN_STYLE                 m_lastTextOrientation;
     bool                       m_lastTextBold;
     bool                       m_lastTextItalic;
     EDA_ANGLE                  m_lastTextAngle;

@@ -1326,7 +1326,7 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
         // feature of Eagle schematics.
         if( !labelled && firstWireFound )
         {
-            std::unique_ptr<SCH_TEXT> label;
+            std::unique_ptr<SCH_LABEL_BASE> label;
 
             // Add a global label if the net appears on more than one Eagle sheet
             if( m_netCounts[netName.ToStdString()] > 1 )
@@ -1342,9 +1342,9 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
                                               schIUScale.MilsToIU( 40 ) ) );
 
                 if( firstWire.B.x > firstWire.A.x )
-                    label->SetTextSpinStyle( TEXT_SPIN_STYLE::LEFT );
+                    label->SetSpinStyle( SPIN_STYLE::LEFT );
                 else
-                    label->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );
+                    label->SetSpinStyle( SPIN_STYLE::RIGHT );
 
                 screen->Append( label.release() );
             }
@@ -1500,8 +1500,8 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode, const wxString& aN
 
     // Determine if the label is local or global depending on
     // the number of sheets the net appears in
-    bool                      global = m_netCounts[aNetName] > 1;
-    std::unique_ptr<SCH_TEXT> label;
+    bool                            global = m_netCounts[aNetName] > 1;
+    std::unique_ptr<SCH_LABEL_BASE> label;
 
     VECTOR2I textSize = VECTOR2I( KiROUND( elabel.size.ToSchUnits() * 0.7 ),
                                   KiROUND( elabel.size.ToSchUnits() * 0.7 ) );
@@ -1514,7 +1514,7 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode, const wxString& aN
     label->SetPosition( elabelpos );
     label->SetText( escapeName( elabel.netname ) );
     label->SetTextSize( textSize );
-    label->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );
+    label->SetSpinStyle( SPIN_STYLE::RIGHT );
 
     if( elabel.rot )
     {
@@ -3391,10 +3391,10 @@ void SCH_EAGLE_PLUGIN::addImplicitConnections( SCH_SYMBOL* aSymbol, SCH_SCREEN* 
 
                     switch( pin->GetOrientation() )
                     {
-                    case PIN_ORIENTATION::PIN_LEFT:  netLabel->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );  break;
-                    case PIN_ORIENTATION::PIN_RIGHT: netLabel->SetTextSpinStyle( TEXT_SPIN_STYLE::LEFT );   break;
-                    case PIN_ORIENTATION::PIN_UP:    netLabel->SetTextSpinStyle( TEXT_SPIN_STYLE::UP );     break;
-                    case PIN_ORIENTATION::PIN_DOWN:  netLabel->SetTextSpinStyle( TEXT_SPIN_STYLE::BOTTOM ); break;
+                    case PIN_ORIENTATION::PIN_LEFT:  netLabel->SetSpinStyle( SPIN_STYLE::RIGHT );  break;
+                    case PIN_ORIENTATION::PIN_RIGHT: netLabel->SetSpinStyle( SPIN_STYLE::LEFT );   break;
+                    case PIN_ORIENTATION::PIN_UP:    netLabel->SetSpinStyle( SPIN_STYLE::UP );     break;
+                    case PIN_ORIENTATION::PIN_DOWN:  netLabel->SetSpinStyle( SPIN_STYLE::BOTTOM ); break;
                     }
 
                     aScreen->Append( netLabel );

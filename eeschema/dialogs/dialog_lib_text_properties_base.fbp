@@ -226,7 +226,7 @@
                                     <property name="border">5</property>
                                     <property name="colspan">1</property>
                                     <property name="column">0</property>
-                                    <property name="flag">wxRIGHT|wxLEFT</property>
+                                    <property name="flag">wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL</property>
                                     <property name="row">2</property>
                                     <property name="rowspan">1</property>
                                     <object class="wxStaticText" expanded="1">

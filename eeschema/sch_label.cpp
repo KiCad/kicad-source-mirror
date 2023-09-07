@@ -153,6 +153,54 @@ wxString getElectricalTypeLabel( LABEL_FLAG_SHAPE aType )
 }
 
 
+SPIN_STYLE SPIN_STYLE::RotateCCW()
+{
+    SPIN newSpin = m_spin;
+
+    switch( m_spin )
+    {
+    case SPIN_STYLE::LEFT:   newSpin = SPIN_STYLE::BOTTOM; break;
+    case SPIN_STYLE::BOTTOM: newSpin = SPIN_STYLE::RIGHT;  break;
+    case SPIN_STYLE::RIGHT:  newSpin = SPIN_STYLE::UP;     break;
+    case SPIN_STYLE::UP:     newSpin = SPIN_STYLE::LEFT;   break;
+    }
+
+    return SPIN_STYLE( newSpin );
+}
+
+
+SPIN_STYLE SPIN_STYLE::MirrorX()
+{
+    SPIN newSpin = m_spin;
+
+    switch( m_spin )
+    {
+    case SPIN_STYLE::UP:     newSpin = SPIN_STYLE::BOTTOM; break;
+    case SPIN_STYLE::BOTTOM: newSpin = SPIN_STYLE::UP;     break;
+    case SPIN_STYLE::LEFT:                                      break;
+    case SPIN_STYLE::RIGHT:                                     break;
+    }
+
+    return SPIN_STYLE( newSpin );
+}
+
+
+SPIN_STYLE SPIN_STYLE::MirrorY()
+{
+    SPIN newSpin = m_spin;
+
+    switch( m_spin )
+    {
+    case SPIN_STYLE::LEFT:   newSpin = SPIN_STYLE::RIGHT; break;
+    case SPIN_STYLE::RIGHT:  newSpin = SPIN_STYLE::LEFT;  break;
+    case SPIN_STYLE::UP:                                       break;
+    case SPIN_STYLE::BOTTOM:                                   break;
+    }
+
+    return SPIN_STYLE( newSpin );
+}
+
+
 SCH_LABEL_BASE::SCH_LABEL_BASE( const VECTOR2I& aPos, const wxString& aText, KICAD_T aType ) :
         SCH_TEXT( aPos, aText, aType ),
         m_shape( L_UNSPECIFIED ),
@@ -286,6 +334,60 @@ COLOR4D SCH_LABEL_BASE::GetLabelColor() const
 }
 
 
+void SCH_LABEL_BASE::SetSpinStyle( SPIN_STYLE aSpinStyle )
+{
+    // Assume "Right" and Left" mean which side of the anchor the text will be on
+    // Thus we want to left justify text up against the anchor if we are on the right
+    switch( aSpinStyle )
+    {
+    default:
+        wxFAIL_MSG( "Bad spin style" );
+        KI_FALLTHROUGH;
+
+    case SPIN_STYLE::RIGHT:            // Horiz Normal Orientation
+        SetTextAngle( ANGLE_HORIZONTAL );
+        SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        break;
+
+    case SPIN_STYLE::UP:               // Vert Orientation UP
+        SetTextAngle( ANGLE_VERTICAL );
+        SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        break;
+
+    case SPIN_STYLE::LEFT:             // Horiz Orientation - Right justified
+        SetTextAngle( ANGLE_HORIZONTAL );
+        SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+        break;
+
+    case SPIN_STYLE::BOTTOM:           //  Vert Orientation BOTTOM
+        SetTextAngle( ANGLE_VERTICAL );
+        SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+        break;
+    }
+
+    SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+}
+
+
+SPIN_STYLE SCH_LABEL_BASE::GetSpinStyle() const
+{
+    if( GetTextAngle() == ANGLE_VERTICAL )
+    {
+        if( GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
+            return SPIN_STYLE::BOTTOM;
+        else
+            return SPIN_STYLE::UP;
+    }
+    else
+    {
+        if( GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
+            return SPIN_STYLE::LEFT;
+        else
+            return SPIN_STYLE::RIGHT;
+    }
+}
+
+
 VECTOR2I SCH_LABEL_BASE::GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const
 {
     VECTOR2I text_offset;
@@ -293,13 +395,13 @@ VECTOR2I SCH_LABEL_BASE::GetSchematicTextOffset( const RENDER_SETTINGS* aSetting
     // add an offset to x (or y) position to aid readability of text on a wire or line
     int dist = GetTextOffset( aSettings ) + GetPenWidth();
 
-    switch( GetTextSpinStyle() )
+    switch( GetSpinStyle() )
     {
-    case TEXT_SPIN_STYLE::UP:
-    case TEXT_SPIN_STYLE::BOTTOM: text_offset.x = -dist;  break; // Vert Orientation
+    case SPIN_STYLE::UP:
+    case SPIN_STYLE::BOTTOM: text_offset.x = -dist;  break; // Vert Orientation
     default:
-    case TEXT_SPIN_STYLE::LEFT:
-    case TEXT_SPIN_STYLE::RIGHT: text_offset.y = -dist;  break; // Horiz Orientation
+    case SPIN_STYLE::LEFT:
+    case SPIN_STYLE::RIGHT: text_offset.y = -dist;  break; // Horiz Orientation
     }
 
     return text_offset;
@@ -490,10 +592,10 @@ void SCH_LABEL_BASE::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
     {
         VECTOR2I offset( 0, 0 );
 
-        switch( GetTextSpinStyle() )
+        switch( GetSpinStyle() )
         {
         default:
-        case TEXT_SPIN_STYLE::LEFT:
+        case SPIN_STYLE::LEFT:
             field.SetTextAngle( ANGLE_HORIZONTAL );
             field.SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
 
@@ -504,7 +606,7 @@ void SCH_LABEL_BASE::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
 
             break;
 
-        case TEXT_SPIN_STYLE::UP:
+        case SPIN_STYLE::UP:
             field.SetTextAngle( ANGLE_VERTICAL );
             field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
 
@@ -515,7 +617,7 @@ void SCH_LABEL_BASE::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
 
             break;
 
-        case TEXT_SPIN_STYLE::RIGHT:
+        case SPIN_STYLE::RIGHT:
             field.SetTextAngle( ANGLE_HORIZONTAL );
             field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
 
@@ -526,7 +628,7 @@ void SCH_LABEL_BASE::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
 
             break;
 
-        case TEXT_SPIN_STYLE::BOTTOM:
+        case SPIN_STYLE::BOTTOM:
             field.SetTextAngle( ANGLE_VERTICAL );
             field.SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
 
@@ -1046,13 +1148,13 @@ void SCH_LABEL_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
 
     aList.emplace_back( _( "Text Size" ), aFrame->MessageTextFromValue( GetTextWidth() ) );
 
-    switch( GetTextSpinStyle() )
+    switch( GetSpinStyle() )
     {
-    case TEXT_SPIN_STYLE::LEFT:   msg = _( "Align right" );   break;
-    case TEXT_SPIN_STYLE::UP:     msg = _( "Align bottom" );  break;
-    case TEXT_SPIN_STYLE::RIGHT:  msg = _( "Align left" );    break;
-    case TEXT_SPIN_STYLE::BOTTOM: msg = _( "Align top" );     break;
-    default:                      msg = wxT( "???" );         break;
+    case SPIN_STYLE::LEFT:   msg = _( "Align right" );   break;
+    case SPIN_STYLE::UP:     msg = _( "Align bottom" );  break;
+    case SPIN_STYLE::RIGHT:  msg = _( "Align left" );    break;
+    case SPIN_STYLE::BOTTOM: msg = _( "Align top" );     break;
+    default:                 msg = wxT( "???" );         break;
     }
 
     aList.emplace_back( _( "Justification" ), msg );
@@ -1312,7 +1414,7 @@ void SCH_DIRECTIVE_LABEL::MirrorHorizontally( int aCenter )
     // vertical shape (like a text reduced to only "I" letter).
     // So the mirroring is not exactly similar to a SCH_TEXT item
     // Text is NOT really mirrored; it is moved to a suitable horizontal position
-    SetTextSpinStyle( GetTextSpinStyle().MirrorX() );
+    SetSpinStyle( GetSpinStyle().MirrorX() );
 
     SetTextX( MIRRORVAL( GetTextPos().x, aCenter ) );
 
@@ -1348,7 +1450,7 @@ void SCH_DIRECTIVE_LABEL::MirrorVertically( int aCenter )
     // vertical shape (like a text reduced to only "I" letter).
     // So the mirroring is not exactly similar to a SCH_TEXT item
     // Text is NOT really mirrored; it is moved to a suitable vertical position
-    SetTextSpinStyle( GetTextSpinStyle().MirrorY() );
+    SetSpinStyle( GetSpinStyle().MirrorY() );
 
     SetTextY( MIRRORVAL( GetTextPos().y, aCenter ) );
 
@@ -1418,13 +1520,13 @@ void SCH_DIRECTIVE_LABEL::CreateGraphicShape( const RENDER_SETTINGS* aRenderSett
     // Rotate outlines and move corners to real position
     for( VECTOR2I& aPoint : aPoints )
     {
-        switch( GetTextSpinStyle() )
+        switch( GetSpinStyle() )
         {
         default:
-        case TEXT_SPIN_STYLE::LEFT:                                     break;
-        case TEXT_SPIN_STYLE::UP:     RotatePoint( aPoint, -ANGLE_90 ); break;
-        case TEXT_SPIN_STYLE::RIGHT:  RotatePoint( aPoint, ANGLE_180 ); break;
-        case TEXT_SPIN_STYLE::BOTTOM: RotatePoint( aPoint, ANGLE_90 );  break;
+        case SPIN_STYLE::LEFT:                                     break;
+        case SPIN_STYLE::UP:     RotatePoint( aPoint, -ANGLE_90 ); break;
+        case SPIN_STYLE::RIGHT:  RotatePoint( aPoint, ANGLE_180 ); break;
+        case SPIN_STYLE::BOTTOM: RotatePoint( aPoint, ANGLE_90 );  break;
         }
 
         aPoint += aPos;
@@ -1448,25 +1550,25 @@ void SCH_DIRECTIVE_LABEL::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
 
     for( SCH_FIELD& field : m_fields )
     {
-        switch( GetTextSpinStyle() )
+        switch( GetSpinStyle() )
         {
         default:
-        case TEXT_SPIN_STYLE::LEFT:
+        case SPIN_STYLE::LEFT:
             field.SetTextAngle( ANGLE_HORIZONTAL );
             offset = { symbolWidth + margin, origin };
             break;
 
-        case TEXT_SPIN_STYLE::UP:
+        case SPIN_STYLE::UP:
             field.SetTextAngle( ANGLE_VERTICAL );
             offset = { -origin, -( symbolWidth + margin ) };
             break;
 
-        case TEXT_SPIN_STYLE::RIGHT:
+        case SPIN_STYLE::RIGHT:
             field.SetTextAngle( ANGLE_HORIZONTAL );
             offset = { symbolWidth + margin, -origin };
             break;
 
-        case TEXT_SPIN_STYLE::BOTTOM:
+        case SPIN_STYLE::BOTTOM:
             field.SetTextAngle( ANGLE_VERTICAL );
             offset = { origin, -( symbolWidth + margin ) };
             break;
@@ -1541,20 +1643,20 @@ VECTOR2I SCH_GLOBALLABEL::GetSchematicTextOffset( const RENDER_SETTINGS* aSettin
         break;
     }
 
-    switch( GetTextSpinStyle() )
+    switch( GetSpinStyle() )
     {
     default:
-    case TEXT_SPIN_STYLE::LEFT:   return VECTOR2I( -horiz, vert );
-    case TEXT_SPIN_STYLE::UP:     return VECTOR2I( vert, -horiz );
-    case TEXT_SPIN_STYLE::RIGHT:  return VECTOR2I( horiz, vert );
-    case TEXT_SPIN_STYLE::BOTTOM: return VECTOR2I( vert, horiz );
+    case SPIN_STYLE::LEFT:   return VECTOR2I( -horiz, vert );
+    case SPIN_STYLE::UP:     return VECTOR2I( vert, -horiz );
+    case SPIN_STYLE::RIGHT:  return VECTOR2I( horiz, vert );
+    case SPIN_STYLE::BOTTOM: return VECTOR2I( vert, horiz );
     }
 }
 
 
-void SCH_GLOBALLABEL::SetTextSpinStyle( TEXT_SPIN_STYLE aSpinStyle )
+void SCH_GLOBALLABEL::SetSpinStyle( SPIN_STYLE aSpinStyle )
 {
-    SCH_TEXT::SetTextSpinStyle( aSpinStyle );
+    SCH_LABEL_BASE::SetSpinStyle( aSpinStyle );
     SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
 }
 
@@ -1675,13 +1777,13 @@ void SCH_GLOBALLABEL::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings
     {
         aPoint.x += x_offset;
 
-        switch( GetTextSpinStyle() )
+        switch( GetSpinStyle() )
         {
         default:
-        case TEXT_SPIN_STYLE::LEFT:                                     break;
-        case TEXT_SPIN_STYLE::UP:     RotatePoint( aPoint, -ANGLE_90 ); break;
-        case TEXT_SPIN_STYLE::RIGHT:  RotatePoint( aPoint, ANGLE_180 ); break;
-        case TEXT_SPIN_STYLE::BOTTOM: RotatePoint( aPoint, ANGLE_90 );  break;
+        case SPIN_STYLE::LEFT:                                     break;
+        case SPIN_STYLE::UP:     RotatePoint( aPoint, -ANGLE_90 ); break;
+        case SPIN_STYLE::RIGHT:  RotatePoint( aPoint, ANGLE_180 ); break;
+        case SPIN_STYLE::BOTTOM: RotatePoint( aPoint, ANGLE_90 );  break;
         }
 
         aPoint += aPos;
@@ -1712,9 +1814,9 @@ SCH_HIERLABEL::SCH_HIERLABEL( const VECTOR2I& pos, const wxString& text, KICAD_T
 }
 
 
-void SCH_HIERLABEL::SetTextSpinStyle( TEXT_SPIN_STYLE aSpinStyle )
+void SCH_HIERLABEL::SetSpinStyle( SPIN_STYLE aSpinStyle )
 {
-    SCH_TEXT::SetTextSpinStyle( aSpinStyle );
+    SCH_LABEL_BASE::SetSpinStyle( aSpinStyle );
     SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
 }
 
@@ -1730,7 +1832,7 @@ void SCH_HIERLABEL::CreateGraphicShape( const RENDER_SETTINGS* aSettings,
                                         std::vector<VECTOR2I>& aPoints, const VECTOR2I& aPos,
                                         LABEL_FLAG_SHAPE aShape ) const
 {
-    int* Template = TemplateShape[static_cast<int>( aShape )][static_cast<int>( m_spin_style )];
+    int* Template = TemplateShape[static_cast<int>( aShape )][static_cast<int>( GetSpinStyle() )];
     int  halfSize = GetTextHeight() / 2;
     int  imax = *Template;
     Template++;
@@ -1766,31 +1868,31 @@ const BOX2I SCH_HIERLABEL::GetBodyBoundingBox() const
 
     int dx, dy;
 
-    switch( GetTextSpinStyle() )
+    switch( GetSpinStyle() )
     {
     default:
-    case TEXT_SPIN_STYLE::LEFT:
+    case SPIN_STYLE::LEFT:
         dx = -length;
         dy = height;
         x += schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE );
         y -= height / 2;
         break;
 
-    case TEXT_SPIN_STYLE::UP:
+    case SPIN_STYLE::UP:
         dx = height;
         dy = -length;
         x -= height / 2;
         y += schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE );
         break;
 
-    case TEXT_SPIN_STYLE::RIGHT:
+    case SPIN_STYLE::RIGHT:
         dx = length;
         dy = height;
         x -= schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE );
         y -= height / 2;
         break;
 
-    case TEXT_SPIN_STYLE::BOTTOM:
+    case SPIN_STYLE::BOTTOM:
         dx = height;
         dy = length;
         x -= height / 2;
@@ -1811,13 +1913,13 @@ VECTOR2I SCH_HIERLABEL::GetSchematicTextOffset( const RENDER_SETTINGS* aSettings
 
     dist += GetTextWidth();
 
-    switch( GetTextSpinStyle() )
+    switch( GetSpinStyle() )
     {
     default:
-    case TEXT_SPIN_STYLE::LEFT:   text_offset.x = -dist; break; // Orientation horiz normale
-    case TEXT_SPIN_STYLE::UP:     text_offset.y = -dist; break; // Orientation vert UP
-    case TEXT_SPIN_STYLE::RIGHT:  text_offset.x = dist;  break; // Orientation horiz inverse
-    case TEXT_SPIN_STYLE::BOTTOM: text_offset.y = dist;  break; // Orientation vert BOTTOM
+    case SPIN_STYLE::LEFT:   text_offset.x = -dist; break; // Orientation horiz normale
+    case SPIN_STYLE::UP:     text_offset.y = -dist; break; // Orientation vert UP
+    case SPIN_STYLE::RIGHT:  text_offset.x = dist;  break; // Orientation horiz inverse
+    case SPIN_STYLE::BOTTOM: text_offset.y = dist;  break; // Orientation vert BOTTOM
     }
 
     return text_offset;

@@ -41,7 +41,7 @@
 struct CADSTAR_PART_ENTRY;
 class BUS_ALIAS;
 class EDA_TEXT;
-class TEXT_SPIN_STYLE;
+class SPIN_STYLE;
 class LIB_FIELD;
 class LIB_SYMBOL;
 class REPORTER;
@@ -261,8 +261,8 @@ private:
     ELECTRICAL_PINTYPE getKiCadPinType( const CADSTAR_PIN_TYPE& aPinType );
 
     int             getKiCadUnitNumberFromGate( const GATE_ID& aCadstarGateID );
-    TEXT_SPIN_STYLE getSpinStyle( const long long& aCadstarOrientation, bool aMirror );
-    TEXT_SPIN_STYLE getSpinStyle( const EDA_ANGLE& aOrientation );
+    SPIN_STYLE      getSpinStyle( const long long& aCadstarOrientation, bool aMirror );
+    SPIN_STYLE      getSpinStyle( const EDA_ANGLE& aOrientation );
     ALIGNMENT       mirrorX( const ALIGNMENT& aCadstarAlignment );
     ALIGNMENT       rotate180( const ALIGNMENT& aCadstarAlignment );
 

@@ -30,7 +30,6 @@
 #include <tools/ee_grid_helper.h>
 #include <ee_actions.h>
 #include <sch_edit_frame.h>
-#include <project.h>
 #include <pgm_base.h>
 #include <eeschema_id.h>
 #include <confirm.h>
@@ -54,7 +53,6 @@
 #include <dialogs/dialog_text_properties.h>
 #include <dialogs/dialog_wire_bus_properties.h>
 #include <dialogs/dialog_junction_props.h>
-#include <dialogs/dialog_sheet_pin_properties.h>
 #include <string_utils.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/filedlg.h>
@@ -64,7 +62,7 @@ SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         m_lastSheetPinType( LABEL_FLAG_SHAPE::L_INPUT ),
         m_lastGlobalLabelShape( LABEL_FLAG_SHAPE::L_INPUT ),
         m_lastNetClassFlagShape( LABEL_FLAG_SHAPE::F_ROUND ),
-        m_lastTextOrientation( TEXT_SPIN_STYLE::RIGHT ),
+        m_lastTextOrientation( SPIN_STYLE::RIGHT ),
         m_lastTextBold( false ),
         m_lastTextItalic( false ),
         m_lastTextAngle( ANGLE_0 ),
@@ -1044,7 +1042,9 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
         textItem->SetItalic( m_lastTextItalic );
     }
 
-    textItem->SetTextSpinStyle( m_lastTextOrientation );
+    if( labelItem )
+        labelItem->SetSpinStyle( m_lastTextOrientation );
+
     textItem->SetTextSize( VECTOR2I( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
     textItem->SetFlags( IS_NEW | IS_MOVING );
 
@@ -1090,7 +1090,8 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
         m_lastTextItalic = textItem->IsItalic();
     }
 
-    m_lastTextOrientation = textItem->GetTextSpinStyle();
+    if( labelItem )
+        m_lastTextOrientation = labelItem->GetSpinStyle();
 
     if( aType == LAYER_GLOBLABEL || aType == LAYER_HIERLABEL )
     {

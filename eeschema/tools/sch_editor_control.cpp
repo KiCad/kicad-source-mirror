@@ -1521,7 +1521,6 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     {
         // If it wasn't content, then paste as text object.
         SCH_TEXT* text_item = new SCH_TEXT( VECTOR2I( 0, 0 ), content );
-        text_item->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT ); // Left alignment
         tempScreen->Append( text_item );
     }
 

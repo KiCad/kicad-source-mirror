@@ -3831,17 +3831,18 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
 
         case T_at:
             text->SetPosition( parseXY() );
+            text->SetTextAngle( EDA_ANGLE( parseDouble( "text angle" ), DEGREES_T ) );
 
-            switch( static_cast<int>( parseDouble( "text angle" ) ) )
+            if( SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( text.get() ) )
             {
-            case 0:   text->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );    break;
-            case 90:  text->SetTextSpinStyle( TEXT_SPIN_STYLE::UP );       break;
-            case 180: text->SetTextSpinStyle( TEXT_SPIN_STYLE::LEFT );     break;
-            case 270: text->SetTextSpinStyle( TEXT_SPIN_STYLE::BOTTOM );   break;
-            default:
-                wxFAIL;
-                text->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );
-                break;
+                switch( static_cast<int>( label->GetTextAngle().AsDegrees() ) )
+                {
+                case 0:   label->SetSpinStyle( SPIN_STYLE::RIGHT );         break;
+                case 90:  label->SetSpinStyle( SPIN_STYLE::UP );            break;
+                case 180: label->SetSpinStyle( SPIN_STYLE::LEFT );          break;
+                case 270: label->SetSpinStyle( SPIN_STYLE::BOTTOM );        break;
+                default:  wxFAIL; label->SetSpinStyle( SPIN_STYLE::RIGHT ); break;
+                }
             }
 
             NeedRIGHT();
@@ -3895,26 +3896,6 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
 
         case T_effects:
             parseEDA_TEXT( static_cast<EDA_TEXT*>( text.get() ), true );
-
-            // Spin style is defined differently for graphical text (#SCH_TEXT) objects.
-            if( text->Type() == SCH_TEXT_T )
-            {
-                if( text->GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT
-                        && text->GetTextAngle().IsVertical() )
-                {
-                    // The vertically aligned text angle is always 90 (labels use 270 for the
-                    // down direction) combined with the text justification flags.
-                    text->SetTextSpinStyle( TEXT_SPIN_STYLE::BOTTOM );
-                }
-                else if( text->GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT
-                       && text->GetTextAngle().IsHorizontal() )
-                {
-                    // The horizontally aligned text angle is always 0 (labels use 180 for the
-                    // left direction) combined with the text justification flags.
-                    text->SetTextSpinStyle( TEXT_SPIN_STYLE::LEFT );
-                }
-            }
-
             break;
 
         case T_iref:    // legacy format; current is a T_property (aka SCH_FIELD)

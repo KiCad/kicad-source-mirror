@@ -390,7 +390,7 @@ SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet, const VECTO
 
     m_busUnfold.label = new SCH_LABEL( m_busUnfold.entry->GetEnd(), aNet );
     m_busUnfold.label->SetTextSize( VECTOR2I( cfg.m_DefaultTextSize, cfg.m_DefaultTextSize ) );
-    m_busUnfold.label->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );
+    m_busUnfold.label->SetSpinStyle( SPIN_STYLE::RIGHT );
     m_busUnfold.label->SetParent( m_frame->GetScreen() );
     m_busUnfold.label->SetFlags( IS_NEW | IS_MOVING );
 

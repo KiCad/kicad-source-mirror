@@ -990,42 +990,46 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( LINE_READER& aReader )
     }
 
     int spinStyle = parseInt( aReader, line, &line );
-
-    // Sadly we store the orientation of hierarchical and global labels using a different
-    // int encoding than that for local labels:
-    //                   Global      Local
-    // Left justified      0           2
-    // Up                  1           3
-    // Right justified     2           0
-    // Down                3           1
-    // So we must flip it as the enum is setup with the "global" numbering
-    if( text->Type() != SCH_GLOBAL_LABEL_T && text->Type() != SCH_HIER_LABEL_T )
-    {
-        if( spinStyle == 0 )
-            spinStyle = 2;
-        else if( spinStyle == 2 )
-            spinStyle = 0;
-    }
-
-    text->SetTextSpinStyle( static_cast<TEXT_SPIN_STYLE::SPIN>( spinStyle ) );
-
     int size = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
 
     text->SetTextSize( VECTOR2I( size, size ) );
 
-    // Parse the global and hierarchical label type.
-    if( text->Type() == SCH_HIER_LABEL_T || text->Type() == SCH_GLOBAL_LABEL_T )
+    if( textType == SCH_LABEL_T || textType == SCH_HIER_LABEL_T || textType == SCH_GLOBAL_LABEL_T )
     {
-        auto resultIt = std::find_if( sheetLabelNames.begin(), sheetLabelNames.end(),
-                [ &line ]( const auto& it )
-                {
-                    return strCompare( it.second, line, &line );
-                } );
+        SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( text.get() );
 
-        if( resultIt != sheetLabelNames.end() )
-            text->SetShape( resultIt->first );
-        else
-            SCH_PARSE_ERROR( "invalid label type", aReader, line );
+        // Sadly we store the orientation of hierarchical and global labels using a different
+        // int encoding than that for local labels:
+        //                   Global      Local
+        // Left justified      0           2
+        // Up                  1           3
+        // Right justified     2           0
+        // Down                3           1
+        // So we must flip it as the enum is setup with the "global" numbering
+        if( textType == SCH_LABEL_T )
+        {
+            if( spinStyle == 0 )
+                spinStyle = 2;
+            else if( spinStyle == 2 )
+                spinStyle = 0;
+        }
+
+        label->SetSpinStyle( static_cast<SPIN_STYLE::SPIN>( spinStyle ) );
+
+        // Parse the global and hierarchical label type.
+        if( textType == SCH_HIER_LABEL_T || textType == SCH_GLOBAL_LABEL_T )
+        {
+            auto resultIt = std::find_if( sheetLabelNames.begin(), sheetLabelNames.end(),
+                    [ &line ]( const auto& it )
+                    {
+                        return strCompare( it.second, line, &line );
+                    } );
+
+            if( resultIt != sheetLabelNames.end() )
+                label->SetShape( resultIt->first );
+            else
+                SCH_PARSE_ERROR( "invalid label type", aReader, line );
+        }
     }
 
     int penWidth = 0;
@@ -1991,13 +1995,18 @@ void SCH_LEGACY_PLUGIN::saveText( SCH_TEXT* aText )
             textType = "Label";
         }
 
-        // Local labels must have their spin style inverted for left and right
-        int spinStyle = static_cast<int>( aText->GetTextSpinStyle() );
+        int spinStyle = 0;
 
-        if( spinStyle == 0 )
-            spinStyle = 2;
-        else if( spinStyle == 2 )
-            spinStyle = 0;
+        // Local labels must have their spin style inverted for left and right
+        if( SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( aText ) )
+        {
+            spinStyle = static_cast<int>( label->GetSpinStyle() );
+
+            if( spinStyle == 0 )
+                spinStyle = 2;
+            else if( spinStyle == 2 )
+                spinStyle = 0;
+        }
 
         m_out->Print( 0, "Text %s %-4d %-4d %-4d %-4d %s %d\n%s\n", textType,
                       schIUScale.IUToMils( aText->GetPosition().x ),
@@ -2010,13 +2019,14 @@ void SCH_LEGACY_PLUGIN::saveText( SCH_TEXT* aText )
     {
         textType = ( layer == LAYER_GLOBLABEL ) ? "GLabel" : "HLabel";
 
-        auto shapeLabelIt = sheetLabelNames.find( aText->GetShape() );
+        SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( aText );
+        auto            shapeLabelIt = sheetLabelNames.find( label->GetShape() );
         wxCHECK_RET( shapeLabelIt != sheetLabelNames.end(), "Shape not found in names list" );
 
         m_out->Print( 0, "Text %s %-4d %-4d %-4d %-4d %s %s %d\n%s\n", textType,
                       schIUScale.IUToMils( aText->GetPosition().x ),
                       schIUScale.IUToMils( aText->GetPosition().y ),
-                      static_cast<int>( aText->GetTextSpinStyle() ),
+                      static_cast<int>( label->GetSpinStyle() ),
                       schIUScale.IUToMils( aText->GetTextWidth() ),
                       shapeLabelIt->second,
                       italics,

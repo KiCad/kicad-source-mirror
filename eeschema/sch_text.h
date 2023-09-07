@@ -34,80 +34,6 @@
 
 class HTML_MESSAGE_BOX;
 
-/*
- * Spin style for text items of all kinds on schematics
- * Basically a higher level abstraction of rotation and justification of text
- */
-class TEXT_SPIN_STYLE
-{
-public:
-    enum SPIN : int
-    {
-        LEFT   = 0,
-        UP     = 1,
-        RIGHT  = 2,
-        BOTTOM = 3
-    };
-
-
-    TEXT_SPIN_STYLE() = default;
-    constexpr TEXT_SPIN_STYLE( SPIN aSpin ) : m_spin( aSpin )
-    {
-    }
-
-    constexpr bool operator==( SPIN a ) const
-    {
-        return m_spin == a;
-    }
-
-    constexpr bool operator!=( SPIN a ) const
-    {
-        return m_spin != a;
-    }
-
-    operator int() const
-    {
-        return static_cast<int>( m_spin );
-    }
-
-    TEXT_SPIN_STYLE RotateCW();
-
-    TEXT_SPIN_STYLE RotateCCW();
-
-    /**
-     * Mirror the label spin style across the X axis or simply swaps up and bottom.
-     */
-    TEXT_SPIN_STYLE MirrorX();
-
-    /**
-     * Mirror the label spin style across the Y axis or simply swaps left and right.
-     */
-    TEXT_SPIN_STYLE MirrorY();
-
-private:
-    SPIN m_spin;
-};
-
-
-/*
- * Label and flag shapes used with text objects.
- */
-enum LABEL_FLAG_SHAPE
-{
-    L_INPUT,
-    L_OUTPUT,
-    L_BIDI,
-    L_TRISTATE,
-    L_UNSPECIFIED,
-
-    F_FIRST,
-    F_DOT = F_FIRST,
-    F_ROUND,
-    F_DIAMOND,
-    F_RECTANGLE
-};
-
-
 class SCH_TEXT : public SCH_ITEM, public EDA_TEXT
 {
 public:
@@ -147,19 +73,6 @@ public:
     bool GetExcludedFromSim() const override { return m_excludedFromSim; }
 
     /**
-     * Set a spin or rotation angle, along with specific horizontal and vertical justification
-     * styles with each angle.
-     *
-     * @param aSpinStyle Spin style as per #TEXT_SPIN_STYLE storage class, may be the enum
-     *                   values or int value
-     */
-    virtual void    SetTextSpinStyle( TEXT_SPIN_STYLE aSpinStyle );
-    TEXT_SPIN_STYLE GetTextSpinStyle() const         { return m_spin_style; }
-
-    virtual LABEL_FLAG_SHAPE GetShape() const        { return L_UNSPECIFIED; }
-    virtual void SetShape( LABEL_FLAG_SHAPE aShape ) { }
-
-    /**
      * This offset depends on the orientation, the type of text, and the area required to
      * draw the associated graphic symbol or to put the text above a wire.
      *
@@ -184,6 +97,7 @@ public:
         EDA_TEXT::Offset( aMoveVector );
     }
 
+    void FlipHJustify();
     void MirrorHorizontally( int aCenter ) override;
     void MirrorVertically( int aCenter ) override;
     void Rotate( const VECTOR2I& aCenter ) override;
@@ -236,18 +150,6 @@ protected:
     const KIFONT::METRICS& getFontMetrics() const override { return GetFontMetrics(); }
 
 protected:
-    /**
-     * The orientation of text and any associated drawing elements of derived objects.
-     *  - 0 is the horizontal and left justified.
-     *  - 1 is vertical and top justified.
-     *  - 2 is horizontal and right justified.  It is the equivalent of the mirrored 0 orientation.
-     *  - 3 is vertical and bottom justified. It is the equivalent of the mirrored 1 orientation.
-     *
-     * This is a duplication of m_Orient, m_HJustified, and m_VJustified in #EDA_TEXT but is
-     * easier to handle than 3 parameters when editing and reading and saving files.
-     */
-    TEXT_SPIN_STYLE m_spin_style;
-
     bool            m_excludedFromSim;
 };
 

@@ -48,70 +48,6 @@
 using KIGFX::SCH_RENDER_SETTINGS;
 
 
-TEXT_SPIN_STYLE TEXT_SPIN_STYLE::RotateCW()
-{
-    SPIN newSpin = m_spin;
-
-    switch( m_spin )
-    {
-    case TEXT_SPIN_STYLE::LEFT:   newSpin = TEXT_SPIN_STYLE::UP;     break;
-    case TEXT_SPIN_STYLE::UP:     newSpin = TEXT_SPIN_STYLE::RIGHT;  break;
-    case TEXT_SPIN_STYLE::RIGHT:  newSpin = TEXT_SPIN_STYLE::BOTTOM; break;
-    case TEXT_SPIN_STYLE::BOTTOM: newSpin = TEXT_SPIN_STYLE::LEFT;   break;
-    }
-
-    return TEXT_SPIN_STYLE( newSpin );
-}
-
-
-TEXT_SPIN_STYLE TEXT_SPIN_STYLE::RotateCCW()
-{
-    SPIN newSpin = m_spin;
-
-    switch( m_spin )
-    {
-    case TEXT_SPIN_STYLE::LEFT:   newSpin = TEXT_SPIN_STYLE::BOTTOM; break;
-    case TEXT_SPIN_STYLE::BOTTOM: newSpin = TEXT_SPIN_STYLE::RIGHT;  break;
-    case TEXT_SPIN_STYLE::RIGHT:  newSpin = TEXT_SPIN_STYLE::UP;     break;
-    case TEXT_SPIN_STYLE::UP:     newSpin = TEXT_SPIN_STYLE::LEFT;   break;
-    }
-
-    return TEXT_SPIN_STYLE( newSpin );
-}
-
-
-TEXT_SPIN_STYLE TEXT_SPIN_STYLE::MirrorX()
-{
-    SPIN newSpin = m_spin;
-
-    switch( m_spin )
-    {
-    case TEXT_SPIN_STYLE::UP:     newSpin = TEXT_SPIN_STYLE::BOTTOM; break;
-    case TEXT_SPIN_STYLE::BOTTOM: newSpin = TEXT_SPIN_STYLE::UP;     break;
-    case TEXT_SPIN_STYLE::LEFT:                                      break;
-    case TEXT_SPIN_STYLE::RIGHT:                                     break;
-    }
-
-    return TEXT_SPIN_STYLE( newSpin );
-}
-
-
-TEXT_SPIN_STYLE TEXT_SPIN_STYLE::MirrorY()
-{
-    SPIN newSpin = m_spin;
-
-    switch( m_spin )
-    {
-    case TEXT_SPIN_STYLE::LEFT:   newSpin = TEXT_SPIN_STYLE::RIGHT; break;
-    case TEXT_SPIN_STYLE::RIGHT:  newSpin = TEXT_SPIN_STYLE::LEFT;  break;
-    case TEXT_SPIN_STYLE::UP:                                       break;
-    case TEXT_SPIN_STYLE::BOTTOM:                                   break;
-    }
-
-    return TEXT_SPIN_STYLE( newSpin );
-}
-
-
 SCH_TEXT::SCH_TEXT( const VECTOR2I& pos, const wxString& text, KICAD_T aType ) :
         SCH_ITEM( nullptr, aType ),
         EDA_TEXT( schIUScale, text )
@@ -119,7 +55,6 @@ SCH_TEXT::SCH_TEXT( const VECTOR2I& pos, const wxString& text, KICAD_T aType ) :
     m_layer = LAYER_NOTES;
 
     SetTextPos( pos );
-    SetTextSpinStyle( TEXT_SPIN_STYLE::LEFT );
     SetMultilineAllowed( true );
 
     m_excludedFromSim = false;
@@ -128,8 +63,7 @@ SCH_TEXT::SCH_TEXT( const VECTOR2I& pos, const wxString& text, KICAD_T aType ) :
 
 SCH_TEXT::SCH_TEXT( const SCH_TEXT& aText ) :
         SCH_ITEM( aText ),
-        EDA_TEXT( aText ),
-        m_spin_style( aText.m_spin_style )
+        EDA_TEXT( aText )
 {
     m_excludedFromSim = aText.m_excludedFromSim;
 }
@@ -142,21 +76,36 @@ VECTOR2I SCH_TEXT::GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) co
 }
 
 
+void SCH_TEXT::FlipHJustify()
+{
+    if( GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
+        SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+    else if( GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
+        SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+}
+
+
 void SCH_TEXT::MirrorHorizontally( int aCenter )
 {
-    // Text is NOT really mirrored; it is moved to a suitable horizontal position
-    SetTextSpinStyle( GetTextSpinStyle().MirrorY() );
+    if( GetTextAngle() == ANGLE_HORIZONTAL )
+    {
+        FlipHJustify();
 
-    SetTextX( MIRRORVAL( GetTextPos().x, aCenter ) );
+        if( GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT || GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
+            SetTextX( MIRRORVAL( GetTextPos().x, aCenter ) );
+    }
 }
 
 
 void SCH_TEXT::MirrorVertically( int aCenter )
 {
-    // Text is NOT really mirrored; it is moved to a suitable vertical position
-    SetTextSpinStyle( GetTextSpinStyle().MirrorX() );
+    if( GetTextAngle() == ANGLE_VERTICAL )
+    {
+        FlipHJustify();
 
-    SetTextY( MIRRORVAL( GetTextPos().y, aCenter ) );
+        if( GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT || GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
+            SetTextY( MIRRORVAL( GetTextPos().y, aCenter ) );
+    }
 }
 
 
@@ -174,57 +123,23 @@ void SCH_TEXT::Rotate( const VECTOR2I& aCenter )
 
 void SCH_TEXT::Rotate90( bool aClockwise )
 {
-    if( aClockwise )
-        SetTextSpinStyle( GetTextSpinStyle().RotateCW() );
-    else
-        SetTextSpinStyle( GetTextSpinStyle().RotateCCW() );
+    if( ( GetTextAngle() == ANGLE_HORIZONTAL && aClockwise )
+     || ( GetTextAngle() == ANGLE_HORIZONTAL && !aClockwise ) )
+    {
+        FlipHJustify();
+    }
+
+    SetTextAngle( GetTextAngle() == ANGLE_VERTICAL ? ANGLE_HORIZONTAL : ANGLE_VERTICAL );
 }
 
 
 void SCH_TEXT::MirrorSpinStyle( bool aLeftRight )
 {
-    if( aLeftRight )
-        SetTextSpinStyle( GetTextSpinStyle().MirrorY() );
-    else
-        SetTextSpinStyle( GetTextSpinStyle().MirrorX() );
-}
-
-
-void SCH_TEXT::SetTextSpinStyle( TEXT_SPIN_STYLE aSpinStyle )
-{
-    m_spin_style = aSpinStyle;
-
-    // Assume "Right" and Left" mean which side of the anchor the text will be on
-    // Thus we want to left justify text up against the anchor if we are on the right
-    switch( aSpinStyle )
+    if( ( GetTextAngle() == ANGLE_HORIZONTAL && aLeftRight )
+     || ( GetTextAngle() == ANGLE_VERTICAL && !aLeftRight ) )
     {
-    default:
-        wxFAIL_MSG( "Bad spin style" );
-        m_spin_style = TEXT_SPIN_STYLE::RIGHT; // Handle the error spin style by resetting
-        KI_FALLTHROUGH;
-
-    case TEXT_SPIN_STYLE::RIGHT:            // Horiz Normal Orientation
-        SetTextAngle( ANGLE_HORIZONTAL );
-        SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-        break;
-
-    case TEXT_SPIN_STYLE::UP:               // Vert Orientation UP
-        SetTextAngle( ANGLE_VERTICAL );
-        SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-        break;
-
-    case TEXT_SPIN_STYLE::LEFT:             // Horiz Orientation - Right justified
-        SetTextAngle( ANGLE_HORIZONTAL );
-        SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-        break;
-
-    case TEXT_SPIN_STYLE::BOTTOM:           //  Vert Orientation BOTTOM
-        SetTextAngle( ANGLE_VERTICAL );
-        SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-        break;
+        FlipHJustify();
     }
-
-    SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
 }
 
 
@@ -235,7 +150,6 @@ void SCH_TEXT::SwapData( SCH_ITEM* aItem )
     SCH_TEXT* item = static_cast<SCH_TEXT*>( aItem );
 
     std::swap( m_layer, item->m_layer );
-    std::swap( m_spin_style, item->m_spin_style );
 
     SwapText( *item );
     SwapAttributes( *item );
@@ -514,13 +428,11 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 
     aList.emplace_back( _( "Text Size" ), aFrame->MessageTextFromValue( GetTextWidth() ) );
 
-    switch( GetTextSpinStyle() )
+    switch( GetHorizJustify() )
     {
-    case TEXT_SPIN_STYLE::LEFT:   msg = _( "Align right" );   break;
-    case TEXT_SPIN_STYLE::UP:     msg = _( "Align bottom" );  break;
-    case TEXT_SPIN_STYLE::RIGHT:  msg = _( "Align left" );    break;
-    case TEXT_SPIN_STYLE::BOTTOM: msg = _( "Align top" );     break;
-    default:                      msg = wxT( "???" );         break;
+    case GR_TEXT_H_ALIGN_LEFT:   msg = _( "Align left" );   break;
+    case GR_TEXT_H_ALIGN_CENTER: msg = _( "Align center" ); break;
+    case GR_TEXT_H_ALIGN_RIGHT:  msg = _( "Align right" );  break;
     }
 
     aList.emplace_back( _( "Justification" ), msg );

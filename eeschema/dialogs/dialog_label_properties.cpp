@@ -348,12 +348,12 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataToWindow()
     m_italic->Check( m_currentLabel->IsItalic() );
     m_textColorSwatch->SetSwatchColor( m_currentLabel->GetTextColor(), false );
 
-    switch( m_currentLabel->GetTextSpinStyle() )
+    switch( m_currentLabel->GetSpinStyle() )
     {
-    case TEXT_SPIN_STYLE::RIGHT:  m_spin0->Check( true ); break;
-    case TEXT_SPIN_STYLE::LEFT:   m_spin1->Check( true ); break;
-    case TEXT_SPIN_STYLE::UP:     m_spin2->Check( true ); break;
-    case TEXT_SPIN_STYLE::BOTTOM: m_spin3->Check( true ); break;
+    case SPIN_STYLE::RIGHT:  m_spin0->Check( true ); break;
+    case SPIN_STYLE::LEFT:   m_spin1->Check( true ); break;
+    case SPIN_STYLE::UP:     m_spin2->Check( true ); break;
+    case SPIN_STYLE::BOTTOM: m_spin3->Check( true ); break;
     }
 
     if( m_currentLabel->AutoRotateOnPlacementSupported() )
@@ -553,12 +553,12 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
 
     m_currentLabel->SetTextColor( m_textColorSwatch->GetSwatchColor() );
 
-    TEXT_SPIN_STYLE selectedSpinStyle= TEXT_SPIN_STYLE::LEFT;
+    SPIN_STYLE selectedSpinStyle= SPIN_STYLE::LEFT;
 
-    if( m_spin0->IsChecked() )      selectedSpinStyle = TEXT_SPIN_STYLE::RIGHT;
-    else if( m_spin1->IsChecked() ) selectedSpinStyle = TEXT_SPIN_STYLE::LEFT;
-    else if( m_spin2->IsChecked() ) selectedSpinStyle = TEXT_SPIN_STYLE::UP;
-    else if( m_spin3->IsChecked() ) selectedSpinStyle = TEXT_SPIN_STYLE::BOTTOM;
+    if( m_spin0->IsChecked() )      selectedSpinStyle = SPIN_STYLE::RIGHT;
+    else if( m_spin1->IsChecked() ) selectedSpinStyle = SPIN_STYLE::LEFT;
+    else if( m_spin2->IsChecked() ) selectedSpinStyle = SPIN_STYLE::UP;
+    else if( m_spin3->IsChecked() ) selectedSpinStyle = SPIN_STYLE::BOTTOM;
 
     if( m_currentLabel->AutoRotateOnPlacementSupported() )
     {
@@ -572,9 +572,9 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
     }
 
     if( !m_currentLabel->AutoRotateOnPlacement()
-        && m_currentLabel->GetTextSpinStyle() != selectedSpinStyle )
+        && m_currentLabel->GetSpinStyle() != selectedSpinStyle )
     {
-        m_currentLabel->SetTextSpinStyle( selectedSpinStyle );
+        m_currentLabel->SetSpinStyle( selectedSpinStyle );
     }
 
     if( doAutoplace )

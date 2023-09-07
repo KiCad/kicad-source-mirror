@@ -1561,13 +1561,13 @@ void SCH_EDIT_FRAME::AutoRotateItem( SCH_SCREEN* aScreen, SCH_ITEM* aItem )
 
         if( label->AutoRotateOnPlacement() )
         {
-            TEXT_SPIN_STYLE spin = aScreen->GetLabelOrientationForPoint( label->GetPosition(),
-                                                                         label->GetTextSpinStyle(),
-                                                                         &GetCurrentSheet() );
+            SPIN_STYLE spin = aScreen->GetLabelOrientationForPoint( label->GetPosition(),
+                                                                    label->GetSpinStyle(),
+                                                                    &GetCurrentSheet() );
 
-            if( spin != label->GetTextSpinStyle() )
+            if( spin != label->GetSpinStyle() )
             {
-                label->SetTextSpinStyle( spin );
+                label->SetSpinStyle( spin );
 
                 for( SCH_ITEM* item : aScreen->Items().OfType( SCH_GLOBAL_LABEL_T ) )
                 {

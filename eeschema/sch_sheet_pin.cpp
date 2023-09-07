@@ -121,25 +121,25 @@ void SCH_SHEET_PIN::SetSide( SHEET_SIDE aEdge )
     case SHEET_SIDE::LEFT:
         m_edge = aEdge;
         SetTextX( Sheet->m_pos.x );
-        SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT ); // Orientation horiz inverse
+        SetSpinStyle( SPIN_STYLE::RIGHT ); // Orientation horiz inverse
         break;
 
     case SHEET_SIDE::RIGHT:
         m_edge = aEdge;
         SetTextX( Sheet->m_pos.x + Sheet->m_size.x );
-        SetTextSpinStyle( TEXT_SPIN_STYLE::LEFT ); // Orientation horiz normal
+        SetSpinStyle( SPIN_STYLE::LEFT ); // Orientation horiz normal
         break;
 
     case SHEET_SIDE::TOP:
         m_edge = aEdge;
         SetTextY( Sheet->m_pos.y );
-        SetTextSpinStyle( TEXT_SPIN_STYLE::BOTTOM ); // Orientation vert BOTTOM
+        SetSpinStyle( SPIN_STYLE::BOTTOM ); // Orientation vert BOTTOM
         break;
 
     case SHEET_SIDE::BOTTOM:
         m_edge = aEdge;
         SetTextY( Sheet->m_pos.y + Sheet->m_size.y );
-        SetTextSpinStyle( TEXT_SPIN_STYLE::UP ); // Orientation vert UP
+        SetSpinStyle( SPIN_STYLE::UP ); // Orientation vert UP
         break;
 
     default:

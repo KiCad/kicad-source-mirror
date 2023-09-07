@@ -314,10 +314,10 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( SCH_COMMIT* aCommit,
         }
     }
 
-    if( SCH_TEXT* sch_text = dynamic_cast<SCH_TEXT*>( aItem ) )
+    if( SCH_LABEL_BASE* sch_label = dynamic_cast<SCH_LABEL_BASE*>( aItem ) )
     {
         if( m_orientation->GetStringSelection() != INDETERMINATE_ACTION )
-            sch_text->SetTextSpinStyle( (TEXT_SPIN_STYLE::SPIN) m_orientation->GetSelection() );
+            sch_label->SetSpinStyle( (SPIN_STYLE::SPIN) m_orientation->GetSelection() );
     }
 
     if( SCH_FIELD* sch_field = dynamic_cast<SCH_FIELD*>( aItem ) )

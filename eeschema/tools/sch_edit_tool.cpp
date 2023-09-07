@@ -2108,12 +2108,13 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 
         if( item && item->Type() != convertTo )
         {
+            EDA_TEXT*        sourceText  = dynamic_cast<EDA_TEXT*>( item );
             bool             selected    = item->IsSelected();
             SCH_ITEM*        newtext     = nullptr;
             VECTOR2I         position    = item->GetPosition();
             wxString         txt;
             wxString         href;
-            TEXT_SPIN_STYLE  orientation = TEXT_SPIN_STYLE::SPIN::RIGHT;
+            SPIN_STYLE       spinStyle   = SPIN_STYLE::SPIN::RIGHT;
             LABEL_FLAG_SHAPE shape       = LABEL_FLAG_SHAPE::L_UNSPECIFIED;
 
             switch( item->Type() )
@@ -2122,10 +2123,10 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             case SCH_GLOBAL_LABEL_T:
             case SCH_HIER_LABEL_T:
             {
-                SCH_TEXT* label = static_cast<SCH_LABEL_BASE*>( item );
+                SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( item );
 
                 txt = UnescapeString( label->GetText() );
-                orientation = label->GetTextSpinStyle();
+                spinStyle = label->GetSpinStyle();
                 shape = label->GetShape();
                 href = label->GetHyperlink();
                 break;
@@ -2138,7 +2139,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
                 // a SCH_DIRECTIVE_LABEL has no text
                 txt = _( "<empty>" );
 
-                orientation = dirlabel->GetTextSpinStyle();
+                spinStyle = dirlabel->GetSpinStyle();
                 href = dirlabel->GetHyperlink();
                 break;
             }
@@ -2148,7 +2149,6 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
                 SCH_TEXT* text = static_cast<SCH_TEXT*>( item );
 
                 txt = text->GetText();
-                orientation = text->GetTextSpinStyle();
                 href = text->GetHyperlink();
                 break;
             }
@@ -2167,7 +2167,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
                     EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( item );
                     wxCHECK( text, 0 );
                     int textSize = text->GetTextSize().y;
-                    bbox.Inflate( item->Schematic()->Settings().m_LabelSizeRatio * textSize );
+                    bbox.Inflate( KiROUND( item->Schematic()->Settings().m_LabelSizeRatio * textSize ) );
                 }
 
                 txt = textbox->GetText();
@@ -2176,12 +2176,12 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
                 {
                     if( textbox->GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
                     {
-                        orientation = TEXT_SPIN_STYLE::SPIN::BOTTOM;
+                        spinStyle = SPIN_STYLE::SPIN::BOTTOM;
                         position = VECTOR2I( bbox.Centre().x, bbox.GetOrigin().y );
                     }
                     else
                     {
-                        orientation = TEXT_SPIN_STYLE::SPIN::UP;
+                        spinStyle = SPIN_STYLE::SPIN::UP;
                         position = VECTOR2I( bbox.Centre().x, bbox.GetEnd().y );
                     }
                 }
@@ -2189,12 +2189,12 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
                 {
                     if( textbox->GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
                     {
-                        orientation = TEXT_SPIN_STYLE::SPIN::LEFT;
+                        spinStyle = SPIN_STYLE::SPIN::LEFT;
                         position = VECTOR2I( bbox.GetEnd().x, bbox.Centre().y );
                     }
                     else
                     {
-                        orientation = TEXT_SPIN_STYLE::SPIN::RIGHT;
+                        spinStyle = SPIN_STYLE::SPIN::RIGHT;
                         position = VECTOR2I( bbox.GetOrigin().x, bbox.Centre().y );
                     }
                 }
@@ -2237,7 +2237,8 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
                 SCH_LABEL_BASE* new_label = new SCH_LABEL( position, getValidNetname( txt ) );
 
                 new_label->SetShape( shape );
-                new_label->SetTextSpinStyle( orientation );
+                new_label->SetAttributes( *sourceText, false );
+                new_label->SetSpinStyle( spinStyle );
                 new_label->SetHyperlink( href );
                 newtext = new_label;
                 break;
@@ -2248,7 +2249,8 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
                 SCH_LABEL_BASE* new_label = new SCH_GLOBALLABEL( position, getValidNetname( txt ) );
 
                 new_label->SetShape( shape );
-                new_label->SetTextSpinStyle( orientation );
+                new_label->SetAttributes( *sourceText, false );
+                new_label->SetSpinStyle( spinStyle );
                 new_label->SetHyperlink( href );
                 newtext = new_label;
                 break;
@@ -2259,7 +2261,8 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
                 SCH_LABEL_BASE* new_label = new SCH_HIERLABEL( position, getValidNetname( txt ) );
 
                 new_label->SetShape( shape );
-                new_label->SetTextSpinStyle( orientation );
+                new_label->SetAttributes( *sourceText, false );
+                new_label->SetSpinStyle( spinStyle );
                 new_label->SetHyperlink( href );
                 newtext = new_label;
                 break;
@@ -2282,7 +2285,8 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
                 }
 
                 new_label->SetShape( LABEL_FLAG_SHAPE::F_ROUND );
-                new_label->SetTextSpinStyle( orientation );
+                new_label->SetAttributes( *sourceText, false );
+                new_label->SetSpinStyle( spinStyle );
                 new_label->SetHyperlink( href );
                 newtext = new_label;
                 break;
@@ -2292,7 +2296,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             {
                 SCH_TEXT* new_text = new SCH_TEXT( position, txt );
 
-                new_text->SetTextSpinStyle( orientation );
+                new_text->SetAttributes( *sourceText, false );
                 new_text->SetHyperlink( href );
                 newtext = new_text;
                 break;
@@ -2306,44 +2310,34 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
                 if( SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( item ) )
                     bbox.Inflate( -label->GetLabelBoxExpansion() );
 
-                EDA_TEXT* textItem = dynamic_cast<EDA_TEXT*>( item );
-                wxCHECK(textItem, 0 );
-
-                // Careful: GetTextMargin() is dependent on font size...
-                new_textbox->SetTextSize( textItem->GetTextSize() );
+                new_textbox->SetAttributes( *sourceText, false );
 
                 int margin = new_textbox->GetTextMargin();
                 bbox.Inflate( margin );
 
+                VECTOR2I topLeft = bbox.GetPosition();
+                VECTOR2I botRight = bbox.GetEnd();
+
                 // Add 1/20 of the margin at the end to reduce line-breaking changes.
                 int slop = margin / 20;
 
-                switch( orientation )
+                if( sourceText->GetTextAngle() == ANGLE_VERTICAL )
                 {
-                case TEXT_SPIN_STYLE::SPIN::RIGHT:
-                    new_textbox->SetPosition( bbox.GetPosition() );
-                    new_textbox->SetEnd( bbox.GetEnd() + VECTOR2I( slop, 0 ) );
-                    break;
-
-                case TEXT_SPIN_STYLE::SPIN::LEFT:
-                    new_textbox->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-                    new_textbox->SetPosition( bbox.GetPosition() - VECTOR2I( slop, 0 ) );
-                    new_textbox->SetEnd( bbox.GetEnd() );
-                    break;
-
-                case TEXT_SPIN_STYLE::SPIN::UP:
-                    new_textbox->SetTextAngle( ANGLE_VERTICAL );
-                    new_textbox->SetPosition( bbox.GetPosition() - VECTOR2I( 0, slop ) );
-                    new_textbox->SetEnd( bbox.GetEnd() );
-                    break;
-
-                case TEXT_SPIN_STYLE::SPIN::BOTTOM:
-                    new_textbox->SetTextAngle( ANGLE_VERTICAL );
-                    new_textbox->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-                    new_textbox->SetPosition( bbox.GetPosition() );
-                    new_textbox->SetEnd( bbox.GetEnd() + VECTOR2I( 0, slop ) );
-                    break;
+                    if( sourceText->GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
+                        botRight.y += slop;
+                    else
+                        topLeft.y -= slop;
                 }
+                else
+                {
+                    if( sourceText->GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
+                        topLeft.x -= slop;
+                    else
+                        botRight.x += slop;
+                }
+
+                new_textbox->SetPosition( topLeft );
+                new_textbox->SetEnd( botRight );
 
                 new_textbox->SetHyperlink( href );
                 newtext = new_textbox;

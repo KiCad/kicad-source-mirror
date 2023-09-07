@@ -31,6 +31,78 @@
 #include <sch_connection.h>   // for CONNECTION_TYPE
 
 
+/*
+ * Spin style for labels of all kinds on schematics
+ * Basically a higher level abstraction of rotation and justification of text
+ */
+class SPIN_STYLE
+{
+public:
+    enum SPIN : int
+    {
+        LEFT   = 0,
+        UP     = 1,
+        RIGHT  = 2,
+        BOTTOM = 3
+    };
+
+
+    SPIN_STYLE() = default;
+    constexpr SPIN_STYLE( SPIN aSpin ) : m_spin( aSpin )
+    {
+    }
+
+    constexpr bool operator==( SPIN a ) const
+    {
+        return m_spin == a;
+    }
+
+    constexpr bool operator!=( SPIN a ) const
+    {
+        return m_spin != a;
+    }
+
+    operator int() const
+    {
+        return static_cast<int>( m_spin );
+    }
+
+    SPIN_STYLE RotateCCW();
+
+    /**
+     * Mirror the label spin style across the X axis or simply swaps up and bottom.
+     */
+    SPIN_STYLE MirrorX();
+
+    /**
+     * Mirror the label spin style across the Y axis or simply swaps left and right.
+     */
+    SPIN_STYLE MirrorY();
+
+private:
+    SPIN m_spin;
+};
+
+
+/*
+ * Label and flag shapes used with text objects.
+ */
+enum LABEL_FLAG_SHAPE
+{
+    L_INPUT,
+    L_OUTPUT,
+    L_BIDI,
+    L_TRISTATE,
+    L_UNSPECIFIED,
+
+    F_FIRST,
+    F_DOT = F_FIRST,
+    F_ROUND,
+    F_DIAMOND,
+    F_RECTANGLE
+};
+
+
 class SCH_LABEL_BASE : public SCH_TEXT
 {
 public:
@@ -72,10 +144,13 @@ public:
         }
     }
 
-    LABEL_FLAG_SHAPE GetShape() const override        { return m_shape; }
-    void SetShape( LABEL_FLAG_SHAPE aShape ) override { m_shape = aShape; }
+    LABEL_FLAG_SHAPE GetShape() const        { return m_shape; }
+    void SetShape( LABEL_FLAG_SHAPE aShape ) { m_shape = aShape; }
 
     COLOR4D GetLabelColor() const;
+
+    virtual void SetSpinStyle( SPIN_STYLE aSpinStyle );
+    SPIN_STYLE   GetSpinStyle() const;
 
     void SetLastResolvedState( const SCH_ITEM* aItem ) override
     {
@@ -382,7 +457,7 @@ public:
 
     int GetMandatoryFieldCount() override { return 1; }
 
-    void SetTextSpinStyle( TEXT_SPIN_STYLE aSpinStyle ) override;
+    void SetSpinStyle( SPIN_STYLE aSpinStyle ) override;
 
     VECTOR2I GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const override;
 
@@ -434,7 +509,7 @@ public:
         return wxT( "SCH_HIERLABEL" );
     }
 
-    void SetTextSpinStyle( TEXT_SPIN_STYLE aSpinStyle ) override;
+    void SetSpinStyle( SPIN_STYLE aSpinStyle ) override;
 
     VECTOR2I GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const override;
 

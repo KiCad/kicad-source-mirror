@@ -2403,22 +2403,22 @@ void SCH_ALTIUM_PLUGIN::ParseHarnessEntry( const std::map<wxString, wxString>& a
     default:
     case ASCH_SHEET_ENTRY_SIDE::LEFT:
         sheetPin->SetPosition( { pos.x, pos.y + elem.DistanceFromTop } );
-        sheetPin->SetTextSpinStyle( TEXT_SPIN_STYLE::LEFT );
+        sheetPin->SetSpinStyle( SPIN_STYLE::LEFT );
         sheetPin->SetSide( SHEET_SIDE::LEFT );
         break;
     case ASCH_SHEET_ENTRY_SIDE::RIGHT:
         sheetPin->SetPosition( { pos.x + size.x, pos.y + elem.DistanceFromTop } );
-        sheetPin->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );
+        sheetPin->SetSpinStyle( SPIN_STYLE::RIGHT );
         sheetPin->SetSide( SHEET_SIDE::RIGHT );
         break;
     case ASCH_SHEET_ENTRY_SIDE::TOP:
         sheetPin->SetPosition( { pos.x + elem.DistanceFromTop, pos.y } );
-        sheetPin->SetTextSpinStyle( TEXT_SPIN_STYLE::UP );
+        sheetPin->SetSpinStyle( SPIN_STYLE::UP );
         sheetPin->SetSide( SHEET_SIDE::TOP );
         break;
     case ASCH_SHEET_ENTRY_SIDE::BOTTOM:
         sheetPin->SetPosition( { pos.x + elem.DistanceFromTop, pos.y + size.y } );
-        sheetPin->SetTextSpinStyle( TEXT_SPIN_STYLE::BOTTOM );
+        sheetPin->SetSpinStyle( SPIN_STYLE::BOTTOM );
         sheetPin->SetSide( SHEET_SIDE::BOTTOM );
         break;
     }
@@ -2600,7 +2600,7 @@ void SCH_ALTIUM_PLUGIN::ParseSheetEntry( const std::map<wxString, wxString>& aPr
 
     sheetPin->SetText( elem.name );
     sheetPin->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );
-    //sheetPin->SetTextSpinStyle( getSpinStyle( term.OrientAngle, false ) );
+    //sheetPin->SetSpinStyle( getSpinStyle( term.OrientAngle, false ) );
     //sheetPin->SetPosition( getKiCadPoint( term.Position ) );
 
     VECTOR2I pos = sheetIt->second->GetPosition();
@@ -2611,25 +2611,25 @@ void SCH_ALTIUM_PLUGIN::ParseSheetEntry( const std::map<wxString, wxString>& aPr
     default:
     case ASCH_SHEET_ENTRY_SIDE::LEFT:
         sheetPin->SetPosition( { pos.x, pos.y + elem.distanceFromTop } );
-        sheetPin->SetTextSpinStyle( TEXT_SPIN_STYLE::LEFT );
+        sheetPin->SetSpinStyle( SPIN_STYLE::LEFT );
         sheetPin->SetSide( SHEET_SIDE::LEFT );
         break;
 
     case ASCH_SHEET_ENTRY_SIDE::RIGHT:
         sheetPin->SetPosition( { pos.x + size.x, pos.y + elem.distanceFromTop } );
-        sheetPin->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );
+        sheetPin->SetSpinStyle( SPIN_STYLE::RIGHT );
         sheetPin->SetSide( SHEET_SIDE::RIGHT );
         break;
 
     case ASCH_SHEET_ENTRY_SIDE::TOP:
         sheetPin->SetPosition( { pos.x + elem.distanceFromTop, pos.y } );
-        sheetPin->SetTextSpinStyle( TEXT_SPIN_STYLE::UP );
+        sheetPin->SetSpinStyle( SPIN_STYLE::UP );
         sheetPin->SetSide( SHEET_SIDE::TOP );
         break;
 
     case ASCH_SHEET_ENTRY_SIDE::BOTTOM:
         sheetPin->SetPosition( { pos.x + elem.distanceFromTop, pos.y + size.y } );
-        sheetPin->SetTextSpinStyle( TEXT_SPIN_STYLE::BOTTOM );
+        sheetPin->SetSpinStyle( SPIN_STYLE::BOTTOM );
         sheetPin->SetSide( SHEET_SIDE::BOTTOM );
         break;
     }
@@ -3117,9 +3117,9 @@ void SCH_ALTIUM_PLUGIN::ParsePort( const ASCH_PORT& aElem )
     case ASCH_PORT_STYLE::RIGHT:
     case ASCH_PORT_STYLE::LEFT_RIGHT:
         if( ( startIsWireTerminal || startIsBusTerminal ) )
-            label->SetTextSpinStyle( TEXT_SPIN_STYLE::RIGHT );
+            label->SetSpinStyle( SPIN_STYLE::RIGHT );
         else
-            label->SetTextSpinStyle( TEXT_SPIN_STYLE::LEFT );
+            label->SetSpinStyle( SPIN_STYLE::LEFT );
         break;
 
     case ASCH_PORT_STYLE::NONE_VERTICAL:
@@ -3127,9 +3127,9 @@ void SCH_ALTIUM_PLUGIN::ParsePort( const ASCH_PORT& aElem )
     case ASCH_PORT_STYLE::BOTTOM:
     case ASCH_PORT_STYLE::TOP_BOTTOM:
         if( ( startIsWireTerminal || startIsBusTerminal ) )
-            label->SetTextSpinStyle( TEXT_SPIN_STYLE::UP );
+            label->SetSpinStyle( SPIN_STYLE::UP );
         else
-            label->SetTextSpinStyle( TEXT_SPIN_STYLE::BOTTOM );
+            label->SetSpinStyle( SPIN_STYLE::BOTTOM );
         break;
     }
 
