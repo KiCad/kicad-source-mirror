@@ -92,6 +92,19 @@ bool SCH_BITMAP::ReadImageFile( const wxString& aFullFilename )
 }
 
 
+bool SCH_BITMAP::ReadImageFile( wxMemoryBuffer& aBuffer )
+{
+    if( m_bitmapBase->ReadImageFile( aBuffer ) )
+    {
+        m_bitmapBase->SetPixelSizeIu( (float) pcbIUScale.MilsToIU( 1000 )
+                                      / m_bitmapBase->GetPPI() );
+        return true;
+    }
+
+    return false;
+}
+
+
 EDA_ITEM* SCH_BITMAP::Clone() const
 {
     return new SCH_BITMAP( *this );

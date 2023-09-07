@@ -108,6 +108,16 @@ public:
      */
     bool ReadImageFile( const wxString& aFullFilename );
 
+    /**
+     * Read and store an image file.
+     *
+     * Initialize the bitmap used to draw this item format.
+     *
+     * @param aBuf is the memory buffer containing the image file to read.
+     * @return true if success reading else false.
+     */
+    bool ReadImageFile( wxMemoryBuffer& aBuf );
+
     void Move( const VECTOR2I& aMoveVector ) override
     {
         m_pos += aMoveVector;
