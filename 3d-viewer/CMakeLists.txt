@@ -114,6 +114,7 @@ target_link_libraries( 3d-viewer
         gal
         kimath
         core
+        common
         nlohmann_json
         Boost::headers
         ${wxWidgets_LIBRARIES}
