@@ -241,7 +241,6 @@ public:
                 throw;
             }
 
-            leave_iteration();
         }
     }
 };

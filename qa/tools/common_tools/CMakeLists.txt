@@ -26,9 +26,6 @@ add_executable( qa_common_tools
     # # stuff from common due to...units?
     # ../../common/eda_text.cpp
 
-    # stuff from common which is needed...why?
-    ${CMAKE_SOURCE_DIR}/common/observable.cpp
-
     # Mock Pgm needed for advanced_config in coroutines
     ${CMAKE_SOURCE_DIR}/qa/mocks/kicad/common_mocks.cpp
 
@@ -51,6 +48,7 @@ include_directories(
 
 target_link_libraries( qa_common_tools
     common
+    core
     libcontext
     gal
     qa_utils

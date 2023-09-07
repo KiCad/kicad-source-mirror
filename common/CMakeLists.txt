@@ -369,7 +369,6 @@ set( COMMON_SRCS
     markup_parser.cpp
     netclass.cpp
     notifications_manager.cpp
-    observable.cpp
     origin_transforms.cpp
     page_info.cpp
     paths.cpp
