@@ -64,7 +64,6 @@ set( PCB_CALCULATOR_SRCS
     dialogs/dialog_regulator_form.cpp
     pcb_calculator_utils.cpp
     resistor_substitution_utils.cpp
-    ../common/env_vars.cpp      # needed on MSW to avoid a link issue (a symbol not found)
     )
 
 if( WIN32 )

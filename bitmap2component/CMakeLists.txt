@@ -19,7 +19,6 @@ set( BITMAP2COMPONENT_SRCS
     bitmap2cmp_frame.cpp
     bitmap2cmp_panel.cpp
     bitmap2cmp_panel_base.cpp
-    ../common/env_vars.cpp      # needed on MSW to avoid a link issue (a symbol not found)
     )
 
 set_source_files_properties( ${CMAKE_SOURCE_DIR}/common/single_top.cpp PROPERTIES
