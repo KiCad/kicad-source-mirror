@@ -49,8 +49,8 @@ if( WIN32 )
 endif()
 
 target_link_libraries( gal
-    common          # This is needed until the circular dependency is removed
     kimath
+    kiplatform
     nlohmann_json
     ${GLEW_LIBRARIES}
     ${CAIRO_LIBRARIES}
