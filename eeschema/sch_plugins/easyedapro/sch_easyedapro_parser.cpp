@@ -1075,12 +1075,12 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
                     std::unique_ptr<SCH_GLOBALLABEL> label = std::make_unique<SCH_GLOBALLABEL>(
                             ScalePos( component->position ), nameAttr->value );
 
-                    TEXT_SPIN_STYLE spin = TEXT_SPIN_STYLE::LEFT;
+                    SPIN_STYLE spin = SPIN_STYLE::LEFT;
 
                     for( double i = component->rotation; i > 0; i -= 90 )
                         spin = spin.RotateCCW();
 
-                    label->SetTextSpinStyle( spin );
+                    label->SetSpinStyle( spin );
 
                     if( esymInfo.symbolAttr )
                     {
