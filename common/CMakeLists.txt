@@ -304,7 +304,6 @@ set( COMMON_SRCS
     asset_archive.cpp
     background_jobs_monitor.cpp
     base_screen.cpp
-    base64.cpp
     bin_mod.cpp
     bitmap.cpp
     bitmap_base.cpp

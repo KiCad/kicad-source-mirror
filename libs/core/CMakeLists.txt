@@ -6,6 +6,7 @@ endif()
 
 
 add_library( core STATIC
+    base64.cpp
     observable.cpp
     thread_pool.cpp
     version_compare.cpp

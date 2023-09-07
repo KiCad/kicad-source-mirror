@@ -86,7 +86,7 @@
  * The center of ellipse is automatically calculated.
  */
 
-#include <base64.h>
+#include <core/base64.h>
 #include <eda_shape.h>
 #include <string_utils.h>
 #include <font/font.h>
