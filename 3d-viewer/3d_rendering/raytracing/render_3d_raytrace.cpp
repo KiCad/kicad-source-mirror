@@ -35,7 +35,7 @@
 #include "3d_fastmath.h"
 #include "3d_math.h"
 #include "../common_ogl/ogl_utils.h"
-#include <profile.h>        // To use GetRunningMicroSecs or another profiling utility
+#include <core/profile.h>        // To use GetRunningMicroSecs or another profiling utility
 #include <wx/log.h>
 
 

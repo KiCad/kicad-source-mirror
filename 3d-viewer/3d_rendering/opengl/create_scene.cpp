@@ -30,7 +30,7 @@
 #include "convert_basic_shapes_to_polygon.h"
 #include <trigo.h>
 #include <project.h>
-#include <profile.h>        // To use GetRunningMicroSecs or another profiling utility
+#include <core/profile.h>        // To use GetRunningMicroSecs or another profiling utility
 #include <fp_lib_table.h>
 #include <eda_3d_viewer_frame.h>
 

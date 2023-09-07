@@ -24,7 +24,7 @@
 #include <future>
 #include <vector>
 #include <unordered_map>
-#include <profile.h>
+#include <core/profile.h>
 #include <common.h>
 #include <core/kicad_algo.h>
 #include <erc.h>

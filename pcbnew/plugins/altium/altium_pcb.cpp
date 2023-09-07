@@ -34,7 +34,7 @@
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <pcb_track.h>
-#include <profile.h>
+#include <core/profile.h>
 #include <string_utils.h>
 #include <zone.h>
 

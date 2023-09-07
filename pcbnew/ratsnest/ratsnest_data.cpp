@@ -31,7 +31,7 @@
  */
 
 #ifdef PROFILE
-#include <profile.h>
+#include <core/profile.h>
 #endif
 
 #include <ratsnest/ratsnest_data.h>

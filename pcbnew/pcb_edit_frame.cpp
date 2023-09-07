@@ -103,7 +103,7 @@
 #include <widgets/pcb_properties_panel.h>
 #include <widgets/wx_aui_utils.h>
 #include <kiplatform/app.h>
-#include <profile.h>
+#include <core/profile.h>
 #include <view/wx_view_controls.h>
 #include <footprint_viewer_frame.h>
 

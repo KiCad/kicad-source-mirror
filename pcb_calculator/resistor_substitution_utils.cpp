@@ -33,7 +33,7 @@
 //#define BENCHMARK
 
 #ifdef BENCHMARK
-#include <profile.h>
+#include <core/profile.h>
 #endif
 
 

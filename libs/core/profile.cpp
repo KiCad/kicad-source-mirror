@@ -1,4 +1,3 @@
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -25,42 +24,41 @@
 
 
 #include <config.h>
-#include <common.h>
 
-#if defined(_WIN32)
+#if defined( _WIN32 )
 
 #define WIN32_LEAN_AND_MEAN 1
 #include <windows.h>
 
 unsigned GetRunningMicroSecs()
 {
-    FILETIME    now;
+    FILETIME now;
 
     GetSystemTimeAsFileTime( &now );
-    unsigned long long t = (UINT64(now.dwHighDateTime) << 32) + now.dwLowDateTime;
+    unsigned long long t = ( UINT64( now.dwHighDateTime ) << 32 ) + now.dwLowDateTime;
     t /= 10;
 
     return unsigned( t );
 }
 
-#elif defined(HAVE_CLOCK_GETTIME)
+#elif defined( HAVE_CLOCK_GETTIME )
 
 #include <ctime>
 
 unsigned GetRunningMicroSecs()
 {
-    struct timespec	now;
+    struct timespec now;
 
     clock_gettime( CLOCK_MONOTONIC, &now );
 
-    unsigned usecs = ((unsigned)now.tv_nsec)/1000 + ((unsigned)now.tv_sec) * 1000000;
-//    unsigned msecs = (now.tv_nsec / (1000*1000)) + now.tv_sec * 1000;
+    unsigned usecs = ( (unsigned) now.tv_nsec ) / 1000 + ( (unsigned) now.tv_sec ) * 1000000;
+    //    unsigned msecs = (now.tv_nsec / (1000*1000)) + now.tv_sec * 1000;
 
     return usecs;
 }
 
 
-#elif defined(HAVE_GETTIMEOFDAY_FUNC)
+#elif defined( HAVE_GETTIMEOFDAY_FUNC )
 
 #include <sys/time.h>
 unsigned GetRunningMicroSecs()
@@ -69,8 +67,7 @@ unsigned GetRunningMicroSecs()
 
     gettimeofday( &tv, 0 );
 
-    return (tv.tv_sec * 1000000) + tv.tv_usec;
+    return ( tv.tv_sec * 1000000 ) + tv.tv_usec;
 }
 
 #endif
-

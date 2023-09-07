@@ -44,7 +44,7 @@
 #include <eda_3d_viewer_frame.h>
 
 #include <base_units.h>
-#include <profile.h>        // To use GetRunningMicroSecs or another profiling utility
+#include <core/profile.h>        // To use GetRunningMicroSecs or another profiling utility
 
 /**
  * Perform an interpolation step to easy control the transparency based on the

@@ -32,14 +32,14 @@
 #include <gal/opengl/utils.h>
 #include <gal/opengl/vertex_item.h>
 
-#include <profile.h>
+#include <core/profile.h>
 
 #include <typeinfo>
 #include <confirm.h>
 #include <trace_helpers.h>
 
 #ifdef KICAD_GAL_PROFILE
-#include <profile.h>
+#include <core/profile.h>
 #include <wx/log.h>
 #endif /* KICAD_GAL_PROFILE */
 

@@ -30,7 +30,7 @@
 #include <env_paths.h>
 #include <pgm_base.h>
 #include <kiway.h>
-#include <profile.h>
+#include <core/profile.h>
 #include <wx_filename.h>
 #include <sch_io_mgr.h>
 #include <sch_plugins/legacy/sch_legacy_plugin.h>

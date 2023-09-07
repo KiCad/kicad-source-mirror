@@ -353,7 +353,6 @@ set( COMMON_SRCS
     footprint_info.cpp
     gbr_metadata.cpp
     gestfich.cpp
-    getrunningmicrosecs.cpp
     gr_basic.cpp
     grid_tricks.cpp
     hotkey_store.cpp

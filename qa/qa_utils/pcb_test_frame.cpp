@@ -26,7 +26,7 @@
 
 #include <wx/popupwin.h>
 #include <wx/cmdline.h>
-#include <profile.h>
+#include <core/profile.h>
 
 #include <pgm_base.h>
 #include <settings/settings_manager.h>

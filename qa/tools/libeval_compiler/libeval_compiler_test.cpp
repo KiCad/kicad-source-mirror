@@ -11,7 +11,7 @@
 
 #include <unordered_set>
 
-#include <profile.h>
+#include <core/profile.h>
 
 bool testEvalExpr( const std::string expr, LIBEVAL::VALUE expectedResult, bool expectError = false,
                    BOARD_ITEM* itemA = nullptr, BOARD_ITEM* itemB = nullptr )

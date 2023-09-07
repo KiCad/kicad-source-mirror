@@ -58,7 +58,7 @@
 #include <algorithm>
 
 // TODO(JE) Debugging only
-#include <profile.h>
+#include <core/profile.h>
 #include "sch_bus_entry.h"
 #include "sim/sim_model_ideal.h"
 

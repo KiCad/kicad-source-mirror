@@ -32,7 +32,7 @@
 #include <qa_utils/utility_registry.h>
 
 #include <common.h>
-#include <profile.h>
+#include <core/profile.h>
 
 #include <wx/cmdline.h>
 

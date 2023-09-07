@@ -44,7 +44,7 @@
 
 #include <database/database_connection.h>
 #include <database/database_cache.h>
-#include <profile.h>
+#include <core/profile.h>
 
 
 const char* const traceDatabase = "KICAD_DATABASE";

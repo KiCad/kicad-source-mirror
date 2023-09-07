@@ -40,7 +40,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <gal/painter.h>
 
-#include <profile.h>
+#include <core/profile.h>
 
 #ifdef KICAD_GAL_PROFILE
 #include <wx/log.h>

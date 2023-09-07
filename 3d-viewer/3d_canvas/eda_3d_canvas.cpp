@@ -36,7 +36,7 @@
 #include <board.h>
 #include <reporter.h>
 #include <gl_context_mgr.h>
-#include <profile.h>        // To use GetRunningMicroSecs or another profiling utility
+#include <core/profile.h>        // To use GetRunningMicroSecs or another profiling utility
 #include <bitmaps.h>
 #include <macros.h>
 #include <menus_helpers.h>

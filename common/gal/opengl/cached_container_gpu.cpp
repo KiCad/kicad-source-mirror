@@ -34,7 +34,7 @@
 
 #include <list>
 
-#include <profile.h>
+#include <core/profile.h>
 #include <trace_helpers.h>
 
 using namespace KIGFX;

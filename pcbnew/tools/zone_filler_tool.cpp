@@ -44,7 +44,7 @@
 #include "zone_filler_tool.h"
 #include "zone_filler.h"
 #include "teardrop/teardrop.h"
-#include <profile.h>
+#include <core/profile.h>
 
 ZONE_FILLER_TOOL::ZONE_FILLER_TOOL() :
     PCB_TOOL_BASE( "pcbnew.ZoneFiller" ),

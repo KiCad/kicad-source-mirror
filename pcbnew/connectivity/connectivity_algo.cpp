@@ -39,7 +39,7 @@
 #include <wx/log.h>
 
 #ifdef PROFILE
-#include <profile.h>
+#include <core/profile.h>
 #endif
 
 

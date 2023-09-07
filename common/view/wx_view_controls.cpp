@@ -27,7 +27,7 @@
  */
 
 #include <pgm_base.h>
-#include <profile.h>
+#include <core/profile.h>
 #include <view/view.h>
 #include <view/wx_view_controls.h>
 #include <view/zoom_controller.h>

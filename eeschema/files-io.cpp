@@ -36,7 +36,7 @@
 #include <kiplatform/app.h>
 #include <lockfile.h>
 #include <pgm_base.h>
-#include <profile.h>
+#include <core/profile.h>
 #include <project/project_file.h>
 #include <project_rescue.h>
 #include <dialog_HTML_reporter_base.h>

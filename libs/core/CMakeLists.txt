@@ -8,6 +8,7 @@ endif()
 add_library( core STATIC
     base64.cpp
     observable.cpp
+    profile.cpp
     thread_pool.cpp
     version_compare.cpp
     wx_stl_compat.cpp
@@ -20,4 +21,6 @@ target_link_libraries( core PUBLIC
 target_include_directories( core PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     $<TARGET_PROPERTY:thread-pool,INTERFACE_INCLUDE_DIRECTORIES>
+    PRIVATE
+    ${CMAKE_BINARY_DIR} # to get config.h
 )

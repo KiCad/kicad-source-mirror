@@ -44,7 +44,7 @@
 #include <symbol_edit_frame.h>
 #include <symbol_viewer_frame.h>
 #include <pgm_base.h>
-#include <profile.h>
+#include <core/profile.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include <python_scripting.h>

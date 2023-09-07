@@ -67,7 +67,7 @@ using namespace std::placeholders;
 #include <wx/event.h>
 #include <wx/timer.h>
 #include <wx/log.h>
-#include <profile.h>
+#include <core/profile.h>
 #include <math/vector2wx.h>
 
 

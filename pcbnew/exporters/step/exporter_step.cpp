@@ -47,7 +47,7 @@
 
 #include <wx/crt.h>
 #include <wx/log.h>
-#include <profile.h>        // To use GetRunningMicroSecs or another profiling utility
+#include <core/profile.h>        // To use GetRunningMicroSecs or another profiling utility
 
 #define OCC_VERSION_MIN 0x070500
 

@@ -50,7 +50,7 @@
 #include <geometry/geometry_utils.h>
 #include <core/thread_pool.h>
 
-#include <profile.h>
+#include <core/profile.h>
 #include <trace_helpers.h>
 
 #include <gl_utils.h>

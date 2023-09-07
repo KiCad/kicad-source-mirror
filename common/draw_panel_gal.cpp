@@ -51,7 +51,7 @@
 
 #include <kiplatform/ui.h>
 
-#include <profile.h>
+#include <core/profile.h>
 
 #include <pgm_base.h>
 

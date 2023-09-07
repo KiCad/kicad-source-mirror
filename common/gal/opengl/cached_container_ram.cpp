@@ -36,7 +36,7 @@
 
 #include <wx/log.h>
 #ifdef KICAD_GAL_PROFILE
-#include <profile.h>
+#include <core/profile.h>
 #endif /* KICAD_GAL_PROFILE */
 
 using namespace KIGFX;

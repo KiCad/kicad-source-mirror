@@ -29,7 +29,7 @@
 #include <confirm.h>
 #include <wx/clipbrd.h>
 #include <pgm_base.h>
-#include <profile.h>
+#include <core/profile.h>
 #include <reporter.h>
 #include <trace_helpers.h>
 #include <view/view_overlay.h>

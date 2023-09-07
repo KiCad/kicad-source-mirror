@@ -51,7 +51,7 @@
 #include <wx/log.h>
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
-#include <profile.h>
+#include <core/profile.h>
 #endif
 
 

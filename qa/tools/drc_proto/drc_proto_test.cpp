@@ -24,7 +24,7 @@
 #include <string>
 
 #include <common.h>
-#include <profile.h>
+#include <core/profile.h>
 
 #include <wx/cmdline.h>
 #include <wx/init.h>

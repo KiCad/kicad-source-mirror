@@ -34,7 +34,7 @@
 #include <board.h>
 #include <core/ignore.h>
 #include <zone.h>
-#include <profile.h>
+#include <core/profile.h>
 
 #include <atomic>
 #include <thread>
