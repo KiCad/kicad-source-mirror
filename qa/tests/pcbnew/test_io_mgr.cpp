@@ -1,4 +1,4 @@
-﻿/*
+/*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
@@ -251,7 +251,8 @@ BOOST_AUTO_TEST_CASE( FindBoardPluginType )
     {
         BOOST_TEST_CONTEXT( c.m_case_name )
         {
-            std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + c.m_file_rel_path;
+            wxString dataPath =
+                    wxString::FromUTF8( KI_TEST::GetPcbnewTestDataDir() + c.m_file_rel_path );
 
             BOOST_CHECK_EQUAL( IO_MGR::FindPluginTypeFromBoardPath( dataPath ),
                                c.m_expected_type );
@@ -269,7 +270,8 @@ BOOST_AUTO_TEST_CASE( GuessLibraryPluginType )
     {
         BOOST_TEST_CONTEXT( c.m_case_name )
         {
-            std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + c.m_file_rel_path;
+            wxString dataPath =
+                    wxString::FromUTF8( KI_TEST::GetPcbnewTestDataDir() + c.m_file_rel_path );
 
             BOOST_CHECK_EQUAL( IO_MGR::GuessPluginTypeFromLibPath( dataPath ), c.m_expected_type );
 
@@ -286,7 +288,8 @@ BOOST_AUTO_TEST_CASE( CheckCanReadBoard )
     {
         BOOST_TEST_CONTEXT( c.m_case_name )
         {
-            std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + c.m_file_rel_path;
+            wxString dataPath =
+                    wxString::FromUTF8( KI_TEST::GetPcbnewTestDataDir() + c.m_file_rel_path );
 
             auto& pluginEntries = IO_MGR::PLUGIN_REGISTRY::Instance()->AllPlugins();
 
