@@ -3642,6 +3642,8 @@ static void nsvg__scaleToViewbox( NSVGparser* p, const char* units )
     float   tx, ty, sx, sy, us, bounds[4], t[6], avgs;
     int     i;
     float*  pt;
+    bool    updw = false;
+    bool    updh = false;
 
     // Guess image size if not set completely.
     nsvg__imageBounds( p, bounds );
@@ -3673,10 +3675,16 @@ static void nsvg__scaleToViewbox( NSVGparser* p, const char* units )
     }
 
     if( p->image->width == 0 )
+    {
         p->image->width = p->viewWidth;
+        updw = true;
+    }
 
     if( p->image->height == 0 )
+    {
         p->image->height = p->viewHeight;
+        updh = true;
+    }
 
     tx  = -p->viewMinx;
     ty  = -p->viewMiny;
@@ -3691,6 +3699,13 @@ static void nsvg__scaleToViewbox( NSVGparser* p, const char* units )
     {
         // fit whole image into viewbox
         sx  = sy = nsvg__minf( sx, sy );
+
+        if( updw )
+            p->image->width = p->viewWidth * sx;
+
+        if( updh )
+            p->image->height = p->viewHeight * sy;
+
         tx  += nsvg__viewAlign( p->viewWidth * sx, p->image->width, p->alignX ) / sx;
         ty  += nsvg__viewAlign( p->viewHeight * sy, p->image->height, p->alignY ) / sy;
     }
@@ -3698,6 +3713,13 @@ static void nsvg__scaleToViewbox( NSVGparser* p, const char* units )
     {
         // fill whole viewbox with image
         sx  = sy = nsvg__maxf( sx, sy );
+
+        if( updw )
+            p->image->width = p->viewWidth * sx;
+
+        if( updh )
+            p->image->height = p->viewHeight * sy;
+
         tx  += nsvg__viewAlign( p->viewWidth * sx, p->image->width, p->alignX ) / sx;
         ty  += nsvg__viewAlign( p->viewHeight * sy, p->image->height, p->alignY ) / sy;
     }
