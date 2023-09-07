@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
@@ -116,6 +116,26 @@ static const std::vector<PCB_IO_PLUGIN_CASE> BoardPluginCases = {
         IO_MGR::CADSTAR_PCB_ARCHIVE
     },
     {
+        "Basic EasyEDA Std board json file",
+        "plugins/easyeda/PCB_USBMETER-PD QC修改版_2023-09-02.json",
+        IO_MGR::EASYEDA
+    },
+    {
+        "Basic EasyEDA Std backup file",
+        "plugins/easyeda/BackupProjects_ESP32-PICO-D4_smart_watch.zip",
+        IO_MGR::EASYEDA
+    },
+    {
+        "Basic EasyEDA Pro zip board project",
+        "plugins/easyedapro/Scanning Tunneling Microscope OpenSTM ControlBoard.zip",
+        IO_MGR::EASYEDAPRO
+    },
+    {
+        "Basic EasyEDA Pro epro project",
+        "plugins/easyedapro/ProProject_Yuzuki Chameleon_2023-09-02.epro",
+        IO_MGR::EASYEDAPRO
+    },
+    {
         "Basic Altium Designer board file",
         "plugins/altium/eDP_adapter_dvt1_source/eDP_adapter_dvt1.PcbDoc",
         IO_MGR::ALTIUM_DESIGNER
@@ -189,6 +209,26 @@ static const std::vector<PCB_IO_PLUGIN_CASE> LibraryPluginCases = {
         "Basic CADSTAR PCB Archive library file",
         "plugins/cadstar/lib/footprint-with-thermal-pad.cpa",
         IO_MGR::CADSTAR_PCB_ARCHIVE
+    },
+    {
+        "Basic EasyEDA Std board json file",
+        "plugins/easyeda/PCB_USBMETER-PD QC修改版_2023-09-02.json",
+        IO_MGR::EASYEDA
+    },
+    {
+        "Basic EasyEDA Std backup file",
+        "plugins/easyeda/BackupProjects_ESP32-PICO-D4_smart_watch.zip",
+        IO_MGR::EASYEDA
+    },
+    {
+        "Basic EasyEDA Pro zip board project",
+        "plugins/easyedapro/Scanning Tunneling Microscope OpenSTM ControlBoard.zip",
+        IO_MGR::EASYEDAPRO
+    },
+    {
+        "Basic EasyEDA Pro epro project",
+        "plugins/easyedapro/ProProject_Yuzuki Chameleon_2023-09-02.epro",
+        IO_MGR::EASYEDAPRO
     },
     {
         "Altium Designer 'Espressif ESP32-WROOM-32.PcbLib' library file",
