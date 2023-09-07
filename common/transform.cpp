@@ -23,10 +23,8 @@
  */
 
 #include <hash.h>
-#include <macros.h>
 #include <trigo.h>
 #include <transform.h>
-#include <common.h>
 #include <math/util.h>      // for KiROUND
 #include <math/box2.h>
 
