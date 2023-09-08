@@ -24,6 +24,7 @@
 
 #include "easyedapro_import_utils.h"
 
+#include <ki_exception.h>
 #include <string_utils.h>
 #include <nlohmann/json.hpp>
 

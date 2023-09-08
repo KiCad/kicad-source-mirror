@@ -23,6 +23,7 @@
 #include <kiface_base.h>
 #include <pgm_base.h>
 #include <wx/app.h>
+#include <core/utf8.h>
 
 
 // non-member so it can be moved easily, and kept REALLY private.

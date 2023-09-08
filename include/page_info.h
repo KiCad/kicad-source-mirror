@@ -33,13 +33,12 @@
 #include <wx/string.h>
 #include <math/vector2d.h>
 
-#include <richio.h>         // for OUTPUTFORMATTER and IO_ERROR
-
 /// Min and max page sizes for clamping, in mils.
 #define MIN_PAGE_SIZE_MILS          1000
 #define MAX_PAGE_SIZE_PCBNEW_MILS   48000
 #define MAX_PAGE_SIZE_EESCHEMA_MILS 120000
 
+class OUTPUTFORMATTER;
 
 /**
  * Describe the page size and margins of a paper page on which to eventually print or plot.

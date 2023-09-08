@@ -26,7 +26,6 @@
 #ifndef _LIB_ID_H_
 #define _LIB_ID_H_
 
-#include <richio.h>
 #include <core/utf8.h>
 
 /**

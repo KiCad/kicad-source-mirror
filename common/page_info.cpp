@@ -27,6 +27,7 @@
 #include <page_info.h>
 #include <macros.h>
 #include <eda_units.h>
+#include <richio.h>         // for OUTPUTFORMATTER and IO_ERROR
 
 
 // late arriving wxPAPER_A0, wxPAPER_A1

@@ -27,6 +27,7 @@
 
 #include <sch_io_mgr.h>
 #include <reporter.h>
+#include <wx/arrstr.h>
 
 
 class SCH_SHEET;

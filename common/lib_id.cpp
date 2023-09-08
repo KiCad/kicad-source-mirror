@@ -27,6 +27,7 @@
 #include <memory>
 #include <wx/translation.h>
 
+#include <ki_exception.h>
 #include <macros.h>     // TO_UTF8()
 #include <lib_id.h>
 

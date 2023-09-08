@@ -25,6 +25,7 @@
 #ifndef EASYEDAPRO_IMPORT_UTILS_H_
 #define EASYEDAPRO_IMPORT_UTILS_H_
 
+#include <wx/stream.h>
 #include <wx/string.h>
 #include <lib_id.h>
 #include <nlohmann/json_fwd.hpp>

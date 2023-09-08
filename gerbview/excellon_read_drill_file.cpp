@@ -72,6 +72,7 @@
 #include <excellon_image.h>
 #include <excellon_defaults.h>
 #include <macros.h>
+#include <richio.h>
 #include <string_utils.h>
 #include <locale_io.h>
 #include <X2_gerber_attributes.h>

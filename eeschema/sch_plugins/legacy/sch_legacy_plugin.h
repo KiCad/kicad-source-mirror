@@ -48,6 +48,7 @@ class SCH_LEGACY_PLUGIN_CACHE;
 class LIB_SYMBOL;
 class SYMBOL_LIB;
 class BUS_ALIAS;
+class OUTPUTFORMATTER;
 
 
 /**
@@ -141,7 +142,7 @@ public:
                           const STRING_UTF8_MAP* aProperties = nullptr ) override;
     void SaveLibrary( const wxString& aLibraryPath,
                       const STRING_UTF8_MAP* aProperties = nullptr ) override;
-    
+
     bool IsSymbolLibWritable( const wxString& aLibraryPath ) override;
 
     const wxString& GetError() const override { return m_error; }

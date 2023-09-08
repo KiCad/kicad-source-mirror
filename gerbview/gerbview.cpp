@@ -34,6 +34,7 @@
 #include <macros.h>
 #include <nlohmann/json.hpp>
 #include <pgm_base.h>
+#include <richio.h>
 #include <settings/settings_manager.h>
 #include <dialogs/panel_gerbview_display_options.h>
 #include <dialogs/panel_gerbview_excellon_settings.h>

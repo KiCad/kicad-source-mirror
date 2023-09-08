@@ -23,13 +23,13 @@
 #ifndef _SCH_IO_MGR_H_
 #define _SCH_IO_MGR_H_
 
-#include <richio.h>
 #include <import_export.h>
 #include <map>
 #include <enum_vector.h>
 #include <reporter.h>
 #include <i18n_utility.h>
 #include <plugin_file_desc.h>
+#include <wx/arrstr.h>
 
 
 class SCH_SHEET;
@@ -121,7 +121,7 @@ public:
 
 /**
  * Base class that schematic file and library loading and saving plugins should derive from.
- * Implementations can provide either LoadSchematicFile() or SaveSchematicFile() functions, 
+ * Implementations can provide either LoadSchematicFile() or SaveSchematicFile() functions,
  * or both. SCH_PLUGINs throw exceptions, so it is best that you wrap your calls to these
  * functions in a try catch block.  Plugins throw exceptions because it is illegal
  * for them to have any user interface calls in them whatsoever, i.e. no windowing

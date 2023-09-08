@@ -23,6 +23,7 @@
 #include <boost/iterator/iterator_facade.hpp>
 #include <eda_pattern_match.h>
 #include <footprint_info.h>
+#include <wx/arrstr.h>
 
 
 /**

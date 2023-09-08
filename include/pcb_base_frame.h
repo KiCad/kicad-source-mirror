@@ -36,7 +36,6 @@
 #include <pcb_draw_panel_gal.h>
 #include <pcb_origin_transforms.h>
 #include <pcb_screen.h>
-#include <richio.h>
 #include <vector>
 
 #include <wx/fswatcher.h>

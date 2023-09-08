@@ -29,6 +29,7 @@
 #include <gerbview_frame.h>
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
+#include <richio.h>
 #include <view/view.h>
 
 #include <dialogs/html_message_box.h>

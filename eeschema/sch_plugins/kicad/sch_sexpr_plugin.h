@@ -29,6 +29,7 @@
 #include <sch_sheet_path.h>
 #include <stack>
 #include <wildcards_and_files_ext.h>
+#include <wx/string.h>
 
 
 class KIWAY;

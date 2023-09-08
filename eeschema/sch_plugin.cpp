@@ -23,6 +23,7 @@
 #include <string_utf8_map.h>
 #include <unordered_set>
 
+#include <ki_exception.h>
 #include <sch_io_mgr.h>
 #include <wx/translation.h>
 #include <wx/filename.h>
