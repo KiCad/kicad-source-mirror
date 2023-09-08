@@ -112,7 +112,7 @@ public:
 
     const RESULT Route( const LINE& aInitialPath );
 
-    void SetLengthLimit( bool aEnable ) 
+    void SetLengthLimit( bool aEnable )
     {
         m_lengthLimitOn = aEnable;
     }

@@ -27,7 +27,7 @@
 
 class PCB_SELECTION_TOOL;
 
-class APIEXPORT ROUTER_TOOL : public PNS::TOOL_BASE
+class ROUTER_TOOL : public PNS::TOOL_BASE
 {
 public:
     ROUTER_TOOL();
