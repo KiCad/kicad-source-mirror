@@ -74,7 +74,6 @@
 #include "cli/command_sym_upgrade.h"
 #include "cli/command_version.h"
 #include "cli/exit_codes.h"
-#include "cli/cli_names.h"
 
 // Add this header after all others, to avoid a collision name in a Windows header
 // on mingw.
@@ -284,10 +283,7 @@ static void printHelp( argparse::ArgumentParser& argParser )
 bool PGM_KICAD::OnPgmInit()
 {
     PGM_BASE::BuildArgvUtf8();
-    App().SetAppDisplayName( wxT( "KiCad-cli" ) );
-    // App name can be used by internal code to know if this is a
-    // kicad CLI app or a GUI app that is running
-    App().SetClassName( KICAD_CLI_APP_NAME );
+    App().SetAppDisplayName( wxT( "kicad-cli" ) );
 
 #if defined( DEBUG )
     wxString absoluteArgv0 = wxStandardPaths::Get().GetExecutablePath();

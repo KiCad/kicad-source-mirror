@@ -32,7 +32,6 @@
 #include <functional>
 #include <unordered_map>
 #include <pgm_base.h>
-#include "cli/cli_names.h"
 
 // Set of dialogs that have been chosen not to be shown again
 static std::unordered_map<unsigned long, int> doNotShowAgainDlgs;

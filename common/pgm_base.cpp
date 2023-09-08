@@ -45,7 +45,6 @@
 #include <advanced_config.h>
 #include <background_jobs_monitor.h>
 #include <bitmaps.h>
-#include <cli/cli_names.h> // Needed for the pre wx 3.2 cli workaround
 #include <common.h>
 #include <config_params.h>
 #include <confirm.h>
