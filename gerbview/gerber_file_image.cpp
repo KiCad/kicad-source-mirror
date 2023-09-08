@@ -111,9 +111,9 @@ GERBER_FILE_IMAGE::~GERBER_FILE_IMAGE()
 
 void GERBER_FILE_IMAGE::SetDrawOffetAndRotation( VECTOR2D aOffsetMM, EDA_ANGLE aRotation )
 {
-    m_DrawOffset.x = KiROUND( aOffsetMM.x * gerbIUScale.IU_PER_MM );
-    m_DrawOffset.y = KiROUND( aOffsetMM.y * gerbIUScale.IU_PER_MM );
-    m_DrawRotation = aRotation;
+    m_DisplayOffset.x = KiROUND( aOffsetMM.x * gerbIUScale.IU_PER_MM );
+    m_DisplayOffset.y = KiROUND( aOffsetMM.y * gerbIUScale.IU_PER_MM );
+    m_DisplayRotation = aRotation;
 
     // Clear m_AbsolutePolygon member of Gerber items, because draw coordinates
     // are now outdated
@@ -226,8 +226,8 @@ void GERBER_FILE_IMAGE::ResetDefaultValues()
     m_Last_Pen_Command = 0;
     m_Exposure = false;
 
-    m_DrawOffset.x = m_DrawOffset.y = 0;
-    m_DrawRotation = ANGLE_0;
+    m_DisplayOffset.x = m_DisplayOffset.y = 0;
+    m_DisplayRotation = ANGLE_0;
 }
 
 

@@ -161,11 +161,11 @@ VECTOR2I GERBER_DRAW_ITEM::GetABPosition( const VECTOR2I& aXYPosition ) const
         abPos.y = -abPos.y;
 
     // Now generate the draw transform
-    if( !m_GerberImageFile->m_DrawRotation.IsZero() )
-        RotatePoint( abPos, m_GerberImageFile->m_DrawRotation );
+    if( !m_GerberImageFile->m_DisplayRotation.IsZero() )
+        RotatePoint( abPos, m_GerberImageFile->m_DisplayRotation );
 
-    abPos.x += KiROUND( m_GerberImageFile->m_DrawOffset.x * m_drawScale.x );
-    abPos.y += KiROUND( m_GerberImageFile->m_DrawOffset.y * m_drawScale.y );
+    abPos.x += KiROUND( m_GerberImageFile->m_DisplayOffset.x * m_drawScale.x );
+    abPos.y += KiROUND( m_GerberImageFile->m_DisplayOffset.y * m_drawScale.y );
 
     return abPos;
 }
@@ -177,11 +177,11 @@ VECTOR2I GERBER_DRAW_ITEM::GetXYPosition( const VECTOR2I& aABPosition ) const
     VECTOR2I xyPos = aABPosition;
 
     // First, undo the draw transform
-    xyPos.x -= KiROUND( m_GerberImageFile->m_DrawOffset.x * m_drawScale.x );
-    xyPos.y -= KiROUND( m_GerberImageFile->m_DrawOffset.y * m_drawScale.y );
+    xyPos.x -= KiROUND( m_GerberImageFile->m_DisplayOffset.x * m_drawScale.x );
+    xyPos.y -= KiROUND( m_GerberImageFile->m_DisplayOffset.y * m_drawScale.y );
 
-    if( !m_GerberImageFile->m_DrawRotation.IsZero() )
-        RotatePoint( xyPos, -m_GerberImageFile->m_DrawRotation );
+    if( !m_GerberImageFile->m_DisplayRotation.IsZero() )
+        RotatePoint( xyPos, -m_GerberImageFile->m_DisplayRotation );
 
     if( m_mirrorA )
         xyPos.x = -xyPos.x;
@@ -387,8 +387,29 @@ const BOX2I GERBER_DRAW_ITEM::GetBoundingBox() const
     }
 
     // calculate the corners coordinates in current Gerber axis orientations
-    VECTOR2I org = GetABPosition( bbox.GetOrigin() );
-    VECTOR2I end = GetABPosition( bbox.GetEnd() );
+    // because the initial bbox is a horizontal rect, but the bbox in AB position
+    // is the bbox image with perhaps a rotation, we need to calculate the coords of the
+    // corners of the bbox rotated, and then calculate the final bounding box
+    VECTOR2I corners[4];
+    corners[0] = bbox.GetOrigin();  // top left
+    corners[2] = bbox.GetEnd();     // bottom right
+    corners[1] = VECTOR2I( corners[2].x, corners[0].y );    // top right
+    corners[3] = VECTOR2I( corners[0].x, corners[2].y );    // bottom left
+
+    VECTOR2I org;
+    VECTOR2I end;
+
+    for( int ii = 0; ii < 4; ii++ )
+    {
+        corners[ii] = GetABPosition( corners[ii] );
+
+        org.x = std::min( org.x, corners[ii].x );
+        org.y = std::min( org.y, corners[ii].y );
+
+        end.x = std::max( end.x, corners[ii].x );
+        end.y = std::max( end.y, corners[ii].y );
+    }
+
 
     // Set the corners position:
     bbox.SetOrigin( org );

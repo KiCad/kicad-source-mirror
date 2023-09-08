@@ -464,10 +464,10 @@ public:
     GERBER_LAYER       m_GBRLayerParams;                 // hold params for the current gerber layer
     GERBER_DRAW_ITEMS  m_drawings;                       // linked list of Gerber Items to draw
 
-    ///< Parameters used only to draw items on this layer.
-    ///< Not not change actual coordinates/orientation
-    VECTOR2I           m_DrawOffset;
-    EDA_ANGLE          m_DrawRotation;
+    ///< Parameters used only to draw (display) items on this layer.
+    ///< Do not change actual coordinates/orientation
+    VECTOR2I           m_DisplayOffset;
+    EDA_ANGLE          m_DisplayRotation;
 
 private:
     wxArrayString      m_messagesList;         // A list of messages created when reading a file

@@ -54,9 +54,9 @@ bool DIALOG_DRAW_LAYERS_SETTINGS::TransferDataToWindow()
     wxFileName filename( gbrImage->m_FileName );
     m_stLayerName->SetLabel( filename.GetFullName() );
 
-    m_offsetX.SetValue( gbrImage->m_DrawOffset.x );
-    m_offsetY.SetValue( gbrImage->m_DrawOffset.y );
-    m_rotation.SetValue( gbrImage->m_DrawRotation.AsDegrees() );
+    m_offsetX.SetValue( gbrImage->m_DisplayOffset.x );
+    m_offsetY.SetValue( gbrImage->m_DisplayOffset.y );
+    m_rotation.SetValue( gbrImage->m_DisplayRotation.AsDegrees() );
 
     return true;
 }
