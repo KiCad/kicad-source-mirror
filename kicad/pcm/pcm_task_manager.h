@@ -24,7 +24,7 @@
 #include "dialogs/dialog_pcm_progress.h"
 #include "pcm.h"
 #include "pcm_data.h"
-#include "sync_queue.h"
+#include <core/sync_queue.h>
 #include <atomic>
 #include <condition_variable>
 #include <functional>
@@ -72,7 +72,7 @@ public:
      * @param aPackage package metadata
      * @param aVersion version to be installed
      * @param aRepositoryId id of the source repository
-     * 
+     *
      * @return int status of the process
      */
     PCM_TASK_MANAGER::STATUS DownloadAndInstall( const PCM_PACKAGE& aPackage, const wxString& aVersion,
@@ -85,7 +85,7 @@ public:
      * as uninstalled.
      *
      * @param aPackage package metadata
-     * 
+     *
      * @return int status of the process
      */
     PCM_TASK_MANAGER::STATUS Uninstall( const PCM_PACKAGE& aPackage );
@@ -111,7 +111,7 @@ public:
      *
      * @param aParent parent dialog for progress window
      * @param aFilePath path to the archive file
-     * 
+     *
      * @return int status of the process
      */
     PCM_TASK_MANAGER::STATUS InstallFromFile( wxWindow* aParent, const wxString& aFilePath );

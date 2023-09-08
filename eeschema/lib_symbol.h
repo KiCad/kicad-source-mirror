@@ -31,7 +31,7 @@
 #include <lib_tree_item.h>
 #include <lib_field.h>
 #include <vector>
-#include <multivector.h>
+#include <core/multivector.h>
 
 class LINE_READER;
 class OUTPUTFORMATTER;

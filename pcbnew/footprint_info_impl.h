@@ -27,7 +27,7 @@
 #include <vector>
 
 #include <footprint_info.h>
-#include <sync_queue.h>
+#include <core/sync_queue.h>
 
 class LOCALE_IO;
 

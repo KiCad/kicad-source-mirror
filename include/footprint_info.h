@@ -33,7 +33,7 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <import_export.h>
 #include <ki_exception.h>
-#include <sync_queue.h>
+#include <core/sync_queue.h>
 #include <lib_tree_item.h>
 #include <atomic>
 #include <functional>
