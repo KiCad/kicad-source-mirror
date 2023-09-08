@@ -1,7 +1,7 @@
 
 
 #include <string>
-#include <utf8.h>
+#include <core\utf8.h>
 #include <wx/string.h>
 
 

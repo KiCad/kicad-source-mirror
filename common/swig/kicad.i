@@ -164,8 +164,8 @@ typedef long time_t;
 %rename(utf8_to_wxstring) operator wxString () const;
 %rename(utf8_to_string) operator const std::string& () const;
 
-#include <utf8.h>
-%include <utf8.h>
+#include <core\utf8.h>
+%include <core\utf8.h>
 
 
 %extend UTF8

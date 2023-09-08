@@ -402,7 +402,6 @@ set( COMMON_SRCS
     title_block.cpp
     trace_helpers.cpp
     undo_redo_container.cpp
-    utf8.cpp
     validators.cpp
     wildcards_and_files_ext.cpp
     drawing_sheet/ds_painter.cpp

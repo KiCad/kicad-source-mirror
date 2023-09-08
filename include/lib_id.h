@@ -27,7 +27,7 @@
 #define _LIB_ID_H_
 
 #include <richio.h>
-#include <utf8.h>
+#include <core\utf8.h>
 
 /**
  * A logical library item identifier and consists of various portions much like a URI.

@@ -9,6 +9,7 @@ add_library( core STATIC
     base64.cpp
     observable.cpp
     profile.cpp
+    utf8.cpp
     thread_pool.cpp
     version_compare.cpp
     wx_stl_compat.cpp

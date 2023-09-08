@@ -30,7 +30,7 @@
 
 
 #include <vector>
-#include <utf8.h>
+#include <core\utf8.h>
 
 // I really did not want to be dependent on wxWidgets in richio
 // but the errorText needs to be wide char so wxString rules.

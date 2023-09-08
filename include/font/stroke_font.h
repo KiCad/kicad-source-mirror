@@ -33,7 +33,7 @@
 #include <map>
 #include <deque>
 #include <algorithm>
-#include <utf8.h>
+#include <core\utf8.h>
 #include <math/box2.h>
 #include <font/font.h>
 

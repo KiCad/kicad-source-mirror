@@ -25,7 +25,7 @@
 #include <pegtl/contrib/parse_tree.hpp>
 #include <iostream>
 #include <string>
-#include <utf8.h>
+#include <core\utf8.h>
 
 
 namespace MARKUP

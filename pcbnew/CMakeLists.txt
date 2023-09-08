@@ -417,6 +417,7 @@ set( SWIG_FLAGS
     -I${CMAKE_SOURCE_DIR}/scripting
     -I${CMAKE_SOURCE_DIR}/pcbnew/python/scripting
     -I${CMAKE_SOURCE_DIR}/common/swig
+    -I${CMAKE_SOURCE_DIR}/libs/core/include
     -I${CMAKE_SOURCE_DIR}/libs/kimath/include
     -I${CMAKE_BINARY_DIR}
     )
