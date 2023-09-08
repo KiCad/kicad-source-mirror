@@ -23,7 +23,7 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
-#include <core\utf8.h>
+#include <core/utf8.h>
 
 #include <algorithm>
 #include <iostream>

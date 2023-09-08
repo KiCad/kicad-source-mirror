@@ -22,7 +22,7 @@
 #define CVPCB_ASSOCIATION_H
 
 #include <lib_id.h>
-#include <core\utf8.h>
+#include <core/utf8.h>
 
 /**
  * A class to define a footprint association to be made in cvpcb.

@@ -23,7 +23,7 @@
 
 #include <string>
 #include <map>
-#include <core\utf8.h>
+#include <core/utf8.h>
 
 
 /**

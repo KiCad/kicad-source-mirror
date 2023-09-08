@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <core\utf8.h>
+#include <core/utf8.h>
 #include <wx/strconv.h>
 #include <wx/buffer.h>
 #include <vector>

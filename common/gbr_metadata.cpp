@@ -31,7 +31,7 @@
 #include <wx/datetime.h>
 
 #include <gbr_metadata.h>
-#include <core\utf8.h>
+#include <core/utf8.h>
 
 
 wxString GbrMakeCreationDateAttributeString( GBR_NC_STRING_FORMAT aFormat )
