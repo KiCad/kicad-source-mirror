@@ -187,6 +187,9 @@ public:
 
     /**
      * Set the end point from the angle center and start.
+     * aAngle is:
+     * - clockwise in right-down coordinate system
+     * - counter-clockwise in right-up (libedit) coordinate system.
      */
     void SetArcAngleAndEnd( const EDA_ANGLE& aAngle, bool aCheckNegativeAngle = false );
 
