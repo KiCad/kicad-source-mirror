@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -203,84 +203,173 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	m_gridPanel->SetSizer( bSizer2 );
 	m_gridPanel->Layout();
 	bSizer2->Fit( m_gridPanel );
-	m_gridTypeNotebook->AddPage( m_gridPanel, _("Grid Array"), true );
+	m_gridTypeNotebook->AddPage( m_gridPanel, _("Grid Array"), false );
 	m_circularPanel = new wxPanel( m_gridTypeNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
 
-	wxGridBagSizer* gbSizer2;
-	gbSizer2 = new wxGridBagSizer( 0, 0 );
-	gbSizer2->SetFlexibleDirection( wxBOTH );
-	gbSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxBoxSizer* bSizerCircLeft;
+	bSizerCircLeft = new wxBoxSizer( wxVERTICAL );
 
-	m_labelCentreX = new wxStaticText( m_circularPanel, wxID_ANY, _("Horizontal center:"), wxDefaultPosition, wxDefaultSize, 0 );
+	wxStaticBoxSizer* sbSizerInfo;
+	sbSizerInfo = new wxStaticBoxSizer( new wxStaticBox( m_circularPanel, wxID_ANY, _("Items to duplicate") ), wxVERTICAL );
+
+	m_stInfoItems = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("This is the position of the selected item,\nor the position of the group to duplicate"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stInfoItems->Wrap( -1 );
+	sbSizerInfo->Add( m_stInfoItems, 0, wxALL, 5 );
+
+	wxFlexGridSizer* fgSizer4;
+	fgSizer4 = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizer4->AddGrowableCol( 1 );
+	fgSizer4->SetFlexibleDirection( wxBOTH );
+	fgSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_stRefPosXTxt = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("Ref point pos X:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stRefPosXTxt->Wrap( -1 );
+	fgSizer4->Add( m_stRefPosXTxt, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_tcRefPosX = new wxTextCtrl( sbSizerInfo->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	fgSizer4->Add( m_tcRefPosX, 0, wxALL|wxEXPAND, 5 );
+
+	m_stRefPosXUnit = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stRefPosXUnit->Wrap( -1 );
+	fgSizer4->Add( m_stRefPosXUnit, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_stRefPosYTxt = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("Ref point pos Y:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stRefPosYTxt->Wrap( -1 );
+	fgSizer4->Add( m_stRefPosYTxt, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_tcRefPosY = new wxTextCtrl( sbSizerInfo->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	fgSizer4->Add( m_tcRefPosY, 0, wxALL|wxEXPAND, 5 );
+
+	m_stRefPosYUnit = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stRefPosYUnit->Wrap( -1 );
+	fgSizer4->Add( m_stRefPosYUnit, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	sbSizerInfo->Add( fgSizer4, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+
+
+	bSizerCircLeft->Add( sbSizerInfo, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+
+	wxStaticBoxSizer* sbSizerCircParams;
+	sbSizerCircParams = new wxStaticBoxSizer( new wxStaticBox( m_circularPanel, wxID_ANY, _("Circular array params") ), wxVERTICAL );
+
+	m_stInfoItems1 = new wxStaticText( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("This is the position of the center of the circle\ndefining the circular area to create"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stInfoItems1->Wrap( -1 );
+	sbSizerCircParams->Add( m_stInfoItems1, 0, wxALL, 5 );
+
+	wxFlexGridSizer* fgSizerArrayPrms;
+	fgSizerArrayPrms = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizerArrayPrms->AddGrowableCol( 1 );
+	fgSizerArrayPrms->SetFlexibleDirection( wxBOTH );
+	fgSizerArrayPrms->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_labelCentreX = new wxStaticText( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("Center pos X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelCentreX->Wrap( -1 );
-	gbSizer2->Add( m_labelCentreX, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
+	fgSizerArrayPrms->Add( m_labelCentreX, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_entryCentreX = new wxTextCtrl( m_circularPanel, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( m_entryCentreX, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	m_entryCentreX = new wxTextCtrl( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerArrayPrms->Add( m_entryCentreX, 0, wxALL|wxEXPAND, 5 );
 
-	m_unitLabelCentreX = new wxStaticText( m_circularPanel, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_unitLabelCentreX = new wxStaticText( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_unitLabelCentreX->Wrap( -1 );
-	gbSizer2->Add( m_unitLabelCentreX, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	fgSizerArrayPrms->Add( m_unitLabelCentreX, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_labelCentreY = new wxStaticText( m_circularPanel, wxID_ANY, _("Vertical center:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelCentreY = new wxStaticText( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("Center pos Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelCentreY->Wrap( -1 );
-	gbSizer2->Add( m_labelCentreY, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
+	fgSizerArrayPrms->Add( m_labelCentreY, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_entryCentreY = new wxTextCtrl( m_circularPanel, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( m_entryCentreY, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	m_entryCentreY = new wxTextCtrl( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerArrayPrms->Add( m_entryCentreY, 0, wxALL|wxEXPAND, 5 );
 
-	m_unitLabelCentreY = new wxStaticText( m_circularPanel, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_unitLabelCentreY = new wxStaticText( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_unitLabelCentreY->Wrap( -1 );
-	gbSizer2->Add( m_unitLabelCentreY, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	fgSizerArrayPrms->Add( m_unitLabelCentreY, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_labelCircRadius = new wxStaticText( m_circularPanel, wxID_ANY, _("Radius:"), wxDefaultPosition, wxDefaultSize, 0 );
+
+	sbSizerCircParams->Add( fgSizerArrayPrms, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizerRadius;
+	bSizerRadius = new wxBoxSizer( wxVERTICAL );
+
+	m_labelCircRadius = new wxStaticText( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("Array radius,\nfrom Ref point pos and array center:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelCircRadius->Wrap( -1 );
-	gbSizer2->Add( m_labelCircRadius, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	bSizerRadius->Add( m_labelCircRadius, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_valueCircRadius = new wxStaticText( m_circularPanel, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_valueCircRadius->Wrap( -1 );
-	gbSizer2->Add( m_valueCircRadius, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	wxBoxSizer* bSizerRadiusValue;
+	bSizerRadiusValue = new wxBoxSizer( wxHORIZONTAL );
 
-	m_unitLabelCircRadius = new wxStaticText( m_circularPanel, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_tcValueCircRadius = new wxTextCtrl( sbSizerCircParams->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	m_tcValueCircRadius->SetToolTip( _("Distance between Ref point and Center pos.") );
+
+	bSizerRadiusValue->Add( m_tcValueCircRadius, 1, wxALL|wxEXPAND, 5 );
+
+	m_unitLabelCircRadius = new wxStaticText( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_unitLabelCircRadius->Wrap( -1 );
-	gbSizer2->Add( m_unitLabelCircRadius, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bSizerRadiusValue->Add( m_unitLabelCircRadius, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_labelCircAngle = new wxStaticText( m_circularPanel, wxID_ANY, _("Angle:"), wxDefaultPosition, wxDefaultSize, 0 );
+
+	bSizerRadius->Add( bSizerRadiusValue, 1, wxEXPAND, 5 );
+
+
+	sbSizerCircParams->Add( bSizerRadius, 0, wxEXPAND, 5 );
+
+
+	bSizerCircLeft->Add( sbSizerCircParams, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+
+	wxStaticBoxSizer* sbSizerDupPrms;
+	sbSizerDupPrms = new wxStaticBoxSizer( new wxStaticBox( m_circularPanel, wxID_ANY, _("Duplicate parameters") ), wxVERTICAL );
+
+	wxFlexGridSizer* fgSizerDupPrms;
+	fgSizerDupPrms = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizerDupPrms->AddGrowableCol( 1 );
+	fgSizerDupPrms->SetFlexibleDirection( wxBOTH );
+	fgSizerDupPrms->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_labelCircAngle = new wxStaticText( sbSizerDupPrms->GetStaticBox(), wxID_ANY, _("Angle:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelCircAngle->Wrap( -1 );
-	gbSizer2->Add( m_labelCircAngle, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
+	fgSizerDupPrms->Add( m_labelCircAngle, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_entryCircAngle = new wxTextCtrl( m_circularPanel, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_entryCircAngle = new wxTextCtrl( sbSizerDupPrms->GetStaticBox(), wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_entryCircAngle->SetToolTip( _("Positive angles represent an anti-clockwise rotation. An angle of 0 will produce a full circle divided evenly into \"Count\" portions.") );
 
-	gbSizer2->Add( m_entryCircAngle, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	fgSizerDupPrms->Add( m_entryCircAngle, 0, wxALL|wxEXPAND, 5 );
 
-	m_unitLabelCircAngle = new wxStaticText( m_circularPanel, wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_unitLabelCircAngle = new wxStaticText( sbSizerDupPrms->GetStaticBox(), wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_unitLabelCircAngle->Wrap( -1 );
-	gbSizer2->Add( m_unitLabelCircAngle, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	fgSizerDupPrms->Add( m_unitLabelCircAngle, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_labelCircCount = new wxStaticText( m_circularPanel, wxID_ANY, _("Count:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelCircCount = new wxStaticText( sbSizerDupPrms->GetStaticBox(), wxID_ANY, _("Item count:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelCircCount->Wrap( -1 );
-	gbSizer2->Add( m_labelCircCount, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
+	fgSizerDupPrms->Add( m_labelCircCount, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_entryCircCount = new TEXT_CTRL_EVAL( m_circularPanel, wxID_ANY, _("4"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_entryCircCount = new TEXT_CTRL_EVAL( sbSizerDupPrms->GetStaticBox(), wxID_ANY, _("4"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_entryCircCount->SetToolTip( _("How many items in the array.") );
 
-	gbSizer2->Add( m_entryCircCount, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	fgSizerDupPrms->Add( m_entryCircCount, 0, wxALL|wxEXPAND, 5 );
 
-	m_labelCircRotate = new wxStaticText( m_circularPanel, wxID_ANY, _("Rotate:"), wxDefaultPosition, wxDefaultSize, 0 );
+
+	fgSizerDupPrms->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_labelCircRotate = new wxStaticText( sbSizerDupPrms->GetStaticBox(), wxID_ANY, _("Rotate items:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelCircRotate->Wrap( -1 );
-	gbSizer2->Add( m_labelCircRotate, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
+	fgSizerDupPrms->Add( m_labelCircRotate, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_entryRotateItemsCb = new wxCheckBox( m_circularPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_entryRotateItemsCb = new wxCheckBox( sbSizerDupPrms->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_entryRotateItemsCb->SetValue(true);
 	m_entryRotateItemsCb->SetToolTip( _("Rotate the item as well as move it - multi-selections will be rotated together") );
 
-	gbSizer2->Add( m_entryRotateItemsCb, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	fgSizerDupPrms->Add( m_entryRotateItemsCb, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bSizer4->Add( gbSizer2, 1, wxALL|wxEXPAND, 5 );
+	sbSizerDupPrms->Add( fgSizerDupPrms, 1, wxEXPAND, 5 );
+
+
+	bSizerCircLeft->Add( sbSizerDupPrms, 1, wxEXPAND, 5 );
+
+
+	bSizer4->Add( bSizerCircLeft, 1, wxEXPAND, 5 );
 
 
 	bSizer4->Add( 0, 0, 0, wxALL|wxEXPAND, 10 );
@@ -338,7 +427,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	m_circularPanel->SetSizer( bSizer4 );
 	m_circularPanel->Layout();
 	bSizer4->Fit( m_circularPanel );
-	m_gridTypeNotebook->AddPage( m_circularPanel, _("Circular Array"), false );
+	m_gridTypeNotebook->AddPage( m_circularPanel, _("Circular Array"), true );
 
 	bSizer7->Add( m_gridTypeNotebook, 1, wxEXPAND | wxALL, 5 );
 

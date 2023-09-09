@@ -76,6 +76,7 @@ private:
 
     UNIT_BINDER m_hSpacing, m_vSpacing;
     UNIT_BINDER m_hOffset, m_vOffset;
+    UNIT_BINDER m_refPosX, m_refPosY;
     UNIT_BINDER m_hCentre, m_vCentre;
     UNIT_BINDER m_circRadius;
     UNIT_BINDER m_circAngle;

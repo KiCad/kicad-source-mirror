@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-4761b0c)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -85,6 +85,14 @@ class DIALOG_CREATE_ARRAY_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_entryGridPriNumberingStep;
 		wxTextCtrl* m_entryGridSecNumberingStep;
 		wxPanel* m_circularPanel;
+		wxStaticText* m_stInfoItems;
+		wxStaticText* m_stRefPosXTxt;
+		wxTextCtrl* m_tcRefPosX;
+		wxStaticText* m_stRefPosXUnit;
+		wxStaticText* m_stRefPosYTxt;
+		wxTextCtrl* m_tcRefPosY;
+		wxStaticText* m_stRefPosYUnit;
+		wxStaticText* m_stInfoItems1;
 		wxStaticText* m_labelCentreX;
 		wxTextCtrl* m_entryCentreX;
 		wxStaticText* m_unitLabelCentreX;
@@ -92,7 +100,7 @@ class DIALOG_CREATE_ARRAY_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_entryCentreY;
 		wxStaticText* m_unitLabelCentreY;
 		wxStaticText* m_labelCircRadius;
-		wxStaticText* m_valueCircRadius;
+		wxTextCtrl* m_tcValueCircRadius;
 		wxStaticText* m_unitLabelCircRadius;
 		wxStaticText* m_labelCircAngle;
 		wxTextCtrl* m_entryCircAngle;

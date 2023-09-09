@@ -157,9 +157,11 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent,
         m_vSpacing( aParent, m_labelDy, m_entryDy, m_unitLabelDy ),
         m_hOffset( aParent, m_labelOffsetX, m_entryOffsetX, m_unitLabelOffsetX ),
         m_vOffset( aParent, m_labelOffsetY, m_entryOffsetY, m_unitLabelOffsetY ),
+        m_refPosX( aParent, m_stRefPosXTxt, m_tcRefPosX, m_stRefPosXUnit ),
+        m_refPosY( aParent, m_stRefPosYTxt, m_tcRefPosY, m_stRefPosYUnit ),
         m_hCentre( aParent, m_labelCentreX, m_entryCentreX, m_unitLabelCentreX ),
         m_vCentre( aParent, m_labelCentreY, m_entryCentreY, m_unitLabelCentreY ),
-        m_circRadius( aParent, m_labelCircRadius, m_valueCircRadius, m_unitLabelCircRadius ),
+        m_circRadius( aParent, m_labelCircRadius, m_tcValueCircRadius, m_unitLabelCircRadius ),
         m_circAngle( aParent, m_labelCircAngle, m_entryCircAngle, m_unitLabelCircAngle ),
         m_cfg_persister( pcbIUScale, s_arrayOptions.m_OptionsSet )
 {
@@ -522,4 +524,7 @@ void DIALOG_CREATE_ARRAY::calculateCircularArrayProperties()
     centre -= m_originalItemPosition;
 
     m_circRadius.SetValue( int( centre.EuclideanNorm() ) );
+
+    m_refPosX.SetValue( m_originalItemPosition.x );
+    m_refPosY.SetValue( m_originalItemPosition.y );
 }
