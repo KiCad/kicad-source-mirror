@@ -22,7 +22,7 @@
  */
 
 #include <wx_filename.h>
-#include <macros.h>
+#include <string_utils.h>
 
 
 WX_FILENAME::WX_FILENAME( const wxString& aPath, const wxString& aFilename )
