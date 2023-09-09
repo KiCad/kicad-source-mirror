@@ -24,7 +24,6 @@ include_directories(
 #
 
 add_library( s3d_plugin_vrml MODULE
-        ${CMAKE_SOURCE_DIR}/common/richio.cpp
         ${CMAKE_SOURCE_DIR}/common/exceptions.cpp
         vrml.cpp
         x3d.cpp
@@ -65,7 +64,7 @@ add_library( s3d_plugin_vrml MODULE
         x3d/x3d_transform.cpp
         )
 
-target_link_libraries( s3d_plugin_vrml kicad_3dsg core ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES} kiplatform ZLIB::ZLIB )
+target_link_libraries( s3d_plugin_vrml kicad_3dsg kicommon core ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES} kiplatform ZLIB::ZLIB )
 
 target_include_directories( s3d_plugin_vrml PRIVATE
     $<TARGET_PROPERTY:gzip-hpp,INTERFACE_INCLUDE_DIRECTORIES>

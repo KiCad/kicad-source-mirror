@@ -29,20 +29,21 @@
 #include <wx/string.h>
 #include <wx/filename.h>
 
+#include <kicommon.h>
 
 void ConvertMarkdown2Html( const wxString& aMarkdownInput, wxString& aHtmlOutput );
 
 /**
  * Convert the old `~...~` overbar notation to the new `~{...}` one.
  */
-wxString ConvertToNewOverbarNotation( const wxString& aOldStr );
+KICOMMON_API wxString ConvertToNewOverbarNotation( const wxString& aOldStr );
 
 /**
  * Convert curly quotes and em/en dashes to straight quotes and dashes.
  *
  * @return true if any characters required conversion.
  */
-bool ConvertSmartQuotesAndDashes( wxString* aString );
+KICOMMON_API bool ConvertSmartQuotesAndDashes( wxString* aString );
 
 /**
  * Escape/Unescape routines to safely encode reserved-characters in various contexts.
@@ -68,19 +69,19 @@ enum ESCAPE_CONTEXT
  *   (b) used as control characters in LIB_IDs
  *   (c) used to delineate hierarchical paths
  */
-wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext );
+KICOMMON_API wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext );
 
-wxString UnescapeString( const wxString& aSource );
+KICOMMON_API wxString UnescapeString( const wxString& aSource );
 
 /**
  * Remove markup (such as overbar or subscript) that we can't render to menu items.
  */
-wxString PrettyPrintForMenu( const wxString& aString );
+KICOMMON_API wxString PrettyPrintForMenu( const wxString& aString );
 
 /**
  * Capitalize the first letter in each word.
  */
-wxString TitleCaps( const wxString& aString );
+KICOMMON_API wxString TitleCaps( const wxString& aString );
 
 /**
  * Copy bytes from @a aSource delimited string segment to @a aDest buffer.
@@ -95,7 +96,7 @@ wxString TitleCaps( const wxString& aString );
  *         due to escaping of double quotes and the escape byte itself.
  * @deprecated should use the one which fetches a wxString, below.
  */
-int ReadDelimitedText( char* aDest, const char* aSource, int aDestSize );
+KICOMMON_API int ReadDelimitedText( char* aDest, const char* aSource, int aDestSize );
 
 /**
  * Copy bytes from @a aSource delimited string segment to @a aDest wxString.
@@ -105,7 +106,7 @@ int ReadDelimitedText( char* aDest, const char* aSource, int aDestSize );
  * @return the number of bytes read from source, which may be more than the number copied,
  *         due to escaping of double quotes and the escape byte itself.
  */
-int ReadDelimitedText( wxString* aDest, const char* aSource );
+KICOMMON_API int ReadDelimitedText( wxString* aDest, const char* aSource );
 
 /**
  * Return an 8 bit UTF8 string given aString in Unicode form.
@@ -116,47 +117,47 @@ int ReadDelimitedText( wxString* aDest, const char* aSource );
  * @param aString is the input string to convert.
  * @return the escaped input text, without the wrapping double quotes.
  */
-std::string EscapedUTF8( const wxString& aString );
+KICOMMON_API std::string EscapedUTF8( const wxString& aString );
 
 /**
  * Return a new wxString escaped for embedding in HTML.
  */
-wxString EscapeHTML( const wxString& aString );
+KICOMMON_API wxString EscapeHTML( const wxString& aString );
 
 /**
  * Return a new wxString unescaped from HTML format.
  */
-wxString UnescapeHTML( const wxString& aString );
+KICOMMON_API wxString UnescapeHTML( const wxString& aString );
 
 /**
  * Read one line line from \a aFile.
  *
  * @return a pointer the first useful line read by eliminating blank lines and comments.
  */
-char* GetLine( FILE* aFile, char* Line, int* LineNum = nullptr, int SizeLine = 255 );
+KICOMMON_API char* GetLine( FILE* aFile, char* Line, int* LineNum = nullptr, int SizeLine = 255 );
 
 /**
  * Return true if the string is empty or contains only whitespace.
  */
-bool NoPrintableChars( const wxString& aString );
+KICOMMON_API bool NoPrintableChars( const wxString& aString );
 
 /**
  * Return the number of printable (ie: non-formatting) chars.  Used to approximate rendered
  * text size when speed is more important than accuracy.
  */
-int PrintableCharCount( const wxString& aString );
+KICOMMON_API int PrintableCharCount( const wxString& aString );
 
 /**
  * Remove leading and training spaces, tabs and end of line chars in \a text
  *
  * @return a pointer on the first n char in text
  */
-char* StrPurge( char* text );
+KICOMMON_API char* StrPurge( char* text );
 
 /**
  * @return a string giving the current date and time.
  */
-wxString GetISO8601CurrentDateTime();
+KICOMMON_API wxString GetISO8601CurrentDateTime();
 
 /**
  * Compare two strings with alphanumerical content.
@@ -172,14 +173,15 @@ wxString GetISO8601CurrentDateTime();
  *         \a aString1 is equal to \a aString2, or 1 if \a aString1 is greater
  *         than \a aString2.
  */
-int StrNumCmp( const wxString& aString1, const wxString& aString2, bool aIgnoreCase = false );
+KICOMMON_API int StrNumCmp( const wxString& aString1, const wxString& aString2,
+                           bool aIgnoreCase = false );
 
 /**
  * Compare a string against wild card (* and ?) pattern using the usual rules.
  *
  * @return true if pattern matched otherwise false.
  */
-bool WildCompareString( const wxString& pattern,
+KICOMMON_API bool WildCompareString( const wxString& pattern,
                         const wxString& string_to_tst,
                         bool            case_sensitive = true );
 
@@ -190,7 +192,7 @@ bool WildCompareString( const wxString& pattern,
  * @return -1 if first string is less than the second, 0 if the strings are equal, or
  *          1 if the first string is greater than the second.
  */
-int ValueStringCompare( const wxString& strFWord, const wxString& strSWord );
+KICOMMON_API int ValueStringCompare( const wxString& strFWord, const wxString& strSWord );
 
 /**
  * Break a string into three parts: he alphabetic preamble, the numeric part, and any
@@ -198,7 +200,7 @@ int ValueStringCompare( const wxString& strFWord, const wxString& strSWord );
  *
  * For example C10A is split to C 10 A
  */
-int SplitString( const wxString& strToSplit,
+KICOMMON_API int SplitString( const wxString& strToSplit,
                  wxString* strBeginning,
                  wxString* strDigits,
                  wxString* strEnd );
@@ -209,12 +211,12 @@ int SplitString( const wxString& strToSplit,
  * @param aStr the string to check.
  * @return the trailing int or 0 if none found.
  */
-int GetTrailingInt( const wxString& aStr );
+KICOMMON_API int GetTrailingInt( const wxString& aStr );
 
 /**
  * @return a wxString object containing the illegal file name characters for all platforms.
  */
-wxString GetIllegalFileNameWxChars();
+KICOMMON_API wxString GetIllegalFileNameWxChars();
 
 /**
  * Checks \a aName for illegal file name characters.
@@ -230,8 +232,8 @@ wxString GetIllegalFileNameWxChars();
  * @param aReplaceChar (if not 0) is the replacement char.
  * @return true if any characters have been replaced in \a aName.
  */
-bool ReplaceIllegalFileNameChars( std::string* aName, int aReplaceChar = 0 );
-bool ReplaceIllegalFileNameChars( wxString& aName, int aReplaceChar = 0 );
+KICOMMON_API bool ReplaceIllegalFileNameChars( std::string* aName, int aReplaceChar = 0 );
+KICOMMON_API bool  ReplaceIllegalFileNameChars( wxString& aName, int aReplaceChar = 0 );
 
 
 /**
@@ -333,7 +335,7 @@ inline void AccumulateDescription( wxString& aDesc, const wxString& aItem )
  * @param aStrings will contain the split lines.
  * @param aSplitter is the 'split' character.
  */
-void wxStringSplit( const wxString& aText, wxArrayString& aStrings, wxChar aSplitter );
+KICOMMON_API void wxStringSplit( const wxString& aText, wxArrayString& aStrings, wxChar aSplitter );
 
 /**
  * Remove trailing zeros from a string containing a converted float number.
@@ -341,7 +343,7 @@ void wxStringSplit( const wxString& aText, wxArrayString& aStrings, wxChar aSpli
  * The trailing zeros are removed if the mantissa has more than \a aTrailingZeroAllowed
  * digits and some trailing zeros.
  */
-void StripTrailingZeros( wxString& aStringValue, unsigned aTrailingZeroAllowed = 1 );
+KICOMMON_API void StripTrailingZeros( wxString& aStringValue, unsigned aTrailingZeroAllowed = 1 );
 
 /**
  * Print a float number without using scientific notation and no trailing 0
@@ -352,7 +354,7 @@ void StripTrailingZeros( wxString& aStringValue, unsigned aTrailingZeroAllowed =
  * this helper function uses the %f format when needed, or %g when %f is
  * not well working and then removes trailing 0
  */
-std::string UIDouble2Str( double aValue );
+KICOMMON_API std::string UIDouble2Str( double aValue );
 
 /**
  * Print a float number without using scientific notation and no trailing 0
@@ -362,7 +364,7 @@ std::string UIDouble2Str( double aValue );
  * this helper function uses the %f format when needed, or %g when %f is
  * not well working and then removes trailing 0
  */
-std::string FormatDouble2Str( double aValue );
+KICOMMON_API std::string FormatDouble2Str( double aValue );
 
 /**
  * Convert a wxString to a UTF8 encoded C string for all wxWidgets build modes.
@@ -380,7 +382,7 @@ std::string FormatDouble2Str( double aValue );
  * If fails, tray to convert using current locale
  * If still fails, return the initial string (can be already a converted string)
  */
-wxString From_UTF8( const std::string& aString );
-wxString From_UTF8( const char* cstring );
+KICOMMON_API wxString From_UTF8( const std::string& aString );
+KICOMMON_API wxString  From_UTF8( const char* cstring );
 
 #endif  // STRING_UTILS_H

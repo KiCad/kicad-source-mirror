@@ -39,6 +39,7 @@
     when: always
     paths:
       - build/linux/3d-viewer/
+      - build/linux/common/libkicommon.so*
       - build/linux/eeschema/_eeschema.kiface
       - build/linux/kicad/kicad-cli
       - build/linux/pcbnew/pcbnew.py

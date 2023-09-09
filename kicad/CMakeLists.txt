@@ -120,6 +120,7 @@ if( APPLE )
     target_link_libraries( kicad
         nlohmann_json
         common
+        kicommon
         core
         ${wxWidgets_LIBRARIES}
         )

@@ -39,7 +39,7 @@
 #include <wx/stream.h>
 
 #include <ki_exception.h>
-
+#include <kicommon.h>
 
 /**
  * This is like sprintf() but the output is appended to a std::string instead of to a
@@ -49,7 +49,7 @@
  * @param aFormat is a printf() style format string.
  * @return the count of bytes appended to the result string, no terminating nul is included.
  */
-int
+KICOMMON_API int
 #if defined(__GNUG__)
     __attribute__ ((format (printf, 2, 3)))
 #endif
@@ -63,7 +63,7 @@ int
  * @param format is a printf() style format string.
  * @return std::string - the result of the sprintf().
  */
-std::string
+KICOMMON_API std::string
 #if defined(__GNUG__)
     __attribute__ ((format (printf, 1, 2)))
 #endif
@@ -79,7 +79,7 @@ std::string
  * @throw IO_ERROR if the file can't be opened
  * @return the file contents
  */
-wxString SafeReadFile( const wxString& aFilePath, const wxString& aReadType );
+KICOMMON_API wxString SafeReadFile( const wxString& aFilePath, const wxString& aReadType );
 
 
 #define LINE_READER_LINE_DEFAULT_MAX        1000000
@@ -89,7 +89,7 @@ wxString SafeReadFile( const wxString& aFilePath, const wxString& aReadType );
  * An abstract class from which implementation specific LINE_READERs may be derived to
  * read single lines of text and manage a line number counter.
  */
-class LINE_READER
+class KICOMMON_API LINE_READER
 {
 public:
 
@@ -181,7 +181,7 @@ protected:
  *
  * File must be already open so that this class can exist without any UI policy.
  */
-class FILE_LINE_READER : public LINE_READER
+class KICOMMON_API FILE_LINE_READER : public LINE_READER
 {
 public:
     /**
@@ -249,7 +249,7 @@ protected:
 /**
  * Is a #LINE_READER that reads from a multiline 8 bit wide std::string
  */
-class STRING_LINE_READER : public LINE_READER
+class KICOMMON_API STRING_LINE_READER : public LINE_READER
 {
 protected:
     std::string     m_lines;
@@ -283,7 +283,7 @@ public:
 /**
  * A #LINE_READER that reads from a wxInputStream object.
  */
-class INPUTSTREAM_LINE_READER : public LINE_READER
+class KICOMMON_API INPUTSTREAM_LINE_READER : public LINE_READER
 {
 public:
     /**
@@ -318,7 +318,7 @@ protected:
  * Since this is an abstract interface, only classes derived from this one may actually be
  * used.
  */
-class OUTPUTFORMATTER
+class KICOMMON_API OUTPUTFORMATTER
 {
 protected:
     OUTPUTFORMATTER( int aReserve = OUTPUTFMTBUFZ, char aQuoteChar = '"' ) :
@@ -423,7 +423,7 @@ private:
  *
  * After Print()ing the string is available through GetString()
  */
-class STRING_FORMATTER : public OUTPUTFORMATTER
+class KICOMMON_API STRING_FORMATTER : public OUTPUTFORMATTER
 {
 public:
     /**
@@ -465,7 +465,7 @@ private:
  *
  * It is about 8 times faster than STREAM_OUTPUTFORMATTER for file streams.
  */
-class FILE_OUTPUTFORMATTER : public OUTPUTFORMATTER
+class KICOMMON_API FILE_OUTPUTFORMATTER : public OUTPUTFORMATTER
 {
 public:
 
@@ -495,7 +495,7 @@ protected:
  *
  * The stream is neither opened nor closed by this class.
  */
-class STREAM_OUTPUTFORMATTER : public OUTPUTFORMATTER
+class KICOMMON_API STREAM_OUTPUTFORMATTER : public OUTPUTFORMATTER
 {
     wxOutputStream& m_os;
 

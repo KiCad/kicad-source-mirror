@@ -42,24 +42,60 @@ add_library( singletop STATIC EXCLUDE_FROM_ALL
 # surely needed and certainly used from more than one place without recompilation.
 # Functions and data all need to use the #include <import_export.h> and be declared
 # as APIEXPORT
-set( LIB_KICAD_SRCS
+set( KICOMMON_SRCS
+    exceptions.cpp
+    richio.cpp
     string_utils.cpp
     )
 
-if( future )
-add_library( lib_kicad SHARED
+add_library( kicommon SHARED
+    ${KICOMMON_SRCS}
     )
-target_link_libraries( lib_kicad
+
+target_link_libraries( kicommon
+    core
+    kiplatform
+    fmt::fmt
     ${wxWidgets_LIBRARIES}
     )
-set_target_properties( lib_kicad PROPERTIES
-    OUTPUT_NAME     ki
+
+include( ${KICAD_CMAKE_MODULE_PATH}/KiCadVersion.cmake )
+include( ${KICAD_CMAKE_MODULE_PATH}/CreateGitVersionHeader.cmake )
+create_git_version_header(${CMAKE_SOURCE_DIR})
+
+# Extract the major and minor build version as a string
+string( REGEX MATCH
+        "([0-9]+)\\.([0-9]+)\\.([0-9]+)"
+        KICAD_MAJOR_MINOR_PATCH_VERSION
+        "${KICAD_VERSION}"
     )
-install( TARGETS lib_kicad
-    DESTINATION ${KICAD_BIN}
+
+set_target_properties( kicommon PROPERTIES
+    OUTPUT_NAME     kicommon
+    SOVERSION      ${KICAD_MAJOR_MINOR_PATCH_VERSION}
+    )
+
+install( TARGETS kicommon
+    RUNTIME DESTINATION ${KICAD_LIB}
+    LIBRARY DESTINATION ${KICAD_LIB}
     COMPONENT binary
     )
+
+if( APPLE )
+    # puts library into the main kicad.app bundle in build tree
+    set_target_properties( kicommon PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY "${OSX_BUNDLE_BUILD_LIB_DIR}"
+        INSTALL_NAME_DIR "${OSX_BUNDLE_BUILD_LIB_DIR}"
+    )
 endif()
+
+target_compile_definitions( kicommon PRIVATE KICOMMON_DLL=1 )
+
+target_include_directories( kicommon
+    PUBLIC
+        .
+        ${CMAKE_BINARY_DIR}
+    )
 
 # The build version string defaults to the value in the KiCadVersion.cmake file.
 # If being built inside a git repository, the git tag and commit hash are used to create
@@ -389,7 +425,6 @@ set( COMMON_SRCS
     refdes_utils.cpp
     render_settings.cpp
     reporter.cpp
-    richio.cpp
     scintilla_tricks.cpp
     search_stack.cpp
     searchhelpfilefullpath.cpp
@@ -502,6 +537,7 @@ target_link_libraries( common
     libcontext
     kimath
     kiplatform
+    kicommon
     core
     fmt::fmt
     gal
