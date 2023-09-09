@@ -31,6 +31,8 @@
 #include <tool/grid_helper.h>
 
 class TOOL_MANAGER;
+struct MAGNETIC_SETTINGS;
+struct SELECTION_FILTER_OPTIONS;
 
 class PCB_GRID_HELPER : public GRID_HELPER
 {
