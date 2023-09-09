@@ -1930,21 +1930,21 @@ void SCH_ALTIUM_PLUGIN::ParseArc( const std::map<wxString, wxString>& aPropertie
             symbol->AddDrawItem( arc, false );
             arc->SetUnit( std::max( 0, elem.ownerpartid ) );
 
-            EDA_ANGLE  includedAngle( elem.m_EndAngle - elem.m_StartAngle, DEGREES_T );
-            EDA_ANGLE  startAngle( elem.m_EndAngle, DEGREES_T );
-            VECTOR2I   startOffset( KiROUND( arc_radius * startAngle.Cos() ),
+            EDA_ANGLE includedAngle( elem.m_EndAngle - elem.m_StartAngle, DEGREES_T );
+            EDA_ANGLE startAngle( elem.m_StartAngle, DEGREES_T );
+            VECTOR2I  startOffset( KiROUND( arc_radius * startAngle.Cos() ),
                                    -KiROUND( arc_radius * startAngle.Sin() ) );
 
             if( schsym )
             {
                 arc->SetCenter( GetRelativePosition( elem.m_Center + m_sheetOffset, schsym ) );
                 arc->SetStart( GetRelativePosition( elem.m_Center + startOffset + m_sheetOffset,
-                                                     schsym ) );
+                                                    schsym ) );
             }
             else
             {
                 arc->SetCenter( GetLibEditPosition( elem.m_Center ) );
-                arc->SetStart( elem.m_Center + startOffset + m_sheetOffset );
+                arc->SetStart( GetLibEditPosition( elem.m_Center + startOffset + m_sheetOffset ) );
             }
 
             arc->SetArcAngleAndEnd( includedAngle.Normalize(), true );
