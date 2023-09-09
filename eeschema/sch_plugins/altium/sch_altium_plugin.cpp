@@ -1302,7 +1302,7 @@ void SCH_ALTIUM_PLUGIN::ParseTextFrame( const std::map<wxString, wxString>& aPro
 {
     ASCH_TEXT_FRAME elem( aProperties );
 
-    if( aSymbol.empty() )
+    if( aSymbol.empty() && elem.ownerpartid == ALTIUM_COMPONENT_NONE )
         AddTextBox( &elem );
     else
         AddLibTextBox( &elem, aSymbol, aFontSizes );
@@ -1383,17 +1383,45 @@ void SCH_ALTIUM_PLUGIN::AddTextBox(const ASCH_TEXT_FRAME *aElem )
 
 void SCH_ALTIUM_PLUGIN::AddLibTextBox(const ASCH_TEXT_FRAME *aElem, std::vector<LIB_SYMBOL*>& aSymbol, std::vector<int>& aFontSizes )
 {
-    if( aElem->ownerpartdisplaymode >= static_cast<int>( aSymbol.size() ) )
-        return;
+    LIB_SYMBOL* symbol = static_cast<int>( aSymbol.size() ) <= aElem->ownerpartdisplaymode
+                                 ? nullptr
+                                 : aSymbol[aElem->ownerpartdisplaymode];
+    SCH_SYMBOL* schsym = nullptr;
 
-    LIB_SYMBOL* symbol = aSymbol[aElem->ownerpartdisplaymode];
+    if( !symbol )
+    {
+        const auto& libSymbolIt = m_libSymbols.find( aElem->ownerindex );
+
+        if( libSymbolIt == m_libSymbols.end() )
+        {
+            // TODO: e.g. can depend on Template (RECORD=39
+            m_reporter->Report(
+                    wxString::Format( wxT( "Label's owner (%d) not found." ), aElem->ownerindex ),
+                    RPT_SEVERITY_DEBUG );
+            return;
+        }
+
+        symbol = libSymbolIt->second;
+        schsym = m_symbols.at( libSymbolIt->first );
+    }
+
     LIB_TEXTBOX* textBox = new LIB_TEXTBOX( symbol );
 
-    VECTOR2I sheetTopRight = GetLibEditPosition( aElem->TopRight );
-    VECTOR2I sheetBottomLeft = GetLibEditPosition( aElem->BottomLeft );
+    textBox->SetUnit( std::max( 0, aElem->ownerpartid ) );
 
-    textBox->SetStart( sheetTopRight );
-    textBox->SetEnd( sheetBottomLeft );
+    symbol->AddDrawItem( textBox, false );
+
+    /// Handle text frames that are in a library symbol, not on schematic
+    if( !schsym )
+    {
+        textBox->SetStart( GetLibEditPosition( aElem->TopRight ) );
+        textBox->SetEnd( GetLibEditPosition( aElem->BottomLeft ) );
+    }
+    else
+    {
+        textBox->SetStart( GetRelativePosition( aElem->TopRight + m_sheetOffset, schsym ) );
+        textBox->SetEnd( GetRelativePosition( aElem->BottomLeft + m_sheetOffset, schsym ) );
+    }
 
     textBox->SetText( aElem->Text );
 
@@ -1429,9 +1457,6 @@ void SCH_ALTIUM_PLUGIN::AddLibTextBox(const ASCH_TEXT_FRAME *aElem, std::vector<
         int size = aFontSizes[aElem->FontID - 1];
         textBox->SetTextSize( { size, size } );
     }
-
-    symbol->AddDrawItem( textBox, false );
-
 }
 
 
