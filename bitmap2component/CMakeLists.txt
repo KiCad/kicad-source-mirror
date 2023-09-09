@@ -24,9 +24,6 @@ set( BITMAP2COMPONENT_SRCS
 set_source_files_properties( ${CMAKE_SOURCE_DIR}/common/single_top.cpp PROPERTIES
     COMPILE_DEFINITIONS     "TOP_FRAME=FRAME_BM2CMP"
     )
-set_source_files_properties(bitmap2cmp_frame.cpp PROPERTIES
-    COMPILE_DEFINITIONS     "COMPILING_DLL"
-    )
 
 if( WIN32 )
     if( MINGW )

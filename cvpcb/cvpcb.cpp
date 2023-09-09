@@ -106,7 +106,7 @@ KIFACE_BASE& Kiface() { return kiface; }
 
 // KIFACE_GETTER's actual spelling is a substitution macro found in kiway.h.
 // KIFACE_GETTER will not have name mangling due to declaration in kiway.h.
-MY_API( KIFACE* ) KIFACE_GETTER(  int* aKIFACEversion, int aKIWAYversion, PGM_BASE* aProgram )
+KIFACE_API KIFACE* KIFACE_GETTER(  int* aKIFACEversion, int aKIWAYversion, PGM_BASE* aProgram )
 {
     process = (PGM_BASE*) aProgram;
     return &kiface;

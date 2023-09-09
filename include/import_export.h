@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2011-2023 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,32 +29,28 @@
 /// See: http://gcc.gnu.org/wiki/Visibility
 
 #if defined(_WIN32)
- #define APIEXPORT __declspec(dllexport)
- #define APIIMPORT __declspec(dllimport)
- #define APILOCAL
-
+	#define APIEXPORT __declspec(dllexport)
+	#define APIIMPORT __declspec(dllimport)
+	#define APILOCAL
 #elif defined(__GNUC__) && __GNUC__ >= 4
- // On ELF, we compile with hidden visibility, so unwrap that for specific symbols:
- #define APIEXPORT __attribute__ ((visibility("default")))
- #define APIIMPORT __attribute__ ((visibility("default")))
- #define APILOCAL  __attribute__ ((visibility("hidden")))
-
+	// On ELF, we compile with hidden visibility, so unwrap that for specific symbols:
+	#define APIEXPORT __attribute__ ((visibility("default")))
+	#define APIIMPORT __attribute__ ((visibility("default")))
+	#define APILOCAL  __attribute__ ((visibility("hidden")))
 #else
- #pragma message ( "warning: a supported C++ compiler is required" )
- #define APIEXPORT
- #define APIIMPORT
- #define APILOCAL
+	#pragma message ( "warning: a supported C++ compiler is required" )
+	#define APIEXPORT
+	#define APIIMPORT
+	#define APILOCAL
 #endif
 
 
 #if defined(COMPILING_DLL)
- // Be sure and define COMPILING_DLL when compiling implementation, and NOT when
- // compiling the client.
- #define MY_API(rettype)    APIEXPORT   rettype
+	#define KIFACE_API    APIEXPORT
 #else
- #define MY_API(rettype)    APIIMPORT   rettype
+	#define KIFACE_API    APIIMPORT
 #endif
 
-#define MY_LOCAL(rettype)   APILOCAL    rettype
+#define KIFACE_LOCAL	APILOCAL
 
 #endif  // IMPORT_EXPORT_H_
