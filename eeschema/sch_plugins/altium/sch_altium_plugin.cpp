@@ -202,7 +202,7 @@ static void SetLibShapeFillAndColor( const ASCH_FILL_INTERFACE& elem, LIB_SHAPE*
 
         shape->SetFillMode( FILL_T::FILLED_SHAPE );
     }
-    else if( bgcolor == default_bgcolor )
+    else if( bgcolor.WithAlpha( 1.0 ) == default_bgcolor )
         shape->SetFillMode( FILL_T::FILLED_WITH_BG_BODYCOLOR );
     else
         shape->SetFillMode( FILL_T::FILLED_WITH_COLOR );
