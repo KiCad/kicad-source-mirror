@@ -1396,7 +1396,7 @@ void OPENGL_GAL::DrawCurve( const VECTOR2D& aStartPoint, const VECTOR2D& aContro
     BEZIER_POLY converter( pointCtrl );
     converter.GetPoly( output, aFilterValue );
 
-    DrawPolyline( &output[0], output.size() );
+    DrawPolygon( &output[0], output.size() );
 }
 
 

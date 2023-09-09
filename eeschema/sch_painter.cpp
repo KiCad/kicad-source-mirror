@@ -937,12 +937,9 @@ void SCH_PAINTER::draw( const LIB_SHAPE* aShape, int aLayer, bool aDimmed )
 
                 case SHAPE_T::BEZIER:
                 {
-                    std::deque<VECTOR2D> mappedPts;
-
-                    for( const VECTOR2I& p : shape->GetBezierPoints() )
-                        mappedPts.push_back( mapCoords( p ) );
-
-                    m_gal->DrawPolygon( mappedPts );
+                    m_gal->DrawCurve(
+                            mapCoords( shape->GetStart() ), mapCoords( shape->GetBezierC1() ),
+                            mapCoords( shape->GetBezierC2() ), mapCoords( shape->GetEnd() ) );
                 }
                     break;
 
@@ -2023,12 +2020,8 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer )
 
                 case SHAPE_T::BEZIER:
                 {
-                    std::deque<VECTOR2D> pts;
-
-                    for( const VECTOR2I &p : shape->GetPolyShape().Outline( 0 ).CPoints() )
-                        pts.push_back( p );
-
-                    m_gal->DrawPolygon( pts );
+                    m_gal->DrawCurve( shape->GetStart(), shape->GetBezierC1(), shape->GetBezierC2(),
+                                      shape->GetEnd() );
                     break;
                 }
 
