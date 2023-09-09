@@ -29,7 +29,7 @@
 #include <wx/wxcrtvararg.h>     //for wxPrintf
 
 #include <kiway.h>
-#include <macros.h>
+#include <string_utils.h>
 #include <paths.h>
 #include <settings/settings_manager.h>
 #include <settings/kicad_settings.h>
@@ -276,7 +276,7 @@ static void printHelp( argparse::ArgumentParser& argParser )
 {
     std::stringstream ss;
     ss << argParser;
-    wxPrintf( FROM_UTF8( ss.str().c_str() ) );
+    wxPrintf( From_UTF8( ss.str().c_str() ) );
 }
 
 
@@ -368,7 +368,7 @@ int PGM_KICAD::OnPgmRun()
     {
         std::stringstream ss;
         ss << argParser;
-        wxPrintf( FROM_UTF8( ss.str().c_str() ) );
+        wxPrintf( From_UTF8( ss.str().c_str() ) );
 
         return 0;
     }

@@ -197,7 +197,7 @@ void EDA_3D_MODEL_VIEWER::ogl_initialize()
     else
     {
         wxLogTrace( m_logTrace, wxT( "EDA_3D_MODEL_VIEWER::ogl_initialize Using GLEW version %s" ),
-                    FROM_UTF8( (char*) glewGetString( GLEW_VERSION ) ) );
+                    From_UTF8( (char*) glewGetString( GLEW_VERSION ) ) );
     }
 
     glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );

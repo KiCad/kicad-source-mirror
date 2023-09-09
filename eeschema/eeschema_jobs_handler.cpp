@@ -45,6 +45,7 @@
 #include <plotters/plotters_pslike.h>
 #include <drawing_sheet/ds_data_model.h>
 #include <reporter.h>
+#include <string_utils.h>
 
 #include <settings/settings_manager.h>
 

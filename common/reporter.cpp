@@ -27,6 +27,7 @@
 
 #include <macros.h>
 #include <reporter.h>
+#include <string_utils.h>
 #include <widgets/wx_infobar.h>
 #include <widgets/wx_html_report_panel.h>
 #include <wx/crt.h>
@@ -36,7 +37,7 @@
 
 REPORTER& REPORTER::Report( const char* aText, SEVERITY aSeverity )
 {
-    Report( FROM_UTF8( aText ) );
+    Report( From_UTF8( aText ) );
     return *this;
 }
 

@@ -23,6 +23,7 @@
 #include "jobs/job_export_pcb_drill.h"
 #include <kiface_base.h>
 #include <layer_ids.h>
+#include <string_utils.h>
 #include <wx/crt.h>
 
 #include <macros.h>
@@ -118,7 +119,7 @@ int CLI::PCB_EXPORT_DRILL_COMMAND::doPerform( KIWAY& aKiway )
         }
     }
 
-    wxString format = FROM_UTF8( m_argParser.get<std::string>( ARG_FORMAT ).c_str() );
+    wxString format = From_UTF8( m_argParser.get<std::string>( ARG_FORMAT ).c_str() );
     if( format == "excellon" )
     {
         drillJob->m_format = JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::EXCELLON;
@@ -133,7 +134,7 @@ int CLI::PCB_EXPORT_DRILL_COMMAND::doPerform( KIWAY& aKiway )
         return EXIT_CODES::ERR_ARGS;
     }
 
-    wxString units = FROM_UTF8( m_argParser.get<std::string>( ARG_EXCELLON_UNITS ).c_str() );
+    wxString units = From_UTF8( m_argParser.get<std::string>( ARG_EXCELLON_UNITS ).c_str() );
 
     if( units == wxS( "mm" ) )
     {
@@ -149,7 +150,7 @@ int CLI::PCB_EXPORT_DRILL_COMMAND::doPerform( KIWAY& aKiway )
         return EXIT_CODES::ERR_ARGS;
     }
 
-    wxString zeroFormat = FROM_UTF8( m_argParser.get<std::string>( ARG_EXCELLON_ZEROS_FORMAT ).c_str() );
+    wxString zeroFormat = From_UTF8( m_argParser.get<std::string>( ARG_EXCELLON_ZEROS_FORMAT ).c_str() );
 
     if( zeroFormat == wxS( "decimal" ) )
     {
@@ -174,7 +175,7 @@ int CLI::PCB_EXPORT_DRILL_COMMAND::doPerform( KIWAY& aKiway )
     }
 
     wxString drillFormat =
-            FROM_UTF8( m_argParser.get<std::string>( ARG_EXCELLON_OVAL_FORMAT ).c_str() );
+            From_UTF8( m_argParser.get<std::string>( ARG_EXCELLON_OVAL_FORMAT ).c_str() );
     if( drillFormat == wxS( "route" ) )
     {
         drillJob->m_excellonOvalDrillRoute = true;
@@ -189,7 +190,7 @@ int CLI::PCB_EXPORT_DRILL_COMMAND::doPerform( KIWAY& aKiway )
         return EXIT_CODES::ERR_ARGS;
     }
 
-    wxString mapFormat = FROM_UTF8( m_argParser.get<std::string>( ARG_MAP_FORMAT ).c_str() );
+    wxString mapFormat = From_UTF8( m_argParser.get<std::string>( ARG_MAP_FORMAT ).c_str() );
 
     if( mapFormat == wxS( "pdf" ) )
     {
@@ -217,7 +218,7 @@ int CLI::PCB_EXPORT_DRILL_COMMAND::doPerform( KIWAY& aKiway )
         return EXIT_CODES::ERR_ARGS;
     }
 
-    wxString origin = FROM_UTF8( m_argParser.get<std::string>( ARG_DRILL_ORIGIN ).c_str() );
+    wxString origin = From_UTF8( m_argParser.get<std::string>( ARG_DRILL_ORIGIN ).c_str() );
 
     if( origin == wxS( "absolute" ) )
     {

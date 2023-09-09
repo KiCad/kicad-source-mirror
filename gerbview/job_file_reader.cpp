@@ -33,7 +33,7 @@
 #include <gerbview.h>
 #include <richio.h>
 #include <locale_io.h>
-#include <macros.h>
+#include <string_utils.h>
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
 #include <gerbview_frame.h>
@@ -169,7 +169,7 @@ wxString GERBER_JOBFILE_READER::formatStringFromJSON( const std::string& name )
     // to encode unicode chars
     // Our json11 library returns in this case a UTF8 sequence. Just convert it to
     // a wxString.
-    wxString wstr = FROM_UTF8( name.c_str() );
+    wxString wstr = From_UTF8( name.c_str() );
     return wstr;
 }
 

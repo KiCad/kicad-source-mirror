@@ -41,6 +41,7 @@
 #include <kiplatform/environment.h>
 #include <core/kicad_algo.h>
 #include <paths.h>
+#include <string_utils.h>
 #include <launch_ext.h>
 #include <wx/dcclient.h>
 #include <wx/settings.h>

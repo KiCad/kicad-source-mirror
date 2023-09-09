@@ -55,7 +55,7 @@ int main( int argc, char** argv )
 
     if( argc == 2 )
     {
-        filename = FROM_UTF8( argv[1] );
+        filename = From_UTF8( argv[1] );
     }
 
     try

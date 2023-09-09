@@ -85,17 +85,6 @@
 #endif
 
 /**
- * Convert a wxString to a UTF8 encoded C string for all wxWidgets build modes.
- *
- * wxstring is a wxString, not a wxT() or _().  The scope of the return value
- * is very limited and volatile, but can be used with printf() style functions well.
- *
- * @note Trying to convert it to a function is tricky because of the type of the
- *       parameter!
- */
-#define TO_UTF8( wxstring )  ( (const char*) (wxstring).utf8_str() )
-
-/**
  * Stringifies the given parameter by placing in quotes.
  *
  * @param cstring STRING (no spaces)
@@ -103,17 +92,6 @@
  */
 #define TO_STR2(x) #x
 #define TO_STR(x) TO_STR2(x)
-
-/**
- * Convert an expected UTF8 encoded C string to a wxString.
- * If fails, tray to convert using current locale
- * If still fails, return an empty wxString
- * This macro is obsolete. Replaced by
- * wxString From_UTF8( const char* cstring )
- * (and also wxString From_UTF8( const std::string& aString ) )
- */
-wxString From_UTF8( const char* cstring );
-#define FROM_UTF8(x) From_UTF8(x)
 
 #define UNIMPLEMENTED_FOR( type ) \
         wxFAIL_MSG( wxString::Format( wxT( "%s: unimplemented for %s" ), __FUNCTION__, type ) )

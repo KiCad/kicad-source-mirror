@@ -412,7 +412,7 @@ int ReadDelimitedText( wxString* aDest, const char* aSource )
         }
     }
 
-    *aDest = FROM_UTF8( utf8.c_str() );
+    *aDest = From_UTF8( utf8.c_str() );
 
     return aSource - start;
 }
@@ -1016,7 +1016,7 @@ int GetTrailingInt( const wxString& aStr )
 
 wxString GetIllegalFileNameWxChars()
 {
-    return FROM_UTF8( illegalFileNameChars );
+    return From_UTF8( illegalFileNameChars );
 }
 
 

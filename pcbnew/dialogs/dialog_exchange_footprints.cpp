@@ -101,7 +101,7 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
 
     if( m_currentFootprint )
     {
-        m_newID->AppendText( FROM_UTF8( m_currentFootprint->GetFPID().Format().c_str() ) );
+        m_newID->AppendText( From_UTF8( m_currentFootprint->GetFPID().Format().c_str() ) );
     }
     else
         m_upperSizer->FindItem( m_matchSelected )->Show( false );
@@ -114,7 +114,7 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
         m_specifiedValue->ChangeValue( m_currentFootprint->GetValue() );
 
     if( m_currentFootprint )
-        m_specifiedID->ChangeValue( FROM_UTF8( m_currentFootprint->GetFPID().Format().c_str() ) );
+        m_specifiedID->ChangeValue( From_UTF8( m_currentFootprint->GetFPID().Format().c_str() ) );
 
     m_specifiedIDBrowseButton->SetBitmap( KiBitmap( BITMAPS::small_library ) );
 

@@ -891,7 +891,7 @@ void GPCB_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wxSt
     // the library.
 
     for( const auto& footprint : m_cache->GetFootprints() )
-        aFootprintNames.Add( FROM_UTF8( footprint.first.c_str() ) );
+        aFootprintNames.Add( From_UTF8( footprint.first.c_str() ) );
 
     if( !errorMsg.IsEmpty() && !aBestEfforts )
         THROW_IO_ERROR( errorMsg );

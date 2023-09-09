@@ -560,21 +560,7 @@ public:
     std::vector<SCH_SYMBOL_INSTANCE> GetSymbolInstances() const;
 
 #if defined(DEBUG)
-    void Show( const char* aPrefix = "" )
-    {
-        printf( "%s\n", aPrefix );
-
-        for( unsigned i=0; i < m_flatList.size(); ++i )
-        {
-            SCH_REFERENCE& schref = m_flatList[i];
-
-            printf( " [%-2d] ref:%-8s num:%-3d lib_part:%s\n",
-                    i,
-                    schref.m_ref.ToStdString().c_str(),
-                    schref.m_numRef,
-                    TO_UTF8( schref.GetLibPart()->GetName() ) );
-        }
-    }
+    void Show( const char* aPrefix = "" );
 #endif
 
     /**

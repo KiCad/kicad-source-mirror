@@ -23,6 +23,7 @@
 #include <kiface_base.h>
 #include <bitset>
 #include <layer_ids.h>
+#include <string_utils.h>
 
 #include <macros.h>
 #include <wx/tokenzr.h>
@@ -124,7 +125,7 @@ int CLI::PCB_EXPORT_BASE_COMMAND::doPerform( KIWAY& aKiway )
 {
     if( m_hasLayerArg )
     {
-        wxString layers = FROM_UTF8( m_argParser.get<std::string>( ARG_LAYERS ).c_str() );
+        wxString layers = From_UTF8( m_argParser.get<std::string>( ARG_LAYERS ).c_str() );
 
         LSET layerMask = convertLayerStringList( layers, m_selectedLayersSet );
         if( m_requireLayers && layerMask.Seq().size() < 1 )

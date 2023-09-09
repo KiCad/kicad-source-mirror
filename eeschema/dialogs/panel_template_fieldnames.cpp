@@ -29,7 +29,7 @@
 #include <template_fieldnames.h>
 #include <grid_tricks.h>
 #include <bitmaps.h>
-#include <macros.h>
+#include <string_utils.h>
 #include <panel_template_fieldnames.h>
 
 PANEL_TEMPLATE_FIELDNAMES::PANEL_TEMPLATE_FIELDNAMES( wxWindow* aWindow,
@@ -200,7 +200,7 @@ bool PANEL_TEMPLATE_FIELDNAMES::TransferDataFromWindow()
             STRING_FORMATTER sf;
             m_templateMgr->Format( &sf, 0, true );
 
-            wxString record = FROM_UTF8( sf.GetString().c_str() );
+            wxString record = From_UTF8( sf.GetString().c_str() );
             record.Replace( wxT("\n"), wxT(""), true );   // strip all newlines
             record.Replace( wxT("  "), wxT(" "), true );  // double space to single
 

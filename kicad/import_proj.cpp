@@ -24,6 +24,7 @@
 #include <kiway_player.h>
 #include <wildcards_and_files_ext.h>
 #include <macros.h>
+#include <string_utils.h>
 #include <richio.h>
 
 #include <wx/msgdlg.h>

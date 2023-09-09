@@ -30,7 +30,7 @@
 #include <widgets/wx_grid.h>
 #include <widgets/std_bitmap_button.h>
 #include <bitmaps.h>
-#include <macros.h>
+#include <string_utils.h>
 
 
 #define INITIAL_HELP    \
@@ -67,7 +67,7 @@ DIALOG_PLUGIN_OPTIONS::DIALOG_PLUGIN_OPTIONS( wxWindow* aParent,
         for( STRING_UTF8_MAP::const_iterator it = m_choices.begin(); it != m_choices.end();
                 ++it, ++row )
         {
-            wxString item = FROM_UTF8( it->first.c_str() );
+            wxString item = From_UTF8( it->first.c_str() );
 
             m_listbox->InsertItems( 1, &item, row );
         }
@@ -113,7 +113,7 @@ bool DIALOG_PLUGIN_OPTIONS::TransferDataToWindow()
         for( STRING_UTF8_MAP::const_iterator it = props->begin(); it != props->end();
                 ++it, ++row )
         {
-            m_grid->SetCellValue( row, 0, FROM_UTF8( it->first.c_str() ) );
+            m_grid->SetCellValue( row, 0, From_UTF8( it->first.c_str() ) );
             m_grid->SetCellValue( row, 1, it->second );
         }
 

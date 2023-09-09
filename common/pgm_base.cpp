@@ -64,6 +64,7 @@
 #include <python_scripting.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
+#include <string_utils.h>
 #include <systemdirsappend.h>
 #include <core/thread_pool.h>
 #include <trace_helpers.h>
@@ -945,7 +946,7 @@ void PGM_BASE::HandleException( std::exception_ptr aPtr )
 #endif
 
         wxLogError( wxT( "Unhandled exception class: %s  what: %s" ),
-                    FROM_UTF8( typeid( e ).name() ), FROM_UTF8( e.what() ) );
+                    From_UTF8( typeid( e ).name() ), From_UTF8( e.what() ) );
     }
     catch( ... )
     {

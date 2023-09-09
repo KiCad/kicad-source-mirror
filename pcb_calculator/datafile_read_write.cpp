@@ -232,7 +232,7 @@ void PCB_CALCULATOR_DATAFILE_PARSER::ParseRegulatorDescr( PCB_CALCULATOR_DATAFIL
 
             // Read name
             token = NextTok();
-            name = FROM_UTF8( CurText() );
+            name = From_UTF8( CurText() );
 
             while( ( token = NextTok() ) != T_RIGHT )
             {

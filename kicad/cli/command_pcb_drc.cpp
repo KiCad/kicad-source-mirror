@@ -23,6 +23,7 @@
 #include "jobs/job_pcb_drc.h"
 #include <kiface_base.h>
 #include <layer_ids.h>
+#include <string_utils.h>
 #include <wx/crt.h>
 
 #include <macros.h>
@@ -118,7 +119,7 @@ int CLI::PCB_DRC_COMMAND::doPerform( KIWAY& aKiway )
 
     drcJob->m_reportAllTrackErrors = m_argParser.get<bool>( ARG_ALL_TRACK_ERRORS );
 
-    wxString units = FROM_UTF8( m_argParser.get<std::string>( ARG_UNITS ).c_str() );
+    wxString units = From_UTF8( m_argParser.get<std::string>( ARG_UNITS ).c_str() );
 
     if( units == wxS( "mm" ) )
     {
@@ -138,7 +139,7 @@ int CLI::PCB_DRC_COMMAND::doPerform( KIWAY& aKiway )
         return EXIT_CODES::ERR_ARGS;
     }
 
-    wxString format = FROM_UTF8( m_argParser.get<std::string>( ARG_FORMAT ).c_str() );
+    wxString format = From_UTF8( m_argParser.get<std::string>( ARG_FORMAT ).c_str() );
     if( format == "report" )
     {
         drcJob->m_format = JOB_PCB_DRC::OUTPUT_FORMAT::REPORT;

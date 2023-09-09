@@ -23,6 +23,7 @@
 #include "jobs/job_export_pcb_pos.h"
 #include <kiface_base.h>
 #include <layer_ids.h>
+#include <string_utils.h>
 #include <wx/crt.h>
 
 #include <macros.h>
@@ -119,7 +120,7 @@ int CLI::PCB_EXPORT_POS_COMMAND::doPerform( KIWAY& aKiway )
     aPosJob->m_excludeDNP = m_argParser.get<bool>( ARG_EXCLUDE_DNP );
     aPosJob->m_gerberBoardEdge = m_argParser.get<bool>( ARG_GERBER_BOARD_EDGE );
 
-    wxString format = FROM_UTF8( m_argParser.get<std::string>( ARG_FORMAT ).c_str() );
+    wxString format = From_UTF8( m_argParser.get<std::string>( ARG_FORMAT ).c_str() );
     if( format == wxS( "ascii" ) )
     {
         aPosJob->m_format = JOB_EXPORT_PCB_POS::FORMAT::ASCII;
@@ -138,7 +139,7 @@ int CLI::PCB_EXPORT_POS_COMMAND::doPerform( KIWAY& aKiway )
         return EXIT_CODES::ERR_ARGS;
     }
 
-    wxString units = FROM_UTF8( m_argParser.get<std::string>( ARG_UNITS ).c_str() );
+    wxString units = From_UTF8( m_argParser.get<std::string>( ARG_UNITS ).c_str() );
 
     if( units == wxS( "mm" ) )
     {
@@ -154,7 +155,7 @@ int CLI::PCB_EXPORT_POS_COMMAND::doPerform( KIWAY& aKiway )
         return EXIT_CODES::ERR_ARGS;
     }
 
-    wxString side = FROM_UTF8( m_argParser.get<std::string>( ARG_SIDE ).c_str() );
+    wxString side = From_UTF8( m_argParser.get<std::string>( ARG_SIDE ).c_str() );
 
     if( side == wxS( "both" ) )
     {

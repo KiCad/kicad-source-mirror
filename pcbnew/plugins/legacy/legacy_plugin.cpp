@@ -786,7 +786,7 @@ void LEGACY_PLUGIN::loadSHEET()
 
             if( sname )
             {
-                wxString wname = FROM_UTF8( sname );
+                wxString wname = From_UTF8( sname );
 
                 if( !page.SetType( wname ) )
                 {
@@ -826,67 +826,67 @@ void LEGACY_PLUGIN::loadSHEET()
         else if( TESTLINE( "Title" ) )
         {
             ReadDelimitedText( buf, line, sizeof(buf) );
-            tb.SetTitle( FROM_UTF8( buf ) );
+            tb.SetTitle( From_UTF8( buf ) );
         }
         else if( TESTLINE( "Date" ) )
         {
             ReadDelimitedText( buf, line, sizeof(buf) );
-            tb.SetDate( FROM_UTF8( buf ) );
+            tb.SetDate( From_UTF8( buf ) );
         }
         else if( TESTLINE( "Rev" ) )
         {
             ReadDelimitedText( buf, line, sizeof(buf) );
-            tb.SetRevision( FROM_UTF8( buf ) );
+            tb.SetRevision( From_UTF8( buf ) );
         }
         else if( TESTLINE( "Comp" ) )
         {
             ReadDelimitedText( buf, line, sizeof(buf) );
-            tb.SetCompany( FROM_UTF8( buf ) );
+            tb.SetCompany( From_UTF8( buf ) );
         }
         else if( TESTLINE( "Comment1" ) )
         {
             ReadDelimitedText( buf, line, sizeof(buf) );
-            tb.SetComment( 0, FROM_UTF8( buf ) );
+            tb.SetComment( 0, From_UTF8( buf ) );
         }
         else if( TESTLINE( "Comment2" ) )
         {
             ReadDelimitedText( buf, line, sizeof(buf) );
-            tb.SetComment( 1, FROM_UTF8( buf ) );
+            tb.SetComment( 1, From_UTF8( buf ) );
         }
         else if( TESTLINE( "Comment3" ) )
         {
             ReadDelimitedText( buf, line, sizeof(buf) );
-            tb.SetComment( 2, FROM_UTF8( buf ) );
+            tb.SetComment( 2, From_UTF8( buf ) );
         }
         else if( TESTLINE( "Comment4" ) )
         {
             ReadDelimitedText( buf, line, sizeof(buf) );
-            tb.SetComment( 3, FROM_UTF8( buf ) );
+            tb.SetComment( 3, From_UTF8( buf ) );
         }
         else if( TESTLINE( "Comment5" ) )
         {
             ReadDelimitedText( buf, line, sizeof(buf) );
-            tb.SetComment( 4, FROM_UTF8( buf ) );
+            tb.SetComment( 4, From_UTF8( buf ) );
         }
         else if( TESTLINE( "Comment6" ) )
         {
             ReadDelimitedText( buf, line, sizeof(buf) );
-            tb.SetComment( 5, FROM_UTF8( buf ) );
+            tb.SetComment( 5, From_UTF8( buf ) );
         }
         else if( TESTLINE( "Comment7" ) )
         {
             ReadDelimitedText( buf, line, sizeof(buf) );
-            tb.SetComment( 6, FROM_UTF8( buf ) );
+            tb.SetComment( 6, From_UTF8( buf ) );
         }
         else if( TESTLINE( "Comment8" ) )
         {
             ReadDelimitedText( buf, line, sizeof(buf) );
-            tb.SetComment( 7, FROM_UTF8( buf ) );
+            tb.SetComment( 7, From_UTF8( buf ) );
         }
         else if( TESTLINE( "Comment9" ) )
         {
             ReadDelimitedText( buf, line, sizeof(buf) );
-            tb.SetComment( 8, FROM_UTF8( buf ) );
+            tb.SetComment( 8, From_UTF8( buf ) );
         }
         else if( TESTLINE( "$EndSHEETDESCR" ) )
         {
@@ -943,7 +943,7 @@ void LEGACY_PLUGIN::loadSETUP()
 
             if( data )
             {
-                wxString layerName = FROM_UTF8( data );
+                wxString layerName = From_UTF8( data );
                 m_board->SetLayerName( layer_id, layerName );
 
                 data = strtok_r( nullptr, delims, &saveptr );
@@ -1289,7 +1289,7 @@ void LEGACY_PLUGIN::loadFOOTPRINT( FOOTPRINT* aFootprint )
             data = strtok_r( line + SZ( "AR" ), delims, (char**) &data );
 
             if( data )
-                aFootprint->SetPath( KIID_PATH( FROM_UTF8( data ) ) );
+                aFootprint->SetPath( KIID_PATH( From_UTF8( data ) ) );
         }
         else if( TESTLINE( "$SHAPE3D" ) )
         {
@@ -1298,11 +1298,11 @@ void LEGACY_PLUGIN::loadFOOTPRINT( FOOTPRINT* aFootprint )
         else if( TESTLINE( "Cd" ) )
         {
             // e.g. "Cd Double rangee de contacts 2 x 4 pins\r\n"
-            aFootprint->SetLibDescription( FROM_UTF8( StrPurge( line + SZ( "Cd" ) ) ) );
+            aFootprint->SetLibDescription( From_UTF8( StrPurge( line + SZ( "Cd" ) ) ) );
         }
         else if( TESTLINE( "Kw" ) )         // Key words
         {
-            aFootprint->SetKeywords( FROM_UTF8( StrPurge( line + SZ( "Kw" ) ) ) );
+            aFootprint->SetKeywords( From_UTF8( StrPurge( line + SZ( "Kw" ) ) ) );
         }
         else if( TESTLINE( ".SolderPasteRatio" ) )
         {
@@ -1427,7 +1427,7 @@ void LEGACY_PLUGIN::loadPAD( FOOTPRINT* aFootprint )
             else
             {
                 // version 2, which is UTF8.
-                padNumber = FROM_UTF8( mypadnumber );
+                padNumber = From_UTF8( mypadnumber );
             }
 
             // chances are both were ASCII, but why take chances?
@@ -1510,7 +1510,7 @@ void LEGACY_PLUGIN::loadPAD( FOOTPRINT* aFootprint )
             if( m_board )
             {
                 wxASSERT( m_board->FindNet( getNetCode( netcode ) )->GetNetname()
-                          == ConvertToNewOverbarNotation( FROM_UTF8( StrPurge( buf ) ) ) );
+                          == ConvertToNewOverbarNotation( From_UTF8( StrPurge( buf ) ) ) );
             }
         }
         else if( TESTLINE( "Po" ) )         // (Po)sition
@@ -1979,7 +1979,7 @@ void LEGACY_PLUGIN::loadNETINFO_ITEM()
 
             if( net == nullptr )
             {
-                net = new NETINFO_ITEM( m_board, ConvertToNewOverbarNotation( FROM_UTF8( buf ) ),
+                net = new NETINFO_ITEM( m_board, ConvertToNewOverbarNotation( From_UTF8( buf ) ),
                                         netCode );
             }
             else
@@ -2055,12 +2055,12 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
         if( TESTLINE( "Te" ) )          // Text line (or first line for multi line texts)
         {
             ReadDelimitedText( text, line + SZ( "Te" ), sizeof(text) );
-            pcbtxt->SetText( ConvertToNewOverbarNotation( FROM_UTF8( text ) ) );
+            pcbtxt->SetText( ConvertToNewOverbarNotation( From_UTF8( text ) ) );
         }
         else if( TESTLINE( "nl" ) )     // next line of the current text
         {
             ReadDelimitedText( text, line + SZ( "nl" ), sizeof(text) );
-            pcbtxt->SetText( pcbtxt->GetText() + wxChar( '\n' ) +  FROM_UTF8( text ) );
+            pcbtxt->SetText( pcbtxt->GetText() + wxChar( '\n' ) +  From_UTF8( text ) );
         }
         else if( TESTLINE( "Po" ) )
         {
@@ -2299,7 +2299,7 @@ void LEGACY_PLUGIN::loadNETCLASS()
         {
             // e.g. "AddNet "V3.3D"\n"
             ReadDelimitedText( buf, line + SZ( "AddNet" ), sizeof(buf) );
-            netname = ConvertToNewOverbarNotation( FROM_UTF8( buf ) );
+            netname = ConvertToNewOverbarNotation( From_UTF8( buf ) );
 
             m_board->GetDesignSettings().m_NetSettings->m_NetClassPatternAssignments.push_back(
                     {
@@ -2340,12 +2340,12 @@ void LEGACY_PLUGIN::loadNETCLASS()
         else if( TESTLINE( "Name" ) )
         {
             ReadDelimitedText( buf, line + SZ( "Name" ), sizeof(buf) );
-            nc->SetName( FROM_UTF8( buf ) );
+            nc->SetName( From_UTF8( buf ) );
         }
         else if( TESTLINE( "Desc" ) )
         {
             ReadDelimitedText( buf, line + SZ( "Desc" ), sizeof(buf) );
-            nc->SetDescription( FROM_UTF8( buf ) );
+            nc->SetDescription( From_UTF8( buf ) );
         }
         else if( TESTLINE( "$EndNCLASS" ) )
         {
@@ -2695,7 +2695,7 @@ void LEGACY_PLUGIN::loadDIMENSION()
             char  buf[2048];
 
             ReadDelimitedText( buf, line + SZ( "Te" ), sizeof(buf) );
-            dim->SetOverrideText( FROM_UTF8( buf ) );
+            dim->SetOverrideText( From_UTF8( buf ) );
             dim->SetOverrideTextEnabled( true );
             dim->SetUnitsFormat( DIM_UNITS_FORMAT::NO_SUFFIX );
             dim->SetAutoUnits();
@@ -3208,7 +3208,7 @@ void LEGACY_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wx
     // the library.
 
     for( const auto& footprint : m_cache->m_footprints )
-        aFootprintNames.Add( FROM_UTF8( footprint.first.c_str() ) );
+        aFootprintNames.Add( From_UTF8( footprint.first.c_str() ) );
 
     if( !errorMsg.IsEmpty() && !aBestEfforts )
         THROW_IO_ERROR( errorMsg );

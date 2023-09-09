@@ -107,7 +107,7 @@ int CLI::SCH_EXPORT_PLOT_COMMAND::doPerform( KIWAY& aKiway )
     }
 
     std::vector<wxString> pages;
-    wxString              pagesStr = FROM_UTF8( m_argParser.get<std::string>( ARG_PAGES ).c_str() );
+    wxString              pagesStr = From_UTF8( m_argParser.get<std::string>( ARG_PAGES ).c_str() );
     wxStringTokenizer     tokenizer( pagesStr, "," );
     while( tokenizer.HasMoreTokens() )
     {
@@ -123,7 +123,7 @@ int CLI::SCH_EXPORT_PLOT_COMMAND::doPerform( KIWAY& aKiway )
     settings.m_blackAndWhite = m_argParser.get<bool>( ARG_BLACKANDWHITE );
     settings.m_pageSizeSelect = PAGE_SIZE_AUTO;
     settings.m_useBackgroundColor = !m_argParser.get<bool>( ARG_NO_BACKGROUND_COLOR );
-    settings.m_theme = FROM_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
+    settings.m_theme = From_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
     if( m_outputArgExpectsDir )
         settings.m_outputDirectory = m_argOutput;
     else

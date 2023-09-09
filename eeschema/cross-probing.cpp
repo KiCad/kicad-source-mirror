@@ -218,7 +218,7 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         if( !crossProbingSettings.auto_highlight )
             return;
 
-        wxString netName = FROM_UTF8( text );
+        wxString netName = From_UTF8( text );
 
         if( auto sg = Schematic().ConnectionGraph()->FindFirstSubgraphByName( netName ) )
             m_highlightedConn = sg->GetDriverConnection()->Name();
@@ -245,7 +245,7 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     if( strcmp( idcmd, "$PART:" ) != 0 )
         return;
 
-    wxString part_ref = FROM_UTF8( text );
+    wxString part_ref = From_UTF8( text );
 
     /* look for a complement */
     idcmd = strtok( nullptr, " \n\r" );
@@ -262,7 +262,7 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     if( text == nullptr )
         return;
 
-    wxString msg = FROM_UTF8( text );
+    wxString msg = From_UTF8( text );
 
     if( strcmp( idcmd, "$REF:" ) == 0 )
     {

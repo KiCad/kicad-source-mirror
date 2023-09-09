@@ -589,7 +589,7 @@ void PCB_PARSER::parseRenderCache( EDA_TEXT* text )
     T token;
 
     NeedSYMBOLorNUMBER();
-    wxString  cacheText = FROM_UTF8( CurText() );
+    wxString  cacheText = From_UTF8( CurText() );
     EDA_ANGLE cacheAngle( parseDouble( "render cache angle" ), DEGREES_T );
 
     text->SetupRenderCache( cacheText, cacheAngle );
@@ -1430,13 +1430,13 @@ void PCB_PARSER::parseLayer( LAYER* aLayer )
         Expecting( "hide, user defined name, or )" );
     }
 
-    aLayer->m_name    = FROM_UTF8( name.c_str() );
+    aLayer->m_name    = From_UTF8( name.c_str() );
     aLayer->m_type    = LAYER::ParseType( type.c_str() );
     aLayer->m_number  = layer_num;
     aLayer->m_visible = isVisible;
 
     if( !userName.empty() )
-        aLayer->m_userName = FROM_UTF8( userName.c_str() );
+        aLayer->m_userName = From_UTF8( userName.c_str() );
 
     // The canonical name will get reset back to the default for copper layer on the next
     // save.  The user defined name is now a separate optional layer token from the canonical

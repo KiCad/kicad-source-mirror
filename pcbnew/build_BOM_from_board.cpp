@@ -164,7 +164,7 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
 
         msg << curEntry->m_Id << wxT( ";\"" );
         msg << curEntry->m_Ref << wxT( "\";\"" );
-        msg << FROM_UTF8( curEntry->m_FPID.GetLibItemName().c_str() ) << wxT( "\";" );
+        msg << From_UTF8( curEntry->m_FPID.GetLibItemName().c_str() ) << wxT( "\";" );
         msg << curEntry->m_Count << wxT( ";\"" );
         msg << curEntry->m_Val << wxT( "\";;;\n" );
         fprintf( fp_bom, "%s", TO_UTF8( msg ) );

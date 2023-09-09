@@ -649,7 +649,7 @@ bool PCB_EDIT_FRAME::Export_IDF3( BOARD* aPcb, const wxString& aFullFileName,
         if( !idfBoard.WriteFile( aFullFileName, idfUnit, false ) )
         {
             wxString msg;
-            msg << _( "IDF Export Failed:\n" ) << FROM_UTF8( idfBoard.GetError().c_str() );
+            msg << _( "IDF Export Failed:\n" ) << From_UTF8( idfBoard.GetError().c_str() );
             wxMessageBox( msg );
 
             ok = false;
@@ -666,7 +666,7 @@ bool PCB_EDIT_FRAME::Export_IDF3( BOARD* aPcb, const wxString& aFullFileName,
     catch( const std::exception& e )
     {
         wxString msg;
-        msg << _( "IDF Export Failed:\n" ) << FROM_UTF8( e.what() );
+        msg << _( "IDF Export Failed:\n" ) << From_UTF8( e.what() );
         wxMessageBox( msg );
         ok = false;
     }

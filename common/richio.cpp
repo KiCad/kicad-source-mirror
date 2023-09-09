@@ -109,7 +109,7 @@ std::string StrPrintf( const char* format, ... )
 
 wxString SafeReadFile( const wxString& aFilePath, const wxString& aReadType )
 {
-    auto FROM_UTF8_WINE =
+    auto From_UTF8_WINE =
             []( const char* cstring )
             {
                 wxString line = wxString::FromUTF8( cstring );
@@ -142,7 +142,7 @@ wxString SafeReadFile( const wxString& aFilePath, const wxString& aReadType )
     wxString contents;
 
     while( fileReader.ReadLine() )
-        contents += FROM_UTF8_WINE( fileReader.Line() );
+        contents += From_UTF8_WINE( fileReader.Line() );
 
     return contents;
 }

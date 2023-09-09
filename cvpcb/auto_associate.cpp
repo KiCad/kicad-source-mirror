@@ -141,7 +141,7 @@ int CVPCB_MAINFRAME::buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList,
             if( *line == 0 )
                 continue;
 
-            wxString wtext = FROM_UTF8( line );
+            wxString wtext = From_UTF8( line );
             wxString value = GetQuotedText( wtext );
 
             if( value.IsEmpty() )

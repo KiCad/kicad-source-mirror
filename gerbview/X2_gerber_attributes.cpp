@@ -43,7 +43,7 @@
 
 #include <wx/log.h>
 #include <X2_gerber_attributes.h>
-#include <macros.h>
+#include <string_utils.h>
 
 
 X2_ATTRIBUTE::X2_ATTRIBUTE()
@@ -107,14 +107,14 @@ bool X2_ATTRIBUTE::ParseAttribCmd( FILE* aFile, char *aBuffer, int aBuffSize, ch
                 break;
 
             case '*':       // End of block
-                m_Prms.Add( FROM_UTF8( data.c_str() ) );
+                m_Prms.Add( From_UTF8( data.c_str() ) );
                 data.clear();
                 aText++;
                 break;
 
             case ',':       // End of parameter (separator)
                 aText++;
-                m_Prms.Add( FROM_UTF8( data.c_str() ) );
+                m_Prms.Add( From_UTF8( data.c_str() ) );
                 data.clear();
                 break;
 

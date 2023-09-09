@@ -137,7 +137,7 @@ std::string FONTCONFIG::getFamilyStringByLang( FONTCONFIG_PAT& aPat, const wxStr
 
     for( auto const& [key, val] : famStrings )
     {
-        if( isLanguageMatch( aDesiredLang, FROM_UTF8( key.c_str() ) ) )
+        if( isLanguageMatch( aDesiredLang, From_UTF8( key.c_str() ) ) )
         {
             return val;
         }
@@ -297,7 +297,7 @@ void FONTCONFIG::ListFonts( std::vector<std::string>& aFonts, const std::string&
 
                 FONTCONFIG_PAT patHolder{ font };
                 std::string    theFamily =
-                        getFamilyStringByLang( patHolder, FROM_UTF8( aDesiredLang.c_str() ) );
+                        getFamilyStringByLang( patHolder, From_UTF8( aDesiredLang.c_str() ) );
 
 #ifdef __WXMAC__
                 // On Mac (at least) some of the font names are in their own language.  If

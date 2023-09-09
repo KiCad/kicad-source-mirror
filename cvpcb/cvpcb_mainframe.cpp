@@ -705,7 +705,7 @@ void CVPCB_MAINFRAME::refreshAfterSymbolSearch( COMPONENT* aSymbol )
     // selected footprint.
     if( FindFocus() == m_symbolsListBox || FindFocus() == m_librariesListBox )
     {
-        wxString footprintName = FROM_UTF8( aSymbol->GetFPID().Format().c_str() );
+        wxString footprintName = From_UTF8( aSymbol->GetFPID().Format().c_str() );
 
         m_footprintListBox->SetSelection( m_footprintListBox->GetSelection(), false );
 

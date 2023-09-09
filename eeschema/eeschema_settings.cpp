@@ -28,7 +28,7 @@
 #include <eeschema_settings.h>
 #include <layer_ids.h>
 #include <symbol_editor_settings.h>
-#include <macros.h>
+#include <string_utils.h>
 #include <pgm_base.h>
 #include <settings/common_settings.h>
 #include <settings/json_settings_internals.h>

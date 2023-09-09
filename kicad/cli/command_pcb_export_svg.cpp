@@ -25,6 +25,7 @@
 #include "jobs/job_export_pcb_svg.h"
 #include <kiface_base.h>
 #include <layer_ids.h>
+#include <string_utils.h>
 #include <regex>
 #include <wx/crt.h>
 
@@ -102,7 +103,7 @@ int CLI::PCB_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
 
     svgJob->m_filename = m_argInput;
     svgJob->m_outputFile = m_argOutput;
-    svgJob->m_colorTheme = FROM_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
+    svgJob->m_colorTheme = From_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
     svgJob->m_plotDrawingSheet = !m_argParser.get<bool>( ARG_EXCLUDE_DRAWING_SHEET );
     svgJob->SetVarOverrides( m_argDefineVars );
 

@@ -26,7 +26,6 @@
 
 #include <string_utils.h>
 #include <locale_io.h>
-#include <macros.h>
 #include <math/vector2d.h>
 #include <drawing_sheet/ds_painter.h>
 #include <drawing_sheet/ds_data_item.h>
@@ -34,6 +33,7 @@
 #include <drawing_sheet/drawing_sheet_lexer.h>
 #include <drawing_sheet/ds_file_versions.h>
 #include <font/font.h>
+#include <string_utils.h>
 
 #include <wx/base64.h>
 #include <wx/msgdlg.h>
@@ -125,7 +125,7 @@ public:
 
     ~DS_DATA_MODEL_STRINGIO()
     {
-        *m_output = FROM_UTF8( m_writer->GetString().c_str() );
+        *m_output = From_UTF8( m_writer->GetString().c_str() );
         delete m_writer;
     }
 

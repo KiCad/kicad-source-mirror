@@ -68,7 +68,7 @@ typedef boost::property_tree::ptree_error   PTREE_ERROR;
  *
  * static const KEYWORD empty_keywords[1] = {};
  *
- * DSNLEXER   lexer( empty_keywords, 0, fp, wxString( FROM_UTF8( argv[1] ) ) );
+ * DSNLEXER   lexer( empty_keywords, 0, fp, wxString( From_UTF8( argv[1] ) ) );
  *
  * try
  * {

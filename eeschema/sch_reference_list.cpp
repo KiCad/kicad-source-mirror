@@ -831,7 +831,7 @@ void SCH_REFERENCE::Annotate()
     else
         m_ref = TO_UTF8( GetRef() << GetRefNumber() );
 
-    m_rootSymbol->SetRef( &m_sheetPath, FROM_UTF8( m_ref.c_str() ) );
+    m_rootSymbol->SetRef( &m_sheetPath, From_UTF8( m_ref.c_str() ) );
     m_rootSymbol->SetUnit( m_unit );
     m_rootSymbol->SetUnitSelection( &m_sheetPath, m_unit );
 }
@@ -952,3 +952,19 @@ wxString SCH_REFERENCE_LIST::Shorthand( std::vector<SCH_REFERENCE> aList,
 
     return retVal;
 }
+
+
+#if defined( DEBUG )
+void SCH_REFERENCE_LIST::Show( const char* aPrefix )
+{
+    printf( "%s\n", aPrefix );
+
+    for( unsigned i = 0; i < m_flatList.size(); ++i )
+    {
+        SCH_REFERENCE& schref = m_flatList[i];
+
+        printf( " [%-2d] ref:%-8s num:%-3d lib_part:%s\n", i, schref.m_ref.ToStdString().c_str(),
+                schref.m_numRef, TO_UTF8( schref.GetLibPart()->GetName() ) );
+    }
+}
+#endif

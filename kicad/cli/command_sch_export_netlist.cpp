@@ -23,6 +23,7 @@
 #include "jobs/job_export_sch_netlist.h"
 #include <kiface_base.h>
 #include <layer_ids.h>
+#include <string_utils.h>
 #include <wx/crt.h>
 
 #include <macros.h>
@@ -56,7 +57,7 @@ int CLI::SCH_EXPORT_NETLIST_COMMAND::doPerform( KIWAY& aKiway )
         return EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
 
-    wxString format = FROM_UTF8( m_argParser.get<std::string>( ARG_FORMAT ).c_str() );
+    wxString format = From_UTF8( m_argParser.get<std::string>( ARG_FORMAT ).c_str() );
     if( format == "kicadsexpr" )
     {
         netJob->format = JOB_EXPORT_SCH_NETLIST::FORMAT::KICADSEXPR;

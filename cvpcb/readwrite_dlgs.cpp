@@ -28,7 +28,7 @@
 #include <dialogs/html_message_box.h>
 #include <kiway.h>
 #include <lib_id.h>
-#include <macros.h>
+#include <string_utils.h>
 
 #include <cvpcb_mainframe.h>
 #include <fp_conflict_assignment_selector.h>
@@ -268,7 +268,7 @@ bool CVPCB_MAINFRAME::readNetListAndFpFiles( const std::string& aNetlist )
         msg = formatSymbolDesc( m_symbolsListBox->GetCount() + 1,
                                 component->GetReference(),
                                 component->GetValue(),
-                                FROM_UTF8( component->GetFPID().Format().c_str() ) );
+                                From_UTF8( component->GetFPID().Format().c_str() ) );
 
         m_symbolsListBox->AppendLine( msg );
 

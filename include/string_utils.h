@@ -365,6 +365,17 @@ std::string UIDouble2Str( double aValue );
 std::string FormatDouble2Str( double aValue );
 
 /**
+ * Convert a wxString to a UTF8 encoded C string for all wxWidgets build modes.
+ *
+ * wxstring is a wxString, not a wxT() or _().  The scope of the return value
+ * is very limited and volatile, but can be used with printf() style functions well.
+ *
+ * @note Trying to convert it to a function is tricky because of the type of the
+ *       parameter!
+ */
+#define TO_UTF8( wxstring ) ( (const char*) ( wxstring ).utf8_str() )
+
+/**
  * Convert an expected UTF8 encoded std::string to a wxString.
  * If fails, tray to convert using current locale
  * If still fails, return the initial string (can be already a converted string)

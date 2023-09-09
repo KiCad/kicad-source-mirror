@@ -51,7 +51,7 @@ void SCH_EDITOR_CONTROL::AssignFootprints( const std::string& aChangedSetOfRefer
 
     sheets.GetSymbols( refs, false );
 
-    DSNLEXER lexer( aChangedSetOfReferences, FROM_UTF8( __func__ ) );
+    DSNLEXER lexer( aChangedSetOfReferences, From_UTF8( __func__ ) );
     PTREE    doc;
 
     try
@@ -150,7 +150,7 @@ bool SCH_EDITOR_CONTROL::processCmpToFootprintLinkFile( const wxString& aFullFil
 
     while( cmpFileReader.ReadLine() )
     {
-        buffer = FROM_UTF8( cmpFileReader.Line() );
+        buffer = From_UTF8( cmpFileReader.Line() );
 
         if( !buffer.StartsWith( wxT( "BeginCmp" ) ) )
             continue;
@@ -161,7 +161,7 @@ bool SCH_EDITOR_CONTROL::processCmpToFootprintLinkFile( const wxString& aFullFil
 
         while( cmpFileReader.ReadLine() )
         {
-            buffer = FROM_UTF8( cmpFileReader.Line() );
+            buffer = From_UTF8( cmpFileReader.Line() );
 
             if( buffer.StartsWith( wxT( "EndCmp" ) ) )
                 break;

@@ -19,7 +19,7 @@
 
 #include <algorithm>
 #include <bitmaps.h>
-#include <macros.h>
+#include <string_utils.h>
 #include <dialogs/eda_reorderable_list_dialog.h>
 
 

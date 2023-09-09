@@ -17,8 +17,9 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <string>
 #include <macros.h>
+#include <string>
+#include <string_utils.h>
 
 #include "markdown.h"
 #include "html.h"
@@ -43,7 +44,7 @@ void ConvertMarkdown2Html( const wxString& aMarkdownInput, wxString& aHtmlOutput
     sd_markdown_free( markdown );
 
     std::string out( (char*)ob->data, ob->size );
-    aHtmlOutput = FROM_UTF8( out.data() );
+    aHtmlOutput = From_UTF8( out.data() );
 
     /* cleanup */
     bufrelease( ob );

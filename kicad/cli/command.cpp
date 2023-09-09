@@ -49,7 +49,7 @@ void CLI::COMMAND::PrintHelp()
 {
     std::stringstream ss;
     ss << m_argParser;
-    wxPrintf( FROM_UTF8( ss.str().c_str() ) );
+    wxPrintf( From_UTF8( ss.str().c_str() ) );
 }
 
 
@@ -64,17 +64,17 @@ int CLI::COMMAND::Perform( KIWAY& aKiway )
 
     if ( m_hasInputArg )
     {
-        m_argInput = FROM_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
+        m_argInput = From_UTF8( m_argParser.get<std::string>( ARG_INPUT ).c_str() );
     }
 
     if( m_hasOutputArg )
     {
-        m_argOutput = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
+        m_argOutput = From_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
     }
 
     if( m_hasDrawingSheetArg )
     {
-        m_argDrawingSheet = FROM_UTF8( m_argParser.get<std::string>( ARG_DRAWING_SHEET ).c_str() );
+        m_argDrawingSheet = From_UTF8( m_argParser.get<std::string>( ARG_DRAWING_SHEET ).c_str() );
     }
 
 
@@ -84,7 +84,7 @@ int CLI::COMMAND::Perform( KIWAY& aKiway )
 
         for( const std::string& def : defines )
         {
-            wxString      str = FROM_UTF8( def.c_str() );
+            wxString      str = From_UTF8( def.c_str() );
             wxArrayString bits;
             wxStringSplit( str, bits, wxS( '=' ) );
 

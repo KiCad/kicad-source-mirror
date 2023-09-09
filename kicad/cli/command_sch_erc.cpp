@@ -23,6 +23,7 @@
 #include "jobs/job_sch_erc.h"
 #include <kiface_base.h>
 #include <layer_ids.h>
+#include <string_utils.h>
 #include <wx/crt.h>
 
 #include <macros.h>
@@ -107,7 +108,7 @@ int CLI::SCH_ERC_COMMAND::doPerform( KIWAY& aKiway )
     {
         ercJob->m_severity |= RPT_SEVERITY_EXCLUSION;
     }
-    wxString units = FROM_UTF8( m_argParser.get<std::string>( ARG_UNITS ).c_str() );
+    wxString units = From_UTF8( m_argParser.get<std::string>( ARG_UNITS ).c_str() );
 
     if( units == wxS( "mm" ) )
     {
@@ -127,7 +128,7 @@ int CLI::SCH_ERC_COMMAND::doPerform( KIWAY& aKiway )
         return EXIT_CODES::ERR_ARGS;
     }
 
-    wxString format = FROM_UTF8( m_argParser.get<std::string>( ARG_FORMAT ).c_str() );
+    wxString format = From_UTF8( m_argParser.get<std::string>( ARG_FORMAT ).c_str() );
     if( format == "report" )
     {
         ercJob->m_format = JOB_SCH_ERC::OUTPUT_FORMAT::REPORT;

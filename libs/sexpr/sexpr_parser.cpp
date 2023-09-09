@@ -28,7 +28,7 @@
 #include <wx/file.h>
 #include <wx/ffile.h>
 
-#include <macros.h>
+#include <string_utils.h>
 
 namespace SEXPR
 {
@@ -62,7 +62,7 @@ namespace SEXPR
 
         // the filename is not always a UTF7 string, so do not use ifstream
         // that do not work with unicode chars.
-        wxString fname( FROM_UTF8( aFileName.c_str() ) );
+        wxString fname( From_UTF8( aFileName.c_str() ) );
         wxFFile file( fname, "rb" );
         size_t length = file.Length();
 

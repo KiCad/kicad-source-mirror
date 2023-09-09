@@ -37,6 +37,7 @@
 #include <schematic.h>
 #include <sch_base_frame.h>
 #include <sch_edit_frame.h>
+#include <string_utils.h>
 
 #include "sch_view.h"
 

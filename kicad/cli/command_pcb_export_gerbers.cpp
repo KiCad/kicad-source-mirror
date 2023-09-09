@@ -23,6 +23,7 @@
 #include "jobs/job_export_pcb_gerbers.h"
 #include <kiface_base.h>
 #include <layer_ids.h>
+#include <string_utils.h>
 #include <wx/crt.h>
 
 #include <macros.h>
@@ -72,7 +73,7 @@ int CLI::PCB_EXPORT_GERBERS_COMMAND::doPerform( KIWAY& aKiway )
     if( exitCode != EXIT_CODES::OK )
         return exitCode;
 
-    wxString layers = FROM_UTF8( m_argParser.get<std::string>( ARG_COMMON_LAYERS ).c_str() );
+    wxString layers = From_UTF8( m_argParser.get<std::string>( ARG_COMMON_LAYERS ).c_str() );
     gerberJob->m_layersIncludeOnAll =
             convertLayerStringList( layers, gerberJob->m_layersIncludeOnAllSet );
     gerberJob->m_useBoardPlotParams = m_argParser.get<bool>( ARG_USE_BOARD_PLOT_PARAMS );

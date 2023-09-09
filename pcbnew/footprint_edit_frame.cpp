@@ -936,7 +936,7 @@ void FOOTPRINT_EDIT_FRAME::UpdateTitle()
         if( IsContentModified() )
             title = wxT( "*" );
 
-        title += FROM_UTF8( footprint->GetFPID().Format().c_str() );
+        title += From_UTF8( footprint->GetFPID().Format().c_str() );
 
         if( !writable )
             title += wxS( " " ) + _( "[Read Only]" );
@@ -947,7 +947,7 @@ void FOOTPRINT_EDIT_FRAME::UpdateTitle()
         if( IsContentModified() )
             title = wxT( "*" );
 
-        title += FROM_UTF8( footprint->GetFPID().GetLibItemName().c_str() );
+        title += From_UTF8( footprint->GetFPID().GetLibItemName().c_str() );
         title += wxS( " " ) + _( "[Unsaved]" );
     }
     else

@@ -23,6 +23,7 @@
 #include "jobs/job_fp_export_svg.h"
 #include <kiface_base.h>
 #include <layer_ids.h>
+#include <string_utils.h>
 #include <wx/crt.h>
 #include <wx/dir.h>
 
@@ -65,7 +66,7 @@ int CLI::FP_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
     svgJob->m_libraryPath = m_argInput;
     svgJob->m_outputDirectory = m_argOutput;
     svgJob->m_blackAndWhite = m_argParser.get<bool>( ARG_BLACKANDWHITE );
-    svgJob->m_footprint = FROM_UTF8( m_argParser.get<std::string>( ARG_FOOTPRINT ).c_str() );
+    svgJob->m_footprint = From_UTF8( m_argParser.get<std::string>( ARG_FOOTPRINT ).c_str() );
     svgJob->SetVarOverrides( m_argDefineVars );
 
     if( !wxDir::Exists( svgJob->m_libraryPath ) )
@@ -74,7 +75,7 @@ int CLI::FP_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
         return EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
 
-    svgJob->m_colorTheme = FROM_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
+    svgJob->m_colorTheme = From_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
 
     if( m_selectedLayers.count() > 0 )
         svgJob->m_printMaskLayer = m_selectedLayers;

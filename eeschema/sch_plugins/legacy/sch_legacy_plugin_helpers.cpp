@@ -22,7 +22,7 @@
 #include <wx/intl.h>
 #include <wx/string.h>
 
-#include <macros.h>
+#include <string_utils.h>
 #include <richio.h>
 
 #include <config.h> // contains strncasecmp for msvc
@@ -216,7 +216,7 @@ void parseUnquotedString( wxString& aString, LINE_READER& aReader, const char* a
     while( *tmp && !isspace( *tmp ) )
         utf8 += *tmp++;
 
-    aString = FROM_UTF8( utf8.c_str() );
+    aString = From_UTF8( utf8.c_str() );
 
     if( aString.IsEmpty() && !aCanBeEmpty )
         SCH_PARSE_ERROR( _( "expected unquoted string" ), aReader, aCurrentToken );
@@ -293,7 +293,7 @@ void parseQuotedString( wxString& aString, LINE_READER& aReader, const char* aCu
         tmp++;
     }
 
-    aString = FROM_UTF8( utf8.c_str() );
+    aString = From_UTF8( utf8.c_str() );
 
     if( aString.IsEmpty() && !aCanBeEmpty )
         SCH_PARSE_ERROR( "expected quoted string", aReader, aCurrentToken );

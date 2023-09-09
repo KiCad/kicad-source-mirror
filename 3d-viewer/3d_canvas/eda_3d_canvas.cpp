@@ -227,10 +227,10 @@ bool  EDA_3D_CANVAS::initializeOpenGL()
     else
     {
         wxLogTrace( m_logTrace, wxT( "EDA_3D_CANVAS::initializeOpenGL Using GLEW version %s" ),
-                    FROM_UTF8( (char*) glewGetString( GLEW_VERSION ) ) );
+                    From_UTF8( (char*) glewGetString( GLEW_VERSION ) ) );
     }
 
-    wxString version = FROM_UTF8( (char *) glGetString( GL_VERSION ) );
+    wxString version = From_UTF8( (char *) glGetString( GL_VERSION ) );
 
     wxLogTrace( m_logTrace, wxT( "EDA_3D_CANVAS::%s OpenGL version string %s." ),
                 __WXFUNCTION__, version );

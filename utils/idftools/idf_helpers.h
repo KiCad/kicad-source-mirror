@@ -45,7 +45,7 @@
  *
  * NOTE: Taken from KiCad include/macros.h
  */
-static inline wxString FROM_UTF8( const char* cstring )
+static inline wxString From_UTF8( const char* cstring )
 {
     wxString line = wxString::FromUTF8( cstring );
 

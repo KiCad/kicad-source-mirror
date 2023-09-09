@@ -24,7 +24,7 @@
  */
 
 #include "spice_circuit_model.h"
-#include <macros.h>     // for TO_UTF8 def
+#include <string_utils.h>
 #include <wx/regex.h>
 #include <wx/tokenzr.h>
 #include <locale_io.h>

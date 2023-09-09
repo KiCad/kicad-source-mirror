@@ -93,7 +93,7 @@ static void pcbnewRunPythonMethodWithReturnedString( const char* aMethodName, wx
             if( temp_bytes != nullptr )
             {
                 str_res = PyBytes_AS_STRING( temp_bytes );
-                aNames = FROM_UTF8( str_res );
+                aNames = From_UTF8( str_res );
                 Py_DECREF( temp_bytes );
             }
             else

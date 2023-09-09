@@ -162,11 +162,11 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
                                                             allowUtf8, true );
 
         // Add component footprint info:
-        wxString fp_info = FROM_UTF8( footprint->GetFPID().GetLibItemName().c_str() );
+        wxString fp_info = From_UTF8( footprint->GetFPID().GetLibItemName().c_str() );
         pnpAttrib.m_Footprint = ConvertNotAllowedCharsInGerber( fp_info, allowUtf8, true );
 
         // Add footprint lib name:
-        fp_info = FROM_UTF8( footprint->GetFPID().GetLibNickname().c_str() );
+        fp_info = From_UTF8( footprint->GetFPID().GetLibNickname().c_str() );
         pnpAttrib.m_LibraryName = ConvertNotAllowedCharsInGerber( fp_info, allowUtf8, true );
 
         metadata.m_NetlistMetadata.SetExtraData( pnpAttrib.FormatCmpPnPMetadata() );

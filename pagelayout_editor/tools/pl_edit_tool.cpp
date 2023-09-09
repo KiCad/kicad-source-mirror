@@ -34,6 +34,7 @@
 #include <confirm.h>
 #include <eda_item.h>
 #include <macros.h>
+#include <string_utils.h>
 #include <view/view.h>
 #include <math/util.h>      // for KiROUND
 

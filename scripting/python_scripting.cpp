@@ -366,7 +366,7 @@ static void RunPythonMethodWithReturnedString( const char* aMethodName, wxString
             if( temp_bytes != nullptr )
             {
                 str_res = PyBytes_AS_STRING( temp_bytes );
-                aNames = FROM_UTF8( str_res );
+                aNames = From_UTF8( str_res );
                 Py_DECREF( temp_bytes );
             }
             else
@@ -452,7 +452,7 @@ wxString PyStringToWx( PyObject* aString )
     if( temp_bytes != nullptr )
     {
         str_res = PyBytes_AS_STRING( temp_bytes );
-        ret = FROM_UTF8( str_res );
+        ret = From_UTF8( str_res );
         Py_DECREF( temp_bytes );
     }
     else
@@ -485,7 +485,7 @@ wxArrayString PyArrayStringToWx( PyObject* aArrayString )
             if( temp_bytes != nullptr )
             {
                 str_res = PyBytes_AS_STRING( temp_bytes );
-                ret.Add( FROM_UTF8( str_res ), 1 );
+                ret.Add( From_UTF8( str_res ), 1 );
                 Py_DECREF( temp_bytes );
             }
             else

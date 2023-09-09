@@ -30,6 +30,7 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <macros.h>
 #include <math/util.h>      // for KiROUND
+#include <string_utils.h>
 #include <trigo.h>
 
 #include <plotters/plotters_pslike.h>

@@ -23,6 +23,7 @@
 #include "jobs/job_export_pcb_pdf.h"
 #include <kiface_base.h>
 #include <layer_ids.h>
+#include <string_utils.h>
 #include <wx/crt.h>
 
 #include <macros.h>
@@ -111,7 +112,7 @@ int CLI::PCB_EXPORT_PDF_COMMAND::doPerform( KIWAY& aKiway )
 
     pdfJob->m_mirror = m_argParser.get<bool>( ARG_MIRROR );
     pdfJob->m_blackAndWhite = m_argParser.get<bool>( ARG_BLACKANDWHITE );
-    pdfJob->m_colorTheme = FROM_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
+    pdfJob->m_colorTheme = From_UTF8( m_argParser.get<std::string>( ARG_THEME ).c_str() );
     pdfJob->m_negative = m_argParser.get<bool>( ARG_NEGATIVE );
 
     pdfJob->m_drillShapeOption = m_argParser.get<int>( ARG_DRILL_SHAPE_OPTION );

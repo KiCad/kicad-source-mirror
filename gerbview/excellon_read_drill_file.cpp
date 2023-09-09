@@ -1045,7 +1045,7 @@ bool EXCELLON_IMAGE::Execute_EXCELLON_G_Command( char*& text )
 
     case DRILL_G_UNKNOWN:
     default:
-        AddMessageToList( wxString::Format( _( "Unknown Excellon G Code: &lt;%s&gt;" ), FROM_UTF8(gcmd) ) );
+        AddMessageToList( wxString::Format( _( "Unknown Excellon G Code: &lt;%s&gt;" ), From_UTF8(gcmd) ) );
         while( *text )
             text++;
         return false;

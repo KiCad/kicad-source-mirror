@@ -116,7 +116,7 @@ COMPONENT* LEGACY_NETLIST_READER::loadComponent( char* aText )
                            m_lineReader->Length() );
     }
 
-    KIID_PATH path( FROM_UTF8( text ) );
+    KIID_PATH path( From_UTF8( text ) );
 
     // Read footprint name (second word)
     if( ( text = strtok( nullptr, " ()\t\n" ) ) == nullptr )
@@ -126,7 +126,7 @@ COMPONENT* LEGACY_NETLIST_READER::loadComponent( char* aText )
                            m_lineReader->Length() );
     }
 
-    footprintName = FROM_UTF8( text );
+    footprintName = From_UTF8( text );
 
     // The footprint name will have to be looked up in the *.cmp file.
     if( footprintName == wxT( "$noname" ) )
@@ -140,7 +140,7 @@ COMPONENT* LEGACY_NETLIST_READER::loadComponent( char* aText )
                            m_lineReader->Length() );
     }
 
-    reference = FROM_UTF8( text );
+    reference = From_UTF8( text );
 
     // Read schematic value (forth word)
     if( ( text = strtok( nullptr, " ()\t\n" ) ) == nullptr )
@@ -150,13 +150,13 @@ COMPONENT* LEGACY_NETLIST_READER::loadComponent( char* aText )
                            m_lineReader->Length() );
     }
 
-    value = FROM_UTF8( text );
+    value = From_UTF8( text );
 
     // Read component name (fifth word) {Lib=C}
     // This is an optional field (a comment), which does not always exists
     if( ( text = strtok( nullptr, " ()\t\n" ) ) != nullptr )
     {
-        name = FROM_UTF8( text ).AfterFirst( wxChar( '=' ) ).BeforeLast( wxChar( '}' ) );
+        name = From_UTF8( text ).AfterFirst( wxChar( '=' ) ).BeforeLast( wxChar( '}' ) );
     }
 
     LIB_ID fpid;
@@ -187,7 +187,7 @@ void LEGACY_NETLIST_READER::loadNet( char* aText, COMPONENT* aComponent )
                            m_lineReader->Length() );
     }
 
-    wxString pinName = FROM_UTF8( p );
+    wxString pinName = From_UTF8( p );
 
     if( ( p = strtok( nullptr, " ()\t\n" ) ) == nullptr )
     {
@@ -196,7 +196,7 @@ void LEGACY_NETLIST_READER::loadNet( char* aText, COMPONENT* aComponent )
                            m_lineReader->Length() );
     }
 
-    wxString netName = FROM_UTF8( p );
+    wxString netName = From_UTF8( p );
 
     if( (char) netName[0] == '?' )       // ? indicates no net connected to pin.
         netName = wxEmptyString;
@@ -229,7 +229,7 @@ void LEGACY_NETLIST_READER::loadFootprintFilters()
 
         if( strncasecmp( line, "$component", 10 ) == 0 ) // New component reference found
         {
-            cmpRef = FROM_UTF8( line + 11 );
+            cmpRef = From_UTF8( line + 11 );
             cmpRef.Trim( true );
             cmpRef.Trim( false );
 
@@ -248,7 +248,7 @@ void LEGACY_NETLIST_READER::loadFootprintFilters()
         else
         {
             // Add new filter to list
-            wxString fp = FROM_UTF8( line + 1 );
+            wxString fp = From_UTF8( line + 1 );
             fp.Trim( false );
             fp.Trim( true );
             filters.Add( fp );

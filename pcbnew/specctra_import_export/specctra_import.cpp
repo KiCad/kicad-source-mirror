@@ -158,7 +158,7 @@ PCB_TRACK* SPECCTRA_DB::makeTRACK( WIRE* wire, PATH* aPath, int aPointIndex, int
     if( layerNdx == -1 )
     {
         THROW_IO_ERROR( wxString::Format( _( "Session file uses invalid layer id '%s'." ),
-                                          FROM_UTF8( aPath->layer_id.c_str() ) ) );
+                                          From_UTF8( aPath->layer_id.c_str() ) ) );
     }
 
     PCB_TRACK* track = new PCB_TRACK( m_sessionBoard );
@@ -283,7 +283,7 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA*aVia, PADSTACK* aPadstack, const POINT& 
             int layerNdx = findLayerName( circle->layer_id );
             if( layerNdx == -1 )
             {
-                wxString layerName = FROM_UTF8( circle->layer_id.c_str() );
+                wxString layerName = From_UTF8( circle->layer_id.c_str() );
                 THROW_IO_ERROR( wxString::Format( _( "Session file uses invalid layer id '%s'" ),
                                                   layerName ) );
             }
@@ -392,7 +392,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
             {
                 PLACE* place = &places[i];  // '&' even though places[] holds a pointer!
 
-                wxString   reference = FROM_UTF8( place->m_component_id.c_str() );
+                wxString   reference = From_UTF8( place->m_component_id.c_str() );
                 FOOTPRINT* footprint = aBoard->FindFootprintByReference( reference );
 
                 if( !footprint )
@@ -455,7 +455,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
         // page 143 of spec says wire's net_id is optional
         if( net->net_id.size() )
         {
-            wxString netName = FROM_UTF8( net->net_id.c_str() );
+            wxString netName = From_UTF8( net->net_id.c_str() );
             NETINFO_ITEM* netinfo = aBoard->FindNet( netName );
 
             if( netinfo )
@@ -476,7 +476,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
                  * back in as session here.  We kept our own zones in the BOARD, so ignore this
                  * so called 'wire'.
 
-                wxString netId = FROM_UTF8( wire->net_id.c_str() );
+                wxString netId = From_UTF8( wire->net_id.c_str() );
                 THROW_IO_ERROR( wxString::Format( _( "Unsupported wire shape: '%s' for net: '%s'" ),
                                                     DLEX::GetTokenString(shape).GetData(),
                                                     netId.GetData() ) );
@@ -504,7 +504,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
             // page 144 of spec says wire_via's net_id is optional
             if( net->net_id.size() )
             {
-                wxString netName = FROM_UTF8( net->net_id.c_str() );
+                wxString netName = From_UTF8( net->net_id.c_str() );
                 NETINFO_ITEM* netvia = aBoard->FindNet( netName );
 
                 if( netvia )
@@ -524,7 +524,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
                 // in in the session library, even though they may be actually used in the
                 // pre-routed, protected wire_vias. So until that is fixed, create the padstack
                 // from its name as a work around.
-                wxString psid( FROM_UTF8( wire_via->GetPadstackId().c_str() ) );
+                wxString psid( From_UTF8( wire_via->GetPadstackId().c_str() ) );
 
                 THROW_IO_ERROR( wxString::Format( _( "A wire_via refers to missing padstack '%s'." ),
                                                   psid ) );

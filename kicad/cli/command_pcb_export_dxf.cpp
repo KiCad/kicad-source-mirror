@@ -23,6 +23,7 @@
 #include "jobs/job_export_pcb_dxf.h"
 #include <kiface_base.h>
 #include <layer_ids.h>
+#include <string_utils.h>
 #include <wx/crt.h>
 
 #include <macros.h>
@@ -92,7 +93,7 @@ int CLI::PCB_EXPORT_DXF_COMMAND::doPerform( KIWAY& aKiway )
     dxfJob->m_plotGraphicItemsUsingContours = m_argParser.get<bool>( ARG_USE_CONTOURS );
     dxfJob->m_plotBorderTitleBlocks = m_argParser.get<bool>( ARG_INCLUDE_BORDER_TITLE );
 
-    wxString units = FROM_UTF8( m_argParser.get<std::string>( ARG_OUTPUT_UNITS ).c_str() );
+    wxString units = From_UTF8( m_argParser.get<std::string>( ARG_OUTPUT_UNITS ).c_str() );
 
     if( units == wxS( "mm" ) )
     {

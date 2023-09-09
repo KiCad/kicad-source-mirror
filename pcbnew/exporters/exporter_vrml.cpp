@@ -1301,7 +1301,7 @@ bool EXPORTER_PCB_VRML::ExportVRML_File( PROJECT* aProject, wxString *aMessages,
     catch( const std::exception& e )
     {
         if( aMessages )
-            *aMessages << _( "VRML Export Failed:\n" ) << FROM_UTF8( e.what() );
+            *aMessages << _( "VRML Export Failed:\n" ) << From_UTF8( e.what() );
 
         success = false;
     }

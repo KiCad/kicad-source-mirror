@@ -23,7 +23,7 @@
  */
 
 #include <netlist_lexer.h>  // netlist_lexer is common to Eeschema and Pcbnew
-#include <macros.h>
+#include <string_utils.h>
 #include <nlohmann/json.hpp>
 
 #include "pcb_netlist.h"
@@ -203,13 +203,13 @@ void KICAD_NETLIST_PARSER::parseNet()
         {
         case T_code:
             NeedSYMBOLorNUMBER();
-            code = FROM_UTF8( CurText() );
+            code = From_UTF8( CurText() );
             NeedRIGHT();
             break;
 
         case T_name:
             NeedSYMBOLorNUMBER();
-            name = FROM_UTF8( CurText() );
+            name = From_UTF8( CurText() );
             NeedRIGHT();
             break;
 
@@ -229,25 +229,25 @@ void KICAD_NETLIST_PARSER::parseNet()
                 {
                 case T_ref:
                     NeedSYMBOLorNUMBER();
-                    reference = FROM_UTF8( CurText() );
+                    reference = From_UTF8( CurText() );
                     NeedRIGHT();
                     break;
 
                 case T_pin:
                     NeedSYMBOLorNUMBER();
-                    pin_number = FROM_UTF8( CurText() );
+                    pin_number = From_UTF8( CurText() );
                     NeedRIGHT();
                     break;
 
                 case T_pinfunction:
                     NeedSYMBOLorNUMBER();
-                    pin_function = FROM_UTF8( CurText() );
+                    pin_function = From_UTF8( CurText() );
                     NeedRIGHT();
                     break;
 
                 case T_pintype:
                     NeedSYMBOLorNUMBER();
-                    pin_type = FROM_UTF8( CurText() );
+                    pin_type = From_UTF8( CurText() );
                     NeedRIGHT();
                     break;
 
@@ -323,13 +323,13 @@ void KICAD_NETLIST_PARSER::parseComponent()
         {
         case T_ref:
             NeedSYMBOLorNUMBER();
-            ref = FROM_UTF8( CurText() );
+            ref = From_UTF8( CurText() );
             NeedRIGHT();
             break;
 
         case T_value:
             NeedSYMBOLorNUMBER();
-            value = FROM_UTF8( CurText() );
+            value = From_UTF8( CurText() );
             NeedRIGHT();
             break;
 
@@ -349,13 +349,13 @@ void KICAD_NETLIST_PARSER::parseComponent()
                 if( token == T_lib )
                 {
                     NeedSYMBOLorNUMBER();
-                    library = FROM_UTF8( CurText() );
+                    library = From_UTF8( CurText() );
                     NeedRIGHT();
                 }
                 else if( token == T_part )
                 {
                     NeedSYMBOLorNUMBER();
-                    name = FROM_UTF8( CurText() );
+                    name = From_UTF8( CurText() );
                     NeedRIGHT();
                 }
                 else if( token == T_description )
@@ -383,13 +383,13 @@ void KICAD_NETLIST_PARSER::parseComponent()
                 if( token == T_name )
                 {
                     NeedSYMBOLorNUMBER();
-                    propName = FROM_UTF8( CurText() );
+                    propName = From_UTF8( CurText() );
                     NeedRIGHT();
                 }
                 else if( token == T_value )
                 {
                     NeedSYMBOLorNUMBER();
-                    propValue = FROM_UTF8( CurText() );
+                    propValue = From_UTF8( CurText() );
                     NeedRIGHT();
                 }
                 else
@@ -424,7 +424,7 @@ void KICAD_NETLIST_PARSER::parseComponent()
                         if( token == T_name )
                         {
                             NeedSYMBOLorNUMBER();
-                            fieldName = FROM_UTF8( CurText() );
+                            fieldName = From_UTF8( CurText() );
                             NeedRIGHT();
                         }
                         else if( token == T_STRING )
@@ -451,7 +451,7 @@ void KICAD_NETLIST_PARSER::parseComponent()
             }
 
             NeedSYMBOLorNUMBER();
-            path = KIID_PATH( FROM_UTF8( CurText() ) );
+            path = KIID_PATH( From_UTF8( CurText() ) );
             NeedRIGHT();
             NeedRIGHT();
             break;
@@ -462,7 +462,7 @@ void KICAD_NETLIST_PARSER::parseComponent()
                 if( token == T_RIGHT )
                     break;
 
-                uuids.emplace_back( FROM_UTF8( CurText() ) );
+                uuids.emplace_back( From_UTF8( CurText() ) );
             }
 
             break;
@@ -531,13 +531,13 @@ void KICAD_NETLIST_PARSER::parseLibPartList()
         {
         case T_lib:
             NeedSYMBOLorNUMBER();
-            libName = FROM_UTF8( CurText() );
+            libName = From_UTF8( CurText() );
             NeedRIGHT();
             break;
 
         case T_part:
             NeedSYMBOLorNUMBER();
-            libPartName = FROM_UTF8( CurText() );
+            libPartName = From_UTF8( CurText() );
             NeedRIGHT();
             break;
 
@@ -552,7 +552,7 @@ void KICAD_NETLIST_PARSER::parseLibPartList()
                     Expecting( T_fp );
 
                 NeedSYMBOLorNUMBER();
-                footprintFilters.Add( FROM_UTF8( CurText() ) );
+                footprintFilters.Add( From_UTF8( CurText() ) );
                 NeedRIGHT();
             }
             break;
@@ -567,7 +567,7 @@ void KICAD_NETLIST_PARSER::parseLibPartList()
                     Expecting( T_alias );
 
                 NeedSYMBOLorNUMBER();
-                aliases.Add( FROM_UTF8( CurText() ) );
+                aliases.Add( From_UTF8( CurText() ) );
                 NeedRIGHT();
             }
             break;

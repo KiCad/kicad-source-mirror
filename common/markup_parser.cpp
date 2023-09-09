@@ -21,7 +21,7 @@
 
 #include <markup_parser.h>
 #include <sstream>
-#include "macros.h"
+#include <string_utils.h>
 
 using namespace MARKUP;
 
@@ -65,7 +65,7 @@ std::string NODE::typeString() const
 
 wxString NODE::asWxString() const
 {
-    return FROM_UTF8( string().c_str() );
+    return From_UTF8( string().c_str() );
 }
 
 

@@ -24,7 +24,7 @@
 #include <board_design_settings.h>
 #include <charconv>
 #include <layer_ids.h>
-#include <macros.h>
+#include <string_utils.h>
 #include <math/util.h> // for KiROUND
 #include <pcb_plot_params.h>
 #include <pcb_plot_params_parser.h>
@@ -644,7 +644,7 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
 
         case T_outputdirectory:
             NeedSYMBOLorNUMBER();   // a dir name can be like a number
-            aPcbPlotParams->m_outputDirectory = FROM_UTF8( CurText() );
+            aPcbPlotParams->m_outputDirectory = From_UTF8( CurText() );
             break;
 
         default:

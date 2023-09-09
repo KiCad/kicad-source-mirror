@@ -33,6 +33,7 @@
 #include <gerber_file_image.h>
 #include <core/ignore.h>
 #include <macros.h>
+#include <string_utils.h>
 #include <X2_gerber_attributes.h>
 #include <gbr_metadata.h>
 #include <wx/log.h>
@@ -1032,7 +1033,7 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
         else if( !isdigit(*aText)  )     // Ill. symbol
         {
             msg.Printf( wxT( "RS274X: Aperture Macro \"%s\": ill. symbol, line: \"%s\"" ),
-                        am.m_AmName, FROM_UTF8( aBuff ) );
+                        am.m_AmName, From_UTF8( aBuff ) );
             AddMessageToList( msg );
             primitive_type = AMP_COMMENT;
         }
@@ -1086,7 +1087,7 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
 
         default:
             msg.Printf( wxT( "RS274X: Aperture Macro \"%s\": Invalid primitive id code %d, line %d: \"%s\"" ),
-                        am.m_AmName, primitive_type, m_LineNum, FROM_UTF8( aBuff ) );
+                        am.m_AmName, primitive_type, m_LineNum, From_UTF8( aBuff ) );
             AddMessageToList( msg );
             return false;
         }

@@ -1059,7 +1059,7 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( LINE_READER& aReader )
     char* tmp = aReader.ReadLine();
 
     tmp = strtok( tmp, "\r\n" );
-    wxString val = FROM_UTF8( tmp );
+    wxString val = From_UTF8( tmp );
 
     for( ; ; )
     {

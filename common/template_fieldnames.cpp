@@ -24,9 +24,9 @@
 
 #include <mutex>
 
-#include <macros.h>
 #include <template_fieldnames.h>
 #include <pgm_base.h>
+#include <string_utils.h>
 
 using namespace TFIELD_T;
 
@@ -95,7 +95,7 @@ void TEMPLATE_FIELDNAME::Parse( TEMPLATE_FIELDNAMES_LEXER* in )
 
     in->NeedSYMBOLorNUMBER();
 
-    m_Name = FROM_UTF8( in->CurText() );
+    m_Name = From_UTF8( in->CurText() );
 
     in->NeedRIGHT();    // end (name ...)
 

@@ -316,7 +316,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
         snprintf( line, sizeof(line), "%3.3fmm / %2.4f\" ", diameter_in_mm( tool.m_Diameter ),
                  diameter_in_inches( tool.m_Diameter ) );
 
-        msg = FROM_UTF8( line );
+        msg = From_UTF8( line );
 
         // Now list how many holes and ovals are associated with each drill.
         if( ( tool.m_TotalCount == 1 ) && ( tool.m_OvalCount == 0 ) )
@@ -331,7 +331,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
             snprintf( line, sizeof(line), "(%d holes + %d slots)", tool.m_TotalCount - tool.m_OvalCount,
                      tool.m_OvalCount );
 
-        msg += FROM_UTF8( line );
+        msg += From_UTF8( line );
 
         if( tool.m_Hole_NotPlated )
             msg += wxT( " (not plated)" );

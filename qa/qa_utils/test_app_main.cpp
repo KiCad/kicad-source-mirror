@@ -33,7 +33,7 @@
 
 
 #include <typeinfo>
-#include <macros.h>
+#include <string_utils.h>
 #include <wx/filename.h>
 #include <wx/stdpaths.h>
 #include <wx/snglinst.h>
@@ -182,7 +182,7 @@ struct APP_TEST : public wxApp
         catch( const std::exception& e )
         {
             wxLogError( wxT( "Unhandled exception class: %s  what: %s" ),
-                        FROM_UTF8( typeid(e).name() ), FROM_UTF8( e.what() ) );
+                        From_UTF8( typeid(e).name() ), From_UTF8( e.what() ) );
         }
         catch( const IO_ERROR& ioe )
         {
@@ -215,8 +215,8 @@ struct APP_TEST : public wxApp
         catch( const std::exception& e )
         {
             wxLogError( wxT( "Unhandled exception class: %s  what: %s" ),
-                FROM_UTF8( typeid(e).name() ),
-                FROM_UTF8( e.what() ) );
+                From_UTF8( typeid(e).name() ),
+                From_UTF8( e.what() ) );
         }
         catch( const IO_ERROR& ioe )
         {

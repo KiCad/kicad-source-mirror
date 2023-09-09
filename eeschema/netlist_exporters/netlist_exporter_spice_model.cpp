@@ -25,6 +25,7 @@
 #include "netlist_exporter_spice_model.h"
 #include <sch_screen.h>
 #include <sch_label.h>
+#include <string_utils.h>
 
 
 void NETLIST_EXPORTER_SPICE_MODEL::WriteHead( OUTPUTFORMATTER& aFormatter,

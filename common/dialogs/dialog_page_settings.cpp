@@ -37,6 +37,7 @@
 #include <wildcards_and_files_ext.h>
 #include <drawing_sheet/ds_data_model.h>
 #include <drawing_sheet/ds_painter.h>
+#include <string_utils.h>
 #include <widgets/std_bitmap_button.h>
 #include <wx/valgen.h>
 #include <wx/tokenzr.h>

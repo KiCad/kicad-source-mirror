@@ -64,7 +64,7 @@ NETLIST_READER::NETLIST_FILE_T NETLIST_READER::GuessNetlistFileType( LINE_READER
 
     while( aLineReader->ReadLine() )
     {
-        line = FROM_UTF8( aLineReader->Line() );
+        line = From_UTF8( aLineReader->Line() );
 
         if( reLegacy.Matches( line ) )
             return LEGACY;
@@ -126,7 +126,7 @@ bool CMP_READER::Load( NETLIST* aNetlist )
 
     while( m_lineReader->ReadLine() )
     {
-        buffer = FROM_UTF8( m_lineReader->Line() );
+        buffer = From_UTF8( m_lineReader->Line() );
 
         if( !buffer.StartsWith( wxT( "BeginCmp" ) ) )
             continue;
@@ -138,7 +138,7 @@ bool CMP_READER::Load( NETLIST* aNetlist )
 
         while( m_lineReader->ReadLine() )
         {
-            buffer = FROM_UTF8( m_lineReader->Line() );
+            buffer = From_UTF8( m_lineReader->Line() );
 
             if( buffer.StartsWith( wxT( "EndCmp" ) ) )
                 break;

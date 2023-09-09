@@ -135,7 +135,7 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
                       return UTF8( pt.front().first );
                   };
 
-    DSNLEXER lexer( aPayload, FROM_UTF8( __func__ ) );
+    DSNLEXER lexer( aPayload, From_UTF8( __func__ ) );
     PTREE    doc;
 
     // NOTE: KiCad's PTREE scanner constructs a property *name* tree, not a property tree.

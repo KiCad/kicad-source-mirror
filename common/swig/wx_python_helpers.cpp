@@ -28,7 +28,7 @@
  */
 
 #include <Python.h> // must be first to avoid wx/python typedef conflicts on msvc
-#include <macros.h>
+#include <string_utils.h>
 #include <wx/intl.h>
 #include <wx/string.h>
 #include <wx/arrstr.h>
@@ -87,7 +87,7 @@ wxString Py2wxString( PyObject* src )
     size_t len = PyUnicode_GET_LENGTH( uni_str );
 
     if( len )
-        result = FROM_UTF8( PyUnicode_AsUTF8( uni_str ) );
+        result = From_UTF8( PyUnicode_AsUTF8( uni_str ) );
 
     if( must_unref_str )
     {

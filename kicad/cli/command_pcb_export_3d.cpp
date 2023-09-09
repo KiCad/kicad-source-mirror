@@ -22,6 +22,7 @@
 #include <cli/exit_codes.h>
 #include <kiface_base.h>
 #include <regex>
+#include <string_utils.h>
 #include <locale_io.h>
 #include <wx/crt.h>
 
@@ -169,7 +170,7 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
 
     if( step->m_format == JOB_EXPORT_PCB_3D::FORMAT::UNKNOWN )
     {
-        wxString format = FROM_UTF8( m_argParser.get<std::string>( ARG_FORMAT ).c_str() );
+        wxString format = From_UTF8( m_argParser.get<std::string>( ARG_FORMAT ).c_str() );
 
         if( format == wxS( "step" ) )
             step->m_format = JOB_EXPORT_PCB_3D::FORMAT::STEP;
@@ -184,7 +185,7 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
 
     if( step->m_format == JOB_EXPORT_PCB_3D::FORMAT::VRML )
     {
-        wxString units = FROM_UTF8( m_argParser.get<std::string>( ARG_VRML_UNITS ).c_str() );
+        wxString units = From_UTF8( m_argParser.get<std::string>( ARG_VRML_UNITS ).c_str() );
 
         if( units == wxS( "in" ) )
             step->m_vrmlUnits = JOB_EXPORT_PCB_3D::VRML_UNITS::INCHES;
@@ -200,12 +201,12 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
             return EXIT_CODES::ERR_ARGS;
         }
 
-        step->m_vrmlModelDir = FROM_UTF8( m_argParser.get<std::string>( ARG_VRML_MODELS_DIR ).c_str() );
+        step->m_vrmlModelDir = From_UTF8( m_argParser.get<std::string>( ARG_VRML_MODELS_DIR ).c_str() );
 
         step->m_vrmlRelativePaths = m_argParser.get<bool>( ARG_VRML_MODELS_RELATIVE );
     }
 
-    wxString userOrigin = FROM_UTF8( m_argParser.get<std::string>( ARG_USER_ORIGIN ).c_str() );
+    wxString userOrigin = From_UTF8( m_argParser.get<std::string>( ARG_USER_ORIGIN ).c_str() );
 
     LOCALE_IO dummy;    // Switch to "C" locale
 
@@ -254,7 +255,7 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
     if( m_format == JOB_EXPORT_PCB_3D::FORMAT::STEP || m_format == JOB_EXPORT_PCB_3D::FORMAT::GLB )
     {
         wxString minDistance =
-                FROM_UTF8( m_argParser.get<std::string>( ARG_MIN_DISTANCE ).c_str() );
+                From_UTF8( m_argParser.get<std::string>( ARG_MIN_DISTANCE ).c_str() );
 
         if( !minDistance.IsEmpty() )
         {

@@ -409,8 +409,8 @@ FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintNam
         return nullptr;
     }
 
-    wxString libNickname = FROM_UTF8( fpid.GetLibNickname().c_str() );
-    wxString fpName      = FROM_UTF8( fpid.GetLibItemName().c_str() );
+    wxString libNickname = From_UTF8( fpid.GetLibNickname().c_str() );
+    wxString fpName      = From_UTF8( fpid.GetLibItemName().c_str() );
 
     FP_LIB_TABLE* fpTable = Prj().PcbFootprintLibs();
     wxASSERT( fpTable );

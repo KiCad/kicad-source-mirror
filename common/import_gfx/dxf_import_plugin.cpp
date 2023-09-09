@@ -316,8 +316,8 @@ void DXF_IMPORT_PLUGIN::addLayer( const DL_LayerData& aData )
 void DXF_IMPORT_PLUGIN::addLinetype( const DL_LinetypeData& data )
 {
 #if 0
-    wxString name = FROM_UTF8( data.name.c_str() );
-    wxString description = FROM_UTF8( data.description.c_str() );
+    wxString name = From_UTF8( data.name.c_str() );
+    wxString description = From_UTF8( data.description.c_str() );
 #endif
 }
 

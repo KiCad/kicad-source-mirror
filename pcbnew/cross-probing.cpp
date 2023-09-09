@@ -131,7 +131,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         if( !crossProbingSettings.auto_highlight )
             return;
 
-        wxString net_name = FROM_UTF8( text );
+        wxString net_name = From_UTF8( text );
 
         NETINFO_ITEM* netinfo = pcb->FindNet( net_name );
 
@@ -151,7 +151,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         if( !crossProbingSettings.auto_highlight )
             return;
 
-        wxStringTokenizer netsTok = wxStringTokenizer( FROM_UTF8( text ), wxT( "," ) );
+        wxStringTokenizer netsTok = wxStringTokenizer( From_UTF8( text ), wxT( "," ) );
         bool first = true;
 
         while( netsTok.HasMoreTokens() )

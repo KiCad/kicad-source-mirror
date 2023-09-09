@@ -220,7 +220,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDocs()
             if( strCompare( "$ENDCMP", line, &line ) )
                 break;
 
-            text = FROM_UTF8( line + 2 );
+            text = From_UTF8( line + 2 );
             // Remove spaces at eol, and eol chars:
             text = text.Trim();
 

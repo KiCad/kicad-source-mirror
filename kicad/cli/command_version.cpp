@@ -23,7 +23,7 @@
 #include <wx/crt.h>
 #include <build_version.h>
 
-#include <macros.h>
+#include <string_utils.h>
 #include <build_version.h>
 
 #define ARG_FORMAT "--format"
@@ -50,7 +50,7 @@ int CLI::VERSION_COMMAND::doPerform( KIWAY& aKiway )
         return EXIT_CODES::OK;
     }
 
-    wxString format = FROM_UTF8( m_argParser.get<std::string>( ARG_FORMAT ).c_str() );
+    wxString format = From_UTF8( m_argParser.get<std::string>( ARG_FORMAT ).c_str() );
     if( format == wxS( "plain" ) )
     {
         wxPrintf( "%s\n", GetMajorMinorPatchVersion() );
