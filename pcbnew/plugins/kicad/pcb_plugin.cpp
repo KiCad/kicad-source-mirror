@@ -1636,8 +1636,15 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
                    formatInternalUnits( aPad->GetThermalSpokeWidth() ).c_str() );
     }
 
-    if( ( aPad->GetShape() == PAD_SHAPE::CIRCLE && aPad->GetThermalSpokeAngle() != ANGLE_45 )
-            || ( aPad->GetShape() != PAD_SHAPE::CIRCLE && aPad->GetThermalSpokeAngle() != ANGLE_90 ) )
+    EDA_ANGLE defaultThermalSpokeAngle = ANGLE_90;
+
+    if( aPad->GetShape() == PAD_SHAPE::CIRCLE ||
+      ( aPad->GetShape() == PAD_SHAPE::CUSTOM && aPad->GetAnchorPadShape() == PAD_SHAPE::CIRCLE ) )
+    {
+        defaultThermalSpokeAngle = ANGLE_45;
+    }
+
+    if( aPad->GetThermalSpokeAngle() != defaultThermalSpokeAngle )
     {
         StrPrintf( &output, " (thermal_bridge_angle %s)",
                    EDA_UNIT_UTILS::FormatAngle( aPad->GetThermalSpokeAngle() ).c_str() );
