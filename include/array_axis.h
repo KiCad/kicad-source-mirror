@@ -24,6 +24,7 @@
 #ifndef ARRAY_AXIS__H
 #define ARRAY_AXIS__H
 
+#include <kicommon.h>
 #include <optional>
 
 #include <wx/string.h>
@@ -35,7 +36,7 @@
  * For example, a rectangular grid has two axes, X and Y, but a circular array
  * has only one, that runs around the circle.
  */
-class ARRAY_AXIS
+class KICOMMON_API ARRAY_AXIS
 {
 public:
     enum NUMBERING_TYPE

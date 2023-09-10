@@ -24,6 +24,7 @@
 #ifndef PCBNEW_ARRAY_OPTIONS__H
 #define PCBNEW_ARRAY_OPTIONS__H
 
+#include <kicommon.h>
 #include <math/vector2d.h>
 #include <array_axis.h>
 #include <geometry/eda_angle.h>
@@ -33,7 +34,7 @@
  * The base #ARRAY_OPTIONS do not encode a specific geometry or numbering
  * method, this is done by derived classes.
  */
-class ARRAY_OPTIONS
+class KICOMMON_API ARRAY_OPTIONS
 {
 public:
     enum ARRAY_TYPE_T
@@ -140,7 +141,7 @@ protected:
 };
 
 
-struct ARRAY_GRID_OPTIONS : public ARRAY_OPTIONS
+struct KICOMMON_API ARRAY_GRID_OPTIONS : public ARRAY_OPTIONS
 {
     ARRAY_GRID_OPTIONS()
             : ARRAY_OPTIONS( ARRAY_GRID ),
@@ -172,7 +173,7 @@ private:
 };
 
 
-struct ARRAY_CIRCULAR_OPTIONS : public ARRAY_OPTIONS
+struct KICOMMON_API ARRAY_CIRCULAR_OPTIONS : public ARRAY_OPTIONS
 {
     ARRAY_CIRCULAR_OPTIONS()
             : ARRAY_OPTIONS( ARRAY_CIRCULAR ),

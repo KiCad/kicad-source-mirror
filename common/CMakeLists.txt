@@ -43,6 +43,9 @@ add_library( singletop STATIC EXCLUDE_FROM_ALL
 # Functions and data all need to use the #include <import_export.h> and be declared
 # as APIEXPORT
 set( KICOMMON_SRCS
+    asset_archive.cpp
+    array_axis.cpp
+    array_options.cpp
     exceptions.cpp
     lib_id.cpp
     locale_io.cpp
@@ -351,9 +354,6 @@ set( COMMON_SRCS
     ${COMMON_IMPORT_GFX_SRCS}
     jobs/job_dispatcher.cpp
     advanced_config.cpp
-    array_axis.cpp
-    array_options.cpp
-    asset_archive.cpp
     background_jobs_monitor.cpp
     base_screen.cpp
     bin_mod.cpp

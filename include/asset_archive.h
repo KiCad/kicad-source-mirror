@@ -20,6 +20,7 @@
 #ifndef KICAD_ASSET_ARCHIVE_H
 #define KICAD_ASSET_ARCHIVE_H
 
+#include <kicommon.h>
 #include <unordered_map>
 #include <vector>
 
@@ -32,7 +33,7 @@
  * The entire contents of the archive will be uncompressed and kept resident in memory in the
  * current implementation, so consider this before reusing this as-is for new use cases.
  */
-class ASSET_ARCHIVE
+class KICOMMON_API ASSET_ARCHIVE
 {
 public:
     ASSET_ARCHIVE( const wxString& aFilePath, bool aLoadNow = true );
