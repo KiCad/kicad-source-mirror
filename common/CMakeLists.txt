@@ -44,6 +44,7 @@ add_library( singletop STATIC EXCLUDE_FROM_ALL
 # as APIEXPORT
 set( KICOMMON_SRCS
     exceptions.cpp
+    locale_io.cpp
     richio.cpp
     string_utils.cpp
     )
@@ -54,6 +55,7 @@ add_library( kicommon SHARED
 
 target_link_libraries( kicommon
     core
+    kimath
     kiplatform
     fmt::fmt
     ${wxWidgets_LIBRARIES}
@@ -408,7 +410,6 @@ set( COMMON_SRCS
     lib_table_grid_tricks.cpp
     lib_tree_model.cpp
     lib_tree_model_adapter.cpp
-    locale_io.cpp
     lset.cpp
     marker_base.cpp
     markup_parser.cpp

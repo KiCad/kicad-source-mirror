@@ -47,14 +47,6 @@
 //
 // So use wxLocale on Windows and setlocale on unix
 
-
-// set USE_WXLOCALE 0 to use setlocale, 1 to use wxLocale:
-#if defined( _WIN32 )
-#define USE_WXLOCALE 1
-#else
-#define USE_WXLOCALE 0
-#endif
-
 // On Windows, when using setlocale, a wx alert is generated
 // in some cases (reading a bitmap for instance)
 // So we disable alerts during the time a file is read or written
@@ -73,12 +65,16 @@ void KiAssertFilter( const wxString &file, int line,
 #endif
 #endif
 
-std::atomic<unsigned int> LOCALE_IO::m_c_count( 0 );
+// allow for nesting of LOCALE_IO instantiations
+static std::atomic<unsigned int> locale_count( 0 );
 
-LOCALE_IO::LOCALE_IO() : m_wxLocale( nullptr )
+LOCALE_IO::LOCALE_IO()
+#if USE_WXLOCALE
+    : m_wxLocale( nullptr )
+#endif
 {
     // use thread safe, atomic operation
-    if( m_c_count++ == 0 )
+    if( locale_count++ == 0 )
     {
 #if USE_WXLOCALE
         #define C_LANG "C"
@@ -100,7 +96,7 @@ LOCALE_IO::LOCALE_IO() : m_wxLocale( nullptr )
 LOCALE_IO::~LOCALE_IO()
 {
     // use thread safe, atomic operation
-    if( --m_c_count == 0 )
+    if( --locale_count == 0 )
     {
         // revert to the user locale
 #if USE_WXLOCALE

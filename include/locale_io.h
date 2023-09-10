@@ -24,8 +24,16 @@
 #ifndef LOCALE_IO_H
 #define LOCALE_IO_H
 
+#include <kicommon.h>
 #include <atomic>
 #include <string>
+
+// set USE_WXLOCALE 0 to use setlocale, 1 to use wxLocale:
+#if defined( _WIN32 )
+#define USE_WXLOCALE 1
+#else
+#define USE_WXLOCALE 0
+#endif
 
 class wxLocale;
 
@@ -37,25 +45,20 @@ class wxLocale;
  * point  numbers.  The destructor insures that the default locale is restored whether an
  * exception is thrown or not.
  */
-class LOCALE_IO
+class KICOMMON_API LOCALE_IO
 {
 public:
     LOCALE_IO();
     ~LOCALE_IO();
 
 private:
-    // allow for nesting of LOCALE_IO instantiations
-    static std::atomic<unsigned int> m_c_count;
-
+#if USE_WXLOCALE
+    wxLocale* m_wxLocale;
+#else
     // The locale in use before switching to the "C" locale
     // (the locale can be set by user, and is not always the system locale)
     std::string m_user_locale;
-    #ifndef __clang__
-    // [[maybe_unused]] attribute is ignored by Gcc but generates a warning.
-    wxLocale*   m_wxLocale;
-    #else
-    [[maybe_unused]] wxLocale*   m_wxLocale;
-    #endif
+#endif
 };
 
 #endif
