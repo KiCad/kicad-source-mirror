@@ -26,6 +26,7 @@
 #ifndef _LIB_ID_H_
 #define _LIB_ID_H_
 
+#include <kicommon.h>
 #include <core/utf8.h>
 
 /**
@@ -44,7 +45,7 @@
  *
  * @author Dick Hollenbeck
  */
-class LIB_ID
+class KICOMMON_API LIB_ID
 {
 public:
     LIB_ID() {}

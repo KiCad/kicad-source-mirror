@@ -44,6 +44,7 @@ add_library( singletop STATIC EXCLUDE_FROM_ALL
 # as APIEXPORT
 set( KICOMMON_SRCS
     exceptions.cpp
+    lib_id.cpp
     locale_io.cpp
     richio.cpp
     string_utils.cpp
@@ -405,7 +406,6 @@ set( COMMON_SRCS
     languages_menu.cpp
     launch_ext.cpp
     layer_id.cpp
-    lib_id.cpp
     lib_table_base.cpp
     lib_table_grid_tricks.cpp
     lib_tree_model.cpp
