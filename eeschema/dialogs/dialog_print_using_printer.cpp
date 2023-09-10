@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2015-2022 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2015-2023 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -325,7 +325,69 @@ bool DIALOG_PRINT_USING_PRINTER::TransferDataFromWindow()
 
     int sheet_count = m_parent->Schematic().Root().CountSheets();
 
-    wxPrintDialogData printDialogData( m_parent->GetPageSetupData().GetPrintData() );
+    wxPrintData data = m_parent->GetPageSetupData().GetPrintData();
+
+#if defined( __WXGTK__ ) && !wxCHECK_VERSION( 3, 2, 3 )
+    // In GTK, the default bottom margin is bigger by 0.31 inches for
+    // Letter, Legal, A4 paper sizes (see gtk_paper_size_get_default_bottom_margin).
+    //
+    // wxWidgets doesn't handle this properly when paper is in
+    // landscape orientation.
+    //
+    // Using custom page size avoids the problematic
+    // gtk_page_setup_set_paper_size_and_default_margins call in wxWidgets.
+
+    wxPaperSize   paperId = data.GetPaperId();
+    const wxChar* paperType = nullptr;
+
+    // clang-format off
+    std::set<wxPaperSize> letterSizes = {
+        // na_letter
+        wxPAPER_LETTER,
+        wxPAPER_LETTERSMALL,
+        wxPAPER_NOTE,
+        wxPAPER_LETTER_TRANSVERSE,
+        wxPAPER_LETTER_ROTATED
+    };
+
+    std::set<wxPaperSize> legalSizes = {
+        // na_legal
+        wxPAPER_LEGAL
+    };
+
+    std::set<wxPaperSize> a4Sizes = {
+        // iso_a4
+        wxPAPER_A4,
+        wxPAPER_A4SMALL,
+        wxPAPER_A4_TRANSVERSE,
+        wxPAPER_A4_ROTATED
+    };
+    // clang-format on
+
+    if( letterSizes.count( paperId ) )
+        paperType = PAGE_INFO::USLetter;
+    else if( legalSizes.count( paperId ) )
+        paperType = PAGE_INFO::USLegal;
+    else if( a4Sizes.count( paperId ) )
+        paperType = PAGE_INFO::A4;
+
+    if( paperType )
+    {
+        PAGE_INFO pageInfo( paperType, data.GetOrientation() == wxPORTRAIT );
+
+        if( pageInfo.IsPortrait() )
+            data.SetPaperSize( wxSize( EDA_UNIT_UTILS::Mils2mm( pageInfo.GetWidthMils() ),
+                                       EDA_UNIT_UTILS::Mils2mm( pageInfo.GetHeightMils() ) ) );
+        else
+            data.SetPaperSize( wxSize( EDA_UNIT_UTILS::Mils2mm( pageInfo.GetHeightMils() ),
+                                       EDA_UNIT_UTILS::Mils2mm( pageInfo.GetWidthMils() ) ) );
+
+        data.SetOrientation( pageInfo.GetWxOrientation() );
+        data.SetPaperId( wxPAPER_NONE );
+    }
+#endif
+
+    wxPrintDialogData printDialogData( data );
     printDialogData.SetMaxPage( sheet_count );
 
     if( sheet_count > 1 )
