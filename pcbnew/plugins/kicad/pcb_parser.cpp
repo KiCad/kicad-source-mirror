@@ -4641,21 +4641,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
         Expecting( "circle, rectangle, roundrect, oval, trapezoid or custom" );
     }
 
-    if( pad->GetShape() == PAD_SHAPE::CIRCLE )
-    {
-        pad->SetThermalSpokeAngle( ANGLE_45 );
-    }
-    else if( pad->GetShape() == PAD_SHAPE::CUSTOM && pad->GetAnchorPadShape() == PAD_SHAPE::CIRCLE )
-    {
-        if( m_requiredVersion < 20211226 )
-            pad->SetThermalSpokeAngle( ANGLE_90 );
-        else
-            pad->SetThermalSpokeAngle( ANGLE_45 );
-    }
-    else
-    {
-        pad->SetThermalSpokeAngle( ANGLE_90 );
-    }
+    std::optional<EDA_ANGLE> thermalBrAngleOverride;
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -4851,7 +4837,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
             break;
 
         case T_thermal_bridge_angle:
-            pad->SetThermalSpokeAngle( EDA_ANGLE( parseDouble( "thermal spoke angle" ), DEGREES_T ) );
+            thermalBrAngleOverride = EDA_ANGLE( parseDouble( "thermal spoke angle" ), DEGREES_T );
             NeedRIGHT();
             break;
 
@@ -5063,6 +5049,31 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
                        "solder_mask_margin, solder_paste_margin, solder_paste_margin_ratio, "
                        "clearance, tstamp, primitives, remove_unused_layers, keep_end_layers, "
                        "pinfunction, pintype, zone_connect, thermal_width, or thermal_gap" );
+        }
+    }
+
+    if( thermalBrAngleOverride )
+    {
+        pad->SetThermalSpokeAngle( *thermalBrAngleOverride );
+    }
+    else
+    {
+        // This is here because custom pad anchor shape isn't known before reading (options
+        if( pad->GetShape() == PAD_SHAPE::CIRCLE )
+        {
+            pad->SetThermalSpokeAngle( ANGLE_45 );
+        }
+        else if( pad->GetShape() == PAD_SHAPE::CUSTOM
+                 && pad->GetAnchorPadShape() == PAD_SHAPE::CIRCLE )
+        {
+            if( m_requiredVersion <= 20211014 ) // 6.0
+                pad->SetThermalSpokeAngle( ANGLE_90 );
+            else
+                pad->SetThermalSpokeAngle( ANGLE_45 );
+        }
+        else
+        {
+            pad->SetThermalSpokeAngle( ANGLE_90 );
         }
     }
 
