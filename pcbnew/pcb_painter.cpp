@@ -336,6 +336,8 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
 
         switch( originalLayer )
         {
+        case LAYER_PADS_SMD_FR:
+        case LAYER_PADS_SMD_BK:
         case LAYER_PADS_TH:
         {
             const PAD* pad = static_cast<const PAD*>( item );
