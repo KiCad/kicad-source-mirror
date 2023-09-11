@@ -391,14 +391,25 @@ const BOX2I GERBER_DRAW_ITEM::GetBoundingBox() const
     // is the bbox image with perhaps a rotation, we need to calculate the coords of the
     // corners of the bbox rotated, and then calculate the final bounding box
     VECTOR2I corners[4];
+    bbox.Normalize();
+
+    // Shape:
+    // 0...1
+    // .   .
+    // .   .
+    // 3...2
     corners[0] = bbox.GetOrigin();  // top left
     corners[2] = bbox.GetEnd();     // bottom right
     corners[1] = VECTOR2I( corners[2].x, corners[0].y );    // top right
     corners[3] = VECTOR2I( corners[0].x, corners[2].y );    // bottom left
 
-    VECTOR2I org;
-    VECTOR2I end;
+    VECTOR2I org = GetABPosition( bbox.GetOrigin() );;
+    VECTOR2I end = GetABPosition( bbox.GetEnd() );;
 
+    // Now calculate the bounding box of bbox, if the display image is rotated
+    // It will be perhaps a bit bigger than a better bounding box calculation, but it is fast
+    // and easy
+    // (if not rotated, this is a nop)
     for( int ii = 0; ii < 4; ii++ )
     {
         corners[ii] = GetABPosition( corners[ii] );
@@ -409,7 +420,6 @@ const BOX2I GERBER_DRAW_ITEM::GetBoundingBox() const
         end.x = std::max( end.x, corners[ii].x );
         end.y = std::max( end.y, corners[ii].y );
     }
-
 
     // Set the corners position:
     bbox.SetOrigin( org );
