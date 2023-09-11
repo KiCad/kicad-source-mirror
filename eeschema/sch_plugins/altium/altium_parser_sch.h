@@ -502,6 +502,8 @@ struct ASCH_LINE : ASCH_OWNER_INTERFACE, ASCH_BORDER_INTERFACE
     VECTOR2I point1;
     VECTOR2I point2;
 
+    ASCH_POLYLINE_LINESTYLE LineStyle;
+
     explicit ASCH_LINE( const std::map<wxString, wxString>& aProps );
 };
 

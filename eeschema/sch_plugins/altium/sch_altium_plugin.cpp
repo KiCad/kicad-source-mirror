@@ -153,6 +153,9 @@ static void SetLibShapeLine( const ASCH_BORDER_INTERFACE& elem, LIB_SHAPE* shape
     case ALTIUM_SCH_RECORD::ELLIPTICAL_ARC:
         default_color = COLOR4D( PUREBLUE );
         break;
+    case ALTIUM_SCH_RECORD::LINE:
+        default_color = COLOR4D( PUREBLUE );
+        break;
     case ALTIUM_SCH_RECORD::POLYGON:
         default_color = COLOR4D( PUREBLUE );
         break;
@@ -2281,7 +2284,8 @@ void SCH_ALTIUM_PLUGIN::ParseLine( const std::map<wxString, wxString>& aProperti
         // close polygon
         SCH_LINE* line = new SCH_LINE( elem.point1 + m_sheetOffset, SCH_LAYER_ID::LAYER_NOTES );
         line->SetEndPoint( elem.point2 + m_sheetOffset );
-        line->SetStroke( STROKE_PARAMS( elem.LineWidth, PLOT_DASH_TYPE::SOLID ) ); // TODO?
+        line->SetStroke( STROKE_PARAMS( elem.LineWidth, GetPlotDashType( elem.LineStyle ),
+                                        GetColorFromInt( elem.Color ) ) );
 
         line->SetFlags( IS_NEW );
         screen->Append( line );
@@ -2329,7 +2333,8 @@ void SCH_ALTIUM_PLUGIN::ParseLine( const std::map<wxString, wxString>& aProperti
             line->AddPoint( GetRelativePosition( elem.point2 + m_sheetOffset, schsym ) );
         }
 
-        line->SetStroke( STROKE_PARAMS( elem.LineWidth, PLOT_DASH_TYPE::SOLID ) );
+        SetLibShapeLine( elem, line, ALTIUM_SCH_RECORD::LINE );
+        line->SetLineStyle( GetPlotDashType( elem.LineStyle ) );
     }
 }
 
