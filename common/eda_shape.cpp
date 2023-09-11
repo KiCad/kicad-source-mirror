@@ -64,13 +64,13 @@ wxString EDA_SHAPE::ShowShape() const
 
     switch( m_shape )
     {
-    case SHAPE_T::SEGMENT: return _( "Line" );
-    case SHAPE_T::RECTANGLE:    return _( "Rect" );
-    case SHAPE_T::ARC:     return _( "Arc" );
-    case SHAPE_T::CIRCLE:  return _( "Circle" );
-    case SHAPE_T::BEZIER:  return _( "Bezier Curve" );
-    case SHAPE_T::POLY:    return _( "Polygon" );
-    default:               return wxT( "??" );
+    case SHAPE_T::SEGMENT:   return _( "Line" );
+    case SHAPE_T::RECTANGLE: return _( "Rect" );
+    case SHAPE_T::ARC:       return _( "Arc" );
+    case SHAPE_T::CIRCLE:    return _( "Circle" );
+    case SHAPE_T::BEZIER:    return _( "Bezier Curve" );
+    case SHAPE_T::POLY:      return _( "Polygon" );
+    default:                 return wxT( "??" );
     }
 }
 
