@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2007-2023 Jean-Pierre Charras  jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -182,7 +182,13 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_item( const GERBER_DRAW_ITEM* aGbrIt
     case GBR_SPOT_POLY:
     case GBR_SPOT_MACRO:
         d_codeDescr->ConvertShapeToPolygon( aGbrItem );
-        writePcbPolygon( d_codeDescr->m_Polygon, aLayer, aGbrItem->GetABPosition( seg_start ) );
+        {
+        SHAPE_POLY_SET polyshape = d_codeDescr->m_Polygon;
+
+        // Compensate the Y axis orientation ( writePcbPolygon invert the Y coordinate )
+        polyshape.Outline( 0 ).Mirror( false, true );
+        writePcbPolygon( polyshape, aLayer, aGbrItem->GetABPosition( seg_start ) );
+        }
         break;
 
     case GBR_ARC:
