@@ -275,22 +275,6 @@ public:
      */
     void AddPrimitivePoly( const SHAPE_POLY_SET& aPoly, int aThickness, bool aFilled );
     void AddPrimitivePoly( const std::vector<VECTOR2I>& aPoly, int aThickness, bool aFilled );
-    void AddPrimitiveSegment( const VECTOR2I& aStart, const VECTOR2I& aEnd, int aThickness );
-    void AddPrimitiveCircle( const VECTOR2I& aCenter, int aRadius, int aThickness, bool aFilled );
-    void AddPrimitiveRect( const VECTOR2I& aStart, const VECTOR2I& aEnd, int aThickness,
-                           bool aFilled );
-    void AddPrimitiveArc( const VECTOR2I& aCenter, const VECTOR2I& aStart,
-                          const EDA_ANGLE& aArcAngle, int aThickness );
-    void AddPrimitiveCurve( const VECTOR2I& aStart, const VECTOR2I& aEnd, const VECTOR2I& aCtrl1,
-                            const VECTOR2I& aCtrl2, int aThickness );
-
-    /**
-     * Has meaning only for custom shape pads.  Allows one to specify the box in which to place
-     * the pad number and/or net name (if they are being displayed).
-     */
-    void AddPrimitiveAnnotationBox( const VECTOR2I& aStart, const VECTOR2I& aEnd );
-
-    bool GetBestAnchorPosition( VECTOR2I& aPos );
 
     /**
      * Merge all basic shapes to a #SHAPE_POLY_SET.

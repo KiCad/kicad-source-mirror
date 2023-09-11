@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,91 +70,6 @@ void PAD::AddPrimitivePoly( const std::vector<VECTOR2I>& aPoly, int aThickness, 
     item->SetFilled( aFilled );
     item->SetPolyPoints( aPoly );
     item->SetStroke( STROKE_PARAMS( aThickness, PLOT_DASH_TYPE::SOLID ) );
-    item->SetParent( this );
-    m_editPrimitives.emplace_back( item );
-    SetDirty();
-}
-
-
-void PAD::AddPrimitiveSegment( const VECTOR2I& aStart, const VECTOR2I& aEnd, int aThickness )
-{
-    PCB_SHAPE* item = new PCB_SHAPE( nullptr, SHAPE_T::SEGMENT );
-    item->SetFilled( false );
-    item->SetStart( aStart );
-    item->SetEnd( aEnd );
-    item->SetStroke( STROKE_PARAMS( aThickness, PLOT_DASH_TYPE::SOLID ) );
-    item->SetParent( this );
-    m_editPrimitives.emplace_back( item );
-    SetDirty();
-}
-
-
-void PAD::AddPrimitiveArc( const VECTOR2I& aCenter, const VECTOR2I& aStart,
-                           const EDA_ANGLE& aArcAngle, int aThickness )
-{
-    PCB_SHAPE* item = new PCB_SHAPE( nullptr, SHAPE_T::ARC );
-    item->SetFilled( false );
-    item->SetCenter( aCenter );
-    item->SetStart( aStart );
-    item->SetArcAngleAndEnd( aArcAngle );
-    item->SetStroke( STROKE_PARAMS( aThickness, PLOT_DASH_TYPE::SOLID ) );
-    item->SetParent( this );
-    m_editPrimitives.emplace_back( item );
-    SetDirty();
-}
-
-
-void PAD::AddPrimitiveCurve( const VECTOR2I& aStart, const VECTOR2I& aEnd, const VECTOR2I& aCtrl1,
-                             const VECTOR2I& aCtrl2, int aThickness )
-{
-    PCB_SHAPE* item = new PCB_SHAPE( nullptr, SHAPE_T::BEZIER );
-    item->SetFilled( false );
-    item->SetStart( aStart );
-    item->SetEnd( aEnd );
-    item->SetBezierC1( aCtrl1 );
-    item->SetBezierC2( aCtrl2 );
-    item->SetStroke( STROKE_PARAMS( aThickness, PLOT_DASH_TYPE::SOLID ) );
-    item->SetParent( this );
-    m_editPrimitives.emplace_back( item );
-    SetDirty();
-}
-
-
-void PAD::AddPrimitiveCircle( const VECTOR2I& aCenter, int aRadius, int aThickness, bool aFilled )
-{
-    PCB_SHAPE* item = new PCB_SHAPE( nullptr, SHAPE_T::CIRCLE );
-    item->SetFilled( aFilled );
-    item->SetStart( aCenter );
-    item->SetEnd( VECTOR2I( aCenter.x + aRadius, aCenter.y ) );
-    item->SetStroke( STROKE_PARAMS( aThickness, PLOT_DASH_TYPE::SOLID ) );
-    item->SetParent( this );
-    m_editPrimitives.emplace_back( item );
-    SetDirty();
-}
-
-
-void PAD::AddPrimitiveRect( const VECTOR2I& aStart, const VECTOR2I& aEnd, int aThickness,
-                            bool aFilled)
-{
-    PCB_SHAPE* item = new PCB_SHAPE( nullptr, SHAPE_T::RECTANGLE );
-    item->SetFilled( aFilled );
-    item->SetStart( aStart );
-    item->SetEnd( aEnd );
-    item->SetStroke( STROKE_PARAMS( aThickness, PLOT_DASH_TYPE::SOLID ) );
-    item->SetParent( this );
-    m_editPrimitives.emplace_back( item );
-    SetDirty();
-}
-
-
-void PAD::AddPrimitiveAnnotationBox( const VECTOR2I& aStart, const VECTOR2I& aEnd )
-{
-    PCB_SHAPE* item = new PCB_SHAPE( nullptr, SHAPE_T::RECTANGLE );
-    item->SetIsAnnotationProxy();
-    item->SetFilled( false );
-    item->SetStart( aStart );
-    item->SetEnd( aEnd );
-    item->SetStroke( STROKE_PARAMS( 1, PLOT_DASH_TYPE::SOLID ) );
     item->SetParent( this );
     m_editPrimitives.emplace_back( item );
     SetDirty();
@@ -249,85 +164,4 @@ void PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon, ERROR_LOC aE
     }
 
     addPadPrimitivesToPolygon( aMergedPolygon, maxError, aErrorLoc );
-}
-
-
-bool PAD::GetBestAnchorPosition( VECTOR2I& aPos )
-{
-    SHAPE_POLY_SET poly;
-    addPadPrimitivesToPolygon( &poly, ARC_LOW_DEF, ERROR_INSIDE );
-
-    if( poly.OutlineCount() > 1 )
-        return false;
-
-    const int minSteps = 10;
-    const int maxSteps = 50;
-
-    int stepsX, stepsY;
-
-    auto bbox = poly.BBox();
-
-    if( bbox.GetWidth() < bbox.GetHeight() )
-    {
-        stepsX = minSteps;
-        stepsY = minSteps * (double) bbox.GetHeight() / (double )(bbox.GetWidth() + 1);
-    }
-    else
-    {
-        stepsY = minSteps;
-        stepsX = minSteps * (double) bbox.GetWidth() / (double )(bbox.GetHeight() + 1);
-    }
-
-    stepsX = alg::clamp( minSteps, maxSteps, stepsX );
-    stepsY = alg::clamp( minSteps, maxSteps, stepsY );
-
-    VECTOR2I center = bbox.Centre();
-
-    int64_t minDist = std::numeric_limits<int64_t>::max();
-    int64_t minDistEdge;
-
-    if( GetAnchorPadShape() == PAD_SHAPE::CIRCLE )
-    {
-        minDistEdge = GetSize().x;
-    }
-    else
-    {
-        minDistEdge = std::max( GetSize().x, GetSize().y );
-    }
-
-    std::optional<VECTOR2I> bestAnchor( []()->std::optional<VECTOR2I> { return std::nullopt; }() );
-
-    for( int y = 0; y < stepsY ; y++ )
-    {
-        for( int x = 0; x < stepsX; x++ )
-        {
-            VECTOR2I p = bbox.GetPosition();
-            p.x += rescale( x, bbox.GetWidth(), (stepsX - 1) );
-            p.y += rescale( y, bbox.GetHeight(), (stepsY - 1) );
-
-            if( poly.Contains(p) )
-            {
-
-                int dist = (center - p).EuclideanNorm();
-                int distEdge = poly.COutline(0).Distance( p, true );
-
-                if( distEdge >= minDistEdge )
-                {
-                    if( dist < minDist )
-                    {
-                        bestAnchor = p;
-                        minDist = dist;
-                    }
-                }
-            }
-        }
-    }
-
-    if( bestAnchor )
-    {
-        aPos = *bestAnchor;
-        return true;
-    }
-
-    return false;
 }
