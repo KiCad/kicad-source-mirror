@@ -317,8 +317,6 @@ ASCH_TEXT_FRAME::ASCH_TEXT_FRAME( const std::map<wxString, wxString>& aProps ) :
     BorderWidth = ReadKiCadUnitFrac( aProps, "LINEWIDTH" );
     isSolid = ALTIUM_PARSER::ReadBool( aProps, "ISSOLID", false );
 
-    IsWordWrapped = ALTIUM_PARSER::ReadBool( aProps, "WORDWRAP", true );
-
     Alignment = ReadEnum<ASCH_TEXT_FRAME_ALIGNMENT>( aProps, "ALIGNMENT", 1, 3,
                                                      ASCH_TEXT_FRAME_ALIGNMENT::LEFT );
 }
