@@ -804,6 +804,11 @@ ASCH_SHEET::ASCH_SHEET( const std::map<wxString, wxString>& aProps ) :
     for( int i = 1; i <= fontidcount; i++ )
         fonts.emplace_back( aProps, i );
 
+    useCustomSheet = ALTIUM_PARSER::ReadBool( aProps, "USECUSTOMSHEET", false );
+
+    customSize = VECTOR2I( ReadKiCadUnitFrac( aProps, "CUSTOMX" ),
+                           ReadKiCadUnitFrac( aProps, "CUSTOMY" ) );
+
     sheetSize = ReadEnum<ASCH_SHEET_SIZE>( aProps, "SHEETSTYLE", 0, 17, ASCH_SHEET_SIZE::A4 );
     sheetOrientation = ReadEnum<ASCH_SHEET_WORKSPACEORIENTATION>(
             aProps, "WORKSPACEORIENTATION", 0, 1, ASCH_SHEET_WORKSPACEORIENTATION::LANDSCAPE );

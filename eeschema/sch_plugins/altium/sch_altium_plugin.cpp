@@ -3364,27 +3364,36 @@ void SCH_ALTIUM_PLUGIN::ParseSheet( const std::map<wxString, wxString>& aPropert
 
     bool isPortrait = m_altiumSheet->sheetOrientation == ASCH_SHEET_WORKSPACEORIENTATION::PORTRAIT;
 
-    switch( m_altiumSheet->sheetSize )
+    if( m_altiumSheet->useCustomSheet )
     {
-    default:
-    case ASCH_SHEET_SIZE::A4:      pageInfo.SetType( "A4", isPortrait );       break;
-    case ASCH_SHEET_SIZE::A3:      pageInfo.SetType( "A3", isPortrait );       break;
-    case ASCH_SHEET_SIZE::A2:      pageInfo.SetType( "A2", isPortrait );       break;
-    case ASCH_SHEET_SIZE::A1:      pageInfo.SetType( "A1", isPortrait );       break;
-    case ASCH_SHEET_SIZE::A0:      pageInfo.SetType( "A0", isPortrait );       break;
-    case ASCH_SHEET_SIZE::A:       pageInfo.SetType( "A", isPortrait );        break;
-    case ASCH_SHEET_SIZE::B:       pageInfo.SetType( "B", isPortrait );        break;
-    case ASCH_SHEET_SIZE::C:       pageInfo.SetType( "C", isPortrait );        break;
-    case ASCH_SHEET_SIZE::D:       pageInfo.SetType( "D", isPortrait );        break;
-    case ASCH_SHEET_SIZE::E:       pageInfo.SetType( "E", isPortrait );        break;
-    case ASCH_SHEET_SIZE::LETTER:  pageInfo.SetType( "USLetter", isPortrait ); break;
-    case ASCH_SHEET_SIZE::LEGAL:   pageInfo.SetType( "USLegal", isPortrait );  break;
-    case ASCH_SHEET_SIZE::TABLOID: pageInfo.SetType( "A3", isPortrait );       break;
-    case ASCH_SHEET_SIZE::ORCAD_A: pageInfo.SetType( "A", isPortrait );        break;
-    case ASCH_SHEET_SIZE::ORCAD_B: pageInfo.SetType( "B", isPortrait );        break;
-    case ASCH_SHEET_SIZE::ORCAD_C: pageInfo.SetType( "C", isPortrait );        break;
-    case ASCH_SHEET_SIZE::ORCAD_D: pageInfo.SetType( "D", isPortrait );        break;
-    case ASCH_SHEET_SIZE::ORCAD_E: pageInfo.SetType( "E", isPortrait );        break;
+        PAGE_INFO::SetCustomWidthMils( schIUScale.IUToMils( m_altiumSheet->customSize.x ) );
+        PAGE_INFO::SetCustomHeightMils( schIUScale.IUToMils( m_altiumSheet->customSize.y ) );
+        pageInfo.SetType( PAGE_INFO::Custom, isPortrait );
+    }
+    else
+    {
+        switch( m_altiumSheet->sheetSize )
+        {
+        default:
+        case ASCH_SHEET_SIZE::A4: pageInfo.SetType( "A4", isPortrait ); break;
+        case ASCH_SHEET_SIZE::A3: pageInfo.SetType( "A3", isPortrait ); break;
+        case ASCH_SHEET_SIZE::A2: pageInfo.SetType( "A2", isPortrait ); break;
+        case ASCH_SHEET_SIZE::A1: pageInfo.SetType( "A1", isPortrait ); break;
+        case ASCH_SHEET_SIZE::A0: pageInfo.SetType( "A0", isPortrait ); break;
+        case ASCH_SHEET_SIZE::A: pageInfo.SetType( "A", isPortrait ); break;
+        case ASCH_SHEET_SIZE::B: pageInfo.SetType( "B", isPortrait ); break;
+        case ASCH_SHEET_SIZE::C: pageInfo.SetType( "C", isPortrait ); break;
+        case ASCH_SHEET_SIZE::D: pageInfo.SetType( "D", isPortrait ); break;
+        case ASCH_SHEET_SIZE::E: pageInfo.SetType( "E", isPortrait ); break;
+        case ASCH_SHEET_SIZE::LETTER: pageInfo.SetType( "USLetter", isPortrait ); break;
+        case ASCH_SHEET_SIZE::LEGAL: pageInfo.SetType( "USLegal", isPortrait ); break;
+        case ASCH_SHEET_SIZE::TABLOID: pageInfo.SetType( "A3", isPortrait ); break;
+        case ASCH_SHEET_SIZE::ORCAD_A: pageInfo.SetType( "A", isPortrait ); break;
+        case ASCH_SHEET_SIZE::ORCAD_B: pageInfo.SetType( "B", isPortrait ); break;
+        case ASCH_SHEET_SIZE::ORCAD_C: pageInfo.SetType( "C", isPortrait ); break;
+        case ASCH_SHEET_SIZE::ORCAD_D: pageInfo.SetType( "D", isPortrait ); break;
+        case ASCH_SHEET_SIZE::ORCAD_E: pageInfo.SetType( "E", isPortrait ); break;
+        }
     }
 
     screen->SetPageSettings( pageInfo );
