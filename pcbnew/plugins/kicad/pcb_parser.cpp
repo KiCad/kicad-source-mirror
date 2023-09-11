@@ -4942,62 +4942,22 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
                 if( token == T_LEFT )
                     token = NextTok();
 
-                // Currently, I am using parsePCB_SHAPE() to read basic shapes parameters,
-                // because they are the same as a PCB_SHAPE.
-                // However it could be better to write a specific parser, to avoid possible issues
-                // if the PCB_SHAPE parser is modified.
-                PCB_SHAPE* dummyShape = nullptr;
-
                 switch( token )
                 {
                 case T_gr_arc:
-                    dummyShape = parsePCB_SHAPE();
-                    pad->AddPrimitiveArc( dummyShape->GetCenter(), dummyShape->GetStart(),
-                                          dummyShape->GetArcAngle(), dummyShape->GetWidth() );
-                    break;
-
                 case T_gr_line:
-                    dummyShape = parsePCB_SHAPE();
-                    pad->AddPrimitiveSegment( dummyShape->GetStart(), dummyShape->GetEnd(),
-                                              dummyShape->GetWidth() );
-                    break;
-
                 case T_gr_circle:
-                    dummyShape = parsePCB_SHAPE();
-                    pad->AddPrimitiveCircle( dummyShape->GetCenter(), dummyShape->GetRadius(),
-                                             dummyShape->GetWidth(), dummyShape->IsFilled() );
-                    break;
-
                 case T_gr_rect:
-                    dummyShape = parsePCB_SHAPE();
-                    pad->AddPrimitiveRect( dummyShape->GetStart(), dummyShape->GetEnd(),
-                                           dummyShape->GetWidth(), dummyShape->IsFilled() );
-                    break;
-
                 case T_gr_bbox:
-                    dummyShape = parsePCB_SHAPE();
-                    pad->AddPrimitiveAnnotationBox( dummyShape->GetStart(), dummyShape->GetEnd() );
-                    break;
-
                 case T_gr_poly:
-                    dummyShape = parsePCB_SHAPE();
-                    pad->AddPrimitivePoly( dummyShape->GetPolyShape(), dummyShape->GetWidth(),
-                                           dummyShape->IsFilled() );
-                    break;
-
                 case T_gr_curve:
-                    dummyShape = parsePCB_SHAPE();
-                    pad->AddPrimitiveCurve( dummyShape->GetStart(), dummyShape->GetEnd(),
-                                            dummyShape->GetBezierC1(), dummyShape->GetBezierC2(),
-                                            dummyShape->GetWidth() );
+                    pad->AddPrimitive( parsePCB_SHAPE() );
                     break;
 
                 default:
                     Expecting( "gr_line, gr_arc, gr_circle, gr_curve, gr_rect, gr_bbox or gr_poly" );
                     break;
                 }
-
-                delete dummyShape;
             }
 
             break;
