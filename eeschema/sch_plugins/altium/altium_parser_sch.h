@@ -773,6 +773,9 @@ struct ASCH_SHEET
 {
     std::vector<ASCH_SHEET_FONT> fonts;
 
+    bool     useCustomSheet;
+    VECTOR2I customSize;
+
     ASCH_SHEET_SIZE                 sheetSize;
     ASCH_SHEET_WORKSPACEORIENTATION sheetOrientation;
 
