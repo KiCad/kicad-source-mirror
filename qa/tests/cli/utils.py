@@ -30,6 +30,7 @@ from PIL import Image, ImageChops, ImageFilter
 import numpy as np
 
 logger = logging.getLogger("cli_util")
+Image.MAX_IMAGE_PIXELS = 800 * 1024 * 1024 // 4 # Increase limit to ~800MB uncompressed RGBA, 4bpp (~600MB RGB, 3bpp)
 
 def run_and_capture( command: list ) -> Tuple[ str, str, int ]:
     logger.info("Executing command \"%s\"", " ".join( command ))
@@ -64,19 +65,14 @@ def textdiff_files( golden_filepath: str, new_filepath: str, skip: int = 0 ) -> 
 
 
 def image_is_blank( image_path: str ) -> bool:
-    # Increase limit to ~2GB uncompressed
-    Image.MAX_IMAGE_PIXELS=4 * 1024 * 1024 * 1024 // 4 // 3
     img = Image.open( image_path )
     sum = np.sum( np.asarray( img ) )
 
     return sum == 0
 
 
-def images_are_equal( image1_path: str, image2_path: str, alpha_colour = (50, 100, 50) ) -> bool:
+def images_are_equal( image1_path: str, image2_path: str ) -> bool:
     # Note: if modifying this function - please add new tests for it in test_utils.py
-
-    # Increase limit to ~2GB uncompressed
-    Image.MAX_IMAGE_PIXELS=4 * 1024 * 1024 * 1024 // 4 // 3
 
     image1 = Image.open( image1_path )
     image2 = Image.open( image2_path )
@@ -124,15 +120,16 @@ def images_are_equal( image1_path: str, image2_path: str, alpha_colour = (50, 10
     return retval
 
 
-def get_png_paths( generated_path: str, source_path : str ) -> Tuple[str, str]:
-    generated_png_path = Path( generated_path ).with_suffix( ".png" )
+def get_png_paths( generated_path: str, source_path : str, suffix : str = "" ) -> Tuple[str, str]:
+    generated_stem = Path( generated_path ).stem
+    generated_png_path = Path( generated_path ).with_stem( generated_stem + suffix).with_suffix( ".png" )
 
     if generated_png_path.exists():
         generated_png_path.unlink()  # Delete file
 
     # store source png in same folder as generated, easier to compare
     source_stem = Path( source_path ).stem
-    source_png_path = Path( generated_path ).with_stem( source_stem + "-source").with_suffix( ".png" )
+    source_png_path = Path( generated_path ).with_stem( source_stem + "-source" + suffix).with_suffix( ".png" )
 
     if source_png_path.exists():
         source_png_path.unlink()  # Delete file
@@ -157,23 +154,56 @@ def svgs_are_equivalent( svg_generated_path: str, svg_source_path: str, comparis
 def gerbers_are_equivalent( gerber_generated_path : str, gerber_source_path : str, comparison_dpi : int,
                             originInches :  Tuple[float, float],
                             windowsizeInches :  Tuple[float, float] ) -> bool:
-    png_generated, png_source = get_png_paths( gerber_generated_path, gerber_source_path )
 
-    convert_gerber_to_png( gerber_generated_path, png_generated, comparison_dpi, originInches, windowsizeInches )
-    convert_gerber_to_png( gerber_source_path,    png_source,    comparison_dpi, originInches, windowsizeInches )
+    # Calculate tiles required
+    noTilesRowsCols = np.array( [1,1] )
+    increaseRow = True
+    tileSizeInches=np.array( windowsizeInches ) / noTilesRowsCols
 
-    assert( not image_is_blank( png_generated ) )
-    assert( not image_is_blank( png_source ) )    # make sure test case is generated correctly
+    while( np.prod( tileSizeInches * comparison_dpi ) > Image.MAX_IMAGE_PIXELS // 2 ):
+        if increaseRow:
+            noTilesRowsCols[0]+=1
+        else:
+            noTilesRowsCols[1]+=1
 
-    return images_are_equal( png_generated, png_source )
+        increaseRow=not increaseRow
+        tileSizeInches=np.array( windowsizeInches ) / noTilesRowsCols
+
+
+    gerberGeneratedIsBlank=True
+    gerberSourceIsBlank=True
+    gerbersAreEqual=True
+
+    for row in range( noTilesRowsCols[0] ):
+        for col in range( noTilesRowsCols[1] ):
+            tileOrigin=np.array( originInches ) + ( np.array( [row,col] ) * tileSizeInches )
+
+            png_generated, png_source = get_png_paths( gerber_generated_path, gerber_source_path, f"R{row}C{col}" )
+
+            convert_gerber_to_png( gerber_generated_path, png_generated, comparison_dpi, tileOrigin, tileSizeInches )
+            convert_gerber_to_png( gerber_source_path,    png_source,    comparison_dpi, tileOrigin, tileSizeInches )
+
+            gerberGeneratedIsBlank = gerberGeneratedIsBlank and image_is_blank( png_generated )
+            gerberSourceIsBlank = gerberSourceIsBlank and image_is_blank( png_source )
+
+            gerbersAreEqual = gerbersAreEqual and images_are_equal( png_generated, png_source )
+
+    assert( not gerberGeneratedIsBlank )
+    assert( not gerberSourceIsBlank )    # make sure test case is generated correctly
+
+    return gerbersAreEqual
 
 
 def convert_gerber_to_png( gerber_path : str, png_path : str, dpi : int,
                            originInches :  Tuple[float, float],
                            windowsizeInches :  Tuple[float, float] ):
+
+    originStr="{:.2f}".format(originInches[0]) + "x" + "{:.2f}".format(originInches[1])
+    windowsizeInchesStr="{:.2f}".format(windowsizeInches[0]) + "x" + "{:.2f}".format(windowsizeInches[1])
+
     stdout, stderr, exitcode = run_and_capture(["gerbv", "--export=png", f"--dpi={dpi}",
-                                                f"--origin={originInches[0]}x{originInches[1]}",
-                                                f"--window_inch={windowsizeInches[0]}x{windowsizeInches[1]}",
+                                                f"--origin={originStr}",
+                                                f"--window_inch={windowsizeInchesStr}",
                                                 f"--output={png_path}",
                                                 "--foreground=#FFFFFF", "--background=#000000",
                                                 gerber_path
