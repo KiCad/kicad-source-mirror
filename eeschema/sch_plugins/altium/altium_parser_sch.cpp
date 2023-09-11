@@ -274,7 +274,7 @@ ASCH_TEXT_FRAME::ASCH_TEXT_FRAME( const std::map<wxString, wxString>& aProps )
     AreaColor = ALTIUM_PARSER::ReadInt( aProps, "AREACOLOR", 0 );
     BorderColor = ALTIUM_PARSER::ReadInt( aProps, "COLOR", 0 );
 
-    IsSolid = ALTIUM_PARSER::ReadBool( aProps, "WORDWRAP", true );
+    IsSolid = ALTIUM_PARSER::ReadBool( aProps, "ISSOLID", false );
 
     Alignment = ReadEnum<ASCH_TEXT_FRAME_ALIGNMENT>( aProps, "ALIGNMENT", 1, 3,
                                                      ASCH_TEXT_FRAME_ALIGNMENT::LEFT );
