@@ -26,7 +26,7 @@ import logging
 import subprocess
 from typing import Tuple
 from pathlib import Path
-from PIL import Image, ImageChops, ImageFilter
+from PIL import Image, ImageChops, ImageFilter, ImageEnhance
 import numpy as np
 
 logger = logging.getLogger("cli_util")
@@ -106,19 +106,20 @@ def images_are_equal( image1_path: str, image2_path: str ) -> bool:
 
         eroded_result_sum = np.sum( np.asarray( eroded_result ) )
         retval = eroded_result_sum == 0
-
-        # Save images, cleanup
-        #if not retval:
-        diff_name = image1.filename + ".diff.png"
-        diff.save( diff_name ) # Note: if the image has alpha, the diff will be mostly transparent
         diff.close()
-
-        diff_name = image1.filename + ".binary_result.png"
-        binary_result.save( diff_name )
         binary_result.close()
 
-        diff_name = image1.filename + ".eroded_result_" + str( eroded_result_sum )+ ".png"
-        eroded_result.save( diff_name )
+        # Save diff
+        if not retval:
+            diff_name = image1.filename + ".DIFF_eroded_" + str( eroded_result_sum )+ ".png"
+            red = Image.new( "RGB", image1.size, (255,0,0))
+            imageEnhanced = ImageEnhance.Contrast(image1).enhance(0.3)
+            imageEnhanced.paste( red,mask=eroded_result)
+            imageEnhanced.save(diff_name)
+            logger.error( "Images not equal. Diff stored at '%s'", diff_name )
+            imageEnhanced.close()
+
+        # Cleanup
         eroded_result.close()
 
     # Cleanup
@@ -185,8 +186,8 @@ def gerbers_are_equivalent( gerber_generated_path : str, gerber_source_path : st
     for row in range( noTilesRowsCols[0] ):
         for col in range( noTilesRowsCols[1] ):
             tileOrigin=np.array( originInches ) + ( np.array( [row,col] ) * tileSizeInches )
-
-            png_generated, png_source = get_png_paths( gerber_generated_path, gerber_source_path, f"R{row}C{col}" )
+            tile_name=f"R{row}C{col}"
+            png_generated, png_source = get_png_paths( gerber_generated_path, gerber_source_path, tile_name )
 
             convert_gerber_to_png( gerber_generated_path, png_generated, comparison_dpi, tileOrigin, tileSizeInches )
             convert_gerber_to_png( gerber_source_path,    png_source,    comparison_dpi, tileOrigin, tileSizeInches )
@@ -194,7 +195,8 @@ def gerbers_are_equivalent( gerber_generated_path : str, gerber_source_path : st
             gerberGeneratedIsBlank = gerberGeneratedIsBlank and image_is_blank( png_generated )
             gerberSourceIsBlank = gerberSourceIsBlank and image_is_blank( png_source )
 
-            gerbersAreEqual = gerbersAreEqual and images_are_equal( png_generated, png_source )
+            if( not images_are_equal( png_generated, png_source ) ):
+                gerbersAreEqual = False
 
     assert( not gerberGeneratedIsBlank )
     assert( not gerberSourceIsBlank )    # make sure test case is generated correctly
