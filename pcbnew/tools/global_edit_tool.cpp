@@ -79,7 +79,7 @@ int GLOBAL_EDIT_TOOL::ExchangeFootprints( const TOOL_EVENT& aEvent )
     else if( aEvent.IsAction( &PCB_ACTIONS::updateFootprints ) )
     {
         updateMode = true;
-        currentMode = false;
+        currentMode = selection.CountType( PCB_FOOTPRINT_T ) > 0;
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::changeFootprint ) )
     {
@@ -89,7 +89,7 @@ int GLOBAL_EDIT_TOOL::ExchangeFootprints( const TOOL_EVENT& aEvent )
     else if( aEvent.IsAction( &PCB_ACTIONS::changeFootprints ) )
     {
         updateMode = false;
-        currentMode = false;
+        currentMode = selection.CountType( PCB_FOOTPRINT_T ) > 0;
     }
     else
     {

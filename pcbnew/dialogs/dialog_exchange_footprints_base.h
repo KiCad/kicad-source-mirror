@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
 class WX_HTML_REPORT_PANEL;
 
 #include "dialog_shim.h"
@@ -55,10 +56,10 @@ class DIALOG_EXCHANGE_FOOTPRINTS_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_specifiedValue;
 		wxRadioButton* m_matchSpecifiedID;
 		wxTextCtrl* m_specifiedID;
-		wxBitmapButton* m_specifiedIDBrowseButton;
+		STD_BITMAP_BUTTON* m_specifiedIDBrowseButton;
 		wxBoxSizer* m_changeSizer;
 		wxTextCtrl* m_newID;
-		wxBitmapButton* m_newIDBrowseButton;
+		STD_BITMAP_BUTTON* m_newIDBrowseButton;
 		wxStaticBoxSizer* m_updateOptionsSizer;
 		wxCheckBox* m_removeExtraBox;
 		wxCheckBox* m_resetTextItemLayers;

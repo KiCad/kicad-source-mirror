@@ -25,8 +25,6 @@
  */
 
 #include <bitmaps.h>
-#include <board_commit.h>
-#include <board.h>
 #include <footprint.h>
 #include <pad.h>
 #include <dialog_exchange_footprints.h>
@@ -35,8 +33,8 @@
 #include <macros.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
-#include <project.h>
 #include <widgets/wx_html_report_panel.h>
+#include <widgets/std_bitmap_button.h>
 
 
 #define ID_MATCH_FP_ALL      4200
@@ -100,9 +98,7 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
     }
 
     if( m_currentFootprint )
-    {
         m_newID->AppendText( From_UTF8( m_currentFootprint->GetFPID().Format().c_str() ) );
-    }
     else
         m_upperSizer->FindItem( m_matchSelected )->Show( false );
 

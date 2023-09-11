@@ -210,8 +210,24 @@ bool EDIT_TOOL::Init()
     auto singleFootprintCondition = SELECTION_CONDITIONS::OnlyTypes( { PCB_FOOTPRINT_T } )
                                         && SELECTION_CONDITIONS::Count( 1 );
 
-    auto multipleFootprintsCondition = SELECTION_CONDITIONS::OnlyTypes( { PCB_FOOTPRINT_T } )
-                                        && SELECTION_CONDITIONS::MoreThan( 1 );
+    auto multipleFootprintsCondition =
+            []( const SELECTION& aSelection )
+            {
+                bool foundFirst = false;
+
+                for( EDA_ITEM* item : aSelection )
+                {
+                    if( item->Type() == PCB_FOOTPRINT_T )
+                    {
+                        if( foundFirst )
+                            return true;
+                        else
+                            foundFirst = true;
+                    }
+                }
+
+                return false;
+            };
 
     auto noActiveToolCondition =
             [ this ]( const SELECTION& aSelection )

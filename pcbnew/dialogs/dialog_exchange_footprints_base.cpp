@@ -5,6 +5,7 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/std_bitmap_button.h"
 #include "widgets/wx_html_report_panel.h"
 
 #include "dialog_exchange_footprints_base.h"
@@ -57,8 +58,8 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 
 	bSizer4->Add( m_specifiedID, 1, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_specifiedIDBrowseButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer4->Add( m_specifiedIDBrowseButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 2 );
+	m_specifiedIDBrowseButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bSizer4->Add( m_specifiedIDBrowseButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 2 );
 
 
 	m_mainSizer->Add( bSizer4, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
@@ -82,8 +83,8 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 
 	bSizer3->Add( m_newID, 1, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_newIDBrowseButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer3->Add( m_newIDBrowseButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 2 );
+	m_newIDBrowseButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bSizer3->Add( m_newIDBrowseButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 2 );
 
 
 	m_changeSizer->Add( bSizer3, 1, wxEXPAND|wxLEFT, 5 );
