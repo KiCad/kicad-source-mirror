@@ -813,9 +813,10 @@ PCB_LAYER_ID PAD_TOOL::explodePad( PAD* aPad )
 
         aPad->SetShape( aPad->GetAnchorPadShape() );
         aPad->DeletePrimitivesList();
-        aPad->SetFlags( ENTERED );
-        m_editPad = aPad->m_Uuid;
     }
+
+    aPad->SetFlags( ENTERED );
+    m_editPad = aPad->m_Uuid;
 
     commit.Push( _("Edit pad shapes") );
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
