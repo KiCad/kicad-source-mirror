@@ -478,11 +478,11 @@ void EDA_SHAPE::RebuildBezierToSegmentsPointsList( int aMinSegLen )
     // Ensure last point respects aMinSegLen parameter
     if( m_bezierPoints.size() > 2 )
     {
-        int idx = m_bezierPoints.size()-1;
+        int idx = m_bezierPoints.size() - 1;
 
-        if( VECTOR2I( m_bezierPoints[idx] - m_bezierPoints[idx]-1 ).EuclideanNorm() < aMinSegLen )
+        if( VECTOR2I( m_bezierPoints[idx] - m_bezierPoints[idx] - 1 ).EuclideanNorm() < aMinSegLen )
         {
-            m_bezierPoints[idx]-1 = m_bezierPoints[idx];
+            m_bezierPoints[idx - 1] = m_bezierPoints[idx];
             m_bezierPoints.pop_back();
         }
     }
