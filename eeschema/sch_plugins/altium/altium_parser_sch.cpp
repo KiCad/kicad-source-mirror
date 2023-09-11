@@ -331,13 +331,8 @@ ASCH_POLYLINE::ASCH_POLYLINE( const std::map<wxString, wxString>& aProps )
     LineWidth = ReadKiCadUnitFrac( aProps, "LINEWIDTH" );
     Color = ALTIUM_PARSER::ReadInt( aProps, "COLOR", 0 );
 
-    int linestyleVar = ALTIUM_PARSER::ReadInt( aProps, "LINESTYLEEXT", 0 );
-
-    // overwrite if present.
-    linestyleVar     = ALTIUM_PARSER::ReadInt( aProps, "LINESTYLE", linestyleVar );
-    LineStyle        = linestyleVar >= 0 && linestyleVar <= 3 ?
-                                static_cast<ASCH_POLYLINE_LINESTYLE>( linestyleVar ) :
-                                ASCH_POLYLINE_LINESTYLE::SOLID;
+    auto lineStyleExt = ReadEnum( aProps, "LINESTYLEEXT", 0, 3, ASCH_POLYLINE_LINESTYLE::SOLID );
+    LineStyle = ReadEnum( aProps, "LINESTYLE", 0, 3, lineStyleExt ); // overwrite if present.
 }
 
 
@@ -447,7 +442,11 @@ ASCH_LINE::ASCH_LINE( const std::map<wxString, wxString>& aProps )
     point2 = VECTOR2I( ReadKiCadUnitFrac( aProps, "CORNER.X" ),
                        -ReadKiCadUnitFrac( aProps, "CORNER.Y" ) );
 
-    lineWidth = ReadKiCadUnitFrac( aProps, "LINEWIDTH" );
+    LineWidth = ReadKiCadUnitFrac( aProps, "LINEWIDTH" );
+    Color = ALTIUM_PARSER::ReadInt( aProps, "COLOR", 0 );
+
+    auto lineStyleExt = ReadEnum( aProps, "LINESTYLEEXT", 0, 3, ASCH_POLYLINE_LINESTYLE::SOLID );
+    LineStyle = ReadEnum( aProps, "LINESTYLE", 0, 3, lineStyleExt ); // overwrite if present.
 }
 
 
@@ -679,8 +678,6 @@ ASCH_BUS::ASCH_BUS( const std::map<wxString, wxString>& aProps )
 {
     wxASSERT( ReadRecord( aProps ) == ALTIUM_SCH_RECORD::BUS );
 
-    indexinsheet = ALTIUM_PARSER::ReadInt( aProps, "INDEXINSHEET", 0 );
-
     int locationcount = ALTIUM_PARSER::ReadInt( aProps, "LOCATIONCOUNT", 0 );
 
     for( int i = 1; i <= locationcount; i++ )
@@ -697,8 +694,6 @@ ASCH_BUS::ASCH_BUS( const std::map<wxString, wxString>& aProps )
 ASCH_WIRE::ASCH_WIRE( const std::map<wxString, wxString>& aProps )
 {
     wxASSERT( ReadRecord( aProps ) == ALTIUM_SCH_RECORD::WIRE );
-
-    indexinsheet = ALTIUM_PARSER::ReadInt( aProps, "INDEXINSHEET", 0 );
 
     int locationcount = ALTIUM_PARSER::ReadInt( aProps, "LOCATIONCOUNT", 0 );
 

@@ -1743,7 +1743,10 @@ void SCH_ALTIUM_PLUGIN::ParseLine( const std::map<wxString, wxString>& aProperti
         // close polygon
         SCH_LINE* line = new SCH_LINE( elem.point1 + m_sheetOffset, SCH_LAYER_ID::LAYER_NOTES );
         line->SetEndPoint( elem.point2 + m_sheetOffset );
-        line->SetStroke( STROKE_PARAMS( elem.lineWidth, PLOT_DASH_TYPE::SOLID ) ); // TODO?
+
+        COLOR4D color = GetColorFromInt( elem.Color );
+        line->SetStroke( STROKE_PARAMS( elem.LineWidth, GetPlotDashType( elem.LineStyle ),
+                                        color == PUREBLUE ? COLOR4D::UNSPECIFIED : color ) );
 
         line->SetFlags( IS_NEW );
         screen->Append( line );
@@ -1773,7 +1776,9 @@ void SCH_ALTIUM_PLUGIN::ParseLine( const std::map<wxString, wxString>& aProperti
         line->AddPoint( GetRelativePosition( elem.point1 + m_sheetOffset, symbol ) );
         line->AddPoint( GetRelativePosition( elem.point2 + m_sheetOffset, symbol ) );
 
-        line->SetStroke( STROKE_PARAMS( elem.lineWidth, PLOT_DASH_TYPE::SOLID ) );
+        COLOR4D color = GetColorFromInt( elem.Color );
+        line->SetStroke( STROKE_PARAMS( elem.LineWidth, GetPlotDashType( elem.LineStyle ),
+                                        color == PUREBLUE ? COLOR4D::UNSPECIFIED : color ) );
     }
 }
 

@@ -437,7 +437,10 @@ struct ASCH_LINE
     VECTOR2I point1;
     VECTOR2I point2;
 
-    int lineWidth;
+    int LineWidth;
+    int Color;
+
+    ASCH_POLYLINE_LINESTYLE LineStyle;
 
     explicit ASCH_LINE( const std::map<wxString, wxString>& aProps );
 };
