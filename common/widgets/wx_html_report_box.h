@@ -22,7 +22,7 @@
 
 #include <reporter.h>
 #include <vector>
-#include <html_window.h>
+#include <widgets/html_window.h>
 #include <eda_units.h>
 
 /**

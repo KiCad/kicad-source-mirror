@@ -5,7 +5,7 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "html_window.h"
+#include "widgets/html_window.h"
 #include "widgets/wx_panel.h"
 
 #include "panel_packages_view_base.h"

@@ -28,7 +28,7 @@
 #include <wx/panel.h>
 #include <wx/timer.h>
 #include <lib_tree_model_adapter.h>
-#include <html_window.h>
+#include <widgets/html_window.h>
 #include <widgets/wx_dataviewctrl.h>
 
 class wxTextCtrl;

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -13,7 +13,7 @@
 class UNIT_SELECTOR_LEN;
 class UNIT_SELECTOR_THICKNESS;
 
-#include "html_window.h"
+#include "widgets/html_window.h"
 #include "calculator_panels/calculator_panel.h"
 #include <wx/string.h>
 #include <wx/stattext.h>

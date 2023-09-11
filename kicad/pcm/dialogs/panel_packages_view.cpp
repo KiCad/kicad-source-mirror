@@ -20,7 +20,7 @@
 
 #include "panel_packages_view.h"
 #include <grid_tricks.h>
-#include <html_window.h>
+#include <widgets/html_window.h>
 #include <pgm_base.h>
 #include <kiplatform/ui.h>
 #include <settings/common_settings.h>

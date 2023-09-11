@@ -27,7 +27,7 @@
 #include <string_utils.h>
 #include "iec60664.h"
 #include <wx/string.h>
-#include <html_window.h>
+#include <widgets/html_window.h>
 #include <bitmaps.h>
 
 

@@ -27,7 +27,7 @@
 #include "dialog_shim.h"
 #include <symbol_tree_model_adapter.h>
 #include <footprint_info.h>
-#include <html_window.h>
+#include <widgets/html_window.h>
 
 class wxCheckBox;
 class wxStaticBitmap;

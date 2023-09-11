@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -12,7 +12,7 @@
 #include <wx/intl.h>
 class STD_BITMAP_BUTTON;
 
-#include "html_window.h"
+#include "widgets/html_window.h"
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>

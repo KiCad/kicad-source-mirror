@@ -212,6 +212,7 @@ set( COMMON_WIDGET_SRCS
     widgets/grid_icon_text_helpers.cpp
     widgets/grid_text_button_helpers.cpp
     widgets/grid_text_helpers.cpp
+    widgets/html_window.cpp
     widgets/indicator_icon.cpp
     widgets/wx_infobar.cpp
     widgets/kistatusbar.cpp
@@ -393,7 +394,6 @@ set( COMMON_SRCS
     grid_tricks.cpp
     hotkey_store.cpp
     hotkeys_basic.cpp
-    html_window.cpp
     kiface_base.cpp
     kiid.cpp
     kiway.cpp
