@@ -97,19 +97,23 @@ void SCH_SEXPR_PLUGIN_CACHE::Save( const std::optional<bool>& aOpt )
 
     std::vector<LIB_SYMBOL*> orderedSymbols;
 
-    for( const std::pair<const wxString, LIB_SYMBOL*>& parent : m_symbols )
-        orderedSymbols.push_back( parent.second );
+    for( const auto& [ name, symbol ] : m_symbols )
+    {
+        if( symbol )
+            orderedSymbols.push_back( symbol );
+    }
 
     // Library must be ordered by inheritance depth.
     std::sort( orderedSymbols.begin(), orderedSymbols.end(),
                []( const LIB_SYMBOL* aLhs, const LIB_SYMBOL* aRhs )
                {
-                   wxCHECK( aLhs && aRhs, false );
+                   unsigned int lhDepth = aLhs->GetInheritanceDepth();
+                   unsigned int rhDepth = aRhs->GetInheritanceDepth();
 
-                   if( aLhs->GetInheritanceDepth() < aRhs->GetInheritanceDepth() )
-                       return true;
+                   if( lhDepth == rhDepth )
+                       return aLhs->GetName() < aRhs->GetName();
 
-                   return aLhs->GetName() < aRhs->GetName();
+                   return lhDepth < rhDepth;
                } );
 
     for( LIB_SYMBOL* symbol : orderedSymbols )
