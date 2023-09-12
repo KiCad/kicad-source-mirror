@@ -136,6 +136,7 @@ struct LAYER_PRESET
         layers       = LSET::AllLayersMask();
         renderLayers = GAL_SET::DefaultVisible();
         readOnly     = false;
+        flipBoard    = false;
     }
 
     LAYER_PRESET( const wxString& aName, const LSET& aVisibleLayers ) :
@@ -145,6 +146,7 @@ struct LAYER_PRESET
     {
         renderLayers = GAL_SET::DefaultVisible();
         readOnly     = false;
+        flipBoard    = false;
     }
 
     LAYER_PRESET( const wxString& aName, const LSET& aVisibleLayers, const GAL_SET& aVisibleObjects,
@@ -154,7 +156,8 @@ struct LAYER_PRESET
             renderLayers( aVisibleObjects ),
             activeLayer( aActiveLayer )
     {
-        readOnly = false;
+        readOnly  = false;
+        flipBoard = false;
     }
 
     bool LayersMatch( const LAYER_PRESET& aOther )
@@ -165,6 +168,7 @@ struct LAYER_PRESET
     wxString     name;          ///< A name for this layer set
     LSET         layers;        ///< Board layers that are visible
     GAL_SET      renderLayers;  ///< Render layers (e.g. object types) that are visible
+    bool         flipBoard;     ///< True if the flip board is enabled
     PCB_LAYER_ID activeLayer;   ///< Optional layer to set active when this preset is loaded
     bool         readOnly;      ///< True if this is a read-only (built-in) preset
 };
