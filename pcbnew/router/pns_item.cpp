@@ -185,8 +185,8 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
     }
     else
     {
-        clearance = aNode->GetClearance( this, aHead,
-                                         aCtx ? aCtx->options.m_useClearanceEpsilon : false );
+        clearance = aNode->GetClearance( this, aHead, aCtx ? aCtx->options.m_useClearanceEpsilon
+                                                           : false );
     }
 
     if( clearance >= 0 )
