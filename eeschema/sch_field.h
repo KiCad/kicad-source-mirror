@@ -140,6 +140,18 @@ public:
 
     wxString GetShownText( bool aAllowExtraText, int aDepth = 0 ) const override;
 
+    /**
+     * Return true if both the name and value of the field are empty.  Whitespace
+     * does not count as non-empty
+    */
+    bool IsEmpty()
+    {
+        wxString name( m_name );
+        wxString value( GetText() );
+
+        return name.Trim().empty() && value.Trim().empty();
+    }
+
     COLOR4D GetFieldColor() const;
 
     void SetLastResolvedState( const SCH_ITEM* aItem ) override

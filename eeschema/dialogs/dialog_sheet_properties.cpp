@@ -209,9 +209,8 @@ bool DIALOG_SHEET_PROPERTIES::Validate()
     for( size_t i = SHEET_MANDATORY_FIELDS;  i < m_fields->size(); ++i )
     {
         SCH_FIELD& field = m_fields->at( i );
-        wxString   fieldName = field.GetName( false );
 
-        if( fieldName.IsEmpty() )
+        if( field.GetName( false ).empty() && !field.GetText().empty() )
         {
             DisplayErrorMessage( this, _( "Fields must have a name." ) );
 
@@ -363,7 +362,7 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
         SCH_FIELD&      field = m_fields->at( ii );
         const wxString& fieldName = field.GetCanonicalName();
 
-        if( fieldName.IsEmpty() && field.GetText().IsEmpty() )
+        if( field.IsEmpty() )
             m_fields->erase( m_fields->begin() + ii );
         else if( fieldName.IsEmpty() )
             field.SetName( _( "untitled" ) );
