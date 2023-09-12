@@ -80,6 +80,7 @@
 #include <gerbview_settings.h>
 
 #include <cmath>
+#include <charconv>
 
 #include <dialogs/html_message_box.h>
 
@@ -407,20 +408,41 @@ bool EXCELLON_IMAGE::TestFileIsExcellon( const wxString& aFullFileName )
                     foundT = false; /* Found first T after X or Y */
                 else
                 {
-                    // verify next char is digit
-                    if( isdigit( letter[1] ) )
+                    double x_val;
+                    char* start = letter + 1;
+                    char* end = letter + strlen( letter );
+
+                    std::from_chars_result res = std::from_chars( start, end, x_val );
+
+                    if( res.ec != std::errc::invalid_argument )
                         foundT = true;
                 }
             }
 
             // look for X<number> or Y<number>
             if( ( letter = strstr( line, "X" ) ) != nullptr )
-                if( isdigit( letter[1] ) )
+            {
+                double x_val;
+                char* start = letter + 1;
+                char* end = letter + strlen( letter );
+
+                std::from_chars_result res = std::from_chars( start, end, x_val );
+
+                if( res.ec != std::errc::invalid_argument )
                     foundX = true;
+            }
 
             if( ( letter = strstr( line, "Y" ) ) != nullptr )
-                if( isdigit( letter[1] ) )
+            {
+                double x_val;
+                char* start = letter + 1;
+                char* end = letter + strlen( letter );
+
+                std::from_chars_result res = std::from_chars( start, end, x_val );
+
+                if( res.ec != std::errc::invalid_argument )
                     foundY = true;
+            }
         }
     }
     catch( IO_ERROR& )
