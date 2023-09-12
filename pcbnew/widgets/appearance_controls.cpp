@@ -2642,11 +2642,13 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
         if( !exists )
         {
             index = m_cbLayerPresets->Insert( name, index - 1, static_cast<void*>( preset ) );
+            preset->flipBoard = m_cbFlipBoard->GetValue();
         }
         else
         {
             preset->layers       = getVisibleLayers();
             preset->renderLayers = getVisibleObjects();
+            preset->flipBoard    = m_cbFlipBoard->GetValue();
 
             index = m_cbLayerPresets->FindString( name );
             m_presetMRU.Remove( name );
@@ -2757,6 +2759,12 @@ void APPEARANCE_CONTROLS::doApplyLayerPreset( const LAYER_PRESET& aPreset )
 
     if( !m_isFpEditor )
         m_frame->GetCanvas()->SyncLayersVisibility( board );
+
+    if( aPreset.flipBoard )
+    {
+        m_frame->GetCanvas()->GetView()->SetMirror( true, false );
+        m_frame->GetCanvas()->GetView()->RecacheAllItems();
+    }
 
     m_frame->GetCanvas()->Refresh();
 
