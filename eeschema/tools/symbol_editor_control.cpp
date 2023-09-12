@@ -355,23 +355,25 @@ int SYMBOL_EDITOR_CONTROL::RenameSymbol( const TOOL_EVENT& aEvent )
         }
 
         wxString    oldName = symbolName;
-        LIB_SYMBOL* libSymbol = nullptr;
+        LIB_SYMBOL* libSymbol = libMgr.GetBufferedSymbol( oldName, libName );
+        bool        isCurrentSymbol = editFrame->IsCurrentSymbol( libId );
 
-        if( editFrame->IsCurrentSymbol( libId ) )
-        {
-            // Update buffered copy
-            libSymbol = libMgr.GetBufferedSymbol( oldName, libName );
+        libSymbol->SetName( newName );
 
-            libSymbol->SetName( newName );
+        if( libSymbol->GetFieldById( VALUE_FIELD )->GetText() == oldName )
             libSymbol->GetFieldById( VALUE_FIELD )->SetText( newName );
 
-            libMgr.UpdateSymbolAfterRename( libSymbol, newName, libName );
+        libMgr.UpdateSymbolAfterRename( libSymbol, newName, libName );
+        libMgr.SetSymbolModified( newName, libName );
 
-            // Now update canvasy copy
+        if( isCurrentSymbol )
+        {
             libSymbol = editFrame->GetCurSymbol();
 
             libSymbol->SetName( newName );
-            libSymbol->GetFieldById( VALUE_FIELD )->SetText( newName );
+
+            if( libSymbol->GetFieldById( VALUE_FIELD )->GetText() == oldName )
+                libSymbol->GetFieldById( VALUE_FIELD )->SetText( newName );
 
             editFrame->RebuildView();
             editFrame->OnModify();
@@ -379,16 +381,6 @@ int SYMBOL_EDITOR_CONTROL::RenameSymbol( const TOOL_EVENT& aEvent )
             // N.B. The view needs to be rebuilt first as the Symbol Properties change may
             // invalidate the view pointers by rebuilting the field table
             editFrame->UpdateMsgPanel();
-        }
-        else
-        {
-            libSymbol = libMgr.GetBufferedSymbol( oldName, libName );
-
-            libSymbol->SetName( newName );
-            libSymbol->GetFieldById( VALUE_FIELD )->SetText( newName );
-
-            libMgr.UpdateSymbolAfterRename( libSymbol, newName, libName );
-            libMgr.SetSymbolModified( newName, libName );
         }
 
         wxDataViewItem treeItem = libMgr.GetAdapter()->FindItem( libId );
