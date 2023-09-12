@@ -34,6 +34,7 @@
 #include <schematic.h>
 #include <widgets/hierarchy_pane.h>
 #include <widgets/sch_search_pane.h>
+#include <widgets/properties_panel.h>
 #include <settings/app_settings.h>
 #include <settings/settings_manager.h>
 #include <symbol_lib_table.h>
@@ -234,6 +235,7 @@ void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
         wxAuiPaneInfo& propertiesPane = m_auimgr.GetPane( PropertiesPaneName() );
         cfg->m_AuiPanels.show_properties = propertiesPane.IsShown();
+        cfg->m_AuiPanels.properties_splitter_proportion = m_propertiesPanel->SplitterProportion();
     }
 }
 
