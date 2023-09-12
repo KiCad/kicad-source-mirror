@@ -4577,11 +4577,18 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
                 case T_gr_line:
                 case T_gr_circle:
                 case T_gr_rect:
-                case T_gr_bbox:
                 case T_gr_poly:
                 case T_gr_curve:
                     pad->AddPrimitive( parsePCB_SHAPE( nullptr ) );
                     break;
+
+                case T_gr_bbox:
+                {
+                    PCB_SHAPE* numberBox = parsePCB_SHAPE( nullptr );
+                    numberBox->SetIsAnnotationProxy();
+                    pad->AddPrimitive( numberBox );
+                    break;
+                }
 
                 default:
                     Expecting( "gr_line, gr_arc, gr_circle, gr_curve, gr_rect, gr_bbox or gr_poly" );
