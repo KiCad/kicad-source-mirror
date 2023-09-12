@@ -108,7 +108,7 @@ enum DRAG_MODE
     virtual int GetNetCode( NET_HANDLE aNet ) const = 0;
     virtual wxString GetNetName( PNS::NET_HANDLE aNet ) const = 0;
     virtual void UpdateNet( NET_HANDLE aNet ) = 0;
-
+    virtual NET_HANDLE GetOrphanedNetHandle() = 0;
     virtual PNS::NODE* GetWorld() const = 0;
 
     virtual RULE_RESOLVER* GetRuleResolver() = 0;

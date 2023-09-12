@@ -1325,7 +1325,7 @@ bool LINE_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     m_currentStart = VECTOR2I( aP );
     m_fixStart =  VECTOR2I( aP );
     m_currentEnd = VECTOR2I( aP );
-    m_currentNet = aStartItem ? aStartItem->Net() : nullptr;
+    m_currentNet = aStartItem ? aStartItem->Net() : Router()->GetInterface()->GetOrphanedNetHandle();
     m_startItem = aStartItem;
     m_placingVia = false;
     m_chainedPlacement = false;

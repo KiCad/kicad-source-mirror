@@ -2043,6 +2043,12 @@ void PNS_KICAD_IFACE::UpdateNet( PNS::NET_HANDLE aNet )
 }
 
 
+PNS::NET_HANDLE PNS_KICAD_IFACE_BASE::GetOrphanedNetHandle()
+{
+    return NETINFO_LIST::OrphanedItem();
+}
+
+
 PNS::RULE_RESOLVER* PNS_KICAD_IFACE_BASE::GetRuleResolver()
 {
     return m_ruleResolver;

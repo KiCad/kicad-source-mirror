@@ -77,6 +77,7 @@ public:
     int GetNetCode( PNS::NET_HANDLE aNet ) const override { return -1; }
     wxString GetNetName( PNS::NET_HANDLE aNet ) const override { return wxEmptyString; }
     void UpdateNet( PNS::NET_HANDLE aNet ) override {}
+    PNS::NET_HANDLE GetOrphanedNetHandle() override;
 
     void SetDebugDecorator( PNS::DEBUG_DECORATOR* aDec );
 
