@@ -103,7 +103,7 @@ void SYMBOL_EDIT_FRAME::GetSymbolFromRedoList()
 
     RebuildSymbolUnitsList();
     SetShowDeMorgan( symbol->HasConversion() );
-    updateTitle();
+    UpdateTitle();
 
     RebuildView();
     OnModify();
@@ -156,7 +156,7 @@ void SYMBOL_EDIT_FRAME::GetSymbolFromUndoList()
 
     RebuildSymbolUnitsList();
     SetShowDeMorgan( symbol->HasConversion() );
-    updateTitle();
+    UpdateTitle();
 
     RebuildView();
     OnModify();

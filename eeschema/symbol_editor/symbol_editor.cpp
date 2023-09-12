@@ -51,7 +51,7 @@
 #include <widgets/symbol_filedlg_save_as.h>
 
 
-void SYMBOL_EDIT_FRAME::updateTitle()
+void SYMBOL_EDIT_FRAME::UpdateTitle()
 {
     wxString title;
 
@@ -93,7 +93,7 @@ void SYMBOL_EDIT_FRAME::SelectActiveLibrary( const wxString& aLibrary )
     if( !selectedLib.empty() )
         SetCurLib( selectedLib );
 
-    updateTitle();
+    UpdateTitle();
 }
 
 
@@ -295,7 +295,7 @@ bool SYMBOL_EDIT_FRAME::LoadOneLibrarySymbolAux( LIB_SYMBOL* aEntry, const wxStr
         GetInfoBar()->Dismiss();
     }
 
-    updateTitle();
+    UpdateTitle();
     RebuildSymbolUnitsList();
     SetShowDeMorgan( GetCurSymbol()->HasConversion() );
 
@@ -524,7 +524,7 @@ void SYMBOL_EDIT_FRAME::Save()
     if( IsSymbolTreeShown() )
         m_treePane->GetLibTree()->RefreshLibTree();
 
-    updateTitle();
+    UpdateTitle();
 }
 
 
@@ -765,7 +765,7 @@ void SYMBOL_EDIT_FRAME::UpdateAfterSymbolProperties( wxString* aOldName )
 
     RebuildSymbolUnitsList();
     SetShowDeMorgan( GetCurSymbol()->Flatten()->HasConversion() );
-    updateTitle();
+    UpdateTitle();
 
     // N.B. The view needs to be rebuilt first as the Symbol Properties change may invalidate
     // the view pointers by rebuilting the field table
@@ -1234,7 +1234,7 @@ bool SYMBOL_EDIT_FRAME::saveAllLibraries( bool aRequireConfirmation )
         }
     }
 
-    updateTitle();
+    UpdateTitle();
     return retv;
 }
 

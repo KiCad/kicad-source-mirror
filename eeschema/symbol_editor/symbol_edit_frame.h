@@ -252,6 +252,12 @@ public:
         UpdateSymbolMsgPanelInfo();
     }
 
+    /**
+     * Update the main window title bar with the current library name and read only status
+     * of the library.
+     */
+    void UpdateTitle();
+
     bool IsSymbolFromSchematic() const
     {
         // If we've already vetted closing this window, then we have no symbol anymore
@@ -428,12 +434,6 @@ private:
      * @return True if the library was successfully saved.
      */
     bool saveLibrary( const wxString& aLibrary, bool aNewFile );
-
-    /**
-     * Update the main window title bar with the current library name and read only status
-     * of the library.
-     */
-    void updateTitle();
 
     /**
      * Set the current active library to \a aLibrary.
