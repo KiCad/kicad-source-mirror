@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -52,6 +52,8 @@ class DIALOG_NET_INSPECTOR_BASE : public DIALOG_SHIM
 		STD_BITMAP_BUTTON* m_addNet;
 		STD_BITMAP_BUTTON* m_renameNet;
 		STD_BITMAP_BUTTON* m_deleteNet;
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerCancel;
 		wxButton* m_ReportButt;
 
 		// Virtual event handlers, override them in your derived class

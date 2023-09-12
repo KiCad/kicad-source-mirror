@@ -1100,6 +1100,9 @@ DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent ) :
     m_deleteNet->SetBitmap( KiBitmap( BITMAPS::small_trash ) );
 
     SetupStandardButtons();
+    // Now SetupStandardButtons is called, change the label of Cancel button
+    // to a better name
+    m_sdbSizerCancel->SetLabel( _( "Close" ) );
 
     m_renameNet->Disable();
     m_deleteNet->Disable();

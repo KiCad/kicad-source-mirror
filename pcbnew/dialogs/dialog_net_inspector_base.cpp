@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -86,6 +86,13 @@ DIALOG_NET_INSPECTOR_BASE::DIALOG_NET_INSPECTOR_BASE( wxWindow* parent, wxWindow
 
 
 	bSizerListButtons->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_sdbSizer = new wxStdDialogButtonSizer();
+	m_sdbSizerCancel = new wxButton( this, wxID_CANCEL );
+	m_sdbSizer->AddButton( m_sdbSizerCancel );
+	m_sdbSizer->Realize();
+
+	bSizerListButtons->Add( m_sdbSizer, 0, wxEXPAND, 5 );
 
 	m_ReportButt = new wxButton( this, wxID_ANY, _("Create Report..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerListButtons->Add( m_ReportButt, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );

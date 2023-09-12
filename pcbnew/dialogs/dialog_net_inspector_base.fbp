@@ -770,6 +770,24 @@
                                 <property name="width">0</property>
                             </object>
                         </object>
+                        <object class="sizeritem" expanded="1">
+                            <property name="border">5</property>
+                            <property name="flag">wxEXPAND</property>
+                            <property name="proportion">0</property>
+                            <object class="wxStdDialogButtonSizer" expanded="1">
+                                <property name="Apply">0</property>
+                                <property name="Cancel">1</property>
+                                <property name="ContextHelp">0</property>
+                                <property name="Help">0</property>
+                                <property name="No">0</property>
+                                <property name="OK">0</property>
+                                <property name="Save">0</property>
+                                <property name="Yes">0</property>
+                                <property name="minimum_size"></property>
+                                <property name="name">m_sdbSizer</property>
+                                <property name="permission">protected</property>
+                            </object>
+                        </object>
                         <object class="sizeritem" expanded="0">
                             <property name="border">5</property>
                             <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
