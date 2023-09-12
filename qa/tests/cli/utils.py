@@ -67,6 +67,7 @@ def textdiff_files( golden_filepath: str, new_filepath: str, skip: int = 0 ) -> 
 def image_is_blank( image_path: str ) -> bool:
     img = Image.open( image_path )
     sum = np.sum( np.asarray( img ) )
+    img.close()
 
     return sum == 0
 
@@ -106,16 +107,23 @@ def images_are_equal( image1_path: str, image2_path: str ) -> bool:
         eroded_result_sum = np.sum( np.asarray( eroded_result ) )
         retval = eroded_result_sum == 0
 
-        # Save images
+        # Save images, cleanup
         #if not retval:
         diff_name = image1.filename + ".diff.png"
         diff.save( diff_name ) # Note: if the image has alpha, the diff will be mostly transparent
+        diff.close()
 
         diff_name = image1.filename + ".binary_result.png"
         binary_result.save( diff_name )
+        binary_result.close()
 
         diff_name = image1.filename + ".eroded_result_" + str( eroded_result_sum )+ ".png"
         eroded_result.save( diff_name )
+        eroded_result.close()
+
+    # Cleanup
+    image1.close()
+    image2.close()
 
     return retval
 
