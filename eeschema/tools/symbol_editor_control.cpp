@@ -377,6 +377,7 @@ int SYMBOL_EDITOR_CONTROL::RenameSymbol( const TOOL_EVENT& aEvent )
 
             editFrame->RebuildView();
             editFrame->OnModify();
+            editFrame->UpdateTitle();
 
             // N.B. The view needs to be rebuilt first as the Symbol Properties change may
             // invalidate the view pointers by rebuilting the field table

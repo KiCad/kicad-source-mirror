@@ -170,7 +170,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReCreateVToolbar();
     ReCreateOptToolbar();
 
-    updateTitle();
+    UpdateTitle();
     UpdateSymbolMsgPanelInfo();
     RebuildSymbolUnitsList();
 
@@ -558,7 +558,7 @@ bool SYMBOL_EDIT_FRAME::CanCloseSymbolFromSchematic( bool doClose )
     if( doClose )
     {
         SetCurSymbol( nullptr, false );
-        updateTitle();
+        UpdateTitle();
     }
 
     return true;
@@ -849,7 +849,7 @@ void SYMBOL_EDIT_FRAME::OnModify()
     m_treePane->GetLibTree()->RefreshLibTree();
 
     if( !GetTitle().StartsWith( "*" ) )
-        updateTitle();
+        UpdateTitle();
 }
 
 
@@ -1224,7 +1224,7 @@ void SYMBOL_EDIT_FRAME::ShowChangedLanguage()
         GetCanvas()->Refresh();
     }
 
-    updateTitle();
+    UpdateTitle();
 }
 
 
@@ -1518,7 +1518,7 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
         OnToggleSymbolTree( evt );
     }
 
-    updateTitle();
+    UpdateTitle();
     RebuildSymbolUnitsList();
     SetShowDeMorgan( GetCurSymbol()->HasConversion() );
     UpdateSymbolMsgPanelInfo();
