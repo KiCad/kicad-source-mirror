@@ -73,7 +73,8 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
     }
 
     if( m_model.GetSpiceInfo().inlineTypeString != ""
-        && m_model.GetType() != SIM_MODEL::TYPE::V ) // DC-only sources are already processed
+        && m_model.GetType() != SIM_MODEL::TYPE::V   // DC-only sources are already processed
+        && m_model.GetType() != SIM_MODEL::TYPE::I )
     {
         std::string args = "";
         
