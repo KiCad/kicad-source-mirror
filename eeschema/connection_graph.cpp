@@ -2183,47 +2183,93 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, boo
     std::unordered_set<CONNECTION_SUBGRAPH*> visited;
     std::unordered_set<SCH_CONNECTION*> stale_bus_members;
 
-    auto visit =
-            [&]( CONNECTION_SUBGRAPH* aParent )
+    auto visit =[&]( CONNECTION_SUBGRAPH* aParent )
+    {
+        for( SCH_SHEET_PIN* pin : aParent->m_hier_pins )
+        {
+            SCH_SHEET_PATH path = aParent->m_sheet;
+            path.push_back( pin->GetParent() );
+
+            auto it = m_sheet_to_subgraphs_map.find( path );
+
+            if( it == m_sheet_to_subgraphs_map.end() )
+                continue;
+
+            for( CONNECTION_SUBGRAPH* candidate : it->second )
             {
-                for( SCH_SHEET_PIN* pin : aParent->m_hier_pins )
+                if( !candidate->m_strong_driver
+                    || candidate->m_hier_ports.empty()
+                    || visited.count( candidate ) )
                 {
-                    SCH_SHEET_PATH path = aParent->m_sheet;
-                    path.push_back( pin->GetParent() );
+                    continue;
+                }
 
-                    auto it = m_sheet_to_subgraphs_map.find( path );
-
-                    if( it == m_sheet_to_subgraphs_map.end() )
-                        continue;
-
-                    for( CONNECTION_SUBGRAPH* candidate : it->second )
+                for( SCH_HIERLABEL* label : candidate->m_hier_ports )
+                {
+                    if( candidate->GetNameForDriver( label ) == aParent->GetNameForDriver( pin ) )
                     {
-                        if( !candidate->m_strong_driver
-                            || candidate->m_hier_ports.empty()
-                            || visited.count( candidate ) )
-                        {
-                            continue;
-                        }
+                        wxLogTrace( ConnTrace, wxS( "%lu: found child %lu (%s)" ), aParent->m_code,
+                                    candidate->m_code, candidate->m_driver_connection->Name() );
 
-                        for( SCH_HIERLABEL* label : candidate->m_hier_ports )
-                        {
-                            if( candidate->GetNameForDriver( label ) == aParent->GetNameForDriver( pin ) )
-                            {
-                                wxLogTrace( ConnTrace, wxS( "%lu: found child %lu (%s)" ), aParent->m_code,
-                                            candidate->m_code, candidate->m_driver_connection->Name() );
+                        candidate->m_hier_parent = aParent;
 
-                                candidate->m_hier_parent = aParent;
-                                aParent->m_hier_children.insert( candidate );
-
-                                search_list.push_back( candidate );
-                                break;
-                            }
-                        }
+                        search_list.push_back( candidate );
+                        break;
                     }
                 }
-            };
+            }
+        }
 
-    auto propagate_bus_neighbors = [&]( CONNECTION_SUBGRAPH* aParentGraph ) {
+        for( SCH_HIERLABEL* label : aParent->m_hier_ports )
+        {
+            SCH_SHEET_PATH path = aParent->m_sheet;
+            path.pop_back();
+
+            auto it = m_sheet_to_subgraphs_map.find( path );
+
+            if( it == m_sheet_to_subgraphs_map.end() )
+                continue;
+
+            for( CONNECTION_SUBGRAPH* candidate : it->second )
+            {
+                if( candidate->m_hier_pins.empty()
+                    || visited.count( candidate )
+                    || candidate->m_driver_connection->Type() != aParent->m_driver_connection->Type() )
+                {
+                    continue;
+                }
+
+                const KIID& last_parent_uuid = aParent->m_sheet.Last()->m_Uuid;
+
+                for( SCH_SHEET_PIN* pin : candidate->m_hier_pins )
+                {
+                    // If the last sheet UUIDs won't match, no need to check the full path
+                    if( pin->GetParent()->m_Uuid != last_parent_uuid )
+                        continue;
+
+                    SCH_SHEET_PATH pin_path = path;
+                    pin_path.push_back( pin->GetParent() );
+
+                    if( pin_path != aParent->m_sheet )
+                        continue;
+
+                    if( aParent->GetNameForDriver( label ) == candidate->GetNameForDriver( pin ) )
+                    {
+                        wxLogTrace( ConnTrace, wxS( "%lu: found additional parent %lu (%s)" ),
+                                    aParent->m_code, candidate->m_code,
+                                    candidate->m_driver_connection->Name() );
+
+                        aParent->m_hier_children.insert( candidate );
+                        search_list.push_back( candidate );
+                        break;
+                    }
+                }
+            }
+        }
+    };
+
+    auto propagate_bus_neighbors = [&]( CONNECTION_SUBGRAPH* aParentGraph )
+    {
         for( const auto& kv : aParentGraph->m_bus_neighbors )
         {
             for( CONNECTION_SUBGRAPH* neighbor : kv.second )
@@ -2341,9 +2387,8 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, boo
     {
         auto child = search_list[i];
 
-        visited.insert( child );
-
-        visit( child );
+        if( visited.insert( child ).second )
+            visit( child );
 
         child->m_dirty = false;
     }
