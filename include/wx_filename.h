@@ -24,6 +24,7 @@
 #ifndef WX_FILENAME_H
 #define WX_FILENAME_H
 
+#include <kicommon.h>
 #include <wx/filename.h>
 
 /**
@@ -45,7 +46,7 @@
  * and string concatenations by caching the path and filename locally and only resolving
  * the wxFileName when it has to.
  */
-class WX_FILENAME
+class KICOMMON_API WX_FILENAME
 {
 public:
     WX_FILENAME( const wxString& aPath, const wxString& aFilename );

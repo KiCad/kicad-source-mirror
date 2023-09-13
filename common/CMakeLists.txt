@@ -51,6 +51,7 @@ set( KICOMMON_SRCS
     locale_io.cpp
     richio.cpp
     string_utils.cpp
+    wx_filename.cpp
     )
 
 add_library( kicommon SHARED
@@ -441,7 +442,6 @@ set( COMMON_SRCS
     validators.cpp
     wildcards_and_files_ext.cpp
     drawing_sheet/ds_painter.cpp
-    wx_filename.cpp
     xnode.cpp
     )
 
