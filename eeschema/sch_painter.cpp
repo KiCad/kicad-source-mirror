@@ -2405,7 +2405,8 @@ static void orientSymbol( LIB_SYMBOL* symbol, int orientation )
 }
 
 
-wxString SCH_PAINTER::expandLibItemTextVars( const wxString& aSourceText, const SCH_SYMBOL* aSymbolContext )
+wxString SCH_PAINTER::expandLibItemTextVars( const wxString& aSourceText,
+                                             const SCH_SYMBOL* aSymbolContext )
 {
     std::function<bool( wxString* )> symbolResolver =
             [&]( wxString* token ) -> bool
@@ -2485,7 +2486,7 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
         tempPin->SetFlags( symbolPin->GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED,
                                                         // IS_SHOWN_AS_BITMAP
 
-        tempPin->SetName( symbolPin->GetShownName() );
+        tempPin->SetName( expandLibItemTextVars( symbolPin->GetShownName(), aSymbol ) );
         tempPin->SetType( symbolPin->GetType() );
         tempPin->SetShape( symbolPin->GetShape() );
 
