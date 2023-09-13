@@ -286,6 +286,19 @@ void BOARD_ADAPTER::createTrack( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDs
     {
         const PCB_ARC* arc = static_cast<const PCB_ARC*>( aTrack );
 
+        if( arc->IsDegenerated() )
+        {
+            // Draw this very small arc like a track segment (a PCB_TRACE_T)
+            PCB_TRACK track( arc->GetParent() );
+            track.SetStart( arc->GetStart() );
+            track.SetEnd( arc->GetEnd() );
+            track.SetWidth( arc->GetWidth() );
+            track.SetLayer( arc->GetLayer() );
+
+            createTrack( &track, aDstContainer );
+            return;
+        }
+
         VECTOR2D  center( arc->GetCenter() );
         EDA_ANGLE arc_angle = arc->GetAngle();
         double    radius = arc->GetRadius();

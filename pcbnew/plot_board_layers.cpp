@@ -645,8 +645,19 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         {
             const PCB_ARC* arc = static_cast<const PCB_ARC*>( track );
 
-            aPlotter->ThickArc( arc->GetCenter(), arc->GetArcAngleStart(), arc->GetAngle(),
-                                arc->GetRadius(), width, plotMode, &gbr_metadata );
+            // Too small arcs cannot be really handled: arc center (and arc radius)
+            // cannot be safely computed
+            if( !arc->IsDegenerated( 10 /* in IU */ ) )
+            {
+                aPlotter->ThickArc( arc->GetCenter(), arc->GetArcAngleStart(), arc->GetAngle(),
+                                    arc->GetRadius(), width, plotMode, &gbr_metadata );
+            }
+            else
+            {
+                // Approximate this very small arc by a segment.
+                aPlotter->ThickSegment( track->GetStart(), track->GetEnd(), width, plotMode,
+                                        &gbr_metadata );
+            }
         }
         else
         {
