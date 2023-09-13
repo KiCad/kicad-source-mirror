@@ -1858,6 +1858,11 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
                     SEG seg( primitive->GetStart(), primitive->GetEnd() );
                     SHAPE_LINE_CHAIN::INTERSECTIONS intersections;
 
+                    RotatePoint( seg.A, pad->GetOrientation() );
+                    RotatePoint( seg.B, pad->GetOrientation() );
+                    seg.A += pad->ShapePos();
+                    seg.B += pad->ShapePos();
+
                     // Make sure seg.A is the origin
                     if( !pad->GetEffectivePolygon()->Contains( seg.A ) )
                         seg.Reverse();

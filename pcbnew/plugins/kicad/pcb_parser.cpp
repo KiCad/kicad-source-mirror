@@ -2520,7 +2520,7 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
                  CurTok() == T_fp_rect || CurTok() == T_fp_line || CurTok() == T_fp_poly ||
                  CurTok() == T_gr_arc || CurTok() == T_gr_circle || CurTok() == T_gr_curve ||
                  CurTok() == T_gr_rect || CurTok() == T_gr_bbox || CurTok() == T_gr_line ||
-                 CurTok() == T_gr_poly, nullptr,
+                 CurTok() == T_gr_poly || CurTok() == T_gr_vector, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_SHAPE." ) );
 
     T                          token;
@@ -2720,6 +2720,7 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
         NeedRIGHT();
         break;
 
+    case T_gr_vector:
     case T_gr_line:
     case T_fp_line:
         // Default PCB_SHAPE type is S_SEGMENT.
@@ -4587,6 +4588,14 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
                     PCB_SHAPE* numberBox = parsePCB_SHAPE( nullptr );
                     numberBox->SetIsProxyItem();
                     pad->AddPrimitive( numberBox );
+                    break;
+                }
+
+                case T_gr_vector:
+                {
+                    PCB_SHAPE* spokeTemplate = parsePCB_SHAPE( nullptr );
+                    spokeTemplate->SetIsProxyItem();
+                    pad->AddPrimitive( spokeTemplate );
                     break;
                 }
 

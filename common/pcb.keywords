@@ -146,6 +146,7 @@ gr_poly
 gr_rect
 gr_text
 gr_text_box
+gr_vector
 hatch
 hatch_thickness
 hatch_gap

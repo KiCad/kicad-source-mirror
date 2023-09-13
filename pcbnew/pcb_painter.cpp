@@ -1192,7 +1192,10 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             {
                 if( primitive->IsProxyItem() && primitive->GetShape() == SHAPE_T::RECTANGLE )
                 {
-                    position = aPad->GetPosition() + primitive->GetCenter();
+                    position = primitive->GetCenter();
+                    RotatePoint( position, aPad->GetOrientation() );
+                    position += aPad->ShapePos();
+
                     padsize.x = abs( primitive->GetBotRight().x - primitive->GetTopLeft().x );
                     padsize.y = abs( primitive->GetBotRight().y - primitive->GetTopLeft().y );
 
@@ -1736,10 +1739,24 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
         case SHAPE_T::SEGMENT:
             if( aShape->IsProxyItem() )
             {
-                m_gal->SetIsFill( false );
-                m_gal->SetIsStroke( true );
+                std::vector<VECTOR2I> pts;
+                VECTOR2I offset = ( aShape->GetEnd() - aShape->GetStart() ).Perpendicular();
+                offset = offset.Resize( thickness / 2 );
+
+                pts.push_back( aShape->GetStart() + offset );
+                pts.push_back( aShape->GetStart() - offset );
+                pts.push_back( aShape->GetEnd() - offset );
+                pts.push_back( aShape->GetEnd() + offset );
+
                 m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-                m_gal->DrawSegment( aShape->GetStart(), aShape->GetEnd(), thickness );
+                m_gal->DrawLine( pts[0], pts[1] );
+                m_gal->DrawLine( pts[1], pts[2] );
+                m_gal->DrawLine( pts[2], pts[3] );
+                m_gal->DrawLine( pts[3], pts[0] );
+                m_gal->DrawLine( ( pts[0] + pts[1] ) / 2, ( pts[1] + pts[2] ) / 2 );
+                m_gal->DrawLine( ( pts[1] + pts[2] ) / 2, ( pts[2] + pts[3] ) / 2 );
+                m_gal->DrawLine( ( pts[2] + pts[3] ) / 2, ( pts[3] + pts[0] ) / 2 );
+                m_gal->DrawLine( ( pts[3] + pts[0] ) / 2, ( pts[0] + pts[1] ) / 2 );
             }
             else if( outline_mode )
             {

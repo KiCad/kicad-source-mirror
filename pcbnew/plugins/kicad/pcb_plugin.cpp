@@ -1698,9 +1698,18 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
             switch( primitive->GetShape() )
             {
             case SHAPE_T::SEGMENT:
-                m_out->Print( nested_level, "(gr_line (start %s) (end %s)",
-                              formatInternalUnits( primitive->GetStart() ).c_str(),
-                              formatInternalUnits( primitive->GetEnd() ).c_str() );
+                if( primitive->IsProxyItem() )
+                {
+                    m_out->Print( nested_level, "(gr_vector (start %s) (end %s)",
+                                  formatInternalUnits( primitive->GetStart() ).c_str(),
+                                  formatInternalUnits( primitive->GetEnd() ).c_str() );
+                }
+                else
+                {
+                    m_out->Print( nested_level, "(gr_line (start %s) (end %s)",
+                                  formatInternalUnits( primitive->GetStart() ).c_str(),
+                                  formatInternalUnits( primitive->GetEnd() ).c_str() );
+                }
                 break;
 
             case SHAPE_T::RECTANGLE:
@@ -1757,7 +1766,8 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
                 break;
             }
 
-            m_out->Print( 0, " (width %s)", formatInternalUnits( primitive->GetWidth() ).c_str() );
+            if( !primitive->IsProxyItem() )
+                m_out->Print( 0, " (width %s)", formatInternalUnits( primitive->GetWidth() ).c_str() );
 
             // The filled flag represents if a solid fill is present on circles,
             // rectangles and polygons
