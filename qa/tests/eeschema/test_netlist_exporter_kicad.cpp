@@ -194,5 +194,10 @@ BOOST_AUTO_TEST_CASE( HierarchyAliases )
     TestNetlist( "hierarchy_aliases" );
 }
 
+BOOST_AUTO_TEST_CASE( Issue14818 )
+{
+    TestNetlist( "issue14818" );
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()
