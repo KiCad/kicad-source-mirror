@@ -393,6 +393,9 @@ int SYMBOL_EDITOR_CONTROL::RenameSymbol( const TOOL_EVENT& aEvent )
         LIB_SYMBOL* libSymbol = libMgr.GetBufferedSymbol( oldName, libName );
         bool        isCurrentSymbol = editFrame->IsCurrentSymbol( libId );
 
+        if( !libSymbol )
+            return 0;
+
         libSymbol->SetName( newName );
 
         if( libSymbol->GetFieldById( VALUE_FIELD )->GetText() == oldName )
@@ -401,7 +404,7 @@ int SYMBOL_EDITOR_CONTROL::RenameSymbol( const TOOL_EVENT& aEvent )
         libMgr.UpdateSymbolAfterRename( libSymbol, newName, libName );
         libMgr.SetSymbolModified( newName, libName );
 
-        if( isCurrentSymbol )
+        if( isCurrentSymbol && editFrame->GetCurSymbol())
         {
             libSymbol = editFrame->GetCurSymbol();
 
