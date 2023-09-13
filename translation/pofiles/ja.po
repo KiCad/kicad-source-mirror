@@ -608,9 +608,8 @@ msgid "Toggle 3D models marked DNP"
 msgstr "[未実装]の部品の3Dモデル表示を切り替え"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:345
-#, fuzzy
 msgid "Toggle 3D models for components marked 'Do Not Place'"
-msgstr "\"virtual\" 属性のコンポーネントの 3D モデルを除く"
+msgstr "'部品表から除外'に設定されているコンポーネントの 3D モデルを切り換える"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:352
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:353
@@ -1160,6 +1159,8 @@ msgid ""
 "Show or hide the board body\n"
 "If hidden, show only copper and silkscreen layers."
 msgstr ""
+"基板本体を表示するかしないか\n"
+"表示しない場合は、銅およびシルクスクリーンのレイヤーだけを表示する。"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:231
 msgid "Reload board and 3D models"
@@ -1505,9 +1506,8 @@ msgid "Negative"
 msgstr "ネガ"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:158
-#, fuzzy
 msgid "Pcb Layer for Graphics"
-msgstr "インポートされた画像を配置"
+msgstr "図形用のPCBレイヤー"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:525
@@ -2359,19 +2359,16 @@ msgid "Grid 2:"
 msgstr "グリッド2:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:163 common/tool/actions.cpp:570
-#, fuzzy
 msgid "Grid Overrides"
-msgstr "オーバーライド"
+msgstr "グリッドのオーバーライド"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:174
-#, fuzzy
 msgid "Connectable Items:"
-msgstr "未配線アイテム"
+msgstr "配線可能なアイテム:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:188
-#, fuzzy
 msgid "Wires:"
-msgstr "ワイヤー"
+msgstr "ワイヤー:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:202
 #: eeschema/dialogs/dialog_field_properties_base.cpp:32
@@ -2387,9 +2384,8 @@ msgid "Text:"
 msgstr "テキスト:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:216
-#, fuzzy
 msgid "Graphics:"
-msgstr "図形"
+msgstr "図形:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:236 common/tool/actions.cpp:552
 msgid "Reset Grid Origin"
@@ -3417,7 +3413,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:157
 msgid "Show popup indicator when toggling settings with hotkeys"
-msgstr ""
+msgstr "ホットキーで設定を切り替えるときにポップアップインジケータを表示する"
 
 #: common/dialogs/panel_common_settings_base.cpp:158
 msgid ""
@@ -3751,7 +3747,7 @@ msgstr "画像の倍率:"
 
 #: common/dialogs/panel_image_editor_base.cpp:47
 msgid "PPI:"
-msgstr ""
+msgstr "PPI:"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: pcbnew/dialogs/panel_edit_options_base.cpp:225
@@ -4185,9 +4181,8 @@ msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "OpenGL を使用できないため、ソフトウェア レンダリングに切り替えます"
 
 #: common/draw_panel_gal.cpp:326
-#, fuzzy
 msgid "Graphics error"
-msgstr "グラフィック レイヤー"
+msgstr "図形 エラー"
 
 #: common/draw_panel_gal.cpp:487
 msgid "Could not use OpenGL"
@@ -5506,9 +5501,8 @@ msgid "Delete"
 msgstr "削除"
 
 #: common/grid_tricks.cpp:355
-#, fuzzy
 msgid "Clear contents of selected cells"
-msgstr "選択したセルを削除"
+msgstr "選択したセルの内容を削除"
 
 #: common/grid_tricks.cpp:356 common/tool/actions.cpp:192
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:105
@@ -5764,10 +5758,9 @@ msgstr "シートピン"
 msgid "No-connect symbols"
 msgstr "未接続シンボル"
 
-#: common/layer_id.cpp:138 common/layer_id.cpp:135
-#, fuzzy
+#: common/layer_id.cpp:135
 msgid "DNP markers"
-msgstr "マーカー"
+msgstr "DNP マーカー"
 
 #: common/layer_id.cpp:139 common/layer_id.cpp:136
 msgid "ERC warnings"
@@ -5982,14 +5975,12 @@ msgid "Illegal character found in logical library name"
 msgstr "論理的なライブラリ名の中に不正な文字があります"
 
 #: common/lib_table_grid_tricks.cpp:32
-#, fuzzy
 msgid "Edit options..."
-msgstr "編集オプション"
+msgstr "編集オプション..."
 
 #: common/lib_table_grid_tricks.cpp:33
-#, fuzzy
 msgid "Edit options for this library entry"
-msgstr "フットプリント ライブラリー テーブルを編集"
+msgstr "この ライブラリーエントリーのオプションを編集"
 
 #: common/lib_table_grid_tricks.cpp:56
 msgid "Activate selected"
@@ -6000,9 +5991,9 @@ msgid "Deactivate selected"
 msgstr "選択対象を無効化"
 
 #: common/lib_table_grid_tricks.cpp:67
-#, fuzzy, c-format
+#, c-format
 msgid "Library settings for %s..."
-msgstr "新規パッドの設定を編集"
+msgstr "%sのライブラリ設定..."
 
 #: common/lib_tree_model.cpp:146
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
@@ -6361,9 +6352,8 @@ msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
 msgstr "OUTPUTSTREAM_OUTPUTFORMATTER 書き出しエラー"
 
 #: common/settings/bom_settings.cpp:132
-#, fuzzy
 msgid "Grouped By Value"
-msgstr "名前によるグループ"
+msgstr "値によるグループ化"
 
 #: common/settings/bom_settings.cpp:132 common/settings/bom_settings.cpp:150
 #: common/settings/bom_settings.cpp:169
@@ -6376,9 +6366,8 @@ msgid "Reference"
 msgstr "リファレンス"
 
 #: common/settings/bom_settings.cpp:150
-#, fuzzy
 msgid "Grouped By Value and Footprint"
-msgstr "フットプリントの検索と移動"
+msgstr "値とフットプリントによるグループ化"
 
 #: common/settings/bom_settings.cpp:169
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:268
@@ -7479,9 +7468,8 @@ msgid "Reveal Preferences in Finder"
 msgstr "ファインダーにテーマを表示"
 
 #: common/widgets/paged_dialog.cpp:93
-#, fuzzy
 msgid "Open Preferences Directory"
-msgstr "設定を開く"
+msgstr "設定ディレクトリを開く"
 
 #: common/widgets/paged_dialog.cpp:367
 #, c-format
@@ -7538,9 +7526,8 @@ msgid "Edit..."
 msgstr "編集..."
 
 #: common/widgets/widget_hotkey_list.cpp:421
-#, fuzzy
 msgid "Edit Alternate..."
-msgstr "リファレンスを編集..."
+msgstr "代替を編集..."
 
 #: common/widgets/widget_hotkey_list.cpp:422
 msgid "Undo Changes"
@@ -7556,7 +7543,6 @@ msgid "Clear Assigned Alternate"
 msgstr "割り当てられたホットキーをクリア"
 
 #: common/widgets/widget_hotkey_list.cpp:425
-#, fuzzy
 msgid "Restore Defaults"
 msgstr "デフォルト値を復元"
 
@@ -7766,11 +7752,9 @@ msgstr "OrcadPCB2 ネットリスト ファイル"
 msgid "KiCad netlist files"
 msgstr "KiCad ネットリスト ファイル"
 
-#: common/wildcards_and_files_ext.cpp:339
 #: common/wildcards_and_files_ext.cpp:338
-#, fuzzy
 msgid "Allegro netlist files"
-msgstr "ネットリスト ファイルを生成"
+msgstr "Allegroネットリストファイル"
 
 #: common/wildcards_and_files_ext.cpp:346
 #: common/wildcards_and_files_ext.cpp:392
@@ -7809,11 +7793,9 @@ msgstr "Altium Circuit Studio 基板ファイル"
 msgid "Altium Circuit Maker PCB files"
 msgstr "Altium Circuit Maker 基板ファイル"
 
-#: common/wildcards_and_files_ext.cpp:382
 #: common/wildcards_and_files_ext.cpp:381
-#, fuzzy
 msgid "Solidworks PCB files"
-msgstr "ベタ塗り"
+msgstr "Solidworks PCB ファイル"
 
 #: common/wildcards_and_files_ext.cpp:387
 #: common/wildcards_and_files_ext.cpp:386
@@ -9000,14 +8982,12 @@ msgid "Update"
 msgstr "更新"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:403
-#, fuzzy
 msgid "Update Symbols"
-msgstr "シンボルを更新..."
+msgstr "シンボルを更新"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:512
-#, fuzzy
 msgid "*** No symbols matching criteria found ***"
-msgstr "*** シンボルが見つかりません ***"
+msgstr "***適合するシンボルが見つからない***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:547
 msgid "*** symbol not found ***"
@@ -9177,9 +9157,8 @@ msgid "Database connection failed: %s"
 msgstr "データベースへの接続に失敗: %s"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:117
-#, fuzzy
 msgid "No connection to database"
-msgstr "パッドをゾーンへ接続:"
+msgstr "データベースへの接続がない"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:124
 #, c-format
@@ -9187,13 +9166,12 @@ msgid "Loaded %zu libraries"
 msgstr "%zu 個のライブラリーをロード"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:32
-#, fuzzy
 msgid "Connection"
 msgstr "接続"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:39
 msgid "DSN:"
-msgstr ""
+msgstr "DSN:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:45
 msgid "Username:"
@@ -9219,45 +9197,38 @@ msgid "Libraries"
 msgstr "ライブラリ"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:104
-#, fuzzy
 msgid "Reload Configuration"
-msgstr "ユーザー設定"
+msgstr "設定を再読み込み"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:105
-#, fuzzy
 msgid "Reload the database library configuration file"
-msgstr "ホットキー設定ファイルを読込み:"
+msgstr "データベースライブラリの設定ファイルを再読み込み"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:120
-#, fuzzy
 msgid "Caching"
-msgstr "検索中..."
+msgstr "キャッシュ化."
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:127
-#, fuzzy
 msgid "Cache size:"
-msgstr "ページ サイズ:"
+msgstr "キャッシュ サイズ:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:129
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:134
-#, fuzzy
 msgid "How many database queries to cache"
-msgstr "表示する精度の桁数"
+msgstr "キャッシュするデータベースのクエリの数"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:138
-#, fuzzy
 msgid "Cache timeout:"
-msgstr "キャッシュされたシンボル:"
+msgstr "キャッシュタイムアウト:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:140
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:145
 msgid "Time in seconds that database queries will be cached for"
-msgstr ""
+msgstr "データベースクエリがキャッシュされる秒数"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.h:79
-#, fuzzy
 msgid "Database Library Settings"
-msgstr "KiCad データベース ライブラリ ファイル"
+msgstr "データベースライブラリの設定"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:545
 #, c-format
@@ -9936,9 +9907,8 @@ msgid "Text Item Properties"
 msgstr "テキスト アイテムのプロパティ"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:597
-#, fuzzy
 msgid "Edit Text and Graphics"
-msgstr "テキストと図形のプロパティを編集"
+msgstr "テキストと図形の編集"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:33
 msgid "Other symbol fields"
@@ -10008,9 +9978,8 @@ msgstr "ネットでフィルター:"
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:102
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:91
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:121
-#, fuzzy
 msgid "Selected items only"
-msgstr "選択対象のみ(&S)"
+msgstr "選択項目のみ"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:159
 msgid "Set To"
@@ -10146,19 +10115,16 @@ msgid "Ibis parser"
 msgstr "Ibisパーサー"
 
 #: eeschema/dialogs/dialog_image_properties.cpp:75
-#, fuzzy
 msgid "Image Properties"
-msgstr "ターゲットのプロパティ"
+msgstr "画像のプロパティ"
 
 #: eeschema/dialogs/dialog_junction_props.cpp:113
-#, fuzzy
 msgid "Edit Junction"
-msgstr "ジャンクションを追加"
+msgstr "ジャンクションの編集"
 
 #: eeschema/dialogs/dialog_junction_props.cpp:113
-#, fuzzy
 msgid "Edit Junctions"
-msgstr "ジャンクション (接続点)"
+msgstr "ジャンクションの編集"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
@@ -10781,13 +10747,9 @@ msgstr "シンボルから代替ボディスタイル(ド・モルガン)削除�
 msgid "Symbol name '%s' already in use in library '%s'."
 msgstr "シンボル '%s' はライブラリ '%s' にすでに存在します。"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:329
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:334
-#: eeschema/dialogs/dialog_symbol_properties.cpp:834
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:370
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:375
 #: eeschema/dialogs/dialog_symbol_properties.cpp:871
-#, fuzzy
 msgid "Edit Symbol Properties"
 msgstr "シンボル プロパティを編集"
 
@@ -11024,14 +10986,12 @@ msgid "Text Box Properties"
 msgstr "テキスト ボックスのプロパティ"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:152
-#, fuzzy
 msgid "Edit Line"
-msgstr "ファイルを編集"
+msgstr "ラインを編集"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:152
-#, fuzzy
 msgid "Edit Lines"
-msgstr "線のオプションを編集"
+msgstr "ラインを編集"
 
 #: eeschema/dialogs/dialog_line_properties_base.cpp:79
 msgid "Set width to 0 to use schematic's default line width."
@@ -11413,9 +11373,8 @@ msgid "Select the color theme to use for plotting"
 msgstr "プロットで使用するカラー テーマを選択"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:99
-#, fuzzy
 msgid "Minimum line width:"
-msgstr "最小幅:"
+msgstr "最小ライン幅:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:104
 msgid ""
@@ -11786,9 +11745,8 @@ msgid "%s Properties"
 msgstr "%sのプロパティ"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:179
-#, fuzzy
 msgid "Edit Sheet Pin"
-msgstr "シートピンを追加"
+msgstr "シートピンの編集"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.h:84
 msgid "Sheet Pin Properties"
