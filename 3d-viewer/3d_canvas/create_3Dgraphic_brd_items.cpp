@@ -626,16 +626,12 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
             if( inner_radius3DU < 0 )
                 inner_radius3DU = 0.0;
 
-            if( outer_radius3DU <= inner_radius3DU )
-            {
-                // Don't attempt to render degenerate shapes
-            }
-            else if( aShape->IsFilled() )
+            if( aShape->IsFilled() )
             {
                 aContainer->Add( new FILLED_CIRCLE_2D( center3DU, outer_radius3DU,
                                                        *aOwner ) );
             }
-            else
+            else if( outer_radius3DU > inner_radius3DU )
             {
                 aContainer->Add( new RING_2D( center3DU, inner_radius3DU, outer_radius3DU,
                                               *aOwner ) );
