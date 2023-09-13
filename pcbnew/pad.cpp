@@ -566,7 +566,7 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
     {
         for( const std::shared_ptr<PCB_SHAPE>& primitive : m_editPrimitives )
         {
-            if( !primitive->IsAnnotationProxy() )
+            if( !primitive->IsProxyItem() )
             {
                 for( SHAPE* shape : primitive->MakeEffectiveShapes() )
                 {

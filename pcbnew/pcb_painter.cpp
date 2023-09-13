@@ -1171,7 +1171,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
                 {
                     const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( aItem );
 
-                    if( shape->IsAnnotationProxy() )
+                    if( shape->IsProxyItem() && shape->GetShape() == SHAPE_T::RECTANGLE )
                     {
                         position = shape->GetCenter();
                         padsize = shape->GetBotRight() - shape->GetTopLeft();
@@ -1190,7 +1190,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             // See if we have a number box
             for( const std::shared_ptr<PCB_SHAPE>& primitive : aPad->GetPrimitives() )
             {
-                if( primitive->IsAnnotationProxy() )
+                if( primitive->IsProxyItem() && primitive->GetShape() == SHAPE_T::RECTANGLE )
                 {
                     position = aPad->GetPosition() + primitive->GetCenter();
                     padsize.x = abs( primitive->GetBotRight().x - primitive->GetTopLeft().x );
@@ -1734,7 +1734,14 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
         switch( aShape->GetShape() )
         {
         case SHAPE_T::SEGMENT:
-            if( outline_mode )
+            if( aShape->IsProxyItem() )
+            {
+                m_gal->SetIsFill( false );
+                m_gal->SetIsStroke( true );
+                m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+                m_gal->DrawSegment( aShape->GetStart(), aShape->GetEnd(), thickness );
+            }
+            else if( outline_mode )
             {
                 m_gal->DrawSegment( aShape->GetStart(), aShape->GetEnd(), thickness );
             }
@@ -1752,7 +1759,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
         {
             std::vector<VECTOR2I> pts = aShape->GetRectCorners();
 
-            if( aShape->IsAnnotationProxy() )
+            if( aShape->IsProxyItem() )
             {
                 m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
                 m_gal->DrawLine( pts[0], pts[1] );

@@ -4585,7 +4585,7 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
                 case T_gr_bbox:
                 {
                     PCB_SHAPE* numberBox = parsePCB_SHAPE( nullptr );
-                    numberBox->SetIsAnnotationProxy();
+                    numberBox->SetIsProxyItem();
                     pad->AddPrimitive( numberBox );
                     break;
                 }

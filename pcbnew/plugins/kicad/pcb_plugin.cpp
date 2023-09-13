@@ -1704,7 +1704,7 @@ void PCB_PLUGIN::format( const PAD* aPad, int aNestLevel ) const
                 break;
 
             case SHAPE_T::RECTANGLE:
-                if( primitive->IsAnnotationProxy() )
+                if( primitive->IsProxyItem() )
                 {
                     m_out->Print( nested_level, "(gr_bbox (start %s) (end %s)",
                                   formatInternalUnits( primitive->GetStart() ).c_str(),

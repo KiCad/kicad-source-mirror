@@ -354,14 +354,45 @@ void PCB_SHAPE::Mirror( const VECTOR2I& aCentre, bool aMirrorAroundXAxis )
 }
 
 
-void PCB_SHAPE::SetIsAnnotationProxy( bool aIsProxy )
+void PCB_SHAPE::SetIsProxyItem( bool aIsProxy )
 {
-    if( aIsProxy && !m_annotationProxy )
-        SetStroke( STROKE_PARAMS( 1 ) );
-    else if( m_annotationProxy && !aIsProxy )
-        SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH ) ) );
+    PAD* parentPad = nullptr;
 
-    m_annotationProxy = aIsProxy;
+    if( GetBoard() && GetBoard()->IsFootprintHolder() )
+    {
+        for( FOOTPRINT* fp : GetBoard()->Footprints() )
+        {
+            for( PAD* pad : fp->Pads() )
+            {
+                if( pad->IsEntered() )
+                {
+                    parentPad = pad;
+                    break;
+                }
+            }
+        }
+    }
+
+    if( aIsProxy && !m_proxyItem )
+    {
+        if( GetShape() == SHAPE_T::SEGMENT )
+        {
+            if( parentPad && parentPad->GetThermalSpokeWidth() )
+                SetWidth( parentPad->GetThermalSpokeWidth() );
+            else
+                SetWidth( pcbIUScale.mmToIU( ZONE_THERMAL_RELIEF_COPPER_WIDTH_MM ) );
+        }
+        else
+        {
+            SetWidth( 1 );
+        }
+    }
+    else if( m_proxyItem && !aIsProxy )
+    {
+        SetWidth( pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH ) );
+    }
+
+    m_proxyItem = aIsProxy;
 }
 
 
@@ -591,21 +622,42 @@ static struct PCB_SHAPE_DESC
                                       _HKI( "Net" ), isCopper );
 
         auto isPadEditMode =
-                []( INSPECTABLE* aItem ) -> bool
+                []( BOARD* aBoard ) -> bool
+                {
+                    if( aBoard && aBoard->IsFootprintHolder() )
+                    {
+                        for( FOOTPRINT* fp : aBoard->Footprints() )
+                        {
+                            for( PAD* pad : fp->Pads() )
+                            {
+                                if( pad->IsEntered() )
+                                    return true;
+                            }
+                        }
+                    }
+
+                    return false;
+                };
+
+        auto showNumberBoxProperty =
+                [&]( INSPECTABLE* aItem ) -> bool
                 {
                     if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aItem ) )
                     {
-                        if( shape->GetBoard() && shape->GetBoard()->IsFootprintHolder() )
-                        {
-                            for( FOOTPRINT* fp : shape->GetBoard()->Footprints() )
-                            {
-                                for( PAD* pad : fp->Pads() )
-                                {
-                                    if( pad->IsEntered() )
-                                        return true;
-                                }
-                            }
-                        }
+                        if( shape->GetShape() == SHAPE_T::RECTANGLE )
+                            return isPadEditMode( shape->GetBoard() );
+                    }
+
+                    return false;
+                };
+
+        auto showSpokeTemplateProperty =
+                [&]( INSPECTABLE* aItem ) -> bool
+                {
+                    if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aItem ) )
+                    {
+                        if( shape->GetShape() == SHAPE_T::SEGMENT )
+                            return isPadEditMode( shape->GetBoard() );
                     }
 
                     return false;
@@ -614,8 +666,15 @@ static struct PCB_SHAPE_DESC
         const wxString groupPadPrimitives = _HKI( "Pad Primitives" );
 
         propMgr.AddProperty( new PROPERTY<PCB_SHAPE, bool>( _HKI( "Number Box" ),
-                             &PCB_SHAPE::SetIsAnnotationProxy, &PCB_SHAPE::IsAnnotationProxy ),
+                                                            &PCB_SHAPE::SetIsProxyItem,
+                                                            &PCB_SHAPE::IsProxyItem ),
                              groupPadPrimitives )
-                .SetAvailableFunc( isPadEditMode );
+                .SetAvailableFunc( showNumberBoxProperty );
+
+        propMgr.AddProperty( new PROPERTY<PCB_SHAPE, bool>( _HKI( "Thermal Spoke Template" ),
+                                                            &PCB_SHAPE::SetIsProxyItem,
+                                                            &PCB_SHAPE::IsProxyItem ),
+                             groupPadPrimitives )
+                .SetAvailableFunc( showSpokeTemplateProperty );
     }
 } _PCB_SHAPE_DESC;

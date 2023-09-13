@@ -766,47 +766,20 @@ PCB_LAYER_ID PAD_TOOL::explodePad( PAD* aPad )
 
         for( const std::shared_ptr<PCB_SHAPE>& primitive : aPad->GetPrimitives() )
         {
-            PCB_SHAPE* shape = new PCB_SHAPE( board()->GetFirstFootprint() );
+            PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( primitive->Duplicate() );
 
-            shape->SetShape( primitive->GetShape() );
-            shape->SetIsAnnotationProxy( primitive->IsAnnotationProxy());
-            shape->SetFilled( primitive->IsFilled() );
-            shape->SetStroke( primitive->GetStroke() );
-
-            switch( shape->GetShape() )
-            {
-            case SHAPE_T::SEGMENT:
-            case SHAPE_T::RECTANGLE:
-            case SHAPE_T::CIRCLE:
-                shape->SetStart( primitive->GetStart() );
-                shape->SetEnd( primitive->GetEnd() );
-                break;
-
-            case SHAPE_T::ARC:
-                shape->SetStart( primitive->GetStart() );
-                shape->SetEnd( primitive->GetEnd() );
-                shape->SetCenter( primitive->GetCenter() );
-                break;
-
-            case SHAPE_T::BEZIER:
-                shape->SetStart( primitive->GetStart() );
-                shape->SetEnd( primitive->GetEnd() );
-                shape->SetBezierC1( primitive->GetBezierC1() );
-                shape->SetBezierC2( primitive->GetBezierC2() );
-                break;
-
-            case SHAPE_T::POLY:
-                shape->SetPolyShape( primitive->GetPolyShape() );
-                break;
-
-            default:
-                UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
-            }
-
+            shape->SetParent( board()->GetFirstFootprint() );
             shape->Rotate( VECTOR2I( 0, 0 ), aPad->GetOrientation() );
             shape->Move( aPad->ShapePos() );
-
             shape->SetLayer( layer );
+
+            if( shape->IsProxyItem() && shape->GetShape() == SHAPE_T::SEGMENT )
+            {
+                if( aPad->GetThermalSpokeWidth() )
+                    shape->SetWidth( aPad->GetThermalSpokeWidth() );
+                else
+                    shape->SetWidth( pcbIUScale.mmToIU( ZONE_THERMAL_RELIEF_COPPER_WIDTH_MM ) );
+            }
 
             commit.Add( shape );
         }
@@ -851,7 +824,7 @@ std::vector<PCB_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun, BOARD
                     if( shape->GetLayer() != aLayer )
                         continue;
 
-                    if( shape->IsAnnotationProxy() )    // Pad number (and net name) box
+                    if( shape->IsProxyItem() )    // Pad number (and net name) box
                         return shape;
 
                     SHAPE_POLY_SET drawPoly;
@@ -938,46 +911,12 @@ std::vector<PCB_SHAPE*> PAD_TOOL::RecombinePad( PAD* aPad, bool aIsDryRun, BOARD
 
         if( !aIsDryRun )
         {
-            PCB_SHAPE* primitive = new PCB_SHAPE;
+            PCB_SHAPE* primitive = static_cast<PCB_SHAPE*>( fpShape->Duplicate() );
 
-            primitive->SetShape( fpShape->GetShape() );
-            primitive->SetFilled( fpShape->IsFilled() );
-            primitive->SetStroke( fpShape->GetStroke() );
-
-            switch( primitive->GetShape() )
-            {
-            case SHAPE_T::SEGMENT:
-            case SHAPE_T::RECTANGLE:
-            case SHAPE_T::CIRCLE:
-                primitive->SetStart( fpShape->GetStart() );
-                primitive->SetEnd( fpShape->GetEnd() );
-                break;
-
-            case SHAPE_T::ARC:
-                primitive->SetStart( fpShape->GetStart() );
-                primitive->SetEnd( fpShape->GetEnd() );
-                primitive->SetCenter( fpShape->GetCenter() );
-                break;
-
-            case SHAPE_T::BEZIER:
-                primitive->SetStart( fpShape->GetStart() );
-                primitive->SetEnd( fpShape->GetEnd() );
-                primitive->SetBezierC1( fpShape->GetBezierC1() );
-                primitive->SetBezierC2( fpShape->GetBezierC2() );
-                break;
-
-            case SHAPE_T::POLY:
-                primitive->SetPolyShape( fpShape->GetPolyShape() );
-                break;
-
-            default:
-                UNIMPLEMENTED_FOR( primitive->SHAPE_T_asString() );
-            }
-
+            primitive->SetParent( nullptr );
             primitive->Move( - aPad->ShapePos() );
             primitive->Rotate( VECTOR2I( 0, 0 ), - aPad->GetOrientation() );
 
-            primitive->SetIsAnnotationProxy( fpShape->IsAnnotationProxy() );
             aPad->AddPrimitive( primitive );
 
             aCommit.Remove( fpShape );

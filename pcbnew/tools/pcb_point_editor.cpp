@@ -1303,7 +1303,7 @@ void PCB_POINT_EDITOR::updateItem() const
             break;
         }
 
-        if( shape->IsAnnotationProxy() )
+        if( shape->IsProxyItem() )
         {
             for( PAD* pad : shape->GetParentFootprint()->Pads() )
             {

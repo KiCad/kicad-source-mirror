@@ -1774,6 +1774,20 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
         if( !( itemBB.Intersects( zoneBB ) ) )
             continue;
 
+        bool customSpokes = false;
+
+        if( pad->GetShape() == PAD_SHAPE::CUSTOM )
+        {
+            for( const std::shared_ptr<PCB_SHAPE>& primitive : pad->GetPrimitives() )
+            {
+                if( primitive->IsProxyItem() && primitive->GetShape() == SHAPE_T::SEGMENT )
+                {
+                    customSpokes = true;
+                    break;
+                }
+            }
+        }
+
         // Thermal spokes consist of square-ended segments from the pad center to points just
         // outside the thermal relief.  The outside end has an extra center point (which must be
         // at idx 3) which is used for testing whether or not the spoke connects to copper in the
@@ -1826,9 +1840,51 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
                     }
                 };
 
+        if( customSpokes )
+        {
+            SHAPE_POLY_SET   thermalPoly;
+            SHAPE_LINE_CHAIN thermalOutline;
+
+            pad->TransformShapeToPolygon( thermalPoly, aLayer, thermalReliefGap + epsilon,
+                                          m_maxError, ERROR_OUTSIDE );
+
+            if( thermalPoly.OutlineCount() )
+                thermalOutline = thermalPoly.Outline( 0 );
+
+            for( const std::shared_ptr<PCB_SHAPE>& primitive : pad->GetPrimitives() )
+            {
+                if( primitive->IsProxyItem() && primitive->GetShape() == SHAPE_T::SEGMENT )
+                {
+                    SEG seg( primitive->GetStart(), primitive->GetEnd() );
+                    SHAPE_LINE_CHAIN::INTERSECTIONS intersections;
+
+                    // Make sure seg.A is the origin
+                    if( !pad->GetEffectivePolygon()->Contains( seg.A ) )
+                        seg.Reverse();
+
+                    // Trim seg.B to the thermal outline
+                    if( thermalOutline.Intersect( seg, intersections ) )
+                    {
+                        seg.B = intersections.front().p;
+
+                        VECTOR2I offset = ( seg.B - seg.A ).Perpendicular().Resize( spoke_half_w );
+                        SHAPE_LINE_CHAIN spoke;
+
+                        spoke.Append( seg.A + offset );
+                        spoke.Append( seg.A - offset );
+                        spoke.Append( seg.B - offset );
+                        spoke.Append( seg.B          );  // test pt
+                        spoke.Append( seg.B + offset );
+
+                        spoke.SetClosed( true );
+                        aSpokesList.push_back( std::move( spoke ) );
+                    }
+                }
+            }
+        }
         // If the spokes are at a cardinal angle then we can generate them from a bounding box
         // without trig.
-        if( ( pad->GetOrientation() + pad->GetThermalSpokeAngle() ).IsCardinal() )
+        else if( ( pad->GetOrientation() + pad->GetThermalSpokeAngle() ).IsCardinal() )
         {
             BOX2I spokesBox = pad->GetBoundingBox();
             spokesBox.Inflate( thermalReliefGap + epsilon );

@@ -85,8 +85,8 @@ public:
 
     wxString SHAPE_T_asString() const;
 
-    virtual bool IsAnnotationProxy() const { return m_annotationProxy; }
-    virtual void SetIsAnnotationProxy( bool aIsProxy = true ) { m_annotationProxy = aIsProxy; }
+    virtual bool IsProxyItem() const { return m_proxyItem; }
+    virtual void SetIsProxyItem( bool aIsProxy = true ) { m_proxyItem = aIsProxy; }
 
     bool IsFilled() const
     {
@@ -399,7 +399,8 @@ protected:
     SHAPE_POLY_SET        m_poly;              // Stores the S_POLYGON shape
 
     int                   m_editState;
-    bool                  m_annotationProxy;   // A shape storing the position of an annotation
+    bool                  m_proxyItem;         // A shape storing proxy information (ie: a pad
+                                               //   number box, thermal spoke template, etc.)
 };
 
 #ifndef SWIG

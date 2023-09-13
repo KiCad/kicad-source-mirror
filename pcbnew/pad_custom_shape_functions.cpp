@@ -124,7 +124,7 @@ void PAD::addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, int aError,
 
     for( const std::shared_ptr<PCB_SHAPE>& primitive : m_editPrimitives )
     {
-        if( !primitive->IsAnnotationProxy() )
+        if( !primitive->IsProxyItem() )
             primitive->TransformShapeToPolygon( polyset, UNDEFINED_LAYER, 0, aError, aErrorLoc );
     }
 

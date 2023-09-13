@@ -47,7 +47,7 @@ EDA_SHAPE::EDA_SHAPE( SHAPE_T aType, int aLineWidth, FILL_T aFill ) :
         m_rectangleWidth( 0 ),
         m_segmentLength( 0 ),
         m_editState( 0 ),
-        m_annotationProxy( false )
+        m_proxyItem( false )
 {
 }
 
@@ -59,18 +59,27 @@ EDA_SHAPE::~EDA_SHAPE()
 
 wxString EDA_SHAPE::ShowShape() const
 {
-    if( IsAnnotationProxy() )
-        return _( "Number Box" );
-
-    switch( m_shape )
+    if( IsProxyItem() )
     {
-    case SHAPE_T::SEGMENT:   return _( "Line" );
-    case SHAPE_T::RECTANGLE: return _( "Rect" );
-    case SHAPE_T::ARC:       return _( "Arc" );
-    case SHAPE_T::CIRCLE:    return _( "Circle" );
-    case SHAPE_T::BEZIER:    return _( "Bezier Curve" );
-    case SHAPE_T::POLY:      return _( "Polygon" );
-    default:                 return wxT( "??" );
+        switch( m_shape )
+        {
+        case SHAPE_T::SEGMENT:   return _( "Thermal Spoke" );
+        case SHAPE_T::RECTANGLE: return _( "Number Box" );
+        default:                 return wxT( "??" );
+        }
+    }
+    else
+    {
+        switch( m_shape )
+        {
+        case SHAPE_T::SEGMENT:   return _( "Line" );
+        case SHAPE_T::RECTANGLE: return _( "Rect" );
+        case SHAPE_T::ARC:       return _( "Arc" );
+        case SHAPE_T::CIRCLE:    return _( "Circle" );
+        case SHAPE_T::BEZIER:    return _( "Bezier Curve" );
+        case SHAPE_T::POLY:      return _( "Polygon" );
+        default:                 return wxT( "??" );
+        }
     }
 }
 
@@ -674,15 +683,27 @@ void EDA_SHAPE::SetArcAngleAndEnd( const EDA_ANGLE& aAngle, bool aCheckNegativeA
 
 wxString EDA_SHAPE::GetFriendlyName() const
 {
-    switch( m_shape )
+    if( IsProxyItem() )
     {
-    case SHAPE_T::CIRCLE:   return _( "Circle" );
-    case SHAPE_T::ARC:      return _( "Arc" );
-    case SHAPE_T::BEZIER:   return _( "Curve" );
-    case SHAPE_T::POLY:     return _( "Polygon" );
-    case SHAPE_T::RECTANGLE:     return IsAnnotationProxy() ? _( "Pad Number Box" ) : _( "Rectangle" );
-    case SHAPE_T::SEGMENT:  return _( "Segment" );
-    default:                return _( "Unrecognized" );
+        switch( m_shape )
+        {
+        case SHAPE_T::RECTANGLE: return _( "Pad Number Box" );
+        case SHAPE_T::SEGMENT:   return _( "Thermal Spoke Template" );
+        default:                 return _( "Unrecognized" );
+        }
+    }
+    else
+    {
+        switch( m_shape )
+        {
+        case SHAPE_T::CIRCLE:    return _( "Circle" );
+        case SHAPE_T::ARC:       return _( "Arc" );
+        case SHAPE_T::BEZIER:    return _( "Curve" );
+        case SHAPE_T::POLY:      return _( "Polygon" );
+        case SHAPE_T::RECTANGLE: return _( "Rectangle" );
+        case SHAPE_T::SEGMENT:   return _( "Segment" );
+        default:                 return _( "Unrecognized" );
+        }
     }
 }
 
@@ -880,7 +901,7 @@ bool EDA_SHAPE::hitTest( const VECTOR2I& aPosition, int aAccuracy ) const
         return TestSegmentHit( aPosition, GetStart(), GetEnd(), maxdist );
 
     case SHAPE_T::RECTANGLE:
-        if( IsAnnotationProxy() || IsFilled() )         // Filled rect hit-test
+        if( IsProxyItem() || IsFilled() )               // Filled rect hit-test
         {
             SHAPE_POLY_SET poly;
             poly.NewOutline();
@@ -1175,7 +1196,7 @@ std::vector<SHAPE*> EDA_SHAPE::makeEffectiveShapes( bool aEdgeOnly, bool aLineCh
     {
         std::vector<VECTOR2I> pts = GetRectCorners();
 
-        if( ( IsFilled() || IsAnnotationProxy() ) && !aEdgeOnly )
+        if( ( IsFilled() || IsProxyItem() ) && !aEdgeOnly )
             effectiveShapes.emplace_back( new SHAPE_SIMPLE( pts ) );
 
         if( width > 0 || !IsFilled() || aEdgeOnly )
@@ -1598,7 +1619,7 @@ void EDA_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance
     {
         std::vector<VECTOR2I> pts = GetRectCorners();
 
-        if( IsFilled() || IsAnnotationProxy() )
+        if( IsFilled() || IsProxyItem() )
         {
             aBuffer.NewOutline();
 

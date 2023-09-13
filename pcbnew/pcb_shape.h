@@ -102,8 +102,8 @@ public:
     std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
             FLASHING aFlash = FLASHING::DEFAULT ) const override;
 
-    bool IsAnnotationProxy() const override { return m_annotationProxy; }
-    void SetIsAnnotationProxy( bool aIsProxy = true ) override;
+    bool IsProxyItem() const override { return m_proxyItem; }
+    void SetIsProxyItem( bool aIsProxy = true ) override;
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
