@@ -1170,6 +1170,17 @@ EDA_ANGLE PCB_ARC::GetArcAngleEnd() const
     return angleEnd.Normalize();
 }
 
+bool PCB_ARC::IsDegenerated( int aThreshold ) const
+{
+    // Too small arcs cannot be really handled: arc center (and arc radius)
+    // cannot be safely computed if the distance between mid and end points
+    // is too small (a few internal units)
+
+    // len of both segments must be < aThreshold to be a very small degenerated arc
+    return ( GetMid() - GetStart() ).EuclideanNorm() < aThreshold
+            && ( GetMid() - GetEnd() ).EuclideanNorm() < aThreshold;
+}
+
 
 bool PCB_TRACK::cmp_tracks::operator() ( const PCB_TRACK* a, const PCB_TRACK* b ) const
 {

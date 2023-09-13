@@ -357,6 +357,14 @@ public:
 
     EDA_ITEM* Clone() const override;
 
+    /**
+     * @return true if the arc is too small to allow a safe calculation
+     * of center position and arc angles i.e if distance between m_Mid and each arc end
+     * is only a few internal units.
+     * @param aThreshold is the minimal dist in internal units. Default id 5 IU
+     */
+    bool IsDegenerated( int aThreshold = 5 ) const;
+
 protected:
     virtual void swapData( BOARD_ITEM* aImage ) override;
 

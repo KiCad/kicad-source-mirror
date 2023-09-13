@@ -638,17 +638,28 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         {
             const     PCB_ARC* arc = static_cast<const PCB_ARC*>( track );
 
-            // ThickArc expects only positive angle arcs, so flip start/end if
-            // we are negative
-            if( arc->GetAngle() < ANGLE_0 )
+            // Too small arcs cannot be really handled: arc center (and arc radius)
+            // cannot be safely computed
+            if( arc->IsDegenerated( 10 /* in IU */ ) )
             {
-                aPlotter->ThickArc( arc->GetCenter(), arc->GetEnd(), arc->GetStart(),
-                                    width, plotMode, &gbr_metadata );
+                // Approximate this very small arc by a segment.
+                aPlotter->ThickSegment( track->GetStart(), track->GetEnd(), width, plotMode,
+                                        &gbr_metadata );
             }
             else
             {
-                aPlotter->ThickArc( arc->GetCenter(), arc->GetStart(), arc->GetEnd(),
-                                    width, plotMode, &gbr_metadata );
+                // ThickArc expects only positive angle arcs, so flip start/end if
+                // we are negative
+                if( arc->GetAngle() < ANGLE_0 )
+                {
+                    aPlotter->ThickArc( arc->GetCenter(), arc->GetEnd(), arc->GetStart(),
+                                        width, plotMode, &gbr_metadata );
+                }
+                else
+                {
+                    aPlotter->ThickArc( arc->GetCenter(), arc->GetStart(), arc->GetEnd(),
+                                        width, plotMode, &gbr_metadata );
+                }
             }
         }
         else
