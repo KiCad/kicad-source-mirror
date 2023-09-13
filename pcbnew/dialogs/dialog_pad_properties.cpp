@@ -334,20 +334,22 @@ void DIALOG_PAD_PROPERTIES::OnCancel( wxCommandEvent& event )
 
 void DIALOG_PAD_PROPERTIES::prepareCanvas()
 {
+    KIGFX::GAL_DISPLAY_OPTIONS opts = m_parent->GetGalDisplayOptions();
+    COLOR_SETTINGS*            colorSettings = m_parent->GetColorSettings();
+
+    opts.m_forceDisplayCursor = false;
+
     // Initialize the canvas to display the pad
     m_padPreviewGAL = new PCB_DRAW_PANEL_GAL( m_boardViewPanel, -1, wxDefaultPosition,
-                                              wxDefaultSize,
-                                              m_parent->GetGalDisplayOptions(),
+                                              wxDefaultSize, opts,
                                               m_parent->GetCanvas()->GetBackend() );
 
     m_padPreviewSizer->Add( m_padPreviewGAL, 12, wxEXPAND | wxALL, 5 );
 
     // Show the X and Y axis. It is useful because pad shape can have an offset
     // or be a complex shape.
-    KIGFX::COLOR4D axis_color = LIGHTBLUE;
-
-    m_axisOrigin = new KIGFX::ORIGIN_VIEWITEM( axis_color, KIGFX::ORIGIN_VIEWITEM::CROSS,
-                                               pcbIUScale.mmToIU( 0.2 ),
+    m_axisOrigin = new KIGFX::ORIGIN_VIEWITEM( colorSettings->GetColor( LAYER_GRID ),
+                                               KIGFX::ORIGIN_VIEWITEM::CROSS, 100000,
                                                VECTOR2D( m_previewPad->GetPosition() ) );
     m_axisOrigin->SetDrawAtZero( true );
 
@@ -375,6 +377,7 @@ void DIALOG_PAD_PROPERTIES::prepareCanvas()
 
     // And do not show the grid:
     view->GetGAL()->SetGridVisibility( false );
+    view->GetGAL()->SetAxesEnabled( false );
     view->Add( m_previewPad );
     view->Add( m_axisOrigin );
 
@@ -1420,7 +1423,10 @@ void DIALOG_PAD_PROPERTIES::redraw()
     if( !m_canUpdate )
         return;
 
-    KIGFX::VIEW* view = m_padPreviewGAL->GetView();
+    KIGFX::VIEW*                view = m_padPreviewGAL->GetView();
+    KIGFX::PCB_PAINTER*         painter = static_cast<KIGFX::PCB_PAINTER*>( view->GetPainter() );
+    KIGFX::PCB_RENDER_SETTINGS* settings = painter->GetSettings();
+
     m_padPreviewGAL->StopDrawing();
 
     // The layer used to place primitive items selected when editing custom pad shapes
@@ -1428,9 +1434,9 @@ void DIALOG_PAD_PROPERTIES::redraw()
     #define SELECTED_ITEMS_LAYER Dwgs_User
 
     view->SetTopLayer( SELECTED_ITEMS_LAYER );
-    KIGFX::PCB_RENDER_SETTINGS* settings =
-        static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
     settings->SetLayerColor( SELECTED_ITEMS_LAYER, m_selectedColor );
+
+    m_axisOrigin->SetPosition( m_previewPad->GetPosition() );
 
     view->Update( m_previewPad );
 
