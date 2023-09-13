@@ -409,12 +409,8 @@ bool EXCELLON_IMAGE::TestFileIsExcellon( const wxString& aFullFileName )
                 else
                 {
                     double x_val;
-                    char* start = letter + 1;
-                    char* end = letter + strlen( letter );
 
-                    std::from_chars_result res = std::from_chars( start, end, x_val );
-
-                    if( res.ec != std::errc::invalid_argument )
+                    if( wxString( letter + 1 ).ToCDouble( &x_val ) )
                         foundT = true;
                 }
             }
@@ -423,24 +419,16 @@ bool EXCELLON_IMAGE::TestFileIsExcellon( const wxString& aFullFileName )
             if( ( letter = strstr( line, "X" ) ) != nullptr )
             {
                 double x_val;
-                char* start = letter + 1;
-                char* end = letter + strlen( letter );
 
-                std::from_chars_result res = std::from_chars( start, end, x_val );
-
-                if( res.ec != std::errc::invalid_argument )
+                if( wxString( letter + 1 ).ToCDouble( &x_val ) )
                     foundX = true;
             }
 
             if( ( letter = strstr( line, "Y" ) ) != nullptr )
             {
                 double x_val;
-                char* start = letter + 1;
-                char* end = letter + strlen( letter );
 
-                std::from_chars_result res = std::from_chars( start, end, x_val );
-
-                if( res.ec != std::errc::invalid_argument )
+                if( wxString( letter + 1 ).ToCDouble( &x_val ) )
                     foundY = true;
             }
         }
