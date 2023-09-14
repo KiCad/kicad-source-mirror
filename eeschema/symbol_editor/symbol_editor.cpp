@@ -605,6 +605,7 @@ void SYMBOL_EDIT_FRAME::saveSymbolAs()
         LIB_ID   old_lib_id = symbol->GetLibId();
         wxString symbolName = old_lib_id.GetLibItemName();
         wxString libraryName = old_lib_id.GetLibNickname();
+        bool     valueFollowsName = symbol->GetValueField().GetText() == symbolName;
         bool     done = false;
 
         std::unique_ptr<EDA_LIST_DIALOG> dlg;
@@ -676,6 +677,9 @@ void SYMBOL_EDIT_FRAME::saveSymbolAs()
 
         LIB_SYMBOL new_symbol( *symbol );
         new_symbol.SetName( symbolName );
+
+        if( valueFollowsName )
+            new_symbol.GetValueField().SetText( symbolName );
 
         m_libMgr->UpdateSymbol( &new_symbol, libraryName );
         SyncLibraries( false );
