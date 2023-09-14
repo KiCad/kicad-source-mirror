@@ -39,8 +39,17 @@ void KIPLATFORM::ENV::Init()
     wxString gdkBackend;
     wxGetEnv( wxT( "GDK_BACKEND" ), &gdkBackend );
 
-    // Set KICAD_WAYLAND_TRICKS to develop for native Wayland.
+#ifdef KICAD_WAYLAND
+    bool waylandTricks = true;
+#else
+    bool waylandTricks = false;
+#endif
+
     if( wxGetEnv( wxT( "KICAD_WAYLAND_TRICKS" ), nullptr ) )
+        waylandTricks = true;
+
+    // Set KICAD_WAYLAND_TRICKS to develop for native Wayland.
+    if( waylandTricks )
     {
         wxSetEnv( wxT( "GDK_BACKEND" ), wxT( "wayland" ) );
         gdk_set_allowed_backends( "wayland" );
