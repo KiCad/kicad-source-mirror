@@ -69,7 +69,7 @@ DIALOG_SYMBOL_REMAP::DIALOG_SYMBOL_REMAP( SCH_EDIT_FRAME* aParent ) :
               "for loading library symbols.  KiCad will attempt to map the existing symbols "
               "to use the new symbol library table.  Remapping will change some project files "
               "and schematics may not be compatible with older versions of KiCad.  All files "
-              "that are changed will be backed up to the \"remap_backup\" folder in the project "
+              "that are changed will be backed up to the \"rescue-backup\" folder in the project "
               "folder should you need to revert any changes.  If you choose to skip this step, "
               "you will be responsible for manually remapping the symbols." );
 
