@@ -26,6 +26,7 @@
 #ifndef KIID_H
 #define KIID_H
 
+#include <kicommon.h>
 #include <boost/uuid/uuid.hpp>
 #include <macros_swig.h>
 #include <nlohmann/json_fwd.hpp>
@@ -44,7 +45,7 @@ class wxString;
  */
 typedef uint32_t timestamp_t;
 
-class KIID
+class KICOMMON_API KIID
 {
 public:
     KIID();
@@ -129,14 +130,14 @@ private:
 };
 
 
-extern KIID niluuid;
+extern KICOMMON_API KIID niluuid;
 
-KIID& NilUuid();
+KICOMMON_API KIID& NilUuid();
 
 // declare KIID_VECT_LIST as std::vector<KIID> both for c++ and swig:
 DECL_VEC_FOR_SWIG( KIID_VECT_LIST, KIID )
 
-class KIID_PATH : public KIID_VECT_LIST
+class KICOMMON_API KIID_PATH : public KIID_VECT_LIST
 {
 public:
     KIID_PATH()
@@ -195,7 +196,7 @@ public:
 /**
  * RAII class to safely set/reset nil KIIDs for use in footprint/symbol loading
  */
-class KIID_NIL_SET_RESET
+class KICOMMON_API KIID_NIL_SET_RESET
 {
 public:
     KIID_NIL_SET_RESET()
@@ -209,8 +210,8 @@ public:
     }
 };
 
-void to_json( nlohmann::json& aJson, const KIID& aKIID );
+KICOMMON_API void to_json( nlohmann::json& aJson, const KIID& aKIID );
 
-void from_json( const nlohmann::json& aJson, KIID& aKIID );
+KICOMMON_API void from_json( const nlohmann::json& aJson, KIID& aKIID );
 
 #endif // KIID_H

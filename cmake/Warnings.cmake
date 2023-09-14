@@ -205,6 +205,8 @@ if( MSVC )
     # set( WARN_FLAGS_C   "/external:W0 /external:env:INCLUDE /external:I${CMAKE_SOURCE_DIR}/thirdparty /Wall" )
     set( WARN_FLAGS_CXX "/external:W0 /external:env:INCLUDE /external:I${CMAKE_SOURCE_DIR}/thirdparty /Wall" )
 
+    # disable 'type' : class 'type1' needs to have dll-interface to be used by clients of class 'type2'
+    string( APPEND WARN_FLAGS_CXX " /wd4251" )
     # disable "function not inlined"
     string( APPEND WARN_FLAGS_CXX " /wd4710" )
     # disable "function selected for inline expansion"

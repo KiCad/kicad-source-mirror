@@ -48,6 +48,7 @@ set( KICOMMON_SRCS
     array_options.cpp
     bitmap_info.cpp
     exceptions.cpp
+    kiid.cpp
     lib_id.cpp
     locale_io.cpp
     markup_parser.cpp
@@ -64,6 +65,7 @@ target_link_libraries( kicommon
     core
     kimath
     kiplatform
+    nlohmann_json
     fmt::fmt
     ${wxWidgets_LIBRARIES}
     )
@@ -403,7 +405,6 @@ set( COMMON_SRCS
     hotkey_store.cpp
     hotkeys_basic.cpp
     kiface_base.cpp
-    kiid.cpp
     kiway.cpp
     kiway_express.cpp
     kiway_holder.cpp
