@@ -26,6 +26,7 @@
 #include <iostream>
 #include <string>
 #include <core/utf8.h>
+#include <kicommon.h>
 
 
 namespace MARKUP
@@ -36,7 +37,7 @@ struct subscript;
 struct superscript;
 struct overbar;
 
-struct NODE : parse_tree::basic_node<NODE>
+struct KICOMMON_API NODE : parse_tree::basic_node<NODE>
 {
     std::string asString() const;
 
@@ -99,7 +100,7 @@ using selector = parse_tree::selector< Rule,
                                                                       subscript,
                                                                       overbar > >;
 
-class MARKUP_PARSER
+class KICOMMON_API MARKUP_PARSER
 {
 public:
     MARKUP_PARSER( const std::string& source ) :

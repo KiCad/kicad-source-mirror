@@ -49,6 +49,7 @@ set( KICOMMON_SRCS
     exceptions.cpp
     lib_id.cpp
     locale_io.cpp
+    markup_parser.cpp
     richio.cpp
     string_utils.cpp
     wx_filename.cpp
@@ -102,7 +103,10 @@ target_include_directories( kicommon
     PUBLIC
         .
         ${CMAKE_BINARY_DIR}
+        $<TARGET_PROPERTY:pegtl,INTERFACE_INCLUDE_DIRECTORIES>
     )
+
+add_dependencies( kicommon pegtl )
 
 # The build version string defaults to the value in the KiCadVersion.cmake file.
 # If being built inside a git repository, the git tag and commit hash are used to create
@@ -413,7 +417,6 @@ set( COMMON_SRCS
     lib_tree_model_adapter.cpp
     lset.cpp
     marker_base.cpp
-    markup_parser.cpp
     netclass.cpp
     notifications_manager.cpp
     origin_transforms.cpp
