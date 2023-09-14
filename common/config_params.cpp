@@ -26,7 +26,6 @@
 
 #include <config_params.h>       // for PARAM_CFG_INT_WITH_SCALE, PARAM_CFG_...
 #include <locale_io.h>
-#include <gal/color4d.h>         // for COLOR4D
 #include <math/util.h>             // for KiROUND
 #include <wx/config.h>           // for wxConfigBase
 #include <wx/debug.h>            // for wxASSERT

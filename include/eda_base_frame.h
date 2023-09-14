@@ -65,7 +65,6 @@ class EDA_ITEM;
 class EDA_DRAW_PANEL_GAL;
 class EDA_MSG_PANEL;
 class BASE_SCREEN;
-class PARAM_CFG;
 class PAGE_INFO;
 class PLOTTER;
 class TITLE_BLOCK;

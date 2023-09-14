@@ -32,9 +32,6 @@
 #include <wx/confbase.h>
 #include <wx/fileconf.h>
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <gal/color4d.h>
-
-using KIGFX::COLOR4D;
 
 
 /**

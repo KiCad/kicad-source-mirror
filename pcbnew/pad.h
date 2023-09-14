@@ -36,7 +36,6 @@
 #include <core/arraydim.h>
 
 class PCB_SHAPE;
-class PARAM_CFG;
 class SHAPE;
 class SHAPE_SEGMENT;
 

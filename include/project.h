@@ -41,8 +41,6 @@
 /// default name for nameless projects
 #define NAMELESS_PROJECT _( "untitled" )
 
-class wxConfigBase;
-class PARAM_CFG;
 class FP_LIB_TABLE;
 class SYMBOL_LIBS;
 class SEARCH_STACK;
