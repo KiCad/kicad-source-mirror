@@ -46,6 +46,7 @@ set( KICOMMON_SRCS
     asset_archive.cpp
     array_axis.cpp
     array_options.cpp
+    bitmap_info.cpp
     exceptions.cpp
     lib_id.cpp
     locale_io.cpp
@@ -364,7 +365,6 @@ set( COMMON_SRCS
     bin_mod.cpp
     bitmap.cpp
     bitmap_base.cpp
-    bitmap_info.cpp
     bitmap_store.cpp
     board_printout.cpp
     build_version.cpp

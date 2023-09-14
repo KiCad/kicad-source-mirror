@@ -21,13 +21,14 @@
 #ifndef KICAD_BITMAP_INFO_H
 #define KICAD_BITMAP_INFO_H
 
+#include <kicommon.h>
 #include <vector>
 #include <unordered_map>
 #include <bitmaps/bitmaps_list.h>
 
 #include <wx/string.h>
 
-struct BITMAP_INFO
+struct KICOMMON_API BITMAP_INFO
 {
     BITMAPS  id;
     wxString filename;
@@ -44,7 +45,7 @@ struct BITMAP_INFO
 };
 
 
-extern void BuildBitmapInfo( std::unordered_map<BITMAPS,
+extern KICOMMON_API void BuildBitmapInfo( std::unordered_map<BITMAPS,
                              std::vector<BITMAP_INFO>>& aBitmapInfoCache );
 
 #endif // KICAD_BITMAP_INFO_H
