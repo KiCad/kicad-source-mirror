@@ -66,10 +66,13 @@ void ConnectBoardShapes( std::vector<PCB_SHAPE*>&                 aShapeList,
     if( aShapeList.size() == 0 )
         return;
 
+#if 0
+    // Not used, but not removed, just in case
     auto close_enough = []( const VECTOR2I& aLeft, const VECTOR2I& aRight, unsigned aLimit ) -> bool
     {
         return ( aLeft - aRight ).SquaredEuclideanNorm() <= SEG::Square( aLimit );
     };
+#endif
 
     auto closer_to_first = []( const VECTOR2I& aRef, const VECTOR2I& aFirst,
                                const VECTOR2I& aSecond ) -> bool

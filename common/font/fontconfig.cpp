@@ -24,6 +24,7 @@
 #include <trace_helpers.h>
 #include <string_utils.h>
 #include <macros.h>
+#include <cstdint>
 
 using namespace fontconfig;
 
