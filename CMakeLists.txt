@@ -114,7 +114,7 @@ cmake_dependent_option( KICAD_USE_BUNDLED_GLEW
 
 cmake_dependent_option( KICAD_WAYLAND
     "Support Wayland features"
-    ON "UNIX_NOT_APPLE"
+    OFF "UNIX_NOT_APPLE"
     OFF )
 
 # Options to build with flatpak platform defaults (only on Linux)
