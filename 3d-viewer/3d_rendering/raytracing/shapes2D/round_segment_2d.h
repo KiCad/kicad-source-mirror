@@ -31,6 +31,7 @@
 
 #include "object_2d.h"
 #include "../ray.h"
+#include "filled_circle_2d.h"
 #include <plugins/3dapi/xv3d_types.h>   // SFVEC2F
 
 class BOARD_ITEM;

@@ -62,6 +62,39 @@
 #define TO_SFVEC2F( vec ) SFVEC2F( TO_3DU( vec.x ), TO_3DU( -vec.y ) )
 
 
+
+
+void addFILLED_CIRCLE_2D( CONTAINER_2D_BASE* aContainer, const SFVEC2F& aCenter, float aRadius,
+                          const BOARD_ITEM& aBoardItem )
+{
+    if( aRadius > 0.0f )
+        aContainer->Add( new FILLED_CIRCLE_2D( aCenter, aRadius, aBoardItem ) );
+}
+
+
+void addRING_2D( CONTAINER_2D_BASE* aContainer, const SFVEC2F& aCenter, float aInnerRadius,
+                 float aOuterRadius, const BOARD_ITEM& aBoardItem )
+{
+    if( aOuterRadius > aInnerRadius && aInnerRadius > 0.0f )
+        aContainer->Add( new RING_2D( aCenter, aInnerRadius, aOuterRadius, aBoardItem ) );
+}
+
+
+void addROUND_SEGMENT_2D( CONTAINER_2D_BASE* aContainer, const SFVEC2F& aStart, const SFVEC2F& aEnd,
+                          float aWidth, const BOARD_ITEM& aBoardItem )
+{
+    if( Is_segment_a_circle( aStart, aEnd ) )
+    {
+        // Cannot add segments that have the same start and end point
+        addFILLED_CIRCLE_2D( aContainer, aStart, aWidth / 2, aBoardItem );
+        return;
+    }
+
+    if( aWidth > 0.0f )
+        aContainer->Add( new ROUND_SEGMENT_2D( aStart, aEnd, aWidth, aBoardItem ) );
+}
+
+
 void BOARD_ADAPTER::addText( const EDA_TEXT* aText, CONTAINER_2D_BASE* aContainer,
                              const BOARD_ITEM* aOwner )
 {
@@ -91,24 +124,8 @@ void BOARD_ADAPTER::addText( const EDA_TEXT* aText, CONTAINER_2D_BASE* aContaine
                 // Stroke callback
                 [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
                 {
-                    const SFVEC2F pt1_3DU = TO_SFVEC2F( aPt1 );
-                    const SFVEC2F pt2_3DU = TO_SFVEC2F( aPt2 );
-
-                    if( penWidth_3DU == 0.0 )
-                    {
-                        // Don't attempt to render degenerate shapes
-                    }
-                    else if( Is_segment_a_circle( pt1_3DU, pt2_3DU ) )
-                    {
-                        // Cannot add segments that have the same start and end point
-                        aContainer->Add( new FILLED_CIRCLE_2D( pt1_3DU, penWidth_3DU / 2,
-                                                               *aOwner ) );
-                    }
-                    else
-                    {
-                        aContainer->Add( new ROUND_SEGMENT_2D( pt1_3DU, pt2_3DU, penWidth_3DU,
-                                                               *aOwner ) );
-                    }
+                    addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( aPt1 ), TO_SFVEC2F( aPt2 ),
+                                         penWidth_3DU, *aOwner );
                 },
                 // Triangulation callback
                 [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2, const VECTOR2I& aPt3 )
@@ -140,18 +157,19 @@ void BOARD_ADAPTER::addShape( const PCB_DIMENSION_BASE* aDimension, CONTAINER_2D
         {
             const SEG& seg = static_cast<const SHAPE_SEGMENT*>( shape.get() )->GetSeg();
 
-            aContainer->Add( new ROUND_SEGMENT_2D( TO_SFVEC2F( seg.A ), TO_SFVEC2F( seg.B ),
-                                                   TO_3DU( linewidth ), *aOwner ) );
+            addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( seg.A ), TO_SFVEC2F( seg.B ),
+                                 TO_3DU( linewidth ), *aOwner );
             break;
         }
 
         case SH_CIRCLE:
         {
             int radius = static_cast<const SHAPE_CIRCLE*>( shape.get() )->GetRadius();
-            int delta = aDimension->GetLineThickness() / 2;
+            float innerR3DU = TO_3DU( radius ) - TO_3DU( aDimension->GetLineThickness() ) / 2.0f;
+            float outerR3DU = TO_3DU( radius ) + TO_3DU( aDimension->GetLineThickness() ) / 2.0f;
 
-            aContainer->Add( new RING_2D( TO_SFVEC2F( shape->Centre() ), TO_3DU( radius - delta ),
-                                          TO_3DU( radius + delta ), *aOwner ) );
+            addRING_2D( aContainer, TO_SFVEC2F( shape->Centre() ), innerR3DU, outerR3DU, *aOwner );
+
             break;
         }
 
@@ -260,8 +278,7 @@ void BOARD_ADAPTER::createViaWithMargin( const PCB_TRACK* aTrack, CONTAINER_2D_B
 
     const float radius3DU = TO_3DU( ( aTrack->GetWidth() / 2 ) + aMargin );
 
-    if( radius3DU > 0.0 )
-        aDstContainer->Add( new FILLED_CIRCLE_2D( start3DU, radius3DU, *aTrack ) );
+    addFILLED_CIRCLE_2D( aDstContainer, start3DU, radius3DU, *aTrack );
 }
 
 
@@ -273,14 +290,8 @@ void BOARD_ADAPTER::createTrack( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDs
     switch( aTrack->Type() )
     {
     case PCB_VIA_T:
-    {
-        const float radius3DU = TO_3DU( aTrack->GetWidth() / 2 );
-
-        if( radius3DU > 0.0 )
-            aDstContainer->Add( new FILLED_CIRCLE_2D( start3DU, radius3DU, *aTrack ) );
-
+        addFILLED_CIRCLE_2D( aDstContainer, start3DU, TO_3DU( aTrack->GetWidth() / 2 ), *aTrack );
         break;
-    }
 
     case PCB_ARC_T:
     {
@@ -321,29 +332,14 @@ void BOARD_ADAPTER::createTrack( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDs
             circlesegcount = alg::clamp( 1, circlesegcount, 128 );
         }
 
-        transformArcToSegments( VECTOR2I( center.x, center.y ), arc->GetStart(), arc_angle,
-                                circlesegcount, arc->GetWidth(), aDstContainer, *arc );
+        createArcSegments( VECTOR2I( center.x, center.y ), arc->GetStart(), arc_angle,
+                           circlesegcount, arc->GetWidth(), aDstContainer, *arc );
         break;
     }
 
     case PCB_TRACE_T:    // Track is a usual straight segment
     {
-        if( aTrack->GetWidth() == 0 )
-        {
-            // Don't attempt to render degenerate shapes
-        }
-        else if( Is_segment_a_circle( start3DU, end3DU ) )
-        {
-            // Cannot add segments that have the same start and end point
-            aDstContainer->Add( new FILLED_CIRCLE_2D( start3DU, TO_3DU( aTrack->GetWidth() / 2 ),
-                                                      *aTrack ) );
-        }
-        else
-        {
-            aDstContainer->Add( new ROUND_SEGMENT_2D( start3DU, end3DU, TO_3DU( aTrack->GetWidth() ),
-                                                      *aTrack ) );
-        }
-
+        addROUND_SEGMENT_2D( aDstContainer, start3DU, end3DU, TO_3DU( aTrack->GetWidth() ), *aTrack );
         break;
     }
 
@@ -395,24 +391,11 @@ void BOARD_ADAPTER::createPadWithMargin( const PAD* aPad, CONTAINER_2D_BASE* aCo
             {
                 const SHAPE_SEGMENT* seg = static_cast<const SHAPE_SEGMENT*>( shape );
 
-                const SFVEC2F a3DU = TO_SFVEC2F( seg->GetSeg().A );
-                const SFVEC2F b3DU = TO_SFVEC2F( seg->GetSeg().B );
-                const double  width3DU = TO_3DU(  seg->GetWidth() + clearance.x * 2 );
-
-                if( width3DU == 0.0 )
-                {
-                    // Don't attempt to render degenerate shapes
-                }
-                else if( Is_segment_a_circle( a3DU, b3DU ) )
-                {
-                    // Cannot add segments that have the same start and end point
-                    aContainer->Add( new FILLED_CIRCLE_2D( a3DU, width3DU / 2, *aPad ) );
-                }
-                else
-                {
-                    aContainer->Add( new ROUND_SEGMENT_2D( a3DU, b3DU, width3DU, *aPad ) );
-                }
-
+                addROUND_SEGMENT_2D( aContainer,
+                                     TO_SFVEC2F( seg->GetSeg().A ),
+                                     TO_SFVEC2F( seg->GetSeg().B ),
+                                     TO_3DU(  seg->GetWidth() + clearance.x * 2 ),
+                                     *aPad );
                 break;
             }
 
@@ -420,13 +403,10 @@ void BOARD_ADAPTER::createPadWithMargin( const PAD* aPad, CONTAINER_2D_BASE* aCo
             {
                 const SHAPE_CIRCLE* circle = static_cast<const SHAPE_CIRCLE*>( shape );
 
-                const double  radius3DU = TO_3DU( circle->GetRadius() + clearance.x );
-                const SFVEC2F center3DU = TO_SFVEC2F( circle->GetCenter() );
-
-                // Don't render zero radius circles
-                if( radius3DU > 0.0 )
-                    aContainer->Add( new FILLED_CIRCLE_2D( center3DU, radius3DU, *aPad ) );
-
+                addFILLED_CIRCLE_2D( aContainer,
+                                     TO_SFVEC2F( circle->GetCenter() ),
+                                     TO_3DU( circle->GetRadius() + clearance.x ),
+                                     *aPad );
                 break;
             }
 
@@ -458,23 +438,12 @@ void BOARD_ADAPTER::createPadWithMargin( const PAD* aPad, CONTAINER_2D_BASE* aCo
                 for( int i = 0; i < l.SegmentCount(); i++ )
                 {
                     SHAPE_SEGMENT seg( l.Segment( i ).A, l.Segment( i ).B, arc->GetWidth() );
-                    const SFVEC2F a3DU = TO_SFVEC2F( seg.GetSeg().A );
-                    const SFVEC2F b3DU = TO_SFVEC2F( seg.GetSeg().B );
-                    const double  width3DU = TO_3DU( arc->GetWidth() + clearance.x * 2 );
 
-                    if( width3DU == 0.0 )
-                    {
-                        // Don't attempt to render degenerate shapes
-                    }
-                    else if( Is_segment_a_circle( a3DU, b3DU ) )
-                    {
-                        // Cannot add segments that have the same start and end point
-                        aContainer->Add( new FILLED_CIRCLE_2D( a3DU, width3DU / 2, *aPad ) );
-                    }
-                    else
-                    {
-                        aContainer->Add( new ROUND_SEGMENT_2D( a3DU, b3DU, width3DU, *aPad ) );
-                    }
+                    addROUND_SEGMENT_2D( aContainer,
+                                         TO_SFVEC2F( seg.GetSeg().A ),
+                                         TO_SFVEC2F( seg.GetSeg().B ),
+                                         TO_3DU( arc->GetWidth() + clearance.x * 2 ),
+                                         *aPad );
                 }
 
                 break;
@@ -498,29 +467,22 @@ void BOARD_ADAPTER::createPadWithMargin( const PAD* aPad, CONTAINER_2D_BASE* aCo
 }
 
 
-OBJECT_2D* BOARD_ADAPTER::createPadWithDrill( const PAD* aPad, int aInflateValue )
+OBJECT_2D* BOARD_ADAPTER::createPadWithHole( const PAD* aPad, CONTAINER_2D_BASE* aDstContainer,
+                                             int aInflateValue )
 {
     if( !aPad->HasHole() )
     {
-        wxLogTrace( m_logTrace, wxT( "BOARD_ADAPTER::createPadWithDrill - found an invalid pad" ) );
+        wxLogTrace( m_logTrace, wxT( "BOARD_ADAPTER::createPadWithHole - found an invalid pad" ) );
         return nullptr;
     }
 
     std::shared_ptr<SHAPE_SEGMENT> slot = aPad->GetEffectiveHoleShape();
 
-    if( slot->GetSeg().A == slot->GetSeg().B )
-    {
-        return new FILLED_CIRCLE_2D( TO_SFVEC2F( slot->GetSeg().A ),
-                                     TO_3DU( slot->GetWidth() / 2 + aInflateValue ),
-                                     *aPad );
-    }
-    else
-    {
-        return new ROUND_SEGMENT_2D( TO_SFVEC2F( slot->GetSeg().A ),
-                                     TO_SFVEC2F( slot->GetSeg().B ),
-                                     TO_3DU( slot->GetWidth() + aInflateValue * 2 ),
-                                     *aPad );
-    }
+    addROUND_SEGMENT_2D( aDstContainer,
+                         TO_SFVEC2F( slot->GetSeg().A ),
+                         TO_SFVEC2F( slot->GetSeg().B ),
+                         TO_3DU( slot->GetWidth() + aInflateValue * 2 ),
+                         *aPad );
 }
 
 
@@ -589,10 +551,10 @@ void BOARD_ADAPTER::addPads( const FOOTPRINT* aFootprint, CONTAINER_2D_BASE* aCo
 
 // based on TransformArcToPolygon function from
 // common/convert_basic_shapes_to_polygon.cpp
-void BOARD_ADAPTER::transformArcToSegments( const VECTOR2I& aCentre, const VECTOR2I& aStart,
-                                            const EDA_ANGLE& aArcAngle, int aCircleToSegmentsCount,
-                                            int aWidth, CONTAINER_2D_BASE* aContainer,
-                                            const BOARD_ITEM& aOwner )
+void BOARD_ADAPTER::createArcSegments( const VECTOR2I& aCentre, const VECTOR2I& aStart,
+                                       const EDA_ANGLE& aArcAngle, int aCircleToSegmentsCount,
+                                       int aWidth, CONTAINER_2D_BASE* aContainer,
+                                       const BOARD_ITEM& aOwner )
 {
     // Don't attempt to render degenerate shapes
     if( aWidth == 0 )
@@ -622,26 +584,16 @@ void BOARD_ADAPTER::transformArcToSegments( const VECTOR2I& aCentre, const VECTO
         curr_end = arc_start;
         RotatePoint( curr_end, aCentre, -ii );
 
-        const SFVEC2F start3DU = TO_SFVEC2F( curr_start );
-        const SFVEC2F end3DU = TO_SFVEC2F( curr_end );
-
-        if( Is_segment_a_circle( start3DU, end3DU ) )
-            aContainer->Add( new FILLED_CIRCLE_2D( start3DU, TO_3DU( aWidth / 2 ), aOwner ) );
-        else
-            aContainer->Add( new ROUND_SEGMENT_2D( start3DU, end3DU, TO_3DU( aWidth ), aOwner ) );
+        addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( curr_start ), TO_SFVEC2F( curr_end ),
+                             TO_3DU( aWidth ), aOwner );
 
         curr_start = curr_end;
     }
 
     if( curr_end != arc_end )
     {
-        const SFVEC2F start3DU = TO_SFVEC2F( curr_end );
-        const SFVEC2F end3DU = TO_SFVEC2F( arc_end );
-
-        if( Is_segment_a_circle( start3DU, end3DU ) )
-            aContainer->Add( new FILLED_CIRCLE_2D( start3DU, TO_3DU( aWidth / 2 ), aOwner ) );
-        else
-            aContainer->Add( new ROUND_SEGMENT_2D( start3DU, end3DU, TO_3DU( aWidth ), aOwner ) );
+        addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( curr_end ), TO_SFVEC2F( arc_end ),
+                             TO_3DU( aWidth ), aOwner );
     }
 }
 
@@ -650,8 +602,7 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
                               const BOARD_ITEM* aOwner )
 {
     // The full width of the lines to create
-    // The extra 1 protects the inner/outer radius values from degeneracy
-    const int      linewidth = aShape->GetWidth() + 1;
+    const float    linewidth3DU = TO_3DU( aShape->GetWidth() );
     PLOT_DASH_TYPE lineStyle = aShape->GetStroke().GetPlotStyle();
 
     if( lineStyle <= PLOT_DASH_TYPE::FIRST_TYPE )
@@ -660,23 +611,14 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
         {
         case SHAPE_T::CIRCLE:
         {
-            const SFVEC2F center3DU = TO_SFVEC2F( aShape->GetCenter() );
-            float         inner_radius3DU = TO_3DU( aShape->GetRadius() - linewidth / 2 );
-            float         outer_radius3DU = TO_3DU( aShape->GetRadius() + linewidth / 2 );
-
-            if( inner_radius3DU < 0 )
-                inner_radius3DU = 0.0;
+            SFVEC2F center3DU = TO_SFVEC2F( aShape->GetCenter() );
+            float   innerR3DU = TO_3DU( aShape->GetRadius() ) - linewidth3DU / 2.0;
+            float   outerR3DU = TO_3DU( aShape->GetRadius() ) + linewidth3DU / 2.0;
 
             if( aShape->IsFilled() )
-            {
-                aContainer->Add( new FILLED_CIRCLE_2D( center3DU, outer_radius3DU,
-                                                       *aOwner ) );
-            }
-            else if( outer_radius3DU > inner_radius3DU )
-            {
-                aContainer->Add( new RING_2D( center3DU, inner_radius3DU, outer_radius3DU,
-                                              *aOwner ) );
-            }
+                addFILLED_CIRCLE_2D( aContainer, center3DU, outerR3DU, *aOwner );
+            else
+                addRING_2D( aContainer, center3DU, innerR3DU, outerR3DU, *aOwner );
 
             break;
         }
@@ -697,14 +639,14 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
             {
                 std::vector<VECTOR2I> pts = aShape->GetRectCorners();
 
-                aContainer->Add( new ROUND_SEGMENT_2D( TO_SFVEC2F( pts[0] ), TO_SFVEC2F( pts[1] ),
-                                                       TO_3DU( linewidth ), *aOwner ) );
-                aContainer->Add( new ROUND_SEGMENT_2D( TO_SFVEC2F( pts[1] ), TO_SFVEC2F( pts[2] ),
-                                                       TO_3DU( linewidth ), *aOwner ) );
-                aContainer->Add( new ROUND_SEGMENT_2D( TO_SFVEC2F( pts[2] ), TO_SFVEC2F( pts[3] ),
-                                                       TO_3DU( linewidth ), *aOwner ) );
-                aContainer->Add( new ROUND_SEGMENT_2D( TO_SFVEC2F( pts[3] ), TO_SFVEC2F( pts[0] ),
-                                                       TO_3DU( linewidth ), *aOwner ) );
+                addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( pts[0] ), TO_SFVEC2F( pts[1] ),
+                                     linewidth3DU, *aOwner );
+                addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( pts[1] ), TO_SFVEC2F( pts[2] ),
+                                     linewidth3DU, *aOwner );
+                addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( pts[2] ), TO_SFVEC2F( pts[3] ),
+                                     linewidth3DU, *aOwner );
+                addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( pts[3] ), TO_SFVEC2F( pts[0] ),
+                                     linewidth3DU, *aOwner );
             }
             break;
 
@@ -712,33 +654,15 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
         {
             unsigned int segCount = GetCircleSegmentCount( aShape->GetBoundingBox().GetSizeMax() );
 
-            transformArcToSegments( aShape->GetCenter(), aShape->GetStart(), aShape->GetArcAngle(),
-                                    segCount, linewidth, aContainer, *aOwner );
+            createArcSegments( aShape->GetCenter(), aShape->GetStart(), aShape->GetArcAngle(),
+                               segCount, aShape->GetWidth(), aContainer, *aOwner );
             break;
         }
 
         case SHAPE_T::SEGMENT:
-        {
-            const SFVEC2F start3DU = TO_SFVEC2F( aShape->GetStart() );
-            const SFVEC2F end3DU = TO_SFVEC2F( aShape->GetEnd() );
-            const double  linewidth3DU = TO_3DU( linewidth );
-
-            if( linewidth3DU == 0.0 )
-            {
-                // Don't attempt to render degenerate shapes
-            }
-            else if( Is_segment_a_circle( start3DU, end3DU ) )
-            {
-                // Cannot add segments that have the same start and end point
-                aContainer->Add( new FILLED_CIRCLE_2D( start3DU, linewidth3DU / 2, *aOwner ) );
-            }
-            else
-            {
-                aContainer->Add( new ROUND_SEGMENT_2D( start3DU, end3DU, linewidth3DU, *aOwner ) );
-            }
-
+            addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( aShape->GetStart() ),
+                                 TO_SFVEC2F( aShape->GetEnd() ), linewidth3DU, *aOwner );
             break;
-        }
 
         case SHAPE_T::BEZIER:
         case SHAPE_T::POLY:
@@ -761,12 +685,11 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
             break;
         }
     }
-    else if( linewidth > 0 )
+    else
     {
         std::vector<SHAPE*> shapes = aShape->MakeEffectiveShapes( true );
         SFVEC2F             a3DU;
         SFVEC2F             b3DU;
-        double              width3DU = TO_3DU( linewidth );
 
         const PCB_PLOT_PARAMS&     plotParams = aShape->GetBoard()->GetPlotOptions();
         KIGFX::PCB_RENDER_SETTINGS renderSettings;
@@ -776,16 +699,11 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
 
         for( SHAPE* shape : shapes )
         {
-            STROKE_PARAMS::Stroke( shape, lineStyle, linewidth, &renderSettings,
+            STROKE_PARAMS::Stroke( shape, lineStyle, aShape->GetWidth(), &renderSettings,
                     [&]( const VECTOR2I& a, const VECTOR2I& b )
                     {
-                        a3DU = TO_SFVEC2F( a );
-                        b3DU = TO_SFVEC2F( b );
-
-                        if( Is_segment_a_circle( a3DU, b3DU ) )
-                            aContainer->Add( new FILLED_CIRCLE_2D( a3DU, width3DU / 2, *aOwner ) );
-                        else
-                            aContainer->Add( new ROUND_SEGMENT_2D( a3DU, b3DU, width3DU, *aOwner ) );
+                        addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( a ), TO_SFVEC2F( b ),
+                                             linewidth3DU, *aOwner );
                     } );
         }
 
@@ -799,8 +717,8 @@ void BOARD_ADAPTER::addSolidAreasShapes( const ZONE* aZone, CONTAINER_2D_BASE* a
                                          PCB_LAYER_ID aLayerId )
 {
     // This convert the poly in outline and holes
-    ConvertPolygonToTriangles( *aZone->GetFilledPolysList( aLayerId ), *aContainer,
-                               m_biuTo3Dunits, *aZone );
+    ConvertPolygonToTriangles( *aZone->GetFilledPolysList( aLayerId ), *aContainer, m_biuTo3Dunits,
+                               *aZone );
 }
 
 
@@ -814,7 +732,7 @@ void BOARD_ADAPTER::buildPadOutlineAsSegments( const PAD* aPad, CONTAINER_2D_BAS
         const float   inner_radius3DU = TO_3DU( radius - aWidth / 2 );
         const float   outer_radius3DU = TO_3DU( radius + aWidth / 2 );
 
-        aContainer->Add( new RING_2D( center3DU, inner_radius3DU, outer_radius3DU, *aPad ) );
+        addRING_2D( aContainer, center3DU, inner_radius3DU, outer_radius3DU, *aPad );
 
         return;
     }
@@ -828,18 +746,6 @@ void BOARD_ADAPTER::buildPadOutlineAsSegments( const PAD* aPad, CONTAINER_2D_BAS
         SFVEC2F start3DU = TO_SFVEC2F( path.CPoint( j ) );
         SFVEC2F end3DU = TO_SFVEC2F( path.CPoint( j + 1 ) );
 
-        if( aWidth == 0 )
-        {
-            // Don't attempt to render degenerate shapes
-        }
-        else if( Is_segment_a_circle( start3DU, end3DU ) )
-        {
-            // Cannot add segments that have the same start and end point
-            aContainer->Add( new FILLED_CIRCLE_2D( start3DU, TO_3DU( aWidth / 2 ), *aPad ) );
-        }
-        else
-        {
-            aContainer->Add( new ROUND_SEGMENT_2D( start3DU, end3DU, TO_3DU( aWidth ), *aPad ) );
-        }
+        addROUND_SEGMENT_2D( aContainer, start3DU, end3DU, TO_3DU( aWidth ), *aPad );
     }
 }

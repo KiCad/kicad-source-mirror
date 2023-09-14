@@ -464,12 +464,12 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             m_averageHoleDiameter += ( ( pad->GetDrillSize().x +
                                              pad->GetDrillSize().y ) / 2.0f ) * m_biuTo3Dunits;
 
-            m_throughHoleOds.Add( createPadWithDrill( pad, inflate ) );
+            createPadWithHole( pad, &m_throughHoleOds, inflate );
 
             if( m_Cfg->m_Render.clip_silk_on_via_annulus )
-                m_throughHoleAnnularRings.Add( createPadWithDrill( pad, inflate ) );
+                createPadWithHole( pad, &m_throughHoleAnnularRings, inflate );
 
-            m_throughHoleIds.Add( createPadWithDrill( pad, 0 ) );
+            createPadWithHole( pad, &m_throughHoleIds, 0 );
         }
     }
 

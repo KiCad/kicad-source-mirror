@@ -351,7 +351,8 @@ private:
     void createPadWithMargin( const PAD *aPad, CONTAINER_2D_BASE* aDstContainer,
                               PCB_LAYER_ID aLayer, const VECTOR2I& aMargin ) const;
 
-    OBJECT_2D* createPadWithDrill( const PAD* aPad, int aInflateValue );
+    OBJECT_2D* createPadWithHole( const PAD* aPad, CONTAINER_2D_BASE* aDstContainer,
+                                   int aInflateValue );
 
     void addPads( const FOOTPRINT* aFootprint, CONTAINER_2D_BASE* aDstContainer,
                   PCB_LAYER_ID aLayerId, bool aSkipPlatedPads, bool aSkipNonPlatedPads );
@@ -372,9 +373,9 @@ private:
     void addSolidAreasShapes( const ZONE* aZone, CONTAINER_2D_BASE* aDstContainer,
                               PCB_LAYER_ID aLayerId );
 
-    void transformArcToSegments( const VECTOR2I& aCentre, const VECTOR2I& aStart,
+    void createArcSegments( const VECTOR2I& aCentre, const VECTOR2I& aStart,
                                  const EDA_ANGLE& aArcAngle, int aCircleToSegmentsCount, int aWidth,
-                                 CONTAINER_2D_BASE* aDstContainer, const BOARD_ITEM& aOwner );
+                                 CONTAINER_2D_BASE* aContainer, const BOARD_ITEM& aOwner );
 
     void buildPadOutlineAsSegments( const PAD* aPad, CONTAINER_2D_BASE* aDstContainer, int aWidth );
 
