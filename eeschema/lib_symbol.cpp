@@ -639,7 +639,7 @@ std::unique_ptr< LIB_SYMBOL > LIB_SYMBOL::Flatten() const
 
             // If the field isn't defined then inherit the parent field value.
             if( tmp.IsEmpty() )
-                retv->GetFieldById( i )->SetText( parent->GetFieldById( i )->GetText() );
+                retv->GetFieldById( i )->SetText( retv->GetFieldById( i )->GetText() );
             else
                 *retv->GetFieldById( i ) = *GetFieldById( i );
         }
@@ -714,7 +714,12 @@ const wxString LIB_SYMBOL::GetLibraryName() const
 bool LIB_SYMBOL::IsPower() const
 {
     if( LIB_SYMBOL_SPTR parent = m_parent.lock() )
-        return parent->m_options == ENTRY_POWER;
+    {
+        if( parent->IsRoot() )
+            return parent->m_options == ENTRY_POWER;
+        else
+            return parent->IsPower();
+    }
 
     return m_options == ENTRY_POWER;
 }
@@ -723,7 +728,12 @@ bool LIB_SYMBOL::IsPower() const
 void LIB_SYMBOL::SetPower()
 {
     if( LIB_SYMBOL_SPTR parent = m_parent.lock() )
-        parent->m_options = ENTRY_POWER;
+    {
+        if( parent->IsRoot() )
+            parent->m_options = ENTRY_POWER;
+        else
+            parent->SetPower();
+    }
 
     m_options = ENTRY_POWER;
 }
@@ -732,7 +742,12 @@ void LIB_SYMBOL::SetPower()
 bool LIB_SYMBOL::IsNormal() const
 {
     if( LIB_SYMBOL_SPTR parent = m_parent.lock() )
-        return parent->m_options == ENTRY_NORMAL;
+    {
+        if( parent->IsRoot() )
+            return parent->m_options == ENTRY_NORMAL;
+        else
+            return parent->IsNormal();
+    }
 
     return m_options == ENTRY_NORMAL;
 }
@@ -741,7 +756,12 @@ bool LIB_SYMBOL::IsNormal() const
 void LIB_SYMBOL::SetNormal()
 {
     if( LIB_SYMBOL_SPTR parent = m_parent.lock() )
-        parent->m_options = ENTRY_NORMAL;
+    {
+        if( parent->IsRoot() )
+            parent->m_options = ENTRY_NORMAL;
+        else
+            parent->SetNormal();
+    }
 
     m_options = ENTRY_NORMAL;
 }

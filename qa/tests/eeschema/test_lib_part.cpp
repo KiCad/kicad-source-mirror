@@ -626,25 +626,31 @@ BOOST_AUTO_TEST_CASE( Inheritance )
     BOOST_CHECK_EQUAL( child->GetUnitCount(), 4 );
     parent->SetUnitCount( 1 );
 
-    LIB_FIELD* field = new LIB_FIELD( MANDATORY_FIELDS, "Manufacturer" );
-    field->SetText( "Manufacturer" );
-    child->AddField( field );
+    parent->GetDatasheetField().SetText( "https://kicad/resistors.pdf" );
+    ref->GetDatasheetField().SetText( "https://kicad/resistors.pdf" );
+
+    BOOST_CHECK( *parent == *ref );
 
     ref->SetName( "child" );
+    LIB_FIELD* field = new LIB_FIELD( MANDATORY_FIELDS, "Manufacturer" );
+    field->SetText( "KiCad" );
+    child->AddField( field );
     field = new LIB_FIELD( MANDATORY_FIELDS, "Manufacturer" );
-    field->SetText( "Manufacturer" );
+    field->SetText( "KiCad" );
     ref->AddField( field );
     BOOST_CHECK( *ref == *child->Flatten() );
 
     ref->SetName( "grandchild" );
     field = new LIB_FIELD( MANDATORY_FIELDS + 1, "MPN" );
     field->SetText( "123456" );
-    ref->AddField( field );
-
+    grandChild->AddField( field );
     field = new LIB_FIELD( MANDATORY_FIELDS + 1, "MPN" );
     field->SetText( "123456" );
-    grandChild->AddField( field );
+    ref->AddField( field );
     BOOST_CHECK( *ref == *grandChild->Flatten() );
+
+    BOOST_CHECK_EQUAL( grandChild->Flatten()->GetDatasheetField().GetText(),
+                       "https://kicad/resistors.pdf" );
 
     child->SetParent();
     BOOST_CHECK_EQUAL( child->GetUnitCount(), 1 );
