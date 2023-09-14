@@ -92,8 +92,14 @@ void GL_CONTEXT_MANAGER::LockCtx( wxGLContext* aContext, wxGLCanvas* aCanvas )
 
     // Prevent assertion failure in wxGLContext::SetCurrent during GAL teardown
 #ifdef __WXGTK__
+
+#ifdef KICAD_USE_EGL
+    if( canvas->GTKGetDrawingWindow() )
+#else
     if( canvas->GetXWindow() )
-#endif
+#endif // KICAD_USE_EGL
+
+#endif // __WXGTK__
     {
         canvas->SetCurrent( *aContext );
     }

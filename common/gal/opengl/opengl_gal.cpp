@@ -2553,7 +2553,9 @@ unsigned int OPENGL_GAL::getNewGroupNumber()
 
 void OPENGL_GAL::init()
 {
+#ifndef KICAD_USE_EGL
     wxASSERT( IsShownOnScreen() );
+#endif // KICAD_USE_EGL
 
     wxASSERT_MSG( m_isContextLocked, "This should only be called from within a locked context." );
 
@@ -2561,6 +2563,19 @@ void OPENGL_GAL::init()
     if( m_tesselator == nullptr )
         throw std::runtime_error( "Could not create the tesselator" );
     GLenum err = glewInit();
+
+#ifdef KICAD_USE_EGL
+    // TODO: better way to check when EGL is ready (init fails at "getString(GL_VERSION)")
+    for( int i = 0; i < 10; i++ )
+    {
+        if( GLEW_OK == err )
+            break;
+
+        std::this_thread::sleep_for( std::chrono::milliseconds( 250 ) );
+        err = glewInit();
+    }
+
+#endif // KICAD_USE_EGL
 
     if( GLEW_OK != err )
         throw std::runtime_error( (const char*) glewGetErrorString( err ) );
