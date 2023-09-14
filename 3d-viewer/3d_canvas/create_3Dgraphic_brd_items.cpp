@@ -467,13 +467,13 @@ void BOARD_ADAPTER::createPadWithMargin( const PAD* aPad, CONTAINER_2D_BASE* aCo
 }
 
 
-OBJECT_2D* BOARD_ADAPTER::createPadWithHole( const PAD* aPad, CONTAINER_2D_BASE* aDstContainer,
+void BOARD_ADAPTER::createPadWithHole( const PAD* aPad, CONTAINER_2D_BASE* aDstContainer,
                                              int aInflateValue )
 {
     if( !aPad->HasHole() )
     {
         wxLogTrace( m_logTrace, wxT( "BOARD_ADAPTER::createPadWithHole - found an invalid pad" ) );
-        return nullptr;
+        return;
     }
 
     std::shared_ptr<SHAPE_SEGMENT> slot = aPad->GetEffectiveHoleShape();

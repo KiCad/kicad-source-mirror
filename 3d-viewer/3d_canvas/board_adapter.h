@@ -351,7 +351,7 @@ private:
     void createPadWithMargin( const PAD *aPad, CONTAINER_2D_BASE* aDstContainer,
                               PCB_LAYER_ID aLayer, const VECTOR2I& aMargin ) const;
 
-    OBJECT_2D* createPadWithHole( const PAD* aPad, CONTAINER_2D_BASE* aDstContainer,
+    void createPadWithHole( const PAD* aPad, CONTAINER_2D_BASE* aDstContainer,
                                    int aInflateValue );
 
     void addPads( const FOOTPRINT* aFootprint, CONTAINER_2D_BASE* aDstContainer,
