@@ -1213,8 +1213,27 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground ) const
     {
         aPlotter->PlotText( textpos, color, GetShownText( true ), attrs, font, GetFontMetrics() );
 
-        if( s_poly.size() )
-            aPlotter->PlotPoly( s_poly, FILL_T::NO_FILL, penWidth );
+        if( GetShape() == LABEL_FLAG_SHAPE::F_DOT )
+        {
+            aPlotter->MoveTo( s_poly[0] );
+            aPlotter->LineTo( s_poly[1] );
+
+            int diameter = ( s_poly[2] - s_poly[1] ).EuclideanNorm() * 2;
+            aPlotter->FilledCircle( s_poly[2], diameter , FILLED, nullptr );
+        }
+        else if( GetShape() == LABEL_FLAG_SHAPE::F_ROUND )
+        {
+            aPlotter->MoveTo( s_poly[0] );
+            aPlotter->LineTo( s_poly[1] );
+
+            int diameter = ( s_poly[2] - s_poly[1] ).EuclideanNorm() * 2;
+            aPlotter->ThickCircle( s_poly[2], diameter, penWidth, FILLED, nullptr );
+        }
+        else
+        {
+            if( !s_poly.empty() )
+                aPlotter->PlotPoly( s_poly, FILL_T::NO_FILL, penWidth );
+        }
 
         // Plot attributes to a hypertext menu
         std::vector<wxString> properties;
@@ -1268,8 +1287,25 @@ void SCH_LABEL_BASE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aO
 
     CreateGraphicShape( aSettings, s_poly, GetTextPos() + aOffset );
 
-    if( !s_poly.empty() )
-        GRPoly( DC, s_poly.size(), &s_poly[0], false, penWidth, color, color );
+    if( GetShape() == LABEL_FLAG_SHAPE::F_DOT )
+    {
+        GRLine( DC, s_poly[0], s_poly[1], penWidth, color );
+
+        int radius = ( s_poly[2] - s_poly[1] ).EuclideanNorm();
+        GRFilledCircle( DC, s_poly[2], radius, penWidth, color, color );
+    }
+    else if( GetShape() == LABEL_FLAG_SHAPE::F_ROUND )
+    {
+        GRLine( DC, s_poly[0], s_poly[1], penWidth, color );
+
+        int radius = ( s_poly[2] - s_poly[1] ).EuclideanNorm();
+        GRCircle( DC, s_poly[2], radius, penWidth, color );
+    }
+    else
+    {
+        if( !s_poly.empty() )
+            GRPoly( DC, s_poly.size(), &s_poly[0], false, penWidth, color, color );
+    }
 
     for( SCH_FIELD& field : m_fields )
         field.Print( aSettings, aOffset );
