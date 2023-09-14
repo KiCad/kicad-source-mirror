@@ -39,16 +39,25 @@ void KIPLATFORM::ENV::Init()
     wxString gdkBackend;
     wxGetEnv( wxT( "GDK_BACKEND" ), &gdkBackend );
 
-    if( gdkBackend == wxT( "broadway" ) )
+    // Set KICAD_WAYLAND_TRICKS to develop for native Wayland.
+    if( wxGetEnv( wxT( "KICAD_WAYLAND_TRICKS" ), nullptr ) )
     {
-        // Work around static setter in wx
-        gdk_set_allowed_backends( "broadway" );
+        wxSetEnv( wxT( "GDK_BACKEND" ), wxT( "wayland" ) );
+        gdk_set_allowed_backends( "wayland" );
     }
-    else if( gdkBackend != wxT( "wayland" ) )
+    else
     {
-        // Force the use of X11 backend (or wayland-x11 compatibility layer).  This is
-        // required until wxWidgets supports the Wayland compositors
-        wxSetEnv( wxT( "GDK_BACKEND" ), wxT( "x11" ) );
+        if( gdkBackend == wxT( "broadway" ) )
+        {
+            // Work around static setter in wx
+            gdk_set_allowed_backends( "broadway" );
+        }
+        else if( gdkBackend != wxT( "wayland" ) )
+        {
+            // Force the use of X11 backend (or wayland-x11 compatibility layer).  This is
+            // required until wxWidgets supports the Wayland compositors
+            wxSetEnv( wxT( "GDK_BACKEND" ), wxT( "x11" ) );
+        }
     }
 
     // Set GTK2-style input instead of xinput2.  This disables touchscreen and smooth
