@@ -704,8 +704,12 @@ endif()
 #
 # Find OpenGL library, required
 #
-set( OpenGL_GL_PREFERENCE "LEGACY" )     # CMake 3.11+ setting; see 'cmake --help-policy CMP0072'
-find_package( OpenGL REQUIRED )
+if( KICAD_USE_EGL )
+    find_package( OpenGL REQUIRED COMPONENTS OpenGL EGL )
+else()
+    set( OpenGL_GL_PREFERENCE "LEGACY" )     # CMake 3.11+ setting; see 'cmake --help-policy CMP0072'
+    find_package( OpenGL REQUIRED )
+endif()
 
 #
 # Find GLEW library, required
