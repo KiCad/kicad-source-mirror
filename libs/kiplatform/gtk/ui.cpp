@@ -28,6 +28,18 @@
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 
+#ifdef GDK_WINDOWING_X11
+#include <gdk/gdkx.h>
+#endif
+
+#ifdef GDK_WINDOWING_WAYLAND
+#include <gdk/gdkwayland.h>
+#endif
+
+#ifdef KICAD_WAYLAND
+#include "wayland-pointer-constraints-unstable-v1.h"
+#endif
+
 bool KIPLATFORM::UI::IsDarkTheme()
 {
     wxColour bg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
@@ -198,6 +210,27 @@ bool KIPLATFORM::UI::AllowIconsInMenus()
     return !!allowed;
 }
 
+#ifdef KICAD_WAYLAND
+
+static struct zwp_pointer_constraints_v1* pointer_constraints = NULL;
+
+static void handle_global( void* data, struct wl_registry* registry, uint32_t name,
+                           const char* interface, uint32_t version )
+{
+    if( strcmp( interface, zwp_pointer_constraints_v1_interface.name ) == 0 )
+    {
+        pointer_constraints = static_cast<zwp_pointer_constraints_v1*>( wl_registry_bind(
+                registry, name, &zwp_pointer_constraints_v1_interface, version ) );
+    }
+}
+
+static const struct wl_registry_listener registry_listener = {
+	.global = handle_global,
+	.global_remove = NULL,
+};
+
+#endif
+
 
 void KIPLATFORM::UI::WarpPointer( wxWindow* aWindow, int aX, int aY )
 {
@@ -207,19 +240,59 @@ void KIPLATFORM::UI::WarpPointer( wxWindow* aWindow, int aX, int aY )
     }
     else
     {
-        GdkDisplay* disp = gtk_widget_get_display( static_cast<GtkWidget*>( aWindow->GetHandle() ) );
-        GdkSeat* seat = gdk_display_get_default_seat( disp );
-        GdkDevice* dev = gdk_seat_get_pointer( seat );
-        GdkWindow* win = gdk_device_get_window_at_position( dev, nullptr, nullptr );
-        GdkCursor* blank_cursor = gdk_cursor_new_for_display( disp, GDK_BLANK_CURSOR );
-        GdkCursor* cur_cursor = gdk_window_get_cursor( win );
+        GtkWidget* widget = static_cast<GtkWidget*>( aWindow->GetHandle() );
 
-        if( cur_cursor )
-            g_object_ref( cur_cursor );
+        GdkDisplay* disp = gtk_widget_get_display( widget );
+        GdkSeat*    seat = gdk_display_get_default_seat( disp );
+        GdkDevice*  ptrdev = gdk_seat_get_pointer( seat );
 
-        gdk_window_set_cursor( win, blank_cursor );
-        aWindow->WarpPointer( aX, aY );
-        gdk_window_set_cursor( win, cur_cursor );
+#if defined( GDK_WINDOWING_WAYLAND ) && defined KICAD_WAYLAND
+        if( GDK_IS_WAYLAND_DISPLAY( disp ) )
+        {
+            GdkWindow* win = aWindow->GTKGetDrawingWindow();
+
+            wl_display* wldisp = gdk_wayland_display_get_wl_display( disp );
+
+            struct wl_registry* registry = wl_display_get_registry( wldisp );
+            int lret = wl_registry_add_listener( registry, &registry_listener, NULL );
+
+            wl_display_roundtrip( wldisp );
+
+            wl_surface* wlsurf = gdk_wayland_window_get_wl_surface( win );
+            wl_pointer* wlptr = gdk_wayland_device_get_wl_pointer( ptrdev );
+
+            struct zwp_locked_pointer_v1* locked_pointer = zwp_pointer_constraints_v1_lock_pointer(
+                    pointer_constraints, wlsurf, wlptr, NULL,
+                    ZWP_POINTER_CONSTRAINTS_V1_LIFETIME_ONESHOT );
+
+            gint wx, wy;
+            gtk_widget_translate_coordinates( widget, gtk_widget_get_toplevel( widget ), 0, 0, &wx,
+                                              &wy );
+
+            zwp_locked_pointer_v1_set_cursor_position_hint(
+                    locked_pointer, wl_fixed_from_int( aX + wx ), wl_fixed_from_int( aY + wy ) );
+
+            wl_surface_commit( wlsurf );
+            wl_display_roundtrip( wldisp );
+
+            zwp_locked_pointer_v1_destroy( locked_pointer );
+        }
+#endif
+#ifdef GDK_WINDOWING_X11
+        if( GDK_IS_X11_DISPLAY( disp ) )
+        {
+            GdkWindow* win = gdk_device_get_window_at_position( ptrdev, nullptr, nullptr );
+            GdkCursor* blank_cursor = gdk_cursor_new_for_display( disp, GDK_BLANK_CURSOR );
+            GdkCursor* cur_cursor = gdk_window_get_cursor( win );
+
+            if( cur_cursor )
+                g_object_ref( cur_cursor );
+
+            gdk_window_set_cursor( win, blank_cursor );
+            aWindow->WarpPointer( aX, aY );
+            gdk_window_set_cursor( win, cur_cursor );
+        }
+#endif
     }
 }
 

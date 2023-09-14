@@ -61,6 +61,13 @@ elseif( UNIX )
     link_directories( ${GTK3_LIBRARY_DIRS} )
     add_definitions( ${GTK3_CFLAGS_OTHER} )
 
+    if( KICAD_WAYLAND )
+        find_package(Wayland COMPONENTS Client REQUIRED)
+
+        list( APPEND PLATFORM_SRCS gtk/wayland-pointer-constraints-unstable-v1.c )
+        list( APPEND PLATFORM_LIBS Wayland::Client  )
+    endif()
+
     # Add the definition to show the GTK error messages if desired (they are hidden
     # by us by default)
     if( KICAD_SHOW_GTK_MESSAGES )

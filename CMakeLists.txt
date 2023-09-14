@@ -112,6 +112,11 @@ cmake_dependent_option( KICAD_USE_BUNDLED_GLEW
     ON "KICAD_USE_EGL"
     OFF )
 
+cmake_dependent_option( KICAD_WAYLAND
+    "Support Wayland features"
+    ON "UNIX_NOT_APPLE"
+    OFF )
+
 # Options to build with flatpak platform defaults (only on Linux)
 cmake_dependent_option( KICAD_BUILD_FLATPAK
     "Build KiCad with metadata, launchers, icons, and MIME info following flatpak conventions"
@@ -247,6 +252,11 @@ add_compile_definitions( $<$<BOOL:${KICAD_WIN32_VERIFY_CODESIGN}>:KICAD_WIN32_VE
 if( KICAD_USE_EGL )
     message( STATUS "Configuring KiCad for the wxGLCanvas EGL backend" )
     add_compile_definitions( KICAD_USE_EGL )
+endif()
+
+if( KICAD_WAYLAND )
+    message( STATUS "Configuring KiCad to support Wayland features" )
+    add_compile_definitions( KICAD_WAYLAND )
 endif()
 
 # Ensure DEBUG is defined for all platforms in Debug builds
