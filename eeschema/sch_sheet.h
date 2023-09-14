@@ -418,6 +418,10 @@ public:
      */
     static int ComparePageNum( const wxString& aPageNumberA, const wxString& aPageNumberB );
 
+    double Similarity( const SCH_ITEM& aOther ) const override;
+
+    bool operator==( const SCH_ITEM& aOther ) const override;
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif

@@ -1387,6 +1387,55 @@ int SCH_SHEET::ComparePageNum( const wxString& aPageNumberA, const wxString& aPa
 }
 
 
+bool SCH_SHEET::operator==( const SCH_ITEM& aOther ) const
+{
+    if( Type() != aOther.Type() )
+        return false;
+
+    const SCH_SHEET* other = static_cast<const SCH_SHEET*>( &aOther );
+
+    if( m_pos != other->m_pos )
+        return false;
+
+    if( m_size != other->m_size )
+        return false;
+
+    if( GetBorderColor() != other->GetBorderColor() )
+        return false;
+
+    if( GetBackgroundColor() != other->GetBackgroundColor() )
+        return false;
+
+    if( GetBorderWidth() != other->GetBorderWidth() )
+        return false;
+
+    if( GetFields().size() != other->GetFields().size() )
+        return false;
+
+    for( size_t i = 0; i < GetFields().size(); ++i )
+    {
+        if( !( GetFields()[i] == other->GetFields()[i] ) )
+            return false;
+    }
+
+    return true;
+}
+
+
+double SCH_SHEET::Similarity( const SCH_ITEM& aOther ) const
+{
+    if( Type() != aOther.Type() )
+        return 0.0;
+
+    const SCH_SHEET* other = static_cast<const SCH_SHEET*>( &aOther );
+
+    if( m_screen->GetFileName() == other->m_screen->GetFileName() )
+        return 1.0;
+
+    return 0.0;
+}
+
+
 #if defined(DEBUG)
 
 void SCH_SHEET::Show( int nestLevel, std::ostream& os ) const

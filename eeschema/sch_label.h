@@ -311,6 +311,10 @@ public:
      */
     virtual bool AutoRotateOnPlacementSupported() const = 0;
 
+    double Similarity( const SCH_ITEM& aItem ) const override;
+
+    bool operator==( const SCH_ITEM& aItem ) const override;
+
 protected:
     void cacheShownText() override;
 

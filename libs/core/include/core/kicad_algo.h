@@ -206,6 +206,37 @@ T clamp( T min, T value, T max )
     return std::max( min, std::min( value, max ) );
 }
 
+/**
+ * @brief Returns the length of the longest common subset of values between two containers.
+*/
+template <class _Container>
+size_t longest_common_subset( const _Container& __c1, const _Container& __c2 )
+{
+    size_t __c1_size = __c1.size();
+    size_t __c2_size = __c2.size();
+
+    if( __c1_size == 0 || __c2_size == 0 )
+        return 0;
+
+    // Create a 2D table to store the lengths of common subsets
+    std::vector<std::vector<size_t>> table( __c1_size + 1, std::vector<size_t>( __c2_size + 1, 0 ) );
+
+    size_t longest = 0;
+
+    for( size_t i = 1; i <= __c1_size; ++i )
+    {
+        for( size_t j = 1; j <= __c2_size; ++j )
+        {
+            if( __c1[i - 1] == __c2[j - 1] )
+            {
+                table[i][j] = table[i - 1][j - 1] + 1;
+                longest = std::max( longest, static_cast<size_t>( table[i][j] ) );
+            }
+        }
+    }
+
+    return longest;
+}
 
 } // namespace alg
 

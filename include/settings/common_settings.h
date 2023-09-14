@@ -145,6 +145,25 @@ public:
         int sash_pos;
     };
 
+    struct GIT_REPOSITORY
+    {
+        wxString name;
+        wxString path;
+        wxString authType;
+        wxString username;
+        wxString ssh_path;
+        bool     active;
+        bool     checkValid;
+    };
+
+    struct GIT
+    {
+        std::vector<GIT_REPOSITORY> repositories;
+        bool                        useDefaultAuthor;
+        wxString                    authorName;
+        wxString                    authorEmail;
+    };
+
     COMMON_SETTINGS();
 
     virtual ~COMMON_SETTINGS() {}
@@ -193,6 +212,8 @@ public:
     NETCLASS_PANEL m_NetclassPanel;
 
     PACKAGE_MANAGER m_PackageManager;
+
+    GIT m_Git;
 };
 
 #endif

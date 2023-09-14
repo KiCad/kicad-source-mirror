@@ -502,6 +502,30 @@ void SCH_SHAPE::AddPoint( const VECTOR2I& aPosition )
 }
 
 
+bool SCH_SHAPE::operator==( const SCH_ITEM& aOther ) const
+{
+    if( aOther.Type() != Type() )
+        return false;
+
+    const SCH_SHAPE& other = static_cast<const SCH_SHAPE&>( aOther );
+
+    return EDA_SHAPE::operator==( other );
+}
+
+
+double SCH_SHAPE::Similarity( const SCH_ITEM& aOther ) const
+{
+    if( aOther.Type() != Type() )
+        return 0.0;
+
+    const SCH_SHAPE& other = static_cast<const SCH_SHAPE&>( aOther );
+
+    double similarity = EDA_SHAPE::Similarity( other );
+
+    return similarity;
+}
+
+
 static struct SCH_SHAPE_DESC
 {
     SCH_SHAPE_DESC()

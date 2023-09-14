@@ -131,6 +131,8 @@ target_link_libraries( kicommon
     fmt::fmt
     CURL::libcurl
     ${wxWidgets_LIBRARIES}
+    ${LIBGIT2_LIBRARIES}
+    ${OPENSSL_LIBRARIES}
 
     # needed by kiid to allow linking for Boost for the UUID against bcrypt (msys2 only)
     ${EXTRA_LIBS}
@@ -195,7 +197,19 @@ set( COMMON_ABOUT_DLG_SRCS
     dialog_about/dialog_about_base.cpp
     )
 
+set( COMMON_GIT_DLG_SRCS
+    dialogs/git/dialog_git_commit.cpp
+    dialogs/git/dialog_git_switch.cpp
+    dialogs/git/dialog_git_auth.cpp
+    dialogs/git/dialog_git_repository.cpp
+    dialogs/git/dialog_git_repository_base.cpp
+    dialogs/git/panel_git_repos.cpp
+    dialogs/git/panel_git_repos_base.cpp
+
+    )
+
 set( COMMON_DLG_SRCS
+    ${COMMON_GIT_DLG_SRCS}
     dialogs/dialog_assign_netclass.cpp
     dialogs/dialog_assign_netclass_base.cpp
     dialogs/dialog_book_reporter.cpp
@@ -390,6 +404,20 @@ set( COMMON_IMPORT_GFX_SRCS
     import_gfx/svg_import_plugin.cpp
     )
 
+set( COMMON_GIT_SRCS
+    git/git_add_to_index_handler.cpp
+    git/git_clone_handler.cpp
+    git/git_commit_handler.cpp
+    git/git_pull_handler.cpp
+    git/git_push_handler.cpp
+    git/git_remove_from_index_handler.cpp
+    git/git_resolve_conflict_handler.cpp
+    git/git_revert_handler.cpp
+    git/git_sync_handler.cpp
+    git/kicad_git_common.cpp
+    git/kicad_git_errors.cpp
+    )
+
 set( COMMON_SRCS
     ${LIB_KICAD_SRCS}
     ${COMMON_ABOUT_DLG_SRCS}
@@ -405,6 +433,7 @@ set( COMMON_SRCS
     ${PLUGINS_EASYEDAPRO_SRCS}
 	${FONT_SRCS}
     ${COMMON_IMPORT_GFX_SRCS}
+    ${COMMON_GIT_SRCS}
     jobs/job_dispatcher.cpp
     background_jobs_monitor.cpp
     base_screen.cpp

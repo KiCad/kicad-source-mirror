@@ -2899,6 +2899,77 @@ bool FOOTPRINT::HasThroughHolePads() const
 }
 
 
+bool FOOTPRINT::operator==( const BOARD_ITEM& aOther ) const
+{
+    if( aOther.Type() != PCB_FOOTPRINT_T )
+        return false;
+
+    const FOOTPRINT& other = static_cast<const FOOTPRINT&>( aOther );
+
+    if( m_pads.size() != other.m_pads.size() )
+        return false;
+
+    for( size_t ii = 0; ii < m_pads.size(); ++ii )
+    {
+        if( !( *m_pads[ii] == *other.m_pads[ii] ) )
+            return false;
+    }
+
+    if( m_drawings.size() != other.m_drawings.size() )
+        return false;
+
+    for( size_t ii = 0; ii < m_drawings.size(); ++ii )
+    {
+        if( !( *m_drawings[ii] == *other.m_drawings[ii] ) )
+            return false;
+    }
+
+    if( m_zones.size() != other.m_zones.size() )
+        return false;
+
+    for( size_t ii = 0; ii < m_zones.size(); ++ii )
+    {
+        if( !( *m_zones[ii] == *other.m_zones[ii] ) )
+            return false;
+    }
+
+    if( m_fields.size() != other.m_fields.size() )
+        return false;
+
+    for( size_t ii = 0; ii < m_fields.size(); ++ii )
+    {
+        if( !( *m_fields[ii] == *other.m_fields[ii] ) )
+            return false;
+    }
+
+    return true;
+}
+
+
+double FOOTPRINT::Similarity( const BOARD_ITEM& aOther ) const
+{
+    if( aOther.Type() != PCB_FOOTPRINT_T )
+        return 0.0;
+
+    const FOOTPRINT& other = static_cast<const FOOTPRINT&>( aOther );
+
+    double similarity = 1.0;
+
+    for( size_t ii = 0; ii < m_pads.size(); ++ii )
+    {
+        const PAD* pad = m_pads[ii];
+        const PAD* otherPad = other.FindPadByNumber( pad->GetNumber() );
+
+        if( !otherPad )
+            continue;
+
+        similarity *= pad->Similarity( *otherPad );
+    }
+
+    return similarity;
+}
+
+
 #define TEST( a, b ) { if( a != b ) return a < b; }
 #define TEST_PT( a, b ) { if( a.x != b.x ) return a.x < b.x; if( a.y != b.y ) return a.y < b.y; }
 

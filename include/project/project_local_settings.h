@@ -135,6 +135,12 @@ public:
     /// State of the selection filter widget
     SELECTION_FILTER_OPTIONS m_SelectionFilter;
 
+    // Upstream git repo info
+    wxString m_GitRepoUsername;
+    wxString m_GitRepoPassword;
+    wxString m_GitRepoType;
+    wxString m_GitSSHKey;
+
 private:
     /// A link to the owning project
     PROJECT* m_project;

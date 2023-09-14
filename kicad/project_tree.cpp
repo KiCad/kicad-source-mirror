@@ -24,6 +24,7 @@
 
 
 #include <bitmaps.h>
+#include <git/kicad_git_common.h>
 #include <wx/settings.h>
 
 #include "project_tree_item.h"
@@ -48,6 +49,7 @@ PROJECT_TREE::PROJECT_TREE( PROJECT_TREE_PANE* parent ) :
         m_imageList( nullptr )
 {
     m_projectTreePane = parent;
+    m_gitCommon = new KIGIT_COMMON( nullptr );
 
     // Make sure the GUI font scales properly on GTK
     SetFont( KIUI::GetControlFont( this ) );
@@ -65,6 +67,7 @@ PROJECT_TREE::~PROJECT_TREE()
 void PROJECT_TREE::LoadIcons()
 {
     delete m_imageList;
+    delete m_statusImageList;
 
     // icons size is not know (depending on they are built)
     // so get it:
@@ -107,6 +110,28 @@ void PROJECT_TREE::LoadIcons()
     m_imageList->Add( KiBitmap( BITMAPS::zip ) );                    // ZIP_ARCHIVE
 
     SetImageList( m_imageList );
+
+    // Make an image list containing small icons
+    dummy = KiBitmap( BITMAPS::git_add );
+    iconsize.x = dummy.GetWidth();
+    iconsize.y = dummy.GetHeight();
+
+    wxBitmap blank_bitmap( iconsize.x, iconsize.y );
+
+    m_statusImageList = new wxImageList( iconsize.x, iconsize.y, true,
+                                         static_cast<int>( KIGIT_COMMON::GIT_STATUS::GIT_STATUS_LAST ) );
+
+    m_statusImageList->Add( blank_bitmap );                          // GIT_STATUS_UNTRACKED
+    m_statusImageList->Add( KiBitmap( BITMAPS::git_good_check ) );   // GIT_STATUS_CURRENT
+    m_statusImageList->Add( KiBitmap( BITMAPS::git_modified ) );     // GIT_STATUS_MODIFIED
+    m_statusImageList->Add( KiBitmap( BITMAPS::git_add ) );          // GIT_STATUS_ADDED
+    m_statusImageList->Add( KiBitmap( BITMAPS::git_delete ) );       // GIT_STATUS_DELETED
+    m_statusImageList->Add( KiBitmap( BITMAPS::git_out_of_date ) );  // GIT_STATUS_BEHIND
+    m_statusImageList->Add( KiBitmap( BITMAPS::git_changed_ahead ) );// GIT_STATUS_AHEAD
+    m_statusImageList->Add( KiBitmap( BITMAPS::git_conflict ) );     // GIT_STATUS_CONFLICTED
+
+    SetStateImageList( m_statusImageList );
+
 }
 
 

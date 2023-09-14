@@ -356,6 +356,39 @@ bool SCH_SHEET_PIN::HitTest( const VECTOR2I& aPoint, int aAccuracy ) const
 }
 
 
+bool SCH_SHEET_PIN::operator==( const SCH_ITEM& aOther ) const
+{
+    if( aOther.Type() != Type() )
+        return false;
+
+    const SCH_SHEET_PIN* other = static_cast<const SCH_SHEET_PIN*>( &aOther );
+
+    return m_edge == other->m_edge && m_number == other->m_number
+           && SCH_HIERLABEL::operator==( aOther );
+}
+
+
+double SCH_SHEET_PIN::Similarity( const SCH_ITEM& aOther ) const
+{
+    if( aOther.Type() != Type() )
+        return 0.0;
+
+    const SCH_SHEET_PIN* other = static_cast<const SCH_SHEET_PIN*>( &aOther );
+
+    double similarity = 1.0;
+
+    if( m_edge != other->m_edge )
+        similarity *= 0.9;
+
+    if( m_number != other->m_number )
+        similarity *= 0.9;
+
+    similarity *= SCH_HIERLABEL::Similarity( aOther );
+
+    return similarity;
+}
+
+
 #if defined(DEBUG)
 
 void SCH_SHEET_PIN::Show( int nestLevel, std::ostream& os ) const

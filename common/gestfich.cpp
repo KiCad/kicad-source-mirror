@@ -40,6 +40,8 @@
 #include <launch_ext.h>
 #include "wx/tokenzr.h"
 
+#include <filesystem>
+
 void QuoteString( wxString& string )
 {
     if( !string.StartsWith( wxT( "\"" ) ) )
@@ -291,4 +293,52 @@ void KiCopyFile( const wxString& aSrcPath, const wxString& aDestPath, wxString& 
 wxString QuoteFullPath( wxFileName& fn, wxPathFormat format )
 {
     return wxT( "\"" ) + fn.GetFullPath( format ) + wxT( "\"" );
+}
+
+
+bool RmDirRecursive( const wxString& aFileName, wxString* aErrors )
+{
+    namespace fs = std::filesystem;
+
+    std::string rmDir = aFileName.ToStdString();
+
+    if( rmDir.length() < 3 )
+    {
+        if( aErrors )
+            *aErrors = _( "Invalid directory name, cannot remove root" );
+
+        return false;
+    }
+
+    if( !fs::exists( rmDir ) )
+    {
+        if( aErrors )
+            *aErrors = wxString::Format( _( "Directory '%s' does not exist" ), aFileName );
+
+        return false;
+    }
+
+    fs::path path( rmDir );
+
+    if( !fs::is_directory( path ) )
+    {
+        if( aErrors )
+            *aErrors = wxString::Format( _( "'%s' is not a directory" ), aFileName );
+
+        return false;
+    }
+
+    try
+    {
+        fs::remove_all( path );
+    }
+    catch( const fs::filesystem_error& e )
+    {
+        if( aErrors )
+            *aErrors = wxString::Format( _( "Error removing directory '%s': %s" ), aFileName, e.what() );
+
+        return false;
+    }
+
+    return true;
 }

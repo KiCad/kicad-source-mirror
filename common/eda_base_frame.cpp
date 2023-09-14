@@ -23,9 +23,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <advanced_config.h>
 #include <bitmaps.h>
 #include <bitmap_store.h>
 #include <dialog_shim.h>
+#include <dialogs/git/panel_git_repos.h>
 #include <dialogs/panel_common_settings.h>
 #include <dialogs/panel_mouse_settings.h>
 #include <dialogs/panel_data_collection.h>
@@ -1070,6 +1072,15 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
             }, _( "Mouse and Touchpad" ) );
 
     book->AddPage( hotkeysPanel, _( "Hotkeys" ) );
+
+// This currently allows pre-defined repositories that we
+// don't use, so keep it disabled at the moment
+if( ADVANCED_CFG::GetCfg().m_EnableGit && false )
+    book->AddLazyPage(
+            []( wxWindow* aParent ) -> wxWindow*
+            {
+                return new PANEL_GIT_REPOS( aParent );
+            }, _( "Version Control" ) );
 
 #ifdef KICAD_USE_SENTRY
     book->AddLazyPage(

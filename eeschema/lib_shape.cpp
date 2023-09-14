@@ -518,6 +518,33 @@ void LIB_SHAPE::AddPoint( const VECTOR2I& aPosition )
 }
 
 
+bool LIB_SHAPE::operator==( const LIB_ITEM& aOther ) const
+{
+    if( aOther.Type() != Type() )
+        return false;
+
+    const LIB_SHAPE& other = static_cast<const LIB_SHAPE&>( aOther );
+
+    return LIB_ITEM::operator==( aOther ) && EDA_SHAPE::operator==( other );
+}
+
+
+double LIB_SHAPE::Similarity( const LIB_ITEM& aOther ) const
+{
+    if( m_Uuid == aOther.m_Uuid )
+        return 1.0;
+
+    if( aOther.Type() != Type() )
+        return 0.0;
+
+    const LIB_SHAPE& other = static_cast<const LIB_SHAPE&>( aOther );
+
+    double similarity = SimilarityBase( other );
+
+    similarity *= EDA_SHAPE::Similarity( other );
+
+    return similarity;
+}
 
 
 void LIB_SHAPE::ViewGetLayers( int aLayers[], int& aCount ) const

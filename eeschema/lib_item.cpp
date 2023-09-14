@@ -168,5 +168,3 @@ void LIB_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
     aLayers[1]  = LAYER_DEVICE_BACKGROUND;
     aLayers[2]  = LAYER_SELECTION_SHADOWS;
 }
-
-

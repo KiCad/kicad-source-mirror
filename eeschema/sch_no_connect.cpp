@@ -195,3 +195,34 @@ BITMAPS SCH_NO_CONNECT::GetMenuImage() const
 {
     return BITMAPS::noconn;
 }
+
+
+bool SCH_NO_CONNECT::operator==( const SCH_ITEM& aOther ) const
+{
+    if( aOther.Type() != Type() )
+        return false;
+
+    const SCH_NO_CONNECT* other = static_cast<const SCH_NO_CONNECT*>( &aOther );
+
+    if( m_pos != other->m_pos )
+        return false;
+
+    return true;
+}
+
+
+double SCH_NO_CONNECT::Similarity( const SCH_ITEM& aOther ) const
+{
+    if( m_Uuid == aOther.m_Uuid )
+        return 1.0;
+
+    if( aOther.Type() != Type() )
+        return 0.0;
+
+    const SCH_NO_CONNECT* other = static_cast<const SCH_NO_CONNECT*>( &aOther );
+
+    if( m_pos != other->m_pos )
+        return 0.0;
+
+    return 1.0;
+}

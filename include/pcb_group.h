@@ -102,6 +102,10 @@ public:
 
     static bool WithinScope( BOARD_ITEM* aItem, PCB_GROUP* aScope, bool isFootprintEditor );
 
+    double Similarity( const BOARD_ITEM& aOther ) const override;
+
+    bool operator==( const BOARD_ITEM& aOther ) const override;
+
 #if defined( DEBUG )
     void Show( int nestLevel, std::ostream& os ) const override
     {

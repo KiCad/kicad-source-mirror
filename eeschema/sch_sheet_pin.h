@@ -200,6 +200,10 @@ public:
 
     EDA_ITEM* Clone() const override;
 
+    double Similarity( const SCH_ITEM& aOther ) const override;
+
+    bool operator==( const SCH_ITEM& aOther ) const override;
+
 private:
     int m_number;       ///< Label number use for saving sheet label to file.
                         ///< Sheet label numbering begins at 2.

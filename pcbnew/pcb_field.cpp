@@ -116,7 +116,7 @@ wxString PCB_FIELD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
                                  KIUI::EllipsizeMenuText( GetText() ),
                                  GetParentFootprint()->GetReference() );
 
-    default: 
+    default:
         break; // avoid unreachable code / missing return statement warnings
     }
 
@@ -157,6 +157,41 @@ EDA_ITEM* PCB_FIELD::Clone() const
     return new PCB_FIELD( *this );
 }
 
+
+bool PCB_FIELD::operator==( const BOARD_ITEM& aOther ) const
+{
+    if( aOther.Type() != Type() )
+        return false;
+
+    const PCB_FIELD& other = static_cast<const PCB_FIELD&>( aOther );
+
+    return m_id == other.m_id && m_name == other.m_name && EDA_TEXT::operator==( other );
+}
+
+
+double PCB_FIELD::Similarity( const BOARD_ITEM& aOther ) const
+{
+    if( m_Uuid == aOther.m_Uuid )
+        return 1.0;
+
+    if( aOther.Type() != Type() )
+        return 0.0;
+
+    const PCB_FIELD& other = static_cast<const PCB_FIELD&>( aOther );
+
+    if( m_id < MANDATORY_FIELDS || other.m_id < MANDATORY_FIELDS )
+    {
+        if( m_id == other.m_id )
+            return 1.0;
+        else
+            return 0.0;
+    }
+
+    if( m_name == other.m_name )
+        return 1.0;
+
+    return EDA_TEXT::Similarity( other );
+}
 
 static struct PCB_FIELD_DESC
 {

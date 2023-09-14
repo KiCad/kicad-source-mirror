@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="16"
+   height="16"
+   version="1.1"
+   viewBox="0 0 16 16"
+   xml:space="preserve"
+   id="svg521"
+   sodipodi:docname="git_delete.svg"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"><defs
+   id="defs525" /><sodipodi:namedview
+   id="namedview523"
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1.0"
+   inkscape:showpageshadow="2"
+   inkscape:pageopacity="0.0"
+   inkscape:pagecheckerboard="0"
+   inkscape:deskcolor="#d1d1d1"
+   showgrid="false"
+   inkscape:zoom="64.1875"
+   inkscape:cx="6.4342746"
+   inkscape:cy="8"
+   inkscape:window-width="3840"
+   inkscape:window-height="2109"
+   inkscape:window-x="0"
+   inkscape:window-y="27"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="svg521" />
+
+
+<circle
+   cx="8"
+   cy="8"
+   r="7"
+   fill="#bf2641"
+   stroke-width=".032034"
+   id="circle511"
+   style="fill:#f2647e;fill-opacity:1" /><g
+   transform="matrix(.043356 0 0 .043356 -5.0836 -10.951)"
+   fill="#fff"
+   id="g517">
+	
+		<rect
+   transform="matrix(.7071 -.7071 .7071 .7071 -222.62 340.69)"
+   x="267.16"
+   y="307.98"
+   width="65.545"
+   height="262.18"
+   id="rect513" />
+	
+		<rect
+   transform="matrix(.7071 .7071 -.7071 .7071 398.39 -83.312)"
+   x="266.99"
+   y="308.15"
+   width="65.544"
+   height="262.18"
+   id="rect515" />
+</g>
+<metadata
+   id="metadata519"><rdf:RDF><cc:Work
+       rdf:about=""><cc:license
+         rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" /></cc:Work><cc:License
+       rdf:about="http://creativecommons.org/licenses/by-sa/4.0/"><cc:permits
+         rdf:resource="http://creativecommons.org/ns#Reproduction" /><cc:permits
+         rdf:resource="http://creativecommons.org/ns#Distribution" /><cc:requires
+         rdf:resource="http://creativecommons.org/ns#Notice" /><cc:requires
+         rdf:resource="http://creativecommons.org/ns#Attribution" /><cc:permits
+         rdf:resource="http://creativecommons.org/ns#DerivativeWorks" /><cc:requires
+         rdf:resource="http://creativecommons.org/ns#ShareAlike" /></cc:License></rdf:RDF></metadata></svg>

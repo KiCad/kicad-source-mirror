@@ -1025,6 +1025,67 @@ bool EDA_TEXT::ValidateHyperlink( const wxString& aURL )
     return false;
 }
 
+double EDA_TEXT::Levenshtein( const EDA_TEXT& aOther ) const
+{
+    // Compute the Levenshtein distance between the two strings
+    const wxString& str1 = GetText();
+    const wxString& str2 = aOther.GetText();
+
+    int m = str1.length();
+    int n = str2.length();
+
+    if( n == 0 || m == 0 )
+        return 0.0;
+
+    // Create a matrix to store the distance values
+    std::vector<std::vector<int>> distance(m + 1, std::vector<int>(n + 1));
+
+    // Initialize the matrix
+    for( int i = 0; i <= m; i++ )
+        distance[i][0] = i;
+    for( int j = 0; j <= n; j++ )
+        distance[0][j] = j;
+
+    // Calculate the distance
+    for( int i = 1; i <= m; i++ )
+    {
+        for( int j = 1; j <= n; j++ )
+        {
+            if( str1[i - 1] == str2[j - 1] )
+            {
+                distance[i][j] = distance[i - 1][j - 1];
+            }
+            else
+            {
+                distance[i][j] = std::min( { distance[i - 1][j], distance[i][j - 1],
+                                             distance[i - 1][j - 1] } ) + 1;
+            }
+        }
+    }
+
+    // Calculate similarity score
+    int    maxLen = std::max( m, n );
+    double similarity = 1.0 - ( static_cast<double>( distance[m][n] ) / maxLen );
+
+    return similarity;
+}
+
+
+double EDA_TEXT::Similarity( const EDA_TEXT& aOther ) const
+{
+    double retval = 1.0;
+
+    if( !( m_attributes == aOther.m_attributes ) )
+        retval *= 0.9;
+
+    if( m_pos != aOther.m_pos )
+        retval *= 0.9;
+
+    retval *= Levenshtein( aOther );
+
+    return retval;
+}
+
 
 bool EDA_TEXT::IsGotoPageHref( const wxString& aHref, wxString* aDestination )
 {

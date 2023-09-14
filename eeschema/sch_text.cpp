@@ -438,6 +438,43 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
     aList.emplace_back( _( "Justification" ), msg );
 }
 
+bool SCH_TEXT::operator==( const SCH_ITEM& aOther ) const
+{
+    if( Type() != aOther.Type() )
+        return false;
+
+    const SCH_TEXT* other = static_cast<const SCH_TEXT*>( &aOther );
+
+    if( GetLayer() != other->GetLayer() )
+        return false;
+
+    if( GetExcludedFromSim() != other->GetExcludedFromSim() )
+        return false;
+
+    return EDA_TEXT::operator==( *other );
+}
+
+
+double SCH_TEXT::Similarity( const SCH_ITEM& aOther ) const
+{
+    if( Type() != aOther.Type() )
+        return 0.0;
+
+    const SCH_TEXT* other = static_cast<const SCH_TEXT*>( &aOther );
+
+    double retval = 1.0;
+
+    if( GetLayer() != other->GetLayer() )
+        retval *= 0.9;
+
+    if( GetExcludedFromSim() != other->GetExcludedFromSim() )
+        retval *= 0.9;
+
+    retval *= EDA_TEXT::Similarity( *other );
+
+    return retval;
+}
+
 
 #if defined(DEBUG)
 

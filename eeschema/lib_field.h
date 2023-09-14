@@ -198,6 +198,10 @@ public:
     bool ShowInChooser() const { return m_showInChooser; }
     void SetShowInChooser( bool aShow = true ) { m_showInChooser = aShow; }
 
+    double Similarity( const LIB_ITEM& aItem ) const override;
+
+    bool operator==( const LIB_ITEM& aItem ) const override;
+
 private:
 
     /**

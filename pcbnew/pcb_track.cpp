@@ -151,6 +151,142 @@ BITMAPS PCB_VIA::GetMenuImage() const
 }
 
 
+bool PCB_TRACK::operator==( const BOARD_ITEM& aOther ) const
+{
+    if( aOther.Type() != Type() )
+        return false;
+
+    const PCB_TRACK& other = static_cast<const PCB_TRACK&>( aOther );
+
+    return m_Start == other.m_Start && m_End == other.m_End && m_layer == other.m_layer &&
+           m_Width == other.m_Width;
+}
+
+
+double PCB_TRACK::Similarity( const BOARD_ITEM& aOther ) const
+{
+    if( aOther.Type() != Type() )
+        return 0.0;
+
+    const PCB_TRACK& other = static_cast<const PCB_TRACK&>( aOther );
+
+    double similarity = 1.0;
+
+    if( m_layer != other.m_layer )
+        similarity *= 0.9;
+
+    if( m_Width != other.m_Width )
+        similarity *= 0.9;
+
+    if( m_Start != other.m_Start )
+        similarity *= 0.9;
+
+    if( m_End != other.m_End )
+        similarity *= 0.9;
+
+    return similarity;
+}
+
+
+bool PCB_ARC::operator==( const BOARD_ITEM& aOther ) const
+{
+    if( aOther.Type() != Type() )
+        return false;
+
+    const PCB_ARC& other = static_cast<const PCB_ARC&>( aOther );
+
+    return m_Start == other.m_Start && m_End == other.m_End && m_Mid == other.m_Mid &&
+           m_layer == other.m_layer && m_Width == other.m_Width;
+}
+
+
+double PCB_ARC::Similarity( const BOARD_ITEM& aOther ) const
+{
+    if( aOther.Type() != Type() )
+        return 0.0;
+
+    const PCB_ARC& other = static_cast<const PCB_ARC&>( aOther );
+
+    double similarity = 1.0;
+
+    if( m_layer != other.m_layer )
+        similarity *= 0.9;
+
+    if( m_Width != other.m_Width )
+        similarity *= 0.9;
+
+    if( m_Start != other.m_Start )
+        similarity *= 0.9;
+
+    if( m_End != other.m_End )
+        similarity *= 0.9;
+
+    if( m_Mid != other.m_Mid )
+        similarity *= 0.9;
+
+    return similarity;
+}
+
+
+bool PCB_VIA::operator==( const BOARD_ITEM& aOther ) const
+{
+    if( aOther.Type() != Type() )
+        return false;
+
+    const PCB_VIA& other = static_cast<const PCB_VIA&>( aOther );
+
+    return m_Start == other.m_Start && m_End == other.m_End && m_layer == other.m_layer &&
+           m_bottomLayer == other.m_bottomLayer && m_Width == other.m_Width &&
+           m_viaType == other.m_viaType && m_drill == other.m_drill &&
+           m_removeUnconnectedLayer == other.m_removeUnconnectedLayer &&
+           m_keepStartEndLayer == other.m_keepStartEndLayer &&
+           m_zoneLayerOverrides == other.m_zoneLayerOverrides;
+}
+
+
+double PCB_VIA::Similarity( const BOARD_ITEM& aOther ) const
+{
+    if( aOther.Type() != Type() )
+        return 0.0;
+
+    const PCB_VIA& other = static_cast<const PCB_VIA&>( aOther );
+
+    double similarity = 1.0;
+
+    if( m_layer != other.m_layer )
+        similarity *= 0.9;
+
+    if( m_Width != other.m_Width )
+        similarity *= 0.9;
+
+    if( m_Start != other.m_Start )
+        similarity *= 0.9;
+
+    if( m_End != other.m_End )
+        similarity *= 0.9;
+
+    if( m_bottomLayer != other.m_bottomLayer )
+        similarity *= 0.9;
+
+    if( m_viaType != other.m_viaType )
+        similarity *= 0.9;
+
+    if( m_drill != other.m_drill )
+        similarity *= 0.9;
+
+    if( m_removeUnconnectedLayer != other.m_removeUnconnectedLayer )
+        similarity *= 0.9;
+
+    if( m_keepStartEndLayer != other.m_keepStartEndLayer )
+        similarity *= 0.9;
+
+    if( m_zoneLayerOverrides != other.m_zoneLayerOverrides )
+        similarity *= 0.9;
+
+    return similarity;
+}
+
+
 bool PCB_TRACK::ApproxCollinear( const PCB_TRACK& aTrack )
 {
     SEG a( m_Start, m_End );

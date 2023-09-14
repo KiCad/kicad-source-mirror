@@ -149,6 +149,10 @@ public:
     void SetBorderWidth( const int aSize );
     int  GetBorderWidth() const { return m_stroke.GetWidth(); }
 
+    double Similarity( const BOARD_ITEM& aBoardItem ) const override;
+
+    bool operator==( const BOARD_ITEM& aBoardItem ) const override;
+
 protected:
     bool m_borderEnabled; ///< Controls drawing the border (as defined by the stroke members)
 

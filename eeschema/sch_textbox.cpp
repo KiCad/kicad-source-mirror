@@ -466,6 +466,39 @@ void SCH_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL
 }
 
 
+bool SCH_TEXTBOX::operator==( const SCH_ITEM& aOther ) const
+{
+    if( Type() != aOther.Type() )
+        return false;
+
+    const SCH_TEXTBOX& other = static_cast<const SCH_TEXTBOX&>( aOther );
+
+    if( m_excludedFromSim != other.m_excludedFromSim )
+        return false;
+
+    return SCH_SHAPE::operator==( aOther ) && EDA_TEXT::operator==( other );
+}
+
+
+double SCH_TEXTBOX::Similarity( const SCH_ITEM& aOther ) const
+{
+    if( aOther.Type() != Type() )
+        return 0.0;
+
+    auto other = static_cast<const SCH_TEXTBOX&>( aOther );
+
+    double similarity = 1.0;
+
+    if( m_excludedFromSim != other.m_excludedFromSim )
+        similarity *= 0.9;
+
+    similarity *= SCH_SHAPE::Similarity( aOther );
+    similarity *= EDA_TEXT::Similarity( other );
+
+    return similarity;
+}
+
+
 static struct SCH_TEXTBOX_DESC
 {
     SCH_TEXTBOX_DESC()

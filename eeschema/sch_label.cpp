@@ -579,6 +579,69 @@ bool SCH_LABEL_BASE::IncrementLabel( int aIncrement )
 }
 
 
+bool SCH_LABEL_BASE::operator==( const SCH_ITEM& aOther ) const
+{
+    const SCH_LABEL_BASE* other = dynamic_cast<const SCH_LABEL_BASE*>( &aOther );
+
+    if( !other )
+        return false;
+
+    if( m_shape != other->m_shape )
+        return false;
+
+    if( m_connectionType != other->m_connectionType )
+        return false;
+
+    if( m_fields.size() != other->m_fields.size() )
+        return false;
+
+    for( size_t ii = 0; ii < m_fields.size(); ++ii )
+    {
+        if( !( m_fields[ii] == other->m_fields[ii] ) )
+            return false;
+    }
+
+    return SCH_TEXT::operator==( aOther );
+}
+
+
+double SCH_LABEL_BASE::Similarity( const SCH_ITEM& aOther ) const
+{
+    const SCH_LABEL_BASE* other = dynamic_cast<const SCH_LABEL_BASE*>( &aOther );
+
+    if( !other )
+        return 0.0;
+
+    if( m_Uuid == other->m_Uuid )
+        return 1.0;
+
+    double similarity = SCH_TEXT::Similarity( aOther );
+
+    if( typeid( *this ) != typeid( aOther ) )
+        similarity *= 0.9;
+
+    if( m_shape == other->m_shape )
+        similarity *= 0.9;
+
+    if( m_connectionType == other->m_connectionType )
+        similarity *= 0.9;
+
+    for( size_t ii = 0; ii < m_fields.size(); ++ii )
+    {
+        if( ii >= other->m_fields.size() )
+            break;
+
+        similarity *= m_fields[ii].Similarity( other->m_fields[ii] );
+    }
+
+    int diff = std::abs( int( m_fields.size() ) - int( other->m_fields.size() ) );
+
+    similarity *= std::pow( 0.9, diff );
+
+    return similarity;
+}
+
+
 void SCH_LABEL_BASE::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
 {
     int margin = GetTextOffset() * 2;

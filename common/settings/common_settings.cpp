@@ -347,6 +347,61 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "package_manager.sash_pos",
             &m_PackageManager.sash_pos, 380 ) );
 
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "git.repositories",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json ret = {};
+
+                for( const GIT_REPOSITORY& repo : m_Git.repositories )
+                {
+                    nlohmann::json repoJson = {};
+
+                    repoJson["name"] = repo.name;
+                    repoJson["path"] = repo.path;
+                    repoJson["authType"] = repo.authType;
+                    repoJson["username"] = repo.username;
+                    repoJson["ssh_path"] = repo.ssh_path;
+                    repoJson["active"] = repo.active;
+
+                    ret.push_back( repoJson );
+                }
+
+                return ret;
+            },
+            [&]( const nlohmann::json& aJson )
+            {
+                if( !aJson.is_array() )
+                    return;
+
+                m_Git.repositories.clear();
+
+                for( const auto& repoJson : aJson )
+                {
+                    GIT_REPOSITORY repo;
+
+                    repo.name = repoJson["name"].get<wxString>();
+                    repo.path = repoJson["path"].get<wxString>();
+                    repo.authType = repoJson["authType"].get<wxString>();
+                    repo.username = repoJson["username"].get<wxString>();
+                    repo.ssh_path = repoJson["ssh_path"].get<wxString>();
+                    repo.active = repoJson["active"].get<bool>();
+
+                    m_Git.repositories.push_back( repo );
+                }
+            },
+            {} ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "git.authorName",
+            &m_Git.authorName, wxS( "" ) ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "git.authorEmail",
+            &m_Git.authorEmail, wxS( "" ) ) );
+
+    m_params.emplace_back( new PARAM<bool>( "git.useDefaultAuthor",
+            &m_Git.useDefaultAuthor, true ) );
+
+
+
     registerMigration( 0, 1, std::bind( &COMMON_SETTINGS::migrateSchema0to1, this ) );
     registerMigration( 1, 2, std::bind( &COMMON_SETTINGS::migrateSchema1to2, this ) );
     registerMigration( 2, 3, std::bind( &COMMON_SETTINGS::migrateSchema2to3, this ) );

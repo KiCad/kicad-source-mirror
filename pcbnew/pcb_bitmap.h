@@ -141,6 +141,10 @@ public:
 
     EDA_ITEM* Clone() const override;
 
+    double Similarity( const BOARD_ITEM& aBoardItem ) const override;
+
+    bool operator==( const BOARD_ITEM& aBoardItem ) const override;
+
 #if defined( DEBUG )
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif

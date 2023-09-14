@@ -72,6 +72,13 @@ set( BMAPS_SMALL
     e_48
     e_96
     e_192
+    git_add
+    git_changed_ahead
+    git_conflict
+    git_delete
+    git_good_check
+    git_modified
+    git_out_of_date
     icon_bitmap2component_16
     icon_eeschema_16
     icon_gerbview_16

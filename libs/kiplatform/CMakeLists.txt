@@ -14,6 +14,7 @@ if( APPLE )
         osx/environment.mm
         osx/io.mm
         osx/policy.mm
+        osx/secrets.mm
         osx/ui.mm
         )
 
@@ -30,6 +31,7 @@ elseif( WIN32 )
         msw/environment.cpp
         msw/io.cpp
         msw/policy.cpp
+        msw/secrets.cpp
         msw/ui.cpp
         )
 
@@ -46,6 +48,7 @@ elseif( UNIX )
         gtk/environment.cpp
         gtk/io.cpp
         gtk/policy.cpp
+        gtk/secrets.cpp
         gtk/ui.cpp
         )
 
@@ -60,6 +63,11 @@ elseif( UNIX )
     include_directories( SYSTEM ${GTK3_INCLUDE_DIRS} )
     link_directories( ${GTK3_LIBRARY_DIRS} )
     add_definitions( ${GTK3_CFLAGS_OTHER} )
+
+    # Detect the secret library and configure it
+    pkg_check_modules(secret REQUIRED libsecret-1)
+    include_directories( SYSTEM ${secret_INCLUDE_DIRS} )
+    list( APPEND PLATFORM_LIBS ${secret_LIBRARIES} )
 
     if( KICAD_WAYLAND )
         find_package(Wayland COMPONENTS Client REQUIRED)

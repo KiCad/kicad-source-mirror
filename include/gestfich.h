@@ -92,4 +92,11 @@ wxString FindKicadFile( const wxString& shortname );
  */
 extern wxString QuoteFullPath( wxFileName& fn, wxPathFormat format = wxPATH_NATIVE );
 
+
+/**
+ * Removes the directory \a aDirName and all its contents including
+ * subdirectories and their files
+ */
+bool RmDirRecursive( const wxString& aDirName, wxString* aErrors = nullptr );
+
 #endif /* GESTFICH_H */

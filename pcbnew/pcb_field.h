@@ -111,6 +111,10 @@ public:
 
     int GetId() const { return m_id; }
 
+    double Similarity( const BOARD_ITEM& aOther ) const override;
+
+    bool operator==( const BOARD_ITEM& aOther ) const override;
+
 private:
     int m_id; ///< Field index, @see enum MANDATORY_FIELD_T
 

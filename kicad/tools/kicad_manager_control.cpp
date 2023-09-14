@@ -36,6 +36,8 @@
 #include <tools/kicad_manager_actions.h>
 #include <tools/kicad_manager_control.h>
 #include <dialogs/dialog_template_selector.h>
+#include <dialogs/git/dialog_git_repository.h>
+#include <git/git_clone_handler.h>
 #include <gestfich.h>
 #include <paths.h>
 #include <wx/checkbox.h>
@@ -62,10 +64,12 @@ void KICAD_MANAGER_CONTROL::Reset( RESET_REASON aReason )
 }
 
 
-int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
+wxFileName KICAD_MANAGER_CONTROL::newProjectDirectory( wxString* aFileName )
 {
+    wxString default_filename = aFileName ? *aFileName : wxString();
+
     wxString        default_dir = m_frame->GetMruPath();
-    wxFileDialog    dlg( m_frame, _( "Create New Project" ), default_dir, wxEmptyString,
+    wxFileDialog    dlg( m_frame, _( "Create New Project" ), default_dir, default_filename,
                          ProjectFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     // Add a "Create a new directory" checkbox
@@ -73,7 +77,7 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
     dlg.SetCustomizeHook( newProjectHook );
 
     if( dlg.ShowModal() == wxID_CANCEL )
-        return -1;
+        return wxFileName();
 
     wxFileName pro( dlg.GetPath() );
 
@@ -107,7 +111,7 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
                            "Make sure you have write permissions and try again." ),
                         pro.GetPath() );
             DisplayErrorMessage( m_frame, msg );
-            return -1;
+            return wxFileName();
         }
     }
     else if( directory.HasFiles() )
@@ -117,11 +121,85 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
                           "Do you want to continue?" );
 
         if( !IsOK( m_frame, msg ) )
-            return -1;
+            return wxFileName();
     }
+
+    return pro;
+}
+
+
+int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
+{
+
+    wxFileName pro = newProjectDirectory();
+
+    if( !pro.IsOk() )
+        return -1;
 
     m_frame->CreateNewProject( pro );
     m_frame->LoadProject( pro );
+
+    return 0;
+}
+
+
+int KICAD_MANAGER_CONTROL::NewFromRepository( const TOOL_EVENT& aEvent )
+{
+    DIALOG_GIT_REPOSITORY dlg( m_frame, nullptr );
+
+    dlg.SetTitle( _( "Clone Project from Git Repository" ) );
+
+    int ret = dlg.ShowModal();
+
+    if( ret != wxID_OK )
+        return -1;
+
+    wxString   repodest = dlg.GetRepoName();
+    wxFileName pro = newProjectDirectory( &repodest );
+
+    if( !pro.IsOk() )
+        return -1;
+
+    GIT_CLONE_HANDLER cloneHandler;
+
+    cloneHandler.SetURL( dlg.GetRepoURL() );
+    cloneHandler.SetClonePath( pro.GetPath() );
+    cloneHandler.SetConnType( dlg.GetRepoType() );
+    cloneHandler.SetUsername( dlg.GetUsername() );
+    cloneHandler.SetPassword( dlg.GetPassword() );
+    cloneHandler.SetSSHKey( dlg.GetRepoSSHPath() );
+
+    cloneHandler.SetProgressReporter( std::make_unique<WX_PROGRESS_REPORTER>( m_frame, _( "Cloning Repository" ), 1 ) );
+
+    if( !cloneHandler.PerformClone() )
+    {
+        DisplayErrorMessage( m_frame, cloneHandler.GetErrorString() );
+        return -1;
+    }
+
+    std::vector<wxString> projects = cloneHandler.GetProjectDirs();
+
+    if( projects.empty() )
+    {
+        DisplayErrorMessage( m_frame, _( "No project files were found in the repository." ) );
+        return -1;
+    }
+
+    // Currently, we pick the first project file we find in the repository.
+    // TODO: Look into spare checkout to allow the user to pick a partial repository
+    wxString dest = pro.GetPath() + wxFileName::GetPathSeparator() + projects.front();
+    m_frame->LoadProject( dest );
+
+    Prj().GetLocalSettings().m_GitRepoPassword = dlg.GetPassword();
+    Prj().GetLocalSettings().m_GitRepoUsername = dlg.GetUsername();
+    Prj().GetLocalSettings().m_GitSSHKey = dlg.GetRepoSSHPath();
+
+    if( dlg.GetRepoType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH )
+        Prj().GetLocalSettings().m_GitRepoType = "ssh";
+    else if( dlg.GetRepoType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_HTTPS )
+        Prj().GetLocalSettings().m_GitRepoType = "https";
+    else
+        Prj().GetLocalSettings().m_GitRepoType = "local";
 
     return 0;
 }
@@ -874,6 +952,7 @@ void KICAD_MANAGER_CONTROL::setTransitions()
 {
     Go( &KICAD_MANAGER_CONTROL::NewProject,         KICAD_MANAGER_ACTIONS::newProject.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::NewFromTemplate,    KICAD_MANAGER_ACTIONS::newFromTemplate.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::NewFromRepository,  KICAD_MANAGER_ACTIONS::newFromRepository.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::OpenDemoProject,    KICAD_MANAGER_ACTIONS::openDemoProject.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::OpenProject,        KICAD_MANAGER_ACTIONS::openProject.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::CloseProject,       KICAD_MANAGER_ACTIONS::closeProject.MakeEvent() );

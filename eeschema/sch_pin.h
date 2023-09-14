@@ -164,6 +164,10 @@ public:
     const wxString& GetOperatingPoint() const { return m_operatingPoint; }
     void SetOperatingPoint( const wxString& aText ) { m_operatingPoint = aText; }
 
+    double Similarity( const SCH_ITEM& aItem ) const override;
+
+    bool operator==( const SCH_ITEM& aItem ) const override;
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override {}
 #endif

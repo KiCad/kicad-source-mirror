@@ -112,6 +112,16 @@ public:
 
     SEVERITY GetSeverity() const override;
 
+    double Similarity( const BOARD_ITEM& aBoardItem ) const override
+    {
+        return 0.0;
+    }
+
+    bool operator==( const BOARD_ITEM& aBoardItem ) const override
+    {
+        return false;
+    }
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif

@@ -160,6 +160,10 @@ public:
     ///< @copydoc VIEW_ITEM::ViewGetLOD
     double ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 
+    double Similarity( const BOARD_ITEM& aBoardItem ) const override;
+
+    bool operator==( const BOARD_ITEM& aBoardItem ) const override;
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif

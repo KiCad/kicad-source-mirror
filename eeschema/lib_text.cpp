@@ -500,6 +500,33 @@ void LIB_TEXT::CalcEdit( const VECTOR2I& aPosition )
 }
 
 
+bool LIB_TEXT::operator==( const LIB_ITEM& aOther ) const
+{
+    if( Type() != aOther.Type() )
+        return false;
+
+    const LIB_TEXT& other = static_cast<const LIB_TEXT&>( aOther );
+
+    return LIB_ITEM::operator==( aOther ) && EDA_TEXT::operator==( other );
+}
+
+
+double LIB_TEXT::Similarity( const LIB_ITEM& aOther ) const
+{
+    if( m_Uuid == aOther.m_Uuid )
+        return 1.0;
+
+    if( aOther.Type() != Type() )
+        return 0.0;
+
+    const LIB_TEXT& other = static_cast<const LIB_TEXT&>( aOther );
+
+    double similarity = SimilarityBase( other );
+    similarity *= EDA_TEXT::Similarity( other );
+
+    return similarity;
+}
+
 static struct LIB_TEXT_DESC
 {
     LIB_TEXT_DESC()

@@ -1,0 +1,60 @@
+/*
+* This program source code file is part of KiCad, a free EDA CAD application.
+*
+* Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+*
+* This program is free software: you can redistribute it and/or modify it
+* under the terms of the GNU General Public License as published by the
+* Free Software Foundation, either version 3 of the License, or (at your
+* option) any later version.
+*
+* This program is distributed in the hope that it will be useful, but
+* WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License along
+* with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#include <kiplatform/secrets.h>
+
+#include <windows.h>
+#include <wincred.h>
+#include <wx/string.h>
+
+namespace KIPLATFORM
+{
+    namespace SECRETS
+    {
+        bool StoreSecret( const wxString& aService, const wxString& aKey, const wxString& aSecret )
+        {
+            wxString display = aService + L":" + aKey;
+
+            CREDENTIALW cred = { 0 };
+            cred.Type = CRED_TYPE_GENERIC;
+            cred.TargetName = (LPWSTR)display.wc_str();
+            cred.CredentialBlobSize = (DWORD)aSecret.size();
+            cred.CredentialBlob = (LPBYTE)aSecret.c_str();
+            cred.Persist = CRED_PERSIST_USER;
+
+            return CredWriteW( &cred, 0 );
+        }
+
+        bool GetSecret( const wxString& aService, const wxString& aKey, wxString& aSecret )
+        {
+            wxString display = aService + ":" + aKey;
+
+            CREDENTIALW* cred = nullptr;
+            bool result = CredReadW( display.wc_str(), CRED_TYPE_GENERIC, 0, &cred );
+
+            if( result )
+            {
+                aSecret = wxString( (char*)cred->CredentialBlob, cred->CredentialBlobSize );
+                CredFree( cred );
+            }
+
+            return result;
+        }
+    }
+}

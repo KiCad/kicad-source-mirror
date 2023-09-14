@@ -503,6 +503,22 @@ private:
  */
 inline EDA_ITEM* new_clone( const EDA_ITEM& aItem ) { return aItem.Clone(); }
 
+/**
+ * Comparison functor for sorting EDA_ITEM pointers by their UUID.
+ */
+struct CompareByUuid
+{
+    bool operator()(const EDA_ITEM* item1, const EDA_ITEM* item2) const
+    {
+        assert( item1 != nullptr && item2 != nullptr );
+
+        if( item1->m_Uuid == item2->m_Uuid )
+            return item1 < item2;
+
+        return item1->m_Uuid < item2->m_Uuid;
+    }
+};
+
 
 /**
  * Define list of drawing items for screens.
@@ -511,5 +527,7 @@ inline EDA_ITEM* new_clone( const EDA_ITEM& aItem ) { return aItem.Clone(); }
  * it being destroyed.
  */
 typedef std::vector< EDA_ITEM* > EDA_ITEMS;
+
+typedef std::set< EDA_ITEM*, CompareByUuid > EDA_ITEM_SET;
 
 #endif // EDA_ITEM_H

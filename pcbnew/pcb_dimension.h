@@ -278,6 +278,10 @@ public:
                                   int aError, ERROR_LOC aErrorLoc,
                                   bool aIgnoreLineWidth = false ) const override;
 
+    double Similarity( const BOARD_ITEM& aOther ) const override;
+
+    bool operator==( const BOARD_ITEM& aOther ) const override;
+
 #if defined(DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif

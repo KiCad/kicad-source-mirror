@@ -1393,6 +1393,140 @@ void ZONE::TransformSolidAreasShapesToPolygon( PCB_LAYER_ID aLayer, SHAPE_POLY_S
 }
 
 
+bool ZONE::operator==( const BOARD_ITEM& aOther ) const
+{
+    if( aOther.Type() != Type() )
+        return false;
+
+    const ZONE& other = static_cast<const ZONE&>( aOther );
+
+    if( GetIsRuleArea() != other.GetIsRuleArea() )
+        return false;
+
+    if( GetLayerSet() != other.GetLayerSet() )
+        return false;
+
+    if( GetNetCode() != other.GetNetCode() )
+        return false;
+
+    if( GetIsRuleArea() )
+    {
+        if( GetDoNotAllowCopperPour() != other.GetDoNotAllowCopperPour() )
+            return false;
+        if( GetDoNotAllowTracks() != other.GetDoNotAllowTracks() )
+            return false;
+        if( GetDoNotAllowVias() != other.GetDoNotAllowVias() )
+            return false;
+        if( GetDoNotAllowFootprints() != other.GetDoNotAllowFootprints() )
+            return false;
+        if( GetDoNotAllowPads() != other.GetDoNotAllowPads() )
+            return false;
+    }
+    else
+    {
+        if( GetAssignedPriority() != other.GetAssignedPriority() )
+            return false;
+
+        if( GetMinThickness() != other.GetMinThickness() )
+            return false;
+
+        if( GetCornerSmoothingType() != other.GetCornerSmoothingType() )
+            return false;
+
+        if( GetCornerRadius() != other.GetCornerRadius() )
+            return false;
+
+        if( GetTeardropParams() != other.GetTeardropParams() )
+            return false;
+    }
+
+    if( GetNumCorners() != other.GetNumCorners() )
+        return false;
+
+    for( int ii = 0; ii < GetNumCorners(); ii++ )
+    {
+        if( GetCornerPosition( ii ) != other.GetCornerPosition( ii ) )
+            return false;
+    }
+
+    return true;
+}
+
+
+double ZONE::Similarity( const BOARD_ITEM& aOther ) const
+{
+    if( aOther.Type() != Type() )
+        return 0.0;
+
+    const ZONE& other = static_cast<const ZONE&>( aOther );
+
+    if( GetIsRuleArea() != other.GetIsRuleArea() )
+        return 0.0;
+
+    double similarity = 1.0;
+
+    if( GetLayerSet() != other.GetLayerSet() )
+        similarity *= 0.9;
+
+    if( GetNetCode() != other.GetNetCode() )
+        similarity *= 0.9;
+
+    if( !GetIsRuleArea() )
+    {
+        if( GetAssignedPriority() != other.GetAssignedPriority() )
+            similarity *= 0.9;
+
+        if( GetMinThickness() != other.GetMinThickness() )
+            similarity *= 0.9;
+
+        if( GetCornerSmoothingType() != other.GetCornerSmoothingType() )
+            similarity *= 0.9;
+
+        if( GetCornerRadius() != other.GetCornerRadius() )
+            similarity *= 0.9;
+
+        if( GetTeardropParams() != other.GetTeardropParams() )
+            similarity *= 0.9;
+    }
+    else
+    {
+        if( GetDoNotAllowCopperPour() != other.GetDoNotAllowCopperPour() )
+            similarity *= 0.9;
+        if( GetDoNotAllowTracks() != other.GetDoNotAllowTracks() )
+            similarity *= 0.9;
+        if( GetDoNotAllowVias() != other.GetDoNotAllowVias() )
+            similarity *= 0.9;
+        if( GetDoNotAllowFootprints() != other.GetDoNotAllowFootprints() )
+            similarity *= 0.9;
+        if( GetDoNotAllowPads() != other.GetDoNotAllowPads() )
+            similarity *= 0.9;
+    }
+
+    std::vector<VECTOR2I> corners;
+    std::vector<VECTOR2I> otherCorners;
+    VECTOR2I lastCorner( 0, 0 );
+
+    for( int ii = 0; ii < GetNumCorners(); ii++ )
+    {
+        corners.push_back( lastCorner - GetCornerPosition( ii ) );
+        lastCorner = GetCornerPosition( ii );
+    }
+
+    lastCorner = VECTOR2I( 0, 0 );
+    for( int ii = 0; ii < other.GetNumCorners(); ii++ )
+    {
+        otherCorners.push_back( lastCorner - other.GetCornerPosition( ii ) );
+        lastCorner = other.GetCornerPosition( ii );
+    }
+
+    size_t longest = alg::longest_common_subset( corners, otherCorners );
+
+    similarity *= std::pow( 0.9, GetNumCorners() + other.GetNumCorners() - 2 * longest );
+
+    return similarity;
+}
+
+
 static struct ZONE_DESC
 {
     ZONE_DESC()

@@ -1684,6 +1684,186 @@ void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
 }
 
 
+bool PAD::operator==( const BOARD_ITEM& aOther ) const
+{
+    if( Type() != aOther.Type() )
+        return false;
+
+    if( m_parent->m_Uuid != aOther.GetParent()->m_Uuid )
+        return false;
+
+    const PAD& other = static_cast<const PAD&>( aOther );
+
+    if( GetShape() != other.GetShape() )
+        return false;
+
+    if( GetPosition() != other.GetPosition() )
+        return false;
+
+    if( GetAttribute() != other.GetAttribute() )
+        return false;
+
+    if( GetSize() != other.GetSize() )
+        return false;
+
+    if( GetOffset() != other.GetOffset() )
+        return false;
+
+    if( GetDrillSize() != other.GetDrillSize() )
+        return false;
+
+    if( GetDrillShape() != other.GetDrillShape() )
+        return false;
+
+    if( GetRoundRectRadiusRatio() != other.GetRoundRectRadiusRatio() )
+        return false;
+
+    if( GetChamferRectRatio() != other.GetChamferRectRatio() )
+        return false;
+
+    if( GetChamferPositions() != other.GetChamferPositions() )
+        return false;
+
+    if( GetOrientation() != other.GetOrientation() )
+        return false;
+
+    if( GetZoneConnection() != other.GetZoneConnection() )
+        return false;
+
+    if( GetThermalSpokeWidth() != other.GetThermalSpokeWidth() )
+        return false;
+
+    if( GetThermalSpokeAngle() != other.GetThermalSpokeAngle() )
+        return false;
+
+    if( GetThermalGap() != other.GetThermalGap() )
+        return false;
+
+    if( GetCustomShapeInZoneOpt() != other.GetCustomShapeInZoneOpt() )
+        return false;
+
+    if( GetPrimitives().size() != other.GetPrimitives().size() )
+        return false;
+
+    for( size_t ii = 0; ii < GetPrimitives().size(); ii++ )
+    {
+        if( GetPrimitives()[ii] != other.GetPrimitives()[ii] )
+            return false;
+    }
+
+    if( GetAnchorPadShape() != other.GetAnchorPadShape() )
+        return false;
+
+    if( GetLocalClearance() != other.GetLocalClearance() )
+        return false;
+
+    if( GetLocalSolderMaskMargin() != other.GetLocalSolderMaskMargin() )
+        return false;
+
+    if( GetLocalSolderPasteMargin() != other.GetLocalSolderPasteMargin() )
+        return false;
+
+    if( GetLocalSolderPasteMarginRatio() != other.GetLocalSolderPasteMarginRatio() )
+        return false;
+
+    if( GetLocalSpokeWidthOverride() != other.GetLocalSpokeWidthOverride() )
+        return false;
+
+    if( GetLayerSet() != other.GetLayerSet() )
+        return false;
+
+    return true;
+}
+
+
+double PAD::Similarity( const BOARD_ITEM& aOther ) const
+{
+    if( aOther.Type() != Type() )
+        return 0.0;
+
+    if( m_parent->m_Uuid != aOther.GetParent()->m_Uuid )
+        return 0.0;
+
+    const PAD& other = static_cast<const PAD&>( aOther );
+
+    double similarity = 1.0;
+
+    if( GetShape() != other.GetShape() )
+        similarity *= 0.9;
+
+    if( GetPosition() != other.GetPosition() )
+        similarity *= 0.9;
+
+    if( GetAttribute() != other.GetAttribute() )
+        similarity *= 0.9;
+
+    if( GetSize() != other.GetSize() )
+        similarity *= 0.9;
+
+    if( GetOffset() != other.GetOffset() )
+        similarity *= 0.9;
+
+    if( GetDrillSize() != other.GetDrillSize() )
+        similarity *= 0.9;
+
+    if( GetDrillShape() != other.GetDrillShape() )
+        similarity *= 0.9;
+
+    if( GetRoundRectRadiusRatio() != other.GetRoundRectRadiusRatio() )
+        similarity *= 0.9;
+
+    if( GetChamferRectRatio() != other.GetChamferRectRatio() )
+        similarity *= 0.9;
+
+    if( GetChamferPositions() != other.GetChamferPositions() )
+        similarity *= 0.9;
+
+    if( GetOrientation() != other.GetOrientation() )
+        similarity *= 0.9;
+
+    if( GetZoneConnection() != other.GetZoneConnection() )
+        similarity *= 0.9;
+
+    if( GetThermalSpokeWidth() != other.GetThermalSpokeWidth() )
+        similarity *= 0.9;
+
+    if( GetThermalSpokeAngle() != other.GetThermalSpokeAngle() )
+        similarity *= 0.9;
+
+    if( GetThermalGap() != other.GetThermalGap() )
+        similarity *= 0.9;
+
+    if( GetCustomShapeInZoneOpt() != other.GetCustomShapeInZoneOpt() )
+        similarity *= 0.9;
+
+    if( GetPrimitives().size() != other.GetPrimitives().size() )
+        similarity *= 0.9;
+
+    if( GetAnchorPadShape() != other.GetAnchorPadShape() )
+        similarity *= 0.9;
+
+    if( GetLocalClearance() != other.GetLocalClearance() )
+        similarity *= 0.9;
+
+    if( GetLocalSolderMaskMargin() != other.GetLocalSolderMaskMargin() )
+        similarity *= 0.9;
+
+    if( GetLocalSolderPasteMargin() != other.GetLocalSolderPasteMargin() )
+        similarity *= 0.9;
+
+    if( GetLocalSolderPasteMarginRatio() != other.GetLocalSolderPasteMarginRatio() )
+        similarity *= 0.9;
+
+    if( GetLocalSpokeWidthOverride() != other.GetLocalSpokeWidthOverride() )
+        similarity *= 0.9;
+
+    if( GetLayerSet() != other.GetLayerSet() )
+        similarity *= 0.9;
+
+    return similarity;
+}
+
+
 static struct PAD_DESC
 {
     PAD_DESC()

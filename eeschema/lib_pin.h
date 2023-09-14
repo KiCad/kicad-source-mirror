@@ -265,6 +265,13 @@ public:
      */
     static const wxString GetCanonicalElectricalTypeName( ELECTRICAL_PINTYPE aType );
 
+    double Similarity( const LIB_ITEM& aItem ) const override;
+
+    bool operator==( const LIB_ITEM& aItem ) const override;
+    bool operator!=( const LIB_ITEM& aItem ) const { return !operator==( aItem ); }
+    bool operator<( const LIB_PIN& aRhs ) const { return compare( aRhs, EQUALITY ) < 0; }
+    bool operator>( const LIB_PIN& aRhs ) const { return compare( aRhs, EQUALITY ) > 0; }
+
 protected:
     struct EXTENTS_CACHE
     {
@@ -300,10 +307,6 @@ protected:
      */
     void printPinElectricalTypeName( const RENDER_SETTINGS* aSettings, VECTOR2I& aPosition,
                                      PIN_ORIENTATION aOrientation, bool aDimmed );
-
-    bool operator==( const LIB_PIN& aRhs ) const { return compare( aRhs, EQUALITY ) == 0; }
-    bool operator<( const LIB_PIN& aRhs ) const { return compare( aRhs, EQUALITY ) < 0; }
-    bool operator>( const LIB_PIN& aRhs ) const { return compare( aRhs, EQUALITY ) > 0; }
     std::ostream& operator<<( std::ostream& aStream );
 
 private:

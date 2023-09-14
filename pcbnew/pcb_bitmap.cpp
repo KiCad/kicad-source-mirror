@@ -255,6 +255,72 @@ void PCB_BITMAP::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
+bool PCB_BITMAP::operator==( const BOARD_ITEM& aOther ) const
+{
+    if( aOther.Type() != Type() )
+        return false;
+
+    const PCB_BITMAP& other = static_cast<const PCB_BITMAP&>( aOther );
+
+    if( m_layer != other.m_layer )
+        return false;
+
+    if( m_pos != other.m_pos )
+        return false;
+
+    if( m_bitmapBase->GetSize() != other.m_bitmapBase->GetSize() )
+        return false;
+
+    if( m_bitmapBase->GetPPI() != other.m_bitmapBase->GetPPI() )
+        return false;
+
+    if( m_bitmapBase->GetScale() != other.m_bitmapBase->GetScale() )
+        return false;
+
+    if( m_bitmapBase->GetImageID() != other.m_bitmapBase->GetImageID() )
+        return false;
+
+    if( m_bitmapBase->GetImageData() != other.m_bitmapBase->GetImageData() )
+        return false;
+
+    return true;
+}
+
+
+double PCB_BITMAP::Similarity( const BOARD_ITEM& aOther ) const
+{
+    if( aOther.Type() != Type() )
+        return 0.0;
+
+    const PCB_BITMAP& other = static_cast<const PCB_BITMAP&>( aOther );
+
+    double similarity = 1.0;
+
+    if( m_layer != other.m_layer )
+        similarity *= 0.9;
+
+    if( m_pos != other.m_pos )
+        similarity *= 0.9;
+
+    if( m_bitmapBase->GetSize() != other.m_bitmapBase->GetSize() )
+        similarity *= 0.9;
+
+    if( m_bitmapBase->GetPPI() != other.m_bitmapBase->GetPPI() )
+        similarity *= 0.9;
+
+    if( m_bitmapBase->GetScale() != other.m_bitmapBase->GetScale() )
+        similarity *= 0.9;
+
+    if( m_bitmapBase->GetImageID() != other.m_bitmapBase->GetImageID() )
+        similarity *= 0.9;
+
+    if( m_bitmapBase->GetImageData() != other.m_bitmapBase->GetImageData() )
+        similarity *= 0.9;
+
+    return similarity;
+}
+
+
 static struct PCB_BITMAP_DESC
 {
     PCB_BITMAP_DESC()

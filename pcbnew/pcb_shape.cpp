@@ -573,6 +573,68 @@ void PCB_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID a
 }
 
 
+bool PCB_SHAPE::operator==( const BOARD_ITEM& aOther ) const
+{
+    if( aOther.Type() != Type() )
+        return false;
+
+    const PCB_SHAPE& other = static_cast<const PCB_SHAPE&>( aOther );
+
+    if( m_layer != other.m_layer )
+        return false;
+
+    if( m_isKnockout != other.m_isKnockout )
+        return false;
+
+    if( m_isLocked != other.m_isLocked )
+        return false;
+
+    if( m_flags != other.m_flags )
+        return false;
+
+    if( m_forceVisible != other.m_forceVisible )
+        return false;
+
+    if( m_netinfo->GetNetCode() != other.m_netinfo->GetNetCode() )
+        return false;
+
+    return EDA_SHAPE::operator==( other );
+}
+
+
+double PCB_SHAPE::Similarity( const BOARD_ITEM& aOther ) const
+{
+    if( aOther.Type() != Type() )
+        return 0.0;
+
+    const PCB_SHAPE& other = static_cast<const PCB_SHAPE&>( aOther );
+
+    double similarity = 1.0;
+
+    if( GetLayer() != other.GetLayer() )
+        similarity *= 0.9;
+
+    if( m_isKnockout != other.m_isKnockout )
+        similarity *= 0.9;
+
+    if( m_isLocked != other.m_isLocked )
+        similarity *= 0.9;
+
+    if( m_flags != other.m_flags )
+        similarity *= 0.9;
+
+    if( m_forceVisible != other.m_forceVisible )
+        similarity *= 0.9;
+
+    if( m_netinfo->GetNetCode() != other.m_netinfo->GetNetCode() )
+        similarity *= 0.9;
+
+    similarity *= EDA_SHAPE::Similarity( other );
+
+    return similarity;
+}
+
+
 static struct PCB_SHAPE_DESC
 {
     PCB_SHAPE_DESC()

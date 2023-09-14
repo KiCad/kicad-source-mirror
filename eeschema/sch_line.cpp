@@ -978,6 +978,69 @@ bool SCH_LINE::IsBus() const
 }
 
 
+bool SCH_LINE::operator==( const SCH_ITEM& aOther ) const
+{
+    if( Type() != aOther.Type() )
+        return false;
+
+    const SCH_LINE& other = static_cast<const SCH_LINE&>( aOther );
+
+    if( GetLayer() != other.GetLayer() )
+        return false;
+
+    if( m_start != other.m_start )
+        return false;
+
+    if( m_end != other.m_end )
+        return false;
+
+    if( m_stroke.GetWidth() != other.m_stroke.GetWidth() )
+        return false;
+
+    if( m_stroke.GetColor() != other.m_stroke.GetColor() )
+        return false;
+
+    if( m_stroke.GetPlotStyle() != other.m_stroke.GetPlotStyle() )
+        return false;
+
+    return true;
+}
+
+
+double SCH_LINE::Similarity( const SCH_ITEM& aOther ) const
+{
+    if( m_Uuid == aOther.m_Uuid )
+        return 1.0;
+
+    if( Type() != aOther.Type() )
+        return 0.0;
+
+    const SCH_LINE& other = static_cast<const SCH_LINE&>( aOther );
+
+    if( GetLayer() != other.GetLayer() )
+        return 0.0;
+
+    double similarity = 1.0;
+
+    if( m_start != other.m_start )
+        similarity *= 0.9;
+
+    if( m_end != other.m_end )
+        similarity *= 0.9;
+
+    if( m_stroke.GetWidth() != other.m_stroke.GetWidth() )
+        similarity *= 0.9;
+
+    if( m_stroke.GetColor() != other.m_stroke.GetColor() )
+        similarity *= 0.9;
+
+    if( m_stroke.GetPlotStyle() != other.m_stroke.GetPlotStyle() )
+        similarity *= 0.9;
+
+    return similarity;
+}
+
+
 static struct SCH_LINE_DESC
 {
     SCH_LINE_DESC()

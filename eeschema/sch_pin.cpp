@@ -416,6 +416,43 @@ bool SCH_PIN::ConnectionPropagatesTo( const EDA_ITEM* aItem ) const
 }
 
 
+bool SCH_PIN::operator==( const SCH_ITEM& aOther ) const
+{
+    if( aOther.Type() != SCH_PIN_T )
+        return false;
+
+    const SCH_PIN& other = static_cast<const SCH_PIN&>( aOther );
+
+    if( m_number != other.m_number )
+        return false;
+
+    if( m_position != other.m_position )
+        return false;
+
+    return m_libPin == other.m_libPin;
+}
+
+
+double SCH_PIN::Similarity( const SCH_ITEM& aOther ) const
+{
+    if( m_Uuid == aOther.m_Uuid )
+        return 1.0;
+
+    if( aOther.Type() != SCH_PIN_T )
+        return 0.0;
+
+    const SCH_PIN& other = static_cast<const SCH_PIN&>( aOther );
+
+    if( m_number != other.m_number )
+        return 0.0;
+
+    if( m_position != other.m_position )
+        return 0.0;
+
+    return m_libPin->Similarity( *other.m_libPin );
+}
+
+
 static struct SCH_PIN_DESC
 {
     SCH_PIN_DESC()

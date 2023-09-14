@@ -249,3 +249,45 @@ static struct SCH_BITMAP_DESC
         propMgr.InheritsAfter( TYPE_HASH( SCH_BITMAP ), TYPE_HASH( SCH_ITEM ) );
     }
 } _SCH_BITMAP_DESC;
+
+
+bool SCH_BITMAP::operator==( const SCH_ITEM& aItem ) const
+{
+    if( Type() != aItem.Type() )
+        return false;
+
+    const SCH_BITMAP* bitmap = static_cast<const SCH_BITMAP*>( &aItem );
+
+    if( GetPosition() != bitmap->GetPosition() )
+        return false;
+
+    if( GetSize() != bitmap->GetSize() )
+        return false;
+
+    if( GetImage() != bitmap->GetImage() )
+        return false;
+
+    return true;
+}
+
+
+double SCH_BITMAP::Similarity( const SCH_ITEM& aItem ) const
+{
+    if( Type() != aItem.Type() )
+        return 0.0;
+
+    if( m_Uuid == aItem.m_Uuid )
+        return 1.0;
+
+    const SCH_BITMAP* bitmap = static_cast<const SCH_BITMAP*>( &aItem );
+
+    if( GetImage() != bitmap->GetImage() )
+        return 0.0;
+
+    // If it is the same image but a different UUID and a different size,
+    // then it _might be different_.
+    if( GetSize() != bitmap->GetSize() )
+        return 0.5;
+
+    return 1.0;
+}

@@ -1294,6 +1294,74 @@ bool SCH_FIELD::operator <( const SCH_ITEM& aItem ) const
     return GetName() < field->GetName();
 }
 
+bool SCH_FIELD::operator==( const SCH_ITEM& aOther ) const
+{
+    if( Type() != aOther.Type() )
+        return false;
+
+    const SCH_FIELD& field = static_cast<const SCH_FIELD&>( aOther );
+
+    if( GetId() != field.GetId() )
+        return false;
+
+    if( GetPosition() != field.GetPosition() )
+        return false;
+
+    if( IsNamedVariable() != field.IsNamedVariable() )
+        return false;
+
+    if( IsNameShown() != field.IsNameShown() )
+        return false;
+
+    if( CanAutoplace() != field.CanAutoplace() )
+        return false;
+
+    if( GetText() != field.GetText() )
+        return false;
+
+    return true;
+}
+
+
+double SCH_FIELD::Similarity( const SCH_ITEM& aOther ) const
+{
+    if( Type() != aOther.Type() )
+        return 0.0;
+
+    if( m_Uuid == aOther.m_Uuid )
+        return 1.0;
+
+    const SCH_FIELD& field = static_cast<const SCH_FIELD&>( aOther );
+
+    double retval = 0.99; // The UUIDs are different, so we start with non-identity
+
+    if( GetId() != field.GetId() )
+    {
+        // We don't allow swapping of mandatory fields, so these cannot be the same item
+        if( GetId() < MANDATORY_FIELDS || field.GetId() < MANDATORY_FIELDS )
+            return 0.0;
+        else
+            retval *= 0.5;
+    }
+
+    if( GetPosition() != field.GetPosition() )
+        retval *= 0.5;
+
+    if( IsNamedVariable() != field.IsNamedVariable() )
+        retval *= 0.5;
+
+    if( IsNameShown() != field.IsNameShown() )
+        retval *= 0.5;
+
+    if( CanAutoplace() != field.CanAutoplace() )
+        retval *= 0.5;
+
+    if( GetText() != field.GetText() )
+        retval *= Levenshtein( field );
+
+    return 1.0;
+}
+
 
 static struct SCH_FIELD_DESC
 {

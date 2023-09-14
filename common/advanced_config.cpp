@@ -215,6 +215,8 @@ static const wxChar UseClipper2[] = wxT( "UseClipper2" );
 
 static const wxChar EnableGenerators[] = wxT( "EnableGenerators" );
 
+static const wxChar EnableGit[] = wxT( "EnableGit" );
+
 /**
  * The time in milliseconds to wait before displaying a disambiguation menu.
  */
@@ -345,6 +347,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_ShowRepairSchematic       = false;
     m_ShowPropertiesPanel       = false;
     m_EnableGenerators          = false;
+    m_EnableGit                 = false;
 
     m_3DRT_BevelHeight_um       = 30;
     m_3DRT_BevelExtentFactor    = 1.0 / 16.0;
@@ -517,6 +520,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableGenerators,
                                                 &m_EnableGenerators, m_EnableGenerators ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableGit,
+                                                &m_EnableGit, m_EnableGit ) );
 
 
 

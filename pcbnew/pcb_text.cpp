@@ -527,6 +527,28 @@ void PCB_TEXT::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aL
 }
 
 
+bool PCB_TEXT::operator==( const BOARD_ITEM& aOther ) const
+{
+    if( aOther.Type() != Type() )
+        return false;
+
+    const PCB_TEXT& other = static_cast<const PCB_TEXT&>( aOther );
+
+    return EDA_TEXT::operator==( other );
+}
+
+
+double PCB_TEXT::Similarity( const BOARD_ITEM& aOther ) const
+{
+    if( aOther.Type() != Type() )
+        return 0.0;
+
+    const PCB_TEXT& other = static_cast<const PCB_TEXT&>( aOther );
+
+    return EDA_TEXT::Similarity( other );
+}
+
+
 static struct PCB_TEXT_DESC
 {
     PCB_TEXT_DESC()

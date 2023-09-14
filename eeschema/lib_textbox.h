@@ -93,6 +93,10 @@ public:
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
+    double Similarity( const LIB_ITEM& aOther ) const override;
+
+    bool operator==( const LIB_ITEM& aOther ) const override;
+
 protected:
         KIFONT::FONT* getDrawFont() const override;
 

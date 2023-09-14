@@ -584,6 +584,36 @@ void PCB_TEXTBOX::SetBorderWidth( const int aSize )
 }
 
 
+
+bool PCB_TEXTBOX::operator==( const BOARD_ITEM& aBoardItem ) const
+{
+    if( aBoardItem.Type() != Type() )
+        return false;
+
+    const PCB_TEXTBOX& other = static_cast<const PCB_TEXTBOX&>( aBoardItem );
+
+    return m_borderEnabled == other.m_borderEnabled && EDA_TEXT::operator==( other );
+}
+
+
+double PCB_TEXTBOX::Similarity( const BOARD_ITEM& aBoardItem ) const
+{
+    if( aBoardItem.Type() != Type() )
+        return 0.0;
+
+    const PCB_TEXTBOX& other = static_cast<const PCB_TEXTBOX&>( aBoardItem );
+
+    double similarity = 1.0;
+
+    if( m_borderEnabled != other.m_borderEnabled )
+        similarity *= 0.9;
+
+    similarity *= EDA_TEXT::Similarity( other );
+
+    return similarity;
+}
+
+
 static struct PCB_TEXTBOX_DESC
 {
     PCB_TEXTBOX_DESC()

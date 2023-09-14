@@ -307,6 +307,51 @@ void SCH_JUNCTION::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANE
 }
 
 
+bool SCH_JUNCTION::operator==( const SCH_ITEM& aOther ) const
+{
+    if( Type() != aOther.Type() )
+        return false;
+
+    const SCH_JUNCTION& other = static_cast<const SCH_JUNCTION&>( aOther );
+
+    if( m_pos != other.m_pos )
+        return false;
+
+    if( m_diameter != other.m_diameter )
+        return false;
+
+    if( m_color != other.m_color )
+        return false;
+
+    return true;
+}
+
+
+double SCH_JUNCTION::Similarity( const SCH_ITEM& aOther ) const
+{
+    if( m_Uuid == aOther.m_Uuid )
+        return 1.0;
+
+    if( aOther.Type() != Type() )
+        return 0.0;
+
+    const SCH_JUNCTION& other = static_cast<const SCH_JUNCTION&>( aOther );
+
+    double similarity = 1.0;
+
+    if( m_pos != other.m_pos )
+        similarity *= 0.9;
+
+    if( m_diameter != other.m_diameter )
+        similarity *= 0.9;
+
+    if( m_color != other.m_color )
+        similarity *= 0.9;
+
+    return similarity;
+}
+
+
 static struct SCH_JUNCTION_DESC
 {
     SCH_JUNCTION_DESC()

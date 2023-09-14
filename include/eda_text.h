@@ -304,6 +304,16 @@ public:
     void GetLinePositions( std::vector<VECTOR2I>& aPositions, int aLineCount ) const;
 
     /**
+     * Return the levenstein distance between two texts.
+     *
+     * Return a value of 0.0 - 1.0 where 1.0 is a perfect match.
+    */
+    double Levenshtein( const EDA_TEXT& aOther ) const;
+
+
+    double Similarity( const EDA_TEXT& aOther ) const;
+
+    /**
      * Output the object to \a aFormatter in s-expression form.
      *
      * @param aFormatter The #OUTPUTFORMATTER object to write to.

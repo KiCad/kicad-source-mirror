@@ -434,3 +434,50 @@ void PCB_GROUP::RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFun
         wxFAIL_MSG( wxT( "Error calling function in PCB_GROUP::RunOnDescendants" ) );
     }
 }
+
+bool PCB_GROUP::operator==( const BOARD_ITEM& aOther ) const
+{
+    if( aOther.Type() != Type() )
+        return false;
+
+    const PCB_GROUP& other = static_cast<const PCB_GROUP&>( aOther );
+
+    if( m_items.size() != other.m_items.size() )
+        return false;
+
+    // The items in groups are in unordered sets hashed by the pointer value, so we need to
+    // order them by UUID (EDA_ITEM_SET) to compare
+    EDA_ITEM_SET itemSet( m_items.begin(), m_items.end() );
+    EDA_ITEM_SET otherItemSet( other.m_items.begin(), other.m_items.end() );
+
+    for( auto it1 = itemSet.begin(), it2 = otherItemSet.begin(); it1 != itemSet.end(); ++it1, ++it2 )
+    {
+        // Compare UUID instead of the items themselves because we only care if the contents
+        // of the group has changed, not which elements in the group have changed
+        if( ( *it1 )->m_Uuid != ( *it2 )->m_Uuid )
+            return false;
+    }
+
+    return true;
+}
+
+
+double PCB_GROUP::Similarity( const BOARD_ITEM& aOther ) const
+{
+    if( aOther.Type() != Type() )
+        return 0.0;
+
+    const PCB_GROUP& other = static_cast<const PCB_GROUP&>( aOther );
+
+    double similarity = 0.0;
+
+    for( BOARD_ITEM* item : m_items )
+    {
+        for( BOARD_ITEM* otherItem : other.m_items )
+        {
+            similarity += item->Similarity( *otherItem );
+        }
+    }
+
+    return similarity / m_items.size();
+}

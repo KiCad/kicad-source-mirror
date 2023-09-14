@@ -326,6 +326,10 @@ public:
      */
     bool IsBus() const;
 
+    double Similarity( const SCH_ITEM& aOther ) const override;
+
+    bool operator==( const SCH_ITEM& aOther ) const override;
+
 private:
     /**
      * @brief Recursively called function to travel through the connected wires and find a connected

@@ -53,6 +53,14 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::newFromTemplate( TOOL_ACTION_ARGS()
         .Tooltip( _( "Create new project from template" ) )
         .Icon( BITMAPS::new_project_from_template ) );
 
+TOOL_ACTION KICAD_MANAGER_ACTIONS::newFromRepository( TOOL_ACTION_ARGS()
+        .Name( "kicad.Control.newFromRepository" )
+        .Scope( AS_GLOBAL )
+        .LegacyHotkeyName( "Clone Project From Repository" )
+        .MenuText( _( "Clone Project from Repository..." ) )
+        .Tooltip( _( "Clone a project from an existing repository" ) )
+        .Icon( BITMAPS::new_project_from_template ) );
+
 TOOL_ACTION KICAD_MANAGER_ACTIONS::openDemoProject( TOOL_ACTION_ARGS()
         .Name( "kicad.Control.openDemoProject" )
         .Scope( AS_GLOBAL )

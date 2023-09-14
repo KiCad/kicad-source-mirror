@@ -577,6 +577,45 @@ bool SCH_BUS_WIRE_ENTRY::ConnectionPropagatesTo( const EDA_ITEM* aItem ) const
     return true;
 }
 
+bool SCH_BUS_ENTRY_BASE::operator==( const SCH_ITEM& aItem ) const
+{
+    if( Type() != aItem.Type() )
+        return false;
+
+    const SCH_BUS_ENTRY_BASE* symbol = static_cast<const SCH_BUS_ENTRY_BASE*>( &aItem );
+
+    if( GetLayer() != symbol->GetLayer() )
+        return false;
+
+    if( GetPosition() != symbol->GetPosition() )
+        return false;
+
+    if( GetEnd() != symbol->GetEnd() )
+        return false;
+
+    return true;
+}
+
+
+double SCH_BUS_ENTRY_BASE::Similarity( const SCH_ITEM& aItem ) const
+{
+    if( aItem.Type() != Type() )
+        return 0.0;
+
+    if( m_Uuid == aItem.m_Uuid )
+        return 1.0;
+
+    const SCH_BUS_ENTRY_BASE& other = static_cast<const SCH_BUS_ENTRY_BASE&>( aItem );
+
+    if( GetLayer() != other.GetLayer() )
+        return 0.0;
+
+    if( GetPosition() != other.GetPosition() )
+        return 0.0;
+
+    return 1.0;
+}
+
 
 static struct SCH_BUS_ENTRY_DESC
 {

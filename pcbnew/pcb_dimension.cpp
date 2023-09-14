@@ -62,6 +62,101 @@ PCB_DIMENSION_BASE::PCB_DIMENSION_BASE( BOARD_ITEM* aParent, KICAD_T aType ) :
 }
 
 
+bool PCB_DIMENSION_BASE::operator==( const BOARD_ITEM& aOther ) const
+{
+    if( Type() != aOther.Type() )
+        return false;
+
+    const PCB_DIMENSION_BASE& other = static_cast<const PCB_DIMENSION_BASE&>( aOther );
+
+    if( m_textPosition != other.m_textPosition )
+        return false;
+
+    if( m_keepTextAligned != other.m_keepTextAligned )
+        return false;
+
+    if( m_units != other.m_units )
+        return false;
+
+    if( m_autoUnits != other.m_autoUnits )
+        return false;
+
+    if( m_unitsFormat != other.m_unitsFormat )
+        return false;
+
+    if( m_precision != other.m_precision )
+        return false;
+
+    if( m_suppressZeroes != other.m_suppressZeroes )
+        return false;
+
+    if( m_lineThickness != other.m_lineThickness )
+        return false;
+
+    if( m_arrowLength != other.m_arrowLength )
+        return false;
+
+    if( m_extensionOffset != other.m_extensionOffset )
+        return false;
+
+    if( m_measuredValue != other.m_measuredValue )
+        return false;
+
+    return EDA_TEXT::operator==( other );
+}
+
+
+double PCB_DIMENSION_BASE::Similarity( const BOARD_ITEM& aOther ) const
+{
+    if( m_Uuid == aOther.m_Uuid )
+        return 1.0;
+
+    if( Type() != aOther.Type() )
+        return 0.0;
+
+    const PCB_DIMENSION_BASE& other = static_cast<const PCB_DIMENSION_BASE&>( aOther );
+
+    double similarity = 1.0;
+
+    if( m_textPosition != other.m_textPosition )
+        similarity *= 0.9;
+
+    if( m_keepTextAligned != other.m_keepTextAligned )
+        similarity *= 0.9;
+
+    if( m_units != other.m_units )
+        similarity *= 0.9;
+
+    if( m_autoUnits != other.m_autoUnits )
+        similarity *= 0.9;
+
+    if( m_unitsFormat != other.m_unitsFormat )
+        similarity *= 0.9;
+
+    if( m_precision != other.m_precision )
+        similarity *= 0.9;
+
+    if( m_suppressZeroes != other.m_suppressZeroes )
+        similarity *= 0.9;
+
+    if( m_lineThickness != other.m_lineThickness )
+        similarity *= 0.9;
+
+    if( m_arrowLength != other.m_arrowLength )
+        similarity *= 0.9;
+
+    if( m_extensionOffset != other.m_extensionOffset )
+        similarity *= 0.9;
+
+    if( m_measuredValue != other.m_measuredValue )
+        similarity *= 0.9;
+
+    similarity *= EDA_TEXT::Similarity( other );
+
+    return similarity;
+}
+
+
 void PCB_DIMENSION_BASE::updateText()
 {
     wxString text = m_overrideTextEnabled ? m_valueString : GetValueText();

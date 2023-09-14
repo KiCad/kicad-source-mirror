@@ -1721,6 +1721,129 @@ PLOT_DASH_TYPE EDA_SHAPE::GetLineStyle() const
 }
 
 
+bool EDA_SHAPE::operator==( const EDA_SHAPE& aOther ) const
+{
+    if( GetShape() != aOther.GetShape() )
+        return false;
+
+    if( m_fill != aOther.m_fill )
+        return false;
+
+    if( m_stroke.GetWidth() != aOther.m_stroke.GetWidth() )
+        return false;
+
+    if( m_stroke.GetPlotStyle() != aOther.m_stroke.GetPlotStyle() )
+        return false;
+
+    if( m_fillColor != aOther.m_fillColor )
+        return false;
+
+    if( m_start != aOther.m_start )
+        return false;
+
+    if( m_end != aOther.m_end )
+        return false;
+
+    if( m_arcCenter != aOther.m_arcCenter )
+        return false;
+
+    if( m_bezierC1 != aOther.m_bezierC1 )
+        return false;
+
+    if( m_bezierC2 != aOther.m_bezierC2 )
+        return false;
+
+    if( m_bezierPoints != aOther.m_bezierPoints )
+        return false;
+
+    for( int ii = 0; ii < m_poly.TotalVertices(); ++ii )
+    {
+        if( m_poly.CVertex( ii ) != aOther.m_poly.CVertex( ii ) )
+            return false;
+    }
+
+    return true;
+}
+
+
+double EDA_SHAPE::Similarity( const EDA_SHAPE& aOther ) const
+{
+    if( GetShape() != aOther.GetShape() )
+        return 0.0;
+
+    double similarity = 1.0;
+
+    if( m_fill != aOther.m_fill )
+        similarity *= 0.9;
+
+    if( m_stroke.GetWidth() != aOther.m_stroke.GetWidth() )
+        similarity *= 0.9;
+
+    if( m_stroke.GetPlotStyle() != aOther.m_stroke.GetPlotStyle() )
+        similarity *= 0.9;
+
+    if( m_fillColor != aOther.m_fillColor )
+        similarity *= 0.9;
+
+    if( m_start != aOther.m_start )
+        similarity *= 0.9;
+
+    if( m_end != aOther.m_end )
+        similarity *= 0.9;
+
+    if( m_arcCenter != aOther.m_arcCenter )
+        similarity *= 0.9;
+
+    if( m_bezierC1 != aOther.m_bezierC1 )
+        similarity *= 0.9;
+
+    if( m_bezierC2 != aOther.m_bezierC2 )
+        similarity *= 0.9;
+
+    {
+        int m = m_bezierPoints.size();
+        int n = aOther.m_bezierPoints.size();
+
+        size_t longest = alg::longest_common_subset( m_bezierPoints, aOther.m_bezierPoints );
+
+        similarity *= std::pow( 0.9, m + n - 2 * longest );
+    }
+
+    {
+        int m = m_poly.TotalVertices();
+        int n = aOther.m_poly.TotalVertices();
+        std::vector<VECTOR2I> poly;
+        std::vector<VECTOR2I> otherPoly;
+        VECTOR2I              lastPt( 0, 0 );
+
+        // We look for the longest common subset of the two polygons, but we need to
+        // offset each point because we're actually looking for overall similarity, not just
+        // exact matches.  So if the zone is moved by 1IU, we only want one point to be
+        // considered "moved" rather than the entire polygon.  In this case, the first point
+        // will not be a match but the rest of the sequence will.
+        for( int ii = 0; ii < m; ++ii )
+        {
+            poly.emplace_back( lastPt - m_poly.CVertex( ii ) );
+            lastPt = m_poly.CVertex( ii );
+        }
+
+        lastPt = VECTOR2I( 0, 0 );
+
+        for( int ii = 0; ii < n; ++ii )
+        {
+            otherPoly.emplace_back( lastPt - aOther.m_poly.CVertex( ii ) );
+            lastPt = aOther.m_poly.CVertex( ii );
+        }
+
+        size_t longest = alg::longest_common_subset( poly, otherPoly );
+
+        similarity *= std::pow( 0.9, m + n - 2 * longest );
+    }
+
+    return similarity;
+}
+
+
 IMPLEMENT_ENUM_TO_WXANY( SHAPE_T )
 IMPLEMENT_ENUM_TO_WXANY( PLOT_DASH_TYPE )
 

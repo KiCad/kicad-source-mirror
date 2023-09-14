@@ -92,6 +92,24 @@ public:
 
     bool IsCurved() const { return m_CurveSegCount > 2; }
 
+    bool operator== ( const TEARDROP_PARAMETERS& aOther ) const
+    {
+        return m_Enabled == aOther.m_Enabled &&
+               m_AllowUseTwoTracks == aOther.m_AllowUseTwoTracks &&
+               m_TdMaxLen == aOther.m_TdMaxLen &&
+               m_TdMaxWidth == aOther.m_TdMaxWidth &&
+               m_BestLengthRatio == aOther.m_BestLengthRatio &&
+               m_BestWidthRatio == aOther.m_BestWidthRatio &&
+               m_CurveSegCount == aOther.m_CurveSegCount &&
+               m_WidthtoSizeFilterRatio == aOther.m_WidthtoSizeFilterRatio &&
+               m_TdOnPadsInZones == aOther.m_TdOnPadsInZones;
+    }
+
+    bool operator!= ( const TEARDROP_PARAMETERS& aOther ) const
+    {
+        return !( *this == aOther );
+    }
+
 public:
     bool    m_Enabled;
     /// True to create teardrops using 2 track segments if the first in too small

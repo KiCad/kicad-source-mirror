@@ -113,6 +113,10 @@ public:
 
     EDA_ITEM* Clone() const override;
 
+    double Similarity( const LIB_ITEM& aOther ) const override;
+
+    bool operator==( const LIB_ITEM& aOther ) const override;
+
 private:
     /**
      * @copydoc LIB_ITEM::compare()

@@ -177,6 +177,18 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                            ZONE_DISPLAY_MODE::SHOW_FILLED, ZONE_DISPLAY_MODE::SHOW_FILLED,
                            ZONE_DISPLAY_MODE::SHOW_TRIANGULATION ) );
 
+    m_params.emplace_back( new PARAM<wxString>( "git.repo_username",
+            &m_GitRepoUsername, "" ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "git.repo_password",
+            &m_GitRepoPassword, "" ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "git.repo_type",
+            &m_GitRepoType, "" ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "git.ssh_key",
+            &m_GitSSHKey, "" ) );
+
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "project.files",
             [&]() -> nlohmann::json
             {

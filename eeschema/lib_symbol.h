@@ -711,11 +711,7 @@ public:
                  REPORTER* aReporter = nullptr ) const;
 
     bool operator==( const LIB_SYMBOL* aSymbol ) const { return this == aSymbol; }
-    bool operator==( const LIB_SYMBOL& aSymbol ) const
-    {
-        return Compare( aSymbol, LIB_ITEM::COMPARE_FLAGS::EQUALITY ) == 0;
-    }
-
+    bool operator==( const LIB_SYMBOL& aSymbol ) const;
     bool operator!=( const LIB_SYMBOL& aSymbol ) const
     {
         return Compare( aSymbol, LIB_ITEM::COMPARE_FLAGS::EQUALITY ) != 0;
@@ -762,6 +758,13 @@ public:
      */
     std::vector<LIB_ITEM*> GetUnitDrawItems( int aUnit, int aConvert );
 
+    /**
+     * Return a measure of similarity between this symbol and \a aSymbol.
+     * @param aSymbol is the symbol to compare to.
+     *
+     * @return a measure of similarity from 1.0 (identical) to 0.0 (no similarity).
+    */
+    double Similarity( const LIB_SYMBOL& aSymbol ) const;
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif

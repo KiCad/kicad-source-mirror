@@ -2584,21 +2584,85 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer,
 }
 
 
-const std::set<BOARD_ITEM*> BOARD::GetItemSet()
+const BOARD_ITEM_SET BOARD::GetItemSet()
 {
-    std::set<BOARD_ITEM*> items;
+    BOARD_ITEM_SET items;
 
-#define INSERT_ITEMS( collection )                                                                 \
-    for( BOARD_ITEM * item : collection )                                                          \
-        items.insert( item );
-
-    INSERT_ITEMS( m_tracks )
-    INSERT_ITEMS( m_footprints )
-    INSERT_ITEMS( m_drawings )
-    INSERT_ITEMS( m_zones )
-    INSERT_ITEMS( m_markers )
-
-#undef INSERT_ITEMS
+    std::copy( m_tracks.begin(), m_tracks.end(), std::inserter( items, items.end() ) );
+    std::copy( m_zones.begin(), m_zones.end(), std::inserter( items, items.end() ) );
+    std::copy( m_footprints.begin(), m_footprints.end(), std::inserter( items, items.end() ) );
+    std::copy( m_drawings.begin(), m_drawings.end(), std::inserter( items, items.end() ) );
+    std::copy( m_markers.begin(), m_markers.end(), std::inserter( items, items.end() ) );
+    std::copy( m_groups.begin(), m_groups.end(), std::inserter( items, items.end() ) );
 
     return items;
+}
+
+
+bool BOARD::operator==( const BOARD_ITEM& aItem ) const
+{
+    if( aItem.Type() != Type() )
+        return false;
+
+    const BOARD& other = static_cast<const BOARD&>( aItem );
+
+    if( m_designSettings != other.m_designSettings )
+        return false;
+
+    if( m_NetInfo.GetNetCount() != other.m_NetInfo.GetNetCount() )
+        return false;
+
+    const NETNAMES_MAP& thisNetNames = m_NetInfo.NetsByName();
+    const NETNAMES_MAP& otherNetNames = other.m_NetInfo.NetsByName();
+
+    for( auto it1 = thisNetNames.begin(), it2 = otherNetNames.begin();
+         it1 != thisNetNames.end() && it2 != otherNetNames.end(); ++it1, ++it2 )
+    {
+        // We only compare the names in order here, not the index values
+        // as the index values are auto-generated and the names are not.
+        if( it1->first != it2->first )
+            return false;
+    }
+
+    if( m_properties.size() != other.m_properties.size() )
+        return false;
+
+    for( auto it1 = m_properties.begin(), it2 = other.m_properties.begin();
+         it1 != m_properties.end() && it2 != other.m_properties.end(); ++it1, ++it2 )
+    {
+        if( *it1 != *it2 )
+            return false;
+    }
+
+    if( m_paper.GetCustomHeightMils() != other.m_paper.GetCustomHeightMils() )
+        return false;
+
+    if( m_paper.GetCustomWidthMils() != other.m_paper.GetCustomWidthMils() )
+        return false;
+
+    if( m_paper.GetSizeMils() != other.m_paper.GetSizeMils() )
+        return false;
+
+    if( m_paper.GetPaperId() != other.m_paper.GetPaperId() )
+        return false;
+
+    if( m_paper.GetWxOrientation() != other.m_paper.GetWxOrientation() )
+        return false;
+
+    for( int ii = 0; !m_titles.GetComment( ii ).empty(); ++ii )
+    {
+        if( m_titles.GetComment( ii ) != other.m_titles.GetComment( ii ) )
+            return false;
+    }
+
+    wxArrayString ourVars;
+    m_titles.GetContextualTextVars( &ourVars );
+
+    wxArrayString otherVars;
+    other.m_titles.GetContextualTextVars( &otherVars );
+
+    if( ourVars != otherVars )
+        return false;
+
+    return true;
 }

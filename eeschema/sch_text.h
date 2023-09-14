@@ -138,6 +138,10 @@ public:
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
+    virtual double Similarity( const SCH_ITEM& aItem ) const override;
+
+    virtual bool operator==( const SCH_ITEM& aItem ) const override;
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif

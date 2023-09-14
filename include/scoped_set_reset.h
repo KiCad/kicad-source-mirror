@@ -24,6 +24,8 @@
 #ifndef __SCOPED_SET_RESET_H
 #define __SCOPED_SET_RESET_H
 
+#include <functional>
+
 /**
  * RAII class that sets an value at construction and resets it to the original value
  * at destruction.
@@ -63,6 +65,32 @@ public:
 private:
     VAL_TYPE m_original;
     VAL_TYPE& m_target;
+};
+
+
+/**
+ * RAII class that executes a function at construction and another at destruction.
+ *
+ * Useful to ensure cleanup code is executed even if an exception is thrown.
+*/
+template <typename Func>
+class SCOPED_EXECUTION
+{
+public:
+    SCOPED_EXECUTION(Func initFunc, Func destroyFunc) :
+            m_initFunc(initFunc), m_destroyFunc(destroyFunc)
+    {
+        m_initFunc();
+    }
+
+    ~SCOPED_EXECUTION()
+    {
+        m_destroyFunc();
+    }
+
+private:
+    Func m_initFunc;
+    Func m_destroyFunc;
 };
 
 #endif // __SCOPED_SET_RESET_H

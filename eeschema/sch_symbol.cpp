@@ -2519,6 +2519,61 @@ bool SCH_SYMBOL::IsPower() const
 }
 
 
+bool SCH_SYMBOL::operator==( const SCH_ITEM& aOther ) const
+{
+    if( Type() != aOther.Type() )
+        return false;
+
+    auto symbol = static_cast<const SCH_SYMBOL&>( aOther );
+
+    if( GetLibId() != symbol.GetLibId() )
+        return false;
+
+    if( GetPosition() != symbol.GetPosition() )
+        return false;
+
+    if( GetUnit() != symbol.GetUnit() )
+        return false;
+
+    if( GetConvert() != symbol.GetConvert() )
+        return false;
+
+    if( GetTransform() != symbol.GetTransform() )
+        return false;
+
+    if( GetFields() != symbol.GetFields() )
+        return false;
+
+    if( m_pins.size() != symbol.m_pins.size() )
+        return false;
+
+    for( unsigned i = 0; i < m_pins.size(); ++i )
+    {
+        if( !( *m_pins[i] == *symbol.m_pins[i] ) )
+            return false;
+    }
+
+    return true;
+}
+
+
+double SCH_SYMBOL::Similarity( const SCH_ITEM& aOther ) const
+{
+    if( Type() != aOther.Type() )
+        return 0.0;
+
+    auto symbol = static_cast<const SCH_SYMBOL&>( aOther );
+
+    if( GetLibId() != symbol.GetLibId() )
+        return 0.0;
+
+    if( GetPosition() == symbol.GetPosition() )
+        return 1.0;
+
+    return 0.0;
+}
+
+
 static struct SCH_SYMBOL_DESC
 {
     SCH_SYMBOL_DESC()

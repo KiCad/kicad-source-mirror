@@ -171,6 +171,16 @@ public:
 
     bool Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const override;
 
+    double Similarity( const BOARD_ITEM& aBoardItem ) const override
+    {
+        return 0.0;
+    }
+
+    bool operator==( const BOARD_ITEM& aBoardItem ) const override
+    {
+        return 0.0;
+    }
+
 private:
     friend class NETINFO_LIST;
 

@@ -254,6 +254,10 @@ public:
     virtual void OnBoardRatsnestChanged( BOARD& aBoard ) { }
 };
 
+/**
+ * Set of BOARD_ITEMs ordered by UUID.
+ */
+typedef std::set<BOARD_ITEM*, CompareByUuid> BOARD_ITEM_SET;
 
 /**
  * Flags to specify how the board is being used.
@@ -326,7 +330,7 @@ public:
     MARKERS& Markers() { return m_markers; }
     const MARKERS& Markers() const { return m_markers; }
 
-    const std::set<BOARD_ITEM*> GetItemSet();
+    const BOARD_ITEM_SET GetItemSet();
 
     /**
      * The groups must maintain the following invariants. These are checked by
@@ -935,6 +939,16 @@ public:
      * Copy the current project's text variables into the boards property cache.
      */
     void SynchronizeProperties();
+
+    /**
+     * Return the Similarity.  Because we compare board to board, we just return 1.0 here
+    */
+    double Similarity( const BOARD_ITEM& aOther ) const override
+    {
+        return 1.0;
+    }
+
+    bool operator==( const BOARD_ITEM& aOther ) const override;
 
     wxString GetClass() const override
     {

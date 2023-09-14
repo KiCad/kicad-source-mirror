@@ -249,6 +249,10 @@ public:
         return m_CachedScale;
     }
 
+    virtual double Similarity( const BOARD_ITEM& aOther ) const override;
+
+    virtual bool operator==( const BOARD_ITEM& aOther ) const override;
+
     /**
      * Set the cached scale.
      *
@@ -359,6 +363,10 @@ public:
      * @param aThreshold is the minimal dist in internal units. Default id 5 IU
      */
     bool IsDegenerated( int aThreshold = 5 ) const;
+
+    double Similarity( const BOARD_ITEM& aOther ) const override;
+
+    bool operator==( const BOARD_ITEM& aOther ) const override;
 
 protected:
     virtual void swapData( BOARD_ITEM* aImage ) override;
@@ -578,6 +586,10 @@ public:
         std::unique_lock<std::mutex> cacheLock( m_zoneLayerOverridesMutex );
         m_zoneLayerOverrides.at( aLayer ) = aOverride;
     }
+
+    double Similarity( const BOARD_ITEM& aOther ) const override;
+
+    bool operator==( const BOARD_ITEM& aOther ) const override;
 
 protected:
     void swapData( BOARD_ITEM* aImage ) override;

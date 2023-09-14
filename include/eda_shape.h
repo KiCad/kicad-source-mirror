@@ -331,6 +331,10 @@ public:
 
     int Compare( const EDA_SHAPE* aOther ) const;
 
+    double Similarity( const EDA_SHAPE& aOther ) const;
+
+    bool operator==( const EDA_SHAPE& aOther ) const;
+
 protected:
     void    setPosition( const VECTOR2I& aPos );
     VECTOR2I getPosition() const;

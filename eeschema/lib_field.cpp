@@ -589,6 +589,58 @@ bool LIB_FIELD::IsMandatory() const
 }
 
 
+bool LIB_FIELD::operator==( const LIB_ITEM& aItem ) const
+{
+    if( aItem.Type() != LIB_FIELD_T )
+        return false;
+
+    const LIB_FIELD& field = static_cast<const LIB_FIELD&>( aItem );
+
+    if( m_id != field.m_id )
+        return false;
+
+    if( m_name != field.m_name )
+        return false;
+
+    if( m_parent->m_Uuid != aItem.GetParent()->m_Uuid )
+        return false;
+
+    if( m_id < MANDATORY_FIELDS )
+        return true;
+
+    if( m_Uuid == field.m_Uuid )
+        return true;
+
+    return EDA_TEXT::operator==( field );
+}
+
+
+double LIB_FIELD::Similarity( const LIB_ITEM& aItem ) const
+{
+    if( aItem.Type() != LIB_FIELD_T )
+        return 0.0;
+
+    const LIB_FIELD& field = static_cast<const LIB_FIELD&>( aItem );
+
+    if( m_id != field.m_id && m_id < MANDATORY_FIELDS )
+        return 0.0;
+
+    if( m_parent->m_Uuid != aItem.GetParent()->m_Uuid )
+        return 0.0;
+
+    if( m_id < MANDATORY_FIELDS )
+        return 1.0;
+
+    if( m_Uuid == field.m_Uuid )
+        return 1.0;
+
+    double similarity = SimilarityBase( field );
+
+    similarity *= EDA_TEXT::Similarity( field );
+
+    return similarity;
+}
+
 static struct LIB_FIELD_DESC
 {
     LIB_FIELD_DESC()

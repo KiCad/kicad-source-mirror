@@ -1912,3 +1912,139 @@ std::vector<struct LIB_SYMBOL_UNIT> LIB_SYMBOL::GetUniqueUnits()
 
     return uniqueUnits;
 }
+
+
+bool LIB_SYMBOL::operator==( const LIB_SYMBOL& aOther ) const
+{
+    if( m_libId != aOther.m_libId )
+        return false;
+
+    if( m_excludedFromBoard != aOther.m_excludedFromBoard )
+        return false;
+
+    if( m_excludedFromBOM != aOther.m_excludedFromBOM )
+        return false;
+
+    if( m_excludedFromSim != aOther.m_excludedFromSim )
+        return false;
+
+    if( m_flags != aOther.m_flags )
+        return false;
+
+    if( m_unitCount != aOther.m_unitCount )
+        return false;
+
+    if( m_pinNameOffset != aOther.m_pinNameOffset )
+        return false;
+
+    if( m_showPinNames != aOther.m_showPinNames )
+        return false;
+
+    if( m_showPinNumbers != aOther.m_showPinNumbers )
+        return false;
+
+    if( m_drawings.size() != aOther.m_drawings.size() )
+        return false;
+
+    for( auto it1 = m_drawings.begin(), it2 = aOther.m_drawings.begin();
+         it1 != m_drawings.end(); ++it1, ++it2 )
+    {
+        if( !( *it1 == *it2 ) )
+            return false;
+    }
+
+    const LIB_PINS thisPinList = GetAllLibPins();
+    const LIB_PINS otherPinList = aOther.GetAllLibPins();
+
+    if( thisPinList.size() != otherPinList.size() )
+        return false;
+
+    for( auto it1 = thisPinList.begin(), it2 = otherPinList.begin();
+         it1 != thisPinList.end(); ++it1, ++it2 )
+    {
+        if( !( **it1 == **it2 ) )
+            return false;
+    }
+    for( size_t ii = 0; ii < thisPinList.size(); ++ii )
+    {
+        if( !( *thisPinList[ii] == *otherPinList[ii] ) )
+            return false;
+    }
+
+    return true;
+}
+
+
+double LIB_SYMBOL::Similarity( const LIB_SYMBOL& aOther ) const
+{
+    double similarity = 0.0;
+    int    totalItems = 0;
+
+    if( m_Uuid == aOther.m_Uuid )
+        return 1.0;
+
+    for( const LIB_ITEM& item : m_drawings )
+    {
+        totalItems += 1;
+        double max_similarity = 0.0;
+
+        for( const LIB_ITEM& otherItem : aOther.m_drawings )
+        {
+            double temp_similarity = item.Similarity( otherItem );
+            max_similarity = std::max( max_similarity, temp_similarity );
+
+            if( max_similarity == 1.0 )
+                break;
+        }
+
+        similarity += max_similarity;
+    }
+
+    for( const LIB_PIN* pin : GetAllLibPins() )
+    {
+        totalItems += 1;
+        double max_similarity = 0.0;
+
+        for( const LIB_PIN* otherPin : aOther.GetAllLibPins() )
+        {
+            double temp_similarity = pin->Similarity( *otherPin );
+            max_similarity = std::max( max_similarity, temp_similarity );
+
+            if( max_similarity == 1.0 )
+                break;
+        }
+
+        similarity += max_similarity;
+    }
+
+    if( totalItems == 0 )
+        similarity = 0.0;
+    else
+        similarity /= totalItems;
+
+    if( m_excludedFromBoard != aOther.m_excludedFromBoard )
+        similarity *= 0.9;
+
+    if( m_excludedFromBOM != aOther.m_excludedFromBOM )
+        similarity *= 0.9;
+
+    if( m_excludedFromSim != aOther.m_excludedFromSim )
+        similarity *= 0.9;
+
+    if( m_flags != aOther.m_flags )
+        similarity *= 0.9;
+
+    if( m_unitCount != aOther.m_unitCount )
+        similarity *= 0.5;
+
+    if( m_pinNameOffset != aOther.m_pinNameOffset )
+        similarity *= 0.9;
+
+    if( m_showPinNames != aOther.m_showPinNames )
+        similarity *= 0.9;
+
+    if( m_showPinNumbers != aOther.m_showPinNumbers )
+        similarity *= 0.9;
+
+    return similarity;
+}

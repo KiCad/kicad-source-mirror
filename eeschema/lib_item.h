@@ -204,6 +204,35 @@ public:
         return (LIB_SYMBOL*) m_parent;
     }
 
+    /**
+     * Return a measure of how likely the other object is to represent the same
+     * object.  The scale runs from 0.0 (definitely different objects) to 1.0 (same)
+     *
+     * This is a pure virtual function.  Derived classes must implement this.
+    */
+    virtual double Similarity( const LIB_ITEM& aItem ) const = 0;
+
+    /**
+     * Calculate the boilerplate similarity for all LIB_ITEMs without
+     * preventing the use above of a pure virtual function that catches at compile
+     * time when a new object has not been fully implemented
+    */
+    double SimilarityBase( const LIB_ITEM& aItem ) const
+    {
+        double similarity = 1.0;
+
+        if( m_unit != aItem.m_unit )
+            similarity *= 0.9;
+
+        if( m_convert != aItem.m_convert )
+            similarity *= 0.9;
+
+        if( m_private != aItem.m_private )
+            similarity *= 0.9;
+
+        return similarity;
+    }
+
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override
@@ -237,7 +266,7 @@ public:
      * @param aOther Object to test against.
      * @return True if object is identical to this object.
      */
-    bool operator==( const LIB_ITEM& aOther ) const;
+    virtual bool operator==( const LIB_ITEM& aOther ) const;
     bool operator==( const LIB_ITEM* aOther ) const
     {
         return *this == *aOther;

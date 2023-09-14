@@ -501,6 +501,35 @@ void LIB_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL
 }
 
 
+bool LIB_TEXTBOX::operator==( const LIB_ITEM& aOther ) const
+{
+    if( aOther.Type() != LIB_TEXTBOX_T )
+        return false;
+
+    const LIB_TEXTBOX& other = static_cast<const LIB_TEXTBOX&>( aOther );
+
+    return LIB_SHAPE::operator==( other ) && EDA_TEXT::operator==( other );
+}
+
+
+double LIB_TEXTBOX::Similarity( const LIB_ITEM& aOther ) const
+{
+    if( m_Uuid == aOther.m_Uuid )
+        return 1.0;
+
+    if( aOther.Type() != LIB_TEXTBOX_T )
+        return 0.0;
+
+    const LIB_TEXTBOX& other = static_cast<const LIB_TEXTBOX&>( aOther );
+
+    double similarity = SimilarityBase( other );
+    similarity *= LIB_SHAPE::Similarity( other );
+    similarity *= EDA_TEXT::Similarity( other );
+
+    return similarity;
+}
+
+
 void LIB_TEXTBOX::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount     = 3;

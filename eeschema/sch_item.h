@@ -280,6 +280,15 @@ public:
     bool RenderAsBitmap( double aWorldScale ) const override;
 
     /**
+     * Return a measure of how likely the other object is to represent the same
+     * object.  The scale runs from 0.0 (definitely different objects) to 1.0 (same)
+     *
+     * This is a pure virtual function.  Derived classes must implement this.
+    */
+    virtual double Similarity( const SCH_ITEM& aItem ) const = 0;
+    virtual bool operator==( const SCH_ITEM& aItem ) const = 0;
+
+    /**
      * Print a schematic item.
      *
      * Each schematic item should have its own method

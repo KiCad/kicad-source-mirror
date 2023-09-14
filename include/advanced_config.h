@@ -279,6 +279,11 @@ public:
      */
     bool m_EnableGenerators;
 
+    /**
+     * When true, enable git integration
+     */
+    bool m_EnableGit;
+
 ///@}
 
 

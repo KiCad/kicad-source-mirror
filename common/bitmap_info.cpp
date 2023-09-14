@@ -30,6 +30,13 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::e_48].emplace_back( BITMAPS::e_48, wxT( "e_48_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::e_96].emplace_back( BITMAPS::e_96, wxT( "e_96_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::e_192].emplace_back( BITMAPS::e_192, wxT( "e_192_16.png" ), 16, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::git_add].emplace_back( BITMAPS::git_add, wxT( "git_add_16.png" ), 16, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::git_changed_ahead].emplace_back( BITMAPS::git_changed_ahead, wxT( "git_changed_ahead_16.png" ), 16, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::git_conflict].emplace_back( BITMAPS::git_conflict, wxT( "git_conflict_16.png" ), 16, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::git_delete].emplace_back( BITMAPS::git_delete, wxT( "git_delete_16.png" ), 16, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::git_good_check].emplace_back( BITMAPS::git_good_check, wxT( "git_good_check_16.png" ), 16, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::git_modified].emplace_back( BITMAPS::git_modified, wxT( "git_modified_16.png" ), 16, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::git_out_of_date].emplace_back( BITMAPS::git_out_of_date, wxT( "git_out_of_date_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::icon_bitmap2component_16].emplace_back( BITMAPS::icon_bitmap2component_16, wxT( "icon_bitmap2component_16_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::icon_eeschema_16].emplace_back( BITMAPS::icon_eeschema_16, wxT( "icon_eeschema_16_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::icon_gerbview_16].emplace_back( BITMAPS::icon_gerbview_16, wxT( "icon_gerbview_16_16.png" ), 16, wxT( "light" ) );
@@ -101,6 +108,13 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::visibility].emplace_back( BITMAPS::visibility, wxT( "visibility_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::visibility_off].emplace_back( BITMAPS::visibility_off, wxT( "visibility_off_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::www].emplace_back( BITMAPS::www, wxT( "www_16.png" ), 16, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::git_add].emplace_back( BITMAPS::git_add, wxT( "git_add_dark_16.png" ), 16, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::git_changed_ahead].emplace_back( BITMAPS::git_changed_ahead, wxT( "git_changed_ahead_dark_16.png" ), 16, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::git_conflict].emplace_back( BITMAPS::git_conflict, wxT( "git_conflict_dark_16.png" ), 16, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::git_delete].emplace_back( BITMAPS::git_delete, wxT( "git_delete_dark_16.png" ), 16, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::git_good_check].emplace_back( BITMAPS::git_good_check, wxT( "git_good_check_dark_16.png" ), 16, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::git_modified].emplace_back( BITMAPS::git_modified, wxT( "git_modified_dark_16.png" ), 16, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::git_out_of_date].emplace_back( BITMAPS::git_out_of_date, wxT( "git_out_of_date_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::icon_bitmap2component_16].emplace_back( BITMAPS::icon_bitmap2component_16, wxT( "icon_bitmap2component_16_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::icon_eeschema_16].emplace_back( BITMAPS::icon_eeschema_16, wxT( "icon_eeschema_16_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::icon_gerbview_16].emplace_back( BITMAPS::icon_gerbview_16, wxT( "icon_gerbview_16_dark_16.png" ), 16, wxT( "dark" ) );

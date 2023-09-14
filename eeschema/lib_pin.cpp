@@ -1453,6 +1453,123 @@ wxString LIB_PIN::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 }
 
 
+bool LIB_PIN::operator==( const LIB_ITEM& aOther ) const
+{
+    if( aOther.Type() != LIB_PIN_T )
+        return false;
+
+    const LIB_PIN* other = static_cast<const LIB_PIN*>( &aOther );
+
+    if( m_name != other->m_name )
+        return false;
+
+    if( m_number != other->m_number )
+        return false;
+
+    if( m_position != other->m_position )
+        return false;
+
+    if( m_length != other->m_length )
+        return false;
+
+    if( m_orientation != other->m_orientation )
+        return false;
+
+    if( m_shape != other->m_shape )
+        return false;
+
+    if( m_type != other->m_type )
+        return false;
+
+    if( m_attributes != other->m_attributes )
+        return false;
+
+    if( m_numTextSize != other->m_numTextSize )
+        return false;
+
+    if( m_nameTextSize != other->m_nameTextSize )
+        return false;
+
+    if( m_alternates.size() != other->m_alternates.size() )
+        return false;
+
+    auto lhsItem = m_alternates.begin();
+    auto rhsItem = other->m_alternates.begin();
+
+    while( lhsItem != m_alternates.end() )
+    {
+        if( rhsItem == other->m_alternates.end() )
+            return false;
+
+        const ALT& lhsAlt = lhsItem->second;
+        const ALT& rhsAlt = rhsItem->second;
+
+        if( lhsAlt.m_Name != rhsAlt.m_Name )
+            return false;
+
+        if( lhsAlt.m_Type != rhsAlt.m_Type )
+            return false;
+
+        if( lhsAlt.m_Shape != rhsAlt.m_Shape )
+            return false;
+
+        ++lhsItem;
+        ++rhsItem;
+    }
+
+    return rhsItem == other->m_alternates.end();
+}
+
+
+double LIB_PIN::Similarity( const LIB_ITEM& aOther ) const
+{
+    if( aOther.m_Uuid == m_Uuid )
+        return 1.0;
+
+    if( aOther.Type() != LIB_PIN_T )
+        return 0.0;
+
+    const LIB_PIN* other = static_cast<const LIB_PIN*>( &aOther );
+
+    double similarity = SimilarityBase( aOther );
+
+    if( m_name != other->m_name )
+        similarity *= 0.9;
+
+    if( m_number != other->m_number )
+        similarity *= 0.9;
+
+    if( m_position != other->m_position )
+        similarity *= 0.9;
+
+    if( m_length != other->m_length )
+        similarity *= 0.9;
+
+    if( m_orientation != other->m_orientation )
+        similarity *= 0.9;
+
+    if( m_shape != other->m_shape )
+        similarity *= 0.9;
+
+    if( m_type != other->m_type )
+        similarity *= 0.9;
+
+    if( m_attributes != other->m_attributes )
+        similarity *= 0.9;
+
+    if( m_numTextSize != other->m_numTextSize )
+        similarity *= 0.9;
+
+    if( m_nameTextSize != other->m_nameTextSize )
+        similarity *= 0.9;
+
+    if( m_alternates.size() != other->m_alternates.size() )
+        similarity *= 0.9;
+
+    return similarity;
+}
+
+
 std::ostream& LIB_PIN::operator<<( std::ostream& aStream )
 {
     aStream << "LIB_PIN:" << std::endl

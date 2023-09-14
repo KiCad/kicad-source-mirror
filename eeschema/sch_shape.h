@@ -107,6 +107,10 @@ public:
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
+    double Similarity( const SCH_ITEM& aOther ) const override;
+
+    bool operator==( const SCH_ITEM& aOther ) const override;
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif

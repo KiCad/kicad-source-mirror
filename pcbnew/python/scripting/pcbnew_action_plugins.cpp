@@ -333,7 +333,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     PICKED_ITEMS_LIST deletedItemsList;
 
     // The list of existing items after running the action script
-    const std::set<BOARD_ITEM*> currItemList = currentPcb->GetItemSet();
+    const auto currItemList = currentPcb->GetItemSet();
 
     // Found deleted items
     for( unsigned int i = 0; i < oldBuffer->GetCount(); i++ )
@@ -418,7 +418,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
 void PCB_EDIT_FRAME::RebuildAndRefresh()
 {
     // The list of existing items after running the action script
-    const std::set<BOARD_ITEM*> items = GetBoard()->GetItemSet();
+    const BOARD_ITEM_SET items = GetBoard()->GetItemSet();
 
     // Sync selection with items selection state
     SELECTION&          selection = GetCurrentSelection();

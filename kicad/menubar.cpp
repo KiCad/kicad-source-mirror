@@ -74,6 +74,7 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
 
     fileMenu->Add( KICAD_MANAGER_ACTIONS::newProject );
     fileMenu->Add( KICAD_MANAGER_ACTIONS::newFromTemplate );
+    fileMenu->Add( KICAD_MANAGER_ACTIONS::newFromRepository );
 
     if( wxDir::Exists( PATHS::GetStockDemosPath() ) )
     {

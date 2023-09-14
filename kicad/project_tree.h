@@ -25,12 +25,14 @@
 #ifndef PROJECT_TREE_H
 #define PROJECT_TREE_H
 
+#include <git/kicad_git_common.h>
 
 #include <wx/treectrl.h>
 
 #include "tree_file_type.h"
 
 class PROJECT_TREE_PANE;
+struct git_repository;
 
 /** PROJECT_TREE
  * This is the class to show (as a tree) the files in the project directory
@@ -42,6 +44,8 @@ class PROJECT_TREE : public wxTreeCtrl
 private:
     PROJECT_TREE_PANE* m_projectTreePane;
     wxImageList*       m_imageList;
+    wxImageList*       m_statusImageList;
+    KIGIT_COMMON*      m_gitCommon;
 
 public:
     PROJECT_TREE_PANE* GetProjectTreePane() const { return m_projectTreePane; }
@@ -50,6 +54,11 @@ public:
     ~PROJECT_TREE();
 
     void LoadIcons();
+
+    void SetGitRepo( git_repository* aRepo )    { m_gitCommon->SetRepo( aRepo ); }
+    git_repository* GetGitRepo() const          { return m_gitCommon->GetRepo(); }
+
+    KIGIT_COMMON* GitCommon() const             { return m_gitCommon; }
 
 private:
     /* overridden sort function */

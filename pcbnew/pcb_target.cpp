@@ -189,6 +189,45 @@ void PCB_TARGET::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID 
 }
 
 
+bool PCB_TARGET::operator==( const BOARD_ITEM& aOther ) const
+{
+    if( aOther.Type() != Type() )
+        return false;
+
+    const PCB_TARGET& other = static_cast<const PCB_TARGET&>( aOther );
+
+    return m_shape == other.m_shape && m_size == other.m_size && m_lineWidth == other.m_lineWidth
+           && m_layer == other.m_layer && m_pos == other.m_pos;
+}
+
+
+double PCB_TARGET::Similarity( const BOARD_ITEM& aOther ) const
+{
+    if( aOther.Type() != Type() )
+        return 0.0;
+
+    const PCB_TARGET& other = static_cast<const PCB_TARGET&>( aOther );
+
+    double similarity = 1.0;
+
+    if( GetShape() != other.GetShape() )
+        similarity *= 0.9;
+
+    if( GetSize() != other.GetSize() )
+        similarity *= 0.9;
+
+    if( GetWidth() != other.GetWidth() )
+        similarity *= 0.9;
+
+    if( GetLayer() != other.GetLayer() )
+        similarity *= 0.9;
+
+    if( GetPosition() != other.GetPosition() )
+        similarity *= 0.9;
+
+    return 1.0;
+}
+
 static struct PCB_TARGET_DESC
 {
     PCB_TARGET_DESC()

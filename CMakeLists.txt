@@ -747,6 +747,12 @@ find_package(ZLIB REQUIRED)
 find_package( CURL REQUIRED )
 
 #
+# Find libssl, required
+#
+find_package( OpenSSL REQUIRED )
+include_directories( SYSTEM ${OPENSSL_INCLUDE_DIR} )
+
+#
 # Find Cairo library, required
 #
 find_package( Cairo 1.12 REQUIRED )
@@ -754,6 +760,12 @@ include_directories( SYSTEM ${CAIRO_INCLUDE_DIR} )
 
 find_package( Pixman 0.30 REQUIRED )
 include_directories( SYSTEM ${PIXMAN_INCLUDE_DIR} )
+
+# Find libgit2, required
+find_package( libgit2 REQUIRED )
+
+# Set include directories for libgit
+include_directories(${LIBGIT2_INCLUDE_DIRS})
 
 #
 # Find Boost headers and libraries, required.

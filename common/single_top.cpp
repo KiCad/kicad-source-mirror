@@ -52,6 +52,8 @@
 #include <kiplatform/app.h>
 #include <kiplatform/environment.h>
 
+#include <git2.h>
+
 #ifdef KICAD_USE_SENTRY
 #include <sentry.h>
 #endif
@@ -73,6 +75,7 @@ static struct PGM_SINGLE_TOP : public PGM_BASE
 
     void OnPgmExit()
     {
+
         Kiway.OnKiwayEnd();
 
         if( m_settings_manager && m_settings_manager->IsOK() )
@@ -84,6 +87,7 @@ static struct PGM_SINGLE_TOP : public PGM_BASE
         // Destroy everything in PGM_BASE, especially wxSingleInstanceCheckerImpl
         // earlier than wxApp and earlier than static destruction would.
         PGM_BASE::Destroy();
+        git_libgit2_shutdown();
     }
 
     void MacOpenFile( const wxString& aFileName )   override
@@ -297,6 +301,9 @@ bool PGM_SINGLE_TOP::OnPgmInit()
         return false;
     }
 #endif
+
+    // Initialize the git library before trying to initialize individual programs
+    git_libgit2_init();
 
     // Not all kicad applications use the python stuff. skip python init
     // for these apps.

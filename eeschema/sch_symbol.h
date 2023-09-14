@@ -758,6 +758,10 @@ public:
 
     bool IsPower() const;
 
+    double Similarity( const SCH_ITEM& aOther ) const override;
+
+    bool operator==( const SCH_ITEM& aOther ) const override;
+
 private:
     BOX2I doGetBoundingBox( bool aIncludePins, bool aIncludeFields ) const;
 

@@ -31,6 +31,7 @@
 #define TREEPRJ_FRAME_H
 
 #include <vector>
+#include <wx/datetime.h>
 #include <wx/fswatcher.h>
 #include <wx/laywin.h>
 #include <wx/treebase.h>
@@ -155,6 +156,87 @@ private:
     void onPaint( wxPaintEvent& aEvent );
 
     /**
+     * Initialize a new git repository in the current project directory
+    */
+    void onGitInitializeProject( wxCommandEvent& event );
+
+    /**
+     * Commit the current project saved changes to the git repository
+    */
+    void onGitCommit( wxCommandEvent& event );
+
+    /**
+     * Pull the latest changes from the git repository
+    */
+    void onGitPullProject( wxCommandEvent& event );
+
+    /**
+     * Push the current project changes to the git repository
+    */
+    void onGitPushProject( wxCommandEvent& event );
+
+    /**
+     * Switch to a different branch in the git repository
+    */
+    void onGitSwitchBranch( wxCommandEvent& event );
+
+    /**
+     * Compare the current project to a different branch in the git repository
+    */
+    void onGitCompare( wxCommandEvent& event );
+
+    /**
+     * Remove the git repository from the current project directory
+    */
+    void onGitRemoveVCS( wxCommandEvent& event );
+
+    /**
+     * Add a file to the git index
+    */
+    void onGitAddToIndex( wxCommandEvent& event );
+
+    /**
+     * Remove a file from the git index
+    */
+    void onGitRemoveFromIndex( wxCommandEvent& event );
+
+    /**
+     * Sync the current project with the git repository
+    */
+    void onGitSyncProject( wxCommandEvent& event );
+
+    /**
+     * Fetch the latest changes from the git repository
+    */
+    void onGitFetch( wxCommandEvent& event );
+
+    /**
+     * Resolve conflicts in the git repository
+    */
+    void onGitResolveConflict( wxCommandEvent& event );
+
+    /**
+     * Revert the local repository to the last commit
+    */
+    void onGitRevertLocal( wxCommandEvent& event );
+
+    /**
+     * Updates the icons shown in the tree project to reflect the current git status
+    */
+    void updateGitStatusIcons();
+
+    /**
+     * Returns true if the current project has any uncommitted changes
+    */
+    bool hasChangedFiles();
+
+    /**
+     * Returns true if the current project has local commits that have not been pushed to the
+     * remote repository
+    */
+    bool hasLocalCommits();
+
+    /**
      * Shutdown the file watcher.  Used when closing to prevent post-free access into the project
      * tree.  (Using the destructor doesn't work as wxWidgets defers destruction in some cases.)
      */
@@ -190,6 +272,12 @@ private:
 
     void onThemeChanged( wxSysColourChangedEvent &aEvent );
 
+    /**
+     * Returns true if the file has already been added to the repository or
+     * false if it has not been added yet.
+    */
+    bool canFileBeAddedToVCS( const wxString& aFilePath );
+
 public:
     KICAD_MANAGER_FRAME*    m_Parent;
     PROJECT_TREE*           m_TreeProject;
@@ -203,6 +291,7 @@ private:
     bool                    m_watcherNeedReset; // true if FileWatcherReset() must be called
                                                 // (during an idle time for instance) after
                                                 // the main loop event handler is started
+    wxDateTime              m_lastGitStatusUpdate;
 
     DECLARE_EVENT_TABLE()
 };

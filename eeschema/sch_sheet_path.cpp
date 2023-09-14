@@ -80,6 +80,16 @@ public:
     void MirrorVertically( int aCenter ) override {}
     void Rotate( const VECTOR2I& aCenter ) override {}
 
+    double Similarity( const SCH_ITEM& aOther ) const override
+    {
+        return 0.0;
+    }
+
+    bool operator==( const SCH_ITEM& aOther ) const override
+    {
+        return false;
+    }
+
 #if defined(DEBUG)
     void Show( int , std::ostream&  ) const override {}
 #endif
