@@ -259,8 +259,18 @@ wxPGWindowList PG_COLOR_EDITOR::CreateControls( wxPropertyGrid* aGrid, wxPGPrope
                       aGrid->ChangePropertyValue( colorProp, val );
                   } );
 
+#if wxCHECK_VERSION( 3, 3, 0 )
+    if( aGrid->GetInternalFlags() & wxPropertyGrid::wxPG_FL_ACTIVATION_BY_CLICK )
+#else
     if( aGrid->GetInternalFlags() & wxPG_FL_ACTIVATION_BY_CLICK )
-        aGrid->CallAfter( [=]() { editor->GetNewSwatchColor(); } );
+#endif
+    {
+        aGrid->CallAfter(
+                [=]()
+                {
+                    editor->GetNewSwatchColor();
+                } );
+    }
 
     return editor;
 }
