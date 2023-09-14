@@ -20,7 +20,6 @@
 
 
 #include <font/fontconfig.h>
-#include <pgm_base.h>
 #include <wx/log.h>
 #include <trace_helpers.h>
 #include <string_utils.h>
