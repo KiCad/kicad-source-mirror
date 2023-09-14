@@ -41,6 +41,7 @@
 #include <pcb_edit_frame.h>
 #include <pcb_shape.h>
 #include <pcb_track.h>
+#include <pad.h>
 #include <tool/tool_manager.h>
 #include <tools/edit_tool.h>
 #include <tools/pcb_actions.h>
@@ -55,7 +56,8 @@
 class CONVERT_SETTINGS_DIALOG : public DIALOG_SHIM
 {
 public:
-    CONVERT_SETTINGS_DIALOG( EDA_DRAW_FRAME* aParent, CONVERT_SETTINGS* aSettings ) :
+    CONVERT_SETTINGS_DIALOG( EDA_DRAW_FRAME* aParent, CONVERT_SETTINGS* aSettings,
+                             bool aShowCopyLineWidth ) :
             DIALOG_SHIM( aParent, wxID_ANY, _( "Conversion Settings" ), wxDefaultPosition,
                          wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
             m_settings( aSettings )
@@ -65,7 +67,11 @@ public:
         SetSizer( mainSizer );
 
         m_rbMimicLineWidth = new wxRadioButton( this, wxID_ANY, _( "Copy line width of first object" ) );
-        topSizer->Add( m_rbMimicLineWidth, 0, wxLEFT|wxRIGHT, 5 );
+
+        if( aShowCopyLineWidth )
+            topSizer->Add( m_rbMimicLineWidth, 0, wxLEFT|wxRIGHT, 5 );
+        else
+            m_rbMimicLineWidth->Hide();
 
         topSizer->AddSpacer( 6 );
         m_rbCenterline = new wxRadioButton( this, wxID_ANY, _( "Use centerlines" ) );
@@ -246,10 +252,16 @@ bool CONVERT_TOOL::Init()
 
     auto anyPolys = S_C::OnlyTypes( { PCB_ZONE_T, PCB_SHAPE_LOCATE_POLY_T, PCB_SHAPE_LOCATE_RECT_T } );
 
+    auto anyPads = S_C::OnlyTypes( { PCB_PAD_T } );
+
     auto canCreateArcs     = S_C::Count( 1 )
                                 && S_C::OnlyTypes( { PCB_TRACE_T, PCB_SHAPE_LOCATE_SEGMENT_T } );
     auto canCreateArray    = S_C::MoreThan( 0 );
     auto canCreatePolyType = shapes || anyPolys || anyTracks;
+
+    if( m_frame->IsType( FRAME_FOOTPRINT_EDITOR ) )
+        canCreatePolyType = shapes || anyPolys || anyTracks || anyPads;
+
     auto canCreateLines    = anyPolys;
     auto canCreateTracks   = anyPolys || graphicToTrack;
     auto canCreate         = canCreatePolyType
@@ -259,7 +271,10 @@ bool CONVERT_TOOL::Init()
                                 || canCreateArray;
 
     m_menu->AddItem( PCB_ACTIONS::convertToPoly, canCreatePolyType );
-    m_menu->AddItem( PCB_ACTIONS::convertToZone, canCreatePolyType );
+
+    if( m_frame->IsType( FRAME_PCB_EDITOR ) )
+        m_menu->AddItem( PCB_ACTIONS::convertToZone, canCreatePolyType );
+
     m_menu->AddItem( PCB_ACTIONS::convertToKeepout, canCreatePolyType );
     m_menu->AddItem( PCB_ACTIONS::convertToLines, canCreateLines );
     m_menu->AppendSeparator();
@@ -348,7 +363,18 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
 
     if( aEvent.IsAction( &PCB_ACTIONS::convertToPoly ) )
     {
-        CONVERT_SETTINGS_DIALOG dlg( m_frame, &m_userSettings );
+        bool showCopyLineWidth = true;
+
+        // No copy-line-width option for pads
+        if( dynamic_cast<PAD*>( selection.Front() ) )
+        {
+            if( m_userSettings.m_Strategy == COPY_LINEWIDTH )
+                m_userSettings.m_Strategy = CENTERLINE;
+
+            showCopyLineWidth = false;
+        }
+
+        CONVERT_SETTINGS_DIALOG dlg( m_frame, &m_userSettings, showCopyLineWidth );
 
         if( dlg.ShowModal() != wxID_OK )
             return 0;
@@ -788,7 +814,6 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromClosedGraphics( const std::deque<EDA_I
                                             aStrategy == COPY_LINEWIDTH || aStrategy == CENTERLINE );
             shape->SetFillMode( wasFilled );
             shape->SetFlags( SKIP_STRUCT );
-
             break;
         }
 
@@ -805,6 +830,16 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromClosedGraphics( const std::deque<EDA_I
             text->SetFlags( SKIP_STRUCT );
             break;
         }
+
+        case PCB_PAD_T:
+        {
+            PAD* pad = static_cast<PAD*>( item );
+            pad->TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, bds.m_MaxError, ERROR_INSIDE,
+                                          false );
+            pad->SetFlags( SKIP_STRUCT );
+            break;
+        }
+
 
         default:
             continue;
