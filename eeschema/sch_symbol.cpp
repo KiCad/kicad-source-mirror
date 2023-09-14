@@ -1303,12 +1303,12 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
     }
     else if( token->IsSameAs( wxT( "SYMBOL_LIBRARY" ) ) )
     {
-        *token = m_lib_id.GetLibNickname();
+        *token = m_lib_id.GetUniStringLibNickname();
         return true;
     }
     else if( token->IsSameAs( wxT( "SYMBOL_NAME" ) ) )
     {
-        *token = m_lib_id.GetLibItemName();
+        *token = m_lib_id.GetUniStringLibItemName();
         return true;
     }
     else if( token->IsSameAs( wxT( "SYMBOL_DESCRIPTION" ) ) )

@@ -498,7 +498,7 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
     wxString footprintName = parentframe->GetSelectedFootprint();
 
     if( footprintName.IsEmpty() && comp )
-        footprintName = comp->GetFPID().Format();
+        footprintName = comp->GetFPID().Format().wx_str();
 
     if( m_currentFootprint == footprintName && m_currentComp == comp )
         return;

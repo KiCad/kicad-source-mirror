@@ -99,7 +99,7 @@ SCH_SHEET* CADSTAR_SCH_ARCHIVE_PLUGIN::LoadSchematicFile( const wxString&       
     if( libName.IsEmpty() )
         libName = "noname";
 
-    libName = LIB_ID::FixIllegalChars( libName, true );
+    libName = LIB_ID::FixIllegalChars( libName, true ).wx_str();
 
     wxFileName libFileName( aSchematic->Prj().GetProjectPath(), libName,
                             KiCadSymbolLibFileExtension );
@@ -265,7 +265,7 @@ void CADSTAR_SCH_ARCHIVE_PLUGIN::ensureLoadedLibrary( const wxString& aLibraryPa
 
     if( aProperties && aProperties->count( "fplib" ) )
     {
-        fplibname = aProperties->at( "fplib" );
+        fplibname = aProperties->at( "fplib" ).wx_str();
     }
 
     // Get timestamp

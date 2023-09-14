@@ -148,7 +148,7 @@ void RESCUE_CASE_CANDIDATE::FindRescues( RESCUER& aRescuer,
 
     for( SCH_SYMBOL* eachSymbol : *( aRescuer.GetSymbols() ) )
     {
-        symbol_name = eachSymbol->GetLibId().GetLibItemName();
+        symbol_name = eachSymbol->GetLibId().GetUniStringLibItemName();
 
         if( last_symbol_name != symbol_name )
         {
@@ -364,7 +364,7 @@ RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::RESCUE_SYMBOL_LIB_TABLE_CANDIDATE(
     int aConvert ) : RESCUE_CANDIDATE()
 {
     m_requested_id = aRequestedId;
-    m_requested_name = aRequestedId.Format();
+    m_requested_name = aRequestedId.Format().wx_str();
     m_new_id = aNewId;
     m_lib_candidate = aLibCandidate;
     m_cache_candidate = aCacheCandidate;

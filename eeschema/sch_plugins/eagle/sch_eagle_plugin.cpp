@@ -162,7 +162,7 @@ wxString SCH_EAGLE_PLUGIN::getLibName()
             m_libName = wxT( "noname" );
 
         m_libName += wxT( "-eagle-import" );
-        m_libName = LIB_ID::FixIllegalChars( m_libName, true );
+        m_libName = LIB_ID::FixIllegalChars( m_libName, true ).wx_str();
     }
 
     return m_libName;

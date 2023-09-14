@@ -465,7 +465,10 @@ LIB_ID FOOTPRINT_EDIT_FRAME::GetLoadedFPID() const
 void FOOTPRINT_EDIT_FRAME::ClearModify()
 {
     if( GetBoard()->GetFirstFootprint() )
-        m_footprintNameWhenLoaded = GetBoard()->GetFirstFootprint()->GetFPID().GetLibItemName();
+    {
+        m_footprintNameWhenLoaded =
+                GetBoard()->GetFirstFootprint()->GetFPID().GetUniStringLibItemName();
+    }
 
     GetScreen()->SetContentModified( false );
 }
@@ -521,7 +524,7 @@ void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
     m_originalFootprintCopy.reset( static_cast<FOOTPRINT*>( aFootprint->Clone() ) );
     m_originalFootprintCopy->SetParent( nullptr );
 
-    m_footprintNameWhenLoaded = aFootprint->GetFPID().GetLibItemName();
+    m_footprintNameWhenLoaded = aFootprint->GetFPID().GetUniStringLibItemName();
 
     PCB_BASE_EDIT_FRAME::AddFootprintToBoard( aFootprint );
     // Ensure item UUIDs are valid

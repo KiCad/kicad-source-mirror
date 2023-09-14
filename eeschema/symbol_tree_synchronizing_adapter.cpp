@@ -235,7 +235,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataVie
     {
     case NAME_COL:
         if( m_frame->GetCurSymbol() && m_frame->GetCurSymbol()->GetLibId() == node->m_LibId )
-            node->m_Name = m_frame->GetCurSymbol()->GetLibId().GetLibItemName();
+            node->m_Name = m_frame->GetCurSymbol()->GetLibId().GetUniStringLibItemName();
 
         if( node->m_Pinned )
             aVariant = GetPinningSymbol() + UnescapeString( node->m_Name );

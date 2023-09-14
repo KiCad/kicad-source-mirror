@@ -293,7 +293,7 @@ FOOTPRINT* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect )
         if( !fpid.IsValid() )
             return nullptr;
         else
-            footprintName = fpid.Format();
+            footprintName = fpid.Format().wx_str();
     }
 
     try

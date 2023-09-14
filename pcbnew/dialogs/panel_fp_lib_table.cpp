@@ -975,7 +975,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
         bool       doAdd    = true;
 
         if( fileType == IO_MGR::KICAD_SEXP && fn.GetExt() != KiCadFootprintLibPathExtension )
-            nickname = LIB_ID::FixIllegalChars( fn.GetFullName(), true );
+            nickname = LIB_ID::FixIllegalChars( fn.GetFullName(), true ).wx_str();
 
         if( cur_model()->ContainsNickname( nickname ) )
         {

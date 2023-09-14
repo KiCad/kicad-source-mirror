@@ -501,7 +501,7 @@ void SYMBOL_EDIT_FRAME::Save()
     wxString libName;
 
     if( IsSymbolTreeShown() )
-        libName = GetTreeLIBID().GetLibNickname();
+        libName = GetTreeLIBID().GetUniStringLibNickname();
 
     if( libName.empty() )
     {
@@ -963,7 +963,7 @@ void SYMBOL_EDIT_FRAME::Revert( bool aConfirm )
             reload_currentSymbol = libName == curr_libId.GetLibNickname();
 
             if( reload_currentSymbol )
-                curr_symbolName = curr_libId.GetLibItemName();
+                curr_symbolName = curr_libId.GetUniStringLibItemName();
         }
         else
         {

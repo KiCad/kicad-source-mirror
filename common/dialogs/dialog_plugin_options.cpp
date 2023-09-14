@@ -146,7 +146,7 @@ bool DIALOG_PLUGIN_OPTIONS::TransferDataFromWindow()
         }
     }
 
-    *m_result =  LIB_TABLE::FormatOptions( &props );
+    *m_result = LIB_TABLE::FormatOptions( &props ).wx_str();
     return true;
 }
 

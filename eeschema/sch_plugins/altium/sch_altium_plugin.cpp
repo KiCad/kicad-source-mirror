@@ -273,7 +273,7 @@ wxString SCH_ALTIUM_PLUGIN::getLibName()
             m_libName = "noname";
 
         m_libName += "-altium-import";
-        m_libName = LIB_ID::FixIllegalChars( m_libName, true );
+        m_libName = LIB_ID::FixIllegalChars( m_libName, true ).wx_str();
     }
 
     return m_libName;

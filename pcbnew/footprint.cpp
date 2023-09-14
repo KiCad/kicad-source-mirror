@@ -647,12 +647,12 @@ bool FOOTPRINT::ResolveTextVar( wxString* token, int aDepth ) const
     }
     else if( token->IsSameAs( wxT( "FOOTPRINT_LIBRARY" ) ) )
     {
-        *token = m_fpid.GetLibNickname();
+        *token = m_fpid.GetUniStringLibNickname();
         return true;
     }
     else if( token->IsSameAs( wxT( "FOOTPRINT_NAME" ) ) )
     {
-        *token = m_fpid.GetLibItemName();
+        *token = m_fpid.GetUniStringLibItemName();
         return true;
     }
     else if( token->StartsWith( wxT( "SHORT_NET_NAME(" ) )

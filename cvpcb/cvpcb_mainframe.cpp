@@ -853,7 +853,7 @@ void CVPCB_MAINFRAME::DisplayStatus()
     {
         // Use the footprint of the selected symbol
         if( symbol )
-            lib = symbol->GetFPID().GetLibNickname();
+            lib = symbol->GetFPID().GetUniStringLibNickname();
     }
     else if( GetFocusedControl() == CVPCB_MAINFRAME::CONTROL_LIBRARY )
     {

@@ -250,7 +250,7 @@ public:
     SYMBOL_CANDIDATE( SCH_SYMBOL* aSymbol )
     {
         m_Symbol = aSymbol;
-        m_InitialLibId = m_Symbol->GetLibId().Format();
+        m_InitialLibId = m_Symbol->GetLibId().Format().wx_str();
         m_Row = -1;
         m_IsOrphan = false;
         m_Screen = nullptr;
@@ -696,7 +696,7 @@ bool DIALOG_EDIT_SYMBOLS_LIBID::setLibIdByBrowser( int aRow )
     }
 
     wxString new_libid;
-    new_libid = sel.LibId.Format();
+    new_libid = sel.LibId.Format().wx_str();
 
     m_grid->SetCellValue( aRow, COL_NEW_LIBID, UnescapeString( new_libid ) );
 

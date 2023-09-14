@@ -328,8 +328,8 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
 
             if( symbol->UseLibIdLookup() )
             {
-                libName = symbol->GetLibId().GetLibNickname();
-                partName = symbol->GetLibId().GetLibItemName();
+                libName = symbol->GetLibId().GetUniStringLibNickname();
+                partName = symbol->GetLibId().GetUniStringLibItemName();
             }
             else
             {
