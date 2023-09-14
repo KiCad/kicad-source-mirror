@@ -307,14 +307,15 @@ std::vector<PCB_LAYER_ID> ALTIUM_PCB::GetKicadLayersToIterate( ALTIUM_LAYER aAlt
 {
     static std::set<ALTIUM_LAYER> altiumLayersWithWarning;
 
-    if( aAltiumLayer == ALTIUM_LAYER::MULTI_LAYER )
+    if( aAltiumLayer == ALTIUM_LAYER::MULTI_LAYER || aAltiumLayer == ALTIUM_LAYER::KEEP_OUT_LAYER )
     {
         std::vector<PCB_LAYER_ID> layers;
-        layers.reserve( MAX_CU_LAYERS ); // TODO: only use Cu layers which are on the board
-        for( PCB_LAYER_ID layer = PCB_LAYER_ID::F_Cu; layer <= PCB_LAYER_ID::B_Cu;
-             layer = static_cast<PCB_LAYER_ID>( static_cast<int>( layer ) + 1 ) )
+        layers.reserve( MAX_CU_LAYERS );
+
+        for( PCB_LAYER_ID layer : LSET::AllCuMask().Seq() )
         {
-            layers.emplace_back( layer );
+            if( m_board->IsLayerEnabled( layer ) )
+                layers.emplace_back( layer );
         }
 
         return layers;
@@ -2046,9 +2047,7 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItem( const AREGION6& aElem )
         if( aElem.subpolyindex == ALTIUM_POLYGON_NONE )
         {
             for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aElem.layer ) )
-            {
                 ConvertShapeBasedRegions6ToBoardItemOnLayer( aElem, klayer );
-            }
         }
     }
     else
@@ -2107,8 +2106,10 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItem( FOOTPRINT*      aFoot
         if( aElem.subpolyindex == ALTIUM_POLYGON_NONE )
         {
             for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aElem.layer ) )
+            {
                 ConvertShapeBasedRegions6ToFootprintItemOnLayer( aFootprint, aElem, klayer,
                                                                  aPrimitiveIndex );
+            }
         }
     }
     else if( aElem.kind == ALTIUM_REGION_KIND::DASHED_OUTLINE )
@@ -3143,9 +3144,7 @@ void ALTIUM_PCB::ConvertTracks6ToBoardItem( const ATRACK6& aElem, const int aPri
     else
     {
         for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aElem.layer ) )
-        {
             ConvertTracks6ToBoardItemOnLayer( aElem, klayer );
-        }
     }
 
     for( const auto layerExpansionMask : HelperGetSolderAndPasteMaskExpansions(
@@ -3596,19 +3595,12 @@ void ALTIUM_PCB::ConvertFills6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
 
 void ALTIUM_PCB::HelperSetZoneLayers( ZONE* aZone, const ALTIUM_LAYER aAltiumLayer )
 {
-    if( aAltiumLayer == ALTIUM_LAYER::MULTI_LAYER || aAltiumLayer == ALTIUM_LAYER::KEEP_OUT_LAYER )
-    {
-        aZone->SetLayerSet( LSET::AllCuMask() );
-    }
-    else
-    {
-        LSET layerSet;
+    LSET layerSet;
 
-        for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aAltiumLayer ) )
-            layerSet.set( klayer );
+    for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aAltiumLayer ) )
+        layerSet.set( klayer );
 
-        aZone->SetLayerSet( layerSet );
-    }
+    aZone->SetLayerSet( layerSet );
 }
 
 
