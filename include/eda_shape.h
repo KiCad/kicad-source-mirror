@@ -107,7 +107,7 @@ public:
     void SetFillColor( const COLOR4D& aColor ) { m_fillColor = aColor; }
 
     void SetWidth( int aWidth )                { m_stroke.SetWidth( aWidth ); }
-    int GetWidth() const                       { return m_stroke.GetWidth(); }
+    virtual int GetWidth() const               { return m_stroke.GetWidth(); }
     virtual int GetEffectiveWidth() const      { return GetWidth(); }
 
     void           SetLineStyle( const PLOT_DASH_TYPE aStyle );

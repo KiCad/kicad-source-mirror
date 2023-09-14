@@ -594,8 +594,7 @@ void PLOTTER::ThickArc( const VECTOR2D& centre, const EDA_ANGLE& aStartAngle,
 }
 
 
-void PLOTTER::ThickArc( const EDA_SHAPE& aArcShape,
-                           OUTLINE_MODE aTraceMode, void* aData )
+void PLOTTER::ThickArc( const EDA_SHAPE& aArcShape, OUTLINE_MODE aTraceMode, void* aData )
 {
     VECTOR2D center = aArcShape.getCenter();
     VECTOR2D mid = aArcShape.GetArcMid();

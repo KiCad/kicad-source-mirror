@@ -82,6 +82,8 @@ public:
     STROKE_PARAMS GetStroke() const override { return m_stroke; }
     void SetStroke( const STROKE_PARAMS& aStroke ) override { m_stroke = aStroke; }
 
+    int GetWidth() const override;
+
     void StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings ) override;
 
     /**

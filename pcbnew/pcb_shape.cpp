@@ -146,6 +146,16 @@ std::vector<VECTOR2I> PCB_SHAPE::GetConnectionPoints() const
 }
 
 
+int PCB_SHAPE::GetWidth() const
+{
+    // A stroke width of 0 in PCBNew means no-border, but negative stroke-widths are only used
+    // in EEschema (see SCH_SHAPE::GetPenWidth()).
+    // Since negative stroke widths can trip up down-stream code (such as the Gerber plotter), we
+    // weed them out here.
+    return std::max( EDA_SHAPE::GetWidth(), 0 );
+}
+
+
 void PCB_SHAPE::StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings )
 {
     m_stroke.SetWidth( settings.GetLineThickness( GetLayer() ) );
