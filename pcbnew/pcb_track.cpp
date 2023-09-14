@@ -1177,8 +1177,9 @@ bool PCB_ARC::IsDegenerated( int aThreshold ) const
     // cannot be safely computed if the distance between mid and end points
     // is too small (a few internal units)
 
+    // len of both segments must be >= aThreshold to be not Degenerated arc
     return ( GetMid() - GetStart() ).EuclideanNorm() < aThreshold
-            || ( GetMid() - GetEnd() ).EuclideanNorm() < aThreshold;
+            && ( GetMid() - GetEnd() ).EuclideanNorm() < aThreshold;
 }
 
 
