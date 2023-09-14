@@ -11,14 +11,16 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class COLOR_SWATCH;
+class WX_INFOBAR;
 
 #include "dialog_shim.h"
-#include <wx/string.h>
-#include <wx/checkbox.h>
+#include <wx/infobar.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/string.h>
+#include <wx/checkbox.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
@@ -54,6 +56,7 @@ class DIALOG_LIB_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 			FILLED_WITH_COLOR
 		};
 
+		WX_INFOBAR* m_infoBar;
 		wxCheckBox* m_checkBorder;
 		wxStaticText* m_borderWidthLabel;
 		wxTextCtrl* m_borderWidthCtrl;
@@ -83,7 +86,7 @@ class DIALOG_LIB_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_LIB_SHAPE_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Drawing Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_LIB_SHAPE_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("%s Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_LIB_SHAPE_PROPERTIES_BASE();
 

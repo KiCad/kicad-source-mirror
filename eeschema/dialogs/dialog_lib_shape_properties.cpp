@@ -40,7 +40,8 @@ DIALOG_LIB_SHAPE_PROPERTIES::DIALOG_LIB_SHAPE_PROPERTIES( SYMBOL_EDIT_FRAME* aPa
 {
     wxASSERT( aShape );
 
-    SetTitle( m_shape->GetTypeName() + wxT( " " ) + GetTitle() );
+    SetTitle( wxString::Format( GetTitle(), aShape->EDA_SHAPE::GetFriendlyName() ) );
+
     m_helpLabel->SetFont( KIUI::GetInfoFont( this ).Italic() );
 
     COLOR_SETTINGS* colorSettings = m_frame->GetColorSettings();
@@ -58,6 +59,9 @@ DIALOG_LIB_SHAPE_PROPERTIES::DIALOG_LIB_SHAPE_PROPERTIES( SYMBOL_EDIT_FRAME* aPa
     m_fillColorSwatch->SetSwatchBackground( schematicBackground );
 
     m_helpLabel->SetFont( KIUI::GetInfoFont( this ).Italic() );
+
+    if( m_frame->GetColorSettings()->GetOverrideSchItemColors() )
+        m_infoBar->ShowMessage( _( "Note: individual item colors overridden in Preferences." ) );
 
     SetInitialFocus( m_borderWidthCtrl );
 

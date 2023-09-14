@@ -6,6 +6,7 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #include "widgets/color_swatch.h"
+#include "widgets/wx_infobar.h"
 
 #include "dialog_lib_shape_properties_base.h"
 
@@ -25,6 +26,13 @@ DIALOG_LIB_SHAPE_PROPERTIES_BASE::DIALOG_LIB_SHAPE_PROPERTIES_BASE( wxWindow* pa
 
 	wxBoxSizer* mainSizer;
 	mainSizer = new wxBoxSizer( wxVERTICAL );
+
+	m_infoBar = new WX_INFOBAR( this );
+	m_infoBar->SetShowHideEffects( wxSHOW_EFFECT_NONE, wxSHOW_EFFECT_NONE );
+	m_infoBar->SetEffectDuration( 500 );
+	m_infoBar->Hide();
+
+	mainSizer->Add( m_infoBar, 0, wxEXPAND, 5 );
 
 	wxBoxSizer* bTop;
 	bTop = new wxBoxSizer( wxHORIZONTAL );
