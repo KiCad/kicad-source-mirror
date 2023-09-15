@@ -611,8 +611,9 @@ bool PNS_KICAD_IFACE_BASE::inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedW
     for( PNS::ITEM* item : linkedSegs.Items() )
     {
         int w = tryGetTrackWidth( item );
-        assert( w > 0 );
-        mval = std::min( w, mval );
+
+        if( w > 0 )
+            mval = std::min( w, mval );
     }
 
     if( mval == INT_MAX )
