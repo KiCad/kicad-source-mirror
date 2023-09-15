@@ -23,6 +23,30 @@ add_subdirectory( gal )
 # Only for win32 cross compilation using MXE
 add_compile_definitions( $<$<AND:$<BOOL:${WIN32}>,$<BOOL:${MSYS}>>:GLEW_STATIC> )
 
+
+# The build version string defaults to the value in the KiCadVersion.cmake file.
+# If being built inside a git repository, the git tag and commit hash are used to create
+# a new version string instead. The user can supply an additional string to be appended
+# to the end inside the KICAD_VERSION_EXTRA variable
+set( KICAD_VERSION_EXTRA "" CACHE STRING
+    "User defined configuration string to append to KiCad version." )
+
+# Generate version header file.
+add_custom_target(
+    version_header ALL
+    COMMAND ${CMAKE_COMMAND}
+        -DKICAD_VERSION_EXTRA=${KICAD_VERSION_EXTRA}
+        -DOUTPUT_FILE=${CMAKE_BINARY_DIR}/kicad_build_version.h
+        -DTEXT_OUTPUT_FILE=${CMAKE_BINARY_DIR}/kicad_build_version.txt
+        -DSRC_PATH=${PROJECT_SOURCE_DIR}
+        -DKICAD_CMAKE_MODULE_PATH=${KICAD_CMAKE_MODULE_PATH}
+        -P ${KICAD_CMAKE_MODULE_PATH}/BuildSteps/WriteVersionHeader.cmake
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    BYPRODUCTS ${CMAKE_BINARY_DIR}/kicad_build_version.h
+    DEPENDS ${KICAD_CMAKE_MODULE_PATH}/BuildSteps/WriteVersionHeader.cmake
+    COMMENT "Generating version string header"
+    )
+
 # A shared library subsetted from common which restricts what can go into
 # a single_top link image.  By not linking to common, we control what does
 # statically go into single_top link images.  My current thinking is that only
@@ -112,34 +136,11 @@ target_include_directories( kicommon
         $<TARGET_PROPERTY:pegtl,INTERFACE_INCLUDE_DIRECTORIES>
     )
 
-add_dependencies( kicommon pegtl )
+add_dependencies( kicommon pegtl version_header )
 
 if( MSVC )
     target_sources( kicommon PRIVATE ${CMAKE_SOURCE_DIR}/resources/msw/kicommon-dll.rc )
 endif()
-
-# The build version string defaults to the value in the KiCadVersion.cmake file.
-# If being built inside a git repository, the git tag and commit hash are used to create
-# a new version string instead. The user can supply an additional string to be appended
-# to the end inside the KICAD_VERSION_EXTRA variable
-set( KICAD_VERSION_EXTRA "" CACHE STRING
-    "User defined configuration string to append to KiCad version." )
-
-# Generate version header file.
-add_custom_target(
-    version_header ALL
-    COMMAND ${CMAKE_COMMAND}
-        -DKICAD_VERSION_EXTRA=${KICAD_VERSION_EXTRA}
-        -DOUTPUT_FILE=${CMAKE_BINARY_DIR}/kicad_build_version.h
-        -DTEXT_OUTPUT_FILE=${CMAKE_BINARY_DIR}/kicad_build_version.txt
-        -DSRC_PATH=${PROJECT_SOURCE_DIR}
-        -DKICAD_CMAKE_MODULE_PATH=${KICAD_CMAKE_MODULE_PATH}
-        -P ${KICAD_CMAKE_MODULE_PATH}/BuildSteps/WriteVersionHeader.cmake
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-    BYPRODUCTS ${CMAKE_BINARY_DIR}/kicad_build_version.h
-    DEPENDS ${KICAD_CMAKE_MODULE_PATH}/BuildSteps/WriteVersionHeader.cmake
-    COMMENT "Generating version string header"
-    )
 
 set( COMMON_ABOUT_DLG_SRCS
     dialog_about/AboutDialog_main.cpp
