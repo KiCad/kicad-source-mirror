@@ -1259,8 +1259,8 @@ protected:
     bool CheckYLimits( double& desiredMax, double& desiredMin ) const
     {
         return !( m_enableLimitedView
-                  && (desiredMax > m_maxY + m_marginBottom / m_scaleY
-                      || desiredMin < m_minY + m_marginTop / m_scaleY) );
+                  && (desiredMax > m_maxY + m_marginTop / m_scaleY
+                      || desiredMin < m_minY - m_marginBottom / m_scaleY) );
     }
 
     /** Recalculate global layer bounding box, and save it in m_minX,...

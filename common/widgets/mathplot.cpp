@@ -1715,8 +1715,8 @@ void mpWindow::AdjustLimitedView()
     // xMin, xMax, yMin, yMax are the full limits (plot limit + margin)
     const double    xMin    = m_minX - m_marginLeft / m_scaleX;
     const double    xMax    = m_maxX + m_marginRight / m_scaleX;
-    const double    yMin    = m_minY - m_marginTop / m_scaleY;
-    const double    yMax    = m_maxY + m_marginBottom / m_scaleY;
+    const double    yMin    = m_minY - m_marginBottom / m_scaleY;
+    const double    yMax    = m_maxY + m_marginTop / m_scaleY;
 
     if( m_desiredXmin < xMin )
     {
@@ -1872,7 +1872,9 @@ void mpWindow::ZoomOut( const wxPoint& centerPoint, double zoomFactor )
     m_desiredXmax   = m_posX + (m_scrX - m_marginLeft - m_marginRight) / m_scaleX;
     m_desiredYmax   = m_posY;
     m_desiredYmin   = m_posY - (m_scrY - m_marginTop - m_marginBottom) / m_scaleY;
-
+    
+    AdjustLimitedView();
+    
     if( !CheckXLimits( m_desiredXmax, m_desiredXmin )
         || !CheckYLimits( m_desiredYmax, m_desiredYmin ) )
     {
