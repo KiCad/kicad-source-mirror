@@ -68,6 +68,9 @@ target_link_libraries( kicommon
     nlohmann_json
     fmt::fmt
     ${wxWidgets_LIBRARIES}
+
+    # needed by kiid to allow linking for Boost for the UUID against bcrypt (msys2 only)
+    ${EXTRA_LIBS}
     )
 
 include( ${KICAD_CMAKE_MODULE_PATH}/KiCadVersion.cmake )
