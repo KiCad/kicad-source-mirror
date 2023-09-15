@@ -241,7 +241,7 @@ std::vector<PCB_LAYER_ID> ALTIUM_PCB::GetKicadLayersToIterate( ALTIUM_LAYER aAlt
 
         for( PCB_LAYER_ID layer : LSET::AllCuMask().Seq() )
         {
-            if( m_board->IsLayerEnabled( layer ) )
+            if( !m_board || m_board->IsLayerEnabled( layer ) )
                 layers.emplace_back( layer );
         }
 
