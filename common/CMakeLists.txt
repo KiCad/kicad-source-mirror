@@ -75,8 +75,10 @@ set( KICOMMON_SRCS
     bitmap_info.cpp
     exceptions.cpp
     kiid.cpp
+    layer_id.cpp
     lib_id.cpp
     locale_io.cpp
+    lset.cpp
     markup_parser.cpp
     richio.cpp
     string_utils.cpp
@@ -421,12 +423,10 @@ set( COMMON_SRCS
     kiway_player.cpp
     languages_menu.cpp
     launch_ext.cpp
-    layer_id.cpp
     lib_table_base.cpp
     lib_table_grid_tricks.cpp
     lib_tree_model.cpp
     lib_tree_model_adapter.cpp
-    lset.cpp
     marker_base.cpp
     netclass.cpp
     notifications_manager.cpp

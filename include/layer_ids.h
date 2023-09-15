@@ -31,6 +31,7 @@
 #include <bitset>
 #include <stdexcept>
 #include <wx/string.h>
+#include <kicommon.h>
 
 
 /**
@@ -295,7 +296,7 @@ typedef std::bitset<GAL_LAYER_ID_COUNT> GAL_BASE_SET;
 
 
 /// Helper for storing and iterating over GAL_LAYER_IDs
-class GAL_SET : public GAL_BASE_SET
+class KICOMMON_API GAL_SET : public GAL_BASE_SET
 {
 
 private:
@@ -473,7 +474,7 @@ enum LAYER_3D_ID : int
  * Returns the string equivalent of a given layer
  * @param aLayer is a valid layer ID
  */
-wxString LayerName( int aLayer );
+KICOMMON_API wxString LayerName( int aLayer );
 
 
 // Some elements do not have yet a visibility control
@@ -507,7 +508,7 @@ typedef std::vector<PCB_LAYER_ID>   BASE_SEQ;
  *
  * </code>
  */
-class LSEQ : public BASE_SEQ
+class KICOMMON_API LSEQ : public BASE_SEQ
 {
     unsigned   m_index;
 
@@ -546,7 +547,7 @@ typedef std::bitset<PCB_LAYER_ID_COUNT>     BASE_SET;
  * of converting to LSEQ using purposeful code, is it removes any dependency
  * on order/sequence inherent in this set.
  */
-class LSET : public BASE_SET
+class KICOMMON_API LSET : public BASE_SET
 {
 public:
 
@@ -966,7 +967,7 @@ inline bool IsBackLayer( PCB_LAYER_ID aLayerId )
  * @param aCopperLayersCount = the number of copper layers. if 0 (in fact if < 4 )
  *  internal layers will be not flipped because the layer count is not known
  */
-PCB_LAYER_ID FlipLayer( PCB_LAYER_ID aLayerId, int aCopperLayersCount = 0 );
+KICOMMON_API PCB_LAYER_ID FlipLayer( PCB_LAYER_ID aLayerId, int aCopperLayersCount = 0 );
 
 /**
  * Calculate the mask layer when flipping a footprint.
@@ -977,7 +978,7 @@ PCB_LAYER_ID FlipLayer( PCB_LAYER_ID aLayerId, int aCopperLayersCount = 0 );
  * @param aCopperLayersCount = the number of copper layers. if 0 (in fact if < 4 )
  *  internal layers will be not flipped because the layer count is not known
  */
-LSET FlipLayerMask( LSET aMask, int aCopperLayersCount = 0 );
+KICOMMON_API LSET FlipLayerMask( LSET aMask, int aCopperLayersCount = 0 );
 
 
 /**
@@ -1049,6 +1050,6 @@ inline bool IsNetCopperLayer( int aLayer )
 }
 
 
-PCB_LAYER_ID ToLAYER_ID( int aLayer );
+KICOMMON_API PCB_LAYER_ID ToLAYER_ID( int aLayer );
 
 #endif // LAYER_IDS_H
