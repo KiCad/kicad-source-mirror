@@ -1350,10 +1350,21 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
                     {
                         return KIGFX::REPAINT;
                     }
+
+                    if( via->GetRemoveUnconnected() )
+                        return KIGFX::ALL;
+
+                    // Clearances could be layer-dependent so redraw them when the active layer
+                    // is changed
+                    if( GetPcbNewSettings()->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS )
+                        return KIGFX::REPAINT;
                 }
                 else if( item->Type() == PCB_PAD_T )
                 {
                     PAD* pad = static_cast<PAD*>( item );
+
+                    if( pad->GetRemoveUnconnected() )
+                        return KIGFX::ALL;
 
                     // Clearances could be layer-dependent so redraw them when the active layer
                     // is changed
