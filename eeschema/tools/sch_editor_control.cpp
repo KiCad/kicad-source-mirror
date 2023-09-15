@@ -1574,6 +1574,9 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     std::map<KIID, EDA_ITEM*> itemMap;
     hierarchy.FillItemMap( itemMap );
 
+    // Keep track of updated library symbols
+    std::map<LIB_SYMBOL*, LIB_SYMBOL*> libItemMap;
+
     // Keep track of pasted sheets and symbols for the different paths to the hierarchy.
     std::map<SCH_SHEET_PATH, SCH_REFERENCE_LIST> pastedSymbols;
     std::map<SCH_SHEET_PATH, SCH_SHEET_LIST>     pastedSheets;
@@ -1768,7 +1771,17 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             item->SetFlags( STARTPOINT | ENDPOINT );
 
         item->SetFlags( IS_NEW | IS_PASTED | IS_MOVING );
+        LIB_SYMBOL* libItem = nullptr;
+        SCH_SYMBOL* sym = dyn_cast<SCH_SYMBOL*>( item );
+
+        if( sym )
+            libItem = sym->GetLibSymbolRef().get();
+
         m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), (SCH_ITEM*) item, i > 0 );
+
+        // Keep track of updated library symbols
+        if( libItem && sym )
+            libItemMap[libItem] = sym->GetLibSymbolRef().get();
 
         // Reset flags for subsequent move operation
         item->SetFlags( IS_NEW | IS_PASTED | IS_MOVING );
@@ -1819,6 +1832,14 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
               || pasteMode == PASTE_MODE::RESPECT_OPTIONS
               || pastedSymbols[sheetPath][i].AlwaysAnnotate() )
             {
+                LIB_SYMBOL* libItem = pastedSymbols[sheetPath][i].GetLibPart();
+                auto it = libItemMap.find( libItem );
+
+                if( it != libItemMap.end() )
+                    pastedSymbols[sheetPath][i] = SCH_REFERENCE( pastedSymbols[sheetPath][i].GetSymbol(),
+                                                                 it->second,
+                                                                 pastedSymbols[sheetPath][i].GetSheetPath() );
+
                 annotatedSymbols[sheetPath].AddItem( pastedSymbols[sheetPath][i] );
             }
         }
