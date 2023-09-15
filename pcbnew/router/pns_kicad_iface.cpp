@@ -574,15 +574,15 @@ bool PNS_KICAD_IFACE_BASE::inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedW
     assert( aItem->Owner() != nullptr );
 
     auto tryGetTrackWidth =
-        []( PNS::ITEM* aPnsItem ) -> int
-        {
-            switch( aPnsItem->Kind() )
+            []( PNS::ITEM* aPnsItem ) -> int
             {
-            case PNS::ITEM::SEGMENT_T: return static_cast<PNS::SEGMENT*>( aPnsItem )->Width();
-            case PNS::ITEM::ARC_T: return static_cast<PNS::ARC*>( aPnsItem )->Width();
-            default: return -1;
-            }
-        };
+                switch( aPnsItem->Kind() )
+                {
+                case PNS::ITEM::SEGMENT_T: return static_cast<PNS::SEGMENT*>( aPnsItem )->Width();
+                case PNS::ITEM::ARC_T:     return static_cast<PNS::ARC*>( aPnsItem )->Width();
+                default:                   return -1;
+                }
+            };
 
     int itemTrackWidth = tryGetTrackWidth( aItem );
 
@@ -594,16 +594,9 @@ bool PNS_KICAD_IFACE_BASE::inheritTrackWidth( PNS::ITEM* aItem, int* aInheritedW
 
     switch( aItem->Kind() )
     {
-    case PNS::ITEM::VIA_T:
-        p = static_cast<PNS::VIA*>( aItem )->Pos();
-        break;
-
-    case PNS::ITEM::SOLID_T:
-        p = static_cast<PNS::SOLID*>( aItem )->Pos();
-        break;
-
-    default:
-        return false;
+    case PNS::ITEM::VIA_T:   p = static_cast<PNS::VIA*>( aItem )->Pos();   break;
+    case PNS::ITEM::SOLID_T: p = static_cast<PNS::SOLID*>( aItem )->Pos(); break;
+    default:                 return false;
     }
 
     const PNS::JOINT* jt = static_cast<const PNS::NODE*>( aItem->Owner() )->FindJoint( p, aItem );
