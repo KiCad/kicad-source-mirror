@@ -130,7 +130,8 @@ private:
     std::map<SIM_MODEL::DEVICE_T, SIM_MODEL::TYPE> m_curModelTypeOfDeviceType;
     SIM_MODEL::TYPE                                m_curModelType;
 
-    SCINTILLA_TRICKS*      m_scintillaTricks;
+    SCINTILLA_TRICKS*      m_scintillaTricksCode;
+    SCINTILLA_TRICKS*      m_scintillaTricksSubckt;
 
     wxPGProperty*          m_firstCategory;            // Used to add principal parameters to root.
     wxPGProperty*          m_prevParamGridSelection;
