@@ -58,7 +58,7 @@ BEGIN
             VALUE "FileVersion", KICAD_WIN32_RC_FILEVER_STR
             //original filename without extension
             VALUE "InternalName", RC_VER_INTERNALNAME
-            VALUE "LegalCopyright", "Copyright (C) 2022 KiCad Developers"
+            VALUE "LegalCopyright", "Copyright (C) 2023 KiCad Developers"
             // the exe name
             VALUE "OriginalFilename", RC_VER_ORIGINALFILENAME
             // name of distributed package
