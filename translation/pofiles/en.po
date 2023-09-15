@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-13 14:57-0700\n"
+"POT-Creation-Date: 2023-09-15 15:58-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -148,14 +148,14 @@ msgstr "3D Viewer"
 msgid "Copy 3D Image"
 msgstr "Copy 3D Image"
 
+msgid "3D Grid"
+msgstr "3D Grid"
+
 msgid "Raytracing"
 msgstr "Raytracing"
 
 msgid "Reset to Default Settings"
 msgstr "Reset to Default Settings"
-
-msgid "3D Grid"
-msgstr "3D Grid"
 
 msgid "&File"
 msgstr "&File"
@@ -169,28 +169,6 @@ msgstr "&View"
 msgid "&Preferences"
 msgstr "&Preferences"
 
-#, c-format
-msgid "Viewports (%s+Tab):"
-msgstr "Viewports (%s+Tab):"
-
-msgid "Save viewport..."
-msgstr "Save viewport..."
-
-msgid "Delete viewport..."
-msgstr "Delete viewport..."
-
-#, c-format
-msgid ""
-"Save and restore view orientation and zoom.\n"
-"Use %s+Tab to activate selector.\n"
-"Successive Tabs while holding %s down will cycle through viewports in the "
-"popup."
-msgstr ""
-"Save and restore view orientation and zoom.\n"
-"Use %s+Tab to activate selector.\n"
-"Successive Tabs while holding %s down will cycle through viewports in the "
-"popup."
-
 msgid "Reload board"
 msgstr "Reload board"
 
@@ -203,20 +181,17 @@ msgstr "Render current view using Raytracing"
 msgid "KiCad 3D Viewer"
 msgstr "KiCad 3D Viewer"
 
-msgid "Viewport name:"
-msgstr "Viewport name:"
+msgid "Appearance"
+msgstr "Appearance"
 
-msgid "Save Viewport"
-msgstr "Save Viewport"
+msgid "Follow PCB Editor"
+msgstr "Follow PCB Editor"
 
-msgid "Viewports"
-msgstr "Viewports"
+msgid "Follow PCB Plot Settings"
+msgstr "Follow PCB Plot Settings"
 
-msgid "Delete Viewport"
-msgstr "Delete Viewport"
-
-msgid "Select viewport:"
-msgstr "Select viewport:"
+msgid "legacy colors"
+msgstr "legacy colors"
 
 msgid "3D Image File Name"
 msgstr "3D Image File Name"
@@ -339,83 +314,269 @@ msgstr "Render CAD Colors"
 msgid "Use a CAD color style based on the diffuse color of the material"
 msgstr "Use a CAD color style based on the diffuse color of the material"
 
-msgid "Toggle Through Hole 3D models"
-msgstr "Toggle Through Hole 3D models"
+msgid "Show Through Hole 3D Models"
+msgstr "Show Through Hole 3D Models"
 
-msgid "Toggle 3D models for 'Through hole' type components"
-msgstr "Toggle 3D models for 'Through hole' type components"
+msgid "Show 3D models for 'Through hole' type footprints"
+msgstr "Show 3D models for 'Through hole' type footprints"
 
-msgid "Toggle SMD 3D models"
-msgstr "Toggle SMD 3D models"
+msgid "Show SMD 3D Models"
+msgstr "Show SMD 3D Models"
 
-msgid "Toggle 3D models for 'Surface mount' type components"
-msgstr "Toggle 3D models for 'Surface mount' type components"
+msgid "Show 3D models for 'Surface mount' type footprints"
+msgstr "Show 3D models for 'Surface mount' type footprints"
 
-msgid "Toggle unspecified 3D models"
-msgstr "Toggle unspecified 3D models"
+msgid "Show Unspecified 3D Models"
+msgstr "Show Unspecified 3D Models"
 
-msgid "Toggle 3D models for 'unspecified' type components"
-msgstr "Toggle 3D models for 'unspecified' type components"
+msgid "Show 3D models for 'unspecified' type footprints"
+msgstr "Show 3D models for 'unspecified' type footprints"
 
-msgid "Toggle 3D models not in pos file"
-msgstr "Toggle 3D models not in pos file"
+msgid "Show 3D Models not in POS File"
+msgstr "Show 3D Models not in POS File"
 
-msgid "Toggle 3D models marked DNP"
-msgstr "Toggle 3D models marked DNP"
+msgid "Show 3D models even if not found in .pos file"
+msgstr "Show 3D models even if not found in .pos file"
 
-msgid "Toggle 3D models for components marked 'Do Not Place'"
-msgstr "Toggle 3D models for components marked 'Do Not Place'"
+msgid "Show 3D Models marked DNP"
+msgstr "Show 3D Models marked DNP"
+
+msgid "Show 3D models even if marked 'Do Not Place'"
+msgstr "Show 3D models even if marked 'Do Not Place'"
 
 msgid "Show Model Bounding Boxes"
 msgstr "Show Model Bounding Boxes"
 
-msgid "Toggle realistic mode"
-msgstr "Toggle realistic mode"
-
-msgid "Toggle board body display"
-msgstr "Toggle board body display"
+msgid "Show 3D model bounding boxes in realtime renderer"
+msgstr "Show 3D model bounding boxes in realtime renderer"
 
 msgid "Show 3D Axis"
 msgstr "Show 3D Axis"
 
-msgid "Toggle zone display"
-msgstr "Toggle zone display"
+msgid "Show Appearance Manager"
+msgstr "Show Appearance Manager"
 
-msgid "Toggle adhesive display"
-msgstr "Toggle adhesive display"
+msgid "Show/hide the appearance manager"
+msgstr "Show/hide the appearance manager"
 
-msgid "Toggle display of adhesive layers"
-msgstr "Toggle display of adhesive layers"
+msgid "Board Body"
+msgstr "Board Body"
 
-msgid "Toggle silkscreen display"
-msgstr "Toggle silkscreen display"
+msgid "Show board body"
+msgstr "Show board body"
 
-msgid "Toggle display of silkscreen layers"
-msgstr "Toggle display of silkscreen layers"
+msgid "F.Cu"
+msgstr "F.Cu"
 
-msgid "Toggle solder mask display"
-msgstr "Toggle solder mask display"
+msgid "Show front copper / surface finish color"
+msgstr "Show front copper / surface finish color"
 
-msgid "Toggle display of solder mask layers"
-msgstr "Toggle display of solder mask layers"
+msgid "B.Cu"
+msgstr "B.Cu"
 
-msgid "Toggle solder paste display"
-msgstr "Toggle solder paste display"
+msgid "Show back copper / surface finish color"
+msgstr "Show back copper / surface finish color"
 
-msgid "Toggle display of solder paste layers"
-msgstr "Toggle display of solder paste layers"
+msgid "Adhesive"
+msgstr "Adhesive"
 
-msgid "Toggle comments display"
-msgstr "Toggle comments display"
+msgid "Show adhesive"
+msgstr "Show adhesive"
 
-msgid "Toggle display of comments and drawings layers"
-msgstr "Toggle display of comments and drawings layers"
+msgid "Solder Paste"
+msgstr "Solder Paste"
 
-msgid "Toggle ECO display"
-msgstr "Toggle ECO display"
+msgid "Show solder paste"
+msgstr "Show solder paste"
 
-msgid "Toggle display of ECO layers"
-msgstr "Toggle display of ECO layers"
+msgid "F.Silkscreen"
+msgstr "F.Silkscreen"
+
+msgid "Show front silkscreen"
+msgstr "Show front silkscreen"
+
+msgid "B.Silkscreen"
+msgstr "B.Silkscreen"
+
+msgid "Show back silkscreen"
+msgstr "Show back silkscreen"
+
+msgid "F.Mask"
+msgstr "F.Mask"
+
+msgid "Show front solder mask"
+msgstr "Show front solder mask"
+
+msgid "B.Mask"
+msgstr "B.Mask"
+
+msgid "Show back solder mask"
+msgstr "Show back solder mask"
+
+msgid "User.Drawings"
+msgstr "User.Drawings"
+
+msgid "Show user drawings layer"
+msgstr "Show user drawings layer"
+
+msgid "User.Comments"
+msgstr "User.Comments"
+
+msgid "Show user comments layer"
+msgstr "Show user comments layer"
+
+msgid "User.Eco1"
+msgstr "User.Eco1"
+
+msgid "Show user ECO1 layer"
+msgstr "Show user ECO1 layer"
+
+msgid "User.Eco2"
+msgstr "User.Eco2"
+
+msgid "Show user ECO2 layer"
+msgstr "Show user ECO2 layer"
+
+msgid "Through-hole Models"
+msgstr "Through-hole Models"
+
+msgid "SMD Models"
+msgstr "SMD Models"
+
+msgid "Virtual Models"
+msgstr "Virtual Models"
+
+msgid "Models not in POS File"
+msgstr "Models not in POS File"
+
+msgid "Models marked DNP"
+msgstr "Models marked DNP"
+
+msgid "Model Bounding Boxes"
+msgstr "Model Bounding Boxes"
+
+msgid "Values"
+msgstr "Values"
+
+msgid "Show footprint values"
+msgstr "Show footprint values"
+
+msgid "References"
+msgstr "References"
+
+msgid "Show footprint references"
+msgstr "Show footprint references"
+
+msgid "Footprint Text"
+msgstr "Footprint Text"
+
+msgid "Show all footprint text"
+msgstr "Show all footprint text"
+
+msgid "3D Axis"
+msgstr "3D Axis"
+
+msgid "Background Start"
+msgstr "Background Start"
+
+msgid "Background gradient start color"
+msgstr "Background gradient start color"
+
+msgid "Background End"
+msgstr "Background End"
+
+msgid "Background gradient end color"
+msgstr "Background gradient end color"
+
+#, c-format
+msgid ""
+"Save and restore color and visibility combinations.\n"
+"Use %s+Tab to activate selector.\n"
+"Successive Tabs while holding %s down will cycle through presets in the "
+"popup."
+msgstr ""
+"Save and restore color and visibility combinations.\n"
+"Use %s+Tab to activate selector.\n"
+"Successive Tabs while holding %s down will cycle through presets in the "
+"popup."
+
+#, c-format
+msgid ""
+"Save and restore camera position and zoom.\n"
+"Use %s+Tab to activate selector.\n"
+"Successive Tabs while holding %s down will cycle through viewports in the "
+"popup."
+msgstr ""
+"Save and restore camera position and zoom.\n"
+"Use %s+Tab to activate selector.\n"
+"Successive Tabs while holding %s down will cycle through viewports in the "
+"popup."
+
+msgid "Left double click or middle click to change color"
+msgstr "Left double click or middle click to change color"
+
+#, c-format
+msgid "Show or hide %s"
+msgstr "Show or hide %s"
+
+#, c-format
+msgid "Presets (%s+Tab):"
+msgstr "Presets (%s+Tab):"
+
+msgid "Save preset..."
+msgstr "Save preset..."
+
+msgid "Delete preset..."
+msgstr "Delete preset..."
+
+msgid "Layer preset name:"
+msgstr "Layer preset name:"
+
+msgid "Save Layer Preset"
+msgstr "Save Layer Preset"
+
+msgid "Presets"
+msgstr "Presets"
+
+msgid "Delete Preset"
+msgstr "Delete Preset"
+
+msgid "Select preset:"
+msgstr "Select preset:"
+
+#, c-format
+msgid "Viewports (%s+Tab):"
+msgstr "Viewports (%s+Tab):"
+
+msgid "Save viewport..."
+msgstr "Save viewport..."
+
+msgid "Delete viewport..."
+msgstr "Delete viewport..."
+
+msgid "Viewport name:"
+msgstr "Viewport name:"
+
+msgid "Save Viewport"
+msgstr "Save Viewport"
+
+msgid "Viewports"
+msgstr "Viewports"
+
+msgid "Delete Viewport"
+msgstr "Delete Viewport"
+
+msgid "Select viewport:"
+msgstr "Select viewport:"
+
+msgid "Presets (Ctrl+Tab):"
+msgstr "Presets (Ctrl+Tab):"
+
+msgid "Viewports (Alt+Tab):"
+msgstr "Viewports (Alt+Tab):"
+
+msgid "(unsaved)"
+msgstr "(unsaved)"
 
 #, c-format
 msgid "All supported files (%s)"
@@ -430,83 +591,14 @@ msgstr "Configure Paths"
 msgid "Select 3D Model"
 msgstr "Select 3D Model"
 
-msgid "Environment Colors"
-msgstr "Environment Colors"
-
-msgid "Background gradient start:"
-msgstr "Background gradient start:"
-
-msgid "Background gradient end:"
-msgstr "Background gradient end:"
-
-msgid "Solder paste:"
-msgstr "Solder paste:"
-
-msgid "Board Colors"
-msgstr "Board Colors"
-
-msgid "Use board stackup colors"
-msgstr "Use board stackup colors"
-
-msgid "Use colors:"
-msgstr "Use colors:"
-
-msgid "Silkscreen top:"
-msgstr "Silkscreen top:"
-
-msgid "Silkscreen bottom:"
-msgstr "Silkscreen bottom:"
-
-msgid "Solder mask top:"
-msgstr "Solder mask top:"
-
-msgid "Solder mask bottom:"
-msgstr "Solder mask bottom:"
-
-msgid "Copper/surface finish:"
-msgstr "Copper/surface finish:"
-
-msgid "Board body:"
-msgstr "Board body:"
-
-msgid "Board Layers"
-msgstr "Board Layers"
-
-msgid "Show silkscreen layers"
-msgstr "Show silkscreen layers"
-
-msgid "Clip silkscreen at solder mask edges"
-msgstr "Clip silkscreen at solder mask edges"
+msgid "Render Options"
+msgstr "Render Options"
 
 msgid "Clip silkscreen at via annuli"
 msgstr "Clip silkscreen at via annuli"
 
-msgid "Show solder mask layers"
-msgstr "Show solder mask layers"
-
-msgid "Show solder paste layers"
-msgstr "Show solder paste layers"
-
-msgid "Show adhesive layers"
-msgstr "Show adhesive layers"
-
-msgid "User Layers (not shown in realistic mode)"
-msgstr "User Layers (not shown in realistic mode)"
-
-msgid "Show comment and drawing layers"
-msgstr "Show comment and drawing layers"
-
-msgid "Show ECO layers"
-msgstr "Show ECO layers"
-
-msgid "Render Options"
-msgstr "Render Options"
-
-msgid "Show board body"
-msgstr "Show board body"
-
-msgid "Realistic mode"
-msgstr "Realistic mode"
+msgid "Clip silkscreen at solder mask edges"
+msgstr "Clip silkscreen at solder mask edges"
 
 msgid "Show filled areas in zones"
 msgstr "Show filled areas in zones"
@@ -1311,62 +1403,11 @@ msgstr "Select a file"
 msgid "Configure Global Library Table"
 msgstr "Configure Global Library Table"
 
-msgid "Grid Origin"
-msgstr "Grid Origin"
+msgid "Grid size X out of range."
+msgstr "Grid size X out of range."
 
-msgid "a page"
-msgstr "a page"
-
-msgid "Current Grid"
-msgstr "Current Grid"
-
-msgid "User Defined Grid"
-msgstr "User Defined Grid"
-
-msgid "Size X:"
-msgstr "Size X:"
-
-msgid "Size Y:"
-msgstr "Size Y:"
-
-msgid "Fast Switching"
-msgstr "Fast Switching"
-
-msgid "Grid 1:"
-msgstr "Grid 1:"
-
-msgid "(hotkey)"
-msgstr "(hotkey)"
-
-msgid "Grid 2:"
-msgstr "Grid 2:"
-
-msgid "Grid Overrides"
-msgstr "Grid Overrides"
-
-msgid "Connectable Items:"
-msgstr "Connectable Items:"
-
-msgid "Wires:"
-msgstr "Wires:"
-
-msgid "Text:"
-msgstr "Text:"
-
-msgid "Graphics:"
-msgstr "Graphics:"
-
-msgid "Reset Grid Origin"
-msgstr "Reset Grid Origin"
-
-msgid "Reset Grid Sizes"
-msgstr "Reset Grid Sizes"
-
-msgid "Resets the list of grid sizes to default values"
-msgstr "Resets the list of grid sizes to default values"
-
-msgid "Grid Settings"
-msgstr "Grid Settings"
+msgid "Grid size Y out of range."
+msgstr "Grid size Y out of range."
 
 msgid "Hotkey List"
 msgstr "Hotkey List"
@@ -2118,6 +2159,50 @@ msgstr "I agree to provide anonymous reports"
 msgid "Reset Unique Id"
 msgstr "Reset Unique Id"
 
+#, c-format
+msgid "%s%s (%s)"
+msgstr "%s%s (%s)"
+
+#, c-format
+msgid "Grid size '%s' already exists."
+msgstr "Grid size '%s' already exists."
+
+msgid "At least one grid size is required."
+msgstr "At least one grid size is required."
+
+msgid "Grids:"
+msgstr "Grids:"
+
+msgid "Fast Grid Switching"
+msgstr "Fast Grid Switching"
+
+msgid "Grid 1:"
+msgstr "Grid 1:"
+
+msgid "(hotkey)"
+msgstr "(hotkey)"
+
+msgid "Grid 2:"
+msgstr "Grid 2:"
+
+msgid "Grid Overrides"
+msgstr "Grid Overrides"
+
+msgid "Connected items:"
+msgstr "Connected items:"
+
+msgid "Wires:"
+msgstr "Wires:"
+
+msgid "Vias:"
+msgstr "Vias:"
+
+msgid "Text:"
+msgstr "Text:"
+
+msgid "Graphics:"
+msgstr "Graphics:"
+
 msgid "Type filter text"
 msgstr "Type filter text"
 
@@ -2273,6 +2358,9 @@ msgstr "Pan up/down:"
 msgid "Pan left/right:"
 msgstr "Pan left/right:"
 
+msgid "Reverse"
+msgstr "Reverse"
+
 msgid "Pan left/right with horizontal movement"
 msgstr "Pan left/right with horizontal movement"
 
@@ -2425,6 +2513,9 @@ msgstr "Graphics error"
 
 msgid "Could not use OpenGL"
 msgstr "Could not use OpenGL"
+
+msgid "Failed to read image data."
+msgstr "Failed to read image data."
 
 #, c-format
 msgid "Drawing sheet '%s' not found."
@@ -2589,6 +2680,9 @@ msgstr "Symbol Editor"
 msgid "Display Options"
 msgstr "Display Options"
 
+msgid "Grids"
+msgstr "Grids"
+
 msgid "Editing Options"
 msgstr "Editing Options"
 
@@ -2680,8 +2774,8 @@ msgstr "Inches"
 msgid "Constrain to H, V, 45"
 msgstr "Constrain to H, V, 45"
 
-msgid "Edit User Grid..."
-msgstr "Edit User Grid..."
+msgid "Edit Grids..."
+msgstr "Edit Grids..."
 
 msgid "Zoom Auto"
 msgstr "Zoom Auto"
@@ -2808,6 +2902,9 @@ msgstr "Gerber Layout"
 msgid "Draw Item"
 msgstr "Draw Item"
 
+msgid "Thermal Spoke"
+msgstr "Thermal Spoke"
+
 msgid "Number Box"
 msgstr "Number Box"
 
@@ -2826,17 +2923,20 @@ msgstr "Bezier Curve"
 msgid "Polygon"
 msgstr "Polygon"
 
-msgid "Curve"
-msgstr "Curve"
-
 msgid "Pad Number Box"
 msgstr "Pad Number Box"
 
-msgid "Segment"
-msgstr "Segment"
+msgid "Thermal Spoke Template"
+msgstr "Thermal Spoke Template"
 
 msgid "Unrecognized"
 msgstr "Unrecognized"
+
+msgid "Curve"
+msgstr "Curve"
+
+msgid "Segment"
+msgstr "Segment"
 
 msgid "Shape"
 msgstr "Shape"
@@ -3152,6 +3252,12 @@ msgstr "Project Manager"
 msgid "Gestures"
 msgstr "Gestures"
 
+msgid "Memory was exhausted trying to load the DXF, it may be too large."
+msgstr "Memory was exhausted trying to load the DXF, it may be too large."
+
+msgid "Invalid spline definition encountered"
+msgstr "Invalid spline definition encountered"
+
 #, c-format
 msgid "Failed to verify kiface library '%s' signature."
 msgstr "Failed to verify kiface library '%s' signature."
@@ -3343,9 +3449,6 @@ msgstr "Footprints front"
 
 msgid "Footprints back"
 msgstr "Footprints back"
-
-msgid "Values"
-msgstr "Values"
 
 msgid "Reference designators"
 msgstr "Reference designators"
@@ -3610,6 +3713,34 @@ msgstr "Invalid size %lld: too large"
 msgid "Invalid Arc with radius %f and angle %f"
 msgstr "Invalid Arc with radius %f and angle %f"
 
+#, c-format
+msgid "Failed to parse number from '%s'"
+msgstr "Failed to parse number from '%s'"
+
+#, c-format
+msgid ""
+"'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project file. Cannot "
+"find project.json."
+msgstr ""
+"'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project file. Cannot "
+"find project.json."
+
+#, c-format
+msgid "Cannot read ZIP archive '%s'"
+msgstr "Cannot read ZIP archive '%s'"
+
+#, c-format
+msgid "JSON error reading '%s': %s"
+msgstr "JSON error reading '%s': %s"
+
+#, c-format
+msgid "Error reading '%s': %s"
+msgstr "Error reading '%s': %s"
+
+#, c-format
+msgid "Cannot parse JSON line %d in '%s': %s"
+msgstr "Cannot parse JSON line %d in '%s': %s"
+
 msgid "Error loading project footprint library table."
 msgstr "Error loading project footprint library table."
 
@@ -3805,6 +3936,12 @@ msgstr "Paste item(s) from clipboard"
 msgid "Select all items on screen"
 msgstr "Select all items on screen"
 
+msgid "Unselect All"
+msgstr "Unselect All"
+
+msgid "Unselect all items on screen"
+msgstr "Unselect all items on screen"
+
 msgid "Paste Special..."
 msgstr "Paste Special..."
 
@@ -3997,8 +4134,14 @@ msgstr "Switch to Next Grid"
 msgid "Switch to Previous Grid"
 msgstr "Switch to Previous Grid"
 
-msgid "Set the grid origin point"
-msgstr "Set the grid origin point"
+msgid "Grid Origin"
+msgstr "Grid Origin"
+
+msgid "Place the grid origin point"
+msgstr "Place the grid origin point"
+
+msgid "Reset Grid Origin"
+msgstr "Reset Grid Origin"
 
 msgid "Show Grid"
 msgstr "Show Grid"
@@ -4009,11 +4152,14 @@ msgstr "Display background grid in the edit window"
 msgid "Enables item-specific grids that override the current grid"
 msgstr "Enables item-specific grids that override the current grid"
 
-msgid "Grid Properties..."
-msgstr "Grid Properties..."
+msgid "Edit grid definitions"
+msgstr "Edit grid definitions"
 
-msgid "Set grid dimensions"
-msgstr "Set grid dimensions"
+msgid "Grid Origin..."
+msgstr "Grid Origin..."
+
+msgid "Set the grid origin point"
+msgstr "Set the grid origin point"
 
 msgid "Use inches"
 msgstr "Use inches"
@@ -4217,14 +4363,6 @@ msgstr ""
 "Could not launch the default browser.\n"
 "To donate to the KiCad project, visit %s"
 
-#, c-format
-msgid "Grid: %s (%s)"
-msgstr "Grid: %s (%s)"
-
-#, c-format
-msgid "User grid: %s (%s)"
-msgstr "User grid: %s (%s)"
-
 msgid "Select &All\tA"
 msgstr "Select &All\tA"
 
@@ -4324,15 +4462,6 @@ msgstr "Loading Footprint Libraries"
 msgid "No default footprint"
 msgstr "No default footprint"
 
-msgid "Accelerated graphics"
-msgstr "Accelerated graphics"
-
-msgid "Fallback graphics"
-msgstr "Fallback graphics"
-
-msgid "Rendering Engine"
-msgstr "Rendering Engine"
-
 msgid "Hardware-accelerated graphics (recommended)"
 msgstr "Hardware-accelerated graphics (recommended)"
 
@@ -4343,8 +4472,20 @@ msgstr ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
 
+msgid "Accelerated graphics"
+msgstr "Accelerated graphics"
+
+msgid "Fallback graphics"
+msgstr "Fallback graphics"
+
+msgid "Rendering Engine"
+msgstr "Rendering Engine"
+
 msgid "Grid Options"
 msgstr "Grid Options"
+
+msgid "Style:"
+msgstr "Style:"
 
 msgid "Dots"
 msgstr "Dots"
@@ -4355,20 +4496,14 @@ msgstr "Lines"
 msgid "Small crosses"
 msgstr "Small crosses"
 
-msgid "Grid Style"
-msgstr "Grid Style"
-
 msgid "Grid thickness:"
 msgstr "Grid thickness:"
-
-msgid "px"
-msgstr "px"
 
 msgid "Min grid spacing:"
 msgstr "Min grid spacing:"
 
-msgid "Snap to Grid:"
-msgstr "Snap to Grid:"
+msgid "Snap to grid:"
+msgstr "Snap to grid:"
 
 msgid "Always"
 msgstr "Always"
@@ -4382,17 +4517,11 @@ msgstr "Never"
 msgid "Cursor Options"
 msgstr "Cursor Options"
 
-msgid "Small crosshair"
-msgstr "Small crosshair"
+msgid "Small crosshairs"
+msgstr "Small crosshairs"
 
-msgid "Full window crosshair"
-msgstr "Full window crosshair"
-
-msgid "Cursor Shape"
-msgstr "Cursor Shape"
-
-msgid "Cursor shape for drawing, placement and movement tools"
-msgstr "Cursor shape for drawing, placement and movement tools"
+msgid "Full window crosshairs"
+msgstr "Full window crosshairs"
 
 msgid "Always show crosshairs"
 msgstr "Always show crosshairs"
@@ -4567,20 +4696,8 @@ msgstr "Save…"
 msgid "All files"
 msgstr "All files"
 
-msgid "KiCad drawing symbol files"
-msgstr "KiCad drawing symbol files"
-
 msgid "KiCad symbol library files"
 msgstr "KiCad symbol library files"
-
-msgid "KiCad legacy symbol library files"
-msgstr "KiCad legacy symbol library files"
-
-msgid "KiCad database library files"
-msgstr "KiCad database library files"
-
-msgid "All KiCad symbol library files"
-msgstr "All KiCad symbol library files"
 
 msgid "KiCad project files"
 msgstr "KiCad project files"
@@ -4600,20 +4717,8 @@ msgstr "KiCad legacy schematic files"
 msgid "KiCad s-expression schematic files"
 msgstr "KiCad s-expression schematic files"
 
-msgid "Altium schematic files"
-msgstr "Altium schematic files"
-
-msgid "CADSTAR Schematic Archive files"
-msgstr "CADSTAR Schematic Archive files"
-
 msgid "CADSTAR Archive files"
 msgstr "CADSTAR Archive files"
-
-msgid "Eagle XML schematic files"
-msgstr "Eagle XML schematic files"
-
-msgid "LTspice schematic files"
-msgstr "LTspice schematic files"
 
 msgid "Eagle XML files"
 msgstr "Eagle XML files"
@@ -4627,50 +4732,20 @@ msgstr "KiCad netlist files"
 msgid "Allegro netlist files"
 msgstr "Allegro netlist files"
 
+msgid "EasyEDA (JLCEDA) Std backup archive"
+msgstr "EasyEDA (JLCEDA) Std backup archive"
+
+msgid "EasyEDA (JLCEDA) Pro files"
+msgstr "EasyEDA (JLCEDA) Pro files"
+
 msgid "KiCad printed circuit board files"
 msgstr "KiCad printed circuit board files"
-
-msgid "Eagle ver. 6.x XML PCB files"
-msgstr "Eagle ver. 6.x XML PCB files"
-
-msgid "CADSTAR PCB Archive files"
-msgstr "CADSTAR PCB Archive files"
-
-msgid "P-Cad 200x ASCII PCB files"
-msgstr "P-Cad 200x ASCII PCB files"
-
-msgid "Altium Designer PCB files"
-msgstr "Altium Designer PCB files"
-
-msgid "Altium Circuit Studio PCB files"
-msgstr "Altium Circuit Studio PCB files"
-
-msgid "Altium Circuit Maker PCB files"
-msgstr "Altium Circuit Maker PCB files"
-
-msgid "Solidworks PCB files"
-msgstr "Solidworks PCB files"
-
-msgid "Fabmaster PCB files"
-msgstr "Fabmaster PCB files"
 
 msgid "KiCad footprint files"
 msgstr "KiCad footprint files"
 
 msgid "KiCad footprint library paths"
 msgstr "KiCad footprint library paths"
-
-msgid "Legacy footprint library files"
-msgstr "Legacy footprint library files"
-
-msgid "Altium PCB footprint library files"
-msgstr "Altium PCB footprint library files"
-
-msgid "Eagle ver. 6.x XML library files"
-msgstr "Eagle ver. 6.x XML library files"
-
-msgid "Geda PCB footprint library files"
-msgstr "Geda PCB footprint library files"
 
 msgid "Drawing sheet files"
 msgstr "Drawing sheet files"
@@ -4695,6 +4770,9 @@ msgstr "Portable document format files"
 
 msgid "PostScript files"
 msgstr "PostScript files"
+
+msgid "Json files"
+msgstr "Json files"
 
 msgid "Report files"
 msgstr "Report files"
@@ -5272,6 +5350,9 @@ msgstr ""
 msgid "Generating BOM requires a fully annotated schematic."
 msgstr "Generating BOM requires a fully annotated schematic."
 
+msgid "Failed to create file."
+msgstr "Failed to create file."
+
 msgid "Generator nickname:"
 msgstr "Generator nickname:"
 
@@ -5800,42 +5881,6 @@ msgstr "-------- ERC cancelled by user.<br><br>"
 msgid "Done.<br><br>"
 msgstr "Done.<br><br>"
 
-msgid "Checking sheet names..."
-msgstr "Checking sheet names..."
-
-msgid "Checking bus conflicts..."
-msgstr "Checking bus conflicts..."
-
-msgid "Checking conflicts..."
-msgstr "Checking conflicts..."
-
-msgid "Checking units..."
-msgstr "Checking units..."
-
-msgid "Checking footprints..."
-msgstr "Checking footprints..."
-
-msgid "Checking pins..."
-msgstr "Checking pins..."
-
-msgid "Checking labels..."
-msgstr "Checking labels..."
-
-msgid "Checking for unresolved variables..."
-msgstr "Checking for unresolved variables..."
-
-msgid "Checking SPICE models..."
-msgstr "Checking SPICE models..."
-
-msgid "Checking no connect pins for connections..."
-msgstr "Checking no connect pins for connections..."
-
-msgid "Checking for library symbol issues..."
-msgstr "Checking for library symbol issues..."
-
-msgid "Checking for off grid pins and wires..."
-msgstr "Checking for off grid pins and wires..."
-
 msgid "errors"
 msgstr "errors"
 
@@ -5898,28 +5943,11 @@ msgstr "Violation Severity"
 msgid "Report file '%s' created."
 msgstr "Report file '%s' created."
 
-#, c-format
-msgid "ERC report (%s, Encoding UTF8)\n"
-msgstr "ERC report (%s, Encoding UTF8)\n"
-
-#, c-format
-msgid ""
-"\n"
-"***** Sheet %s\n"
-msgstr ""
-"\n"
-"***** Sheet %s\n"
-
-#, c-format
-msgid ""
-"\n"
-" ** ERC messages: %d  Errors %d  Warnings %d\n"
-msgstr ""
-"\n"
-" ** ERC messages: %d  Errors %d  Warnings %d\n"
-
 msgid "Tests Running..."
 msgstr "Tests Running..."
+
+msgid "a page"
+msgstr "a page"
 
 msgid "Click on items to highlight them on the board."
 msgstr "Click on items to highlight them on the board."
@@ -6184,6 +6212,9 @@ msgstr "Down"
 
 msgid "-- leave unchanged --"
 msgstr "-- leave unchanged --"
+
+msgid "(labels only)"
+msgstr "(labels only)"
 
 msgid "H Align:"
 msgstr "H Align:"
@@ -6508,11 +6539,11 @@ msgstr "Pin name inside"
 msgid "New Symbol"
 msgstr "New Symbol"
 
+msgid "Note: individual item colors overridden in Preferences."
+msgstr "Note: individual item colors overridden in Preferences."
+
 msgid "Border"
 msgstr "Border"
-
-msgid "Style:"
-msgstr "Style:"
 
 msgid "Set border width to 0 to use schematic's default symbol line width."
 msgstr "Set border width to 0 to use schematic's default symbol line width."
@@ -6541,8 +6572,9 @@ msgstr "Common to all &units in symbol"
 msgid "Common to all body &styles (De Morgan)"
 msgstr "Common to all body &styles (De Morgan)"
 
-msgid "Drawing Properties"
-msgstr "Drawing Properties"
+#, c-format
+msgid "%s Properties"
+msgstr "%s Properties"
 
 msgid "References must start with a letter."
 msgstr "References must start with a letter."
@@ -6859,8 +6891,8 @@ msgstr "&Visible"
 msgid "Preview:"
 msgstr "Preview:"
 
-msgid "Alternate pin definitions"
-msgstr "Alternate pin definitions"
+msgid "Alternate pin function definitions"
+msgstr "Alternate pin function definitions"
 
 msgid "Pin Properties"
 msgstr "Pin Properties"
@@ -7222,9 +7254,6 @@ msgstr ""
 "Error importing settings from project:\n"
 "Project file %s could not be loaded."
 
-msgid "Note: individual item colors overridden in Preferences."
-msgstr "Note: individual item colors overridden in Preferences."
-
 #, c-format
 msgid "Edit %s"
 msgstr "Edit %s"
@@ -7237,10 +7266,6 @@ msgstr "Set border width to 0 to use schematic's default line width."
 
 msgid "Clear colors to use Schematic Editor colors."
 msgstr "Clear colors to use Schematic Editor colors."
-
-#, c-format
-msgid "%s Properties"
-msgstr "%s Properties"
 
 msgid "Edit Sheet Pin"
 msgstr "Edit Sheet Pin"
@@ -7833,32 +7858,14 @@ msgstr "Could not write BOM output to '%s'."
 msgid "Wrote BOM output to '%s'"
 msgstr "Wrote BOM output to '%s'"
 
-msgid "Save preset..."
-msgstr "Save preset..."
-
-msgid "Delete preset..."
-msgstr "Delete preset..."
-
 msgid "BOM preset name:"
 msgstr "BOM preset name:"
 
 msgid "Save BOM Preset"
 msgstr "Save BOM Preset"
 
-msgid "Presets"
-msgstr "Presets"
-
-msgid "Delete Preset"
-msgstr "Delete Preset"
-
-msgid "Select preset:"
-msgstr "Select preset:"
-
-msgid "View Preset:"
-msgstr "View Preset:"
-
-msgid "(unsaved)"
-msgstr "(unsaved)"
+msgid "View presets:"
+msgstr "View presets:"
 
 msgid "Exclude DNP"
 msgstr "Exclude DNP"
@@ -7869,47 +7876,44 @@ msgstr "Group symbols"
 msgid "Group symbols together based on common properties"
 msgstr "Group symbols together based on common properties"
 
+msgid "Scope:"
+msgstr "Scope:"
+
+msgid "Entire project"
+msgstr "Entire project"
+
+msgid "Recursive"
+msgstr "Recursive"
+
+msgid "Cross-probe action:"
+msgstr "Cross-probe action:"
+
 msgid "Highlight"
 msgstr "Highlight"
 
 msgid "Select"
 msgstr "Select"
 
-msgid "Off"
-msgstr "Off"
-
-msgid "Selection Control"
-msgstr "Selection Control"
-
-msgid "Entire Project"
-msgstr "Entire Project"
-
-msgid "Recursive"
-msgstr "Recursive"
-
 msgid "Edit"
 msgstr "Edit"
 
-msgid "Format Preset:"
-msgstr "Format Preset:"
-
-msgid "Field Delimeter:"
-msgstr "Field Delimeter:"
+msgid "Field delimeter:"
+msgstr "Field delimeter:"
 
 msgid ","
 msgstr ","
 
-msgid "String Delimeter:"
-msgstr "String Delimeter:"
+msgid "String delimeter:"
+msgstr "String delimeter:"
 
 msgid "\""
 msgstr "\""
 
-msgid "Reference Delimiter:"
-msgstr "Reference Delimiter:"
+msgid "Reference delimiter:"
+msgstr "Reference delimiter:"
 
-msgid "Range Delimiter:"
-msgstr "Range Delimiter:"
+msgid "Range delimiter:"
+msgstr "Range delimiter:"
 
 msgid "-"
 msgstr "-"
@@ -7917,11 +7921,14 @@ msgstr "-"
 msgid "Leave blank to disable ranges."
 msgstr "Leave blank to disable ranges."
 
-msgid "Keep Tabs:"
-msgstr "Keep Tabs:"
+msgid "Keep tabs"
+msgstr "Keep tabs"
 
-msgid "Keep Line Breaks:"
-msgstr "Keep Line Breaks:"
+msgid "Keep line breaks"
+msgstr "Keep line breaks"
+
+msgid "Format presets:"
+msgstr "Format presets:"
 
 msgid "Output file:"
 msgstr "Output file:"
@@ -8021,8 +8028,8 @@ msgstr "Pin Number"
 msgid "Base Pin Name"
 msgstr "Base Pin Name"
 
-msgid "Alternate Pin Assignments"
-msgstr "Alternate Pin Assignments"
+msgid "Pin Functions"
+msgstr "Pin Functions"
 
 msgid "Library link:"
 msgstr "Library link:"
@@ -8046,7 +8053,7 @@ msgid ""
 "for loading library symbols.  KiCad will attempt to map the existing symbols "
 "to use the new symbol library table.  Remapping will change some project "
 "files and schematics may not be compatible with older versions of KiCad.  "
-"All files that are changed will be backed up to the \"remap_backup\" folder "
+"All files that are changed will be backed up to the \"rescue-backup\" folder "
 "in the project folder should you need to revert any changes.  If you choose "
 "to skip this step, you will be responsible for manually remapping the "
 "symbols."
@@ -8055,9 +8062,10 @@ msgstr ""
 "for loading library symbols.  KiCad will attempt to map the existing symbols "
 "to use the new symbol library table.  Remapping will change some project "
 "files and schematics may not be compatible with older versions of KiCad.  "
-"All files that are changed will be backed up to the “remap_backup” folder in "
-"the project folder should you need to revert any changes.  If you choose to "
-"skip this step, you will be responsible for manually remapping the symbols."
+"All files that are changed will be backed up to the \"rescue-backup\" folder "
+"in the project folder should you need to revert any changes.  If you choose "
+"to skip this step, you will be responsible for manually remapping the "
+"symbols."
 
 #, c-format
 msgid "Adding library '%s', file '%s' to project symbol library table."
@@ -8246,9 +8254,6 @@ msgstr "Color Preview"
 
 msgid "/path/to/sheet"
 msgstr "/path/to/sheet"
-
-msgid "Appearance"
-msgstr "Appearance"
 
 msgid "Default font:"
 msgstr "Default font:"
@@ -8688,6 +8693,9 @@ msgstr "Show pin &electrical type"
 msgid "&Pitch of repeated pins:"
 msgstr "&Pitch of repeated pins:"
 
+msgid "All supported formats"
+msgstr "All supported formats"
+
 msgid "A library table row nickname and path cells are empty."
 msgstr "A library table row nickname and path cells are empty."
 
@@ -8749,11 +8757,11 @@ msgid "Add Anyway"
 msgstr "Add Anyway"
 
 msgid ""
-"Select one or more rows containing libraries in Legacy format (*.lib) to "
-"save as current KiCad format (*.kicad_sym)."
+"Select one or more rows containing libraries to save as current KiCad format "
+"(*.kicad_sym)."
 msgstr ""
-"Select one or more rows containing libraries in Legacy format (*.lib) to "
-"save as current KiCad format (*.kicad_sym)."
+"Select one or more rows containing libraries to save as current KiCad format "
+"(*.kicad_sym)."
 
 #, c-format
 msgid ""
@@ -8765,11 +8773,11 @@ msgstr ""
 
 #, c-format
 msgid ""
-"Save %d Legacy format libraries as current KiCad format (*.kicad_sym) and "
-"replace legacy entries in table?"
+"Save %d libraries as current KiCad format (*.kicad_sym) and replace legacy "
+"entries in table?"
 msgstr ""
-"Save %d Legacy format libraries as current KiCad format (*.kicad_sym) and "
-"replace legacy entries in table?"
+"Save %d libraries as current KiCad format (*.kicad_sym) and replace legacy "
+"entries in table?"
 
 #, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
@@ -8888,6 +8896,10 @@ msgstr "Error loading drawing sheet."
 msgid "Error loading the symbol library table '%s'."
 msgstr "Error loading the symbol library table '%s'."
 
+#, c-format
+msgid "Error loading drawing sheet '%s'."
+msgstr "Error loading drawing sheet '%s'."
+
 msgid "Failed to load schematic file\n"
 msgstr "Failed to load schematic file\n"
 
@@ -8930,6 +8942,21 @@ msgstr "Saving symbol library in updated format\n"
 
 msgid "Symbol library was not updated\n"
 msgstr "Symbol library was not updated\n"
+
+msgid "Running ERC...\n"
+msgstr "Running ERC...\n"
+
+#, c-format
+msgid "Found %d violations\n"
+msgstr "Found %d violations\n"
+
+#, c-format
+msgid "Unable to save ERC report to %s\n"
+msgstr "Unable to save ERC report to %s\n"
+
+#, c-format
+msgid "Saved ERC Report to %s\n"
+msgstr "Saved ERC Report to %s\n"
 
 msgid "Net Navigator"
 msgstr "Net Navigator"
@@ -9000,8 +9027,8 @@ msgstr "Symbol %s has input pins in units %s that are not placed."
 msgid "Symbol %s has bidirectional pins in units %s that are not placed."
 msgstr "Symbol %s has bidirectional pins in units %s that are not placed."
 
-msgid "Pins with 'no connection' type are connected"
-msgstr "Pins with 'no connection' type are connected"
+msgid "Pin with 'no connection' type is connected"
+msgstr "Pin with 'no connection' type is connected"
 
 #, c-format
 msgid "Pins of type %s and %s are connected"
@@ -9026,6 +9053,42 @@ msgstr "Symbol '%s' not found in symbol library '%s'"
 #, c-format
 msgid "Symbol '%s' has been modified in library '%s'"
 msgstr "Symbol '%s' has been modified in library '%s'"
+
+msgid "Checking sheet names..."
+msgstr "Checking sheet names..."
+
+msgid "Checking bus conflicts..."
+msgstr "Checking bus conflicts..."
+
+msgid "Checking conflicts..."
+msgstr "Checking conflicts..."
+
+msgid "Checking units..."
+msgstr "Checking units..."
+
+msgid "Checking footprints..."
+msgstr "Checking footprints..."
+
+msgid "Checking pins..."
+msgstr "Checking pins..."
+
+msgid "Checking labels..."
+msgstr "Checking labels..."
+
+msgid "Checking for unresolved variables..."
+msgstr "Checking for unresolved variables..."
+
+msgid "Checking SPICE models..."
+msgstr "Checking SPICE models..."
+
+msgid "Checking no connect pins for connections..."
+msgstr "Checking no connect pins for connections..."
+
+msgid "Checking for library symbol issues..."
+msgstr "Checking for library symbol issues..."
+
+msgid "Checking for off grid pins and wires..."
+msgstr "Checking for off grid pins and wires..."
 
 msgid "Conflicts"
 msgstr "Conflicts"
@@ -9134,6 +9197,26 @@ msgstr "Duplicate reference designators"
 
 msgid "Bus Entry needed"
 msgstr "Bus Entry needed"
+
+#, c-format
+msgid "ERC report (%s, Encoding UTF8)\n"
+msgstr "ERC report (%s, Encoding UTF8)\n"
+
+#, c-format
+msgid ""
+"\n"
+"***** Sheet %s\n"
+msgstr ""
+"\n"
+"***** Sheet %s\n"
+
+#, c-format
+msgid ""
+"\n"
+" ** ERC messages: %d  Errors %d  Warnings %d\n"
+msgstr ""
+"\n"
+" ** ERC messages: %d  Errors %d  Warnings %d\n"
 
 msgid "Schematic Files"
 msgstr "Schematic Files"
@@ -9257,15 +9340,12 @@ msgstr ""
 "\n"
 "Do you want to save the current document before proceeding?"
 
-msgid "All supported formats"
-msgstr "All supported formats"
-
 msgid "Import Schematic"
 msgstr "Import Schematic"
 
 #, c-format
-msgid "Unexpected file extension: '%s'."
-msgstr "Unexpected file extension: '%s'."
+msgid "No loader can read the specified file: '%s'."
+msgstr "No loader can read the specified file: '%s'."
 
 #, c-format
 msgid ""
@@ -9646,9 +9726,6 @@ msgstr "Symbols to Library..."
 msgid "Symbols to New Library..."
 msgstr "Symbols to New Library..."
 
-msgid "&Units"
-msgstr "&Units"
-
 msgid "&Place"
 msgstr "&Place"
 
@@ -9753,6 +9830,9 @@ msgstr "No alternate body style found for symbol '%s' in library '%s'."
 
 msgid "Convert Symbol"
 msgstr "Convert Symbol"
+
+msgid "Set Pin Function"
+msgstr "Set Pin Function"
 
 msgid "none"
 msgstr "none"
@@ -10131,10 +10211,6 @@ msgid "Bezier has %d control points. At least 2 are expected."
 msgstr "Bezier has %d control points. At least 2 are expected."
 
 #, c-format
-msgid "Unsupported ellipse was not imported at (X = %d; Y = %d)."
-msgstr "Unsupported ellipse was not imported at (X = %d; Y = %d)."
-
-#, c-format
 msgid ""
 "Altium's harness connector (%s) was imported as a hierarchical sheet. Please "
 "review the imported schematic."
@@ -10172,6 +10248,19 @@ msgstr "Error reading image %s."
 #, c-format
 msgid "File not found %s."
 msgstr "File not found %s."
+
+#, c-format
+msgid "Unknown or unexpected record id %d found in %s."
+msgstr "Unknown or unexpected record id %d found in %s."
+
+msgid "Expected Altium Schematic Library file version 5.0"
+msgstr "Expected Altium Schematic Library file version 5.0"
+
+msgid "Altium schematic files"
+msgstr "Altium schematic files"
+
+msgid "Altium schematic library files"
+msgstr "Altium schematic library files"
 
 msgid "The selected file does not appear to be a CADSTAR parts Library file"
 msgstr "The selected file does not appear to be a CADSTAR parts Library file"
@@ -10385,6 +10474,12 @@ msgstr ""
 "should create a separate entry for the CADSTAR PCB Archive (*.cpa) file in "
 "the footprint library tables. If none specified, 'cadstarpcblib' is assumed."
 
+msgid "CADSTAR Schematic Archive files"
+msgstr "CADSTAR Schematic Archive files"
+
+msgid "CADSTAR Parts Library files"
+msgstr "CADSTAR Parts Library files"
+
 #, c-format
 msgid "Error reading database table %s: %s"
 msgstr "Error reading database table %s: %s"
@@ -10396,6 +10491,9 @@ msgstr "Could not load database library: settings file %s missing or invalid"
 #, c-format
 msgid "Could not load database library: could not connect to database %s (%s)"
 msgstr "Could not load database library: could not connect to database %s (%s)"
+
+msgid "KiCad database library files"
+msgstr "KiCad database library files"
 
 #, c-format
 msgid ""
@@ -10420,6 +10518,32 @@ msgstr ""
 #, c-format
 msgid "Could not find '%s' in the imported library."
 msgstr "Could not find '%s' in the imported library."
+
+msgid "Eagle XML schematic files"
+msgstr "Eagle XML schematic files"
+
+#, c-format
+msgid "Unable to find a valid schematic file in '%s'"
+msgstr "Unable to find a valid schematic file in '%s'"
+
+#, c-format
+msgid "Error loading symbol '%s' from library '%s': %s"
+msgstr "Error loading symbol '%s' from library '%s': %s"
+
+#, c-format
+msgid "Error enumerating symbol library '%s': %s"
+msgstr "Error enumerating symbol library '%s': %s"
+
+#, c-format
+msgid "Error loading schematic '%s': %s"
+msgstr "Error loading schematic '%s': %s"
+
+msgid "EasyEDA (JLCEDA) Std files"
+msgstr "EasyEDA (JLCEDA) Std files"
+
+#, c-format
+msgid "Failed to parse value: '%s'"
+msgstr "Failed to parse value: '%s'"
 
 #, c-format
 msgid "Library file '%s' not found."
@@ -10563,8 +10687,14 @@ msgstr "expected ‘Italics’ or ‘~’"
 msgid "symbol field text attributes must be 3 characters wide"
 msgstr "symbol field text attributes must be 3 characters wide"
 
+msgid "KiCad legacy symbol library files"
+msgstr "KiCad legacy symbol library files"
+
 msgid "expected unquoted string"
 msgstr "expected unquoted string"
+
+msgid "LTspice schematic files"
+msgstr "LTspice schematic files"
 
 #, c-format
 msgid "File at '%s' was ignored. Using previously found file at '%s' instead."
@@ -10765,6 +10895,9 @@ msgstr "Symbol %s [%s]"
 
 msgid "Graphic Text"
 msgstr "Graphic Text"
+
+msgid "Align center"
+msgstr "Align center"
 
 msgid ""
 "<table>\n"
@@ -11819,6 +11952,12 @@ msgstr "Measure RMS"
 msgid "Measure Peak-to-peak"
 msgstr "Measure Peak-to-peak"
 
+msgid "Measure Frequency of Min"
+msgstr "Measure Frequency of Min"
+
+msgid "Measure Frequency of Max"
+msgstr "Measure Frequency of Max"
+
 msgid "Measure Time of Min"
 msgstr "Measure Time of Min"
 
@@ -11830,6 +11969,9 @@ msgstr "Measure Integral"
 
 msgid "Perform Fourier Analysis..."
 msgstr "Perform Fourier Analysis..."
+
+msgid " (amplitude)"
+msgstr " (amplitude)"
 
 #, c-format
 msgid "Fourier Analysis of %s"
@@ -11863,9 +12005,6 @@ msgstr "Cursor 1"
 
 msgid "Cursor 2"
 msgstr "Cursor 2"
-
-msgid " (amplitude)"
-msgstr " (amplitude)"
 
 msgid "Diff"
 msgstr "Diff"
@@ -12201,8 +12340,8 @@ msgstr ""
 "to migrate to current format."
 
 #, c-format
-msgid "Symbol %s is derived from %s.  Symbol graphics will not be editable."
-msgstr "Symbol %s is derived from %s.  Symbol graphics will not be editable."
+msgid "Symbol %s is a derived symbol.  Symbol graphics will not be editable."
+msgstr "Symbol %s is a derived symbol.  Symbol graphics will not be editable."
 
 #, c-format
 msgid "Library '%s' already exists."
@@ -12271,11 +12410,11 @@ msgid "The current symbol has been modified.  Save changes?"
 msgstr "The current symbol has been modified.  Save changes?"
 
 #, c-format
-msgid "Deriving from '%s', the root symbol of '%s'."
-msgstr "Deriving from '%s', the root symbol of '%s'."
+msgid "Deriving from symbol '%s'."
+msgstr "Deriving from symbol '%s'."
 
-msgid "This new symbol has no name and cannot be created."
-msgstr "This new symbol has no name and cannot be created."
+msgid "Symbol must have a newName."
+msgstr "Symbol must have a newName."
 
 #, c-format
 msgid "Symbol '%s' already exists in library '%s'."
@@ -12297,17 +12436,16 @@ msgstr "Save Symbol As"
 msgid "Save in library:"
 msgstr "Save in library:"
 
-msgid "No library specified.  Symbol could not be saved."
-msgstr "No library specified.  Symbol could not be saved."
+msgid "A library must be specified."
+msgstr "A library must be specified."
+
+msgid "Symbol must have a name."
+msgstr "Symbol must have a name."
 
 msgid ""
 "Derived symbols must be saved in the same library as their parent symbol."
 msgstr ""
 "Derived symbols must be saved in the same library as their parent symbol."
-
-#, c-format
-msgid "Symbol '%s' already exists in library '%s'"
-msgstr "Symbol '%s' already exists in library '%s'"
 
 #, c-format
 msgid "Symbol name '%s' already in use."
@@ -12387,6 +12525,10 @@ msgid "Import Symbol"
 msgstr "Import Symbol"
 
 #, c-format
+msgid "Unable to find a reader for '%s'."
+msgstr "Unable to find a reader for '%s'."
+
+#, c-format
 msgid "Cannot import symbol library '%s'."
 msgstr "Cannot import symbol library '%s'."
 
@@ -12436,10 +12578,6 @@ msgstr "Library '%s' not found in the Symbol Library Table."
 
 msgid "Symbol not found."
 msgstr "Symbol not found."
-
-#, c-format
-msgid "Error loading symbol %s from library '%s'. (%s)"
-msgstr "Error loading symbol %s from library '%s'. (%s)"
 
 #, c-format
 msgid "Cannot load symbol '%s' from library '%s'."
@@ -13686,6 +13824,15 @@ msgstr "no symbol selected"
 msgid "symbol is not multi-unit"
 msgstr "symbol is not multi-unit"
 
+msgid "Pin Function"
+msgstr "Pin Function"
+
+msgid "no pin selected"
+msgstr "no pin selected"
+
+msgid "no alternate pin functions defined"
+msgstr "no alternate pin functions defined"
+
 msgid "Transform Selection"
 msgstr "Transform Selection"
 
@@ -13848,9 +13995,6 @@ msgstr "New name:"
 msgid "Change Symbol Name"
 msgstr "Change Symbol Name"
 
-msgid "Symbol name cannot be empty."
-msgstr "Symbol name cannot be empty."
-
 msgid "No symbol to export"
 msgstr "No symbol to export"
 
@@ -13898,13 +14042,6 @@ msgstr "Enter page number for sheet path %s"
 msgid "(page %s)"
 msgstr "(page %s)"
 
-msgid ""
-"Creating a project will enable features such as text variables, net classes, "
-"and ERC exclusions"
-msgstr ""
-"Creating a project will enable features such as text variables, net classes, "
-"and ERC exclusions"
-
 msgid "Change property"
 msgstr "Change property"
 
@@ -13920,40 +14057,6 @@ msgstr "Add new global library table entry"
 msgid "Add new project library table entry"
 msgstr "Add new project library table entry"
 
-msgid "Do not perform any additional operations after saving library."
-msgstr "Do not perform any additional operations after saving library."
-
-msgid ""
-"Update symbol library table entry to point to new library.\n"
-"\n"
-"The original library will no longer be available for use."
-msgstr ""
-"Update symbol library table entry to point to new library.\n"
-"\n"
-"The original library will no longer be available for use."
-
-msgid ""
-"Add new entry to the global symbol library table.\n"
-"\n"
-"The symbol library table nickname is suffixed with\n"
-"an integer to prevent duplicate table entries."
-msgstr ""
-"Add new entry to the global symbol library table.\n"
-"\n"
-"The symbol library table nickname is suffixed with\n"
-"an integer to prevent duplicate table entries."
-
-msgid ""
-"Add new entry to the project symbol library table.\n"
-"\n"
-"The symbol library table nickname is suffixed with\n"
-"an integer to prevent duplicate table entries."
-msgstr ""
-"Add new entry to the project symbol library table.\n"
-"\n"
-"The symbol library table nickname is suffixed with\n"
-"an integer to prevent duplicate table entries."
-
 #, c-format
 msgid "Tune %s"
 msgstr "Tune %s"
@@ -13968,6 +14071,30 @@ msgstr "Current data will be lost?"
 #, c-format
 msgid "Clear layer %d?"
 msgstr "Clear layer %d?"
+
+msgid "Active layer name:"
+msgstr "Active layer name:"
+
+msgid "Offset X"
+msgstr "Offset X"
+
+msgid "Offset Y"
+msgstr "Offset Y"
+
+msgid "Rotation CCW"
+msgstr "Rotation CCW"
+
+msgid "Active layer"
+msgstr "Active layer"
+
+msgid "All layers"
+msgstr "All layers"
+
+msgid "All visible layers"
+msgstr "All visible layers"
+
+msgid "Layers Settings"
+msgstr "Layers Settings"
 
 #, c-format
 msgid "Layer %d"
@@ -14446,6 +14573,9 @@ msgstr "Open Recent Job File"
 msgid "Open Recent Zip File"
 msgstr "Open Recent Zip File"
 
+msgid "&Units"
+msgstr "&Units"
+
 #, c-format
 msgid "File '%s' not found"
 msgstr "File '%s' not found"
@@ -14727,6 +14857,9 @@ msgstr "Sort Layers if X2 Mode"
 msgid "Sort Layers by File Extension"
 msgstr "Sort Layers by File Extension"
 
+msgid "Layers Display Parameters: Offset and Rotation"
+msgstr "Layers Display Parameters: Offset and Rotation"
+
 msgid "Move Current Layer Up"
 msgstr "Move Current Layer Up"
 
@@ -14780,14 +14913,175 @@ msgstr "Hide this message."
 msgid "Failed to output data"
 msgstr "Failed to output data"
 
-msgid "shows help message and exits"
-msgstr "shows help message and exits"
+msgid "Input file"
+msgstr "Input file"
+
+msgid "Output directory"
+msgstr "Output directory"
 
 msgid "Output file name"
 msgstr "Output file name"
 
-msgid "Input file"
-msgstr "Input file"
+msgid ""
+"Path to drawing sheet, this overrides any existing project defined sheet "
+"when used"
+msgstr ""
+"Path to drawing sheet, this overrides any existing project defined sheet "
+"when used"
+
+msgid ""
+"Overrides or adds project variables, can be used multiple times to declare "
+"multiple variables.\n"
+"Use in the format of '--define-var key=value' or '-D key=value'"
+msgstr ""
+"Overrides or adds project variables, can be used multiple times to declare "
+"multiple variables.\n"
+"Use in the format of '--define-var key=value' or '-D key=value'"
+
+msgid "Shows help message and exits"
+msgstr "Shows help message and exits"
+
+msgid "Footprint and Footprint Libraries"
+msgstr "Footprint and Footprint Libraries"
+
+msgid "Export utilities (svg)"
+msgstr "Export utilities (svg)"
+
+msgid "Exports the footprint or entire footprint library to SVG"
+msgstr "Exports the footprint or entire footprint library to SVG"
+
+msgid "Color theme to use (will default to pcbnew settings)"
+msgstr "Color theme to use (will default to pcbnew settings)"
+
+msgid "Specific footprint to export within the library"
+msgstr "Specific footprint to export within the library"
+
+msgid "Footprint library does not exist or is not accessible\n"
+msgstr "Footprint library does not exist or is not accessible\n"
+
+msgid "Upgrades the footprint library to the current kicad version format"
+msgstr "Upgrades the footprint library to the current kicad version format"
+
+msgid "Forces the footprint library to be resaved regardless of versioning"
+msgstr "Forces the footprint library to be resaved regardless of versioning"
+
+msgid "Footprint library path does not exist or is not accessible\n"
+msgstr "Footprint library path does not exist or is not accessible\n"
+
+msgid "PCB"
+msgstr "PCB"
+
+msgid "Runs the Design Rules Check (DRC) on the PCB and creates a report"
+msgstr "Runs the Design Rules Check (DRC) on the PCB and creates a report"
+
+msgid "Output file format, options: json, report"
+msgstr "Output file format, options: json, report"
+
+msgid "Report all errors for each track"
+msgstr "Report all errors for each track"
+
+msgid "Report units; valid options: in, mm, mils"
+msgstr "Report units; valid options: in, mm, mils"
+
+msgid ""
+"Report all DRC violations, this is equivalent to including all the other "
+"severity arguments"
+msgstr ""
+"Report all DRC violations, this is equivalent to including all the other "
+"severity arguments"
+
+msgid ""
+"Report all DRC error level violations, this can be combined with the other "
+"severity arguments"
+msgstr ""
+"Report all DRC error level violations, this can be combined with the other "
+"severity arguments"
+
+msgid ""
+"Report all DRC warning level violations, this can be combined with the other "
+"severity arguments"
+msgstr ""
+"Report all DRC warning level violations, this can be combined with the other "
+"severity arguments"
+
+msgid ""
+"Report all excluded DRC violations, this can be combined with the other "
+"severity arguments"
+msgstr ""
+"Report all excluded DRC violations, this can be combined with the other "
+"severity arguments"
+
+msgid "Return a exit code depending on whether or not violations exist"
+msgstr "Return a exit code depending on whether or not violations exist"
+
+msgid "Invalid units specified\n"
+msgstr "Invalid units specified\n"
+
+msgid "Invalid report format\n"
+msgstr "Invalid report format\n"
+
+msgid "Export utilities (gerbers, drill, position files, etc)"
+msgstr "Export utilities (gerbers, drill, position files, etc)"
+
+msgid "Output file format, options: step, glb (binary glTF)"
+msgstr "Output file format, options: step, glb (binary glTF)"
+
+msgid "Overwrite output file"
+msgstr "Overwrite output file"
+
+msgid "Use Grid Origin for output origin"
+msgstr "Use Grid Origin for output origin"
+
+msgid "Use Drill Origin for output origin"
+msgstr "Use Drill Origin for output origin"
+
+msgid "Exclude 3D models for components with 'Unspecified' footprint type"
+msgstr "Exclude 3D models for components with 'Unspecified' footprint type"
+
+msgid "Exclude 3D models for components with 'Do not populate' attribute"
+msgstr "Exclude 3D models for components with 'Do not populate' attribute"
+
+msgid ""
+"Substitute STEP or IGS models with the same name in place of VRML models"
+msgstr ""
+"Substitute STEP or IGS models with the same name in place of VRML models"
+
+msgid "Only generate a board with no components"
+msgstr "Only generate a board with no components"
+
+msgid "Export tracks (extremely time consuming)"
+msgstr "Export tracks (extremely time consuming)"
+
+msgid "Export zones (extremely time consuming)"
+msgstr "Export zones (extremely time consuming)"
+
+msgid "Minimum distance between points to treat them as separate ones"
+msgstr "Minimum distance between points to treat them as separate ones"
+
+msgid ""
+"User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default unit "
+"mm)"
+msgstr ""
+"User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default unit "
+"mm)"
+
+msgid ""
+"Output units; ascii or csv format only; valid options: mm, m, in, tenths"
+msgstr ""
+"Output units; ascii or csv format only; valid options: mm, m, in, tenths"
+
+msgid ""
+"Name of folder to create and store 3d models in, if not specified or empty, "
+"the models will be embedded in main exported vrml file"
+msgstr ""
+"Name of folder to create and store 3d models in, if not specified or empty, "
+"the models will be embedded in main exported vrml file"
+
+msgid "Used with --models-dir to output relative paths in the resulting file"
+msgstr "Used with --models-dir to output relative paths in the resulting file"
+
+msgid "Invalid format specified\n"
+msgstr "Invalid format specified\n"
 
 #, c-format
 msgid "Invalid layer name \"%s\"\n"
@@ -14801,6 +15095,9 @@ msgstr ""
 msgid "At least one or more layers must be specified\n"
 msgstr "At least one or more layers must be specified\n"
 
+msgid "Generate Drill Files"
+msgstr "Generate Drill Files"
+
 msgid "Valid options excellon, gerber."
 msgstr "Valid options excellon, gerber."
 
@@ -14809,6 +15106,9 @@ msgstr "Valid options are: absolute,plot"
 
 msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
 msgstr "Valid options are: decimal,suppressleading,suppresstrailing,keep."
+
+msgid "Valid options are: route,alternate."
+msgstr "Valid options are: route,alternate."
 
 msgid "Output units, valid options:in,mm"
 msgstr "Output units, valid options:in,mm"
@@ -14837,11 +15137,11 @@ msgstr "Output must be a directory\n"
 msgid "Invalid drill format\n"
 msgstr "Invalid drill format\n"
 
-msgid "Invalid units specified\n"
-msgstr "Invalid units specified\n"
-
 msgid "Invalid zeros format specified\n"
 msgstr "Invalid zeros format specified\n"
+
+msgid "Invalid oval drill format specified\n"
+msgstr "Invalid oval drill format specified\n"
 
 msgid "Invalid map format specified\n"
 msgstr "Invalid map format specified\n"
@@ -14852,6 +15152,9 @@ msgstr "Invalid origin mode specified\n"
 msgid "Gerber coordinate precision should be either 5 or 6\n"
 msgstr "Gerber coordinate precision should be either 5 or 6\n"
 
+msgid "Generate a DXF from a list of layers"
+msgstr "Generate a DXF from a list of layers"
+
 msgid "Exclude the reference designator text"
 msgstr "Exclude the reference designator text"
 
@@ -14861,14 +15164,17 @@ msgstr "Exclude the value text"
 msgid "Plot graphic items using their contours"
 msgstr "Plot graphic items using their contours"
 
+msgid "Include the border and title block"
+msgstr "Include the border and title block"
+
 msgid "Output units, valid options: mm, in"
 msgstr "Output units, valid options: mm, in"
 
 msgid "Board file does not exist or is not accessible\n"
 msgstr "Board file does not exist or is not accessible\n"
 
-msgid "Include the border and title block"
-msgstr "Include the border and title block"
+msgid "Plot given layers to a single gerber file"
+msgstr "Plot given layers to a single gerber file"
 
 msgid "Do not use the extended X2 format"
 msgstr "Do not use the extended X2 format"
@@ -14892,6 +15198,13 @@ msgid "Use KiCad gerber file extension"
 msgstr "Use KiCad gerber file extension"
 
 msgid ""
+"Plot multiple gerbers for a PCB, including the ability to use stored board "
+"plot settings"
+msgstr ""
+"Plot multiple gerbers for a PCB, including the ability to use stored board "
+"plot settings"
+
+msgid ""
 "Layers to include on each plot, comma separated list of untranslated layer "
 "names to include such as F.Cu,B.Cu"
 msgstr ""
@@ -14900,6 +15213,9 @@ msgstr ""
 
 msgid "Use the gerber plot settings already configured in the board file"
 msgstr "Use the gerber plot settings already configured in the board file"
+
+msgid "Generate PDF from a list of layers"
+msgstr "Generate PDF from a list of layers"
 
 msgid "Mirror the board (useful for trying to show bottom layers)"
 msgstr "Mirror the board (useful for trying to show bottom layers)"
@@ -14957,44 +15273,8 @@ msgstr "\"both\" not supported for gerber format\n"
 msgid "Invalid side specified\n"
 msgstr "Invalid side specified\n"
 
-msgid "Use Drill Origin for output origin"
-msgstr "Use Drill Origin for output origin"
-
-msgid "Use Grid Origin for output origin"
-msgstr "Use Grid Origin for output origin"
-
-msgid "Exclude 3D models for components with 'Unspecified' footprint type"
-msgstr "Exclude 3D models for components with 'Unspecified' footprint type"
-
-msgid "Exclude 3D models for components with 'Do not populate' attribute"
-msgstr "Exclude 3D models for components with 'Do not populate' attribute"
-
-msgid ""
-"Substitute STEP or IGS models with the same name in place of VRML models"
-msgstr ""
-"Substitute STEP or IGS models with the same name in place of VRML models"
-
-msgid "Overwrite output file"
-msgstr "Overwrite output file"
-
-msgid "Only generate a board with no components"
-msgstr "Only generate a board with no components"
-
-msgid "Export tracks (extremely time consuming)"
-msgstr "Export tracks (extremely time consuming)"
-
-msgid "Minimum distance between points to treat them as separate ones"
-msgstr "Minimum distance between points to treat them as separate ones"
-
-msgid ""
-"User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default unit "
-"mm)"
-msgstr ""
-"User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default unit "
-"mm)"
-
-msgid "Color theme to use (will default to pcbnew settings)"
-msgstr "Color theme to use (will default to pcbnew settings)"
+msgid "Generate SVG outputs of a given layer list"
+msgstr "Generate SVG outputs of a given layer list"
 
 msgid ""
 "Set page sizing mode (0 = page with frame and title block, 1 = current page "
@@ -15006,8 +15286,53 @@ msgstr ""
 msgid "No drawing sheet"
 msgstr "No drawing sheet"
 
+msgid "Schematics"
+msgstr "Schematics"
+
+msgid ""
+"Runs the Electrical Rules Check (ERC) on the schematic and creates a report"
+msgstr ""
+"Runs the Electrical Rules Check (ERC) on the schematic and creates a report"
+
+msgid ""
+"Report all ERC violations, this is equivalent to including all the other "
+"severity arguments"
+msgstr ""
+"Report all ERC violations, this is equivalent to including all the other "
+"severity arguments"
+
+msgid ""
+"Report all ERC error level violations, this can be combined with the other "
+"severity arguments"
+msgstr ""
+"Report all ERC error level violations, this can be combined with the other "
+"severity arguments"
+
+msgid ""
+"Report all ERC warning level violations, this can be combined with the other "
+"severity arguments"
+msgstr ""
+"Report all ERC warning level violations, this can be combined with the other "
+"severity arguments"
+
+msgid ""
+"Report all excluded ERC violations, this can be combined with the other "
+"severity arguments"
+msgstr ""
+"Report all excluded ERC violations, this can be combined with the other "
+"severity arguments"
+
+msgid "Export utilities (netlist, pdf, bom, etc)"
+msgstr "Export utilities (netlist, pdf, bom, etc)"
+
+msgid "Generate a Bill of Material (BOM)"
+msgstr "Generate a Bill of Material (BOM)"
+
 msgid "Schematic file does not exist or is not accessible\n"
 msgstr "Schematic file does not exist or is not accessible\n"
+
+msgid "Export a Netlist"
+msgstr "Export a Netlist"
 
 msgid ""
 "Netlist output format, valid options: kicadsexpr, kicadxml, cadstar, "
@@ -15022,8 +15347,12 @@ msgstr "Color theme to use (will default to schematic settings)"
 msgid "Avoid setting a background color (regardless of theme)"
 msgstr "Avoid setting a background color (regardless of theme)"
 
-msgid "Plot only the first page (no sub-sheets)"
-msgstr "Plot only the first page (no sub-sheets)"
+msgid ""
+"List of page numbers separated by comma to print, blank or unspecified is "
+"equivalent to all pages"
+msgstr ""
+"List of page numbers separated by comma to print, blank or unspecified is "
+"equivalent to all pages"
 
 msgid "Pen size [mm]"
 msgstr "Pen size [mm]"
@@ -15034,60 +15363,21 @@ msgstr "Origin and scale: 0 bottom left, 1 centered, 2 page fit, 3 content fit"
 msgid "HPGL origin option must be 0, 1, 2 or 3\n"
 msgstr "HPGL origin option must be 0, 1, 2 or 3\n"
 
+msgid ""
+"Export the legacy bom xml format used in the schematic editor with python "
+"scripts"
+msgstr ""
+"Export the legacy bom xml format used in the schematic editor with python "
+"scripts"
+
+msgid "Symbol and Symbol Libraries"
+msgstr "Symbol and Symbol Libraries"
+
+msgid "Exports the symbol or entire symbol library to SVG"
+msgstr "Exports the symbol or entire symbol library to SVG"
+
 msgid "Specific symbol to export within the library"
 msgstr "Specific symbol to export within the library"
-
-msgid "Footprint library does not exist or is not accessible\n"
-msgstr "Footprint library does not exist or is not accessible\n"
-
-msgid "Forces the footprint library to be resaved regardless of versioning"
-msgstr "Forces the footprint library to be resaved regardless of versioning"
-
-msgid "Footprint path does not exist or is not accessible\n"
-msgstr "Footprint path does not exist or is not accessible\n"
-
-msgid "Output file format, options: json, report"
-msgstr "Output file format, options: json, report"
-
-msgid "Report all errors for each track"
-msgstr "Report all errors for each track"
-
-msgid "Report units; valid options: in, mm, mils"
-msgstr "Report units; valid options: in, mm, mils"
-
-msgid ""
-"Report all DRC violations, this is equivalent to including all the other "
-"severity arguments"
-msgstr ""
-"Report all DRC violations, this is equivalent to including all the other "
-"severity arguments"
-
-msgid ""
-"Report all DRC error level violations, this can be combined with the other "
-"severity arguments"
-msgstr ""
-"Report all DRC error level violations, this can be combined with the other "
-"severity arguments"
-
-msgid ""
-"Report all DRC warning level violations, this can be combined with the other "
-"severity arguments"
-msgstr ""
-"Report all DRC warning level violations, this can be combined with the other "
-"severity arguments"
-
-msgid ""
-"Report all excluded DRC violations, this can be combined with the other "
-"severity arguments"
-msgstr ""
-"Report all excluded DRC violations, this can be combined with the other "
-"severity arguments"
-
-msgid "Return a exit code depending on whether or not violations exist"
-msgstr "Return a exit code depending on whether or not violations exist"
-
-msgid "Invalid report format\n"
-msgstr "Invalid report format\n"
 
 msgid "Include hidden pins"
 msgstr "Include hidden pins"
@@ -15098,8 +15388,17 @@ msgstr "Include hidden fields"
 msgid "Symbol file does not exist or is not accessible\n"
 msgstr "Symbol file does not exist or is not accessible\n"
 
+msgid "Upgrades the symbol library to the current kicad version format"
+msgstr "Upgrades the symbol library to the current kicad version format"
+
 msgid "Forces the symbol library to be resaved regardless of versioning"
 msgstr "Forces the symbol library to be resaved regardless of versioning"
+
+msgid "Symbol library does not exist or is not accessible\n"
+msgstr "Symbol library does not exist or is not accessible\n"
+
+msgid "Reports the version info in various formats"
+msgstr "Reports the version info in various formats"
 
 msgid "version info format (plain, commit, about)"
 msgstr "version info format (plain, commit, about)"
@@ -15211,6 +15510,12 @@ msgstr "Import CADSTAR Archive Project Files"
 msgid "Import Eagle Project Files"
 msgstr "Import Eagle Project Files"
 
+msgid "Import EasyEDA Std Backup"
+msgstr "Import EasyEDA Std Backup"
+
+msgid "Import EasyEDA Pro Project"
+msgstr "Import EasyEDA Pro Project"
+
 #, c-format
 msgid ""
 "File '%s'\n"
@@ -15218,6 +15523,30 @@ msgid ""
 msgstr ""
 "File '%s'\n"
 "does not appear to be a valid KiCad project file."
+
+msgid "Export GLB (binary GLTF)"
+msgstr "Export GLB (binary GLTF)"
+
+msgid "Export STEP"
+msgstr "Export STEP"
+
+msgid "Export VRML"
+msgstr "Export VRML"
+
+msgid "Export DXF"
+msgstr "Export DXF"
+
+msgid "Export HPGL"
+msgstr "Export HPGL"
+
+msgid "Export PDF"
+msgstr "Export PDF"
+
+msgid "Export PS"
+msgstr "Export PS"
+
+msgid "Export SVG"
+msgstr "Export SVG"
 
 msgid "prints version information and exits"
 msgstr "prints version information and exits"
@@ -15275,6 +15604,18 @@ msgstr "EAGLE Project..."
 
 msgid "Import EAGLE CAD XML schematic and board"
 msgstr "Import EAGLE CAD XML schematic and board"
+
+msgid "EasyEDA (JLCEDA) Std Backup..."
+msgstr "EasyEDA (JLCEDA) Std Backup..."
+
+msgid "Import EasyEDA (JLCEDA) Standard schematic and board"
+msgstr "Import EasyEDA (JLCEDA) Standard schematic and board"
+
+msgid "EasyEDA (JLCEDA) Pro Project..."
+msgstr "EasyEDA (JLCEDA) Pro Project..."
+
+msgid "Import EasyEDA (JLCEDA) Professional schematic and board"
+msgstr "Import EasyEDA (JLCEDA) Professional schematic and board"
 
 msgid "&Archive Project..."
 msgstr "&Archive Project…"
@@ -16181,10 +16522,6 @@ msgstr "KiCad Drawing Sheet Editor"
 
 msgid "coord origin: Right Bottom page corner"
 msgstr "coord origin: Right Bottom page corner"
-
-#, c-format
-msgid "Error loading drawing sheet '%s'."
-msgstr "Error loading drawing sheet '%s'."
 
 msgid "Error Init Printer info"
 msgstr "Error Init Printer info"
@@ -18059,9 +18396,6 @@ msgstr "Autoplace components"
 msgid "Tessellating copper zones..."
 msgstr "Tessellating copper zones..."
 
-msgid "PCB"
-msgstr "PCB"
-
 msgid "Pads"
 msgstr "Pads"
 
@@ -19457,14 +19791,50 @@ msgstr "Pad numbering skip:"
 msgid "Grid Array"
 msgstr "Grid Array"
 
-msgid "Horizontal center:"
-msgstr "Horizontal center:"
+msgid "Items to duplicate"
+msgstr "Items to duplicate"
 
-msgid "Vertical center:"
-msgstr "Vertical center:"
+msgid ""
+"This is the position of the selected item,\n"
+"or the position of the group to duplicate"
+msgstr ""
+"This is the position of the selected item,\n"
+"or the position of the group to duplicate"
 
-msgid "Radius:"
-msgstr "Radius:"
+msgid "Ref point pos X:"
+msgstr "Ref point pos X:"
+
+msgid "Ref point pos Y:"
+msgstr "Ref point pos Y:"
+
+msgid "Circular array params"
+msgstr "Circular array params"
+
+msgid ""
+"This is the position of the center of the circle\n"
+"defining the circular area to create"
+msgstr ""
+"This is the position of the center of the circle\n"
+"defining the circular area to create"
+
+msgid "Center pos X:"
+msgstr "Center pos X:"
+
+msgid "Center pos Y:"
+msgstr "Center pos Y:"
+
+msgid ""
+"Array radius,\n"
+"from Ref point pos and array center:"
+msgstr ""
+"Array radius,\n"
+"from Ref point pos and array center:"
+
+msgid "Distance between Ref point and Center pos."
+msgstr "Distance between Ref point and Center pos."
+
+msgid "Duplicate parameters"
+msgstr "Duplicate parameters"
 
 msgid ""
 "Positive angles represent an anti-clockwise rotation. An angle of 0 will "
@@ -19473,11 +19843,14 @@ msgstr ""
 "Positive angles represent an anti-clockwise rotation. An angle of 0 will "
 "produce a full circle divided evenly into “Count” portions."
 
+msgid "Item count:"
+msgstr "Item count:"
+
 msgid "How many items in the array."
 msgstr "How many items in the array."
 
-msgid "Rotate:"
-msgstr "Rotate:"
+msgid "Rotate items:"
+msgstr "Rotate items:"
 
 msgid ""
 "Rotate the item as well as move it - multi-selections will be rotated "
@@ -19917,11 +20290,14 @@ msgstr "Output Units"
 msgid "Export IDFv3"
 msgstr "Export IDFv3"
 
-msgid "Select a STEP export filename"
-msgstr "Select a STEP export filename"
-
 msgid "STEP files"
 msgstr "STEP files"
+
+msgid "Binary GTLF files"
+msgstr "Binary GTLF files"
+
+msgid "Select a STEP export filename"
+msgstr "Select a STEP export filename"
 
 msgid "Non-unity scaled models:"
 msgstr "Non-unity scaled models:"
@@ -19945,8 +20321,8 @@ msgstr ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
 "Run DRC for a full analysis."
 
-msgid "STEP Export"
-msgstr "STEP Export"
+msgid "STEP/GLTF Export"
+msgstr "STEP/GLTF Export"
 
 msgid "temp"
 msgstr "temp"
@@ -20003,6 +20379,16 @@ msgstr ""
 "Export tracks and vias on external copper layers.\n"
 "Warning: this is *extremely* time consuming."
 
+msgid "Export zones (time consuming)"
+msgstr "Export zones (time consuming)"
+
+msgid ""
+"Export zones on external copper layers.\n"
+"Warning: this is *extremely* time consuming."
+msgstr ""
+"Export zones on external copper layers.\n"
+"Warning: this is *extremely* time consuming."
+
 msgid "Board outline chaining tolerance:"
 msgstr "Board outline chaining tolerance:"
 
@@ -20022,8 +20408,14 @@ msgstr ""
 "Tolerance sets the distance between two points that are considered joined "
 "when building the board outlines."
 
-msgid "Export STEP"
-msgstr "Export STEP"
+msgid "Export STEP / GLTF"
+msgstr "Export STEP / GLTF"
+
+msgid "Command line:\n"
+msgstr "Command line:\n"
+
+msgid "3D Export"
+msgstr "3D Export"
 
 msgid "Use a relative path?"
 msgstr "Use a relative path?"
@@ -20056,6 +20448,9 @@ msgstr "Print Mode"
 
 msgid "Export as black elements on a white background"
 msgstr "Export as black elements on a white background"
+
+msgid "Use current board theme"
+msgstr "Use current board theme"
 
 msgid "Page with frame and title block"
 msgstr "Page with frame and title block"
@@ -20790,9 +21185,6 @@ msgstr "Non-plated pads:"
 msgid "Buried vias:"
 msgstr "Buried vias:"
 
-msgid "Generate Drill Files"
-msgstr "Generate Drill Files"
-
 msgid "Reference designator:"
 msgstr "Reference designator:"
 
@@ -20849,9 +21241,6 @@ msgstr "Locked tracks"
 
 msgid "Unlocked tracks"
 msgstr "Unlocked tracks"
-
-msgid "All layers"
-msgstr "All layers"
 
 msgid "Current layer only"
 msgstr "Current layer only"
@@ -21344,6 +21733,9 @@ msgstr ""
 "Invalid movement values.  Movement would place selection outside of the "
 "maximum board area."
 
+msgid "Rotate:"
+msgstr "Rotate:"
+
 msgid "Rotate around center of selection"
 msgstr "Rotate around center of selection"
 
@@ -21446,67 +21838,6 @@ msgstr "degree"
 msgid "Non Copper Zone Properties"
 msgstr "Non Copper Zone Properties"
 
-msgid "Center Point:"
-msgstr "Center Point:"
-
-msgid "Ring"
-msgstr "Ring"
-
-msgid "Line width may not be 0 for unfilled shapes."
-msgstr "Line width may not be 0 for unfilled shapes."
-
-#, c-format
-msgid "Corner %d"
-msgstr "Corner %d"
-
-msgid "Polygon must have at least 3 corners"
-msgstr "Polygon must have at least 3 corners"
-
-msgid "Polygon must have at least 3 corners after simplification"
-msgstr "Polygon must have at least 3 corners after simplification"
-
-msgid "Polygon can not be self-intersecting"
-msgstr "Polygon can not be self-intersecting"
-
-msgid "Note: redundant corners removed"
-msgstr "Note: redundant corners removed"
-
-msgid "Select a corner to add the new corner after."
-msgstr "Select a corner to add the new corner after."
-
-msgid "Select a corner to delete."
-msgstr "Select a corner to delete."
-
-msgid "Start point"
-msgstr "Start point"
-
-msgid "Control point 1"
-msgstr "Control point 1"
-
-msgid "Control point 2"
-msgstr "Control point 2"
-
-msgid "End point"
-msgstr "End point"
-
-msgid "Move vector"
-msgstr "Move vector"
-
-msgid "Scaling factor:"
-msgstr "Scaling factor:"
-
-msgid "Duplicate:"
-msgstr "Duplicate:"
-
-msgid "Coordinates are relative to anchor pad, rotated 0.0 deg."
-msgstr "Coordinates are relative to anchor pad, rotated 0.0 deg."
-
-msgid "Pad Custom Shape Geometry Transform"
-msgstr "Pad Custom Shape Geometry Transform"
-
-msgid "Basic Shape Polygon"
-msgstr "Basic Shape Polygon"
-
 msgid "Pad Properties"
 msgstr "Pad Properties"
 
@@ -21522,40 +21853,6 @@ msgstr "back side (mirrored)"
 
 msgid "front side"
 msgstr "front side"
-
-msgid "width"
-msgstr "width"
-
-msgid "from"
-msgstr "from"
-
-msgid "to"
-msgstr "to"
-
-msgid "center"
-msgstr "center"
-
-msgid "start"
-msgstr "start"
-
-msgid "angle"
-msgstr "angle"
-
-msgid "at"
-msgstr "at"
-
-msgid "radius"
-msgstr "radius"
-
-#, c-format
-msgid "corners count %d"
-msgstr "corners count %d"
-
-msgid "Number box"
-msgstr "Number box"
-
-msgid "Unknown primitive"
-msgstr "Unknown primitive"
 
 msgid "All copper layers"
 msgstr "All copper layers"
@@ -21669,18 +21966,6 @@ msgstr "Hole size X:"
 
 msgid "Pad size X:"
 msgstr "Pad size X:"
-
-msgid "No shape selected"
-msgstr "No shape selected"
-
-msgid "Ring/Circle"
-msgstr "Ring/Circle"
-
-msgid "Shape type:"
-msgstr "Shape type:"
-
-msgid "Add Primitive"
-msgstr "Add Primitive"
 
 msgid "Pad type:"
 msgstr "Pad type:"
@@ -21984,27 +22269,6 @@ msgstr ""
 "The final clearance value is the sum of this value and the clearance value.\n"
 "A negative value means a smaller mask size than pad size."
 
-msgid "Primitives list:"
-msgstr "Primitives list:"
-
-msgid "Note: coordinates are relative to anchor pad, orientation 0."
-msgstr "Note: coordinates are relative to anchor pad, orientation 0."
-
-msgid "Edit Primitive"
-msgstr "Edit Primitive"
-
-msgid "Duplicate Primitive"
-msgstr "Duplicate Primitive"
-
-msgid "Transform Primitive"
-msgstr "Transform Primitive"
-
-msgid "Delete Primitive"
-msgstr "Delete Primitive"
-
-msgid "Custom Shape Primitives"
-msgstr "Custom Shape Primitives"
-
 msgid "Preview pad in sketch mode"
 msgstr "Preview pad in sketch mode"
 
@@ -22061,6 +22325,9 @@ msgstr "Plot footprint values"
 msgid "Plot reference designators"
 msgstr "Plot reference designators"
 
+msgid "Plot footprint text"
+msgstr "Plot footprint text"
+
 msgid "Force plotting of invisible values / refs"
 msgstr "Force plotting of invisible values / refs"
 
@@ -22073,6 +22340,9 @@ msgstr "Sketch pads on fabrication layers"
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
 msgstr "Include pad outlines on F.Fab and B.Fab layers when plotting"
 
+msgid "Check zone fills before plotting"
+msgstr "Check zone fills before plotting"
+
 msgid "Tent vias"
 msgstr "Tent vias"
 
@@ -22084,11 +22354,6 @@ msgstr ""
 "Tented vias: not plotted on soldermask layer\n"
 "Not tented: vias are plotted on soldermask layer\n"
 "(Solder mask is a negative layer)"
-
-msgid ""
-"Use the drill/place file origin as the coordinate origin for plotted files"
-msgstr ""
-"Use the drill/place file origin as the coordinate origin for plotted files"
 
 msgid "Drill marks:"
 msgstr "Drill marks:"
@@ -22114,14 +22379,16 @@ msgstr "Plot mode:"
 msgid "Sketch"
 msgstr "Sketch"
 
+msgid ""
+"Use the drill/place file origin as the coordinate origin for plotted files"
+msgstr ""
+"Use the drill/place file origin as the coordinate origin for plotted files"
+
 msgid "Mirrored plot"
 msgstr "Mirrored plot"
 
 msgid "Negative plot"
 msgstr "Negative plot"
-
-msgid "Check zone fills before plotting"
-msgstr "Check zone fills before plotting"
 
 msgid "Global solder mask minimum width and/or margin are not set to 0. "
 msgstr "Global solder mask minimum width and/or margin are not set to 0. "
@@ -22889,77 +23156,6 @@ msgstr ""
 msgid "Update PCB from Schematic"
 msgstr "Update PCB from Schematic"
 
-msgid "Do not show"
-msgstr "Do not show"
-
-msgid "Show on pads"
-msgstr "Show on pads"
-
-msgid "Show on tracks"
-msgstr "Show on tracks"
-
-msgid "Show on pads and tracks"
-msgstr "Show on pads and tracks"
-
-msgid "Net Names"
-msgstr "Net Names"
-
-msgid "Show or hide net names on pads and/or tracks."
-msgstr "Show or hide net names on pads and/or tracks."
-
-msgid "Show pad numbers"
-msgstr "Show pad numbers"
-
-msgid "Clearance Outlines"
-msgstr "Clearance Outlines"
-
-msgid "Show when routing"
-msgstr "Show when routing"
-
-msgid "Show when routing w/ via clearance at end"
-msgstr "Show when routing w/ via clearance at end"
-
-msgid "Show when routing and editing"
-msgstr "Show when routing and editing"
-
-msgid "Show always"
-msgstr "Show always"
-
-msgid "Track && Via Clearances"
-msgstr "Track && Via Clearances"
-
-msgid ""
-"Show clearance outlines around tracks, and optionally the via clearance "
-"around the end of the track while routing."
-msgstr ""
-"Show clearance outlines around tracks, and optionally the via clearance "
-"around the end of the track while routing."
-
-msgid "Show pad clearance"
-msgstr "Show pad clearance"
-
-msgid "Select/highlight objects corresponding to schematic selection"
-msgstr "Select/highlight objects corresponding to schematic selection"
-
-msgid "Highlight footprints corresponding to selected symbols"
-msgstr "Highlight footprints corresponding to selected symbols"
-
-msgid "Ensures that cross-probed footprints are visible in the current view"
-msgstr "Ensures that cross-probed footprints are visible in the current view"
-
-msgid "Highlight nets when they are highlighted in the schematic editor"
-msgstr "Highlight nets when they are highlighted in the schematic editor"
-
-msgid "Refresh 3D view automatically"
-msgstr "Refresh 3D view automatically"
-
-msgid ""
-"When enabled, edits to the board will cause the 3D view to refresh (may be "
-"slow with larger boards)"
-msgstr ""
-"When enabled, edits to the board will cause the 3D view to refresh (may be "
-"slow with larger boards)"
-
 msgid "Constrain actions to H, V, 45 degrees"
 msgstr "Constrain actions to H, V, 45 degrees"
 
@@ -23085,18 +23281,40 @@ msgid "Default properties for new graphic items:"
 msgstr "Default properties for new graphic items:"
 
 #, c-format
+msgid "folder with %s files"
+msgstr "folder with %s files"
+
+#, c-format
 msgid "Illegal character '%c' in nickname '%s'."
 msgstr "Illegal character '%c' in nickname '%s'."
+
+msgid ""
+"Select one or more rows containing libraries to save as current KiCad format."
+msgstr ""
+"Select one or more rows containing libraries to save as current KiCad format."
+
+#, c-format
+msgid "Save '%s' as current KiCad format and replace entry in table?"
+msgstr "Save '%s' as current KiCad format and replace entry in table?"
+
+#, c-format
+msgid "Save %d libraries as current KiCad format and replace entries in table?"
+msgstr ""
+"Save %d libraries as current KiCad format and replace entries in table?"
+
+#, c-format
+msgid ""
+"Folder '%s' already exists. Do you want overwrite any existing footprints?"
+msgstr ""
+"Folder '%s' already exists. Do you want overwrite any existing footprints?"
+
+#, c-format
+msgid "Failed to save footprint library file '%s'."
+msgstr "Failed to save footprint library file '%s'."
 
 #, c-format
 msgid "Select %s Library"
 msgstr "Select %s Library"
-
-msgid "The following directories could not be opened: \n"
-msgstr "The following directories could not be opened: \n"
-
-msgid "Failed to open directories to look for libraries"
-msgstr "Failed to open directories to look for libraries"
 
 msgid "Warning: Duplicate Nicknames"
 msgstr "Warning: Duplicate Nicknames"
@@ -23121,6 +23339,73 @@ msgstr "Unknown error"
 
 msgid "3D Model(s)"
 msgstr "3D Model(s)"
+
+msgid "Net names:"
+msgstr "Net names:"
+
+msgid "Do not show"
+msgstr "Do not show"
+
+msgid "Show on pads"
+msgstr "Show on pads"
+
+msgid "Show on tracks"
+msgstr "Show on tracks"
+
+msgid "Show on pads & tracks"
+msgstr "Show on pads & tracks"
+
+msgid "Show pad numbers"
+msgstr "Show pad numbers"
+
+msgid "Clearance Outlines"
+msgstr "Clearance Outlines"
+
+msgid "Tracks:"
+msgstr "Tracks:"
+
+msgid "Do not show clearances"
+msgstr "Do not show clearances"
+
+msgid "Show when routing"
+msgstr "Show when routing"
+
+msgid "Show when routing w/ via clearance at end"
+msgstr "Show when routing w/ via clearance at end"
+
+msgid "Show when routing and editing"
+msgstr "Show when routing and editing"
+
+msgid "Show always"
+msgstr "Show always"
+
+msgid "Show pad clearance"
+msgstr "Show pad clearance"
+
+msgid "Show all fields when parent footprint is selected"
+msgstr "Show all fields when parent footprint is selected"
+
+msgid "Select/highlight objects corresponding to schematic selection"
+msgstr "Select/highlight objects corresponding to schematic selection"
+
+msgid "Highlight footprints corresponding to selected symbols"
+msgstr "Highlight footprints corresponding to selected symbols"
+
+msgid "Ensures that cross-probed footprints are visible in the current view"
+msgstr "Ensures that cross-probed footprints are visible in the current view"
+
+msgid "Highlight nets when they are highlighted in the schematic editor"
+msgstr "Highlight nets when they are highlighted in the schematic editor"
+
+msgid "Refresh 3D view automatically"
+msgstr "Refresh 3D view automatically"
+
+msgid ""
+"When enabled, edits to the board will cause the 3D view to refresh (may be "
+"slow with larger boards)"
+msgstr ""
+"When enabled, edits to the board will cause the 3D view to refresh (may be "
+"slow with larger boards)"
 
 msgid "Icon"
 msgstr "Icon"
@@ -24556,14 +24841,8 @@ msgstr "No via hole size defined."
 msgid "No differential pair gap defined."
 msgstr "No differential pair gap defined."
 
-msgid "Tracks:"
-msgstr "Tracks:"
-
 msgid "7"
 msgstr "7"
-
-msgid "Vias:"
-msgstr "Vias:"
 
 msgid "Hole"
 msgstr "Hole"
@@ -25707,8 +25986,9 @@ msgstr "Determining PCB data\n"
 msgid "Board Thickness from stackup: %.3f mm\n"
 msgstr "Board Thickness from stackup: %.3f mm\n"
 
-msgid "Build STEP data\n"
-msgstr "Build STEP data\n"
+#, c-format
+msgid "Build %s data\n"
+msgstr "Build %s data\n"
 
 msgid ""
 "\n"
@@ -25717,40 +25997,69 @@ msgstr ""
 "\n"
 "** Error building STEP board model. Export aborted. **\n"
 
-msgid "Writing STEP file\n"
-msgstr "Writing STEP file\n"
-
-msgid ""
-"\n"
-"** Error writing STEP file. **\n"
-msgstr ""
-"\n"
-"** Error writing STEP file. **\n"
+#, c-format
+msgid "Writing %s file\n"
+msgstr "Writing %s file\n"
 
 #, c-format
 msgid ""
 "\n"
-"STEP file '%s' created.\n"
+"** Error writing %s file. **\n"
 msgstr ""
 "\n"
-"STEP file '%s' created.\n"
+"** Error writing %s file. **\n"
 
+#, c-format
+msgid "%s file '%s' created.\n"
+msgstr "%s file '%s' created.\n"
+
+#, c-format
 msgid ""
 "\n"
-"** Error exporting STEP file. Export aborted. **\n"
+"** Error exporting %s file. Export aborted. **\n"
 msgstr ""
 "\n"
-"** Error exporting STEP file. Export aborted. **\n"
+"** Error exporting %s file. Export aborted. **\n"
 
+#, c-format
 msgid ""
-"Unable to create STEP file.\n"
+"Unable to create %s file.\n"
 "Check that the board has a valid outline and models."
 msgstr ""
-"Unable to create STEP file.\n"
+"Unable to create %s file.\n"
 "Check that the board has a valid outline and models."
 
-msgid "STEP file has been created, but there are warnings."
-msgstr "STEP file has been created, but there are warnings."
+#, c-format
+msgid "%s file has been created, but there are warnings."
+msgstr "%s file has been created, but there are warnings."
+
+#, c-format
+msgid ""
+"\n"
+"Export time %.3f s\n"
+msgstr ""
+"\n"
+"Export time %.3f s\n"
+
+#, c-format
+msgid "Build holes for %s\n"
+msgstr "Build holes for %s\n"
+
+#, c-format
+msgid "Cutting %d/%d %s\n"
+msgstr "Cutting %d/%d %s\n"
+
+msgid "pads"
+msgstr "pads"
+
+msgid "shapes"
+msgstr "shapes"
+
+msgid "tracks"
+msgstr "tracks"
+
+msgid "zones"
+msgstr "zones"
 
 msgid "All KiCad Board Files"
 msgstr "All KiCad Board Files"
@@ -25806,6 +26115,9 @@ msgstr "PCB '%s' does not exist. Do you wish to create it?"
 
 msgid "Creating PCB"
 msgstr "Creating PCB"
+
+msgid "File format is not supported"
+msgstr "File format is not supported"
 
 #, c-format
 msgid "Error loading PCB '%s'."
@@ -26116,12 +26428,6 @@ msgstr "Previous footprint placement still in progress."
 msgid "Save Footprint As"
 msgstr "Save Footprint As"
 
-msgid "No library specified.  Footprint could not be saved."
-msgstr "No library specified.  Footprint could not be saved."
-
-msgid "No footprint name specified.  Footprint could not be saved."
-msgstr "No footprint name specified.  Footprint could not be saved."
-
 #, c-format
 msgid "Footprint %s already exists in %s."
 msgstr "Footprint %s already exists in %s."
@@ -26140,8 +26446,9 @@ msgstr "Enter footprint name:"
 msgid "New Footprint"
 msgstr "New Footprint"
 
-msgid "No footprint name defined."
-msgstr "No footprint name defined."
+#, c-format
+msgid "Footprint '%s' already exists in library '%s'."
+msgstr "Footprint '%s' already exists in library '%s'."
 
 msgid "KiCad Footprint Library Viewer"
 msgstr "KiCad Footprint Library Viewer"
@@ -26157,22 +26464,19 @@ msgstr ""
 
 #, c-format
 msgid ""
-"The current configuration does not include library '%s'.  Use Manage "
-"Footprint Libraries to edit the configuration."
+"Footprint library not found. The current configuration does not include "
+"library '%s'."
 msgstr ""
-"The current configuration does not include library '%s'.  Use Manage "
-"Footprint Libraries to edit the configuration."
-
-msgid "Footprint library not found."
-msgstr "Footprint library not found."
+"Footprint library not found. The current configuration does not include "
+"library '%s'."
 
 #, c-format
 msgid ""
-"Library '%s' is not enabled in the current configuration.  Use Manage "
-"Footprint Libraries to edit the configuration."
+"Footprint library not enabled. Library '%s' is not enabled in the current "
+"configuration."
 msgstr ""
-"Library '%s' is not enabled in the current configuration.  Use Manage "
-"Footprint Libraries to edit the configuration."
+"Footprint library not enabled. Library '%s' is not enabled in the current "
+"configuration."
 
 msgid "Footprint Wizard"
 msgstr "Footprint Wizard"
@@ -26275,12 +26579,6 @@ msgstr "Default units:"
 msgid "Import Vector Graphics File"
 msgstr "Import Vector Graphics File"
 
-msgid "Memory was exhausted trying to load the DXF, it may be too large."
-msgstr "Memory was exhausted trying to load the DXF, it may be too large."
-
-msgid "Invalid spline definition encountered"
-msgstr "Invalid spline definition encountered"
-
 msgid ""
 "Current Board will be lost and this operation cannot be undone. Continue?"
 msgstr ""
@@ -26303,6 +26601,10 @@ msgstr "Choose Footprint (%d items loaded)"
 #, c-format
 msgid "Footprints [%u items]"
 msgstr "Footprints [%u items]"
+
+#, c-format
+msgid "Unable to find a writer for '%s'."
+msgstr "Unable to find a writer for '%s'."
 
 #, c-format
 msgid "Footprint '%s' saved."
@@ -27055,50 +27357,6 @@ msgstr "Constraints Report"
 msgid "Diff Footprint with Library"
 msgstr "Diff Footprint with Library"
 
-msgid "must be mm, in, or mil"
-msgstr "must be mm, in, or mil"
-
-#, c-format
-msgid "Missing layer name argument to %s."
-msgstr "Missing layer name argument to %s."
-
-#, c-format
-msgid "Unrecognized layer '%s'"
-msgstr "Unrecognized layer '%s'"
-
-#, c-format
-msgid "Missing footprint argument (A, B, or reference designator) to %s."
-msgstr "Missing footprint argument (A, B, or reference designator) to %s."
-
-msgid "Footprint's courtyard is not a single, closed shape."
-msgstr "Footprint's courtyard is not a single, closed shape."
-
-msgid "Footprint has no front courtyard."
-msgstr "Footprint has no front courtyard."
-
-msgid "Footprint has no back courtyard."
-msgstr "Footprint has no back courtyard."
-
-#, c-format
-msgid "Missing rule-area argument (A, B, or rule-area name) to %s."
-msgstr "Missing rule-area argument (A, B, or rule-area name) to %s."
-
-#, c-format
-msgid "Missing group name argument to %s."
-msgstr "Missing group name argument to %s."
-
-#, c-format
-msgid "Missing footprint argument (reference designator) to %s."
-msgstr "Missing footprint argument (reference designator) to %s."
-
-#, c-format
-msgid "Missing diff-pair name argument to %s."
-msgstr "Missing diff-pair name argument to %s."
-
-#, c-format
-msgid "Missing field name argument to %s."
-msgstr "Missing field name argument to %s."
-
 msgid "User Field"
 msgstr "User Field"
 
@@ -27160,6 +27418,9 @@ msgstr "%s %s on %s"
 msgid "%s on %s"
 msgstr "%s on %s"
 
+msgid "Pad Primitives"
+msgstr "Pad Primitives"
+
 msgid "PCB Target"
 msgstr "PCB Target"
 
@@ -27180,6 +27441,12 @@ msgstr "PCB Text '%s' on %s"
 #, c-format
 msgid "PCB Text Box on %s"
 msgstr "PCB Text Box on %s"
+
+msgid "Border Properties"
+msgstr "Border Properties"
+
+msgid "Border Style"
+msgstr "Border Style"
 
 #, c-format
 msgid "Blind/Buried Via %s on %s"
@@ -27252,6 +27519,54 @@ msgstr "Layer Bottom"
 msgid "Via Type"
 msgstr "Via Type"
 
+msgid "must be mm, in, or mil"
+msgstr "must be mm, in, or mil"
+
+#, c-format
+msgid "Missing layer name argument to %s."
+msgstr "Missing layer name argument to %s."
+
+#, c-format
+msgid "Unrecognized layer '%s'"
+msgstr "Unrecognized layer '%s'"
+
+#, c-format
+msgid "Missing footprint argument (A, B, or reference designator) to %s."
+msgstr "Missing footprint argument (A, B, or reference designator) to %s."
+
+msgid "Footprint's courtyard is not a single, closed shape."
+msgstr "Footprint's courtyard is not a single, closed shape."
+
+msgid "Footprint has no front courtyard."
+msgstr "Footprint has no front courtyard."
+
+msgid "Footprint has no back courtyard."
+msgstr "Footprint has no back courtyard."
+
+#, c-format
+msgid "Missing rule-area argument (A, B, or rule-area name) to %s."
+msgstr "Missing rule-area argument (A, B, or rule-area name) to %s."
+
+#, c-format
+msgid "Missing group name argument to %s."
+msgstr "Missing group name argument to %s."
+
+#, c-format
+msgid "Missing sheet name argument to %s."
+msgstr "Missing sheet name argument to %s."
+
+#, c-format
+msgid "Missing footprint argument (reference designator) to %s."
+msgstr "Missing footprint argument (reference designator) to %s."
+
+#, c-format
+msgid "Missing diff-pair name argument to %s."
+msgstr "Missing diff-pair name argument to %s."
+
+#, c-format
+msgid "Missing field name argument to %s."
+msgstr "Missing field name argument to %s."
+
 msgid ""
 "An error occurred attempting to load the global footprint library table.\n"
 "Please edit this global footprint library table in Preferences menu."
@@ -27261,6 +27576,13 @@ msgstr ""
 
 msgid "Loading board\n"
 msgstr "Loading board\n"
+
+#, c-format
+msgid "Successfully exported VRML to %s"
+msgstr "Successfully exported VRML to %s"
+
+msgid "Error exporting VRML"
+msgstr "Error exporting VRML"
 
 msgid "Successfully created svg file"
 msgstr "Successfully created svg file"
@@ -27298,10 +27620,6 @@ msgid "DRC"
 msgstr "DRC"
 
 #, c-format
-msgid "Found %d violations\n"
-msgstr "Found %d violations\n"
-
-#, c-format
 msgid "Found %d unconnected items\n"
 msgstr "Found %d unconnected items\n"
 
@@ -27322,6 +27640,13 @@ msgstr "Multiple Layers"
 
 msgid "Library Description"
 msgstr "Library Description"
+
+msgid ""
+"Selected file contains multiple footprints. Only the first one will be "
+"imported."
+msgstr ""
+"Selected file contains multiple footprints. Only the first one will be "
+"imported."
 
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
 msgstr "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
@@ -27347,9 +27672,21 @@ msgid ""
 msgstr ""
 "Enter the python module which implements the PLUGIN::Footprint*() functions."
 
+msgid "Altium Circuit Maker PCB files"
+msgstr "Altium Circuit Maker PCB files"
+
+msgid "Altium Circuit Studio PCB files"
+msgstr "Altium Circuit Studio PCB files"
+
 #, c-format
 msgid "File not found: '%s'."
 msgstr "File not found: '%s'."
+
+msgid "Altium Designer PCB files"
+msgstr "Altium Designer PCB files"
+
+msgid "Altium PCB footprint library files"
+msgstr "Altium PCB footprint library files"
 
 #, c-format
 msgid "Unknown mapping of the Altium layer '%s'."
@@ -27389,6 +27726,13 @@ msgstr "'%s' was not parsed correctly."
 #, c-format
 msgid "'%s' was not fully parsed."
 msgstr "'%s' was not fully parsed."
+
+msgid ""
+"This file does not appear to be in a valid PCB Binary Version 6.0 format. In "
+"Altium Designer, make sure to save as \"PCB Binary Files (*.PcbDoc)\"."
+msgstr ""
+"This file does not appear to be in a valid PCB Binary Version 6.0 format. In "
+"Altium Designer, make sure to save as \"PCB Binary Files (*.PcbDoc)\"."
 
 #, c-format
 msgid "File not found: '%s' for directory '%s'."
@@ -27556,6 +27900,9 @@ msgstr "Ignored barcode on Altium layer %d (not yet supported)."
 
 msgid "Loading rectangles..."
 msgstr "Loading rectangles..."
+
+msgid "Solidworks PCB files"
+msgstr "Solidworks PCB files"
 
 msgid ""
 "The selected file indicates that nets might be out of synchronisation with "
@@ -27952,6 +28299,9 @@ msgstr ""
 "imported. Please review the design rules as copper pours will affected by "
 "this."
 
+msgid "CADSTAR PCB Archive files"
+msgstr "CADSTAR PCB Archive files"
+
 #, c-format
 msgid "Unable to read file '%s'"
 msgstr "Unable to read file '%s'"
@@ -27967,6 +28317,10 @@ msgstr "No '%s' package in library '%s'."
 #, c-format
 msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
+
+#, c-format
+msgid "Skipping a polygon on layer '%s' (%d): outline count is not 1"
+msgstr "Skipping a polygon on layer '%s' (%d): outline count is not 1"
 
 #, c-format
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
@@ -27991,6 +28345,50 @@ msgstr "Ignoring a rectangle since Eagle layer '%s' (%d) was not mapped"
 #, c-format
 msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
+
+msgid "Eagle ver. 6.x XML PCB files"
+msgstr "Eagle ver. 6.x XML PCB files"
+
+msgid "Eagle ver. 6.x XML library files"
+msgstr "Eagle ver. 6.x XML library files"
+
+#, c-format
+msgid "Unknown SVGNODE nodeType %d"
+msgstr "Unknown SVGNODE nodeType %d"
+
+#, c-format
+msgid "Unable to find a valid board in '%s'"
+msgstr "Unable to find a valid board in '%s'"
+
+#, c-format
+msgid "Error loading board '%s': %s"
+msgstr "Error loading board '%s': %s"
+
+#, c-format
+msgid "Unable to find valid footprints in '%s'"
+msgstr "Unable to find valid footprints in '%s'"
+
+#, c-format
+msgid "Error enumerating footprints in library '%s': %s"
+msgstr "Error enumerating footprints in library '%s': %s"
+
+#, c-format
+msgid "Error reading footprint '%s' from library '%s': %s"
+msgstr "Error reading footprint '%s' from library '%s': %s"
+
+#, c-format
+msgid "Cannot load footprint '%s' from '%s'"
+msgstr "Cannot load footprint '%s' from '%s'"
+
+#, c-format
+msgid "Footprint '%s' not found in project '%s'"
+msgstr "Footprint '%s' not found in project '%s'"
+
+msgid "EasyEDA (JLCEDA) Pro project"
+msgstr "EasyEDA (JLCEDA) Pro project"
+
+msgid "Fabmaster PCB files"
+msgstr "Fabmaster PCB files"
 
 msgid "Could not read file "
 msgstr "Could not read file "
@@ -28117,6 +28515,12 @@ msgstr "Unexpected file '%s' found in library '%s'."
 #, c-format
 msgid "Footprint library '%s' cannot be deleted."
 msgstr "Footprint library '%s' cannot be deleted."
+
+msgid "gEDA PCB footprint file"
+msgstr "gEDA PCB footprint file"
+
+msgid "gEDA PCB footprint library directory"
+msgstr "gEDA PCB footprint library directory"
 
 #, c-format
 msgid "Cannot interpret date code %d"
@@ -28329,6 +28733,9 @@ msgstr "Cannot overwrite library path '%s'."
 msgid "Unexpected file '%s' found in library path '%s'."
 msgstr "Unexpected file '%s' found in library path '%s'."
 
+msgid "KiCad footprint file"
+msgstr "KiCad footprint file"
+
 #, c-format
 msgid "File '%s' has an unrecognized version: %d."
 msgstr "File '%s' has an unrecognized version: %d."
@@ -28389,12 +28796,18 @@ msgstr "File '%s' is empty."
 msgid "File '%s' is not a legacy library."
 msgstr "File '%s' is not a legacy library."
 
+msgid "Legacy footprint library files"
+msgstr "Legacy footprint library files"
+
 #, c-format
 msgid "Unknown PCad layer %u"
 msgstr "Unknown PCad layer %u"
 
 msgid "KiCad only supports 32 signal layers."
 msgstr "KiCad only supports 32 signal layers."
+
+msgid "P-Cad 200x ASCII PCB files"
+msgstr "P-Cad 200x ASCII PCB files"
 
 msgid "Unable to find library section."
 msgstr "Unable to find library section."
@@ -29463,13 +29876,6 @@ msgstr "_copy"
 msgid "Change Footprint Name"
 msgstr "Change Footprint Name"
 
-msgid "Footprint name cannot be empty."
-msgstr "Footprint name cannot be empty."
-
-#, c-format
-msgid "Footprint name '%s' already in use in library '%s'."
-msgstr "Footprint name '%s' already in use in library '%s'."
-
 msgid "No footprint problems found."
 msgstr "No footprint problems found."
 
@@ -29698,6 +30104,25 @@ msgstr "Switch Arc Posture"
 
 msgid "Switch the arc posture"
 msgstr "Switch the arc posture"
+
+msgid "Snap to objects on the active layer only"
+msgstr "Snap to objects on the active layer only"
+
+msgid "Enables snapping to objects on the active layer only"
+msgstr "Enables snapping to objects on the active layer only"
+
+msgid "Snap to objects on all layers"
+msgstr "Snap to objects on all layers"
+
+msgid "Enables snapping to objects on all visible layers"
+msgstr "Enables snapping to objects on all visible layers"
+
+msgid "Toggle snapping between active and all layers"
+msgstr "Toggle snapping between active and all layers"
+
+msgid "Toggles between snapping on all visible layers and only the active area"
+msgstr ""
+"Toggles between snapping on all visible layers and only the active area"
 
 msgid "Delete Last Point"
 msgstr "Delete Last Point"
@@ -30250,12 +30675,6 @@ msgstr "Toggle ratsnest display of selected item(s)"
 
 msgid "Show the net inspector"
 msgstr "Show the net inspector"
-
-msgid "Show Appearance Manager"
-msgstr "Show Appearance Manager"
-
-msgid "Show/hide the appearance manager"
-msgstr "Show/hide the appearance manager"
 
 msgid "Flip Board View"
 msgstr "Flip Board View"
@@ -30849,6 +31268,15 @@ msgstr ""
 msgid "Append Board"
 msgstr "Append Board"
 
+msgid "Active Layer"
+msgstr "Active Layer"
+
+msgid "All Layers"
+msgstr "All Layers"
+
+msgid "Object Snapping"
+msgstr "Object Snapping"
+
 msgid "Resolved clearance"
 msgstr "Resolved clearance"
 
@@ -31037,21 +31465,6 @@ msgstr "Through-hole Pads"
 msgid "Show through-hole pads"
 msgstr "Show through-hole pads"
 
-msgid "Show footprint values"
-msgstr "Show footprint values"
-
-msgid "References"
-msgstr "References"
-
-msgid "Show footprint references"
-msgstr "Show footprint references"
-
-msgid "Footprint Text"
-msgstr "Footprint Text"
-
-msgid "Show all footprint text"
-msgstr "Show all footprint text"
-
 msgid "Hidden Text"
 msgstr "Hidden Text"
 
@@ -31088,14 +31501,17 @@ msgstr "Locked Item Shadow"
 msgid "Show a shadow marker on locked items"
 msgstr "Show a shadow marker on locked items"
 
+msgid "Conflict Fp Shadow"
+msgstr "Conflict Fp Shadow"
+
+msgid "Show a shadow marker on conflicting footprints"
+msgstr "Show a shadow marker on conflicting footprints"
+
 msgid "Show drawing sheet borders and title block"
 msgstr "Show drawing sheet borders and title block"
 
 msgid "No Layers"
 msgstr "No Layers"
-
-msgid "All Layers"
-msgstr "All Layers"
 
 msgid "All Copper Layers"
 msgstr "All Copper Layers"
@@ -31375,10 +31791,6 @@ msgid "Show Only Back Assembly Layers"
 msgstr "Show Only Back Assembly Layers"
 
 #, c-format
-msgid "Show or hide %s"
-msgstr "Show or hide %s"
-
-#, c-format
 msgid "Set opacity of %s"
 msgstr "Set opacity of %s"
 
@@ -31399,16 +31811,6 @@ msgstr "Hide All Other Netclasses"
 msgid "Show or hide ratsnest for nets in %s"
 msgstr "Show or hide ratsnest for nets in %s"
 
-#, c-format
-msgid "Presets (%s+Tab):"
-msgstr "Presets (%s+Tab):"
-
-msgid "Layer preset name:"
-msgstr "Layer preset name:"
-
-msgid "Save Layer Preset"
-msgstr "Save Layer Preset"
-
 msgid ""
 "The current color theme is read-only.  Create a new theme in Preferences to "
 "enable color editing."
@@ -31422,12 +31824,6 @@ msgstr "Show the Net Inspector"
 msgid "Configure net classes"
 msgstr "Configure net classes"
 
-msgid "Presets (Ctrl+Tab):"
-msgstr "Presets (Ctrl+Tab):"
-
-msgid "Viewports (Alt+Tab):"
-msgstr "Viewports (Alt+Tab):"
-
 msgid "Create a new project for this board"
 msgstr "Create a new project for this board"
 
@@ -31439,13 +31835,6 @@ msgstr "Omit nets"
 
 msgid "Do not prefix path with footprint UUID."
 msgstr "Do not prefix path with footprint UUID."
-
-msgid ""
-"Creating a project will enable features such as design rules, net classes, "
-"and layer presets"
-msgstr ""
-"Creating a project will enable features such as design rules, net classes, "
-"and layer presets"
 
 #, c-format
 msgid "Only %s"
@@ -31713,6 +32102,638 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#, c-format
+#~ msgid ""
+#~ "Save and restore view orientation and zoom.\n"
+#~ "Use %s+Tab to activate selector.\n"
+#~ "Successive Tabs while holding %s down will cycle through viewports in the "
+#~ "popup."
+#~ msgstr ""
+#~ "Save and restore view orientation and zoom.\n"
+#~ "Use %s+Tab to activate selector.\n"
+#~ "Successive Tabs while holding %s down will cycle through viewports in the "
+#~ "popup."
+
+#~ msgid "Toggle Through Hole 3D models"
+#~ msgstr "Toggle Through Hole 3D models"
+
+#~ msgid "Toggle 3D models for 'Through hole' type components"
+#~ msgstr "Toggle 3D models for 'Through hole' type components"
+
+#~ msgid "Toggle SMD 3D models"
+#~ msgstr "Toggle SMD 3D models"
+
+#~ msgid "Toggle 3D models for 'Surface mount' type components"
+#~ msgstr "Toggle 3D models for 'Surface mount' type components"
+
+#~ msgid "Toggle unspecified 3D models"
+#~ msgstr "Toggle unspecified 3D models"
+
+#~ msgid "Toggle 3D models for 'unspecified' type components"
+#~ msgstr "Toggle 3D models for 'unspecified' type components"
+
+#~ msgid "Toggle 3D models not in pos file"
+#~ msgstr "Toggle 3D models not in pos file"
+
+#~ msgid "Toggle 3D models marked DNP"
+#~ msgstr "Toggle 3D models marked DNP"
+
+#~ msgid "Toggle 3D models for components marked 'Do Not Place'"
+#~ msgstr "Toggle 3D models for components marked 'Do Not Place'"
+
+#~ msgid "Toggle realistic mode"
+#~ msgstr "Toggle realistic mode"
+
+#~ msgid "Toggle board body display"
+#~ msgstr "Toggle board body display"
+
+#~ msgid "Toggle zone display"
+#~ msgstr "Toggle zone display"
+
+#~ msgid "Toggle adhesive display"
+#~ msgstr "Toggle adhesive display"
+
+#~ msgid "Toggle display of adhesive layers"
+#~ msgstr "Toggle display of adhesive layers"
+
+#~ msgid "Toggle silkscreen display"
+#~ msgstr "Toggle silkscreen display"
+
+#~ msgid "Toggle display of silkscreen layers"
+#~ msgstr "Toggle display of silkscreen layers"
+
+#~ msgid "Toggle solder mask display"
+#~ msgstr "Toggle solder mask display"
+
+#~ msgid "Toggle display of solder mask layers"
+#~ msgstr "Toggle display of solder mask layers"
+
+#~ msgid "Toggle solder paste display"
+#~ msgstr "Toggle solder paste display"
+
+#~ msgid "Toggle display of solder paste layers"
+#~ msgstr "Toggle display of solder paste layers"
+
+#~ msgid "Toggle comments display"
+#~ msgstr "Toggle comments display"
+
+#~ msgid "Toggle display of comments and drawings layers"
+#~ msgstr "Toggle display of comments and drawings layers"
+
+#~ msgid "Toggle ECO display"
+#~ msgstr "Toggle ECO display"
+
+#~ msgid "Toggle display of ECO layers"
+#~ msgstr "Toggle display of ECO layers"
+
+#~ msgid "Environment Colors"
+#~ msgstr "Environment Colors"
+
+#~ msgid "Background gradient start:"
+#~ msgstr "Background gradient start:"
+
+#~ msgid "Background gradient end:"
+#~ msgstr "Background gradient end:"
+
+#~ msgid "Solder paste:"
+#~ msgstr "Solder paste:"
+
+#~ msgid "Board Colors"
+#~ msgstr "Board Colors"
+
+#~ msgid "Use board stackup colors"
+#~ msgstr "Use board stackup colors"
+
+#~ msgid "Use colors:"
+#~ msgstr "Use colors:"
+
+#~ msgid "Silkscreen top:"
+#~ msgstr "Silkscreen top:"
+
+#~ msgid "Silkscreen bottom:"
+#~ msgstr "Silkscreen bottom:"
+
+#~ msgid "Solder mask top:"
+#~ msgstr "Solder mask top:"
+
+#~ msgid "Solder mask bottom:"
+#~ msgstr "Solder mask bottom:"
+
+#~ msgid "Copper/surface finish:"
+#~ msgstr "Copper/surface finish:"
+
+#~ msgid "Board body:"
+#~ msgstr "Board body:"
+
+#~ msgid "Board Layers"
+#~ msgstr "Board Layers"
+
+#~ msgid "Show silkscreen layers"
+#~ msgstr "Show silkscreen layers"
+
+#~ msgid "Show solder mask layers"
+#~ msgstr "Show solder mask layers"
+
+#~ msgid "Show solder paste layers"
+#~ msgstr "Show solder paste layers"
+
+#~ msgid "Show adhesive layers"
+#~ msgstr "Show adhesive layers"
+
+#~ msgid "User Layers (not shown in realistic mode)"
+#~ msgstr "User Layers (not shown in realistic mode)"
+
+#~ msgid "Show comment and drawing layers"
+#~ msgstr "Show comment and drawing layers"
+
+#~ msgid "Show ECO layers"
+#~ msgstr "Show ECO layers"
+
+#~ msgid "Realistic mode"
+#~ msgstr "Realistic mode"
+
+#~ msgid "Current Grid"
+#~ msgstr "Current Grid"
+
+#~ msgid "User Defined Grid"
+#~ msgstr "User Defined Grid"
+
+#~ msgid "Size X:"
+#~ msgstr "Size X:"
+
+#~ msgid "Size Y:"
+#~ msgstr "Size Y:"
+
+#~ msgid "Fast Switching"
+#~ msgstr "Fast Switching"
+
+#~ msgid "Connectable Items:"
+#~ msgstr "Connectable Items:"
+
+#~ msgid "Reset Grid Sizes"
+#~ msgstr "Reset Grid Sizes"
+
+#~ msgid "Resets the list of grid sizes to default values"
+#~ msgstr "Resets the list of grid sizes to default values"
+
+#~ msgid "Grid Settings"
+#~ msgstr "Grid Settings"
+
+#~ msgid "Edit User Grid..."
+#~ msgstr "Edit User Grid..."
+
+#~ msgid "Grid Properties..."
+#~ msgstr "Grid Properties..."
+
+#~ msgid "Set grid dimensions"
+#~ msgstr "Set grid dimensions"
+
+#, c-format
+#~ msgid "Grid: %s (%s)"
+#~ msgstr "Grid: %s (%s)"
+
+#, c-format
+#~ msgid "User grid: %s (%s)"
+#~ msgstr "User grid: %s (%s)"
+
+#~ msgid "Grid Style"
+#~ msgstr "Grid Style"
+
+#~ msgid "px"
+#~ msgstr "px"
+
+#~ msgid "Snap to Grid:"
+#~ msgstr "Snap to Grid:"
+
+#~ msgid "Small crosshair"
+#~ msgstr "Small crosshair"
+
+#~ msgid "Full window crosshair"
+#~ msgstr "Full window crosshair"
+
+#~ msgid "Cursor Shape"
+#~ msgstr "Cursor Shape"
+
+#~ msgid "Cursor shape for drawing, placement and movement tools"
+#~ msgstr "Cursor shape for drawing, placement and movement tools"
+
+#~ msgid "KiCad drawing symbol files"
+#~ msgstr "KiCad drawing symbol files"
+
+#~ msgid "All KiCad symbol library files"
+#~ msgstr "All KiCad symbol library files"
+
+#~ msgid "Geda PCB footprint library files"
+#~ msgstr "Geda PCB footprint library files"
+
+#~ msgid "Drawing Properties"
+#~ msgstr "Drawing Properties"
+
+#~ msgid "Alternate pin definitions"
+#~ msgstr "Alternate pin definitions"
+
+#~ msgid "View Preset:"
+#~ msgstr "View Preset:"
+
+#~ msgid "Off"
+#~ msgstr "Off"
+
+#~ msgid "Selection Control"
+#~ msgstr "Selection Control"
+
+#~ msgid "Entire Project"
+#~ msgstr "Entire Project"
+
+#~ msgid "Format Preset:"
+#~ msgstr "Format Preset:"
+
+#~ msgid "Field Delimeter:"
+#~ msgstr "Field Delimeter:"
+
+#~ msgid "String Delimeter:"
+#~ msgstr "String Delimeter:"
+
+#~ msgid "Reference Delimiter:"
+#~ msgstr "Reference Delimiter:"
+
+#~ msgid "Range Delimiter:"
+#~ msgstr "Range Delimiter:"
+
+#~ msgid "Keep Tabs:"
+#~ msgstr "Keep Tabs:"
+
+#~ msgid "Keep Line Breaks:"
+#~ msgstr "Keep Line Breaks:"
+
+#~ msgid "Alternate Pin Assignments"
+#~ msgstr "Alternate Pin Assignments"
+
+#~ msgid ""
+#~ "This schematic currently uses the project symbol library list look up "
+#~ "method for loading library symbols.  KiCad will attempt to map the "
+#~ "existing symbols to use the new symbol library table.  Remapping will "
+#~ "change some project files and schematics may not be compatible with older "
+#~ "versions of KiCad.  All files that are changed will be backed up to the "
+#~ "\"remap_backup\" folder in the project folder should you need to revert "
+#~ "any changes.  If you choose to skip this step, you will be responsible "
+#~ "for manually remapping the symbols."
+#~ msgstr ""
+#~ "This schematic currently uses the project symbol library list look up "
+#~ "method for loading library symbols.  KiCad will attempt to map the "
+#~ "existing symbols to use the new symbol library table.  Remapping will "
+#~ "change some project files and schematics may not be compatible with older "
+#~ "versions of KiCad.  All files that are changed will be backed up to the "
+#~ "“remap_backup” folder in the project folder should you need to revert any "
+#~ "changes.  If you choose to skip this step, you will be responsible for "
+#~ "manually remapping the symbols."
+
+#~ msgid ""
+#~ "Select one or more rows containing libraries in Legacy format (*.lib) to "
+#~ "save as current KiCad format (*.kicad_sym)."
+#~ msgstr ""
+#~ "Select one or more rows containing libraries in Legacy format (*.lib) to "
+#~ "save as current KiCad format (*.kicad_sym)."
+
+#, c-format
+#~ msgid ""
+#~ "Save %d Legacy format libraries as current KiCad format (*.kicad_sym) and "
+#~ "replace legacy entries in table?"
+#~ msgstr ""
+#~ "Save %d Legacy format libraries as current KiCad format (*.kicad_sym) and "
+#~ "replace legacy entries in table?"
+
+#~ msgid "Pins with 'no connection' type are connected"
+#~ msgstr "Pins with 'no connection' type are connected"
+
+#, c-format
+#~ msgid "Unexpected file extension: '%s'."
+#~ msgstr "Unexpected file extension: '%s'."
+
+#, c-format
+#~ msgid "Unsupported ellipse was not imported at (X = %d; Y = %d)."
+#~ msgstr "Unsupported ellipse was not imported at (X = %d; Y = %d)."
+
+#, c-format
+#~ msgid "Symbol %s is derived from %s.  Symbol graphics will not be editable."
+#~ msgstr ""
+#~ "Symbol %s is derived from %s.  Symbol graphics will not be editable."
+
+#, c-format
+#~ msgid "Deriving from '%s', the root symbol of '%s'."
+#~ msgstr "Deriving from '%s', the root symbol of '%s'."
+
+#~ msgid "This new symbol has no name and cannot be created."
+#~ msgstr "This new symbol has no name and cannot be created."
+
+#~ msgid "No library specified.  Symbol could not be saved."
+#~ msgstr "No library specified.  Symbol could not be saved."
+
+#, c-format
+#~ msgid "Symbol '%s' already exists in library '%s'"
+#~ msgstr "Symbol '%s' already exists in library '%s'"
+
+#, c-format
+#~ msgid "Error loading symbol %s from library '%s'. (%s)"
+#~ msgstr "Error loading symbol %s from library '%s'. (%s)"
+
+#~ msgid "Symbol name cannot be empty."
+#~ msgstr "Symbol name cannot be empty."
+
+#~ msgid ""
+#~ "Creating a project will enable features such as text variables, net "
+#~ "classes, and ERC exclusions"
+#~ msgstr ""
+#~ "Creating a project will enable features such as text variables, net "
+#~ "classes, and ERC exclusions"
+
+#~ msgid "Do not perform any additional operations after saving library."
+#~ msgstr "Do not perform any additional operations after saving library."
+
+#~ msgid ""
+#~ "Update symbol library table entry to point to new library.\n"
+#~ "\n"
+#~ "The original library will no longer be available for use."
+#~ msgstr ""
+#~ "Update symbol library table entry to point to new library.\n"
+#~ "\n"
+#~ "The original library will no longer be available for use."
+
+#~ msgid ""
+#~ "Add new entry to the global symbol library table.\n"
+#~ "\n"
+#~ "The symbol library table nickname is suffixed with\n"
+#~ "an integer to prevent duplicate table entries."
+#~ msgstr ""
+#~ "Add new entry to the global symbol library table.\n"
+#~ "\n"
+#~ "The symbol library table nickname is suffixed with\n"
+#~ "an integer to prevent duplicate table entries."
+
+#~ msgid ""
+#~ "Add new entry to the project symbol library table.\n"
+#~ "\n"
+#~ "The symbol library table nickname is suffixed with\n"
+#~ "an integer to prevent duplicate table entries."
+#~ msgstr ""
+#~ "Add new entry to the project symbol library table.\n"
+#~ "\n"
+#~ "The symbol library table nickname is suffixed with\n"
+#~ "an integer to prevent duplicate table entries."
+
+#~ msgid "shows help message and exits"
+#~ msgstr "shows help message and exits"
+
+#~ msgid "Plot only the first page (no sub-sheets)"
+#~ msgstr "Plot only the first page (no sub-sheets)"
+
+#~ msgid "Footprint path does not exist or is not accessible\n"
+#~ msgstr "Footprint path does not exist or is not accessible\n"
+
+#~ msgid "Horizontal center:"
+#~ msgstr "Horizontal center:"
+
+#~ msgid "Vertical center:"
+#~ msgstr "Vertical center:"
+
+#~ msgid "Radius:"
+#~ msgstr "Radius:"
+
+#~ msgid "STEP Export"
+#~ msgstr "STEP Export"
+
+#~ msgid "Center Point:"
+#~ msgstr "Center Point:"
+
+#~ msgid "Ring"
+#~ msgstr "Ring"
+
+#~ msgid "Line width may not be 0 for unfilled shapes."
+#~ msgstr "Line width may not be 0 for unfilled shapes."
+
+#, c-format
+#~ msgid "Corner %d"
+#~ msgstr "Corner %d"
+
+#~ msgid "Polygon must have at least 3 corners"
+#~ msgstr "Polygon must have at least 3 corners"
+
+#~ msgid "Polygon must have at least 3 corners after simplification"
+#~ msgstr "Polygon must have at least 3 corners after simplification"
+
+#~ msgid "Polygon can not be self-intersecting"
+#~ msgstr "Polygon can not be self-intersecting"
+
+#~ msgid "Note: redundant corners removed"
+#~ msgstr "Note: redundant corners removed"
+
+#~ msgid "Select a corner to add the new corner after."
+#~ msgstr "Select a corner to add the new corner after."
+
+#~ msgid "Select a corner to delete."
+#~ msgstr "Select a corner to delete."
+
+#~ msgid "Start point"
+#~ msgstr "Start point"
+
+#~ msgid "Control point 1"
+#~ msgstr "Control point 1"
+
+#~ msgid "Control point 2"
+#~ msgstr "Control point 2"
+
+#~ msgid "End point"
+#~ msgstr "End point"
+
+#~ msgid "Move vector"
+#~ msgstr "Move vector"
+
+#~ msgid "Scaling factor:"
+#~ msgstr "Scaling factor:"
+
+#~ msgid "Duplicate:"
+#~ msgstr "Duplicate:"
+
+#~ msgid "Coordinates are relative to anchor pad, rotated 0.0 deg."
+#~ msgstr "Coordinates are relative to anchor pad, rotated 0.0 deg."
+
+#~ msgid "Pad Custom Shape Geometry Transform"
+#~ msgstr "Pad Custom Shape Geometry Transform"
+
+#~ msgid "Basic Shape Polygon"
+#~ msgstr "Basic Shape Polygon"
+
+#~ msgid "width"
+#~ msgstr "width"
+
+#~ msgid "from"
+#~ msgstr "from"
+
+#~ msgid "to"
+#~ msgstr "to"
+
+#~ msgid "center"
+#~ msgstr "center"
+
+#~ msgid "start"
+#~ msgstr "start"
+
+#~ msgid "angle"
+#~ msgstr "angle"
+
+#~ msgid "at"
+#~ msgstr "at"
+
+#~ msgid "radius"
+#~ msgstr "radius"
+
+#, c-format
+#~ msgid "corners count %d"
+#~ msgstr "corners count %d"
+
+#~ msgid "Number box"
+#~ msgstr "Number box"
+
+#~ msgid "Unknown primitive"
+#~ msgstr "Unknown primitive"
+
+#~ msgid "No shape selected"
+#~ msgstr "No shape selected"
+
+#~ msgid "Ring/Circle"
+#~ msgstr "Ring/Circle"
+
+#~ msgid "Shape type:"
+#~ msgstr "Shape type:"
+
+#~ msgid "Add Primitive"
+#~ msgstr "Add Primitive"
+
+#~ msgid "Primitives list:"
+#~ msgstr "Primitives list:"
+
+#~ msgid "Note: coordinates are relative to anchor pad, orientation 0."
+#~ msgstr "Note: coordinates are relative to anchor pad, orientation 0."
+
+#~ msgid "Edit Primitive"
+#~ msgstr "Edit Primitive"
+
+#~ msgid "Duplicate Primitive"
+#~ msgstr "Duplicate Primitive"
+
+#~ msgid "Transform Primitive"
+#~ msgstr "Transform Primitive"
+
+#~ msgid "Delete Primitive"
+#~ msgstr "Delete Primitive"
+
+#~ msgid "Custom Shape Primitives"
+#~ msgstr "Custom Shape Primitives"
+
+#~ msgid "Show on pads and tracks"
+#~ msgstr "Show on pads and tracks"
+
+#~ msgid "Net Names"
+#~ msgstr "Net Names"
+
+#~ msgid "Show or hide net names on pads and/or tracks."
+#~ msgstr "Show or hide net names on pads and/or tracks."
+
+#~ msgid "Track && Via Clearances"
+#~ msgstr "Track && Via Clearances"
+
+#~ msgid ""
+#~ "Show clearance outlines around tracks, and optionally the via clearance "
+#~ "around the end of the track while routing."
+#~ msgstr ""
+#~ "Show clearance outlines around tracks, and optionally the via clearance "
+#~ "around the end of the track while routing."
+
+#~ msgid "The following directories could not be opened: \n"
+#~ msgstr "The following directories could not be opened: \n"
+
+#~ msgid "Failed to open directories to look for libraries"
+#~ msgstr "Failed to open directories to look for libraries"
+
+#~ msgid "Build STEP data\n"
+#~ msgstr "Build STEP data\n"
+
+#~ msgid "Writing STEP file\n"
+#~ msgstr "Writing STEP file\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "** Error writing STEP file. **\n"
+#~ msgstr ""
+#~ "\n"
+#~ "** Error writing STEP file. **\n"
+
+#, c-format
+#~ msgid ""
+#~ "\n"
+#~ "STEP file '%s' created.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "STEP file '%s' created.\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "** Error exporting STEP file. Export aborted. **\n"
+#~ msgstr ""
+#~ "\n"
+#~ "** Error exporting STEP file. Export aborted. **\n"
+
+#~ msgid ""
+#~ "Unable to create STEP file.\n"
+#~ "Check that the board has a valid outline and models."
+#~ msgstr ""
+#~ "Unable to create STEP file.\n"
+#~ "Check that the board has a valid outline and models."
+
+#~ msgid "STEP file has been created, but there are warnings."
+#~ msgstr "STEP file has been created, but there are warnings."
+
+#~ msgid "No library specified.  Footprint could not be saved."
+#~ msgstr "No library specified.  Footprint could not be saved."
+
+#~ msgid "No footprint name specified.  Footprint could not be saved."
+#~ msgstr "No footprint name specified.  Footprint could not be saved."
+
+#~ msgid "No footprint name defined."
+#~ msgstr "No footprint name defined."
+
+#, c-format
+#~ msgid ""
+#~ "The current configuration does not include library '%s'.  Use Manage "
+#~ "Footprint Libraries to edit the configuration."
+#~ msgstr ""
+#~ "The current configuration does not include library '%s'.  Use Manage "
+#~ "Footprint Libraries to edit the configuration."
+
+#~ msgid "Footprint library not found."
+#~ msgstr "Footprint library not found."
+
+#, c-format
+#~ msgid ""
+#~ "Library '%s' is not enabled in the current configuration.  Use Manage "
+#~ "Footprint Libraries to edit the configuration."
+#~ msgstr ""
+#~ "Library '%s' is not enabled in the current configuration.  Use Manage "
+#~ "Footprint Libraries to edit the configuration."
+
+#~ msgid "Footprint name cannot be empty."
+#~ msgstr "Footprint name cannot be empty."
+
+#, c-format
+#~ msgid "Footprint name '%s' already in use in library '%s'."
+#~ msgstr "Footprint name '%s' already in use in library '%s'."
+
+#~ msgid ""
+#~ "Creating a project will enable features such as design rules, net "
+#~ "classes, and layer presets"
+#~ msgstr ""
+#~ "Creating a project will enable features such as design rules, net "
+#~ "classes, and layer presets"
 
 #~ msgid "Ltspice schematic files"
 #~ msgstr "Ltspice schematic files"
@@ -38918,9 +39939,6 @@ msgstr "KiCad Printed Circuit Board"
 #~ msgid "Scroll cross-probed items into view"
 #~ msgstr "Scroll cross-probed items into view"
 
-#~ msgid "F.Cu"
-#~ msgstr "F.Cu"
-
 #~ msgid "In1.Cu"
 #~ msgstr "In1.Cu"
 
@@ -39011,9 +40029,6 @@ msgstr "KiCad Printed Circuit Board"
 #~ msgid "In30.Cu"
 #~ msgstr "In30.Cu"
 
-#~ msgid "B.Cu"
-#~ msgstr "B.Cu"
-
 #~ msgid "B.Adhesive"
 #~ msgstr "B.Adhesive"
 
@@ -39025,30 +40040,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "F.Paste"
 #~ msgstr "F.Paste"
-
-#~ msgid "B.Silkscreen"
-#~ msgstr "B.Silkscreen"
-
-#~ msgid "F.Silkscreen"
-#~ msgstr "F.Silkscreen"
-
-#~ msgid "B.Mask"
-#~ msgstr "B.Mask"
-
-#~ msgid "F.Mask"
-#~ msgstr "F.Mask"
-
-#~ msgid "User.Drawings"
-#~ msgstr "User.Drawings"
-
-#~ msgid "User.Comments"
-#~ msgstr "User.Comments"
-
-#~ msgid "User.Eco1"
-#~ msgstr "User.Eco1"
-
-#~ msgid "User.Eco2"
-#~ msgstr "User.Eco2"
 
 #~ msgid "Edge.Cuts"
 #~ msgstr "Edge.Cuts"
@@ -53779,9 +54770,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "Push changes from PCB to Schematic"
 #~ msgstr "Push changes from PCB to Schematic"
-
-#~ msgid "Scope:"
-#~ msgstr "Scope:"
 
 #~ msgid "Order:"
 #~ msgstr "Order:"

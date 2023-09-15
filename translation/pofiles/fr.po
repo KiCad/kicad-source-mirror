@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-15 19:57+0200\n"
+"POT-Creation-Date: 2023-09-15 15:58-0700\n"
 "PO-Revision-Date: 2023-09-15 20:00+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
@@ -4157,7 +4157,7 @@ msgstr "Style de Ligne"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:69
 #: eeschema/dialogs/dialog_junction_props.cpp:47
 #: eeschema/dialogs/dialog_line_properties.cpp:57
-#: eeschema/dialogs/dialog_sim_model.cpp:518
+#: eeschema/dialogs/dialog_sim_model.cpp:521
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:68
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:270
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:60
@@ -5942,7 +5942,7 @@ msgstr "Paramètres de la librairie pour %s..."
 #: common/lib_tree_model.cpp:146
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:99
-#: eeschema/dialogs/dialog_sim_model.cpp:517 eeschema/lib_item.cpp:56
+#: eeschema/dialogs/dialog_sim_model.cpp:520 eeschema/lib_item.cpp:56
 #: eeschema/symbol_editor/symbol_editor.cpp:1268
 msgid "Unit"
 msgstr "Unité"
@@ -12158,44 +12158,44 @@ msgstr "P"
 msgid "Format %s"
 msgstr "Format %s"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:211
+#: eeschema/dialogs/dialog_sim_model.cpp:214
 msgid "<unknown>"
 msgstr "<inconnu>"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:221
+#: eeschema/dialogs/dialog_sim_model.cpp:224
 #, c-format
 msgid "No model named '%s' in library."
 msgstr "Aucun modèle nommé '%s' dans la librairie."
 
-#: eeschema/dialogs/dialog_sim_model.cpp:302
+#: eeschema/dialogs/dialog_sim_model.cpp:305
 msgid "Failed to read simulation model from fields."
 msgstr "Échec de la lecture du modèle de simulation à partir des champs."
 
-#: eeschema/dialogs/dialog_sim_model.cpp:432
+#: eeschema/dialogs/dialog_sim_model.cpp:435
 msgid "Component:"
 msgstr "Composant:"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:432
+#: eeschema/dialogs/dialog_sim_model.cpp:435
 #: eeschema/dialogs/dialog_sim_model_base.cpp:54
 #: eeschema/dialogs/dialog_sim_model_base.cpp:82
 msgid "Model:"
 msgstr "Modèle:"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:491
+#: eeschema/dialogs/dialog_sim_model.cpp:494
 #, c-format
 msgid "Save parameter '%s (%s)' in Value field"
 msgstr "Sauver le paramètre '%s (%s)' dans le champ Valeur"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:499
+#: eeschema/dialogs/dialog_sim_model.cpp:502
 msgid "Save primary parameter in Value field"
 msgstr "Sauver le paramètre primaire dans le champ Valeur"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:516
+#: eeschema/dialogs/dialog_sim_model.cpp:519
 #: pcbnew/footprint_wizard_frame.cpp:325
 msgid "Parameter"
 msgstr "Paramètre"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:519 eeschema/lib_item.cpp:49
+#: eeschema/dialogs/dialog_sim_model.cpp:522 eeschema/lib_item.cpp:49
 #: eeschema/lib_pin.cpp:1193 eeschema/sch_label.cpp:1141
 #: eeschema/sch_pin.cpp:207 eeschema/sch_pin.cpp:220
 #: eeschema/symbol_editor/symbol_editor.cpp:1282
@@ -12209,12 +12209,12 @@ msgstr "Paramètre"
 msgid "Type"
 msgstr "Type"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:635
-#: eeschema/dialogs/dialog_sim_model.cpp:678
+#: eeschema/dialogs/dialog_sim_model.cpp:638
+#: eeschema/dialogs/dialog_sim_model.cpp:681
 msgid "Not Connected"
 msgstr "Non Connecté"
 
-#: eeschema/dialogs/dialog_sim_model.cpp:1097
+#: eeschema/dialogs/dialog_sim_model.cpp:1101
 msgid "Browse Models"
 msgstr "Examiner les Modèles"
 
@@ -15407,6 +15407,7 @@ msgstr ""
 
 #: eeschema/sch_edit_frame.cpp:1230 eeschema/sch_plotter.cpp:1011
 #: eeschema/widgets/symbol_diff_widget.cpp:38
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr "Schématique"
 
@@ -22188,6 +22189,7 @@ msgid "Footprint library path does not exist or is not accessible\n"
 msgstr "La librairie d'empreinte n'existe pas ou n'est pas accessible\n"
 
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1024
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
 msgid "PCB"
 msgstr "PCB"
 
@@ -32382,6 +32384,7 @@ msgid "Plot format:"
 msgstr "Format du tracé:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Gerber"
 msgstr "Gerber"
 
@@ -32743,8 +32746,8 @@ msgstr "La distance entre pistes doit être plus grande que 0."
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:65
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:66
-#: pcbnew/router/pns_kicad_iface.cpp:688 pcbnew/router/pns_kicad_iface.cpp:770
-#: pcbnew/router/pns_kicad_iface.cpp:771
+#: pcbnew/router/pns_kicad_iface.cpp:682 pcbnew/router/pns_kicad_iface.cpp:764
+#: pcbnew/router/pns_kicad_iface.cpp:765
 msgid "user choice"
 msgstr "choix de l’utilisateur"
 
@@ -41097,30 +41100,30 @@ msgstr "Ajusté: "
 msgid "?"
 msgstr "?"
 
-#: pcbnew/router/pns_kicad_iface.cpp:644 pcbnew/router/pns_kicad_iface.cpp:734
+#: pcbnew/router/pns_kicad_iface.cpp:638 pcbnew/router/pns_kicad_iface.cpp:728
 #: pcbnew/router/router_tool.cpp:796
 msgid "board minimum clearance"
 msgstr "isolation minimum du PCB"
 
-#: pcbnew/router/pns_kicad_iface.cpp:658 pcbnew/router/pns_kicad_iface.cpp:733
+#: pcbnew/router/pns_kicad_iface.cpp:652 pcbnew/router/pns_kicad_iface.cpp:727
 #: pcbnew/router/router_tool.cpp:758 pcbnew/router/router_tool.cpp:783
 msgid "board minimum track width"
 msgstr "c.i. largeur minimum de piste"
 
-#: pcbnew/router/pns_kicad_iface.cpp:665 pcbnew/router/router_tool.cpp:760
+#: pcbnew/router/pns_kicad_iface.cpp:659 pcbnew/router/router_tool.cpp:760
 msgid "existing track"
 msgstr "piste existante"
 
-#: pcbnew/router/pns_kicad_iface.cpp:686
+#: pcbnew/router/pns_kicad_iface.cpp:680
 msgid "netclass 'Default'"
 msgstr "netclasse 'Défaut'"
 
-#: pcbnew/router/pns_kicad_iface.cpp:1275
+#: pcbnew/router/pns_kicad_iface.cpp:1269
 #, c-format
 msgid "%s is malformed."
 msgstr "%s est mal formé."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1278
+#: pcbnew/router/pns_kicad_iface.cpp:1272
 msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
@@ -41128,7 +41131,7 @@ msgstr ""
 "Cette zone ne peut pas être gérée par le routeur.\n"
 "SVP vérifier qu’il ne s’agit pas d’un polygone auto-intersectant."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1982 pcbnew/router/router_tool.cpp:480
+#: pcbnew/router/pns_kicad_iface.cpp:1976 pcbnew/router/router_tool.cpp:480
 msgid "Interactive Router"
 msgstr "Routeur Interactif"
 
@@ -45391,6 +45394,14 @@ msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
 
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:34
+msgid "EDA"
+msgstr "EDA"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
+msgid "Circuit board"
+msgstr "Circuit Imprimé"
+
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
@@ -46754,12 +46765,6 @@ msgstr "Fichier Circuit Imprimé KiCad"
 
 #~ msgid "Remove Unused Pads"
 #~ msgstr "Supprimer Pads Inutilisés"
-
-#~ msgid "EDA"
-#~ msgstr "EDA"
-
-#~ msgid "Circuit board"
-#~ msgstr "Circuit Imprimé"
 
 #~ msgid "Filter other symbol fields by name:"
 #~ msgstr "Filtrer les autres champs par nom:"
