@@ -130,7 +130,7 @@ int CLI::PCB_EXPORT_BASE_COMMAND::doPerform( KIWAY& aKiway )
         LSET layerMask = convertLayerStringList( layers, m_selectedLayersSet );
         if( m_requireLayers && layerMask.Seq().size() < 1 )
         {
-            wxFprintf( stderr, _( "At least one or more layers must be specified\n" ) );
+            wxFprintf( stderr, _( "At least one layer must be specified\n" ) );
             return EXIT_CODES::ERR_ARGS;
         }
 

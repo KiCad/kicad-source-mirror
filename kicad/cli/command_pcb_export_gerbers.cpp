@@ -42,7 +42,7 @@ CLI::PCB_EXPORT_GERBERS_COMMAND::PCB_EXPORT_GERBERS_COMMAND() :
     addDrawingSheetArg();
     addDefineArg();
 
-    m_argParser.add_description( UTF8STDSTR( _( "Plot multiple gerbers for a PCB, including the "
+    m_argParser.add_description( UTF8STDSTR( _( "Plot multiple Gerbers for a PCB, including the "
                                                 "ability to use stored board plot settings" ) ) );
 
     m_argParser.add_argument( "--cl", ARG_COMMON_LAYERS )
@@ -53,7 +53,7 @@ CLI::PCB_EXPORT_GERBERS_COMMAND::PCB_EXPORT_GERBERS_COMMAND() :
             .metavar( "COMMON_LAYER_LIST" );
 
     m_argParser.add_argument( ARG_USE_BOARD_PLOT_PARAMS )
-            .help( UTF8STDSTR( _( "Use the gerber plot settings already configured in the board file" ) ) )
+            .help( UTF8STDSTR( _( "Use the Gerber plot settings already configured in the board file" ) ) )
             .implicit_value( true )
             .default_value( false );
 }

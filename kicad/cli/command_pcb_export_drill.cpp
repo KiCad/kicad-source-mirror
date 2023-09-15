@@ -97,7 +97,7 @@ CLI::PCB_EXPORT_DRILL_COMMAND::PCB_EXPORT_DRILL_COMMAND() : PCB_EXPORT_BASE_COMM
             .metavar( "MAP_FORMAT" );
 
     m_argParser.add_argument( ARG_GERBER_PRECISION )
-            .help( UTF8STDSTR( _( "Precision of gerber coordinates (5 or 6)" ) ) )
+            .help( UTF8STDSTR( _( "Precision of Gerber coordinates (5 or 6)" ) ) )
             .default_value( 6 );
 }
 

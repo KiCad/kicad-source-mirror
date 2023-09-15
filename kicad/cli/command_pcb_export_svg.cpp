@@ -52,7 +52,7 @@ CLI::PCB_EXPORT_SVG_COMMAND::PCB_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND(
 
     m_argParser.add_argument( "-t", ARG_THEME )
             .default_value( std::string() )
-            .help( UTF8STDSTR( _( "Color theme to use (will default to pcbnew settings)" ) ) )
+            .help( UTF8STDSTR( _( "Color theme to use (will default to PCB editor settings)" ) ) )
             .metavar( "THEME_NAME" );
 
     m_argParser.add_argument( ARG_NEGATIVE_SHORT, ARG_NEGATIVE )

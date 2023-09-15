@@ -90,7 +90,7 @@ CLI::PCB_EXPORT_POS_COMMAND::PCB_EXPORT_POS_COMMAND() : PCB_EXPORT_BASE_COMMAND(
             .default_value( false );
 
     m_argParser.add_argument( ARG_GERBER_BOARD_EDGE )
-            .help( UTF8STDSTR( _( "Include board edge layer (gerber only)" ) ) )
+            .help( UTF8STDSTR( _( "Include board edge layer (Gerber only)" ) ) )
             .implicit_value( true )
             .default_value( false );
 }
@@ -161,7 +161,7 @@ int CLI::PCB_EXPORT_POS_COMMAND::doPerform( KIWAY& aKiway )
     {
         if( aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::GERBER )
         {
-            wxFprintf( stderr, _( "\"both\" not supported for gerber format\n" ) );
+            wxFprintf( stderr, _( "\"both\" not supported for Gerber format\n" ) );
             return EXIT_CODES::ERR_ARGS;
         }
 

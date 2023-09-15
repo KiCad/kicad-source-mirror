@@ -38,7 +38,7 @@ CLI::PCB_EXPORT_GERBER_COMMAND::PCB_EXPORT_GERBER_COMMAND( const std::string& aN
     addDrawingSheetArg();
     addDefineArg();
 
-    m_argParser.add_description( UTF8STDSTR( _( "Plot given layers to a single gerber file" ) ) );
+    m_argParser.add_description( UTF8STDSTR( _( "Plot given layers to a single Gerber file" ) ) );
 
     m_argParser.add_argument( "--erd", ARG_EXCLUDE_REFDES )
             .help( UTF8STDSTR( _( "Exclude the reference designator text" ) ) )
@@ -81,13 +81,13 @@ CLI::PCB_EXPORT_GERBER_COMMAND::PCB_EXPORT_GERBER_COMMAND( const std::string& aN
             .default_value( false );
 
     m_argParser.add_argument( ARG_PRECISION )
-            .help( UTF8STDSTR( _( "Precision of gerber coordinates, valid options: 5 or 6" ) ) )
+            .help( UTF8STDSTR( _( "Precision of Gerber coordinates, valid options: 5 or 6" ) ) )
             .scan<'i', int>()
             .default_value( 6 )
             .metavar( "PRECISION" );
 
     m_argParser.add_argument( ARG_NO_PROTEL_EXTENSION )
-            .help( UTF8STDSTR( _( "Use KiCad gerber file extension" ) ) )
+            .help( UTF8STDSTR( _( "Use KiCad Gerber file extension" ) ) )
             .implicit_value( true )
             .default_value( false );
 }

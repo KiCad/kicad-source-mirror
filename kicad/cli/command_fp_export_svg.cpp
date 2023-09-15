@@ -41,7 +41,7 @@ CLI::FP_EXPORT_SVG_COMMAND::FP_EXPORT_SVG_COMMAND() : PCB_EXPORT_BASE_COMMAND( "
 
     m_argParser.add_argument( "-t", ARG_THEME )
             .default_value( std::string() )
-            .help( UTF8STDSTR( _( "Color theme to use (will default to pcbnew settings)" ) ) );
+            .help( UTF8STDSTR( _( "Color theme to use (will default to footprint editor settings)" ) ) );
 
     m_argParser.add_argument( "--fp", ARG_FOOTPRINT )
             .default_value( std::string() )

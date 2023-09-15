@@ -42,7 +42,7 @@ CLI::SYM_EXPORT_SVG_COMMAND::SYM_EXPORT_SVG_COMMAND() : COMMAND( "svg" )
 
     m_argParser.add_argument( "-t", ARG_THEME )
             .default_value( std::string() )
-            .help( UTF8STDSTR( _( "Color theme to use (will default to pcbnew settings)" ) ) )
+            .help( UTF8STDSTR( _( "Color theme to use (will default to symbol editor settings)" ) ) )
             .metavar( "THEME_NAME" );
 
     m_argParser.add_argument( "-s", ARG_SYMBOL )
