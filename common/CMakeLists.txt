@@ -67,6 +67,8 @@ add_library( singletop STATIC EXCLUDE_FROM_ALL
 # Functions and data all need to use the #include <import_export.h> and be declared
 # as APIEXPORT
 set( KICOMMON_SRCS
+    gal/color4d.cpp
+
     asset_archive.cpp
     array_axis.cpp
     array_options.cpp

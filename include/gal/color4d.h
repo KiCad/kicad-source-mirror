@@ -27,6 +27,7 @@
 #ifndef COLOR4D_H_
 #define COLOR4D_H_
 
+#include <kicommon.h>
 #include <wx/debug.h>
 #include <wx/colour.h>
 #include <wx/string.h>
@@ -80,7 +81,7 @@ enum EDA_COLOR_T
     MASKCOLOR      =    31       ///< mask for color index into colorRefs()[]
 };
 
-struct StructColors
+struct KICOMMON_API StructColors
 {
     unsigned char m_Blue;
     unsigned char m_Green;
@@ -91,7 +92,7 @@ struct StructColors
 };
 
 /// Global list of legacy color names, still used all over the place for constructing COLOR4D's
-const StructColors* colorRefs();
+KICOMMON_API const StructColors* colorRefs();
 
 
 namespace KIGFX
@@ -99,7 +100,7 @@ namespace KIGFX
 /**
  * A color representation with 4 components: red, green, blue, alpha.
  */
-class COLOR4D
+class KICOMMON_API COLOR4D
 {
 public:
     // Constructor (creates the Color 0,0,0,0)
@@ -387,26 +388,26 @@ public:
 };
 
 /// @brief Equality operator, are two colors equal
-bool operator==( const COLOR4D& lhs, const COLOR4D& rhs );
+KICOMMON_API bool operator==( const COLOR4D& lhs, const COLOR4D& rhs );
 
 /// @brief Not equality operator, are two colors not equal
-bool operator!=( const COLOR4D& lhs, const COLOR4D& rhs );
+KICOMMON_API bool operator!=( const COLOR4D& lhs, const COLOR4D& rhs );
 
-bool operator<( const COLOR4D& lhs, const COLOR4D& rhs );
+KICOMMON_API bool operator<( const COLOR4D& lhs, const COLOR4D& rhs );
 
 /// Syntactic sugar for outputting colors to strings
-std::ostream &operator<<( std::ostream &aStream, COLOR4D const &aColor );
+KICOMMON_API std::ostream& operator<<( std::ostream& aStream, COLOR4D const& aColor );
 
 // to allow json( COLOR4D )
-void to_json( nlohmann::json& aJson, const COLOR4D& aColor );
+KICOMMON_API void to_json( nlohmann::json& aJson, const COLOR4D& aColor );
 
 // To allow json::get<COLOR4D>()
-void from_json( const nlohmann::json& aJson, COLOR4D& aColor );
+KICOMMON_API void from_json( const nlohmann::json& aJson, COLOR4D& aColor );
 
 } // namespace KIGFX
 
 template<>
-struct std::hash<KIGFX::COLOR4D>
+struct KICOMMON_API std::hash<KIGFX::COLOR4D>
 {
     std::size_t operator()( const KIGFX::COLOR4D& aColor ) const
     {

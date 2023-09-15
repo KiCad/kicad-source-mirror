@@ -5,7 +5,6 @@ set( GAL_SRCS
     ../gl_context_mgr.cpp
     ../newstroke_font.cpp
     painter.cpp
-    color4d.cpp
     cursors.cpp
     dpi_scaling.cpp
     gal_display_options.cpp
@@ -49,6 +48,7 @@ if( WIN32 )
 endif()
 
 target_link_libraries( gal
+    kicommon
     common
     kimath
     kiplatform
