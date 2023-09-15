@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-13 14:56-0700\n"
+"POT-Creation-Date: 2023-09-15 15:57-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -3115,6 +3115,9 @@ msgstr "Unable to switch language to %s"
 msgid "Set Language"
 msgstr "Set Language"
 
+msgid "undefined"
+msgstr "undefined"
+
 msgid "Rescue"
 msgstr "Rescue"
 
@@ -4115,15 +4118,6 @@ msgstr "Loading Footprint Libraries"
 msgid "No default footprint"
 msgstr "No default footprint"
 
-msgid "Accelerated graphics"
-msgstr "Accelerated graphics"
-
-msgid "Fallback graphics"
-msgstr "Fallback graphics"
-
-msgid "Rendering Engine"
-msgstr "Rendering Engine"
-
 msgid "Hardware-accelerated graphics (recommended)"
 msgstr "Hardware-accelerated graphics (recommended)"
 
@@ -4133,6 +4127,15 @@ msgid ""
 msgstr ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
+
+msgid "Accelerated graphics"
+msgstr "Accelerated graphics"
+
+msgid "Fallback graphics"
+msgstr "Fallback graphics"
+
+msgid "Rendering Engine"
+msgstr "Rendering Engine"
 
 msgid "Grid Options"
 msgstr "Grid Options"
@@ -4158,8 +4161,8 @@ msgstr "px"
 msgid "Min grid spacing:"
 msgstr "Min grid spacing:"
 
-msgid "Snap to Grid:"
-msgstr "Snap to Grid:"
+msgid "Snap to grid:"
+msgstr "Snap to grid:"
 
 msgid "Always"
 msgstr "Always"
@@ -13523,6 +13526,9 @@ msgstr "Valid options are: absolute,plot"
 msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
 msgstr "Valid options are: decimal,suppressleading,suppresstrailing,keep."
 
+msgid "Valid options are: route,alternate."
+msgstr "Valid options are: route,alternate."
+
 msgid "Output units, valid options:in,mm"
 msgstr "Output units, valid options:in,mm"
 
@@ -13555,6 +13561,9 @@ msgstr "Invalid units specified\n"
 
 msgid "Invalid zeros format specified\n"
 msgstr "Invalid zeros format specified\n"
+
+msgid "Invalid oval drill format specified\n"
+msgstr "Invalid oval drill format specified\n"
 
 msgid "Invalid map format specified\n"
 msgstr "Invalid map format specified\n"
@@ -13617,8 +13626,15 @@ msgstr "Use the gerber plot settings already configured in the board file"
 msgid "Mirror the board (useful for trying to show bottom layers)"
 msgstr "Mirror the board (useful for trying to show bottom layers)"
 
-msgid "Color theme to use (will default to pcbnew settings)"
-msgstr "Color theme to use (will default to pcbnew settings)"
+msgid "Color theme to use (will default to PCB Editor settings)"
+msgstr "Color theme to use (will default to PCB Editor settings)"
+
+msgid ""
+"Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual "
+"shape)"
+msgstr ""
+"Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual "
+"shape)"
 
 msgid "Generate Position File"
 msgstr "Generate Position File"
@@ -13689,6 +13705,9 @@ msgid ""
 msgstr ""
 "User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default unit "
 "mm)"
+
+msgid "Color theme to use (will default to pcbnew settings)"
+msgstr "Color theme to use (will default to pcbnew settings)"
 
 msgid ""
 "Set page sizing mode (0 = page with frame and title block, 1 = current page "
@@ -18298,6 +18317,9 @@ msgstr ""
 msgid "Export STEP"
 msgstr "Export STEP"
 
+msgid "Command line:\n"
+msgstr "Command line:\n"
+
 msgid "Use a relative path?"
 msgstr "Use a relative path?"
 
@@ -22801,9 +22823,6 @@ msgstr "Checking %s min spoke count: %s."
 msgid "Checking %s zone connection: %s."
 msgstr "Checking %s zone connection: %s."
 
-msgid "undefined"
-msgstr "undefined"
-
 #, c-format
 msgid "Checking %s track width: opt %s."
 msgstr "Checking %s track width: opt %s."
@@ -23644,12 +23663,6 @@ msgstr "Error saving footprint %s to project specific library."
 
 msgid "Error saving project specific footprint library table."
 msgstr "Error saving project specific footprint library table."
-
-msgid "Converting zone fills"
-msgstr "Converting zone fills"
-
-msgid "Convert Zone(s)"
-msgstr "Convert Zone(s)"
 
 #, c-format
 msgid "Insufficient permissions to write file '%s'."
@@ -25681,6 +25694,10 @@ msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 
 #, c-format
+msgid "Skipping a polygon on layer '%s' (%d): outline count is not 1"
+msgstr "Skipping a polygon on layer '%s' (%d): outline count is not 1"
+
+#, c-format
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
 
@@ -25956,22 +25973,19 @@ msgstr ""
 "line: %d\n"
 "offset: %d."
 
-msgid "Legacy Zone Warning"
-msgstr "Legacy Zone Warning"
+msgid ""
+"Legacy zone fill strategy is not supported anymore.\n"
+"Zone fills will be converted on best-effort basis."
+msgstr ""
+"Legacy zone fill strategy is not supported anymore.\n"
+"Zone fills will be converted on best-effort basis."
 
 msgid ""
-"The segment zone fill mode is no longer supported.\n"
-"Convert zones to smoothed polygon fills?"
+"The legacy segment zone fill mode is no longer supported.\n"
+"Zone fills will be converted on a best-effort basis."
 msgstr ""
-"The segment zone fill mode is no longer supported.\n"
-"Convert zones to smoothed polygon fills?"
-
-msgid ""
-"The legacy zone fill strategy is no longer supported.\n"
-"Convert zones to smoothed polygon fills?"
-msgstr ""
-"The legacy zone fill strategy is no longer supported.\n"
-"Convert zones to smoothed polygon fills?"
+"The legacy segment zone fill mode is no longer supported.\n"
+"Zone fills will be converted on a best-effort basis."
 
 #, c-format
 msgid "Cannot create footprint library '%s'."
@@ -26074,13 +26088,6 @@ msgstr "Bad ZAux for CZONE_CONTAINER “%s”"
 #, c-format
 msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr "Bad ZSmoothing for CZONE_CONTAINER “%s”"
-
-msgid ""
-"The legacy segment fill mode is no longer supported.\n"
-"Convert zones to smoothed polygon fills?"
-msgstr ""
-"The legacy segment fill mode is no longer supported.\n"
-"Convert zones to smoothed polygon fills?"
 
 #, c-format
 msgid "Bad ZClearance padoption for CZONE_CONTAINER \"%s\""
@@ -29436,6 +29443,39 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Snap to Grid:"
+#~ msgstr "Snap to Grid:"
+
+#~ msgid "Converting zone fills"
+#~ msgstr "Converting zone fills"
+
+#~ msgid "Convert Zone(s)"
+#~ msgstr "Convert Zone(s)"
+
+#~ msgid "Legacy Zone Warning"
+#~ msgstr "Legacy Zone Warning"
+
+#~ msgid ""
+#~ "The segment zone fill mode is no longer supported.\n"
+#~ "Convert zones to smoothed polygon fills?"
+#~ msgstr ""
+#~ "The segment zone fill mode is no longer supported.\n"
+#~ "Convert zones to smoothed polygon fills?"
+
+#~ msgid ""
+#~ "The legacy zone fill strategy is no longer supported.\n"
+#~ "Convert zones to smoothed polygon fills?"
+#~ msgstr ""
+#~ "The legacy zone fill strategy is no longer supported.\n"
+#~ "Convert zones to smoothed polygon fills?"
+
+#~ msgid ""
+#~ "The legacy segment fill mode is no longer supported.\n"
+#~ "Convert zones to smoothed polygon fills?"
+#~ msgstr ""
+#~ "The legacy segment fill mode is no longer supported.\n"
+#~ "Convert zones to smoothed polygon fills?"
 
 #~ msgid "Board thickness:"
 #~ msgstr "Board thickness:"
