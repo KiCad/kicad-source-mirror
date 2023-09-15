@@ -663,6 +663,27 @@ const PCB_PLOT_PARAMS& PCB_BASE_FRAME::GetPlotSettings() const
 void PCB_BASE_FRAME::SetPlotSettings( const PCB_PLOT_PARAMS& aSettings )
 {
     m_pcb->SetPlotOptions( aSettings );
+
+    // Plot Settings can also change the "tent vias" setting, which can affect the solder mask.
+    LSET visibleLayers = GetBoard()->GetVisibleLayers();
+
+    if( visibleLayers.test( F_Mask ) || visibleLayers.test( B_Mask ) )
+    {
+        GetCanvas()->GetView()->UpdateAllItemsConditionally(
+                [&]( KIGFX::VIEW_ITEM* aItem ) -> int
+                {
+                    BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( aItem );
+
+                    // Note: KIGFX::REPAINT isn't enough for things that go from invisible to
+                    // visible as they won't be found in the view layer's itemset for re-painting.
+                    if( item && item->Type() == PCB_VIA_T )
+                        return KIGFX::ALL;
+
+                    return 0;
+                } );
+
+        GetCanvas()->Refresh();
+    }
 }
 
 
