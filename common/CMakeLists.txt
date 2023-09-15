@@ -111,6 +111,10 @@ target_include_directories( kicommon
 
 add_dependencies( kicommon pegtl )
 
+if( MSVC )
+    target_sources( kicommon PRIVATE ${CMAKE_SOURCE_DIR}/resources/msw/kicommon-dll.rc )
+endif()
+
 # The build version string defaults to the value in the KiCadVersion.cmake file.
 # If being built inside a git repository, the git tag and commit hash are used to create
 # a new version string instead. The user can supply an additional string to be appended

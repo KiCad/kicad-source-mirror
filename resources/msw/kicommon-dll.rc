@@ -1,0 +1,4 @@
+#define RC_VER_FILE_DESCRIPTION "KiCad Common " KICAD_WIN32_RC_PRODVER_STR
+#define RC_VER_INTERNALNAME "kicommon.dll"
+#define RC_VER_ORIGINALFILENAME "kicommon.dll"
+#include "kiwin32-dll.rc"
