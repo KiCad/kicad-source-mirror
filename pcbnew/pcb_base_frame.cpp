@@ -1117,6 +1117,11 @@ void PCB_BASE_FRAME::SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions, boo
     // Vias on a restricted layer set must be redrawn when high contrast mode is changed
     if( hcChanged )
     {
+        bool showNetNames = false;
+
+        if( PCBNEW_SETTINGS* config = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() ) )
+            showNetNames = config->m_Display.m_NetNames > 0;
+
         // Note: KIGFX::REPAINT isn't enough for things that go from invisible to visible as
         // they won't be found in the view layer's itemset for re-painting.
         GetCanvas()->GetView()->UpdateAllItemsConditionally(
@@ -1126,15 +1131,19 @@ void PCB_BASE_FRAME::SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions, boo
                     {
                         if( via->GetViaType() == VIATYPE::BLIND_BURIED
                                 || via->GetViaType() == VIATYPE::MICROVIA
-                                || via->GetRemoveUnconnected() )
+                                || via->GetRemoveUnconnected()
+                                || showNetNames )
                         {
                             return hcVisChanged ? KIGFX::ALL : KIGFX::REPAINT;
                         }
                     }
                     else if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
                     {
-                        if( pad->GetRemoveUnconnected() )
+                        if( pad->GetRemoveUnconnected()
+                                || showNetNames )
+                        {
                             return hcVisChanged ? KIGFX::ALL : KIGFX::REPAINT;
+                        }
                     }
 
                     return 0;
