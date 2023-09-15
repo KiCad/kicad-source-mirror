@@ -193,9 +193,10 @@ namespace SPICE_GRAMMAR
                                          spiceUnit>>> {};
 
 
-    struct modelUnit : sor<dotModelAko,
-                           dotModel,
-                           dotSubckt> {};
+    struct modelUnit : seq<star<commentLine>,
+                           sor<dotModelAko,
+                               dotModel,
+                               dotSubckt>> {};
 
 
     // Intentionally no if_must<>.

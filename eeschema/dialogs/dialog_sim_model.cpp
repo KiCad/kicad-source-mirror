@@ -58,19 +58,20 @@ bool equivalent( SIM_MODEL::DEVICE_T a, SIM_MODEL::DEVICE_T b )
 
 template <typename T_symbol, typename T_field>
 DIALOG_SIM_MODEL<T_symbol, T_field>::DIALOG_SIM_MODEL( wxWindow* aParent, T_symbol& aSymbol,
-                                                       std::vector<T_field>& aFields )
-    : DIALOG_SIM_MODEL_BASE( aParent ),
-      m_symbol( aSymbol ),
-      m_fields( aFields ),
-      m_libraryModelsMgr( &Prj() ),
-      m_builtinModelsMgr( &Prj() ),
-      m_prevModel( nullptr ),
-      m_curModelType( SIM_MODEL::TYPE::NONE ),
-      m_scintillaTricks( nullptr ),
-      m_firstCategory( nullptr ),
-      m_prevParamGridSelection( nullptr ),
-      m_lastParamGridWidth( 0 ),
-      m_inKillFocus( false )
+                                                       std::vector<T_field>& aFields ) :\
+        DIALOG_SIM_MODEL_BASE( aParent ),
+        m_symbol( aSymbol ),
+        m_fields( aFields ),
+        m_libraryModelsMgr( &Prj() ),
+        m_builtinModelsMgr( &Prj() ),
+        m_prevModel( nullptr ),
+        m_curModelType( SIM_MODEL::TYPE::NONE ),
+        m_scintillaTricksCode( nullptr ),
+        m_scintillaTricksSubckt( nullptr ),
+        m_firstCategory( nullptr ),
+        m_prevParamGridSelection( nullptr ),
+        m_lastParamGridWidth( 0 ),
+        m_inKillFocus( false )
 {
     m_browseButton->SetBitmap( KiBitmap( BITMAPS::small_folder ) );
 
@@ -90,7 +91,8 @@ DIALOG_SIM_MODEL<T_symbol, T_field>::DIALOG_SIM_MODEL( wxWindow* aParent, T_symb
 
     m_typeChoice->Clear();
 
-    m_scintillaTricks = new SCINTILLA_TRICKS( m_codePreview, wxT( "{}" ), false );
+    m_scintillaTricksCode = new SCINTILLA_TRICKS( m_codePreview, wxT( "{}" ), false );
+    m_scintillaTricksSubckt = new SCINTILLA_TRICKS( m_subckt, wxT( "()" ), false );
 
     m_paramGridMgr->Bind( wxEVT_PG_SELECTED, &DIALOG_SIM_MODEL::onParamGridSelectionChange, this );
 
@@ -140,7 +142,8 @@ DIALOG_SIM_MODEL<T_symbol, T_field>::~DIALOG_SIM_MODEL()
     // Delete the GRID_TRICKS.
     m_pinAssignmentsGrid->PopEventHandler( true );
 
-    delete m_scintillaTricks;
+    delete m_scintillaTricksCode;
+    delete m_scintillaTricksSubckt;
 }
 
 
@@ -690,6 +693,7 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updatePinAssignments( SIM_MODEL* aMode
     {
         SIM_MODEL_SUBCKT* subckt = static_cast<SIM_MODEL_SUBCKT*>( aModel );
         m_subckt->SetText( subckt->GetSpiceCode() );
+        m_subckt->SetEditable( false );
     }
     else
     {
