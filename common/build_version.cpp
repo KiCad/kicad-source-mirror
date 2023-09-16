@@ -175,6 +175,19 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
          << platform.GetPortIdName();
 
 #ifdef __WXGTK__
+    if( wxTheApp && wxTheApp->IsGUI() )
+    {
+        aMsg << ", ";
+        
+        switch( wxGetDisplayInfo().type )
+        {
+        case wxDisplayX11:     aMsg << "X11"; break;
+        case wxDisplayWayland: aMsg << "Wayland"; break;
+        case wxDisplayNone:    aMsg << "None"; break;
+        default:               aMsg << "Unknown";
+        }
+    }
+
     aMsg << ", " << wxGetenv( "XDG_SESSION_DESKTOP" )
          << ", " << wxGetenv( "XDG_SESSION_TYPE" );
 #endif
