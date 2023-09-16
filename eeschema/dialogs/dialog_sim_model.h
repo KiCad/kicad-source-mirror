@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -97,11 +97,12 @@ private:
     void onLibraryPathTextKillFocus( wxFocusEvent& aEvent ) override;
     void onBrowseButtonClick( wxCommandEvent& aEvent ) override;
     void onModelNameChoice( wxCommandEvent& aEvent ) override;
-    void onIbisPinCombobox( wxCommandEvent& event ) override;
-    void onIbisPinComboboxTextEnter( wxCommandEvent& event ) override;
-    void onIbisModelCombobox( wxCommandEvent& event ) override;
-    void onIbisModelComboboxTextEnter( wxCommandEvent& event ) override;
+    void onPinCombobox( wxCommandEvent& event ) override;
+    void onPinComboboxTextEnter( wxCommandEvent& event ) override;
+    void onPinModelCombobox( wxCommandEvent& event ) override;
+    void onPinModelComboboxTextEnter( wxCommandEvent& event ) override;
     void onDeviceTypeChoice( wxCommandEvent& aEvent ) override;
+    void onWaveformChoice( wxCommandEvent& aEvent ) override;
     void onTypeChoice( wxCommandEvent& aEvent ) override;
     void onPageChanging( wxNotebookEvent& event ) override;
     void onPinAssignmentsGridCellChange( wxGridEvent& aEvent ) override;

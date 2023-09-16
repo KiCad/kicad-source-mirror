@@ -89,7 +89,9 @@ DIALOG_SIM_MODEL<T_symbol, T_field>::DIALOG_SIM_MODEL( wxWindow* aParent, T_symb
                    return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), true ) < 0;
                } );
 
-    m_typeChoice->Clear();
+    m_waveformChoice->Clear();
+    m_deviceChoice->Clear();
+    m_deviceTypeChoice->Clear();
 
     m_scintillaTricksCode = new SCINTILLA_TRICKS( m_codePreview, wxT( "{}" ), false );
     m_scintillaTricksSubckt = new SCINTILLA_TRICKS( m_subckt, wxT( "()" ), false );
@@ -253,7 +255,7 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
                         auto kibisLibrary = static_cast<const SIM_LIBRARY_KIBIS*>( library() );
 
                         kibismodel->ChangePin( *kibisLibrary, strs.first );
-                        m_ibisPinCombobox->SetSelection( static_cast<int>( i ) );
+                        m_pinCombobox->SetSelection( static_cast<int>( i ) );
                         break;
                     }
                     i++;
@@ -261,9 +263,9 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
 
                 if( i < static_cast<int>( kibismodel->GetIbisPins().size() ) )
                 {
-                    onIbisPinCombobox( dummyEvent ); // refresh list of models
+                    onPinCombobox( dummyEvent ); // refresh list of models
 
-                    m_ibisModelCombobox->SetStringSelection(
+                    m_pinModelCombobox->SetStringSelection(
                             SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY_KIBIS::MODEL_FIELD ) );
                 }
 
@@ -364,11 +366,11 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataFromWindow()
         if( ibismodel )
         {
             std::string pins;
-            std::string modelName = std::string( m_ibisModelCombobox->GetValue().c_str() );
+            std::string modelName = std::string( m_pinModelCombobox->GetValue().c_str() );
             std::string differential;
 
-            if( m_ibisPinCombobox->GetSelection() >= 0 )
-                pins = ibismodel->GetIbisPins().at( m_ibisPinCombobox->GetSelection() ).first;
+            if( m_pinCombobox->GetSelection() >= 0 )
+                pins = ibismodel->GetIbisPins().at( m_pinCombobox->GetSelection() ).first;
 
             if( ibismodel->CanDifferential() && m_differentialCheckbox->GetValue() )
                 differential = "1";
@@ -426,10 +428,38 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateIbisWidgets( SIM_MODEL* aModel )
     SIM_MODEL_KIBIS* modelkibis = isIbisLoaded() ? dynamic_cast<SIM_MODEL_KIBIS*>( aModel )
                                                  : nullptr;
 
-    m_ibisModelCombobox->Show( isIbisLoaded() );
-    m_ibisPinCombobox->Show( isIbisLoaded() );
-    m_ibisModelLabel->Show( isIbisLoaded() );
-    m_ibisPinLabel->Show( isIbisLoaded() );
+    m_pinLabel->Show( isIbisLoaded() );
+    m_pinCombobox->Show( isIbisLoaded() );
+    m_pinModelLabel->Show( isIbisLoaded() );
+    m_pinModelCombobox->Show( isIbisLoaded() );
+    m_waveformLabel->Show( isIbisLoaded() );
+    m_waveformChoice->Show( isIbisLoaded() );
+
+    if( aModel != m_prevModel )
+    {
+        m_waveformChoice->Clear();
+
+        if( isIbisLoaded() )
+        {
+            for( SIM_MODEL::TYPE type : { SIM_MODEL::TYPE::KIBIS_DEVICE,
+                                          SIM_MODEL::TYPE::KIBIS_DRIVER_DC,
+                                          SIM_MODEL::TYPE::KIBIS_DRIVER_RECT,
+                                          SIM_MODEL::TYPE::KIBIS_DRIVER_PRBS } )
+            {
+                SIM_MODEL::DEVICE_T deviceType = SIM_MODEL::TypeInfo( type ).deviceType;
+                const std::string&  deviceTypeDesc = SIM_MODEL::DeviceInfo( deviceType ).description;
+
+                if( deviceType == aModel->GetDeviceType()
+                    || deviceTypeDesc == aModel->GetDeviceInfo().description )
+                {
+                    m_waveformChoice->Append( SIM_MODEL::TypeInfo( type ).description );
+
+                    if( type == aModel->GetType() )
+                        m_waveformChoice->SetSelection( m_waveformChoice->GetCount() - 1 );
+                }
+            }
+        }
+    }
 
     m_differentialCheckbox->Show( isIbisLoaded() && modelkibis && modelkibis->CanDifferential() );
     m_modelNameLabel->SetLabel( isIbisLoaded() ? _( "Component:" ) : _( "Model:" ) );
@@ -442,45 +472,48 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateBuiltinModelWidgets( SIM_MODEL* 
     // Change the Type choice to match the current device type.
     if( aModel != m_prevModel )
     {
+        m_deviceChoice->Clear();
         m_deviceTypeChoice->Clear();
 
-        if( m_rbLibraryModel->GetValue() )
-        {
-            m_deviceTypeChoice->Append( aModel->GetDeviceInfo().description );
-            m_deviceTypeChoice->SetSelection( 0 );
-        }
-        else
+        if( m_rbBuiltinModel->GetValue() )
         {
             for( SIM_MODEL::DEVICE_T deviceType : SIM_MODEL::DEVICE_T_ITERATOR() )
             {
                 if( !SIM_MODEL::DeviceInfo( deviceType ).showInMenu )
                     continue;
 
-                m_deviceTypeChoice->Append( SIM_MODEL::DeviceInfo( deviceType ).description );
+                m_deviceChoice->Append( SIM_MODEL::DeviceInfo( deviceType ).description );
 
                 if( equivalent( deviceType, aModel->GetDeviceType() ) )
-                    m_deviceTypeChoice->SetSelection( m_deviceTypeChoice->GetCount() - 1 );
+                    m_deviceChoice->SetSelection( m_deviceChoice->GetCount() - 1 );
             }
-        }
 
-        m_typeChoice->Clear();
-
-        for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
-        {
-            SIM_MODEL::DEVICE_T deviceType = SIM_MODEL::TypeInfo( type ).deviceType;
-
-            if( deviceType == aModel->GetDeviceType()
-                || SIM_MODEL::DeviceInfo( deviceType ).description == aModel->GetDeviceInfo().description )
+            for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
             {
-                m_typeChoice->Append( SIM_MODEL::TypeInfo( type ).description );
+                if( type == SIM_MODEL::TYPE::KIBIS_DEVICE
+                        || type == SIM_MODEL::TYPE::KIBIS_DRIVER_DC
+                        || type == SIM_MODEL::TYPE::KIBIS_DRIVER_RECT
+                        || type == SIM_MODEL::TYPE::KIBIS_DRIVER_PRBS )
+                {
+                    continue;
+                }
 
-                if( type == aModel->GetType() )
-                    m_typeChoice->SetSelection( m_typeChoice->GetCount() - 1 );
+                SIM_MODEL::DEVICE_T deviceType = SIM_MODEL::TypeInfo( type ).deviceType;
+                const std::string&  deviceTypeDesc = SIM_MODEL::DeviceInfo( deviceType ).description;
+
+                if( deviceType == aModel->GetDeviceType()
+                    || deviceTypeDesc == aModel->GetDeviceInfo().description )
+                {
+                    m_deviceTypeChoice->Append( SIM_MODEL::TypeInfo( type ).description );
+
+                    if( type == aModel->GetType() )
+                        m_deviceTypeChoice->SetSelection( m_deviceTypeChoice->GetCount() - 1 );
+                }
             }
         }
     }
 
-    m_typeChoice->Enable( !m_rbLibraryModel->GetValue() || isIbisLoaded() );
+    m_deviceTypeChoice->Enable( !m_rbLibraryModel->GetValue() );
 
     if( dynamic_cast<SIM_MODEL_RAW_SPICE*>( aModel ) )
         m_modelNotebook->SetSelection( 1 );
@@ -760,10 +793,10 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::loadLibrary( const wxString& aLibraryP
     if( isIbisLoaded() )
     {
         wxArrayString emptyArray;
-        m_ibisModelCombobox->Set( emptyArray );
-        m_ibisPinCombobox->Set( emptyArray );
-        m_ibisModelCombobox->SetSelection( -1 );
-        m_ibisPinCombobox->SetSelection( -1 );
+        m_pinModelCombobox->Set( emptyArray );
+        m_pinCombobox->Set( emptyArray );
+        m_pinModelCombobox->SetSelection( -1 );
+        m_pinCombobox->SetSelection( -1 );
     }
 
     m_prevLibrary = aLibraryPath;
@@ -1039,15 +1072,17 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onRadioButton( wxCommandEvent& aEvent 
     m_browseButton->Enable( fromLibrary );
     m_modelNameLabel->Enable( fromLibrary );
     m_modelNameChoice->Enable( fromLibrary );
-    m_ibisPinLabel->Enable( fromLibrary );
-    m_ibisPinCombobox->Enable( fromLibrary );
+    m_pinLabel->Enable( fromLibrary );
+    m_pinCombobox->Enable( fromLibrary );
     m_differentialCheckbox->Enable( fromLibrary );
-    m_ibisModelLabel->Enable( fromLibrary );
-    m_ibisModelCombobox->Enable( fromLibrary );
+    m_pinModelLabel->Enable( fromLibrary );
+    m_pinModelCombobox->Enable( fromLibrary );
+    m_waveformLabel->Enable( fromLibrary );
+    m_waveformChoice->Enable( fromLibrary );
 
-    m_staticTextDevType->Enable( !fromLibrary );
-    m_deviceTypeChoice->Enable( !fromLibrary );
-    m_staticTextSpiceType->Enable( !fromLibrary );
+    m_deviceLabel->Enable( !fromLibrary );
+    m_deviceChoice->Enable( !fromLibrary );
+    m_deviceTypeLabel->Enable( !fromLibrary );
 
     m_prevModel = nullptr;  // Ensure the Model panel will be rebuild after updating other params.
     updateWidgets();
@@ -1129,10 +1164,10 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onModelNameChoice( wxCommandEvent& aEv
         for( std::pair<wxString, wxString> strs : modelkibis->GetIbisPins() )
             pinLabels.Add( strs.first + wxT( " - " ) + strs.second );
 
-        m_ibisPinCombobox->Set( pinLabels );
+        m_pinCombobox->Set( pinLabels );
 
         wxArrayString emptyArray;
-        m_ibisModelCombobox->Set( emptyArray );
+        m_pinModelCombobox->Set( emptyArray );
     }
 
     updateWidgets();
@@ -1140,71 +1175,66 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onModelNameChoice( wxCommandEvent& aEv
 
 
 template <typename T_symbol, typename T_field>
-void DIALOG_SIM_MODEL<T_symbol, T_field>::onIbisPinCombobox( wxCommandEvent& aEvent )
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onPinCombobox( wxCommandEvent& aEvent )
 {
-    if( isIbisLoaded() )
-    {
-        wxArrayString modelLabels;
+    wxArrayString modelLabels;
 
-        SIM_MODEL_KIBIS& ibisModel = static_cast<SIM_MODEL_KIBIS&>( curModel() );
+    SIM_MODEL_KIBIS& ibisModel = static_cast<SIM_MODEL_KIBIS&>( curModel() );
 
-        std::vector<std::pair<std::string, std::string>> strs = ibisModel.GetIbisPins();
-        std::string pinNumber = strs.at( m_ibisPinCombobox->GetSelection() ).first;
+    std::vector<std::pair<std::string, std::string>> strs = ibisModel.GetIbisPins();
+    std::string pinNumber = strs.at( m_pinCombobox->GetSelection() ).first;
 
-        const SIM_LIBRARY_KIBIS* ibisLibrary = dynamic_cast<const SIM_LIBRARY_KIBIS*>( library() );
+    const SIM_LIBRARY_KIBIS* ibisLibrary = dynamic_cast<const SIM_LIBRARY_KIBIS*>( library() );
 
-        ibisModel.ChangePin( *ibisLibrary, pinNumber );
+    ibisModel.ChangePin( *ibisLibrary, pinNumber );
 
-        ibisModel.m_enableDiff = ibisLibrary->isPinDiff( ibisModel.GetComponentName(), pinNumber );
+    ibisModel.m_enableDiff = ibisLibrary->isPinDiff( ibisModel.GetComponentName(), pinNumber );
 
-        for( wxString modelName : ibisModel.GetIbisModels() )
-            modelLabels.Add( modelName );
+    for( wxString modelName : ibisModel.GetIbisModels() )
+        modelLabels.Add( modelName );
 
-        m_ibisModelCombobox->Set( modelLabels );
-    }
+    m_pinModelCombobox->Set( modelLabels );
+
+    if( m_pinModelCombobox->GetCount() == 1 )
+        m_pinModelCombobox->SetSelection( 0 );
+    else
+        m_pinModelCombobox->SetSelection( -1 );
 
     updateWidgets();
 }
 
 
 template <typename T_symbol, typename T_field>
-void DIALOG_SIM_MODEL<T_symbol, T_field>::onIbisPinComboboxTextEnter( wxCommandEvent& aEvent )
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onPinComboboxTextEnter( wxCommandEvent& aEvent )
 {
-    m_ibisPinCombobox->SetSelection(
-            m_ibisPinCombobox->FindString( m_ibisPinCombobox->GetValue() ) );
+    m_pinCombobox->SetSelection( m_pinCombobox->FindString( m_pinCombobox->GetValue() ) );
 
-    onIbisPinCombobox( aEvent );
+    onPinModelCombobox( aEvent );
 }
 
 
 template <typename T_symbol, typename T_field>
-void DIALOG_SIM_MODEL<T_symbol, T_field>::onIbisModelCombobox( wxCommandEvent& aEvent )
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onPinModelCombobox( wxCommandEvent& aEvent )
 {
     updateWidgets();
 }
 
 
 template <typename T_symbol, typename T_field>
-void DIALOG_SIM_MODEL<T_symbol, T_field>::onIbisModelComboboxTextEnter( wxCommandEvent& aEvent )
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onPinModelComboboxTextEnter( wxCommandEvent& aEvent )
 {
-    m_ibisModelCombobox->SetSelection(
-            m_ibisModelCombobox->FindString( m_ibisModelCombobox->GetValue() ) );
-
-    onIbisPinCombobox( aEvent );
+    m_pinModelCombobox->SetSelection( m_pinModelCombobox->FindString( m_pinModelCombobox->GetValue() ) );
 }
 
 template <typename T_symbol, typename T_field>
 void DIALOG_SIM_MODEL<T_symbol, T_field>::onDifferentialCheckbox( wxCommandEvent& aEvent )
 {
-    if( isIbisLoaded() )
-    {
-        SIM_MODEL_KIBIS* modelkibis = dynamic_cast<SIM_MODEL_KIBIS*>( &curModel() );
+    SIM_MODEL_KIBIS* modelkibis = dynamic_cast<SIM_MODEL_KIBIS*>( &curModel() );
 
-        wxCHECK( modelkibis, /* void */ );
+    wxCHECK( modelkibis, /* void */ );
 
-        bool             diff = m_differentialCheckbox->GetValue() && modelkibis->CanDifferential();
-        modelkibis->SwitchSingleEndedDiff( diff );
-    }
+    bool             diff = m_differentialCheckbox->GetValue() && modelkibis->CanDifferential();
+    modelkibis->SwitchSingleEndedDiff( diff );
 
     updateWidgets();
 }
@@ -1215,7 +1245,7 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onDeviceTypeChoice( wxCommandEvent& aE
 {
     for( SIM_MODEL::DEVICE_T deviceType : SIM_MODEL::DEVICE_T_ITERATOR() )
     {
-        if( SIM_MODEL::DeviceInfo( deviceType ).description == m_deviceTypeChoice->GetStringSelection() )
+        if( SIM_MODEL::DeviceInfo( deviceType ).description == m_deviceChoice->GetStringSelection() )
         {
             m_curModelType = m_curModelTypeOfDeviceType.at( deviceType );
             break;
@@ -1227,39 +1257,55 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onDeviceTypeChoice( wxCommandEvent& aE
 
 
 template <typename T_symbol, typename T_field>
+void DIALOG_SIM_MODEL<T_symbol, T_field>::onWaveformChoice( wxCommandEvent& aEvent )
+{
+    SIM_MODEL::DEVICE_T deviceType = curModel().GetDeviceType();
+    wxString            typeDescription = m_waveformChoice->GetStringSelection();
+
+    for( SIM_MODEL::TYPE type : { SIM_MODEL::TYPE::KIBIS_DEVICE,
+                                  SIM_MODEL::TYPE::KIBIS_DRIVER_DC,
+                                  SIM_MODEL::TYPE::KIBIS_DRIVER_RECT,
+                                  SIM_MODEL::TYPE::KIBIS_DRIVER_PRBS } )
+    {
+        if( equivalent( deviceType, SIM_MODEL::TypeInfo( type ).deviceType )
+            && typeDescription == SIM_MODEL::TypeInfo( type ).description )
+        {
+            int idx = m_modelNameChoice->GetSelection();
+
+            auto& baseModel = static_cast<SIM_MODEL_KIBIS&>( m_libraryModelsMgr.GetModels()[idx].get() );
+
+            m_libraryModelsMgr.SetModel( idx, std::make_unique<SIM_MODEL_KIBIS>( type, baseModel ) );
+
+            try
+            {
+                m_libraryModelsMgr.GetModels()[idx].get().ReadDataFields( &m_fields, m_sortedPartPins );
+            }
+            catch( IO_ERROR& err )
+            {
+                DisplayErrorMessage( this, err.What() );
+            }
+
+            m_curModelType = type;
+            break;
+        }
+    }
+
+    m_curModelTypeOfDeviceType.at( deviceType ) = m_curModelType;
+    updateWidgets();
+}
+
+
+template <typename T_symbol, typename T_field>
 void DIALOG_SIM_MODEL<T_symbol, T_field>::onTypeChoice( wxCommandEvent& aEvent )
 {
-    SIM_MODEL::DEVICE_T   deviceType = curModel().GetDeviceType();
-    wxString              typeDescription = m_typeChoice->GetString( m_typeChoice->GetSelection() );
+    SIM_MODEL::DEVICE_T deviceType = curModel().GetDeviceType();
+    wxString            typeDescription = m_deviceTypeChoice->GetStringSelection();
 
     for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
     {
         if( equivalent( deviceType, SIM_MODEL::TypeInfo( type ).deviceType )
             && typeDescription == SIM_MODEL::TypeInfo( type ).description )
         {
-            if( isIbisLoaded()
-                && ( type == SIM_MODEL::TYPE::KIBIS_DEVICE
-                     || type == SIM_MODEL::TYPE::KIBIS_DRIVER_DC
-                     || type == SIM_MODEL::TYPE::KIBIS_DRIVER_RECT
-                     || type == SIM_MODEL::TYPE::KIBIS_DRIVER_PRBS ) )
-            {
-                int idx = m_modelNameChoice->GetSelection();
-
-                auto& baseModel = static_cast<SIM_MODEL_KIBIS&>( m_libraryModelsMgr.GetModels()[idx].get() );
-
-                m_libraryModelsMgr.SetModel( idx, std::make_unique<SIM_MODEL_KIBIS>( type, baseModel ) );
-
-                try
-                {
-                    m_libraryModelsMgr.GetModels()[idx].get().ReadDataFields( &m_fields,
-                                                                              m_sortedPartPins );
-                }
-                catch( IO_ERROR& err )
-                {
-                    DisplayErrorMessage( this, err.What() );
-                }
-            }
-
             m_curModelType = type;
             break;
         }

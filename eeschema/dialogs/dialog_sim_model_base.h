@@ -60,16 +60,18 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		STD_BITMAP_BUTTON* m_browseButton;
 		wxStaticText* m_modelNameLabel;
 		wxChoice* m_modelNameChoice;
-		wxStaticText* m_ibisPinLabel;
-		wxComboBox* m_ibisPinCombobox;
+		wxStaticText* m_pinLabel;
+		wxComboBox* m_pinCombobox;
 		wxCheckBox* m_differentialCheckbox;
-		wxStaticText* m_ibisModelLabel;
-		wxComboBox* m_ibisModelCombobox;
+		wxStaticText* m_pinModelLabel;
+		wxComboBox* m_pinModelCombobox;
+		wxStaticText* m_waveformLabel;
+		wxChoice* m_waveformChoice;
 		wxRadioButton* m_rbBuiltinModel;
-		wxStaticText* m_staticTextDevType;
+		wxStaticText* m_deviceLabel;
+		wxChoice* m_deviceChoice;
+		wxStaticText* m_deviceTypeLabel;
 		wxChoice* m_deviceTypeChoice;
-		wxStaticText* m_staticTextSpiceType;
-		wxChoice* m_typeChoice;
 		wxNotebook* m_modelNotebook;
 		wxPanel* m_parametersPanel;
 		wxPropertyGridManager* m_paramGridMgr;
@@ -95,15 +97,16 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		virtual void onModelNameLabelUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onModelNameChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onIbisPinLabelUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void onIbisPinCombobox( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onPinCombobox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onModelNameComboboxKillFocus( wxFocusEvent& event ) { event.Skip(); }
-		virtual void onIbisPinComboboxTextEnter( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onPinComboboxTextEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onModelNameComboboxUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onDifferentialCheckbox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onOverrideCheckboxUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onIbisModelLabelUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void onIbisModelCombobox( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onIbisModelComboboxTextEnter( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onPinModelCombobox( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onPinModelComboboxTextEnter( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onWaveformChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onDeviceTypeLabelUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onDeviceTypeChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onDeviceTypeChoiceUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
