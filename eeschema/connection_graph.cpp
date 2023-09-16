@@ -233,13 +233,20 @@ void CONNECTION_SUBGRAPH::getAllConnectedItems( std::set<std::pair<SCH_SHEET_PAT
     CONNECTION_SUBGRAPH* sg = this;
 
     while( sg->m_absorbed_by )
+    {
+        wxASSERT( sg->m_graph == sg->m_absorbed_by->m_graph );
         sg = sg->m_absorbed_by;
+    }
 
     aSubgraphs.insert( sg );
     aSubgraphs.insert( sg->m_absorbed_subgraphs.begin(), sg->m_absorbed_subgraphs.end() );
 
     for( SCH_ITEM* item : sg->m_items )
+    {
+        item->Connection( &m_sheet )->Reset();
+        item->ConnectedItems( m_sheet ).clear();
         aItems.emplace( m_sheet, item );
+    }
 
     for( CONNECTION_SUBGRAPH* child_sg : sg->m_hier_children )
         child_sg->getAllConnectedItems( aItems, aSubgraphs );
@@ -599,8 +606,11 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
         for( SCH_ITEM* item : sheet.LastScreen()->Items() )
         {
             if( item->IsConnectable() && ( aUnconditional || item->IsConnectivityDirty() ) )
+            {
+                wxLogTrace( ConnTrace, wxT( "Adding item %s to connectivity graph update" ),
+                            item->GetTypeDesc() );
                 items.push_back( item );
-
+            }
             // Ensure the hierarchy info stored in SCREENS is built and up to date
             // (multi-unit symbols)
             if( item->Type() == SCH_SYMBOL_T )
@@ -658,11 +668,17 @@ std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>> CONNECTION_GRAPH::ExtractAffected
     {
         // Find the primary subgraph on this sheet
         while( aSubgraph->m_absorbed_by )
+        {
+            wxASSERT( aSubgraph->m_graph == aSubgraph->m_absorbed_by->m_graph );
             aSubgraph = aSubgraph->m_absorbed_by;
+        }
 
         // Find the top most connected subgraph on all sheets
         while( aSubgraph->m_hier_parent )
+        {
+            wxASSERT( aSubgraph->m_graph == aSubgraph->m_hier_parent->m_graph );
             aSubgraph = aSubgraph->m_hier_parent;
+        }
 
         // Recurse through all subsheets to collect connected items
         aSubgraph->getAllConnectedItems( retvals, subgraphs );
@@ -2212,6 +2228,9 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, boo
                                     candidate->m_code, candidate->m_driver_connection->Name() );
 
                         candidate->m_hier_parent = aParent;
+                        aParent->m_hier_children.insert( candidate );
+
+                        wxASSERT( candidate->m_graph == aParent->m_graph );
 
                         search_list.push_back( candidate );
                         break;
