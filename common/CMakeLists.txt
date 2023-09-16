@@ -73,6 +73,7 @@ set( KICOMMON_SRCS
     array_axis.cpp
     array_options.cpp
     bitmap_info.cpp
+    eda_units.cpp
     exceptions.cpp
     kiid.cpp
     layer_id.cpp
@@ -400,7 +401,6 @@ set( COMMON_SRCS
     eda_shape.cpp
     eda_text.cpp
     eda_tools.cpp
-    eda_units.cpp
     env_paths.cpp
     env_vars.cpp
     exceptions.cpp

@@ -25,6 +25,7 @@
 #ifndef EDA_UNITS_H
 #define EDA_UNITS_H
 
+#include <kicommon.h>
 #include <wx/string.h>
 #include <geometry/eda_angle.h>
 #include <base_units.h>
@@ -51,25 +52,25 @@ enum class EDA_UNITS
 
 namespace EDA_UNIT_UTILS
 {
-    bool IsImperialUnit( EDA_UNITS aUnit );
+    KICOMMON_API bool IsImperialUnit( EDA_UNITS aUnit );
 
-    bool IsMetricUnit( EDA_UNITS aUnit );
+    KICOMMON_API bool IsMetricUnit( EDA_UNITS aUnit );
 
     /**
      *  Convert mm to mils.
      */
-    int Mm2mils( double aVal );
+    KICOMMON_API int Mm2mils( double aVal );
 
     /**
      *  Convert mils to mm.
      */
-    int Mils2mm( double aVal );
+    KICOMMON_API int Mils2mm( double aVal );
 
     /**
      * Writes any unit info found in the string to aUnits.
      * @return true - when unit was found, false - when unit could not be determined
      */
-    bool FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS& aUnits );
+    KICOMMON_API bool FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS& aUnits );
 
     /**
      * Get the units string for a given units type.
@@ -80,7 +81,7 @@ namespace EDA_UNIT_UTILS
      * @param aType DISTANCE, AREA, or VOLUME
      * @return The human readable units string with appropriate separators.
      */
-    wxString GetText( EDA_UNITS aUnits, EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
+    KICOMMON_API wxString GetText( EDA_UNITS aUnits, EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
     /**
      * Get the units string for a given units type.
@@ -91,7 +92,8 @@ namespace EDA_UNIT_UTILS
      * @param aType DISTANCE, AREA, or VOLUME
      * @return The human readable units string.
      */
-    wxString GetLabel( EDA_UNITS aUnits, EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
+    KICOMMON_API wxString GetLabel( EDA_UNITS     aUnits,
+                                    EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
     /**
      * Converts \a aAngle from board units to a string appropriate for writing to file.
@@ -103,7 +105,7 @@ namespace EDA_UNIT_UTILS
      * @param aAngle A angle value to convert.
      * @return std::string object containing the converted angle.
      */
-    std::string FormatAngle( const EDA_ANGLE& aAngle );
+    KICOMMON_API std::string FormatAngle( const EDA_ANGLE& aAngle );
 
     /**
      * Converts \a aValue from internal units to a string appropriate for writing to file.
@@ -116,8 +118,9 @@ namespace EDA_UNIT_UTILS
      * @param aValue A coordinate value to convert.
      * @return A std::string object containing the converted value.
      */
-    std::string FormatInternalUnits( const EDA_IU_SCALE& aIuScale, int aValue );
-    std::string FormatInternalUnits( const EDA_IU_SCALE& aIuScale, const VECTOR2I& aPoint );
+    KICOMMON_API std::string FormatInternalUnits( const EDA_IU_SCALE& aIuScale, int aValue );
+    KICOMMON_API std::string FormatInternalUnits( const EDA_IU_SCALE& aIuScale,
+                                                  const VECTOR2I&     aPoint );
 
     constexpr inline int Mils2IU( const EDA_IU_SCALE& aIuScale, int mils )
     {
@@ -135,7 +138,8 @@ namespace EDA_UNIT_UTILS
          * @param aUnit The units to convert \a aValue to.
          * @param aValue The value in internal units to convert.
          */
-        double ToUserUnit( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnit, double aValue );
+        KICOMMON_API double ToUserUnit( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnit,
+                                        double aValue );
 
         /**
          * Returns the string from \a aValue according to \a aUnits (inch, mm ...) for display.
@@ -150,9 +154,10 @@ namespace EDA_UNIT_UTILS
          * @param aType DISTANCE, AREA, or VOLUME
          * @return A wxString object containing value and optionally the symbol unit (like 2.000 mm)
          */
-        wxString StringFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits, double aValue,
-                                  bool aAddUnitsText = false,
-                                  EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
+        KICOMMON_API wxString StringFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
+                                               double aValue,
+                                               bool aAddUnitsText = false,
+                                               EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
         /**
          * A helper to convert the \a double length \a aValue to a string in inches, millimeters,
@@ -168,25 +173,25 @@ namespace EDA_UNIT_UTILS
          * @param aType DISTANCE, AREA, or VOLUME
          * @return The converted string for display in user interface elements.
          */
-        wxString MessageTextFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
-                                       double aValue, bool aAddUnitsText = true,
-                                       EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
+        KICOMMON_API wxString MessageTextFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
+                                                    double aValue, bool aAddUnitsText = true,
+                                                    EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
-        wxString MessageTextFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
-                                       int aValue, bool aAddUnitLabel = true,
-                                       EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
+        KICOMMON_API wxString MessageTextFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
+                                                    int aValue, bool aAddUnitLabel = true,
+                                                    EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
-        wxString MessageTextFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
-                                       long long int aValue, bool aAddUnitLabel = true,
-                                       EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
+        KICOMMON_API wxString MessageTextFromValue( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
+                                                    long long int aValue, bool aAddUnitLabel = true,
+                                                    EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
-        wxString MessageTextFromValue( EDA_ANGLE aValue, bool aAddUnitLabel = true );
+        KICOMMON_API wxString MessageTextFromValue( EDA_ANGLE aValue, bool aAddUnitLabel = true );
 
 
         /**
          * Return in internal units the value "val" given in a real unit such as "in", "mm" or "deg"
          */
-        double FromUserUnit( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnit, double aValue );
+        KICOMMON_API double FromUserUnit( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnit, double aValue );
 
 
         /**
@@ -199,11 +204,11 @@ namespace EDA_UNIT_UTILS
          * @param aTextValue A reference to a wxString object containing the string to convert.
          * @return A double representing that value in internal units
          */
-        double DoubleValueFromString( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
-                                      const wxString& aTextValue,
-                                      EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
+        KICOMMON_API double DoubleValueFromString( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
+                                                   const wxString& aTextValue,
+                                                   EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
-        double DoubleValueFromString( const wxString& aTextValue );
+        KICOMMON_API double DoubleValueFromString( const wxString& aTextValue );
 
         /**
          * Function ValueFromString
@@ -215,11 +220,11 @@ namespace EDA_UNIT_UTILS
          * @param aTextValue A reference to a wxString object containing the string to convert.
          * @return A long long int representing that value in internal units
          */
-        long long int ValueFromString( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
-                                       const wxString& aTextValue,
-                                       EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
+        KICOMMON_API long long int ValueFromString( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits,
+                                                    const wxString& aTextValue,
+                                                    EDA_DATA_TYPE aType = EDA_DATA_TYPE::DISTANCE );
 
-        long long int ValueFromString( const wxString& aTextValue);
+        KICOMMON_API long long int ValueFromString( const wxString& aTextValue );
     }
 }
 
