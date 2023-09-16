@@ -1686,9 +1686,10 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
     }
     else
     {
-        auto& changed_list = m_undoList.m_CommandsList.back();
+        PICKED_ITEMS_LIST* changed_list = m_undoList.m_CommandsList.back();
         std::set<SCH_ITEM*> changed_items;
         std::vector<VECTOR2I> pts;
+        std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>> item_paths;
 
         for( unsigned ii = 0; ii < changed_list->GetCount(); ++ii )
         {
@@ -1697,11 +1698,16 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
             if( !item || !IsEeschemaType( item->Type() ) )
                 continue;
 
+            SCH_SCREEN* screen = static_cast<SCH_SCREEN*>( changed_list->GetScreenForItem( ii ) );
             SCH_ITEM* sch_item = static_cast<SCH_ITEM*>( item );
+            SCH_SHEET_PATHS& paths = screen->GetClientSheetPaths();
 
             std::vector<VECTOR2I> tmp_pts = sch_item->GetConnectionPoints();
             pts.insert( pts.end(), tmp_pts.begin(), tmp_pts.end() );
             changed_items.insert( sch_item );
+
+            for( SCH_SHEET_PATH& path : paths )
+                item_paths.insert( std::make_pair( path, sch_item ) );
         }
 
         for( VECTOR2I& pt: pts )
@@ -1731,6 +1737,8 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
         std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>> all_items =
                 Schematic().ConnectionGraph()->ExtractAffectedItems( changed_items );
 
+        all_items.insert( item_paths.begin(), item_paths.end() );
+
         CONNECTION_GRAPH new_graph( &Schematic() );
 
         new_graph.SetLastCodes( Schematic().ConnectionGraph() );
@@ -1741,7 +1749,6 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
             {
             case SCH_FIELD_T:
             case SCH_PIN_T:
-            case SCH_SHEET_PIN_T:
                 static_cast<SCH_ITEM*>( item->GetParent() )->SetConnectivityDirty();
                 break;
 
