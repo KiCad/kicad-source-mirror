@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-15 15:57-0700\n"
-"PO-Revision-Date: 2023-08-18 10:50+0000\n"
+"PO-Revision-Date: 2023-09-19 08:56+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/v7/pt_BR/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.1-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -6694,9 +6694,8 @@ msgid "Min grid spacing:"
 msgstr "Espaçamento mínimo de grade:"
 
 #: common/widgets/gal_options_panel_base.cpp:72
-#, fuzzy
 msgid "Snap to grid:"
-msgstr "Ajuste à grade:"
+msgstr "Ajustar à grade:"
 
 #: common/widgets/gal_options_panel_base.cpp:76
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
@@ -19906,9 +19905,8 @@ msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
 msgstr "As opções válidas são: decimal,suppressleading,suppresstrailing,keep."
 
 #: kicad/cli/command_export_pcb_drill.cpp:60
-#, fuzzy
 msgid "Valid options are: route,alternate."
-msgstr "As opções válidas são: absolute,plot"
+msgstr "As opções válidas são: route,alternate."
 
 #: kicad/cli/command_export_pcb_drill.cpp:64
 msgid "Output units, valid options:in,mm"
@@ -19959,9 +19957,8 @@ msgid "Invalid zeros format specified\n"
 msgstr "Foi definido um formato de zeros inválidos\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:180
-#, fuzzy
 msgid "Invalid oval drill format specified\n"
-msgstr "Foi definido um formato inválido do mapa\n"
+msgstr "Foi especificado um formato de perfuração inválido\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:208
 msgid "Invalid map format specified\n"
@@ -20060,10 +20057,10 @@ msgid "Mirror the board (useful for trying to show bottom layers)"
 msgstr "Espelhar a placa (útil para tentar mostrar as camadas de baixo)"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:72
-#, fuzzy
 msgid "Color theme to use (will default to PCB Editor settings)"
 msgstr ""
-"Tema das cores que será usado (o padrão será as configurações do pcbnew)"
+"Tema das cores a ser utilizado (o padrão será as configurações do editor de "
+"PCI)"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:75
 #: kicad/cli/command_export_pcb_svg.cpp:74
@@ -20071,6 +20068,8 @@ msgid ""
 "Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual "
 "shape)"
 msgstr ""
+"Definir a opção do formato da ilha/via do bloco (0 = sem formato, 1 = "
+"formato pequeno, 2 = formato real)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:44
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:64
@@ -26580,9 +26579,8 @@ msgid "Export STEP"
 msgstr "Exporta STEP"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:210
-#, fuzzy
 msgid "Command line:\n"
-msgstr "Linha de comando:"
+msgstr "Linha de comando:\n"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:210
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:207
@@ -36469,9 +36467,10 @@ msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignorando um polígono pois a camada '%s' do Eagle (%d) não foi mapeada"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1503
-#, fuzzy, c-format
+#, c-format
 msgid "Skipping a polygon on layer '%s' (%d): outline count is not 1"
-msgstr "Ignorando um polígono pois a camada '%s' do Eagle (%d) não foi mapeada"
+msgstr ""
+"Ignorando um polígono na camada '%s' (%d): a contagem de contornos não é 1"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1793
 #, c-format
@@ -36846,23 +36845,22 @@ msgstr ""
 "posição: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6063
-#, fuzzy
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
 msgstr ""
 "A estratégia de preenchimento legado da região não é mais suportada.\n"
-"Deseja converter as regiões em enchimentos com polígonos suavizados?"
+"O preenchimento da região será convertido com base no melhor esforço."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6096
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2483
-#, fuzzy
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
 msgstr ""
-"A estratégia de preenchimento legado da região não é mais suportada.\n"
-"Deseja converter as regiões em enchimentos com polígonos suavizados?"
+"A estratégia de preenchimento legado do segmento da região não é mais "
+"suportada.\n"
+"O preenchimento da região será convertido com base no melhor esforço."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:94
 #, c-format
