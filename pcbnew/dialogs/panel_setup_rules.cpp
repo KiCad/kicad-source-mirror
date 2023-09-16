@@ -692,10 +692,12 @@ void PANEL_SETUP_RULES::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
 #endif
 
     m_helpWindow = new HTML_MESSAGE_BOX( nullptr, _( "Syntax Help" ) );
-    m_helpWindow->SetDialogSizeInDU( 320, 320 );
+    m_helpWindow->SetDialogSizeInDU( 420, 320 );
 
     wxString html_txt;
     ConvertMarkdown2Html( wxGetTranslation( msg ), html_txt );
+
+    html_txt.Replace( wxS( "<td" ), wxS( "<td valign=top" ) );
     m_helpWindow->AddHTML_Text( html_txt );
 
     m_helpWindow->ShowModeless();

@@ -38,7 +38,7 @@ void ConvertMarkdown2Html( const wxString& aMarkdownInput, wxString& aHtmlOutput
     struct buf* ob = bufnew( OUTPUT_UNIT );
 
     sdhtml_renderer( &callbacks, &options, 0 );
-    struct sd_markdown* markdown = sd_markdown_new( 0, 16, &callbacks, &options );
+    struct sd_markdown* markdown = sd_markdown_new( MKDEXT_TABLES, 16, &callbacks, &options );
 
     sd_markdown_render( ob, (uint8_t*)markdownInput.data(), markdownInput.size(), markdown );
     sd_markdown_free( markdown );
