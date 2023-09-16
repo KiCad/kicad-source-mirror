@@ -11,16 +11,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-15 15:58-0700\n"
-"PO-Revision-Date: 2023-08-06 10:12+0000\n"
+"PO-Revision-Date: 2023-09-19 08:56+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
-"Language: pt_br\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.1-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -314,21 +314,18 @@ msgstr "Aparência"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:326
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:518
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:40
-#, fuzzy
 msgid "Follow PCB Editor"
-msgstr "Editor da PCI"
+msgstr "Seguir o editor da PCI"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:328
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:519
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:40
-#, fuzzy
 msgid "Follow PCB Plot Settings"
-msgstr "Configurações do filtro"
+msgstr "Seguir as configurações de plotagem da PCI"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:586
-#, fuzzy
 msgid "legacy colors"
-msgstr "Use cores:"
+msgstr "Cores herdadas"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:725
 msgid "3D Image File Name"
@@ -538,64 +535,55 @@ msgid "Use a CAD color style based on the diffuse color of the material"
 msgstr "Utilize o estilo de cor do CAD com base na cor difusa do material"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:309
-#, fuzzy
 msgid "Show Through Hole 3D Models"
-msgstr "Alterne os modelos 3D dos pin through-hole"
+msgstr "Mostrar modelos 3D com furos passantes"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:310
-#, fuzzy
 msgid "Show 3D models for 'Through hole' type footprints"
-msgstr "Alterne os modelos 3D para os componentes do tipo 'pin through-hole'"
+msgstr "Mostrar modelos 3D com footprint tipo 'furo passante'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:318
-#, fuzzy
 msgid "Show SMD 3D Models"
-msgstr "Exibir modelos 3D SMD"
+msgstr "Mostrar modelos 3D SMD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:319
-#, fuzzy
 msgid "Show 3D models for 'Surface mount' type footprints"
-msgstr ""
-"Alterne o modelos 3D para os componentes do tipo 'montagem na superfície'"
+msgstr "Mostrar modelos 3D com footprint tipo 'montagem na superfície'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:327
-#, fuzzy
 msgid "Show Unspecified 3D Models"
-msgstr "Alterna os modelos 3D não especificados"
+msgstr "Mostrar modelos 3D não especificados"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:328
-#, fuzzy
 msgid "Show 3D models for 'unspecified' type footprints"
-msgstr "Alterna os modelos 3D para os componentes do tipo 'não especificado'"
+msgstr "Mostrar modelos 3D com footprint tipo \"não especificados\""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:336
-#, fuzzy
 msgid "Show 3D Models not in POS File"
-msgstr "Alterna os modelos 3D que não estão no arquivo pos"
+msgstr "Mostrar modelos 3D que não estão no arquivo POS"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:337
-#, fuzzy
 msgid "Show 3D models even if not found in .pos file"
-msgstr "Alterna os modelos 3D que não estão no arquivo pos"
+msgstr "Mostrar modelos 3D mesmo que não sejam encontrados no arquivo .pos"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:345
-#, fuzzy
 msgid "Show 3D Models marked DNP"
-msgstr "Alterne os modelos 3D marcados com DNP"
+msgstr "Mostrar modelos 3D marcados com DNP"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:346
-#, fuzzy
 msgid "Show 3D models even if marked 'Do Not Place'"
-msgstr "Alternar os modelos 3D para componentes marcados como 'Não colocar'"
+msgstr ""
+"Mostrar modelos 3D mesmo que estejam marcados como \"Do Not Place\" (Não "
+"colocar)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:353
 msgid "Show Model Bounding Boxes"
 msgstr "Exiba as caixas delimitadoras do modelo"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:354
-#, fuzzy
 msgid "Show 3D model bounding boxes in realtime renderer"
-msgstr "Exiba as caixas delimitadoras do modelo"
+msgstr ""
+"Mostrar em tempo real as caixas delimitadoras do modelos 3D no renderizador"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:361
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:362
@@ -613,9 +601,8 @@ msgid "Show/hide the appearance manager"
 msgstr "Mostra/oculta o gerenciador de aparência"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:50
-#, fuzzy
 msgid "Board Body"
-msgstr "Corpo da placa:"
+msgstr "Corpo da placa"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:50
 msgid "Show board body"
@@ -626,141 +613,120 @@ msgid "F.Cu"
 msgstr "F.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:51
-#, fuzzy
 msgid "Show front copper / surface finish color"
-msgstr "Cor de acabamento do Cobre/Superfície…"
+msgstr "Mostrar o cobre frontal / cor de acabamento da superfície"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:52
 msgid "B.Cu"
 msgstr "B.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:52
-#, fuzzy
 msgid "Show back copper / surface finish color"
-msgstr "Cor de acabamento do Cobre/Superfície…"
+msgstr "Mostrar o cobre de trás / cor de acabamento da superfície"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:53
-#, fuzzy
 msgid "Adhesive"
-msgstr "B.Adhesive"
+msgstr "Adesivo"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:53
-#, fuzzy
 msgid "Show adhesive"
-msgstr "Exiba as camadas do adesivo"
+msgstr "Mostrar o adesivo"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
-#, fuzzy
 msgid "Solder Paste"
-msgstr "Pasta de Solda:"
+msgstr "Pasta de solda"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
-#, fuzzy
 msgid "Show solder paste"
-msgstr "Exiba as camadas da pasta de solda"
+msgstr "Mostrar a pasta de solda"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
 msgid "F.Silkscreen"
 msgstr "F.Silkscreen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
-#, fuzzy
 msgid "Show front silkscreen"
-msgstr "Serigrafia da frente"
+msgstr "Mostrar a serigrafia da frente"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "B.Silkscreen"
 msgstr "B.Silkscreen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Show back silkscreen"
-msgstr "Serigrafia traseira"
+msgstr "Mostrar a serigrafia de trás"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "F.Mask"
 msgstr "F.Mask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
-#, fuzzy
 msgid "Show front solder mask"
-msgstr "Máscara de solda da frente"
+msgstr "Mostrar a máscara de solda da frente"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "B.Mask"
 msgstr "B.Mask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
-#, fuzzy
 msgid "Show back solder mask"
-msgstr "Máscara de solda traseira"
+msgstr "Mostrar a máscara de solda de trás"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
-#, fuzzy
 msgid "User.Drawings"
-msgstr "Desenhos"
+msgstr "User.Drawings"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
-#, fuzzy
 msgid "Show user drawings layer"
-msgstr "Mostre as camadas com os comentários e com os desenhos"
+msgstr "Mostrar as camadas com os desenhos do usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "User.Comments"
 msgstr "User.Comments"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
-#, fuzzy
 msgid "Show user comments layer"
-msgstr "Exiba as camadas da máscara de solda"
+msgstr "Mostrar as camadas com os comentários do usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "User.Eco1"
 msgstr "User.Eco1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
-#, fuzzy
 msgid "Show user ECO1 layer"
-msgstr "Exiba as camadas ECO"
+msgstr "Mostrar a camada ECO1 do usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "User.Eco2"
 msgstr "User.Eco2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
-#, fuzzy
 msgid "Show user ECO2 layer"
-msgstr "Exiba as camadas ECO"
+msgstr "Mostrar a camada ECO2 do usuário"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
-#, fuzzy
 msgid "Through-hole Models"
-msgstr "Ilhas com furo passante"
+msgstr "Modelos com furo passante"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
-#, fuzzy
 msgid "SMD Models"
-msgstr "Modelos 3D"
+msgstr "Modelos SMD"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
-#, fuzzy
 msgid "Virtual Models"
-msgstr "Exibir/Ocultar modelos 3D virtuais"
+msgstr "Modelos virtuais"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:67
-#, fuzzy
 msgid "Models not in POS File"
-msgstr "Alterna os modelos 3D que não estão no arquivo pos"
+msgstr "Modelos não inclusos no arquivo POS"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "Models marked DNP"
-msgstr "Alterne os modelos 3D marcados com DNP"
+msgstr "Modelos marcados como DNP"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "Model Bounding Boxes"
-msgstr "Exiba as caixas delimitadoras do modelo"
+msgstr "Caixas delimitadoras do modelo"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71 common/layer_id.cpp:161
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
@@ -797,32 +763,27 @@ msgid "Show all footprint text"
 msgstr "Mostra todo o texto do footprint"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "3D Axis"
-msgstr "Eixo X"
+msgstr "Eixo 3D"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
 msgid "Background Start"
-msgstr "Cor de fundo"
+msgstr "Início do fundo"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
 msgid "Background gradient start color"
-msgstr "Início do gradiente do fundo:"
+msgstr "Cor inicial do gradiente de fundo"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "Background End"
-msgstr "Cor de fundo"
+msgstr "Fim do fundo"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "Background gradient end color"
-msgstr "Fim do gradiente do fundo:"
+msgstr "Cor final do gradiente de fundo"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save and restore color and visibility combinations.\n"
 "Use %s+Tab to activate selector.\n"
@@ -831,27 +792,27 @@ msgid ""
 msgstr ""
 "Salva e restaura as combinações de visibilidade da camada.\n"
 "Use %s+Tab para ativar o seletor.\n"
-"Tabs sucessivos enquanto mantém %s pressionado alternarão as predefinições "
-"no pop-up."
+"Pressionar sucessivamente a tecla Tabs enquanto mantém pressionado %s "
+"percorrerá as predefinições no pop-up."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save and restore camera position and zoom.\n"
 "Use %s+Tab to activate selector.\n"
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
-"Salva e restaura as localizações e a aproximação.\n"
+"Salva e restaura a localização da câmera e a aproximação.\n"
 "Use %s+Tab para ativar o seletor.\n"
-"Tabs sucessivos enquanto mantém %s pressionado alternarão os pontos de "
-"visualização no pop-up."
+"Pressionar sucessivamente Tabs enquanto mantém pressionado %s percorrerá as "
+"predefinições no pop-up."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:412
-#, fuzzy
 msgid "Left double click or middle click to change color"
 msgstr ""
-"Clique-duplo com o botão esquerdo ou clique com o do meio para alterar a cor"
+"Clique duas vezes com o botão esquerdo do mouse ou com o botão do meio para "
+"alterar a cor"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:459
 #: pcbnew/widgets/appearance_controls.cpp:2156
@@ -1741,9 +1702,8 @@ msgid "Export to Clipboard"
 msgstr "Exporte para a área de transferência"
 
 #: common/background_jobs_monitor.cpp:97
-#, fuzzy
 msgid "Background Jobs"
-msgstr "Cor de fundo"
+msgstr "Trabalhos em segundo plano"
 
 #: common/common.cpp:270
 #, c-format
@@ -2449,14 +2409,12 @@ msgid "Configure Global Library Table"
 msgstr "Configure a tabela global da biblioteca"
 
 #: common/dialogs/dialog_grid_settings.cpp:61
-#, fuzzy
 msgid "Grid size X out of range."
-msgstr "Perfuração fora do alcance"
+msgstr "O tamanho da grade X está fora do intervalo."
 
 #: common/dialogs/dialog_grid_settings.cpp:68
-#, fuzzy
 msgid "Grid size Y out of range."
-msgstr "Perfuração fora do alcance"
+msgstr "O tamanho da grade Y está fora do intervalo."
 
 #: common/dialogs/dialog_hotkey_list.cpp:33
 msgid "Hotkey List"
@@ -3155,23 +3113,20 @@ msgid "MyLabel"
 msgstr "Meu Rótulo"
 
 #: common/dialogs/dialog_unit_entry_base.cpp:79
-#, fuzzy
 msgid "X label:"
-msgstr "Rótulo:"
+msgstr "Etiqueta X:"
 
 #: common/dialogs/dialog_unit_entry_base.cpp:90
-#, fuzzy
 msgid "Y label:"
-msgstr "Rótulo:"
+msgstr "Etiqueta Y:"
 
 #: common/dialogs/dialog_unit_entry_base.h:45
 msgid "Title"
 msgstr "Título"
 
 #: common/dialogs/dialog_unit_entry_base.h:71
-#, fuzzy
 msgid "Move Point to Location"
-msgstr "localização do footprint"
+msgstr "Mover ponto para o local"
 
 #: common/dialogs/eda_list_dialog.cpp:46 common/dialogs/eda_list_dialog.cpp:68
 #: common/widgets/lib_tree.cpp:197 common/widgets/lib_tree.cpp:237
@@ -3711,29 +3666,26 @@ msgid "Reset Unique Id"
 msgstr "Redefinir o ID único"
 
 #: common/dialogs/panel_grid_settings.cpp:124 common/tool/grid_menu.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s (%s)"
-msgstr "Página %s (%s)"
+msgstr "%s%s (%s)"
 
 #: common/dialogs/panel_grid_settings.cpp:243
-#, fuzzy, c-format
+#, c-format
 msgid "Grid size '%s' already exists."
-msgstr "'%s' já existe."
+msgstr "O tamanho da grade '%s' já existe."
 
 #: common/dialogs/panel_grid_settings.cpp:262
-#, fuzzy
 msgid "At least one grid size is required."
-msgstr "A classe padrão da rede é necessária."
+msgstr "Pelo menos um tamanho de grade é necessário."
 
 #: common/dialogs/panel_grid_settings_base.cpp:25
-#, fuzzy
 msgid "Grids:"
-msgstr "Grade"
+msgstr "Grades:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:64
-#, fuzzy
 msgid "Fast Grid Switching"
-msgstr "Troca rápida"
+msgstr "Comutação rápida da grade"
 
 #: common/dialogs/panel_grid_settings_base.cpp:77
 msgid "Grid 1:"
@@ -3753,9 +3705,8 @@ msgid "Grid Overrides"
 msgstr "Substituições da grade"
 
 #: common/dialogs/panel_grid_settings_base.cpp:119
-#, fuzzy
 msgid "Connected items:"
-msgstr "Itens conectáveis:"
+msgstr "Itens conectados:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:127
 msgid "Wires:"
@@ -4021,9 +3972,8 @@ msgid "Pan left/right:"
 msgstr "Faça movimentos para a esquerda/direita:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:284
-#, fuzzy
 msgid "Reverse"
-msgstr "Reverta"
+msgstr "Inverter"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:305
 msgid "Pan left/right with horizontal movement"
@@ -4286,9 +4236,8 @@ msgstr "Não foi possível usar o OpenGL"
 #: common/drawing_sheet/drawing_sheet_parser.cpp:539
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:3061
 #: pcbnew/plugins/kicad/pcb_parser.cpp:2987
-#, fuzzy
 msgid "Failed to read image data."
-msgstr "Houve uma falha ao ler uma palavra."
+msgstr "Houve uma falha ao ler os dados da imagem."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:961
 #, c-format
@@ -4543,9 +4492,8 @@ msgstr "Opções de exibição"
 #: common/eda_base_frame.cpp:1102 common/eda_base_frame.cpp:1111
 #: common/eda_base_frame.cpp:1132 common/eda_base_frame.cpp:1142
 #: common/eda_base_frame.cpp:1188 common/tool/common_tools.cpp:549
-#, fuzzy
 msgid "Grids"
-msgstr "Grade"
+msgstr "Grades"
 
 #: common/eda_base_frame.cpp:1103 common/eda_base_frame.cpp:1112
 #: common/eda_base_frame.cpp:1133 common/eda_base_frame.cpp:1143
@@ -4707,9 +4655,8 @@ msgid "Constrain to H, V, 45"
 msgstr "Restrinja para H, V, 45"
 
 #: common/eda_draw_frame.cpp:390 common/tool/actions.cpp:689
-#, fuzzy
 msgid "Edit Grids..."
-msgstr "Edite a grade do usuário ..."
+msgstr "Editar as grades..."
 
 #: common/eda_draw_frame.cpp:546
 msgid "Zoom Auto"
@@ -4917,9 +4864,8 @@ msgid "Draw Item"
 msgstr "Desenhar item"
 
 #: common/eda_shape.cpp:66
-#, fuzzy
 msgid "Thermal Spoke"
-msgstr "Largura da raia térmica:"
+msgstr "Largura do raio térmico"
 
 #: common/eda_shape.cpp:67 pcbnew/pcb_shape.cpp:678
 msgid "Number Box"
@@ -4955,9 +4901,8 @@ msgid "Pad Number Box"
 msgstr "Número da caixa da ilha"
 
 #: common/eda_shape.cpp:691 pcbnew/pcb_shape.cpp:684
-#, fuzzy
 msgid "Thermal Spoke Template"
-msgstr "Largura da raia térmica:"
+msgstr "Modelo de raio térmico"
 
 #: common/eda_shape.cpp:692 common/eda_shape.cpp:705
 msgid "Unrecognized"
@@ -6064,22 +6009,20 @@ msgid "Type mismatch between %lf and '%s'"
 msgstr "Houve uma incompatibilidade de tipo entre %lf e '%s'"
 
 #: common/notifications_manager.cpp:90
-#, fuzzy
 msgid "View Details"
-msgstr "Detalhes"
+msgstr "Ver os detalhes"
 
 #: common/notifications_manager.cpp:95
 msgid "Dismiss"
-msgstr ""
+msgstr "Dispensar"
 
 #: common/notifications_manager.cpp:155
-#, fuzzy
 msgid "Notifications"
-msgstr "Justificação"
+msgstr "Notificações"
 
 #: common/notifications_manager.cpp:175
 msgid "There are no notifications available"
-msgstr ""
+msgstr "Não há notificações disponíveis"
 
 #: common/pgm_base.cpp:210
 msgid "No default editor found, you must choose one."
@@ -6241,38 +6184,38 @@ msgid "Invalid Arc with radius %f and angle %f"
 msgstr "Arco com raio %f e ângulo %f é inválido"
 
 #: common/plugins/easyeda/easyeda_parser_base.cpp:37
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse number from '%s'"
-msgstr "Falha ao analisar o grupo de barramento %s"
+msgstr "Houve uma falha ao analisar o número de '%s'"
 
 #: common/plugins/easyedapro/easyedapro_import_utils.cpp:85
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project file. Cannot "
 "find project.json."
 msgstr ""
-"O arquivos '%s'\n"
-"não parece ser um arquivo válido do projeto KiCad."
+"'%s' não parece ser um arquivo válido do projeto do EasyEDA (JLCEDA) Pro. "
+"Não é possível encontrar o arquivo project.json."
 
 #: common/plugins/easyedapro/easyedapro_import_utils.cpp:101
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot read ZIP archive '%s'"
-msgstr "Não é possível abrir o arquivo '%s'"
+msgstr "Não é possível ler o arquivo ZIP '%s '"
 
 #: common/plugins/easyedapro/easyedapro_import_utils.cpp:117
-#, fuzzy, c-format
+#, c-format
 msgid "JSON error reading '%s': %s"
-msgstr "Houve um erro ao ler a imagem %s."
+msgstr "Erro JSON ao ler '%s': %s"
 
 #: common/plugins/easyedapro/easyedapro_import_utils.cpp:121
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading '%s': %s"
-msgstr "Houve um erro ao ler a imagem %s."
+msgstr "Houve um erro ao ler '%s': %s"
 
 #: common/plugins/easyedapro/easyedapro_import_utils.cpp:144
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse JSON line %d in '%s': %s"
-msgstr "Não é possível encontrar %s pino '%s'."
+msgstr "Não é possível analisar a linha JSON %d em '%s': %s"
 
 #: common/project.cpp:366 common/project.cpp:371 pcbnew/pcb_base_frame.cpp:194
 msgid "Error loading project footprint library table."
@@ -6575,14 +6518,12 @@ msgid "Select all items on screen"
 msgstr "Selecione todos os itens na tela"
 
 #: common/tool/actions.cpp:232
-#, fuzzy
 msgid "Unselect All"
-msgstr "Deselecionar todos"
+msgstr "Desmarcar todos"
 
 #: common/tool/actions.cpp:233
-#, fuzzy
 msgid "Unselect all items on screen"
-msgstr "Selecione todos os itens na tela"
+msgstr "Desmarcar todos os itens na tela"
 
 #: common/tool/actions.cpp:238
 msgid "Paste Special..."
@@ -6855,9 +6796,8 @@ msgid "Grid Origin"
 msgstr "Origem da grade"
 
 #: common/tool/actions.cpp:656
-#, fuzzy
 msgid "Place the grid origin point"
-msgstr "Defina o ponto de origem da grade"
+msgstr "insira o ponto de origem da grade"
 
 #: common/tool/actions.cpp:664
 msgid "Reset Grid Origin"
@@ -6876,14 +6816,12 @@ msgid "Enables item-specific grids that override the current grid"
 msgstr "Permite itens específicos das grades que substituem a grade atual"
 
 #: common/tool/actions.cpp:690
-#, fuzzy
 msgid "Edit grid definitions"
-msgstr "Defina as dimensões da grade"
+msgstr "Editar as definições de grade"
 
 #: common/tool/actions.cpp:696
-#, fuzzy
 msgid "Grid Origin..."
-msgstr "Origem da grade"
+msgstr "Origem da grade..."
 
 #: common/tool/actions.cpp:697
 msgid "Set the grid origin point"
@@ -7364,9 +7302,8 @@ msgid "Min grid spacing:"
 msgstr "Espaçamento mínimo de grade:"
 
 #: common/widgets/gal_options_panel_base.cpp:84
-#, fuzzy
 msgid "Snap to grid:"
-msgstr "Ajuste à grade:"
+msgstr "Ajustar à grade:"
 
 #: common/widgets/gal_options_panel_base.cpp:88
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
@@ -7393,14 +7330,12 @@ msgid "Cursor Options"
 msgstr "Opções de cursor"
 
 #: common/widgets/gal_options_panel_base.cpp:114
-#, fuzzy
 msgid "Small crosshairs"
-msgstr "Retícula pequena"
+msgstr "Retículas pequenas"
 
 #: common/widgets/gal_options_panel_base.cpp:117
-#, fuzzy
 msgid "Full window crosshairs"
-msgstr "Retícula de tela inteira"
+msgstr "Retículas em toda a janela"
 
 #: common/widgets/gal_options_panel_base.cpp:123
 msgid "Always show crosshairs"
@@ -7716,13 +7651,13 @@ msgstr "Arquivos netlist do Allegro"
 
 #: common/wildcards_and_files_ext.cpp:296
 msgid "EasyEDA (JLCEDA) Std backup archive"
-msgstr ""
+msgstr "EasyEDA (JLCEDA) Arquivo de backup padrão"
 
 #: common/wildcards_and_files_ext.cpp:302
 #: eeschema/sch_plugins/easyedapro/sch_easyedapro_plugin.h:53
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_plugin.h:52
 msgid "EasyEDA (JLCEDA) Pro files"
-msgstr ""
+msgstr "EasyEDA (JLCEDA) Arquivos Pro"
 
 #: common/wildcards_and_files_ext.cpp:308 pcbnew/plugins/kicad/pcb_plugin.h:284
 msgid "KiCad printed circuit board files"
@@ -7770,9 +7705,8 @@ msgid "PostScript files"
 msgstr "Arquivos PostScript"
 
 #: common/wildcards_and_files_ext.cpp:381
-#, fuzzy
 msgid "Json files"
-msgstr "Arquivos de trabalho"
+msgstr "Arquivos Json"
 
 #: common/wildcards_and_files_ext.cpp:387
 msgid "Report files"
@@ -8555,9 +8489,8 @@ msgid "Generating BOM requires a fully annotated schematic."
 msgstr "A geração do BOM requer um esquema totalmente anotado."
 
 #: eeschema/dialogs/dialog_bom.cpp:351
-#, fuzzy
 msgid "Failed to create file."
-msgstr "Houve uma falha ao criar o arquivo '%s'."
+msgstr "Houve uma falha ao criar o arquivo."
 
 #: eeschema/dialogs/dialog_bom.cpp:387 eeschema/dialogs/dialog_bom_base.cpp:45
 msgid "Generator nickname:"
@@ -9842,9 +9775,8 @@ msgid "-- leave unchanged --"
 msgstr "-- deixe inalterado --"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:248
-#, fuzzy
 msgid "(labels only)"
-msgstr "(apenas os campos)"
+msgstr "(apenas etiquetas)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:279
 msgid "H Align:"
@@ -10990,9 +10922,8 @@ msgid "Preview:"
 msgstr "Pré-visualização:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:188
-#, fuzzy
 msgid "Alternate pin function definitions"
-msgstr "Definições alternativas do pino"
+msgstr "Definições alternativas das funções dos pinos"
 
 #: eeschema/dialogs/dialog_pin_properties_base.h:104
 msgid "Pin Properties"
@@ -12089,9 +12020,8 @@ msgid "Bottom:"
 msgstr "Em baixo:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:852
-#, fuzzy
 msgid "45"
-msgstr "4"
+msgstr "45"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:863
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:565
@@ -12455,9 +12385,8 @@ msgid "Save BOM Preset"
 msgstr "Salva a predefinição do BOM"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:64
-#, fuzzy
 msgid "View presets:"
-msgstr "Ver a predefinição:"
+msgstr "Mostrar as predefinições:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:102
 msgid "Exclude DNP"
@@ -12476,19 +12405,16 @@ msgid "Scope:"
 msgstr "Escopo:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:167
-#, fuzzy
 msgid "Entire project"
-msgstr "Descompacte o projeto"
+msgstr "Todo o projeto"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:173
-#, fuzzy
 msgid "Recursive"
-msgstr "Nível da recursão"
+msgstr "Recursivo"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:181
-#, fuzzy
 msgid "Cross-probe action:"
-msgstr "Sonda cruzada na seleção"
+msgstr "Ação da sonda cruzada:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:185
 #: gerbview/tools/gerbview_selection_tool.cpp:46
@@ -12505,9 +12431,8 @@ msgid "Edit"
 msgstr "Editar"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:220
-#, fuzzy
 msgid "Field delimeter:"
-msgstr "Delimitador de campo:"
+msgstr "Delimitador do campo:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:224
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:242
@@ -12515,23 +12440,20 @@ msgid ","
 msgstr ","
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:229
-#, fuzzy
 msgid "String delimeter:"
-msgstr "Delimitador da string:"
+msgstr "Delimitador do texto:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:233
 msgid "\""
 msgstr "\""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:238
-#, fuzzy
 msgid "Reference delimiter:"
-msgstr "Delimitador de referência:"
+msgstr "Delimitador da referência:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:247
-#, fuzzy
 msgid "Range delimiter:"
-msgstr "Intervalo do delimitador:"
+msgstr "Delimitador do alcance:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:251
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:35
@@ -12543,19 +12465,16 @@ msgid "Leave blank to disable ranges."
 msgstr "Deixe em branco para desativar os intervalos."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:257
-#, fuzzy
 msgid "Keep tabs"
-msgstr "Manter as guias:"
+msgstr "Mantenha as abas"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:260
-#, fuzzy
 msgid "Keep line breaks"
-msgstr "Mantenha as quebras da linha:"
+msgstr "Mantenha as quebras de linha"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:266
-#, fuzzy
 msgid "Format presets:"
-msgstr "Predefinição do formato:"
+msgstr "Predefinições do formato:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:282
 msgid "Output file:"
@@ -12715,9 +12634,8 @@ msgid "Base Pin Name"
 msgstr "Nome do pino base"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:305
-#, fuzzy
 msgid "Pin Functions"
-msgstr "Editar as junções"
+msgstr "Funções do pino"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:318
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:384
@@ -12742,7 +12660,6 @@ msgstr ""
 "para a pasta do projeto '%s'."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:68
-#, fuzzy
 msgid ""
 "This schematic currently uses the project symbol library list look up method "
 "for loading library symbols.  KiCad will attempt to map the existing symbols "
@@ -12753,15 +12670,15 @@ msgid ""
 "to skip this step, you will be responsible for manually remapping the "
 "symbols."
 msgstr ""
-"Este esquema usa atualmente o método de pesquisa da lista da biblioteca dos "
+"Atualmente, esse esquema usa o método de pesquisa da lista da biblioteca de "
 "símbolos do projeto para carregar os símbolos da biblioteca.  O KiCad "
-"tentará mapear os símbolos já existentes para usar a nova tabela da "
-"biblioteca dos símbolos.  O remapeamento alterará alguns arquivos do projeto "
-"e os esquemas podem perder a compatibilidade com as versões anteriores do "
-"KiCad.  Todos os arquivos alterados serão copiados para a pasta "
-"\"remap_backup\" na pasta do projeto, caso seja necessário reverter as "
-"alterações.  Caso queira ignorar esta etapa, você será responsável pelo "
-"remapeamento manual dos símbolos."
+"tentará mapear os símbolos existentes para usar a nova tabela da biblioteca "
+"de símbolos.  O remapeamento alterará alguns arquivos do projeto e os "
+"esquemas podem não ser compatíveis com as versões mais antigas do KiCad.  "
+"Todos os arquivos que forem alterados serão copiados para a pasta \"rescue-"
+"backup\" na pasta do projeto, caso precise reverter alguma alteração.  Se "
+"optar por ignorar essa etapa, você será responsável por remapear manualmente "
+"os símbolos."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:208
 #, c-format
@@ -13385,9 +13302,8 @@ msgid "Default text size:"
 msgstr "O tamanho padrão do texto:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:66
-#, fuzzy
 msgid "Overbar offset ratio:"
-msgstr "Taxa de deslocamento da etiqueta:"
+msgstr "Proporção de deslocamento da barra superior:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:77
 msgid "Label offset ratio:"
@@ -22431,9 +22347,8 @@ msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
 msgstr "As opções válidas são: decimal,suppressleading,suppresstrailing,keep."
 
 #: kicad/cli/command_pcb_export_drill.cpp:66
-#, fuzzy
 msgid "Valid options are: route,alternate."
-msgstr "As opções válidas são: absolute,plot"
+msgstr "As opções válidas são: route,alternate."
 
 #: kicad/cli/command_pcb_export_drill.cpp:71
 msgid "Output units, valid options:in,mm"
@@ -22478,9 +22393,8 @@ msgid "Invalid zeros format specified\n"
 msgstr "Foi definido um formato de zeros inválidos\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:189
-#, fuzzy
 msgid "Invalid oval drill format specified\n"
-msgstr "Foi definido um formato inválido do mapa\n"
+msgstr "Foi especificado um formato de perfuração inválido\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:217
 msgid "Invalid map format specified\n"
@@ -22602,8 +22516,8 @@ msgstr "Espelhar a placa (útil para tentar mostrar as camadas de baixo)"
 #: kicad/cli/command_pcb_export_pdf.cpp:77
 msgid "Color theme to use (will default to PCB Editor settings)"
 msgstr ""
-"O tema das cores que serão utilizadas (o padrão será redefinido com as "
-"configurações do editor da PCI)"
+"Tema das cores a ser utilizado (o padrão será as configurações do editor de "
+"PCI)"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:81
 #: kicad/cli/command_pcb_export_svg.cpp:81
@@ -22611,6 +22525,8 @@ msgid ""
 "Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual "
 "shape)"
 msgstr ""
+"Definir a opção do formato da ilha/via do bloco (0 = sem formato, 1 = "
+"formato pequeno, 2 = formato real)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:46
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:62
@@ -29733,9 +29649,8 @@ msgid "Export STEP / GLTF"
 msgstr "Exporta STEP"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:218
-#, fuzzy
 msgid "Command line:\n"
-msgstr "Linha de comando:"
+msgstr "Linha de comando:\n"
 
 #: pcbnew/dialogs/dialog_export_step_process_base.h:46
 #, fuzzy
@@ -40347,9 +40262,10 @@ msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignorando um polígono pois a camada '%s' do Eagle (%d) não foi mapeada"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1535
-#, fuzzy, c-format
+#, c-format
 msgid "Skipping a polygon on layer '%s' (%d): outline count is not 1"
-msgstr "Ignorando um polígono pois a camada '%s' do Eagle (%d) não foi mapeada"
+msgstr ""
+"Ignorando um polígono na camada '%s' (%d): a contagem de contornos não é 1"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1820
 #, c-format
@@ -40806,8 +40722,7 @@ msgid ""
 "Zone fills will be converted on best-effort basis."
 msgstr ""
 "A estratégia de preenchimento legado da região não é mais suportada.\n"
-"O preenchimento de região será convertida com base no melhor esforço "
-"possível."
+"O preenchimento da região será convertido com base no melhor esforço."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:5721
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2518
@@ -40815,10 +40730,9 @@ msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
 msgstr ""
-"A estratégia de preenchimento legado da região do segmento não é mais "
+"A estratégia de preenchimento legado do segmento da região não é mais "
 "suportada.\n"
-"O preenchimento de região será convertida com base no melhor esforço "
-"possível."
+"O preenchimento da região será convertido com base no melhor esforço."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:90
 #, c-format
