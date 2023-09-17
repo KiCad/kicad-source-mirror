@@ -43,6 +43,7 @@
 #include <reporter.h>
 #include <richio.h>
 #include <sch_bus_entry.h>
+#include <sch_commit.h>
 #include <sch_edit_frame.h>
 #include <sch_plugins/legacy/sch_legacy_plugin.h>
 #include <sch_file_versions.h>
@@ -486,8 +487,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             OnModify();
         }
 
-        RecalculateConnections( nullptr, GLOBAL_CLEANUP );
-        ClearUndoRedoList();
+        SCH_COMMIT dummy( this );
+
+        RecalculateConnections( &dummy, GLOBAL_CLEANUP );
     }
 
     // Load any exclusions from the project file
