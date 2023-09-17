@@ -11,16 +11,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-15 15:58-0700\n"
-"PO-Revision-Date: 2023-08-06 10:12+0000\n"
+"PO-Revision-Date: 2023-09-19 08:56+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.1-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -303,21 +303,18 @@ msgstr "Utseende"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:326
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:518
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:40
-#, fuzzy
 msgid "Follow PCB Editor"
-msgstr "Mönsterkortsredigerare"
+msgstr "Enligt mönsterkortsredigeraren"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:328
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:519
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:40
-#, fuzzy
 msgid "Follow PCB Plot Settings"
-msgstr "Filterinställningar"
+msgstr "Enligt plottinställningar för mönsterkort"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:586
-#, fuzzy
 msgid "legacy colors"
-msgstr "Använd färger:"
+msgstr "färger som i äldre version"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:725
 msgid "3D Image File Name"
@@ -527,64 +524,52 @@ msgid "Use a CAD color style based on the diffuse color of the material"
 msgstr "Använd en CAD-färgstil baserat på materialets diffusa färg"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:309
-#, fuzzy
 msgid "Show Through Hole 3D Models"
-msgstr "Växla visning av hålmonterade 3D-modeller"
+msgstr "Visa hålmonterade 3D-modeller"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:310
-#, fuzzy
 msgid "Show 3D models for 'Through hole' type footprints"
-msgstr "Växla visning av 3D-modeller för hålmonterade komponenter"
+msgstr "Visa 3D-modeller för fotavtryck av typen hålmonterad"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:318
-#, fuzzy
 msgid "Show SMD 3D Models"
-msgstr "Visa 3D SMD-modeller"
+msgstr "Visa ytmonterade 3D-modeller"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:319
-#, fuzzy
 msgid "Show 3D models for 'Surface mount' type footprints"
-msgstr "Växla visning av 3D-modeller för ytmonterade komponenter"
+msgstr "Visa 3D-modeller för fotavtryck av typ ytmonterad"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:327
-#, fuzzy
 msgid "Show Unspecified 3D Models"
-msgstr "Växla visning av ospecificerade 3D-modeller"
+msgstr "Visa 3D-modeller av ospecificerad typ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:328
-#, fuzzy
 msgid "Show 3D models for 'unspecified' type footprints"
-msgstr "Växla visning av 3D-modeller för komponenter av 'ospecificerad' typ"
+msgstr "Växla visning av 3D-modeller för fotavtryck av 'ospecificerad' typ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:336
-#, fuzzy
 msgid "Show 3D Models not in POS File"
-msgstr "Växla visning av 3D-modeller som inte är med i positionsfilen"
+msgstr "Visa 3D-modeller som inte är med i positionsfilen"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:337
-#, fuzzy
 msgid "Show 3D models even if not found in .pos file"
-msgstr "Växla visning av 3D-modeller som inte är med i positionsfilen"
+msgstr "Visa 3D-modell även om den inte är med i positionsfilen"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:345
-#, fuzzy
 msgid "Show 3D Models marked DNP"
-msgstr "Växla visning av 3D-modeller markerade som monteras ej"
+msgstr "Visa 3D-modeller markerade som monteras ej"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:346
-#, fuzzy
 msgid "Show 3D models even if marked 'Do Not Place'"
-msgstr ""
-"Växla visning av 3D-modeller för komponenter med attributet 'monteras ej'"
+msgstr "Visa 3D-modell även om attributet 'monteras ej' är satt"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:353
 msgid "Show Model Bounding Boxes"
 msgstr "Visa modellgränslådor"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:354
-#, fuzzy
 msgid "Show 3D model bounding boxes in realtime renderer"
-msgstr "Visa gränsrutor för modell"
+msgstr "Visa gränslådor för 3D-modeller i realtidsrendering"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:361
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:362
@@ -602,9 +587,8 @@ msgid "Show/hide the appearance manager"
 msgstr "Visa / dölj utseendehanteraren"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:50
-#, fuzzy
 msgid "Board Body"
-msgstr "Basmaterial:"
+msgstr "Basmaterial"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:50
 msgid "Show board body"
@@ -615,141 +599,120 @@ msgid "F.Cu"
 msgstr "F.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:51
-#, fuzzy
 msgid "Show front copper / surface finish color"
-msgstr "Färg för Finish för Koppar/Yta..."
+msgstr "Visa färg för koppar / ytplätering på framsidan"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:52
 msgid "B.Cu"
 msgstr "B.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:52
-#, fuzzy
 msgid "Show back copper / surface finish color"
-msgstr "Färg för Finish för Koppar/Yta..."
+msgstr "Visa färg för koppar / ytplätering på baksidan"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:53
-#, fuzzy
 msgid "Adhesive"
-msgstr "B.Adhesive"
+msgstr "Lim"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:53
-#, fuzzy
 msgid "Show adhesive"
 msgstr "Visa lager för lim"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
-#, fuzzy
 msgid "Solder Paste"
-msgstr "Lodpasta:"
+msgstr "Lodpasta"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
-#, fuzzy
 msgid "Show solder paste"
-msgstr "Visa lodpastalager"
+msgstr "Visa lager för lodpasta"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
 msgid "F.Silkscreen"
 msgstr "F.Anvisningstryck"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
-#, fuzzy
 msgid "Show front silkscreen"
-msgstr "Anvisningstryck framsida"
+msgstr "Visa framsidans anvisningstryck"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "B.Silkscreen"
 msgstr "B.Anvisningstryck"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Show back silkscreen"
-msgstr "Baksida silkskärm"
+msgstr "Visa baksidans anvisningstryck"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "F.Mask"
 msgstr "F.Mask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
-#, fuzzy
 msgid "Show front solder mask"
-msgstr "Lödmask framsida"
+msgstr "Visa framsidans lödmask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "B.Mask"
 msgstr "B.Mask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
-#, fuzzy
 msgid "Show back solder mask"
-msgstr "Baksidans lödmask"
+msgstr "Visa baksidans lödmask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
-#, fuzzy
 msgid "User.Drawings"
-msgstr "Ritningar"
+msgstr "Användar.Ritningar"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
-#, fuzzy
 msgid "Show user drawings layer"
-msgstr "Visa kommentars- och ritningslager"
+msgstr "Visa lager för användarens ritningar"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "User.Comments"
 msgstr "User.Comments"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
-#, fuzzy
 msgid "Show user comments layer"
-msgstr "Visa lödmasklager"
+msgstr "Visa lager för användarens kommentarer"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "User.Eco1"
 msgstr "User.Eco1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
-#, fuzzy
 msgid "Show user ECO1 layer"
-msgstr "Visa ECO-lager"
+msgstr "Visa användardefinierat ECO1-lager"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "User.Eco2"
 msgstr "User.Eco2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
-#, fuzzy
 msgid "Show user ECO2 layer"
-msgstr "Visa ECO-lager"
+msgstr "Visa användardefinierat ECO2-lager"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
-#, fuzzy
 msgid "Through-hole Models"
-msgstr "Hålmonteringslödytor"
+msgstr "Hålmonteringsmodeller"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
-#, fuzzy
 msgid "SMD Models"
-msgstr "3D-modeller"
+msgstr "Ytmonteringsmodeller"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
-#, fuzzy
 msgid "Virtual Models"
-msgstr "Växla virtuella 3D-modeller"
+msgstr "Virtuella 3D-modeller"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:67
-#, fuzzy
 msgid "Models not in POS File"
-msgstr "Växla visning av 3D-modeller som inte är med i positionsfilen"
+msgstr "3D-modeller som inte är med i positionsfilen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "Models marked DNP"
-msgstr "Växla visning av 3D-modeller markerade som monteras ej"
+msgstr "3D-modeller markerade monteras ej"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "Model Bounding Boxes"
-msgstr "Visa modellgränslådor"
+msgstr "Modellgränslådor"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71 common/layer_id.cpp:161
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
@@ -786,58 +749,52 @@ msgid "Show all footprint text"
 msgstr "Visa all fotavtryckstext"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "3D Axis"
-msgstr "X-axel"
+msgstr "3D-axel"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
 msgid "Background Start"
-msgstr "Bakgrund"
+msgstr "Bakgrunds början"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
-#, fuzzy
 msgid "Background gradient start color"
-msgstr "Bakgrundsgradient början:"
+msgstr "Bakgrundsgradient börjar från färg"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "Background End"
-msgstr "Bakgrund"
+msgstr "Bakgrund slutar"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
-#, fuzzy
 msgid "Background gradient end color"
-msgstr "Bakgrundsgradient slut:"
+msgstr "Bakgrundsgradient slutar med färg"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:110
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save and restore color and visibility combinations.\n"
 "Use %s+Tab to activate selector.\n"
 "Successive Tabs while holding %s down will cycle through presets in the "
 "popup."
 msgstr ""
-"Spara och hämta kombinationer för lagers synlighet.\n"
+"Spara och hämta kombinationer för färg och lagers synlighet.\n"
 "Använd %s+Tab för att aktivera väljare.\n"
 "Följande tryck på Tab medan %s hålls ner stegar genom förinställningarna i "
 "popupmenyn."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save and restore camera position and zoom.\n"
 "Use %s+Tab to activate selector.\n"
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
-"Spara och hämta visningens position och zoom.\n"
+"Spara och hämta kamerans position och zoom.\n"
 "Använd %s+Tab för att aktivera väljare.\n"
 "Följande tryck på Tab medan %s hålls ner stegar genom visningsytor i "
 "popupmenyn."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:412
-#, fuzzy
 msgid "Left double click or middle click to change color"
 msgstr "Vänster dubbelklick eller mittklick för att ändra färg"
 
@@ -1051,7 +1008,7 @@ msgstr "Renderingsalternativ"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:32
 msgid "Show model bounding boxes"
-msgstr "Visa gränsrutor för modell"
+msgstr "Visa gränslådor för modell"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:35
 msgid "Show copper and tech layers thickness (very slow)"
@@ -1728,9 +1685,8 @@ msgid "Export to Clipboard"
 msgstr "Exportera till urklipp"
 
 #: common/background_jobs_monitor.cpp:97
-#, fuzzy
 msgid "Background Jobs"
-msgstr "Bakgrund"
+msgstr "Bakgrundsprocesser"
 
 #: common/common.cpp:270
 #, c-format
@@ -2431,14 +2387,12 @@ msgid "Configure Global Library Table"
 msgstr "Konfigurera global bibliotekstabell"
 
 #: common/dialogs/dialog_grid_settings.cpp:61
-#, fuzzy
 msgid "Grid size X out of range."
-msgstr "Borra utom räckhåll"
+msgstr "Rutnäntsstorlek X utanför tillåtet område."
 
 #: common/dialogs/dialog_grid_settings.cpp:68
-#, fuzzy
 msgid "Grid size Y out of range."
-msgstr "Borra utom räckhåll"
+msgstr "Rutnätsstorlek Y utanför tillåtet område."
 
 #: common/dialogs/dialog_hotkey_list.cpp:33
 msgid "Hotkey List"
@@ -3129,24 +3083,20 @@ msgid "MyLabel"
 msgstr "MinEtikett"
 
 #: common/dialogs/dialog_unit_entry_base.cpp:79
-#, fuzzy
 msgid "X label:"
-msgstr "Etikett:"
+msgstr "X-etikett:"
 
 #: common/dialogs/dialog_unit_entry_base.cpp:90
-#, fuzzy
 msgid "Y label:"
-msgstr "Etikett:"
+msgstr "Y-etikett:"
 
 #: common/dialogs/dialog_unit_entry_base.h:45
-#, fuzzy
 msgid "Title"
-msgstr "Titel:"
+msgstr "Titel"
 
 #: common/dialogs/dialog_unit_entry_base.h:71
-#, fuzzy
 msgid "Move Point to Location"
-msgstr "plats för fotavtryck"
+msgstr "Flytta punkt till position"
 
 #: common/dialogs/eda_list_dialog.cpp:46 common/dialogs/eda_list_dialog.cpp:68
 #: common/widgets/lib_tree.cpp:197 common/widgets/lib_tree.cpp:237
@@ -3496,7 +3446,7 @@ msgstr "Redigering"
 
 #: common/dialogs/panel_common_settings_base.cpp:255
 msgid "Warp mouse to origin of moved object"
-msgstr "Förflytta musen till det flyttade objektets origo"
+msgstr "Flytta musmarkören till det flyttade objektets origo"
 
 #: common/dialogs/panel_common_settings_base.cpp:259
 msgid "First hotkey selects tool"
@@ -3682,29 +3632,26 @@ msgid "Reset Unique Id"
 msgstr "Återställ unikt id"
 
 #: common/dialogs/panel_grid_settings.cpp:124 common/tool/grid_menu.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s (%s)"
-msgstr "Sida %s (%s)"
+msgstr "%s%s (%s)"
 
 #: common/dialogs/panel_grid_settings.cpp:243
-#, fuzzy, c-format
+#, c-format
 msgid "Grid size '%s' already exists."
-msgstr "'%s' finns redan."
+msgstr "Rutnätsstorlek '%s' finns redan."
 
 #: common/dialogs/panel_grid_settings.cpp:262
-#, fuzzy
 msgid "At least one grid size is required."
-msgstr "Den förvalda nätklassen krävs."
+msgstr "Minst en rutnätsstorlek krävs."
 
 #: common/dialogs/panel_grid_settings_base.cpp:25
-#, fuzzy
 msgid "Grids:"
-msgstr "Rutnät"
+msgstr "Rutnät:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:64
-#, fuzzy
 msgid "Fast Grid Switching"
-msgstr "Snabb Växling"
+msgstr "Snabbväxling av rutnät"
 
 #: common/dialogs/panel_grid_settings_base.cpp:77
 msgid "Grid 1:"
@@ -3724,9 +3671,8 @@ msgid "Grid Overrides"
 msgstr "Åsidosättanden för rutnät"
 
 #: common/dialogs/panel_grid_settings_base.cpp:119
-#, fuzzy
 msgid "Connected items:"
-msgstr "Anslutbara objekt:"
+msgstr "Anslutna objekt:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:127
 msgid "Wires:"
@@ -4253,9 +4199,8 @@ msgstr "Kunde inte använda OpenGL"
 #: common/drawing_sheet/drawing_sheet_parser.cpp:539
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:3061
 #: pcbnew/plugins/kicad/pcb_parser.cpp:2987
-#, fuzzy
 msgid "Failed to read image data."
-msgstr "Det gick inte att läsa ett ord."
+msgstr "Det gick inte att läsa in bilddata."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:961
 #, c-format
@@ -4510,7 +4455,6 @@ msgstr "Visningsalternativ"
 #: common/eda_base_frame.cpp:1102 common/eda_base_frame.cpp:1111
 #: common/eda_base_frame.cpp:1132 common/eda_base_frame.cpp:1142
 #: common/eda_base_frame.cpp:1188 common/tool/common_tools.cpp:549
-#, fuzzy
 msgid "Grids"
 msgstr "Rutnät"
 
@@ -4673,9 +4617,8 @@ msgid "Constrain to H, V, 45"
 msgstr "Begränsa till H, V, 45"
 
 #: common/eda_draw_frame.cpp:390 common/tool/actions.cpp:689
-#, fuzzy
 msgid "Edit Grids..."
-msgstr "Redigera användardefinierat rutnät..."
+msgstr "Redigera rutnät..."
 
 #: common/eda_draw_frame.cpp:546
 msgid "Zoom Auto"
@@ -4883,9 +4826,8 @@ msgid "Draw Item"
 msgstr "Rita Komponent"
 
 #: common/eda_shape.cpp:66
-#, fuzzy
 msgid "Thermal Spoke"
-msgstr "Termisk ekers bredd"
+msgstr "Termisk eker"
 
 #: common/eda_shape.cpp:67 pcbnew/pcb_shape.cpp:678
 msgid "Number Box"
@@ -4921,9 +4863,8 @@ msgid "Pad Number Box"
 msgstr "Ruta för lödytenummer"
 
 #: common/eda_shape.cpp:691 pcbnew/pcb_shape.cpp:684
-#, fuzzy
 msgid "Thermal Spoke Template"
-msgstr "Termisk ekers bredd"
+msgstr "Mall för termisk eker"
 
 #: common/eda_shape.cpp:692 common/eda_shape.cpp:705
 msgid "Unrecognized"
@@ -6021,22 +5962,20 @@ msgid "Type mismatch between %lf and '%s'"
 msgstr "Typkonflikt mellan %lf och '%s'"
 
 #: common/notifications_manager.cpp:90
-#, fuzzy
 msgid "View Details"
-msgstr "Detaljer"
+msgstr "Visa detaljer"
 
 #: common/notifications_manager.cpp:95
 msgid "Dismiss"
-msgstr ""
+msgstr "Avfärda"
 
 #: common/notifications_manager.cpp:155
-#, fuzzy
 msgid "Notifications"
-msgstr "Justering"
+msgstr "Underrättelser"
 
 #: common/notifications_manager.cpp:175
 msgid "There are no notifications available"
-msgstr ""
+msgstr "Det finns inga meddelanden"
 
 #: common/pgm_base.cpp:210
 msgid "No default editor found, you must choose one."
@@ -6197,38 +6136,38 @@ msgid "Invalid Arc with radius %f and angle %f"
 msgstr "Ogiltig båge med radie %f och vinkel %f"
 
 #: common/plugins/easyeda/easyeda_parser_base.cpp:37
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse number from '%s'"
-msgstr "behöver ett nummer för '%s'"
+msgstr "Lyckades inte läsa ut nummer från '%s'"
 
 #: common/plugins/easyedapro/easyedapro_import_utils.cpp:85
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project file. Cannot "
 "find project.json."
 msgstr ""
-"Filen '%s'\n"
-"verkar inte vara en giltig KiCad projektfil."
+"'%s' verkar inte vara en giltig EasyEDA (JLCEDA) Pro projektfil. Kan inte "
+"hitta project.json."
 
 #: common/plugins/easyedapro/easyedapro_import_utils.cpp:101
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot read ZIP archive '%s'"
-msgstr "Kan inte öppna filen '%s'"
+msgstr "Kan inte öppna ZIP-arkiv '%s'"
 
 #: common/plugins/easyedapro/easyedapro_import_utils.cpp:117
-#, fuzzy, c-format
+#, c-format
 msgid "JSON error reading '%s': %s"
-msgstr "Fel vid inläsning av bild %s."
+msgstr "JSON-fel vid inläsning av '%s':%s"
 
 #: common/plugins/easyedapro/easyedapro_import_utils.cpp:121
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading '%s': %s"
-msgstr "Fel vid inläsning av bild %s."
+msgstr "Fel vid inläsning av '%s':%s"
 
 #: common/plugins/easyedapro/easyedapro_import_utils.cpp:144
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse JSON line %d in '%s': %s"
-msgstr "Det går inte att hitta %s stift '%s'."
+msgstr "Det går inte att tolka JSON-rad %d i '%s': %s"
 
 #: common/project.cpp:366 common/project.cpp:371 pcbnew/pcb_base_frame.cpp:194
 msgid "Error loading project footprint library table."
@@ -6531,12 +6470,12 @@ msgstr "Välj alla objekt på skärmen"
 #: common/tool/actions.cpp:232
 #, fuzzy
 msgid "Unselect All"
-msgstr "Radera alla"
+msgstr "Avlägsna alla val"
 
 #: common/tool/actions.cpp:233
 #, fuzzy
 msgid "Unselect all items on screen"
-msgstr "Välj alla objekt på skärmen"
+msgstr "Ta bort alla objekt på skärmen från urval"
 
 #: common/tool/actions.cpp:238
 msgid "Paste Special..."
@@ -6809,9 +6748,8 @@ msgid "Grid Origin"
 msgstr "Rutnäts origo"
 
 #: common/tool/actions.cpp:656
-#, fuzzy
 msgid "Place the grid origin point"
-msgstr "Ange rutnätets origo"
+msgstr "Placera rutnätets origo"
 
 #: common/tool/actions.cpp:664
 msgid "Reset Grid Origin"
@@ -6831,14 +6769,12 @@ msgstr ""
 "Aktiverar objektspecifika rutnät som åsidosätter det nuvarande rutnätet"
 
 #: common/tool/actions.cpp:690
-#, fuzzy
 msgid "Edit grid definitions"
-msgstr "Ange rutnätets delning"
+msgstr "Redigera rutnätets definition"
 
 #: common/tool/actions.cpp:696
-#, fuzzy
 msgid "Grid Origin..."
-msgstr "Rutnäts origo"
+msgstr "Rutnäts origo..."
 
 #: common/tool/actions.cpp:697
 msgid "Set the grid origin point"
@@ -6933,7 +6869,7 @@ msgstr "Växla inaktiva lager mellan normala, nedtonade och dolda"
 
 #: common/tool/actions.cpp:798 common/tool/actions.cpp:799
 msgid "Draw Bounding Boxes"
-msgstr "Rita avgränsningsboxar"
+msgstr "Rita avgränsningslådor"
 
 #: common/tool/actions.cpp:805 common/tool/actions.cpp:806
 msgid "Select item(s)"
@@ -7318,7 +7254,6 @@ msgid "Min grid spacing:"
 msgstr "Minsta rutnätsavstånd:"
 
 #: common/widgets/gal_options_panel_base.cpp:84
-#, fuzzy
 msgid "Snap to grid:"
 msgstr "Fäst mot rutnät:"
 
@@ -7347,12 +7282,10 @@ msgid "Cursor Options"
 msgstr "Alternativ för markör"
 
 #: common/widgets/gal_options_panel_base.cpp:114
-#, fuzzy
 msgid "Small crosshairs"
-msgstr "Litet hårkors"
+msgstr "Små hårkors"
 
 #: common/widgets/gal_options_panel_base.cpp:117
-#, fuzzy
 msgid "Full window crosshairs"
 msgstr "Hårkors över hela fönstret"
 
@@ -7426,9 +7359,8 @@ msgid "Reset to Defaults"
 msgstr "Återställ till standardinställningar"
 
 #: common/widgets/paged_dialog.cpp:90
-#, fuzzy
 msgid "Reveal Preferences in Finder"
-msgstr "Visa teman i Finder"
+msgstr "Visa egenskaper i Finder"
 
 #: common/widgets/paged_dialog.cpp:92
 msgid "Open Preferences Directory"
@@ -7671,13 +7603,13 @@ msgstr "Allegro nätlistefiler"
 
 #: common/wildcards_and_files_ext.cpp:296
 msgid "EasyEDA (JLCEDA) Std backup archive"
-msgstr ""
+msgstr "EasyEDA (JLCEDA) standard backup-arkiv"
 
 #: common/wildcards_and_files_ext.cpp:302
 #: eeschema/sch_plugins/easyedapro/sch_easyedapro_plugin.h:53
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_plugin.h:52
 msgid "EasyEDA (JLCEDA) Pro files"
-msgstr ""
+msgstr "EasyEDA (JLCEDA) Pro filer"
 
 #: common/wildcards_and_files_ext.cpp:308 pcbnew/plugins/kicad/pcb_plugin.h:284
 msgid "KiCad printed circuit board files"
@@ -7724,9 +7656,8 @@ msgid "PostScript files"
 msgstr "PostScript-filer"
 
 #: common/wildcards_and_files_ext.cpp:381
-#, fuzzy
 msgid "Json files"
-msgstr "Jobbfiler"
+msgstr "Json-filer"
 
 #: common/wildcards_and_files_ext.cpp:387
 msgid "Report files"
@@ -8500,9 +8431,8 @@ msgstr ""
 "För att generera en komponentlista krävs ett fullständigt numrerat schema."
 
 #: eeschema/dialogs/dialog_bom.cpp:351
-#, fuzzy
 msgid "Failed to create file."
-msgstr "Det gick inte att skapa filen '%s'."
+msgstr "Det gick inte att skapa filen."
 
 #: eeschema/dialogs/dialog_bom.cpp:387 eeschema/dialogs/dialog_bom_base.cpp:45
 msgid "Generator nickname:"
@@ -9783,9 +9713,8 @@ msgid "-- leave unchanged --"
 msgstr "-- lämna oförändrat --"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:248
-#, fuzzy
 msgid "(labels only)"
-msgstr "(endast fält)"
+msgstr "(endast etiketter)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:279
 msgid "H Align:"
@@ -10918,9 +10847,8 @@ msgid "Preview:"
 msgstr "Förhandsvisning:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:188
-#, fuzzy
 msgid "Alternate pin function definitions"
-msgstr "Alternativa stiftdefinitioner"
+msgstr "Alternativa stiftfunktionsdefinitioner"
 
 #: eeschema/dialogs/dialog_pin_properties_base.h:104
 msgid "Pin Properties"
@@ -12016,9 +11944,8 @@ msgid "Bottom:"
 msgstr "Botten:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:852
-#, fuzzy
 msgid "45"
-msgstr "4"
+msgstr "45"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:863
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:565
@@ -12380,7 +12307,6 @@ msgid "Save BOM Preset"
 msgstr "Spara materiallistans förinställning"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:64
-#, fuzzy
 msgid "View presets:"
 msgstr "Visa förinställningar:"
 
@@ -12402,19 +12328,16 @@ msgid "Scope:"
 msgstr "Omfattning"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:167
-#, fuzzy
 msgid "Entire project"
-msgstr "Packa upp projektet"
+msgstr "Hela projektet"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:173
-#, fuzzy
 msgid "Recursive"
-msgstr "Rekursionsnivå"
+msgstr "Rekursivt"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:181
-#, fuzzy
 msgid "Cross-probe action:"
-msgstr "Korsreferera vid val"
+msgstr "Åtgärd vid korsreferens:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:185
 #: gerbview/tools/gerbview_selection_tool.cpp:46
@@ -12431,7 +12354,6 @@ msgid "Edit"
 msgstr "Redigera"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:220
-#, fuzzy
 msgid "Field delimeter:"
 msgstr "Fältavgränsare:"
 
@@ -12441,7 +12363,6 @@ msgid ","
 msgstr ","
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:229
-#, fuzzy
 msgid "String delimeter:"
 msgstr "Strängavgränsare:"
 
@@ -12450,12 +12371,10 @@ msgid "\""
 msgstr "\""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:238
-#, fuzzy
 msgid "Reference delimiter:"
-msgstr "Referensbetecknings avgränsare:"
+msgstr "Referensbetecknings-avgränsare:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:247
-#, fuzzy
 msgid "Range delimiter:"
 msgstr "Intervallavgränsare:"
 
@@ -12469,17 +12388,14 @@ msgid "Leave blank to disable ranges."
 msgstr "Lämna tomt för att deaktivera intervall."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:257
-#, fuzzy
 msgid "Keep tabs"
-msgstr "Behåll tabulatorsteg:"
+msgstr "Behåll tabulatorsteg"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:260
-#, fuzzy
 msgid "Keep line breaks"
-msgstr "Behåll radbrytningar:"
+msgstr "Behåll radbrytningar"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:266
-#, fuzzy
 msgid "Format presets:"
 msgstr "Formatförinställning:"
 
@@ -12642,9 +12558,8 @@ msgid "Base Pin Name"
 msgstr "Grundstiftets namn"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:305
-#, fuzzy
 msgid "Pin Functions"
-msgstr "Redigera knutpunkter"
+msgstr "Stiftfunktioner"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:318
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:384
@@ -13326,9 +13241,8 @@ msgstr ""
 "textstorleken"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:92
-#, fuzzy
 msgid "Global label margin ratio:"
-msgstr "Marginal för globala etiketter:"
+msgstr "Marginalproportion för globala etiketter:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:94
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:99
@@ -13686,13 +13600,12 @@ msgid "Add Anyway"
 msgstr "Lägg till ändå"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:843
-#, fuzzy
 msgid ""
 "Select one or more rows containing libraries to save as current KiCad format "
 "(*.kicad_sym)."
 msgstr ""
-"Välj en eller flera tabellrader som innehåller bibliotek i äldre format (*."
-"lib) för att spara som aktuellt format (*.kicad_sym)."
+"Välj en eller flera rader som innehåller bibliotek att spara som aktuellt "
+"KiCad-format (*.kicad_sym)."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:851
 #, c-format
@@ -13704,13 +13617,13 @@ msgstr ""
 "tabellen?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:857
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save %d libraries as current KiCad format (*.kicad_sym) and replace legacy "
 "entries in table?"
 msgstr ""
-"Spara %d bibliotek i tidigare format som aktuellt format (*.kicad_sym) och "
-"ersätt äldre poster i tabellen?"
+"Spara %d bibliotek som aktuellt KiCad-format (*.kicad_sym) och ersätt äldre "
+"versions poster i tabellen?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:885
 #: pcbnew/dialogs/dialog_export_step.cpp:379
@@ -13971,24 +13884,23 @@ msgid "Symbol library was not updated\n"
 msgstr "Symbolbiblioteket uppdaterades inte\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:788
-#, fuzzy
 msgid "Running ERC...\n"
-msgstr "Kör DRC ..."
+msgstr "Utför kontroll av elektriska regler...\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:796 pcbnew/pcbnew_jobs_handler.cpp:990
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d violations\n"
-msgstr "Tillåt DRC-kränkningar"
+msgstr "Hittade %d regelbrott\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:810
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save ERC report to %s\n"
-msgstr "Kan inte tolka repository: %s"
+msgstr "Kan inte spara rapport från kontroll av elektriska regler till %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:815
-#, fuzzy, c-format
+#, c-format
 msgid "Saved ERC Report to %s\n"
-msgstr "Spara rapport till fil"
+msgstr "Spara rapport för elektrisk regelkontroll till fil %s\n"
 
 #: eeschema/eeschema_settings.cpp:70
 msgid "Net Navigator"
@@ -14084,9 +13996,8 @@ msgid "Symbol %s has bidirectional pins in units %s that are not placed."
 msgstr "Symbolen %s har tvåvägs stift i enheter %s som inte placerats ut."
 
 #: eeschema/erc.cpp:605
-#, fuzzy
 msgid "Pin with 'no connection' type is connected"
-msgstr "Stift med typ \"ingen anslutning\" är anslutna"
+msgstr "Stift med typ \"ingen anslutning\" är anslutet"
 
 #: eeschema/erc.cpp:731
 #, c-format
@@ -14503,7 +14414,7 @@ msgstr "Importera kretsschema"
 #: eeschema/files-io.cpp:700
 #, c-format
 msgid "No loader can read the specified file: '%s'."
-msgstr ""
+msgstr "Ingen inläsningsrutin kan tolka den specificerade filen: '%s'."
 
 #: eeschema/files-io.cpp:768
 #, c-format
@@ -14895,9 +14806,8 @@ msgid "Show pin numbers settings differ."
 msgstr "Inställning visa stiftnummer är olika."
 
 #: eeschema/lib_symbol.cpp:492
-#, fuzzy
 msgid "Exclude from simulation settings differ."
-msgstr "Inställning undanta från mönsterkortsinställningar är olika."
+msgstr "Inställning undanta från simulering är olika."
 
 #: eeschema/lib_symbol.cpp:501
 msgid "Exclude from bill of materials settings differ."
@@ -15159,9 +15069,8 @@ msgid "Convert Symbol"
 msgstr "Konvertera symbol"
 
 #: eeschema/picksymbol.cpp:326
-#, fuzzy
 msgid "Set Pin Function"
-msgstr "Välj Anslutning"
+msgstr "Ange stiftfunktion"
 
 #: eeschema/pin_numbers.cpp:124 pcbnew/zones.h:64
 msgid "none"
@@ -15731,22 +15640,21 @@ msgid "File not found %s."
 msgstr "Fil %s hittades inte."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:3947
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown or unexpected record id %d found in %s."
-msgstr "Okänt eller oväntat post-ID %d funnet i avsnittet \"FileHeader\"."
+msgstr "Okänt eller oväntat post-ID %d funnet i %s."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:4046
 msgid "Expected Altium Schematic Library file version 5.0"
-msgstr ""
+msgstr "Förväntade Altimu Kretsschemabiblioteksfil version 5.0"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.h:64
 msgid "Altium schematic files"
 msgstr "Altium kretsschemafiler"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.h:69
-#, fuzzy
 msgid "Altium schematic library files"
-msgstr "Altium kretsschemafiler"
+msgstr "Altium kretsschemabiblioteksfiler"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:72
 msgid "The selected file does not appear to be a CADSTAR parts Library file"
@@ -16000,9 +15908,8 @@ msgid "CADSTAR Schematic Archive files"
 msgstr "CADSTAR kretsschema-arkivfiler"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_plugin.h:69
-#, fuzzy
 msgid "CADSTAR Parts Library files"
-msgstr "CADSTAR Arkivfiler"
+msgstr "CADSTAR Parts biblioteksfiler"
 
 #: eeschema/sch_plugins/database/sch_database_plugin.cpp:84
 #, c-format
@@ -16064,42 +15971,42 @@ msgstr "Eagle XML kretsschemafiler"
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:420
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:464
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:498
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a valid schematic file in '%s'"
-msgstr "Kunde inte läsa datafil '%s'."
+msgstr "Kunde inte hitta en giltig kretsschemafil i '%s'"
 
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:273
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:278
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:472
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:477
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol '%s' from library '%s': %s"
-msgstr "Fel vid inläsning av symbol %s från biblioteket '%s'. (%s)"
+msgstr "Fel vid inläsning av symbol '%s' från bibliotek '%s': %s"
 
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:398
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:403
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:440
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:445
-#, fuzzy, c-format
+#, c-format
 msgid "Error enumerating symbol library '%s': %s"
-msgstr "Fel vid skapande av symbolbibliotek '%s'."
+msgstr "Fel vid uppräkning av symbolbibliotek '%s': %s"
 
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:536
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.cpp:541
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schematic '%s': %s"
-msgstr "Fel vid inläsning av kretsschema '%s'."
+msgstr "Fel vid inläsning av kretsschema '%s':%s."
 
 #: eeschema/sch_plugins/easyeda/sch_easyeda_plugin.h:59
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.h:42
 msgid "EasyEDA (JLCEDA) Std files"
-msgstr ""
+msgstr "EasyEDA (JLCEDA) standard filer"
 
 #: eeschema/sch_plugins/easyedapro/sch_easyedapro_parser.cpp:69
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_parser.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse value: '%s'"
-msgstr "Kunde inte arkivera filen '%s'."
+msgstr "Kunde inte tolka värde: '%s'"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_lib_plugin_cache.cpp:54
 #: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:71
@@ -16314,7 +16221,6 @@ msgid "expected unquoted string"
 msgstr "förväntad ociterad sträng"
 
 #: eeschema/sch_plugins/ltspice/ltspice_sch_plugin.h:58
-#, fuzzy
 msgid "LTspice schematic files"
 msgstr "LTspice kretsschemafiler"
 
@@ -16577,9 +16483,8 @@ msgid "Graphic Text"
 msgstr "Grafisk text"
 
 #: eeschema/sch_text.cpp:434
-#, fuzzy
 msgid "Align center"
-msgstr "Rikta in mot centrum"
+msgstr "Justera mot centrum"
 
 #: eeschema/sch_text_help_md.h:2
 msgid ""
@@ -17872,14 +17777,12 @@ msgid "Measure Peak-to-peak"
 msgstr "Mät topp-till-topp"
 
 #: eeschema/sim/simulator_frame_ui.cpp:152
-#, fuzzy
 msgid "Measure Frequency of Min"
-msgstr "Mät tidpunkt för minimum"
+msgstr "Mät frekvens vid minimum"
 
 #: eeschema/sim/simulator_frame_ui.cpp:153
-#, fuzzy
 msgid "Measure Frequency of Max"
-msgstr "Mät tidpunkt för maximum"
+msgstr "Mät frekvens vid maximum"
 
 #: eeschema/sim/simulator_frame_ui.cpp:157
 msgid "Measure Time of Min"
@@ -18371,9 +18274,9 @@ msgstr ""
 "Libraries för att migrera till aktuellt format."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:822
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s is a derived symbol.  Symbol graphics will not be editable."
-msgstr "Symbol %s härrör från %s. Symbolgrafik kan inte redigeras."
+msgstr "Symbol %s är en härledd symbol.   Symbolgrafik kan inte redigeras."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:900
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:951
@@ -18470,14 +18373,13 @@ msgid "The current symbol has been modified.  Save changes?"
 msgstr "Den aktuella symbolen har ändrats. Spara ändringar?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:364
-#, fuzzy, c-format
+#, c-format
 msgid "Deriving from symbol '%s'."
-msgstr "Härled från symbol:"
+msgstr "Härleder från symbol '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:378
-#, fuzzy
 msgid "Symbol must have a newName."
-msgstr "Fältet måste ha ett namn."
+msgstr "Symbolen måste ha ett nytt namn."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:384
 #: eeschema/symbol_editor/symbol_editor.cpp:689
@@ -18526,15 +18428,13 @@ msgstr "Spara i biblioteket:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:677
 #: pcbnew/footprint_libraries_utils.cpp:1066
-#, fuzzy
 msgid "A library must be specified."
-msgstr "Inget bibliotek specificerat."
+msgstr "Ett bibliotek måste specificeras."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:683
 #: eeschema/tools/symbol_editor_control.cpp:369
-#, fuzzy
 msgid "Symbol must have a name."
-msgstr "Fältet måste ha ett namn."
+msgstr "Symbolen måste ha ett namn."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:704
 msgid ""
@@ -18644,9 +18544,9 @@ msgstr "Importera symbol"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:101
 #: pcbnew/load_select_footprint.cpp:441
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a reader for '%s'."
-msgstr "Det gick inte att hitta en PDF-visare för '%s'."
+msgstr "Det gick inte att hitta en visare för '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:115
 #, c-format
@@ -20413,19 +20313,16 @@ msgid "symbol is not multi-unit"
 msgstr "symbolen innehåller inte flera enheter"
 
 #: eeschema/tools/sch_edit_tool.cpp:138
-#, fuzzy
 msgid "Pin Function"
-msgstr "Funktionell"
+msgstr "Stiftfunktion"
 
 #: eeschema/tools/sch_edit_tool.cpp:158
-#, fuzzy
 msgid "no pin selected"
-msgstr "<ingen vald>"
+msgstr "inget stift valt"
 
 #: eeschema/tools/sch_edit_tool.cpp:165
-#, fuzzy
 msgid "no alternate pin functions defined"
-msgstr "Alternativa stiftdefinitioner"
+msgstr "inga alternativa stiftfunktioner definierade"
 
 #: eeschema/tools/sch_edit_tool.cpp:425 eeschema/tools/sch_edit_tool.cpp:517
 #: eeschema/tools/sch_edit_tool.cpp:602
@@ -20762,29 +20659,24 @@ msgid "Clear layer %d?"
 msgstr "Rensa lager %d?"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:21
-#, fuzzy
 msgid "Active layer name:"
-msgstr "Inaktiva lager:"
+msgstr "Namn på aktivt lager:"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:38
-#, fuzzy
 msgid "Offset X"
-msgstr "Offset X:"
+msgstr "Offset X"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:49
-#, fuzzy
 msgid "Offset Y"
-msgstr "Offset Y:"
+msgstr "Offset Y"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:60
-#, fuzzy
 msgid "Rotation CCW"
-msgstr "Rotation"
+msgstr "Rotation motsols"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:77
-#, fuzzy
 msgid "Active layer"
-msgstr "Inaktiva lager:"
+msgstr "Aktivt lager"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:77
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:87
@@ -20792,14 +20684,12 @@ msgid "All layers"
 msgstr "Alla lager"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:77
-#, fuzzy
 msgid "All visible layers"
-msgstr "Synliga lager"
+msgstr "Alla synliga lager"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.h:64
-#, fuzzy
 msgid "Layers Settings"
-msgstr "Sidinställningar"
+msgstr "Lagerinställningar"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:144
 #, c-format
@@ -21915,7 +21805,7 @@ msgstr "Sortera lager efter filnamnstillägg"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:185
 msgid "Layers Display Parameters: Offset and Rotation"
-msgstr ""
+msgstr "Lagrets visningsparametrar: Offset och rotation"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:190
 msgid "Move Current Layer Up"
@@ -21994,9 +21884,8 @@ msgid "Input file"
 msgstr "Inmatningsfil"
 
 #: kicad/cli/command.cpp:134
-#, fuzzy
 msgid "Output directory"
-msgstr "Katalog för utdata:"
+msgstr "Katalog för utdata"
 
 #: kicad/cli/command.cpp:141
 msgid "Output file name"
@@ -22007,6 +21896,8 @@ msgid ""
 "Path to drawing sheet, this overrides any existing project defined sheet "
 "when used"
 msgstr ""
+"Sökväg till ritningsark; när detta används åsidosätter det eventuellt "
+"existerande ark definierade i projektet"
 
 #: kicad/cli/command.cpp:166
 msgid ""
@@ -22014,27 +21905,26 @@ msgid ""
 "multiple variables.\n"
 "Use in the format of '--define-var key=value' or '-D key=value'"
 msgstr ""
+"Åsidosätter eller lägger till projektvariabler; kan användas flera gånger "
+"för att deklarera flera variabler.\n"
+"Använd enligt formatet '--define-var variabelnamn=värde' eller '-D "
+"variabelnamn=värde'"
 
 #: kicad/cli/command.h:32
-#, fuzzy
 msgid "Shows help message and exits"
-msgstr "visar hjälpmeddelande och avslutar"
+msgstr "Visar hjälpmeddelande och avslutar"
 
 #: kicad/cli/command_fp.h:31
-#, fuzzy
 msgid "Footprint and Footprint Libraries"
-msgstr "Läser in fotavtrycksbibliotek"
+msgstr "Fotavtryck och fotavtrycksbibliotek"
 
 #: kicad/cli/command_fp_export.h:32 kicad/cli/command_sym_export.h:33
-#, fuzzy
 msgid "Export utilities (svg)"
-msgstr "Måttenhet för export:"
+msgstr "Exportverktyg (svg)"
 
 #: kicad/cli/command_fp_export_svg.cpp:37
-#, fuzzy
 msgid "Exports the footprint or entire footprint library to SVG"
-msgstr ""
-"Redigera listorna över globala och projektspecifika bibliotek för fotavtryck"
+msgstr "Exporterar fotavtrycket eller hela fotavtrycksbiblioteket till SVG"
 
 #: kicad/cli/command_fp_export_svg.cpp:44
 #: kicad/cli/command_pcb_export_svg.cpp:55
@@ -22045,27 +21935,27 @@ msgstr ""
 "inställningarna i mönsterkortsredigeraren)"
 
 #: kicad/cli/command_fp_export_svg.cpp:48
-#, fuzzy
 msgid "Specific footprint to export within the library"
-msgstr "Specifik symbol som skall exporteras från biblioteket"
+msgstr "Specifikt fotavtryck som skall exporteras från biblioteket"
 
 #: kicad/cli/command_fp_export_svg.cpp:74
 msgid "Footprint library does not exist or is not accessible\n"
 msgstr "Fotavtrycksbibliotek existerar inte eller är inte tillgängligt\n"
 
 #: kicad/cli/command_fp_upgrade.cpp:35
-#, fuzzy
 msgid "Upgrades the footprint library to the current kicad version format"
-msgstr "Tvingar att spara om fotavtrycksbiblioteket oberoende av version"
+msgstr ""
+"Uppgraderar fotavtrycksbiblioteket till formatet för aktuell KiCad-version"
 
 #: kicad/cli/command_fp_upgrade.cpp:39
 msgid "Forces the footprint library to be resaved regardless of versioning"
 msgstr "Tvingar att spara om fotavtrycksbiblioteket oberoende av version"
 
 #: kicad/cli/command_fp_upgrade.cpp:55
-#, fuzzy
 msgid "Footprint library path does not exist or is not accessible\n"
-msgstr "Fotavtrycksbibliotek existerar inte eller är inte tillgängligt\n"
+msgstr ""
+"Sölvägen till fotavtrycksbiblioteket existerar inte eller är inte "
+"tillgänglig\n"
 
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1024
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
@@ -22074,48 +21964,56 @@ msgstr "PCB"
 
 #: kicad/cli/command_pcb_drc.cpp:46
 msgid "Runs the Design Rules Check (DRC) on the PCB and creates a report"
-msgstr ""
+msgstr "Utför designregelkontroll (DRC) på mönsterkortet och skapar en rapport"
 
 #: kicad/cli/command_pcb_drc.cpp:50 kicad/cli/command_sch_erc.cpp:49
 msgid "Output file format, options: json, report"
-msgstr ""
+msgstr "Filformat för utmatning; alternativ: json, rapport"
 
 #: kicad/cli/command_pcb_drc.cpp:54 pcbnew/dialogs/dialog_drc_base.cpp:30
 msgid "Report all errors for each track"
 msgstr "Rapportera alla fel för varje ledare"
 
 #: kicad/cli/command_pcb_drc.cpp:60 kicad/cli/command_sch_erc.cpp:54
-#, fuzzy
 msgid "Report units; valid options: in, mm, mils"
-msgstr "Utmatningens måttenhet; giltiga alternativ: mm, in"
+msgstr "Rapportens måttenhet; giltiga alternativ: tum, mm, mils (1/1000 tum)"
 
 #: kicad/cli/command_pcb_drc.cpp:64
 msgid ""
 "Report all DRC violations, this is equivalent to including all the other "
 "severity arguments"
 msgstr ""
+"Rapportera alla designregelbrott; detta motsvarar att inkludera alla andra "
+"allvarlighetsgradsargument"
 
 #: kicad/cli/command_pcb_drc.cpp:69
 msgid ""
 "Report all DRC error level violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
+"Rapportera designregelbrott av alla nivåer; detta kan kombineras med de "
+"andra argumenten för allvarlighetsgrad"
 
 #: kicad/cli/command_pcb_drc.cpp:74
 msgid ""
 "Report all DRC warning level violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
+"Rapportera designregelvarningar av alla nivåer; detta kan kombineras med de "
+"andra argumenten för allvarlighetsgrad"
 
 #: kicad/cli/command_pcb_drc.cpp:79
 msgid ""
 "Report all excluded DRC violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
+"Rapportera alla exkluderade designregelbrott; detta kan kombineras med de "
+"andra argumenten för allvarlighetsgrad"
 
 #: kicad/cli/command_pcb_drc.cpp:84 kicad/cli/command_sch_erc.cpp:77
+#, fuzzy
 msgid "Return a exit code depending on whether or not violations exist"
-msgstr ""
+msgstr "Returnera en exit-kod beroende på huruvida designregelbrott finns"
 
 #: kicad/cli/command_pcb_drc.cpp:138 kicad/cli/command_pcb_export_3d.cpp:200
 #: kicad/cli/command_pcb_export_drill.cpp:149
@@ -22125,17 +22023,16 @@ msgid "Invalid units specified\n"
 msgstr "Ogiltiga enheter specificerade\n"
 
 #: kicad/cli/command_pcb_drc.cpp:153 kicad/cli/command_sch_erc.cpp:142
-#, fuzzy
 msgid "Invalid report format\n"
-msgstr "Ogiltigt format\n"
+msgstr "Ogiltigt rapportformat\n"
 
 #: kicad/cli/command_pcb_export.h:33
 msgid "Export utilities (gerbers, drill, position files, etc)"
-msgstr ""
+msgstr "Exportverktyg (gerber, borr- och positionsfiler etc.)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:65
 msgid "Output file format, options: step, glb (binary glTF)"
-msgstr ""
+msgstr "Filformat för utmatning; alternativ: step, glb (binär glTF)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:69
 msgid "Overwrite output file"
@@ -22172,9 +22069,8 @@ msgid "Export tracks (extremely time consuming)"
 msgstr "Exportera ledare (extremt tidskrävande)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:114
-#, fuzzy
 msgid "Export zones (extremely time consuming)"
-msgstr "Exportera ledare (extremt tidskrävande)"
+msgstr "Exportera zoner (extremt tidskrävande)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:121
 msgid "Minimum distance between points to treat them as separate ones"
@@ -22189,27 +22085,28 @@ msgstr ""
 "(förinställd enhet mm)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:134
-#, fuzzy
 msgid ""
 "Output units; ascii or csv format only; valid options: mm, m, in, tenths"
 msgstr ""
 "Utmatningens måttenhet; endast ascii eller csv-format; giltiga alternativ: "
-"in,mm"
+"mm, m, tum, tiondelar"
 
 #: kicad/cli/command_pcb_export_3d.cpp:139
 msgid ""
 "Name of folder to create and store 3d models in, if not specified or empty, "
 "the models will be embedded in main exported vrml file"
 msgstr ""
+"Namn på mapp där 3D-modeller skapas och sparas; om ej specificerad eller tom "
+"kommer modellerna att bäddas in i den exporterade vrml-huvudfilen"
 
 #: kicad/cli/command_pcb_export_3d.cpp:143
 msgid "Used with --models-dir to output relative paths in the resulting file"
 msgstr ""
+"Används med --models-dir för att ange relativa sökvägar i filen som skapas"
 
 #: kicad/cli/command_pcb_export_3d.cpp:181
-#, fuzzy
 msgid "Invalid format specified\n"
-msgstr "Ogiltigt kartformat specificerat\n"
+msgstr "Ogiltigt format specificerat\n"
 
 #: kicad/cli/command_pcb_export_base.cpp:101
 #, c-format
@@ -22245,9 +22142,8 @@ msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
 msgstr "Giltiga alternativ är: decimal,suppressleading,suppresstrailing,keep."
 
 #: kicad/cli/command_pcb_export_drill.cpp:66
-#, fuzzy
 msgid "Valid options are: route,alternate."
-msgstr "Giltiga alternativ är: absolute,plot"
+msgstr "Giltiga alternativ är: route, alternate."
 
 #: kicad/cli/command_pcb_export_drill.cpp:71
 msgid "Output units, valid options:in,mm"
@@ -22292,9 +22188,8 @@ msgid "Invalid zeros format specified\n"
 msgstr "Ogiltigt nollformat specificerat\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:189
-#, fuzzy
 msgid "Invalid oval drill format specified\n"
-msgstr "Ogiltigt kartformat specificerat\n"
+msgstr "Ogiltigt format för oval borrning specificerat\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:217
 msgid "Invalid map format specified\n"
@@ -22311,7 +22206,7 @@ msgstr "Gerberkoordinaternas precision skall vara antingen 5 eller 6\n"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:39
 msgid "Generate a DXF from a list of layers"
-msgstr ""
+msgstr "Generera en DXF från en lista av lager"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:46
 #: kicad/cli/command_pcb_export_gerber.cpp:44
@@ -22349,9 +22244,8 @@ msgid "Board file does not exist or is not accessible\n"
 msgstr "Mönsterkortsfil existerar inte eller är inte tillgänglig\n"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:41
-#, fuzzy
 msgid "Plot given layers to a single gerber file"
-msgstr "Alla lager i en enda fil"
+msgstr "Plotta angivna lager till en enda gerber-fil"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:59
 msgid "Do not use the extended X2 format"
@@ -22389,6 +22283,8 @@ msgid ""
 "Plot multiple gerbers for a PCB, including the ability to use stored board "
 "plot settings"
 msgstr ""
+"Plotta flera gerberfiler för ett mönsterkort; inkluderar möjligheten att "
+"använda sparade inställningar för plottning av mönsterkort"
 
 #: kicad/cli/command_pcb_export_gerbers.cpp:51
 msgid ""
@@ -22405,9 +22301,8 @@ msgstr ""
 "mönsterkortsfilen"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:39
-#, fuzzy
 msgid "Generate PDF from a list of layers"
-msgstr "Skapa IPC-D-356 nätlistefil"
+msgstr "Skapa PDF från en lista av lager"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:46
 #: kicad/cli/command_pcb_export_svg.cpp:49
@@ -22427,6 +22322,8 @@ msgid ""
 "Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual "
 "shape)"
 msgstr ""
+"Sätt alternativ för lödytans / viats borrform (0 = ingen form, 1 = liten "
+"form, 2 = verklig form)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:46
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:62
@@ -22471,9 +22368,8 @@ msgstr ""
 
 #: kicad/cli/command_pcb_export_pos.cpp:88
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:81
-#, fuzzy
 msgid "Exclude all footprints with the Do Not Populate flag set"
-msgstr "Uteslut alla fotavtryck med hålmonterings-lödytor"
+msgstr "Uteslut alla fotavtryck med alternativ \"monteras ej\" aktivt"
 
 #: kicad/cli/command_pcb_export_pos.cpp:93
 msgid "Include board edge layer (gerber only)"
@@ -22494,7 +22390,7 @@ msgstr "Ogiltig sida specificerad\n"
 
 #: kicad/cli/command_pcb_export_svg.cpp:42
 msgid "Generate SVG outputs of a given layer list"
-msgstr ""
+msgstr "Generera SVG-utmatning för en given lista av lager"
 
 #: kicad/cli/command_pcb_export_svg.cpp:69
 msgid ""
@@ -22510,7 +22406,6 @@ msgid "No drawing sheet"
 msgstr "Inget ritningsark"
 
 #: kicad/cli/command_sch.h:31
-#, fuzzy
 msgid "Schematics"
 msgstr "Kretsschema"
 
@@ -22518,39 +22413,47 @@ msgstr "Kretsschema"
 msgid ""
 "Runs the Electrical Rules Check (ERC) on the schematic and creates a report"
 msgstr ""
+"Utför elektrisk regelkontroll (ERC) för kretsschemat och skapar en rapport"
 
 #: kicad/cli/command_sch_erc.cpp:57
 msgid ""
 "Report all ERC violations, this is equivalent to including all the other "
 "severity arguments"
 msgstr ""
+"Rapportera alla brott mot elektriska regler; detta motsvarar att inkludera "
+"alla andra alternativ för allvarlighetsgrad"
 
 #: kicad/cli/command_sch_erc.cpp:62
 msgid ""
 "Report all ERC error level violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
+"Rapportera alla nivåer av brott mot elektriska regler; detta kan kombineras "
+"med de andra argumenten för allvarlighetsgrad"
 
 #: kicad/cli/command_sch_erc.cpp:67
 msgid ""
 "Report all ERC warning level violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
+"Rapportera alla nivåer av varningar gällande elektriska regler; detta kan "
+"kombineras med de andra argumenten för allvarlighetsgrad"
 
 #: kicad/cli/command_sch_erc.cpp:72
 msgid ""
 "Report all excluded ERC violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
+"Rapportera alla utelämnade brott mot elektriska regler; detta kan kombineras "
+"med de andra argumenten för allvarlighetsgrad"
 
 #: kicad/cli/command_sch_export.h:33
 msgid "Export utilities (netlist, pdf, bom, etc)"
-msgstr ""
+msgstr "Exportverktyg (nätlista, pdf, komponentlista etc.)"
 
 #: kicad/cli/command_sch_export_bom.cpp:35
-#, fuzzy
 msgid "Generate a Bill of Material (BOM)"
-msgstr "Generera stycklista"
+msgstr "Generera en komponentlista (BOM)"
 
 #: kicad/cli/command_sch_export_bom.cpp:155
 #: kicad/cli/command_sch_export_netlist.cpp:56
@@ -22560,9 +22463,8 @@ msgid "Schematic file does not exist or is not accessible\n"
 msgstr "Kretsschemafil finns inte eller är inte tillgänglig\n"
 
 #: kicad/cli/command_sch_export_netlist.cpp:35
-#, fuzzy
 msgid "Export a Netlist"
-msgstr "Exportera nätlista"
+msgstr "Exportera en nätlista"
 
 #: kicad/cli/command_sch_export_netlist.cpp:40
 msgid ""
@@ -22587,6 +22489,8 @@ msgid ""
 "List of page numbers separated by comma to print, blank or unspecified is "
 "equivalent to all pages"
 msgstr ""
+"Lista av sidnummer, separerade med komma, att skriva ut; blank eller "
+"ospecificerad motsvarar alla sidor"
 
 #: kicad/cli/command_sch_export_plot.cpp:85
 msgid "Pen size [mm]"
@@ -22606,16 +22510,16 @@ msgid ""
 "Export the legacy bom xml format used in the schematic editor with python "
 "scripts"
 msgstr ""
+"Exportera gamla versionens komponentlista i xml-format som används med "
+"python-skript i kretsschemaredigeraren"
 
 #: kicad/cli/command_sym.h:31
-#, fuzzy
 msgid "Symbol and Symbol Libraries"
-msgstr "Laddar symbolbibliotek"
+msgstr "Symboler och symbolbibliotek"
 
 #: kicad/cli/command_sym_export_svg.cpp:41
-#, fuzzy
 msgid "Exports the symbol or entire symbol library to SVG"
-msgstr "Exportera en symbol till en ny biblioteksfil"
+msgstr "Exportera symbolen eller hela symbolbiblioteket till SVG"
 
 #: kicad/cli/command_sym_export_svg.cpp:50
 msgid "Specific symbol to export within the library"
@@ -22634,23 +22538,20 @@ msgid "Symbol file does not exist or is not accessible\n"
 msgstr "Symbolfil existerar inte eller är inte tillgänglig\n"
 
 #: kicad/cli/command_sym_upgrade.cpp:37
-#, fuzzy
 msgid "Upgrades the symbol library to the current kicad version format"
-msgstr "Tvingar symbolbiblioteket att sparas om oberoende av version"
+msgstr "Uppgraderar symbolbiblioteket till formatet för aktuell KiCad-version"
 
 #: kicad/cli/command_sym_upgrade.cpp:41
 msgid "Forces the symbol library to be resaved regardless of versioning"
 msgstr "Tvingar symbolbiblioteket att sparas om oberoende av version"
 
 #: kicad/cli/command_sym_upgrade.cpp:57
-#, fuzzy
 msgid "Symbol library does not exist or is not accessible\n"
-msgstr "Symbolfil existerar inte eller är inte tillgänglig\n"
+msgstr "Symbolbiblioteket existerar inte eller är inte tillgänglig\n"
 
 #: kicad/cli/command_version.cpp:33
-#, fuzzy
 msgid "Reports the version info in various formats"
-msgstr "skriver ut versionsinformation och avslutar"
+msgstr "Rapporterar versionsinformationen i olika format"
 
 #: kicad/cli/command_version.cpp:37
 msgid "version info format (plain, commit, about)"
@@ -22797,12 +22698,11 @@ msgstr "Importera Eagle Project-filer"
 
 #: kicad/import_project.cpp:142
 msgid "Import EasyEDA Std Backup"
-msgstr ""
+msgstr "Importera EasyEDA standard backup"
 
 #: kicad/import_project.cpp:149
-#, fuzzy
 msgid "Import EasyEDA Pro Project"
-msgstr "Importera Eagle Project-filer"
+msgstr "Importera EasyEDA Pro projekt"
 
 #: kicad/kicad.cpp:312
 #, c-format
@@ -22815,41 +22715,35 @@ msgstr ""
 
 #: kicad/kicad_cli.cpp:132
 msgid "Export GLB (binary GLTF)"
-msgstr ""
+msgstr "Exportera GLB (binär GLTF)"
 
 #: kicad/kicad_cli.cpp:133
 msgid "Export STEP"
 msgstr "Exportera STEG"
 
 #: kicad/kicad_cli.cpp:134
-#, fuzzy
 msgid "Export VRML"
-msgstr "Exportera"
+msgstr "Exportera VRML"
 
 #: kicad/kicad_cli.cpp:147
-#, fuzzy
 msgid "Export DXF"
-msgstr "Exportera IDFv3"
+msgstr "Exportera DXF"
 
 #: kicad/kicad_cli.cpp:148
-#, fuzzy
 msgid "Export HPGL"
-msgstr "Exportera STEG"
+msgstr "Exportera HPGL"
 
 #: kicad/kicad_cli.cpp:149
-#, fuzzy
 msgid "Export PDF"
-msgstr "Exportera IDFv3"
+msgstr "Exportera PDF"
 
 #: kicad/kicad_cli.cpp:150
-#, fuzzy
 msgid "Export PS"
-msgstr "Exportera STEG"
+msgstr "Exportera PS"
 
 #: kicad/kicad_cli.cpp:151
-#, fuzzy
 msgid "Export SVG"
-msgstr "Exportera SVG-fil"
+msgstr "Exportera SVG"
 
 #: kicad/kicad_cli.cpp:317
 msgid "prints version information and exits"
@@ -22869,9 +22763,9 @@ msgid "PCM Updates Available"
 msgstr "Det finns paketuppdateringar tillgängliga"
 
 #: kicad/kicad_manager_frame.cpp:287
-#, fuzzy, c-format
+#, c-format
 msgid "%d package update(s) avaliable"
-msgstr "Inga paketuppdateringar tillgängliga"
+msgstr "%d paketuppdatering(ar) tillgänglig(a)"
 
 #: kicad/kicad_manager_frame.cpp:737
 msgid "Load File to Edit"
@@ -22931,22 +22825,19 @@ msgstr "Importera EAGLE CAD XML-schemat och kort"
 
 #: kicad/menubar.cpp:116
 msgid "EasyEDA (JLCEDA) Std Backup..."
-msgstr ""
+msgstr "EasyEDA (JLCEDA) standard backup..."
 
 #: kicad/menubar.cpp:117
-#, fuzzy
 msgid "Import EasyEDA (JLCEDA) Standard schematic and board"
-msgstr "Importera EAGLE CAD XML-schemat och kort"
+msgstr "Importera EasyEDA (JLCEDA) Standard kretsschema och mönsterkort"
 
 #: kicad/menubar.cpp:121
-#, fuzzy
 msgid "EasyEDA (JLCEDA) Pro Project..."
-msgstr "EAGLE-projekt..."
+msgstr "EasyEDA (JLCEDA) Pro projekt..."
 
 #: kicad/menubar.cpp:122
-#, fuzzy
 msgid "Import EasyEDA (JLCEDA) Professional schematic and board"
-msgstr "Importera EAGLE CAD XML-schemat och kort"
+msgstr "Importera EasyEDA (JLCEDA) Professional kretsschema och mönsterkort"
 
 #: kicad/menubar.cpp:128
 msgid "&Archive Project..."
@@ -23404,19 +23295,16 @@ msgid "PCM Update"
 msgstr "Uppdatera"
 
 #: kicad/pcm/pcm.cpp:1114
-#, fuzzy
 msgid "Preparing to fetch repositories"
-msgstr "Hantera repository"
+msgstr "Förbereder för att hämta mjukvaruförråd"
 
 #: kicad/pcm/pcm.cpp:1132
-#, fuzzy
 msgid "Fetching repository..."
-msgstr "Hämtar repository"
+msgstr "Hämtar mjukvaruförråd..."
 
 #: kicad/pcm/pcm.cpp:1145
-#, fuzzy
 msgid "Reviewing packages..."
-msgstr "Tar bort ledare i lödytor..."
+msgstr "Utvärderar paket..."
 
 #: kicad/pcm/pcm_task_manager.cpp:74 kicad/pcm/pcm_task_manager.cpp:168
 #, c-format
@@ -28638,62 +28526,62 @@ msgid "Grid Array"
 msgstr "Rutnät"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:215
-#, fuzzy
 msgid "Items to duplicate"
-msgstr "Objekt att radera"
+msgstr "Objekt att duplicera"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:217
 msgid ""
 "This is the position of the selected item,\n"
 "or the position of the group to duplicate"
 msgstr ""
+"Detta är positionen för det valda objektet,\n"
+"eller positionen för gruppen som ska dupliceras"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:227
-#, fuzzy
 msgid "Ref point pos X:"
-msgstr "Slutpunkt X:"
+msgstr "Referenspunkts position X:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:238
-#, fuzzy
 msgid "Ref point pos Y:"
-msgstr "Slutpunkt Y:"
+msgstr "Referenspunkts position Y:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:256
-#, fuzzy
 msgid "Circular array params"
-msgstr "Cirkulär matris"
+msgstr "Parametrar för cirkulär matris"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:258
 msgid ""
 "This is the position of the center of the circle\n"
 "defining the circular area to create"
 msgstr ""
+"Detta är positionen för centrum av cirkeln\n"
+"som definierar den cirkulära ytan som ska skapas"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:268
 #, fuzzy
 msgid "Center pos X:"
-msgstr "Centrera"
+msgstr "Centrerposition X:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:279
 #, fuzzy
 msgid "Center pos Y:"
-msgstr "Centrera"
+msgstr "Centrerposition Y:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:296
 msgid ""
 "Array radius,\n"
 "from Ref point pos and array center:"
 msgstr ""
+"Matrisens radie,\n"
+"från referenspunktens position och matrisens centrum:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:304
-#, fuzzy
 msgid "Distance between Ref point and Center pos."
-msgstr "Avstånd mellan ledare och övre metall"
+msgstr "Avstånd mellan referenspunkt och mittpunkt"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:322
-#, fuzzy
 msgid "Duplicate parameters"
-msgstr "Duplicera primitiv"
+msgstr "Duplicera parametrar"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:335
 msgid ""
@@ -28704,18 +28592,16 @@ msgstr ""
 "producera en hel cirkel jämnt uppdelad i \"Antal\" delar."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:343
-#, fuzzy
 msgid "Item count:"
-msgstr "Antal stift:"
+msgstr "Antal objekt:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:348
 msgid "How many items in the array."
 msgstr "Hur många objekt i matrisen."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:355
-#, fuzzy
 msgid "Rotate items:"
-msgstr "Rotera:"
+msgstr "Rotera objekt:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:361
 msgid ""
@@ -29370,7 +29256,7 @@ msgstr "STEP-filer"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:156
 msgid "Binary GTLF files"
-msgstr ""
+msgstr "Binära glTF-filer"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:160
 msgid "Select a STEP export filename"
@@ -29405,9 +29291,8 @@ msgstr ""
 "Kör DRC för en fullständig analys."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:382
-#, fuzzy
 msgid "STEP/GLTF Export"
-msgstr "STEG Export"
+msgstr "STEP/glTF-export"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:26
 msgid "temp"
@@ -29487,17 +29372,15 @@ msgstr ""
 "Varning: Detta är *extremt* tidskrävande."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:136
-#, fuzzy
 msgid "Export zones (time consuming)"
-msgstr "Exportera ledare (tidskrävande)"
+msgstr "Exportera zoner (tidskrävande)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:137
-#, fuzzy
 msgid ""
 "Export zones on external copper layers.\n"
 "Warning: this is *extremely* time consuming."
 msgstr ""
-"Exportera ledare och vior på yttre kopparlager.\n"
+"Exportera zoner på yttre kopparlager.\n"
 "Varning: Detta är *extremt* tidskrävande."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:141
@@ -29525,19 +29408,16 @@ msgstr ""
 "mönsterkortets kontur skapas."
 
 #: pcbnew/dialogs/dialog_export_step_base.h:80
-#, fuzzy
 msgid "Export STEP / GLTF"
-msgstr "Exportera STEG"
+msgstr "Exportera STEP / glTF"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:218
-#, fuzzy
 msgid "Command line:\n"
-msgstr "Kommando:"
+msgstr "Kommandorad\n"
 
 #: pcbnew/dialogs/dialog_export_step_process_base.h:46
-#, fuzzy
 msgid "3D Export"
-msgstr "Exportera"
+msgstr "3D-export"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:231
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:215
@@ -29588,9 +29468,8 @@ msgid "Export as black elements on a white background"
 msgstr "Exportera som svarta element på en vit bakgrund"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:89
-#, fuzzy
 msgid "Use current board theme"
-msgstr "Använd aktuellt ark som rot"
+msgstr "Använd aktuellt tema för mönsterkort"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:114
 msgid "Page with frame and title block"
@@ -32004,9 +31883,8 @@ msgstr "Krenelerad lödyta (endast för hålmonteringshål)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:590
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:352
-#, fuzzy
 msgid "Board contains legacy teardrops."
-msgstr "Mönsterkortet innehåller äldre typ av kragförstärkningar. "
+msgstr "Mönsterkortet innehåller äldre typ av kragförstärkningar."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:594
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:356
@@ -32223,9 +32101,8 @@ msgid "Plot reference designators"
 msgstr "Plotta referensbeteckningar"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:88
-#, fuzzy
 msgid "Plot footprint text"
-msgstr "Plotta fotavtrycks värden"
+msgstr "Plotta fotavtrycks text"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:92
 msgid "Force plotting of invisible values / refs"
@@ -32260,6 +32137,9 @@ msgid ""
 "Not tented: vias are plotted on soldermask layer\n"
 "(Solder mask is a negative layer)"
 msgstr ""
+"Täckta vior: plottas inte på lödmasklagret\n"
+"Ej täckta vior: vior plottas på lödmasklagret\n"
+"(Lödmask är ett negativt lager)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:110
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:234
@@ -33497,9 +33377,9 @@ msgid "Default properties for new graphic items:"
 msgstr "Standardegenskaper för nya grafiska objekt:"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:433
-#, fuzzy, c-format
+#, c-format
 msgid "folder with %s files"
-msgstr "Polygontåg med %d punkter"
+msgstr "mapp med %s filer"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:521
 #, c-format
@@ -33507,37 +33387,34 @@ msgid "Illegal character '%c' in nickname '%s'."
 msgstr "Olaglig karaktär '%c' i smeknamn '%s'."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:762
-#, fuzzy
 msgid ""
 "Select one or more rows containing libraries to save as current KiCad format."
 msgstr ""
-"Välj en eller flera tabellrader som innehåller bibliotek i äldre format (*."
-"lib) för att spara som aktuellt format (*.kicad_sym)."
+"Välj en eller flera rader som innehåller bibliotek att spara som aktuellt "
+"KiCad-format."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:770
-#, fuzzy, c-format
+#, c-format
 msgid "Save '%s' as current KiCad format and replace entry in table?"
-msgstr ""
-"Spara '%s' som aktuellt KiCad-format (*.kicad_sym) och ersätt äldre post i "
-"tabellen?"
+msgstr "Spara '%s' som aktuellt KiCad-format och ersätt post i tabellen?"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:776
-#, fuzzy, c-format
+#, c-format
 msgid "Save %d libraries as current KiCad format and replace entries in table?"
-msgstr ""
-"Spara %d bibliotek i tidigare format som aktuellt format (*.kicad_sym) och "
-"ersätt äldre poster i tabellen?"
+msgstr "Spara %d bibliotek som aktuellt format och ersätt poster i tabellen?"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:806
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing footprints?"
-msgstr "Filen '%s' finns redan. Vill du skriva över den här filen?"
+msgstr ""
+"Katalog '%s' finns redan. Vill du skriva över eventuella existerande "
+"fotavtryck?"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:836
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save footprint library file '%s'."
-msgstr "Det gick inte att spara symbolbiblioteksfil '%s'."
+msgstr "Det gick inte att spara fotavtrycksbiblioteksfil '%s'."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:911
 #, c-format
@@ -33578,9 +33455,8 @@ msgid "3D Model(s)"
 msgstr "3D-modell (er)"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:49
-#, fuzzy
 msgid "Net names:"
-msgstr "Nätnamn"
+msgstr "Nätnamn:"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:53
 msgid "Do not show"
@@ -33595,7 +33471,6 @@ msgid "Show on tracks"
 msgstr "Visa på ledare"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:53
-#, fuzzy
 msgid "Show on pads & tracks"
 msgstr "Visa på lödytor och ledare"
 
@@ -33614,9 +33489,8 @@ msgid "Tracks:"
 msgstr "Ledare:"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:85
-#, fuzzy
 msgid "Do not show clearances"
-msgstr "Visa inte igen"
+msgstr "Visa inte isolationsavstånd"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:85
 msgid "Show when routing"
@@ -33639,9 +33513,8 @@ msgid "Show pad clearance"
 msgstr "Visa vadderingsavstånd"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:110
-#, fuzzy
 msgid "Show all fields when parent footprint is selected"
-msgstr "Framhäv symboler när fotavtryck väljs"
+msgstr "Visa alla fält när överordnat fotavtryck är valt"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:130
 msgid "Select/highlight objects corresponding to schematic selection"
@@ -36957,9 +36830,9 @@ msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s max diameter %s; faktisk %s)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:200
-#, fuzzy, c-format
+#, c-format
 msgid "(layer %s; %d spokes connected to isolated island)"
-msgstr "(lager %s; %s minsta antal ekrar %d; faktiskt %d)"
+msgstr "(lager %s; %d ekrar anslutna till isolerad ö)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:206
 #, c-format
@@ -37051,7 +36924,7 @@ msgstr "Mönsterkortstjocklek från lageruppbyggnad: %.3f mm\n"
 #: pcbnew/exporters/step/exporter_step.cpp:513
 #, fuzzy, c-format
 msgid "Build %s data\n"
-msgstr "Bygg STEP-data\n"
+msgstr "Bygg %s-data\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:517
 msgid ""
@@ -37062,87 +36935,83 @@ msgstr ""
 "** Fel vid uppbyggnad av STEP mönsterkortsmodell. Export avbruten. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:521
-#, fuzzy, c-format
+#, c-format
 msgid "Writing %s file\n"
-msgstr "Skriver STEP-fil\n"
+msgstr "Skriver %s-fil\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:531
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "** Error writing %s file. **\n"
 msgstr ""
 "\n"
-"** Fel vid skrivning av STEP-fil. **\n"
+"** Fel vid skrivning av %s-fil. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:537
-#, fuzzy, c-format
+#, c-format
 msgid "%s file '%s' created.\n"
-msgstr ""
-"\n"
-"STEP-fil '%s' skapad.\n"
+msgstr "%s-fil '%s' skapad.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:544
 #: pcbnew/exporters/step/exporter_step.cpp:550
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "** Error exporting %s file. Export aborted. **\n"
 msgstr ""
 "\n"
-"** Fel vid export av STEP-fil. Export avbruten. **\n"
+"** Fel vid export av %s-fil. Export avbruten. **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:559
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to create %s file.\n"
 "Check that the board has a valid outline and models."
 msgstr ""
-"Kunde inte skapa STEP-fil.\n"
+"Kunde inte skapa %s-fil.\n"
 "Kontrollera att mönserkortet har en giltig definition av kant och giltiga "
 "modeller."
 
 #: pcbnew/exporters/step/exporter_step.cpp:565
-#, fuzzy, c-format
+#, c-format
 msgid "%s file has been created, but there are warnings."
-msgstr "STEP-fil har skapats, men det finns varningar."
+msgstr "%s-fil har skapats, men det finns varningar."
 
 #: pcbnew/exporters/step/exporter_step.cpp:574
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Export time %.3f s\n"
-msgstr "Omladdningstid %.3f s"
+msgstr ""
+"\n"
+"Export-tid %.3f s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:948
 #, fuzzy, c-format
 msgid "Build holes for %s\n"
-msgstr "Bygg tekniskt lager %d"
+msgstr "Bygg hål för %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:953
 #, c-format
 msgid "Cutting %d/%d %s\n"
-msgstr ""
+msgstr "Kapar ut %d/%d %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:972
-#, fuzzy
 msgid "pads"
-msgstr "Inga lödytor"
+msgstr "lödytor"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:973
-#, fuzzy
 msgid "shapes"
-msgstr "Form"
+msgstr "former"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:974
-#, fuzzy
 msgid "tracks"
-msgstr "Ledare"
+msgstr "ledare"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:975
-#, fuzzy
 msgid "zones"
-msgstr "zon"
+msgstr "zoner"
 
 #: pcbnew/files.cpp:137
 msgid "All KiCad Board Files"
@@ -37216,9 +37085,8 @@ msgid "Creating PCB"
 msgstr "Skapar mönsterkort"
 
 #: pcbnew/files.cpp:618
-#, fuzzy
 msgid "File format is not supported"
-msgstr "(fler än ett mönsterkort stöds inte)"
+msgstr "Filformatet stöds inte"
 
 #: pcbnew/files.cpp:654 pcbnew/files.cpp:664
 #, c-format
@@ -37645,9 +37513,9 @@ msgstr "Nytt fotavtryck"
 
 #: pcbnew/footprint_libraries_utils.cpp:1233
 #: pcbnew/tools/footprint_editor_control.cpp:446
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' already exists in library '%s'."
-msgstr "Fotavtrycksnamn '%s' används redan i bibliotek '%s'."
+msgstr "Fotavtryck '%s' existerar redan i bibliotek '%s'."
 
 #: pcbnew/footprint_viewer_frame.cpp:131
 msgid "KiCad Footprint Library Viewer"
@@ -37664,18 +37532,22 @@ msgstr ""
 "En term som är ett nummer kommer också att matcha mot antalet lödytor."
 
 #: pcbnew/footprint_viewer_frame.cpp:1083
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint library not found. The current configuration does not include "
 "library '%s'."
-msgstr "Den aktuella konfigurationen inkluderar inte biblioteket '%s'."
+msgstr ""
+"Fotavtrycksbibliotek hittades inte. Den aktuella konfigurationen inkluderar "
+"inte biblioteket '%s'."
 
 #: pcbnew/footprint_viewer_frame.cpp:1095
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint library not enabled. Library '%s' is not enabled in the current "
 "configuration."
-msgstr "Biblioteket '%s' är inte aktiverat i den aktuella konfigurationen."
+msgstr ""
+"Fotavtrycksbiblioteket är inte aktiverat. Biblioteket '%s' är inte aktiverat "
+"i den aktuella konfigurationen."
 
 #: pcbnew/footprint_wizard_frame.cpp:83
 #: pcbnew/footprint_wizard_frame_functions.cpp:81
@@ -37844,9 +37716,9 @@ msgid "Footprints [%u items]"
 msgstr "Fotavtryck [%u föremål]"
 
 #: pcbnew/load_select_footprint.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a writer for '%s'."
-msgstr "Det gick inte att hitta en PDF-visare för '%s'."
+msgstr "Det gick inte att hitta en skrivrutin för '%s'."
 
 #: pcbnew/load_select_footprint.cpp:462
 #, c-format
@@ -38895,9 +38767,9 @@ msgid "Drawing"
 msgstr "Ritning"
 
 #: pcbnew/pcb_shape.cpp:486
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s on %s"
-msgstr "%s på %s"
+msgstr "%s %s på %s"
 
 #: pcbnew/pcb_shape.cpp:491
 #, c-format
@@ -38905,9 +38777,8 @@ msgid "%s on %s"
 msgstr "%s på %s"
 
 #: pcbnew/pcb_shape.cpp:676
-#, fuzzy
 msgid "Pad Primitives"
-msgstr "Lägg till primitiv"
+msgstr "Primitivformer för lödyta"
 
 #: pcbnew/pcb_target.cpp:151
 msgid "PCB Target"
@@ -38937,14 +38808,12 @@ msgid "PCB Text Box on %s"
 msgstr "Mönsterkorts textruta på %s"
 
 #: pcbnew/pcb_textbox.cpp:606
-#, fuzzy
 msgid "Border Properties"
-msgstr "Kurvegenskaper"
+msgstr "Ramens egenskaper"
 
 #: pcbnew/pcb_textbox.cpp:616
-#, fuzzy
 msgid "Border Style"
-msgstr "Kantstil:"
+msgstr "Kantstil"
 
 #: pcbnew/pcb_track.cpp:141
 #, c-format
@@ -39080,9 +38949,9 @@ msgid "Missing group name argument to %s."
 msgstr "Argumentet gruppnamn saknas för %s."
 
 #: pcbnew/pcbexpr_functions.cpp:826
-#, fuzzy, c-format
+#, c-format
 msgid "Missing sheet name argument to %s."
-msgstr "Argumentet lagernamn saknas för %s."
+msgstr "Argumentet arknamn saknas för %s."
 
 #: pcbnew/pcbexpr_functions.cpp:873
 #, c-format
@@ -39117,14 +38986,13 @@ msgid "Loading board\n"
 msgstr "Läser in mönsterkort\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Successfully exported VRML to %s"
-msgstr "Lyckades skapa svg-fil"
+msgstr "Lyckades exportera VRML till %s"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:139
-#, fuzzy
 msgid "Error exporting VRML"
-msgstr "Fel vid extrahering av fil!"
+msgstr "Fel vid export av VRML"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:210
 msgid "Successfully created svg file"
@@ -39165,33 +39033,32 @@ msgid "Plotting footprint '%s' to '%s'\n"
 msgstr "Plottar fotavtryck '%s' till '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:962
-#, fuzzy
 msgid "Running DRC...\n"
-msgstr "Kör DRC ..."
+msgstr "Utför designregelkontroll...\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:974 pcbnew/tools/drc_tool.cpp:194
 msgid "DRC"
 msgstr "DRC"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:993
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d unconnected items\n"
-msgstr "Oanslutna objekt (%s)"
+msgstr "Hittade %d oanslutna objekt\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:995
 #, c-format
 msgid "Found %d schematic parity issues\n"
-msgstr ""
+msgstr "Hittade %d problem med kretsschemaparitet\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1009
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save DRC report to %s\n"
-msgstr "Kan inte tolka repository: %s"
+msgstr "Kan inte spara rapport från designregelkontroll till %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1014
-#, fuzzy, c-format
+#, c-format
 msgid "Saved DRC Report to %s\n"
-msgstr "Spara rapport till fil"
+msgstr "Sparade designregelkontrollrapport till %s\n"
 
 #: pcbnew/pcbnew_printout.cpp:113
 msgid "Multiple Layers"
@@ -39202,13 +39069,12 @@ msgid "Library Description"
 msgstr "Biblioteksbeskrivning"
 
 #: pcbnew/plugin.cpp:193
-#, fuzzy
 msgid ""
 "Selected file contains multiple footprints. Only the first one will be "
 "imported."
 msgstr ""
-"Fler än en Altium-nätklass med namn '%s' hittades. Endast den första kommer "
-"att importeras."
+"Den valda filen innehåller flera fotavtryck. Endast det första kommer att "
+"importeras."
 
 #: pcbnew/plugin.cpp:269
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
@@ -39328,6 +39194,8 @@ msgid ""
 "This file does not appear to be in a valid PCB Binary Version 6.0 format. In "
 "Altium Designer, make sure to save as \"PCB Binary Files (*.PcbDoc)\"."
 msgstr ""
+"Den här filen verkar inte vara i ett giltigt PCB Binary Version 6.0-format. "
+"Se till att spara som \"PCB Binary Files (*.PcbDoc)\" i Altium."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:503
 #, c-format
@@ -40030,9 +39898,9 @@ msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignorera en polygon eftersom Eagle-lagret '%s' (%d) inte var kartlagt"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1535
-#, fuzzy, c-format
+#, c-format
 msgid "Skipping a polygon on layer '%s' (%d): outline count is not 1"
-msgstr "Ignorera en polygon eftersom Eagle-lagret '%s' (%d) inte var kartlagt"
+msgstr "Ignorerar en polygon på lager '%s' (%d): antal konturer är inte 1"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1820
 #, c-format
@@ -40076,56 +39944,54 @@ msgid "Eagle ver. 6.x XML library files"
 msgstr "Eagle ver. 6.x XML biblioteksfiler"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_parser.cpp:728
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown SVGNODE nodeType %d"
-msgstr "Okänd Model_type "
+msgstr "Okänd SVGNODE nodeType %d"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:168
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a valid board in '%s'"
-msgstr "Det gick inte att hitta en PDF-visare för '%s'."
+msgstr "Det gick inte att hitta ett giltigt mönsterkort i '%s'"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:266
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading board '%s': %s"
-msgstr ""
-"Fel vid inläsning av kort.\n"
-"%s"
+msgstr "Fel vid inläsning av mönsterkort '%s':%s"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:296
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find valid footprints in '%s'"
-msgstr "Kan inte hitta lödyteindex '%d' i fotavtryck '%s'."
+msgstr "Kan inte hitta giltiga fotavtryck i '%s'"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:362
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:367
-#, fuzzy, c-format
+#, c-format
 msgid "Error enumerating footprints in library '%s': %s"
-msgstr "Fel vid inläsning av fotavtryck %s från bibliotek '%s'."
+msgstr "Fel vid inläsning av fotavtryck i bibliotek '%s': %s"
 
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:514
 #: pcbnew/plugins/easyeda/pcb_easyeda_plugin.cpp:519
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading footprint '%s' from library '%s': %s"
-msgstr "Fel vid inläsning av fotavtryck %s från bibliotek '%s'."
+msgstr "Fel vid inläsning av fotavtryck '%s' från bibliotek '%s'.:%s"
 
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_plugin.cpp:325
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_plugin.cpp:375
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot load footprint '%s' from '%s'"
-msgstr "Det gick inte att ladda fotavtrycket '%s' från '%s'"
+msgstr "Det gick inte att läsa in fotavtrycket '%s' från '%s'"
 
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_plugin.cpp:357
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in project '%s'"
-msgstr "Fotavtryck '%s' hittades inte i bibliotek '%s'."
+msgstr "Fotavtryck '%s' hittades inte i projektet '%s'."
 
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_plugin.h:42
 #: pcbnew/plugins/easyedapro/pcb_easyedapro_plugin.h:47
 msgid "EasyEDA (JLCEDA) Pro project"
-msgstr ""
+msgstr "EasyEDA (JLCEDA) Pro projekt"
 
 #: pcbnew/plugins/fabmaster/fabmaster_plugin.cpp:56
 msgid "Fabmaster PCB files"
@@ -40313,14 +40179,12 @@ msgid "Footprint library '%s' cannot be deleted."
 msgstr "Fotavtrycksbibliotek '%s' kan inte tas bort."
 
 #: pcbnew/plugins/geda/gpcb_plugin.h:56
-#, fuzzy
 msgid "gEDA PCB footprint file"
-msgstr "Lägg till fotavtrycksfilter"
+msgstr "gEDA PCB fotavtrycksfil"
 
 #: pcbnew/plugins/geda/gpcb_plugin.h:61
-#, fuzzy
 msgid "gEDA PCB footprint library directory"
-msgstr "Altium biblioteksfiler för mönsterkortsfotavtryck"
+msgstr "gEDA PCB fotavtrycksbibliotekskatalog"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:242
 #, c-format
@@ -40570,9 +40434,8 @@ msgid "Unexpected file '%s' found in library path '%s'."
 msgstr "Oväntad fil '%s' hittades i bibliotekssökvägen '%s'."
 
 #: pcbnew/plugins/kicad/pcb_plugin.h:289
-#, fuzzy
 msgid "KiCad footprint file"
-msgstr "KiCad fotavtrycksfiler"
+msgstr "KiCad fotavtrycksfil"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:650
 #, c-format
@@ -42429,31 +42292,29 @@ msgid "Switch the arc posture"
 msgstr "Byt bågens hållning"
 
 #: pcbnew/tools/pcb_actions.cpp:336
-#, fuzzy
 msgid "Snap to objects on the active layer only"
-msgstr "Ingen fil laddad på det aktiva lagret %d."
+msgstr "Fäst bara mot objekt på det aktiva lagret"
 
 #: pcbnew/tools/pcb_actions.cpp:337
 msgid "Enables snapping to objects on the active layer only"
-msgstr ""
+msgstr "Tillåter att fästa mot objekt endast på det aktiva lagret"
 
 #: pcbnew/tools/pcb_actions.cpp:342
-#, fuzzy
 msgid "Snap to objects on all layers"
-msgstr "Plotta kortkonturer på alla lager"
+msgstr "Fäst mot objekt på alla lager"
 
 #: pcbnew/tools/pcb_actions.cpp:343
-#, fuzzy
 msgid "Enables snapping to objects on all visible layers"
-msgstr "Visa nätlinjer för objekt på synliga lager"
+msgstr "Aktiverar fäst mot objekt på alla synliga lager"
 
 #: pcbnew/tools/pcb_actions.cpp:349
 msgid "Toggle snapping between active and all layers"
-msgstr ""
+msgstr "Växla fäst mot aktivt eller alla lager"
 
 #: pcbnew/tools/pcb_actions.cpp:350
 msgid "Toggles between snapping on all visible layers and only the active area"
 msgstr ""
+"Växlar mellan att fästa mot alla synliga lager eller bara det aktiva lagret"
 
 #: pcbnew/tools/pcb_actions.cpp:356
 msgid "Delete Last Point"
@@ -42532,24 +42393,20 @@ msgid "Moves the selected item(s) by an exact amount"
 msgstr "Flyttar markerade objekt med en exakt mängd"
 
 #: pcbnew/tools/pcb_actions.cpp:462
-#, fuzzy
 msgid "Move Corner To..."
-msgstr "Ta bort"
+msgstr "Flytta hörn till..."
 
 #: pcbnew/tools/pcb_actions.cpp:463
-#, fuzzy
 msgid "Move the active corner to an exact location"
-msgstr "Flyttar markerade objekt med en exakt mängd"
+msgstr "Flyttar det aktiva hörnet till en exakt position"
 
 #: pcbnew/tools/pcb_actions.cpp:469
-#, fuzzy
 msgid "Move Midpoint To..."
-msgstr "Flytta punkt"
+msgstr "Flytta mittpunkt till..."
 
 #: pcbnew/tools/pcb_actions.cpp:470
-#, fuzzy
 msgid "Move the active midpoint to an exact location"
-msgstr "Flyttar markerade objekt med en exakt mängd"
+msgstr "Flyttar den aktiva mittpunkten till en exakt position"
 
 #: pcbnew/tools/pcb_actions.cpp:478
 msgid "Create Array..."
@@ -43982,9 +43839,8 @@ msgid "Append Board"
 msgstr "Lägg till mönsterkort"
 
 #: pcbnew/tools/pcb_control.cpp:1369
-#, fuzzy
 msgid "Active Layer"
-msgstr "Inaktiva lager:"
+msgstr "Aktivt lager"
 
 #: pcbnew/tools/pcb_control.cpp:1370 pcbnew/widgets/appearance_controls.cpp:373
 #: pcbnew/widgets/appearance_controls_base.cpp:165
@@ -43993,7 +43849,7 @@ msgstr "Alla lager"
 
 #: pcbnew/tools/pcb_control.cpp:1379
 msgid "Object Snapping"
-msgstr ""
+msgstr "Fäst mot objekt"
 
 #: pcbnew/tools/pcb_control.cpp:1457
 msgid "Resolved clearance"
@@ -44024,49 +43880,40 @@ msgid "Selected Items"
 msgstr "Valda objekt"
 
 #: pcbnew/tools/pcb_point_editor.cpp:626
-#, fuzzy
 msgid "Drag Corner"
-msgstr "Dra ett hörn"
+msgstr "Dra hörn"
 
 #: pcbnew/tools/pcb_point_editor.cpp:682
-#, fuzzy
 msgid "Move Midpoint to Location"
-msgstr "plats för fotavtryck"
+msgstr "Flytta mittpunkt till position"
 
 #: pcbnew/tools/pcb_point_editor.cpp:683
-#, fuzzy
 msgid "Move Midpoint"
-msgstr "Flytta punkt"
+msgstr "Flytta mittpunkt"
 
 #: pcbnew/tools/pcb_point_editor.cpp:687
-#, fuzzy
 msgid "Move Corner to Location"
-msgstr "Ta bort"
+msgstr "Flytta hörn till position"
 
 #: pcbnew/tools/pcb_point_editor.cpp:688
-#, fuzzy
 msgid "Move Corner"
-msgstr "Ta bort"
+msgstr "Flytta hörn"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2280
-#, fuzzy
 msgid "Add Zone Corner"
-msgstr "Lägg till ett zonhörn"
+msgstr "Lägg till ett hörn till zon"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2300
-#, fuzzy
 msgid "Split Segment"
-msgstr "Delat segment"
+msgstr "Dela segment"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2372
-#, fuzzy
 msgid "Remove Zone Corner"
-msgstr "Ta bort hörnet"
+msgstr "Ta bort hörnet från zon"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2374
-#, fuzzy
 msgid "Remove Polygon Corner"
-msgstr "Ta bort ett hörn för zon / polygon"
+msgstr "Ta bort ett hörn från polygon"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:1236
 msgid "Select/Expand Connection..."
@@ -44260,9 +44107,8 @@ msgid "Hidden Text"
 msgstr "Dold text"
 
 #: pcbnew/widgets/appearance_controls.cpp:339
-#, fuzzy
 msgid "Show text marked as hidden"
-msgstr "Visa fotavtrycks text som är markerad som osynligt"
+msgstr "Visa text som är markerad som osynlig"
 
 #: pcbnew/widgets/appearance_controls.cpp:342
 msgid "Show unconnected nets as a ratsnest"
@@ -44305,14 +44151,12 @@ msgid "Show a shadow marker on locked items"
 msgstr "Visa en skuggad markör på låsta objekt"
 
 #: pcbnew/widgets/appearance_controls.cpp:348
-#, fuzzy
 msgid "Conflict Fp Shadow"
-msgstr "Motstridiga skuggor för objekt"
+msgstr "Skugga fotavtryckskonflikt"
 
 #: pcbnew/widgets/appearance_controls.cpp:348
-#, fuzzy
 msgid "Show a shadow marker on conflicting footprints"
-msgstr "Visa en skuggad markör på låsta objekt"
+msgstr "Visa en skuggad markör på fotavtryck som har konflikter"
 
 #: pcbnew/widgets/appearance_controls.cpp:349
 msgid "Show drawing sheet borders and title block"
@@ -44899,9 +44743,9 @@ msgid "on %s, %s and %s"
 msgstr "på %s, %s och %s"
 
 #: pcbnew/zone.cpp:849
-#, fuzzy, c-format
+#, c-format
 msgid "on %s, %s and %zu more"
-msgstr "på %s, %s och %d till"
+msgstr "på %s, %s och %zu ytterligare"
 
 #: pcbnew/zone.cpp:859
 #, c-format
