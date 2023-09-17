@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-15 15:57-0700\n"
-"PO-Revision-Date: 2023-08-21 05:12+0000\n"
+"PO-Revision-Date: 2023-09-19 08:56+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v7/ja/>\n"
 "Language: ja\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.1-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -6629,7 +6629,6 @@ msgid "Min grid spacing:"
 msgstr "最小グリッド間隔:"
 
 #: common/widgets/gal_options_panel_base.cpp:72
-#, fuzzy
 msgid "Snap to grid:"
 msgstr "グリッドにスナップ:"
 
@@ -19688,9 +19687,8 @@ msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
 msgstr "有効なオプション: decimal,suppressleading,suppresstrailing,keep."
 
 #: kicad/cli/command_export_pcb_drill.cpp:60
-#, fuzzy
 msgid "Valid options are: route,alternate."
-msgstr "有効なオプション: absolute,plot"
+msgstr "有効なオプション: route,alternate."
 
 #: kicad/cli/command_export_pcb_drill.cpp:64
 msgid "Output units, valid options:in,mm"
@@ -19741,9 +19739,8 @@ msgid "Invalid zeros format specified\n"
 msgstr "不正なゼロの扱いが指定されています\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:180
-#, fuzzy
 msgid "Invalid oval drill format specified\n"
-msgstr "不正なマップ ファイル形式が指定されています\n"
+msgstr "不正な長円のドリルが指定されています\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:208
 msgid "Invalid map format specified\n"
@@ -19841,16 +19838,16 @@ msgid "Mirror the board (useful for trying to show bottom layers)"
 msgstr "基板を反転 (裏面から表示するのに便利です)"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:72
-#, fuzzy
 msgid "Color theme to use (will default to PCB Editor settings)"
-msgstr "カラー テーマを使用する (pcbnewの設定でのデフォルト)"
+msgstr "カラー テーマを使用する (PCBエディターのデフォルト設定)"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:75
 #: kicad/cli/command_export_pcb_svg.cpp:74
 msgid ""
 "Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual "
 "shape)"
-msgstr ""
+msgstr "パッド/ビアの形状オプションを設定します (0 = 形状指定なし, 1 = 小さな形状, 2 "
+"= 実際の形状)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:44
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:64
@@ -26286,9 +26283,8 @@ msgid "Export STEP"
 msgstr "STEP をエクスポート"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:210
-#, fuzzy
 msgid "Command line:\n"
-msgstr "コマンド ライン:"
+msgstr "コマンド ライン:\n"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:210
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:207
@@ -28937,7 +28933,7 @@ msgstr "出力フォーマット:"
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Gerber"
-msgstr "ガーバー"
+msgstr "Gerber"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:54
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:271
@@ -34963,14 +34959,12 @@ msgid "Suppress Trailing Zeroes"
 msgstr "後方ゼロ省略 (トレイリング ゼロ サプレス)"
 
 #: pcbnew/pcb_dimension.cpp:1411
-#, fuzzy
 msgid "Crossbar Height"
-msgstr "カーソルを右へ移動"
+msgstr "十字線の高さ"
 
 #: pcbnew/pcb_dimension.cpp:1415
-#, fuzzy
 msgid "Extension Line Overshoot"
-msgstr "寸法補助線へのオフセット:"
+msgstr "寸法補助線のオーバーシュート:"
 
 #: pcbnew/pcb_dimension.cpp:1498
 msgid "Leader Length"
@@ -35390,9 +35384,9 @@ msgid "'%s' was not fully parsed."
 msgstr "'%s' は完全にパースされていません。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:683
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint directory not found: '%s'."
-msgstr "フットプリント ライブラリが見つかりません。"
+msgstr "フットプリント ディレクトリが見つかりません: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:802
 #, c-format
@@ -36054,10 +36048,9 @@ msgstr ""
 "Eagle のレイヤー '%s'（%d）がマップされていないため、ポリゴンを無視します"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1503
-#, fuzzy, c-format
+#, c-format
 msgid "Skipping a polygon on layer '%s' (%d): outline count is not 1"
-msgstr ""
-"Eagle のレイヤー '%s'（%d）がマップされていないため、ポリゴンを無視します"
+msgstr "外形線の1つではないため '%s'（%d）のポリゴンを無視します"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1793
 #, c-format
@@ -36428,23 +36421,21 @@ msgstr ""
 "オフセット: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6063
-#, fuzzy
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
 msgstr ""
 "以前のゾーンの塗りつぶし方式は現在ではサポートされていません。\n"
-"ゾーンをポリゴン塗りつぶしに変換しますか？"
+"ゾーンの塗りつぶしを可能な限り忠実に変換します。"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6096
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2483
-#, fuzzy
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
 msgstr ""
 "以前のセグメントの塗りつぶしモードは現在サポートされていません。\n"
-"ゾーンをポリゴン塗りつぶしに変換しますか？"
+"ゾーンの塗りつぶしを可能な限り忠実に変換します。"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:94
 #, c-format
