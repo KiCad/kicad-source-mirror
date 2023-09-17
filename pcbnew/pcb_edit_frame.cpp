@@ -761,13 +761,6 @@ void PCB_EDIT_FRAME::setupUIConditions()
                 return GetPcbNewSettings()->m_Use45DegreeLimit;
             };
 
-    auto enableBoardSetupCondition =
-            [this] ( const SELECTION& )
-            {
-                DRC_TOOL* tool = m_toolManager->GetTool<DRC_TOOL>();
-                return !( tool && tool->IsDRCDialogShown() );
-            };
-
     auto boardFlippedCond =
             [this]( const SELECTION& )
             {
@@ -832,7 +825,6 @@ void PCB_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( PCB_ACTIONS::ratsnestLineMode,     CHECK( curvedRatsnestCond ) );
     mgr->SetConditions( PCB_ACTIONS::toggleNetHighlight,   CHECK( netHighlightCond )
                                                            .Enable( enableNetHighlightCond ) );
-    mgr->SetConditions( PCB_ACTIONS::boardSetup,           ENABLE( enableBoardSetupCondition ) );
     mgr->SetConditions( PCB_ACTIONS::showProperties,       CHECK( propertiesCond ) );
     mgr->SetConditions( PCB_ACTIONS::showSearch,           CHECK( searchPaneCond ) );
 
@@ -1233,6 +1225,9 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage )
         OnModify();
 
         Kiway().CommonSettingsChanged( false, true );
+
+        Prj().IncrementTextVarsTicker();
+        Prj().IncrementNetclassesTicker();
 
         PCBNEW_SETTINGS* settings = GetPcbNewSettings();
         static LSET      maskAndPasteLayers = LSET( 4, F_Mask, F_Paste, B_Mask, B_Paste );

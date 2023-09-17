@@ -64,6 +64,11 @@ public:
 private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
+
+    void checkReload();
+
+private:
+    std::map<int, SEVERITY> m_lastLoaded;
 };
 
 #endif //KICAD_PANEL_SETUP_SEVERITIES_H

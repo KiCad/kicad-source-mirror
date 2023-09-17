@@ -78,6 +78,7 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( wxWindow* aParentWindow, EDA_DRA
         m_isEEschema( aIsEEschema ),
         m_netSettings( aNetSettings ),
         m_netNames( aNetNames ),
+        m_lastCheckedTicker( 0 ),
         m_hoveredCol( -1 ),
         m_lastNetclassGridWidth( -1 )
 {
@@ -219,6 +220,21 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( wxWindow* aParentWindow, EDA_DRA
     m_assignmentGrid->EndBatch();
     Thaw();
 
+    Bind( wxEVT_IDLE,
+          [this]( wxIdleEvent& aEvent )
+          {
+              // Careful of consuming CPU in an idle event handler.  Check the ticker first to
+              // see if there's even a possibility of the netclasses having changed.
+              if( m_frame->Prj().GetNetclassesTicker() > m_lastCheckedTicker )
+              {
+                  wxWindow* dialog = wxGetTopLevelParent( this );
+                  wxWindow* topLevelFocus = wxGetTopLevelParent( wxWindow::FindFocus() );
+
+                  if( topLevelFocus == dialog && m_lastLoaded != m_netSettings->m_NetClasses )
+                      checkReload();
+              }
+          } );
+
     m_matchingNets->SetFont( KIUI::GetInfoFont( this ) );
 }
 
@@ -242,27 +258,7 @@ PANEL_SETUP_NETCLASSES::~PANEL_SETUP_NETCLASSES()
 }
 
 
-void PANEL_SETUP_NETCLASSES::onUnitsChanged( wxCommandEvent& aEvent )
-{
-    std::shared_ptr<NET_SETTINGS> tempNetSettings = std::make_shared<NET_SETTINGS>( nullptr, "" );
-    std::shared_ptr<NET_SETTINGS> saveNetSettings = m_netSettings;
-
-    m_netSettings = tempNetSettings;
-
-    TransferDataFromWindow();
-
-    m_schUnitsProvider->SetUserUnits( m_frame->GetUserUnits() );
-    m_pcbUnitsProvider->SetUserUnits( m_frame->GetUserUnits() );
-
-    TransferDataToWindow();
-
-    m_netSettings = saveNetSettings;
-
-    aEvent.Skip();
-}
-
-
-bool PANEL_SETUP_NETCLASSES::TransferDataToWindow()
+void PANEL_SETUP_NETCLASSES::loadNetclasses()
 {
     int row = 0;
 
@@ -321,7 +317,50 @@ bool PANEL_SETUP_NETCLASSES::TransferDataToWindow()
         m_assignmentGrid->SetCellValue( row, 1, netclassName );
         row++;
     }
+}
 
+
+void PANEL_SETUP_NETCLASSES::checkReload()
+{
+    // MUST update the ticker before calling IsOK (or we'll end up re-entering through the idle
+    // event until we crash the stack).
+    m_lastCheckedTicker = m_frame->Prj().GetTextVarsTicker();
+
+    if( IsOK( m_parent, _( "The netclasses have been changed outside the Setup dialog.\n"
+                           "Do you wish to reload them?" ) ) )
+    {
+        m_lastLoaded = m_netSettings->m_NetClasses;
+        loadNetclasses();
+    }
+}
+
+
+void PANEL_SETUP_NETCLASSES::onUnitsChanged( wxCommandEvent& aEvent )
+{
+    std::shared_ptr<NET_SETTINGS> tempNetSettings = std::make_shared<NET_SETTINGS>( nullptr, "" );
+    std::shared_ptr<NET_SETTINGS> saveNetSettings = m_netSettings;
+
+    m_netSettings = tempNetSettings;
+
+    TransferDataFromWindow();
+
+    m_schUnitsProvider->SetUserUnits( m_frame->GetUserUnits() );
+    m_pcbUnitsProvider->SetUserUnits( m_frame->GetUserUnits() );
+
+    TransferDataToWindow();
+
+    m_netSettings = saveNetSettings;
+
+    aEvent.Skip();
+}
+
+
+bool PANEL_SETUP_NETCLASSES::TransferDataToWindow()
+{
+    m_lastLoaded = m_netSettings->m_NetClasses;
+    m_lastCheckedTicker = m_frame->Prj().GetNetclassesTicker();
+
+    loadNetclasses();
     AdjustAssignmentGridColumns( GetSize().x * 3 / 5 );
 
     return true;

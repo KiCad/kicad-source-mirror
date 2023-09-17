@@ -22,6 +22,7 @@
 #define JOB_EXPORT_SCH_BOM_H
 
 #include <kicommon.h>
+#include <vector>
 #include <wx/string.h>
 #include "job.h"
 

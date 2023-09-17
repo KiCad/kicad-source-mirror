@@ -96,6 +96,9 @@ void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
 
         Kiway().CommonSettingsChanged( false, true );
 
+        Prj().IncrementTextVarsTicker();
+        Prj().IncrementNetclassesTicker();
+
         GetRenderSettings()->SetDefaultPenWidth( Schematic().Settings().m_DefaultLineWidth );
         GetRenderSettings()->m_LabelSizeRatio  = Schematic().Settings().m_LabelSizeRatio;
         GetRenderSettings()->m_TextOffsetRatio = Schematic().Settings().m_TextOffsetRatio;

@@ -30,6 +30,7 @@
 #include <panel_setup_netclasses_base.h>
 
 class NET_SETTINGS;
+class NETCLASS;
 
 
 class PANEL_SETUP_NETCLASSES : public PANEL_SETUP_NETCLASSES_BASE
@@ -67,6 +68,9 @@ private:
     void AdjustNetclassGridColumns( int aWidth );
     void AdjustAssignmentGridColumns( int aWidth );
 
+    void loadNetclasses();
+    void checkReload();
+
 private:
     EDA_DRAW_FRAME*                 m_frame;
     bool                            m_isEEschema;
@@ -75,6 +79,9 @@ private:
 
     std::unique_ptr<UNITS_PROVIDER> m_schUnitsProvider;
     std::unique_ptr<UNITS_PROVIDER> m_pcbUnitsProvider;
+
+    std::map<wxString, std::shared_ptr<NETCLASS>> m_lastLoaded;
+    int                                           m_lastCheckedTicker;
 
     int*                  m_originalColWidths;
     bool                  m_netclassesDirty;    // The netclass drop-down menus need rebuilding

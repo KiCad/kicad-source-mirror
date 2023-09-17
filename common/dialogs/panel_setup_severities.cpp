@@ -28,6 +28,7 @@
 #include <wx/radiobut.h>
 #include <wx/scrolwin.h>
 #include <wx/stattext.h>
+#include "confirm.h"
 
 
 PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( wxWindow* aParentWindow,
@@ -149,9 +150,36 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( wxWindow* aParentWindow,
     scrollWinSizer->Add( gridSizer, 1, wxEXPAND | wxALL, 5 );
     panelSizer->Add( scrollWin, 1, wxEXPAND, 0 );
 
+    Bind( wxEVT_IDLE,
+          [this]( wxIdleEvent& aEvent )
+          {
+              if( m_lastLoaded != m_severities )
+              {
+                  wxWindow* dialog = wxGetTopLevelParent( this );
+                  wxWindow* topLevelFocus = wxGetTopLevelParent( wxWindow::FindFocus() );
+
+                  if( topLevelFocus == dialog )
+                      checkReload();
+              }
+          } );
+
     SetSizer( panelSizer );
     Layout();
     panelSizer->Fit( this );
+}
+
+
+void PANEL_SETUP_SEVERITIES::checkReload()
+{
+    // MUST update lastLoaded before calling IsOK (or we'll end up re-entering through the idle
+    // event until we crash the stack).
+    m_lastLoaded = m_severities;
+
+    if( IsOK( m_parent, _( "The violation severities have been changed outside the Setup dialog.\n"
+                           "Do you wish to reload them?" ) ) )
+    {
+        TransferDataToWindow();
+    }
 }
 
 
@@ -188,6 +216,8 @@ void PANEL_SETUP_SEVERITIES::ImportSettingsFrom( std::map<int, SEVERITY>& aSetti
 
 bool PANEL_SETUP_SEVERITIES::TransferDataToWindow()
 {
+    m_lastLoaded = m_severities;
+
     for( const RC_ITEM& item : m_items )
     {
         int errorCode = item.GetErrorCode();

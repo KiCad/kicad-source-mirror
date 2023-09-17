@@ -43,6 +43,8 @@
 
 PROJECT::PROJECT() :
         m_readOnly( false ),
+        m_textVarsTicker( 0 ),
+        m_netclassesTicker( 0 ),
         m_projectFile( nullptr ),
         m_localSettings( nullptr )
 {

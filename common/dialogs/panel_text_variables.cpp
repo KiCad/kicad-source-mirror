@@ -64,6 +64,21 @@ PANEL_TEXT_VARIABLES::PANEL_TEXT_VARIABLES( wxWindow* aParent, PROJECT* aProject
     m_TextVars->Connect( wxEVT_GRID_CELL_CHANGING,
                          wxGridEventHandler( PANEL_TEXT_VARIABLES::OnGridCellChanging ),
                          nullptr, this );
+
+    Bind( wxEVT_IDLE,
+          [this]( wxIdleEvent& aEvent )
+          {
+              // Careful of consuming CPU in an idle event handler.  Check the ticker first to
+              // see if there's even a possibility of the text variables having changed.
+              if( m_project->GetTextVarsTicker() > m_lastCheckedTicker )
+              {
+                  wxWindow* dialog = wxGetTopLevelParent( this );
+                  wxWindow* topLevelFocus = wxGetTopLevelParent( wxWindow::FindFocus() );
+
+                  if( topLevelFocus == dialog && m_lastLoaded != m_project->GetTextVars() )
+                      checkReload();
+              }
+          } );
 }
 
 
@@ -78,11 +93,31 @@ PANEL_TEXT_VARIABLES::~PANEL_TEXT_VARIABLES()
 }
 
 
+void PANEL_TEXT_VARIABLES::checkReload()
+{
+    // MUST update the ticker before calling IsOK (or we'll end up re-entering through the idle
+    // event until we crash the stack).
+    m_lastCheckedTicker = m_project->GetTextVarsTicker();
+
+    if( IsOK( m_parent, _( "The text variables have been changed outside the Setup dialog.\n"
+                           "Do you wish to reload them?" ) ) )
+    {
+        m_TextVars->ClearRows();
+
+        m_lastLoaded = m_project->GetTextVars();
+
+        for( const auto& var : m_lastLoaded )
+            AppendTextVar( var.first, var.second );
+    }
+}
+
+
 bool PANEL_TEXT_VARIABLES::TransferDataToWindow()
 {
-    std::map<wxString, wxString>& variables = m_project->GetTextVars();
+    m_lastLoaded = m_project->GetTextVars();
+    m_lastCheckedTicker = m_project->GetTextVarsTicker();
 
-    for( const auto& var : variables )
+    for( const auto& var : m_lastLoaded )
         AppendTextVar( var.first, var.second );
 
     return true;

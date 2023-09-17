@@ -91,6 +91,12 @@ public:
      */
     virtual void ApplyTextVars( const std::map<wxString, wxString>& aVarsMap );
 
+    bool GetTextVarsTicker() const { return m_textVarsTicker; }
+    void IncrementTextVarsTicker() { m_textVarsTicker++; }
+
+    bool GetNetclassesTicker() const { return m_netclassesTicker; }
+    void IncrementNetclassesTicker() { m_netclassesTicker++; }
+
     /**
      * Return the full path and name of the project.
      *
@@ -348,25 +354,27 @@ private:
      */
     const wxString libTableName( const wxString& aLibTableName ) const;
 
+private:
     wxFileName      m_project_name;         ///< \<fullpath\>/\<basename\>.pro
     wxString        m_pro_date_and_time;
 
-    ///< True if the project is read-only: no project files will be written
-    bool m_readOnly;
+    bool            m_readOnly;             ///< No project files will be written to disk
+    int             m_textVarsTicker;       ///< Update counter on text vars
+    int             m_netclassesTicker;     ///< Update counter on netclasses
 
     /// Backing store for project data -- owned by SETTINGS_MANAGER
-    PROJECT_FILE*   m_projectFile;
+    PROJECT_FILE*            m_projectFile;
 
     /// Backing store for project local settings -- owned by SETTINGS_MANAGER
-    PROJECT_LOCAL_SETTINGS* m_localSettings;
+    PROJECT_LOCAL_SETTINGS*  m_localSettings;
 
-    std::map<KIID, wxString>     m_sheetNames;
+    std::map<KIID, wxString> m_sheetNames;
 
     /// @see this::SetRString(), GetRString(), and enum RSTRING_T.
-    wxString        m_rstrings[RSTRING_COUNT];
+    wxString                 m_rstrings[RSTRING_COUNT];
 
     /// @see this::Elem() and enum ELEM_T.
-    _ELEM*          m_elems[ELEM_COUNT];
+    _ELEM*                   m_elems[ELEM_COUNT];
 };
 
 

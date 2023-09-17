@@ -26,6 +26,7 @@
 
 #include <../common/dialogs/panel_text_variables_base.h>
 #include <wx/valtext.h>
+#include <map>
 
 class PROJECT;
 
@@ -50,16 +51,21 @@ protected:
 
     void AppendTextVar( const wxString& aName, const wxString& aValue );
 
+    void checkReload();
+
 private:
-    PROJECT*            m_project;
+    PROJECT*                     m_project;
 
-    wxString            m_errorMsg;
-    int                 m_errorRow;
-    int                 m_errorCol;
+    std::map<wxString, wxString> m_lastLoaded;
+    int                          m_lastCheckedTicker;
 
-    wxTextValidator     m_nameValidator;
+    wxString                     m_errorMsg;
+    int                          m_errorRow;
+    int                          m_errorCol;
 
-    bool                m_gridWidthsDirty;
+    wxTextValidator              m_nameValidator;
+
+    bool                         m_gridWidthsDirty;
 };
 
 #endif    // _PANEL_TEXT_VARIABLES_H_
