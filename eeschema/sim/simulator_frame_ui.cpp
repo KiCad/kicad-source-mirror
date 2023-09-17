@@ -2438,7 +2438,7 @@ void SIMULATOR_FRAME_UI::updatePlotCursors()
     auto formatValue =
             [this]( double aValue, int aCursorId, int aCol ) -> wxString
             {
-                if( !m_simulatorFrame->SimFinished() && aCol == 1 )
+                if( ( !m_simulatorFrame->SimFinished() && aCol == 1 ) || std::isnan( aValue ) )
                     return wxS( "--" );
                 else
                     return SPICE_VALUE( aValue ).ToString( m_cursorFormats[ aCursorId ][ aCol ] );

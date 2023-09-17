@@ -283,17 +283,13 @@ void CURSOR::doSetCoordX( double aValue )
     int minIdx = maxIdx - 1;
 
     // Out of bounds checks
-    if( minIdx < 0 )
+    if( minIdx < 0 || maxIdx >= (int) dataX.size() )
     {
-        minIdx = 0;
-        maxIdx = 1;
-        m_coords.x = dataX[0];
-    }
-    else if( maxIdx >= (int) dataX.size() )
-    {
-        maxIdx = dataX.size() - 1;
-        minIdx = maxIdx - 1;
-        m_coords.x = dataX[maxIdx];
+        // Simulation may not be complete yet, or we may have a cursor off the beginning or end
+        // of the data.  Either way, that's where the user put it.  Don't second guess them; just
+        // leave its y value undefined.
+        m_coords.y = NAN;
+        return;
     }
 
     const double leftX = dataX[minIdx];
