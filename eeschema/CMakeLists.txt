@@ -684,4 +684,4 @@ make_lexer(
     TSCHEMATIC_T
     )
 
-add_subdirectory( plugins )
+add_subdirectory( python_scripts )
