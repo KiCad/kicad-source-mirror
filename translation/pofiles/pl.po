@@ -7,13 +7,14 @@
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023.
 # Henrik Kauhanen <henrik@kauhanen.se>, 2023.
 # Jan Sobków <sobkow.jan@gmail.com>, 2023.
+# Eryk Michalak <gnu.ewm@protonmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-15 15:58-0700\n"
 "PO-Revision-Date: 2023-09-19 08:56+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"Last-Translator: Eryk Michalak <gnu.ewm@protonmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
 "Language: pl\n"
@@ -7322,7 +7323,6 @@ msgid "Min grid spacing:"
 msgstr "Minimalny odstęp siatki:"
 
 #: common/widgets/gal_options_panel_base.cpp:84
-#, fuzzy
 msgid "Snap to grid:"
 msgstr "Przyciąganie do siatki:"
 
@@ -22378,7 +22378,6 @@ msgid "Invalid zeros format specified\n"
 msgstr "Określono nieprawidłowy format zer\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:189
-#, fuzzy
 msgid "Invalid oval drill format specified\n"
 msgstr "Określono nieprawidłowy format mapy wierceń\n"
 
@@ -39474,7 +39473,7 @@ msgstr "Nie znaleziono pliku: '%s' dla katalogu '%s'."
 #: pcbnew/plugins/altium/altium_pcb.cpp:636
 #, c-format
 msgid "Footprint directory not found: '%s'."
-msgstr "Folder z footprintami nie został odnaleziony: '%s'."
+msgstr "Biblioteka footprintów nie została odnaleziona: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:755
 #, c-format
