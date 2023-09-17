@@ -54,6 +54,8 @@ BOOST_AUTO_TEST_CASE( Connect )
     }
 
     dc.Connect();
+    dc.CacheTableInfo( "Resistors", { "Part ID", "MPN" } );
+    dc.CacheTableInfo( "Capacitors", { "Part ID", "Cost" } );
     BOOST_CHECK( dc.IsConnected() );
 
     DATABASE_CONNECTION::ROW result;
@@ -64,6 +66,13 @@ BOOST_AUTO_TEST_CASE( Connect )
     BOOST_CHECK( result.count( "MPN" ) );
     BOOST_CHECK_NO_THROW( std::any_cast<std::string>( result.at( "MPN" ) ) );
     BOOST_CHECK_EQUAL( std::any_cast<std::string>( result.at( "MPN" ) ), "RC0603FR-0710KL" );
+
+    BOOST_CHECK( dc.SelectOne( "Capacitors", std::make_pair( "Part ID", "CAP-003" ), result ) );
+
+    BOOST_CHECK( !result.empty() );
+    BOOST_CHECK( result.count( "Cost" ) );
+    BOOST_CHECK_NO_THROW( std::any_cast<std::string>( result.at( "Cost" ) ) );
+    BOOST_CHECK_EQUAL( std::any_cast<std::string>( result.at( "Cost" ) ), "1.95" );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

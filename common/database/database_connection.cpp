@@ -435,7 +435,22 @@ bool DATABASE_CONNECTION::SelectOne( const std::string& aTable,
         for( short i = 0; i < results.columns(); ++i )
         {
             std::string column = toUTF8( results.column_name( i ) );
-            aResult[ column ] = toUTF8( results.get<nanodbc::string>( i, NANODBC_TEXT( "" ) ) );
+
+            switch( results.column_datatype( i ) )
+            {
+            case SQL_DOUBLE:
+            case SQL_FLOAT:
+            case SQL_REAL:
+            case SQL_DECIMAL:
+            case SQL_NUMERIC:
+            {
+                aResult[column] = fmt::format( "{:G}", results.get<double>( i ) );
+                break;
+            }
+
+            default:
+                aResult[column] = toUTF8( results.get<nanodbc::string>( i, NANODBC_TEXT( "" ) ) );
+            }
         }
     }
     catch( nanodbc::database_error& e )
@@ -534,7 +549,23 @@ bool DATABASE_CONNECTION::SelectAll( const std::string& aTable, const std::strin
             for( short j = 0; j < results.columns(); ++j )
             {
                 std::string column = toUTF8( results.column_name( j ) );
-                result[column] = toUTF8( results.get<nanodbc::string>( j, NANODBC_TEXT( "" ) ) );
+
+                switch( results.column_datatype( j ) )
+                {
+                case SQL_DOUBLE:
+                case SQL_FLOAT:
+                case SQL_REAL:
+                case SQL_DECIMAL:
+                case SQL_NUMERIC:
+                {
+                    result[column] = fmt::format( "{:G}", results.get<double>( j ) );
+                    break;
+                }
+
+                default:
+                    result[column] = toUTF8( results.get<nanodbc::string>( j,
+                                                                           NANODBC_TEXT( "" ) ) );
+                }
             }
 
             aResults.emplace_back( std::move( result ) );

@@ -102,6 +102,18 @@
                     "name": "Voltage Rating",
                     "visible_on_add": true,
                     "visible_in_chooser": true
+                },
+                {
+                    "column": "Cost",
+                    "name": "Cost",
+                    "visible_on_add": false,
+                    "visible_in_chooser": true
+                },
+                {
+                    "column": "Mass",
+                    "name": "Mass",
+                    "visible_on_add": false,
+                    "visible_in_chooser": true
                 }
             ],
             "properties": {
