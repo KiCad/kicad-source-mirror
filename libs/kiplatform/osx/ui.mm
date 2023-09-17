@@ -175,3 +175,15 @@ void KIPLATFORM::UI::WarpPointer( wxWindow* aWindow, int aX, int aY )
 void KIPLATFORM::UI::ImmControl( wxWindow* aWindow, bool aEnable )
 {
 }
+
+
+void KIPLATFORM::UI::InfiniteDragPrepareWindow( wxWindow* aWindow )
+{
+    // Not needed on this platform
+}
+
+
+void KIPLATFORM::UI::InfiniteDragReleaseWindow()
+{
+    // Not needed on this platform
+}

@@ -447,6 +447,7 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
         {
             m_dragStartPoint = VECTOR2D( aEvent.GetX(), aEvent.GetY() );
             setState( DRAG_PANNING );
+            KIPLATFORM::UI::InfiniteDragPrepareWindow( m_parentPanel );
 
 #if defined USE_MOUSE_CAPTURE
             if( !m_parentPanel->HasCapture() )
@@ -476,6 +477,7 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
         if( aEvent.MiddleUp() || aEvent.LeftUp() || aEvent.RightUp() )
         {
             setState( IDLE );
+            KIPLATFORM::UI::InfiniteDragReleaseWindow();
 
 #if defined USE_MOUSE_CAPTURE
             if( !m_settings.m_cursorCaptured && m_parentPanel->HasCapture() )

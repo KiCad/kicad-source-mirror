@@ -212,12 +212,21 @@ bool KIPLATFORM::UI::AllowIconsInMenus()
 
 #ifdef KICAD_WAYLAND
 
+static bool                               wl_initialized = false;
+static struct wl_compositor*              compositor = NULL;
 static struct zwp_pointer_constraints_v1* pointer_constraints = NULL;
+static struct zwp_confined_pointer_v1*    confined_pointer = NULL;
+static struct wl_region*                  confinement_region = NULL;
 
 static void handle_global( void* data, struct wl_registry* registry, uint32_t name,
                            const char* interface, uint32_t version )
 {
-    if( strcmp( interface, zwp_pointer_constraints_v1_interface.name ) == 0 )
+    if( strcmp( interface, wl_compositor_interface.name ) == 0 )
+    {
+        compositor = static_cast<wl_compositor*>(
+                wl_registry_bind( registry, name, &wl_compositor_interface, version ) );
+    }
+    else if( strcmp( interface, zwp_pointer_constraints_v1_interface.name ) == 0 )
     {
         pointer_constraints = static_cast<zwp_pointer_constraints_v1*>( wl_registry_bind(
                 registry, name, &zwp_pointer_constraints_v1_interface, version ) );
@@ -225,9 +234,25 @@ static void handle_global( void* data, struct wl_registry* registry, uint32_t na
 }
 
 static const struct wl_registry_listener registry_listener = {
-	.global = handle_global,
-	.global_remove = NULL,
+    .global = handle_global,
+    .global_remove = NULL,
 };
+
+/**
+ * Initializes `compositor` and `pointer_constraints` global variables.
+ */
+static void initialize_wayland( wl_display* wldisp )
+{
+    if( wl_initialized )
+    {
+        return;
+    }
+
+    struct wl_registry* registry = wl_display_get_registry( wldisp );
+    wl_registry_add_listener( registry, &registry_listener, NULL );
+    wl_display_roundtrip( wldisp );
+    wl_initialized = true;
+}
 
 #endif
 
@@ -246,20 +271,23 @@ void KIPLATFORM::UI::WarpPointer( wxWindow* aWindow, int aX, int aY )
         GdkSeat*    seat = gdk_display_get_default_seat( disp );
         GdkDevice*  ptrdev = gdk_seat_get_pointer( seat );
 
-#if defined( GDK_WINDOWING_WAYLAND ) && defined KICAD_WAYLAND
+#if defined( GDK_WINDOWING_WAYLAND ) && defined( KICAD_WAYLAND )
         if( GDK_IS_WAYLAND_DISPLAY( disp ) )
         {
             GdkWindow* win = aWindow->GTKGetDrawingWindow();
 
             wl_display* wldisp = gdk_wayland_display_get_wl_display( disp );
-
-            struct wl_registry* registry = wl_display_get_registry( wldisp );
-            int lret = wl_registry_add_listener( registry, &registry_listener, NULL );
-
-            wl_display_roundtrip( wldisp );
-
             wl_surface* wlsurf = gdk_wayland_window_get_wl_surface( win );
             wl_pointer* wlptr = gdk_wayland_device_get_wl_pointer( ptrdev );
+
+            initialize_wayland( wldisp );
+
+            // temporary disable confinement to allow pointer warping
+            if( confinement_region != NULL )
+            {
+                zwp_confined_pointer_v1_destroy( confined_pointer );
+                confined_pointer = NULL;
+            }
 
             struct zwp_locked_pointer_v1* locked_pointer = zwp_pointer_constraints_v1_lock_pointer(
                     pointer_constraints, wlsurf, wlptr, NULL,
@@ -272,10 +300,18 @@ void KIPLATFORM::UI::WarpPointer( wxWindow* aWindow, int aX, int aY )
             zwp_locked_pointer_v1_set_cursor_position_hint(
                     locked_pointer, wl_fixed_from_int( aX + wx ), wl_fixed_from_int( aY + wy ) );
 
+            zwp_locked_pointer_v1_destroy( locked_pointer );
+
+            // restore confinement
+            if( confinement_region != NULL )
+            {
+                confined_pointer = zwp_pointer_constraints_v1_confine_pointer(
+                        pointer_constraints, wlsurf, wlptr, confinement_region,
+                        ZWP_POINTER_CONSTRAINTS_V1_LIFETIME_ONESHOT );
+            }
+
             wl_surface_commit( wlsurf );
             wl_display_roundtrip( wldisp );
-
-            zwp_locked_pointer_v1_destroy( locked_pointer );
         }
 #endif
 #ifdef GDK_WINDOWING_X11
@@ -300,3 +336,62 @@ void KIPLATFORM::UI::WarpPointer( wxWindow* aWindow, int aX, int aY )
 void KIPLATFORM::UI::ImmControl( wxWindow* aWindow, bool aEnable )
 {
 }
+
+
+void KIPLATFORM::UI::InfiniteDragPrepareWindow( wxWindow* aWindow )
+{
+#if defined( GDK_WINDOWING_WAYLAND ) && defined( KICAD_WAYLAND )
+    if( confined_pointer != NULL )
+    {
+        KIPLATFORM::UI::InfiniteDragReleaseWindow();
+    }
+
+    GtkWidget*  widget = static_cast<GtkWidget*>( aWindow->GetHandle() );
+    GdkDisplay* disp = gtk_widget_get_display( widget );
+
+    if( !GDK_IS_WAYLAND_DISPLAY( disp ) )
+    {
+        return;
+    }
+
+    GdkSeat*   seat = gdk_display_get_default_seat( disp );
+    GdkDevice* ptrdev = gdk_seat_get_pointer( seat );
+    GdkWindow* win = aWindow->GTKGetDrawingWindow();
+
+    wl_display* wldisp = gdk_wayland_display_get_wl_display( disp );
+    wl_surface* wlsurf = gdk_wayland_window_get_wl_surface( win );
+    wl_pointer* wlptr = gdk_wayland_device_get_wl_pointer( ptrdev );
+
+    initialize_wayland( wldisp );
+
+    gint x, y, width, height, wx, wy;
+    gdk_window_get_geometry( win, &x, &y, &width, &height );
+    gtk_widget_translate_coordinates( widget, gtk_widget_get_toplevel( widget ), 0, 0, &wx, &wy );
+
+    confinement_region = wl_compositor_create_region( compositor );
+    wl_region_add( confinement_region, x + wx - 1, y + wy - 1, width + 2, height + 2 );
+
+    confined_pointer = zwp_pointer_constraints_v1_confine_pointer(
+            pointer_constraints, wlsurf, wlptr, confinement_region,
+            ZWP_POINTER_CONSTRAINTS_V1_LIFETIME_ONESHOT );
+
+    wl_surface_commit( wlsurf );
+    wl_display_roundtrip( wldisp );
+#endif
+};
+
+void KIPLATFORM::UI::InfiniteDragReleaseWindow()
+{
+#if defined( GDK_WINDOWING_WAYLAND ) && defined( KICAD_WAYLAND )
+    if( confined_pointer == NULL )
+    {
+        return;
+    }
+
+    zwp_confined_pointer_v1_destroy( confined_pointer );
+    wl_region_destroy( confinement_region );
+
+    confined_pointer = NULL;
+    confinement_region = NULL;
+#endif
+};

@@ -175,3 +175,15 @@ void KIPLATFORM::UI::ImmControl( wxWindow* aWindow, bool aEnable )
         ImmAssociateContextEx( aWindow->GetHWND(), 0, IACE_DEFAULT );
     }
 }
+
+
+void KIPLATFORM::UI::InfiniteDragPrepareWindow( wxWindow* aWindow )
+{
+    // Not needed on this platform
+}
+
+
+void KIPLATFORM::UI::InfiniteDragReleaseWindow()
+{
+    // Not needed on this platform
+}

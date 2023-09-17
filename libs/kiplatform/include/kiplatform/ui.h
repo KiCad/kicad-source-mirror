@@ -150,6 +150,20 @@ namespace KIPLATFORM
          * Configures the IME mode of a given control handle
          */
         void ImmControl( wxWindow* aWindow, bool aEnable );
+
+        /**
+         * On Wayland, restricts the pointer movement to a rectangle slightly bigger than the given `wxWindow`.
+         * This way, the cursor doesn't exit the (bigger) application window and we retain control on it.
+         * Required to make the infinite mouse-drag work with fast movement.
+         * See https://gitlab.com/kicad/code/kicad/-/issues/7207#note_1562089503
+         * @param aWindow Window in which to position to mouse cursor
+         */
+        void InfiniteDragPrepareWindow( wxWindow* aWindow );
+
+        /**
+         * On Wayland, allows the cursor to freely move again after a drag (see `InfiniteDragPrepareWindow`).
+         */
+        void InfiniteDragReleaseWindow();
     }
 }
 
