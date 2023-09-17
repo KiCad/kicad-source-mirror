@@ -731,6 +731,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
     bool                  loggedInfoBarError = false;
     wxString              description;
     SCH_SCREEN*           screen = m_frame->GetScreen();
+    bool                  allowRepeat = false;  // Set to true to allow new item repetition
 
     if( m_inSingleClickPlace )
         return 0;
@@ -757,6 +758,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
         previewItem = new SCH_NO_CONNECT( cursorPos );
         previewItem->SetParent( screen );
         description = _( "Add No Connect Flag" );
+        allowRepeat = true;
         break;
 
     case SCH_JUNCTION_T:
@@ -769,6 +771,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
         previewItem = new SCH_BUS_WIRE_ENTRY( cursorPos );
         previewItem->SetParent( screen );
         description = _( "Add Wire to Bus Entry" );
+        allowRepeat = true;
         break;
 
     default:
@@ -858,6 +861,9 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                 newItem->SetPosition( cursorPos );
                 newItem->SetFlags( IS_NEW );
                 m_frame->AddToScreen( newItem, screen );
+
+                if( allowRepeat )
+                    m_frame->SaveCopyForRepeatItem( newItem );
 
                 SCH_COMMIT commit( m_toolMgr );
                 commit.Added( newItem, screen );
