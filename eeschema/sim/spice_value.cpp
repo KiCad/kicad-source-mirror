@@ -253,7 +253,7 @@ wxString SPICE_VALUE::ToString( const SPICE_VALUE_FORMAT& aFormat )
     mantissa = KiROUND( mantissa * std::pow( 10, aFormat.Precision - 1 ) );
     mantissa *= std::pow( 10, scale - aFormat.Precision + 1 );
 
-    wxString res = wxString::FromCDouble( mantissa, aFormat.Precision );
+    wxString res = wxString::FromCDouble( mantissa, std::max( 0, aFormat.Precision - scale - 1 ) );
     return res + range;
 }
 

@@ -22,11 +22,11 @@ DIALOG_SIM_FORMAT_VALUE_BASE::DIALOG_SIM_FORMAT_VALUE_BASE( wxWindow* parent, wx
 	fgSizer->SetFlexibleDirection( wxBOTH );
 	fgSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_precisionLabel = new wxStaticText( this, wxID_ANY, _("Precision:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_precisionLabel = new wxStaticText( this, wxID_ANY, _("Significant digits:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_precisionLabel->Wrap( -1 );
 	fgSizer->Add( m_precisionLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_precisionCtrl = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 9, 2 );
+	m_precisionCtrl = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 9, 3 );
 	fgSizer->Add( m_precisionCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_rangeLabel = new wxStaticText( this, wxID_ANY, _("Range:"), wxDefaultPosition, wxDefaultSize, 0 );

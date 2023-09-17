@@ -527,8 +527,8 @@ SIMULATOR_FRAME_UI::SIMULATOR_FRAME_UI( SIMULATOR_FRAME* aSimulatorFrame,
 
     for( int cursorId = 0; cursorId < 3; ++cursorId )
     {
-        m_cursorFormats[ cursorId ][ 0 ] = { 2, wxS( "~s" ) };
-        m_cursorFormats[ cursorId ][ 1 ] = { 2, wxS( "~V" ) };
+        m_cursorFormats[ cursorId ][ 0 ] = { 3, wxS( "~s" ) };
+        m_cursorFormats[ cursorId ][ 1 ] = { 3, wxS( "~V" ) };
     }
 
     attr = new wxGridCellAttr;
