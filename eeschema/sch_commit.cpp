@@ -302,7 +302,7 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
             break;
         }
 
-        schItem->ClearEditFlags();
+        schItem->ClearFlags();
     }
 
     if( schematic )
